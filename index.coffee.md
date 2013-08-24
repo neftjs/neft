@@ -7,45 +7,8 @@ Utils
 
 	'use strict'
 
-Utils for objects and arrays
-----------------------------
-
-### isArguments
-
-Check if specified object is an arguments array.
-
-	do (toString = Object::toString) ->
-
-		module.exports.isArguments = (obj) ->
-
-			throw new RangeError unless arguments.length
-
-			toString.call(obj) is '[object Arguments]'
-
-### isObject
-
-Check if arg is clear object (without any other prototypes).
-
-	do (getPrototypeOf = Object.getPrototypeOf) ->
-
-		module.exports.isObject = (obj) ->
-
-			throw new RangeError unless arguments.length
-
-			if typeof obj isnt 'object'
-				return false
-
-			proto = getPrototypeOf obj
-
-			# comes from Object.create
-			unless proto
-				return true
-
-			# one-proto object
-			if (proto is Object::) and not getPrototypeOf(proto)
-				return true
-
-			false
+Utils for object, arrays and functions
+--------------------------------------
 
 ### clone
 
@@ -92,6 +55,46 @@ Prototype is copied (if exists).
 			return cloneArray(arg) if isArray arg
 			return cloneObject(arg) if typeofArg is 'object'
 			arg
+
+Utils for objects and arrays
+----------------------------
+
+### isArguments
+
+Check if specified object is an arguments array.
+
+	do (toString = Object::toString) ->
+
+		module.exports.isArguments = (obj) ->
+
+			throw new RangeError unless arguments.length
+
+			toString.call(obj) is '[object Arguments]'
+
+### isObject
+
+Check if arg is clear object (without any other prototypes).
+
+	do (getPrototypeOf = Object.getPrototypeOf) ->
+
+		module.exports.isObject = (obj) ->
+
+			throw new RangeError unless arguments.length
+
+			if typeof obj isnt 'object'
+				return false
+
+			proto = getPrototypeOf obj
+
+			# comes from Object.create
+			unless proto
+				return true
+
+			# one-proto object
+			if (proto is Object::) and not getPrototypeOf(proto)
+				return true
+
+			false
 		
 ### merge
 
