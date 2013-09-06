@@ -10,12 +10,12 @@ Utils
 Utils for object, arrays and functions
 --------------------------------------
 
-### clone
+### clone()
 
 Clone array, object or function.
 Prototype is copied (if exists).
 
-	module.exports.clone = do (
+	do (
 		funcToString = Function::toString,
 		isArray = Array.isArray,
 		createObject = Object.create,
@@ -45,9 +45,10 @@ Prototype is copied (if exists).
 
 			newFunc
 
-		(arg) ->
+		module.exports.clone = (arg) ->
 
-			throw new RangeError unless arguments.length
+			unless arguments.length
+				throw new RangeError
 
 			typeofArg = typeof arg
 
@@ -56,10 +57,26 @@ Prototype is copied (if exists).
 			return cloneObject(arg) if typeofArg is 'object'
 			arg
 
+### merge()
+
+Merge second object into the first one.
+Existed properties will be overriden.
+
+	module.exports.merge = (source, obj) ->
+
+		if not source or not obj
+			throw new TypeError
+
+		for key, value of obj
+
+			source[key] = value
+
+		source
+
 Utils for objects and arrays
 ----------------------------
 
-### isArguments
+### isArguments()
 
 Check if specified object is an arguments array.
 
@@ -67,11 +84,12 @@ Check if specified object is an arguments array.
 
 		module.exports.isArguments = (obj) ->
 
-			throw new RangeError unless arguments.length
+			unless arguments.length
+				throw new RangeError
 
 			toString.call(obj) is '[object Arguments]'
 
-### isObject
+### isObject()
 
 Check if arg is clear object (without any other prototypes).
 
@@ -79,7 +97,8 @@ Check if arg is clear object (without any other prototypes).
 
 		module.exports.isObject = (obj) ->
 
-			throw new RangeError unless arguments.length
+			unless arguments.length
+				throw new RangeError
 
 			if typeof obj isnt 'object'
 				return false
@@ -95,24 +114,8 @@ Check if arg is clear object (without any other prototypes).
 				return true
 
 			false
-		
-### merge
 
-Merge second object into the first one.
-Existed properties will be overriden.
-
-	module.exports.merge = (source, obj) ->
-
-		throw new TypeError if typeof source isnt 'object'
-		throw new TypeError if typeof obj isnt 'object'
-
-		for key, value of obj
-
-			source[key] = value
-
-		source
-
-### get
+### get()
 
 Get needed value from the object. Arrays are supported.
 If path can't be resolved, new get.OptionsArray is returned with
@@ -196,7 +199,7 @@ For arrays add to property name two brackets ('[]')
 
 		obj
 
-#### get.OptionsArray
+#### *class* get.OptionsArray()
 
 Special version of Array, returned if result of the `get` method is a list
 of possible values and not a proper value.
@@ -205,7 +208,7 @@ of possible values and not a proper value.
 
 		constructor: -> super
 
-### forEachASYNC
+### forEachASYNC()
 
 Check object or array as by standard Array::forEach but working asynchronously.
 As last `callback` argument you will get `next` function. Call it when your
@@ -264,16 +267,21 @@ For objects callback get: key, value, object, next.
 
 		(arg, callback, onEnd, thisArg) ->
 
-			throw new TypeError if typeof arg isnt 'object'
-			throw new TypeError if typeof callback isnt 'function'
-			onEnd = NOP if typeof onEnd isnt 'function'
+			if typeof arg isnt 'object'
+				throw new TypeError
+
+			if typeof callback isnt 'function'
+				throw new TypeError
+
+			if typeof onEnd isnt 'function'
+				onEnd = NOP
 
 			method = if isArray arg then forArray else forObject
 			method arg, callback, onEnd, thisArg
 
 			thisArg
 
-### isEmpty
+### isEmpty()
 
 Check if specified object or array is empty.
 Proto is not checking.
@@ -282,7 +290,8 @@ Proto is not checking.
 
 		module.exports.isEmpty = (arg) ->
 
-			throw new TypeError if typeof arg isnt 'object'
+			if typeof arg isnt 'object'
+				throw new TypeError
 
 			if isArray arg
 				return !!arg.length
@@ -290,10 +299,30 @@ Proto is not checking.
 			return false for key of arg
 			true
 
+### last()
+
+Get last element from the Object or Array
+
+	do (isArray = Array.isArray, objKeys = Object.keys) ->
+
+		module.exports.last = (arg) ->
+
+			if typeof arg isnt 'object'
+				throw new TypeError
+
+			# Array
+			if isArray arg
+				return arg[arg.length - 1]
+
+			# Object
+			keys = objKeys arg
+			arg[keys[keys.length - 1]]
+
+
 Utils for arrays
 ----------------
 
-### arrayToObject
+### arrayToObject()
 
 Save parsed array into `target` (new object by default) and return it.
 Use optionally `keyGen` and `valueGen` to specify custom keys and values
@@ -320,7 +349,7 @@ Use optionally `keyGen` and `valueGen` to specify custom keys and values
 Utils for strings
 -----------------
 
-### capitalize
+### capitalize()
 
 	module.exports.capitalize = (arg) ->
 
@@ -329,7 +358,7 @@ Utils for strings
 		return '' unless arg.length
 		arg[0].toUpperCase() + arg.substring(1)
 
-### isStringArray
+### isStringArray()
 
 Check if string references into array (according to notation in `get` method).
 
