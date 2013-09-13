@@ -3,21 +3,14 @@ Db Collection class
 
 	'use strict'
 
-	Promise = require 'Promise'
-	utils = require 'utils'
-
 *class* Collection()
 --------------------
 
-	module.exports = class Collection extends Promise
+	module.exports = class Collection
 
 ### Constructor
 
 		constructor: (@self) ->
-
-			super
-
-			if self._search then @run()
 
 ### Properties
 
@@ -35,16 +28,24 @@ Execute query
 
 		run: ->
 
-			setTimeout => @reject()
+			throw new Error
 
 #### removeAll()
 
 Remove all documents from the collection.
 
+Success callbacks returns object with amount of deleted and errors documents.
+
 		removeAll: ->
+
+			throw new Error
 
 ### updateAll()
 
 Update all documents in the collection.
 
+Success callbacks returns object with amount of updated and errors documents.
+
 		updateAll: (doc) ->
+
+			throw new Error

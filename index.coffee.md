@@ -11,10 +11,9 @@ Db abstract
 
 *  **Database** - root class for tables,
 *  **Table** - collection of stored documents,
-*  **Collection** - array of documents,
-*  **Document** - pure JS object,
+*  **Collection** - list of documents,
 *  **id** - unique object/string/number for each documents,
-*  **row** - property name from *Document*.
+*  **row** - property name from document.
 
 ### Purposes
 
@@ -34,12 +33,12 @@ Db abstract
     ```
 
 2.  Update two documents (started from the second one) where title is 'Best'
-    changing title to 'The Best'.
+    and change title to 'The Best'.
     ```
     new Db('db', 'table')
      .where('title').is('Best')
+     .skip(1)
      .limit(2)
-     .offset(1)
      .insert(title: 'The Best')()
     ```
 
@@ -58,23 +57,15 @@ Exports module if dependencies are ready. Look at `Initialization` section.
 
 	ready = ->
 
-		module.exports = require './Db.coffee.md'
+		Db = module.exports = require './Db.coffee.md'
 
-		Db = module.exports
-
-		ok = -> console.log(':)')
-		error = -> console.log(':(', arguments)
-
-		console.log 1, new Db('db', 'table')
-			.where('name')
-			.is('Bob')
-			.then(ok, error)()
-
+		impl = require('./implementation')
+		impl(Db) if impl?
 
 Initialization
 --------------
 
-Support [`browser_module`](https://github.com/Kildyt/browser_module)
+Support [`browser_module`](https://github.com/Kildyt/browser_module).
 
 	if Module?.load
 
@@ -82,7 +73,8 @@ Support [`browser_module`](https://github.com/Kildyt/browser_module)
 			'Promise', 'Events', 'utils',
 			'./Db.coffee.md',
 			'./Database.coffee.md', './Table.coffee.md',
-			'./Collection.coffee.md', './Document.coffee.md',
+			'./Collection.coffee.md',
+			'./implementation'
 			ready)
 
 	else

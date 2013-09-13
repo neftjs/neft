@@ -3,20 +3,14 @@ Db Database class
 
 	'use strict'
 
-	Promise = require 'Promise'
-
 *class* Database()
 ------------------
 
-	module.exports = class Database extends Promise
+	module.exports = class Database
 
 ### Constructor
 
 		constructor: (@self, @name) ->
-
-			super
-
-			@run()
 
 ### Properties
 
@@ -39,4 +33,5 @@ Name of database
 Get database
 
 		run: ->
-			setTimeout => @reject()
+			
+			throw new Error

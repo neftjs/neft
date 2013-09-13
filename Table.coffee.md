@@ -3,20 +3,14 @@ Db Table class
 
 	'use strict'
 
-	Promise = require 'Promise'
-
 *class* Table()
 ---------------
 
-	module.exports = class Table extends Promise
+	module.exports = class Table
 
 ### Constructor
 
 		constructor: (@self, @name) ->
-
-			super
-
-			@run()
 
 ### Properties
 
@@ -40,7 +34,7 @@ Get table
 
 		run: ->
 
-			setTimeout => @reject()
+			throw new Error
 
 #### insertData()
 
@@ -49,3 +43,5 @@ Add new object document into table.
 Id of created document will be returned.
 
 		insertData: (doc) ->
+
+			throw new Error

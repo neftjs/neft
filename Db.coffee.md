@@ -9,7 +9,6 @@ Db main file
 	Database = require './Database.coffee.md'
 	Table = require './Table.coffee.md'
 	Collection = require './Collection.coffee.md'
-	Document = require './Document.coffee.md'
 
 *class* Db()
 ------------
@@ -36,12 +35,6 @@ Reference to the `Table` class.
 
 		@_Table = Table
 
-#### _Document()
-
-Reference to the `Document` class.
-
-		@_Document = Document
-
 ### Events
 
 		@NOT_IMPLEMENTED_ERROR = 'notimplementederror'
@@ -67,6 +60,9 @@ Don't re-use instance to get different results.
 
 			super
 
+			# init properties
+			@_commands = []
+
 			# implement databse
 			@then @_implementDatabase.bind @, database
 
@@ -78,8 +74,7 @@ Don't re-use instance to get different results.
 
 			# get document
 			if id
-				@_search = false
-				@then @_implementDocument.bind @, id
+				@_id = id
 
 Function with all public methods will be returned.
 Methods are binded and always returns the same function from *constructor*.
@@ -110,7 +105,6 @@ You loose access to class context, but it shouldn't be public.
 		_database: null
 		_table: null
 		_collection: null
-		_document: null
 
 #### Behavior
 
@@ -120,29 +114,31 @@ It not have place if any documents won't be returned
 
 		_search: true
 
-#### Cached needs
+#### Cached commands
 
-		_limit: Infinity
-		_offset: 0
-		_where: null
+		_id: null
+		_commands: null
 
 #### Methods
 
 		_implementDatabase: (name) ->
 
-			@_database = new Database @, name
+			r = @_database = new Database @, name
+
+			r.run()
 
 		_implementTable: (name) ->
 
-			@_table = new Table @, name
+			r = @_table = new Table @, name
+
+			r.run()
 
 		_implementCollection: ->
 
-			@_collection = new Collection @
+			r = @_collection = new Collection @
 
-		_implementDocument: (id) ->
-
-			@_document = new Document @, id
+			if @_search
+				r.run()
 
 ### Methods
 
@@ -158,8 +154,7 @@ to public class methods.
 
 		run: ->
 
-			@reject
-				name: Db.NOT_IMPLEMENTED_ERROR
+			@resolve()
 
 #### limit()
 
@@ -167,21 +162,27 @@ Set limit of documents in collection.
 
 		limit: (value) ->
 
+			if @_id?
+				throw new ReferenceError "limit() can not be used for document"
+
 			if typeof value isnt 'number' or value <= 0
 				throw new TypeError "Limit value must be a positive number"
 
-			@_limit = value
+			@_commands.push limit: value
 
-#### offset()
+#### skip()
 
 Omit documents from the begining.
 
-		offset: (value) ->
+		skip: (value) ->
+
+			if @_id?
+				throw new ReferenceError "skip() can not be used for document"
 
 			if typeof value isnt 'number' or value < 0 or not isFinite value
 				throw new TypeError "Offset value must be a positive and finite number"
 
-			@_offset = value
+			@_commands.push skip: value
 
 #### where()
 
@@ -193,12 +194,13 @@ Use dots in *row* name for namespaces.
 
 		where: (row) ->
 
+			if @_id?
+				throw new ReferenceError "where() can not be used for document"
+
 			if typeof row isnt 'string' or not row
 				throw new TypeError "Row must be a string"
 
-			@_where ?= []
-
-			@_where.push row: row
+			@_commands.push where: row
 
 ##### is()
 
@@ -206,7 +208,9 @@ Triple comparison.
 
 		is: (value) ->
 
-			unless where = utils.last @_where
+			where = utils.last @_commands
+
+			unless where.where?
 				throw new ReferenceError "is() requires where()"
 
 			if where.lt? or where.gt?
@@ -220,7 +224,9 @@ Lower than
 
 		lt: (value) ->
 
-			unless where = utils.last @_where
+			where = utils.last @_commands
+
+			unless where.where?
 				throw new ReferenceError "lt() requires where()"
 
 			if where.is?
@@ -234,7 +240,9 @@ Greater than
 
 		gt: (value) ->
 
-			unless where = utils.last @_where
+			where = utils.last @_commands
+
+			unless where.where?
 				throw new ReferenceError "gt() requires where()"
 
 			if where.is?
@@ -253,6 +261,9 @@ Remove all documents from the collection.
 
 		remove: ->
 
+			unless @_search
+				throw new ReferenceError "remove() can works only with collection"
+
 			@_search = false
 
 			@then => @_collection.removeAll()
@@ -267,12 +278,19 @@ Id of created document will be returned.
 
 		insert: (doc) ->
 
+			if @_id?
+				throw new ReferenceError "insert() can not be used for document"
+
 			unless utils.isObject doc
-				throw new TypeError 'Only simply objects could be inserted'
+				throw new TypeError "Only simply objects could be inserted"
+
+			unless @_search
+				throw new ReferenceError "remove() can works only with collection"
 
 			@_search = false
 
-			@then => @_table.insertData doc
+			@then =>
+				@_table.insertData doc
 
 #### update()
 
@@ -283,7 +301,10 @@ Update all documents in the collection.
 		update: (doc) ->
 
 			unless utils.isObject doc
-				throw new TypeError 'Only simply objects could be inserted'
+				throw new TypeError "Only simply objects could be inserted"
+
+			unless @_search
+				throw new ReferenceError "remove() can works only with collection"
 
 			@_search = false
 
