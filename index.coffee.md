@@ -70,7 +70,7 @@ Support [`browser_module`](https://github.com/Kildyt/browser_module).
 	if Module?.load
 
 		Module.load(
-			'Promise', 'Events', 'utils',
+			'Events', 'utils',
 			'./Db.coffee.md',
 			'./Database.coffee.md', './Table.coffee.md',
 			'./Collection.coffee.md',

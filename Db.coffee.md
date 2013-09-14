@@ -4,16 +4,17 @@ Db main file
 	'use strict'
 
 	utils = require 'utils'
-	Promise = require 'Promise'
 
 	Database = require './Database.coffee.md'
 	Table = require './Table.coffee.md'
 	Collection = require './Collection.coffee.md'
 
+	NOP = ->
+
 *class* Db()
 ------------
 
-	class Db extends Promise
+	class Db
 
 ### Static protected
 
@@ -35,10 +36,6 @@ Reference to the `Table` class.
 
 		@_Table = Table
 
-### Events
-
-		@NOT_IMPLEMENTED_ERROR = 'notimplementederror'
-
 ### Constructor
 
 Load collection of database table or specified document.
@@ -58,19 +55,18 @@ Don't re-use instance to get different results.
 			if id? and (typeof id isnt 'string' or not id)
 				throw new TypeError "Id of document must be a string"
 
-			super
-
 			# init properties
+			@_stack = new utils.async.Stack
 			@_commands = []
 
-			# implement databse
-			@then @_implementDatabase.bind @, database
+			# implement database
+			@_implementDatabase database
 
 			# implement table
-			@then @_implementTable.bind @, table
+			@_implementTable table
 
 			# implement collection
-			@then @_implementCollection.bind @
+			@_implementCollection()
 
 			# get document
 			if id
@@ -100,6 +96,10 @@ You loose access to class context, but it shouldn't be public.
 
 ### Protected
 
+#### Processing
+
+		_stack: null
+
 #### Instances of classes
 
 		_database: null
@@ -123,22 +123,24 @@ It not have place if any documents won't be returned
 
 		_implementDatabase: (name) ->
 
-			r = @_database = new Database @, name
+			database = @_database = new Database @, name
 
-			r.run()
+			@_stack.add database, 'run'
 
 		_implementTable: (name) ->
 
-			r = @_table = new Table @, name
+			table = @_table = new Table @, name
 
-			r.run()
+			@_stack.add table, 'run'
 
 		_implementCollection: ->
 
-			r = @_collection = new Collection @
+			@_collection = new Collection @
 
-			if @_search
-				r.run()
+			@_stack.add null, (callback) =>
+
+				if @_search then return @_collection.run callback
+				callback null
 
 ### Methods
 
@@ -146,15 +148,15 @@ It not have place if any documents won't be returned
 
 Initialize query.
 
-There is a shortcat for this function - constructor and all methods returns
-always this function which could be easily called and have special properties
-to public class methods.
+All methods and constructor returns this function (binded with public properties).
 
 **Example:** `new Db('db', 'table', 'id')()`
 
-		run: ->
+		run: (callback = NOP) ->
 
-			@resolve()
+			@_stack.runAll callback
+
+			null
 
 #### limit()
 
@@ -266,7 +268,7 @@ Remove all documents from the collection.
 
 			@_search = false
 
-			@then => @_collection.removeAll()
+			@_stack.add @_collection, 'removeAll'
 
 #### insert()
 
@@ -289,8 +291,7 @@ Id of created document will be returned.
 
 			@_search = false
 
-			@then =>
-				@_table.insertData doc
+			@_stack.add @_table, 'insertData', doc
 
 #### update()
 
@@ -308,7 +309,7 @@ Update all documents in the collection.
 
 			@_search = false
 
-			@then => @_collection.updateAll doc
+			@_stack.add @_collection, 'updateAll', doc
 
 *Events* emitted
 ----------------

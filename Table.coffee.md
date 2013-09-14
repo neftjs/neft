@@ -32,9 +32,9 @@ Name of table
 
 Get table
 
-		run: ->
+		run: (callback) ->
 
-			throw new Error
+			callback new Error
 
 #### insertData()
 
@@ -42,6 +42,6 @@ Add new object document into table.
 
 Id of created document will be returned.
 
-		insertData: (doc) ->
+		insertData: (doc, callback) ->
 
-			throw new Error
+			callback new Error

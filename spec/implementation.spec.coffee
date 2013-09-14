@@ -1,5 +1,10 @@
 'use strict'
 
+###
+# TODO
+* more tests
+###
+
 Db = require '../index.coffee.md'
 
 describe 'Db', ->
@@ -23,6 +28,10 @@ describe 'Db implementation', ->
 	DOCUMENT =
 		name: 'Test name'
 		age: 1
+	UPDATE =
+		name: 'Test name two'
+		age: 2
+		parent: 'nothing'
 
 	id = null
 
@@ -31,14 +40,14 @@ describe 'Db implementation', ->
 		end = false
 
 		runs ->
-			new Db(DATABASE, TABLE).remove()().then -> end = true
+			new Db(DATABASE, TABLE).remove() (err) -> end = not err
 
 		waitsFor -> end
 
 	it 'saves new document', ->
 
 		runs ->
-			new Db(DATABASE, TABLE).insert(DOCUMENT)().then (arg) -> id = arg
+			new Db(DATABASE, TABLE).insert(DOCUMENT) (err, arg) -> id = arg
 
 		waitsFor -> id
 
@@ -50,7 +59,7 @@ describe 'Db implementation', ->
 		doc = null
 
 		runs ->
-			new Db(DATABASE, TABLE, id)().then (arg) -> doc = arg
+			new Db(DATABASE, TABLE, id) (err, arg) -> doc = arg
 
 		waitsFor -> doc
 
@@ -66,12 +75,12 @@ describe 'Db implementation', ->
 		doc = true
 
 		runs ->
-			new Db(DATABASE, TABLE, id).remove()().then -> end = true
+			new Db(DATABASE, TABLE, id).remove() (err) -> end = not err
 
 		waitsFor -> end
 
 		runs ->
-			new Db(DATABASE, TABLE, id)().then (res) -> doc = !!res
+			new Db(DATABASE, TABLE, id) (err, res) -> doc = !!res
 
 		waitsFor -> not doc
 
@@ -87,7 +96,7 @@ describe 'Db implementation', ->
 
 		runs ->
 			for i in [0...N]
-				new Db(DATABASE, TABLE).insert(DOCUMENT)().then -> ++end
+				new Db(DATABASE, TABLE).insert(DOCUMENT) (err) -> end += not err
 
 		waitsFor -> end is N
 
@@ -96,21 +105,16 @@ describe 'Db implementation', ->
 
 	it 'supports limit and skip commands', ->
 
-		UPDATE =
-			name: 'Test name two'
-			age: 2
-			parent: 'nothing'
-
 		end = false
 		elems = null
 
 		runs ->
-			new Db(DATABASE, TABLE).skip(1).limit(2).skip(1).update(UPDATE)().then -> end = true
+			new Db(DATABASE, TABLE).skip(1).limit(2).skip(1).update(UPDATE) (err) -> end = not err
 
 		waitsFor -> end
 
 		runs ->
-			new Db(DATABASE, TABLE)().then (arg) -> elems = arg
+			new Db(DATABASE, TABLE) (err, arg) -> elems = arg
 
 		waitsFor -> elems
 
@@ -128,18 +132,52 @@ describe 'Db implementation', ->
 			validate elems[2], UPDATE.name, UPDATE.age, UPDATE.parent
 			validate elems[3], DOCUMENT.name, DOCUMENT.age, undefined
 
+	it 'supports where.is', ->
+
+		elems = null
+
+		runs ->
+			new Db(DATABASE, TABLE).where('name').is(DOCUMENT.name) (err, arg) -> elems = arg
+
+		waitsFor -> elems
+
+		runs ->
+			expect(elems.length).toBe 3
+
+			elems.forEach (elem) ->
+				expect(elem.name).toBe DOCUMENT.name
+				expect(elem.age).toBe DOCUMENT.age
+				expect(elem.parent).not.toBe UPDATE.parent
+
+	it 'supports where lt and gt', ->
+
+		elems = null
+
+		runs ->
+			new Db(DATABASE, TABLE).where('age').gt(0).lt(2) (err, arg) -> elems = arg
+
+		waitsFor -> elems
+
+		runs ->
+			expect(elems.length).toBe 3
+
+			elems.forEach (elem) ->
+				expect(elem.name).toBe DOCUMENT.name
+				expect(elem.age).toBe DOCUMENT.age
+				expect(elem.parent).not.toBe UPDATE.parent
+
 	it 'cleans table', ->
 
 		end = false
 		count = true
 
 		runs ->
-			new Db(DATABASE, TABLE).remove()().then -> end = true
+			new Db(DATABASE, TABLE).remove() (err) -> end = not err
 
 		waitsFor -> end
 
 		runs ->
-			new Db(DATABASE, TABLE)().then (arg) -> count = arg.length
+			new Db(DATABASE, TABLE) (err, arg) -> count = arg.length
 
 		waitsFor -> not count
 

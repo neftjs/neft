@@ -26,9 +26,9 @@ Link into main `Db` instance
 
 Execute query
 
-		run: ->
+		run: (callback) ->
 
-			throw new Error
+			callback new Error
 
 #### removeAll()
 
@@ -36,9 +36,9 @@ Remove all documents from the collection.
 
 Success callbacks returns object with amount of deleted and errors documents.
 
-		removeAll: ->
+		removeAll: (callback) ->
 
-			throw new Error
+			callback new Error
 
 ### updateAll()
 
@@ -46,6 +46,6 @@ Update all documents in the collection.
 
 Success callbacks returns object with amount of updated and errors documents.
 
-		updateAll: (doc) ->
+		updateAll: (doc, callback) ->
 
-			throw new Error
+			callback new Error

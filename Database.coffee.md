@@ -32,6 +32,6 @@ Name of database
 
 Get database
 
-		run: ->
+		run: (callback) ->
 			
-			throw new Error
+			callback new Error
