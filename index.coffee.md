@@ -48,35 +48,10 @@ Index
 This is only a index file.
 All sub-files and needed dependencies are loading.
 Check [my repos](https://github.com/Kildyt/) for needed packages.
-It's async operation, because [`browser_module`](https://github.com/Kildyt/browser_module)
-are supported.
 
 Check `Db.coffee.md` file next.
 
-Exports module if dependencies are ready. Look at `Initialization` section.
+	Db = module.exports = require './Db.coffee.md'
 
-	ready = ->
-
-		Db = module.exports = require './Db.coffee.md'
-
-		impl = require('./implementation')
-		impl(Db) if impl?
-
-Initialization
---------------
-
-Support [`browser_module`](https://github.com/Kildyt/browser_module).
-
-	if Module?.load
-
-		Module.load(
-			'Events', 'utils',
-			'./Db.coffee.md',
-			'./Database.coffee.md', './Table.coffee.md',
-			'./Collection.coffee.md',
-			'./implementation'
-			ready)
-
-	else
-
-		ready()
+	impl = require('./implementation')
+	impl(Db) if impl?
