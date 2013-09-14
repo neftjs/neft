@@ -7,6 +7,20 @@ Utils
 
 	'use strict'
 
+	exports = module.exports
+
+	toString = Object::toString
+	funcToString = Function::toString
+	isArray = Array.isArray
+	createObject = Object.create
+	getPrototypeOf = Object.getPrototypeOf
+	objKeys = Object.keys
+
+Include sub-modules
+-------------------
+
+	exports.async = require './async.coffee.md'
+
 Utils for object, arrays and functions
 --------------------------------------
 
@@ -15,12 +29,7 @@ Utils for object, arrays and functions
 Clone array, object or function.
 Prototype is copied (if exists).
 
-	do (
-		funcToString = Function::toString,
-		isArray = Array.isArray,
-		createObject = Object.create,
-		getPrototypeOf = Object.getPrototypeOf
-	) ->
+	exports.clone = do ->
 
 		cloneArray = (arr) ->
 
@@ -45,7 +54,7 @@ Prototype is copied (if exists).
 
 			newFunc
 
-		module.exports.clone = (arg) ->
+		(arg) ->
 
 			unless arguments.length
 				throw new RangeError
@@ -62,7 +71,7 @@ Prototype is copied (if exists).
 Merge second object into the first one.
 Existed properties will be overriden.
 
-	module.exports.merge = (source, obj) ->
+	exports.merge = (source, obj) ->
 
 		if not source or not obj
 			throw new TypeError
@@ -80,40 +89,36 @@ Utils for objects and arrays
 
 Check if specified object is an arguments array.
 
-	do (toString = Object::toString) ->
+	exports.isArguments = (obj) ->
 
-		module.exports.isArguments = (obj) ->
+		unless arguments.length
+			throw new RangeError
 
-			unless arguments.length
-				throw new RangeError
-
-			toString.call(obj) is '[object Arguments]'
+		toString.call(obj) is '[object Arguments]'
 
 ### isObject()
 
 Check if arg is clear object (without any other prototypes).
 
-	do (getPrototypeOf = Object.getPrototypeOf) ->
+	exports.isObject = (obj) ->
 
-		module.exports.isObject = (obj) ->
+		unless arguments.length
+			throw new RangeError
 
-			unless arguments.length
-				throw new RangeError
+		if typeof obj isnt 'object'
+			return false
 
-			if typeof obj isnt 'object'
-				return false
+		proto = getPrototypeOf obj
 
-			proto = getPrototypeOf obj
+		# comes from Object.create
+		unless proto
+			return true
 
-			# comes from Object.create
-			unless proto
-				return true
+		# one-proto object
+		if (proto is Object::) and not getPrototypeOf(proto)
+			return true
 
-			# one-proto object
-			if (proto is Object::) and not getPrototypeOf(proto)
-				return true
-
-			false
+		false
 
 ### get()
 
@@ -124,13 +129,13 @@ Separate properties in path by dots ('.').
 For arrays add to property name two brackets ('[]')
 - look at isStringArray method to check it in other way.
 
-	module.exports.get = (obj, path='', target) ->
+	exports.get = (obj, path='', target) ->
 
 		switch typeof path
 
 			when 'object'
 
-				path = module.exports.clone path
+				path = exports.clone path
 
 			when 'string'
 
@@ -204,119 +209,42 @@ For arrays add to property name two brackets ('[]')
 Special version of Array, returned if result of the `get` method is a list
 of possible values and not a proper value.
 
-	module.exports.get.OptionsArray = class OptionsArray extends Array
+	exports.get.OptionsArray = class OptionsArray extends Array
 
 		constructor: -> super
-
-### forEachASYNC()
-
-Check object or array as by standard Array::forEach but working asynchronously.
-As last `callback` argument you will get `next` function. Call it when your
-async code finished and you are ready to check next pair.
-
-As third argument you can optionally specify `onEnd` function which will
-be called when all pairs will be checked.
-
-For arrays callback get: element, index, array, next.
-For objects callback get: key, value, object, next.
-
-`thisArg` is using to call callbacks and it's returned by this method.
-
-	module.exports.forEachASYNC = do (isArray = Array.isArray, NOP = ->) ->
-
-		forArray = (arr, callback, onEnd, thisArg) ->
-
-			i = 0
-			n = arr.length
-
-			next = =>
-
-				# return and call onEnd if there is no elements to check
-				if i is n then return onEnd()
-
-				# call callback func
-				callback.call thisArg, arr[i], i, arr, next
-
-				# increase counter
-				i++
-
-			# start
-			next()
-
-		forObject = (obj, callback, onEnd, thisArg) ->
-
-			keys = Object.keys obj
-
-			i = 0
-			n = keys.length
-
-			next = =>
-
-				# return and call onEnd if there is no pairs to check
-				if i is n then return onEnd()
-
-				# call callback func
-				key = keys[i]
-				callback.call thisArg, key, obj[key], obj, next
-
-				# increase counter
-				i++
-
-			# start
-			next()
-
-		(arg, callback, onEnd, thisArg) ->
-
-			if typeof arg isnt 'object'
-				throw new TypeError
-
-			if typeof callback isnt 'function'
-				throw new TypeError
-
-			if typeof onEnd isnt 'function'
-				onEnd = NOP
-
-			method = if isArray arg then forArray else forObject
-			method arg, callback, onEnd, thisArg
-
-			thisArg
 
 ### isEmpty()
 
 Check if specified object or array is empty.
 Proto is not checking.
 
-	do (isArray = Array.isArray) ->
+	exports.isEmpty = (arg) ->
 
-		module.exports.isEmpty = (arg) ->
+		if typeof arg isnt 'object'
+			throw new TypeError
 
-			if typeof arg isnt 'object'
-				throw new TypeError
+		if isArray arg
+			return !!arg.length
 
-			if isArray arg
-				return !!arg.length
-
-			return false for key of arg
-			true
+		return false for key of arg
+		true
 
 ### last()
 
 Get last element from the Object or Array
 
-	do (isArray = Array.isArray, objKeys = Object.keys) ->
+	exports.last = (arg) ->
 
-		module.exports.last = (arg) ->
+		if typeof arg isnt 'object'
+			throw new TypeError
 
-			if typeof arg isnt 'object'
-				throw new TypeError
+		# Array
+		if isArray arg
+			return arg[arg.length - 1]
 
-			# Array
-			if isArray arg
-				return arg[arg.length - 1]
-
-			# Object
-			keys = objKeys arg
-			arg[keys[keys.length - 1]]
+		# Object
+		keys = objKeys arg
+		arg[keys[keys.length - 1]]
 
 
 Utils for arrays
@@ -329,29 +257,27 @@ Use optionally `keyGen` and `valueGen` to specify custom keys and values
 (by default key is current index, and value refers to array element).
 `keyGen` and `valueGen` get current element, current index and array.
 
-	do (isArray = Array.isArray) ->
+	exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
 
-		module.exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
+		throw new TypeError unless isArray arr
+		keyGen = null if typeof keyGen isnt 'function'
+		valueGen = null if typeof valueGen isnt 'function'
 
-			throw new TypeError unless isArray arr
-			keyGen = null if typeof keyGen isnt 'function'
-			valueGen = null if typeof valueGen isnt 'function'
+		for elem, i in arr
 
-			for elem, i in arr
+			key = if keyGen then keyGen(elem, i, arr) else i
+			value = if valueGen then valueGen(elem, i, arr) else elem
 
-				key = if keyGen then keyGen(elem, i, arr) else i
-				value = if valueGen then valueGen(elem, i, arr) else elem
+			target[key] = value
 
-				target[key] = value
-
-			target
+		target
 
 Utils for strings
 -----------------
 
 ### capitalize()
 
-	module.exports.capitalize = (arg) ->
+	exports.capitalize = (arg) ->
 
 		arg += ''
 
@@ -362,7 +288,7 @@ Utils for strings
 
 Check if string references into array (according to notation in `get` method).
 
-	module.exports.isStringArray = (arg) ->
+	exports.isStringArray = (arg) ->
 
 		arg += ''
 		arg.slice(-2) is '[]'
