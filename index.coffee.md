@@ -1,9 +1,9 @@
 Utils
 =====
 
-@author kildyt@gmail.com
+**Author:** *kildyt@gmail.com*
 
-@license MIT
+**License:** *MIT*
 
 	'use strict'
 

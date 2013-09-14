@@ -18,21 +18,21 @@ Functions have to provide `callback` as last parameter.
 
 	exports.Stack = class Stack
 
-## Constructor
+### Constructor
 
 		constructor: ->
 
 			@_arr = []
 
-## Properties
+### Properties
 
-### Protected
+#### Protected
 
 		_arr: null
 
-## Methods
+### Methods
 
-### add()
+#### add()
 
 Add new asynchronous function into stack.
 
@@ -47,7 +47,7 @@ Add new asynchronous function into stack.
 
 			@_arr.push obj, func, args
 
-### callNext()
+#### callNext()
 
 Call next function from the stack.
 
@@ -81,7 +81,7 @@ Empty `callback` will be called if there is no function to call.
 			# call
 			func.apply obj, args
 
-### runAll()
+#### runAll()
 
 Run all stored functions.
 
