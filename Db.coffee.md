@@ -18,23 +18,14 @@ Db main file
 
 ### Static protected
 
-#### _Database()
+#### _subclasses
 
-Reference to the `Database` class.
+Namespace of all available *subclasses*.
 
-		@_Database = Database
-
-#### _Collection()
-
-Reference to the `Collection` class.
-
-		@_Collection = Collection
-
-#### _Table()
-
-Reference to the `Table` class.
-
-		@_Table = Table
+		@_subclasses =
+			Database: Database
+			Collection: Collection
+			Table: Table
 
 ### Constructor
 
@@ -123,19 +114,19 @@ It not have place if any documents won't be returned
 
 		_implementDatabase: (name) ->
 
-			database = @_database = new Database @, name
+			database = @_database = new Db._subclasses.Database @, name
 
 			@_stack.add database, 'run'
 
 		_implementTable: (name) ->
 
-			table = @_table = new Table @, name
+			table = @_table = new Db._subclasses.Table @, name
 
 			@_stack.add table, 'run'
 
 		_implementCollection: ->
 
-			@_collection = new Collection @
+			@_collection = new Db._subclasses.Collection @
 
 			@_stack.add null, (callback) =>
 
