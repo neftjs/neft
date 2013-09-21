@@ -36,13 +36,13 @@ Functions have to provide `callback` as last parameter.
 
 Add new asynchronous function into stack.
 
-`obj` is a namespace where specified `func` exists and context passed into function.
-`func` is a name of function stored in `obj` or function to call
-`args...` are an arguments passed into function
+`obj` is a namespace where specified `func` exists and context passed into function;
+`func` is a name of function stored in `obj` or function to call;
+`args...` are an arguments passed into function.
 
 		add: (obj, func, args...) ->
 
-			if typeof obj isnt 'object'
+			if typeof func is 'string' and (not obj or typeof obj isnt 'object')
 				throw new TypeError "ASync Stack::add(): passed obj is not an object"
 
 			@_arr.push obj, func, args
@@ -83,7 +83,7 @@ Empty `callback` will be called if there is no function to call.
 
 #### runAll()
 
-Run all stored functions.
+Run all stored functions in order.
 
 `callback` has arguments from the last fulfilled or first rejected fuction.
 
@@ -103,6 +103,38 @@ Run all stored functions.
 			callNext = @callNext.bind @, onNextCalled
 
 			callNext()
+
+#### runAllSimultaneously()
+
+Run all stored functions in the same time.
+
+`callback` has arguments from the last fulfilled or first rejected fuction.
+
+		runAllSimultaneously: (callback) ->
+
+			if typeof callback isnt 'function'
+				throw new TypeError "ASync runAllSimultaneously(): passed callback is not a function"
+
+			length = n = @_arr.length
+			done = 0
+
+			onDone = (err) ->
+
+				++done
+
+				if done > length then return
+
+				if err
+					done = length
+					return callback err
+
+				if done is length
+					callback.apply null, arguments
+
+			# run all functions
+			while n--
+				@callNext onDone
+
 
 forEachASYNC()
 --------------
