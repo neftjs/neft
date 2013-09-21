@@ -6,20 +6,9 @@
 ###
 
 Db = require '../index.coffee.md'
+specUtils = require './utils.coffee'
 
-describe 'Db', ->
-
-	it 'is ready', ->
-
-		ready = false
-
-		runs ->
-			Db.on Db.READY, -> ready = true
-
-		waitsFor -> ready
-
-		runs ->
-			expect(ready).toBeTruthy()
+specUtils.isReady Db
 
 describe 'Db implementation', ->
 
@@ -35,14 +24,7 @@ describe 'Db implementation', ->
 
 	id = null
 
-	it 'cleans', ->
-
-		end = false
-
-		runs ->
-			new Db(DATABASE, TABLE).remove() (err) -> end = not err
-
-		waitsFor -> end
+	specUtils.clean Db, DATABASE, TABLE
 
 	it 'saves new document', ->
 
