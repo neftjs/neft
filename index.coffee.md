@@ -129,7 +129,7 @@ Separate properties in path by dots ('.').
 For arrays add to property name two brackets ('[]')
 - look at isStringArray method to check it in other way.
 
-	exports.get = (obj, path='', target) ->
+	get = exports.get = (obj, path='', target) ->
 
 		switch typeof path
 
@@ -149,8 +149,12 @@ For arrays add to property name two brackets ('[]')
 		# check chunks
 		for key, i in path
 
+			# empty props are not supported
+			if not key.length and i
+				throw new ReferenceError "utils.get(): empty properties are not supported"
+
 			# support array elements by `[]` chars
-			if ~key.indexOf('[]') and key.slice(-2) is '[]'
+			if isStringArray key
 
 				# get array key name
 				key = key.substring 0, key.indexOf('[]')
@@ -178,9 +182,9 @@ For arrays add to property name two brackets ('[]')
 				# call this func recursive on all array elements
 				# found results will be saved in the `target` array
 				for elem in obj
-					Object.get elem, path.join('.'), target
+					get elem, path.join('.'), target
 
-				# return `undefined` no nothing has been found
+				# return `undefined` if nothing has been found
 				unless target.length
 					return undefined
 
@@ -188,7 +192,7 @@ For arrays add to property name two brackets ('[]')
 				return target
 
 			# move to the next object value
-			obj = obj[key]
+			if key.length then obj = obj[key]
 
 			# break if no way exists
 			if typeof obj isnt 'object'
@@ -288,7 +292,7 @@ Utils for strings
 
 Check if string references into array (according to notation in `get` method).
 
-	exports.isStringArray = (arg) ->
+	isStringArray = exports.isStringArray = (arg) ->
 
 		arg += ''
 		arg.slice(-2) is '[]'
