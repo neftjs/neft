@@ -78,8 +78,11 @@ Empty `callback` will be called if there is no function to call.
 			# add callback
 			args[func.length - 1] = callback
 
-			# call
-			func.apply obj, args
+			# call; support sync errors
+			try
+				func.apply obj, args
+			catch e
+				callback e
 
 #### runAll()
 
