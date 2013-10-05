@@ -296,3 +296,18 @@ Check if string references into array (according to notation in `get` method).
 
 		arg += ''
 		arg.slice(-2) is '[]'
+
+Utils for errors
+----------------
+
+### errorToObject()
+
+Parse native `Error` instance into *pure* object.
+
+	exports.errorToObject = (error) ->
+
+		unless error instanceof Error
+			throw new TypeError
+
+		name: error.name
+		message: error.message

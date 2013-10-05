@@ -121,6 +121,9 @@ Run all stored functions in the same time.
 			length = n = @_arr.length
 			done = 0
 
+			unless length
+				return callback null
+
 			onDone = (err) ->
 
 				++done
