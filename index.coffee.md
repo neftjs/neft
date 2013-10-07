@@ -228,7 +228,7 @@ Proto is not checking.
 			throw new TypeError
 
 		if isArray arg
-			return !!arg.length
+			return !arg.length
 
 		return false for key of arg
 		true
