@@ -8,5 +8,5 @@ module.exports = (row, value, expected) ->
 	if value is NaN or value is null
 		value = undefined
 
-	if typeof value isnt expected
+	if value? and typeof value isnt expected
 		throw new TypeError "Schema: #{row} must be a #{expected}"
