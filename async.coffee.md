@@ -95,7 +95,14 @@ Run all stored functions in order.
 			if typeof callback isnt 'function'
 				throw new TypeError "ASync runAll(): passed callback is not a function"
 
-			onNextCalled = =>
+			unless @_arr.length
+				return callback null
+
+			onNextCalled = (err) =>
+
+				# on err
+				if err
+					return callback err
 
 				# call next
 				if @_arr.length
