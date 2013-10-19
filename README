@@ -1,0 +1,6 @@
+Steps to produce:
+
+load - load file and get DOM
+preparse - load requirements, find declarations and placedunits
+parse - prepare declarations and placedunits
+render - render html output
