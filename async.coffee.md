@@ -149,7 +149,7 @@ Run all stored functions in the same time.
 				@callNext onDone
 
 
-forEachASYNC()
+forEach()
 --------------
 
 Check object or array like by standard Array::forEach but working asynchronously.
@@ -171,16 +171,16 @@ For objects callback gets: key, value, object, next.
 			i = 0
 			n = arr.length
 
-			next = =>
+			next = ->
 
 				# return and call onEnd if there is no elements to check
 				if i is n then return onEnd()
 
-				# call callback func
-				callback.call thisArg, arr[i], i, arr, next
-
 				# increase counter
 				i++
+
+				# call callback func
+				callback.call thisArg, arr[i-1], i-1, arr, next
 
 			# start
 			next()
@@ -192,7 +192,7 @@ For objects callback gets: key, value, object, next.
 			i = 0
 			n = keys.length
 
-			next = =>
+			next = ->
 
 				# return and call onEnd if there is no pairs to check
 				if i is n then return onEnd()
