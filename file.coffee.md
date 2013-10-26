@@ -1,0 +1,135 @@
+View File
+=========
+
+Goals
+-----
+
+One of the main goal is to provide an easy interface to describe a file which is
+a DOM element with placed unit declarations, links to units and others provided
+features. Physical file should be easy to load and parse.
+
+	'use strict'
+
+	utils = require 'utils/index.coffee.md'
+	assert = require 'assert'
+	Events = require 'Events/index.coffee.md'
+
+*class* File
+------------
+
+	module.exports = class File extends Events
+
+### Static
+
+#### DOC
+
+DOM `DocumentElement` where all files are parsed.
+
+		@DOC = DOC = document? and document
+		@DOC = DOC ?= jsdom.jsdom null, null,
+			FetchExternalResources: false
+			ProcessExternalResources: false
+
+#### Event names
+
+		@LOAD_END = 'loadend'
+		@READY = 'ready'
+		@ERROR = 'error'
+
+#### *File* factory(*string*)
+
+All `File` instances are cached, so if you want to render some file it's not
+necessary to parse it each time you want to use it.
+
+		@factory = do ->
+
+			cache = {}
+
+			(path) ->
+
+				assert typeof path is 'string'
+				assert path
+
+				cache[path] or cache[path] = new File path
+
+### Protected
+
+		@_createFileElem = (source) ->
+
+			file = File.DOC.createElement 'file'
+			while child = source.firstChild then file.appendChild child
+
+			file
+
+#### Modules
+
+		@LoadFile = require('./file/load.coffee.md') File
+		@ParseFile = require('./file/parse.coffee.md') File
+		@RenderFile = require('./file/render.coffee.md') File
+		@Unit = require('./unit.coffee.md') File
+		@Elem = require('./elem.coffee.md') File
+
+### Constructor(*path*, *parse: true*)
+
+		constructor: (@path, opts={}) ->
+
+			assert typeof path is 'string'
+			assert path
+
+			super
+
+			# set default options
+			opts.parse ?= true
+
+			# set properties
+			@pathbase = path.substring 0, path.lastIndexOf('/')
+			@load = new File.LoadFile @
+
+			# on ready
+			@once File.READY, -> @isReady = true
+
+			# load files
+			@load.all (err) =>
+
+				if err then return @trigger File.ERROR, err
+
+				# create parse and render classes
+				@trigger File.LOAD_END
+				@parse = new File.ParseFile @
+				@render = new File.RenderFile @
+
+				unless opts.parse
+					return @trigger File.READY
+
+				# parse file if needed
+				@parse.all (err) =>
+
+					if err then return @trigger File.ERROR, err
+					@trigger File.READY
+
+### Properties
+
+		isReady: false
+		dom: null
+		path: ''
+		pathbase: ''
+		parent: null
+		links: null
+		units: null
+		elems: null
+
+		load: null
+		parse: null
+		render: null
+
+### Methods
+
+#### *Object* toJSON()
+
+		toJSON: ->
+
+			path: @path
+			pathbase: @pathbase
+			links: @links
+			units: @units
+			elems: @elems
