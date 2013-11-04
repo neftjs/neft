@@ -15,7 +15,7 @@ PHRASING_ELEMENTS = ["A", "EM", "STRONG", "SMALL", "MARK", "ABBR",
 
 isRemove = (node) ->
 
-	switch node.nodeName
+	switch node.name
 
 		when '#comment'
 
@@ -23,12 +23,13 @@ isRemove = (node) ->
 
 		when '#text'
 
-			if WHITE_SPACE_RE.test node.textContent then return true
+			if WHITE_SPACE_RE.test node.text then return true
 
-			unless ~PHRASING_ELEMENTS.indexOf node.parentNode.nodeName
-				node.data = node.textContent
+			unless ~PHRASING_ELEMENTS.indexOf node.parent.name
+				# TODO
+				###node.text = node.text
 					.replace(WHITE_SPACES_RE, '')
-					.replace(LINE_BREAKERS_RE, '')
+					.replace(LINE_BREAKERS_RE, '')###
 
 			false
 
@@ -38,7 +39,7 @@ isRemove = (node) ->
 
 removeEmptyTexts = (node) ->
 
-	nodes = node.childNodes
+	nodes = node.children
 	length = nodes.length
 	j = 0
 	for i in [0..length] by 1
@@ -47,13 +48,13 @@ removeEmptyTexts = (node) ->
 		unless elem then break
 
 		if isRemove elem
-			node.removeChild elem
+			elem.parent = undefined
 			j--
 
 		j++
 
 	# check nodes recursively
-	for elem in node.childNodes
+	for elem, i in node.children
 		removeEmptyTexts elem
 
 module.exports = (dom) ->

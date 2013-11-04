@@ -31,7 +31,6 @@ Represents *unit* - separated part of dom which can be placed by elems.
 				assert self instanceof File
 				assert typeof name is 'string'
 				assert name
-				assert dom.ownerDocument is File.DOC
 
 				unless (cached = cache[self.path]?[name])?
 					forPath = cache[self.path] ?= {}
@@ -41,15 +40,11 @@ Represents *unit* - separated part of dom which can be placed by elems.
 
 ### Constructor(*File*, *string, *HTMLDivElement*)
 
-		constructor: (@self, @name, dom) ->
+		constructor: (@self, @name, @dom) ->
 
 			assert self instanceof File
 			assert typeof name is 'string'
 			assert name
-			assert dom.ownerDocument is File.DOC
-
-			# move declarated unit dom element as file
-			@dom = File._createFileElem dom
 
 			# merge units from parent
 			@units = utils.clone self.units

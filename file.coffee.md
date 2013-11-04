@@ -10,6 +10,8 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
+	ELEMENT_IMPL = if window? then 'dom' else 'jsdom'
+
 	utils = require 'utils/index.coffee.md'
 	assert = require 'assert'
 	Events = require 'Events/index.coffee.md'
@@ -21,16 +23,7 @@ features. Physical file should be easy to load and parse.
 
 ### Static
 
-#### DOC
-
-DOM `DocumentElement` where all files are parsed.
-
-		@DOC = DOC = document? and document
-		@DOC = DOC ?= jsdom.jsdom null, null,
-			FetchExternalResources: false
-			ProcessExternalResources: false
-
-#### Event names
+#### Events
 
 		@LOAD_END = 'loadend'
 		@READY = 'ready'
@@ -52,17 +45,9 @@ necessary to parse it each time you want to use it.
 
 				cache[path] or cache[path] = new File path
 
-### Protected
-
-		@_createFileElem = (source) ->
-
-			file = File.DOC.createElement 'file'
-			while child = source.firstChild then file.appendChild child
-
-			file
-
 #### Modules
 
+		@Element = require('./Element/index.coffee.md') ELEMENT_IMPL
 		@LoadFile = require('./file/load.coffee.md') File
 		@ParseFile = require('./file/parse.coffee.md') File
 		@RenderFile = require('./file/render.coffee.md') File

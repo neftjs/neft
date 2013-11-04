@@ -22,7 +22,6 @@ Represents an element placed in the file.
 			assert self instanceof File
 			assert typeof name is 'string'
 			assert name
-			assert dom.ownerDocument is File.DOC
 
 ### Properties
 

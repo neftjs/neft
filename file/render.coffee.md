@@ -64,7 +64,6 @@ Integer value used for bitmasks. Check static properties to needed values.
 			dom = @self.dom
 
 			assert not (@status & RenderFile.PARSE)
-			assert dom.ownerDocument is File.DOC
 
 			{usedUnits, changes} = @
 			{units, elems} = @self
@@ -83,8 +82,8 @@ Integer value used for bitmasks. Check static properties to needed values.
 					newChild = usedUnit.dom
 					oldChild = elem.dom
 
-					changes.push dom, oldChild, newChild
-					dom.replaceChild newChild, oldChild
+					changes.push oldChild.parent, oldChild, newChild
+					oldChild.parent.replace oldChild, newChild
 
 			# change status
 			@status |= RenderFile.PARSE
@@ -105,7 +104,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 				oldChild = changes.pop()
 				node = changes.pop()
 
-				node.replaceChild oldChild, newChild
+				node.replace newChild, oldChild
 
 			# clear and destroy used units
 			while usedUnits.length
@@ -121,7 +120,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 		html: ->
 
 			@parse()
-			html = @self.dom.innerHTML
+			html = @self.dom.stringify()
 			@clear()
 
 			html

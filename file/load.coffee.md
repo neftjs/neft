@@ -11,6 +11,7 @@ Trigger `LOAD_END` event when all needed resources are loaded and parsed into DO
 	utils = require 'utils/index.coffee.md'
 	assert = require 'assert'
 	Events = require 'Events/index.coffee.md'
+
 	getFile = require './load/getFile.coffee'
 
 *class* LoadFile
@@ -53,9 +54,9 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 ### Protected
 
-#### *dom* _clearDOM(dom)
+#### *dom* _clear(dom)
 
-		_clearDOM: require './load/clearDOM.coffee'
+		_clear: require './load/clear.coffee'
 
 ### Methods
 
@@ -82,24 +83,15 @@ File will be cleared if needed (editable in options).
 			opts.clear ?= true
 
 			# get file
-			getFile @self.path, (err, dom) =>
+			getFile @self.path, (err, html) =>
 
 				if err then return @trigger LoadFile.ERROR, err
 
-				# get body
-				body = File.DOC.body
-
-				# parse string into DOM
-				body.innerHTML = dom
-
-				# get special element for file
-				dom = File._createFileElem body
-
 				# save parsed dom
-				@self.dom = dom
+				dom = @self.dom = File.Element.fromHTML html
 
 				# clear dom
-				@_clearDOM dom if opts.clear
+				@_clear dom if opts.clear
 				
 				onend()
 
@@ -126,7 +118,7 @@ Find and attach all found links to the other files.
 				@trigger LoadFile.STATUS_CHANGED, @status 
 
 			# find link tags
-			nodes = dom.querySelectorAll 'file > link[rel="require"][href]'
+			nodes = dom.queryAll '> link[rel="require"][href]'
 			unless nodes.length then return onend null
 
 			# create async stack
@@ -146,10 +138,10 @@ Find and attach all found links to the other files.
 			# load found files
 			for node in nodes
 
-				href = node.getAttribute 'href'
+				href = node.attrs.get 'href'
 
 				# remove link element
-				dom.removeChild node
+				node.parent = undefined
 
 				stack.add null, requireView, href
 
@@ -180,6 +172,6 @@ Load file complexly.
 		clone: (self) ->
 
 			copy = utils.clone @
-			copy.self.dom = self.dom.cloneNode true
+			copy.self.dom = self.dom.cloneDeep()
 
 			copy

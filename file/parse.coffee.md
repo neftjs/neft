@@ -84,7 +84,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			# find units in file
 			stack = new utils.async.Stack
-			nodes = dom.querySelectorAll "file > unit[name]"
+			nodes = dom.queryAll '> unit[name]'
 
 			factoryUnit = (name, node, callback) ->
 
@@ -98,13 +98,12 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			for node in nodes
 
-				name = node.getAttribute 'name'
-				name = name.toUpperCase()
+				name = node.attrs.get 'name'
 
 				stack.add @self, factoryUnit, name, node
 
 				# remove node from file
-				dom.removeChild node
+				node.parent = undefined
 
 			# update status
 			stack.runAllSimultaneously (err) =>
@@ -130,11 +129,13 @@ Integer value used for bitmasks. Check static properties to needed values.
 			# find elems
 			for name of @self.units
 
-				nodes = dom.querySelectorAll name
+				nodes = dom.queryAll name
 
-				if nodes? then for node in nodes
+				unless nodes? then continue
+
+				for node in nodes
 					nameElems = elems[name] ?= []
-					nameElems.push new File.Elem @self, name, node
+					nameElems.push elem = new File.Elem @self, name, node
 
 			# update status
 			@status |= ParseFile.ELEMS
