@@ -11,8 +11,9 @@ Provide easy to use wrapper for `DOM` and other engines to parse `HTML`.
 	assert = require 'assert'
 
 	IMPLS =
-		jsdom: unless window? then require './impls/jsdom/index.coffee'
-		dom: if window? then require './impls/dom/index.coffee'
+		jsdom: require './impls/jsdom/index.coffee'
+		htmlparser: require './impls/htmlparser/index.coffee'
+		dom: require './impls/dom/index.coffee'
 
 	module.exports = (impl) ->
 

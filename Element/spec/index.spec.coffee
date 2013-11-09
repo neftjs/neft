@@ -1,6 +1,6 @@
 'use strict'
 
-Element = require('../index.coffee.md') 'jsdom'
+Element = require('../index.coffee.md') 'htmlparser'
 
 describe 'View Element', ->
 
@@ -35,17 +35,6 @@ describe 'View Element', ->
 			expect(b.name).toBe 'b'
 			expect(em.name).toBe 'em'
 			expect(div.name).toBe 'div'
-
-	it 'can be cloned deep', ->
-
-		clone = b.cloneDeep()
-
-		expect(clone).toEqual jasmine.any Element
-		expect(clone).not.toBe b
-		expect(clone.children[0]).toEqual jasmine.any Element
-		expect(clone.children[0]).not.toBe em
-		expect(clone.children[0].name).toBe 'em'
-		expect(clone.stringify()).toBe b.stringify()
 
 	it 'stringify to html', ->
 
@@ -95,6 +84,19 @@ describe 'View Element', ->
 
 			b.children[0].parent = undefined
 			em.parent = b
+	
+	it 'can be cloned deep', ->
+
+		clone = b.cloneDeep()
+		clone.attrs.set 'a', 'a'
+
+		expect(clone).toEqual jasmine.any Element
+		expect(clone).not.toBe b
+		expect(b.attrs.get 'a').not.toBe 'a'
+		expect(clone.children[0]).toEqual jasmine.any Element
+		expect(clone.children[0]).not.toBe em
+		expect(clone.children[0].name).toBe 'em'
+		expect(clone.stringify()).toBe b.stringify()
 
 	describe 'attrs', ->
 
@@ -150,29 +152,28 @@ describe 'View Element', ->
 			expect(div.index).toBe 1
 			expect(b.index).toBe 0
 
-	it 'queryAll() returns proper list', ->
-
-		expect(doc.queryAll('>*')).toEqual [b, div, p]
-
 	it 'replace() works properly', ->
 
 		elem = Element.fromHTML '<b><em></em></b><div></div><p></p>'
-		article = Element.fromHTML('<article></article>').children[0] # TODO
 
-		[b, div, p] = elem.children
-		[em] = b.children
+		[elemB, elemDiv, elemP] = elem.children
+		[elemEm] = b.children
 
-		elem.replace b, p
+		elem.replace elemB, elemP
 
 		expect(elem.children.length).toBe 2
-		expect(elem.children[0]).toBe p
+		expect(elem.children[0]).toBe elemP
 		expect(elem.stringify()).toBe '<p></p><div></div>'
 
-		elem.replace p, b
-		p.parent = elem
+		elem.replace elemP, elemB
+		elemP.parent = elem
 
 		expect(elem.children.length).toBe 3
-		expect(elem.children[0]).toBe b
-		expect(elem.children[1]).toBe div
-		expect(elem.children[2]).toBe p
+		expect(elem.children[0]).toBe elemB
+		expect(elem.children[1]).toBe elemDiv
+		expect(elem.children[2]).toBe elemP
 		expect(elem.stringify()).toBe '<b><em></em></b><div></div><p></p>'
+
+	it 'queryAll() returns proper list', ->
+
+		expect(doc.queryAll('>*')).toEqual [b, div, p]

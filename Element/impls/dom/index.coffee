@@ -1,5 +1,7 @@
 'use strict'
 
+unless document? then return
+
 DOC = document
 
 module.exports =

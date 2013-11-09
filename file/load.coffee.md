@@ -117,16 +117,16 @@ Find and attach all found links to the other files.
 				@status |= LoadFile.LINKS 
 				@trigger LoadFile.STATUS_CHANGED, @status 
 
-			# find link tags
-			nodes = dom.queryAll '> link[rel="require"][href]'
-			unless nodes.length then return onend null
-
 			# create async stack
 			stack = new utils.async.Stack
 
 			# load file and save it
-			requireView = (href, callback) =>
+			requireView = (href, node, callback) =>
 
+				# remove link element
+				node.parent = undefined
+
+				# get view
 				links.push file = File.factory @self.pathbase + '/' + href
 
 				if file.isReady then return callback null
@@ -136,14 +136,15 @@ Find and attach all found links to the other files.
 					.once(File.READY, callback.bind null)
 
 			# load found files
-			for node in nodes
+			for node in dom.children
+
+				if node.name isnt 'link' or node.attrs.get('rel') isnt 'require'
+					continue
 
 				href = node.attrs.get 'href'
+				unless href then continue
 
-				# remove link element
-				node.parent = undefined
-
-				stack.add null, requireView, href
+				stack.add null, requireView, href, node
 
 			stack.runAllSimultaneously onend
 

@@ -90,9 +90,6 @@ module.exports = (DOC) ->
 
 			tmp ?= @constructor.factory()
 
-			# remove all children
-			elem.parent = undefined while elem = @children[0]
-
 			# parse html
 			parseHTML.call tmp, text
 

@@ -66,13 +66,12 @@ Integer value used for bitmasks. Check static properties to needed values.
 			units = @self.units ?= {}
 
 			# merge units from files
-			pathbase = @self.pathbase and @self.pathbase.toUpperCase().replace(HASH_RE, '-')
+			pathbase = @self.pathbase and @self.pathbase.replace(HASH_RE, '-')
 			pathbaselen = @self.pathbase.length
 
 			for link in @self.links
 
 				base = link.pathbase.slice pathbaselen + 1
-				base = base.toUpperCase()
 				base += if base then '-' else ''
 
 				# merge
@@ -84,10 +83,13 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			# find units in file
 			stack = new utils.async.Stack
-			nodes = dom.queryAll '> unit[name]'
 
 			factoryUnit = (name, node, callback) ->
 
+				# remove node from file
+				node.parent = undefined
+
+				# get unit
 				unit = units[name] = File.Unit.factory @, name, node
 
 				if unit.isReady then return callback null
@@ -96,14 +98,14 @@ Integer value used for bitmasks. Check static properties to needed values.
 					.once(File.Unit.ERROR, callback)
 					.once(File.Unit.READY, callback.bind null)
 
-			for node in nodes
+			for node in dom.children
+
+				if node.name isnt 'unit' then continue
 
 				name = node.attrs.get 'name'
+				unless name then continue
 
 				stack.add @self, factoryUnit, name, node
-
-				# remove node from file
-				node.parent = undefined
 
 			# update status
 			stack.runAllSimultaneously (err) =>

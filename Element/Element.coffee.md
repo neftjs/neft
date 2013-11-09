@@ -148,6 +148,10 @@ Can be changed.
 
 				if text is value then return
 
+				# remove all children
+				elem.parent = undefined while elem = @children[0]
+
+				# set text
 				text = value
 				impl.text.set.call @, value
 
@@ -206,7 +210,7 @@ Returns cloned *Element* will all new instances of children.
 			selector = selector.trim()
 			assert selector
 
-			impl.queryAll.call @, selector, target
+			impl.queryAll.call @, selector.trim(), target
 			target
 
 #### replace(*Element*, *Element*)

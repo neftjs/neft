@@ -10,7 +10,7 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	ELEMENT_IMPL = if window? then 'dom' else 'jsdom'
+	ELEMENT_IMPL = if window? then 'dom' else 'htmlparser'
 
 	utils = require 'utils/index.coffee.md'
 	assert = require 'assert'

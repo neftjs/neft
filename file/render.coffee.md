@@ -117,6 +117,8 @@ Integer value used for bitmasks. Check static properties to needed values.
 			@status = 0
 			@trigger RenderFile.STATUS_CHANGED, @status
 
+#### html()
+
 		html: ->
 
 			@parse()
