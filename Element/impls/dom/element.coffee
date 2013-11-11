@@ -48,7 +48,7 @@ module.exports = (DOC) ->
 
 	clone: (clone) ->
 
-		clone._node = @_node.cloneNode()
+		clone._node = @_node.cloneNode false
 		clone._node._element = clone
 
 	child:
