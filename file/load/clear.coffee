@@ -26,10 +26,9 @@ isRemove = (node) ->
 			if WHITE_SPACE_RE.test node.text then return true
 
 			unless ~PHRASING_ELEMENTS.indexOf node.parent.name
-				# TODO
-				###node.text = node.text
+				node.text = node.text
 					.replace(WHITE_SPACES_RE, '')
-					.replace(LINE_BREAKERS_RE, '')###
+					.replace(LINE_BREAKERS_RE, '')
 
 			false
 

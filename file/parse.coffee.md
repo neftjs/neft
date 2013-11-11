@@ -25,7 +25,8 @@ Prepare file to be render: find provided elements, attributes and so on.
 
 		@UNITS = 1<<0
 		@ELEMS = 1<<1
-		@ALL = @UNITS | @ELEMS
+		@TEXTS = 1<<2
+		@ALL = @UNITS | @ELEMS | @TEXTS
 
 #### Events names
 
@@ -145,6 +146,30 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			elems
 
+#### texts()
+
+		texts: ->
+
+			assert not (@status & ParseFile.TEXTS)
+			assert @status & ParseFile.UNITS
+			assert @status & ParseFile.ELEMS
+
+			dom = @self.dom
+
+			# find elems
+			nodes = dom.queryAll '[text]'
+			texts = @self.texts = new Array nodes.length
+
+			for node, i in nodes
+				prop = node.attrs.get 'text'
+				texts[i] = new File.Text @self, prop, node
+
+			# update status
+			@status |= ParseFile.TEXTS
+			@trigger ParseFile.STATUS_CHANGED, @status
+
+			texts
+
 #### all()
 
 		all: (callback) ->
@@ -156,6 +181,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			@once ParseFile.STATUS_CHANGED, =>
 				@elems()
+				@texts()
 				callback null
 
 			@units()

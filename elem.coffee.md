@@ -20,8 +20,7 @@ Represents an element placed in the file.
 		constructor: (@self, @name, @dom) ->
 
 			assert self instanceof File
-			assert typeof name is 'string'
-			assert name
+			assert name and typeof name is 'string'
 
 ### Properties
 

@@ -177,3 +177,4 @@ describe 'View Element', ->
 	it 'queryAll() returns proper list', ->
 
 		expect(doc.queryAll('>*')).toEqual [b, div, p]
+		expect(doc.queryAll('[title]')).toEqual [p]

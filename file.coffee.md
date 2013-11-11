@@ -53,6 +53,7 @@ necessary to parse it each time you want to use it.
 		@RenderFile = require('./file/render.coffee.md') File
 		@Unit = require('./unit.coffee.md') File
 		@Elem = require('./elem.coffee.md') File
+		@Text = require('./text.coffee.md') File
 
 ### Constructor(*path*, *parse: true*)
 
@@ -102,6 +103,7 @@ necessary to parse it each time you want to use it.
 		links: null
 		units: null
 		elems: null
+		texts: null
 
 		load: null
 		parse: null

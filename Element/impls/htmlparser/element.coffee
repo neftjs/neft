@@ -8,7 +8,9 @@ utils = require 'utils/index.coffee.md'
 {forEach} = Array::
 {min} = Math
 
-MAIN_ELEMENT_NAME = 'div'
+isDefined = (elem) -> elem?
+
+MAIN_ELEMENT_NAME = 'fragment'
 
 updateIndexes = (nodes, from=0, to=nodes.length) ->
 
@@ -27,7 +29,7 @@ module.exports = ->
 			type: 'tag'
 			name: MAIN_ELEMENT_NAME
 			attribs: null
-			children: null
+			children: []
 		node._element = @
 
 	parseHTML: parseHTML = (html) ->
@@ -124,6 +126,10 @@ module.exports = ->
 
 		set: do (tmp=null) -> (text) ->
 
+			if @_node.type is 'text'
+				@_node.data = text
+				return;
+
 			tmp ?= @constructor.factory()
 
 			# parse html
@@ -144,7 +150,18 @@ module.exports = ->
 		unless recurse
 			selector = selector.slice 1
 
-		opts.tag_name = selector.trim()
+		# get attrs
+		attrs = selector.split '['
+		selector = attrs.shift().trim()
+
+		for attr in attrs
+			attr = attr.slice 0, -1
+			[name, value] = attr.split '='
+			value ?= isDefined
+			opts[name] = value
+
+		# save opts
+		if selector then opts.tag_name = selector
 
 		# find elements
 		nodes = nodes.concat domutils.getElements opts, @_node.children, recurse, Infinity

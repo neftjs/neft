@@ -2,7 +2,7 @@
 
 forEach = Array::forEach
 
-MAIN_ELEMENT_NAME = 'div'
+MAIN_ELEMENT_NAME = 'fragment'
 
 module.exports = (DOC) ->
 
@@ -87,6 +87,10 @@ module.exports = (DOC) ->
 				@_node.textContent
 
 		set: do (tmp=null) -> (text) ->
+
+			if @_node.nodeType is document.TEXT_NODE
+				@_node.textContent = text
+				return
 
 			tmp ?= @constructor.factory()
 

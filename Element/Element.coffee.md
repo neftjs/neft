@@ -23,6 +23,10 @@ View Structure Element
 
 		@INIT = 'init'
 
+#### modules
+
+		@modules = modules
+
 #### *Element* fromHTML(*string*)
 
 Create new *Element* instance based on *HTML*.

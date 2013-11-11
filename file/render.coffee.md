@@ -59,14 +59,15 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 #### parse()
 
-		parse: =>
+		parse: do (tmp=File.Element.factory()) -> (data) ->
 
 			dom = @self.dom
 
 			assert not (@status & RenderFile.PARSE)
+			assert not data or data instanceof File.Element.modules.Attrs
 
 			{usedUnits, changes} = @
-			{units, elems} = @self
+			{units, elems, texts} = @self
 
 			# replace elems by units
 			for name, subelems of elems
@@ -75,15 +76,36 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 				for elem in subelems
 
+					oldChild = elem.dom
+
+					# get unit and parse it
 					usedUnit = unit.clone()
-					usedUnit.render.parse()
+					usedUnit.render.parse oldChild.attrs
 					usedUnits.push usedUnit
 
 					newChild = usedUnit.dom
-					oldChild = elem.dom
 
+					# replace
 					changes.push oldChild.parent, oldChild, newChild
 					oldChild.parent.replace oldChild, newChild
+
+			# replace texts by values
+			for elem in texts
+
+				elemData = data.get elem.prop
+				if elemData is undefined then continue 
+
+				oldChild = elem.dom
+				tmp.text = elemData
+
+				# remove children
+				for child in oldChild.children
+					changes.push oldChild, child, null
+					child.parent = undefined
+
+				# replace
+				changes.push oldChild, null, tmp
+				tmp.parent = oldChild
 
 			# change status
 			@status |= RenderFile.PARSE
@@ -91,7 +113,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 #### clear()
 
-		clear: =>
+		clear: ->
 
 			assert @status & RenderFile.PARSE
 
@@ -103,6 +125,14 @@ Integer value used for bitmasks. Check static properties to needed values.
 				newChild = changes.pop()
 				oldChild = changes.pop()
 				node = changes.pop()
+
+				unless newChild
+					oldChild.parent = node
+					continue
+
+				unless oldChild
+					newChild.parent = undefined
+					continue
 
 				node.replace newChild, oldChild
 
@@ -119,9 +149,9 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 #### html()
 
-		html: ->
+		html: (data) ->
 
-			@parse()
+			@parse data
 			html = @self.dom.stringify()
 			@clear()
 
