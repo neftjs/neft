@@ -1,23 +1,33 @@
 'use strict'
 
 htmlparser = require 'htmlparser2'
+DomHandler = require './domhandler.js'
 domutils = require 'domutils'
 utils = require 'utils/index.coffee.md'
 
-forEach = Array::forEach
+{forEach} = Array::
+{min} = Math
 
 MAIN_ELEMENT_NAME = 'div'
+
+updateIndexes = (nodes, from=0, to=nodes.length) ->
+
+	if from >= to then return
+
+	i = to
+	while i-- - from
+		nodes[i].index = i
 
 module.exports = ->
 
 	factory: ->
 
 		node = @_node ?=
+			index: -1
 			type: 'tag'
 			name: MAIN_ELEMENT_NAME
 			attribs: null
 			children: null
-			parent: null
 		node._element = @
 
 	parseHTML: parseHTML = (html) ->
@@ -25,13 +35,12 @@ module.exports = ->
 		Element = @constructor
 		node = @_node
 
-		handler = new htmlparser.DomHandler (err, dom) =>
+		handler = new DomHandler (err, dom) =>
 			
 			if err then throw err
 
 			# move all nodes into document
 			node.children = dom
-			elem.parent = node for elem in dom when elem.parent?
 
 			# for all nodes
 			forNode = (node) ->
@@ -48,6 +57,7 @@ module.exports = ->
 
 			forNodes = (document, node) ->
 
+				updateIndexes node.children
 				forEach.call node.children, forNode, document
 
 			forNodes @, node
@@ -67,7 +77,6 @@ module.exports = ->
 		node._element = clone
 		node.attribs = utils.clone @_node.attribs
 		node.children = []
-		node.parent = null
 
 	child:
 
@@ -75,27 +84,23 @@ module.exports = ->
 
 			node = element._node
 			if node and !~@_node.children.indexOf node
-				@_node.children.push node
-				node.parent = @_node if node.parent?
+				node.index = @_node.children.push(node) - 1
 
 		remove: (element) ->
 
+			children = @_node.children
 			node = element._node
-			index = @_node.children.indexOf node
+			index = node.index
 
-			if node and ~index
-				@_node.children.splice index, 1
-				node.parent = null if node.parent?
+			if children[index] is node
+				children.splice index, 1
+				updateIndexes children, index
 
 	index:
 
 		get: ->
 
-			node = @parent?._node
-
-			unless node then return 0
-
-			node.children.indexOf @_node
+			@_node.index
 
 		set: (index) ->
 
@@ -103,9 +108,10 @@ module.exports = ->
 
 			if node
 				children = node.children
-				oldIndex = children.indexOf @_node
+				oldIndex = @_node.index
 
 				children.splice index, 0, children.splice(oldIndex, 1)[0]
+				updateIndexes children, min(index, oldIndex)
 
 	text:
 
@@ -155,13 +161,17 @@ module.exports = ->
 		oldElementNode = oldElement._node
 		newElementNode = newElement._node
 
-		oldElementIndex = children.indexOf oldElementNode
-		newElementIndex = children.indexOf newElementNode
+		oldElementIndex = oldElementNode.index
+		newElementIndex = newElementNode.index
 
-		if ~newElementIndex
+		# remove new element if exists
+		if children[newElementIndex] is newElementNode
 			children.splice newElementIndex, 1
+			newElementNode.index = -1
+			updateIndexes children, newElementIndex
 
+		# update elements
 		if ~oldElementIndex
 			children[oldElementIndex] = newElementNode
-			oldElementNode.parent = null
-			newElementNode.parent = @_node
+			newElementNode.index = oldElementNode.index
+			oldElementNode.index = -1

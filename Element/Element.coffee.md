@@ -65,7 +65,7 @@ Name of element as in *HTML*.
 Only first set value will be saved.
 It's *readonly* property.
 
-		@on @INIT, (self) -> defineProp self, 'name',
+		defineProp @::, 'name',
 
 			configurable: true
 
@@ -80,22 +80,29 @@ It's *readonly* property.
 List of all children. Don't edit this array.
 Use `parent` property to manipulate children.
 
-		@on @INIT, (self) -> defineProp self, 'children', do (children=[]) ->
+		children: null
 
-			get: -> children
+		@on @INIT, (self) -> defineProp self, 'children',
+
+			value: []
 
 #### *Element* parent
 
 Link to other *Element*.
 Value will automatically change `children`.
 
-		@on @INIT, (self) -> defineProp self, 'parent', do (parent=null) ->
+		_parent: null
+		parent: null
 
-			get: -> parent
+		@on @INIT, (self) -> defineProp self, 'parent',
+
+			get: -> @_parent
 
 			set: (value) ->
 
 				assert @ isnt value
+
+				parent = @_parent
 
 				if parent is value then return
 
@@ -106,7 +113,7 @@ Value will automatically change `children`.
 					parent.children.splice index, 1
 					impl.child.remove.call parent, @
 
-				parent = value
+				@_parent = parent = value
 
 				# append element
 				if parent and not ~parent.children.indexOf @
@@ -118,6 +125,8 @@ Value will automatically change `children`.
 
 Position of *Element* in the parent.
 Can be changed.
+
+		index: null
 
 		@on @INIT, (self) -> defineProp self, 'index',
 
@@ -137,6 +146,8 @@ Can be changed.
 				impl.index.set.call @, value
 
 #### *string* text
+
+		text: null
 
 		@on @INIT, (self) -> defineProp self, 'text',
 
@@ -158,6 +169,8 @@ Can be changed.
 #### *Attrs* attrs
 
 Instance of *Attrs* class.
+
+		attrs: null
 
 		@on @INIT, (self) -> defineProp self, 'attrs', value: new modules.Attrs self
 
@@ -221,13 +234,20 @@ Returns cloned *Element* will all new instances of children.
 			assert newElement instanceof Element
 			assert oldElement.parent is @
 
+			{children} = @
+
+			# call impl
 			impl.replace.call @, oldElement, newElement
 
-			newElement.parent = oldElement.parent
-			index = @children.indexOf(newElement)
+			# update new element
+			newElement._parent = oldElement._parent
+			index = children.indexOf(newElement)
 			if ~index then @children.splice index, 1
 
-			@children[@children.indexOf(oldElement)] = newElement
-			oldElement.parent = undefined
+			# update children list
+			children[children.indexOf(oldElement)] = newElement
+
+			# update old element
+			oldElement._parent = undefined
 
 			null
