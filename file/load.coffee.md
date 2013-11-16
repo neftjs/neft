@@ -173,6 +173,8 @@ Load file complexly.
 		clone: (self) ->
 
 			copy = utils.clone @
-			copy.self.dom = self.dom.cloneDeep()
+			copy.self = self
+			clonedNode = self.dom.cloneDeep()
+			copy.self.dom = clonedNode
 
 			copy

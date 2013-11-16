@@ -2,6 +2,7 @@
 
 htmlparser = require 'htmlparser2'
 DomHandler = require './domhandler.js'
+stringify = require './stringify.js'
 domutils = require 'domutils'
 utils = require 'utils/index.coffee.md'
 
@@ -30,6 +31,8 @@ module.exports = ->
 			name: MAIN_ELEMENT_NAME
 			attribs: null
 			children: []
+			visible: true
+			_element: null
 		node._element = @
 
 	parseHTML: parseHTML = (html) ->
@@ -70,12 +73,12 @@ module.exports = ->
 
 	stringify: ->
 
-		domutils.getInnerHTML @_node
+		stringify.getInnerHTML @_node
 
 	clone: (clone) ->
 
 		node = clone._node = utils.clone @_node
-		
+
 		node._element = clone
 		node.attribs = utils.clone @_node.attribs
 		node.children = []
@@ -97,6 +100,16 @@ module.exports = ->
 			if children[index] is node
 				children.splice index, 1
 				updateIndexes children, index
+
+	visible:
+
+		get: ->
+
+			@_node.visible
+
+		set: (visible) ->
+
+			@_node.visible = visible
 
 	index:
 
@@ -122,12 +135,14 @@ module.exports = ->
 			if @_node.hasOwnProperty 'data'
 				@_node.data
 			else
-				domutils.getInnerHTML @_node
+				stringify.getInnerHTML @_node
 
-		set: do (tmp=null) -> (text) ->
+		set: do (tmp=null, LESS_THAN_RE = ///<///g, GREATER_THAN_RE = ///>///g) -> (text) ->
 
 			if @_node.type is 'text'
 				@_node.data = text
+					.replace(LESS_THAN_RE, '&#60;')
+					.replace(GREATER_THAN_RE, '&#62;')
 				return;
 
 			tmp ?= @constructor.factory()

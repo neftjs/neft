@@ -178,3 +178,10 @@ describe 'View Element', ->
 
 		expect(doc.queryAll('>*')).toEqual [b, div, p]
 		expect(doc.queryAll('[title]')).toEqual [p]
+
+	it 'visible property is editable', ->
+
+		expect(p.visible).toBeTruthy()
+		p.visible = false
+		expect(p.visible).toBeFalsy()
+		p.visible = true

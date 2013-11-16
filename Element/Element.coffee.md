@@ -125,6 +125,22 @@ Value will automatically change `children`.
 					parent.children.push @
 					impl.child.append.call parent, @	
 
+#### *boolean* visible
+
+		visible: null
+
+		@on @INIT, (self) -> defineProp self, 'visible',
+
+			get: -> impl.visible.get.call @
+
+			set: (value) ->
+
+				assert typeof value is 'boolean'
+
+				if @visible is value then return
+
+				impl.visible.set.call @, value
+
 #### *number* index
 
 Position of *Element* in the parent.
@@ -161,13 +177,10 @@ Can be changed.
 
 				value += ''
 
-				if text is value then return
-
 				# remove all children
 				elem.parent = undefined while elem = @children[0]
 
 				# set text
-				text = value
 				impl.text.set.call @, value
 
 #### *Attrs* attrs
@@ -198,6 +211,8 @@ Returns new instance of *Element* with the same properties.
 			if @name then clone.name = @name
 
 			impl.clone.call @, clone
+
+			clone.visible = @visible
 
 			clone
 
@@ -255,3 +270,22 @@ Returns cloned *Element* will all new instances of children.
 			oldElement._parent = undefined
 
 			null
+
+#### getCopiedElement(*Element*, *Element*)
+
+		getCopiedElement: do (tmp = []) -> (lookForElement, copiedParent) ->
+
+			# get indexes to parent
+			elem = lookForElement
+			while elem.parent
+				tmp.push elem.index
+				elem = elem.parent
+				break if elem is @
+
+			# go by indexes in copied parent
+			elem = copiedParent
+			while tmp.length
+				index = tmp.pop()
+				elem = elem.children[index]
+
+			elem

@@ -62,7 +62,7 @@ Represents *unit* - separated part of dom which can be placed by elems.
 
 #### *Unit* clone()
 
-		clone: ->
+		clone: (self) ->
 
 			assert @ instanceof File
 			assert not @isClone
@@ -70,14 +70,16 @@ Represents *unit* - separated part of dom which can be placed by elems.
 			forName = clones[@path]?[@name]
 			if forName?.length then return forName.pop() 
 
-			proto = utils.clone @
+			copy = utils.clone @
 
-			proto.isClone = true
-			proto.load = @load.clone proto
-			proto.parse = @parse.clone proto
-			proto.render = @render.clone proto
 
-			proto
+			copy.isClone = true
+
+			copy.load = @load.clone copy
+			copy.parse = @parse.clone copy
+			copy.render = @render.clone copy
+
+			copy
 
 #### destroy()
 

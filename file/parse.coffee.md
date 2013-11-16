@@ -106,6 +106,8 @@ Integer value used for bitmasks. Check static properties to needed values.
 				name = node.attrs.get 'name'
 				unless name then continue
 
+				node.attrs.set 'name', undefined
+
 				stack.add @self, factoryUnit, name, node
 
 			# update status
@@ -148,7 +150,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 #### texts()
 
-		texts: ->
+		texts: do (tmpTextNode = new File.Element.fromHTML('DEFAULT').children[0]) -> ->
 
 			assert not (@status & ParseFile.TEXTS)
 			assert @status & ParseFile.UNITS
@@ -162,7 +164,13 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			for node, i in nodes
 				prop = node.attrs.get 'text'
-				texts[i] = new File.Text @self, prop, node
+				node.attrs.set 'text', undefined
+
+				valueDom = tmpTextNode.clone()
+				valueDom.parent = node
+				valueDom.visible = false
+
+				texts[i] = new File.Text @self, prop, node, valueDom
 
 			# update status
 			@status |= ParseFile.TEXTS
@@ -190,7 +198,22 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 		clone: (self) ->
 
-			copy = new ParseFile self
-			copy.all ->
+			copy = utils.clone @
+			copy.self = self
+
+			# copy elems
+			elems = self.elems = utils.clone @self.elems
+
+			for name, unitElems of elems
+
+				unitElems = elems[name] = utils.clone unitElems
+				for elem, i in unitElems
+					unitElems[i] = elem.clone self
+
+			# copy texts
+			texts = self.texts = utils.clone @self.texts
+
+			for text, i in texts
+				texts[i] = text.clone self
 
 			copy

@@ -59,9 +59,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 #### parse()
 
-		parse: do (tmp=File.Element.factory()) -> (data) ->
-
-			dom = @self.dom
+		parse: (data) ->
 
 			assert not (@status & RenderFile.PARSE)
 			assert not data or data instanceof File.Element.modules.Attrs
@@ -92,20 +90,25 @@ Integer value used for bitmasks. Check static properties to needed values.
 			# replace texts by values
 			for elem in texts
 
-				elemData = data.get elem.prop
-				if elemData is undefined then continue 
+				{dom, valueDom} = elem
 
-				oldChild = elem.dom
-				tmp.text = elemData
+				valueDom.text = elemData = data.get elem.prop
 
-				# remove children
-				for child in oldChild.children
-					changes.push oldChild, child, null
-					child.parent = undefined
+				# on data not found
+				if elemData is undefined
+					valueDom.visible = false
 
-				# replace
-				changes.push oldChild, null, tmp
-				tmp.parent = oldChild
+					for child in dom.children when child isnt valueDom
+						child.visible = true
+
+					continue 
+
+				valueDom.visible = true
+
+
+				# hide children
+				for child in dom.children when child isnt valueDom
+					child.visible = false
 
 			# change status
 			@status |= RenderFile.PARSE

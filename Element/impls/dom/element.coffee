@@ -3,6 +3,7 @@
 forEach = Array::forEach
 
 MAIN_ELEMENT_NAME = 'fragment'
+{TEXT_NODE} = document
 
 module.exports = (DOC) ->
 
@@ -63,6 +64,31 @@ module.exports = (DOC) ->
 			node = element._node
 			node and node.parentNode is @_node and @_node.removeChild node
 
+	visible:
+
+		get: ->
+
+			if @_node.nodeType is TEXT_NODE
+
+				return not @_node._textContent
+
+			not @_node.hidden
+
+		set: (visible) ->
+
+			if @_node.nodeType is TEXT_NODE
+
+				if not visible
+					@_node._textContent = @_node.textContent
+					@_node.textContent = ''
+				else
+					@_node.textContent = @_node._textContent
+					@_node._textContent = ''
+
+				return
+
+			@_node.hidden = not visible
+
 	index:
 
 		get: ->
@@ -88,7 +114,7 @@ module.exports = (DOC) ->
 
 		set: do (tmp=null) -> (text) ->
 
-			if @_node.nodeType is document.TEXT_NODE
+			if @_node.nodeType is TEXT_NODE
 				@_node.textContent = text
 				return
 

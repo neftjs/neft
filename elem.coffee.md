@@ -9,6 +9,7 @@ Represents an element placed in the file.
 	'use strict'
 
 	assert = require 'assert'
+	utils = require 'utils/index.coffee.md'
 
 *class* Elem
 ------------
@@ -29,6 +30,15 @@ Represents an element placed in the file.
 		dom: null
 
 ### Methods
+
+		clone: (self) ->
+
+			proto = utils.clone @
+
+			proto.self = self
+			proto.dom = @self.dom.getCopiedElement @dom, self.dom
+
+			proto
 
 		toJSON: ->
 

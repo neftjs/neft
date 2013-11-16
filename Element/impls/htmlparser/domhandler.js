@@ -1,3 +1,5 @@
+// Forked https://github.com/fb55/DomHandler
+
 function DomHandler(callback, options, elementCB){
 	if(typeof callback === "object"){
 		elementCB = options;
@@ -64,7 +66,9 @@ DomHandler.prototype.onopentag = function(name, attribs){
 		type: name !== 'script' && name !== 'style' ? 'tag' : name,
 		name: name,
 		attribs: attribs,
-		children: []
+		children: [],
+		visible: true,
+		_element: null
 	};
 
 	if(lastTag){
@@ -95,7 +99,9 @@ DomHandler.prototype.ontext = function(data){
 			this._addDomElement({
 				index: -1,
 				data: data,
-				type: 'text'
+				type: 'text',
+				visible: true,
+				_element: null
 			});
 		}
 	}
@@ -112,7 +118,9 @@ DomHandler.prototype.oncomment = function(data){
 	var element = {
 		index: -1,
 		data: data,
-		type: 'comment'
+		type: 'comment',
+		visible: true,
+		_element: null
 	};
 
 	this._addDomElement(element);
@@ -124,7 +132,9 @@ DomHandler.prototype.oncdatastart = function(){
 		children: [{
 			index: -1,
 			data: "",
-			type: 'text'
+			type: 'text',
+			visible: true,
+			_element: null
 		}],
 		type: 'cdata'
 	};
@@ -142,7 +152,9 @@ DomHandler.prototype.onprocessinginstruction = function(name, data){
 		index: -1,
 		name: name,
 		data: data,
-		type: 'directive'
+		type: 'directive',
+		visible: true,
+		_element: null
 	});
 };
 
