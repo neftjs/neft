@@ -21,13 +21,13 @@ Give a method to easily generate HTML based on parsed file.
 
 #### Status bitmask values
 
-		@DATA = 1<<0
-		@PARSE = 1<<1
-		@ALL = @DATA | @PARSE
+		@ELEMS = 1<<0
+		@ALL = @ELEMS
 
 #### Event names
 
 		@STATUS_CHANGED = 'statuschanged'
+		@ERROR = 'error'
 
 ### Constructor(*File*)
 
@@ -57,15 +57,16 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 ### Methods
 
-#### parse()
+#### parseElems()
 
-		parse: (data) ->
+		parseElems: ->
 
-			assert not (@status & RenderFile.PARSE)
-			assert not data or data instanceof File.Element.modules.Attrs
+			assert not (@status & RenderFile.ELEMS)
 
 			{usedUnits, changes} = @
 			{units, elems, texts} = @self
+
+			stack = new utils.async.Stack
 
 			# replace elems by units
 			for name, subelems of elems
@@ -78,7 +79,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 					# get unit and parse it
 					usedUnit = unit.clone()
-					usedUnit.render.parse oldChild.attrs
+					stack.add usedUnit.render, 'parse', oldChild.attrs
 					usedUnits.push usedUnit
 
 					newChild = usedUnit.dom
@@ -87,38 +88,37 @@ Integer value used for bitmasks. Check static properties to needed values.
 					changes.push oldChild.parent, oldChild, newChild
 					oldChild.parent.replace oldChild, newChild
 
-			# replace texts by values
-			for elem in texts
+			# parse units
+			stack.runAllSimultaneously (err) =>
 
-				{dom, valueDom} = elem
+				if err
+					return @trigger RenderFile.ERROR, err
 
-				valueDom.text = elemData = data.get elem.prop
+				# change status
+				@status |= RenderFile.ELEMS
+				@trigger RenderFile.STATUS_CHANGED, @status
 
-				# on data not found
-				if elemData is undefined
-					valueDom.visible = false
+#### parse()
 
-					for child in dom.children when child isnt valueDom
-						child.visible = true
+		parse: (callback) ->
 
-					continue 
+			assert typeof callback is 'function'
 
-				valueDom.visible = true
+			@once RenderFile.ERROR, (err) ->
+				@off RenderFile.STATUS_CHANGED
+				callback err
 
+			@on RenderFile.STATUS_CHANGED, (status) ->
+				if status is File.RenderFile.ALL
+					callback null
 
-				# hide children
-				for child in dom.children when child isnt valueDom
-					child.visible = false
-
-			# change status
-			@status |= RenderFile.PARSE
-			@trigger RenderFile.STATUS_CHANGED, @status
+			@parseElems()
 
 #### clear()
 
 		clear: ->
 
-			assert @status & RenderFile.PARSE
+			assert @status & RenderFile.ELEMS
 
 			{changes, usedUnits} = @
 
@@ -147,18 +147,21 @@ Integer value used for bitmasks. Check static properties to needed values.
 				usedUnit.destroy()
 
 			# change status
-			@status = 0
+			@status -= @ELEMS
 			@trigger RenderFile.STATUS_CHANGED, @status
 
 #### html()
 
-		html: (data) ->
+		html: (callback) ->
 
-			@parse data
-			html = @self.dom.stringify()
-			@clear()
+			assert typeof callback is 'function'
 
-			html
+			@parse (err) =>
+
+				html = @self.dom.stringify()
+				@clear()
+
+				callback err, html
 
 #### *RenderFile* clone(*File*)
 

@@ -25,8 +25,7 @@ Prepare file to be render: find provided elements, attributes and so on.
 
 		@UNITS = 1<<0
 		@ELEMS = 1<<1
-		@TEXTS = 1<<2
-		@ALL = @UNITS | @ELEMS | @TEXTS
+		@ALL = @UNITS | @ELEMS
 
 #### Events names
 
@@ -148,36 +147,6 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			elems
 
-#### texts()
-
-		texts: do (tmpTextNode = new File.Element.fromHTML('DEFAULT').children[0]) -> ->
-
-			assert not (@status & ParseFile.TEXTS)
-			assert @status & ParseFile.UNITS
-			assert @status & ParseFile.ELEMS
-
-			dom = @self.dom
-
-			# find elems
-			nodes = dom.queryAll '[text]'
-			texts = @self.texts = new Array nodes.length
-
-			for node, i in nodes
-				prop = node.attrs.get 'text'
-				node.attrs.set 'text', undefined
-
-				valueDom = tmpTextNode.clone()
-				valueDom.parent = node
-				valueDom.visible = false
-
-				texts[i] = new File.Text @self, prop, node, valueDom
-
-			# update status
-			@status |= ParseFile.TEXTS
-			@trigger ParseFile.STATUS_CHANGED, @status
-
-			texts
-
 #### all()
 
 		all: (callback) ->
@@ -185,12 +154,16 @@ Integer value used for bitmasks. Check static properties to needed values.
 			assert not @status
 			assert typeof callback is 'function'
 
-			@once ParseFile.ERROR, callback
+			@once ParseFile.ERROR, (err) ->
+				@off ParseFile.STATUS_CHANGED
+				callback err
 
 			@once ParseFile.STATUS_CHANGED, =>
 				@elems()
-				@texts()
-				callback null
+
+			@on ParseFile.STATUS_CHANGED, (status) ->
+				if status is File.ParseFile.ALL
+					callback null
 
 			@units()
 
@@ -209,11 +182,5 @@ Integer value used for bitmasks. Check static properties to needed values.
 				unitElems = elems[name] = utils.clone unitElems
 				for elem, i in unitElems
 					unitElems[i] = elem.clone self
-
-			# copy texts
-			texts = self.texts = utils.clone @self.texts
-
-			for text, i in texts
-				texts[i] = text.clone self
 
 			copy
