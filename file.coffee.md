@@ -92,6 +92,9 @@ necessary to parse it each time you want to use it.
 					if err then return @trigger File.ERROR, err
 					@trigger File.READY
 
+			# call init
+			@init()
+
 ### Properties
 
 		isReady: false
@@ -108,6 +111,10 @@ necessary to parse it each time you want to use it.
 		render: null
 
 ### Methods
+
+#### init()
+
+		init: ->
 
 #### *Object* toJSON()
 

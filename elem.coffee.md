@@ -23,6 +23,9 @@ Represents an element placed in the file.
 			assert self instanceof File
 			assert name and typeof name is 'string'
 
+			# call init
+			@init()
+
 ### Properties
 
 		name: ''
@@ -30,6 +33,8 @@ Represents an element placed in the file.
 		dom: null
 
 ### Methods
+
+		init: ->
 
 		clone: (self) ->
 

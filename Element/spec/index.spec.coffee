@@ -61,13 +61,14 @@ describe 'View Element', ->
 
 		it 'is filled properly', ->
 
-			expect(b.text).toBe '<em>abc</em>'
-			expect(em.text).toBe 'abc'
+			expect(b.text).toBeUndefined()
+			expect(em.text).toBeUndefined()
+			expect(em.children[0].text).toBe 'abc'
 
 		it 'can be changed', ->
 
 			em.text = 123
-			expect(em.text).toBe '123'
+			expect(em.children[0].text).toBe '123'
 			expect(b.children[0]).toBe em
 			expect(b.stringify()).toBe '<em>123</em>'
 
@@ -78,7 +79,7 @@ describe 'View Element', ->
 			b.text = '<em>345</em>'
 			expect(b.children.length).toBe 1
 			expect(b.children[0].name).toBe 'em'
-			expect(b.children[0].text).toBe '345'
+			expect(b.children[0].children[0].text).toBe '345'
 			expect(b.children[0]).not.toBe em
 			expect(em.parent).toBeUndefined()
 

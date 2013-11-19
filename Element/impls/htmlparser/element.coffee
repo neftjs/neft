@@ -132,10 +132,7 @@ module.exports = ->
 
 		get: ->
 
-			if @_node.hasOwnProperty 'data'
-				@_node.data
-			else
-				stringify.getInnerHTML @_node
+			@_node.data
 
 		set: do (tmp=null, LESS_THAN_RE = ///<///g, GREATER_THAN_RE = ///>///g) -> (text) ->
 

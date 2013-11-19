@@ -81,10 +81,7 @@ module.exports = (DOC) ->
 
 		get: ->
 
-			if 'innerHTML' of @_node
-				@_node.innerHTML
-			else
-				@_node.textContent
+			@_node.textContent
 
 		set: do (tmp=null) -> (text) ->
 

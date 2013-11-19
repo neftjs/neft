@@ -62,6 +62,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 		parseElems: ->
 
 			assert not (@status & RenderFile.ELEMS)
+			unit and assert unit instanceof File.Unit
 
 			{usedUnits, changes} = @
 			{units, elems, texts} = @self
@@ -79,7 +80,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 					# get unit and parse it
 					usedUnit = unit.clone()
-					stack.add usedUnit.render, 'parse', oldChild.attrs
+					stack.add usedUnit.render, 'parse', elem
 					usedUnits.push usedUnit
 
 					newChild = usedUnit.dom
@@ -96,12 +97,14 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 				# change status
 				@status |= RenderFile.ELEMS
+
 				@trigger RenderFile.STATUS_CHANGED, @status
 
 #### parse()
 
-		parse: (callback) ->
+		parse: (elem, callback) ->
 
+			elem and assert elem instanceof File.Elem
 			assert typeof callback is 'function'
 
 			@once RenderFile.ERROR, (err) ->
@@ -129,14 +132,6 @@ Integer value used for bitmasks. Check static properties to needed values.
 				oldChild = changes.pop()
 				node = changes.pop()
 
-				unless newChild
-					oldChild.parent = node
-					continue
-
-				unless oldChild
-					newChild.parent = undefined
-					continue
-
 				node.replace newChild, oldChild
 
 			# clear and destroy used units
@@ -156,10 +151,11 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 			assert typeof callback is 'function'
 
-			@parse (err) =>
+			@parse null, (err) =>
 
-				html = @self.dom.stringify()
-				@clear()
+				try
+					html = @self.dom.stringify()
+					@clear()
 
 				callback err, html
 
@@ -167,4 +163,4 @@ Integer value used for bitmasks. Check static properties to needed values.
 
 		clone: (self) ->
 
-			new RenderFile self
+			new File.RenderFile self

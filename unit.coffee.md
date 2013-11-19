@@ -70,16 +70,15 @@ Represents *unit* - separated part of dom which can be placed by elems.
 			forName = clones[@path]?[@name]
 			if forName?.length then return forName.pop() 
 
-			copy = utils.clone @
+			proto = utils.clone @
 
+			proto.isClone = true
 
-			copy.isClone = true
+			proto.load = @load.clone proto
+			proto.parse = @parse.clone proto
+			proto.render = @render.clone proto
 
-			copy.load = @load.clone copy
-			copy.parse = @parse.clone copy
-			copy.render = @render.clone copy
-
-			copy
+			proto
 
 #### destroy()
 
