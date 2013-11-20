@@ -131,7 +131,12 @@ Value will automatically change `children`.
 
 		@on @INIT, (self) -> defineProp self, 'visible',
 
-			get: -> impl.visible.get.call @
+			get: ->
+
+				visible = impl.visible.get.call @
+				unless @parent then return true
+				if visible then return @parent.visible
+				visible
 
 			set: (value) ->
 

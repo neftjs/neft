@@ -179,6 +179,17 @@ describe 'View Element', ->
 
 		expect(doc.queryAll('>*')).toEqual [b, div, p]
 		expect(doc.queryAll('[title]')).toEqual [p]
+ 
+	it 'getting visible property works recursively', ->
+
+		expect(b.visible).toBeTruthy()
+		b.visible = false
+		expect(b.visible).toBeFalsy()
+		expect(em.visible).toBeFalsy()
+
+		b.visible = true
+		expect(b.visible).toBeTruthy()
+		expect(em.visible).toBeTruthy()
 
 	it 'visible property is editable', ->
 

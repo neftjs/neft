@@ -77,6 +77,7 @@ Integer value used for bitmasks. Check static properties to needed values.
 				for elem in subelems
 
 					oldChild = elem.dom
+					unless oldChild.visible then continue
 
 					# get unit and parse it
 					usedUnit = unit.clone()
