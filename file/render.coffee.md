@@ -112,9 +112,12 @@ Integer value used for bitmasks. Check static properties to needed values.
 				@off RenderFile.STATUS_CHANGED
 				callback err
 
-			@on RenderFile.STATUS_CHANGED, (status) ->
+			onstatuschanged = (status) =>
 				if status is File.RenderFile.ALL
+					@off RenderFile.STATUS_CHANGED, onstatuschanged
 					callback null
+
+			@on RenderFile.STATUS_CHANGED, onstatuschanged
 
 			@parseElems()
 
@@ -157,6 +160,8 @@ Integer value used for bitmasks. Check static properties to needed values.
 				try
 					html = @self.dom.stringify()
 					@clear()
+				catch err
+					return callback err
 
 				callback err, html
 
