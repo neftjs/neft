@@ -60,8 +60,6 @@ Set value as `undefined` to remove attribute.
 
 		set: (name, value) ->
 
-			value += '' unless typeof value is 'undefined'
-
 			assert name and typeof name is 'string'
 
 			impl.set.call @, name, value

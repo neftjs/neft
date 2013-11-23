@@ -131,6 +131,19 @@ describe 'View Element', ->
 			elem.attrs.set 'b', 'c'
 			expect(elem.attrs.item(2)).toEqual ['b', 'c']
 
+		it 'can store references to the objects', ->
+
+			elemContainer = b.cloneDeep()
+			elem = elemContainer.children[0]
+			obj = a: 1
+
+			expect(elem.attrs.get 'data').toBeUndefined()
+
+			# change
+			elem.attrs.set 'data', obj
+			expect(elem.attrs.get 'data').toBe obj
+			expect(elemContainer.stringify()).toBe '<em data="[object Object]">abc</em>'
+
 	describe 'index', ->
 
 		it 'is filled properly', ->
