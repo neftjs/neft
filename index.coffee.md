@@ -15,6 +15,7 @@ Utils
 	createObject = Object.create
 	getPrototypeOf = Object.getPrototypeOf
 	objKeys = Object.keys
+	hasOwnProp = Object.hasOwnProperty
 
 Include sub-modules
 -------------------
@@ -65,6 +66,18 @@ Prototype is copied (if exists).
 			return cloneArray(arg) if isArray arg
 			return cloneObject(arg) if typeofArg is 'object'
 			arg
+
+### cloneDeep()
+
+	exports.cloneDeep = (arg) ->
+
+		result = exports.clone arg
+
+		if result
+			for key, value of result when hasOwnProp.call result, key
+				result[key] = exports.cloneDeep value
+
+		result
 
 ### merge()
 
