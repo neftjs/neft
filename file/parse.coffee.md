@@ -11,6 +11,7 @@ Prepare file to be render: find provided elements, attributes and so on.
 	assert = require 'assert'
 	utils = require 'utils/index.coffee.md'
 	Events = require 'Events/index.coffee.md'
+	coffee = require('coffee-script').CoffeeScript
 
 	HASH_RE = ///////g
 
@@ -23,9 +24,10 @@ Prepare file to be render: find provided elements, attributes and so on.
 
 #### Status bitmask values
 
-		@UNITS = 1<<0
-		@ELEMS = 1<<1
-		@ALL = @UNITS | @ELEMS
+		@ATTRS = 1<<0
+		@UNITS = 1<<1
+		@ELEMS = 1<<2
+		@ALL = @ATTRS | @UNITS | @ELEMS
 
 #### Events names
 
@@ -53,6 +55,40 @@ Integer value used for bitmasks. Check static properties to needed values.
 		status: 0
 
 ### Methods
+
+#### attrs()
+
+Parse JSON attrs into objects.
+
+		attrs: do (attr=[]) -> ->
+
+			assert not (@status & ParseFile.ATTRS)
+			assert @self.load.status & File.LoadFile.FILE
+
+			dom = @self.dom
+
+			forNode = (elem) =>
+
+				i = 0
+				loop
+					elem.attrs.item i, attr
+					unless attr[0] then break
+
+					if attr[1][0] is '[' or attr[1][0] is '{'
+						try
+							elem.attrs.set attr[0], coffee.eval attr[1]
+						catch err
+							return @trigger ParseFile.ERROR, err
+
+					i++
+
+				elem.children?.forEach forNode
+
+			forNode dom
+
+			# update status
+			@status |= ParseFile.ATTRS
+			@trigger ParseFile.STATUS_CHANGED, @status
 
 #### units()
 
@@ -157,6 +193,8 @@ Integer value used for bitmasks. Check static properties to needed values.
 			@once ParseFile.ERROR, (err) ->
 				@off ParseFile.STATUS_CHANGED
 				callback err
+
+			@attrs()
 
 			@once ParseFile.STATUS_CHANGED, =>
 				@elems()

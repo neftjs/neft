@@ -80,7 +80,7 @@ module.exports = ->
 		node = clone._node = utils.clone @_node
 
 		node._element = clone
-		node.attribs = utils.clone @_node.attribs
+		node.attribs = node.attribs and utils.clone @_node.attribs
 		node.children = []
 
 	child:

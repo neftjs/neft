@@ -136,6 +136,14 @@ Integer value used for bitmasks. Check static properties to needed values.
 				oldChild = changes.pop()
 				node = changes.pop()
 
+				unless newChild
+					oldChild.parent = node
+					continue
+
+				unless oldChild
+					newChild.parent = undefined
+					continue
+
 				node.replace newChild, oldChild
 
 			# clear and destroy used units
@@ -156,6 +164,8 @@ Integer value used for bitmasks. Check static properties to needed values.
 			assert typeof callback is 'function'
 
 			@parse null, (err) =>
+
+				if err then return callback err
 
 				try
 					html = @self.dom.stringify()

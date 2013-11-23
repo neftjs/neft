@@ -174,7 +174,6 @@ Load file complexly.
 
 			copy = utils.clone @
 			copy.self = self
-			clonedNode = self.dom.cloneDeep()
-			copy.self.dom = clonedNode
+			copy.self.dom = self.dom.cloneDeep()
 
 			copy
