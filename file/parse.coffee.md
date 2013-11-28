@@ -11,7 +11,7 @@ Prepare file to be render: find provided elements, attributes and so on.
 	assert = require 'assert'
 	utils = require 'utils/index.coffee.md'
 	Events = require 'Events/index.coffee.md'
-	coffee = require('coffee-script').CoffeeScript
+	coffee = require 'coffee-script'
 
 	HASH_RE = ///////g
 
