@@ -70,6 +70,9 @@ necessary to parse it each time you want to use it.
 			@pathbase = path.substring 0, path.lastIndexOf('/')
 			@load = new File.LoadFile @
 
+			# call init
+			@init()
+
 			# on ready
 			@once File.READY, -> @isReady = true
 
@@ -91,9 +94,6 @@ necessary to parse it each time you want to use it.
 
 					if err then return @trigger File.ERROR, err
 					@trigger File.READY
-
-			# call init
-			@init()
 
 ### Properties
 
