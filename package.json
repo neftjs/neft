@@ -1,0 +1,26 @@
+{
+	"private": true,
+	"name": "app",
+	"version": "0.0.1",
+	"dependencies": {
+		"express": ">=3.4.5",
+		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
+		"schema": "git+ssh://git@bitbucket.org:Kildyt/schema.git",
+		"db": "git+ssh://git@github.com:Kildyt/Db.git",
+		"db-implementation": "git+ssh://git@bitbucket.org:Kildyt/db-implementation.git",
+		"db-addons": "git+ssh://git@bitbucket.org:Kildyt/db-addons.git",
+		"db-schema": "git+ssh://git@bitbucket.org:Kildyt/db-schema.git",
+		"model": "git+ssh://git@bitbucket.org:Kildyt/model.git",
+		"model-db": "git+ssh://git@bitbucket.org:Kildyt/model-db.git",
+		"route": "git+ssh://git@bitbucket.org:Kildyt/route.git",
+		"route-auth": "git+ssh://git@bitbucket.org:Kildyt/route-auth.git",
+		"route-model": "git+ssh://git@bitbucket.org:Kildyt/route-model.git",
+		"route-schema": "git+ssh://git@bitbucket.org:Kildyt/route-schema.git",
+		"route-schema-model": "git+ssh://git@bitbucket.org:Kildyt/route-schema-model.git",
+		"data": "git+ssh://git@bitbucket.org:Kildyt/data.git",
+		"view": "git+ssh://git@bitbucket.org:Kildyt/view.git",
+		"view-condition": "git+ssh://git@bitbucket.org:Kildyt/view-condition.git",
+		"view-data": "git+ssh://git@bitbucket.org:Kildyt/view-data.git",
+		"view-iterator": "git+ssh://git@bitbucket.org:Kildyt/view-iterator.git"
+	}
+}
