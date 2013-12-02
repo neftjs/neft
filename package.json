@@ -1,6 +1,6 @@
 {
 	"name": "db",
-	"version": "0.5.1",
+	"version": "0.5.2",
 	"dependencies": {
 		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
 		"events": "git+ssh://git@github.com:Kildyt/Events.git"

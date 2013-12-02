@@ -53,5 +53,5 @@ Check `Db.coffee.md` file next.
 
 	Db = module.exports = require './Db.coffee.md'
 
-	impl = require('./implementation')
+	impl = require 'db-implementation'
 	impl(Db) if impl?
