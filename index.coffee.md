@@ -7,8 +7,6 @@ Utils
 
 	'use strict'
 
-	exports = module.exports
-
 	toString = Object::toString
 	funcToString = Function::toString
 	isArray = Array.isArray
@@ -309,6 +307,24 @@ Check if string references into array (according to notation in `get` method).
 
 		arg += ''
 		arg.slice(-2) is '[]'
+
+### addSlashes()
+
+New string with added backslashes before `'` and `"` is returned.
+
+	exports.addSlashes = do ->
+
+		SLASHES_RE = ///'|"///g
+		NEW_SUB_STR = '\\$&'
+
+		(str) ->
+
+			if typeof str isnt 'string'
+				throw new TypeError
+
+			unless str then return str
+
+			str.replace SLASHES_RE, NEW_SUB_STR
 
 Utils for errors
 ----------------
