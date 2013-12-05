@@ -74,10 +74,15 @@ necessary to parse it each time you want to use it.
 			@init()
 
 			# on ready
-			@once File.READY, -> @isReady = true
+			@once File.READY, ->
+				@isReady = true
+				@off File.ERROR
 
 			# load files
+			@isLoading = true
 			@load.all (err) =>
+
+				@isLoading = false
 
 				if err then return @trigger File.ERROR, err
 
@@ -90,14 +95,18 @@ necessary to parse it each time you want to use it.
 					return @trigger File.READY
 
 				# parse file if needed
+				@isParsing = true
 				@parse.all (err) =>
 
+					@isParsing = false
 					if err then return @trigger File.ERROR, err
 					@trigger File.READY
 
 ### Properties
 
 		isReady: false
+		isLoading: false
+		isParsing: false
 		dom: null
 		path: ''
 		pathbase: ''
