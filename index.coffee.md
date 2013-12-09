@@ -62,7 +62,7 @@ Prototype is copied (if exists).
 
 			return cloneFunction(arg) if typeofArg is 'function'
 			return cloneArray(arg) if isArray arg
-			return cloneObject(arg) if typeofArg is 'object'
+			return cloneObject(arg) if arg and typeofArg is 'object'
 			arg
 
 ### cloneDeep()
