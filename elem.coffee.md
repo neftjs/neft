@@ -18,7 +18,7 @@ Represents an element placed in the file.
 
 ### Constructor(*File*, *string*, *HTMLElement*)
 
-		constructor: (@self, @name, @dom) ->
+		constructor: (@self, @name, @node) ->
 
 			assert self instanceof File
 			assert name and typeof name is 'string'
@@ -30,7 +30,7 @@ Represents an element placed in the file.
 
 		name: ''
 		self: null
-		dom: null
+		node: null
 
 ### Methods
 
@@ -41,7 +41,7 @@ Represents an element placed in the file.
 			proto = utils.clone @
 
 			proto.self = self
-			proto.dom = @self.dom.getCopiedElement @dom, self.dom
+			proto.node = @self.node.getCopiedElement @node, self.node
 
 			proto
 

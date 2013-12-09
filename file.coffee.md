@@ -14,100 +14,75 @@ features. Physical file should be easy to load and parse.
 
 	utils = require 'utils/index.coffee.md'
 	assert = require 'assert'
-	Events = require 'Events/index.coffee.md'
 
 *class* File
 ------------
 
-	module.exports = class File extends Events
+	module.exports = class File
+
+		files = {}
+		clones = []
 
 ### Static
 
-#### Events
+#### *File* fromHTML(*string*, *string*)
 
-		@LOAD_END = 'loadend'
-		@READY = 'ready'
-		@ERROR = 'error'
+		@fromHTML = (path, html) ->
+
+			assert html and typeof html is 'string'
+
+			# get node
+			node = File.Element.fromHTML html
+
+			# clear
+			File.clear node
+
+			new File path, node
 
 #### *File* factory(*string*)
 
-All `File` instances are cached, so if you want to render some file it's not
-necessary to parse it each time you want to use it.
+		@factory = (path) ->
 
-		@factory = do ->
+			assert files[path]
 
-			cache = {}
+			files[path].clone()
 
-			(path) ->
+### Constructor(*string*, *File.Element*)
 
-				assert typeof path is 'string'
-				assert path
+		constructor: (@path, @node) ->
 
-				cache[path] or cache[path] = new File path
+			assert path and typeof path is 'string'
+			assert node instanceof File.Element
+			assert not files[path]
 
-#### Modules
-
-		@Element = require('./Element/index.coffee.md') ELEMENT_IMPL
-		@LoadFile = require('./file/load.coffee.md') File
-		@ParseFile = require('./file/parse.coffee.md') File
-		@RenderFile = require('./file/render.coffee.md') File
-		@Unit = require('./unit.coffee.md') File
-		@Elem = require('./elem.coffee.md') File
-
-### Constructor(*path*, *parse: true*)
-
-		constructor: (@path, opts={}) ->
-
-			assert typeof path is 'string'
-			assert path
-
-			super
-
-			# set default options
-			opts.parse ?= true
+			# save instance
+			files[path] = @
 
 			# set properties
-			@pathbase = path.substring 0, path.lastIndexOf('/')
-			@load = new File.LoadFile @
+			@pathbase = path.substring 0, path.lastIndexOf('/')+1
 
 			# call init
 			@init()
 
-			# on ready
-			@once File.READY, ->
-				@isReady = true
-				@off File.ERROR
+			# parse file
+			File.parse @
 
-			# load files
-			@isLoading = true
-			@load.all (err) =>
-
-				@isLoading = false
-
-				if err then return @trigger File.ERROR, err
-
-				# create parse and render classes
-				@trigger File.LOAD_END
-				@parse = new File.ParseFile @
-				@render = new File.RenderFile @
-
-				unless opts.parse
-					return @trigger File.READY
-
-				# parse file if needed
-				@isParsing = true
-				@parse.all (err) =>
-
-					@isParsing = false
-					if err then return @trigger File.ERROR, err
-					@trigger File.READY
+			# set render functions
+			@render = utils.cloneDeep @render
+			@render.parse = File.render.parse.bind null, @
+			@render.clear = File.render.clear.bind null, @
 
 ### Properties
 
-		isReady: false
-		isLoading: false
-		isParsing: false
-		dom: null
+		isClone: false
+
+		render:
+			isParsing: false
+			isParsed: false
+			parse: null
+			clear: null
+
+		node: null
 		path: ''
 		pathbase: ''
 		parent: null
@@ -115,22 +90,66 @@ necessary to parse it each time you want to use it.
 		units: null
 		elems: null
 
-		load: null
-		parse: null
-		render: null
-
 ### Methods
 
 #### init()
 
 		init: ->
 
-#### *Object* toJSON()
+#### clone()
 
-		toJSON: ->
+		clone: ->
 
-			path: @path
-			pathbase: @pathbase
-			links: @links
-			units: @units
-			elems: @elems
+			assert not @isClone
+			assert not @render.isParsing
+			assert not @render.isParsed
+
+			for file in clones
+				if file.path is @path
+					return file
+
+			copy = utils.clone @
+			copy.isClone = true
+			copy.node = @node.cloneDeep()
+
+			copy.render = utils.cloneDeep File::render
+			copy.render.parse = File.render.parse.bind null, copy
+			copy.render.clear = File.render.clear.bind null, copy
+
+			copy
+
+#### destroy()
+
+		destroy: ->
+
+			assert @isClone
+			assert not ~clones.indexOf @
+
+			clones.push @
+
+### Static
+
+#### Modules
+
+		@Element = require('./Element/index.coffee.md') ELEMENT_IMPL
+		@RenderFile = require('./file/render.coffee.md') File
+		@Unit = require('./unit.coffee.md') File
+		@Elem = require('./elem.coffee.md') File
+
+#### Functions
+
+		@clear = require('./file/clear.coffee') File
+		@parse = 
+			require('./file/parse/elems.coffee') File,
+			require('./file/parse/units.coffee') File,
+			require('./file/parse/attrs.coffee') File,
+			require('./file/parse/links.coffee') File, ->
+		@render =
+			parse:
+				require('./file/render/parse/init.coffee') File,
+				require('./file/render/parse/elems.coffee') File,
+				require('./file/render/parse/onend.coffee') File
+			clear:
+				require('./file/render/clear/init.coffee') File,
+				require('./file/render/clear/elems.coffee') File,
+				require('./file/render/clear/onend.coffee') File

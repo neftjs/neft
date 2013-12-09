@@ -4,7 +4,7 @@ View File Unit
 Goals
 -----
 
-Represents *unit* - separated part of dom which can be placed by elems.
+Represents *unit* - separated part of file which can be placed by elems.
 
 	'use script'
 
@@ -14,97 +14,32 @@ Represents *unit* - separated part of dom which can be placed by elems.
 *class* Unit
 ------------
 
-	clones = {}
-
 	module.exports = (File) -> class Unit extends File
 
 ### Static
 
 #### *Unit* factory(*File*, *string*, *HTMLDivElement*)
 
-		@factory = do ->
+		@factory = (self, name) ->
 
-			cache = {}
+			assert self instanceof File
+			assert name and typeof name is 'string'
 
-			(self, name, dom) ->
-
-				assert self instanceof File
-				assert typeof name is 'string'
-				assert name
-
-				unless (cached = cache[self.path]?[name])?
-					forPath = cache[self.path] ?= {}
-					cached = forPath[name] = new Unit self, name, dom
-
-				cached
+			File.factory "#{self.path}:#{name}"
 
 ### Constructor(*File*, *string, *HTMLDivElement*)
 
-		constructor: (@self, @name, @dom) ->
+		constructor: (self, @name, node) ->
 
 			assert self instanceof File
-			assert typeof name is 'string'
-			assert name
+			assert name and typeof name is 'string'
 
 			# merge units from parent
 			@units = utils.clone self.units
 			delete @units[@name] # prevent circular structure
 
-			super self.path
+			super "#{self.path}:#{name}", node
 
 ### Properties
 
-		self: null
-		isClone: false
 		name: ''
-
-### Methods
-
-#### *Unit* clone()
-
-		clone: (self) ->
-
-			assert @ instanceof File
-			assert not @isClone
-
-			forName = clones[@path]?[@name]
-			if forName?.length then return forName.pop() 
-
-			proto = utils.clone @
-
-			proto.isClone = true
-
-			proto.load = @load.clone proto
-			proto.parse = @parse.clone proto
-			proto.render = @render.clone proto
-
-			proto
-
-#### destroy()
-
-		destroy: ->
-
-			forPath = clones[@path] ?= {}
-			forName = forPath[@name] ?= []
-
-			assert @isClone
-			assert not ~forName.indexOf @
-
-			forName.push @
-
-#### *Object* toJSON()
-
-		toJSON: ->
-
-			units = utils.clone @units
-
-			for name, unit of units
-				if @self.units[name] is unit
-					units[name] = '[ From parent ]'
-
-			path: @path
-			pathbase: @pathbase
-			files: @files
-			name: @name
-			units: units
-			elems: @elems

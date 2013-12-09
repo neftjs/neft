@@ -56,8 +56,8 @@ removeEmptyTexts = (node) ->
 	for elem, i in node.children
 		removeEmptyTexts elem
 
-module.exports = (dom) ->
+module.exports = (File) -> (node) ->
 
-	removeEmptyTexts dom
+	removeEmptyTexts node
 
-	dom
+	node
