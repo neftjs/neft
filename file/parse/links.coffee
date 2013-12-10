@@ -2,6 +2,8 @@
 
 module.exports = (File, _super) -> (file) ->
 
+	_super.call null, file
+
 	# prepare
 	links = file.links = []
 

@@ -132,7 +132,6 @@ features. Physical file should be easy to load and parse.
 #### Modules
 
 		@Element = require('./Element/index.coffee.md') ELEMENT_IMPL
-		@RenderFile = require('./file/render.coffee.md') File
 		@Unit = require('./unit.coffee.md') File
 		@Elem = require('./elem.coffee.md') File
 
