@@ -20,6 +20,7 @@ features. Physical file should be easy to load and parse.
 
 	module.exports = class File
 
+		firstInit = false
 		files = {}
 		clones = []
 
@@ -54,6 +55,12 @@ features. Physical file should be easy to load and parse.
 			assert path and typeof path is 'string'
 			assert node instanceof File.Element
 			assert not files[path]
+
+			# on first init
+			unless firstInit
+				File.render.parse = require('./file/render/parse/init.coffee') File, File.render.parse
+				File.render.clear = require('./file/render/clear/init.coffee') File, File.render.clear
+				firstInit = true
 
 			# save instance
 			files[path] = @
@@ -145,10 +152,8 @@ features. Physical file should be easy to load and parse.
 			require('./file/parse/links.coffee') File, ->
 		@render =
 			parse:
-				require('./file/render/parse/init.coffee') File,
 				require('./file/render/parse/elems.coffee') File,
 				require('./file/render/parse/onend.coffee') File
 			clear:
-				require('./file/render/clear/init.coffee') File,
 				require('./file/render/clear/elems.coffee') File,
 				require('./file/render/clear/onend.coffee') File
