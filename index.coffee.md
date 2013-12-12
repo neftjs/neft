@@ -14,6 +14,7 @@ Utils
 	getPrototypeOf = Object.getPrototypeOf
 	objKeys = Object.keys
 	hasOwnProp = Object.hasOwnProperty
+	{random} = Math
 
 Include sub-modules
 -------------------
@@ -325,6 +326,23 @@ New string with added backslashes before `'` and `"` is returned.
 			unless str then return str
 
 			str.replace SLASHES_RE, NEW_SUB_STR
+
+### uid()
+
+Generate unique hash. Length of returned string can be specified (default 8).
+
+	exports.uid = (n=8) ->
+
+		if typeof n isnt 'number' or not isFinite(n)
+			throw new TypeError
+
+		str = ''
+
+		loop
+			str += random().toString(16).slice 2
+			if str.length >= n then break
+
+		str.slice 0, n
 
 Utils for errors
 ----------------
