@@ -58,6 +58,7 @@ features. Physical file should be easy to load and parse.
 
 			# on first init
 			unless firstInit
+				File.parse = require('./file/parse/elems.coffee') File, File.parse
 				File.render.parse = require('./file/render/parse/init.coffee') File, File.render.parse
 				File.render.clear = require('./file/render/clear/init.coffee') File, File.render.clear
 				firstInit = true
@@ -146,7 +147,6 @@ features. Physical file should be easy to load and parse.
 
 		@clear = require('./file/clear.coffee') File
 		@parse = 
-			require('./file/parse/elems.coffee') File,
 			require('./file/parse/units.coffee') File,
 			require('./file/parse/attrs.coffee') File,
 			require('./file/parse/links.coffee') File, ->
