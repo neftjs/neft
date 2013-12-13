@@ -4,6 +4,15 @@ View = require '../index.coffee.md'
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
+renderParse = (view, callback) ->
+
+	ok = null
+	runs -> view.render.parse (err) -> ok = not err
+	waitsFor -> ok isnt null
+	runs ->
+		expect(ok).toBe true
+		callback()
+
 describe 'View', ->
 
 	it 'can be created using HTML', ->
@@ -87,6 +96,15 @@ describe 'View', ->
 			expect(view.node.stringify()).toBe '<unit><b></b></unit>'
 			view.render.clear()
 			expect(view.node.stringify()).toBe '<a></a>'
+
+	it 'can replace elems by units in units', ->
+
+		source = View.fromHTML uid(), '<unit name="b">1</unit><unit name="a"><b></b></unit><a></a>'
+		view = source.clone();
+
+		renderParse view, ->
+			expect(source.node.stringify()).toBe '<a></a>'
+			expect(view.node.stringify()).toBe '<unit><unit>1</unit></unit>'
 
 	it 'can render clone separately', ->
 

@@ -6,7 +6,7 @@ module.exports = (File, _super) -> (file) ->
 
 	_super.call null, file
 
-	units = file.units = {}
+	units = file.units ?= {}
 
 	# merge units from files
 	for link in file.links
