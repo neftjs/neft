@@ -91,6 +91,7 @@ features. Physical file should be easy to load and parse.
 			clear: null
 
 		node: null
+		sourceNode: null
 		path: ''
 		pathbase: ''
 		parent: null
@@ -112,8 +113,9 @@ features. Physical file should be easy to load and parse.
 			assert not @render.isParsing
 			assert not @render.isParsed
 
-			for file in clones
+			for file, i in clones
 				if file.path is @path
+					clones.splice i, 1
 					return file
 
 			copy = utils.clone @
@@ -147,12 +149,14 @@ features. Physical file should be easy to load and parse.
 
 		@clear = require('./file/clear.coffee') File
 		@parse = 
+			require('./file/parse/source.coffee') File,
 			require('./file/parse/units.coffee') File,
 			require('./file/parse/attrs.coffee') File,
 			require('./file/parse/links.coffee') File, ->
 		@render =
 			parse:
 				require('./file/render/parse/elems.coffee') File,
+				require('./file/render/parse/source.coffee') File,
 				require('./file/render/parse/onend.coffee') File
 			clear:
 				require('./file/render/clear/elems.coffee') File,

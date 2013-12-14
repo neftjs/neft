@@ -10,6 +10,11 @@ renderParse = (view, callback) ->
 	runs -> view.render.parse (err) -> ok = not err
 	waitsFor -> ok isnt null
 	runs ->
+		view.render.clear()
+		ok = null
+	runs -> view.render.parse (err) -> ok = not err
+	waitsFor -> ok isnt null
+	runs ->
 		expect(ok).toBe true
 		callback()
 
@@ -87,12 +92,7 @@ describe 'View', ->
 
 		view = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
 
-		ok = false; err = null
-		runs -> view.render.parse -> [err] = arguments; ok = not err
-		waitsFor -> ok or err
-		runs ->
-			expect(ok).toBe true
-			expect(err).toBe null
+		renderParse view, ->
 			expect(view.node.stringify()).toBe '<unit><b></b></unit>'
 			view.render.clear()
 			expect(view.node.stringify()).toBe '<a></a>'
@@ -108,14 +108,20 @@ describe 'View', ->
 
 	it 'can render clone separately', ->
 
-		view = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
-		copy = view.clone()
+		source = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
+		view = source.clone()
 
-		ok = false; err = null
-		runs -> copy.render.parse -> [err] = arguments; ok = not err
-		waitsFor -> ok or err
-		runs ->
-			expect(ok).toBe true
-			expect(err).toBe null
-			expect(copy.node.stringify()).toBe '<unit><b></b></unit>'
-			expect(view.node.stringify()).toBe '<a></a>'
+		renderParse view, ->
+			expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+			expect(source.node.stringify()).toBe '<a></a>'
+
+	it 'can put elem body in unit', ->
+
+		source = View.fromHTML uid(), '
+			<unit name="a"><source></source></unit>
+			<a><b></b></a>'
+		view = source.clone()
+
+		renderParse view, ->
+			expect(source.node.stringify()).toBe '<a><fragment><b></b></fragment></a>'
+			expect(view.node.stringify()).toBe '<unit><fragment><b></b></fragment></unit>'
