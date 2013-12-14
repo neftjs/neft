@@ -125,7 +125,7 @@ Run all stored functions in the same time.
 			if typeof callback isnt 'function'
 				throw new TypeError "ASync runAllSimultaneously(): passed callback is not a function"
 
-			length = n = @_arr.length
+			length = n = @_arr.length / 3
 			done = 0
 
 			unless length
