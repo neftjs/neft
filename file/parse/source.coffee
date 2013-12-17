@@ -2,19 +2,8 @@
 
 tmp = []
 
-module.exports = (File, _super) ->
+module.exports = (File) -> (_super) -> (file) ->
 
-	File::clone = do (_super = File::clone) -> ->
+	_super arguments...
 
-		clone = _super.call @
-
-		if @sourceNode
-			clone.sourceNode = @node.getCopiedElement @sourceNode, clone.node
-
-		clone
-
-	(file) ->
-
-		_super arguments...
-
-		file.sourceNode = file.node.queryAll('source', tmp)[0]
+	file.sourceNode = file.node.queryAll('source', tmp)[0]

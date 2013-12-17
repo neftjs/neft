@@ -2,7 +2,7 @@
 
 assert = require 'assert'
 
-module.exports = (File, _super) -> (file, opts, callback) ->
+module.exports = (File) -> (_super) -> (file, opts, callback) ->
 
 	assert not file.isParsing
 	assert not file.isParsed

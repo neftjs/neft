@@ -1,5 +1,5 @@
 'use strict'
 
-module.exports = (File) -> (file) ->
+module.exports = (File) -> -> (file) ->
 
 	file.isParsed = false

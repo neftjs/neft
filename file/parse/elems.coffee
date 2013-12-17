@@ -2,38 +2,21 @@
 
 utils = require 'utils/index.coffee.md'
 
-module.exports = (File, _super) ->
+module.exports = (File) -> (_super) -> (file) ->
 
-	File::clone = do (_super = File::clone) -> ->
+	_super.call null, file
 
-		copy = _super.call @
+	node = file.node
 
-		# copy elems
-		elems = copy.elems = utils.clone @elems
+	elems = file.elems = {}
 
-		for name, unitElems of elems
+	# find elems
+	for name of file.units
 
-			unitElems = elems[name] = utils.clone unitElems
-			for elem, i in unitElems
-				unitElems[i] = elem.clone copy
+		nodes = node.queryAll name
 
-		copy
+		unless nodes? then continue
 
-	(file) ->
-
-		_super.call null, file
-
-		node = file.node
-
-		elems = file.elems = {}
-
-		# find elems
-		for name of file.units
-
-			nodes = node.queryAll name
-
-			unless nodes? then continue
-
-			for node in nodes
-				nameElems = elems[name] ?= []
-				nameElems.push elem = new File.Elem file, name, node
+		for node in nodes
+			nameElems = elems[name] ?= []
+			nameElems.push elem = new File.Elem file, name, node

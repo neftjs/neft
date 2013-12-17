@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (File, _super) -> (file) ->
+module.exports = (File) -> (_super) -> (file) ->
 
 	{changes, usedUnits} = file._tmp
 

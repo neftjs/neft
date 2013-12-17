@@ -5,12 +5,9 @@ assert = require 'assert'
 
 module.exports = class CallList extends Array
 
-	_initArgs: null
 	_isModifiable: true
 
 	constructor: ->
-
-		@_initArgs = arguments
 
 	_build: ->
 
@@ -22,7 +19,7 @@ module.exports = class CallList extends Array
 			func = @pop()
 			@pop()
 
-			builtFunc = func @_initArgs..., builtFunc
+			builtFunc = func builtFunc
 
 		@_isModifiable = false
 		@run = builtFunc

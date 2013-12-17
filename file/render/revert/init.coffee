@@ -2,7 +2,7 @@
 
 assert = require 'assert'
 
-module.exports = (File, _super) -> (file) ->
+module.exports = (File) -> (_super) -> (file) ->
 
 	assert file.isParsed
 

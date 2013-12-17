@@ -2,7 +2,7 @@
 
 utils = require 'utils/index.coffee.md'
 
-module.exports = (File, _super) -> (file, opts, callback) ->
+module.exports = (File) -> (_super) -> (file, opts, callback) ->
 
 	{usedUnits, changes} = file._tmp
 	{units, elems, texts} = file

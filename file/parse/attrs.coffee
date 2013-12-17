@@ -19,7 +19,7 @@ forNode = (elem) ->
 
 	elem.children?.forEach forNode
 
-module.exports = (File, _super) -> (file) ->
+module.exports = (File) -> (_super) -> (file) ->
 
 	_super.call null, file
 

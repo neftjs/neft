@@ -1,6 +1,5 @@
 'use strict'
 
-INIT = ['INIT1', 'INIT2']
 CallList = require('../callList.coffee')
 
 describe 'Call List', ->
@@ -8,11 +7,9 @@ describe 'Call List', ->
 	ARG1 = 'argument1'
 	ARG2 = 'argument2'
 
-	callList = new CallList INIT...
+	callList = new CallList
 
-	createFunc = (id) -> (init1, init2, _super) ->
-		throw new Error if init1 isnt INIT[0]
-		throw new Error if init2 isnt INIT[1]
+	createFunc = (id) -> (_super) ->
 		throw new Error if typeof _super isnt 'function'
 
 		(a, b, stack) ->

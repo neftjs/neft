@@ -2,7 +2,7 @@
 
 HASH_RE = ///////g
 
-module.exports = (File, _super) -> (file) ->
+module.exports = (File) -> (_super) -> (file) ->
 
 	_super.call null, file
 

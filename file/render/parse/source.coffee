@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (File, _super) -> (file, opts) ->
+module.exports = (File) -> (_super) -> (file, opts) ->
 
 	if file.sourceNode and opts?.source and file.sourceNode.visible
 

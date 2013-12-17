@@ -102,12 +102,25 @@ features. Physical file should be easy to load and parse.
 					clones.splice i, 1
 					return file
 
-			copy = utils.clone @
-			copy.isClone = true
-			copy.node = @node.cloneDeep()
-			copy._tmp = utils.cloneDeep File::_tmp
+			clone = utils.clone @
+			clone.isClone = true
+			clone.node = @node.cloneDeep()
+			clone._tmp = utils.cloneDeep File::_tmp
 
-			copy
+			# copy sourceNode
+			if @sourceNode
+				clone.sourceNode = @node.getCopiedElement @sourceNode, clone.node
+
+			# copy elems
+			elems = clone.elems = utils.clone @elems
+
+			for name, unitElems of elems
+
+				unitElems = elems[name] = utils.clone unitElems
+				for elem, i in unitElems
+					unitElems[i] = elem.clone clone
+
+			clone
 
 #### render()
 
@@ -140,24 +153,24 @@ features. Physical file should be easy to load and parse.
 
 #### Functions
 
-		@clear = new CallList File
-		@clear.add 'clear', require('./file/clear.coffee')
+		@clear = new CallList
+		@clear.add 'clear', require('./file/clear.coffee') File
 
-		@parse = new CallList File
-		@parse.add('links', require('./file/parse/links.coffee'))
-		      .add('attrs', require('./file/parse/attrs.coffee'))
-		      .add('units', require('./file/parse/units.coffee'))
-		      .add('source', require('./file/parse/source.coffee'))
-		      .add('elems', require('./file/parse/elems.coffee'));
+		@parse = new CallList
+		@parse.add('links', require('./file/parse/links.coffee') File)
+		      .add('attrs', require('./file/parse/attrs.coffee') File)
+		      .add('units', require('./file/parse/units.coffee') File)
+		      .add('source', require('./file/parse/source.coffee') File)
+		      .add('elems', require('./file/parse/elems.coffee') File);
 
 		@render =
-			parse: new CallList File
-			revert: new CallList File
+			parse: new CallList
+			revert: new CallList
 
-		@render.parse.add('onend', require('./file/render/parse/onend.coffee'))
-		             .add('source', require('./file/render/parse/source.coffee'))
-		             .add('elems', require('./file/render/parse/elems.coffee'))
-		             .add('init', require('./file/render/parse/init.coffee'));
-		@render.revert.add('onend', require('./file/render/revert/onend.coffee'))
-		              .add('elems', require('./file/render/revert/elems.coffee'))
-		              .add('init', require('./file/render/revert/init.coffee'));
+		@render.parse.add('onend', require('./file/render/parse/onend.coffee') File)
+		             .add('source', require('./file/render/parse/source.coffee') File)
+		             .add('elems', require('./file/render/parse/elems.coffee') File)
+		             .add('init', require('./file/render/parse/init.coffee') File);
+		@render.revert.add('onend', require('./file/render/revert/onend.coffee') File)
+		              .add('elems', require('./file/render/revert/elems.coffee') File)
+		              .add('init', require('./file/render/revert/init.coffee') File);
