@@ -2,7 +2,7 @@
 
 module.exports = (File, _super) -> (file) ->
 
-	{changes, usedUnits} = file.render._tmp
+	{changes, usedUnits} = file._tmp
 
 	# back changes
 	while changes.length
@@ -25,7 +25,7 @@ module.exports = (File, _super) -> (file) ->
 	while usedUnits.length
 
 		usedUnit = usedUnits.pop()
-		usedUnit.render.clear()
+		usedUnit.revert()
 		usedUnit.destroy()
 
 	_super arguments...

@@ -2,15 +2,9 @@
 
 utils = require 'utils/index.coffee.md'
 
-init = (File) ->
+module.exports = (File, _super) -> (file, opts, callback) ->
 
-	File::render._tmp =
-		usedUnits: []
-		changes: []
-
-module.exports = (File, _super) -> init(File); (file, opts, callback) ->
-
-	{usedUnits, changes} = file.render._tmp
+	{usedUnits, changes} = file._tmp
 	{units, elems, texts} = file
 
 	if utils.isEmpty elems then return _super arguments...
@@ -29,7 +23,7 @@ module.exports = (File, _super) -> init(File); (file, opts, callback) ->
 
 			# get unit and parse it
 			usedUnit = unit.clone()
-			stack.add usedUnit.render, 'parse', source: elem
+			stack.add usedUnit, 'render', source: elem
 			usedUnits.push usedUnit
 
 			newChild = usedUnit.node
@@ -40,6 +34,7 @@ module.exports = (File, _super) -> init(File); (file, opts, callback) ->
 
 	# parse units
 	args = arguments
+
 	stack.runAllSimultaneously (err) ->
 
 		if err then return callback err

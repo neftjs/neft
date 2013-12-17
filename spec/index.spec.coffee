@@ -7,12 +7,12 @@ uid = do (i = 0) -> -> "index_#{i++}.html"
 renderParse = (view, callback) ->
 
 	ok = null
-	runs -> view.render.parse (err) -> ok = not err
+	runs -> view.render (err) -> ok = not err
 	waitsFor -> ok isnt null
 	runs ->
-		view.render.clear()
+		view.revert()
 		ok = null
-	runs -> view.render.parse (err) -> ok = not err
+	runs -> view.render (err) -> ok = not err
 	waitsFor -> ok isnt null
 	runs ->
 		expect(ok).toBe true
@@ -94,7 +94,7 @@ describe 'View', ->
 
 		renderParse view, ->
 			expect(view.node.stringify()).toBe '<unit><b></b></unit>'
-			view.render.clear()
+			view.revert()
 			expect(view.node.stringify()).toBe '<a></a>'
 
 	it 'can replace elems by units in units', ->

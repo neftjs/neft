@@ -56,7 +56,9 @@ removeEmptyTexts = (node) ->
 	for elem, i in node.children
 		removeEmptyTexts elem
 
-module.exports = (File) -> (node) ->
+module.exports = (File, _super) -> (node) ->
+
+	_super arguments...
 
 	removeEmptyTexts node
 

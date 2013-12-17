@@ -2,7 +2,7 @@
 
 module.exports = (File) -> (file, opts, callback) ->
 
-	file.render.isParsing = false
-	file.render.isParsed = true
+	file.isParsing = false
+	file.isParsed = true
 
 	callback null

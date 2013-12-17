@@ -14,13 +14,13 @@ features. Physical file should be easy to load and parse.
 
 	utils = require 'utils/index.coffee.md'
 	assert = require 'assert'
+	CallList = require './callList.coffee'
 
 *class* File
 ------------
 
 	module.exports = class File
 
-		firstInit = false
 		files = {}
 		clones = []
 
@@ -36,7 +36,7 @@ features. Physical file should be easy to load and parse.
 			node = File.Element.fromHTML html
 
 			# clear
-			File.clear node
+			File.clear.run node
 
 			new File path, node
 
@@ -56,39 +56,27 @@ features. Physical file should be easy to load and parse.
 			assert node instanceof File.Element
 			assert not files[path]
 
-			# on first init
-			unless firstInit
-				File.parse = require('./file/parse/elems.coffee') File, File.parse
-				File.render.parse = require('./file/render/parse/init.coffee') File, File.render.parse
-				File.render.clear = require('./file/render/clear/init.coffee') File, File.render.clear
-				firstInit = true
-
 			# save instance
 			files[path] = @
 
 			# set properties
 			@pathbase = path.substring 0, path.lastIndexOf('/')+1
 
-			# call init
-			@init()
-
 			# parse file
-			File.parse @
+			File.parse.run @
 
-			# set render functions
-			@render = utils.cloneDeep @render
-			@render.parse = File.render.parse.bind null, @
-			@render.clear = File.render.clear.bind null, @
+			# clone tmp
+			@_tmp = utils.cloneDeep @_tmp
 
 ### Properties
 
 		isClone: false
+		isParsing: false
+		isParsed: false
 
-		render:
-			isParsing: false
-			isParsed: false
-			parse: null
-			clear: null
+		_tmp:
+			usedUnits: []
+			changes: []
 
 		node: null
 		sourceNode: null
@@ -101,17 +89,13 @@ features. Physical file should be easy to load and parse.
 
 ### Methods
 
-#### init()
-
-		init: ->
-
 #### clone()
 
 		clone: ->
 
 			assert not @isClone
-			assert not @render.isParsing
-			assert not @render.isParsed
+			assert not @isParsing
+			assert not @isParsed
 
 			for file, i in clones
 				if file.path is @path
@@ -121,12 +105,21 @@ features. Physical file should be easy to load and parse.
 			copy = utils.clone @
 			copy.isClone = true
 			copy.node = @node.cloneDeep()
-
-			copy.render = utils.cloneDeep File::render
-			copy.render.parse = File.render.parse.bind null, copy
-			copy.render.clear = File.render.clear.bind null, copy
+			copy._tmp = utils.cloneDeep File::_tmp
 
 			copy
+
+#### render()
+
+		render: (opts, callback) ->
+
+			File.render.parse.run @, opts, callback
+
+#### revert() ->
+
+		revert: ->
+
+			File.render.revert.run @
 
 #### destroy()
 
@@ -147,17 +140,24 @@ features. Physical file should be easy to load and parse.
 
 #### Functions
 
-		@clear = require('./file/clear.coffee') File
-		@parse = 
-			require('./file/parse/source.coffee') File,
-			require('./file/parse/units.coffee') File,
-			require('./file/parse/attrs.coffee') File,
-			require('./file/parse/links.coffee') File, ->
+		@clear = new CallList File
+		@clear.add 'clear', require('./file/clear.coffee')
+
+		@parse = new CallList File
+		@parse.add('links', require('./file/parse/links.coffee'))
+		      .add('attrs', require('./file/parse/attrs.coffee'))
+		      .add('units', require('./file/parse/units.coffee'))
+		      .add('source', require('./file/parse/source.coffee'))
+		      .add('elems', require('./file/parse/elems.coffee'));
+
 		@render =
-			parse:
-				require('./file/render/parse/elems.coffee') File,
-				require('./file/render/parse/source.coffee') File,
-				require('./file/render/parse/onend.coffee') File
-			clear:
-				require('./file/render/clear/elems.coffee') File,
-				require('./file/render/clear/onend.coffee') File
+			parse: new CallList File
+			revert: new CallList File
+
+		@render.parse.add('onend', require('./file/render/parse/onend.coffee'))
+		             .add('source', require('./file/render/parse/source.coffee'))
+		             .add('elems', require('./file/render/parse/elems.coffee'))
+		             .add('init', require('./file/render/parse/init.coffee'));
+		@render.revert.add('onend', require('./file/render/revert/onend.coffee'))
+		              .add('elems', require('./file/render/revert/elems.coffee'))
+		              .add('init', require('./file/render/revert/init.coffee'));

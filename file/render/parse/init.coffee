@@ -4,8 +4,8 @@ assert = require 'assert'
 
 module.exports = (File, _super) -> (file, opts, callback) ->
 
-	assert not file.render.isParsing
-	assert not file.render.isParsed
+	assert not file.isParsing
+	assert not file.isParsed
 
 	unless callback
 		callback = opts
@@ -14,6 +14,6 @@ module.exports = (File, _super) -> (file, opts, callback) ->
 	assert typeof opts is 'object'
 	assert typeof callback is 'function'
 
-	file.render.isParsing = true
+	file.isParsing = true
 
 	_super.call null, file, opts, callback

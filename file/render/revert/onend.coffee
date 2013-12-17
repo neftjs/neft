@@ -2,4 +2,4 @@
 
 module.exports = (File) -> (file) ->
 
-	file.render.isParsed = false
+	file.isParsed = false
