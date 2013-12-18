@@ -60,6 +60,9 @@ features. Physical file should be easy to load and parse.
 			# set properties
 			@pathbase = path.substring 0, path.lastIndexOf('/')+1
 
+			# call init
+			@init()
+
 			# parse file
 			File.parse.run @
 
@@ -86,6 +89,10 @@ features. Physical file should be easy to load and parse.
 		elems: null
 
 ### Methods
+
+#### init()
+
+		init: ->
 
 #### clone()
 
