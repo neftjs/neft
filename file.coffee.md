@@ -10,8 +10,6 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	ELEMENT_IMPL = if window? then 'dom' else 'htmlparser'
-
 	utils = require 'utils/index.coffee.md'
 	assert = require 'assert'
 	CallList = require './callList.coffee'
@@ -144,12 +142,6 @@ features. Physical file should be easy to load and parse.
 			clones.push @
 
 ### Static
-
-#### Modules
-
-		@Element = require('./Element/index.coffee.md') ELEMENT_IMPL
-		@Unit = require('./unit.coffee.md') File
-		@Elem = require('./elem.coffee.md') File
 
 #### Functions
 

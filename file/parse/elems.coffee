@@ -4,9 +4,9 @@ utils = require 'utils/index.coffee.md'
 
 module.exports = (File) -> (_super) -> (file) ->
 
-	_super.call null, file
+	_super arguments...
 
-	node = file.node
+	{node} = file
 
 	elems = file.elems = {}
 

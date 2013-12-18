@@ -1,6 +1,6 @@
 'use strict'
 
-View = require '../index.coffee.md'
+View = require('../index.coffee.md')()
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
