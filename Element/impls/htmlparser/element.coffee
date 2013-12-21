@@ -12,6 +12,7 @@ utils = require 'utils/index.coffee.md'
 isDefined = (elem) -> elem?
 
 MAIN_ELEMENT_NAME = 'fragment'
+CSS_ID_RE = ///\#([^\s]+)///
 
 updateIndexes = (nodes, from=0, to=nodes.length) ->
 
@@ -57,7 +58,7 @@ module.exports = ->
 				element.name = node.name or "##{node.type}"
 
 				# for nodes recursively
-				if node.type is 'tag'
+				if node.children?
 					forNodes element, node
 
 			forNodes = (document, node) ->
@@ -161,6 +162,11 @@ module.exports = ->
 
 		unless recurse
 			selector = selector.slice 1
+
+		# get id
+		id = CSS_ID_RE.exec selector
+		if id?
+			opts['id'] = id[1]
 
 		# get attrs
 		attrs = selector.split '['
