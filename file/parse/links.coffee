@@ -1,5 +1,7 @@
 'use strict'
 
+assert = require 'assert'
+
 module.exports = (File) -> (_super) -> (file) ->
 
 	_super.call null, file
@@ -8,7 +10,12 @@ module.exports = (File) -> (_super) -> (file) ->
 	links = file.links = []
 
 	# load found files
-	for node in file.node.children
+	{children} = file.node
+	i = -1
+	n = children.length
+	while ++i < n
+
+		node = children[i]
 
 		if node.name isnt 'link' or node.attrs.get('rel') isnt 'require'
 			continue
@@ -20,9 +27,11 @@ module.exports = (File) -> (_super) -> (file) ->
 
 		# remove link element
 		node.parent = undefined
+		i--; n--
 
 		# get view
 		view = File.factory file.pathbase + href
-		view and links.push
+		assert view
+		links.push
 			view: view
 			namespace: namespace

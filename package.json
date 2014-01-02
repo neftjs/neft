@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "view",
-  "version": "0.6.91",
+  "version": "0.6.92",
   "dependencies": {
     "utils": "git+ssh://git@github.com:Kildyt/utils.git",
     "events": "git+ssh://git@github.com:Kildyt/Events.git",
