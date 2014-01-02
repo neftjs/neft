@@ -54,7 +54,8 @@ removeEmptyTexts = (node) ->
 
 	# check nodes recursively
 	for elem, i in node.children
-		removeEmptyTexts elem
+		if elem.name isnt 'script'
+			removeEmptyTexts elem
 
 module.exports = (File) -> (_super) -> (node) ->
 
