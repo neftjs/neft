@@ -4,6 +4,7 @@ forEach = Array::forEach
 
 MAIN_ELEMENT_NAME = 'fragment'
 {TEXT_NODE} = document
+TEXT_NODE = 3
 
 module.exports = (DOC) ->
 
@@ -51,6 +52,9 @@ module.exports = (DOC) ->
 
 		clone._node = @_node.cloneNode false
 		clone._node._element = clone
+
+		if @_node._textContent?
+			clone._node._textContent = @_node._textContent
 
 	child:
 
@@ -107,7 +111,7 @@ module.exports = (DOC) ->
 
 		get: ->
 
-			@_node.textContent
+			@_node.textContent if @_node.nodeType is TEXT_NODE
 
 		set: do (tmp=null) -> (text) ->
 
