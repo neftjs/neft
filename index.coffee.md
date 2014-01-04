@@ -21,6 +21,22 @@ Include sub-modules
 
 	exports.async = require './async.coffee.md'
 
+Environment information
+-----------------------
+
+	exports.isNode = exports.isBrowser = exports.isQML = false
+
+	switch true
+
+		when global?+'' is '[object global]'
+			exports.isNode = true
+
+		when window?.document?
+			exports.isBrowser = true
+
+		when Qt?.include
+			exports.isQML = true
+
 Utils for object, arrays and functions
 --------------------------------------
 
