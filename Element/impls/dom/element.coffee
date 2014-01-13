@@ -46,7 +46,7 @@ module.exports = (DOC) ->
 
 	stringify: ->
 
-		@_node.innerHTML
+		@_node.outerHTML
 
 	clone: (clone) ->
 
@@ -99,7 +99,7 @@ module.exports = (DOC) ->
 
 			elem = @_node
 			k = 0
-			while (elem = elem.previousSibling) and ++k then
+			while (elem = elem.previousSibling) then k++
 
 			k
 

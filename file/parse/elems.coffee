@@ -6,14 +6,12 @@ module.exports = (File) -> (_super) -> (file) ->
 
 	_super arguments...
 
-	{node} = file
-
 	elems = file.elems = {}
 
 	# find elems
 	for name of file.units
 
-		nodes = node.queryAll name
+		nodes = file.node.queryAll name
 
 		unless nodes? then continue
 

@@ -74,7 +74,7 @@ module.exports = ->
 
 	stringify: ->
 
-		stringify.getInnerHTML @_node
+		stringify.getOuterHTML @_node
 
 	clone: (clone) ->
 
