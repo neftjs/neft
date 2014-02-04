@@ -1,12 +1,8 @@
 'use strict'
 
-###
-# TODO
-* more tests
-###
+[Db, _, specUtils] = ['../index.coffee.md', 'db-implementation', './utils.coffee'].map require
 
-Db = require '../index.coffee.md'
-specUtils = require './utils.coffee'
+Db = Db.Impl()
 
 specUtils.isReady Db
 

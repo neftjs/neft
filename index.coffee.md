@@ -51,7 +51,4 @@ Check [my repos](https://github.com/Kildyt/) for needed packages.
 
 Check `Db.coffee.md` file next.
 
-	Db = module.exports = require './Db.coffee.md'
-
-	impl = require 'db-implementation'
-	impl(Db) if impl?
+	module.exports = require './Db.coffee.md'

@@ -18,6 +18,8 @@ Db main file
 
 ### Static protected
 
+		@__name__ = 'Db'
+
 #### _subclasses
 
 Namespace of all available *subclasses*.
@@ -275,7 +277,7 @@ Id of created document will be returned.
 				throw new ReferenceError "insert() can not be used for document"
 
 			unless utils.isObject doc
-				throw new TypeError "Only simply objects could be inserted"
+				throw new TypeError "Only simply objects can be inserted"
 
 			unless @_search
 				throw new ReferenceError "remove() can works only with collection"
@@ -293,7 +295,7 @@ Update all documents in the collection.
 		update: (doc) ->
 
 			unless utils.isObject doc
-				throw new TypeError "Only simply objects could be inserted"
+				throw new TypeError "Only simply objects can be inserted"
 
 			unless @_search
 				throw new ReferenceError "remove() can works only with collection"
