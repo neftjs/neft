@@ -7,13 +7,17 @@ Utils
 
 	'use strict'
 
-	toString = Object::toString
+	assert = require 'assert'
+
+	{toString} = Object::
 	funcToString = Function::toString
-	isArray = Array.isArray
+	{isArray} = Array
 	createObject = Object.create
 	getPrototypeOf = Object.getPrototypeOf
 	objKeys = Object.keys
 	hasOwnProp = Object.hasOwnProperty
+	getObjOwnPropDesc = Object.getOwnPropertyDescriptor
+	defObjProp = Object.defineProperty
 	{random} = Math
 
 Include sub-modules
@@ -28,7 +32,7 @@ Environment information
 
 	switch true
 
-		when global?+'' is '[object global]'
+		when global? and global+'' is '[object global]'
 			exports.isNode = true
 
 		when window?.document?
@@ -99,12 +103,12 @@ Prototype is copied (if exists).
 Merge second object into the first one.
 Existed properties will be overriden.
 
-	exports.merge = (source, obj) ->
+	merge = exports.merge = (source, obj) ->
 
 		if not source or not obj
 			throw new TypeError
 
-		for key, value of obj
+		for key, value of obj when obj.hasOwnProperty(key)
 
 			source[key] = value
 
@@ -133,7 +137,7 @@ Check if arg is clear object (without any other prototypes).
 		unless arguments.length
 			throw new RangeError
 
-		if typeof obj isnt 'object'
+		if not obj or typeof obj isnt 'object'
 			return false
 
 		proto = getPrototypeOf obj
@@ -278,6 +282,185 @@ Get last element from the Object or Array
 		keys = objKeys arg
 		arg[keys[keys.length - 1]]
 
+### simplify()
+
+Convert passed object into the most simplified format.
+Such object can be easily stringified.
+Use `assemble()` method to restore into initial structure.
+
+Second optional parameter is an config object.
+Possible options to define (all are `false` by default):
+  - `properties` - save properties with config,
+  - `protos` - save proto
+  - `constructors` - include constructors functions
+
+Example
+  1. ```
+     obj = {}
+     obj.self = obj
+     JSON.parse utils.simplify obj
+     ```
+
+	exports.simplify = (obj, opts={}) ->
+
+		assert obj and typeof obj is 'object'
+		opts? and assert exports.isObject opts
+
+		optsProps = opts.properties ?= false
+		optsProtos = opts.protos ?= false
+		optsCtors = opts.constructors ?= false
+
+		# list of objects
+		objs = []
+
+		# list of lists of ids per object
+		ids = []
+
+		# lists of keys to references per object
+		references = {}
+
+		# objects constructors
+		if optsCtors then ctors = {}
+
+		# proto destination to proto object
+		if optsProtos then protos = {}
+
+		# get cyclic references in the object
+		cyclic = (obj) ->
+
+			len = objs.push obj
+			ids.push objIds = []
+
+			for key, value of obj when obj.hasOwnProperty key
+
+				unless value and typeof value is 'object'
+					continue
+
+				# check whether obj already exists
+				unless ~(i = objs.indexOf value)
+					i = cyclic value
+
+				objIds.push i
+
+			# cycle proto
+			if optsProtos and proto = obj.__proto__
+				unless ~(i = objs.indexOf proto)
+					i = cyclic proto
+				objIds.push i
+
+			len - 1
+
+		# parse object
+		parse = (obj, index) ->
+
+			r = if isArray obj then [] else {}
+			objIds = ids[index]
+
+			obji = 0
+			for key, value of obj when obj.hasOwnProperty key
+
+				if value and typeof value is 'object'
+					unless objReferences
+						objReferences = []
+
+					value = objIds[obji++]
+					objReferences.push key
+
+				# get property description
+				if optsProps
+					propValue = value
+					value = getObjOwnPropDesc obj, key
+					value.value = propValue
+
+				r[key] = value
+
+			# save reference to proto
+			if optsProtos and obj.__proto__
+				protos[index] = objIds[obji++]
+
+			# save ctor if needed
+			if optsCtors and not r.hasOwnProperty('constructor')
+				ctor = obj.constructor
+
+				if ctor isnt Array and ctor isnt Object
+					ctors[index] = ctor
+
+			# save object references
+			if objReferences then references[index] = objReferences
+
+			r
+
+		# find cycles
+		cyclic obj
+
+		# parse all found objects
+		for value, i in objs
+			objs[i] = parse value, i
+
+		# return
+		opts: opts
+		objects: objs
+		references: references
+		protos: protos
+		constructors: ctors
+
+### assemble()
+
+Backward `simplify()` operation.
+
+	exports.assemble = do ->
+
+		if Object.__proto__
+			setObjProto = (obj, proto) ->
+				obj.__proto__ = proto
+				obj
+		else
+			setObjProto = (obj, proto) ->
+				proto = createObject proto
+				merge proto, obj
+				proto
+
+		ctorPropConfig =
+			value: null
+			enumerable: false
+
+		(obj) ->
+
+			assert exports.isObject obj
+
+			{opts, objects, references, protos, constructors} = obj
+
+			optsProps = opts.properties
+			optsProtos = opts.protos
+			optsCtors = opts.constructors
+
+			# set references
+			for objI, refs of references
+				obj = objects[objI]
+
+				for ref in refs
+					if optsProps
+						obj[ref].value = objects[obj[ref].value]
+					else
+						obj[ref] = objects[obj[ref]]
+
+			# set properties
+			if optsProps
+				for obj in objects
+					for key, value of obj
+						defObjProp obj, key, value
+
+			# set protos
+			for objI, refI of protos
+				objects[objI] = setObjProto objects[objI], objects[refI]
+
+			# set ctors
+			if optsCtors
+				for objI, func of constructors
+					ctorPropConfig.value = func
+					defObjProp objects[objI], 'constructor', ctorPropConfig
+
+			objects[0]
 
 Utils for arrays
 ----------------

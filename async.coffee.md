@@ -3,7 +3,7 @@ Utils for async
 
 	'use strict'
 
-	exports = module.exports
+	{exports} = module
 
 	shift = Array::shift
 	isArray = Array.isArray
