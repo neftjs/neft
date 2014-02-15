@@ -311,7 +311,7 @@ Update all documents in the collection.
 
 	Events = require 'Events'
 
-	Db = utils.merge Db, new Events
+	Db = utils.merge Db, utils.merge Events::, new Events
 
 ### Events
 
