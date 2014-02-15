@@ -1,0 +1,7 @@
+{
+	"name": "log",
+	"version": "0.0.1",
+	"dependencies": {
+		"cli-color": ">=0.2.3"
+	}
+}
