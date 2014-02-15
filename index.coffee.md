@@ -9,4 +9,7 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 
 	switch true
 		when utils.isNode
-			module.exports = require './index.node.coffee'
+			exports = module.exports = require './index.node.coffee'
+
+	exports.PROTOCOL = 'http'
+	exports.HOST = 'localhost'

@@ -1,10 +1,16 @@
 'use strict'
 
+[log] = ['log'].map require
+
+log = log.scope 'Routing'
+
 PORT = 3000
 
 express = require 'express'
 routing = express()
 routing.listen PORT
+
+log.info "Start listening on port #{PORT}"
 
 routing.use express.compress()
 routing.use express.json()
