@@ -5,116 +5,112 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 
 	'use strict'
 
-	assert = require 'assert'
-	clc = require 'cli-color'
+	[assert, utils] = ['assert', 'utils'].map require
 
-	writeStdout = process.stdout.write.bind process.stdout
-	{white, blackBright, blue, yellow, red} = clc
 	{bind} = Function
+	{isArray} = Array
 	{unshift} = Array::
-
-	write = (msg) ->
-
-		assert msg and typeof msg is 'string'
-
-		prefix = blackBright getTimesLines()
-		writeStdout prefix + msg
-
-	newline = -> writeStdout '\n'
-
-	getTimesLines = ->
-
-		str = ''
-
-		for time in times
-			str += if time then '│ ' else '  '
-
-		str
 
 	fromArgs = (args) ->
 
 		str = ''
-
 		str += "#{arg} → " for arg in args
-
 		str.substring 0, str.length - 3
 
-	exports = module.exports = ->
+*class* Log
+-----------
 
-		newline()
-		write white fromArgs arguments
+	class Log
 
-	info = exports.info = ->
+		@LOGS_METHODS = ['info', 'warn', 'error', 'time']
 
-		newline()
-		write blue fromArgs arguments
+		@TIMES_LEN = 50
 
-	warn = exports.warn = ->
+		@MARKERS =
+			white: (str) -> str
+			gray: (str) -> str
+			blue: (str) -> str
+			yellow: (str) -> str
+			red: (str) -> str
+			bold: (str) -> "**#{bold}**"
 
-		newline()
-		write yellow fromArgs arguments
+		@time = Date.now
+		@timeDiff = (since) -> Log.time() - since
+		@times = new Array Log.TIMES_LEN
 
-	error = exports.error = ->
+		prefixes: null
 
-		newline()
-		write red fromArgs arguments
+		constructor: (@prefixes) ->
 
-	scope = exports.scope = ->
+			if prefixes
 
-		unshift.call arguments, null
+				assert isArray prefixes
 
-		func = exports.bind null
-		func.info = bind.apply info, arguments
-		func.warn = bind.apply warn, arguments
-		func.error = bind.apply error, arguments
-		func.time = bind.apply time, arguments
-		func.scope = bind.apply scope, arguments
-		func.end = end
+				# bind all logs methods by prefixes
+				args = utils.clone(prefixes)
+				args.unshift @
 
-		func
+				for name in LogImpl.LOGS_METHODS
+					@[name] = bind.apply @[name], args
 
-	times = []
+			@[key] = value for key, value of @
+			return utils.merge @log.bind(@), @
 
-	time = exports.time = ->
+		_write: console?.log or (->)
 
-		pos = -1
+		scope: (args...) ->
 
-		for time, i in times
-			unless time
-				pos = i
+			if @prefixes
+				unshift.apply args, @prefixes
+
+			new LogImpl args
+
+		log: -> @_write LogImpl.MARKERS.white fromArgs arguments
+
+		info: -> @_write LogImpl.MARKERS.blue fromArgs arguments
+
+		warn: -> @_write LogImpl.MARKERS.yellow fromArgs arguments
+
+		error: -> @_write LogImpl.MARKERS.red fromArgs arguments
+
+		time: ->
+
+			{times} = LogImpl
+
+			# get time id and set current time
+			for v, i in times when not v
+				id = i
+				times[i] = LogImpl.time()
 				break
 
-		if pos is -1
-			pos = times.push(null) - 1
+			assert id?, "Log times out of range"
 
-		times[pos] = process.hrtime()
+			# write
+			@_write LogImpl.MARKERS.bold fromArgs arguments
 
-		str = getTimesLines()
-		charpos = pos * 2
-		str = str.substr(0, charpos) + '┌ '
+			id
 
-		newline()
-		writeStdout blackBright(str) + clc.bold fromArgs arguments
+		end: (id) ->
 
-		pos
+			time = LogImpl.times[id]
+			diff = LogImpl.timeDiff time
+			LogImpl.times[id] = null
 
-	end = exports.end = (time) ->
+			str = "#{diff} ms"
+			@_write LogImpl.MARKERS.gray str
 
-		diff = process.hrtime times[time]
-		diff = (diff[0] * 1e9 + diff[1]) / 1e6
+Implementation
+--------------
 
-		times[time] = null
+	impl = switch true
+		when utils.isNode
+			require './node/index.coffee'
+		when utils.isBrowser
+			require './browser/index.coffee'
+		when utils.isQML
+			require './qml/index.coffee'
 
-		if time is times.length - 1
-			i = times.length
-			while i--
-				if times[i] isnt null
-					break
-				times.pop()
+	assert impl, "No log implementation found"
 
-		str = getTimesLines()
-		charpos = time * 2
-		str = str.substr(0, charpos) + "└ #{diff} ms"
-
-		newline()
-		writeStdout blackBright str
+	LogImpl = impl Log
+	module.exports = new LogImpl
