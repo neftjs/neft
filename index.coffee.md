@@ -12,6 +12,7 @@ Utils
 	{toString} = Object::
 	funcToString = Function::toString
 	{isArray} = Array
+	{shift} = Array::
 	createObject = Object.create
 	getPrototypeOf = Object.getPrototypeOf
 	objKeys = Object.keys
@@ -542,6 +543,27 @@ Generate unique hash. Length of returned string can be specified (default 8).
 			if str.length >= n then break
 
 		str.slice 0, n
+
+Utils for functions
+-------------------
+
+### catchError()
+
+Catch raised error and return it.
+Made as workaroud for V8 deoptimization.
+
+	exports.catchError = (func, context) ->
+
+		assert typeof func is 'function'
+
+		shift.call arguments
+		shift.call arguments
+
+		try
+			func.apply context, arguments
+			null
+		catch err
+			err
 
 Utils for errors
 ----------------
