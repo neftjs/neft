@@ -283,6 +283,23 @@ Get last element from the Object or Array
 		keys = objKeys arg
 		arg[keys[keys.length - 1]]
 
+### clear()
+
+Remove all elements from the array, or all properties from the object.
+
+	exports.clear = (obj) ->
+
+		assert obj and typeof obj is 'object'
+
+		# Array
+		if isArray obj
+			obj.pop() for _ in [0...obj.length] by 1
+			return obj
+
+		# Object
+		delete obj[key] for key of obj when obj.hasOwnProperty key
+		obj
+
 ### simplify()
 
 Convert passed object into the most simplified format.
