@@ -19,7 +19,13 @@ module.exports = (Log) -> class LogNode extends Log
 		diff = process.hrtime since
 		(diff[0] * 1e9 + diff[1]) / 1e6
 
-	_write: writeStdout
+	_write: (msg) ->
+
+		prefix = ''
+		for time in Log.times
+			prefix += time? and '  ' or ''
+
+		writeStdout "#{prefix}#{msg}\n"
 
 ###
 	colors = clc

@@ -77,6 +77,9 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 
 			{times} = LogImpl
 
+			# write
+			@_write LogImpl.MARKERS.bold fromArgs arguments
+
 			# get time id and set current time
 			for v, i in times when not v
 				id = i
@@ -84,9 +87,6 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 				break
 
 			assert id?, "Log times out of range"
-
-			# write
-			@_write LogImpl.MARKERS.bold fromArgs arguments
 
 			id
 
