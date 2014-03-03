@@ -12,7 +12,7 @@ Utils
 	{toString} = Object::
 	funcToString = Function::toString
 	{isArray} = Array
-	{shift} = Array::
+	{shift, pop} = Array::
 	createObject = Object.create
 	getPrototypeOf = Object.getPrototypeOf
 	objKeys = Object.keys
@@ -563,6 +563,24 @@ Generate unique hash. Length of returned string can be specified (default 8).
 
 Utils for functions
 -------------------
+
+### tryFunc()
+
+Call function and omit error raising.
+Made as workaroud for V8 deoptimization.
+
+	exports.tryFunc = (func, context, onfail) ->
+
+		assert typeof func is 'function'
+
+		shift.call arguments
+		shift.call arguments
+		onfail = pop.call arguments
+
+		try
+			func.apply context, arguments
+		catch err
+			if typeof onfail is 'function' then onfail(err) else onfail
 
 ### catchError()
 
