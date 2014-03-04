@@ -93,7 +93,7 @@ Prototype is copied (if exists).
 
 		result = exports.clone arg
 
-		if result
+		if result and typeof result is 'object'
 			for key, value of result when hasOwnProp.call result, key
 				result[key] = exports.cloneDeep value
 
