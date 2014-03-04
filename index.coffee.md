@@ -480,6 +480,96 @@ Backward `simplify()` operation.
 
 			objects[0]
 
+### isEqual()
+
+Compare two objects deeply.
+
+	isEqual = exports.isEqual = do ->
+
+		defaultComparison = (a, b) -> a is b
+
+		forArrays = (a, b, compareFunc) ->
+
+			# prototypes are the same
+			if getPrototypeOf(a) isnt getPrototypeOf(b)
+				return false
+
+			# length is the same
+			if a.length isnt b.length
+				return false
+
+			# values are the same
+			for aValue in a
+				isTrue = false
+
+				for bValue in b
+					if bValue and typeof bValue is 'object'
+						if isEqual aValue, bValue, compareFunc
+							isTrue = true
+						continue
+
+					if compareFunc aValue, bValue
+						isTrue = true
+						break
+
+				unless isTrue
+					return false
+
+			for bValue in b
+				isTrue = false
+
+				for aValue in a
+					if aValue and typeof aValue is 'object'
+						if isEqual bValue, aValue, compareFunc
+							isTrue = true
+						continue
+
+					if compareFunc bValue, aValue
+						isTrue = true
+						break
+
+				unless isTrue
+					return false
+
+			true
+
+		forObjects = (a, b, compareFunc) ->
+
+			# prototypes are the same
+			if getPrototypeOf(a) isnt getPrototypeOf(b)
+				return false
+
+			# whether keys are the same
+			for key, value of a when a.hasOwnProperty key
+				unless b.hasOwnProperty key
+					return false
+
+			for key, value of b when b.hasOwnProperty key
+				unless a.hasOwnProperty key
+					return false
+
+			# whether values are equal
+			for key, value of a when a.hasOwnProperty key
+				if value and typeof value is 'object'
+					unless isEqual value, b[key], compareFunc
+						return false
+					continue
+
+				unless compareFunc value, b[key]
+					return false
+
+			true
+
+		(a, b, compareFunc=defaultComparison) ->
+
+			if isArray(a) and isArray(b)
+				return forArrays a, b, compareFunc
+
+			if a and typeof a is 'object' and b and typeof b is 'object'
+				return forObjects a, b, compareFunc
+
+			return compareFunc a, b
+
 Utils for arrays
 ----------------
 
