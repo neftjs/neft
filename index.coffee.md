@@ -110,6 +110,25 @@ Existed properties will be overriden.
 			throw new TypeError
 
 		for key, value of obj when obj.hasOwnProperty(key)
+			source[key] = value
+
+		source
+
+### mergeDeep()
+
+Merge second object into the first one deeply.
+
+	mergeDeep = exports.mergeDeep = (source, obj) ->
+
+		assert source and typeof source is 'object'
+		assert obj and typeof obj is 'object'
+
+		for key, value of obj when hasOwnProp.call obj, key
+			sourceValue = source[key]
+
+			if value and typeof value is 'object' and sourceValue and typeof sourceValue is 'object'
+				mergeDeep sourceValue, value
+				continue
 
 			source[key] = value
 
