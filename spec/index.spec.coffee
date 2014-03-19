@@ -1,22 +1,14 @@
 'use strict'
 
-View = require('../index.coffee.md')()
+View = require('../index.coffee.md')
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
-renderParse = (view, callback) ->
+renderParse = (view) ->
 
-	ok = null
-	runs -> view.render (err) -> ok = not err
-	waitsFor -> ok isnt null
-	runs ->
-		view.revert()
-		ok = null
-	runs -> view.render (err) -> ok = not err
-	waitsFor -> ok isnt null
-	runs ->
-		expect(ok).toBe true
-		callback()
+	view.render()
+	view.revert()
+	view.render()
 
 describe 'View', ->
 
@@ -85,35 +77,35 @@ describe 'View', ->
 		view_refactored = View.factory path
 
 		expect(view_factored).not.toBe view_start
-		expect(view_factored.isClone).toBeTruthy()
 		expect(view_factored).toBe view_refactored
 
 	it 'can replace elems by units', ->
 
 		view = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
+		view = view.clone()
 
-		renderParse view, ->
-			expect(view.node.stringify()).toBe '<unit><b></b></unit>'
-			view.revert()
-			expect(view.node.stringify()).toBe '<a></a>'
+		renderParse view
+		expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+		view.revert()
+		expect(view.node.stringify()).toBe '<a></a>'
 
 	it 'can replace elems by units in units', ->
 
 		source = View.fromHTML uid(), '<unit name="b">1</unit><unit name="a"><b></b></unit><a></a>'
 		view = source.clone();
 
-		renderParse view, ->
-			expect(source.node.stringify()).toBe '<a></a>'
-			expect(view.node.stringify()).toBe '<unit><unit>1</unit></unit>'
+		renderParse view
+		expect(source.node.stringify()).toBe '<a></a>'
+		expect(view.node.stringify()).toBe '<unit><unit>1</unit></unit>'
 
 	it 'can render clone separately', ->
 
 		source = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
 		view = source.clone()
 
-		renderParse view, ->
-			expect(view.node.stringify()).toBe '<unit><b></b></unit>'
-			expect(source.node.stringify()).toBe '<a></a>'
+		renderParse view
+		expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+		expect(source.node.stringify()).toBe '<a></a>'
 
 	it 'can put elem body in unit', ->
 
@@ -122,6 +114,6 @@ describe 'View', ->
 			<a><b></b></a>'
 		view = source.clone()
 
-		renderParse view, ->
-			expect(source.node.stringify()).toBe '<a><fragment><b></b></fragment></a>'
-			expect(view.node.stringify()).toBe '<unit><fragment><b></b></fragment></unit>'
+		renderParse view
+		expect(source.node.stringify()).toBe '<a><b></b></a>'
+		expect(view.node.stringify()).toBe '<unit><b></b></unit>'

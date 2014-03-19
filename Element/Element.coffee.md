@@ -59,7 +59,7 @@ Constructor is instance of *Events* class, so after every initializing
 
 			Element.trigger Element.INIT, @
 
-		utils.merge @, new Events
+		utils.merge utils.merge(@, Events::), new Events
 
 ### Properties
 

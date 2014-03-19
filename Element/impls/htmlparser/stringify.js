@@ -1,10 +1,12 @@
 var ElementType = require("domelementtype"),
-    isTag = ElementType.isTag;
+    isTag = ElementType.isTag,
+    isArray = Array.isArray;
 
-module.exports = {
+exports = module.exports = {
 	getInnerHTML: getInnerHTML,
 	getOuterHTML: getOuterHTML,
-	getText: getText
+	getText: getText,
+	omit: null
 };
 
 function getInnerHTML(elem){
@@ -62,6 +64,8 @@ function getOuterHTML(elem){
 	case ElementType.CDATA:
 		return "<!CDATA " + getInnerHTML(elem) + "]]>";
 	}
+
+	if (exports.omit && ~exports.omit.indexOf(elem.name)) return getInnerHTML(elem);
 
 	var ret = "<" + elem.name;
 	if("attribs" in elem){

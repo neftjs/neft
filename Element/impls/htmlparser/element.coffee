@@ -11,8 +11,10 @@ utils = require 'utils/index.coffee.md'
 
 isDefined = (elem) -> elem?
 
-MAIN_ELEMENT_NAME = 'fragment'
+MAIN_ELEMENT_NAME = 'g'
 CSS_ID_RE = ///\#([^\s]+)///
+
+stringify.omit = [MAIN_ELEMENT_NAME]
 
 updateIndexes = (nodes, from=0, to=nodes.length) ->
 

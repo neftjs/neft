@@ -2,9 +2,7 @@
 
 HASH_RE = ///////g
 
-module.exports = (File) -> (_super) -> (file) ->
-
-	_super.call null, file
+module.exports = (File) -> (file) ->
 
 	units = file.units ?= {}
 
@@ -37,3 +35,5 @@ module.exports = (File) -> (_super) -> (file) ->
 
 		# get unit
 		units[name] = new File.Unit file, name, node
+
+	null

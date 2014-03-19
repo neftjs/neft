@@ -2,8 +2,6 @@
 
 tmp = []
 
-module.exports = (File) -> (_super) -> (file) ->
-
-	_super arguments...
+module.exports = (File) -> (file) ->
 
 	file.sourceNode = file.node.queryAll('source', tmp)[0]

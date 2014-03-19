@@ -1,15 +1,13 @@
 'use strict'
 
-utils = require 'utils/index.coffee.md'
+[utils] = ['utils'].map require
 
-module.exports = (File) -> (_super) -> (file, opts, callback) ->
+module.exports = (File) -> (file, opts) ->
 
 	{usedUnits, changes} = file._tmp
 	{units, elems, texts} = file
 
-	if utils.isEmpty elems then return _super arguments...
-
-	stack = new utils.async.Stack
+	if utils.isEmpty elems then return
 
 	# replace elems by units
 	for name, subelems of elems
@@ -23,7 +21,7 @@ module.exports = (File) -> (_super) -> (file, opts, callback) ->
 
 			# get unit and parse it
 			usedUnit = unit.clone()
-			stack.add usedUnit, 'render', source: elem
+			usedUnit.render source: elem
 			usedUnits.push usedUnit
 
 			newChild = usedUnit.node
@@ -32,10 +30,4 @@ module.exports = (File) -> (_super) -> (file, opts, callback) ->
 			changes.push oldChild.parent, oldChild, newChild
 			oldChild.parent.replace oldChild, newChild
 
-	# parse units
-	args = arguments
-
-	stack.runAllSimultaneously (err) ->
-
-		if err then return callback err
-		_super args...
+	null

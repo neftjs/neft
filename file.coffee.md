@@ -10,9 +10,7 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	utils = require 'utils/index.coffee.md'
-	assert = require 'assert'
-	CallList = require './callList.coffee'
+	[utils, assert] = ['utils', 'assert'].map require
 
 *class* File
 ------------
@@ -20,65 +18,112 @@ features. Physical file should be easy to load and parse.
 	module.exports = class File
 
 		files = {}
-		clones = []
-
-### Static
+		pool = {}
 
 #### *File* fromHTML(*string*, *string*)
 
-		@fromHTML = (path, html) ->
+		@fromHTML = do ->
 
-			assert html and typeof html is 'string'
+			clear = require('./file/clear.coffee') File
 
-			# get node
-			node = File.Element.fromHTML html
+			(path, html) ->
 
-			# clear
-			File.clear.run node
+				assert path and typeof path is 'string'
+				assert not files[path]
+				assert html and typeof html is 'string'
 
-			new File path, node
+				# get node
+				node = File.Element.fromHTML html
+
+				# clear
+				clear node
+
+				# create file
+				file = new File path, node
+
+				file
+
+#### *File* fromJSON(*String*, *String*)
+
+		@fromJSON = (path, json) ->
+
+			assert path and typeof path is 'string'
+			assert not files[path]
+			assert json and typeof json is 'string'
+
+			# parse json
+			json = utils.tryFunc JSON.parse, null, json
+			assert utils.isObject json
+
+			# save to storage
+			files[path] = json
+
+			# factory
+			File.factory path
 
 #### *File* factory(*string*)
 
 		@factory = (path) ->
 
-			assert files[path]
+			assert path and typeof path is 'string'
 
-			files[path].clone()
+			# from pool
+			if pool[path]?.length
+				return pool[path].pop()
+
+			# from json
+			json = files[path]
+			assert json
+
+			json = utils.cloneDeep json
+			json = utils.assemble json
+
+			json
 
 ### Constructor(*string*, *File.Element*)
 
-		constructor: (@path, @node) ->
+		constructor: do ->
 
-			assert path and typeof path is 'string'
-			assert node instanceof File.Element
-			assert not files[path]
+			links = require('./file/parse/links.coffee') File
+			attrs = require('./file/parse/attrs.coffee') File
+			units = require('./file/parse/units.coffee') File
+			source = require('./file/parse/source.coffee') File
+			elems = require('./file/parse/elems.coffee') File
 
-			# save instance
-			files[path] = @
+			(@path, @node) ->
 
-			# set properties
-			@pathbase = path.substring 0, path.lastIndexOf('/')+1
+				assert path and typeof path is 'string'
+				assert node instanceof File.Element
+				assert not files[path]
 
-			# call init
-			@init()
+				# set properties
+				@pathbase = path.substring 0, path.lastIndexOf('/')+1
 
-			# parse file
-			File.parse.run @
+				# call init
+				@init()
 
-			# clone tmp
-			@_tmp = utils.cloneDeep @_tmp
+				# clone tmp
+				@_tmp = utils.cloneDeep @_tmp
+
+				# parse
+				links @
+				attrs @
+				units @
+				source @
+				elems @
+
+				# save to storage
+				files[@path] = @toJSON()
+
+				@
 
 ### Properties
-
-		isClone: false
-		isParsing: false
-		isParsed: false
 
 		_tmp:
 			usedUnits: []
 			changes: []
 
+		isRendered: false
 		node: null
 		sourceNode: null
 		path: ''
@@ -94,82 +139,53 @@ features. Physical file should be easy to load and parse.
 
 		init: ->
 
+#### render()
+
+		render: do ->
+
+			elems = require('./file/render/parse/elems.coffee') File
+			source = require('./file/render/parse/source.coffee') File
+
+			optsDef = {}
+			(opts=optsDef) ->
+
+				assert opts and typeof opts is 'object'
+				assert not @isRendered
+
+				@isRendered = true
+
+				elems @, opts
+				source @, opts
+
+#### revert() ->
+
+		revert: do ->
+
+			elems = require('./file/render/revert/elems.coffee') File
+
+			->
+
+				assert @isRendered
+
+				@isRendered = false
+
+				elems @
+
 #### clone()
 
 		clone: ->
 
-			assert not @isClone
-			assert not @isParsing
-			assert not @isParsed
-
-			for file, i in clones
-				if file.path is @path
-					clones.splice i, 1
-					return file
-
-			clone = utils.clone @
-			clone.isClone = true
-			clone.node = @node.cloneDeep()
-			clone._tmp = utils.cloneDeep File::_tmp
-
-			# copy sourceNode
-			if @sourceNode
-				clone.sourceNode = @node.getCopiedElement @sourceNode, clone.node
-
-			# copy elems
-			elems = clone.elems = utils.clone @elems
-
-			for name, unitElems of elems
-
-				unitElems = elems[name] = utils.clone unitElems
-				for elem, i in unitElems
-					unitElems[i] = elem.clone clone
-
-			clone
-
-#### render()
-
-		render: (opts, callback) ->
-
-			File.render.parse.run @, opts, callback
-
-#### revert() ->
-
-		revert: ->
-
-			File.render.revert.run @
+			File.factory @path
 
 #### destroy()
 
 		destroy: ->
 
-			assert @isClone
-			assert not ~clones.indexOf @
+			pathPool = pool[@path] ?= []
+			pathPool.push @
 
-			clones.push @
+#### toJSON()
 
-### Static
+		toJSON: ->
 
-#### Functions
-
-		@clear = new CallList
-		@clear.add 'clear', require('./file/clear.coffee') File
-
-		@parse = new CallList
-		@parse.add('links', require('./file/parse/links.coffee') File)
-		      .add('attrs', require('./file/parse/attrs.coffee') File)
-		      .add('units', require('./file/parse/units.coffee') File)
-		      .add('source', require('./file/parse/source.coffee') File)
-		      .add('elems', require('./file/parse/elems.coffee') File);
-
-		@render =
-			parse: new CallList
-			revert: new CallList
-
-		@render.parse.add('onend', require('./file/render/parse/onend.coffee') File)
-		             .add('source', require('./file/render/parse/source.coffee') File)
-		             .add('elems', require('./file/render/parse/elems.coffee') File)
-		             .add('init', require('./file/render/parse/init.coffee') File);
-		@render.revert.add('onend', require('./file/render/revert/onend.coffee') File)
-		              .add('elems', require('./file/render/revert/elems.coffee') File)
-		              .add('init', require('./file/render/revert/init.coffee') File);
+			utils.simplify @, properties: true, protos: false, constructors: true

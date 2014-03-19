@@ -42,16 +42,3 @@ Represents an element placed in the file.
 ### Methods
 
 		init: ->
-
-		clone: (self) ->
-
-			proto = utils.clone @
-
-			proto.self = self
-			proto.node = @self.node.getCopiedElement @node, self.node
-
-			proto
-
-		toJSON: ->
-
-			name: @name

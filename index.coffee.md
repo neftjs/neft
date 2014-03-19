@@ -30,14 +30,11 @@ One file can include other files using `link` tag.
 
 	ELEMENT_IMPL = if window? then 'dom' else 'htmlparser'
 
-	module.exports = (plugins...) ->
+	File = require './file.coffee.md'
 
-		File = require './file.coffee.md'
+	File.Element = require('./Element/index.coffee.md') ELEMENT_IMPL
+	File.Unit = require('./unit.coffee.md') File
+	File.Elem = require('./elem.coffee.md') File
 
-		File.Element = require('./Element/index.coffee.md') ELEMENT_IMPL
-		File.Unit = require('./unit.coffee.md') File
-		File.Elem = require('./elem.coffee.md') File
 
-		for plugin in plugins then plugin File
-
-		File
+	module.exports = File

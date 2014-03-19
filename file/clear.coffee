@@ -57,10 +57,4 @@ removeEmptyTexts = (node) ->
 		if elem.name isnt 'script'
 			removeEmptyTexts elem
 
-module.exports = (File) -> (_super) -> (node) ->
-
-	_super arguments...
-
-	removeEmptyTexts node
-
-	node
+module.exports = (File) -> removeEmptyTexts

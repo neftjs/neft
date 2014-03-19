@@ -1,10 +1,8 @@
 'use strict'
 
-utils = require 'utils/index.coffee.md'
+[utils] = ['utils'].map require
 
-module.exports = (File) -> (_super) -> (file) ->
-
-	_super arguments...
+module.exports = (File) -> (file) ->
 
 	elems = file.elems = {}
 
@@ -18,3 +16,5 @@ module.exports = (File) -> (_super) -> (file) ->
 		for node in nodes
 			nameElems = elems[name] ?= []
 			nameElems.push elem = new File.Elem file, name, node
+
+	null

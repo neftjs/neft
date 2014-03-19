@@ -2,9 +2,7 @@
 
 assert = require 'assert'
 
-module.exports = (File) -> (_super) -> (file) ->
-
-	_super.call null, file
+module.exports = (File) -> (file) ->
 
 	# prepare
 	links = file.links = []
@@ -35,3 +33,5 @@ module.exports = (File) -> (_super) -> (file) ->
 		links.push
 			view: view
 			namespace: namespace
+
+	null

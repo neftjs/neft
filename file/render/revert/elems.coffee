@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (File) -> (_super) -> (file) ->
+module.exports = (File) -> (file) ->
 
 	{changes, usedUnits} = file._tmp
 
@@ -28,4 +28,4 @@ module.exports = (File) -> (_super) -> (file) ->
 		usedUnit.revert()
 		usedUnit.destroy()
 
-	_super arguments...
+	null
