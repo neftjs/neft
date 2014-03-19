@@ -90,13 +90,21 @@ Prototype is copied (if exists).
 
 ### cloneDeep()
 
-	exports.cloneDeep = (arg) ->
+Clone passed `arg` deeply.
+Optional `opts` parameter can specify which types shouldn't be cloned.
+Functions are not clone by default (pass `{function: true}` to reverse this proccess).
+
+	exports.cloneDeep = do (optsDef={function: false}) -> (arg, opts=optsDef) ->
+
+		opts and assert typeof opts is 'object'
+		opts.function ?= false
 
 		result = exports.clone arg
 
 		if result and typeof result is 'object'
 			for key, value of result when hasOwnProp.call result, key
-				result[key] = exports.cloneDeep value
+				if opts?[typeof value] isnt false
+					result[key] = exports.cloneDeep value
 
 		result
 
