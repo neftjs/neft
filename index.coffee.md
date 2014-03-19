@@ -347,7 +347,7 @@ Example
      JSON.parse utils.simplify obj
      ```
 
-	exports.simplify = (obj, opts={}) ->
+	exports.simplify = do (nativeProtos = [Array::, Object::]) -> (obj, opts={}) ->
 
 		assert obj and typeof obj is 'object'
 		opts? and assert exports.isObject opts
@@ -394,9 +394,16 @@ Example
 				objIds.push i
 
 			# cycle proto
-			if optsProtos and proto = obj.__proto__
-				unless ~(i = objs.indexOf proto)
+			if optsProtos and proto = getPrototypeOf obj
+
+				# don't save protos for native ones (Array, Object, etc..)
+				if ~(nativeProtos.indexOf proto)
+					i = null
+
+				# find recursively if it's for first time
+				else unless ~(i = objs.indexOf proto)
 					i = cyclic proto
+
 				objIds.push i
 
 			len - 1
@@ -438,8 +445,10 @@ Example
 				r[key] = value
 
 			# save reference to proto
-			if optsProtos and obj.__proto__
-				protos[index] = objIds[obji++]
+			if optsProtos and getPrototypeOf obj
+				protoObjId = objIds[obji++]
+				if protoObjId isnt null
+					protos[index] = protoObjId
 
 			# save ctor if needed
 			if optsCtors and not r.hasOwnProperty('constructor')
