@@ -20,6 +20,7 @@ Utils
 	getObjOwnPropDesc = Object.getOwnPropertyDescriptor
 	defObjProp = Object.defineProperty
 	{random} = Math
+	lookupGetter = Object::__lookupGetter__ or -> @getOwnPropertyDescriptor().get
 
 Include sub-modules
 -------------------
@@ -373,6 +374,11 @@ Example
 				unless value and typeof value is 'object'
 					continue
 
+				# don't check getters values
+				if optsProps and lookupGetter.call obj, key
+					objIds.push null
+					continue
+
 				# check whether obj already exists
 				unless ~(i = objs.indexOf value)
 					i = cyclic value
@@ -393,22 +399,34 @@ Example
 			r = if isArray obj then [] else {}
 			objIds = ids[index]
 
+			# Create `references` for each object with keys which are a references to others
+			# Value of each property will be changed to referenced object id
 			obji = 0
+			objReferences = null
 			for key, value of obj when obj.hasOwnProperty key
 
+				r[key] = value
+
+				isReference = false
+
+				# save as reference
 				if value and typeof value is 'object'
-					unless objReferences
-						objReferences = []
+					objReferences ?= []
 
-					value = objIds[obji++]
-					objReferences.push key
+					objId = value = objIds[obji++]
 
-				# get property description
+					# with `optsProps` id can be a null when value is an object
+					if value isnt null
+						isReference = true
+						objReferences.push key
+
+				# save as property description
 				if optsProps
-					propValue = value
-					value = getObjOwnPropDesc obj, key
-					value.value = propValue
+					desc = getObjOwnPropDesc obj, key
+					desc.value = value if isReference
+					value = desc
 
+				# override prop value as referenced object id
 				r[key] = value
 
 			# save reference to proto
@@ -419,6 +437,7 @@ Example
 			if optsCtors and not r.hasOwnProperty('constructor')
 				ctor = obj.constructor
 
+				# omits `Array` and `Objects` prototypes
 				if ctor isnt Array and ctor isnt Object
 					ctors[index] = ctor
 
