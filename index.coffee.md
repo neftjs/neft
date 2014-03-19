@@ -336,146 +336,169 @@ Use `assemble()` method to restore into initial structure.
 
 Second optional parameter is an config object.
 Possible options to define (all are `false` by default):
-  - `properties` - save properties with config,
-  - `protos` - save proto
-  - `constructors` - include constructors functions
+  - `properties` - save properties descriptions (getters, config etc.),
+  - `protos` - save proto as object,
+  - `constructors` - include constructors functions.
 
-Example
+If `protos` is `false` and `constructors` is `true` objects will be taken as instances (example 2).
+
+Examples
   1. ```
      obj = {}
      obj.self = obj
-     JSON.parse utils.simplify obj
+     JSON.stringify utils.simplify obj
+     ```
+  2. ```
+     class Sample
+     	constructor: -> @fromInst = 1
+     	fromProto: 1
+     sample = new Sample
+     parts = utils.simplify sample, constructors: true
+     clone = utils.assemble json
+     # it's true because `protos` option is `false` and `constructors` is true
+     # won't work for json, because functions are not stringified - do it on your own
+     assert(clone instanceof Sample)
      ```
 
-	exports.simplify = do (nativeProtos = [Array::, Object::]) -> (obj, opts={}) ->
+ * * *
 
-		assert obj and typeof obj is 'object'
-		opts? and assert exports.isObject opts
+	exports.simplify = do ->
 
-		optsProps = opts.properties ?= false
-		optsProtos = opts.protos ?= false
-		optsCtors = opts.constructors ?= false
+		nativeProtos = [Array::, Object::]
+		nativeCtors = [Array, Object]
 
-		# list of objects
-		objs = []
+		(obj, opts={}) ->
 
-		# list of lists of ids per object
-		ids = []
+			assert obj and typeof obj is 'object'
+			opts? and assert exports.isObject opts
 
-		# lists of keys to references per object
-		references = {}
+			optsProps = opts.properties ?= false
+			optsProtos = opts.protos ?= false
+			optsCtors = opts.constructors ?= false
+			optsInsts = opts.instances = not optsProtos and optsCtors
 
-		# objects constructors
-		if optsCtors then ctors = {}
+			# list of objects
+			objs = []
 
-		# proto destination to proto object
-		if optsProtos then protos = {}
+			# list of lists of ids per object
+			ids = []
 
-		# get cyclic references in the object
-		cyclic = (obj) ->
+			# lists of keys to references per object
+			references = {}
 
-			len = objs.push obj
-			ids.push objIds = []
+			# objects constructors
+			if optsCtors then ctors = {}
 
-			for key, value of obj when obj.hasOwnProperty key
+			# proto destination to proto object
+			if optsProtos then protos = {}
 
-				unless value and typeof value is 'object'
-					continue
+			# get cyclic references in the object
+			cyclic = (obj) ->
 
-				# don't check getters values
-				if optsProps and lookupGetter.call obj, key
-					objIds.push null
-					continue
+				len = objs.push obj
+				ids.push objIds = []
 
-				# check whether obj already exists
-				unless ~(i = objs.indexOf value)
-					i = cyclic value
+				for key, value of obj when obj.hasOwnProperty key
 
-				objIds.push i
+					unless value and typeof value is 'object'
+						continue
 
-			# cycle proto
-			if optsProtos and proto = getPrototypeOf obj
+					# don't check getters values
+					if optsProps and lookupGetter.call obj, key
+						objIds.push null
+						continue
 
-				# don't save protos for native ones (Array, Object, etc..)
-				if ~(nativeProtos.indexOf proto)
-					i = null
+					# check whether obj already exists
+					unless ~(i = objs.indexOf value)
+						i = cyclic value
 
-				# find recursively if it's for first time
-				else unless ~(i = objs.indexOf proto)
-					i = cyclic proto
+					objIds.push i
 
-				objIds.push i
+				# cycle proto
+				if optsProtos and proto = getPrototypeOf obj
 
-			len - 1
+					# don't save protos for native ones (Array, Object, etc..)
+					if ~(nativeProtos.indexOf proto)
+						i = null
 
-		# parse object
-		parse = (obj, index) ->
+					# find recursively if it's for first time
+					else unless ~(i = objs.indexOf proto)
+						i = cyclic proto
 
-			r = if isArray obj then [] else {}
-			objIds = ids[index]
+					objIds.push i
 
-			# Create `references` for each object with keys which are a references to others
-			# Value of each property will be changed to referenced object id
-			obji = 0
-			objReferences = null
-			for key, value of obj when obj.hasOwnProperty key
+				len - 1
 
-				r[key] = value
+			# parse object
+			parse = (obj, index) ->
 
-				isReference = false
+				r = if isArray obj then [] else {}
+				objIds = ids[index]
 
-				# save as reference
-				if value and typeof value is 'object'
-					objReferences ?= []
+				# Create `references` for each object with keys which are a references to others
+				# Value of each property will be changed to referenced object id
+				obji = 0
+				objReferences = null
+				for key, value of obj when obj.hasOwnProperty key
 
-					objId = value = objIds[obji++]
+					r[key] = value
 
-					# with `optsProps` id can be a null when value is an object
-					if value isnt null
-						isReference = true
-						objReferences.push key
+					isReference = false
 
-				# save as property description
-				if optsProps
-					desc = getObjOwnPropDesc obj, key
-					desc.value = value if isReference
-					value = desc
+					# save as reference
+					if value and typeof value is 'object'
+						objReferences ?= []
 
-				# override prop value as referenced object id
-				r[key] = value
+						objId = value = objIds[obji++]
 
-			# save reference to proto
-			if optsProtos and getPrototypeOf obj
-				protoObjId = objIds[obji++]
-				if protoObjId isnt null
-					protos[index] = protoObjId
+						# with `optsProps` id can be a null when value is an object
+						if value isnt null
+							isReference = true
+							objReferences.push key
 
-			# save ctor if needed
-			if optsCtors and not r.hasOwnProperty('constructor')
-				ctor = obj.constructor
+					# save as property description
+					if optsProps
+						desc = getObjOwnPropDesc obj, key
+						desc.value = value if isReference
+						value = desc
 
-				# omits `Array` and `Objects` prototypes
-				if ctor isnt Array and ctor isnt Object
-					ctors[index] = ctor
+					# override prop value as referenced object id
+					r[key] = value
 
-			# save object references
-			if objReferences then references[index] = objReferences
+				# save reference to proto
+				if optsProtos and getPrototypeOf obj
+					protoObjId = objIds[obji++]
+					if protoObjId isnt null
+						protos[index] = protoObjId
 
-			r
+				# save ctor if needed
+				if optsCtors and ctor = obj.constructor
 
-		# find cycles
-		cyclic obj
+					# save for instance or for prototype depend on the flag
+					if optsInsts or obj.hasOwnProperty('constructor')
 
-		# parse all found objects
-		for value, i in objs
-			objs[i] = parse value, i
+						# omits native constructors (Array, Object etc.)
+						unless ~(nativeCtors.indexOf ctor)
+							ctors[index] = ctor
 
-		# return
-		opts: opts
-		objects: objs
-		references: references
-		protos: protos
-		constructors: ctors
+				# save object references
+				if objReferences then references[index] = objReferences
+
+				r
+
+			# find cycles
+			cyclic obj
+
+			# parse all found objects
+			for value, i in objs
+				objs[i] = parse value, i
+
+			# return
+			opts: opts
+			objects: objs
+			references: references
+			protos: protos
+			constructors: ctors
 
 ### assemble()
 
@@ -493,9 +516,7 @@ Backward `simplify()` operation.
 				merge proto, obj
 				proto
 
-		ctorPropConfig =
-			value: null
-			enumerable: false
+		ctorPropConfig = value: null
 
 		(obj) ->
 
@@ -506,6 +527,7 @@ Backward `simplify()` operation.
 			optsProps = opts.properties
 			optsProtos = opts.protos
 			optsCtors = opts.constructors
+			optsInsts = opts.instances
 
 			# set references
 			for objI, refs of references
@@ -527,8 +549,13 @@ Backward `simplify()` operation.
 			for objI, refI of protos
 				objects[objI] = setObjProto objects[objI], objects[refI]
 
-			# set ctors
-			if optsCtors
+			# set objects as instances
+			if optsInsts
+				for objI, func of constructors
+					setObjProto objects[objI], func::
+
+			# .. or set ctors as properties
+			else if optsCtors
 				for objI, func of constructors
 					ctorPropConfig.value = func
 					defObjProp objects[objI], 'constructor', ctorPropConfig
