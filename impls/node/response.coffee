@@ -2,7 +2,6 @@
 
 [zlib, log, View] = ['zlib', 'log', 'view'].map require
 
-View = View()
 log = log.scope 'Routing'
 
 HEADERS =

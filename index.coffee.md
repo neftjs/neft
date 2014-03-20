@@ -107,7 +107,7 @@ New instance of implemented *Routing* is returned.
 			assert utils.isObject opts
 
 			logtime = log.time 'request'
-			log "Resolve #{JSON.stringify(opts)} request"
+			log "Resolve `#{JSON.stringify(opts)}` request"
 
 			# create request
 			req = Routing.Request.factory opts
@@ -129,8 +129,8 @@ New instance of implemented *Routing* is returned.
 				utils.async.forEach handlers, (handler, i, handlers, next) ->
 
 					handler.exec req, res, (err) ->
-						if err then next()
-						else log.end logtime
+						if err then return next()
+						log.end logtime
 
 				, ->
 					res.raise Routing.Response.Error.RequestResolve req
