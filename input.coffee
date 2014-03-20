@@ -45,11 +45,13 @@ module.exports = (File) -> class Input
 
 			# from attr
 			if storage instanceof File.Element.modules.Attrs
-				if r = storage.get prop
+				r = storage.get prop
+				if r?
 					return r
 
 			# from object
-			if r = storage[prop]
+			r = storage[prop]
+			if r?
 				return r
 
 	parse: ->

@@ -25,6 +25,7 @@ features. Physical file should be easy to load and parse.
 		@Elem = require('./elem.coffee.md') @
 		@Input = require('./input.coffee') @
 		@Condition = require('./condition.coffee') @
+		@Iterator = require('./iterator.coffee') @
 
 #### *File* fromHTML(*string*, *string*)
 
@@ -97,6 +98,7 @@ features. Physical file should be easy to load and parse.
 			elems = require('./file/parse/elems.coffee') File
 			storage = require('./file/parse/storage.coffee') File
 			conditions = require('./file/parse/conditions.coffee') File
+			iterators = require('./file/parse/iterators.coffee') File
 
 			(@path, @node) ->
 
@@ -120,6 +122,7 @@ features. Physical file should be easy to load and parse.
 				source @
 				elems @
 				storage @
+				iterators @
 				conditions @
 
 				# save to storage
@@ -134,6 +137,7 @@ features. Physical file should be easy to load and parse.
 			changes: []
 			hidden: []
 			conditions: []
+			iterators: []
 
 		isRendered: false
 		node: null
@@ -146,6 +150,7 @@ features. Physical file should be easy to load and parse.
 		elems: null
 		inputs: null
 		conditions: null
+		iterators: null
 
 ### Methods
 
@@ -161,6 +166,7 @@ features. Physical file should be easy to load and parse.
 			source = require('./file/render/parse/source.coffee') File
 			storage = require('./file/render/parse/storage.coffee') File
 			conditions = require('./file/render/parse/conditions.coffee') File
+			iterators = require('./file/render/parse/iterators.coffee') File
 
 			optsDef = {}
 			(opts=optsDef) ->
@@ -170,10 +176,11 @@ features. Physical file should be easy to load and parse.
 
 				@isRendered = true
 
+				storage @, opts
+				iterators @, opts
+				conditions @, opts
 				elems @, opts
 				source @, opts
-				storage @, opts
-				conditions @, opts
 
 #### revert() ->
 
@@ -181,6 +188,7 @@ features. Physical file should be easy to load and parse.
 
 			elems = require('./file/render/revert/elems.coffee') File
 			conditions = require('./file/render/revert/conditions.coffee') File
+			iterators = require('./file/render/revert/iterators.coffee') File
 
 			->
 
@@ -189,6 +197,7 @@ features. Physical file should be easy to load and parse.
 				@isRendered = false
 
 				conditions @
+				iterators @
 				elems @
 
 #### clone()

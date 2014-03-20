@@ -178,3 +178,45 @@ describe 'View Condition', ->
 		view.revert()
 		renderParse view, storage: x: 2
 		expect(view.node.stringify()).toBe '<div><b>1</b></div>'
+
+describe 'View Iterator', ->
+
+	it 'loops expected times', ->
+
+		view = View.fromHTML uid(), '<ul each="[0,0]">1</ul>'
+
+		renderParse view
+		expect(view.node.stringify()).toBe '<ul>11</ul>'
+
+	it 'public data per loop', ->
+
+		view = View.fromHTML uid(), '<ul each="[{v:1},{v:2}]">#{each[i].v}</ul>'
+
+		renderParse view
+		expect(view.node.stringify()).toBe '<ul>12</ul>'
+
+	it 'works with cloned files', ->
+
+		source = View.fromHTML uid(), '<ul each="[1,2]">#{each[i]}</ul>'
+		view = source.clone()
+
+		renderParse view
+		expect(source.node.stringify()).toBe '<ul each="1,2"></ul>'
+		expect(view.node.stringify()).toBe '<ul>12</ul>'
+
+	it 'works in units with elems', ->
+
+		source = View.fromHTML uid(), '<unit name="b">#{data}</unit>
+			<unit name="a"><ul each="#{data}"><b data="#{each[i]}"></b></ul></unit>
+			<a data="[1,2]"></a>'
+		view = source.clone()
+
+		renderParse view
+		expect(source.node.stringify()).toBe '<a data="1,2"></a>'
+		expect(view.node.stringify()).toBe '' +
+			'<unit>' +
+				'<ul>' +
+					'<unit>1</unit>' +
+					'<unit>2</unit>' +
+				'</ul>' +
+			'</unit>'
