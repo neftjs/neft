@@ -20,6 +20,11 @@ features. Physical file should be easy to load and parse.
 		files = {}
 		pool = {}
 
+		@Element = require('./Element/index.coffee.md') 'htmlparser'
+		@Unit = require('./unit.coffee.md') @
+		@Elem = require('./elem.coffee.md') @
+		@Input = require('./input.coffee') @
+
 #### *File* fromHTML(*string*, *string*)
 
 		@fromHTML = do ->
@@ -89,6 +94,7 @@ features. Physical file should be easy to load and parse.
 			units = require('./file/parse/units.coffee') File
 			source = require('./file/parse/source.coffee') File
 			elems = require('./file/parse/elems.coffee') File
+			storage = require('./file/parse/storage.coffee') File
 
 			(@path, @node) ->
 
@@ -111,6 +117,7 @@ features. Physical file should be easy to load and parse.
 				units @
 				source @
 				elems @
+				storage @
 
 				# save to storage
 				files[@path] = @toJSON()
@@ -132,6 +139,7 @@ features. Physical file should be easy to load and parse.
 		links: null
 		units: null
 		elems: null
+		inputs: null
 
 ### Methods
 
@@ -145,6 +153,7 @@ features. Physical file should be easy to load and parse.
 
 			elems = require('./file/render/parse/elems.coffee') File
 			source = require('./file/render/parse/source.coffee') File
+			storage = require('./file/render/parse/storage.coffee') File
 
 			optsDef = {}
 			(opts=optsDef) ->
@@ -156,6 +165,7 @@ features. Physical file should be easy to load and parse.
 
 				elems @, opts
 				source @, opts
+				storage @, opts
 
 #### revert() ->
 

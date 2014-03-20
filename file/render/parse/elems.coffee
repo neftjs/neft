@@ -21,7 +21,11 @@ module.exports = (File) -> (file, opts) ->
 
 			# get unit and parse it
 			usedUnit = unit.clone()
-			usedUnit.render source: elem
+
+			opts.source = elem
+			usedUnit.render opts
+			opts.source = null
+
 			usedUnits.push usedUnit
 
 			newChild = usedUnit.node

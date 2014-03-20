@@ -4,11 +4,11 @@ View = require('../index.coffee.md')
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
-renderParse = (view) ->
+renderParse = (view, opts) ->
 
-	view.render()
+	view.render opts
 	view.revert()
-	view.render()
+	view.render opts
 
 describe 'View', ->
 
@@ -117,3 +117,26 @@ describe 'View', ->
 		renderParse view
 		expect(source.node.stringify()).toBe '<a><b></b></a>'
 		expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+
+describe 'View Storage', ->
+
+	describe 'inputs are replaced', ->
+
+		it 'by elem attrs', ->
+
+			source = View.fromHTML uid(), '<unit name="a">#{x}</unit><a x="2"></a>'
+			view = source.clone()
+
+			renderParse view
+			expect(source.node.stringify()).toBe '<a x="2"></a>'
+			expect(view.node.stringify()).toBe '<unit>2</unit>'
+
+		it 'by passed storage', ->
+
+			source = View.fromHTML uid(), '<unit name="a">#{x}, #{b.a}</unit><a></a>'
+			view = source.clone()
+
+			renderParse view,
+				storage: x: 2, b: {a: 1}
+			expect(source.node.stringify()).toBe '<a></a>'
+			expect(view.node.stringify()).toBe '<unit>2, 1</unit>'

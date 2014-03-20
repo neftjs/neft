@@ -28,13 +28,4 @@ One file can include other files using `link` tag.
 
 	'use strict'
 
-	ELEMENT_IMPL = if window? then 'dom' else 'htmlparser'
-
-	File = require './file.coffee.md'
-
-	File.Element = require('./Element/index.coffee.md') ELEMENT_IMPL
-	File.Unit = require('./unit.coffee.md') File
-	File.Elem = require('./elem.coffee.md') File
-
-
-	module.exports = File
+	module.exports = require './file.coffee.md'
