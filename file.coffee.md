@@ -10,7 +10,9 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	[utils, assert] = ['utils', 'assert'].map require
+	[utils, assert, log] = ['utils', 'assert', 'log'].map require
+
+	log = log.scope 'View'
 
 *class* File
 ------------
@@ -39,6 +41,9 @@ features. Physical file should be easy to load and parse.
 				assert not files[path]
 				assert html and typeof html is 'string'
 
+				logtime = log.time 'from html'
+				log "Parse `#{path}` from HTML"
+
 				# get node
 				node = File.Element.fromHTML html
 
@@ -47,6 +52,8 @@ features. Physical file should be easy to load and parse.
 
 				# create file
 				file = new File path, node
+
+				log.end logtime
 
 				file
 
@@ -78,12 +85,17 @@ features. Physical file should be easy to load and parse.
 			if pool[path]?.length
 				return pool[path].pop()
 
+			logtime = log.time 'factory'
+			log "Factory new `#{path}` view"
+
 			# from json
 			json = files[path]
 			assert json
 
 			json = utils.cloneDeep json
 			json = utils.assemble json
+
+			log.end logtime
 
 			json
 
@@ -183,6 +195,8 @@ features. Physical file should be easy to load and parse.
 				elems @, opts
 				source @, opts
 
+				null
+
 #### revert() ->
 
 		revert: do ->
@@ -200,6 +214,8 @@ features. Physical file should be easy to load and parse.
 				elems @
 				iterators @
 				conditions @
+
+				null
 
 #### clone()
 

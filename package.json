@@ -5,6 +5,7 @@
 	"dependencies": {
 		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
 		"events": "git+ssh://git@github.com:Kildyt/Events.git",
+		"log": "git+ssh://git@bitbucket.org:Kildyt/log.git",
 		"htmlparser2": ">=3.3.0",
 		"domelementtype": "git+ssh://git@github.com:fb55/DomElementType.git",
 		"domutils": "git+ssh://git@github.com:fb55/DomUtils.git",
