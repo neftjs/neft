@@ -140,3 +140,41 @@ describe 'View Storage', ->
 				storage: x: 2, b: {a: 1}
 			expect(source.node.stringify()).toBe '<a></a>'
 			expect(view.node.stringify()).toBe '<unit>2, 1</unit>'
+
+describe 'View Condition', ->
+
+	describe 'works in file', ->
+
+		it 'with positive expression', ->
+
+			view = View.fromHTML uid(), '<div><b if="2 > 1">1</b></div>'
+
+			renderParse view
+			expect(view.node.stringify()).toBe '<div><b>1</b></div>'
+
+		it 'with negative expression', ->
+
+			view = View.fromHTML uid(), '<div><b if="1 > 2">1</b></div>'
+
+			renderParse view
+			expect(view.node.stringify()).toBe '<div></div>'
+
+	it 'works in units', ->
+
+		source = View.fromHTML uid(), '<unit name="a"><b if="1 > 2">1</b></unit><a></a>'
+		view = source.clone()
+
+		renderParse view
+		expect(source.node.stringify()).toBe '<a></a>'
+		expect(view.node.stringify()).toBe '<unit></unit>'
+
+	it 'can be declared using storage input', ->
+
+		view = View.fromHTML uid(), '<div><b if="#{x} > 1">1</b></div>'
+
+		renderParse view, storage: x: 1
+		expect(view.node.stringify()).toBe '<div></div>'
+
+		view.revert()
+		renderParse view, storage: x: 2
+		expect(view.node.stringify()).toBe '<div><b>1</b></div>'

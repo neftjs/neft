@@ -24,6 +24,7 @@ features. Physical file should be easy to load and parse.
 		@Unit = require('./unit.coffee.md') @
 		@Elem = require('./elem.coffee.md') @
 		@Input = require('./input.coffee') @
+		@Condition = require('./condition.coffee') @
 
 #### *File* fromHTML(*string*, *string*)
 
@@ -95,6 +96,7 @@ features. Physical file should be easy to load and parse.
 			source = require('./file/parse/source.coffee') File
 			elems = require('./file/parse/elems.coffee') File
 			storage = require('./file/parse/storage.coffee') File
+			conditions = require('./file/parse/conditions.coffee') File
 
 			(@path, @node) ->
 
@@ -118,6 +120,7 @@ features. Physical file should be easy to load and parse.
 				source @
 				elems @
 				storage @
+				conditions @
 
 				# save to storage
 				files[@path] = @toJSON()
@@ -129,6 +132,8 @@ features. Physical file should be easy to load and parse.
 		_tmp:
 			usedUnits: []
 			changes: []
+			hidden: []
+			conditions: []
 
 		isRendered: false
 		node: null
@@ -140,6 +145,7 @@ features. Physical file should be easy to load and parse.
 		units: null
 		elems: null
 		inputs: null
+		conditions: null
 
 ### Methods
 
@@ -154,6 +160,7 @@ features. Physical file should be easy to load and parse.
 			elems = require('./file/render/parse/elems.coffee') File
 			source = require('./file/render/parse/source.coffee') File
 			storage = require('./file/render/parse/storage.coffee') File
+			conditions = require('./file/render/parse/conditions.coffee') File
 
 			optsDef = {}
 			(opts=optsDef) ->
@@ -166,12 +173,14 @@ features. Physical file should be easy to load and parse.
 				elems @, opts
 				source @, opts
 				storage @, opts
+				conditions @, opts
 
 #### revert() ->
 
 		revert: do ->
 
 			elems = require('./file/render/revert/elems.coffee') File
+			conditions = require('./file/render/revert/conditions.coffee') File
 
 			->
 
@@ -179,6 +188,7 @@ features. Physical file should be easy to load and parse.
 
 				@isRendered = false
 
+				conditions @
 				elems @
 
 #### clone()
