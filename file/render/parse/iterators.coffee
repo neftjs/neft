@@ -9,6 +9,7 @@ module.exports = (File) -> (file, opts) ->
 	unless file.iterators.length then return null
 
 	{iterators, hidden, changes, usedUnits} = file._tmp
+	source = opts.source
 
 	# parse var inputs
 	i = 0
@@ -30,7 +31,8 @@ module.exports = (File) -> (file, opts) ->
 			usedUnit = iterator.unit.clone()
 
 			iterator.storage.i = i++
-			usedUnit.render source: iterator
+			opts.source = iterator
+			usedUnit.render opts
 
 			usedUnits.push usedUnit
 
@@ -42,5 +44,8 @@ module.exports = (File) -> (file, opts) ->
 
 		# remove `if` attrs
 		node.attrs.set 'each', undefined
+
+	# restore opts
+	opts.source = source
 
 	null

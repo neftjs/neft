@@ -1,6 +1,7 @@
 'use strict'
 
 View = require('../index.coffee.md')
+[utils] = ['utils'].map require
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
@@ -117,6 +118,22 @@ describe 'View', ->
 		renderParse view
 		expect(source.node.stringify()).toBe '<a><b></b></a>'
 		expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+
+	it 'reverted view is identical as before render', ->
+
+		view = View.fromHTML uid(), '
+			<unit name="b"><ul each="#{data}"><div if="#{each[i]} > 0">1</div></ul></unit>
+			<unit name="a"><b data="#{data}"></b></unit>
+			<a data="[0,1]"></a>'
+		ver1 = utils.simplify view
+
+		view.render()
+		view.revert()
+		ver2 = utils.simplify view
+
+		expect(JSON.stringify(ver1)).toBe JSON.stringify(ver2)
+
+		expect(view.render.bind(view)).not.toThrow()
 
 describe 'View Storage', ->
 

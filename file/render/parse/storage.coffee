@@ -7,6 +7,6 @@ module.exports = (File) -> (file, opts) ->
 	attrs = opts?.source?.node.attrs
 
 	for input in file.inputs when input.node.visible
-		input.parse storage, sourceStorage, attrs
+		input.parse attrs, sourceStorage, storage
 
 	null

@@ -107,7 +107,8 @@ features. Physical file should be easy to load and parse.
 				assert not files[path]
 
 				# set properties
-				@pathbase = path.substring 0, path.lastIndexOf('/')+1
+				@pathbase = path.substring 0, path.lastIndexOf('/') + 1
+				@isRendered = false
 
 				# call init
 				@init()
@@ -196,9 +197,9 @@ features. Physical file should be easy to load and parse.
 
 				@isRendered = false
 
-				conditions @
-				iterators @
 				elems @
+				iterators @
+				conditions @
 
 #### clone()
 

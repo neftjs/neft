@@ -16,17 +16,6 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 	module.exports = (File) -> class Unit extends File
 
-### Static
-
-#### *Unit* factory(*File*, *string*, *HTMLDivElement*)
-
-		@factory = (self, name) ->
-
-			assert self instanceof File
-			assert name and typeof name is 'string'
-
-			File.factory "#{self.path}:#{name}"
-
 ### Constructor(*File*, *string, *HTMLDivElement*)
 
 		constructor: (self, @name, node) ->
