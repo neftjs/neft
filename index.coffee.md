@@ -5,8 +5,9 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 
 	'use strict'
 
-	[assert, utils] = ['assert', 'utils'].map require
+	[utils] = ['utils'].map require
 
+	{assert} = console
 	{bind} = Function
 	{isArray} = Array
 	{unshift} = Array::
@@ -28,11 +29,12 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 
 		@MARKERS =
 			white: (str) -> str
+			green: (str) -> str
 			gray: (str) -> str
 			blue: (str) -> str
 			yellow: (str) -> str
 			red: (str) -> str
-			bold: (str) -> "**#{bold}**"
+			bold: (str) -> "**#{str}**"
 
 		@time = Date.now
 		@timeDiff = (since) -> Log.time() - since
@@ -69,6 +71,8 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 
 		info: -> @_write LogImpl.MARKERS.blue fromArgs arguments
 
+		ok: -> @_write LogImpl.MARKERS.green fromArgs arguments
+
 		warn: -> @_write LogImpl.MARKERS.yellow fromArgs arguments
 
 		error: -> @_write LogImpl.MARKERS.red fromArgs arguments
@@ -104,11 +108,11 @@ Implementation
 
 	impl = switch true
 		when utils.isNode
-			require './node/index.coffee'
+			require './impls/node/index.coffee'
 		when utils.isBrowser
-			require './browser/index.coffee'
+			require './impls/browser/index.coffee'
 		when utils.isQML
-			require './qml/index.coffee'
+			require './impls/qml/index.coffee'
 
 	assert impl, "No log implementation found"
 

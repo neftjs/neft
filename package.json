@@ -3,5 +3,12 @@
 	"version": "0.0.1",
 	"dependencies": {
 		"cli-color": ">=0.2.3"
+	},
+	"environments": {
+		"client": {
+			"dependencies": {
+				"cli-color": false
+			}
+		}
 	}
 }
