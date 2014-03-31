@@ -1,6 +1,7 @@
 'use strict'
 
-coffee = require 'coffee-script'
+[utils] = ['utils'].map require
+coffee = require 'coffee-script' if utils.isNode
 
 attr = [null, null]
 

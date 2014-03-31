@@ -1,6 +1,6 @@
 'use strict'
 
-[assert, utils] = ['assert', 'utils'].map require
+{assert} = console
 
 module.exports = (File) -> class Condition
 

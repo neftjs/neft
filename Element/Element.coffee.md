@@ -8,9 +8,9 @@ View Structure Element
 	defineProp = Object.defineProperty
 	isArray = Array.isArray
 
-	assert = require 'assert'
-	utils = require 'utils/index.coffee.md'
-	Events = require 'Events/index.coffee.md'
+	[utils, Emitter] = ['utils', 'emitter'].map require
+
+	{assert} = console
 
 *class* Element
 ----------------
@@ -59,7 +59,7 @@ Constructor is instance of *Events* class, so after every initializing
 
 			Element.trigger Element.INIT, @
 
-		utils.merge utils.merge(@, Events::), new Events
+		utils.merge utils.merge(@, Emitter::), new Emitter
 
 ### Properties
 
@@ -123,7 +123,7 @@ Value will automatically change `children`.
 				if parent and not ~parent.children.indexOf @
 
 					parent.children.push @
-					impl.child.append.call parent, @	
+					impl.child.append.call parent, @
 
 #### *boolean* visible
 

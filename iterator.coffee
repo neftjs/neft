@@ -1,6 +1,8 @@
 'use strict'
 
-[assert, utils] = ['assert', 'utils'].map require
+[utils] = ['utils'].map require
+
+{assert} = console
 
 module.exports = (File) -> class Iterator extends File.Elem
 

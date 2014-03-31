@@ -10,7 +10,9 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	[utils, assert, log] = ['utils', 'assert', 'log'].map require
+	[utils, log] = ['utils', 'log'].map require
+
+	{assert} = console
 
 	log = log.scope 'View'
 
@@ -22,7 +24,7 @@ features. Physical file should be easy to load and parse.
 		files = {}
 		pool = {}
 
-		@Element = require('./Element/index.coffee.md') 'htmlparser'
+		@Element = require('./Element/index.coffee.md')
 		@Unit = require('./unit.coffee.md') @
 		@Elem = require('./elem.coffee.md') @
 		@Input = require('./input.coffee') @
@@ -66,7 +68,7 @@ features. Physical file should be easy to load and parse.
 			assert json and typeof json is 'string'
 
 			# parse json
-			json = utils.tryFunc JSON.parse, null, json
+			json = utils.tryFunc JSON.parse, null, json, json
 			assert utils.isObject json
 
 			# save to storage

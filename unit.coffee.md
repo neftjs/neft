@@ -8,8 +8,9 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 	'use script'
 
-	assert = require 'assert'
-	utils = require 'utils/index.coffee.md'
+	[utils] = ['utils'].map require
+
+	{assert} = console
 
 *class* Unit
 ------------

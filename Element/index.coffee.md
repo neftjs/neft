@@ -8,20 +8,22 @@ Provide easy to use wrapper for `DOM` and other engines to parse `HTML`.
 
 	'use strict'
 
-	assert = require 'assert'
+	[utils] = ['utils'].map require
 
-	IMPLS =
-		htmlparser: require './impls/htmlparser/index.coffee'
-		dom: require './impls/dom/index.coffee'
+	{assert} = console
 
-	module.exports = (impl) ->
+	impl = switch true
+		when utils.isNode
+			require './impls/htmlparser/index.coffee'
 
-		impl = IMPLS[impl]
-		assert typeof impl is 'object'
+	# TODO
+	# remove dom impl
 
-		modules = {}
+	modules = {}
 
-		modules.Element = require('./Element.coffee.md') impl.Element, modules
-		modules.Attrs = require('./Attrs.coffee.md') impl.Attrs, modules
+	modules.Element = require('./Element.coffee.md') impl?.Element, modules
+	modules.Attrs = require('./Attrs.coffee.md') impl?.Attrs, modules
 
-		modules.Element
+	modules.Element
+
+	module.exports = modules.Element

@@ -1,6 +1,9 @@
 'use strict'
 
-[assert, utils, coffee] = ['assert', 'utils', 'coffee-script'].map require
+[utils] = ['utils'].map require
+coffee = require 'coffee-script' if utils.isNode
+
+{assert} = console
 
 module.exports = (File) -> class Input
 

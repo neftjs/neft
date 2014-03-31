@@ -8,8 +8,7 @@ Represents an element placed in the file.
 
 	'use strict'
 
-	assert = require 'assert'
-	utils = require 'utils/index.coffee.md'
+	{assert} = console
 
 *class* Elem
 ------------

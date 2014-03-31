@@ -3,9 +3,8 @@ VS Attrs
 
 	'use strict'
 
-	isArray = Array.isArray
-
-	assert = require 'assert'
+	{assert} = console
+	{isArray} = Array
 
 *class* Attrs
 -------------

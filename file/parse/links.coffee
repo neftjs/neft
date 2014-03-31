@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'assert'
+{assert} = console
 
 module.exports = (File) -> (file) ->
 
