@@ -83,7 +83,7 @@ You loose access to class context, but it shouldn't be public.
 
 					exec[prop] = =>
 						elem.apply @, arguments
-						exec 
+						exec
 
 			return exec
 
@@ -309,9 +309,9 @@ Update all documents in the collection.
 
 *Db()* is a class and simultaneously instance of `Events()` *class*.
 
-	Events = require 'Events'
+	Emitter = require 'emitter'
 
-	Db = utils.merge Db, utils.merge Events::, new Events
+	Db = utils.merge Db, utils.merge Emitter::, new Emitter
 
 ### Events
 
