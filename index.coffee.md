@@ -5,7 +5,9 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 
 	'use strict'
 
-	[assert, utils, log] = ['assert', 'utils', 'log'].map require
+	[utils, log] = ['utils', 'log'].map require
+
+	{assert} = console
 
 	log = log.scope 'Routing'
 
@@ -63,7 +65,7 @@ New instance of implemented *Routing* is returned.
 
 			impl.init.call @
 
-			log.info "Start listening on #{@host}:#{@port}"
+			log.info "Start as `#{@host}:#{@port}`"
 
 ### Properties
 

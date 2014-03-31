@@ -3,14 +3,16 @@ Response
 
 	'use strict'
 
-	[assert, utils, Events] = ['assert', 'utils', 'Events'].map require
+	[utils, Emitter] = ['utils', 'emitter'].map require
+
+	{assert} = console
 
 *class* Response
 ----------------
 
 	pool = []
 
-	module.exports = (Routing, impl) -> class Response extends Events
+	module.exports = (Routing, impl) -> class Response extends Emitter
 
 ### Events
 

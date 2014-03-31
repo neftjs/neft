@@ -3,14 +3,16 @@ Request
 
 	'use strict'
 
-	[utils, assert, Events] = ['utils', 'assert', 'Events'].map require
+	[utils, Emitter] = ['utils', 'emitter'].map require
+
+	{assert} = console
 
 *class* Request
 ---------------
 
 	pool = []
 
-	module.exports = (Routing, impl) -> class Request extends Events
+	module.exports = (Routing, impl) -> class Request extends Emitter
 
 ### Events
 

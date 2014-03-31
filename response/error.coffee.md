@@ -3,7 +3,9 @@ Response Error
 
 	'use strict'
 
-	[assert, utils] = ['assert', 'utils'].map require
+	[utils] = ['utils'].map require
+
+	{assert} = console
 
 *class* RequestResolveResponseError
 -----------------------------------

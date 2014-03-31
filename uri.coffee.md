@@ -3,7 +3,7 @@ Uri
 
 	'use strict'
 
-	[assert] = ['assert'].map require
+	{assert} = console
 
 *class* Uri
 -----------

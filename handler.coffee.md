@@ -3,8 +3,9 @@ Handler
 
 	'use strict'
 
-	[utils, assert, log, Schema] = ['utils', 'assert', 'log', 'schema'].map require
+	[utils, log, Schema] = ['utils', 'log', 'schema'].map require
 
+	{assert} = console
 	{parse, stringify} = JSON
 
 	log = log.scope 'Routing', 'Handler'
