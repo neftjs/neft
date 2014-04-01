@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.2"
+   width="708.66138"
+   height="1052.3622"
+   id="svg3805">
+  <defs
+     id="defs3" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="header">
+    <rect
+       width="532.85712"
+       height="101.42858"
+       x="88.571426"
+       y="62.142864"
+       id="rect3811"
+       style="fill:#ff5555" />
+    <text
+       x="322.47986"
+       y="122.69715"
+       id="text3131"
+       xml:space="preserve"
+       style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Source Sans Pro;-inkscape-font-specification:Source Sans Pro"><tspan
+         x="402.16736"
+         y="3.6149391e+18"
+         id="tspan3133"><tspan
+           x="322.47986"
+           y="122.69715"
+           id="tspan3135"
+           style="font-weight:bold;-inkscape-font-specification:Source Sans Pro Bold">TODO </tspan><tspan
+           x="402.16736"
+           y="122.69715"
+           id="tspan3137"
+           style="font-style:italic;-inkscape-font-specification:Source Sans Pro Bold Italic">APP</tspan></tspan></text>
+  </g>
+  <g
+     id="item">
+    <rect
+       width="532.85712"
+       height="105.71429"
+       x="88.571426"
+       y="195.21933"
+       id="rect3834"
+       style="fill:#ffffff;stroke:#000000;stroke-opacity:0.2739274" />
+    <text
+       x="101.42857"
+       y="218.25868"
+       id="text4604"
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"><tspan
+         x="101.42857"
+         y="218.25868"
+         id="tspan4606">Title</tspan></text>
+    <text
+       x="102.85268"
+       y="239.14407"
+       id="text3163"
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><tspan
+         x="102.85268"
+         y="239.14407"
+         id="tspan3165"><tspan
+           x="102.85268"
+           y="239.14407"
+           id="tspan3167"
+           style="font-size:10px">text text</tspan></tspan></text>
+    <g
+       id="delete_button">
+      <rect
+         width="86.428574"
+         height="18.571428"
+         x="523.57141"
+         y="204.50504"
+         id="rect4616"
+         style="fill:#ffd5d5;stroke:#000000;stroke-opacity:0.50165016" />
+      <text
+         x="566.76617"
+         y="217.5139"
+         id="text3157"
+         xml:space="preserve"
+         style="font-size:10px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff2a2a;fill-opacity:1;stroke:none;font-family:Sans"><tspan
+           x="566.76617"
+           y="217.5139"
+           id="tspan3159"><tspan
+             x="566.76617"
+             y="217.5139"
+             id="tspan3161">delete</tspan></tspan></text>
+    </g>
+  </g>
+</svg>

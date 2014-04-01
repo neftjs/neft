@@ -1,0 +1,30 @@
+<unit name="todo-item">
+	<article>
+		<h3>#{data.id}</h3>
+		<em>Created: #{data.created}</em>
+		<em>Updated: #{data.updated}</em>
+		<p contenteditable>#{data.msg}</p>
+
+		<nav>
+			<button type="submit" onclick="removeItem('#{id}')">Remove</button>
+			<button type="submit" onclick="updateItem(this)">Update</button>
+		</nav>
+	</article>
+</unit>
+
+<unit name="todo-list" data-item>
+	<ul each="#{item}">
+		<li>
+			<todo-item data="#{each[i]}"></todo-item>
+		</li>
+	</ul>
+</unit>
+
+<unit name="todo-new">
+	<form action="/item" method="post">
+		<fieldset>
+			<textarea name="msg" rows="10" cols="30"></textarea>
+			<input type="submit">
+		</fieldset>
+	</form>
+</unit>

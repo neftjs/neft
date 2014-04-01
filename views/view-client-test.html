@@ -1,0 +1,399 @@
+<unit name="header">
+	<h1 id="h1">Dipart</h1>
+	<nav id="nav">
+		<a id="a1" href="/">serwis</a>
+		<a id="a2" href="/">wysyłka</a>
+		<a id="a3" href="/">dokumenty</a>
+		<a id="a4" href="/">pomoc</a>
+	</nav>
+
+	<script>
+		window.CONTAINER_WIDTH = 870
+
+		main:
+			width: 12 * 56 + 11 * 18 #-> @parent
+			height: 90 #-> @parent
+			itemsDirection: 'column'
+		h1:
+			fill:
+				image: src: 'static/icons.svg', position: '-391 -101'
+			fontSize: 0
+			width: 155
+			height: 54
+			align: 'left center'
+			#itemPadding: '0 0 0 10'
+			onPointerClick: -> console.log(123)
+		nav:
+			itemsDirection: 'column'
+			width: 50 * 4 - (50-13)
+			height: 19
+			align: 'right top'
+			padding: '41 0 0 0'
+		a1:
+			width: 30, height: 22
+			fill:
+				image: src: 'static/icons.svg', position: [-1221, 306 + 22 - 515]
+			fontSize: 0
+			align: 'left center'
+			itemWidth: 50
+			scale: 0.8
+		a2:
+			_extends: 'a1'
+			width: 17, height: 18
+			fill:
+				image: src: 'static/icons.svg', position: [-1325 - 4, 306 + 22 - 515 - 5]
+			scale: 1
+		a3:
+			_extends: 'a1'
+			width: 15, height: 18
+			fill:
+				image: src: 'static/icons.svg', position: [-1285, 306 + 22 - 515 - 5]
+			scale: 1
+		a4:
+			_extends: 'a1'
+			width: 13, height: 18
+			fill:
+				image: src: 'static/icons.svg', position: [-1383, 306 + 22 - 515 - 3]
+			scale: 1
+	</script>
+</unit>
+
+<unit name="article-promo">
+	<h2 id="title">Oryginalne części i akcesoria</h2>
+	<p id="text">sdfadsf sadfasdf asdfadsf<br>sdfasdfasdfdsafsadfadsf</p>
+
+	<script>
+		main:
+			itemsDirection: 'row'
+			width: CONTAINER_WIDTH
+		title:
+			font: family: 'Bariol', size: 30, capitalization: 'uppercase', letterspacing: 1
+			width: -> @parent.width
+			text: color: 'rgb(255, 100, 0)', align: 'center top'
+			itemPadding: '37 0 10 0'
+		text:
+			font: family: 'Source Sans Pro', size: 14, lineheight: 17
+			text: color: 'rgb(51, 51, 51)'
+			width: -> @parent
+			text: color: 'gray', align: 'center top'
+			itemPadding: '0 0 35'
+	</script>
+</unit>
+
+<unit name="hr">
+	<script>
+		main:
+			fill: image: src: 'static/hr.png'
+			width: -> CONTAINER_WIDTH
+			height: 1
+	</script>
+</unit>
+
+<unit name="reviews">
+	<div id="review">
+		<span id="reviewText">nasza opinia:</span>
+		<span id="reviewStar1"></span>
+		<span id="reviewStar2"></span>
+		<span id="reviewStar3"></span>
+		<span id="reviewStar4"></span>
+		<span id="reviewStar5"></span>
+	</div>
+
+	<a href="/" id="see_all">zobacz szczegółowe opinie</a>
+
+	<script>
+		main:
+			itemsDirection: 'column'
+			width: CONTAINER_WIDTH # TODO: ->
+			height: 16
+			itemPadding: '10 0 0 0'
+		review:
+			itemsDirection: 'column'
+			align: 'left center'
+			height: 16
+		reviewText:
+			font: family: 'Source Sans Pro', size: 13, lineheight: 17
+			width: 80
+			height: 16
+			text: color: 'rgb(51, 51, 51)', align: 'left center'
+		reviewStar1:
+			fontSize: 0
+			fill:
+				image: src: 'static/icons.svg', position: [-1190, 269 + 16 - 515]
+			width: 17, height: 16
+		reviewStar2:
+			_extends: 'reviewStar1'
+		reviewStar3:
+			_extends: 'reviewStar1'
+		reviewStar4:
+			_extends: 'reviewStar1'
+		reviewStar5:
+			_extends: 'reviewStar1'
+		see_all:
+			font: family: 'Source Sans Pro', size: 13, lineheight: 17
+			text: color: 'rgb(56, 157, 242)', align: 'right center'
+	</script>
+</unit>
+
+<unit name="info">
+	<article id="contact">
+		<div id="icon1"></div>
+		<h2 id="h1">Kontakt</h2>
+		contasdfadsfdsafdct
+	</article>
+
+	<article id="payment">
+		<div id="icon2"></div>
+		<h2 id="h2">Płatność</h2>
+		payment
+	</article>
+
+	<article id="shipping">
+		<div id="icon3"></div>
+		<h2 id="h3">Wysyłka</h2>
+		shipping
+	</article>
+
+	<script>
+		main:
+			width: CONTAINER_WIDTH # TODO: ->
+			height: 200
+			itemsDirection: 'column'
+			padding: '100 0 0 0'
+		contact:
+			width: CONTAINER_WIDTH / 3
+			height: -> @parent
+			itemsDirection: 'row'
+		payment:
+			_extends: 'contact'
+		shipping:
+			_extends: 'contact'
+		h1:
+			font: family: 'Bariol', size: 20, letterspacing: 1, capitalization: 'uppercase'
+			text: color: 'rgb(51, 51, 51)'
+		h2:
+			_extends: 'h1'
+		h3:
+			_extends: 'h1'
+		icon1:
+			fill:
+				image: src: 'static/icons.svg', position: [-196, 471 + 36 - 515]
+			width: 38, height: 42
+		icon2:
+			_extends: 'icon1'
+			width: 39
+			fill:
+				image: src: 'static/icons.svg', position: [-485 + 1, 471 + 36 - 515 + 5]
+		icon3:
+			_extends: 'icon1'
+			fill:
+				image: src: 'static/icons.svg', position: [-440, 471 + 36 - 515 + 8]
+	</script>
+</unit>
+
+<unit name="product">
+	<unit name="desc">
+		<h1 id="title">Tytuł</h1>
+
+		<a href="/" id="sublink">
+			zobacz inne dostępne kolory
+			<span id="sublink_icon"></span>
+		</a>
+
+		<hr id="hr"></hr>
+
+		<p id="text">text text</p>
+
+		<h3 id="header">Header</h3>
+
+		<script>
+			main:
+				itemsDirection: 'row'
+				width: CONTAINER_WIDTH / 2 - 20
+			title:
+				font:
+					family: 'Bariol', size: 12, letterspacing: 1
+					lineheight: 25, capitalization: 'uppercase'
+				text: color: 'white'
+				fillColor: 'rgb(56, 157, 242)'
+				width: -> @parent
+				padding: '10 20'
+			sublink:
+				font: family: 'Source Sans Pro', size: 13, lineheight: 17
+				text: color: 'rgb(56, 157, 242)', align: 'left center'
+				width: -> @parent
+				height: 40
+			sublink_icon:
+				width: 20, height: 20
+				align: 'right center'
+				fill:
+					image: src: 'static/icons.svg', position: [-1260, 117 + 20 - 515]
+			hr:
+				width: -> @parent
+				clip: true
+			text:
+				font: family: 'Source Sans Pro', size: 14, lineheight: 17
+				textColor: 'rgb(51, 51, 51)'
+			header:
+				textColor: 'orange'
+				height: 40
+				itemAlign: 'center'
+		</script>
+	</unit>
+
+	<unit name="similar">
+		<unit name="li">
+			<a href="#{link}" id="a">
+				<div id="text"><source></source></div>
+				<span id="link">zobacz</span>
+			</a>
+
+			<script>
+				a:
+					itemsDirection: 'column'
+					width: CONTAINER_WIDTH / 2
+					padding: 10
+				text:
+					font: family: 'Source Sans Pro', size: 14, lineheight: 17, capitalization: 'uppercase'
+					textColor: 'rgb(51, 51, 51)'
+					itemWidth: CONTAINER_WIDTH / 2 - 100 - 20
+				link:
+					font: family: 'Source Sans Pro', size: 13, lineheight: 17
+					text: color: 'rgb(56, 157, 242)', align: 'right top'
+					itemWidth: 100
+					width: 100
+			</script>
+		</unit>
+
+		<h2 id="title">Podobne aukcje:</h2>
+
+		<li link="/">Podobne części do tego modelu</li>
+		<li link="/">Narzędnia</li>
+		<li link="/">Akcesoria</li>
+
+		<footer id="footer">
+			<a href="/" id="footer_left">Pozostałe części do xxx</a>
+			<a href="/" id="footer_right">Zobacz inne aukcje fimy Dipart</a>
+		</footer>
+
+		<script>
+			main:
+				itemsDirection: 'row'
+				fillColor: 'lightgray'
+				width: CONTAINER_WIDTH / 2
+				itemPadding: '10 0 0 0'
+			title:
+				font: family: 'Bariol', size: 20, letterspacing: 1, capitalization: 'uppercase'
+				textColor: 'white'
+				fillColor: 'black'
+				width: -> @parent
+				padding: 10
+				itemPadding: '0 0 20'
+			footer:
+				itemsDirection: 'column'
+				width: CONTAINER_WIDTH / 2
+				fillColor: 'black'
+				padding: 10
+				itemPadding: '20 0 0 0'
+			footer_left:
+				font: family: 'Source Sans Pro', size: 13, lineheight: 17
+				text: color: 'rgb(56, 157, 242)'
+				width: -> @parent.width / 2 - 20
+			footer_right:
+				_extends: 'footer_left'
+				textAlign: 'right'
+		</script>
+	</unit>
+
+	<div id="aside">
+		<span id="brand">nokia</span>
+
+		<similar></similar>
+	</div>
+
+	<desc id="desc"></desc>
+
+	<script>
+		main:
+			itemsDirection: 'column'
+			width: -> CONTAINER_WIDTH
+		aside:
+			itemsDirection: 'row'
+			width: CONTAINER_WIDTH / 2
+		brand:
+			width: -> @parent
+			height: 300
+			fillColor: 'white'
+			border: width: 30, color: 'red'
+		desc:
+			itemPadding: '0 0 0 20'
+			width: CONTAINER_WIDTH / 2 - 20
+	</script>
+</unit>
+
+<unit name="social">
+	<h2 id="title">Znajdź nas na:</h2>
+
+	<ul id="list">
+		<li><a href="/" id="fb">fb</a></li>
+		<li><a href="/" id="gplus">gplus</a></li>
+	</ul>
+
+	<script>
+		main:
+			itemsDirection: 'row'
+			width: CONTAINER_WIDTH # TODO: ->
+		title:
+			font: family: 'Bariol', size: 20, letterspacing: 1, capitalization: 'uppercase'
+			text: color: 'rgb(51, 51, 51)', align: 'center top'
+			width: -> @parent
+			itemPadding: '31 0 20 0'
+		list:
+			width: 32 * 2 + 5 * 4
+			height: 52 # TODO: why required?
+			itemsDirection: 'column'
+			align: 'center top'
+		fb:
+			width: 32, height: 32
+			fontSize: 0
+			fill:
+				image: src: 'static/icons.svg', position: [-1179 + 1, 31 - 515 + 1]
+			itemPadding: '0 5'
+		gplus:
+			_extends: 'fb'
+			fill:
+				image: src: 'static/icons.svg', position: [-1221 + 1, 31 - 515 + 1]
+	</script>
+</unit>
+
+<div id="header">
+	<header id="headerContent"></header>
+</div>
+
+<div id="container">
+	<article-promo></article-promo>
+	<hr></hr>
+	<reviews></reviews>
+	<info></info>
+	<hr></hr>
+	<product></product>
+	<social></social>
+</div>
+
+<script>
+	main:
+		itemsDirection: 'row'
+	header:
+		fillColor: 'rgb(51,51,51)'
+		itemsDirection: 'row'
+		width: innerWidth
+		height: 90
+	headerContent:
+		width: -> CONTAINER_WIDTH
+		height: -> @parent
+		align: 'center top'
+	container:
+		itemsDirection: 'row'
+		width: -> CONTAINER_WIDTH
+		align: 'center top'
+</script>
