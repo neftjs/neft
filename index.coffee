@@ -20,6 +20,8 @@ require('db/log.coffee') Db
 `//</development>`
 
 App =
+	config:
+		name: 'Sample TODO App'
 	routing: new Routing
 		protocol: 'http'
 		port: 3000

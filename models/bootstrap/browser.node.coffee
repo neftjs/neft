@@ -4,26 +4,28 @@
 
 module.exports = (App) -> new class BrowserBootstrapModel extends App.Model.Client().View()
 
+	APP_JS_URI: 'app.js'
+	JS_BUNDLE_FILE_PATH: './build/bundles/browser.js'
+
 	reservedUris: ['app.js', 'favicon.ico']
 
 	@view 'bootstrap/browser',
 	@client Routing.GET, '*',
 	getApp: (id, query, type, callback, req, next) ->
 
-		console.log req.userAgent
 		if req
 
-			# omit reserved URIs
-			if ~@reservedUris.indexOf(req.uri) or
-			   ~req.userAgent.indexOf('Googlebot')
+			# TODO: consider other robots and clients with legacy browsers
+			if ~@reservedUris.indexOf(req.uri) or # omit reserved URIs
+			   ~req.userAgent.indexOf('Googlebot') # omit google boot
 				return next()
 
 		callback null,
-			title: 'title 123'
-			appTextModeUrl: '/',
-			filename: 'app.js'
+			title: App.config.name
+			appTextModeUrl: '/', # TODO
+			filename: @APP_JS_URI
 
-	@client Routing.GET, 'app.js',
+	@client Routing.GET, @::APP_JS_URI,
 	getAppBundle: (id, query, type, callback) ->
 
-		callback null, fs.readFileSync './build/bundles/browser.js', 'utf-8'
+		callback null, fs.readFileSync @JS_BUNDLE_FILE_PATH, 'utf-8'
