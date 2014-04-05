@@ -2,7 +2,7 @@
 
 performance = window.performance or Date
 
-log = console.error # for stack
+log = console.log
 
 module.exports = (Log) -> class LogBrowser extends Log
 
@@ -21,16 +21,15 @@ module.exports = (Log) -> class LogBrowser extends Log
 		red: marker.bind null, 'red', null
 		bold: marker.bind null, 'black', 'bold'
 
-	@time = performance.now
+	@time = performance.now.bind performance
 	@timeDiff = (since) ->
-		diff = LogBrowser.time() - since
-		(diff[0] * 1e9 + diff[1]) / 1e6
+		LogBrowser.time() - since
 
 	_write: (marker) ->
 
 		prefix = ''
 		for time in Log.times
-			prefix += time? and '--' or ''
+			prefix += time? and '  ' or ''
 
 		marker[0] = "#{prefix}#{marker[0]}"
 
