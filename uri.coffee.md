@@ -80,20 +80,21 @@ Test whether *uri* is valid with *uri*.
 			chunks = @_chunks
 
 			# beginning
-			if uri.indexOf(chunks[0]) isnt 0
+			if uri.indexOf(chunks[0]) isnt 0 and chunks[0] isnt '*'
 				return false
 
 			# end
 			if chunks.length % 2 isnt 0
 				last = chunks[chunks.length - 1]
-				unless uri.indexOf(last) is uri.length - last.length
+				if uri.indexOf(last) isnt uri.length - last.length and last isnt '*'
 					return false
 
 			# separators
 			i = -1
 			for chunk in chunks by 2
 				index = uri.indexOf chunk, i
-				unless ~index then return false
+				if not ~index and chunk isnt '*'
+					return false
 				i = index + chunk.length
 
 			true

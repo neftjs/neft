@@ -4,6 +4,7 @@
 
 pending = {}
 
+exports.Request = require('./request.coffee') pending
 exports.Response = require('./response.coffee') pending
 
 exports.init = ->
@@ -17,20 +18,20 @@ exports.init = ->
 	# on request
 	server.on 'request', (serverReq, serverRes) =>
 
-		# call request
-		res = @request
-			method: @constructor[serverReq.method]
-			url: serverReq.url.slice 1
-			body: null
+		uid = utils.uid()
 
 		# save in stack
-		pending[res.req.uid] =
+		obj = pending[uid] =
 			routing: @
 			server: server
-			res: res
+			res: @request
+				uid: uid
+				method: @constructor[serverReq.method]
+				uri: serverReq.url.slice 1
+				body: null
 			serverReq: serverReq
 			serverRes: serverRes
 
 		# run immediately if needed
-		unless res.req.pending
-			exports.Response.send.call res
+		unless obj.res.req.pending
+			exports.Response.send.call obj.res

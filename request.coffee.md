@@ -37,14 +37,14 @@ Request
 		constructor: (opts) ->
 
 			assert utils.isObject opts
+			assert opts.uid and typeof opts.uid is 'string'
 			assert ~Routing.METHODS.indexOf(opts.method)
-			assert typeof opts.url is 'string'
+			assert typeof opts.uri is 'string'
 			assert typeof opts.body is 'object'
 
 			super
 
-			{@method, @url, @body} = opts
-			@uid = utils.uid()
+			{@uid, @method, @uri, @body} = opts
 			@pending = true
 			@params = null
 
@@ -53,7 +53,7 @@ Request
 		uid: ''
 		pending: false
 		method: 0
-		url: ''
+		uri: ''
 		params: null
 		body: null
 
@@ -70,3 +70,6 @@ Request
 			null
 
 		valueOf: -> @uid
+
+		Object.defineProperty @::, 'userAgent', get: ->
+			impl.getUserAgent.call(@) or ''

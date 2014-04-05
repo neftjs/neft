@@ -73,10 +73,10 @@ Handler
 					return callback uriNotValidError
 
 				# test uri
-				unless @uri.test req.url
+				unless @uri.test req.uri
 					return callback uriNotValidError
 
-				params = req.params = @uri.match req.url
+				params = req.params = @uri.match req.uri
 
 				# with schema
 				if @schema
