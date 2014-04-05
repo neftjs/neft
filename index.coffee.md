@@ -63,7 +63,9 @@ New instance of implemented *Routing* is returned.
 			@_handlers = {}
 			{@protocol, @port, @host, @language} = opts
 
-			impl.init.call @
+			@url = "#{@protocol}://#{@host}:#{@port}/"
+
+			setImmediate => impl.init.call @
 
 			log.info "Start as `#{@host}:#{@port}`"
 
@@ -75,6 +77,7 @@ New instance of implemented *Routing* is returned.
 		port: 0
 		host: ''
 		language: ''
+		url: ''
 
 ### Methods
 
