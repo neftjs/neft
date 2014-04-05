@@ -24,13 +24,15 @@ exports.init = ->
 		obj = pending[uid] =
 			routing: @
 			server: server
-			res: @request
-				uid: uid
-				method: @constructor[serverReq.method]
-				uri: serverReq.url.slice 1
-				body: null
+			res: null
 			serverReq: serverReq
 			serverRes: serverRes
+
+		obj.res = @request
+			uid: uid
+			method: @constructor[serverReq.method]
+			uri: serverReq.url.slice 1
+			body: null
 
 		# run immediately if needed
 		unless obj.res.req.pending

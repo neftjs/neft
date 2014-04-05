@@ -4,4 +4,4 @@ module.exports = (pending) ->
 
 	getUserAgent: ->
 
-		pending[@uid]?.userAgent
+		pending[@uid]?.serverReq.headers['user-agent']

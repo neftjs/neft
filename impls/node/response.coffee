@@ -1,6 +1,6 @@
 'use strict'
 
-[zlib, log, View] = ['zlib', 'log', 'view'].map require
+[zlib, log, path, View] = ['zlib', 'log', 'path', 'view'].map require
 
 log = log.scope 'Routing'
 
@@ -38,6 +38,10 @@ isObject = (data) -> true if data and typeof data is 'object'
 isJSON = (data) -> 'application/json' if isObject data
 isView = (data) -> 'text/html' if data instanceof View
 
+extensions =
+	'.js': 'application/javascript'
+	'.ico': 'image/x-icon'
+
 parsers =
 	'application/json': (data) ->
 		try JSON.stringify data
@@ -52,10 +56,11 @@ prepareData = (obj) ->
 
 	# determine data type
 	type = isView(data) or isJSON(data)
-	data = parsers[type]?(obj.res.data)
+	type ?= extensions[path.extname obj.serverReq.url]
+	type ?= 'text/plain'
 
-	unless data
-		type = 'text/plain'
+	# parse data into type
+	unless data = parsers[type]?(obj.res.data)
 		data = obj.res.data + ''
 
 	log "Data will be send as `#{type}`"
@@ -103,7 +108,7 @@ module.exports = (pending) ->
 
 		# get config obj
 		obj = pending[@req.uid]
-		return unless obj
+		return unless obj?.res
 		delete pending[@req.uid]
 
 		logtime = log.time "send response by HTTP"
