@@ -1,6 +1,6 @@
 'use strict'
 
-[Routing, fs] = ['routing', 'fs'].map require
+[Routing, fs, utils] = ['routing', 'fs', 'utils'].map require
 
 module.exports = (App) -> new class BrowserBootstrapModel extends App.Model.Client().View()
 
@@ -8,6 +8,11 @@ module.exports = (App) -> new class BrowserBootstrapModel extends App.Model.Clie
 	JS_BUNDLE_FILE_PATH: './build/bundles/browser.js'
 
 	reservedUris: ['app.js', 'favicon.ico']
+	_reservedUrisRe: do =>
+		re = ''
+		re += "#{utils.addSlashes(uri)}|" for uri in @::reservedUris
+		re = re.slice 0, -1
+		new RegExp re
 
 	@view 'bootstrap/browser',
 	@client Routing.GET, '*',
@@ -16,14 +21,14 @@ module.exports = (App) -> new class BrowserBootstrapModel extends App.Model.Clie
 		if req
 
 			# TODO: consider other robots and clients with legacy browsers
-			if ~@reservedUris.indexOf(req.uri) or # omit reserved URIs
+			if @_reservedUrisRe.test(req.uri) or # omit reserved URIs
 			   ~req.userAgent.indexOf('Googlebot') # omit google boot
 				return next()
 
 		callback null,
 			title: App.config.name
 			appTextModeUrl: '/', # TODO
-			filename: @APP_JS_URI
+			filename: App.routing.url + @APP_JS_URI
 
 	@client Routing.GET, @::APP_JS_URI,
 	getAppBundle: (id, query, type, callback) ->

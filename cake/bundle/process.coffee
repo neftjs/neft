@@ -5,14 +5,14 @@
 modules = []
 paths = {}
 
+# Get index to require and their base path
+index = process.argv[2]
+base = path.dirname index
+
+###
+Override standard `Module._load()` to capture all required modules and files
+###
 Module = module.constructor
-
-# FIXME
-utils = require 'utils'
-utils.isNode = false
-utils.isBrowser = true
-global.window = {}
-
 Module._load = do (_super = Module._load) -> (req, parent) ->
 
 	r = _super.apply @, arguments
@@ -30,16 +30,27 @@ Module._load = do (_super = Module._load) -> (req, parent) ->
 
 	r
 
-index = process.argv[2]
-base = path.dirname index
+###
+Emulate as client
+###
+utils = require 'utils'
+utils.isNode = false
+utils.isBrowser = true
 
+###
+Provide necessary standard browser globals
+###
+global.window = {}
+global.location = pathname: ''
+
+# run index file
 try
 	require index
 catch err
 	return process.send err: err.stack
 
 # add index file into modules list
-modules.push Object.keys(paths)[0]
+modules.push Object.keys(paths)[1]
 
 process.send
 	modules: modules
