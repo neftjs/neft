@@ -13,7 +13,7 @@ module.exports = (App) -> new class ItemModel extends App.Model.Db().Client().Vi
 		description: 'msg'
 
 	@view 'index',
-	@client Routing.GET, { # TODO: rename client to resource
+	@client Routing.GET, {
 		uri: 'items/{page}',
 		schema: new Schema
 			page:

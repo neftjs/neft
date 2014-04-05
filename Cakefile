@@ -1,7 +1,7 @@
 'use strict'
 
-[fs, log, utils, path] = ['fs-extra', 'log', 'utils', 'path'].map require
-[bundle] = ['./cake/bundle.coffee'].map require
+[fs, log, utils, cp] = ['fs-extra', 'log', 'utils', 'child_process'].map require
+[bundle, links] = ['./cake/bundle.coffee', './cake/links.coffee'].map require
 
 {assert} = console
 
@@ -10,8 +10,9 @@ option '-w', '--watch', 'watch files for changes'
 
 OUT = './build/'
 BUNDLE_OUT = "#{OUT}bundles/"
-VIEWS_OUT = "#{OUT}views/"
-STYLES_OUT = "#{OUT}styles/"
+VIEWS_OUT = "#{OUT}views"
+STYLES_OUT = "#{OUT}styles"
+MODELS_OUT = "#{OUT}models"
 
 task = do (_super = global.task) -> (name, desc, callback) ->
 
@@ -31,7 +32,6 @@ funcs = []
 immediate = false
 
 run = ->
-
 	return if immediate
 
 	immediate = true
@@ -44,7 +44,6 @@ Called on the beginning for all tasks
 ###
 initialized = false
 init = (opts) ->
-
 	assert not initialized
 	assert utils.isObject opts
 
@@ -78,28 +77,10 @@ task 'compile:views', 'Compile HTML views into json format', compileViewsTask = 
 
 	[View] = ['view'].map require
 
-	NAME_RE = ///(.+)\.html///
-
-	names = []
-
-	# compile html into json
-	for view in fs.readdirSync './views'
-		[_, name] = NAME_RE.exec view
-		html = fs.readFileSync "./views/#{view}", 'utf-8'
+	links input: './views', output: VIEWS_OUT, ext: '.json', (name, html, callback) ->
 
 		view = View.fromHTML name, html
-		json = JSON.stringify view, null, 4
-
-		names.push name
-		fs.outputFileSync "#{VIEWS_OUT}#{name}.json", json
-
-	# generate `views.coffee` file
-	viewsDir = path.relative OUT, VIEWS_OUT
-	str = ''
-	for name in names
-		str += "exports['#{name}'] = require('./#{viewsDir}/#{name}.json');\n"
-
-	fs.outputFileSync "#{OUT}views.coffee", str
+		callback JSON.stringify view, null, 4
 
 	log.ok "Views has been successfully compiled"
 
@@ -107,30 +88,11 @@ task 'compile:styles', 'Compile SVG styles into json format', compileStylesTask 
 
 	[svg2styles] = ['svg2styles'].map require
 
-	NAME_RE = ///(.+)\.svg///
-
-	names = []
-
-	# compile svg into json
-	for style in fs.readdirSync './styles'
-		[_, name] = NAME_RE.exec style
-		svg = fs.readFileSync "./styles/#{style}", 'utf-8'
-		
-		names.push name
+	links input: './styles', output: STYLES_OUT, ext: '.json', (name, svg, callback) ->
 
 		svg2styles svg, null, (err, json) ->
 
-			json = JSON.stringify json, null, 4
-
-			fs.outputFileSync "#{STYLES_OUT}#{name}.json", json
-
-	# generate `views.coffee` file
-	stylesDir = path.relative OUT, STYLES_OUT
-	str = ''
-	for name in names
-		str += "exports['#{name}'] = require('./#{stylesDir}/#{name}.json');\n"
-
-	fs.outputFileSync "#{OUT}styles.coffee", str
+			callback JSON.stringify json, null, 4
 
 	log.ok "Styles has been successfully compiled"
 
@@ -138,6 +100,16 @@ task 'compile', 'Compile views and styles', compileTask = ->
 
 	compileViewsTask()
 	compileStylesTask()
+
+task 'link:models', 'Generate list of models', linkModelsTask = ->
+
+	links input: './models', output: MODELS_OUT
+
+	log.ok "Models has been successfully linked"
+
+task 'link', 'Generate needed lists of existed files', linkTask = ->
+
+	linkModelsTask()
 
 task 'build:browser', 'Build bundle for browser environment', buildBrowserTask = (opts) ->
 
@@ -151,7 +123,15 @@ task 'build', 'Build bundles for all supported environments', buildTask = (opts)
 
 	buildBrowserTask opts
 
-task 'all', 'Compile and build', (opts) ->
+task 'all', 'Compile, build and link', allTask = (opts) ->
 
 	compileTask opts
 	buildTask opts
+	linkTask opts
+
+task 'run', 'Compile, build, link and run index', runTask = (opts) ->
+
+	allTask opts
+	funcs.push -> cp.fork './index.coffee'
+
+	run()

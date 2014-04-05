@@ -29,20 +29,13 @@ App =
 	Model: null
 	Db: Db
 	View: View
-	views: {}
 
 App.Model = AppModel App
 
 # load views
 views = require './build/views.coffee'
-for path, json of views
-	App.views[path] = View.fromJSON path, json
+View.fromJSON path, json for path, json of views
 
 # load models
-App.models =
-	item: require('./models/item.coffee') App
-
-if utils.isNode
-	App.models.dev = require('./models/dev.node.coffee') App
-
-module.exports = App
+models = require './build/models.coffee'
+model App for name, model of models

@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (App) -> App.DbSchema.registerSchema 'project_todo', 'item',
+module.exports = (App) -> App.Db.Schema().registerSchema 'project_todo', 'item',
 	msg:
 		type: 'string'
 		min: 1
