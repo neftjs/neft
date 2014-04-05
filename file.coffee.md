@@ -24,6 +24,9 @@ features. Physical file should be easy to load and parse.
 		files = {}
 		pool = {}
 
+		@__name__ = 'File'
+		@__path__ = 'File'
+
 		@Element = require('./Element/index.coffee.md')
 		@Unit = require('./unit.coffee.md') @
 		@Elem = require('./elem.coffee.md') @
@@ -59,17 +62,22 @@ features. Physical file should be easy to load and parse.
 
 				file
 
-#### *File* fromJSON(*String*, *String*)
+#### *File* fromJSON(*String*, *String|Object*)
 
 		@fromJSON = (path, json) ->
 
 			assert path and typeof path is 'string'
 			assert not files[path]
-			assert json and typeof json is 'string'
+			assert json and (typeof json is 'string' or utils.isObject json)
 
 			# parse json
-			json = utils.tryFunc JSON.parse, null, json, json
-			assert utils.isObject json
+			if typeof json is 'string'
+				json = utils.tryFunc JSON.parse, null, json, json
+				assert utils.isObject json
+
+			# put ctors
+			for i, ctor of ctors = json.constructors
+				ctors[i] = eval ctor
 
 			# save to storage
 			files[path] = json
@@ -141,7 +149,7 @@ features. Physical file should be easy to load and parse.
 				conditions @
 
 				# save to storage
-				files[@path] = @toJSON()
+				files[@path] = @toSimplifiedObject()
 
 				@
 
@@ -232,8 +240,19 @@ features. Physical file should be easy to load and parse.
 			pathPool = pool[@path] ?= []
 			pathPool.push @
 
+#### toSimplifiedObject()
+
+		toSimplifiedObject: ->
+
+			utils.simplify @, properties: true, protos: false, constructors: true
+
 #### toJSON()
 
 		toJSON: ->
 
-			utils.simplify @, properties: true, protos: false, constructors: true
+			json = @toSimplifiedObject()
+
+			for i, ctor of ctors = json.constructors
+				ctors[i] = ctor.__path__
+
+			json

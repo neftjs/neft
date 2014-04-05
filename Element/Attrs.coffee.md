@@ -13,6 +13,9 @@ VS Attrs
 
 		{Element} = modules
 
+		@__name__ = 'Attrs'
+		@__path__ = 'File.Element.modules.Attrs'
+
 ### Constructor
 
 		constructor: (@_element) ->

@@ -7,6 +7,9 @@ coffee = require 'coffee-script' if utils.isNode
 
 module.exports = (File) -> class Input
 
+	@__name__ = 'Input'
+	@__path__ = 'File.Input'
+
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^[a-z][a-z0-9]*)|(?:\[)([a-z][a-z0-9]*)(?:\])///gi
 
@@ -18,9 +21,8 @@ module.exports = (File) -> class Input
 		assert node instanceof File.Element
 		assert text and typeof text is 'string'
 
-		# build toString
+		# build toString()
 		func = ''
-		get = @get
 		RE.lastIndex = 0
 		while (match = RE.exec text) isnt null
 
@@ -36,10 +38,9 @@ module.exports = (File) -> class Input
 			if match[3] then func += "'#{utils.addSlashes match[3]}' + "
 
 		func = 'return ' + func.slice 0, -3
-		func = coffee.compile func, bare: true
-		eval "func = function(storages){ #{func} }"
-		this.toString = -> try func.apply null, arguments
+		@_func = func = coffee.compile func, bare: true
 
+	_func: ''
 	node: null
 
 	get: (storages, prop) ->
@@ -58,5 +59,17 @@ module.exports = (File) -> class Input
 				return r
 
 	parse: ->
+		throw "`parse()` method not implemented"
 
-	toString: null
+	###
+	Override `toString()` method on first call by `@_func` generated in the ctor.
+	`utils.simplify()` currently does not support `fromJSON()` and `toJSON()` methods
+	on the constructors, so it's the only way to support such functionality.
+	###
+	toString: (storages) ->
+		{get} = @
+		func = null
+		eval "func = function(storages){ #{@_func} }"
+
+		toString = @toString = (storages) -> try func storages
+		toString storages

@@ -15,6 +15,9 @@ Represents an element placed in the file.
 
 	module.exports = (File) -> class Elem
 
+		@__name__ = 'Elem'
+		@__path__ = 'File.Elem'
+
 ### Constructor(*File*, *string*, *HTMLElement*)
 
 		constructor: (@self, @name, @node) ->

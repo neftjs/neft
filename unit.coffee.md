@@ -17,6 +17,9 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 	module.exports = (File) -> class Unit extends File
 
+		@__name__ = 'Unit'
+		@__path__ = 'File.Unit'
+
 ### Constructor(*File*, *string, *HTMLDivElement*)
 
 		constructor: (self, @name, node) ->

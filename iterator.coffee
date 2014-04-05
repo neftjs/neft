@@ -6,6 +6,9 @@
 
 module.exports = (File) -> class Iterator extends File.Elem
 
+	@__name__ = 'Iterator'
+	@__path__ = 'File.Iterator'
+
 	constructor: (@self, node) ->
 
 		assert self instanceof File

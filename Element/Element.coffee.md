@@ -8,7 +8,7 @@ View Structure Element
 	defineProp = Object.defineProperty
 	isArray = Array.isArray
 
-	[utils, Emitter] = ['utils', 'emitter'].map require
+	[utils] = ['utils'].map require
 
 	{assert} = console
 
@@ -17,11 +17,10 @@ View Structure Element
 
 	module.exports = (impl, modules) -> class Element
 
+		@__name__ = 'Element'
+		@__path__ = 'File.Element'
+
 ### Static
-
-#### Events
-
-		@INIT = 'init'
 
 #### modules
 
@@ -57,11 +56,12 @@ Constructor is instance of *Events* class, so after every initializing
 
 		constructor: ->
 
-			Element.trigger Element.INIT, @
-
-		utils.merge utils.merge(@, Emitter::), new Emitter
+			@children = []
+			@attrs = new modules.Attrs @
 
 ### Properties
+
+		Object.defineProperties @::,
 
 #### name
 
@@ -69,132 +69,123 @@ Name of element as in *HTML*.
 Only first set value will be saved.
 It's *readonly* property.
 
-		defineProp @::, 'name',
+			name:
+				configurable: true
+				set: (value) ->
 
-			configurable: true
+					assert value and typeof value is 'string'
 
-			set: (value) ->
-
-				assert value and typeof value is 'string'
-
-				defineProp @, 'name', value: value
+					defineProp @, 'name', value: value
 
 #### *Array* children
 
 List of all children. Don't edit this array.
 Use `parent` property to manipulate children.
 
-		children: null
-
-		@on @INIT, (self) -> defineProp self, 'children',
-
-			value: []
+			children:
+				value: null
+				writable: true
 
 #### *Element* parent
 
 Link to other *Element*.
 Value will automatically change `children`.
 
-		_parent: null
-		parent: null
+			_parent:
+				value: null
+				writable: true
 
-		@on @INIT, (self) -> defineProp self, 'parent',
+			parent:
 
-			get: -> @_parent
+				get: -> @_parent
 
-			set: (value) ->
+				set: (value) ->
 
-				assert @ isnt value
+					assert @ isnt value
 
-				parent = @_parent
+					parent = @_parent
 
-				if parent is value then return
+					if parent is value then return
 
-				# remove element
-				index = parent and parent.children.indexOf @
-				if parent and ~index
+					# remove element
+					index = parent and parent.children.indexOf @
+					if parent and ~index
 
-					parent.children.splice index, 1
-					impl.child.remove.call parent, @
+						parent.children.splice index, 1
+						impl.child.remove.call parent, @
 
-				@_parent = parent = value
+					@_parent = parent = value
 
-				# append element
-				if parent and not ~parent.children.indexOf @
+					# append element
+					if parent and not ~parent.children.indexOf @
 
-					parent.children.push @
-					impl.child.append.call parent, @
+						parent.children.push @
+						impl.child.append.call parent, @
 
 #### *boolean* visible
 
-		visible: null
+			visible:
 
-		@on @INIT, (self) -> defineProp self, 'visible',
+				get: ->
 
-			get: ->
+					visible = impl.visible.get.call @
+					unless @parent then return true
+					if visible then return @parent.visible
+					visible
 
-				visible = impl.visible.get.call @
-				unless @parent then return true
-				if visible then return @parent.visible
-				visible
+				set: (value) ->
 
-			set: (value) ->
+					assert typeof value is 'boolean'
 
-				assert typeof value is 'boolean'
+					if @visible is value then return
 
-				if @visible is value then return
-
-				impl.visible.set.call @, value
+					impl.visible.set.call @, value
 
 #### *number* index
 
 Position of *Element* in the parent.
 Can be changed.
 
-		index: null
+			index:
 
-		@on @INIT, (self) -> defineProp self, 'index',
+				get: ->
 
-			get: ->
+					unless @parent then return undefined
 
-				unless @parent then return undefined
+					impl.index.get.call @
 
-				impl.index.get.call @
+				set: (value) ->
 
-			set: (value) ->
+					assert @parent
+					assert typeof value is 'number'
+					assert value >= 0 and isFinite value
+					assert value < @parent.children.length
 
-				assert @parent
-				assert typeof value is 'number'
-				assert value >= 0 and isFinite value
-				assert value < @parent.children.length
-
-				impl.index.set.call @, value
+					impl.index.set.call @, value
 
 #### *string* text
 
-		text: null
+			text:
 
-		@on @INIT, (self) -> defineProp self, 'text',
+				get: -> impl.text.get.call @
 
-			get: -> impl.text.get.call @
+				set: (value) ->
 
-			set: (value) ->
+					value += ''
 
-				value += ''
+					# remove all children
+					elem.parent = undefined while elem = @children[0]
 
-				# remove all children
-				elem.parent = undefined while elem = @children[0]
-
-				# set text
-				impl.text.set.call @, value
+					# set text
+					impl.text.set.call @, value
 
 #### *Attrs* attrs
 
 Instance of *Attrs* class.
 
-		attrs: null
-
-		@on @INIT, (self) -> defineProp self, 'attrs', value: new modules.Attrs self
+			attrs:
+				value: null
+				writable: true
 
 ### Methods
 
@@ -202,95 +193,95 @@ Instance of *Attrs* class.
 
 Returns *Element* as *HTML* string.
 
-		stringify: ->
+			stringify: value: ->
 
-			impl.stringify.call @
+				impl.stringify.call @
 
 #### *Element* clone()
 
 Returns new instance of *Element* with the same properties.
 
-		clone: ->
+			clone: value: ->
 
-			clone = new Element
-			if @name then clone.name = @name
+				clone = new Element
+				if @name then clone.name = @name
 
-			impl.clone.call @, clone
+				impl.clone.call @, clone
 
-			clone.visible = @visible
+				clone.visible = @visible
 
-			clone
+				clone
 
 #### *Element* cloneDeep()
 
 Returns cloned *Element* will all new instances of children.
 
-		cloneDeep: ->
+			cloneDeep: value: ->
 
-			clone = @clone()
+				clone = @clone()
 
-			cloneChild = (child) ->
+				cloneChild = (child) ->
 
-				clonedChild = child.cloneDeep()
-				clonedChild.parent = clone
+					clonedChild = child.cloneDeep()
+					clonedChild.parent = clone
 
-			@children.forEach cloneChild
+				@children.forEach cloneChild
 
-			clone
+				clone
 
 #### *Element[]* queryAll()
 
-		queryAll: (selector, target=[]) ->
+			queryAll: value: (selector, target=[]) ->
 
-			assert isArray target
-			assert typeof selector is 'string'
-			selector = selector.trim()
-			assert selector
+				assert isArray target
+				assert typeof selector is 'string'
+				selector = selector.trim()
+				assert selector
 
-			impl.queryAll.call @, selector.trim(), target
-			target
+				impl.queryAll.call @, selector.trim(), target
+				target
 
 #### replace(*Element*, *Element*)
 
-		replace: (oldElement, newElement) ->
+			replace: value: (oldElement, newElement) ->
 
-			assert oldElement instanceof Element
-			assert newElement instanceof Element
-			assert oldElement.parent is @
+				assert oldElement instanceof Element
+				assert newElement instanceof Element
+				assert oldElement.parent is @
 
-			{children} = @
+				{children} = @
 
-			# call impl
-			impl.replace.call @, oldElement, newElement
+				# call impl
+				impl.replace.call @, oldElement, newElement
 
-			# update new element
-			newElement._parent = oldElement._parent
-			index = children.indexOf(newElement)
-			if ~index then @children.splice index, 1
+				# update new element
+				newElement._parent = oldElement._parent
+				index = children.indexOf(newElement)
+				if ~index then @children.splice index, 1
 
-			# update children list
-			children[children.indexOf(oldElement)] = newElement
+				# update children list
+				children[children.indexOf(oldElement)] = newElement
 
-			# update old element
-			oldElement._parent = undefined
+				# update old element
+				oldElement._parent = undefined
 
-			null
+				null
 
 #### getCopiedElement(*Element*, *Element*)
 
-		getCopiedElement: do (tmp = []) -> (lookForElement, copiedParent) ->
+			getCopiedElement: value: do (tmp = []) -> (lookForElement, copiedParent) ->
 
-			# get indexes to parent
-			elem = lookForElement
-			while elem.parent
-				tmp.push elem.index
-				elem = elem.parent
-				break if elem is @
+				# get indexes to parent
+				elem = lookForElement
+				while elem.parent
+					tmp.push elem.index
+					elem = elem.parent
+					break if elem is @
 
-			# go by indexes in copied parent
-			elem = copiedParent
-			while tmp.length
-				index = tmp.pop()
-				elem = elem.children[index]
+				# go by indexes in copied parent
+				elem = copiedParent
+				while tmp.length
+					index = tmp.pop()
+					elem = elem.children[index]
 
-			elem
+				elem
