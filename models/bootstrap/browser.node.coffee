@@ -1,6 +1,8 @@
 'use strict'
 
-[Routing, fs, utils] = ['routing', 'fs', 'utils'].map require
+[Routing, fs, utils, Model, _] = ['routing', 'fs', 'utils', 'model', 'model-view'].map require
+
+Model = Model.View()
 
 module.exports = (App) -> new class BrowserBootstrapModel extends App.Model.Client().View()
 
@@ -21,7 +23,8 @@ module.exports = (App) -> new class BrowserBootstrapModel extends App.Model.Clie
 		if req
 
 			# TODO: consider other robots and clients with legacy browsers
-			if @_reservedUrisRe.test(req.uri) or # omit reserved URIs
+			if req.type isnt Model.VIEW or # omit types other than view
+			   @_reservedUrisRe.test(req.uri) or # omit reserved URIs
 			   ~req.userAgent.indexOf('Googlebot') # omit google boot
 				return next()
 

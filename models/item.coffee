@@ -2,7 +2,7 @@
 
 [Routing, Schema] = ['routing', 'schema'].map require
 
-module.exports = (App) -> new class ItemModel extends App.Model.Db().Client().View()
+module.exports = (App) -> new class ItemModel extends App.Model.Db().View().Client()
 
 	@PER_PAGE = 10
 
