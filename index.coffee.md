@@ -44,10 +44,10 @@ New instance of implemented *Routing* is returned.
 #### METHODS
 
 		@METHODS = [
-			(@GET = 1),
-			(@POST = 2),
-			(@PUT = 3),
-			(@DELETE = 4)
+			(@GET = 'get'),
+			(@POST = 'post'),
+			(@PUT = 'put'),
+			(@DELETE = 'delete')
 		]
 
 ### Constructor
@@ -105,20 +105,51 @@ New instance of implemented *Routing* is returned.
 
 			log.info "New handler `#{handler}` registered"
 
-#### *Response* request(*Object*)
+#### request(*Object*, *Function*)
 
-		request: (opts) ->
+		request: (opts, callback) ->
+
+			assert utils.isObject opts
+			assert typeof callback is 'function'
+
+			opts.method ?= Routing.GET
+			opts.uri ?= ''
+			opts.data ?= null
+
+			opts.url = "#{@url}#{opts.uri}"
+
+			opts.uid = utils.uid()
+			req = new Routing.Request opts
+
+			impl.sendRequest.call @, opts, (status, data) ->
+
+				req.pending = false
+
+				resp = new Routing.Response
+					req: req
+					status: status
+					data: data
+
+				args = [null]
+				args[resp.isSucceed()|0] = resp
+				callback args...
+
+			req
+
+#### *Response* onRequest(*Object*)
+
+		onRequest: (opts) ->
 
 			assert utils.isObject opts
 
-			logtime = log.time 'request'
+			logtime = log.time 'onRequest'
 			log "Resolve `#{JSON.stringify(opts)}` request"
 
 			# create request
 			req = Routing.Request.factory opts
 
 			# create response
-			res = Routing.Response.factory req
+			res = Routing.Response.factory req: req
 
 			# resolve request
 			loop

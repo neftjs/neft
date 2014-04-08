@@ -28,12 +28,20 @@ exports.init = ->
 			serverReq: serverReq
 			serverRes: serverRes
 
-		obj.res = @request
+		type = serverReq.headers['x-expected-type']
+		type |= 0 if type
+
+		obj.res = @onRequest
 			uid: uid
 			method: @constructor[serverReq.method]
 			uri: serverReq.url.slice 1
-			body: null
+			data: null
+			type: type
 
 		# run immediately if needed
 		unless obj.res.req.pending
 			exports.Response.send.call obj.res
+
+exports.sendRequest = ->
+
+	throw "Sending routing requests are not supported on the `node`"

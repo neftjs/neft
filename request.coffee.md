@@ -3,9 +3,11 @@ Request
 
 	'use strict'
 
-	[utils, Emitter] = ['utils', 'emitter'].map require
+	[utils, Emitter, Model, _] = ['utils', 'emitter', 'model', 'model-view'].map require
 
 	{assert} = console
+
+	Model = Model.View()
 
 *class* Request
 ---------------
@@ -37,14 +39,18 @@ Request
 		constructor: (opts) ->
 
 			assert utils.isObject opts
+
+			opts.type ?= Request::type
+
 			assert opts.uid and typeof opts.uid is 'string'
 			assert ~Routing.METHODS.indexOf(opts.method)
 			assert typeof opts.uri is 'string'
-			assert typeof opts.body is 'object'
+			assert typeof opts.data is 'object'
+			assert Model.TYPES & opts.type
 
 			super
 
-			{@uid, @method, @uri, @body} = opts
+			{@uid, @method, @uri, @data, @type} = opts
 			@pending = true
 			@params = null
 
@@ -55,7 +61,8 @@ Request
 		method: 0
 		uri: ''
 		params: null
-		body: null
+		data: null
+		type: Model.VIEW
 
 ### Methods
 

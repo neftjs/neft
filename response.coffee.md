@@ -72,13 +72,20 @@ Response
 
 ### Constructor
 
-		constructor: (req) ->
+		constructor: (opts) ->
 
-			assert req instanceof Routing.Request
+			assert utils.isObject opts
+
+			opts.status ?= Response.OK
+			opts.data ?= null
+
+			assert opts.req instanceof Routing.Request
+			assert ~Response.STATUSES.indexOf opts.status
+			assert typeof opts.data is 'object'
 
 			super
 
-			@req = req
+			{@req, @status, @data} = opts
 
 ### Properties
 
@@ -103,6 +110,10 @@ Response
 			assert error instanceof Response.Error
 
 			@send error.status, error
+
+		isSucceed: ->
+
+			300 > @status >= 200
 
 		destroy: ->
 
