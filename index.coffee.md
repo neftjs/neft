@@ -146,10 +146,10 @@ New instance of implemented *Routing* is returned.
 			log "Resolve `#{JSON.stringify(opts)}` request"
 
 			# create request
-			req = Routing.Request.factory opts
+			req = new Routing.Request opts
 
 			# create response
-			res = Routing.Response.factory req: req
+			res = new Routing.Response req: req
 
 			# resolve request
 			loop

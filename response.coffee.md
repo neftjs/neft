@@ -10,8 +10,6 @@ Response
 *class* Response
 ----------------
 
-	pool = []
-
 	module.exports = (Routing, impl) -> class Response extends Emitter
 
 ### Events
@@ -58,18 +56,6 @@ Response
 
 		@Error = require('./response/error.coffee.md') Routing, Response
 
-#### *Response* factory()
-
-		@factory = (req) ->
-
-			# from pool
-			if res = pool.pop()
-				Response.call res, req
-				return res
-
-			# create new
-			new Response req
-
 ### Constructor
 
 		constructor: (opts) ->
@@ -86,9 +72,11 @@ Response
 			super
 
 			{@req, @status, @data} = opts
+			@pending = true
 
 ### Properties
 
+		pending: false
 		req: null
 		status: Response.OK
 		data: null
@@ -97,16 +85,19 @@ Response
 
 		send: (@status, @data) ->
 
+			assert @pending
 			assert ~Response.STATUSES.indexOf status
+
+			@req.destroy()
 
 			if data instanceof Error
 				data = utils.errorToObject data
 
 			impl.send.call @
-			@destroy()
 
 		raise: (error) ->
 
+			assert @pending
 			assert error instanceof Response.Error
 
 			@send error.status, error
@@ -117,11 +108,8 @@ Response
 
 		destroy: ->
 
+			assert @pending
+			assert not @req.pending
+
+			@pending = false
 			@trigger Response.DESTROY
-			@off()
-
-			@req.destroy()
-
-			pool.push @
-
-			null

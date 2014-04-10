@@ -46,7 +46,9 @@ parsers =
 	'application/json': (data) ->
 		try JSON.stringify data
 	'text/html': (data) ->
-		data.node.stringify()
+		html = data.node.stringify()
+		data.destroy() # destroy view
+		html
 
 prepareData = (obj) ->
 
@@ -86,13 +88,13 @@ sendData = do ->
 		obj.serverRes.setHeader 'Content-Length', len
 		obj.serverRes.end data
 
-	(obj, data) ->
+	(obj, data, callback) ->
 
 		useGzip = ~obj.serverReq.headers['accept-encoding'].indexOf 'gzip'
 
 		unless useGzip
 			send obj, data
-			return
+			return callback()
 
 		logtime = log.time "gzip data"
 
@@ -101,6 +103,7 @@ sendData = do ->
 		zlib.gzip data, (_, data) ->
 			log.end logtime
 			send obj, data
+			callback()
 
 module.exports = (pending) ->
 
@@ -123,6 +126,7 @@ module.exports = (pending) ->
 
 		# send data
 		data = prepareData obj
-		sendData obj, data
+		sendData obj, data, =>
 
-		log.end logtime
+			log.end logtime
+			@destroy()

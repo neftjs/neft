@@ -12,8 +12,6 @@ Request
 *class* Request
 ---------------
 
-	pool = []
-
 	module.exports = (Routing, impl) -> class Request extends Emitter
 
 ### Events
@@ -21,18 +19,6 @@ Request
 		@DESTROY = 'destroy'
 
 ### Static
-
-#### *Request* factory(*Object*)
-
-		@factory = (opts) ->
-
-			# from pool
-			if req = pool.pop()
-				Request.call req, opts
-				return req
-
-			# create new
-			new Request opts
 
 ### Constructor(*Object*)
 
@@ -68,15 +54,10 @@ Request
 
 		destroy: ->
 
-			@trigger Request.DESTROY
-			@off()
+			assert @pending
 
 			@pending = false
-			pool.push @
+			@trigger Request.DESTROY
 
-			null
-
-		valueOf: -> @uid
-
-		Object.defineProperty @::, 'userAgent', get: ->
-			impl.getUserAgent.call(@) or ''
+		Object.defineProperty @::, 'userAgent',
+			get: -> impl.getUserAgent.call(@) or ''
