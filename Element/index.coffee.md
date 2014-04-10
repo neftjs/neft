@@ -12,12 +12,7 @@ Provide easy to use wrapper for `DOM` and other engines to parse `HTML`.
 
 	{assert} = console
 
-	impl = switch true
-		when utils.isNode
-			require './impls/htmlparser/index.coffee'
-
-	# TODO
-	# remove dom impl
+	impl = require './impls/htmlparser/index.coffee'
 
 	modules = {}
 

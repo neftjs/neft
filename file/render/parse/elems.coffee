@@ -20,7 +20,7 @@ module.exports = (File) -> (file, opts) ->
 			unless oldChild.visible then continue
 
 			# get unit and parse it
-			usedUnit = unit.clone()
+			usedUnit = File.factory unit
 
 			opts.source = elem
 			usedUnit.render opts

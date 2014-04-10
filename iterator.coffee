@@ -19,10 +19,11 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		super self, name, node
 
-		@storage = { i: 0 }
+		@storage = i: 0
 
 		# create unit
-		@unit = new File.Unit self, name, @bodyNode
+		unit = new File.Unit self, name, @bodyNode
+		@unit = unit.id
 		@bodyNode.parent = undefined
 
 	unit: null

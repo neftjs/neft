@@ -1,10 +1,11 @@
 'use strict'
 
-htmlparser = require 'htmlparser2'
-DomHandler = require './domhandler.js'
+utils = require 'utils'
+if utils.isNode
+	htmlparser = require 'htmlparser2'
+	DomHandler = require './domhandler.js'
 stringify = require './stringify.js'
 domutils = require 'domutils'
-utils = require 'utils/index.coffee.md'
 
 {forEach} = Array::
 {min} = Math

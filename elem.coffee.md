@@ -25,9 +25,6 @@ Represents an element placed in the file.
 			assert self instanceof File
 			assert name and typeof name is 'string'
 
-			# call init
-			@init()
-
 			# get bodyNode
 			if node.children.length
 				bodyNode = @bodyNode = File.Element.factory()
@@ -40,7 +37,3 @@ Represents an element placed in the file.
 		self: null
 		node: null
 		bodyNode: null
-
-### Methods
-
-		init: ->

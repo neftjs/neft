@@ -21,7 +21,7 @@ features. Physical file should be easy to load and parse.
 
 	module.exports = class File
 
-		files = {}
+		files = @_files = {}
 		pool = {}
 
 		@__name__ = 'File'

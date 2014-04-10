@@ -31,8 +31,11 @@ Represents *unit* - separated part of file which can be placed by elems.
 			@units = utils.clone self.units
 			delete @units[@name] # prevent circular structure
 
-			super "#{self.path}:#{name}", node
+			@id = "#{self.path}:#{name}"
+
+			super @id, node
 
 ### Properties
 
+		id: ''
 		name: ''

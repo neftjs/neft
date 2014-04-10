@@ -34,6 +34,7 @@ module.exports = (File) -> (file) ->
 		i--; n--
 
 		# get unit
-		units[name] = new File.Unit file, name, node
+		unit = new File.Unit file, name, node
+		units[name] = unit.id
 
 	null

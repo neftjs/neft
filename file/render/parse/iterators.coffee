@@ -28,7 +28,7 @@ module.exports = (File) -> (file, opts) ->
 
 		for elem in each
 
-			usedUnit = iterator.unit.clone()
+			usedUnit = File.factory iterator.unit
 
 			iterator.storage.i = i++
 			opts.source = iterator
