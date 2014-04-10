@@ -128,10 +128,7 @@ Value will automatically change `children`.
 
 				get: ->
 
-					visible = impl.visible.get.call @
-					unless @parent then return true
-					if visible then return @parent.visible
-					visible
+					impl.visible.get.call @
 
 				set: (value) ->
 
@@ -140,6 +137,9 @@ Value will automatically change `children`.
 					if @visible is value then return
 
 					impl.visible.set.call @, value
+
+					for child in @children
+						child.visible = value
 
 #### *number* index
 
