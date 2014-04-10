@@ -77,10 +77,16 @@ task 'compile:views', 'Compile HTML views into json format', compileViewsTask = 
 
 	[View] = ['view'].map require
 
-	links input: './views', output: VIEWS_OUT, ext: '.json', (name, html, callback) ->
+	links input: './views', output: VIEWS_OUT, ext: '.json', (name, html, write) ->
 
-		view = View.fromHTML name, html
-		callback JSON.stringify view, null, 4
+		View.fromHTML name, html
+
+		for path of View._files
+			view = View.factory path
+			json = JSON.stringify view, null, 4
+			write json, path
+
+		utils.clear View._files
 
 	log.ok "Views has been successfully compiled"
 
@@ -103,7 +109,7 @@ task 'compile', 'Compile views and styles', compileTask = ->
 
 task 'link:models', 'Generate list of models', linkModelsTask = ->
 
-	links input: './models', output: MODELS_OUT
+	links input: './models', output: MODELS_OUT, (name, file, callback) -> callback()
 
 	log.ok "Models has been successfully linked"
 

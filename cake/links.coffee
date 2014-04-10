@@ -38,24 +38,31 @@ module.exports = (opts, callback) ->
 		filename = name = filePath.slice 0, -ext.length
 		[_, name, env] = ENV_RE.exec name if ENV_RE.test name
 
-		files.push name: name, filename: filename, env: env
-
 		return unless callback
 
-		callback name, file, (result) ->
+		callback name, file, (result, customName) ->
+			customName ?= name
+			filename = customName
+			if env then filename += ".#{env}"
+			files.push file = name: customName, filename: filename, env: env			
 
+			return unless result
+			file.result = true
 			fs.outputFileSync "#{opts.output}/#{filename}#{opts.ext}", result
 
 	# generate file requiring found files
 	baseDir = path.relative path.dirname(opts.output), opts.output
-	prefix = if callback then './' else '../'
-	baseDir = "#{prefix}#{baseDir}"
 
 	str = "utils = require 'utils'\n"
 	for file in files
+
+		prefix = if file.result then './' else '../'
+		fileBaseDir = "#{prefix}#{baseDir}"
+
 		if file.env
 			env = utils.capitalize file.env
 			str += "if utils.is#{env} then "
-		str += "exports['#{file.name}'] = require('#{baseDir}/#{file.filename}#{opts.ext}');\n"
+
+		str += "exports['#{file.name}'] = require('#{fileBaseDir}/#{file.filename}#{opts.ext}');\n"
 
 	fs.outputFileSync "#{opts.output}.coffee", str
