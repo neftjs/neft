@@ -105,6 +105,8 @@ New instance of implemented *Routing* is returned.
 
 			log.info "New handler `#{handler}` registered"
 
+			handler
+
 #### request(*Object*, *Function*)
 
 		request: (opts, callback) ->

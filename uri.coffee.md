@@ -137,14 +137,25 @@ Get parameters values from the passed string.
 
 #### toString()
 
-		toString: ->
+Parse `Uri` into string.
+
+`params` object can be optionally passed as an argument.
+It will be used to replace uri chunks (works like standard
+string `format()` but on the named parameters).
+
+		toString: (params) ->
 
 			[SEPARATOR_LEFT, SEPARATOR_RIGHT] = Uri.SEPARATORS
 
 			str = ''
+
 			for chunk, i in @_chunks
 				if i % 2 isnt 0
-					chunk = "#{SEPARATOR_LEFT}#{chunk}#{SEPARATOR_RIGHT}"
+					chunk = if params and params.hasOwnProperty(chunk)
+							params[chunk]
+						else
+							"#{SEPARATOR_LEFT}#{chunk}#{SEPARATOR_RIGHT}"
+
 				str += chunk
 
 			str
