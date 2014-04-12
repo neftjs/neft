@@ -740,16 +740,13 @@ Utils for functions
 Call function and omit error raising.
 Made as workaroud for V8 deoptimization.
 
-	exports.tryFunc = (func, context, onfail) ->
+	exports.tryFunc = (func, context, args, onfail) ->
 
 		assert typeof func is 'function'
-
-		shift.call arguments
-		shift.call arguments
-		onfail = pop.call arguments
+		args? and assert isArray args
 
 		try
-			func.apply context, arguments
+			func.apply context, args
 		catch err
 			if typeof onfail is 'function' then onfail(err) else onfail
 
@@ -758,15 +755,13 @@ Made as workaroud for V8 deoptimization.
 Catch raised error and return it.
 Made as workaroud for V8 deoptimization.
 
-	exports.catchError = (func, context) ->
+	exports.catchError = (func, context, args) ->
 
 		assert typeof func is 'function'
-
-		shift.call arguments
-		shift.call arguments
+		args? and assert isArray args
 
 		try
-			func.apply context, arguments
+			func.apply context, args
 			null
 		catch err
 			err
