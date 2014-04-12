@@ -72,7 +72,7 @@ features. Physical file should be easy to load and parse.
 
 			# parse json
 			if typeof json is 'string'
-				json = utils.tryFunc JSON.parse, null, json, json
+				json = utils.tryFunc JSON.parse, null, [json], json
 				assert utils.isObject json
 
 			# put ctors
