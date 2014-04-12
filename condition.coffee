@@ -2,6 +2,10 @@
 
 {assert} = console
 
+cache = {}
+cachelen = 0
+MAX_IN_CACHE = 4000
+
 module.exports = (File) -> class Condition
 
 	@__name__ = 'Condition'
@@ -15,10 +19,14 @@ module.exports = (File) -> class Condition
 
 	execute: ->
 
-		try
+		exp = @node.attrs.get('if')
 
-			eval unescape(@node.attrs.get('if')) + ' ? true : false'
+		unless cache[exp]
+			if cachelen++ > MAX_IN_CACHE
+				cache = {}
+				cachelen = 0
 
-		catch
+			cond = "!!(#{unescape(exp)})"
+			cache[exp] = new Function "try { return #{cond}; } catch(_){ return false; }"
 
-			false
+		return cache[exp].call()
