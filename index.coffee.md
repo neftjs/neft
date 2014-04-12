@@ -7,8 +7,7 @@ Utils
 
 	'use strict'
 
-	assert = require 'assert'
-
+	{assert} = console
 	{toString} = Object::
 	funcToString = Function::toString
 	{isArray} = Array
@@ -30,7 +29,7 @@ Include sub-modules
 Environment information
 -----------------------
 
-	exports.isNode = exports.isBrowser = exports.isQML = false
+	exports.isNode = exports.isClient = exports.isBrowser = exports.isQML = false
 
 	switch true
 
@@ -38,10 +37,10 @@ Environment information
 			exports.isNode = true
 
 		when window?.document?
-			exports.isBrowser = true
+			exports.isClient = exports.isBrowser = true
 
 		when Qt?.include
-			exports.isQML = true
+			exports.isClient = exports.isQML = true
 
 Utils for object, arrays and functions
 --------------------------------------
