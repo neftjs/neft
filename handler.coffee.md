@@ -84,10 +84,10 @@ Handler
 					# parse params into expected types
 					for key, schemaOpts of @schema.schema
 						if params.hasOwnProperty(key) and schemaOpts.type
-							params[key] = utils.tryFunc parse, null, params[key], params[key]
+							params[key] = utils.tryFunc parse, null, [params[key]], params[key]
 
 					# validate schema
-					err = utils.catchError @schema.validate, @schema, params
+					err = utils.catchError @schema.validate, @schema, [params]
 					if err instanceof Error
 						log "`#{@uri}` tests, but not passed schema (`#{err}`)"
 						return callback err
@@ -103,7 +103,7 @@ Handler
 					res.off Routing.Response.DESTROY, callback
 					callback handlerCallbackError
 
-				utils.tryFunc @listener, @, req, res, next, next
+				utils.tryFunc @listener, @, [req, res, next], next
 
 				null
 
