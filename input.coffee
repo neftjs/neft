@@ -11,7 +11,7 @@ module.exports = (File) -> class Input
 	@__path__ = 'File.Input'
 
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
-	VAR_RE = @VAR_RE = ///(^[a-z][a-z0-9]*)|(?:\[)([a-z][a-z0-9]*)(?:\])///gi
+	VAR_RE = @VAR_RE = ///(^|\s|\[|:)([a-z]\w*)+///gi
 
 	@Text = require('./input/text.coffee') File, @
 	@Attr = require('./input/attr.coffee') File, @
@@ -27,10 +27,9 @@ module.exports = (File) -> class Input
 		while (match = RE.exec text) isnt null
 
 			# parse prop
-			prop = match[2].replace VAR_RE, (_, elem1, elem2, index) ->
-				str = "get(storages, '#{escape(elem1 or elem2)}')"
-				if index then str = "[#{str}]"
-				str
+			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
+				str = "get(storages, '#{escape(elem)}')"
+				"#{prefix}#{str}"
 
 			# add into func string
 			if match[1] then func += "'#{utils.addSlashes match[1]}' + "
