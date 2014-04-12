@@ -3,10 +3,12 @@ Utils for async
 
 	'use strict'
 
+	[utils] = ['./index.coffee.md'].map require
+
 	{exports} = module
 
-	shift = Array::shift
-	isArray = Array.isArray
+	{shift} = Array::
+	{isArray} = Array
 
 	NOP = ->
 
@@ -79,10 +81,7 @@ Empty `callback` will be called if there is no function to call.
 			args[func.length - 1] = callback
 
 			# call; support sync errors
-			try
-				func.apply obj, args
-			catch e
-				callback e
+			utils.tryFunc func, obj, args, callback
 
 #### runAll()
 
