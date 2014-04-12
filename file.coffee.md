@@ -237,6 +237,9 @@ features. Physical file should be easy to load and parse.
 
 		destroy: ->
 
+			if @isRendered
+				@revert()
+
 			pathPool = pool[@path] ?= []
 			pathPool.push @
 
