@@ -50,7 +50,7 @@ fileScope = ->
 
 moduleScope = ->
 
-	module = exports: {}
+	module = exports: modules['{{name}}']
 	require = getModule.bind null, '{{paths}}'
 	exports = module.exports
 
@@ -81,6 +81,7 @@ getModulesInit = (modules, paths) ->
 				func = "module.exports = #{func};"
 
 		module = autoCall moduleScope
+		module = replaceStr module, '{{name}}', name
 		module = replaceStr module, '\'{{paths}}\'', stringify modulePaths
 		module = replaceStr module, '\'{{file}}\';', func
 

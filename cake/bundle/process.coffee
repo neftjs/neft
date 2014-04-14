@@ -51,7 +51,7 @@ catch err
 	return process.send err: err.stack
 
 # add index file into modules list
-modules.push Object.keys(paths)[1]
+modules.push 'index.coffee'
 
 process.send
 	modules: modules

@@ -6,7 +6,6 @@
 {assert} = console
 
 option '-d', '--development', 'generate bundle for development'
-option '-w', '--watch', 'watch files for changes'
 
 OUT = './build/'
 BUNDLE_OUT = "#{OUT}bundles/"
@@ -14,53 +13,48 @@ VIEWS_OUT = "#{OUT}views"
 STYLES_OUT = "#{OUT}styles"
 MODELS_OUT = "#{OUT}models"
 
-task = do (_super = global.task) -> (name, desc, callback) ->
-
-	func = ->
-
-		logtime = log.time name
-		callback.apply @, arguments
-		log.end logtime
-
-	_super.call @, name, desc, func
-
-###
-Run registered tasks if needed.
-Omit changes in the same tick.
-###
-funcs = []
-immediate = false
-
-run = ->
-	return if immediate
-
-	immediate = true
-	setImmediate ->
-		immediate = false
-		func() for func in funcs
+initialized = false
 
 ###
 Called on the beginning for all tasks
 ###
-initialized = false
 init = (opts) ->
 	assert not initialized
 	assert utils.isObject opts
 
 	initialized = true
 
-	# watch changes
-	if opts.watch
-		log.warn 'Watch feature is not implemented yet'
-
 	# production mode
 	if not opts.development
 		log.warn "Production mode is not implemented yet"
 
 ###
+Override global cake `task`.
+Call `init()` on initialize and log tasks.
+###
+task = do (_super = global.task) -> (name, desc, callback) ->
+
+	func = (opts, taskCallback) ->
+
+		unless initialized then init opts
+
+		onEnd = -> 
+			log.end logtime
+			taskCallback?()
+
+		logtime = log.time name
+		callback.call @, opts, onEnd
+
+		onEnd() if callback.length < 2
+
+	_super.call @, name, desc, func
+
+	func
+
+###
 Build bundle file
 ###
-build = (type) ->
+build = (type, callback) ->
 
 	assert ~['qml', 'browser'].indexOf type
 
@@ -73,7 +67,9 @@ build = (type) ->
 
 		log.ok "#{utils.capitalize(type)} bundle saved as `#{out}`"
 
-task 'compile:views', 'Compile HTML views into json format', compileViewsTask = ->
+		callback()
+
+compileViewsTask = task 'compile:views', 'Compile HTML views into json format', ->
 
 	[View] = ['view'].map require
 
@@ -90,7 +86,7 @@ task 'compile:views', 'Compile HTML views into json format', compileViewsTask = 
 
 	log.ok "Views has been successfully compiled"
 
-task 'compile:styles', 'Compile SVG styles into json format', compileStylesTask = ->
+compileStylesTask = task 'compile:styles', 'Compile SVG styles into json format', ->
 
 	[svg2styles] = ['svg2styles'].map require
 
@@ -102,42 +98,37 @@ task 'compile:styles', 'Compile SVG styles into json format', compileStylesTask 
 
 	log.ok "Styles has been successfully compiled"
 
-task 'compile', 'Compile views and styles', compileTask = ->
+compileTask = task 'compile', 'Compile views and styles', ->
 
 	compileViewsTask()
 	compileStylesTask()
 
-task 'link:models', 'Generate list of models', linkModelsTask = ->
+linkModelsTask = task 'link:models', 'Generate list of models', ->
 
 	links input: './models', output: MODELS_OUT, (name, file, callback) -> callback()
 
 	log.ok "Models has been successfully linked"
 
-task 'link', 'Generate needed lists of existed files', linkTask = ->
+linkTask = task 'link', 'Generate needed lists of existed files', ->
 
 	linkModelsTask()
 
-task 'build:browser', 'Build bundle for browser environment', buildBrowserTask = (opts) ->
+buildBrowserTask = task 'build:browser', 'Build bundle for browser environment', (opts, callback) ->
 
-	init opts
+	build 'browser', callback
 
-	funcs.push build.bind(null, 'browser')
+buildTask = task 'build', 'Build bundles for all supported environments', (opts, callback) ->
 
-	run()
+	buildBrowserTask opts, callback
 
-task 'build', 'Build bundles for all supported environments', buildTask = (opts) ->
-
-	buildBrowserTask opts
-
-task 'all', 'Compile, build and link', allTask = (opts) ->
+allTask = task 'all', 'Compile, build and link', (opts, callback) ->
 
 	compileTask opts
-	buildTask opts
 	linkTask opts
+	buildTask opts, callback
 
-task 'run', 'Compile, build, link and run index', runTask = (opts) ->
+runTask = task 'run', 'Compile, build, link and run index', (opts, callback) ->
 
-	allTask opts
-	funcs.push -> cp.fork './index.coffee'
-
-	run()
+	allTask opts, ->
+		cp.fork './index.coffee'
+		callback()
