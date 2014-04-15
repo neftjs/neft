@@ -327,6 +327,25 @@ Remove all elements from the array, or all properties from the object.
 		delete obj[key] for key of obj when obj.hasOwnProperty key
 		obj
 
+### setPrototypeOf
+
+Polyfill for ES6 `Object.setPrototypeOf()`.
+
+	exports.setPrototypeOf = setPrototypeOf = do ->
+
+		if Object.setPrototypeOf?
+			return Object.setPrototypeOf
+
+		if Object.__proto__
+			return (obj, proto) ->
+				obj.__proto__ = proto
+				obj
+
+		return (obj, proto) ->
+			proto = createObject proto
+			merge proto, obj
+			proto
+
 ### simplify()
 
 Convert passed object into the most simplified format.
@@ -505,16 +524,6 @@ Backward `simplify()` operation.
 
 	exports.assemble = do ->
 
-		if Object.__proto__
-			setObjProto = (obj, proto) ->
-				obj.__proto__ = proto
-				obj
-		else
-			setObjProto = (obj, proto) ->
-				proto = createObject proto
-				merge proto, obj
-				proto
-
 		ctorPropConfig = value: null
 
 		(obj) ->
@@ -546,12 +555,12 @@ Backward `simplify()` operation.
 
 			# set protos
 			for objI, refI of protos
-				objects[objI] = setObjProto objects[objI], objects[refI]
+				objects[objI] = setPrototypeOf objects[objI], objects[refI]
 
 			# set objects as instances
 			if optsInsts
 				for objI, func of constructors
-					setObjProto objects[objI], func::
+					setPrototypeOf objects[objI], func::
 
 			# .. or set ctors as properties
 			else if optsCtors
