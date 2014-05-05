@@ -142,6 +142,22 @@ Merge second object into the first one deeply.
 
 		source
 
+### fill()
+
+Works like `merge()` but only on defined properties in the `source`.
+Existed properties won't be overriden.
+
+	exports.fill = (source, obj) ->
+
+		if not source or not obj
+			throw new TypeError
+
+		for key, value of obj
+			if key of source and not hasOwnProp.call(source, key)
+				source[key] = value
+
+		source
+
 Utils for objects and arrays
 ----------------------------
 
