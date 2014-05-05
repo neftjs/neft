@@ -255,7 +255,7 @@ For arrays add to property name two brackets ('[]')
 			if key.length then obj = obj[key]
 
 			# break if no way exists
-			if typeof obj isnt 'object'
+			if typeof obj isnt 'object' and typeof obj isnt 'function'
 
 				# if it is no end of path, return undefined
 				if i isnt path.length - 1
@@ -345,6 +345,15 @@ Polyfill for ES6 `Object.setPrototypeOf()`.
 			proto = createObject proto
 			merge proto, obj
 			proto
+
+### getOwnProperties
+
+Returns new array or object only with own properties.
+
+	exports.getOwnProperties = (obj) ->
+		result = if isArray obj then [] else {}
+		merge result, obj
+		result
 
 ### simplify()
 
@@ -550,7 +559,7 @@ Backward `simplify()` operation.
 			# set properties
 			if optsProps
 				for obj in objects
-					for key, value of obj
+					for key, value of obj when obj.hasOwnProperty key # TODO rethink db bug
 						defObjProp obj, key, value
 
 			# set protos
