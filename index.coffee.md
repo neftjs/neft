@@ -158,6 +158,19 @@ Existed properties won't be overriden.
 
 		source
 
+### remove()
+
+Remove passed key/element from the object/array.
+
+	exports.remove = (obj, elem) ->
+
+		if isArray obj
+			index = obj.indexOf elem
+			obj.splice index, 1 if ~index
+			return
+
+		delete obj[elem]
+
 Utils for objects and arrays
 ----------------------------
 
