@@ -171,6 +171,60 @@ Remove passed key/element from the object/array.
 
 		delete obj[elem]
 
+### defProp()
+
+Short version of `Object.defineProperty`.
+
+Parameters:
+  1. object where property will be defined,
+  2. property name
+  3. string describing property config:
+     "w" - writable, "e" - enumarable and "c" - configurable in any order
+  4. value or getter
+  5. setter
+
+To avoid `setter`, when `getter` is specified, pass `null`.
+
+Example:
+```
+obj = {}
+utils.defProp obj, 'const', 'e', 'constant value'
+utils.defProp obj, 'name', 'ec', (-> 2), null
+```
+
+	exports.defProp = do ->
+
+		descCfg =
+			enumerable: true
+			configurable: true
+
+		valueCfg = exports.merge writable: true, value: null, descCfg
+
+		accessorsCfg = exports.merge get: undefined, set: undefined, descCfg
+
+		(obj, prop, desc, getter, setter) ->
+
+			# configure value
+			if setter is undefined
+				cfg = valueCfg
+				cfg.value = getter
+				cfg.writable = exports.has desc, 'w'
+
+			# configure accessors
+			else
+				cfg = accessorsCfg
+				cfg.get = getter or undefined
+				cfg.set = setter or undefined
+
+			# set common config
+			cfg.enumerable = exports.has desc, 'e'
+			cfg.configurable = exports.has desc, 'c'
+
+			# set property
+			defObjProp obj, prop, cfg
+
+			obj
+
 Utils for objects and arrays
 ----------------------------
 
@@ -697,6 +751,17 @@ Compare two objects deeply.
 				return forObjects a, b, compareFunc
 
 			return compareFunc a, b
+
+Utils for arrays and strings
+----------------------------
+
+### has()
+
+Check whether array or string contains passed value.
+
+	exports.has = (any, elem) ->
+
+		!!~any.indexOf elem
 
 Utils for arrays
 ----------------
