@@ -19,7 +19,6 @@ Utils
 	getObjOwnPropDesc = Object.getOwnPropertyDescriptor
 	defObjProp = Object.defineProperty
 	{random} = Math
-	lookupGetter = Object::__lookupGetter__ or -> @getOwnPropertyDescriptor().get
 
 Include sub-modules
 -------------------
@@ -224,6 +223,50 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 			defObjProp obj, prop, cfg
 
 			obj
+
+### getPropDesc()
+
+Works like `Object.getOwnPropertyDescriptor` but lookup all prototypes, not only own properties.
+
+	exports.getPropDesc = (obj, prop) ->
+
+		while obj and not desc
+			desc = getObjOwnPropDesc obj, prop
+			return desc if desc
+
+			obj = getPrototypeOf.call obj
+
+### lookupGetter()
+
+Object::__lookupGetter__ polyfill.
+
+	exports.lookupGetter = do ->
+
+		# use native function if possible
+		if Object::__lookupGetter__
+			return Function.call.bind Object::__lookupGetter__
+
+		# use polyfill
+		(obj, prop) ->
+
+			desc = exports.getPropDesc obj, prop
+			desc?.get
+
+### lookupSetter()
+
+Object::__lookupSetter__ polyfill.
+
+	exports.lookupSetter = do ->
+
+		# use native function if possible
+		if Object::__lookupSetter__
+			return Function.call.bind Object::__lookupSetter__
+
+		# use polyfill
+		(obj, prop) ->
+
+			desc = exports.getPropDesc obj, prop
+			desc?.set
 
 Utils for objects and arrays
 ----------------------------
@@ -514,7 +557,7 @@ Examples
 						continue
 
 					# don't check getters values
-					if optsProps and lookupGetter.call obj, key
+					if optsProps and exports.lookupGetter obj, key
 						objIds.push null
 						continue
 
