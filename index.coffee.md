@@ -20,6 +20,8 @@ Utils
 	defObjProp = Object.defineProperty
 	{random} = Math
 
+	[expect] = ['expect'].map require
+
 Include sub-modules
 -------------------
 
@@ -76,14 +78,9 @@ Prototype is copied (if exists).
 
 		(arg) ->
 
-			unless arguments.length
-				throw new RangeError
-
-			typeofArg = typeof arg
-
-			return cloneFunction(arg) if typeofArg is 'function'
+			return cloneFunction(arg) if typeof arg is 'function'
 			return cloneArray(arg) if isArray arg
-			return cloneObject(arg) if arg and typeofArg is 'object'
+			return cloneObject(arg) if arg and typeof arg is 'object'
 			arg
 
 ### cloneDeep()
@@ -94,7 +91,6 @@ Functions are not clone by default (pass `{function: true}` to reverse this proc
 
 	exports.cloneDeep = do (optsDef={function: false}) -> (arg, opts=optsDef) ->
 
-		opts and assert typeof opts is 'object'
 		opts.function ?= false
 
 		result = exports.clone arg
@@ -113,8 +109,9 @@ Existed properties will be overriden.
 
 	merge = exports.merge = (source, obj) ->
 
-		if not source or not obj
-			throw new TypeError
+		expect(source).not().toBe.primitive()
+		expect(obj).not().toBe.primitive()
+		expect(source).not().toBe obj
 
 		for key, value of obj when obj.hasOwnProperty(key)
 			source[key] = value
@@ -127,8 +124,9 @@ Merge second object into the first one deeply.
 
 	mergeDeep = exports.mergeDeep = (source, obj) ->
 
-		assert source and typeof source is 'object'
-		assert obj and typeof obj is 'object'
+		expect(source).not().toBe.primitive()
+		expect(obj).not().toBe.primitive()
+		expect(source).not().toBe obj
 
 		for key, value of obj when hasOwnProp.call obj, key
 			sourceValue = source[key]
@@ -148,8 +146,9 @@ Existed properties won't be overriden.
 
 	exports.fill = (source, obj) ->
 
-		if not source or not obj
-			throw new TypeError
+		expect(source).not().toBe.primitive()
+		expect(obj).not().toBe.primitive()
+		expect(source).not().toBe obj
 
 		for key, value of obj
 			if key of source and not hasOwnProp.call(source, key)
@@ -162,6 +161,8 @@ Existed properties won't be overriden.
 Remove passed key/element from the object/array.
 
 	exports.remove = (obj, elem) ->
+
+		expect(obj).not().toBe.primitive()
 
 		if isArray obj
 			index = obj.indexOf elem
@@ -203,6 +204,10 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 
 		(obj, prop, desc, getter, setter) ->
 
+			expect(obj).not().toBe.primitive()
+			expect(prop).toBe.string()
+			expect(desc).toBe.string()
+
 			# configure value
 			if setter is undefined
 				cfg = valueCfg
@@ -229,6 +234,9 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 Works like `Object.getOwnPropertyDescriptor` but lookup all prototypes, not only own properties.
 
 	exports.getPropDesc = (obj, prop) ->
+
+		expect(obj).not().toBe.primitive()
+		expect(prop).toBe.string()
 
 		while obj and not desc
 			desc = getObjOwnPropDesc obj, prop
@@ -277,8 +285,7 @@ Check if specified object is an arguments array.
 
 	exports.isArguments = (obj) ->
 
-		unless arguments.length
-			throw new RangeError
+		expect(obj).toBe.object()
 
 		toString.call(obj) is '[object Arguments]'
 
@@ -287,9 +294,6 @@ Check if specified object is an arguments array.
 Check if arg is clear object (without any other prototypes).
 
 	exports.isObject = (obj) ->
-
-		unless arguments.length
-			throw new RangeError
 
 		if not obj or typeof obj isnt 'object'
 			return false
@@ -316,6 +320,8 @@ For arrays add to property name two brackets ('[]')
 - look at isStringArray method to check it in other way.
 
 	get = exports.get = (obj, path='', target) ->
+
+		expect(obj).toBe.object()
 
 		switch typeof path
 
@@ -410,8 +416,7 @@ Proto is not checking.
 
 	exports.isEmpty = (arg) ->
 
-		if typeof arg isnt 'object'
-			throw new TypeError
+		expect(arg).toBe.object()
 
 		if isArray arg
 			return !arg.length
@@ -425,8 +430,7 @@ Get last element from the Object or Array
 
 	exports.last = (arg) ->
 
-		if typeof arg isnt 'object'
-			throw new TypeError
+		expect(arg).toBe.object()
 
 		# Array
 		if isArray arg
@@ -442,7 +446,7 @@ Remove all elements from the array, or all properties from the object.
 
 	exports.clear = (obj) ->
 
-		assert obj and typeof obj is 'object'
+		expect(obj).toBe.object()
 
 		# Array
 		if isArray obj
@@ -464,10 +468,16 @@ Polyfill for ES6 `Object.setPrototypeOf()`.
 
 		if Object.__proto__
 			return (obj, proto) ->
+
+				expect(obj).toBe.object()
+
 				obj.__proto__ = proto
 				obj
 
 		return (obj, proto) ->
+
+			expect(obj).toBe.object()
+
 			proto = createObject proto
 			merge proto, obj
 			proto
@@ -477,6 +487,9 @@ Polyfill for ES6 `Object.setPrototypeOf()`.
 Returns new array or object only with own properties.
 
 	exports.getOwnProperties = (obj) ->
+
+		expect(obj).toBe.object()
+
 		result = if isArray obj then [] else {}
 		merge result, obj
 		result
@@ -522,8 +535,8 @@ Examples
 
 		(obj, opts={}) ->
 
-			assert obj and typeof obj is 'object'
-			opts? and assert exports.isObject opts
+			expect(obj).toBe.object()
+			expect(opts).toBe.simpleObject()
 
 			optsProps = opts.properties ?= false
 			optsProtos = opts.protos ?= false
@@ -663,7 +676,7 @@ Backward `simplify()` operation.
 
 		(obj) ->
 
-			assert exports.isObject obj
+			expect(obj).toBe.simpleObject()
 
 			{opts, objects, references, protos, constructors} = obj
 
@@ -787,6 +800,8 @@ Compare two objects deeply.
 
 		(a, b, compareFunc=defaultComparison) ->
 
+			expect().defined(compareFunc).toBe.function()
+
 			if isArray(a) and isArray(b)
 				return forArrays a, b, compareFunc
 
@@ -804,6 +819,8 @@ Check whether array or string contains passed value.
 
 	exports.has = (any, elem) ->
 
+		expect(any?.indexOf).toBe.function()
+
 		!!~any.indexOf elem
 
 Utils for arrays
@@ -814,13 +831,14 @@ Utils for arrays
 Save parsed array into `target` (new object by default) and return it.
 Use optionally `keyGen` and `valueGen` to specify custom keys and values
 (by default key is current index, and value refers to array element).
-`keyGen` and `valueGen` get current element, current index and array.
+`keyGen` and `valueGen` are called with current element, current index and array.
 
 	exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
 
-		throw new TypeError unless isArray arr
-		keyGen = null if typeof keyGen isnt 'function'
-		valueGen = null if typeof valueGen isnt 'function'
+		expect(arr).toBe.array()
+		expect().defined(keyGen).toBe.function()
+		expect().defined(valueGen).toBe.function()
+		expect(target).toBe.object()
 
 		for elem, i in arr
 
@@ -836,12 +854,12 @@ Utils for strings
 
 ### capitalize()
 
-	exports.capitalize = (arg) ->
+	exports.capitalize = (str) ->
 
-		arg += ''
+		expect(str).toBe.string()
 
-		return '' unless arg.length
-		arg[0].toUpperCase() + arg.substring(1)
+		return '' unless str.length
+		str[0].toUpperCase() + str.substring(1)
 
 ### isStringArray()
 
@@ -849,7 +867,8 @@ Check if string references into array (according to notation in `get` method).
 
 	isStringArray = exports.isStringArray = (arg) ->
 
-		arg += ''
+		expect(arg).toBe.string()
+
 		arg.slice(-2) is '[]'
 
 ### addSlashes()
@@ -863,8 +882,7 @@ New string with added backslashes before `'` and `"` is returned.
 
 		(str) ->
 
-			if typeof str isnt 'string'
-				throw new TypeError
+			expect(str).toBe.string()
 
 			unless str then return str
 
@@ -876,8 +894,7 @@ Generate unique hash. Length of returned string can be specified (default 8).
 
 	exports.uid = (n=8) ->
 
-		if typeof n isnt 'number' or not isFinite(n)
-			throw new TypeError
+		expect(n).toBe.integer()
 
 		str = ''
 
@@ -897,8 +914,8 @@ Made as workaroud for V8 deoptimization.
 
 	exports.tryFunc = (func, context, args, onfail) ->
 
-		assert typeof func is 'function'
-		args? and assert isArray args
+		expect(func).toBe.function()
+		expect().defined(args).toBe.array()
 
 		try
 			func.apply context, args
@@ -912,8 +929,8 @@ Made as workaroud for V8 deoptimization.
 
 	exports.catchError = (func, context, args) ->
 
-		assert typeof func is 'function'
-		args? and assert isArray args
+		expect(func).toBe.function()
+		expect().defined(args).toBe.array()
 
 		try
 			func.apply context, args
@@ -930,8 +947,7 @@ Parse native `Error` instance into *pure* object.
 
 	exports.errorToObject = (error) ->
 
-		unless error instanceof Error
-			throw new TypeError
+		expect(error).toBe.any Error
 
 		name: error.name
 		message: error.message

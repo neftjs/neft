@@ -1,4 +1,7 @@
 {
 	"name": "utils",
-	"version": "1.0.6"
+	"version": "1.0.6",
+	"dependencies": {
+		"expect": "git+ssh://git@github.com:Kildyt/expect.git"
+	}
 }
