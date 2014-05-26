@@ -1,26 +1,30 @@
-<unit name="todo-item">
+<unit name="item">
 	<article>
-		<h3>#{data.id}</h3>
-		<em>Created: #{data.created}</em>
-		<em>Updated: #{data.updated}</em>
+		<header><h1>#{data.id}</h1></header>
+		<dl>
+			<dt>Created</dt>
+			<dd>#{data.created}</dd>
+			<dt>Updated</dt>
+			<dd>#{data.updated}</dd>
+		</dl>
 		<p contenteditable>#{data.msg}</p>
 
 		<nav>
-			<button type="submit" onclick="removeItem('#{id}')">Remove</button>
+			<button type="submit" onclick="removeItem('#{data.id}')">Remove</button>
 			<button type="submit" onclick="updateItem(this)">Update</button>
 		</nav>
 	</article>
 </unit>
 
-<unit name="todo-list" data-item>
-	<ul each="#{item}">
+<unit name="list">
+	<ul each="#{data}">
 		<li>
-			<todo-item data="#{each[i]}"></todo-item>
+			<item data="#{each[i]}"></item>
 		</li>
 	</ul>
 </unit>
 
-<unit name="todo-new">
+<unit name="new">
 	<form action="/item" method="post">
 		<fieldset>
 			<textarea name="msg" rows="10" cols="30"></textarea>
