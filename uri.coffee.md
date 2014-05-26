@@ -3,7 +3,7 @@ Uri
 
 	'use strict'
 
-	{assert} = console
+	[expect] = ['expect'].map require
 
 *class* Uri
 -----------
@@ -34,7 +34,7 @@ Get separators and parameters names as one-deep array.
 				index = uri.indexOf SEPARATOR_LEFT, i
 				unless ~index then index = len
 				chunk = uri.substring i, index
-				assert chunk
+				expect(chunk).toBe.truthy()
 				target.push chunk
 				i = index
 
@@ -42,7 +42,7 @@ Get separators and parameters names as one-deep array.
 				index = uri.indexOf SEPARATOR_RIGHT, i
 				unless ~index then break
 				chunk = uri.substring i + 1, index
-				assert chunk
+				expect(chunk).toBe.truthy()
 				target.push chunk
 				i = index + 1
 
@@ -52,7 +52,7 @@ Get separators and parameters names as one-deep array.
 
 		constructor: (uri) ->
 
-			assert uri and typeof uri is 'string'
+			expect(uri).toBe.string()
 
 			@_chunks = Uri.getChunks uri
 			@params = {}
@@ -78,6 +78,10 @@ Test whether *uri* is valid with *uri*.
 		test: (uri) ->
 
 			chunks = @_chunks
+
+			# on empty uri
+			if not uri and not chunks.length
+				return true
 
 			# beginning
 			if uri.indexOf(chunks[0]) isnt 0 and chunks[0] isnt '*'
@@ -105,7 +109,7 @@ Get parameters values from the passed string.
 
 		match: (uri) ->
 
-			assert @test uri
+			expect(@test uri).toBe.truthy()
 
 			chunks = @_chunks
 

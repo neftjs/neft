@@ -5,9 +5,7 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 
 	'use strict'
 
-	[utils, log] = ['utils', 'log'].map require
-
-	{assert} = console
+	[utils, expect, log] = ['utils', 'expect', 'log'].map require
 
 	log = log.scope 'Routing'
 
@@ -25,7 +23,7 @@ New instance of implemented *Routing* is returned.
 		when utils.isQML
 			require './impls/qml/index.coffee'
 
-	assert impl, "No routing implementation found"
+	log.error "No routing implementation found" unless impl
 
 *class* Routing
 ---------------
@@ -47,18 +45,19 @@ New instance of implemented *Routing* is returned.
 			(@GET = 'get'),
 			(@POST = 'post'),
 			(@PUT = 'put'),
-			(@DELETE = 'delete')
+			(@DELETE = 'delete'),
+			(@OPTIONS = 'options')
 		]
 
 ### Constructor
 
 		constructor: (opts) ->
 
-			assert utils.isObject opts
-			assert opts.protocol and typeof opts.protocol is 'string'
-			assert opts.port is (opts.port|0)
-			assert opts.host and typeof opts.host is 'string'
-			assert opts.language and typeof opts.language is 'string'
+			expect(opts).toBe.simpleObject()
+			expect(opts.protocol).toBe.truthy().string()
+			expect(opts.port).toBe.integer()
+			expect(opts.host).toBe.truthy().string()
+			expect(opts.language).toBe.truthy().string()
 
 			@_handlers = {}
 			{@protocol, @port, @host, @language} = opts
@@ -88,10 +87,10 @@ New instance of implemented *Routing* is returned.
 			if typeof opts isnt 'object'
 				opts = uri: opts
 
-			assert ~Routing.METHODS.indexOf(method)
-			assert utils.isObject opts
-			assert opts.uri and typeof opts.uri is 'string'
-			assert typeof listener is 'function'
+			expect().some(Routing.METHODS).toBe method
+			expect(opts).toBe.simpleObject()
+			expect(opts.uri).toBe.string()
+			expect(listener).toBe.function()
 
 			opts.uri = new Routing.Uri opts.uri
 
@@ -111,8 +110,8 @@ New instance of implemented *Routing* is returned.
 
 		request: (opts, callback) ->
 
-			assert utils.isObject opts
-			assert typeof callback is 'function'
+			expect(opts).toBe.simpleObject()
+			expect(callback).toBe.function()
 
 			opts.method ?= Routing.GET
 			opts.uri ?= ''
@@ -142,9 +141,9 @@ New instance of implemented *Routing* is returned.
 
 		onRequest: (opts) ->
 
-			assert utils.isObject opts
+			expect(opts).toBe.simpleObject()
 
-			logtime = log.time 'onRequest'
+			logtime = log.time 'new request'
 			log "Resolve `#{JSON.stringify(opts)}` request"
 
 			# create request

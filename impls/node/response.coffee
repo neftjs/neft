@@ -13,7 +13,7 @@ HEADERS =
 METHOD_HEADERS =
 	OPTIONS:
 		'Access-Control-Allow-Origin': (opts) ->
-			"#{opts.routing.protocol}://#{opts.routing.host}:#{opts.protocol.port}"
+			"#{opts.routing.protocol}://#{opts.routing.host}:#{opts.routing.port}"
 		'Allow': 'GET, POST, PUT, DELETE'
 
 GZIP_ENCODING_HEADERS =
@@ -120,6 +120,7 @@ module.exports = (pending) ->
 
 		# write headers
 		setHeaders obj, HEADERS
+		setHeaders obj, headers if headers = METHOD_HEADERS[obj.serverReq.method]
 
 		# set status
 		serverRes.statusCode = @status
