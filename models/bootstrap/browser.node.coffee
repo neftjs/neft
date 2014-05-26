@@ -4,36 +4,40 @@
 
 Model = Model.View()
 
-module.exports = (App) -> new class BrowserBootstrapModel extends App.Model.Client().View()
+module.exports = (App) -> 
 
-	APP_JS_URI: 'app.js'
-	JS_BUNDLE_FILE_PATH: './build/bundles/browser.js'
+	class BrowserBootstrapModel extends App.Model.Client().View()
 
-	reservedUris: ['app.js', 'favicon.ico']
-	_reservedUrisRe: do =>
-		re = ''
-		re += "#{utils.addSlashes(uri)}|" for uri in @::reservedUris
-		re = re.slice 0, -1
-		new RegExp re
+		APP_JS_URI: 'app.js'
+		JS_BUNDLE_FILE_PATH: './build/bundles/browser.js'
 
-	@view 'bootstrap/browser',
-	@client Routing.GET, '*',
-	getApp: (id, query, type, callback, req, next) ->
+		reservedUris: ['app.js', 'favicon.ico']
+		_reservedUrisRe: do =>
+			re = ''
+			re += "#{utils.addSlashes(uri)}|" for uri in @::reservedUris
+			re = re.slice 0, -1
+			new RegExp re
 
-		if req
+		@view 'bootstrap/browser',
+		@client Routing.GET, '*',
+		getApp: (id, query, type, callback, req, next) ->
 
-			# TODO: consider other robots and clients with legacy browsers
-			if req.type isnt Model.VIEW or # omit types other than view
-			   @_reservedUrisRe.test(req.uri) or # omit reserved URIs
-			   ~req.userAgent.indexOf('Googlebot') # omit google boot
-				return next()
+			if req
 
-		callback null,
-			title: App.config.name
-			appTextModeUrl: '/', # TODO
-			filename: App.routing.url + @APP_JS_URI
+				# TODO: consider other robots and clients with legacy browsers
+				if req.type isnt Model.VIEW or # omit types other than view
+				   @_reservedUrisRe.test(req.uri) or # omit reserved URIs
+				   ~req.userAgent.indexOf('Googlebot') # omit google boot
+					return next()
 
-	@client Routing.GET, @::APP_JS_URI,
-	getAppBundle: (id, query, type, callback) ->
+			callback null,
+				title: App.config.name
+				appTextModeUrl: '/', # TODO
+				filename: App.routing.url + @APP_JS_URI
 
-		callback null, fs.readFileSync @JS_BUNDLE_FILE_PATH, 'utf-8'
+		@client Routing.GET, @::APP_JS_URI,
+		getAppBundle: (id, query, type, callback) ->
+
+			callback null, fs.readFileSync @JS_BUNDLE_FILE_PATH, 'utf-8'
+
+	new BrowserBootstrapModel
