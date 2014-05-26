@@ -86,22 +86,9 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 
 	log.ok "Views has been successfully compiled"
 
-compileStylesTask = task 'compile:styles', 'Compile SVG styles into json format', ->
-
-	[svg2styles] = ['svg2styles'].map require
-
-	links input: './styles', output: STYLES_OUT, ext: '.json', (name, svg, callback) ->
-
-		svg2styles svg, null, (err, json) ->
-
-			callback JSON.stringify json, null, 4
-
-	log.ok "Styles has been successfully compiled"
-
 compileTask = task 'compile', 'Compile views and styles', ->
 
 	compileViewsTask()
-	compileStylesTask()
 
 linkModelsTask = task 'link:models', 'Generate list of models', ->
 
@@ -121,14 +108,13 @@ buildTask = task 'build', 'Build bundles for all supported environments', (opts,
 
 	buildBrowserTask opts, callback
 
-allTask = task 'all', 'Compile, build and link', (opts, callback) ->
+allTask = task 'all', 'Compile, build, link and run index', (opts, callback) ->
 
 	compileTask opts
 	linkTask opts
 	buildTask opts, callback
 
-runTask = task 'run', 'Compile, build, link and run index', (opts, callback) ->
+runTask = task 'run', 'Run server', (opts, callback) ->
 
-	allTask opts, ->
-		cp.fork './index.coffee'
-		callback()
+	cp.fork './index.coffee'
+	callback()
