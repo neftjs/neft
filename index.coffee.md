@@ -89,7 +89,7 @@ Clone passed `arg` deeply.
 Optional `opts` parameter can specify which types shouldn't be cloned.
 Functions are not clone by default (pass `{function: true}` to reverse this proccess).
 
-	exports.cloneDeep = do (optsDef={function: false}) -> (arg, opts=optsDef) ->
+	cloneDeep = exports.cloneDeep = do (optsDef={function: false}) -> (arg, opts=optsDef) ->
 
 		opts.function ?= false
 
@@ -98,7 +98,7 @@ Functions are not clone by default (pass `{function: true}` to reverse this proc
 		if result and typeof result is 'object'
 			for key, value of result when hasOwnProp.call result, key
 				if opts?[typeof value] isnt false
-					result[key] = exports.cloneDeep value
+					result[key] = cloneDeep value, opts
 
 		result
 
@@ -321,7 +321,7 @@ For arrays add to property name two brackets ('[]')
 
 	get = exports.get = (obj, path='', target) ->
 
-		expect(obj).toBe.object()
+		expect(obj).not().toBe.primitive()
 
 		switch typeof path
 
@@ -462,17 +462,6 @@ Remove all elements from the array, or all properties from the object.
 Polyfill for ES6 `Object.setPrototypeOf()`.
 
 	exports.setPrototypeOf = setPrototypeOf = do ->
-
-		if Object.setPrototypeOf?
-			return Object.setPrototypeOf
-
-		if Object.__proto__
-			return (obj, proto) ->
-
-				expect(obj).toBe.object()
-
-				obj.__proto__ = proto
-				obj
 
 		return (obj, proto) ->
 
@@ -685,20 +674,29 @@ Backward `simplify()` operation.
 			optsCtors = opts.constructors
 			optsInsts = opts.instances
 
-			# set references
-			for objI, refs of references
-				obj = objects[objI]
+			# list of all referenced objects ids
+			refsIds = []
 
-				for ref in refs
-					if optsProps
+			# set references
+			if optsProps
+				for objI, refs of references
+					obj = objects[objI]
+
+					for ref in refs
+						refsIds.push obj[ref].value
 						obj[ref].value = objects[obj[ref].value]
-					else
+			else
+				for objI, refs of references
+					obj = objects[objI]
+
+					for ref in refs
+						refsIds.push obj[ref]
 						obj[ref] = objects[obj[ref]]
 
 			# set properties
 			if optsProps
 				for obj in objects
-					for key, value of obj when obj.hasOwnProperty key # TODO rethink db bug
+					for key, value of obj when obj.hasOwnProperty key
 						defObjProp obj, key, value
 
 			# set protos
@@ -708,13 +706,21 @@ Backward `simplify()` operation.
 			# set objects as instances
 			if optsInsts
 				for objI, func of constructors
-					setPrototypeOf objects[objI], func::
+					objects[objI] = setPrototypeOf objects[objI], func::
 
 			# .. or set ctors as properties
 			else if optsCtors
 				for objI, func of constructors
 					ctorPropConfig.value = func
 					defObjProp objects[objI], 'constructor', ctorPropConfig
+
+			# update references, because same of them could changed by `setPrototypeOf`
+			refId = 0
+			for objI, refs of references
+				obj = objects[objI]
+
+				for ref in refs
+					obj[ref] = objects[refsIds[refId++]]
 
 			objects[0]
 
