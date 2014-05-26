@@ -311,7 +311,8 @@ Update all documents in the collection.
 
 	Emitter = require 'emitter'
 
-	Db = utils.merge Db, utils.merge Emitter::, new Emitter
+	utils.merge Db, Emitter::
+	utils.merge Db, new Emitter
 
 ### Events
 
