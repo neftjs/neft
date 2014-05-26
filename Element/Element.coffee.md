@@ -5,20 +5,24 @@ View Structure Element
 
 	'use strict'
 
-	defineProp = Object.defineProperty
-	isArray = Array.isArray
+	[utils, expect, Emitter] = ['utils', 'expect', 'emitter'].map require
 
-	[utils] = ['utils'].map require
-
-	{assert} = console
+	{isArray} = Array
 
 *class* Element
 ----------------
 
-	module.exports = (impl, modules) -> class Element
+	module.exports = (impl, modules) -> class Element extends Emitter
 
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
+
+### Events
+
+		@CHILD_APPEND = 'childAppend'
+		@CHILD_REMOVE = 'childRemove'
+		@TEXT_CHANGE = 'textChange'
+		@VISIBILITY_CHANGE = 'visibilityChange'
 
 ### Static
 
@@ -26,14 +30,14 @@ View Structure Element
 
 		@modules = modules
 
-#### *Element* fromHTML(*string*)
+#### *Element* fromHTML(*String*)
 
 Create new *Element* instance based on *HTML*.
 The whole structure will be returned.
 
 		@fromHTML = (html) ->
 
-			assert html and typeof html is 'string'
+			expect(html).toBe.truthy().string()
 
 			elem = Element.factory()
 			impl.parseHTML.call elem, html
@@ -56,8 +60,11 @@ Constructor is instance of *Events* class, so after every initializing
 
 		constructor: ->
 
-			@children = []
-			@attrs = new modules.Attrs @
+			super
+
+			utils.defProp @, 'children', 'e', []
+			utils.defProp @, 'attrs', 'e', new modules.Attrs @
+			utils.defProp @, '_parent', 'ew', null
 
 ### Properties
 
@@ -70,12 +77,11 @@ Only first set value will be saved.
 It's *readonly* property.
 
 			name:
-				configurable: true
 				set: (value) ->
 
-					assert value and typeof value is 'string'
+					expect(value).toBe.truthy().string()
 
-					defineProp @, 'name', value: value
+					utils.defProp @, 'name', 'e', value
 
 #### *Array* children
 
@@ -91,26 +97,23 @@ Use `parent` property to manipulate children.
 Link to other *Element*.
 Value will automatically change `children`.
 
-			_parent:
-				value: null
-				writable: true
-
 			parent:
 
 				get: -> @_parent
 
 				set: (value) ->
 
-					assert @ isnt value
+					expect(@).not().toBe value
 
 					parent = @_parent
 
-					if parent is value then return
+					return if parent is value
 
 					# remove element
 					index = parent and parent.children.indexOf @
 					if parent and ~index
 
+						parent.trigger Element.CHILD_REMOVE, @
 						parent.children.splice index, 1
 						impl.child.remove.call parent, @
 
@@ -119,10 +122,11 @@ Value will automatically change `children`.
 					# append element
 					if parent and not ~parent.children.indexOf @
 
+						parent.trigger Element.CHILD_APPEND, @
 						parent.children.push @
 						impl.child.append.call parent, @
 
-#### *boolean* visible
+#### *Boolean* visible
 
 			visible:
 
@@ -132,16 +136,17 @@ Value will automatically change `children`.
 
 				set: (value) ->
 
-					assert typeof value is 'boolean'
+					expect(value).toBe.boolean()
 
-					if @visible is value then return
+					return if @visible is value
 
 					impl.visible.set.call @, value
+					@trigger Element.VISIBILITY_CHANGE, value
 
 					for child in @children
 						child.visible = value
 
-#### *number* index
+#### *Number* index
 
 Position of *Element* in the parent.
 Can be changed.
@@ -156,14 +161,14 @@ Can be changed.
 
 				set: (value) ->
 
-					assert @parent
-					assert typeof value is 'number'
-					assert value >= 0 and isFinite value
-					assert value < @parent.children.length
+					expect(@parent).toBe.truthy()
+					expect(value).toBe.integer()
+					expect(value >= 0).toBe.truthy()
+					expect(value < @parent.children.length).toBe.truthy()
 
 					impl.index.set.call @, value
 
-#### *string* text
+#### *String* text
 
 			text:
 
@@ -171,13 +176,16 @@ Can be changed.
 
 				set: (value) ->
 
-					value += ''
+					expect(value).toBe.string()
 
 					# remove all children
 					elem.parent = undefined while elem = @children[0]
 
 					# set text
 					impl.text.set.call @, value
+
+					# trigger event
+					@trigger Element.TEXT_CHANGE
 
 #### *Attrs* attrs
 
@@ -204,10 +212,10 @@ Returns new instance of *Element* with the same properties.
 			clone: value: ->
 
 				clone = new Element
-				if @name then clone.name = @name
 
 				impl.clone.call @, clone
 
+				clone.name = @name if @name
 				clone.visible = @visible
 
 				clone
@@ -233,26 +241,34 @@ Returns cloned *Element* will all new instances of children.
 
 			queryAll: value: (selector, target=[]) ->
 
-				assert isArray target
-				assert typeof selector is 'string'
+				expect(target).toBe.array()
+				expect(selector).toBe.string()
+
+				return target unless @children
+
 				selector = selector.trim()
-				assert selector
+				expect(selector).toBe.truthy()
 
 				impl.queryAll.call @, selector.trim(), target
+
 				target
 
 #### replace(*Element*, *Element*)
 
 			replace: value: (oldElement, newElement) ->
 
-				assert oldElement instanceof Element
-				assert newElement instanceof Element
-				assert oldElement.parent is @
+				expect(oldElement).toBe.any Element
+				expect(newElement).toBe.any Element
+				expect(oldElement.parent).toBe @
 
 				{children} = @
 
 				# call impl
 				impl.replace.call @, oldElement, newElement
+
+				# trigger events
+				@trigger Element.CHILD_REMOVE, oldElement
+				@trigger Element.CHILD_APPEND, newElement
 
 				# update new element
 				newElement._parent = oldElement._parent

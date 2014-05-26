@@ -10,7 +10,7 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	[utils, log] = ['utils', 'log'].map require
+	[utils, expect, log, Emitter] = ['utils', 'expect', 'log', 'emitter'].map require
 
 	{assert} = console
 
@@ -27,6 +27,11 @@ features. Physical file should be easy to load and parse.
 		@__name__ = 'File'
 		@__path__ = 'File'
 
+		@CREATE = 'create'
+
+		utils.merge @, Emitter::
+		utils.merge @, new Emitter
+
 		@Element = require('./Element/index.coffee.md')
 		@Unit = require('./unit.coffee.md') @
 		@Elem = require('./elem.coffee.md') @
@@ -42,9 +47,9 @@ features. Physical file should be easy to load and parse.
 
 			(path, html) ->
 
-				assert path and typeof path is 'string'
-				assert not files[path]
-				assert html and typeof html is 'string'
+				expect(path).toBe.truthy().string()
+				expect().some(files).not().toBe path
+				expect(html).toBe.truthy().string()
 
 				logtime = log.time 'from html'
 				log "Parse `#{path}` from HTML"
@@ -65,19 +70,19 @@ features. Physical file should be easy to load and parse.
 #### *File* fromJSON(*String*, *String|Object*)
 
 		@fromJSON = (path, json) ->
-
-			assert path and typeof path is 'string'
-			assert not files[path]
-			assert json and (typeof json is 'string' or utils.isObject json)
+			expect(path).toBe.truthy().string()
+			expect().some(files).not().toBe path
 
 			# parse json
 			if typeof json is 'string'
 				json = utils.tryFunc JSON.parse, null, [json], json
-				assert utils.isObject json
+
+			expect(json).toBe.simpleObject()
 
 			# put ctors
+			ns = File: File
 			for i, ctor of ctors = json.constructors
-				ctors[i] = eval ctor
+				ctors[i] = utils.get ns, ctor
 
 			# save to storage
 			files[path] = json
@@ -95,9 +100,6 @@ features. Physical file should be easy to load and parse.
 			if pool[path]?.length
 				return pool[path].pop()
 
-			logtime = log.time 'factory'
-			log "Factory new `#{path}` view"
-
 			# from json
 			json = files[path]
 			assert json
@@ -105,7 +107,7 @@ features. Physical file should be easy to load and parse.
 			json = utils.cloneDeep json
 			json = utils.assemble json
 
-			log.end logtime
+			File.trigger File.CREATE, json
 
 			json
 
@@ -124,9 +126,9 @@ features. Physical file should be easy to load and parse.
 
 			(@path, @node) ->
 
-				assert path and typeof path is 'string'
-				assert node instanceof File.Element
-				assert not files[path]
+				expect(path).toBe.truthy().string()
+				expect(node).toBe.any File.Element
+				expect().some(files).not().toBe path
 
 				# set properties
 				@pathbase = path.substring 0, path.lastIndexOf('/') + 1
@@ -194,8 +196,8 @@ features. Physical file should be easy to load and parse.
 			optsDef = {}
 			(opts=optsDef) ->
 
-				assert opts and typeof opts is 'object'
-				assert not @isRendered
+				expect(opts).toBe.simpleObject()
+				expect(@isRendered).toBe.falsy()
 
 				@isRendered = true
 
@@ -217,7 +219,7 @@ features. Physical file should be easy to load and parse.
 
 			->
 
-				assert @isRendered
+				expect(@isRendered).toBe.truthy()
 
 				@isRendered = false
 

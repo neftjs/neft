@@ -129,6 +129,8 @@ module.exports = ->
 				children = node.children
 				oldIndex = @_node.index
 
+				return if index is oldIndex
+
 				children.splice index, 0, children.splice(oldIndex, 1)[0]
 				updateIndexes children, min(index, oldIndex)
 
