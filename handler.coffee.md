@@ -50,7 +50,7 @@ Handler
 
 ### Properties
 
-		method: 0
+		method: ''
 		uri: null
 		schema: null
 		listener: null
@@ -102,6 +102,8 @@ Handler
 
 					res.off Routing.Response.DESTROY, callback
 					callback handlerCallbackError
+
+				log "Use `#{@method} #{@uri}` handler"
 
 				utils.tryFunc @listener, @, [req, res, next], next
 
