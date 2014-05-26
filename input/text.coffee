@@ -10,4 +10,6 @@ module.exports = (File, Input) -> class InputText extends Input
 		super node, node.text
 
 	parse: ->
-		@node.text = @toString arguments
+		str = @toString arguments
+		str += '' if typeof str isnt 'string'
+		@node.text = str

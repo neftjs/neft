@@ -67,8 +67,7 @@ module.exports = (File) -> class Input
 	###
 	toString: (storages) ->
 		{get} = @
-		func = null
-		eval "func = function(storages){ #{@_func} }"
+		func = new Function 'get', 'storages', @_func
 
-		toString = @toString = (storages) -> try func storages
+		toString = @toString = (storages) -> try func get, storages
 		toString storages
