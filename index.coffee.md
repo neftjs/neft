@@ -28,12 +28,12 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 		@TIMES_LEN = 50
 
 		@MARKERS =
-			white: (str) -> str
-			green: (str) -> str
-			gray: (str) -> str
-			blue: (str) -> str
-			yellow: (str) -> str
-			red: (str) -> str
+			white: (str) -> "LOG: #{str}"
+			green: (str) -> "OK: #{str}"
+			gray: (str) -> "#{str}"
+			blue: (str) -> "INFO: #{str}"
+			yellow: (str) -> "WARN: #{str}"
+			red: (str) -> "ERROR: #{str}"
 			bold: (str) -> "**#{str}**"
 
 		@time = Date.now
@@ -111,10 +111,6 @@ Implementation
 			require './impls/node/index.coffee'
 		when utils.isBrowser
 			require './impls/browser/index.coffee'
-		when utils.isQML
-			require './impls/qml/index.coffee'
 
-	assert impl, "No log implementation found"
-
-	LogImpl = impl Log
+	LogImpl = if impl then impl Log else Log
 	module.exports = new LogImpl
