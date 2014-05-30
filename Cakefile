@@ -1,14 +1,16 @@
 'use strict'
 
-[fs, log, utils, cp] = ['fs-extra', 'log', 'utils', 'child_process'].map require
+[fs, log, utils, cp, groundskeeper, coffee, glob] = ['fs-extra', 'log', 'utils', 'child_process',
+	'groundskeeper', 'coffee-script', 'glob'].map require
 [bundle, links] = ['./cake/bundle.coffee', './cake/links.coffee'].map require
 
 {assert} = console
 
-option '-d', '--development', 'generate bundle for development'
+option '-r', '--release', 'generate bundle for release'
 
 OUT = './build/'
 BUNDLE_OUT = "#{OUT}bundles/"
+QML_BUNDLE_OUT = "#{BUNDLE_OUT}qml/"
 VIEWS_OUT = "#{OUT}views"
 STYLES_OUT = "#{OUT}styles"
 MODELS_OUT = "#{OUT}models"
@@ -23,10 +25,6 @@ init = (opts) ->
 	assert utils.isObject opts
 
 	initialized = true
-
-	# production mode
-	if not opts.development
-		log.warn "Production mode is not implemented yet"
 
 ###
 Override global cake `task`.
@@ -54,15 +52,24 @@ task = do (_super = global.task) -> (name, desc, callback) ->
 ###
 Build bundle file
 ###
-build = (type, callback) ->
+build = (type, opts, callback) ->
 
 	assert ~['qml', 'browser'].indexOf type
 
-	bundle (err, src) ->
+	bundle type, (err, src) ->
 
 		if err then return log.error err
 
-		out = "#{BUNDLE_OUT}#{type}.js"
+		out = opts?.out or "#{BUNDLE_OUT}#{type}.js"
+
+		# release mode
+		if opts?.release
+			cleaner = groundskeeper
+				namespace: ['expect']
+				replace: '\'\''
+			cleaner.write src
+			src = cleaner.toString()
+
 		fs.outputFileSync out, src
 
 		log.ok "#{utils.capitalize(type)} bundle saved as `#{out}`"
@@ -102,11 +109,41 @@ linkTask = task 'link', 'Generate needed lists of existed files', ->
 
 buildBrowserTask = task 'build:browser', 'Build bundle for browser environment', (opts, callback) ->
 
-	build 'browser', callback
+	build 'browser', release: opts.release, callback
+
+buildQmlTask = task 'build:qml', 'Build bundle for qml environment', (opts, callback) ->
+
+	stack = new utils.async.Stack
+
+	# generate script
+	stack.add null, (callback) ->
+		build 'qml', release: opts.release, out: "#{QML_BUNDLE_OUT}script.js", callback
+
+	stack.add null, (callback) ->
+		# copy qml files
+		fs.copySync './cake/bundle/qml', QML_BUNDLE_OUT
+
+		# compile coffee files
+		glob "#{QML_BUNDLE_OUT}**/*.coffee", (err, files) ->
+			if err then return log.error err
+
+			for filePath in files
+				file = fs.readFileSync filePath, 'utf-8'
+				js = coffee.compile file, bare: true
+				jsFilePath = filePath.replace '.coffee', '.js'
+				fs.writeFileSync jsFilePath, js
+				fs.unlinkSync filePath
+
+		callback()
+
+	stack.runAllSimultaneously callback
 
 buildTask = task 'build', 'Build bundles for all supported environments', (opts, callback) ->
 
-	buildBrowserTask opts, callback
+	stack = new utils.async.Stack
+	stack.add null, buildBrowserTask, opts
+	stack.add null, buildQmlTask, opts
+	stack.runAll callback
 
 allTask = task 'all', 'Compile, build, link and run index', (opts, callback) ->
 

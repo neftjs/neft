@@ -2,10 +2,10 @@
 
 [cp, path] = ['child_process', 'path'].map require
 
-module.exports = (callback) ->
+module.exports = (type, callback) ->
 
 	index = path.resolve __dirname, '../index.coffee'
-	child = cp.fork __dirname + '/bundle/process.coffee', [index], silent: true
+	child = cp.fork __dirname + '/bundle/process.coffee', [index, type], silent: true
 	child.on 'message', (msg) ->
 
 		child.kill()

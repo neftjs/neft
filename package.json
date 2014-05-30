@@ -21,6 +21,8 @@
     "view": "git+ssh://git@bitbucket.org:Kildyt/view.git"
   },
   "devDependencies": {
-    "fs-extra": "~0.8.1"
+    "fs-extra": "~0.8.1",
+    "glob": "^4.0.0",
+    "groundskeeper": "^0.1.8"
   }
 }

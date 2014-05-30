@@ -100,4 +100,4 @@ module.exports = (modules, paths) ->
 	r = replaceStr r, '\'{{declarations}}\'', stringify declarations
 	r = replaceStr r, '\'{{init}}\';', init
 
-	r
+	"try {#{r}} catch(err){ console.log(err.name, err.message, err.stack); }"
