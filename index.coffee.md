@@ -13,7 +13,7 @@ Utils
 	{isArray} = Array
 	{shift, pop} = Array::
 	createObject = Object.create
-	getPrototypeOf = Object.getPrototypeOf
+	{getPrototypeOf} = Object
 	objKeys = Object.keys
 	hasOwnProp = Object.hasOwnProperty
 	getObjOwnPropDesc = Object.getOwnPropertyDescriptor
@@ -242,7 +242,7 @@ Works like `Object.getOwnPropertyDescriptor` but lookup all prototypes, not only
 			desc = getObjOwnPropDesc obj, prop
 			return desc if desc
 
-			obj = getPrototypeOf.call obj
+			obj = getPrototypeOf obj
 
 ### lookupGetter()
 
