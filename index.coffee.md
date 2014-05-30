@@ -40,7 +40,7 @@ Environment information
 		when window?.document?
 			exports.isClient = exports.isBrowser = true
 
-		when Qt?.include
+		when Qt?.include?
 			exports.isClient = exports.isQML = true
 
 Utils for object, arrays and functions
