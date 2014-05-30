@@ -46,62 +46,6 @@ Environment information
 Utils for object, arrays and functions
 --------------------------------------
 
-### clone()
-
-Clone array, object or function.
-Prototype is copied (if exists).
-
-	exports.clone = do ->
-
-		cloneArray = (arr) ->
-
-			arr.slice()
-
-		cloneObject = (obj) ->
-
-			result = createObject getPrototypeOf obj
-
-			for key, value of obj when obj.hasOwnProperty(key)
-
-				result[key] = value
-
-			result
-
-		cloneFunction = (func) ->
-
-			newFunc = null
-			eval "newFunc=#{funcToString.call(func)}"
-
-			newFunc[key] = value for key, value of func
-
-			newFunc
-
-		(arg) ->
-
-			return cloneFunction(arg) if typeof arg is 'function'
-			return cloneArray(arg) if isArray arg
-			return cloneObject(arg) if arg and typeof arg is 'object'
-			arg
-
-### cloneDeep()
-
-Clone passed `arg` deeply.
-Optional `opts` parameter can specify which types shouldn't be cloned.
-Functions are not clone by default (pass `{function: true}` to reverse this proccess).
-
-	cloneDeep = exports.cloneDeep = do (optsDef={function: false}) -> (arg, opts=optsDef) ->
-
-		opts.function ?= false
-
-		result = exports.clone arg
-
-		if result and typeof result is 'object'
-			for key, value of result when hasOwnProp.call result, key
-				if opts?[typeof value] isnt false
-					result[key] = cloneDeep value, opts
-
-		result
-
 ### merge()
 
 Merge second object into the first one.
@@ -278,6 +222,43 @@ Object::__lookupSetter__ polyfill.
 
 Utils for objects and arrays
 ----------------------------
+
+### clone()
+
+Clone array or object.
+Prototype is copied (if exists).
+
+	clone = exports.clone = (arg) ->
+
+		if isArray arg
+			return arg.slice()
+
+		if typeof arg is 'object' and arg isnt null
+			result = createObject getPrototypeOf arg
+
+			for key in objKeys arg
+				result[key] = arg[key]
+
+			return result
+
+		arg
+
+### cloneDeep()
+
+Clone passed `arg` deeply.
+
+	cloneDeep = exports.cloneDeep = (arg) ->
+
+		result = clone arg
+
+		if typeof result is 'object' and result isnt null
+			for key in objKeys result
+				value = result[key]
+				if typeof result is 'object' and result isnt null
+					value = cloneDeep value
+				result[key] = cloneDeep value
+
+		result
 
 ### isArguments()
 
