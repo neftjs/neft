@@ -65,9 +65,11 @@ module.exports = (File) -> class Input
 	`utils.simplify()` currently does not support `fromJSON()` and `toJSON()` methods
 	on the constructors, so it's the only way to support such functionality.
 	###
-	toString: (storages) ->
+	toString: do (cache = {}) -> (storages) ->
 		{get} = @
-		func = new Function 'get', 'storages', @_func
 
-		toString = @toString = (storages) -> try func get, storages
-		toString storages
+		cache[@_func] ?= new Function 'get', 'storages', @_func
+
+		try cache[@_func] get, storages
+		#toString = @toString = (storages) -> try func get, storages
+		#toString storages
