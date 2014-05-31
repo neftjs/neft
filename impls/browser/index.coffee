@@ -46,8 +46,11 @@ exports.sendRequest = (opts, callback) ->
 
 	xhr.open opts.method, opts.url, true
 	xhr.setRequestHeader 'X-Expected-Type', Model.OBJECT
+	xhr.responseType = 'json'
 	xhr.onload = ->
-		response = utils.tryFunc JSON.parse, null, [xhr.response], xhr.response
+		response = xhr.response
+		if typeof response is 'string'
+			response = utils.tryFunc JSON.parse, null, [response], response
 		callback xhr.status, response
 
 	xhr.send()
