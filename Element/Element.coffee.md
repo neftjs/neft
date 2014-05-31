@@ -197,13 +197,21 @@ Instance of *Attrs* class.
 
 ### Methods
 
-#### stringify()
+#### *String* stringify()
 
 Returns *Element* as *HTML* string.
 
 			stringify: value: ->
 
 				impl.stringify.call @
+
+#### *String* stringifyChildren()
+
+Returns all children as *HTML* string.
+
+			stringifyChildren: value: ->
+
+				impl.stringifyChildren.call @
 
 #### *Element* clone()
 

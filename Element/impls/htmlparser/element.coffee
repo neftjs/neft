@@ -79,6 +79,10 @@ module.exports = ->
 
 		stringify.getOuterHTML @_node
 
+	stringifyChildren: ->
+
+		stringify.getInnerHTML @_node
+
 	clone: (clone) ->
 
 		node = clone._node = utils.clone @_node
