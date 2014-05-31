@@ -249,7 +249,7 @@ features. Physical file should be easy to load and parse.
 
 		toSimplifiedObject: ->
 
-			utils.simplify @, properties: true, protos: false, constructors: true
+			utils.simplify @, properties: false, protos: false, constructors: true
 
 #### toJSON()
 
