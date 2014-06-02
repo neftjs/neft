@@ -1,6 +1,6 @@
 'use strict'
 
-{assert} = console
+[expect] = ['expect'].map require
 
 cache = {}
 cachelen = 0
@@ -13,7 +13,7 @@ module.exports = (File) -> class Condition
 
 	constructor: (@node) ->
 
-		assert node instanceof File.Element
+		expect(node).toBe.any File.Element
 
 	node: null
 

@@ -1,8 +1,6 @@
 'use strict'
 
-[utils] = ['utils'].map require
-
-{assert} = console
+[utils, expect] = ['utils', 'expect'].map require
 
 module.exports = (File) -> class Iterator extends File.Elem
 
@@ -11,8 +9,8 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 	constructor: (@self, node) ->
 
-		assert self instanceof File
-		assert node instanceof File.Element
+		expect(self).toBe.any File
+		expect(node).toBe.any File.Element
 
 		prefix = if self.name then "#{self.name}-" else ''
 		name = "#{prefix}each[#{utils.uid()}]"

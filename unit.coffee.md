@@ -8,9 +8,7 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 	'use script'
 
-	[utils] = ['utils'].map require
-
-	{assert} = console
+	[utils, expect] = ['utils', 'expect'].map require
 
 *class* Unit
 ------------
@@ -24,8 +22,8 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 		constructor: (self, @name, node) ->
 
-			assert self instanceof File
-			assert name and typeof name is 'string'
+			expect(self).toBe.any File
+			expect(name).toBe.truthy().string()
 
 			# merge units from parent
 			@units = utils.clone self.units

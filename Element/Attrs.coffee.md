@@ -3,7 +3,8 @@ VS Attrs
 
 	'use strict'
 
-	{assert} = console
+	[expect] = ['expect'].map require
+
 	{isArray} = Array
 
 *class* Attrs
@@ -20,7 +21,7 @@ VS Attrs
 
 		constructor: (@_element) ->
 
-			assert _element instanceof Element
+			expect(_element).toBe.any Element
 
 ### Properties
 
@@ -37,7 +38,7 @@ If no target is specified, new array with attribute name and value will be retur
 
 		item: (i, target=[]) ->
 
-			assert isArray target
+			expect(target).toBe.array()
 
 			target[0] = undefined
 			target[1] = undefined
@@ -51,7 +52,7 @@ Get attribute value based on name.
 
 		get: (name) ->
 
-			assert name and typeof name is 'string'
+			expect(name).toBe.truthy().string()
 
 			impl.get.call @, name
 
@@ -62,6 +63,6 @@ Set value as `undefined` to remove attribute.
 
 		set: (name, value) ->
 
-			assert name and typeof name is 'string'
+			expect(name).toBe.truthy().string()
 
 			impl.set.call @, name, value

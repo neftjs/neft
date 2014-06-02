@@ -8,7 +8,7 @@ Represents an element placed in the file.
 
 	'use strict'
 
-	{assert} = console
+	[expect] = ['expect'].map require
 
 *class* Elem
 ------------
@@ -22,8 +22,8 @@ Represents an element placed in the file.
 
 		constructor: (@self, @name, @node) ->
 
-			assert self instanceof File
-			assert name and typeof name is 'string'
+			expect(self).toBe.any File
+			expect(name).toBe.truthy().string()
 
 			# get bodyNode
 			if node.children.length

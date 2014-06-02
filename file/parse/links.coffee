@@ -1,6 +1,5 @@
 'use strict'
 
-{assert} = console
 
 module.exports = (File) -> (file) ->
 
@@ -29,7 +28,6 @@ module.exports = (File) -> (file) ->
 
 		# get view
 		view = File.factory file.pathbase + href
-		assert view
 		links.push
 			view: view
 			namespace: namespace

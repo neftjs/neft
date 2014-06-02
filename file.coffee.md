@@ -12,8 +12,6 @@ features. Physical file should be easy to load and parse.
 
 	[utils, expect, log, Emitter] = ['utils', 'expect', 'log', 'emitter'].map require
 
-	{assert} = console
-
 	log = log.scope 'View'
 
 *class* File

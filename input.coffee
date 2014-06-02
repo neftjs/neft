@@ -1,9 +1,7 @@
 'use strict'
 
-[utils] = ['utils'].map require
+[utils, expect] = ['utils', 'expect'].map require
 coffee = require 'coffee-script' if utils.isNode
-
-{assert} = console
 
 module.exports = (File) -> class Input
 
@@ -18,8 +16,8 @@ module.exports = (File) -> class Input
 
 	constructor: (@node, text) ->
 
-		assert node instanceof File.Element
-		assert text and typeof text is 'string'
+		expect(node).toBe.any File.Element
+		expect(text).toBe.truthy().string()
 
 		# build toString()
 		func = ''
