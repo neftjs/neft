@@ -146,17 +146,24 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 
 		accessorsCfg = exports.merge get: undefined, set: undefined, descCfg
 
+		descCache = {}
+
 		(obj, prop, desc, getter, setter) ->
 
 			expect(obj).not().toBe.primitive()
 			expect(prop).toBe.string()
 			expect(desc).toBe.string()
 
+			# standardize desc into array [writable, enumerable, configurable]
+			unless descCache.hasOwnProperty desc
+				descCache[desc] = [has(desc, 'w'), has(desc, 'e'), has(desc, 'c')]
+			desc = descCache[desc]
+
 			# configure value
 			if setter is undefined
 				cfg = valueCfg
 				cfg.value = getter
-				cfg.writable = exports.has desc, 'w'
+				cfg.writable = desc[0]
 
 			# configure accessors
 			else
@@ -165,8 +172,8 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 				cfg.set = setter or undefined
 
 			# set common config
-			cfg.enumerable = exports.has desc, 'e'
-			cfg.configurable = exports.has desc, 'c'
+			cfg.enumerable = desc[1]
+			cfg.configurable = desc[2]
 
 			# set property
 			defObjProp obj, prop, cfg
@@ -804,7 +811,7 @@ Utils for arrays and strings
 
 Check whether array or string contains passed value.
 
-	exports.has = (any, elem) ->
+	has = exports.has = (any, elem) ->
 
 		expect(any?.indexOf).toBe.function()
 
