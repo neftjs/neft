@@ -73,3 +73,12 @@ module.exports = (File) -> class Input
 		try cache[@_func] get, storages
 		#toString = @toString = (storages) -> try func get, storages
 		#toString storages
+
+	clone: (original, self) ->
+
+		clone = Object.create @
+
+		clone.clone = undefined
+		clone.node = original.node.getCopiedElement @node, self.node
+
+		clone

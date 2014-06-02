@@ -85,11 +85,13 @@ module.exports = ->
 
 	clone: (clone) ->
 
-		node = clone._node = utils.clone @_node
+		node = clone._node = Object.create @_node
 
 		node._element = clone
-		node.attribs = node.attribs and utils.clone @_node.attribs
+		node.index = -1
+		node.attribs &&= utils.clone @_node.attribs
 		node.children = []
+		node.visible = @_node.visible
 
 	child:
 

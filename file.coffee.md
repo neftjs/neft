@@ -30,7 +30,7 @@ features. Physical file should be easy to load and parse.
 		@CREATE = 'create'
 
 		utils.merge @, Emitter::
-		utils.merge @, new Emitter
+		Emitter.call @
 
 		@Element = require('./Element/index.coffee.md')
 		@Unit = require('./unit.coffee.md') @
@@ -48,7 +48,7 @@ features. Physical file should be easy to load and parse.
 			(path, html) ->
 
 				expect(path).toBe.truthy().string()
-				expect().some(files).not().toBe path
+				expect().some(Object.keys(files)).not().toBe path
 				expect(html).toBe.truthy().string()
 
 				logtime = log.time 'from html'
@@ -69,9 +69,9 @@ features. Physical file should be easy to load and parse.
 
 #### *File* fromJSON(*String*, *String|Object*)
 
-		@fromJSON = (path, json) ->
+		@fromJSON = do (ctorsCache={}) -> (path, json) ->
 			expect(path).toBe.truthy().string()
-			expect().some(files).not().toBe path
+			expect().some(Object.keys(files)).not().toBe path
 
 			# parse json
 			if typeof json is 'string'
@@ -82,34 +82,32 @@ features. Physical file should be easy to load and parse.
 			# put ctors
 			ns = File: File
 			for i, ctor of ctors = json.constructors
-				ctors[i] = utils.get ns, ctor
+				ctorsCache[ctor] ?= utils.get ns, ctor
+				ctors[i] = ctorsCache[ctor]
 
 			# save to storage
+			json = utils.assemble json
 			files[path] = json
 
-			# factory
-			File.factory path
+			json
 
 #### *File* factory(*string*)
 
 		@factory = (path) ->
 
-			assert path and typeof path is 'string'
+			expect(path).toBe.truthy().string()
+			expect().some(Object.keys(files)).toBe path
 
 			# from pool
 			if pool[path]?.length
 				return pool[path].pop()
 
-			# from json
-			json = files[path]
-			assert json
+			# clone original
+			file = files[path].clone()
 
-			json = utils.cloneDeep json
-			json = utils.assemble json
+			File.trigger File.CREATE, file
 
-			File.trigger File.CREATE, json
-
-			json
+			file
 
 ### Constructor(*string*, *File.Element*)
 
@@ -138,20 +136,20 @@ features. Physical file should be easy to load and parse.
 				@init()
 
 				# clone tmp
-				@_tmp = utils.cloneDeep @_tmp
+				utils.defProp @, '_tmp', 'e', utils.cloneDeep @_tmp
 
 				# parse
 				links @
 				attrs @
 				units @
+				iterators @
 				source @
 				elems @
 				storage @
-				iterators @
 				conditions @
 
 				# save to storage
-				files[@path] = @toSimplifiedObject()
+				files[@path] = @
 
 				@
 
@@ -233,7 +231,42 @@ features. Physical file should be easy to load and parse.
 
 		clone: ->
 
-			File.factory @path
+			clone = Object.create @
+
+			clone.clone = undefined
+			clone._tmp = utils.cloneDeep File::_tmp
+			clone.isRendered = false
+			clone.node = @node.cloneDeep()
+			clone.sourceNode &&= @sourceNode.cloneDeep()
+			clone.parent = null
+
+			# elems
+			unless utils.isEmpty @elems
+				clone.elems = {}
+				for elemName, elems of @elems
+					clone.elems[elemName] = []
+					for elem, i in elems
+						clone.elems[elemName][i] = elem.clone @, clone
+
+			# inputs
+			unless utils.isEmpty @inputs
+				clone.inputs = []
+				for input, i in @inputs
+					clone.inputs[i] = input.clone @, clone
+
+			# conditions
+			unless utils.isEmpty @conditions
+				clone.conditions = []
+				for condition, i in @conditions
+					clone.conditions[i] = condition.clone @, clone
+
+			# iterators
+			unless utils.isEmpty @iterators
+				clone.iterators = []
+				for iterator, i in @iterators
+					clone.iterators[i] = iterator.clone @, clone
+
+			clone
 
 #### destroy()
 

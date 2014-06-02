@@ -10,11 +10,10 @@ module.exports = (File) -> (file) ->
 	for name of file.units
 
 		nodes = file.node.queryAll name
-
 		unless nodes? then continue
 
 		for node in nodes
 			nameElems = elems[name] ?= []
-			nameElems.push elem = new File.Elem file, name, node
+			nameElems.push new File.Elem file, name, node
 
 	null

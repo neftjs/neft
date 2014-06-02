@@ -30,3 +30,12 @@ module.exports = (File) -> class Condition
 			cache[exp] = new Function "try { return #{cond}; } catch(_){ return false; }"
 
 		return cache[exp].call()
+
+	clone: (original, self) ->
+
+		clone = Object.create @
+
+		clone.clone = undefined
+		clone.node = original.node.getCopiedElement @node, self.node
+
+		clone

@@ -26,5 +26,13 @@ module.exports = (File) -> class Iterator extends File.Elem
 		@unit = unit.id
 		@bodyNode.parent = undefined
 
-	unit: null
+	unit: ''
 	storage: null
+
+	clone: (original, self) ->
+
+		clone = super
+
+		clone.storage = utils.cloneDeep @storage
+
+		clone

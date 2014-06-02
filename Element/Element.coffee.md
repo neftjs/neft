@@ -219,12 +219,10 @@ Returns new instance of *Element* with the same properties.
 
 			clone: value: ->
 
-				clone = new Element
+				clone = Object.create @
+				Element.call clone
 
 				impl.clone.call @, clone
-
-				clone.name = @name if @name
-				clone.visible = @visible
 
 				clone
 
@@ -236,12 +234,9 @@ Returns cloned *Element* will all new instances of children.
 
 				clone = @clone()
 
-				cloneChild = (child) ->
-
+				for child in @children
 					clonedChild = child.cloneDeep()
 					clonedChild.parent = clone
-
-				@children.forEach cloneChild
 
 				clone
 

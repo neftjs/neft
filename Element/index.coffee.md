@@ -10,8 +10,6 @@ Provide easy to use wrapper for `DOM` and other engines to parse `HTML`.
 
 	[utils] = ['utils'].map require
 
-	{assert} = console
-
 	impl = require './impls/htmlparser/index.coffee'
 
 	modules = {}

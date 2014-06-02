@@ -37,3 +37,16 @@ Represents an element placed in the file.
 		self: null
 		node: null
 		bodyNode: null
+
+### Methods
+
+		clone: (original, self) ->
+
+			clone = Object.create @
+
+			clone.clone = undefined
+			clone.self = self
+			clone.node = original.node.getCopiedElement @node, self.node
+			clone.bodyNode = clone.node.children[0]
+
+			clone
