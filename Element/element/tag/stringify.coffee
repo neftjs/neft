@@ -13,7 +13,7 @@ getOuterHTML = (elem) ->
 	if elem._text isnt undefined
 		return elem._text
 
-	unless elem.name
+	if not elem.name or elem.name is 'unit'
 		return getInnerHTML elem
 
 	ret = "<" + elem.name
