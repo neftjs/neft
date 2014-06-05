@@ -817,6 +817,32 @@ Check whether array or string contains passed value.
 
 		!!~any.indexOf elem
 
+Utils for objects
+-----------------
+
+Create new array based on the object properties / values.
+Optional `valueGen` is called with three parameters: value, key and passed object.
+By default array of object values is returned.
+
+### objectToArray()
+
+	exports.objectToArray = (obj, valueGen, target) ->
+
+		keys = objKeys obj
+		target ?= keys
+
+		expect(obj).toBe.object()
+		expect().defined(valueGen).toBe.function()
+		expect(target).toBe.array()
+
+		for key, i in keys
+
+			value = if valueGen then valueGen(key, obj[key], obj) else obj[key]
+
+			target[i] = value
+
+		target
+
 Utils for arrays
 ----------------
 
