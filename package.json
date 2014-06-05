@@ -7,8 +7,6 @@
 		"emitter": "git+ssh://git@github.com:Kildyt/emitter.git",
 		"log": "git+ssh://git@bitbucket.org:Kildyt/log.git",
 		"htmlparser2": ">=3.3.0",
-		"domelementtype": "git+ssh://git@github.com:fb55/DomElementType.git",
-		"domutils": "git+ssh://git@github.com:fb55/DomUtils.git",
 		"coffee-script": ">=1.6.3"
 	}
 }

@@ -30,7 +30,7 @@ features. Physical file should be easy to load and parse.
 		utils.merge @, Emitter::
 		Emitter.call @
 
-		@Element = require('./Element/index.coffee.md')
+		@Element = require('./Element/index')
 		@Unit = require('./unit.coffee.md') @
 		@Elem = require('./elem.coffee.md') @
 		@Input = require('./input.coffee') @
@@ -247,19 +247,19 @@ features. Physical file should be easy to load and parse.
 						clone.elems[elemName][i] = elem.clone @, clone
 
 			# inputs
-			unless utils.isEmpty @inputs
+			if @inputs.length
 				clone.inputs = []
 				for input, i in @inputs
 					clone.inputs[i] = input.clone @, clone
 
 			# conditions
-			unless utils.isEmpty @conditions
+			if @conditions.length
 				clone.conditions = []
 				for condition, i in @conditions
 					clone.conditions[i] = condition.clone @, clone
 
 			# iterators
-			unless utils.isEmpty @iterators
+			if @iterators.length
 				clone.iterators = []
 				for iterator, i in @iterators
 					clone.iterators[i] = iterator.clone @, clone

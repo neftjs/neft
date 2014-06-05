@@ -7,7 +7,7 @@ module.exports = (File) -> (file) ->
 
 	forNode = (elem) ->
 
-		unless elem.attrs.get 'each'
+		unless elem.attrs?.get 'each'
 			return elem.children?.forEach forNode
 
 		# get iterator

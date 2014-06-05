@@ -9,8 +9,9 @@ forNode = (elem) ->
 
 	i = 0
 	loop
+		break unless elem.attrs
 		elem.attrs.item i, attr
-		unless attr[0] then break
+		break unless attr[0]
 
 		if attr[1][0] is '[' or attr[1][0] is '{'
 			try

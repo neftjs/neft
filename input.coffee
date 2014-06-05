@@ -45,8 +45,8 @@ module.exports = (File) -> class Input
 		for storage in storages when storage
 
 			# from attr
-			if storage instanceof File.Element.modules.Attrs
-				r = storage.get prop
+			if storage instanceof File.Element.Tag
+				r = storage.attrs.get prop
 				if r?
 					return r
 
@@ -66,11 +66,10 @@ module.exports = (File) -> class Input
 	toString: do (cache = {}) -> (storages) ->
 		{get} = @
 
-		cache[@_func] ?= new Function 'get', 'storages', @_func
+		func = cache[@_func] ?= new Function 'get', 'storages', @_func
 
-		try cache[@_func] get, storages
-		#toString = @toString = (storages) -> try func get, storages
-		#toString storages
+		toString = @toString = (storages) -> try func get, storages
+		toString storages
 
 	clone: (original, self) ->
 

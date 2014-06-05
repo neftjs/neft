@@ -39,6 +39,7 @@ isRemove = (node) ->
 removeEmptyTexts = (node) ->
 
 	nodes = node.children
+	return unless nodes
 	length = nodes.length
 	j = 0
 	for i in [0..length] by 1

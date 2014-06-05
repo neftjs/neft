@@ -27,7 +27,7 @@ Represents an element placed in the file.
 
 			# get bodyNode
 			if node.children.length
-				bodyNode = @bodyNode = File.Element.factory()
+				bodyNode = @bodyNode = new File.Element.Tag
 				elem.parent = bodyNode while elem = node.children[0]
 				bodyNode.parent = node
 

@@ -18,15 +18,17 @@ module.exports = (File) ->
 
 			# text
 			text = elem.text
-			InputRE.lastIndex = 0
-			if text and InputRE.test text
-				inputs.push new Input.Text elem
+			if text isnt undefined
+				InputRE.lastIndex = 0
+				if text and InputRE.test text
+					inputs.push new Input.Text elem
 
 			# attrs
 			i = 0
 			loop
+				break unless elem.attrs
 				elem.attrs.item i, attr
-				unless attr[0] then break
+				break unless attr[0]
 
 				if InputRE.test attr[1]
 					inputs.push new Input.Attr elem, attr[0]
