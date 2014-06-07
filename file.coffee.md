@@ -22,6 +22,13 @@ features. Physical file should be easy to load and parse.
 		files = @_files = {}
 		pool = {}
 
+		getTmp = ->
+			usedUnits: []
+			changes: []
+			hidden: []
+			conditions: []
+			iterators: []
+
 		@__name__ = 'File'
 		@__path__ = 'File'
 
@@ -134,7 +141,7 @@ features. Physical file should be easy to load and parse.
 				@init()
 
 				# clone tmp
-				utils.defProp @, '_tmp', 'e', utils.cloneDeep @_tmp
+				utils.defProp @, '_tmp', '', getTmp()
 
 				# parse
 				links @
@@ -152,13 +159,6 @@ features. Physical file should be easy to load and parse.
 				@
 
 ### Properties
-
-		_tmp:
-			usedUnits: []
-			changes: []
-			hidden: []
-			conditions: []
-			iterators: []
 
 		isRendered: false
 		node: null
@@ -232,7 +232,7 @@ features. Physical file should be easy to load and parse.
 			clone = Object.create @
 
 			clone.clone = undefined
-			clone._tmp = utils.cloneDeep File::_tmp
+			clone._tmp = getTmp()
 			clone.isRendered = false
 			clone.node = @node.cloneDeep()
 			clone.sourceNode &&= @sourceNode.cloneDeep()
