@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (pending) ->
+module.exports = ->
 
 	getUserAgent: ->
 

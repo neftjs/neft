@@ -1,33 +1,24 @@
 'use strict'
 
-[log, View, StylesView] = ['log', 'view', 'styles/view'].map require
+[log, View] = ['log', 'view'].map require
 
 log = log.scope 'Routing'
 
-prevResp = null
-
-module.exports = (pending) ->
+module.exports = (impl) ->
 
 	send: ->
 
 		log.info "Got response `#{@req.method}` `#{@req.uri}`"
 
-		# mark previous response as unused
-		prevResp?.destroy()
-		prevResp = @
+		# save response into internal impl object
+		impl.resp = @
 
 		switch true
-			when @data instanceof StylesView
-
-				# clear styles and destroy view when it won't be needed
-				@on @constructor.DESTROY, ->
-					@data.clear()
-					@data.view.destroy()
-
 			when @data instanceof View
-				document.body.innerHTML = @data.node.stringify()
+				# TODO: detect when styles are not using and serve HTML
+				# document.body.innerHTML = @data.node.stringify()
 
-				# destroy view when it won't be needed
+				# destroy view on response destroy
 				@on @constructor.DESTROY, -> @data.destroy()
 
 			else

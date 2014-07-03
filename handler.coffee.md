@@ -98,7 +98,7 @@ Handler
 				# on callback fail
 				next = (err) =>
 
-					if err then log.warn "Error raised in `#{@uri}` handler (`#{err}`)"
+					if err then log.warn "Error raised in `#{@uri}` handler (`#{err}`)" + err.stack
 
 					res.off Routing.Response.DESTROY, callback
 					callback handlerCallbackError

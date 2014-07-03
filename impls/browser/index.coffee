@@ -2,13 +2,18 @@
 
 [utils, Model] = ['utils', 'model'].map require
 
-exports.Request = require('./request.coffee')()
-exports.Response = require('./response.coffee')()
+impl = {}
+
+exports.Request = require('./request.coffee') impl
+exports.Response = require('./response.coffee') impl
 
 exports.init = ->
 
 	# Send internal request to change the page based on the URI
 	changePage = (uri) =>
+
+		# mark previous response as unused
+		impl.resp?.destroy()
 
 		# change browser URI in the history
 		history.pushState null, '', uri
