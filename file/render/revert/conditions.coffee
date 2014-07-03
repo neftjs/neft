@@ -5,7 +5,10 @@ module.exports = (File) -> (file) ->
 	{conditions, hidden} = file._tmp
 
 	# back conditions
-	while (attr = conditions.pop()) and (node = conditions.pop())
+	while conditions.length
+		attr = conditions.pop()
+		node = conditions.pop()
+
 		node.attrs.set 'if', attr
 
 	# back hidden into visible

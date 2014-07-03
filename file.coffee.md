@@ -75,6 +75,7 @@ features. Physical file should be easy to load and parse.
 #### *File* fromJSON(*String*, *String|Object*)
 
 		@fromJSON = do (ctorsCache={}) -> (path, json) ->
+
 			expect(path).toBe.truthy().string()
 			expect().some(Object.keys(files)).not().toBe path
 
