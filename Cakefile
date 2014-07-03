@@ -1,7 +1,7 @@
 'use strict'
 
-[fs, log, utils, cp, groundskeeper, coffee, glob] = ['fs-extra', 'log', 'utils', 'child_process',
-	'groundskeeper', 'coffee-script', 'glob'].map require
+[fs, log, utils, cp, groundskeeper, coffee, glob, path] = ['fs-extra', 'log', 'utils', 'child_process',
+	'groundskeeper', 'coffee-script', 'glob', 'path'].map require
 [bundle, links] = ['./cake/bundle.coffee', './cake/links.coffee'].map require
 
 {assert} = console
@@ -56,6 +56,8 @@ build = (type, opts, callback) ->
 
 	assert ~['qml', 'browser'].indexOf type
 
+	PROPS_DEFS = ///utils\.defProp\(([a-z@]+),\s?'([a-zA-Z0-9_]+)',\s?'([a-z]*)',\s?([^,]+)\);///
+
 	bundle type, (err, src) ->
 
 		if err then return log.error err
@@ -64,11 +66,20 @@ build = (type, opts, callback) ->
 
 		# release mode
 		if opts?.release
+
+			# remove `expect`s
 			cleaner = groundskeeper
 				namespace: ['expect']
-				replace: '\'\''
+				replace: 'true'
 			cleaner.write src
 			src = cleaner.toString()
+
+			# change properties definitions into simple assignments
+			lines = src.split "\n"
+			for line, i in lines
+				if PROPS_DEFS.test line
+					lines[i] = line.replace PROPS_DEFS, '$1.$2 = $4;'
+			src = lines.join "\n"
 
 		fs.outputFileSync out, src
 
@@ -84,10 +95,9 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 
 		View.fromHTML name, html
 
-		for path of View._files
-			view = View.factory path
+		for filePath, view of View._files
 			json = JSON.stringify view, null, 4
-			write json, path
+			write json, filePath
 
 		utils.clear View._files
 
@@ -103,9 +113,23 @@ linkModelsTask = task 'link:models', 'Generate list of models', ->
 
 	log.ok "Models has been successfully linked"
 
+linkStylesTask = task 'link:styles', 'Generate list of styles', ->
+
+	links
+		input: './styles'
+		output: STYLES_OUT
+		ext: '.json'
+		test: (filePath, stat) ->
+			path.extname(filePath) is '.json'
+		callback: (name, file, callback) ->
+			callback()
+
+	log.ok "Styles has been successfully linked"
+
 linkTask = task 'link', 'Generate needed lists of existed files', ->
 
 	linkModelsTask()
+	linkStylesTask()
 
 buildBrowserTask = task 'build:browser', 'Build bundle for browser environment', (opts, callback) ->
 

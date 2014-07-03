@@ -23,6 +23,6 @@
   "devDependencies": {
     "fs-extra": "~0.8.1",
     "glob": "^4.0.0",
-    "groundskeeper": "^0.1.8"
+    "groundskeeper": "git+ssh://git@github.com:Kildyt/groundskeeper.git#no_definitions"
   }
 }

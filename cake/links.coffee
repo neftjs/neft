@@ -11,8 +11,9 @@ forEachFile = (dir, callback) ->
 	for file in fs.readdirSync dir
 		filePath = "#{dir}/#{file}"
 
-		if fs.statSync(filePath).isFile()
-			callback filePath
+		stat = fs.statSync(filePath)
+		if stat.isFile()
+			callback filePath, stat
 			continue
 
 		forEachFile filePath, callback
@@ -22,6 +23,7 @@ module.exports = (opts, callback) ->
 	ENV_RE = ///(.+)\.([a-z]+)///
 
 	opts.ext ?= '.coffee'
+	callback ||= opts.callback
 
 	# clean
 	fs.removeSync opts.output
@@ -30,13 +32,15 @@ module.exports = (opts, callback) ->
 	files = []
 
 	# do callback per each file
-	forEachFile opts.input, (filePath) ->
+	forEachFile opts.input, (filePath, stat) ->
 		file = fs.readFileSync filePath, 'utf-8'
 
 		filePath = path.relative opts.input, filePath
 		ext = path.extname filePath
 		filename = name = filePath.slice 0, -ext.length
 		[_, name, env] = ENV_RE.exec name if ENV_RE.test name
+
+		return if opts.test?(filePath, stat) is false
 
 		return unless callback
 
