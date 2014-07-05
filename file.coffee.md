@@ -53,7 +53,7 @@ features. Physical file should be easy to load and parse.
 			(path, html) ->
 
 				expect(path).toBe.truthy().string()
-				expect().some(Object.keys(files)).not().toBe path
+				expect().some().keys(files).not().toBe path
 				expect(html).toBe.truthy().string()
 
 				logtime = log.time 'from html'
@@ -77,7 +77,7 @@ features. Physical file should be easy to load and parse.
 		@fromJSON = do (ctorsCache={}) -> (path, json) ->
 
 			expect(path).toBe.truthy().string()
-			expect().some(Object.keys(files)).not().toBe path
+			expect().some().keys(files).not().toBe path
 
 			# parse json
 			if typeof json is 'string'
@@ -102,7 +102,7 @@ features. Physical file should be easy to load and parse.
 		@factory = (path) ->
 
 			expect(path).toBe.truthy().string()
-			expect().some(Object.keys(files)).toBe path
+			expect().some().keys(files).toBe path
 
 			# from pool
 			if pool[path]?.length
