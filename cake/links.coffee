@@ -1,6 +1,6 @@
 'use strict'
 
-[fs, path, utils] = ['fs-extra', 'path', 'utils'].map require
+[fs, path, utils, expect] = ['fs-extra', 'path', 'utils', 'expect'].map require
 
 ###
 Call callback for each file.
@@ -18,55 +18,119 @@ forEachFile = (dir, callback) ->
 
 		forEachFile filePath, callback
 
-module.exports = (opts, callback) ->
+module.exports = class LinksBuilder
 
-	ENV_RE = ///(.+)\.([a-z]+)///
+	@ENV_RE = ///(.+)\.([a-z]+)///
 
-	opts.ext ?= '.coffee'
-	callback ||= opts.callback
+	@build = (opts) ->
+		builder = new LinksBuilder opts
+		builder.run()
+		builder
 
-	# clean
-	fs.removeSync opts.output
-	fs.removeSync "#{opts.output}#{opts.ext}"
+	constructor: (opts) ->
 
-	files = []
+		expect(opts).toBe.simpleObject()
+		expect().defined(opts.files).toBe.array()
+		expect().defined(opts.ext).toBe.truthy().string()
+		expect().defined(opts.input).toBe.truthy().string()
+		expect().defined(opts.output).toBe.truthy().string()
+		expect().defined(opts.onFile).toBe.function()
 
-	# do callback per each file
-	forEachFile opts.input, (filePath, stat) ->
-		file = fs.readFileSync filePath, 'utf-8'
+		utils.fill @, opts
 
-		filePath = path.relative opts.input, filePath
-		ext = path.extname filePath
-		filename = name = filePath.slice 0, -ext.length
-		[_, name, env] = ENV_RE.exec name if ENV_RE.test name
+		@files ?= []
 
-		return if opts.test?(filePath, stat) is false
+	ext: '.coffee'
+	input: ''
+	output: ''
+	onFile: null
+	files: null
 
-		return unless callback
+	cleanOutput: ->
+		fs.removeSync @output
+		fs.removeSync "#{@output}.coffee"
 
-		callback name, file, (result, customName) ->
-			customName ?= name
-			filename = customName
-			if env then filename += ".#{env}"
-			files.push file = name: customName, filename: filename, env: env			
+	findFiles: ->
 
-			return unless result
-			file.result = true
-			fs.outputFileSync "#{opts.output}/#{filename}#{opts.ext}", result
+		forEachFile @input, (filePath, stat) =>
+			file = fs.readFileSync filePath, 'utf-8'
 
-	# generate file requiring found files
-	baseDir = path.relative path.dirname(opts.output), opts.output
+			filePath = path.relative @input, filePath
+			ext = path.extname filePath
+			filename = name = filePath.slice 0, -ext.length
 
-	str = "utils = require 'utils'\n"
-	for file in files
+			if LinksBuilder.ENV_RE.test name
+				[_, name, env] = LinksBuilder.ENV_RE.exec name
 
-		prefix = if file.result then './' else '../'
-		fileBaseDir = "#{prefix}#{baseDir}"
+			file = new LinksBuilder.File
+				name: name
+				filename: filename
+				filepath: filePath
+				env: env
+				data: file
 
-		if file.env
-			env = utils.capitalize file.env
-			str += "if utils.is#{env} then "
+			return if @onFile?(file) is false
 
-		str += "exports['#{file.name}'] = require('#{fileBaseDir}/#{file.filename}#{opts.ext}');\n"
+			@addFile file
 
-	fs.outputFileSync "#{opts.output}.coffee", str
+	addFile: (file) ->
+
+		expect(file).toBe.any LinksBuilder.File
+		expect().some(@files).not().toBe.file
+
+		@files.push file
+
+	writeFile: (file) ->
+
+		if file.env then file.filename += ".#{file.env}"
+
+		file.saved = true
+		fs.outputFileSync "#{@output}/#{file.filename}#{@ext}", file.data
+
+	save: ->
+
+		baseDir = path.relative path.dirname(@output), @output
+
+		str = "utils = require 'utils'\n"
+		for file in @files
+
+			prefix = if file.saved then './' else '../'
+			fileBaseDir = "#{prefix}#{baseDir}"
+
+			if file.env
+				env = utils.capitalize file.env
+				str += "if utils.is#{env} then "
+
+			str += "exports['#{file.name}'] = require('#{fileBaseDir}/#{file.filename}#{@ext}');\n"
+
+		fs.outputFileSync "#{@output}.coffee", str
+
+	run: ->
+
+		@cleanOutput()
+		@findFiles()
+		@save()
+
+module.exports.File = class File
+
+	constructor: (opts) ->
+
+		expect(opts).toBe.simpleObject()
+		expect(opts.saved).toBe undefined
+		expect(opts.name).toBe.truthy().string()
+		expect().defined(opts.filename).toBe.truthy().string()
+		expect().defined(opts.filepath).toBe.truthy().string()
+		expect().defined(opts.env).toBe.truthy().string()
+		expect(opts.data).toBe.truthy().string()
+
+		utils.fill @, opts
+
+		@filename = @name unless @filename
+		@filepath = @name unless @filepath
+
+	saved: false
+	name: ''
+	filename: ''
+	filepath: ''
+	env: ''
+	data: ''

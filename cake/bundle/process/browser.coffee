@@ -9,9 +9,12 @@ utils.isBrowser = true
 ###
 Provide necessary standard browser globals
 ###
-global.window = {}
+global.window =
+	addEventListener: ->
 global.location = pathname: ''
 global.navigator = userAgent: ''
+global.innerWidth = 1024
+global.innerHeight = 600
 global.document =
 	body:
 		appendChild: ->

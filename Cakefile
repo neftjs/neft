@@ -2,7 +2,7 @@
 
 [fs, log, utils, cp, groundskeeper, coffee, glob, path] = ['fs-extra', 'log', 'utils', 'child_process',
 	'groundskeeper', 'coffee-script', 'glob', 'path'].map require
-[bundle, links] = ['./cake/bundle.coffee', './cake/links.coffee'].map require
+[bundle, LinksBuilder] = ['./cake/bundle.coffee', './cake/links.coffee'].map require
 
 {assert} = console
 
@@ -91,15 +91,36 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 
 	[View] = ['view'].map require
 
-	links input: './views', output: VIEWS_OUT, ext: '.json', (name, html, write) ->
+	saved = {}
 
+	View.on View.ERROR, (name) ->
+		path = "#{name}.html"
+		html = fs.readFileSync "./views/#{path}", 'utf-8'
 		View.fromHTML name, html
 
-		for filePath, view of View._files
-			json = JSON.stringify view, null, 4
-			write json, filePath
+	builder = new LinksBuilder
+		input: './views'
+		output: VIEWS_OUT
+		ext: '.json'
 
-		utils.clear View._files
+	builder.cleanOutput()
+	builder.findFiles()
+
+	for file in builder.files
+		unless View._files[file.name]
+			View.fromHTML file.name, file.data
+
+	utils.clear builder.files
+
+	for name, view of View._files
+		json = JSON.stringify view, null, 4
+		file = new LinksBuilder.File
+			name: name
+			data: json
+		builder.addFile file
+		builder.writeFile file
+
+	builder.save()
 
 	log.ok "Views has been successfully compiled"
 
@@ -109,20 +130,20 @@ compileTask = task 'compile', 'Compile views and styles', ->
 
 linkModelsTask = task 'link:models', 'Generate list of models', ->
 
-	links input: './models', output: MODELS_OUT, (name, file, callback) -> callback()
+	LinksBuilder.build
+		input: './models'
+		output: MODELS_OUT
 
 	log.ok "Models has been successfully linked"
 
 linkStylesTask = task 'link:styles', 'Generate list of styles', ->
 
-	links
+	LinksBuilder.build
 		input: './styles'
 		output: STYLES_OUT
 		ext: '.json'
-		test: (filePath, stat) ->
-			path.extname(filePath) is '.json'
-		callback: (name, file, callback) ->
-			callback()
+		onFile: (file) ->
+			path.extname(file.filepath) is '.json'
 
 	log.ok "Styles has been successfully linked"
 
