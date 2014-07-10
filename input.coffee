@@ -5,6 +5,8 @@ coffee = require 'coffee-script' if utils.isNode
 
 module.exports = (File) -> class Input
 
+	{Element} = File
+
 	@__name__ = 'Input'
 	@__path__ = 'File.Input'
 
@@ -45,15 +47,16 @@ module.exports = (File) -> class Input
 		for storage in storages when storage
 
 			# from attr
-			if storage instanceof File.Element.Tag
+			if storage instanceof Element
 				r = storage.attrs.get prop
-				if r?
-					return r
+				return r if r?
+			else
 
-			# from object
-			r = storage[prop]
-			if r?
-				return r
+				# from object
+				r = storage[prop]
+				return r if r?
+
+		null
 
 	parse: ->
 		throw "`parse()` method not implemented"
