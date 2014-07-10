@@ -187,13 +187,7 @@ features. Physical file should be easy to load and parse.
 
 #### render()
 
-		render: do ->
-
-			elems = require('./file/render/parse/elems.coffee') File
-			source = require('./file/render/parse/source.coffee') File
-			storage = require('./file/render/parse/storage.coffee') File
-			conditions = require('./file/render/parse/conditions.coffee') File
-			iterators = require('./file/render/parse/iterators.coffee') File
+		render: render = do ->
 
 			optsDef = {}
 			(opts=optsDef) ->
@@ -203,13 +197,33 @@ features. Physical file should be easy to load and parse.
 
 				@isRendered = true
 
-				storage @, opts
-				iterators @, opts
-				conditions @, opts
-				elems @, opts
-				source @, opts
+				# storage
+				for input in @inputs
+					render.storage @, opts, input
+
+				# iterators
+				for iterator in @iterators
+					render.iterator @, opts, iterator
+
+				# conditions
+				for condition in @conditions
+					render.condition @, opts, condition
+				
+				# elems
+				for name, subelems of @elems
+					for elem in subelems
+						render.elem @, opts, elem
+
+				# source
+				render.source @, opts
 
 				null
+
+		render.storage = require('./file/render/parse/storage.coffee') File
+		render.iterator = require('./file/render/parse/iterator.coffee') File
+		render.condition = require('./file/render/parse/condition.coffee') File
+		render.elem = require('./file/render/parse/elem.coffee') File
+		render.source = require('./file/render/parse/source.coffee') File
 
 #### revert() ->
 

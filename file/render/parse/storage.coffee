@@ -2,16 +2,12 @@
 
 tmp = []
 
-module.exports = (File) -> (file, opts) ->
+module.exports = (File) -> (file, opts, input) ->
 
-	storage = opts?.storage
-	sourceStorage = opts?.source?.storage
-	node = opts?.source?.node
+	unless input.node.visible then return
 
-	for input in file.inputs when input.node.visible
-		tmp[0] = node
-		tmp[1] = sourceStorage
-		tmp[2] = storage
-		input.parse tmp
+	tmp[0] = opts.source?.node
+	tmp[1] = opts.source?.storage
+	tmp[2] = opts.storage
 
-	null
+	input.parse tmp
