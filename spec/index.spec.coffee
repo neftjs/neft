@@ -86,7 +86,7 @@ describe 'View', ->
 		view = view.clone()
 
 		renderParse view
-		expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+		expect(view.node.stringify()).toBe '<b></b>'
 		view.revert()
 		expect(view.node.stringify()).toBe '<a></a>'
 
@@ -97,7 +97,7 @@ describe 'View', ->
 
 		renderParse view
 		expect(source.node.stringify()).toBe '<a></a>'
-		expect(view.node.stringify()).toBe '<unit><unit>1</unit></unit>'
+		expect(view.node.stringify()).toBe '1'
 
 	it 'can render clone separately', ->
 
@@ -105,7 +105,7 @@ describe 'View', ->
 		view = source.clone()
 
 		renderParse view
-		expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+		expect(view.node.stringify()).toBe '<b></b>'
 		expect(source.node.stringify()).toBe '<a></a>'
 
 	it 'can put elem body in unit', ->
@@ -117,7 +117,7 @@ describe 'View', ->
 
 		renderParse view
 		expect(source.node.stringify()).toBe '<a><b></b></a>'
-		expect(view.node.stringify()).toBe '<unit><b></b></unit>'
+		expect(view.node.stringify()).toBe '<b></b>'
 
 	it 'reverted view is identical as before render', ->
 
@@ -146,7 +146,7 @@ describe 'View Storage', ->
 
 			renderParse view
 			expect(source.node.stringify()).toBe '<a x="2"></a>'
-			expect(view.node.stringify()).toBe '<unit>2</unit>'
+			expect(view.node.stringify()).toBe '2'
 
 		it 'by passed storage', ->
 
@@ -156,7 +156,7 @@ describe 'View Storage', ->
 			renderParse view,
 				storage: x: 2, b: {a: 1}
 			expect(source.node.stringify()).toBe '<a></a>'
-			expect(view.node.stringify()).toBe '<unit>2, 1</unit>'
+			expect(view.node.stringify()).toBe '2, 1'
 
 describe 'View Condition', ->
 
@@ -183,7 +183,7 @@ describe 'View Condition', ->
 
 		renderParse view
 		expect(source.node.stringify()).toBe '<a></a>'
-		expect(view.node.stringify()).toBe '<unit></unit>'
+		expect(view.node.stringify()).toBe ''
 
 	it 'can be declared using storage input', ->
 
@@ -231,9 +231,4 @@ describe 'View Iterator', ->
 		renderParse view
 		expect(source.node.stringify()).toBe '<a data="1,2"></a>'
 		expect(view.node.stringify()).toBe '' +
-			'<unit>' +
-				'<ul>' +
-					'<unit>1</unit>' +
-					'<unit>2</unit>' +
-				'</ul>' +
-			'</unit>'
+			'<ul>12</ul>'

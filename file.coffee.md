@@ -33,6 +33,7 @@ features. Physical file should be easy to load and parse.
 		@__path__ = 'File'
 
 		@CREATE = 'create'
+		@ERROR = 'error'
 
 		utils.merge @, Emitter::
 		Emitter.call @
@@ -101,6 +102,10 @@ features. Physical file should be easy to load and parse.
 
 		@factory = (path) ->
 
+			unless files.hasOwnProperty path
+				# TODO: trigger here instance of `LoadError` class
+				File.trigger File.ERROR, path
+
 			expect(path).toBe.truthy().string()
 			expect().some().keys(files).toBe path
 
@@ -142,7 +147,7 @@ features. Physical file should be easy to load and parse.
 				@init()
 
 				# clone tmp
-				utils.defProp @, '_tmp', '', getTmp()
+				utils.defProp @, '_tmp', 'w', getTmp()
 
 				# parse
 				links @
@@ -236,7 +241,7 @@ features. Physical file should be easy to load and parse.
 			clone._tmp = getTmp()
 			clone.isRendered = false
 			clone.node = @node.cloneDeep()
-			clone.sourceNode &&= @sourceNode.cloneDeep()
+			clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
 			clone.parent = null
 
 			# elems
