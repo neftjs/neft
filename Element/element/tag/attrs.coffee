@@ -43,9 +43,12 @@ exports.set = (name, value) ->
 	i = tag.attrsNames?[name]
 	return if i is undefined
 
-	# call observers
-	if tag.onAttrChange
-		if tag.attrsValues[i] isnt value
-			tag.onAttrChange name, value
+	old = tag.attrsValues[i]
+	return if old is value
 
+	# save change
 	tag.attrsValues[i] = value
+
+	# call observers
+	tag.onAttrChanged name, old
+

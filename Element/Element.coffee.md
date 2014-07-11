@@ -56,7 +56,8 @@ Value will automatically change `children`.
 
 					expect(@).not().toBe value
 
-					return if @_parent is value
+					old = @_parent
+					return if old is value
 
 					# remove element
 					if @_parent
@@ -64,15 +65,15 @@ Value will automatically change `children`.
 						index = @_parent.children.indexOf @
 						@_parent.children.splice index, 1
 
-					# call observers
-					@onParentChange? value
-
 					@_parent = parent = value
 
 					# append element
 					if parent
 						expect().some(@_parent.children).not().toBe @
 						parent.children.push @
+
+					# call observers
+					@onParentChanged old
 
 #### *Boolean* visible
 
@@ -88,16 +89,17 @@ Value will automatically change `children`.
 
 					expect(value).toBe.boolean()
 
-					return if @_visible is value
-
-					# call observers
-					@onVisibilityChange? value
+					old = @_visible
+					return if old is value
 
 					@_visible = value
 
 					if @children
 						for child in @children
 							child.visible = value
+
+					# call observers
+					@onVisibilityChanged old
 
 					null
 
@@ -117,7 +119,7 @@ Returns new instance of *Element* with the same properties.
 
 			cloneDeep: value: clone
 
-		@Observer = require('./observer') @
+		require('./observer') @
 		if utils.isNode
 			@parser = require('./element/parser') @
 		@Tag = require('./element/tag') @

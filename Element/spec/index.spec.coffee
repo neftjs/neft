@@ -192,83 +192,74 @@ describe 'View Element', ->
 
 		it 'onAttrChange works properly', ->
 
-			old = args = null
+			value = args = null
 			elem = Element.fromHTML '<b a="1"></b>'
 			tag = elem.children[0]
 
-			new Observer tag,
-				onAttrChange: (node, name) ->
-					old = node.attrs.get name
-					args = [arguments...]
+			tag.onAttrChanged.connect (node, name) ->
+				value = node.attrs.get name
+				args = [arguments...]
 
 			tag.attrs.set 'a', 2
 
-			expect(args).toEqual [tag, 'a', 2]
-			expect(old).toBe '1'
+			expect(args).toEqual [tag, 'a', '1']
+			expect(value).toBe 2
 
 		it 'onVisibilityChange works properly', ->
 
-			old = args = null
+			value = args = null
 			elem = Element.fromHTML '<b></b>'
 			tag = elem.children[0]
 
-			new Observer tag,
-				onVisibilityChange: (node) ->
-					old = node.visible
-					args = [arguments...]
+			tag.onVisibilityChanged.connect (node) ->
+				value = node.visible
+				args = [arguments...]
 
 			tag.visible = false
 
-			expect(args).toEqual [tag, false, undefined]
-			expect(old).toBe true
+			expect(args).toEqual [tag, true, undefined]
+			expect(value).toBe false
 
 		it 'onTextChange works properly', ->
 
-			old = args = null
+			text = args = null
 			elem = Element.fromHTML '<b>a</b>'
 			tag = elem.children[0].children[0]
 
-			new Observer tag,
-				onTextChange: (node) ->
-					old = node.text
-					args = [arguments...]
+			tag.onTextChanged.connect (node) ->
+				text = node.text
+				args = [arguments...]
 
 			tag.text = 'b'
 
-			expect(args).toEqual [tag, 'b', undefined]
-			expect(old).toBe 'a'
+			expect(args).toEqual [tag, 'a', undefined]
+			expect(text).toBe 'b'
 
 		it 'onParentChange works properly', ->
 
-			old = args = null
+			value = args = null
 			elem = Element.fromHTML '<a></a><b></b>'
 			tag1 = elem.children[0]
 			tag2 = elem.children[1]
 
-			new Observer tag2,
-				onParentChange: (node) ->
-					old = node.parent
-					args = [arguments...]
+			tag2.onParentChanged.connect (node) ->
+				value = node.parent
+				args = [arguments...]
 
 			tag2.parent = tag1
 
-			expect(args).toEqual [tag2, tag1, undefined]
-			expect(old).toBe elem
+			expect(args).toEqual [tag2, elem, undefined]
+			expect(value).toBe tag1
 
-		it 'deep flag works properly', ->
+		it 'disconnect() works as expected', ->
 
-			old = args = null
-			elem = Element.fromHTML '<b>a</b>'
+			ok = true
+			elem = Element.fromHTML '<b></b>'
 			tag = elem.children[0]
-			text = tag.children[0]
 
-			new Observer tag,
-				deep: true
-				onTextChange: (node) ->
-					old = node.text
-					args = [arguments...]
+			tag.onVisibilityChanged.connect listener = -> ok = false
+			tag.onVisibilityChanged.disconnect listener
 
-			text.text = 'b'
+			tag.visible = false
 
-			expect(args).toEqual [text, 'b', undefined]
-			expect(old).toBe 'a'
+			expect(ok).toBeTruthy()

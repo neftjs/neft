@@ -23,10 +23,11 @@ module.exports = (Element) -> class Text extends Element
 
 				expect(value).toBe.string()
 
-				return if @_text is value
-
-				# call observers
-				@onTextChange? value
+				old = @_text
+				return if old is value
 
 				# set text
 				@_text = value
+
+				# call observers
+				@onTextChanged old

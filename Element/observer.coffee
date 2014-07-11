@@ -2,67 +2,65 @@
 
 [utils, expect] = ['utils', 'expect'].map require
 
-module.exports = (Element) -> class Observer
+module.exports = (Element) ->
 
-	@EVENTS = ['onAttrChange', 'onParentChange', 'onTextChange', 'onVisibilityChange']
-
-	###
-	Register event listener on the node
-	###
-	connect = (observer, node, name) ->
-
-		unless node[name] then do ->
-			node[name] = event = (a, b) -> trigger event, @, a, b
-			event.listenersLen = 0
-
-		node[name][node[name].listenersLen++] = observer[name]
+	EVENTS = ['onAttrChanged', 'onParentChanged', 'onTextChanged', 'onVisibilityChanged']
 
 	###
-	Call `connect` on the node and on the each child recursively
+	Function creates new Event function which can be used to
+	trigger, connect and disconnect listeners.
 	###
-	connectDeep = (observer, node, name) ->
+	createEvent = do ->
+		useProto = do ->
+			try
+				func = ->
+				proto = func.__proto__ = {a: 1}
+				if func.a is 1
+					return true
+				false
 
-		connect observer, node, name
+		(node) ->
+			event = (a, b) ->
+				if event.store
+					for func in event.store
+						func event.node, a, b
+				null
 
-		if node.children
-			for child in node.children
-				connectDeep observer, child, name
-			
-		null
+			event.node = node
+			event.store = null
+
+			if useProto
+				event.__proto__ = EventPrototype
+			else
+				utils.merge event, EventPrototype
+
+			event
 
 	###
-	Call all registered listeners
+	Event prototype joined into each Event function
 	###
-	trigger = (event, node, a, b) ->
+	EventPrototype =
+		connect: (listener, opts) ->
+			expect(listener).toBe.function()
+			expect().defined(opts).toBe.simpleObject()
+			expect().some(@store).not().toBe listener if @store
 
-		expect(event).toBe.function()
-		expect(node).toBe.any Element
+			store = @store ?= []
+			store.push listener
 
-		for i in [0...event.listenersLen]
-			event[i] node, a, b
+		disconnect: (listener) ->
+			expect(listener).toBe.function()
+			expect().some(@store).toBe listener
 
-		null
+			utils.remove @store, listener
 
-	constructor: (@node, opts) ->
-
-		expect(node).toBe.any Element
-		expect(opts).toBe.simpleObject()
-		expect().defined(opts.deep).toBe.boolean()
-		expect().defined(opts[event]).toBe.function() for event in Observer.EVENTS
-
-		utils.fill @, opts
-
-		# chosen function depends on the `deep` flag
-		if opts.deep
-			connectFunc = connectDeep
-		else
-			connectFunc = connect
-
-		# register listeners
-		for name in Observer.EVENTS when @[name]			
-			connectFunc @, node, name
-
-	# mark listeners in the prototype
-	for event in Observer.EVENTS
-		Element::[event] = null
-		@::[event] = null
+	# add events getters into Element prototype
+	for name in EVENTS
+		do (name=name) =>
+			Object.defineProperty Element::, name,
+				enumerable: true
+				configurable: true
+				get: ->
+					event = createEvent(@)
+					utils.defProp @, name, 'ce', event
+					event
