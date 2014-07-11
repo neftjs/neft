@@ -38,7 +38,14 @@ exports.set = (name, value) ->
 
 	expect(name).toBe.truthy().string()
 
-	i = exports.tag.attrsNames?[name]
+	{tag} = exports
+
+	i = tag.attrsNames?[name]
 	return if i is undefined
 
-	exports.tag.attrsValues[i] = value
+	# call observers
+	if tag.onAttrChange
+		if tag.attrsValues[i] isnt value
+			tag.onAttrChange name, value
+
+	tag.attrsValues[i] = value

@@ -25,5 +25,8 @@ module.exports = (Element) -> class Text extends Element
 
 				return if @_text is value
 
+				# call observers
+				@onTextChange? value
+
 				# set text
 				@_text = value

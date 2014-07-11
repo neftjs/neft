@@ -64,6 +64,9 @@ Value will automatically change `children`.
 						index = @_parent.children.indexOf @
 						@_parent.children.splice index, 1
 
+					# call observers
+					@onParentChange? value
+
 					@_parent = parent = value
 
 					# append element
@@ -86,6 +89,9 @@ Value will automatically change `children`.
 					expect(value).toBe.boolean()
 
 					return if @_visible is value
+
+					# call observers
+					@onVisibilityChange? value
 
 					@_visible = value
 
@@ -111,6 +117,7 @@ Returns new instance of *Element* with the same properties.
 
 			cloneDeep: value: clone
 
+		@Observer = require('./observer') @
 		if utils.isNode
 			@parser = require('./element/parser') @
 		@Tag = require('./element/tag') @
