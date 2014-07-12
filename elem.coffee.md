@@ -8,7 +8,7 @@ Represents an element placed in the file.
 
 	'use strict'
 
-	[expect] = ['expect'].map require
+	[utils, expect] = ['utils', 'expect'].map require
 
 *class* Elem
 ------------
@@ -33,6 +33,7 @@ Represents an element placed in the file.
 
 ### Properties
 
+		uid: ''
 		name: ''
 		self: null
 		node: null
@@ -46,6 +47,7 @@ Represents an element placed in the file.
 
 			clone.clone = undefined
 			clone.self = self
+			clone.uid = utils.uid()
 			clone.node = original.node.getCopiedElement @node, self.node
 			clone.bodyNode = clone.node.children[0]
 

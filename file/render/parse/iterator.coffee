@@ -6,18 +6,17 @@
 
 module.exports = (File) -> (file, opts, iterator) ->
 
-	{iterators, hidden, changes, usedUnits} = file._tmp
+	{parentChanges, usedUnits} = file._tmp
 	source = opts.source
 
 	node = iterator.node
 	unless node.visible then return
 
 	each = node.attrs.get 'each'
-	iterators.push node, each
 
 	unless isArray each
 		node.visible = false
-		hidden.push node
+		file._tmp.visibleChanges.push node
 		return
 
 	for elem, i in each
@@ -34,10 +33,7 @@ module.exports = (File) -> (file, opts, iterator) ->
 
 		# replace
 		newChild.parent = node
-		changes.push node, null, newChild
-
-	# remove `if` attrs
-	node.attrs.set 'each', undefined
+		parentChanges.push node, null, newChild
 
 	# restore opts
 	opts.source = source

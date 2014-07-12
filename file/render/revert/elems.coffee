@@ -2,24 +2,7 @@
 
 module.exports = (File) -> (file) ->
 
-	{changes, usedUnits} = file._tmp
-
-	# back changes
-	while changes.length
-
-		newChild = changes.pop()
-		oldChild = changes.pop()
-		node = changes.pop()
-
-		unless newChild
-			oldChild.parent = node
-			continue
-
-		unless oldChild
-			newChild.parent = undefined
-			continue
-
-		node.replace newChild, oldChild
+	{usedUnits} = file._tmp
 
 	# clear and destroy used units
 	while usedUnits.length

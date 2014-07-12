@@ -1,7 +1,7 @@
 'use strict'
 
 View = require('../index.coffee.md')
-[utils] = ['utils'].map require
+[utils, Emitter] = ['utils', 'emitter'].map require
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
@@ -125,6 +125,7 @@ describe 'View', ->
 			<unit name="b"><ul each="#{data}"><div if="#{each[i]} > 0">1</div></ul></unit>
 			<unit name="a"><b data="#{data}"></b></unit>
 			<a data="[0,1]"></a>'
+		view = view.clone()
 		ver1 = utils.simplify view
 
 		view.render()
@@ -157,6 +158,43 @@ describe 'View Storage', ->
 				storage: x: 2, b: {a: 1}
 			expect(source.node.stringify()).toBe '<a></a>'
 			expect(view.node.stringify()).toBe '2, 1'
+
+	describe 'supports realtime changes', ->
+
+		it 'on attrs', ->
+
+			source = View.fromHTML uid(), '<unit name="a">#{x}</unit><a x="2"></a>'
+			view = source.clone()
+			elem = view.node.children[0]
+
+			renderParse view
+			elem.attrs.set 'x', 1
+			expect(view.node.stringify()).toBe '1'
+			view.revert()
+			expect(elem.attrs.get('x')).toBe '2'
+
+		it 'on storage', ->
+
+			source = View.fromHTML uid(), '#{x}'
+			view = source.clone()
+
+			storage = new Emitter
+			utils.merge storage, x: 1
+
+			renderParse view,
+				storage: storage
+			expect(view.node.stringify()).toBe '1'
+
+			storage.x = 2
+			storage.trigger 'change', 'x', 1
+			expect(view.node.stringify()).toBe '2'
+
+			view.revert()
+			storage.x = 1
+			storage.trigger 'change', 'x', 2
+			renderParse view,
+				storage: storage
+			expect(view.node.stringify()).toBe '1'
 
 describe 'View Condition', ->
 
@@ -205,9 +243,10 @@ describe 'View Iterator', ->
 		renderParse view
 		expect(view.node.stringify()).toBe '<ul>11</ul>'
 
-	it 'public data per loop', ->
+	it 'render data in loops', ->
 
 		view = View.fromHTML uid(), '<ul each="[{v:1},{v:2}]">#{each[i].v}</ul>'
+		view = view.clone()
 
 		renderParse view
 		expect(view.node.stringify()).toBe '<ul>12</ul>'
@@ -218,7 +257,7 @@ describe 'View Iterator', ->
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<ul each="1,2"></ul>'
+		expect(source.node.stringify()).toBe '<ul></ul>'
 		expect(view.node.stringify()).toBe '<ul>12</ul>'
 
 	it 'works in units with elems', ->

@@ -4,11 +4,8 @@
 
 module.exports = (File) -> (file, opts, elem) ->
 
-	{usedUnits, changes} = file._tmp
-	{units, elems, texts} = file
-
 	name = elem.name
-	unit = units[name]
+	unit = file.units[name]
 
 	oldChild = elem.node
 	unless oldChild.visible then return
@@ -20,10 +17,10 @@ module.exports = (File) -> (file, opts, elem) ->
 	usedUnit.render opts
 	opts.source = null
 
-	usedUnits.push usedUnit
+	file._tmp.usedUnits.push usedUnit
 
 	newChild = usedUnit.node
 
 	# replace
-	changes.push oldChild.parent, oldChild, newChild
+	file._tmp.parentChanges.push oldChild.parent, oldChild, newChild
 	oldChild.parent.replace oldChild, newChild

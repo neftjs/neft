@@ -16,6 +16,13 @@ module.exports = (File) -> class Input
 	@Text = require('./input/text.coffee') File, @
 	@Attr = require('./input/attr.coffee') File, @
 
+	@get = (input, prop) ->
+
+		v = input.sourceNode?.attrs.get prop
+		v ?= input.sourceStorage?[prop]
+		v ?= input.storage?[prop]
+		v
+
 	constructor: (@node, text) ->
 
 		expect(node).toBe.any File.Element
@@ -28,7 +35,7 @@ module.exports = (File) -> class Input
 
 			# parse prop
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
-				str = "get(storages, '#{escape(elem)}')"
+				str = "get(input, '#{escape(elem)}')"
 				"#{prefix}#{str}"
 
 			# add into func string
@@ -41,22 +48,9 @@ module.exports = (File) -> class Input
 
 	_func: ''
 	node: null
-
-	get: (storages, prop) ->
-
-		for storage in storages when storage
-
-			# from attr
-			if storage instanceof Element
-				r = storage.attrs.get prop
-				return r if r?
-			else
-
-				# from object
-				r = storage[prop]
-				return r if r?
-
-		null
+	sourceNode: null
+	sourceStorage: null
+	storage: null
 
 	parse: ->
 		throw "`parse()` method not implemented"
@@ -66,13 +60,11 @@ module.exports = (File) -> class Input
 	`utils.simplify()` currently does not support `fromJSON()` and `toJSON()` methods
 	on the constructors, so it's the only way to support such functionality.
 	###
-	toString: do (cache = {}) -> (storages) ->
-		{get} = @
+	toString: do (cache = {}) -> ->
+		func = cache[@_func] ?= new Function 'input', 'get', @_func
 
-		func = cache[@_func] ?= new Function 'get', 'storages', @_func
-
-		toString = @toString = (storages) -> try func get, storages
-		toString storages
+		toString = @toString = -> try func @, Input.get
+		toString.call @
 
 	clone: (original, self) ->
 

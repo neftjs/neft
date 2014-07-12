@@ -22,12 +22,12 @@ features. Physical file should be easy to load and parse.
 		files = @_files = {}
 		pool = {}
 
-		getTmp = ->
+		getTmp = -> tmp =
 			usedUnits: []
-			changes: []
-			hidden: []
-			conditions: []
-			iterators: []
+			parentChanges: []
+			attrChanges: []
+			visibleChanges: []
+			listeners: []
 
 		@__name__ = 'File'
 		@__path__ = 'File'
@@ -127,11 +127,12 @@ features. Physical file should be easy to load and parse.
 			links = require('./file/parse/links.coffee') File
 			attrs = require('./file/parse/attrs.coffee') File
 			units = require('./file/parse/units.coffee') File
+			iterators = require('./file/parse/iterators.coffee') File
 			source = require('./file/parse/source.coffee') File
 			elems = require('./file/parse/elems.coffee') File
 			storage = require('./file/parse/storage.coffee') File
 			conditions = require('./file/parse/conditions.coffee') File
-			iterators = require('./file/parse/iterators.coffee') File
+			nodes = require('./file/parse/nodes.coffee') File
 
 			(@path, @node) ->
 
@@ -158,6 +159,7 @@ features. Physical file should be easy to load and parse.
 				elems @
 				storage @
 				conditions @
+				nodes @
 
 				# save to storage
 				files[@path] = @
@@ -168,6 +170,7 @@ features. Physical file should be easy to load and parse.
 
 		isRendered: false
 		node: null
+		nodes: null
 		sourceNode: null
 		path: ''
 		pathbase: ''
@@ -217,6 +220,8 @@ features. Physical file should be easy to load and parse.
 				# source
 				render.source @, opts
 
+				File.Element.OBSERVE = true
+
 				null
 
 		render.storage = require('./file/render/parse/storage.coffee') File
@@ -229,62 +234,65 @@ features. Physical file should be easy to load and parse.
 
 		revert: do ->
 
+			changes = require('./file/render/revert/changes.coffee') File
+			listeners = require('./file/render/revert/listeners.coffee') File
 			elems = require('./file/render/revert/elems.coffee') File
-			conditions = require('./file/render/revert/conditions.coffee') File
-			iterators = require('./file/render/revert/iterators.coffee') File
 
 			->
 
 				expect(@isRendered).toBe.truthy()
 
 				@isRendered = false
+				File.Element.OBSERVE = false
 
+				listeners @
+				changes @
 				elems @
-				iterators @
-				conditions @
 
 				null
 
 #### clone()
 
-		clone: ->
+		clone: do ->
 
-			clone = Object.create @
+			->
 
-			clone.clone = undefined
-			clone._tmp = getTmp()
-			clone.isRendered = false
-			clone.node = @node.cloneDeep()
-			clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
-			clone.parent = null
+				clone = Object.create @
 
-			# elems
-			unless utils.isEmpty @elems
-				clone.elems = {}
-				for elemName, elems of @elems
-					clone.elems[elemName] = []
-					for elem, i in elems
-						clone.elems[elemName][i] = elem.clone @, clone
+				clone.clone = undefined
+				clone._tmp = getTmp()
+				clone.isRendered = false
+				clone.node = @node.cloneDeep()
+				clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
+				clone.parent = null
 
-			# inputs
-			if @inputs.length
-				clone.inputs = []
-				for input, i in @inputs
-					clone.inputs[i] = input.clone @, clone
+				# elems
+				unless utils.isEmpty @elems
+					clone.elems = {}
+					for elemName, elems of @elems
+						clone.elems[elemName] = []
+						for elem, i in elems
+							clone.elems[elemName][i] = elem.clone @, clone
 
-			# conditions
-			if @conditions.length
-				clone.conditions = []
-				for condition, i in @conditions
-					clone.conditions[i] = condition.clone @, clone
+				# inputs
+				if @inputs.length
+					clone.inputs = []
+					for input, i in @inputs
+						clone.inputs[i] = input.clone @, clone
 
-			# iterators
-			if @iterators.length
-				clone.iterators = []
-				for iterator, i in @iterators
-					clone.iterators[i] = iterator.clone @, clone
+				# conditions
+				if @conditions.length
+					clone.conditions = []
+					for condition, i in @conditions
+						clone.conditions[i] = condition.clone @, clone
 
-			clone
+				# iterators
+				if @iterators.length
+					clone.iterators = []
+					for iterator, i in @iterators
+						clone.iterators[i] = iterator.clone @, clone
+
+				clone
 
 #### destroy()
 

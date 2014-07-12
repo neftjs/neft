@@ -7,7 +7,7 @@ module.exports = (File) -> (file, opts) ->
 		oldChild = file.sourceNode
 		newChild = opts.source.bodyNode
 
-		file._tmp.changes.push oldChild.parent, oldChild, newChild
+		file._tmp.parentChanges.push oldChild.parent, oldChild, newChild
 		oldChild.parent.replace oldChild, newChild
 
 	null
