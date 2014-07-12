@@ -5,8 +5,7 @@ View Structure Element
 
 	'use strict'
 
-	[utils, expect] = ['utils', 'expect'].map require
-	[observer] = ['./observer'].map require
+	[utils, expect, signal] = ['utils', 'expect', 'signal'].map require
 
 	{isArray} = Array
 
@@ -112,14 +111,6 @@ Value will automatically change `children`.
 
 					null
 
-#### onParentChanged
-
-			onParentChanged: observer.getPropertyDesc('onParentChanged')
-
-#### onVisibilityChanged
-
-			onVisibilityChanged: observer.getPropertyDesc('onVisibilityChanged')
-
 ### Methods
 
 #### *Element* clone()
@@ -135,6 +126,16 @@ Returns new instance of *Element* with the same properties.
 				clone
 
 			cloneDeep: value: clone
+
+### Signals
+
+#### onParentChanged
+
+			signal.create @::, 'onParentChanged'
+
+#### onVisibilityChanged
+
+			signal.create @::, 'onVisibilityChanged'
 
 		if utils.isNode
 			@parser = require('./element/parser') @

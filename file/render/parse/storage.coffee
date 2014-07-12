@@ -12,15 +12,17 @@ module.exports = (File) -> (file, opts, input) ->
 
 	input.parse()
 
+	# TODO: check whether input must be parsed on any change
+
 	# listen on source node attrs changes
 	if sourceNode?.attrsNames
-		sourceNode.onAttrChanged.connect listener = (node, name, old) ->
+		sourceNode.onAttrChanged.connect listener = (name, old) ->
 			input.parse()
-			file._tmp.attrChanges.push node, name, old
+			file._tmp.attrChanges.push @, name, old
 		file._tmp.listeners.push sourceNode, 'onAttrChanged', listener
 
 	# listen on storage changes
-	if storage instanceof Emitter
-		storage.on 'change', listener = (name, value) ->
+	if storage?.hasOwnProperty 'onChanged'
+		storage.onChanged.connect listener = (name, value) ->
 			input.parse()
-		file._tmp.listeners.push storage, 'change', listener
+		file._tmp.listeners.push storage, 'onChanged', listener

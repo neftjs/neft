@@ -1,7 +1,6 @@
 'use strict'
 
-[expect] = ['expect'].map require
-[observer] = ['../observer'].map require
+[expect, signal] = ['expect', 'signal'].map require
 
 module.exports = (Element) -> class Text extends Element
 
@@ -34,4 +33,4 @@ module.exports = (Element) -> class Text extends Element
 				if Element.OBSERVE and @hasOwnProperty('onTextChanged')
 					@onTextChanged old
 
-		onTextChanged: observer.getPropertyDesc('onTextChanged')
+	signal.create @::, 'onTextChanged'

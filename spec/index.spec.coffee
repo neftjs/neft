@@ -1,7 +1,7 @@
 'use strict'
 
 View = require('../index.coffee.md')
-[utils, Emitter] = ['utils', 'emitter'].map require
+[utils, signal] = ['utils', 'signal'].map require
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
@@ -178,20 +178,20 @@ describe 'View Storage', ->
 			source = View.fromHTML uid(), '#{x}'
 			view = source.clone()
 
-			storage = new Emitter
-			utils.merge storage, x: 1
+			storage = x: 1
+			signal.create storage, 'onChanged'
 
 			renderParse view,
 				storage: storage
 			expect(view.node.stringify()).toBe '1'
 
 			storage.x = 2
-			storage.trigger 'change', 'x', 1
+			storage.onChanged 'x', 1
 			expect(view.node.stringify()).toBe '2'
 
 			view.revert()
 			storage.x = 1
-			storage.trigger 'change', 'x', 2
+			storage.onChanged 'x', 2
 			renderParse view,
 				storage: storage
 			expect(view.node.stringify()).toBe '1'

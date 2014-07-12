@@ -9,12 +9,9 @@ module.exports = (File) -> (file) ->
 	# disconnect listeners
 	while listeners.length
 		listener = listeners.pop()
-		eventName = listeners.pop()
+		signalName = listeners.pop()
 		node = listeners.pop()
 
-		if node instanceof Emitter
-			node.off eventName, listener
-		else
-			node[eventName].disconnect listener
+		node[signalName].disconnect listener
 
 	null

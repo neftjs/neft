@@ -1,7 +1,7 @@
 'use strict'
 
-[utils, expect] = ['utils', 'expect'].map require
-[stringify, observer] = ['./tag/stringify', '../observer'].map require
+[utils, expect, signal] = ['utils', 'expect', 'signal'].map require
+[stringify] = ['./tag/stringify'].map require
 
 isDefined = (elem) -> elem?
 
@@ -127,4 +127,4 @@ module.exports = (Element) -> class Tag extends Element
 			elem
 
 
-		onAttrChanged: observer.getPropertyDesc('onAttrChanged')
+	signal.create @::, 'onAttrChanged'
