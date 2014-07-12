@@ -42,6 +42,22 @@ describe 'View Element', ->
 
 		expect(html).toBe HTML
 
+	it 'hidden attrs are omitted in the stringified process', ->
+
+		elem = Element.fromHTML '<span if="a" each="a"></span>'
+		html = elem.stringify()
+
+		expect(html).toBe '<span></span>'
+
+	it 'stringify children to html', ->
+
+		elem = Element.fromHTML '<span><b></b></span>'
+		htmlOuter = elem.children[0].stringify()
+		htmlInner = elem.children[0].stringifyChildren()
+
+		expect(htmlOuter).toBe '<span><b></b></span>'
+		expect(htmlInner).toBe '<b></b>'
+
 	it 'change parents properly', ->
 
 		em.parent = div

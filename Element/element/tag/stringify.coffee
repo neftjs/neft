@@ -1,5 +1,9 @@
 'use strict'
 
+HIDDEN_ATTRS =
+	each: true
+	if: true
+
 getInnerHTML = (elem) ->
 	if elem.visible and elem.children
 		elem.children.map(getOuterHTML).join("")
@@ -19,6 +23,7 @@ getOuterHTML = (elem) ->
 	ret = "<" + elem.name
 	if elem.attrsNames
 		for attrName, i in elem.attrsKeys
+			continue if HIDDEN_ATTRS[attrName]
 			attrValue = elem.attrsValues[i]
 			continue if attrValue is undefined
 
