@@ -1,6 +1,7 @@
 'use strict'
 
 [expect] = ['expect'].map require
+[observer] = ['../observer'].map require
 
 module.exports = (Element) -> class Text extends Element
 
@@ -31,3 +32,5 @@ module.exports = (Element) -> class Text extends Element
 
 				# call observers
 				@onTextChanged old
+
+		onTextChanged: observer.getPropertyDesc('onTextChanged')
