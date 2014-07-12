@@ -206,10 +206,10 @@ describe 'View Element', ->
 
 		{Observer} = Element
 
-		it 'onAttrChange works properly', ->
+		it 'onAttrChanged works properly', ->
 
 			value = args = null
-			elem = Element.fromHTML '<b a="1"></b>'
+			elem = Element.fromHTML('<b a="1"></b>').cloneDeep()
 			tag = elem.children[0]
 
 			tag.onAttrChanged.connect (node, name) ->
@@ -221,10 +221,10 @@ describe 'View Element', ->
 			expect(args).toEqual [tag, 'a', '1']
 			expect(value).toBe 2
 
-		it 'onVisibilityChange works properly', ->
+		it 'onVisibilityChanged works properly', ->
 
 			value = args = null
-			elem = Element.fromHTML '<b></b>'
+			elem = Element.fromHTML('<b></b>').cloneDeep()
 			tag = elem.children[0]
 
 			tag.onVisibilityChanged.connect (node) ->
@@ -236,10 +236,10 @@ describe 'View Element', ->
 			expect(args).toEqual [tag, true, undefined]
 			expect(value).toBe false
 
-		it 'onTextChange works properly', ->
+		it 'onTextChanged works properly', ->
 
 			text = args = null
-			elem = Element.fromHTML '<b>a</b>'
+			elem = Element.fromHTML('<b>a</b>').cloneDeep()
 			tag = elem.children[0].children[0]
 
 			tag.onTextChanged.connect (node) ->
@@ -251,10 +251,10 @@ describe 'View Element', ->
 			expect(args).toEqual [tag, 'a', undefined]
 			expect(text).toBe 'b'
 
-		it 'onParentChange works properly', ->
+		it 'onParentChanged works properly', ->
 
 			value = args = null
-			elem = Element.fromHTML '<a></a><b></b>'
+			elem = Element.fromHTML('<a></a><b></b>').cloneDeep()
 			tag1 = elem.children[0]
 			tag2 = elem.children[1]
 
@@ -270,7 +270,7 @@ describe 'View Element', ->
 		it 'disconnect() works as expected', ->
 
 			ok = true
-			elem = Element.fromHTML '<b></b>'
+			elem = Element.fromHTML('<b></b>').cloneDeep()
 			tag = elem.children[0]
 
 			tag.onVisibilityChanged.connect listener = -> ok = false

@@ -50,5 +50,6 @@ exports.set = (name, value) ->
 	tag.attrsValues[i] = value
 
 	# call observers
-	tag.onAttrChanged name, old
+	if tag.hasOwnProperty('onAttrChanged')
+		tag.onAttrChanged name, old
 

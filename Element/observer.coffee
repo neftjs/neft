@@ -63,6 +63,7 @@ exports.getPropertyDesc = (name) ->
 	enumerable: true
 	configurable: true
 	get: ->
+		expect(Object.getPrototypeOf(@).hasOwnProperty('clone')).toBe.falsy()
 		event = createEvent @, name
 		utils.defProp @, name, 'cwe', event
 		event

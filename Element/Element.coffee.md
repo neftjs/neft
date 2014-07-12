@@ -74,7 +74,8 @@ Value will automatically change `children`.
 						parent.children.push @
 
 					# call observers
-					@onParentChanged old
+					if @hasOwnProperty('onParentChanged')
+						@onParentChanged old
 
 #### *Boolean* visible
 
@@ -100,7 +101,8 @@ Value will automatically change `children`.
 							child.visible = value
 
 					# call observers
-					@onVisibilityChanged old
+					if @hasOwnProperty('onVisibilityChanged')
+						@onVisibilityChanged old
 
 					null
 
