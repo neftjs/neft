@@ -205,6 +205,7 @@ describe 'View Element', ->
 	describe 'Observer', ->
 
 		{Observer} = Element
+		Element.OBSERVE = true
 
 		it 'onAttrChanged works properly', ->
 
@@ -279,3 +280,18 @@ describe 'View Element', ->
 			tag.visible = false
 
 			expect(ok).toBeTruthy()
+
+		it 'doesn\'t work if `Element.OBSERVE` flag is `false`', ->
+
+			OBSERVE = Element.OBSERVE
+			Element.OBSERVE = false
+
+			ok = true
+			elem = b.clone()
+
+			elem.onVisibilityChanged.connect -> ok = false
+
+			elem.visible = false
+			expect(ok).toBeTruthy()
+
+			Element.OBSERVE = OBSERVE

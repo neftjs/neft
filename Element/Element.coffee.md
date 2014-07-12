@@ -20,6 +20,12 @@ View Structure Element
 
 ### Static
 
+#### *Boolean* OBSERVE
+
+Determines whether listeners are called
+
+		@OBSERVE = false
+
 #### *Element* fromHTML(*String*)
 
 Create new *Element* instance based on *HTML*.
@@ -74,7 +80,7 @@ Value will automatically change `children`.
 						parent.children.push @
 
 					# call observers
-					if @hasOwnProperty('onParentChanged')
+					if Element.OBSERVE and @hasOwnProperty('onParentChanged')
 						@onParentChanged old
 
 #### *Boolean* visible
@@ -101,7 +107,7 @@ Value will automatically change `children`.
 							child.visible = value
 
 					# call observers
-					if @hasOwnProperty('onVisibilityChanged')
+					if Element.OBSERVE and @hasOwnProperty('onVisibilityChanged')
 						@onVisibilityChanged old
 
 					null

@@ -1,13 +1,15 @@
 'use strict'
 
 [utils, expect] = ['utils', 'expect'].map require
-[stringify, attrs, observer] = ['./tag/stringify', './tag/attrs', '../observer'].map require
+[stringify, observer] = ['./tag/stringify', '../observer'].map require
 
 isDefined = (elem) -> elem?
 
 CSS_ID_RE = ///\#([^\s]+)///
 
 module.exports = (Element) -> class Tag extends Element
+
+	attrs = require('./tag/attrs') Element
 
 	@__name__ = 'Tag'
 	@__path__ = 'File.Element.Tag'

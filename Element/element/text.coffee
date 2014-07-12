@@ -31,7 +31,7 @@ module.exports = (Element) -> class Text extends Element
 				@_text = value
 
 				# call observers
-				if @hasOwnProperty('onTextChanged')
+				if Element.OBSERVE and @hasOwnProperty('onTextChanged')
 					@onTextChanged old
 
 		onTextChanged: observer.getPropertyDesc('onTextChanged')

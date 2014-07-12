@@ -4,52 +4,54 @@
 
 {isArray} = Array
 
-exports.tag = null
+module.exports = (Element) -> exports =
 
-exports.item = (i, target=[]) ->
+	tag: null
 
-	expect(target).toBe.array()
+	item: (i, target=[]) ->
 
-	keys = exports.tag.attrsKeys
-	values = exports.tag.attrsValues
+		expect(target).toBe.array()
 
-	target[0] = target[1] = undefined
+		keys = exports.tag.attrsKeys
+		values = exports.tag.attrsValues
 
-	unless values
-		return target
+		target[0] = target[1] = undefined
 
-	while target[1] is undefined and keys.length >= i
-		target[0] = keys[i]
-		target[1] = values[i]
-		i++
+		unless values
+			return target
 
-	target
+		while target[1] is undefined and keys.length >= i
+			target[0] = keys[i]
+			target[1] = values[i]
+			i++
 
-exports.get = (name) ->
+		target
 
-	expect(name).toBe.truthy().string()
+	get: (name) ->
 
-	i = exports.tag.attrsNames?[name]
-	return if i is undefined
+		expect(name).toBe.truthy().string()
 
-	exports.tag.attrsValues[i]
+		i = exports.tag.attrsNames?[name]
+		return if i is undefined
 
-exports.set = (name, value) ->
+		exports.tag.attrsValues[i]
 
-	expect(name).toBe.truthy().string()
+	set: (name, value) ->
 
-	{tag} = exports
+		expect(name).toBe.truthy().string()
 
-	i = tag.attrsNames?[name]
-	return if i is undefined
+		{tag} = exports
 
-	old = tag.attrsValues[i]
-	return if old is value
+		i = tag.attrsNames?[name]
+		return if i is undefined
 
-	# save change
-	tag.attrsValues[i] = value
+		old = tag.attrsValues[i]
+		return if old is value
 
-	# call observers
-	if tag.hasOwnProperty('onAttrChanged')
-		tag.onAttrChanged name, old
+		# save change
+		tag.attrsValues[i] = value
+
+		# call observers
+		if Element.OBSERVE and tag.hasOwnProperty('onAttrChanged')
+			tag.onAttrChanged name, old
 
