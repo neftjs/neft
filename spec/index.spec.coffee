@@ -206,14 +206,16 @@ describe 'View Condition', ->
 
 		it 'with positive expression', ->
 
-			view = View.fromHTML uid(), '<div><b if="2 > 1">1</b></div>'
+			source = View.fromHTML uid(), '<div><b if="2 > 1">1</b></div>'
+			view = source.clone()
 
 			renderParse view
 			expect(view.node.stringify()).toBe '<div><b>1</b></div>'
 
 		it 'with negative expression', ->
 
-			view = View.fromHTML uid(), '<div><b if="1 > 2">1</b></div>'
+			source = View.fromHTML uid(), '<div><b if="1 > 2">1</b></div>'
+			view = source.clone()
 
 			renderParse view
 			expect(view.node.stringify()).toBe '<div></div>'
@@ -274,7 +276,8 @@ describe 'View Iterator', ->
 
 	it 'loops expected times', ->
 
-		view = View.fromHTML uid(), '<ul each="[0,0]">1</ul>'
+		source = View.fromHTML uid(), '<ul each="[0,0]">1</ul>'
+		view = source.clone()
 
 		renderParse view
 		expect(view.node.stringify()).toBe '<ul>11</ul>'

@@ -198,6 +198,7 @@ features. Physical file should be easy to load and parse.
 
 			expect().defined(source).toBe.object()
 			expect(@isRendered).toBe.falsy()
+			expect(@clone).toBe undefined
 
 			@isRendered = true
 

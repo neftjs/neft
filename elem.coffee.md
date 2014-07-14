@@ -45,17 +45,17 @@ Represents an element placed in the file.
 		render: ->
 			expect(@self.isRendered).toBe.truthy()
 
-			unless @isRendered
-				return unless @node.visible
+			return if @isRendered
+			return unless @node.visible
 
-				unit = @_unit = File.factory @self.units[@name]
-				unit.storage = @self.storage
-				unit.render @
+			unit = @_unit = File.factory @self.units[@name]
+			unit.storage = @self.storage
+			unit.render @
 
-				@self._tmp.parentChanges.push @node.parent, @node, unit.node
-				@node.parent.replace @node, unit.node
+			@self._tmp.parentChanges.push @node.parent, @node, unit.node
+			@node.parent.replace @node, unit.node
 
-				@isRendered = true
+			@isRendered = true
 
 		revert: ->
 			expect(@self.isRendered).toBe.falsy()
