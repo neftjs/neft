@@ -18,6 +18,7 @@ module.exports = (File) -> (file, opts, input) ->
 	if sourceNode?.attrsNames
 		sourceNode.onAttrChanged.connect listener = (name, old) ->
 			input.parse()
+			input.onChanged() # TODO: move it into input class
 			file._tmp.attrChanges.push @, name, old
 		file._tmp.listeners.push sourceNode, 'onAttrChanged', listener
 
@@ -25,4 +26,5 @@ module.exports = (File) -> (file, opts, input) ->
 	if storage?.hasOwnProperty 'onChanged'
 		storage.onChanged.connect listener = (name, value) ->
 			input.parse()
+			input.onChanged() # TODO: move it into input class
 		file._tmp.listeners.push storage, 'onChanged', listener

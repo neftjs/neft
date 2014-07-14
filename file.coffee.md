@@ -10,7 +10,7 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	[utils, expect, log, Emitter] = ['utils', 'expect', 'log', 'emitter'].map require
+	[utils, expect, log, Emitter, signal] = ['utils', 'expect', 'log', 'emitter', 'signal'].map require
 
 	log = log.scope 'View'
 
@@ -182,6 +182,8 @@ features. Physical file should be easy to load and parse.
 		conditions: null
 		iterators: null
 
+		signal.create @::, 'onRender'
+
 ### Methods
 
 #### init()
@@ -208,10 +210,6 @@ features. Physical file should be easy to load and parse.
 				for iterator in @iterators
 					render.iterator @, opts, iterator
 
-				# conditions
-				for condition in @conditions
-					render.condition @, opts, condition
-				
 				# elems
 				for name, subelems of @elems
 					for elem in subelems
@@ -220,13 +218,14 @@ features. Physical file should be easy to load and parse.
 				# source
 				render.source @, opts
 
+				@onRender opts
+
 				File.Element.OBSERVE = true
 
 				null
 
 		render.storage = require('./file/render/parse/storage.coffee') File
 		render.iterator = require('./file/render/parse/iterator.coffee') File
-		render.condition = require('./file/render/parse/condition.coffee') File
 		render.elem = require('./file/render/parse/elem.coffee') File
 		render.source = require('./file/render/parse/source.coffee') File
 

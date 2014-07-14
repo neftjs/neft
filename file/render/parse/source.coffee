@@ -2,7 +2,7 @@
 
 module.exports = (File) -> (file, opts) ->
 
-	if file.sourceNode and opts?.source and file.sourceNode.visible
+	if file.sourceNode and opts?.source
 
 		oldChild = file.sourceNode
 		newChild = opts.source.bodyNode

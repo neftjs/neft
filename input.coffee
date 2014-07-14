@@ -1,6 +1,6 @@
 'use strict'
 
-[utils, expect] = ['utils', 'expect'].map require
+[utils, expect, signal] = ['utils', 'expect', 'signal'].map require
 coffee = require 'coffee-script' if utils.isNode
 
 module.exports = (File) -> class Input
@@ -48,9 +48,12 @@ module.exports = (File) -> class Input
 
 	_func: ''
 	node: null
+
 	sourceNode: null
 	sourceStorage: null
 	storage: null
+
+	signal.create @::, 'onChanged'
 
 	parse: ->
 		throw "`parse()` method not implemented"

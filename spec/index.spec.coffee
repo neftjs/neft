@@ -225,7 +225,8 @@ describe 'View Condition', ->
 
 	it 'can be declared using storage input', ->
 
-		view = View.fromHTML uid(), '<div><b if="#{x} > 1">1</b></div>'
+		source = View.fromHTML uid(), '<div><b if="#{x} > 1">1</b></div>'
+		view = source.clone()
 
 		renderParse view, storage: x: 1
 		expect(view.node.stringify()).toBe '<div></div>'
@@ -233,6 +234,19 @@ describe 'View Condition', ->
 		view.revert()
 		renderParse view, storage: x: 2
 		expect(view.node.stringify()).toBe '<div><b>1</b></div>'
+
+	it 'supports storage observer', ->
+
+		source = View.fromHTML uid(), '<unit name="a"><b if="#{x} > 1">OK</b>' +
+		                              '<b if="#{x} == 1">FAIL</b></unit><a x="1"></a>'
+		view = source.clone()
+		elem = view.node.children[0]
+
+		renderParse view
+		elem.attrs.set 'x', 2
+		expect(view.node.stringify()).toBe '<b>OK</b>'
+		view.revert()
+		expect(view.node.stringify()).toBe '<a x="1"></a>'
 
 describe 'View Iterator', ->
 
