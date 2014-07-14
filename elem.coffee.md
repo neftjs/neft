@@ -24,6 +24,7 @@ Represents an element placed in the file.
 
 			expect(self).toBe.any File
 			expect(name).toBe.truthy().string()
+			expect(node).toBe.any File.Element
 
 			# get bodyNode
 			if node.children.length
@@ -33,7 +34,7 @@ Represents an element placed in the file.
 
 ### Properties
 
-		uid: ''
+		isRendered: false
 		name: ''
 		self: null
 		node: null
@@ -41,14 +42,47 @@ Represents an element placed in the file.
 
 ### Methods
 
+		render: (opts) ->
+			expect(@self.isRendered).toBe.truthy()
+			expect().defined(opts).toBe.simpleObject()
+
+			if opts
+				utils.merge @_renderOpts, opts
+
+			unless @isRendered
+				return unless @node.visible
+
+				unit = @_unit = File.factory @self.units[@name]
+				@_renderOpts.source = @
+				unit.render @_renderOpts
+
+				@self._tmp.parentChanges.push @node.parent, @node, unit.node
+				@node.parent.replace @node, unit.node
+
+				@isRendered = true
+
+		revert: ->
+			expect(@self.isRendered).toBe.falsy()
+			@isRendered = false
+			@_unit?.revert().destroy()
+
 		clone: (original, self) ->
 
 			clone = Object.create @
 
 			clone.clone = undefined
 			clone.self = self
-			clone.uid = utils.uid()
 			clone.node = original.node.getCopiedElement @node, self.node
 			clone.bodyNode = clone.node.children[0]
+			clone.render = @render.bind clone
+			clone.revert = @revert.bind clone
+			clone.isRendered = false
+
+			utils.defProp clone, '_unit', 'cw', null
+			utils.defProp clone, '_renderOpts', 'cw', {}
+
+			self.onRender.connect clone.render
+			self.onRevert.connect clone.revert
+			clone.node.onVisibilityChanged.connect -> clone.render()
 
 			clone

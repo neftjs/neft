@@ -27,6 +27,10 @@ module.exports = (File) -> class Iterator extends File.Elem
 	unit: ''
 	storage: null
 
+	render: ->
+
+	revert: ->
+
 	clone: (original, self) ->
 
 		clone = super

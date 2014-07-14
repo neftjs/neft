@@ -235,18 +235,36 @@ describe 'View Condition', ->
 		renderParse view, storage: x: 2
 		expect(view.node.stringify()).toBe '<div><b>1</b></div>'
 
-	it 'supports storage observer', ->
+	describe 'supports storage observer', ->
 
-		source = View.fromHTML uid(), '<unit name="a"><b if="#{x} > 1">OK</b>' +
-		                              '<b if="#{x} == 1">FAIL</b></unit><a x="1"></a>'
-		view = source.clone()
-		elem = view.node.children[0]
+		it 'in changing visibility', ->
 
-		renderParse view
-		elem.attrs.set 'x', 2
-		expect(view.node.stringify()).toBe '<b>OK</b>'
-		view.revert()
-		expect(view.node.stringify()).toBe '<a x="1"></a>'
+			source = View.fromHTML uid(), '<unit name="a"><b if="#{x} > 1">OK</b>' +
+			                              '<b if="#{x} == 1">FAIL</b></unit><a x="1"></a>'
+			view = source.clone()
+			elem = view.node.children[0]
+
+			renderParse view
+			elem.attrs.set 'x', 2
+			expect(view.node.stringify()).toBe '<b>OK</b>'
+			view.revert()
+			expect(view.node.stringify()).toBe '<a x="1"></a>'
+
+		it 'in replacing elems', ->
+
+			source = View.fromHTML uid(), '<unit name="a">OK</unit>' +
+			                              '<a if="#{x} == 1"></a>'
+			view = source.clone()
+
+			storage = x: 0
+			signal.create storage, 'onChanged'
+
+			renderParse view, storage: storage
+			expect(view.node.stringify()).toBe ''
+
+			storage.x = 1
+			storage.onChanged 'x', 0
+			expect(view.node.stringify()).toBe 'OK'			
 
 describe 'View Iterator', ->
 

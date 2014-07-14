@@ -183,6 +183,7 @@ features. Physical file should be easy to load and parse.
 		iterators: null
 
 		signal.create @::, 'onRender'
+		signal.create @::, 'onRevert'
 
 ### Methods
 
@@ -210,23 +211,18 @@ features. Physical file should be easy to load and parse.
 				for iterator in @iterators
 					render.iterator @, opts, iterator
 
-				# elems
-				for name, subelems of @elems
-					for elem in subelems
-						render.elem @, opts, elem
+				@onRender opts
 
 				# source
 				render.source @, opts
 
-				@onRender opts
 
 				File.Element.OBSERVE = true
 
-				null
+				@
 
 		render.storage = require('./file/render/parse/storage.coffee') File
 		render.iterator = require('./file/render/parse/iterator.coffee') File
-		render.elem = require('./file/render/parse/elem.coffee') File
 		render.source = require('./file/render/parse/source.coffee') File
 
 #### revert() ->
@@ -244,11 +240,13 @@ features. Physical file should be easy to load and parse.
 				@isRendered = false
 				File.Element.OBSERVE = false
 
+				@onRevert()
+
 				listeners @
 				changes @
 				elems @
 
-				null
+				@
 
 #### clone()
 
@@ -264,14 +262,6 @@ features. Physical file should be easy to load and parse.
 				clone.node = @node.cloneDeep()
 				clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
 				clone.parent = null
-
-				# elems
-				unless utils.isEmpty @elems
-					clone.elems = {}
-					for elemName, elems of @elems
-						clone.elems[elemName] = []
-						for elem, i in elems
-							clone.elems[elemName][i] = elem.clone @, clone
 
 				# inputs
 				if @inputs.length
@@ -290,6 +280,14 @@ features. Physical file should be easy to load and parse.
 					clone.iterators = []
 					for iterator, i in @iterators
 						clone.iterators[i] = iterator.clone @, clone
+
+				# elems
+				unless utils.isEmpty @elems
+					clone.elems = {}
+					for elemName, elems of @elems
+						clone.elems[elemName] = []
+						for elem, i in elems
+							clone.elems[elemName][i] = elem.clone @, clone
 
 				clone
 
