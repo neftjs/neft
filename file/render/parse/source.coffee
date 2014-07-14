@@ -1,11 +1,11 @@
 'use strict'
 
-module.exports = (File) -> (file, opts) ->
+module.exports = (File) -> (file, source) ->
 
-	if file.sourceNode and opts?.source
+	if file.sourceNode and source
 
 		oldChild = file.sourceNode
-		newChild = opts.source.bodyNode
+		newChild = source.bodyNode
 
 		file._tmp.parentChanges.push oldChild.parent, oldChild, newChild
 		oldChild.parent.replace oldChild, newChild

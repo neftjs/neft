@@ -2,13 +2,15 @@
 
 [Emitter] = ['emitter'].map require
 
-module.exports = (File) -> (file, opts, input) ->
+module.exports = (File) -> (file, source, input) ->
 
 	unless input.node.visible then return
 
-	sourceNode = input.sourceNode = opts.source?.node
-	input.sourceStorage = opts.source?.storage
-	storage = input.storage = opts.storage
+	{storage} = file
+
+	sourceNode = input.sourceNode = source?.node
+	input.sourceStorage = source?.storage
+	input.storage = storage
 
 	input.parse()
 

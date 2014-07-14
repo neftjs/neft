@@ -4,10 +4,9 @@
 
 {isArray} = Array
 
-module.exports = (File) -> (file, opts, iterator) ->
+module.exports = (File) -> (file, source, iterator) ->
 
 	{parentChanges, usedUnits} = file._tmp
-	source = opts.source
 
 	node = iterator.node
 	unless node.visible then return
@@ -24,8 +23,7 @@ module.exports = (File) -> (file, opts, iterator) ->
 		usedUnit = File.factory iterator.unit
 
 		iterator.storage.i = i++
-		opts.source = iterator
-		usedUnit.render opts
+		usedUnit.render iterator
 
 		usedUnits.push usedUnit
 
@@ -34,8 +32,5 @@ module.exports = (File) -> (file, opts, iterator) ->
 		# replace
 		newChild.parent = node
 		parentChanges.push node, null, newChild
-
-	# restore opts
-	opts.source = source
 
 	null

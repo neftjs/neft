@@ -7,9 +7,13 @@ uid = do (i = 0) -> -> "index_#{i++}.html"
 
 renderParse = (view, opts) ->
 
-	view.render opts
+	view.storage = opts?.storage
+	view.render opts?.source
+
 	view.revert()
-	view.render opts
+
+	view.storage = opts?.storage
+	view.render opts?.source
 
 describe 'View', ->
 

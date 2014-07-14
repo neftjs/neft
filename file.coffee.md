@@ -181,6 +181,7 @@ features. Physical file should be easy to load and parse.
 		inputs: null
 		conditions: null
 		iterators: null
+		storage: null
 
 		signal.create @::, 'onRender'
 		signal.create @::, 'onRevert'
@@ -193,33 +194,29 @@ features. Physical file should be easy to load and parse.
 
 #### render()
 
-		render: render = do ->
+		render: render = (source) ->
 
-			optsDef = {}
-			(opts=optsDef) ->
+			expect().defined(source).toBe.object()
+			expect(@isRendered).toBe.falsy()
 
-				expect(opts).toBe.simpleObject()
-				expect(@isRendered).toBe.falsy()
+			@isRendered = true
 
-				@isRendered = true
+			# storage
+			for input in @inputs
+				render.storage @, source, input
 
-				# storage
-				for input in @inputs
-					render.storage @, opts, input
+			# iterators
+			for iterator in @iterators
+				render.iterator @, source, iterator
 
-				# iterators
-				for iterator in @iterators
-					render.iterator @, opts, iterator
+			@onRender source
 
-				@onRender opts
+			# source
+			render.source @, source
 
-				# source
-				render.source @, opts
+			File.Element.OBSERVE = true
 
-
-				File.Element.OBSERVE = true
-
-				@
+			@
 
 		render.storage = require('./file/render/parse/storage.coffee') File
 		render.iterator = require('./file/render/parse/iterator.coffee') File
@@ -238,6 +235,7 @@ features. Physical file should be easy to load and parse.
 				expect(@isRendered).toBe.truthy()
 
 				@isRendered = false
+				@storage = null
 				File.Element.OBSERVE = false
 
 				@onRevert()
@@ -262,6 +260,7 @@ features. Physical file should be easy to load and parse.
 				clone.node = @node.cloneDeep()
 				clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
 				clone.parent = null
+				clone.storage = null
 
 				# inputs
 				if @inputs.length
