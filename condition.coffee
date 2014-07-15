@@ -21,17 +21,11 @@ module.exports = (File) -> class Condition
 		expect(opts).toBe.simpleObject()
 		expect(opts.self).toBe.any File
 		expect(opts.node).toBe.any File.Element
-		expect(opts.input).toBe.any File.Input
 
 		utils.fill @, opts
 
-		@inputIndex = @self.inputs.indexOf @input
-		expect(@inputIndex).not().toBe -1
-
 	self: null
 	node: null
-	input: null
-	inputIndex: 0
 
 	execute: ->
 
@@ -63,9 +57,9 @@ module.exports = (File) -> class Condition
 		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
 		clone.render = @render.bind clone
-		clone.input = self.inputs[@inputIndex]
 
 		clone.self.onRender.connect clone.render
-		clone.input.onChanged.connect clone.render
+		clone.node.onAttrChanged.connect (attr) ->
+			clone.render() if attr is 'if'
 
 		clone
