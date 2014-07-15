@@ -123,6 +123,20 @@ describe 'View', ->
 		expect(source.node.stringify()).toBe '<a><b></b></a>'
 		expect(view.node.stringify()).toBe '<b></b>'
 
+	it '`source` element supports updates', ->
+
+		source = View.fromHTML uid(), '
+			<unit name="a"><source if="#{x} == 1"></source></unit>
+			<a x="0"><b></b></a>'
+		view = source.clone()
+		elem = view.node.children[0]
+
+		renderParse view
+		expect(view.node.stringify()).toBe ''
+
+		elem.attrs.set 'x', 1
+		expect(view.node.stringify()).toBe '<b></b>'
+
 	it 'reverted view is identical as before render', ->
 
 		view = View.fromHTML uid(), '

@@ -1,5 +1,9 @@
 'use strict'
 
+HIDDEN_TAGS =
+	unit: true
+	source: true
+
 HIDDEN_ATTRS =
 	each: true
 	if: true
@@ -17,7 +21,7 @@ getOuterHTML = (elem) ->
 	if elem._text isnt undefined
 		return elem._text
 
-	if not elem.name or elem.name is 'unit'
+	if not elem.name or HIDDEN_TAGS[elem.name]
 		return getInnerHTML elem
 
 	ret = "<" + elem.name
