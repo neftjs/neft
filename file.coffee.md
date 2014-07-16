@@ -206,10 +206,6 @@ features. Physical file should be easy to load and parse.
 			for input in @inputs
 				render.storage @, source, input
 
-			# iterators
-			for iterator in @iterators
-				render.iterator @, source, iterator
-
 			@onRender source
 
 			# source
@@ -220,7 +216,6 @@ features. Physical file should be easy to load and parse.
 			@
 
 		render.storage = require('./file/render/parse/storage.coffee') File
-		render.iterator = require('./file/render/parse/iterator.coffee') File
 		render.source = require('./file/render/parse/source.coffee') File
 
 #### revert() ->

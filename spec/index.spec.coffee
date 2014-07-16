@@ -288,6 +288,7 @@ describe 'View Condition', ->
 
 describe 'View Iterator', ->
 
+	###
 	it 'loops expected times', ->
 
 		source = View.fromHTML uid(), '<ul each="[0,0]">1</ul>'
@@ -324,3 +325,26 @@ describe 'View Iterator', ->
 		expect(source.node.stringify()).toBe '<a data="1,2"></a>'
 		expect(view.node.stringify()).toBe '' +
 			'<ul>12</ul>'
+	###
+	it 'supports updates', ->
+
+		source = View.fromHTML uid(), '<ul each="#{arr}">#{each[i]}</ul>'
+		view = source.clone()
+
+		storage = arr: arr = [1, 2]
+		signal.create storage, 'onChanged'
+		signal.create arr, 'onAdded'
+		signal.create arr, 'onRemoved'
+
+		renderParse view, storage: storage
+		expect(view.node.stringify()).toBe '<ul>12</ul>'
+
+		i = arr.push 3
+		arr.onAdded i-1
+		storage.onChanged 'arr', arr
+		expect(view.node.stringify()).toBe '<ul>123</ul>'
+
+		arr.splice 1, 1
+		arr.onRemoved 1
+		storage.onChanged 'arr', arr
+		expect(view.node.stringify()).toBe '<ul>13</ul>'
