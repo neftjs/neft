@@ -101,7 +101,13 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		usedUnit = File.factory @unit
 
-		@storage = i: i
+		data = @array
+		if data instanceof ObservableArray
+			{data} = data
+
+		@storage =
+			i: i
+			item: data[i]
 		usedUnit.render @
 
 		@self._tmp.usedUnits.push usedUnit

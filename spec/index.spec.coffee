@@ -291,6 +291,14 @@ describe 'View Iterator', ->
 		renderParse view
 		expect(view.node.stringify()).toBe '<ul>11</ul>'
 
+	it 'provides `item` property', ->
+
+		source = View.fromHTML uid(), '<ul each="[1,2]">#{item}</ul>'
+		view = source.clone()
+
+		renderParse view
+		expect(view.node.stringify()).toBe '<ul>12</ul>'
+
 	it 'render data in loops', ->
 
 		view = View.fromHTML uid(), '<ul each="[{v:1},{v:2}]">#{each[i].v}</ul>'
