@@ -21,7 +21,6 @@ module.exports = (File) -> (file, source, input) ->
 		sourceNode.onAttrChanged.connect listener = (name, old) ->
 			input.parse()
 			input.onChanged() # TODO: move it into input class
-			file._tmp.attrChanges.push @, name, old
 		file._tmp.listeners.push sourceNode, 'onAttrChanged', listener
 
 	# listen on storage changes

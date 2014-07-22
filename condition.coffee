@@ -47,7 +47,11 @@ module.exports = (File) -> class Condition
 		return if @node.visible is result
 
 		@node.visible = result
-		@self._tmp.visibleChanges.push @node
+
+	revert: ->
+		expect(@self.isRendered).toBe.falsy()
+
+		@node.visible = true
 
 	clone: (original, self) ->
 
@@ -57,8 +61,10 @@ module.exports = (File) -> class Condition
 		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
 		clone.render = @render.bind clone
+		clone.revert = @revert.bind clone
 
 		clone.self.onRender.connect clone.render
+		clone.self.onRevert.connect clone.revert
 		clone.node.onAttrChanged.connect (attr) ->
 			clone.render() if attr is 'if'
 

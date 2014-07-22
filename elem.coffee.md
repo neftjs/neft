@@ -39,6 +39,7 @@ Represents an element placed in the file.
 		self: null
 		node: null
 		bodyNode: null
+		usedUnit: null
 
 ### Methods
 
@@ -48,19 +49,27 @@ Represents an element placed in the file.
 			return if @isRendered
 			return unless @node.visible
 
-			unit = @_unit = File.factory @self.units[@name]
-			unit.storage = @self.storage
-			unit.render @
+			usedUnit = @usedUnit = File.factory @self.units[@name]
+			usedUnit.storage = @self.storage
+			usedUnit.render @
 
-			@self._tmp.parentChanges.push @node.parent, @node, unit.node
-			@node.parent.replace @node, unit.node
+			@node.parent.replace @node, usedUnit.node
 
 			@isRendered = true
 
 		revert: ->
 			expect(@self.isRendered).toBe.falsy()
 			@isRendered = false
-			@_unit?.revert().destroy()
+
+			# restore attrs
+			@node.attrs.backChanges()
+
+			return unless @usedUnit
+
+			# destroy used unit
+			@usedUnit.node.parent.replace @usedUnit.node, @node
+			@usedUnit.revert().destroy()
+			@usedUnit = null
 
 		clone: (original, self) ->
 
@@ -73,6 +82,7 @@ Represents an element placed in the file.
 			clone.render = @render.bind clone
 			clone.revert = @revert.bind clone
 			clone.isRendered = false
+			clone.usedUnit = null
 
 			utils.defProp clone, '_unit', 'cw', null
 

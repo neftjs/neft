@@ -24,9 +24,6 @@ features. Physical file should be easy to load and parse.
 
 		getTmp = -> tmp =
 			usedUnits: []
-			parentChanges: []
-			attrChanges: []
-			visibleChanges: []
 			listeners: []
 
 		@__name__ = 'File'
@@ -224,7 +221,6 @@ features. Physical file should be easy to load and parse.
 
 		revert: do ->
 
-			changes = require('./file/render/revert/changes.coffee') File
 			listeners = require('./file/render/revert/listeners.coffee') File
 			elems = require('./file/render/revert/elems.coffee') File
 
@@ -239,7 +235,6 @@ features. Physical file should be easy to load and parse.
 				@onRevert()
 
 				listeners @
-				changes @
 				elems @
 
 				@

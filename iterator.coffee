@@ -42,17 +42,16 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		if not isArray(each) and not (each instanceof ObservableArray)
 			node.visible = false
-			@self._tmp.visibleChanges.push node
 			return
 
 		{unit} = @
-		{usedUnits, parentChanges} = @self._tmp
 
 		null
 
 	revert: ->
 
 		@clearArray()
+		@node.visible = true
 
 	getArray: ->
 
