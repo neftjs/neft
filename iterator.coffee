@@ -9,6 +9,8 @@ module.exports = (File) -> class Iterator extends File.Elem
 	@__name__ = 'Iterator'
 	@__path__ = 'File.Iterator'
 
+	{ObservableArray} = File
+
 	constructor: (@self, node) ->
 
 		expect(self).toBe.any File
@@ -26,7 +28,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 	unit: ''
 	storage: null
-	data: null
+	array: null
 
 	render: ->
 
@@ -34,13 +36,13 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		return unless node.visible
 
-		@getData()
+		@getArray()
 
 		each = node.attrs.get 'each'
 
-		unless isArray each
+		if not isArray(each) and not (each instanceof ObservableArray)
 			node.visible = false
-			file._tmp.visibleChanges.push node
+			@self._tmp.visibleChanges.push node
 			return
 
 		{unit} = @
@@ -50,40 +52,48 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 	revert: ->
 
-		@clearData()
+		@clearArray()
 
-	clearData: ->
-
-		{data} = @
-
-		return unless isArray data
-
-		data.onAdded?.disconnect @addItem
-		data.onRemoved?.disconnect @removeItem
-
-		for _, i in data
-			@removeItem 0
-
-		@data = null
-
-		null
-
-	getData: ->
+	getArray: ->
 
 		each = @node.attrs.get 'each'
 
-		if @data and @data isnt each
-			@clearData()
+		# clear all if array changed
+		if @array and @array isnt each
+			@clearArray()
 
-		return if @data is each
-		return unless isArray each
+		return if @array is each
 
-		@data = each
-		each.onAdded?.connect @addItem
-		each.onRemoved?.connect @removeItem
+		data = @array = each
 
-		for _, i in each
+		if each instanceof ObservableArray
+			each.onAdded.connect @addItem
+			each.onRemoved.connect @removeItem
+			{data} = each
+
+		return unless isArray data
+
+		for _, i in data
 			@addItem i
+
+		null
+
+	clearArray: ->
+
+		{array} = @
+
+		data = array
+
+		if array instanceof ObservableArray
+			array.onAdded.disconnect @addItem
+			array.onRemoved.disconnect @removeItem
+			{data} = array
+
+		{children} = @node
+		while children.length
+			children[children.length - 1].parent = undefined
+
+		@array = null
 
 		null
 
@@ -103,8 +113,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 	removeItem: (i) ->
 
-		expect(@data).toBe.array()
-		expect(@data[i]).not().toBe undefined
+		expect(@array).toBe.object()
 
 		@node.children[i].parent = undefined
 
@@ -113,12 +122,12 @@ module.exports = (File) -> class Iterator extends File.Elem
 		clone = super
 
 		clone.storage = utils.cloneDeep @storage
-		clone.data = null
+		clone.array = null
 
 		clone.addItem = clone.addItem.bind clone
 		clone.removeItem = clone.removeItem.bind clone
 
 		clone.node.onAttrChanged.connect (attr) ->
-			clone.getData() if attr is 'each'
+			clone.getArray() if attr is 'each'
 
 		clone

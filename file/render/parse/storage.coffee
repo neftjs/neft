@@ -25,7 +25,7 @@ module.exports = (File) -> (file, source, input) ->
 		file._tmp.listeners.push sourceNode, 'onAttrChanged', listener
 
 	# listen on storage changes
-	if storage?.hasOwnProperty 'onChanged'
+	if storage instanceof File.ObservableObject
 		storage.onChanged.connect listener = (name, value) ->
 			input.parse()
 			input.onChanged() # TODO: move it into input class

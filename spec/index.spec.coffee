@@ -196,20 +196,17 @@ describe 'View Storage', ->
 			source = View.fromHTML uid(), '#{x}'
 			view = source.clone()
 
-			storage = x: 1
-			signal.create storage, 'onChanged'
+			storage = new View.ObservableObject x: 1
 
 			renderParse view,
 				storage: storage
 			expect(view.node.stringify()).toBe '1'
 
-			storage.x = 2
-			storage.onChanged 'x', 1
+			storage.set 'x', 2
 			expect(view.node.stringify()).toBe '2'
 
 			view.revert()
-			storage.x = 1
-			storage.onChanged 'x', 2
+			storage.set 'x', 1
 			renderParse view,
 				storage: storage
 			expect(view.node.stringify()).toBe '1'
@@ -276,19 +273,16 @@ describe 'View Condition', ->
 			                              '<a if="#{x} == 1"></a>'
 			view = source.clone()
 
-			storage = x: 0
-			signal.create storage, 'onChanged'
+			storage = new View.ObservableObject x: 0
 
 			renderParse view, storage: storage
 			expect(view.node.stringify()).toBe ''
 
-			storage.x = 1
-			storage.onChanged 'x', 0
+			storage.set 'x', 1
 			expect(view.node.stringify()).toBe 'OK'			
 
 describe 'View Iterator', ->
 
-	###
 	it 'loops expected times', ->
 
 		source = View.fromHTML uid(), '<ul each="[0,0]">1</ul>'
@@ -325,26 +319,21 @@ describe 'View Iterator', ->
 		expect(source.node.stringify()).toBe '<a data="1,2"></a>'
 		expect(view.node.stringify()).toBe '' +
 			'<ul>12</ul>'
-	###
+
 	it 'supports updates', ->
 
-		source = View.fromHTML uid(), '<ul each="#{arr}">#{each[i]}</ul>'
+		source = View.fromHTML uid(), '<ul each="#{arr}">#{each.get(i)}</ul>'
 		view = source.clone()
 
-		storage = arr: arr = [1, 2]
-		signal.create storage, 'onChanged'
-		signal.create arr, 'onAdded'
-		signal.create arr, 'onRemoved'
+		storage = arr: arr = new View.ObservableArray [1, 2]
 
 		renderParse view, storage: storage
 		expect(view.node.stringify()).toBe '<ul>12</ul>'
 
-		i = arr.push 3
-		arr.onAdded i-1
-		storage.onChanged 'arr', arr
+		# TODO: test ObservableArray::insert support
+
+		arr.append 3
 		expect(view.node.stringify()).toBe '<ul>123</ul>'
 
-		arr.splice 1, 1
-		arr.onRemoved 1
-		storage.onChanged 'arr', arr
+		arr.pop 1
 		expect(view.node.stringify()).toBe '<ul>13</ul>'

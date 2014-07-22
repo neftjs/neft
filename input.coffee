@@ -6,20 +6,20 @@ coffee = require 'coffee-script' if utils.isNode
 module.exports = (File) -> class Input
 
 	{Element} = File
+	{ObservableObject} = File
 
 	@__name__ = 'Input'
 	@__path__ = 'File.Input'
 
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
-	VAR_RE = @VAR_RE = ///(^|\s|\[|:)([a-z]\w*)+///gi
-
-	@Text = require('./input/text.coffee') File, @
-	@Attr = require('./input/attr.coffee') File, @
+	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z]\w*)+///gi
 
 	@get = (input, prop) ->
 
 		v = input.sourceNode?.attrs.get prop
 		v ?= input.sourceStorage?[prop]
+		if input.storage instanceof ObservableObject
+			v ?= input.storage.data[prop]
 		v ?= input.storage?[prop]
 		v
 
@@ -77,3 +77,6 @@ module.exports = (File) -> class Input
 		clone.node = original.node.getCopiedElement @node, self.node
 
 		clone
+
+	@Text = require('./input/text.coffee') File, @
+	@Attr = require('./input/attr.coffee') File, @

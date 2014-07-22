@@ -39,6 +39,8 @@ features. Physical file should be easy to load and parse.
 		Emitter.call @
 
 		@Element = require('./Element/index')
+		@ObservableObject = require('./observableObject.coffee') @
+		@ObservableArray = require('./observableArray.coffee') @
 		@Unit = require('./unit.coffee.md') @
 		@Elem = require('./elem.coffee.md') @
 		@Input = require('./input.coffee') @
