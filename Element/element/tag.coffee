@@ -23,24 +23,28 @@ module.exports = (Element) -> class Tag extends Element
 
 	Object.defineProperties @::,
 
-		clone: value: do (_super = @::clone) -> ->
+		clone:
+			writable: true
+			value: do (_super = @::clone) -> ->
 
-			clone = _super.call @
+				clone = _super.call @
 
-			clone.children = []
-			clone.attrsValues &&= utils.clone @attrsValues
+				clone.children = []
+				clone.attrsValues &&= utils.clone @attrsValues
 
-			clone
+				clone
 
-		cloneDeep: value: ->
+		cloneDeep:
+			writable: true
+			value: ->
 
-			clone = @clone()
+				clone = @clone()
 
-			for child in @children
-				clonedChild = child.cloneDeep()
-				clonedChild.parent = clone
+				for child in @children
+					clonedChild = child.cloneDeep()
+					clonedChild.parent = clone
 
-			clone
+				clone
 
 		attrs:
 

@@ -56,8 +56,8 @@ Value will automatically change `children`.
 
 			parent:
 
+				enumerable: true
 				get: -> @_parent
-
 				set: (value) ->
 
 					expect(@).not().toBe value
@@ -90,8 +90,8 @@ Value will automatically change `children`.
 
 			visible:
 
+				enumerable: true
 				get: -> @_visible
-
 				set: (value) ->
 
 					expect(value).toBe.boolean()
@@ -117,15 +117,23 @@ Value will automatically change `children`.
 
 Returns new instance of *Element* with the same properties.
 
-			clone: value: clone = ->
+			clone:
+				enumerable: true
+				writable: true
+				value: cloneMethod = ->
 
-				clone = Object.create @
+					clone = Object.create @
 
-				clone._parent = null
+					clone.clone = undefined
+					clone.cloneDeep = undefined
+					clone._parent = null
 
-				clone
+					clone
 
-			cloneDeep: value: clone
+			cloneDeep:
+				enumerable: true
+				writable: true
+				value: cloneMethod
 
 ### Signals
 

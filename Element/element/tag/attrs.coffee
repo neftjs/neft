@@ -55,3 +55,26 @@ module.exports = (Element) -> exports =
 		if Element.OBSERVE and tag.hasOwnProperty('onAttrChanged')
 			tag.onAttrChanged name, old
 
+	backChanges: ->
+
+		expect(exports.tag.clone).toBe undefined
+
+		{tag} = exports
+
+		keys = tag.attrsKeys
+		return unless keys
+
+		original = Object.getPrototypeOf tag
+		valuesA = tag.attrsValues
+		valuesB = original.attrsValues
+
+		for value, i in valuesA
+			continue if value is valuesB[i]
+
+			valuesA[i] = valuesB[i]
+
+			# call observers
+			if Element.OBSERVE and tag.hasOwnProperty('onAttrChanged')
+				tag.onAttrChanged keys[i], value
+
+		@

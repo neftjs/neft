@@ -157,6 +157,16 @@ describe 'View Element', ->
 
 			elem.attrs.set 'title', title
 
+		it 'supports backing changes on cloned elements', ->
+
+			elem = p.clone()
+			title = elem.attrs.get 'title'
+
+			elem.attrs.set 'title', Math.random()
+			elem.attrs.backChanges()
+
+			expect(elem.attrs.get('title')).toBe title
+
 	it 'replace() works properly', ->
 
 		elem = Element.fromHTML '<b><em></em></b><div></div><p></p>'
