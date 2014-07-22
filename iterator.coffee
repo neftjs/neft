@@ -109,8 +109,6 @@ module.exports = (File) -> class Iterator extends File.Elem
 			item: data[i]
 		usedUnit.render @
 
-		@self._tmp.usedUnits.push usedUnit
-
 		newChild = usedUnit.node
 
 		# replace

@@ -23,7 +23,6 @@ features. Physical file should be easy to load and parse.
 		pool = {}
 
 		getTmp = -> tmp =
-			usedUnits: []
 			listeners: []
 
 		@__name__ = 'File'
@@ -222,7 +221,6 @@ features. Physical file should be easy to load and parse.
 		revert: do ->
 
 			listeners = require('./file/render/revert/listeners.coffee') File
-			elems = require('./file/render/revert/elems.coffee') File
 
 			->
 
@@ -235,7 +233,6 @@ features. Physical file should be easy to load and parse.
 				@onRevert()
 
 				listeners @
-				elems @
 
 				@
 
