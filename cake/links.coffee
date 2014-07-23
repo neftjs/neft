@@ -33,6 +33,7 @@ module.exports = class LinksBuilder
 		expect().defined(opts.files).toBe.array()
 		expect().defined(opts.ext).toBe.truthy().string()
 		expect().defined(opts.input).toBe.truthy().string()
+		expect().defined(opts.inputs).toBe.array()
 		expect().defined(opts.output).toBe.truthy().string()
 		expect().defined(opts.onFile).toBe.function()
 
@@ -42,6 +43,7 @@ module.exports = class LinksBuilder
 
 	ext: '.coffee'
 	input: ''
+	inputs: null
 	output: ''
 	onFile: null
 	files: null
@@ -50,14 +52,14 @@ module.exports = class LinksBuilder
 		fs.removeSync @output
 		fs.removeSync "#{@output}.coffee"
 
-	findFiles: ->
+	findFiles: (input=@input) ->
 
-		forEachFile @input, (filePath, stat) =>
+		forEachFile input, (filePath, stat) =>
+
 			file = fs.readFileSync filePath, 'utf-8'
 
-			filePath = path.relative @input, filePath
 			ext = path.extname filePath
-			filename = name = filePath.slice 0, -ext.length
+			filename = name = path.relative(input, filePath).slice 0, -ext.length
 
 			if LinksBuilder.ENV_RE.test name
 				[_, name, env] = LinksBuilder.ENV_RE.exec name
@@ -94,21 +96,29 @@ module.exports = class LinksBuilder
 		str = "utils = require 'utils'\n"
 		for file in @files
 
-			prefix = if file.saved then './' else '../'
-			fileBaseDir = "#{prefix}#{baseDir}"
+			filePath = file.filepath
+			unless file.saved
+				filePath = path.relative './build', file.filepath
+			filePath = filePath.substr(0, filePath.lastIndexOf(".")) + @ext
 
 			if file.env
 				env = utils.capitalize file.env
 				str += "if utils.is#{env} then "
 
-			str += "exports['#{file.name}'] = require('#{fileBaseDir}/#{file.filename}#{@ext}');\n"
+			str += "exports['#{file.name}'] = require('#{filePath}');\n"
 
 		fs.outputFileSync "#{@output}.coffee", str
 
 	run: ->
 
 		@cleanOutput()
-		@findFiles()
+
+		if @input
+			@findFiles @input
+		else if @inputs
+			for input in @inputs
+				@findFiles input
+
 		@save()
 
 module.exports.File = class File

@@ -1,10 +1,10 @@
 'use strict'
 
-[cp, path] = ['child_process', 'path'].map require
+[fs, cp, path] = ['fs', 'child_process', 'path'].map require
 
 module.exports = (type, callback) ->
 
-	index = path.resolve __dirname, '../index.coffee'
+	index = path.resolve fs.realpathSync('.'), 'index.coffee'
 	child = cp.fork __dirname + '/bundle/process.coffee', [index, type], silent: true
 	child.on 'message', (msg) ->
 

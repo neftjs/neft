@@ -94,8 +94,8 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 	saved = {}
 
 	View.on View.ERROR, (name) ->
-		path = "#{name}.html"
-		html = fs.readFileSync "./views/#{path}", 'utf-8'
+		filePath = "#{name}.html"
+		html = fs.readFileSync "./views/#{filePath}", 'utf-8'
 		View.fromHTML name, html
 
 	builder = new LinksBuilder
@@ -116,6 +116,7 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 		json = JSON.stringify view, null, 4
 		file = new LinksBuilder.File
 			name: name
+			filepath: "./views/#{name}.json"
 			data: json
 		builder.addFile file
 		builder.writeFile file
@@ -131,7 +132,7 @@ compileTask = task 'compile', 'Compile views and styles', ->
 linkModelsTask = task 'link:models', 'Generate list of models', ->
 
 	LinksBuilder.build
-		input: './models'
+		inputs: ['./node_modules/app/models', './models']
 		output: MODELS_OUT
 
 	log.ok "Models has been successfully linked"
