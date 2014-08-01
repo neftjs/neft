@@ -1,58 +1,54 @@
 Schema
 ======
 
-### Goals
+Validate data using specified validators.
 
-Validate data using specified validators. If no error are raised, data passed.
+The whole process in this module must be synchronous.
 
-Standard JS errors should be raising, when invalid data is passed.
-
-### Schema structure
-
-Structure is a namespace with *row* name and options as specified:
-
-*  `required` - if *row* has been specified,
-*  `array` - if *value* is an array,
-*  `object = [{Object}]` - if *value* is a pure object (without any other protos);
-   define available properties by specified `properties`,
-*  `function` - if *value* is a proper function,
-*  `max = {Number}` - if *value* is lower or the same as *expected*,
-*  `min = {Number}` - if *value* is greater or the same as *expected*,
-*  `options = {Object|Array}` - if *value* was provided in the *expected*
-   (keys if Object, elements if Array),
-*  `re = {RegExp}` - if *value* test *expected* regexp,
-*  `type = {String}` - if *value* is the same type as *expected*
-   (for `NaN` and `null` the type is `undefined`).
-
-Provided schema validators options shoduldn't be validated if no specified options
-are required. Schema object could be edit in realtime also.
-
-Validators
-----------
-
-	validators =
-		required: require('./validators/required.coffee')
-		array: require('./validators/array.coffee')
-		object: require('./validators/object.coffee')
-		function: require('./validators/function.coffee')
-		max: require('./validators/max.coffee')
-		min: require('./validators/min.coffee')
-		options: require('./validators/options.coffee')
-		re: require('./validators/re.coffee')
-		type: require('./validators/type.coffee')
-
-*class* Schema
---------------
+When invalid data has been passed, standard JavaScript errors should be raised
+(`Error`, `TypeError`, `RangeError`).
 
 	'use strict'
+
+	validators =
+		required: require('./validators/required')
+		array: require('./validators/array')
+		object: require('./validators/object')
+		function: require('./validators/function')
+		max: require('./validators/max')
+		min: require('./validators/min')
+		options: require('./validators/options')
+		re: require('./validators/re')
+		type: require('./validators/type')
 
 	utils = require 'utils'
 
 	objKeys = Object.keys
 
+*class* Schema
+--------------
+
 	module.exports = class Schema
 
-### Constructor
+### Constructor( *Object* schema )
+
+Craate new *Schema* instance with got *requirements object*.
+
+Check supported validators to create your own *schema*.
+
+The *requirements object* must provide all possible rows which are validated.
+
+##### Example
+```coffeescript
+Schema = require 'schema'
+
+new Schema
+	address:
+		required: 'string'
+		type: 'string'
+	delivery:
+		type: 'boolean'
+```
 
 		constructor: (@schema) ->
 
@@ -66,17 +62,55 @@ Validators
 				unless utils.isObject elem
 					throw new TypeError "Schema(): schema for #{row} row is not an object"
 
-### Properties
+### *Object* schema
 
-#### schema
+This property keeps passed *schema* object from the constructor.
+
+Object is not *readonly*, so you can change the config in realtime.
 
 		schema: null
 
-### Methods
+### validate( *Object* data )
 
-#### validate()
+Validate passed *data* by the already registered validators.
 
-Standard JS errors will be raised if data not passed, otherwise `true`.
+This method throws an error if data is invalid.
+
+##### Example
+```coffeescript
+Schema = require 'schema'
+
+schema = new Schema
+	age:
+		required: true
+		type: 'number'
+		min: 0
+		max: 200
+
+schema.validate name: 'Jony'
+# throws `TypeError: Schema::validate(): unexpected name row`
+
+schema.validate age: -5
+# throws `RangeError: Schema: Minimum range of age is 0`
+
+schema.validate age: 20
+# returns `true`
+```
+
+##### Tip
+###### Get an boolean value
+To get `true`/`false` which determines whether data passed validator or not,
+you can use `tryFunc` from [utils][module_utils] module.
+
+```coffeescript
+utils = require 'utils'
+
+utils.tryFunc schema.validate, schema, [age: -1], false
+# returns `false`
+
+utils.tryFunc schema.validate, schema, [age: 5], false
+# returns `true`
+```
 
 		validate: (data) ->
 
