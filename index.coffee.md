@@ -1,11 +1,16 @@
 Log
 ===
 
-Logger used to log `info`, `warn`, `error` messages and functions processing times.
+Simply to use and good looking logger used to log `info`, `warn`,
+`error` messages and functions processing times.
+
+Built to be easily implemented for the standard console output and for browsers.
+
+All loggs are removed for the *release* mode.
 
 	'use strict'
 
-	[utils] = ['utils'].map require
+	[utils, expect] = ['utils', 'expect'].map require
 
 	{assert} = console
 	{bind} = Function
@@ -17,9 +22,6 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 		str = ''
 		str += "#{arg} → " for arg in args
 		str.substring 0, str.length - 3
-
-*class* Log
------------
 
 	class Log
 
@@ -45,8 +47,7 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 		constructor: (@prefixes) ->
 
 			if prefixes
-
-				assert isArray prefixes
+				expect(prefixes).toBe.array()
 
 				# bind all logs methods by prefixes
 				args = utils.clone(prefixes)
@@ -60,22 +61,94 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 
 		_write: console?.log or (->)
 
-		scope: (args...) ->
+log()
+-----
 
-			if @prefixes
-				unshift.apply args, @prefixes
+The most basic function used to write into console.
 
-			new LogImpl args
+All passed arguments are concatenated with right arrow (`→`).
+
+Logged text is white.
+
+This method is also a module object, so you can use it just after requiring module.
+
+##### Example
+```coffeescript
+log = require 'log'
+
+log "Log me now!"
+
+log "setName()", "db time"
+# will be logged as "setName() → db time"
+```
 
 		log: -> @_write LogImpl.MARKERS.white fromArgs arguments
 
+info()
+------
+
+Method used to log some useful informations for debugging, to mark progress.
+
+Logged text is blue.
+
 		info: -> @_write LogImpl.MARKERS.blue fromArgs arguments
+
+ok()
+----
+
+Use this method to mark successful operations.
+
+Logged text is green.
+
+##### Example
+```coffeescript
+log = require 'log'
+
+log.ok "Data has been successfully sent!"
+```
 
 		ok: -> @_write LogImpl.MARKERS.green fromArgs arguments
 
+warn()
+------
+
+For warnings, use this method.
+
+Logged text if yellow.
+
 		warn: -> @_write LogImpl.MARKERS.yellow fromArgs arguments
 
+error()
+-------
+
+If during processing, some errors occurs, use thid method to log them.
+
+Logged text is red.
+
 		error: -> @_write LogImpl.MARKERS.red fromArgs arguments
+
+time()
+------
+
+This method and `end()` are used to debug how long the operation takes.
+
+All logs logged after this method and before `end()` will be indented.
+
+Use it only for the synchronous operations.
+
+It's a good practice to always name variable which keeps returned *time id* as `logtime`.
+
+##### Example
+```coffeescript
+log = require 'log'
+
+findPath = ->
+  logtime = log.time 'findPath()'
+
+  # ... some complex algorithm ...
+
+  log.end logtime
+```
 
 		time: ->
 
@@ -94,6 +167,13 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 
 			id
 
+end()
+-----
+
+This method is used to mark when counting time ends.
+
+See `time()` method for more informations and example.
+
 		end: (id) ->
 
 			time = LogImpl.times[id]
@@ -103,9 +183,33 @@ Logger used to log `info`, `warn`, `error` messages and functions processing tim
 			str = "#{diff} ms"
 			@_write LogImpl.MARKERS.gray str
 
-Implementation
---------------
+scope()
+-------
 
+This methods returns new logger with binded functions.
+
+Use this function to always log with some special prefix (e.g. module name).
+
+##### Example
+```coffeescript
+log = require "log"
+log = log.scope "Example file"
+
+log "hello"
+# loggs "Example file → hello"
+
+log.info "Let's go!"
+# loggs "Example file → Let's go"
+```
+
+		scope: (args...) ->
+
+			if @prefixes
+				unshift.apply args, @prefixes
+
+			new LogImpl args
+
+	# implementation
 	impl = switch true
 		when utils.isNode
 			require './impls/node/index.coffee'
