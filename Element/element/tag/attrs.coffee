@@ -55,6 +55,8 @@ module.exports = (Element) -> exports =
 		if Element.OBSERVE and tag.hasOwnProperty('onAttrChanged')
 			tag.onAttrChanged name, old
 
+		value
+
 	backChanges: ->
 
 		expect(exports.tag.clone).toBe undefined
