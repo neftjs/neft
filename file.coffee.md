@@ -34,6 +34,8 @@ features. Physical file should be easy to load and parse.
 		utils.merge @, Emitter::
 		Emitter.call @
 
+		signal.create @, 'onParse'
+
 		@Element = require('./Element/index')
 		@ObservableObject = require('./observableObject.coffee') @
 		@ObservableArray = require('./observableArray.coffee') @
@@ -158,6 +160,9 @@ features. Physical file should be easy to load and parse.
 				storage @
 				conditions @
 				nodes @
+
+				# trigger signal
+				File.onParse @
 
 				# save to storage
 				files[@path] = @
