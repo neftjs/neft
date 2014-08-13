@@ -55,6 +55,9 @@ Represents an element placed in the file.
 
 			@node.parent.replace @node, usedUnit.node
 
+			if usedUnit.hasOwnProperty 'onReplacedByElem'
+				usedUnit.onReplacedByElem @
+
 			@isRendered = true
 
 		revert: ->

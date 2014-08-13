@@ -8,7 +8,7 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 	'use script'
 
-	[utils, expect] = ['utils', 'expect'].map require
+	[utils, expect, signal] = ['utils', 'expect', 'signal'].map require
 
 *class* Unit
 ------------
@@ -37,3 +37,7 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 		id: ''
 		name: ''
+
+### Signals
+
+		signal.create @::, 'onReplacedByElem'

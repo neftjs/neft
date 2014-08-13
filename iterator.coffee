@@ -114,6 +114,9 @@ module.exports = (File) -> class Iterator extends File.Elem
 		# replace
 		newChild.parent = @node
 
+		if usedUnit.hasOwnProperty 'onReplacedByElem'
+			usedUnit.onReplacedByElem @
+
 	removeItem: (i) ->
 
 		expect(@array).toBe.object()
