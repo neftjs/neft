@@ -1,6 +1,5 @@
 'use strict'
 
-
 module.exports = (File) -> (file) ->
 
 	# prepare
@@ -14,7 +13,7 @@ module.exports = (File) -> (file) ->
 
 		node = children[i]
 
-		if node.name isnt 'link' or node.attrs.get('rel') isnt 'require'
+		if node.name isnt 'require' or node.attrs.get('rel') isnt 'view'
 			continue
 
 		href = node.attrs.get 'href'

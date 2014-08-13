@@ -37,13 +37,13 @@ describe 'View', ->
 		view = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
 		expect(view.elems).not.toEqual {}
 
-	describe 'links', ->
+	describe 'requires', ->
 
 		it 'finds properly', ->
 
 			first = uid()
 			View.fromHTML first, '<b></b>'
-			view = View.fromHTML uid(), '<link rel="require" href="'+first+'">'
+			view = View.fromHTML uid(), '<require rel="view" href="'+first+'">'
 			expect(view.links.length).toBe 1
 
 		describe 'shares units', ->
@@ -52,7 +52,7 @@ describe 'View', ->
 
 				first = 'namespace/'+uid()
 				View.fromHTML first, '<unit name="a"></unit>'
-				view = View.fromHTML uid(), '<link rel="require" href="'+first+'">'
+				view = View.fromHTML uid(), '<require rel="view" href="'+first+'">'
 				expect(Object.keys(view.units).length).toBe 1
 				expect(Object.keys(view.units)[0]).toBe 'a'
 
@@ -60,7 +60,7 @@ describe 'View', ->
 
 				first = uid()
 				View.fromHTML first, '<unit name="a"></unit>'
-				view = View.fromHTML uid(), '<link rel="require" href="'+first+'" as="ns">'
+				view = View.fromHTML uid(), '<require rel="view" href="'+first+'" as="ns">'
 				expect(Object.keys(view.units).length).toBe 1
 				expect(Object.keys(view.units)[0]).toBe 'ns-a'
 
