@@ -166,6 +166,7 @@ features. Physical file should be easy to load and parse.
 
 ### Properties
 
+		uid: ''
 		isRendered: false
 		node: null
 		nodes: null
@@ -246,6 +247,7 @@ features. Physical file should be easy to load and parse.
 
 				clone.clone = undefined
 				clone._tmp = getTmp()
+				clone.uid = utils.uid()
 				clone.isRendered = false
 				clone.node = @node.cloneDeep()
 				clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
