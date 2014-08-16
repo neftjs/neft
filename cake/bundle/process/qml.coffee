@@ -11,5 +11,13 @@ Provide necessary standard browser globals
 ###
 global.Font = {}
 global.Qt =
-	createQmlObject: -> {}
-global.styles = {}
+	createQmlObject: ->
+		font: {}
+	binding: ->
+global.styles =
+	children: []
+global.window =
+	items: {}
+global.qmlUtils =
+	createBinding: ->
+global.hatchery = {}

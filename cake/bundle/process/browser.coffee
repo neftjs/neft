@@ -11,10 +11,13 @@ Provide necessary standard browser globals
 ###
 global.window =
 	addEventListener: ->
+	Image: ->
 global.location = pathname: ''
 global.navigator = userAgent: ''
 global.innerWidth = 1024
 global.innerHeight = 600
+global.scrollX = 0
+global.scrollY = 0
 global.document =
 	body:
 		appendChild: ->
@@ -26,6 +29,10 @@ global.document =
 		children: [
 			{
 				childNodes: []
+				width:
+					baseVal: 0
+				height:
+					baseVal: 0
 			}
 		]
 		removeChild: ->
@@ -60,3 +67,5 @@ global.document =
 	querySelector: ->
 global.history =
 	pushState: ->
+global.requestAnimationFrame = ->
+global.Image = global.document.createElement
