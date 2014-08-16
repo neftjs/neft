@@ -89,9 +89,20 @@ build = (type, opts, callback) ->
 
 compileViewsTask = task 'compile:views', 'Compile HTML views into json format', ->
 
-	[View] = ['view'].map require
+	# TODO: compile with styles only for a client bundle
+	[View, _] = ['view', 'view-styles'].map require
+	#[View] = ['view'].map require
 
-	saved = {}
+	# load all styles
+	###
+	currentPath = fs.realpathSync ''
+	LinksBuilder.build
+		input: './styles'
+		ext: '.json'
+		onFile: (file) ->
+			if path.extname(file.filepath) is '.coffee'
+				require "#{currentPath}/#{file.filepath}"
+	###
 
 	View.on View.ERROR, (name) ->
 		filePath = "#{name}.html"
@@ -125,9 +136,32 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 
 	log.ok "Views has been successfully compiled"
 
+compileStylesTask = task 'compile:styles', 'Compile styles into json format', ->
+
+	compiler = require './cake/styles'
+
+	builder = new LinksBuilder
+		input: './styles'
+		output: STYLES_OUT
+		ext: '.json'
+		onFile: (file) ->
+			path.extname(file.filepath) is '.coffee'
+
+	builder.cleanOutput()
+	builder.findFiles()
+
+	for file in builder.files
+		file.data = compiler.compile file.data
+		builder.writeFile file
+
+	builder.save()
+
+	log.ok "Styles has been successfully compiled"
+
 compileTask = task 'compile', 'Compile views and styles', ->
 
 	compileViewsTask()
+	compileStylesTask()
 
 linkModelsTask = task 'link:models', 'Generate list of models', ->
 
@@ -137,21 +171,9 @@ linkModelsTask = task 'link:models', 'Generate list of models', ->
 
 	log.ok "Models has been successfully linked"
 
-linkStylesTask = task 'link:styles', 'Generate list of styles', ->
-
-	LinksBuilder.build
-		input: './styles'
-		output: STYLES_OUT
-		ext: '.json'
-		onFile: (file) ->
-			path.extname(file.filepath) is '.json'
-
-	log.ok "Styles has been successfully linked"
-
 linkTask = task 'link', 'Generate needed lists of existed files', ->
 
 	linkModelsTask()
-	linkStylesTask()
 
 buildBrowserTask = task 'build:browser', 'Build bundle for browser environment', (opts, callback) ->
 
@@ -167,7 +189,7 @@ buildQmlTask = task 'build:qml', 'Build bundle for qml environment', (opts, call
 
 	stack.add null, (callback) ->
 		# copy qml files
-		fs.copySync './cake/bundle/qml', QML_BUNDLE_OUT
+		fs.copySync './node_modules/app/cake/bundle/qml', QML_BUNDLE_OUT
 
 		# compile coffee files
 		glob "#{QML_BUNDLE_OUT}**/*.coffee", (err, files) ->

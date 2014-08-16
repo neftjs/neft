@@ -6,6 +6,7 @@
 [_, _, _, _, _, AppModel] = ['model', 'model-db', 'model-client', 'model-linkeddata',
                              'model-view', './model.coffee'].map require
 
+# TODO: use view-styles only for a client bundle
 if utils.isClient
 	[_] = ['view-styles'].map require
 
@@ -45,7 +46,8 @@ module.exports = (opts={}) ->
 
 	# load styles
 	if utils.isClient
-		View.loadStylesFromJSON style for path, style of opts.styles
+		for path, json of opts.styles
+			View.loadStylesFromJSON path, json
 
 	# load models
 	models = {}
