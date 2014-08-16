@@ -3,6 +3,9 @@
 attrsKeyGen = (elem, i) -> elem
 attrsValueGen = (elem, i) -> i
 
+VOID_ELEMENTS =
+	require: true
+
 module.exports = (Element) ->
 
 	class Parser
@@ -47,7 +50,8 @@ module.exports = (Element) ->
 
 			@_addDomElement element
 
-			@_tagStack.push element
+			unless VOID_ELEMENTS[name]
+				@_tagStack.push element
 
 		ontext: (data) ->
 
