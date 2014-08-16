@@ -18,12 +18,16 @@ Represents *unit* - separated part of file which can be placed by elems.
 		@__name__ = 'Unit'
 		@__path__ = 'File.Unit'
 
+		signal.create @, 'onCreate'
+
 ### Constructor(*File*, *string, *HTMLDivElement*)
 
 		constructor: (self, @name, node) ->
 
 			expect(self).toBe.any File
 			expect(name).toBe.truthy().string()
+
+			Unit.onCreate @, self
 
 			# merge units from parent
 			@units = utils.clone self.units
