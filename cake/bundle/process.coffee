@@ -38,7 +38,11 @@ require "./process/#{type}"
 try
 	require index
 catch err
-	return process.send err: err.stack
+	if err.stack
+		err = err.stack
+	else
+		err += ''
+	return process.send err: err
 
 # add index file into modules list
 modules.push 'index.coffee'
