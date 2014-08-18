@@ -4,7 +4,7 @@
 
 BINDING_RE = ///([a-z0-9_]+)\.(left|top|width|height)///ig
 RESERVED_IDS = ['window']
-HASH_PATTERN = '__{hash}__'
+HASH_PATTERN = 'u{hash}_'
 BINDED_PROPS = ['left', 'top', 'width', 'height']
 
 result =
@@ -27,16 +27,24 @@ sandbox.Item = (opts) ->
 	if opts.id
 		result.ids[opts.id] = index
 		obj.variables = {}
-		obj.variables.id = opts.id + HASH_PATTERN
+		obj.variables.id = HASH_PATTERN + opts.id
 		opts.id = ''
 
 	# binded properties
 	for prop in BINDED_PROPS when typeof opts[prop] is 'string'
 		obj.variables ?= {}
-		obj.variables[prop] = opts[prop].replace BINDING_RE, (str, id, prop) ->
-			return str if utils.has RESERVED_IDS, id
-			"#{id}#{HASH_PATTERN}.#{prop}"
-		opts[prop] = ''
+		args = []
+		idsIndexes = {}
+		expr = opts[prop].replace BINDING_RE, (str, id, prop) ->
+			unless utils.has RESERVED_IDS, id
+				id = HASH_PATTERN + id
+			unless idsIndexes[id]
+				idsIndexes[id] = args.length
+				args.push id
+			"$#{idsIndexes[id]}.#{prop}"
+
+		opts[prop] = [expr, []]
+		obj.variables[prop] = args
 
 	obj
 
