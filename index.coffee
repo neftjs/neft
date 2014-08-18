@@ -7,8 +7,8 @@
                              'model-view', './model.coffee'].map require
 
 # TODO: use view-styles only for a client bundle
-if utils.isClient
-	[_] = ['view-styles'].map require
+# if utils.isClient
+[_] = ['view-styles'].map require
 
 Db = Db.Impl()
 
