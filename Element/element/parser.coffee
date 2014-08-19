@@ -92,7 +92,8 @@ module.exports = (Element) ->
 
 			r = node
 
-		parser = new htmlparser.Parser handler
+		parser = new htmlparser.Parser handler,
+			xmlMode: true
 		parser.write html
 		parser.end()
 		
