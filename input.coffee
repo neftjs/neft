@@ -14,13 +14,14 @@ module.exports = (File) -> class Input
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z]\w*)+(?!:)///gi
 
-	@get = (input, prop) ->
+	@get = (file, prop) ->
 
-		v = input.sourceNode?.attrs.get prop
-		v ?= input.sourceStorage?[prop]
-		if input.storage instanceof ObservableObject
-			v ?= input.storage.data[prop]
-		v ?= input.storage?[prop]
+		v = file.source?.node.attrs.get prop
+		v ?= file.source?.storage?[prop]
+		if file.storage instanceof ObservableObject
+			v ?= file.storage.data[prop]
+		else
+			v ?= file.storage?[prop]
 		v
 
 	constructor: (@node, text) ->
@@ -35,7 +36,7 @@ module.exports = (File) -> class Input
 
 			# parse prop
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
-				str = "get(input, '#{escape(elem)}')"
+				str = "get(file, '#{escape(elem)}')"
 				"#{prefix}#{str}"
 
 			# add into func string
@@ -63,10 +64,12 @@ module.exports = (File) -> class Input
 	`utils.simplify()` currently does not support `fromJSON()` and `toJSON()` methods
 	on the constructors, so it's the only way to support such functionality.
 	###
-	toString: do (cache = {}) -> ->
-		func = cache[@_func] ?= new Function 'input', 'get', @_func
+	toString: do (cache = {}) -> (file) ->
+		expect(file).toBe.any File
 
-		toString = @toString = -> try func @, Input.get
+		func = cache[@_func] ?= new Function 'file', 'get', @_func
+
+		toString = @toString = -> try func file, Input.get
 		toString.call @
 
 	clone: (original, self) ->

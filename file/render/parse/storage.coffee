@@ -12,7 +12,7 @@ module.exports = (File) -> (file, source, input) ->
 	input.sourceStorage = source?.storage
 	input.storage = storage
 
-	input.parse()
+	input.parse file
 
 	# TODO: check whether input must be parsed on any change
 

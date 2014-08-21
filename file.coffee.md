@@ -193,6 +193,7 @@ features. Physical file should be easy to load and parse.
 		conditions: null
 		iterators: null
 		storage: null
+		source: null
 
 		signal.create @::, 'onRender'
 		signal.create @::, 'onRevert'
@@ -212,6 +213,7 @@ features. Physical file should be easy to load and parse.
 			expect(@clone).toBe undefined
 
 			@isRendered = true
+			@source = source
 
 			# storage
 			for input in @inputs
@@ -241,6 +243,7 @@ features. Physical file should be easy to load and parse.
 
 				@isRendered = false
 				@storage = null
+				@source = null
 				File.Element.OBSERVE = false
 
 				@onRevert()
@@ -265,6 +268,7 @@ features. Physical file should be easy to load and parse.
 				clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
 				clone.parent = null
 				clone.storage = null
+				clone.source = null
 
 				# inputs
 				if @inputs.length
