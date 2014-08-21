@@ -93,8 +93,10 @@ features. Physical file should be easy to load and parse.
 				ctorsCache[ctor] ?= utils.get ns, ctor
 				ctors[i] = ctorsCache[ctor]
 
-			# save to storage
+			# assemble
 			json = utils.assemble json
+
+			# save to storage
 			files[path] = json
 
 			json
@@ -125,15 +127,16 @@ features. Physical file should be easy to load and parse.
 
 		constructor: do ->
 
-			links = require('./file/parse/links.coffee') File
-			attrs = require('./file/parse/attrs.coffee') File
-			units = require('./file/parse/units.coffee') File
-			iterators = require('./file/parse/iterators.coffee') File
-			source = require('./file/parse/source.coffee') File
-			elems = require('./file/parse/elems.coffee') File
-			storage = require('./file/parse/storage.coffee') File
-			conditions = require('./file/parse/conditions.coffee') File
-			nodes = require('./file/parse/nodes.coffee') File
+			if utils.isNode
+				links = require('./file/parse/links.coffee') File
+				attrs = require('./file/parse/attrs.coffee') File
+				units = require('./file/parse/units.coffee') File
+				iterators = require('./file/parse/iterators.coffee') File
+				source = require('./file/parse/source.coffee') File
+				elems = require('./file/parse/elems.coffee') File
+				storage = require('./file/parse/storage.coffee') File
+				conditions = require('./file/parse/conditions.coffee') File
+				nodes = require('./file/parse/nodes.coffee') File
 
 			(@path, @node) ->
 
