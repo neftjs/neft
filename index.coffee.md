@@ -694,7 +694,10 @@ Backward `simplify()` operation.
 			# set objects as instances
 			if optsInsts
 				for objI, func of constructors
-					objects[objI] = setPrototypeOf objects[objI], func::
+					object = objects[objI] = setPrototypeOf objects[objI], func::
+
+					# call `fromAssebled` if exists
+					func.fromAssembled? object
 
 			# .. or set ctors as properties
 			else if optsCtors
