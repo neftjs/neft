@@ -195,8 +195,8 @@ features. Physical file should be easy to load and parse.
 		storage: null
 		source: null
 
-		signal.create @::, 'onRender'
-		signal.create @::, 'onRevert'
+		signal.defineGetter @::, 'onRender'
+		signal.defineGetter @::, 'onRevert'
 
 ### Methods
 

@@ -33,4 +33,4 @@ module.exports = (Element) -> class Text extends Element
 				if Element.OBSERVE and @hasOwnProperty('onTextChanged')
 					@onTextChanged old
 
-	signal.create @::, 'onTextChanged'
+	signal.defineGetter @::, 'onTextChanged'

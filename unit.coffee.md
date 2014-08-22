@@ -44,4 +44,4 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 ### Signals
 
-		signal.create @::, 'onReplacedByElem'
+		signal.defineGetter @::, 'onReplacedByElem'

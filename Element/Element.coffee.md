@@ -139,11 +139,11 @@ Returns new instance of *Element* with the same properties.
 
 #### onParentChanged
 
-			signal.create @::, 'onParentChanged'
+			signal.defineGetter @::, 'onParentChanged'
 
 #### onVisibilityChanged
 
-			signal.create @::, 'onVisibilityChanged'
+			signal.defineGetter @::, 'onVisibilityChanged'
 
 		if utils.isNode
 			@parser = require('./element/parser') @
