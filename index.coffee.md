@@ -20,14 +20,27 @@ They are several adventages in using this module rather than `emitter`:
 	Returns property descriptor which can be used
 	to define property
 	###
-	exports.getPropertyDesc = (name) ->
-		expect(name).toBe.truthy().string()
+	exports.getPropertyDesc = do ->
 
-		configurable: true
-		get: ->
-			signal = createSignal @, name
-			utils.defProp @, name, 'cw', signal
-			signal
+		config =
+			configurable: true
+			get: null
+
+		(name) ->
+				expect(name).toBe.truthy().string()
+
+				config.get = ->
+					defSignal @, name
+
+				config
+
+	###
+	Create new signal and define it as a property
+	###
+	defSignal = (obj, name) ->
+		signal = createSignal @
+		utils.defProp obj, name, 'cw', signal
+		signal
 
 *Signal* create( *Object* obj, *String* name )
 ----------------------------------------------
@@ -61,6 +74,15 @@ Naming signals are standardised. It's recommended to follow this pattern, but it
 #
 
 	exports.create = (obj, name) ->
+		expect(obj).not().toBe.primitive()
+		expect(name).toBe.truthy().string()
+
+		defSignal obj, name
+
+*Signal* defineGetter( *Object* obj, *String* name )
+----------------------------------------------------
+
+	exports.defineGetter = (obj, name) ->
 		expect(obj).not().toBe.primitive()
 		expect(name).toBe.truthy().string()
 
@@ -104,28 +126,24 @@ obj.onUpdate 'a', 'b', 'c'
 					return true
 				false
 
-		(node, name) ->
-			signal = (a, b) ->
+		signalFunc = (store, a, b) ->
+			n = store.length
+			i = -1
+			while ++i < n
+				func = store[i]
+				if func is null
+					store.splice i, 1
+					i--; n--
+					continue
 
-				# omit cloned elements with no listeners
-				return unless @hasOwnProperty name
+				func.call @, a, b
 
-				{store} = signal
+			null
 
-				if store
-					n = store.length
-					i = -1
-					while ++i < n
-						func = store[i]
-						if func is null
-							store.splice i, 1
-							i--; n--
-							continue
-
-						func.call @, a, b
-				null
-
-			signal.store = null
+		(obj) ->
+			store = []
+			signal = signalFunc.bind obj, store
+			signal.store = store
 
 			if useProto
 				signal.__proto__ = SignalPrototype
@@ -147,10 +165,9 @@ Duplicated are not allowed.
 
 		connect: (listener) ->
 			expect(listener).toBe.function()
-			expect().some(@store).not().toBe listener if @store
+			expect().some(@store).not().toBe listener
 
-			store = @store ?= []
-			store.push listener
+			@store.push listener
 
 ### Signal::disconnect( *Function* listener )
 
