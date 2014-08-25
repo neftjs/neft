@@ -54,6 +54,8 @@ module.exports = class LinksBuilder
 
 	findFiles: (input=@input) ->
 
+		return unless fs.existsSync input
+
 		forEachFile input, (filePath, stat) =>
 
 			file = fs.readFileSync filePath, 'utf-8'

@@ -93,29 +93,18 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 	[View, _] = ['view', 'view-styles'].map require
 	#[View] = ['view'].map require
 
-	# load all styles
-	###
-	currentPath = fs.realpathSync ''
-	LinksBuilder.build
-		input: './styles'
-		ext: '.json'
-		onFile: (file) ->
-			if path.extname(file.filepath) is '.coffee'
-				require "#{currentPath}/#{file.filepath}"
-	###
-
 	View.on View.ERROR, (name) ->
 		filePath = "#{name}.html"
 		html = fs.readFileSync "./views/#{filePath}", 'utf-8'
 		View.fromHTML name, html
 
 	builder = new LinksBuilder
-		input: './views'
 		output: VIEWS_OUT
 		ext: '.json'
 
 	builder.cleanOutput()
-	builder.findFiles()
+	builder.findFiles './node_modules/app/views'
+	builder.findFiles './views'
 
 	for file in builder.files
 		unless View._files[file.name]
