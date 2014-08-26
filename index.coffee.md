@@ -38,7 +38,7 @@ They are several adventages in using this module rather than `emitter`:
 	Create new signal and define it as a property
 	###
 	defSignal = (obj, name) ->
-		signal = createSignal @
+		signal = createSignal obj
 		utils.defProp obj, name, 'cw', signal
 		signal
 
@@ -141,6 +141,8 @@ obj.onUpdate 'a', 'b', 'c'
 			null
 
 		(obj) ->
+			expect(obj).not().toBe.primitive()
+
 			store = []
 			signal = signalFunc.bind obj, store
 			signal.store = store
