@@ -13,7 +13,7 @@ module.exports = (File) -> (file) ->
 
 		node = children[i]
 
-		if node.name isnt 'require' or node.attrs.get('rel') isnt 'view'
+		if node.name isnt 'x:require' or node.attrs.get('rel') isnt 'view'
 			continue
 
 		href = node.attrs.get 'href'

@@ -29,12 +29,12 @@ describe 'View', ->
 
 	it 'finds units', ->
 
-		view = View.fromHTML uid(), '<unit name="a"></unit>'
+		view = View.fromHTML uid(), '<x:unit name="a"></x:unit>'
 		expect(view.units).not.toEqual {}
 
 	it 'finds elems', ->
 
-		view = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
+		view = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
 		expect(view.elems).not.toEqual {}
 
 	describe 'requires', ->
@@ -43,7 +43,7 @@ describe 'View', ->
 
 			first = uid()
 			View.fromHTML first, '<b></b>'
-			view = View.fromHTML uid(), '<require rel="view" href="'+first+'">'
+			view = View.fromHTML uid(), '<x:require rel="view" href="'+first+'">'
 			expect(view.links.length).toBe 1
 
 		describe 'shares units', ->
@@ -51,16 +51,16 @@ describe 'View', ->
 			it 'without namespace', ->
 
 				first = 'namespace/'+uid()
-				View.fromHTML first, '<unit name="a"></unit>'
-				view = View.fromHTML uid(), '<require rel="view" href="'+first+'">'
+				View.fromHTML first, '<x:unit name="a"></x:unit>'
+				view = View.fromHTML uid(), '<x:require rel="view" href="'+first+'">'
 				expect(Object.keys(view.units).length).toBe 1
 				expect(Object.keys(view.units)[0]).toBe 'a'
 
 			it 'with namespace', ->
 
 				first = uid()
-				View.fromHTML first, '<unit name="a"></unit>'
-				view = View.fromHTML uid(), '<require rel="view" href="'+first+'" as="ns">'
+				View.fromHTML first, '<x:unit name="a"></x:unit>'
+				view = View.fromHTML uid(), '<x:require rel="view" href="'+first+'" as="ns">'
 				expect(Object.keys(view.units).length).toBe 1
 				expect(Object.keys(view.units)[0]).toBe 'ns-a'
 
@@ -86,48 +86,48 @@ describe 'View', ->
 
 	it 'can replace elems by units', ->
 
-		view = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
+		view = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
 		view = view.clone()
 
 		renderParse view
 		expect(view.node.stringify()).toBe '<b></b>'
 		view.revert()
-		expect(view.node.stringify()).toBe '<a></a>'
+		expect(view.node.stringify()).toBe '<x:a></x:a>'
 
 	it 'can replace elems by units in units', ->
 
-		source = View.fromHTML uid(), '<unit name="b">1</unit><unit name="a"><b></b></unit><a></a>'
+		source = View.fromHTML uid(), '<x:unit name="b">1</x:unit><x:unit name="a"><x:b></x:b></x:unit><x:a></x:a>'
 		view = source.clone();
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<a></a>'
+		expect(source.node.stringify()).toBe '<x:a></x:a>'
 		expect(view.node.stringify()).toBe '1'
 
 	it 'can render clone separately', ->
 
-		source = View.fromHTML uid(), '<unit name="a"><b></b></unit><a></a>'
+		source = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
 		view = source.clone()
 
 		renderParse view
 		expect(view.node.stringify()).toBe '<b></b>'
-		expect(source.node.stringify()).toBe '<a></a>'
+		expect(source.node.stringify()).toBe '<x:a></x:a>'
 
 	it 'can put elem body in unit', ->
 
 		source = View.fromHTML uid(), '
-			<unit name="a"><source></source></unit>
-			<a><b></b></a>'
+			<x:unit name="a"><x:source></x:source></x:unit>
+			<x:a><b></b></x:a>'
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<a><b></b></a>'
+		expect(source.node.stringify()).toBe '<x:a><b></b></x:a>'
 		expect(view.node.stringify()).toBe '<b></b>'
 
 	it '`source` element supports updates', ->
 
 		source = View.fromHTML uid(), '
-			<unit name="a"><source if="#{x} == 1"></source></unit>
-			<a x="0"><b></b></a>'
+			<x:unit name="a"><x:source x:if="#{x} == 1"></x:source></x:unit>
+			<x:a x="0"><b></b></x:a>'
 		view = source.clone()
 		elem = view.node.children[0]
 
@@ -140,9 +140,9 @@ describe 'View', ->
 	it 'reverted view is identical as before render', ->
 
 		view = View.fromHTML uid(), '
-			<unit name="b"><ul each="#{data}"><div if="#{each[i]} > 0">1</div></ul></unit>
-			<unit name="a"><b data="#{data}"></b></unit>
-			<a data="[0,1]"></a>'
+			<x:unit name="b"><ul x:each="#{data}"><div x:if="#{each[i]} > 0">1</div></ul></x:unit>
+			<x:unit name="a"><x:b data="#{data}"></x:b></x:unit>
+			<x:a data="[0,1]"></x:a>'
 		view = view.clone()
 		ver1 = utils.simplify view
 
@@ -160,28 +160,28 @@ describe 'View Storage', ->
 
 		it 'by elem attrs', ->
 
-			source = View.fromHTML uid(), '<unit name="a">#{x}</unit><a x="2"></a>'
+			source = View.fromHTML uid(), '<x:unit name="a">#{x}</x:unit><x:a x="2"></x:a>'
 			view = source.clone()
 
 			renderParse view
-			expect(source.node.stringify()).toBe '<a x="2"></a>'
+			expect(source.node.stringify()).toBe '<x:a x="2"></x:a>'
 			expect(view.node.stringify()).toBe '2'
 
 		it 'by passed storage', ->
 
-			source = View.fromHTML uid(), '<unit name="a">#{x}, #{b.a}</unit><a></a>'
+			source = View.fromHTML uid(), '<x:unit name="a">#{x}, #{b.a}</x:unit><x:a></x:a>'
 			view = source.clone()
 
 			renderParse view,
 				storage: x: 2, b: {a: 1}
-			expect(source.node.stringify()).toBe '<a></a>'
+			expect(source.node.stringify()).toBe '<x:a></x:a>'
 			expect(view.node.stringify()).toBe '2, 1'
 
 	describe 'supports realtime changes', ->
 
 		it 'on attrs', ->
 
-			source = View.fromHTML uid(), '<unit name="a">#{x}</unit><a x="2"></a>'
+			source = View.fromHTML uid(), '<x:unit name="a">#{x}</x:unit><x:a x="2"></x:a>'
 			view = source.clone()
 			elem = view.node.children[0]
 
@@ -217,7 +217,7 @@ describe 'View Condition', ->
 
 		it 'with positive expression', ->
 
-			source = View.fromHTML uid(), '<div><b if="2 > 1">1</b></div>'
+			source = View.fromHTML uid(), '<div><b x:if="2 > 1">1</b></div>'
 			view = source.clone()
 
 			renderParse view
@@ -225,7 +225,7 @@ describe 'View Condition', ->
 
 		it 'with negative expression', ->
 
-			source = View.fromHTML uid(), '<div><b if="1 > 2">1</b></div>'
+			source = View.fromHTML uid(), '<div><b x:if="1 > 2">1</b></div>'
 			view = source.clone()
 
 			renderParse view
@@ -233,16 +233,16 @@ describe 'View Condition', ->
 
 	it 'works in units', ->
 
-		source = View.fromHTML uid(), '<unit name="a"><b if="1 > 2">1</b></unit><a></a>'
+		source = View.fromHTML uid(), '<x:unit name="a"><b x:if="1 > 2">1</b></x:unit><x:a></x:a>'
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<a></a>'
+		expect(source.node.stringify()).toBe '<x:a></x:a>'
 		expect(view.node.stringify()).toBe ''
 
 	it 'can be declared using storage input', ->
 
-		source = View.fromHTML uid(), '<div><b if="#{x} > 1">1</b></div>'
+		source = View.fromHTML uid(), '<div><b x:if="#{x} > 1">1</b></div>'
 		view = source.clone()
 
 		renderParse view, storage: x: 1
@@ -256,8 +256,8 @@ describe 'View Condition', ->
 
 		it 'in changing visibility', ->
 
-			source = View.fromHTML uid(), '<unit name="a"><b if="#{x} > 1">OK</b>' +
-			                              '<b if="#{x} == 1">FAIL</b></unit><a x="1"></a>'
+			source = View.fromHTML uid(), '<x:unit name="a"><b x:if="#{x} > 1">OK</b>' +
+			                              '<b x:if="#{x} == 1">FAIL</b></x:unit><x:a x="1"></x:a>'
 			view = source.clone()
 			elem = view.node.children[0]
 
@@ -265,12 +265,12 @@ describe 'View Condition', ->
 			elem.attrs.set 'x', 2
 			expect(view.node.stringify()).toBe '<b>OK</b>'
 			view.revert()
-			expect(view.node.stringify()).toBe '<a x="1"></a>'
+			expect(view.node.stringify()).toBe '<x:a x="1"></x:a>'
 
 		it 'in replacing elems', ->
 
-			source = View.fromHTML uid(), '<unit name="a">OK</unit>' +
-			                              '<a if="#{x} == 1"></a>'
+			source = View.fromHTML uid(), '<x:unit name="a">OK</x:unit>' +
+			                              '<x:a x:if="#{x} == 1"></x:a>'
 			view = source.clone()
 
 			storage = new View.ObservableObject x: 0
@@ -285,7 +285,7 @@ describe 'View Iterator', ->
 
 	it 'loops expected times', ->
 
-		source = View.fromHTML uid(), '<ul each="[0,0]">1</ul>'
+		source = View.fromHTML uid(), '<ul x:each="[0,0]">1</ul>'
 		view = source.clone()
 
 		renderParse view
@@ -293,7 +293,7 @@ describe 'View Iterator', ->
 
 	it 'provides `item` property', ->
 
-		source = View.fromHTML uid(), '<ul each="[1,2]">#{item}</ul>'
+		source = View.fromHTML uid(), '<ul x:each="[1,2]">#{item}</ul>'
 		view = source.clone()
 
 		renderParse view
@@ -301,7 +301,7 @@ describe 'View Iterator', ->
 
 	it 'render data in loops', ->
 
-		view = View.fromHTML uid(), '<ul each="[{v:1},{v:2}]">#{each[i].v}</ul>'
+		view = View.fromHTML uid(), '<ul x:each="[{v:1},{v:2}]">#{each[i].v}</ul>'
 		view = view.clone()
 
 		renderParse view
@@ -309,7 +309,7 @@ describe 'View Iterator', ->
 
 	it 'works with cloned files', ->
 
-		source = View.fromHTML uid(), '<ul each="[1,2]">#{each[i]}</ul>'
+		source = View.fromHTML uid(), '<ul x:each="[1,2]">#{each[i]}</ul>'
 		view = source.clone()
 
 		renderParse view
@@ -318,19 +318,19 @@ describe 'View Iterator', ->
 
 	it 'works in units with elems', ->
 
-		source = View.fromHTML uid(), '<unit name="b">#{data}</unit>
-			<unit name="a"><ul each="#{data}"><b data="#{each[i]}"></b></ul></unit>
-			<a data="[1,2]"></a>'
+		source = View.fromHTML uid(), '<x:unit name="b">#{data}</x:unit>
+			<x:unit name="a"><ul x:each="#{data}"><x:b data="#{each[i]}"></x:b></ul></x:unit>
+			<x:a data="[1,2]"></x:a>'
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<a data="1,2"></a>'
+		expect(source.node.stringify()).toBe '<x:a data="1,2"></x:a>'
 		expect(view.node.stringify()).toBe '' +
 			'<ul>12</ul>'
 
 	it 'supports updates', ->
 
-		source = View.fromHTML uid(), '<ul each="#{arr}">#{each.get(i)}</ul>'
+		source = View.fromHTML uid(), '<ul x:each="#{arr}">#{each[i]}</ul>'
 		view = source.clone()
 
 		storage = arr: arr = new View.ObservableArray [1, 2]

@@ -1,12 +1,12 @@
 'use strict'
 
 HIDDEN_TAGS =
-	unit: true
-	source: true
+	'x:unit': true
+	'x:source': true
 
 HIDDEN_ATTRS =
-	each: true
-	if: true
+	'x:each': true
+	'x:if': true
 
 getInnerHTML = (elem) ->
 	if elem.visible and elem.children

@@ -38,7 +38,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		@getArray()
 
-		each = node.attrs.get 'each'
+		each = node.attrs.get 'x:each'
 
 		if not isArray(each) and not (each instanceof ObservableArray)
 			node.visible = false
@@ -55,7 +55,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 	getArray: ->
 
-		each = @node.attrs.get 'each'
+		each = @node.attrs.get 'x:each'
 
 		# clear all if array changed
 		if @array and @array isnt each
@@ -105,6 +105,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 			{data} = data
 
 		@storage =
+			each: data
 			i: i
 			item: data[i]
 		usedUnit.render @
@@ -134,6 +135,6 @@ module.exports = (File) -> class Iterator extends File.Elem
 		clone.removeItem = clone.removeItem.bind clone
 
 		clone.node.onAttrChanged.connect (attr) ->
-			clone.getArray() if attr is 'each'
+			clone.getArray() if attr is 'x:each'
 
 		clone

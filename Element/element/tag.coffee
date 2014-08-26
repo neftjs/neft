@@ -106,9 +106,10 @@ module.exports = (Element) -> class Tag extends Element
 			index = @children.indexOf oldElement
 
 			oldElement.parent = undefined
-			newElement.parent = @
 
+			newElement.parent = @
 			@children.pop()
+
 			@children.splice index, 0, newElement
 
 			null

@@ -16,13 +16,25 @@ module.exports = (File) -> class Input
 
 	@get = (file, prop) ->
 
+		# get from source attr
 		v = file.source?.node.attrs.get prop
-		v ?= file.source?.storage?[prop]
-		if file.storage instanceof ObservableObject
-			v ?= file.storage.data[prop]
-		else
-			v ?= file.storage?[prop]
-		v
+		return v if v?
+
+		# get from source storage
+		obj = file.source?.storage
+		if obj
+			if obj instanceof ObservableObject
+				obj = obj.data
+			v = obj[prop]
+			return v if v?
+
+		# get from storage
+		obj = file.storage
+		if obj
+			if obj instanceof ObservableObject
+				obj = obj.data
+			v = obj[prop]
+			return v if v?
 
 	constructor: (@node, text) ->
 

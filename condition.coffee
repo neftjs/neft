@@ -29,7 +29,7 @@ module.exports = (File) -> class Condition
 
 	execute: ->
 
-		exp = @node.attrs.get('if')
+		exp = @node.attrs.get 'x:if'
 
 		unless cache[exp]
 			if cachelen++ > MAX_IN_CACHE
@@ -66,6 +66,6 @@ module.exports = (File) -> class Condition
 		clone.self.onRender.connect clone.render
 		clone.self.onRevert.connect clone.revert
 		clone.node.onAttrChanged.connect (attr) ->
-			clone.render() if attr is 'if'
+			clone.render() if attr is 'x:if'
 
 		clone

@@ -22,7 +22,7 @@ module.exports = (File) -> (file) ->
 
 		node = children[i]
 
-		if node.name isnt 'unit' then continue
+		if node.name isnt 'x:unit' then continue
 
 		name = node.attrs.get 'name'
 		unless name then continue

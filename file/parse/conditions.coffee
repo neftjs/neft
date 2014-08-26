@@ -8,11 +8,11 @@ module.exports = (File) ->
 
 		conditions = file.conditions = []
 
-		nodes = file.node.queryAll '[if]'
+		nodes = file.node.queryAll '[x:if]'
 
 		for node in nodes
 
-			attr = node.attrs.get 'if'
+			attr = node.attrs.get 'x:if'
 			continue unless attr
 
 			conditions.push new File.Condition

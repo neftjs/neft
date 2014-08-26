@@ -9,7 +9,7 @@ module.exports = (File) -> (file) ->
 	# find elems
 	for name of file.units
 
-		nodes = file.node.queryAll name
+		nodes = file.node.queryAll "x:#{name}"
 		unless nodes? then continue
 
 		for node in nodes
