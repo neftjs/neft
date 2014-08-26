@@ -80,7 +80,7 @@ describe 'items()', ->
 		expect(items).toEqual [['a', 1]]
 		expect(dict.items()).toEqual [['a', 1], ['b', 2]]
 
-describe 'onChange signal', ->
+describe 'onChanged signal', ->
 
 	dict = listener = null
 	ok = false
@@ -98,25 +98,25 @@ describe 'onChange signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		dict.onChange.disconnect listener
+		dict.onChanged.disconnect listener
 
 	it 'works with set() on new item', ->
 		dict = Dict()
-		dict.onChange.connect listener
+		dict.onChanged.connect listener
 		dict.set 'a', 1
-		expect(args).toEqual [['a', 1]]
-		expect(items).toEqual []
+		expect(args).toEqual [['a', undefined]]
+		expect(items).toEqual [['a', 1]]
 
 	it 'works with set() on item change', ->
 		dict = Dict a: 1
-		dict.onChange.connect listener
+		dict.onChanged.connect listener
 		dict.set 'a', 2
-		expect(args).toEqual [['a', 2]]
-		expect(items).toEqual [['a', 1]]
+		expect(args).toEqual [['a', 1]]
+		expect(items).toEqual [['a', 2]]
 
 	it 'works with pop()', ->
 		dict = Dict a: 1
-		dict.onChange.connect listener
+		dict.onChanged.connect listener
 		dict.pop 'a'
-		expect(args).toEqual [['a', undefined]]
-		expect(items).toEqual [['a', 1]]
+		expect(args).toEqual [['a', 1]]
+		expect(items).toEqual []

@@ -27,7 +27,7 @@ module.exports = class Dict
 		@keys().length
 	, null
 
-	signal.defineGetter @::, 'onChange'
+	signal.defineGetter @::, 'onChanged'
 
 	get: (key) ->
 		expect(key).toBe.truthy().string()
@@ -38,17 +38,18 @@ module.exports = class Dict
 		expect(key).toBe.truthy().string()
 		expect(val).not().toBe undefined
 
-		if @_data[key] is val
+		oldVal = @_data[key]
+		if oldVal is val
 			return val
-
-		# signal
-		if @hasOwnProperty 'onChange'
-			@onChange key, val
 
 		@_data[key] = val
 
 		# dirty
 		@_dirty |= ALL
+
+		# signal
+		if @hasOwnProperty 'onChanged'
+			@onChanged key, oldVal
 
 		val
 
@@ -56,15 +57,15 @@ module.exports = class Dict
 		expect(key).toBe.truthy().string()
 		expect().some().keys(@_data).toBe key
 
-		# signal
-		if @hasOwnProperty 'onChange'
-			@onChange key, undefined
-
 		val = @_data[key]
 		delete @_data[key]
 
 		# dirty
 		@_dirty |= ALL
+
+		# signal
+		if @hasOwnProperty 'onChanged'
+			@onChanged key, val
 
 		val
 
