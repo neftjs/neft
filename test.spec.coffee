@@ -88,7 +88,7 @@ describe 'index()', ->
 		list = List 1, 2, 2
 		expect(list.index 2).toBe 1
 
-describe 'onChange signal', ->
+describe 'onChanged signal', ->
 
 	list = listener = null
 	ok = false
@@ -105,18 +105,18 @@ describe 'onChange signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.onChange.disconnect listener
+		list.onChanged.disconnect listener
 
 	it 'works with set()', ->
 		list = List 1, 2, 3
-		list.onChange.connect listener
+		list.onChanged.connect listener
 
 		list.set 1, 'a'
 
-		expect(args).toEqual [[1, 'a']]
-		expect(copy).toEqual [1, 2, 3]
+		expect(args).toEqual [[1, 2]]
+		expect(copy).toEqual [1, 'a', 3]
 
-describe 'onInsert signal', ->
+describe 'onInserted signal', ->
 
 	list = listener = null
 	ok = false
@@ -133,27 +133,27 @@ describe 'onInsert signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.onInsert.disconnect listener
+		list.onInserted.disconnect listener
 
 	it 'works with append()', ->
 		list = List 1, 2
-		list.onInsert.connect listener
+		list.onInserted.connect listener
 
 		list.append 'a'
 
-		expect(args).toEqual [[2, 'a']]
-		expect(copy).toEqual [1, 2]
+		expect(args).toEqual [[2, undefined]]
+		expect(copy).toEqual [1, 2, 'a']
 
 	it 'works with insert()', ->
 		list = List 1, 2
-		list.onInsert.connect listener
+		list.onInserted.connect listener
 
 		list.insert 1, 'a'
 
-		expect(args).toEqual [[1, 'a']]
-		expect(copy).toEqual [1, 2]
+		expect(args).toEqual [[1, undefined]]
+		expect(copy).toEqual [1, 'a', 2]
 
-describe 'onPop signal', ->
+describe 'onPopped signal', ->
 
 	list = listener = null
 	ok = false
@@ -170,40 +170,40 @@ describe 'onPop signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.onPop.disconnect listener
+		list.onPopped.disconnect listener
 
 	it 'works with pop()', ->
 		list = List 1, 2
-		list.onPop.connect listener
+		list.onPopped.connect listener
 
 		list.pop()
 
-		expect(args).toEqual [[1, undefined]]
-		expect(copy).toEqual [1, 2]
+		expect(args).toEqual [[1, 2]]
+		expect(copy).toEqual [1]
 
 	it 'works with pop(i)', ->
 		list = List 1, 2
-		list.onPop.connect listener
+		list.onPopped.connect listener
 
 		list.pop 0
 
-		expect(args).toEqual [[0, undefined]]
-		expect(copy).toEqual [1, 2]
+		expect(args).toEqual [[0, 1]]
+		expect(copy).toEqual [2]
 
 	it 'works with remove()', ->
 		list = List 1, 2
-		list.onPop.connect listener
+		list.onPopped.connect listener
 
 		list.remove 2
 
-		expect(args).toEqual [[1, undefined]]
-		expect(copy).toEqual [1, 2]
+		expect(args).toEqual [[1, 2]]
+		expect(copy).toEqual [1]
 
 	it 'works with clear()', ->
 		list = List 1, 2
-		list.onPop.connect listener
+		list.onPopped.connect listener
 
 		list.clear()
 
-		expect(args).toEqual [[1, undefined], [0, undefined]]
-		expect(copy).toEqual [1]
+		expect(args).toEqual [[1, 2], [0, 1]]
+		expect(copy).toEqual []

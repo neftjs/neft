@@ -22,9 +22,9 @@ module.exports = class List
 		@_data.length
 	, null
 
-	signal.defineGetter @::, 'onChange'
-	signal.defineGetter @::, 'onInsert'
-	signal.defineGetter @::, 'onPop'
+	signal.defineGetter @::, 'onChanged'
+	signal.defineGetter @::, 'onInserted'
+	signal.defineGetter @::, 'onPopped'
 
 	get: (i) ->
 		expect(i).not().toBe.lessThan 0
@@ -36,14 +36,17 @@ module.exports = class List
 		expect(i).toBe.lessThan @length
 		expect(val).not().toBe undefined
 
-		if @_data[i] is val
+		oldVal = @_data[i]
+		if oldVal is val
 			return val
 
-		# signal
-		if @hasOwnProperty 'onChange'
-			@onChange i, val
-
 		@_data[i] = val
+
+		# signal
+		if @hasOwnProperty 'onChanged'
+			@onChanged i, oldVal
+
+		val
 
 	items: ->
 		@_data
@@ -51,11 +54,11 @@ module.exports = class List
 	append: (val) ->
 		expect(val).not().toBe undefined
 
-		# signal
-		if @hasOwnProperty 'onInsert'
-			@onInsert @length, val
-
 		@_data.push val
+
+		# signal
+		if @hasOwnProperty 'onInserted'
+			@onInserted @length - 1
 
 		@
 
@@ -64,11 +67,11 @@ module.exports = class List
 		expect(i).toBe.lessThan @length
 		expect(val).not().toBe undefined
 
-		# signal
-		if @hasOwnProperty 'onInsert'
-			@onInsert i, val
-
 		@_data.splice i, 0, val
+
+		# signal
+		if @hasOwnProperty 'onInserted'
+			@onInserted i
 
 		@
 
@@ -86,14 +89,14 @@ module.exports = class List
 			expect(i).not().toBe.lessThan 0
 			expect(i).toBe.lessThan @length
 
-		# signal
-		if @hasOwnProperty 'onPop'
-			@onPop i ? @length - 1
+		i ?= @length - 1
+		oldVal = @_data[i]
 
-		if i is undefined
-			@_data.pop()
-		else
-			@_data.splice i, 1
+		@_data.splice i, 1
+
+		# signal
+		if @hasOwnProperty 'onPopped'
+			@onPopped i, oldVal
 
 		@
 
