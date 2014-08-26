@@ -44,7 +44,7 @@ describe 'View Element', ->
 
 	it 'hidden attrs are omitted in the stringified process', ->
 
-		elem = Element.fromHTML '<span if="a" each="a"></span>'
+		elem = Element.fromHTML '<span x:if="a" x:each="a"></span>'
 		html = elem.stringify()
 
 		expect(html).toBe '<span></span>'
@@ -166,6 +166,21 @@ describe 'View Element', ->
 			elem.attrs.backChanges()
 
 			expect(elem.attrs.get('title')).toBe title
+
+	describe 'index property', ->
+
+		it 'returns child index in the parent', ->
+
+			expect(div.index).toBe 1
+
+		it 'change child index in the parent', ->
+
+			elem = Element.fromHTML '<a></a><b></b>'
+			[elemA, elemB] = elem.children
+
+			elemB.index = 0
+
+			expect(elem.children).toEqual [elemB, elemA]
 
 	it 'replace() works properly', ->
 

@@ -45,9 +45,27 @@ Constructor is instance of *Events* class, so after every initializing
 
 			@_parent = null
 
-### Proeprties
+### Properties
 
 		Object.defineProperties @::,
+
+#### index
+
+			index:
+				enumerable: true
+				get: ->
+					expect(@parent).toBe.any Element
+
+					@parent.children.indexOf @
+
+				set: (value) ->
+					expect(@parent).toBe.any Element
+					expect(value).toBe.integer()
+					expect(value).not().toBe.lessThan 0
+					expect(value).toBe.lessThan @parent.children.length
+
+					@parent.children.splice @index, 1
+					@parent.children.splice value, 0, @
 
 #### *Element* parent
 
