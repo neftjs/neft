@@ -38,8 +38,6 @@ features. Physical file should be easy to load and parse.
 		signal.create @, 'onParsed'
 
 		@Element = require('./Element/index')
-		@ObservableObject = require('./observableObject.coffee') @
-		@ObservableArray = require('./observableArray.coffee') @
 		@Unit = require('./unit.coffee.md') @
 		@Elem = require('./elem.coffee.md') @
 		@Input = require('./input.coffee') @
@@ -215,11 +213,7 @@ features. Physical file should be easy to load and parse.
 			@isRendered = true
 			@source = source
 
-			# storage
-			for input in @inputs
-				render.storage @, source, input
-
-			@onRender source
+			@onRender()
 
 			# source
 			render.source @, source
@@ -228,7 +222,6 @@ features. Physical file should be easy to load and parse.
 
 			@
 
-		render.storage = require('./file/render/parse/storage.coffee') File
 		render.source = require('./file/render/parse/source.coffee') File
 
 #### revert() ->
@@ -240,13 +233,13 @@ features. Physical file should be easy to load and parse.
 			->
 
 				expect(@isRendered).toBe.truthy()
-
 				@isRendered = false
-				@storage = null
-				@source = null
 				File.Element.OBSERVE = false
 
 				@onRevert()
+
+				@storage = null
+				@source = null
 
 				listeners @
 

@@ -15,6 +15,6 @@ module.exports = (File, Input) -> class InputAttr extends Input
 
 	attrName: ''
 
-	parse: (file) ->
-		str = @toString file
+	update: ->
+		str = @toString()
 		@node.attrs.set @attrName, str

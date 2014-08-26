@@ -1,6 +1,6 @@
 'use strict'
 
-[utils, expect] = ['utils', 'expect'].map require
+[utils, expect, List] = ['utils', 'expect', 'list'].map require
 
 {isArray} = Array
 
@@ -26,103 +26,122 @@ module.exports = (File) -> class Iterator extends File.Elem
 		@unit = unit.id
 		@bodyNode.parent = undefined
 
+		@usedUnits = []
+
 	unit: ''
 	storage: null
-	array: null
+	usedUnits: null
+	data: null
 
 	render: ->
+		if @node.visible
+			@update()
 
-		{node} = @
+	revert: ->
+		@update()
+		@node.visible = true
 
-		return unless node.visible
+	update: ->
 
-		@getArray()
+		{data} = @
+		each = @node.attrs.get 'x:each'
 
-		each = node.attrs.get 'x:each'
+		# clear all if data changed
+		if data and data isnt each
+			if data instanceof List
+				array.onChanged.disconnect @updateItem
+				array.onInserted.disconnect @insertItem
+				array.onPopped.disconnect @popItem
 
-		if not isArray(each) and not (each instanceof ObservableArray)
+			@clearData()
+
+		# stop if no data found
+		if not isArray(each) and not (each instanceof List)
 			node.visible = false
 			return
 
-		{unit} = @
+		# stop if nothing changed
+		return if @data is each
 
-		null
+		# set as data
+		@data = array = each
 
-	revert: ->
+		# listen on changes
+		if each instanceof List
+			each.onChanged.connect @updateItem
+			each.onInserted.connect @insertItem
+			each.onPopped.connect @popItem
 
-		@clearArray()
-		@node.visible = true
+			array = each.items()
 
-	getArray: ->
+		# add items
+		for _, i in array
+			@insertItem i
 
-		each = @node.attrs.get 'x:each'
+		@
 
-		# clear all if array changed
-		if @array and @array isnt each
-			@clearArray()
+	clearData: ->
+		expect(@data).toBe.object()
 
-		return if @array is each
+		while length = @usedUnit.length
+			@popItem length - 1
 
-		data = @array = each
+		@
 
-		if each instanceof ObservableArray
-			each.onAdded.connect @addItem
-			each.onRemoved.connect @removeItem
-			{data} = each
+	updateItem: (i) ->
+		expect(@data).toBe.object()
+		expect(i).toBe.integer()
 
-		return unless isArray data
+		@popItem i
+		@insertItem i
 
-		for _, i in data
-			@addItem i
+		@
 
-		null
+	insertItem: (i) ->
+		expect(@data).toBe.object()
+		expect(i).toBe.integer()
 
-	clearArray: ->
-
-		{array} = @
-
-		data = array
-
-		if array instanceof ObservableArray
-			array.onAdded.disconnect @addItem
-			array.onRemoved.disconnect @removeItem
-			{data} = array
-
-		{children} = @node
-		while children.length
-			children[children.length - 1].parent = undefined
-
-		@array = null
-
-		null
-
-	addItem: (i) ->
+		{data} = @
 
 		usedUnit = File.factory @unit
+		@usedUnits.splice i, 0, usedUnit
 
-		data = @array
-		if data instanceof ObservableArray
-			{data} = data
+		if data instanceof List
+			each = data.items()
+			item = data.get i
+		else
+			each = data
+			item = data[i]
 
-		@storage =
-			each: data
-			i: i
-			item: data[i]
+		# render unit with storage
+		storage = usedUnit.storage = Object.create @self.storage or null
+		storage.each = each
+		storage.i = i
+		storage.item = item
 		usedUnit.render @
 
-		newChild = usedUnit.node
-
 		# replace
+		newChild = usedUnit.node
 		newChild.parent = @node
+		newChild.index = i
 
+		# signal
 		if usedUnit.hasOwnProperty 'onReplacedByElem'
 			usedUnit.onReplacedByElem @
 
-	removeItem: (i) ->
+		@
 
-		expect(@array).toBe.object()
+	popItem: (i) ->
+		expect(@data).toBe.object()
+		expect(i).toBe.integer()
 
 		@node.children[i].parent = undefined
+
+		usedUnit = @usedUnits[i]
+		usedUnit.revert().destroy()
+		@usedUnits.splice i, 1
+
+		@
 
 	clone: (original, self) ->
 
@@ -131,10 +150,11 @@ module.exports = (File) -> class Iterator extends File.Elem
 		clone.storage = utils.cloneDeep @storage
 		clone.array = null
 
-		clone.addItem = clone.addItem.bind clone
-		clone.removeItem = clone.removeItem.bind clone
+		clone.updateItem = @updateItem.bind clone
+		clone.insertItem = @insertItem.bind clone
+		clone.popItem = @popItem.bind clone
 
 		clone.node.onAttrChanged.connect (attr) ->
-			clone.getArray() if attr is 'x:each'
+			clone.update() if attr is 'x:each'
 
 		clone

@@ -1,6 +1,6 @@
 'use strict'
 
-[utils, expect, signal] = ['utils', 'expect', 'signal'].map require
+[utils, expect, signal, Dict] = ['utils', 'expect', 'signal', 'dict'].map require
 coffee = require 'coffee-script' if utils.isNode
 
 module.exports = (File) -> class Input
@@ -14,32 +14,38 @@ module.exports = (File) -> class Input
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z]\w*)+(?!:)///gi
 
-	@get = (file, prop) ->
+	cache = {}
 
-		# get from source attr
-		v = file.source?.node.attrs.get prop
-		return v if v?
+	@get = (storages, prop) ->
+		for storage in storages
+			if storage instanceof Element
+				v = storage.attrs.get prop
+			else if storage instanceof Dict
+				v = storage.get prop
+			else if storage
+				v = storage[prop]
 
-		# get from source storage
-		obj = file.source?.storage
-		if obj
-			if obj instanceof ObservableObject
-				obj = obj.data
-			v = obj[prop]
 			return v if v?
 
-		# get from storage
-		obj = file.storage
-		if obj
-			if obj instanceof ObservableObject
-				obj = obj.data
-			v = obj[prop]
-			return v if v?
+		null
+
+	@getStoragesArray = do (arr = []) -> (file) ->
+		expect(file).toBe.any File
+
+		arr[0] = file.source?.node
+		arr[1] = file.source?.storage
+		arr[2] = file.storage
+
+		arr
+
+	@fromAssembled = (input) ->
+		input._func = cache[input.func] ?= new Function 'file', 'get', input.func
 
 	constructor: (@node, text) ->
-
 		expect(node).toBe.any File.Element
 		expect(text).toBe.truthy().string()
+
+		vars = @vars = []
 
 		# build toString()
 		func = ''
@@ -48,6 +54,7 @@ module.exports = (File) -> class Input
 
 			# parse prop
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
+				vars.push elem
 				str = "get(file, '#{escape(elem)}')"
 				"#{prefix}#{str}"
 
@@ -57,39 +64,58 @@ module.exports = (File) -> class Input
 			if match[3] then func += "'#{utils.addSlashes match[3]}' + "
 
 		func = 'return ' + func.slice 0, -3
-		@_func = func = coffee.compile func, bare: true
+		@func = coffee.compile func, bare: true
 
-	_func: ''
+		Input.fromAssembled @
+
+	_func: null
+
+	self: null
 	node: null
+	vars: null
+	func: ''
 
-	sourceNode: null
-	sourceStorage: null
-	storage: null
+	_onChanged: (prop) ->
+		unless utils.has @vars, prop
+			return
 
-	signal.create @::, 'onChanged'
+		@update()
 
-	parse: ->
-		throw "`parse()` method not implemented"
+	render: (self) ->
+		for storage in Input.getStoragesArray @self
+			if storage instanceof Element
+				storage.onAttrChanged.connect @_onChanged
+			else if storage instanceof Dict
+				storage.onChanged.connect @_onChanged
+		
+		@update()
 
-	###
-	Override `toString()` method on first call by `@_func` generated in the ctor.
-	`utils.simplify()` currently does not support `fromJSON()` and `toJSON()` methods
-	on the constructors, so it's the only way to support such functionality.
-	###
-	toString: do (cache = {}) -> (file) ->
-		expect(file).toBe.any File
+	revert: ->
+		for storage in Input.getStoragesArray @self
+			if storage instanceof Element
+				storage.onAttrChanged.disconnect @_onChanged
+			else if storage instanceof Dict
+				storage.onChanged.disconnect @_onChanged
 
-		func = cache[@_func] ?= new Function 'file', 'get', @_func
+		null
 
-		toString = @toString = -> try func file, Input.get
-		toString.call @
+	update: ->
+		throw "`update()` method not implemented"
+
+	toString: ->
+		try @_func Input.getStoragesArray(@self), Input.get
 
 	clone: (original, self) ->
 
 		clone = Object.create @
 
 		clone.clone = undefined
+		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
+		clone._onChanged = @_onChanged.bind clone
+
+		self.onRender.connect @render.bind clone, self
+		self.onRevert.connect @revert.bind clone, self
 
 		clone
 

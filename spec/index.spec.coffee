@@ -1,7 +1,7 @@
 'use strict'
 
 View = require('../index.coffee.md')
-[utils, signal] = ['utils', 'signal'].map require
+[utils, signal, Dict, List] = ['utils', 'signal', 'dict', 'list'].map require
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
@@ -169,7 +169,7 @@ describe 'View Storage', ->
 
 		it 'by passed storage', ->
 
-			source = View.fromHTML uid(), '<x:unit name="a">#{x}, #{b.a}</x:unit><x:a></x:a>'
+			source = View.fromHTML uid(), '<x:unit name="a">#{x}, #{b.a}</x:unit><x:a/>'
 			view = source.clone()
 
 			renderParse view,
@@ -181,7 +181,7 @@ describe 'View Storage', ->
 
 		it 'on attrs', ->
 
-			source = View.fromHTML uid(), '<x:unit name="a">#{x}</x:unit><x:a x="2"></x:a>'
+			source = View.fromHTML uid(), '<x:unit name="a">#{x}</x:unit><x:a x="2" y="1"></x:a>'
 			view = source.clone()
 			elem = view.node.children[0]
 
@@ -196,7 +196,7 @@ describe 'View Storage', ->
 			source = View.fromHTML uid(), '#{x}'
 			view = source.clone()
 
-			storage = new View.ObservableObject x: 1
+			storage = Dict x: 1
 
 			renderParse view,
 				storage: storage
@@ -273,7 +273,7 @@ describe 'View Condition', ->
 			                              '<x:a x:if="#{x} == 1"></x:a>'
 			view = source.clone()
 
-			storage = new View.ObservableObject x: 0
+			storage = Dict x: 0
 
 			renderParse view, storage: storage
 			expect(view.node.stringify()).toBe ''
@@ -333,15 +333,17 @@ describe 'View Iterator', ->
 		source = View.fromHTML uid(), '<ul x:each="#{arr}">#{each[i]}</ul>'
 		view = source.clone()
 
-		storage = arr: arr = new View.ObservableArray [1, 2]
+		storage = arr: arr = List [1, 2]
 
 		renderParse view, storage: storage
 		expect(view.node.stringify()).toBe '<ul>12</ul>'
 
-		# TODO: test ObservableArray::insert support
+		arr.insert 1, 'a'
+		expect(view.node.stringify()).toBe '<ul>1a2</ul>'
+
+		arr.pop 1
+		expect(view.node.stringify()).toBe '<ul>12</ul>'
 
 		arr.append 3
 		expect(view.node.stringify()).toBe '<ul>123</ul>'
 
-		arr.pop 1
-		expect(view.node.stringify()).toBe '<ul>13</ul>'

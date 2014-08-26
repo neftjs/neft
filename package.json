@@ -8,6 +8,8 @@
 		"log": "git+ssh://git@bitbucket.org:Kildyt/log.git",
 		"signal": "git+ssh://git@bitbucket.org:Kildyt/signal.git",
 		"htmlparser2": ">=3.3.0",
-		"coffee-script": ">=1.6.3"
+		"coffee-script": ">=1.6.3",
+		"dict": "git+ssh://git@bitbucket.org:Kildyt/dict.git",
+		"list": "git+ssh://git@bitbucket.org:Kildyt/list.git"
 	}
 }

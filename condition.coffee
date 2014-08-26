@@ -11,10 +11,15 @@ module.exports = (File) -> class Condition
 	@__name__ = 'Condition'
 	@__path__ = 'File.Condition'
 
+	@FALSE_FUNC = -> false
+
 	@getCondFunc: (exp) ->
 
-		cond = "!!(#{unescape(exp)})"
-		new Function "try { return #{cond}; } catch(_){ return false; }"
+		try
+			cond = "!!(#{unescape(exp)})"
+			new Function "try { return #{cond}; } catch(_){ return false; }"
+		catch
+			Condition.FALSE_FUNC
 
 	constructor: (opts) ->
 
