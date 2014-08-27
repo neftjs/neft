@@ -30,7 +30,7 @@ module.exports = (Element) -> class Tag extends Element
 				clone = _super.call @
 
 				clone.children = []
-				clone.attrsValues &&= utils.clone @attrsValues
+				clone.attrsValues &&= utils.cloneDeep @attrsValues
 
 				clone
 
