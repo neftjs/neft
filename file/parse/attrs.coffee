@@ -1,9 +1,11 @@
 'use strict'
 
-[utils] = ['utils'].map require
+[utils, Dict, List] = ['utils', 'dict', 'list'].map require
 coffee = require 'coffee-script' if utils.isNode
 
 attr = [null, null]
+
+VALUE_TO_EVAL_RE = ///^(\[|\{|Dict|List)///
 
 forNode = (elem) ->
 
@@ -11,11 +13,15 @@ forNode = (elem) ->
 	loop
 		break unless elem.attrs
 		elem.attrs.item i, attr
-		break unless attr[0]
 
-		if attr[1][0] is '[' or attr[1][0] is '{'
+		[name, val] = attr
+		break unless name
+
+		if VALUE_TO_EVAL_RE.test val
 			try
-				elem.attrs.set attr[0], coffee.eval attr[1]
+				code = coffee.compile attr[1], bare: true
+				newVal = eval code
+				elem.attrs.set attr[0], newVal
 
 		i++
 

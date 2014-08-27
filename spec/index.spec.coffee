@@ -172,6 +172,28 @@ describe 'View', ->
 
 		expect(elem.attrs.get 'data').toEqual data
 
+	it 'parses dict in attrs into Dict instance', ->
+
+		data = Dict a: 1
+		json = "Dict a: 1"
+		view = View.fromHTML uid(), "<a data='#{json}'></a>"
+		[elem] = view.node.children
+
+		attrValue = elem.attrs.get 'data'
+		expect(attrValue).toEqual jasmine.any Dict
+		expect(attrValue.items()).toEqual data.items()
+
+	it 'parses list in attrs into List instance', ->
+
+		data = List 1, 2
+		json = "List 1, 2"
+		view = View.fromHTML uid(), "<a data='#{json}'></a>"
+		[elem] = view.node.children
+
+		attrValue = elem.attrs.get 'data'
+		expect(attrValue).toEqual jasmine.any List
+		expect(attrValue.items()).toEqual data.items()
+
 describe 'View Storage', ->
 
 	describe 'inputs are replaced', ->
