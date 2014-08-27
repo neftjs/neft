@@ -4,6 +4,9 @@
 
 module.exports = class Dict
 
+	@__name__ = 'Dict'
+	@__path__ = 'Dict'
+
 	KEYS = 1<<0
 	VALUES = 1<<1
 	ITEMS = 1<<2
