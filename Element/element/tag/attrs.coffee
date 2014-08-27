@@ -1,6 +1,6 @@
 'use strict'
 
-[expect] = ['expect'].map require
+[expect, utils] = ['expect', 'utils'].map require
 
 {isArray} = Array
 
@@ -73,7 +73,7 @@ module.exports = (Element) -> exports =
 		for value, i in valuesA
 			continue if value is valuesB[i]
 
-			valuesA[i] = valuesB[i]
+			valuesA[i] = utils.cloneDeep valuesB[i]
 
 			# call observers
 			if Element.OBSERVE and tag.hasOwnProperty('onAttrChanged')
