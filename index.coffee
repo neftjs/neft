@@ -4,6 +4,9 @@
 
 module.exports = class List
 
+	@__name__ = 'List'
+	@__path__ = 'List'
+
 	constructor: ->
 		# array
 		arr = arguments[0]
