@@ -17,7 +17,7 @@ module.exports = class Dict
 			return new Dict obj
 
 		# properties
-		utils.defProp @, '_data', '', obj
+		utils.defProp @, '_data', 'e', obj
 		utils.defProp @, '_keys', 'w', null
 		utils.defProp @, '_values', 'w', null
 		utils.defProp @, '_items', 'w', null
