@@ -10,7 +10,8 @@ features. Physical file should be easy to load and parse.
 
 	'use strict'
 
-	[utils, expect, log, Emitter, signal] = ['utils', 'expect', 'log', 'emitter', 'signal'].map require
+	[utils,   expect,   log,   Emitter,   signal,   Dict,   List] =
+	['utils', 'expect', 'log', 'emitter', 'signal', 'dict', 'list'].map require
 
 	log = log.scope 'View'
 
@@ -86,7 +87,7 @@ features. Physical file should be easy to load and parse.
 			expect(json).toBe.simpleObject()
 
 			# put ctors
-			ns = File: File
+			ns = File: File, Dict: Dict, List: List
 			for i, ctor of ctors = json.constructors
 				ctorsCache[ctor] ?= utils.get ns, ctor
 				ctors[i] = ctorsCache[ctor]
