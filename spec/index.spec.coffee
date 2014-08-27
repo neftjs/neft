@@ -154,6 +154,24 @@ describe 'View', ->
 
 		expect(view.render.bind(view)).not.toThrow()
 
+	it 'parses object in attrs into Object instance', ->
+
+		data = a: 1
+		json = JSON.stringify data
+		view = View.fromHTML uid(), "<a data='#{json}'></a>"
+		[elem] = view.node.children
+
+		expect(elem.attrs.get 'data').toEqual data
+
+	it 'parses array in attrs into Array instance', ->
+
+		data = [1, 2]
+		json = JSON.stringify data
+		view = View.fromHTML uid(), "<a data='#{json}'></a>"
+		[elem] = view.node.children
+
+		expect(elem.attrs.get 'data').toEqual data
+
 describe 'View Storage', ->
 
 	describe 'inputs are replaced', ->
