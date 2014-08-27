@@ -55,7 +55,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		# stop if no data found
 		if not isArray(each) and not (each instanceof List)
-			node.visible = false
+			@node.visible = false
 			return
 
 		# stop if nothing changed
