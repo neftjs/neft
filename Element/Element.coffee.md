@@ -52,7 +52,6 @@ Constructor is instance of *Events* class, so after every initializing
 #### index
 
 			index:
-				enumerable: true
 				get: ->
 					expect(@parent).toBe.any Element
 
