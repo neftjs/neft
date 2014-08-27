@@ -12,7 +12,7 @@ module.exports = (File) -> class Input
 	@__path__ = 'File.Input'
 
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
-	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z]\w*)+(?!:)///gi
+	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z][\w:]*)+(?!:)///gi
 
 	cache = {}
 
@@ -55,7 +55,7 @@ module.exports = (File) -> class Input
 			# parse prop
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
 				vars.push elem
-				str = "get(file, '#{escape(elem)}')"
+				str = "get(file, '#{utils.addSlashes elem}')"
 				"#{prefix}#{str}"
 
 			# add into func string
