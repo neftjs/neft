@@ -16,7 +16,7 @@ module.exports = class List
 			return new List arr
 
 		# properties
-		utils.defProp @, '_data', '', arr
+		utils.defProp @, '_data', 'e', arr
 
 	utils.defProp @::, 'length', 'ce', ->
 		@_data.length
