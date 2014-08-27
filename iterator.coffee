@@ -26,8 +26,6 @@ module.exports = (File) -> class Iterator extends File.Elem
 		@unit = unit.id
 		@bodyNode.parent = undefined
 
-		@usedUnits = []
-
 	unit: ''
 	storage: null
 	usedUnits: null
@@ -83,7 +81,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 	clearData: ->
 		expect(@data).toBe.object()
 
-		while length = @usedUnit.length
+		while length = @usedUnits.length
 			@popItem length - 1
 
 		@
@@ -149,6 +147,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		clone.storage = utils.cloneDeep @storage
 		clone.array = null
+		clone.usedUnits = []
 
 		clone.updateItem = @updateItem.bind clone
 		clone.insertItem = @insertItem.bind clone
