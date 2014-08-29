@@ -1,12 +1,7 @@
 'use strict'
 
-HIDDEN_TAGS =
-	'x:unit': true
-	'x:source': true
-
-HIDDEN_ATTRS =
-	'x:each': true
-	'x:if': true
+isPublic = (name) ->
+	name.indexOf('x:') isnt 0
 
 getInnerHTML = (elem) ->
 	if elem.visible and elem.children
@@ -21,13 +16,13 @@ getOuterHTML = (elem) ->
 	if elem._text isnt undefined
 		return elem._text
 
-	if not elem.name or HIDDEN_TAGS[elem.name]
+	if not elem.name or not isPublic elem.name
 		return getInnerHTML elem
 
 	ret = "<" + elem.name
 	if elem.attrsNames
 		for attrName, i in elem.attrsKeys
-			continue if HIDDEN_ATTRS[attrName]
+			continue unless isPublic attrName
 			attrValue = elem.attrsValues[i]
 			continue if attrValue is undefined
 
