@@ -1,6 +1,8 @@
 'use strict'
 
-[expect, utils] = ['expect', 'utils'].map require
+[expect, utils, log] = ['expect', 'utils', 'log'].map require
+
+log = log.scope 'View', 'Condition'
 
 cache = {}
 cachelen = 0
@@ -18,7 +20,8 @@ module.exports = (File) -> class Condition
 		try
 			cond = "!!(#{unescape(exp)})"
 			new Function "try { return #{cond}; } catch(_){ return false; }"
-		catch
+		catch err
+			log.error "Can't build `#{exp}` function: #{err}"
 			Condition.FALSE_FUNC
 
 	constructor: (opts) ->

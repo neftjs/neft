@@ -13,6 +13,7 @@ module.exports = (File) -> class Input
 
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z][\w:]*)+(?!:)///gi
+	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null']
 
 	cache = {}
 
@@ -54,8 +55,9 @@ module.exports = (File) -> class Input
 
 			# parse prop
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
-				vars.push elem
-				str = "get(file, '#{utils.addSlashes elem}')"
+				if prefix.trim() or not utils.has CONSTANT_VARS, elem
+					vars.push elem
+					str = "get(file, '#{utils.addSlashes elem}')"
 				"#{prefix}#{str}"
 
 			# add into func string
@@ -64,7 +66,7 @@ module.exports = (File) -> class Input
 			if match[3] then func += "'#{utils.addSlashes match[3]}' + "
 
 		func = 'return ' + func.slice 0, -3
-		@func = coffee.compile func, bare: true
+		@func = utils.tryFunc coffee.compile, coffee, [func, bare: true], func
 
 		Input.fromAssembled @
 
