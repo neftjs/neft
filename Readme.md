@@ -67,13 +67,13 @@ TODO
 ----
 
 1. View Element realtime updates (+ View-Styles)
-2. View Element `style` element
+2. View Element `style` element X
 3. View Element condition bindings X
-4. Styles clip
-5. Styles scroll
-6. View scripts
+4. Styles clip X
+5. Styles scroll X
+6. View scripts X
 7. View templates
 8. View Element events X
-9. View Styles common items
+9. View Styles common items OUT
 10. Styles input
 11. View form

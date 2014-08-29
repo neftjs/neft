@@ -1,6 +1,7 @@
 'use strict'
 
-[vm, utils, expect, coffee] = ['vm', 'utils', 'expect', 'coffee-script'].map require
+[vm, utils, expect, coffee, log] = ['vm', 'utils', 'expect', 'coffee-script', 'log'].map require
+{assert} = console
 
 BINDING_RE = ///([a-z0-9_]+)\.(left|top|width|height)///ig
 RESERVED_IDS = ['window']
@@ -12,6 +13,14 @@ result =
 	ids: {}
 units = {}
 sandbox = {}
+
+setItemId = (item, id) ->
+	assert item.variables?.id is undefined
+
+	result.ids[id] = item.index
+	item.variables ?= {}
+	item.variables.id = HASH_PATTERN + id
+	item.config.id = ''
 
 sandbox.Item = (opts) ->
 	index = result.items.length
@@ -25,10 +34,7 @@ sandbox.Item = (opts) ->
 
 	# id
 	if opts.id
-		result.ids[opts.id] = index
-		obj.variables = {}
-		obj.variables.id = HASH_PATTERN + opts.id
-		opts.id = ''
+		setItemId obj, opts.id
 
 	# binded properties
 	for prop in BINDED_PROPS when typeof opts[prop] is 'string'
@@ -97,6 +103,11 @@ sandbox.Scrollable = ->
 sandbox.Unit = (name, node) ->
 	expect(name).toBe.truthy().string()
 	expect(node).toBe.object()
+
+	unless node.variables?.id
+		setItemId node, 'root'
+	else if node.variables.id isnt "#{HASH_PATTERN}root"
+		log.error "`#{name}` unit item id must be `root`"
 
 	units[name] = result
 	result =
