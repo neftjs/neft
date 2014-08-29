@@ -5,6 +5,7 @@ HASH_RE = ///////g
 module.exports = (File) -> (file) ->
 
 	units = file.units ?= {}
+	createdUnits = []
 
 	# merge units from files
 	for link in file.links
@@ -36,5 +37,20 @@ module.exports = (File) -> (file) ->
 		# get unit
 		unit = new File.Unit file, name, node
 		units[name] = unit.id
+		createdUnits.push unit
+
+	# link units
+	for createdUnit in createdUnits
+		for unitName, unitId of units
+			if unitId is createdUnit.id
+				continue
+			if createdUnit.units.hasOwnProperty unitName
+				continue
+
+			createdUnit.units[unitName] = unitId
+
+	# parse units
+	for createdUnit in createdUnits
+		createdUnit.parse()
 
 	null

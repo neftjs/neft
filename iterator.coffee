@@ -23,6 +23,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		# create unit
 		unit = new File.Unit self, name, @bodyNode
+		unit.parse()
 		@unit = unit.id
 		@bodyNode.parent = undefined
 

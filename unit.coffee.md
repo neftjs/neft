@@ -35,7 +35,7 @@ Represents *unit* - separated part of file which can be placed by elems.
 
 			@id = "#{self.path}:#{name}"
 
-			super @id, node
+			@_node = node
 
 ### Properties
 
@@ -45,3 +45,8 @@ Represents *unit* - separated part of file which can be placed by elems.
 ### Signals
 
 		signal.defineGetter @::, 'onReplacedByElem'
+
+		if utils.isNode
+			@::parse = ->
+				File.call @, @id, @_node
+				delete @_node
