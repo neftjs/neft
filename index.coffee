@@ -42,9 +42,14 @@ module.exports = (opts={}) ->
 
 	App.Route = require('./route') App
 
+	# load bootstrap
+	if utils.isNode
+		require('./bootstrap/route') App
+
 	# load views
 	for path, json of App.views
-		App.views[path] = View.fromJSON path, json
+		unless json instanceof View
+			App.views[path] = View.fromJSON path, json
 
 	# load styles
 	if utils.isClient

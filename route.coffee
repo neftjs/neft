@@ -256,6 +256,12 @@ module.exports = (App) -> class Route
 		stack = new utils.async.Stack
 
 		masterLogtime = log.time "Handle request"
+		logtime = null
+
+		# end loggs on custom response send
+		res.on Routing.Response.DESTROY, ->
+			log.end logtime if logtime?
+			log.end masterLogtime if masterLogtime?
 
 		# custom callback
 		if @callback
@@ -263,12 +269,20 @@ module.exports = (App) -> class Route
 				logtime = log.time "Route callback"
 				@callback req, res, (err, data) ->
 					log.end logtime
+					logtime = null
 
 					assert req.pending
 					, "Route callback can't send an response and call `next()` also"
 
 					result = data
 					callback err, result
+				, (err) ->
+					log "Route callback wants to omit this request; call next route"
+					log.end logtime
+					log.end masterLogtime
+					logtime = masterLogtime = null
+
+					next err
 
 		# controller
 		if @controller
@@ -276,6 +290,7 @@ module.exports = (App) -> class Route
 				logtime = log.time "Controller"
 				@_callController req, (err, data) ->
 					log.end logtime
+					logtime = null
 
 					if err? and not result
 						return callback err
@@ -286,11 +301,12 @@ module.exports = (App) -> class Route
 					callback null, result
 
 		# handler
-		if @handlers[req.type]
+		if @handlers?[req.type]
 			stack.add (callback) =>
 				logtime = log.time "Handler (`#{req.type}`)"
 				@_callHandler req.type, result, (err, data) ->
 					log.end logtime
+					logtime = null
 
 					if data
 						result = data
@@ -302,6 +318,7 @@ module.exports = (App) -> class Route
 				logtime = log.time "View"
 				@_renderView req, result, (err, data) ->
 					log.end logtime
+					logtime = null
 
 					if data
 						result = data
@@ -310,6 +327,7 @@ module.exports = (App) -> class Route
 		# run all
 		stack.runAll (err) ->
 			log.end masterLogtime
+			masterLogtime = null
 
 			if err?
 				return next err

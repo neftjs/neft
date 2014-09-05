@@ -102,7 +102,6 @@ compileViewsTask = task 'compile:views', 'Compile HTML views into json format', 
 		ext: '.json'
 
 	builder.cleanOutput()
-	builder.findFiles './node_modules/app/views'
 	builder.findFiles './views'
 
 	for file in builder.files
