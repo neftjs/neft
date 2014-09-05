@@ -3,8 +3,8 @@
 [utils] = ['utils'].map require
 [Schema, Routing, View] = ['schema', 'routing', 'view'].map require
 [Db, _, _, _] = ['db', 'db-implementation', 'db-schema', 'db-addons'].map require
-[_, _, _, _, _, AppModel] = ['model', 'model-db', 'model-client', 'model-linkeddata',
-                             'model-view', './model.coffee'].map require
+[_, _, _, _, _] = ['model', 'model-db', 'model-client', 'model-linkeddata',
+                   'model-view'].map require
 
 # TODO: use view-styles only for a client bundle
 # if utils.isClient
@@ -32,17 +32,19 @@ module.exports = (opts={}) ->
 			port: pkg.config.port
 			host: pkg.config.host
 			language: pkg.config.language
-		Routing: Routing
-		Schema: Schema
-		Model: null
-		Db: Db
-		View: View
+		Route: null
+		models: opts.models
+		controllers: opts.controllers
+		handlers: opts.handlers
+		routes: opts.routes
+		views: opts.views
+		templates: opts.templates
 
-	App.Model = AppModel App
+	App.Route = require('./route') App
 
 	# load views
-	viewFiles = []
-	viewFiles.push View.fromJSON path, json for path, json of opts.views
+	for path, json of App.views
+		App.views[path] = View.fromJSON path, json
 
 	# load styles
 	if utils.isClient
@@ -50,5 +52,14 @@ module.exports = (opts={}) ->
 			View.loadStylesFromJSON path, json
 
 	# load models
-	models = {}
-	models[name] = model App for name, model of opts.models
+	init = (files) ->
+		for name, module of files
+			files[name] = module App
+		files
+
+	init App.models
+	init App.controllers
+	init App.handlers.rest
+	init App.handlers.view
+	init App.templates
+	init App.routes

@@ -100,7 +100,7 @@ module.exports = class LinksBuilder
 
 			filePath = file.filepath
 			unless file.saved
-				filePath = path.relative './build', file.filepath
+				filePath = path.join path.relative(file.filepath, '').slice(0, -2), file.filepath
 			filePath = filePath.substr(0, filePath.lastIndexOf(".")) + @ext
 
 			if file.env

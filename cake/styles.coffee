@@ -1,6 +1,7 @@
 'use strict'
 
 [vm, utils, expect, coffee, log] = ['vm', 'utils', 'expect', 'coffee-script', 'log'].map require
+[Styles] = ['styles'].map require
 {assert} = console
 
 BINDING_RE = ///([a-z0-9_]+)\.(left|top|width|height)///ig
@@ -53,6 +54,7 @@ sandbox.Item = (opts) ->
 		obj.variables[prop] = args
 
 	obj
+utils.merge sandbox.Item, Styles.Item
 
 sandbox.Node = (opts, children) ->
 	if Array.isArray opts
@@ -72,22 +74,27 @@ sandbox.Node = (opts, children) ->
 			child.parent = obj.index
 
 	obj
+utils.merge sandbox.Node, Styles.Node
 
 sandbox.Image = ->
 	utils.merge sandbox.Item(arguments...),
 		type: 'Image'
+utils.merge sandbox.Image, Styles.Image
 
 sandbox.Text = ->
 	utils.merge sandbox.Item(arguments...),
 		type: 'Text'
+utils.merge sandbox.Text, Styles.Text
 
 sandbox.Column = ->
 	utils.merge sandbox.Node(arguments...),
 		type: 'Column'
+utils.merge sandbox.Column, Styles.Column
 
 sandbox.Row = ->
 	utils.merge sandbox.Node(arguments...),
 		type: 'Row'
+utils.merge sandbox.Row, Styles.Row
 
 sandbox.Scrollable = ->
 	utils.merge obj = sandbox.Node(arguments...),
@@ -99,6 +106,7 @@ sandbox.Scrollable = ->
 		obj.config.content = null
 
 	obj
+utils.merge sandbox.Scrollable, Styles.Scrollable
 
 sandbox.Unit = (name, node) ->
 	expect(name).toBe.truthy().string()

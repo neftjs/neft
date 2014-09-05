@@ -13,7 +13,6 @@ BUNDLE_OUT = "#{OUT}bundles/"
 QML_BUNDLE_OUT = "#{BUNDLE_OUT}qml/"
 VIEWS_OUT = "#{OUT}views"
 STYLES_OUT = "#{OUT}styles"
-MODELS_OUT = "#{OUT}models"
 
 initialized = false
 
@@ -152,17 +151,42 @@ compileTask = task 'compile', 'Compile views and styles', ->
 	compileViewsTask()
 	compileStylesTask()
 
-linkModelsTask = task 'link:models', 'Generate list of models', ->
-
-	LinksBuilder.build
-		inputs: ['./node_modules/app/models', './models']
-		output: MODELS_OUT
-
-	log.ok "Models has been successfully linked"
-
+FOLDERS = [
+	{
+		src: 'controllers'
+		capitalize: true
+	},
+	{
+		src: 'handlers/rest'
+		capitalize: true
+	},
+	{
+		src: 'handlers/view'
+		capitalize: true
+	},
+	{
+		src: 'models'
+		capitalize: true
+	},
+	{
+		src: 'routes'
+	},
+	{
+		src: 'templates'
+	}
+]
 linkTask = task 'link', 'Generate needed lists of existed files', ->
 
-	linkModelsTask()
+	capitalizeFileName = (file) ->
+		file.name = utils.capitalize file.name
+
+	for folder in FOLDERS
+		LinksBuilder.build
+			input: folder.src
+			output: "#{OUT}#{folder.src}"
+			onFile: if folder.capitalize then capitalizeFileName else null
+
+	log.ok "Files has been successfully linked"
 
 buildBrowserTask = task 'build:browser', 'Build bundle for browser environment', (opts, callback) ->
 

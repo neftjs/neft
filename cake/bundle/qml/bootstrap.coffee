@@ -6,7 +6,7 @@ boot = ->
 				when e.OK
 					callback()
 				when e.NETWORK_ERROR
-					console.log "Can not load #{src}"
+					console.log "Cannot load #{src}"
 				when e.EXCEPTION
 					console.log "#{e.exception.name}: #{e.exception.message}"
 
