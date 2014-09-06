@@ -3,7 +3,7 @@ Utils for async
 
 	'use strict'
 
-	[utils] = ['./index.coffee.md'].map require
+	[utils, expect] = ['./index.coffee.md', 'expect'].map require
 
 	{exports} = module
 
@@ -38,16 +38,14 @@ Functions have to provide `callback` as last parameter.
 
 Add new asynchronous function into stack.
 
-`obj` is a namespace where specified `func` exists and context passed into function;
 `func` is a name of function stored in `obj` or function to call;
-`args...` are an arguments passed into function.
+`obj` is a namespace where specified `func` exists and context passed into function;
+`args` are an array of arguments passed into function.
 
-		add: (obj, func, args...) ->
+		add: (func, context, args) ->
+			expect().defined(args).toBe.object()
 
-			if typeof func is 'string' and (not obj or typeof obj isnt 'object')
-				throw new TypeError "ASync Stack::add(): passed obj is not an object"
-
-			@_arr.push obj, func, args
+			@_arr.push func, context, args
 
 #### callNext()
 
@@ -67,21 +65,27 @@ Empty `callback` will be called if there is no function to call.
 				return callback null
 
 			# get next
-			obj = @_arr.shift()
 			func = @_arr.shift()
+			context = @_arr.shift()
 			args = @_arr.shift()
 
 			if typeof func is 'string'
-				func = obj[func]
+				func = context[func]
 
 			if typeof func isnt 'function'
 				throw new TypeError "ASync Stack::callNext(): function to call is not a function"
 
-			# add callback
+			# add callback into args
+			# To avoid got args array modification and to minimise memory usage,
+			# we create new object with `args` as a prototype.
+			# `Function::apply` expects an object and iterate by it to the `length`.
+			args = Object.create (args or null)
 			args[func.length - 1] = callback
+			if args.length is undefined or args.length < func.length
+				args.length = func.length
 
 			# call; support sync errors
-			utils.tryFunc func, obj, args, callback
+			utils.tryFunc func, context, args, callback
 
 #### runAll()
 

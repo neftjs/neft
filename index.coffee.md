@@ -938,7 +938,7 @@ Made as workaroud for V8 deoptimization.
 	exports.tryFunc = (func, context, args, onfail) ->
 
 		expect(func).toBe.function()
-		expect().defined(args).toBe.array()
+		expect().defined(args).toBe.object()
 
 		try
 			func.apply context, args
@@ -953,7 +953,7 @@ Made as workaroud for V8 deoptimization.
 	exports.catchError = (func, context, args) ->
 
 		expect(func).toBe.function()
-		expect().defined(args).toBe.array()
+		expect().defined(args).toBe.object()
 
 		try
 			func.apply context, args
