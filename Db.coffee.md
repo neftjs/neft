@@ -118,20 +118,19 @@ It not have place if any documents won't be returned
 
 			database = @_database = new Db._subclasses.Database @, name
 
-			@_stack.add database, 'run'
+			@_stack.add 'run', database
 
 		_implementTable: (name) ->
 
 			table = @_table = new Db._subclasses.Table @, name
 
-			@_stack.add table, 'run'
+			@_stack.add 'run', table
 
 		_implementCollection: ->
 
 			@_collection = new Db._subclasses.Collection @
 
-			@_stack.add null, (callback) =>
-
+			@_stack.add (callback) =>
 				if @_search then return @_collection.run callback
 				callback null
 
@@ -261,7 +260,7 @@ Remove all documents from the collection.
 
 			@_search = false
 
-			@_stack.add @_collection, 'removeAll'
+			@_stack.add 'removeAll', @_collection
 
 #### insert()
 
@@ -284,7 +283,7 @@ Id of created document will be returned.
 
 			@_search = false
 
-			@_stack.add @_table, 'insertData', doc
+			@_stack.add 'insertData', @_table, [doc]
 
 #### update()
 
@@ -302,7 +301,7 @@ Update all documents in the collection.
 
 			@_search = false
 
-			@_stack.add @_collection, 'updateAll', doc
+			@_stack.add 'updateAll', @_collection, [doc]
 
 *Events* emitted
 ----------------
@@ -312,7 +311,7 @@ Update all documents in the collection.
 	Emitter = require 'emitter'
 
 	utils.merge Db, Emitter::
-	utils.merge Db, new Emitter
+	Emitter.call Db
 
 ### Events
 
