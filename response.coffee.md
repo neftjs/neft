@@ -32,6 +32,7 @@ Response
 			(@MOVED = 301),
 			(@FOUND = 302),
 			(@NOT_MODIFIED = 304),
+			(@TEMPORARY_REDIRECT = 307),
 
 			# Client error
 			(@BAD_REQUEST = 400),
