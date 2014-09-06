@@ -3,7 +3,6 @@
 	"name": "routing",
 	"version": "0.0.1",
 	"dependencies": {
-		"express": ">=3.4.5",
 		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
 		"emitter": "git+ssh://git@bitbucket.org:Kildyt/emitter.git"
 	}
