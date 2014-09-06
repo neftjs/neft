@@ -29,13 +29,12 @@ exports.init = ->
 			serverRes: serverRes
 
 		type = serverReq.headers['x-expected-type']
-		type |= 0 if type
 
 		obj.res = @onRequest
 			uid: uid
 			method: @constructor[serverReq.method]
 			uri: serverReq.url.slice 1
-			data: null
+			data: undefined
 			type: type
 
 		# run immediately if needed

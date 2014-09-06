@@ -3,16 +3,18 @@ Request
 
 	'use strict'
 
-	[utils, Emitter, Model, _] = ['utils', 'emitter', 'model', 'model-view'].map require
+	[utils, expect, Emitter] = ['utils', 'expect', 'emitter'].map require
 
 	{assert} = console
-
-	Model = Model.View()
 
 *class* Request
 ---------------
 
 	module.exports = (Routing, impl) -> class Request extends Emitter
+
+		@TYPES = [
+			(@VIEW_TYPE = 'view')
+		]
 
 ### Events
 
@@ -23,20 +25,24 @@ Request
 ### Constructor(*Object*)
 
 		constructor: (opts) ->
+			expect(opts).toBe.simpleObject()
 
-			assert utils.isObject opts
+			expect(opts.uid).toBe.truthy().string()
+			expect().some(Routing.METHODS).toBe opts.method
+			expect(opts.uri).toBe.string()
 
-			opts.type ?= Request::type
+			if opts.data?
+				expect().defined(opts.data).toBe.object()
+				{@data} = opts
 
-			assert opts.uid and typeof opts.uid is 'string'
-			assert ~Routing.METHODS.indexOf(opts.method)
-			assert typeof opts.uri is 'string'
-			assert typeof opts.data is 'object'
-			assert Model.TYPES & opts.type
+			if opts.type?
+				expect().some(Request.TYPES).toBe opts.type
+				{@type} = opts
+
+			{@uid, @method, @uri} = opts
 
 			super
 
-			{@uid, @method, @uri, @data, @type} = opts
 			@pending = true
 			@params = null
 
@@ -44,11 +50,11 @@ Request
 
 		uid: ''
 		pending: false
-		method: 0
+		method: Routing.GET
 		uri: ''
 		params: null
 		data: null
-		type: Model.VIEW
+		type: @VIEW_TYPE
 
 ### Methods
 
