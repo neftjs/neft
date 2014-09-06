@@ -68,8 +68,8 @@ module.exports = (File) -> class Condition
 		clone.clone = undefined
 		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
-		clone.render = @render.bind clone
-		clone.revert = @revert.bind clone
+		clone.render = => @render.call clone
+		clone.revert = => @revert.call clone
 
 		clone.self.onRender.connect clone.render
 		clone.self.onRevert.connect clone.revert

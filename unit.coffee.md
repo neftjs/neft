@@ -42,10 +42,6 @@ Represents *unit* - separated part of file which can be placed by elems.
 		id: ''
 		name: ''
 
-### Signals
-
-		signal.defineGetter @::, 'onReplacedByElem'
-
 		if utils.isNode
 			@::parse = ->
 				File.call @, @id, @_node

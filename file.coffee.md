@@ -196,6 +196,7 @@ features. Physical file should be easy to load and parse.
 
 		signal.defineGetter @::, 'onRender'
 		signal.defineGetter @::, 'onRevert'
+		signal.defineGetter @::, 'onReplacedByElem'
 
 ### Methods
 

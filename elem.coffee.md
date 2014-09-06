@@ -34,26 +34,33 @@ Represents an element placed in the file.
 
 ### Properties
 
-		isRendered: false
 		name: ''
 		self: null
 		node: null
 		bodyNode: null
 		usedUnit: null
+		isRendered: false
 
 ### Methods
 
-		render: ->
+		render: (file) ->
 			expect(@self.isRendered).toBe.truthy()
+			expect().defined(file).toBe.any File
 
-			return if @isRendered
 			return unless @node.visible
 
-			usedUnit = @usedUnit = File.factory @self.units[@name]
-			usedUnit.storage = @self.storage
+			if @isRendered
+				@revert()
+
+			unit = @self.units[@name]
+			return if not file and not unit
+
+			usedUnit = @usedUnit = file or File.factory(unit)
+			unless file
+				usedUnit.storage = @self.storage
 			usedUnit.render @
 
-			@node.parent.replace @node, usedUnit.node
+			usedUnit.node.parent = @node
 
 			if usedUnit.hasOwnProperty 'onReplacedByElem'
 				usedUnit.onReplacedByElem @
@@ -62,7 +69,8 @@ Represents an element placed in the file.
 
 		revert: ->
 			expect(@self.isRendered).toBe.falsy()
-			@isRendered = false
+
+			return unless @isRendered
 
 			# restore attrs
 			@node.attrs.backChanges()
@@ -70,9 +78,10 @@ Represents an element placed in the file.
 			return unless @usedUnit
 
 			# destroy used unit
-			@usedUnit.node.parent.replace @usedUnit.node, @node
+			@usedUnit.node.parent = undefined
 			@usedUnit.revert().destroy()
 			@usedUnit = null
+			@isRendered = false
 
 		clone: (original, self) ->
 
@@ -82,15 +91,15 @@ Represents an element placed in the file.
 			clone.self = self
 			clone.node = original.node.getCopiedElement @node, self.node
 			clone.bodyNode = clone.node.children[0]
-			clone.render = @render.bind clone
-			clone.revert = @revert.bind clone
-			clone.isRendered = false
+			clone.render = (a1) => @render.call clone, a1
+			clone.revert = => @revert.call clone
 			clone.usedUnit = null
+			clone.isRendered = false
 
 			utils.defProp clone, '_unit', 'cw', null
 
 			self.onRender.connect clone.render
 			self.onRevert.connect clone.revert
-			clone.node.onVisibilityChanged.connect clone.render
+			clone.node.onVisibilityChanged.connect -> clone.render()
 
 			clone
