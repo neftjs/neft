@@ -315,6 +315,9 @@ module.exports = (App) -> class Route
 		# view
 		if @view or @template
 			stack.add (callback) =>
+				if result instanceof View
+					return callback null, result
+
 				logtime = log.time "View"
 				@_renderView req, result, (err, data) ->
 					log.end logtime
