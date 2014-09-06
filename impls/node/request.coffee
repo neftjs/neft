@@ -2,6 +2,8 @@
 
 module.exports = (pending) ->
 
-	getUserAgent: ->
+	getHeaders: ->
+		pending[@uid]?.serverReq.headers
 
+	getUserAgent: ->
 		pending[@uid]?.serverReq.headers['user-agent']

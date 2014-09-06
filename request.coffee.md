@@ -65,5 +65,8 @@ Request
 			@pending = false
 			@trigger Request.DESTROY
 
+		Object.defineProperty @::, 'headers',
+			get: -> impl.getHeaders.call(@) or {}
+
 		Object.defineProperty @::, 'userAgent',
 			get: -> impl.getUserAgent.call(@) or ''
