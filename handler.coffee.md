@@ -89,7 +89,7 @@ Handler
 					# validate schema
 					err = utils.catchError @schema.validate, @schema, [params]
 					if err instanceof Error
-						log "`#{@uri}` tests, but not passed schema (`#{err}`)"
+						log "`#{@uri}` tests, but not passed schema\n#{err}"
 						return callback err
 
 				# on response destroy
@@ -98,7 +98,8 @@ Handler
 				# on callback fail
 				next = (err) =>
 
-					if err then log.warn "Error raised in `#{@uri}` handler (`#{err}`)" + err.stack
+					if err
+						log.error "Error raised in `#{@uri}` handler\n#{err.stack or err}"
 
 					res.off Routing.Response.DESTROY, callback
 					callback handlerCallbackError
