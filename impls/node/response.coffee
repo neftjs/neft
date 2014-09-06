@@ -107,6 +107,12 @@ sendData = do ->
 
 module.exports = (pending) ->
 
+	setHeader: (name, val) ->
+
+		# get config obj
+		obj = pending[@req.uid]
+		obj.serverRes.setHeader name, val
+
 	send: ->
 
 		# get config obj
@@ -128,6 +134,5 @@ module.exports = (pending) ->
 		# send data
 		data = prepareData obj
 		sendData obj, data, =>
-
 			log.end logtime
 			@destroy()

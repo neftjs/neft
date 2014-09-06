@@ -3,7 +3,7 @@ Response
 
 	'use strict'
 
-	[utils, Emitter] = ['utils', 'emitter'].map require
+	[utils, expect, Emitter] = ['utils', 'expect', 'emitter'].map require
 
 	{assert} = console
 
@@ -84,8 +84,16 @@ Response
 
 ### Methods
 
-		send: (@status, @data) ->
+		setHeader: (name, val) ->
+			expect(@pending).toBe.truthy()
+			expect(name).toBe.truthy().string()
+			expect(val).toBe.truthy().string()
 
+			impl.setHeader.call @, name, val
+
+			@
+
+		send: (@status, @data) ->
 			assert @pending
 			assert ~Response.STATUSES.indexOf status
 
@@ -96,8 +104,9 @@ Response
 
 			impl.send.call @
 
-		raise: (error) ->
+			@
 
+		raise: (error) ->
 			assert @pending
 			assert error instanceof Response.Error
 
