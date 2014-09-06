@@ -3,8 +3,6 @@
 [utils] = ['utils'].map require
 [Schema, Routing, View] = ['schema', 'routing', 'view'].map require
 [Db, _, _, _] = ['db', 'db-implementation', 'db-schema', 'db-addons'].map require
-[_, _, _, _, _] = ['model', 'model-db', 'model-client', 'model-linkeddata',
-                   'model-view'].map require
 
 # TODO: use view-styles only for a client bundle
 # if utils.isClient
