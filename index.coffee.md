@@ -49,7 +49,7 @@ New instance of implemented *Routing* is returned.
 			expect(opts.host).toBe.truthy().string()
 			expect(opts.language).toBe.truthy().string()
 
-			@_handlers = {}
+			utils.defProp @, '_handlers', 'c', {}
 			{@protocol, @port, @host, @language} = opts
 
 			@url = "#{@protocol}://#{@host}:#{@port}/"
@@ -59,8 +59,6 @@ New instance of implemented *Routing* is returned.
 			log.info "Start as `#{@host}:#{@port}`"
 
 ### Properties
-
-		_handlers: null
 
 		protocol: 'http'
 		port: 0
