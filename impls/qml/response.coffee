@@ -1,6 +1,6 @@
 'use strict'
 
-[log, View, StylesView] = ['log', 'view', 'styles/view'].map require
+[log, View] = ['log', 'view'].map require
 
 log = log.scope 'Routing'
 
@@ -17,18 +17,11 @@ module.exports = (pending) ->
 		prevResp = @
 
 		switch true
-			when @data instanceof StylesView
-
-				# clear styles and destroy view when it won't be needed
-				@on @constructor.DESTROY, ->
-					@data.clear()
-					@data.view.destroy()
-
 			when @data instanceof View
-				webView.loadHtml @data.node.stringify()
+				# webView.loadHtml @data.node.stringify()
 
 				# destroy view when it won't be needed
 				@on @constructor.DESTROY, -> @data.destroy()
 
 			else
-				webView.loadHtml "<pre>" + JSON.stringify(@data, 0, 4) + "</pre>"
+				# webView.loadHtml "<pre>" + JSON.stringify(@data, 0, 4) + "</pre>"

@@ -11,7 +11,7 @@ exports.init = ->
 		# send internal request
 		uid = utils.uid()
 
-		res = @onRequest
+		res = @handleRequest
 			uid: uid
 			method: @constructor.GET
 			uri: 'items/0'
