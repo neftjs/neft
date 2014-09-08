@@ -4,6 +4,7 @@ Handler
 	'use strict'
 
 	[utils, log, Schema] = ['utils', 'log', 'schema'].map require
+	expect = require 'expect'
 
 	{assert} = console
 	{parse, stringify} = JSON
@@ -41,19 +42,20 @@ Handler
 
 			opts ?= @
 
-			assert ~Routing.METHODS.indexOf(opts.method)
-			assert opts.uri instanceof Routing.Uri
-			opts.schema and assert opts.schema instanceof Schema
-			assert typeof opts.listener is 'function'
+			expect(opts).toBe.simpleObject()
+			expect().some(Routing.METHODS).toBe opts.method
+			expect(opts.uri).toBe.any Routing.Uri
+			expect().defined(opts.schema).toBe.any Schema
+			expect(opts.callback).toBe.function()
 
-			{@method, @uri, @schema, @listener} = opts
+			{@method, @uri, @schema, @callback} = opts
 
 ### Properties
 
 		method: ''
 		uri: null
 		schema: null
-		listener: null
+		callback: null
 
 ### Methods
 
@@ -106,7 +108,7 @@ Handler
 
 				log "Use `#{@method} #{@uri}` handler"
 
-				utils.tryFunc @listener, @, [req, res, next], next
+				utils.tryFunc @callback, @, [req, res, next], next
 
 				null
 

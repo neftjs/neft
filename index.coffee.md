@@ -82,7 +82,7 @@ New instance of implemented *Routing* is returned.
 
 #### createHandler(*Number*, *Object*, *Function*)
 
-		createHandler: (method, uri, listener) ->
+		createHandler: (method, uri, callback) ->
 
 			opts = method
 
@@ -90,12 +90,11 @@ New instance of implemented *Routing* is returned.
 				opts =
 					method: method
 					uri: uri
-					listener: listener
+					callback: callback
 
 			expect(opts).toBe.simpleObject()
 			expect().some(Routing.METHODS).toBe opts.method
 			expect(opts.uri).toBe.string()
-			expect(opts.listener).toBe.function()
 
 			uri = new Routing.Uri opts.uri
 
@@ -105,7 +104,7 @@ New instance of implemented *Routing* is returned.
 				method: opts.method
 				uri: uri
 				schema: opts.schema
-				listener: opts.listener
+				callback: opts.callback
 
 			log.info "New handler `#{handler}` registered"
 
