@@ -80,27 +80,32 @@ New instance of implemented *Routing* is returned.
 
 ### Methods
 
-#### on(*Number*, *Object*, *Function*)
+#### createHandler(*Number*, *Object*, *Function*)
 
-		on: (method, opts, listener) ->
+		createHandler: (method, uri, listener) ->
+
+			opts = method
 
 			if typeof opts isnt 'object'
-				opts = uri: opts
+				opts =
+					method: method
+					uri: uri
+					listener: listener
 
-			expect().some(Routing.METHODS).toBe method
 			expect(opts).toBe.simpleObject()
+			expect().some(Routing.METHODS).toBe opts.method
 			expect(opts.uri).toBe.string()
-			expect(listener).toBe.function()
+			expect(opts.listener).toBe.function()
 
-			opts.uri = new Routing.Uri opts.uri
+			uri = new Routing.Uri opts.uri
 
-			stack = @_handlers[method] ?= []
+			stack = @_handlers[opts.method] ?= []
 
 			stack.push handler = new Routing.Handler
-				method: method
-				uri: opts.uri
+				method: opts.method
+				uri: uri
 				schema: opts.schema
-				listener: listener
+				listener: opts.listener
 
 			log.info "New handler `#{handler}` registered"
 
