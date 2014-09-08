@@ -1,6 +1,6 @@
 'use strict'
 
-[utils, Model] = ['utils', 'model'].map require
+[utils] = ['utils'].map require
 
 impl = {}
 
@@ -18,7 +18,7 @@ exports.init = ->
 		# send internal request
 		uid = utils.uid()
 
-		res = @onRequest
+		res = @handleRequest
 			uid: uid
 			method: @constructor.GET
 			uri: uri.slice 1
@@ -47,7 +47,7 @@ exports.sendRequest = (opts, callback) ->
 	xhr = new XMLHttpRequest
 
 	xhr.open opts.method, opts.url, true
-	xhr.setRequestHeader 'X-Expected-Type', Model.OBJECT
+	xhr.setRequestHeader 'X-Expected-Type', 'object' # TODO: use `Request` type
 	xhr.responseType = 'json'
 	xhr.onload = ->
 		response = xhr.response

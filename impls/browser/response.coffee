@@ -16,13 +16,12 @@ module.exports = (impl) ->
 		# save response into internal impl object
 		impl.resp = @
 
-		switch true
-			when @data instanceof View
-				# TODO: detect when styles are not using and serve HTML
-				# document.body.innerHTML = @data.node.stringify()
-
-				# destroy view on response destroy
-				@on @constructor.DESTROY, -> @data.destroy()
-
-			else
-				document.body.innerHTML = "<pre>" + JSON.stringify(@data, 0, 4) + "</pre>"
+		unless @data instanceof View
+			data = do =>
+				if @data isnt null and typeof @data is 'object'
+					try JSON.stringify @data, null, 4
+				else if @data instanceof Error
+					@data.stack
+				else
+					@data
+			document.body.innerHTML = data

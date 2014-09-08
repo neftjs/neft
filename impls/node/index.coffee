@@ -30,7 +30,7 @@ exports.init = ->
 
 		type = serverReq.headers['x-expected-type']
 
-		obj.res = @onRequest
+		obj.res = @handleRequest
 			uid: uid
 			method: @constructor[serverReq.method]
 			uri: serverReq.url.slice 1

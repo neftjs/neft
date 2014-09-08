@@ -47,7 +47,6 @@ parsers =
 		try JSON.stringify data
 	'text/html': (data) ->
 		html = data.node.stringify()
-		data.destroy() # destroy view
 		html
 
 prepareData = (obj) ->

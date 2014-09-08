@@ -116,6 +116,9 @@ Response
 
 			300 > @status >= 200
 
+		###
+		Should be called by the implementation.
+		###
 		destroy: ->
 
 			assert @pending

@@ -137,9 +137,9 @@ New instance of implemented *Routing* is returned.
 
 			req
 
-#### *Response* onRequest(*Object*)
+#### *Response* handleRequest(*Object*)
 
-		onRequest: (opts) ->
+		handleRequest: (opts) ->
 
 			expect(opts).toBe.simpleObject()
 
@@ -152,16 +152,13 @@ New instance of implemented *Routing* is returned.
 			# create response
 			res = new Routing.Response req: req
 
-			# resolve request
-			loop
-
-				# get handlers
-				handlers = @_handlers[req.method]
-				unless handlers
+			# get handlers
+			onError = ->
 					res.raise Routing.Response.Error.RequestResolve req
 					log.end logtime
-					break
 
+			handlers = @_handlers[req.method]
+			if handlers
 				# run handlers
 				utils.async.forEach handlers, (handler, i, handlers, next) ->
 
@@ -169,10 +166,8 @@ New instance of implemented *Routing* is returned.
 						if err then return next()
 						log.end logtime
 
-				, ->
-					res.raise Routing.Response.Error.RequestResolve req
-					log.end logtime
-
-				break
+				, onError
+			else
+				onError()
 
 			res
