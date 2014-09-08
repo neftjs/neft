@@ -90,34 +90,47 @@ New instance of implemented *Routing* is returned.
 
 			handler
 
-#### request(*Object*, *Function*)
+#### createServerRequest(*Object*)
 
-		request: (opts, callback) ->
+		createServerRequest: (opts) ->
 
 			expect(opts).toBe.simpleObject()
-			expect(callback).toBe.function()
 
-			opts.method ?= Routing.GET
-			opts.uri ?= ''
-			opts.data ?= null
+			config = Object.create opts
 
-			opts.url = "#{@url}#{opts.uri}"
+			# method
+			unless config.method?
+				config.method = Routing.Request.GET
 
-			opts.uid = utils.uid()
-			req = new Routing.Request opts
+			# uri
+			unless config.uri?
+				config.uri = ''
 
-			impl.sendRequest.call @, opts, (status, data) ->
+			# type
+			unless config.type?
+				config.type = Routing.Request.OBJECT_TYPE
 
-				req.pending = false
+			expect().some(Routing.Request.METHODS).toBe config.method
+			expect(config.uri).toBe.string()
+			expect().defined(config.data).toBe.object()
 
-				resp = new Routing.Response
+			config.url = "#{@url}#{opts.uri}"
+			req = new Routing.Request config
+
+			impl.sendServerRequest.call @, config, (status, data) ->
+
+				res = new Routing.Response
 					req: req
 					status: status
 					data: data
 
-				args = [null]
-				args[resp.isSucceed()|0] = resp
-				callback args...
+				# destroy
+				req.destroy()
+				res.destroy()
+
+				# call request signal
+				if req.hasOwnProperty 'onLoad'
+					req.onLoad res
 
 			req
 
@@ -138,8 +151,8 @@ New instance of implemented *Routing* is returned.
 
 			# get handlers
 			onError = ->
-					res.raise Routing.Response.Error.RequestResolve req
-					log.end logtime
+				res.raise Routing.Response.Error.RequestResolve req
+				log.end logtime
 
 			handlers = @_handlers[req.method]
 			if handlers

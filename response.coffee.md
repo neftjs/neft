@@ -99,6 +99,10 @@ Response
 
 			@req.destroy()
 
+			# call request signal
+			if @req.hasOwnProperty 'onLoad'
+				@req.onLoad @
+
 			if data instanceof Error
 				data = utils.errorToObject data
 

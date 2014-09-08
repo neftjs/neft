@@ -40,7 +40,3 @@ exports.init = ->
 		# run immediately if needed
 		unless obj.res.req.pending
 			exports.Response.send.call obj.res
-
-exports.sendRequest = ->
-
-	throw "Sending routing requests are not supported on the `node`"

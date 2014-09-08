@@ -4,6 +4,7 @@ Request
 	'use strict'
 
 	[utils, expect, Emitter] = ['utils', 'expect', 'emitter'].map require
+	signal = require 'signal'
 
 	{assert} = console
 
@@ -21,6 +22,7 @@ Request
 		]
 
 		@TYPES = [
+			(@OBJECT_TYPE = 'object'),
 			(@VIEW_TYPE = 'view')
 		]
 
@@ -64,6 +66,8 @@ Request
 		params: null
 		data: null
 		type: @VIEW_TYPE
+
+		signal.defineGetter @::, 'onLoad'
 
 ### Methods
 
