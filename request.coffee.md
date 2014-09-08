@@ -35,7 +35,7 @@ Request
 		constructor: (opts) ->
 			expect(opts).toBe.simpleObject()
 
-			expect(opts.uid).toBe.truthy().string()
+			expect().defined(opts.uid).toBe.truthy().string()
 			expect().some(Request.METHODS).toBe opts.method
 			expect(opts.uri).toBe.string()
 
@@ -48,6 +48,7 @@ Request
 				{@type} = opts
 
 			{@uid, @method, @uri} = opts
+			@uid ?= utils.uid()
 
 			super
 
