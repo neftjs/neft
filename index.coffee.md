@@ -451,13 +451,29 @@ Polyfill for ES6 `Object.setPrototypeOf()`.
 
 	exports.setPrototypeOf = setPrototypeOf = do ->
 
+		# ES6 `Object.setPrototypeOf()`
+		if typeof Object.setPrototypeOf is 'function'
+			return Object.setPrototypeOf
+
+		# writable __proto__
+		tmp = {}
+		tmp.__proto__ = a: 1
+		if tmp.a is 1
+			return (obj, proto) ->
+				expect(obj).not().toBe.primitive()
+				expect(proto).toBe.object()
+
+				obj.__proto__ = proto
+				obj
+
+		# object merging
 		return (obj, proto) ->
+			expect(obj).not().toBe.primitive()
+			expect(proto).toBe.object()
 
-			expect(obj).toBe.object()
-
-			proto = createObject proto
-			merge proto, obj
-			proto
+			newObj = createObject proto
+			merge newObj, obj
+			newObj
 
 ### getOwnProperties
 
