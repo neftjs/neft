@@ -8,7 +8,10 @@ module.exports = (impl) ->
 
 	send: ->
 
-		log.info "Got response `#{@req.method}` `#{@req.uri}`"
+		log.ok "Got response `#{@req.method} #{@req.uri}`"
+
+		# mark previous response as unused
+		impl.resp?.destroy()
 
 		# save response into internal impl object
 		impl.resp = @
