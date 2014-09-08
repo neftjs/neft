@@ -61,19 +61,23 @@ Response
 
 		constructor: (opts) ->
 
-			assert utils.isObject opts
+			if opts instanceof Routing.Request
+				opts: req: opts
 
-			opts.status ?= Response.OK
-			opts.data ?= null
-
-			assert opts.req instanceof Routing.Request
-			assert ~Response.STATUSES.indexOf opts.status
-			assert typeof opts.data is 'object'
+			expect(opts).toBe.simpleObject()
+			expect(opts.req).toBe.any Routing.Request
+			expect().some(Response.STATUSES).toBe opts.status if opts.status?
 
 			super
 
-			{@req, @status, @data} = opts
+			{@req} = opts
+			{@status} = opts if opts.status?
+			{@data} = opts if opts.data?
+
 			@pending = true
+
+			if opts.status?
+				@destroy()
 
 ### Properties
 

@@ -119,14 +119,13 @@ New instance of implemented *Routing* is returned.
 
 			impl.sendServerRequest.call @, config, (status, data) ->
 
+				# destroy request
+				req.destroy()
+
 				res = new Routing.Response
 					req: req
 					status: status
 					data: data
-
-				# destroy
-				req.destroy()
-				res.destroy()
 
 				# call request signal
 				if req.hasOwnProperty 'onLoad'
@@ -165,6 +164,8 @@ New instance of implemented *Routing* is returned.
 
 				, onError
 			else
+				log.warn "No handler found"
+
 				onError()
 
 			res

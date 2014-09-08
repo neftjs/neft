@@ -38,7 +38,7 @@ Request
 			expect(opts).toBe.simpleObject()
 
 			expect().defined(opts.uid).toBe.truthy().string()
-			expect().some(Request.METHODS).toBe opts.method
+			expect().some(Request.METHODS).toBe opts.method if opts.method?
 			expect(opts.uri).toBe.string()
 
 			if opts.data?
@@ -49,7 +49,8 @@ Request
 				expect().some(Request.TYPES).toBe opts.type
 				{@type} = opts
 
-			{@uid, @method, @uri} = opts
+			{@uid, @uri} = opts
+			{@method} = opts if opts.method?
 			@uid ?= utils.uid()
 
 			super
@@ -61,7 +62,7 @@ Request
 
 		uid: ''
 		pending: false
-		method: Routing.GET
+		method: Request.GET
 		uri: ''
 		params: null
 		data: null
