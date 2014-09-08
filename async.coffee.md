@@ -6,6 +6,7 @@ Utils for async
 	[utils, expect] = ['./index.coffee.md', 'expect'].map require
 
 	{exports} = module
+	{assert} = console
 
 	{shift} = Array::
 	{isArray} = Array
@@ -75,17 +76,33 @@ Empty `callback` will be called if there is no function to call.
 			if typeof func isnt 'function'
 				throw new TypeError "ASync Stack::callNext(): function to call is not a function"
 
+			syncError = null
+			called = false
+
+			callbackWrapper = ->
+				assert not called or not syncError
+				, "Callback can't be called if function throws an error;\n" +
+				  "Function: `#{func}`\nSynchronous error: `#{syncError}`"
+
+				assert not called
+				, "Callback can't be called twice;\nFunction: `#{func}`"
+
+				called = true
+				callback.apply @, arguments
+
 			# add callback into args
 			# To avoid got args array modification and to minimise memory usage,
 			# we create new object with `args` as a prototype.
 			# `Function::apply` expects an object and iterate by it to the `length`.
 			args = Object.create (args or null)
-			args[func.length - 1] = callback
+			args[func.length - 1] = callbackWrapper
 			if args.length is undefined or args.length < func.length
 				args.length = func.length
 
 			# call; support sync errors
-			utils.tryFunc func, context, args, callback
+			syncError = utils.catchError func, context, args
+			if syncError
+				callbackWrapper syncError
 
 #### runAll()
 
@@ -113,7 +130,7 @@ Run all stored functions in order.
 
 				callback.apply null, arguments
 
-			callNext = @callNext.bind @, onNextCalled
+			callNext = => @callNext onNextCalled
 
 			callNext()
 
