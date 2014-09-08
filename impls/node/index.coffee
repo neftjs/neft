@@ -32,7 +32,7 @@ exports.init = ->
 
 		obj.res = @handleRequest
 			uid: uid
-			method: @constructor[serverReq.method]
+			method: @constructor.Request[serverReq.method]
 			uri: serverReq.url.slice 1
 			data: undefined
 			type: type

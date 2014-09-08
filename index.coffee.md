@@ -39,16 +39,6 @@ New instance of implemented *Routing* is returned.
 		@Request = require('./request.coffee.md') Routing, impl.Request
 		@Response = require('./response.coffee.md') Routing, impl.Response
 
-#### METHODS
-
-		@METHODS = [
-			(@GET = 'get'),
-			(@POST = 'post'),
-			(@PUT = 'put'),
-			(@DELETE = 'delete'),
-			(@OPTIONS = 'options')
-		]
-
 ### Constructor
 
 		constructor: (opts) ->

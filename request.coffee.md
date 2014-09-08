@@ -12,6 +12,14 @@ Request
 
 	module.exports = (Routing, impl) -> class Request extends Emitter
 
+		@METHODS = [
+			(@GET = 'get'),
+			(@POST = 'post'),
+			(@PUT = 'put'),
+			(@DELETE = 'delete'),
+			(@OPTIONS = 'options')
+		]
+
 		@TYPES = [
 			(@VIEW_TYPE = 'view')
 		]
@@ -28,7 +36,7 @@ Request
 			expect(opts).toBe.simpleObject()
 
 			expect(opts.uid).toBe.truthy().string()
-			expect().some(Routing.METHODS).toBe opts.method
+			expect().some(Request.METHODS).toBe opts.method
 			expect(opts.uri).toBe.string()
 
 			if opts.data?

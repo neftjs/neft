@@ -43,7 +43,7 @@ Handler
 			opts ?= @
 
 			expect(opts).toBe.simpleObject()
-			expect().some(Routing.METHODS).toBe opts.method
+			expect().some(Routing.Request.METHODS).toBe opts.method
 			expect(opts.uri).toBe.any Routing.Uri
 			expect().defined(opts.schema).toBe.any Schema
 			expect(opts.callback).toBe.function()

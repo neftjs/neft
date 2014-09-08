@@ -20,7 +20,7 @@ exports.init = ->
 
 		res = @handleRequest
 			uid: uid
-			method: @constructor.GET
+			method: @constructor.Request.GET
 			uri: uri.slice 1
 			data: null
 
