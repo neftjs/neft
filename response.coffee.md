@@ -121,7 +121,7 @@ Response
 
 			# call request signal
 			{req} = res
-			if req.hasOwnProperty 'onLoad'
+			if req.hasOwnProperty 'onLoaded'
 				req.onLoaded @
 
 			# prepare data
