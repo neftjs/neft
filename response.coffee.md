@@ -10,7 +10,7 @@ Response
 *class* Response
 ----------------
 
-	module.exports = (Routing, impl) -> class Response extends Emitter
+	module.exports = (Routing, Impl) -> class Response extends Emitter
 
 ### Events
 
@@ -93,7 +93,7 @@ Response
 			expect(name).toBe.truthy().string()
 			expect(val).toBe.truthy().string()
 
-			impl.setHeader.call @, name, val
+			Impl.setHeader @, name, val
 
 			@
 
@@ -110,7 +110,7 @@ Response
 			if data instanceof Error
 				data = utils.errorToObject data
 
-			impl.send.call @
+			setImmediate => Impl.send @
 
 			@
 

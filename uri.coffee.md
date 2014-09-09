@@ -8,7 +8,7 @@ Uri
 *class* Uri
 -----------
 
-	module.exports = (Routing, impl) -> class Uri
+	module.exports = (Routing) -> class Uri
 
 ### Static
 

@@ -1,6 +1,7 @@
 'use strict'
 
 [zlib, log, path, View] = ['zlib', 'log', 'path', 'view'].map require
+expect = require 'expect'
 
 log = log.scope 'Routing'
 
@@ -104,20 +105,20 @@ sendData = do ->
 			send obj, data
 			callback()
 
-module.exports = (pending) ->
+module.exports = (Routing, pending) ->
 
-	setHeader: (name, val) ->
+	setHeader: (res, name, val) ->
 
 		# get config obj
-		obj = pending[@req.uid]
+		obj = pending[res.req.uid]
 		obj.serverRes.setHeader name, val
 
-	send: ->
+	send: (res) ->
 
 		# get config obj
-		obj = pending[@req.uid]
-		return unless obj?.res
-		delete pending[@req.uid]
+		obj = pending[res.req.uid]
+		expect(obj.res).not().toBe undefined
+		delete pending[res.req.uid]
 
 		logtime = log.time "send response by HTTP"
 
@@ -128,10 +129,10 @@ module.exports = (pending) ->
 		setHeaders obj, headers if headers = METHOD_HEADERS[obj.serverReq.method]
 
 		# set status
-		serverRes.statusCode = @status
+		serverRes.statusCode = res.status
 
 		# send data
 		data = prepareData obj
-		sendData obj, data, =>
+		sendData obj, data, ->
 			log.end logtime
-			@destroy()
+			res.destroy()

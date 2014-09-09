@@ -34,7 +34,7 @@ Handler
 *class* Handler
 ---------------
 
-	module.exports = (Routing, impl) -> class Handler
+	module.exports = (Routing) -> class Handler
 
 ### Constructor
 

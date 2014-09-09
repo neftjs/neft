@@ -9,35 +9,21 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 
 	log = log.scope 'Routing'
 
-Implementation
---------------
-
-Internal *Routing* class is automatically implemented by the platform-based implementation.
-New instance of implemented *Routing* is returned.
-
-	impl = switch true
-		when utils.isNode
-			require './impls/node/index.coffee'
-		when utils.isBrowser
-			require './impls/browser/index.coffee'
-		when utils.isQML
-			require './impls/qml/index.coffee'
-
-	log.error "No routing implementation found" unless impl
-
 *class* Routing
 ---------------
 
 	module.exports = class Routing
 
+		Impl = require('./impl') Routing
+
 ### Static
 
 #### Submodules
 
-		@Uri = require('./uri.coffee.md') Routing, impl.Uri
-		@Handler = require('./handler.coffee.md') Routing, impl.Handler
-		@Request = require('./request.coffee.md') Routing, impl.Request
-		@Response = require('./response.coffee.md') Routing, impl.Response
+		@Uri = require('./uri.coffee.md') Routing
+		@Handler = require('./handler.coffee.md') Routing
+		@Request = require('./request.coffee.md') Routing, Impl.Request
+		@Response = require('./response.coffee.md') Routing, Impl.Response
 
 ### Constructor
 
@@ -54,7 +40,7 @@ New instance of implemented *Routing* is returned.
 
 			@url = "#{@protocol}://#{@host}:#{@port}/"
 
-			setImmediate => impl.init.call @
+			setImmediate => Impl.init @
 
 			log.info "Start as `#{@host}:#{@port}`"
 
@@ -94,6 +80,7 @@ New instance of implemented *Routing* is returned.
 
 		createServerRequest: (opts) ->
 
+			expect(utils.isNode).toBe.truthy()
 			expect(opts).toBe.simpleObject()
 
 			config = Object.create opts
@@ -117,7 +104,7 @@ New instance of implemented *Routing* is returned.
 			config.url = "#{@url}#{opts.uri}"
 			req = new Routing.Request config
 
-			impl.sendServerRequest.call @, config, (status, data) ->
+			Impl.sendServerRequest @, config, (status, data) ->
 
 				# destroy request
 				req.destroy()

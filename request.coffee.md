@@ -11,7 +11,7 @@ Request
 *class* Request
 ---------------
 
-	module.exports = (Routing, impl) -> class Request extends Emitter
+	module.exports = (Routing, Impl) -> class Request extends Emitter
 
 		@METHODS = [
 			(@GET = 'get'),
@@ -80,7 +80,7 @@ Request
 			@trigger Request.DESTROY
 
 		Object.defineProperty @::, 'headers',
-			get: -> impl.getHeaders.call(@) or {}
+			get: -> Impl.getHeaders(@) or {}
 
 		Object.defineProperty @::, 'userAgent',
-			get: -> impl.getUserAgent.call(@) or ''
+			get: -> Impl.getUserAgent(@) or ''
