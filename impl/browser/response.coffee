@@ -4,24 +4,18 @@
 
 log = log.scope 'Routing'
 
-module.exports = (Routing, impl) ->
+module.exports = (Routing) ->
 
-	send: (res) ->
+	send: (res, data) ->
 
 		log.ok "Got response `#{res.req.method} #{res.req.uri}`"
 
-		# mark previous response as unused
-		impl.resp?.destroy()
-
-		# save response into internal impl object
-		impl.resp = res
-
-		unless res.data instanceof View
+		unless data instanceof View
 			data = do =>
-				if res.data isnt null and typeof res.data is 'object'
-					try JSON.stringify res.data, null, 4
-				else if res.data instanceof Error
-					res.data.stack
+				if data isnt null and typeof data is 'object'
+					try JSON.stringify data, null, 4
+				else if data instanceof Error
+					data.stack
 				else
-					res.data
+					data
 			document.body.innerHTML = data

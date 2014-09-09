@@ -3,7 +3,7 @@ Request
 
 	'use strict'
 
-	[utils, expect, Emitter] = ['utils', 'expect', 'emitter'].map require
+	[utils, expect] = ['utils', 'expect'].map require
 	signal = require 'signal'
 
 	{assert} = console
@@ -11,7 +11,7 @@ Request
 *class* Request
 ---------------
 
-	module.exports = (Routing, Impl) -> class Request extends Emitter
+	module.exports = (Routing, Impl) -> class Request
 
 		@METHODS = [
 			(@GET = 'get'),
@@ -25,10 +25,6 @@ Request
 			(@OBJECT_TYPE = 'object'),
 			(@VIEW_TYPE = 'view')
 		]
-
-### Events
-
-		@DESTROY = 'destroy'
 
 ### Static
 
@@ -53,8 +49,6 @@ Request
 			{@method} = opts if opts.method?
 			@uid ?= utils.uid()
 
-			super
-
 			@pending = true
 			@params = null
 
@@ -68,7 +62,8 @@ Request
 		data: null
 		type: @OBJECT_TYPE
 
-		signal.defineGetter @::, 'onLoad'
+		signal.defineGetter @::, 'onDestroyed'
+		signal.defineGetter @::, 'onLoaded'
 
 ### Methods
 
@@ -77,7 +72,9 @@ Request
 			assert @pending
 
 			@pending = false
-			@trigger Request.DESTROY
+			
+			if @hasOwnProperty 'onDestroyed'
+				@onDestroyed()
 
 		Object.defineProperty @::, 'headers',
 			get: -> Impl.getHeaders(@) or {}

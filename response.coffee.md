@@ -3,18 +3,17 @@ Response
 
 	'use strict'
 
-	[utils, expect, Emitter] = ['utils', 'expect', 'emitter'].map require
+	[utils, expect] = ['utils', 'expect'].map require
+	log = require 'log'
+
+	log = log.scope 'Routing', 'Response'
 
 	{assert} = console
 
 *class* Response
 ----------------
 
-	module.exports = (Routing, Impl) -> class Response extends Emitter
-
-### Events
-
-		@DESTROY = 'destroy'
+	module.exports = (Routing, Impl) -> class Response
 
 ### Static
 
@@ -68,8 +67,6 @@ Response
 			expect(opts.req).toBe.any Routing.Request
 			expect().some(Response.STATUSES).toBe opts.status if opts.status?
 
-			super
-
 			{@req} = opts
 			{@status} = opts if opts.status?
 			{@data} = opts if opts.data?
@@ -79,11 +76,14 @@ Response
 			if opts.status?
 				@destroy()
 
+			# whether response will be send on the next tick
+			utils.defProp @, '_waitingToSend', 'w', false
+
 ### Properties
 
 		pending: false
 		req: null
-		status: Response.OK
+		status: 0
 		data: null
 
 ### Methods
@@ -97,25 +97,42 @@ Response
 
 			@
 
-		send: (@status, @data) ->
+		send: (@status, data) ->
 			assert @pending
 			assert ~Response.STATUSES.indexOf status
 
-			@req.destroy()
+			if @data
+				log.info "`#{@req.uri}` response data has been overwritten"
 
-			# call request signal
-			if @req.hasOwnProperty 'onLoad'
-				@req.onLoad @
+			@data = data
 
-			if data instanceof Error
-				data = utils.errorToObject data
-
-			setImmediate => Impl.send @
+			unless @_waitingToSend
+				@_waitingToSend = true
+				@req.destroy()
+				setImmediate => sendData @
 
 			@
 
+		sendData = (res) ->
+			expect(res).toBe.any Response
+			expect(res.pending).toBe.truthy()
+
+			res.pending = false
+
+			# call request signal
+			{req} = res
+			if req.hasOwnProperty 'onLoad'
+				req.onLoaded @
+
+			# prepare data
+			{data} = res
+			if data instanceof Error
+				data = utils.errorToObject data
+
+			# send it!
+			Impl.send res, data
+
 		raise: (error) ->
-			assert @pending
 			assert error instanceof Response.Error
 
 			@send error.status, error
@@ -123,14 +140,3 @@ Response
 		isSucceed: ->
 
 			300 > @status >= 200
-
-		###
-		Should be called by the implementation.
-		###
-		destroy: ->
-
-			assert @pending
-			assert not @req.pending
-
-			@pending = false
-			@trigger Response.DESTROY

@@ -89,13 +89,15 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 			# create a request
 			req = new Routing.Request reqOpts
 
+			req.onDestroyed.connect ->
+				log.end logtime
+
 			# create an response
 			res = new Routing.Response req: req
 
 			# get handlers
 			onError = ->
 				res.raise Routing.Response.Error.RequestResolve req
-				log.end logtime
 
 			handlers = @_handlers[req.method]
 			if handlers
@@ -103,8 +105,7 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 				utils.async.forEach handlers, (handler, i, handlers, next) ->
 
 					handler.exec req, res, (err) ->
-						if err then return next()
-						log.end logtime
+						next()
 
 				, onError
 			else

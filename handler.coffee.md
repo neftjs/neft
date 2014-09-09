@@ -59,28 +59,27 @@ Handler
 
 ### Methods
 
-#### exec(*Request*, *Response*, *Function*)
+#### exec(*Request*, *Response*)
 
 		exec: do (uriNotValidError = new UriNotValidError,
 		          handlerCallbackError = new HandlerCallbackError) ->
 
-			(req, res, callback) ->
+			(req, res, next) ->
 
 				assert req instanceof Routing.Request
 				assert res instanceof Routing.Response
-				assert typeof callback is 'function'
 
 				# compare methods
 				if @method isnt req.method
-					return callback uriNotValidError
+					return next uriNotValidError
 
 				# test uri
 				unless @uri.test req.uri
-					return callback uriNotValidError
+					return next uriNotValidError
 
 				params = req.params = @uri.match req.uri
 
-				# with schema
+				# validate by schema
 				if @schema
 
 					# parse params into expected types
@@ -92,23 +91,19 @@ Handler
 					err = utils.catchError @schema.validate, @schema, [params]
 					if err instanceof Error
 						log "`#{@uri}` tests, but not passed schema\n#{err}"
-						return callback err
-
-				# on response destroy
-				res.on Routing.Response.DESTROY, callback
+						return next err
 
 				# on callback fail
-				next = (err) =>
+				callbackNext = (err) =>
 
 					if err
 						log.error "Error raised in `#{@uri}` handler\n#{err.stack or err}"
 
-					res.off Routing.Response.DESTROY, callback
-					callback handlerCallbackError
+					next handlerCallbackError
 
 				log "Use `#{@method} #{@uri}` handler"
 
-				utils.tryFunc @callback, @, [req, res, next], next
+				utils.tryFunc @callback, @, [req, res, callbackNext], callbackNext
 
 				null
 

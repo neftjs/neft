@@ -2,11 +2,9 @@
 
 [utils] = ['utils'].map require
 
-impl = {}
-
 module.exports = (Routing) ->
-	Request: require('./request.coffee') Routing, impl
-	Response: require('./response.coffee') Routing, impl
+	Request: require('./request.coffee') Routing
+	Response: require('./response.coffee') Routing
 
 	init: (routing) ->
 
