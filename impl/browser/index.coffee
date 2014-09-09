@@ -19,7 +19,7 @@ module.exports = (Routing) ->
 
 			res = routing.createRequest
 				uid: uid
-				method: routing.constructor.Request.GET
+				method: Routing.Request.GET
 				type: Routing.Request.VIEW_TYPE
 				uri: uri.slice 1
 				data: null

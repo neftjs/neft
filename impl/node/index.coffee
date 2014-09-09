@@ -37,7 +37,7 @@ module.exports = (Routing) ->
 
 			obj.req = routing.createRequest
 				uid: uid
-				method: routing.constructor.Request[serverReq.method]
+				method: Routing.Request[serverReq.method]
 				uri: serverReq.url.slice 1
 				data: undefined
 				type: type

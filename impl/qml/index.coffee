@@ -14,13 +14,13 @@ module.exports = (Routing) ->
 
 			res = routing.handleRequest
 				uid: uid
-				method: routing.constructor.Request.GET
+				method: Routing.Request.GET
 				uri: 'items/0'
 				data: null
 
 	sendServerRequest: (routing, opts, callback) ->
 
-		Request = routing.constructor.Request
+		Request = Routing.Request
 
 		xhr = new XMLHttpRequest
 
