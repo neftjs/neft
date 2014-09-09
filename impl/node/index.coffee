@@ -20,21 +20,22 @@ module.exports = (Routing) ->
 		server.listen routing.port, routing.host
 
 		# on request
-		server.on 'request', (serverReq, serverRes) =>
+		server.on 'request', (serverReq, serverRes) ->
 
 			uid = utils.uid()
 
-			# save in stack
+			# save in the stack
 			obj = pending[uid] =
 				routing: routing
 				server: server
-				res: null
+				req: null
 				serverReq: serverReq
 				serverRes: serverRes
 
 			type = serverReq.headers['x-expected-type']
+			type ||= Routing.Request.VIEW_TYPE
 
-			obj.res = routing.handleRequest
+			obj.req = routing.createRequest
 				uid: uid
 				method: routing.constructor.Request[serverReq.method]
 				uri: serverReq.url.slice 1

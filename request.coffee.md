@@ -66,7 +66,7 @@ Request
 		uri: ''
 		params: null
 		data: null
-		type: @VIEW_TYPE
+		type: @OBJECT_TYPE
 
 		signal.defineGetter @::, 'onLoad'
 

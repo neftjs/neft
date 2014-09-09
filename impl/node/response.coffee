@@ -50,11 +50,9 @@ parsers =
 		html = data.node.stringify()
 		html
 
-prepareData = (obj) ->
+prepareData = (obj, data) ->
 
 	logtime = log.time 'prepare data'
-
-	{data} = obj.res
 
 	# determine data type
 	type = isView(data) or isJSON(data)
@@ -62,8 +60,8 @@ prepareData = (obj) ->
 	type ?= 'text/plain'
 
 	# parse data into type
-	unless data = parsers[type]?(obj.res.data)
-		data = obj.res.data + ''
+	unless parsedData = parsers[type]?(data)
+		parsedData = data + ''
 
 	log "Data will be send as `#{type}`"
 
@@ -71,7 +69,7 @@ prepareData = (obj) ->
 
 	log.end logtime
 
-	data
+	parsedData
 
 ###
 Send data in server response
@@ -117,7 +115,8 @@ module.exports = (Routing, pending) ->
 
 		# get config obj
 		obj = pending[res.req.uid]
-		expect(obj.res).not().toBe undefined
+		return unless obj
+
 		delete pending[res.req.uid]
 
 		logtime = log.time "send response by HTTP"
@@ -132,7 +131,7 @@ module.exports = (Routing, pending) ->
 		serverRes.statusCode = res.status
 
 		# send data
-		data = prepareData obj
+		data = prepareData obj, res.data
 		sendData obj, data, ->
 			log.end logtime
 			res.destroy()

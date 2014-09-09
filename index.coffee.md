@@ -57,6 +57,7 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 #### createHandler(*Number*, *String*, *Function*)
 
 		createHandler: (method, uri, callback) ->
+			expect(@).toBe.any Routing
 
 			if utils.isObject method
 				{method, uri, schema, callback} = method
@@ -76,63 +77,19 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 
 			handler
 
-#### createServerRequest(*Object*)
+#### createRequest(*Object*)
 
-		createServerRequest: (opts) ->
-
-			expect(utils.isNode).toBe.truthy()
-			expect(opts).toBe.simpleObject()
-
-			config = Object.create opts
-
-			# method
-			unless config.method?
-				config.method = Routing.Request.GET
-
-			# uri
-			unless config.uri?
-				config.uri = ''
-
-			# type
-			unless config.type?
-				config.type = Routing.Request.OBJECT_TYPE
-
-			expect().some(Routing.Request.METHODS).toBe config.method
-			expect(config.uri).toBe.string()
-			expect().defined(config.data).toBe.object()
-
-			config.url = "#{@url}#{opts.uri}"
-			req = new Routing.Request config
-
-			Impl.sendServerRequest @, config, (status, data) ->
-
-				# destroy request
-				req.destroy()
-
-				res = new Routing.Response
-					req: req
-					status: status
-					data: data
-
-				# call request signal
-				if req.hasOwnProperty 'onLoad'
-					req.onLoad res
-
-			req
-
-#### *Response* handleRequest(*Object*)
-
-		handleRequest: (opts) ->
-
-			expect(opts).toBe.simpleObject()
+		createRequest: (reqOpts) ->
+			expect(@).toBe.any Routing
+			expect(reqOpts).toBe.simpleObject()
 
 			logtime = log.time 'new request'
-			log "Resolve `#{JSON.stringify(opts)}` request"
+			log "Resolve `#{JSON.stringify(reqOpts)}` request"
 
-			# create request
-			req = new Routing.Request opts
+			# create a request
+			req = new Routing.Request reqOpts
 
-			# create response
+			# create an response
 			res = new Routing.Response req: req
 
 			# get handlers
@@ -155,4 +112,48 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 
 				onError()
 
-			res
+			req
+
+#### createServerRequest(*Object*)
+
+		createServerRequest: (reqOpts) ->
+			expect(@).toBe.any Routing
+			expect(utils.isNode).toBe.truthy()
+			expect(reqOpts).toBe.simpleObject()
+
+			config = Object.create reqOpts
+
+			# method
+			unless config.method?
+				config.method = Routing.Request.GET
+
+			# uri
+			unless config.uri?
+				config.uri = ''
+
+			# type
+			unless config.type?
+				config.type = Routing.Request.OBJECT_TYPE
+
+			expect().some(Routing.Request.METHODS).toBe config.method
+			expect(config.uri).toBe.string()
+			expect().defined(config.data).toBe.object()
+
+			req = new Routing.Request config
+
+			url = "#{@url}#{reqOpts.uri}"
+			Impl.sendServerRequest url, config, (status, data) ->
+
+				# destroy request
+				req.destroy()
+
+				res = new Routing.Response
+					req: req
+					status: status
+					data: data
+
+				# call request signal
+				if req.hasOwnProperty 'onLoad'
+					req.onLoad res
+
+			req

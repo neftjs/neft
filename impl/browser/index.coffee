@@ -19,9 +19,10 @@ module.exports = (Routing) ->
 			# send internal request
 			uid = utils.uid()
 
-			res = routing.handleRequest
+			res = routing.createRequest
 				uid: uid
 				method: routing.constructor.Request.GET
+				type: Routing.Request.VIEW_TYPE
 				uri: uri.slice 1
 				data: null
 
@@ -46,22 +47,22 @@ module.exports = (Routing) ->
 	###
 	Send a XHR request and call `callback` on response.
 	###
-	sendServerRequest: (routing, opts, callback) ->
+	sendServerRequest: (url, req, callback) ->
 
-		Request = routing.constructor.Request
+		{Request} = Routing
 
 		xhr = new XMLHttpRequest
 
-		xhr.open opts.method, opts.url, true
-		xhr.setRequestHeader 'X-Expected-Type', opts.type
+		xhr.open req.method, url, true
+		xhr.setRequestHeader 'X-Expected-Type', req.type
 
-		if opts.type is Request.OBJECT_TYPE
+		if req.type is Request.OBJECT_TYPE
 			xhr.responseType = 'json'
 
 		xhr.onload = ->
 			{response} = xhr
 
-			if opts.type is Request.OBJECT_TYPE and typeof response is 'string'
+			if req.type is Request.OBJECT_TYPE and typeof response is 'string'
 				response = utils.tryFunc JSON.parse, null, [response], response
 
 			callback xhr.status, response
