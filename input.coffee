@@ -12,7 +12,7 @@ module.exports = (File) -> class Input
 	@__path__ = 'File.Input'
 
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
-	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z][\w:]*)+(?!:)///gi
+	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z_][\w:_]*)+(?!:)///gi
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null']
 
 	cache = {}
