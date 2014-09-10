@@ -1,7 +1,10 @@
 'use strict'
 
 [utils, expect, signal, Dict] = ['utils', 'expect', 'signal', 'dict'].map require
+log = require 'log'
 coffee = require 'coffee-script' if utils.isNode
+
+log = log.scope 'View', 'Input'
 
 module.exports = (File) -> class Input
 
@@ -42,7 +45,7 @@ module.exports = (File) -> class Input
 	@fromAssembled = (input) ->
 		input._func = cache[input.func] ?= new Function 'file', 'get', input.func
 
-	constructor: (@node, text) ->
+	constructor: (@node, @text) ->
 		expect(node).toBe.any File.Element
 		expect(text).toBe.truthy().string()
 
@@ -75,6 +78,7 @@ module.exports = (File) -> class Input
 	self: null
 	node: null
 	vars: null
+	text: ''
 	func: ''
 
 	_onChanged: (prop) ->
@@ -105,7 +109,10 @@ module.exports = (File) -> class Input
 		throw "`update()` method not implemented"
 
 	toString: ->
-		try @_func Input.getStoragesArray(@self), Input.get
+		try
+			@_func Input.getStoragesArray(@self), Input.get
+		catch err
+			log.warn "`#{@text}` interpolation is skipped due to an error;\n#{err}"
 
 	clone: (original, self) ->
 
