@@ -120,9 +120,7 @@ Response
 			res.pending = false
 
 			# call request signal
-			{req} = res
-			if req.hasOwnProperty 'onLoaded'
-				req.onLoaded @
+			res.req.loaded @
 
 			# prepare data
 			{data} = res

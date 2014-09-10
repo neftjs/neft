@@ -52,6 +52,10 @@ Request
 			@pending = true
 			@params = null
 
+			# signals
+			signal.create @, 'destroyed'
+			signal.create @, 'loaded'
+
 ### Properties
 
 		uid: ''
@@ -62,9 +66,6 @@ Request
 		data: null
 		type: @OBJECT_TYPE
 
-		signal.defineGetter @::, 'onDestroyed'
-		signal.defineGetter @::, 'onLoaded'
-
 ### Methods
 
 		destroy: ->
@@ -72,9 +73,7 @@ Request
 			assert @pending
 
 			@pending = false
-			
-			if @hasOwnProperty 'onDestroyed'
-				@onDestroyed()
+			@destroyed()
 
 		Object.defineProperty @::, 'headers',
 			get: -> Impl.getHeaders(@) or {}

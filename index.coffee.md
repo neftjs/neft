@@ -89,7 +89,7 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 			# create a request
 			req = new Routing.Request reqOpts
 
-			req.onDestroyed.connect ->
+			req.onDestroyed ->
 				log.end logtime
 
 			# create an response
