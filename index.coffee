@@ -21,13 +21,14 @@ module.exports = class List
 		# properties
 		utils.defProp @, '_data', 'e', arr
 
+		# signals
+		signal.create @, 'changed'
+		signal.create @, 'inserted'
+		signal.create @, 'popped'
+
 	utils.defProp @::, 'length', 'ce', ->
 		@_data.length
 	, null
-
-	signal.defineGetter @::, 'onChanged'
-	signal.defineGetter @::, 'onInserted'
-	signal.defineGetter @::, 'onPopped'
 
 	get: (i) ->
 		expect(i).not().toBe.lessThan 0
@@ -46,8 +47,7 @@ module.exports = class List
 		@_data[i] = val
 
 		# signal
-		if @hasOwnProperty 'onChanged'
-			@onChanged i, oldVal
+		@changed i, oldVal
 
 		val
 
@@ -60,8 +60,7 @@ module.exports = class List
 		@_data.push val
 
 		# signal
-		if @hasOwnProperty 'onInserted'
-			@onInserted @length - 1
+		@inserted @length - 1
 
 		@
 
@@ -73,8 +72,7 @@ module.exports = class List
 		@_data.splice i, 0, val
 
 		# signal
-		if @hasOwnProperty 'onInserted'
-			@onInserted i
+		@inserted i
 
 		@
 
@@ -98,8 +96,7 @@ module.exports = class List
 		@_data.splice i, 1
 
 		# signal
-		if @hasOwnProperty 'onPopped'
-			@onPopped i, oldVal
+		@popped i, oldVal
 
 		@
 

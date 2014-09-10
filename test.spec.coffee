@@ -105,11 +105,11 @@ describe 'onChanged signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.onChanged.disconnect listener
+		list.changed.disconnect listener
 
 	it 'works with set()', ->
 		list = List 1, 2, 3
-		list.onChanged.connect listener
+		list.onChanged listener
 
 		list.set 1, 'a'
 
@@ -133,24 +133,24 @@ describe 'onInserted signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.onInserted.disconnect listener
+		list.inserted.disconnect listener
 
 	it 'works with append()', ->
 		list = List 1, 2
-		list.onInserted.connect listener
+		list.onInserted listener
 
 		list.append 'a'
 
-		expect(args).toEqual [[2, undefined]]
+		expect(args).toEqual [[2]]
 		expect(copy).toEqual [1, 2, 'a']
 
 	it 'works with insert()', ->
 		list = List 1, 2
-		list.onInserted.connect listener
+		list.onInserted listener
 
 		list.insert 1, 'a'
 
-		expect(args).toEqual [[1, undefined]]
+		expect(args).toEqual [[1]]
 		expect(copy).toEqual [1, 'a', 2]
 
 describe 'onPopped signal', ->
@@ -170,11 +170,11 @@ describe 'onPopped signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.onPopped.disconnect listener
+		list.popped.disconnect listener
 
 	it 'works with pop()', ->
 		list = List 1, 2
-		list.onPopped.connect listener
+		list.onPopped listener
 
 		list.pop()
 
@@ -183,7 +183,7 @@ describe 'onPopped signal', ->
 
 	it 'works with pop(i)', ->
 		list = List 1, 2
-		list.onPopped.connect listener
+		list.onPopped listener
 
 		list.pop 0
 
@@ -192,7 +192,7 @@ describe 'onPopped signal', ->
 
 	it 'works with remove()', ->
 		list = List 1, 2
-		list.onPopped.connect listener
+		list.onPopped listener
 
 		list.remove 2
 
@@ -201,7 +201,7 @@ describe 'onPopped signal', ->
 
 	it 'works with clear()', ->
 		list = List 1, 2
-		list.onPopped.connect listener
+		list.onPopped listener
 
 		list.clear()
 
