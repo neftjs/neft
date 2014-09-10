@@ -26,11 +26,12 @@ module.exports = class Dict
 		utils.defProp @, '_items', 'w', null
 		utils.defProp @, '_dirty', 'w', ALL
 
+		# signals
+		signal.create @, 'changed'
+
 	utils.defProp @::, 'length', 'ce', ->
 		@keys().length
 	, null
-
-	signal.defineGetter @::, 'onChanged'
 
 	get: (key) ->
 		expect(key).toBe.truthy().string()
@@ -51,8 +52,7 @@ module.exports = class Dict
 		@_dirty |= ALL
 
 		# signal
-		if @hasOwnProperty 'onChanged'
-			@onChanged key, oldVal
+		@changed key, oldVal
 
 		val
 
@@ -67,8 +67,7 @@ module.exports = class Dict
 		@_dirty |= ALL
 
 		# signal
-		if @hasOwnProperty 'onChanged'
-			@onChanged key, val
+		@changed key, val
 
 		val
 

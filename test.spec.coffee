@@ -98,25 +98,25 @@ describe 'onChanged signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		dict.onChanged.disconnect listener
+		dict.changed.disconnect listener
 
 	it 'works with set() on new item', ->
 		dict = Dict()
-		dict.onChanged.connect listener
+		dict.onChanged listener
 		dict.set 'a', 1
 		expect(args).toEqual [['a', undefined]]
 		expect(items).toEqual [['a', 1]]
 
 	it 'works with set() on item change', ->
 		dict = Dict a: 1
-		dict.onChanged.connect listener
+		dict.onChanged listener
 		dict.set 'a', 2
 		expect(args).toEqual [['a', 1]]
 		expect(items).toEqual [['a', 2]]
 
 	it 'works with pop()', ->
 		dict = Dict a: 1
-		dict.onChanged.connect listener
+		dict.onChanged listener
 		dict.pop 'a'
 		expect(args).toEqual [['a', 1]]
 		expect(items).toEqual []
