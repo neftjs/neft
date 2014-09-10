@@ -58,7 +58,9 @@ Represents an element placed in the file.
 			usedUnit = @usedUnit = file or File.factory(unit)
 			unless file
 				usedUnit.storage = @self.storage
-			usedUnit.render @
+
+			unless usedUnit.isRendered
+				usedUnit.render @
 
 			usedUnit.node.parent = @node
 
