@@ -232,13 +232,13 @@ describe 'View Element', ->
 		{Observer} = Element
 		Element.OBSERVE = true
 
-		it 'onAttrChanged works properly', ->
+		it 'observing attr changes works properly', ->
 
 			value = args = null
 			elem = Element.fromHTML('<b a="1"></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.onAttrChanged.connect (name) ->
+			Observer.observe tag, Observer.ATTR, (name) ->
 				value = @attrs.get name
 				args = [@, arguments...]
 
@@ -247,13 +247,13 @@ describe 'View Element', ->
 			expect(args).toEqual [tag, 'a', '1']
 			expect(value).toBe 2
 
-		it 'onVisibilityChanged works properly', ->
+		it 'observing visibility changes works properly', ->
 
 			value = args = null
 			elem = Element.fromHTML('<b></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.onVisibilityChanged.connect ->
+			Observer.observe tag, Observer.VISIBILITY, ->
 				value = @visible
 				args = [@, arguments...]
 
@@ -262,13 +262,13 @@ describe 'View Element', ->
 			expect(args).toEqual [tag, true, undefined]
 			expect(value).toBe false
 
-		it 'onTextChanged works properly', ->
+		it 'observing text changes works properly', ->
 
 			text = args = null
 			elem = Element.fromHTML('<b>a</b>').cloneDeep()
 			tag = elem.children[0].children[0]
 
-			tag.onTextChanged.connect ->
+			Observer.observe tag, Observer.TEXT, ->
 				text = @text
 				args = [@, arguments...]
 
@@ -277,14 +277,14 @@ describe 'View Element', ->
 			expect(args).toEqual [tag, 'a', undefined]
 			expect(text).toBe 'b'
 
-		it 'onParentChanged works properly', ->
+		it 'observing parent changes works properly', ->
 
 			value = args = null
 			elem = Element.fromHTML('<a></a><b></b>').cloneDeep()
 			tag1 = elem.children[0]
 			tag2 = elem.children[1]
 
-			tag2.onParentChanged.connect ->
+			Observer.observe tag2, Observer.PARENT, ->
 				value = @parent
 				args = [@, arguments...]
 
@@ -299,8 +299,9 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.onVisibilityChanged.connect listener = -> ok = false
-			tag.onVisibilityChanged.disconnect listener
+			listener = -> ok = false
+			Observer.observe tag, Observer.VISIBILITY, listener
+			Observer.disconnect tag, Observer.VISIBILITY, listener
 
 			tag.visible = false
 
@@ -314,7 +315,7 @@ describe 'View Element', ->
 			ok = true
 			elem = b.clone()
 
-			elem.onVisibilityChanged.connect -> ok = false
+			Observer.observe elem, Observer.VISIBILITY, -> ok = false
 
 			elem.visible = false
 			expect(ok).toBeTruthy()

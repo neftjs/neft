@@ -129,5 +129,3 @@ module.exports = (Element) -> class Tag extends Element
 
 			elem
 
-
-	signal.defineGetter @::, 'onAttrChanged'

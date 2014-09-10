@@ -96,8 +96,8 @@ Value will automatically change `children`.
 						parent.children.push @
 
 					# call observers
-					if Element.OBSERVE and @hasOwnProperty('onParentChanged')
-						@onParentChanged old
+					if Element.OBSERVE and Observer._isObserved(@, Observer.PARENT)
+						Observer._report @, Observer.PARENT, old
 
 #### *Boolean* visible
 
@@ -123,8 +123,8 @@ Value will automatically change `children`.
 							child.visible = value
 
 					# call observers
-					if Element.OBSERVE and @hasOwnProperty('onVisibilityChanged')
-						@onVisibilityChanged old
+					if Element.OBSERVE and Observer._isObserved(@, Observer.VISIBILITY)
+						Observer._report @, Observer.VISIBILITY, old
 
 					null
 
@@ -141,9 +141,11 @@ Returns new instance of *Element* with the same properties.
 
 					clone = Object.create @
 
+					clone._parent = null
 					clone.clone = undefined
 					clone.cloneDeep = undefined
-					clone._parent = null
+
+					Element.Observer._linkElement clone
 
 					clone
 
@@ -152,17 +154,8 @@ Returns new instance of *Element* with the same properties.
 				writable: true
 				value: cloneMethod
 
-### Signals
-
-#### onParentChanged
-
-			signal.defineGetter @::, 'onParentChanged'
-
-#### onVisibilityChanged
-
-			signal.defineGetter @::, 'onVisibilityChanged'
-
 		if utils.isNode
 			@parser = require('./element/parser') @
+		Observer = @Observer = require('./observer') @
 		@Tag = require('./element/tag') @
 		@Text = require('./element/text') @

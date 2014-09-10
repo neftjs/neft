@@ -4,79 +4,83 @@
 
 {isArray} = Array
 
-module.exports = (Element) -> exports =
+module.exports = (Element) ->
 
-	tag: null
+	{Observer} = Element
 
-	item: (i, target=[]) ->
+	exports =
 
-		expect(target).toBe.array()
+		tag: null
 
-		keys = exports.tag.attrsKeys
-		values = exports.tag.attrsValues
+		item: (i, target=[]) ->
 
-		target[0] = target[1] = undefined
+			expect(target).toBe.array()
 
-		unless values
-			return target
+			keys = exports.tag.attrsKeys
+			values = exports.tag.attrsValues
 
-		while target[1] is undefined and keys.length >= i
-			target[0] = keys[i]
-			target[1] = values[i]
-			i++
+			target[0] = target[1] = undefined
 
-		target
+			unless values
+				return target
 
-	get: (name) ->
+			while target[1] is undefined and keys.length >= i
+				target[0] = keys[i]
+				target[1] = values[i]
+				i++
 
-		expect(name).toBe.truthy().string()
+			target
 
-		i = exports.tag.attrsNames?[name]
-		return if i is undefined
+		get: (name) ->
 
-		exports.tag.attrsValues[i]
+			expect(name).toBe.truthy().string()
 
-	set: (name, value) ->
+			i = exports.tag.attrsNames?[name]
+			return if i is undefined
 
-		expect(name).toBe.truthy().string()
+			exports.tag.attrsValues[i]
 
-		{tag} = exports
+		set: (name, value) ->
 
-		i = tag.attrsNames?[name]
-		return if i is undefined
+			expect(name).toBe.truthy().string()
 
-		old = tag.attrsValues[i]
-		return if old is value
+			{tag} = exports
 
-		# save change
-		tag.attrsValues[i] = value
+			i = tag.attrsNames?[name]
+			return if i is undefined
 
-		# call observers
-		if Element.OBSERVE and tag.hasOwnProperty('onAttrChanged')
-			tag.onAttrChanged name, old
+			old = tag.attrsValues[i]
+			return if old is value
 
-		value
-
-	backChanges: ->
-
-		expect(exports.tag.clone).toBe undefined
-
-		{tag} = exports
-
-		keys = tag.attrsKeys
-		return unless keys
-
-		original = Object.getPrototypeOf tag
-		valuesA = tag.attrsValues
-		valuesB = original.attrsValues
-
-		for value, i in valuesA
-			continue if value is valuesB[i]
-
-			valuesA[i] = utils.cloneDeep valuesB[i]
+			# save change
+			tag.attrsValues[i] = value
 
 			# call observers
-			if Element.OBSERVE and tag.hasOwnProperty('onAttrChanged')
-				tag.onAttrChanged keys[i], value
+			if Element.OBSERVE and Observer._isObserved(tag, Observer.ATTR)
+				Observer._report tag, Observer.ATTR, name, old
 
-		@
+			value
+
+		backChanges: ->
+
+			expect(exports.tag.clone).toBe undefined
+
+			{tag} = exports
+
+			keys = tag.attrsKeys
+			return unless keys
+
+			original = Object.getPrototypeOf tag
+			valuesA = tag.attrsValues
+			valuesB = original.attrsValues
+
+			for value, i in valuesA
+				continue if value is valuesB[i]
+
+				valuesA[i] = utils.cloneDeep valuesB[i]
+
+				# call observers
+				if Element.OBSERVE and Observer._isObserved(tag, Observer.ATTR)
+					Observer._report tag, Observer.ATTR, keys[i], value
+
+			@
