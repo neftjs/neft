@@ -59,7 +59,8 @@ module.exports = (Element) ->
 			#append ||= _tagStack.length and (lastTag = _tagStack[_tagStack.length - 1]) and (lastTag = lastTag.children[lastTag.children.length - 1]) and lastTag.type is 'text'
 
 			# omit spaces and new lines
-			return unless data.trim()
+			return unless data.trim() # TODO
+			return unless data
 
 			lastTag = utils.last(@_tagStack)?.children[0]
 			append = lastTag?.hasOwnProperty '_text'
