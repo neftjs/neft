@@ -64,8 +64,8 @@ Represents an element placed in the file.
 
 			usedUnit.node.parent = @node
 
-			if usedUnit.hasOwnProperty 'onReplacedByElem'
-				usedUnit.onReplacedByElem @
+			# signal
+			usedUnit.replacedByElem @
 
 			@isRendered = true
 
@@ -93,15 +93,15 @@ Represents an element placed in the file.
 			clone.self = self
 			clone.node = original.node.getCopiedElement @node, self.node
 			clone.bodyNode = clone.node.children[0]
-			clone.render = (a1) => @render.call clone, a1
+			clone.render = (arg1) => @render.call clone, arg1
 			clone.revert = => @revert.call clone
 			clone.usedUnit = null
 			clone.isRendered = false
 
 			utils.defProp clone, '_unit', 'cw', null
 
-			self.onRender.connect clone.render
-			self.onRevert.connect clone.revert
-			clone.node.onVisibilityChanged.connect -> clone.render()
+			clone.node.on 'visibilityChanged', ->
+				if self.isRendered
+					clone.render()
 
 			clone

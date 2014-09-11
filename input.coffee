@@ -1,6 +1,6 @@
 'use strict'
 
-[utils, expect, signal, Dict] = ['utils', 'expect', 'signal', 'dict'].map require
+[utils, expect, Dict] = ['utils', 'expect', 'dict'].map require
 log = require 'log'
 coffee = require 'coffee-script' if utils.isNode
 
@@ -9,7 +9,6 @@ log = log.scope 'View', 'Input'
 module.exports = (File) -> class Input
 
 	{Element} = File
-	{ObservableObject} = File
 
 	@__name__ = 'Input'
 	@__path__ = 'File.Input'
@@ -82,26 +81,27 @@ module.exports = (File) -> class Input
 	func: ''
 
 	_onChanged: (prop) ->
-		unless utils.has @vars, prop
-			return
+		if utils.has @vars, prop
+			@update()
 
-		@update()
+	_onAttrChanged: (e) ->
+		@_onChanged e.name
 
-	render: (self) ->
+	render: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.onAttrChanged.connect @_onChanged
+				storage.on 'attrChanged', @_onAttrChanged
 			else if storage instanceof Dict
-				storage.onChanged.connect @_onChanged
+				storage.onChanged @_onChanged
 		
 		@update()
 
 	revert: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.onAttrChanged.disconnect @_onChanged
+				storage.off 'attrChanged', @_onAttrChanged
 			else if storage instanceof Dict
-				storage.onChanged.disconnect @_onChanged
+				storage.changed.disconnect @_onChanged
 
 		null
 
@@ -121,10 +121,8 @@ module.exports = (File) -> class Input
 		clone.clone = undefined
 		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
-		clone._onChanged = @_onChanged.bind clone
-
-		self.onRender.connect @render.bind clone, self
-		self.onRevert.connect @revert.bind clone, self
+		clone._onAttrChanged = (arg1) => @_onAttrChanged.call clone, arg1
+		clone._onChanged = (arg1) => @_onChanged.call clone, arg1
 
 		clone
 

@@ -35,8 +35,8 @@ features. Physical file should be easy to load and parse.
 		utils.merge @, Emitter::
 		Emitter.call @
 
-		signal.create @, 'onParse'
-		signal.create @, 'onParsed'
+		signal.create @, 'parse'
+		signal.create @, 'parsed'
 
 		@Element = require('./Element/index')
 		@Unit = require('./unit.coffee.md') @
@@ -154,7 +154,7 @@ features. Physical file should be easy to load and parse.
 				utils.defProp @, '_tmp', 'w', getTmp()
 
 				# trigger signal
-				File.onParse @
+				File.parse @
 
 				# parse
 				links @
@@ -168,7 +168,7 @@ features. Physical file should be easy to load and parse.
 				nodes @
 
 				# trigger signal
-				File.onParsed @
+				File.parsed @
 
 				# save to storage
 				files[@path] = @
@@ -194,10 +194,6 @@ features. Physical file should be easy to load and parse.
 		storage: null
 		source: null
 
-		signal.defineGetter @::, 'onRender'
-		signal.defineGetter @::, 'onRevert'
-		signal.defineGetter @::, 'onReplacedByElem'
-
 ### Methods
 
 #### init()
@@ -215,12 +211,29 @@ features. Physical file should be easy to load and parse.
 			@isRendered = true
 			@source = source
 
-			@onRender()
+			# inputs
+			if @inputs.length
+				for input, i in @inputs
+					input.render()
+
+			# conditions
+			if @conditions.length
+				for condition, i in @conditions
+					condition.render()
+
+			# iterators
+			if @iterators.length
+				for iterator, i in @iterators
+					iterator.render()
+
+			# elems
+			unless utils.isEmpty @elems
+				for elemName, elems of @elems
+					for elem, i in elems
+						elem.render()
 
 			# source
 			render.source @, source
-
-			File.Element.OBSERVE = true
 
 			@
 
@@ -236,9 +249,27 @@ features. Physical file should be easy to load and parse.
 
 				expect(@isRendered).toBe.truthy()
 				@isRendered = false
-				File.Element.OBSERVE = false
 
-				@onRevert()
+				# inputs
+				if @inputs.length
+					for input, i in @inputs
+						input.revert()
+
+				# conditions
+				if @conditions.length
+					for condition, i in @conditions
+						condition.revert()
+
+				# iterators
+				if @iterators.length
+					for iterator, i in @iterators
+						iterator.revert()
+
+				# elems
+				unless utils.isEmpty @elems
+					for elemName, elems of @elems
+						for elem, i in elems
+							elem.revert()
 
 				@storage = null
 				@source = null
@@ -264,6 +295,9 @@ features. Physical file should be easy to load and parse.
 				clone.parent = null
 				clone.storage = null
 				clone.source = null
+
+				# signals
+				signal.create clone, 'replacedByElem'
 
 				# inputs
 				if @inputs.length

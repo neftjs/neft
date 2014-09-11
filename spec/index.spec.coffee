@@ -92,7 +92,7 @@ describe 'View', ->
 		renderParse view
 		expect(view.node.stringify()).toBe '<b></b>'
 		view.revert()
-		expect(view.node.stringify()).toBe '<x:a></x:a>'
+		expect(view.node.children[0].name).toBe 'x:a'
 
 	it 'can replace elems by units in units', ->
 
@@ -100,7 +100,7 @@ describe 'View', ->
 		view = source.clone();
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<x:a></x:a>'
+		expect(source.node.children[0].name).toBe 'x:a'
 		expect(view.node.stringify()).toBe '1'
 
 	it 'can render clone separately', ->
@@ -110,7 +110,7 @@ describe 'View', ->
 
 		renderParse view
 		expect(view.node.stringify()).toBe '<b></b>'
-		expect(source.node.stringify()).toBe '<x:a></x:a>'
+		expect(source.node.children[0].name).toBe 'x:a'
 
 	it 'can put elem body in unit', ->
 
@@ -120,7 +120,7 @@ describe 'View', ->
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<x:a><b></b></x:a>'
+		expect(source.node.children[0].name).toBe 'x:a'
 		expect(view.node.stringify()).toBe '<b></b>'
 
 	it '`source` element supports updates', ->
@@ -144,8 +144,8 @@ describe 'View', ->
 			<x:unit name="a"><x:b data="#{data}"></x:b></x:unit>
 			<x:a data="[0,1]"></x:a>'
 		view = view.clone()
-		ver1 = utils.simplify view
 
+		ver1 = utils.simplify view
 		view.render()
 		view.revert()
 		ver2 = utils.simplify view
@@ -204,7 +204,7 @@ describe 'View Storage', ->
 			view = source.clone()
 
 			renderParse view
-			expect(source.node.stringify()).toBe '<x:a x="2"></x:a>'
+			expect(source.node.children[0].name).toBe 'x:a'
 			expect(view.node.stringify()).toBe '2'
 
 		it 'by passed storage', ->
@@ -214,7 +214,7 @@ describe 'View Storage', ->
 
 			renderParse view,
 				storage: x: 2, b: {a: 1}
-			expect(source.node.stringify()).toBe '<x:a></x:a>'
+			expect(source.node.children[0].name).toBe 'x:a'
 			expect(view.node.stringify()).toBe '2, 1'
 
 	describe 'supports realtime changes', ->
@@ -277,7 +277,7 @@ describe 'View Condition', ->
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<x:a></x:a>'
+		expect(source.node.children[0].name).toBe 'x:a'
 		expect(view.node.stringify()).toBe ''
 
 	it 'can be declared using storage input', ->
@@ -296,8 +296,11 @@ describe 'View Condition', ->
 
 		it 'in changing visibility', ->
 
-			source = View.fromHTML uid(), '<x:unit name="a"><b x:if="#{x} > 1">OK</b>' +
-			                              '<b x:if="#{x} == 1">FAIL</b></x:unit><x:a x="1"></x:a>'
+			source = View.fromHTML uid(), '<x:unit name="a">' +
+			                              '    <b x:if="#{x} > 1">OK</b>' +
+			                              '    <b x:if="#{x} == 1">FAIL</b>' +
+			                              '</x:unit>' +
+			                              '<x:a x="1"></x:a>'
 			view = source.clone()
 			elem = view.node.children[0]
 
@@ -305,7 +308,7 @@ describe 'View Condition', ->
 			elem.attrs.set 'x', 2
 			expect(view.node.stringify()).toBe '<b>OK</b>'
 			view.revert()
-			expect(view.node.stringify()).toBe '<x:a x="1"></x:a>'
+			expect(view.node.children[0].name).toBe 'x:a'
 
 		it 'in replacing elems', ->
 
@@ -364,7 +367,7 @@ describe 'View Iterator', ->
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<x:a data="1,2"></x:a>'
+		expect(source.node.children[0].name).toBe 'x:a'
 		expect(view.node.stringify()).toBe '' +
 			'<ul>12</ul>'
 

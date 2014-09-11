@@ -9,8 +9,6 @@ module.exports = (File) -> class Iterator extends File.Elem
 	@__name__ = 'Iterator'
 	@__path__ = 'File.Iterator'
 
-	{ObservableArray} = File
-
 	constructor: (@self, node) ->
 
 		expect(self).toBe.any File
@@ -48,9 +46,9 @@ module.exports = (File) -> class Iterator extends File.Elem
 		# clear all if data changed
 		if data and data isnt each
 			if data instanceof List
-				array.onChanged.disconnect @updateItem
-				array.onInserted.disconnect @insertItem
-				array.onPopped.disconnect @popItem
+				array.changed.disconnect @updateItem
+				array.inserted.disconnect @insertItem
+				array.popped.disconnect @popItem
 
 			@clearData()
 
@@ -67,9 +65,9 @@ module.exports = (File) -> class Iterator extends File.Elem
 
 		# listen on changes
 		if each instanceof List
-			each.onChanged.connect @updateItem
-			each.onInserted.connect @insertItem
-			each.onPopped.connect @popItem
+			each.onChanged @updateItem
+			each.onInserted @insertItem
+			each.onPopped @popItem
 
 			array = each.items()
 
@@ -125,8 +123,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 		newChild.index = i
 
 		# signal
-		if usedUnit.hasOwnProperty 'onReplacedByElem'
-			usedUnit.onReplacedByElem @
+		usedUnit.replacedByElem @
 
 		@
 
@@ -150,11 +147,11 @@ module.exports = (File) -> class Iterator extends File.Elem
 		clone.array = null
 		clone.usedUnits = []
 
-		clone.updateItem = @updateItem.bind clone
-		clone.insertItem = @insertItem.bind clone
-		clone.popItem = @popItem.bind clone
+		clone.updateItem = (arg1) => @updateItem.call clone, arg1
+		clone.insertItem = (arg1) => @insertItem.call clone, arg1
+		clone.popItem = (arg1) => @popItem.call clone, arg1
 
-		clone.node.onAttrChanged.connect (attr) ->
-			clone.update() if attr is 'x:each'
+		clone.node.on 'attrChanged', (e) ->
+			clone.update() if e.name is 'x:each'
 
 		clone

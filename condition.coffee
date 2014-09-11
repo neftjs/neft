@@ -71,9 +71,8 @@ module.exports = (File) -> class Condition
 		clone.render = => @render.call clone
 		clone.revert = => @revert.call clone
 
-		clone.self.onRender.connect clone.render
-		clone.self.onRevert.connect clone.revert
-		clone.node.onAttrChanged.connect (attr) ->
-			clone.render() if attr is 'x:if'
+		clone.node.on 'attrChanged', (e) ->
+			if self.isRendered
+				clone.render() if e.name is 'x:if'
 
 		clone
