@@ -108,11 +108,16 @@ module.exports = (File) -> class Input
 	update: ->
 		throw "`update()` method not implemented"
 
-	toString: ->
-		try
+	toString: do ->
+
+		callFunc = ->
 			@_func Input.getStoragesArray(@self), Input.get
-		catch err
-			log.warn "`#{@text}` interpolation is skipped due to an error;\n#{err}"
+
+		->
+			try
+				callFunc.call @
+			catch err
+				log.warn "`#{@text}` interpolation is skipped due to an error;\n#{err}"
 
 	clone: (original, self) ->
 

@@ -4,9 +4,13 @@
 
 log = log.scope 'View', 'Condition'
 
-cache = {}
-cachelen = 0
-MAX_IN_CACHE = 4000
+funcCache = {}
+funcCacheLen = 0
+MAX_IN_FUNC_CACHE = 4000
+
+expCache = {}
+expCacheLen = 0
+MAX_IN_EXP_CACHE = 4000
 
 module.exports = (File) -> class Condition
 
@@ -16,10 +20,9 @@ module.exports = (File) -> class Condition
 	@FALSE_FUNC = -> false
 
 	@getCondFunc: (exp) ->
-
 		try
 			cond = "!!(#{unescape(exp)})"
-			new Function "try { return #{cond}; } catch(_){ return false; }"
+			new Function "return #{cond};"
 		catch err
 			log.error "Can't build `#{exp}` function: #{err}"
 			Condition.FALSE_FUNC
@@ -39,14 +42,28 @@ module.exports = (File) -> class Condition
 
 		exp = @node.attrs.get 'x:if'
 
-		unless cache[exp]
-			if cachelen++ > MAX_IN_CACHE
-				cache = {}
-				cachelen = 0
+		# get cached exp result
+		if expCache.hasOwnProperty exp
+			return expCache[exp]
 
-			cache[exp] = Condition.getCondFunc exp
+		# cache func
+		unless funcCache.hasOwnProperty exp
+			if funcCacheLen++ > MAX_IN_FUNC_CACHE
+				funcCache = {}
+				funcCacheLen = 0
 
-		return cache[exp].call()
+			funcCache[exp] = Condition.getCondFunc exp
+
+		# get result
+		result = utils.tryFunc funcCache[exp], null, null, false
+
+		# save result to the exp cache
+		if expCacheLen++ > MAX_IN_EXP_CACHE
+			expCache = {}
+			expCacheLen = 0
+		expCache[exp] = result
+
+		return result
 
 	render: ->
 		expect(@self.isRendered).toBe.truthy()
