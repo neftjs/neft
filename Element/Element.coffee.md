@@ -5,25 +5,20 @@ View Structure Element
 
 	'use strict'
 
-	[utils, expect, signal] = ['utils', 'expect', 'signal'].map require
+	[utils, expect] = ['utils', 'expect'].map require
+	Emitter = require 'emitter'
 
 	{isArray} = Array
 
 *class* Element
 ----------------
 
-	module.exports = class Element
+	module.exports = class Element extends Emitter
 
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
 ### Static
-
-#### *Boolean* OBSERVE
-
-Determines whether listeners are called
-
-		@OBSERVE = false
 
 #### *Element* fromHTML(*String*)
 
@@ -44,6 +39,8 @@ Constructor is instance of *Events* class, so after every initializing
 		constructor: ->
 
 			@_parent = null
+
+			super
 
 ### Properties
 
@@ -95,9 +92,8 @@ Value will automatically change `children`.
 						expect().some(@_parent.children).not().toBe @
 						parent.children.push @
 
-					# call observers
-					if Element.OBSERVE and Observer._isObserved(@, Observer.PARENT)
-						Observer._report @, Observer.PARENT, old
+					# trigger event
+					@trigger 'parentChanged', old
 
 #### *Boolean* visible
 
@@ -122,9 +118,8 @@ Value will automatically change `children`.
 						for child in @children
 							child.visible = value
 
-					# call observers
-					if Element.OBSERVE and Observer._isObserved(@, Observer.VISIBILITY)
-						Observer._report @, Observer.VISIBILITY, old
+					# trigger event
+					@trigger 'visibilityChanged', old
 
 					null
 
@@ -145,8 +140,6 @@ Returns new instance of *Element* with the same properties.
 					clone.clone = undefined
 					clone.cloneDeep = undefined
 
-					Element.Observer._linkElement clone
-
 					clone
 
 			cloneDeep:
@@ -156,6 +149,8 @@ Returns new instance of *Element* with the same properties.
 
 		if utils.isNode
 			@parser = require('./element/parser') @
-		Observer = @Observer = require('./observer') @
 		@Tag = require('./element/tag') @
 		@Text = require('./element/text') @
+
+		# set Element as immutable
+		Object.freeze @

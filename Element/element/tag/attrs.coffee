@@ -6,7 +6,15 @@
 
 module.exports = (Element) ->
 
-	{Observer} = Element
+	eventsPool = []
+
+	triggerEvent = (tag, name, value) ->
+		event = eventsPool.pop() or {}
+		event.name = name
+		event.value = value
+
+		tag.trigger 'attrChanged', event
+		eventsPool.push event
 
 	exports =
 
@@ -55,9 +63,8 @@ module.exports = (Element) ->
 			# save change
 			tag.attrsValues[i] = value
 
-			# call observers
-			if Element.OBSERVE and Observer._isObserved(tag, Observer.ATTR)
-				Observer._report tag, Observer.ATTR, name, old
+			# trigger event
+			triggerEvent tag, name, old
 
 			value
 
@@ -79,8 +86,7 @@ module.exports = (Element) ->
 
 				valuesA[i] = utils.cloneDeep valuesB[i]
 
-				# call observers
-				if Element.OBSERVE and Observer._isObserved(tag, Observer.ATTR)
-					Observer._report tag, Observer.ATTR, keys[i], value
+				# trigger event
+				triggerEvent tag, keys[i], value
 
 			@

@@ -4,8 +4,6 @@
 
 module.exports = (Element) -> class Text extends Element
 
-	{Observer} = Element
-
 	@__name__ = 'Text'
 	@__path__ = 'File.Element.Text'
 
@@ -31,6 +29,5 @@ module.exports = (Element) -> class Text extends Element
 				# set text
 				@_text = value
 
-				# call observers
-				if Element.OBSERVE and Observer._isObserved(@, Observer.TEXT)
-					Observer._report @, Observer.TEXT, old
+				# trigger event
+				@trigger 'textChanged', old
