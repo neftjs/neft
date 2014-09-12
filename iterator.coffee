@@ -35,6 +35,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 			@update()
 
 	revert: ->
+		@clearData()
 		@update()
 		@node.visible = true
 
@@ -46,9 +47,9 @@ module.exports = (File) -> class Iterator extends File.Elem
 		# clear all if data changed
 		if data and data isnt each
 			if data instanceof List
-				array.changed.disconnect @updateItem
-				array.inserted.disconnect @insertItem
-				array.popped.disconnect @popItem
+				data.changed.disconnect @updateItem
+				data.inserted.disconnect @insertItem
+				data.popped.disconnect @popItem
 
 			@clearData()
 
