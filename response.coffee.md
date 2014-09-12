@@ -5,6 +5,7 @@ Response
 
 	[utils, expect] = ['utils', 'expect'].map require
 	log = require 'log'
+	signal = require 'signal'
 
 	log = log.scope 'Routing', 'Response'
 
@@ -79,6 +80,9 @@ Response
 			# whether response will be send on the next tick
 			utils.defProp @, '_waitingToSend', 'w', false
 
+			# signals
+			signal.create @, 'sent'
+
 ### Properties
 
 		pending: false
@@ -102,7 +106,8 @@ Response
 			assert ~Response.STATUSES.indexOf status
 
 			if @data
-				log.info "`#{@req.uri}` response data has been overwritten"
+				log.info "`#{@req.uri}` response data has been overwritten, because " +
+				         "`send()` method has been called twice"
 
 			@data = data
 
@@ -128,7 +133,9 @@ Response
 				data = utils.errorToObject data
 
 			# send it!
-			Impl.send res, data
+			Impl.send res, data, ->
+				# signal
+				res.sent()
 
 		raise: (error) ->
 			assert error instanceof Response.Error

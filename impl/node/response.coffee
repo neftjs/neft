@@ -111,7 +111,7 @@ module.exports = (Routing, pending) ->
 		obj = pending[res.req.uid]
 		obj.serverRes.setHeader name, val
 
-	send: (res, data) ->
+	send: (res, data, callback) ->
 
 		# get config obj
 		obj = pending[res.req.uid]
@@ -134,3 +134,4 @@ module.exports = (Routing, pending) ->
 		data = prepareData obj, data
 		sendData obj, data, ->
 			log.end logtime
+			callback()

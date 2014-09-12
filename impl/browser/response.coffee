@@ -6,7 +6,7 @@ log = log.scope 'Routing'
 
 module.exports = (Routing) ->
 
-	send: (res, data) ->
+	send: (res, data, callback) ->
 
 		log.ok "Got response `#{res.req.method} #{res.req.uri}`"
 
@@ -19,3 +19,5 @@ module.exports = (Routing) ->
 				else
 					data
 			document.body.innerHTML = data
+
+		callback()
