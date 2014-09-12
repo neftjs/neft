@@ -96,6 +96,8 @@ Handler
 				# on callback fail
 				callbackNext = (err) =>
 
+					req.handler = null
+
 					if err
 						log.error "Error raised in `#{@uri}` handler\n#{err.stack or err}"
 
@@ -103,6 +105,7 @@ Handler
 
 				log "Use `#{@method} #{@uri}` handler"
 
+				req.handler = @
 				utils.tryFunc @callback, @, [req, res, callbackNext], callbackNext
 
 				null

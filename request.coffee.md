@@ -65,6 +65,7 @@ Request
 		params: null
 		data: null
 		type: @OBJECT_TYPE
+		handler: null
 
 ### Methods
 
