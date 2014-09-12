@@ -26,4 +26,8 @@ module.exports = (Log) -> class LogNode extends Log
 		for time in Log.times
 			prefix += time? and '  ' or ''
 
-		writeStdout "#{prefix}#{msg}\n"
+		text = "#{prefix}#{msg}"
+		text = text.replace ///\n///g, "\n#{prefix}"
+		text += "\n"
+
+		writeStdout text

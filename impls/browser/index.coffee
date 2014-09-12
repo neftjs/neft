@@ -31,6 +31,6 @@ module.exports = (Log) -> class LogBrowser extends Log
 		for time in Log.times
 			prefix += time? and '  ' or ''
 
-		marker[0] = "#{prefix}#{marker[0]}"
+		marker[0] = "#{prefix}#{marker[0]}".replace ///\n///g, "\n#{prefix}"
 
 		log.apply console, marker
