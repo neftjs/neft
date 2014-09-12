@@ -5,6 +5,8 @@ Uri
 
 	[expect] = ['expect'].map require
 
+	Dict = require 'dict'
+
 *class* Uri
 -----------
 
@@ -148,6 +150,9 @@ It will be used to replace uri chunks (works like standard
 string `format()` but on the named parameters).
 
 		toString: (params) ->
+			# TODO: use some light bridge here
+			if params and not (params instanceof Dict)
+				params = Dict params
 
 			[SEPARATOR_LEFT, SEPARATOR_RIGHT] = Uri.SEPARATORS
 
@@ -155,8 +160,8 @@ string `format()` but on the named parameters).
 
 			for chunk, i in @_chunks
 				if i % 2 isnt 0
-					chunk = if params and params.hasOwnProperty(chunk)
-							params[chunk]
+					chunk = if params and params.get(chunk) isnt undefined
+							params.get chunk
 						else
 							"#{SEPARATOR_LEFT}#{chunk}#{SEPARATOR_RIGHT}"
 
