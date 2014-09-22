@@ -44,7 +44,6 @@ Represents an element placed in the file.
 ### Methods
 
 		render: (file) ->
-			expect(@self.isRendered).toBe.truthy()
 			expect().defined(file).toBe.any File
 
 			return unless @node.visible
@@ -70,20 +69,18 @@ Represents an element placed in the file.
 			@isRendered = true
 
 		revert: ->
-			expect(@self.isRendered).toBe.falsy()
-
 			return unless @isRendered
+
+			# destroy used unit
+			if @usedUnit
+				@usedUnit.node.parent = undefined
+				@usedUnit.revert().destroy()
+				@usedUnit = null
+
+			@isRendered = false
 
 			# restore attrs
 			@node.attrs.backChanges()
-
-			return unless @usedUnit
-
-			# destroy used unit
-			@usedUnit.node.parent = undefined
-			@usedUnit.revert().destroy()
-			@usedUnit = null
-			@isRendered = false
 
 		clone: (original, self) ->
 

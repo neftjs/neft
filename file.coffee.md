@@ -335,6 +335,8 @@ features. Physical file should be easy to load and parse.
 				@revert()
 
 			pathPool = pool[@path] ?= []
+			expect().some(pathPool).not().toBe @
+
 			pathPool.push @
 
 #### toSimplifiedObject()
