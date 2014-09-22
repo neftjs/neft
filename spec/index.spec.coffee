@@ -362,7 +362,7 @@ describe 'View Iterator', ->
 	it 'works in units with elems', ->
 
 		source = View.fromHTML uid(), '<x:unit name="b">#{data}</x:unit>
-			<x:unit name="a"><ul x:each="#{data}"><x:b data="#{each[i]}"></x:b></ul></x:unit>
+			<x:unit name="a"><ul x:each="#{data}"><x:b data="#{each[i]}"/></ul></x:unit>
 			<x:a data="[1,2]"></x:a>'
 		view = source.clone()
 

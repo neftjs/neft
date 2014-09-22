@@ -1,8 +1,11 @@
 'use strict'
 
 [utils, expect, List] = ['utils', 'expect', 'list'].map require
+log = require 'log'
 
 {isArray} = Array
+
+log = log.scope 'View', 'Iterator'
 
 module.exports = (File) -> class Iterator extends File.Elem
 
@@ -31,35 +34,19 @@ module.exports = (File) -> class Iterator extends File.Elem
 	data: null
 
 	render: ->
-		if @node.visible
-			@update()
+		unless @node.visible
+			return
 
-	revert: ->
-		@clearData()
-		@update()
-		@node.visible = true
-
-	update: ->
-
-		{data} = @
 		each = @node.attrs.get 'x:each'
 
-		# clear all if data changed
-		if data and data isnt each
-			if data instanceof List
-				data.changed.disconnect @updateItem
-				data.inserted.disconnect @insertItem
-				data.popped.disconnect @popItem
-
-			@clearData()
+		# stop if nothing changed
+		if each is @data
+			return
 
 		# stop if no data found
 		if not isArray(each) and not (each instanceof List)
-			@node.visible = false
+			log.warn "Data is not an array or a List:\n#{each}"
 			return
-
-		# stop if nothing changed
-		return if @data is each
 
 		# set as data
 		@data = array = each
@@ -76,7 +63,24 @@ module.exports = (File) -> class Iterator extends File.Elem
 		for _, i in array
 			@insertItem i
 
-		@
+		null
+
+	revert: ->
+		{data} = @
+
+		if data
+			@clearData()
+
+			if data instanceof List
+				data.changed.disconnect @updateItem
+				data.inserted.disconnect @insertItem
+				data.popped.disconnect @popItem
+
+		@data = null
+
+	update: ->
+		@revert()
+		@render()
 
 	clearData: ->
 		expect(@data).toBe.object()
@@ -153,6 +157,11 @@ module.exports = (File) -> class Iterator extends File.Elem
 		clone.popItem = (arg1) => @popItem.call clone, arg1
 
 		clone.node.on 'attrChanged', (e) ->
-			clone.update() if e.name is 'x:each'
+			if self.isRendered and e.name is 'x:each'
+				clone.update()
+
+		clone.node.on 'visibilityChanged', (oldVal) ->
+			if self.isRendered and oldVal is false and not @data
+				clone.update()
 
 		clone
