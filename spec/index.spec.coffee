@@ -251,6 +251,20 @@ describe 'View Storage', ->
 				storage: storage
 			expect(view.node.stringify()).toBe '1'
 
+		it 'on storage deep', ->
+
+			source = View.fromHTML uid(), '#{dict.get \'x\'}'
+			view = source.clone()
+
+			storage = dict: Dict x: 1
+
+			renderParse view,
+				storage: storage
+			expect(view.node.stringify()).toBe '1'
+
+			storage.dict.set 'x', 2
+			expect(view.node.stringify()).toBe '2'
+
 describe 'View Condition', ->
 
 	describe 'works in file', ->

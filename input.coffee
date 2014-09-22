@@ -19,18 +19,34 @@ module.exports = (File) -> class Input
 
 	cache = {}
 
-	@get = (storages, prop) ->
-		for storage in storages
-			if storage instanceof Element
-				v = storage.attrs.get prop
-			else if storage instanceof Dict
-				v = storage.get prop
-			else if storage
-				v = storage[prop]
+	@getVal = do ->
 
-			return v if v?
+		getFromElement = (elem, prop) ->
+			if elem instanceof Element
+				elem.attrs.get prop
 
-		null
+		getFromObject = (obj, prop) ->
+			if obj instanceof Dict
+				obj.get prop
+			else if obj
+				obj[prop]
+
+		(file, prop) ->
+			if file.source
+				v = getFromElement file.source.node, prop
+				v ?= getFromObject file.source.storage, prop
+			v ?= getFromObject file.storage, prop
+
+			v
+
+	@get = (input, prop) ->
+		v = Input.getVal input.self, prop
+
+		# realtime traces
+		if v instanceof Dict and not input.traces[v.__hash__]
+			input.trace v
+
+		v
 
 	@getStoragesArray = do (arr = []) -> (file) ->
 		expect(file).toBe.any File
@@ -48,7 +64,7 @@ module.exports = (File) -> class Input
 		expect(node).toBe.any File.Element
 		expect(text).toBe.truthy().string()
 
-		vars = @vars = []
+		@traces = {}
 
 		# build toString()
 		func = ''
@@ -58,7 +74,6 @@ module.exports = (File) -> class Input
 			# parse prop
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
 				if prefix.trim() or not utils.has CONSTANT_VARS, elem
-					vars.push elem
 					str = "get(file, '#{utils.addSlashes elem}')"
 				"#{prefix}#{str}"
 
@@ -76,23 +91,29 @@ module.exports = (File) -> class Input
 
 	self: null
 	node: null
-	vars: null
 	text: ''
 	func: ''
+	traces: null
 
 	_onChanged: (prop) ->
-		if utils.has @vars, prop
-			@update()
+		@update()
 
 	_onAttrChanged: (e) ->
 		@_onChanged e.name
+
+	trace: (dict) ->
+		expect(dict).toBe.any Dict
+		expect().some().keys(@traces).not().toBe dict.__hash__
+
+		dict.onChanged @_onChanged
+		@traces[dict.__hash__] = dict
 
 	render: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
 				storage.on 'attrChanged', @_onAttrChanged
 			else if storage instanceof Dict
-				storage.onChanged @_onChanged
+				@trace storage
 		
 		@update()
 
@@ -100,8 +121,10 @@ module.exports = (File) -> class Input
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
 				storage.off 'attrChanged', @_onAttrChanged
-			else if storage instanceof Dict
-				storage.changed.disconnect @_onChanged
+
+		for hash, dict of @traces
+			dict.changed.disconnect @_onChanged
+			delete @traces[hash]
 
 		null
 
@@ -111,13 +134,13 @@ module.exports = (File) -> class Input
 	toString: do ->
 
 		callFunc = ->
-			@_func Input.getStoragesArray(@self), Input.get
+			@_func @, Input.get
 
 		->
 			try
 				callFunc.call @
 			catch err
-				log.warn "`#{@text}` interpolation is skipped due to an error;\n#{err}"
+				log.warn "`#{@text}` variable is skipped due to an error;\n#{err}"
 
 	clone: (original, self) ->
 
