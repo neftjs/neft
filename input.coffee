@@ -64,8 +64,6 @@ module.exports = (File) -> class Input
 		expect(node).toBe.any File.Element
 		expect(text).toBe.truthy().string()
 
-		@traces = {}
-
 		# build toString()
 		func = ''
 		RE.lastIndex = 0
@@ -94,9 +92,13 @@ module.exports = (File) -> class Input
 	text: ''
 	func: ''
 	traces: null
+	updatePending: false
 
 	_onChanged: (prop) ->
-		@update()
+		return if @updatePending
+
+		setImmediate @update
+		@updatePending = false
 
 	_onAttrChanged: (e) ->
 		@_onChanged e.name
@@ -129,7 +131,7 @@ module.exports = (File) -> class Input
 		null
 
 	update: ->
-		throw "`update()` method not implemented"
+		@updatePending = false
 
 	toString: do ->
 
@@ -149,6 +151,8 @@ module.exports = (File) -> class Input
 		clone.clone = undefined
 		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
+		clone.traces = {}
+		clone.update = => @update.call clone
 		clone._onAttrChanged = (arg1) => @_onAttrChanged.call clone, arg1
 		clone._onChanged = (arg1) => @_onChanged.call clone, arg1
 

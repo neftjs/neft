@@ -227,9 +227,11 @@ describe 'View Storage', ->
 
 			renderParse view
 			elem.attrs.set 'x', 1
-			expect(view.node.stringify()).toBe '1'
-			view.revert()
-			expect(elem.attrs.get('x')).toBe '2'
+			waits 4
+			runs ->
+				expect(view.node.stringify()).toBe '1'
+				view.revert()
+				expect(elem.attrs.get('x')).toBe '2'
 
 		it 'on storage', ->
 
@@ -243,13 +245,17 @@ describe 'View Storage', ->
 			expect(view.node.stringify()).toBe '1'
 
 			storage.set 'x', 2
-			expect(view.node.stringify()).toBe '2'
+			waits 4
+			runs ->
+				expect(view.node.stringify()).toBe '2'
 
-			view.revert()
-			storage.set 'x', 1
-			renderParse view,
-				storage: storage
-			expect(view.node.stringify()).toBe '1'
+			waits 4
+			runs ->
+				view.revert()
+				storage.set 'x', 1
+				renderParse view,
+					storage: storage
+				expect(view.node.stringify()).toBe '1'
 
 		it 'on storage deep', ->
 
@@ -263,7 +269,9 @@ describe 'View Storage', ->
 			expect(view.node.stringify()).toBe '1'
 
 			storage.dict.set 'x', 2
-			expect(view.node.stringify()).toBe '2'
+			waits 4
+			runs ->
+				expect(view.node.stringify()).toBe '2'
 
 describe 'View Condition', ->
 
@@ -320,9 +328,11 @@ describe 'View Condition', ->
 
 			renderParse view
 			elem.attrs.set 'x', 2
-			expect(view.node.stringify()).toBe '<b>OK</b>'
-			view.revert()
-			expect(view.node.children[0].name).toBe 'x:a'
+			waits 4
+			runs ->
+				expect(view.node.stringify()).toBe '<b>OK</b>'
+				view.revert()
+				expect(view.node.children[0].name).toBe 'x:a'
 
 		it 'in replacing elems', ->
 
@@ -336,7 +346,9 @@ describe 'View Condition', ->
 			expect(view.node.stringify()).toBe ''
 
 			storage.set 'x', 1
-			expect(view.node.stringify()).toBe 'OK'			
+			waits 4
+			runs ->
+				expect(view.node.stringify()).toBe 'OK'
 
 describe 'View Iterator', ->
 
