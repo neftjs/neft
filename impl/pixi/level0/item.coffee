@@ -5,18 +5,27 @@ PIXI = require '../pixi.lib.js'
 module.exports = (impl) ->
 	{items} = impl
 
+	updateMask = (id) ->
+		{elem} = items[id]
+		{mask} = elem
+
+		mask.clear()
+		mask.beginFill()
+		mask.drawRect 0, 0, elem.width, elem.height
+		mask.endFill()
+
 	create: (id, target) ->
 		elem = target.elem ?= new PIXI.DisplayObjectContainer
-		# elem.pivot.x = elem.pivot.y = 0.5
 		target.parent = ''
-		target.scale = 1
+		target.elem.sizeScale = 1
 
 	getItemParent: (id) ->
 		items[id].parent
 
 	setItemParent: (id, val) ->
-		items[id].parent = val
-		items[val].elem.addChild items[id].elem
+		item = items[id]
+		item.parent = val
+		items[val].elem.addChild item.elem
 
 	getItemVisible: (id) ->
 		items[id].elem.visible
@@ -25,10 +34,23 @@ module.exports = (impl) ->
 		items[id].elem.visible = val
 
 	getItemClip: (id) ->
-		# items[id].clip
+		items[id].elem.mask?
 
 	setItemClip: (id, val) ->
-		# items[id].clip = val
+		item = items[id]
+		{elem} = item
+
+		# TODO: doesn't work with custom PIXI.DisplayObject.prototype.updateTransform
+		# if val is false
+		# 	# remove mask
+		# 	elem.removeChild elem.mask
+		# 	elem.mask = null
+		# else
+		# 	# add mask
+		# 	mask = new PIXI.Graphics
+		# 	elem.mask = mask
+		# 	updateMask id
+		# 	elem.addChild mask
 
 	getItemWidth: (id) ->
 		items[id].elem.width
@@ -36,7 +58,8 @@ module.exports = (impl) ->
 	setItemWidth: (id, val) ->
 		{elem} = items[id]
 		elem.width = val
-		# elem.pivot.x = val/2
+		if elem.mask?
+			updateMask id
 
 	getItemHeight: (id) ->
 		items[id].elem.height
@@ -44,27 +67,28 @@ module.exports = (impl) ->
 	setItemHeight: (id, val) ->
 		{elem} = items[id]
 		elem.height = val
-		# elem.pivot.y = val/2
+		if elem.mask?
+			updateMask id
 
 	getItemX: (id) ->
 		item = items[id]
 		{elem} = item
-		elem.position.x# / item.scale
+		elem.position.x
 
 	setItemX: (id, val) ->
 		item = items[id]
 		{elem} = item
-		elem.position.x = val# * item.scale
+		elem.position.x = val
 
 	getItemY: (id) ->
 		item = items[id]
 		{elem} = item
-		elem.position.y# / item.scale
+		elem.position.y
 
 	setItemY: (id, val) ->
 		item = items[id]
 		{elem} = item
-		elem.position.y = val# * item.scale
+		elem.position.y = val
 
 	getItemZ: (id) ->
 		# items[id].z
@@ -73,24 +97,10 @@ module.exports = (impl) ->
 		# items[id].z = val
 
 	getItemScale: (id) ->
-		items[id].elem.scale
+		items[id].elem.sizeScale
 
 	setItemScale: (id, val) ->
-		item = items[id]
-		{elem} = item
-		{scale, width, height, position} = elem
-
-		baseScaleX = scale.x / item.scale
-		baseScaleY = scale.y / item.scale
-		basePositionX = position.x / item.scale
-		basePositionY = position.y / item.scale
-
-		item.scale = val
-
-		scale.x = baseScaleX * val
-		scale.y = baseScaleY * val
-		# position.x = basePositionX - elem.width*item.scale/2
-		# position.y = basePositionY - elem.height*item.scale/2
+		items[id].elem.sizeScale = val
 
 	getItemRotation: (id) ->
 		items[id].elem.rotation

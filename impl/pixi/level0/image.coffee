@@ -10,7 +10,6 @@ module.exports = (impl) ->
 
 	create: (id, target) ->
 		elem = target.elem ?= new PIXI.Sprite emptyTexture
-		# elem.anchor.x = elem.anchor.y = 0.5
 		impl.Types.Item.create id, target
 		target.source = ''
 
