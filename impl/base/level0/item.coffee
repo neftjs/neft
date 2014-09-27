@@ -83,3 +83,4 @@ module.exports = (impl) ->
 	setItemOpacity: (id, val) ->
 		items[id].opacity = val
 
+	attachItemSignal: (id, name, signal) ->

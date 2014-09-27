@@ -16,6 +16,14 @@ isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 rad2deg = (rad) ->
 	rad * 180/Math.PI
 
+SIGNALS =
+	'pointerClicked': 'click'
+	'pointerPressed': 'mousedown'
+	'pointerReleased': 'mouseup'
+	'pointerEntered': 'mouseenter'
+	'pointerExited': 'mouseleave'
+	'pointerWheel': 'wheel'
+
 module.exports = (impl) ->
 	{items} = impl
 
@@ -105,3 +113,5 @@ module.exports = (impl) ->
 	setItemOpacity: (id, val) ->
 		items[id].elem.style.opacity = val
 
+	attachItemSignal: (id, name, signal) ->
+		items[id].elem.addEventListener SIGNALS[name], -> signal()

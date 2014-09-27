@@ -5,8 +5,8 @@ utils = require 'utils'
 impl = require './impl/base'
 
 platformImpl = switch true
-	when utils.isBrowser and window.HTMLCanvasElement?
-		require('./impl/pixi') impl
+	# when utils.isBrowser and window.HTMLCanvasElement?
+	# 	require('./impl/pixi') impl
 	when utils.isBrowser
 		require('./impl/css') impl
 	when utils.isQml

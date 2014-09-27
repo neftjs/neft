@@ -2,20 +2,29 @@
 
 expect = require 'expect'
 utils = require 'utils'
+signal = require 'signal'
 
 Impl = require './impl'
 
 pool =
 	Item: []
+signals = {}
 
 class Item
 	@ID_RE = ///^([a-z0-9_A-Z]+)$///
+	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
+	            'pointerEntered', 'pointerExited', 'pointerWheel']
 
 	constructor: (type) ->
 		expect(type).toBe.truthy().string()
 
 		utils.defProp @, 'type', '', type
 		utils.defProp @, '_id', 'w', ''
+
+		# register signals properties
+		for signalName in Item.SIGNALS
+			@[signalName] = null
+			signal.createHandler @, signalName
 
 		Object.seal @
 
@@ -113,9 +122,39 @@ exports._create = (type, proto, opts) ->
 
 	expect(id).toMatchRe Item.ID_RE
 
+	# create signals object
+	itemSignals = signals[id] = {}
+
+	# get item instance
 	item = exports._open type, proto, id
 	Impl.createItem type, id
-	utils.mergeDeep item, opts
+
+	# create signals
+	Item.SIGNALS.forEach (signalName) ->
+		signalFunc = signal.createOnlySignal item, signalName
+		itemSignals[signalName] = signalFunc
+
+		# initialize
+		handler = (listener) ->
+			signalFunc.connected.disconnect handler
+
+			# call signal with opened item instance,
+			# so all listeners will have easy access to it
+			bindSignalFunc = ->
+				item = exports._open type, proto, id
+				Function.apply.call signalFunc, item, arguments
+				item.close()
+
+			Impl.attachItemSignal id, signalName, bindSignalFunc
+
+		signalFunc.connected.connect handler
+
+	# fill item
+	customOpts = utils.clone opts
+	delete customOpts.id
+	utils.mergeDeep item, customOpts
+
+	# close modification
 	item.close()
 
 	id
@@ -132,6 +171,11 @@ exports._open = (type, proto, id) ->
 		Item.call item, type
 
 	item._id = id
+
+	# move signals
+	itemSignals = signals[id]
+	for signalName in Item.SIGNALS
+		item[signalName] = itemSignals[signalName]
 
 	item
 
