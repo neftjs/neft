@@ -15,9 +15,15 @@ platformImpl = switch true
 if platformImpl
 	utils.mergeDeep impl, platformImpl
 
+# merge types
 for name, type of impl.Types
 	type = impl.Types[name] = type(impl)
 	utils.merge impl, type
+
+# merge modules
+for name, extra of impl.Extras
+	extra = impl.Extras[name] = extra(impl)
+	utils.merge impl, extra
 
 impl.createItem = (type, id) ->
 	item =
@@ -27,4 +33,4 @@ impl.createItem = (type, id) ->
 	impl.items[id] = item
 	Object.seal item
 
-module.exports = impl
+exports = module.exports = impl

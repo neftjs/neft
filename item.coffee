@@ -15,6 +15,8 @@ class Item
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel']
 
+	@Binding = require './item/binding'
+
 	constructor: (type) ->
 		expect(type).toBe.truthy().string()
 
@@ -56,28 +58,44 @@ class Item
 	utils.defProp @::, 'width', 'e', ->
 		Impl.getItemWidth @_id
 	, (val) ->
-		expect(val).toBe.float()
-		expect(val).not().toBe.lessThan 0
-		Impl.setItemWidth @_id, val
+		if typeof val is 'number'
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			Impl.setItemWidth @_id, val
+		else
+			binding = Item.Binding.factory val
+			Impl.setItemBinding @_id, 'width', binding
 
 	utils.defProp @::, 'height', 'e', ->
 		Impl.getItemHeight @_id
 	, (val) ->
-		expect(val).toBe.float()
-		expect(val).not().toBe.lessThan 0
-		Impl.setItemHeight @_id, val
+		if typeof val is 'number'
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			Impl.setItemHeight @_id, val
+		else
+			binding = Item.Binding.factory val
+			Impl.setItemBinding @_id, 'height', binding
 
 	utils.defProp @::, 'x', 'e', ->
 		Impl.getItemX @_id
 	, (val) ->
-		expect(val).toBe.float()
-		Impl.setItemX @_id, val
+		if typeof val is 'number'
+			expect(val).toBe.float()
+			Impl.setItemX @_id, val
+		else
+			binding = Item.Binding.factory val
+			Impl.setItemBinding @_id, 'x', binding
 
 	utils.defProp @::, 'y', 'e', ->
 		Impl.getItemY @_id
 	, (val) ->
-		expect(val).toBe.float()
-		Impl.setItemY @_id, val
+		if typeof val is 'number'
+			expect(val).toBe.float()
+			Impl.setItemY @_id, val
+		else
+			binding = Item.Binding.factory val
+			Impl.setItemBinding @_id, 'y', binding
 
 	utils.defProp @::, 'z', 'e', ->
 		Impl.getItemZ @_id

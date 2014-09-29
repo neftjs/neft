@@ -59,25 +59,25 @@ module.exports = (impl) ->
 		items[id].elem.style.overflow = if val then 'hidden' else 'visible'
 
 	getItemWidth: (id) ->
-		parseFloat items[id].elem.style.width
+		parseFloat items[id].elem.style.width or 0
 
 	setItemWidth: (id, val) ->
 		items[id].elem.style.width = "#{val}px"
 
 	getItemHeight: (id) ->
-		parseFloat items[id].elem.style.height
+		parseFloat items[id].elem.style.height or 0
 
 	setItemHeight: (id, val) ->
 		items[id].elem.style.height = "#{val}px"
 
 	getItemX: (id) ->
-		parseFloat items[id].elem.style.left
+		parseFloat items[id].elem.style.left or 0
 
 	setItemX: (id, val) ->
 		items[id].elem.style.left = val
 
 	getItemY: (id) ->
-		parseFloat items[id].elem.style.top
+		parseFloat items[id].elem.style.top or 0
 
 	setItemY: (id, val) ->
 		items[id].elem.style.top = val

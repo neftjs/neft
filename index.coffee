@@ -1,8 +1,8 @@
 'use strict'
 
 exports.Item = require './item'
-exports.Image = require './item/image'
-exports.Rectangle = require './item/rectangle'
+exports.Image = require './item/types/image'
+exports.Rectangle = require './item/types/rectangle'
 
 Impl = require './impl'
 

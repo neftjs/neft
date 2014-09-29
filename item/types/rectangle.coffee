@@ -3,7 +3,7 @@
 expect = require 'expect'
 utils = require 'utils'
 
-Item = require '../item'
+Item = require '../../item'
 Impl = Item._Impl
 
 self = null
