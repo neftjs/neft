@@ -6,6 +6,6 @@ exports.Rectangle = require './item/rectangle'
 
 Impl = require './impl'
 
-if window+'' is '[object Window]'
+if window? and window+'' is '[object Window]'
 	exports.window = exports.Item.create {}
 	Impl.setWindow exports.window

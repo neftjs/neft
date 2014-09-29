@@ -24,13 +24,15 @@ class Item
 		# register signals properties
 		for signalName in Item.SIGNALS
 			@[signalName] = null
-			signal.createHandler @, signalName
 
 		Object.seal @
 
 	utils.defProp @::, 'id', 'e', ->
 		@_id
 	, null
+
+	for signalName in Item.SIGNALS
+		signal.createHandler @::, signalName
 
 	utils.defProp @::, 'parent', 'e', ->
 		Impl.getItemParent @_id
