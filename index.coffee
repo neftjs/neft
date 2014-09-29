@@ -11,18 +11,43 @@ exports.create = (obj, name) ->
 	expect(obj).not().toBe.primitive()
 	expect(name).toBe.truthy().string()
 
-	assert not obj.hasOwnProperty name
+	signal = exports.createOnlySignal obj, name
+	exports.createHandler obj, name
+
+	signal
+
+exports.createOnlySignal = (obj, name) ->
+	expect(obj).not().toBe.primitive()
+	expect(name).toBe.truthy().string()
+
+	assert not obj[name]?
 	, "Signal `#{name}` can't be created, because object `#{obj}` has already defined such property"
 
 	signal = obj[name] = newSignal()
+	signal.connected = newSignal()
+	signal.disconnected = newSignal()
+
+	signal
+
+exports.createHandler = (obj, name) ->
+	expect(obj).not().toBe.primitive()
+	expect(name).toBe.truthy().string()
 
 	# fast connecting
+	prefixedName = exports.getHandlerName name
+	connect = (arg1) -> @[name].connect arg1
+	utils.defProp obj, prefixedName, 'c', ->
+		connect
+	, (listener) ->
+		@[name].disconnectAll()
+		if listener?
+			@[name].connect listener
+
+exports.getHandlerName = (name) ->
 	prefixedName = prefixedNamesCache[name]
 	unless prefixedName
 		prefixedName = prefixedNamesCache[name] = "on#{utils.capitalize name}"
-	obj[prefixedName] = (arg1) -> signal.connect arg1
-
-	exports
+	prefixedName
 
 newSignal = ->
 	args = []
@@ -60,6 +85,7 @@ SignalPrototype =
 		expect().some(@listeners).not().toBe listener
 
 		@listeners.push listener
+		@connected? listener
 
 	disconnect: (listener) ->
 		expect(@).toBe.function()
@@ -68,3 +94,12 @@ SignalPrototype =
 
 		index = @listeners.indexOf listener
 		@listeners[index] = null
+		@disconnected? listener
+
+	disconnectAll: ->
+		expect(@).toBe.function()
+
+		for listener in @listeners
+			@disconnect listener
+
+		null
