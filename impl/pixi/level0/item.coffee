@@ -2,6 +2,13 @@
 
 PIXI = require '../pixi.lib.js'
 
+SIGNALS =
+	'pointerClicked': 'click'
+	'pointerPressed': 'mousedown'
+	'pointerReleased': 'mouseup'
+	'pointerEntered': 'mouseover'
+	'pointerExited': 'mouseout'
+
 module.exports = (impl) ->
 	{items} = impl
 
@@ -114,3 +121,7 @@ module.exports = (impl) ->
 	setItemOpacity: (id, val) ->
 		items[id].elem.alpha = val
 
+	attachItemSignal: (id, name, signal) ->
+		{elem} = items[id]
+		elem.setInteractive true
+		elem[SIGNALS[name]] = -> signal()

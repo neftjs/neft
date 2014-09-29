@@ -140,7 +140,7 @@ div, span, canvas, img {
 "
 
 if window+'' is '[object Window]'
-	stage = new PIXI.Stage 0xFFFFFF
+	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
 	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight, null, false, true
 
 window.addEventListener 'resize', ->
