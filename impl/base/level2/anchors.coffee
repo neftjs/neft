@@ -3,6 +3,7 @@
 Binding = require '../../../item/binding'
 
 module.exports = (impl) ->
+	{items} = impl
 
 	TYPES_VALUES =
 		left: (target) ->
@@ -34,23 +35,33 @@ module.exports = (impl) ->
 			r += " + #{target}.height/2"
 			r
 
+	MARGIN_FUNCS =
+		left: (id) ->
+			items[id].anchorMargins?.left
+		top: (id) ->
+			items[id].anchorMargins?.top
+		right: (id) ->
+			items[id].anchorMargins?.right
+		bottom: (id) ->
+			items[id].anchorMargins?.bottom
+
 	TYPES_BINDINGS =
 		left: (id, val) ->
 			left = getAnchorValue val
 			left = Binding.factory left
-			impl.setItemBinding id, 'x', left
+			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.left
 		top: (id, val) ->
 			top = getAnchorValue val
 			top = Binding.factory top
-			impl.setItemBinding id, 'y', top
+			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.top
 		right: (id, val) ->
 			left = getAnchorValue(val) + " - this.width"
 			left = Binding.factory left
-			impl.setItemBinding id, 'x', left
+			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.right
 		bottom: (id, val) ->
 			top = getAnchorValue(val) + " - this.height"
 			top = Binding.factory top
-			impl.setItemBinding id, 'y', top
+			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.bottom
 		horizontalCenter: (id, val) ->
 			left = getAnchorValue(val) + " - this.width/2"
 			left = Binding.factory left
@@ -62,15 +73,21 @@ module.exports = (impl) ->
 		centerIn: (id, val) ->
 			TYPES_BINDINGS.horizontalCenter id, "#{val}.horizontalCenter"
 			TYPES_BINDINGS.verticalCenter id, "#{val}.verticalCenter"
-		fill: (id, val) ->
-			TYPES_BINDINGS.left id, "#{val}.left"
-			TYPES_BINDINGS.top id, "#{val}.top"
+		fill: do ->
+			WIDTH_MARGIN_FUNC = (id) ->
+				- (MARGIN_FUNCS.left(id) or 0) - (MARGIN_FUNCS.right(id) or 0)
+			HEIGHT_MARGIN_FUNC = (id) ->
+				- (MARGIN_FUNCS.top(id) or 0) - (MARGIN_FUNCS.bottom(id) or 0)
 
-			width = Binding.factory "#{val}.width"
-			impl.setItemBinding id, 'width', width
+			(id, val) ->
+				TYPES_BINDINGS.left id, "#{val}.left"
+				TYPES_BINDINGS.top id, "#{val}.top"
 
-			height = Binding.factory "#{val}.height"
-			impl.setItemBinding id, 'height', height
+				width = Binding.factory "#{val}.width"
+				impl.setItemBinding id, 'width', width, WIDTH_MARGIN_FUNC
+
+				height = Binding.factory "#{val}.height"
+				impl.setItemBinding id, 'height', height, HEIGHT_MARGIN_FUNC
 
 	getAnchorValue = (val) ->
 		dot = val.indexOf '.'
@@ -82,5 +99,15 @@ module.exports = (impl) ->
 
 		TYPES_VALUES[line] target
 
+	impl.Types.Item.create = do (_super = impl.Types.Item.create) -> (id, target) ->
+		target.anchorMargins = null
+
+		_super id, target
+
 	setItemAnchor: (id, type, val) ->
 		TYPES_BINDINGS[type] id, val
+
+	setItemAnchorMargin: (id, type, val) ->
+		item = items[id]
+		anchorMargins = item.anchorMargins ?= {}
+		anchorMargins[type] = val

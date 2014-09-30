@@ -30,7 +30,7 @@ module.exports = (impl) ->
 		cache = {}
 		tmpFuncArgs = ['']
 
-		constructor: (@itemId, @prop, @binding) ->
+		constructor: (@itemId, @prop, @binding, @extraResultFunc) ->
 			@locations = []
 			func = @func = cache[binding.setup]
 			args = @args = utils.clone binding.items
@@ -94,6 +94,7 @@ module.exports = (impl) ->
 		parentId: ''
 		prop: ''
 		binding: null
+		extraResultFunc: null
 		func: null
 		args: null
 		locations: null
@@ -116,7 +117,14 @@ module.exports = (impl) ->
 			@locations.push itemListeners
 
 		update: ->
-			Binding.SETTER_METHODS[@prop] @itemId, @func.apply(null, @args)
+			result = @func.apply(null, @args)
+
+			if @extraResultFunc
+				funcResult = @extraResultFunc @itemId
+				if typeof funcResult is 'number'
+					result += funcResult
+
+			Binding.SETTER_METHODS[@prop] @itemId, result
 
 		destroy: ->
 			for location in @locations
@@ -163,8 +171,8 @@ module.exports = (impl) ->
 	overrideSetter 'width'
 	overrideSetter 'height'
 
-	setItemBinding: (id, prop, binding) ->
+	setItemBinding: (id, prop, binding, extraResultFunc) ->
 		item = items[id]
 		item.bindings ?= {}
 		item.bindings[prop]?.destroy()
-		item.bindings[prop] = new Binding id, prop, binding
+		item.bindings[prop] = new Binding id, prop, binding, extraResultFunc

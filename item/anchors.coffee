@@ -113,4 +113,38 @@ createAnchorProp 'bottom', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 
+Anchors.margin = {}
+
+createMarginProp = (type) ->
+	utils.defProp Anchors.margin, type, 'e', null, (val) ->
+		id = exports.currentItem._id
+
+		`//<development>`
+		assert typeof val is 'number' and isFinite(val)
+		, "(##{id}).anchors.margin.#{type} expects a finite number; `#{val}` given"
+		`//</development>`
+
+		Impl.setItemAnchorMargin id, type, val
+
+createMarginProp 'left'
+createMarginProp 'top'
+createMarginProp 'right'
+createMarginProp 'bottom'
+
+utils.defProp Anchors, 'margins', 'e', null, (val) ->
+	`//<development>`
+	id = exports.currentItem._id
+
+	assert typeof val is 'number' and isFinite(val)
+	, "(##{id}).anchors.margins expects a finite number; `#{val}` given"
+	`//</development>`
+
+	{margin} = Anchors
+
+	margin.left = val
+	margin.top = val
+	margin.right = val
+	margin.bottom = val
+
+Object.freeze Anchors.margin
 Object.freeze Anchors
