@@ -9,6 +9,7 @@ exports.Types =
 
 exports.Extras =
 	Binding: require './level1/binding'
+	Anchors: require './level2/anchors'
 
 exports.items = {}
 

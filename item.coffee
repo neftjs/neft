@@ -10,12 +10,16 @@ pool =
 	Item: []
 signals = {}
 
+###
+Item
+###
 class Item
 	@ID_RE = ///^([a-z0-9_A-Z]+)$///
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel']
 
-	@Binding = require './item/binding'
+	Binding = require './item/binding'
+	Anchors = require './item/anchors'
 
 	constructor: (type) ->
 		expect(type).toBe.truthy().string()
@@ -63,7 +67,7 @@ class Item
 			expect(val).not().toBe.lessThan 0
 			Impl.setItemWidth @_id, val
 		else
-			binding = Item.Binding.factory val
+			binding = Binding.factory val
 			Impl.setItemBinding @_id, 'width', binding
 
 	utils.defProp @::, 'height', 'e', ->
@@ -74,7 +78,7 @@ class Item
 			expect(val).not().toBe.lessThan 0
 			Impl.setItemHeight @_id, val
 		else
-			binding = Item.Binding.factory val
+			binding = Binding.factory val
 			Impl.setItemBinding @_id, 'height', binding
 
 	utils.defProp @::, 'x', 'e', ->
@@ -84,7 +88,7 @@ class Item
 			expect(val).toBe.float()
 			Impl.setItemX @_id, val
 		else
-			binding = Item.Binding.factory val
+			binding = Binding.factory val
 			Impl.setItemBinding @_id, 'x', binding
 
 	utils.defProp @::, 'y', 'e', ->
@@ -94,7 +98,7 @@ class Item
 			expect(val).toBe.float()
 			Impl.setItemY @_id, val
 		else
-			binding = Item.Binding.factory val
+			binding = Binding.factory val
 			Impl.setItemBinding @_id, 'y', binding
 
 	utils.defProp @::, 'z', 'e', ->
@@ -120,6 +124,11 @@ class Item
 	, (val) ->
 		expect(val).toBe.float()
 		Impl.setItemOpacity @_id, val
+
+	utils.defProp @::, 'anchors', 'e', ->
+		Anchors.currentItem = @
+		Anchors.Anchors
+	, null
 
 	close: ->
 		@_id = ''

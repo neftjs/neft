@@ -17,6 +17,9 @@ module.exports = (impl) ->
 		target.rotation = 0
 		target.opacity = 1
 
+	confirmItemChild: (id, childId) ->
+		false
+
 	getItemParent: (id) ->
 		items[id].parent?.id
 

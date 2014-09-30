@@ -163,7 +163,7 @@ module.exports = (impl) ->
 	overrideSetter 'width'
 	overrideSetter 'height'
 
-	impl.setItemBinding = (id, prop, binding) ->
+	setItemBinding: (id, prop, binding) ->
 		item = items[id]
 		item.bindings ?= {}
 		item.bindings[prop]?.destroy()

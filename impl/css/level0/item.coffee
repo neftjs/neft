@@ -40,6 +40,9 @@ module.exports = (impl) ->
 		target.rotation = 0
 		target.scale = 1
 
+	confirmItemChild: (id, child) ->
+		!!items[id].elem.querySelector "##{child}"
+
 	getItemParent: (id) ->
 		items[id].elem.parentElement?.id
 
