@@ -13,8 +13,6 @@ module.exports = (impl) ->
 		item.textUpdatePending = true
 
 		requestAnimationFrame ->
-			item.textUpdatePending = false
-
 			{elem} = item
 
 			if item.autoWidth
@@ -22,6 +20,8 @@ module.exports = (impl) ->
 
 			if item.autoHeight
 				impl.setItemHeight id, elem.offsetHeight
+
+			item.textUpdatePending = false
 
 	impl.setItemWidth = do (_super = impl.setItemWidth) -> (id, val) ->
 		_super id, val

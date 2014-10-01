@@ -124,8 +124,10 @@ body {
 html, body {
 	height: 100%;
 }
-#body {
+canvas {
 	position: absolute;
+	left: 0;
+	top: 0;
 	z-index: 0;
 }
 div, span, canvas, img {
@@ -147,7 +149,10 @@ window.addEventListener 'resize', ->
 	renderer.resize innerWidth, innerHeight
 
 # body
+hatchery = document.createElement 'div'
+hatchery.style.visibility = 'hidden'
 window.addEventListener 'load', ->
+	document.body.appendChild hatchery
 	document.body.appendChild renderer.view
 
 	styles = document.createElement 'style'
@@ -163,9 +168,12 @@ window.addEventListener 'load', ->
 module.exports = (impl) ->
 	{items} = impl
 
+	impl._hatchery = hatchery
+
 	Types:
 		Item: require './level0/item'
 		Image: require './level0/image'
+		Text: require './level0/text'
 
 	setWindow: (id) ->
 		if stage.children.length
