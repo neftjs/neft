@@ -36,11 +36,15 @@ module.exports = (impl) ->
 
 	impl.setItemWidth = do (_super = impl.setItemWidth) -> (id, val) ->
 		_super id, val
-		updateImage id
+
+		if items[id].type is 'Rectangle'
+			updateImage id
 
 	impl.setItemHeight = do (_super = impl.setItemHeight) -> (id, val) ->
 		_super id, val
-		updateImage id
+
+		if items[id].type is 'Rectangle'
+			updateImage id
 
 	create: (id, target) ->
 		Image.create id, target

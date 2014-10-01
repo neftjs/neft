@@ -47,30 +47,53 @@ module.exports = (impl) ->
 
 	TYPES_BINDINGS =
 		left: (id, val) ->
+			unless val
+				return impl.setItemBinding id, 'x', null
+
 			left = getAnchorValue val
 			left = Binding.factory left
 			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.left
 		top: (id, val) ->
+			unless val
+				return impl.setItemBinding id, 'y', null
+
 			top = getAnchorValue val
 			top = Binding.factory top
 			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.top
 		right: (id, val) ->
+			unless val
+				return impl.setItemBinding id, 'x', null
+
 			left = getAnchorValue(val) + " - this.width"
 			left = Binding.factory left
 			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.right
 		bottom: (id, val) ->
+			unless val
+				return impl.setItemBinding id, 'y', null
+
 			top = getAnchorValue(val) + " - this.height"
 			top = Binding.factory top
 			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.bottom
 		horizontalCenter: (id, val) ->
+			unless val
+				return impl.setItemBinding id, 'x', null
+
 			left = getAnchorValue(val) + " - this.width/2"
 			left = Binding.factory left
 			impl.setItemBinding id, 'x', left
 		verticalCenter: (id, val) ->
+			unless val
+				return impl.setItemBinding id, 'y', null
+
 			top = getAnchorValue(val) + " - this.height/2"
 			top = Binding.factory top
 			impl.setItemBinding id, 'y', top
 		centerIn: (id, val) ->
+			unless val
+				TYPES_BINDINGS.horizontalCenter id, null
+				TYPES_BINDINGS.verticalCenter id, null
+				return
+
 			TYPES_BINDINGS.horizontalCenter id, "#{val}.horizontalCenter"
 			TYPES_BINDINGS.verticalCenter id, "#{val}.verticalCenter"
 		fill: do ->
@@ -80,6 +103,13 @@ module.exports = (impl) ->
 				- (MARGIN_FUNCS.top(id) or 0) - (MARGIN_FUNCS.bottom(id) or 0)
 
 			(id, val) ->
+				unless val
+					TYPES_BINDINGS.left id, null
+					TYPES_BINDINGS.top id, null
+					impl.setItemBinding id, 'width', null
+					impl.setItemBinding id, 'height', null
+					return
+
 				TYPES_BINDINGS.left id, "#{val}.left"
 				TYPES_BINDINGS.top id, "#{val}.top"
 

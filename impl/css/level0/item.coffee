@@ -62,25 +62,25 @@ module.exports = (impl) ->
 		items[id].elem.style.overflow = if val then 'hidden' else 'visible'
 
 	getItemWidth: (id) ->
-		parseFloat items[id].elem.style.width or 0
+		parseFloat(items[id].elem.style.width) or 0
 
 	setItemWidth: (id, val) ->
 		items[id].elem.style.width = "#{val}px"
 
 	getItemHeight: (id) ->
-		parseFloat items[id].elem.style.height or 0
+		parseFloat(items[id].elem.style.height) or 0
 
 	setItemHeight: (id, val) ->
 		items[id].elem.style.height = "#{val}px"
 
 	getItemX: (id) ->
-		parseFloat items[id].elem.style.left or 0
+		parseFloat(items[id].elem.style.left) or 0
 
 	setItemX: (id, val) ->
 		items[id].elem.style.left = val
 
 	getItemY: (id) ->
-		parseFloat items[id].elem.style.top or 0
+		parseFloat(items[id].elem.style.top) or 0
 
 	setItemY: (id, val) ->
 		items[id].elem.style.top = val
@@ -91,7 +91,7 @@ module.exports = (impl) ->
 		if val is 'inherit'
 			0
 		else
-			parseFloat val
+			parseFloat(val) or 0
 
 	setItemZ: (id, val) ->
 		items[id].elem.style.zIndex = if val is 0 then 'inherit' else val
@@ -111,7 +111,8 @@ module.exports = (impl) ->
 		updateTransforms id
 
 	getItemOpacity: (id) ->
-		parseFloat items[id].elem.style.opacity
+		opacity = items[id].elem.style.opacity
+		if opacity is '' then 1 else (parseFloat(opacity) or 0)
 
 	setItemOpacity: (id, val) ->
 		items[id].elem.style.opacity = val

@@ -174,5 +174,9 @@ module.exports = (impl) ->
 	setItemBinding: (id, prop, binding, extraResultFunc) ->
 		item = items[id]
 		item.bindings ?= {}
+
 		item.bindings[prop]?.destroy()
-		item.bindings[prop] = new Binding id, prop, binding, extraResultFunc
+		item.bindings[prop] = null
+
+		if binding?
+			item.bindings[prop] = new Binding id, prop, binding, extraResultFunc

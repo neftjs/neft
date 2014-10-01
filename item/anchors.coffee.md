@@ -85,13 +85,14 @@ This connection is updated in realtime, so if the *rect1* will change a position
 			id = exports.currentItem._id
 
 			`//<development>`
-			[target, line] = splitAnchorValue val
-			allowedLines = if H_LINES[type] then H_LINES else V_LINES
-			itemsAnchors[id] ?= 0
+			if val?
+				[target, line] = splitAnchorValue val
+				allowedLines = if H_LINES[type] then H_LINES else V_LINES
+				itemsAnchors[id] ?= 0
 
-			assert typeof val is 'string' and val.length
-			, "`(##{id}).anchors.#{type}` expects a string (e.g. `'parent.left'`); " +
-			  "`'#{val}'` given"
+				assert typeof val is 'string' and val.length
+				, "`(##{id}).anchors.#{type}` expects a string (e.g. `'parent.left'`); " +
+				  "`'#{val}'` given"
 
 Item id in the anchor descriptor (*rect1* in *rect1.right*) is called a ***target***.
 
@@ -119,19 +120,20 @@ rect2.parent = Renderer.window
 rect2.close()
 ```
 
-			assert target.length
-			, "`(##{id}).anchors.#{type}` expects a target; `'#{val}'` given;\n" +
-			  "specify an item id or `parent` (e.g `anchors.left = 'parent.right'`)"
+				assert target.length
+				, "`(##{id}).anchors.#{type}` expects a target; `'#{val}'` given;\n" +
+				  "specify an item id or `parent` (e.g `anchors.left = 'parent.right'`)"
 
 For the peformance reasons, the *target* could be only a *parent* or a ***item sibling***.
 
 Pointing to the *parent* by its id is not allowed, `parent` special *target* should be used.
 
-			setImmediate ->
-				if target isnt 'parent'
-					isFamily = Impl.confirmItemChild id, target
-					assert isFamily
-					, "`(##{id}).anchors.#{type}` can be anchored only to a parent or sibling"
+				setImmediate ->
+					if target isnt 'parent'
+						isFamily = Impl.confirmItemChild id, target
+						assert isFamily
+						, "`(##{id}).anchors.#{type}` can be anchored only to a parent " +
+						  "or sibling"
 
 *Anchors* also provies two ***special anchors***: *centerIn* and *fill*.
 
@@ -152,29 +154,29 @@ Renderer.Rectangle.create
     ...
 ```
 
-			if opts & ONLY_TARGET_ALLOW
-				assert line.length is 0
-				, "`(##{id}).anchors.#{type}` expects only a target to be defined; " +
-				  "`'#{val}'` given;\npointing to the line is not required " +
-				  "(e.g `anchors.centerIn = 'parent'`)"
+				if opts & ONLY_TARGET_ALLOW
+					assert line.length is 0
+					, "`(##{id}).anchors.#{type}` expects only a target to be defined; " +
+					  "`'#{val}'` given;\npointing to the line is not required " +
+					  "(e.g `anchors.centerIn = 'parent'`)"
 
-			if opts & LINE_REQ
-				assert H_LINES[line] or V_LINES[line]
-				, "`(##{id}).anchors.#{type}` expects a anchor line to be defined; " +
-				  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
+				if opts & LINE_REQ
+					assert H_LINES[line] or V_LINES[line]
+					, "`(##{id}).anchors.#{type}` expects a anchor line to be defined; " +
+					  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
 
 Horizontal anchors can't point to the vertical lines (and vice versa),
 so `anchors.top = 'parent.left'` is not allowed.
 
-			if opts & H_LINE_REQ
-				assert H_LINES[line]
-				, "`(##{id}).anchors.#{type}` can't be anchored to a vertical edge; " +
-				  "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
+				if opts & H_LINE_REQ
+					assert H_LINES[line]
+					, "`(##{id}).anchors.#{type}` can't be anchored to a vertical edge; " +
+					  "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
 
-			if opts & V_LINE_REQ
-				assert V_LINES[line]
-				, "`(##{id}).anchors.#{type}` can't be anchored to a horizontal edge; " +
-				  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
+				if opts & V_LINE_REQ
+					assert V_LINES[line]
+					, "`(##{id}).anchors.#{type}` can't be anchored to a horizontal edge; " +
+					  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
 
 Second, and the last restriction says that only one *horizontal* and one *vertical anchor*
 can be set in the *item*.
@@ -194,19 +196,25 @@ Renderer.Rectangle.create
     ...
 ```
 
-			if opts & FREE_H_LINE_REQ
-				assert not (itemsAnchors[id] & H_LINE)
-				, "`(##{id}).anchors.#{type}` can't be set, because some other horizontal " +
-				  "anchor is currently set; `'#{val}'` given"
+				if opts & FREE_H_LINE_REQ
+					assert not (itemsAnchors[id] & H_LINE)
+					, "`(##{id}).anchors.#{type}` can't be set, because some other " +
+					  "horizontal anchor is currently set; `'#{val}'` given"
 
-				itemsAnchors[id] |= H_LINE
+					itemsAnchors[id] |= H_LINE
 
-			if opts & FREE_V_LINE_REQ
-				assert not (itemsAnchors[id] & V_LINE)
-				, "`(##{id}).anchors.#{type}` can't be set, because some other vertical " +
-				  "anchor is currently set; `'#{val}'` given"
+				if opts & FREE_V_LINE_REQ
+					assert not (itemsAnchors[id] & V_LINE)
+					, "`(##{id}).anchors.#{type}` can't be set, because some other " +
+					  "vertical anchor is currently set; `'#{val}'` given"
 
-				itemsAnchors[id] |= V_LINE
+					itemsAnchors[id] |= V_LINE
+
+			unless val?
+				if opts & FREE_V_LINE_REQ
+					itemsAnchors[id] &= ~V_LINE
+				if opts & FREE_H_LINE_REQ
+					itemsAnchors[id] &= ~H_LINE
 			`//</development>`
 
 			Impl.setItemAnchor id, type, val

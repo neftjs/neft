@@ -5,6 +5,7 @@ utils = require 'utils'
 exports.Types =
 	Item: require './level0/item'
 	Image: require './level0/image'
+	Text: require './level0/text'
 	Rectangle: require './level1/rectangle'
 
 exports.Extras =

@@ -41,6 +41,7 @@ module.exports = (impl) ->
 	Types:
 		Item: require './level0/item'
 		Image: require './level0/image'
+		Text: require './level0/text'
 
 	setWindow: (id) ->
 		if document.readyState isnt 'complete'
