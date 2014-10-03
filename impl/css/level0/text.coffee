@@ -12,11 +12,16 @@ module.exports = (impl) ->
 		return if item.textUpdatePending
 		item.textUpdatePending = true
 
+		if document.readyState isnt 'complete'
+			setTimeout ->
+				updateSize id
+			, 1000
+
 		requestAnimationFrame ->
 			{elem} = item
 
 			if item.autoWidth
-				impl.setItemWidth id, elem.offsetWidth
+				impl.setItemWidth id, elem.offsetWidth+1
 
 			if item.autoHeight
 				impl.setItemHeight id, elem.offsetHeight
@@ -29,7 +34,7 @@ module.exports = (impl) ->
 		item = items[id]
 		if item.type is 'Text'
 			item.elem.style.whiteSpace = if val > 0 then 'normal' else 'nowrap'
-			item.autoWidth = val > 0
+			item.autoWidth = val <= 0
 			updateSize id
 
 	impl.setItemHeight = do (_super = impl.setItemHeight) -> (id, val) ->
@@ -37,7 +42,7 @@ module.exports = (impl) ->
 
 		item = items[id]
 		if item.type is 'Text'
-			item.autoHeight = val > 0
+			item.autoHeight = val <= 0
 			updateSize id
 
 	create: (id, target) ->
@@ -52,6 +57,8 @@ module.exports = (impl) ->
 		style.width = 'auto'
 		style.height = 'auto'
 		style.whiteSpace = 'nowrap'
+		style.fontSize = '14px'
+		style.fontFamily = 'sans-serif'
 		if isFirefox
 			style.marginTop = '1px'
 

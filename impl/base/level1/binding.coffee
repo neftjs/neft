@@ -16,10 +16,10 @@ module.exports = (impl) ->
 			'height': 'impl.getItemHeight'
 
 		@SETTER_METHODS =
-			'x': impl.setItemX
-			'y': impl.setItemY
-			'width': impl.setItemWidth
-			'height': impl.setItemHeight
+			'x': 'setItemX'
+			'y': 'setItemY'
+			'width': 'setItemWidth'
+			'height': 'setItemHeight'
 
 		@update: (listeners) ->
 			if listeners
@@ -98,6 +98,7 @@ module.exports = (impl) ->
 		func: null
 		args: null
 		locations: null
+		updatePending: false
 
 		updateParent: ->
 			return if @parentArgIndex is -1
@@ -124,9 +125,13 @@ module.exports = (impl) ->
 				if typeof funcResult is 'number'
 					result += funcResult
 
-			Binding.SETTER_METHODS[@prop] @itemId, result
+			@updatePending = true
+			impl[Binding.SETTER_METHODS[@prop]] @itemId, result
+			@updatePending = false
 
 		destroy: ->
+			return if @updatePending
+
 			for location in @locations
 				utils.remove location, @
 
