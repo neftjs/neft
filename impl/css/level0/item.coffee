@@ -16,6 +16,8 @@ isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 rad2deg = (rad) ->
 	rad * 180/Math.PI
 
+{now} = Date
+
 SIGNALS =
 	'pointerClicked': 'click'
 	'pointerPressed': 'mousedown'
@@ -24,21 +26,45 @@ SIGNALS =
 	'pointerExited': 'mouseleave'
 	'pointerWheel': 'wheel'
 
+HOT_MAX_TIME = 120
+HOT_MAX_ACTIONS = 100
+
 module.exports = (impl) ->
 	{items} = impl
 
-	updateTransforms = (id) ->
-		item = items[id]
-
-		transform = "rotate(#{rad2deg(item.rotation)}deg) scale(#{item.scale})"
+	updateTransforms = (item) ->
+		transform = ''
+		if item.rotation
+			transform += "rotate(#{rad2deg(item.rotation)}deg) "
+		if item.scale isnt 1
+			transform += "scale(#{item.scale}) "
+		if item.isHot
+			transform += "translate3d(#{item.x}px, #{item.y}px, 0) "
 		item.elem.style[transformProp] = transform
+
+	markAction = (item) ->
+		if now() - item.lastAction < HOT_MAX_TIME
+			if item.hotActions++ > HOT_MAX_ACTIONS
+				{style, id} = item.elem
+				item.isHot = true
+				item.x = getItemX id
+				item.y = getItemY id
+				style.left = style.top = '0'
+		else
+			item.lastAction = now()
 
 	create: (id, target) ->
 		target.elem ?= document.createElement 'div'
 		target.elem.id = id
 
+		target.x = 0
+		target.y = 0
 		target.rotation = 0
 		target.scale = 1
+
+		target.lastAction = now()
+		target.hotActions = 0
+		target.isHot = false
 
 	confirmItemChild: (id, child) ->
 		!!items[id].elem.querySelector "##{child}"
@@ -73,17 +99,33 @@ module.exports = (impl) ->
 	setItemHeight: (id, val) ->
 		items[id].elem.style.height = "#{val}px"
 
-	getItemX: (id) ->
-		parseFloat(items[id].elem.style.left) or 0
+	getItemX: getItemX = (id) ->
+		item = items[id]
+		item.x or parseFloat(item.elem.style.left) or 0
 
 	setItemX: (id, val) ->
-		items[id].elem.style.left = val
+		item = items[id]
 
-	getItemY: (id) ->
-		parseFloat(items[id].elem.style.top) or 0
+		if item.isHot
+			item.x = val
+			updateTransforms item
+		else
+			item.elem.style.left = val
+			markAction item
+
+	getItemY: getItemY = (id) ->
+		item = items[id]
+		item.y or parseFloat(item.elem.style.top) or 0
 
 	setItemY: (id, val) ->
-		items[id].elem.style.top = val
+		item = items[id]
+
+		if item.isHot
+			item.y = val
+			updateTransforms item
+		else
+			item.elem.style.top = val
+			markAction item
 
 	getItemZ: (id) ->
 		val = items[id].elem.style.zIndex
@@ -100,15 +142,17 @@ module.exports = (impl) ->
 		items[id].scale
 
 	setItemScale: (id, val) ->
-		items[id].scale = val
-		updateTransforms id
+		item = items[id]
+		item.scale = val
+		updateTransforms item
 
 	getItemRotation: (id) ->
 		items[id].rotation
 
 	setItemRotation: (id, val) ->
-		items[id].rotation = val
-		updateTransforms id
+		item = items[id]
+		item.rotation = val
+		updateTransforms item
 
 	getItemOpacity: (id) ->
 		opacity = items[id].elem.style.opacity
