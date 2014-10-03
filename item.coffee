@@ -4,126 +4,169 @@ expect = require 'expect'
 utils = require 'utils'
 signal = require 'signal'
 
-Impl = require './impl'
+Management = require './utils/management'
 
-pool =
-	Item: []
 signals = {}
 
-###
-Item
-###
-class Item
-	@ID_RE = ///^([a-z0-9_A-Z]+)$///
+module.exports = (Scope, Impl) -> class Item extends Management
+	@__name__ = 'Item'
+
+	@GLOBAL_ID_RE = ///^([a-z0-9_A-Z]+)\$([a-z0-9_A-Z]+)$///
+	@GLOBAL_ID_FORMAT = (scopeId, id) ->
+		"#{scopeId}$#{id}"
+
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel']
 
 	Binding = require './item/binding'
 	Anchors = require './item/anchors'
 
-	constructor: (type) ->
-		expect(type).toBe.truthy().string()
+	@create = (scopeId, opts) ->
+		id = opts.id or "u#{utils.uid()}"
+		item = @open scopeId, id
+		Impl.createItem @__name__, item._globalId
 
-		utils.defProp @, 'type', '', type
-		utils.defProp @, '_id', 'w', ''
+		itemSignals = signals[id] = {}
+
+		# create signals
+		Item.SIGNALS.forEach (signalName) ->
+			signalFunc = signal.createOnlySignal item, signalName
+			itemSignals[signalName] = signalFunc
+
+			# initialize
+			handler = (listener) ->
+				signalFunc.connected.disconnect handler
+
+				# call signal with opened item instance,
+				# so all listeners will have easy access to it
+				bindSignalFunc = ->
+					scope = Scope.open scopeId
+					item = scope.open id
+					Function.apply.call signalFunc, item, arguments
+					item.close()
+					scope.close()
+
+				Impl.attachItemSignal item._globalId, signalName, bindSignalFunc
+
+			signalFunc.connected.connect handler
+
+		super item, opts
+
+	@open = (scopeId, id) ->
+		item = super id
+
+		item._scopeId = scopeId
+		item._globalId = Item.GLOBAL_ID_FORMAT scopeId, id
+
+		# move signals
+		itemSignals = signals[id]
+		for signalName in Item.SIGNALS
+			item[signalName] = itemSignals?[signalName]
+
+		item
+
+	constructor: ->
+		utils.defProp @, '_scopeId', 'w', ''
+		utils.defProp @, '_globalId', 'w', ''
 
 		# register signals properties
 		for signalName in Item.SIGNALS
 			@[signalName] = null
 
-		Object.seal @
-
-	utils.defProp @::, 'id', 'e', ->
-		@_id
-	, null
+		super
 
 	for signalName in Item.SIGNALS
 		signal.createHandler @::, signalName
 
 	utils.defProp @::, 'parent', 'e', ->
-		Impl.getItemParent @_id
+		Impl.getItemParent @_globalId
 	, (val) ->
-		parentId = if val instanceof Item then val._id else val
+		parentId = if val instanceof Item then val._globalId else val
 		expect(parentId).toBe.truthy().string()
-		Impl.setItemParent @_id, parentId
+
+		# use current scope
+		unless Item.GLOBAL_ID_RE.test parentId
+			parentId = Item.GLOBAL_ID_FORMAT @_scopeId, parentId
+
+		Impl.setItemParent @_globalId, parentId
 
 	utils.defProp @::, 'visible', 'e', ->
-		Impl.getItemVisible @_id
+		Impl.getItemVisible @_globalId
 	, (val) ->
 		expect(val).toBe.boolean()
-		Impl.setItemVisible @_id, val
+		Impl.setItemVisible @_globalId, val
 
 	utils.defProp @::, 'clip', 'e', ->
-		Impl.getItemClip @_id
+		Impl.getItemClip @_globalId
 	, (val) ->
 		expect(val).toBe.boolean()
-		Impl.setItemClip @_id, val
+		Impl.setItemClip @_globalId, val
 
 	utils.defProp @::, 'width', 'e', ->
-		Impl.getItemWidth @_id
+		Impl.getItemWidth @_globalId
 	, (val) ->
 		if typeof val is 'number'
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
-			Impl.setItemWidth @_id, val
+			Impl.setItemWidth @_globalId, val
 		else
 			binding = Binding.factory val
-			Impl.setItemBinding @_id, 'width', binding
+			Impl.setItemBinding @_globalId, 'width', binding
 
 	utils.defProp @::, 'height', 'e', ->
-		Impl.getItemHeight @_id
+		Impl.getItemHeight @_globalId
 	, (val) ->
 		if typeof val is 'number'
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
-			Impl.setItemHeight @_id, val
+			Impl.setItemHeight @_globalId, val
 		else
 			binding = Binding.factory val
-			Impl.setItemBinding @_id, 'height', binding
+			Impl.setItemBinding @_globalId, 'height', binding
 
 	utils.defProp @::, 'x', 'e', ->
-		Impl.getItemX @_id
+		Impl.getItemX @_globalId
 	, (val) ->
 		if typeof val is 'number'
 			expect(val).toBe.float()
-			Impl.setItemX @_id, val
+			Impl.setItemX @_globalId, val
 		else
 			binding = Binding.factory val
-			Impl.setItemBinding @_id, 'x', binding
+			Impl.setItemBinding @_globalId, 'x', binding
 
 	utils.defProp @::, 'y', 'e', ->
-		Impl.getItemY @_id
+		Impl.getItemY @_globalId
 	, (val) ->
 		if typeof val is 'number'
 			expect(val).toBe.float()
-			Impl.setItemY @_id, val
+			Impl.setItemY @_globalId, val
 		else
 			binding = Binding.factory val
-			Impl.setItemBinding @_id, 'y', binding
+			Impl.setItemBinding @_globalId, 'y', binding
 
 	utils.defProp @::, 'z', 'e', ->
-		Impl.getItemZ @_id
+		Impl.getItemZ @_globalId
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setItemZ @_id, val
+		Impl.setItemZ @_globalId, val
 
 	utils.defProp @::, 'scale', 'e', ->
-		Impl.getItemScale @_id
+		Impl.getItemScale @_globalId
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setItemScale @_id, val
+		Impl.setItemScale @_globalId, val
 
 	utils.defProp @::, 'rotation', 'e', ->
-		Impl.getItemRotation @_id
+		Impl.getItemRotation @_globalId
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setItemRotation @_id, val
+		Impl.setItemRotation @_globalId, val
 
 	utils.defProp @::, 'opacity', 'e', ->
-		Impl.getItemOpacity @_id
+		Impl.getItemOpacity @_globalId
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setItemOpacity @_id, val
+		Impl.setItemOpacity @_globalId, val
 
 	utils.defProp @::, 'anchors', 'e', ->
 		Anchors.currentItem = @
@@ -131,85 +174,6 @@ class Item
 	, null
 
 	close: ->
-		@_id = ''
-		pool[@type].push @
-		null
-
-	Object.freeze @::
-
-exports._pool = pool
-exports._Item = Item
-exports._Impl = Impl
-
-exports._create = (type, proto, opts) ->
-	expect(type).toBe.truthy().string()
-	expect(proto).toBe.object()
-	expect(opts).toBe.simpleObject()
-
-	id = opts.id
-	id ?= "u#{utils.uid()}"
-
-	expect(id).toMatchRe Item.ID_RE
-
-	# create signals object
-	itemSignals = signals[id] = {}
-
-	# get item instance
-	item = exports._open type, proto, id
-	Impl.createItem type, id
-
-	# create signals
-	Item.SIGNALS.forEach (signalName) ->
-		signalFunc = signal.createOnlySignal item, signalName
-		itemSignals[signalName] = signalFunc
-
-		# initialize
-		handler = (listener) ->
-			signalFunc.connected.disconnect handler
-
-			# call signal with opened item instance,
-			# so all listeners will have easy access to it
-			bindSignalFunc = ->
-				item = exports._open type, proto, id
-				Function.apply.call signalFunc, item, arguments
-				item.close()
-
-			Impl.attachItemSignal id, signalName, bindSignalFunc
-
-		signalFunc.connected.connect handler
-
-	# fill item
-	customOpts = utils.clone opts
-	delete customOpts.id
-	utils.mergeDeep item, customOpts
-
-	# close modification
-	item.close()
-
-	id
-
-exports._open = (type, proto, id) ->
-	expect(type).toBe.truthy().string()
-	expect(proto).toBe.object()
-	expect(id).toBe.truthy().string()
-
-	item = pool[type].pop()
-
-	unless item
-		item = Object.create(proto)
-		Item.call item, type
-
-	item._id = id
-
-	# move signals
-	itemSignals = signals[id]
-	for signalName in Item.SIGNALS
-		item[signalName] = itemSignals[signalName]
-
-	item
-
-exports.create = (opts) ->
-	exports._create 'Item', Item::, opts
-
-exports.open = (id) ->
-	exports._open 'Item', Item::, id
+		@_scopeId = ''
+		@_globalId = ''
+		super

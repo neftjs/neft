@@ -1,12 +1,18 @@
 'use strict'
 
-exports.Item = require './item'
-exports.Image = require './item/types/image'
-exports.Text = require './item/types/text'
-exports.Rectangle = require './item/types/rectangle'
-
 Impl = require './impl'
+Scope = Impl.Scope = require './scope'
+
+exports = module.exports = Object.create Scope.create id: 'main'
 
 if window? and window+'' is '[object Window]'
-	exports.window = exports.Item.create {}
-	Impl.setWindow exports.window
+	windowItem = exports.create 'Item', id: 'window'
+	Impl.setWindow Scope.TYPES.Item.GLOBAL_ID_FORMAT(exports.id, windowItem)
+
+exports.createScope = (opts) ->
+	Scope.create opts
+
+exports.openScope = (id) ->
+	Scope.open id
+
+Object.freeze exports

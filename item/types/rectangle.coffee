@@ -3,54 +3,43 @@
 expect = require 'expect'
 utils = require 'utils'
 
-Item = require '../../item'
-Impl = Item._Impl
+module.exports = (Scope, Impl) ->
+	self = null
 
-self = null
+	Border = Object.create null
 
-Rectangle = Object.create Item._Item::
+	utils.defProp Border, 'width', 'e', ->
+		Impl.getRectangleBorderWidth self._globalId
+	, (val) ->
+		expect(val).toBe.float()
+		expect(val).not().toBe.lessThan 0
+		Impl.setRectangleBorderWidth self._globalId, val
 
-utils.defProp Rectangle, 'color', 'e', ->
-	Impl.getRectangleColor @_id
-, (val) ->
-	expect(val).toBe.truthy().string()
-	Impl.setRectangleColor @_id, val
+	utils.defProp Border, 'color', 'e', ->
+		Impl.getRectangleBorderColor self._globalId
+	, (val) ->
+		expect(val).toBe.truthy().string()
+		Impl.setRectangleBorderColor self._globalId, val
 
-utils.defProp Rectangle, 'radius', 'e', ->
-	Impl.getRectangleRadius @_id
-, (val) ->
-	expect(val).toBe.float()
-	expect(val).not().toBe.lessThan 0
-	Impl.setRectangleRadius @_id, val
+	Object.freeze Border
 
-utils.defProp Rectangle, 'border', 'e', ->
-	self = @
-	Border
-, null
+	class Rectangle extends Scope.Item
+		@__name__ = 'Rectangle'
 
-Object.freeze Rectangle
+		utils.defProp @::, 'color', 'e', ->
+			Impl.getRectangleColor @_globalId
+		, (val) ->
+			expect(val).toBe.truthy().string()
+			Impl.setRectangleColor @_globalId, val
 
-Border = Object.create null
+		utils.defProp @::, 'radius', 'e', ->
+			Impl.getRectangleRadius @_globalId
+		, (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			Impl.setRectangleRadius @_globalId, val
 
-utils.defProp Border, 'width', 'e', ->
-	Impl.getRectangleBorderWidth self._id
-, (val) ->
-	expect(val).toBe.float()
-	expect(val).not().toBe.lessThan 0
-	Impl.setRectangleBorderWidth self._id, val
-
-utils.defProp Border, 'color', 'e', ->
-	Impl.getRectangleBorderColor self._id
-, (val) ->
-	expect(val).toBe.truthy().string()
-	Impl.setRectangleBorderColor self._id, val
-
-Object.freeze Border
-
-Item._pool.Rectangle = []
-
-exports.create = (opts) ->
-	Item._create 'Rectangle', Rectangle, opts
-
-exports.open = (id) ->
-	Item._open 'Rectangle', Rectangle, id
+		utils.defProp @::, 'border', 'e', ->
+			self = @
+			Border
+		, null

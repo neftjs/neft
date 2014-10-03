@@ -73,10 +73,16 @@ module.exports = (impl) ->
 				# break on destroyed
 				return unless @locations
 
+				# get scope Id
+				[_, scopeId] = impl.Scope.Item.GLOBAL_ID_RE.exec itemId
+
 				# register binding
 				while bindingChunks = Binding.BINDING_RE.exec binding.setup
-					[_, id, prop] = bindingChunks
-					item = items[args[id]]
+					[_, idIndex, prop] = bindingChunks
+					id = args[idIndex]
+					unless impl.Scope.Item.GLOBAL_ID_RE.test id
+						id = args[idIndex] = impl.Scope.Item.GLOBAL_ID_FORMAT scopeId, id
+					item = items[id]
 
 					item.listeners ?= {}
 					itemListeners = item.listeners[prop] ?= []

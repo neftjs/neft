@@ -33,4 +33,4 @@ impl.createItem = (type, id) ->
 	impl.items[id] = item
 	Object.seal item
 
-exports = module.exports = impl
+module.exports = impl
