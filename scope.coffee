@@ -16,6 +16,7 @@ module.exports = class Scope extends Management
 		Image: @Image = require('./item/types/image') @, Impl
 		Text: @Text = require('./item/types/text') @, Impl
 		Rectangle: @Rectangle = require('./item/types/rectangle') @, Impl
+		Grid: @Grid = require('./item/types/grid') @, Impl
 
 	@open = (id) ->
 		scope = super

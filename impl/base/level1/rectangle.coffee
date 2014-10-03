@@ -8,6 +8,7 @@ module.exports = (impl) ->
 		item = items[id]
 		width = Item.getItemWidth id
 		height = Item.getItemHeight id
+		strokeWidth = Math.min item.borderWidth*2, width, height
 
 		"data:image/svg+xml;utf8," +
 		"<svg width='#{width}' height='#{height}' xmlns='http://www.w3.org/2000/svg'>" +
@@ -20,7 +21,7 @@ module.exports = (impl) ->
 				"clip-path='url(#clip)' " +
 				"fill='#{item.color}' " +
 				"stroke='#{item.borderColor}' " +
-				"stroke-width='#{item.borderWidth}' " +
+				"stroke-width='#{strokeWidth}' " +
 				"rx='#{item.radius}' " +
 				"width='#{width}' height='#{height}' />" +
 		"</svg>"

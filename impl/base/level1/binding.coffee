@@ -7,7 +7,7 @@ module.exports = (impl) ->
 
 	class Binding
 
-		@BINDING_RE = ///\i([0-9]+)\.(left|top|width|height)///g
+		@BINDING_RE = ///\i([0-9]+)\.(x|y|width|height)///g
 
 		@GETTER_METHODS_NAMES =
 			'x': 'impl.getItemX'

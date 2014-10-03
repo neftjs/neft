@@ -130,10 +130,12 @@ Pointing to the *parent* by its id is not allowed, `parent` special *target* sho
 
 				setImmediate ->
 					if target isnt 'parent'
-						isFamily = Impl.confirmItemChild id, target
+						parentA = Impl.getItemParent id
+						parentB = Impl.getItemParent 'main$'+target #TODO
+						isFamily = parentA is parentB
 						assert isFamily
-						, "`(##{id}).anchors.#{type}` can be anchored only to a parent " +
-						  "or sibling"
+						, "`(##{id}).anchors.#{type}` can be anchored only to the " +
+						  "parent or a sibling"
 
 *Anchors* also provies two ***special anchors***: *centerIn* and *fill*.
 
