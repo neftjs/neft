@@ -8,6 +8,8 @@ exports.Types =
 	Text: require './level0/text'
 	Rectangle: require './level1/rectangle'
 	Grid: require './level1/grid'
+	Column: require './level2/column'
+	Row: require './level2/row'
 
 exports.Extras =
 	Binding: require './level1/binding'
