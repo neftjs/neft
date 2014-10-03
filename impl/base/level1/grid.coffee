@@ -40,12 +40,14 @@ module.exports = (impl) ->
 			# sum columns positions
 			last = 0
 			for column, i in columnsPositions
-				last = columnsPositions[i] += last + columnSpacing
+				val = columnsPositions[i]
+				last = columnsPositions[i] += last + (if val then columnSpacing else 0)
 
 			# sum rows positions
 			last = 0
 			for row, i in rowsPositions
-				last = rowsPositions[i] += last + rowSpacing
+				val = rowsPositions[i]
+				last = rowsPositions[i] += last + (if val then rowSpacing else 0)
 
 			# set positions
 			for childId, i in children
