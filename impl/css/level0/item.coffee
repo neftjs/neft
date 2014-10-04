@@ -34,12 +34,12 @@ module.exports = (impl) ->
 
 	updateTransforms = (item) ->
 		transform = ''
+		if item.isHot
+			transform += "translate3d(#{item.x}px, #{item.y}px, 0) "
 		if item.rotation
 			transform += "rotate(#{rad2deg(item.rotation)}deg) "
 		if item.scale isnt 1
 			transform += "scale(#{item.scale}) "
-		if item.isHot
-			transform += "translate3d(#{item.x}px, #{item.y}px, 0) "
 		item.elem.style[transformProp] = transform
 
 	markAction = (item) ->
