@@ -32,9 +32,11 @@ module.exports = (Scope, Impl) -> class Item
 			signalFunc = signal.createOnlySignal @, signalName
 
 			# initialize
-			handler = (listener) ->
+			handler = (listener) =>
 				signalFunc.connected.disconnect handler
-				Impl.attachItemSignal uid, signalName, signalFunc
+				signalToCall = =>
+					Function.apply.call signalFunc, @, arguments
+				Impl.attachItemSignal uid, signalName, signalToCall
 
 			signalFunc.connected.connect handler
 
