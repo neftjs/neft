@@ -7,7 +7,7 @@ module.exports = (Scope, Impl) -> class Column extends Scope.Item
 	@__name__ = 'Column'
 
 	utils.defProp @::, 'spacing', 'e', ->
-		Impl.getColumnSpacing @_globalId
+		Impl.getColumnSpacing @_uid
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setColumnSpacing @_globalId, val
+		Impl.setColumnSpacing @_uid, val

@@ -7,30 +7,30 @@ module.exports = (Scope, Impl) -> class PropertyAnimation extends Scope.Animatio
 	@__name__ = 'PropertyAnimation'
 
 	utils.defProp @::, 'target', 'e', ->
-		Impl.getPropertyAnimationTarget @_id
+		Impl.getPropertyAnimationTarget @_uid
 	, (val) ->
-		# expect(val).toBe.any Scope.Item
-		Impl.setPropertyAnimationTarget @_id, val
+		expect(val).toBe.any Scope.Item
+		Impl.setPropertyAnimationTarget @_uid, val._uid
 
 	utils.defProp @::, 'property', 'e', ->
-		Impl.getPropertyAnimationProperty @_id
+		Impl.getPropertyAnimationProperty @_uid
 	, (val) ->
 		expect(val).toBe.truthy().string()
-		Impl.setPropertyAnimationProperty @_id, val
+		Impl.setPropertyAnimationProperty @_uid, val
 
 	utils.defProp @::, 'duration', 'e', ->
-		Impl.getPropertyAnimationDuration @_id
+		Impl.getPropertyAnimationDuration @_uid
 	, (val) ->
 		expect(val).toBe.integer()
 		expect(val).toBe.greaterThan 0
-		Impl.setPropertyAnimationDuration @_id, val
+		Impl.setPropertyAnimationDuration @_uid, val
 
 	utils.defProp @::, 'from', 'e', ->
-		Impl.getPropertyAnimationFrom @_id
+		Impl.getPropertyAnimationFrom @_uid
 	, (val) ->
-		Impl.setPropertyAnimationFrom @_id, val
+		Impl.setPropertyAnimationFrom @_uid, val
 
 	utils.defProp @::, 'to', 'e', ->
-		Impl.getPropertyAnimationTo @_id
+		Impl.getPropertyAnimationTo @_uid
 	, (val) ->
-		Impl.setPropertyAnimationTo @_id, val
+		Impl.setPropertyAnimationTo @_uid, val

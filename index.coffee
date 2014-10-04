@@ -3,16 +3,12 @@
 Impl = require './impl'
 Scope = Impl.Scope = require './scope'
 
-exports = module.exports = Object.create Scope.create id: 'main'
+exports = module.exports = Object.create new Scope id: 'main'
+
+exports.Scope = Scope
 
 if window? and window+'' is '[object Window]'
 	windowItem = exports.create 'Item', id: 'window'
-	Impl.setWindow Scope.TYPES.Item.GLOBAL_ID_FORMAT(exports.id, windowItem)
-
-exports.createScope = (opts) ->
-	Scope.create opts
-
-exports.openScope = (id) ->
-	Scope.open id
+	Impl.setWindow windowItem._uid
 
 Object.freeze exports

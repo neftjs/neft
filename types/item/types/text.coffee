@@ -9,36 +9,36 @@ module.exports = (Scope, Impl) ->
 	Font = Object.create null
 
 	utils.defProp Font, 'family', 'e', ->
-		Impl.getTextFontFamily self._globalId
+		Impl.getTextFontFamily self._uid
 	, (val) ->
 		expect(val).toBe.truthy().string()
-		Impl.setTextFontFamily self._globalId, val
+		Impl.setTextFontFamily self._uid, val
 
 	utils.defProp Font, 'pixelSize', 'e', ->
-		Impl.getTextFontPixelSize self._globalId
+		Impl.getTextFontPixelSize self._uid
 	, (val) ->
 		expect(val).toBe.truthy().float()
-		Impl.setTextFontPixelSize self._globalId, val
+		Impl.setTextFontPixelSize self._uid, val
 
 	utils.defProp Font, 'weight', 'e', ->
-		Impl.getTextFontWeight self._globalId
+		Impl.getTextFontWeight self._uid
 	, (val) ->
 		expect(val).toBe.float()
 		expect(val).not().toBe.greaterThan 1
 		expect(val).not().toBe.lessThan 0
-		Impl.setTextFontWeight self._globalId, val
+		Impl.setTextFontWeight self._uid, val
 
 	utils.defProp Font, 'wordSpacing', 'e', ->
-		Impl.getTextFontWordSpacing self._globalId
+		Impl.getTextFontWordSpacing self._uid
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setTextFontWordSpacing self._globalId, val
+		Impl.setTextFontWordSpacing self._uid, val
 
 	utils.defProp Font, 'letterSpacing', 'e', ->
-		Impl.getTextFontLetterSpacing self._globalId
+		Impl.getTextFontLetterSpacing self._uid
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setTextFontLetterSpacing self._globalId, val
+		Impl.setTextFontLetterSpacing self._uid, val
 
 	Object.freeze Font
 
@@ -46,22 +46,22 @@ module.exports = (Scope, Impl) ->
 		@__name__ = 'Text'
 
 		utils.defProp @::, 'text', 'e', ->
-			Impl.getText @_globalId
+			Impl.getText @_uid
 		, (val) ->
 			expect(val).toBe.string()
-			Impl.setText @_globalId, val
+			Impl.setText @_uid, val
 
 		utils.defProp @::, 'color', 'e', ->
-			Impl.getTextColor @_globalId
+			Impl.getTextColor @_uid
 		, (val) ->
 			expect(val).toBe.truthy().string()
-			Impl.setTextColor @_globalId, val
+			Impl.setTextColor @_uid, val
 
 		utils.defProp @::, 'lineHeight', 'e', ->
-			Impl.getTextLineHeight @_globalId
+			Impl.getTextLineHeight @_uid
 		, (val) ->
 			expect(val).toBe.truthy().float()
-			Impl.setTextLineHeight @_globalId, val
+			Impl.setTextLineHeight @_uid, val
 
 		utils.defProp @::, 'font', 'e', ->
 			self = @

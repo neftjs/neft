@@ -9,17 +9,17 @@ module.exports = (Scope, Impl) ->
 	Border = Object.create null
 
 	utils.defProp Border, 'width', 'e', ->
-		Impl.getRectangleBorderWidth self._globalId
+		Impl.getRectangleBorderWidth self._uid
 	, (val) ->
 		expect(val).toBe.float()
 		expect(val).not().toBe.lessThan 0
-		Impl.setRectangleBorderWidth self._globalId, val
+		Impl.setRectangleBorderWidth self._uid, val
 
 	utils.defProp Border, 'color', 'e', ->
-		Impl.getRectangleBorderColor self._globalId
+		Impl.getRectangleBorderColor self._uid
 	, (val) ->
 		expect(val).toBe.truthy().string()
-		Impl.setRectangleBorderColor self._globalId, val
+		Impl.setRectangleBorderColor self._uid, val
 
 	Object.freeze Border
 
@@ -27,17 +27,17 @@ module.exports = (Scope, Impl) ->
 		@__name__ = 'Rectangle'
 
 		utils.defProp @::, 'color', 'e', ->
-			Impl.getRectangleColor @_globalId
+			Impl.getRectangleColor @_uid
 		, (val) ->
 			expect(val).toBe.truthy().string()
-			Impl.setRectangleColor @_globalId, val
+			Impl.setRectangleColor @_uid, val
 
 		utils.defProp @::, 'radius', 'e', ->
-			Impl.getRectangleRadius @_globalId
+			Impl.getRectangleRadius @_uid
 		, (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
-			Impl.setRectangleRadius @_globalId, val
+			Impl.setRectangleRadius @_uid, val
 
 		utils.defProp @::, 'border', 'e', ->
 			self = @

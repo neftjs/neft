@@ -9,16 +9,16 @@ module.exports = (Scope, Impl) ->
 	Spacing = Object.create null
 
 	utils.defProp Spacing, 'column', 'e', ->
-		Impl.getGridColumnSpacing self._globalId
+		Impl.getGridColumnSpacing self._uid
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setGridColumnSpacing self._globalId, val
+		Impl.setGridColumnSpacing self._uid, val
 
 	utils.defProp Spacing, 'row', 'e', ->
-		Impl.getGridRowSpacing self._globalId
+		Impl.getGridRowSpacing self._uid
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setGridRowSpacing self._globalId, val
+		Impl.setGridRowSpacing self._uid, val
 
 	Spacing.valueOf = ->
 		(@column + @row) / 2
@@ -29,16 +29,16 @@ module.exports = (Scope, Impl) ->
 		@__name__ = 'Grid'
 
 		utils.defProp @::, 'columns', 'e', ->
-			Impl.getGridColumns @_globalId
+			Impl.getGridColumns @_uid
 		, (val) ->
 			expect(val).toBe.greaterThan 0
-			Impl.setGridColumns @_globalId, val
+			Impl.setGridColumns @_uid, val
 
 		utils.defProp @::, 'rows', 'e', ->
-			Impl.getGridRows @_globalId
+			Impl.getGridRows @_uid
 		, (val) ->
 			expect(val).toBe.greaterThan 0
-			Impl.setGridRows @_globalId, val
+			Impl.setGridRows @_uid, val
 
 		utils.defProp @::, 'spacing', 'e', ->
 			self = @

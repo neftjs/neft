@@ -1,17 +1,16 @@
 'use strict'
 
 utils = require 'utils'
+expect = require 'expect'
 
 Impl = require './impl'
-Management = require './utils/management'
 
 {isArray} = Array
 
-mainItems = {}
-itemsTypes = {}
-
-module.exports = class Scope extends Management
+module.exports = class Scope
 	@__name__ = 'Scope'
+
+	@ID_RE = ///^([a-z0-9_A-Z]+)$///
 
 	@TYPES =
 		Item: @Item = require('./types/item') @, Impl
@@ -25,18 +24,11 @@ module.exports = class Scope extends Management
 		PropertyAnimation: @PropertyAnimation = require('./types/animation/types/property') @, Impl
 		NumberAnimation: @NumberAnimation = require('./types/animation/types/property/types/number') @, Impl
 
-	@open = (id) ->
-		scope = super
-		scope._mainItem = mainItems[id]
-		scope
+	constructor: (opts={}) ->
+		expect(opts).toBe.simpleObject()
 
-	@create = (opts) ->
-		scope = super
-		itemsTypes[scope._id] = {}
-		scope
-
-	constructor: ->
 		utils.defProp @, '_mainItem', 'w', null
+		utils.defProp @, 'items', 'e', {}
 
 		# types creation shortcuts
 		for name, type of Scope.TYPES
@@ -44,11 +36,22 @@ module.exports = class Scope extends Management
 				@[name] = (args...) =>
 					@create name, args
 
-		super
+		utils.merge @, opts
+		@id ?= "u#{utils.uid()}"
+
+		Object.seal @
+
+	utils.defProp @::, 'items', 'e', null
 
 	utils.defProp @::, 'mainItem', 'e', ->
 		@_mainItem
 	, null
+
+	utils.defProp @::, 'id', 'e', null, (val) ->
+		expect(val).toBe.truthy().string()
+		expect(val).toMatchRe Scope.ID_RE
+
+		utils.defProp @, 'id', 'e', val
 
 	create: (type, opts, children) ->
 		# only children
@@ -64,27 +67,13 @@ module.exports = class Scope extends Management
 
 		# check whether type supports children
 		if ctor is Scope.Item or (ctor::) instanceof Scope.Item
-			; # TODO: assert
+			# TODO: assert
+			item = new ctor @, opts, children
+			@_mainItem ?= item
+			@items[item.id or item._uid] = item
 		else if children?.length
 			; # TODO: assert
-
-		item = ctor.create @_id, opts, children
-		itemId = item._id
-
-		itemsTypes[@_id][itemId] = type
-		@_mainItem ?= mainItems[@_id] = item
-
-		if item instanceof Management
-			item.close()
-			itemId
 		else
-			item
+			item = new ctor opts
 
-	open: (id) ->
-		type = itemsTypes[@_id][id]
-		item = Scope.TYPES[type].open @_id, id
 		item
-
-	close: ->
-		@_mainItem = null
-		super

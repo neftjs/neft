@@ -6,43 +6,40 @@ expect = require 'expect'
 module.exports = (Scope, Impl) -> class Animation
 	@__name__ = 'Animation'
 
-	@create = (scopeId, opts) ->
-		animation = new @
-		Impl.createAnimation @__name__, animation._id
-		utils.merge animation, opts
-		animation
+	constructor: (opts) ->
+		expect(opts).toBe.simpleObject()
 
-	constructor: ->
-		utils.defProp @, '_id', 'w', utils.uid()
-		utils.defProp @, '_name', 'w', ''
+		utils.defProp @, '_uid', '', uid = utils.uid()
+		Impl.createAnimation @constructor.__name__, uid
+		utils.merge @, opts
 
-		Object.seal @
+		Object.freeze @
 
-	utils.defProp @::, 'name', 'e', ->
-		@_name
-	, (val) ->
-		@_name = val
+	utils.defProp @::, 'name', 'e', null, (val) ->
+		expect(val).toBe.truthy().string()
+
+		utils.defProp @, 'name', 'e', val
 
 	utils.defProp @::, 'running', 'e', ->
-		Impl.getAnimationRunning @_id
+		Impl.getAnimationRunning @_uid
 	, (val) ->
 		expect(val).toBe.boolean()
 
 		if val
-			Impl.playAnimation @_id
+			Impl.playAnimation @_uid
 		else
-			Impl.stopAnimation @_id
+			Impl.stopAnimation @_uid
 
 	utils.defProp @::, 'loop', 'e', ->
-		Impl.getAnimationLoop @_id
+		Impl.getAnimationLoop @_uid
 	, (val) ->
 		expect(val).toBe.boolean()
-		Impl.setAnimationLoop @_id, val
+		Impl.setAnimationLoop @_uid, val
 
 	play: ->
-		Impl.playAnimation @_id
+		Impl.playAnimation @_uid
 		@
 
 	stop: ->
-		Impl.stopAnimation @_id
+		Impl.stopAnimation @_uid
 		@

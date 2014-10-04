@@ -7,7 +7,7 @@ module.exports = (Scope, Impl) -> class Row extends Scope.Item
 	@__name__ = 'Row'
 
 	utils.defProp @::, 'spacing', 'e', ->
-		Impl.getRowSpacing @_globalId
+		Impl.getRowSpacing @_uid
 	, (val) ->
 		expect(val).toBe.float()
-		Impl.setRowSpacing @_globalId, val
+		Impl.setRowSpacing @_uid, val

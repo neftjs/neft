@@ -6,7 +6,6 @@ module.exports = (impl) ->
 	{items} = impl
 
 	class Binding
-
 		@BINDING_RE = ///\i([0-9]+)\.(x|y|width|height)///g
 
 		@update: (listeners) ->
@@ -63,15 +62,10 @@ module.exports = (impl) ->
 					@parentId = impl.getItemParent itemId
 					args[parentIndex] = @parentId
 
-				# get scope Id
-				[_, scopeId] = impl.Scope.Item.GLOBAL_ID_RE.exec itemId
-
 				# register binding
 				while bindingChunks = Binding.BINDING_RE.exec binding.setup
 					[_, idIndex, prop] = bindingChunks
 					id = args[idIndex]
-					unless impl.Scope.Item.GLOBAL_ID_RE.test id
-						id = args[idIndex] = impl.Scope.Item.GLOBAL_ID_FORMAT scopeId, id
 					
 					if item = items[id]
 						item.listeners ?= {}

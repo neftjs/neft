@@ -7,7 +7,7 @@ module.exports = (Scope, Impl) -> class Image extends Scope.Item
 	@__name__ = 'Image'
 
 	utils.defProp @::, 'source', 'e', ->
-		Impl.getImageSource @_globalId
+		Impl.getImageSource @_uid
 	, (val) ->
 		expect(val).toBe.truthy().string()
-		Impl.setImageSource @_globalId, val
+		Impl.setImageSource @_uid, val

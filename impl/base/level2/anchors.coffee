@@ -51,42 +51,42 @@ module.exports = (impl) ->
 				return impl.setItemBinding id, 'x', null
 
 			left = getAnchorValue val
-			left = Binding.factory left
+			left = new Binding null, left
 			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.left
 		top: (id, val) ->
 			unless val
 				return impl.setItemBinding id, 'y', null
 
 			top = getAnchorValue val
-			top = Binding.factory top
+			top = new Binding null, top
 			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.top
 		right: (id, val) ->
 			unless val
 				return impl.setItemBinding id, 'x', null
 
 			left = getAnchorValue(val) + " - this.width"
-			left = Binding.factory left
+			left = new Binding null, left
 			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.right
 		bottom: (id, val) ->
 			unless val
 				return impl.setItemBinding id, 'y', null
 
 			top = getAnchorValue(val) + " - this.height"
-			top = Binding.factory top
+			top = new Binding null, top
 			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.bottom
 		horizontalCenter: (id, val) ->
 			unless val
 				return impl.setItemBinding id, 'x', null
 
 			left = getAnchorValue(val) + " - this.width/2"
-			left = Binding.factory left
+			left = new Binding null, left
 			impl.setItemBinding id, 'x', left
 		verticalCenter: (id, val) ->
 			unless val
 				return impl.setItemBinding id, 'y', null
 
 			top = getAnchorValue(val) + " - this.height/2"
-			top = Binding.factory top
+			top = new Binding null, top
 			impl.setItemBinding id, 'y', top
 		centerIn: (id, val) ->
 			unless val
@@ -113,10 +113,10 @@ module.exports = (impl) ->
 				TYPES_BINDINGS.left id, "#{val}.left"
 				TYPES_BINDINGS.top id, "#{val}.top"
 
-				width = Binding.factory "#{val}.width"
+				width = new Binding null, "#{val}.width"
 				impl.setItemBinding id, 'width', width, WIDTH_MARGIN_FUNC
 
-				height = Binding.factory "#{val}.height"
+				height = new Binding null, "#{val}.height"
 				impl.setItemBinding id, 'height', height, HEIGHT_MARGIN_FUNC
 
 	getAnchorValue = (val) ->

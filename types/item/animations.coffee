@@ -1,7 +1,10 @@
 'use strict'
 
+expect = require 'expect'
+
 module.exports = (Scope) -> class Animations
-	item: ''
+	constructor: (@item) ->
+		expect(@item).toBe.any Scope.Item
 
 	initialize: ->
 		for name, animation of @ when @hasOwnProperty name

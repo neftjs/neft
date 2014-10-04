@@ -82,7 +82,7 @@ This connection is updated in realtime, so if the *rect1* will change a position
 
 	createAnchorProp = (type, opts=0) ->
 		utils.defProp Anchors, type, 'e', null, (val) ->
-			id = exports.currentItem._globalId
+			id = exports.currentItem._uid
 
 			`//<development>`
 			if val?
@@ -219,7 +219,12 @@ Renderer.Rectangle.create
 					itemsAnchors[id] &= ~H_LINE
 			`//</development>`
 
-			Impl.setItemAnchor id, type, val
+			# change local id to uid
+			target = val
+			if val? and val isnt 'parent'
+				target = exports.currentItem.scope.items[val]._uid
+
+			Impl.setItemAnchor id, type, target
 
 	createAnchorProp 'left', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
 	createAnchorProp 'right', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
@@ -253,7 +258,7 @@ Renderer.Rectangle.create
 
 	createMarginProp = (type) ->
 		utils.defProp Anchors.margin, type, 'e', null, (val) ->
-			id = exports.currentItem._globalId
+			id = exports.currentItem._uid
 
 			`//<development>`
 			assert typeof val is 'number' and isFinite(val)
@@ -284,7 +289,7 @@ Renderer.Rectangle.create
 
 	utils.defProp Anchors, 'margins', 'e', null, (val) ->
 		`//<development>`
-		id = exports.currentItem._globalId
+		id = exports.currentItem._uid
 
 		assert typeof val is 'number' and isFinite(val)
 		, "(##{id}).anchors.margins expects a finite number; `#{val}` given"

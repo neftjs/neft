@@ -6,16 +6,11 @@ expect = require 'expect'
 module.exports = class Binding
 	@BINDING_RE = ///([a-zA-Z0-9_]+)\.(x|y|width|height)///g
 	@BINDED_PROPS = ['x', 'y', 'width', 'height']
+	@SPECIAL_TARGETS =
+		parent: true
+		this: true
 
-	@cache = {}
-
-	@factory = (value) ->
-		if (cached = Binding.cache[value])?
-			return cached
-
-		Binding.cache[value] = new Binding value
-
-	constructor: (@value) ->
+	constructor: (item, @value) ->
 		expect(value).toBe.truthy().string()
 
 		@items = []
@@ -27,6 +22,14 @@ module.exports = class Binding
 
 			# replace value chunk
 			"i#{itemId}.#{prop}"
+
+		# parse items to uid's
+		if item?
+			for bingingItem, i in @items
+				unless Binding.SPECIAL_TARGETS[bingingItem]
+					@items[i] = item.scope.items[bingingItem]._uid
+
+		Object.freeze @
 
 	value: ''
 	setup: ''
