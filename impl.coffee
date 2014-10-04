@@ -33,4 +33,11 @@ impl.createItem = (type, id) ->
 	impl.items[id] = item
 	Object.seal item
 
+impl.createAnimation = (type, id) ->
+	animation =
+		type: type
+	impl.Types[type].create id, animation
+	impl.animations[id] = animation
+	Object.seal animation
+
 module.exports = impl

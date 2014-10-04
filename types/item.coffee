@@ -4,9 +4,10 @@ expect = require 'expect'
 utils = require 'utils'
 signal = require 'signal'
 
-Management = require './utils/management'
+Management = require '../utils/management'
 
 signals = {}
+animations = {}
 
 module.exports = (Scope, Impl) -> class Item extends Management
 	@__name__ = 'Item'
@@ -20,13 +21,17 @@ module.exports = (Scope, Impl) -> class Item extends Management
 
 	Binding = require './item/binding'
 	Anchors = require './item/anchors'
+	Animations = require('./item/animations') Scope
 
 	@create = (scopeId, opts, children) ->
 		id = opts.id or "u#{utils.uid()}"
 		item = @open scopeId, id
-		Impl.createItem @__name__, item._globalId
+		globalId = item._globalId
+		Impl.createItem @__name__, globalId
 
-		itemSignals = signals[id] = {}
+		itemSignals = signals[globalId] = {}
+		animations[globalId] = new Animations
+		animations[globalId].item = globalId
 
 		# create signals
 		Item.SIGNALS.forEach (signalName) ->
@@ -50,6 +55,7 @@ module.exports = (Scope, Impl) -> class Item extends Management
 
 			signalFunc.connected.connect handler
 
+		signal.createOnlySignal item, 'ready'
 		super item, opts
 
 		# append children
@@ -61,6 +67,9 @@ module.exports = (Scope, Impl) -> class Item extends Management
 				child.close()
 			scope.close()
 
+		# animations
+		item.animations.initialize()
+
 		# call `ready` signal
 		item.ready()
 
@@ -70,10 +79,11 @@ module.exports = (Scope, Impl) -> class Item extends Management
 		item = super id
 
 		item._scopeId = scopeId
-		item._globalId = Item.GLOBAL_ID_FORMAT scopeId, id
+		globalId = item._globalId = Item.GLOBAL_ID_FORMAT scopeId, id
 
 		# move signals
-		itemSignals = signals[id]
+		item.ready = null
+		itemSignals = signals[globalId]
 		for signalName in Item.SIGNALS
 			item[signalName] = itemSignals?[signalName]
 
@@ -83,9 +93,8 @@ module.exports = (Scope, Impl) -> class Item extends Management
 		utils.defProp @, '_scopeId', 'w', ''
 		utils.defProp @, '_globalId', 'w', ''
 
-		signal.createOnlySignal @, 'ready'
-
 		# register signals properties
+		@ready = null
 		for signalName in Item.SIGNALS
 			@[signalName] = null
 
@@ -190,6 +199,15 @@ module.exports = (Scope, Impl) -> class Item extends Management
 		Anchors.currentItem = @
 		Anchors.Anchors
 	, null
+
+	utils.defProp @::, 'animations', 'e', ->
+		animations[@_globalId]
+	, (val) ->
+		# TODO
+		{animations} = @
+		for animation in val
+			animations.append animation, animation.name
+		null
 
 	close: ->
 		@_scopeId = ''

@@ -14,13 +14,16 @@ module.exports = class Scope extends Management
 	@__name__ = 'Scope'
 
 	@TYPES =
-		Item: @Item = require('./item') @, Impl
-		Image: @Image = require('./item/types/image') @, Impl
-		Text: @Text = require('./item/types/text') @, Impl
-		Rectangle: @Rectangle = require('./item/types/rectangle') @, Impl
-		Grid: @Grid = require('./item/types/grid') @, Impl
-		Column: @Column = require('./item/types/column') @, Impl
-		Row: @Row = require('./item/types/row') @, Impl
+		Item: @Item = require('./types/item') @, Impl
+		Image: @Image = require('./types/item/types/image') @, Impl
+		Text: @Text = require('./types/item/types/text') @, Impl
+		Rectangle: @Rectangle = require('./types/item/types/rectangle') @, Impl
+		Grid: @Grid = require('./types/item/types/grid') @, Impl
+		Column: @Column = require('./types/item/types/column') @, Impl
+		Row: @Row = require('./types/item/types/row') @, Impl
+		Animation: @Animation = require('./types/animation') @, Impl
+		PropertyAnimation: @PropertyAnimation = require('./types/animation/types/property') @, Impl
+		NumberAnimation: @NumberAnimation = require('./types/animation/types/property/types/number') @, Impl
 
 	@open = (id) ->
 		scope = super
@@ -71,8 +74,11 @@ module.exports = class Scope extends Management
 		itemsTypes[@_id][itemId] = type
 		@_mainItem ?= mainItems[@_id] = item
 
-		item.close()
-		itemId
+		if item instanceof Management
+			item.close()
+			itemId
+		else
+			item
 
 	open: (id) ->
 		type = itemsTypes[@_id][id]

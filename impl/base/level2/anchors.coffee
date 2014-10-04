@@ -1,6 +1,6 @@
 'use strict'
 
-Binding = require '../../../item/binding'
+Binding = require '../../../types/item/binding'
 
 module.exports = (impl) ->
 	{items} = impl

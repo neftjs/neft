@@ -9,18 +9,6 @@ module.exports = (impl) ->
 
 		@BINDING_RE = ///\i([0-9]+)\.(x|y|width|height)///g
 
-		@GETTER_METHODS_NAMES =
-			'x': 'impl.getItemX'
-			'y': 'impl.getItemY'
-			'width': 'impl.getItemWidth'
-			'height': 'impl.getItemHeight'
-
-		@SETTER_METHODS =
-			'x': 'setItemX'
-			'y': 'setItemY'
-			'width': 'setItemWidth'
-			'height': 'setItemHeight'
-
 		@update: (listeners) ->
 			if listeners
 				for binding in listeners
@@ -50,7 +38,7 @@ module.exports = (impl) ->
 
 				# prepare setup
 				setup = binding.setup.replace Binding.BINDING_RE, (_, id, prop) ->
-					"#{Binding.GETTER_METHODS_NAMES[prop]}(i#{id})"
+					"impl.#{impl.utils.GETTER_METHODS_NAMES[prop]}(i#{id})"
 
 				tmpFuncArgs.push 'impl'
 				tmpFuncArgs.push "return #{setup}"
@@ -138,7 +126,7 @@ module.exports = (impl) ->
 					result += funcResult
 
 			@updatePending = true
-			impl[Binding.SETTER_METHODS[@prop]] @itemId, result
+			impl[impl.utils.SETTER_METHODS_NAMES[@prop]] @itemId, result
 			@updatePending = false
 
 		destroy: ->

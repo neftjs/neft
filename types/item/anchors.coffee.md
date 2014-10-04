@@ -9,7 +9,7 @@ relationships between items: ***anchors***.
 	utils = require 'utils'
 	expect = require 'expect'
 
-	Impl = require '../impl'
+	Impl = require '../../impl'
 
 	{assert} = console
 
@@ -128,14 +128,14 @@ For the peformance reasons, the *target* could be only a *parent* or a ***item s
 
 Pointing to the *parent* by its id is not allowed, `parent` special *target* should be used.
 
-				setImmediate ->
-					if target isnt 'parent'
-						parentA = Impl.getItemParent id
-						parentB = Impl.getItemParent 'main$'+target #TODO
-						isFamily = parentA is parentB
-						assert isFamily
-						, "`(##{id}).anchors.#{type}` can be anchored only to the " +
-						  "parent or a sibling"
+				# TODO: we need know scope id here
+				# setImmediate ->
+				# 	if target isnt 'parent'
+				# 		parentA = Impl.getItemParent id
+				# 		isFamily = Impl.confirmItemChild parentA, target
+				# 		assert isFamily
+				# 		, "`(##{id}).anchors.#{type}` can be anchored only to the " +
+				# 		  "parent or a sibling"
 
 *Anchors* also provies two ***special anchors***: *centerIn* and *fill*.
 
