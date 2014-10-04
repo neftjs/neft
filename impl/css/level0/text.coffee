@@ -104,10 +104,10 @@ module.exports = (impl) ->
 		updateSize id
 
 	getTextFontWeight: (id) ->
-		items[id].elem.style.fontWeight / 1000
+		items[id].elem.style.fontWeight / 900
 
 	setTextFontWeight: (id, val) ->
-		items[id].elem.style.fontWeight = val * 1000
+		items[id].elem.style.fontWeight = Math.round(val * 9) * 100
 		updateSize id
 
 	getTextFontWordSpacing: (id) ->
