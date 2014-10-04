@@ -67,44 +67,46 @@ module.exports = (impl) ->
 		target.isHot = false
 
 	confirmItemChild: (id, child) ->
-		!!items[id].elem.querySelector "##{child}"
+		!!items[id]?.elem.querySelector "##{child}"
 
 	getItemParent: (id) ->
-		items[id].elem.parentElement?.id
+		items[id]?.elem.parentElement?.id
 
 	setItemParent: (id, val) ->
-		items[val].elem.appendChild items[id].elem
+		items[val]?.elem.appendChild items[id].elem
 
 	getItemVisible: (id) ->
-		items[id].elem.style.display isnt 'none'
+		items[id]?.elem.style.display isnt 'none'
 
 	setItemVisible: (id, val) ->
-		items[id].elem.style.display = if val then 'inherit' else 'none'
+		items[id]?.elem.style.display = if val then 'inherit' else 'none'
 
 	getItemClip: (id) ->
-		items[id].elem.style.overflow is 'hidden'
+		items[id]?.elem.style.overflow is 'hidden'
 
 	setItemClip: (id, val) ->
-		items[id].elem.style.overflow = if val then 'hidden' else 'visible'
+		items[id]?.elem.style.overflow = if val then 'hidden' else 'visible'
 
 	getItemWidth: (id) ->
-		parseFloat(items[id].elem.style.width) or 0
+		parseFloat(items[id]?.elem.style.width) or 0
 
 	setItemWidth: (id, val) ->
-		items[id].elem.style.width = "#{val}px"
+		items[id]?.elem.style.width = "#{val}px"
 
 	getItemHeight: (id) ->
-		parseFloat(items[id].elem.style.height) or 0
+		parseFloat(items[id]?.elem.style.height) or 0
 
 	setItemHeight: (id, val) ->
-		items[id].elem.style.height = "#{val}px"
+		items[id]?.elem.style.height = "#{val}px"
 
 	getItemX: getItemX = (id) ->
 		item = items[id]
+		return unless item
 		item.x or parseFloat(item.elem.style.left) or 0
 
 	setItemX: (id, val) ->
 		item = items[id]
+		return unless item
 
 		if item.isHot
 			item.x = val
@@ -115,10 +117,12 @@ module.exports = (impl) ->
 
 	getItemY: getItemY = (id) ->
 		item = items[id]
+		return unless item
 		item.y or parseFloat(item.elem.style.top) or 0
 
 	setItemY: (id, val) ->
 		item = items[id]
+		return unless item
 
 		if item.isHot
 			item.y = val
@@ -128,7 +132,7 @@ module.exports = (impl) ->
 			markAction item
 
 	getItemZ: (id) ->
-		val = items[id].elem.style.zIndex
+		val = items[id].elem?.style.zIndex
 
 		if val is 'inherit'
 			0
@@ -136,30 +140,32 @@ module.exports = (impl) ->
 			parseFloat(val) or 0
 
 	setItemZ: (id, val) ->
-		items[id].elem.style.zIndex = if val is 0 then 'inherit' else val
+		items[id]?.elem.style.zIndex = if val is 0 then 'inherit' else val
 
 	getItemScale: (id) ->
-		items[id].scale
+		items[id]?.scale
 
 	setItemScale: (id, val) ->
 		item = items[id]
+		return unless item
 		item.scale = val
 		updateTransforms item
 
 	getItemRotation: (id) ->
-		items[id].rotation
+		items[id]?.rotation
 
 	setItemRotation: (id, val) ->
 		item = items[id]
+		return unless item
 		item.rotation = val
 		updateTransforms item
 
 	getItemOpacity: (id) ->
-		opacity = items[id].elem.style.opacity
+		opacity = items[id]?.elem.style.opacity
 		if opacity is '' then 1 else (parseFloat(opacity) or 0)
 
 	setItemOpacity: (id, val) ->
-		items[id].elem.style.opacity = val
+		items[id]?.elem.style.opacity = val
 
 	attachItemSignal: (id, name, signal) ->
-		items[id].elem.addEventListener SIGNALS[name], -> signal()
+		items[id]?.elem.addEventListener SIGNALS[name], -> signal()

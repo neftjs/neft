@@ -21,7 +21,7 @@ module.exports = (Scope, Impl) -> class Item extends Management
 	Binding = require './item/binding'
 	Anchors = require './item/anchors'
 
-	@create = (scopeId, opts) ->
+	@create = (scopeId, opts, children) ->
 		id = opts.id or "u#{utils.uid()}"
 		item = @open scopeId, id
 		Impl.createItem @__name__, item._globalId
@@ -51,6 +51,15 @@ module.exports = (Scope, Impl) -> class Item extends Management
 			signalFunc.connected.connect handler
 
 		super item, opts
+
+		# append children
+		if children
+			scope = Scope.open scopeId
+			for childId in children
+				child = scope.open childId
+				child.parent = item
+				child.close()
+			scope.close()
 
 		item
 

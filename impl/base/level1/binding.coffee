@@ -57,21 +57,23 @@ module.exports = (impl) ->
 				func = @func = Function.apply null, tmpFuncArgs
 				cache[binding.setup] = func
 
-			# `this` arg
-			thisIndex = args.indexOf 'this'
-			if thisIndex isnt -1
-				args[thisIndex] = itemId
-
-			# `parent` arg
-			parentIndex = args.indexOf 'parent'
-			if parentIndex isnt -1
-				@parentArgIndex = parentIndex
-				@parentId = impl.getItemParent itemId
-				args[parentIndex] = @parentId
-
-			setImmediate =>
+			requestAnimationFrame =>
 				# break on destroyed
 				return unless @locations
+
+				@ready = true
+
+				# `this` arg
+				thisIndex = args.indexOf 'this'
+				if thisIndex isnt -1
+					args[thisIndex] = itemId
+
+				# `parent` arg
+				parentIndex = args.indexOf 'parent'
+				if parentIndex isnt -1
+					@parentArgIndex = parentIndex
+					@parentId = impl.getItemParent itemId
+					args[parentIndex] = @parentId
 
 				# get scope Id
 				[_, scopeId] = impl.Scope.Item.GLOBAL_ID_RE.exec itemId
@@ -82,12 +84,12 @@ module.exports = (impl) ->
 					id = args[idIndex]
 					unless impl.Scope.Item.GLOBAL_ID_RE.test id
 						id = args[idIndex] = impl.Scope.Item.GLOBAL_ID_FORMAT scopeId, id
-					item = items[id]
-
-					item.listeners ?= {}
-					itemListeners = item.listeners[prop] ?= []
-					itemListeners.push @
-					@locations.push itemListeners
+					
+					if item = items[id]
+						item.listeners ?= {}
+						itemListeners = item.listeners[prop] ?= []
+						itemListeners.push @
+						@locations.push itemListeners
 
 				# add impl arg
 				args.push impl
@@ -95,6 +97,7 @@ module.exports = (impl) ->
 				# call automatically
 				@update()
 
+		ready: false
 		itemId: ''
 		parentArgIndex: -1
 		parentId: ''
@@ -107,6 +110,7 @@ module.exports = (impl) ->
 		updatePending: false
 
 		updateParent: ->
+			return unless @ready
 			return if @parentArgIndex is -1
 
 			# remove old one
@@ -124,6 +128,8 @@ module.exports = (impl) ->
 			@locations.push itemListeners
 
 		update: ->
+			return unless @ready
+
 			result = @func.apply(null, @args)
 
 			if @extraResultFunc
