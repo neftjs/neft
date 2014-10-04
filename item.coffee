@@ -52,6 +52,8 @@ module.exports = (Scope, Impl) -> class Item extends Management
 
 		super item, opts
 
+		item
+
 	@open = (scopeId, id) ->
 		item = super id
 

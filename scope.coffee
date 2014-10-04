@@ -32,6 +32,13 @@ module.exports = class Scope extends Management
 
 	constructor: ->
 		utils.defProp @, '_mainItem', 'w', null
+
+		# types creation shortcuts
+		for name, type of Scope.TYPES
+			do (name=name) =>
+				@[name] = (opts) =>
+					@create name, opts
+
 		super
 
 	utils.defProp @::, 'mainItem', 'e', ->
