@@ -61,6 +61,9 @@ module.exports = (Scope, Impl) -> class Item extends Management
 				child.close()
 			scope.close()
 
+		# call `ready` signal
+		item.ready()
+
 		item
 
 	@open = (scopeId, id) ->
@@ -80,11 +83,15 @@ module.exports = (Scope, Impl) -> class Item extends Management
 		utils.defProp @, '_scopeId', 'w', ''
 		utils.defProp @, '_globalId', 'w', ''
 
+		signal.createOnlySignal @, 'ready'
+
 		# register signals properties
 		for signalName in Item.SIGNALS
 			@[signalName] = null
 
 		super
+
+	signal.createHandler @::, 'ready'
 
 	for signalName in Item.SIGNALS
 		signal.createHandler @::, signalName
