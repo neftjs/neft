@@ -7,7 +7,7 @@ Impl = require './impl'
 
 {isArray} = Array
 
-module.exports = class Scope
+class Scope
 	@__name__ = 'Scope'
 
 	@ID_RE = ///^([a-z0-9_A-Z]+)$///
@@ -57,9 +57,11 @@ module.exports = class Scope
 		# only children
 		if isArray opts
 			children = opts
+			opts = null
 
 			# opts as first child
 			if utils.isObject children[0]
+				children = utils.clone children
 				opts = children.shift()
 
 		opts ?= {}
@@ -77,3 +79,38 @@ module.exports = class Scope
 			item = new ctor opts
 
 		item
+
+history = {}
+module.exports = class CloneableScope extends Scope
+
+	constructor: ->
+		super
+		history[@id] = []
+
+	create: (type, opts, children) ->
+		history[@id].push [type, utils.clone(opts), utils.clone(children)]
+
+		super
+
+	clone: ->
+		new Scope
+			id: "#{@id}_#{utils.uid()}"
+
+	toItemCtor: ->
+		(opts, children) =>
+			scope = @clone()
+
+			calls = history[@id]
+			for call in calls
+				scope.create call[0], call[1], call[2]
+
+			# custom opts
+			if opts?
+				utils.merge scope.mainItem, opts
+
+			# extra children
+			if children?
+				for child in children
+					child.parent = scope.mainItem
+
+			scope.mainItem
