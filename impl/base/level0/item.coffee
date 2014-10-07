@@ -20,6 +20,9 @@ module.exports = (impl) ->
 	confirmItemChild: (id, childId) ->
 		false
 
+	getItemChildren: (id) ->
+		[]
+
 	getItemParent: (id) ->
 		items[id].parent?.id
 

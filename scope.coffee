@@ -20,6 +20,8 @@ class Scope
 		Grid: @Grid = require('./types/item/types/grid') @, Impl
 		Column: @Column = require('./types/item/types/column') @, Impl
 		Row: @Row = require('./types/item/types/row') @, Impl
+		Scrollable: @Scrollable = require('./types/item/types/scrollable') @, Impl
+
 		Animation: @Animation = require('./types/animation') @, Impl
 		PropertyAnimation: @PropertyAnimation = require('./types/animation/types/property') @, Impl
 		NumberAnimation: @NumberAnimation = require('./types/animation/types/property/types/number') @, Impl

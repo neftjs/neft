@@ -1,5 +1,7 @@
 'use strict'
 
+{assert} = console
+
 utils = require 'utils'
 
 impl = require './impl/base'
@@ -26,18 +28,22 @@ for name, extra of impl.Extras
 	utils.merge impl, extra
 
 impl.createItem = (type, id) ->
-	item =
+	impl.items[id] = item =
 		type: type
 		elem: null
 	impl.Types[type].create id, item
-	impl.items[id] = item
 	Object.seal item
 
 impl.createAnimation = (type, id) ->
-	animation =
+	impl.animations[id] = animation =
 		type: type
 	impl.Types[type].create id, animation
-	impl.animations[id] = animation
 	Object.seal animation
+
+impl.window = ''
+impl.setWindow = do (_super = impl.setWindow) -> (id) ->
+	assert impl.window is ''
+	impl.window = id
+	_super.call impl, id
 
 module.exports = impl

@@ -44,10 +44,10 @@ module.exports = (impl) ->
 		Text: require './level0/text'
 		Rectangle: require './level1/rectangle'
 
-	setWindow: (id) ->
+	setWindow: setWindow = (id) ->
 		if document.readyState isnt 'complete'
 			document.onreadystatechange = =>
-				@setWindow id
+				setWindow id
 		else
 			while child = body.firstChild
 				body.removeChild child

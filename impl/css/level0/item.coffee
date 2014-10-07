@@ -24,7 +24,71 @@ SIGNALS =
 	'pointerReleased': 'mouseup'
 	'pointerEntered': 'mouseenter'
 	'pointerExited': 'mouseleave'
-	'pointerWheel': 'wheel'
+	'pointerMove': 'mousemove'
+	'pointerWheel': (elem, func) ->
+		if isFirefox
+			'DOMMouseScroll'
+		else
+			'mousewheel'
+
+mouseCoordsArgs = (e) ->
+	x: e.screenX
+	y: e.screenY
+
+SIGNALS_ARGS =
+	'pointerWheel': do ->
+		REQUIRED_CHECKS = 200
+		NORMALIZED_VALUE = 120
+
+		checks = 0
+		lastX = lastY = 0
+
+		getDeltas = (e) ->
+			e.preventDefault()
+
+			x: e.wheelDeltaX || 0
+			y: e.wheelDelta || -e.detail
+
+		normalizedWheel = (e) ->
+			r = getDeltas e
+
+			r.x = Math.max(-1, Math.min(1, r.x)) * NORMALIZED_VALUE
+			r.y = Math.max(-1, Math.min(1, r.y)) * NORMALIZED_VALUE
+
+			r
+
+		continuousWheel = getDeltas
+
+		(e) ->
+			x = e.wheelDeltaX || 0
+			y = e.wheelDelta || -e.detail
+
+			# check whether we check it enough
+			if checks < REQUIRED_CHECKS
+				absX = Math.abs x
+				absY = Math.abs y
+
+				# check if it's not first validation
+				if checks > 0
+					# check whether values change in time
+					if absX isnt lastX or absY isnt lastY
+						# always use continuous wheel
+						SIGNALS_ARGS.pointerWheel = continuousWheel
+
+				# save current deltas to compare it in the next check
+				lastX = absX
+				lastY = absY
+				checks++
+			else
+				# values don't change, always use normalized wheel
+				SIGNALS_ARGS.pointerWheel = normalizedWheel
+
+			# use normalized wheel temporary
+			normalizedWheel e
+
+	'pointerPressed': mouseCoordsArgs
+	'pointerReleased': mouseCoordsArgs
+	'pointerMove': mouseCoordsArgs
 
 HOT_MAX_TIME = 120
 HOT_MAX_ACTIONS = 100
@@ -69,11 +133,26 @@ module.exports = (impl) ->
 	confirmItemChild: (id, child) ->
 		!!items[id]?.elem.querySelector "##{child}"
 
+	getItemChildren: (id) ->
+		item = items[id]
+		{elem} = item
+		{children} = elem
+
+		arr = Array children.length
+		for child, i in children
+			arr[i] = child.id
+
+		arr
+
 	getItemParent: (id) ->
 		items[id]?.elem.parentElement?.id
 
 	setItemParent: (id, val) ->
-		items[val]?.elem.appendChild items[id].elem
+		parent = items[val]
+		return unless parent
+
+		elem = items[parent.container]?.elem or parent.elem
+		elem.appendChild items[id].elem
 
 	getItemVisible: (id) ->
 		items[id]?.elem.style.display isnt 'none'
@@ -167,5 +246,13 @@ module.exports = (impl) ->
 	setItemOpacity: (id, val) ->
 		items[id]?.elem.style.opacity = val
 
-	attachItemSignal: (id, name, signal) ->
-		items[id]?.elem.addEventListener SIGNALS[name], -> signal()
+	attachItemSignal: (id, name, func) ->
+		elem = items[id]?.elem
+		signal = SIGNALS[name]?(elem, func) or SIGNALS[name]
+
+		customFunc = (e) ->
+			args = SIGNALS_ARGS[name]? e
+			func args
+
+		if typeof signal is 'string'
+			elem.addEventListener signal, customFunc

@@ -31,8 +31,13 @@ module.exports = (impl) ->
 
 	setItemParent: (id, val) ->
 		item = items[id]
+		parent = items[val]
+		return unless parent
+
 		item.parent = val
-		items[val].elem.addChild item.elem
+
+		elem = items[parent.container]?.elem or parent.elem
+		elem.addChild item.elem
 
 	getItemVisible: (id) ->
 		items[id].elem.visible

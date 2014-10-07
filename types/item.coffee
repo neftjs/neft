@@ -10,7 +10,7 @@ module.exports = (Scope, Impl) -> class Item
 	@__name__ = 'Item'
 
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
-	            'pointerEntered', 'pointerExited', 'pointerWheel']
+	            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
 	Binding = require './item/binding'
 	Anchors = require './item/anchors'

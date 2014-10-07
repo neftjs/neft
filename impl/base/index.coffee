@@ -10,6 +10,8 @@ exports.Types =
 	Grid: require './level1/grid'
 	Column: require './level2/column'
 	Row: require './level2/row'
+	Scrollable: require './level2/scrollable'
+
 	Animation: require './level1/animation'
 	PropertyAnimation: require './level1/animation/property'
 	NumberAnimation: require './level1/animation/number'
