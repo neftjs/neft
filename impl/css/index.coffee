@@ -38,6 +38,13 @@ window.addEventListener 'load', ->
 module.exports = (impl) ->
 	{items} = impl
 
+	window.addEventListener 'resize', resize = ->
+		id = impl.window
+		return unless id
+
+		impl.setItemWidth id, innerWidth
+		impl.setItemHeight id, innerHeight
+
 	Types:
 		Item: require './level0/item'
 		Image: require './level0/image'
@@ -52,4 +59,5 @@ module.exports = (impl) ->
 			while child = body.firstChild
 				body.removeChild child
 
+			resize()
 			body.appendChild items[id].elem
