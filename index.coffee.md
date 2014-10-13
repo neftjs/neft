@@ -862,6 +862,17 @@ By default array of object values is returned.
 
 		target
 
+### hasValue()
+
+	exports.hasValue = (obj, val) ->
+		expect(obj).toBe.object()
+
+		for key, value of obj when obj.hasOwnProperty(key)
+			if value is val
+				return true
+
+		false
+
 Utils for arrays
 ----------------
 
