@@ -12,6 +12,7 @@ Provide necessary standard browser globals
 global.window =
 	addEventListener: ->
 	Image: ->
+	HTMLCanvasElement: ->
 global.location = pathname: ''
 global.navigator = userAgent: ''
 global.innerWidth = 1024
@@ -37,6 +38,7 @@ global.document =
 		]
 		removeChild: ->
 		getBoundingClientRect: -> {}
+		addEventListener: ->
 	createElementNS: ->
 		width: baseVal: value: null
 		height: baseVal: value: null

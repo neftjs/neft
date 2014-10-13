@@ -89,8 +89,8 @@ build = (type, opts, callback) ->
 compileViewsTask = task 'compile:views', 'Compile HTML views into json format', ->
 
 	# TODO: compile with styles only for a client bundle
-	[View, _] = ['view', 'view-styles'].map require
-	#[View] = ['view'].map require
+	# [View, _] = ['view', 'view-styles'].map require
+	[View] = ['view'].map require
 
 	View.on View.ERROR, (name) ->
 		filePath = "#{name}.html"
@@ -130,7 +130,7 @@ compileStylesTask = task 'compile:styles', 'Compile styles into json format', ->
 	builder = new LinksBuilder
 		input: './styles'
 		output: STYLES_OUT
-		ext: '.json'
+		ext: '.coffee'
 		onFile: (file) ->
 			path.extname(file.filepath) is '.coffee'
 
@@ -138,7 +138,11 @@ compileStylesTask = task 'compile:styles', 'Compile styles into json format', ->
 	builder.findFiles()
 
 	for file in builder.files
-		file.data = compiler.compile file.data
+		file.data = compiler.compile file.data, file.filename
+		builder.writeFile file
+
+	for file in builder.files
+		file.data = compiler.finish file.data, file.filename
 		builder.writeFile file
 
 	builder.save()
@@ -196,10 +200,10 @@ buildQmlTask = task 'build:qml', 'Build bundle for qml environment', (opts, call
 	stack = new utils.async.Stack
 
 	# generate script
-	stack.add null, (callback) ->
+	stack.add (callback) ->
 		build 'qml', release: opts.release, out: "#{QML_BUNDLE_OUT}script.js", callback
 
-	stack.add null, (callback) ->
+	stack.add (callback) ->
 		# copy qml files
 		fs.copySync './node_modules/app/cake/bundle/qml', QML_BUNDLE_OUT
 

@@ -1,139 +1,62 @@
 'use strict'
 
-[vm, utils, expect, coffee, log] = ['vm', 'utils', 'expect', 'coffee-script', 'log'].map require
-[Styles] = ['styles'].map require
-{assert} = console
+Renderer = require 'renderer'
+pathUtils = require 'path'
 
-BINDING_RE = ///([a-z0-9_]+)\.(left|top|width|height)///ig
-RESERVED_IDS = ['window']
-HASH_PATTERN = 'u{hash}_'
-BINDED_PROPS = ['left', 'top', 'width', 'height']
+DEFAULT_SCOPE = 'main'
 
-result =
-	items: []
-	ids: {}
-units = {}
-sandbox = {}
+scopes = {}
 
-setItemId = (item, id) ->
-	assert item.variables?.id is undefined
+exports.compile = (data, name) ->
 
-	result.ids[id] = item.index
-	item.variables ?= {}
-	item.variables.id = HASH_PATTERN + id
-	item.config.id = ''
+	# prepare scope name
+	parts = name.split '/'
+	parts.reverse()
+	for part, i in parts
+		parts[i] = part[0].toUpperCase() + part.slice(1)
 
-sandbox.Item = (opts) ->
-	index = result.items.length
+	scopeItemName = parts.join ''
+	scopeName = scopeItemName[0].toLowerCase() + scopeItemName.slice(1)
 
-	obj =
-		type: 'Item'
-		index: index
-		config: opts
+	if scopeName isnt DEFAULT_SCOPE
+		scopes[scopeItemName] = name
 
-	result.items.push obj
+	# bootstrap code
+	base = parts.map(-> '../').join ''
+	code = "'use strict'\n"
+	code += "Renderer = require '../#{base}node_modules/app/node_modules/renderer'\n"
+	code += "\n"
 
-	# id
-	if opts.id
-		setItemId obj, opts.id
+	# custom scope code
+	if scopeName isnt DEFAULT_SCOPE
+		code += "scope = new Renderer.Scope id: '#{scopeName}'\n"
+	else
+		code += "scope = Renderer\n"
+	code += "{{modules}}\n"
 
-	# binded properties
-	for prop in BINDED_PROPS when typeof opts[prop] is 'string'
-		obj.variables ?= {}
-		args = []
-		idsIndexes = {}
-		expr = opts[prop].replace BINDING_RE, (str, id, prop) ->
-			unless utils.has RESERVED_IDS, id
-				id = HASH_PATTERN + id
-			unless idsIndexes[id]
-				idsIndexes[id] = args.length
-				args.push id
-			"$#{idsIndexes[id]}.#{prop}"
+	# scope types
+	code += "{#{Object.keys(Renderer.Scope.TYPES)}} = scope\n"
+	code += "\n"
 
-		opts[prop] = [expr, []]
-		obj.variables[prop] = args
+	code += data
 
-	obj
-utils.merge sandbox.Item, Styles.Item
+	# module exports
+	if scopeName isnt DEFAULT_SCOPE
+		code += '\n\nmodule.exports = scope.toItemCtor()\n'
 
-sandbox.Node = (opts, children) ->
-	if Array.isArray opts
-		children = opts
-		opts = {}
+	code
 
-	if children ||= opts.children
-		childrenIndexes = []
+exports.finish = (data, name) ->
+	code = ''
 
-	obj = utils.merge sandbox.Item(opts),
-		type: 'Node'
-		children: childrenIndexes
+	for scopeName, path of scopes
+		if path isnt name and path.indexOf("#{name}/") isnt 0
+			base = name.split('/').map(-> '../').join('')
+			base = base.slice 3
+			base ||= './'
+			code += "#{scopeName} = (args...) -> scope.create require('#{base}#{path}'), args\n"
+	code += "\n"
 
-	if children
-		for child in children
-			childrenIndexes.push child.index
-			child.parent = obj.index
+	data = data.replace '{{modules}}', code
 
-	obj
-utils.merge sandbox.Node, Styles.Node
-
-sandbox.Image = ->
-	utils.merge sandbox.Item(arguments...),
-		type: 'Image'
-utils.merge sandbox.Image, Styles.Image
-
-sandbox.Text = ->
-	utils.merge sandbox.Item(arguments...),
-		type: 'Text'
-utils.merge sandbox.Text, Styles.Text
-
-sandbox.Column = ->
-	utils.merge sandbox.Node(arguments...),
-		type: 'Column'
-utils.merge sandbox.Column, Styles.Column
-
-sandbox.Row = ->
-	utils.merge sandbox.Node(arguments...),
-		type: 'Row'
-utils.merge sandbox.Row, Styles.Row
-
-sandbox.Scrollable = ->
-	utils.merge obj = sandbox.Node(arguments...),
-		type: 'Scrollable'
-
-	if obj.config.content?
-		obj.links ?= {}
-		obj.links.content = obj.config.content.index
-		obj.config.content = null
-
-	obj
-utils.merge sandbox.Scrollable, Styles.Scrollable
-
-sandbox.Unit = (name, node) ->
-	expect(name).toBe.truthy().string()
-	expect(node).toBe.object()
-
-	unless node.variables?.id
-		setItemId node, 'root'
-	else if node.variables.id isnt "#{HASH_PATTERN}root"
-		log.error "`#{name}` unit item id must be `root`"
-
-	units[name] = result
-	result =
-		items: []
-		ids: {}
-
-exports.compile = (data) ->
-
-	data = coffee.compile data, bare: true
-
-	script = vm.createScript data
-	script.runInNewContext sandbox
-
-	# stringify
-	json = JSON.stringify units, null, 4
-
-	# clear
-	utils.clear result.items
-	utils.clear result.ids
-
-	json
+	data
