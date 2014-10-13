@@ -51,14 +51,22 @@ module.exports = (impl) ->
 		content[3] = -maxY
 
 	###
-	Update Scrollable content on the child appended
+	Update Scrollable content on the child appended or removed
 	###
 	impl.setItemParent = do (_super = impl.setItemParent) -> (id, val) ->
 		parent = items[val]
 
+		old = impl.getItemParent id
+		oldItem = items[old]
+
+		# update old
+		if old and oldItem.type is 'Scrollable' and oldItem.container
+			updateContent old
+
 		_super id, val
 
-		if parent.type is 'Scrollable' and parent.container
+		# update new
+		if parent and parent.type is 'Scrollable' and parent.container
 			updateContent val
 
 	createContinuous = (id, prop) ->

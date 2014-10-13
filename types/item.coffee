@@ -57,7 +57,9 @@ module.exports = (Scope, Impl) -> class Item
 
 		Object.seal @
 
-	utils.defProp @::, 'id', 'e', null, (val) ->
+	utils.defProp @::, 'id', 'e', ->
+		@_uid
+	, (val) ->
 		expect(val).toBe.truthy().string()
 		utils.defProp @, 'id', 'e', val
 
@@ -77,8 +79,8 @@ module.exports = (Scope, Impl) -> class Item
 		if typeof val is 'string'
 			item = @scope.items[val]
 
-		expect(item).toBe.any Item
-		Impl.setItemParent @_uid, item._uid
+		expect().defined(item).toBe.any Item
+		Impl.setItemParent @_uid, item?._uid
 
 	utils.defProp @::, 'visible', 'e', ->
 		Impl.getItemVisible @_uid

@@ -34,9 +34,9 @@ class Scope
 
 		# types creation shortcuts
 		for name, type of Scope.TYPES
-			do (name=name) =>
-				@[name] = (args...) =>
-					@create name, args
+			do (type=type) =>
+				utils.defProp @, name, '', (args...) =>
+					@create type, args
 
 		utils.merge @, opts
 		@id ?= "u#{utils.uid()}"
@@ -55,7 +55,9 @@ class Scope
 
 		utils.defProp @, 'id', 'e', val
 
-	create: (type, opts, children) ->
+	create: (ctor, opts, children) ->
+		expect(ctor).toBe.function()
+
 		# only children
 		if isArray opts
 			children = opts
@@ -67,20 +69,23 @@ class Scope
 				opts = children.shift()
 
 		opts ?= {}
-		ctor = Scope.TYPES[type]
 
 		# check whether type supports children
 		if ctor is Scope.Item or (ctor::) instanceof Scope.Item
 			# TODO: assert
 			item = new ctor @, opts, children
-			@_mainItem ?= item
-			@items[item.id or item._uid] = item
+		else unless utils.hasValue Scope.TYPES, ctor
+			item = ctor opts, children
 		else if children?.length
 			; # TODO: assert
 		else
-			item = new ctor opts
+			child = new ctor opts
 
-		item
+		if item
+			@_mainItem ?= item
+			@items[item.id] = item
+
+		item or child
 
 history = {}
 module.exports = class CloneableScope extends Scope
@@ -104,7 +109,7 @@ module.exports = class CloneableScope extends Scope
 
 			calls = history[@id]
 			for call in calls
-				scope.create call[0], call[1], call[2]
+				scope.create.apply scope, call
 
 			# custom opts
 			if opts?
@@ -115,4 +120,5 @@ module.exports = class CloneableScope extends Scope
 				for child in children
 					child.parent = scope.mainItem
 
+			# main item
 			scope.mainItem

@@ -148,11 +148,15 @@ module.exports = (impl) ->
 		items[id]?.elem.parentElement?.id
 
 	setItemParent: (id, val) ->
+		elem = items[id].elem
 		parent = items[val]
-		return unless parent
 
-		elem = items[parent.container]?.elem or parent.elem
-		elem.appendChild items[id].elem
+		unless parent
+			elem.parentElement?.removeChild elem
+			return
+
+		parentElem = items[parent.container]?.elem or parent.elem
+		parentElem.appendChild elem
 
 	getItemVisible: (id) ->
 		items[id]?.elem.style.display isnt 'none'
@@ -248,6 +252,8 @@ module.exports = (impl) ->
 
 	attachItemSignal: (id, name, func) ->
 		elem = items[id]?.elem
+		return unless elem
+
 		signal = SIGNALS[name]?(elem, func) or SIGNALS[name]
 
 		customFunc = (e) ->
