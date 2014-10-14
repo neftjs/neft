@@ -20,6 +20,8 @@ module.exports = (Scope, Impl) -> class Item
 		expect(opts).toBe.simpleObject()
 		expect().defined(children).toBe.array()
 
+		utils.defProp @, '_opts', '', utils.clone(opts)
+
 		utils.defProp @, '_uid', '', uid = utils.uid()
 		items[uid] = @
 
@@ -78,6 +80,7 @@ module.exports = (Scope, Impl) -> class Item
 		item = val
 		if typeof val is 'string'
 			item = @scope.items[val]
+			expect(item).toBe.any Item
 
 		expect().defined(item).toBe.any Item
 		Impl.setItemParent @_uid, item?._uid
@@ -166,3 +169,22 @@ module.exports = (Scope, Impl) -> class Item
 	, null
 
 	utils.defProp @::, 'animations', 'e', null
+
+	clone: (scope=@scope) ->
+		expect(scope).toBe.any Scope
+
+		clone = scope.create @constructor, @_opts
+
+		if scope is @scope
+			clone.parent = @parent
+
+		clone
+
+	cloneDeep: (scope) ->
+		clone = @clone scope
+
+		for child in @children
+			child = child.cloneDeep scope
+			child.parent = clone
+
+		clone

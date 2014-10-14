@@ -75,6 +75,11 @@ class Scope
 			# TODO: assert
 			item = new ctor @, opts, children
 		else unless utils.hasValue Scope.TYPES, ctor
+			if opts and typeof opts.parent is 'string'
+				opts = utils.clone opts
+				opts.parent = @items[opts.parent]
+				expect(opts.parent).toBe.any Scope.Item
+
 			item = ctor opts, children
 		else if children?.length
 			; # TODO: assert
@@ -90,15 +95,6 @@ class Scope
 history = {}
 module.exports = class CloneableScope extends Scope
 
-	constructor: ->
-		super
-		history[@id] = []
-
-	create: (type, opts, children) ->
-		history[@id].push [type, utils.clone(opts), utils.clone(children)]
-
-		super
-
 	clone: ->
 		new Scope
 			id: "#{@id}_#{utils.uid()}"
@@ -107,18 +103,19 @@ module.exports = class CloneableScope extends Scope
 		(opts, children) =>
 			scope = @clone()
 
-			calls = history[@id]
-			for call in calls
-				scope.create.apply scope, call
+			# main item
+			item = @mainItem.clone scope
 
 			# custom opts
 			if opts?
-				utils.merge scope.mainItem, opts
+				# TODO: deal with deep arrays e.g. animations
+				utils.merge item._opts, opts
+				utils.merge item, opts
 
 			# extra children
 			if children?
 				for child in children
-					child.parent = scope.mainItem
+					child.parent = item
 
 			# main item
-			scope.mainItem
+			item
