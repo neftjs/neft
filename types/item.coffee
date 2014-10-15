@@ -27,6 +27,7 @@ module.exports = (Scope, Impl) -> class Item
 
 		Impl.createItem @constructor.__name__, uid
 
+		utils.defProp @, 'children', 'e', []
 		utils.defProp @, 'animations', 'e', new Animations @
 
 		# create signals
@@ -55,7 +56,7 @@ module.exports = (Scope, Impl) -> class Item
 		@animations.initialize()
 
 		# call `ready` signal
-		@ready()
+		setImmediate => @ready()
 
 		Object.seal @
 
@@ -79,10 +80,24 @@ module.exports = (Scope, Impl) -> class Item
 	, (val) ->
 		item = val
 		if typeof val is 'string'
-			item = @scope.items[val]
+			item = @scope.getItemById val
+
+		if val?
 			expect(item).toBe.any Item
 
-		expect().defined(item).toBe.any Item
+		# break on no change
+		old = @parent
+		if item is old
+			return
+
+		# remove from the old one
+		if old
+			utils.remove old.children, @
+
+		# append into the new one
+		if item?
+			item.children.push @
+
 		Impl.setItemParent @_uid, item?._uid
 
 	utils.defProp @::, 'visible', 'e', ->
@@ -168,7 +183,14 @@ module.exports = (Scope, Impl) -> class Item
 		Anchors.Anchors
 	, null
 
+	utils.defProp @::, 'children', 'e', null
+
 	utils.defProp @::, 'animations', 'e', null
+
+	clear: ->
+		for child in @children
+			child.parent = null
+		@
 
 	clone: (scope=@scope) ->
 		expect(scope).toBe.any Scope

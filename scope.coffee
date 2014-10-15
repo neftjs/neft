@@ -26,6 +26,8 @@ class Scope
 		PropertyAnimation: @PropertyAnimation = require('./types/animation/types/property') @, Impl
 		NumberAnimation: @NumberAnimation = require('./types/animation/types/property/types/number') @, Impl
 
+	@DEFAULT_SCOPE = new Scope id: '__main__'
+
 	constructor: (opts={}) ->
 		expect(opts).toBe.simpleObject()
 
@@ -54,6 +56,11 @@ class Scope
 		expect(val).toMatchRe Scope.ID_RE
 
 		utils.defProp @, 'id', 'e', val
+
+	getItemById: (id) ->
+		expect(id).toBe.truthy().string()
+
+		@items[id] or Scope.DEFAULT_SCOPE.items[id]
 
 	create: (ctor, opts, children) ->
 		expect(ctor).toBe.function()
@@ -92,7 +99,6 @@ class Scope
 
 		item or child
 
-history = {}
 module.exports = class CloneableScope extends Scope
 
 	clone: ->
@@ -103,19 +109,23 @@ module.exports = class CloneableScope extends Scope
 		(opts, children) =>
 			scope = @clone()
 
-			# main item
-			item = @mainItem.clone scope
+			# clone all items with no parents
+			for _, item of @items
+				if not item.parent
+					cloned = item.cloneDeep scope
+
+			{mainItem} = scope
 
 			# custom opts
 			if opts?
 				# TODO: deal with deep arrays e.g. animations
-				utils.merge item._opts, opts
-				utils.merge item, opts
+				utils.merge mainItem._opts, opts
+				utils.merge mainItem, opts
 
 			# extra children
 			if children?
 				for child in children
-					child.parent = item
+					child.parent = mainItem
 
 			# main item
-			item
+			scope.mainItem

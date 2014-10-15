@@ -30,7 +30,7 @@ module.exports = class Binding
 		if item?
 			for bindingItem, i in @items
 				unless Binding.SPECIAL_TARGETS[bindingItem]
-					item = item.scope.items[bindingItem]
+					item = item.scope.getItemById bindingItem
 					unless item
 						log.warn "Unexpected item (`#{bindingItem}`) in binding;\n" +
 						         "Can't find such id in this scope"

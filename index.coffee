@@ -3,7 +3,7 @@
 Impl = require './impl'
 Scope = Impl.Scope = require './scope'
 
-exports = module.exports = Object.create new Scope id: 'main'
+exports = module.exports = Object.create Scope.DEFAULT_SCOPE
 
 exports.Scope = Scope
 
