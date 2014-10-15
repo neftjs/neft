@@ -89,8 +89,9 @@ build = (type, opts, callback) ->
 compileViewsTask = task 'compile:views', 'Compile HTML views into json format', ->
 
 	# TODO: compile with styles only for a client bundle
-	# [View, _] = ['view', 'view-styles'].map require
-	[View] = ['view'].map require
+	[View, styles] = ['view', 'styles'].map require
+	styles = styles({})
+	# [View] = ['view'].map require
 
 	View.on View.ERROR, (name) ->
 		filePath = "#{name}.html"
@@ -138,11 +139,11 @@ compileStylesTask = task 'compile:styles', 'Compile styles into json format', ->
 	builder.findFiles()
 
 	for file in builder.files
-		file.data = compiler.compile file.data, file.filename
+		compiler.compile file
 		builder.writeFile file
 
 	for file in builder.files
-		file.data = compiler.finish file.data, file.filename
+		compiler.finish file
 		builder.writeFile file
 
 	builder.save()

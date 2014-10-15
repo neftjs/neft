@@ -3,11 +3,12 @@
 Renderer = require 'renderer'
 pathUtils = require 'path'
 
-DEFAULT_SCOPE = 'main'
-
 scopes = {}
 
-exports.compile = (data, name) ->
+exports.compile = (file) ->
+
+	data = file.data
+	name = file.filename
 
 	# prepare scope name
 	parts = name.split '/'
@@ -18,8 +19,7 @@ exports.compile = (data, name) ->
 	scopeItemName = parts.join ''
 	scopeName = scopeItemName[0].toLowerCase() + scopeItemName.slice(1)
 
-	if scopeName isnt DEFAULT_SCOPE
-		scopes[scopeItemName] = name
+	scopes[scopeItemName] = name
 
 	# bootstrap code
 	base = parts.map(-> '../').join ''
@@ -28,10 +28,7 @@ exports.compile = (data, name) ->
 	code += "\n"
 
 	# custom scope code
-	if scopeName isnt DEFAULT_SCOPE
-		code += "scope = new Renderer.Scope id: '#{scopeName}'\n"
-	else
-		code += "scope = Renderer\n"
+	code += "scope = new Renderer.Scope id: '#{scopeName}'\n"
 	code += "{{modules}}\n"
 
 	# scope types
@@ -41,12 +38,15 @@ exports.compile = (data, name) ->
 	code += data
 
 	# module exports
-	if scopeName isnt DEFAULT_SCOPE
-		code += '\n\nmodule.exports = scope.toItemCtor()\n'
+	code += '\n\nmodule.exports = scope.toItemCtor()\n'
 
-	code
+	file.name = scopeItemName
+	file.data = code
 
-exports.finish = (data, name) ->
+exports.finish = (file) ->
+	data = file.data
+	name = file.filename
+
 	code = ''
 
 	for scopeName, path of scopes
@@ -59,4 +59,4 @@ exports.finish = (data, name) ->
 
 	data = data.replace '{{modules}}', code
 
-	data
+	file.data = data
