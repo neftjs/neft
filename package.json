@@ -1,0 +1,8 @@
+{
+	"private": true,
+	"name": "styles",
+	"version": "0.0.1",
+	"dependencies": {
+		"utils": "git+ssh://git@github.com:Kildyt/utils.git"
+	}
+}
