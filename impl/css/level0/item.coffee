@@ -135,17 +135,31 @@ module.exports = (impl) ->
 
 	getItemChildren: (id) ->
 		item = items[id]
+
+		if item.container?
+			return impl.getItemChildren item.container
+
 		{elem} = item
 		{children} = elem
 
-		arr = Array children.length
-		for child, i in children
-			arr[i] = child.id
+		arr = []
+		for child in children
+			if id = child.id
+				arr.push id
 
 		arr
 
 	getItemParent: (id) ->
-		items[id]?.elem.parentElement?.id
+		parent = items[id].elem.parentElement
+
+		if parent
+			parentId = parent.id
+			parent2Id = parent.parentElement.id
+
+			if items[parent2Id]?.container is parentId
+				parent2Id
+			else
+				parentId
 
 	setItemParent: (id, val) ->
 		elem = items[id].elem

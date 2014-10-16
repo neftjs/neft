@@ -27,7 +27,6 @@ module.exports = (Scope, Impl) -> class Item
 
 		Impl.createItem @constructor.__name__, uid
 
-		utils.defProp @, 'children', 'e', []
 		utils.defProp @, 'animations', 'e', new Animations @
 
 		# create signals
@@ -84,19 +83,6 @@ module.exports = (Scope, Impl) -> class Item
 
 		if val?
 			expect(item).toBe.any Item
-
-		# break on no change
-		old = @parent
-		if item is old
-			return
-
-		# remove from the old one
-		if old
-			utils.remove old.children, @
-
-		# append into the new one
-		if item?
-			item.children.push @
 
 		Impl.setItemParent @_uid, item?._uid
 
@@ -183,7 +169,14 @@ module.exports = (Scope, Impl) -> class Item
 		Anchors.Anchors
 	, null
 
-	utils.defProp @::, 'children', 'e', null
+	utils.defProp @::, 'children', 'e', ->
+		children = Impl.getItemChildren @_uid
+
+		for child, i in children
+			children[i] = items[child]
+
+		children
+	, null
 
 	utils.defProp @::, 'animations', 'e', null
 
@@ -196,9 +189,7 @@ module.exports = (Scope, Impl) -> class Item
 		expect(scope).toBe.any Scope
 
 		clone = scope.create @constructor, @_opts
-
-		if scope is @scope
-			clone.parent = @parent
+		clone.parent = if scope is @scope then @parent else null
 
 		clone
 

@@ -17,8 +17,17 @@ module.exports = (impl) ->
 				updateSize id
 			, 1000
 
-		requestAnimationFrame ->
+		limit = 100
+		requestAnimationFrame update = ->
 			{elem} = item
+
+			unless limit
+				return
+
+			if (item.autoWidth or item.autoHeight) and elem.offsetWidth is 0 and elem.innerHTML
+				limit--
+				requestAnimationFrame update
+				return;
 
 			if item.autoWidth
 				impl.setItemWidth id, elem.offsetWidth+1
@@ -51,6 +60,8 @@ module.exports = (impl) ->
 		target.autoWidth = true
 		target.autoHeight = true
 		target.textUpdatePending = false
+
+		# TODO: write text in a container
 
 		# set default styles
 		{style} = target.elem

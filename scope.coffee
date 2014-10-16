@@ -36,9 +36,8 @@ class Scope
 
 		# types creation shortcuts
 		for name, type of Scope.TYPES
-			do (type=type) =>
-				utils.defProp @, name, '', (args...) =>
-					@create type, args
+			utils.defProp @, name, '', do (type=type) => (args...) =>
+				@create type, args
 
 		utils.merge @, opts
 		@id ?= "u#{utils.uid()}"
