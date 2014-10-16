@@ -1,5 +1,6 @@
 'use strict'
 
+utils = require 'utils'
 PIXI = require '../pixi.lib.js'
 
 SIGNALS =
@@ -12,6 +13,9 @@ SIGNALS =
 module.exports = (impl) ->
 	{items} = impl
 
+	if utils.isEmpty PIXI
+		return require('../../base/level0/item') impl
+
 	updateMask = (id) ->
 		{elem} = items[id]
 		{mask} = elem
@@ -23,6 +27,7 @@ module.exports = (impl) ->
 
 	create: (id, target) ->
 		elem = target.elem ?= new PIXI.DisplayObjectContainer
+		elem.id = id
 		target.parent = ''
 		target.elem.sizeScale = 1
 
@@ -35,9 +40,17 @@ module.exports = (impl) ->
 		return unless parent
 
 		item.parent = val
+		parent.elem.addChild item.elem
 
-		elem = items[parent.container]?.elem or parent.elem
-		elem.addChild item.elem
+	getItemChildren: (id) ->
+		item = items[id]
+
+		arr = []
+		for child in item.elem.children
+			if id = child.id
+				arr.push id
+
+		arr
 
 	getItemVisible: (id) ->
 		items[id].elem.visible
@@ -129,4 +142,4 @@ module.exports = (impl) ->
 	attachItemSignal: (id, name, signal) ->
 		{elem} = items[id]
 		elem.setInteractive true
-		elem[SIGNALS[name]] = -> signal()
+		elem[SIGNALS[name]] = (e) -> signal e.global

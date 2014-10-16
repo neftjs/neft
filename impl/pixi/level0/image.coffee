@@ -1,5 +1,6 @@
 'use strict'
 
+utils = require 'utils'
 PIXI = require '../pixi.lib.js'
 
 if window+'' is '[object Window]'
@@ -7,6 +8,9 @@ if window+'' is '[object Window]'
 
 module.exports = (impl) ->
 	{items} = impl
+
+	if utils.isEmpty PIXI
+		return require('../../base/level0/image') impl
 
 	create: (id, target) ->
 		elem = target.elem ?= new PIXI.Sprite emptyTexture

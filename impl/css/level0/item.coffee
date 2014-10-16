@@ -136,9 +136,6 @@ module.exports = (impl) ->
 	getItemChildren: (id) ->
 		item = items[id]
 
-		if item.container?
-			return impl.getItemChildren item.container
-
 		{elem} = item
 		{children} = elem
 
@@ -150,16 +147,7 @@ module.exports = (impl) ->
 		arr
 
 	getItemParent: (id) ->
-		parent = items[id].elem.parentElement
-
-		if parent
-			parentId = parent.id
-			parent2Id = parent.parentElement.id
-
-			if items[parent2Id]?.container is parentId
-				parent2Id
-			else
-				parentId
+		items[id].elem.parentElement?.id
 
 	setItemParent: (id, val) ->
 		elem = items[id].elem
@@ -169,8 +157,7 @@ module.exports = (impl) ->
 			elem.parentElement?.removeChild elem
 			return
 
-		parentElem = items[parent.container]?.elem or parent.elem
-		parentElem.appendChild elem
+		parent.elem.appendChild elem
 
 	getItemVisible: (id) ->
 		items[id]?.elem.style.display isnt 'none'

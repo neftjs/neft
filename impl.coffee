@@ -46,4 +46,27 @@ impl.setWindow = do (_super = impl.setWindow) -> (id) ->
 	impl.window = id
 	_super.call impl, id
 
+impl.getItemChildren = do (_super = impl.getItemChildren) -> (id) ->
+	if container = impl.items[id]?.container
+		_super container
+	else
+		_super id
+
+impl.getItemParent = do (_super = impl.getItemParent) -> (id) ->
+	parent = _super id
+	parent2 = parent and _super parent
+
+	if impl.items[parent2]?.container
+		parent2
+	else
+		parent
+
+impl.setItemParent = do (_super = impl.setItemParent) -> (id, val) ->
+	parent = impl.items[val]
+
+	if container = parent?.container
+		_super id, container
+	else
+		_super id, val
+
 module.exports = impl

@@ -1,9 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-window.PIXI = PIXI = require './pixi.lib.js'
-
-
+PIXI = require './pixi.lib.js'
 
 # thanks to: https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat2d.js
 class Matrix2d
@@ -64,7 +62,7 @@ class Matrix2d
 		arr[5] = a1 * b4 + a3 * b5 + a5
 		@
 
-if window+'' is '[object Window]'
+unless window.isFake
 	SuperDisplayObject = PIXI.DisplayObject
 	PIXI.DisplayObject = ->
 		SuperDisplayObject.call @
@@ -141,7 +139,7 @@ div, span, canvas, img {
 }
 "
 
-if window+'' is '[object Window]'
+unless window.isFake
 	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
 	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight, null, false, true
 
@@ -176,7 +174,8 @@ module.exports = (impl) ->
 		Text: require './level0/text'
 
 	setWindow: (id) ->
-		if stage.children.length
-			stage.removeChildren()
+		unless window.isFake
+			if stage.children.length
+				stage.removeChildren()
 
-		stage.addChild items[id].elem
+			stage.addChild items[id].elem

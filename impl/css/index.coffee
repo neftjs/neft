@@ -27,7 +27,6 @@ div, span, canvas, img {
 
 # body
 body = document.createElement 'div'
-body.id = 'body'
 window.addEventListener 'load', ->
 	document.body.appendChild body
 
