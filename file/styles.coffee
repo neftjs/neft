@@ -19,7 +19,7 @@ module.exports = (File, scopes) ->
 	File::styles = null
 
 	File::render = do (_super = File::render) -> ->
-		r = _super.apply @, arguments
+		r = _super.call @
 
 		# styles
 		if @styles.length

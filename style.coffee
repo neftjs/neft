@@ -5,8 +5,6 @@ Renderer = require 'renderer'
 
 log = log.scope 'Styles'
 
-currentItem = null
-
 module.exports = (File, scopes) -> class Style
 
 	@__name__ = 'Style'
@@ -66,12 +64,9 @@ module.exports = (File, scopes) -> class Style
 		if @_parent = val
 			val.children.push @
 
-	render: ->
-		unless currentItem
-			currentItem = @item
-			@item.parent = Renderer.mainItem
-		else if @isAutoParent
-			@item.parent = @parent.item
+	render: (parent=@parent) ->
+		if @isAutoParent
+			@item.parent = parent?.item
 
 		for child in @children
 			child.render()

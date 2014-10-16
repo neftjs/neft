@@ -5,7 +5,7 @@ Renderer = require 'renderer'
 
 module.exports = (File) ->
 
-	{Input} = File
+	{Input, Unit} = File
 
 	FuncGlobalFuncs =
 		get: (prop) ->
@@ -37,15 +37,20 @@ module.exports = (File) ->
 
 			func.apply {}, args
 
-	File.fromAssembled = do (_super = File.fromAssembled) -> (file) ->
-		_super? file
-
-		# parse funcs
+	parseFuncsFromAssembled = (file) ->
 		{funcs} = file
 		if funcs
 			for name, body of funcs
 				funcs[name] = new Function funcGlobalProps, body
 
+	File.fromAssembled = do (_super = File.fromAssembled) -> (file) ->
+		_super? file
+		parseFuncsFromAssembled file
+		null
+
+	Unit.fromAssembled = do (_super = Unit.fromAssembled) -> (file) ->
+		_super? file
+		parseFuncsFromAssembled file
 		null
 
 	File::funcs = null
