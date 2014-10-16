@@ -1,6 +1,6 @@
 'use strict'
 
-[utils, Model] = ['utils', 'model'].map require
+utils = require 'utils'
 
 module.exports = (Routing) ->
 	Request: require('./request.coffee') Routing
@@ -10,12 +10,9 @@ module.exports = (Routing) ->
 
 		setImmediate ->
 			# send internal request
-			uid = utils.uid()
-
-			res = routing.handleRequest
-				uid: uid
+			res = routing.createRequest
 				method: Routing.Request.GET
-				uri: 'items/0'
+				uri: 'docs/log/null'
 				data: null
 
 	sendServerRequest: (routing, opts, callback) ->

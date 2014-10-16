@@ -99,7 +99,15 @@ Handler
 					req.handler = null
 
 					if err
-						log.error "Error raised in `#{@uri}` handler\n#{err.stack or err}"
+						# TODO: move building errors into more generic place
+						errMsg = err
+						if err.stack?
+							if utils.isQML
+								errMsg = "#{err.message}\n#{err.stack}"
+							else
+								errMsg = err.stack
+
+						log.error "Error raised in `#{@uri}` handler\n#{errMsg}"
 
 					next handlerCallbackError
 

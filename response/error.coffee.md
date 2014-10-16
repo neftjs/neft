@@ -47,4 +47,6 @@ Response Error
 		name: 'ResponseError'
 		message: ''
 
+		ResponseError:: = Object.create Error::
+
 		tmp = Object.create ResponseError::

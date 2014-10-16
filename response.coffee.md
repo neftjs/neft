@@ -127,13 +127,8 @@ Response
 			# call request signal
 			res.req.loaded @
 
-			# prepare data
-			{data} = res
-			if data instanceof Error
-				data = utils.errorToObject data
-
 			# send it!
-			Impl.send res, data, ->
+			Impl.send res, res.data, ->
 				# signal
 				res.sent()
 
