@@ -19,7 +19,7 @@ module.exports = (File, scopes) ->
 	File::styles = null
 
 	File::render = do (_super = File::render) -> ->
-		r = _super.call @
+		r = _super.apply @, arguments
 
 		# styles
 		if @styles.length
@@ -29,7 +29,7 @@ module.exports = (File, scopes) ->
 		r
 
 	File::revert = do (_super = File::revert) -> ->
-		r = _super.call @
+		r = _super.apply @, arguments
 
 		# styles
 		if @styles.length

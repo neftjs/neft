@@ -65,6 +65,9 @@ module.exports = (File, scopes) -> class Style
 			val.children.push @
 
 	render: (parent=@parent) ->
+		unless @item
+			return
+
 		if @isAutoParent
 			@item.parent = parent?.item
 
@@ -77,6 +80,9 @@ module.exports = (File, scopes) -> class Style
 		@updateVisibility()
 
 	revert: ->
+		unless @item
+			return
+
 		if @isAutoParent
 			@item.parent = null
 
@@ -111,15 +117,14 @@ module.exports = (File, scopes) -> class Style
 			clone.isAutoParent = true
 			scope = clone.item.scope
 		else
-			item = clone.item = scope.items[@itemId]
+			if item = clone.item = scope.items[@itemId]
+				if @isRepeat
+					clone.item = clone.item.cloneDeep()
 
-			if @isRepeat
-				clone.item = clone.item.cloneDeep()
-
-			clone.isAutoParent = !clone.item.parent
+				clone.isAutoParent = !clone.item.parent
 
 		unless item
-			log.error "Can't find `#{@itemId}` style item in `#{scope.name}` scope"
+			log.error "Can't find `#{@itemId}` style item in the `#{scope.id}` scope"
 
 			# return if no style item found
 			return clone

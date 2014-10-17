@@ -19,9 +19,11 @@ module.exports = (File) ->
 	funcGlobalProps = Object.keys(FuncGlobalFuncs)
 	Array::push.apply funcGlobalProps, Object.keys(FuncGlobalGetters)
 
-	bindFuncIntoGlobal = do (args = []) -> (func, file) ->
+	bindFuncIntoGlobal = (func, file) ->
 		expect(func).toBe.function()
 		expect(file).toBe.any File
+
+		args = []
 
 		for prop, i in funcGlobalProps
 			if globalFunc = FuncGlobalFuncs[prop]
