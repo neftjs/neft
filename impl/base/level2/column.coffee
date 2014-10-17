@@ -9,6 +9,7 @@ module.exports = (impl) ->
 
 		target.type = 'Grid'
 		target.columns = 1
+		target.updateX = false
 
 	getColumnSpacing: impl.getGridRowSpacing
 

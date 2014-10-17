@@ -10,6 +10,7 @@ module.exports = (impl) ->
 		target.type = 'Grid'
 		target.columns = Infinity
 		target.rows = 1
+		target.updateY = false
 
 	getRowSpacing: impl.getGridColumnSpacing
 

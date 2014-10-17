@@ -14,7 +14,7 @@ module.exports = (impl) ->
 
 		requestAnimationFrame ->
 			{children, columns, rows, columnsPositions, rowsPositions} = item
-			{rowSpacing, columnSpacing} = item
+			{rowSpacing, columnSpacing, updateX, updateY} = item
 
 			# reset columns positions
 			for column, i in columnsPositions
@@ -56,8 +56,11 @@ module.exports = (impl) ->
 				column = i % columns
 				row = Math.floor(i/columns) % rows
 
-				impl.setItemX childId, (columnsPositions[column-1] or 0)
-				impl.setItemY childId, (rowsPositions[row-1] or 0)
+				if updateX
+					impl.setItemX childId, (columnsPositions[column-1] or 0)
+
+				if updateY
+					impl.setItemY childId, (rowsPositions[row-1] or 0)
 
 			# set item size
 			impl.setItemWidth id, utils.last(columnsPositions) - columnSpacing
@@ -108,6 +111,8 @@ module.exports = (impl) ->
 		target.rows = Infinity
 		target.columnSpacing = 0
 		target.rowSpacing = 0
+		target.updateX = true
+		target.updateY = true
 		target.children = []
 		target.columnsPositions = []
 		target.rowsPositions = []

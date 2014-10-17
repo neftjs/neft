@@ -22,8 +22,8 @@ SIGNALS =
 	'pointerClicked': 'click'
 	'pointerPressed': 'mousedown'
 	'pointerReleased': 'mouseup'
-	'pointerEntered': 'mouseenter'
-	'pointerExited': 'mouseleave'
+	'pointerEntered': 'mouseover'
+	'pointerExited': 'mouseout'
 	'pointerMove': 'mousemove'
 	'pointerWheel': (elem, func) ->
 		if isFirefox
@@ -31,21 +31,24 @@ SIGNALS =
 		else
 			'mousewheel'
 
+SIGNALS_CURSORS =
+	pointerClicked: 'pointer'
+
 mouseCoordsArgs = (e) ->
 	x: e.screenX
 	y: e.screenY
 
 SIGNALS_ARGS =
 	'pointerWheel': do ->
-		REQUIRED_CHECKS = 500
-		REQUIRED_DELTA_CHECKS = 200
+		REQUIRED_CHECKS = 200
+		REQUIRED_DELTA_CHECKS = 500
 		NORMALIZED_VALUE = 120
 
 		checks = 0
 		lastX = lastY = 0
 
-		xDeltaChecks = 0
-		yDeltaChecks = 0
+		xDeltaChecks = 1
+		yDeltaChecks = 1
 		averageX = NORMALIZED_VALUE
 		averageY = NORMALIZED_VALUE
 
@@ -133,6 +136,7 @@ module.exports = (impl) ->
 				item.x = getItemX id
 				item.y = getItemY id
 				style.left = style.top = '0'
+				updateTransforms item
 		else
 			item.lastAction = now()
 
@@ -282,3 +286,7 @@ module.exports = (impl) ->
 
 		if typeof signal is 'string'
 			elem.addEventListener signal, customFunc
+
+		# cursor
+		if cursor = SIGNALS_CURSORS[name]
+			elem.style.cursor = cursor
