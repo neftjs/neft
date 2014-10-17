@@ -37,17 +37,35 @@ mouseCoordsArgs = (e) ->
 
 SIGNALS_ARGS =
 	'pointerWheel': do ->
-		REQUIRED_CHECKS = 200
+		REQUIRED_CHECKS = 500
+		REQUIRED_DELTA_CHECKS = 200
 		NORMALIZED_VALUE = 120
 
 		checks = 0
 		lastX = lastY = 0
 
+		xDeltaChecks = 0
+		yDeltaChecks = 0
+		averageX = NORMALIZED_VALUE
+		averageY = NORMALIZED_VALUE
+
 		getDeltas = (e) ->
 			e.preventDefault()
 
-			x: e.wheelDeltaX || 0
-			y: e.wheelDelta || -e.detail
+			x = e.wheelDeltaX || 0
+			y = e.wheelDelta || -e.detail
+
+			if x isnt 0 and xDeltaChecks < REQUIRED_DELTA_CHECKS
+				averageX = (averageX * xDeltaChecks + Math.abs(x)) / ++xDeltaChecks
+
+			if y isnt 0 and yDeltaChecks < REQUIRED_DELTA_CHECKS
+				averageY = (averageY * yDeltaChecks + Math.abs(y)) / ++yDeltaChecks
+
+			x *= NORMALIZED_VALUE / averageX
+			y *= NORMALIZED_VALUE / averageY
+
+			x: x
+			y: y
 
 		normalizedWheel = (e) ->
 			r = getDeltas e
@@ -104,6 +122,7 @@ module.exports = (impl) ->
 			transform += "rotate(#{rad2deg(item.rotation)}deg) "
 		if item.scale isnt 1
 			transform += "scale(#{item.scale}) "
+
 		item.elem.style[transformProp] = transform
 
 	markAction = (item) ->
