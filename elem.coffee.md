@@ -95,8 +95,6 @@ Represents an element placed in the file.
 			clone.usedUnit = null
 			clone.isRendered = false
 
-			utils.defProp clone, '_unit', 'cw', null
-
 			clone.node.on 'visibilityChanged', ->
 				if self.isRendered
 					clone.render()
