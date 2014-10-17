@@ -6,22 +6,66 @@ module.exports = (impl) ->
 	{items} = impl
 	{Item, Image} = impl.Types
 
+	# TODO: move it to the utils
+	stringCount = (str, char) ->
+		str.length - str.replace(RegExp(char, 'g'), '').length
+
+	getTextWidth = (id) ->
+		text = impl.getText id
+		fontSize = impl.getTextFontPixelSize id
+
+		text.length * fontSize * 0.45
+
+	getTextHeight = (id) ->
+		text = impl.getText id
+		width = impl.getItemWidth id
+		fontSize = impl.getTextFontPixelSize id
+		lineHeight = impl.getTextLineHeight id
+
+		if width isnt 0
+			w = text.length * fontSize * 0.45
+			w = Math.round(w * 100) / 100
+			lines = Math.ceil w / width
+		else
+			lines = 1
+		lines += stringCount text, '\n'
+		lines * lineHeight * fontSize
+
+	updateWidth = (id) ->
+
+	updateHeight = (id) ->
+
 	updateSize = (id) ->
 		item = items[id]
+		{style} = item.elem
 
 		return if item.textUpdatePending
 		item.textUpdatePending = true
 
-		if document.readyState isnt 'complete'
-			setTimeout ->
-				updateSize id
-			, 1000
+		text = impl.getText id
+		unless text.length
+			if item.autoWidth
+				impl.setItemWidth id, 0
+			if item.autoHeight
+				impl.setItemHeight id, 0
+		else
+			if document.readyState isnt 'complete'
+				setTimeout ->
+					updateSize id
+				, 1000
 
-		{style} = item.elem
-		if item.autoWidth
-			style.width = 'auto'
-		if item.autoHeight
-			style.height = 'auto'
+			if item.autoWidth
+				style.width = 'auto'
+				# updateWidth id
+				impl.setItemWidth id, getTextWidth(id)
+
+			if item.autoHeight
+				style.height = 'auto'
+				# updateHeight id
+				impl.setItemHeight id, getTextHeight(id)
+
+		item.textUpdatePending = false
+		return;
 
 		limit = 16 * 60 * 2
 		requestAnimationFrame update = ->

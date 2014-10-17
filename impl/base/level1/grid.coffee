@@ -12,7 +12,7 @@ module.exports = (impl) ->
 
 		item.updatePending = true
 
-		requestAnimationFrame ->
+		do -> # HACK: using setImmediate occurs in one-frame not positioned elements
 			{children, columns, rows, columnsPositions, rowsPositions} = item
 			{rowSpacing, columnSpacing, updateX, updateY} = item
 

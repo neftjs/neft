@@ -41,7 +41,7 @@ mouseCoordsArgs = (e) ->
 SIGNALS_ARGS =
 	'pointerWheel': do ->
 		REQUIRED_CHECKS = 200
-		REQUIRED_DELTA_CHECKS = 500
+		REQUIRED_DELTA_CHECKS = 1000
 		NORMALIZED_VALUE = 120
 
 		checks = 0

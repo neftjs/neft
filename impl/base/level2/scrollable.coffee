@@ -2,7 +2,7 @@
 
 utils = require 'utils'
 
-WHEEL_DIVISOR = 10
+WHEEL_DIVISOR = 8
 
 module.exports = (impl) ->
 	{Types, items} = impl

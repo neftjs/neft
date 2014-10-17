@@ -46,7 +46,7 @@ module.exports = (impl) ->
 				func = @func = Function.apply null, tmpFuncArgs
 				cache[binding.setup] = func
 
-			requestAnimationFrame =>
+			setImmediate =>
 				# break on destroyed
 				return unless @locations
 
