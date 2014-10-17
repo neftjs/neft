@@ -106,8 +106,9 @@ module.exports = (Scope, Impl) -> class Item
 			expect(val).not().toBe.lessThan 0
 			Impl.setItemWidth @_uid, val
 		else
-			binding = new Binding @, val
-			Impl.setItemBinding @_uid, 'width', binding
+			setImmediate =>
+				binding = new Binding @, val
+				Impl.setItemBinding @_uid, 'width', binding
 
 	utils.defProp @::, 'height', 'e', ->
 		Impl.getItemHeight @_uid
@@ -117,8 +118,9 @@ module.exports = (Scope, Impl) -> class Item
 			expect(val).not().toBe.lessThan 0
 			Impl.setItemHeight @_uid, val
 		else
-			binding = new Binding @, val
-			Impl.setItemBinding @_uid, 'height', binding
+			setImmediate =>
+				binding = new Binding @, val
+				Impl.setItemBinding @_uid, 'height', binding
 
 	utils.defProp @::, 'x', 'e', ->
 		Impl.getItemX @_uid
@@ -127,8 +129,9 @@ module.exports = (Scope, Impl) -> class Item
 			expect(val).toBe.float()
 			Impl.setItemX @_uid, val
 		else
-			binding = new Binding @, val
-			Impl.setItemBinding @_uid, 'x', binding
+			setImmediate =>
+				binding = new Binding @, val
+				Impl.setItemBinding @_uid, 'x', binding
 
 	utils.defProp @::, 'y', 'e', ->
 		Impl.getItemY @_uid
@@ -137,8 +140,9 @@ module.exports = (Scope, Impl) -> class Item
 			expect(val).toBe.float()
 			Impl.setItemY @_uid, val
 		else
-			binding = new Binding @, val
-			Impl.setItemBinding @_uid, 'y', binding
+			setImmediate =>
+				binding = new Binding @, val
+				Impl.setItemBinding @_uid, 'y', binding
 
 	utils.defProp @::, 'z', 'e', ->
 		Impl.getItemZ @_uid

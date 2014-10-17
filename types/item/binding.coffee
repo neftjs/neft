@@ -28,14 +28,15 @@ module.exports = class Binding
 
 		# parse items to uid's
 		if item?
-			for bindingItem, i in @items
-				unless Binding.SPECIAL_TARGETS[bindingItem]
-					item = item.scope.getItemById bindingItem
-					unless item
-						log.warn "Unexpected item (`#{bindingItem}`) in binding;\n" +
+			for bindingItemId, i in @items
+				unless Binding.SPECIAL_TARGETS[bindingItemId]
+					bindingItem = item.scope.getItemById bindingItemId
+
+					unless bindingItem
+						log.warn "Unexpected item `#{bindingItemId}` in binding;\n" +
 						         "Can't find such id in this scope"
 					else
-						@items[i] = item._uid
+						@items[i] = bindingItem._uid
 
 		Object.freeze @
 

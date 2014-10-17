@@ -16,8 +16,6 @@ module.exports = (impl) ->
 			{children, columns, rows, columnsPositions, rowsPositions} = item
 			{rowSpacing, columnSpacing} = item
 
-			getColumn = (i) ->
-
 			# reset columns positions
 			for column, i in columnsPositions
 				columnsPositions[i] = 0
@@ -30,6 +28,10 @@ module.exports = (impl) ->
 			for childId, i in children
 				column = i % columns
 				row = Math.floor(i/columns) % rows
+
+				# omit not visible children
+				unless impl.getItemVisible childId
+					continue
 
 				width = impl.getItemWidth childId
 				height = impl.getItemHeight childId
@@ -81,12 +83,12 @@ module.exports = (impl) ->
 		_super id, val
 
 		if items[old]?.type is 'Grid'
-			removeChild val, id
+			removeChild old, id
 
 		if items[val]?.type is 'Grid'
 			appendChild val, id
 
-	overrideSizeSetter = (methodName) ->
+	overrideSetter = (methodName) ->
 		impl[methodName] = do (_super = impl[methodName]) -> (id, val) ->
 			_super id, val
 
@@ -94,8 +96,9 @@ module.exports = (impl) ->
 			if items[parentId]?.type is 'Grid'
 				update parentId
 
-	overrideSizeSetter 'setItemWidth'
-	overrideSizeSetter 'setItemHeight'
+	overrideSetter 'setItemWidth'
+	overrideSetter 'setItemHeight'
+	overrideSetter 'setItemVisible'
 
 	create: (id, target) ->
 		Item.create id, target

@@ -2,6 +2,8 @@
 
 utils = require 'utils'
 
+{assert} = console
+
 module.exports = (impl) ->
 	{items} = impl
 
@@ -66,7 +68,7 @@ module.exports = (impl) ->
 				while bindingChunks = Binding.BINDING_RE.exec binding.setup
 					[_, idIndex, prop] = bindingChunks
 					id = args[idIndex]
-					
+
 					if item = items[id]
 						item.listeners ?= {}
 						itemListeners = item.listeners[prop] ?= []
@@ -129,6 +131,8 @@ module.exports = (impl) ->
 			for location in @locations
 				utils.remove location, @
 
+			items[@itemId].bindings[@prop] = null
+
 			@locations = null
 			@args = null
 
@@ -175,7 +179,6 @@ module.exports = (impl) ->
 		item.bindings ?= {}
 
 		item.bindings[prop]?.destroy()
-		item.bindings[prop] = null
 
 		if binding?
 			item.bindings[prop] = new Binding id, prop, binding, extraResultFunc

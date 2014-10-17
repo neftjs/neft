@@ -2,7 +2,6 @@
 
 utils = require 'utils'
 
-WHEEL_FOCUS_DURATION = 1000
 WHEEL_DIVISOR = 10
 
 module.exports = (impl) ->
@@ -25,6 +24,23 @@ module.exports = (impl) ->
 			val = Math.max(content[3], Math.min(content[1], val))
 			impl.setItemY container, val
 
+		updateScroll item
+
+	updateScroll = (item) ->
+		{container, content} = item
+
+		# x
+		x = impl.getItemX(container)
+		val = Math.min(content[0], Math.max(content[2], x))
+		if val isnt x
+			impl.setItemX container, val
+
+		# y
+		y = impl.getItemY(container)
+		val = Math.min(content[1], Math.max(content[3], y))
+		if val isnt y
+			impl.setItemY container, val
+
 	###
 	Recalculate current content position and size
 	###
@@ -42,13 +58,13 @@ module.exports = (impl) ->
 			maxWidth = Math.max maxWidth, impl.getItemWidth(child)
 			maxHeight = Math.max maxHeight, impl.getItemHeight(child)
 
-		maxX = minX + maxWidth - impl.getItemWidth(id)
-		maxY = minY + maxHeight - impl.getItemHeight(id)
+		maxX = - maxWidth - minX + impl.getItemWidth(id)
+		maxY = - maxHeight - minY + impl.getItemHeight(id)
 
-		content[0] = -minX
-		content[1] = -minY
-		content[2] = -maxX
-		content[3] = -maxY
+		content[0] = 0
+		content[1] = 0
+		content[2] = maxX
+		content[3] = maxY
 
 	###
 	Update Scrollable content on the child appended or removed
@@ -62,12 +78,30 @@ module.exports = (impl) ->
 		# update old
 		if old and oldItem.type is 'Scrollable' and oldItem.container
 			updateContent old
+			updateScroll oldItem
 
 		_super id, val
 
 		# update new
 		if parent and parent.type is 'Scrollable' and parent.container
 			updateContent val
+			updateScroll parent
+
+	overrideSetter = (methodName) ->
+		impl[methodName] = do (_super = impl[methodName]) -> (id, val) ->
+			_super id, val
+
+			parentId = impl.getItemParent id
+			parent = items[parentId]
+			if parent?.type is 'Scrollable'
+				updateContent parentId
+				updateScroll parent
+
+	overrideSetter 'setItemX'
+	overrideSetter 'setItemY'
+	overrideSetter 'setItemWidth'
+	overrideSetter 'setItemHeight'
+	overrideSetter 'setItemVisible'
 
 	createContinuous = (id, prop) ->
 		item = items[id]
@@ -160,14 +194,8 @@ module.exports = (impl) ->
 
 	useWheel = (id) ->
 		item = items[id]
-		lastTime = 0
 
 		impl.attachItemSignal id, 'pointerWheel', (e) ->
-			now = Date.now()
-			if now - lastTime > WHEEL_FOCUS_DURATION
-				updateContent id
-			lastTime = now
-
 			x = e.x / WHEEL_DIVISOR
 			y = e.y / WHEEL_DIVISOR
 			scroll item, x, y

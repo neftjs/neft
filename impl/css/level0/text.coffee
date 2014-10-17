@@ -17,23 +17,31 @@ module.exports = (impl) ->
 				updateSize id
 			, 1000
 
-		limit = 100
+		{style} = item.elem
+		if item.autoWidth
+			style.width = 'auto'
+		if item.autoHeight
+			style.height = 'auto'
+
+		limit = 16 * 60 * 2
 		requestAnimationFrame update = ->
 			{elem} = item
 
 			unless limit
 				return
 
-			if (item.autoWidth or item.autoHeight) and elem.offsetWidth is 0 and elem.innerHTML
+			width = elem.offsetWidth
+			height = elem.offsetHeight
+			if (item.autoWidth and width is 0) or (item.autoHeight and height is 0) and elem.innerHTML
 				limit--
 				requestAnimationFrame update
 				return;
 
 			if item.autoWidth
-				impl.setItemWidth id, elem.offsetWidth+1
+				impl.setItemWidth id, width+1
 
 			if item.autoHeight
-				impl.setItemHeight id, elem.offsetHeight
+				impl.setItemHeight id, height
 
 			item.textUpdatePending = false
 
@@ -41,7 +49,7 @@ module.exports = (impl) ->
 		_super id, val
 
 		item = items[id]
-		if item.type is 'Text'
+		if item.type is 'Text' and not item.textUpdatePending
 			item.elem.style.whiteSpace = if val > 0 then 'normal' else 'nowrap'
 			item.autoWidth = val <= 0
 			updateSize id
@@ -50,13 +58,14 @@ module.exports = (impl) ->
 		_super id, val
 
 		item = items[id]
-		if item.type is 'Text'
+		if item.type is 'Text' and not item.textUpdatePending
 			item.autoHeight = val <= 0
 			updateSize id
 
 	create: (id, target) ->
 		Item.create id, target
 
+		target.lineHeight = 1
 		target.autoWidth = true
 		target.autoHeight = true
 		target.textUpdatePending = false
@@ -87,12 +96,15 @@ module.exports = (impl) ->
 		items[id].elem.style.color = val
 
 	getTextLineHeight: (id) ->
-		{style} = items[id].elem
-		(parseFloat(style.lineHeight) / parseFloat(style.fontSize)) or 0
+		items[id].lineHeight
 
 	setTextLineHeight: (id, val) ->
-		{style} = items[id].elem
-		pxLineHeight = val * (parseFloat(style.fontSize) or 0)
+		item = items[id]
+		style = item.elem.style
+
+		item.lineHeight = val
+
+		pxLineHeight = Math.max 1, val * (parseFloat(style.fontSize) or 0)
 		style.lineHeight = "#{pxLineHeight}px"
 		updateSize id
 
