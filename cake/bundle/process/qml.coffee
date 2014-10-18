@@ -9,15 +9,32 @@ utils.isQML = true
 ###
 Provide necessary standard browser globals
 ###
+SIGNAL =
+	connect: ->
+	disconnect: ->
+
 global.Font = {}
 global.Qt =
 	createQmlObject: ->
 		font: {}
+		onClicked: SIGNAL
+		onPressed: SIGNAL
+		onReleased: SIGNAL
+		onReleased: SIGNAL
+		onEntered: SIGNAL
+		onExited: SIGNAL
+		onPositionChanged: SIGNAL
+		onWheel: SIGNAL
 	binding: ->
-global.styles =
+	rgba: ->
+	hsla: ->
+global.stylesBody =
 	children: []
-global.window =
+global.stylesWindow =
 	items: {}
+	widthChanged: SIGNAL
+	heightChanged: SIGNAL
 global.qmlUtils =
 	createBinding: ->
-global.hatchery = {}
+global.stylesHatchery = {}
+global.requestAnimationFrame = ->

@@ -5,7 +5,7 @@
 module.exports = (type, callback) ->
 
 	index = path.resolve fs.realpathSync('.'), 'index.coffee'
-	child = cp.fork __dirname + '/bundle/process.coffee', [index, type]#, silent: true
+	child = cp.fork __dirname + '/bundle/process.coffee', [index, type], silent: true
 	child.on 'message', (msg) ->
 
 		child.kill()

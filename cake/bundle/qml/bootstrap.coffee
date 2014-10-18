@@ -4,11 +4,11 @@ boot = ->
 		Qt.include src, (e) ->
 			switch e.status
 				when e.OK
-					callback()
+					callback?()
 				when e.NETWORK_ERROR
 					console.log "Cannot load #{src}"
 				when e.EXCEPTION
 					console.log "#{e.exception.name}: #{e.exception.message}"
 
 	require 'bootstrap/timers.js', ->
-		require 'script.js', ->
+		require 'script.js'

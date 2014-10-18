@@ -38,9 +38,22 @@ fileScope = ->
 	setImmediate = setTimeout
 	console.assert = console.assert.bind console
 
+	# informations
+	`
+	setTimeout = (function(){
+		var _super = setTimeout;
+
+		return function(){
+			console.warn("Using \`setTimeout()\` is not recommended; " +
+			             "use \`setImmediate()\` instead");
+
+			_super.apply(null, arguments);
+		};
+	})();
+	`
+
 	# used as `require`
 	getModule = (paths, name) ->
-
 		modules[paths[name]]
 
 	# fill modules by their bodies

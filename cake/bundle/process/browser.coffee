@@ -10,6 +10,7 @@ utils.isBrowser = true
 Provide necessary standard browser globals
 ###
 global.window =
+	isFake: true
 	addEventListener: ->
 	Image: ->
 	HTMLCanvasElement: ->
@@ -39,6 +40,8 @@ global.document =
 		removeChild: ->
 		getBoundingClientRect: -> {}
 		addEventListener: ->
+		setAttribute: ->
+		innerHTML: ''
 	createElementNS: ->
 		width: baseVal: value: null
 		height: baseVal: value: null

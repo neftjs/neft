@@ -74,11 +74,11 @@ build = (type, opts, callback) ->
 			src = cleaner.toString()
 
 			# change properties definitions into simple assignments
-			lines = src.split "\n"
-			for line, i in lines
-				if PROPS_DEFS.test line
-					lines[i] = line.replace PROPS_DEFS, '$1.$2 = $4;'
-			src = lines.join "\n"
+			# lines = src.split "\n"
+			# for line, i in lines
+			# 	if PROPS_DEFS.test line
+			# 		lines[i] = line.replace PROPS_DEFS, '$1.$2 = $4;'
+			# src = lines.join "\n"
 
 		fs.outputFileSync out, src
 
@@ -226,8 +226,8 @@ buildQmlTask = task 'build:qml', 'Build bundle for qml environment', (opts, call
 buildTask = task 'build', 'Build bundles for all supported environments', (opts, callback) ->
 
 	stack = new utils.async.Stack
-	stack.add null, buildBrowserTask, opts
-	stack.add null, buildQmlTask, opts
+	stack.add buildBrowserTask, null, [opts]
+	stack.add buildQmlTask, null, [opts]
 	stack.runAll callback
 
 allTask = task 'all', 'Compile, build, link and run index', (opts, callback) ->

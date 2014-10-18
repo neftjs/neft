@@ -1,14 +1,15 @@
 import QtQuick 2.3
+import QtWebKit 3.0
 import "./bootstrap.js" as Bootstrap
 
 Item {
-	id: window
-	readonly property var items: Object({ window: window })
+	id: stylesWindow
+	readonly property var items: Object({})
 	width: 900
 	height: 700
 
 	Item {
-		id: hatchery
+		id: stylesHatchery
 		visible: false
 	}
 
@@ -17,7 +18,9 @@ Item {
 
 		// TODO: use cache for funcs
 		function createBinding(item, prop, binding){
-			var func = "func = function(){ try {return " + binding + ";} catch(err){ console.log('Binding error:\\n'+err.message+'\\n"+binding+"'); } }";
+			// DEBUG
+			var func = "func = function(){ try {return " + binding + ";} catch(err){ console.log(\"Binding error:\\n\"+err.message+\"\\n"+binding+"\"); } }";
+			// var func = "func = function(){ return " + binding + "; }";
 			try {
 				eval(func);
 			} catch(err){
@@ -28,13 +31,22 @@ Item {
 		}
 	}
 
+	WebView {
+		id: webview
+		anchors.fill: parent
+	}
+
 	Item {
-		id: styles
+		id: stylesBody
 	}
 
 	Timer {
 		id: setImmediateTimer
 		interval: 1
+	}
+
+	Canvas {
+		id: canvas
 	}
 
 	Component.onCompleted: {

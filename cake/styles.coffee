@@ -12,7 +12,7 @@ exports.compile = (file) ->
 
 	# prepare scope name
 	parts = name.split '/'
-	parts.reverse()
+	# parts.reverse()
 	for part, i in parts
 		parts[i] = part[0].toUpperCase() + part.slice(1)
 
@@ -54,7 +54,7 @@ exports.finish = (file) ->
 			base = name.split('/').map(-> '../').join('')
 			base = base.slice 3
 			base ||= './'
-			code += "#{scopeName} = (args...) -> scope.create require('#{base}#{path}'), args\n"
+			code += "#{scopeName} = (args) -> scope.create require('#{base}#{path}'), args\n"
 	code += "\n"
 
 	data = data.replace '{{modules}}', code
