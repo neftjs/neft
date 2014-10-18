@@ -16,7 +16,7 @@ module.exports = (App) ->
 	TEXT_MODE_URI_PREFIX = 'legacy/'
 	TEXT_MODE_COOKIE_NAME = 'textMode'
 
-	App.views[VIEW_NAME] = do ->
+	view = new App.View do ->
 		path = pathUtils.join __dirname, VIEW_FILE
 		file = fs.readFileSync path, 'utf-8'
 		View.fromHTML VIEW_NAME, file
@@ -30,7 +30,7 @@ module.exports = (App) ->
 
 	new App.Route
 		uri: '*'
-		view: VIEW_NAME
+		view: view
 		callback: (req, res, callback, next) ->
 			# app js uri
 			if req.uri is APP_JS_URI

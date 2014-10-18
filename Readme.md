@@ -1,79 +1,79 @@
-*Squirrel.io* - Multi-platform Hybrid App Framework
+*Neft.io* - Multi-platform Hybrid App Framework
 =============
 
 Font-end and back-end modern framework for desktop and mobile apps which
 works natively and in browsers (*SVG* + *XML* + *CS/JS*).
 
+Why Neft
+--------
+
+1. Deployment HTML5 websites as native applications failed.
+
+   It's time for change.
+
+2. Imagine your product working fully responsive on all the devices including browsers
+   made easy and super-fast!
+
+   Got idea?
+
+2. With Neft.io you needs only one team!
+
+   Frontend, Backend, iOS, Android, Windows Phone -> Neft.io
+
+3. Easiest, cheaper and better for users!
+
+   Check powerful Neft.io framework made for multiplatform challenges.
+
 Features
 --------
 
-1. Truly multi-platform
+1. We created shiny new set of APIs
+   which allows to create fast and powerful applications.
 
-   *Squirell.io* runs in all modern browsers (*IE 9+*) and natively in *iOS*, *Android*,
-   *Windows Phone*, *BlackBerry*, *Windows*, *Mac OS X*, *Linux* and more.
+   Old inconsistent APIs v Neft.io
+
+2. Truly multi-platform
+
+   *Neft.io* runs in all modern browsers and natively in *iOS*, *Android*,
+   *Windows Phone*, *BlackBerry*, *Windows*, *OS X*, *Linux* and more.
 
    No PhoneGap. No HTML. Truly native - gorgeous performance.
 
-2. UI
-
-   Import your layout just from any *SVG* program (e.g. *Adobe Illustrator*) into our editor,
-   or write styles on your own in our internal format.
-
-   Layouts built in this way are fully responsive, extremely fast and easy in development.
-
-3. View
-
-   Custom performance-focused *DOM* with high-level *API* helps you even faster write
-   app views in *XML* and *HTML*.
-
-   Our *View API* is full of functionalities.
-
-4. Server + Client
-
-   Use our *API*s (*DB*, *Schema*, *Model*, *Routing*) and many *utils*.
-
-   Write in *CoffeeScript* or *JavaScript*.
+3. Server + Client
 
    Share *back-end* code with the *front-end* for faster development.
+
+   Each part of the *Neft.io* has been designed to work on the server and on the client side.
+
+   With our APIs you only need to point which things should be hidden for the client due to security.
+
+3. View and rendering
+
+   Import your layout just from any *SVG* program (e.g. *Adobe Illustrator*).
+
+   Custom performance-focused *DOM* with high-level *APIs* helps you even faster write
+   views in *HTML*.
+
+4. Linked Data, Database abstract, Routing ... and a lot of utils ...
+
+   Check our Documentation for more
 
 Examples
 --------
 
-Is it too good to be true? Check our examples and applications built in *Squirell.io*.
+Is it too good to be true? Check our examples and applications built in *Neft.io*.
 
 Prices
 ------
 
-*Squirell.io* has been made for business.
-We want to helps with creating complete and valuable applications.
+*Neft.io* has been made for business.
+We want to help with creating complete and valuable applications.
 
 **Framework & License - $980**
 
 Check *playground* and write some demo before buying it.
 
-Documentation
--------------
-
-*Squirrell.io* is fully docuemented.
-Check **API documentation** and **tutorials**.
-Don't forget about free *playground*.
-
 Contact
 -------
 
 Write an email to *contact@squirell.io* or use the form below.
-
-TODO
-----
-
-1. View Element realtime updates (+ View-Styles)
-2. View Element `style` element X
-3. View Element condition bindings X
-4. Styles clip X
-5. Styles scroll X
-6. View scripts X
-7. View templates
-8. View Element events X
-9. View Styles common items OUT
-10. Styles input
-11. View form

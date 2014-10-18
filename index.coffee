@@ -6,7 +6,6 @@
 
 # TODO: use view-styles only for a client bundle
 # if utils.isClient
-[_] = ['view-styles'].map require
 
 Db = Db.Impl()
 
@@ -31,6 +30,8 @@ module.exports = (opts={}) ->
 			host: pkg.config.host
 			language: pkg.config.language
 		Route: null
+		Template: null
+		View: null
 		models: opts.models
 		controllers: opts.controllers
 		handlers: opts.handlers
@@ -39,6 +40,11 @@ module.exports = (opts={}) ->
 		templates: opts.templates
 
 	App.Route = require('./route') App
+	App.Template = require('./template') App
+	App.View = require('./view') App
+
+	# load styles
+	require('styles') opts.styles
 
 	# load bootstrap
 	if utils.isNode
@@ -47,14 +53,9 @@ module.exports = (opts={}) ->
 	# load views
 	for path, json of App.views
 		unless json instanceof View
-			App.views[path] = View.fromJSON path, json
+			App.views[path] = new App.View View.fromJSON path, json
 
-	# load styles
-	if utils.isClient
-		for path, json of opts.styles
-			View.loadStylesFromJSON path, json
-
-	# load models
+	# loading files helper
 	init = (files) ->
 		for name, module of files
 			files[name] = module App
