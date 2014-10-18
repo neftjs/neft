@@ -9,7 +9,7 @@ log = log.scope 'Routing'
 module.exports = (Routing) ->
 
 	showAsJson = (data) ->
-		unless utils.isObject data
+		if not webview? or not utils.isObject(data)
 			return false
 
 		unless json = utils.tryFunc(JSON.stringify, null, [data, null, 4])
@@ -38,7 +38,7 @@ module.exports = (Routing) ->
 		true
 
 	showAsHtml = (data) ->
-		unless data instanceof View
+		if not webview? or not (data instanceof View)
 			return false
 
 		webview.loadHtml data.node.stringify()
@@ -68,7 +68,7 @@ module.exports = (Routing) ->
 		mainItem.clear()
 
 		# clear messages container
-		webview.loadHtml ''
+		webview?.loadHtml ''
 
 		# render data
 		if showAsStyles(data)
