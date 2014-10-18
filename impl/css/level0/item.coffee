@@ -153,9 +153,6 @@ module.exports = (impl) ->
 		target.hotActions = 0
 		target.isHot = false
 
-	confirmItemChild: (id, child) ->
-		!!items[id]?.elem.querySelector "##{child}"
-
 	getItemChildren: (id) ->
 		item = items[id]
 

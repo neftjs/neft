@@ -6,19 +6,27 @@ utils = require 'utils'
 
 impl = require './impl/base'
 
+TYPES = ['Item', 'Image', 'Text',
+
+         'Rectangle', 'Grid',
+         'Animation', 'PropertyAnimation', 'NumberAnimation',
+
+         'Column', 'Row', 'Scrollable']
+
 platformImpl = switch true
 	# when utils.isBrowser and window.HTMLCanvasElement?
 	# 	require('./impl/pixi') impl
 	when utils.isBrowser
 		require('./impl/css') impl
-	when utils.isQml
+	when utils.isQML
 		require('./impl/qml') impl
 
 if platformImpl
 	utils.mergeDeep impl, platformImpl
 
 # merge types
-for name, type of impl.Types
+for name in TYPES
+	type = impl.Types[name]
 	type = impl.Types[name] = type(impl)
 	utils.merge impl, type
 
