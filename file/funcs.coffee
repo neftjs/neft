@@ -58,10 +58,31 @@ module.exports = (File) ->
 	File::funcs = null
 
 	if utils.isNode
+		linkUnits = (funcs, target) ->
+			for name, func of funcs
+				for _, unitName of target.units
+					unit = File._files[unitName]
+					unitFuncs = unit.funcs
+
+					# don't override funcs
+					if unitFuncs.hasOwnProperty name
+						continue
+
+					# save function
+					unitFuncs[name] = func
+
+					# safe function recursively
+					linkUnits funcs, unit
+
+			null
+
 		File.onParsed do ->
 			funcs = require('./parse/funcs') File
 			(file) ->
 				funcs file
+
+				# link local funcs into units
+				linkUnits file.funcs, file
 
 	File::clone = do (_super = File::clone) -> ->
 		clone = _super.call @

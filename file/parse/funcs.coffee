@@ -26,7 +26,4 @@ module.exports = (File) -> (file) ->
 		# remove node
 		node.parent = null
 
-	if utils.isEmpty funcs
-		file.funcs = null
-
 	null
