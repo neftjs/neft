@@ -1,2 +1,10 @@
 exports.createQmlObject = (type, id) ->
-	Qt.createQmlObject "import QtQuick 2.3; #{type} {property string uid: \"#{id}\";}", stylesHatchery
+	qmlStr = "import QtQuick 2.3; "
+	qmlStr += "#{type} {"
+
+	if id?
+		qmlStr += "property string uid: \"#{id}\";"
+
+	qmlStr += "}"
+
+	Qt.createQmlObject qmlStr, stylesHatchery

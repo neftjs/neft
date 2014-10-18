@@ -32,7 +32,7 @@ SIGNALS =
 			'mousewheel'
 
 SIGNALS_CURSORS =
-	pointerClicked: 'pointer'
+	'pointerClicked': 'pointer'
 
 mouseCoordsArgs = (e) ->
 	x: e.screenX
@@ -278,8 +278,8 @@ module.exports = (impl) ->
 		signal = SIGNALS[name]?(elem, func) or SIGNALS[name]
 
 		customFunc = (e) ->
-			args = SIGNALS_ARGS[name]? e
-			func args
+			arg = SIGNALS_ARGS[name]? e
+			func arg
 
 		if typeof signal is 'string'
 			elem.addEventListener signal, customFunc

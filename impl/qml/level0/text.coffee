@@ -12,14 +12,45 @@ module.exports = (impl) ->
 	{items} = impl
 	{Item, Image} = impl.Types
 
+	# TODO: remove it if the binding implementation will be ready
 	updateSize = (id) ->
-		impl.setItemWidth id, impl.getItemWidth(id)
-		impl.setItemHeight id, impl.getItemHeight(id)
+		item = items[id]
+		{elem} = item
+
+		item.textUpdatePending = true
+
+		if item.autoWidth
+			impl.setItemWidth id, elem.contentWidth
+
+		if item.autoHeight
+			impl.setItemHeight id, elem.contentHeight
+
+		item.textUpdatePending = false
+
+	impl.setItemWidth = do (_super = impl.setItemWidth) -> (id, val) ->
+		_super id, val
+
+		item = items[id]
+		if item.type is 'Text' and not item.textUpdatePending
+			item.autoWidth = val <= 0
+			updateSize id
+
+	impl.setItemHeight = do (_super = impl.setItemHeight) -> (id, val) ->
+		_super id, val
+
+		item = items[id]
+		if item.type is 'Text' and not item.textUpdatePending
+			item.autoHeight = val <= 0
+			updateSize id
 
 	create: (id, target) ->
 		target.elem ?= impl.utils.createQmlObject 'Text', id
 
 		Item.create id, target
+
+		target.autoWidth = true
+		target.autoHeight = true
+		target.textUpdatePending = false
 
 		target.elem.font.pixelSize = 14
 		target.elem.font.family = 'sans-serif'

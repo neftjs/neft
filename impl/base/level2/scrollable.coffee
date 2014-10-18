@@ -16,15 +16,13 @@ module.exports = (impl) ->
 
 		if x isnt 0
 			val = impl.getItemX(container)+x
-			val = Math.max(content[2], Math.min(content[0], val))
+			val = Math.min(content[0], Math.max(content[2], val))
 			impl.setItemX container, val
 
 		if y isnt 0
 			val = impl.getItemY(container)+y
-			val = Math.max(content[3], Math.min(content[1], val))
+			val = Math.min(content[1], Math.max(content[3], val))
 			impl.setItemY container, val
-
-		updateScroll item
 
 	updateScroll = (item) ->
 		{container, content} = item
@@ -93,7 +91,7 @@ module.exports = (impl) ->
 
 			parentId = impl.getItemParent id
 			parent = items[parentId]
-			if parent?.type is 'Scrollable'
+			if parent?.type is 'Scrollable' and parent.container isnt id
 				updateContent parentId
 				updateScroll parent
 

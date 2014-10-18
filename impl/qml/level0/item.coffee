@@ -1,10 +1,40 @@
 'use strict'
 
+SIGNALS =
+	'pointerClicked': 'onClicked'
+	'pointerPressed': 'onPressed'
+	'pointerReleased': 'onReleased'
+	'pointerEntered': 'onEntered'
+	'pointerExited': 'onExited'
+	'pointerMove': 'onPositionChanged'
+	'pointerWheel': 'onWheel'
+
+HOVER_SIGNALS =
+	'pointerEntered': true
+	'pointerExited': true
+	'pointerMove': true
+
+SIGNALS_CURSORS =
+	'pointerClicked': Qt.PointingHandCursor
+
+mouseCoordsArgs = (e) ->
+	x: e.x
+	y: e.y
+
+SIGNALS_ARGS =
+	'pointerPressed': mouseCoordsArgs
+	'pointerReleased': mouseCoordsArgs
+	'pointerMove': mouseCoordsArgs
+	'pointerWheel': (e) ->
+		x: e.angleDelta.x
+		y: e.angleDelta.y
+
 module.exports = (impl) ->
 	{items} = impl
 
 	create: (id, target) ->
 		target.elem ?= impl.utils.createQmlObject 'Item', id
+		target.mouseArea = null
 
 	getItemChildren: (id) ->
 		item = items[id]
@@ -88,8 +118,32 @@ module.exports = (impl) ->
 	setItemOpacity: (id, val) ->
 		items[id]?.elem.opacity = val
 
+	# TODO: `pointerReleased` doesn't work with `pointerPressed`
 	attachItemSignal: (id, name, func) ->
-		elem = items[id]?.elem
-		return unless elem
+		item = items[id]
 
-		# TODO
+		# create mouse area if needed
+		unless mouseArea = item.mouseArea
+			mouseArea = item.mouseArea = impl.utils.createQmlObject 'MouseArea'
+			mouseArea.propagateComposedEvents = true
+			mouseArea.parent = item.elem
+
+			qmlUtils.createBinding mouseArea, 'width', "stylesWindow.items['#{id}'].elem.width"
+			qmlUtils.createBinding mouseArea, 'height', "stylesWindow.items['#{id}'].elem.height"
+
+		# hover
+		if HOVER_SIGNALS[name]
+			mouseArea.hoverEnabled = true
+
+		# listen on an event
+		signal = SIGNALS[name]
+
+		customFunc = (e) ->
+			arg = SIGNALS_ARGS[name]? e
+			func arg
+
+		mouseArea[signal].connect customFunc
+
+		# cursor
+		if cursor = SIGNALS_CURSORS[name]
+			mouseArea.cursorShape = cursor
