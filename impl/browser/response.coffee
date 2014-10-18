@@ -6,8 +6,6 @@ Renderer = require 'renderer'
 
 log = log.scope 'Routing'
 
-# @item.parent = Renderer.mainItem
-
 messagesContainer = document.createElement 'div'
 window.addEventListener 'load', ->
 	document.body.appendChild messagesContainer
