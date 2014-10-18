@@ -9,3 +9,4 @@ exports.SETTER_METHODS_NAMES =
 	'y': 'setItemY'
 	'width': 'setItemWidth'
 	'height': 'setItemHeight'
+	'opacity': 'setItemOpacity'
