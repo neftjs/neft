@@ -892,8 +892,8 @@ Use optionally `keyGen` and `valueGen` to specify custom keys and values
 
 		for elem, i in arr
 
-			key = if keyGen then keyGen(elem, i, arr) else i
-			value = if valueGen then valueGen(elem, i, arr) else elem
+			key = if keyGen then keyGen(i, elem, arr) else i
+			value = if valueGen then valueGen(i, elem, arr) else elem
 
 			target[key] = value
 
