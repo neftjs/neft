@@ -12,6 +12,15 @@ module.exports = (Scope, Impl) -> class Item
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
+	ALL_HANDLERS = utils.arrayToObject Item.SIGNALS, (_, val) ->
+		signal.getHandlerName val
+	, -> true
+	ALL_HANDLERS.onReady = true
+
+	DEEP_PROPERTIES =
+		anchors: true
+		animations: true
+
 	Binding = require './item/binding'
 	Anchors = require './item/anchors'
 	Animations = require('./item/animations') Scope
@@ -29,22 +38,19 @@ module.exports = (Scope, Impl) -> class Item
 
 		utils.defProp @, 'animations', 'e', new Animations @
 
-		# create signals
-		Item.SIGNALS.forEach (signalName) =>
-			signalFunc = signal.createOnlySignal @, signalName
+		# register signals
+		@ready = null
+		for signalName in Item.SIGNALS
+			@[signalName] = null
 
-			# initialize
-			handler = (listener) =>
-				signalFunc.connected.disconnect handler
-				signalToCall = =>
-					Function.apply.call signalFunc, @, arguments
-				Impl.attachItemSignal uid, signalName, signalToCall
-
-			signalFunc.connected.connect handler
-
-		signal.createOnlySignal @, 'ready'
-
-		utils.mergeDeep @, opts
+		# fill
+		for key, val of opts
+			if ALL_HANDLERS[key]
+				@[key].connect val
+			else if DEEP_PROPERTIES[key]
+				utils.mergeDeep @[key], val
+			else
+				@[key] = val
 
 		# append children
 		if children
@@ -54,14 +60,12 @@ module.exports = (Scope, Impl) -> class Item
 		# animations
 		@animations.initialize()
 
-		# call `ready` signal
-		setImmediate => @ready()
-
 		Object.seal @
 
 	createBindedSetter = (propName, setFunc) ->
 		(val) ->
 			if typeof val is 'string'
+				# TODO: optimize it
 				setImmediate =>
 					binding = new Binding @, val
 					Impl.setItemBinding @_uid, propName, binding
@@ -78,10 +82,17 @@ module.exports = (Scope, Impl) -> class Item
 		expect(val).toBe.any Scope
 		utils.defProp @, 'scope', 'e', val
 
-	signal.createHandler @::, 'ready'
+	readyLazySignal = signal.createLazy @::, 'ready'
+
+	readyLazySignal.onInitialized (item) ->
+		setImmediate => @ready()
+
+	onLazySignalInitialized = (item, signalName) ->
+		Impl.attachItemSignal item._uid, signalName, item[signalName]
 
 	for signalName in Item.SIGNALS
-		signal.createHandler @::, signalName
+		lazySignal = signal.createLazy @::, signalName
+		lazySignal.onInitialized onLazySignalInitialized
 
 	utils.defProp @::, 'parent', 'e', ->
 		items[Impl.getItemParent @_uid]
