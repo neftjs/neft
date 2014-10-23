@@ -105,7 +105,7 @@ describe 'onChanged signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.changed.disconnect listener
+		list.onChanged.disconnect listener
 
 	it 'works with set()', ->
 		list = List 1, 2, 3
@@ -133,7 +133,7 @@ describe 'onInserted signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.inserted.disconnect listener
+		list.onInserted.disconnect listener
 
 	it 'works with append()', ->
 		list = List 1, 2
@@ -170,7 +170,7 @@ describe 'onPopped signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		list.popped.disconnect listener
+		list.onPopped.disconnect listener
 
 	it 'works with pop()', ->
 		list = List 1, 2
