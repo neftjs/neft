@@ -59,6 +59,15 @@ module.exports = (Scope, Impl) -> class Item
 
 		Object.seal @
 
+	createBindedSetter = (propName, setFunc) ->
+		(val) ->
+			if typeof val is 'string'
+				setImmediate =>
+					binding = new Binding @, val
+					Impl.setItemBinding @_uid, propName, binding
+			else
+				setFunc.call @, val
+
 	utils.defProp @::, 'id', 'e', ->
 		@_uid
 	, (val) ->
@@ -100,49 +109,29 @@ module.exports = (Scope, Impl) -> class Item
 
 	utils.defProp @::, 'width', 'e', ->
 		Impl.getItemWidth @_uid
-	, (val) ->
-		if typeof val is 'number'
-			expect(val).toBe.float()
-			expect(val).not().toBe.lessThan 0
-			Impl.setItemWidth @_uid, val
-		else
-			setImmediate =>
-				binding = new Binding @, val
-				Impl.setItemBinding @_uid, 'width', binding
+	, createBindedSetter 'width', (val) ->
+		expect(val).toBe.float()
+		expect(val).not().toBe.lessThan 0
+		Impl.setItemWidth @_uid, val
 
 	utils.defProp @::, 'height', 'e', ->
 		Impl.getItemHeight @_uid
-	, (val) ->
-		if typeof val is 'number'
-			expect(val).toBe.float()
-			expect(val).not().toBe.lessThan 0
-			Impl.setItemHeight @_uid, val
-		else
-			setImmediate =>
-				binding = new Binding @, val
-				Impl.setItemBinding @_uid, 'height', binding
+	, createBindedSetter 'height', (val) ->
+		expect(val).toBe.float()
+		expect(val).not().toBe.lessThan 0
+		Impl.setItemHeight @_uid, val
 
 	utils.defProp @::, 'x', 'e', ->
 		Impl.getItemX @_uid
-	, (val) ->
-		if typeof val is 'number'
-			expect(val).toBe.float()
-			Impl.setItemX @_uid, val
-		else
-			setImmediate =>
-				binding = new Binding @, val
-				Impl.setItemBinding @_uid, 'x', binding
+	, createBindedSetter 'x', (val) ->
+		expect(val).toBe.float()
+		Impl.setItemX @_uid, val
 
 	utils.defProp @::, 'y', 'e', ->
 		Impl.getItemY @_uid
-	, (val) ->
-		if typeof val is 'number'
-			expect(val).toBe.float()
-			Impl.setItemY @_uid, val
-		else
-			setImmediate =>
-				binding = new Binding @, val
-				Impl.setItemBinding @_uid, 'y', binding
+	, createBindedSetter 'y', (val) ->
+		expect(val).toBe.float()
+		Impl.setItemY @_uid, val
 
 	utils.defProp @::, 'z', 'e', ->
 		Impl.getItemZ @_uid
@@ -176,6 +165,7 @@ module.exports = (Scope, Impl) -> class Item
 	utils.defProp @::, 'children', 'e', ->
 		children = Impl.getItemChildren @_uid
 
+		# TODO: cache array for the optimization
 		for child, i in children
 			children[i] = items[child]
 
