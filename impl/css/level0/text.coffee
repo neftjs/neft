@@ -1,5 +1,7 @@
 'use strict'
 
+utils = require 'utils'
+
 isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
 module.exports = (impl) ->
@@ -95,6 +97,7 @@ module.exports = (impl) ->
 		item = items[id]
 		if item.type is 'Text' and not item.textUpdatePending
 			item.elem.style.whiteSpace = if val > 0 then 'normal' else 'nowrap'
+			item.textArea.style.width = if val > 0 then '100%' else 'auto'
 			item.autoWidth = val <= 0
 			updateSize id
 
@@ -103,6 +106,7 @@ module.exports = (impl) ->
 
 		item = items[id]
 		if item.type is 'Text' and not item.textUpdatePending
+			item.textArea.style.height = if val > 0 then '100%' else 'auto'
 			item.autoHeight = val <= 0
 			updateSize id
 
@@ -114,10 +118,12 @@ module.exports = (impl) ->
 		target.autoHeight = true
 		target.textUpdatePending = false
 
-		# TODO: write text in a container
+		# textArea
+		target.textArea = textArea = document.createElement 'span'
+		target.elem.appendChild textArea
 
 		# set default styles
-		{style} = target.elem
+		{style} = textArea
 		style.width = 'auto'
 		style.height = 'auto'
 		style.whiteSpace = 'nowrap'
@@ -127,24 +133,24 @@ module.exports = (impl) ->
 			style.marginTop = '1px'
 
 	getText: (id) ->
-		items[id].elem.innerHTML
+		items[id].textArea.innerHTML
 
 	setText: (id, val) ->
-		items[id].elem.innerHTML = val
+		items[id].textArea.innerHTML = val
 		updateSize id
 
 	getTextColor: (id) ->
-		items[id].elem.style.color
+		items[id].textArea.style.color
 
 	setTextColor: (id, val) ->
-		items[id].elem.style.color = val
+		items[id].textArea.style.color = val
 
 	getTextLineHeight: (id) ->
 		items[id].lineHeight
 
 	setTextLineHeight: (id, val) ->
 		item = items[id]
-		style = item.elem.style
+		{style} = item.textArea
 
 		item.lineHeight = val
 
@@ -153,40 +159,40 @@ module.exports = (impl) ->
 		updateSize id
 
 	getTextFontFamily: (id) ->
-		items[id].elem.style.fontFamily
+		items[id].textArea.style.fontFamily
 
 	setTextFontFamily: (id, val) ->
-		items[id].elem.style.fontFamily = val
+		items[id].textArea.style.fontFamily = val
 		updateSize id
 
 	getTextFontPixelSize: (id) ->
-		parseFloat(items[id].elem.style.fontSize) or 0
+		parseFloat(items[id].textArea.style.fontSize) or 0
 
 	setTextFontPixelSize: (id, val) ->
-		{style} = items[id].elem
+		{style} = items[id].textArea
 
 		lineHeight = impl.getTextLineHeight id
-		items[id].elem.style.fontSize = "#{val}px"
+		items[id].textArea.style.fontSize = "#{val}px"
 		impl.setTextLineHeight id, lineHeight
 		updateSize id
 
 	getTextFontWeight: (id) ->
-		items[id].elem.style.fontWeight / 900
+		items[id].textArea.style.fontWeight / 900
 
 	setTextFontWeight: (id, val) ->
-		items[id].elem.style.fontWeight = Math.round(val * 9) * 100
+		items[id].textArea.style.fontWeight = Math.round(val * 9) * 100
 		updateSize id
 
 	getTextFontWordSpacing: (id) ->
-		parseFloat(items[id].elem.style.wordSpacing) or 0
+		parseFloat(items[id].textArea.style.wordSpacing) or 0
 
 	setTextFontWordSpacing: (id, val) ->
-		items[id].elem.style.wordSpacing = "#{val}px"
+		items[id].textArea.style.wordSpacing = "#{val}px"
 		updateSize id
 
 	getTextFontLetterSpacing: (id) ->
-		parseFloat(items[id].elem.style.letterSpacing) or 0
+		parseFloat(items[id].textArea.style.letterSpacing) or 0
 
 	setTextFontLetterSpacing: (id, val) ->
-		items[id].elem.style.letterSpacing = "#{val}px"
+		items[id].textArea.style.letterSpacing = "#{val}px"
 		updateSize id

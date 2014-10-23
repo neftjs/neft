@@ -37,13 +37,17 @@ module.exports = (impl) ->
 
 	MARGIN_FUNCS =
 		left: (id) ->
-			items[id].anchorMargins?.left
+			items[id].anchorMargins?.left or 0
 		top: (id) ->
-			items[id].anchorMargins?.top
+			items[id].anchorMargins?.top or 0
 		right: (id) ->
-			items[id].anchorMargins?.right
+			- items[id].anchorMargins?.right or 0
 		bottom: (id) ->
-			items[id].anchorMargins?.bottom
+			- items[id].anchorMargins?.bottom or 0
+		horizontalCenter: (id) ->
+			MARGIN_FUNCS.left(id) + MARGIN_FUNCS.right(id)
+		verticalCenter: (id) ->
+			MARGIN_FUNCS.top(id) + MARGIN_FUNCS.bottom(id)
 
 	TYPES_BINDINGS =
 		left: (id, val) ->
@@ -80,14 +84,14 @@ module.exports = (impl) ->
 
 			left = getAnchorValue(val) + " - this.width/2"
 			left = new Binding null, left
-			impl.setItemBinding id, 'x', left
+			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.horizontalCenter
 		verticalCenter: (id, val) ->
 			unless val
 				return impl.setItemBinding id, 'y', null
 
 			top = getAnchorValue(val) + " - this.height/2"
 			top = new Binding null, top
-			impl.setItemBinding id, 'y', top
+			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.verticalCenter
 		centerIn: (id, val) ->
 			unless val
 				TYPES_BINDINGS.horizontalCenter id, null

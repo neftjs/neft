@@ -149,8 +149,9 @@ module.exports = (impl) ->
 
 		if bindings = item.bindings
 			for _, binding of bindings
-				binding.updateParent()
-				binding.update()
+				if binding?
+					binding.updateParent()
+					binding.update()
 		null
 
 	overrideSetter = (name) ->

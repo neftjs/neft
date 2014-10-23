@@ -26,24 +26,24 @@ relationships between items: ***anchors***.
 *Anchors* allows to *pin* one item into another using one of the 6 ***anchor lines***.
 
 Three horizontal lines:
- * *left*
  * *top*
- * *right*
-
-	H_LINES =
-		left: true
-		horizontalCenter: true
-		right: true
-
-And three vertical lines:
  * *bottom*
- * *horizontalCenter*
  * *verticalCenter*
 
-	V_LINES =
+	H_LINES =
 		top: true
 		verticalCenter: true
 		bottom: true
+
+And three vertical lines:
+ * *left*
+ * *right*
+ * *horizontalCenter*
+
+	V_LINES =
+		left: true
+		horizontalCenter: true
+		right: true
 
 	`//<development>`
 	itemsAnchors = {}
@@ -84,9 +84,11 @@ This connection is updated in realtime, so if the *rect1* will change a position
 		utils.defProp Anchors, type, 'e', null, (val) ->
 			id = exports.currentItem._uid
 
-			`//<development>`
 			if val?
 				[target, line] = splitAnchorValue val
+
+			`//<development>`
+			if val?
 				allowedLines = if H_LINES[type] then H_LINES else V_LINES
 				itemsAnchors[id] ?= 0
 
@@ -220,16 +222,17 @@ Renderer.Rectangle.create
 			`//</development>`
 
 			# change local id to uid
-			target = val
-			if val? and val isnt 'parent'
-				target = exports.currentItem.scope.items[val]._uid
+			if val? and target isnt 'parent'
+				target = exports.currentItem.scope.items[target]._uid
 
-			Impl.setItemAnchor id, type, target
+			Impl.setItemAnchor id, type, val
 
-	createAnchorProp 'left', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
-	createAnchorProp 'right', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
-	createAnchorProp 'top', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
-	createAnchorProp 'bottom', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
+	createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
+	createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
+	createAnchorProp 'verticalCenter', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
+	createAnchorProp 'top', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
+	createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
+	createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 	createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 	createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 

@@ -93,7 +93,7 @@ class Scope
 			child = new ctor opts
 
 		if item
-			@_mainItem ?= item
+			@_mainItem = item
 			@items[item.id] = item
 
 		item or child
@@ -107,19 +107,22 @@ module.exports = class CloneableScope extends Scope
 	toItemCtor: ->
 		(opts, children) =>
 			scope = @clone()
+			mainItem = null
 
 			# clone all items with no parents
 			for _, item of @items
 				if not item.parent
 					cloned = item.cloneDeep scope
+					if @_mainItem is item
+						mainItem = cloned
 
-			{mainItem} = scope
+			scope._mainItem = mainItem
 
 			# custom opts
 			if opts?
 				# TODO: deal with deep arrays e.g. animations
 				utils.merge mainItem._opts, opts
-				utils.merge mainItem, opts
+				utils.mergeDeep mainItem, opts
 
 			# extra children
 			if children?
