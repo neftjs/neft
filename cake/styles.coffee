@@ -1,5 +1,7 @@
 'use strict'
 
+utils = require 'utils'
+
 Renderer = require 'renderer'
 pathUtils = require 'path'
 
@@ -50,11 +52,19 @@ exports.finish = (file) ->
 	code = ''
 
 	for scopeName, path of scopes
-		if path isnt name and path.indexOf("#{name}/") isnt 0
+		if path isnt name and name.indexOf(path) is -1 and name.split('/').length <= path.split('/').length
+			base = name.split('/')
+			base.pop()
+
+			localPath = path.split('/')[base.length...]
+
+			localName = localPath.map (str) -> utils.capitalize(str)
+			localName = localName.join ''
+
 			base = name.split('/').map(-> '../').join('')
 			base = base.slice 3
 			base ||= './'
-			code += "#{scopeName} = (args) -> scope.create require('#{base}#{path}'), args\n"
+			code += "#{localName} = (args) -> scope.create require('#{base}#{path}'), args\n"
 	code += "\n"
 
 	data = data.replace '{{modules}}', code
