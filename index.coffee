@@ -5,60 +5,76 @@ expect = require 'expect'
 
 {assert} = console
 
-prefixedNamesCache = {}
+createSignal = (obj, name) ->
+	expect(obj).not().toBe.primitive()
+	expect(name).toBe.truthy().string()
+
+	handlerName = exports.getHandlerName name
+
+	assert not obj[name]?
+	, "Signal `#{name}` can't be created, because object `#{obj}` " +
+	  "has already defined such property"
+
+	obj[name] = createSignalFunction obj
+
+createHandler = (obj, name) ->
+	expect(obj).not().toBe.primitive()
+	expect(name).toBe.truthy().string()
+
+	handlerName = exports.getHandlerName name
+
+	assert not obj[handlerName]?
+	, "Handler `#{handlerName}` can't be created, because object `#{obj}` " +
+	  "has already defined such property"
+
+	signal = obj[name]
+	obj[handlerName] = createHandlerFunction obj, signal
+
+exports.getHandlerName = do ->
+	cache = {}
+
+	(name) ->
+		if cache.hasOwnProperty name
+			cache[name]
+		else
+			cache[name] = "on#{utils.capitalize name}"
 
 exports.create = (obj, name) ->
 	expect(obj).not().toBe.primitive()
 	expect(name).toBe.truthy().string()
 
-	signal = exports.createOnlySignal obj, name
-	exports.createHandler obj, name
+	createSignal obj, name
+	createHandler obj, name
 
-	signal
-
-exports.createOnlySignal = (obj, name) ->
+exports.createLazy = (obj, name) ->
 	expect(obj).not().toBe.primitive()
 	expect(name).toBe.truthy().string()
 
-	assert not obj[name]?
-	, "Signal `#{name}` can't be created, because object `#{obj}` has already defined such property"
+	handlerName = exports.getHandlerName name
+	handler = createHandler obj, name
 
-	signal = obj[name] = newSignal()
-	signal.connected = newSignal()
-	signal.disconnected = newSignal()
+	exports.create handler, 'initialized'
 
-	signal
+	utils.defProp obj, handlerName, 'ec', ->
+		signal = @[name]
+		unless signal?
+			signal = @[name] = createSignalFunction @, handler
+			handler.initialized @, name
 
-exports.createHandler = (obj, name) ->
-	expect(obj).not().toBe.primitive()
-	expect(name).toBe.truthy().string()
+		handler.listeners = signal.listeners
+		handler
+	, null
 
-	# fast connecting
-	prefixedName = exports.getHandlerName name
-	connect = (arg1) -> @[name].connect arg1
-	utils.defProp obj, prefixedName, 'c', ->
-		connect
-	, (listener) ->
-		@[name].disconnectAll()
-		if listener?
-			@[name].connect listener
+	handler
 
-exports.getHandlerName = (name) ->
-	prefixedName = prefixedNamesCache[name]
-	unless prefixedName
-		prefixedName = prefixedNamesCache[name] = "on#{utils.capitalize name}"
-	prefixedName
-
-newSignal = ->
-	args = []
-
+createSignalFunction = (obj) ->
 	signal = ->
 		n = listeners.length
 		return unless n
 
+		args = []
 		for arg, i in arguments
 			args[i] = arg
-		args.length = arguments.length
 
 		i = -1
 		while ++i < n
@@ -68,24 +84,30 @@ newSignal = ->
 				i--; n--
 				continue
 
-			func.apply @, args
+			func.apply obj, args
 
 		null
 
 	listeners = signal.listeners = []
 
-	utils.setPrototypeOf signal, SignalPrototype
-
 	signal
 
-SignalPrototype =
+createHandlerFunction = (obj, signal) ->
+	handler = (listener) ->
+		HandlerPrototype.connect.call handler, listener
+
+	handler.listeners = signal?.listeners
+	utils.setPrototypeOf handler, HandlerPrototype
+
+	handler
+
+HandlerPrototype =
 	connect: (listener) ->
 		expect(@).toBe.function()
 		expect(listener).toBe.function()
 		expect().some(@listeners).not().toBe listener
 
 		@listeners.push listener
-		@connected? listener
 
 	disconnect: (listener) ->
 		expect(@).toBe.function()
@@ -94,7 +116,6 @@ SignalPrototype =
 
 		index = @listeners.indexOf listener
 		@listeners[index] = null
-		@disconnected? listener
 
 	disconnectAll: ->
 		expect(@).toBe.function()
