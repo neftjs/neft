@@ -98,7 +98,7 @@ describe 'onChanged signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		dict.changed.disconnect listener
+		dict.onChanged.disconnect listener
 
 	it 'works with set() on new item', ->
 		dict = Dict()
