@@ -72,9 +72,9 @@ module.exports = (File) -> class Iterator extends File.Elem
 			@clearData()
 
 			if data instanceof List
-				data.changed.disconnect @updateItem
-				data.inserted.disconnect @insertItem
-				data.popped.disconnect @popItem
+				data.onChanged.disconnect @updateItem
+				data.onInserted.disconnect @insertItem
+				data.onPopped.disconnect @popItem
 
 		@data = null
 

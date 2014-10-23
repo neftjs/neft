@@ -1,7 +1,7 @@
 [utils, htmlparser] = ['utils', 'htmlparser2'].map require
 
-attrsKeyGen = (elem, i) -> elem
-attrsValueGen = (elem, i) -> i
+attrsKeyGen = (i, elem) -> elem
+attrsValueGen = (i, elem) -> i
 
 VOID_ELEMENTS =
 	require: true

@@ -125,7 +125,7 @@ module.exports = (File) -> class Input
 				storage.off 'attrChanged', @_onAttrChanged
 
 		for hash, dict of @traces
-			dict.changed.disconnect @_onChanged
+			dict.onChanged.disconnect @_onChanged
 			delete @traces[hash]
 
 		null
