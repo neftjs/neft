@@ -63,7 +63,7 @@ module.exports = (App) -> class AppView
 		GlobalStorage.onRequestChanged (_req) ->
 			req = _req
 
-			dict.changed.disconnect onDictChanged
+			dict.onChanged.disconnect onDictChanged
 
 			# remove missed params
 			for key in dict.keys()
