@@ -3,10 +3,11 @@
 expect = require 'expect'
 utils = require 'utils'
 signal = require 'signal'
+Dict = require 'dict'
 
 items = {}
 
-module.exports = (Scope, Impl) -> class Item
+module.exports = (Scope, Impl) -> class Item extends Dict
 	@__name__ = 'Item'
 
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
@@ -38,14 +39,18 @@ module.exports = (Scope, Impl) -> class Item
 
 		utils.defProp @, 'animations', 'e', new Animations @
 
-		# register signals
-		@ready = null
-		for signalName in Item.SIGNALS
-			@[signalName] = null
+		# custom properties
+		for key, val of opts
+			if key of @
+				continue
+
+			Dict.defineProperty @, key
+
+		super()
 
 		# fill
 		for key, val of opts
-			if ALL_HANDLERS[key]
+			if typeof @[key] is 'function'
 				@[key].connect val
 			else if DEEP_PROPERTIES[key]
 				utils.mergeDeep @[key], val
@@ -59,8 +64,6 @@ module.exports = (Scope, Impl) -> class Item
 
 		# animations
 		@animations.initialize()
-
-		Object.seal @
 
 	createBindedSetter = (propName, setFunc) ->
 		(val) ->
@@ -85,7 +88,7 @@ module.exports = (Scope, Impl) -> class Item
 	readyLazySignal = signal.createLazy @::, 'ready'
 
 	readyLazySignal.onInitialized (item) ->
-		setImmediate => @ready()
+		setImmediate -> item.ready()
 
 	onLazySignalInitialized = (item, signalName) ->
 		Impl.attachItemSignal item._uid, signalName, item[signalName]
@@ -93,6 +96,18 @@ module.exports = (Scope, Impl) -> class Item
 	for signalName in Item.SIGNALS
 		lazySignal = signal.createLazy @::, signalName
 		lazySignal.onInitialized onLazySignalInitialized
+
+	Dict.defineProperty @::, 'parent'
+	Dict.defineProperty @::, 'visible'
+	Dict.defineProperty @::, 'clip'
+	Dict.defineProperty @::, 'width'
+	Dict.defineProperty @::, 'height'
+	Dict.defineProperty @::, 'x'
+	Dict.defineProperty @::, 'y'
+	Dict.defineProperty @::, 'z'
+	Dict.defineProperty @::, 'scale'
+	Dict.defineProperty @::, 'rotation'
+	Dict.defineProperty @::, 'opacity'
 
 	utils.defProp @::, 'parent', 'e', ->
 		items[Impl.getItemParent @_uid]

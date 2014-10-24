@@ -2,6 +2,7 @@
 
 expect = require 'expect'
 utils = require 'utils'
+Dict = require 'dict'
 
 module.exports = (Scope, Impl) ->
 	self = null
@@ -25,6 +26,10 @@ module.exports = (Scope, Impl) ->
 
 	class Rectangle extends Scope.Item
 		@__name__ = 'Rectangle'
+
+		Dict.defineProperty @::, 'color'
+		Dict.defineProperty @::, 'radius'
+		Dict.defineProperty @::, 'border'
 
 		utils.defProp @::, 'color', 'e', ->
 			Impl.getRectangleColor @_uid
