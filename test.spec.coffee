@@ -1,132 +1,163 @@
 Dict = require './index'
 
-describe 'Dict', ->
-	describe 'ctor', ->
+describe 'ctor', ->
 
-		it 'creates new dict', ->
-			dict = Dict a: 1
-			expect(dict).toEqual jasmine.any Dict
+	it 'creates new dict', ->
+		dict = Dict a: 1
+		expect(dict).toEqual jasmine.any Dict
 
-	describe 'get()', ->
+describe 'get()', ->
 
-		it 'returns key value', ->
-			dict = Dict a: 1
-			expect(dict.get 'a').toBe 1
+	it 'returns key value', ->
+		dict = Dict a: 1
+		expect(dict.get 'a').toBe 1
 
-		it 'returns `undefined` for unknown', ->
-			dict = Dict()
-			expect(dict.get 'abc').toBe undefined
+	it 'returns `undefined` for unknown', ->
+		dict = Dict()
+		expect(dict.get 'abc').toBe undefined
 
-	describe 'set()', ->
+describe 'set()', ->
 
-		it 'set key value', ->
-			dict = Dict()
-			dict.set 'a', 1
-			expect(dict.get 'a').toBe 1
+	it 'set key value', ->
+		dict = Dict()
+		dict.set 'a', 1
+		expect(dict.get 'a').toBe 1
 
-		it 'overrides keys', ->
-			dict = Dict a: 1
-			dict.set 'a', 2
-			expect(dict.get 'a').toBe 2
+	it 'overrides keys', ->
+		dict = Dict a: 1
+		dict.set 'a', 2
+		expect(dict.get 'a').toBe 2
 
-	describe 'length', ->
+describe 'length', ->
 
-		it 'returns amount of keys', ->
-			dict = Dict a: 1, b: 2
-			expect(dict.length).toBe 2
+	it 'returns amount of keys', ->
+		dict = Dict a: 1, b: 2
+		expect(dict.length).toBe 2
 
-	describe 'pop()', ->
+describe 'pop()', ->
 
-		it 'removes key', ->
-			dict = Dict a: 1
-			expect(dict.pop 'a').toBe 1
-			expect(dict.get 'a').toBe undefined
+	it 'removes key', ->
+		dict = Dict a: 1
+		expect(dict.pop 'a').toBe dict
+		expect(dict.get 'a').toBe undefined
 
-	describe 'keys()', ->
+describe 'keys()', ->
 
-		it 'returns keys as an array', ->
-			dict = Dict a: 1, b: 2
-			expect(dict.keys()).toEqual ['a', 'b']
+	it 'returns keys as an array', ->
+		dict = Dict a: 1, b: 2
+		expect(dict.keys()).toEqual ['a', 'b']
 
-		it 'length is const', ->
-			dict = Dict a: 1
-			keys = dict.keys()
-			dict.set 'b', 1
-			expect(keys).toEqual ['a']
-			expect(dict.keys()).toEqual ['a', 'b']
+	it 'length is const', ->
+		dict = Dict a: 1
+		keys = dict.keys()
+		dict.set 'b', 1
+		expect(keys).toEqual ['a']
+		expect(dict.keys()).toEqual ['a', 'b']
 
-	describe 'values()', ->
+describe 'values()', ->
 
-		it 'returns key values as an array', ->
-			dict = Dict a: 1, b: 2
-			expect(dict.values()).toEqual [1, 2]
+	it 'returns key values as an array', ->
+		dict = Dict a: 1, b: 2
+		expect(dict.values()).toEqual [1, 2]
 
-		it 'length is const', ->
-			dict = Dict a: 1
-			values = dict.values()
-			dict.set 'b', 2
-			expect(values).toEqual [1]
-			expect(dict.values()).toEqual [1, 2]
+	it 'length is const', ->
+		dict = Dict a: 1
+		values = dict.values()
+		dict.set 'b', 2
+		expect(values).toEqual [1]
+		expect(dict.values()).toEqual [1, 2]
 
-	describe 'items()', ->
+describe 'items()', ->
 
-		it 'returns an array of key - value pairs', ->
-			dict = Dict a: 1, b: 2
-			expect(dict.items()).toEqual [['a', 1], ['b', 2]]
+	it 'returns an array of key - value pairs', ->
+		dict = Dict a: 1, b: 2
+		expect(dict.items()).toEqual [['a', 1], ['b', 2]]
 
-		it 'length is const', ->
-			dict = Dict a: 1
-			items = dict.items()
-			dict.set 'b', 2
-			expect(items).toEqual [['a', 1]]
-			expect(dict.items()).toEqual [['a', 1], ['b', 2]]
+	it 'length is const', ->
+		dict = Dict a: 1
+		items = dict.items()
+		dict.set 'b', 2
+		expect(items).toEqual [['a', 1]]
+		expect(dict.items()).toEqual [['a', 1], ['b', 2]]
 
-	describe 'json stringified', ->
+describe 'json stringified', ->
 
-		it 'is a reversed operation', ->
-			dict = Dict a: 1, b: 2
-			json = JSON.stringify dict
-			dict2 = Dict.fromJSON json
+	it 'is a reversed operation', ->
+		dict = Dict a: 1, b: 2
+		json = JSON.stringify dict
+		dict2 = Dict.fromJSON json
 
-			expect(dict2.items()).toEqual dict.items()
+		expect(dict2.items()).toEqual dict.items()
+		expect(dict2).toEqual jasmine.any Dict
 
-	describe 'onChanged signal', ->
+describe 'onChanged signal', ->
 
-		dict = listener = null
+	dict = listener = null
+	ok = false
+	args = items = null
+
+
+	beforeEach ->
 		ok = false
-		args = items = null
+		args = []
 
+		listener = (_args...) ->
+			ok = true
+			args.push _args
+			items = dict.items()
 
-		beforeEach ->
-			ok = false
-			args = []
+	afterEach ->
+		expect(ok).toBeTruthy()
+		dict.onChanged.disconnect listener
 
-			listener = (_args...) ->
-				ok = true
-				args.push _args
-				items = dict.items()
+	it 'works with set() on new item', ->
+		dict = Dict()
+		dict.onChanged listener
+		dict.set 'a', 1
+		expect(args).toEqual [['a']]
+		expect(items).toEqual [['a', 1]]
 
-		afterEach ->
-			expect(ok).toBeTruthy()
-			dict.onChanged.disconnect listener
+	it 'works with set() on item change', ->
+		dict = Dict a: 1
+		dict.onChanged listener
+		dict.set 'a', 2
+		expect(args).toEqual [['a']]
+		expect(items).toEqual [['a', 2]]
 
-		it 'works with set() on new item', ->
-			dict = Dict()
-			dict.onChanged listener
-			dict.set 'a', 1
-			expect(args).toEqual [['a', undefined]]
-			expect(items).toEqual [['a', 1]]
+	it 'works with pop()', ->
+		dict = Dict a: 1
+		dict.onChanged listener
+		dict.pop 'a'
+		expect(args).toEqual [['a']]
+		expect(items).toEqual []
 
-		it 'works with set() on item change', ->
-			dict = Dict a: 1
-			dict.onChanged listener
-			dict.set 'a', 2
-			expect(args).toEqual [['a', 1]]
-			expect(items).toEqual [['a', 2]]
+describe 'properties', ->
 
-		it 'works with pop()', ->
-			dict = Dict a: 1
-			dict.onChanged listener
-			dict.pop 'a'
-			expect(args).toEqual [['a', 1]]
-			expect(items).toEqual []
+	it 'getter/setter works', ->
+		NAME = 'abc'
+		NAME2 = '123'
+
+		dict = Dict()
+		Dict.defineProperty dict, 'name'
+
+		expect(dict.name).toBe undefined
+		dict.name = NAME
+		expect(dict.name).toBe NAME
+		expect(dict.get 'name').toBe NAME
+
+		dict.set 'name', NAME2
+		expect(dict.name).toBe NAME2
+		expect(dict.get 'name').toBe NAME2
+
+	it 'custom signals are calling', ->
+		dict = Dict()
+		Dict.defineProperty dict, 'name'
+
+		i = 0
+		dict.onNameChanged ->
+			i++
+
+		dict.name = 2
+		dict.name = 25
+
+		expect(i).toBe 2

@@ -18,8 +18,43 @@ module.exports = class Dict
 
 		new Dict json
 
+	@defineProperty = do ->
+		getPropertySignalName = do (cache = {}) -> (propName) ->
+			expect(propName).toBe.truthy().string()
+
+			if cache.hasOwnProperty propName
+				cache[propName]
+			else
+				cache[propName] = "#{propName}Changed"
+
+		createGetter = (propName) ->
+			->
+				Dict::get.call @, propName
+
+		createSetter = (propName) ->
+			signalName = getPropertySignalName propName
+
+			(val) ->
+				Dict::set.call @, propName, val
+
+				# signal
+				@[signalName]?()
+
+		(prototype, propName) ->
+			expect(prototype).not().toBe.primitive()
+			expect(propName).toBe.truthy().string()
+
+			# handler
+			signalName = getPropertySignalName propName
+			signal.createLazy prototype, signalName
+
+			# getter/setter
+			getter = createGetter propName
+			setter = createSetter propName
+			utils.defProp prototype, propName, 'ec', getter, setter
+
 	constructor: (obj={}) ->
-		expect(obj).toBe.simpleObject()
+		expect(obj).toBe.object()
 
 		# support no `new` syntax
 		unless @ instanceof Dict
@@ -32,6 +67,9 @@ module.exports = class Dict
 		utils.defProp @, '_values', 'w', null
 		utils.defProp @, '_items', 'w', null
 		utils.defProp @, '_dirty', 'w', ALL
+
+		# signals
+		@changed = null
 
 	utils.defProp @::, 'length', 'ce', ->
 		@keys().length
@@ -48,34 +86,30 @@ module.exports = class Dict
 		expect(key).toBe.truthy().string()
 		expect(val).not().toBe undefined
 
-		oldVal = @_data[key]
-		if oldVal is val
-			return val
-
+		# update value
 		@_data[key] = val
 
 		# dirty
 		@_dirty |= ALL
 
 		# signal
-		@changed? key, oldVal
+		@changed? key
 
-		val
+		@
 
 	pop: (key) ->
 		expect(key).toBe.truthy().string()
 		expect().some().keys(@_data).toBe key
 
-		val = @_data[key]
 		delete @_data[key]
 
 		# dirty
 		@_dirty |= ALL
 
 		# signal
-		@changed? key, val
+		@changed? key
 
-		val
+		@
 
 	keys: ->
 		if @_dirty & KEYS
