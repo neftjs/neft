@@ -12,6 +12,12 @@ module.exports = class Dict
 	ITEMS = 1<<2
 	ALL = (ITEMS<<1) - 1
 
+	@fromJSON = (json) ->
+		json = utils.tryFunc JSON.parse, JSON, [json], json
+		expect(json).toBe.simpleObject()
+
+		new Dict json
+
 	constructor: (obj={}) ->
 		expect(obj).toBe.simpleObject()
 
@@ -21,18 +27,17 @@ module.exports = class Dict
 
 		# properties
 		utils.defProp @, '__hash__', '', utils.uid()
-		utils.defProp @, '_data', 'e', obj
+		utils.defProp @, '_data', '', obj
 		utils.defProp @, '_keys', 'w', null
 		utils.defProp @, '_values', 'w', null
 		utils.defProp @, '_items', 'w', null
 		utils.defProp @, '_dirty', 'w', ALL
 
-		# signals
-		signal.create @, 'changed'
-
 	utils.defProp @::, 'length', 'ce', ->
 		@keys().length
 	, null
+
+	signal.createLazy @::, 'changed'
 
 	get: (key) ->
 		expect(key).toBe.truthy().string()
@@ -53,7 +58,7 @@ module.exports = class Dict
 		@_dirty |= ALL
 
 		# signal
-		@changed key, oldVal
+		@changed? key, oldVal
 
 		val
 
@@ -68,7 +73,7 @@ module.exports = class Dict
 		@_dirty |= ALL
 
 		# signal
-		@changed key, val
+		@changed? key, val
 
 		val
 
@@ -114,3 +119,6 @@ module.exports = class Dict
 			arr.length = i
 
 		@_values
+
+	toJSON: ->
+		@_data
