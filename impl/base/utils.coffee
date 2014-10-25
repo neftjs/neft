@@ -10,3 +10,5 @@ exports.SETTER_METHODS_NAMES =
 	'width': 'setItemWidth'
 	'height': 'setItemHeight'
 	'opacity': 'setItemOpacity'
+
+exports.grid = require './utils/grid'

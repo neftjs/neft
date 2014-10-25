@@ -2,72 +2,100 @@
 
 expect = require 'expect'
 utils = require 'utils'
+Dict = require 'dict'
 
 module.exports = (Scope, Impl) ->
-	self = null
+	class Font extends Dict
+		constructor: (item) ->
+			expect(item).toBe.any Text
 
-	Font = Object.create null
+			utils.defProp @, '_item', '', item
 
-	utils.defProp Font, 'family', 'e', ->
-		Impl.getTextFontFamily self._uid
-	, (val) ->
-		expect(val).toBe.truthy().string()
-		Impl.setTextFontFamily self._uid, val
+			super
+				family: 'sans-serif'
+				pixelSize: 14
+				weight: 0.5
+				wordSpacing: 0
+				letterSpacing: 0
 
-	utils.defProp Font, 'pixelSize', 'e', ->
-		Impl.getTextFontPixelSize self._uid
-	, (val) ->
-		expect(val).toBe.truthy().float()
-		Impl.setTextFontPixelSize self._uid, val
+		Dict.defineProperty @::, 'family'
 
-	utils.defProp Font, 'weight', 'e', ->
-		Impl.getTextFontWeight self._uid
-	, (val) ->
-		expect(val).toBe.float()
-		expect(val).not().toBe.greaterThan 1
-		expect(val).not().toBe.lessThan 0
-		Impl.setTextFontWeight self._uid, val
+		utils.defProp @::, 'family', 'e', utils.lookupGetter(@::, 'family')
+		, do (_super = utils.lookupSetter @::, 'family') -> (val) ->
+			expect(val).toBe.truthy().string()
+			_super.call @, val
+			Impl.setTextFontFamily.call @_item, val
 
-	utils.defProp Font, 'wordSpacing', 'e', ->
-		Impl.getTextFontWordSpacing self._uid
-	, (val) ->
-		expect(val).toBe.float()
-		Impl.setTextFontWordSpacing self._uid, val
+		Dict.defineProperty @::, 'pixelSize'
 
-	utils.defProp Font, 'letterSpacing', 'e', ->
-		Impl.getTextFontLetterSpacing self._uid
-	, (val) ->
-		expect(val).toBe.float()
-		Impl.setTextFontLetterSpacing self._uid, val
+		utils.defProp @::, 'pixelSize', 'e', utils.lookupGetter(@::, 'pixelSize')
+		, do (_super = utils.lookupSetter @::, 'pixelSize') -> (val) ->
+			expect(val).toBe.truthy().float()
+			_super.call @, val
+			Impl.setTextFontPixelSize.call @_item, val
 
-	Object.freeze Font
+		Dict.defineProperty @::, 'weight'
+
+		utils.defProp @::, 'weight', 'e', utils.lookupGetter(@::, 'weight')
+		, do (_super = utils.lookupSetter @::, 'weight') -> (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.greaterThan 1
+			expect(val).not().toBe.lessThan 0
+			_super.call @, val
+			Impl.setTextFontWeight.call @_item, val
+
+		Dict.defineProperty @::, 'wordSpacing'
+
+		utils.defProp @::, 'wordSpacing', 'e', utils.lookupGetter(@::, 'wordSpacing')
+		, do (_super = utils.lookupSetter @::, 'wordSpacing') -> (val) ->
+			expect(val).toBe.float()
+			_super.call @, val
+			Impl.setTextFontWordSpacing.call @_item, val
+
+		Dict.defineProperty @::, 'letterSpacing'
+
+		utils.defProp @::, 'letterSpacing', 'e', utils.lookupGetter(@::, 'letterSpacing')
+		, do (_super = utils.lookupSetter @::, 'letterSpacing') -> (val) ->
+			expect(val).toBe.float()
+			_super.call @, val
+			Impl.setTextFontLetterSpacing.call @_item, val
 
 	class Text extends Scope.Item
 		@__name__ = 'Text'
 
-		utils.defProp @::, 'text', 'e', ->
-			Impl.getText @_uid
-		, (val) ->
+		@DATA = utils.merge Object.create(Scope.Item.DATA),
+			text: ''
+			color: 'black'
+			lineHeight: 1
+			font: 'sans-serif'
+
+		Dict.defineProperty @::, 'text'
+
+		utils.defProp @::, 'text', 'e', utils.lookupGetter(@::, 'text')
+		, do (_super = utils.lookupSetter @::, 'text') -> (val) ->
 			expect(val).toBe.string()
-			Impl.setText @_uid, val
+			_super.call @, val
+			Impl.setText.call @, val
 
-		utils.defProp @::, 'color', 'e', ->
-			Impl.getTextColor @_uid
-		, (val) ->
+		Dict.defineProperty @::, 'color'
+
+		utils.defProp @::, 'color', 'e', utils.lookupGetter(@::, 'color')
+		, do (_super = utils.lookupSetter @::, 'color') -> (val) ->
 			expect(val).toBe.truthy().string()
-			Impl.setTextColor @_uid, val
+			_super.call @, val
+			Impl.setTextColor.call @, val
 
-		utils.defProp @::, 'lineHeight', 'e', ->
-			Impl.getTextLineHeight @_uid
-		, (val) ->
+		Dict.defineProperty @::, 'lineHeight'
+
+		utils.defProp @::, 'lineHeight', 'e', utils.lookupGetter(@::, 'lineHeight')
+		, do (_super = utils.lookupSetter @::, 'lineHeight') -> (val) ->
 			expect(val).toBe.truthy().float()
-			Impl.setTextLineHeight @_uid, val
+			_super.call @, val
+			Impl.setTextLineHeight.call @, val
 
 		utils.defProp @::, 'font', 'e', ->
-			self = @
-			Font
+			utils.defProp @, 'font', 'e', val = new Font(@)
+			val
 		, (val) ->
 			expect(val).toBe.simpleObject()
-			self = @
-			utils.merge Font, val
-
+			utils.merge @font, val

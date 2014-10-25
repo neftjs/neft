@@ -4,9 +4,12 @@ utils = require 'utils'
 
 WHEEL_DIVISOR = 8
 
+# TODO
 module.exports = (impl) ->
 	{Types, items} = impl
 	{Item, Rectangle} = Types
+
+	return {}
 
 	###
 	Scroll container by given x and y deltas

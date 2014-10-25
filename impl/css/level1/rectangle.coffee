@@ -1,17 +1,18 @@
 'use strict'
 
 module.exports = (impl) ->
-	{items} = impl
 	{Item} = impl.Types
 
 	# TODO: browsers makes borders always visible even
 	#       if the size is less than border width
 
-	create: (id, target) ->
-		Item.create id, target
+	create: (item) ->
+		storage = item._impl
 
-		rect = target.rect = document.createElement 'div'
-		target.elem.appendChild rect
+		Item.create item
+
+		rect = storage.rect = document.createElement 'div'
+		storage.elem.appendChild rect
 
 		{style} = rect
 		style.width = '100%'
@@ -21,26 +22,14 @@ module.exports = (impl) ->
 		style.borderStyle = 'solid'
 		style.borderColor = 'transparent'
 
-	getRectangleColor: (id) ->
-		items[id].rect.style.backgroundColor
+	setRectangleColor: (val) ->
+		@_impl.rect.style.backgroundColor = val
 
-	setRectangleColor: (id, val) ->
-		items[id].rect.style.backgroundColor = val
+	setRectangleRadius: (val) ->
+		@_impl.rect.style.borderRadius = "#{val}px"
 
-	getRectangleRadius: (id) ->
-		parseFloat(items[id].rect.style.borderRadius) or 0
+	setRectangleBorderColor: (val) ->
+		@_impl.rect.style.borderColor = val
 
-	setRectangleRadius: (id, val) ->
-		items[id].rect.style.borderRadius = "#{val}px"
-
-	getRectangleBorderColor: (id) ->
-		items[id].rect.style.borderColor
-
-	setRectangleBorderColor: (id, val) ->
-		items[id].rect.style.borderColor = val
-
-	getRectangleBorderWidth: (id) ->
-		parseFloat(items[id].rect.style.borderWidth) or 0
-
-	setRectangleBorderWidth: (id, val) ->
-		items[id].rect.style.borderWidth = "#{val}px"
+	setRectangleBorderWidth: (val) ->
+		@_impl.rect.style.borderWidth = "#{val}px"

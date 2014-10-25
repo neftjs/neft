@@ -4,62 +4,28 @@ module.exports = (impl) ->
 	{items} = impl
 	{Item, Image} = impl.Types
 
-	create: (id, target) ->
-		Image.create id, target
+	create: (item) ->
 
-		target.text = ''
-		target.color = 'black'
-		target.lineHeight = 1
-		target.fontFamily = 'sans-serif'
-		target.fontPixelSize = 14
-		target.fontWeight = 0.5
-		target.fontWordSpacing = 0
-		target.fontLetterSpacing = 0
+	setText: (val) ->
+		@_impl.text = val
 
-	getText: (id) ->
-		items[id].text
+	setTextColor: (val) ->
+		@_impl.color = val
 
-	setText: (id, val) ->
-		items[id].text = val
+	setTextLineHeight: (val) ->
+		@_impl.lineHeight = val
 
-	getTextColor: (id) ->
-		items[id].color
+	setTextFontFamily: (val) ->
+		@_impl.fontFamily = val
 
-	setTextColor: (id, val) ->
-		items[id].color = val
+	setTextFontPixelSize: (val) ->
+		@_impl.fontPixelSize = val
 
-	getTextLineHeight: (id) ->
-		items[id].lineHeight
+	setTextFontWeight: (val) ->
+		@_impl.fontWeight = val
 
-	setTextLineHeight: (id, val) ->
-		items[id].lineHeight = val
+	setTextFontWordSpacing: (val) ->
+		@_impl.fontWordSpacing = val
 
-	getTextFontFamily: (id) ->
-		items[id].fontFamily
-
-	setTextFontFamily: (id, val) ->
-		items[id].fontFamily = val
-
-	getTextFontPixelSize: (id) ->
-		items[id].fontPixelSize
-
-	setTextFontPixelSize: (id, val) ->
-		items[id].fontPixelSize = val
-
-	getTextFontWeight: (id) ->
-		items[id].fontWeight
-
-	setTextFontWeight: (id, val) ->
-		items[id].fontWeight = val
-
-	getTextFontWordSpacing: (id) ->
-		items[id].fontWordSpacing
-
-	setTextFontWordSpacing: (id, val) ->
-		items[id].fontWordSpacing = val
-
-	getTextFontLetterSpacing: (id) ->
-		items[id].fontLetterSpacing
-
-	setTextFontLetterSpacing: (id, val) ->
-		items[id].fontLetterSpacing = val
+	setTextFontLetterSpacing: (val) ->
+		@_impl.fontLetterSpacing = val

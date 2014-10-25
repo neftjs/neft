@@ -3,6 +3,7 @@
 utils = require 'utils'
 expect = require 'expect'
 
+# TODO: use Dict
 module.exports = (Scope, Impl) -> class Animation
 	@__name__ = 'Animation'
 
@@ -10,7 +11,7 @@ module.exports = (Scope, Impl) -> class Animation
 		expect(opts).toBe.simpleObject()
 
 		utils.defProp @, '_uid', '', uid = utils.uid()
-		Impl.createAnimation @constructor.__name__, uid
+		Impl.createAnimation.call @, @constructor.__name__
 		utils.merge @, opts
 
 		Object.freeze @

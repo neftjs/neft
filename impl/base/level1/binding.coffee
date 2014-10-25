@@ -1,185 +1,199 @@
 'use strict'
 
 utils = require 'utils'
+signal = require 'signal'
+Dict = require 'dict'
 
 {assert} = console
+{isArray} = Array
 
 module.exports = (impl) ->
 	{items} = impl
 
-	class Binding
-		@BINDING_RE = ///\i([0-9]+)\.(x|y|width|height)///g
+	class Connection
+		constructor: (@binding, @item, @prop) ->
+			{changeListener} = @
 
-		@update: (listeners) ->
-			if listeners
-				for binding in listeners
-					binding.update()
+			@changeListener = =>
+				if @debug
+					debugger
+				changeListener.call @
+
+			if isArray item
+				@item = null
+				child = new Connection binding, item[0], item[1]
+				child.parent = @
+				@updateChild child
+			else
+				@listen()
+
+		binding: null
+		item: null
+		prop: null
+		parent: null
+
+		listen: ->
+			signalName = Dict.getPropertySignalName @prop
+			handlerName = signal.getHandlerName signalName
+
+			@item?[handlerName] @changeListener
+
+		updateChild: (child) ->
+			signalName = Dict.getPropertySignalName @prop
+			handlerName = signal.getHandlerName signalName
+
+			if @item
+				@item[handlerName].disconnect @changeListener
+				@item = null
+
+			if child
+				@item = child.getValue()
+				@listen()
+				@changeListener()
+
+		changeListener: ->
+			if @parent
+				@parent.updateChild @
+			else
+				@binding.update()
+
+		getValue: ->
+			@item[@prop]
+
+		destroy: ->
+			@updateChild null
+
+	class Binding
+		@prepare = (arr, item) ->
+			for elem, i in arr
+				if isArray elem
+					Binding.prepare elem, item
+				else if elem is 'this'
+					arr[i] = item
 			null
 
-		cache = {}
-		tmpFuncArgs = ['']
+		@getHash = do ->
+			argI = 0
 
-		constructor: (@itemId, @prop, @binding, @extraResultFunc) ->
-			@locations = []
-			func = @func = cache[binding.setup]
-			args = @args = utils.clone binding.items
+			(arr, isFork=false) ->
+				r = ''
+				for elem, i in arr
+					if isArray elem
+						r += Binding.getHash elem, true
+					else if typeof elem is 'string'
+						if i is 1 and typeof arr[0] is 'object' and ///^[a-zA-Z_]///.test elem
+							r += "."
+						r += elem
+					else if typeof elem is 'object'
+						r += "$#{argI++}"
+				unless isFork
+					argI = 0
+				r
 
-			unless func
-				tmpFuncArgs.pop()
-				tmpFuncArgs.pop()
+		@getItems = (arr, r=[])->
+			for elem in arr
+				if isArray elem
+					Binding.getItems elem, r
+				else if typeof elem is 'object'
+					r.push elem
+			r				
 
-				lenArr = tmpFuncArgs.length
-				lenArgs = binding.items.length
+		@getFunc = do (cache = {}) -> (binding) ->
+			hash = Binding.getHash binding
+			if cache.hasOwnProperty hash
+				cache[hash]
+			else
+				args = Binding.getItems binding
+				for _, i in args
+					args[i] = "$#{i}"
 
-				if lenArr > lenArgs
-					tmpFuncArgs.length = lenArgs
-				else if lenArr < lenArgs
-					for i in [lenArr...lenArgs] by 1
-						tmpFuncArgs[i] = "i#{i}"
+				hash ||= '0'
+				args.push "try { return #{hash}; } catch(err){}"
+				cache[hash] = Function.apply null, args
 
-				# prepare setup
-				setup = binding.setup.replace Binding.BINDING_RE, (_, id, prop) ->
-					"impl.#{impl.utils.GETTER_METHODS_NAMES[prop]}(i#{id})"
+		# TODO: remove it
+		@clone = (binding) ->
+			binding = utils.clone binding
+			for elem, i in binding
+				if isArray elem
+					binding[i] = Binding.clone elem
+			binding
 
-				tmpFuncArgs.push 'impl'
-				tmpFuncArgs.push "return #{setup}"
-				func = @func = Function.apply null, tmpFuncArgs
-				cache[binding.setup] = func
+		constructor: (@item, @prop, binding, @extraResultFunc) ->
+			binding = Binding.clone binding
+			Binding.prepare binding, item
 
-			setImmediate =>
-				# break on destroyed
-				return unless @locations
+			# properties
+			@func = Binding.getFunc binding
+			@args = Binding.getItems binding
 
-				@ready = true
+			# bind methods
+			{changeListener} = @
+			@changeListener = => changeListener.call @
 
-				# `this` arg
-				thisIndex = args.indexOf 'this'
-				if thisIndex isnt -1
-					args[thisIndex] = itemId
+			# destroy on property value change
+			signalName = Dict.getPropertySignalName prop
+			handlerName = signal.getHandlerName signalName
+			item[handlerName] @changeListener
 
-				# `parent` arg
-				parentIndex = args.indexOf 'parent'
-				if parentIndex isnt -1
-					@parentArgIndex = parentIndex
-					@parentId = impl.getItemParent itemId
-					args[parentIndex] = @parentId
+			# connections
+			connections = @connections = []
+			for elem in binding
+				if isArray elem
+					connections.push new Connection @, elem[0], elem[1]
 
-				# register binding
-				while bindingChunks = Binding.BINDING_RE.exec binding.setup
-					[_, idIndex, prop] = bindingChunks
-					id = args[idIndex]
+			# update
+			@update()
 
-					if item = items[id]
-						item.listeners ?= {}
-						itemListeners = item.listeners[prop] ?= []
-						itemListeners.push @
-						@locations.push itemListeners
-
-				# add impl arg
-				args.push impl
-
-				# call automatically
-				@update()
-
-		ready: false
-		itemId: ''
-		parentArgIndex: -1
-		parentId: ''
-		prop: ''
-		binding: null
-		extraResultFunc: null
-		func: null
+		item: null
 		args: null
-		locations: null
+		prop: ''
+		func: null
+		extraResultFunc: null
 		updatePending: false
+		connections: null
 
-		updateParent: ->
-			return unless @ready
-			return if @parentArgIndex is -1
-
-			# remove old one
-			if @parentId
-				for _, itemListeners of items[@parentId].listeners
-					utils.remove itemListeners, @
-					utils.remove @locations, itemListeners
-
-			# join new one
-			@parentId = impl.getItemParent @itemId
-			@args[@parentArgIndex] = @parentId
-			itemListeners = items[@parentId].listeners ?= {}
-			itemListeners = itemListeners[@prop] ?= []
-			itemListeners.push @
-			@locations.push itemListeners
+		changeListener: ->
+			unless @updatePending
+				@destroy()
 
 		update: ->
-			return unless @ready
+			result = @func.apply null, @args
+			unless result?
+				return
 
-			result = @func.apply(null, @args)
-
+			# extra func
 			if @extraResultFunc
-				funcResult = @extraResultFunc @itemId
-				if typeof funcResult is 'number'
+				funcResult = @extraResultFunc @item
+				if typeof funcResult is 'number' and isFinite(funcResult)
 					result += funcResult
 
 			@updatePending = true
-			impl[impl.utils.SETTER_METHODS_NAMES[@prop]] @itemId, result
+			@item[@prop] = result
 			@updatePending = false
 
 		destroy: ->
-			return if @updatePending
+			# destroy connections
+			for connection in @connections
+				connection.destroy()
 
-			for location in @locations
-				utils.remove location, @
+			# remove from the list
+			@item._impl.bindings[@prop] = null
 
-			items[@itemId].bindings[@prop] = null
+			# disconnect listener
+			signalName = Dict.getPropertySignalName @prop
+			handlerName = signal.getHandlerName signalName
+			@item[handlerName].disconnect @changeListener
 
-			@locations = null
+			# clear props
 			@args = null
+			@connections = null
 
-	impl.Types.Item.create = do (_super = impl.Types.Item.create) -> (id, target) ->
-		target.bindings = null
-		target.listeners = null
+	setItemBinding: (prop, binding, extraResultFunc) ->
+		storage = @_impl
 
-		_super id, target
-
-	impl.setItemParent = do (_super = impl.setItemParent) -> (id, val) ->
-		item = items[id]
-
-		_super id, val
-
-		if bindings = item.bindings
-			for _, binding of bindings
-				if binding?
-					binding.updateParent()
-					binding.update()
-		null
-
-	overrideSetter = (name) ->
-
-		methodName = "setItem#{utils.capitalize name}"
-
-		impl[methodName] = do (_super = impl[methodName]) -> (id, val) ->
-			item = items[id]
-
-			# remove binding
-			item.bindings?[name]?.destroy()
-
-			# call super
-			_super id, val
-
-			# update listeners
-			Binding.update item.listeners?[name]
-
-	overrideSetter 'x'
-	overrideSetter 'y'
-	overrideSetter 'width'
-	overrideSetter 'height'
-
-	setItemBinding: (id, prop, binding, extraResultFunc) ->
-		item = items[id]
-		item.bindings ?= {}
-
-		item.bindings[prop]?.destroy()
+		storage.bindings ?= {}
+		storage.bindings[prop]?.destroy()
 
 		if binding?
-			item.bindings[prop] = new Binding id, prop, binding, extraResultFunc
+			storage.bindings[prop] = new Binding @, prop, binding, extraResultFunc

@@ -8,8 +8,8 @@ exports.Types =
 	Text: require './level0/text'
 	Rectangle: require './level1/rectangle'
 	Grid: require './level1/grid'
-	Column: require './level2/column'
-	Row: require './level2/row'
+	Column: require './level1/column'
+	Row: require './level1/row'
 	Scrollable: require './level2/scrollable'
 
 	Animation: require './level1/animation'

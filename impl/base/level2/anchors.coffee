@@ -1,147 +1,156 @@
 'use strict'
 
-Binding = require '../../../types/item/binding'
+{isArray} = Array
 
 module.exports = (impl) ->
 	{items} = impl
 
-	TYPES_VALUES =
-		left: (target) ->
-			if target is 'parent'
-				"0"
-			else
-				"#{target}.x"
-		top: (target) ->
-			if target is 'parent'
-				"0"
-			else
-				"#{target}.y"
-		right: (target) ->
-			r = "#{target}.width"
-			if target isnt 'parent'
-				r += " + #{target}.x"
-			r
-		bottom: (target) ->
-			r = "#{target}.height"
-			if target isnt 'parent'
-				r += " + #{target}.y"
-			r
-		horizontalCenter: (target) ->
-			r = TYPES_VALUES.left target
-			r += " + #{target}.width/2"
-			r
-		verticalCenter: (target) ->
-			r = TYPES_VALUES.top target
-			r += " + #{target}.height/2"
-			r
+	PARENT = 1<<0
+	THIS = 1<<1
+
+	VALUES =
+		left: (item, target, arr, opts) ->
+			unless opts & PARENT
+				arr.push [target, 'x']
+		top: (item, target, arr, opts) ->
+			unless opts & PARENT
+				arr.push [target, 'y']
+		right: (item, target, arr, opts) ->
+			arr.push [target, 'width']
+			unless opts & PARENT
+				arr.push '+', [target, 'x']
+		bottom: (item, target, arr, opts) ->
+			arr.push [target, 'height']
+			unless opts & PARENT
+				arr.push '+', [target, 'y']
+		horizontalCenter: (item, target, arr, opts) ->
+			VALUES.left item, target, arr, opts
+			arr.push '+', [target, 'width'], '/2'
+		verticalCenter: (item, target, arr, opts) ->
+			VALUES.top item, target, arr, opts
+			arr.push '+', [target, 'height'], '/2'
+
+	getBindingValue = (item, anchor) ->
+		[target, line] = anchor
+
+		opts = 0
+		switch target
+			when 'parent'
+				opts |= PARENT
+				target = [item, 'parent']
+			when 'this'
+				opts |= THIS
+				target = item
+
+		arr = []
+		VALUES[line]? item, target, arr, opts
+		arr
 
 	MARGIN_FUNCS =
-		left: (id) ->
-			items[id].anchorMargins?.left or 0
-		top: (id) ->
-			items[id].anchorMargins?.top or 0
-		right: (id) ->
-			- items[id].anchorMargins?.right or 0
-		bottom: (id) ->
-			- items[id].anchorMargins?.bottom or 0
-		horizontalCenter: (id) ->
-			MARGIN_FUNCS.left(id) + MARGIN_FUNCS.right(id)
-		verticalCenter: (id) ->
-			MARGIN_FUNCS.top(id) + MARGIN_FUNCS.bottom(id)
+		left: (item) ->
+			item.anchors.margin.left
+		top: (item) ->
+			item.anchors.margin.top
+		right: (item) ->
+			- item.anchors.margin.right
+		bottom: (item) ->
+			- item.anchors.margin.bottom
+		horizontalCenter: (item) ->
+			MARGIN_FUNCS.left(item) + MARGIN_FUNCS.right(item)
+		verticalCenter: (item) ->
+			MARGIN_FUNCS.top(item) + MARGIN_FUNCS.bottom(item)
 
-	TYPES_BINDINGS =
-		left: (id, val) ->
-			unless val
-				return impl.setItemBinding id, 'x', null
+	BINDINGS_PROPS =
+		left: ['x']
+		top: ['y']
+		right: ['x']
+		bottom: ['y']
+		horizontalCenter: ['x']
+		verticalCenter: ['y']
+		centerIn: ['x', 'y']
+		fill: ['x', 'y', 'width', 'height']
 
-			left = getAnchorValue val
-			left = new Binding null, left
-			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.left
-		top: (id, val) ->
-			unless val
-				return impl.setItemBinding id, 'y', null
+	BINDINGS =
+		left: (item, anchor) ->
+			unless anchor
+				return impl.setItemBinding.call item, 'x', null
 
-			top = getAnchorValue val
-			top = new Binding null, top
-			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.top
-		right: (id, val) ->
-			unless val
-				return impl.setItemBinding id, 'x', null
+			binding = getBindingValue item, anchor
+			impl.setItemBinding.call item, 'x', binding, MARGIN_FUNCS.left
+		top: (item, anchor) ->
+			unless anchor
+				return impl.setItemBinding.call item, 'y', null
 
-			left = getAnchorValue(val) + " - this.width"
-			left = new Binding null, left
-			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.right
-		bottom: (id, val) ->
-			unless val
-				return impl.setItemBinding id, 'y', null
+			binding = getBindingValue item, anchor
+			impl.setItemBinding.call item, 'y', binding, MARGIN_FUNCS.top
+		right: (item, anchor) ->
+			unless anchor
+				return impl.setItemBinding.call item, 'x', null
 
-			top = getAnchorValue(val) + " - this.height"
-			top = new Binding null, top
-			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.bottom
-		horizontalCenter: (id, val) ->
-			unless val
-				return impl.setItemBinding id, 'x', null
+			binding = getBindingValue item, anchor
+			binding.push '-', [item, 'width']
+			impl.setItemBinding.call item, 'x', binding, MARGIN_FUNCS.right
+		bottom: (item, anchor) ->
+			unless anchor
+				return impl.setItemBinding.call item, 'y', null
 
-			left = getAnchorValue(val) + " - this.width/2"
-			left = new Binding null, left
-			impl.setItemBinding id, 'x', left, MARGIN_FUNCS.horizontalCenter
-		verticalCenter: (id, val) ->
-			unless val
-				return impl.setItemBinding id, 'y', null
+			binding = getBindingValue item, anchor
+			binding.push '-', [item, 'height']
+			impl.setItemBinding.call item, 'y', binding, MARGIN_FUNCS.bottom
+		horizontalCenter: (item, anchor) ->
+			unless anchor
+				return impl.setItemBinding.call item, 'x', null
 
-			top = getAnchorValue(val) + " - this.height/2"
-			top = new Binding null, top
-			impl.setItemBinding id, 'y', top, MARGIN_FUNCS.verticalCenter
-		centerIn: (id, val) ->
-			unless val
-				TYPES_BINDINGS.horizontalCenter id, null
-				TYPES_BINDINGS.verticalCenter id, null
+			binding = getBindingValue item, anchor
+			binding.push '-', [item, 'width'], '/2'
+			impl.setItemBinding.call item, 'x', binding, MARGIN_FUNCS.horizontalCenter
+		verticalCenter: (item, anchor) ->
+			unless anchor
+				return impl.setItemBinding.call item, 'y', null
+
+			binding = getBindingValue item, anchor
+			binding.push '-', [item, 'height'], '/2'
+			impl.setItemBinding.call item, 'y', binding, MARGIN_FUNCS.verticalCenter
+		centerIn: (item, anchor) ->
+			unless anchor
+				BINDINGS.horizontalCenter item, null
+				BINDINGS.verticalCenter item, null
 				return
 
-			TYPES_BINDINGS.horizontalCenter id, "#{val}.horizontalCenter"
-			TYPES_BINDINGS.verticalCenter id, "#{val}.verticalCenter"
-		fill: do ->
-			WIDTH_MARGIN_FUNC = (id) ->
-				- (MARGIN_FUNCS.left(id) or 0) - (MARGIN_FUNCS.right(id) or 0)
-			HEIGHT_MARGIN_FUNC = (id) ->
-				- (MARGIN_FUNCS.top(id) or 0) - (MARGIN_FUNCS.bottom(id) or 0)
+			[target] = anchor
 
-			(id, val) ->
-				unless val
-					TYPES_BINDINGS.left id, null
-					TYPES_BINDINGS.top id, null
-					impl.setItemBinding id, 'width', null
-					impl.setItemBinding id, 'height', null
+			BINDINGS.horizontalCenter item, [target, 'horizontalCenter']
+			BINDINGS.verticalCenter item, [target, 'verticalCenter']
+		fill: do ->
+			WIDTH_MARGIN_FUNC = (item) ->
+				- MARGIN_FUNCS.left(item) - MARGIN_FUNCS.right(item)
+			HEIGHT_MARGIN_FUNC = (item) ->
+				- MARGIN_FUNCS.top(item) - MARGIN_FUNCS.bottom(item)
+
+			(item, anchor) ->
+				unless anchor
+					BINDINGS.left item, null
+					BINDINGS.top item, null
+					impl.setItemBinding.call item, 'width', null
+					impl.setItemBinding.call item, 'height', null
 					return
 
-				TYPES_BINDINGS.left id, "#{val}.left"
-				TYPES_BINDINGS.top id, "#{val}.top"
+				[target] = anchor
 
-				width = new Binding null, "#{val}.width"
-				impl.setItemBinding id, 'width', width, WIDTH_MARGIN_FUNC
+				BINDINGS.left item, [target, 'left']
+				BINDINGS.top item, [target, 'top']
 
-				height = new Binding null, "#{val}.height"
-				impl.setItemBinding id, 'height', height, HEIGHT_MARGIN_FUNC
+				width = [[getBindingValue(item, anchor)[0], 'width']]
+				impl.setItemBinding.call item, 'width', width, WIDTH_MARGIN_FUNC
 
-	getAnchorValue = (val) ->
-		dot = val.indexOf '.'
-		if dot is -1
-			dot = val.length
+				height = [[getBindingValue(item, anchor)[0], 'height']]
+				impl.setItemBinding.call item, 'height', height, HEIGHT_MARGIN_FUNC
 
-		target = val.slice 0, dot
-		line = val.slice dot+1
+	setItemAnchor: (type, val) ->
+		BINDINGS[type] @, val
 
-		TYPES_VALUES[line] target
-
-	impl.Types.Item.create = do (_super = impl.Types.Item.create) -> (id, target) ->
-		target.anchorMargins = null
-
-		_super id, target
-
-	setItemAnchor: (id, type, val) ->
-		TYPES_BINDINGS[type] id, val
-
-	setItemAnchorMargin: (id, type, val) ->
-		item = items[id]
-		anchorMargins = item.anchorMargins ?= {}
-		anchorMargins[type] = val
+	setItemAnchorMargin: (type, val) ->
+		if bindings = @_impl.bindings
+			for prop in BINDINGS_PROPS[type]
+				bindings[prop]?.update()
+		null

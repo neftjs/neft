@@ -5,46 +5,60 @@ utils = require 'utils'
 Dict = require 'dict'
 
 module.exports = (Scope, Impl) ->
-	self = null
+	class Border extends Dict
+		constructor: (item) ->
+			expect(item).toBe.any Rectangle
 
-	Border = Object.create null
+			utils.defProp @, '_item', '', item
 
-	utils.defProp Border, 'width', 'e', ->
-		Impl.getRectangleBorderWidth self._uid
-	, (val) ->
-		expect(val).toBe.float()
-		expect(val).not().toBe.lessThan 0
-		Impl.setRectangleBorderWidth self._uid, val
+			super
+				width: 0
+				color: 'transparent'
 
-	utils.defProp Border, 'color', 'e', ->
-		Impl.getRectangleBorderColor self._uid
-	, (val) ->
-		expect(val).toBe.truthy().string()
-		Impl.setRectangleBorderColor self._uid, val
+		Dict.defineProperty @::, 'width'
 
-	Object.freeze Border
+		utils.defProp @::, 'width', 'e', utils.lookupGetter(@::, 'width')
+		, do (_super = utils.lookupSetter @::, 'width') -> (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			_super.call @, val
+			Impl.setRectangleWidth.call @_item, val
+
+		Dict.defineProperty @::, 'color'
+
+		utils.defProp @::, 'color', 'e', utils.lookupGetter(@::, 'color')
+		, do (_super = utils.lookupSetter @::, 'color') -> (val) ->
+			expect(val).toBe.truthy().string()
+			_super.call @, val
+			Impl.setRectangleBorderColor.call @_item, val
 
 	class Rectangle extends Scope.Item
 		@__name__ = 'Rectangle'
 
+		@DATA = utils.merge Object.create(Scope.Item.DATA),
+			color: 'transparent'
+			radius: 0
+
 		Dict.defineProperty @::, 'color'
-		Dict.defineProperty @::, 'radius'
-		Dict.defineProperty @::, 'border'
 
-		utils.defProp @::, 'color', 'e', ->
-			Impl.getRectangleColor @_uid
-		, (val) ->
+		utils.defProp @::, 'color', 'e', utils.lookupGetter(@::, 'color')
+		, do (_super = utils.lookupSetter @::, 'color') -> (val) ->
 			expect(val).toBe.truthy().string()
-			Impl.setRectangleColor @_uid, val
+			_super.call @, val
+			Impl.setRectangleColor.call @, val
 
-		utils.defProp @::, 'radius', 'e', ->
-			Impl.getRectangleRadius @_uid
-		, (val) ->
+		Dict.defineProperty @::, 'radius'
+
+		utils.defProp @::, 'radius', 'e', utils.lookupGetter(@::, 'radius')
+		, do (_super = utils.lookupSetter @::, 'radius') -> (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
-			Impl.setRectangleRadius @_uid, val
+			_super.call @, val
+			Impl.setRectangleRadius.call @, val
 
 		utils.defProp @::, 'border', 'e', ->
-			self = @
-			Border
-		, null
+			utils.defProp @, 'border', 'e', val = new Border(@)
+			val
+		, (val) ->
+			expect(val).toBe.simpleObject()
+			utils.merge @border, val

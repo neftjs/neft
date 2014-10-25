@@ -4,8 +4,7 @@ expect = require 'expect'
 utils = require 'utils'
 signal = require 'signal'
 Dict = require 'dict'
-
-items = {}
+List = require 'list'
 
 module.exports = (Scope, Impl) -> class Item extends Dict
 	@__name__ = 'Item'
@@ -13,31 +12,33 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
+	@DATA =
+		parent: null
+		clip: false
+		visible: true
+		x: 0
+		y: 0
+		z: 0
+		width: 0
+		height: 0
+		rotation: 0
+		scale: 1
+		opacity: 1
+
 	ALL_HANDLERS = utils.arrayToObject Item.SIGNALS, (_, val) ->
 		signal.getHandlerName val
 	, -> true
 	ALL_HANDLERS.onReady = true
 
-	DEEP_PROPERTIES =
-		anchors: true
-		animations: true
-
-	Binding = require './item/binding'
-	Anchors = require './item/anchors'
-	Animations = require('./item/animations') Scope
+	Anchors = require('./item/anchors') Scope, Impl
+	Animations = require('./item/animations') Scope, Impl
 
 	constructor: (@scope, opts, children) ->
 		expect(opts).toBe.simpleObject()
 		expect().defined(children).toBe.array()
 
 		utils.defProp @, '_opts', '', utils.clone(opts)
-
-		utils.defProp @, '_uid', '', uid = utils.uid()
-		items[uid] = @
-
-		Impl.createItem @constructor.__name__, uid
-
-		utils.defProp @, 'animations', 'e', new Animations @
+		utils.defProp @, '_impl', '', {}
 
 		# custom properties
 		for key, val of opts
@@ -46,14 +47,14 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 
 			Dict.defineProperty @, key
 
-		super()
+		super Object.create(@constructor.DATA)
+
+		Impl.createItem @, @constructor.__name__
 
 		# fill
 		for key, val of opts
-			if typeof @[key] is 'function'
-				@[key].connect val
-			else if DEEP_PROPERTIES[key]
-				utils.mergeDeep @[key], val
+			if typeof opts[key] is 'function'
+				@[key] val
 			else
 				@[key] = val
 
@@ -62,21 +63,15 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 			for child in children
 				child.parent = @
 
-		# animations
-		@animations.initialize()
-
 	createBindedSetter = (propName, setFunc) ->
 		(val) ->
-			if typeof val is 'string'
-				# TODO: optimize it
-				setImmediate =>
-					binding = new Binding @, val
-					Impl.setItemBinding @_uid, propName, binding
+			if Array.isArray val
+				Impl.setItemBinding.call @, propName, val
 			else
 				setFunc.call @, val
 
 	utils.defProp @::, 'id', 'e', ->
-		@_uid
+		undefined
 	, (val) ->
 		expect(val).toBe.truthy().string()
 		utils.defProp @, 'id', 'e', val
@@ -91,114 +86,144 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 		setImmediate -> item.ready()
 
 	onLazySignalInitialized = (item, signalName) ->
-		Impl.attachItemSignal item._uid, signalName, item[signalName]
+		Impl.attachItemSignal.call item, signalName, item[signalName]
 
 	for signalName in Item.SIGNALS
 		lazySignal = signal.createLazy @::, signalName
 		lazySignal.onInitialized onLazySignalInitialized
 
-	Dict.defineProperty @::, 'parent'
-	Dict.defineProperty @::, 'visible'
-	Dict.defineProperty @::, 'clip'
-	Dict.defineProperty @::, 'width'
-	Dict.defineProperty @::, 'height'
-	Dict.defineProperty @::, 'x'
-	Dict.defineProperty @::, 'y'
-	Dict.defineProperty @::, 'z'
-	Dict.defineProperty @::, 'scale'
-	Dict.defineProperty @::, 'rotation'
-	Dict.defineProperty @::, 'opacity'
-
-	utils.defProp @::, 'parent', 'e', ->
-		items[Impl.getItemParent @_uid]
-	, (val) ->
-		item = val
-		if typeof val is 'string'
-			item = @scope.getItemById val
-
-		if val?
-			expect(item).toBe.any Item
-
-		Impl.setItemParent @_uid, item?._uid
-
-	utils.defProp @::, 'visible', 'e', ->
-		Impl.getItemVisible @_uid
-	, (val) ->
-		expect(val).toBe.boolean()
-		Impl.setItemVisible @_uid, val
-
-	utils.defProp @::, 'clip', 'e', ->
-		Impl.getItemClip @_uid
-	, (val) ->
-		expect(val).toBe.boolean()
-		Impl.setItemClip @_uid, val
-
-	utils.defProp @::, 'width', 'e', ->
-		Impl.getItemWidth @_uid
-	, createBindedSetter 'width', (val) ->
-		expect(val).toBe.float()
-		expect(val).not().toBe.lessThan 0
-		Impl.setItemWidth @_uid, val
-
-	utils.defProp @::, 'height', 'e', ->
-		Impl.getItemHeight @_uid
-	, createBindedSetter 'height', (val) ->
-		expect(val).toBe.float()
-		expect(val).not().toBe.lessThan 0
-		Impl.setItemHeight @_uid, val
-
-	utils.defProp @::, 'x', 'e', ->
-		Impl.getItemX @_uid
-	, createBindedSetter 'x', (val) ->
-		expect(val).toBe.float()
-		Impl.setItemX @_uid, val
-
-	utils.defProp @::, 'y', 'e', ->
-		Impl.getItemY @_uid
-	, createBindedSetter 'y', (val) ->
-		expect(val).toBe.float()
-		Impl.setItemY @_uid, val
-
-	utils.defProp @::, 'z', 'e', ->
-		Impl.getItemZ @_uid
-	, (val) ->
-		expect(val).toBe.float()
-		Impl.setItemZ @_uid, val
-
-	utils.defProp @::, 'scale', 'e', ->
-		Impl.getItemScale @_uid
-	, (val) ->
-		expect(val).toBe.float()
-		Impl.setItemScale @_uid, val
-
-	utils.defProp @::, 'rotation', 'e', ->
-		Impl.getItemRotation @_uid
-	, (val) ->
-		expect(val).toBe.float()
-		Impl.setItemRotation @_uid, val
-
-	utils.defProp @::, 'opacity', 'e', ->
-		Impl.getItemOpacity @_uid
-	, (val) ->
-		expect(val).toBe.float()
-		Impl.setItemOpacity @_uid, val
-
-	utils.defProp @::, 'anchors', 'e', ->
-		Anchors.currentItem = @
-		Anchors.Anchors
-	, null
+	Dict.defineProperty @::, 'children'
+	childrenSetter = utils.lookupSetter @::, 'children'
 
 	utils.defProp @::, 'children', 'e', ->
-		children = Impl.getItemChildren @_uid
+		val = Object.create(null)
+		utils.defProp val, 'length', 'w', 0
+		utils.defProp @, 'children', 'e', val
+		val
+	, (val) ->
+		expect(val).toBe.array()
+		for item in val
+			val.parent = @
+		null
 
-		# TODO: cache array for the optimization
-		for child, i in children
-			children[i] = items[child]
+	Dict.defineProperty @::, 'parent'
 
-		children
-	, null
+	utils.defProp @::, 'parent', 'e', utils.lookupGetter(@::, 'parent')
+	, do (_super = utils.lookupSetter @::, 'parent') -> (val) ->
+		if val?
+			expect(val).toBe.any Item
+			Array::push.call val.children, @
+			childrenSetter.call val, val.children
 
-	utils.defProp @::, 'animations', 'e', null
+		if old = @parent
+			index = Array::indexOf.call old.children
+			Array::splice.call old.children, index, 1
+			childrenSetter.call old, old.children
+
+		_super.call @, val
+		Impl.setItemParent.call @, val
+
+	Dict.defineProperty @::, 'visible'
+
+	utils.defProp @::, 'visible', 'e', utils.lookupGetter(@::, 'visible')
+	, do (_super = utils.lookupSetter @::, 'visible') -> (val) ->
+		expect(val).toBe.boolean()
+		_super.call @, val
+		Impl.setItemVisible.call @, val
+
+	Dict.defineProperty @::, 'clip'
+
+	utils.defProp @::, 'clip', 'e', utils.lookupGetter(@::, 'clip')
+	, do (_super = utils.lookupSetter @::, 'clip') -> (val) ->
+		expect(val).toBe.boolean()
+		_super.call @, val
+		Impl.setItemClip.call @, val
+
+	Dict.defineProperty @::, 'width'
+
+	utils.defProp @::, 'width', 'e', utils.lookupGetter(@::, 'width')
+	, do (_super = utils.lookupSetter @::, 'width') ->
+		createBindedSetter 'width', (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			_super.call @, val
+			Impl.setItemWidth.call @, val
+
+	Dict.defineProperty @::, 'height'
+
+	utils.defProp @::, 'height', 'e', utils.lookupGetter(@::, 'height')
+	, do (_super = utils.lookupSetter @::, 'height') ->
+		createBindedSetter 'height', (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			_super.call @, val
+			Impl.setItemHeight.call @, val
+
+	Dict.defineProperty @::, 'x'
+
+	utils.defProp @::, 'x', 'e', utils.lookupGetter(@::, 'x')
+	, do (_super = utils.lookupSetter @::, 'x') ->
+		createBindedSetter 'x', (val) ->
+			expect(val).toBe.float()
+			_super.call @, val
+			Impl.setItemX.call @, val
+
+	Dict.defineProperty @::, 'y'
+
+	utils.defProp @::, 'y', 'e', utils.lookupGetter(@::, 'y')
+	, do (_super = utils.lookupSetter @::, 'y') ->
+		createBindedSetter 'y', (val) ->
+			expect(val).toBe.float()
+			_super.call @, val
+			Impl.setItemY.call @, val
+
+	Dict.defineProperty @::, 'z'
+
+	utils.defProp @::, 'z', 'e', utils.lookupGetter(@::, 'z')
+	, do (_super = utils.lookupSetter @::, 'z') -> (val) ->
+		expect(val).toBe.float()
+		_super.call @, val
+		Impl.setItemZ.call @, val
+
+	Dict.defineProperty @::, 'scale'
+
+	utils.defProp @::, 'scale', 'e', utils.lookupGetter(@::, 'scale')
+	, do (_super = utils.lookupSetter @::, 'scale') -> (val) ->
+		expect(val).toBe.float()
+		_super.call @, val
+		Impl.setItemScale.call @, val
+
+	Dict.defineProperty @::, 'rotation'
+
+	utils.defProp @::, 'rotation', 'e', utils.lookupGetter(@::, 'rotation')
+	, do (_super = utils.lookupSetter @::, 'rotation') -> (val) ->
+		expect(val).toBe.float()
+		_super.call @, val
+		Impl.setItemRotation.call @, val
+
+	Dict.defineProperty @::, 'opacity'
+
+	utils.defProp @::, 'opacity', 'e', utils.lookupGetter(@::, 'opacity')
+	, do (_super = utils.lookupSetter @::, 'opacity') -> (val) ->
+		expect(val).toBe.float()
+		expect(val).not().toBe.lessThan 0
+		expect(val).not().toBe.greaterThan 1
+		_super.call @, val
+		Impl.setItemOpacity.call @, val
+
+	utils.defProp @::, 'anchors', 'e', ->
+		utils.defProp @, 'anchors', 'e', val = new Anchors(@)
+		val
+	, (val) ->
+		expect(val).toBe.simpleObject()
+		utils.mergeDeep @anchors, val
+
+	utils.defProp @::, 'animations', 'e', ->
+		utils.defProp @, 'animations', 'e', val = new Animations(@)
+		val
+	, (val) ->
+		expect(val).toBe.array()
+		throw "Not implemented"
 
 	clear: ->
 		for child in @children
@@ -216,7 +241,7 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 	cloneDeep: (scope) ->
 		clone = @clone scope
 
-		for child in @children
+		for child, i in @children
 			child = child.cloneDeep scope
 			child.parent = clone
 

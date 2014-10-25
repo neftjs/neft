@@ -3,87 +3,39 @@
 module.exports = (impl) ->
 	{items} = impl
 
-	create: (id, target) ->
-		target.id = id
-		target.parent = null
-		target.visible = true
-		target.clip = false
-		target.width = 0
-		target.height = 0
-		target.x = 0
-		target.y = 0
-		target.z = 0
-		target.scale = 1
-		target.rotation = 0
-		target.opacity = 1
+	create: (item) ->
 
-	getItemChildren: (id) ->
-		[]
+	setItemParent: (val) ->
+		@_impl.parent = items[val]
 
-	getItemParent: (id) ->
-		items[id].parent?.id
+	setItemVisible: (val) ->
+		@_impl.visible = val
 
-	setItemParent: (id, val) ->
-		items[id].parent = items[val]
+	setItemClip: (val) ->
+		@_impl.clip = val
 
-	getItemVisible: (id) ->
-		items[id].visible
+	setItemWidth: (val) ->
+		@_impl.width = val
 
-	setItemVisible: (id, val) ->
-		items[id].visible = val
+	setItemHeight: (val) ->
+		@_impl.height = val
 
-	getItemClip: (id) ->
-		items[id].clip
+	setItemX: (val) ->
+		@_impl.x = val
 
-	setItemClip: (id, val) ->
-		items[id].clip = val
+	setItemY: (val) ->
+		@_impl.y = val
 
-	getItemWidth: (id) ->
-		items[id].width
+	setItemZ: (val) ->
+		@_impl.z = val
 
-	setItemWidth: (id, val) ->
-		items[id].width = val
+	setItemScale: (val) ->
+		@_impl.scale = val
 
-	getItemHeight: (id) ->
-		items[id].height
+	setItemRotation: (val) ->
+		@_impl.rotation = val
 
-	setItemHeight: (id, val) ->
-		items[id].height = val
+	setItemOpacity: (val) ->
+		@_impl.opacity = val
 
-	getItemX: (id) ->
-		items[id].x
-
-	setItemX: (id, val) ->
-		items[id].x = val
-
-	getItemY: (id) ->
-		items[id].y
-
-	setItemY: (id, val) ->
-		items[id].y = val
-
-	getItemZ: (id) ->
-		items[id].z
-
-	setItemZ: (id, val) ->
-		items[id].z = val
-
-	getItemScale: (id) ->
-		items[id].scale
-
-	setItemScale: (id, val) ->
-		items[id].scale = val
-
-	getItemRotation: (id) ->
-		items[id].rotation
-
-	setItemRotation: (id, val) ->
-		items[id].rotation = val
-
-	getItemOpacity: (id) ->
-		items[id].opacity
-
-	setItemOpacity: (id, val) ->
-		items[id].opacity = val
-
-	attachItemSignal: (id, name, signal) ->
+	attachItemSignal: (name, signal) ->

@@ -115,165 +115,87 @@ HOT_MAX_TIME = 120
 HOT_MAX_ACTIONS = 100
 
 module.exports = (impl) ->
-	{items} = impl
-
 	updateTransforms = (item) ->
 		transform = ''
-		if item.isHot
+		if item._impl.isHot
 			transform += "translate3d(#{item.x}px, #{item.y}px, 0) "
 		if item.rotation
 			transform += "rotate(#{rad2deg(item.rotation)}deg) "
 		if item.scale isnt 1
 			transform += "scale(#{item.scale}) "
 
-		item.elem.style[transformProp] = transform
+		item._impl.elem.style[transformProp] = transform
 
 	markAction = (item) ->
-		if now() - item.lastAction < HOT_MAX_TIME
-			if item.hotActions++ > HOT_MAX_ACTIONS
-				{style, id} = item.elem
-				item.isHot = true
-				item.x = getItemX id
-				item.y = getItemY id
+		storage = item._impl
+
+		if now() - storage.lastAction < HOT_MAX_TIME
+			if storage.hotActions++ > HOT_MAX_ACTIONS
+				{style, id} = storage.elem
+				storage.isHot = true
 				style.left = style.top = '0'
 				updateTransforms item
 		else
-			item.lastAction = now()
+			storage.lastAction = now()
 
-	create: (id, target) ->
-		target.elem ?= document.createElement 'div'
-		target.elem.id = id
+	create: (item) ->
+		storage = item._impl
 
-		target.x = 0
-		target.y = 0
-		target.rotation = 0
-		target.scale = 1
+		storage.elem ?= document.createElement 'div'
 
-		target.lastAction = now()
-		target.hotActions = 0
-		target.isHot = false
+		storage.lastAction = now()
+		storage.hotActions = 0
+		storage.isHot = false
 
-	getItemChildren: (id) ->
-		item = items[id]
+	setItemParent: (val) ->
+		{elem} = @_impl
 
-		{elem} = item
-		{children} = elem
-
-		arr = []
-		for child in children
-			if id = child.id
-				arr.push id
-
-		arr
-
-	getItemParent: (id) ->
-		items[id].elem.parentElement?.id
-
-	setItemParent: (id, val) ->
-		elem = items[id].elem
-		parent = items[val]
-
-		unless parent
+		unless val
 			elem.parentElement?.removeChild elem
 			return
 
-		parent.elem.appendChild elem
+		val._impl.elem.appendChild elem
 
-	getItemVisible: (id) ->
-		items[id]?.elem.style.display isnt 'none'
+	setItemVisible: (val) ->
+		@_impl.elem.style.display = if val then 'inherit' else 'none'
 
-	setItemVisible: (id, val) ->
-		items[id]?.elem.style.display = if val then 'inherit' else 'none'
+	setItemClip: (val) ->
+		@_impl.elem.style.overflow = if val then 'hidden' else 'visible'
 
-	getItemClip: (id) ->
-		items[id]?.elem.style.overflow is 'hidden'
+	setItemWidth: (val) ->
+		@_impl.elem.style.width = "#{val}px"
 
-	setItemClip: (id, val) ->
-		items[id]?.elem.style.overflow = if val then 'hidden' else 'visible'
+	setItemHeight: (val) ->
+		@_impl.elem.style.height = "#{val}px"
 
-	getItemWidth: (id) ->
-		parseFloat(items[id]?.elem.style.width) or 0
-
-	setItemWidth: (id, val) ->
-		items[id]?.elem.style.width = "#{val}px"
-
-	getItemHeight: (id) ->
-		parseFloat(items[id]?.elem.style.height) or 0
-
-	setItemHeight: (id, val) ->
-		items[id]?.elem.style.height = "#{val}px"
-
-	getItemX: getItemX = (id) ->
-		item = items[id]
-		return unless item
-		item.x or parseFloat(item.elem.style.left) or 0
-
-	setItemX: (id, val) ->
-		item = items[id]
-		return unless item
-
-		if item.isHot
-			item.x = val
-			updateTransforms item
+	setItemX: (val) ->
+		if @_impl.isHot
+			updateTransforms @
 		else
-			item.elem.style.left = val
-			markAction item
+			@_impl.elem.style.left = val
+			markAction @
 
-	getItemY: getItemY = (id) ->
-		item = items[id]
-		return unless item
-		item.y or parseFloat(item.elem.style.top) or 0
-
-	setItemY: (id, val) ->
-		item = items[id]
-		return unless item
-
-		if item.isHot
-			item.y = val
-			updateTransforms item
+	setItemY: (val) ->
+		if @_impl.isHot
+			updateTransforms @
 		else
-			item.elem.style.top = val
-			markAction item
+			@_impl.elem.style.top = val
+			markAction @
 
-	getItemZ: (id) ->
-		val = items[id].elem?.style.zIndex
+	setItemZ: (val) ->
+		@_impl.elem.style.zIndex = if val is 0 then 'inherit' else val
 
-		if val is 'inherit'
-			0
-		else
-			parseFloat(val) or 0
+	setItemScale: (val) ->
+		updateTransforms @
 
-	setItemZ: (id, val) ->
-		items[id]?.elem.style.zIndex = if val is 0 then 'inherit' else val
+	setItemRotation: (val) ->
+		updateTransforms @
 
-	getItemScale: (id) ->
-		items[id]?.scale
+	setItemOpacity: (val) ->
+		@_impl.elem.style.opacity = val
 
-	setItemScale: (id, val) ->
-		item = items[id]
-		return unless item
-		item.scale = val
-		updateTransforms item
-
-	getItemRotation: (id) ->
-		items[id]?.rotation
-
-	setItemRotation: (id, val) ->
-		item = items[id]
-		return unless item
-		item.rotation = val
-		updateTransforms item
-
-	getItemOpacity: (id) ->
-		opacity = items[id]?.elem.style.opacity
-		if opacity is '' then 1 else (parseFloat(opacity) or 0)
-
-	setItemOpacity: (id, val) ->
-		items[id]?.elem.style.opacity = val
-
-	attachItemSignal: (id, name, func) ->
-		elem = items[id]?.elem
-		return unless elem
+	attachItemSignal: (name, func) ->
+		{elem} = @_impl
 
 		signal = SIGNALS[name]?(elem, func) or SIGNALS[name]
 

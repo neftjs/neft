@@ -6,8 +6,8 @@ Scope = Impl.Scope = require './scope'
 exports = module.exports = Object.create Scope.DEFAULT_SCOPE
 
 exports.Scope = Scope
+exports.window = exports.create Scope.Item, id: 'window'
 
-windowItem = exports.create Scope.Item, id: 'window'
-Impl.setWindow windowItem._uid
+Impl.setWindow exports.window
 
 Object.freeze exports

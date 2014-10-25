@@ -38,11 +38,11 @@ module.exports = (impl) ->
 	{items} = impl
 
 	window.addEventListener 'resize', resize = ->
-		id = impl.window
-		return unless id
+		item = impl.window
+		return unless item
 
-		impl.setItemWidth id, innerWidth
-		impl.setItemHeight id, innerHeight
+		item.width = innerWidth
+		item.height = innerHeight
 
 	Types:
 		Item: require './level0/item'
@@ -50,13 +50,13 @@ module.exports = (impl) ->
 		Text: require './level0/text'
 		Rectangle: require './level1/rectangle'
 
-	setWindow: setWindow = (id) ->
+	setWindow: setWindow = (item) ->
 		if document.readyState isnt 'complete'
 			document.onreadystatechange = =>
-				setWindow id
+				setWindow item
 		else
 			while child = body.firstChild
 				body.removeChild child
 
 			resize()
-			body.appendChild items[id].elem
+			body.appendChild item._impl.elem
