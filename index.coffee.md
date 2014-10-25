@@ -34,7 +34,7 @@ Environment information
 
 	switch true
 
-		when global? and global+'' is '[object global]'
+		when global? and Object::toString.call(global) is '[object global]'
 			exports.isNode = true
 
 		when window?.document?
