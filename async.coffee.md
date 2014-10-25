@@ -168,6 +168,7 @@ Run all stored functions in the same time.
 			while n--
 				@callNext onDone
 
+			null
 
 forEach()
 --------------
