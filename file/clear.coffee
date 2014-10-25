@@ -58,4 +58,6 @@ removeEmptyTexts = (node) ->
 		if elem.name isnt 'script'
 			removeEmptyTexts elem
 
+	null
+
 module.exports = (File) -> removeEmptyTexts
