@@ -66,3 +66,5 @@ schema.validate dict: { name: 'John' }
 			for prop of value
 				unless ~props.indexOf prop
 					throw new TypeError "Schema: #{row} doesn't provide #{prop} property"
+
+		null
