@@ -44,6 +44,7 @@ module.exports = (File) ->
 		if funcs
 			for name, body of funcs
 				funcs[name] = new Function funcGlobalProps, body
+		null
 
 	File.fromAssembled = do (_super = File.fromAssembled) -> (file) ->
 		_super? file
