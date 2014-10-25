@@ -39,6 +39,11 @@ exports.getHandlerName = do ->
 		else
 			cache[name] = "on#{utils.capitalize name}"
 
+exports.isHandlerName = (name) ->
+	expect(name).toBe.string()
+
+	///^on[A-Z]///.test name
+
 exports.create = (obj, name) ->
 	expect(obj).not().toBe.primitive()
 	expect(name).toBe.truthy().string()
