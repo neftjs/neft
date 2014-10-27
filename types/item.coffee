@@ -95,8 +95,12 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 	Dict.defineProperty @::, 'children'
 	childrenSetter = utils.lookupSetter @::, 'children'
 
+	ChildrenObject = {}
+	signal.createLazy ChildrenObject, 'inserted'
+	signal.createLazy ChildrenObject, 'popped'
+
 	utils.defProp @::, 'children', 'e', ->
-		val = Object.create(null)
+		val = Object.create ChildrenObject
 		utils.defProp val, 'length', 'w', 0
 		utils.defProp @, 'children', 'e', val
 		val
@@ -110,15 +114,17 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'parent', 'e', utils.lookupGetter(@::, 'parent')
 	, do (_super = utils.lookupSetter @::, 'parent') -> (val) ->
-		if val?
-			expect(val).toBe.any Item
-			Array::push.call val.children, @
-			childrenSetter.call val, val.children
-
 		if old = @parent
-			index = Array::indexOf.call old.children
+			index = Array::indexOf.call old.children, @
 			Array::splice.call old.children, index, 1
 			childrenSetter.call old, old.children
+			old.children.popped? index, @
+
+		if val?
+			expect(val).toBe.any Item
+			length = Array::push.call val.children, @
+			childrenSetter.call val, val.children
+			val.children.inserted? length - 1, @
 
 		_super.call @, val
 		Impl.setItemParent.call @, val

@@ -92,6 +92,9 @@ update = ->
 		setImmediate updateItems
 		pending = true
 
+updateParent = ->
+	update.call @parent
+
 exports.COLUMN = 1<<0
 exports.ROW = 1<<1
 exports.ALL = (1<<2) - 1
@@ -103,6 +106,15 @@ exports.create = (item, type) ->
 	storage.columnsPositions = []
 	storage.rowsPositions = []
 
+	# update on children change
 	item.onChildrenChanged update
+
+	# update on each children size change
+	item.children.onInserted (i, item) ->
+		item.onWidthChanged updateParent
+		item.onHeightChanged updateParent
+	item.children.onPopped (i, item) ->
+		item.onWidthChanged.disconnect updateParent
+		item.onHeightChanged.disconnect updateParent
 
 exports.update = update
