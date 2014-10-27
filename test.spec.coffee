@@ -141,7 +141,7 @@ describe 'onInserted signal', ->
 
 		list.append 'a'
 
-		expect(args).toEqual [[2]]
+		expect(args).toEqual [[2, 'a']]
 		expect(copy).toEqual [1, 2, 'a']
 
 	it 'works with insert()', ->
@@ -150,7 +150,7 @@ describe 'onInserted signal', ->
 
 		list.insert 1, 'a'
 
-		expect(args).toEqual [[1]]
+		expect(args).toEqual [[1, 'a']]
 		expect(copy).toEqual [1, 'a', 2]
 
 describe 'onPopped signal', ->

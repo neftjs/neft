@@ -21,10 +21,10 @@ module.exports = class List
 		# properties
 		utils.defProp @, '_data', 'e', arr
 
-		# signals
-		signal.create @, 'changed'
-		signal.create @, 'inserted'
-		signal.create @, 'popped'
+	# signals
+	signal.createLazy @::, 'changed'
+	signal.createLazy @::, 'inserted'
+	signal.createLazy @::, 'popped'
 
 	utils.defProp @::, 'length', 'ce', ->
 		@_data.length
@@ -47,7 +47,7 @@ module.exports = class List
 		@_data[i] = val
 
 		# signal
-		@changed i, oldVal
+		@changed? i, oldVal
 
 		val
 
@@ -60,7 +60,7 @@ module.exports = class List
 		@_data.push val
 
 		# signal
-		@inserted @length - 1
+		@inserted? @length - 1, val
 
 		@
 
@@ -72,7 +72,7 @@ module.exports = class List
 		@_data.splice i, 0, val
 
 		# signal
-		@inserted i
+		@inserted? i, val
 
 		@
 
@@ -96,7 +96,7 @@ module.exports = class List
 		@_data.splice i, 1
 
 		# signal
-		@popped i, oldVal
+		@popped? i, oldVal
 
 		@
 
