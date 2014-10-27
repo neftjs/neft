@@ -114,21 +114,21 @@ describe 'onChanged signal', ->
 		dict = Dict()
 		dict.onChanged listener
 		dict.set 'a', 1
-		expect(args).toEqual [['a']]
+		expect(args).toEqual [['a', undefined]]
 		expect(items).toEqual [['a', 1]]
 
 	it 'works with set() on item change', ->
 		dict = Dict a: 1
 		dict.onChanged listener
 		dict.set 'a', 2
-		expect(args).toEqual [['a']]
+		expect(args).toEqual [['a', 1]]
 		expect(items).toEqual [['a', 2]]
 
 	it 'works with pop()', ->
 		dict = Dict a: 1
 		dict.onChanged listener
 		dict.pop 'a'
-		expect(args).toEqual [['a']]
+		expect(args).toEqual [['a', 1]]
 		expect(items).toEqual []
 
 describe 'properties', ->
@@ -154,10 +154,13 @@ describe 'properties', ->
 		Dict.defineProperty dict, 'name'
 
 		i = 0
+		args = []
 		dict.onNameChanged ->
+			args.push [arguments...]
 			i++
 
 		dict.name = 2
 		dict.name = 25
 
 		expect(i).toBe 2
+		expect(args).toEqual [[undefined], [2]]

@@ -18,34 +18,36 @@ module.exports = class Dict
 
 		new Dict json
 
+	@getPropertySignalName = do (cache = {}) -> (propName) ->
+		expect(propName).toBe.truthy().string()
+
+		if cache.hasOwnProperty propName
+			cache[propName]
+		else
+			cache[propName] = "#{propName}Changed"
+
 	@defineProperty = do ->
-		getPropertySignalName = do (cache = {}) -> (propName) ->
-			expect(propName).toBe.truthy().string()
-
-			if cache.hasOwnProperty propName
-				cache[propName]
-			else
-				cache[propName] = "#{propName}Changed"
-
 		createGetter = (propName) ->
 			->
 				Dict::get.call @, propName
 
 		createSetter = (propName) ->
-			signalName = getPropertySignalName propName
+			signalName = Dict.getPropertySignalName propName
 
 			(val) ->
+				oldVal = @_data[propName]
+
 				Dict::set.call @, propName, val
 
 				# signal
-				@[signalName]?()
+				@[signalName]? oldVal
 
 		(prototype, propName) ->
 			expect(prototype).not().toBe.primitive()
 			expect(propName).toBe.truthy().string()
 
 			# handler
-			signalName = getPropertySignalName propName
+			signalName = Dict.getPropertySignalName propName
 			signal.createLazy prototype, signalName
 
 			# getter/setter
@@ -86,6 +88,8 @@ module.exports = class Dict
 		expect(key).toBe.truthy().string()
 		expect(val).not().toBe undefined
 
+		oldVal = @_data[key]
+
 		# update value
 		@_data[key] = val
 
@@ -93,7 +97,7 @@ module.exports = class Dict
 		@_dirty |= ALL
 
 		# signal
-		@changed? key
+		@changed? key, oldVal
 
 		@
 
@@ -101,13 +105,14 @@ module.exports = class Dict
 		expect(key).toBe.truthy().string()
 		expect().some().keys(@_data).toBe key
 
+		oldVal = @_data[key]
 		delete @_data[key]
 
 		# dirty
 		@_dirty |= ALL
 
 		# signal
-		@changed? key
+		@changed? key, oldVal
 
 		@
 
@@ -156,3 +161,6 @@ module.exports = class Dict
 
 	toJSON: ->
 		@_data
+
+	toString: ->
+		@__hash__
