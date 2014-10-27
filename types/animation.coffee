@@ -4,7 +4,7 @@ utils = require 'utils'
 expect = require 'expect'
 
 # TODO: use Dict
-module.exports = (Scope, Impl) -> class Animation
+module.exports = (Renderer, Impl) -> class Animation
 	@__name__ = 'Animation'
 
 	constructor: (opts) ->

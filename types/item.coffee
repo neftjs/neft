@@ -6,7 +6,9 @@ signal = require 'signal'
 Dict = require 'dict'
 List = require 'list'
 
-module.exports = (Scope, Impl) -> class Item extends Dict
+{isArray} = Array
+
+module.exports = (Renderer, Impl) -> class Item extends Dict
 	@__name__ = 'Item'
 
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
@@ -30,33 +32,45 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 	, -> true
 	ALL_HANDLERS.onReady = true
 
-	Anchors = require('./item/anchors') Scope, Impl
-	Animations = require('./item/animations') Scope, Impl
+	Anchors = require('./item/anchors') Renderer, Impl
+	Animations = require('./item/animations') Renderer, Impl
 
-	constructor: (@scope, opts, children) ->
-		expect(opts).toBe.simpleObject()
+	constructor: (opts, children) ->
+		# optional `opts` argument
+		if arguments.length is 1 and isArray(opts)
+			children = opts
+			opts = undefined
+
+		expect(@).toBe.any Item
+		expect(arguments.length).not().toBe.greaterThan 2
+		expect().defined(opts).toBe.simpleObject()
 		expect().defined(children).toBe.array()
 
-		utils.defProp @, '_opts', '', utils.clone(opts)
-		utils.defProp @, '_impl', '', {}
-
 		# custom properties
-		for key, val of opts
-			if key of @
-				continue
+		if opts?
+			for key, val of opts
+				if key of @
+					continue
 
-			Dict.defineProperty @, key
+				Dict.defineProperty @, key
 
-		super Object.create(@constructor.DATA)
+		# initialization
+		unless @hasOwnProperty '__hash__'
+			utils.defProp @, '_impl', '', {}
 
-		Impl.createItem @, @constructor.__name__
+			super Object.create(@constructor.DATA)
+			Impl.createItem @, @constructor.__name__
 
 		# fill
-		for key, val of opts
-			if typeof opts[key] is 'function'
-				@[key] val
-			else
-				@[key] = val
+		if opts?
+			for key, val of opts
+				switch val? and not isArray(val) and typeof val
+					when 'function'
+						@[key] val
+					when 'object'
+						utils.mergeDeep @[key], val
+					else
+						@[key] = val
 
 		# append children
 		if children
@@ -75,10 +89,6 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 	, (val) ->
 		expect(val).toBe.truthy().string()
 		utils.defProp @, 'id', 'e', val
-
-	utils.defProp @::, 'scope', 'e', null, (val) ->
-		expect(val).toBe.any Scope
-		utils.defProp @, 'scope', 'e', val
 
 	readyLazySignal = signal.createLazy @::, 'ready'
 
@@ -236,19 +246,21 @@ module.exports = (Scope, Impl) -> class Item extends Dict
 			child.parent = null
 		@
 
-	clone: (scope=@scope) ->
-		expect(scope).toBe.any Scope
+	clone: ->
+		# TODO
+		# expect(scope).toBe.any Renderer
 
-		clone = scope.create @constructor, @_opts
-		clone.parent = if scope is @scope then @parent else null
+		# clone = scope.create @constructor, @_opts
+		# clone.parent = if scope is @scope then @parent else null
 
-		clone
+		# clone
 
-	cloneDeep: (scope) ->
-		clone = @clone scope
+	cloneDeep: ->
+		# TODO
+		# clone = @clone scope
 
-		for child, i in @children
-			child = child.cloneDeep scope
-			child.parent = clone
+		# for child, i in @children
+		# 	child = child.cloneDeep scope
+		# 	child.parent = clone
 
-		clone
+		# clone

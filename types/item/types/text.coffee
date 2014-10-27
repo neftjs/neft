@@ -4,7 +4,7 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Scope, Impl) ->
+module.exports = (Renderer, Impl) ->
 	class Font extends Dict
 		constructor: (item) ->
 			expect(item).toBe.any Text
@@ -60,10 +60,10 @@ module.exports = (Scope, Impl) ->
 			_super.call @, val
 			Impl.setTextFontLetterSpacing.call @_item, val
 
-	class Text extends Scope.Item
+	class Text extends Renderer.Item
 		@__name__ = 'Text'
 
-		@DATA = utils.merge Object.create(Scope.Item.DATA),
+		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			text: ''
 			color: 'black'
 			lineHeight: 1

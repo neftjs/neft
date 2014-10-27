@@ -4,10 +4,10 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Scope, Impl) -> class Row extends Scope.Item
+module.exports = (Renderer, Impl) -> class Row extends Renderer.Item
 	@__name__ = 'Row'
 
-	@DATA = utils.merge Object.create(Scope.Item.DATA),
+	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		spacing: 0
 
 	Dict.defineProperty @::, 'spacing'

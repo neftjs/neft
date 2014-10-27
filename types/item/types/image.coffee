@@ -4,10 +4,10 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Scope, Impl) -> class Image extends Scope.Item
+module.exports = (Renderer, Impl) -> class Image extends Renderer.Item
 	@__name__ = 'Image'
 
-	@DATA = utils.merge Object.create(Scope.Item.DATA),
+	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		source: ''
 
 	Dict.defineProperty @::, 'source'

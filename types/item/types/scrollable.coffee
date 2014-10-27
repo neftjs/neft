@@ -4,10 +4,10 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Scope, Impl) -> class Scrollable extends Scope.Item
+module.exports = (Renderer, Impl) -> class Scrollable extends Renderer.Item
 	@__name__ = 'Scrollable'
 
-	@DATA = utils.merge Object.create(Scope.Item.DATA),
+	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		contentX: 0
 		contentY: 0
 

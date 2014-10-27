@@ -44,7 +44,7 @@ And three vertical lines:
 		horizontalCenter: true
 		right: true
 
-	module.exports = (Scope, Impl) ->
+	module.exports = (Renderer, Impl) ->
 
 		`//<development>`
 		itemsAnchors = {}
@@ -111,7 +111,7 @@ rect2.parent = Renderer.window
 rect2.close()
 ```
 
-						assert target is 'parent' or target is 'this' or target instanceof Scope.Item
+						assert target is 'parent' or target is 'this' or target instanceof Renderer.Item
 						, "`(##{id}).anchors.#{type}` expects an item; `'#{val}'` given"
 
 For the peformance reasons, the *target* could be only a *parent* or a ***item sibling***.
@@ -216,7 +216,7 @@ Renderer.Rectangle.create
 					Impl.setItemAnchor.call @_item, type, val
 
 			constructor: (item) ->
-				expect(item).toBe.any Scope.Item
+				expect(item).toBe.any Renderer.Item
 
 				utils.defProp @, '_item', '', item
 
@@ -261,7 +261,7 @@ Renderer.Rectangle.create
 
 		class Margin extends Dict
 			constructor: (item) ->
-				expect(item).toBe.any Scope.Item
+				expect(item).toBe.any Renderer.Item
 
 				utils.defProp @, '_item', '', item
 

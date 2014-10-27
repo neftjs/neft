@@ -15,8 +15,6 @@ module.exports = (impl) ->
 			{changeListener} = @
 
 			@changeListener = =>
-				if @debug
-					debugger
 				changeListener.call @
 
 			if isArray item
@@ -111,19 +109,11 @@ module.exports = (impl) ->
 				args.push "try { return #{hash}; } catch(err){}"
 				cache[hash] = Function.apply null, args
 
-		# TODO: remove it
-		@clone = (binding) ->
-			binding = utils.clone binding
-			for elem, i in binding
-				if isArray elem
-					binding[i] = Binding.clone elem
-			binding
-
 		constructor: (@item, @prop, binding, @extraResultFunc) ->
-			binding = Binding.clone binding
 			Binding.prepare binding, item
 
 			# properties
+			@__hash__ = utils.uid()
 			@func = Binding.getFunc binding
 			@args = Binding.getItems binding
 
@@ -157,20 +147,44 @@ module.exports = (impl) ->
 			unless @updatePending
 				@destroy()
 
-		update: ->
-			result = @func.apply null, @args
-			unless result?
-				return
+		update: do ->
+			queue = []
+			queueHashes = {}
+			pending = false
 
-			# extra func
-			if @extraResultFunc
-				funcResult = @extraResultFunc @item
-				if typeof funcResult is 'number' and isFinite(funcResult)
-					result += funcResult
+			updateBinding = (binding) ->
+				result = binding.func.apply null, binding.args
+				unless result?
+					return
 
-			@updatePending = true
-			@item[@prop] = result
-			@updatePending = false
+				# extra func
+				if binding.extraResultFunc
+					funcResult = binding.extraResultFunc binding.item
+					if typeof funcResult is 'number' and isFinite(funcResult)
+						result += funcResult
+
+				binding.updatePending = true
+				binding.item[binding.prop] = result
+				binding.updatePending = false
+
+			updateAll = ->
+				pending = false
+				while queue.length
+					binding = queue.pop()
+					queueHashes[binding.__hash__] = false
+					updateBinding binding
+				null
+
+			->
+				if queueHashes[@__hash__]
+					return
+
+				queue.push @
+				queueHashes[@__hash__] = true
+
+				unless pending
+					setImmediate updateAll
+					pending = true
 
 		destroy: ->
 			# destroy connections

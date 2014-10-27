@@ -3,15 +3,15 @@
 expect = require 'expect'
 utils = require 'utils'
 
-module.exports = (Scope) -> class Animations
+module.exports = (Renderer) -> class Animations
 	constructor: (item) ->
-		expect(item).toBe.any Scope.Item
+		expect(item).toBe.any Renderer.Item
 
 		utils.defProp @, '_item', '', item
 
 	initialize: ->
 		for name, animation of @ when @hasOwnProperty name
-			if animation instanceof Scope.Animation
+			if animation instanceof Renderer.Animation
 				@append animation
 		null
 

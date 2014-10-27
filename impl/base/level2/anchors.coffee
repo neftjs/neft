@@ -42,9 +42,12 @@ module.exports = (impl) ->
 				opts |= THIS
 				target = item
 
-		arr = []
-		VALUES[line]? item, target, arr, opts
-		arr
+		if line?
+			arr = []
+			VALUES[line]? item, target, arr, opts
+			arr
+		else
+			[target]
 
 	MARGIN_FUNCS =
 		left: (item) ->

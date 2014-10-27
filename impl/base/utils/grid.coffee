@@ -76,10 +76,11 @@ updateItem = (item) ->
 
 updateItems = ->
 	pending = false
-	for item in queue
-		updateItem item
+	while queue.length
+		item = queue.pop()
 		queueItems[item.__hash__] = false
-	utils.clear queue
+		updateItem item
+	null
 
 update = ->
 	if queueItems[@__hash__]

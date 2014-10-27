@@ -3,13 +3,13 @@
 utils = require 'utils'
 expect = require 'expect'
 
-module.exports = (Scope, Impl) -> class PropertyAnimation extends Scope.Animation
+module.exports = (Renderer, Impl) -> class PropertyAnimation extends Renderer.Animation
 	@__name__ = 'PropertyAnimation'
 
 	utils.defProp @::, 'target', 'e', ->
 		Impl.getPropertyAnimationTarget @_uid
 	, (val) ->
-		expect(val).toBe.any Scope.Item
+		expect(val).toBe.any Renderer.Item
 		Impl.setPropertyAnimationTarget @_uid, val._uid
 
 	utils.defProp @::, 'property', 'e', ->

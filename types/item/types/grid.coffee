@@ -4,7 +4,7 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Scope, Impl) ->
+module.exports = (Renderer, Impl) ->
 	class Spacing extends Dict
 		constructor: (item) ->
 			expect(item).toBe.any Grid
@@ -34,10 +34,10 @@ module.exports = (Scope, Impl) ->
 		valueOf: ->
 			(@column + @row) / 2
 
-	class Grid extends Scope.Item
+	class Grid extends Renderer.Item
 		@__name__ = 'Grid'
 
-		@DATA = utils.merge Object.create(Scope.Item.DATA),
+		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			columns: 0
 			rows: 0
 

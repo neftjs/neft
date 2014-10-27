@@ -4,7 +4,7 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Scope, Impl) ->
+module.exports = (Renderer, Impl) ->
 	class Border extends Dict
 		constructor: (item) ->
 			expect(item).toBe.any Rectangle
@@ -32,10 +32,10 @@ module.exports = (Scope, Impl) ->
 			_super.call @, val
 			Impl.setRectangleBorderColor.call @_item, val
 
-	class Rectangle extends Scope.Item
+	class Rectangle extends Renderer.Item
 		@__name__ = 'Rectangle'
 
-		@DATA = utils.merge Object.create(Scope.Item.DATA),
+		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			color: 'transparent'
 			radius: 0
 
