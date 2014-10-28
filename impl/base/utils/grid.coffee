@@ -71,8 +71,8 @@ updateItem = (item) ->
 			child.y = rowsPositions[row-1] or 0
 
 	# set item size
-	item.width = utils.last(columnsPositions) - columnSpacing
-	item.height = utils.last(rowsPositions) - rowSpacing
+	item.width = Math.max 0, utils.last(columnsPositions) - columnSpacing
+	item.height = Math.max 0, utils.last(rowsPositions) - rowSpacing
 
 updateItems = ->
 	pending = false

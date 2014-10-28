@@ -70,17 +70,26 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 		# fill
 		if opts?
+			# set properties
 			for key, val of opts
 				unless key of @
 					throw "Unexpected property `#{key}`"
 
-				switch val? and not isArray(val) and typeof val
-					when 'function'
-						@[key] val
-					when 'object'
-						utils.mergeDeep @[key], val
-					else
-						@[key] = val
+				if typeof val is 'function'
+					continue
+
+				if val and typeof val is 'object' and not isArray(val)
+					utils.mergeDeep @[key], val
+				else
+					@[key] = val
+
+			# connect handlers
+			for key, val of opts
+				unless key of @
+					throw "Unexpected property `#{key}`"
+
+				if typeof val is 'function'
+					@[key].connect val
 
 		# save opts object as a default state
 		if opts?

@@ -7,97 +7,40 @@ isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 module.exports = (impl) ->
 	{Item, Image} = impl.Types
 
-	# TODO: move it to the utils
-	stringCount = (str, char) ->
-		str.length - str.replace(RegExp(char, 'g'), '').length
-
-	getTextWidth = (item) ->
-		{text} = item
-		fontSize = item.font.pixelSize
-
-		text.length * fontSize * 0.45
-
-	getTextHeight = (item) ->
-		{text, width, lineHeight} = item
-		fontSize = item.font.pixelSize
-
-		if width isnt 0
-			w = text.length * fontSize * 0.45
-			w = Math.round(w * 100) / 100
-			lines = Math.ceil w / width
-		else
-			lines = 1
-		lines += stringCount text, '\n'
-		lines * lineHeight * fontSize
-
-	updateWidth = (item) ->
-
-	updateHeight = (item) ->
+	updatePending = false
 
 	updateSize = (item) ->
-		return if item._impl.textUpdatePending
-		item._impl.textUpdatePending = true
+		if document.readyState isnt 'complete'
+			window.addEventListener 'load', ->
+				updateSize item
+			return;
 
-		{text} = item
-		unless text.length
-			if item._impl.autoWidth
-				item.width = 0
-			if item._impl.autoHeight
-				item.height = 0
-		else
-			if document.readyState isnt 'complete'
-				setTimeout ->
-					updateSize item
-				, 1000
+		updatePending = true
 
-			style = item._impl.textArea.style
-			if item._impl.autoWidth
-				style.width = 'auto'
-				# updateWidth id
-				item.width = getTextWidth(item)
+		if item._impl.autoWidth
+			item.width = item._impl.textElement.offsetWidth
 
-			if item._impl.autoHeight
-				style.height = 'auto'
-				# updateHeight id
-				item.height = getTextHeight(item)
+		if item._impl.autoHeight
+			item.height = item._impl.textElement.offsetHeight
 
-		item._impl.textUpdatePending = false
-		return;
+		updatePending = false
 
-		limit = 16 * 60 * 2
-		requestAnimationFrame update = ->
-			{elem} = item
+	onWidthChanged = ->
+		if not updatePending
+			{textElement} = @_impl
+			auto = @_impl.autoWidth = @width is 0
+			textElement.style.whiteSpace = if auto then 'nowrap' else 'normal'
+			textElement.style.width = if auto then 'auto' else '100%'
+			if auto
+				updateSize @
 
-			unless limit
-				return
-
-			width = elem.offsetWidth
-			height = elem.offsetHeight
-			if (item.autoWidth and width is 0) or (item.autoHeight and height is 0) and elem.innerHTML
-				limit--
-				requestAnimationFrame update
-				return;
-
-			if item.autoWidth
-				impl.setItemWidth id, width+1
-
-			if item.autoHeight
-				impl.setItemHeight id, height
-
-			item.textUpdatePending = false
-
-	onWidthChanged = (val) ->
-		if not @_impl.textUpdatePending
-			@_impl.elem.style.whiteSpace = if val > 0 then 'normal' else 'nowrap'
-			@_impl.textArea.style.width = if val > 0 then '100%' else 'auto'
-			@_impl.autoWidth = val <= 0
-			updateSize @
-
-	onHeightChanged = (val) ->
-		if not @_impl.textUpdatePending
-			@_impl.textArea.style.height = if val > 0 then '100%' else 'auto'
-			@_impl.autoHeight = val <= 0
-			updateSize @
+	onHeightChanged = ->
+		if not updatePending
+			{textElement} = @_impl
+			auto = @_impl.autoHeight = @height is 0
+			textElement.style.height = if auto then 'auto' else '100%'
+			if auto
+				updateSize @
 
 	create: (item) ->
 		storage = item._impl
@@ -105,18 +48,17 @@ module.exports = (impl) ->
 
 		storage.autoWidth = true
 		storage.autoHeight = true
-		storage.textUpdatePending = false
 
-		# textArea
-		textArea = storage.textArea = document.createElement 'span'
-		storage.elem.appendChild textArea
+		# textElement
+		textElement = storage.textElement = document.createElement 'span'
+		storage.elem.appendChild textElement
 
 		# handlers
 		item.onWidthChanged onWidthChanged
 		item.onHeightChanged onHeightChanged
 
 		# set default styles
-		{style} = textArea
+		{style} = textElement
 		style.width = 'auto'
 		style.height = 'auto'
 		style.whiteSpace = 'nowrap'
@@ -126,34 +68,34 @@ module.exports = (impl) ->
 			style.marginTop = '1px'
 
 	setText: (val) ->
-		@_impl.textArea.innerHTML = val
+		@_impl.textElement.innerHTML = val
 		updateSize @
 
 	setTextColor: (val) ->
-		@_impl.textArea.style.color = val
+		@_impl.textElement.style.color = val
 
 	setTextLineHeight: (val) ->
 		pxLineHeight = val * @font.size
-		@_impl.textArea.style.lineHeight = "#{pxLineHeight}px"
+		@_impl.textElement.style.lineHeight = "#{pxLineHeight}px"
 		updateSize @
 
 	setTextFontFamily: (val) ->
-		@_impl.textArea.style.fontFamily = val
+		@_impl.textElement.style.fontFamily = val
 		updateSize @
 
 	setTextFontPixelSize: (val) ->
-		@_impl.textArea.style.fontSize = "#{val}px"
+		@_impl.textElement.style.fontSize = "#{val}px"
 		impl.setTextLineHeight.call @, @lineHeight
 		updateSize @
 
 	setTextFontWeight: (val) ->
-		@_impl.textArea.style.fontWeight = Math.round(val * 9) * 100
+		@_impl.textElement.style.fontWeight = Math.round(val * 9) * 100
 		updateSize @
 
 	setTextFontWordSpacing: (val) ->
-		@_impl.textArea.style.wordSpacing = "#{val}px"
+		@_impl.textElement.style.wordSpacing = "#{val}px"
 		updateSize @
 
 	setTextFontLetterSpacing: (val) ->
-		@_impl.textArea.style.letterSpacing = "#{val}px"
+		@_impl.textElement.style.letterSpacing = "#{val}px"
 		updateSize @
