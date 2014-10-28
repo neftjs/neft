@@ -47,12 +47,10 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 		expect().defined(children).toBe.array()
 
 		# custom properties
-		if opts?
-			for key, val of opts
-				if key of @
-					continue
-
-				Dict.defineProperty @, key
+		if opts?.properties?
+			for propName in opts.properties
+				Dict.defineProperty @, propName
+			delete opts.properties
 
 		# initialization
 		unless @hasOwnProperty '__hash__'
@@ -64,6 +62,9 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 		# fill
 		if opts?
 			for key, val of opts
+				unless key of @
+					throw "Unexpected property `#{key}`"
+
 				switch val? and not isArray(val) and typeof val
 					when 'function'
 						@[key] val
