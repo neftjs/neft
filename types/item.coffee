@@ -102,7 +102,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 			for child in children
 				child.parent = @
 
-	createBindedSetter = (propName, setFunc) ->
+	createBindingSetter = (propName, setFunc) ->
 		(val) ->
 			if Array.isArray val
 				Impl.setItemBinding.call @, propName, val
@@ -148,43 +148,46 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 	Dict.defineProperty @::, 'parent'
 
 	utils.defProp @::, 'parent', 'e', utils.lookupGetter(@::, 'parent')
-	, do (_super = utils.lookupSetter @::, 'parent') -> (val) ->
-		if old = @parent
-			index = Array::indexOf.call old.children, @
-			Array::splice.call old.children, index, 1
-			childrenSetter.call old, old.children
-			old.children.popped? index, @
+	, do (_super = utils.lookupSetter @::, 'parent') ->
+		createBindingSetter 'parent', (val) ->
+			if old = @parent
+				index = Array::indexOf.call old.children, @
+				Array::splice.call old.children, index, 1
+				childrenSetter.call old, old.children
+				old.children.popped? index, @
 
-		if val?
-			expect(val).toBe.any Item
-			length = Array::push.call val.children, @
-			childrenSetter.call val, val.children
-			val.children.inserted? length - 1, @
+			if val?
+				expect(val).toBe.any Item
+				length = Array::push.call val.children, @
+				childrenSetter.call val, val.children
+				val.children.inserted? length - 1, @
 
-		_super.call @, val
-		Impl.setItemParent.call @, val
+			_super.call @, val
+			Impl.setItemParent.call @, val
 
 	Dict.defineProperty @::, 'visible'
 
 	utils.defProp @::, 'visible', 'e', utils.lookupGetter(@::, 'visible')
-	, do (_super = utils.lookupSetter @::, 'visible') -> (val) ->
-		expect(val).toBe.boolean()
-		_super.call @, val
-		Impl.setItemVisible.call @, val
+	, do (_super = utils.lookupSetter @::, 'visible') ->
+		createBindingSetter 'visible', (val) ->
+			expect(val).toBe.boolean()
+			_super.call @, val
+			Impl.setItemVisible.call @, val
 
 	Dict.defineProperty @::, 'clip'
 
 	utils.defProp @::, 'clip', 'e', utils.lookupGetter(@::, 'clip')
-	, do (_super = utils.lookupSetter @::, 'clip') -> (val) ->
-		expect(val).toBe.boolean()
-		_super.call @, val
-		Impl.setItemClip.call @, val
+	, do (_super = utils.lookupSetter @::, 'clip') ->
+		createBindingSetter 'clip', (val) ->
+			expect(val).toBe.boolean()
+			_super.call @, val
+			Impl.setItemClip.call @, val
 
 	Dict.defineProperty @::, 'width'
 
 	utils.defProp @::, 'width', 'e', utils.lookupGetter(@::, 'width')
 	, do (_super = utils.lookupSetter @::, 'width') ->
-		createBindedSetter 'width', (val) ->
+		createBindingSetter 'width', (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
@@ -194,7 +197,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'height', 'e', utils.lookupGetter(@::, 'height')
 	, do (_super = utils.lookupSetter @::, 'height') ->
-		createBindedSetter 'height', (val) ->
+		createBindingSetter 'height', (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
@@ -204,7 +207,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'x', 'e', utils.lookupGetter(@::, 'x')
 	, do (_super = utils.lookupSetter @::, 'x') ->
-		createBindedSetter 'x', (val) ->
+		createBindingSetter 'x', (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setItemX.call @, val
@@ -213,7 +216,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'y', 'e', utils.lookupGetter(@::, 'y')
 	, do (_super = utils.lookupSetter @::, 'y') ->
-		createBindedSetter 'y', (val) ->
+		createBindingSetter 'y', (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setItemY.call @, val
@@ -221,75 +224,84 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 	Dict.defineProperty @::, 'z'
 
 	utils.defProp @::, 'z', 'e', utils.lookupGetter(@::, 'z')
-	, do (_super = utils.lookupSetter @::, 'z') -> (val) ->
-		expect(val).toBe.float()
-		_super.call @, val
-		Impl.setItemZ.call @, val
+	, do (_super = utils.lookupSetter @::, 'z') ->
+		createBindingSetter 'z', (val) ->
+			expect(val).toBe.float()
+			_super.call @, val
+			Impl.setItemZ.call @, val
 
 	Dict.defineProperty @::, 'scale'
 
 	utils.defProp @::, 'scale', 'e', utils.lookupGetter(@::, 'scale')
-	, do (_super = utils.lookupSetter @::, 'scale') -> (val) ->
-		expect(val).toBe.float()
-		_super.call @, val
-		Impl.setItemScale.call @, val
+	, do (_super = utils.lookupSetter @::, 'scale') ->
+		createBindingSetter 'scale', (val) ->
+			expect(val).toBe.float()
+			_super.call @, val
+			Impl.setItemScale.call @, val
 
 	Dict.defineProperty @::, 'rotation'
 
 	utils.defProp @::, 'rotation', 'e', utils.lookupGetter(@::, 'rotation')
-	, do (_super = utils.lookupSetter @::, 'rotation') -> (val) ->
-		expect(val).toBe.float()
-		_super.call @, val
-		Impl.setItemRotation.call @, val
+	, do (_super = utils.lookupSetter @::, 'rotation') ->
+		createBindingSetter 'rotation', (val) ->
+			expect(val).toBe.float()
+			_super.call @, val
+			Impl.setItemRotation.call @, val
 
 	Dict.defineProperty @::, 'opacity'
 
 	utils.defProp @::, 'opacity', 'e', utils.lookupGetter(@::, 'opacity')
-	, do (_super = utils.lookupSetter @::, 'opacity') -> (val) ->
-		expect(val).toBe.float()
-		expect(val).not().toBe.lessThan 0
-		expect(val).not().toBe.greaterThan 1
-		_super.call @, val
-		Impl.setItemOpacity.call @, val
+	, do (_super = utils.lookupSetter @::, 'opacity') ->
+		createBindingSetter 'opacity', (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			expect(val).not().toBe.greaterThan 1
+			_super.call @, val
+			Impl.setItemOpacity.call @, val
 
 	Dict.defineProperty @::, 'state'
 
 	utils.defProp @::, 'state', 'e', utils.lookupGetter(@::, 'state')
-	, do (_super = utils.lookupSetter @::, 'state') -> (val) ->
-		expect(val).toBe.string()
-		expect().some().keys(@states).toBe val
+	, do (_super = utils.lookupSetter @::, 'state') ->
+		createBindingSetter 'state', (val) ->
+			expect(val).toBe.string()
+			expect().some().keys(@states).toBe val
 
-		{DATA} = @.constructor
-		defaultState = @states['']
-		oldState = @states[@state]
-		newState = @states[val]
+			{DATA} = @.constructor
+			defaultState = @states['']
+			oldState = @states[@state]
+			newState = @states[val]
 
-		# clear
-		if oldState isnt defaultState
-			for key, optVal of oldState
+			# break on no change
+			if oldState is newState
+				return
+
+			# clear
+			if oldState isnt defaultState
+				for key, optVal of oldState
+					switch optVal? and not isArray(optVal) and typeof optVal
+						when 'function'
+							@[key].disconnect optVal
+						when 'object'
+							utils.mergeDeep @[key], DATA[key]
+
+							if defaultState.hasOwnProperty key
+								utils.mergeDeep @[key], defaultState[key]
+						else
+							unless newState.hasOwnProperty key
+								@[key] = defaultState[key] or DATA[key]
+
+			# set new state
+			for key, optVal of newState
 				switch optVal? and not isArray(optVal) and typeof optVal
 					when 'function'
-						@[key].disconnect optVal
+						@[key].connect optVal
 					when 'object'
-						utils.mergeDeep @[key], DATA[key]
-
-						if defaultState.hasOwnProperty key
-							utils.mergeDeep @[key], defaultState[key]
+						utils.mergeDeep @[key], optVal
 					else
-						unless newState.hasOwnProperty key
-							@[key] = defaultState[key] or DATA[key]
+						@[key] = optVal
 
-		# set new state
-		for key, optVal of newState
-			switch optVal? and not isArray(optVal) and typeof optVal
-				when 'function'
-					@[key].connect optVal
-				when 'object'
-					utils.mergeDeep @[key], optVal
-				else
-					@[key] = optVal
-
-		_super.call @, val
+			_super.call @, val
 
 	utils.defProp @::, 'states', 'e', ->
 		utils.defProp @, 'states', 'e', val = {}

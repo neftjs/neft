@@ -12,10 +12,10 @@ module.exports = (impl) ->
 
 	class Connection
 		constructor: (@binding, @item, @prop) ->
-			{changeListener} = @
+			{signalChangeListener} = @
 
-			@changeListener = =>
-				changeListener.call @
+			@signalChangeListener = =>
+				signalChangeListener.call @
 
 			if isArray item
 				@item = null
@@ -34,22 +34,22 @@ module.exports = (impl) ->
 			signalName = Dict.getPropertySignalName @prop
 			handlerName = signal.getHandlerName signalName
 
-			@item?[handlerName] @changeListener
+			@item?[handlerName] @signalChangeListener
 
 		updateChild: (child) ->
 			signalName = Dict.getPropertySignalName @prop
 			handlerName = signal.getHandlerName signalName
 
 			if @item
-				@item[handlerName].disconnect @changeListener
+				@item[handlerName].disconnect @signalChangeListener
 				@item = null
 
 			if child
 				@item = child.getValue()
 				@listen()
-				@changeListener()
+				@signalChangeListener()
 
-		changeListener: ->
+		signalChangeListener: ->
 			if @parent
 				@parent.updateChild @
 			else
@@ -118,13 +118,13 @@ module.exports = (impl) ->
 			@args = Binding.getItems binding
 
 			# bind methods
-			{changeListener} = @
-			@changeListener = => changeListener.call @
+			{signalChangeListener} = @
+			@signalChangeListener = => signalChangeListener.call @
 
 			# destroy on property value change
 			signalName = Dict.getPropertySignalName prop
 			handlerName = signal.getHandlerName signalName
-			item[handlerName] @changeListener
+			item[handlerName] @signalChangeListener
 
 			# connections
 			connections = @connections = []
@@ -143,7 +143,7 @@ module.exports = (impl) ->
 		updatePending: false
 		connections: null
 
-		changeListener: ->
+		signalChangeListener: ->
 			unless @updatePending
 				@destroy()
 
@@ -197,7 +197,7 @@ module.exports = (impl) ->
 			# disconnect listener
 			signalName = Dict.getPropertySignalName @prop
 			handlerName = signal.getHandlerName signalName
-			@item[handlerName].disconnect @changeListener
+			@item[handlerName].disconnect @signalChangeListener
 
 			# clear props
 			@args = null
