@@ -6,17 +6,19 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl) ->
 	class Font extends Dict
+		@DATA = 
+			family: 'sans-serif'
+			pixelSize: 14
+			weight: 0.5
+			wordSpacing: 0
+			letterSpacing: 0
+
 		constructor: (item) ->
 			expect(item).toBe.any Text
 
 			utils.defProp @, '_item', '', item
 
-			super
-				family: 'sans-serif'
-				pixelSize: 14
-				weight: 0.5
-				wordSpacing: 0
-				letterSpacing: 0
+			super Object.create Font.DATA
 
 		Dict.defineProperty @::, 'family'
 
@@ -67,7 +69,7 @@ module.exports = (Renderer, Impl) ->
 			text: ''
 			color: 'black'
 			lineHeight: 1
-			font: 'sans-serif'
+			font: Font.DATA
 
 		Dict.defineProperty @::, 'text'
 

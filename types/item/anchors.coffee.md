@@ -46,9 +46,62 @@ And three vertical lines:
 
 	module.exports = (Renderer, Impl) ->
 
-		`//<development>`
-		itemsAnchors = {}
-		`//</development>`
+Margins
+-------
+
+*Anchors* object also provides a way to set *left*, *top*, *right* and *bottom* margins.
+
+```coffeescript
+Renderer.Rectangle.create
+    id: 'rect1'
+    ...
+
+Renderer.Rectangle.create
+    id: 'rect2'
+    anchors:
+        left: 'rect1.right'
+        margin:
+            left: 20
+    ...
+```
+
+*Margins* doesn't have any effect for the *horizontalCenter* and *verticalCenter* anchors.
+
+		class Margin extends Dict
+			@DATA =
+				left: 0
+				top: 0
+				right: 0
+				bottom: 0
+
+			constructor: (item) ->
+				expect(item).toBe.any Renderer.Item
+
+				utils.defProp @, '_item', '', item
+
+				super Object.create Margin.DATA
+
+			createMarginProp = (type) ->
+				Dict.defineProperty Margin::, type
+
+				utils.defProp Margin::, type, 'e', utils.lookupGetter(Margin::, type)
+				, do (_super = utils.lookupSetter Margin::, type) -> (val) ->
+					`//<development>`
+					id = @_item.__hash__
+					assert typeof val is 'number' and isFinite(val)
+					, "(##{id}).anchors.margin.#{type} expects a finite number; `#{val}` given"
+					`//</development>`
+
+					_super.call @, val
+					Impl.setItemAnchorMargin.call @_item, type, val
+
+			createMarginProp 'left'
+			createMarginProp 'top'
+			createMarginProp 'right'
+			createMarginProp 'bottom'
+
+Anchors
+-------
 
 ```coffeescript
 Renderer.Rectangle.create
@@ -69,6 +122,15 @@ This connection is updated in realtime, so if the *rect1* will change a position
 
 		class Anchors extends Dict
 
+			@DATA =
+				top: null
+				verticalCenter: null
+				bottom: null
+				left: null
+				horizontalCenter: null
+				right: null
+				margin: Margin.DATA
+
 			createAnchorProp = (type, opts=0) ->
 				Dict.defineProperty Anchors::, type
 
@@ -78,7 +140,6 @@ This connection is updated in realtime, so if the *rect1* will change a position
 					if val?
 						id = @_item.__hash__
 						allowedLines = if H_LINES[type] then H_LINES else V_LINES
-						itemsAnchors[id] ?= 0
 
 						assert Array.isArray(val) and val.length > 0 and val.length < 3
 						, "`(##{id}).anchors.#{type}` expects an array; `'#{val}'` given"
@@ -170,47 +231,11 @@ so `anchors.top = 'parent.left'` is not allowed.
 							, "`(##{id}).anchors.#{type}` can't be anchored to a horizontal edge; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
 
-Second, and the last restriction says that only one *horizontal* and one *vertical anchor*
-can be set in the *item*.
-
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    anchors:
-        left: 'rect1.left'
-        right: 'rect1.right' # ERROR!
-        # horizontal line is currently occupied by the left anchor;
-        # custom binding on a `width` property should be used instead
-        # (`width: 'rect1.width'`)
-    ...
-```
-
-						if opts & FREE_H_LINE_REQ
-							assert not (itemsAnchors[id] & H_LINE)
-							, "`(##{id}).anchors.#{type}` can't be set, because some other " +
-							  "horizontal anchor is currently set; `'#{val}'` given"
-
-							itemsAnchors[id] |= H_LINE
-
-						if opts & FREE_V_LINE_REQ
-							assert not (itemsAnchors[id] & V_LINE)
-							, "`(##{id}).anchors.#{type}` can't be set, because some other " +
-							  "vertical anchor is currently set; `'#{val}'` given"
-
-							itemsAnchors[id] |= V_LINE
-
-					unless val?
-						if opts & FREE_V_LINE_REQ
-							itemsAnchors[id] &= ~V_LINE
-						if opts & FREE_H_LINE_REQ
-							itemsAnchors[id] &= ~H_LINE
 					`//</development>`
 
-					if val[0] is 'this'
-						val[0] = @
+					if val?
+						if val[0] is 'this'
+							val[0] = @
 
 					_super.call @, val
 					Impl.setItemAnchor.call @_item, type, val
@@ -220,7 +245,7 @@ Renderer.Rectangle.create
 
 				utils.defProp @, '_item', '', item
 
-				super()
+				super Object.create Anchors.DATA
 
 			createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
@@ -234,61 +259,7 @@ Renderer.Rectangle.create
 			utils.defProp @::, 'margin', 'e', ->
 				utils.defProp @, 'margin', 'e', val = new Margin(@_item)
 				val
-			, (val) ->
-				expect(val).toBe.simpleObject()
-				utils.merge @margin, val
-
-Margins
--------
-
-*Anchors* object also provides a way to set *left*, *top*, *right* and *bottom* margins.
-
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    id: 'rect2'
-    anchors:
-        left: 'rect1.right'
-        margin:
-            left: 20
-    ...
-```
-
-*Margins* doesn't have any effect for the *horizontalCenter* and *verticalCenter* anchors.
-
-		class Margin extends Dict
-			constructor: (item) ->
-				expect(item).toBe.any Renderer.Item
-
-				utils.defProp @, '_item', '', item
-
-				super
-					left: 0
-					top: 0
-					right: 0
-					bottom: 0
-
-			createMarginProp = (type) ->
-				Dict.defineProperty Margin::, type
-
-				utils.defProp Margin::, type, 'e', utils.lookupGetter(Margin::, type)
-				, do (_super = utils.lookupSetter Margin::, type) -> (val) ->
-					`//<development>`
-					id = @_item.__hash__
-					assert typeof val is 'number' and isFinite(val)
-					, "(##{id}).anchors.margin.#{type} expects a finite number; `#{val}` given"
-					`//</development>`
-
-					_super.call @, val
-					Impl.setItemAnchorMargin.call @_item, type, val
-
-			createMarginProp 'left'
-			createMarginProp 'top'
-			createMarginProp 'right'
-			createMarginProp 'bottom'
+			, null
 
 ***margins*** property can be used to set the same margin from all sides.
 
@@ -305,7 +276,7 @@ Renderer.Rectangle.create
     ...
 ```
 
-		utils.defProp Anchors::, 'margins', 'e', null, (val) ->
+		utils.defProp Anchors::, 'margins', '', null, (val) ->
 			`//<development>`
 			id = @_item.__hash__
 			assert typeof val is 'number' and isFinite(val)

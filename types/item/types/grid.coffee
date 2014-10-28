@@ -6,14 +6,16 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl) ->
 	class Spacing extends Dict
+		@DATA =
+			column: 0
+			row: 0
+
 		constructor: (item) ->
 			expect(item).toBe.any Grid
 
 			utils.defProp @, '_item', '', item
 
-			super
-				column: 0
-				row: 0
+			super Object.create Spacing.DATA
 
 		Dict.defineProperty @::, 'column'
 
@@ -40,6 +42,7 @@ module.exports = (Renderer, Impl) ->
 		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			columns: 0
 			rows: 0
+			spacing: Spacing.DATA
 
 		Dict.defineProperty @::, 'columns'
 

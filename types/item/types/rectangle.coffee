@@ -6,14 +6,16 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl) ->
 	class Border extends Dict
+		@DATA = 
+			width: 0
+			color: 'transparent'
+
 		constructor: (item) ->
 			expect(item).toBe.any Rectangle
 
 			utils.defProp @, '_item', '', item
 
-			super
-				width: 0
-				color: 'transparent'
+			super Object.create Border.DATA
 
 		Dict.defineProperty @::, 'width'
 
@@ -38,6 +40,7 @@ module.exports = (Renderer, Impl) ->
 		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			color: 'transparent'
 			radius: 0
+			border: Border.DATA
 
 		Dict.defineProperty @::, 'color'
 

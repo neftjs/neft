@@ -14,6 +14,9 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
+	Anchors = require('./item/anchors') Renderer, Impl
+	Animations = require('./item/animations') Renderer, Impl
+
 	@DATA =
 		parent: null
 		clip: false
@@ -26,14 +29,14 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 		rotation: 0
 		scale: 1
 		opacity: 1
+		state: ''
+		states: null
+		anchors: Anchors.DATA
 
 	ALL_HANDLERS = utils.arrayToObject Item.SIGNALS, (_, val) ->
 		signal.getHandlerName val
 	, -> true
 	ALL_HANDLERS.onReady = true
-
-	Anchors = require('./item/anchors') Renderer, Impl
-	Animations = require('./item/animations') Renderer, Impl
 
 	constructor: (opts, children) ->
 		# optional `opts` argument
@@ -51,6 +54,12 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 			for propName in opts.properties
 				Dict.defineProperty @, propName
 			delete opts.properties
+
+		# custom signals
+		if opts?.signals?
+			for signalName in opts.signals
+				signal.create @, signalName
+			delete opts.signals
 
 		# initialization
 		unless @hasOwnProperty '__hash__'
@@ -72,6 +81,21 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 						utils.mergeDeep @[key], val
 					else
 						@[key] = val
+
+		# save opts object as a default state
+		if opts?
+			delete opts.state
+			delete opts.states
+			delete opts.animations
+
+			for key, val of opts
+				if typeof val is 'function'
+					delete opts[key]
+
+			if @states.hasOwnProperty ''
+				utils.mergeDeep @states[''], opts
+			else
+				@states[''] = opts
 
 		# append children
 		if children
@@ -228,19 +252,59 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 		_super.call @, val
 		Impl.setItemOpacity.call @, val
 
+	Dict.defineProperty @::, 'state'
+
+	utils.defProp @::, 'state', 'e', utils.lookupGetter(@::, 'state')
+	, do (_super = utils.lookupSetter @::, 'state') -> (val) ->
+		expect(val).toBe.string()
+		expect().some().keys(@states).toBe val
+
+		{DATA} = @.constructor
+		defaultState = @states['']
+		oldState = @states[@state]
+		newState = @states[val]
+
+		# clear
+		if oldState isnt defaultState
+			for key, optVal of oldState
+				switch optVal? and not isArray(optVal) and typeof optVal
+					when 'function'
+						@[key].disconnect optVal
+					when 'object'
+						utils.mergeDeep @[key], DATA[key]
+
+						if defaultState.hasOwnProperty key
+							utils.mergeDeep @[key], defaultState[key]
+					else
+						unless newState.hasOwnProperty key
+							@[key] = defaultState[key] or DATA[key]
+
+		# set new state
+		for key, optVal of newState
+			switch optVal? and not isArray(optVal) and typeof optVal
+				when 'function'
+					@[key].connect optVal
+				when 'object'
+					utils.mergeDeep @[key], optVal
+				else
+					@[key] = optVal
+
+		_super.call @, val
+
+	utils.defProp @::, 'states', 'e', ->
+		utils.defProp @, 'states', 'e', val = {}
+		val
+	, null
+
 	utils.defProp @::, 'anchors', 'e', ->
 		utils.defProp @, 'anchors', 'e', val = new Anchors(@)
 		val
-	, (val) ->
-		expect(val).toBe.simpleObject()
-		utils.mergeDeep @anchors, val
+	, null
 
 	utils.defProp @::, 'animations', 'e', ->
 		utils.defProp @, 'animations', 'e', val = new Animations(@)
 		val
-	, (val) ->
-		expect(val).toBe.array()
-		throw "Not implemented"
+	, null
 
 	clear: ->
 		for child in @children
