@@ -1,10 +1,13 @@
-exports.createQmlObject = (type, id) ->
-	qmlStr = "import QtQuick 2.3; "
-	qmlStr += "#{type} {"
+exports.createQmlObject = do ->
+	components = {}
 
-	if id?
-		qmlStr += "property string uid: \"#{id}\";"
+	createItemComponent = (type) ->
+		qmlStr = "import QtQuick 2.3; Component { #{type} {} }"
+		components[type] = Qt.createQmlObject qmlStr, stylesHatchery
 
-	qmlStr += "}"
+	(type) ->
+		component = components[type] or createItemComponent(type)
+		component.createObject()
 
-	Qt.createQmlObject qmlStr, stylesHatchery
+exports.radToDeg = (val) ->
+	val * (180/Math.PI)

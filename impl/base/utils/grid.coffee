@@ -11,32 +11,33 @@ updateItem = (item) ->
 	{columnsPositions, rowsPositions, gridType} = item._impl
 
 	# get config
-	if gridType is exports.ALL
-		{children, columns, rows} = item
-		columnSpacing = item.spacing.column
-		rowSpacing = item.spacing.row
-	else
-		columnSpacing = rowSpacing = item.spacing
+	columnSpacing = rowSpacing = 0
 
-		if gridType is exports.COLUMN
-			columns = 1
-			rows = Infinity
-		else
-			columns = Infinity
-			rows = 1
+	switch gridType
+		when exports.ALL
+			columnsLen = item.columns
+			rowsLen = item.rows
+			columnSpacing = item.spacing.column
+			rowSpacing = item.spacing.row
+		when exports.COLUMN
+			rowSpacing = item.spacing
+			columnsLen = 1
+			rowsLen = Infinity
+		when exports.ROW
+			columnSpacing = item.spacing
+			columnsLen = Infinity
+			rowsLen = 1
 
 	# reset columns positions
-	for column, i in columnsPositions
-		columnsPositions[i] = 0
+	utils.clear columnsPositions
 
 	# reset rows positions
-	for row, i in rowsPositions
-		rowsPositions[i] = 0
+	utils.clear rowsPositions
 
 	# refresh widths
 	for child, i in children
-		column = i % columns
-		row = Math.floor(i/columns) % rows
+		column = i % columnsLen
+		row = Math.floor(i/columnsLen) % rowsLen
 
 		# omit not visible children
 		unless child.visible
@@ -61,8 +62,8 @@ updateItem = (item) ->
 
 	# set positions
 	for child, i in children
-		column = i % columns
-		row = Math.floor(i/columns) % rows
+		column = i % columnsLen
+		row = Math.floor(i/columnsLen) % rowsLen
 
 		if gridType & exports.ROW
 			child.x = columnsPositions[column-1] or 0

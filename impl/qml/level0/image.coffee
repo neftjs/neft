@@ -1,16 +1,12 @@
 'use strict'
 
 module.exports = (impl) ->
-	{items} = impl
 	{Item} = impl.Types
 
-	create: (id, target) ->
-		target.elem ?= impl.utils.createQmlObject 'Image', id
+	create: (item) ->
+		item._impl.elem ?= impl.utils.createQmlObject 'Image'
 
-		Item.create id, target
+		Item.create item
 
-	getImageSource: (id) ->
-		items[id].elem.source
-
-	setImageSource: (id, val) ->
-		items[id].elem.source = val
+	setImageSource: (val) ->
+		@_impl.elem.source = val

@@ -26,34 +26,23 @@ toQtColor = (color) ->
 		color
 
 module.exports = (impl) ->
-	{items} = impl
 	{Item} = impl.Types
 
-	create: (id, target) ->
-		target.elem ?= impl.utils.createQmlObject 'Rectangle', id
+	create: (item) ->
+		elem = item._impl.elem ?= impl.utils.createQmlObject 'Rectangle'
 
-		Item.create id, target
+		Item.create item
 
-	getRectangleColor: (id) ->
-		items[id].elem.color
+		elem.color = 'transparent'
 
-	setRectangleColor: (id, val) ->
-		items[id].elem.color = toQtColor val
+	setRectangleColor: (val) ->
+		@_impl.elem.color = toQtColor val
 
-	getRectangleRadius: (id) ->
-		items[id].elem.radius
+	setRectangleRadius: (val) ->
+		@_impl.elem.radius = val
 
-	setRectangleRadius: (id, val) ->
-		items[id].elem.radius = val
+	setRectangleBorderColor: (val) ->
+		@_impl.elem.border.color = val
 
-	getRectangleBorderColor: (id) ->
-		items[id].elem.border.color
-
-	setRectangleBorderColor: (id, val) ->
-		items[id].elem.border.color = val
-
-	getRectangleBorderWidth: (id) ->
-		items[id].elem.border.width
-
-	setRectangleBorderWidth: (id, val) ->
-		items[id].elem.border.width = val
+	setRectangleBorderWidth: (val) ->
+		@_impl.elem.border.width = val

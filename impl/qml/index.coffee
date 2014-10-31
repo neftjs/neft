@@ -3,16 +3,14 @@
 utils = require 'utils'
 
 module.exports = (impl) ->
-	items = impl.items = stylesWindow.items
-	
 	utils.merge impl.utils, require('./utils')
 
 	resize = ->
-		id = impl.window
-		return unless id
+		item = impl.window
+		return unless item
 
-		impl.setItemWidth id, stylesWindow.width
-		impl.setItemHeight id, stylesWindow.height
+		item.width = stylesWindow.width
+		item.height = stylesWindow.height
 
 	stylesWindow.widthChanged.connect resize
 	stylesWindow.heightChanged.connect resize
@@ -24,9 +22,9 @@ module.exports = (impl) ->
 
 		Rectangle: require './level1/rectangle'
 
-	setWindow: (id) ->
+	setWindow: (item) ->
 		while child = stylesBody.children[0]
 			child.parent = null
 
-		items[id].elem.parent = stylesBody
+		item._impl.elem.parent = stylesBody
 		resize()

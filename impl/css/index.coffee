@@ -45,11 +45,8 @@ module.exports = (impl) ->
 		item = impl.window
 		return unless item
 
-		if item.width isnt innerWidth
-			item.width = innerWidth
-
-		if item.height isnt innerHeight
-			item.height = innerHeight
+		item.width = innerWidth
+		item.height = innerHeight
 
 	Types:
 		Item: require './level0/item'

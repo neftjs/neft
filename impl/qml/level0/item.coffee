@@ -30,104 +30,56 @@ SIGNALS_ARGS =
 		y: e.angleDelta.y
 
 module.exports = (impl) ->
-	{items} = impl
+	create: (item) ->
+		storage = item._impl
+		storage.elem ?= impl.utils.createQmlObject 'Item'
+		storage.id = stylesWindow.items.push(storage) - 1
+		storage.mouseArea = null
 
-	create: (id, target) ->
-		target.elem ?= impl.utils.createQmlObject 'Item', id
-		target.mouseArea = null
+	setItemParent: (val) ->
+		@_impl.elem.parent = val._impl.elem or null
 
-	getItemChildren: (id) ->
-		item = items[id]
+	setItemVisible: (val) ->
+		@_impl.elem.visible = val
 
-		{elem} = item
-		{children} = elem
+	setItemClip: (val) ->
+		@_impl.elem.clip = val
 
-		arr = []
-		for child in children
-			if id = child.uid
-				arr.push id
+	setItemWidth: (val) ->
+		@_impl.elem.width = val
 
-		arr
+	setItemHeight: (val) ->
+		@_impl.elem.height = val
 
-	getItemParent: (id) ->
-		items[id].elem.parent?.uid
+	setItemX: (val) ->
+		@_impl.elem.x = val
 
-	setItemParent: (id, val) ->
-		elem = items[id].elem
-		parent = items[val]
+	setItemY: (val) ->
+		@_impl.elem.y = val
 
-		elem.parent = parent?.elem or null
+	setItemZ: (val) ->
+		@_impl.elem.z = val
 
-	getItemVisible: (id) ->
-		items[id]?.elem.visible
+	setItemScale: (val) ->
+		@_impl.elem.scale = val
 
-	setItemVisible: (id, val) ->
-		items[id]?.elem.visible = val
+	setItemRotation: (val) ->
+		@_impl.elem.rotation = impl.utils.radToDeg val
 
-	getItemClip: (id) ->
-		items[id]?.elem.clip
-
-	setItemClip: (id, val) ->
-		items[id]?.elem.clip = val
-
-	getItemWidth: (id) ->
-		items[id]?.elem.width
-
-	setItemWidth: (id, val) ->
-		items[id]?.elem.width = val
-
-	getItemHeight: (id) ->
-		items[id]?.elem.height
-
-	setItemHeight: (id, val) ->
-		items[id]?.elem.height = val
-
-	getItemX: (id) ->
-		items[id]?.elem.x
-
-	setItemX: (id, val) ->
-		items[id]?.elem.x = val
-
-	getItemY: (id) ->
-		items[id]?.elem.y
-
-	setItemY: (id, val) ->
-		items[id]?.elem.y = val
-
-	getItemZ: (id) ->
-		items[id]?.elem.z
-
-	setItemZ: (id, val) ->
-		items[id]?.elem.z = val
-
-	getItemScale: (id) ->
-		items[id]?.elem.scale
-
-	setItemScale: (id, val) ->
-		items[id]?.elem.scale = val
-
-	getItemRotation: (id) ->
-		items[id]?.elem.rotation
-
-	setItemRotation: (id, val) ->
-		items[id]?.elem.rotation = val
-
-	getItemOpacity: (id) ->
-		items[id]?.elem.opacity
-
-	setItemOpacity: (id, val) ->
-		items[id]?.elem.opacity = val
+	setItemOpacity: (val) ->
+		@_impl.elem.opacity = val
 
 	# TODO: `pointerReleased` doesn't work with `pointerPressed`
-	attachItemSignal: (id, name, func) ->
-		item = items[id]
+	attachItemSignal: (name, func) ->
+		storage = @_impl
 
 		# create mouse area if needed
-		unless mouseArea = item.mouseArea
-			mouseArea = item.mouseArea = impl.utils.createQmlObject 'MouseArea'
+		unless mouseArea = storage.mouseArea
+			mouseArea = storage.mouseArea = impl.utils.createQmlObject 'MouseArea'
 			mouseArea.propagateComposedEvents = true
-			mouseArea.parent = item.elem
+			mouseArea.parent = storage.elem
 
+			{id} = storage
 			qmlUtils.createBinding mouseArea, 'width', "stylesWindow.items['#{id}'].elem.width"
 			qmlUtils.createBinding mouseArea, 'height', "stylesWindow.items['#{id}'].elem.height"
 

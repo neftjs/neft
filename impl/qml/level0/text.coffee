@@ -9,103 +9,83 @@ FONT_WEIGHT = [
 ]
 
 module.exports = (impl) ->
-	{items} = impl
 	{Item, Image} = impl.Types
 
-	# TODO: remove it if the binding implementation will be ready
-	updateSize = (id) ->
-		item = items[id]
-		{elem} = item
+	updatePending = false
 
-		item.textUpdatePending = true
+	updateSize = (item) ->
+		storage = item._impl
+		{elem} = storage
 
-		if item.autoWidth
-			impl.setItemWidth id, elem.contentWidth
+		updatePending = true
 
-		if item.autoHeight
-			impl.setItemHeight id, elem.contentHeight
+		if storage.autoWidth
+			item.width = elem.contentWidth
 
-		item.textUpdatePending = false
+		if storage.autoHeight
+			item.height = elem.contentHeight
 
-	impl.setItemWidth = do (_super = impl.setItemWidth) -> (id, val) ->
-		_super id, val
+		updatePending = false
 
-		item = items[id]
-		if item.type is 'Text' and not item.textUpdatePending
-			item.autoWidth = val <= 0
-			updateSize id
+	onWidthChanged = ->
+		if not updatePending
+			{elem} = @_impl
+			auto = @_impl.autoWidth = @width is 0
+			@_impl.elem.wrapMode = if auto then Text.NoWrap else Text.Wrap
+			if auto
+				updateSize @
 
-	impl.setItemHeight = do (_super = impl.setItemHeight) -> (id, val) ->
-		_super id, val
+	onHeightChanged = ->
+		if not updatePending
+			{elem} = @_impl
+			auto = @_impl.autoHeight = @height is 0
+			if auto
+				updateSize @
 
-		item = items[id]
-		if item.type is 'Text' and not item.textUpdatePending
-			item.autoHeight = val <= 0
-			updateSize id
+	create: (item) ->
+		storage = item._impl
+		elem = storage.elem ?= impl.utils.createQmlObject 'Text'
 
-	create: (id, target) ->
-		target.elem ?= impl.utils.createQmlObject 'Text', id
+		Item.create item
 
-		Item.create id, target
+		storage.autoWidth = true
+		storage.autoHeight = true
 
-		target.autoWidth = true
-		target.autoHeight = true
-		target.textUpdatePending = false
+		# handlers
+		item.onWidthChanged onWidthChanged
+		item.onHeightChanged onHeightChanged
 
-		target.elem.font.pixelSize = 14
-		target.elem.font.family = 'sans-serif'
+		# set default styles
+		elem.font.pixelSize = 14
+		elem.font.family = 'sans-serif'
 
-	getText: (id) ->
-		items[id].elem.text
+	setText: (val) ->
+		@_impl.elem.text = val
+		updateSize @
 
-	setText: (id, val) ->
-		items[id].elem.text = val
-		updateSize id
+	setTextColor: (val) ->
+		@_impl.elem.color = val
 
-	getTextColor: (id) ->
-		items[id].elem.color
+	setTextLineHeight: (val) ->
+		@_impl.elem.lineHeight = val
+		updateSize @
 
-	setTextColor: (id, val) ->
-		items[id].elem.color = val
+	setTextFontFamily: (val) ->
+		@_impl.elem.font.family = val
+		updateSize @
 
-	getTextLineHeight: (id) ->
-		items[id].elem.lineHeight
+	setTextFontPixelSize: (val) ->
+		@_impl.elem.font.pixelSize = val
+		updateSize @
 
-	setTextLineHeight: (id, val) ->
-		items[id].elem.lineHeight = val
-		updateSize id
-
-	getTextFontFamily: (id) ->
-		items[id].elem.font.family
-
-	setTextFontFamily: (id, val) ->
-		items[id].elem.font.family = val
-		updateSize id
-
-	getTextFontPixelSize: (id) ->
-		items[id].elem.font.pixelSize
-
-	setTextFontPixelSize: (id, val) ->
-		items[id].elem.font.pixelSize = val
-		updateSize id
-
-	getTextFontWeight: (id) ->
-		FONT_WEIGHT.indexOf items[id].elem.font.weight
-
-	setTextFontWeight: (id, val) ->
+	setTextFontWeight: (val) ->
 		weight = FONT_WEIGHT[Math.round(val * (FONT_WEIGHT.length-1))]
-		items[id].elem.font.weight = Font[weight]
+		@_impl.elem.font.weight = Font[weight]
 
-	getTextFontWordSpacing: (id) ->
-		items[id].elem.font.wordSpacing
+	setTextFontWordSpacing: (val) ->
+		@_impl.elem.font.wordSpacing = val
+		updateSize @
 
-	setTextFontWordSpacing: (id, val) ->
-		items[id].elem.font.wordSpacing = val
-		updateSize id
-
-	getTextFontLetterSpacing: (id) ->
-		items[id].elem.font.letterSpacing
-
-	setTextFontLetterSpacing: (id, val) ->
-		items[id].elem.font.letterSpacing = val
-		updateSize id
+	setTextFontLetterSpacing: (val) ->
+		@_impl.elem.font.letterSpacing = val
+		updateSize @
