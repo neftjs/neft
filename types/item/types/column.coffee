@@ -6,6 +6,7 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
 	@__name__ = 'Column'
+	@__path__ = 'Renderer.Column'
 
 	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		spacing: 0

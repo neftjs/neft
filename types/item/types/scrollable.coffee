@@ -6,6 +6,7 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 	@__name__ = 'Scrollable'
+	@__path__ = 'Renderer.Scrollable'
 
 	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		contentX: 0

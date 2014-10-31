@@ -38,6 +38,7 @@ module.exports = (Renderer, Impl, itemUtils) ->
 
 	class Grid extends Renderer.Item
 		@__name__ = 'Grid'
+		@__path__ = 'Renderer.Grid'
 
 		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			columns: 0

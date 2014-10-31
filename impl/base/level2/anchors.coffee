@@ -76,44 +76,44 @@ module.exports = (impl) ->
 	BINDINGS =
 		left: (item, anchor) ->
 			unless anchor
-				return impl.setItemBinding.call item, 'x', null
+				return impl.setItemBinding.call item, item, 'x', null
 
 			binding = getBindingValue item, anchor
-			impl.setItemBinding.call item, 'x', binding, MARGIN_FUNCS.left
+			impl.setItemBinding.call item, item, 'x', binding, MARGIN_FUNCS.left
 		top: (item, anchor) ->
 			unless anchor
-				return impl.setItemBinding.call item, 'y', null
+				return impl.setItemBinding.call item, item, 'y', null
 
 			binding = getBindingValue item, anchor
-			impl.setItemBinding.call item, 'y', binding, MARGIN_FUNCS.top
+			impl.setItemBinding.call item, item, 'y', binding, MARGIN_FUNCS.top
 		right: (item, anchor) ->
 			unless anchor
-				return impl.setItemBinding.call item, 'x', null
+				return impl.setItemBinding.call item, item, 'x', null
 
 			binding = getBindingValue item, anchor
 			binding.push '-', [item, 'width']
-			impl.setItemBinding.call item, 'x', binding, MARGIN_FUNCS.right
+			impl.setItemBinding.call item, item, 'x', binding, MARGIN_FUNCS.right
 		bottom: (item, anchor) ->
 			unless anchor
-				return impl.setItemBinding.call item, 'y', null
+				return impl.setItemBinding.call item, item, 'y', null
 
 			binding = getBindingValue item, anchor
 			binding.push '-', [item, 'height']
-			impl.setItemBinding.call item, 'y', binding, MARGIN_FUNCS.bottom
+			impl.setItemBinding.call item, item, 'y', binding, MARGIN_FUNCS.bottom
 		horizontalCenter: (item, anchor) ->
 			unless anchor
-				return impl.setItemBinding.call item, 'x', null
+				return impl.setItemBinding.call item, item, 'x', null
 
 			binding = getBindingValue item, anchor
 			binding.push '-', [item, 'width'], '/2'
-			impl.setItemBinding.call item, 'x', binding, MARGIN_FUNCS.horizontalCenter
+			impl.setItemBinding.call item, item, 'x', binding, MARGIN_FUNCS.horizontalCenter
 		verticalCenter: (item, anchor) ->
 			unless anchor
-				return impl.setItemBinding.call item, 'y', null
+				return impl.setItemBinding.call item, item, 'y', null
 
 			binding = getBindingValue item, anchor
 			binding.push '-', [item, 'height'], '/2'
-			impl.setItemBinding.call item, 'y', binding, MARGIN_FUNCS.verticalCenter
+			impl.setItemBinding.call item, item, 'y', binding, MARGIN_FUNCS.verticalCenter
 		centerIn: (item, anchor) ->
 			unless anchor
 				BINDINGS.horizontalCenter item, null
@@ -134,8 +134,8 @@ module.exports = (impl) ->
 				unless anchor
 					BINDINGS.left item, null
 					BINDINGS.top item, null
-					impl.setItemBinding.call item, 'width', null
-					impl.setItemBinding.call item, 'height', null
+					impl.setItemBinding.call item, item, 'width', null
+					impl.setItemBinding.call item, item, 'height', null
 					return
 
 				[target] = anchor
@@ -144,10 +144,10 @@ module.exports = (impl) ->
 				BINDINGS.top item, [target, 'top']
 
 				width = [[getBindingValue(item, anchor)[0], 'width']]
-				impl.setItemBinding.call item, 'width', width, WIDTH_MARGIN_FUNC
+				impl.setItemBinding.call item, item, 'width', width, WIDTH_MARGIN_FUNC
 
 				height = [[getBindingValue(item, anchor)[0], 'height']]
-				impl.setItemBinding.call item, 'height', height, HEIGHT_MARGIN_FUNC
+				impl.setItemBinding.call item, item, 'height', height, HEIGHT_MARGIN_FUNC
 
 	setItemAnchor: (type, val) ->
 		BINDINGS[type] @, val

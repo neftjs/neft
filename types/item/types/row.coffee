@@ -6,6 +6,7 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Row extends Renderer.Item
 	@__name__ = 'Row'
+	@__path__ = 'Renderer.Row'
 
 	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		spacing: 0

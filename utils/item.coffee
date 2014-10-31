@@ -22,7 +22,10 @@ module.exports = (Renderer, Impl) -> exports =
 		setter = if customSetter? then customSetter(propSetter) else propSetter
 
 		# accept bindings
-		setter = exports.createBindingSetter propName, setter
+		if prototype.constructor.__path__.indexOf('Renderer.') isnt 0
+			setter = exports.createDeepBindingSetter propName, setter
+		else
+			setter = exports.createBindingSetter propName, setter
 
 		# override
 		utils.defProp prototype, propName, 'e', getter, setter
@@ -32,7 +35,14 @@ module.exports = (Renderer, Impl) -> exports =
 	createBindingSetter: (propName, setFunc) ->
 		(val) ->
 			if Array.isArray val
-				Impl.setItemBinding.call @, propName, val
+				Impl.setItemBinding.call @, @, propName, val
+			else
+				setFunc.call @, val
+
+	createDeepBindingSetter: (propName, setFunc) ->
+		(val) ->
+			if Array.isArray val
+				Impl.setItemBinding.call @_item, @, propName, val
 			else
 				setFunc.call @, val
 

@@ -10,6 +10,7 @@ List = require 'list'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 	@__name__ = 'Item'
+	@__path__ = 'Renderer.Item'
 
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']

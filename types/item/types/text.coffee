@@ -20,50 +20,36 @@ module.exports = (Renderer, Impl, itemUtils) ->
 
 			super Object.create Font.DATA
 
-		Dict.defineProperty @::, 'family'
-
-		utils.defProp @::, 'family', 'e', utils.lookupGetter(@::, 'family')
-		, do (_super = utils.lookupSetter @::, 'family') -> (val) ->
+		itemUtils.defineProperty @::, 'family', null, (_super) -> (val) ->
 			expect(val).toBe.truthy().string()
 			_super.call @, val
 			Impl.setTextFontFamily.call @_item, val
 
-		Dict.defineProperty @::, 'pixelSize'
-
-		utils.defProp @::, 'pixelSize', 'e', utils.lookupGetter(@::, 'pixelSize')
-		, do (_super = utils.lookupSetter @::, 'pixelSize') -> (val) ->
+		itemUtils.defineProperty @::, 'pixelSize', null, (_super) -> (val) ->
 			expect(val).toBe.truthy().float()
 			_super.call @, val
 			Impl.setTextFontPixelSize.call @_item, val
 
-		Dict.defineProperty @::, 'weight'
-
-		utils.defProp @::, 'weight', 'e', utils.lookupGetter(@::, 'weight')
-		, do (_super = utils.lookupSetter @::, 'weight') -> (val) ->
+		itemUtils.defineProperty @::, 'weight', null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.greaterThan 1
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
 			Impl.setTextFontWeight.call @_item, val
 
-		Dict.defineProperty @::, 'wordSpacing'
-
-		utils.defProp @::, 'wordSpacing', 'e', utils.lookupGetter(@::, 'wordSpacing')
-		, do (_super = utils.lookupSetter @::, 'wordSpacing') -> (val) ->
+		itemUtils.defineProperty @::, 'wordSpacing', null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setTextFontWordSpacing.call @_item, val
 
-		Dict.defineProperty @::, 'letterSpacing'
-
-		utils.defProp @::, 'letterSpacing', 'e', utils.lookupGetter(@::, 'letterSpacing')
-		, do (_super = utils.lookupSetter @::, 'letterSpacing') -> (val) ->
+		itemUtils.defineProperty @::, 'letterSpacing', null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setTextFontLetterSpacing.call @_item, val
 
 	class Text extends Renderer.Item
 		@__name__ = 'Text'
+		@__path__ = 'Renderer.Text'
 
 		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			text: ''

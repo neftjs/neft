@@ -6,6 +6,7 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Item
 	@__name__ = 'Image'
+	@__path__ = 'Renderer.Image'
 
 	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		source: ''

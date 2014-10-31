@@ -6,6 +6,8 @@ Dict = require 'dict'
 
 module.exports = (Renderer, Impl, itemUtils) ->
 	class Border extends Dict
+		@__name__ = 'Border'
+
 		@DATA = 
 			width: 0
 			color: 'transparent'
@@ -17,25 +19,20 @@ module.exports = (Renderer, Impl, itemUtils) ->
 
 			super Object.create Border.DATA
 
-		Dict.defineProperty @::, 'width'
-
-		utils.defProp @::, 'width', 'e', utils.lookupGetter(@::, 'width')
-		, do (_super = utils.lookupSetter @::, 'width') -> (val) ->
+		itemUtils.defineProperty @::, 'width', null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
 			Impl.setRectangleBorderWidth.call @_item, val
 
-		Dict.defineProperty @::, 'color'
-
-		utils.defProp @::, 'color', 'e', utils.lookupGetter(@::, 'color')
-		, do (_super = utils.lookupSetter @::, 'color') -> (val) ->
+		itemUtils.defineProperty @::, 'color', null, (_super) -> (val) ->
 			expect(val).toBe.truthy().string()
 			_super.call @, val
 			Impl.setRectangleBorderColor.call @_item, val
 
 	class Rectangle extends Renderer.Item
 		@__name__ = 'Rectangle'
+		@__path__ = 'Renderer.Rectangle'
 
 		@DATA = utils.merge Object.create(Renderer.Item.DATA),
 			color: 'transparent'

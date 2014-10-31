@@ -109,7 +109,7 @@ module.exports = (impl) ->
 				args.push "try { return #{hash}; } catch(err){}"
 				cache[hash] = Function.apply null, args
 
-		constructor: (@item, @prop, binding, @extraResultFunc) ->
+		constructor: (@item, @obj, @uniqueProp, @prop, binding, @extraResultFunc) ->
 			Binding.prepare binding, item
 
 			# properties
@@ -136,7 +136,9 @@ module.exports = (impl) ->
 			@update()
 
 		item: null
+		obj: null
 		args: null
+		uniqueProp: ''
 		prop: ''
 		func: null
 		extraResultFunc: null
@@ -170,7 +172,7 @@ module.exports = (impl) ->
 					return
 
 				binding.updatePending = true
-				binding.item[binding.prop] = result
+				binding.obj[binding.prop] = result
 				binding.updatePending = false
 
 			updateAll = ->
@@ -198,22 +200,24 @@ module.exports = (impl) ->
 				connection.destroy()
 
 			# remove from the list
-			@item._impl.bindings[@prop] = null
+			@item._impl.bindings[@uniqueProp] = null
 
 			# disconnect listener
 			signalName = Dict.getPropertySignalName @prop
 			handlerName = signal.getHandlerName signalName
-			@item[handlerName].disconnect @signalChangeListener
+			@obj[handlerName].disconnect @signalChangeListener
 
 			# clear props
 			@args = null
 			@connections = null
 
-	setItemBinding: (prop, binding, extraResultFunc) ->
+	setItemBinding: (obj, prop, binding, extraResultFunc) ->
 		storage = @_impl
 
+		uniqueProp = "#{obj.constructor.__name__}-#{prop}"
+
 		storage.bindings ?= {}
-		storage.bindings[prop]?.destroy()
+		storage.bindings[uniqueProp]?.destroy()
 
 		if binding?
-			storage.bindings[prop] = new Binding @, prop, binding, extraResultFunc
+			storage.bindings[uniqueProp] = new Binding @, obj, uniqueProp, prop, binding, extraResultFunc
