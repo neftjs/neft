@@ -124,7 +124,7 @@ module.exports = (impl) ->
 			# destroy on property value change
 			signalName = Dict.getPropertySignalName prop
 			handlerName = signal.getHandlerName signalName
-			item[handlerName] @signalChangeListener
+			obj[handlerName] @signalChangeListener
 
 			# connections
 			connections = @connections = []
