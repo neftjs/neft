@@ -4,12 +4,34 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Renderer, Impl) -> class Scrollable extends Renderer.Item
+module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 	@__name__ = 'Scrollable'
 
 	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		contentX: 0
 		contentY: 0
+		contentItem: null
+		clip: true
+
+	constructor: ->
+		super
+
+		`//<development>`
+		@onChildrenChanged ->
+			if @contentItem
+				expect().some(@children).toBe @contentItem
+		`//</development>`
+
+	Dict.defineProperty @::, 'contentItem'
+
+	utils.defProp @::, 'contentItem', 'e', utils.lookupGetter(@::, 'contentItem')
+	, do (_super = utils.lookupSetter @::, 'contentItem') -> (val) ->
+		expect(val).toBe.any Renderer.Item
+		oldVal = @contentItem
+		val.parent = @
+		_super.call @, val
+		oldVal?.parent = null
+		Impl.setScrollableContentItem.call @, val
 
 	Dict.defineProperty @::, 'contentX'
 

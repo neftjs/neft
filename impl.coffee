@@ -41,11 +41,10 @@ impl.createItem = (item, type) ->
 impl.createAnimation = (animation, type) ->
 	impl.Types[type].create animation
 
-impl.window = ''
-impl.setWindow = do (_super = impl.setWindow) -> (id) ->
-	assert impl.window is ''
-	impl.window = id
-	_super.call impl, id
+impl.window = null
+impl.setWindow = do (_super = impl.setWindow) -> (item) ->
+	utils.defProp impl, 'window', 'e', item
+	_super.call impl, item
 
 # impl.getItemChildren = do (_super = impl.getItemChildren) -> (id) ->
 # 	if container = impl.items[id]?.container

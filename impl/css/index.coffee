@@ -23,6 +23,10 @@ div, span, canvas, img {
 	word-wrap: break-word;
 	margin: 0;
 }
+a {
+	text-decoration: inherit;
+	color: inherit;
+}
 "
 
 # body

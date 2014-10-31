@@ -4,7 +4,7 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Renderer, Impl) ->
+module.exports = (Renderer, Impl, itemUtils) ->
 	class Border extends Dict
 		@DATA = 
 			width: 0
@@ -24,7 +24,7 @@ module.exports = (Renderer, Impl) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
-			Impl.setRectangleWidth.call @_item, val
+			Impl.setRectangleBorderWidth.call @_item, val
 
 		Dict.defineProperty @::, 'color'
 
@@ -45,19 +45,21 @@ module.exports = (Renderer, Impl) ->
 		Dict.defineProperty @::, 'color'
 
 		utils.defProp @::, 'color', 'e', utils.lookupGetter(@::, 'color')
-		, do (_super = utils.lookupSetter @::, 'color') -> (val) ->
-			expect(val).toBe.truthy().string()
-			_super.call @, val
-			Impl.setRectangleColor.call @, val
+		, do (_super = utils.lookupSetter @::, 'color') ->
+			itemUtils.createBindingSetter 'color', (val) ->
+				expect(val).toBe.truthy().string()
+				_super.call @, val
+				Impl.setRectangleColor.call @, val
 
 		Dict.defineProperty @::, 'radius'
 
 		utils.defProp @::, 'radius', 'e', utils.lookupGetter(@::, 'radius')
-		, do (_super = utils.lookupSetter @::, 'radius') -> (val) ->
-			expect(val).toBe.float()
-			expect(val).not().toBe.lessThan 0
-			_super.call @, val
-			Impl.setRectangleRadius.call @, val
+		, do (_super = utils.lookupSetter @::, 'radius') ->
+			itemUtils.createBindingSetter 'radius', (val) ->
+				expect(val).toBe.float()
+				expect(val).not().toBe.lessThan 0
+				_super.call @, val
+				Impl.setRectangleRadius.call @, val
 
 		utils.defProp @::, 'border', 'e', ->
 			utils.defProp @, 'border', 'e', val = new Border(@)

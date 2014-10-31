@@ -12,7 +12,10 @@ module.exports = (impl) ->
 	updateSize = (item) ->
 		if document.readyState isnt 'complete'
 			window.addEventListener 'load', ->
-				updateSize item
+				unless item._impl.textElement.offsetWidth
+					setTimeout updateSize, 0, item
+				else
+					updateSize item
 			return;
 
 		updatePending = true

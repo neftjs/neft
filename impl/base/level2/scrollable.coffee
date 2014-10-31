@@ -4,109 +4,105 @@ utils = require 'utils'
 
 WHEEL_DIVISOR = 8
 
-# TODO
 module.exports = (impl) ->
-	{Types, items} = impl
+	{Types} = impl
 	{Item, Rectangle} = Types
-
-	return {}
 
 	###
 	Scroll container by given x and y deltas
 	###
 	scroll = (item, x, y) ->
-		{container, content} = item
+		{contentItem} = item._impl
 
 		if x isnt 0
-			val = impl.getItemX(container)+x
-			val = Math.min(content[0], Math.max(content[2], val))
-			impl.setItemX container, val
+			val = item.contentX - x
+			max = contentItem.width - item.width
+			val = Math.max(0, Math.min(max, val))
+			item.contentX = val
 
 		if y isnt 0
-			val = impl.getItemY(container)+y
-			val = Math.min(content[1], Math.max(content[3], val))
-			impl.setItemY container, val
+			val = item.contentY - y
+			max = contentItem.height - item.height
+			val = Math.max(0, Math.min(max, val))
+			item.contentY = val
 
-	updateScroll = (item) ->
-		{container, content} = item
+	# updateScroll = (item) ->
+		
+	# 	{x, y} = contentItem
 
-		# x
-		x = impl.getItemX(container)
-		val = Math.min(content[0], Math.max(content[2], x))
-		if val isnt x
-			impl.setItemX container, val
+	# 	# x
+	# 	val = Math.min(0, Math.max(contentItem.width, x))
+	# 	if val isnt x
+	# 		item.contentX = val
 
-		# y
-		y = impl.getItemY(container)
-		val = Math.min(content[1], Math.max(content[3], y))
-		if val isnt y
-			impl.setItemY container, val
+	# 	# y
+	# 	val = Math.min(0, Math.max(contentItem.height, y))
+	# 	if val isnt y
+	# 		item.contentY = val
 
 	###
 	Recalculate current content position and size
 	###
-	updateContent = (id) ->
-		item = items[id]
-		{content} = item
+	# updateContent = (id) ->
+	# 	item = items[id]
+	# 	{content} = item
 
-		children = impl.getItemChildren item.container
-		minX = minY = Infinity
-		maxWidth = maxHeight = 0
+	# 	children = impl.getItemChildren item.container
+	# 	minX = minY = Infinity
+	# 	maxWidth = maxHeight = 0
 
-		for child in children
-			minX = Math.min minX, impl.getItemX(child)
-			minY = Math.min minY, impl.getItemY(child)
-			maxWidth = Math.max maxWidth, impl.getItemWidth(child)
-			maxHeight = Math.max maxHeight, impl.getItemHeight(child)
+	# 	for child in children
+	# 		minX = Math.min minX, impl.getItemX(child)
+	# 		minY = Math.min minY, impl.getItemY(child)
+	# 		maxWidth = Math.max maxWidth, impl.getItemWidth(child)
+	# 		maxHeight = Math.max maxHeight, impl.getItemHeight(child)
 
-		maxX = - maxWidth - minX + impl.getItemWidth(id)
-		maxY = - maxHeight - minY + impl.getItemHeight(id)
+	# 	maxX = - maxWidth - minX + impl.getItemWidth(id)
+	# 	maxY = - maxHeight - minY + impl.getItemHeight(id)
 
-		content[0] = 0
-		content[1] = 0
-		content[2] = maxX
-		content[3] = maxY
+	# 	content[0] = 0
+	# 	content[1] = 0
+	# 	content[2] = maxX
+	# 	content[3] = maxY
 
 	###
 	Update Scrollable content on the child appended or removed
 	###
-	impl.setItemParent = do (_super = impl.setItemParent) -> (id, val) ->
-		parent = items[val]
+	# impl.setItemParent = do (_super = impl.setItemParent) -> (id, val) ->
+	# 	parent = items[val]
 
-		old = impl.getItemParent id
-		oldItem = items[old]
+	# 	old = impl.getItemParent id
+	# 	oldItem = items[old]
 
-		# update old
-		if old and oldItem.type is 'Scrollable' and oldItem.container
-			updateContent old
-			updateScroll oldItem
+	# 	# update old
+	# 	if old and oldItem.type is 'Scrollable' and oldItem.container
+	# 		updateContent old
+	# 		updateScroll oldItem
 
-		_super id, val
+	# 	_super id, val
 
-		# update new
-		if parent and parent.type is 'Scrollable' and parent.container
-			updateContent val
-			updateScroll parent
+	# 	# update new
+	# 	if parent and parent.type is 'Scrollable' and parent.container
+	# 		updateContent val
+	# 		updateScroll parent
 
-	overrideSetter = (methodName) ->
-		impl[methodName] = do (_super = impl[methodName]) -> (id, val) ->
-			_super id, val
+	# overrideSetter = (methodName) ->
+	# 	impl[methodName] = do (_super = impl[methodName]) -> (id, val) ->
+	# 		_super id, val
 
-			parentId = impl.getItemParent id
-			parent = items[parentId]
-			if parent?.type is 'Scrollable' and parent.container isnt id
-				updateContent parentId
-				updateScroll parent
+	# 		parentId = impl.getItemParent id
+	# 		parent = items[parentId]
+	# 		if parent?.type is 'Scrollable' and parent.container isnt id
+	# 			updateContent parentId
+	# 			updateScroll parent
 
-	overrideSetter 'setItemX'
-	overrideSetter 'setItemY'
-	overrideSetter 'setItemWidth'
-	overrideSetter 'setItemHeight'
-	overrideSetter 'setItemVisible'
+	# overrideSetter 'setItemX'
+	# overrideSetter 'setItemY'
+	# overrideSetter 'setItemWidth'
+	# overrideSetter 'setItemHeight'
+	# overrideSetter 'setItemVisible'
 
-	createContinuous = (id, prop) ->
-		item = items[id]
-
+	createContinuous = (item, prop) ->
 		velocity = 0
 		amplitude = 0
 		timestamp = 0
@@ -148,11 +144,9 @@ module.exports = (impl) ->
 			v = 100 * -val / (1 + elapsed);
 			velocity = 0.8 * v + 0.2 * velocity;
 
-	usePointer = (id) ->
-		item = items[id]
-
-		horizontalContinuous = createContinuous id, 'x'
-		verticalContinuous = createContinuous id, 'y'
+	usePointer = (item) ->
+		horizontalContinuous = createContinuous item, 'x'
+		verticalContinuous = createContinuous item, 'y'
 
 		focus = false
 		x = y = 0
@@ -162,17 +156,15 @@ module.exports = (impl) ->
 			dy = e.y - y
 			scroll item, dx, dy
 
-		impl.attachItemSignal id, 'pointerPressed', (e) ->
+		impl.attachItemSignal.call item, 'pointerPressed', (e) ->
 			focus = true
-
-			updateContent id
 
 			horizontalContinuous.press()
 			verticalContinuous.press()
 
 			x = e.x; y = e.y
 
-		impl.attachItemSignal impl.window, 'pointerReleased', (e) ->
+		impl.attachItemSignal.call impl.window, 'pointerReleased', (e) ->
 			return unless focus
 			focus = false
 
@@ -183,7 +175,7 @@ module.exports = (impl) ->
 
 			x = y = 0
 
-		impl.attachItemSignal impl.window, 'pointerMove', (e) ->
+		impl.attachItemSignal.call impl.window, 'pointerMove', (e) ->
 			return unless focus
 
 			moveMovement e
@@ -193,40 +185,34 @@ module.exports = (impl) ->
 
 			x = e.x; y = e.y
 
-	useWheel = (id) ->
-		item = items[id]
-
-		impl.attachItemSignal id, 'pointerWheel', (e) ->
+	useWheel = (item) ->
+		impl.attachItemSignal.call item, 'pointerWheel', (e) ->
 			x = e.x / WHEEL_DIVISOR
 			y = e.y / WHEEL_DIVISOR
 			scroll item, x, y
 
-	create: (id, target) ->
-		Item.create id, target
+	create: (item) ->
+		storage = item._impl
 
-		target.content = [0, 0, 0, 0]
+		Item.create item
 
-		# container
-		container = "i#{utils.uid()}"
-		impl.createItem 'Item', container
-		impl.setItemParent container, id
-		target.container = container
+		storage.contentItem = null
 
 		# item props
-		impl.setItemClip id, true
+		impl.setItemClip.call item, true
 
 		# signals
-		usePointer id
-		useWheel id
+		usePointer item
+		useWheel item
 
-	getScrollableContentX: (id) ->
-		impl.getItemX items[id].container
+	setScrollableContentItem: (val) ->
+		oldVal = @_impl.contentItem
 
-	setScrollableContentX: (id, val) ->
-		impl.setItemX items[id].container, val
+		if newVal = val
+			@_impl.contentItem = newVal
 
-	getScrollableContentY: (id) ->
-		impl.getItemY items[id].container
+	setScrollableContentX: (val) ->
+		@_impl.contentItem?.x = -val
 
-	setScrollableContentY: (id, val) ->
-		impl.setItemY items[id].container, val
+	setScrollableContentY: (val) ->
+		@_impl.contentItem?.y = -val

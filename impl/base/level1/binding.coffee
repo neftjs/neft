@@ -153,6 +153,9 @@ module.exports = (impl) ->
 			pending = false
 
 			updateBinding = (binding) ->
+				unless binding.args
+					return
+
 				result = binding.func.apply null, binding.args
 				unless result?
 					return
@@ -162,6 +165,9 @@ module.exports = (impl) ->
 					funcResult = binding.extraResultFunc binding.item
 					if typeof funcResult is 'number' and isFinite(funcResult)
 						result += funcResult
+
+				if typeof result is 'number' and not isFinite(result)
+					return
 
 				binding.updatePending = true
 				binding.item[binding.prop] = result

@@ -8,14 +8,14 @@ List = require 'list'
 
 {isArray} = Array
 
-module.exports = (Renderer, Impl) -> class Item extends Dict
+module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 	@__name__ = 'Item'
 
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
-	Anchors = require('./item/anchors') Renderer, Impl
-	Animations = require('./item/animations') Renderer, Impl
+	Anchors = require('./item/anchors') Renderer, Impl, itemUtils
+	Animations = require('./item/animations') Renderer, Impl, itemUtils
 
 	@DATA =
 		parent: null
@@ -53,6 +53,11 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 		if opts?.properties?
 			for propName in opts.properties
 				Dict.defineProperty @, propName
+
+				# allow bindings in custom properties
+				utils.defProp @, propName, 'e', utils.lookupGetter(@, propName)
+				, do (_super = utils.lookupSetter @, propName) ->
+					itemUtils.createBindingSetter propName, _super
 			delete opts.properties
 
 		# custom signals
@@ -78,10 +83,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 				if typeof val is 'function'
 					continue
 
-				if val and typeof val is 'object' and not isArray(val)
-					utils.mergeDeep @[key], val
-				else
-					@[key] = val
+				itemUtils.setProperty @, key, val
 
 			# connect handlers
 			for key, val of opts
@@ -110,13 +112,6 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 		if children
 			for child in children
 				child.parent = @
-
-	createBindingSetter = (propName, setFunc) ->
-		(val) ->
-			if Array.isArray val
-				Impl.setItemBinding.call @, propName, val
-			else
-				setFunc.call @, val
 
 	utils.defProp @::, 'id', 'e', ->
 		undefined
@@ -158,7 +153,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'parent', 'e', utils.lookupGetter(@::, 'parent')
 	, do (_super = utils.lookupSetter @::, 'parent') ->
-		createBindingSetter 'parent', (val) ->
+		itemUtils.createBindingSetter 'parent', (val) ->
 			if old = @parent
 				index = Array::indexOf.call old.children, @
 				Array::splice.call old.children, index, 1
@@ -178,7 +173,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'visible', 'e', utils.lookupGetter(@::, 'visible')
 	, do (_super = utils.lookupSetter @::, 'visible') ->
-		createBindingSetter 'visible', (val) ->
+		itemUtils.createBindingSetter 'visible', (val) ->
 			expect(val).toBe.boolean()
 			_super.call @, val
 			Impl.setItemVisible.call @, val
@@ -187,7 +182,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'clip', 'e', utils.lookupGetter(@::, 'clip')
 	, do (_super = utils.lookupSetter @::, 'clip') ->
-		createBindingSetter 'clip', (val) ->
+		itemUtils.createBindingSetter 'clip', (val) ->
 			expect(val).toBe.boolean()
 			_super.call @, val
 			Impl.setItemClip.call @, val
@@ -196,7 +191,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'width', 'e', utils.lookupGetter(@::, 'width')
 	, do (_super = utils.lookupSetter @::, 'width') ->
-		createBindingSetter 'width', (val) ->
+		itemUtils.createBindingSetter 'width', (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
@@ -206,7 +201,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'height', 'e', utils.lookupGetter(@::, 'height')
 	, do (_super = utils.lookupSetter @::, 'height') ->
-		createBindingSetter 'height', (val) ->
+		itemUtils.createBindingSetter 'height', (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
@@ -216,7 +211,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'x', 'e', utils.lookupGetter(@::, 'x')
 	, do (_super = utils.lookupSetter @::, 'x') ->
-		createBindingSetter 'x', (val) ->
+		itemUtils.createBindingSetter 'x', (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setItemX.call @, val
@@ -225,7 +220,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'y', 'e', utils.lookupGetter(@::, 'y')
 	, do (_super = utils.lookupSetter @::, 'y') ->
-		createBindingSetter 'y', (val) ->
+		itemUtils.createBindingSetter 'y', (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setItemY.call @, val
@@ -234,7 +229,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'z', 'e', utils.lookupGetter(@::, 'z')
 	, do (_super = utils.lookupSetter @::, 'z') ->
-		createBindingSetter 'z', (val) ->
+		itemUtils.createBindingSetter 'z', (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setItemZ.call @, val
@@ -243,7 +238,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'scale', 'e', utils.lookupGetter(@::, 'scale')
 	, do (_super = utils.lookupSetter @::, 'scale') ->
-		createBindingSetter 'scale', (val) ->
+		itemUtils.createBindingSetter 'scale', (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setItemScale.call @, val
@@ -252,7 +247,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'rotation', 'e', utils.lookupGetter(@::, 'rotation')
 	, do (_super = utils.lookupSetter @::, 'rotation') ->
-		createBindingSetter 'rotation', (val) ->
+		itemUtils.createBindingSetter 'rotation', (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setItemRotation.call @, val
@@ -261,7 +256,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'opacity', 'e', utils.lookupGetter(@::, 'opacity')
 	, do (_super = utils.lookupSetter @::, 'opacity') ->
-		createBindingSetter 'opacity', (val) ->
+		itemUtils.createBindingSetter 'opacity', (val) ->
 			expect(val).toBe.float()
 			expect(val).not().toBe.lessThan 0
 			expect(val).not().toBe.greaterThan 1
@@ -272,7 +267,7 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 	utils.defProp @::, 'state', 'e', utils.lookupGetter(@::, 'state')
 	, do (_super = utils.lookupSetter @::, 'state') ->
-		createBindingSetter 'state', (val) ->
+		itemUtils.createBindingSetter 'state', (val) ->
 			expect(val).toBe.string()
 			expect().some().keys(@states).toBe val
 
@@ -302,13 +297,10 @@ module.exports = (Renderer, Impl) -> class Item extends Dict
 
 			# set new state
 			for key, optVal of newState
-				switch optVal? and not isArray(optVal) and typeof optVal
-					when 'function'
+				if typeof optVal is 'function'
 						@[key].connect optVal
-					when 'object'
-						utils.mergeDeep @[key], optVal
-					else
-						@[key] = optVal
+				else
+					itemUtils.setProperty @, key, optVal
 
 			_super.call @, val
 
