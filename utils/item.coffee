@@ -1,10 +1,16 @@
 'use strict'
 
+expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
 module.exports = (Renderer, Impl) -> exports =
 	defineProperty: (prototype, propName, customGetter, customSetter) ->
+		expect(prototype).toBe.object();
+		expect(propName).toBe.truthy().string();
+		expect().defined(customGetter).toBe.function();
+		expect().defined(customSetter).toBe.function();
+
 		Dict.defineProperty prototype, propName
 
 		# dist desc

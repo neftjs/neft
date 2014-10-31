@@ -257,6 +257,11 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		val
 	, null
 
+	defineProperty: (propName, defVal=null) ->
+		itemUtils.defineProperty @, propName
+		@_data[propName] = defVal
+		@
+
 	clear: ->
 		for child in @children
 			child.parent = null
