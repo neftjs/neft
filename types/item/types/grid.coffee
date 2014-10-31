@@ -4,7 +4,7 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Renderer, Impl) ->
+module.exports = (Renderer, Impl, itemUtils) ->
 	class Spacing extends Dict
 		@DATA =
 			column: 0
@@ -44,19 +44,13 @@ module.exports = (Renderer, Impl) ->
 			rows: 0
 			spacing: Spacing.DATA
 
-		Dict.defineProperty @::, 'columns'
-
-		utils.defProp @::, 'columns', 'e', utils.lookupGetter(@::, 'columns')
-		, do (_super = utils.lookupSetter @::, 'columns') -> (val) ->
+		itemUtils.defineProperty @::, 'columns', null, (_super) -> (val) ->
 			expect(val).toBe.integer()
 			expect(val).toBe.greaterThan 0
 			_super.call @, val
 			Impl.setGridColumns.call @, val
 
-		Dict.defineProperty @::, 'rows'
-
-		utils.defProp @::, 'rows', 'e', utils.lookupGetter(@::, 'rows')
-		, do (_super = utils.lookupSetter @::, 'rows') -> (val) ->
+		itemUtils.defineProperty @::, 'rows', null, (_super) -> (val) ->
 			expect(val).toBe.integer()
 			expect(val).toBe.greaterThan 0
 			_super.call @, val

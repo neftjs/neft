@@ -4,16 +4,13 @@ expect = require 'expect'
 utils = require 'utils'
 Dict = require 'dict'
 
-module.exports = (Renderer, Impl) -> class Row extends Renderer.Item
+module.exports = (Renderer, Impl, itemUtils) -> class Row extends Renderer.Item
 	@__name__ = 'Row'
 
 	@DATA = utils.merge Object.create(Renderer.Item.DATA),
 		spacing: 0
 
-	Dict.defineProperty @::, 'spacing'
-
-	utils.defProp @::, 'spacing', 'e', utils.lookupGetter(@::, 'spacing')
-	, do (_super = utils.lookupSetter @::, 'spacing') -> (val) ->
+	itemUtils.defineProperty @::, 'spacing', null, (_super) -> (val) ->
 		expect(val).toBe.float()
 		_super.call @, val
 		Impl.setRowSpacing.call @, val

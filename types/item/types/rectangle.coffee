@@ -42,24 +42,16 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			radius: 0
 			border: Border.DATA
 
-		Dict.defineProperty @::, 'color'
+		itemUtils.defineProperty @::, 'color', null, (_super) -> (val) ->
+			expect(val).toBe.truthy().string()
+			_super.call @, val
+			Impl.setRectangleColor.call @, val
 
-		utils.defProp @::, 'color', 'e', utils.lookupGetter(@::, 'color')
-		, do (_super = utils.lookupSetter @::, 'color') ->
-			itemUtils.createBindingSetter 'color', (val) ->
-				expect(val).toBe.truthy().string()
-				_super.call @, val
-				Impl.setRectangleColor.call @, val
-
-		Dict.defineProperty @::, 'radius'
-
-		utils.defProp @::, 'radius', 'e', utils.lookupGetter(@::, 'radius')
-		, do (_super = utils.lookupSetter @::, 'radius') ->
-			itemUtils.createBindingSetter 'radius', (val) ->
-				expect(val).toBe.float()
-				expect(val).not().toBe.lessThan 0
-				_super.call @, val
-				Impl.setRectangleRadius.call @, val
+		itemUtils.defineProperty @::, 'radius', null, (_super) -> (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
+			_super.call @, val
+			Impl.setRectangleRadius.call @, val
 
 		utils.defProp @::, 'border', 'e', ->
 			utils.defProp @, 'border', 'e', val = new Border(@)

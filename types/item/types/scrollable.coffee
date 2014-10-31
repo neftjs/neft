@@ -22,10 +22,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Rendere
 				expect().some(@children).toBe @contentItem
 		`//</development>`
 
-	Dict.defineProperty @::, 'contentItem'
-
-	utils.defProp @::, 'contentItem', 'e', utils.lookupGetter(@::, 'contentItem')
-	, do (_super = utils.lookupSetter @::, 'contentItem') -> (val) ->
+	itemUtils.defineProperty @::, 'contentItem', null, (_super) -> (val) ->
 		expect(val).toBe.any Renderer.Item
 		oldVal = @contentItem
 		val.parent = @
@@ -33,18 +30,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Rendere
 		oldVal?.parent = null
 		Impl.setScrollableContentItem.call @, val
 
-	Dict.defineProperty @::, 'contentX'
-
-	utils.defProp @::, 'contentX', 'e', utils.lookupGetter(@::, 'contentX')
-	, do (_super = utils.lookupSetter @::, 'contentX') -> (val) ->
+	itemUtils.defineProperty @::, 'contentX', null, (_super) -> (val) ->
 		expect(val).toBe.float()
 		_super.call @, val
 		Impl.setScrollableContentX.call @, val
 
-	Dict.defineProperty @::, 'contentY'
-
-	utils.defProp @::, 'contentY', 'e', utils.lookupGetter(@::, 'contentY')
-	, do (_super = utils.lookupSetter @::, 'contentY') -> (val) ->
+	itemUtils.defineProperty @::, 'contentY', null, (_super) -> (val) ->
 		expect(val).toBe.float()
 		_super.call @, val
 		Impl.setScrollableContentY.call @, val

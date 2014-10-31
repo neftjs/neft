@@ -1,8 +1,28 @@
 'use strict'
 
 utils = require 'utils'
+Dict = require 'dict'
 
-module.exports = (Renderer, Impl) ->
+module.exports = (Renderer, Impl) -> exports =
+	defineProperty: (prototype, propName, customGetter, customSetter) ->
+		Dict.defineProperty prototype, propName
+
+		# dist desc
+		propGetter = utils.lookupGetter prototype, propName
+		propSetter = utils.lookupSetter prototype, propName
+
+		# custom desc
+		getter = if customGetter? then customGetter(propGetter) else propGetter
+		setter = if customSetter? then customSetter(propSetter) else propSetter
+
+		# accept bindings
+		setter = exports.createBindingSetter propName, setter
+
+		# override
+		utils.defProp prototype, propName, 'e', getter, setter
+
+		prototype
+
 	createBindingSetter: (propName, setFunc) ->
 		(val) ->
 			if Array.isArray val

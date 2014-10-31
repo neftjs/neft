@@ -71,32 +71,20 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			lineHeight: 1
 			font: Font.DATA
 
-		Dict.defineProperty @::, 'text'
+		itemUtils.defineProperty @::, 'text', null, (_super) -> (val) ->
+			expect(val).toBe.string()
+			_super.call @, val
+			Impl.setText.call @, val
 
-		utils.defProp @::, 'text', 'e', utils.lookupGetter(@::, 'text')
-		, do (_super = utils.lookupSetter @::, 'text') ->
-			itemUtils.createBindingSetter 'text', (val) ->
-				expect(val).toBe.string()
-				_super.call @, val
-				Impl.setText.call @, val
+		itemUtils.defineProperty @::, 'color', null, (_super) -> (val) ->
+			expect(val).toBe.truthy().string()
+			_super.call @, val
+			Impl.setTextColor.call @, val
 
-		Dict.defineProperty @::, 'color'
-
-		utils.defProp @::, 'color', 'e', utils.lookupGetter(@::, 'color')
-		, do (_super = utils.lookupSetter @::, 'color') ->
-			itemUtils.createBindingSetter 'color', (val) ->
-				expect(val).toBe.truthy().string()
-				_super.call @, val
-				Impl.setTextColor.call @, val
-
-		Dict.defineProperty @::, 'lineHeight'
-
-		utils.defProp @::, 'lineHeight', 'e', utils.lookupGetter(@::, 'lineHeight')
-		, do (_super = utils.lookupSetter @::, 'lineHeight') ->
-			itemUtils.createBindingSetter 'lineHeight', (val) ->
-				expect(val).toBe.truthy().float()
-				_super.call @, val
-				Impl.setTextLineHeight.call @, val
+		itemUtils.defineProperty @::, 'lineHeight', null, (_super) -> (val) ->
+			expect(val).toBe.truthy().float()
+			_super.call @, val
+			Impl.setTextLineHeight.call @, val
 
 		utils.defProp @::, 'font', 'e', ->
 			utils.defProp @, 'font', 'e', val = new Font(@)
