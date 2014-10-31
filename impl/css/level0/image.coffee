@@ -1,5 +1,7 @@
 'use strict'
 
+DATA_URI_RE = ///^(data:[a-z+/]+,)(.*)$///
+
 module.exports = (impl) ->
 	{Item} = impl.Types
 
@@ -15,4 +17,10 @@ module.exports = (impl) ->
 		data.elem.appendChild image
 
 	setImageSource: (val) ->
+		# escape data uri for some browsers (e.g. firefox)
+		dataUri = DATA_URI_RE.exec val
+		if dataUri?
+			[_, dec, data] = dataUri
+			val = "#{dec}#{escape data}"
+
 		@_impl.image.src = val
