@@ -12,19 +12,27 @@ module.exports = (impl) ->
 	Scroll container by given x and y deltas
 	###
 	scroll = (item, x, y) ->
-		{contentItem} = item._impl
+		{contentItem, globalScale} = item._impl
 
 		if x isnt 0
+			x /= globalScale
 			val = item.contentX - x
 			max = contentItem.width - item.width
 			val = Math.max(0, Math.min(max, val))
 			item.contentX = val
 
 		if y isnt 0
+			y /= globalScale
 			val = item.contentY - y
 			max = contentItem.height - item.height
 			val = Math.max(0, Math.min(max, val))
 			item.contentY = val
+
+	getItemGlobalScale = (item) ->
+		val = item.scale
+		while item = item.parent
+			val *= item.scale
+		val
 
 	# updateScroll = (item) ->
 		
@@ -159,6 +167,7 @@ module.exports = (impl) ->
 		impl.attachItemSignal.call item, 'pointerPressed', (e) ->
 			focus = true
 
+			item._impl.globalScale = getItemGlobalScale item
 			horizontalContinuous.press()
 			verticalContinuous.press()
 
@@ -187,6 +196,7 @@ module.exports = (impl) ->
 
 	useWheel = (item) ->
 		impl.attachItemSignal.call item, 'pointerWheel', (e) ->
+			item._impl.globalScale = getItemGlobalScale item
 			x = e.x / WHEEL_DIVISOR
 			y = e.y / WHEEL_DIVISOR
 			scroll item, x, y
@@ -197,6 +207,7 @@ module.exports = (impl) ->
 		Item.create item
 
 		storage.contentItem = null
+		storage.globalScale = 1
 
 		# item props
 		impl.setItemClip.call item, true
