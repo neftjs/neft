@@ -1,5 +1,7 @@
 'use strict'
 
+utils = require 'utils'
+
 # get transform CSS property name
 transformProp = do ->
 	prefix = do ->
@@ -18,6 +20,8 @@ rad2deg = (rad) ->
 
 {now} = Date
 
+isTouch = 'ontouchstart' of window
+
 SIGNALS =
 	'pointerClicked': 'click'
 	'pointerPressed': 'mousedown'
@@ -31,12 +35,30 @@ SIGNALS =
 		else
 			'mousewheel'
 
+if isTouch
+	utils.merge SIGNALS,
+		'pointerPressed': 'touchstart'
+		'pointerReleased': 'touchend'
+		'pointerEntered': null
+		'pointerExited': null
+		'pointerMove': 'touchmove'
+
 SIGNALS_CURSORS =
 	'pointerClicked': 'pointer'
 
-mouseCoordsArgs = (e) ->
-	x: e.screenX
-	y: e.screenY
+mouseCoordsArgs = do ->
+	getArgs = (e) ->
+		x: e.screenX
+		y: e.screenY
+
+	if isTouch
+		(e) ->
+			if e.touches.length
+				getArgs e.touches[0]
+			else
+				getArgs e.changedTouches[0]
+	else
+		getArgs
 
 SIGNALS_ARGS =
 	'pointerWheel': do ->
@@ -172,14 +194,14 @@ module.exports = (impl) ->
 		if @_impl.isHot
 			updateTransforms @
 		else
-			@_impl.elem.style.left = val
+			@_impl.elem.style.left = "#{val}px"
 			markAction @
 
 	setItemY: (val) ->
 		if @_impl.isHot
 			updateTransforms @
 		else
-			@_impl.elem.style.top = val
+			@_impl.elem.style.top = "#{val}px"
 			markAction @
 
 	setItemZ: (val) ->
@@ -198,6 +220,10 @@ module.exports = (impl) ->
 		{elem} = @_impl
 
 		signal = SIGNALS[name]?(elem, func) or SIGNALS[name]
+
+		# break if event is not supported (e.g. some events on touch devices)
+		unless signal?
+			return
 
 		customFunc = (e) ->
 			arg = SIGNALS_ARGS[name]? e
