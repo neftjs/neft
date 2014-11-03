@@ -46,60 +46,6 @@ And three vertical lines:
 
 	module.exports = (Renderer, Impl) ->
 
-Margins
--------
-
-*Anchors* object also provides a way to set *left*, *top*, *right* and *bottom* margins.
-
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    id: 'rect2'
-    anchors:
-        left: 'rect1.right'
-        margin:
-            left: 20
-    ...
-```
-
-*Margins* doesn't have any effect for the *horizontalCenter* and *verticalCenter* anchors.
-
-		class Margin extends Dict
-			@DATA =
-				left: 0
-				top: 0
-				right: 0
-				bottom: 0
-
-			constructor: (item) ->
-				expect(item).toBe.any Renderer.Item
-
-				utils.defProp @, '_item', '', item
-
-				super Object.create Margin.DATA
-
-			createMarginProp = (type) ->
-				Dict.defineProperty Margin::, type
-
-				utils.defProp Margin::, type, 'e', utils.lookupGetter(Margin::, type)
-				, do (_super = utils.lookupSetter Margin::, type) -> (val) ->
-					`//<development>`
-					id = @_item.__hash__
-					assert typeof val is 'number' and isFinite(val)
-					, "(##{id}).anchors.margin.#{type} expects a finite number; `#{val}` given"
-					`//</development>`
-
-					_super.call @, val
-					Impl.setItemAnchorMargin.call @_item, type, val
-
-			createMarginProp 'left'
-			createMarginProp 'top'
-			createMarginProp 'right'
-			createMarginProp 'bottom'
-
 Anchors
 -------
 
@@ -129,7 +75,6 @@ This connection is updated in realtime, so if the *rect1* will change a position
 				left: null
 				horizontalCenter: null
 				right: null
-				margin: Margin.DATA
 
 			createAnchorProp = (type, opts=0) ->
 				Dict.defineProperty Anchors::, type
@@ -255,39 +200,5 @@ so `anchors.top = 'parent.left'` is not allowed.
 			createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
-
-			utils.defProp @::, 'margin', 'e', ->
-				utils.defProp @, 'margin', 'e', val = new Margin(@_item)
-				val
-			, null
-
-***margins*** property can be used to set the same margin from all sides.
-
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    id: 'rect2'
-    anchors:
-        fill: 'rect1'
-        margins: 10
-    ...
-```
-
-		utils.defProp Anchors::, 'margins', '', null, (val) ->
-			`//<development>`
-			id = @_item.__hash__
-			assert typeof val is 'number' and isFinite(val)
-			, "(##{id}).anchors.margins expects a finite number; `#{val}` given"
-			`//</development>`
-
-			{margin} = @_item.anchors
-
-			margin.left = val
-			margin.top = val
-			margin.right = val
-			margin.bottom = val
 
 		Anchors

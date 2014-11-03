@@ -15,6 +15,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 	@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 	            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
+	Margin = require('./item/margin') Renderer, Impl, itemUtils
 	Anchors = require('./item/anchors') Renderer, Impl, itemUtils
 	Animations = require('./item/animations') Renderer, Impl, itemUtils
 
@@ -33,6 +34,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		state: ''
 		states: null
 		anchors: Anchors.DATA
+		margin: Margin.DATA
 
 	constructor: (opts, children) ->
 		# optional `opts` argument
@@ -245,6 +247,13 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 
 	utils.defProp @::, 'states', 'e', ->
 		utils.defProp @, 'states', 'e', val = {}
+		val
+	, null
+
+	signal.createLazy @::, Dict.getPropertySignalName 'margin'
+
+	utils.defProp @::, 'margin', 'e', ->
+		utils.defProp @, 'margin', 'e', val = new Margin(@)
 		val
 	, null
 

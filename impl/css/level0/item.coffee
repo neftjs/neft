@@ -216,6 +216,8 @@ module.exports = (impl) ->
 	setItemOpacity: (val) ->
 		@_impl.elem.style.opacity = val
 
+	setItemMargin: (type, val) ->
+
 	attachItemSignal: (name, func) ->
 		{elem} = @_impl
 

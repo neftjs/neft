@@ -8,7 +8,7 @@ pending = false
 
 updateItem = (item) ->
 	{children} = item
-	{columnsPositions, rowsPositions, gridType} = item._impl
+	{gridType} = item._impl
 
 	# get config
 	columnSpacing = rowSpacing = 0
@@ -28,52 +28,83 @@ updateItem = (item) ->
 			columnsLen = Infinity
 			rowsLen = 1
 
-	# reset columns positions
-	utils.clear columnsPositions
+	# get tmp arrays
+	maxColumnsLen = if columnsLen is Infinity then children.length else columnsLen
+	columnsPositions = new Uint32Array maxColumnsLen
 
-	# reset rows positions
-	utils.clear rowsPositions
+	maxRowsLen = if rowsLen is Infinity then children.length / columnsLen else rowsLen
+	rowsPositions = new Uint32Array maxRowsLen
 
-	# refresh widths
-	for child, i in children
-		column = i % columnsLen
-		row = Math.floor(i/columnsLen) % rowsLen
+	maxColumn = 0
+	maxRow = 0
+	rightMargin = 0
+	bottomMargin = 0
 
+	# get sizes
+	i = 0
+	for child in children
 		# omit not visible children
 		unless child.visible
 			continue
 
-		{width, height} = child
+		column = i % columnsLen
+		row = Math.floor(i/columnsLen) % rowsLen
 
-		columnsPositions[column] = Math.max (columnsPositions[column] or 0), width
-		rowsPositions[row] = Math.max (rowsPositions[row] or 0), height
+		# max column / row
+		if column > maxColumn
+			maxColumn = column
+			rightMargin = 0
+		if row > maxRow
+			maxRow = row
+			bottomMargin = 0
+
+		# child
+		{width, height, margin} = child
+
+		# right / bottom margins
+		rightMargin = Math.max rightMargin, margin.right + columnSpacing
+		width += rightMargin
+		bottomMargin = Math.max bottomMargin, margin.bottom + rowSpacing
+		height += bottomMargin
+
+		# left / top margins
+		if column > 0
+			width += margin.left
+		if row > 0
+			height += margin.top
+
+		# save
+		if width > columnsPositions[column]
+			columnsPositions[column] = width
+		if height > rowsPositions[row]
+			rowsPositions[row] = height
+
+		i++
 
 	# sum columns positions
 	last = 0
 	for column, i in columnsPositions
-		val = columnsPositions[i]
-		last = columnsPositions[i] += last + (if val then columnSpacing else 0)
+		last = columnsPositions[i] += last
 
 	# sum rows positions
 	last = 0
 	for row, i in rowsPositions
-		val = rowsPositions[i]
-		last = rowsPositions[i] += last + (if val then rowSpacing else 0)
+		last = rowsPositions[i] += last
 
 	# set positions
 	for child, i in children
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
 
-		if gridType & exports.ROW
-			child.x = columnsPositions[column-1] or 0
+		if column > 0 and gridType & exports.ROW
+			child.x = columnsPositions[column-1] + child.margin.left
 
-		if gridType & exports.COLUMN
-			child.y = rowsPositions[row-1] or 0
+		if row > 0 and gridType & exports.COLUMN
+			child.y = rowsPositions[row-1] + child.margin.top
 
 	# set item size
-	item.width = Math.max 0, utils.last(columnsPositions) - columnSpacing
-	item.height = Math.max 0, utils.last(rowsPositions) - rowSpacing
+	item.width = Math.max 0, utils.last(columnsPositions) - rightMargin
+	item.height = Math.max 0, utils.last(rowsPositions) - bottomMargin
 
 updateItems = ->
 	pending = false
@@ -105,8 +136,6 @@ exports.create = (item, type) ->
 	storage = item._impl
 
 	storage.gridType = type
-	storage.columnsPositions = []
-	storage.rowsPositions = []
 
 	# update on children change
 	item.onChildrenChanged update
@@ -115,8 +144,10 @@ exports.create = (item, type) ->
 	item.children.onInserted (i, item) ->
 		item.onWidthChanged updateParent
 		item.onHeightChanged updateParent
+		item.onMarginChanged updateParent
 	item.children.onPopped (i, item) ->
 		item.onWidthChanged.disconnect updateParent
 		item.onHeightChanged.disconnect updateParent
+		item.onMarginChanged.disconnect updateParent
 
 exports.update = update

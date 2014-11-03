@@ -38,4 +38,6 @@ module.exports = (impl) ->
 	setItemOpacity: (val) ->
 		@_impl.opacity = val
 
+	setItemMargin: (type, val) ->
+
 	attachItemSignal: (name, signal) ->

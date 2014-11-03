@@ -51,13 +51,13 @@ module.exports = (impl) ->
 
 	MARGIN_FUNCS =
 		left: (item) ->
-			item.anchors.margin.left
+			item.margin.left
 		top: (item) ->
-			item.anchors.margin.top
+			item.margin.top
 		right: (item) ->
-			- item.anchors.margin.right
+			- item.margin.right
 		bottom: (item) ->
-			- item.anchors.margin.bottom
+			- item.margin.bottom
 		horizontalCenter: (item) ->
 			MARGIN_FUNCS.left(item) + MARGIN_FUNCS.right(item)
 		verticalCenter: (item) ->
@@ -152,7 +152,9 @@ module.exports = (impl) ->
 	setItemAnchor: (type, val) ->
 		BINDINGS[type] @, val
 
-	setItemAnchorMargin: (type, val) ->
+	setItemMargin: do (_super = impl.setItemMargin) -> (type, val) ->
+		_super.call @, type, val
+
 		if bindings = @_impl.bindings
 			for prop in BINDINGS_PROPS[type]
 				bindings[prop]?.update()
