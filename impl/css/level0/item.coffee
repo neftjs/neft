@@ -63,31 +63,18 @@ mouseCoordsArgs = do ->
 SIGNALS_ARGS =
 	'pointerWheel': do ->
 		REQUIRED_CHECKS = 200
-		REQUIRED_DELTA_CHECKS = 1000
 		NORMALIZED_VALUE = 120
 
 		checks = 0
 		lastX = lastY = 0
 
-		xDeltaChecks = 1
-		yDeltaChecks = 1
-		averageX = NORMALIZED_VALUE
-		averageY = NORMALIZED_VALUE
+		isSlowContinuous = false
 
 		getDeltas = (e) ->
 			e.preventDefault()
 
 			x = e.wheelDeltaX || 0
 			y = e.wheelDelta || -e.detail
-
-			if x isnt 0 and xDeltaChecks < REQUIRED_DELTA_CHECKS
-				averageX = (averageX * xDeltaChecks + Math.abs(x)) / ++xDeltaChecks
-
-			if y isnt 0 and yDeltaChecks < REQUIRED_DELTA_CHECKS
-				averageY = (averageY * yDeltaChecks + Math.abs(y)) / ++yDeltaChecks
-
-			x *= NORMALIZED_VALUE / averageX
-			y *= NORMALIZED_VALUE / averageY
 
 			x: x
 			y: y
@@ -100,7 +87,23 @@ SIGNALS_ARGS =
 
 			r
 
-		continuousWheel = getDeltas
+		continuousWheel = (e) ->
+			deltas = getDeltas e
+
+			# MAGIC!
+			# It looks that Chrome on MacBook never gives values in range (-3, 3) as
+			# it does Firefox which always sends lower values
+			if not isSlowContinuous
+				delta = deltas.x or deltas.y or 3
+
+				if (delta > 0 and delta < 3) or (delta < 0 and delta > -3)
+					isSlowContinuous = true
+
+			if isSlowContinuous
+				deltas.x *= 25
+				deltas.y *= 25
+
+			deltas
 
 		(e) ->
 			x = e.wheelDeltaX || 0
