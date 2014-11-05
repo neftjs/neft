@@ -6,151 +6,98 @@ module.exports = (impl) ->
 	{items} = impl
 	{Item, Image} = impl.Types
 
-	getImageSource = (id) ->
-		item = items[id]
+	CssText = require('../../css/level0/text') impl
 
-		width = impl.getItemWidth id
-		height = impl.getItemHeight id
+	getImageSource = (item) ->
+		{width, height} = item
+		{textElement} = item._impl
 
 		# retina displays
-		item.textElem.style.transform = "scale(2)"
+		textElement.style.zoom = 2
+		width *= 2
+		height *= 2
 
 		svg = "data:image/svg+xml;utf8," +
-		"<svg width='#{width*2}' height='#{height*2}' xmlns='http://www.w3.org/2000/svg'>" +
+		"<svg width='#{width}' height='#{height}' xmlns='http://www.w3.org/2000/svg'>" +
 			"<foreignObject width='100%' height='100%'>" +
-				item.textElem.outerHTML +
+				textElement.outerHTML +
 			"</foreignObject>" +
 		"</svg>"
 
-		item.textElem.style.transform = ""
+		textElement.style.zoom = ""
 
 		svg
 
-	updateSize = (id) ->
-		item = items[id]
+	updateText = do ->
+		queue = []
+		queueItems = {}
+		pending = false
 
-		return if item.textUpdatePending
-		item.textUpdatePending = true
+		updateItem = (item) ->
+			item._impl.contentElem.width = item.width
+			item._impl.contentElem.height = item.height
+			# TODO: too large height's
+			# console.log getImageSource(item), item.width, item.height
+			impl.setImageSource.call item, getImageSource(item)
 
-		if document.readyState isnt 'complete'
-			return setTimeout ->
-				item.textUpdatePending = false
-				updateSize id
-			, 1000
+		updateAll = ->
+			pending = false
+			while queue.length
+				item = queue.pop()
+				queueItems[item.__hash__] = false
+				updateItem item
+			null
 
-		requestAnimationFrame ->
-			{textElem} = item
+		->
+			if queueItems[@__hash__]
+				return
 
-			if item.autoWidth
-				impl.setItemWidth id, textElem.offsetWidth+1
+			queueItems[@__hash__] = true
+			queue.push @
 
-			if item.autoHeight
-				impl.setItemHeight id, textElem.offsetHeight
+			unless pending
+				setImmediate updateAll
+				pending = true
 
-			# image
-			impl.setImageSource id, getImageSource(id)
+	create: (item) ->
+		Image.create item
+		CssText._createTextElement item
+		impl._hatchery.appendChild item._impl.textElement
+		item._impl.textElement.style.transformOrigin = '0 0'
 
-			item.textUpdatePending = false
+		item._impl.textElement.setAttribute 'xmlns', 'http://www.w3.org/1999/xhtml'
 
-	impl.setItemWidth = do (_super = impl.setItemWidth) -> (id, val) ->
-		_super id, val
+		item.onWidthChanged updateText
+		item.onHeightChanged updateText
 
-		item = items[id]
-		if item.type is 'Text'
-			item.textElem.style.width = if val > 0 then "#{val}px" else 'auto'
-			item.textElem.style.whiteSpace = if val > 0 then 'normal' else 'nowrap'
-			item.autoWidth = val > 0
-			updateSize id
+	setText: (val) ->
+		CssText.setText.call @, val
+		updateText.call @
 
-	impl.setItemHeight = do (_super = impl.setItemHeight) -> (id, val) ->
-		_super id, val
+	setTextColor: (val) ->
+		CssText.setTextColor.call @, val
+		updateText.call @
 
-		item = items[id]
-		if item.type is 'Text'
-			item.textElem.style.height = if val > 0 then "#{val}px" else 'auto'
-			item.autoHeight = val > 0
-			updateSize id
+	setTextLineHeight: (val) ->
+		CssText.setTextLineHeight.call @, val
+		updateText.call @
 
-	create: (id, target) ->
-		Image.create id, target
+	setTextFontFamily: (val) ->
+		CssText.setTextFontFamily.call @, val
+		updateText.call @
 
-		target.autoWidth = true
-		target.autoHeight = true
-		target.textUpdatePending = false
+	setTextFontPixelSize: (val) ->
+		CssText.setTextFontPixelSize.call @, val
+		updateText.call @
 
-		textElem = target.textElem = document.createElement 'div'
-		textElem.setAttribute 'xmlns', 'http://www.w3.org/1999/xhtml'
-		impl._hatchery.appendChild textElem
+	setTextFontWeight: (val) ->
+		CssText.setTextFontWeight.call @, val
+		updateText.call @
 
-		# set default styles
-		{style} = textElem
-		style.transformOrigin = '0 0'
-		style.visible = 'invisible'
-		style.width = 'auto'
-		style.height = 'auto'
-		style.fontSize = "40px"
-		style.whiteSpace = 'nowrap'
-		if isFirefox
-			style.marginTop = '1px'
+	setTextFontWordSpacing: (val) ->
+		CssText.setTextFontWordSpacing.call @, val
+		updateText.call @
 
-	getText: (id) ->
-		items[id].textElem.innerHTML
-
-	setText: (id, val) ->
-		items[id].textElem.innerHTML = val
-		updateSize id
-
-	getTextColor: (id) ->
-		items[id].textElem.style.color
-
-	setTextColor: (id, val) ->
-		items[id].textElem.style.color = val
-
-	getTextLineHeight: (id) ->
-		{style} = items[id].textElem
-		(parseFloat(style.lineHeight) / parseFloat(style.fontSize)) or 0
-
-	setTextLineHeight: (id, val) ->
-		{style} = items[id].textElem
-		pxLineHeight = val * (parseFloat(style.fontSize) or 0)
-		style.lineHeight = "#{pxLineHeight}px"
-		updateSize id
-
-	getTextFontFamily: (id) ->
-		items[id].textElem.style.fontFamily
-
-	setTextFontFamily: (id, val) ->
-		items[id].textElem.style.fontFamily = val
-		updateSize id
-
-	getTextFontPixelSize: (id) ->
-		parseFloat(items[id].textElem.style.fontSize) or 0
-
-	setTextFontPixelSize: (id, val) ->
-		{style} = items[id].textElem
-
-		lineHeight = impl.getTextLineHeight id
-		items[id].textElem.style.fontSize = "#{val}px"
-		impl.setTextLineHeight id, lineHeight
-		updateSize id
-
-	getTextFontWeight: (id) ->
-		items[id].textElem.style.fontWeight / 1000
-
-	setTextFontWeight: (id, val) ->
-		items[id].textElem.style.fontWeight = val * 1000
-		updateSize id
-
-	getTextFontWordSpacing: (id) ->
-		parseFloat(items[id].textElem.style.wordSpacing) or 0
-
-	setTextFontWordSpacing: (id, val) ->
-		items[id].textElem.style.wordSpacing = "#{val}px"
-		updateSize id
-
-	getTextFontLetterSpacing: (id) ->
-		parseFloat(items[id].textElem.style.letterSpacing) or 0
-
-	setTextFontLetterSpacing: (id, val) ->
-		items[id].textElem.style.letterSpacing = "#{val}px"
-		updateSize id
+	setTextFontLetterSpacing: (val) ->
+		CssText.setTextFontLetterSpacing.call @, val
+		updateText.call @

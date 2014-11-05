@@ -45,16 +45,14 @@ module.exports = (impl) ->
 			if auto
 				updateSize @
 
-	create: (item) ->
+	_createTextElement: (item) ->
 		storage = item._impl
-		Item.create item
 
 		storage.autoWidth = true
 		storage.autoHeight = true
 
 		# textElement
 		textElement = storage.textElement = document.createElement 'span'
-		storage.elem.appendChild textElement
 
 		# handlers
 		item.onWidthChanged onWidthChanged
@@ -69,6 +67,11 @@ module.exports = (impl) ->
 		style.fontFamily = 'sans-serif'
 		if isFirefox
 			style.marginTop = '1px'
+
+	create: (item) ->
+		Item.create item
+		this._createTextElement item
+		item._impl.elem.appendChild textElement
 
 	setText: (val) ->
 		@_impl.textElement.innerHTML = val

@@ -73,45 +73,51 @@ unless window.isFake
 
 	PIXI.DisplayObject.prototype.updateTransform = ->
 		{matrix} = @
+
+		# if @rotation isnt @rotationCache
+		# 	@rotationCache = @rotation
+		# 	@_sr = Math.sin @rotation
+		# 	@_cr = Math.cos @rotation
+
 		matrix.identity()
 
 		# multiply by parent
-		matrix.multiply this.parent.matrix
+		matrix.multiply @parent.matrix
 
 		# translate
-		matrix.translate this.position.x, this.position.y
+		matrix.translate @position.x, @position.y
 
 		# size
-		matrix.scale this.scale.x, this.scale.y
+		matrix.scale @scale.x, @scale.y
 
 		# translate to origin
-		width = this.width * this.scale.x
-		height = this.height * this.scale.y
+		width = @width / @scale.x
+		height = @height / @scale.y
 		matrix.translate width/2, height/2
 
 		# scale
-		matrix.scale this.sizeScale, this.sizeScale
+		matrix.scale @sizeScale, @sizeScale
 
 		# rotate
-		matrix.rotate this.rotation
+		matrix.rotate @rotation
 
 		# translate to position
 		matrix.translate -width/2, -height/2
 
 		# set matrix to pixijs format
-		worldTransform = this.worldTransform
+		worldTransform = @worldTransform
 
 		worldTransform.a = matrix.arr[0]
-		worldTransform.b = matrix.arr[2] # LOL
+		worldTransform.b = matrix.arr[1]
 
-		worldTransform.c = matrix.arr[1]
+		worldTransform.c = matrix.arr[2]
 		worldTransform.d = matrix.arr[3]
 
 		worldTransform.tx = matrix.arr[4]
 		worldTransform.ty = matrix.arr[5]
 
 		# calculate alpha
-		this.worldAlpha = this.alpha * this.parent.worldAlpha
+		@worldAlpha = @alpha * @parent.worldAlpha
 
 
 SHEET = "
@@ -143,12 +149,19 @@ unless window.isFake
 	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
 	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight, null, false, true
 
+	# tex = PIXI.Texture.fromImage 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="510.15494480606117 680.999968662737 66.84503476481814 81.30406151133161" width="66.84503476481814" height="81.30406151133161" ><g><path fill="#0DFF7E" d="M556.727,729.177l5.682-3.28v-34.024L543.576,681l-18.828,10.873v34.024l5.68,3.28l-20.273,11.706v21.421H577v-21.421L556.727,729.177z M528.748,696.65l12.654,7.306l4.025-2.294l-14.818-8.555l4.721-2.726l14.848,8.574l4.025-2.294l-14.873-8.589l4.246-2.452l14.832,8.563v29.405l-14.832,8.562l-14.828-8.562V696.65z M573,758.304h-10.234v-8.049h-4v8.049h-30.375v-8.049h-4v8.049h-10.236v-15.111l20.273-11.706l9.148,5.282l9.148-5.282L573,743.192V758.304z"></path><path fill="#0DFF7E" d="M553.881,717.505l-3.09-2.54c-0.988,1.203-4.215,4.326-7.215,4.326c-2.973,0-6.215-3.125-7.211-4.327l-3.09,2.541c0.195,0.236,4.822,5.786,10.301,5.786C549.061,723.292,553.688,717.742,553.881,717.505z"></path></g></svg>'
+	# emptyTexture = PIXI.Texture.fromImage 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NkYGD4DwABCQEBtxmN7wAAAABJRU5ErkJggg=='
+	# elem = new PIXI.Sprite emptyTexture
+	# elem.setTexture tex
+	# stage.addChild elem
+
 window.addEventListener 'resize', ->
 	renderer.resize innerWidth, innerHeight
 
 # body
 hatchery = document.createElement 'div'
 hatchery.style.visibility = 'hidden'
+
 window.addEventListener 'load', ->
 	document.body.appendChild hatchery
 	document.body.appendChild renderer.view
@@ -157,25 +170,38 @@ window.addEventListener 'load', ->
 	styles.innerHTML = SHEET
 	document.body.appendChild styles
 
-	vsync = ->
-		renderer.render stage
-		requestAnimationFrame vsync
-
-	requestAnimationFrame vsync
-
 module.exports = (impl) ->
 	{items} = impl
 
+	impl._dirty = true
 	impl._hatchery = hatchery
+
+	# render loop
+	window.addEventListener 'load', ->
+		vsync = ->
+			if impl._dirty
+				impl._dirty = false
+				renderer.render stage
+			requestAnimationFrame vsync
+
+		requestAnimationFrame vsync
+
+	window.addEventListener 'resize', resize = ->
+		item = impl.window
+		return unless item
+
+		item.width = innerWidth
+		item.height = innerHeight
 
 	Types:
 		Item: require './level0/item'
 		Image: require './level0/image'
 		Text: require './level0/text'
 
-	setWindow: (id) ->
+	setWindow: (item) ->
 		unless window.isFake
 			if stage.children.length
 				stage.removeChildren()
 
-			stage.addChild items[id].elem
+			resize()
+			stage.addChild item._impl.elem

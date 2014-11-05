@@ -9,6 +9,7 @@ SIGNALS =
 	'pointerReleased': 'mouseup'
 	'pointerEntered': 'mouseover'
 	'pointerExited': 'mouseout'
+	'pointerMove': 'mousemove'
 
 module.exports = (impl) ->
 	{items} = impl
@@ -16,8 +17,9 @@ module.exports = (impl) ->
 	if utils.isEmpty PIXI
 		return require('../../base/level0/item') impl
 
-	updateMask = (id) ->
-		{elem} = items[id]
+	updateMask = (item) ->
+		return; # TODO
+		{elem} = item._impl
 		{mask} = elem
 
 		mask.clear()
@@ -25,46 +27,25 @@ module.exports = (impl) ->
 		mask.drawRect 0, 0, elem.width, elem.height
 		mask.endFill()
 
-	create: (id, target) ->
-		elem = target.elem ?= new PIXI.DisplayObjectContainer
-		elem.id = id
-		target.parent = ''
-		target.elem.sizeScale = 1
+	create: (item) ->
+		elem = item._impl.elem = new PIXI.DisplayObjectContainer
+		elem.sizeScale = 1
 
-	getItemParent: (id) ->
-		items[id].parent
+	setItemParent: (val) ->
+		item = @_impl.elem
+		parent = val?._impl.elem
 
-	setItemParent: (id, val) ->
-		item = items[id]
-		parent = items[val]
-		return unless parent
+		unless parent
+			item.parent.removeChild item
 
-		item.parent = val
-		parent.elem.addChild item.elem
+		parent.addChild item
+		impl._dirty = true
 
-	getItemChildren: (id) ->
-		item = items[id]
+	setItemVisible: (val) ->
+		@_impl.elem.visible = val
+		impl._dirty = true
 
-		arr = []
-		for child in item.elem.children
-			if id = child.id
-				arr.push id
-
-		arr
-
-	getItemVisible: (id) ->
-		items[id].elem.visible
-
-	setItemVisible: (id, val) ->
-		items[id].elem.visible = val
-
-	getItemClip: (id) ->
-		items[id].elem.mask?
-
-	setItemClip: (id, val) ->
-		item = items[id]
-		{elem} = item
-
+	setItemClip: (val) ->
 		# TODO: doesn't work with custom PIXI.DisplayObject.prototype.updateTransform
 		# if val is false
 		# 	# remove mask
@@ -74,72 +55,51 @@ module.exports = (impl) ->
 		# 	# add mask
 		# 	mask = new PIXI.Graphics
 		# 	elem.mask = mask
-		# 	updateMask id
+		# 	updateMask @
 		# 	elem.addChild mask
 
-	getItemWidth: (id) ->
-		items[id].elem.width
-
-	setItemWidth: (id, val) ->
-		{elem} = items[id]
-		elem.width = val
+	setItemWidth: (val) ->
+		{elem} = @_impl
+		# elem.width = val
+		@_impl.contentElem?.width = val
 		if elem.mask?
-			updateMask id
+			updateMask @
+		impl._dirty = true
 
-	getItemHeight: (id) ->
-		items[id].elem.height
-
-	setItemHeight: (id, val) ->
-		{elem} = items[id]
-		elem.height = val
+	setItemHeight: (val) ->
+		{elem} = @_impl
+		# elem.height = val
+		@_impl.contentElem?.height = val
 		if elem.mask?
-			updateMask id
+			updateMask @
+		impl._dirty = true
 
-	getItemX: (id) ->
-		item = items[id]
-		{elem} = item
-		elem.position.x
+	setItemX: (val) ->
+		@_impl.elem.position.x = val
+		impl._dirty = true
 
-	setItemX: (id, val) ->
-		item = items[id]
-		{elem} = item
-		elem.position.x = val
+	setItemY: (val) ->
+		@_impl.elem.position.y = val
+		impl._dirty = true
 
-	getItemY: (id) ->
-		item = items[id]
-		{elem} = item
-		elem.position.y
-
-	setItemY: (id, val) ->
-		item = items[id]
-		{elem} = item
-		elem.position.y = val
-
-	getItemZ: (id) ->
-		# items[id].z
-
-	setItemZ: (id, val) ->
+	setItemZ: (val) ->
 		# items[id].z = val
 
-	getItemScale: (id) ->
-		items[id].elem.sizeScale
+	setItemScale: (val) ->
+		@_impl.elem.sizeScale = val
+		impl._dirty = true
 
-	setItemScale: (id, val) ->
-		items[id].elem.sizeScale = val
+	setItemRotation: (val) ->
+		@_impl.elem.rotation = val
+		impl._dirty = true
 
-	getItemRotation: (id) ->
-		items[id].elem.rotation
+	setItemOpacity: (val) ->
+		@_impl.elem.alpha = val
+		impl._dirty = true
 
-	setItemRotation: (id, val) ->
-		items[id].elem.rotation = val
+	setItemMargin: (type, val) ->
 
-	getItemOpacity: (id) ->
-		items[id].elem.alpha
-
-	setItemOpacity: (id, val) ->
-		items[id].elem.alpha = val
-
-	attachItemSignal: (id, name, signal) ->
-		{elem} = items[id]
-		elem.setInteractive true
+	attachItemSignal: (name, signal) ->
+		{elem} = @_impl
+		elem.interactive = true
 		elem[SIGNALS[name]] = (e) -> signal e.global
