@@ -29,7 +29,7 @@ module.exports = (impl) ->
 
 	create: (item) ->
 		elem = item._impl.elem = new PIXI.DisplayObjectContainer
-		elem.sizeScale = 1
+		elem._data = item._data
 
 	setItemParent: (val) ->
 		item = @_impl.elem

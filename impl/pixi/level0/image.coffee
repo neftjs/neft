@@ -16,7 +16,6 @@ module.exports = (impl) ->
 	create: (item) ->
 		impl.Types.Item.create item
 		item._impl.contentElem = new PIXI.Sprite emptyTexture
-		item._impl.contentElem.sizeScale = 1
 		item._impl.elem.addChild item._impl.contentElem
 
 	setImageSource: (val) ->

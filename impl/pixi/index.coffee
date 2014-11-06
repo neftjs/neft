@@ -3,122 +3,82 @@
 utils = require 'utils'
 PIXI = require './pixi.lib.js'
 
-# thanks to: https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat2d.js
-class Matrix2d
-
-	constructor: ->
-		@arr = new (Float64Array or Array)(6)
-		@identity()
-
-	arr: null
-
-	identity: ->
-		{arr} = @
-		arr[0] = 1
-		arr[1] = 0
-		arr[2] = 0
-		arr[3] = 1
-		arr[4] = 0
-		arr[5] = 0
-		@
-
-	rotate: (rad) ->
-		{arr} = @
-		[a0, a1, a2, a3] = arr
-		s = Math.sin rad
-		c = Math.cos rad
-
-		arr[0] = a0 *  c + a2 * s;
-		arr[1] = a1 *  c + a3 * s;
-		arr[2] = a0 * -s + a2 * c;
-		arr[3] = a1 * -s + a3 * c;
-		@
-
-	scale: (v0, v1) ->
-		{arr} = @
-		arr[0] *= v0;
-		arr[1] *= v0;
-		arr[2] *= v1;
-		arr[3] *= v1;
-		@
-
-	translate: (v0, v1) ->
-		{arr} = @
-		arr[4] += arr[0] * v0 + arr[2] * v1;
-		arr[5] += arr[1] * v0 + arr[3] * v1;
-		@
-
-	multiply: (b) ->
-		{arr} = @
-		bArr = b.arr
-		[a0, a1, a2, a3, a4, a5] = arr
-		[b0, b1, b2, b3, b4, b5] = bArr
-
-		arr[0] = a0 * b0 + a2 * b1
-		arr[1] = a1 * b0 + a3 * b1
-		arr[2] = a0 * b2 + a2 * b3
-		arr[3] = a1 * b2 + a3 * b3
-		arr[4] = a0 * b4 + a2 * b5 + a4
-		arr[5] = a1 * b4 + a3 * b5 + a5
-		@
-
 unless window.isFake
-	SuperDisplayObject = PIXI.DisplayObject
-	PIXI.DisplayObject = ->
-		SuperDisplayObject.call @
-		@matrix = new Matrix2d
-	utils.merge PIXI.DisplayObject, SuperDisplayObject
+	PI_2 = Math.PI * 2
 
-	PIXI.DisplayObject:: = SuperDisplayObject::
-
-	PIXI.DisplayObject.prototype.updateTransform = ->
-		{matrix} = @
-
-		# if @rotation isnt @rotationCache
-		# 	@rotationCache = @rotation
-		# 	@_sr = Math.sin @rotation
-		# 	@_cr = Math.cos @rotation
-
-		matrix.identity()
-
-		# multiply by parent
-		matrix.multiply @parent.matrix
-
-		# translate
-		matrix.translate @position.x, @position.y
+	PIXI.DisplayObject::updateTransform = ->
+		pt = @parent.worldTransform
+		wt = @worldTransform
+		data = @_data
 
 		# size
-		matrix.scale @scale.x, @scale.y
+		a = @scale.x
+		d = @scale.y
 
-		# translate to origin
-		width = @width / @scale.x
-		height = @height / @scale.y
-		matrix.translate width/2, height/2
+		if data isnt undefined
+			# translate to origin
+			originX = data.width / a / 2
+			originY = data.height / d / 2
+			tx = data.x + a * originX
+			ty = data.y + d * originY
 
-		# scale
-		matrix.scale @sizeScale, @sizeScale
+			# scale
+			a *= data.scale
+			d *= data.scale
 
-		# rotate
-		matrix.rotate @rotation
+			# rotation
+			if data.rotation % PI_2
+				if @rotation isnt @rotationCache
+					@rotationCache = @rotation
+					@_sr = Math.sin @rotation
+					@_cr = Math.cos @rotation
 
-		# translate to position
-		matrix.translate -width/2, -height/2
+				# rotate
+				ac = a
+				dc = d
 
-		# set matrix to pixijs format
-		worldTransform = @worldTransform
+				a = ac * @_cr
+				b = dc * @_sr
+				c = ac * -@_sr
+				d = dc * @_cr
 
-		worldTransform.a = matrix.arr[0]
-		worldTransform.b = matrix.arr[1]
+				# translate to position
+				tx += a * -originX + c * -originY
+				ty += b * -originX + d * -originY
 
-		worldTransform.c = matrix.arr[2]
-		worldTransform.d = matrix.arr[3]
+				# multiply by parent
+				wt.a = a * pt.a + b * pt.c
+				wt.b = a * pt.b + b * pt.d
+				wt.c = c * pt.a + d * pt.c
+				wt.d = c * pt.b + d * pt.d
+				wt.tx = tx * pt.a + ty * pt.c + pt.tx
+				wt.ty = tx * pt.b + ty * pt.d + pt.ty
+			else
+				# translate to position
+				tx += a * -originX
+				ty += d * -originY
 
-		worldTransform.tx = matrix.arr[4]
-		worldTransform.ty = matrix.arr[5]
+				# multiply by parent
+				wt.a = a * pt.a
+				wt.b = a * pt.b
+				wt.c = d * pt.c
+				wt.d = d * pt.d
+				wt.tx = tx * pt.a + ty * pt.c + pt.tx
+				wt.ty = tx * pt.b + ty * pt.d + pt.ty
 
-		# calculate alpha
-		@worldAlpha = @alpha * @parent.worldAlpha
+			# calculate alpha
+			@worldAlpha = @alpha * @parent.worldAlpha
+		else
+			# multiply by parent
+			wt.a = pt.a * a
+			wt.b = pt.b * a
+			wt.c = pt.c * d
+			wt.d = pt.d * d
+			wt.tx = pt.tx
+			wt.ty = pt.ty
 
+			# calculate alpha
+			@worldAlpha = @parent.worldAlpha
 
 SHEET = "
 body {
@@ -148,12 +108,6 @@ div, span, canvas, img {
 unless window.isFake
 	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
 	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight, null, false, true
-
-	# tex = PIXI.Texture.fromImage 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="510.15494480606117 680.999968662737 66.84503476481814 81.30406151133161" width="66.84503476481814" height="81.30406151133161" ><g><path fill="#0DFF7E" d="M556.727,729.177l5.682-3.28v-34.024L543.576,681l-18.828,10.873v34.024l5.68,3.28l-20.273,11.706v21.421H577v-21.421L556.727,729.177z M528.748,696.65l12.654,7.306l4.025-2.294l-14.818-8.555l4.721-2.726l14.848,8.574l4.025-2.294l-14.873-8.589l4.246-2.452l14.832,8.563v29.405l-14.832,8.562l-14.828-8.562V696.65z M573,758.304h-10.234v-8.049h-4v8.049h-30.375v-8.049h-4v8.049h-10.236v-15.111l20.273-11.706l9.148,5.282l9.148-5.282L573,743.192V758.304z"></path><path fill="#0DFF7E" d="M553.881,717.505l-3.09-2.54c-0.988,1.203-4.215,4.326-7.215,4.326c-2.973,0-6.215-3.125-7.211-4.327l-3.09,2.541c0.195,0.236,4.822,5.786,10.301,5.786C549.061,723.292,553.688,717.742,553.881,717.505z"></path></g></svg>'
-	# emptyTexture = PIXI.Texture.fromImage 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2NkYGD4DwABCQEBtxmN7wAAAABJRU5ErkJggg=='
-	# elem = new PIXI.Sprite emptyTexture
-	# elem.setTexture tex
-	# stage.addChild elem
 
 window.addEventListener 'resize', ->
 	renderer.resize innerWidth, innerHeight
