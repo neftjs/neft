@@ -136,18 +136,26 @@ SIGNALS_ARGS =
 	'pointerReleased': mouseCoordsArgs
 	'pointerMove': mouseCoordsArgs
 
-HOT_MAX_TIME = 120
-HOT_MAX_ACTIONS = 100
+HOT_MAX_TIME = 50
+HOT_MAX_ACTIONS = 5
 
 module.exports = (impl) ->
+	# TODO: use TextEncoder & TextDecoder ?
 	updateTransforms = (item) ->
 		transform = ''
+		data = item._data
+
+		# position
 		if item._impl.isHot
-			transform += "translate3d(#{item.x}px, #{item.y}px, 0) "
-		if item.rotation
-			transform += "rotate(#{rad2deg(item.rotation)}deg) "
-		if item.scale isnt 1
-			transform += "scale(#{item.scale}) "
+			transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
+
+		# rotation
+		if data.rotation
+			transform += "rotate(#{rad2deg(data.rotation)}deg) "
+
+		# scale
+		if data.scale isnt 1
+			transform += "scale(#{data.scale}) "
 
 		item._impl.elem.style[transformProp] = transform
 

@@ -71,7 +71,7 @@ module.exports = (impl) ->
 	create: (item) ->
 		Item.create item
 		this._createTextElement item
-		item._impl.elem.appendChild textElement
+		item._impl.elem.appendChild item._impl.textElement
 
 	setText: (val) ->
 		@_impl.textElement.innerHTML = val
