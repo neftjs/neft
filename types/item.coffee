@@ -255,12 +255,16 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 	utils.defProp @::, 'margin', 'e', ->
 		utils.defProp @, 'margin', 'e', val = new Margin(@)
 		val
-	, null
+	, (val) ->
+		expect(val).toBe.simpleObject()
+		utils.merge @margin, val
 
 	utils.defProp @::, 'anchors', 'e', ->
 		utils.defProp @, 'anchors', 'e', val = new Anchors(@)
 		val
-	, null
+	, (val) ->
+		expect(val).toBe.simpleObject()
+		utils.merge @anchors, val
 
 	utils.defProp @::, 'animations', 'e', ->
 		utils.defProp @, 'animations', 'e', val = new Animations(@)
