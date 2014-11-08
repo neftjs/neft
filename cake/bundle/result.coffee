@@ -34,8 +34,15 @@ fileScope = ->
 	# list of modules with empty objects
 	modules = '{{declarations}}';
 
-	# standard polyfills
+	# global object
 	setImmediate = setTimeout
+	global = Object.create null,
+		setImmediate:
+			enumerable: true
+			get: -> setImmediate
+			set: (val) -> setImmediate = val
+
+	# standard polyfills
 	console.assert = console.assert.bind console
 
 	# used as `require`

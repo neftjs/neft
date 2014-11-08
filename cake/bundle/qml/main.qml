@@ -4,7 +4,7 @@ import "./bootstrap.js" as Bootstrap
 
 Item {
 	id: stylesWindow
-	readonly property var items: Object({})
+	readonly property var items: Object([])
 	width: 900
 	height: 700
 

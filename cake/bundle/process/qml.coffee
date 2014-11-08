@@ -25,13 +25,16 @@ global.Qt =
 		onExited: SIGNAL
 		onPositionChanged: SIGNAL
 		onWheel: SIGNAL
+		createObject: -> global.Qt.createQmlObject()
 	binding: ->
 	rgba: ->
 	hsla: ->
 global.stylesBody =
 	children: []
 global.stylesWindow =
-	items: {}
+	items: []
+	width: 900
+	height: 600
 	widthChanged: SIGNAL
 	heightChanged: SIGNAL
 global.qmlUtils =

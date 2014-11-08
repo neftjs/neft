@@ -68,6 +68,7 @@ build = (type, opts, callback) ->
 
 			# remove `expect`s
 			cleaner = groundskeeper
+				console: true
 				namespace: ['expect']
 				replace: 'true'
 			cleaner.write src
@@ -128,12 +129,16 @@ compileStylesTask = task 'compile:styles', 'Compile styles into json format', ->
 
 	compiler = require './cake/styles'
 
+	STYLES_EXT_FILE =
+		'.coffee': true
+		'.nml': true
+
 	builder = new LinksBuilder
 		input: './styles'
 		output: STYLES_OUT
 		ext: '.coffee'
 		onFile: (file) ->
-			path.extname(file.filepath) is '.coffee'
+			STYLES_EXT_FILE[path.extname(file.filepath)]
 
 	builder.cleanOutput()
 	builder.findFiles()
