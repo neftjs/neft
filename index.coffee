@@ -1,5 +1,6 @@
 'use strict'
 
+utils = require 'utils'
 Impl = require './impl'
 
 itemUtils = require('./utils/item') exports, Impl
@@ -16,7 +17,8 @@ exports.Animation = require('./types/animation') exports, Impl
 exports.PropertyAnimation = require('./types/animation/types/property') exports, Impl
 exports.NumberAnimation = require('./types/animation/types/property/types/number') exports, Impl
 
-exports.window = new exports.Item()
-Impl.setWindow exports.window
+utils.defProp exports, 'window', 'c', null, (val) ->
+	utils.defProp exports, 'window', 'e', val
+	Impl.setWindow val
 
-Object.freeze exports
+Object.preventExtensions exports
