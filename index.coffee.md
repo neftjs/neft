@@ -1,0 +1,385 @@
+List
+====
+
+Helper made to extends standard Javascript Array functionalities.
+
+	'use strict'
+
+	utils = require 'utils'
+	expect = require 'expect'
+	signal = require 'signal'
+
+*List* List([*Array* data|*Any* data...])
+-----------------------------------------
+
+Creates new *list* based on the *given* elements.
+
+### Example
+```
+list = new List [1, 2]
+
+console.log list instanceof List
+// true
+```
+
+### Arguments notation
+
+It's allowed to pass elements as an arguments.
+
+```
+list = new List 1, 2
+```
+
+### *new* keyword
+
+Using *new* keyword is not required.
+
+```
+list = List [1, 2]
+```
+
+	module.exports = class List
+
+		@__name__ = 'List'
+		@__path__ = 'List'
+
+		constructor: ->
+
+			arr = arguments[0]
+			if arguments.length > 1 or not Array.isArray arr
+				arr = []
+				arr[i] = arg for arg, i in arguments
+			
+			unless @ instanceof List
+				return new List arr
+
+			# properties
+			utils.defProp @, '_data', 'e', arr
+
+List::changed(*Integer* index, *Any* oldValue)
+----------------------------------------------
+
+**Signal** called on each element value change.
+
+Use ***onChanged*** handler to listen on signals.
+
+		signal.createLazy @::, 'changed'
+
+List::inserted(*Integer* index, *Any* value)
+--------------------------------------------
+
+**Signal** called on each element insert.
+
+Use ***onInserted*** handler to listen on signals.
+
+		signal.createLazy @::, 'inserted'
+
+List::popped(*Integer* index, *Any* oldValue)
+---------------------------------------------
+
+**Signal** called on each element pop.
+
+Use ***onPopped*** handler to listen on signals.
+
+		signal.createLazy @::, 'popped'
+
+*Integer* List::length
+----------------------
+
+Number of elements in a list.
+
+This property is **read-only**.
+
+### Example
+
+list = new List 'a', 'b'
+
+console.log list.length
+// 2
+
+		utils.defProp @::, 'length', 'ce', ->
+			@_data.length
+		, null
+
+*Any* List::get(*Integer* index)
+--------------------------------
+
+Returns **value** of the element stored at given *index*.
+
+For unknown elements, `undefined` is returned.
+
+### Example
+```
+list = new List 'a', 'b'
+
+console.log list.get 0
+// a
+
+console.log list.get 1
+// b
+
+console.log list.get 2
+// undefined
+```
+
+		get: (i) ->
+			expect(i).not().toBe.lessThan 0
+
+			@_data[i]
+
+*Any* List::set(*Integer* index, *Any* value)
+---------------------------------------------
+
+Changes element *value*.
+
+Element at given *index* must be stored in a list.
+
+`List::changed()` **signal** is called with the given *index* and overriden element *value*.
+
+Given *value* is returned as a **result**.
+
+### Example
+```
+types = new List 'fantasy', 'Thriller'
+
+types.onChanged.connect (i, oldVal) ->
+  console.log "Element #{oldVal} changed to #{@get i}"
+
+types.set 0, 'Fantasy'
+// Element fantasy changed to Fantasy
+
+types.set 0, 'Fantasy'
+// nothing changed ...
+```
+
+		set: (i, val) ->
+			expect(i).not().toBe.lessThan 0
+			expect(i).toBe.lessThan @length
+			expect(val).not().toBe undefined
+
+			oldVal = @_data[i]
+			if oldVal is val
+				return val
+
+			@_data[i] = val
+
+			# signal
+			@changed? i, oldVal
+
+			val
+
+*Array* List::items()
+---------------------
+
+Returns array of all the elements stored in a list.
+
+Always the same instance is returned, so don't change this array manually.
+Use `utils.clone()` otherwise.
+
+### Example
+```
+list = new List 1, 2
+
+console.log list.items()
+// [1, 2]
+
+console.log Array.isArray list.items()
+// true
+```
+
+### Iterating over a list
+```
+list = new List 'a', 'b'
+for element in list.items()
+	console.log element
+// a
+// b
+```
+
+		items: ->
+			@_data
+
+*Any* List::append(*Any* value)
+-------------------------------
+
+Append new element at the end of a list.
+
+`List::inserted()` **signal** is called with the element *index* and given *value*.
+
+*value* can't be a `undefined`, because this value is reserved only for unknown elements.
+
+### Example
+```
+fridge = new List 'apple', 'milk'
+
+fridge.onInserted.connect (i, val) ->
+  console.log "#{val} appended!"
+
+fridge.append 'cheese'
+// cheese appended!
+
+console.log fridge.items()
+// apple, milk, cheese
+```
+
+		append: (val) ->
+			expect(val).not().toBe undefined
+
+			@_data.push val
+
+			# signal
+			@inserted? @length - 1, val
+
+			val
+
+*Any* List::insert(*Integer* index, *Any* value)
+------------------------------------------------
+
+Inserts new element at given position.
+
+Added value is returned.
+
+`List::inserted()` **signal** is called with parameters passed to this function.
+
+### Example
+```
+list = new List 'a', 'b'
+
+list.onInserted.connect (i, val) ->
+  console.log "New element #{val} inserted at index #{i}"
+
+list.insert 'c'
+// New element c inserted at index 2
+```
+
+		insert: (i, val) ->
+			expect(i).not().toBe.lessThan 0
+			expect(i).toBe.lessThan @length
+			expect(val).not().toBe undefined
+
+			@_data.splice i, 0, val
+
+			# signal
+			@inserted? i, val
+
+			val
+
+*Any* List::remove(*Any* value)
+-------------------------------
+
+Removes given *value* from a list.
+
+`List::popped()` **signal** is called with the popped element *index* as a parameter.
+
+Given *value* is returned.
+
+### Example
+```
+list = new List 'a', 'b'
+
+console.log(list.get(1)) // b
+list.remove 'b'
+console.log(list.get(1)) // undefined
+console.log(list.items()) // ['a']
+```
+
+		remove: (val) ->
+			expect().some(@_data).toBe val
+
+			i = @index val
+			if i isnt -1
+				@pop i
+
+			val
+
+*Any* List::pop([*Integer* index])
+----------------------------------
+
+Removes element at given *index*, or the last element by default.
+
+Given *index* must exists in the list.
+
+`List::popped()` **signal** is called with the popped element *index* and it's *value*.
+
+Removed element is returned.
+
+### Example
+```
+list = new List 'a', 'b'
+
+console.log(list.get(1)) // b
+list.pop(1)
+console.log(list.get(1)) // undefined
+console.log(list.items()) // ['a']
+```
+
+		pop: (i) ->
+			if i isnt undefined
+				expect(i).not().toBe.lessThan 0
+				expect(i).toBe.lessThan @length
+
+			i ?= @length - 1
+			oldVal = @_data[i]
+
+			@_data.splice i, 1
+
+			# signal
+			@popped? i, oldVal
+
+			oldVal
+
+List::clear()
+-------------
+
+Removes all elements stored in a list.
+
+Notice that this method will call `List::popped()` **signal** on each element.
+
+### Example
+```
+list = new List 'a', 'b'
+
+list.onPopped.connect (i, oldVal) ->
+  console.log "Element #{oldVal} popped!"
+
+console.log list.items()
+// ['a', 'b']
+
+list.clear()
+// Element b popped!
+// Element a popped!
+
+console.log list.items()
+// []
+```
+
+		clear: ->
+			while @_data.length 
+				@pop()
+
+			null
+
+*Integer* List::index(*Any* value)
+----------------------------------
+
+Returns index of the given value in a list.
+
+Given value can't be a `undefined`, becuase it's used for unknown elements.
+
+If no value exists in this list `-1` is returned.
+
+### Example
+```
+list = new List 'a', 'b'
+
+console.log list.index 'b'
+// 1
+
+console.log list.index 'c'
+// -1
+```
+
+		index: (val) ->
+			expect(val).not().toBe undefined
+
+			@_data.indexOf val
