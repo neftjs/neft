@@ -1,6 +1,9 @@
 Signal
 ======
 
+Signals are used as standard `events` but brings new features and fix some issues, which
+standard events based on the strings have.
+
 	'use strict'
 
 	utils = require 'utils'
@@ -42,7 +45,8 @@ In pratice it adds *on* prefix and capitalize the signal name.
 
 ### Example
 
-signal.getHandlerName 'xChanged' // onXChanged
+signal.getHandlerName 'xChanged'
+// onXChanged
 
 	exports.getHandlerName = do ->
 		cache = {}
@@ -62,9 +66,14 @@ In pratice it returns true if the *name* is prefixed by *on*.
 
 ### Example
 
-signal.isHandlerName 'onXChanged' // true
-signal.isHandlerName 'xChanged' // false
-signal.isHandlerName 'onxChanged' // false (because x is lowercase)
+signal.isHandlerName 'onXChanged'
+// true
+
+signal.isHandlerName 'xChanged'
+// false
+
+signal.isHandlerName 'onxChanged'
+// false (because x is lowercase)
 
 	exports.isHandlerName = (name) ->
 		expect(name).toBe.string()
@@ -83,9 +92,10 @@ obj = {}
 signal.create obj, 'xChanged'
 
 obj.onXChanged.connect ->
-	console.log arguments
+  console.log arguments
 
-obj.xChanged(1, 2) // 1, 2
+obj.xChanged 1, 2
+// [1, 2]
 
 	exports.create = (obj, name) ->
 		expect(obj).not().toBe.primitive()
@@ -107,10 +117,10 @@ It can be also used to create signals in the prototypes.
 ### Example
 
 class Dog
-	handler = signal.createLazy @::, 'ageChanged'
+  handler = signal.createLazy @::, 'ageChanged'
 
-	handler.onInitialized (ctx, name) ->
-		console.log "Signal #{name} initialized"
+  handler.onInitialized (ctx, name) ->
+    console.log "Signal #{name} initialized"
 
 myDog = new Dog
 
@@ -119,8 +129,11 @@ console.log(Object.keys(myDog)) // []
 myDog.onAgeChanged.connect ->
 // Signal ageChanged initialized
 
-console.log(Object.keys(myDog)) // ['ageChanged']
-console.log(Object.keys(Object.getPrototypeOf(myDog))) // ['onAgeChanged']
+console.log Object.keys(myDog)
+// ['ageChanged']
+
+console.log Object.keys(Object.getPrototypeOf(myDog))
+// ['onAgeChanged']
 
 	exports.createLazy = (obj, name) ->
 		expect(obj).not().toBe.primitive()
@@ -153,7 +166,8 @@ Signal function is used to call all handler listeners.
 obj = {}
 signal.create obj, 'changed'
 
-obj.changed() // call all connected listeners
+obj.changed()
+// call all connected listeners ...
 
 	createSignalFunction = (obj) ->
 		signal = ->
@@ -196,10 +210,10 @@ obj = {}
 signal.create obj, 'pressed'
 
 obj.onPressed ->
-	console.log 'listener 1'
+  console.log 'listener 1'
 
 obj.onPressed.connect ->
-	console.log 'listener 2'
+  console.log 'listener 2'
 
 obj.pressed()
 // listener 1
@@ -244,7 +258,7 @@ obj = {}
 signal.create obj, 'pressed'
 
 listener = ->
-	console.log 'listener called!'
+  console.log 'listener called!'
 
 obj.onPressed.connect listener
 obj.onPressed.disconnect listener
