@@ -19,8 +19,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Rendere
 
 		`//<development>`
 		@onChildrenChanged ->
-			if @contentItem
-				expect().some(@children).toBe @contentItem
+			{contentItem} = @
+			if contentItem
+				expect().some(@children).toBe contentItem
 		`//</development>`
 
 	itemUtils.defineProperty @::, 'contentItem', null, (_super) -> (val) ->

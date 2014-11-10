@@ -57,6 +57,7 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			_super.call @, val
 			Impl.setGridRows.call @, val
 
+		Renderer.State.supportObjectProperty 'spacing'
 		utils.defProp @::, 'spacing', 'e', ->
 			utils.defProp @, 'spacing', 'e', val = new Spacing(@)
 			val
@@ -64,6 +65,7 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			{spacing} = @
 
 			if utils.isObject val
+				utils.merge spacing, Spacing.DATA
 				utils.merge spacing, val
 			else
 				spacing.column = val

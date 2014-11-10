@@ -4,6 +4,9 @@ utils = require 'utils'
 Impl = require './impl'
 
 itemUtils = require('./utils/item') exports, Impl
+
+exports.State = require('./types/state') exports, Impl, itemUtils
+
 exports.Item = require('./types/item') exports, Impl, itemUtils
 exports.Image = require('./types/item/types/image') exports, Impl, itemUtils
 exports.Text = require('./types/item/types/text') exports, Impl, itemUtils

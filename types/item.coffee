@@ -31,7 +31,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		rotation: 0
 		scale: 1
 		opacity: 1
-		state: ''
+		state: null
 		states: null
 		anchors: Anchors.DATA
 		margin: Margin.DATA
@@ -86,21 +86,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 				if typeof val is 'function'
 					@[key].connect val
 
-		# save opts object as a default state
-		if opts?
-			delete opts.state
-			delete opts.states
-			delete opts.animations
-
-			for key, val of opts
-				if typeof val is 'function'
-					delete opts[key]
-
-			if @states.hasOwnProperty ''
-				utils.mergeDeep @states[''], opts
-			else
-				@states[''] = opts
-
 		# append children
 		if children
 			for child in children
@@ -124,7 +109,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		lazySignal = signal.createLazy @::, signalName
 		lazySignal.onInitialized onLazySignalInitialized
 
-	Dict.defineProperty @::, 'children'
+	signal.createLazy @::, Dict.getPropertySignalName('children')
 	childrenSetter = utils.lookupSetter @::, 'children'
 
 	ChildrenObject = {}
@@ -146,13 +131,14 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		if old = @parent
 			index = Array::indexOf.call old.children, @
 			Array::splice.call old.children, index, 1
+			old.childrenChanged? old.children
 			childrenSetter.call old, old.children
 			old.children.popped? index, @
 
 		if val?
 			expect(val).toBe.any Item
 			length = Array::push.call val.children, @
-			childrenSetter.call val, val.children
+			val.childrenChanged? val.children
 			val.children.inserted? length - 1, @
 
 		_super.call @, val
@@ -208,64 +194,29 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		_super.call @, val
 		Impl.setItemOpacity.call @, val
 
-	itemUtils.defineProperty @::, 'state', null, (_super) -> (val) ->
-		expect(val).toBe.string()
-		expect().some().keys(@states).toBe val
-
-		{DATA} = @.constructor
-		defaultState = @states['']
-		oldState = @states[@state]
-		newState = @states[val]
-
-		# break on no change
-		if oldState is newState
-			return
-
-		# clear
-		if oldState isnt defaultState
-			for key, optVal of oldState
-				switch optVal? and not isArray(optVal) and typeof optVal
-					when 'function'
-						@[key].disconnect optVal
-					when 'object'
-						utils.mergeDeep @[key], DATA[key]
-
-						if defaultState.hasOwnProperty key
-							utils.mergeDeep @[key], defaultState[key]
-					else
-						unless newState.hasOwnProperty key
-							@[key] = defaultState[key] or DATA[key]
-
-		# set new state
-		for key, optVal of newState
-			if typeof optVal is 'function'
-					@[key].connect optVal
-			else
-				itemUtils.setProperty @, key, optVal
-
-		_super.call @, val
-
-	utils.defProp @::, 'states', 'e', ->
-		utils.defProp @, 'states', 'e', val = {}
-		val
-	, null
+	require('./item/state') Renderer, Impl, @, itemUtils
 
 	signal.createLazy @::, Dict.getPropertySignalName 'margin'
 
+	Renderer.State.supportObjectProperty 'margin'
 	utils.defProp @::, 'margin', 'e', ->
 		utils.defProp @, 'margin', 'e', val = new Margin(@)
 		val
 	, (val) ->
 		expect(val).toBe.simpleObject()
+		utils.merge @margin, Margin.DATA
 		utils.merge @margin, val
 
+	Renderer.State.supportObjectProperty 'anchors'
 	utils.defProp @::, 'anchors', 'e', ->
 		utils.defProp @, 'anchors', 'e', val = new Anchors(@)
 		val
 	, (val) ->
 		expect(val).toBe.simpleObject()
+		utils.merge @anchors, Anchors.DATA
 		utils.merge @anchors, val
 
+	Renderer.State.supportObjectProperty 'animations'
 	utils.defProp @::, 'animations', 'e', ->
 		utils.defProp @, 'animations', 'e', val = new Animations(@)
 		val

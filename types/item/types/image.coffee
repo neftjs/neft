@@ -12,6 +12,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Ite
 		source: ''
 
 	itemUtils.defineProperty @::, 'source', null, (_super) -> (val) ->
-		expect(val).toBe.truthy().string()
+		expect(val).toBe.string()
 		_super.call @, val
 		Impl.setImageSource.call @, val

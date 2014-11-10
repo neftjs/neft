@@ -50,9 +50,11 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			_super.call @, val
 			Impl.setRectangleRadius.call @, val
 
+		Renderer.State.supportObjectProperty 'border'
 		utils.defProp @::, 'border', 'e', ->
 			utils.defProp @, 'border', 'e', val = new Border(@)
 			val
 		, (val) ->
 			expect(val).toBe.simpleObject()
+			utils.merge @border, Border.DATA
 			utils.merge @border, val

@@ -72,9 +72,11 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			_super.call @, val
 			Impl.setTextLineHeight.call @, val
 
+		Renderer.State.supportObjectProperty 'font'
 		utils.defProp @::, 'font', 'e', ->
 			utils.defProp @, 'font', 'e', val = new Font(@)
 			val
 		, (val) ->
 			expect(val).toBe.simpleObject()
+			utils.merge @font, Font.DATA
 			utils.merge @font, val
