@@ -52,6 +52,14 @@ exports.compile = (file) ->
 	# data to the function
 	code += data.replace ///^///gm, '	'
 
+	# support using scope as element
+	code += "\n	if arguments.length\n" +
+	        "		mainItem.constructor.apply mainItem, arguments\n"
+
+	# return data
+	code += "\n	mainItem: mainItem\n" +
+	        "	items: items\n"
+
 	file.name = scopeItemName
 	file.data = code
 
@@ -87,10 +95,7 @@ exports.finish = (file) ->
 			base = base.slice 3
 			base ||= './'
 			links += "require '#{base}#{path}'\n"
-			code += "	#{localName} = ->\n" +
-			        "		item = require('#{base}#{path}')()\n" +
-			        "		item.constructor.apply item, arguments\n" +
-			        "		item\n"
+			code += "	#{localName} = require('#{base}#{path}')\n"
 	code += "\n"
 
 	data = data.replace '{{modulesLinks}}', links

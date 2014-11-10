@@ -1,11 +1,13 @@
 'use strict'
 
 [utils] = ['utils'].map require
-[Schema, Routing, View] = ['schema', 'routing', 'view'].map require
+[Schema, Routing, View, Renderer] = ['schema', 'routing', 'view', 'renderer'].map require
 [Db, _, _, _] = ['db', 'db-implementation', 'db-schema', 'db-addons'].map require
 
-# TODO: use view-styles only for a client bundle
-# if utils.isClient
+# build polyfills
+# TODO: move it into separated module
+if utils.isBrowser
+	global.setImmediate = require 'emitter/node_modules/immediate'
 
 Db = Db.Impl()
 
@@ -25,10 +27,10 @@ module.exports = (opts={}) ->
 		config:
 			name: pkg.title
 		routing: new Routing
-			protocol: pkg.config.protocol
-			port: pkg.config.port
-			host: pkg.config.host
-			language: pkg.config.language
+			protocol: config.protocol
+			port: config.port
+			host: config.host
+			language: config.language
 		Route: null
 		Template: null
 		View: null
@@ -42,6 +44,9 @@ module.exports = (opts={}) ->
 	App.Route = require('./route') App
 	App.Template = require('./template') App
 	App.View = require('./view') App
+
+	# set styles window item
+	Renderer.window = opts.styles.window?().mainItem or new Renderer.Item
 
 	# load styles
 	require('styles') opts.styles

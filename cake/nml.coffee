@@ -2,41 +2,51 @@
 
 utils = require 'utils'
 
+Renderer = require 'renderer'
+
 {assert} = console
 
+###
+TODO:
+border:
+	color: BINDING
+
+###
+
 TEST_FILE = """
-Item {
-	id: main
-	x: 10
-	property empty
-	property name: "String, 123",
-	signal pressed
-	obj: {a: 2, b: 3}
-	onReady: ->
-		a = 2
-	onCompleted: -> @state = 2
+Image {
+	property type: ''
+	property color: 'green'
+	property sources: {}
 
-	states.first: State {
-		abc: 123
-		transitions: [
-			Transition {
-				properties: ['abc']
-			}
-		]
-	}
+	width: -window.width
+	state: [this.type, this.type + '_' + this.color]
+	source: this.sources[this.color]
+	anchors.left: parent.left
 
-	Image {
-		id: img1
-		name: this.name + 'a' + parent.name
-		anchors: {
-			left: main.right
-			top: parent.top
+	onPointerEntered: ->
+		if @state = 'hover'
+			alert 1
+	onPointerExited: ->
+		@state = ''
+
+	Text {
+		font: {
+			family: "AvenirLTStd-Light"
+			pixelSize: 36
+		}
+		text: parent.text
+
+		onPointerClicked: ->
+
+		state: parent.color
+		states.white: State {
+			color: 'white'
+		}
+		states.black: State {
+			color: '#1A1A1A'
 		}
 	}
-}
-
-Item2 {
-	a: 1
 }
 """
 
@@ -50,16 +60,19 @@ ATTRIBUTE = ///([^:]*?):(.*)///
 PROPERTY = ///property\s(.*)///
 SIGNAL = ///signal\s(.*)///
 ANCHOR = ///([a-zA-Z]+):\s*([a-zA-Z0-9_-]+)(?:\.([a-zA-Z]+))?///
-BINDING = ///([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)///
+BINDING = ///([a-zA-Z_][a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)///
 FUNCTION = ///^(\s+)([a-zA-Z0-9_-]+):\s*->$///m
-LINE_COMMENT = ///\#(.*)$///m
-MULTI_LINE_COMMENT = ///\#\#\#(.|\n)*?\#\#\#///m
+LINE_COMMENT = ///^\s*\#(.*)$///m
+MULTI_LINE_COMMENT = ///^\s*\#\#\#(.|\n)*?\#\#\#///m
+CUSTOM_ID = ///CUSTOM_UID_([a-zA-Z0-9]+)///
 
 PROPERTY_G = new RegExp PROPERTY.source, 'g'
 SIGNAL_G = new RegExp SIGNAL.source, 'g'
 BINDING_G = new RegExp BINDING.source, 'g'
-LINE_COMMENT_G = new RegExp LINE_COMMENT.source, 'g'
-MULTI_LINE_COMMENT_G = new RegExp MULTI_LINE_COMMENT.source, 'g'
+LINE_COMMENT_G = new RegExp LINE_COMMENT.source, 'mg'
+MULTI_LINE_COMMENT_G = new RegExp MULTI_LINE_COMMENT.source, 'mg'
+FUNCTION_G = new RegExp FUNCTION.source, 'mg'
+CUSTOM_ID_G = new RegExp CUSTOM_ID.source, 'g'
 
 getScopeLen = (str, startIndex) ->
 	assert str[startIndex] is SCOPE_OPEN
@@ -68,7 +81,7 @@ getScopeLen = (str, startIndex) ->
 	innerStartIndex = startIndex
 	while true
 		end = str.indexOf SCOPE_CLOSE, end+1
-		assert end isnt -1
+		assert end isnt -1, str
 
 		innerStartIndex = str.indexOf(SCOPE_OPEN, innerStartIndex+1)
 		if innerStartIndex is -1 or innerStartIndex > end
@@ -135,20 +148,25 @@ clearScopeBody = (scope) ->
 	scope.body = body
 
 findFuncs = (scope) ->
-	scope.body = scope.body.replace FUNCTION, (str, tab, name, index) ->
-		lines = scope.body.slice(index+str.length).split '\n'
+	scope.body = scope.body.replace FUNCTION_G, (str, tab, name, index) ->
+		lines = scope.body.slice(index+str.length+1).split '\n'
 
 		lines = lines.filter (line) ->
 			!!line.trim()
 
+		tabLen = tab.match(///\t///g).length
+
 		for line, i in lines
-			unless ///\s///.test line[tab.length]
+			unless ///\s///.test line[tabLen]
 				lines.splice i, lines.length-i
 				break
 			else
-				lines[i] = line.trim()
+				lines[i] = line.slice tabLen+1
 		
-		scope.attributes[name] = "->\n	#{lines.join('	')}"
+		indentation = ''
+		for i in [0...tabLen]
+			indentation += '\t'
+		scope.attributes[name] = "->\n#{indentation}#{lines.join('\n' + indentation)}"
 
 		''
 
@@ -162,8 +180,8 @@ findAttributes = (scope) ->
 		line = lines[i]
 		if scopesCharsLen > 0
 			scope.attributes[lastName] += "\n#{line}"
-			scopesCharsLen += ///[{\[]///g.exec(line)?.length or 0
-			scopesCharsLen -= ///[}\]]///g.exec(line)?.length or 0
+			scopesCharsLen += line.match(///[{\[]///g)?.length or 0
+			scopesCharsLen -= line.match(///[}\]]///g)?.length or 0
 			lines.splice i, 1
 			n--
 			continue
@@ -197,9 +215,10 @@ findId = (scope) ->
 
 useIdInAttributes = (scope) ->
 	for name, val of scope.attributes
-		if scopeRef = scopes[val]
+		scope.attributes[name] = val.replace CUSTOM_ID_G, (id) ->
+			scopeRef = scopes[id]
 			scopeRef.isItem = false
-			scope.attributes[name] = scopeRef.id
+			scopeRef.id
 	null
 
 findProperties = (scope) ->
@@ -268,13 +287,14 @@ parseAnchors = (scope) ->
 
 parseBindings = do ->
 	isBinding = (val) ->
-		if val[0] is '['
+		if val[0] is '{'
 			return false
 
 		if val.indexOf('->') is 0
 			return false
 
-		unless utils.catchError eval, null, ["(function(){return (#{val});}).call(null)"]
+		try
+			eval "(function(){return (#{val});}).call(null)"
 			return false
 
 		unless BINDING.test val
@@ -292,7 +312,7 @@ parseBindings = do ->
 						ref = "['this', 'parent']"
 					else if ref is 'this'
 						ref = "'this'"
-					else if not ids.hasOwnProperty ref
+					else if ref isnt 'window' and not ids.hasOwnProperty ref
 						return str
 
 					binding.push val.slice lastIndex, index
@@ -305,10 +325,10 @@ parseBindings = do ->
 					!!elem.trim()
 				
 				for elem, i in binding
-					if elem[0] isnt '['
+					if elem[0] isnt '[' or elem[elem.length-1] isnt ']'
 						binding[i] = "'#{utils.addSlashes elem}'"
 
-				scope.attributes[name] = "[#{binding.join ', '}]"
+				scope.attributes[name] = "{binding: [#{binding.join ', '}]}"
 
 # STRINGIFY #
 
@@ -317,7 +337,10 @@ result = ''
 stringifyDeclarations = (scope) ->
 	return unless scope.type
 
-	result += "#{scope.id} = new #{scope.type}("
+	if Renderer[scope.type]?
+		result += "#{scope.id} = new #{scope.type}("
+	else
+		result += "#{scope.id} = #{scope.type}("
 
 	args = []
 	if scope.properties.length
@@ -327,7 +350,10 @@ stringifyDeclarations = (scope) ->
 	if args.length > 0
 		result += "{#{args.join ', '}}"
 
-	result += ')\n'
+	if Renderer[scope.type]?
+		result += ')\n'
+	else
+		result += ').mainItem\n'
 
 stringifyAttributes = (scope) ->
 	return unless scope.type
@@ -367,7 +393,18 @@ module.exports = (str) ->
 	result += '\n'
 	callRecursive main, stringifyTree
 
-	result += "\n#{main.children[0].id}"
+	# main item
+	result += "\nmainItem = #{main.children[0].id}\n"
+
+	# items
+	items = '{'
+	for id, scope of ids
+		items += "#{id}: #{id}, "
+	if items.length > 1
+		items = items.slice 0, -2
+	items += '}'
+
+	result += "items = #{items}\n"
 
 	# console.log JSON.stringify main, null, 4
 	result
