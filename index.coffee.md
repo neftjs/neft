@@ -1,13 +1,15 @@
 Dict
 ====
 
-Basics helper which has been made to extends functionalitites of the default JavasScript.
+Basics helper which has been made to extends functionalitites of the default JavaScript.
 
 It's similar to the Python Dict helper and was designed on it, but brings a little bit more.
 
 	'use strict'
 
-	[utils, expect, signal] = ['utils', 'expect', 'signal'].map require
+	utils = require 'utils'
+	expect = require 'expect'
+	signal = require 'signal'
 
 	module.exports = class Dict
 
@@ -24,7 +26,7 @@ It's similar to the Python Dict helper and was designed on it, but brings a litt
 
 Creates new *Dict* from the json.
 
-See *Dict::toJSON* to see how to stringify a *Dict* instance and use it here.
+See `Dict::toJSON` to see how to stringify a *Dict* instance and use it here.
 
 		@fromJSON = (json) ->
 			json = utils.tryFunc JSON.parse, JSON, [json], json
@@ -39,15 +41,18 @@ Returns name of the signal name, based on the property name.
 
 By default this function adds into the property name *Changed* word.
 
-Read more about signals on the *signal* module documentation and
-check methods on this class which call signals.
+Read more about signals in the *signal* module documentation and
+check methods in this class which calls signals.
 
 To create signal handler name based on the signal name, check `signal.getHandlerName()`.
 
 ### Example
 
-Dict.getPropertySignalName('name') // nameChanged
-signal.getHandlerName('nameChanged') // onNameChanged
+Dict.getPropertySignalName('name')
+// nameChanged
+
+signal.getHandlerName('nameChanged')
+// onNameChanged
 
 		@getPropertySignalName = do (cache = {}) -> (propName) ->
 			expect(propName).toBe.truthy().string()
@@ -63,10 +68,10 @@ Dict.defineProperty(*NotPrimitive* prototype, *String* propertyName)
 Define new *Dict* custom property on the given *prototype*.
 
 *Dict* properties are used for fast getting and setting properties in opposite to
-use *Dict::get()* and *Dict::set()* methods.
+use `Dict::get()` and `Dict::set()` methods.
 
 Additionally, each setter calls special signal
-which is determined by the *Dict.getPropertySignalName()*.
+which is determined by the `Dict.getPropertySignalName()`.
 
 All created signals are *lazy* (see more in the *signal* module documentation page), so
 it's can be easily used in the classes prototypes. Additionally it brings a little
@@ -76,20 +81,22 @@ on each property value change.
 ### Example
 
 class Dog extends Dict
-	constructor: ->
-		super
-			age: 4
+  constructor: ->
+    super
+      age: 4
 
-	Dict.defineProperty @::, 'age'
+  Dict.defineProperty @::, 'age'
 
 myDog = new Dog
 
-console.log(myDog.age) // 4
+console.log myDog.age
+// 4
 
 myDog.onAgeChanged.connect (oldVal) ->
-	console.log "Age has been changed from #{oldVal} to #{@age}"
+  console.log "Age has been changed from #{oldVal} to #{@age}"
 
-myDog.age++ // Age has been changed from 4 to 5
+myDog.age++
+// Age has been changed from 4 to 5
 
 		@defineProperty = do ->
 			createGetter = (propName) ->
@@ -126,7 +133,7 @@ myDog.age++ // Age has been changed from 4 to 5
 
 				null
 
-*new* Dict([*Object* data])
+*Dict* Dict([*Object* data])
 -------------------------
 
 Creates new *Dict* instance.
@@ -138,9 +145,10 @@ Using *new* keyword is not required.
 ### Example
 
 data = new Dict
-	name: 'xyz'
+  name: 'xyz'
 
-console.log(data.get 'name') // xyz
+console.log data.get 'name'
+// xyz
 
 		constructor: (obj={}) ->
 			expect(obj).toBe.object()
@@ -168,20 +176,23 @@ This value can't be changed manually.
 			@keys().length
 		, null
 
-*Signal* Dict::changed()
-------------------------
+Dict::changed(*String* key, *Any* oldValue)
+-------------------------------------------
 
-Lazy *signal* called on each property value change.
+Lazy **signal** called on each property value change.
+
+You can listen on this signal using the ***onChanged*** handler.
 
 ### Example
 
 user = new Dict
-	country: 'Germany'
+  country: 'Germany'
 
 user.onChanged.connect (key, oldVal) ->
-	console.log "User #{key} property changed from #{oldVal} to #{@get(key)}"
+  console.log "User #{key} property changed from #{oldVal} to #{@get(key)}"
 
-user.set 'country', 'US' // User country property changed from Germany to US
+user.set 'country', 'US'
+// User country property changed from Germany to US
 
 		signal.createLazy @::, 'changed'
 
@@ -195,36 +206,43 @@ Returns *undefined* only for unknown properties.
 ### Example
 
 bunny = new Dict
-	speedX: 5
-	speedY: 2
+  speedX: 5
+  speedY: 2
 
-console.log(bunny.get 'speedX') // 5
-console.log(bunny.get 'speedY') // 2
-console.log(bunny.get 'speedZ') // undefined
+console.log bunny.get 'speedX'
+// 5
+
+console.log bunny.get 'speedY'
+// 2
+
+console.log bunny.get 'speedZ'
+// undefined
 
 		get: (key) ->
 			expect(key).toBe.truthy().string()
 
 			@_data[key]
 
-Dict::set(*String* key, *Any* value)
-------------------------------------
+*Any* Dict::set(*String* key, *Any* value)
+------------------------------------------
 
-Change the property value on create a new property.
+Change the property value or create a new property.
 
-Calls `changed` signal if the value is different than before.
+Calls `Dict::changed()` **signal** if the value is different than before.
 This signal is called with two parameters *key* and *oldValue*.
 
-Passed *value* can't be a *undefined*, because it's used only for unknown properties.
+Passed *value* can't be a `undefined`, because it's used only for unknown properties.
+
+Given *value* is returned as a **result**.
 
 ### Example
 
 links = new Dict
-	facebook: 'https://facebook.com/neft.io'
-	twitter: 'https://twitter.com/neft_io'
+  facebook: 'https://facebook.com/neft.io'
+  twitter: 'https://twitter.com/neft_io'
 
 links.onChanged.connect (key, oldVal) ->
-	console.log "Social link for #{key} changed from #{oldVal} to #{@get(key)}"
+  console.log "Social link for #{key} changed from #{oldVal} to #{@get(key)}"
 
 links.set 'googlePlus', 'https://plus.google.com/+NeftIo-for-apps/'
 // Social link for googlePlus changed from undefined to https://...
@@ -248,14 +266,14 @@ links.set 'googlePlus', 'https://plus.google.com/+NeftIo-for-apps/'
 			# signal
 			@changed? key, oldVal
 
-			null
+			val
 
 Dict::pop(*String* key)
 -----------------------
 
 Remove exists property from the *Dict*.
 
-This method calls *Dict::changed()* signal.
+This method calls `Dict::changed()` **signal** with standard parameters.
 
 ### Example
 
@@ -264,10 +282,11 @@ member = new Dict
 data.set 'name', 'John'
 
 data.onChanged.connect (key, oldVal) ->
-	if @get(key) is undefined
-		console.log "#{key} property has been removed"
+  if @get(key) is undefined
+    console.log "#{key} property has been removed"
 
-data.pop('name') // name property has been rmeoved
+data.pop 'name'
+// name property has been rmeoved
 
 		pop: (key) ->
 			expect(key).toBe.truthy().string()
@@ -290,14 +309,16 @@ data.pop('name') // name property has been rmeoved
 Returns array of the existed properties names in the *Dict*.
 
 It always returns the same array, so don't modify it manually.
+Use `utils.clone()` otherwise.
 
 ### Example
 
 data = new Dict
-	x: 10
-	y: 30
+  x: 10
+  y: 30
 
-console.log(data.keys()) // ['x', 'y']
+console.log data.keys()
+// ['x', 'y']
 
 		keys: ->
 			if @_dirty & KEYS
@@ -319,14 +340,16 @@ console.log(data.keys()) // ['x', 'y']
 Returns array of the existed properties values in the *Dict*.
 
 It always returns the same array, so don't modify it manually.
+Use `utils.clone()` otherwise.
 
 ### Example
 
 data = new Dict
-	x: 10
-	y: 30
+  x: 10
+  y: 30
 
-console.log(data.values()) // [10, 30]
+console.log data.values()
+// [10, 30]
 
 		values: ->
 			if @_dirty & VALUES
@@ -348,14 +371,16 @@ console.log(data.values()) // [10, 30]
 Returns array of key-value pairs of all existed properties.
 
 It always returns the same arrays, so don't modify it manually.
+Use `utils.clone()` otherwise.
 
 ### Example
 
 data = new Dict
-	x: 10
-	y: 30
+  x: 10
+  y: 30
 
-console.log(data.items()) // [['x', 10], ['y', 30]]
+console.log data.items()
+// [['x', 10], ['y', 30]]
 
 		items: ->
 			if @_dirty & ITEMS
@@ -377,7 +402,7 @@ console.log(data.items()) // [['x', 10], ['y', 30]]
 
 Returns an object which can be stringified to JSON.
 
-Check *Dict.fromJSON* to reverse this operation.
+Check `Dict.fromJSON` to reverse this operation.
 
 		toJSON: ->
 			@_data
