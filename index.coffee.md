@@ -75,7 +75,7 @@ Merge second object into the first one deeply.
 		for key, value of obj when hasOwnProp.call obj, key
 			sourceValue = source[key]
 
-			if value and typeof value is 'object' and sourceValue and typeof sourceValue is 'object'
+			if value and typeof value is 'object' and not isArray(value) and sourceValue and typeof sourceValue is 'object' and not isArray(sourceValue)
 				mergeDeep sourceValue, value
 				continue
 
@@ -148,6 +148,8 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 
 		descCache = {}
 
+		isSafari = if navigator? then navigator.userAgent.indexOf('Safari') isnt -1 else false
+
 		(obj, prop, desc, getter, setter) ->
 
 			expect(obj).not().toBe.primitive()
@@ -167,6 +169,15 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 
 			# configure accessors
 			else
+				# HACK: safari bug
+				if isSafari
+					_getter = getter
+					getter = ->
+						if @hasOwnProperty(prop) and @ isnt obj
+							@[prop]
+						else
+							_getter.call @
+
 				cfg = accessorsCfg
 				cfg.get = getter or undefined
 				cfg.set = setter or undefined
