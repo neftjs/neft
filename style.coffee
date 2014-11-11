@@ -5,7 +5,8 @@ Renderer = require 'renderer'
 
 log = log.scope 'Styles'
 
-module.exports = (File, scopes) -> class Style
+module.exports = (File, data) -> class Style
+	{windowStyle, styles} = data
 
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
@@ -22,47 +23,31 @@ module.exports = (File, scopes) -> class Style
 		null
 
 	constructor: (opts) ->
-		@_parent = null
-
 		expect(opts).toBe.simpleObject()
 		expect(opts.self).toBe.any File
 		expect(opts.node).toBe.any File.Element
-		expect(opts.itemId).toBe.truthy().string()
+		expect(opts.id).toBe.truthy().string()
 		expect(opts.isRepeat).toBe.boolean()
+		expect(opts.isScope).toBe.boolean()
 		expect().defined(opts.parent).toBe.any Style
+		expect().defined(opts.scope).toBe.any File.StyleScope
 		expect().defined(opts.events).toBe.simpleObject()
 
 		utils.fill @, opts
 
 		@children = []
-		@isScope = @itemId[0].toUpperCase() is @itemId[0]
+		@parent?.children.push @
 
 		Object.seal @
 
 	self: null
 	node: null
-	itemId: ''
+	id: ''
 	children: null
 	events: null
-	isScope: false
+	parent: null
 	isRepeat: false
-
-	utils.defProp @::, 'parent', 'e', ->
-		@_parent
-	, (val) ->
-		if val?
-			expect(val).toBe.any Style
-
-		if @_parent is val
-			return
-
-		# remove from the old one
-		if @_parent
-			utils.remove @_parent.children, @
-
-		# add new one
-		if @_parent = val
-			val.children.push @
+	isScope: false
 
 	render: (parent=@parent) ->
 		unless @item
@@ -74,7 +59,7 @@ module.exports = (File, scopes) -> class Style
 		for child in @children
 			child.render()
 
-		if @item instanceof Renderer.Scope.Text
+		if @item instanceof Renderer.Text
 			@updateText()
 
 		@updateVisibility()
@@ -92,7 +77,7 @@ module.exports = (File, scopes) -> class Style
 		null
 
 	updateText: ->
-		expect(@item instanceof Renderer.Scope.Text)
+		expect(@item).toBe.any Renderer.Text
 
 		@item.text = @node.stringifyChildren()
 
@@ -100,40 +85,49 @@ module.exports = (File, scopes) -> class Style
 		@item.visible = @node.visible
 
 	clone: (original, self, scope) ->
-
 		clone = Object.create @
 
 		clone.clone = undefined
 		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
 
-		# break for abstract
-		return clone unless utils.isClient
+		# break for the abstract
+		unless utils.isClient
+			return clone
+
+		# get scope
+		if @isScope
+			scope = styles[@id]?()
+			unless scope
+				log.warn "Style file `#{@id}` can't be find. Operation aborted"
+				return clone
+			else
+				clone.item = scope.mainItem
+
+		unless scope
+			scope = windowStyle
+			unless scope
+				log.warn "Style item `#{@id}` doesn't have any style file and `Window` " +
+				         "is not defined. Operation aborted."
+				return clone
 
 		# get item
-		scope ?= Renderer
-		if @isScope
-			item = clone.item = scope.create scopes[@itemId]
-			clone.isAutoParent = true
-			scope = clone.item.scope
-		else
-			if item = clone.item = scope.items[@itemId]
-				if @isRepeat
-					clone.item = clone.item.cloneDeep()
+		if clone.item ?= scope.items[@id]
+			if @isRepeat
+				clone.item = clone.item.cloneDeep()
 
-				clone.isAutoParent = !clone.item.parent
-
-		unless item
-			log.error "Can't find `#{@itemId}` style item in the `#{scope.id}` scope"
-
-			# return if no style item found
+		unless clone.item
+			log.error "Can't find `#{@id}` style item"
 			return clone
+		else
+			clone.isAutoParent = !clone.item.parent
 
 		# clone children
 		children = clone.children = []
 		for child in @children
 			child = child.clone original, self, scope
 			child.parent = clone
+			children.push child
 
 		# attach events
 		if @events
@@ -149,7 +143,7 @@ module.exports = (File, scopes) -> class Style
 			if self.isRendered
 				clone.updateVisibility()
 
-		if item instanceof Renderer.Scope.Text
+		if clone.item instanceof Renderer.Text
 			listenRecursive clone.node, 'textChanged', ->
 				if self.isRendered
 					clone.updateText()

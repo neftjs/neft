@@ -18,7 +18,6 @@ findEvents = (node) ->
 	events
 
 module.exports = (File) -> (file) ->
-
 	{Style} = File
 	styles = file.styles = []
 
@@ -28,21 +27,21 @@ module.exports = (File) -> (file) ->
 			style = new Style
 				self: file
 				node: node
-				itemId: attr
+				id: attr
 				events: findEvents(node)
 				parent: parentStyle
 				isRepeat: !!data?.ids[attr]
+				isScope: ///^[A-Z]///.test attr
 
 			data?.ids[attr] = true
+
+			if style.isScope
+				data = ids: {}
 
 			unless parentStyle
 				styles.push style
 
 			parentStyle = style
-
-			if style.isScope
-				data =
-					ids: {}
 
 		for child in node.children
 			if child instanceof File.Element.Tag

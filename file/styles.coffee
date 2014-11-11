@@ -8,7 +8,7 @@
 
 log = log.scope 'Styles'
 
-module.exports = (File, scopes) ->
+module.exports = (File) ->
 
 	if utils.isNode
 		File.onParsed do ->
@@ -48,5 +48,3 @@ module.exports = (File, scopes) ->
 				cloned = clone.styles[i] = style.clone @, clone
 
 		clone
-
-	File.Style = require('../style') File, scopes

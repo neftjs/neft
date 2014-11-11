@@ -6,7 +6,9 @@ View = require 'view'
 
 expect(View).toBe.function()
 
-module.exports = (scopes) ->
-	require('./file/funcs') View, scopes
-	require('./file/styles') View, scopes
-	require('./file/render') View, scopes
+module.exports = (data) ->
+	require('./file/funcs') View
+	require('./file/styles') View
+	require('./file/render') View
+
+	View.Style = require('./style') View, data
