@@ -1,10 +1,6 @@
 Utils
 =====
 
-**Author:** *kildyt@gmail.com*
-
-**License:** *MIT*
-
 	'use strict'
 
 	{assert} = console
@@ -13,7 +9,7 @@ Utils
 	{isArray} = Array
 	{shift, pop} = Array::
 	createObject = Object.create
-	{getPrototypeOf} = Object
+	{getPrototypeOf, getOwnPropertyNames} = Object
 	objKeys = Object.keys
 	hasOwnProp = Object.hasOwnProperty
 	getObjOwnPropDesc = Object.getOwnPropertyDescriptor
@@ -22,15 +18,29 @@ Utils
 
 	[expect] = ['expect'].map require
 
-Include sub-modules
--------------------
-
 	exports.async = require './async.coffee.md'
 
-Environment information
------------------------
+*Boolean* utils.isNode
+----------------------
 
-	exports.isNode = exports.isClient = exports.isBrowser = exports.isQML = false
+Determine whether application is run in *node.js*.
+
+*Boolean* utils.isBrowser
+-------------------------
+
+Determine whether application is run in the browser environment.
+
+*Boolean* utils.isQml
+---------------------
+
+Determine whether application is a part of the QML program.
+
+*Boolean* utils.isClient
+------------------------
+
+`utils.isNode` inverse.
+
+	exports.isNode = exports.isClient = exports.isBrowser = exports.isQml = false
 
 	switch true
 
@@ -41,18 +51,109 @@ Environment information
 			exports.isClient = exports.isBrowser = true
 
 		when Qt?.include?
-			exports.isClient = exports.isQML = true
+			exports.isClient = exports.isQml = true
 
-Utils for object, arrays and functions
---------------------------------------
+*Boolean* utils.isObject(*Any* param)
+-------------------------------------
 
-### merge()
+Checks whether given *param* is an object.
 
-Merge second object into the first one.
-Existed properties will be overriden.
+### Example
+```
+console.log utils.isObject({})
+# true
+
+console.log utils.isObject([])
+# true
+
+console.log utils.isObject('')
+# false
+
+console.log utils.isObject(->)
+# false
+```
+
+	isObject = exports.isObject = (param) ->
+		param isnt null and typeof param is 'object'
+
+*Boolean* utils.isPlainObject(*Any* param)
+------------------------------------------
+
+Checks whether given *param* is a plain object, that is:
+ - object with no prototype,
+ - object with standard `Object` prototype.
+
+### Example
+```
+console.log utils.isPlainObject({})
+# true
+
+console.log utils.isPlainObject(Object.create(null))
+# true
+
+console.log utils.isPlainObject([])
+# false
+
+console.log utils.isPlainObject(->)
+# false
+
+class User
+console.log utils.isPlainObject(new User)
+# false
+
+console.log utils.isPlainObject(Object.create({propertyInProto: 1}))
+# false
+```
+
+	exports.isPlainObject = (param) ->
+		unless isObject param
+			return false
+
+		proto = getPrototypeOf param
+
+		# comes from Object.create
+		unless proto
+			return true
+
+		# one-proto object
+		if (proto is Object::) and not getPrototypeOf(proto)
+			return true
+
+		false
+
+*Boolean* utils.isArguments(*Any* param)
+----------------------------------------
+
+Returns true if given *param* is an arguments object.
+
+### Example
+```
+console.log utils.isArguments(do -> arguments)
+# true
+
+console.log utils.isArguments {}
+# false
+```
+
+	exports.isArguments = (param) ->
+		toString.call(param) is '[object Arguments]'
+
+*NotPrimitive* utils.merge(*NotPrimitive* source, *NotPrimitive* object)
+------------------------------------------------------------------------
+
+Override given *source* object by the given *object* own properties.
+
+Given *source* is returned.
+
+### Example
+```
+config = a: 1, b: 2
+utils.merge config, {b: 99, d: 100}
+console.log config
+# {a: 1, b: 99, d: 100}
+```
 
 	merge = exports.merge = (source, obj) ->
-
 		expect(source).not().toBe.primitive()
 		expect(obj).not().toBe.primitive()
 		expect(source).not().toBe obj
@@ -62,9 +163,31 @@ Existed properties will be overriden.
 
 		source
 
-### mergeDeep()
+*NotPrimitive* utils.mergeDeep(*NotPrimitive* source, *NotPrimitive* object)
+----------------------------------------------------------------------------
 
-Merge second object into the first one deeply.
+Override given *source* object and all it's objects by the given *object* own properties.
+
+Only objects are merge deeply (no arrays and functions).
+
+Given *source* is returned.
+
+### Example
+```
+user =
+	name: 'test'
+	carsByName:
+		tiny: 'Ferrharhi'
+		monkey: 'BMM'
+
+utils.mergeDeep user,
+	name: 'Johny'
+	carsByName:
+		nextCar: 'Fita'
+
+console.log user
+# {name: 'Johny', carsByName: {tiny: 'Ferrharhi', monkey: 'BMM', nextCar: 'Fita'}}
+```
 
 	mergeDeep = exports.mergeDeep = (source, obj) ->
 
@@ -83,94 +206,205 @@ Merge second object into the first one deeply.
 
 		source
 
-### fill()
+*NotPrimitive* utils.fill(*NotPrimitive* source, *NotPrimitive* object)
+-----------------------------------------------------------------------
 
-Works like `merge()` but only on defined properties in the `source`.
-Existed properties won't be overriden.
+Translate *object* own properties into the *source* if they are defined in the
+*source* prototype and are not defined in the *source* as own properties.
+
+### Example
+```
+class User
+	name: ''
+
+user = new User
+utils.fill user, {name: 'Johny', age: 40}
+console.log user
+# {name: 'Johny'}
+```
 
 	exports.fill = (source, obj) ->
-
 		expect(source).not().toBe.primitive()
 		expect(obj).not().toBe.primitive()
 		expect(source).not().toBe obj
 
-		for key, value of obj
+		for key, value of obj when hasOwnProp.call(obj, key)
 			if key of source and not hasOwnProp.call(source, key)
 				source[key] = value
 
 		source
 
-### remove()
+utils.remove(*NotPrimitive* object, *Any* element)
+--------------------------------------------------
 
-Remove passed key/element from the object/array.
+Remove array element or object property.
+
+### Example
+```
+array = ['a', 'b', 'c']
+utils.remove array, 'b'
+console.log array
+# ['a', 'c']
+
+object = {a: 1, b: 2}
+utils.remove object, 'a'
+console.log object
+# {b: 2}
+```
 
 	exports.remove = (obj, elem) ->
-
 		expect(obj).not().toBe.primitive()
 
 		if isArray obj
 			index = obj.indexOf elem
-			obj.splice index, 1 if ~index
-			return
+			if index isnt -1
+				if index is 0
+					obj.shift()
+				else if index is obj.length-1
+					obj.pop()
+				else
+					obj.splice index, 1
+		else
+			delete obj[elem]
 
-		delete obj[elem]
+		null
 
-### defProp()
+[*Object*] getPropertyDescriptor(*NotPrimitive* object, *String* property)
+--------------------------------------------------------------------------
 
-Short version of `Object.defineProperty`.
+Returns descriptor of the *property* defined in the given *object*.
 
-Parameters:
-  1. object where property will be defined,
-  2. property name
-  3. string describing property config:
-     "w" - writable, "e" - enumarable and "c" - configurable in any order
-  4. value or getter
-  5. setter
+All *object* prototypes are checked.
 
-To avoid `setter`, when `getter` is specified, pass `null`.
-
-Example:
+### Example
 ```
-obj = {}
-utils.defProp obj, 'const', 'e', 'constant value'
-utils.defProp obj, 'name', 'ec', (-> 2), null
+class User
+	age: 0
+	utils.defineProperty User::, 'isAdult', utils.CONFIGURABLE, ->
+		@age >= 18
+	, null
+
+user = new User
+console.log utils.getPropertyDescriptor(user, 'isAdult')
+# {enumerable: false, configurable: true, get: ..., set: undefined}
 ```
+
+	exports.getPropertyDescriptor = (obj, prop) ->
+		expect(obj).not().toBe.primitive()
+		expect(prop).toBe.string()
+
+		while obj and not desc
+			desc = getObjOwnPropDesc obj, prop
+
+			obj = getPrototypeOf obj
+
+		desc
+
+[*Function*] lookupGetter(*NotPrimitive* object, *String* property)
+-------------------------------------------------------------------
+
+Returns the function bound as a getter to the given *property*.
+
+### Example
+```
+object = {loaded: 2, length: 5}
+utils.defineProperty object, 'progress', null, ->
+	@loaded / @length
+, null
+console.log utils.lookupGetter(object, 'progress')
+# -> @loaded / @length
+```
+
+	exports.lookupGetter = do ->
+
+		# use native function if possible
+		if Object::__lookupGetter__
+			return Function.call.bind Object::__lookupGetter__
+
+		# use polyfill
+		(obj, prop) ->
+
+			desc = exports.getPropertyDescriptor obj, prop
+			desc?.get
+
+[*Function*] lookupSetter(*NotPrimitive* object, *String* property)
+-------------------------------------------------------------------
+
+Returns the function bound as a setter to the given *property*.
+
+	exports.lookupSetter = do ->
+
+		# use native function if possible
+		if Object::__lookupSetter__
+			return Function.call.bind Object::__lookupSetter__
+
+		# use polyfill
+		(obj, prop) ->
+
+			desc = exports.getPropertyDescriptor obj, prop
+			desc?.set
+
+*NotPrimitive* utils.defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Defines *property* in the given *object*.
+
+*descriptors* is a bitmask contains `utils.WRITABLE`, `utils.ENUMERABLE` and
+`utils.CONFIGURABLE`.
+
+*value* becomes a getter if given *setter* is not `undefined`.
+
+### Example
+```
+object = {}
+
+desc = utils.ENUMERABLE | utils.WRITABLE | utils.CONFIGURABLE
+utils.defineProperty object, 'name', desc, 'Emmy'
+console.log object.name
+# Emmy
+
+utils.defineProperty object, 'const', utils.ENUMERABLE | utils.CONFIGURABLE, 'constantValue'
+console.log object.const
+# constantValue
+
+utils.defineProperty object, 'length', utils.ENUMERABLE | utils.CONFIGURABLE, (-> 2), null
+console.log object.length
+# 2
+```
+
+	exports.WRITABLE = 1<<0
+	exports.ENUMERABLE = 1<<1
+	exports.CONFIGURABLE = 1<<2
 
 	exports.defProp = do ->
 
-		descCfg =
-			enumerable: true
-			configurable: true
+		{WRITABLE, ENUMERABLE, CONFIGURABLE} = exports
 
+		descCfg = enumerable: true, configurable: true
 		valueCfg = exports.merge writable: true, value: null, descCfg
-
 		accessorsCfg = exports.merge get: undefined, set: undefined, descCfg
 
-		descCache = {}
-
-		isSafari = if navigator? then navigator.userAgent.indexOf('Safari') isnt -1 else false
+		# thanks to http://stackoverflow.com/a/23522755/2021829
+		isSafari = if navigator?
+				///^((?!chrome).)*safari///i.test(navigator.userAgent)
+			else
+				false
 
 		(obj, prop, desc, getter, setter) ->
-
 			expect(obj).not().toBe.primitive()
 			expect(prop).toBe.string()
-			expect(desc).toBe.string()
-
-			# standardize desc into array [writable, enumerable, configurable]
-			unless descCache.hasOwnProperty desc
-				descCache[desc] = [has(desc, 'w'), has(desc, 'e'), has(desc, 'c')]
-			desc = descCache[desc]
+			expect().defined(desc).toBe.integer().greaterThan(0)
 
 			# configure value
 			if setter is undefined
 				cfg = valueCfg
 				cfg.value = getter
-				cfg.writable = desc[0]
+				cfg.writable = desc & WRITABLE
 
 			# configure accessors
 			else
 				# HACK: safari bug
-				if isSafari
+				if isSafari and getter
 					_getter = getter
 					getter = ->
 						if @hasOwnProperty(prop) and @ isnt obj
@@ -183,284 +417,161 @@ utils.defProp obj, 'name', 'ec', (-> 2), null
 				cfg.set = setter or undefined
 
 			# set common config
-			cfg.enumerable = desc[1]
-			cfg.configurable = desc[2]
+			cfg.enumerable = desc & ENUMERABLE
+			cfg.configurable = desc & CONFIGURABLE
 
 			# set property
 			defObjProp obj, prop, cfg
 
 			obj
 
-### getPropDesc()
+*Any* utils.clone(*Any* param)
+------------------------------
 
-Works like `Object.getOwnPropertyDescriptor` but lookup all prototypes, not only own properties.
+Clones array elements or object own properties.
 
-	exports.getPropDesc = (obj, prop) ->
+Functions are not cloned!
 
-		expect(obj).not().toBe.primitive()
-		expect(prop).toBe.string()
+### Example
+```
+console.log utils.clone 'ABC'
+# ABC
 
-		while obj and not desc
-			desc = getObjOwnPropDesc obj, prop
-			return desc if desc
+console.log utils.clone [1, 2]
+# [1, 2]
 
-			obj = getPrototypeOf obj
+console.log utils.clone {a: 1}
+# {a: 1}
+```
 
-### lookupGetter()
+	clone = exports.clone = (param) ->
 
-Object::__lookupGetter__ polyfill.
+		if isArray param
+			return param.slice()
 
-	exports.lookupGetter = do ->
+		if isObject param
+			result = createObject getPrototypeOf param
 
-		# use native function if possible
-		if Object::__lookupGetter__
-			return Function.call.bind Object::__lookupGetter__
-
-		# use polyfill
-		(obj, prop) ->
-
-			desc = exports.getPropDesc obj, prop
-			desc?.get
-
-### lookupSetter()
-
-Object::__lookupSetter__ polyfill.
-
-	exports.lookupSetter = do ->
-
-		# use native function if possible
-		if Object::__lookupSetter__
-			return Function.call.bind Object::__lookupSetter__
-
-		# use polyfill
-		(obj, prop) ->
-
-			desc = exports.getPropDesc obj, prop
-			desc?.set
-
-Utils for objects and arrays
-----------------------------
-
-### clone()
-
-Clone array or object.
-Prototype is copied (if exists).
-
-	clone = exports.clone = (arg) ->
-
-		if isArray arg
-			return arg.slice()
-
-		if typeof arg is 'object' and arg isnt null
-			result = createObject getPrototypeOf arg
-
-			for key in objKeys arg
-				result[key] = arg[key]
+			for key in objKeys param
+				result[key] = param[key]
 
 			return result
 
-		arg
+		param
 
-### cloneDeep()
+*Any* cloneDeep(*Any* param)
+----------------------------
 
-Clone passed `arg` deeply.
+Clone array elements and object properties deeply.
 
-	cloneDeep = exports.cloneDeep = (arg) ->
+### Example
+```
+obj2 = {ba: 1}
+obj = {a: 1, b: obj2}
+clonedObj = utils.cloneDeep obj
 
-		result = clone arg
+console.log clonedObj
+# {a: 1, b: {ba: 1}}
 
-		if typeof result is 'object' and result isnt null
+console.log clonedObj.b is obj.b
+# false
+```
+
+	cloneDeep = exports.cloneDeep = (param) ->
+
+		result = clone param
+
+		if isObject result
 			for key in objKeys result
-				value = result[key]
-				if typeof result is 'object' and result isnt null
-					value = cloneDeep value
-				result[key] = cloneDeep value
+				result[key] = cloneDeep result[key]
 
 		result
 
-### isArguments()
+*Boolean* isEmpty(*NotPrimitive* object)
+----------------------------------------
 
-Check if specified object is an arguments array.
+Checks whether given *object* is empty, that is:
+ - for arrays, if no elements exists (*length* is 0),
+ - for objects, if no own properties are defined.
 
-	exports.isArguments = (obj) ->
+* * *
 
-		expect(obj).toBe.object()
+	exports.isEmpty = (object) ->
+		expect(object).not().toBe.primitive()
 
-		toString.call(obj) is '[object Arguments]'
+		if isArray object
+			return !object.length
+		else
+			return !getOwnPropertyNames(object).length
 
-### isObject()
+*Any* utils.last(*Array* array)
+-------------------------------
 
-Check if arg is clear object (without any other prototypes).
+Returns given *array* last element.
 
-	exports.isObject = (obj) ->
+### Example
+```
+console.log utils.last(['a', 'b'])
+# b
 
-		if not obj or typeof obj isnt 'object'
-			return false
-
-		proto = getPrototypeOf obj
-
-		# comes from Object.create
-		unless proto
-			return true
-
-		# one-proto object
-		if (proto is Object::) and not getPrototypeOf(proto)
-			return true
-
-		false
-
-### get()
-
-Get needed value from the object. Arrays are supported.
-If path can't be resolved, new get.OptionsArray is returned with
-all possible results.
-Separate properties in path by dots ('.').
-For arrays add to property name two brackets ('[]')
-- look at isStringArray method to check it in other way.
-
-	get = exports.get = (obj, path='', target) ->
-
-		expect(obj).not().toBe.primitive()
-
-		switch typeof path
-
-			when 'object'
-
-				path = exports.clone path
-
-			when 'string'
-
-				# split path by dot's
-				path = path.split '.'
-
-			else
-
-				throw new TypeError
-
-		# check chunks
-		for key, i in path
-
-			# empty props are not supported
-			if not key.length and i
-				throw new ReferenceError "utils.get(): empty properties are not supported"
-
-			# support array elements by `[]` chars
-			if isStringArray key
-
-				# get array key name
-				key = key.substring 0, key.indexOf('[]')
-
-				# cut path removing checked elements
-				path = path.splice i
-
-				# update current path elem without array brackets
-				path[0] = path[0].substring key.length + 2
-
-				# if current path is empty, remove it
-				unless path[0].length then path.shift()
-
-				# create target array if no exists
-				target ?= new OptionsArray()
-
-				# move to the key value if needed
-				if key.length
-					obj = obj[key]
-
-				# return `undefined` if no value exists
-				if typeof obj is 'undefined'
-					return undefined
-
-				# call this func recursive on all array elements
-				# found results will be saved in the `target` array
-				for elem in obj
-					get elem, path.join('.'), target
-
-				# return `undefined` if nothing has been found
-				unless target.length
-					return undefined
-
-				# return found elements
-				return target
-
-			# move to the next object value
-			if key.length then obj = obj[key]
-
-			# break if no way exists
-			if typeof obj isnt 'object' and typeof obj isnt 'function'
-
-				# if it is no end of path, return undefined
-				if i isnt path.length - 1
-					obj = undefined
-
-				break
-
-		# save obj into target array
-		if target and typeof obj isnt 'undefined' then target.push obj
-
-		obj
-
-#### *class* get.OptionsArray()
-
-Special version of Array, returned if result of the `get` method is a list
-of possible values and not a proper value.
-
-	exports.get.OptionsArray = class OptionsArray extends Array
-
-		constructor: -> super
-
-### isEmpty()
-
-Check if specified object or array is empty.
-Proto is not checking.
-
-	exports.isEmpty = (arg) ->
-
-		expect(arg).toBe.object()
-
-		if isArray arg
-			return !arg.length
-
-		return false for key of arg
-		true
-
-### last()
-
-Get last element from the Object or Array
+console.log utils.last([])
+# undefined
+```
 
 	exports.last = (arg) ->
+		expect(arg).toBe.array()
 
-		expect(arg).toBe.object()
+		arg[arg.length - 1]
 
-		# Array
-		if isArray arg
-			return arg[arg.length - 1]
+*NotPrimitive* utils.clear(*NotPrimitive* object)
+-------------------------------------------------
 
-		# Object
-		keys = objKeys arg
-		arg[keys[keys.length - 1]]
+Removes all elements from an array, or all properties from an object.
 
-### clear()
+### Example
+```
+console.log utils.clear(['a', 'b'])
+# []
 
-Remove all elements from the array, or all properties from the object.
+console.log utils.clear({age: 37})
+# {}
+```
 
 	exports.clear = (obj) ->
+		expect(obj).not().toBe.primitive()
 
-		expect(obj).toBe.object()
-
-		# Array
 		if isArray obj
 			obj.pop() for _ in [0...obj.length] by 1
-			return obj
+		else
+			delete obj[key] for key in objKeys obj
 
-		# Object
-		delete obj[key] for key of obj when obj.hasOwnProperty key
 		obj
 
-### setPrototypeOf
+*Object* utils.setPrototypeOf(*NotPrimitive* object, *NotPrimitive|Null* prototype)
+-----------------------------------------------------------------------------------
 
-Polyfill for ES6 `Object.setPrototypeOf()`.
+Changes given *object* prototype into *prototype*.
 
-	exports.setPrototypeOf = setPrototypeOf = do ->
+This method on some environments returns new object!
+
+### Example
+```
+obj = a: 1
+prototype = b: 100
+
+newObj = utils.setPrototypeOf(obj, prototype)
+
+console.log Object.getPrototypeOf(newObj) is prototype
+# true
+
+console.log newObj.a
+# 1
+
+console.log newObj.b
+# 100
+```
+
+	setPrototypeOf = exports.setPrototypeOf = do ->
 
 		# ES6 `Object.setPrototypeOf()`
 		if typeof Object.setPrototypeOf is 'function'
@@ -472,7 +583,8 @@ Polyfill for ES6 `Object.setPrototypeOf()`.
 		if tmp.a is 1
 			return (obj, proto) ->
 				expect(obj).not().toBe.primitive()
-				expect(proto).toBe.object()
+				if proto isnt null
+					expect(proto).not().toBe.primitive()
 
 				obj.__proto__ = proto
 				obj
@@ -480,271 +592,315 @@ Polyfill for ES6 `Object.setPrototypeOf()`.
 		# object merging
 		return (obj, proto) ->
 			expect(obj).not().toBe.primitive()
-			expect(proto).toBe.object()
+			if proto isnt null
+				expect(proto).not().toBe.primitive()
 
 			newObj = createObject proto
 			merge newObj, obj
 			newObj
 
-### getOwnProperties
+*Boolean* utils.has(*Array* array, *Any* value)
+-----------------------------------------------
 
-Returns new array or object only with own properties.
+Returns true if given *array* contains *value*.
+
+### Example
+```
+console.log utils.has(['a']), 'a'
+# true
+
+console.log utils.has(['a']), 'b'
+# false
+```
+
+	has = exports.has = (any, elem) ->
+		expect(any?.indexOf).toBe.function()
+
+		!!~any.indexOf elem
+
+*Boolean* utils.hasValue(*Object* object, *Any* value)
+------------------------------------------------------
+
+Returns true if given *object* in some own enumerable property stores given *value*.
+
+### Example
+```
+object =
+	city: 'New York'
+
+console.log utils.hasValue(object, 'New York')
+# true
+```
+
+	exports.hasValue = (obj, val) ->
+		expect(obj).toBe.object()
+
+		if isArray obj
+			return has obj, val
+
+		for key, value of obj when hasOwnProp.call(obj, key)
+			if value is val
+				return true
+
+		false
+
+*Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target *= []*])
+------------------------------------------------------------------------------------------
+
+Translates given *object* into an array.
+
+Array elements are determined by the *valueGen* function.
+*valueGen* function is called with property name, property value and given *object*.
+
+Array elements are properties values by default.
+
+Elements are set into the *target* array (new array by default).
+
+### Example
+```
+object =
+	type: 'dog'
+	name: 'Bandit'
+
+console.log utils.objectToArray(object)
+# ['dog', 'Bandit']
+
+console.log utils.objectToArray(object, (key, val) ->
+	"#{key}_#{val}")
+# ['type_dog', 'name_Bandit']
+```
+
+	exports.objectToArray = (obj, valueGen, target) ->
+		keys = objKeys obj
+		target ?= keys
+
+		expect(obj).toBe.object()
+		expect().defined(valueGen).toBe.function()
+		expect(target).toBe.array()
+
+		for key, i in keys
+			value = if valueGen then valueGen(key, obj[key], obj) else obj[key]
+			target[i] = value
+
+		target
+
+*Object* utils.arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen*, *Object* target *= {}*])
+--------------------------------------------------------------------------------------------------------------
+
+Translates given *array* into object with keys defined by the *keyGen* and values
+defined by the *valueGen*.
+
+Keys are indexes by default.
+Values are elements by default.
+
+*keyGen* and *valueGen* functions are called with element index,
+element value and given *array*.
+
+Properties are set into the *target* object (new object by default).
+
+### Example
+```
+console.log utils.arrayToObject(['a', 'b'])
+# {0: 'a', 1: 'b'}
+
+console.log utils.arrayToObject(['a'], (i, elem) ->
+	"value_#{elem}")
+# {"value_a": "a"}
+
+console.log utils.arrayToObject(['a'], ((i, elem) -> elem), ((i, elem) -> i))
+# {"a": 0}
+```
+
+	exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
+		expect(arr).toBe.array()
+		expect().defined(keyGen).toBe.function()
+		expect().defined(valueGen).toBe.function()
+		expect(target).toBe.object()
+
+		for elem, i in arr
+			key = if keyGen then keyGen(i, elem, arr) else i
+			value = if valueGen then valueGen(i, elem, arr) else elem
+
+			target[key] = value
+
+		target
+
+*String* utils.capitalize(*String* string)
+------------------------------------------
+
+Capitalize given *string* first character.
+
+### Example
+```
+console.log utils.capitalize('name')
+# Name
+```
+
+	exports.capitalize = (str) ->
+		expect(str).toBe.string()
+
+		unless str.length
+			return ''
+
+		str[0].toUpperCase() + str.slice(1)
+
+*String* utils.addSlashes(*String* string)
+------------------------------------------
+
+Adds backslashes before each `'` and `"` characters.
+
+### Example
+```
+console.log utils.addSlashes('a"b')
+# a\"b
+```
+
+	exports.addSlashes = do ->
+
+		SLASHES_RE = ///'|"///g
+		NEW_SUB_STR = '\\$&'
+
+		(str) ->
+			expect(str).toBe.string()
+
+			unless str.length
+				return str
+
+			str.replace SLASHES_RE, NEW_SUB_STR
+
+*String* utils.uid([*Integer* length *= 8*])
+--------------------------------------------
+
+Generates pseudo-unique hash with given *length*.
+
+	exports.uid = (n=8) ->
+		expect(n).toBe.integer()
+		expect(n).toBe.greaterThan 0
+
+		str = ''
+
+		loop
+			str += random().toString(16).slice 2
+			if str.length >= n then break
+
+		if str.length is n
+			str
+		else
+			str.slice 0, n
+
+*Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
+----------------------------------------------------------------------------------------------
+
+Calls given *function* with *context* and *arguments*.
+
+If *function* throws an errpr, *onfail* is returned.
+
+If *onfail* is a function, it will be called with catched error.
+
+### Example
+```
+func = (size) ->
+	if size is 0
+		throw "Wrong size!"
+
+console.log utils.tryFunction(func, null, [0])
+# undefined
+
+console.log utils.tryFunction(func, null, [0], 'ERROR!')
+# ERROR!
+
+console.log utils.tryFunction(func, null, [100], 'ERROR!')
+# undefined
+```
+
+	exports.tryFunction = (func, context, args, onfail) ->
+		expect(func).toBe.function()
+		expect().defined(args).toBe.object()
+
+		try
+			func.apply context, args
+		catch err
+			if typeof onfail is 'function' then onfail(err) else onfail
+
+*Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
+-----------------------------------------------------------------------------
+
+Calls given *function* with *context* and *arguments* and returns catched error.
+
+### Example
+```
+func = (size) ->
+	if size is 0
+		throw "Wrong size!"
+
+console.log utils.catchError(func, null, [0])
+# "Wrong size!"
+
+console.log utils.catchError(func, null, [100])
+# null
+```
+
+	exports.catchError = (func, context, args) ->
+		expect(func).toBe.function()
+		expect().defined(args).toBe.object()
+
+		try
+			func.apply context, args
+			null
+		catch err
+			err
+
+*Object* utils.errorToObject(*Error* error)
+-------------------------------------------
+
+Takes an *Error* instance and returns plain object with the *error* name and message.
+
+### Example
+```
+error = new ReferenceError 'error message!'
+console.log utils.errorToObject(error)
+# {name: 'ReferenceError', message: 'error message!'}
+```
+
+	exports.errorToObject = (error) ->
+		expect(error).toBe.any Error
+
+		name: error.name
+		message: error.message
+
+*Object* utils.getOwnProperties(*Object* object)
+------------------------------------------------
+
+Returns new array or object with own properties.
 
 	exports.getOwnProperties = (obj) ->
-
 		expect(obj).toBe.object()
 
 		result = if isArray obj then [] else {}
 		merge result, obj
 		result
 
-### simplify()
+*Boolean* isEqual(*Object* object1, *Object* object2, [*Function* compareFunction])
+-----------------------------------------------------------------------------------
 
-Convert passed object into the most simplified format.
-Such object can be easily stringified.
-Use `assemble()` method to restore into initial structure.
+Compares two objects or arrays deeply.
 
-Second optional parameter is an config object.
-Possible options to define (all are `false` by default):
-  - `properties` - save properties descriptions (getters, config etc.),
-  - `protos` - save proto as object,
-  - `constructors` - include constructors functions.
+Optional *compareFunction* defines whether two values are equal.
 
-If `protos` is `false` and `constructors` is `true` objects will be taken as instances (example 2).
+### Example
+```
+console.log utils.isEqual([0, 1], [1, 0])
+# true
 
-Examples
-  1. ```
-     obj = {}
-     obj.self = obj
-     JSON.stringify utils.simplify obj
-     ```
-  2. ```
-     class Sample
-     	constructor: -> @fromInst = 1
-     	fromProto: 1
-     sample = new Sample
-     parts = utils.simplify sample, constructors: true
-     clone = utils.assemble json
-     # it's true because `protos` option is `false` and `constructors` is true
-     # won't work for json, because functions are not stringified - do it on your own
-     assert(clone instanceof Sample)
-     ```
+console.log utils.isEqual({a: 1}, {a: 1})
+# true
 
- * * *
+console.log utils.isEqual({a: {aa: 1}}, {a: {aa: 1}})
+# true
 
-	exports.simplify = do ->
-
-		nativeProtos = [Array::, Object::]
-		nativeCtors = [Array, Object]
-
-		(obj, opts={}) ->
-
-			expect(obj).toBe.object()
-			expect(opts).toBe.simpleObject()
-
-			optsProps = opts.properties ?= false
-			optsProtos = opts.protos ?= false
-			optsCtors = opts.constructors ?= false
-			optsInsts = opts.instances = not optsProtos and optsCtors
-
-			# list of objects
-			objs = []
-
-			# list of lists of ids per object
-			ids = []
-
-			# lists of keys to references per object
-			references = {}
-
-			# objects constructors
-			if optsCtors then ctors = {}
-
-			# proto destination to proto object
-			if optsProtos then protos = {}
-
-			# get cyclic references in the object
-			cyclic = (obj) ->
-
-				len = objs.push obj
-				ids.push objIds = []
-
-				for key, value of obj when obj.hasOwnProperty key
-
-					unless value and typeof value is 'object'
-						continue
-
-					# don't check getters values
-					if optsProps and exports.lookupGetter obj, key
-						objIds.push null
-						continue
-
-					# check whether obj already exists
-					unless ~(i = objs.indexOf value)
-						i = cyclic value
-
-					objIds.push i
-
-				# cycle proto
-				if optsProtos and proto = getPrototypeOf obj
-
-					# don't save protos for native ones (Array, Object, etc..)
-					if ~(nativeProtos.indexOf proto)
-						i = null
-
-					# find recursively if it's for first time
-					else unless ~(i = objs.indexOf proto)
-						i = cyclic proto
-
-					objIds.push i
-
-				len - 1
-
-			# parse object
-			parse = (obj, index) ->
-
-				r = if isArray obj then [] else {}
-				objIds = ids[index]
-
-				# Create `references` for each object with keys which are a references to others
-				# Value of each property will be changed to referenced object id
-				obji = 0
-				objReferences = null
-				for key, value of obj when obj.hasOwnProperty key
-
-					r[key] = value
-
-					isReference = false
-
-					# save as reference
-					if value and typeof value is 'object'
-						objReferences ?= []
-
-						objId = value = objIds[obji++]
-
-						# with `optsProps` id can be a null when value is an object
-						if value isnt null
-							isReference = true
-							objReferences.push key
-
-					# save as property description
-					if optsProps
-						desc = getObjOwnPropDesc obj, key
-						desc.value = value if isReference
-						value = desc
-
-					# override prop value as referenced object id
-					r[key] = value
-
-				# save reference to proto
-				if optsProtos and getPrototypeOf obj
-					protoObjId = objIds[obji++]
-					if protoObjId isnt null
-						protos[index] = protoObjId
-
-				# save ctor if needed
-				if optsCtors and ctor = obj.constructor
-
-					# save for instance or for prototype depend on the flag
-					if optsInsts or obj.hasOwnProperty('constructor')
-
-						# omits native constructors (Array, Object etc.)
-						unless ~(nativeCtors.indexOf ctor)
-							ctors[index] = ctor
-
-				# save object references
-				if objReferences then references[index] = objReferences
-
-				r
-
-			# find cycles
-			cyclic obj
-
-			# parse all found objects
-			for value, i in objs
-				objs[i] = parse value, i
-
-			# return
-			opts: opts
-			objects: objs
-			references: references
-			protos: protos
-			constructors: ctors
-
-### assemble()
-
-Backward `simplify()` operation.
-
-	exports.assemble = do ->
-
-		ctorPropConfig = value: null
-
-		(obj) ->
-
-			expect(obj).toBe.simpleObject()
-
-			{opts, objects, references, protos, constructors} = obj
-
-			optsProps = opts.properties
-			optsProtos = opts.protos
-			optsCtors = opts.constructors
-			optsInsts = opts.instances
-
-			# list of all referenced objects ids
-			refsIds = []
-
-			# set references
-			if optsProps
-				for objI, refs of references
-					obj = objects[objI]
-
-					for ref in refs
-						refsIds.push obj[ref].value
-						obj[ref].value = objects[obj[ref].value]
-			else
-				for objI, refs of references
-					obj = objects[objI]
-
-					for ref in refs
-						refsIds.push obj[ref]
-						obj[ref] = objects[obj[ref]]
-
-			# set properties
-			if optsProps
-				for obj in objects
-					for key, value of obj when obj.hasOwnProperty key
-						defObjProp obj, key, value
-
-			# set protos
-			for objI, refI of protos
-				objects[objI] = setPrototypeOf objects[objI], objects[refI]
-
-			# set objects as instances
-			if optsInsts
-				for objI, func of constructors
-					object = objects[objI] = setPrototypeOf objects[objI], func::
-
-					# call `fromAssebled` if exists
-					func.fromAssembled? object
-
-			# .. or set ctors as properties
-			else if optsCtors
-				for objI, func of constructors
-					ctorPropConfig.value = func
-					defObjProp objects[objI], 'constructor', ctorPropConfig
-
-			# update references, because same of them could changed by `setPrototypeOf`
-			refId = 0
-			for objI, refs of references
-				obj = objects[objI]
-
-				for ref in refs
-					obj[ref] = objects[refsIds[refId++]]
-
-			objects[0]
-
-### isEqual()
-
-Compare two objects deeply.
+console.log utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
+# false
+```
 
 	isEqual = exports.isEqual = do ->
 
@@ -823,192 +979,11 @@ Compare two objects deeply.
 			true
 
 		(a, b, compareFunc=defaultComparison) ->
-
-			expect().defined(compareFunc).toBe.function()
+			expect(compareFunc).toBe.function()
 
 			if isArray(a) and isArray(b)
-				return forArrays a, b, compareFunc
-
-			if a and typeof a is 'object' and b and typeof b is 'object'
-				return forObjects a, b, compareFunc
-
-			return compareFunc a, b
-
-Utils for arrays and strings
-----------------------------
-
-### has()
-
-Check whether array or string contains passed value.
-
-	has = exports.has = (any, elem) ->
-
-		expect(any?.indexOf).toBe.function()
-
-		!!~any.indexOf elem
-
-Utils for objects
------------------
-
-Create new array based on the object properties / values.
-Optional `valueGen` is called with three parameters: value, key and passed object.
-By default array of object values is returned.
-
-### objectToArray()
-
-	exports.objectToArray = (obj, valueGen, target) ->
-
-		keys = objKeys obj
-		target ?= keys
-
-		expect(obj).toBe.object()
-		expect().defined(valueGen).toBe.function()
-		expect(target).toBe.array()
-
-		for key, i in keys
-
-			value = if valueGen then valueGen(key, obj[key], obj) else obj[key]
-
-			target[i] = value
-
-		target
-
-### hasValue()
-
-	exports.hasValue = (obj, val) ->
-		expect(obj).toBe.object()
-
-		for key, value of obj when obj.hasOwnProperty(key)
-			if value is val
-				return true
-
-		false
-
-Utils for arrays
-----------------
-
-### arrayToObject()
-
-Save parsed array into `target` (new object by default) and return it.
-Use optionally `keyGen` and `valueGen` to specify custom keys and values
-(by default key is current index, and value refers to array element).
-`keyGen` and `valueGen` are called with current element, current index and array.
-
-	exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
-
-		expect(arr).toBe.array()
-		expect().defined(keyGen).toBe.function()
-		expect().defined(valueGen).toBe.function()
-		expect(target).toBe.object()
-
-		for elem, i in arr
-
-			key = if keyGen then keyGen(i, elem, arr) else i
-			value = if valueGen then valueGen(i, elem, arr) else elem
-
-			target[key] = value
-
-		target
-
-Utils for strings
------------------
-
-### capitalize()
-
-	exports.capitalize = (str) ->
-
-		expect(str).toBe.string()
-
-		return '' unless str.length
-		str[0].toUpperCase() + str.substring(1)
-
-### isStringArray()
-
-Check if string references into array (according to notation in `get` method).
-
-	isStringArray = exports.isStringArray = (arg) ->
-
-		expect(arg).toBe.string()
-
-		arg.slice(-2) is '[]'
-
-### addSlashes()
-
-New string with added backslashes before `'` and `"` is returned.
-
-	exports.addSlashes = do ->
-
-		SLASHES_RE = ///'|"///g
-		NEW_SUB_STR = '\\$&'
-
-		(str) ->
-
-			expect(str).toBe.string()
-
-			unless str then return str
-
-			str.replace SLASHES_RE, NEW_SUB_STR
-
-### uid()
-
-Generate unique hash. Length of returned string can be specified (default 8).
-
-	exports.uid = (n=8) ->
-
-		expect(n).toBe.integer()
-
-		str = ''
-
-		loop
-			str += random().toString(16).slice 2
-			if str.length >= n then break
-
-		str.slice 0, n
-
-Utils for functions
--------------------
-
-### tryFunc()
-
-Call function and omit error raising.
-Made as workaroud for V8 deoptimization.
-
-	exports.tryFunc = (func, context, args, onfail) ->
-
-		expect(func).toBe.function()
-		expect().defined(args).toBe.object()
-
-		try
-			func.apply context, args
-		catch err
-			if typeof onfail is 'function' then onfail(err) else onfail
-
-### catchError()
-
-Catch raised error and return it.
-Made as workaroud for V8 deoptimization.
-
-	exports.catchError = (func, context, args) ->
-
-		expect(func).toBe.function()
-		expect().defined(args).toBe.object()
-
-		try
-			func.apply context, args
-			null
-		catch err
-			err
-
-Utils for errors
-----------------
-
-### errorToObject()
-
-Parse native `Error` instance into *pure* object.
-
-	exports.errorToObject = (error) ->
-
-		expect(error).toBe.any Error
-
-		name: error.name
-		message: error.message
+				forArrays a, b, compareFunc
+			else if isObject(a) and isObject(b)
+				forObjects a, b, compareFunc
+			else
+				return compareFunc a, b
