@@ -1,26 +1,24 @@
-Validators: required
-====================
+required
+========
 
 Use this validator to point *rows* which have to be defined.
 
-Passed *row* must exists in the object and can't be `undefined` or `null`.
+Passed *row* must exists in the object and can't be `undefined` nor `null`.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 schema = new Schema
 	name:
 		required: true
 
 schema.validate name: 1
-# ok
+# true
 
 schema.validate name: null
-# fail
+# TypeError: Schema: name is required
 
 schema.validate age: 2
-# fail
+# TypeError: Schema: name is required
 ```
 
 	'use strict'

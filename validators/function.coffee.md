@@ -1,36 +1,32 @@
-Validators: function
-====================
+function
+========
 
 Use this validator to check whether passed function can be properly called.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
+Use `type` validator to check whether function was passed.
 
+### Example
+```
 schema = new Schema
 	calculate:
 		function: true
 
 schema.validate calculate: -> throw new Error
-# fail
+# TypeError: Schema: calculate must be a proper function body
 
 schema.validate calculate: -> someUnknownProperty.a = 2
-# fail
+# TypeError: Schema: calculate must be a proper function body
 
 schema.validate calculate: (a, b) -> a + b
-# ok
+# true
 ```
 
 	'use strict'
 
 	module.exports = (row, value, expected) ->
-
 		try
-
 			func = new Function value
-
 			eval func
 
 		catch err
-
 			throw new TypeError "Schema: #{row} must be a proper function body"

@@ -1,24 +1,22 @@
-Validators: re
-==============
+re
+==
 
 Using this validator you can check whether *value* passed regular expression.
 
-##### Example
-```coffeescript
-Schema = new 'schema'
-
+### Example
+```
 schema = new Schema
 	word:
 		re: ///^\S+$///
 
 schema.validate word: ''
-# fail
+# TypeError: Schema: word doesn't passed regular expression
 
 schema.validate word: 'a b'
-# fail
+# TypeError: Schema: word doesn't passed regular expression
 
 schema.validate word: 'abc'
-# ok
+# true
 ```
 
 	'use strict'

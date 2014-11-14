@@ -1,14 +1,14 @@
 Schema
 ======
 
-Validate data using specified validators.
+Module used to validate structures e.g. got data from the client.
 
-The whole process in this module must be synchronous.
-
-When invalid data has been passed, standard JavaScript errors should be raised
-(`Error`, `TypeError`, `RangeError`).
+Use `schema = require 'Schema'` to get access to this module.
 
 	'use strict'
+
+	utils = require 'utils'
+	expect = require 'expect'
 
 	validators =
 		required: require('./validators/required')
@@ -21,27 +21,19 @@ When invalid data has been passed, standard JavaScript errors should be raised
 		re: require('./validators/re')
 		type: require('./validators/type')
 
-	utils = require 'utils'
-
 	objKeys = Object.keys
 
-*class* Schema
---------------
+*Schema* Schema(*Object* schema)
+--------------------------------
 
-	module.exports = class Schema
+Creates new *Schema* instance.
 
-### Constructor( *Object* schema )
+Given *schema* object must provides options for each possible property.
 
-Craate new *Schema* instance with got *requirements object*.
+Check validators documentation for more information.
 
-Check supported validators to create your own *schema*.
-
-The *requirements object* must provide all possible rows which are validated.
-
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 new Schema
 	address:
 		required: 'string'
@@ -50,10 +42,10 @@ new Schema
 		type: 'boolean'
 ```
 
-		constructor: (@schema) ->
+	module.exports = class Schema
 
-			unless utils.isPlainObject schema
-				throw new TypeError "Schema(): schema structure is not an object"
+		constructor: (@schema) ->
+			expect(schema).toBe.simpleObject()
 
 			unless objKeys(schema).length
 				throw new TypeError "Schema(): schema can't be empty"
@@ -62,24 +54,25 @@ new Schema
 				unless utils.isPlainObject elem
 					throw new TypeError "Schema(): schema for #{row} row is not an object"
 
-### *Object* schema
+*Object* Schema::schema
+-----------------------
 
-This property keeps passed *schema* object from the constructor.
+Saved schema object from the constructor.
 
-Object is not *readonly*, so you can change the config in realtime.
+It's allowed to change this object in runtime.
 
 		schema: null
 
-### validate( *Object* data )
+*Boolean* Schema::validate(*NotPrimitive* data)
+-----------------------------------------------
 
-Validate passed *data* by the already registered validators.
+Validates given *data* object by the schema validators.
 
-This method throws an error if data is invalid.
+This method throws an error if data is invalid, otherwise `true` is returned.
+To get always a boolean value, you can use `utils.tryFunction()`.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 schema = new Schema
 	age:
 		required: true
@@ -88,31 +81,23 @@ schema = new Schema
 		max: 200
 
 schema.validate name: 'Jony'
-# throws `TypeError: Schema::validate(): unexpected name row`
+# TypeError: Schema::validate(): unexpected name row
 
 schema.validate age: -5
-# throws `RangeError: Schema: Minimum range of age is 0`
+# RangeError: Schema: Minimum range of age is 0
 
 schema.validate age: 20
-# returns `true`
-```
-
-##### Tip
-###### Get an boolean value
-To get `true`/`false` which determines whether data passed validator or not,
-you can use `tryFunc` from [utils][module_utils] module.
-
-```coffeescript
-utils = require 'utils'
+# true
 
 utils.tryFunction schema.validate, schema, [age: -1], false
-# returns `false`
+# false
 
 utils.tryFunction schema.validate, schema, [age: 5], false
-# returns `true`
+# true
 ```
 
 		validate: (data) ->
+			expect(data).not().toBe.primitive()
 
 			# check if there is no unprovided rows
 			for row of data
@@ -129,17 +114,13 @@ utils.tryFunction schema.validate, schema, [age: 5], false
 
 				# by validators
 				for validator, validate of validators when options.hasOwnProperty validator
-
 					expected = options[validator]
 
 					if values instanceof utils.get.OptionsArray
-
 						for value, i in values
-
 							validate row, value, expected
 
 					else
-
 						validate row, values, expected
 
 			true

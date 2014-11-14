@@ -1,67 +1,61 @@
-Validators: object
-==================
+object
+======
 
-When `type` validator returns `object` for arrays, objects and `null` (as standard *typeof* operator),
-this validator is used to determine whether passed *value* is a simple object.
+When `type` validator returns `object` for arrays, objects and
+`null` (as standard *typeof* operator),
+this validator is used to determine whether passed *value* is a plain object.
 
-*Simple object* can't extends any custom prototypes.
-You can write more about *simple objects* in [utils][module_utils] module.
+*Plain object* can't extends any custom prototypes.
+You can read more about *plain objects* in `utils.isPlainObject()`
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 schema = new Schema
 	dict:
 		object: true
 
 schema.validate dict: []
-# fail
+# TypeError: Schema: dict must be a plain object
 
 schema.validate dict: null
-# fail
+# TypeError: Schema: dict must be a plain object
 
 schema.validate dict: Object.create({a: 1})
-# fail
+# TypeError: Schema: dict must be a plain object
 
 schema.validate dict: {}
-# ok
+# true
 ```
 
 This validator accepts `properties` array which determine allowed properties.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+```
 schema = new Schema
 	dict:
 		object:
 			properties: ['name', 'age']
 
 schema.validate dict: { address: 'abc' }
-# fail; `TypeError: Schema: dict doesn't provide address property`
+# TypeError: Schema: dict doesn't provide address property
 
 schema.validate dict: { name: 'John' }
-# ok
+# true
 ```
 
 	'use strict'
 
 	utils = require 'utils'
 
-	isArray = Array.isArray
+	{isArray} = Array
 
 	module.exports = (row, value, expected) ->
-
 		unless utils.isPlainObject value
-			throw new TypeError "Schema: #{row} must be an object"
+			throw new TypeError "Schema: #{row} must be a plain object"
 
 		# available properties
 		if props = expected?.properties
-
 			unless isArray props
-				throw new TypeError "Schema internal: object validator requires that `properties` is an array"
+				throw new TypeError "Schema internal: `object.properties` must be an array"
 
 			for prop of value
 				unless ~props.indexOf prop

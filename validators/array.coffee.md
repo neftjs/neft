@@ -1,34 +1,32 @@
-Validators: array
-=================
+array
+=====
 
-When `type` validator returns `object` for array (as standard *typeof* operator),
-this validator is used to determine whether *value* is a truly array (must extends *Array* prototype).
+When `type` validator returns `object` for an array (as standard *typeof* operator),
+this validator is used to determine whether *value* is a truly array instance.
 
-Remember that `arguments` and many other array-like objects in *JavaScript* are not truly arrays!
+Remember that `arguments` and many other array-like objects in *JavaScript* are not an arrays!
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 schema = new Schema
 	friends:
 		array: true
 
 schema.validate friends: {}
-# fail
+# TypeError: Schema: friends must be an array
 
 schema.validate friends: []
-# ok
+# true
 
 schema.validate {}
-# ok, bacuse `friends` are not required
+# true
+# bacuse `friends` is not required ...
 ```
 
 	'use strict'
 
-	isArray = Array.isArray
+	{isArray} = Array
 
 	module.exports = (row, value, expected) ->
-
 		unless isArray value
 			throw new TypeError "Schema: #{row} must be an array"

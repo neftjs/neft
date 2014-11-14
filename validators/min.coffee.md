@@ -1,32 +1,32 @@
-Validators: min
-===============
+min
+===
 
-Determine the minimum range from number.
+Determines the minimum range from number.
 
 *value* can be greater or equal maximum.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 schema = new Schema
 	age:
 		min: 0
 
 schema.validate age: -5
-# fail
+# RangeError: Schema: Minimum range of age is 0
+
+schema.validate age: 'string'
+# RangeError: Schema internal: max for age row must be a number
 
 schema.validate age: 20
-# ok
+# true
 
 schema.validate age: 0
-# ok
+# true
 ```
 
 	'use strict'
 
 	module.exports = (row, value, expected) ->
-
 		if typeof expected isnt 'number'
 			throw new TypeError "Schema internal: max for #{row} row must be a number"
 

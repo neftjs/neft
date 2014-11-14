@@ -1,41 +1,39 @@
-Validators: type
-================
+type
+====
 
 This valdiator uses standard *typeof* expression to check whether *value* type is equal required.
 
-##### Important
+### NaN and null
 
-Unlike standard `typeof` behaviour, this validator returns `undefined` for `NaN` and `null`.
+Unlike standard `typeof`, this validator returns `undefined` for `NaN` and `null`.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 schema = new Schema
 	desc:
 		type: 'object'
 
 schema.validate desc: 231
-# fail
+# TypeError: Schema: desc must be a object
 
 schema.validate desc: null
-# fail
+# TypeError: Schema: desc must be a object
 
 schema.validate desc: {}
-# ok
+# true
 
 schema.validate desc: []
-# ok; because in js `typeof [] === 'object'` is true
+# true
+# because in js `typeof []` is `object` ...
 ```
 
 	'use strict'
 
 	module.exports = (row, value, expected) ->
-
 		if typeof expected isnt 'string'
 			throw new TypeError "Schema internal: type for #{row} row must be a string"
 
-		if value is NaN or value is null
+		if isNaN(value) or value is null
 			value = undefined
 
 		if value? and typeof value isnt expected

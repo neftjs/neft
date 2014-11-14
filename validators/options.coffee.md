@@ -1,31 +1,26 @@
-Validators: options
-===================
+options
+=======
 
 Determine possible values for the *row*.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+### Example
+```
 schema = new Schema
 	city:
 		options: ['Paris', 'Warsaw']
 
 schema.validate city: 'Berlin'
-# fail; `Schema: city value is not provided`
+# TypeError: Schema: city value is not provided
 
 schema.validate city: 'Warsaw'
-# ok
+# true
 ```
 
 This validator also accepts an object in place of array.
 
-In such case, we check whether passed *row* value exists as object key.
+In such case, we check whether passed *row* value exists as an object key.
 
-##### Example
-```coffeescript
-Schema = require 'schema'
-
+```
 cities =
 	Paris:
 		country: 'France'
@@ -37,10 +32,10 @@ schema = new Schema
 		options: cities
 
 schema.validate city: 'Moscow'
-# fail
+# TypeError: Schema: city value is not provided
 
 schema.validate city: 'Paris'
-# ok
+# true
 ```
 
 	'use strict'
