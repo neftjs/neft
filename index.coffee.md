@@ -44,9 +44,10 @@ Returns handler name based on the signal name.
 In pratice it adds *on* prefix and capitalize the signal name.
 
 ### Example
-
+```
 signal.getHandlerName 'xChanged'
-// onXChanged
+# onXChanged
+```
 
 	exports.getHandlerName = do ->
 		cache = {}
@@ -65,15 +66,16 @@ Returns true if the given *name* is a proper handler name.
 In pratice it returns true if the *name* is prefixed by *on*.
 
 ### Example
-
+```
 signal.isHandlerName 'onXChanged'
-// true
+# true
 
 signal.isHandlerName 'xChanged'
-// false
+# false
 
 signal.isHandlerName 'onxChanged'
-// false (because x is lowercase)
+# false (because x is lowercase)
+```
 
 	exports.isHandlerName = (name) ->
 		expect(name).toBe.string()
@@ -85,7 +87,7 @@ signal.isHandlerName 'onxChanged'
 
 Creates new signal and handler for this signal in the given *object* under the given *name*.
 
-### Example
+### E```xample
 
 obj = {}
 
@@ -95,7 +97,8 @@ obj.onXChanged.connect ->
   console.log arguments
 
 obj.xChanged 1, 2
-// [1, 2]
+# [1, 2]
+```
 
 	exports.create = (obj, name) ->
 		expect(obj).not().toBe.primitive()
@@ -115,7 +118,7 @@ It creates new *signal* function only if it's needed (any listeners wan't to lis
 It can be also used to create signals in the prototypes.
 
 ### Example
-
+```
 class Dog
   handler = signal.createLazy @::, 'ageChanged'
 
@@ -124,16 +127,18 @@ class Dog
 
 myDog = new Dog
 
-console.log(Object.keys(myDog)) // []
+console.log Object.keys(myDog)
+# []
 
 myDog.onAgeChanged.connect ->
-// Signal ageChanged initialized
+# Signal ageChanged initialized
 
 console.log Object.keys(myDog)
-// ['ageChanged']
+# ['ageChanged']
 
 console.log Object.keys(Object.getPrototypeOf(myDog))
-// ['onAgeChanged']
+# ['onAgeChanged']
+```
 
 	exports.createLazy = (obj, name) ->
 		expect(obj).not().toBe.primitive()
@@ -144,7 +149,8 @@ console.log Object.keys(Object.getPrototypeOf(myDog))
 
 		exports.create handler, 'initialized'
 
-		utils.defProp obj, handlerName, 'ec', ->
+		desc = utils.ENUMERABLE | utils.CONFIGURABLE
+		utils.defineProperty obj, handlerName, desc, ->
 			signal = @[name]
 			unless signal?
 				signal = @[name] = createSignalFunction @, handler
@@ -162,12 +168,13 @@ console.log Object.keys(Object.getPrototypeOf(myDog))
 Signal function is used to call all handler listeners.
 
 ### Example
-
+```
 obj = {}
 signal.create obj, 'changed'
 
 obj.changed()
-// call all connected listeners ...
+# call all connected listeners ...
+```
 
 	createSignalFunction = (obj) ->
 		signal = ->
@@ -204,7 +211,7 @@ Handler is always stored in the property prefixed by the *on* (e.g. *onWidthChan
 If it's called it works as a alias for the *Handler.connect()*.
 
 ### Example
-
+```
 obj = {}
 
 signal.create obj, 'pressed'
@@ -216,8 +223,9 @@ obj.onPressed.connect ->
   console.log 'listener 2'
 
 obj.pressed()
-// listener 1
-// listener 2
+# listener 1
+# listener 2
+```
 
 	createHandlerFunction = (obj, signal) ->
 		handler = (listener) ->
@@ -252,7 +260,7 @@ Handler.disconnect(*Function* listener)
 Diconnect already connected listener.
 
 ### Example
-
+```
 obj = {}
 
 signal.create obj, 'pressed'
@@ -263,7 +271,9 @@ listener = ->
 obj.onPressed.connect listener
 obj.onPressed.disconnect listener
 
-obj.pressed() // no loggs...
+obj.pressed()
+# no loggs...
+```
 
 		disconnect: (listener) ->
 			expect(@).toBe.function()
