@@ -55,7 +55,7 @@ module.exports = (File) -> class Condition
 			funcCache[exp] = Condition.getCondFunc exp
 
 		# get result
-		result = utils.tryFunc funcCache[exp], null, null, false
+		result = utils.tryFunction funcCache[exp], null, null, false
 
 		# save result to the exp cache
 		if expCacheLen++ > MAX_IN_EXP_CACHE

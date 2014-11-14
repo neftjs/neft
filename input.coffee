@@ -81,7 +81,7 @@ module.exports = (File) -> class Input
 			if match[3] then func += "'#{utils.addSlashes match[3]}' + "
 
 		func = 'return ' + func.slice 0, -3
-		@func = utils.tryFunc coffee.compile, coffee, [func, bare: true], func
+		@func = utils.tryFunction coffee.compile, coffee, [func, bare: true], func
 
 		Input.fromAssembled @
 

@@ -82,7 +82,7 @@ features. Physical file should be easy to load and parse.
 
 			# parse json
 			if typeof json is 'string'
-				json = utils.tryFunc JSON.parse, null, [json], json
+				json = utils.tryFunction JSON.parse, null, [json], json
 
 			expect(json).toBe.simpleObject()
 
@@ -151,7 +151,7 @@ features. Physical file should be easy to load and parse.
 				@init()
 
 				# clone tmp
-				utils.defProp @, '_tmp', 'w', getTmp()
+				utils.defineProperty @, '_tmp', utils.WRITABLE, getTmp()
 
 				# trigger signal
 				File.parse @
