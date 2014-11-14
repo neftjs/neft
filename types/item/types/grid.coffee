@@ -13,22 +13,16 @@ module.exports = (Renderer, Impl, itemUtils) ->
 		constructor: (item) ->
 			expect(item).toBe.any Grid
 
-			utils.defProp @, '_item', '', item
+			utils.defineProperty @, '_item', null, item
 
 			super Object.create Spacing.DATA
 
-		Dict.defineProperty @::, 'column'
-
-		utils.defProp @::, 'column', 'e', utils.lookupGetter(@::, 'column')
-		, do (_super = utils.lookupSetter @::, 'column') -> (val) ->
+		itemUtils.defineProperty @::, 'column', null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setGridColumnSpacing.call @_item, val
 
-		Dict.defineProperty @::, 'row'
-
-		utils.defProp @::, 'row', 'e', utils.lookupGetter(@::, 'row')
-		, do (_super = utils.lookupSetter @::, 'row') -> (val) ->
+		itemUtils.defineProperty @::, 'row', null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
 			Impl.setGridRowSpacing.call @_item, val
@@ -58,13 +52,13 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			Impl.setGridRows.call @, val
 
 		Renderer.State.supportObjectProperty 'spacing'
-		utils.defProp @::, 'spacing', 'e', ->
-			utils.defProp @, 'spacing', 'e', val = new Spacing(@)
+		utils.defineProperty @::, 'spacing', utils.ENUMERABLE, ->
+			utils.defineProperty @, 'spacing', utils.ENUMERABLE, val = new Spacing(@)
 			val
 		, (val) ->
 			{spacing} = @
 
-			if utils.isObject val
+			if utils.isPlainObject val
 				utils.merge spacing, Spacing.DATA
 				utils.merge spacing, val
 			else

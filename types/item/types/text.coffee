@@ -16,7 +16,7 @@ module.exports = (Renderer, Impl, itemUtils) ->
 		constructor: (item) ->
 			expect(item).toBe.any Text
 
-			utils.defProp @, '_item', '', item
+			utils.defineProperty @, '_item', null, item
 
 			super Object.create Font.DATA
 
@@ -73,8 +73,8 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			Impl.setTextLineHeight.call @, val
 
 		Renderer.State.supportObjectProperty 'font'
-		utils.defProp @::, 'font', 'e', ->
-			utils.defProp @, 'font', 'e', val = new Font(@)
+		utils.defineProperty @::, 'font', utils.ENUMERABLE, ->
+			utils.defineProperty @, 'font', utils.ENUMERABLE, val = new Font(@)
 			val
 		, (val) ->
 			expect(val).toBe.simpleObject()

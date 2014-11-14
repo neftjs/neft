@@ -3,6 +3,7 @@
 {assert} = console
 
 utils = require 'utils'
+signal = require 'signal'
 
 impl = require './impl/base'
 
@@ -18,7 +19,7 @@ platformImpl = switch true
 	# 	require('./impl/pixi') impl
 	when utils.isBrowser
 		require('./impl/css') impl
-	when utils.isQML
+	when utils.isQml
 		require('./impl/qml') impl
 
 if platformImpl
@@ -42,9 +43,11 @@ impl.createAnimation = (animation, type) ->
 	impl.Types[type].create animation
 
 impl.window = null
+signal.create impl, 'windowReady'
 impl.setWindow = do (_super = impl.setWindow) -> (item) ->
-	utils.defProp impl, 'window', 'e', item
+	utils.defineProperty impl, 'window', utils.ENUMERABLE, item
 	_super.call impl, item
+	impl.windowReady()
 
 # impl.getItemChildren = do (_super = impl.getItemChildren) -> (id) ->
 # 	if container = impl.items[id]?.container

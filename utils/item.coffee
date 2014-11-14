@@ -30,7 +30,7 @@ module.exports = (Renderer, Impl) -> exports =
 			setter = exports.createBindingSetter propName, setter
 
 		# override
-		utils.defProp prototype, propName, 'e', getter, setter
+		utils.defineProperty prototype, propName, utils.ENUMERABLE, getter, setter
 
 		prototype
 

@@ -79,7 +79,7 @@ This connection is updated in realtime, so if the *rect1* will change a position
 			createAnchorProp = (type, opts=0) ->
 				Dict.defineProperty Anchors::, type
 
-				utils.defProp Anchors::, type, 'e', utils.lookupGetter(Anchors::, type)
+				utils.defineProperty Anchors::, type, utils.ENUMERABLE, utils.lookupGetter(Anchors::, type)
 				, do (_super = utils.lookupSetter Anchors::, type) -> (val) ->
 					`//<development>`
 					if val?
@@ -188,7 +188,7 @@ so `anchors.top = 'parent.left'` is not allowed.
 			constructor: (item) ->
 				expect(item).toBe.any Renderer.Item
 
-				utils.defProp @, '_item', '', item
+				utils.defineProperty @, '_item', null, item
 
 				super Object.create Anchors.DATA
 

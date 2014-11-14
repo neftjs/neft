@@ -173,26 +173,32 @@ module.exports = (impl) ->
 
 			x = e.x; y = e.y
 
-		impl.attachItemSignal.call impl.window, 'pointerReleased', (e) ->
-			return unless focus
-			focus = false
+		listenOnWindowSignals = ->
+			impl.attachItemSignal.call impl.window, 'pointerReleased', (e) ->
+				return unless focus
+				focus = false
 
-			moveMovement e
+				moveMovement e
 
-			horizontalContinuous.release()
-			verticalContinuous.release()
+				horizontalContinuous.release()
+				verticalContinuous.release()
 
-			x = y = 0
+				x = y = 0
 
-		impl.attachItemSignal.call impl.window, 'pointerMove', (e) ->
-			return unless focus
+			impl.attachItemSignal.call impl.window, 'pointerMove', (e) ->
+				return unless focus
 
-			moveMovement e
+				moveMovement e
 
-			horizontalContinuous.update e.x - x
-			verticalContinuous.update e.y - y
+				horizontalContinuous.update e.x - x
+				verticalContinuous.update e.y - y
 
-			x = e.x; y = e.y
+				x = e.x; y = e.y
+
+		if impl.window?
+			listenOnWindowSignals()
+		else
+			impl.onWindowReady listenOnWindowSignals
 
 	useWheel = (item) ->
 		impl.attachItemSignal.call item, 'pointerWheel', (e) ->

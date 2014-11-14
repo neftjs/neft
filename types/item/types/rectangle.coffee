@@ -15,7 +15,7 @@ module.exports = (Renderer, Impl, itemUtils) ->
 		constructor: (item) ->
 			expect(item).toBe.any Rectangle
 
-			utils.defProp @, '_item', '', item
+			utils.defineProperty @, '_item', null, item
 
 			super Object.create Border.DATA
 
@@ -51,8 +51,8 @@ module.exports = (Renderer, Impl, itemUtils) ->
 			Impl.setRectangleRadius.call @, val
 
 		Renderer.State.supportObjectProperty 'border'
-		utils.defProp @::, 'border', 'e', ->
-			utils.defProp @, 'border', 'e', val = new Border(@)
+		utils.defineProperty @::, 'border', utils.ENUMERABLE, ->
+			utils.defineProperty @, 'border', utils.ENUMERABLE, val = new Border(@)
 			val
 		, (val) ->
 			expect(val).toBe.simpleObject()

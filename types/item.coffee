@@ -61,7 +61,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 
 		# initialization
 		unless @hasOwnProperty '__hash__'
-			utils.defProp @, '_impl', '', {}
+			utils.defineProperty @, '_impl', null, {}
 
 			super Object.create(@constructor.DATA)
 			Impl.createItem @, @constructor.__name__
@@ -91,11 +91,11 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 			for child in children
 				child.parent = @
 
-	utils.defProp @::, 'id', 'e', ->
+	utils.defineProperty @::, 'id', utils.ENUMERABLE, ->
 		undefined
 	, (val) ->
 		expect(val).toBe.truthy().string()
-		utils.defProp @, 'id', 'e', val
+		utils.defineProperty @, 'id', utils.ENUMERABLE, val
 
 	readyLazySignal = signal.createLazy @::, 'ready'
 
@@ -110,16 +110,15 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		lazySignal.onInitialized onLazySignalInitialized
 
 	signal.createLazy @::, Dict.getPropertySignalName('children')
-	childrenSetter = utils.lookupSetter @::, 'children'
 
 	ChildrenObject = {}
 	signal.createLazy ChildrenObject, 'inserted'
 	signal.createLazy ChildrenObject, 'popped'
 
-	utils.defProp @::, 'children', 'e', ->
+	utils.defineProperty @::, 'children', utils.ENUMERABLE, ->
 		val = Object.create ChildrenObject
-		utils.defProp val, 'length', 'w', 0
-		utils.defProp @, 'children', 'e', val
+		utils.defineProperty val, 'length', utils.WRITABLE, 0
+		utils.defineProperty @, 'children', utils.ENUMERABLE, val
 		val
 	, (val) ->
 		expect(val).toBe.array()
@@ -132,7 +131,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 			index = Array::indexOf.call old.children, @
 			Array::splice.call old.children, index, 1
 			old.childrenChanged? old.children
-			childrenSetter.call old, old.children
 			old.children.popped? index, @
 
 		if val?
@@ -199,8 +197,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 	signal.createLazy @::, Dict.getPropertySignalName 'margin'
 
 	Renderer.State.supportObjectProperty 'margin'
-	utils.defProp @::, 'margin', 'e', ->
-		utils.defProp @, 'margin', 'e', val = new Margin(@)
+	utils.defineProperty @::, 'margin', utils.ENUMERABLE, ->
+		utils.defineProperty @, 'margin', utils.ENUMERABLE, val = new Margin(@)
 		val
 	, (val) ->
 		expect(val).toBe.simpleObject()
@@ -208,8 +206,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		utils.merge @margin, val
 
 	Renderer.State.supportObjectProperty 'anchors'
-	utils.defProp @::, 'anchors', 'e', ->
-		utils.defProp @, 'anchors', 'e', val = new Anchors(@)
+	utils.defineProperty @::, 'anchors', utils.ENUMERABLE, ->
+		utils.defineProperty @, 'anchors', utils.ENUMERABLE, val = new Anchors(@)
 		val
 	, (val) ->
 		expect(val).toBe.simpleObject()
@@ -217,8 +215,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		utils.merge @anchors, val
 
 	Renderer.State.supportObjectProperty 'animations'
-	utils.defProp @::, 'animations', 'e', ->
-		utils.defProp @, 'animations', 'e', val = new Animations(@)
+	utils.defineProperty @::, 'animations', utils.ENUMERABLE, ->
+		utils.defineProperty @, 'animations', utils.ENUMERABLE, val = new Animations(@)
 		val
 	, null
 
@@ -228,25 +226,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
 		@
 
 	clear: ->
-		for child in @children
+		while child = @children[0]
 			child.parent = null
 		@
 
 	clone: ->
-		# TODO
-		# expect(scope).toBe.any Renderer
-
-		# clone = scope.create @constructor, @_opts
-		# clone.parent = if scope is @scope then @parent else null
-
-		# clone
+		throw "Not implemented"
 
 	cloneDeep: ->
-		# TODO
-		# clone = @clone scope
-
-		# for child, i in @children
-		# 	child = child.cloneDeep scope
-		# 	child.parent = clone
-
-		# clone
+		throw "Not implemented"

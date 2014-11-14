@@ -4,8 +4,10 @@ utils = require 'utils'
 expect = require 'expect'
 
 # TODO: use Dict
-module.exports = (Renderer, Impl) -> class Animation
-	@__name__ = 'Animation'
+module.exports = (Renderer, Impl) -># class Animation
+	#@__name__ = 'Animation'
+
+	return {} # TODO
 
 	constructor: (opts) ->
 		expect(opts).toBe.simpleObject()

@@ -3,8 +3,10 @@
 utils = require 'utils'
 expect = require 'expect'
 
-module.exports = (Renderer, Impl) -> class NumberAnimation extends Renderer.PropertyAnimation
-	@__name__ = 'NumberAnimation'
+module.exports = (Renderer, Impl) -># class NumberAnimation extends Renderer.PropertyAnimation
+	#@__name__ = 'NumberAnimation'
+
+	return {} # TODO
 
 	utils.defProp @::, 'from', 'e', utils.lookupGetter(Renderer.PropertyAnimation::, 'from')
 	, do (_super = utils.lookupSetter(Renderer.PropertyAnimation::, 'from')) -> (val) ->

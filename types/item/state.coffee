@@ -72,7 +72,7 @@ module.exports = (Renderer, Impl, Item, itemUtils) ->
 	itemUtils.defineProperty Item::, 'state', ((_super) -> ->
 		if @_data.state is null
 			list = @_data.state = new List()
-			utils.defProp list, '_item', '', @
+			utils.defineProperty list, '_item', null, @
 
 			list.onInserted stateInserted
 			list.onChanged statePopped
@@ -86,7 +86,7 @@ module.exports = (Renderer, Impl, Item, itemUtils) ->
 		state.clear()
 
 		if val[0] is '['
-			val = utils.tryFunc JSON.stringify, JSON, [val], val
+			val = utils.tryFunction JSON.stringify, JSON, [val], val
 
 		if typeof val is 'string'
 			if val isnt ''
@@ -101,10 +101,10 @@ module.exports = (Renderer, Impl, Item, itemUtils) ->
 
 		null
 
-	utils.defProp Item::, 'states', 'e', ->
+	utils.defineProperty Item::, 'states', utils.ENUMERABLE, ->
 		val =
 			'': new Renderer.State
-		utils.defProp @, 'states', 'e', val
+		utils.defineProperty @, 'states', utils.ENUMERABLE, val
 		val
 	, (val) ->
 		expect(val).toBe.simpleObject()

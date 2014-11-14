@@ -6,11 +6,11 @@ utils = require 'utils'
 module.exports = (Renderer, Impl, itemUtils) -> class State
 
 	@supportObjectProperty = (propName) ->
-		utils.defProp State::, propName, '', ->
-			utils.defProp @, propName, 'e', val = {}
+		utils.defineProperty State::, propName, null, ->
+			utils.defineProperty @, propName, utils.ENUMERABLE, val = {}
 			val
 		, (val) ->
-			utils.defProp @, propName, 'e', val
+			utils.defineProperty @, propName, utils.ENUMERABLE, val
 
 	update: (item) ->
 		expect(item).toBe.any Renderer.Item

@@ -3,7 +3,9 @@
 expect = require 'expect'
 utils = require 'utils'
 
-module.exports = (Renderer) -> class Animations
+module.exports = (Renderer) -># class Animations
+	return {} # TODO
+
 	constructor: (item) ->
 		expect(item).toBe.any Renderer.Item
 

@@ -37,14 +37,14 @@ Renderer.Rectangle.create
 			constructor: (item) ->
 				expect(item).toBe.any Renderer.Item
 
-				utils.defProp @, '_item', '', item
+				utils.defineProperty @, '_item', null, item
 
 				super Object.create Margin.DATA
 
 			createMarginProp = (type) ->
 				Dict.defineProperty Margin::, type
 
-				utils.defProp Margin::, type, 'e', utils.lookupGetter(Margin::, type)
+				utils.defineProperty Margin::, type, utils.ENUMERABLE, utils.lookupGetter(Margin::, type)
 				, do (_super = utils.lookupSetter Margin::, type) -> (val) ->
 					`//<development>`
 					id = @_item.__hash__

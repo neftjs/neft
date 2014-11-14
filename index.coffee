@@ -20,8 +20,8 @@ exports.Animation = require('./types/animation') exports, Impl
 exports.PropertyAnimation = require('./types/animation/types/property') exports, Impl
 exports.NumberAnimation = require('./types/animation/types/property/types/number') exports, Impl
 
-utils.defProp exports, 'window', 'c', null, (val) ->
-	utils.defProp exports, 'window', 'e', val
+utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
+	utils.defineProperty exports, 'window', utils.ENUMERABLE, val
 	Impl.setWindow val
 
 Object.preventExtensions exports

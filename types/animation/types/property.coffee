@@ -3,8 +3,10 @@
 utils = require 'utils'
 expect = require 'expect'
 
-module.exports = (Renderer, Impl) -> class PropertyAnimation extends Renderer.Animation
-	@__name__ = 'PropertyAnimation'
+module.exports = (Renderer, Impl) -># class PropertyAnimation extends Renderer.Animation
+	#@__name__ = 'PropertyAnimation'
+
+	return {} # TODO
 
 	utils.defProp @::, 'target', 'e', ->
 		Impl.getPropertyAnimationTarget @_uid

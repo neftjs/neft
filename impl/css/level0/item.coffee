@@ -140,7 +140,6 @@ HOT_MAX_TIME = 50
 HOT_MAX_ACTIONS = 5
 
 module.exports = (impl) ->
-	# TODO: use TextEncoder & TextDecoder ?
 	updateTransforms = (item) ->
 		transform = ''
 		data = item._data
