@@ -67,7 +67,8 @@ module.exports = (File) ->
 				break
 
 		if proceed
-			utils.defProp clone, '_watchedFile', 'cw', null
+			desc = utils.ENUMERABLE | utils.WRITABLE
+			utils.defineProperty clone, '_watchedFile', desc, null
 
 			clone.updateStylesParent = @updateStylesParent.bind clone
 			clone.onReplacedByElem clone.updateStylesParent
