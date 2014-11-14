@@ -19,7 +19,7 @@ Creates new *list* based on the *given* elements.
 list = new List [1, 2]
 
 console.log list instanceof List
-// true
+# true
 ```
 
 ### Arguments notation
@@ -54,7 +54,8 @@ list = List [1, 2]
 				return new List arr
 
 			# properties
-			utils.defProp @, '_data', 'e', arr
+			# TODO: mark as not enumerable (toJSON must be added)
+			utils.defineProperty @, '_data', utils.ENUMERABLE, arr
 
 List::changed(*Integer* index, *Any* oldValue)
 ----------------------------------------------
@@ -95,9 +96,10 @@ This property is **read-only**.
 list = new List 'a', 'b'
 
 console.log list.length
-// 2
+# 2
 
-		utils.defProp @::, 'length', 'ce', ->
+		desc = utils.CONFIGURABLE | utils.ENUMERABLE
+		utils.defineProperty @::, 'length', desc, ->
 			@_data.length
 		, null
 
@@ -113,13 +115,13 @@ For unknown elements, `undefined` is returned.
 list = new List 'a', 'b'
 
 console.log list.get 0
-// a
+# a
 
 console.log list.get 1
-// b
+# b
 
 console.log list.get 2
-// undefined
+# undefined
 ```
 
 		get: (i) ->
@@ -146,10 +148,10 @@ types.onChanged.connect (i, oldVal) ->
   console.log "Element #{oldVal} changed to #{@get i}"
 
 types.set 0, 'Fantasy'
-// Element fantasy changed to Fantasy
+# Element fantasy changed to Fantasy
 
 types.set 0, 'Fantasy'
-// nothing changed ...
+# nothing changed ...
 ```
 
 		set: (i, val) ->
@@ -181,10 +183,10 @@ Use `utils.clone()` otherwise.
 list = new List 1, 2
 
 console.log list.items()
-// [1, 2]
+# [1, 2]
 
 console.log Array.isArray list.items()
-// true
+# true
 ```
 
 ### Iterating over a list
@@ -192,8 +194,8 @@ console.log Array.isArray list.items()
 list = new List 'a', 'b'
 for element in list.items()
 	console.log element
-// a
-// b
+# a
+# b
 ```
 
 		items: ->
@@ -216,10 +218,10 @@ fridge.onInserted.connect (i, val) ->
   console.log "#{val} appended!"
 
 fridge.append 'cheese'
-// cheese appended!
+# cheese appended!
 
 console.log fridge.items()
-// apple, milk, cheese
+# apple, milk, cheese
 ```
 
 		append: (val) ->
@@ -249,7 +251,7 @@ list.onInserted.connect (i, val) ->
   console.log "New element #{val} inserted at index #{i}"
 
 list.insert 'c'
-// New element c inserted at index 2
+# New element c inserted at index 2
 ```
 
 		insert: (i, val) ->
@@ -277,10 +279,16 @@ Given *value* is returned.
 ```
 list = new List 'a', 'b'
 
-console.log(list.get(1)) // b
+console.log list.get(1)
+# b
+
 list.remove 'b'
-console.log(list.get(1)) // undefined
-console.log(list.items()) // ['a']
+
+console.log list.get(1)
+# undefined
+
+console.log list.items()
+# ['a']
 ```
 
 		remove: (val) ->
@@ -307,10 +315,16 @@ Removed element is returned.
 ```
 list = new List 'a', 'b'
 
-console.log(list.get(1)) // b
+console.log list.get(1)
+# b
+
 list.pop(1)
-console.log(list.get(1)) // undefined
-console.log(list.items()) // ['a']
+
+console.log list.get(1)
+# undefined
+
+console.log list.items()
+# ['a']
 ```
 
 		pop: (i) ->
@@ -343,14 +357,14 @@ list.onPopped.connect (i, oldVal) ->
   console.log "Element #{oldVal} popped!"
 
 console.log list.items()
-// ['a', 'b']
+# ['a', 'b']
 
 list.clear()
-// Element b popped!
-// Element a popped!
+# Element b popped!
+# Element a popped!
 
 console.log list.items()
-// []
+# []
 ```
 
 		clear: ->
@@ -373,10 +387,10 @@ If no value exists in this list `-1` is returned.
 list = new List 'a', 'b'
 
 console.log list.index 'b'
-// 1
+# 1
 
 console.log list.index 'c'
-// -1
+# -1
 ```
 
 		index: (val) ->
