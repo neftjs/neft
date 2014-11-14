@@ -10,7 +10,7 @@ PlatformImpl = switch true
 		require './impl/node/index'
 	when utils.isBrowser
 		require './impl/browser/index'
-	when utils.isQML
+	when utils.isQml
 		require './impl/qml/index'
 
 assert PlatformImpl

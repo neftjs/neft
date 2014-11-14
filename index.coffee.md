@@ -35,7 +35,7 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 			expect(opts.host).toBe.truthy().string()
 			expect(opts.language).toBe.truthy().string()
 
-			utils.defProp @, '_handlers', 'c', {}
+			utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
 			{@protocol, @port, @host, @language} = opts
 
 			@url = "#{@protocol}://#{@host}:#{@port}/"
@@ -59,7 +59,7 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 		createHandler: (method, uri, callback) ->
 			expect(@).toBe.any Routing
 
-			if utils.isObject method
+			if utils.isPlainObject method
 				{method, uri, schema, callback} = method
 
 			uri = new Routing.Uri uri

@@ -30,7 +30,7 @@ module.exports = (Routing) ->
 			response = xhr.responseText
 
 			if opts.type is Request.OBJECT_TYPE
-				response = utils.tryFunc JSON.parse, null, [response], response
+				response = utils.tryFunction JSON.parse, null, [response], response
 
 			callback xhr.status, response
 

@@ -61,7 +61,7 @@ module.exports = (Routing) ->
 			{response} = xhr
 
 			if req.type is Request.OBJECT_TYPE and typeof response is 'string'
-				response = utils.tryFunc JSON.parse, null, [response], response
+				response = utils.tryFunction JSON.parse, null, [response], response
 
 			callback xhr.status, response
 

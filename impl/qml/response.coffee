@@ -9,10 +9,10 @@ log = log.scope 'Routing'
 module.exports = (Routing) ->
 
 	showAsJson = (data) ->
-		if not webview? or not utils.isObject(data)
+		if not webview? or not utils.isPlainObject(data)
 			return false
 
-		unless json = utils.tryFunc(JSON.stringify, null, [data, null, 4])
+		unless json = utils.tryFunction(JSON.stringify, null, [data, null, 4])
 			log.warn "Response is an object but can't be stringified into JSON"
 			return false
 
@@ -55,7 +55,7 @@ module.exports = (Routing) ->
 			return false
 
 		for style in styles
-			style.item.parent = Renderer.mainItem
+			style.item.parent = Renderer.window
 
 		true
 
@@ -64,8 +64,7 @@ module.exports = (Routing) ->
 		log.ok "Got response `#{res.req.method} #{res.req.uri}`"
 
 		# clear styles
-		{mainItem} = Renderer
-		mainItem.clear()
+		Renderer.window.clear()
 
 		# clear messages container
 		webview?.loadHtml ''

@@ -85,7 +85,7 @@ Handler
 					# parse params into expected types
 					for key, schemaOpts of @schema.schema
 						if params.hasOwnProperty(key) and schemaOpts.type
-							params[key] = utils.tryFunc parse, null, [params[key]], params[key]
+							params[key] = utils.tryFunction parse, null, [params[key]], params[key]
 
 					# validate schema
 					err = utils.catchError @schema.validate, @schema, [params]
@@ -102,7 +102,7 @@ Handler
 						# TODO: move building errors into more generic place
 						errMsg = err
 						if err.stack?
-							if utils.isQML
+							if utils.isQml
 								errMsg = "#{err.message}\n#{err.stack}"
 							else
 								errMsg = err.stack
@@ -114,7 +114,7 @@ Handler
 				log "Use `#{@method} #{@uri}` handler"
 
 				req.handler = @
-				utils.tryFunc @callback, @, [req, res, callbackNext], callbackNext
+				utils.tryFunction @callback, @, [req, res, callbackNext], callbackNext
 
 				null
 

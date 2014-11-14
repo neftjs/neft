@@ -78,7 +78,7 @@ Response
 				@destroy()
 
 			# whether response will be send on the next tick
-			utils.defProp @, '_waitingToSend', 'w', false
+			utils.defineProperty @, '_waitingToSend', utils.WRITABLE, false
 
 			# signals
 			signal.create @, 'sent'

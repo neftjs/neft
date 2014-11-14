@@ -13,10 +13,10 @@ window.addEventListener 'load', ->
 module.exports = (Routing) ->
 
 	showAsJson = (data) ->
-		unless utils.isObject data
+		unless utils.isPlainObject data
 			return false
 
-		unless json = utils.tryFunc(JSON.stringify, null, [data, null, 4])
+		unless json = utils.tryFunction(JSON.stringify, null, [data, null, 4])
 			log.warn "Response is an object but can't be stringified into JSON"
 			return false
 
@@ -55,11 +55,10 @@ module.exports = (Routing) ->
 
 		{styles} = data
 		unless styles.length
-			log.warn "Can't find an item style declaration in the main view scope"
 			return false
 
 		for style in styles
-			style.item.parent = Renderer.mainItem
+			style.item.parent = Renderer.window
 
 		true
 
@@ -68,8 +67,7 @@ module.exports = (Routing) ->
 		log.ok "Got response `#{res.req.method} #{res.req.uri}`"
 
 		# clear styles
-		{mainItem} = Renderer
-		mainItem.clear()
+		# Renderer.window.clear()
 
 		# clear messages container
 		while child = messagesContainer.firstChild
