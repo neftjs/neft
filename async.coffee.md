@@ -1,9 +1,10 @@
-Utils for async
-===============
+Asynchronous
+============
 
 	'use strict'
 
-	[utils, expect] = ['./index.coffee.md', 'expect'].map require
+	[expect] = ['expect'].map require
+	utils = null
 
 	{exports} = module
 	{assert} = console
@@ -13,179 +14,40 @@ Utils for async
 
 	NOP = ->
 
-*class* Stack
--------------
+utils.async.forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
+-------------------------------------------------------------------------------------------------
 
-Store asynchronous functions in list.
-Functions have to provide `callback` as last parameter.
+Asynchronous version of standard `Array.prototype.forEach()` method works with arrays and
+objects as well.
 
-	exports.Stack = class Stack
+*callback* function is called with parameters:
+ - for array given: element value, index, array, next callback
+ - for object given: key, value, object, next callback
 
-### Constructor
+Each *callback* must call got *next callback* if it finished processing.
 
-		constructor: ->
+*onEnd* function is called when the last *callback* finished processing.
 
-			@_arr = []
+*context* argument is passing into the each *callback*.
 
-### Properties
+### Example
+```
+toLoadInOrder = ['users.json', 'families.js', 'relationships.js']
 
-#### Protected
+utils.async.forEach toLoadInOrder, (elem, i, array, next) ->
+  console.log "Load #{elem} file"
+  # on load end ...
+  next()
+, ->
+  console.log "All files are loaded!"
 
-		_arr: null
+# Load users.json
+# Load families.json
+# load relationships.json
+# All files are loaded!
+```
 
-### Methods
-
-#### add()
-
-Add new asynchronous function into stack.
-
-`func` is a name of function stored in `obj` or function to call;
-`obj` is a namespace where specified `func` exists and context passed into function;
-`args` are an array of arguments passed into function.
-
-		add: (func, context, args) ->
-			expect().defined(args).toBe.object()
-
-			@_arr.push func, context, args
-
-#### callNext()
-
-Call next function from the stack.
-
-`callback` is provided into function.
-
-Empty `callback` will be called if there is no function to call.
-
-		callNext: (callback) ->
-
-			if typeof callback isnt 'function'
-				throw new TypeError "ASync callNext(): passed callback is not a function"
-
-			# on empty
-			unless @_arr.length
-				return callback null
-
-			# get next
-			func = @_arr.shift()
-			context = @_arr.shift()
-			args = @_arr.shift()
-
-			if typeof func is 'string'
-				func = context[func]
-
-			if typeof func isnt 'function'
-				throw new TypeError "ASync Stack::callNext(): function to call is not a function"
-
-			syncError = null
-			called = false
-
-			callbackWrapper = ->
-				assert not called or not syncError
-				, "Callback can't be called if function throws an error;\n" +
-				  "Function: `#{func}`\nSynchronous error: `#{syncError}`"
-
-				assert not called
-				, "Callback can't be called twice;\nFunction: `#{func}`"
-
-				called = true
-				callback.apply @, arguments
-
-			# add callback into args
-			# To avoid got args array modification and to minimise memory usage,
-			# we create new object with `args` as a prototype.
-			# `Function::apply` expects an object and iterate by it to the `length`.
-			args = Object.create (args or null)
-			args[func.length - 1] = callbackWrapper
-			if args.length is undefined or args.length < func.length
-				args.length = func.length
-
-			# call; support sync errors
-			syncError = utils.catchError func, context, args
-			if syncError
-				callbackWrapper syncError
-
-#### runAll()
-
-Run all stored functions in order.
-
-`callback` has arguments from the last fulfilled or first rejected fuction.
-
-		runAll: (callback) ->
-
-			if typeof callback isnt 'function'
-				throw new TypeError "ASync runAll(): passed callback is not a function"
-
-			unless @_arr.length
-				return callback null
-
-			onNextCalled = (err) =>
-
-				# on err
-				if err
-					return callback err
-
-				# call next
-				if @_arr.length
-					return callNext()
-
-				callback.apply null, arguments
-
-			callNext = => @callNext onNextCalled
-
-			callNext()
-
-#### runAllSimultaneously()
-
-Run all stored functions in the same time.
-
-`callback` has arguments from the last fulfilled or first rejected fuction.
-
-		runAllSimultaneously: (callback) ->
-
-			if typeof callback isnt 'function'
-				throw new TypeError "ASync runAllSimultaneously(): passed callback is not a function"
-
-			length = n = @_arr.length / 3
-			done = 0
-
-			unless length
-				return callback null
-
-			onDone = (err) ->
-
-				++done
-
-				if done > length then return
-
-				if err
-					done = length
-					return callback err
-
-				if done is length
-					callback.apply null, arguments
-
-			# run all functions
-			while n--
-				@callNext onDone
-
-			null
-
-forEach()
---------------
-
-Check object or array like by standard Array::forEach but working asynchronously.
-As last `callback` argument you will get `next` function. Call it when your
-async code finished and you are ready to check next element.
-
-As third argument you can optionally specify `onEnd` function which will
-be called when all pairs will be checked.
-
-For arrays callback gets: element, index, array, next.
-For objects callback gets: key, value, object, next.
-
-`thisArg` is using to call callbacks and it's returned by this method.
-
-	exports.forEach = do ->
+	forEach = do ->
 
 		forArray = (arr, callback, onEnd, thisArg) ->
 
@@ -216,7 +78,8 @@ For objects callback gets: key, value, object, next.
 			next = ->
 
 				# return and call onEnd if there is no pairs to check
-				if i is n then return onEnd()
+				if i is n
+					return onEnd()
 
 				# call callback func
 				key = keys[i]
@@ -229,17 +92,212 @@ For objects callback gets: key, value, object, next.
 			next()
 
 		(list, callback, onEnd, thisArg) ->
-
-			if typeof list isnt 'object'
-				throw new TypeError
-
-			if typeof callback isnt 'function'
-				throw new TypeError
-
-			if typeof onEnd isnt 'function'
-				onEnd = NOP
+			expect(list).not().toBe.primitive()
+			expect(callback).toBe.function()
+			expect().defined(onEnd).toBe.function()
 
 			method = if isArray list then forArray else forObject
 			method list, callback, onEnd, thisArg
 
-			thisArg
+			null
+
+*Stack* utils.async.Stack()
+---------------------------
+
+Class used to store asynchronous functions in a proper order.
+
+### Example
+```
+stack = new utils.async.Stack
+
+load = (src, callback) ->
+  console.log "Load #{src} file"
+  # load file async ...
+  # first callback parameter is an error ...
+  callback null, "fiel data"
+
+stack.add load, null, ['items.json']
+stack.add load, null, ['users.json']
+
+stack.runAllSimultaneously ->
+  console.log "All files have been loaded!"
+
+# Load items.json file
+# Load users.json file
+# All files have been loaded!
+
+# or ... (simultaneous call has no order)
+
+# Load users.json file
+# Load items.json file
+# All files have been loaded!
+```
+
+	class Stack
+
+		constructor: ->
+
+			###
+			One-deep array of added functions in schema [function, context, args, ...]
+			###
+			@_arr = []
+
+utils.async.Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
+--------------------------------------------------------------------------------------
+
+Adds new *function* to the stack.
+
+*function* must provide *callback* argument as the last one.
+First argument passing to the *callback* by the *function* is always an error.
+
+### Example
+```
+stack = new utils.async.Stack
+
+add = (a, b, callback) ->
+  if isFinite(a) and isFinite(b)
+    callback null, a+b
+  else
+    callback "Finite numbers are required!"
+
+stack.add add, null, [1, 2]
+```
+
+		add: (func, context, args) ->
+			expect().defined(args).toBe.object()
+
+			@_arr.push func, context, args
+
+utils.async.Stack::callNext(*Function* callback)
+------------------------------------------------
+
+Calls first function from the stack and remove it.
+
+*callback* function gots all passed arguments by the called *function*.
+
+		callNext: (callback) ->
+			expect(callback).toBe.function()
+
+			# on empty
+			unless @_arr.length
+				return callback()
+
+			# get next
+			func = @_arr.shift()
+			context = @_arr.shift()
+			args = @_arr.shift()
+
+			if typeof func is 'string'
+				func = context[func]
+
+			if typeof func isnt 'function'
+				throw new TypeError "ASync Stack::callNext(): function to call is not a function"
+
+			syncError = null
+			called = false
+
+			callbackWrapper = ->
+				assert not called or not syncError
+				, "Callback can't be called if function throws an error;\n" +
+				  "Function: `#{func}`\nSynchronous error: `#{syncError}`"
+
+				assert not called
+				, "Callback can't be called twice;\nFunction: `#{func}`"
+
+				called = true
+				callback.apply @, arguments
+
+			# add callback into args
+			# To avoid got args array modification and to minimise memory usage,
+			# we create new object with `args` as a prototype.
+			# `Function::apply` expects an object and iterate by it to the `length`.
+			args = Object.create(args or null)
+			args[func.length - 1] = callbackWrapper
+			if args.length is undefined or args.length < func.length
+				args.length = func.length
+
+			# call; support sync errors
+			syncError = utils.catchError func, context, args
+			if syncError
+				callbackWrapper syncError
+
+			null
+
+utils.async.Stack::runAll(*Function* callback)
+----------------------------------------------
+
+Calls all functions from the stack one by one.
+
+*callback* function gots all passed arguments by the last called *function*.
+
+Processing stops on error occurs, then *callback* function is called with got error.
+
+		runAll: (callback) ->
+
+			if typeof callback isnt 'function'
+				throw new TypeError "ASync runAll(): passed callback is not a function"
+
+			unless @_arr.length
+				return callback null
+
+			onNextCalled = (err) =>
+
+				# on err
+				if err
+					return callback err
+
+				# call next
+				if @_arr.length
+					return callNext()
+
+				callback.apply null, arguments
+
+			callNext = => @callNext onNextCalled
+
+			callNext()
+
+			null
+
+utils.async.Stack::runAllSimultaneously(*Function* callback)
+------------------------------------------------------------
+
+Calls all functions from the stack simultaneously (all at the same time).
+
+Processing stops on error occurs, then *callback* function is called with got error.
+
+		runAllSimultaneously: (callback) ->
+			expect(callback).toBe.function()
+
+			length = n = @_arr.length / 3
+			done = 0
+
+			unless length
+				return callback()
+
+			onDone = (err) ->
+				++done
+
+				if done > length
+					return
+
+				if err
+					done = length
+					return callback err
+
+				if done is length
+					callback()
+
+			# run all functions
+			while n--
+				@callNext onDone
+
+			null
+
+	###
+	Exports
+	###
+	module.exports = ->
+		[utils] = arguments
+		utils.async =
+			forEach: forEach
+			Stack: Stack

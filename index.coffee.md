@@ -18,12 +18,22 @@ Utils
 
 	[expect] = ['expect'].map require
 
-	exports.async = require './async.coffee.md'
+	###
+	Link subfiles
+	###
+	require('./namespace') exports
+	require('./stringifying') exports
+	require('./async') exports
 
 *Boolean* utils.isNode
 ----------------------
 
 Determine whether application is run in *node.js*.
+
+*Boolean* utils.isClient
+------------------------
+
+`utils.isNode` inverse.
 
 *Boolean* utils.isBrowser
 -------------------------
@@ -34,11 +44,6 @@ Determine whether application is run in the browser environment.
 ---------------------
 
 Determine whether application is a part of the QML program.
-
-*Boolean* utils.isClient
-------------------------
-
-`utils.isNode` inverse.
 
 	exports.isNode = exports.isClient = exports.isBrowser = exports.isQml = false
 
@@ -53,23 +58,23 @@ Determine whether application is a part of the QML program.
 		when Qt?.include?
 			exports.isClient = exports.isQml = true
 
-*Boolean* utils.isObject(*Any* param)
+*Boolean* utils.isPlainObject(*Any* param)
 -------------------------------------
 
 Checks whether given *param* is an object.
 
 ### Example
 ```
-console.log utils.isObject({})
+console.log utils.isPlainObject({})
 # true
 
-console.log utils.isObject([])
+console.log utils.isPlainObject([])
 # true
 
-console.log utils.isObject('')
+console.log utils.isPlainObject('')
 # false
 
-console.log utils.isObject(->)
+console.log utils.isPlainObject(->)
 # false
 ```
 
@@ -372,11 +377,11 @@ console.log object.length
 # 2
 ```
 
-	exports.WRITABLE = 1<<0
-	exports.ENUMERABLE = 1<<1
-	exports.CONFIGURABLE = 1<<2
+	defObjProp exports, 'WRITABLE', value: 1<<0
+	defObjProp exports, 'ENUMERABLE', value: 1<<1
+	defObjProp exports, 'CONFIGURABLE', value: 1<<2
 
-	exports.defProp = do ->
+	exports.defineProperty = do ->
 
 		{WRITABLE, ENUMERABLE, CONFIGURABLE} = exports
 
@@ -504,8 +509,8 @@ Checks whether given *object* is empty, that is:
 		else
 			return !getOwnPropertyNames(object).length
 
-*Any* utils.last(*Array* array)
--------------------------------
+*Any* utils.last(*NotPrimitive* array)
+--------------------------------------
 
 Returns given *array* last element.
 
@@ -519,7 +524,7 @@ console.log utils.last([])
 ```
 
 	exports.last = (arg) ->
-		expect(arg).toBe.array()
+		expect(arg).not().toBe.primitive()
 
 		arg[arg.length - 1]
 
@@ -788,7 +793,7 @@ Generates pseudo-unique hash with given *length*.
 		else
 			str.slice 0, n
 
-*Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
+*Any* utils.tryFunctiontion(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
 ----------------------------------------------------------------------------------------------
 
 Calls given *function* with *context* and *arguments*.
@@ -803,13 +808,13 @@ func = (size) ->
 	if size is 0
 		throw "Wrong size!"
 
-console.log utils.tryFunction(func, null, [0])
+console.log utils.tryFunctiontion(func, null, [0])
 # undefined
 
-console.log utils.tryFunction(func, null, [0], 'ERROR!')
+console.log utils.tryFunctiontion(func, null, [0], 'ERROR!')
 # ERROR!
 
-console.log utils.tryFunction(func, null, [100], 'ERROR!')
+console.log utils.tryFunctiontion(func, null, [100], 'ERROR!')
 # undefined
 ```
 

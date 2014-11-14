@@ -1,6 +1,10 @@
 	'use strict'
 
-### get()
+	expect = require 'expect'
+
+	module.exports = (utils) ->
+
+### TODO: get()
 
 Get needed value from the object. Arrays are supported.
 If path can't be resolved, new get.OptionsArray is returned with
@@ -9,102 +13,102 @@ Separate properties in path by dots ('.').
 For arrays add to property name two brackets ('[]')
 - look at isStringArray method to check it in other way.
 
-	get = exports.get = (obj, path='', target) ->
+		get = utils.get = (obj, path='', target) ->
 
-		expect(obj).not().toBe.primitive()
+			expect(obj).not().toBe.primitive()
 
-		switch typeof path
+			switch typeof path
 
-			when 'object'
+				when 'object'
 
-				path = exports.clone path
+					path = exports.clone path
 
-			when 'string'
+				when 'string'
 
-				# split path by dot's
-				path = path.split '.'
+					# split path by dot's
+					path = path.split '.'
 
-			else
+				else
 
-				throw new TypeError
+					throw new TypeError
 
-		# check chunks
-		for key, i in path
+			# check chunks
+			for key, i in path
 
-			# empty props are not supported
-			if not key.length and i
-				throw new ReferenceError "utils.get(): empty properties are not supported"
+				# empty props are not supported
+				if not key.length and i
+					throw new ReferenceError "utils.get(): empty properties are not supported"
 
-			# support array elements by `[]` chars
-			if isStringArray key
+				# support array elements by `[]` chars
+				if isStringArray key
 
-				# get array key name
-				key = key.substring 0, key.indexOf('[]')
+					# get array key name
+					key = key.substring 0, key.indexOf('[]')
 
-				# cut path removing checked elements
-				path = path.splice i
+					# cut path removing checked elements
+					path = path.splice i
 
-				# update current path elem without array brackets
-				path[0] = path[0].substring key.length + 2
+					# update current path elem without array brackets
+					path[0] = path[0].substring key.length + 2
 
-				# if current path is empty, remove it
-				unless path[0].length then path.shift()
+					# if current path is empty, remove it
+					unless path[0].length then path.shift()
 
-				# create target array if no exists
-				target ?= new OptionsArray()
+					# create target array if no exists
+					target ?= new OptionsArray()
 
-				# move to the key value if needed
-				if key.length
-					obj = obj[key]
+					# move to the key value if needed
+					if key.length
+						obj = obj[key]
 
-				# return `undefined` if no value exists
-				if typeof obj is 'undefined'
-					return undefined
+					# return `undefined` if no value exists
+					if typeof obj is 'undefined'
+						return undefined
 
-				# call this func recursive on all array elements
-				# found results will be saved in the `target` array
-				for elem in obj
-					get elem, path.join('.'), target
+					# call this func recursive on all array elements
+					# found results will be saved in the `target` array
+					for elem in obj
+						get elem, path.join('.'), target
 
-				# return `undefined` if nothing has been found
-				unless target.length
-					return undefined
+					# return `undefined` if nothing has been found
+					unless target.length
+						return undefined
 
-				# return found elements
-				return target
+					# return found elements
+					return target
 
-			# move to the next object value
-			if key.length then obj = obj[key]
+				# move to the next object value
+				if key.length then obj = obj[key]
 
-			# break if no way exists
-			if typeof obj isnt 'object' and typeof obj isnt 'function'
+				# break if no way exists
+				if typeof obj isnt 'object' and typeof obj isnt 'function'
 
-				# if it is no end of path, return undefined
-				if i isnt path.length - 1
-					obj = undefined
+					# if it is no end of path, return undefined
+					if i isnt path.length - 1
+						obj = undefined
 
-				break
+					break
 
-		# save obj into target array
-		if target and typeof obj isnt 'undefined' then target.push obj
+			# save obj into target array
+			if target and typeof obj isnt 'undefined' then target.push obj
 
-		obj
+			obj
 
 #### *class* get.OptionsArray()
 
 Special version of Array, returned if result of the `get` method is a list
 of possible values and not a proper value.
 
-	exports.get.OptionsArray = class OptionsArray extends Array
+		get.OptionsArray = class OptionsArray extends Array
 
-		constructor: -> super
+			constructor: -> super
 
 ### isStringArray()
 
 Check if string references into array (according to notation in `get` method).
 
-	isStringArray = exports.isStringArray = (arg) ->
+		isStringArray = utils.isStringArray = (arg) ->
 
-		expect(arg).toBe.string()
+			expect(arg).toBe.string()
 
-		arg.slice(-2) is '[]'
+			arg.slice(-2) is '[]'
