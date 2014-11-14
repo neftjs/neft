@@ -29,7 +29,7 @@ Creates new *Dict* from the json.
 See `Dict::toJSON` to see how to stringify a *Dict* instance and use it here.
 
 		@fromJSON = (json) ->
-			json = utils.tryFunc JSON.parse, JSON, [json], json
+			json = utils.tryFunction JSON.parse, JSON, [json], json
 			expect(json).toBe.simpleObject()
 
 			new Dict json
@@ -47,12 +47,13 @@ check methods in this class which calls signals.
 To create signal handler name based on the signal name, check `signal.getHandlerName()`.
 
 ### Example
-
+```
 Dict.getPropertySignalName('name')
-// nameChanged
+# nameChanged
 
 signal.getHandlerName('nameChanged')
-// onNameChanged
+# onNameChanged
+```
 
 		@getPropertySignalName = do (cache = {}) -> (propName) ->
 			expect(propName).toBe.truthy().string()
@@ -79,7 +80,7 @@ optimization, because signal handlers without listeners are not created and call
 on each property value change.
 
 ### Example
-
+```
 class Dog extends Dict
   constructor: ->
     super
@@ -90,13 +91,14 @@ class Dog extends Dict
 myDog = new Dog
 
 console.log myDog.age
-// 4
+# 4
 
 myDog.onAgeChanged.connect (oldVal) ->
   console.log "Age has been changed from #{oldVal} to #{@age}"
 
 myDog.age++
-// Age has been changed from 4 to 5
+# Age has been changed from 4 to 5
+```
 
 		@defineProperty = do ->
 			createGetter = (propName) ->
@@ -129,7 +131,8 @@ myDog.age++
 				# getter/setter
 				getter = createGetter propName
 				setter = createSetter propName
-				utils.defProp prototype, propName, 'ec', getter, setter
+				desc = utils.ENUMERABLE | utils.CONFIGURABLE
+				utils.defineProperty prototype, propName, desc, getter, setter
 
 				null
 
@@ -143,12 +146,13 @@ Creates new *Dict* instance.
 Using *new* keyword is not required.
 
 ### Example
-
+```
 data = new Dict
   name: 'xyz'
 
 console.log data.get 'name'
-// xyz
+# xyz
+```
 
 		constructor: (obj={}) ->
 			expect(obj).toBe.object()
@@ -158,12 +162,12 @@ console.log data.get 'name'
 				return new Dict obj
 
 			# properties
-			utils.defProp @, '__hash__', '', utils.uid()
-			utils.defProp @, '_data', '', obj
-			utils.defProp @, '_keys', 'w', null
-			utils.defProp @, '_values', 'w', null
-			utils.defProp @, '_items', 'w', null
-			utils.defProp @, '_dirty', 'w', ALL
+			utils.defineProperty @, '__hash__', null, utils.uid()
+			utils.defineProperty @, '_data', null, obj
+			utils.defineProperty @, '_keys', utils.WRITABLE, null
+			utils.defineProperty @, '_values', utils.WRITABLE, null
+			utils.defineProperty @, '_items', utils.WRITABLE, null
+			utils.defineProperty @, '_dirty', utils.WRITABLE, ALL
 
 *Integer* Dict::length
 ----------------------
@@ -172,7 +176,8 @@ Returns amount of the keys stored in the *Dict* instance.
 
 This value can't be changed manually.
 
-		utils.defProp @::, 'length', 'ce', ->
+		desc = utils.CONFIGURABLE | utils.ENUMERABLE
+		utils.defineProperty @::, 'length', desc, ->
 			@keys().length
 		, null
 
@@ -184,7 +189,7 @@ Lazy **signal** called on each property value change.
 You can listen on this signal using the ***onChanged*** handler.
 
 ### Example
-
+```
 user = new Dict
   country: 'Germany'
 
@@ -192,7 +197,8 @@ user.onChanged.connect (key, oldVal) ->
   console.log "User #{key} property changed from #{oldVal} to #{@get(key)}"
 
 user.set 'country', 'US'
-// User country property changed from Germany to US
+# User country property changed from Germany to US
+```
 
 		signal.createLazy @::, 'changed'
 
@@ -204,19 +210,20 @@ Get a property value stored in the *Dict*.
 Returns *undefined* only for unknown properties.
 
 ### Example
-
+```
 bunny = new Dict
   speedX: 5
   speedY: 2
 
 console.log bunny.get 'speedX'
-// 5
+# 5
 
 console.log bunny.get 'speedY'
-// 2
+# 2
 
 console.log bunny.get 'speedZ'
-// undefined
+# undefined
+```
 
 		get: (key) ->
 			expect(key).toBe.truthy().string()
@@ -236,7 +243,7 @@ Passed *value* can't be a `undefined`, because it's used only for unknown proper
 Given *value* is returned as a **result**.
 
 ### Example
-
+```
 links = new Dict
   facebook: 'https://facebook.com/neft.io'
   twitter: 'https://twitter.com/neft_io'
@@ -245,7 +252,8 @@ links.onChanged.connect (key, oldVal) ->
   console.log "Social link for #{key} changed from #{oldVal} to #{@get(key)}"
 
 links.set 'googlePlus', 'https://plus.google.com/+NeftIo-for-apps/'
-// Social link for googlePlus changed from undefined to https://...
+# Social link for googlePlus changed from undefined to https://...
+```
 
 		set: (key, val) ->
 			expect(key).toBe.truthy().string()
@@ -276,7 +284,7 @@ Remove exists property from the *Dict*.
 This method calls `Dict::changed()` **signal** with standard parameters.
 
 ### Example
-
+```
 member = new Dict
 
 data.set 'name', 'John'
@@ -286,7 +294,8 @@ data.onChanged.connect (key, oldVal) ->
     console.log "#{key} property has been removed"
 
 data.pop 'name'
-// name property has been rmeoved
+# name property has been rmeoved
+```
 
 		pop: (key) ->
 			expect(key).toBe.truthy().string()
@@ -312,13 +321,14 @@ It always returns the same array, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ### Example
-
+```
 data = new Dict
   x: 10
   y: 30
 
 console.log data.keys()
-// ['x', 'y']
+# ['x', 'y']
+```
 
 		keys: ->
 			if @_dirty & KEYS
@@ -343,13 +353,14 @@ It always returns the same array, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ### Example
-
+```
 data = new Dict
   x: 10
   y: 30
 
 console.log data.values()
-// [10, 30]
+# [10, 30]
+```
 
 		values: ->
 			if @_dirty & VALUES
@@ -374,13 +385,14 @@ It always returns the same arrays, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ### Example
-
+```
 data = new Dict
   x: 10
   y: 30
 
 console.log data.items()
-// [['x', 10], ['y', 30]]
+# [['x', 10], ['y', 30]]
+```
 
 		items: ->
 			if @_dirty & ITEMS
