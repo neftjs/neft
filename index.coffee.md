@@ -52,14 +52,14 @@ new Schema
 
 		constructor: (@schema) ->
 
-			unless utils.isObject schema
+			unless utils.isPlainObject schema
 				throw new TypeError "Schema(): schema structure is not an object"
 
 			unless objKeys(schema).length
 				throw new TypeError "Schema(): schema can't be empty"
 
 			for row, elem of schema
-				unless utils.isObject elem
+				unless utils.isPlainObject elem
 					throw new TypeError "Schema(): schema for #{row} row is not an object"
 
 ### *Object* schema
@@ -105,10 +105,10 @@ you can use `tryFunc` from [utils][module_utils] module.
 ```coffeescript
 utils = require 'utils'
 
-utils.tryFunc schema.validate, schema, [age: -1], false
+utils.tryFunction schema.validate, schema, [age: -1], false
 # returns `false`
 
-utils.tryFunc schema.validate, schema, [age: 5], false
+utils.tryFunction schema.validate, schema, [age: 5], false
 # returns `true`
 ```
 

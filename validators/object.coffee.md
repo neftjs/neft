@@ -54,7 +54,7 @@ schema.validate dict: { name: 'John' }
 
 	module.exports = (row, value, expected) ->
 
-		unless utils.isObject value
+		unless utils.isPlainObject value
 			throw new TypeError "Schema: #{row} must be an object"
 
 		# available properties
