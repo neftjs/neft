@@ -1,24 +1,45 @@
-Response
-========
+Routing.Response
+================
 
 	'use strict'
 
-	[utils, expect] = ['utils', 'expect'].map require
+	utils = require 'utils'
+	expect = require 'expect'
 	log = require 'log'
 	signal = require 'signal'
 
 	log = log.scope 'Routing', 'Response'
 
-	{assert} = console
-
-*class* Response
-----------------
-
 	module.exports = (Routing, Impl) -> class Response
 
-### Static
+*Array* Response.STATUSES
+-------------------------
 
-#### Statuses
+Abstract values used to describe response type.
+
+This values are used in the `Response::status` property and for `Response::send()` method.
+
+Each status corresponds to the HTTP numeral value.
+
+### Response.OK
+### Response.CREATED
+### Response.ACCEPTED
+### Response.NO_CONTENT
+### Response.MOVED
+### Response.FOUND
+### Response.NOT_MODIFIED
+### Response.TEMPORARY_REDIRECT
+### Response.BAD_REQUEST
+### Response.UNAUTHORIZED
+### Response.PAYMENT_REQUIRED
+### Response.FORBIDDEN
+### Response.NOT_FOUND
+### Response.CONFLICT
+### Response.PRECONDITION_FAILED
+### Response.UNSUPPORTED_MEDIA_TYPE
+### Response.INTERNAL_SERVER_ERROR
+### Response.NOT_IMPLEMENTED
+### Response.SERVICE_UNAVAILABLE
 
 		@STATUSES = [
 
@@ -53,24 +74,24 @@ Response
 
 		]
 
-### Submodules
-
 		@Error = require('./response/error.coffee.md') Routing, Response
 
-### Constructor
+*Response* Response(*Object* options)
+-------------------------------------
+
+Class represents response for a request.
+
+It's created automatically and used to handle the request.
 
 		constructor: (opts) ->
-
-			if opts instanceof Routing.Request
-				opts: req: opts
-
 			expect(opts).toBe.simpleObject()
-			expect(opts.req).toBe.any Routing.Request
+			expect(opts.request).toBe.any Routing.Request
 			expect().some(Response.STATUSES).toBe opts.status if opts.status?
 
-			{@req} = opts
 			{@status} = opts if opts.status?
 			{@data} = opts if opts.data?
+
+			utils.defineProperty @, 'request', null, opts.request
 
 			@pending = true
 
@@ -80,17 +101,82 @@ Response
 			# whether response will be send on the next tick
 			utils.defineProperty @, '_waitingToSend', utils.WRITABLE, false
 
-			# signals
-			signal.create @, 'sent'
+Response::sent()
+----------------
 
-### Properties
+**Signal** called when the response has been marked as going to be send.
+
+On this signal, the response can't be modified.
+
+You can listen on this signal using the `onSent` handler.
+
+```
+res.onSent ->
+  console.log "Response has been sent!"
+```
+
+		signal.createLazy @::, 'sent'
+
+*Boolean* Response::pending
+---------------------------
+
+It's `true` if the response is active, `false` if the response has been
+destroyed or sent and can't be modified.
+
+It's **read-only**.
 
 		pending: false
-		req: null
-		status: 0
+
+*Routing.Request* Response::request
+-----------------------------------
+
+Reference to the created `request`.
+
+This request is active until the response is pending.
+
+It's **read-only**.
+
+		request: null
+
+*Integer* Response::status
+--------------------------
+
+Normalized code determines response type.
+
+Use one of the constant values provided in the `Response.STATUSES`.
+
+It's equal `Response.OK` by default.
+
+```
+res.status = Routing.Response.CREATED
+res.status = Routing.Response.PAYMENT_REQUIRED
+```
+
+		status: @OK
+
+*Any* Response::data
+--------------------
+
+Value to send. It can be set using the `Response::send()` method or manually.
+
+```
+res.data = {items: ['superhero toy', 'book']}
+res.data = new Error "Wrong order"
+res.data = View.fromJSON(...)
+```
+
 		data: null
 
-### Methods
+*Response* Response::setHeader(*String* name, *String* value)
+-------------------------------------------------------------
+
+Sets a single header. If the header aready exists, its value will be replaced.
+
+Currently this method has no effect for local responses.
+
+```
+res.setHeader 'Location', '/redirect/to/url'
+```
 
 		setHeader: (name, val) ->
 			expect(@pending).toBe.truthy()
@@ -101,42 +187,77 @@ Response
 
 			@
 
-		send: (@status, data) ->
-			assert @pending
-			assert ~Response.STATUSES.indexOf status
+Response::send([*Integer* status, *Any* data])
+----------------------------------------------
 
-			if @data
-				log.info "`#{@req.uri}` response data has been overwritten, because " +
-				         "`send()` method has been called twice"
+Marks response as ready to send.
 
-			@data = data
+This method calls `Response::sent()` signal asynchronously.
+
+You can change response status and data, but only synchronously.
+
+This method automatically parses got data which is determined by the environment.
+
+```
+res.send Routing.Response.OK, {user: 'Max', age: 43}
+
+res.onSent ->
+  console.log "Response has been sent and is not active"
+```
+
+		send: (status, data) ->
+			expect(@pending).toBe.truthy()
+
+			if data? and typeof status isnt 'number'
+				data = status
+				status = @status
+
+			if status?
+				expect().some(Response.STATUSES).toBe status
+				@status = status
+
+			if data?
+				if @data
+					log.info "`#{@request.url}` response data has been overwritten"
+
+				@data = data
 
 			unless @_waitingToSend
 				@_waitingToSend = true
-				@req.destroy()
+				@request.destroy()
 				setImmediate => sendData @
 
-			@
+			null
 
 		sendData = (res) ->
 			expect(res).toBe.any Response
 			expect(res.pending).toBe.truthy()
 
-			res.pending = false
+			utils.defineProperty res, 'pending', utils.ENUMERABLE, false
+			res.request.loaded? @
 
-			# call request signal
-			res.req.loaded @
-
-			# send it!
 			Impl.send res, res.data, ->
-				# signal
-				res.sent()
+				res.sent?()
+
+Response::raise(*Response.Error* error)
+---------------------------------------
+
+Finishes response as failed.
+
+```
+res.raise new Routing.Response.Error "Login first"
+res.raise new Routing.Response.Error Routing.Response.UNAUTHORIZED, "Login first"
+```
 
 		raise: (error) ->
-			assert error instanceof Response.Error
+			expect(error).toBe.any Response.Error
 
 			@send error.status, error
 
-		isSucceed: ->
+*Boolean* Response::isSucceed()
+-------------------------------
 
+Returns `true` if status is in range from 200 to 299.
+
+		isSucceed: ->
 			300 > @status >= 200

@@ -1,47 +1,50 @@
-Handler
-=======
+Routing.Handler
+===============
 
 	'use strict'
 
-	[utils, log, Schema] = ['utils', 'log', 'schema'].map require
+	utils = require 'utils'
 	expect = require 'expect'
+	log = require 'log'
+	Schema = require 'schema'
 
-	{assert} = console
 	{parse, stringify} = JSON
 
 	log = log.scope 'Routing', 'Handler'
 
-*class* UriNotValidError
-------------------------
+*UriNotValidError* Handler.UriNotValidError *extends* Error
+-----------------------------------------------------------
 
 	class UriNotValidError extends Error
-
 		constructor: (@message) -> super
 
 		name: 'UriNotValid'
 		message: ''
 
-*class* HandlerCallbackError
-----------------------------
+*CallbackError* Handler.CallbackError *extends* Error
+-----------------------------------------------------
 
-	class HandlerCallbackError extends Error
+	class CallbackError extends Error
 
 		constructor: (@message) -> super
 
-		name: 'HandlerCallbackError'
+		name: 'CallbackError'
 		message: ''
 
-*class* Handler
----------------
+*Handler* Handler(*Object* options)
+-----------------------------------
+
+Use `Routing::createHandler()` to create new handler.
+
+*options* specifies `Handler::method`, `Handler::uri`,
+`Handler::schema` and `Handler::callback`.
 
 	module.exports = (Routing) -> class Handler
 
-### Constructor
+		@UriNotValidError = UriNotValidError
+		@CallbackError = CallbackError
 
 		constructor: (opts) ->
-
-			opts ?= @
-
 			expect(opts).toBe.simpleObject()
 			expect().some(Routing.Request.METHODS).toBe opts.method
 			expect(opts.uri).toBe.any Routing.Uri
@@ -50,76 +53,91 @@ Handler
 
 			{@method, @uri, @schema, @callback} = opts
 
-### Properties
+*String* Handler::method
+------------------------
 
 		method: ''
+
+*Routing.Uri* Handler::uri
+--------------------------
+
 		uri: null
+
+*Schema* Handler::schema
+------------------------
+
 		schema: null
+
+*Function* Handler::callback
+----------------------------
+
 		callback: null
 
-### Methods
+Handler::exec(*Routing.Request* request, *Routing.Response* response, *Function* next)
+--------------------------------------------------------------------------------------
 
-#### exec(*Request*, *Response*)
+		exec: (req, res, next) ->
+			expect(req).toBe.any Routing.Request
+			expect(res).toBe.any Routing.Response
+			expect(next).toBe.function()
 
-		exec: do (uriNotValidError = new UriNotValidError,
-		          handlerCallbackError = new HandlerCallbackError) ->
+			# compare methods
+			if @method isnt req.method
+				return next new UriNotValidError
 
-			(req, res, next) ->
+			# test uri
+			unless @uri.test req.url
+				return next new UriNotValidError
 
-				assert req instanceof Routing.Request
-				assert res instanceof Routing.Response
+			params = req.params = @uri.match req.url
 
-				# compare methods
-				if @method isnt req.method
-					return next uriNotValidError
+			# validate by schema
+			if @schema
 
-				# test uri
-				unless @uri.test req.uri
-					return next uriNotValidError
+				# parse params into expected types
+				for key, schemaOpts of @schema.schema
+					if params.hasOwnProperty(key) and schemaOpts.type
+						params[key] = utils.tryFunction parse, null, [params[key]], params[key]
 
-				params = req.params = @uri.match req.uri
+				# validate schema
+				err = utils.catchError @schema.validate, @schema, [params]
+				if err instanceof Error
+					log "`#{@uri}` tests, but not passed schema\n#{err}"
+					return next err
 
-				# validate by schema
-				if @schema
+			# on callback fail
+			callbackNext = (err) =>
 
-					# parse params into expected types
-					for key, schemaOpts of @schema.schema
-						if params.hasOwnProperty(key) and schemaOpts.type
-							params[key] = utils.tryFunction parse, null, [params[key]], params[key]
+				req.handler = null
 
-					# validate schema
-					err = utils.catchError @schema.validate, @schema, [params]
-					if err instanceof Error
-						log "`#{@uri}` tests, but not passed schema\n#{err}"
-						return next err
+				if err
+					# TODO: move building errors into more generic place
+					errMsg = err
+					if err.stack?
+						if utils.isQml
+							errMsg = "#{err.message}\n#{err.stack}"
+						else
+							errMsg = err.stack
 
-				# on callback fail
-				callbackNext = (err) =>
+					log.error "Error raised in `#{@uri}` handler\n#{errMsg}"
 
-					req.handler = null
+				next new CallbackError
 
-					if err
-						# TODO: move building errors into more generic place
-						errMsg = err
-						if err.stack?
-							if utils.isQml
-								errMsg = "#{err.message}\n#{err.stack}"
-							else
-								errMsg = err.stack
+			log "Use `#{@method} #{@uri}` handler"
 
-						log.error "Error raised in `#{@uri}` handler\n#{errMsg}"
+			req.handler = @
+			utils.tryFunction @callback, @, [req, res, callbackNext], callbackNext
 
-					next handlerCallbackError
+			null
 
-				log "Use `#{@method} #{@uri}` handler"
+*String* Handler::toString()
+----------------------------
 
-				req.handler = @
-				utils.tryFunction @callback, @, [req, res, callbackNext], callbackNext
+Returns string describing the handler.
 
-				null
-
-#### toString()
+```
+get /users/{name}
+```
 
 		toString: ->
-
 			"#{@method} #{@uri}"

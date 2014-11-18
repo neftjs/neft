@@ -1,31 +1,16 @@
-Uri
-===
+Routing.Uri
+===========
 
 	'use strict'
 
-	[expect] = ['expect'].map require
-
+	expect = require 'expect'
 	Dict = require 'dict'
-
-*class* Uri
------------
 
 	module.exports = (Routing) -> class Uri
 
-### Static
-
-#### SEPARATORS
-
-Left and right characters used as separators for parameters.
-
 		@SEPARATORS = ['{', '}']
 
-#### *String[]* getChunks(*String*, *[Array]*)
-
-Get separators and parameters names as one-deep array.
-
 		@getChunks = (uri, target=[]) ->
-
 			[SEPARATOR_LEFT, SEPARATOR_RIGHT] = Uri.SEPARATORS
 
 			i = 0
@@ -50,35 +35,26 @@ Get separators and parameters names as one-deep array.
 
 			target
 
-### Constructor(*String*)
+*Uri* Uri(*String* uri)
+-----------------------
 
 		constructor: (uri) ->
-
 			expect(uri).toBe.string()
 
 			@_chunks = Uri.getChunks uri
 			@params = {}
 
-### Protected
-
-#### *String[]* _chunks
-
-		_chunks: null
-
-### Properties
-
-#### params
+*Object* Uri::params
+--------------------
 
 		params: null
 
-### Methods
+*Boolean* Uri::test(*String* uri)
+---------------------------------
 
-#### test(*String*)
-
-Test whether *uri* is valid with *uri*.
+Test whether `Routing.Uri` is valid with given *uri* string.
 
 		test: (uri) ->
-
 			chunks = @_chunks
 
 			# on empty uri
@@ -105,12 +81,12 @@ Test whether *uri* is valid with *uri*.
 
 			true
 
-#### match(*String*)
+*Object* Uri::match(*String* uri)
+---------------------------------
 
 Get parameters values from the passed string.
 
 		match: (uri) ->
-
 			expect(@test uri).toBe.truthy()
 
 			chunks = @_chunks
@@ -141,7 +117,8 @@ Get parameters values from the passed string.
 
 			params
 
-#### toString()
+*String* Uri::toString()
+------------------------
 
 Parse `Uri` into string.
 
@@ -150,7 +127,7 @@ It will be used to replace uri chunks (works like standard
 string `format()` but on the named parameters).
 
 		toString: (params) ->
-			# TODO: use some light bridge here
+			# TODO: use some optimized bridge here
 			if params and not (params instanceof Dict)
 				params = Dict params
 

@@ -21,7 +21,7 @@ module.exports = (Routing) ->
 				uid: uid
 				method: Routing.Request.GET
 				type: Routing.Request.VIEW_TYPE
-				uri: uri.slice 1
+				url: uri
 				data: null
 
 		# don't refresh page on click anchor
@@ -45,7 +45,7 @@ module.exports = (Routing) ->
 	###
 	Send a XHR request and call `callback` on response.
 	###
-	sendServerRequest: (url, req, callback) ->
+	sendRequest: (url, req, callback) ->
 
 		{Request} = Routing
 

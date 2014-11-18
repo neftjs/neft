@@ -1,52 +1,52 @@
-Response Error
-==============
+Routing.Response.Error
+======================
 
 	'use strict'
 
-	[utils] = ['utils'].map require
+	utils = require 'utils'
+	expect = require 'expect'
 
-	{assert} = console
-
-*class* RequestResolveResponseError
------------------------------------
-
-	RequestResolve = (Routing, Response, ResponseError) -> class RequestResolve extends ResponseError
-
-		constructor: (req) ->
-
-			assert req instanceof Routing.Request
-
-			return super "No handler can be found", RequestResolve
-
-		status: Response.BAD_REQUEST
-		name: 'RequestResolveResponseError'
-
-*class* ResponseError
----------------------
-
-	module.exports = (Routing, Response) -> class ResponseError
+	module.exports = (Routing, Response) -> class ResponseError extends Error
 
 		@RequestResolve = RequestResolve Routing, Response, ResponseError
 
-		constructor: (message, Error) ->
+*Error* Error([*Integer* status], *String* message)
+---------------------------------------------------
 
-			assert typeof message is 'string'
+This class is used in the `Routing.Response::raise()` method and describes an error.
 
-			self = @
-			unless self instanceof ResponseError
-				self = tmp
+It works as standard Javascript `Error` class, but provides extra `status` value.
 
-			if Error
-				utils.merge self, Error::
+		constructor: (status, message='') ->
+			unless @ instanceof ResponseError
+				return new ResponseError status, message
 
+			if typeof status is 'string'
+				message = status
+				status = @status
+
+			expect().some(Response.STATUSES).toBe status
+			expect(message).toBe.string()
+
+			self.status = status
 			self.message = message
-
-			return self
 
 		status: Response.INTERNAL_SERVER_ERROR
 		name: 'ResponseError'
 		message: ''
 
-		ResponseError:: = Object.create Error::
+*RequestResolve* Error.RequestResolve(*Routing.Request* req)
+------------------------------------------------------------
 
-		tmp = Object.create ResponseError::
+This error is send if the request can't be resolved, because no proper handler which can
+handle the request can be found.
+
+	RequestResolve = (Routing, Response, ResponseError) -> class RequestResolve extends ResponseError
+
+		constructor: (req) ->
+			expect(req).toBe.any Routing.Request
+
+			return super "No handler can be found"
+
+		status: Response.BAD_REQUEST
+		name: 'RequestResolveResponseError'

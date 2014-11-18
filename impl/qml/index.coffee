@@ -12,10 +12,10 @@ module.exports = (Routing) ->
 			# send internal request
 			res = routing.createRequest
 				method: Routing.Request.GET
-				uri: 'docs/log/null'
+				url: '/docs/log/null'
 				data: null
 
-	sendServerRequest: (routing, opts, callback) ->
+	sendRequest: (routing, opts, callback) ->
 
 		Request = Routing.Request
 

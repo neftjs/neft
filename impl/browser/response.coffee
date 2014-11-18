@@ -64,7 +64,7 @@ module.exports = (Routing) ->
 
 	send: (res, data, callback) ->
 
-		log.ok "Got response `#{res.req.method} #{res.req.uri}`"
+		log.ok "Got response `#{res.request.method} #{res.request.url}`"
 
 		# clear styles
 		# Renderer.window.clear()
@@ -88,3 +88,5 @@ module.exports = (Routing) ->
 			log.error "Can't find a data handler for the response"
 
 		callback()
+
+	setHeader: ->

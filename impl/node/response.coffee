@@ -109,16 +109,16 @@ module.exports = (Routing, pending) ->
 	setHeader: (res, name, val) ->
 
 		# get config obj
-		obj = pending[res.req.uid]
+		obj = pending[res.request.uid]
 		obj.serverRes.setHeader name, val
 
 	send: (res, data, callback) ->
 
 		# get config obj
-		obj = pending[res.req.uid]
+		obj = pending[res.request.uid]
 		return unless obj
 
-		delete pending[res.req.uid]
+		delete pending[res.request.uid]
 
 		logtime = log.time "send response by HTTP"
 

@@ -1,34 +1,38 @@
 Routing
 =======
 
-It's a module to manage requests and responses from the outside (`HTTP` or client request).
+Use this module to handle requests and responses (e.g. by the HTTP protocol or just
+locally to handle different URIs).
+
+*App* object always has one instance of this class `App.routing`, so manual
+loading this module is not required in most cases.
 
 	'use strict'
 
-	[utils, expect, log] = ['utils', 'expect', 'log'].map require
+	utils = require 'utils'
+	expect = require 'expect'
+	log = require 'log'
 
 	log = log.scope 'Routing'
 
-*class* Routing
----------------
+*Routing* Routing(*Object* options)
+-----------------------------------
+
+Creates new *Routing* instance.
+
+*options* specifies `Routing::protocol`, `Routing::port`,
+`Routing::host` and `Rotuing::language`.
 
 	module.exports = class Routing
 
 		Impl = require('./impl') Routing
-
-### Static
-
-#### Submodules
 
 		@Uri = require('./uri.coffee.md') Routing
 		@Handler = require('./handler.coffee.md') Routing
 		@Request = require('./request.coffee.md') Routing, Impl.Request
 		@Response = require('./response.coffee.md') Routing, Impl.Response
 
-### Constructor
-
 		constructor: (opts) ->
-
 			expect(opts).toBe.simpleObject()
 			expect(opts.protocol).toBe.truthy().string()
 			expect(opts.port).toBe.integer()
@@ -38,123 +42,161 @@ It's a module to manage requests and responses from the outside (`HTTP` or clien
 			utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
 			{@protocol, @port, @host, @language} = opts
 
-			@url = "#{@protocol}://#{@host}:#{@port}/"
+			url = "#{@protocol}://#{@host}:#{@port}/"
+			utils.defineProperty @, 'url', utils.ENUMERABLE, url
 
 			setImmediate => Impl.init @
-
 			log.info "Start as `#{@host}:#{@port}`"
 
-### Properties
+			Object.freeze @
+
+*String* Routing::protocol
+--------------------------
+
+It's **read-only**.
 
 		protocol: 'http'
+
+*Integer* Routing::port
+-----------------------
+
+It's **read-only**.
+
 		port: 0
+
+*String* Routing::host
+----------------------
+
+It's **read-only**.
+
 		host: ''
+
+*String* Routing::language
+--------------------------
+
+It's **read-only**.
+
 		language: ''
+
+*String* Routing::url
+---------------------
+
+Proper URL path contains protocol, port and host.
+
+It's **read-only**.
+
 		url: ''
 
-### Methods
+*Routing.Handler* Routing::createHandler(*Object* options)
+----------------------------------------------------------
 
-#### createHandler(*Number*, *String*, *Function*)
+Creates new *Routing.Handler* used to handle requests.
 
-		createHandler: (method, uri, callback) ->
+Given *options* object is used to create `Routing.Handler`.
+
+```
+app.routing.createHandler
+  method: Routing.Request.GET
+  uri: 'users/{name}'
+  schema: new Schema
+    name:
+      required: true
+      type: 'string'
+  callback: (req, res, next) ->
+    res.raise new Routing.Response.Error Routing.Response.NOT_IMPLEMENTED
+```
+
+		createHandler: (opts) ->
 			expect(@).toBe.any Routing
+			expect(opts).toBe.simpleObject()
 
-			if utils.isPlainObject method
-				{method, uri, schema, callback} = method
-
-			uri = new Routing.Uri uri
+			uri = new Routing.Uri opts.uri
 
 			handler = new Routing.Handler
-				method: method
+				method: opts.method
 				uri: uri
-				schema: schema
-				callback: callback
+				schema: opts.schema
+				callback: opts.callback
 
-			stack = @_handlers[method] ?= []
+			stack = @_handlers[opts.method] ?= []
 			stack.push handler
 
 			log.info "New handler `#{handler}` registered"
 
 			handler
 
-#### createRequest(*Object*)
+*Routing.Request* Routing::createRequest(*Object* options)
+----------------------------------------------------------
 
-		createRequest: (reqOpts) ->
+Creates new local or server request.
+
+Given *options* object is used to create `Routing.Request`.
+
+```
+req = app.routing.createRequest
+  type: Routing.Request.OBJECT_TYPE
+  url: '/achievements/world_2'
+
+req.onLoaded (res) ->
+  if res.isSucceed()
+    console.log "Request has been loaded! Data #{res.data}"
+```
+
+```
+req = app.routing.createRequest
+  method: Routing.Request.POST
+  url: 'http://server.domain/comments'
+  data: {title: 'Best app ever!', message: 'Great, but why it\'s not free?'}
+
+req.onLoaded (res) ->
+  if res.isSucceed()
+    console.log "Comment has been added!"
+```
+
+		EXTERNAL_URL_RE = ///^[a-zA-Z]+:\/\////
+		createRequest: (opts) ->
 			expect(@).toBe.any Routing
-			expect(reqOpts).toBe.simpleObject()
+			expect(opts).toBe.simpleObject()
 
-			logtime = log.time 'new request'
-			log "Resolve `#{JSON.stringify(reqOpts)}` request"
+			logtime = log.time 'New request'
 
 			# create a request
-			req = new Routing.Request reqOpts
+			req = new Routing.Request opts
 
 			req.onDestroyed ->
 				log.end logtime
 
-			# create an response
-			res = new Routing.Response req: req
+			# create a response
+			res = new Routing.Response request: req
 
 			# get handlers
 			onError = ->
 				res.raise Routing.Response.Error.RequestResolve req
 
-			handlers = @_handlers[req.method]
-			if handlers
-				# run handlers
-				utils.async.forEach handlers, (handler, i, handlers, next) ->
+			if EXTERNAL_URL_RE.test req.url
+				log "Send `#{req}` request"
 
-					handler.exec req, res, (err) ->
-						next()
-
-				, onError
+				Impl.sendRequest url, config, (status, data) ->
+					res.status = status
+					res.data = data
+					res.pending = false
+					req.destroyed?()
+					req.loaded? res
 			else
-				log.warn "No handler found"
+				log "Resolve local `#{req}` request"
 
-				onError()
+				handlers = @_handlers[req.method]
+				if handlers
+					# run handlers
+					utils.async.forEach handlers, (handler, i, handlers, next) ->
 
-			req
+						handler.exec req, res, (err) ->
+							next()
 
-#### createServerRequest(*Object*)
+					, onError
+				else
+					log.warn "No handler found"
 
-		createServerRequest: (reqOpts) ->
-			expect(@).toBe.any Routing
-			expect(utils.isNode).toBe.truthy()
-			expect(reqOpts).toBe.simpleObject()
-
-			config = Object.create reqOpts
-
-			# method
-			unless config.method?
-				config.method = Routing.Request.GET
-
-			# uri
-			unless config.uri?
-				config.uri = ''
-
-			# type
-			unless config.type?
-				config.type = Routing.Request.OBJECT_TYPE
-
-			expect().some(Routing.Request.METHODS).toBe config.method
-			expect(config.uri).toBe.string()
-			expect().defined(config.data).toBe.object()
-
-			req = new Routing.Request config
-
-			url = "#{@url}#{reqOpts.uri}"
-			Impl.sendServerRequest url, config, (status, data) ->
-
-				# destroy request
-				req.destroy()
-
-				res = new Routing.Response
-					req: req
-					status: status
-					data: data
-
-				# call request signal
-				if req.hasOwnProperty 'onLoad'
-					req.onLoad res
+					onError()
 
 			req

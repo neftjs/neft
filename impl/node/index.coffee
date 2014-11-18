@@ -38,6 +38,9 @@ module.exports = (Routing) ->
 			obj.req = routing.createRequest
 				uid: uid
 				method: Routing.Request[serverReq.method]
-				uri: serverReq.url.slice 1
+				url: serverReq.url.slice 1
 				data: undefined
 				type: type
+
+	sendRequest: ->
+		throw "Not implemented!"
