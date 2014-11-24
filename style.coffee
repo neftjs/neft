@@ -1,6 +1,8 @@
 'use strict'
 
-[expect, utils, log] = ['expect', 'utils', 'log'].map require
+expect = require 'expect'
+utils = require 'utils'
+log = require 'log'
 Renderer = require 'renderer'
 
 log = log.scope 'Styles'

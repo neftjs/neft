@@ -1,6 +1,9 @@
 'use strict'
 
-[utils, expect, log, View] = ['utils', 'expect', 'log', 'view'].map require
+utils = require 'utils'
+expect = require 'expect'
+log = require 'log'
+View = require 'view'
 
 {isArray} = Array
 {Element} = View

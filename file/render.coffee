@@ -1,6 +1,7 @@
 'use strict'
 
-[utils, log] = ['utils', 'log'].map require
+utils = require 'utils'
+log = require 'log'
 
 log = log.scope 'Styles'
 
@@ -27,7 +28,7 @@ module.exports = (File) ->
 			null
 
 		(elem) ->
-			@_watchedFile?.replacedByElem.disconnect @updateStylesParent
+			@_watchedFile?.replacedByUse.disconnect @updateStylesParent
 			@_watchedFile = null
 
 			return unless elem
@@ -37,7 +38,7 @@ module.exports = (File) ->
 			# keep looking if no styles found
 			unless parentStyles.length
 				@_watchedFile = elem.self
-				elem.self.onReplacedByElem @updateStylesParent
+				elem.self.onReplacedByUse @updateStylesParent
 				return
 
 			# find styles parent walking by the tree
@@ -71,6 +72,6 @@ module.exports = (File) ->
 			utils.defineProperty clone, '_watchedFile', desc, null
 
 			clone.updateStylesParent = @updateStylesParent.bind clone
-			clone.onReplacedByElem clone.updateStylesParent
+			clone.onReplacedByUse clone.updateStylesParent
 
 		clone

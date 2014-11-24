@@ -1,6 +1,7 @@
 'use strict'
 
-[utils, expect] = ['utils', 'expect'].map require
+utils = require 'utils'
+expect = require 'expect'
 Renderer = require 'renderer'
 
 module.exports = (File) ->
