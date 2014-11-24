@@ -7,7 +7,7 @@ log = require 'log'
 
 log = log.scope 'View', 'Iterator'
 
-module.exports = (File) -> class Iterator extends File.Elem
+module.exports = (File) -> class Iterator extends File.Use
 
 	@__name__ = 'Iterator'
 	@__path__ = 'File.Iterator'
@@ -128,7 +128,7 @@ module.exports = (File) -> class Iterator extends File.Elem
 		newChild.index = i
 
 		# signal
-		usedUnit.replacedByElem @
+		usedUnit.replacedByUse @
 
 		@
 

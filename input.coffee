@@ -1,8 +1,10 @@
 'use strict'
 
-[utils, expect, Dict] = ['utils', 'expect', 'dict'].map require
+utils = require 'utils'
+expect = require 'expect'
 log = require 'log'
 coffee = require 'coffee-script' if utils.isNode
+Dict = require 'dict'
 
 log = log.scope 'View', 'Input'
 

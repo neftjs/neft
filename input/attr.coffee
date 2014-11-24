@@ -1,6 +1,6 @@
 'use strict'
 
-{assert} = console
+expect = require 'expect'
 
 module.exports = (File, Input) -> class InputAttr extends Input
 
@@ -8,8 +8,7 @@ module.exports = (File, Input) -> class InputAttr extends Input
 	@__path__ = 'File.Input.Attr'
 
 	constructor: (node, @attrName) ->
-
-		assert attrName and typeof attrName is 'string'
+		expect(attrName).toBe.truthy().string()
 
 		super node, node.attrs.get(attrName)
 

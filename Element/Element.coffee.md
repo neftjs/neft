@@ -1,52 +1,45 @@
-View Structure Element
-=======================
+File.Element @low-level API
+===========================
 
 *Element* as a collection of elements.
 
 	'use strict'
 
-	[utils, expect] = ['utils', 'expect'].map require
+	utils = require 'utils'
+	expect = require 'expect'
 	Emitter = require 'emitter'
 
 	{isArray} = Array
-
-*class* Element
-----------------
 
 	module.exports = class Element extends Emitter
 
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
-### Static
+*Element* Element.fromHTML(*String* html)
+-----------------------------------------
 
-#### *Element* fromHTML(*String*)
-
-Create new *Element* instance based on *HTML*.
-The whole structure will be returned.
+Creates new `Element` instance based on given *html*.
 
 		@fromHTML = (html) ->
-
 			expect(html).toBe.truthy().string()
 
 			Element.parser.parse html
 
-### Constructor
+*Element* Element()
+-------------------
 
-Constructor is instance of *Events* class, so after every initializing
-*INIT* event is triggered.
+**Extends:** `Emitter`
 
 		constructor: ->
-
 			@_parent = null
 
 			super
 
-### Properties
-
 		Object.defineProperties @::,
 
-#### index
+*Integer* Element::index
+------------------------
 
 			index:
 				get: ->
@@ -63,17 +56,17 @@ Constructor is instance of *Events* class, so after every initializing
 					@parent.children.splice @index, 1
 					@parent.children.splice value, 0, @
 
-#### *Element* parent
+*[Element]* Element::parent
+---------------------------
 
-Link to other *Element*.
-Value will automatically change `children`.
+Returns `Element` in which an element is placed.
+
+Change the value to move the element.
 
 			parent:
-
 				enumerable: true
 				get: -> @_parent
 				set: (value) ->
-
 					expect(@).not().toBe value
 
 					old = @_parent
@@ -95,52 +88,53 @@ Value will automatically change `children`.
 					# trigger event
 					@trigger 'parentChanged', old
 
-#### *Boolean* visible
+*Boolean* Element::visible
+--------------------------
 
 			_visible:
 				value: true
 				writable: true
 
 			visible:
-
 				enumerable: true
-				get: -> @_visible
-				set: (value) ->
-
-					expect(value).toBe.boolean()
+				get: ->
+					@_visible
+				set: (val) ->
+					expect(val).toBe.boolean()
 
 					old = @_visible
-					return if old is value
+					return if old is val
 
-					@_visible = value
+					@_visible = val
 
 					if @children
 						for child in @children
-							child.visible = value
+							child.visible = val
 
 					# trigger event
 					@trigger 'visibilityChanged', old
 
 					null
 
-### Methods
+*Element* Element::clone()
+--------------------------
 
-#### *Element* clone()
+Returns new instance of the `Element` with the same properties.
 
-Returns new instance of *Element* with the same properties.
+Parent of the returned `Element` is `null`.
 
 			clone:
 				enumerable: true
 				writable: true
 				value: cloneMethod = ->
-
 					clone = Object.create @
-
 					clone._parent = null
 					clone.clone = undefined
 					clone.cloneDeep = undefined
-
 					clone
+
+*Element* Element::cloneDeep()
+------------------------------
 
 			cloneDeep:
 				enumerable: true

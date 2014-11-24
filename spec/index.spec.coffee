@@ -32,10 +32,10 @@ describe 'View', ->
 		view = View.fromHTML uid(), '<x:unit name="a"></x:unit>'
 		expect(view.units).not.toEqual {}
 
-	it 'finds elems', ->
+	it 'finds uses', ->
 
 		view = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
-		expect(view.elems).not.toEqual {}
+		expect(view.uses).not.toEqual {}
 
 	describe 'requires', ->
 
@@ -84,7 +84,7 @@ describe 'View', ->
 		expect(view_factored).not.toBe view_start
 		expect(view_factored).toBe view_refactored
 
-	it 'can replace elems by units', ->
+	it 'can replace uses by units', ->
 
 		view = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
 		view = view.clone()
@@ -94,7 +94,7 @@ describe 'View', ->
 		view.revert()
 		expect(view.node.children[0].name).toBe 'x:a'
 
-	it 'can replace elems by units in units', ->
+	it 'can replace uses by units in units', ->
 
 		source = View.fromHTML uid(), '<x:unit name="b">1</x:unit><x:unit name="a"><x:b></x:b></x:unit><x:a></x:a>'
 		view = source.clone();
@@ -334,7 +334,7 @@ describe 'View Condition', ->
 				view.revert()
 				expect(view.node.children[0].name).toBe 'x:a'
 
-		it 'in replacing elems', ->
+		it 'in replacing uses', ->
 
 			source = View.fromHTML uid(), '<x:unit name="a">OK</x:unit>' +
 			                              '<x:a x:if="#{x} == 1"></x:a>'
@@ -385,7 +385,7 @@ describe 'View Iterator', ->
 		expect(source.node.stringify()).toBe '<ul></ul>'
 		expect(view.node.stringify()).toBe '<ul>12</ul>'
 
-	it 'works in units with elems', ->
+	it 'works in units with uses', ->
 
 		source = View.fromHTML uid(), '<x:unit name="b">#{data}</x:unit>
 			<x:unit name="a"><ul x:each="#{data}"><x:b data="#{each[i]}"/></ul></x:unit>
