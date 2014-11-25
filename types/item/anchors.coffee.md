@@ -1,4 +1,4 @@
-Item Anchors
+Item.Anchors
 ============
 
 `Item` provides simply but powerful way to describe

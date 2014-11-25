@@ -1,3 +1,6 @@
+Item.Margin
+===========
+
 	'use strict'
 
 	expect = require 'expect'
@@ -8,24 +11,10 @@
 
 	module.exports = (Renderer, Impl) ->
 
-Margins
--------
+*Margin* Margin
+---------------
 
-*Anchors* object also provides a way to set *left*, *top*, *right* and *bottom* margins.
-
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    id: 'rect2'
-    anchors:
-        left: 'rect1.right'
-        margin:
-            left: 20
-    ...
-```
+**Extends:** `Dict`
 
 		class Margin extends Dict
 			@DATA =
@@ -58,7 +47,22 @@ Renderer.Rectangle.create
 						@_item[Dict.getPropertySignalName 'margin']? @
 						Impl.setItemMargin.call @_item, type, val
 
+*Float* Margin::left
+--------------------
+
 			createMarginProp 'left'
+
+*Float* Margin::top
+--------------------
+
 			createMarginProp 'top'
+
+*Float* Margin::right
+--------------------
+
 			createMarginProp 'right'
+
+*Float* Margin::bottom
+--------------------
+
 			createMarginProp 'bottom'
