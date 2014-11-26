@@ -28,8 +28,8 @@ It works as standard Javascript `Error` class, but provides extra `status` value
 			expect().some(Response.STATUSES).toBe status
 			expect(message).toBe.string()
 
-			self.status = status
-			self.message = message
+			@status = status
+			@message = message
 
 		status: Response.INTERNAL_SERVER_ERROR
 		name: 'ResponseError'
