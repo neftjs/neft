@@ -13,10 +13,9 @@ Special HTML attribute using to create new `File.Iterator`s.
 
 	module.exports = (File) -> (file) ->
 		# get iterators
-		iterators = file.iterators = []
+		iterators = []
 
 		forNode = (elem) ->
-
 			unless elem.attrs?.get "#{File.HTML_NS}:each"
 				return elem.children?.forEach forNode
 
@@ -24,3 +23,6 @@ Special HTML attribute using to create new `File.Iterator`s.
 			iterators.push new File.Iterator file, elem
 
 		forNode file.node
+
+		if iterators.length
+			file.iterators = iterators

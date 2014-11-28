@@ -78,6 +78,20 @@ File.Element.Tag.Attrs
 
 				value
 
+add(*String* name[, *Any* val]) @low-level
+------------------------------------------
+
+			add: (name, val) ->
+				expect(name).toBe.truthy().string()
+				expect().some(exports.tag.attrsNames).not().toBe name
+
+				{tag} = exports
+
+				tag.attrsKeys.push name
+				tag.attrsNames[name] = tag.attrsKeys.length - 1
+				tag.attrsValues.push val
+				return
+
 			backChanges: ->
 
 				expect(exports.tag.clone).toBe undefined

@@ -22,7 +22,7 @@ Declared `File.Unit` can be used in the *HTML* file by using its name as a tag.
 		'neft:source': true
 
 	module.exports = (File) -> (file) ->
-		uses = file.uses = {}
+		uses = {}
 
 		forNode = (node) ->
 			unless node instanceof File.Element.Tag
@@ -38,4 +38,5 @@ Declared `File.Unit` can be used in the *HTML* file by using its name as a tag.
 
 		forNode file.node
 
-		null
+		unless utils.isEmpty uses
+			file.uses = uses

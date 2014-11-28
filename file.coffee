@@ -32,6 +32,7 @@ module.exports = class File
 	signal.create @, 'parsed'
 
 	@Element = require('./element/index')
+	@AttrChange = require('./attrChange') @
 	@Unit = require('./unit') @
 	@Use = require('./use') @
 	@Input = require('./input') @
@@ -114,6 +115,7 @@ module.exports = class File
 		if utils.isNode
 			links = require('./file/parse/links') File
 			attrs = require('./file/parse/attrs') File
+			attrChanges = require('./file/parse/attrChanges') File
 			units = require('./file/parse/units') File
 			iterators = require('./file/parse/iterators') File
 			source = require('./file/parse/source') File
@@ -144,6 +146,7 @@ module.exports = class File
 			# parse
 			links @
 			attrs @
+			attrChanges @
 			units @
 			iterators @
 			source @
@@ -169,6 +172,7 @@ module.exports = class File
 	pathbase: ''
 	parent: null
 	links: null
+	attrChanges: null
 	units: null
 	uses: null
 	inputs: null
@@ -189,22 +193,22 @@ module.exports = class File
 		@source = source
 
 		# inputs
-		if @inputs.length
+		if @inputs
 			for input, i in @inputs
 				input.render()
 
 		# conditions
-		if @conditions.length
+		if @conditions
 			for condition, i in @conditions
 				condition.render()
 
 		# iterators
-		if @iterators.length
+		if @iterators
 			for iterator, i in @iterators
 				iterator.render()
 
 		# uses
-		unless utils.isEmpty @uses
+		if @uses
 			for elemName, uses of @uses
 				for elem, i in uses
 					elem.render()
@@ -226,22 +230,22 @@ module.exports = class File
 			@isRendered = false
 
 			# inputs
-			if @inputs.length
+			if @inputs
 				for input, i in @inputs
 					input.revert()
 
 			# conditions
-			if @conditions.length
+			if @conditions
 				for condition, i in @conditions
 					condition.revert()
 
 			# iterators
-			if @iterators.length
+			if @iterators
 				for iterator, i in @iterators
 					iterator.revert()
 
 			# uses
-			unless utils.isEmpty @uses
+			if @uses
 				for elemName, uses of @uses
 					for elem, i in uses
 						elem.revert()
@@ -269,29 +273,35 @@ module.exports = class File
 			clone.storage = null
 			clone.source = null
 
-			# signals
+			# call signals
 			signal.create clone, 'replacedByUse'
 
+			# attrChanges
+			if @attrChanges
+				clone.attrChanges = []
+				for attrChange, i in @attrChanges
+					clone.attrChanges[i] = attrChange.clone @, clone
+
 			# inputs
-			if @inputs.length
+			if @inputs
 				clone.inputs = []
 				for input, i in @inputs
 					clone.inputs[i] = input.clone @, clone
 
 			# conditions
-			if @conditions.length
+			if @conditions
 				clone.conditions = []
 				for condition, i in @conditions
 					clone.conditions[i] = condition.clone @, clone
 
 			# iterators
-			if @iterators.length
+			if @iterators
 				clone.iterators = []
 				for iterator, i in @iterators
 					clone.iterators[i] = iterator.clone @, clone
 
 			# uses
-			unless utils.isEmpty @uses
+			if @uses
 				clone.uses = {}
 				for elemName, uses of @uses
 					clone.uses[elemName] = []

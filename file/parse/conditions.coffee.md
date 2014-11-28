@@ -13,8 +13,7 @@ Special HTML attribute using to create new `File.Condition`s.
 		{Condition} = File
 
 		(file) ->
-
-			conditions = file.conditions = []
+			conditions = []
 
 			nodes = file.node.queryAll "[#{File.HTML_NS}:if]"
 
@@ -26,4 +25,5 @@ Special HTML attribute using to create new `File.Condition`s.
 					self: file
 					node: node
 
-			null
+			if conditions.length
+				file.conditions = conditions

@@ -22,14 +22,13 @@ Special `as` parameter defines alias.
 	module.exports = (File) -> (file) ->
 
 		# prepare
-		links = file.links = []
+		links = []
 
 		# load found files
 		{children} = file.node
 		i = -1
 		n = children.length
 		while ++i < n
-
 			node = children[i]
 
 			if node.name isnt "#{File.HTML_NS}:require"
@@ -50,4 +49,5 @@ Special `as` parameter defines alias.
 				view: view
 				namespace: namespace
 
-		null
+		if links.length
+			file.links = links

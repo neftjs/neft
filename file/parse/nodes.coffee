@@ -4,7 +4,7 @@
 
 module.exports = (File) -> (file) ->
 
-	nodes = file.nodes = []
+	nodes = []
 
 	search = (node) ->
 		for child in node.children
@@ -15,4 +15,5 @@ module.exports = (File) -> (file) ->
 	nodes.push file.node
 	search file.node
 
-	null
+	if nodes.length
+		file.nodes = nodes

@@ -9,6 +9,8 @@ Special HTML tag used to create new `File.Unit`s.
 
 	'use strict'
 
+	utils = require 'utils'
+
 	HASH_RE = ///////g
 
 	module.exports = (File) -> (file) ->
@@ -17,11 +19,12 @@ Special HTML tag used to create new `File.Unit`s.
 		createdUnits = []
 
 		# merge units from files
-		for link in file.links
-			namespace = if link.namespace then "#{link.namespace}-" else ''
+		if file.links
+			for link in file.links
+				namespace = if link.namespace then "#{link.namespace}-" else ''
 
-			for name, unit of link.view.units
-				units[namespace + name] = unit
+				for name, unit of link.view.units
+					units[namespace + name] = unit
 
 		# find units in file
 		children = file.node.children
@@ -60,4 +63,5 @@ Special HTML tag used to create new `File.Unit`s.
 		for createdUnit in createdUnits
 			createdUnit.parse()
 
-		null
+		if utils.isEmpty units
+			file.units = null
