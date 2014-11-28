@@ -99,7 +99,7 @@ module.exports = (File, data) -> class Style
 		obj = @item
 		for prop, i in props
 			if i is props.length - 1
-				if signal.isHandlerName prop
+				if typeof obj[prop] is 'function'
 					obj[prop] val
 				else
 					obj[prop] = val
@@ -153,17 +153,18 @@ module.exports = (File, data) -> class Style
 
 		# attach attrs
 		if @attrs
-			for name, val of @attrs
+			for name, val of @attrs when val?
 				val = self.funcs?[val] or val
 				clone.setAttr name, val
 
 			# listen on attr change
 			clone.node.on 'attrChanged', (e) ->
 				return unless clone.attrs.hasOwnProperty(e.name)
-				if clone.self.funcs?[e.value]
+				value = @attrs.get e.name
+				if clone.self.funcs?[value]
 					log.warn "Dynamic listening on Renderer events is not supported"
 					return
-				clone.setAttr e.name, e.value
+				clone.setAttr e.name, value
 
 		# listen on node changes
 		clone.node.on 'visibilityChanged', ->
