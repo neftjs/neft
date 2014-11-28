@@ -14,8 +14,9 @@ module.exports = (impl) ->
 		constructor: (@binding, @item, @prop) ->
 			{signalChangeListener} = @
 
-			@signalChangeListener = =>
-				signalChangeListener.call @
+			self = @
+			@signalChangeListener = ->
+				signalChangeListener.call self
 
 			if isArray item
 				@item = null
@@ -119,7 +120,8 @@ module.exports = (impl) ->
 
 			# bind methods
 			{signalChangeListener} = @
-			@signalChangeListener = => signalChangeListener.call @
+			@signalChangeListener = (oldVal) =>
+				signalChangeListener.call @, oldVal
 
 			# destroy on property value change
 			signalName = Dict.getPropertySignalName prop
@@ -145,8 +147,8 @@ module.exports = (impl) ->
 		updatePending: false
 		connections: null
 
-		signalChangeListener: ->
-			unless @updatePending
+		signalChangeListener: (oldVal) ->
+			if not @updatePending and oldVal isnt @item[@prop]
 				@destroy()
 
 		update: do ->

@@ -75,6 +75,8 @@ Item states
 *List* Item::state
 ------------------
 
+### Item::stateChanged(*List* list)
+
 		itemUtils.defineProperty Item::, 'state', ((_super) -> ->
 			if @_data.state is null
 				list = @_data.state = new List()
@@ -86,7 +88,7 @@ Item states
 
 			@_data.state
 
-		), (_super) -> (val) ->
+		), (_super) -> (val='') ->
 			{state} = @
 
 			state.clear()

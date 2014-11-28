@@ -26,10 +26,9 @@ Renderer.Scrollable
 			super
 
 			`//<development>`
-			@onChildrenChanged ->
+			@onReady ->
 				{contentItem} = @
-				if contentItem
-					expect().some(@children).toBe contentItem
+				expect().some(@children).toBe contentItem
 			`//</development>`
 
 *[Renderer.Item]* Scrollable::contentItem

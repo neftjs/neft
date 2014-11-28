@@ -11,22 +11,20 @@ module.exports = (impl) ->
 	###
 	Scroll container by given x and y deltas
 	###
-	scroll = (item, x, y) ->
+	scroll = (item, x=0, y=0) ->
 		{contentItem, globalScale} = item._impl
 
-		if x isnt 0
-			x /= globalScale
-			val = item.contentX - x
-			max = contentItem.width - item.width
-			val = Math.max(0, Math.min(max, val))
-			item.contentX = val
+		x /= globalScale
+		val = item.contentX - x
+		max = contentItem.width - item.width
+		val = Math.max(0, Math.min(max, val))
+		item.contentX = val
 
-		if y isnt 0
-			y /= globalScale
-			val = item.contentY - y
-			max = contentItem.height - item.height
-			val = Math.max(0, Math.min(max, val))
-			item.contentY = val
+		y /= globalScale
+		val = item.contentY - y
+		max = contentItem.height - item.height
+		val = Math.max(0, Math.min(max, val))
+		item.contentY = val
 
 	getItemGlobalScale = (item) ->
 		val = item.scale
@@ -212,6 +210,7 @@ module.exports = (impl) ->
 
 		Item.create item
 
+		storage.scroll = (x, y) -> scroll item, x, y
 		storage.contentItem = null
 		storage.globalScale = 1
 
@@ -223,10 +222,14 @@ module.exports = (impl) ->
 		useWheel item
 
 	setScrollableContentItem: (val) ->
-		oldVal = @_impl.contentItem
+		if oldVal = @_impl.contentItem
+			oldVal.onWidthChanged.disconnect @_impl.scroll
+			oldVal.onHeightChanged.disconnect @_impl.scroll
 
 		if newVal = val
 			@_impl.contentItem = newVal
+			newVal.onWidthChanged @_impl.scroll
+			newVal.onHeightChanged @_impl.scroll
 
 	setScrollableContentX: (val) ->
 		@_impl.contentItem?.x = -val

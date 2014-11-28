@@ -9,6 +9,18 @@ module.exports = (impl) ->
 
 	updatePending = false
 
+	updateSizeNow = (item) ->
+		updatePending = true
+		{textElement} = item._impl
+
+		if item._impl.autoWidth
+			item.width = textElement.offsetWidth+1
+
+		if item._impl.autoHeight
+			item.height = textElement.offsetHeight
+
+		updatePending = false
+
 	updateSize = (item) ->
 		if document.readyState isnt 'complete'
 			window.addEventListener 'load', ->
@@ -18,15 +30,8 @@ module.exports = (impl) ->
 					updateSize item
 			return;
 
-		updatePending = true
-
-		if item._impl.autoWidth
-			item.width = item._impl.textElement.offsetWidth
-
-		if item._impl.autoHeight
-			item.height = item._impl.textElement.offsetHeight
-
-		updatePending = false
+		requestAnimationFrame ->
+			updateSizeNow item
 
 	onWidthChanged = ->
 		if not updatePending
