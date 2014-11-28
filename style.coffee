@@ -2,6 +2,7 @@
 
 expect = require 'expect'
 utils = require 'utils'
+signal = require 'signal'
 log = require 'log'
 Renderer = require 'renderer'
 
@@ -12,6 +13,9 @@ module.exports = (File, data) -> class Style
 
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
+
+	@HTML_ATTR = "#{File.HTML_NS}:style"
+	@HTML_DEEP_ATTR = "#{Style.HTML_ATTR}:"
 
 	listenRecursive = (node, event, listener) ->
 		expect(node).toBe.any File.Element
@@ -33,7 +37,7 @@ module.exports = (File, data) -> class Style
 		expect(opts.isScope).toBe.boolean()
 		expect().defined(opts.parent).toBe.any Style
 		expect().defined(opts.scope).toBe.any File.StyleScope
-		expect().defined(opts.events).toBe.simpleObject()
+		expect().defined(opts.attrs).toBe.simpleObject()
 
 		utils.fill @, opts
 
@@ -46,7 +50,7 @@ module.exports = (File, data) -> class Style
 	node: null
 	id: ''
 	children: null
-	events: null
+	attrs: null
 	parent: null
 	isRepeat: false
 	isScope: false
@@ -85,6 +89,22 @@ module.exports = (File, data) -> class Style
 
 	updateVisibility: ->
 		@item.visible = @node.visible
+
+	setAttr: (name, val) ->
+		expect(@).toBe.any Style
+		expect().some().keys(@attrs).toBe name
+
+		name = name.slice Style.HTML_DEEP_ATTR.length
+		props = name.split ':'
+		obj = @item
+		for prop, i in props
+			if i is props.length - 1
+				if signal.isHandlerName prop
+					obj[prop] val
+				else
+					obj[prop] = val
+			obj = obj[prop]
+		return
 
 	clone: (original, self, scope) ->
 		clone = Object.create @
@@ -131,14 +151,19 @@ module.exports = (File, data) -> class Style
 			child.parent = clone
 			children.push child
 
-		# attach events
-		if @events
-			for name, funcName of @events
-				func = self.funcs?[funcName]
-				unless func
-					log.error "Can't find `#{funcName}` func in `#{self.path}` for `#{@styleId}` style"
-					continue
-				clone.item[name] func
+		# attach attrs
+		if @attrs
+			for name, val of @attrs
+				val = self.funcs?[val] or val
+				clone.setAttr name, val
+
+			# listen on attr change
+			clone.node.on 'attrChanged', (e) ->
+				return unless clone.attrs.hasOwnProperty(e.name)
+				if clone.self.funcs?[e.value]
+					log.warn "Dynamic listening on Renderer events is not supported"
+					return
+				clone.setAttr e.name, e.value
 
 		# listen on node changes
 		clone.node.on 'visibilityChanged', ->

@@ -20,22 +20,19 @@ Each style file can be put by capitalizing its file name.
 
 	'use strict'
 
-	findEvents = (node) ->
-		# find events
-		events = null
+	findAttrs = (node) ->
+		# find attrs
+		attrs = null
 		i = 0
 		while (attr = node.attrs.item(i++))[0]?
 			[attrKey, attrValue] = attr
 
-			continue if attrKey.slice(0, 4) isnt 'neft:on'
-			continue if (attrKey[4]+'').toUpperCase() isnt attrKey[4]
+			continue if attrKey.indexOf('neft:style:') isnt 0
 
-			eventName = attrKey.slice 2
+			attrs ?= {}
+			attrs[attrKey] = attrValue
 
-			events ?= {}
-			events[eventName] = attrValue
-
-		events
+		attrs
 
 	module.exports = (File) -> (file) ->
 		{Style} = File
@@ -48,7 +45,7 @@ Each style file can be put by capitalizing its file name.
 					self: file
 					node: node
 					id: attr
-					events: findEvents(node)
+					attrs: findAttrs(node)
 					parent: parentStyle
 					isRepeat: !!data?.ids[attr]
 					isScope: ///^[A-Z]///.test attr

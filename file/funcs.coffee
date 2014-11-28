@@ -14,7 +14,7 @@ module.exports = (File) ->
 
 	FuncGlobalGetters =
 		item: (ctx) ->
-			if ctx instanceof Renderer.Scope.Item
+			if ctx instanceof Renderer.Item
 				ctx
 
 	funcGlobalProps = Object.keys(FuncGlobalFuncs)
