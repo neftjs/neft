@@ -33,8 +33,10 @@ Routing.Uri
 
 			# re
 			re = uri
-			re = re.replace '*', ->
+			re = re.replace ///\*///g, ->
 				"(.*?)"
+			re = re.replace ///\/([^/]*)///g, (_, str) ->
+				"(?:/#{str})?"
 			re = re.replace Uri.NAMES_RE, ->
 				"([^/]*?)"
 			re = new RegExp "^\/?#{re}\/?$"
@@ -66,7 +68,10 @@ Get parameters values from the passed string.
 
 			exec = @_re.exec uri
 			for name, i in @_names
-				@params[name] = exec[i+1]
+				val = exec[i+1]
+				if val is undefined
+					val = null
+				@params[name] = val
 
 			@params
 
