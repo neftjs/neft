@@ -4,15 +4,25 @@ utils = require 'utils'
 expect = require 'expect'
 Renderer = require 'renderer'
 
+# link modules to be possible required by the funcs
+links = ['db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
+         'log', 'renderer', 'routing', 'schema', 'signal', 'utils', 'view']
+for link in links
+	require link
+
 module.exports = (File) ->
 
 	{Input, Unit} = File
 
 	FuncGlobalFuncs =
+		require: require
 		get: (prop) ->
 			Input.getVal @, prop
 
 	FuncGlobalGetters =
+		view: -> @
+		global: -> @storage?.global
+		data: -> FuncGlobalFuncs.get.call @, 'data'
 		item: (ctx) ->
 			if ctx instanceof Renderer.Item
 				ctx
