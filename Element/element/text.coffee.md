@@ -17,7 +17,7 @@ File.Element.Text
 **Extends:** `File.Element`
 
 		constructor: ->
-			utils.defineProperty @, '_text', utils.WRITABLE, ''
+			@_text = ''
 
 			super()
 

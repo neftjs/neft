@@ -16,7 +16,8 @@ module.exports = (File) -> class Input
 	@__path__ = 'File.Input'
 
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
-	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z_][\w:_]*)+(?!:)///gi
+	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z_$][\w:_]*)+(?!:)///gi
+	PROP_RE = @PROP_RE = ///(\.(?:[a-z_$][\w]+)|\[['"](?:[a-z_$][\w]+)['"]\])([^(]?)///gi
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null']
 
 	cache = {}
@@ -43,10 +44,7 @@ module.exports = (File) -> class Input
 
 	@get = (input, prop) ->
 		v = Input.getVal input.self, prop
-
-		# realtime traces
-		if v instanceof Dict and not input.traces[v.__hash__]
-			input.trace v
+		input.trace v
 
 		v
 
@@ -60,7 +58,7 @@ module.exports = (File) -> class Input
 		arr
 
 	@fromAssembled = (input) ->
-		input._func = cache[input.func] ?= new Function 'file', 'get', input.func
+		input._func = cache[input.func] ?= new Function '__input', '__get', input.func
 
 	constructor: (@node, @text) ->
 		expect(node).toBe.any File.Element
@@ -70,12 +68,17 @@ module.exports = (File) -> class Input
 		func = ''
 		RE.lastIndex = 0
 		while (match = RE.exec text) isnt null
-
 			# parse prop
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
 				if prefix.trim() or not utils.has CONSTANT_VARS, elem
-					str = "get(file, '#{utils.addSlashes elem}')"
+					str = "__get(__input, '#{utils.addSlashes elem}')"
 				"#{prefix}#{str}"
+
+			prefix = ''
+			prop = prop.replace PROP_RE, (_, str, postfix) ->
+				prefix += "__input.trace("
+				"#{str})#{postfix}"
+			prop = "#{prefix}#{prop}"
 
 			# add into func string
 			if match[1] then func += "'#{utils.addSlashes match[1]}' + "
@@ -105,12 +108,11 @@ module.exports = (File) -> class Input
 	_onAttrChanged: (e) ->
 		@_onChanged e.name
 
-	trace: (dict) ->
-		expect(dict).toBe.any Dict
-		expect().some().keys(@traces).not().toBe dict.__hash__
-
-		dict.onChanged @_onChanged
-		@traces[dict.__hash__] = dict
+	trace: (val) ->
+		if val instanceof Dict and not @traces[val.__hash__]
+			val.onChanged @_onChanged
+			@traces[val.__hash__] = val
+		val
 
 	render: ->
 		for storage in Input.getStoragesArray @self
@@ -138,7 +140,7 @@ module.exports = (File) -> class Input
 	toString: do ->
 
 		callFunc = ->
-			@_func @, Input.get
+			@_func.call null, @, Input.get
 
 		->
 			try
