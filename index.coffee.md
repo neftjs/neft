@@ -14,7 +14,6 @@ Helper made to extends standard Javascript Array functionalities.
 
 Creates new *list* based on the *given* elements.
 
-### Example
 ```
 list = new List [1, 2]
 
@@ -91,7 +90,6 @@ Number of elements in a list.
 
 This property is **read-only**.
 
-### Example
 
 list = new List 'a', 'b'
 
@@ -110,7 +108,6 @@ Returns **value** of the element stored at given *index*.
 
 For unknown elements, `undefined` is returned.
 
-### Example
 ```
 list = new List 'a', 'b'
 
@@ -140,7 +137,6 @@ Element at given *index* must be stored in a list.
 
 Given *value* is returned as a **result**.
 
-### Example
 ```
 types = new List 'fantasy', 'Thriller'
 
@@ -178,7 +174,6 @@ Returns array of all the elements stored in a list.
 Always the same instance is returned, so don't change this array manually.
 Use `utils.clone()` otherwise.
 
-### Example
 ```
 list = new List 1, 2
 
@@ -210,7 +205,6 @@ Append new element at the end of a list.
 
 *value* can't be a `undefined`, because this value is reserved only for unknown elements.
 
-### Example
 ```
 fridge = new List 'apple', 'milk'
 
@@ -243,7 +237,6 @@ Added value is returned.
 
 `List::inserted()` **signal** is called with parameters passed to this function.
 
-### Example
 ```
 list = new List 'a', 'b'
 
@@ -275,7 +268,6 @@ Removes given *value* from a list.
 
 Given *value* is returned.
 
-### Example
 ```
 list = new List 'a', 'b'
 
@@ -311,7 +303,6 @@ Given *index* must exists in the list.
 
 Removed element is returned.
 
-### Example
 ```
 list = new List 'a', 'b'
 
@@ -349,7 +340,6 @@ Removes all elements stored in a list.
 
 Notice that this method will call `List::popped()` **signal** on each element.
 
-### Example
 ```
 list = new List 'a', 'b'
 
@@ -382,7 +372,6 @@ Given value can't be a `undefined`, becuase it's used for unknown elements.
 
 If no value exists in this list `-1` is returned.
 
-### Example
 ```
 list = new List 'a', 'b'
 
@@ -397,3 +386,21 @@ console.log list.index 'c'
 			expect(val).not().toBe undefined
 
 			@_data.indexOf val
+
+*Boolean* List::has(*Any* value)
+--------------------------------
+
+Returns true if given *value* exists in a list.
+
+```
+list = new List 'a', 'b'
+
+console.log list.has 'a'
+# true
+
+console.log list.has 'ab123'
+# false
+```
+
+		has: (val) ->
+			@index(val) isnt -1

@@ -87,6 +87,14 @@ describe 'index()', ->
 	it 'return the index of the first item equal given value', ->
 		list = List 1, 2, 2
 		expect(list.index 2).toBe 1
+		expect(list.index 3).toBe -1
+
+describe 'has()', ->
+
+	it 'return true if given value exists in a list', ->
+		list = List 1, 2, 2
+		expect(list.has 2).toBe true
+		expect(list.has 3).toBe false
 
 describe 'onChanged signal', ->
 
