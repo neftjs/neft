@@ -30,5 +30,5 @@ schema.validate age: -5
 		if typeof expected isnt 'number'
 			throw new TypeError "Schema internal: max for #{row} row must be a number"
 
-		if value > expected
+		if typeof value is 'number' and value > expected
 			throw new RangeError "Schema: Maximum range of #{row} is #{expected}"
