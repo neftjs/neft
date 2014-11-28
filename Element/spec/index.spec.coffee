@@ -44,7 +44,7 @@ describe 'View Element', ->
 
 	it 'hidden attrs are omitted in the stringified process', ->
 
-		elem = Element.fromHTML '<span x:if="a" x:each="a"></span>'
+		elem = Element.fromHTML '<span neft:if="a" neft:each="a"></span>'
 		html = elem.stringify()
 
 		expect(html).toBe '<span></span>'

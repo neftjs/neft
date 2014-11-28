@@ -1,7 +1,7 @@
 'use strict'
 
 isPublic = (name) ->
-	name.indexOf('x:') isnt 0
+	name.indexOf('neft:') isnt 0
 
 getInnerHTML = (elem) ->
 	if elem.visible and elem.children

@@ -18,6 +18,7 @@ module.exports = (File) -> class Condition
 	@__path__ = 'File.Condition'
 
 	@FALSE_FUNC = -> false
+	@HTML_ATTR = "#{File.HTML_NS}:if"
 
 	@getCondFunc: (exp) ->
 		try
@@ -40,7 +41,7 @@ module.exports = (File) -> class Condition
 
 	execute: ->
 
-		exp = @node.attrs.get 'x:if'
+		exp = @node.attrs.get Condition.HTML_ATTR
 
 		# get cached exp result
 		if expCache.hasOwnProperty exp
@@ -90,6 +91,6 @@ module.exports = (File) -> class Condition
 
 		clone.node.on 'attrChanged', (e) ->
 			if self.isRendered
-				clone.render() if e.name is 'x:if'
+				clone.render() if e.name is Condition.HTML_ATTR
 
 		clone

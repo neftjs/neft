@@ -12,6 +12,8 @@ module.exports = (File) -> class Iterator extends File.Use
 	@__name__ = 'Iterator'
 	@__path__ = 'File.Iterator'
 
+	@HTML_ATTR = "#{File.HTML_NS}:each"
+
 	constructor: (@self, node) ->
 
 		expect(self).toBe.any File
@@ -37,7 +39,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		unless @node.visible
 			return
 
-		each = @node.attrs.get 'x:each'
+		each = @node.attrs.get Iterator.HTML_ATTR
 
 		# stop if nothing changed
 		if each is @data
@@ -157,7 +159,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.popItem = (arg1) => @popItem.call clone, arg1
 
 		clone.node.on 'attrChanged', (e) ->
-			if self.isRendered and e.name is 'x:each'
+			if self.isRendered and e.name is Iterator.HTML_ATTR
 				clone.update()
 
 		clone.node.on 'visibilityChanged', (oldVal) ->
