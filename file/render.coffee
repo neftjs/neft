@@ -28,7 +28,7 @@ module.exports = (File) ->
 			null
 
 		(elem) ->
-			@_watchedFile?.replacedByUse.disconnect @updateStylesParent
+			@_watchedFile?.onReplacedByUse.disconnect @updateStylesParent
 			@_watchedFile = null
 
 			return unless elem

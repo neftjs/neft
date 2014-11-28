@@ -56,7 +56,7 @@ module.exports = (File, data) -> class Style
 			return
 
 		if @isAutoParent
-			@item.parent = parent?.item
+			@item.parent = if parent then parent.item else null
 
 		for child in @children
 			child.render()
