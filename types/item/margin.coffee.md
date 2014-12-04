@@ -9,7 +9,7 @@ Item.Margin
 
 	{assert} = console
 
-	module.exports = (Renderer, Impl) ->
+	module.exports = (Renderer, Impl, itemUtils) ->
 
 *Margin* Margin
 ---------------
@@ -31,10 +31,7 @@ Item.Margin
 				super Object.create Margin.DATA
 
 			createMarginProp = (type) ->
-				Dict.defineProperty Margin::, type
-
-				utils.defineProperty Margin::, type, utils.ENUMERABLE, utils.lookupGetter(Margin::, type)
-				, do (_super = utils.lookupSetter Margin::, type) -> (val) ->
+				itemUtils.defineProperty Margin::, type, null, (_super) -> (val) ->
 					`//<development>`
 					id = @_item.__hash__
 					assert typeof val is 'number' and isFinite(val)

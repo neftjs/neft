@@ -73,24 +73,7 @@ Renderer.Item
 				Impl.createItem @, @constructor.__name__
 
 			# fill
-			if opts?
-				# set properties
-				for key, val of opts
-					unless key of @
-						throw "Unexpected property `#{key}`"
-
-					if typeof val is 'function'
-						continue
-
-					itemUtils.setProperty @, key, val
-
-				# connect handlers
-				for key, val of opts
-					unless key of @
-						throw "Unexpected property `#{key}`"
-
-					if typeof val is 'function'
-						@[key].connect val
+			itemUtils.fill @, opts
 
 			# append children
 			if children

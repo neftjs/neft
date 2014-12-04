@@ -3,17 +3,15 @@
 utils = require 'utils'
 expect = require 'expect'
 
-module.exports = (Renderer, Impl) -># class NumberAnimation extends Renderer.PropertyAnimation
-	#@__name__ = 'NumberAnimation'
+module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
+	@__name__ = 'NumberAnimation'
 
-	return {} # TODO
-
-	utils.defProp @::, 'from', 'e', utils.lookupGetter(Renderer.PropertyAnimation::, 'from')
-	, do (_super = utils.lookupSetter(Renderer.PropertyAnimation::, 'from')) -> (val) ->
+	utils.defineProperty @::, 'from', utils.ENUMERABLE, utils.lookupGetter(@::, 'from')
+	, do (_super = utils.lookupSetter(@::, 'from')) -> (val) ->
 		expect(val).toBe.float()
 		_super.call @, val
 
-	utils.defProp @::, 'to', 'e', utils.lookupGetter(Renderer.PropertyAnimation::, 'to')
-	, do (_super = utils.lookupSetter(Renderer.PropertyAnimation::, 'to')) -> (val) ->
+	utils.defineProperty @::, 'to', utils.ENUMERABLE, utils.lookupGetter(@::, 'to')
+	, do (_super = utils.lookupSetter(@::, 'to')) -> (val) ->
 		expect(val).toBe.float()
 		_super.call @, val

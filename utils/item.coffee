@@ -52,7 +52,27 @@ module.exports = (Renderer, Impl) -> exports =
 		if typeof val is 'function'
 			return item[key].connect val
 
-		if val? and typeof val is 'object' and key of item.constructor.prototype and not Array.isArray(val) and not(val instanceof Renderer.Item) 
+		if val? and typeof val is 'object' and key of item.constructor.prototype and not Array.isArray(val.binding) and not(val instanceof Renderer.Item) 
 			return utils.merge item[key], val
 
 		item[key] = val
+
+	fill: (item, opts) ->
+		if opts?
+			# set properties
+			for key, val of opts
+				unless key of item
+					throw "Unexpected property `#{key}`"
+
+				if typeof val is 'function'
+					continue
+
+				exports.setProperty item, key, val
+
+			# connect handlers
+			for key, val of opts
+				unless key of item
+					throw "Unexpected property `#{key}`"
+
+				if typeof val is 'function'
+					item[key].connect val

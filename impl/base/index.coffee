@@ -21,7 +21,6 @@ exports.Extras =
 	Anchors: require './level2/anchors'
 
 exports.items = {}
-exports.animations = {}
 exports.utils = require './utils'
 
 exports.setWindow = (id) ->

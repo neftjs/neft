@@ -27,9 +27,9 @@ It's a base for everything which can be rendered on the screen.
 	exports.Row = require('./types/item/types/row') exports, Impl, itemUtils
 	exports.Scrollable = require('./types/item/types/scrollable') exports, Impl, itemUtils
 
-	exports.Animation = require('./types/animation') exports, Impl
-	exports.PropertyAnimation = require('./types/animation/types/property') exports, Impl
-	exports.NumberAnimation = require('./types/animation/types/property/types/number') exports, Impl
+	exports.Animation = require('./types/animation') exports, Impl, itemUtils
+	exports.PropertyAnimation = require('./types/animation/types/property') exports, Impl, itemUtils
+	exports.NumberAnimation = require('./types/animation/types/property/types/number') exports, Impl, itemUtils
 
 	utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val

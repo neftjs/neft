@@ -34,7 +34,7 @@ module.exports = (impl) ->
 					animation.running = false
 
 			val = (animation.to - animation.from) * animation.progress + animation.from
-			impl[impl.utils.SETTER_METHODS_NAMES[animation.property]] animation.target, val
+			animation.target[animation.property] = val
 
 			i++
 
@@ -46,9 +46,10 @@ module.exports = (impl) ->
 		reqSend = true
 		requestAnimationFrame vsync
 
-	create: (id, target) ->
-		PropertyAnimation.create id, target
+	create: (animation) ->
+		PropertyAnimation.create animation
 
+		target = animation._impl
 		target.progress = 0
 		target.startTime = 0
 		target.play = ->

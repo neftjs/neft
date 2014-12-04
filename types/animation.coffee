@@ -2,47 +2,40 @@
 
 utils = require 'utils'
 expect = require 'expect'
+Dict = require 'dict'
 
-# TODO: use Dict
-module.exports = (Renderer, Impl) -># class Animation
-	#@__name__ = 'Animation'
+module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Dict
+	@__name__ = 'Animation'
 
-	return {} # TODO
+	@DATA =
+		running: false
+		loop: false
 
 	constructor: (opts) ->
 		expect(opts).toBe.simpleObject()
 
-		utils.defProp @, '_uid', '', uid = utils.uid()
-		Impl.createAnimation.call @, @constructor.__name__
-		utils.merge @, opts
+		utils.defineProperty @, '_impl', null, {}
+		super Object.create(@constructor.DATA)
+		Impl.createAnimation @, @constructor.__name__
+		itemUtils.fill @, opts
 
-		Object.freeze @
-
-	utils.defProp @::, 'name', 'e', null, (val) ->
-		expect(val).toBe.truthy().string()
-
-		utils.defProp @, 'name', 'e', val
-
-	utils.defProp @::, 'running', 'e', ->
-		Impl.getAnimationRunning @_uid
-	, (val) ->
+	itemUtils.defineProperty @::, 'running', null, (_super) -> (val) ->
 		expect(val).toBe.boolean()
-
+		_super.call @, val
 		if val
-			Impl.playAnimation @_uid
+			Impl.playAnimation.call @
 		else
-			Impl.stopAnimation @_uid
+			Impl.stopAnimation.call @
 
-	utils.defProp @::, 'loop', 'e', ->
-		Impl.getAnimationLoop @_uid
-	, (val) ->
+	itemUtils.defineProperty @::, 'loop', null, (_super) -> (val) ->
 		expect(val).toBe.boolean()
-		Impl.setAnimationLoop @_uid, val
+		_super.call @, val
+		Impl.setAnimationLoop.call @, val
 
 	play: ->
-		Impl.playAnimation @_uid
+		@running = true
 		@
 
 	stop: ->
-		Impl.stopAnimation @_uid
+		@running = false
 		@

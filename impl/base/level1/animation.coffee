@@ -1,25 +1,17 @@
 'use strict'
 
 module.exports = (impl) ->
-	{animations} = impl
-
-	create: (id, target) ->
+	create: (animation) ->
+		target = animation._impl
 		target.running = false
 		target.loop = false
 
-	getAnimationRunning: (id) ->
-		animations[id].running
-
-	getAnimationLoop: (id) ->
-		animations[id].loop
-
-	setAnimationLoop: (id, val) ->
-		animations[id].loop = val
+	setAnimationLoop: (val) ->
+		@_impl.loop = val
 
 	playAnimation: (id) ->
-		animation = animations[id]
-		animation.running = true
-		animation.play()
+		@_impl.running = true
+		@_impl.play()
 
 	stopAnimation: (id) ->
-		animations[id].running = false
+		@_impl.running = false

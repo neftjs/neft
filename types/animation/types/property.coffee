@@ -3,36 +3,29 @@
 utils = require 'utils'
 expect = require 'expect'
 
-module.exports = (Renderer, Impl) -># class PropertyAnimation extends Renderer.Animation
-	#@__name__ = 'PropertyAnimation'
+module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
+	@__name__ = 'PropertyAnimation'
 
-	return {} # TODO
-
-	utils.defProp @::, 'target', 'e', ->
-		Impl.getPropertyAnimationTarget @_uid
-	, (val) ->
+	itemUtils.defineProperty @::, 'target', null, (_super) -> (val) ->
 		expect(val).toBe.any Renderer.Item
-		Impl.setPropertyAnimationTarget @_uid, val._uid
+		_super.call @, val
+		Impl.setPropertyAnimationTarget.call @, val
 
-	utils.defProp @::, 'property', 'e', ->
-		Impl.getPropertyAnimationProperty @_uid
-	, (val) ->
+	itemUtils.defineProperty @::, 'property', null, (_super) -> (val) ->
 		expect(val).toBe.truthy().string()
-		Impl.setPropertyAnimationProperty @_uid, val
+		_super.call @, val
+		Impl.setPropertyAnimationProperty.call @, val
 
-	utils.defProp @::, 'duration', 'e', ->
-		Impl.getPropertyAnimationDuration @_uid
-	, (val) ->
+	itemUtils.defineProperty @::, 'duration', null, (_super) -> (val) ->
 		expect(val).toBe.integer()
 		expect(val).toBe.greaterThan 0
-		Impl.setPropertyAnimationDuration @_uid, val
+		_super.call @, val
+		Impl.setPropertyAnimationDuration.call @, val
 
-	utils.defProp @::, 'from', 'e', ->
-		Impl.getPropertyAnimationFrom @_uid
-	, (val) ->
-		Impl.setPropertyAnimationFrom @_uid, val
+	itemUtils.defineProperty @::, 'from', null, (_super) -> (val) ->
+		_super.call @, val
+		Impl.setPropertyAnimationFrom.call @, val
 
-	utils.defProp @::, 'to', 'e', ->
-		Impl.getPropertyAnimationTo @_uid
-	, (val) ->
-		Impl.setPropertyAnimationTo @_uid, val
+	itemUtils.defineProperty @::, 'to', null, (_super) -> (val) ->
+		_super.call @, val
+		Impl.setPropertyAnimationTo.call @, val

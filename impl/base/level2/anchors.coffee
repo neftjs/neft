@@ -157,5 +157,6 @@ module.exports = (impl) ->
 
 		if bindings = @_impl.bindings
 			for prop in BINDINGS_PROPS[type]
-				bindings[prop]?.update()
+				uniqueProp = "#{@constructor.__name__}-#{prop}"
+				bindings[uniqueProp]?.update()
 		null

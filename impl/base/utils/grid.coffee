@@ -103,8 +103,8 @@ updateItem = (item) ->
 			child.y = rowsPositions[row-1] + child.margin.top
 
 	# set item size
-	item.width = Math.max 0, utils.last(columnsPositions) - rightMargin
-	item.height = Math.max 0, utils.last(rowsPositions) - bottomMargin
+	item.width = Math.max 0, (utils.last(columnsPositions) or 0) - rightMargin
+	item.height = Math.max 0, (utils.last(rowsPositions) or 0) - bottomMargin
 
 updateItems = ->
 	pending = false

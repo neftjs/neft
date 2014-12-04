@@ -3,8 +3,11 @@
 utils = require 'utils'
 
 SHEET = "
-body {
+* {
 	margin: 0;
+	padding: 0;
+}
+body {
 	overflow: hidden;
 }
 html, body {
@@ -23,9 +26,18 @@ div, span, canvas, img {
 	word-wrap: break-word;
 	margin: 0;
 }
+span * {
+	font-weight: inherit;
+}
+span b, span strong {
+	font-weight: bolder;
+}
 a {
 	text-decoration: inherit;
 	color: inherit;
+}
+code {
+	white-space: pre;
 }
 "
 
