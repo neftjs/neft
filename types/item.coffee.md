@@ -1,5 +1,5 @@
-Renderer.Item
-=============
+Renderer.Item @class
+====================
 
 	'use strict'
 
