@@ -6,10 +6,8 @@ Renderer.Column
 	expect = require 'expect'
 	utils = require 'utils'
 
-*Column* Column([*Object* options, *Array* children])
------------------------------------------------------
-
-**Extends:** `Renderer.Item`
+*Column* Column([*Object* options, *Array* children]) : Renderer.Item
+---------------------------------------------------------------------
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
 		@__name__ = 'Column'

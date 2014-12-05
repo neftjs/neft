@@ -8,10 +8,8 @@ Renderer.Grid
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Grid* Grid([*Object* options, *Array* children])
--------------------------------------------------
-
-**Extends:** `Renderer.Item`
+*Grid* Grid([*Object* options, *Array* children]) : Renderer.Item
+-----------------------------------------------------------------
 
 		class Grid extends Renderer.Item
 			@__name__ = 'Grid'
@@ -34,7 +32,7 @@ Renderer.Grid
 *Integer* Grid::rows
 --------------------
 
-### Grid::rowsChanged(*Imteger* oldValue)
+### Grid::rowsChanged(*Integer* oldValue)
 
 			itemUtils.defineProperty @::, 'rows', Impl.setGridRows, null, (_super) -> (val) ->
 				expect(val).toBe.integer()

@@ -1,4 +1,4 @@
-Item states
+Item.States
 ===========
 
 	'use strict'
@@ -108,8 +108,8 @@ Item states
 
 			null
 
-*Renderer.State* Item::states
------------------------------
+*List<Renderer.State>* Item::states
+-----------------------------------
 
 		utils.defineProperty Item::, 'states', utils.ENUMERABLE, ->
 			val =

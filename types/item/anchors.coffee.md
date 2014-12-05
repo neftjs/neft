@@ -46,19 +46,14 @@ And three vertical lines:
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-Anchors
--------
+```
+Rectangle {
+  id: 'rect1'
+}
 
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    id: 'rect2'
-    anchors:
-        left: 'rect1.right'
-    ...
+Rectangle {
+  anchors.left: rect1.right
+}
 ```
 
 Left side of the *rect2* item now is anchored into the right side of the *rect1* item.
@@ -182,6 +177,9 @@ so `anchors.top = 'parent.left'` is not allowed.
 					_super.call @, val
 					@_item.anchorsChanged? @
 					Impl.setItemAnchor.call @_item, type, val
+
+*Anchors* Anchors(*Renderer.Item* item) @low-level
+--------------------------------------------------
 
 			constructor: (item) ->
 				expect(item).toBe.any Renderer.Item

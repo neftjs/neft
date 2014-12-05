@@ -9,10 +9,8 @@ Renderer.Text
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Text* Text([*Object* options, *Array* children])
--------------------------------------------------
-
-**Extends:** `Renderer.Item`
+*Text* Text([*Object* options, *Array* children]) : Renderer.Item
+-----------------------------------------------------------------
 
 		class Text extends Renderer.Item
 			@__name__ = 'Text'
@@ -73,8 +71,6 @@ Renderer.Text
 
 *Font* Font()
 -------------
-
-**Extends:** `Dict`
 
 		class Font
 			@DATA = Text.DATA.font =

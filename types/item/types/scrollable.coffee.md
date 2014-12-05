@@ -6,10 +6,8 @@ Renderer.Scrollable
 	expect = require 'expect'
 	utils = require 'utils'
 
-*Scrollable* Scrollable([*Object* options, *Array* children])
--------------------------------------------------------------
-
-**Extends:** `Renderer.Item`
+*Scrollable* Scrollable([*Object* options, *Array* children]) : Renderer.Item
+-----------------------------------------------------------------------------
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 		@__name__ = 'Scrollable'
@@ -30,10 +28,10 @@ Renderer.Scrollable
 				expect().some(@children).toBe contentItem
 			`//</development>`
 
-*[Renderer.Item]* Scrollable::contentItem
+[*Renderer.Item*] Scrollable::contentItem
 -----------------------------------------
 
-### Scrollable::contentItemChanged(*[Renderer.Item]* oldValue)
+### Scrollable::contentItemChanged([*Renderer.Item* oldValue])
 
 		itemUtils.defineProperty @::, 'contentItem', Impl.setScrollableContentItem, null, (_super) -> (val) ->
 			expect(val).toBe.any Renderer.Item

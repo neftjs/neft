@@ -1,5 +1,5 @@
-Renderer.PropertyAnimation @class
-=================================
+Renderer.PropertyAnimation
+==========================
 
 	'use strict'
 

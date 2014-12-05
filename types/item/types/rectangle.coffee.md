@@ -8,10 +8,8 @@ Renderer.Rectangle
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Rectangle* Rectangle([*Object* options, *Array* children])
------------------------------------------------------------
-
-**Extends:** `Renderer.Item`
+*Rectangle* Rectangle([*Object* options, *Array* children]) : Renderer.Item
+---------------------------------------------------------------------------
 
 		class Rectangle extends Renderer.Item
 			@__name__ = 'Rectangle'

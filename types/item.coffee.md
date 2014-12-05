@@ -1,5 +1,5 @@
-Renderer.Item @class
-====================
+Renderer.Item
+=============
 
 	'use strict'
 
@@ -310,7 +310,7 @@ Item::clear()
 		clear: ->
 			while child = @children[0]
 				child.parent = null
-			null
+			@
 
 *Item* Item::clone()
 --------------------

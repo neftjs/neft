@@ -6,10 +6,8 @@ Renderer.Row
 	expect = require 'expect'
 	utils = require 'utils'
 
-*Row* Row([*Object* options, *Array* children])
------------------------------------------------
-
-**Extends:** `Renderer.Item`
+*Row* Row([*Object* options, *Array* children]) : Renderer.Item
+---------------------------------------------------------------
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Row extends Renderer.Item
 		@__name__ = 'Row'

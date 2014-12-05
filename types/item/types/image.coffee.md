@@ -6,10 +6,8 @@ Renderer.Image
 	expect = require 'expect'
 	utils = require 'utils'
 
-*Image* Image([*Object* options, *Array* children])
----------------------------------------------------
-
-**Extends:** `Renderer.Item`
+*Image* Image([*Object* options, *Array* children]) : Renderer.Item
+-------------------------------------------------------------------
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Item
 		@__name__ = 'Image'
