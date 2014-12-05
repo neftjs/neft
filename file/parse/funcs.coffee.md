@@ -8,7 +8,7 @@ Special HTML tag used to create new view functions.
   item.text = parseInt(item.text) + 1 + ''
 </neft:func>
 
-<span neft:style="button" neft:onPointerClicked="increment">0</span>
+<span neft:style="button" neft:style:onPointerClicked="increment">0</span>
 ```
 
 	'use strict'
