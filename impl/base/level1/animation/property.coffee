@@ -13,6 +13,7 @@ module.exports = (impl) ->
 		target.duration = 1000
 		target.from = null
 		target.to = null
+		target.progress = 0
 
 	setPropertyAnimationTarget: (val) ->
 		target = @_impl
@@ -34,3 +35,6 @@ module.exports = (impl) ->
 
 	setPropertyAnimationTo: (val) ->
 		@_impl.to = val
+
+	getPropertyAnimationProgress: ->
+		@_impl.progress

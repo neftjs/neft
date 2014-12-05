@@ -31,6 +31,8 @@ It's a base for everything which can be rendered on the screen.
 	exports.PropertyAnimation = require('./types/animation/types/property') exports, Impl, itemUtils
 	exports.NumberAnimation = require('./types/animation/types/property/types/number') exports, Impl, itemUtils
 
+	exports.Transition = require('./types/transition') exports, Impl, itemUtils
+
 	utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val
 		Impl.setWindow val

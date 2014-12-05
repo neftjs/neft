@@ -17,14 +17,15 @@ module.exports = (impl) ->
 		i = 0; n = pending.length
 		while i < n
 			animation = pending[i]
+			abstractData = animation.animation._data
 
 			unless animation.running
-				animation.animation.running = false
 				animation.progress = 0
+				animation.animation.running = false
 				pending[i] = utils.last(pending)
 				pending.pop()
 				n--
-				break if i+1 is n
+				continue
 
 			animation.progress = Math.min 1, (now()-animation.startTime) / animation.duration
 
@@ -35,8 +36,15 @@ module.exports = (impl) ->
 					animation.running = false
 
 			val = (animation.to - animation.from) * animation.progress + animation.from
-			if not isNaN(val)
-				animation.target[animation.property] = val
+			target = animation.target
+			if not isNaN(val) and target
+				setter = impl.utils.SETTER_METHODS_NAMES[animation.property]
+				if not abstractData.updateProperty and setter
+					impl[setter].call target, val
+				else
+					abstractData.updatePending = true
+					target[animation.property] = val
+					abstractData.updatePending = false
 
 			i++
 
@@ -52,7 +60,6 @@ module.exports = (impl) ->
 		PropertyAnimation.create animation
 
 		target = animation._impl
-		target.progress = 0
 		target.startTime = 0
 		target.play = ->
 			pending.push @

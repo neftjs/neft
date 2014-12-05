@@ -20,6 +20,7 @@ Renderer.Item
 		Margin = require('./item/margin') Renderer, Impl, itemUtils
 		Anchors = require('./item/anchors') Renderer, Impl, itemUtils
 		Animations = require('./item/animations') Renderer, Impl, itemUtils
+		Transitions = require('./item/transitions') Renderer, Impl, itemUtils
 
 		@DATA =
 			parent: null
@@ -286,6 +287,22 @@ Item::ready()
 			utils.defineProperty @, 'animations', utils.ENUMERABLE, val = new Animations(@)
 			val
 		, null
+
+*Item.Transitions* Item::transitions
+------------------------------------
+
+		Renderer.State.supportObjectProperty 'transitions'
+		utils.defineProperty @::, 'transitions', utils.ENUMERABLE, ->
+			utils.defineProperty @, 'transitions', utils.ENUMERABLE, val = new Transitions(@)
+			val
+		, (val) ->
+			{transitions} = @
+			if Array.isArray(val)
+				for elem in val
+					transitions.append elem
+			else
+				transitions.append val
+			return
 
 Item::clear()
 -------------

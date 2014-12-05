@@ -142,19 +142,19 @@ HOT_MAX_ACTIONS = 5
 module.exports = (impl) ->
 	updateTransforms = (item) ->
 		transform = ''
-		data = item._data
+		target = item._impl
 
 		# position
 		if item._impl.isHot
-			transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
+			transform = "translate3d(#{target.x}px, #{target.y}px, 0) "
 
 		# rotation
-		if data.rotation
-			transform += "rotate(#{rad2deg(data.rotation)}deg) "
+		if target.rotation
+			transform += "rotate(#{rad2deg(target.rotation)}deg) "
 
 		# scale
-		if data.scale isnt 1
-			transform += "scale(#{data.scale}) "
+		if target.scale isnt 1
+			transform += "scale(#{target.scale}) "
 
 		item._impl.elem.style[transformProp] = transform
 
@@ -178,6 +178,10 @@ module.exports = (impl) ->
 		storage.lastAction = now()
 		storage.hotActions = 0
 		storage.isHot = false
+		storage.x = 0
+		storage.y = 0
+		storage.rotation = 0
+		storage.scale = 1
 
 	setItemParent: (val) ->
 		{elem} = @_impl
@@ -201,6 +205,7 @@ module.exports = (impl) ->
 		@_impl.elem.style.height = "#{val}px"
 
 	setItemX: (val) ->
+		@_impl.x = val
 		if @_impl.isHot
 			updateTransforms @
 		else
@@ -208,6 +213,7 @@ module.exports = (impl) ->
 			markAction @
 
 	setItemY: (val) ->
+		@_impl.y = val
 		if @_impl.isHot
 			updateTransforms @
 		else
@@ -218,9 +224,11 @@ module.exports = (impl) ->
 		@_impl.elem.style.zIndex = if val is 0 then 'inherit' else val
 
 	setItemScale: (val) ->
+		@_impl.scale = val
 		updateTransforms @
 
 	setItemRotation: (val) ->
+		@_impl.rotation = val
 		updateTransforms @
 
 	setItemOpacity: (val) ->
