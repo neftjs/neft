@@ -17,7 +17,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends 
 		Impl.setPropertyAnimationProperty.call @, val
 
 	itemUtils.defineProperty @::, 'duration', null, (_super) -> (val) ->
-		expect(val).toBe.integer()
+		expect(val).toBe.float()
 		expect(val).toBe.greaterThan 0
 		_super.call @, val
 		Impl.setPropertyAnimationDuration.call @, val

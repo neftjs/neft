@@ -19,6 +19,7 @@ module.exports = (impl) ->
 			animation = pending[i]
 
 			unless animation.running
+				animation.animation.running = false
 				animation.progress = 0
 				pending[i] = utils.last(pending)
 				pending.pop()

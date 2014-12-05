@@ -3,6 +3,7 @@
 module.exports = (impl) ->
 	create: (animation) ->
 		target = animation._impl
+		target.animation = animation
 		target.running = false
 		target.loop = false
 
