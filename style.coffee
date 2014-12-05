@@ -59,13 +59,13 @@ module.exports = (File, data) -> class Style
 		unless @item
 			return
 
-		if @isAutoParent
+		if @isAutoParent and @item isnt parent?.item
 			@item.parent = if parent then parent.item else null
 
 		for child in @children
 			child.render()
 
-		if @item instanceof Renderer.Text
+		if 'text' of @item
 			@updateText()
 
 		@updateVisibility()
@@ -83,8 +83,6 @@ module.exports = (File, data) -> class Style
 		null
 
 	updateText: ->
-		expect(@item).toBe.any Renderer.Text
-
 		@item.text = @node.stringifyChildren()
 
 	updateVisibility: ->
@@ -171,7 +169,7 @@ module.exports = (File, data) -> class Style
 			if self.isRendered
 				clone.updateVisibility()
 
-		if clone.item instanceof Renderer.Text
+		if 'text' of clone.item
 			listenRecursive clone.node, 'textChanged', ->
 				if self.isRendered
 					clone.updateText()

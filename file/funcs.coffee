@@ -20,6 +20,7 @@ module.exports = (File) ->
 			Input.getVal @, prop
 
 	FuncGlobalGetters =
+		arguments: (_, args) -> args
 		view: -> @
 		global: -> @storage?.global
 		data: -> FuncGlobalFuncs.get.call @, 'data'
@@ -46,7 +47,7 @@ module.exports = (File) ->
 			# call getters
 			for prop, i in funcGlobalProps
 				if globalGetter = FuncGlobalGetters[prop]
-					args[i] = globalGetter.call file, @
+					args[i] = globalGetter.call file, @, arguments
 
 			func.apply {}, args
 
@@ -74,6 +75,9 @@ module.exports = (File) ->
 			for name, func of funcs
 				for _, unitName of target.units
 					unit = File._files[unitName]
+					unless unit
+						continue
+
 					unitFuncs = unit.funcs
 
 					# don't override funcs
