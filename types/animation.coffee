@@ -12,7 +12,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Dict
 		loop: false
 
 	constructor: (opts) ->
-		expect(opts).toBe.simpleObject()
+		expect().defined(opts).toBe.simpleObject()
 
 		utils.defineProperty @, '_impl', null, {}
 		super Object.create(@constructor.DATA)
@@ -34,8 +34,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Dict
 
 	play: ->
 		@running = true
-		@
+		return
 
 	stop: ->
 		@running = false
-		@
+		return

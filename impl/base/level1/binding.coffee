@@ -214,7 +214,7 @@ module.exports = (impl) ->
 			@connections = null
 
 	setItemBinding: (obj, prop, binding, extraResultFunc) ->
-		storage = @_impl
+		storage = obj._impl or @?._impl
 
 		uniqueProp = "#{obj.constructor.__name__}-#{prop}"
 

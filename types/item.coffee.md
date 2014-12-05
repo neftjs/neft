@@ -292,6 +292,7 @@ Item::ready()
 			val
 		, null
 
+		# TODO: remove
 		defineProperty: (propName, defVal=null) ->
 			itemUtils.defineProperty @, propName
 			@_data[propName] = defVal

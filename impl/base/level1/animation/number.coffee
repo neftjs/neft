@@ -34,7 +34,8 @@ module.exports = (impl) ->
 					animation.running = false
 
 			val = (animation.to - animation.from) * animation.progress + animation.from
-			animation.target[animation.property] = val
+			if not isNaN(val)
+				animation.target[animation.property] = val
 
 			i++
 

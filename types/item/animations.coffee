@@ -3,20 +3,14 @@
 expect = require 'expect'
 utils = require 'utils'
 
-module.exports = (Renderer) -># class Animations
-	return {} # TODO
+module.exports = (Renderer) -> class Animations
+	@__name__ = 'Animations'
 
 	constructor: (item) ->
 		expect(item).toBe.any Renderer.Item
 
-		utils.defProp @, '_item', '', item
+		utils.defineProperty @, '_item', null, item
 
-	initialize: ->
-		for name, animation of @ when @hasOwnProperty name
-			if animation instanceof Renderer.Animation
-				@append animation
-		null
-
-	append: (animation) ->
-		animation.target = @_item
-		@[animation.name] = animation
+		item.onReady ->
+			for name, animation of @animations
+				animation.target = @
