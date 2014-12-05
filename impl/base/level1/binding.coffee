@@ -2,7 +2,6 @@
 
 utils = require 'utils'
 signal = require 'signal'
-Dict = require 'dict'
 
 {assert} = console
 {isArray} = Array
@@ -32,13 +31,13 @@ module.exports = (impl) ->
 		parent: null
 
 		listen: ->
-			signalName = Dict.getPropertySignalName @prop
+			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 
 			@item?[handlerName] @signalChangeListener
 
 		updateChild: (child) ->
-			signalName = Dict.getPropertySignalName @prop
+			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 
 			if @item
@@ -124,7 +123,7 @@ module.exports = (impl) ->
 				signalChangeListener.call @, oldVal
 
 			# destroy on property value change
-			signalName = Dict.getPropertySignalName prop
+			signalName = "#{prop}Changed"
 			handlerName = signal.getHandlerName signalName
 			obj[handlerName] @signalChangeListener
 
@@ -205,7 +204,7 @@ module.exports = (impl) ->
 			@item._impl.bindings[@uniqueProp] = null
 
 			# disconnect listener
-			signalName = Dict.getPropertySignalName @prop
+			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 			@obj[handlerName].disconnect @signalChangeListener
 

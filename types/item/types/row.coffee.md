@@ -5,7 +5,6 @@ Renderer.Row
 
 	expect = require 'expect'
 	utils = require 'utils'
-	Dict = require 'dict'
 
 *Row* Row([*Object* options, *Array* children])
 -----------------------------------------------
@@ -24,7 +23,6 @@ Renderer.Row
 
 ### Row::spacingChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'spacing', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'spacing', Impl.setRowSpacing, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setRowSpacing.call @, val

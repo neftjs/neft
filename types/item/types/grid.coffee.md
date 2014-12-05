@@ -5,7 +5,6 @@ Renderer.Grid
 
 	expect = require 'expect'
 	utils = require 'utils'
-	Dict = require 'dict'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -27,22 +26,20 @@ Renderer.Grid
 
 ### Grid::columnsChanged(*Integer* oldValue)
 
-			itemUtils.defineProperty @::, 'columns', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'columns', Impl.setGridColumns, null, (_super) -> (val) ->
 				expect(val).toBe.integer()
 				expect(val).toBe.greaterThan 0
 				_super.call @, val
-				Impl.setGridColumns.call @, val
 
 *Integer* Grid::rows
 --------------------
 
 ### Grid::rowsChanged(*Imteger* oldValue)
 
-			itemUtils.defineProperty @::, 'rows', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'rows', Impl.setGridRows, null, (_super) -> (val) ->
 				expect(val).toBe.integer()
 				expect(val).toBe.greaterThan 0
 				_super.call @, val
-				Impl.setGridRows.call @, val
 
 *Spacing* Grid::spacing
 -----------------------
@@ -64,9 +61,7 @@ Renderer.Grid
 *Spacing* Spacing()
 -------------------
 
-**Extends:** `Dict`
-
-		class Spacing extends Dict
+		class Spacing
 			@DATA = Grid.DATA.spacing =
 				column: 0
 				row: 0
@@ -76,27 +71,26 @@ Renderer.Grid
 
 				utils.defineProperty @, '_item', null, item
 
-				super Object.create Spacing.DATA
+				data = Object.create Spacing.DATA
+				utils.defineProperty @, '_data', null, data
 
 *Float* Spacing::column
 -----------------------
 
 ### Spacing::columnChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'column', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'column', Impl.setGridColumnSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				_super.call @, val
-				Impl.setGridColumnSpacing.call @_item, val
 
 *Float* Spacing::row
 --------------------
 
 ### Spacing::rowChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'row', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'row', Impl.setGridRowSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				_super.call @, val
-				Impl.setGridRowSpacing.call @_item, val
 
 *Float* Spacing::valueOf()
 --------------------------

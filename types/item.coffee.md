@@ -6,12 +6,11 @@ Renderer.Item
 	expect = require 'expect'
 	utils = require 'utils'
 	signal = require 'signal'
-	Dict = require 'dict'
 	List = require 'list'
 
 	{isArray} = Array
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Item extends Dict
+	module.exports = (Renderer, Impl, itemUtils) -> class Item
 		@__name__ = 'Item'
 		@__path__ = 'Renderer.Item'
 
@@ -67,9 +66,12 @@ Renderer.Item
 
 			# initialization
 			unless @hasOwnProperty '__hash__'
-				utils.defineProperty @, '_impl', null, {}
+				utils.defineProperty @, '__hash__', null, utils.uid()
 
-				super Object.create(@constructor.DATA)
+				data = Object.create(@constructor.DATA)
+				utils.defineProperty @, '_data', null, data
+
+				utils.defineProperty @, '_impl', null, {}
 				Impl.createItem @, @constructor.__name__
 
 			# fill
@@ -120,7 +122,7 @@ Item::ready()
 
 ### Item::childrenChanged(*Object* children)
 
-		signal.createLazy @::, Dict.getPropertySignalName('children')
+		signal.createLazy @::, 'childrenChanged'
 
 		ChildrenObject = {}
 
@@ -137,7 +139,7 @@ Item::ready()
 
 ### Item::parentChanged(*Item* oldParent)
 
-		itemUtils.defineProperty @::, 'parent', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'parent', Impl.setItemParent, null, (_super) -> (val) ->
 			if old = @parent
 				index = Array::indexOf.call old.children, @
 				Array::splice.call old.children, index, 1
@@ -151,134 +153,127 @@ Item::ready()
 				val.children.inserted? length - 1, @
 
 			_super.call @, val
-			Impl.setItemParent.call @, val
 
 *Boolean* Item::visible
 -----------------------
 
 ### Item::visibleChanged(*Boolean* oldValue)
 
-		itemUtils.defineProperty @::, 'visible', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'visible', Impl.setItemVisible, null, (_super) -> (val) ->
 			expect(val).toBe.boolean()
 			_super.call @, val
-			Impl.setItemVisible.call @, val
 
 *Boolean* Item::clip
 --------------------
 
 ### Item::clipChanged(*Boolean* oldValue)
 
-		itemUtils.defineProperty @::, 'clip', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'clip', Impl.setItemClip, null, (_super) -> (val) ->
 			expect(val).toBe.boolean()
 			_super.call @, val
-			Impl.setItemClip.call @, val
 
 *Float* Item::width
 -------------------
 
 ### Item::widthChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'width', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'width', Impl.setItemWidth, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemWidth.call @, val
 
 *Float* Item::height
 --------------------
 
 ### Item::heightChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'height', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'height', Impl.setItemHeight, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemHeight.call @, val
 
 *Float* Item::x
 ---------------
 
 ### Item::xChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'x', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'x', Impl.setItemX, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemX.call @, val
 
 *Float* Item::y
 ---------------
 
 ### Item::yChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'y', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'y', Impl.setItemY, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemY.call @, val
 
 *Float* Item::z
 ---------------
 
 ### Item::zChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'z', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'z', Impl.setItemZ, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemZ.call @, val
 
 *Float* Item::scale
 -------------------
 
 ### Item::scaleChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'scale', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'scale', Impl.setItemScale, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemScale.call @, val
 
 *Float* Item::rotation
 ----------------------
 
 ### Item::rotationChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'rotation', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'rotation', Impl.setItemRotation, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemRotation.call @, val
 
 *Float* Item::opacity
 ---------------------
 
 ### Item::opacityChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'opacity', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'opacity', Impl.setItemOpacity, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setItemOpacity.call @, val
 
 		require('./item/state') Renderer, Impl, @, itemUtils
 
 *Item.Margin* Item::margin
 --------------------------
 
+### Item::marginChanged(*Item.Margin* margin)
+
 		Renderer.State.supportObjectProperty 'margin'
-		utils.defineProperty @::, 'margin', utils.ENUMERABLE, ->
-			utils.defineProperty @, 'margin', utils.ENUMERABLE, val = new Margin(@)
-			val
-		, (val) ->
+		itemUtils.defineProperty @::, 'margin', null, ((_super) -> ->
+			if @_data.margin is Margin.DATA
+				@_data.margin = new Margin(@)
+			_super.call @
+		), (_super) -> (val) ->
+			_super.call @, @margin
 			expect(val).toBe.simpleObject()
 			utils.merge @margin, Margin.DATA
 			utils.merge @margin, val
 
-### Item::marginChanged(*Item.Margin* margin)
-
-		signal.createLazy @::, Dict.getPropertySignalName 'margin'
-
 *Item.Anchors* Item::anchors
 ----------------------------
 
+### Item::anchorsChanged(*Item.Anchors* anchors)
+
 		Renderer.State.supportObjectProperty 'anchors'
-		utils.defineProperty @::, 'anchors', utils.ENUMERABLE, ->
-			utils.defineProperty @, 'anchors', utils.ENUMERABLE, val = new Anchors(@)
-			val
-		, (val) ->
+		itemUtils.defineProperty @::, 'anchors', null, ((_super) -> ->
+			if @_data.anchors is Anchors.DATA
+				@_data.anchors = new Anchors(@)
+			_super.call @
+		), (_super) -> (val) ->
+			_super.call @, @anchors
 			expect(val).toBe.simpleObject()
 			utils.merge @anchors, Anchors.DATA
 			utils.merge @anchors, val
@@ -291,12 +286,6 @@ Item::ready()
 			utils.defineProperty @, 'animations', utils.ENUMERABLE, val = new Animations(@)
 			val
 		, null
-
-		# TODO: remove
-		defineProperty: (propName, defVal=null) ->
-			itemUtils.defineProperty @, propName
-			@_data[propName] = defVal
-			@
 
 Item::clear()
 -------------

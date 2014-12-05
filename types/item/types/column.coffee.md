@@ -5,7 +5,6 @@ Renderer.Column
 
 	expect = require 'expect'
 	utils = require 'utils'
-	Dict = require 'dict'
 
 *Column* Column([*Object* options, *Array* children])
 -----------------------------------------------------
@@ -24,7 +23,6 @@ Renderer.Column
 
 ### Column::spacingChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'spacing', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'spacing', Impl.setColumnSpacing, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setColumnSpacing.call @, val

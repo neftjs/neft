@@ -5,7 +5,6 @@ Item.Margin
 
 	expect = require 'expect'
 	utils = require 'utils'
-	Dict = require 'dict'
 
 	{assert} = console
 
@@ -14,9 +13,7 @@ Item.Margin
 *Margin* Margin
 ---------------
 
-**Extends:** `Dict`
-
-		class Margin extends Dict
+		class Margin
 			@DATA =
 				left: 0
 				top: 0
@@ -28,10 +25,11 @@ Item.Margin
 
 				utils.defineProperty @, '_item', null, item
 
-				super Object.create Margin.DATA
+				data = Object.create Margin.DATA
+				utils.defineProperty @, '_data', null, data
 
 			createMarginProp = (type) ->
-				itemUtils.defineProperty Margin::, type, null, (_super) -> (val) ->
+				itemUtils.defineProperty Margin::, type, null, null, (_super) -> (val) ->
 					`//<development>`
 					id = @_item.__hash__
 					assert typeof val is 'number' and isFinite(val)
@@ -41,7 +39,7 @@ Item.Margin
 					oldVal = @_data[type]
 					if oldVal isnt val
 						_super.call @, val
-						@_item[Dict.getPropertySignalName 'margin']? @
+						@_item.marginChanged? @
 						Impl.setItemMargin.call @_item, type, val
 
 *Float* Margin::left

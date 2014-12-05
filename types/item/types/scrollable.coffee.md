@@ -5,7 +5,6 @@ Renderer.Scrollable
 
 	expect = require 'expect'
 	utils = require 'utils'
-	Dict = require 'dict'
 
 *Scrollable* Scrollable([*Object* options, *Array* children])
 -------------------------------------------------------------
@@ -36,30 +35,27 @@ Renderer.Scrollable
 
 ### Scrollable::contentItemChanged(*[Renderer.Item]* oldValue)
 
-		itemUtils.defineProperty @::, 'contentItem', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'contentItem', Impl.setScrollableContentItem, null, (_super) -> (val) ->
 			expect(val).toBe.any Renderer.Item
 			oldVal = @contentItem
 			val.parent = @
 			_super.call @, val
 			oldVal?.parent = null
-			Impl.setScrollableContentItem.call @, val
 
 *Float* Scrollable::contentX
 ----------------------------
 
 ### Scrollable::contentXChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'contentX', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'contentX', Impl.setScrollableContentX, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setScrollableContentX.call @, val
 
 *Float* Scrollable::contentY
 ----------------------------
 
 ### Scrollable::contentYChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'contentY', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'contentY', Impl.setScrollableContentY, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			_super.call @, val
-			Impl.setScrollableContentY.call @, val

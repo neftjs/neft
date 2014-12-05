@@ -8,7 +8,7 @@ relationships between items: ***anchors***.
 
 	utils = require 'utils'
 	expect = require 'expect'
-	Dict = require 'dict'
+	signal = require 'signal'
 
 	{assert} = console
 
@@ -44,7 +44,7 @@ And three vertical lines:
 		horizontalCenter: true
 		right: true
 
-	module.exports = (Renderer, Impl) ->
+	module.exports = (Renderer, Impl, itemUtils) ->
 
 Anchors
 -------
@@ -66,7 +66,7 @@ Left side of the *rect2* item now is anchored into the right side of the *rect1*
 This connection is updated in realtime, so if the *rect1* will change a position,
 *rect2* item will be automatically updated.
 
-		class Anchors extends Dict
+		class Anchors
 
 			@DATA =
 				top: null
@@ -77,10 +77,7 @@ This connection is updated in realtime, so if the *rect1* will change a position
 				right: null
 
 			createAnchorProp = (type, opts=0) ->
-				Dict.defineProperty Anchors::, type
-
-				utils.defineProperty Anchors::, type, utils.ENUMERABLE, utils.lookupGetter(Anchors::, type)
-				, do (_super = utils.lookupSetter Anchors::, type) -> (val) ->
+				itemUtils.defineProperty Anchors::, type, null, null, (_super) -> (val) ->
 					`//<development>`
 					if val?
 						id = @_item.__hash__
@@ -183,6 +180,7 @@ so `anchors.top = 'parent.left'` is not allowed.
 							val[0] = @
 
 					_super.call @, val
+					@_item.anchorsChanged? @
 					Impl.setItemAnchor.call @_item, type, val
 
 			constructor: (item) ->
@@ -190,7 +188,8 @@ so `anchors.top = 'parent.left'` is not allowed.
 
 				utils.defineProperty @, '_item', null, item
 
-				super Object.create Anchors.DATA
+				data = Object.create Anchors.DATA
+				utils.defineProperty @, '_data', null, data
 
 			createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ

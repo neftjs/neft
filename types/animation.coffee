@@ -2,9 +2,8 @@
 
 utils = require 'utils'
 expect = require 'expect'
-Dict = require 'dict'
 
-module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Dict
+module.exports = (Renderer, Impl, itemUtils) -> class Animation
 	@__name__ = 'Animation'
 
 	@DATA =
@@ -14,12 +13,15 @@ module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Dict
 	constructor: (opts) ->
 		expect().defined(opts).toBe.simpleObject()
 
+		data = Object.create(@constructor.DATA)
+		utils.defineProperty @, '_data', null, data
+
 		utils.defineProperty @, '_impl', null, {}
-		super Object.create(@constructor.DATA)
 		Impl.createAnimation @, @constructor.__name__
+
 		itemUtils.fill @, opts
 
-	itemUtils.defineProperty @::, 'running', null, (_super) -> (val) ->
+	itemUtils.defineProperty @::, 'running', null, null, (_super) -> (val) ->
 		expect(val).toBe.boolean()
 		_super.call @, val
 		if val
@@ -27,10 +29,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Dict
 		else
 			Impl.stopAnimation.call @
 
-	itemUtils.defineProperty @::, 'loop', null, (_super) -> (val) ->
+	itemUtils.defineProperty @::, 'loop', Impl.setAnimationLoop, null, (_super) -> (val) ->
 		expect(val).toBe.boolean()
 		_super.call @, val
-		Impl.setAnimationLoop.call @, val
 
 	play: ->
 		@running = true

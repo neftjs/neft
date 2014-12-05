@@ -6,7 +6,6 @@ Item states
 	utils = require 'utils'
 	expect = require 'expect'
 
-	Dict = require 'dict'
 	List = require 'list'
 
 	{isArray} = Array
@@ -77,7 +76,7 @@ Item states
 
 ### Item::stateChanged(*List* list)
 
-		itemUtils.defineProperty Item::, 'state', ((_super) -> ->
+		itemUtils.defineProperty Item::, 'state', null, ((_super) -> ->
 			if @_data.state is null
 				list = @_data.state = new List()
 				utils.defineProperty list, '_item', null, @

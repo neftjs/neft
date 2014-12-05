@@ -6,26 +6,26 @@ expect = require 'expect'
 module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
 	@__name__ = 'PropertyAnimation'
 
-	itemUtils.defineProperty @::, 'target', null, (_super) -> (val) ->
+	@DATA = utils.merge Object.create(@DATA),
+		target: null
+		property: ''
+		duration: 0
+		from: null
+		to: null
+
+	itemUtils.defineProperty @::, 'target', Impl.setPropertyAnimationTarget, null, (_super) -> (val) ->
 		expect(val).toBe.any Renderer.Item
 		_super.call @, val
-		Impl.setPropertyAnimationTarget.call @, val
 
-	itemUtils.defineProperty @::, 'property', null, (_super) -> (val) ->
+	itemUtils.defineProperty @::, 'property', Impl.setPropertyAnimationProperty, null, (_super) -> (val) ->
 		expect(val).toBe.truthy().string()
 		_super.call @, val
-		Impl.setPropertyAnimationProperty.call @, val
 
-	itemUtils.defineProperty @::, 'duration', null, (_super) -> (val) ->
+	itemUtils.defineProperty @::, 'duration', Impl.setPropertyAnimationDuration, null, (_super) -> (val) ->
 		expect(val).toBe.float()
 		expect(val).toBe.greaterThan 0
 		_super.call @, val
-		Impl.setPropertyAnimationDuration.call @, val
 
-	itemUtils.defineProperty @::, 'from', null, (_super) -> (val) ->
-		_super.call @, val
-		Impl.setPropertyAnimationFrom.call @, val
+	itemUtils.defineProperty @::, 'from', Impl.setPropertyAnimationFrom, null, null
 
-	itemUtils.defineProperty @::, 'to', null, (_super) -> (val) ->
-		_super.call @, val
-		Impl.setPropertyAnimationTo.call @, val
+	itemUtils.defineProperty @::, 'to', Impl.setPropertyAnimationTo, null, null

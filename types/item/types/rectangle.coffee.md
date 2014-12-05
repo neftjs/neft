@@ -5,7 +5,6 @@ Renderer.Rectangle
 
 	expect = require 'expect'
 	utils = require 'utils'
-	Dict = require 'dict'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -27,21 +26,19 @@ Renderer.Rectangle
 
 ### Rectangle::colorChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'color', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'color', Impl.setRectangleColor, null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
-				Impl.setRectangleColor.call @, val
 
 *Float* Rectangle::radius
 -------------------------
 
 ### Rectangle::radiusChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'radius', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'radius', Impl.setRectangleRadius, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				expect(val).not().toBe.lessThan 0
 				_super.call @, val
-				Impl.setRectangleRadius.call @, val
 
 *Border* Rectangle::border
 --------------------------
@@ -49,7 +46,7 @@ Renderer.Rectangle
 ### Rectangle::borderChanged(*Border* border)
 
 			Renderer.State.supportObjectProperty 'border'
-			itemUtils.defineProperty @::, 'border', ((_super) -> ->
+			itemUtils.defineProperty @::, 'border', null, ((_super) -> ->
 				if @_data.border is Rectangle.DATA.border
 					@_data.border = new Border(@)
 				_super.call @
@@ -67,9 +64,7 @@ Renderer.Rectangle
 *Border* Border()
 -----------------
 
-**Extends:** `Dict`
-
-		class Border extends Dict
+		class Border
 			@__name__ = 'Border'
 
 			@DATA = Rectangle.DATA.border =
@@ -81,29 +76,28 @@ Renderer.Rectangle
 
 				utils.defineProperty @, '_item', null, item
 
-				super Object.create Border.DATA
+				data = Object.create Border.DATA
+				utils.defineProperty @, '_data', null, data
 
 *Float* Border::width
 ---------------------
 
 ### Border::widthChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'width', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'width', Impl.setRectangleBorderWidth, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				expect(val).not().toBe.lessThan 0
 				_super.call @, val
 				@_item.borderChanged? @
-				Impl.setRectangleBorderWidth.call @_item, val
 
 *String* Border::color
 ----------------------
 
 ### Border::colorChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'color', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'color', Impl.setRectangleBorderColor, null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
 				@_item.borderChanged? @
-				Impl.setRectangleBorderColor.call @_item, val
 
 		Rectangle

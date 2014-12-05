@@ -6,7 +6,6 @@ Renderer.Text
 	expect = require 'expect'
 	utils = require 'utils'
 	signal = require 'signal'
-	Dict = require 'dict'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -29,30 +28,27 @@ Renderer.Text
 
 ### Text::textChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'text', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'text', Impl.setText, null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
-				Impl.setText.call @, val
 
 *String* Text::color
 --------------------
 
 ### Text::colorChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'color', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'color', Impl.setTextColor, null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
-				Impl.setTextColor.call @, val
 
 *Float* Text::lineHeight
 ------------------------
 
 ### Text::lineHeightChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'lineHeight', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'lineHeight', Impl.setTextLineHeight, null, (_super) -> (val) ->
 				expect(val).toBe.truthy().float()
 				_super.call @, val
-				Impl.setTextLineHeight.call @, val
 
 *Font* Text::font
 -----------------
@@ -60,7 +56,7 @@ Renderer.Text
 ### Text::fontChanged(*Font* font)
 
 			Renderer.State.supportObjectProperty 'font'
-			itemUtils.defineProperty @::, 'font', ((_super) -> ->
+			itemUtils.defineProperty @::, 'font', null, ((_super) -> ->
 				if @_data.font is Text.DATA.font
 					@_data.font = new Font(@)
 				_super.call @
@@ -80,7 +76,7 @@ Renderer.Text
 
 **Extends:** `Dict`
 
-		class Font extends Dict
+		class Font
 			@DATA = Text.DATA.font =
 				family: 'sans-serif'
 				pixelSize: 14
@@ -93,63 +89,59 @@ Renderer.Text
 
 				utils.defineProperty @, '_item', null, item
 
-				super Object.create Font.DATA
+				data = Object.create Font.DATA
+				utils.defineProperty @, '_data', null, data
 
 *String* Font::family
 ---------------------
 
 ### Font::familyChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'family', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'family', Impl.setTextFontFamily, null, (_super) -> (val) ->
 				expect(val).toBe.truthy().string()
 				_super.call @, val
 				@_item.fontChanged? @
-				Impl.setTextFontFamily.call @_item, val
 
 *Float* Font::pixelSize
 -----------------------
 
 ### Font::pixelSizeChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'pixelSize', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'pixelSize', Impl.setTextFontPixelSize, null, (_super) -> (val) ->
 				expect(val).toBe.truthy().float()
 				_super.call @, val
 				@_item.fontChanged? @
-				Impl.setTextFontPixelSize.call @_item, val
 
 *Float* Font::weight
 --------------------
 
 ### Font::weightChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'weight', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'weight', Impl.setTextFontWeight, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				expect(val).not().toBe.greaterThan 1
 				expect(val).not().toBe.lessThan 0
 				_super.call @, val
 				@_item.fontChanged? @
-				Impl.setTextFontWeight.call @_item, val
 
 *Float* Font::wordSpacing
 -------------------------
 
 ### Font::wordSpacingChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'wordSpacing', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'wordSpacing', Impl.setTextFontWordSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				_super.call @, val
 				@_item.fontChanged? @
-				Impl.setTextFontWordSpacing.call @_item, val
 
 *Float* Font::letterSpacing
 ---------------------------
 
 ### Font::letterSpacingChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'letterSpacing', null, (_super) -> (val) ->
+			itemUtils.defineProperty @::, 'letterSpacing', Impl.setTextFontLetterSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				_super.call @, val
 				@_item.fontChanged? @
-				Impl.setTextFontLetterSpacing.call @_item, val
 
 		Text

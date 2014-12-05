@@ -5,7 +5,6 @@ Renderer.Image
 
 	expect = require 'expect'
 	utils = require 'utils'
-	Dict = require 'dict'
 
 *Image* Image([*Object* options, *Array* children])
 ---------------------------------------------------
@@ -24,7 +23,6 @@ Renderer.Image
 
 ### Image::sourceChanged(*String* oldValue)
 
-		itemUtils.defineProperty @::, 'source', null, (_super) -> (val) ->
+		itemUtils.defineProperty @::, 'source', Impl.setImageSource, null, (_super) -> (val) ->
 			expect(val).toBe.string()
 			_super.call @, val
-			Impl.setImageSource.call @, val

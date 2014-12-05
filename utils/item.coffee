@@ -2,29 +2,38 @@
 
 expect = require 'expect'
 utils = require 'utils'
-Dict = require 'dict'
+signal = require 'signal'
 
 {isArray} = Array
 
 module.exports = (Renderer, Impl) -> exports =
-	defineProperty: (prototype, propName, customGetter, customSetter) ->
-		expect(prototype).toBe.object();
-		expect(propName).toBe.truthy().string();
-		expect().defined(customGetter).toBe.function();
-		expect().defined(customSetter).toBe.function();
+	defineProperty: (prototype, propName, implMethod, customGetter, customSetter) ->
+		expect(prototype).toBe.object()
+		expect(propName).toBe.truthy().string()
+		expect().defined(customGetter).toBe.function()
+		expect().defined(customSetter).toBe.function()
 
-		Dict.defineProperty prototype, propName
+		signalName = "#{propName}Changed"
+		signal.createLazy prototype, signalName
 
-		# dist desc
-		propGetter = utils.lookupGetter prototype, propName
-		propSetter = utils.lookupSetter prototype, propName
+		propGetter = ->
+			@_data[propName]
+
+		propSetter = (val) ->
+			oldVal = @_data[propName]
+			if oldVal isnt val
+				@_data[propName] = val
+				@[signalName]? oldVal
+
+			if implMethod and @_data[propName] is val
+				implMethod.call @_item or @, val
 
 		# custom desc
 		getter = if customGetter? then customGetter(propGetter) else propGetter
 		setter = if customSetter? then customSetter(propSetter) else propSetter
 
 		# accept bindings
-		if prototype.constructor.__path__.indexOf('Renderer.') isnt 0
+		if prototype.constructor.__path__?.indexOf('Renderer.') isnt 0
 			setter = exports.createDeepBindingSetter propName, setter
 		else
 			setter = exports.createBindingSetter propName, setter
