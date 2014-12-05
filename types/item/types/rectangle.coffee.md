@@ -46,14 +46,23 @@ Renderer.Rectangle
 *Border* Rectangle::border
 --------------------------
 
+### Rectangle::borderChanged(*Border* border)
+
 			Renderer.State.supportObjectProperty 'border'
-			utils.defineProperty @::, 'border', utils.ENUMERABLE, ->
-				utils.defineProperty @, 'border', utils.ENUMERABLE, val = new Border(@)
-				val
-			, (val) ->
-				expect(val).toBe.simpleObject()
-				utils.merge @border, Border.DATA
-				utils.merge @border, val
+			itemUtils.defineProperty @::, 'border', ((_super) -> ->
+				if @_data.border is Rectangle.DATA.border
+					@_data.border = new Border(@)
+				_super.call @
+			), (_super) -> (val) ->
+				if val instanceof Border
+					val = val._data
+
+				{border} = @
+				_super.call @, border
+
+				if utils.isObject(val)
+					utils.merge border, Border.DATA
+					utils.merge border, val
 
 *Border* Border()
 -----------------
@@ -83,6 +92,7 @@ Renderer.Rectangle
 				expect(val).toBe.float()
 				expect(val).not().toBe.lessThan 0
 				_super.call @, val
+				@_item.borderChanged? @
 				Impl.setRectangleBorderWidth.call @_item, val
 
 *String* Border::color
@@ -93,6 +103,7 @@ Renderer.Rectangle
 			itemUtils.defineProperty @::, 'color', null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
+				@_item.borderChanged? @
 				Impl.setRectangleBorderColor.call @_item, val
 
 		Rectangle

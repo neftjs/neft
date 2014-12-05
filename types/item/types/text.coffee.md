@@ -5,6 +5,7 @@ Renderer.Text
 
 	expect = require 'expect'
 	utils = require 'utils'
+	signal = require 'signal'
 	Dict = require 'dict'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
@@ -56,14 +57,23 @@ Renderer.Text
 *Font* Text::font
 -----------------
 
+### Text::fontChanged(*Font* font)
+
 			Renderer.State.supportObjectProperty 'font'
-			utils.defineProperty @::, 'font', utils.ENUMERABLE, ->
-				utils.defineProperty @, 'font', utils.ENUMERABLE, val = new Font(@)
-				val
-			, (val) ->
-				expect(val).toBe.simpleObject()
-				utils.merge @font, Font.DATA
-				utils.merge @font, val
+			itemUtils.defineProperty @::, 'font', ((_super) -> ->
+				if @_data.font is Text.DATA.font
+					@_data.font = new Font(@)
+				_super.call @
+			), (_super) -> (val) ->
+				if val instanceof Font
+					val = val._data
+
+				{font} = @
+				_super.call @, font
+
+				if utils.isObject(val)
+					utils.merge font, Font.DATA
+					utils.merge font, val
 
 *Font* Font()
 -------------
@@ -93,6 +103,7 @@ Renderer.Text
 			itemUtils.defineProperty @::, 'family', null, (_super) -> (val) ->
 				expect(val).toBe.truthy().string()
 				_super.call @, val
+				@_item.fontChanged? @
 				Impl.setTextFontFamily.call @_item, val
 
 *Float* Font::pixelSize
@@ -103,6 +114,7 @@ Renderer.Text
 			itemUtils.defineProperty @::, 'pixelSize', null, (_super) -> (val) ->
 				expect(val).toBe.truthy().float()
 				_super.call @, val
+				@_item.fontChanged? @
 				Impl.setTextFontPixelSize.call @_item, val
 
 *Float* Font::weight
@@ -115,6 +127,7 @@ Renderer.Text
 				expect(val).not().toBe.greaterThan 1
 				expect(val).not().toBe.lessThan 0
 				_super.call @, val
+				@_item.fontChanged? @
 				Impl.setTextFontWeight.call @_item, val
 
 *Float* Font::wordSpacing
@@ -125,6 +138,7 @@ Renderer.Text
 			itemUtils.defineProperty @::, 'wordSpacing', null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				_super.call @, val
+				@_item.fontChanged? @
 				Impl.setTextFontWordSpacing.call @_item, val
 
 *Float* Font::letterSpacing
@@ -135,6 +149,7 @@ Renderer.Text
 			itemUtils.defineProperty @::, 'letterSpacing', null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				_super.call @, val
+				@_item.fontChanged? @
 				Impl.setTextFontLetterSpacing.call @_item, val
 
 		Text
