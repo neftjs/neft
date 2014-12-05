@@ -147,7 +147,7 @@ module.exports = (impl) ->
 		connections: null
 
 		signalChangeListener: (oldVal) ->
-			if not @updatePending and oldVal isnt @item[@prop]
+			if not @updatePending and oldVal isnt @obj[@prop]
 				@destroy()
 
 		update: do ->
@@ -201,7 +201,7 @@ module.exports = (impl) ->
 				connection.destroy()
 
 			# remove from the list
-			@item._impl.bindings[@uniqueProp] = null
+			@obj._impl.bindings[@uniqueProp] = null
 
 			# disconnect listener
 			signalName = "#{@prop}Changed"

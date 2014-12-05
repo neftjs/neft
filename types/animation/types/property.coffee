@@ -38,3 +38,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends 
 	itemUtils.defineProperty @::, 'from', Impl.setPropertyAnimationFrom, null, null
 
 	itemUtils.defineProperty @::, 'to', Impl.setPropertyAnimationTo, null, null
+
+	reverse: ->
+		tmp = @to
+		@to = @from
+		@from = tmp
+		@
