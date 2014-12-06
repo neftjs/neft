@@ -121,7 +121,7 @@ describe 'onChanged signal', ->
 
 		list.set 1, 'a'
 
-		expect(args).toEqual [[1, 2]]
+		expect(args).toEqual [[2, 1]]
 		expect(copy).toEqual [1, 'a', 3]
 
 describe 'onInserted signal', ->
@@ -149,7 +149,7 @@ describe 'onInserted signal', ->
 
 		list.append 'a'
 
-		expect(args).toEqual [[2, 'a']]
+		expect(args).toEqual [['a', 2]]
 		expect(copy).toEqual [1, 2, 'a']
 
 	it 'works with insert()', ->
@@ -158,7 +158,7 @@ describe 'onInserted signal', ->
 
 		list.insert 1, 'a'
 
-		expect(args).toEqual [[1, 'a']]
+		expect(args).toEqual [['a', 1]]
 		expect(copy).toEqual [1, 'a', 2]
 
 describe 'onPopped signal', ->
@@ -186,7 +186,7 @@ describe 'onPopped signal', ->
 
 		list.pop()
 
-		expect(args).toEqual [[1, 2]]
+		expect(args).toEqual [[2, 1]]
 		expect(copy).toEqual [1]
 
 	it 'works with pop(i)', ->
@@ -195,7 +195,7 @@ describe 'onPopped signal', ->
 
 		list.pop 0
 
-		expect(args).toEqual [[0, 1]]
+		expect(args).toEqual [[1, 0]]
 		expect(copy).toEqual [2]
 
 	it 'works with remove()', ->
@@ -204,7 +204,7 @@ describe 'onPopped signal', ->
 
 		list.remove 2
 
-		expect(args).toEqual [[1, 2]]
+		expect(args).toEqual [[2, 1]]
 		expect(copy).toEqual [1]
 
 	it 'works with clear()', ->
@@ -213,5 +213,5 @@ describe 'onPopped signal', ->
 
 		list.clear()
 
-		expect(args).toEqual [[1, 2], [0, 1]]
+		expect(args).toEqual [[2, 1], [1, 0]]
 		expect(copy).toEqual []

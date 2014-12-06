@@ -56,7 +56,7 @@ list = List [1, 2]
 			# TODO: mark as not enumerable (toJSON must be added)
 			utils.defineProperty @, '_data', utils.ENUMERABLE, arr
 
-List::changed(*Integer* index, *Any* oldValue)
+List::changed(*Any* oldValue, *Integer* index)
 ----------------------------------------------
 
 **Signal** called on each element value change.
@@ -65,7 +65,7 @@ Use ***onChanged*** handler to listen on signals.
 
 		signal.createLazy @::, 'changed'
 
-List::inserted(*Integer* index, *Any* value)
+List::inserted(*Any* value, *Integer* index)
 --------------------------------------------
 
 **Signal** called on each element insert.
@@ -74,7 +74,7 @@ Use ***onInserted*** handler to listen on signals.
 
 		signal.createLazy @::, 'inserted'
 
-List::popped(*Integer* index, *Any* oldValue)
+List::popped(*Any* oldValue, *Integer* index)
 ---------------------------------------------
 
 **Signal** called on each element pop.
@@ -90,11 +90,12 @@ Number of elements in a list.
 
 This property is **read-only**.
 
-
+```
 list = new List 'a', 'b'
 
 console.log list.length
 # 2
+```
 
 		desc = utils.CONFIGURABLE | utils.ENUMERABLE
 		utils.defineProperty @::, 'length', desc, ->
@@ -140,7 +141,7 @@ Given *value* is returned as a **result**.
 ```
 types = new List 'fantasy', 'Thriller'
 
-types.onChanged.connect (i, oldVal) ->
+types.onChanged.connect (oldVal, i) ->
   console.log "Element #{oldVal} changed to #{@get i}"
 
 types.set 0, 'Fantasy'
@@ -162,7 +163,7 @@ types.set 0, 'Fantasy'
 			@_data[i] = val
 
 			# signal
-			@changed? i, oldVal
+			@changed? oldVal, i
 
 			val
 
@@ -188,7 +189,7 @@ console.log Array.isArray list.items()
 ```
 list = new List 'a', 'b'
 for element in list.items()
-	console.log element
+  console.log element
 # a
 # b
 ```
@@ -208,7 +209,7 @@ Append new element at the end of a list.
 ```
 fridge = new List 'apple', 'milk'
 
-fridge.onInserted.connect (i, val) ->
+fridge.onInserted.connect (val, i) ->
   console.log "#{val} appended!"
 
 fridge.append 'cheese'
@@ -224,7 +225,7 @@ console.log fridge.items()
 			@_data.push val
 
 			# signal
-			@inserted? @length - 1, val
+			@inserted? val, @length - 1
 
 			val
 
@@ -240,7 +241,7 @@ Added value is returned.
 ```
 list = new List 'a', 'b'
 
-list.onInserted.connect (i, val) ->
+list.onInserted.connect (val, i) ->
   console.log "New element #{val} inserted at index #{i}"
 
 list.insert 'c'
@@ -249,13 +250,13 @@ list.insert 'c'
 
 		insert: (i, val) ->
 			expect(i).not().toBe.lessThan 0
-			expect(i).toBe.lessThan @length
+			expect(i).not().toBe.greaterThan @length
 			expect(val).not().toBe undefined
 
 			@_data.splice i, 0, val
 
 			# signal
-			@inserted? i, val
+			@inserted? val, i
 
 			val
 
@@ -299,7 +300,7 @@ Removes element at given *index*, or the last element by default.
 
 Given *index* must exists in the list.
 
-`List::popped()` **signal** is called with the popped element *index* and it's *value*.
+`List::popped()` **signal** is called with the popped element *value* and it's *index*.
 
 Removed element is returned.
 
@@ -329,7 +330,7 @@ console.log list.items()
 			@_data.splice i, 1
 
 			# signal
-			@popped? i, oldVal
+			@popped? oldVal, i
 
 			oldVal
 
@@ -343,7 +344,7 @@ Notice that this method will call `List::popped()` **signal** on each element.
 ```
 list = new List 'a', 'b'
 
-list.onPopped.connect (i, oldVal) ->
+list.onPopped.connect (oldVal, i) ->
   console.log "Element #{oldVal} popped!"
 
 console.log list.items()
