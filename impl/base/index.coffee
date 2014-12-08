@@ -6,6 +6,7 @@ exports.Types =
 	Item: require './level0/item'
 	Image: require './level0/image'
 	Text: require './level0/text'
+	FontLoader: require './level0/fontLoader'
 	Rectangle: require './level1/rectangle'
 	Grid: require './level1/grid'
 	Column: require './level1/column'

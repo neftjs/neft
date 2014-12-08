@@ -6,6 +6,9 @@ Renderer.Text
 	expect = require 'expect'
 	utils = require 'utils'
 	signal = require 'signal'
+	log = require 'log'
+
+	log = log.scope 'Renderer', 'Text'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -76,9 +79,10 @@ Renderer.Text
 			@DATA = Text.DATA.font =
 				family: 'sans-serif'
 				pixelSize: 14
-				weight: 0.5
+				weight: 0.4
 				wordSpacing: 0
 				letterSpacing: 0
+				italic: false
 
 			constructor: (item) ->
 				expect(item).toBe.any Text
@@ -88,18 +92,28 @@ Renderer.Text
 				data = Object.create Font.DATA
 				utils.defineProperty @, '_data', null, data
 
-*String* Font::family
----------------------
+*String* Font::family = 'sans-serif'
+------------------------------------
 
 ### Font::familyChanged(*String* oldValue)
 
+			`//<development>`
+			familyLogs = {}
+			`//</development>`
 			itemUtils.defineProperty @::, 'family', Impl.setTextFontFamily, null, (_super) -> (val) ->
 				expect(val).toBe.truthy().string()
 				_super.call @, val
 				@_item.fontChanged? @
 
-*Float* Font::pixelSize
------------------------
+				`//<development>`
+				setTimeout =>
+					if not familyLogs[@family] and not Renderer.FontLoader.fonts[@family]
+						familyLogs[@family] = true
+						log.warn "Font `#{@family}` is not loaded; use `FontLoader` to load a font"
+				`//</development>`
+
+*Float* Font::pixelSize = 14
+----------------------------
 
 ### Font::pixelSizeChanged(*String* oldValue)
 
@@ -108,8 +122,8 @@ Renderer.Text
 				_super.call @, val
 				@_item.fontChanged? @
 
-*Float* Font::weight
---------------------
+*Float* Font::weight = 0.4
+--------------------------
 
 ### Font::weightChanged(*Float* oldValue)
 
@@ -137,6 +151,16 @@ Renderer.Text
 
 			itemUtils.defineProperty @::, 'letterSpacing', Impl.setTextFontLetterSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
+				_super.call @, val
+				@_item.fontChanged? @
+
+*Boolean* Font::italic = false
+------------------------------
+
+### Font::italicChanged(*Boolean* oldValue)
+
+			itemUtils.defineProperty @::, 'italic', Impl.setTextFontItalic, null, (_super) -> (val) ->
+				expect(val).toBe.boolean()
 				_super.call @, val
 				@_item.fontChanged? @
 

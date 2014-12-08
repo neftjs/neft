@@ -33,6 +33,8 @@ It's a base for everything which can be rendered on the screen.
 
 	exports.Transition = require('./types/transition') exports, Impl, itemUtils
 
+	exports.FontLoader = require('./types/fontLoader') exports, Impl, itemUtils
+
 	utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val
 		Impl.setWindow val

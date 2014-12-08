@@ -110,3 +110,6 @@ module.exports = (impl) ->
 	setTextFontLetterSpacing: (val) ->
 		@_impl.textElement.style.letterSpacing = "#{val}px"
 		updateSize @
+
+	setTextFontItalic: (val) ->
+		@_impl.textElement.style.fontStyle = if val then 'italic' else 'normal'
