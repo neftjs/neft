@@ -141,12 +141,12 @@ exports.create = (item, type) ->
 	item.onChildrenChanged update
 
 	# update on each children size change
-	item.children.onInserted (i, item) ->
+	item.children.onInserted (item, i) ->
 		item.onVisibleChanged updateParent
 		item.onWidthChanged updateParent
 		item.onHeightChanged updateParent
 		item.onMarginChanged updateParent
-	item.children.onPopped (i, item) ->
+	item.children.onPopped (item, i) ->
 		item.onVisibleChanged.disconnect updateParent
 		item.onWidthChanged.disconnect updateParent
 		item.onHeightChanged.disconnect updateParent

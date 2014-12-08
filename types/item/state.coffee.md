@@ -59,12 +59,12 @@ Item.States
 
 		null
 
-	stateInserted = (i, val) ->
+	stateInserted = (val, i) ->
 		support @_item, val
 		update @_item
 		@_item.stateChanged? @
 
-	statePopped = (i, oldVal) ->
+	statePopped = (oldVal, i) ->
 		@_item.states[oldVal]?.restore @_item
 		update @_item
 		@_item.stateChanged? @

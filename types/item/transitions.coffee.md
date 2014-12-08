@@ -20,11 +20,11 @@ Item.Transitions
 
 			super()
 
-			@onInserted (i, elem) ->
+			@onInserted (elem, i) ->
 				expect(elem).toBe.any Renderer.Transition
 				expect(elem._item).toBe null
 				elem._setItem @_item
 
-			@onPopped (i, elem) ->
+			@onPopped (elem, i) ->
 				elem._setItem null
 

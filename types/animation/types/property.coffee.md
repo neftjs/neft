@@ -16,6 +16,7 @@ Renderer.PropertyAnimation
 			target: null
 			property: ''
 			duration: 1000
+			delay: 0
 			from: null
 			to: null
 			updateProperty: false
@@ -46,6 +47,16 @@ Renderer.PropertyAnimation
 		itemUtils.defineProperty @::, 'duration', Impl.setPropertyAnimationDuration, null, (_super) -> (val) ->
 			expect(val).toBe.float()
 			expect(val).toBe.greaterThan 0
+			_super.call @, val
+
+*Float* PropertyAnimation::delay
+--------------------------------
+
+### PropertyAnimation::delayChanged(*Float* oldValue)
+
+		itemUtils.defineProperty @::, 'delay', Impl.setPropertyAnimationDelay, null, (_super) -> (val) ->
+			expect(val).toBe.float()
+			expect(val).not().toBe.lessThan 0
 			_super.call @, val
 
 *Boolean* PropertyAnimation::updateProperty = false

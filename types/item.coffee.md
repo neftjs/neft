@@ -127,11 +127,11 @@ Item::ready()
 
 		ChildrenObject = {}
 
-### Item::children::inserted(*Integer* index, *Item* child)
+### Item::children::inserted(*Item* child, *Integer* index)
 
 		signal.createLazy ChildrenObject, 'inserted'
 
-### Item::children::popped(*Integer* index, *Item* child)
+### Item::children::popped(*Item* child, *Integer* index)
 
 		signal.createLazy ChildrenObject, 'popped'
 
@@ -141,17 +141,21 @@ Item::ready()
 ### Item::parentChanged(*Item* oldParent)
 
 		itemUtils.defineProperty @::, 'parent', Impl.setItemParent, null, (_super) -> (val) ->
-			if old = @parent
+			old = @parent
+			if old is val
+				return
+
+			if old
 				index = Array::indexOf.call old.children, @
 				Array::splice.call old.children, index, 1
 				old.childrenChanged? old.children
-				old.children.popped? index, @
+				old.children.popped? @, index
 
 			if val?
 				expect(val).toBe.any Item
 				length = Array::push.call val.children, @
 				val.childrenChanged? val.children
-				val.children.inserted? length - 1, @
+				val.children.inserted? @, length - 1
 
 			_super.call @, val
 

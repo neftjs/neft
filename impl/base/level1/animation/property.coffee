@@ -11,6 +11,7 @@ module.exports = (impl) ->
 		target.target = ''
 		target.property = ''
 		target.duration = 1000
+		target.delay = 0
 		target.from = null
 		target.to = null
 		target.progress = 0
@@ -29,6 +30,9 @@ module.exports = (impl) ->
 
 	setPropertyAnimationDuration: (val) ->
 		@_impl.duration = val
+
+	setPropertyAnimationDelay: (val) ->
+		@_impl.delay = val
 
 	setPropertyAnimationFrom: (val) ->
 		@_impl.from = val
