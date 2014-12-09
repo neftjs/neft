@@ -35,7 +35,7 @@ describe 'View', ->
 	it 'finds uses', ->
 
 		view = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
-		expect(view.uses).not.toEqual {}
+		expect(view.uses).not.toEqual []
 
 	describe 'requires', ->
 

@@ -14,7 +14,7 @@ Declared `File.Unit` can be used in the *HTML* file by using its name as a tag.
 	utils = require 'utils'
 
 	module.exports = (File) -> (file) ->
-		uses = {}
+		uses = []
 
 		forNode = (node) ->
 			unless node instanceof File.Element.Tag
@@ -25,8 +25,7 @@ Declared `File.Unit` can be used in the *HTML* file by using its name as a tag.
 
 			# get uses
 			name = node.name.slice "#{File.HTML_NS}:use:".length
-			nameUses = uses[name] ?= []
-			nameUses.push new File.Use file, name, node
+			uses.push new File.Use file, name, node
 
 		forNode file.node
 

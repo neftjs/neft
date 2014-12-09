@@ -209,10 +209,8 @@ module.exports = class File
 
 		# uses
 		if @uses
-			# TODO: use array
-			for elemName, uses of @uses
-				for elem, i in uses
-					elem.render()
+			for use in @uses
+				use.render()
 
 		# source
 		render.source @, source
@@ -247,9 +245,8 @@ module.exports = class File
 
 			# uses
 			if @uses
-				for elemName, uses of @uses
-					for elem, i in uses
-						elem.revert()
+				for use in @uses
+					use.revert()
 
 			@storage = null
 			@source = null
@@ -303,11 +300,9 @@ module.exports = class File
 
 			# uses
 			if @uses
-				clone.uses = {}
-				for elemName, uses of @uses
-					clone.uses[elemName] = []
-					for elem, i in uses
-						clone.uses[elemName][i] = elem.clone @, clone
+				clone.uses = []
+				for use, i in @uses
+					clone.uses[i] = use.clone @, clone
 
 			clone
 
