@@ -1,6 +1,10 @@
 'use strict'
 
-performance = window.performance or Date
+performance = do ->
+	if window.performance?.now
+		window.performance
+	else
+		Date
 
 log = console.log
 
