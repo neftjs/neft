@@ -2,6 +2,13 @@
 
 utils = require 'utils'
 
+unless Uint32Array?
+	Uint32Array = (len) ->
+		arr = []
+		for i in [0..len]
+			arr[i] = 0
+		arr
+
 queue = []
 queueItems = {}
 pending = false

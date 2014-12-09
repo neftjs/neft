@@ -48,6 +48,7 @@ module.exports = (impl) ->
 		if not isNaN(val) and target
 			setter = impl.utils.SETTER_METHODS_NAMES[animation.property]
 			if not abstractData.updateProperty and setter
+				animation.animation._data[animation.property] = val
 				impl[setter].call target, val
 			else
 				abstractData.updatePending = true

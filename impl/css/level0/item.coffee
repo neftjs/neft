@@ -11,7 +11,8 @@ transformProp = do ->
 		return 'mozT' if tmp.style.mozTransform?
 		return 'msT' if tmp.style.msTransform?
 
-	"#{prefix}ransform"
+	if prefix
+		"#{prefix}ransform"
 
 isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
@@ -39,8 +40,8 @@ if isTouch
 	utils.merge SIGNALS,
 		'pointerPressed': 'touchstart'
 		'pointerReleased': 'touchend'
-		'pointerEntered': null
-		'pointerExited': null
+		'pointerEntered': 'touchstart'
+		'pointerExited': 'touchend'
 		'pointerMove': 'touchmove'
 
 SIGNALS_CURSORS =
@@ -132,31 +133,92 @@ SIGNALS_ARGS =
 			# use normalized wheel temporary
 			normalizedWheel e
 
-	'pointerPressed': mouseCoordsArgs
-	'pointerReleased': mouseCoordsArgs
-	'pointerMove': mouseCoordsArgs
+	'pointerPressed': (e) ->
+		if isTouch
+			e.preventDefault()
 
-HOT_MAX_TIME = 50
-HOT_MAX_ACTIONS = 5
+		mouseCoordsArgs e
+	'pointerReleased': mouseCoordsArgs
+	'pointerMove': (e) ->
+		if isTouch
+			e.preventDefault()
+
+		mouseCoordsArgs e
+
+HOT_MAX_TIME = 1000
+HOT_MAX_ACTIONS = 12
 
 module.exports = (impl) ->
-	updateTransforms = (item) ->
-		transform = ''
-		target = item._impl
 
-		# position
-		if item._impl.isHot
-			transform = "translate3d(#{target.x}px, #{target.y}px, 0) "
+	STYLE_TRANSFORM = 1<<0
+	STYLE_WIDTH = 1<<1
+	STYLE_HEIGHT = 1<<2
+	STYLE_OPACITY = 1<<3
 
-		# rotation
-		if target.rotation
-			transform += "rotate(#{rad2deg(target.rotation)}deg) "
+	updateStyles = do ->
+		pending = false
+		queue = []
+		queueItems = {}
 
-		# scale
-		if target.scale isnt 1
-			transform += "scale(#{target.scale}) "
+		getTransforms = (item) ->
+			transform = ''
+			data = item._data
+			target = item._impl
 
-		item._impl.elem.style[transformProp] = transform
+			# position
+			if item._impl.isHot
+				transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
+			else
+				transform = "translate(#{data.x}px, #{data.y}px) "
+
+			# rotation
+			if data.rotation
+				transform += "rotate(#{rad2deg(data.rotation)}deg) "
+
+			# scale
+			if data.scale isnt 1
+				transform += "scale(#{data.scale}) "
+
+			transform
+
+		updateItem = (item, styles) ->
+			data = item._data
+			target = item._impl
+			style = target.elem.style
+
+			if styles & STYLE_TRANSFORM
+				style[transformProp] = getTransforms item
+			if styles & STYLE_WIDTH
+				style.width = "#{data.width}px"
+			if styles & STYLE_HEIGHT
+				style.height = "#{data.height}px"
+			if styles & STYLE_OPACITY
+				style.opacity = data.opacity
+			return
+
+		updateItems = ->
+			pending = false
+			while queue.length
+				item = queue.pop()
+				updateItem item, queueItems[item.__hash__]
+				queueItems[item.__hash__] = 0
+			return
+
+		(elem, style) ->
+			styles = queueItems[elem.__hash__]
+
+			unless styles
+				queue.push elem
+
+			queueItems[elem.__hash__] = (styles |= style)
+
+			unless pending
+				pending = true
+				if isTouch
+					requestAnimation updateItems
+				else
+					setImmediate updateItems
+			return
 
 	markAction = (item) ->
 		storage = item._impl
@@ -165,9 +227,8 @@ module.exports = (impl) ->
 			if storage.hotActions++ > HOT_MAX_ACTIONS
 				{style, id} = storage.elem
 				storage.isHot = true
-				style.left = style.top = '0'
-				updateTransforms item
 		else
+			storage.hotActions = 0
 			storage.lastAction = now()
 
 	create: (item) ->
@@ -178,10 +239,6 @@ module.exports = (impl) ->
 		storage.lastAction = now()
 		storage.hotActions = 0
 		storage.isHot = false
-		storage.x = 0
-		storage.y = 0
-		storage.rotation = 0
-		storage.scale = 1
 
 	setItemParent: (val) ->
 		{elem} = @_impl
@@ -199,40 +256,32 @@ module.exports = (impl) ->
 		@_impl.elem.style.overflow = if val then 'hidden' else 'visible'
 
 	setItemWidth: (val) ->
-		@_impl.elem.style.width = "#{val}px"
+		updateStyles @, STYLE_WIDTH
 
 	setItemHeight: (val) ->
-		@_impl.elem.style.height = "#{val}px"
+		updateStyles @, STYLE_HEIGHT
 
 	setItemX: (val) ->
-		@_impl.x = val
-		if @_impl.isHot
-			updateTransforms @
-		else
-			@_impl.elem.style.left = "#{val}px"
-			markAction @
+		unless @_impl.isHot
+			markAction(@)
+		updateStyles @, STYLE_TRANSFORM
 
 	setItemY: (val) ->
-		@_impl.y = val
-		if @_impl.isHot
-			updateTransforms @
-		else
-			@_impl.elem.style.top = "#{val}px"
-			markAction @
+		unless @_impl.isHot
+			markAction(@)
+		updateStyles @, STYLE_TRANSFORM
 
 	setItemZ: (val) ->
 		@_impl.elem.style.zIndex = if val is 0 then 'inherit' else val
 
 	setItemScale: (val) ->
-		@_impl.scale = val
-		updateTransforms @
+		updateStyles @, STYLE_TRANSFORM
 
 	setItemRotation: (val) ->
-		@_impl.rotation = val
-		updateTransforms @
+		updateStyles @, STYLE_TRANSFORM
 
 	setItemOpacity: (val) ->
-		@_impl.elem.style.opacity = val
+		updateStyles @, STYLE_OPACITY
 
 	setItemMargin: (type, val) ->
 

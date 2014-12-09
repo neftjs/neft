@@ -19,7 +19,7 @@ Renderer.PropertyAnimation
 			delay: 0
 			from: null
 			to: null
-			updateProperty: false
+			updateProperty: true
 
 *Renderer.Item* PropertyAnimation::target
 -----------------------------------------
@@ -59,8 +59,8 @@ Renderer.PropertyAnimation
 			expect(val).not().toBe.lessThan 0
 			_super.call @, val
 
-*Boolean* PropertyAnimation::updateProperty = false
----------------------------------------------------
+*Boolean* PropertyAnimation::updateProperty = true
+--------------------------------------------------
 
 PropertyAnimation::updatePropertyChanged(*Boolean* oldValue)
 

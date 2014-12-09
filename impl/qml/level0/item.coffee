@@ -37,7 +37,7 @@ module.exports = (impl) ->
 		storage.mouseArea = null
 
 	setItemParent: (val) ->
-		@_impl.elem.parent = val._impl.elem or null
+		@_impl.elem.parent = val?._impl.elem or null
 
 	setItemVisible: (val) ->
 		@_impl.elem.visible = val
@@ -68,6 +68,8 @@ module.exports = (impl) ->
 
 	setItemOpacity: (val) ->
 		@_impl.elem.opacity = val
+
+	setItemMargin: (val) ->
 
 	# TODO: `pointerReleased` doesn't work with `pointerPressed`
 	attachItemSignal: (name, func) ->
