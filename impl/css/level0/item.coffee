@@ -14,6 +14,11 @@ transformProp = do ->
 	if prefix
 		"#{prefix}ransform"
 
+transform3dSupported = do ->
+	tmp = document.createElement 'div'
+	tmp.style[transformProp] = 'translate3d(1px,1px,0)'
+	tmp.style[transformProp].indexOf('translate3d') isnt -1
+
 isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
 rad2deg = (rad) ->
@@ -166,7 +171,7 @@ module.exports = (impl) ->
 			target = item._impl
 
 			# position
-			if item._impl.isHot
+			if item._impl.isHot and transform3dSupported
 				transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
 			else
 				transform = "translate(#{data.x}px, #{data.y}px) "
