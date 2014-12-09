@@ -52,8 +52,8 @@ Special HTML tag used to create new `File.Unit`s.
 		# link units
 		for createdUnit in createdUnits
 			for unitName, unitId of units
-				if unitId is createdUnit.id
-					continue
+				# if unitId is createdUnit.id
+				# 	continue
 				if createdUnit.units.hasOwnProperty unitName
 					continue
 
@@ -63,5 +63,5 @@ Special HTML tag used to create new `File.Unit`s.
 		for createdUnit in createdUnits
 			createdUnit.parse()
 
-		if utils.isEmpty units
-			file.units = null
+		# if utils.isEmpty units
+		# 	file.units = null

@@ -7,17 +7,17 @@ automatically evaluating to the JavaScript objects.
 String `[...]` is evaluated to the `Array`.
 ```
 <ul neft:each="[1, 2]"></ul>
-<neft:list items="[{name: 't-shirt'}]" />
+<neft:use:list items="[{name: 't-shirt'}]" />
 ```
 
 String `{...}` is evaluated to the `Object`.
 ```
-<neft:user data="{name: 'Johny'}" />
+<neft:use:user data="{name: 'Johny'}" />
 ```
 
 String `Dict ...` is evaluated to the `Dict`.
 ```
-<neft:user data="Dict({name: 'Johny'})" />
+<neft:use:user data="Dict({name: 'Johny'})" />
 ```
 
 String `List ...` is evaluated to the `List`.

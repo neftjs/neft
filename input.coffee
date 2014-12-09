@@ -18,7 +18,7 @@ module.exports = (File) -> class Input
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z_$][\w:_]*)+(?!:)///gi
 	PROP_RE = @PROP_RE = ///(\.(?:[a-z_$][\w]+)|\[['"](?:[a-z_$][\w]+)['"]\])([^(]?)///gi
-	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null']
+	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON']
 
 	cache = {}
 
@@ -72,6 +72,8 @@ module.exports = (File) -> class Input
 			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
 				if prefix.trim() or not utils.has CONSTANT_VARS, elem
 					str = "__get(__input, '#{utils.addSlashes elem}')"
+				else
+					str = elem
 				"#{prefix}#{str}"
 
 			prefix = ''
@@ -140,7 +142,7 @@ module.exports = (File) -> class Input
 	toString: do ->
 
 		callFunc = ->
-			@_func.call null, @, Input.get
+			@_func.call @self, @, Input.get
 
 		->
 			try

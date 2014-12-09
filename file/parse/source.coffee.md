@@ -4,11 +4,11 @@ neft:source @html
 Special HTML tag used in `File.Unit` to define destination for the `File.Use` body.
 
 ```
-<neft:unit="user">
+<neft:unit name="user">
   <neft:source />
 </neft:unit>
 
-<neft:user>123</neft:user>
+<neft:use:user>123</neft:use:user>
 ```
 
 	'use strict'

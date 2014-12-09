@@ -6,7 +6,7 @@ Special HTML tag used to include view files units.
 ```
 <neft:require href="user_utils.html" />
 
-<neft:avatar />
+<neft:use:avatar />
 ```
 
 Special `as` parameter defines alias.
@@ -14,7 +14,7 @@ Special `as` parameter defines alias.
 ```
 <neft:require href="user_utils.html" as="user" />
 
-<neft:user-avatar />
+<neft:use:user-avatar />
 ```
 
 	'use strict'

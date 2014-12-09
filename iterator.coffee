@@ -92,7 +92,10 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@
 
-	updateItem: (i) ->
+	updateItem: (elem, i) ->
+		if i?
+			i = elem
+
 		expect(@data).toBe.object()
 		expect(i).toBe.integer()
 
@@ -101,7 +104,10 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@
 
-	insertItem: (i) ->
+	insertItem: (elem, i) ->
+		if i?
+			i = elem
+
 		expect(@data).toBe.object()
 		expect(i).toBe.integer()
 
@@ -134,7 +140,10 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@
 
-	popItem: (i) ->
+	popItem: (elem, i) ->
+		if i?
+			i = elem
+
 		expect(@data).toBe.object()
 		expect(i).toBe.integer()
 
@@ -154,9 +163,9 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.array = null
 		clone.usedUnits = []
 
-		clone.updateItem = (arg1) => @updateItem.call clone, arg1
-		clone.insertItem = (arg1) => @insertItem.call clone, arg1
-		clone.popItem = (arg1) => @popItem.call clone, arg1
+		clone.updateItem = (arg1, arg2) => @updateItem.call clone, arg1, arg2
+		clone.insertItem = (arg1, arg2) => @insertItem.call clone, arg1, arg2
+		clone.popItem = (arg1, arg2) => @popItem.call clone, arg1, arg2
 
 		clone.node.on 'attrChanged', (e) ->
 			if self.isRendered and e.name is Iterator.HTML_ATTR

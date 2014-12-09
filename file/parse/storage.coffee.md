@@ -10,7 +10,7 @@ Any HTML text and attribute value can use string interpolation.
 ```
 <neft:unit name="user">#{name}</neft:unit>
 
-<neft:user name="#{ownerName}" />
+<neft:use:user name="#{ownerName}" />
 ```
 
 	'use strict'

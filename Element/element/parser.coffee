@@ -54,7 +54,6 @@ module.exports = (Element) ->
 				@_tagStack.push element
 
 		ontext: (data) ->
-
 			#append = not _tagStack.length and @node.length and (lastTag = @node[@node.length-1]).type is 'text'
 			#append ||= _tagStack.length and (lastTag = _tagStack[_tagStack.length - 1]) and (lastTag = lastTag.children[lastTag.children.length - 1]) and lastTag.type is 'text'
 
@@ -62,7 +61,7 @@ module.exports = (Element) ->
 			return unless data.trim() # TODO
 			return unless data
 
-			lastTag = utils.last(@_tagStack)?.children[0]
+			# lastTag = utils.last(@_tagStack)?.children[0]
 			append = lastTag?.hasOwnProperty '_text'
 
 			if append

@@ -209,6 +209,7 @@ module.exports = class File
 
 		# uses
 		if @uses
+			# TODO: use array
 			for elemName, uses of @uses
 				for elem, i in uses
 					elem.render()

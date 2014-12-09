@@ -40,7 +40,6 @@ module.exports = (File) -> class Condition
 	node: null
 
 	execute: ->
-
 		exp = @node.attrs.get Condition.HTML_ATTR
 
 		# get cached exp result
@@ -56,7 +55,7 @@ module.exports = (File) -> class Condition
 			funcCache[exp] = Condition.getCondFunc exp
 
 		# get result
-		result = utils.tryFunction funcCache[exp], null, null, false
+		result = utils.tryFunction funcCache[exp], @self, null, false
 
 		# save result to the exp cache
 		if expCacheLen++ > MAX_IN_EXP_CACHE
@@ -80,7 +79,6 @@ module.exports = (File) -> class Condition
 		@node.visible = true
 
 	clone: (original, self) ->
-
 		clone = Object.create @
 
 		clone.clone = undefined

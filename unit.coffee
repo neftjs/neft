@@ -20,7 +20,7 @@ module.exports = (File) -> class Unit extends File
 
 		# merge units from parent
 		@units = utils.clone self.units
-		delete @units[@name] # prevent circular structure
+		delete @units?[@name] # prevent circular structure
 
 		@id = "#{self.path}:#{name}"
 

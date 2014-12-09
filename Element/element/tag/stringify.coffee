@@ -1,5 +1,8 @@
 'use strict'
 
+QUICK_TAG_END =
+	br: true
+
 isPublic = (name) ->
 	name.indexOf('neft:') isnt 0
 
@@ -31,7 +34,11 @@ getOuterHTML = (elem) ->
 				ret += "=\"\"" unless attrName of booleanAttribs
 			else
 				ret += "=\"" + attrValue + "\""
-	ret + ">" + getInnerHTML(elem) + "</" + elem.name + ">"
+
+	if QUICK_TAG_END[elem.name]
+		ret + " />"
+	else
+		ret + ">" + getInnerHTML(elem) + "</" + elem.name + ">"
 
 module.exports =
 	getInnerHTML: getInnerHTML
