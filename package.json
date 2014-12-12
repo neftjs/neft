@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "nml",
+  "description": "NML language parser",
+  "dependencies": {
+    "pegjs": "git://github.com/dmajda/pegjs.git#master",
+    "pegjs-import": "^0.2.6"
+  }
+}
