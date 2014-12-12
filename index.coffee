@@ -7,6 +7,7 @@ parser = require './parser'
 {assert} = console
 
 OBJECT = 'object'
+ID = 'id'
 PROPERTY = 'property'
 ATTRIBUTE = 'attribute'
 SIGNAL = 'signal'
@@ -62,10 +63,14 @@ getEachProp = (arr, prop) ->
 anchorAttributeToString = (obj) ->
 	assert obj.type is ATTRIBUTE
 
+	if typeof obj.value is 'object'
+		return "{}"
+
 	anchor = obj.value.split '.'
 	if anchor[0] is 'parent'
-		anchor[0] = "'#{anchor[0]}'"
-	anchor[1] = "'#{anchor[1]}'"
+		anchor[0] = "'parent'"
+	if anchor.length > 1
+		anchor[1] = "'#{anchor[1]}'"
 	"[#{anchor}]"
 
 bindingAttributeToString = (obj) ->
@@ -139,6 +144,9 @@ bindingAttributeToString = (obj) ->
 stringObject = (obj) ->
 	assert obj.type is OBJECT
 
+	if getByType(obj.body, ID).length > 0
+		ids[obj.id] = true
+
 	isLocal = Renderer[obj.name]?
 	properties = getEachProp(getByType(obj.body, PROPERTY), 'name')
 	signals = getEachProp(getByType(obj.body, SIGNAL), 'name')
@@ -149,7 +157,7 @@ stringObject = (obj) ->
 	if args.length
 		args = "{#{args.join ', '}}"
 
-	r = "#{obj.id} = #{isLocal and 'new ' or ''}#{obj.name}(#{args or ''});\n"
+	r = "var #{obj.id} = #{isLocal and 'new ' or ''}#{obj.name}(#{args or ''});\n"
 
 	for child in getByType(obj.body, OBJECT)
 		r += stringObject child
@@ -160,40 +168,64 @@ stringObject = (obj) ->
 stringAttributeValueObject = (obj) ->
 	assert obj.type is OBJECT
 
-	[stringObject(obj), obj.id]
+	[stringObjectFull(obj), obj.id, '']
 
-stringAttributeValue = (obj) ->
+stringAttributeValue = (obj, parent) ->
 	assert obj.type is ATTRIBUTE
+	assert parent.type is OBJECT
 
 	{value} = obj
-
-	if isAnchor obj
-		['', anchorAttributeToString obj]
-	else if isBinding obj
-		['', bindingAttributeToString obj]
-	else if Array.isArray value
+	
+	if Array.isArray value
 		r = ''
 		childIds = []
+		postfix = ''
 		for elem in value
-			childResult = stringAttributeValueObject(elem)
-			r += childResult[0]
-			childIds.push childResult[1]
-		[r, "[#{childIds}]"]
+			switch elem.type
+				when 'object'
+					childResult = stringAttributeValueObject(elem)
+					r += childResult[0]
+					childIds.push childResult[1]
+					postfix += childResult[2]
+				when 'attribute'
+					elem.name = "#{obj.name}.#{elem.name}"
+					childResult = stringAttribute(elem, parent)
+					r += childResult[0]
+					postfix += childResult[1] + childResult[2]
+				else
+					throw "Not implemented attribute type"
+		if childIds.length
+			value = "[#{childIds}]"
+		else
+			value = "{}"
+		[r, value, postfix]
+	else if isAnchor obj
+		['', anchorAttributeToString(obj), '']
+	else if isBinding obj
+		['', bindingAttributeToString(obj), '']
 	else if value.type is 'object'
 		stringAttributeValueObject value
 	else
-		['', value]
+		['', value, '']
+
+stringAttribute = (obj, parent) ->
+	assert obj.type is ATTRIBUTE
+	assert parent.type is OBJECT
+
+	r = ['', '', '']
+	r[1] += "#{parent.id}.#{obj.name} = "
+	concatArrayElements r, stringAttributeValue(obj, parent)
+	r[1] += ";\n"
+	r
 
 stringAttributes = (obj) ->
 	assert obj.type is OBJECT
 
-	r = ['', '']
+	r = ['', '', '']
 
 	attributes = getByType obj.body, ATTRIBUTE
 	for attribute in attributes
-		r[1] += "#{obj.id}.#{attribute.name} = "
-		concatArrayElements r, stringAttributeValue(attribute)
-		r[1] += ";\n"
+		concatArrayElements r, stringAttribute(attribute, obj)
 
 	for child in getByType(obj.body, OBJECT)
 		r[1] += stringAttributes child
@@ -215,18 +247,28 @@ stringFunctions = (obj) ->
 
 	r
 
+stringObjectFull = (obj) ->
+	assert obj.type is OBJECT
+
+	code = stringObject obj
+	code += stringAttributes obj
+	code += stringFunctions obj
+	code
+
 module.exports = (file) ->
 	elems = parser file
 	ids = {}
 
-	console.log JSON.stringify elems, null, 2
+	code = stringObjectFull elems
+	code += "var mainItem = #{elems.id};\n"
 
-	console.log ''
-	console.log ''
-
-	code = stringObject elems
-	code += stringAttributes elems
-	code += stringFunctions elems
-	code += "mainItem = #{elems.id}\n"
+	idsObject = '{'
+	idsKeys = Object.keys ids
+	for id in idsKeys
+		idsObject += "#{id}: #{id}, "
+	if idsKeys.length > 0
+		idsObject = idsObject.slice 0, -2
+	idsObject += "}"
+	code += "var ids = #{idsObject};\n"
 
 	code

@@ -85,17 +85,31 @@ WhiteSpace "whitespace"
 	/ Zs
 
 Comment "comment"
-  = MultiLineComment
-  / SingleLineComment
+	= MultiLineComment
+	/ SingleLineComment
 
 MultiLineComment
-  = "/*" (!"*/" SourceCharacter)* "*/"
+	= "/*" (!"*/" SourceCharacter)* "*/"
 
 MultiLineCommentNoLineTerminator
-  = "/*" (!("*/" / LineTerminator) SourceCharacter)* "*/"
+	= "/*" (!("*/" / LineTerminator) SourceCharacter)* "*/"
 
 SingleLineComment
-  = "//" (!LineTerminator SourceCharacter)*
+	= "//" (!LineTerminator SourceCharacter)*
+
+StringLiteral "string"
+	= '"' chars:DoubleStringCharacter* '"' {
+			return chars.join('');
+		}
+	/ "'" chars:SingleStringCharacter* "'" {
+			return chars.join('');
+		}
+
+DoubleStringCharacter
+	= !('"' / "\\" / LineTerminator) SourceCharacter { return text(); }
+
+SingleStringCharacter
+	= !("'" / "\\" / LineTerminator) SourceCharacter { return text(); }
 
 __
 	= (WhiteSpace / LineTerminatorSequence / Comment)*
@@ -116,7 +130,9 @@ AttributeEnds
 
 AttributeBody
 	= Type
+	/ "{" d:(__ d:Attribute __ { return d })* "}" { return d }
 	/ "[" d:Type* "]" { return d }
+	/ d:$StringLiteral { return d }
 	/ value:(!AttributeEnds d:SourceCharacter {return d})+ AttributeEnds {
 			return value.join('').trim()
 		}
@@ -175,9 +191,12 @@ FunctionParams
 			return flattenArray([first, rest])
 		}
 
+FunctionName
+	= (Variable ".")* "on" Variable
+
 Function "function"
-	= "on" name:Variable ":" __ params:FunctionParams? __ "{" body:FunctionBody "}" {
-			return { type: 'function', name: 'on'+name, params: params, body: body };
+	= name:$FunctionName ":" __ params:FunctionParams? __ "{" body:FunctionBody "}" {
+			return { type: 'function', name: name, params: params, body: body };
 		}
 
 /* DECLARATION */
