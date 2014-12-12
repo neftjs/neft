@@ -46,14 +46,20 @@ module.exports = (opts={}) ->
 	App.View = require('./view') App
 
 	# set styles window item
-	Renderer.window = opts.styles.window?().mainItem or new Renderer.Item
+	windowStyle = opts.styles?.Window?.withStructure()
+	windowStyle ?=
+		mainItem: new Renderer.Item
+		ids: {}
+	Renderer.window = windowStyle.mainItem
 
 	# load styles
-	require('styles') opts.styles
+	require('styles')
+		windowStyle: windowStyle
+		styles: opts.styles
 
 	# load bootstrap
 	if utils.isNode
-		require('./bootstrap/route') App
+		require('./bootstrap/route.node') App
 
 	# load views
 	for path, json of App.views

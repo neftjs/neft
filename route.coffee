@@ -146,7 +146,7 @@ module.exports = (App) -> class AppRoute
 	setSchema = (ctx, val) ->
 		expect(ctx).toBe.any AppRoute
 
-		if utils.isObject val
+		if utils.isPlainObject val
 			ctx.schema = new Schema val
 		else
 			assert val instanceof Schema
@@ -175,7 +175,7 @@ module.exports = (App) -> class AppRoute
 	setHandlers = (ctx, val) ->
 		expect(ctx).toBe.any AppRoute
 
-		assert utils.isObject val
+		assert utils.isPlainObject val
 		, "Route `handlers` must be an object; available handlers are `#{HANDLERS}`"
 
 		handlers = {}
@@ -201,7 +201,7 @@ module.exports = (App) -> class AppRoute
 
 		findHandlers = 0
 		for type in HANDLERS
-			handler = utils.tryFunc getByPath, null, [ctx, val, '', "handlers.#{type}"]
+			handler = utils.tryFunction getByPath, null, [ctx, val, '', "handlers.#{type}"]
 			unless handler?
 				continue
 

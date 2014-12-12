@@ -5,13 +5,7 @@ utils = require 'utils'
 Renderer = require 'renderer'
 
 {assert} = console
-
-###
-TODO:
-border:
-	color: BINDING
-
-###
+{isArray} = Array
 
 TEST_FILE = """
 Image {
@@ -59,9 +53,10 @@ TYPE = ///([A-Z][a-zA-Z0-9_-]*)\s*{///
 ATTRIBUTE = ///([^:]*?):(.*)///
 PROPERTY = ///property\s(.*)///
 SIGNAL = ///signal\s(.*)///
-ANCHOR = ///([a-zA-Z]+):\s*([a-zA-Z0-9_-]+)(?:\.([a-zA-Z]+))?///
-BINDING = ///([a-zA-Z_][a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)///
-FUNCTION = ///^(\s+)([a-zA-Z0-9_-]+):\s*->$///m
+ANCHOR = ///([a-zA-Z]+):\s*([a-zA-Z0-9_]+)(?:\.([a-zA-Z]+))?///
+BINDING = ///([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z0-9_]+)///
+FUNCTION = ///^(\s*)([a-zA-Z0-9_.]+):\s*(\([a-zA-Z0-9_$,\s]*\)\s*)?->$///m
+FUNCTION_DECLATARION = ///^(\([a-zA-Z0-9_$,\s]*\)\s*)?->///
 LINE_COMMENT = ///^\s*\#(.*)$///m
 MULTI_LINE_COMMENT = ///^\s*\#\#\#(.|\n)*?\#\#\#///m
 CUSTOM_ID = ///CUSTOM_UID_([a-zA-Z0-9]+)///
@@ -73,6 +68,12 @@ LINE_COMMENT_G = new RegExp LINE_COMMENT.source, 'mg'
 MULTI_LINE_COMMENT_G = new RegExp MULTI_LINE_COMMENT.source, 'mg'
 FUNCTION_G = new RegExp FUNCTION.source, 'mg'
 CUSTOM_ID_G = new RegExp CUSTOM_ID.source, 'g'
+
+repeatString = (str, amount) ->
+	r = str
+	for i in [0...amount-1] by 1
+		r += str
+	r
 
 getScopeLen = (str, startIndex) ->
 	assert str[startIndex] is SCOPE_OPEN
@@ -126,11 +127,11 @@ getScope = (obj) ->
 	scopeLen = getScopeLen body, scopeFrom
 	scopeTo = scopeFrom + scopeLen + 1
 
-	scopeBody = body.slice(scopeFrom+1, scopeTo-1).trim()
+	scopeBody = body.slice(scopeFrom+1, scopeTo-1)#.trim()
 
 	scope = new Scope type, scopeBody
 	obj.body = body.slice(0, exec.index) + scope.uid + body.slice(scopeTo)
-	obj.body = obj.body.trim()
+	# obj.body = obj.body.trim()
 	scope
 
 getScopeRecursive = (scope) ->
@@ -141,20 +142,20 @@ getScopeRecursive = (scope) ->
 
 clearScopeBody = (scope) ->
 	{body} = scope
-	body = body.replace ///^\s+///gm, ''
+	# body = body.replace ///^\s+///gm, ''
 	# body = body.replace ///\n///g, ','
 	# body = body.replace ///,,///g, ','
 	# body = body.replace ///({),|,(})///g, '$1$2'
 	scope.body = body
 
 findFuncs = (scope) ->
-	scope.body = scope.body.replace FUNCTION_G, (str, tab, name, index) ->
+	scope.body = scope.body.replace FUNCTION_G, (str, tab, name, args, index) ->
 		lines = scope.body.slice(index+str.length+1).split '\n'
 
 		lines = lines.filter (line) ->
 			!!line.trim()
 
-		tabLen = tab.match(///\t///g).length
+		tabLen = tab.match(///\t///g)?.length or 0
 
 		for line, i in lines
 			unless ///\s///.test line[tabLen]
@@ -162,11 +163,13 @@ findFuncs = (scope) ->
 				break
 			else
 				lines[i] = line.slice tabLen+1
-		
+
 		indentation = ''
 		for i in [0...tabLen]
 			indentation += '\t'
-		scope.attributes[name] = "->\n#{indentation}#{lines.join('\n' + indentation)}"
+
+		args ?= ''
+		scope.attributes[name] = "#{args}->\n#{indentation}#{lines.join('\n' + indentation)}"
 
 		''
 
@@ -290,7 +293,7 @@ parseBindings = do ->
 		if val[0] is '{'
 			return false
 
-		if val.indexOf('->') is 0
+		if FUNCTION_DECLATARION.test val
 			return false
 
 		try
@@ -305,30 +308,72 @@ parseBindings = do ->
 	(scope) ->
 		for name, val of scope.attributes
 			if isBinding val
-				binding = []
-				lastIndex = 0
-				val = val.replace BINDING_G, (str, ref, prop, index) ->
-					if ref is 'parent'
-						ref = "['this', 'parent']"
-					else if ref is 'this'
-						ref = "'this'"
-					else if ref isnt 'window' and not ids.hasOwnProperty ref
-						return str
+				test = (val) ->
+				binding = ['']
 
-					binding.push val.slice lastIndex, index
-					lastIndex = index + str.length
-					binding.push "[#{ref}, '#{prop}']"
-					str
-				binding.push val.slice lastIndex
+				# split to types
+				val += ' '
+				lastBinding = null
+				for char in val
+					if char is '.' and lastBinding
+						lastBinding.push ''
 
-				binding = binding.filter (elem) ->
-					!!elem.trim()
-				
+					else if ///[a-zA-Z_]///.test char
+						if lastBinding
+							lastBinding[lastBinding.length - 1] += char
+						else
+							lastBinding = [char]
+							binding.push lastBinding
+
+					else
+						if lastBinding is null
+							binding[binding.length - 1] += char
+						else
+							lastBinding = null
+							binding.push char
+
+				# filter by ids
+				for elem, i in binding when typeof elem isnt 'string'
+					[id] = elem
+					if id is 'parent'
+						elem.unshift "'this'"
+					else if id is 'this'
+						elem[0] = "'this'"
+					else if id is 'window' or ids.hasOwnProperty(id)
+						continue
+					else
+						binding[i] = elem.join '.'
+
+				# split texts
+				i = -1
+				n = binding.length
+				while ++i < n
+					if typeof binding[i] is 'string'
+						if typeof binding[i-1] is 'string'
+							binding[i-1] += binding[i]
+
+						else if binding[i].trim() isnt ''
+							continue
+
+						binding.splice i, 1
+						n--
+
+				# split
+				text = ''
 				for elem, i in binding
-					if elem[0] isnt '[' or elem[elem.length-1] isnt ']'
-						binding[i] = "'#{utils.addSlashes elem}'"
+					if binding[i-1]?
+						text += ", "
 
-				scope.attributes[name] = "{binding: [#{binding.join ', '}]}"
+					if typeof elem is 'string'
+						text += "'#{elem}'"
+					else
+						text += repeatString('[', elem.length-1)
+						text += "#{elem[0]}"
+						elem.shift()
+						for id, i in elem
+							text += ", '#{id}']"
+
+				scope.attributes[name] = "{binding: [#{text}]}"
 
 # STRINGIFY #
 
@@ -350,23 +395,20 @@ stringifyDeclarations = (scope) ->
 	if args.length > 0
 		result += "{#{args.join ', '}}"
 
-	if Renderer[scope.type]?
-		result += ')\n'
-	else
-		result += ').mainItem\n'
+	result += ')\n'
 
 stringifyAttributes = (scope) ->
 	return unless scope.type
 
 	for name, val of scope.attributes
-		if val.indexOf('->') is 0
+		if FUNCTION_DECLATARION.test val
 			result += "#{scope.id}.#{name} #{val}\n"
 		else
 			result += "#{scope.id}.#{name} = #{val}\n"
 
 stringifyTree = (scope, parent) ->
 	if parent? and parent.type and scope.isItem
-		result += "#{scope.id}.parent = #{parent.id}\n"
+		result += "if #{scope.id} instanceof Item then #{scope.id}.parent = #{parent.id}\n"
 
 module.exports = (str) ->
 	result = ''
@@ -404,7 +446,7 @@ module.exports = (str) ->
 		items = items.slice 0, -2
 	items += '}'
 
-	result += "items = #{items}\n"
+	result += "ids = #{items}\n"
 
 	# console.log JSON.stringify main, null, 4
 	result

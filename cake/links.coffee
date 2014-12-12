@@ -58,6 +58,9 @@ module.exports = class LinksBuilder
 
 		forEachFile input, (filePath, stat) =>
 
+			if filePath[filePath.lastIndexOf('/')+1] is '.'
+				return
+
 			file = fs.readFileSync filePath, 'utf-8'
 
 			ext = path.extname filePath

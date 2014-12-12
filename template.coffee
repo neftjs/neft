@@ -68,12 +68,12 @@ module.exports = (App) -> class AppTemplate
 		assert val and typeof val is 'string'
 		, "App.Template targetElem must be a name of the view element (string); `#{val}` given"
 
-		elemPlaces = ctx.view?.view.elems[val]
+		elemPlaces = ctx.view?.view.uses[val]
 		assert elemPlaces
 		, "App.Template `#{ctx.view.view.path}` view doesn't have any `#{val}` elem"
 
 		if elemPlaces.length > 1
-			log.info "`#{ctx.view.view.path}` view has more than one `#{val}` elems;\n" +
+			log.info "`#{ctx.view.view.path}` view has more than one `#{val}` uses;\n" +
 			         "only the first one will be used in the template"
 
 		ctx.targetElem = val
@@ -96,6 +96,6 @@ module.exports = (App) -> class AppTemplate
 		view
 
 	_renderTarget: (view, target) ->
-		elem = view.elems[@targetElem][0]
+		elem = view.uses[@targetElem][0]
 		elem.usedUnit = null # avoid destroying target, it's AppRoute job
 		elem.render target

@@ -1,30 +1,35 @@
 'use strict'
 
 setImmediate = do ->
-
 	stack = []
 
 	setImmediateTimer.triggered.connect ->
 		while stack.length
 			func = stack.shift()
-			args = stack.shift()
-			func.apply null, args
+			func.apply null
 
 	(func) ->
-		# support extra arguments
 		if arguments.length > 1
-			Array::shift.call arguments
-			args = arguments
+			throw new RangeError "setImmediate() doesn't support extra arguments"
 
-		stack.push func, args
+		stack.push func
 		setImmediateTimer.start()
 
 setTimeout = do ->
-	(func, ms, args...) ->
-		unless ms
-			return setImmediate func, args...
+	stack = []
 
-		console.error "ERROR: ms in setTimeout are not supported"
+	setTimeoutTimer.triggered.connect ->
+		while stack.length
+			func = stack.shift()
+			args = stack.shift()
+			func.apply null, args
+
+	(func, ms, args...) ->
+		if ms
+			console.error "ERROR: ms in setTimeout are not supported"
+
+		stack.push func, args
+		setTimeoutTimer.start()
 
 requestAnimationFrame = (func) ->
 	canvas.requestAnimationFrame ->

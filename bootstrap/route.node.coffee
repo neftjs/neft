@@ -29,17 +29,26 @@ module.exports = (App) ->
 		new RegExp re
 
 	new App.Route
+		uri: APP_JS_URI
+		callback: (req, res, callback, next) ->
+			fs.readFile JS_BUNDLE_FILE_PATH, 'utf-8', callback
+
+	new App.Route
+		uri: 'static/{path*}'
+		callback: (req, res, callback, next) ->
+			url = pathUtils.join 'static', req.params.path
+			unless ///^static.///.test url
+				return next()
+
+			fs.readFile req.url, 'utf-8', callback
+
+	new App.Route
 		uri: '*'
 		view: view
 		callback: (req, res, callback, next) ->
-			# app js uri
-			if req.uri is APP_JS_URI
-				res.send Routing.Response.OK, fs.readFileSync(JS_BUNDLE_FILE_PATH, 'utf-8')
-				return
-
 			# text mode initialization
-			if req.uri.indexOf(TEXT_MODE_URI_PREFIX) is 0
-				redirect = req.uri.slice TEXT_MODE_URI_PREFIX.length
+			if req.url.indexOf(TEXT_MODE_URI_PREFIX) is 0
+				redirect = req.url.slice TEXT_MODE_URI_PREFIX.length
 				res.setHeader 'Set-Cookie', "#{TEXT_MODE_COOKIE_NAME}=true; path=/;"
 				res.setHeader 'Location', "/#{redirect}"
 				res.send Routing.Response.TEMPORARY_REDIRECT
@@ -52,11 +61,11 @@ module.exports = (App) ->
 
 			# TODO: consider other robots and clients with legacy browsers
 			if req.type isnt Routing.Request.VIEW_TYPE or # omit types other than view
-			   reservedUrisRe.test(req.uri) or # omit reserved URIs
+			   reservedUrisRe.test(req.url) or # omit reserved URIs
 			   ~req.userAgent.indexOf('Googlebot') # omit google boot
 				return next()
 
 			callback null,
 				title: App.config.name
-				appTextModeUrl: TEXT_MODE_URI_PREFIX + req.uri
+				appTextModeUrl: TEXT_MODE_URI_PREFIX + req.url
 				filename: App.routing.url + APP_JS_URI

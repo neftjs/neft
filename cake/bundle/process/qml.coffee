@@ -4,7 +4,7 @@ Emulate as client
 utils = require 'utils'
 utils.isNode = false
 utils.isClient = true
-utils.isQML = true
+utils.isQml = true
 
 ###
 Provide necessary standard browser globals

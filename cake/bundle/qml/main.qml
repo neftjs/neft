@@ -1,5 +1,5 @@
 import QtQuick 2.3
-import QtWebKit 3.0
+// import QtWebKit 3.0
 import "./bootstrap.js" as Bootstrap
 
 Item {
@@ -31,10 +31,10 @@ Item {
 		}
 	}
 
-	WebView {
-		id: webview
-		anchors.fill: parent
-	}
+	// WebView {
+	// 	id: webview
+	// 	anchors.fill: parent
+	// }
 
 	Item {
 		id: stylesBody
@@ -43,6 +43,11 @@ Item {
 	Timer {
 		id: setImmediateTimer
 		interval: 1
+	}
+
+	Timer {
+		id: setTimeoutTimer
+		interval: 4
 	}
 
 	Canvas {

@@ -8,6 +8,14 @@ nmlParser = require './nml'
 
 scopes = {}
 
+AVAILABLE_MODULES =
+	'Renderer': 'renderer'
+	'Dict': 'dict'
+	'List': 'list'
+	'signal': 'signal'
+	'log': 'log'
+	'expect': 'expect'
+
 exports.compile = (file) ->
 
 	data = file.data
@@ -26,7 +34,10 @@ exports.compile = (file) ->
 	# bootstrap code
 	base = parts.map(-> '../').join ''
 	code = "'use strict'\n"
-	code += "Renderer = require '../#{base}node_modules/app/node_modules/renderer'\n"
+
+	for name, path of AVAILABLE_MODULES
+		code += "#{name} = require '../#{base}node_modules/app/node_modules/#{path}'\n"
+
 	code += "\n"
 
 	# point files tot require for the build system
@@ -37,7 +48,7 @@ exports.compile = (file) ->
 	code += "\n"
 
 	# exports as a function
-	code += "module.exports = ->\n"
+	code += "getStructure = ->\n"
 
 	# window reference
 	code += "	{window} = Renderer\n"
@@ -57,8 +68,14 @@ exports.compile = (file) ->
 	        "		mainItem.constructor.apply mainItem, arguments\n"
 
 	# return data
-	code += "\n	mainItem: mainItem\n" +
-	        "	items: items\n"
+	code += "\n"
+	code += "	Object.freeze({\n" +
+	        "		mainItem: mainItem\n" +
+	        "		ids: ids\n" +
+	        "	})\n"
+
+	code += "module.exports = -> getStructure.apply(null, arguments).mainItem\n"
+	code += "module.exports.withStructure = -> getStructure.apply null, arguments\n"
 
 	file.name = scopeItemName
 	file.data = code
@@ -67,7 +84,7 @@ exports.finish = (file) ->
 	data = file.data
 	name = file.filename
 
-	code = ''
+	code = '	items = {}\n'
 	links = ''
 
 	for scopeName, path of scopes
@@ -79,11 +96,12 @@ exports.finish = (file) ->
 			localPath = path.split '/'
 			i = 0
 			while localPath.length
-				if localPath[0] is base[i]
+				if localPath[0] is base[i] and localPath.length > 1
 					localPath.shift()
 					i++
 				else
 					break
+
 			unless localPath.length
 				continue
 			# localPath = localPath.splice Math.min(base.length, localPath.length-1)
@@ -95,7 +113,7 @@ exports.finish = (file) ->
 			base = base.slice 3
 			base ||= './'
 			links += "require '#{base}#{path}'\n"
-			code += "	#{localName} = require('#{base}#{path}')\n"
+			code += "	#{localName} = items['#{localName}'] = require('#{base}#{path}')\n"
 	code += "\n"
 
 	data = data.replace '{{modulesLinks}}', links

@@ -21,7 +21,7 @@ Called on the beginning for all tasks
 ###
 init = (opts) ->
 	assert not initialized
-	assert utils.isObject opts
+	assert utils.isPlainObject opts
 
 	initialized = true
 
