@@ -3,10 +3,11 @@
 fs = require 'fs'
 pathUtils = require 'path'
 PEG = require 'pegjs'
-pegimport = require 'pegjs-import'
 
 path = pathUtils.join __dirname, './grammar.pegjs'
-parser = pegimport.buildParser path,
+file = fs.readFileSync path, 'utf-8'
+
+parser = PEG.buildParser file,
 	optimize: 'speed'
 
 module.exports = (file) ->
@@ -20,6 +21,5 @@ module.exports = (file) ->
 		msg += "\u001b[31m#{lines[line]}\u001b[39m \n" if line isnt lines.length
 		msg += lines[line+1] + "\n" if line < lines.length
 
-		message = err.message.replace ///_1///g, ''
-		msg += "\nLine #{err.line}, column #{err.column}: #{message}\n"
+		msg += "\nLine #{err.line}, column #{err.column}: #{err.message}\n"
 		throw Error msg

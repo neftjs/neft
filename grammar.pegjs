@@ -1,5 +1,3 @@
-@import "./lib/javascript.pegjs" as JavaScript
-
 {
 	var RESERVED_ATTRIBUTES = {id: true};
 	var ids = {};
@@ -184,7 +182,16 @@ Id "id declaration"
 /* FUNCTION */
 
 FunctionBody
-	= $JavaScript
+	= FunctionBodyCode (FunctionBodyCode FunctionBodyFunc)* FunctionBodyCode
+
+FunctionBodyCode
+	= FunctionBodyAny (StringLiteral FunctionBodyAny)* FunctionBodyAny
+
+FunctionBodyAny
+	= [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\n;:]*
+
+FunctionBodyFunc
+	= "{" FunctionBody "}"
 
 FunctionParams
 	= "(" first:Variable? rest:(__ "," __ d:Variable { return d })* ")" {
@@ -195,7 +202,7 @@ FunctionName
 	= (Variable ".")* "on" Variable
 
 Function "function"
-	= name:$FunctionName ":" __ params:FunctionParams? __ "{" body:FunctionBody "}" {
+	= name:$FunctionName ":" __ params:FunctionParams? __ "{" body:$FunctionBody "}" {
 			return { type: 'function', name: name, params: params, body: body };
 		}
 
