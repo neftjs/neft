@@ -6,6 +6,7 @@ isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
 module.exports = (impl) ->
 	{Item, Image} = impl.Types
+	implUtils = impl.utils
 
 	updatePending = false
 
@@ -100,7 +101,7 @@ module.exports = (impl) ->
 		updateSize @
 
 	setTextFontWeight: (val) ->
-		@_impl.textElement.style.fontWeight = Math.round(val * 9) * 100
+		@_impl.textElement.style.fontWeight = implUtils.getFontWeight val
 		updateSize @
 
 	setTextFontWordSpacing: (val) ->

@@ -65,6 +65,8 @@ window.addEventListener 'load', ->
 module.exports = (impl) ->
 	{items} = impl
 
+	utils.merge impl.utils, require('./utils')
+
 	window.addEventListener 'resize', resize = ->
 		item = impl.window
 		return unless item
