@@ -76,6 +76,8 @@ Renderer.Text
 -------------
 
 		class Font
+			@__name__ = 'Font'
+
 			@DATA = Text.DATA.font =
 				family: 'sans-serif'
 				pixelSize: 14

@@ -2,6 +2,9 @@
 
 utils = require 'utils'
 signal = require 'signal'
+log = require 'log'
+
+log = log.scope 'Renderer', 'Binding'
 
 {assert} = console
 {isArray} = Array
@@ -34,20 +37,24 @@ module.exports = (impl) ->
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 
-			@item?[handlerName] @signalChangeListener
+			if @item
+				@item[handlerName]? @signalChangeListener
 
 		updateChild: (child) ->
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 
 			if @item
-				@item[handlerName].disconnect @signalChangeListener
+				@item[handlerName]?.disconnect @signalChangeListener
 				@item = null
 
 			if child
-				@item = child.getValue()
-				@listen()
-				@signalChangeListener()
+				if child.item
+					@item = child.getValue()
+					@listen()
+					@signalChangeListener()
+				else
+					child.updateChild()
 
 		signalChangeListener: ->
 			if @parent

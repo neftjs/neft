@@ -11,6 +11,8 @@ Item.Margin
 	module.exports = (Renderer, Impl, itemUtils) ->
 
 		class Margin
+			@__name__ = 'Margin'
+
 			@DATA =
 				left: 0
 				top: 0
