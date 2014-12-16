@@ -36,9 +36,17 @@ module.exports = (impl) ->
 					[_, type, data] = dataUri
 					"data:#{type},#{escape data}"
 
-		(val) ->
+		(val, callback) ->
 			dataUri = DATA_URI_RE.exec val
 			if dataUri?
 				val = prepareDataUri dataUri
 
 			@_impl.image.src = val
+
+			@_impl.image.onerror = (err) ->
+				callback true
+
+			@_impl.image.onload = ->
+				callback null,
+					width: @naturalWidth or @width
+					height: @naturalHeight or @height

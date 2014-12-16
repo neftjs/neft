@@ -25,8 +25,13 @@ module.exports = (Renderer, Impl) -> exports =
 				@_data[propName] = val
 				@[signalName]? oldVal
 
-			if implMethod and @_data[propName] is val
-				implMethod.call @_item or @, val
+			# TODO: why calling on only changes doesn't work?
+			if @_data[propName] is val
+				if implMethod
+					implMethod.call(@_item or @, val)
+				return true
+			else
+				return false
 
 		# custom desc
 		getter = if customGetter? then customGetter(propGetter) else propGetter

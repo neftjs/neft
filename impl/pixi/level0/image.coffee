@@ -18,7 +18,7 @@ module.exports = (impl) ->
 		item._impl.contentElem = new PIXI.Sprite emptyTexture
 		item._impl.elem.addChild item._impl.contentElem
 
-	setImageSource: (val) ->
+	setImageSource: (val, callback) ->
 		{contentElem, elem} = @_impl
 		{width, height} = contentElem
 
@@ -28,5 +28,7 @@ module.exports = (impl) ->
 		# BUG: size for SVG images is changing
 		contentElem.width = width
 		contentElem.height = height
+
+		# TODO: implement callback
 
 		impl._dirty = true

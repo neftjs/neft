@@ -83,8 +83,10 @@ Renderer.Transition
 			if progress > 0
 				animation.duration = duration * progress
 
-			animation.onStopped ->
+			onStopped = ->
+				animation.onStopped.disconnect onStopped
 				animation.duration = duration
+			animation.onStopped onStopped
 
 			animation.play()
 

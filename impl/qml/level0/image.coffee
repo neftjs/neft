@@ -8,5 +8,7 @@ module.exports = (impl) ->
 
 		Item.create item
 
-	setImageSource: (val) ->
+	setImageSource: (val, callback) ->
 		@_impl.elem.source = val
+
+		# TODO: implement callback
