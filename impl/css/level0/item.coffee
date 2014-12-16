@@ -151,7 +151,7 @@ SIGNALS_ARGS =
 		mouseCoordsArgs e
 
 HOT_MAX_TIME = 1000
-HOT_MAX_ACTIONS = 12
+HOT_MAX_ACTIONS = 4
 
 module.exports = (impl) ->
 
@@ -159,6 +159,7 @@ module.exports = (impl) ->
 	STYLE_WIDTH = 1<<1
 	STYLE_HEIGHT = 1<<2
 	STYLE_OPACITY = 1<<3
+	STYLE_ALL = (1<<4)-1
 
 	updateStyles = do ->
 		pending = false
@@ -174,6 +175,7 @@ module.exports = (impl) ->
 			if item._impl.isHot and transform3dSupported
 				transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
 			else
+				markAction item
 				transform = "translate(#{data.x}px, #{data.y}px) "
 
 			# rotation
@@ -191,6 +193,13 @@ module.exports = (impl) ->
 			target = item._impl
 			style = target.elem.style
 
+			if target.isHidden
+				if styles & STYLE_OPACITY
+					target.isHidden = false
+					styles |= STYLE_ALL
+				else
+					return
+
 			if styles & STYLE_TRANSFORM
 				style[transformProp] = getTransforms item
 			if styles & STYLE_WIDTH
@@ -199,11 +208,16 @@ module.exports = (impl) ->
 				style.height = "#{data.height}px"
 			if styles & STYLE_OPACITY
 				style.opacity = data.opacity
+
+				if data.opacity is 0
+					target.isHidden = true
+
 			return
 
 		updateItems = ->
 			pending = false
-			while queue.length
+			n = queue.length
+			while n--
 				item = queue.pop()
 				updateItem item, queueItems[item.__hash__]
 				queueItems[item.__hash__] = 0
@@ -220,9 +234,9 @@ module.exports = (impl) ->
 			unless pending
 				pending = true
 				if isTouch
-					requestAnimation updateItems
+					requestAnimationFrame updateItems
 				else
-					setImmediate updateItems
+					setTimeout updateItems, 8
 			return
 
 	markAction = (item) ->
@@ -244,6 +258,7 @@ module.exports = (impl) ->
 		storage.lastAction = now()
 		storage.hotActions = 0
 		storage.isHot = false
+		storage.isHidden = false
 
 	setItemParent: (val) ->
 		{elem} = @_impl
@@ -255,7 +270,7 @@ module.exports = (impl) ->
 		val._impl.elem.appendChild elem
 
 	setItemVisible: (val) ->
-		@_impl.elem.style.display = if val then 'inherit' else 'none'
+		@_impl.elem.style.display = if val then 'inline' else 'none'
 
 	setItemClip: (val) ->
 		@_impl.elem.style.overflow = if val then 'hidden' else 'visible'
@@ -267,17 +282,13 @@ module.exports = (impl) ->
 		updateStyles @, STYLE_HEIGHT
 
 	setItemX: (val) ->
-		unless @_impl.isHot
-			markAction(@)
 		updateStyles @, STYLE_TRANSFORM
 
 	setItemY: (val) ->
-		unless @_impl.isHot
-			markAction(@)
 		updateStyles @, STYLE_TRANSFORM
 
 	setItemZ: (val) ->
-		@_impl.elem.style.zIndex = if val is 0 then 'inherit' else val
+		@_impl.elem.style.zIndex = if val is 0 then 'auto' else val
 
 	setItemScale: (val) ->
 		updateStyles @, STYLE_TRANSFORM

@@ -22,7 +22,6 @@ html, body {
 }
 div, span, canvas, img {
 	position: absolute;
-	z-index: inherit;
 }
 span {
 	-ms-word-break: break-all;

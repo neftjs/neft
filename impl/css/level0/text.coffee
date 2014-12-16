@@ -31,8 +31,9 @@ module.exports = (impl) ->
 					updateSize item
 			return;
 
-		requestAnimationFrame ->
+		setImmediate ->
 			updateSizeNow item
+		setTimeout updateSizeNow, 200, item
 
 	onWidthChanged = ->
 		if not updatePending
