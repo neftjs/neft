@@ -83,15 +83,6 @@ Renderer.Item
 				for child in children
 					child.parent = @
 
-*String* Item::id
------------------
-
-		utils.defineProperty @::, 'id', utils.ENUMERABLE, ->
-			undefined
-		, (val) ->
-			expect(val).toBe.truthy().string()
-			utils.defineProperty @, 'id', utils.ENUMERABLE, val
-
 Item::ready()
 -------------
 
