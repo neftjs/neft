@@ -1,7 +1,6 @@
 'use strict'
 
 Renderer = require 'renderer'
-
 parser = require './parser'
 
 {assert} = console
@@ -157,7 +156,8 @@ stringObject = (obj) ->
 	if args.length
 		args = "{#{args.join ', '}}"
 
-	r = "var #{obj.id} = #{isLocal and 'new ' or ''}#{obj.name}(#{args or ''});\n"
+	decl = if isLocal then "new #{obj.name}" else "styles['#{obj.name}']"
+	r = "var #{obj.id} = #{decl}(#{args or ''});\n"
 
 	for child in getByType(obj.body, OBJECT)
 		r += stringObject child

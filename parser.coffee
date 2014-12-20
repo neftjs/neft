@@ -1,16 +1,15 @@
 'use strict'
 
-fs = require 'fs'
-pathUtils = require 'path'
-PEG = require 'pegjs'
-
-path = pathUtils.join __dirname, './grammar.pegjs'
-file = fs.readFileSync path, 'utf-8'
-
-parser = PEG.buildParser file,
-	optimize: 'speed'
+grammar = '{{grammar}}'
 
 module.exports = (file) ->
+	fs = require 'fs'
+	pathUtils = require 'path'
+	PEG = require 'pegjs'
+
+	parser = PEG.buildParser grammar,
+		optimize: 'speed'
+
 	try
 		parser.parse(file)
 	catch err

@@ -87,13 +87,10 @@ Comment "comment"
 	/ SingleLineComment
 
 MultiLineComment
-	= "/*" (!"*/" SourceCharacter)* "*/"
-
-MultiLineCommentNoLineTerminator
-	= "/*" (!("*/" / LineTerminator) SourceCharacter)* "*/"
+	= WhiteSpace* "/*" (!"*/" SourceCharacter)* "*/"
 
 SingleLineComment
-	= "//" (!LineTerminator SourceCharacter)*
+	= WhiteSpace* "//" (!LineTerminator SourceCharacter)*
 
 StringLiteral "string"
 	= '"' chars:DoubleStringCharacter* '"' {
@@ -125,12 +122,13 @@ AttributeName "attribute name"
 AttributeEnds
 	= ";"
 	/ LineTerminator
+	/ Comment
 
 AttributeBody
 	= Type
 	/ "{" d:(__ d:Attribute __ { return d })* "}" { return d }
 	/ "[" d:Type* "]" { return d }
-	/ d:$StringLiteral { return d }
+	/ $StringLiteral
 	/ value:(!AttributeEnds d:SourceCharacter {return d})+ AttributeEnds {
 			return value.join('').trim()
 		}
