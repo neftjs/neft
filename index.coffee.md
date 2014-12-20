@@ -10,9 +10,9 @@ All loggs are removed for the *release* mode.
 
 	'use strict'
 
-	[utils, expect] = ['utils', 'expect'].map require
+	utils = require 'utils'
+	assert = require 'asserts'
 
-	{assert} = console
 	{bind} = Function
 	{isArray} = Array
 	{unshift} = Array::
@@ -47,7 +47,7 @@ All loggs are removed for the *release* mode.
 		constructor: (@prefixes) ->
 
 			if prefixes
-				expect(prefixes).toBe.array()
+				assert.isArray prefixes
 
 				# bind all logs methods by prefixes
 				args = utils.clone(prefixes)
