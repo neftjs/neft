@@ -5,6 +5,8 @@ expect = require 'expect'
 log = require 'log'
 View = require 'view'
 
+styleParseStyles = require('./parse/styles')
+
 {isArray} = Array
 {Element} = View
 {Tag} = Element
@@ -15,7 +17,7 @@ module.exports = (File) ->
 
 	if utils.isNode
 		File.onParsed do ->
-			styles = require('./parse/styles') File
+			styles = styleParseStyles File
 			(file) ->
 				styles file
 

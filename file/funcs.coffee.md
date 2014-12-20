@@ -7,6 +7,8 @@ View Func
 	expect = require 'expect'
 	Renderer = require 'renderer'
 
+	stylesParseFuncs = require './parse/funcs'
+
 	# link modules to be possible required by the funcs
 	links = ['db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
 	         'log', 'renderer', 'routing', 'schema', 'signal', 'utils', 'view']
@@ -127,7 +129,7 @@ View Func
 				null
 
 			File.onParsed do ->
-				funcs = require('./parse/funcs') File
+				funcs = stylesParseFuncs File
 				(file) ->
 					funcs file
 

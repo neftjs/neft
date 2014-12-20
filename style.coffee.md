@@ -123,7 +123,7 @@ View.Style
 
 			# get scope
 			if @isScope
-				scope = styles[@id]?()
+				scope = styles[@id]?.withStructure()
 				unless scope
 					log.warn "Style file `#{@id}` can't be find. Operation aborted"
 					return clone

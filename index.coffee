@@ -1,14 +1,18 @@
 'use strict'
 
 expect = require 'expect'
-
 View = require 'view'
+
+stylesFuncs = require('./file/funcs')
+stylesStyles = require('./file/styles')
+stylesRender = require('./file/render')
+stylesStyle = require('./style')
 
 expect(View).toBe.function()
 
 module.exports = (data) ->
-	require('./file/funcs') View
-	require('./file/styles') View
-	require('./file/render') View
+	stylesFuncs View
+	stylesStyles View
+	stylesRender View
 
-	View.Style = require('./style') View, data
+	View.Style = stylesStyle View, data

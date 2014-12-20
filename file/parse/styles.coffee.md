@@ -41,14 +41,16 @@ Each style file can be put by capitalizing its file name.
 		# parse tags with `style` attr
 		forNode = (node, parentStyle, data) ->
 			if attr = node.attrs.get "#{File.HTML_NS}:style"
+				isScope = ///^[A-Z]///.test attr
+
 				style = new Style
 					self: file
 					node: node
 					id: attr
 					attrs: findAttrs(node)
 					parent: parentStyle
-					isRepeat: !!data?.ids[attr]
-					isScope: ///^[A-Z]///.test attr
+					isRepeat: not isScope and !!data?.ids[attr]
+					isScope: isScope
 
 				data?.ids[attr] = true
 
