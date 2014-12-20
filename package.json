@@ -1,0 +1,10 @@
+{
+	"private": true,
+	"name": "bundle",
+	"version": "0.0.1",
+	"devDependencies": {
+		"fs-extra": "~0.8.1",
+		"glob": "^4.0.0",
+		"groundskeeper": "git+ssh://git@github.com:Kildyt/groundskeeper.git#no_definitions"
+	}
+}

@@ -1,0 +1,197 @@
+'use strict'
+
+module.exports = ->
+	EMULATORS =
+		browser: ->
+			###
+			Provide necessary standard browser globals
+			###
+			global.window =
+				document: {}
+				isFake: true
+				addEventListener: ->
+				Image: ->
+				HTMLCanvasElement: ->
+			global.location = pathname: ''
+			global.navigator = userAgent: ''
+			global.innerWidth = 1024
+			global.innerHeight = 600
+			global.scrollX = 0
+			global.scrollY = 0
+			global.document =
+				body:
+					appendChild: ->
+				createElement: ->
+					classList:
+						add: ->
+					appendChild: ->
+					style: {}
+					children: [
+						{
+							childNodes: []
+							width:
+								baseVal: 0
+							height:
+								baseVal: 0
+						}
+					]
+					removeChild: ->
+					getBoundingClientRect: -> {}
+					addEventListener: ->
+					setAttribute: ->
+					innerHTML: ''
+				createElementNS: ->
+					width: baseVal: value: null
+					height: baseVal: value: null
+					style: {}
+					classList:
+						add: ->
+					transform:
+						baseVal:
+							appendItem: ->
+					setAttribute: ->
+					appendChild: ->
+					setAttributeNS: ->
+					createSVGTransform: ->
+						setTranslate: ->
+						setScale: ->
+					childNodes: [
+						{
+							transform:
+								baseVal:
+									appendItem: ->
+							childNodes: []
+							setAttribute: ->
+						}
+					]
+					children: []
+				getElementById: ->
+				addEventListener: ->
+				querySelector: ->
+			global.history =
+				pushState: ->
+			global.requestAnimationFrame = ->
+			global.Image = global.document.createElement
+
+		node: ->
+			global.option = ->
+			global.task = ->
+
+		qml: ->
+			###
+			Provide necessary standard browser globals
+			###
+			SIGNAL =
+				connect: ->
+				disconnect: ->
+
+			global.Font = {}
+			global.Qt =
+				include: ->
+				createQmlObject: ->
+					font: {}
+					onClicked: SIGNAL
+					onPressed: SIGNAL
+					onReleased: SIGNAL
+					onEntered: SIGNAL
+					onExited: SIGNAL
+					onPositionChanged: SIGNAL
+					onWheel: SIGNAL
+					createObject: -> global.Qt.createQmlObject()
+				binding: ->
+				rgba: ->
+				hsla: ->
+			global.stylesBody =
+				children: []
+			global.stylesWindow =
+				items: []
+				width: 900
+				height: 600
+				widthChanged: SIGNAL
+				heightChanged: SIGNAL
+			global.qmlUtils =
+				createBinding: ->
+			global.stylesHatchery = {}
+			global.requestAnimationFrame = ->
+
+	NODE_MODULES =
+		fs: true
+		path: true
+		vm: true
+		http: true
+		zlib: true
+		util: true # TODO
+		events: true # TODO
+		rethinkdb: true
+		'coffee-script': true
+		child_process: true
+		stream: true
+		groundskeeper: true
+		'uglify-js': true
+
+	pathUtils = require 'path'
+	require 'coffee-script/register'
+
+	modules = []
+	paths = {}
+
+	# gets argv
+	[_, _, index, opts] = process.argv
+	opts = JSON.parse opts
+	{type, onlyLocal, allowedRemoteModules} = opts
+	allowedRemoteModules ?= []
+	process.argv.splice 2, Infinity
+
+	# Get index to require and their base path
+	base = pathUtils.dirname index
+
+	EMULATORS[type]()
+
+	###
+	Override standard `Module._load()` to capture all required modules and files
+	###
+	Module = module.constructor
+	Module._load = do (_super = Module._load) -> (req, parent) ->
+		r = _super.apply @, arguments
+
+		if NODE_MODULES[req]
+			return r
+
+		for module, _ of NODE_MODULES
+			if parent.id.indexOf("node_modules/#{module}") > 0
+				return r
+
+		filename = Module._resolveFilename req, parent
+
+		modulePath = pathUtils.relative base, filename
+		parentPath = pathUtils.relative base, parent.id
+		unless parentPath then return r	
+
+		if onlyLocal and ///^\.\.\/|^node_modules\////.test(modulePath)
+			name = ///^\.\.\/([a-z_\-A-Z]+)///.exec(modulePath)?[1]
+			if allowedRemoteModules.indexOf(name) is -1
+				return r
+
+		modules.push modulePath unless ~modules.indexOf modulePath
+
+		mpaths = paths[parentPath] ?= {}
+		mpaths[req] = modulePath
+
+		r
+
+	# run index file
+	try
+		require index
+	catch err
+		if err.stack
+			err = err.stack
+		else
+			err += ''
+		return process.send err: err
+
+	# add index file into modules list
+	modules.push opts.path
+
+	process.send
+		modules: modules
+		paths: paths
