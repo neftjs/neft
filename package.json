@@ -1,9 +1,9 @@
 {
 	"private": true,
 	"name": "app",
-	"title": "Squirrel App Scaffolding",
 	"version": "0.0.2",
 	"config": {
+		"title": "Neft.io Application",
 		"protocol": "http",
 		"port": 3000,
 		"host": "0.0.0.0",
@@ -23,10 +23,5 @@
 		"view": "git+ssh://git@bitbucket.org:Kildyt/view.git",
 		"styles": "git+ssh://git@bitbucket.org:Kildyt/styles.git",
 		"view-styles": "git+ssh://git@bitbucket.org:Kildyt/view-styles.git"
-	},
-	"devDependencies": {
-		"fs-extra": "~0.8.1",
-		"glob": "^4.0.0",
-		"groundskeeper": "git+ssh://git@github.com:Kildyt/groundskeeper.git#no_definitions"
 	}
 }

@@ -1,0 +1,28 @@
+fs = require 'fs'
+bundle = require 'bundle'
+
+modulePackage = require './package.json'
+
+createBundle = (opts) ->
+	bundle type: opts.type, release: opts.release, path: 'index.coffee', (err, bundle) ->
+		if err
+			return console.error err
+
+		license = fs.readFileSync 'LICENSE', 'utf-8'
+		template = fs.readFileSync './bundle/template.js', 'utf-8'
+		mode = if opts.release then 'release' else 'develop'
+
+		template = template.replace '{{version}}', modulePackage.version
+		template = template.replace '{{license}}', license
+		template = template.replace '{{bundle}}', bundle
+		template = template.replace '{{target}}', opts.type
+		template = template.replace '{{mode}}', mode
+
+		fs.writeFileSync "neft-#{opts.type}-#{mode}.js", template
+
+# createBundle type: 'node', release: true
+createBundle type: 'node', release: false
+# createBundle type: 'browser', release: true
+# createBundle type: 'browser', release: false
+# createBundle type: 'qml', release: true
+# createBundle type: 'qml', release: false

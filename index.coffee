@@ -1,8 +1,19 @@
 'use strict'
 
-[utils] = ['utils'].map require
-[Schema, Routing, View, Renderer] = ['schema', 'routing', 'view', 'renderer'].map require
-[Db, _, _, _] = ['db', 'db-implementation', 'db-schema', 'db-addons'].map require
+utils = require 'utils'
+log = require 'log'
+Schema = require 'schema'
+Routing = require 'routing'
+View = require 'view'
+Renderer = require 'renderer'
+Db = require 'db'
+require 'db-implementation'
+require 'db-schema'
+require 'db-addons'
+
+AppRoute = require './route'
+AppTemplate = require './template'
+AppView = require './view'
 
 # build polyfills
 # TODO: move it into separated module
@@ -15,17 +26,29 @@ Db = Db.Impl()
 require('db/log.coffee') Db
 `//</development>`
 
-module.exports = (opts={}) ->
+if utils.isNode
+	bootstrapRoute = require './bootstrap/route.node'
 
-	pkg = require './package.json'
+pkg = require './package.json'
+
+# Welcome log
+log.ok "\nWelcome! Neft.io v. #{pkg.version}; Feedback appreciated\n"
+
+# TODO
+# `//<development>`
+# log.warn "Use this bundles only for testing. " +
+#          "For production use --release option!"
+# `//</development>`
+
+exports = module.exports = (opts={}) ->
+
 	{config} = pkg
 
 	if opts.config
 		config = utils.merge utils.clone(config), opts.config
 
-	App =
-		config:
-			name: pkg.title
+	App = Object.preventExtensions
+		config: config
 		routing: new Routing
 			protocol: config.protocol
 			port: config.port
@@ -34,16 +57,21 @@ module.exports = (opts={}) ->
 		Route: null
 		Template: null
 		View: null
-		models: opts.models
-		controllers: opts.controllers
-		handlers: opts.handlers
-		routes: opts.routes
-		views: opts.views
-		templates: opts.templates
+		models: opts.models or {}
+		controllers: opts.controllers or {}
+		handlers: opts.handlers or {}
+		routes: opts.routes or {}
+		views: opts.views or {}
+		templates: opts.templates or {}
 
-	App.Route = require('./route') App
-	App.Template = require('./template') App
-	App.View = require('./view') App
+	App.Route = AppRoute App
+	App.Template = AppTemplate App
+	App.View = AppView App
+
+	# initialize styles
+	{styles} = opts
+	for name, style of styles
+		styles[name] = style styles
 
 	# set styles window item
 	windowStyle = opts.styles?.Window?.withStructure()
@@ -59,7 +87,7 @@ module.exports = (opts={}) ->
 
 	# load bootstrap
 	if utils.isNode
-		require('./bootstrap/route.node') App
+		bootstrapRoute App
 
 	# load views
 	for path, json of App.views
@@ -78,3 +106,9 @@ module.exports = (opts={}) ->
 	init App.handlers.view
 	init App.templates
 	init App.routes
+
+# link module
+MODULES = ['asserts', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
+           'log', 'renderer', 'routing', 'schema', 'signal', 'utils', 'view', 'styles']
+for name in MODULES
+	exports[name] = require name

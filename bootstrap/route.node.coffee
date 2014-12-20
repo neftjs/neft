@@ -1,11 +1,25 @@
 'use strict'
 
 utils = require 'utils'
-fs = require 'fs'
 pathUtils = require 'path'
 
 View = require 'view'
 Routing = require 'routing'
+
+VIEW_HTML = """
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+	<title>\#{data.title}</title>
+	<script type="text/javascript" src="\#{data.filename}"></script>
+</head>
+<body>
+	<noscript>
+		<meta http-equiv="refresh" content="0; url=\#{data.appTextModeUrl}"></meta>
+	</noscript>
+</body>
+</html>
+"""
 
 module.exports = (App) ->
 
@@ -17,9 +31,7 @@ module.exports = (App) ->
 	TEXT_MODE_COOKIE_NAME = 'textMode'
 
 	view = new App.View do ->
-		path = pathUtils.join __dirname, VIEW_FILE
-		file = fs.readFileSync path, 'utf-8'
-		View.fromHTML VIEW_NAME, file
+		View.fromHTML VIEW_NAME, VIEW_HTML
 
 	reservedUris = ['app.js', 'favicon.ico']
 	reservedUrisRe = do =>
@@ -66,6 +78,6 @@ module.exports = (App) ->
 				return next()
 
 			callback null,
-				title: App.config.name
+				title: App.config.title
 				appTextModeUrl: TEXT_MODE_URI_PREFIX + req.url
 				filename: App.routing.url + APP_JS_URI
