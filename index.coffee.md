@@ -28,7 +28,7 @@ Utils
 *Boolean* utils.isNode
 ----------------------
 
-Determine whether application is run in *node.js*.
+Determines whether application is run in *node.js*.
 
 *Boolean* utils.isClient
 ------------------------
@@ -38,19 +38,16 @@ Determine whether application is run in *node.js*.
 *Boolean* utils.isBrowser
 -------------------------
 
-Determine whether application is run in the browser environment.
+Determines whether application is run in the browser environment.
 
 *Boolean* utils.isQml
 ---------------------
 
-Determine whether application is a part of the QML program.
+Determines whether application is a part of the QML program.
 
 	exports.isNode = exports.isClient = exports.isBrowser = exports.isQml = false
 
 	switch true
-
-		when global? and Object::toString.call(global) is '[object global]'
-			exports.isNode = true
 
 		when window?.document?
 			exports.isClient = exports.isBrowser = true
@@ -58,23 +55,62 @@ Determine whether application is a part of the QML program.
 		when Qt?.include?
 			exports.isClient = exports.isQml = true
 
-*Boolean* utils.isPlainObject(*Any* param)
+		when process? and Object.prototype.toString.call(process) is '[object process]'
+			exports.isNode = true
+
+*Boolean* utils.is(*Any* value1, *Any* value2)
+----------------------------------------------
+
+	exports.is = (val1, val2) ->
+		if val1 is 0 and val2 is 0
+			return 1 / val1 is 1 / val2
+		else if val1 isnt val1
+			return val2 isnt val2
+		else
+			return val1 is val2
+
+*Boolean* utils.isFloat(*Any* value)
+------------------------------------
+
+	exports.isFloat = (val) ->
+		typeof val is 'number' and isFinite(val)
+
+*Boolean* utils.isInteger(*Any* value)
+--------------------------------------
+
+	exports.isInteger = (val) ->
+		typeof val is 'number' and
+		isFinite(val) and
+		val > -9007199254740992 and
+		val < 9007199254740992 and
+		Math.floor(val) is val
+
+*Boolean* utils.isPrimitive(*Any* value)
+----------------------------------------
+
+	exports.isPrimitive = (val) ->
+		val is null or
+		typeof val is 'string' or
+		typeof val is 'number' or
+		typeof val is 'boolean' or
+		typeof val is 'undefined'
+
+*Boolean* utils.isObject(*Any* param)
 -------------------------------------
 
 Checks whether given *param* is an object.
 
-### Example
 ```
-console.log utils.isPlainObject({})
+console.log utils.isObject({})
 # true
 
-console.log utils.isPlainObject([])
+console.log utils.isObject([])
 # true
 
-console.log utils.isPlainObject('')
+console.log utils.isObject('')
 # false
 
-console.log utils.isPlainObject(->)
+console.log utils.isObject(->)
 # false
 ```
 
@@ -88,7 +124,6 @@ Checks whether given *param* is a plain object, that is:
  - object with no prototype,
  - object with standard `Object` prototype.
 
-### Example
 ```
 console.log utils.isPlainObject({})
 # true
@@ -131,7 +166,6 @@ console.log utils.isPlainObject(Object.create({propertyInProto: 1}))
 
 Returns true if given *param* is an arguments object.
 
-### Example
 ```
 console.log utils.isArguments(do -> arguments)
 # true
@@ -150,7 +184,6 @@ Override given *source* object by the given *object* own properties.
 
 Given *source* is returned.
 
-### Example
 ```
 config = a: 1, b: 2
 utils.merge config, {b: 99, d: 100}
@@ -177,7 +210,6 @@ Only objects are merge deeply (no arrays and functions).
 
 Given *source* is returned.
 
-### Example
 ```
 user =
 	name: 'test'
@@ -217,7 +249,6 @@ console.log user
 Translate *object* own properties into the *source* if they are defined in the
 *source* prototype and are not defined in the *source* as own properties.
 
-### Example
 ```
 class User
 	name: ''
@@ -244,7 +275,6 @@ utils.remove(*NotPrimitive* object, *Any* element)
 
 Remove array element or object property.
 
-### Example
 ```
 array = ['a', 'b', 'c']
 utils.remove array, 'b'
@@ -281,7 +311,6 @@ Returns descriptor of the *property* defined in the given *object*.
 
 All *object* prototypes are checked.
 
-### Example
 ```
 class User
 	age: 0
@@ -308,9 +337,8 @@ console.log utils.getPropertyDescriptor(user, 'isAdult')
 [*Function*] lookupGetter(*NotPrimitive* object, *String* property)
 -------------------------------------------------------------------
 
-Returns the function bound as a getter to the given *property*.
+Returns function bound as a getter to the given *property*.
 
-### Example
 ```
 object = {loaded: 2, length: 5}
 utils.defineProperty object, 'progress', null, ->
@@ -335,7 +363,7 @@ console.log utils.lookupGetter(object, 'progress')
 [*Function*] lookupSetter(*NotPrimitive* object, *String* property)
 -------------------------------------------------------------------
 
-Returns the function bound as a setter to the given *property*.
+Returns function bound as a setter to the given *property*.
 
 	exports.lookupSetter = do ->
 
@@ -359,7 +387,6 @@ Defines *property* in the given *object*.
 
 *value* becomes a getter if given *setter* is not `undefined`.
 
-### Example
 ```
 object = {}
 
@@ -437,7 +464,6 @@ Clones array elements or object own properties.
 
 Functions are not cloned!
 
-### Example
 ```
 console.log utils.clone 'ABC'
 # ABC
@@ -469,7 +495,6 @@ console.log utils.clone {a: 1}
 
 Clone array elements and object properties deeply.
 
-### Example
 ```
 obj2 = {ba: 1}
 obj = {a: 1, b: obj2}
@@ -514,7 +539,6 @@ Checks whether given *object* is empty, that is:
 
 Returns given *array* last element.
 
-### Example
 ```
 console.log utils.last(['a', 'b'])
 # b
@@ -533,7 +557,6 @@ console.log utils.last([])
 
 Removes all elements from an array, or all properties from an object.
 
-### Example
 ```
 console.log utils.clear(['a', 'b'])
 # []
@@ -559,7 +582,6 @@ Changes given *object* prototype into *prototype*.
 
 This method on some environments returns new object!
 
-### Example
 ```
 obj = a: 1
 prototype = b: 100
@@ -609,7 +631,6 @@ console.log newObj.b
 
 Returns true if given *array* contains *value*.
 
-### Example
 ```
 console.log utils.has(['a']), 'a'
 # true
@@ -628,7 +649,6 @@ console.log utils.has(['a']), 'b'
 
 Returns true if given *object* in some own enumerable property stores given *value*.
 
-### Example
 ```
 object =
 	city: 'New York'
@@ -661,7 +681,6 @@ Array elements are properties values by default.
 
 Elements are set into the *target* array (new array by default).
 
-### Example
 ```
 object =
 	type: 'dog'
@@ -703,7 +722,6 @@ element value and given *array*.
 
 Properties are set into the *target* object (new object by default).
 
-### Example
 ```
 console.log utils.arrayToObject(['a', 'b'])
 # {0: 'a', 1: 'b'}
@@ -735,7 +753,6 @@ console.log utils.arrayToObject(['a'], ((i, elem) -> elem), ((i, elem) -> i))
 
 Capitalize given *string* first character.
 
-### Example
 ```
 console.log utils.capitalize('name')
 # Name
@@ -754,7 +771,6 @@ console.log utils.capitalize('name')
 
 Adds backslashes before each `'` and `"` characters.
 
-### Example
 ```
 console.log utils.addSlashes('a"b')
 # a\"b
@@ -802,7 +818,6 @@ If *function* throws an errpr, *onfail* is returned.
 
 If *onfail* is a function, it will be called with catched error.
 
-### Example
 ```
 func = (size) ->
 	if size is 0
@@ -832,7 +847,6 @@ console.log utils.tryFunctiontion(func, null, [100], 'ERROR!')
 
 Calls given *function* with *context* and *arguments* and returns catched error.
 
-### Example
 ```
 func = (size) ->
 	if size is 0
@@ -860,7 +874,6 @@ console.log utils.catchError(func, null, [100])
 
 Takes an *Error* instance and returns plain object with the *error* name and message.
 
-### Example
 ```
 error = new ReferenceError 'error message!'
 console.log utils.errorToObject(error)
@@ -892,7 +905,6 @@ Compares two objects or arrays deeply.
 
 Optional *compareFunction* defines whether two values are equal.
 
-### Example
 ```
 console.log utils.isEqual([0, 1], [1, 0])
 # true
