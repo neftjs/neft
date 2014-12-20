@@ -49,9 +49,6 @@ module.exports = class File
 			expect().some().keys(files).not().toBe path
 			expect(html).toBe.truthy().string()
 
-			logtime = log.time 'from html'
-			log "Parse `#{path}` from HTML"
-
 			# get node
 			node = File.Element.fromHTML html
 
@@ -60,8 +57,6 @@ module.exports = class File
 
 			# create file
 			file = new File path, node
-
-			log.end logtime
 
 			file
 

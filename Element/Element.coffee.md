@@ -24,6 +24,9 @@ Creates new `Element` instance based on given *html*.
 		@fromHTML = (html) ->
 			expect(html).toBe.truthy().string()
 
+			unless utils.isNode
+				throw "Creating Views from HTML files is allowed only on a server"
+
 			Element.parser.parse html
 
 *Element* Element()
