@@ -40,7 +40,8 @@ module.exports = (Routing) ->
 			changePage target.pathname
 
 		# change page to the current one
-		changePage location.pathname
+		setTimeout ->
+			changePage location.pathname
 
 	###
 	Send a XHR request and call `callback` on response.
@@ -66,6 +67,6 @@ module.exports = (Routing) ->
 			callback xhr.status, response
 
 		xhr.onerror = ->
-			# TODO
+			callback xhr.status, xhr.response
 
 		xhr.send()

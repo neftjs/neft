@@ -10,7 +10,7 @@ Routing.Uri
 	module.exports = (Routing) -> class Uri
 
 		@URI_TRIM_RE = ///^\/?(.*?)\/?$///
-		@NAMES_RE = ///{([a-zA-Z0-9_$]+)}///g
+		@NAMES_RE = ///{([a-zA-Z0-9_$]+)\*?}///g
 
 *Uri* Uri(*String* uri)
 -----------------------
@@ -33,7 +33,7 @@ Routing.Uri
 
 			# re
 			re = uri
-			re = re.replace ///\*///g, ->
+			re = re.replace ///{?([a-zA-Z0-9_$]+)?\*}?///g, ->
 				"(.*?)"
 			re = re.replace ///\/([^/]*)///g, (_, str) ->
 				"(?:/#{str})?"

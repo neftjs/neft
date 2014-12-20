@@ -176,7 +176,7 @@ req.onLoaded (res) ->
 			if EXTERNAL_URL_RE.test req.url
 				log "Send `#{req}` request"
 
-				Impl.sendRequest url, config, (status, data) ->
+				Impl.sendRequest req.url, opts, (status, data) ->
 					res.status = status
 					res.data = data
 					res.pending = false
