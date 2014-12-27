@@ -1,6 +1,21 @@
 Utils
 =====
 
+@desc Don't Repeat Yourself!
+
+**Neft** framework recommends using *JavaScript* language while writing applications.
+
+Unfortunatelly, *JavaScript* doesn't have lot of useful functions.
+
+This module helps to write applications faster and better,
+because it collets most commonly used functions.
+It's always important to don't repeating code.
+
+Require this module to use it.
+```
+utils = require 'utils'
+```
+
 	'use strict'
 
 	{assert} = console
@@ -28,7 +43,7 @@ Utils
 *Boolean* utils.isNode
 ----------------------
 
-Determines whether application is run in *node.js*.
+Determines whether application is run in **node.js** environment.
 
 *Boolean* utils.isClient
 ------------------------
@@ -43,7 +58,7 @@ Determines whether application is run in the browser environment.
 *Boolean* utils.isQml
 ---------------------
 
-Determines whether application is a part of the QML program.
+Determines whether application is a part of the **QML** program.
 
 	exports.isNode = exports.isClient = exports.isBrowser = exports.isQml = false
 
@@ -61,6 +76,28 @@ Determines whether application is a part of the QML program.
 *Boolean* utils.is(*Any* value1, *Any* value2)
 ----------------------------------------------
 
+Determines whether two values are the same value.
+
+It's a `Object.is()` function polyfill (introduced in ECMAScript 6).
+
+In opposite to the *===* operator, this function treats two `NaN`s as equal, and
+`-0` and `+0` as not equal.
+
+```
+console.log utils.is 'a', 'a'
+# true
+
+console.log utils.is NaN, NaN
+# true, but ...
+console.log NaN === NaN
+# false
+
+console.log utils.is -0, 0
+# false, but ...
+console.log -0 === 0
+# true
+```
+
 	exports.is = (val1, val2) ->
 		if val1 is 0 and val2 is 0
 			return 1 / val1 is 1 / val2
@@ -72,11 +109,46 @@ Determines whether application is a part of the QML program.
 *Boolean* utils.isFloat(*Any* value)
 ------------------------------------
 
+Checks whether value is a finite number.
+
+```
+console.log utils.isFloat 10
+# true
+
+console.log utils.isFloat 0.99
+# true
+
+console.log utils.isFloat NaN
+# false
+
+console.log utils.isFloat Infinity
+# false
+
+console.log utils.isFloat '10'
+# false
+```
+
 	exports.isFloat = (val) ->
 		typeof val is 'number' and isFinite(val)
 
 *Boolean* utils.isInteger(*Any* value)
 --------------------------------------
+
+Checks whether value is an integer.
+
+```
+console.log utils.isInteger 10
+# true
+
+console.log utils.isInteger -2
+# true
+
+console.log utils.isInteger 1.22
+# false
+
+console.log utils.isInteger '2'
+# false
+```
 
 	exports.isInteger = (val) ->
 		typeof val is 'number' and
@@ -87,6 +159,30 @@ Determines whether application is a part of the QML program.
 
 *Boolean* utils.isPrimitive(*Any* value)
 ----------------------------------------
+
+Checks whether value is a primitive *JavaScript* value.
+
+In *JavaScript* (ECMAScript 5.1) we have five primitive types:
+ - `null`,
+ - string,
+ - number,
+ - boolean,
+ - undefined.
+
+For simplify, we also include here a `null` and `undefined` types.
+
+Each of this type is not mutable (because it's primitive).
+
+```
+console.log utils.isPrimitive null
+# true
+
+console.log utils.isPrimitive 'abc'
+# true
+
+console.log utils.isPrimitive []
+# false
+```
 
 	exports.isPrimitive = (val) ->
 		val is null or
@@ -99,6 +195,9 @@ Determines whether application is a part of the QML program.
 -------------------------------------
 
 Checks whether given *param* is an object.
+
+Other libraries define *object* differently.
+This function returns `true` for an objects (not `null`) and an arrays (reference types).
 
 ```
 console.log utils.isObject({})
@@ -137,7 +236,7 @@ console.log utils.isPlainObject([])
 console.log utils.isPlainObject(->)
 # false
 
-class User
+User = ->
 console.log utils.isPlainObject(new User)
 # false
 
@@ -302,10 +401,10 @@ console.log object
 		else
 			delete obj[elem]
 
-		null
+		return
 
-[*Object*] getPropertyDescriptor(*NotPrimitive* object, *String* property)
---------------------------------------------------------------------------
+[*Object*] utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
+--------------------------------------------------------------------------------
 
 Returns descriptor of the *property* defined in the given *object*.
 
@@ -334,8 +433,8 @@ console.log utils.getPropertyDescriptor(user, 'isAdult')
 
 		desc
 
-[*Function*] lookupGetter(*NotPrimitive* object, *String* property)
--------------------------------------------------------------------
+[*Function*] utils.lookupGetter(*NotPrimitive* object, *String* property)
+-------------------------------------------------------------------------
 
 Returns function bound as a getter to the given *property*.
 
@@ -360,8 +459,8 @@ console.log utils.lookupGetter(object, 'progress')
 			desc = exports.getPropertyDescriptor obj, prop
 			desc?.get
 
-[*Function*] lookupSetter(*NotPrimitive* object, *String* property)
--------------------------------------------------------------------
+[*Function*] utils.lookupSetter(*NotPrimitive* object, *String* property)
+-------------------------------------------------------------------------
 
 Returns function bound as a setter to the given *property*.
 
@@ -490,8 +589,8 @@ console.log utils.clone {a: 1}
 
 		param
 
-*Any* cloneDeep(*Any* param)
-----------------------------
+*Any* utils.cloneDeep(*Any* param)
+----------------------------------
 
 Clone array elements and object properties deeply.
 
@@ -626,10 +725,10 @@ console.log newObj.b
 			merge newObj, obj
 			newObj
 
-*Boolean* utils.has(*Array* array, *Any* value)
------------------------------------------------
+*Boolean* utils.has(*NotPrimitive* object, *Any* value)
+-------------------------------------------------------
 
-Returns true if given *array* contains *value*.
+Returns true if given *object* contains *value*.
 
 ```
 console.log utils.has(['a']), 'a'
@@ -639,35 +738,27 @@ console.log utils.has(['a']), 'b'
 # false
 ```
 
-	has = exports.has = (any, elem) ->
-		expect(any?.indexOf).toBe.function()
-
-		!!~any.indexOf elem
-
-*Boolean* utils.hasValue(*Object* object, *Any* value)
-------------------------------------------------------
-
-Returns true if given *object* in some own enumerable property stores given *value*.
+For objects, only own enumerable properties are checked.
 
 ```
 object =
 	city: 'New York'
 
-console.log utils.hasValue(object, 'New York')
+console.log utils.has(object, 'New York')
 # true
 ```
 
-	exports.hasValue = (obj, val) ->
+	has = exports.has = (obj, elem) ->
 		expect(obj).toBe.object()
 
 		if isArray obj
-			return has obj, val
+			!!~Array::indexOf.call obj
+		else
+			for key, value of obj when hasOwnProp.call(obj, key)
+				if value is val
+					return true
 
-		for key, value of obj when hasOwnProp.call(obj, key)
-			if value is val
-				return true
-
-		false
+			false
 
 *Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target *= []*])
 ------------------------------------------------------------------------------------------
@@ -769,7 +860,7 @@ console.log utils.capitalize('name')
 *String* utils.addSlashes(*String* string)
 ------------------------------------------
 
-Adds backslashes before each `'` and `"` characters.
+Adds backslashes before each `'` and `"` character.
 
 ```
 console.log utils.addSlashes('a"b')
@@ -809,7 +900,7 @@ Generates pseudo-unique hash with given *length*.
 		else
 			str.slice 0, n
 
-*Any* utils.tryFunctiontion(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
+*Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
 ----------------------------------------------------------------------------------------------
 
 Calls given *function* with *context* and *arguments*.
@@ -873,6 +964,10 @@ console.log utils.catchError(func, null, [100])
 -------------------------------------------
 
 Takes an *Error* instance and returns plain object with the *error* name and message.
+
+This function is helpful to stringify errors.
+It's needed, because standard `Error` object marks *name* and *message* properties
+as not enumerable, so they are ommited.
 
 ```
 error = new ReferenceError 'error message!'
