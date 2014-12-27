@@ -47,7 +47,7 @@ using the `neft:use` tag. This is faster and cleaner.
 		# merge units from files
 		if file.links
 			for link in file.links
-				namespace = if link.namespace then "#{link.namespace}-" else ''
+				namespace = if link.namespace then "#{link.namespace}:" else ''
 
 				for name, unit of link.view.units
 					units[namespace + name] = unit

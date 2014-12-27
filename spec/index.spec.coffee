@@ -62,7 +62,7 @@ describe 'View', ->
 				View.fromHTML first, '<x:unit name="a"></x:unit>'
 				view = View.fromHTML uid(), '<x:require rel="view" href="'+first+'" as="ns">'
 				expect(Object.keys(view.units).length).toBe 1
-				expect(Object.keys(view.units)[0]).toBe 'ns-a'
+				expect(Object.keys(view.units)[0]).toBe 'ns:a'
 
 	it 'can be cloned and destroyed', ->
 

@@ -24,7 +24,7 @@ To each included unit, this alias will be prefixed in schema as below.
 ```
 <neft:require href="user_utils.html" as="user" />
 
-<neft:use:user-avatar />
+<neft:use:user:avatar />
 ```
 
 ### See also
