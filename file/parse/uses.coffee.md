@@ -1,13 +1,20 @@
-Using units @html
-=================
+neft:use @xml
+=============
 
-Declared `File.Unit` can be used in the *HTML* file by using its name as a tag.
+Special XML tag used to place `neft:unit`.
 
-```
-<neft:unit name="user">123</neft:unit>
+```view,example
+<neft:unit name="user">This is user</neft:unit>
 
 <neft:use:user />
 ```
+
+### See also
+
+- `neft:unit`
+- `neft:source`
+
+.
 
 	'use strict'
 

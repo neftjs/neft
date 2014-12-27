@@ -1,15 +1,28 @@
-neft:source @html
-=================
+neft:source @xml
+================
 
-Special HTML tag used in `File.Unit` to define destination for the `File.Use` body.
+Special XML tag used in `neft:unit`s to define place,
+where the `neft:use` body should be placed.
 
-```
+```view,example
 <neft:unit name="user">
+  <name>#{name}</name>
+  <age>#{age}</age>
   <neft:source />
 </neft:unit>
 
-<neft:use:user>123</neft:use:user>
+<neft:use:user name="Max" age="19">
+  <superPower>flying</superPower>
+</neft:use:user>
 ```
+
+### See also
+
+- `neft:unit`
+- `neft:use`
+- `String Interpolation`
+
+.
 
 	'use strict'
 

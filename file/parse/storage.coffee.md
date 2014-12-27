@@ -1,17 +1,29 @@
-String Interpolation @html
-==========================
+String Interpolation @xml
+=========================
 
-Any HTML text and attribute value can use string interpolation.
+Any XML text and attribute value can use string interpolation.
 
 ```
 <h1>Welcome #{name}!</h1>
 ```
+
+In `neft:unit`s you can use got attributes from the `neft:use`, like in the example below.
+If no attribute with such name found, value from the global data will be used
+(data from `App Controller` etc.).
 
 ```
 <neft:unit name="user">#{name}</neft:unit>
 
 <neft:use:user name="#{ownerName}" />
 ```
+
+### See also
+
+- `Attributes evaluating`
+- `neft:unit`
+- `neft:use`
+
+.
 
 	'use strict'
 

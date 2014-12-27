@@ -1,12 +1,14 @@
-Attributes evaluating @html
-===========================
+Attributes evaluating @xml
+==========================
 
-Attributes in HTML are written as strings. For easiest developing, some of them are
-automatically evaluating to the JavaScript objects.
+Attributes in XML are written as strings.
+For easiest developing, some of them are automatically evaluating to the JavaScript objects.
 
 String `[...]` is evaluated to the `Array`.
 ```
-<ul neft:each="[1, 2]"></ul>
+<items neft:each="[1, 2]"></items>
+```
+```
 <neft:use:list items="[{name: 't-shirt'}]" />
 ```
 
@@ -22,7 +24,7 @@ String `Dict ...` is evaluated to the `Dict`.
 
 String `List ...` is evaluated to the `List`.
 ```
-<ul neft:each="List([1, 2])"></ul>
+<items neft:each="List([1, 2])"></items>
 ```
 
 CoffeeScript syntax
@@ -31,8 +33,14 @@ CoffeeScript syntax
 Using *CoffeeScript* syntax is fully allowed.
 
 ```
-<ul neft:each="List [1, 2]"></ul>
+<items neft:each="List [1, 2]"></items>
 ```
+
+### See also
+
+- `neft:use`
+
+.
 
 	'use strict'
 

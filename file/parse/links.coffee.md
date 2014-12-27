@@ -1,7 +1,12 @@
-neft:require @html
-==================
+neft:require @xml
+=================
 
-Special HTML tag used to include view files units.
+Special XML tag used to include units from other local files.
+
+All units (`neft:unit` tags) from the file defined by the `href`
+are available in file where this tag has been used.
+
+`href` is a local path relative to the file when it's used.
 
 ```
 <neft:require href="user_utils.html" />
@@ -9,13 +14,25 @@ Special HTML tag used to include view files units.
 <neft:use:avatar />
 ```
 
-Special `as` parameter defines alias.
+### Namespaces
+
+For better organizations, you can include external files into the namespaces.
+
+Just specify an `as` attribute.
+To each included unit, this alias will be prefixed in schema as below.
 
 ```
 <neft:require href="user_utils.html" as="user" />
 
 <neft:use:user-avatar />
 ```
+
+### See also
+
+- `neft:unit`
+- `neft:use`
+
+.
 
 	'use strict'
 
