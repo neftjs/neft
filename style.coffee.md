@@ -1,6 +1,3 @@
-View.Style
-==========
-
 	'use strict'
 
 	expect = require 'expect'
@@ -30,9 +27,6 @@ View.Style
 					listenRecursive child, event, listener
 
 			null
-
-*Style* Style(*Object* options) @low-level
-------------------------------------------
 
 		constructor: (opts) ->
 			expect(opts).toBe.simpleObject()

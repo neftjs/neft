@@ -1,22 +1,63 @@
-neft:style @html
-================
+neft:style @xml
+===============
 
-Special HTML attribute used to connect `File.Element` with the `Renderer.Item`.
+Special *XML* attribute used to connect `File.Element` with `Renderer.Item`.
 
+As you know, `view` is used to organise your data in understood format and `Renderer` is
+used to show some stuff (images, texts etc.) on the screen. We need to connect this two
+things in some way - that's why `neft:style` *XML* attribute has been introduced.
+
+This attribute value references to the `Renderer.Item::id` attribute.
+
+By default, `Window` styles file is taken.
+
+If used `Renderer.Item` defines `text` property, *XML* tag text will be used for it.
+
+```nml,include(Window)
+Rectangle {
+  color: 'gray'
+
+  Rectangle {
+    id: header
+    property text: ''
+    width: 100
+    height: 100
+    color: 'blue'
+    
+    Text {
+      text: parent.text
+      color: 'white'
+      anchors.centerIn: parent
+    }
+  }
+}
 ```
-<h1 neft:style="header">Welcome!</h1>
+
+```view,example
+<heading neft:style="header">Welcome!</heading>
 ```
 
-Style files
------------
+Tags with this attributes creates special scopes, so you can easily put your styles file
+into another `Renderer.Item`, just use capitalized file name.
 
-Each style file can be put by capitalizing its file name.
+```nml,include(ArticlesContact)
+Text {
+  id: header
+  color: 'red'
+}
+```
 
+```view,example
+<contact neft:style="ArticlesContact">
+  <heading neft:style="header">Contact</heading>
+</contact>
 ```
-<div neft:style="ArticlesContact">
-  <h1 neft:style="header">Contact</h1>
-</div>
-```
+
+### See also
+
+- `neft:style`
+
+.
 
 	'use strict'
 

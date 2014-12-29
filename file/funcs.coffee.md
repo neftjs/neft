@@ -1,5 +1,5 @@
-View Func
-=========
+neft:func @js
+=============
 
 	'use strict'
 
@@ -22,15 +22,37 @@ View Func
 *ReadOnly* *Object* globalObject
 --------------------------------
 
+Functions are created in their private scope.
+
+Each function and property defined in this object comes global in the function body.
+
 		FuncGlobalFuncs =
 
 *Function* globalObject.require(*String* moduleName)
 ----------------------------------------------------
 
+Require *Neft* modules like in normal *JavaScript* file.
+
+```
+<neft:func name="test">
+  var utils = require('utils');
+  return utils.arrayToObject([1, 2]);
+</neft:func>
+```
+
 			require: require
 
 *Function* globalObject.get(*String* propertyName)
 --------------------------------------------------
+
+Function used to find data with given name in the storage, that is: `neft:use` attributes
+or global storage got from `App Route` etc.
+
+```
+<neft:func name="test">
+  return get('user').name;
+</neft:func>
+```
 
 			get: (prop) ->
 				Input.getVal @, prop
@@ -40,29 +62,81 @@ View Func
 *Arguments* globalObject.arguments
 ----------------------------------
 
+Object corresponding to the arguments passed to a function.
+
+```
+<neft:func name="followMouse">
+  var e = arguments[0]; // Renderer.Item::onPointerMove comes with event argument
+  return [e.x, e.y];
+</neft:func>
+
+<button neft:style="mouseArea" neft:style:onPointerMove="followMouse" />
+```
+
 			arguments: (_, args) -> args
 
 *View* globalObject.view
 ------------------------
 
+Global attribute which references to the current *XML* element `view` unit.
+
+This is *low-level API*.
+
+Using this attribute you can call other functions.
+
+```
+<neft:func name="add">
+  return arguments[0] + arguments[1];
+</neft:func>
+
+<neft:func name="test">
+  return "1 + 3 = " + view.funcs.add(1, 3);
+</neft:func>
+```
+
 			view: -> @
+
+[*Renderer.Item*] globalObject.item
+-----------------------------------
+
+Reference to the *low-level* `Renderer.Item` *API*.
+
+This attribute is available, only if it's a `Renderer.Item` signal.
+
+```
+<neft:func name="test">
+  return item.width * item.height;
+</neft:func>
+
+<rectangle neft:style="rectangle" neft:style:onPointerClicked="test" />
+```
+
+			item: (ctx) ->
+				if ctx instanceof Renderer.Item
+					ctx
 
 [*App.View.GlobalStorage*] globalObject.global
 ----------------------------------------------
+
+In most cases this attribute references to the `App.View.GlobalStorage` unless you render
+`view` in a custom way (not using `App View`).
+
+```
+<neft:func name="changePage">
+  global.uri.name = item.text;
+</neft:func>
+
+<button neft:style="enterName" neft:style:onPointerClicked="changePage" />
+```
 
 			global: -> @storage?.global
 
 [*Any*] globalObject.data
 -------------------------
 
+Just a shortcut for `get('data')`.
+
 			data: -> FuncGlobalFuncs.get.call @, 'data'
-
-[*Renderer.Item*] globalObject.item
------------------------------------
-
-			item: (ctx) ->
-				if ctx instanceof Renderer.Item
-					ctx
 
 		funcGlobalProps = Object.keys(FuncGlobalFuncs)
 		Array::push.apply funcGlobalProps, Object.keys(FuncGlobalGetters)
