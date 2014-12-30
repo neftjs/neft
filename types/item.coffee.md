@@ -3,10 +3,12 @@ Renderer.Item
 
 	'use strict'
 
-	expect = require 'expect'
+	assert = require 'asserts'
 	utils = require 'utils'
 	signal = require 'signal'
 	List = require 'list'
+
+	assert = assert.scope 'Renderer.Item'
 
 	{isArray} = Array
 
@@ -48,10 +50,10 @@ Renderer.Item
 				children = opts
 				opts = undefined
 
-			expect(@).toBe.any Item
-			expect(arguments.length).not().toBe.greaterThan 2
-			expect().defined(opts).toBe.simpleObject()
-			expect().defined(children).toBe.array()
+			assert.instanceOf @, Item, ' ctor ...'
+			assert.operator arguments.length, '<=', 2, ' ctor arguments ...'
+			assert.isDefined opts, ' ctor options argument ...' if opts?
+			asser.isArray children, ' ctor children argument ...' if children?
 
 			# custom properties
 			if opts?.properties?
@@ -107,7 +109,7 @@ Item::ready()
 			utils.defineProperty @, 'children', utils.ENUMERABLE, val
 			val
 		, (val) ->
-			expect(val).toBe.array()
+			assert.isArray val, '::children setter ...'
 			for item in val
 				val.parent = @
 			null
@@ -143,7 +145,7 @@ Item::ready()
 				old.children.popped? @, index
 
 			if val?
-				expect(val).toBe.any Item
+				assert.instanceOf val, Item, '::parent setter ...'
 				length = Array::push.call val.children, @
 				val.childrenChanged? val.children
 				val.children.inserted? @, length - 1
@@ -156,7 +158,7 @@ Item::ready()
 ### Item::visibleChanged(*Boolean* oldValue)
 
 		itemUtils.defineProperty @::, 'visible', Impl.setItemVisible, null, (_super) -> (val) ->
-			expect(val).toBe.boolean()
+			assert.isBoolean val, '::visible setter ...'
 			_super.call @, val
 
 *Boolean* Item::clip
@@ -165,7 +167,7 @@ Item::ready()
 ### Item::clipChanged(*Boolean* oldValue)
 
 		itemUtils.defineProperty @::, 'clip', Impl.setItemClip, null, (_super) -> (val) ->
-			expect(val).toBe.boolean()
+			assert.isBoolean val, '::clip setter ...'
 			_super.call @, val
 
 *Float* Item::width
@@ -174,7 +176,7 @@ Item::ready()
 ### Item::widthChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'width', Impl.setItemWidth, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::width setter ...'
 			_super.call @, val
 
 *Float* Item::height
@@ -183,7 +185,7 @@ Item::ready()
 ### Item::heightChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'height', Impl.setItemHeight, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::height setter ...'
 			_super.call @, val
 
 *Float* Item::x
@@ -192,7 +194,7 @@ Item::ready()
 ### Item::xChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'x', Impl.setItemX, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::x setter ...'
 			_super.call @, val
 
 *Float* Item::y
@@ -201,7 +203,7 @@ Item::ready()
 ### Item::yChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'y', Impl.setItemY, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::y setter ...'
 			_super.call @, val
 
 *Float* Item::z
@@ -210,7 +212,7 @@ Item::ready()
 ### Item::zChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'z', Impl.setItemZ, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::z setter ...'
 			_super.call @, val
 
 *Float* Item::scale
@@ -219,7 +221,7 @@ Item::ready()
 ### Item::scaleChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'scale', Impl.setItemScale, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::scale setter ...'
 			_super.call @, val
 
 *Float* Item::rotation
@@ -228,7 +230,7 @@ Item::ready()
 ### Item::rotationChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'rotation', Impl.setItemRotation, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::rotation setter ...'
 			_super.call @, val
 
 *Float* Item::opacity
@@ -237,7 +239,7 @@ Item::ready()
 ### Item::opacityChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'opacity', Impl.setItemOpacity, null, (_super) -> (val) ->
-			expect(val).toBe.float()
+			assert.isFloat val, '::opacity setter ...'
 			_super.call @, val
 
 		require('./item/state') Renderer, Impl, @, itemUtils
@@ -254,7 +256,7 @@ Item::ready()
 			_super.call @
 		), (_super) -> (val) ->
 			_super.call @, @margin
-			expect(val).toBe.simpleObject()
+			assert.isPlainObject val, '::margin setter ...'
 			utils.merge @margin, Margin.DATA
 			utils.merge @margin, val
 
@@ -270,7 +272,7 @@ Item::ready()
 			_super.call @
 		), (_super) -> (val) ->
 			_super.call @, @anchors
-			expect(val).toBe.simpleObject()
+			assert.isPlainObject val, '::anchors setter ...'
 			utils.merge @anchors, Anchors.DATA
 			utils.merge @anchors, val
 
