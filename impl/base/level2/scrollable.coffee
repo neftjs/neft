@@ -8,105 +8,42 @@ module.exports = (impl) ->
 	{Types} = impl
 	{Item, Rectangle} = Types
 
+	scrolling = false
+	resetScrolling = ->
+		scrolling = false
+	setScrolling = ->
+		scrolling = true
+		requestAnimationFrame resetScrolling
+
 	###
 	Scroll container by given x and y deltas
 	###
 	scroll = (item, x=0, y=0) ->
+		if scrolling
+			return;
+
 		{contentItem, globalScale} = item._impl
 
 		x /= globalScale
-		val = item.contentX - x
+		x = item.contentX - x
 		max = contentItem.width - item.width
-		val = Math.max(0, Math.min(max, val))
-		item.contentX = val
+		x = Math.max(0, Math.min(max, x))
 
 		y /= globalScale
-		val = item.contentY - y
+		y = item.contentY - y
 		max = contentItem.height - item.height
-		val = Math.max(0, Math.min(max, val))
-		item.contentY = val
+		y = Math.max(0, Math.min(max, y))
+
+		if item.contentX isnt x or item.contentY isnt y
+			item.contentX = x
+			item.contentY = y
+			setScrolling()
 
 	getItemGlobalScale = (item) ->
 		val = item.scale
 		while item = item.parent
 			val *= item.scale
 		val
-
-	# updateScroll = (item) ->
-		
-	# 	{x, y} = contentItem
-
-	# 	# x
-	# 	val = Math.min(0, Math.max(contentItem.width, x))
-	# 	if val isnt x
-	# 		item.contentX = val
-
-	# 	# y
-	# 	val = Math.min(0, Math.max(contentItem.height, y))
-	# 	if val isnt y
-	# 		item.contentY = val
-
-	###
-	Recalculate current content position and size
-	###
-	# updateContent = (id) ->
-	# 	item = items[id]
-	# 	{content} = item
-
-	# 	children = impl.getItemChildren item.container
-	# 	minX = minY = Infinity
-	# 	maxWidth = maxHeight = 0
-
-	# 	for child in children
-	# 		minX = Math.min minX, impl.getItemX(child)
-	# 		minY = Math.min minY, impl.getItemY(child)
-	# 		maxWidth = Math.max maxWidth, impl.getItemWidth(child)
-	# 		maxHeight = Math.max maxHeight, impl.getItemHeight(child)
-
-	# 	maxX = - maxWidth - minX + impl.getItemWidth(id)
-	# 	maxY = - maxHeight - minY + impl.getItemHeight(id)
-
-	# 	content[0] = 0
-	# 	content[1] = 0
-	# 	content[2] = maxX
-	# 	content[3] = maxY
-
-	###
-	Update Scrollable content on the child appended or removed
-	###
-	# impl.setItemParent = do (_super = impl.setItemParent) -> (id, val) ->
-	# 	parent = items[val]
-
-	# 	old = impl.getItemParent id
-	# 	oldItem = items[old]
-
-	# 	# update old
-	# 	if old and oldItem.type is 'Scrollable' and oldItem.container
-	# 		updateContent old
-	# 		updateScroll oldItem
-
-	# 	_super id, val
-
-	# 	# update new
-	# 	if parent and parent.type is 'Scrollable' and parent.container
-	# 		updateContent val
-	# 		updateScroll parent
-
-	# overrideSetter = (methodName) ->
-	# 	impl[methodName] = do (_super = impl[methodName]) -> (id, val) ->
-	# 		_super id, val
-
-	# 		parentId = impl.getItemParent id
-	# 		parent = items[parentId]
-	# 		if parent?.type is 'Scrollable' and parent.container isnt id
-	# 			updateContent parentId
-	# 			updateScroll parent
-
-	# overrideSetter 'setItemX'
-	# overrideSetter 'setItemY'
-	# overrideSetter 'setItemWidth'
-	# overrideSetter 'setItemHeight'
-	# overrideSetter 'setItemVisible'
 
 	createContinuous = (item, prop) ->
 		velocity = 0

@@ -69,7 +69,7 @@ mouseCoordsArgs = do ->
 SIGNALS_ARGS =
 	'pointerWheel': do ->
 		REQUIRED_CHECKS = 200
-		NORMALIZED_VALUE = 120
+		NORMALIZED_VALUE = 260
 
 		checks = 0
 		lastX = lastY = 0
@@ -126,6 +126,7 @@ SIGNALS_ARGS =
 					if absX isnt lastX or absY isnt lastY
 						# always use continuous wheel
 						SIGNALS_ARGS.pointerWheel = continuousWheel
+						return continuousWheel e
 
 				# save current deltas to compare it in the next check
 				lastX = absX
@@ -134,9 +135,19 @@ SIGNALS_ARGS =
 			else
 				# values don't change, always use normalized wheel
 				SIGNALS_ARGS.pointerWheel = normalizedWheel
+				return normalizedWheel e
 
 			# use normalized wheel temporary
-			normalizedWheel e
+			event = normalizedWheel e
+
+			# smooth first events
+			if checks < 4
+				event = normalizedWheel e
+				event.x /= 10
+				event.y /= 10
+				event
+			else
+				event
 
 	'pointerPressed': (e) ->
 		if isTouch
@@ -144,6 +155,9 @@ SIGNALS_ARGS =
 
 		mouseCoordsArgs e
 	'pointerReleased': mouseCoordsArgs
+	'pointerClicked': mouseCoordsArgs
+	'pointerEntered': mouseCoordsArgs
+	'pointerExited': mouseCoordsArgs
 	'pointerMove': (e) ->
 		if isTouch
 			e.preventDefault()
