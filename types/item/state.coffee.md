@@ -1,6 +1,3 @@
-Item.States
-===========
-
 	'use strict'
 
 	utils = require 'utils'
@@ -74,7 +71,7 @@ Item.States
 *List* Item::state
 ------------------
 
-### Item::stateChanged(*List* list)
+### *Signal* Item::stateChanged(*List* list)
 
 		itemUtils.defineProperty Item::, 'state', null, ((_super) -> ->
 			if @_data.state is null
@@ -108,8 +105,8 @@ Item.States
 
 			null
 
-*List<Renderer.State>* Item::states
------------------------------------
+*Object<String, Renderer.State>* Item::states
+---------------------------------------------
 
 		utils.defineProperty Item::, 'states', utils.ENUMERABLE, ->
 			val =

@@ -31,7 +31,7 @@ Renderer.Scrollable
 [*Renderer.Item*] Scrollable::contentItem
 -----------------------------------------
 
-### Scrollable::contentItemChanged([*Renderer.Item* oldValue])
+### *Signal* Scrollable::contentItemChanged([*Renderer.Item* oldValue])
 
 		itemUtils.defineProperty @::, 'contentItem', Impl.setScrollableContentItem, null, (_super) -> (val) ->
 			expect(val).toBe.any Renderer.Item
@@ -43,7 +43,7 @@ Renderer.Scrollable
 *Float* Scrollable::contentX
 ----------------------------
 
-### Scrollable::contentXChanged(*Float* oldValue)
+### *Signal* Scrollable::contentXChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'contentX', Impl.setScrollableContentX, null, (_super) -> (val) ->
 			expect(val).toBe.float()
@@ -52,7 +52,7 @@ Renderer.Scrollable
 *Float* Scrollable::contentY
 ----------------------------
 
-### Scrollable::contentYChanged(*Float* oldValue)
+### *Signal* Scrollable::contentYChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'contentY', Impl.setScrollableContentY, null, (_super) -> (val) ->
 			expect(val).toBe.float()

@@ -8,8 +8,8 @@ Renderer.Grid
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Grid* Grid([*Object* options, *Array* children]) : Renderer.Item
------------------------------------------------------------------
+*Grid* Grid([*Object* options, *Array* children]) : *Renderer.Item*
+-------------------------------------------------------------------
 
 		class Grid extends Renderer.Item
 			@__name__ = 'Grid'
@@ -22,7 +22,7 @@ Renderer.Grid
 *Integer* Grid::columns
 -----------------------
 
-### Grid::columnsChanged(*Integer* oldValue)
+### *Signal* Grid::columnsChanged(*Integer* oldValue)
 
 			itemUtils.defineProperty @::, 'columns', Impl.setGridColumns, null, (_super) -> (val) ->
 				expect(val).toBe.integer()
@@ -32,7 +32,7 @@ Renderer.Grid
 *Integer* Grid::rows
 --------------------
 
-### Grid::rowsChanged(*Integer* oldValue)
+### *Signal* Grid::rowsChanged(*Integer* oldValue)
 
 			itemUtils.defineProperty @::, 'rows', Impl.setGridRows, null, (_super) -> (val) ->
 				expect(val).toBe.integer()
@@ -75,7 +75,7 @@ Renderer.Grid
 *Float* Spacing::column
 -----------------------
 
-### Spacing::columnChanged(*Float* oldValue)
+### *Signal* Spacing::columnChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'column', Impl.setGridColumnSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
@@ -84,7 +84,7 @@ Renderer.Grid
 *Float* Spacing::row
 --------------------
 
-### Spacing::rowChanged(*Float* oldValue)
+### *Signal* Spacing::rowChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'row', Impl.setGridRowSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()

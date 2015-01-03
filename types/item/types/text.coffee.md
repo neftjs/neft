@@ -12,8 +12,8 @@ Renderer.Text
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Text* Text([*Object* options, *Array* children]) : Renderer.Item
------------------------------------------------------------------
+*Text* Text([*Object* options, *Array* children]) : *Renderer.Item*
+-------------------------------------------------------------------
 
 		class Text extends Renderer.Item
 			@__name__ = 'Text'
@@ -27,25 +27,25 @@ Renderer.Text
 *String* Text::text
 -------------------
 
-### Text::textChanged(*String* oldValue)
+### *Signal* Text::textChanged(*String* oldValue)
 
 			itemUtils.defineProperty @::, 'text', Impl.setText, null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
 
-*String* Text::color
---------------------
+*String* Text::color = 'black'
+------------------------------
 
-### Text::colorChanged(*String* oldValue)
+### *Signal* Text::colorChanged(*String* oldValue)
 
 			itemUtils.defineProperty @::, 'color', Impl.setTextColor, null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
 
-*Float* Text::lineHeight
-------------------------
+*Float* Text::lineHeight = 1
+----------------------------
 
-### Text::lineHeightChanged(*Float* oldValue)
+### *Signal* Text::lineHeightChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'lineHeight', Impl.setTextLineHeight, null, (_super) -> (val) ->
 				expect(val).toBe.truthy().float()
@@ -54,7 +54,7 @@ Renderer.Text
 *Font* Text::font
 -----------------
 
-### Text::fontChanged(*Font* font)
+### *Signal* Text::fontChanged(*Font* font)
 
 			Renderer.State.supportObjectProperty 'font'
 			itemUtils.defineProperty @::, 'font', null, ((_super) -> ->
@@ -97,7 +97,7 @@ Renderer.Text
 *String* Font::family = 'sans-serif'
 ------------------------------------
 
-### Font::familyChanged(*String* oldValue)
+### *Signal* Font::familyChanged(*String* oldValue)
 
 			`//<development>`
 			familyLogs = {}
@@ -117,7 +117,7 @@ Renderer.Text
 *Float* Font::pixelSize = 14
 ----------------------------
 
-### Font::pixelSizeChanged(*String* oldValue)
+### *Signal* Font::pixelSizeChanged(*String* oldValue)
 
 			itemUtils.defineProperty @::, 'pixelSize', Impl.setTextFontPixelSize, null, (_super) -> (val) ->
 				expect(val).toBe.truthy().float()
@@ -127,7 +127,7 @@ Renderer.Text
 *Float* Font::weight = 0.4
 --------------------------
 
-### Font::weightChanged(*Float* oldValue)
+### *Signal* Font::weightChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'weight', Impl.setTextFontWeight, null, (_super) -> (val) ->
 				expect(val).toBe.float()
@@ -136,20 +136,20 @@ Renderer.Text
 				_super.call @, val
 				@_item.fontChanged? @
 
-*Float* Font::wordSpacing
--------------------------
+*Float* Font::wordSpacing = 0
+-----------------------------
 
-### Font::wordSpacingChanged(*Float* oldValue)
+### *Signal* Font::wordSpacingChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'wordSpacing', Impl.setTextFontWordSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
 				_super.call @, val
 				@_item.fontChanged? @
 
-*Float* Font::letterSpacing
----------------------------
+*Float* Font::letterSpacing = 0
+-------------------------------
 
-### Font::letterSpacingChanged(*Float* oldValue)
+### *Signal* Font::letterSpacingChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'letterSpacing', Impl.setTextFontLetterSpacing, null, (_super) -> (val) ->
 				expect(val).toBe.float()
@@ -159,7 +159,7 @@ Renderer.Text
 *Boolean* Font::italic = false
 ------------------------------
 
-### Font::italicChanged(*Boolean* oldValue)
+### *Signal* Font::italicChanged(*Boolean* oldValue)
 
 			itemUtils.defineProperty @::, 'italic', Impl.setTextFontItalic, null, (_super) -> (val) ->
 				expect(val).toBe.boolean()

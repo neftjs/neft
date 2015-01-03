@@ -6,8 +6,18 @@ Renderer.Column
 	expect = require 'expect'
 	utils = require 'utils'
 
-*Column* Column([*Object* options, *Array* children]) : Renderer.Item
----------------------------------------------------------------------
+*Column* Column([*Object* options, *Array* children]) : *Renderer.Item*
+-----------------------------------------------------------------------
+
+```nml,render
+Column {
+\  spacing: 5
+\
+\  Rectangle { color: 'blue'; width: 50; height: 50; }
+\  Rectangle { color: 'green'; width: 20; height: 50; }
+\  Rectangle { color: 'red'; width: 50; height: 20; }
+}
+```
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
 		@__name__ = 'Column'
@@ -19,7 +29,7 @@ Renderer.Column
 *Float* Column::spacing
 -----------------------
 
-### Column::spacingChanged(*Float* oldValue)
+### *Signal* Column::spacingChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'spacing', Impl.setColumnSpacing, null, (_super) -> (val) ->
 			expect(val).toBe.float()

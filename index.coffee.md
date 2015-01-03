@@ -9,6 +9,12 @@ this module should define how to show and interact with elements.
 Basic class used in this module is `Renderer.Item`.
 It's a base for everything which can be rendered on the screen.
 
+```nml,render
+AppStructure {
+	active: 'renderer'
+}
+```
+
 	'use strict'
 
 	utils = require 'utils'

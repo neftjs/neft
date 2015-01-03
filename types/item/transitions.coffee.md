@@ -10,8 +10,8 @@ Item.Transitions
 	module.exports = (Renderer) -> class Transitions extends List
 		@__name__ = 'Transitions'
 
-*Transitions* Transitions(*Renderer.Item* item) @low-level
-----------------------------------------------------------
+*Transitions* Transitions(*Renderer.Item* item) : *List*
+--------------------------------------------------------
 
 		constructor: (item) ->
 			expect(item).toBe.any Renderer.Item

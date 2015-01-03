@@ -1,9 +1,11 @@
 Renderer.Item
 =============
 
+@category styles
+
 	'use strict'
 
-	assert = require 'asserts'
+	assert = require 'assert'
 	utils = require 'utils'
 	signal = require 'signal'
 	List = require 'list'
@@ -15,9 +17,6 @@ Renderer.Item
 	module.exports = (Renderer, Impl, itemUtils) -> class Item
 		@__name__ = 'Item'
 		@__path__ = 'Renderer.Item'
-
-		@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
-		            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
 		Margin = require('./item/margin') Renderer, Impl, itemUtils
 		Anchors = require('./item/anchors') Renderer, Impl, itemUtils
@@ -50,10 +49,10 @@ Renderer.Item
 				children = opts
 				opts = undefined
 
-			assert.instanceOf @, Item, ' ctor ...'
-			assert.operator arguments.length, '<=', 2, ' ctor arguments ...'
-			assert.isDefined opts, ' ctor options argument ...' if opts?
-			asser.isArray children, ' ctor children argument ...' if children?
+			assert.instanceOf @, Item, 'ctor ...'
+			assert.operator arguments.length, '<=', 2, 'ctor arguments ...'
+			assert.isDefined opts, 'ctor options argument ...' if opts?
+			asser.isArray children, 'ctor children argument ...' if children?
 
 			# custom properties
 			if opts?.properties?
@@ -85,8 +84,27 @@ Renderer.Item
 				for child in children
 					child.parent = @
 
-Item::ready()
--------------
+*Signal* Item::ready()
+----------------------
+
+This signal is called when the *Renderer.Item* is ready, that is, all
+properties have been set and it's ready to use.
+
+This signal is asynchronous.
+
+```
+Item {
+\  width: 200
+\
+\  Item {
+\  	width: parent.width / 2
+\  	onReady: {
+\  	  console.log(this.width);
+\  	  // 100
+\  	}
+\  }
+}
+```
 
 		readyLazySignal = signal.createLazy @::, 'ready'
 
@@ -95,6 +113,30 @@ Item::ready()
 
 		onLazySignalInitialized = (item, signalName) ->
 			Impl.attachItemSignal.call item, signalName, item[signalName]
+
+*Signal* Item::pointerClicked(*Object* event)
+---------------------------------------------
+
+*Signal* Item::pointerPressed(*Object* event)
+---------------------------------------------
+
+*Signal* Item::pointerReleased(*Object* event)
+----------------------------------------------
+
+*Signal* Item::pointerEntered(*Object* event)
+---------------------------------------------
+
+*Signal* Item::pointerExited(*Object* event)
+--------------------------------------------
+
+*Signal* Item::pointerWheel(*Object* event)
+-------------------------------------------
+
+*Signal* Item::pointerMove(*Object* event)
+------------------------------------------
+
+		@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
+		            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
 
 		for signalName in Item.SIGNALS
 			lazySignal = signal.createLazy @::, signalName
@@ -114,24 +156,24 @@ Item::ready()
 				val.parent = @
 			null
 
-### Item::childrenChanged(*Object* children)
+### *Signal* Item::childrenChanged(*Object* children)
 
 		signal.createLazy @::, 'childrenChanged'
 
 		ChildrenObject = {}
 
-### Item::children::inserted(*Item* child, *Integer* index)
+### *Signal* Item::children::inserted(*Item* child, *Integer* index)
 
 		signal.createLazy ChildrenObject, 'inserted'
 
-### Item::children::popped(*Item* child, *Integer* index)
+### *Signal* Item::children::popped(*Item* child, *Integer* index)
 
 		signal.createLazy ChildrenObject, 'popped'
 
 *[Item]* Item::parent
 ---------------------
 
-### Item::parentChanged(*Item* oldParent)
+### *Signal* Item::parentChanged(*Item* oldParent)
 
 		itemUtils.defineProperty @::, 'parent', Impl.setItemParent, null, (_super) -> (val) ->
 			old = @parent
@@ -155,7 +197,33 @@ Item::ready()
 *Boolean* Item::visible
 -----------------------
 
-### Item::visibleChanged(*Boolean* oldValue)
+Determines whether an item is visible or not.
+
+```nml,render
+Item {
+\  width: 100
+\  height: 100
+\
+\  onPointerClicked: {
+\  	rect.visible = !rect.visible;
+\  	text.text = rect.visible ? "Click to hide" : "Click to show";
+\  }
+\
+\  Rectangle {
+\  	id: rect
+\  	anchors.fill: parent
+\  	color: blue
+\  }
+\
+\  Text {
+\  	id: text
+\  	text: "Click to hide"
+\  	anchors.centerIn: parent
+\  }
+}
+```
+
+### *Signal* Item::visibleChanged(*Boolean* oldValue)
 
 		itemUtils.defineProperty @::, 'visible', Impl.setItemVisible, null, (_super) -> (val) ->
 			assert.isBoolean val, '::visible setter ...'
@@ -164,7 +232,7 @@ Item::ready()
 *Boolean* Item::clip
 --------------------
 
-### Item::clipChanged(*Boolean* oldValue)
+### *Signal* Item::clipChanged(*Boolean* oldValue)
 
 		itemUtils.defineProperty @::, 'clip', Impl.setItemClip, null, (_super) -> (val) ->
 			assert.isBoolean val, '::clip setter ...'
@@ -173,7 +241,7 @@ Item::ready()
 *Float* Item::width
 -------------------
 
-### Item::widthChanged(*Float* oldValue)
+### *Signal* Item::widthChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'width', Impl.setItemWidth, null, (_super) -> (val) ->
 			assert.isFloat val, '::width setter ...'
@@ -182,7 +250,7 @@ Item::ready()
 *Float* Item::height
 --------------------
 
-### Item::heightChanged(*Float* oldValue)
+### *Signal* Item::heightChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'height', Impl.setItemHeight, null, (_super) -> (val) ->
 			assert.isFloat val, '::height setter ...'
@@ -191,7 +259,7 @@ Item::ready()
 *Float* Item::x
 ---------------
 
-### Item::xChanged(*Float* oldValue)
+### *Signal* Item::xChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'x', Impl.setItemX, null, (_super) -> (val) ->
 			assert.isFloat val, '::x setter ...'
@@ -200,7 +268,7 @@ Item::ready()
 *Float* Item::y
 ---------------
 
-### Item::yChanged(*Float* oldValue)
+### *Signal* Item::yChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'y', Impl.setItemY, null, (_super) -> (val) ->
 			assert.isFloat val, '::y setter ...'
@@ -209,7 +277,7 @@ Item::ready()
 *Float* Item::z
 ---------------
 
-### Item::zChanged(*Float* oldValue)
+### *Signal* Item::zChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'z', Impl.setItemZ, null, (_super) -> (val) ->
 			assert.isFloat val, '::z setter ...'
@@ -218,7 +286,7 @@ Item::ready()
 *Float* Item::scale
 -------------------
 
-### Item::scaleChanged(*Float* oldValue)
+### *Signal* Item::scaleChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'scale', Impl.setItemScale, null, (_super) -> (val) ->
 			assert.isFloat val, '::scale setter ...'
@@ -227,7 +295,7 @@ Item::ready()
 *Float* Item::rotation
 ----------------------
 
-### Item::rotationChanged(*Float* oldValue)
+### *Signal* Item::rotationChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'rotation', Impl.setItemRotation, null, (_super) -> (val) ->
 			assert.isFloat val, '::rotation setter ...'
@@ -236,7 +304,7 @@ Item::ready()
 *Float* Item::opacity
 ---------------------
 
-### Item::opacityChanged(*Float* oldValue)
+### *Signal* Item::opacityChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'opacity', Impl.setItemOpacity, null, (_super) -> (val) ->
 			assert.isFloat val, '::opacity setter ...'
@@ -247,7 +315,7 @@ Item::ready()
 *Item.Margin* Item::margin
 --------------------------
 
-### Item::marginChanged(*Item.Margin* margin)
+### *Signal* Item::marginChanged(*Item.Margin* margin)
 
 		Renderer.State.supportObjectProperty 'margin'
 		itemUtils.defineProperty @::, 'margin', null, ((_super) -> ->
@@ -263,7 +331,7 @@ Item::ready()
 *Item.Anchors* Item::anchors
 ----------------------------
 
-### Item::anchorsChanged(*Item.Anchors* anchors)
+### *Signal* Item::anchorsChanged(*Item.Anchors* anchors)
 
 		Renderer.State.supportObjectProperty 'anchors'
 		itemUtils.defineProperty @::, 'anchors', null, ((_super) -> ->
@@ -304,10 +372,12 @@ Item::ready()
 Item::clear()
 -------------
 
+Removes all children from the node.
+
 		clear: ->
 			while child = @children[0]
 				child.parent = null
-			@
+			return
 
 *Item* Item::clone()
 --------------------

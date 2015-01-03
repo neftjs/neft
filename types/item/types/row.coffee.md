@@ -6,8 +6,18 @@ Renderer.Row
 	expect = require 'expect'
 	utils = require 'utils'
 
-*Row* Row([*Object* options, *Array* children]) : Renderer.Item
----------------------------------------------------------------
+*Row* Row([*Object* options, *Array* children]) : *Renderer.Item*
+-----------------------------------------------------------------
+
+```nml,render
+Row {
+\  spacing: 5
+\
+\  Rectangle { color: 'blue'; width: 50; height: 50; }
+\  Rectangle { color: 'green'; width: 20; height: 50; }
+\  Rectangle { color: 'red'; width: 50; height: 20; }
+}
+```
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Row extends Renderer.Item
 		@__name__ = 'Row'
@@ -19,7 +29,7 @@ Renderer.Row
 *Float* Row::spacing
 --------------------
 
-### Row::spacingChanged(*Float* oldValue)
+### *Signal* Row::spacingChanged(*Float* oldValue)
 
 		itemUtils.defineProperty @::, 'spacing', Impl.setRowSpacing, null, (_super) -> (val) ->
 			expect(val).toBe.float()

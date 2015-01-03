@@ -8,8 +8,21 @@ Renderer.Rectangle
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Rectangle* Rectangle([*Object* options, *Array* children]) : Renderer.Item
----------------------------------------------------------------------------
+*Rectangle* Rectangle([*Object* options, *Array* children]) : *Renderer.Item*
+-----------------------------------------------------------------------------
+
+*Renderer.Item* represents filled rectangle with an optional border and corner radius.
+
+```nml,render
+Rectangle {
+  width: 100
+  height: 100
+  color: 'blue'
+  border.color: 'black'
+  border.width: 5
+  radius: 10
+}
+```
 
 		class Rectangle extends Renderer.Item
 			@__name__ = 'Rectangle'
@@ -19,19 +32,19 @@ Renderer.Rectangle
 				color: 'transparent'
 				radius: 0
 
-*String* Rectangle::color
--------------------------
+*String* Rectangle::color = 'transparent'
+-----------------------------------------
 
-### Rectangle::colorChanged(*String* oldValue)
+### *Signal* Rectangle::colorChanged(*String* oldValue)
 
 			itemUtils.defineProperty @::, 'color', Impl.setRectangleColor, null, (_super) -> (val) ->
 				expect(val).toBe.string()
 				_super.call @, val
 
-*Float* Rectangle::radius
--------------------------
+*Float* Rectangle::radius = 0
+-----------------------------
 
-### Rectangle::radiusChanged(*Float* oldValue)
+### *Signal* Rectangle::radiusChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'radius', Impl.setRectangleRadius, null, (_super) -> (val) ->
 				expect(val).toBe.float()
@@ -41,7 +54,7 @@ Renderer.Rectangle
 *Border* Rectangle::border
 --------------------------
 
-### Rectangle::borderChanged(*Border* border)
+### *Signal* Rectangle::borderChanged(*Border* border)
 
 			Renderer.State.supportObjectProperty 'border'
 			itemUtils.defineProperty @::, 'border', null, ((_super) -> ->
@@ -62,6 +75,8 @@ Renderer.Rectangle
 *Border* Border()
 -----------------
 
+Internal class used in *Rectangle::border* attribute.
+
 		class Border
 			@__name__ = 'Border'
 
@@ -77,10 +92,10 @@ Renderer.Rectangle
 				data = Object.create Border.DATA
 				utils.defineProperty @, '_data', null, data
 
-*Float* Border::width
----------------------
+*Float* Border::width = 0
+-------------------------
 
-### Border::widthChanged(*Float* oldValue)
+### *Signal* Border::widthChanged(*Float* oldValue)
 
 			itemUtils.defineProperty @::, 'width', Impl.setRectangleBorderWidth, null, (_super) -> (val) ->
 				expect(val).toBe.float()
@@ -88,10 +103,10 @@ Renderer.Rectangle
 				_super.call @, val
 				@_item.borderChanged? @
 
-*String* Border::color
-----------------------
+*String* Border::color = 'transparent'
+--------------------------------------
 
-### Border::colorChanged(*String* oldValue)
+### *Signal* Border::colorChanged(*String* oldValue)
 
 			itemUtils.defineProperty @::, 'color', Impl.setRectangleBorderColor, null, (_super) -> (val) ->
 				expect(val).toBe.string()

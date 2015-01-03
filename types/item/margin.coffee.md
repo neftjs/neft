@@ -19,8 +19,8 @@ Item.Margin
 				right: 0
 				bottom: 0
 
-*Margin* Margin(*Renderer.Item* item) @low-level
-------------------------------------------------
+*Margin* Margin(*Renderer.Item* item)
+-------------------------------------
 
 			constructor: (item) ->
 				expect(item).toBe.any Renderer.Item
@@ -47,27 +47,27 @@ Item.Margin
 *Float* Margin::left
 --------------------
 
-### Margin::leftChanged(*Float* oldValue)
+### *Signal* Margin::leftChanged(*Float* oldValue)
 
 			createMarginProp 'left'
 
 *Float* Margin::top
---------------------
+-------------------
 
-### Margin::topChanged(*Float* oldValue)
+### *Signal* Margin::topChanged(*Float* oldValue)
 
 			createMarginProp 'top'
 
 *Float* Margin::right
---------------------
+---------------------
 
-### Margin::rightChanged(*Float* oldValue)
+### *Signal* Margin::rightChanged(*Float* oldValue)
 
 			createMarginProp 'right'
 
 *Float* Margin::bottom
---------------------
+----------------------
 
-### Margin::bottomChanged(*Float* oldValue)
+### *Signal* Margin::bottomChanged(*Float* oldValue)
 
 			createMarginProp 'bottom'
