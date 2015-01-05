@@ -1,6 +1,8 @@
 Log
 ===
 
+@requires utils
+
 Simply to use and good looking logger used to log `info`, `warn`,
 `error` messages and functions processing times.
 
@@ -11,7 +13,7 @@ All loggs are removed for the *release* mode.
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'asserts'
+	assert = require 'assert'
 
 	{bind} = Function
 	{isArray} = Array
