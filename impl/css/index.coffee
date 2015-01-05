@@ -3,43 +3,48 @@
 utils = require 'utils'
 
 SHEET = "
-* {
+#styles * {
 	margin: 0;
 	padding: 0;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; 
 	-webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; 
 	outline: none !important;
 }
-body {
+#styles {
+	height: 100%;
 	overflow: hidden;
 }
 html, body {
 	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 #body {
 	position: absolute;
 	z-index: 0;
 }
-div, span, canvas, img {
+#styles div, #styles span, #styles canvas, #styles img {
 	position: absolute;
 }
-span {
+#styles span {
 	-ms-word-break: break-all;
 	word-break: break-all;
 	word-break: break-word;
 	word-wrap: break-word;
 }
-span * {
+#styles span * {
+	display: inline;
 	font-weight: inherit;
+	font-size: inherit;
 }
-span b, span strong {
+#styles span b, #styles span strong {
 	font-weight: bolder;
 }
-a {
+#styles a {
 	text-decoration: inherit;
 	color: inherit;
 }
-code {
+#styles code {
 	white-space: pre;
 }
 "
@@ -48,6 +53,7 @@ isTouch = 'ontouchstart' of window
 
 # body
 body = document.createElement 'div'
+body.setAttribute 'id', 'styles'
 window.addEventListener 'load', ->
 	document.body.appendChild body
 
@@ -73,7 +79,7 @@ module.exports = (impl) ->
 		item.width = innerWidth
 		item.height = innerHeight
 
-	window.addEventListener 'scroll', ->
+	body.addEventListener 'scroll', ->
 		window.scrollTo 0, 0
 
 	Types:

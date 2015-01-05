@@ -52,7 +52,7 @@ Renderer.Item
 			assert.instanceOf @, Item, 'ctor ...'
 			assert.operator arguments.length, '<=', 2, 'ctor arguments ...'
 			assert.isDefined opts, 'ctor options argument ...' if opts?
-			asser.isArray children, 'ctor children argument ...' if children?
+			assert.isArray children, 'ctor children argument ...' if children?
 
 			# custom properties
 			if opts?.properties?
@@ -323,10 +323,17 @@ Item {
 				@_data.margin = new Margin(@)
 			_super.call @
 		), (_super) -> (val) ->
-			_super.call @, @margin
-			assert.isPlainObject val, '::margin setter ...'
-			utils.merge @margin, Margin.DATA
-			utils.merge @margin, val
+			{margin} = @
+			_super.call @, margin
+			if typeof val is 'number'
+				margin.left = val
+				margin.top = val
+				margin.right = val
+				margin.bottom = val
+			else
+				assert.isPlainObject val, '::margin setter ...'
+				utils.merge margin, Margin.DATA
+				utils.merge margin, val
 
 *Item.Anchors* Item::anchors
 ----------------------------

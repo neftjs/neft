@@ -208,7 +208,8 @@ module.exports = (impl) ->
 				connection.destroy()
 
 			# remove from the list
-			@obj._impl.bindings[@uniqueProp] = null
+			objImpl = @obj._impl or @item._impl
+			objImpl.bindings[@uniqueProp] = null
 
 			# disconnect listener
 			signalName = "#{@prop}Changed"

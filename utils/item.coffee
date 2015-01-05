@@ -21,8 +21,8 @@ module.exports = (Renderer, Impl) -> exports =
 
 		propSetter = (val) ->
 			oldVal = @_data[propName]
+			@_data[propName] = val
 			if oldVal isnt val
-				@_data[propName] = val
 				@[signalName]? oldVal
 
 			# TODO: why calling on only changes doesn't work?
@@ -63,7 +63,7 @@ module.exports = (Renderer, Impl) -> exports =
 				setFunc.call @, val
 
 	setProperty: (item, key, val) ->
-		if typeof val is 'function'
+		if typeof val is 'function' and signal.isHandlerName(key)
 			return item[key].connect val
 
 		if val? and typeof val is 'object' and key of item.constructor.prototype and not Array.isArray(val.binding) and not(val instanceof Renderer.Item) 
@@ -78,7 +78,7 @@ module.exports = (Renderer, Impl) -> exports =
 				unless key of item
 					throw "Unexpected property `#{key}`"
 
-				if typeof val is 'function'
+				if typeof val is 'function' and signal.isHandlerName(key)
 					continue
 
 				exports.setProperty item, key, val
@@ -88,5 +88,5 @@ module.exports = (Renderer, Impl) -> exports =
 				unless key of item
 					throw "Unexpected property `#{key}`"
 
-				if typeof val is 'function'
+				if typeof val is 'function' and signal.isHandlerName(key)
 					item[key].connect val

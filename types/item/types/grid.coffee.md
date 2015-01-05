@@ -25,7 +25,6 @@ Renderer.Grid
 ### *Signal* Grid::columnsChanged(*Integer* oldValue)
 
 			itemUtils.defineProperty @::, 'columns', Impl.setGridColumns, null, (_super) -> (val) ->
-				expect(val).toBe.integer()
 				expect(val).toBe.greaterThan 0
 				_super.call @, val
 
@@ -35,7 +34,6 @@ Renderer.Grid
 ### *Signal* Grid::rowsChanged(*Integer* oldValue)
 
 			itemUtils.defineProperty @::, 'rows', Impl.setGridRows, null, (_super) -> (val) ->
-				expect(val).toBe.integer()
 				expect(val).toBe.greaterThan 0
 				_super.call @, val
 

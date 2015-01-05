@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'utils'
+signal = require 'signal'
 
 # get transform CSS property name
 transformProp = do ->
@@ -318,18 +319,21 @@ module.exports = (impl) ->
 	attachItemSignal: (name, func) ->
 		{elem} = @_impl
 
-		signal = SIGNALS[name]?(elem, func) or SIGNALS[name]
+		signalName = SIGNALS[name]?(elem, func) or SIGNALS[name]
 
 		# break if event is not supported (e.g. some events on touch devices)
-		unless signal?
+		unless signalName?
 			return
 
 		customFunc = (e) ->
 			arg = SIGNALS_ARGS[name]? e
-			func arg
+			result = func arg
+			if result is signal.STOP_PROPAGATION
+				e.stopPropagation()
+			result
 
-		if typeof signal is 'string'
-			elem.addEventListener signal, customFunc
+		if typeof signalName is 'string'
+			elem.addEventListener signalName, customFunc
 
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]

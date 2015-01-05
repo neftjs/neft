@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'utils'
+signal = require 'signal'
 
 WHEEL_DIVISOR = 8
 
@@ -8,20 +9,10 @@ module.exports = (impl) ->
 	{Types} = impl
 	{Item, Rectangle} = Types
 
-	scrolling = false
-	resetScrolling = ->
-		scrolling = false
-	setScrolling = ->
-		scrolling = true
-		requestAnimationFrame resetScrolling
-
 	###
 	Scroll container by given x and y deltas
 	###
 	scroll = (item, x=0, y=0) ->
-		if scrolling
-			return;
-
 		{contentItem, globalScale} = item._impl
 
 		x /= globalScale
@@ -37,7 +28,7 @@ module.exports = (impl) ->
 		if item.contentX isnt x or item.contentY isnt y
 			item.contentX = x
 			item.contentY = y
-			setScrolling()
+			signal.STOP_PROPAGATION
 
 	getItemGlobalScale = (item) ->
 		val = item.scale
@@ -99,7 +90,7 @@ module.exports = (impl) ->
 			dy = e.y - y
 			scroll item, dx, dy
 
-		impl.attachItemSignal.call item, 'pointerPressed', (e) ->
+		item.onPointerPressed (e) ->
 			focus = true
 
 			item._impl.globalScale = getItemGlobalScale item
@@ -109,7 +100,7 @@ module.exports = (impl) ->
 			x = e.x; y = e.y
 
 		listenOnWindowSignals = ->
-			impl.attachItemSignal.call impl.window, 'pointerReleased', (e) ->
+			impl.window.onPointerReleased (e) ->
 				return unless focus
 				focus = false
 
@@ -120,15 +111,15 @@ module.exports = (impl) ->
 
 				x = y = 0
 
-			impl.attachItemSignal.call impl.window, 'pointerMove', (e) ->
+			impl.window.onPointerMove (e) ->
 				return unless focus
-
-				moveMovement e
 
 				horizontalContinuous.update e.x - x
 				verticalContinuous.update e.y - y
 
 				x = e.x; y = e.y
+
+				moveMovement e
 
 		if impl.window?
 			listenOnWindowSignals()
@@ -136,7 +127,7 @@ module.exports = (impl) ->
 			impl.onWindowReady listenOnWindowSignals
 
 	useWheel = (item) ->
-		impl.attachItemSignal.call item, 'pointerWheel', (e) ->
+		item.onPointerWheel (e) ->
 			item._impl.globalScale = getItemGlobalScale item
 			x = e.x / WHEEL_DIVISOR
 			y = e.y / WHEEL_DIVISOR

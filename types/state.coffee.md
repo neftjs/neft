@@ -18,6 +18,10 @@ Renderer.State
 			, (val) ->
 				utils.defineProperty @, propName, utils.ENUMERABLE, val
 
+		constructor: (opts) ->
+			if opts?
+				utils.merge @, opts
+
 		update: (item) ->
 			expect(item).toBe.any Renderer.Item
 

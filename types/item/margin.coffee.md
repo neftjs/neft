@@ -71,3 +71,9 @@ Item.Margin
 ### *Signal* Margin::bottomChanged(*Float* oldValue)
 
 			createMarginProp 'bottom'
+
+*Float* Margin::valueOf()
+--------------------------
+
+			valueOf: ->
+				(@left + @top + @right + @bottom) / 4

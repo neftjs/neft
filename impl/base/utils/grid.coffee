@@ -99,7 +99,11 @@ updateItem = (item) ->
 		last = rowsPositions[i] += last
 
 	# set positions
-	for child, i in children
+	i = 0
+	for child in children
+		unless child.visible
+			continue
+
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
 
@@ -108,6 +112,8 @@ updateItem = (item) ->
 
 		if row > 0 and gridType & exports.COLUMN
 			child.y = rowsPositions[row-1] + child.margin.top
+
+		i++
 
 	# set item size
 	item.width = Math.max 0, (utils.last(columnsPositions) or 0) - rightMargin
