@@ -24,7 +24,6 @@ GZIP_ENCODING_HEADERS =
 Set headers in the server response
 ###
 setHeaders = (obj, headers) ->
-
 	{serverRes} = obj
 
 	for name, value of headers
@@ -47,8 +46,7 @@ parsers =
 	'application/json': (data) ->
 		try JSON.stringify data
 	'text/html': (data) ->
-		html = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
-		html += data.node.stringify()
+		html = data.node.stringify()
 		html
 
 prepareData = (obj, data) ->

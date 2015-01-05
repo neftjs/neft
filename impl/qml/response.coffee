@@ -51,7 +51,7 @@ module.exports = (Routing) ->
 
 		{styles} = data
 		unless styles.length
-			log.warn "Can't find an item style declaration in the main view scope"
+			log.warn "Can't find any `neft:style` in main view file"
 			return false
 
 		for style in styles

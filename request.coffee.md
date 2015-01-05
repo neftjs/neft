@@ -4,8 +4,10 @@ Routing.Request
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
+
+	assert = assert.scope 'Routing.Request'
 
 	module.exports = (Routing, Impl) -> class Request
 
@@ -53,23 +55,24 @@ Use `Routing::createRequest()` to create new local or server request.
 *options* specifies `Request::method`, `Request::url`, `Request::data`, `Request::type`.
 
 		constructor: (opts) ->
-			expect(opts).toBe.simpleObject()
-
-			expect().defined(opts.uid).toBe.truthy().string()
-			expect().some(Request.METHODS).toBe opts.method if opts.method?
-			expect(opts.url).toBe.string()
+			assert.isPlainObject opts, 'ctor options argument ...'
+			assert.isString opts.uid if opts.uid?
+			assert.ok utils.has(Request.METHODS, opts.method) if opts.method?
+			assert.isString opts.url, 'ctor options.url argument ...'
 
 			if opts.data?
-				expect().defined(opts.data).toBe.object()
+				assert.isObject opts.data, 'ctor options.data argument ...' if opts.data?
 				{@data} = opts
 
 			if opts.type?
-				expect().some(Request.TYPES).toBe opts.type
+				assert.ok utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...'
 				{@type} = opts
 			utils.defineProperty @, 'type', utils.ENUMERABLE, @type
 
 			{@url} = opts
 			{@method} = opts if opts.method?
+
+			@url = unescape @url
 
 			uid = opts.uid or utils.uid()
 			utils.defineProperty @, 'uid', null, uid
@@ -77,8 +80,8 @@ Use `Routing::createRequest()` to create new local or server request.
 			@pending = true
 			@params = null
 
-Request::destroyed()
---------------------
+*Signal* Request::destroyed()
+-----------------------------
 
 **Signal** called by the `Routing.Response` when some data is ready to be send.
 
@@ -88,8 +91,8 @@ You can listen on this signal using the `onDestroyed` handler.
 
 		signal.createLazy @::, 'destroyed'
 
-Request::loaded(*Routing.Response* res)
----------------------------------------
+*Signal* Request::loaded(*Routing.Response* res)
+------------------------------------------------
 
 **Signal** called by the `Routing.Response` when the final data is ready.
 
@@ -107,23 +110,19 @@ req.onLoaded (res) ->
 
 		signal.createLazy @::, 'loaded'
 
-*String* Request::uid
----------------------
+ReadOnly *String* Request::uid
+------------------------------
 
 Pseudo unique hash.
 
-It's **read-only**.
-
 		uid: ''
 
-*Boolean* Request::pending
---------------------------
+ReadOnly *Boolean* Request::pending
+-----------------------------------
 
 It's `true` if the request is active, `false` if the request has been destroyed.
 
 This property is changed by the `Routing.Response`.
-
-It's **read-only**.
 
 		pending: false
 
@@ -174,8 +173,8 @@ The currently matched `Routing.Handler`.
 
 		handler: null
 
-*Object* Request::params
-------------------------
+ReadOnly *Object* Request::params
+---------------------------------
 
 This property is an object containing matched parameters from the handler.
 
@@ -184,12 +183,10 @@ the "name" property is available as `req.params.name`.
 
 It's `{}` by default.
 
-It's **read-only**.
-
 		params: null
 
-*Object* Request::headers
--------------------------
+ReadOnly *Object* Request::headers
+----------------------------------
 
 The request headers object.
 
@@ -197,19 +194,15 @@ Modifying this object has no effect.
 
 For client requests, this object is empty.
 
-It's **read-only**.
-
 		Object.defineProperty @::, 'headers',
 			get: -> Impl.getHeaders(@) or {}
 
-*String* Request::userAgent
----------------------------
+ReadOnly *String* Request::userAgent
+------------------------------------
 
 This property describes client user agent.
 
 It can be used on the client side and on the server side.
-
-It's **read-only**.
 
 		Object.defineProperty @::, 'userAgent',
 			get: -> Impl.getUserAgent(@) or ''
@@ -225,7 +218,7 @@ because `response` gives a signal to destroy the request.
 This method calls `Request::destroyed()` signal.
 
 		destroy: ->
-			expect(@pending).toBe.truthy()
+			assert.ok @pending
 
 			utils.defineProperty @, 'pending', utils.ENUMERABLE, false
 			@destroyed()

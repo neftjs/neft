@@ -8,7 +8,7 @@ log = log.scope 'Routing'
 
 messagesContainer = document.createElement 'div'
 window.addEventListener 'load', ->
-	document.body.appendChild messagesContainer
+	document.body.insertBefore messagesContainer, document.body.firstChild
 
 module.exports = (Routing) ->
 
@@ -55,6 +55,7 @@ module.exports = (Routing) ->
 
 		{styles} = data
 		unless styles.length
+			log.warn "Can't find any `neft:style` in main view file"
 			return false
 
 		for style in styles
@@ -63,11 +64,7 @@ module.exports = (Routing) ->
 		true
 
 	send: (res, data, callback) ->
-
 		log.ok "Got response `#{res.request.method} #{res.request.url}`"
-
-		# clear styles
-		# Renderer.window.clear()
 
 		# clear messages container
 		while child = messagesContainer.firstChild

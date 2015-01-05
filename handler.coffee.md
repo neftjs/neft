@@ -4,16 +4,17 @@ Routing.Handler
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	log = require 'log'
 	Schema = require 'schema'
 
 	{parse, stringify} = JSON
 
+	assert = assert.scope 'Routing.Handler'
 	log = log.scope 'Routing', 'Handler'
 
-*UriNotValidError* Handler.UriNotValidError *extends* Error
------------------------------------------------------------
+*UriNotValidError* Handler.UriNotValidError extends Error
+---------------------------------------------------------
 
 	class UriNotValidError extends Error
 		constructor: (@message) -> super
@@ -21,8 +22,8 @@ Routing.Handler
 		name: 'UriNotValid'
 		message: ''
 
-*CallbackError* Handler.CallbackError *extends* Error
------------------------------------------------------
+*CallbackError* Handler.CallbackError extends Error
+---------------------------------------------------
 
 	class CallbackError extends Error
 
@@ -45,11 +46,11 @@ Use `Routing::createHandler()` to create new handler.
 		@CallbackError = CallbackError
 
 		constructor: (opts) ->
-			expect(opts).toBe.simpleObject()
-			expect().some(Routing.Request.METHODS).toBe opts.method
-			expect(opts.uri).toBe.any Routing.Uri
-			expect().defined(opts.schema).toBe.any Schema
-			expect(opts.callback).toBe.function()
+			assert.isPlainObject opts, 'ctor options argument ...'
+			assert.ok utils.has(Routing.Request.METHODS, opts.method), 'ctor options.method argument ...'
+			assert.instanceOf opts.uri, Routing.Uri, 'ctor options.uri argument ...'
+			assert.instanceOf opts.schema, Schema, 'ctor options.schema argument ...' if opts.schema?
+			assert.isFunction opts.callback, 'ctor options.callback argument ...'
 
 			{@method, @uri, @schema, @callback} = opts
 
@@ -77,9 +78,9 @@ Handler::exec(*Routing.Request* request, *Routing.Response* response, *Function*
 --------------------------------------------------------------------------------------
 
 		exec: (req, res, next) ->
-			expect(req).toBe.any Routing.Request
-			expect(res).toBe.any Routing.Response
-			expect(next).toBe.function()
+			assert.instanceOf req, Routing.Request, '::exec request argument ...'
+			assert.instanceOf res, Routing.Response, '::exec response argument ...'
+			assert.isFunction next, '::exec next argument ...'
 
 			# compare methods
 			if @method isnt req.method

@@ -4,8 +4,10 @@ Routing.Uri
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	Dict = require 'dict'
+
+	assert = assert.scope 'Routing.Uri'
 
 	module.exports = (Routing) -> class Uri
 
@@ -16,13 +18,13 @@ Routing.Uri
 -----------------------
 
 		constructor: (uri) ->
-			expect(uri).toBe.string()
+			assert.isString uri, 'ctor uri argument ...'
 
 			@params = {}
 
 			# uri
 			uri = Uri.URI_TRIM_RE.exec(uri)[1]
-			utils.defineProperty @, '_uri', null, uri
+			utils.defineProperty @, '_uri', null, "/#{uri}"
 
 			# names
 			names = []
@@ -64,7 +66,7 @@ Test whether `Routing.Uri` is valid with given *uri* string.
 Get parameters values from the passed string.
 
 		match: (uri) ->
-			expect(@test uri).toBe.truthy()
+			assert.ok @test(uri)
 
 			exec = @_re.exec uri
 			for name, i in @_names
@@ -92,5 +94,5 @@ string `format()` but on the named parameters).
 				params = params._data
 
 			i = 0
-			@_uri.replace Uri.NAMES_RE, =>
+			escape @_uri.replace Uri.NAMES_RE, =>
 				params[@_names[i++]]

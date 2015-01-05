@@ -4,10 +4,11 @@ Routing.Response
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	log = require 'log'
 	signal = require 'signal'
 
+	assert = assert.scope 'Routing.Response'
 	log = log.scope 'Routing', 'Response'
 
 	module.exports = (Routing, Impl) -> class Response
@@ -84,12 +85,15 @@ Class represents response for a request.
 It's created automatically and used to handle the request.
 
 		constructor: (opts) ->
-			expect(opts).toBe.simpleObject()
-			expect(opts.request).toBe.any Routing.Request
-			expect().some(Response.STATUSES).toBe opts.status if opts.status?
+			assert.isPlainObject opts, 'ctor options argument ...'
+			assert.instanceOf opts.request, Routing.Request, 'ctor options.request argument ...'
 
-			{@status} = opts if opts.status?
-			{@data} = opts if opts.data?
+			if opts.status?
+				assert.ok utils.has(Response.STATUSES, opts.status), 'ctor options.status argument ...'
+				{@status} = opts
+
+			if opts.data?
+				{@data} = opts
 
 			utils.defineProperty @, 'request', null, opts.request
 
@@ -101,8 +105,8 @@ It's created automatically and used to handle the request.
 			# whether response will be send on the next tick
 			utils.defineProperty @, '_waitingToSend', utils.WRITABLE, false
 
-Response::sent()
-----------------
+*Signal* Response::sent()
+-------------------------
 
 **Signal** called when the response has been marked as going to be send.
 
@@ -117,24 +121,20 @@ res.onSent ->
 
 		signal.createLazy @::, 'sent'
 
-*Boolean* Response::pending
----------------------------
+ReadOnly *Boolean* Response::pending
+------------------------------------
 
 It's `true` if the response is active, `false` if the response has been
 destroyed or sent and can't be modified.
 
-It's **read-only**.
-
 		pending: false
 
-*Routing.Request* Response::request
------------------------------------
+ReadOnly *Routing.Request* Response::request
+--------------------------------------------
 
 Reference to the created `request`.
 
 This request is active until the response is pending.
-
-It's **read-only**.
 
 		request: null
 
@@ -179,9 +179,11 @@ res.setHeader 'Location', '/redirect/to/url'
 ```
 
 		setHeader: (name, val) ->
-			expect(@pending).toBe.truthy()
-			expect(name).toBe.truthy().string()
-			expect(val).toBe.truthy().string()
+			assert.ok @pending
+			assert.isString name, '::setHeader name argument ...'
+			assert.notLengthOf name, 0, '::setHeader name argument ...'
+			assert.isString val, '::setHeader value argument ...'
+			assert.notLengthOf val, 0, '::setHeader value argument ...'
 
 			Impl.setHeader @, name, val
 
@@ -206,14 +208,14 @@ res.onSent ->
 ```
 
 		send: (status, data) ->
-			expect(@pending).toBe.truthy()
+			assert.ok @pending
 
 			if data? and typeof status isnt 'number'
 				data = status
 				status = @status
 
 			if status?
-				expect().some(Response.STATUSES).toBe status
+				assert.ok utils.has(Response.STATUSES, status)
 				@status = status
 
 			if data?
@@ -230,8 +232,8 @@ res.onSent ->
 			null
 
 		sendData = (res) ->
-			expect(res).toBe.any Response
-			expect(res.pending).toBe.truthy()
+			assert.instanceOf res, Response
+			assert.ok res.pending
 
 			utils.defineProperty res, 'pending', utils.ENUMERABLE, false
 			res.request.loaded? @
@@ -250,7 +252,7 @@ res.raise new Routing.Response.Error Routing.Response.UNAUTHORIZED, "Login first
 ```
 
 		raise: (error) ->
-			expect(error).toBe.any Response.Error
+			assert.instanceOf error, Response.Error, '::raise error argument ...'
 
 			@send error.status, error
 

@@ -21,7 +21,6 @@ module.exports = (Routing) ->
 
 		# on request
 		server.on 'request', (serverReq, serverRes) ->
-
 			uid = utils.uid()
 
 			# save in the stack
@@ -38,7 +37,7 @@ module.exports = (Routing) ->
 			obj.req = routing.createRequest
 				uid: uid
 				method: Routing.Request[serverReq.method]
-				url: serverReq.url.slice 1
+				url: serverReq.url
 				data: undefined
 				type: type
 

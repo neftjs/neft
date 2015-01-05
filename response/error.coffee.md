@@ -4,7 +4,9 @@ Routing.Response.Error
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
+
+	assert = assert.scope 'Routing.Response.Error'
 
 	module.exports = (Routing, Response) -> class ResponseError extends Error
 
@@ -25,8 +27,8 @@ It works as standard Javascript `Error` class, but provides extra `status` value
 				message = status
 				status = @status
 
-			expect().some(Response.STATUSES).toBe status
-			expect(message).toBe.string()
+			assert.ok utils.has(Response.STATUSES, status)
+			assert.isString message
 
 			@status = status
 			@message = message
@@ -35,8 +37,8 @@ It works as standard Javascript `Error` class, but provides extra `status` value
 		name: 'ResponseError'
 		message: ''
 
-*RequestResolve* Error.RequestResolve(*Routing.Request* req)
-------------------------------------------------------------
+*RequestResolve* Error.RequestResolve(*Routing.Request* request)
+----------------------------------------------------------------
 
 This error is send if the request can't be resolved, because no proper handler which can
 handle the request can be found.
@@ -44,7 +46,7 @@ handle the request can be found.
 	RequestResolve = (Routing, Response, ResponseError) -> class RequestResolve extends ResponseError
 
 		constructor: (req) ->
-			expect(req).toBe.any Routing.Request
+			assert.instanceOf req, Routing.Request, 'ctor request argument ...'
 
 			return super "No handler can be found"
 

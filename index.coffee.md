@@ -10,9 +10,10 @@ loading this module is not required in most cases.
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	log = require 'log'
 
+	assert = assert.scope 'Routing'
 	log = log.scope 'Routing'
 
 *Routing* Routing(*Object* options)
@@ -33,11 +34,14 @@ Creates new *Routing* instance.
 		@Response = require('./response.coffee.md') Routing, Impl.Response
 
 		constructor: (opts) ->
-			expect(opts).toBe.simpleObject()
-			expect(opts.protocol).toBe.truthy().string()
-			expect(opts.port).toBe.integer()
-			expect(opts.host).toBe.truthy().string()
-			expect(opts.language).toBe.truthy().string()
+			assert.isPlainObject opts, 'ctor options argument ....'
+			assert.isString opts.protocol, 'ctor options.protocol argument ...'
+			assert.notLengthOf opts.protocol, 0, 'ctor options.protocol argument ...'
+			assert.isInteger opts.port, 'ctor options.port argument ...'
+			assert.isString opts.host, 'ctor options.host argument ...'
+			assert.notLengthOf opts.host, 0, 'ctor options.host argument ...'
+			assert.isString opts.language, 'ctor options.language argument ...'
+			assert.notLengthOf opts.language, 0, 'ctor options.language argument ...'
 
 			utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
 			{@protocol, @port, @host, @language} = opts
@@ -50,40 +54,30 @@ Creates new *Routing* instance.
 
 			Object.freeze @
 
-*String* Routing::protocol
---------------------------
-
-It's **read-only**.
+ReadOnly *String* Routing::protocol
+-----------------------------------
 
 		protocol: 'http'
 
-*Integer* Routing::port
------------------------
-
-It's **read-only**.
+ReadOnly *Integer* Routing::port
+--------------------------------
 
 		port: 0
 
-*String* Routing::host
-----------------------
-
-It's **read-only**.
+ReadOnly *String* Routing::host
+-------------------------------
 
 		host: ''
 
-*String* Routing::language
---------------------------
-
-It's **read-only**.
+ReadOnly *String* Routing::language
+-----------------------------------
 
 		language: ''
 
-*String* Routing::url
----------------------
+ReadOnly *String* Routing::url
+------------------------------
 
 Proper URL path contains protocol, port and host.
-
-It's **read-only**.
 
 		url: ''
 
@@ -107,8 +101,8 @@ app.routing.createHandler
 ```
 
 		createHandler: (opts) ->
-			expect(@).toBe.any Routing
-			expect(opts).toBe.simpleObject()
+			assert.instanceOf @, Routing
+			assert.isPlainObject opts, '::createHandler options argument ...'
 
 			uri = new Routing.Uri opts.uri
 
@@ -155,8 +149,8 @@ req.onLoaded (res) ->
 
 		EXTERNAL_URL_RE = ///^[a-zA-Z]+:\/\////
 		createRequest: (opts) ->
-			expect(@).toBe.any Routing
-			expect(opts).toBe.simpleObject()
+			assert.instanceOf @, Routing
+			assert.isPlainObject opts, '::createRequest options argument ...'
 
 			logtime = log.time 'New request'
 
@@ -170,9 +164,6 @@ req.onLoaded (res) ->
 			res = new Routing.Response request: req
 
 			# get handlers
-			onError = ->
-				res.raise Routing.Response.Error.RequestResolve req
-
 			if EXTERNAL_URL_RE.test req.url
 				log "Send `#{req}` request"
 
@@ -185,18 +176,26 @@ req.onLoaded (res) ->
 			else
 				log "Resolve local `#{req}` request"
 
+				onError = ->
+					res.raise Routing.Response.Error.RequestResolve req
+
+				noHandlersError = ->
+					log.warn "No handler found"
+					onError()
+
 				handlers = @_handlers[req.method]
 				if handlers
 					# run handlers
 					utils.async.forEach handlers, (handler, i, handlers, next) ->
-
 						handler.exec req, res, (err) ->
 							next()
 
-					, onError
+					, (err) ->
+						if err
+							onError err
+						else
+							noHandlersError()
 				else
-					log.warn "No handler found"
-
-					onError()
+					noHandlersError()
 
 			req
