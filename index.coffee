@@ -10,6 +10,7 @@ Db = require 'db'
 require 'db-implementation'
 require 'db-schema'
 require 'db-addons'
+require 'db/log.coffee'
 
 AppRoute = require './route'
 AppTemplate = require './template'
@@ -20,19 +21,10 @@ AppView = require './view'
 if utils.isBrowser
 	global.setImmediate = require 'emitter/node_modules/immediate'
 
-Db = Db.Impl()
-
-`//<development>`
-require('db/log.coffee') Db
-`//</development>`
-
 if utils.isNode
 	bootstrapRoute = require './bootstrap/route.node'
 
 pkg = require './package.json'
-
-# Welcome log
-log.ok "\nWelcome! Neft.io v. #{pkg.version}; Feedback appreciated\n"
 
 # TODO
 # `//<development>`
@@ -41,6 +33,14 @@ log.ok "\nWelcome! Neft.io v. #{pkg.version}; Feedback appreciated\n"
 # `//</development>`
 
 exports = module.exports = (opts={}) ->
+	# Welcome log
+	log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
+
+	# Db
+	Db = Db.Impl()
+	`//<development>`
+	require('db/log.coffee') Db
+	`//</development>`
 
 	{config} = pkg
 
@@ -108,7 +108,7 @@ exports = module.exports = (opts={}) ->
 	init App.routes
 
 # link module
-MODULES = ['asserts', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
+MODULES = ['assert', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
            'log', 'renderer', 'routing', 'schema', 'signal', 'utils', 'view', 'styles']
 for name in MODULES
 	exports[name] = require name

@@ -1,9 +1,10 @@
 fs = require 'fs'
 bundle = require 'bundle'
+utils = require 'utils'
 
 modulePackage = require './package.json'
 
-createBundle = (opts) ->
+createBundle = (opts, callback) ->
 	bundle type: opts.type, release: opts.release, path: 'index.coffee', (err, bundle) ->
 		if err
 			return console.error err
@@ -20,9 +21,16 @@ createBundle = (opts) ->
 
 		fs.writeFileSync "neft-#{opts.type}-#{mode}.js", template
 
+		console.log "Ready: #{opts.type}-#{mode}"
+		callback()
+
+stack = new utils.async.Stack
+
 # createBundle type: 'node', release: true
-createBundle type: 'node', release: false
+# stack.add createBundle, null, [type: 'node', release: false]
 # createBundle type: 'browser', release: true
-# createBundle type: 'browser', release: false
+stack.add createBundle, null, [type: 'browser', release: false]
 # createBundle type: 'qml', release: true
 # createBundle type: 'qml', release: false
+
+stack.runAll ->

@@ -1,17 +1,20 @@
 'use strict'
 
 utils = require 'utils'
+fs = require 'fs'
 pathUtils = require 'path'
 
 View = require 'view'
 Routing = require 'routing'
 
 VIEW_HTML = """
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+	<meta charset="utf-8">
 	<title>\#{data.title}</title>
-	<script type="text/javascript" src="\#{data.filename}"></script>
+	<script type="text/javascript" src="\#{data.neftFilePath}"></script>
+	<script type="text/javascript" src="\#{data.appFilePath}"></script>
 </head>
 <body>
 	<noscript>
@@ -24,11 +27,18 @@ VIEW_HTML = """
 module.exports = (App) ->
 
 	APP_JS_URI = 'app.js'
-	JS_BUNDLE_FILE_PATH = './build/bundles/browser.js'
+	NEFT_JS_URI = 'neft.js'
+	JS_NEFT_FILE_PATH = './neft-browser-release.js'
+	JS_BUNDLE_FILE_PATH = './build/app-browser-release.js'
 	VIEW_NAME = '_app_bootstrap'
 	VIEW_FILE = 'view.html'
-	TEXT_MODE_URI_PREFIX = 'legacy/'
+	TEXT_MODE_URI_PREFIX = '/legacy/'
 	TEXT_MODE_COOKIE_NAME = 'textMode'
+
+	`//<development>`
+	JS_NEFT_FILE_PATH = './neft-browser-develop.js'
+	JS_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
+	`//</development>`
 
 	view = new App.View do ->
 		View.fromHTML VIEW_NAME, VIEW_HTML
@@ -44,6 +54,11 @@ module.exports = (App) ->
 		uri: APP_JS_URI
 		callback: (req, res, callback, next) ->
 			fs.readFile JS_BUNDLE_FILE_PATH, 'utf-8', callback
+
+	new App.Route
+		uri: NEFT_JS_URI
+		callback: (req, res, callback, next) ->
+			fs.readFile JS_NEFT_FILE_PATH, 'utf-8', callback
 
 	new App.Route
 		uri: 'static/{path*}'
@@ -80,4 +95,5 @@ module.exports = (App) ->
 			callback null,
 				title: App.config.title
 				appTextModeUrl: TEXT_MODE_URI_PREFIX + req.url
-				filename: App.routing.url + APP_JS_URI
+				neftFilePath: App.routing.url + NEFT_JS_URI
+				appFilePath: App.routing.url + APP_JS_URI

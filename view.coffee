@@ -33,6 +33,7 @@ module.exports = (app) -> class AppView
 		unless typeof storage is 'object'
 			storage = null
 		storageObj = Object.create storage
+		storageObj.app = app
 		storageObj.global = GlobalStorage
 		view.storage = storageObj
 
@@ -87,8 +88,11 @@ module.exports = (app) -> class AppView
 
 			dict.onChanged onDictChanged
 
-		dict.toString = ->
-			req.uri
+		dict.toString = (params) ->
+			if params
+				req.handler.uri.toString params
+			else
+				req.url
 
 		-> dict
 
