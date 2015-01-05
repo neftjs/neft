@@ -1,9 +1,9 @@
 'use strict'
 
-expect = require 'expect'
+assert = require 'assert'
 utils = require 'utils'
 
-{assert} = console
+assert = assert.scope 'View.Element.Observer'
 
 module.exports = (Element) ->
 
@@ -15,16 +15,16 @@ module.exports = (Element) ->
 		ALL: (1<<4) - 1
 
 		_linkElement: (elem) ->
-			expect(elem).toBe.any Element
+			assert.instanceOf elem, Element
 
 			elem._observed = 0
 			elem._observer = null
 
 		_isObserved: (elem, type) ->
-			!! (elem._observed & type)
+			!!(elem._observed & type)
 
 		_report: (elem, type, arg1, arg2) ->
-			assert Observer._isObserved elem, type
+			assert.ok Observer._isObserved(elem, type)
 
 			store = elem._observer[type]
 
@@ -42,10 +42,10 @@ module.exports = (Element) ->
 			null
 
 		observe: (elem, type, listener) ->
-			expect(elem).toBe.any Element
-			expect(type).toBe.integer()
-			expect(Observer.ALL & type).toBe.truthy()
-			expect(listener).toBe.function()
+			assert.instanceOf elem, Element
+			assert.isInteger type
+			assert.ok Observer.ALL & type
+			assert.isFunction listener
 
 			elem._observer ?= utils.clone ObserverObject
 
@@ -58,11 +58,11 @@ module.exports = (Element) ->
 			@
 
 		disconnect: (elem, type, listener) ->
-			expect(elem).toBe.any Element
-			expect(type).toBe.integer()
-			expect(Observer.ALL & type).toBe.truthy()
-			expect(listener).toBe.function()
-			expect(Observer._isObserved elem, type).toBe.truthy()
+			assert.instanceOf elem, Element
+			assert.isInteger type
+			assert.ok Observer.ALL & type
+			assert.isFunction listener
+			assert.ok Observer._isObserved(elem, type)
 
 			store = elem._observer[type]
 			index = store.indexOf listener

@@ -4,10 +4,11 @@ File.Element.Text
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
+
+	assert = assert.scope 'View.Element.Text'
 
 	module.exports = (Element) -> class Text extends Element
-
 		@__name__ = 'Text'
 		@__path__ = 'File.Element.Text'
 
@@ -27,7 +28,7 @@ File.Element.Text
 		utils.defineProperty @::, 'text', null, ->
 			@_text
 		, (value) ->
-			expect(value).toBe.string()
+			assert.isString value
 
 			old = @_text
 			return if old is value

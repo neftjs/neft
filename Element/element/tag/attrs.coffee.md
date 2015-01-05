@@ -4,12 +4,13 @@ File.Element.Tag.Attrs
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
+
+	assert = assert.scope 'View.Element.Tag.Attrs'
 
 	{isArray} = Array
 
 	module.exports = (Element) ->
-
 		eventsPool = []
 
 		triggerEvent = (tag, name, value) ->
@@ -28,7 +29,7 @@ File.Element.Tag.Attrs
 -----------------------------------------------
 
 			item: (i, target=[]) ->
-				expect(target).toBe.array()
+				assert.isArray target
 
 				keys = exports.tag.attrsKeys
 				values = exports.tag.attrsValues
@@ -49,7 +50,8 @@ File.Element.Tag.Attrs
 ------------------------
 
 			get: (name) ->
-				expect(name).toBe.truthy().string()
+				assert.isString name
+				assert.notLengthOf name, 0
 
 				i = exports.tag.attrsNames?[name]
 				return if i is undefined
@@ -60,7 +62,8 @@ File.Element.Tag.Attrs
 -------------------------------------
 
 			set: (name, value) ->
-				expect(name).toBe.truthy().string()
+				assert.isString name
+				assert.notLengthOf name, 0
 
 				{tag} = exports
 
@@ -82,8 +85,9 @@ add(*String* name[, *Any* val]) @low-level
 ------------------------------------------
 
 			add: (name, val) ->
-				expect(name).toBe.truthy().string()
-				expect().some(exports.tag.attrsNames).not().toBe name
+				assert.isString name
+				assert.notLengthOf name, 0
+				assert.notOk utils.has(exports.tag.attrsNames, name)
 
 				{tag} = exports
 
@@ -93,8 +97,7 @@ add(*String* name[, *Any* val]) @low-level
 				return
 
 			backChanges: ->
-
-				expect(exports.tag.clone).toBe undefined
+				assert.is exports.tag.clone, undefined
 
 				{tag} = exports
 

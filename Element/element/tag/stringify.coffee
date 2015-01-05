@@ -1,7 +1,26 @@
 'use strict'
 
-QUICK_TAG_END =
+SINGLE_TAG =
+	__proto__: null
+	area: true
+	base: true
+	basefont: true
 	br: true
+	col: true
+	command: true
+	embed: true
+	frame: true
+	hr: true
+	img: true
+	input: true
+	isindex: true
+	keygen: true
+	link: true
+	meta: true
+	param: true
+	source: true
+	track: true
+	wbr: true
 
 isPublic = (name) ->
 	name.indexOf('neft:') isnt 0
@@ -19,10 +38,10 @@ getOuterHTML = (elem) ->
 	if elem._text isnt undefined
 		return elem._text
 
-	if not elem.name or not isPublic elem.name
+	if not elem.name or not isPublic(elem.name)
 		return getInnerHTML elem
 
-	ret = "<" + elem.name
+	nameRet = ret = "<" + elem.name
 	if elem.attrsNames
 		for attrName, i in elem.attrsKeys
 			continue unless isPublic attrName
@@ -31,12 +50,15 @@ getOuterHTML = (elem) ->
 
 			ret += " " + attrName
 			unless attrValue?
-				ret += "=\"\"" unless attrName of booleanAttribs
+				ret += "=\"\"" unless booleanAttribs[attrName]
 			else
 				ret += "=\"" + attrValue + "\""
 
-	if QUICK_TAG_END[elem.name]
-		ret + " />"
+	if elem.name is 'div' and ret is nameRet
+		return getInnerHTML elem
+
+	if SINGLE_TAG[elem.name]
+		ret + ">"
 	else
 		ret + ">" + getInnerHTML(elem) + "</" + elem.name + ">"
 

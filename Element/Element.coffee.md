@@ -6,13 +6,14 @@ File.Element @low-level API
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	Emitter = require 'emitter'
 
 	{isArray} = Array
 
-	module.exports = class Element extends Emitter
+	assert = assert.scope 'View.Element'
 
+	module.exports = class Element extends Emitter
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
@@ -22,7 +23,8 @@ File.Element @low-level API
 Creates new `Element` instance based on given *html*.
 
 		@fromHTML = (html) ->
-			expect(html).toBe.truthy().string()
+			assert.isString html
+			assert.notLengthOf html, 0
 
 			unless utils.isNode
 				throw "Creating Views from HTML files is allowed only on a server"
@@ -46,15 +48,15 @@ Creates new `Element` instance based on given *html*.
 
 			index:
 				get: ->
-					expect(@parent).toBe.any Element
+					assert.instanceOf @parent, Element
 
 					@parent.children.indexOf @
 
 				set: (value) ->
-					expect(@parent).toBe.any Element
-					expect(value).toBe.integer()
-					expect(value).not().toBe.lessThan 0
-					expect(value).toBe.lessThan @parent.children.length
+					assert.instanceOf @parent, Element
+					assert.isInteger value
+					assert.operator value, '>=', 0
+					assert.operator value, '<', @parent.children.length
 
 					@parent.children.splice @index, 1
 					@parent.children.splice value, 0, @
@@ -70,14 +72,14 @@ Change the value to move the element.
 				enumerable: true
 				get: -> @_parent
 				set: (value) ->
-					expect(@).not().toBe value
+					assert.isNot @, value
 
 					old = @_parent
 					return if old is value
 
 					# remove element
 					if @_parent
-						expect().some(@_parent.children).toBe @
+						assert.ok utils.has(@_parent.children, @)
 						index = @_parent.children.indexOf @
 						@_parent.children.splice index, 1
 
@@ -85,7 +87,7 @@ Change the value to move the element.
 
 					# append element
 					if parent
-						expect().some(@_parent.children).not().toBe @
+						assert.notOk utils.has(@_parent.children, @)
 						parent.children.push @
 
 					# trigger event
@@ -103,7 +105,7 @@ Change the value to move the element.
 				get: ->
 					@_visible
 				set: (val) ->
-					expect(val).toBe.boolean()
+					assert.isBoolean val
 
 					old = @_visible
 					return if old is val

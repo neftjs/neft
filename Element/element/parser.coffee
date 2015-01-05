@@ -1,17 +1,14 @@
-[utils, htmlparser] = ['utils', 'htmlparser2'].map require
+utils = require 'utils'
+htmlparser = require 'htmlparser2'
 
 attrsKeyGen = (i, elem) -> elem
 attrsValueGen = (i, elem) -> i
-
-VOID_ELEMENTS =
-	require: true
 
 module.exports = (Element) ->
 
 	class Parser
 
 		constructor: (callback) ->
-
 			@_callback = callback
 			@_done = false
 			@_tagStack = []
@@ -49,16 +46,14 @@ module.exports = (Element) ->
 				element.attrsValues = utils.objectToArray attribs
 
 			@_addDomElement element
-
-			unless VOID_ELEMENTS[name]
-				@_tagStack.push element
+			@_tagStack.push element
 
 		ontext: (data) ->
 			#append = not _tagStack.length and @node.length and (lastTag = @node[@node.length-1]).type is 'text'
 			#append ||= _tagStack.length and (lastTag = _tagStack[_tagStack.length - 1]) and (lastTag = lastTag.children[lastTag.children.length - 1]) and lastTag.type is 'text'
 
 			# omit spaces and new lines
-			return unless data.trim() # TODO
+			data = data.replace ///[\t\n]///gm, ''
 			return unless data
 
 			# lastTag = utils.last(@_tagStack)?.children[0]
@@ -80,20 +75,25 @@ module.exports = (Element) ->
 
 		oncdataend: ->
 
-		onprocessinginstruction: ->
+		onprocessinginstruction: (name, data) ->
+			element = new Element.Text
+
+			element._text = "<#{data}>"
+			@_addDomElement element
 
 	parse: (html) ->
-
 		r = null
 
 		handler = new Parser (err, node) =>
-			
 			if err then throw err
 
 			r = node
 
 		parser = new htmlparser.Parser handler,
-			xmlMode: true
+			xmlMode: false
+			recognizeSelfClosing: true
+			lowerCaseAttributeNames: false
+			lowerCaseTags: false
 		parser.write html
 		parser.end()
 		

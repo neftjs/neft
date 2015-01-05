@@ -4,16 +4,17 @@ File.Element.Tag
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
 	stringify = require './tag/stringify'
+
+	assert = assert.scope 'View.Element.Tag'
 
 	isDefined = (elem) -> elem?
 
 	CSS_ID_RE = ///\#([^\s]+)///
 
 	module.exports = (Element) -> class Tag extends Element
-
 		attrs = require('./tag/attrs') Element
 
 		@__name__ = 'Tag'
@@ -75,8 +76,9 @@ File.Element.Tag
 				null
 
 			(selector, target=[]) ->
-				expect(selector).toBe.truthy().string()
-				expect(target).toBe.array()
+				assert.isString selector
+				assert.notLengthOf selector, 0
+				assert.isArray target
 
 				utils.clear target
 				return target unless @children
@@ -106,9 +108,9 @@ Tag::replace(*File.Element* oldElement, *File.Element* newElement)
 ------------------------------------------------------------------
 
 		replace: (oldElement, newElement) ->
-			expect(oldElement).toBe.any Element
-			expect(newElement).toBe.any Element
-			expect(oldElement.parent).toBe @
+			assert.instanceOf oldElement, Element
+			assert.instanceOf newElement, Element
+			assert.is oldElement.parent, @
 
 			index = @children.indexOf oldElement
 
