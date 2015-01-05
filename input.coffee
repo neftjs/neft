@@ -1,29 +1,36 @@
 'use strict'
 
 utils = require 'utils'
-expect = require 'expect'
+assert = require 'assert'
 log = require 'log'
-coffee = require 'coffee-script' if utils.isNode
 Dict = require 'dict'
 
+if utils.isNode
+	coffee = require 'coffee-script'
+	PEG = require 'pegjs'
+	grammar = require './input/grammar.pegjs'
+
+	parser = PEG.buildParser grammar,
+		optimize: 'speed'
+
+assert = assert.scope 'View.Input'
 log = log.scope 'View', 'Input'
 
 module.exports = (File) -> class Input
-
 	{Element} = File
 
 	@__name__ = 'Input'
 	@__path__ = 'File.Input'
 
 	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
-	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-z_$][\w:_]*)+(?!:)///gi
-	PROP_RE = @PROP_RE = ///(\.(?:[a-z_$][\w]+)|\[['"](?:[a-z_$][\w]+)['"]\])([^(]?)///gi
+	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)///g
+	PROP_RE = @PROP_RE = ///(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+///
+	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+(.)?///g
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON']
 
 	cache = {}
 
 	@getVal = do ->
-
 		getFromElement = (elem, prop) ->
 			if elem instanceof Element
 				elem.attrs.get prop
@@ -49,7 +56,7 @@ module.exports = (File) -> class Input
 		v
 
 	@getStoragesArray = do (arr = []) -> (file) ->
-		expect(file).toBe.any File
+		assert.instanceOf file, File
 
 		arr[0] = file.source?.node
 		arr[1] = file.source?.storage
@@ -61,36 +68,70 @@ module.exports = (File) -> class Input
 		input._func = cache[input.func] ?= new Function '__input', '__get', input.func
 
 	constructor: (@node, @text) ->
-		expect(node).toBe.any File.Element
-		expect(text).toBe.truthy().string()
+		assert.instanceOf node, File.Element
+		assert.isString text
+		assert.notLengthOf text, 0
 
 		# build toString()
-		func = ''
-		RE.lastIndex = 0
-		while (match = RE.exec text) isnt null
-			# parse prop
-			prop = match[2].replace VAR_RE, (_, prefix, elem) ->
-				if prefix.trim() or not utils.has CONSTANT_VARS, elem
-					str = "__get(__input, '#{utils.addSlashes elem}')"
-				else
-					str = elem
-				"#{prefix}#{str}"
+		func = ""
 
-			prefix = ''
-			prop = prop.replace PROP_RE, (_, str, postfix) ->
-				prefix += "__input.trace("
-				"#{str})#{postfix}"
-			prop = "#{prefix}#{prop}"
+		try
+			chunks = parser.parse text
+		catch err
+			log.error "Can't parse string literal:\n#{text}\n#{err.message}"
+			return
+
+		while chunks.length > 1
+			match = [chunks.shift(), chunks.shift()]
+
+			# parse prop
+			prop = match[1]
+
+			if prop
+				prop = prop.replace PROPS_RE, (str, _, postfix) ->
+					prefix = ''
+					postfix ?= ''
+					str = str.replace PROP_RE, (props) ->
+						props = props.split '.'
+						props.shift()
+						if postfix is '('
+							ends = '.' + props[props.length - 1]
+							props.pop()
+						else
+							ends = ''
+						r = ''
+						for prop in props
+							prefix += "__input.trace("
+							r += ".#{prop})"
+						r + ends
+					"#{prefix}#{str}"
+
+				prop = prop.replace VAR_RE, (matched, prefix, elem) ->
+					if elem.indexOf('__') is 0
+						return matched
+
+					if prefix.trim() or not utils.has CONSTANT_VARS, elem
+						str = "__get(__input, '#{utils.addSlashes elem}')"
+					else
+						str = elem
+					"#{prefix}#{str}"
+
+			prop ?= ''
 
 			# add into func string
-			if match[1] then func += "'#{utils.addSlashes match[1]}' + "
-			func += "#{prop} + "
-			if match[3] then func += "'#{utils.addSlashes match[3]}' + "
+			if match[0] then func += "'#{utils.addSlashes match[0]}' + "
+			if prop
+				func += "#{prop} + "
+
+		if chunks.length then func += "'#{utils.addSlashes chunks[0]}' + "
 
 		func = 'return ' + func.slice 0, -3
 		@func = utils.tryFunction coffee.compile, coffee, [func, bare: true], func
 
-		Input.fromAssembled @
+		try
+			Input.fromAssembled @
+		catch err
+			log.error "Can't parse string literal:\n#{text}\n#{err.message}\n#{func}"
 
 	_func: null
 

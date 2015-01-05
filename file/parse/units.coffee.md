@@ -64,8 +64,6 @@ using the `neft:use` tag. This is faster and cleaner.
 			name = node.attrs.get 'name'
 			unless name then continue
 
-			node.attrs.set 'name', undefined
-
 			# remove node from file
 			node.parent = undefined
 			i--; n--

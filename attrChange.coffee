@@ -1,10 +1,11 @@
 'use strict'
 
-expect = require 'expect'
+assert = require 'assert'
 utils = require 'utils'
 log = require 'log'
 
-log = log.scope 'View', 'Condition'
+assert = assert.scope 'View.AttrChange'
+log = log.scope 'View', 'AttrChange'
 
 module.exports = (File) -> class AttrChange
 
@@ -12,11 +13,12 @@ module.exports = (File) -> class AttrChange
 	@__path__ = 'File.AttrChange'
 
 	constructor: (opts) ->
-		expect(opts).toBe.simpleObject()
-		expect(opts.self).toBe.any File
-		expect(opts.node).toBe.any File.Element
-		expect(opts.target).toBe.any File.Element
-		expect(opts.name).toBe.truthy().string()
+		assert.isPlainObject opts
+		assert.instanceOf opts.self, File
+		assert.instanceOf opts.node, File.Element
+		assert.instanceOf opts.target, File.Element
+		assert.isString opts.name
+		assert.notLengthOf opts.name, 0
 
 		utils.fill @, opts
 

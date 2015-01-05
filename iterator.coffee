@@ -1,23 +1,24 @@
 'use strict'
 
-[utils, expect, List] = ['utils', 'expect', 'list'].map require
+utils = require 'utils'
+assert = require 'assert'
+List = require 'list'
 log = require 'log'
 
 {isArray} = Array
 
+assert = assert.scope 'View.Iterator'
 log = log.scope 'View', 'Iterator'
 
 module.exports = (File) -> class Iterator extends File.Use
-
 	@__name__ = 'Iterator'
 	@__path__ = 'File.Iterator'
 
 	@HTML_ATTR = "#{File.HTML_NS}:each"
 
 	constructor: (@self, node) ->
-
-		expect(self).toBe.any File
-		expect(node).toBe.any File.Element
+		assert.instanceOf self, File
+		assert.instanceOf node, File.Element
 
 		prefix = if self.name then "#{self.name}-" else ''
 		name = "#{prefix}each[#{utils.uid()}]"
@@ -85,7 +86,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		@render()
 
 	clearData: ->
-		expect(@data).toBe.object()
+		assert.isObject @data
 
 		while length = @usedUnits.length
 			@popItem length - 1
@@ -93,11 +94,11 @@ module.exports = (File) -> class Iterator extends File.Use
 		@
 
 	updateItem: (elem, i) ->
-		if i?
+		unless i?
 			i = elem
 
-		expect(@data).toBe.object()
-		expect(i).toBe.integer()
+		assert.isObject @data
+		assert.isInteger i
 
 		@popItem i
 		@insertItem i
@@ -105,11 +106,11 @@ module.exports = (File) -> class Iterator extends File.Use
 		@
 
 	insertItem: (elem, i) ->
-		if i?
+		unless i?
 			i = elem
 
-		expect(@data).toBe.object()
-		expect(i).toBe.integer()
+		assert.isObject @data
+		assert.isInteger i
 
 		{data} = @
 
@@ -141,11 +142,11 @@ module.exports = (File) -> class Iterator extends File.Use
 		@
 
 	popItem: (elem, i) ->
-		if i?
+		unless i?
 			i = elem
 
-		expect(@data).toBe.object()
-		expect(i).toBe.integer()
+		assert.isObject @data
+		assert.isInteger i
 
 		@node.children[i].parent = undefined
 
@@ -156,7 +157,6 @@ module.exports = (File) -> class Iterator extends File.Use
 		@
 
 	clone: (original, self) ->
-
 		clone = super
 
 		clone.storage = utils.cloneDeep @storage

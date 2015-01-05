@@ -1,7 +1,10 @@
 'use strict'
 
-[expect, utils, log] = ['expect', 'utils', 'log'].map require
+assert = require 'assert'
+utils = require 'utils'
+log = require 'log'
 
+assert = assert.scope 'View.Condition'
 log = log.scope 'View', 'Condition'
 
 funcCache = {}
@@ -13,7 +16,6 @@ expCacheLen = 0
 MAX_IN_EXP_CACHE = 4000
 
 module.exports = (File) -> class Condition
-
 	@__name__ = 'Condition'
 	@__path__ = 'File.Condition'
 
@@ -29,10 +31,9 @@ module.exports = (File) -> class Condition
 			Condition.FALSE_FUNC
 
 	constructor: (opts) ->
-
-		expect(opts).toBe.simpleObject()
-		expect(opts.self).toBe.any File
-		expect(opts.node).toBe.any File.Element
+		assert.isPlainObject opts
+		assert.instanceOf opts.self, File
+		assert.instanceOf opts.node, File.Element
 
 		utils.fill @, opts
 
@@ -42,39 +43,44 @@ module.exports = (File) -> class Condition
 	execute: ->
 		exp = @node.attrs.get Condition.HTML_ATTR
 
-		# get cached exp result
-		if expCache.hasOwnProperty exp
-			return expCache[exp]
+		if typeof exp is 'string'
+			# get cached exp result
+			if expCache.hasOwnProperty exp
+				return expCache[exp]
 
-		# cache func
-		unless funcCache.hasOwnProperty exp
-			if funcCacheLen++ > MAX_IN_FUNC_CACHE
-				funcCache = {}
-				funcCacheLen = 0
+			# cache func
+			unless funcCache.hasOwnProperty exp
+				if funcCacheLen++ > MAX_IN_FUNC_CACHE
+					funcCache = {}
+					funcCacheLen = 0
 
-			funcCache[exp] = Condition.getCondFunc exp
+				funcCache[exp] = Condition.getCondFunc exp
 
-		# get result
-		result = utils.tryFunction funcCache[exp], @self, null, false
+			# get result
+			result = utils.tryFunction funcCache[exp], @self, null, (err) =>
+				cond = Object.getPrototypeOf(@node).attrs.get Condition.HTML_ATTR
+				log.error "Can't execute condition `#{cond}` (`#{exp}` now);\n#{err};\n" +
+				          "Rewrite your `neft:if` to always return boolean"
+				false
 
-		# save result to the exp cache
-		if expCacheLen++ > MAX_IN_EXP_CACHE
-			expCache = {}
-			expCacheLen = 0
-		expCache[exp] = result
+			# save result to the exp cache
+			if expCacheLen++ > MAX_IN_EXP_CACHE
+				expCache = {}
+				expCacheLen = 0
+			expCache[exp] = result
+		else
+			result = !!exp
 
 		return result
 
 	render: ->
-		expect(@self.isRendered).toBe.truthy()
-
 		result = @execute()
 		return if @node.visible is result
 
 		@node.visible = result
 
 	revert: ->
-		expect(@self.isRendered).toBe.falsy()
+		assert.notOk @self.isRendered
 
 		@node.visible = true
 

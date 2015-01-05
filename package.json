@@ -3,13 +3,7 @@
 	"name": "view",
 	"version": "0.7.0",
 	"dependencies": {
-		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
-		"emitter": "git+ssh://git@github.com:Kildyt/emitter.git",
-		"log": "git+ssh://git@bitbucket.org:Kildyt/log.git",
-		"signal": "git+ssh://git@bitbucket.org:Kildyt/signal.git",
 		"htmlparser2": ">=3.3.0",
-		"coffee-script": ">=1.6.3",
-		"dict": "git+ssh://git@bitbucket.org:Kildyt/dict.git",
-		"list": "git+ssh://git@bitbucket.org:Kildyt/list.git"
+		"coffee-script": ">=1.6.3"
 	}
 }

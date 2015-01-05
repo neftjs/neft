@@ -1,8 +1,10 @@
 'use script'
 
 utils = require 'utils'
-expect = require 'expect'
+assert = require 'assert'
 signal = require 'signal'
+
+assert = assert.scope 'View.Unit'
 
 module.exports = (File) -> class Unit extends File
 
@@ -12,9 +14,9 @@ module.exports = (File) -> class Unit extends File
 	signal.create @, 'created'
 
 	constructor: (self, @name, node) ->
-
-		expect(self).toBe.any File
-		expect(name).toBe.truthy().string()
+		assert.instanceOf self, File
+		assert.isString name
+		assert.notLengthOf name, 0
 
 		Unit.created @, self
 

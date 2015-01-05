@@ -1,13 +1,14 @@
 'use strict'
 
 utils = require 'utils'
-expect = require 'expect'
+assert = require 'assert'
 log = require 'log'
 Emitter = require 'emitter'
 signal = require 'signal'
 Dict = require 'dict'
 List = require 'list'
 
+assert = assert.scope 'View'
 log = log.scope 'View'
 
 module.exports = class File
@@ -40,14 +41,14 @@ module.exports = class File
 	@Iterator = require('./iterator') @
 
 	@fromHTML = do ->
-
 		clear = require('./file/clear') File
 
 		(path, html) ->
-
-			expect(path).toBe.truthy().string()
-			expect().some().keys(files).not().toBe path
-			expect(html).toBe.truthy().string()
+			assert.isString path
+			assert.notLengthOf path, 0
+			assert.notOk files[path]?
+			assert.isString html
+			assert.notLengthOf html, 0
 
 			# get node
 			node = File.Element.fromHTML html
@@ -61,15 +62,15 @@ module.exports = class File
 			file
 
 	@fromJSON = do (ctorsCache={}) -> (path, json) ->
-
-		expect(path).toBe.truthy().string()
-		expect().some().keys(files).not().toBe path
+		assert.isString path
+		assert.notLengthOf path, 0
+		assert.notOk files[path]?
 
 		# parse json
 		if typeof json is 'string'
 			json = utils.tryFunction JSON.parse, null, [json], json
 
-		expect(json).toBe.simpleObject()
+		assert.isPlainObject json
 
 		# put ctors
 		ns = File: File, Dict: Dict, List: List
@@ -91,8 +92,8 @@ module.exports = class File
 			# TODO: trigger here instance of `LoadError` class
 			File.trigger File.ERROR, path
 
-		expect(path).toBe.truthy().string()
-		expect().some().keys(files).toBe path
+		assert.isString path
+		assert.ok files[path]?
 
 		# from pool
 		if pool[path]?.length
@@ -106,24 +107,22 @@ module.exports = class File
 		file
 
 	constructor: do ->
-
 		if utils.isNode
 			links = require('./file/parse/links') File
+			units = require('./file/parse/units') File
 			attrs = require('./file/parse/attrs') File
 			attrChanges = require('./file/parse/attrChanges') File
-			units = require('./file/parse/units') File
 			iterators = require('./file/parse/iterators') File
 			source = require('./file/parse/source') File
 			uses = require('./file/parse/uses') File
 			storage = require('./file/parse/storage') File
 			conditions = require('./file/parse/conditions') File
-			nodes = require('./file/parse/nodes') File
 
 		(@path, @node) ->
-
-			expect(path).toBe.truthy().string()
-			expect(node).toBe.any File.Element
-			expect().some(files).not().toBe path
+			assert.isString path
+			assert.notLengthOf path, 0
+			assert.instanceOf node, File.Element
+			assert.notOk files[path]?
 
 			# set properties
 			@pathbase = path.substring 0, path.lastIndexOf('/') + 1
@@ -140,15 +139,14 @@ module.exports = class File
 
 			# parse
 			links @
+			units @
 			attrs @
 			attrChanges @
-			units @
 			iterators @
 			source @
 			uses @
 			storage @
 			conditions @
-			nodes @
 
 			# trigger signal
 			File.parsed @
@@ -161,7 +159,6 @@ module.exports = class File
 	uid: ''
 	isRendered: false
 	node: null
-	nodes: null
 	sourceNode: null
 	path: ''
 	pathbase: ''
@@ -179,12 +176,10 @@ module.exports = class File
 	init: ->
 
 	render: render = (source) ->
+		assert.isObject source if source?
+		assert.notOk @isRendered
+		assert.is @clone, undefined
 
-		expect().defined(source).toBe.object()
-		expect(@isRendered).toBe.falsy()
-		expect(@clone).toBe undefined
-
-		@isRendered = true
 		@source = source
 
 		# inputs
@@ -197,18 +192,23 @@ module.exports = class File
 			for condition, i in @conditions
 				condition.render()
 
-		# iterators
-		if @iterators
-			for iterator, i in @iterators
-				iterator.render()
+		# TODO: render uses and iterators in proper
+		# order (by the nodes tree) - important for styles
 
 		# uses
 		if @uses
 			for use in @uses
 				use.render()
 
+		# iterators
+		if @iterators
+			for iterator, i in @iterators
+				iterator.render()
+
 		# source
 		render.source @, source
+
+		@isRendered = true
 
 		@
 
@@ -219,8 +219,8 @@ module.exports = class File
 		listeners = require('./file/render/revert/listeners') File
 
 		->
+			assert.ok @isRendered
 
-			expect(@isRendered).toBe.truthy()
 			@isRendered = false
 
 			# inputs
@@ -233,15 +233,15 @@ module.exports = class File
 				for condition, i in @conditions
 					condition.revert()
 
-			# iterators
-			if @iterators
-				for iterator, i in @iterators
-					iterator.revert()
-
 			# uses
 			if @uses
 				for use in @uses
 					use.revert()
+
+			# iterators
+			if @iterators
+				for iterator, i in @iterators
+					iterator.revert()
 
 			@storage = null
 			@source = null
@@ -307,7 +307,7 @@ module.exports = class File
 			@revert()
 
 		pathPool = pool[@path] ?= []
-		expect().some(pathPool).not().toBe @
+		assert.notOk utils.has(pathPool, @)
 
 		pathPool.push @
 

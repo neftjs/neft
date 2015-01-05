@@ -1,7 +1,11 @@
 'use strict'
 
 utils = require 'utils'
-expect = require 'expect'
+assert = require 'assert'
+log = require 'log'
+
+assert = assert.scope 'View.Use'
+log = log.scope 'View', 'Use'
 
 module.exports = (File) -> class Use
 
@@ -9,10 +13,10 @@ module.exports = (File) -> class Use
 	@__path__ = 'File.Use'
 
 	constructor: (@self, @name, @node) ->
-
-		expect(self).toBe.any File
-		expect(name).toBe.truthy().string()
-		expect(node).toBe.any File.Element
+		assert.instanceOf self, File
+		assert.isString name
+		assert.notLengthOf name, 0
+		assert.instanceOf node, File.Element
 
 		# get bodyNode
 		if node.children.length
@@ -28,7 +32,7 @@ module.exports = (File) -> class Use
 	isRendered: false
 
 	render: (file) ->
-		expect().defined(file).toBe.any File
+		assert.instanceOf file, File if file?
 
 		return unless @node.visible
 
@@ -36,7 +40,9 @@ module.exports = (File) -> class Use
 			@revert()
 
 		unit = @self.units[@name]
-		return if not file and not unit
+		if not file and not unit
+			log.warn "Can't find `#{@name}` neft:unit"
+			return
 
 		usedUnit = @usedUnit = file or File.factory(unit)
 		unless file

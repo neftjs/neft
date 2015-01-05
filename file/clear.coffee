@@ -14,15 +14,8 @@ PHRASING_ELEMENTS = ["A", "EM", "STRONG", "SMALL", "MARK", "ABBR",
                      "CANVAS", "TIME", "METER"]
 
 isRemove = (node) ->
-
 	switch node.name
-
-		when '#comment'
-
-			true
-
 		when '#text'
-
 			if WHITE_SPACE_RE.test node.text then return true
 
 			unless ~PHRASING_ELEMENTS.indexOf node.parent.name
@@ -33,7 +26,6 @@ isRemove = (node) ->
 			false
 
 		else
-
 			false
 
 removeEmptyTexts = (node) ->

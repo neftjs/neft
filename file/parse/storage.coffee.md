@@ -57,6 +57,7 @@ If no attribute with such name found, value from the global data will be used
 					elem.attrs.item i, attr
 					break unless attr[0]
 
+					InputRE.lastIndex = 0
 					if InputRE.test attr[1]
 						inputs.push new Input.Attr elem, attr[0]
 
