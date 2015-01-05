@@ -128,7 +128,9 @@ module.exports = ->
 		stream: true
 		groundskeeper: true
 		'uglify-js': true
+		pegjs: true
 
+	fs = require 'fs'
 	pathUtils = require 'path'
 	require 'coffee-script/register'
 
@@ -147,11 +149,18 @@ module.exports = ->
 
 	EMULATORS[type]()
 
+	require.extensions['.pegjs'] = (module, filename) ->
+		module.exports = fs.readFileSync filename, 'utf8'
+
 	###
 	Override standard `Module._load()` to capture all required modules and files
 	###
 	Module = module.constructor
 	Module._load = do (_super = Module._load) -> (req, parent) ->
+		hiddenReq = req
+		if req is 'assert'
+			hiddenReq = arguments[0] = 'neft-assert'
+
 		r = _super.apply @, arguments
 
 		if NODE_MODULES[req]
@@ -161,7 +170,7 @@ module.exports = ->
 			if parent.id.indexOf("node_modules/#{module}") > 0
 				return r
 
-		filename = Module._resolveFilename req, parent
+		filename = Module._resolveFilename hiddenReq, parent
 
 		modulePath = pathUtils.relative base, filename
 		parentPath = pathUtils.relative base, parent.id
@@ -169,13 +178,16 @@ module.exports = ->
 
 		if onlyLocal and ///^\.\.\/|^node_modules\////.test(modulePath)
 			name = ///^\.\.\/([a-z_\-A-Z]+)///.exec(modulePath)?[1]
-			if allowedRemoteModules.indexOf(name) is -1
+			if allowedRemoteModules.indexOf(name) is -1 and req isnt 'neft-assert'
 				return r
 
 		modules.push modulePath unless ~modules.indexOf modulePath
 
 		mpaths = paths[parentPath] ?= {}
 		mpaths[req] = modulePath
+
+		if req is 'neft-assert'
+			mpaths['assert'] = modulePath
 
 		r
 

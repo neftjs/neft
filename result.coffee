@@ -19,6 +19,10 @@ replaceStr = (str, oldStr, newStr) ->
 
 IS_COFFEE_RE = ///\.(coffee|litcoffee|coffee.md)$///
 IS_LITERATE_COFFEE_RE = ///\.(litcoffee|coffee.md)$///
+STRING_FILES =
+	'.pegjs': true
+	'.txt': true
+
 getFile = (path) ->
 	# console.log "Include file: #{path}"
 	file = fs.readFileSync path, 'utf-8'
@@ -26,6 +30,9 @@ getFile = (path) ->
 	if IS_COFFEE_RE.test path
 		isLiterate = IS_LITERATE_COFFEE_RE.test path
 		file = coffee.compile file, bare: true, literate: isLiterate
+
+	if STRING_FILES[pathUtils.extname(path)]
+		file = "module.exports = #{JSON.stringify(file)}"
 
 	file
 

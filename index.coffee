@@ -1,7 +1,7 @@
 'use strict'
 
 fs = require 'fs'
-assert = require 'asserts'
+assert = require 'neft-assert'
 cp = require 'child_process'
 pathUtils = require 'path'
 
