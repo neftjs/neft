@@ -728,7 +728,7 @@ console.log newObj.b
 *Boolean* utils.has(*NotPrimitive* object, *Any* value)
 -------------------------------------------------------
 
-Returns true if given *object* contains *value*.
+Returns true if given array contains *value*.
 
 ```
 console.log utils.has(['a']), 'a'
@@ -748,11 +748,11 @@ console.log utils.has(object, 'New York')
 # true
 ```
 
-	has = exports.has = (obj, elem) ->
+	has = exports.has = (obj, val) ->
 		expect(obj).toBe.object()
 
 		if isArray obj
-			!!~Array::indexOf.call obj
+			!!~Array::indexOf.call obj, val
 		else
 			for key, value of obj when hasOwnProp.call(obj, key)
 				if value is val
@@ -870,7 +870,7 @@ console.log utils.addSlashes('a"b')
 	exports.addSlashes = do ->
 
 		SLASHES_RE = ///'|"///g
-		NEW_SUB_STR = '\\$&'
+		NEW_SUB_STR = '\\$\&'
 
 		(str) ->
 			expect(str).toBe.string()
