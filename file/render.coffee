@@ -33,12 +33,15 @@ module.exports = (File) ->
 
 			return unless elem
 
+			keepLooking = =>
+				@_watchedFile = elem.self
+				elem.self.onReplacedByUse @updateStylesParent
+
 			parentStyles = elem.self.styles
 
 			# keep looking if no styles found
 			unless parentStyles.length
-				@_watchedFile = elem.self
-				elem.self.onReplacedByUse @updateStylesParent
+				keepLooking()
 				return
 
 			# find styles parent walking by the tree
@@ -54,10 +57,10 @@ module.exports = (File) ->
 
 				parentNode = parentNode._parent
 
-			null
+			keepLooking()
+			return
 
 	File::clone = do (_super = File::clone) -> ->
-
 		clone = _super.call @
 
 		# check whether listening is necessary

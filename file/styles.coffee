@@ -5,7 +5,8 @@ expect = require 'expect'
 log = require 'log'
 View = require 'view'
 
-styleParseStyles = require('./parse/styles')
+if utils.isNode
+	styleParseStyles = require('./parse/styles')
 
 {isArray} = Array
 {Element} = View

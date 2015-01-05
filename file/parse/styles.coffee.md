@@ -15,21 +15,21 @@ If used `Renderer.Item` defines `text` property, *XML* tag text will be used for
 
 ```nml,include(Window)
 Rectangle {
-  color: 'gray'
-
-  Rectangle {
-    id: header
-    property text: ''
-    width: 100
-    height: 100
-    color: 'blue'
-    
-    Text {
-      text: parent.text
-      color: 'white'
-      anchors.centerIn: parent
-    }
-  }
+\	color: 'gray'
+\
+\	Rectangle {
+\		id: header
+\		property text: ''
+\		width: 100
+\		height: 100
+\		color: 'blue'
+\
+\		Text {
+\			text: parent.text
+\			color: 'white'
+\			anchors.centerIn: parent
+\		}
+\	}
 }
 ```
 
@@ -42,8 +42,8 @@ into another `Renderer.Item`, just use capitalized file name.
 
 ```nml,include(ArticlesContact)
 Text {
-  id: header
-  color: 'red'
+\	id: header
+\	color: 'red'
 }
 ```
 

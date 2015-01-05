@@ -12,39 +12,39 @@ data and logic duplications.
 
 ```nml,include(Place)
 Column {
-  Text {
-  	id: heading
-  	font.weight: 1
-  	font.color: 'blue'
-  }
-
-  Rectangle {
-    margin.top: 15
-    width: parent.width
-    height: stats.height
-    color: 'gray'
-
-    Column {
-      id: stats
-    }
-  }
+\	Text {
+\		id: heading
+\		font.weight: 1
+\		font.color: 'blue'
+\	}
+\
+\	Rectangle {
+\		margin.top: 15
+\		width: parent.width
+\		height: stats.height
+\		color: 'gray'
+\
+\		Column {
+\			id: stats
+\		}
+\	}
 }
 ```
 
 ```nml,include(PlaceInformation)
 Row {
-  margin: 10
-  
-  Text {
-  	id: name
-  	width: 50
-  	font.weight: 0.8
-  }
-
-  Text {
-  	id: value
-  	font.color: '#444'
-  }
+\	margin: 10
+\
+\	Text {
+\		id: name
+\		width: 50
+\		font.weight: 0.8
+\	}
+\
+\	Text {
+\		id: value
+\		font.color: '#444'
+\	}
 }
 ```
 

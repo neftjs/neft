@@ -7,7 +7,8 @@ neft:func @js
 	expect = require 'expect'
 	Renderer = require 'renderer'
 
-	stylesParseFuncs = require './parse/funcs'
+	if utils.isNode
+		stylesParseFuncs = require './parse/funcs'
 
 	# link modules to be possible required by the funcs
 	links = ['db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
