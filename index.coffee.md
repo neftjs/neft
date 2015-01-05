@@ -1,6 +1,8 @@
 Signal
 ======
 
+@requires utils
+
 Signals are used as standard `events` but brings new features and fix some issues, which
 standard events based on the strings have.
 
@@ -36,6 +38,11 @@ standard events based on the strings have.
 		signal = obj[name]
 		obj[handlerName] = createHandlerFunction obj, signal
 
+signal.STOP_PROPAGATION
+-----------------------
+
+	exports.STOP_PROPAGATION = 1 << 30
+
 *String* signal.getHandlerName(*String* signalName)
 -----------------------------------------------------
 
@@ -43,7 +50,6 @@ Returns handler name based on the signal name.
 
 In pratice it adds *on* prefix and capitalize the signal name.
 
-### Example
 ```
 signal.getHandlerName 'xChanged'
 # onXChanged
@@ -65,7 +71,6 @@ Returns true if the given *name* is a proper handler name.
 
 In pratice it returns true if the *name* is prefixed by *on*.
 
-### Example
 ```
 signal.isHandlerName 'onXChanged'
 # true
@@ -87,8 +92,7 @@ signal.isHandlerName 'onxChanged'
 
 Creates new signal and handler for this signal in the given *object* under the given *name*.
 
-### E```xample
-
+```
 obj = {}
 
 signal.create obj, 'xChanged'
@@ -117,7 +121,6 @@ It creates new *signal* function only if it's needed (any listeners wan't to lis
 
 It can be also used to create signals in the prototypes.
 
-### Example
 ```
 class Dog
   handler = signal.createLazy @::, 'ageChanged'
@@ -167,7 +170,6 @@ console.log Object.keys(Object.getPrototypeOf(myDog))
 
 Signal function is used to call all handler listeners.
 
-### Example
 ```
 obj = {}
 signal.create obj, 'changed'
@@ -188,14 +190,16 @@ obj.changed()
 			i = -1
 			while ++i < n
 				func = listeners[i]
-				if func is null
+				unless func
 					listeners.splice i, 1
 					i--; n--
 					continue
 
-				func.apply obj, args
+				result = func.apply(obj, args)
+				if result is exports.STOP_PROPAGATION
+					return result
 
-			null
+			return
 
 		listeners = signal.listeners = []
 
@@ -210,7 +214,6 @@ Handler is always stored in the property prefixed by the *on* (e.g. *onWidthChan
 
 If it's called it works as a alias for the *Handler.connect()*.
 
-### Example
 ```
 obj = {}
 
@@ -252,14 +255,13 @@ Connected function will be called on each signal call.
 
 			@listeners.push listener
 
-			null
+			return
 
 Handler.disconnect(*Function* listener)
 ---------------------------------------
 
 Diconnect already connected listener.
 
-### Example
 ```
 obj = {}
 
@@ -283,7 +285,7 @@ obj.pressed()
 			index = @listeners.indexOf listener
 			@listeners[index] = null
 
-			null
+			return
 
 Handler.disconnectAll()
 -----------------------
@@ -296,4 +298,4 @@ Diconnect all already connected listeners from the *handler*.
 			for listener in @listeners
 				@disconnect listener
 
-			null
+			return
