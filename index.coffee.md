@@ -1,6 +1,8 @@
 Dict
 ====
 
+@requires utils
+
 Basics helper which has been made to extends functionalitites of the default JavaScript.
 
 It's similar to the Python Dict helper and was designed on it, but brings a little bit more.
@@ -34,110 +36,8 @@ See `Dict::toJSON` to see how to stringify a *Dict* instance and use it here.
 
 			new Dict json
 
-*String* Dict.getPropertySignalName(*String* propertyName)
-----------------------------------------------------------
-
-Returns name of the signal name, based on the property name.
-
-By default this function adds into the property name *Changed* word.
-
-Read more about signals in the *signal* module documentation and
-check methods in this class which calls signals.
-
-To create signal handler name based on the signal name, check `signal.getHandlerName()`.
-
-### Example
-```
-Dict.getPropertySignalName('name')
-# nameChanged
-
-signal.getHandlerName('nameChanged')
-# onNameChanged
-```
-
-		@getPropertySignalName = do (cache = {}) -> (propName) ->
-			expect(propName).toBe.truthy().string()
-
-			if cache.hasOwnProperty propName
-				cache[propName]
-			else
-				cache[propName] = "#{propName}Changed"
-
-Dict.defineProperty(*NotPrimitive* prototype, *String* propertyName)
---------------------------------------------------------------------
-
-Define new *Dict* custom property on the given *prototype*.
-
-*Dict* properties are used for fast getting and setting properties in opposite to
-use `Dict::get()` and `Dict::set()` methods.
-
-Additionally, each setter calls special signal
-which is determined by the `Dict.getPropertySignalName()`.
-
-All created signals are *lazy* (see more in the *signal* module documentation page), so
-it's can be easily used in the classes prototypes. Additionally it brings a little
-optimization, because signal handlers without listeners are not created and called
-on each property value change.
-
-### Example
-```
-class Dog extends Dict
-  constructor: ->
-    super
-      age: 4
-
-  Dict.defineProperty @::, 'age'
-
-myDog = new Dog
-
-console.log myDog.age
-# 4
-
-myDog.onAgeChanged.connect (oldVal) ->
-  console.log "Age has been changed from #{oldVal} to #{@age}"
-
-myDog.age++
-# Age has been changed from 4 to 5
-```
-
-		@defineProperty = do ->
-			createGetter = (propName) ->
-				->
-					Dict::get.call @, propName
-
-			createSetter = (propName) ->
-				signalName = Dict.getPropertySignalName propName
-
-				(val) ->
-					oldVal = @_data[propName]
-
-					# break if value didn't change
-					if oldVal is val
-						return @
-
-					Dict::set.call @, propName, val
-
-					# signal
-					@[signalName]? oldVal
-
-			(prototype, propName) ->
-				expect(prototype).not().toBe.primitive()
-				expect(propName).toBe.truthy().string()
-
-				# handler
-				signalName = Dict.getPropertySignalName propName
-				signal.createLazy prototype, signalName
-
-				# getter/setter
-				getter = createGetter propName
-				setter = createSetter propName
-				desc = utils.ENUMERABLE | utils.CONFIGURABLE
-				utils.defineProperty prototype, propName, desc, getter, setter
-
-				null
-
 *Dict* Dict([*Object* data])
--------------------------
+----------------------------
 
 Creates new *Dict* instance.
 
@@ -145,7 +45,6 @@ Creates new *Dict* instance.
 
 Using *new* keyword is not required.
 
-### Example
 ```
 data = new Dict
   name: 'xyz'
@@ -181,14 +80,13 @@ This value can't be changed manually.
 			@keys().length
 		, null
 
-Dict::changed(*String* key, *Any* oldValue)
--------------------------------------------
+*Signal* Dict::changed(*String* key, *Any* oldValue)
+----------------------------------------------------
 
 Lazy **signal** called on each property value change.
 
-You can listen on this signal using the ***onChanged*** handler.
+You can listen on this signal using the `onChanged` handler.
 
-### Example
 ```
 user = new Dict
   country: 'Germany'
@@ -209,7 +107,6 @@ Get a property value stored in the *Dict*.
 
 Returns *undefined* only for unknown properties.
 
-### Example
 ```
 bunny = new Dict
   speedX: 5
@@ -242,7 +139,6 @@ Passed *value* can't be a `undefined`, because it's used only for unknown proper
 
 Given *value* is returned as a **result**.
 
-### Example
 ```
 links = new Dict
   facebook: 'https://facebook.com/neft.io'
@@ -283,7 +179,6 @@ Remove exists property from the *Dict*.
 
 This method calls `Dict::changed()` **signal** with standard parameters.
 
-### Example
 ```
 member = new Dict
 
@@ -320,7 +215,6 @@ Returns array of the existed properties names in the *Dict*.
 It always returns the same array, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
-### Example
 ```
 data = new Dict
   x: 10
@@ -352,7 +246,6 @@ Returns array of the existed properties values in the *Dict*.
 It always returns the same array, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
-### Example
 ```
 data = new Dict
   x: 10
@@ -384,7 +277,6 @@ Returns array of key-value pairs of all existed properties.
 It always returns the same arrays, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
-### Example
 ```
 data = new Dict
   x: 10
