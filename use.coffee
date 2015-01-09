@@ -85,7 +85,7 @@ module.exports = (File) -> class Use
 		clone.usedUnit = null
 		clone.isRendered = false
 
-		clone.node.on 'visibilityChanged', ->
+		clone.node.onVisibilityChanged ->
 			if self.isRendered
 				clone.render()
 

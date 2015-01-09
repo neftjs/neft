@@ -5,6 +5,7 @@ File.Element.Tag.Attrs
 
 	utils = require 'utils'
 	assert = require 'assert'
+	Emitter = require '../../emitter'
 
 	assert = assert.scope 'View.Element.Tag.Attrs'
 
@@ -18,7 +19,7 @@ File.Element.Tag.Attrs
 			event.name = name
 			event.value = value
 
-			tag.trigger 'attrChanged', event
+			Emitter.trigger tag, Emitter.ATTR_CHANGED, event
 			eventsPool.push event
 
 		exports =

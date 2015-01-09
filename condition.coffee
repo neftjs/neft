@@ -93,7 +93,7 @@ module.exports = (File) -> class Condition
 		clone.render = => @render.call clone
 		clone.revert = => @revert.call clone
 
-		clone.node.on 'attrChanged', (e) ->
+		clone.node.onAttrChanged (e) ->
 			if self.isRendered
 				clone.render() if e.name is Condition.HTML_ATTR
 

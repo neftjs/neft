@@ -45,7 +45,7 @@ module.exports = (File) -> class AttrChange
 
 		@update()
 
-		clone.node.on 'visibilityChanged', (e) ->
+		clone.node.onVisibilityChanged (e) ->
 			clone.update()
 
 		clone

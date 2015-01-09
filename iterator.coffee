@@ -167,11 +167,11 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.insertItem = (arg1, arg2) => @insertItem.call clone, arg1, arg2
 		clone.popItem = (arg1, arg2) => @popItem.call clone, arg1, arg2
 
-		clone.node.on 'attrChanged', (e) ->
+		clone.node.onAttrChanged (e) ->
 			if self.isRendered and e.name is Iterator.HTML_ATTR
 				clone.update()
 
-		clone.node.on 'visibilityChanged', (oldVal) ->
+		clone.node.onVisibilityChanged (oldVal) ->
 			if self.isRendered and oldVal is false and not @data
 				clone.update()
 

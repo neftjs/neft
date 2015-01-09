@@ -5,6 +5,7 @@ File.Element.Text
 
 	utils = require 'utils'
 	assert = require 'assert'
+	Emitter = require '../emitter'
 
 	assert = assert.scope 'View.Element.Text'
 
@@ -37,4 +38,4 @@ File.Element.Text
 			@_text = value
 
 			# trigger event
-			@trigger 'textChanged', old
+			Emitter.trigger @, Emitter.TEXT_CHANGED, old

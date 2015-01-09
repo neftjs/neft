@@ -160,7 +160,7 @@ module.exports = (File) -> class Input
 	render: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.on 'attrChanged', @_onAttrChanged
+				storage.onAttrChanged @_onAttrChanged
 			else if storage instanceof Dict
 				@trace storage
 		
@@ -169,7 +169,7 @@ module.exports = (File) -> class Input
 	revert: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.off 'attrChanged', @_onAttrChanged
+				storage.onAttrChanged.disconnect @_onAttrChanged
 
 		for hash, dict of @traces
 			dict.onChanged.disconnect @_onChanged

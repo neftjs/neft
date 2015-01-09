@@ -7,7 +7,7 @@ File.Element @low-level API
 
 	utils = require 'utils'
 	assert = require 'assert'
-	Emitter = require 'emitter'
+	Emitter = require './emitter'
 
 	{isArray} = Array
 
@@ -91,7 +91,7 @@ Change the value to move the element.
 						parent.children.push @
 
 					# trigger event
-					@trigger 'parentChanged', old
+					Emitter.trigger @, Emitter.PARENT_CHANGED, old
 
 *Boolean* Element::visible
 --------------------------
@@ -117,7 +117,7 @@ Change the value to move the element.
 							child.visible = val
 
 					# trigger event
-					@trigger 'visibilityChanged', old
+					Emitter.trigger @, Emitter.VISIBILITY_CHANGED, old
 
 					null
 
@@ -150,6 +150,3 @@ Parent of the returned `Element` is `null`.
 			@parser = require('./element/parser') @
 		@Tag = require('./element/tag') @
 		@Text = require('./element/text') @
-
-		# set Element as immutable
-		Object.freeze @
