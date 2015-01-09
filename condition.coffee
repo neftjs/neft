@@ -84,6 +84,10 @@ module.exports = (File) -> class Condition
 
 		@node.visible = true
 
+	attrChangedListener = (e) ->
+		if @self.isRendered and e.name is Condition.HTML_ATTR
+			@render()
+
 	clone: (original, self) ->
 		clone = Object.create @
 
@@ -93,8 +97,6 @@ module.exports = (File) -> class Condition
 		clone.render = => @render.call clone
 		clone.revert = => @revert.call clone
 
-		clone.node.onAttrChanged (e) ->
-			if self.isRendered
-				clone.render() if e.name is Condition.HTML_ATTR
+		clone.node.onAttrChanged attrChangedListener, clone
 
 		clone

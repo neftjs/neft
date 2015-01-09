@@ -35,6 +35,9 @@ module.exports = (File) -> class AttrChange
 		@target.attrs.set @name, val
 		return
 
+	visibilityChangedListener = ->
+		@update()
+
 	clone: (original, self) ->
 		clone = Object.create @
 
@@ -45,7 +48,6 @@ module.exports = (File) -> class AttrChange
 
 		@update()
 
-		clone.node.onVisibilityChanged (e) ->
-			clone.update()
+		clone.node.onVisibilityChanged visibilityChangedListener, clone
 
 		clone

@@ -21,7 +21,7 @@ module.exports = class Emitter
 
 			while i < n
 				if listeners[i]
-					listeners[i].call listeners[i+1], param
+					listeners[i].call listeners[i+1], param, emitter
 					i += 2
 				else
 					listeners.splice i, 2

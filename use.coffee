@@ -71,6 +71,10 @@ module.exports = (File) -> class Use
 
 		# restore attrs
 		# @node.attrs.backChanges()
+	
+	visibilityChangedListener = ->
+		if @self.isRendered
+			@render()
 
 	clone: (original, self) ->
 
@@ -85,8 +89,6 @@ module.exports = (File) -> class Use
 		clone.usedUnit = null
 		clone.isRendered = false
 
-		clone.node.onVisibilityChanged ->
-			if self.isRendered
-				clone.render()
+		clone.node.onVisibilityChanged visibilityChangedListener, clone
 
 		clone
