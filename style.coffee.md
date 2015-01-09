@@ -43,16 +43,33 @@
 			@__name__ = 'StyleClone'
 			@__path__ = 'File.Style.Clone'
 
-			listenRecursive = (node, event, listener) ->
+			listenRecursive = (style, node, event, listener) ->
+				assert.instanceOf style, StyleClone
 				assert.instanceOf node, File.Element
 
-				node[event] listener
+				node[event] listener, style
 
 				if node.children
 					for child in node.children
-						listenRecursive child, event, listener
+						listenRecursive style, child, event, listener
 
 				null
+
+			visibilityChangedListener = ->
+				if @file.isRendered
+					@updateVisibility()
+
+			textChangedListener = ->
+				if @file.isRendered
+					@updateText()
+
+			attrChangedListener = (e, node) ->
+				return unless @formula.attrs.hasOwnProperty(e.name)
+				value = node.attrs.get e.name
+				if @file.funcs?[value]
+					log.warn "Dynamic listening on Renderer events is not supported"
+					return
+				@setAttr e.name, value
 
 			constructor: (formula, originalFile, file, scope) ->
 				self = @
@@ -115,13 +132,7 @@
 						@setAttr name, val
 
 					# listen on attr change
-					@node.onAttrChanged (e) ->
-						return unless self.formula.attrs.hasOwnProperty(e.name)
-						value = @attrs.get e.name
-						if self.file.funcs?[value]
-							log.warn "Dynamic listening on Renderer events is not supported"
-							return
-						self.setAttr e.name, value
+					@node.onAttrChanged attrChangedListener, @
 
 				# support HTML anchors
 				if @node.name is 'a' and not formula.attrs?.hasOwnProperty("#{Style.HTML_DEEP_ATTR}onPointerClicked")
@@ -133,14 +144,10 @@
 						self.file.storage.global?.uri = url
 
 				# listen on node changes
-				@node.onVisibilityChanged ->
-					if self.file.isRendered
-						self.updateVisibility()
+				@node.onVisibilityChanged visibilityChangedListener, @
 
 				if 'text' of @item
-					listenRecursive @node, 'onTextChanged', ->
-						if self.file.isRendered
-							self.updateText()
+					listenRecursive @, @node, 'onTextChanged', textChangedListener
 
 			render: (parent=@parent) ->
 				assert.instanceOf parent, StyleClone if parent?
