@@ -85,7 +85,7 @@ Text {
 				isScope = ///^[A-Z]///.test attr
 
 				style = new Style
-					self: file
+					file: file
 					node: node
 					id: attr
 					attrs: findAttrs(node)
