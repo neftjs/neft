@@ -8,6 +8,25 @@ module.exports = (impl) ->
 	{Item, Image} = impl.Types
 	implUtils = impl.utils
 
+	queue = []
+	windowLoadQueue = []
+	pending = false
+
+	window.addEventListener 'load', ->
+		while elem = windowLoadQueue.pop()
+			updateSize elem
+		return
+
+	updateAll = ->
+		pending = false
+		for elem in queue
+			updateSizeNow elem
+		return
+
+	updateAllAndClean = ->
+		updateAll()
+		utils.clear queue
+
 	updatePending = false
 
 	updateSizeNow = (item) ->
@@ -24,16 +43,14 @@ module.exports = (impl) ->
 
 	updateSize = (item) ->
 		if document.readyState isnt 'complete'
-			window.addEventListener 'load', ->
-				unless item._impl.textElement.offsetWidth
-					setTimeout updateSize, 0, item
-				else
-					updateSize item
-			return;
+			windowLoadQueue.push item
+		else
+			queue.push item
 
-		setImmediate ->
-			updateSizeNow item
-		setTimeout updateSizeNow, 200, item
+		unless pending
+			setImmediate updateAll
+			setTimeout updateAllAndClean, 200
+			pending = true
 
 	onWidthChanged = ->
 		if not updatePending
