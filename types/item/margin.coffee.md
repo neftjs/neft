@@ -32,6 +32,7 @@ Item.Margin
 
 			createMarginProp = (type) ->
 				itemUtils.defineProperty Margin::, type, null, null, (_super) -> (val) ->
+					true;
 					`//<development>`
 					id = @_item.__hash__
 					assert typeof val is 'number' and isFinite(val)

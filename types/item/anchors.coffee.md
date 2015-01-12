@@ -73,8 +73,8 @@ This connection is updated in realtime, so if the *rect1* will change a position
 
 			createAnchorProp = (type, opts=0) ->
 				itemUtils.defineProperty Anchors::, type, null, null, (_super) -> (val) ->
-					`//<development>`
 					if val?
+						`//<development>`
 						id = @_item.__hash__
 						allowedLines = if H_LINES[type] then H_LINES else V_LINES
 
@@ -167,10 +167,8 @@ so `anchors.top = 'parent.left'` is not allowed.
 							assert V_LINES[line]
 							, "`(##{id}).anchors.#{type}` can't be anchored to a horizontal edge; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
+						`//</development>`
 
-					`//</development>`
-
-					if val?
 						if val[0] is 'this'
 							val[0] = @
 

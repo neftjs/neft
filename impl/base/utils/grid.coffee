@@ -42,11 +42,6 @@ updateItem = (item) ->
 	maxRowsLen = if rowsLen is Infinity then children.length / columnsLen else rowsLen
 	rowsPositions = new Uint32Array maxRowsLen
 
-	maxColumn = 0
-	maxRow = 0
-	rightMargin = 0
-	bottomMargin = 0
-
 	# get sizes
 	i = 0
 	for child in children
@@ -57,28 +52,14 @@ updateItem = (item) ->
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
 
-		# max column / row
-		if column > maxColumn
-			maxColumn = column
-			rightMargin = 0
-		if row > maxRow
-			maxRow = row
-			bottomMargin = 0
-
 		# child
 		{width, height, margin} = child
 
 		# right / bottom margins
-		rightMargin = Math.max rightMargin, margin.right + columnSpacing
-		width += rightMargin
-		bottomMargin = Math.max bottomMargin, margin.bottom + rowSpacing
-		height += bottomMargin
-
-		# left / top margins
-		if column > 0
-			width += margin.left
-		if row > 0
-			height += margin.top
+		if gridType & exports.ROW
+			width += margin.left + margin.right + columnSpacing
+		if gridType & exports.COLUMN
+			height += margin.top + margin.bottom + rowSpacing
 
 		# save
 		if width > columnsPositions[column]
@@ -107,17 +88,21 @@ updateItem = (item) ->
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
 
-		if column > 0 and gridType & exports.ROW
-			child.x = columnsPositions[column-1] + child.margin.left
+		if gridType & exports.ROW
+			child.x = child.margin.left + (if column > 0 then columnsPositions[column-1] else 0)
 
-		if row > 0 and gridType & exports.COLUMN
-			child.y = rowsPositions[row-1] + child.margin.top
+		if gridType & exports.COLUMN
+			child.y = child.margin.top + (if row > 0 then rowsPositions[row-1] else 0)
 
 		i++
 
 	# set item size
-	item.width = Math.max 0, (utils.last(columnsPositions) or 0) - rightMargin
-	item.height = Math.max 0, (utils.last(rowsPositions) or 0) - bottomMargin
+	item._impl.updatePending = true
+	if item._impl.autoWidth
+		item.width = Math.max 0, (utils.last(columnsPositions) or 0)
+	if item._impl.autoHeight
+		item.height = Math.max 0, (utils.last(rowsPositions) or 0)
+	item._impl.updatePending = false
 
 updateItems = ->
 	pending = false
@@ -149,6 +134,18 @@ exports.create = (item, type) ->
 	storage = item._impl
 
 	storage.gridType = type
+	storage.autoWidth = true
+	storage.autoHeight = true
+	storage.updatePending = false
+
+	# auto size
+	item.onWidthChanged ->
+		unless @_impl.updatePending
+			@_impl.autoWidth = @width is 0
+
+	item.onHeightChanged ->
+		unless @_impl.updatePending
+			@_impl.autoHeight = @height is 0
 
 	# update on children change
 	item.onChildrenChanged update
@@ -159,6 +156,7 @@ exports.create = (item, type) ->
 		item.onWidthChanged updateParent
 		item.onHeightChanged updateParent
 		item.onMarginChanged updateParent
+
 	item.children.onPopped (item, i) ->
 		item.onVisibleChanged.disconnect updateParent
 		item.onWidthChanged.disconnect updateParent
