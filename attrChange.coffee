@@ -46,7 +46,7 @@ module.exports = (File) -> class AttrChange
 		clone.node = original.node.getCopiedElement @node, self.node
 		clone.target = original.node.getCopiedElement @target, self.node
 
-		@update()
+		clone.update()
 
 		clone.node.onVisibilityChanged visibilityChangedListener, clone
 

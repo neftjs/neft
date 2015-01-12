@@ -107,7 +107,7 @@ add(*String* name[, *Any* val]) @low-level
 
 				original = Object.getPrototypeOf tag
 				valuesA = tag.attrsValues
-				valuesB = original.attrsValues
+				valuesB = attrsValues
 
 				for value, i in valuesA
 					continue if value is valuesB[i]

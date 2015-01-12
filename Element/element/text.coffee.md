@@ -9,33 +9,38 @@ File.Element.Text
 
 	assert = assert.scope 'View.Element.Text'
 
-	module.exports = (Element) -> class Text extends Element
-		@__name__ = 'Text'
-		@__path__ = 'File.Element.Text'
+	module.exports = (Element) ->
 
-*Text* Text()
--------------
+		class Text extends Element
+			@__name__ = 'Text'
+			@__path__ = 'File.Element.Text'
 
-**Extends:** `File.Element`
+*Text* Text() : *File.Element*
+------------------------------
 
-		constructor: ->
-			@_text = ''
+			constructor: ->
+				@_text = ''
 
-			super()
+				super()
+
+			clone: ->
+				clone = super()
+				clone._text = @_text
+				clone
 
 *String* Text::text
 -------------------
 
-		utils.defineProperty @::, 'text', null, ->
-			@_text
-		, (value) ->
-			assert.isString value
+			utils.defineProperty @::, 'text', null, ->
+				@_text
+			, (value) ->
+				assert.isString value
 
-			old = @_text
-			return if old is value
+				old = @_text
+				return if old is value
 
-			# set text
-			@_text = value
+				# set text
+				@_text = value
 
-			# trigger event
-			Emitter.trigger @, Emitter.TEXT_CHANGED, old
+				# trigger event
+				Emitter.trigger @, Emitter.TEXT_CHANGED, old

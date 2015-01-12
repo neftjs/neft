@@ -32,16 +32,18 @@ getInnerHTML = (elem) ->
 		""
 
 getOuterHTML = (elem) ->
-	if elem.visible is false
+	if elem._visible is false
 		return
 
 	if elem._text isnt undefined
 		return elem._text
 
-	if not elem.name or not isPublic(elem.name)
+	name = elem.name
+
+	if not name or not isPublic(name)
 		return getInnerHTML elem
 
-	nameRet = ret = "<" + elem.name
+	nameRet = ret = "<" + name
 	if elem.attrsNames
 		for attrName, i in elem.attrsKeys
 			continue unless isPublic attrName
@@ -54,13 +56,13 @@ getOuterHTML = (elem) ->
 			else
 				ret += "=\"" + attrValue + "\""
 
-	if elem.name is 'div' and ret is nameRet
+	if name is 'div' and ret is nameRet
 		return getInnerHTML elem
 
-	if SINGLE_TAG[elem.name]
+	if SINGLE_TAG[name]
 		ret + ">"
 	else
-		ret + ">" + getInnerHTML(elem) + "</" + elem.name + ">"
+		ret + ">" + getInnerHTML(elem) + "</" + name + ">"
 
 module.exports =
 	getInnerHTML: getInnerHTML

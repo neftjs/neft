@@ -57,7 +57,7 @@ module.exports = (Element) ->
 			return unless data
 
 			# lastTag = utils.last(@_tagStack)?.children[0]
-			append = lastTag?.hasOwnProperty '_text'
+			append = lastTag?.hasOwnProperty 'text'
 
 			if append
 				lastTag._text += data

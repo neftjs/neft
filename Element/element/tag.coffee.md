@@ -14,130 +14,141 @@ File.Element.Tag
 
 	CSS_ID_RE = ///\#([^\s]+)///
 
-	module.exports = (Element) -> class Tag extends Element
-		attrs = require('./tag/attrs') Element
+	module.exports = (Element) ->
+		class Tag extends Element
+			@Attrs = require('./tag/attrs') Element
 
-		@__name__ = 'Tag'
-		@__path__ = 'File.Element.Tag'
+			@__name__ = 'Tag'
+			@__path__ = 'File.Element.Tag'
 
-*Tag* Tag()
------------
+*Tag* Tag() : *File.Element*
+----------------------------
 
-**Extends:** `File.Element`
+			constructor: ->
+				@children = []
+				@name = ''
+				@attrsKeys = null
+				@attrsNames = null
+				@attrsValues = null
 
-		constructor: ->
-			super()
-
-			@children = []
-			@name = ''
-
-		clone: do (_super = @::clone) -> ->
-			clone = _super.call @
-			clone.children = []
-			clone.attrsValues &&= utils.cloneDeep @attrsValues
-			clone
-
-		cloneDeep: ->
-			clone = @clone()
-
-			for child in @children
-				clonedChild = child.cloneDeep()
-				clonedChild.parent = clone
-
-			clone
+				super()
 
 *File.Element.Tag.Attrs* File::attrs
 ------------------------------------
 
-		utils.defineProperty @::, 'attrs', null, ->
-			attrs.tag = @
-			attrs
-		, null
+			utils.defineProperty @::, 'attrs', null, ->
+				Tag.Attrs.tag = @
+				Tag.Attrs
+			, null
 
-*File.Element[]* Tag::queryAll(*String* selector, [*Array* target])
--------------------------------------------------------------------
+			clone: ->
+				clone = super()
+				clone.name = @name
+				clone.attrsKeys = @attrsKeys
+				clone.attrsNames = @attrsNames
+				clone.attrsValues = utils.cloneDeep @attrsValues
+				clone
 
-		queryAll: do ->
-			byName = (node, data) ->
-				node.name is data
+			cloneDeep: ->
+				clone = @clone()
 
-			byAttr = (node, data) ->
-				node.attrs?.get(data) isnt undefined
+				for child in @children
+					clonedChild = child.cloneDeep()
+					clone.children.push clonedChild
+					clonedChild._parent = clone
 
-			forChild = (node, testFunc, testFuncData, target) ->
-
-				for child in node.children
-					if testFunc child, testFuncData
-						target.push child
-
-					if child.children
-						forChild child, testFunc, testFuncData, target
-
-				null
-
-			(selector, target=[]) ->
-				assert.isString selector
-				assert.notLengthOf selector, 0
-				assert.isArray target
-
-				utils.clear target
-				return target unless @children
-
-				# find by attr
-				if attr = /^\[([^\]]+)\]$/.exec selector
-					forChild @, byAttr, attr[1], target
-				else
-					# find by name
-					forChild @, byName, selector, target
-
-				target
-
-*String* Tag::stringify()
--------------------------
-
-		stringify: ->
-			stringify.getOuterHTML @
-
-*String* Tag::stringifyChildren()
----------------------------------
-
-		stringifyChildren: ->
-			stringify.getInnerHTML @
-
-Tag::replace(*File.Element* oldElement, *File.Element* newElement)
-------------------------------------------------------------------
-
-		replace: (oldElement, newElement) ->
-			assert.instanceOf oldElement, Element
-			assert.instanceOf newElement, Element
-			assert.is oldElement.parent, @
-
-			index = @children.indexOf oldElement
-
-			oldElement.parent = undefined
-
-			newElement.parent = @
-			newElement.index = index
-
-			null
+				clone
 
 *File.Element* Tag::getCopiedElement(*File.Element* lookFor, *Tag* copiedParent)
 --------------------------------------------------------------------------------
 
-		getCopiedElement: (lookForElement, copiedParent) ->
-			tmp = []
+			getCopiedElement: (lookForElement, copiedParent) ->
+				assert.instanceOf @, Tag
+				assert.instanceOf lookForElement, Element
+				assert.instanceOf copiedParent, Element
 
-			# get indexes to parent
-			elem = lookForElement
-			while parent = elem._parent
-				tmp.push parent.children.indexOf elem
-				elem = parent
-				break if elem is @
+				tmp = []
 
-			# go by indexes in copied parent
-			elem = copiedParent
-			while tmp.length
-				index = tmp.pop()
-				elem = elem.children[index]
+				# get indexes to parent
+				elem = lookForElement
+				while parent = elem._parent
+					tmp.push parent.children.indexOf elem
+					elem = parent
+					break if elem is @
 
-			elem
+				# go by indexes in copied parent
+				elem = copiedParent
+				while tmp.length
+					index = tmp.pop()
+					elem = elem.children[index]
+
+				elem
+
+*File.Element[]* Tag::queryAll(*String* selector, [*Array* target])
+-------------------------------------------------------------------
+
+			queryAll: do ->
+				byName = (node, data) ->
+					node.name is data
+
+				byAttr = (node, data) ->
+					node.attrs?.get(data) isnt undefined
+
+				forChild = (node, testFunc, testFuncData, target) ->
+
+					for child in node.children
+						if testFunc child, testFuncData
+							target.push child
+
+						if child.children
+							forChild child, testFunc, testFuncData, target
+
+					null
+
+				(selector, target=[]) ->
+					assert.isString selector
+					assert.notLengthOf selector, 0
+					assert.isArray target
+
+					utils.clear target
+					return target unless @children
+
+					# find by attr
+					if attr = /^\[([^\]]+)\]$/.exec selector
+						forChild @, byAttr, attr[1], target
+					else
+						# find by name
+						forChild @, byName, selector, target
+
+					target
+
+*String* Tag::stringify()
+-------------------------
+
+			stringify: ->
+				stringify.getOuterHTML @
+
+*String* Tag::stringifyChildren()
+---------------------------------
+
+			stringifyChildren: ->
+				stringify.getInnerHTML @
+
+Tag::replace(*File.Element* oldElement, *File.Element* newElement)
+------------------------------------------------------------------
+
+			replace: (oldElement, newElement) ->
+				assert.instanceOf oldElement, Element
+				assert.instanceOf newElement, Element
+				assert.is oldElement.parent, @
+
+				index = @children.indexOf oldElement
+
+				oldElement.parent = undefined
+
+				newElement.parent = @
+				newElement.index = index
+
+				null
+
+		Tag

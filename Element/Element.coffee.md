@@ -13,7 +13,7 @@ File.Element @low-level API
 
 	assert = assert.scope 'View.Element'
 
-	module.exports = class Element extends Emitter
+	class Element extends Emitter
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
@@ -34,12 +34,13 @@ Creates new `Element` instance based on given *html*.
 *Element* Element()
 -------------------
 
-**Extends:** `Emitter`
-
 		constructor: ->
 			@_parent = null
+			@_visible = true
 
-			super
+			super()
+
+			Object.seal @
 
 		Object.defineProperties @::,
 
@@ -48,9 +49,7 @@ Creates new `Element` instance based on given *html*.
 
 			index:
 				get: ->
-					assert.instanceOf @parent, Element
-
-					@parent.children.indexOf @
+					@parent?.children.indexOf(@) or 0
 
 				set: (value) ->
 					assert.instanceOf @parent, Element
@@ -69,9 +68,11 @@ Returns `Element` in which an element is placed.
 Change the value to move the element.
 
 			parent:
-				enumerable: true
-				get: -> @_parent
+				get: ->
+					@_parent
 				set: (value) ->
+					assert.instanceOf @, Element
+					assert.instanceOf value, Element if value?
 					assert.isNot @, value
 
 					old = @_parent
@@ -96,12 +97,7 @@ Change the value to move the element.
 *Boolean* Element::visible
 --------------------------
 
-			_visible:
-				value: true
-				writable: true
-
 			visible:
-				enumerable: true
 				get: ->
 					@_visible
 				set: (val) ->
@@ -128,25 +124,20 @@ Returns new instance of the `Element` with the same properties.
 
 Parent of the returned `Element` is `null`.
 
-			clone:
-				enumerable: true
-				writable: true
-				value: cloneMethod = ->
-					clone = Object.create @
-					clone._parent = null
-					clone.clone = undefined
-					clone.cloneDeep = undefined
-					clone
+		clone: ->
+			clone = new @constructor
+			clone._visible = @visible
+			clone
 
 *Element* Element::cloneDeep()
 ------------------------------
 
-			cloneDeep:
-				enumerable: true
-				writable: true
-				value: cloneMethod
+		cloneDeep: ->
+			@clone()
 
-		if utils.isNode
-			@parser = require('./element/parser') @
-		@Tag = require('./element/tag') @
-		@Text = require('./element/text') @
+	if utils.isNode
+		Element.parser = require('./element/parser') Element
+	Element.Tag = require('./element/tag') Element
+	Element.Text = require('./element/text') Element
+
+	module.exports = Element
