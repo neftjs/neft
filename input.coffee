@@ -175,7 +175,7 @@ module.exports = (File) -> class Input
 			dict.onChanged.disconnect @_onChanged
 			delete @traces[hash]
 
-		null
+		return
 
 	update: ->
 		@updatePending = false

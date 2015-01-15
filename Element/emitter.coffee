@@ -48,7 +48,8 @@ module.exports = class Emitter
 			index = currentEmitter._events[id].indexOf func
 			assert.isNot index, -1
 
-			currentEmitter._events[id] = null
+			currentEmitter._events[id][index] = null
+			currentEmitter._events[id][index+1] = null
 			return
 
 		getter = ->
