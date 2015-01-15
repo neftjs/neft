@@ -1,7 +1,15 @@
 List
 ====
 
-Helper made to extends standard Javascript Array functionalities.
+As you know, `Array`s are list-like objects in JavaScript.
+
+This helper replaces poor `Array` `API` and brings signals called when something change.
+
+Unfortunately, you have to use `get()` and `set()` methods to manipulate elements in a list.
+
+```
+List = require('list');
+```
 
 	'use strict'
 
@@ -9,32 +17,32 @@ Helper made to extends standard Javascript Array functionalities.
 	expect = require 'expect'
 	signal = require 'signal'
 
-*List* List([*Array* data|*Any* data...])
------------------------------------------
+*List* List([*Any* data...])
+----------------------------
 
 Creates new *list* based on the *given* elements.
 
 ```
-list = new List [1, 2]
+var list = new List([1, 2]);
 
-console.log list instanceof List
-# true
+console.log(list instanceof List);
+// true
 ```
 
-### Arguments notation
+#### Arguments notation
 
 It's allowed to pass elements as an arguments.
 
 ```
-list = new List 1, 2
+var list = new List(1, 2);
 ```
 
-### *new* keyword
+#### *new* keyword
 
 Using *new* keyword is not required.
 
 ```
-list = List [1, 2]
+var list = List([1, 2]);
 ```
 
 	module.exports = class List
@@ -56,8 +64,16 @@ list = List [1, 2]
 			# TODO: mark as not enumerable (toJSON must be added)
 			utils.defineProperty @, '_data', utils.ENUMERABLE, arr
 
-List::changed(*Any* oldValue, *Integer* index)
-----------------------------------------------
+		# List is not a standard Array object
+		utils.addPryoperty @::, '0', null, ->
+			throw "You can't get elements from a list as standard properties; " +
+			      "use `List::get()` method instead"
+		, ->
+			throw "You can't set elements into a list as standard properties; " +
+			      "use `List::set()` method instead"
+
+*Signal* List::changed(*Any* oldValue, *Integer* index)
+-------------------------------------------------------
 
 **Signal** called on each element value change.
 
@@ -65,8 +81,8 @@ Use ***onChanged*** handler to listen on signals.
 
 		signal.createLazy @::, 'changed'
 
-List::inserted(*Any* value, *Integer* index)
---------------------------------------------
+*Signal* List::inserted(*Any* value, *Integer* index)
+-----------------------------------------------------
 
 **Signal** called on each element insert.
 
@@ -74,8 +90,8 @@ Use ***onInserted*** handler to listen on signals.
 
 		signal.createLazy @::, 'inserted'
 
-List::popped(*Any* oldValue, *Integer* index)
----------------------------------------------
+*Signal* List::popped(*Any* oldValue, *Integer* index)
+------------------------------------------------------
 
 **Signal** called on each element pop.
 
@@ -91,10 +107,10 @@ Number of elements in a list.
 This property is **read-only**.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-console.log list.length
-# 2
+console.log(list.length);
+// 2
 ```
 
 		desc = utils.CONFIGURABLE | utils.ENUMERABLE
@@ -110,16 +126,16 @@ Returns **value** of the element stored at given *index*.
 For unknown elements, `undefined` is returned.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-console.log list.get 0
-# a
+console.log(list.get(0));
+// a
 
-console.log list.get 1
-# b
+console.log(list.get(1));
+// b
 
-console.log list.get 2
-# undefined
+console.log(list.get(2));
+// undefined
 ```
 
 		get: (i) ->
@@ -134,21 +150,22 @@ Changes element *value*.
 
 Element at given *index* must be stored in a list.
 
-`List::changed()` **signal** is called with the given *index* and overriden element *value*.
+`List::changed()` signal is called with the given *index* and overriden element *value*.
 
 Given *value* is returned as a **result**.
 
 ```
-types = new List 'fantasy', 'Thriller'
+var types = new List('fantasy', 'Thriller');
 
-types.onChanged.connect (oldVal, i) ->
-  console.log "Element #{oldVal} changed to #{@get i}"
+types.onChanged.connect(function (oldVal, i){
+  console.log("Element "+oldVal+" changed to "+this.get(i));
+});
 
-types.set 0, 'Fantasy'
-# Element fantasy changed to Fantasy
+types.set(0, 'Fantasy');
+// Element fantasy changed to Fantasy
 
-types.set 0, 'Fantasy'
-# nothing changed ...
+types.set(0, 'Fantasy');
+// nothing changed ...
 ```
 
 		set: (i, val) ->
@@ -176,22 +193,24 @@ Always the same instance is returned, so don't change this array manually.
 Use `utils.clone()` otherwise.
 
 ```
-list = new List 1, 2
+var list = new List(1, 2);
 
-console.log list.items()
-# [1, 2]
+console.log(list.items());
+// [1, 2]
 
-console.log Array.isArray list.items()
-# true
+console.log(Array.isArray(list.items()));
+// true
 ```
 
-### Iterating over a list
+#### Iterating over a list
 ```
-list = new List 'a', 'b'
-for element in list.items()
-  console.log element
-# a
-# b
+var list = new List('a', 'b');
+var items = list.items();
+for (var i = 0, n = items.length; i < n; i++){  
+  console.log(element);
+}
+// a
+// b
 ```
 
 		items: ->
@@ -202,21 +221,22 @@ for element in list.items()
 
 Append new element at the end of a list.
 
-`List::inserted()` **signal** is called with the element *index* and given *value*.
+`List::inserted()` signal is called with the element *index* and given *value*.
 
 *value* can't be a `undefined`, because this value is reserved only for unknown elements.
 
 ```
-fridge = new List 'apple', 'milk'
+var fridge = new List('apple', 'milk');
 
-fridge.onInserted.connect (val, i) ->
-  console.log "#{val} appended!"
+fridge.onInserted.connect(function (val, i){
+  console.log(val+" appended!");
+});
 
-fridge.append 'cheese'
-# cheese appended!
+fridge.append('cheese');
+// cheese appended!
 
-console.log fridge.items()
-# apple, milk, cheese
+console.log(fridge.items());
+// apple, milk, cheese
 ```
 
 		append: (val) ->
@@ -236,16 +256,20 @@ Inserts new element at given position.
 
 Added value is returned.
 
-`List::inserted()` **signal** is called with parameters passed to this function.
+`List::inserted()` signal is called with parameters passed to this function.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-list.onInserted.connect (val, i) ->
-  console.log "New element #{val} inserted at index #{i}"
+list.onInserted.connect(function (val, i){
+  console.log("New element "+val+" inserted at index "+i);
+});
 
-list.insert 'c'
-# New element c inserted at index 2
+list.insert('c', 1);
+// New element c inserted at index 1
+
+console.log(list.items());
+// ['a', 'c', 'b']
 ```
 
 		insert: (i, val) ->
@@ -265,23 +289,22 @@ list.insert 'c'
 
 Removes given *value* from a list.
 
-`List::popped()` **signal** is called with the popped element *index* as a parameter.
+`List::popped()` signal is called with the popped element *index* as a parameter.
 
 Given *value* is returned.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-console.log list.get(1)
-# b
+console.log(list.get(1));
+// b
 
-list.remove 'b'
+list.remove('b');
+console.log(list.get(1));
+// undefined
 
-console.log list.get(1)
-# undefined
-
-console.log list.items()
-# ['a']
+console.log(list.items());
+// ['a']
 ```
 
 		remove: (val) ->
@@ -300,23 +323,22 @@ Removes element at given *index*, or the last element by default.
 
 Given *index* must exists in the list.
 
-`List::popped()` **signal** is called with the popped element *value* and it's *index*.
+`List::popped()` signal is called with the popped element *value* and it's *index*.
 
 Removed element is returned.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-console.log list.get(1)
-# b
+console.log(list.get(1));
+// b
 
-list.pop(1)
+list.pop(1);
+console.log(list.get(1));
+// undefined
 
-console.log list.get(1)
-# undefined
-
-console.log list.items()
-# ['a']
+console.log(list.items());
+// ['a']
 ```
 
 		pop: (i) ->
@@ -339,23 +361,24 @@ List::clear()
 
 Removes all elements stored in a list.
 
-Notice that this method will call `List::popped()` **signal** on each element.
+Notice that this method will call `List::popped()` signal on each element.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-list.onPopped.connect (oldVal, i) ->
-  console.log "Element #{oldVal} popped!"
+list.onPopped.connect(function (oldVal, i){
+  console.log("Element "+oldVal+" popped!");
+});
 
-console.log list.items()
-# ['a', 'b']
+console.log(list.items());
+// ['a', 'b']
 
 list.clear()
-# Element b popped!
-# Element a popped!
+// Element b popped!
+// Element a popped!
 
-console.log list.items()
-# []
+console.log(list.items());
+// []
 ```
 
 		clear: ->
@@ -374,13 +397,13 @@ Given value can't be a `undefined`, becuase it's used for unknown elements.
 If no value exists in this list `-1` is returned.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-console.log list.index 'b'
-# 1
+console.log(list.index('b'));
+// 1
 
-console.log list.index 'c'
-# -1
+console.log(list.index('c'));
+// -1
 ```
 
 		index: (val) ->
@@ -394,13 +417,13 @@ console.log list.index 'c'
 Returns true if given *value* exists in a list.
 
 ```
-list = new List 'a', 'b'
+var list = new List('a', 'b');
 
-console.log list.has 'a'
-# true
+console.log(list.has('a'));
+// true
 
-console.log list.has 'ab123'
-# false
+console.log(list.has('ab123'));
+// false
 ```
 
 		has: (val) ->
