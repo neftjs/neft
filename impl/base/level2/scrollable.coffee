@@ -4,6 +4,7 @@ utils = require 'utils'
 signal = require 'signal'
 
 WHEEL_DIVISOR = 8
+MIN_POINTER_DELTA = 5
 
 module.exports = (impl) ->
 	{Types} = impl
@@ -78,11 +79,13 @@ module.exports = (impl) ->
 			v = 100 * -val / (1 + elapsed);
 			velocity = 0.8 * v + 0.2 * velocity;
 
+	pointerUsed = false
 	usePointer = (item) ->
 		horizontalContinuous = createContinuous item, 'x'
 		verticalContinuous = createContinuous item, 'y'
 
 		focus = false
+		listen = false
 		x = y = 0
 
 		moveMovement = (e) ->
@@ -91,7 +94,7 @@ module.exports = (impl) ->
 			scroll item, dx, dy
 
 		item.onPointerPressed (e) ->
-			focus = true
+			listen = true
 
 			item._impl.globalScale = getItemGlobalScale item
 			horizontalContinuous.press()
@@ -101,8 +104,11 @@ module.exports = (impl) ->
 
 		listenOnWindowSignals = ->
 			impl.window.onPointerReleased (e) ->
+				listen = false
+
 				return unless focus
 				focus = false
+				pointerUsed = false
 
 				moveMovement e
 
@@ -112,14 +118,20 @@ module.exports = (impl) ->
 				x = y = 0
 
 			impl.window.onPointerMove (e) ->
-				return unless focus
+				return unless listen
+
+				if pointerUsed and not focus
+					return
 
 				horizontalContinuous.update e.x - x
 				verticalContinuous.update e.y - y
 
-				x = e.x; y = e.y
+				if focus or Math.abs(e.x - x) + Math.abs(e.y - y) > MIN_POINTER_DELTA
+					if moveMovement(e) is signal.STOP_PROPAGATION
+						focus = true
+						pointerUsed = true
 
-				moveMovement e
+					x = e.x; y = e.y
 
 		if impl.window?
 			listenOnWindowSignals()
