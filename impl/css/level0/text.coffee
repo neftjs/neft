@@ -56,7 +56,7 @@ module.exports = (impl) ->
 		if not updatePending
 			{textElement} = @_impl
 			auto = @_impl.autoWidth = @width is 0
-			textElement.style.whiteSpace = if auto then 'nowrap' else 'normal'
+			textElement.style.whiteSpace = if auto then 'pre' else 'pre-wrap'
 			textElement.style.width = if auto then 'auto' else '100%'
 			if auto
 				updateSize @
@@ -86,7 +86,7 @@ module.exports = (impl) ->
 		{style} = textElement
 		style.width = 'auto'
 		style.height = 'auto'
-		style.whiteSpace = 'nowrap'
+		style.whiteSpace = 'pre'
 		style.fontSize = '14px'
 		style.fontFamily = 'sans-serif'
 		if isFirefox
