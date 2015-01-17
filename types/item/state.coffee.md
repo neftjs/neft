@@ -89,11 +89,12 @@
 
 			state.clear()
 
-			if val[0] is '['
-				val = utils.tryFunction JSON.stringify, JSON, [val], val
 
 			if typeof val is 'string'
 				if val isnt ''
+					if val[0] is '['
+						val = utils.tryFunction JSON.stringify, JSON, [val], val
+
 					state.append val
 			else
 				if val instanceof List
