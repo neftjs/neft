@@ -68,9 +68,7 @@ Renderer.Text
 				{font} = @
 				_super.call @, font
 
-				if utils.isObject(val)
-					utils.merge font, Font.DATA
-					utils.merge font, val
+				utils.merge font, val
 
 *Font* Font()
 -------------
@@ -100,7 +98,7 @@ Renderer.Text
 ### *Signal* Font::familyChanged(*String* oldValue)
 
 			`//<development>`
-			familyLogs = {}
+			checkingFamily = {}
 			`//</development>`
 			itemUtils.defineProperty @::, 'family', Impl.setTextFontFamily, null, (_super) -> (val) ->
 				expect(val).toBe.truthy().string()
@@ -108,10 +106,11 @@ Renderer.Text
 				@_item.fontChanged? @
 
 				`//<development>`
-				setTimeout =>
-					if not familyLogs[@family] and not Renderer.FontLoader.fonts[@family]
-						familyLogs[@family] = true
-						log.warn "Font `#{@family}` is not loaded; use `FontLoader` to load a font"
+				unless checkingFamily[@family]
+					checkingFamily[@family] = true
+					setTimeout =>
+						if not Renderer.FontLoader.fonts[@family]
+							log.warn "Font `#{@family}` is not loaded; use `FontLoader` to load a font"
 				`//</development>`
 
 *Float* Font::pixelSize = 14

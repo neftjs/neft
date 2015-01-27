@@ -33,8 +33,8 @@ SIGNALS =
 	'pointerClicked': 'click'
 	'pointerPressed': 'mousedown'
 	'pointerReleased': 'mouseup'
-	'pointerEntered': 'mouseover'
-	'pointerExited': 'mouseout'
+	'pointerEntered': 'mouseenter'
+	'pointerExited': 'mouseleave'
 	'pointerMove': 'mousemove'
 	'pointerWheel': (elem, func) ->
 		if isFirefox

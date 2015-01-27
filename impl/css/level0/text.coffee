@@ -98,7 +98,10 @@ module.exports = (impl) ->
 		item._impl.elem.appendChild item._impl.textElement
 
 	setText: (val) ->
-		@_impl.textElement.innerHTML = val
+		if ///<///.test val
+			@_impl.textElement.innerHTML = val
+		else
+			@_impl.textElement.textContent = val
 		updateSize @
 
 	setTextColor: (val) ->

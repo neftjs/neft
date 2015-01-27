@@ -89,7 +89,6 @@
 
 			state.clear()
 
-
 			if typeof val is 'string'
 				if val isnt ''
 					if val[0] is '['
