@@ -58,10 +58,13 @@ module.exports = (Routing) ->
 			log.warn "Can't find any `neft:style` in main view file"
 			return false
 
+		hasItems = false
 		for style in styles
-			style.item.parent = Renderer.window
+			if style.item
+				hasItems = true
+				style.item.parent = Renderer.window
 
-		true
+		hasItems
 
 	send: (res, data, callback) ->
 		log.ok "Got response `#{res.request.method} #{res.request.url}`"
