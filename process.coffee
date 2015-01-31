@@ -149,14 +149,20 @@ module.exports = ->
 
 	EMULATORS[type]()
 
-	require.extensions['.pegjs'] = (module, filename) ->
+	require.extensions['.pegjs'] = require.extensions['.txt'] = (module, filename) ->
 		module.exports = fs.readFileSync filename, 'utf8'
+
+	try
+		Neft = require "./neft-#{type}-develop.js"
 
 	###
 	Override standard `Module._load()` to capture all required modules and files
 	###
 	Module = module.constructor
 	Module._load = do (_super = Module._load) -> (req, parent) ->
+		if Neft?[req]
+			return Neft[req]
+
 		hiddenReq = req
 		if req is 'assert'
 			hiddenReq = arguments[0] = 'neft-assert'

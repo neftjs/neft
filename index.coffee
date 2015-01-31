@@ -23,6 +23,8 @@ module.exports = (opts, callback) ->
 	child.on 'message', (msg) ->
 		child.kill()
 
+		fs.unlinkSync BUNDLE_FILE_PATH
+
 		# on error
 		if msg.err
 			return callback msg.err
@@ -36,20 +38,38 @@ module.exports = (opts, callback) ->
 			groundskeeper = require 'groundskeeper'
 			uglify = require 'uglify-js'
 
-			console.log 'Remove debug stuff'
+			bundle = bundle.replace ///\/\/<(\/)?development>;///g, '//<$1development>'
+			bundle = bundle.replace ///expect, |, expect///g, ''
+			bundle = bundle.replace ///assert, |, assert///g, ''
 			cleaner = groundskeeper
-				console: true
-				namespace: ['expect', 'assert']
+				namespace: ['expect', 'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions']
 				replace: 'true'
 			cleaner.write bundle
 			bundle = cleaner.toString()
 
-			console.log 'Minify code'
-			bundle = uglify.minify bundle, fromString: true
-			bundle = bundle.code
+			fs.writeFileSync './tmp.js', bundle, 'utf-8'
 
-		fs.unlinkSync BUNDLE_FILE_PATH
-		callback null, bundle
+			cp.exec "./node_modules/uglify-js/bin/uglifyjs " +
+			"./tmp.js " +
+			"--screw-ie8 " +
+			"--compress negate_iife=false,keep_fargs " +
+			"--mangle " +
+			"--reserved 'Neft,$,require,exports' " +
+			"--beautify",
+				maxBuffer: 1024*1024
+				, (err, stdout, stderr) ->
+					fs.unlinkSync './tmp.js'
+
+					# bundle = uglify.minify bundle,
+					# 	fromString: true
+					# 	warnings: true
+					# 	mangle: false
+					# 	beautify: true
+					# bundle = bundle.code
+
+					callback err, stdout
+		else
+			callback null, bundle
 
 # if process.argv.length > 2
 # 	[_, _, path, type] = process.argv
