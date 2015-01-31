@@ -238,6 +238,20 @@ assert.isNotArray(*Any* value, [*String* message])
 		if Array.isArray val
 			@fail val, 'array', msg, 'isn\'t', assert.isNotArray
 
+assert.isEqual(*Any* value1, *Any* value2, [*String* message])
+--------------------------------------------------------------
+
+	assert.isEqual = (val1, val2, msg) ->
+		unless utils.isEqual val1, val2
+			@fail val1, val2, msg, 'equal', assert.isEqual
+
+assert.isNotEqual(*Any* value1, *Any* value2, [*String* message])
+-----------------------------------------------------------------
+
+	assert.isNotEqual = (val1, val2, msg) ->
+		if utils.isEqual val1, val2
+			@fail val1, val2, msg, 'isn\'t equal', assert.isNotEqual
+
 assert.instanceOf(*Object* object, *Function* constructor, [*String* message])
 ------------------------------------------------------------------------------
 
