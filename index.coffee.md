@@ -84,17 +84,17 @@ In opposite to the *===* operator, this function treats two `NaN`s as equal, and
 `-0` and `+0` as not equal.
 
 ```
-console.log utils.is 'a', 'a'
+console.log(utils.is('a', 'a'));
 # true
 
-console.log utils.is NaN, NaN
+console.log(utils.is(NaN, NaN));
 # true, but ...
-console.log NaN === NaN
+console.log(NaN === NaN);
 # false
 
-console.log utils.is -0, 0
+console.log(utils.is(-0, 0));
 # false, but ...
-console.log -0 === 0
+console.log(-0 === 0);
 # true
 ```
 
@@ -112,20 +112,20 @@ console.log -0 === 0
 Checks whether value is a finite number.
 
 ```
-console.log utils.isFloat 10
-# true
+console.log(utils.isFloat(10));
+// true
 
-console.log utils.isFloat 0.99
-# true
+console.log(utils.isFloat(0.99));
+// true
 
-console.log utils.isFloat NaN
-# false
+console.log(utils.isFloat(NaN));
+// false
 
-console.log utils.isFloat Infinity
-# false
+console.log(utils.isFloat(Infinity));
+// false
 
-console.log utils.isFloat '10'
-# false
+console.log(utils.isFloat('10'));
+// false
 ```
 
 	exports.isFloat = (val) ->
@@ -137,17 +137,17 @@ console.log utils.isFloat '10'
 Checks whether value is an integer.
 
 ```
-console.log utils.isInteger 10
-# true
+console.log(utils.isInteger(10));
+// true
 
-console.log utils.isInteger -2
-# true
+console.log(utils.isInteger(-2));
+// true
 
-console.log utils.isInteger 1.22
-# false
+console.log(utils.isInteger(1.22));
+// false
 
-console.log utils.isInteger '2'
-# false
+console.log(utils.isInteger('2'));
+// false
 ```
 
 	exports.isInteger = (val) ->
@@ -174,14 +174,14 @@ For simplify, we also include here a `null` and `undefined` types.
 Each of this type is not mutable (because it's primitive).
 
 ```
-console.log utils.isPrimitive null
-# true
+console.log(utils.isPrimitive(null));
+// true
 
-console.log utils.isPrimitive 'abc'
-# true
+console.log(utils.isPrimitive('abc'));
+// true
 
-console.log utils.isPrimitive []
-# false
+console.log(utils.isPrimitive([]));
+// false
 ```
 
 	exports.isPrimitive = (val) ->
@@ -200,17 +200,17 @@ Other libraries define *object* differently.
 This function returns `true` for an objects (not `null`) and an arrays (reference types).
 
 ```
-console.log utils.isObject({})
-# true
+console.log(utils.isObject({}));
+// true
 
-console.log utils.isObject([])
-# true
+console.log(utils.isObject([]));
+// true
 
-console.log utils.isObject('')
-# false
+console.log(utils.isObject(''));
+// false
 
-console.log utils.isObject(->)
-# false
+console.log(utils.isObject(function(){}));
+// false
 ```
 
 	isObject = exports.isObject = (param) ->
@@ -224,24 +224,24 @@ Checks whether given *param* is a plain object, that is:
  - object with standard `Object` prototype.
 
 ```
-console.log utils.isPlainObject({})
-# true
+console.log(utils.isPlainObject({}))
+// true
 
-console.log utils.isPlainObject(Object.create(null))
-# true
+console.log(utils.isPlainObject(Object.create(null)))
+// true
 
-console.log utils.isPlainObject([])
-# false
+console.log(utils.isPlainObject([]))
+// false
 
-console.log utils.isPlainObject(->)
-# false
+console.log(utils.isPlainObject(->))
+// false
 
-User = ->
-console.log utils.isPlainObject(new User)
-# false
+function User(){}
+console.log(utils.isPlainObject(new User))
+// false
 
-console.log utils.isPlainObject(Object.create({propertyInProto: 1}))
-# false
+console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
+// false
 ```
 
 	exports.isPlainObject = (param) ->
@@ -266,11 +266,13 @@ console.log utils.isPlainObject(Object.create({propertyInProto: 1}))
 Returns true if given *param* is an arguments object.
 
 ```
-console.log utils.isArguments(do -> arguments)
-# true
+(function(){
+  console.log(utils.isArguments(arguments))
+  // true
+})();
 
-console.log utils.isArguments {}
-# false
+console.log(utils.isArguments({}))
+// false
 ```
 
 	exports.isArguments = (param) ->
@@ -284,10 +286,10 @@ Override given *source* object by the given *object* own properties.
 Given *source* is returned.
 
 ```
-config = a: 1, b: 2
-utils.merge config, {b: 99, d: 100}
-console.log config
-# {a: 1, b: 99, d: 100}
+var config = {a: 1, b: 2};
+utils.merge(config, {b: 99, d: 100});
+console.log(config);
+// {a: 1, b: 99, d: 100}
 ```
 
 	merge = exports.merge = (source, obj) ->
@@ -310,19 +312,23 @@ Only objects are merge deeply (no arrays and functions).
 Given *source* is returned.
 
 ```
-user =
-	name: 'test'
-	carsByName:
-		tiny: 'Ferrharhi'
-		monkey: 'BMM'
+var user = {
+  name: 'test',
+  carsByName: {
+    tiny: 'Ferrharhi',
+    monkey: 'BMM'
+  }
+}
 
-utils.mergeDeep user,
-	name: 'Johny'
-	carsByName:
-		nextCar: 'Fita'
+utils.mergeDeep(user, {
+  name: 'Johny',
+  carsByName: {
+    nextCar: 'Fita'
+  }
+});
 
-console.log user
-# {name: 'Johny', carsByName: {tiny: 'Ferrharhi', monkey: 'BMM', nextCar: 'Fita'}}
+console.log(user);
+// {name: 'Johny', carsByName: {tiny: 'Ferrharhi', monkey: 'BMM', nextCar: 'Fita'}}
 ```
 
 	mergeDeep = exports.mergeDeep = (source, obj) ->
@@ -349,13 +355,15 @@ Translate *object* own properties into the *source* if they are defined in the
 *source* prototype and are not defined in the *source* as own properties.
 
 ```
-class User
-	name: ''
+function User(){
+}
 
-user = new User
-utils.fill user, {name: 'Johny', age: 40}
-console.log user
-# {name: 'Johny'}
+User.prototype.name = '';
+
+var user = new User;
+utils.fill(user, {name: 'Johny', age: 40});
+console.log(user);
+// {name: 'Johny'}
 ```
 
 	exports.fill = (source, obj) ->
@@ -375,15 +383,15 @@ utils.remove(*NotPrimitive* object, *Any* element)
 Remove array element or object property.
 
 ```
-array = ['a', 'b', 'c']
-utils.remove array, 'b'
-console.log array
-# ['a', 'c']
+var array = ['a', 'b', 'c'];
+utils.remove(array, 'b');
+console.log(array);
+// ['a', 'c']
 
-object = {a: 1, b: 2}
-utils.remove object, 'a'
-console.log object
-# {b: 2}
+var object = {a: 1, b: 2};
+utils.remove(object, 'a');
+console.log(object);
+// {b: 2}
 ```
 
 	exports.remove = (obj, elem) ->
@@ -411,15 +419,17 @@ Returns descriptor of the *property* defined in the given *object*.
 All *object* prototypes are checked.
 
 ```
-class User
-	age: 0
-	utils.defineProperty User::, 'isAdult', utils.CONFIGURABLE, ->
-		@age >= 18
-	, null
+function User(){
+  this.age = 0;
+}
 
-user = new User
-console.log utils.getPropertyDescriptor(user, 'isAdult')
-# {enumerable: false, configurable: true, get: ..., set: undefined}
+utils.defineProperty(User.prototype, 'isAdult', utils.CONFIGURABLE, function(){
+  return this.age >= 18;
+}, null);
+
+var user = new User;
+console.log(utils.getPropertyDescriptor(user, 'isAdult'));
+// {enumerable: false, configurable: true, get: ..., set: undefined}
 ```
 
 	exports.getPropertyDescriptor = (obj, prop) ->
@@ -439,12 +449,12 @@ console.log utils.getPropertyDescriptor(user, 'isAdult')
 Returns function bound as a getter to the given *property*.
 
 ```
-object = {loaded: 2, length: 5}
-utils.defineProperty object, 'progress', null, ->
-	@loaded / @length
-, null
-console.log utils.lookupGetter(object, 'progress')
-# -> @loaded / @length
+var object = {loaded: 2, length: 5};
+utils.defineProperty(object, 'progress', null, function(){
+	return this.loaded / this.length;
+}, null);
+console.log(utils.lookupGetter(object, 'progress'));
+// function(){ return this.loaded / this.length; }
 ```
 
 	exports.lookupGetter = do ->
@@ -487,20 +497,22 @@ Defines *property* in the given *object*.
 *value* becomes a getter if given *setter* is not `undefined`.
 
 ```
-object = {}
+var object = {};
 
-desc = utils.ENUMERABLE | utils.WRITABLE | utils.CONFIGURABLE
-utils.defineProperty object, 'name', desc, 'Emmy'
-console.log object.name
-# Emmy
+var desc = utils.ENUMERABLE | utils.WRITABLE | utils.CONFIGURABLE;
+utils.defineProperty(object, 'name', desc, 'Emmy');
+console.log(object.name);
+// Emmy
 
-utils.defineProperty object, 'const', utils.ENUMERABLE | utils.CONFIGURABLE, 'constantValue'
-console.log object.const
-# constantValue
+utils.defineProperty(object, 'const', utils.ENUMERABLE | utils.CONFIGURABLE, 'constantValue');
+console.log(object.const);
+// constantValue
 
-utils.defineProperty object, 'length', utils.ENUMERABLE | utils.CONFIGURABLE, (-> 2), null
-console.log object.length
-# 2
+utils.defineProperty(object, 'length', utils.ENUMERABLE | utils.CONFIGURABLE, function(){
+  return 2;
+}, null);
+console.log(object.length);
+// 2
 ```
 
 	defObjProp exports, 'WRITABLE', value: 1<<0
@@ -564,14 +576,11 @@ Clones array elements or object own properties.
 Functions are not cloned!
 
 ```
-console.log utils.clone 'ABC'
-# ABC
+console.log(utils.clone([1, 2]))
+// [1, 2]
 
-console.log utils.clone [1, 2]
-# [1, 2]
-
-console.log utils.clone {a: 1}
-# {a: 1}
+console.log(utils.clone({a: 1}))
+// {a: 1}
 ```
 
 	clone = exports.clone = (param) ->
@@ -595,15 +604,15 @@ console.log utils.clone {a: 1}
 Clone array elements and object properties deeply.
 
 ```
-obj2 = {ba: 1}
-obj = {a: 1, b: obj2}
-clonedObj = utils.cloneDeep obj
+var obj2 = {ba: 1};
+var obj = {a: 1, b: obj2};
 
-console.log clonedObj
-# {a: 1, b: {ba: 1}}
+var clonedObj = utils.cloneDeep(obj);
+console.log(clonedObj);
+// {a: 1, b: {ba: 1}}
 
-console.log clonedObj.b is obj.b
-# false
+console.log(clonedObj.b === obj.b)
+// false
 ```
 
 	cloneDeep = exports.cloneDeep = (param) ->
@@ -616,14 +625,14 @@ console.log clonedObj.b is obj.b
 
 		result
 
-*Boolean* isEmpty(*NotPrimitive* object)
-----------------------------------------
+*Boolean* utils.isEmpty(*NotPrimitive* object)
+----------------------------------------------
 
 Checks whether given *object* is empty, that is:
  - for arrays, if no elements exists (*length* is 0),
  - for objects, if no own properties are defined.
 
-* * *
+.
 
 	exports.isEmpty = (object) ->
 		expect(object).not().toBe.primitive()
@@ -639,11 +648,11 @@ Checks whether given *object* is empty, that is:
 Returns given *array* last element.
 
 ```
-console.log utils.last(['a', 'b'])
-# b
+console.log(utils.last(['a', 'b']))
+// b
 
-console.log utils.last([])
-# undefined
+console.log(utils.last([]))
+// undefined
 ```
 
 	exports.last = (arg) ->
@@ -657,11 +666,15 @@ console.log utils.last([])
 Removes all elements from an array, or all properties from an object.
 
 ```
-console.log utils.clear(['a', 'b'])
-# []
+var arr = ['a', 'b'];
+utils.clear(arr);
+console.log(arr);
+// []
 
-console.log utils.clear({age: 37})
-# {}
+var obj = {age: 37};
+utils.clear(obj);
+console.log(obj);
+// {}
 ```
 
 	exports.clear = (obj) ->
@@ -682,19 +695,19 @@ Changes given *object* prototype into *prototype*.
 This method on some environments returns new object!
 
 ```
-obj = a: 1
-prototype = b: 100
+var obj = {a: 1};
+var prototype = {b: 100};
 
-newObj = utils.setPrototypeOf(obj, prototype)
+var newObj = utils.setPrototypeOf(obj, prototype);
 
-console.log Object.getPrototypeOf(newObj) is prototype
-# true
+console.log(Object.getPrototypeOf(newObj) === prototype)
+// true
 
-console.log newObj.a
-# 1
+console.log(newObj.a)
+// 1
 
-console.log newObj.b
-# 100
+console.log(newObj.b)
+// 100
 ```
 
 	setPrototypeOf = exports.setPrototypeOf = do ->
@@ -731,21 +744,22 @@ console.log newObj.b
 Returns true if given array contains *value*.
 
 ```
-console.log utils.has(['a']), 'a'
-# true
+console.log(utils.has(['a']), 'a')
+// true
 
-console.log utils.has(['a']), 'b'
-# false
+console.log(utils.has(['a']), 'b')
+// false
 ```
 
 For objects, only own enumerable properties are checked.
 
 ```
-object =
+var object = {
 	city: 'New York'
+}
 
-console.log utils.has(object, 'New York')
-# true
+console.log(utils.has(object, 'New York'))
+// true
 ```
 
 	has = exports.has = (obj, val) ->
@@ -773,16 +787,18 @@ Array elements are properties values by default.
 Elements are set into the *target* array (new array by default).
 
 ```
-object =
-	type: 'dog'
+var object = {
+	type: 'dog',
 	name: 'Bandit'
+};
 
-console.log utils.objectToArray(object)
-# ['dog', 'Bandit']
+console.log(utils.objectToArray(object))
+// ['dog', 'Bandit']
 
-console.log utils.objectToArray(object, (key, val) ->
-	"#{key}_#{val}")
-# ['type_dog', 'name_Bandit']
+console.log(utils.objectToArray(object, function(key, val){
+	return key + "_" + val;
+})
+// ['type_dog', 'name_Bandit']
 ```
 
 	exports.objectToArray = (obj, valueGen, target) ->
@@ -814,15 +830,20 @@ element value and given *array*.
 Properties are set into the *target* object (new object by default).
 
 ```
-console.log utils.arrayToObject(['a', 'b'])
-# {0: 'a', 1: 'b'}
+console.log(utils.arrayToObject(['a', 'b']))
+// {0: 'a', 1: 'b'}
 
-console.log utils.arrayToObject(['a'], (i, elem) ->
-	"value_#{elem}")
-# {"value_a": "a"}
+console.log(utils.arrayToObject(['a'], function(i, elem){
+	return "value_" + elem;
+})
+// {"value_a": "a"}
 
-console.log utils.arrayToObject(['a'], ((i, elem) -> elem), ((i, elem) -> i))
-# {"a": 0}
+console.log(utils.arrayToObject(['a'], function(i, elem){
+	return elem;
+}, function(i, elem){
+	return i;
+})
+// {"a": 0}
 ```
 
 	exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
@@ -845,8 +866,8 @@ console.log utils.arrayToObject(['a'], ((i, elem) -> elem), ((i, elem) -> i))
 Capitalize given *string* first character.
 
 ```
-console.log utils.capitalize('name')
-# Name
+console.log(utils.capitalize('name'))
+// Name
 ```
 
 	exports.capitalize = (str) ->
@@ -863,8 +884,8 @@ console.log utils.capitalize('name')
 Adds backslashes before each `'` and `"` character.
 
 ```
-console.log utils.addSlashes('a"b')
-# a\"b
+console.log(utils.addSlashes('a"b'))
+// a\"b
 ```
 
 	exports.addSlashes = do ->
@@ -884,6 +905,11 @@ console.log utils.addSlashes('a"b')
 --------------------------------------------
 
 Generates pseudo-unique hash with given *length*.
+
+```
+console.log(utils.uid())
+// 27a1ac42
+```
 
 	exports.uid = (n=8) ->
 		expect(n).toBe.integer()
@@ -910,18 +936,20 @@ If *function* throws an errpr, *onfail* is returned.
 If *onfail* is a function, it will be called with catched error.
 
 ```
-func = (size) ->
-	if size is 0
-		throw "Wrong size!"
+function test(size){
+	if (size === 0){
+		throw "Wrong size!";
+	}
+}
 
-console.log utils.tryFunctiontion(func, null, [0])
-# undefined
+console.log(utils.tryFunctiontion(test, null, [0]))
+// undefined
 
-console.log utils.tryFunctiontion(func, null, [0], 'ERROR!')
-# ERROR!
+console.log(utils.tryFunctiontion(test, null, [0], 'ERROR!'))
+// ERROR!
 
-console.log utils.tryFunctiontion(func, null, [100], 'ERROR!')
-# undefined
+console.log(utils.tryFunctiontion(test, null, [100], 'ERROR!'))
+// undefined
 ```
 
 	exports.tryFunction = (func, context, args, onfail) ->
@@ -934,20 +962,22 @@ console.log utils.tryFunctiontion(func, null, [100], 'ERROR!')
 			if typeof onfail is 'function' then onfail(err) else onfail
 
 *Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 Calls given *function* with *context* and *arguments* and returns catched error.
 
 ```
-func = (size) ->
-	if size is 0
-		throw "Wrong size!"
+function test(size){
+	if (size === 0){
+		throw "Wrong size!";
+	}
+}
 
-console.log utils.catchError(func, null, [0])
-# "Wrong size!"
+console.log(utils.catchError(test, null, [0]))
+// "Wrong size!"
 
-console.log utils.catchError(func, null, [100])
-# null
+console.log(utils.catchError(test, null, [100]))
+// null
 ```
 
 	exports.catchError = (func, context, args) ->
@@ -970,9 +1000,9 @@ It's needed, because standard `Error` object marks *name* and *message* properti
 as not enumerable, so they are ommited.
 
 ```
-error = new ReferenceError 'error message!'
-console.log utils.errorToObject(error)
-# {name: 'ReferenceError', message: 'error message!'}
+var error = new ReferenceError('error message!');
+console.log(utils.errorToObject(error));
+// {name: 'ReferenceError', message: 'error message!'}
 ```
 
 	exports.errorToObject = (error) ->
@@ -993,25 +1023,25 @@ Returns new array or object with own properties.
 		merge result, obj
 		result
 
-*Boolean* isEqual(*Object* object1, *Object* object2, [*Function* compareFunction])
------------------------------------------------------------------------------------
+*Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction])
+-----------------------------------------------------------------------------------------
 
 Compares two objects or arrays deeply.
 
 Optional *compareFunction* defines whether two values are equal.
 
 ```
-console.log utils.isEqual([0, 1], [1, 0])
-# true
+console.log(utils.isEqual([0, 1], [1, 0]))
+// true
 
-console.log utils.isEqual({a: 1}, {a: 1})
-# true
+console.log(utils.isEqual({a: 1}, {a: 1}))
+// true
 
-console.log utils.isEqual({a: {aa: 1}}, {a: {aa: 1}})
-# true
+console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1}}))
+// true
 
-console.log utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
-# false
+console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
+// false
 ```
 
 	isEqual = exports.isEqual = do ->
