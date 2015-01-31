@@ -113,7 +113,7 @@ module.exports = (impl) ->
 					args[i] = "$#{i}"
 
 				hash ||= '0'
-				args.push "try { return #{hash}; } catch(err){}"
+				args.push "return #{hash};"
 				cache[hash] = Function.apply null, args
 
 		constructor: (@item, @obj, @uniqueProp, @prop, binding, @extraResultFunc) ->
@@ -166,7 +166,7 @@ module.exports = (impl) ->
 				unless binding.args
 					return
 
-				result = binding.func.apply null, binding.args
+				result = utils.tryFunction binding.func, null, binding.args
 				unless result?
 					return
 

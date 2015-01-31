@@ -5,9 +5,13 @@ module.exports = (impl) ->
 	{Item} = Types
 	{grid} = impl.utils
 
-	create: (item) ->
-		Item.create item
+	DATA: grid.data
 
-		grid.create item, grid.ROW
+	createData: impl.utils.createDataCloner Item.DATA, grid.DATA
+
+	create: (data) ->
+		Item.create.call @, data
+
+		grid.create @, grid.ROW
 
 	setRowSpacing: grid.update

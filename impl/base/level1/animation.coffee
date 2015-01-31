@@ -1,11 +1,18 @@
 'use strict'
 
 module.exports = (impl) ->
-	create: (animation) ->
-		target = animation._impl
-		target.animation = animation
-		target.running = false
-		target.loop = false
+	DATA =
+		bindings: null
+		animation: null
+		running: false
+		loop: false
+
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner DATA
+
+	create: (data) ->
+		data.animation = @
 
 	setAnimationLoop: (val) ->
 		@_impl.loop = val

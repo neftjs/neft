@@ -37,10 +37,14 @@ for name, extra of impl.Extras
 	utils.merge impl, extra
 
 impl.createItem = (item, type) ->
-	impl.Types[type].create item
+	item._impl = impl.Types[type].createData?() or {}
+	Object.preventExtensions item._impl
+	impl.Types[type].create.call item, item._impl
 
 impl.createAnimation = (animation, type) ->
-	impl.Types[type].create animation
+	animation._impl = impl.Types[type].createData?() or {}
+	Object.preventExtensions animation._impl
+	impl.Types[type].create.call animation, animation._impl
 
 impl.window = null
 signal.create impl, 'windowReady'
@@ -48,28 +52,5 @@ impl.setWindow = do (_super = impl.setWindow) -> (item) ->
 	utils.defineProperty impl, 'window', utils.ENUMERABLE, item
 	_super.call impl, item
 	impl.windowReady()
-
-# impl.getItemChildren = do (_super = impl.getItemChildren) -> (id) ->
-# 	if container = impl.items[id]?.container
-# 		_super container
-# 	else
-# 		_super id
-
-# impl.getItemParent = do (_super = impl.getItemParent) -> (id) ->
-# 	parent = _super id
-# 	parent2 = parent and _super parent
-
-# 	if impl.items[parent2]?.container
-# 		parent2
-# 	else
-# 		parent
-
-# impl.setItemParent = do (_super = impl.setItemParent) -> (id, val) ->
-# 	parent = impl.items[val]
-
-# 	if container = parent?.container
-# 		_super id, container
-# 	else
-# 		_super id, val
 
 module.exports = impl

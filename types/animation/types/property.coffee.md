@@ -9,83 +9,105 @@ Renderer.PropertyAnimation
 *PropertyAnimation* PropertyAnimation([*Object* options]) : *Renderer.Animation*
 --------------------------------------------------------------------------------
 
-	module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
+	module.exports = (Renderer, Impl, Animation, itemUtils) -> class PropertyAnimation extends Animation
 		@__name__ = 'PropertyAnimation'
 
-		@DATA = utils.merge Object.create(@DATA),
-			target: null
-			property: ''
-			duration: 1000
-			delay: 0
-			from: null
-			to: null
-			updateProperty: false
+		itemUtils.initConstructor @,
+			extends: Animation
+			data:
+				target: null
+				property: ''
+				duration: 1000
+				delay: 0
+				from: null
+				to: null
+				updateProperty: false
 
 *Renderer.Item* PropertyAnimation::target
 -----------------------------------------
 
 ### *Signal* PropertyAnimation::targetChanged([*Renderer.Item* oldValue])
 
-		itemUtils.defineProperty @::, 'target', Impl.setPropertyAnimationTarget, null, (_super) -> (val) ->
-			expect().defined(val).toBe.any Renderer.Item
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'target'
+			implementation: Impl.setPropertyAnimationTarget
+			developmentSetter: (val) ->
+				expect().defined(val).toBe.any Renderer.Item
 
 *String* PropertyAnimation::property
 ------------------------------------
 
 ### *Signal* PropertyAnimation::propertyChanged(*String* oldValue)
 
-		itemUtils.defineProperty @::, 'property', Impl.setPropertyAnimationProperty, null, (_super) -> (val) ->
-			expect(val).toBe.truthy().string()
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'property'
+			implementation: Impl.setPropertyAnimationProperty
+			developmentSetter: (val) ->
+				expect(val).toBe.truthy().string()
 
 *Float* PropertyAnimation::duration = 1000
 ------------------------------------------
 
 ### *Signal* PropertyAnimation::durationChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'duration', Impl.setPropertyAnimationDuration, null, (_super) -> (val) ->
-			expect(val).toBe.float()
-			expect(val).toBe.greaterThan 0
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'duration'
+			implementation: Impl.setPropertyAnimationDuration
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
+				expect(val).toBe.greaterThan 0
 
 *Float* PropertyAnimation::delay
 --------------------------------
 
 ### *Signal* PropertyAnimation::delayChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'delay', Impl.setPropertyAnimationDelay, null, (_super) -> (val) ->
-			expect(val).toBe.float()
-			expect(val).not().toBe.lessThan 0
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'delay'
+			implementation: Impl.setPropertyAnimationDelay
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
+				expect(val).not().toBe.lessThan 0
 
 *Boolean* PropertyAnimation::updateProperty = false
 ---------------------------------------------------
 
 ### *Signal* PropertyAnimation::updatePropertyChanged(*Boolean* oldValue)
 
-		itemUtils.defineProperty @::, 'updateProperty', null, null, (_super) -> (val) ->
-			expect(val).toBe.boolean()
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'updateProperty'
+			developmentSetter: (val) ->
+				expect(val).toBe.boolean()
 
 *Any* PropertyAnimation::from
 -----------------------------
 
 ### *Signal* PropertyAnimation::fromChanged(*Any* oldValue)
 
-		itemUtils.defineProperty @::, 'from', Impl.setPropertyAnimationFrom, null, null
+		itemUtils.defineProperty
+			constructor: @
+			name: 'from'
+			implementation: Impl.setPropertyAnimationFrom
 
 *Any* PropertyAnimation::to
 ---------------------------
 
 ### *Signal* PropertyAnimation::toChanged(*Any* oldValue)
 
-		itemUtils.defineProperty @::, 'to', Impl.setPropertyAnimationTo, null, null
+		itemUtils.defineProperty
+			constructor: @
+			name: 'to'
+			implementation: Impl.setPropertyAnimationTo
 
 *ReadOnly* *Float* PropertyAnimation::progress = 0
 --------------------------------------------------
 
-		utils.defineProperty @::, 'progress', utils.ENUMERABLE, ->
+		utils.defineProperty @::, 'progress', null, ->
 			Impl.getPropertyAnimationProgress.call @
 		, null
 

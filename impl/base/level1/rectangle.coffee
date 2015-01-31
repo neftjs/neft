@@ -32,13 +32,18 @@ module.exports = (impl) ->
 			@_impl.rectangleUpdatePending = false
 			Image.setImageSource.call @, getRectangleSource(@)
 
-	create: (item) ->
-		Image.create item
+	DATA =
+		rectangleUpdatePending: false
 
-		item.onWidthChanged updateImage
-		item.onHeightChanged updateImage
+	DATA: DATA
 
-		item._impl.rectangleUpdatePending = false
+	createData: impl.utils.createDataCloner Image.DATA, DATA
+
+	create: (data) ->
+		Image.create.call @, data
+
+		@onWidthChanged updateImage
+		@onHeightChanged updateImage
 
 	setRectangleColor: updateImage
 	setRectangleRadius: updateImage

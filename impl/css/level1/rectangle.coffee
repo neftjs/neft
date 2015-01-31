@@ -6,13 +6,18 @@ module.exports = (impl) ->
 	# TODO: browsers makes borders always visible even
 	#       if the size is less than border width
 
-	create: (item) ->
-		storage = item._impl
+	DATA =
+		rect: null
 
-		Item.create item
+	DATA: DATA
 
-		rect = storage.rect = document.createElement 'div'
-		storage.elem.appendChild rect
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		Item.create.call @, data
+
+		rect = data.rect = document.createElement 'div'
+		data.elem.appendChild rect
 
 		{style} = rect
 		style.width = '100%'

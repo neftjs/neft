@@ -130,13 +130,16 @@ exports.COLUMN = 1<<0
 exports.ROW = 1<<1
 exports.ALL = (1<<2) - 1
 
+exports.DATA =
+	gridType: ''
+	autoWidth: true
+	autoHeight: true
+	updatePending: false
+
 exports.create = (item, type) ->
 	storage = item._impl
 
 	storage.gridType = type
-	storage.autoWidth = true
-	storage.autoHeight = true
-	storage.updatePending = false
 
 	# auto size
 	item.onWidthChanged ->

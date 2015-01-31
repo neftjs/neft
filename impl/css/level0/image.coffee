@@ -5,10 +5,15 @@ DATA_URI_RE = ///^data:([a-z+/]+),(.*)$///
 module.exports = (impl) ->
 	{Item} = impl.Types
 
-	create: (item) ->
-		data = item._impl
+	DATA =
+		image: null
 
-		Item.create item
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		Item.create.call @, data
 
 		image = data.image = document.createElement 'img'
 		image.style.width = "100%"

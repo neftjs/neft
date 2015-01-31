@@ -1,9 +1,9 @@
-Renderer.FontLoader
-===================
+Renderer.Font.Loader
+====================
 
 ```
 Item {
-  FontLoader {
+  Font.Loader {
   	name: 'myFont'
   	source: 'static/fonts/myFont.woff'
   }
@@ -23,8 +23,9 @@ Item {
 
 	log = log.scope 'Renderer', 'FontLoader'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class FontLoader
-		@__name__ = 'FontLoader'
+	module.exports = (Renderer, Impl, itemUtils) -> class Font
+		@__name__ = 'Font'
+		@__path__ = 'Renderer.Loader.Font'
 
 		SOURCE_FILE = ///(\w+)\.(\w+)$///
 
@@ -42,21 +43,13 @@ Item {
 
 		@fonts = {}
 
-		@DATA =
-			name: ''
-			source: ''
-
 *FontLoader* FontLoader([*Object* options])
 -------------------------------------------
 
-		constructor: (opts) ->
-			expect().defined(opts).toBe.simpleObject()
-
-			data = Object.create(FontLoader.DATA)
-			utils.defineProperty @, '_data', null, data
-			Object.freeze @
-
-			itemUtils.fill @, opts
+		constructor: ->
+			@_data =
+				name: ''
+				source: ''
 
 *String* FontLoader::name
 -------------------------
@@ -78,5 +71,5 @@ Item {
 
 			setImmediate =>
 				Object.freeze @_data
-				FontLoader.fonts[@name] = @
+				Font.fonts[@name] = @
 				loadFont @

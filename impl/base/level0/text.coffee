@@ -4,7 +4,22 @@ module.exports = (impl) ->
 	{items} = impl
 	{Item, Image} = impl.Types
 
-	create: (item) ->
+	DATA =
+		text: ''
+		color: 'black'
+		lineHeight: 1
+		fontFamily: 'sans-serif'
+		fontPixelSize: 14
+		fontWeight: 0.5
+		fontWordSpacing: 0
+		fontLetterSpacing: 0
+
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		Item.create.call @, data
 
 	setText: (val) ->
 		@_impl.text = val

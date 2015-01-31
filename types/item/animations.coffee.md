@@ -6,17 +6,8 @@ Item.Animations
 	expect = require 'expect'
 	utils = require 'utils'
 
-	module.exports = (Renderer) -> class Animations
+	module.exports = (Renderer, Impl, itemUtils) -> class Animations extends itemUtils.DeepObject
 		@__name__ = 'Animations'
 
-*Animations* Animations(*Renderer.Item* item) @low-level
---------------------------------------------------------
-
-		constructor: (item) ->
-			expect(item).toBe.any Renderer.Item
-
-			utils.defineProperty @, '_item', null, item
-
-			item.onReady ->
-				for name, animation of @animations
-					animation.target = @
+*Animations* Animations()
+-------------------------

@@ -265,15 +265,21 @@ module.exports = (impl) ->
 			storage.hotActions = 0
 			storage.lastAction = now()
 
-	create: (item) ->
-		storage = item._impl
+	DATA =
+		bindings: null
+		elem: null
+		lastAction: 0
+		hotActions: 0
+		isHot: false
+		isHidden: false
 
-		storage.elem ?= document.createElement 'div'
+	DATA: DATA
 
-		storage.lastAction = now()
-		storage.hotActions = 0
-		storage.isHot = false
-		storage.isHidden = false
+	createData: impl.utils.createDataCloner DATA
+
+	create: (data) ->
+		data.elem ?= document.createElement 'div'
+		data.lastAction = now()
 
 	setItemParent: (val) ->
 		{elem} = @_impl

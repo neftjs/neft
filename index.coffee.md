@@ -43,12 +43,9 @@ AppStructure {
 	exports.UI = require('./types/item/types/ui') exports, Impl, itemUtils
 
 	exports.Animation = require('./types/animation') exports, Impl, itemUtils
-	exports.PropertyAnimation = require('./types/animation/types/property') exports, Impl, itemUtils
-	exports.NumberAnimation = require('./types/animation/types/property/types/number') exports, Impl, itemUtils
-
 	exports.Transition = require('./types/transition') exports, Impl, itemUtils
 
-	exports.FontLoader = require('./types/fontLoader') exports, Impl, itemUtils
+	exports.Loader = require('./types/loader') exports, Impl, itemUtils
 
 	utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val

@@ -23,14 +23,19 @@ Column {
 		@__name__ = 'Column'
 		@__path__ = 'Renderer.Column'
 
-		@DATA = utils.merge Object.create(Renderer.Item.DATA),
-			spacing: 0
+		itemUtils.initConstructor @,
+			extends: Renderer.Item
+			data:
+				spacing: 0
 
 *Float* Column::spacing
 -----------------------
 
 ### *Signal* Column::spacingChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'spacing', Impl.setColumnSpacing, null, (_super) -> (val) ->
-			expect(val).toBe.float()
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'spacing'
+			implementation: Impl.setColumnSpacing
+			developmentSetter: (val) ->
+				expect(val).toBe.float()

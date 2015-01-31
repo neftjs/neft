@@ -145,21 +145,26 @@ module.exports = (impl) ->
 			y = e.y / WHEEL_DIVISOR
 			scroll item, x, y
 
-	create: (item) ->
-		storage = item._impl
+	DATA =
+		scroll: null
+		contentItem: null
+		globalScale: 1
 
-		Item.create item
+	DATA: DATA
 
-		storage.scroll = (x, y) -> scroll item, x, y
-		storage.contentItem = null
-		storage.globalScale = 1
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		Item.create.call @, data
+
+		data.scroll = (x, y) => scroll @, x, y
 
 		# item props
-		impl.setItemClip.call item, true
+		impl.setItemClip.call @, true
 
 		# signals
-		usePointer item
-		useWheel item
+		usePointer @
+		useWheel @
 
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem

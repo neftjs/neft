@@ -3,7 +3,7 @@ Renderer.State
 
 	'use strict'
 
-	expect = require 'expect'
+	assert = require 'assert'
 	utils = require 'utils'
 
 *State* State() @low-level
@@ -12,17 +12,18 @@ Renderer.State
 	module.exports = (Renderer, Impl, itemUtils) -> class State
 
 		@supportObjectProperty = (propName) ->
+			return if State::.hasOwnProperty propName
+
 			utils.defineProperty State::, propName, null, ->
 				utils.defineProperty @, propName, utils.ENUMERABLE, val = {}
 				val
 			, (val) ->
 				utils.defineProperty @, propName, utils.ENUMERABLE, val
 
-		constructor: (opts) ->
-			if opts?
-				utils.merge @, opts
+		constructor: ->
 
 		update: (item) ->
+			return; # TODO
 			expect(item).toBe.any Renderer.Item
 
 			# apply changes
@@ -32,11 +33,12 @@ Renderer.State
 			null
 
 		restore: (item) ->
+			return; # TODO
 			expect(item).toBe.any Renderer.Item
 
 			# disconnect listeners
 			for prop, val of @ when @hasOwnProperty prop
 				if typeof val is 'function'
-					item[prop].diconnect val
+					item[prop].disconnect val
 
 			null

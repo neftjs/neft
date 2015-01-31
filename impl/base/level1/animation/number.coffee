@@ -60,12 +60,20 @@ module.exports = (impl) ->
 		reqSend = true
 		requestAnimationFrame vsync
 
-	create: (animation) ->
-		PropertyAnimation.create animation
+	DATA =
+		from: 0
+		to: 0
+		startTime: 0
+		play: null
 
-		target = animation._impl
-		target.startTime = 0
-		target.play = ->
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner PropertyAnimation.DATA, DATA
+
+	create: (data) ->
+		PropertyAnimation.create.call @, data
+
+		data.play = ->
 			pending.push @
 			@startTime = now() + @delay
 			update()

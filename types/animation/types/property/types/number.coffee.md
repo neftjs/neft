@@ -9,12 +9,14 @@ Renderer.NumberAnimation
 *NumberAnimation* NumberAnimation([*Object* options]) : Renderer.PropertyAnimation
 ----------------------------------------------------------------------------------
 
-	module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
+	module.exports = (Renderer, Impl, Animation, itemUtils) -> class NumberAnimation extends Animation.Property
 		@__name__ = 'NumberAnimation'
 
-		@DATA = utils.merge @DATA,
-			from: 0
-			to: 0
+		itemUtils.initConstructor @,
+			extends: Animation.Property
+			data:
+				from: 0
+				to: 0
 
 *Float* NumberAnimation::from
 -----------------------------

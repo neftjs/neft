@@ -1,11 +1,7 @@
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
-
-	List = require 'list'
-
-	{isArray} = Array
+	assert = require 'assert'
 
 	update = do ->
 		queue = []
@@ -44,6 +40,7 @@
 				pending = true
 
 	support = (item, state) ->
+		return; # TODO
 		state = item.states[state]
 		unless state
 			return
@@ -56,63 +53,56 @@
 
 		null
 
-	stateInserted = (val, i) ->
-		support @_item, val
-		update @_item
-		@_item.stateChanged? @
-
-	statePopped = (oldVal, i) ->
-		@_item.states[oldVal]?.restore @_item
-		update @_item
-		@_item.stateChanged? @
-
 	module.exports = (Renderer, Impl, Item, itemUtils) ->
 
-*List* Item::state
-------------------
+*String* Item::state
+--------------------
 
 ### *Signal* Item::stateChanged(*List* list)
 
-		itemUtils.defineProperty Item::, 'state', null, ((_super) -> ->
-			if @_data.state is null
-				list = @_data.state = new List()
-				utils.defineProperty list, '_item', null, @
+		itemUtils.defineProperty
+			constructor: Item
+			name: 'state'
+			setter: (_super) -> (val='') ->
+				assert.isString val
+				if @state is val
+					return
 
-				list.onInserted stateInserted
-				list.onChanged statePopped
-				list.onPopped statePopped
+				# restore old one
+				@states[@state].restore @
 
-			@_data.state
+				_super.call @, val
 
-		), (_super) -> (val='') ->
-			{state} = @
+				# support new
+				support @, val
 
-			state.clear()
+*Object* Item::states
+---------------------
 
-			if typeof val is 'string'
-				if val isnt ''
-					if val[0] is '['
-						val = utils.tryFunction JSON.stringify, JSON, [val], val
+		itemUtils.defineProperty
+			constructor: Item
+			name: 'states'
+			getter: (_super) -> ->
+				@_data.states ?=
+					'': new Renderer.State @
+				_super.call @
+			setter: (_super) -> (val) ->
+				assert.isPlainObject val
+				{states} = @
 
-					state.append val
-			else
-				if val instanceof List
-					val = val.items()
+				# remove old
+				for key of states
+					if key isnt ''
+						delete states[key]
 
-				if isArray(val)
-					for elem in val
-						state.append elem
+				# merge new ones
+				utils.merge states, val
 
-			null
+				# call signal
+				@statesChanged? states
 
-*Object<String, Renderer.State>* Item::states
----------------------------------------------
-
-		utils.defineProperty Item::, 'states', utils.ENUMERABLE, ->
-			val =
-				'': new Renderer.State
-			utils.defineProperty @, 'states', utils.ENUMERABLE, val
-			val
-		, (val) ->
-			expect(val).toBe.simpleObject()
-			utils.merge @states, val
+				# update current state
+				if val[@state]
+					@state = @state
+				else unless states[@state]
+					@state = ''

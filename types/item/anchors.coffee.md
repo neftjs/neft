@@ -61,18 +61,19 @@ Left side of the *rect2* item now is anchored into the right side of the *rect1*
 This connection is updated in realtime, so if the *rect1* will change a position,
 *rect2* item will be automatically updated.
 
-		class Anchors
+		class Anchors extends itemUtils.DeepObject
 
-			@DATA =
-				top: null
-				verticalCenter: null
-				bottom: null
-				left: null
-				horizontalCenter: null
-				right: null
+			itemUtils.initConstructor @,
+				data:
+					top: null
+					verticalCenter: null
+					bottom: null
+					left: null
+					horizontalCenter: null
+					right: null
 
 			createAnchorProp = (type, opts=0) ->
-				itemUtils.defineProperty Anchors::, type, null, null, (_super) -> (val) ->
+				setter = (_super) -> (val) ->
 					if val?
 						`//<development>`
 						id = @_item.__hash__
@@ -176,16 +177,14 @@ so `anchors.top = 'parent.left'` is not allowed.
 					@_item.anchorsChanged? @
 					Impl.setItemAnchor.call @_item, type, val
 
+				itemUtils.defineProperty
+					constructor: Anchors
+					name: type
+					namespace: 'anchors'
+					setter: setter
+
 *Anchors* Anchors(*Renderer.Item* item) @low-level
 --------------------------------------------------
-
-			constructor: (item) ->
-				expect(item).toBe.any Renderer.Item
-
-				utils.defineProperty @, '_item', null, item
-
-				data = Object.create Anchors.DATA
-				utils.defineProperty @, '_data', null, data
 
 			createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ

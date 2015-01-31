@@ -10,10 +10,14 @@ Renderer.Animation
 	module.exports = (Renderer, Impl, itemUtils) -> class Animation
 		@__name__ = 'Animation'
 
-		@DATA =
-			running: false
-			loop: false
-			updatePending: false
+		itemUtils.initConstructor @,
+			data:
+				running: false
+				loop: false
+				updatePending: false
+
+		@Property = require('./animation/types/property') Renderer, Impl, @, itemUtils
+		@Number = require('./animation/types/property/types/number') Renderer, Impl, @, itemUtils
 
 *Animation* Animation([*Object* options])
 -----------------------------------------
@@ -21,51 +25,52 @@ Renderer.Animation
 		constructor: (opts) ->
 			expect().defined(opts).toBe.simpleObject()
 
-			data = Object.create(@constructor.DATA)
-			utils.defineProperty @, '_data', null, data
-
-			utils.defineProperty @, '_impl', null, {}
-			Impl.createAnimation @, @constructor.__name__
-
+			itemUtils.initObject @, Impl.createAnimation
 			itemUtils.fill @, opts
 
-Animation::played()
--------------------
+*Signal* Animation::played()
+----------------------------
 
 		signal.createLazy @::, 'played'
 
-Animation::stopped()
---------------------
+*Signal* Animation::stopped()
+-----------------------------
 
 		signal.createLazy @::, 'stopped'
 
 *Boolean* Animation::running
 ----------------------------
 
-		itemUtils.defineProperty @::, 'running', null, null, (_super) -> (val) ->
-			oldVal = @_data.running
-			if oldVal is val
-				return
+		itemUtils.defineProperty
+			constructor: @
+			name: 'running'
+			setter: (_super) -> (val) ->
+				oldVal = @_data.running
+				if oldVal is val
+					return
 
-			expect(val).toBe.boolean()
-			_super.call @, val
+				expect(val).toBe.boolean()
+				_super.call @, val
 
-			if val
-				Impl.playAnimation.call @
-				@played?()
-			else
-				Impl.stopAnimation.call @
-				@stopped?()
+				if val
+					Impl.playAnimation.call @
+					@played?()
+				else
+					Impl.stopAnimation.call @
+					@stopped?()
 
 *Boolean* Animation::loop
 -------------------------
 
-		itemUtils.defineProperty @::, 'loop', Impl.setAnimationLoop, null, (_super) -> (val) ->
-			expect(val).toBe.boolean()
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'loop'
+			implementation: Impl.setAnimationLoop
+			developmentSetter: (val) ->
+				expect(val).toBe.boolean()
 
-*Boolean* Animation::updatePending
-----------------------------------
+*ReadOnly* *Boolean* Animation::updatePending
+---------------------------------------------
 
 		utils.defineProperty @::, 'updatePending', null, ->
 			@_data.updatePending

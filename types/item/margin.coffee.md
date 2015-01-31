@@ -10,28 +10,21 @@ Item.Margin
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-		class Margin
+		class Margin extends itemUtils.DeepObject
 			@__name__ = 'Margin'
 
-			@DATA =
-				left: 0
-				top: 0
-				right: 0
-				bottom: 0
+			itemUtils.initConstructor @,
+				data:
+					left: 0
+					top: 0
+					right: 0
+					bottom: 0
 
 *Margin* Margin(*Renderer.Item* item)
 -------------------------------------
 
-			constructor: (item) ->
-				expect(item).toBe.any Renderer.Item
-
-				utils.defineProperty @, '_item', null, item
-
-				data = Object.create Margin.DATA
-				utils.defineProperty @, '_data', null, data
-
 			createMarginProp = (type) ->
-				itemUtils.defineProperty Margin::, type, null, null, (_super) -> (val) ->
+				setter = (_super) -> (val) ->
 					true;
 					`//<development>`
 					id = @_item.__hash__
@@ -44,6 +37,12 @@ Item.Margin
 						_super.call @, val
 						@_item.marginChanged? @
 						Impl.setItemMargin.call @_item, type, val
+
+				itemUtils.defineProperty
+					constructor: Margin
+					name: type
+					namespace: 'margin'
+					setter: setter
 
 *Float* Margin::left
 --------------------
@@ -77,4 +76,7 @@ Item.Margin
 --------------------------
 
 			valueOf: ->
-				(@left + @top + @right + @bottom) / 4
+				if @left is @top and @top is @right and @right is @bottom
+					@left
+				else
+					throw new Error "margin values are different"

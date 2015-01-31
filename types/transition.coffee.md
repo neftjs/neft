@@ -7,69 +7,23 @@ Renderer.Transition
 	expect = require 'expect'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Transition
+	module.exports = (Renderer, Impl, itemUtils) -> class Transition extends itemUtils.DeepObject
 		@__name__ = 'Transition'
 
-		@DATA =
-			animation: null
-			property: ''
+		itemUtils.initConstructor @,
+			data:
+				animation: null
+				property: ''
 
 *Transition* Transition([*Object* options])
 -------------------------------------------
 
-		constructor: (opts) ->
-			expect().defined(opts).toBe.simpleObject()
+		constructor: (item, parent) ->
+			super item, parent
 
-			data = Object.create(@constructor.DATA)
-			utils.defineProperty @, '_data', null, data
-			utils.defineProperty @, '_item', utils.WRITABLE, null
+			@_listener = (a1) => listener.call @, a1
 
-			itemUtils.fill @, opts
-
-			utils.defineProperty @, '_listener', null, @_listener.bind(@)
-
-*Renderer.Animation* Transition::animation
-------------------------------------------
-
-### Transition::animationChanged([*Renderer.Animation* oldValue])
-
-		itemUtils.defineProperty @::, 'animation', null, null, (_super) -> (val) ->
-			oldVal = @animation
-			if oldVal is val
-				return
-
-			_super.call @, val
-
-			oldVal?.stop()
-
-			if val
-				val.target = @_item
-				val.property = @property
-
-*String* Transition::property
------------------------------
-
-### Transition::propertyChanged(*String* oldValue)
-
-		itemUtils.defineProperty @::, 'property', null, null, (_super) -> (val) ->
-			oldVal = @property
-			if oldVal is val
-				return
-
-			_super.call @, val
-
-			if @_item
-				if oldVal
-					handlerName = signal.getHandlerName "#{oldVal}Changed"
-					@_item[handlerName].disconnect @_listener
-
-				if val
-					handlerName = signal.getHandlerName "#{val}Changed"
-					@_item[handlerName] @_listener
-
-			@animation?.property = val
-
-		utils.defineProperty @::, '_listener', null, (oldVal) ->
+		listener = (oldVal) ->
 			{animation} = @
 			if animation.updatePending
 				return
@@ -90,7 +44,7 @@ Renderer.Transition
 
 			animation.play()
 
-		utils.defineProperty @::, '_setItem', null, (val) ->
+		setItem = (val) ->
 			oldVal = @_item
 
 			if oldVal is val
@@ -113,3 +67,50 @@ Renderer.Transition
 				animation.stop()
 
 			return
+
+*Renderer.Animation* Transition::animation
+------------------------------------------
+
+### Transition::animationChanged([*Renderer.Animation* oldValue])
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'animation'
+			setter: (_super) -> (val) ->
+				oldVal = @animation
+				if oldVal is val
+					return
+
+				_super.call @, val
+
+				oldVal?.stop()
+
+				if val
+					val.target = @_item
+					val.property = @property
+
+*String* Transition::property
+-----------------------------
+
+### Transition::propertyChanged(*String* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'property'
+			setter: (_super) -> (val) ->
+				oldVal = @property
+				if oldVal is val
+					return
+
+				_super.call @, val
+
+				if @_item
+					if oldVal
+						handlerName = signal.getHandlerName "#{oldVal}Changed"
+						@_item[handlerName].disconnect @_listener
+
+					if val
+						handlerName = signal.getHandlerName "#{val}Changed"
+						@_item[handlerName] @_listener
+
+				@animation?.property = val

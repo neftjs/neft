@@ -4,17 +4,21 @@ module.exports = (impl) ->
 	{Types, items} = impl
 	{Animation} = Types
 
-	create: (animation) ->
-		Animation.create animation
+	DATA =
+		target: ''
+		property: ''
+		duration: 1000
+		delay: 0
+		from: null
+		to: null
+		progress: 0
 
-		target = animation._impl
-		target.target = ''
-		target.property = ''
-		target.duration = 1000
-		target.delay = 0
-		target.from = null
-		target.to = null
-		target.progress = 0
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner Animation.DATA, DATA
+
+	create: (data) ->
+		Animation.create.call @, data
 
 	setPropertyAnimationTarget: (val) ->
 		target = @_impl

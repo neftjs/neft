@@ -1,9 +1,17 @@
 'use strict'
 
 module.exports = (impl) ->
-	{items} = impl
+	{Item} = impl.Types
 
-	create: (item) ->
+	DATA =
+		source: ''
+
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		Item.create.call @, data
 
 	setImageSource: (val) ->
 		@_impl.source = val

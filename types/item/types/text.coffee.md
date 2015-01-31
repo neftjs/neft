@@ -19,150 +19,159 @@ Renderer.Text
 			@__name__ = 'Text'
 			@__path__ = 'Renderer.Text'
 
-			@DATA = utils.merge Object.create(Renderer.Item.DATA),
-				text: ''
-				color: 'black'
-				lineHeight: 1
+			itemUtils.initConstructor @,
+				extends: Renderer.Item
+				data:
+					text: ''
+					color: 'black'
+					lineHeight: 1
+					font: null
 
 *String* Text::text
 -------------------
 
 ### *Signal* Text::textChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'text', Impl.setText, null, (_super) -> (val) ->
-				expect(val).toBe.string()
-				_super.call @, val
+			itemUtils.defineProperty
+				constructor: @
+				name: 'text'
+				implementation: Impl.setText
+				developmentSetter: (val) ->
+					expect(val).toBe.string()
 
 *String* Text::color = 'black'
 ------------------------------
 
 ### *Signal* Text::colorChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'color', Impl.setTextColor, null, (_super) -> (val) ->
-				expect(val).toBe.string()
-				_super.call @, val
+			itemUtils.defineProperty
+				constructor: @
+				name: 'color'
+				implementation: Impl.setTextColor
+				developmentSetter: (val) ->
+					expect(val).toBe.string()
 
 *Float* Text::lineHeight = 1
 ----------------------------
 
 ### *Signal* Text::lineHeightChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'lineHeight', Impl.setTextLineHeight, null, (_super) -> (val) ->
-				expect(val).toBe.truthy().float()
-				_super.call @, val
+			itemUtils.defineProperty
+				constructor: @
+				name: 'lineHeight'
+				implementation: Impl.setTextLineHeight
+				developmentSetter: (val) ->
+					expect(val).toBe.truthy().float()
 
 *Font* Text::font
 -----------------
 
 ### *Signal* Text::fontChanged(*Font* font)
 
-			Renderer.State.supportObjectProperty 'font'
-			itemUtils.defineProperty @::, 'font', null, ((_super) -> ->
-				if @_data.font is Text.DATA.font
-					@_data.font = new Font(@)
-				_super.call @
-			), (_super) -> (val) ->
-				if val instanceof Font
-					val = val._data
-
-				{font} = @
-				_super.call @, font
-
-				utils.merge font, val
-
-*Font* Font()
--------------
-
-		class Font
+		class Font extends itemUtils.DeepObject
 			@__name__ = 'Font'
 
-			@DATA = Text.DATA.font =
-				family: 'sans-serif'
-				pixelSize: 14
-				weight: 0.4
-				wordSpacing: 0
-				letterSpacing: 0
-				italic: false
+			itemUtils.initConstructor @,
+				data:
+					family: 'sans-serif'
+					pixelSize: 14
+					weight: 0.4
+					wordSpacing: 0
+					letterSpacing: 0
+					italic: false
 
-			constructor: (item) ->
-				expect(item).toBe.any Text
+			itemUtils.defineProperty
+				constructor: Text
+				name: 'font'
+				valueConstructor: Font
 
-				utils.defineProperty @, '_item', null, item
+*String* Text::font.family = 'sans-serif'
+-----------------------------------------
 
-				data = Object.create Font.DATA
-				utils.defineProperty @, '_data', null, data
-
-*String* Font::family = 'sans-serif'
-------------------------------------
-
-### *Signal* Font::familyChanged(*String* oldValue)
+### *Signal* Text::font.familyChanged(*String* oldValue)
 
 			`//<development>`
 			checkingFamily = {}
 			`//</development>`
-			itemUtils.defineProperty @::, 'family', Impl.setTextFontFamily, null, (_super) -> (val) ->
-				expect(val).toBe.truthy().string()
-				_super.call @, val
-				@_item.fontChanged? @
+			itemUtils.defineProperty
+				constructor: @
+				name: 'family'
+				namespace: 'font'
+				implementation: Impl.setTextFontFamily
+				developmentSetter: (val) ->
+					expect(val).toBe.truthy().string()
 
-				`//<development>`
-				unless checkingFamily[@family]
-					checkingFamily[@family] = true
-					setTimeout =>
-						if not Renderer.FontLoader.fonts[@family]
-							log.warn "Font `#{@family}` is not loaded; use `FontLoader` to load a font"
-				`//</development>`
+					unless checkingFamily[val]
+						checkingFamily[val] = true
+						setTimeout =>
+							if not Renderer.Loader.Font.fonts[val]
+								log.warn "Font `#{@family}` is not loaded; use `Loader.Font` to load a font"
 
-*Float* Font::pixelSize = 14
-----------------------------
+*Float* Text::font.pixelSize = 14
+---------------------------------
 
-### *Signal* Font::pixelSizeChanged(*String* oldValue)
+### *Signal* Text::font.pixelSizeChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'pixelSize', Impl.setTextFontPixelSize, null, (_super) -> (val) ->
-				expect(val).toBe.truthy().float()
-				_super.call @, val
-				@_item.fontChanged? @
+			itemUtils.defineProperty
+				constructor: @
+				name: 'pixelSize'
+				namespace: 'font'
+				implementation: Impl.setTextFontPixelSize
+				developmentSetter: (val) ->
+					expect(val).toBe.truthy().float()
 
-*Float* Font::weight = 0.4
---------------------------
-
-### *Signal* Font::weightChanged(*Float* oldValue)
-
-			itemUtils.defineProperty @::, 'weight', Impl.setTextFontWeight, null, (_super) -> (val) ->
-				expect(val).toBe.float()
-				expect(val).not().toBe.greaterThan 1
-				expect(val).not().toBe.lessThan 0
-				_super.call @, val
-				@_item.fontChanged? @
-
-*Float* Font::wordSpacing = 0
------------------------------
-
-### *Signal* Font::wordSpacingChanged(*Float* oldValue)
-
-			itemUtils.defineProperty @::, 'wordSpacing', Impl.setTextFontWordSpacing, null, (_super) -> (val) ->
-				expect(val).toBe.float()
-				_super.call @, val
-				@_item.fontChanged? @
-
-*Float* Font::letterSpacing = 0
+*Float* Text::font.weight = 0.4
 -------------------------------
 
-### *Signal* Font::letterSpacingChanged(*Float* oldValue)
+### *Signal* Text::font.weightChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'letterSpacing', Impl.setTextFontLetterSpacing, null, (_super) -> (val) ->
-				expect(val).toBe.float()
-				_super.call @, val
-				@_item.fontChanged? @
+			itemUtils.defineProperty
+				constructor: @
+				name: 'weight'
+				namespace: 'font'
+				implementation: Impl.setTextFontWeight
+				developmentSetter: (val) ->
+					expect(val).toBe.float()
+					expect(val).not().toBe.greaterThan 1
+					expect(val).not().toBe.lessThan 0
 
-*Boolean* Font::italic = false
-------------------------------
+*Float* Text::font.wordSpacing = 0
+----------------------------------
 
-### *Signal* Font::italicChanged(*Boolean* oldValue)
+### *Signal* Text::font.wordSpacingChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'italic', Impl.setTextFontItalic, null, (_super) -> (val) ->
-				expect(val).toBe.boolean()
-				_super.call @, val
-				@_item.fontChanged? @
+			itemUtils.defineProperty
+				constructor: @
+				name: 'wordSpacing'
+				namespace: 'font'
+				implementation: Impl.setTextFontWordSpacing
+				developmentSetter: (val) ->
+					expect(val).toBe.float()
+
+*Float* Text::font.letterSpacing = 0
+------------------------------------
+
+### *Signal* Text::font.letterSpacingChanged(*Float* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'letterSpacing'
+				namespace: 'font'
+				implementation: Impl.setTextFontLetterSpacing
+				developmentSetter: (val) ->
+					expect(val).toBe.float()
+
+*Boolean* Text::font.italic = false
+-----------------------------------
+
+### *Signal* Text::font.italicChanged(*Boolean* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'italic'
+				namespace: 'font'
+				implementation: Impl.setTextFontItalic
+				developmentSetter: (val) ->
+					expect(val).toBe.boolean()
 
 		Text

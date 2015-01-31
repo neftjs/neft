@@ -15,83 +15,84 @@ Renderer.Grid
 			@__name__ = 'Grid'
 			@__path__ = 'Renderer.Grid'
 
-			@DATA = utils.merge Object.create(Renderer.Item.DATA),
-				columns: 0
-				rows: 0
+			itemUtils.initConstructor @,
+				extends: Renderer.Item
+				data:
+					columns: 0
+					rows: 0
+					spacing: null
 
 *Integer* Grid::columns
 -----------------------
 
 ### *Signal* Grid::columnsChanged(*Integer* oldValue)
 
-			itemUtils.defineProperty @::, 'columns', Impl.setGridColumns, null, (_super) -> (val) ->
-				expect(val).toBe.greaterThan 0
-				_super.call @, val
+			itemUtils.defineProperty
+				constructor: @
+				name: 'columns'
+				implementation: Impl.setGridColumns
+				developmentSetter: (val) ->
+					expect(val).toBe.greaterThan 0
 
 *Integer* Grid::rows
 --------------------
 
 ### *Signal* Grid::rowsChanged(*Integer* oldValue)
 
-			itemUtils.defineProperty @::, 'rows', Impl.setGridRows, null, (_super) -> (val) ->
-				expect(val).toBe.greaterThan 0
-				_super.call @, val
+			itemUtils.defineProperty
+				constructor: @
+				name: 'rows'
+				implementation: Impl.setGridRows
+				developmentSetter: (val) ->
+					expect(val).toBe.greaterThan 0
 
 *Spacing* Grid::spacing
 -----------------------
 
-			Renderer.State.supportObjectProperty 'spacing'
-			utils.defineProperty @::, 'spacing', utils.ENUMERABLE, ->
-				utils.defineProperty @, 'spacing', utils.ENUMERABLE, val = new Spacing(@)
-				val
-			, (val) ->
-				{spacing} = @
+		class Spacing extends itemUtils.DeepObject
+			@__name__ = 'Spacing'
 
-				if utils.isPlainObject val
-					utils.merge spacing, Spacing.DATA
-					utils.merge spacing, val
-				else
-					spacing.column = val
-					spacing.row = val
+			itemUtils.initConstructor @,
+				data:
+					column: 0
+					row: 0
 
-*Spacing* Spacing()
--------------------
+			itemUtils.defineProperty
+				constructor: @
+				name: 'spacing'
+				valueConstructor: Spacing
 
-		class Spacing
-			@DATA = Grid.DATA.spacing =
-				column: 0
-				row: 0
+*Float* Grid::spacing.column
+----------------------------
 
-			constructor: (item) ->
-				expect(item).toBe.any Grid
+### *Signal* Grid::spacing.columnChanged(*Float* oldValue)
 
-				utils.defineProperty @, '_item', null, item
+			itemUtils.defineProperty
+				constructor: @
+				name: 'column'
+				implementation: Impl.setGridColumnSpacing
+				developmentSetter: (val) ->
+					expect(val).toBe.float()
 
-				data = Object.create Spacing.DATA
-				utils.defineProperty @, '_data', null, data
+*Float* Grid::spacing.row
+-------------------------
 
-*Float* Spacing::column
------------------------
+### *Signal* Grid::spacing.rowChanged(*Float* oldValue)
 
-### *Signal* Spacing::columnChanged(*Float* oldValue)
+			itemUtils.defineProperty
+				constructor: @
+				name: 'row'
+				implementation: Impl.setGridRowSpacing
+				developmentSetter: (val) ->
+					expect(val).toBe.float()
 
-			itemUtils.defineProperty @::, 'column', Impl.setGridColumnSpacing, null, (_super) -> (val) ->
-				expect(val).toBe.float()
-				_super.call @, val
-
-*Float* Spacing::row
---------------------
-
-### *Signal* Spacing::rowChanged(*Float* oldValue)
-
-			itemUtils.defineProperty @::, 'row', Impl.setGridRowSpacing, null, (_super) -> (val) ->
-				expect(val).toBe.float()
-				_super.call @, val
-
-*Float* Spacing::valueOf()
---------------------------
+*Float* Grid::spacing.valueOf()
+-------------------------------
 
 			valueOf: ->
-				(@column + @row) / 2
+				if @column is @row
+					@column
+				else
+					throw new Error "column and row grid spacing are different"
 
 		Grid

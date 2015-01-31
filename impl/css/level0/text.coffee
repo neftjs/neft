@@ -69,14 +69,22 @@ module.exports = (impl) ->
 			if auto
 				updateSize @
 
-	_createTextElement: (item) ->
-		storage = item._impl
+	DATA =
+		autoWidth: true
+		autoHeight: true
+		textElement: null
 
-		storage.autoWidth = true
-		storage.autoHeight = true
+	exports =
+	DATA: DATA
+
+	_createTextElement: (item) ->
+		data = item._impl
+
+		data.autoWidth = true
+		data.autoHeight = true
 
 		# textElement
-		textElement = storage.textElement = document.createElement 'span'
+		textElement = data.textElement = document.createElement 'span'
 
 		# handlers
 		item.onWidthChanged onWidthChanged
@@ -92,10 +100,13 @@ module.exports = (impl) ->
 		if isFirefox
 			style.marginTop = '1px'
 
-	create: (item) ->
-		Item.create item
-		this._createTextElement item
-		item._impl.elem.appendChild item._impl.textElement
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		Item.create.call @, data
+
+		exports._createTextElement @
+		data.elem.appendChild data.textElement
 
 	setText: (val) ->
 		if ///<///.test val

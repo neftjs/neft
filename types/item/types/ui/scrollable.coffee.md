@@ -14,12 +14,14 @@ Renderer.Scrollable
 		@__name__ = 'Scrollable'
 		@__path__ = 'Renderer.Scrollable'
 
-		@DATA = utils.merge Object.create(Renderer.Item.DATA),
-			contentX: 0
-			contentY: 0
-			contentItem: null
-			verticalScrollbar: null
-			clip: true
+		itemUtils.initConstructor @,
+			extends: Renderer.Item
+			data:
+				contentX: 0
+				contentY: 0
+				contentItem: null
+				verticalScrollbar: null
+				clip: true
 
 		@createDefaultVerticalScrollbar = ->
 			scrollbar = new Renderer.Item
@@ -50,7 +52,10 @@ Renderer.Scrollable
 					unless scrollbar.pressed
 						return
 					if scrollbar.lastEvent
-						scrollbar.parent.contentY += (e.y - scrollbar.lastEvent.y) / (scrollbar.parent.height / scrollbar.parent.contentItem.height)
+						delta = (e.y - scrollbar.lastEvent.y) / (scrollbar.parent.height / scrollbar.parent.contentItem.height)
+						contentY = scrollbar.parent.contentY + delta
+						contentY = Math.max 0, Math.min contentY, (scrollbar.parent.contentItem.height - scrollbar.parent.height)
+						scrollbar.parent.contentY = contentY
 					scrollbar.lastEvent = e
 					signal.STOP_PROPAGATION
 			, [
@@ -108,40 +113,53 @@ Renderer.Scrollable
 
 ### *Signal* Scrollable::contentItemChanged([*Renderer.Item* oldValue])
 
-		itemUtils.defineProperty @::, 'contentItem', Impl.setScrollableContentItem, null, (_super) -> (val) ->
-			expect(val).toBe.any Renderer.Item
-			oldVal = @contentItem
-			val.parent = @
-			_super.call @, val
-			oldVal?.parent = null
+		itemUtils.defineProperty
+			constructor: @
+			name: 'contentItem'
+			implementation: Impl.setScrollableContentItem
+			setter: (_super) -> (val) ->
+				expect(val).toBe.any Renderer.Item
+				oldVal = @contentItem
+				val.parent = @
+				_super.call @, val
+				oldVal?.parent = null
 
 [*Renderer.Item*] Scrollable::verticalScrollbar
 -----------------------------------------------
 
 ### *Signal* Scrollable::verticalScrollbarChanged([*Renderer.Item* oldValue])
 
-		itemUtils.defineProperty @::, 'verticalScrollbar', null, null, (_super) -> (val) ->
-			oldVal = @verticalScrollbar
-			if val?
-				expect(val).toBe.any Renderer.Item
-				val.parent = @
-			_super.call @, val
-			oldVal?.parent = null
+		itemUtils.defineProperty
+			constructor: @
+			name: 'verticalScrollbar'
+			setter: (_super) -> (val) ->
+				oldVal = @verticalScrollbar
+				if val?
+					expect(val).toBe.any Renderer.Item
+					val.parent = @
+				_super.call @, val
+				oldVal?.parent = null
 
 *Float* Scrollable::contentX
 ----------------------------
 
 ### *Signal* Scrollable::contentXChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'contentX', Impl.setScrollableContentX, null, (_super) -> (val) ->
-			expect(val).toBe.float()
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'contentX'
+			implementation: Impl.setScrollableContentX
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
 
 *Float* Scrollable::contentY
 ----------------------------
 
 ### *Signal* Scrollable::contentYChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'contentY', Impl.setScrollableContentY, null, (_super) -> (val) ->
-			expect(val).toBe.float()
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'contentY'
+			implementation: Impl.setScrollableContentY
+			developmentSetter: (val) ->
+				expect(val).toBe.float()

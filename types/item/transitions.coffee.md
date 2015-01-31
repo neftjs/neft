@@ -7,13 +7,14 @@ Item.Transitions
 	utils = require 'utils'
 	List = require 'list'
 
-	module.exports = (Renderer) -> class Transitions extends List
+	module.exports = (Renderer, Impl, itemUtils) -> class Transitions extends itemUtils.DeepObject
 		@__name__ = 'Transitions'
 
 *Transitions* Transitions(*Renderer.Item* item) : *List*
 --------------------------------------------------------
 
 		constructor: (item) ->
+			return; # TODO
 			expect(item).toBe.any Renderer.Item
 
 			utils.defineProperty @, '_item', null, item

@@ -28,89 +28,81 @@ Rectangle {
 			@__name__ = 'Rectangle'
 			@__path__ = 'Renderer.Rectangle'
 
-			@DATA = utils.merge Object.create(Renderer.Item.DATA),
-				color: 'transparent'
-				radius: 0
+			itemUtils.initConstructor @,
+				extends: Renderer.Item
+				data:
+					color: 'transparent'
+					radius: 0
+					border: null
 
 *String* Rectangle::color = 'transparent'
 -----------------------------------------
 
 ### *Signal* Rectangle::colorChanged(*String* oldValue)
 
-			itemUtils.defineProperty @::, 'color', Impl.setRectangleColor, null, (_super) -> (val) ->
-				expect(val).toBe.string()
-				_super.call @, val
+			itemUtils.defineProperty
+				constructor: @
+				name: 'color'
+				implementation: Impl.setRectangleColor
+				developmentSetter: (val) ->
+					expect(val).toBe.string()
 
 *Float* Rectangle::radius = 0
 -----------------------------
 
 ### *Signal* Rectangle::radiusChanged(*Float* oldValue)
 
-			itemUtils.defineProperty @::, 'radius', Impl.setRectangleRadius, null, (_super) -> (val) ->
-				expect(val).toBe.float()
-				expect(val).not().toBe.lessThan 0
-				_super.call @, val
+			itemUtils.defineProperty
+				constructor: @
+				name: 'radius',
+				implementation: Impl.setRectangleRadius
+				developmentSetter: (val) ->
+					expect(val).toBe.float()
+					expect(val).not().toBe.lessThan 0
 
 *Border* Rectangle::border
 --------------------------
 
 ### *Signal* Rectangle::borderChanged(*Border* border)
 
-			Renderer.State.supportObjectProperty 'border'
-			itemUtils.defineProperty @::, 'border', null, ((_super) -> ->
-				if @_data.border is Rectangle.DATA.border
-					@_data.border = new Border(@)
-				_super.call @
-			), (_super) -> (val) ->
-				if val instanceof Border
-					val = val._data
-
-				{border} = @
-				_super.call @, border
-
-				if utils.isObject(val)
-					utils.merge border, Border.DATA
-					utils.merge border, val
-
-*Border* Border()
------------------
-
-Internal class used in *Rectangle::border* attribute.
-
-		class Border
+		class Border extends itemUtils.DeepObject
 			@__name__ = 'Border'
 
-			@DATA = Rectangle.DATA.border =
-				width: 0
-				color: 'transparent'
+			itemUtils.initConstructor @,
+				data:
+					width: 0
+					color: 'transparent'
 
-			constructor: (item) ->
-				expect(item).toBe.any Rectangle
+			itemUtils.defineProperty
+				constructor: Rectangle
+				name: 'border'
+				valueConstructor: Border
 
-				utils.defineProperty @, '_item', null, item
+*Float* Rectangle::border.width = 0
+-----------------------------------
 
-				data = Object.create Border.DATA
-				utils.defineProperty @, '_data', null, data
+### *Signal* Rectangle::border.widthChanged(*Float* oldValue)
 
-*Float* Border::width = 0
--------------------------
+			itemUtils.defineProperty
+				constructor: @
+				name: 'width'
+				namespace: 'border'
+				implementation: Impl.setRectangleBorderWidth
+				developmentSetter: (val) ->
+					expect(val).toBe.float()
+					expect(val).not().toBe.lessThan 0
 
-### *Signal* Border::widthChanged(*Float* oldValue)
+*String* Rectangle::border.color = 'transparent'
+------------------------------------------------
 
-			itemUtils.defineProperty @::, 'width', Impl.setRectangleBorderWidth, null, (_super) -> (val) ->
-				expect(val).toBe.float()
-				expect(val).not().toBe.lessThan 0
-				_super.call @, val
-				@_item.borderChanged? @
+### *Signal* Rectangle::border.colorChanged(*String* oldValue)
 
-*String* Border::color = 'transparent'
---------------------------------------
-
-### *Signal* Border::colorChanged(*String* oldValue)
-
-			itemUtils.defineProperty @::, 'color', Impl.setRectangleBorderColor, null, (_super) -> (val) ->
-				expect(val).toBe.string()
-				_super.call @, val
-				@_item.borderChanged? @
+			itemUtils.defineProperty
+				constructor: @
+				name: 'color'
+				namespace: 'border'
+				implementation: Impl.setRectangleBorderColor
+				developmentSetter: (val) ->
+					expect(val).toBe.string()
 
 		Rectangle

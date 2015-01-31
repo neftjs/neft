@@ -36,8 +36,10 @@ Image {
 		@__name__ = 'Image'
 		@__path__ = 'Renderer.Image'
 
-		@DATA = utils.merge Object.create(Renderer.Item.DATA),
-			source: ''
+		itemUtils.initConstructor @,
+			extends: Renderer.Item
+			data:
+				source: ''
 
 *String* Image::source
 ----------------------
@@ -48,27 +50,31 @@ Image source URL (absolute or relative to the page) or data URI.
 
 ### *Signal* Image::sourceChanged(*String* oldValue)
 
-		itemUtils.defineProperty @::, 'source', null, null, (_super) -> (val) ->
-			expect(val).toBe.string()
-			unless _super.call @, val
-				return false
+		itemUtils.defineProperty
+			constructor: @
+			name: 'source'
+			developmentSetter: (val) ->
+				expect(val).toBe.string()
+			setter: (_super) -> (val) ->
+				unless _super.call @, val
+					return false
 
-			Impl.setImageSource.call @, val, (err, opts) =>
-				if val isnt @_data.source
-					return
-				if @_data.hasOwnProperty('width') or @_data.hasOwnProperty('height')
-					return
+				Impl.setImageSource.call @, val, (err, opts) =>
+					if val isnt @_data.source
+						return
+					if @_data.hasOwnProperty('width') or @_data.hasOwnProperty('height')
+						return
 
-				if err
-					err = new Error "Can't load `#{source}` image"
-					log.warn err.message
-				else
-					@width = opts.width
-					@height = opts.height
+					if err
+						err = new Error "Can't load `#{source}` image"
+						log.warn err.message
+					else
+						@width = opts.width
+						@height = opts.height
 
-				@loaded? err
+					@loaded? err
 
-			true
+				true
 
 *Signal* Image::loaded([*Error* error])
 ---------------------------------------

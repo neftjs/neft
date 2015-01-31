@@ -6,10 +6,14 @@ module.exports = (impl) ->
 	{Item} = impl.Types
 	{grid} = impl.utils
 
-	create: (item) ->
-		Item.create item
+	DATA: grid.DATA
 
-		grid.create item, grid.COLUMN | grid.ROW
+	createData: impl.utils.createDataCloner Item.DATA, grid.DATA
+
+	create: (data) ->
+		Item.create.call @, data
+
+		grid.create @, grid.COLUMN | grid.ROW
 
 	setGridColumns: grid.update
 	setGridRows: grid.update

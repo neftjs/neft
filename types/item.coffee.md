@@ -23,41 +23,46 @@ Renderer.Item
 		Animations = require('./item/animations') Renderer, Impl, itemUtils
 		Transitions = require('./item/transitions') Renderer, Impl, itemUtils
 
-		@DATA =
-			parent: null
-			clip: false
-			visible: true
-			x: 0
-			y: 0
-			z: 0
-			width: 0
-			height: 0
-			rotation: 0
-			scale: 1
-			opacity: 1
-			state: null
-			states: null
-			anchors: Anchors.DATA
-			margin: Margin.DATA
+		itemUtils.initConstructor @,
+			data:
+				bindings: null
+				parent: null
+				clip: false
+				visible: true
+				x: 0
+				y: 0
+				z: 0
+				width: 0
+				height: 0
+				rotation: 0
+				scale: 1
+				opacity: 1
+				state: ''
+				states: null
+				anchors: null
+				animations: null
+				transitions: null
+				margin: null
 
 *Item* Item([*Object* options, *Array* children])
 -------------------------------------------------
 
 		constructor: (opts, children) ->
 			# optional `opts` argument
-			if arguments.length is 1 and isArray(opts)
+			if isArray(opts) and not children?
 				children = opts
 				opts = undefined
 
 			assert.instanceOf @, Item, 'ctor ...'
-			assert.operator arguments.length, '<=', 2, 'ctor arguments ...'
 			assert.isDefined opts, 'ctor options argument ...' if opts?
 			assert.isArray children, 'ctor children argument ...' if children?
 
 			# custom properties
 			if opts?.properties?
 				for propName in opts.properties
-					itemUtils.defineProperty @, propName
+					itemUtils.defineProperty
+						object: @
+						name: propName
 				delete opts.properties
 
 			# custom signals
@@ -67,14 +72,7 @@ Renderer.Item
 				delete opts.signals
 
 			# initialization
-			unless @hasOwnProperty '__hash__'
-				utils.defineProperty @, '__hash__', null, utils.uid()
-
-				data = Object.create(@constructor.DATA)
-				utils.defineProperty @, '_data', null, data
-
-				utils.defineProperty @, '_impl', null, {}
-				Impl.createItem @, @constructor.__name__
+			itemUtils.initObject @, Impl.createItem
 
 			# fill
 			itemUtils.fill @, opts
@@ -175,24 +173,28 @@ Item {
 
 ### *Signal* Item::parentChanged(*Item* oldParent)
 
-		itemUtils.defineProperty @::, 'parent', Impl.setItemParent, null, (_super) -> (val) ->
-			old = @parent
-			if old is val
-				return
+		itemUtils.defineProperty
+			constructor: @
+			name: 'parent'
+			implementation: Impl.setItemParent
+			setter: (_super) -> (val) ->
+				old = @parent
+				if old is val
+					return
 
-			if old
-				index = Array::indexOf.call old.children, @
-				Array::splice.call old.children, index, 1
-				old.childrenChanged? old.children
-				old.children.popped? @, index
+				if old
+					index = Array::indexOf.call old.children, @
+					Array::splice.call old.children, index, 1
+					old.childrenChanged? old.children
+					old.children.popped? @, index
 
-			if val?
-				assert.instanceOf val, Item, '::parent setter ...'
-				length = Array::push.call val.children, @
-				val.childrenChanged? val.children
-				val.children.inserted? @, length - 1
+				if val?
+					assert.instanceOf val, Item, '::parent setter ...'
+					length = Array::push.call val.children, @
+					val.childrenChanged? val.children
+					val.children.inserted? @, length - 1
 
-			_super.call @, val
+				_super.call @, val
 
 *Boolean* Item::visible
 -----------------------
@@ -225,90 +227,120 @@ Item {
 
 ### *Signal* Item::visibleChanged(*Boolean* oldValue)
 
-		itemUtils.defineProperty @::, 'visible', Impl.setItemVisible, null, (_super) -> (val) ->
-			assert.isBoolean val, '::visible setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'visible'
+			implementation: Impl.setItemVisible
+			developmentSetter: (val) ->
+				assert.isBoolean val, '::visible setter ...'
 
 *Boolean* Item::clip
 --------------------
 
 ### *Signal* Item::clipChanged(*Boolean* oldValue)
 
-		itemUtils.defineProperty @::, 'clip', Impl.setItemClip, null, (_super) -> (val) ->
-			assert.isBoolean val, '::clip setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'clip'
+			implementation: Impl.setItemClip
+			developmentSetter: (val) ->
+				assert.isBoolean val, '::clip setter ...'
 
 *Float* Item::width
 -------------------
 
 ### *Signal* Item::widthChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'width', Impl.setItemWidth, null, (_super) -> (val) ->
-			assert.isFloat val, '::width setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'width'
+			implementation: Impl.setItemWidth
+			developmentSetter: (val) ->
+				assert.isFloat val, '::width setter ...'
 
 *Float* Item::height
 --------------------
 
 ### *Signal* Item::heightChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'height', Impl.setItemHeight, null, (_super) -> (val) ->
-			assert.isFloat val, '::height setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'height'
+			implementation: Impl.setItemHeight
+			developmentSetter: (val) ->
+				assert.isFloat val, '::height setter ...'
 
 *Float* Item::x
 ---------------
 
 ### *Signal* Item::xChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'x', Impl.setItemX, null, (_super) -> (val) ->
-			assert.isFloat val, '::x setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'x'
+			implementation: Impl.setItemX
+			developmentSetter: (val) ->
+				assert.isFloat val, '::x setter ...'
 
 *Float* Item::y
 ---------------
 
 ### *Signal* Item::yChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'y', Impl.setItemY, null, (_super) -> (val) ->
-			assert.isFloat val, '::y setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'y'
+			implementation: Impl.setItemY
+			developmentSetter: (val) ->
+				assert.isFloat val, '::y setter ...'
 
 *Float* Item::z
 ---------------
 
 ### *Signal* Item::zChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'z', Impl.setItemZ, null, (_super) -> (val) ->
-			assert.isFloat val, '::z setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'z'
+			implementation: Impl.setItemZ
+			developmentSetter: (val) ->
+				assert.isFloat val, '::z setter ...'
 
 *Float* Item::scale
 -------------------
 
 ### *Signal* Item::scaleChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'scale', Impl.setItemScale, null, (_super) -> (val) ->
-			assert.isFloat val, '::scale setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'scale'
+			implementation: Impl.setItemScale
+			developmentSetter: (val) ->
+				assert.isFloat val, '::scale setter ...'
 
 *Float* Item::rotation
 ----------------------
 
 ### *Signal* Item::rotationChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'rotation', Impl.setItemRotation, null, (_super) -> (val) ->
-			assert.isFloat val, '::rotation setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'rotation'
+			implementation: Impl.setItemRotation
+			developmentSetter: (val) ->
+				assert.isFloat val, '::rotation setter ...'
 
 *Float* Item::opacity
 ---------------------
 
 ### *Signal* Item::opacityChanged(*Float* oldValue)
 
-		itemUtils.defineProperty @::, 'opacity', Impl.setItemOpacity, null, (_super) -> (val) ->
-			assert.isFloat val, '::opacity setter ...'
-			_super.call @, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'opacity'
+			implementation: Impl.setItemOpacity
+			developmentSetter: (val) ->
+				assert.isFloat val, '::opacity setter ...'
 
 		require('./item/state') Renderer, Impl, @, itemUtils
 
@@ -317,64 +349,40 @@ Item {
 
 ### *Signal* Item::marginChanged(*Item.Margin* margin)
 
-		Renderer.State.supportObjectProperty 'margin'
-		itemUtils.defineProperty @::, 'margin', null, ((_super) -> ->
-			if @_data.margin is Margin.DATA
-				@_data.margin = new Margin(@)
-			_super.call @
-		), (_super) -> (val) ->
-			{margin} = @
-			_super.call @, margin
-			if typeof val is 'number'
-				margin.left = val
-				margin.top = val
-				margin.right = val
-				margin.bottom = val
-			else
-				assert.isPlainObject val, '::margin setter ...'
-				utils.merge margin, Margin.DATA
-				utils.merge margin, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'margin'
+			valueConstructor: Margin
 
 *Item.Anchors* Item::anchors
 ----------------------------
 
 ### *Signal* Item::anchorsChanged(*Item.Anchors* anchors)
 
-		Renderer.State.supportObjectProperty 'anchors'
-		itemUtils.defineProperty @::, 'anchors', null, ((_super) -> ->
-			if @_data.anchors is Anchors.DATA
-				@_data.anchors = new Anchors(@)
-			_super.call @
-		), (_super) -> (val) ->
-			_super.call @, @anchors
-			assert.isPlainObject val, '::anchors setter ...'
-			utils.merge @anchors, Anchors.DATA
-			utils.merge @anchors, val
+		itemUtils.defineProperty
+			constructor: @
+			name: 'anchors'
+			valueConstructor: Anchors
 
 *Item.Animations* Item::animations
 ----------------------------------
 
-		Renderer.State.supportObjectProperty 'animations'
-		utils.defineProperty @::, 'animations', utils.ENUMERABLE, ->
-			utils.defineProperty @, 'animations', utils.ENUMERABLE, val = new Animations(@)
-			val
-		, null
+### *Signal* Item::animationsChanged(*Item.Animations* animations)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'animations'
+			valueConstructor: Animations
 
 *Item.Transitions* Item::transitions
 ------------------------------------
 
-		Renderer.State.supportObjectProperty 'transitions'
-		utils.defineProperty @::, 'transitions', utils.ENUMERABLE, ->
-			utils.defineProperty @, 'transitions', utils.ENUMERABLE, val = new Transitions(@)
-			val
-		, (val) ->
-			{transitions} = @
-			if Array.isArray(val)
-				for elem in val
-					transitions.append elem
-			else
-				transitions.append val
-			return
+### *Signal* Item::transitionsChanged(*Item.Transitions* transitions)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'transitions'
+			valueConstructor: Transitions
 
 Item::clear()
 -------------

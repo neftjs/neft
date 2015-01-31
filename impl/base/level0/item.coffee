@@ -3,7 +3,24 @@
 module.exports = (impl) ->
 	{items} = impl
 
-	create: (item) ->
+	DATA =
+		parent: null
+		visible: true
+		clip: false
+		width: 0
+		height: 0
+		x: 0
+		y: 0
+		z: 0
+		scale: 1
+		rotation: 0
+		opacity: 1
+
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner DATA
+
+	create: (data) ->
 
 	setItemParent: (val) ->
 		@_impl.parent = items[val]
