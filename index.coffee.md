@@ -8,7 +8,7 @@ This helper replaces poor `Array` `API` and brings signals called when something
 Unfortunately, you have to use `get()` and `set()` methods to manipulate elements in a list.
 
 ```
-List = require('list');
+var List = require('list');
 ```
 
 	'use strict'
@@ -65,7 +65,7 @@ var list = List([1, 2]);
 			utils.defineProperty @, '_data', utils.ENUMERABLE, arr
 
 		# List is not a standard Array object
-		utils.addPryoperty @::, '0', null, ->
+		utils.defineProperty @::, '0', null, ->
 			throw "You can't get elements from a list as standard properties; " +
 			      "use `List::get()` method instead"
 		, ->
@@ -207,7 +207,7 @@ console.log(Array.isArray(list.items()));
 var list = new List('a', 'b');
 var items = list.items();
 for (var i = 0, n = items.length; i < n; i++){  
-  console.log(element);
+  console.log(items[i]);
 }
 // a
 // b
