@@ -15,8 +15,6 @@
 			@__name__ = 'Style'
 			@__path__ = 'File.Style'
 
-			@Clone = StyleClone
-
 			@HTML_ATTR = "#{File.HTML_NS}:style"
 			@HTML_DEEP_ATTR = "#{Style.HTML_ATTR}:"
 
@@ -43,6 +41,8 @@
 			@__name__ = 'StyleClone'
 			@__path__ = 'File.Style.Clone'
 
+			Style.Clone = @
+
 			listenRecursive = (style, node, event, listener) ->
 				assert.instanceOf style, StyleClone
 				assert.instanceOf node, File.Element
@@ -64,12 +64,13 @@
 					@updateText()
 
 			attrChangedListener = (e, node) ->
-				return unless @formula.attrs.hasOwnProperty(e.name)
-				value = node.attrs.get e.name
-				if @file.funcs?[value]
-					log.warn "Dynamic listening on Renderer events is not supported"
-					return
-				@setAttr e.name, value
+				if @file.isRendered
+					return unless @formula.attrs.hasOwnProperty(e.name)
+					value = node.attrs.get e.name
+					if @file.funcs?[value]
+						log.warn "Dynamic listening on Renderer events is not supported"
+						return
+					@setAttr e.name, value
 
 			constructor: (formula, originalFile, file, scope) ->
 				self = @
@@ -127,10 +128,6 @@
 
 				# attach attrs
 				if formula.attrs
-					for name, val of formula.attrs when val?
-						val = file.funcs?[val] or val
-						@setAttr name, val
-
 					# listen on attr change
 					@node.onAttrChanged attrChangedListener, @
 
@@ -152,19 +149,27 @@
 			render: (parent=@parent) ->
 				assert.instanceOf parent, StyleClone if parent?
 
-				if not @item or not @node.visible
+				if not @item
 					return
 
 				if @isAutoParent and @item isnt parent?.item
 					@item.parent = if parent then parent.item else null
 
-				for child in @children
-					child.render()
+				if @node.visible
+					for child in @children
+						child.render()
 
 				if 'text' of @item
 					@updateText()
 
 				@updateVisibility()
+
+				for name of @formula.attrs
+					val = @node.attrs.get name
+					val = @file.funcs?[val] or val
+					@setAttr name, val
+
+				return
 
 			revert: ->
 				unless @item
@@ -176,13 +181,20 @@
 				for child in @children
 					child.revert()
 
+				for name, val of @formula.attrs
+					val = @file.funcs?[val] or val
+					@setAttr name, val
+
 				null
 
 			updateText: ->
 				@item.text = @node.stringifyChildren()
 
 			updateVisibility: ->
-				@item.visible = @node.visible
+				if @item.visible = @node.visible
+					for child in @children
+						child.render()
+				return
 
 			setAttr: (name, val) ->
 				assert.instanceOf @, StyleClone

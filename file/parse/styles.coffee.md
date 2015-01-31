@@ -82,12 +82,16 @@ Text {
 		# parse tags with `style` attr
 		forNode = (node, parentStyle, data) ->
 			if attr = node.attrs.get "#{File.HTML_NS}:style"
-				isScope = ///^[A-Z]///.test attr
+				isScope = ///^styles\/.///.test attr
+
+				id = attr
+				if isScope
+					id = attr.slice 'styles/'.length
 
 				style = new Style
 					file: file
 					node: node
-					id: attr
+					id: id
 					attrs: findAttrs(node)
 					parent: parentStyle
 					isRepeat: not isScope and !!data?.ids[attr]
