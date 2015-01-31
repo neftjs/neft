@@ -34,16 +34,12 @@
 	}
 
 	function uid(){
-		return Math.random().toString(16).slice(2);;
-	}
-
-	function typeValueOf(){
-		return 'var ' + this.id + ' = new ' + this.name;
+		return Math.random().toString(16).slice(2);
 	}
 }
 
 Start
-	= type:Type {return type}
+	= (Code / Type)*
 
 /* HELPERS */
 
@@ -54,13 +50,13 @@ Letter
 	= [a-zA-Z_]
 
 Word
-	= value:[a-zA-Z0-9_]+ {return value.join('')}
+	= $[a-zA-Z0-9_]+
 
 Variable
-	= letter:Letter word:Word? {return letter + (word||'');}
+	= $(Letter Word?)
 
 Reference
-	= Variable ("." Variable)+ {return text()}
+	= $(Variable ("." Variable)+)
 
 LineTerminator
 	= [\n\r\u2028\u2029]
@@ -82,6 +78,32 @@ WhiteSpace "whitespace"
 	/ "\uFEFF"
 	/ Zs
 
+HexDigit
+	= [0-9a-f]i
+
+DecimalDigit
+	= [0-9]
+
+SingleEscapeCharacter
+	= "'"
+	/ '"'
+	/ "\\"
+	/ "b"  { return "\b";   }
+	/ "f"  { return "\f";   }
+	/ "n"  { return "\n";   }
+	/ "r"  { return "\r";   }
+	/ "t"  { return "\t";   }
+	/ "v"  { return "\x0B"; }   // IE does not recognize "\v".
+
+NonEscapeCharacter
+  = !(EscapeCharacter / LineTerminator) SourceCharacter { return text(); }
+
+EscapeCharacter
+	= SingleEscapeCharacter
+	/ DecimalDigit
+	/ "x"
+	/ "u"
+
 Comment "comment"
 	= MultiLineComment
 	/ SingleLineComment
@@ -93,18 +115,45 @@ SingleLineComment
 	= WhiteSpace* "//" (!LineTerminator SourceCharacter)*
 
 StringLiteral "string"
-	= '"' chars:DoubleStringCharacter* '"' {
-			return chars.join('');
-		}
-	/ "'" chars:SingleStringCharacter* "'" {
-			return chars.join('');
-		}
+	= '"' chars:$DoubleStringCharacter* '"' {
+		return chars;
+	}
+	/ "'" chars:$SingleStringCharacter* "'" {
+		return chars;
+	}
 
 DoubleStringCharacter
 	= !('"' / "\\" / LineTerminator) SourceCharacter { return text(); }
+	/ "\\" sequence:EscapeSequence { return sequence; }
+	/ LineContinuation
 
 SingleStringCharacter
 	= !("'" / "\\" / LineTerminator) SourceCharacter { return text(); }
+	/ "\\" sequence:EscapeSequence { return sequence; }
+	/ LineContinuation
+
+LineContinuation
+  = "\\" LineTerminatorSequence { return ""; }
+
+EscapeSequence
+	= CharacterEscapeSequence
+	/ "0" !DecimalDigit { return "\0"; }
+	/ HexEscapeSequence
+	/ UnicodeEscapeSequence
+
+CharacterEscapeSequence
+	= SingleEscapeCharacter
+	/ NonEscapeCharacter
+
+HexEscapeSequence
+	= "x" digits:$(HexDigit HexDigit) {
+		return String.fromCharCode(parseInt(digits, 16));
+	}
+
+UnicodeEscapeSequence
+	= "u" digits:$(HexDigit HexDigit HexDigit HexDigit) {
+		return String.fromCharCode(parseInt(digits, 16));
+	}
 
 __
 	= (WhiteSpace / LineTerminatorSequence / Comment)*
@@ -113,11 +162,11 @@ __
 
 AttributeName "attribute name"
 	= name:(Reference / Variable) {
-			if (RESERVED_ATTRIBUTES[name]){
-				error(name+" syntax error");
-			}
-			return name;
+		if (RESERVED_ATTRIBUTES[name]){
+			error(name+" syntax error");
 		}
+		return name;
+	}
 
 AttributeEnds
 	= ";"
@@ -126,20 +175,20 @@ AttributeEnds
 
 AttributeBody
 	= Type
-	/ "{" d:(__ d:Attribute __ { return d })* "}" { return d }
-	/ "[" d:Type* "]" { return d }
-	/ $StringLiteral
+	/ "{" d:(__ d:Attribute __ { return d })* "}" AttributeEnds { return d }
+	/ "[" d:Type* "]" AttributeEnds { return d }
+	/ d:$StringLiteral AttributeEnds { return d }
 	/ value:(!AttributeEnds d:SourceCharacter {return d})+ AttributeEnds {
-			return value.join('').trim()
-		}
+		return value.join('').trim()
+	}
 
 AttributeDeclaration
-	= name:AttributeName ":" __ {return name}
+	= name:AttributeName ":" WhiteSpace* {return name}
 
 Attribute "attribute"
 	= name:AttributeDeclaration value:AttributeBody {
-			return { type: 'attribute', name: name, value: value };
-		}
+		return { type: 'attribute', name: name, value: value };
+	}
 
 /* PROPERTY */
 
@@ -148,10 +197,10 @@ PropertyToken
 
 Property "custom property"
 	= PropertyToken WhiteSpace attribute:(Attribute / (d:AttributeName AttributeEnds {return d})) {
-			var name = attribute.name || attribute;
-			var obj = { type: 'property', name: name };
-			return typeof attribute === 'string' ? obj : [obj, attribute];
-		}
+		var name = attribute.name || attribute;
+		var obj = { type: 'property', name: name };
+		return typeof attribute === 'string' ? obj : [obj, attribute];
+	}
 
 /* SIGNAL */
 
@@ -160,8 +209,8 @@ SignalToken
 
 Signal "signal"
 	= SignalToken WhiteSpace name:(Variable) AttributeEnds {
-			return { type: 'signal', name: name };
-		}
+		return { type: 'signal', name: name };
+	}
 
 /* ID */
 
@@ -170,12 +219,12 @@ IdToken
 
 Id "id declaration"
 	= IdToken ":" WhiteSpace* value:Variable AttributeEnds {
-			if (ids[value]){
-				error("this id has been already defined");
-			}
-			ids[value] = true;
-			return { type: 'id', value: value };
+		if (ids[value]){
+			error("this id has been already defined");
 		}
+		ids[value] = true;
+		return { type: 'id', value: value };
+	}
 
 /* FUNCTION */
 
@@ -192,49 +241,76 @@ FunctionBodyFunc
 	= "{" FunctionBody "}"
 
 FunctionParams
-	= "(" first:Variable? rest:(__ "," __ d:Variable { return d })* ")" {
-			return flattenArray([first, rest])
-		}
+	= "(" first:Variable? rest:(WhiteSpace* "," WhiteSpace* d:Variable { return d })* ")" {
+		return flattenArray([first, rest])
+	}
 
 FunctionName
 	= (Variable ".")* "on" Variable
 
 Function "function"
-	= name:$FunctionName ":" __ params:FunctionParams? __ "{" body:$FunctionBody "}" {
-			return { type: 'function', name: name, params: params, body: body };
-		}
+	= name:$FunctionName ":" WhiteSpace* "function" WhiteSpace* params:FunctionParams WhiteSpace* "{" body:$FunctionBody "}" AttributeEnds {
+		return { type: 'function', name: name, params: params, body: body };
+	}
 
 /* DECLARATION */
 
 Declaration
 	= __ d:(Function / Id / Attribute / Property / Signal / Type) {
-			return d
-		}
+		return d
+	}
 
 Declarations
-	= s:Declaration* { return flattenArray(s) }
+	= d:(Declaration / Code)* { return flattenArray(d) }
 
 /* TYPE */
 
 TypeName "type name"
-	= letter:[A-Z_] word:Word? {return letter + (word||'')}
+	= d:$(Variable (("." / "/") Variable)*) {
+		if (d.indexOf('/') !== -1){
+			return d.replace(/\.([a-zA-Z0-9_/]+)$/, "['$1") + "']";
+		}
+		return d;
+	}
 
 TypeBody
-	= declarations:Declarations __ {return declarations}
+	= __ d:Declarations __ { return d }
 
 Type
-	= __ name:TypeName __ "{" body:TypeBody "}" __ {
-			var id;
-			forEachType(body, "id", function(elem){
-				if (id){
-					error("item can has only one id");
-				}
-				id = elem.value;
-			});
-
-			if (!id){
-				id = 'a' + uid();
+	= __ name:TypeName WhiteSpace* "{" body:TypeBody "}" __ {
+		var id;
+		forEachType(body, "id", function(elem){
+			if (id){
+				error("item can has only one id");
 			}
+			id = elem.value;
+		});
 
-			return { type: 'object', name: name, id: id, body: body };
+		if (!id){
+			id = 'a' + uid();
 		}
+
+		return { type: 'object', name: name, id: id, body: body };
+	}
+
+/* CODE */
+
+CodeBody
+	= CodeBodyCode (CodeBodyCode CodeBodyFunc)* CodeBodyCode
+
+CodeBodyCode
+	= CodeBodyAny (StringLiteral CodeBodyAny)* CodeBodyAny
+
+CodeBodyAny
+	= CodeBodyAnyChar*
+
+CodeBodyAnyChar
+	= (!(name:TypeName WhiteSpace* "{")) [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\n;:]
+
+CodeBodyFunc
+	= "{" CodeBody "}"
+
+Code
+	= d:$(d:$CodeBody &{return d.trim() ? d : undefined;}) {
+		return { type: 'code', body: d }
+	}

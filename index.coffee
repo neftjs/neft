@@ -11,6 +11,7 @@ PROPERTY = 'property'
 ATTRIBUTE = 'attribute'
 SIGNAL = 'signal'
 FUNCTION = 'function'
+CODE = 'code'
 
 ids = null
 
@@ -29,16 +30,16 @@ concatArrayElements = (arrA, arrB) ->
 	arrA
 
 isAnchor = (obj) ->
-	assert obj.type is ATTRIBUTE
+	assert obj.type is ATTRIBUTE, "isAnchor: type must be an attribute"
 
 	obj.name is 'anchors' or obj.name.indexOf('anchors.') is 0
 
 BINDING = ///([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z0-9_]+)///
 isBinding = (obj) ->
-	assert obj.type is ATTRIBUTE
+	assert obj.type is ATTRIBUTE, "isBinding: type must be an attribute"
 
 	try
-		eval "(function(){return (#{obj.value});}).call(null)"
+		eval "(function(global,console,process,root,module,require){return (#{obj.value});}).call(null)"
 		return false
 
 	unless BINDING.test obj.value
@@ -59,8 +60,14 @@ getEachProp = (arr, prop) ->
 		r.push elem[prop]
 	r
 
+getElemByName = (arr, type, name) ->
+	for elem in arr
+		if elem.type is type and elem.name is name
+			return elem
+	return
+
 anchorAttributeToString = (obj) ->
-	assert obj.type is ATTRIBUTE
+	assert obj.type is ATTRIBUTE, "anchorAttributeToString: type must be an attribute"
 
 	if typeof obj.value is 'object'
 		return "{}"
@@ -141,12 +148,12 @@ bindingAttributeToString = (obj) ->
 	"{binding: [#{text}]}"
 
 stringObject = (obj) ->
-	assert obj.type is OBJECT
+	assert obj.type is OBJECT, "stringObject: type must be an object"
 
 	if getByType(obj.body, ID).length > 0
 		ids[obj.id] = true
 
-	isLocal = Renderer[obj.name]?
+	isLocal = Renderer[obj.name.split('.')[0]]?
 	properties = getEachProp(getByType(obj.body, PROPERTY), 'name')
 	signals = getEachProp(getByType(obj.body, SIGNAL), 'name')
 
@@ -156,7 +163,7 @@ stringObject = (obj) ->
 	if args.length
 		args = "{#{args.join ', '}}"
 
-	decl = if isLocal then "new #{obj.name}" else "styles['#{obj.name}']"
+	decl = if isLocal then "new #{obj.name}" else "#{obj.name}"
 	r = "var #{obj.id} = #{decl}(#{args or ''});\n"
 
 	for child in getByType(obj.body, OBJECT)
@@ -165,75 +172,75 @@ stringObject = (obj) ->
 
 	r
 
-stringAttributeValueObject = (obj) ->
-	assert obj.type is OBJECT
+stringAttribute = (obj, parents) ->
+	assert obj.type is ATTRIBUTE, "stringAttribute: type must be an attribute"
+	assert parents[0].type is OBJECT, "stringAttribute: first parent must be an object"
 
-	[stringObjectFull(obj), obj.id, '']
-
-stringAttributeValue = (obj, parent) ->
-	assert obj.type is ATTRIBUTE
-	assert parent.type is OBJECT
-
+	object = parents[0]
 	{value} = obj
-	
+
+	ref = "#{object.id}."
+	for parent in parents[1...]
+		ref += "#{parent.name}."
+	ref += "#{obj.name}"
+
+	r = "#{ref} = "
+	rPre = ''
+	rPost = ''
+	childParents = null
+
 	if Array.isArray value
-		r = ''
-		childIds = []
-		postfix = ''
+		rArr = "["
+
 		for elem in value
 			switch elem.type
-				when 'object'
-					childResult = stringAttributeValueObject(elem)
-					r += childResult[0]
-					childIds.push childResult[1]
-					postfix += childResult[2]
-				when 'attribute'
-					elem.name = "#{obj.name}.#{elem.name}"
-					childResult = stringAttribute(elem, parent)
-					r += childResult[0]
-					postfix += childResult[1] + childResult[2]
+				when OBJECT
+					rArr += "#{elem.id}, "
+					rPre += stringObjectFull elem
+				when ATTRIBUTE
+					unless childParents
+						childParents = parents.slice()
+						childParents.push obj
+					rPost += stringAttribute elem, childParents
 				else
 					throw "Not implemented attribute type"
-		if childIds.length
-			value = "[#{childIds}]"
+
+		rArr = rArr.slice 0, -2
+		if rArr.length > 0
+			r += "#{rArr}]"
 		else
-			value = "{}"
-		[r, value, postfix]
+			if parents.length > 1 or getElemByName(parents[0].body, PROPERTY, obj.name)
+				r += "{}"
+			else
+				return rPre + rPost
 	else if isAnchor obj
-		['', anchorAttributeToString(obj), '']
+		r += anchorAttributeToString(obj)
 	else if isBinding obj
-		['', bindingAttributeToString(obj), '']
-	else if value.type is 'object'
-		stringAttributeValueObject value
+		r += bindingAttributeToString(obj)
+	else if value.type is OBJECT
+		r += value.id
+		rPre += stringObjectFull value
 	else
-		['', value, '']
+		r += value
 
-stringAttribute = (obj, parent) ->
-	assert obj.type is ATTRIBUTE
-	assert parent.type is OBJECT
-
-	r = ['', '', '']
-	r[1] += "#{parent.id}.#{obj.name} = "
-	concatArrayElements r, stringAttributeValue(obj, parent)
-	r[1] += ";\n"
-	r
+	r += ";\n"
+	rPre + r + rPost
 
 stringAttributes = (obj) ->
-	assert obj.type is OBJECT
+	assert obj.type is OBJECT, "stringAttributes: type must be an object"
 
-	r = ['', '', '']
+	r = ''
 
-	attributes = getByType obj.body, ATTRIBUTE
-	for attribute in attributes
-		concatArrayElements r, stringAttribute(attribute, obj)
+	for attribute in getByType(obj.body, ATTRIBUTE)
+		r += stringAttribute attribute, [obj]
 
 	for child in getByType(obj.body, OBJECT)
-		r[1] += stringAttributes child
+		r += stringAttributes child
 
-	r.join('')
+	r
 
 stringFunctions = (obj) ->
-	assert obj.type is OBJECT
+	assert obj.type is OBJECT, "stringFunctions: type must be an object"
 
 	r = ''
 
@@ -248,7 +255,10 @@ stringFunctions = (obj) ->
 	r
 
 stringObjectFull = (obj) ->
-	assert obj.type is OBJECT
+	if obj.type is CODE
+		return obj.body
+
+	assert obj.type is OBJECT, "stringObjectFull: type must be an object"
 
 	code = stringObject obj
 	code += stringAttributes obj
@@ -259,8 +269,14 @@ module.exports = (file) ->
 	elems = parser file
 	ids = {}
 
-	code = stringObjectFull elems
-	code += "var mainItem = #{elems.id};\n"
+	code = ''
+	for elem in elems
+		code += stringObjectFull elem
+
+	code += "var mainItem;\n"
+	for elem in elems
+		if elem.type is OBJECT
+			code += "if (#{elem.id} instanceof Item) mainItem = #{elem.id};\n"
 
 	idsObject = '{'
 	idsKeys = Object.keys ids
