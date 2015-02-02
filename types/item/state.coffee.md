@@ -3,51 +3,50 @@
 	utils = require 'utils'
 	assert = require 'assert'
 
-	update = do ->
-		queue = []
-		queueItems = {}
-		pending = false
+	# update = do ->
+	# 	queue = []
+	# 	queueItems = {}
+	# 	pending = false
 
-		updateItem = (item) ->
-			{state, states} = item
+	# 	updateItem = (item) ->
+	# 		{state, states} = item
 
-			# restore default state
-			states[''].update item
+	# 		# restore default state
+	# 		states[''].update item
 
-			# apply states
-			for stateElem in state.items()
-				states[stateElem]?.update item
+	# 		# apply states
+	# 		for stateElem in state.items()
+	# 			states[stateElem]?.update item
 
-			null
+	# 		null
 
-		updateItems = ->
-			pending = false
-			while queue.length
-				item = queue.pop()
-				queueItems[item.__hash__] = false
-				updateItem item
-			null
+	# 	updateItems = ->
+	# 		pending = false
+	# 		while queue.length
+	# 			item = queue.pop()
+	# 			queueItems[item.__hash__] = false
+	# 			updateItem item
+	# 		null
 
-		(item) ->
-			if queueItems[item.__hash__]
-				return
+	# 	(item) ->
+	# 		if queueItems[item.__hash__]
+	# 			return
 
-			queueItems[item.__hash__] = true
-			queue.push item
+	# 		queueItems[item.__hash__] = true
+	# 		queue.push item
 
-			unless pending
-				setImmediate updateItems
-				pending = true
+	# 		unless pending
+	# 			setImmediate updateItems
+	# 			pending = true
 
 	support = (item, state) ->
-		return; # TODO
 		state = item.states[state]
 		unless state
 			return
 
 		defaultState = item.states['']
 
-		for name, val of state when state.hasOwnProperty(name)
+		for name, val of state
 			unless defaultState.hasOwnProperty name
 				defaultState[name] = utils.clone(item[name]?._data or item[name])
 
@@ -68,13 +67,12 @@
 				if @state is val
 					return
 
-				# restore old one
-				@states[@state].restore @
+				Renderer.State.restore @states[@state], @
 
 				_super.call @, val
 
-				# support new
 				support @, val
+				Renderer.State.update @states[val], @
 
 *Object* Item::states
 ---------------------

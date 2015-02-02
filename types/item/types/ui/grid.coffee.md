@@ -20,7 +20,6 @@ Renderer.Grid
 				data:
 					columns: 0
 					rows: 0
-					spacing: null
 
 *Integer* Grid::columns
 -----------------------

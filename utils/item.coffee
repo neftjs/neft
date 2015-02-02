@@ -98,7 +98,7 @@ module.exports = (Renderer, Impl) -> exports =
 
 		# accept bindings
 		if namespace
-			setter = exports.createDeepBindingSetter name, setter
+			setter = exports.createDeepBindingSetter namespace, name, setter
 		else
 			setter = exports.createBindingSetter name, setter
 
@@ -109,13 +109,25 @@ module.exports = (Renderer, Impl) -> exports =
 
 	createBindingSetter: (propName, setFunc) ->
 		(val) ->
+			# synchronize with default state
+			if @_data.states and @_data.state is ''
+				@_data.states[''][propName] = val
+
 			if val and isArray val.binding
 				Impl.setItemBinding.call @, @, propName, val.binding
 			else
 				setFunc.call @, val
 
-	createDeepBindingSetter: (propName, setFunc) ->
+	createDeepBindingSetter: (namespace, propName, setFunc) ->
 		(val) ->
+			itemData = @_item._data
+
+			# synchronize with default state
+			if itemData.states and itemData.state is ''
+				state = itemData.states['']
+				state[namespace] ?= {}
+				state[namespace][propName] ?= val
+
 			if val and isArray val.binding
 				Impl.setItemBinding.call @_item, @, propName, val.binding
 			else
@@ -135,7 +147,7 @@ module.exports = (Renderer, Impl) -> exports =
 			# set properties
 			for key, val of opts
 				unless key of item
-					throw "Unexpected property `#{key}`"
+					throw new Error "Unexpected property `#{key}`"
 
 				if typeof val is 'function' and signal.isHandlerName(key)
 					continue
@@ -145,7 +157,7 @@ module.exports = (Renderer, Impl) -> exports =
 			# connect handlers
 			for key, val of opts
 				unless key of item
-					throw "Unexpected property `#{key}`"
+					throw new Error "Unexpected property `#{key}`"
 
 				if typeof val is 'function' and signal.isHandlerName(key)
 					item[key].connect val

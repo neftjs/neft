@@ -33,7 +33,6 @@ Rectangle {
 				data:
 					color: 'transparent'
 					radius: 0
-					border: null
 
 *String* Rectangle::color = 'transparent'
 -----------------------------------------

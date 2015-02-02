@@ -25,7 +25,6 @@ Renderer.Text
 					text: ''
 					color: 'black'
 					lineHeight: 1
-					font: null
 
 *String* Text::text
 -------------------

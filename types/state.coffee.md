@@ -6,8 +6,8 @@ Renderer.State
 	assert = require 'assert'
 	utils = require 'utils'
 
-*State* State() @low-level
---------------------------
+*State* State()
+---------------
 
 	module.exports = (Renderer, Impl, itemUtils) -> class State
 
@@ -20,25 +20,21 @@ Renderer.State
 			, (val) ->
 				utils.defineProperty @, propName, utils.ENUMERABLE, val
 
-		constructor: ->
+		@update = (state, item) ->
+			assert.instanceOf state, State
+			assert.instanceOf item, Renderer.Item
 
-		update: (item) ->
-			return; # TODO
-			expect(item).toBe.any Renderer.Item
-
-			# apply changes
-			for prop, val of @ when @hasOwnProperty prop
+			for prop, val of state
 				itemUtils.setProperty item, prop, val
-			
-			null
 
-		restore: (item) ->
-			return; # TODO
-			expect(item).toBe.any Renderer.Item
+			return
 
-			# disconnect listeners
-			for prop, val of @ when @hasOwnProperty prop
+		@restore = (state, item) ->
+			assert.instanceOf state, State
+			assert.instanceOf item, Renderer.Item
+
+			for prop, val of state
 				if typeof val is 'function'
 					item[prop].disconnect val
 
-			null
+			return

@@ -25,7 +25,6 @@ Renderer.Item
 
 		itemUtils.initConstructor @,
 			data:
-				bindings: null
 				parent: null
 				clip: false
 				visible: true
@@ -38,11 +37,6 @@ Renderer.Item
 				scale: 1
 				opacity: 1
 				state: ''
-				states: null
-				anchors: null
-				animations: null
-				transitions: null
-				margin: null
 
 *Item* Item([*Object* options, *Array* children])
 -------------------------------------------------
@@ -57,25 +51,30 @@ Renderer.Item
 			assert.isDefined opts, 'ctor options argument ...' if opts?
 			assert.isArray children, 'ctor children argument ...' if children?
 
-			# custom properties
-			if opts?.properties?
-				for propName in opts.properties
-					itemUtils.defineProperty
-						object: @
-						name: propName
-				delete opts.properties
-
-			# custom signals
-			if opts?.signals?
-				for signalName in opts.signals
-					signal.create @, signalName
-				delete opts.signals
-
 			# initialization
 			itemUtils.initObject @, Impl.createItem
 
-			# fill
-			itemUtils.fill @, opts
+			if opts?
+				# initialize states
+				if opts.states?
+					@states
+
+				# custom properties
+				if opts.properties?
+					for propName in opts.properties
+						itemUtils.defineProperty
+							object: @
+							name: propName
+					delete opts.properties
+
+				# custom signals
+				if opts.signals?
+					for signalName in opts.signals
+						signal.create @, signalName
+					delete opts.signals
+
+				# fill
+				itemUtils.fill @, opts
 
 			# append children
 			if children
@@ -109,9 +108,6 @@ Item {
 		readyLazySignal.onInitialized (item) ->
 			setImmediate -> item.ready()
 
-		onLazySignalInitialized = (item, signalName) ->
-			Impl.attachItemSignal.call item, signalName, item[signalName]
-
 *Signal* Item::pointerClicked(*Object* event)
 ---------------------------------------------
 
@@ -132,6 +128,9 @@ Item {
 
 *Signal* Item::pointerMove(*Object* event)
 ------------------------------------------
+
+		onLazySignalInitialized = (item, signalName) ->
+			Impl.attachItemSignal.call item, signalName, item[signalName]
 
 		@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
 		            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
