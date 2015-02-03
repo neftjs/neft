@@ -170,6 +170,10 @@ stringObject = (obj) ->
 		r += stringObject child
 		r += "if (#{child.id} instanceof Item){ #{child.id}.parent = #{obj.id}; }\n"
 
+	# initialize states
+	if getElemByName obj.body, ATTRIBUTE, 'states'
+		r += "#{obj.id}.states\n"
+
 	r
 
 stringAttribute = (obj, parents) ->
@@ -273,13 +277,14 @@ module.exports = (file) ->
 	for elem in elems
 		code += stringObjectFull elem
 
+	idsKeys = Object.keys ids
+
 	code += "var mainItem;\n"
 	for elem in elems
 		if elem.type is OBJECT
 			code += "if (#{elem.id} instanceof Item) mainItem = #{elem.id};\n"
 
 	idsObject = '{'
-	idsKeys = Object.keys ids
 	for id in idsKeys
 		idsObject += "#{id}: #{id}, "
 	if idsKeys.length > 0
