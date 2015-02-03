@@ -12,8 +12,8 @@ Routing.Response.Error
 
 		@RequestResolve = RequestResolve Routing, Response, ResponseError
 
-*Error* Error([*Integer* status], *String* message)
----------------------------------------------------
+*Error* Error(*Integer* status, *String* message)
+-------------------------------------------------
 
 This class is used in the `Routing.Response::raise()` method and describes an error.
 

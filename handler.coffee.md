@@ -13,8 +13,8 @@ Routing.Handler
 	assert = assert.scope 'Routing.Handler'
 	log = log.scope 'Routing', 'Handler'
 
-*UriNotValidError* Handler.UriNotValidError extends Error
----------------------------------------------------------
+*UriNotValidError* Handler.UriNotValidError : *Error*
+-----------------------------------------------------
 
 	class UriNotValidError extends Error
 		constructor: (@message) -> super
@@ -22,8 +22,8 @@ Routing.Handler
 		name: 'UriNotValid'
 		message: ''
 
-*CallbackError* Handler.CallbackError extends Error
----------------------------------------------------
+*CallbackError* Handler.CallbackError : *Error*
+-----------------------------------------------
 
 	class CallbackError extends Error
 
