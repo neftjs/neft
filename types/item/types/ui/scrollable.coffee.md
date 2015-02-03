@@ -7,8 +7,8 @@ Renderer.Scrollable
 	utils = require 'utils'
 	signal = require 'signal'
 
-*Scrollable* Scrollable([*Object* options, *Array* children]) : Renderer.Item
------------------------------------------------------------------------------
+*Scrollable* Scrollable([*Object* options, *Array* children]) : *Renderer.Item*
+-------------------------------------------------------------------------------
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 		@__name__ = 'Scrollable'
@@ -108,8 +108,8 @@ Renderer.Scrollable
 				if verticalScrollbar
 					verticalScrollbar.y = @contentY * @height / @contentItem.height
 
-[*Renderer.Item*] Scrollable::contentItem
------------------------------------------
+*Renderer.Item* Scrollable::contentItem
+---------------------------------------
 
 ### *Signal* Scrollable::contentItemChanged([*Renderer.Item* oldValue])
 
@@ -124,8 +124,8 @@ Renderer.Scrollable
 				_super.call @, val
 				oldVal?.parent = null
 
-[*Renderer.Item*] Scrollable::verticalScrollbar
------------------------------------------------
+*Renderer.Item* Scrollable::verticalScrollbar
+---------------------------------------------
 
 ### *Signal* Scrollable::verticalScrollbarChanged([*Renderer.Item* oldValue])
 

@@ -104,8 +104,8 @@ Renderer.PropertyAnimation
 			name: 'to'
 			implementation: Impl.setPropertyAnimationTo
 
-*ReadOnly* *Float* PropertyAnimation::progress = 0
---------------------------------------------------
+ReadOnly *Float* PropertyAnimation::progress = 0
+------------------------------------------------
 
 		utils.defineProperty @::, 'progress', null, ->
 			Impl.getPropertyAnimationProgress.call @

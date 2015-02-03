@@ -69,8 +69,8 @@ Renderer.Animation
 			developmentSetter: (val) ->
 				expect(val).toBe.boolean()
 
-*ReadOnly* *Boolean* Animation::updatePending
----------------------------------------------
+ReadOnly *Boolean* Animation::updatePending
+-------------------------------------------
 
 		utils.defineProperty @::, 'updatePending', null, ->
 			@_data.updatePending

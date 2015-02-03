@@ -159,16 +159,16 @@ Item {
 
 		ChildrenObject = {}
 
-### *Signal* Item::children::inserted(*Item* child, *Integer* index)
+### *Signal* Item.children::inserted(*Item* child, *Integer* index)
 
 		signal.createLazy ChildrenObject, 'inserted'
 
-### *Signal* Item::children::popped(*Item* child, *Integer* index)
+### *Signal* Item.children::popped(*Item* child, *Integer* index)
 
 		signal.createLazy ChildrenObject, 'popped'
 
-*[Item]* Item::parent
----------------------
+*Item* Item::parent
+-------------------
 
 ### *Signal* Item::parentChanged(*Item* oldParent)
 

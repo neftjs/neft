@@ -38,3 +38,7 @@ Renderer.State
 					item[prop].disconnect val
 
 			return
+
+		constructor: (opts) ->
+			if opts?
+				utils.merge @, opts

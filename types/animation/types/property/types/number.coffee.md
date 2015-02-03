@@ -6,8 +6,8 @@ Renderer.NumberAnimation
 	utils = require 'utils'
 	expect = require 'expect'
 
-*NumberAnimation* NumberAnimation([*Object* options]) : Renderer.PropertyAnimation
-----------------------------------------------------------------------------------
+*NumberAnimation* NumberAnimation([*Object* options]) : *Renderer.Animation.Property*
+-------------------------------------------------------------------------------------
 
 	module.exports = (Renderer, Impl, Animation, itemUtils) -> class NumberAnimation extends Animation.Property
 		@__name__ = 'NumberAnimation'

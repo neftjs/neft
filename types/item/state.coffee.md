@@ -82,7 +82,7 @@
 			name: 'states'
 			getter: (_super) -> ->
 				@_data.states ?=
-					'': new Renderer.State @
+					'': new Renderer.State
 				_super.call @
 			setter: (_super) -> (val) ->
 				assert.isPlainObject val
