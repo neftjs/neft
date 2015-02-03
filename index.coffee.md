@@ -411,8 +411,8 @@ console.log(object);
 
 		return
 
-[*Object*] utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
---------------------------------------------------------------------------------
+*Object* utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
+------------------------------------------------------------------------------
 
 Returns descriptor of the *property* defined in the given *object*.
 
@@ -443,8 +443,8 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 
 		desc
 
-[*Function*] utils.lookupGetter(*NotPrimitive* object, *String* property)
--------------------------------------------------------------------------
+*Function* utils.lookupGetter(*NotPrimitive* object, *String* property)
+-----------------------------------------------------------------------
 
 Returns function bound as a getter to the given *property*.
 
@@ -469,8 +469,8 @@ console.log(utils.lookupGetter(object, 'progress'));
 			desc = exports.getPropertyDescriptor obj, prop
 			desc?.get
 
-[*Function*] utils.lookupSetter(*NotPrimitive* object, *String* property)
--------------------------------------------------------------------------
+*Function* utils.lookupSetter(*NotPrimitive* object, *String* property)
+-----------------------------------------------------------------------
 
 Returns function bound as a setter to the given *property*.
 
@@ -774,7 +774,7 @@ console.log(utils.has(object, 'New York'))
 
 			false
 
-*Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target *= []*])
+*Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target = `[]`])
 ------------------------------------------------------------------------------------------
 
 Translates given *object* into an array.
@@ -788,15 +788,15 @@ Elements are set into the *target* array (new array by default).
 
 ```
 var object = {
-	type: 'dog',
-	name: 'Bandit'
+  type: 'dog',
+  name: 'Bandit'
 };
 
 console.log(utils.objectToArray(object))
 // ['dog', 'Bandit']
 
 console.log(utils.objectToArray(object, function(key, val){
-	return key + "_" + val;
+  return key + "_" + val;
 })
 // ['type_dog', 'name_Bandit']
 ```
@@ -815,8 +815,8 @@ console.log(utils.objectToArray(object, function(key, val){
 
 		target
 
-*Object* utils.arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen*, *Object* target *= {}*])
---------------------------------------------------------------------------------------------------------------
+*Object* utils.arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, *Object* target = `{}`])
+-------------------------------------------------------------------------------------------------------------
 
 Translates given *array* into object with keys defined by the *keyGen* and values
 defined by the *valueGen*.
@@ -834,14 +834,14 @@ console.log(utils.arrayToObject(['a', 'b']))
 // {0: 'a', 1: 'b'}
 
 console.log(utils.arrayToObject(['a'], function(i, elem){
-	return "value_" + elem;
+  return "value_" + elem;
 })
 // {"value_a": "a"}
 
 console.log(utils.arrayToObject(['a'], function(i, elem){
-	return elem;
+  return elem;
 }, function(i, elem){
-	return i;
+  return i;
 })
 // {"a": 0}
 ```
@@ -901,7 +901,7 @@ console.log(utils.addSlashes('a"b'))
 
 			str.replace SLASHES_RE, NEW_SUB_STR
 
-*String* utils.uid([*Integer* length *= 8*])
+*String* utils.uid([*Integer* length = `8`])
 --------------------------------------------
 
 Generates pseudo-unique hash with given *length*.
@@ -937,9 +937,9 @@ If *onfail* is a function, it will be called with catched error.
 
 ```
 function test(size){
-	if (size === 0){
-		throw "Wrong size!";
-	}
+  if (size === 0){
+    throw "Wrong size!";
+  }
 }
 
 console.log(utils.tryFunctiontion(test, null, [0]))
@@ -968,9 +968,9 @@ Calls given *function* with *context* and *arguments* and returns catched error.
 
 ```
 function test(size){
-	if (size === 0){
-		throw "Wrong size!";
-	}
+  if (size === 0){
+    throw "Wrong size!";
+  }
 }
 
 console.log(utils.catchError(test, null, [0]))

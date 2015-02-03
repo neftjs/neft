@@ -6,7 +6,8 @@
 
 	module.exports = (utils) ->
 
-### TODO: simplify()
+utils.simplify()
+----------------
 
 Convert passed object into the most simplified format.
 Such object can be easily stringified.
@@ -38,7 +39,7 @@ Examples
      assert(clone instanceof Sample)
      ```
 
- * * *
+.
 
 		utils.simplify = do ->
 
@@ -178,7 +179,8 @@ Examples
 				protos: protos
 				constructors: ctors
 
-### assemble()
+utils.assemble()
+----------------
 
 Backward `simplify()` operation.
 

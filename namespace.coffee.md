@@ -4,7 +4,8 @@
 
 	module.exports = (utils) ->
 
-### TODO: get()
+*Any* utils.get(*Object* object, *String* path, [*OptionsArray* target])
+------------------------------------------------------------------------
 
 Get needed value from the object. Arrays are supported.
 If path can't be resolved, new get.OptionsArray is returned with
@@ -94,7 +95,8 @@ For arrays add to property name two brackets ('[]')
 
 			obj
 
-#### *class* get.OptionsArray()
+*OptionsArray* utils.get.OptionsArray()
+---------------------------------------
 
 Special version of Array, returned if result of the `get` method is a list
 of possible values and not a proper value.
@@ -103,7 +105,8 @@ of possible values and not a proper value.
 
 			constructor: -> super
 
-### isStringArray()
+*boolean* utils.isStringArray(*String* value)
+---------------------------------------------
 
 Check if string references into array (according to notation in `get` method).
 
