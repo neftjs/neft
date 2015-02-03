@@ -1,7 +1,8 @@
 'use strict'
 
-[log, View] = ['log', 'view'].map require
+log = require 'log'
 utils = require 'utils'
+View = require 'view'
 Renderer = require 'renderer'
 
 log = log.scope 'Routing'
@@ -66,8 +67,18 @@ module.exports = (Routing) ->
 
 		hasItems
 
+	uriPop = false
+	window.addEventListener 'popstate', ->
+		uriPop = true
+
 	send: (res, data, callback) ->
 		log.ok "Got response `#{res.request.method} #{res.request.url}`"
+
+		# change browser URI in the history
+		if uriPop
+			uriPop = false
+		else
+			history.pushState null, '', res.request.url
 
 		# clear messages container
 		while child = messagesContainer.firstChild

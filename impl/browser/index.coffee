@@ -1,19 +1,14 @@
 'use strict'
 
-[utils] = ['utils'].map require
+utils = require 'utils'
 
 module.exports = (Routing) ->
 	Request: require('./request.coffee') Routing
 	Response: require('./response.coffee') Routing
 
 	init: (routing) ->
-
 		# Send internal request to change the page based on the URI
 		changePage = (uri) =>
-
-			# change browser URI in the history
-			history.pushState null, '', uri
-
 			# send internal request
 			uid = utils.uid()
 
@@ -24,9 +19,12 @@ module.exports = (Routing) ->
 				url: uri
 				data: null
 
+		# synchronize with browser page changing
+		window.addEventListener 'popstate', ->
+			changePage location.pathname
+
 		# don't refresh page on click anchor
 		document.addEventListener 'click', (e) ->
-
 			{target} = e
 
 			# consider only anchors
