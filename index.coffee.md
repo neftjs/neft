@@ -46,11 +46,12 @@ Creates new *Dict* instance.
 Using *new* keyword is not required.
 
 ```
-data = new Dict
+var data = new Dict({
   name: 'xyz'
+});
 
-console.log data.get 'name'
-# xyz
+console.log(data.get('name'));
+// xyz
 ```
 
 		constructor: (obj={}) ->
@@ -88,14 +89,16 @@ Lazy **signal** called on each property value change.
 You can listen on this signal using the `onChanged` handler.
 
 ```
-user = new Dict
+var user = new Dict({
   country: 'Germany'
+});
 
-user.onChanged.connect (key, oldVal) ->
-  console.log "User #{key} property changed from #{oldVal} to #{@get(key)}"
+user.onChanged.connect(function(key, oldVal){
+  console.log(key + " property changed from " + oldVal + " to " + this.get(key));
+});
 
-user.set 'country', 'US'
-# User country property changed from Germany to US
+user.set('country', 'US');
+// country property changed from Germany to US
 ```
 
 		signal.createLazy @::, 'changed'
@@ -108,18 +111,19 @@ Get a property value stored in the *Dict*.
 Returns *undefined* only for unknown properties.
 
 ```
-bunny = new Dict
-  speedX: 5
+var bunny = new Dict({
+  speedX: 5,
   speedY: 2
+});
 
-console.log bunny.get 'speedX'
-# 5
+console.log(bunny.get('speedX'));
+// 5
 
-console.log bunny.get 'speedY'
-# 2
+console.log(bunny.get('speedY'));
+// 2
 
-console.log bunny.get 'speedZ'
-# undefined
+console.log(bunny.get('speedZ'));
+// undefined
 ```
 
 		get: (key) ->
@@ -140,15 +144,17 @@ Passed *value* can't be a `undefined`, because it's used only for unknown proper
 Given *value* is returned as a **result**.
 
 ```
-links = new Dict
-  facebook: 'https://facebook.com/neft.io'
+var links = new Dict({
+  facebook: 'https://facebook.com/neft.io',
   twitter: 'https://twitter.com/neft_io'
+});
 
-links.onChanged.connect (key, oldVal) ->
-  console.log "Social link for #{key} changed from #{oldVal} to #{@get(key)}"
+links.onChanged.connect(function(key, oldVal){
+  console.log(key + " changed from " + oldVal + " to " + this.get(key));
+});
 
-links.set 'googlePlus', 'https://plus.google.com/+NeftIo-for-apps/'
-# Social link for googlePlus changed from undefined to https://...
+links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
+// googlePlus changed from undefined to https://...
 ```
 
 		set: (key, val) ->
@@ -180,16 +186,18 @@ Remove exists property from the *Dict*.
 This method calls `Dict::changed()` **signal** with standard parameters.
 
 ```
-member = new Dict
+var data = new Dict;
 
-data.set 'name', 'John'
+data.set('name', 'John');
 
-data.onChanged.connect (key, oldVal) ->
-  if @get(key) is undefined
-    console.log "#{key} property has been removed"
+data.onChanged.connect(function(key, oldVal){
+  if (this.get(key) === undefined){
+    console.log(key + " property has been removed");
+  }
+});
 
-data.pop 'name'
-# name property has been rmeoved
+data.pop('name');
+// name property has been rmeoved
 ```
 
 		pop: (key) ->
@@ -216,12 +224,13 @@ It always returns the same array, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ```
-data = new Dict
-  x: 10
+var data = new Dict({
+  x: 10,
   y: 30
+});
 
-console.log data.keys()
-# ['x', 'y']
+console.log(data.keys());
+// ['x', 'y']
 ```
 
 		keys: ->
@@ -247,12 +256,13 @@ It always returns the same array, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ```
-data = new Dict
-  x: 10
+var data = new Dict({
+  x: 10,
   y: 30
+});
 
-console.log data.values()
-# [10, 30]
+console.log(data.values());
+// [10, 30]
 ```
 
 		values: ->
@@ -278,12 +288,13 @@ It always returns the same arrays, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ```
-data = new Dict
-  x: 10
+var data = new Dict({
+  x: 10,
   y: 30
+});
 
-console.log data.items()
-# [['x', 10], ['y', 30]]
+console.log(data.items());
+// [['x', 10], ['y', 30]]
 ```
 
 		items: ->
