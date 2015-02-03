@@ -1,8 +1,6 @@
 Signal
 ======
 
-@requires utils
-
 Signals are used as standard `events` but brings new features and fix some issues, which
 standard events based on the strings have.
 
@@ -19,7 +17,7 @@ standard events based on the strings have.
 
 		handlerName = exports.getHandlerName name
 
-		assert not obj[name]?
+		assert not obj.hasOwnProperty name
 		, "Signal `#{name}` can't be created, because object `#{obj}` " +
 		  "has already defined such property"
 
@@ -31,7 +29,7 @@ standard events based on the strings have.
 
 		handlerName = exports.getHandlerName name
 
-		assert not obj[handlerName]?
+		assert not obj.hasOwnProperty handlerName
 		, "Handler `#{handlerName}` can't be created, because object `#{obj}` " +
 		  "has already defined such property"
 
@@ -51,8 +49,8 @@ Returns handler name based on the signal name.
 In pratice it adds *on* prefix and capitalize the signal name.
 
 ```
-signal.getHandlerName 'xChanged'
-# onXChanged
+signal.getHandlerName('xChanged');
+// onXChanged
 ```
 
 	exports.getHandlerName = do ->
@@ -72,14 +70,14 @@ Returns true if the given *name* is a proper handler name.
 In pratice it returns true if the *name* is prefixed by *on*.
 
 ```
-signal.isHandlerName 'onXChanged'
-# true
+signal.isHandlerName('onXChanged');
+// true
 
-signal.isHandlerName 'xChanged'
-# false
+signal.isHandlerName('xChanged');
+// false
 
-signal.isHandlerName 'onxChanged'
-# false (because x is lowercase)
+signal.isHandlerName('onxChanged');
+// false (because x is lowercase)
 ```
 
 	exports.isHandlerName = (name) ->
@@ -93,15 +91,16 @@ signal.isHandlerName 'onxChanged'
 Creates new signal and handler for this signal in the given *object* under the given *name*.
 
 ```
-obj = {}
+var obj = {};
 
-signal.create obj, 'xChanged'
+signal.create(obj, 'renamed');
 
-obj.onXChanged.connect ->
-  console.log arguments
+obj.onRenamed.connect(function(){
+  console.log(arguments);
+});
 
-obj.xChanged 1, 2
-# [1, 2]
+obj.renamed('Max', 'George');
+// {0: "Max", 1: "George"}
 ```
 
 	exports.create = (obj, name) ->
@@ -165,70 +164,44 @@ console.log Object.keys(Object.getPrototypeOf(myDog))
 
 		handler
 
-*Function* Signal
-=================
+	callSignal = (obj, listeners) ->
+		n = listeners.length
+		return unless n
 
-Signal function is used to call all handler listeners.
+		args = []
+		for arg, i in arguments
+			args[i] = arg
 
-```
-obj = {}
-signal.create obj, 'changed'
+		i = -1
+		while ++i < n
+			func = listeners[i]
+			unless func
+				listeners.splice i, 1
+				i--; n--
+				continue
 
-obj.changed()
-# call all connected listeners ...
-```
+			result = func.apply(obj, args)
+			if result is exports.STOP_PROPAGATION
+				return result
+
+		return
 
 	createSignalFunction = (obj) ->
 		signal = ->
-			n = listeners.length
-			return unless n
-
-			args = []
-			for arg, i in arguments
-				args[i] = arg
-
-			i = -1
-			while ++i < n
-				func = listeners[i]
-				unless func
-					listeners.splice i, 1
-					i--; n--
-					continue
-
-				result = func.apply(obj, args)
-				if result is exports.STOP_PROPAGATION
-					return result
-
-			return
+			callSignal obj, listeners
 
 		listeners = signal.listeners = []
 
 		signal
 
-*Function* Handler
-==================
+*Handler* Handler()
+===================
 
 Handler function used to connect and disconnect listeners.
 
 Handler is always stored in the property prefixed by the *on* (e.g. *onWidthChanged*).
 
 If it's called it works as a alias for the *Handler.connect()*.
-
-```
-obj = {}
-
-signal.create obj, 'pressed'
-
-obj.onPressed ->
-  console.log 'listener 1'
-
-obj.onPressed.connect ->
-  console.log 'listener 2'
-
-obj.pressed()
-# listener 1
-# listener 2
-```
 
 	createHandlerFunction = (obj, signal) ->
 		handler = (listener) ->
@@ -248,6 +221,24 @@ Connect new listener function to the handler.
 
 Connected function will be called on each signal call.
 
+```
+var obj = {};
+
+signal.create(obj, 'pressed');
+
+obj.onPressed(function(){
+  console.log('listener 1');
+});
+
+obj.onPressed.connect(function(){
+  console.log('listener 2');
+});
+
+obj.pressed()
+// listener 1
+// listener 2
+```
+
 		connect: (listener) ->
 			expect(@).toBe.function()
 			expect(listener).toBe.function()
@@ -263,18 +254,19 @@ Handler.disconnect(*Function* listener)
 Diconnect already connected listener.
 
 ```
-obj = {}
+var obj = {};
 
-signal.create obj, 'pressed'
+signal.create(obj, 'pressed');
 
-listener = ->
-  console.log 'listener called!'
+listener = function(){
+  console.log('listener called!');
+};
 
-obj.onPressed.connect listener
-obj.onPressed.disconnect listener
+obj.onPressed.connect(listener);
+obj.onPressed.disconnect(listener);
 
 obj.pressed()
-# no loggs...
+// no loggs...
 ```
 
 		disconnect: (listener) ->
