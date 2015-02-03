@@ -152,6 +152,8 @@
 				if not @item
 					return
 
+				{funcs} = @file
+
 				if @isAutoParent and @item isnt parent?.item
 					@item.parent = if parent then parent.item else null
 
@@ -166,7 +168,8 @@
 
 				for name of @formula.attrs
 					val = @node.attrs.get name
-					val = @file.funcs?[val] or val
+					if funcs?.hasOwnProperty val
+						val = funcs[val]
 					@setAttr name, val
 
 				return

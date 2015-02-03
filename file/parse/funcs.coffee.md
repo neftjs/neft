@@ -41,8 +41,7 @@ in the same file.
 <span neft:style="Button" neft:style:onPointerClicked="boost">1</span>
 ```
 
-CoffeeScript syntax
--------------------
+#### CoffeeScript syntax
 
 Using *CoffeeScript* syntax is fully allowed.
 

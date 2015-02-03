@@ -20,8 +20,8 @@ neft:func @js
 
 		{Input, Unit} = File
 
-*ReadOnly* *Object* globalObject
---------------------------------
+ReadOnly *Object* globalObject
+------------------------------
 
 Functions are created in their private scope.
 
@@ -97,8 +97,8 @@ Using this attribute you can call other functions.
 
 			view: -> @
 
-[*Renderer.Item*] globalObject.item
------------------------------------
+*Renderer.Item* globalObject.item
+---------------------------------
 
 Reference to the *low-level* `Renderer.Item` *API*.
 
@@ -116,8 +116,8 @@ This attribute is available, only if it's a `Renderer.Item` signal.
 				if ctx instanceof Renderer.Item
 					ctx
 
-[*App.View.GlobalStorage*] globalObject.global
-----------------------------------------------
+*App.View.GlobalStorage* globalObject.global
+--------------------------------------------
 
 In most cases this attribute references to the `App.View.GlobalStorage` unless you render
 `view` in a custom way (not using `App View`).
@@ -132,8 +132,8 @@ In most cases this attribute references to the `App.View.GlobalStorage` unless y
 
 			global: -> @storage?.global
 
-[*Any*] globalObject.data
--------------------------
+*Any* globalObject.data
+-----------------------
 
 Just a shortcut for `get('data')`.
 
