@@ -3,11 +3,10 @@ type
 
 This valdiator uses standard *typeof* expression to check whether *value* type is equal required.
 
-### NaN and null
+#### NaN and null
 
 Unlike standard `typeof`, this validator returns `undefined` for `NaN` and `null`.
 
-### Example
 ```
 schema = new Schema
 	desc:
