@@ -157,7 +157,7 @@ Given *value* is returned as a **result**.
 ```
 var types = new List('fantasy', 'Thriller');
 
-types.onChanged.connect(function (oldVal, i){
+types.onChanged.connect(function(oldVal, i){
   console.log("Element "+oldVal+" changed to "+this.get(i));
 });
 
@@ -228,7 +228,7 @@ Append new element at the end of a list.
 ```
 var fridge = new List('apple', 'milk');
 
-fridge.onInserted.connect(function (val, i){
+fridge.onInserted.connect(function(val, i){
   console.log(val+" appended!");
 });
 
@@ -261,11 +261,11 @@ Added value is returned.
 ```
 var list = new List('a', 'b');
 
-list.onInserted.connect(function (val, i){
+list.onInserted.connect(function(val, i){
   console.log("New element "+val+" inserted at index "+i);
 });
 
-list.insert('c', 1);
+list.insert(1, 'c');
 // New element c inserted at index 1
 
 console.log(list.items());
@@ -366,7 +366,7 @@ Notice that this method will call `List::popped()` signal on each element.
 ```
 var list = new List('a', 'b');
 
-list.onPopped.connect(function (oldVal, i){
+list.onPopped.connect(function(oldVal, i){
   console.log("Element "+oldVal+" popped!");
 });
 
