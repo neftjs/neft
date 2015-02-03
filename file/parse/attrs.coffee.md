@@ -27,8 +27,7 @@ String `List ...` is evaluated to the `List`.
 <items neft:each="List([1, 2])"></items>
 ```
 
-CoffeeScript syntax
--------------------
+#### CoffeeScript syntax
 
 Using *CoffeeScript* syntax is fully allowed.
 
@@ -36,7 +35,7 @@ Using *CoffeeScript* syntax is fully allowed.
 <items neft:each="List [1, 2]"></items>
 ```
 
-### See also
+#### See also
 
 - `neft:use`
 

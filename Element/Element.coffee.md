@@ -60,8 +60,8 @@ Creates new `Element` instance based on given *html*.
 					@parent.children.splice @index, 1
 					@parent.children.splice value, 0, @
 
-*[Element]* Element::parent
----------------------------
+*Element* Element::parent
+-------------------------
 
 Returns `Element` in which an element is placed.
 

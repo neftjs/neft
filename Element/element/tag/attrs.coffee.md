@@ -82,8 +82,8 @@ File.Element.Tag.Attrs
 
 				value
 
-add(*String* name[, *Any* val]) @low-level
-------------------------------------------
+add(*String* name, [*Any* val])
+-------------------------------
 
 			add: (name, val) ->
 				assert.isString name

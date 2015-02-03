@@ -14,7 +14,7 @@ are available in file where this tag has been used.
 <neft:use:avatar />
 ```
 
-### Namespaces
+#### Namespaces
 
 For better organizations, you can include external files into the namespaces.
 
@@ -27,7 +27,7 @@ To each included unit, this alias will be prefixed in schema as below.
 <neft:use:user:avatar />
 ```
 
-### See also
+#### See also
 
 - `neft:unit`
 - `neft:use`

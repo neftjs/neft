@@ -25,13 +25,13 @@ In the *iterator body* you have access to the three special variables:
 </items>
 ```
 
-### Runtime updates
+#### Runtime updates
 
 It's recommended to use the `List` module to iterate.
 All changes made on the `List` will be automatically refresh your view, so
 feel free to append and remove elements from the list. *Iterator body* will be synchronized.
 
-### See also
+#### See also
 
 - `neft:unit`
 - `neft:use`

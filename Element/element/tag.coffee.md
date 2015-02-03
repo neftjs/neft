@@ -84,8 +84,8 @@ File.Element.Tag
 
 				elem
 
-*File.Element[]* Tag::queryAll(*String* selector, [*Array* target])
--------------------------------------------------------------------
+*Array* Tag::queryAll(*String* selector, [*Array* target])
+----------------------------------------------------------
 
 			queryAll: do ->
 				byName = (node, data) ->
