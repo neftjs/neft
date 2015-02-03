@@ -3,32 +3,29 @@ Db Table class
 
 	'use strict'
 
-*class* Table()
+*Table* Table()
 ---------------
 
 	module.exports = class Table
 
-### Constructor
-
 		constructor: (@self, @name) ->
 
-### Properties
-
-#### self
+Table::self
+-----------
 
 Link into main `Db` instance
 
 		self: null
 
-#### name
+Table::name
+-----------
 
 Name of table
 
 		name: ''
 
-### Methods
-
-#### run()
+Table::run()
+------------
 
 Get table
 
@@ -36,7 +33,8 @@ Get table
 
 			callback new Error
 
-#### insertData()
+Table::insertData()
+-------------------
 
 Add new object document into table.
 

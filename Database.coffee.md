@@ -3,32 +3,29 @@ Db Database class
 
 	'use strict'
 
-*class* Database()
-------------------
+*Database* Database()
+---------------------
 
 	module.exports = class Database
 
-### Constructor
-
 		constructor: (@self, @name) ->
 
-### Properties
-
-#### self
+Database::self
+--------------
 
 Link into main `Db` instance
 
 		self: null
 
-#### name
+Database::name
+--------------
 
 Name of database
 
 		name: ''
 
-### Methods
-
-#### run()
+Database::run()
+---------------
 
 Get database
 

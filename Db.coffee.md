@@ -11,25 +11,17 @@ Db main file
 
 	NOP = ->
 
-*class* Db()
-------------
+*Db* Db()
+---------
 
 	class Db
 
-### Static protected
-
 		@__name__ = 'Db'
-
-#### _subclasses
-
-Namespace of all available *subclasses*.
 
 		@_subclasses =
 			Database: Database
 			Collection: Collection
 			Table: Table
-
-### Constructor
 
 Load collection of database table or specified document.
 Don't re-use instance to get different results.
@@ -87,32 +79,22 @@ You loose access to class context, but it shouldn't be public.
 
 			return exec
 
-### Protected
-
-#### Processing
-
 		_stack: null
-
-#### Instances of classes
 
 		_database: null
 		_table: null
 		_collection: null
 
-#### Behavior
-
-Define if `Collection` should execute query.
-It not have place if any documents won't be returned
-(e.g. with inserting, updating etc.)
+		# Define if `Collection` should execute query.
+		# It not have place if any documents won't be returned
+		# (e.g. with inserting, updating etc.)
 
 		_search: true
 
-#### Cached commands
+		# Cached commands
 
 		_id: null
 		_commands: null
-
-#### Methods
 
 		_implementDatabase: (name) ->
 
@@ -134,9 +116,8 @@ It not have place if any documents won't be returned
 				if @_search then return @_collection.run callback
 				callback null
 
-### Methods
-
-#### run()
+Db::run()
+---------
 
 Initialize query.
 
@@ -150,7 +131,8 @@ All methods and constructor returns this function (binded with public properties
 
 			null
 
-#### limit()
+Db::limit()
+-----------
 
 Set limit of documents in collection.
 
@@ -164,7 +146,8 @@ Set limit of documents in collection.
 
 			@_commands.push limit: value
 
-#### skip()
+Db::skip()
+----------
 
 Omit documents from the begining.
 
@@ -178,7 +161,8 @@ Omit documents from the begining.
 
 			@_commands.push skip: value
 
-#### where()
+Db::where()
+-----------
 
 Add comparison for the *row*.
 Use extra methods to specify type and expected value.
@@ -196,7 +180,8 @@ Use dots in *row* name for namespaces.
 
 			@_commands.push where: row
 
-##### is()
+Db::is()
+--------
 
 Triple comparison.
 
@@ -212,7 +197,8 @@ Triple comparison.
 
 			where.is = value
 
-##### lt()
+Db::lt()
+--------
 
 Lower than
 
@@ -228,7 +214,8 @@ Lower than
 
 			where.lt = value
 
-##### gt()
+Db::gt()
+--------
 
 Greater than
 
@@ -244,7 +231,8 @@ Greater than
 
 			where.gt = value
 
-#### remove()
+Db::remove()
+------------
 
 Remove all documents from the collection.
 
@@ -262,7 +250,8 @@ Remove all documents from the collection.
 
 			@_stack.add 'removeAll', @_collection
 
-#### insert()
+Db::insert()
+------------
 
 Insert new document into *Table*.
 
@@ -275,7 +264,7 @@ Id of created document will be returned.
 			if @_id?
 				throw new ReferenceError "insert() can not be used for document"
 
-			unless utils.isObject doc
+			unless utils.isPlainObject doc
 				throw new TypeError "Only simply objects can be inserted"
 
 			unless @_search
@@ -285,7 +274,8 @@ Id of created document will be returned.
 
 			@_stack.add 'insertData', @_table, [doc]
 
-#### update()
+Db::update()
+------------
 
 Update all documents in the collection.
 
@@ -293,7 +283,7 @@ Update all documents in the collection.
 
 		update: (doc) ->
 
-			unless utils.isObject doc
+			unless utils.isPlainObject doc
 				throw new TypeError "Only simply objects can be inserted"
 
 			unless @_search
@@ -303,25 +293,15 @@ Update all documents in the collection.
 
 			@_stack.add 'updateAll', @_collection, [doc]
 
-*Events* emitted
-----------------
-
-*Db()* is a class and simultaneously instance of `Events()` *class*.
+	# *Db()* is a class and simultaneously instance of `Events()` *class*.
 
 	Emitter = require 'emitter'
 
 	utils.merge Db, Emitter::
 	Emitter.call Db
 
-### Events
-
-#### READY
-
-Event is emitted when *Db* is ready to use.
+	# Event is emitted when *Db* is ready to use.
 
 	Db.READY = 'ready'
-
-Finalization
-------------
 
 	module.exports = Db
