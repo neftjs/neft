@@ -110,7 +110,7 @@ module.exports = (Renderer, Impl) -> exports =
 	createBindingSetter: (propName, setFunc) ->
 		(val) ->
 			# synchronize with default state
-			if @_data.states and @_data.state is ''
+			if @_data.states and @_data.state is '' and propName isnt 'state' and propName isnt 'parent'
 				@_data.states[''][propName] = val
 
 			if val and isArray val.binding
