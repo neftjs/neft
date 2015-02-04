@@ -52,11 +52,12 @@ module.exports = class Emitter
 				index = events.indexOf func, index
 				if index is -1 or events[index+1] is ctx
 					break
-				++index
+				index += 2
 			assert.isNot index, -1
 
-			currentEmitter._events[id][index] = null
-			currentEmitter._events[id][index+1] = null
+			events[index] = null
+			events[index+1] = null
+
 			return
 
 		getter = ->
