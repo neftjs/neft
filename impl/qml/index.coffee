@@ -12,7 +12,7 @@ module.exports = (Routing) ->
 			# send internal request
 			res = routing.createRequest
 				method: Routing.Request.GET
-				url: '/docs/log/null'
+				uri: '/docs/log/null'
 				data: null
 
 	sendRequest: (routing, opts, callback) ->
@@ -21,7 +21,7 @@ module.exports = (Routing) ->
 
 		xhr = new XMLHttpRequest
 
-		xhr.open opts.method, opts.url, true
+		xhr.open opts.method, opts.uri, true
 		xhr.setRequestHeader 'X-Expected-Type', opts.type
 
 		xhr.onreadystatechange = ->

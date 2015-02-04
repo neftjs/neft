@@ -16,7 +16,7 @@ module.exports = (Routing) ->
 				uid: uid
 				method: Routing.Request.GET
 				type: Routing.Request.VIEW_TYPE
-				url: uri
+				uri: uri
 				data: null
 
 		# synchronize with browser page changing
@@ -44,13 +44,13 @@ module.exports = (Routing) ->
 	###
 	Send a XHR request and call `callback` on response.
 	###
-	sendRequest: (url, req, callback) ->
+	sendRequest: (uri, req, callback) ->
 
 		{Request} = Routing
 
 		xhr = new XMLHttpRequest
 
-		xhr.open req.method, url, true
+		xhr.open req.method, uri, true
 		xhr.setRequestHeader 'X-Expected-Type', req.type
 
 		if req.type is Request.OBJECT_TYPE

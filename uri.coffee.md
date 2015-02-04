@@ -77,17 +77,25 @@ Get parameters values from the passed string.
 
 			@params
 
-*String* Uri::toString()
-------------------------
+*String* Uri::toString([*Object|Dict* params])
+----------------------------------------------
 
-Parse `Uri` into string.
+Parse `Uri` into a string.
 
 `params` object can be optionally passed as an argument.
 It will be used to replace uri chunks (works like standard
 string `format()` but on the named parameters).
 
+```
+var uri = new Routing.Uri('user/{name}');
+console.log(uri.toString({name: 'Jane'}));
+// /user/Jane
+```
+
 		toString: (params) ->
-			unless utils.isObject params
+			if params?
+				assert.isObject param, 'toString() params argument ...'
+			else
 				return @_uri
 
 			if params instanceof Dict

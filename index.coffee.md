@@ -4,9 +4,6 @@ Routing
 Use this module to handle requests and responses (e.g. by the HTTP protocol or just
 locally to handle different URIs).
 
-*App* object always has one instance of this class `App.routing`, so manual
-loading this module is not required in most cases.
-
 	'use strict'
 
 	utils = require 'utils'
@@ -86,18 +83,20 @@ Proper URL path contains protocol, port and host.
 
 Creates new *Routing.Handler* used to handle requests.
 
-Given *options* object is used to create `Routing.Handler`.
-
 ```
-app.routing.createHandler
-  method: Routing.Request.GET
-  uri: 'users/{name}'
-  schema: new Schema
-    name:
-      required: true
+app.routing.createHandler({
+  method: Routing.Request.GET,
+  uri: 'users/{name}',
+  schema: new Schema({
+    name: {
+      required: true,
       type: 'string'
-  callback: (req, res, next) ->
-    res.raise new Routing.Response.Error Routing.Response.NOT_IMPLEMENTED
+    },
+  }),
+  callback: function(req, res, next){
+    res.raise(new Routing.Response.Error(Routing.Response.NOT_IMPLEMENTED));
+  }
+});
 ```
 
 		createHandler: (opts) ->
@@ -126,25 +125,34 @@ Creates new local or server request.
 
 Given *options* object is used to create `Routing.Request`.
 
-```
-req = app.routing.createRequest
-  type: Routing.Request.OBJECT_TYPE
-  url: '/achievements/world_2'
-
-req.onLoaded (res) ->
-  if res.isSucceed()
-    console.log "Request has been loaded! Data #{res.data}"
-```
+#### Local request
 
 ```
-req = app.routing.createRequest
-  method: Routing.Request.POST
-  url: 'http://server.domain/comments'
-  data: {title: 'Best app ever!', message: 'Great, but why it\'s not free?'}
+app.routing.createRequest({
+  uri: '/achievements/world_2',
+  onLoaded: function(res){
+    if (res.isSucceed()){
+      console.log("Request has been loaded! Data: " + res.data);
+    } else {
+      console.log("Error: " + res.data);
+    }
+  }
+});
+```
 
-req.onLoaded (res) ->
-  if res.isSucceed()
-    console.log "Comment has been added!"
+#### Request to the server
+
+```
+app.routing.createRequest({
+  method: Routing.Request.POST,
+  uri: 'http://server.domain/comments',
+  data: {message: 'Great article! Like it.'},
+  onLoaded: function(res){
+    if (res.isSucceed()){
+      console.log("Comment has been added!");
+    }
+  }
+});
 ```
 
 		EXTERNAL_URL_RE = ///^[a-zA-Z]+:\/\////
@@ -164,10 +172,10 @@ req.onLoaded (res) ->
 			res = new Routing.Response request: req
 
 			# get handlers
-			if EXTERNAL_URL_RE.test req.url
+			if EXTERNAL_URL_RE.test req.uri
 				log "Send `#{req}` request"
 
-				Impl.sendRequest req.url, opts, (status, data) ->
+				Impl.sendRequest req.uri, opts, (status, data) ->
 					res.status = status
 					res.data = data
 					res.pending = false

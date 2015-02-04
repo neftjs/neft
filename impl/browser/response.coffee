@@ -72,13 +72,13 @@ module.exports = (Routing) ->
 		uriPop = true
 
 	send: (res, data, callback) ->
-		log.ok "Got response `#{res.request.method} #{res.request.url}`"
+		log.ok "Got response `#{res.request.method} #{res.request.uri}`"
 
 		# change browser URI in the history
 		if uriPop
 			uriPop = false
 		else
-			history.pushState null, '', res.request.url
+			history.pushState null, '', res.request.uri
 
 		# clear messages container
 		while child = messagesContainer.firstChild

@@ -18,11 +18,12 @@ Available request methods which can be used in created and got requests.
 
 This constant values are used in the `Request::method` property.
 
-### Request.GET
-### Request.POST
-### Request.PUT
-### Request.DELETE
-### Request.OPTIONS
+Contains:
+ - Request.GET,
+ - Request.POST,
+ - Request.PUT,
+ - Request.DELETE,
+ - Request.OPTIONS
 
 		@METHODS = [
 			(@GET = 'get'),
@@ -39,8 +40,9 @@ Values descrbes expected response data type.
 
 This constant values are used in the `Request::type` property.
 
-### Request.OBJECT_TYPE
-### Request.VIEW_TYPE
+Contains:
+ - Request.OBJECT_TYPE,
+ - Request.VIEW_TYPE
 
 		@TYPES = [
 			(@OBJECT_TYPE = 'object'),
@@ -50,15 +52,18 @@ This constant values are used in the `Request::type` property.
 *Request* Request(*Object* options)
 -----------------------------------
 
-Use `Routing::createRequest()` to create new local or server request.
+Abstract class used to describe routing request.
 
-*options* specifies `Request::method`, `Request::url`, `Request::data`, `Request::type`.
+You should use `Routing::createRequest()` to create a full request.
+
+*options* specifies `Request::method`, `Request::uri`, `Request::data`, `Request::type`
+and signal handlers.
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ...'
 			assert.isString opts.uid if opts.uid?
 			assert.ok utils.has(Request.METHODS, opts.method) if opts.method?
-			assert.isString opts.url, 'ctor options.url argument ...'
+			assert.isString opts.uri, 'ctor options.uri argument ...'
 
 			if opts.data?
 				assert.isObject opts.data, 'ctor options.data argument ...' if opts.data?
@@ -69,16 +74,22 @@ Use `Routing::createRequest()` to create new local or server request.
 				{@type} = opts
 			utils.defineProperty @, 'type', utils.ENUMERABLE, @type
 
-			{@url} = opts
+			{@uri} = opts
 			{@method} = opts if opts.method?
 
-			@url = unescape @url
+			@uri = unescape @uri
 
 			uid = opts.uid or utils.uid()
 			utils.defineProperty @, 'uid', null, uid
 
 			@pending = true
 			@params = null
+
+			# signal handlers
+			if opts.onDestroyed
+				@onDestroyed opts.onDestroyed
+			if opts.onLoaded
+				@onLoaded opts.onLoaded
 
 *Signal* Request::destroyed()
 -----------------------------
@@ -98,14 +109,15 @@ You can listen on this signal using the `onDestroyed` handler.
 
 When this signal is called, `Request` is already destroyed.
 
-Notice, that the failed `Routing.Response` can be also sent.
-
-You can listen on this signal using the `onLoaded` handler.
+Notice, that the failed `Routing.Response` also use this signal.
+You should always use `Request::isSucceed()` to check whether request succeeded.
 
 ```
-req.onLoaded (res) ->
-  if res.isSucceed()
-    console.log "Response has been sent with data #{res.data}!"
+req.onLoaded(function(res){
+  if (res.isSucceed()){
+    console.log("Response has been sent with data " + res.data);
+  }
+});
 ```
 
 		signal.createLazy @::, 'loaded'
@@ -133,22 +145,22 @@ Request method. Available values are described in the `Request.METHODS`.
 
 		method: Request.GET
 
-*String* Reuqest::url
+*String* Reuqest::uri
 ---------------------
 
-This property referts to the URL path.
+This property referts to the URI path.
 
 For local requests, this property doesn't contains protocol, hostname and port.
 
 ```
-# for requests send to the server ...
-http://server.domain/auth/user
+// for requests send to the server ...
+"http://server.domain/auth/user"
 
-# for local requests ...
-/user/user_id
+// for local requests ...
+"/user/user_id"
 ```
 
-		url: ''
+		uri: ''
 
 *String* Request::type
 ----------------------
@@ -231,9 +243,9 @@ This method calls `Request::destroyed()` signal.
 Returns string describing the request.
 
 ```
-console.log req.toString
-# get /users/id as object
+console.log(req.toString);
+// get /users/id as object
 ```
 
 		toString: ->
-			"#{@method} #{@url} as #{@type}"
+			"#{@method} #{@uri} as #{@type}"

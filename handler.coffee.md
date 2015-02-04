@@ -35,7 +35,9 @@ Routing.Handler
 *Handler* Handler(*Object* options)
 -----------------------------------
 
-Use `Routing::createHandler()` to create new handler.
+Abstract class used to describe routing handler.
+
+You should use `Routing::createHandler()` to create full handler.
 
 *options* specifies `Handler::method`, `Handler::uri`,
 `Handler::schema` and `Handler::callback`.
@@ -87,10 +89,10 @@ Handler::exec(*Routing.Request* request, *Routing.Response* response, *Function*
 				return next new UriNotValidError
 
 			# test uri
-			unless @uri.test req.url
+			unless @uri.test req.uri
 				return next new UriNotValidError
 
-			params = req.params = @uri.match req.url
+			params = req.params = @uri.match req.uri
 
 			# validate by schema
 			if @schema
@@ -137,7 +139,7 @@ Handler::exec(*Routing.Request* request, *Routing.Response* response, *Function*
 Returns string describing the handler.
 
 ```
-get /users/{name}
+"get /users/{name}"
 ```
 
 		toString: ->

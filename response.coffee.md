@@ -20,27 +20,35 @@ Abstract values used to describe response type.
 
 This values are used in the `Response::status` property and for `Response::send()` method.
 
-Each status corresponds to the HTTP numeral value.
+Each status corresponds to the HTTP numeral value
+(check http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html for more).
 
-### Response.OK
-### Response.CREATED
-### Response.ACCEPTED
-### Response.NO_CONTENT
-### Response.MOVED
-### Response.FOUND
-### Response.NOT_MODIFIED
-### Response.TEMPORARY_REDIRECT
-### Response.BAD_REQUEST
-### Response.UNAUTHORIZED
-### Response.PAYMENT_REQUIRED
-### Response.FORBIDDEN
-### Response.NOT_FOUND
-### Response.CONFLICT
-### Response.PRECONDITION_FAILED
-### Response.UNSUPPORTED_MEDIA_TYPE
-### Response.INTERNAL_SERVER_ERROR
-### Response.NOT_IMPLEMENTED
-### Response.SERVICE_UNAVAILABLE
+Contains:
+ - Response.OK,
+ - Response.CREATED,
+ - Response.ACCEPTED,
+ - Response.NO_CONTENT,
+ - Response.MOVED,
+ - Response.FOUND,
+ - Response.NOT_MODIFIED,
+ - Response.TEMPORARY_REDIRECT,
+ - Response.BAD_REQUEST,
+ - Response.UNAUTHORIZED,
+ - Response.PAYMENT_REQUIRED,
+ - Response.FORBIDDEN,
+ - Response.NOT_FOUND,
+ - Response.CONFLICT,
+ - Response.PRECONDITION_FAILED,
+ - Response.UNSUPPORTED_MEDIA_TYPE,
+ - Response.INTERNAL_SERVER_ERROR,
+ - Response.NOT_IMPLEMENTED,
+ - Response.SERVICE_UNAVAILABLE
+
+```
+console.log(Routing.Response.STATUSES);
+console.log(Routing.Response.OK);
+console.log(Routing.Response.BAD_REQUEST);
+```
 
 		@STATUSES = [
 
@@ -82,7 +90,7 @@ Each status corresponds to the HTTP numeral value.
 
 Class represents response for a request.
 
-It's created automatically and used to handle the request.
+It's created automatically and used to handle a request.
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ...'
@@ -115,8 +123,9 @@ On this signal, the response can't be modified.
 You can listen on this signal using the `onSent` handler.
 
 ```
-res.onSent ->
-  console.log "Response has been sent!"
+res.onSent(function(){
+  console.log("Response has been sent!");
+});
 ```
 
 		signal.createLazy @::, 'sent'
@@ -148,8 +157,8 @@ Use one of the constant values provided in the `Response.STATUSES`.
 It's equal `Response.OK` by default.
 
 ```
-res.status = Routing.Response.CREATED
-res.status = Routing.Response.PAYMENT_REQUIRED
+res.status = Routing.Response.CREATED;
+res.status = Routing.Response.PAYMENT_REQUIRED;
 ```
 
 		status: @OK
@@ -160,9 +169,9 @@ res.status = Routing.Response.PAYMENT_REQUIRED
 Value to send. It can be set using the `Response::send()` method or manually.
 
 ```
-res.data = {items: ['superhero toy', 'book']}
-res.data = new Error "Wrong order"
-res.data = View.fromJSON(...)
+res.data = {items: ['superhero toy', 'book']};
+res.data = new Error("Wrong order");
+res.data = View.fromJSON(...);
 ```
 
 		data: null
@@ -175,7 +184,7 @@ Sets a single header. If the header aready exists, its value will be replaced.
 Currently this method has no effect for local responses.
 
 ```
-res.setHeader 'Location', '/redirect/to/url'
+res.setHeader('Location', '/redirect/to/url');
 ```
 
 		setHeader: (name, val) ->
@@ -201,10 +210,11 @@ You can change response status and data, but only synchronously.
 This method automatically parses got data which is determined by the environment.
 
 ```
-res.send Routing.Response.OK, {user: 'Max', age: 43}
+res.send(Routing.Response.OK, {user: 'Max', age: 43});
 
-res.onSent ->
-  console.log "Response has been sent and is not active"
+res.onSent(function(){
+  console.log("Response has been sent and it's not active");
+});
 ```
 
 		send: (status, data) ->
@@ -220,7 +230,7 @@ res.onSent ->
 
 			if data?
 				if @data
-					log.info "`#{@request.url}` response data has been overwritten"
+					log.info "`#{@request.uri}` response data has been overwritten"
 
 				@data = data
 
@@ -247,8 +257,8 @@ Response::raise(*Response.Error* error)
 Finishes response as failed.
 
 ```
-res.raise new Routing.Response.Error "Login first"
-res.raise new Routing.Response.Error Routing.Response.UNAUTHORIZED, "Login first"
+res.raise(new Routing.Response.Error("Login first"));
+res.raise(new Routing.Response.Error(Routing.Response.UNAUTHORIZED, "Login first"));
 ```
 
 		raise: (error) ->

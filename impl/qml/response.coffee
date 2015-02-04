@@ -64,7 +64,7 @@ module.exports = (Routing) ->
 
 	send: (res, data, callback) ->
 
-		log.ok "Got response `#{res.request.method} #{res.request.url}`"
+		log.ok "Got response `#{res.request.method} #{res.request.uri}`"
 
 		# clear styles
 		Renderer.window.clear()
