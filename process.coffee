@@ -129,6 +129,7 @@ module.exports = ->
 		groundskeeper: true
 		'uglify-js': true
 		pegjs: true
+		url: true
 
 	fs = require 'fs'
 	pathUtils = require 'path'
