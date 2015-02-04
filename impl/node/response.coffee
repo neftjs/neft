@@ -1,6 +1,9 @@
 'use strict'
 
-[zlib, log, path, View] = ['zlib', 'log', 'path', 'view'].map require
+zlib = require 'zlib'
+log = require 'log'
+path = require 'path'
+View = require 'view'
 expect = require 'expect'
 
 log = log.scope 'Routing'
@@ -50,7 +53,6 @@ parsers =
 		html
 
 prepareData = (obj, data) ->
-
 	logtime = log.time 'prepare data'
 
 	# determine data type
@@ -74,11 +76,9 @@ prepareData = (obj, data) ->
 Send data in server response
 ###
 sendData = do ->
-
 	send = (obj, data) ->
-
 		if typeof data is 'string'
-			len = Bugger.byteLength data
+			len = Buffer.byteLength data
 		else
 			len = data and data.length
 
@@ -86,8 +86,8 @@ sendData = do ->
 		obj.serverRes.end data
 
 	(obj, data, callback) ->
-
-		useGzip = ~obj.serverReq.headers['accept-encoding'].indexOf 'gzip'
+		acceptEncodingHeader = obj.serverReq.headers['accept-encoding']
+		useGzip = acceptEncodingHeader and ~acceptEncodingHeader.indexOf 'gzip'
 
 		unless useGzip
 			send obj, data
@@ -103,15 +103,12 @@ sendData = do ->
 			callback()
 
 module.exports = (Routing, pending) ->
-
 	setHeader: (res, name, val) ->
-
 		# get config obj
 		obj = pending[res.request.uid]
 		obj.serverRes.setHeader name, val
 
 	send: (res, data, callback) ->
-
 		# get config obj
 		obj = pending[res.request.uid]
 		return unless obj
