@@ -94,7 +94,7 @@ console.log(uri.toString({name: 'Jane'}));
 
 		toString: (params) ->
 			if params?
-				assert.isObject param, 'toString() params argument ...'
+				assert.isObject params, 'toString() params argument ...'
 			else
 				return @_uri
 

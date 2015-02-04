@@ -99,7 +99,7 @@ Handler::exec(*Routing.Request* request, *Routing.Response* response, *Function*
 
 				# parse params into expected types
 				for key, schemaOpts of @schema.schema
-					if params.hasOwnProperty(key) and schemaOpts.type
+					if params.hasOwnProperty(key) and schemaOpts.type and schemaOpts.type isnt 'string'
 						params[key] = utils.tryFunction parse, null, [params[key]], params[key]
 
 				# validate schema

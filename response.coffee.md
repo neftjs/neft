@@ -246,7 +246,7 @@ res.onSent(function(){
 			assert.ok res.pending
 
 			utils.defineProperty res, 'pending', utils.ENUMERABLE, false
-			res.request.loaded? @
+			res.request.loaded? res
 
 			Impl.send res, res.data, ->
 				res.sent?()
