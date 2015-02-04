@@ -34,8 +34,11 @@ module.exports = (File) ->
 			return unless elem
 
 			keepLooking = =>
-				@_watchedFile = elem.self
-				elem.self.onReplacedByUse @updateStylesParent
+				if elem.self.parentUse
+					@updateStylesParent elem.self.parentUse
+				else
+					@_watchedFile = elem.self
+					elem.self.onReplacedByUse @updateStylesParent
 
 			parentStyles = elem.self.styles
 

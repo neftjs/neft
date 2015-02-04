@@ -80,36 +80,26 @@ Text {
 		styles = file.styles = []
 
 		# parse tags with `style` attr
-		forNode = (node, parentStyle, data) ->
+		forNode = (node, parentStyle) ->
 			if attr = node.attrs.get "#{File.HTML_NS}:style"
-				isScope = ///^styles\/.///.test attr
-
 				id = attr
-				if isScope
-					id = attr.slice 'styles/'.length
 
 				style = new Style
-					file: file
-					node: node
-					id: id
-					attrs: findAttrs(node)
-					parent: parentStyle
-					isRepeat: not isScope and !!data?.ids[attr]
-					isScope: isScope
+				style.file = file
+				style.node = node
+				style.attrs = findAttrs(node)
+				style.parent = parentStyle
 
-				data?.ids[attr] = true
-
-				if style.isScope
-					data = ids: {}
-
-				unless parentStyle
+				if parentStyle
+					parentStyle.children.push style
+				else
 					styles.push style
 
 				parentStyle = style
 
 			for child in node.children
 				if child instanceof File.Element.Tag
-					forNode child, parentStyle, data
+					forNode child, parentStyle
 			null
 
 		forNode file.node, null, null
