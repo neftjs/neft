@@ -50,10 +50,10 @@ module.exports = (File) -> class Input
 			v
 
 	@get = (input, prop) ->
-		v = Input.getVal input.self, prop
-		input.trace v
+		val = Input.getVal input.self, prop
+		input.trace val
 
-		v
+		val
 
 	@getStoragesArray = do (arr = []) -> (file) ->
 		assert.instanceOf file, File
@@ -146,7 +146,7 @@ module.exports = (File) -> class Input
 		return if @updatePending
 
 		setImmediate @update
-		@updatePending = false
+		@updatePending = true
 
 	_onAttrChanged: (e) ->
 		@_onChanged e.name

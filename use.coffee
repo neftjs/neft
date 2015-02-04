@@ -54,6 +54,7 @@ module.exports = (File) -> class Use
 		usedUnit.node.parent = @node
 
 		# signal
+		usedUnit.parentUse = @
 		usedUnit.replacedByUse @
 
 		@isRendered = true
@@ -65,6 +66,7 @@ module.exports = (File) -> class Use
 		if @usedUnit
 			@usedUnit.node.parent = undefined
 			@usedUnit.revert().destroy()
+			@usedUnit.parentUse = null
 			@usedUnit = null
 
 		@isRendered = false
@@ -73,11 +75,10 @@ module.exports = (File) -> class Use
 		# @node.attrs.backChanges()
 	
 	visibilityChangedListener = ->
-		if @self.isRendered
+		if @self.isRendered and not @isRendered
 			@render()
 
 	clone: (original, self) ->
-
 		clone = Object.create @
 
 		clone.clone = undefined
