@@ -35,17 +35,24 @@ module.exports = class Emitter
 	createHandler = (id) ->
 		currentEmitter = null
 
-		func = (func, ctx) ->
+		func = (func, ctx=@) ->
 			assert.isFunction func
 
 			@_events ?= [null, null, null]
 			@_events[id] ?= []
-			@_events[id].push func, (ctx or @)
+			@_events[id].push func, ctx
 			return
 
 		func.connect = func
-		func.disconnect = (func) ->
-			index = currentEmitter._events[id].indexOf func
+		func.disconnect = (func, ctx=currentEmitter) ->
+			events = currentEmitter._events[id]
+			index = 0
+
+			loop
+				index = events.indexOf func, index
+				if index is -1 or events[index+1] is ctx
+					break
+				++index
 			assert.isNot index, -1
 
 			currentEmitter._events[id][index] = null
