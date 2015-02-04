@@ -8,8 +8,7 @@ standard events based on the strings have.
 
 	utils = require 'utils'
 	expect = require 'expect'
-
-	{assert} = console
+	assert = require 'assert'
 
 	createSignal = (obj, name) ->
 		expect(obj).not().toBe.primitive()
@@ -165,18 +164,18 @@ console.log Object.keys(Object.getPrototypeOf(myDog))
 		handler
 
 	callSignal = (obj, listeners, args) ->
-		i = -1
+		i = 0
 		n = listeners.length
-		while ++i < n
+		while i < n
 			func = listeners[i]
-			unless func
-				listeners.splice i, 1
-				i--; n--
-				continue
-
-			result = func.apply(obj, args)
-			if result is exports.STOP_PROPAGATION
-				return result
+			if func is null
+				listeners.splice i, 2
+				n -= 2
+			else
+				result = func.apply(listeners[i+1] or obj, args)
+				if result is exports.STOP_PROPAGATION
+					return result
+				i += 2
 
 		return
 
@@ -205,8 +204,8 @@ Handler is always stored in the property prefixed by the *on* (e.g. *onWidthChan
 If it's called it works as a alias for the *Handler.connect()*.
 
 	createHandlerFunction = (obj, signal) ->
-		handler = (listener) ->
-			HandlerPrototype.connect.call handler, listener
+		handler = (listener, ctx) ->
+			HandlerPrototype.connect.call handler, listener, ctx
 
 		handler.listeners = signal?.listeners
 		utils.merge handler, HandlerPrototype
@@ -240,12 +239,11 @@ obj.pressed()
 // listener 2
 ```
 
-		connect: (listener) ->
+		connect: (listener, ctx=null) ->
 			expect(@).toBe.function()
 			expect(listener).toBe.function()
-			expect().some(@listeners).not().toBe listener
 
-			@listeners.push listener
+			@listeners.push listener, ctx
 
 			return
 
@@ -259,7 +257,7 @@ var obj = {};
 
 signal.create(obj, 'pressed');
 
-listener = function(){
+var listener = function(){
   console.log('listener called!');
 };
 
@@ -270,13 +268,22 @@ obj.pressed()
 // no loggs...
 ```
 
-		disconnect: (listener) ->
+		disconnect: (listener, ctx=null) ->
 			expect(@).toBe.function()
 			expect(listener).toBe.function()
-			expect().some(@listeners).toBe listener
 
-			index = @listeners.indexOf listener
-			@listeners[index] = null
+			{listeners} = @
+			index = 0
+
+			loop
+				index = listeners.indexOf listener, index
+				if index is -1 or listeners[index+1] is ctx
+					break
+				index += 2
+			assert.isNot index, -1
+
+			listeners[index] = null
+			listeners[index + 1] = null
 
 			return
 
@@ -288,7 +295,8 @@ Diconnect all already connected listeners from the *handler*.
 		disconnectAll: ->
 			expect(@).toBe.function()
 
-			for listener in @listeners
-				@disconnect listener
+			{listeners} = @
+			for _, i in listeners
+				listeners[i] = null
 
 			return
