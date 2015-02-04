@@ -175,7 +175,7 @@ app.routing.createRequest({
 			if EXTERNAL_URL_RE.test req.uri
 				log "Send `#{req}` request"
 
-				Impl.sendRequest req.uri, opts, (status, data) ->
+				Impl.sendRequest req, (status, data) ->
 					res.status = status
 					res.data = data
 					res.pending = false

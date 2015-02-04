@@ -1,6 +1,8 @@
 'use strict'
 
-[utils, http] = ['utils', 'http'].map require
+utils = require 'utils'
+http = require 'http'
+urlUtils = require 'url'
 expect = require 'expect'
 
 pending = {}
@@ -41,5 +43,39 @@ module.exports = (Routing) ->
 				data: undefined
 				type: type
 
-	sendRequest: ->
-		throw "Not implemented!"
+	sendRequest: (req, callback) ->
+		urlObject = urlUtils.parse req.uri
+
+		opts =
+			protocol: urlObject.protocol
+			hostname: urlObject.hostname
+			port: urlObject.port
+			auth: urlObject.auth
+			path: urlObject.path
+			method: req.method
+			headers:
+				'X-Expected-Type': req.type
+
+		nodeReq = http.request opts, (res) ->
+			res.setEncoding 'utf-8'
+			data = ''
+
+			res.on 'data', (chunk) ->
+				data += chunk
+
+			res.on 'end', ->
+				status = nodeReq.statusCode
+
+				if req.type is Routing.Request.OBJECT_TYPE
+					parsedData = utils.tryFunction JSON.parse, null, [data], data
+					callback status, parsedData
+				else
+					callback status, data
+
+		nodeReq.on 'error', (e) ->
+			callback nodeReq.statusCode, e
+
+		if req.data?
+			nodeReq.write req.data
+
+		nodeReq.end()

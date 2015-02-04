@@ -44,13 +44,13 @@ module.exports = (Routing) ->
 	###
 	Send a XHR request and call `callback` on response.
 	###
-	sendRequest: (uri, req, callback) ->
+	sendRequest: (req, callback) ->
 
 		{Request} = Routing
 
 		xhr = new XMLHttpRequest
 
-		xhr.open req.method, uri, true
+		xhr.open req.method, req.uri, true
 		xhr.setRequestHeader 'X-Expected-Type', req.type
 
 		if req.type is Request.OBJECT_TYPE
