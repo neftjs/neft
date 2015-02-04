@@ -49,7 +49,7 @@ Returns handler name based on the signal name.
 In pratice it adds *on* prefix and capitalize the signal name.
 
 ```
-signal.getHandlerName('xChanged');
+console.log(signal.getHandlerName('xChanged'));
 // onXChanged
 ```
 
@@ -70,13 +70,13 @@ Returns true if the given *name* is a proper handler name.
 In pratice it returns true if the *name* is prefixed by *on*.
 
 ```
-signal.isHandlerName('onXChanged');
+console.log(signal.isHandlerName('onXChanged'));
 // true
 
-signal.isHandlerName('xChanged');
+console.log(signal.isHandlerName('xChanged'));
 // false
 
-signal.isHandlerName('onxChanged');
+console.log(signal.isHandlerName('onxChanged'));
 // false (because x is lowercase)
 ```
 
@@ -122,25 +122,32 @@ It creates new *signal* function only if it's needed (any listeners wan't to lis
 It can be also used to create signals in the prototypes.
 
 ```
-class Dog
-  handler = signal.createLazy @::, 'ageChanged'
+function Dog(){
+}
 
-  handler.onInitialized (ctx, name) ->
-    console.log "Signal #{name} initialized"
+var handler = signal.createLazy(Dog.prototype, 'ageChanged');
 
-myDog = new Dog
+handler.onInitialized(function(ctx, name){
+  console.log("Signal " + name + " initialized");
+});
 
-console.log Object.keys(myDog)
-# []
+var myDog = new Dog;
+console.log(Object.keys(myDog));
+// []
 
-myDog.onAgeChanged.connect ->
-# Signal ageChanged initialized
+myDog.onAgeChanged.connect(function(){
+  console.log('Signal called');
+});
+// Signal ageChanged initialized
 
-console.log Object.keys(myDog)
-# ['ageChanged']
+myDof.ageChanged();
+// Signal called
 
-console.log Object.keys(Object.getPrototypeOf(myDog))
-# ['onAgeChanged']
+console.log(Object.keys(myDog));
+// ['ageChanged']
+
+console.log(Object.keys(Object.getPrototypeOf(myDog)));
+// ['onAgeChanged']
 ```
 
 	exports.createLazy = (obj, name) ->
