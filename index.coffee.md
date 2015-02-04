@@ -7,12 +7,12 @@ standard events based on the strings have.
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
 	assert = require 'assert'
 
 	createSignal = (obj, name) ->
-		expect(obj).not().toBe.primitive()
-		expect(name).toBe.truthy().string()
+		assert.isNotPrimitive obj
+		assert.isString name
+		assert.notLengthOf name, 0
 
 		handlerName = exports.getHandlerName name
 
@@ -23,8 +23,9 @@ standard events based on the strings have.
 		obj[name] = createSignalFunction obj
 
 	createHandler = (obj, name) ->
-		expect(obj).not().toBe.primitive()
-		expect(name).toBe.truthy().string()
+		assert.isNotPrimitive obj
+		assert.isString name
+		assert.notLengthOf name, 0
 
 		handlerName = exports.getHandlerName name
 
@@ -80,7 +81,7 @@ signal.isHandlerName('onxChanged');
 ```
 
 	exports.isHandlerName = (name) ->
-		expect(name).toBe.string()
+		assert.isString name
 
 		///^on[A-Z]///.test name
 
@@ -103,8 +104,9 @@ obj.renamed('Max', 'George');
 ```
 
 	exports.create = (obj, name) ->
-		expect(obj).not().toBe.primitive()
-		expect(name).toBe.truthy().string()
+		assert.isNotPrimitive obj
+		assert.isString name
+		assert.notLengthOf name, 0
 
 		createSignal obj, name
 		createHandler obj, name
@@ -142,8 +144,9 @@ console.log Object.keys(Object.getPrototypeOf(myDog))
 ```
 
 	exports.createLazy = (obj, name) ->
-		expect(obj).not().toBe.primitive()
-		expect(name).toBe.truthy().string()
+		assert.isNotPrimitive obj
+		assert.isString name
+		assert.notLengthOf name, 0
 
 		handlerName = exports.getHandlerName name
 		handler = createHandler obj, name
@@ -240,8 +243,8 @@ obj.pressed()
 ```
 
 		connect: (listener, ctx=null) ->
-			expect(@).toBe.function()
-			expect(listener).toBe.function()
+			assert.isFunction @
+			assert.isFunction listener
 
 			@listeners.push listener, ctx
 
@@ -269,8 +272,8 @@ obj.pressed()
 ```
 
 		disconnect: (listener, ctx=null) ->
-			expect(@).toBe.function()
-			expect(listener).toBe.function()
+			assert.isFunction @
+			assert.isFunction listener
 
 			{listeners} = @
 			index = 0
@@ -293,7 +296,7 @@ Handler.disconnectAll()
 Diconnect all already connected listeners from the *handler*.
 
 		disconnectAll: ->
-			expect(@).toBe.function()
+			assert.isFunction @
 
 			{listeners} = @
 			for _, i in listeners
