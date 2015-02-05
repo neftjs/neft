@@ -62,15 +62,17 @@ Renderer.Item
 				# custom properties
 				if opts.properties?
 					for propName in opts.properties
-						itemUtils.defineProperty
-							object: @
-							name: propName
+						unless propName of @
+							itemUtils.defineProperty
+								object: @
+								name: propName
 					delete opts.properties
 
 				# custom signals
 				if opts.signals?
 					for signalName in opts.signals
-						signal.create @, signalName
+						unless signalName of @
+							signal.create @, signalName
 					delete opts.signals
 
 				# fill

@@ -15,6 +15,7 @@ module.exports = (impl) ->
 		scale: 1
 		rotation: 0
 		opacity: 1
+		bindings: null
 
 	DATA: DATA
 

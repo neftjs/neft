@@ -183,8 +183,8 @@ so `anchors.top = 'parent.left'` is not allowed.
 					namespace: 'anchors'
 					setter: setter
 
-*Anchors* Anchors(*Renderer.Item* item) @low-level
---------------------------------------------------
+*Anchors* Anchors(*Renderer.Item* item)
+---------------------------------------
 
 			createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
