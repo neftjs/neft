@@ -121,7 +121,7 @@
 				@item.text = @node.stringifyChildren()
 
 		updateVisibility: ->
-			@item.visible = @node.visible
+			@item?.visible = @node.visible
 
 		setAttr: (name, val) ->
 			assert.instanceOf @, Style
@@ -162,7 +162,8 @@
 				if @scope
 					@item = @scope.mainItem
 				else
-					log.warn "Style file `#{id}` can't be find"
+					unless File.Input.test id
+						log.warn "Style file `#{id}` can't be find"
 					return
 			else
 				parent = @parent
@@ -173,7 +174,8 @@
 				@item = scope.ids[id]
 
 				unless @item
-					log.warn "Can't find `#{id}` style item"
+					unless File.Input.test id
+						log.warn "Can't find `#{id}` style item"
 					return
 
 				@isAutoParent = !@item.parent
