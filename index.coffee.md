@@ -744,10 +744,10 @@ console.log(newObj.b)
 Returns true if given array contains *value*.
 
 ```
-console.log(utils.has(['a']), 'a')
+console.log(utils.has(['a'], 'a'))
 // true
 
-console.log(utils.has(['a']), 'b')
+console.log(utils.has(['a'], 'b'))
 // false
 ```
 
@@ -755,7 +755,7 @@ For objects, only own enumerable properties are checked.
 
 ```
 var object = {
-	city: 'New York'
+  city: 'New York'
 }
 
 console.log(utils.has(object, 'New York'))
@@ -792,12 +792,12 @@ var object = {
   name: 'Bandit'
 };
 
-console.log(utils.objectToArray(object))
+console.log(utils.objectToArray(object));
 // ['dog', 'Bandit']
 
 console.log(utils.objectToArray(object, function(key, val){
   return key + "_" + val;
-})
+}));
 // ['type_dog', 'name_Bandit']
 ```
 
@@ -835,14 +835,14 @@ console.log(utils.arrayToObject(['a', 'b']))
 
 console.log(utils.arrayToObject(['a'], function(i, elem){
   return "value_" + elem;
-})
+}));
 // {"value_a": "a"}
 
 console.log(utils.arrayToObject(['a'], function(i, elem){
   return elem;
 }, function(i, elem){
   return i;
-})
+}));
 // {"a": 0}
 ```
 
@@ -942,13 +942,13 @@ function test(size){
   }
 }
 
-console.log(utils.tryFunctiontion(test, null, [0]))
+console.log(utils.tryFunction(test, null, [0]))
 // undefined
 
-console.log(utils.tryFunctiontion(test, null, [0], 'ERROR!'))
+console.log(utils.tryFunction(test, null, [0], 'ERROR!'))
 // ERROR!
 
-console.log(utils.tryFunctiontion(test, null, [100], 'ERROR!'))
+console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 // undefined
 ```
 
