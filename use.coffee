@@ -12,10 +12,8 @@ module.exports = (File) -> class Use
 	@__name__ = 'Use'
 	@__path__ = 'File.Use'
 
-	constructor: (@self, @name, @node) ->
+	constructor: (@self, @node) ->
 		assert.instanceOf self, File
-		assert.isString name
-		assert.notLengthOf name, 0
 		assert.instanceOf node, File.Element
 
 		# get bodyNode
@@ -78,6 +76,14 @@ module.exports = (File) -> class Use
 		if @self.isRendered and not @isRendered
 			@render()
 
+	attrChangedListener = (e) ->
+		if e.name is 'unit'
+			@name = @node.attrs.get 'unit'
+
+			if @isRendered
+				@revert()
+				@render()
+
 	clone: (original, self) ->
 		clone = Object.create @
 
@@ -91,5 +97,10 @@ module.exports = (File) -> class Use
 		clone.isRendered = false
 
 		clone.node.onVisibilityChanged visibilityChangedListener, clone
+
+		# name
+		if clone.name is ''
+			clone.name = clone.node.attrs.get 'unit'
+			clone.node.onAttrChanged attrChangedListener, clone
 
 		clone

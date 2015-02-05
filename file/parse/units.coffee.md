@@ -21,8 +21,8 @@ using the `neft:use` tag. This is faster and cleaner.
 </neft:unit>
 
 <products>
-  <neft:use:product type="electronics" name="dryer" />
-  <neft:use:product type="painting" name="Lucretia, Paolo Veronese" />
+  <neft:use unit="product" type="electronics" name="dryer" />
+  <neft:use unit="product" type="painting" name="Lucretia, Paolo Veronese" />
 </products>
 ```
 

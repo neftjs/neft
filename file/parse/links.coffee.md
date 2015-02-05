@@ -11,7 +11,7 @@ are available in file where this tag has been used.
 ```
 <neft:require href="user_utils.html" />
 
-<neft:use:avatar />
+<neft:use unit="avatar" />
 ```
 
 #### Namespaces
@@ -24,7 +24,7 @@ To each included unit, this alias will be prefixed in schema as below.
 ```
 <neft:require href="user_utils.html" as="user" />
 
-<neft:use:user:avatar />
+<neft:use unit="user:avatar" />
 ```
 
 #### See also

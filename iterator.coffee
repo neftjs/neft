@@ -21,12 +21,12 @@ module.exports = (File) -> class Iterator extends File.Use
 		assert.instanceOf node, File.Element
 
 		prefix = if self.name then "#{self.name}-" else ''
-		name = "#{prefix}each[#{utils.uid()}]"
+		@name = "#{prefix}each[#{utils.uid()}]"
 
-		super self, name, node
+		super self, node
 
 		# create unit
-		unit = new File.Unit self, name, @bodyNode
+		unit = new File.Unit self, @name, @bodyNode
 		unit.parse()
 		@unit = unit.id
 		@bodyNode.parent = undefined

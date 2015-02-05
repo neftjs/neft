@@ -11,9 +11,9 @@ where the `neft:use` body should be placed.
   <neft:source />
 </neft:unit>
 
-<neft:use:user name="Max" age="19">
+<neft:use unit="user" name="Max" age="19">
   <superPower>flying</superPower>
-</neft:use:user>
+</neft:use>
 ```
 
 #### See also

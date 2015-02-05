@@ -14,7 +14,7 @@ If no attribute with such name found, value from the global data will be used
 ```
 <neft:unit name="user">#{name}</neft:unit>
 
-<neft:use:user name="#{ownerName}" />
+<neft:use unit="user" name="#{ownerName}" />
 ```
 
 #### See also
