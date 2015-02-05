@@ -137,6 +137,7 @@ bindingAttributeToString = (obj) ->
 			text += ", "
 
 		if typeof elem is 'string'
+			elem = elem.replace ///'///g, '\\\''
 			text += "'#{elem}'"
 		else
 			text += repeatString('[', elem.length-1)
