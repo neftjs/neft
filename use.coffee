@@ -8,7 +8,6 @@ assert = assert.scope 'View.Use'
 log = log.scope 'View', 'Use'
 
 module.exports = (File) -> class Use
-
 	@__name__ = 'Use'
 	@__path__ = 'File.Use'
 
@@ -77,8 +76,8 @@ module.exports = (File) -> class Use
 			@render()
 
 	attrChangedListener = (e) ->
-		if e.name is 'unit'
-			@name = @node.attrs.get 'unit'
+		if e.name is 'neft:unit'
+			@name = @node.attrs.get 'neft:unit'
 
 			if @isRendered
 				@revert()
@@ -100,7 +99,7 @@ module.exports = (File) -> class Use
 
 		# name
 		if clone.name is ''
-			clone.name = clone.node.attrs.get 'unit'
+			clone.name = clone.node.attrs.get 'neft:unit'
 			clone.node.onAttrChanged attrChangedListener, clone
 
 		clone

@@ -6,7 +6,7 @@ Special XML tag used to create separated and repeatable parts of the document.
 Each `neft:unit` has to define a unique *name*.
 
 ```
-<neft:unit name="user"></neft:unit>
+<neft:unit neft:name="user"></neft:unit>
 ```
 
 Let's take an example: you wan't to represent database of products.
@@ -15,14 +15,14 @@ To avoid copying code, we move the common part to the `neft:unit` and paste it l
 using the `neft:use` tag. This is faster and cleaner.
 
 ```view,example
-<neft:unit name="product">
+<neft:unit neft:name="product">
   <type>#{type}</type>
   <name>#{name}</name>
 </neft:unit>
 
 <products>
-  <neft:use unit="product" type="electronics" name="dryer" />
-  <neft:use unit="product" type="painting" name="Lucretia, Paolo Veronese" />
+  <neft:use neft:unit="product" type="electronics" name="dryer" />
+  <neft:use neft:unit="product" type="painting" name="Lucretia, Paolo Veronese" />
 </products>
 ```
 
@@ -64,7 +64,7 @@ using the `neft:use` tag. This is faster and cleaner.
 
 				if node.name isnt "#{File.HTML_NS}:unit" then continue
 
-				name = node.attrs.get 'name'
+				name = node.attrs.get 'neft:name'
 				unless name then continue
 
 				# remove node from file

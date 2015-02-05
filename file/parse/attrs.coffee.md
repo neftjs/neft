@@ -9,17 +9,17 @@ String `[...]` is evaluated to the `Array`.
 <items neft:each="[1, 2]"></items>
 ```
 ```
-<neft:use unit="list" items="[{name: 't-shirt'}]" />
+<neft:use neft:unit="list" items="[{name: 't-shirt'}]" />
 ```
 
 String `{...}` is evaluated to the `Object`.
 ```
-<neft:use unit="user" data="{name: 'Johny'}" />
+<neft:use neft:unit="user" data="{name: 'Johny'}" />
 ```
 
 String `Dict ...` is evaluated to the `Dict`.
 ```
-<neft:use unit="user" data="Dict({name: 'Johny'})" />
+<neft:use neft:unit="user" data="Dict({name: 'Johny'})" />
 ```
 
 String `List ...` is evaluated to the `List`.

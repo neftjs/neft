@@ -4,9 +4,9 @@ neft:use @xml
 Special XML tag used to place `neft:unit`.
 
 ```view,example
-<neft:unit name="user">This is user</neft:unit>
+<neft:unit neft:name="user">This is user</neft:unit>
 
-<neft:use unit="user" />
+<neft:use neft:unit="user" />
 ```
 
 #### See also

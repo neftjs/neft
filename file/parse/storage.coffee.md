@@ -12,9 +12,9 @@ If no attribute with such name found, value from the global data will be used
 (data from `App Controller` etc.).
 
 ```
-<neft:unit name="user">#{name}</neft:unit>
+<neft:unit neft:name="user">#{name}</neft:unit>
 
-<neft:use unit="user" name="#{ownerName}" />
+<neft:use neft:unit="user" name="#{ownerName}" />
 ```
 
 #### See also
