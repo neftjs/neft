@@ -42,8 +42,9 @@ module.exports = (File) -> class Input
 				obj[prop]
 
 		(file, prop) ->
+			v = getFromElement file.node, prop
 			if file.source
-				v = getFromElement file.source.node, prop
+				v ?= getFromElement file.source.node, prop
 				v ?= getFromObject file.source.storage, prop
 			v ?= getFromObject file.storage, prop
 
@@ -58,14 +59,19 @@ module.exports = (File) -> class Input
 	@getStoragesArray = do (arr = []) -> (file) ->
 		assert.instanceOf file, File
 
-		arr[0] = file.source?.node
-		arr[1] = file.source?.storage
-		arr[2] = file.storage
+		arr[0] = file.node
+		arr[1] = file.source?.node
+		arr[2] = file.source?.storage
+		arr[3] = file.storage
 
 		arr
 
 	@fromAssembled = (input) ->
 		input._func = cache[input.func] ?= new Function '__input', '__get', input.func
+
+	@test = (str) ->
+		RE.lastIndex = 0
+		RE.test str
 
 	constructor: (@node, @text) ->
 		assert.instanceOf node, File.Element

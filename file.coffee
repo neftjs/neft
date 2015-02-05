@@ -87,7 +87,6 @@ module.exports = class File
 		json
 
 	@factory = (path) ->
-
 		unless files.hasOwnProperty path
 			# TODO: trigger here instance of `LoadError` class
 			File.trigger File.ERROR, path
@@ -108,7 +107,6 @@ module.exports = class File
 
 	constructor: do ->
 		if utils.isNode
-			links = require('./file/parse/links') File
 			units = require('./file/parse/units') File
 			attrs = require('./file/parse/attrs') File
 			attrChanges = require('./file/parse/attrChanges') File
@@ -138,7 +136,6 @@ module.exports = class File
 			File.parse @
 
 			# parse
-			links @
 			units @
 			attrs @
 			attrChanges @
@@ -163,7 +160,6 @@ module.exports = class File
 	path: ''
 	pathbase: ''
 	parent: null
-	links: null
 	attrChanges: null
 	units: null
 	uses: null

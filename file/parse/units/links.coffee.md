@@ -9,7 +9,7 @@ are available in file where this tag has been used.
 `href` is a local path relative to the file when it's used.
 
 ```
-<neft:require href="user_utils.html" />
+<neft:require href="./user_utils.html" />
 
 <neft:use unit="avatar" />
 ```
@@ -22,7 +22,7 @@ Just specify an `as` attribute.
 To each included unit, this alias will be prefixed in schema as below.
 
 ```
-<neft:require href="user_utils.html" as="user" />
+<neft:require href="./user_utils.html" as="user" />
 
 <neft:use unit="user:avatar" />
 ```
@@ -35,6 +35,8 @@ To each included unit, this alias will be prefixed in schema as below.
 .
 
 	'use strict'
+
+	pathUtils = require 'path'
 
 	module.exports = (File) -> (file) ->
 
@@ -61,10 +63,10 @@ To each included unit, this alias will be prefixed in schema as below.
 			i--; n--
 
 			# get view
-			view = File.factory file.pathbase + href
+			path = pathUtils.join '/', file.pathbase, href
+			path = ///^\/(.+)\.html$///.exec(path)[1]
 			links.push
-				view: view
+				path: path
 				namespace: namespace
 
-		if links.length
-			file.links = links
+		links
