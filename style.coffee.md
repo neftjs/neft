@@ -150,13 +150,13 @@
 					@anchorListener = null
 
 			id = @node.attrs.get Style.HTML_ATTR
-			@isScope = ///^styles\////.test id
+			@isScope = ///^styles\.///.test id
 			@item = null
 			@scope = null
 			@isAutoParent = false
 
 			if @isScope
-				id = id.slice 'styles/'.length
+				id = id.slice 'styles.'.length
 				@isAutoParent = true
 				@scope = styles[id]?.withStructure()
 				if @scope

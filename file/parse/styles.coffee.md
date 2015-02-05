@@ -48,7 +48,7 @@ Text {
 ```
 
 ```view,example
-<contact neft:style="ArticlesContact">
+<contact neft:style="styles.articles/contact">
   <heading neft:style="header">Contact</heading>
 </contact>
 ```

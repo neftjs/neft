@@ -21,7 +21,7 @@ Text {
   item.text = parseInt(item.text) + 1 + '';
 </neft:func>
 
-<span neft:style="Button" neft:style:onPointerClicked="increment">0</span>
+<span neft:style="styles.button" neft:style:onPointerClicked="increment">0</span>
 ```
 
 Functions are scoping in `neft:unit`s, so you can easily use other functions declarated
@@ -38,7 +38,7 @@ in the same file.
   item.text = view.funcs.multiply(item.text, item.text);
 </neft:func>
 
-<span neft:style="Button" neft:style:onPointerClicked="boost">1</span>
+<span neft:style="styles.button" neft:style:onPointerClicked="boost">1</span>
 ```
 
 #### CoffeeScript syntax
