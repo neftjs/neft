@@ -140,7 +140,7 @@ myDog.onAgeChanged.connect(function(){
 });
 // Signal ageChanged initialized
 
-myDof.ageChanged();
+myDog.ageChanged();
 // Signal called
 
 console.log(Object.keys(myDog));
