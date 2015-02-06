@@ -27,13 +27,16 @@ isPublic = (name) ->
 
 getInnerHTML = (elem) ->
 	if elem.visible and elem.children
-		elem.children.map(getOuterHTML).join("")
+		r = ""
+		for child in elem.children
+			r += getOuterHTML child
+		r
 	else
 		""
 
 getOuterHTML = (elem) ->
 	if elem._visible is false
-		return
+		return ""
 
 	if elem._text isnt undefined
 		return elem._text
