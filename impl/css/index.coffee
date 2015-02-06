@@ -3,7 +3,15 @@
 utils = require 'utils'
 
 SHEET = "
-#styles * {
+#hatchery {
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+#hatchery * {
+	position: absolute;
+}
+* {
 	margin: 0;
 	padding: 0;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; 
@@ -32,19 +40,19 @@ html, body {
 	word-break: break-word;
 	word-wrap: break-word;
 }
-#styles span * {
+span * {
 	display: inline;
 	font-weight: inherit;
 	font-size: inherit;
 }
-#styles span b, #styles span strong {
+span b, span strong {
 	font-weight: bolder;
 }
-#styles a {
+a {
 	text-decoration: inherit;
 	color: inherit;
 }
-#styles code {
+code {
 	white-space: pre;
 }
 "
@@ -54,7 +62,10 @@ isTouch = 'ontouchstart' of window
 # body
 body = document.createElement 'div'
 body.setAttribute 'id', 'styles'
+hatchery = document.createElement 'div'
+hatchery.setAttribute 'id', 'hatchery'
 window.addEventListener 'load', ->
+	document.body.appendChild hatchery
 	document.body.appendChild body
 
 	styles = document.createElement 'style'
@@ -69,6 +80,8 @@ window.addEventListener 'load', ->
 
 module.exports = (impl) ->
 	{items} = impl
+
+	impl._hatchery = hatchery
 
 	utils.merge impl.utils, require('./utils')
 

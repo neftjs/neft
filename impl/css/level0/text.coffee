@@ -7,6 +7,7 @@ isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 module.exports = (impl) ->
 	{Item, Image} = impl.Types
 	implUtils = impl.utils
+	hatchery = impl._hatchery
 
 	sizeUpdatePending = false
 
@@ -34,6 +35,9 @@ module.exports = (impl) ->
 			while queue.length
 				item = queue.pop()
 				queueItems[item.__hash__] = false
+
+				if item._impl.textElement.parentNode is hatchery
+					item._impl.elem.appendChild item._impl.textElement
 			return
 
 		updateSizeNow = (item) ->
@@ -55,6 +59,9 @@ module.exports = (impl) ->
 				windowLoadQueue.push item
 			else
 				queue.push item
+
+			if item._data.height is 0
+				hatchery.appendChild item._impl.textElement
 
 			unless pending
 				setImmediate updateAll
@@ -97,20 +104,37 @@ module.exports = (impl) ->
 
 	onWidthChanged = ->
 		if not sizeUpdatePending
+			{width} = @
 			{textElement} = @_impl
-			auto = @_impl.autoWidth = @width is 0
+			auto = @_impl.autoWidth = width is 0
 			textElement.style.whiteSpace = if auto then 'pre' else 'pre-wrap'
-			textElement.style.width = if auto then 'auto' else '100%'
+			textElement.style.width = if auto then 'auto' else "#{width}px"
 			if auto
 				updateSize @
 
 	onHeightChanged = ->
 		if not sizeUpdatePending
+			{height} = @
 			{textElement} = @_impl
-			auto = @_impl.autoHeight = @height is 0
-			textElement.style.height = if auto then 'auto' else '100%'
+			auto = @_impl.autoHeight = height is 0
+			textElement.style.height = if auto then 'auto' else "#{height}px"
 			if auto
 				updateSize @
+
+	SHEET = "
+		.text {
+			width: auto;
+			height: auto;
+			white-space: pre;
+			font-size: 14px;
+			font-family: sans-serif;
+			margin-top: #{if isFirefox then 1 else 0}px;
+		}
+	"
+	window.addEventListener 'load', ->
+		styles = document.createElement 'style'
+		styles.innerHTML = SHEET
+		document.body.appendChild styles
 
 	DATA =
 		autoWidth: true
@@ -131,14 +155,7 @@ module.exports = (impl) ->
 		item.onHeightChanged onHeightChanged
 
 		# set default styles
-		{style} = textElement
-		style.width = 'auto'
-		style.height = 'auto'
-		style.whiteSpace = 'pre'
-		style.fontSize = '14px'
-		style.fontFamily = 'sans-serif'
-		if isFirefox
-			style.marginTop = '1px'
+		textElement.setAttribute 'class', 'text'
 
 	createData: impl.utils.createDataCloner Item.DATA, DATA
 
@@ -146,7 +163,7 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 		exports._createTextElement @
-		data.elem.appendChild data.textElement
+		hatchery.appendChild data.textElement
 
 	setText: (val) ->
 		updateContent @
