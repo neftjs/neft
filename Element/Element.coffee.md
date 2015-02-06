@@ -108,10 +108,6 @@ Change the value to move the element.
 
 					@_visible = val
 
-					if @children
-						for child in @children
-							child.visible = val
-
 					# trigger event
 					Emitter.trigger @, Emitter.VISIBILITY_CHANGED, old
 
