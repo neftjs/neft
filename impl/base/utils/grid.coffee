@@ -10,7 +10,7 @@ unless Uint32Array?
 		arr
 
 queue = []
-queueItems = {}
+queueItems = Object.create null
 pending = false
 
 updateItem = (item) ->

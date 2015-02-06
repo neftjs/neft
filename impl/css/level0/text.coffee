@@ -8,52 +8,96 @@ module.exports = (impl) ->
 	{Item, Image} = impl.Types
 	implUtils = impl.utils
 
-	queue = []
-	windowLoadQueue = []
-	pending = false
+	sizeUpdatePending = false
 
-	window.addEventListener 'load', ->
-		while elem = windowLoadQueue.pop()
-			updateSize elem
-		return
-
-	updateAll = ->
+	updateSize = do ->
+		queue = []
+		queueItems = Object.create null
+		windowLoadQueue = []
 		pending = false
-		for elem in queue
-			updateSizeNow elem
-		return
 
-	updateAllAndClean = ->
-		updateAll()
-		utils.clear queue
+		window.addEventListener 'load', ->
+			while elem = windowLoadQueue.pop()
+				updateSize elem
+			return
 
-	updatePending = false
+		updateAll = ->
+			pending = false
+			for elem in queue
+				updateSizeNow elem
+			return
 
-	updateSizeNow = (item) ->
-		updatePending = true
-		{textElement} = item._impl
+		updateAllAndClean = ->
+			updateAll()
+			while queue.length
+				item = queue.pop()
+				queueItems[item.__hash__] = false
+			return
 
-		if item._impl.autoWidth
-			item.width = textElement.offsetWidth+1
+		updateSizeNow = (item) ->
+			sizeUpdatePending = true
+			{textElement} = item._impl
 
-		if item._impl.autoHeight
-			item.height = textElement.offsetHeight
+			if item._impl.autoWidth
+				item.width = textElement.offsetWidth+1
 
-		updatePending = false
+			if item._impl.autoHeight
+				item.height = textElement.offsetHeight
 
-	updateSize = (item) ->
-		if document.readyState isnt 'complete'
-			windowLoadQueue.push item
-		else
+			sizeUpdatePending = false
+
+		(item) ->
+			if queueItems[item.__hash__]
+				return
+
+			queueItems[item.__hash__] = true
+
+			if document.readyState isnt 'complete'
+				windowLoadQueue.push item
+			else
+				queue.push item
+
+			unless pending
+				setImmediate updateAll
+				setTimeout updateAllAndClean, 200
+				pending = true
+
+	updateContent = do ->
+		queue = []
+		queueItems = Object.create null
+		pending = false
+
+		updateItems = ->
+			pending = false
+
+			# update
+			for item in queue
+				val = item._data.text
+				if val.indexOf('<') isnt -1
+					item._impl.textElement.innerHTML = val
+				else
+					item._impl.textElement.textContent = val
+
+			while queue.length
+				item = queue.pop()
+				queueItems[item.__hash__] = false
+				updateSize item
+
+			return
+
+		(item) ->
+			if queueItems[item.__hash__]
+				return
+
+			queueItems[item.__hash__] = true
 			queue.push item
 
-		unless pending
-			setImmediate updateAll
-			setTimeout updateAllAndClean, 200
-			pending = true
+			unless pending
+				setImmediate updateItems
+				pending = true
 
 	onWidthChanged = ->
-		if not updatePending
+		if not sizeUpdatePending
 			{textElement} = @_impl
 			auto = @_impl.autoWidth = @width is 0
 			textElement.style.whiteSpace = if auto then 'pre' else 'pre-wrap'
@@ -62,7 +106,7 @@ module.exports = (impl) ->
 				updateSize @
 
 	onHeightChanged = ->
-		if not updatePending
+		if not sizeUpdatePending
 			{textElement} = @_impl
 			auto = @_impl.autoHeight = @height is 0
 			textElement.style.height = if auto then 'auto' else '100%'
@@ -79,9 +123,6 @@ module.exports = (impl) ->
 
 	_createTextElement: (item) ->
 		data = item._impl
-
-		data.autoWidth = true
-		data.autoHeight = true
 
 		# textElement
 		textElement = data.textElement = document.createElement 'span'
@@ -109,11 +150,7 @@ module.exports = (impl) ->
 		data.elem.appendChild data.textElement
 
 	setText: (val) ->
-		if ///<///.test val
-			@_impl.textElement.innerHTML = val
-		else
-			@_impl.textElement.textContent = val
-		updateSize @
+		updateContent @
 
 	setTextColor: (val) ->
 		@_impl.textElement.style.color = val
