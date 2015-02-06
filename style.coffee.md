@@ -59,6 +59,13 @@
 
 			return
 
+		anchorListener = ->
+			url = @node.attrs.get 'href'
+			unless url
+				return
+
+			@file.storage.global?.uri = url
+
 		constructor: ->
 			@file = null
 			@node = null
@@ -68,7 +75,7 @@
 			@isAutoParent = false
 			@item = null
 			@scope = null
-			@anchorListener = null
+			@isAnchorListening = false
 			@children = []
 			Object.preventExtensions @
 
@@ -145,9 +152,9 @@
 		reloadItem: ->
 			if @item and @isAutoParent
 				@item.parent = null
-				if @anchorListener
-					@item.onPointerClicked.disconnect @anchorListener
-					@anchorListener = null
+				if @isAnchorListening
+					@item.onPointerClicked.disconnect anchorListener, @
+					@isAnchorListening = false
 
 			id = @node.attrs.get Style.HTML_ATTR
 			@isScope = ///^styles\.///.test id
@@ -181,12 +188,8 @@
 				@isAutoParent = !@item.parent
 
 			if @isAnchor()
-				@item.onPointerClicked @anchorListener = =>
-					url = @node.attrs.get 'href'
-					unless url
-						return
-
-					@file.storage.global?.uri = url
+				@item.onPointerClicked anchorListener, @
+				@isAnchorListening = true
 
 		clone: (originalFile, file) ->
 			clone = new Style
