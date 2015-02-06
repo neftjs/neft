@@ -191,14 +191,7 @@ console.log(Object.keys(Object.getPrototypeOf(myDog)));
 
 	createSignalFunction = (obj) ->
 		signal = ->
-			return unless listeners.length
-
-			if arguments.length isnt 0
-				args = new Array arguments.length
-				for arg, i in arguments
-					args[i] = arg
-
-			callSignal obj, listeners, args
+			callSignal obj, listeners, arguments
 
 		listeners = signal.listeners = []
 
@@ -215,10 +208,10 @@ If it's called it works as a alias for the *Handler.connect()*.
 
 	createHandlerFunction = (obj, signal) ->
 		handler = (listener, ctx) ->
-			HandlerPrototype.connect.call handler, listener, ctx
+			handler.connect listener, ctx
 
 		handler.listeners = signal?.listeners
-		utils.merge handler, HandlerPrototype
+		utils.setPrototypeOf handler, HandlerPrototype
 
 		handler
 
