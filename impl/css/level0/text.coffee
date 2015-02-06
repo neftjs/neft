@@ -23,8 +23,10 @@ module.exports = (impl) ->
 
 		updateAll = ->
 			pending = false
+			sizeUpdatePending = true
 			for elem in queue
 				updateSizeNow elem
+			sizeUpdatePending = false
 			return
 
 		updateAllAndClean = ->
@@ -35,16 +37,13 @@ module.exports = (impl) ->
 			return
 
 		updateSizeNow = (item) ->
-			sizeUpdatePending = true
 			{textElement} = item._impl
 
 			if item._impl.autoWidth
-				item.width = textElement.offsetWidth+1
+				item.width = textElement.scrollWidth+1
 
 			if item._impl.autoHeight
-				item.height = textElement.offsetHeight
-
-			sizeUpdatePending = false
+				item.height = textElement.scrollHeight
 
 		(item) ->
 			if queueItems[item.__hash__]
