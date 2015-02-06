@@ -65,7 +65,7 @@ module.exports = (impl) ->
 
 			unless pending
 				setImmediate updateAll
-				setTimeout updateAllAndClean, 200
+				requestAnimationFrame updateAllAndClean
 				pending = true
 
 	updateContent = do ->

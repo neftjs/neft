@@ -38,6 +38,7 @@ Renderer.Scrollable
 				anchors:
 					right: ['parent', 'right']
 				margin: 3
+				z: 1
 				onPointerPressed: ->
 					unless @pressed
 						@pressed = true
