@@ -27,24 +27,24 @@ module.exports = (File) ->
 
 			null
 
+		keepLooking = (self, elem) ->
+			if elem.self.parentUse
+				self.updateStylesParent elem.self.parentUse
+			else
+				self._watchedFile = elem.self
+				elem.self.onReplacedByUse self.updateStylesParent, self
+
 		(elem) ->
-			@_watchedFile?.onReplacedByUse.disconnect @updateStylesParent
+			@_watchedFile?.onReplacedByUse.disconnect @updateStylesParent, @
 			@_watchedFile = null
 
 			return unless elem
-
-			keepLooking = =>
-				if elem.self.parentUse
-					@updateStylesParent elem.self.parentUse
-				else
-					@_watchedFile = elem.self
-					elem.self.onReplacedByUse @updateStylesParent
 
 			parentStyles = elem.self.styles
 
 			# keep looking if no styles found
 			unless parentStyles.length
-				keepLooking()
+				keepLooking @, elem
 				return
 
 			# find styles parent walking by the tree
@@ -60,7 +60,7 @@ module.exports = (File) ->
 
 				parentNode = parentNode._parent
 
-			keepLooking()
+			keepLooking @, elem
 			return
 
 	File::clone = do (_super = File::clone) -> ->
@@ -77,7 +77,6 @@ module.exports = (File) ->
 			desc = utils.ENUMERABLE | utils.WRITABLE
 			utils.defineProperty clone, '_watchedFile', desc, null
 
-			clone.updateStylesParent = @updateStylesParent.bind clone
-			clone.onReplacedByUse clone.updateStylesParent
+			clone.onReplacedByUse clone.updateStylesParent, clone
 
 		clone
