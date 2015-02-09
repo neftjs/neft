@@ -77,6 +77,7 @@
 			@scope = null
 			@isAnchorListening = false
 			@children = []
+
 			Object.preventExtensions @
 
 		render: (parent=@parent) ->
@@ -128,7 +129,15 @@
 				@item.text = @node.stringifyChildren()
 
 		updateVisibility: ->
-			@item?.visible = @node.visible
+			visible = true
+			tmpNode = @node
+			loop
+				visible = tmpNode.visible
+				tmpNode = tmpNode.parent
+				if not visible or not tmpNode or tmpNode.attrs.has('neft:style')
+					break
+
+			@item?.visible = visible
 
 		setAttr: (name, val) ->
 			assert.instanceOf @, Style
@@ -213,9 +222,17 @@
 			unless utils.isClient
 				return clone
 
-			# listen on node changes
-			clone.node.onVisibilityChanged visibilityChangedListener, clone
+			# visibility changes
+			tmpNode = clone.node
+			loop
+				if tmpNode.attrs.has 'neft:if'
+					tmpNode.onVisibilityChanged visibilityChangedListener, clone
 
+				tmpNode = tmpNode.parent
+				if not tmpNode or tmpNode.attrs.has('neft:style')
+					break
+
+			# text changes
 			if (not @parent and not clone.item) or (clone.item and 'text' of clone.item)
 				listenRecursive @, clone.node, 'onTextChanged', textChangedListener
 
