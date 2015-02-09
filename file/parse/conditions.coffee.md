@@ -40,7 +40,19 @@ In pratice, you will use the string interpolation to conditioning the result.
 				attr = node.attrs.get "#{File.HTML_NS}:if"
 				continue unless attr
 
-				conditions.push new File.Condition node, attr
+				if attr.indexOf('#{') is -1
+					attr = '#{'+attr+'}'
+
+				`//<development>`
+				if attr.indexOf('#{') isnt 0
+					log.warn "neft:if `#{attr}` contains string interpolation, but neft:if always is a string interpolation"
+				`//</development>`
+
+				funcBody = File.Input.parse attr
+				func = File.Input.createFunction funcBody
+				condition = new File.Condition node, func
+				condition.funcBody = funcBody
+				conditions.push condition
 
 			if conditions.length
 				file.conditions = conditions

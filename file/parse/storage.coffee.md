@@ -31,7 +31,7 @@ If no attribute with such name found, value from the global data will be used
 
 	module.exports = (File) ->
 
-		Input = File.Input
+		{Input} = File
 		InputRE = Input.RE
 
 		(file) ->
@@ -48,7 +48,11 @@ If no attribute with such name found, value from the global data will be used
 				if text isnt undefined
 					InputRE.lastIndex = 0
 					if text and InputRE.test text
-						inputs.push new Input.Text elem
+						funcBody = Input.parse text
+						func = Input.createFunction funcBody
+						input = new Input.Text elem, func
+						input.funcBody = funcBody
+						inputs.push input
 
 				# attrs
 				i = 0
@@ -58,7 +62,12 @@ If no attribute with such name found, value from the global data will be used
 					break unless attr[0]
 
 					if Input.test attr[1]
-						inputs.push new Input.Attr elem, attr[0]
+						funcBody = Input.parse attr[1]
+						func = Input.createFunction funcBody
+						input = new Input.Attr elem, func
+						input.funcBody = funcBody
+						input.attrName = attr[0]
+						inputs.push input
 
 					i++
 

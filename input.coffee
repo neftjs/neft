@@ -66,18 +66,11 @@ module.exports = (File) -> class Input
 
 		arr
 
-	@fromAssembled = (input) ->
-		input._func = cache[input.func] ?= new Function '__input', '__get', input.func
-
 	@test = (str) ->
 		RE.lastIndex = 0
 		RE.test str
 
-	constructor: (@node, @text) ->
-		assert.instanceOf node, File.Element
-		assert.isString text
-		assert.notLengthOf text, 0
-
+	@parse = (text) ->
 		# build toString()
 		func = ""
 
@@ -132,41 +125,65 @@ module.exports = (File) -> class Input
 		if chunks.length then func += "'#{utils.addSlashes chunks[0]}' + "
 
 		func = 'return ' + func.slice 0, -3
-		@func = utils.tryFunction coffee.compile, coffee, [func, bare: true], func
+		func = utils.tryFunction coffee.compile, coffee, [func, bare: true], func
 
 		try
-			Input.fromAssembled @
+			new Function func
 		catch err
 			log.error "Can't parse string literal:\n#{text}\n#{err.message}\n#{func}"
 
-	_func: null
+		func
 
-	self: null
-	node: null
-	text: ''
-	func: ''
-	traces: null
-	updatePending: false
+	@createFunction = (funcBody) ->
+		assert.isString funcBody
+		assert.notLengthOf funcBody, 0
 
-	_onChanged: ->
+		new Function '__input', '__get', funcBody
+
+	@fromAssembled = (input) ->
+		input.func = cache[input.funcBody] ?= Input.createFunction(input.funcBody)
+
+	constructor: (@node, @func) ->
+		assert.instanceOf node, File.Element
+		assert.isFunction func
+
+		@self = null
+		@funcBody = ''
+		@traces = {}
+		@updatePending = false
+
+		Object.preventExtensions @
+
+	queue = []
+	pending = false
+
+	updateItems = ->
+		pending = false
+		while input = queue.pop()
+			input.update()
+		return
+
+	onChanged = ->
 		return if @updatePending
 
-		setImmediate @update
+		@update()
+		queue.push @
 		@updatePending = true
-
-	_onAttrChanged: (e) ->
-		@_onChanged()
+		unless pending
+			setImmediate updateItems
+			pending = true
+		return
 
 	trace: (val) ->
 		if val instanceof Dict and not @traces[val.__hash__]
-			val.onChanged @_onChanged
+			val.onChanged onChanged, @
 			@traces[val.__hash__] = val
 		val
 
 	render: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.onAttrChanged @_onAttrChanged
+				storage.onAttrChanged onChanged, @
 			else if storage instanceof Dict
 				@trace storage
 		
@@ -175,20 +192,21 @@ module.exports = (File) -> class Input
 	revert: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.onAttrChanged.disconnect @_onAttrChanged
+				storage.onAttrChanged.disconnect onChanged, @
 
-		for hash, dict of @traces
-			dict.onChanged.disconnect @_onChanged
-			delete @traces[hash]
+		for hash, dict of @traces when dict?
+			dict.onChanged.disconnect onChanged, @
+			@traces[hash] = null
 
 		return
 
 	update: ->
 		@updatePending = false
+		return
 
 	toString: do ->
 		callFunc = ->
-			@_func.call @self, @, Input.get
+			@func.call @self, @, Input.get
 
 		->
 			try
@@ -197,15 +215,10 @@ module.exports = (File) -> class Input
 				log.warn "`#{@text}` variable is skipped due to an error;\n#{err}"
 
 	clone: (original, self) ->
-		clone = Object.create @
+		node = original.node.getCopiedElement @node, self.node
 
-		clone.clone = undefined
+		clone = new @constructor node, @func
 		clone.self = self
-		clone.node = original.node.getCopiedElement @node, self.node
-		clone.traces = {}
-		clone.update = => @update.call clone
-		clone._onAttrChanged = (arg1) => @_onAttrChanged.call clone, arg1
-		clone._onChanged = (arg1) => @_onChanged.call clone, arg1
 
 		clone
 
