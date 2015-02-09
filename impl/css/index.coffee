@@ -34,6 +34,9 @@ html, body {
 #styles div, #styles span, #styles canvas, #styles img {
 	position: absolute;
 }
+#styles span span {
+	position: static
+}
 #styles span {
 	-ms-word-break: break-all;
 	word-break: break-all;
@@ -44,9 +47,14 @@ span * {
 	display: inline;
 	font-weight: inherit;
 	font-size: inherit;
+	font-family: inherit;
+	font-style: inherit;
 }
 span b, span strong {
 	font-weight: bolder;
+}
+span em {
+	font-style: italic;
 }
 a {
 	text-decoration: inherit;

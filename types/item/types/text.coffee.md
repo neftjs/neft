@@ -19,6 +19,18 @@ Renderer.Text
 			@__name__ = 'Text'
 			@__path__ = 'Renderer.Text'
 
+			SUPPORTED_HTML_TAGS = @SUPPORTED_HTML_TAGS =
+				__proto__: null
+				b: true
+				strong: true
+				em: true
+				br: true
+				font: true
+				i: true
+				s: true
+				u: true
+				a: true
+
 			itemUtils.initConstructor @,
 				extends: Renderer.Item
 				data:
