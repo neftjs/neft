@@ -21,7 +21,7 @@
 			assert.instanceOf style, Style
 			assert.instanceOf node, File.Element
 
-			node[event] listener, style
+			node[event]? listener, style
 
 			if node.children
 				for child in node.children
@@ -37,7 +37,7 @@
 			if @file.isRendered
 				@updateText()
 
-		attrChangedListener = (e, node) ->
+		attrChangedListener = (e) ->
 			if e.name is Style.HTML_ATTR
 				@reloadItem()
 				if @file.isRendered
@@ -45,7 +45,7 @@
 
 			if @file.isRendered
 				return unless @attrs?.hasOwnProperty(e.name)
-				value = node.attrs.get e.name
+				value = @node.attrs.get e.name
 				if @file.funcs?.hasOwnProperty value
 					log.warn "Dynamic listening on Renderer events is not supported"
 					return
