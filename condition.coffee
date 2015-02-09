@@ -14,11 +14,11 @@ module.exports = (File) -> class Condition extends File.Input
 	@HTML_ATTR = "#{File.HTML_NS}:if"
 
 	constructor: (node, text) ->
-		if text.indexOf '#{' is -1
+		if text.indexOf('#{') is -1
 			text = '#{'+text+'}'
 
 		`//<development>`
-		if text.indexOf '#{' isnt -1
+		if text.indexOf('#{') isnt 0
 			log.warn "neft:if `#{text}` contains string interpolation, but neft:if always is a string interpolation"
 		`//</development>`
 

@@ -8,6 +8,8 @@ File.Element.Tag
 	signal = require 'signal'
 	stringify = require './tag/stringify'
 
+	SignalsEmitter = signal.Emitter
+
 	assert = assert.scope 'View.Element.Tag'
 
 	isDefined = (elem) -> elem?
@@ -35,6 +37,8 @@ File.Element.Tag
 
 *File.Element.Tag.Attrs* File::attrs
 ------------------------------------
+
+			SignalsEmitter.createSignal @, 'attrChanged'
 
 			utils.defineProperty @::, 'attrs', null, ->
 				Tag.Attrs.tag = @

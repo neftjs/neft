@@ -5,7 +5,9 @@ File.Element.Text
 
 	utils = require 'utils'
 	assert = require 'assert'
-	Emitter = require '../emitter'
+	signal = require 'signal'
+
+	SignalsEmitter = signal.Emitter
 
 	assert = assert.scope 'View.Element.Text'
 
@@ -31,6 +33,8 @@ File.Element.Text
 *String* Text::text
 -------------------
 
+			SignalsEmitter.createSignal @, 'textChanged'
+
 			utils.defineProperty @::, 'text', null, ->
 				@_text
 			, (value) ->
@@ -43,4 +47,4 @@ File.Element.Text
 				@_text = value
 
 				# trigger event
-				Emitter.trigger @, Emitter.TEXT_CHANGED, old
+				@textChanged old

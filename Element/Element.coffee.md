@@ -7,13 +7,14 @@ File.Element @low-level API
 
 	utils = require 'utils'
 	assert = require 'assert'
-	Emitter = require './emitter'
+	signal = require 'signal'
 
 	{isArray} = Array
+	SignalsEmitter = signal.Emitter
 
 	assert = assert.scope 'View.Element'
 
-	class Element extends Emitter
+	class Element extends SignalsEmitter
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
@@ -41,6 +42,9 @@ Creates new `Element` instance based on given *html*.
 			super()
 
 			Object.seal @
+
+		SignalsEmitter.createSignal @, 'parentChanged'
+		SignalsEmitter.createSignal @, 'visibilityChanged'
 
 		Object.defineProperties @::,
 
@@ -91,8 +95,8 @@ Change the value to move the element.
 						assert.notOk utils.has(@_parent.children, @)
 						parent.children.push @
 
-					# trigger event
-					Emitter.trigger @, Emitter.PARENT_CHANGED, old
+					# trigger signal
+					@parentChanged old
 
 *Boolean* Element::visible
 --------------------------
@@ -108,8 +112,8 @@ Change the value to move the element.
 
 					@_visible = val
 
-					# trigger event
-					Emitter.trigger @, Emitter.VISIBILITY_CHANGED, old
+					# trigger signal
+					@visibilityChanged old
 
 					null
 
