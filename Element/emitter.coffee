@@ -5,10 +5,10 @@ utils = require 'utils'
 
 module.exports = class Emitter
 
-	i = 0
-	@PARENT_CHANGED = i++
-	@VISIBILITY_CHANGED = i++
-	@ATTR_CHANGED = @TEXT_CHANGED = i++
+	_i = 0
+	@PARENT_CHANGED = _i++
+	@VISIBILITY_CHANGED = _i++
+	@ATTR_CHANGED = @TEXT_CHANGED = _i++
 
 	@trigger = (emitter, type, param) ->
 		assert.instanceOf emitter, Emitter
