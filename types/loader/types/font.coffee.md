@@ -20,10 +20,11 @@ Item {
 	expect = require 'expect'
 	utils = require 'utils'
 	log = require 'log'
+	signal = require 'signal'
 
 	log = log.scope 'Renderer', 'FontLoader'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Font
+	module.exports = (Renderer, Impl, itemUtils) -> class Font extends signal.Emitter
 		@__name__ = 'Font'
 		@__path__ = 'Renderer.Loader.Font'
 
@@ -50,6 +51,7 @@ Item {
 			@_data =
 				name: ''
 				source: ''
+			super()
 
 *String* FontLoader::name
 -------------------------

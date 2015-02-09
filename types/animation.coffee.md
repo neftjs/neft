@@ -7,7 +7,7 @@ Renderer.Animation
 	expect = require 'expect'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Animation
+	module.exports = (Renderer, Impl, itemUtils) -> class Animation extends signal.Emitter
 		@__name__ = 'Animation'
 
 		itemUtils.initConstructor @,
@@ -24,6 +24,8 @@ Renderer.Animation
 
 		constructor: (opts) ->
 			expect().defined(opts).toBe.simpleObject()
+
+			super()
 
 			itemUtils.initObject @, Impl.createAnimation
 			itemUtils.fill @, opts

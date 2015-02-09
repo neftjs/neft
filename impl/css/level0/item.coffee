@@ -331,9 +331,9 @@ module.exports = (impl) ->
 		unless signalName?
 			return
 
-		customFunc = (e) ->
+		customFunc = (e) =>
 			arg = SIGNALS_ARGS[name]? e
-			result = func arg
+			result = func.call @, arg
 			if result is signal.STOP_PROPAGATION
 				e.stopPropagation()
 			result

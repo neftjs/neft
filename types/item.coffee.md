@@ -10,11 +10,12 @@ Renderer.Item
 	signal = require 'signal'
 	List = require 'list'
 
+	{isArray} = Array
+	SignalsEmitter = signal.Emitter
+
 	assert = assert.scope 'Renderer.Item'
 
-	{isArray} = Array
-
-	module.exports = (Renderer, Impl, itemUtils) -> class Item
+	module.exports = (Renderer, Impl, itemUtils) -> class Item extends signal.Emitter
 		@__name__ = 'Item'
 		@__path__ = 'Renderer.Item'
 
@@ -52,7 +53,9 @@ Renderer.Item
 			assert.isArray children, 'ctor children argument ...' if children?
 
 			# initialization
-			itemUtils.initObject @, Impl.createItem
+			unless @__hash__
+				super()
+				itemUtils.initObject @, Impl.createItem
 
 			if opts?
 				# initialize states

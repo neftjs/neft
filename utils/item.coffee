@@ -5,9 +5,11 @@ expect = require 'expect'
 utils = require 'utils'
 signal = require 'signal'
 
+SignalsEmitter = signal.Emitter
+
 {isArray} = Array
 
-class DeepObject
+class DeepObject extends signal.Emitter
 	constructor: (item, parent) ->
 		if parent
 			assert.instanceOf parent, @constructor
@@ -17,6 +19,8 @@ class DeepObject
 
 		@_item = item
 		@_data = data
+
+		super()
 
 module.exports = (Renderer, Impl) -> exports =
 	DeepObject: DeepObject
@@ -36,7 +40,10 @@ module.exports = (Renderer, Impl) -> exports =
 
 		# signal
 		signalName = "#{name}Changed"
-		signal.createLazy prototype, signalName
+		if opts.hasOwnProperty 'constructor'
+			SignalsEmitter.createSignal opts.constructor, signalName
+		else
+			signal.createLazy prototype, signalName
 
 		# getter
 		propGetter = basicGetter = ->
@@ -90,7 +97,7 @@ module.exports = (Renderer, Impl) -> exports =
 			namespaceSignalName = "#{namespace}Changed"
 			propSetter = (val) ->
 				basicSetter.call @, val
-				@_item[namespaceSignalName]? @
+				@_item[namespaceSignalName] @
 
 		# custom desc
 		getter = if customGetter? then customGetter(propGetter) else propGetter
@@ -180,8 +187,9 @@ module.exports = (Renderer, Impl) -> exports =
 		func.DATA_CTOR = exports.createDataCtor data
 
 	initObject: (self, impl) ->
-		unless self.__hash__
-			self.__hash__ = utils.uid()
-			self._data = new self.constructor.DATA_CTOR
-			impl? self, self.constructor.__name__
+		assert.isNotDefined self.__hash__
+
+		self.__hash__ = utils.uid()
+		self._data = new self.constructor.DATA_CTOR
+		impl? self, self.constructor.__name__
 
