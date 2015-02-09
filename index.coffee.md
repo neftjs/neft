@@ -34,10 +34,32 @@ standard events based on the strings have.
 		  "has already defined such property"
 
 		signal = obj[name]
-		obj[handlerName] = createHandlerFunction obj, signal
+		obj[handlerName] = createHandlerFunction signal
 
 signal.STOP_PROPAGATION
 -----------------------
+
+Special constant value used to stop calling further listeners.
+
+Must be returned by the listener, which wan't to capture a signal.
+
+```
+var obj = {};
+signal.create(obj, 'pressed');
+
+obj.onPressed(function(){
+  console.log('listener 1');
+  return signal.STOP_PROPAGATION;
+});
+
+// this listener won't be called, because first listener will capture this signal
+obj.onPressed(function(){
+  console.log('listener 2');
+});
+
+obj.pressed();
+// listener 1
+```
 
 	exports.STOP_PROPAGATION = 1 << 30
 
@@ -206,7 +228,7 @@ Handler is always stored in the property prefixed by the *on* (e.g. *onWidthChan
 
 If it's called it works as a alias for the *Handler.connect()*.
 
-	createHandlerFunction = (obj, signal) ->
+	createHandlerFunction = (signal) ->
 		handler = (listener, ctx) ->
 			handler.connect listener, ctx
 
@@ -217,8 +239,8 @@ If it's called it works as a alias for the *Handler.connect()*.
 
 	HandlerPrototype =
 
-Handler.connect(*Function* listener)
-------------------------------------
+Handler.connect(*Function* listener, [*Any* context])
+-----------------------------------------------------
 
 Connect new listener function to the handler.
 
@@ -226,7 +248,6 @@ Connected function will be called on each signal call.
 
 ```
 var obj = {};
-
 signal.create(obj, 'pressed');
 
 obj.onPressed(function(){
@@ -242,6 +263,27 @@ obj.pressed()
 // listener 2
 ```
 
+Optional second argument will be used as a context in called listeners.
+By default, listener is called with the object, where it's added.
+
+```
+var obj = {standard: true};
+signal.create(obj, 'pressed');
+
+var fakeContext = {fake: true};
+obj.onPressed(function(){
+  console.log(this);
+}, fakeContext);
+
+obj.onPressed(function(){
+  console.log(this);
+});
+
+obj.pressed();
+// {fake: true}
+// {standard: true}
+```
+
 		connect: (listener, ctx=null) ->
 			assert.isFunction @
 			assert.isFunction listener
@@ -250,8 +292,8 @@ obj.pressed()
 
 			return
 
-Handler.disconnect(*Function* listener)
----------------------------------------
+Handler.disconnect(*Function* listener, [*Any* context])
+--------------------------------------------------------
 
 Diconnect already connected listener.
 
@@ -303,3 +345,8 @@ Diconnect all already connected listeners from the *handler*.
 				listeners[i] = null
 
 			return
+
+	exports.Emitter = require('./emitter')
+		getHandlerName: exports.getHandlerName
+		createHandlerFunction: createHandlerFunction
+		callSignal: callSignal
