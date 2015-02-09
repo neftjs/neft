@@ -148,14 +148,14 @@ module.exports = (File) -> class Input
 	traces: null
 	updatePending: false
 
-	_onChanged: (prop) ->
+	_onChanged: ->
 		return if @updatePending
 
 		setImmediate @update
 		@updatePending = true
 
 	_onAttrChanged: (e) ->
-		@_onChanged e.name
+		@_onChanged()
 
 	trace: (val) ->
 		if val instanceof Dict and not @traces[val.__hash__]
@@ -187,7 +187,6 @@ module.exports = (File) -> class Input
 		@updatePending = false
 
 	toString: do ->
-
 		callFunc = ->
 			@_func.call @self, @, Input.get
 
@@ -198,7 +197,6 @@ module.exports = (File) -> class Input
 				log.warn "`#{@text}` variable is skipped due to an error;\n#{err}"
 
 	clone: (original, self) ->
-
 		clone = Object.create @
 
 		clone.clone = undefined

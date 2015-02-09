@@ -16,7 +16,7 @@ output, because the whole tag `<span>` will be omitted.
 In pratice, you will use the string interpolation to conditioning the result.
 
 ```
-<name neft:if="#{user.age} > 18">#{user.login}</name>
+<name neft:if="user.age > 18">#{user.login}</name>
 ```
 
 #### See also
@@ -40,9 +40,7 @@ In pratice, you will use the string interpolation to conditioning the result.
 				attr = node.attrs.get "#{File.HTML_NS}:if"
 				continue unless attr
 
-				conditions.push new File.Condition
-					self: file
-					node: node
+				conditions.push new File.Condition node, attr
 
 			if conditions.length
 				file.conditions = conditions
