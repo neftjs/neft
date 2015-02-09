@@ -41,7 +41,7 @@ Creates new `Element` instance based on given *html*.
 
 			super()
 
-			Object.seal @
+			Object.preventExtensions @
 
 		SignalsEmitter.createSignal @, 'parentChanged'
 		SignalsEmitter.createSignal @, 'visibilityChanged'

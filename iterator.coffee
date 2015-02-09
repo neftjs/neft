@@ -160,8 +160,8 @@ module.exports = (File) -> class Iterator extends File.Use
 		if @self.isRendered and e.name is Iterator.HTML_ATTR
 			@update()
 
-	visibilityChangedListener = (oldVal, node) ->
-		if @self.isRendered and oldVal is false and not node.data
+	visibilityChangedListener = (oldVal) ->
+		if @self.isRendered and oldVal is false and not @node.data
 			@update()
 
 	clone: (original, self) ->
