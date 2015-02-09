@@ -46,6 +46,12 @@ File.Element.Tag.Attrs
 
 				target
 
+			has: (name) ->
+				assert.isString name
+				assert.notLengthOf name, 0
+
+				exports.tag.attrsNames?[name]?
+
 *Any* get(*String* name)
 ------------------------
 
