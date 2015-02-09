@@ -81,7 +81,7 @@ Text {
 
 		# parse tags with `style` attr
 		forNode = (node, parentStyle) ->
-			if attr = node.attrs.get "#{File.HTML_NS}:style"
+			if attr = node.attrs.get 'neft:style'
 				id = attr
 
 				style = new Style
@@ -89,6 +89,8 @@ Text {
 				style.node = node
 				style.attrs = findAttrs(node)
 				style.parent = parentStyle
+
+				node.attrs.add 'neft:styleItem', null
 
 				if parentStyle
 					parentStyle.children.push style

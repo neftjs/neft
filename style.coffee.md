@@ -14,9 +14,6 @@
 		@__name__ = 'Style'
 		@__path__ = 'File.Style'
 
-		@HTML_ATTR = "#{File.HTML_NS}:style"
-		@HTML_DEEP_ATTR = "#{Style.HTML_ATTR}:"
-
 		listenRecursive = (style, node, event, listener) ->
 			assert.instanceOf style, Style
 			assert.instanceOf node, File.Element
@@ -38,10 +35,11 @@
 				@updateText()
 
 		attrChangedListener = (e) ->
-			if e.name is Style.HTML_ATTR
+			if e.name is 'neft:style'
 				@reloadItem()
 				if @file.isRendered
 					@render()
+					@findItemParent()
 
 			if @file.isRendered
 				return unless @attrs?.hasOwnProperty(e.name)
@@ -80,19 +78,9 @@
 
 			Object.preventExtensions @
 
-		render: (parent=@parent) ->
-			assert.instanceOf parent, Style if parent?
-
-			@parent = parent
-
+		render: ->
 			for child in @children
 				child.render()
-
-			if not @item or not @parent
-				return
-
-			if @isAutoParent and @item isnt @parent.item
-				@item.parent = parent.item
 
 			if 'text' of @item
 				@updateText()
@@ -143,7 +131,7 @@
 			assert.instanceOf @, Style
 			assert.ok @attrs.hasOwnProperty(name)
 
-			name = name.slice Style.HTML_DEEP_ATTR.length
+			name = name.slice 'neft:style:'.length
 			props = name.split ':'
 			obj = @item
 			for prop, i in props
@@ -156,7 +144,7 @@
 			return
 
 		isAnchor: ->
-			@node.name is 'a' and not @attrs?.hasOwnProperty("#{Style.HTML_DEEP_ATTR}onPointerClicked")
+			@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked')
 
 		reloadItem: ->
 			if @item and @isAutoParent
@@ -165,7 +153,10 @@
 					@item.onPointerClicked.disconnect anchorListener, @
 					@isAnchorListening = false
 
-			id = @node.attrs.get Style.HTML_ATTR
+			wasAutoParent = @isAutoParent
+
+			id = @node.attrs.get 'neft:style'
+			assert.isString id
 			@isScope = ///^styles\.///.test id
 			@item = null
 			@scope = null
@@ -199,6 +190,23 @@
 			if @isAnchor()
 				@item.onPointerClicked anchorListener, @
 				@isAnchorListening = true
+
+			@node.attrs.set 'neft:styleItem', @item
+
+		findItemParent: ->
+			assert @isAutoParent
+			assert @item
+
+			tmpNode = @node
+			while tmpNode = tmpNode.parent
+				if item = tmpNode.attrs.get 'neft:styleItem'
+					@item.parent = item
+					break
+
+			unless item
+				@item.parent = null
+
+			return
 
 		clone: (originalFile, file) ->
 			clone = new Style
