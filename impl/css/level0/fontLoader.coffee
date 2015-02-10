@@ -39,11 +39,12 @@ module.exports = (impl) ->
 	loadFont: (source, name) ->
 		style = if isItalic(source) then 'italic' else 'normal'
 		weight = getFontWeight(source)
+		name = impl.DEFAULT_FONTS[name] or name
 
 		styles = document.createElement 'style'
 		styles.innerHTML = """
 			@font-face {
-				font-family: '#{name}';
+				font-family: "#{name}";
 				src: url('#{source}');
 				font-style: #{style};
 				font-weight: #{weight};

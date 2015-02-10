@@ -34,10 +34,10 @@ html, body {
 #styles div, #styles span, #styles canvas, #styles img {
 	position: absolute;
 }
-#styles span span {
-	position: static
+span span {
+	position: static;
 }
-#styles span {
+span {
 	-ms-word-break: break-all;
 	word-break: break-all;
 	word-break: break-word;
@@ -62,6 +62,11 @@ a {
 }
 code {
 	white-space: pre;
+}
+img {
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
 }
 "
 

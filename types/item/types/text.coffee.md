@@ -117,6 +117,11 @@ Renderer.Text
 						setTimeout =>
 							if not Renderer.Loader.Font.fonts[val]
 								log.warn "Font `#{@family}` is not loaded; use `Loader.Font` to load a font"
+				setter: (_super) -> (val) ->
+					if typeof val is 'string'
+						_super.call @, val.toLowerCase()
+					else
+						_super.call @, val
 
 *Float* Text::font.pixelSize = 14
 ---------------------------------

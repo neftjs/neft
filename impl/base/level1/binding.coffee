@@ -157,6 +157,16 @@ module.exports = (impl) ->
 			if not @updatePending and oldVal isnt @obj[@prop]
 				@destroy()
 
+		getDefaultValue = (binding) ->
+			val = binding.obj._data[binding.prop]
+			switch typeof val
+				when 'string'
+					''
+				when 'number'
+					-1
+				else
+					null
+
 		update: do ->
 			queue = []
 			queueHashes = {}
@@ -168,7 +178,7 @@ module.exports = (impl) ->
 
 				result = utils.tryFunction binding.func, null, binding.args
 				unless result?
-					return
+					result = getDefaultValue binding
 
 				# extra func
 				if binding.extraResultFunc
@@ -177,7 +187,7 @@ module.exports = (impl) ->
 						result += funcResult
 
 				if typeof result is 'number' and not isFinite(result)
-					return
+					result = getDefaultValue binding
 
 				binding.updatePending = true
 				binding.obj[binding.prop] = result

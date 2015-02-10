@@ -176,6 +176,8 @@ module.exports = (impl) ->
 	STYLE_OPACITY = 1<<3
 	STYLE_ALL = (1<<4)-1
 
+	nowTime = now()
+
 	updateStyles = do ->
 		pending = false
 		queue = []
@@ -231,6 +233,7 @@ module.exports = (impl) ->
 
 		updateItems = ->
 			pending = false
+			nowTime = now()
 			n = queue.length
 			while n--
 				item = queue.pop()
@@ -257,13 +260,13 @@ module.exports = (impl) ->
 	markAction = (item) ->
 		storage = item._impl
 
-		if now() - storage.lastAction < HOT_MAX_TIME
+		if nowTime - storage.lastAction < HOT_MAX_TIME
 			if storage.hotActions++ > HOT_MAX_ACTIONS
 				{style, id} = storage.elem
 				storage.isHot = true
 		else
 			storage.hotActions = 0
-			storage.lastAction = now()
+			storage.lastAction = nowTime
 
 	DATA =
 		bindings: null
@@ -279,7 +282,7 @@ module.exports = (impl) ->
 
 	create: (data) ->
 		data.elem ?= document.createElement 'div'
-		data.lastAction = now()
+		data.lastAction = nowTime
 
 	setItemParent: (val) ->
 		{elem} = @_impl

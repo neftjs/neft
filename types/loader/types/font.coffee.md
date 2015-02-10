@@ -3,7 +3,7 @@ Renderer.Font.Loader
 
 ```
 Item {
-  Font.Loader {
+  Loader.Font {
   	name: 'myFont'
   	source: 'static/fonts/myFont.woff'
   }
@@ -60,7 +60,7 @@ Item {
 			@_data.name
 		, (val) ->
 			expect(val).toBe.truthy().string()
-			@_data.name = val
+			@_data.name = val.toLowerCase()
 
 *String* FontLoader::source
 ---------------------------

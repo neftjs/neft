@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'utils'
+signal = require 'signal'
 
 isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
@@ -8,6 +9,15 @@ module.exports = (impl) ->
 	{Item, Image} = impl.Types
 	implUtils = impl.utils
 	hatchery = impl._hatchery
+
+	impl.DEFAULT_FONTS =
+		__proto__: null
+		'sans': 'neft-sans-family'
+		'sans-serif': 'neft-sans-family-serif'
+		'monospace': 'neft-monospace-family'
+
+	textImpl = {}
+	signal.create textImpl, 'fontReady'
 
 	sizeUpdatePending = false
 
@@ -17,7 +27,7 @@ module.exports = (impl) ->
 		windowLoadQueue = []
 		pending = false
 
-		window.addEventListener 'load', ->
+		textImpl.onFontReady ->
 			while elem = windowLoadQueue.pop()
 				updateSize elem
 			return
@@ -53,20 +63,36 @@ module.exports = (impl) ->
 			if queueItems[item.__hash__]
 				return
 
-			queueItems[item.__hash__] = true
-
-			if document.readyState isnt 'complete'
+			if not isFontReady
 				windowLoadQueue.push item
-			else
-				queue.push item
+				return
+
+			queueItems[item.__hash__] = true
+			queue.push item
 
 			if item._data.height is 0
 				hatchery.appendChild item._impl.textElement
 
 			unless pending
 				setImmediate updateAll
-				requestAnimationFrame updateAllAndClean
+				setTimeout updateAllAndClean, 100
 				pending = true
+
+	reloadFontFamilyQueue = []
+	isFontReady = false
+	window.addEventListener 'load', ->
+		setTimeout ->
+			isFontReady = true
+
+			while elem = reloadFontFamilyQueue.pop()
+				elem.style.fontFamily = elem.style.fontFamily
+
+			styles = document.createElement 'style'
+			styles.innerHTML = SHEET
+			document.body.appendChild styles
+
+			textImpl.fontReady()
+		, 500
 
 	updateContent = do ->
 		queue = []
@@ -121,20 +147,16 @@ module.exports = (impl) ->
 			if auto
 				updateSize @
 
-	SHEET = "
+	SHEET = """
 		.text {
 			width: auto;
 			height: auto;
 			white-space: pre;
 			font-size: 14px;
-			font-family: sans-serif;
+			font-family: #{impl.DEFAULT_FONTS['sans-serif']}, sans-serif;
 			margin-top: #{if isFirefox then 1 else 0}px;
 		}
-	"
-	window.addEventListener 'load', ->
-		styles = document.createElement 'style'
-		styles.innerHTML = SHEET
-		document.body.appendChild styles
+	"""
 
 	DATA =
 		autoWidth: true
@@ -177,6 +199,13 @@ module.exports = (impl) ->
 		updateSize @
 
 	setTextFontFamily: (val) ->
+		unless isFontReady
+			reloadFontFamilyQueue.push @_impl.textElement
+
+		if impl.DEFAULT_FONTS[val]
+			val = "#{impl.DEFAULT_FONTS[val]}, #{val}"
+		else
+			val = "'#{val}'"
 		@_impl.textElement.style.fontFamily = val
 		updateSize @
 
