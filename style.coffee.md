@@ -82,6 +82,9 @@
 			for child in @children
 				child.render()
 
+			unless @item
+				return
+
 			if 'text' of @item
 				@updateText()
 
@@ -147,6 +150,9 @@
 			@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked')
 
 		reloadItem: ->
+			unless utils.isClient
+				return
+
 			if @item and @isAutoParent
 				@item.parent = null
 				if @isAnchorListening

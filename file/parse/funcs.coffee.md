@@ -24,7 +24,7 @@ Text {
 <span neft:style="styles.button" neft:style:onPointerClicked="increment">0</span>
 ```
 
-Functions are scoping in `neft:unit`s, so you can easily use other functions declarated
+Functions are scoping in `neft:fragment`s, so you can easily use other functions declarated
 in the same file.
 
 ```view,example

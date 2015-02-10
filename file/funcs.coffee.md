@@ -18,7 +18,7 @@ neft:func @js
 
 	module.exports = (File) ->
 
-		{Input, Unit} = File
+		{Input, Fragment} = File
 
 ReadOnly *Object* globalObject
 ------------------------------
@@ -79,7 +79,7 @@ Object corresponding to the arguments passed to a function.
 *View* globalObject.view
 ------------------------
 
-Global attribute which references to the current *XML* element `view` unit.
+Global attribute which references to the current *XML* element `view` fragment.
 
 This is *low-level API*.
 
@@ -174,7 +174,7 @@ Just a shortcut for `get('data')`.
 			parseFuncsFromAssembled file
 			null
 
-		Unit.fromAssembled = do (_super = Unit.fromAssembled) -> (file) ->
+		Fragment.fromAssembled = do (_super = Fragment.fromAssembled) -> (file) ->
 			_super? file
 			parseFuncsFromAssembled file
 			null
@@ -182,24 +182,24 @@ Just a shortcut for `get('data')`.
 		File::funcs = null
 
 		if utils.isNode
-			linkUnits = (funcs, target) ->
+			linkFragments = (funcs, target) ->
 				for name, func of funcs
-					for _, unitName of target.units
-						unit = File._files[unitName]
-						unless unit
+					for _, fragmentName of target.fragments
+						fragment = File._files[fragmentName]
+						unless fragment
 							continue
 
-						unitFuncs = unit.funcs
+						fragmentFuncs = fragment.funcs
 
 						# don't override funcs
-						if unitFuncs.hasOwnProperty name
+						if fragmentFuncs.hasOwnProperty name
 							continue
 
 						# save function
-						unitFuncs[name] = func
+						fragmentFuncs[name] = func
 
 						# safe function recursively
-						linkUnits funcs, unit
+						linkFragments funcs, fragment
 
 				null
 
@@ -208,8 +208,8 @@ Just a shortcut for `get('data')`.
 				(file) ->
 					funcs file
 
-					# link local funcs into units
-					linkUnits file.funcs, file
+					# link local funcs into fragments
+					linkFragments file.funcs, file
 
 		File::clone = do (_super = File::clone) -> ->
 			clone = _super.call @

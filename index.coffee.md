@@ -49,15 +49,15 @@ Row {
 ```
 
 ```view,example
-<neft:unit name="information" neft:style="PlaceInformation">
+<neft:fragment name="information" neft:style="PlaceInformation">
   <name neft:style="name">#{name}</name>
   <value neft:style="value">#{value}</value>
-</neft:unit>
+</neft:fragment>
 
 <city neft:style="Place">
   <name neft:style="heading">Paris</name>
   <informations neft:style="stats">
-    <neft:use:information name="population" value="2,234,105" />
+    <neft:use neft:fragment="information" name="population" value="2,234,105" />
   </informations>
 </city>
 ```
