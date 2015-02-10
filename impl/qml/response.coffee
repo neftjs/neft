@@ -4,9 +4,9 @@
 utils = require 'utils'
 Renderer = require 'renderer'
 
-log = log.scope 'Routing'
+log = log.scope 'Networking'
 
-module.exports = (Routing) ->
+module.exports = (Networking) ->
 
 	showAsJson = (data) ->
 		if not webview? or not utils.isPlainObject(data)
@@ -29,7 +29,7 @@ module.exports = (Routing) ->
 		true
 
 	showAsResponseError = (data) ->
-		unless data instanceof Routing.Response.Error
+		unless data instanceof Networking.Response.Error
 			return false
 
 		webview.loadHtml "<h1>Error #{data.status}</h1>" +

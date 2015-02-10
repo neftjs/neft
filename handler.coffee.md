@@ -1,5 +1,5 @@
-Routing.Handler
-===============
+Networking.Handler
+==================
 
 	'use strict'
 
@@ -10,8 +10,8 @@ Routing.Handler
 
 	{parse, stringify} = JSON
 
-	assert = assert.scope 'Routing.Handler'
-	log = log.scope 'Routing', 'Handler'
+	assert = assert.scope 'Networking.Handler'
+	log = log.scope 'Networking', 'Handler'
 
 *UriNotValidError* Handler.UriNotValidError : *Error*
 -----------------------------------------------------
@@ -37,20 +37,20 @@ Routing.Handler
 
 Abstract class used to describe routing handler.
 
-You should use `Routing::createHandler()` to create full handler.
+You should use `Networking::createHandler()` to create full handler.
 
 *options* specifies `Handler::method`, `Handler::uri`,
 `Handler::schema` and `Handler::callback`.
 
-	module.exports = (Routing) -> class Handler
+	module.exports = (Networking) -> class Handler
 
 		@UriNotValidError = UriNotValidError
 		@CallbackError = CallbackError
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ...'
-			assert.ok utils.has(Routing.Request.METHODS, opts.method), 'ctor options.method argument ...'
-			assert.instanceOf opts.uri, Routing.Uri, 'ctor options.uri argument ...'
+			assert.ok utils.has(Networking.Request.METHODS, opts.method), 'ctor options.method argument ...'
+			assert.instanceOf opts.uri, Networking.Uri, 'ctor options.uri argument ...'
 			assert.instanceOf opts.schema, Schema, 'ctor options.schema argument ...' if opts.schema?
 			assert.isFunction opts.callback, 'ctor options.callback argument ...'
 
@@ -61,8 +61,8 @@ You should use `Routing::createHandler()` to create full handler.
 
 		method: ''
 
-*Routing.Uri* Handler::uri
---------------------------
+*Networking.Uri* Handler::uri
+-----------------------------
 
 		uri: null
 
@@ -76,12 +76,12 @@ You should use `Routing::createHandler()` to create full handler.
 
 		callback: null
 
-Handler::exec(*Routing.Request* request, *Routing.Response* response, *Function* next)
---------------------------------------------------------------------------------------
+Handler::exec(*Networking.Request* request, *Networking.Response* response, *Function* next)
+--------------------------------------------------------------------------------------------
 
 		exec: (req, res, next) ->
-			assert.instanceOf req, Routing.Request, '::exec request argument ...'
-			assert.instanceOf res, Routing.Response, '::exec response argument ...'
+			assert.instanceOf req, Networking.Request, '::exec request argument ...'
+			assert.instanceOf res, Networking.Response, '::exec response argument ...'
 			assert.isFunction next, '::exec next argument ...'
 
 			# compare methods

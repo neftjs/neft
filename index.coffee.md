@@ -1,5 +1,5 @@
-Routing
-=======
+Networking
+==========
 
 Use this module to handle requests and responses (e.g. by the HTTP protocol or just
 locally to handle different URIs).
@@ -10,28 +10,40 @@ locally to handle different URIs).
 	assert = require 'assert'
 	log = require 'log'
 
-	assert = assert.scope 'Routing'
-	log = log.scope 'Routing'
+	assert = assert.scope 'Networking'
+	log = log.scope 'Networking'
 
-*Routing* Routing(*Object* options)
------------------------------------
+	module.exports = class Networking
 
-Creates new *Routing* instance.
+		Impl = require('./impl') Networking
 
-*options* specifies `Routing::protocol`, `Routing::port`,
-`Routing::host` and `Rotuing::language`.
+		@Uri = require('./uri.coffee.md') Networking
+		@Handler = require('./handler.coffee.md') Networking
+		@Request = require('./request.coffee.md') Networking, Impl.Request
+		@Response = require('./response.coffee.md') Networking, Impl.Response
 
-	module.exports = class Routing
+*Array* Networking.TYPES
+------------------------
 
-		Impl = require('./impl') Routing
+Contains:
+ - Networking.HTTP
 
-		@Uri = require('./uri.coffee.md') Routing
-		@Handler = require('./handler.coffee.md') Routing
-		@Request = require('./request.coffee.md') Routing, Impl.Request
-		@Response = require('./response.coffee.md') Routing, Impl.Response
+		@TYPES = [
+			(@HTTP = 'http')
+		]
+
+*Networking* Networking(*Object* options)
+-----------------------------------------
+
+Creates new *Networking* instance.
+
+*options* specifies `Networking::type`, `Networking::protocol`,
+`Networking::port`, `Networking::host` and `Rotuing::language`.
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ....'
+			assert.isString opts.type, 'ctor options.type argument ...'
+			assert.ok utils.has(Networking.TYPES, opts.type)
 			assert.isString opts.protocol, 'ctor options.protocol argument ...'
 			assert.notLengthOf opts.protocol, 0, 'ctor options.protocol argument ...'
 			assert.isInteger opts.port, 'ctor options.port argument ...'
@@ -41,7 +53,7 @@ Creates new *Routing* instance.
 			assert.notLengthOf opts.language, 0, 'ctor options.language argument ...'
 
 			utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
-			{@protocol, @port, @host, @language} = opts
+			{@type, @protocol, @port, @host, @language} = opts
 
 			url = "#{@protocol}://#{@host}:#{@port}/"
 			utils.defineProperty @, 'url', utils.ENUMERABLE, url
@@ -51,41 +63,46 @@ Creates new *Routing* instance.
 
 			Object.freeze @
 
-ReadOnly *String* Routing::protocol
------------------------------------
+ReadOnly *String* Networking::type
+----------------------------------
+
+		type: @HTTP
+
+ReadOnly *String* Networking::protocol
+--------------------------------------
 
 		protocol: 'http'
 
-ReadOnly *Integer* Routing::port
---------------------------------
+ReadOnly *Integer* Networking::port
+-----------------------------------
 
 		port: 0
 
-ReadOnly *String* Routing::host
--------------------------------
+ReadOnly *String* Networking::host
+----------------------------------
 
 		host: ''
 
-ReadOnly *String* Routing::language
------------------------------------
+ReadOnly *String* Networking::language
+--------------------------------------
 
 		language: ''
 
-ReadOnly *String* Routing::url
-------------------------------
+ReadOnly *String* Networking::url
+---------------------------------
 
 Proper URL path contains protocol, port and host.
 
 		url: ''
 
-*Routing.Handler* Routing::createHandler(*Object* options)
-----------------------------------------------------------
+*Networking.Handler* Networking::createHandler(*Object* options)
+----------------------------------------------------------------
 
-Creates new *Routing.Handler* used to handle requests.
+Creates new *Networking.Handler* used to handle requests.
 
 ```
-app.routing.createHandler({
-  method: Routing.Request.GET,
+app.httpNetworking.createHandler({
+  method: Networking.Request.GET,
   uri: 'users/{name}',
   schema: new Schema({
     name: {
@@ -94,18 +111,18 @@ app.routing.createHandler({
     },
   }),
   callback: function(req, res, next){
-    res.raise(new Routing.Response.Error(Routing.Response.NOT_IMPLEMENTED));
+    res.raise(new Networking.Response.Error(Networking.Response.NOT_IMPLEMENTED));
   }
 });
 ```
 
 		createHandler: (opts) ->
-			assert.instanceOf @, Routing
+			assert.instanceOf @, Networking
 			assert.isPlainObject opts, '::createHandler options argument ...'
 
-			uri = new Routing.Uri opts.uri
+			uri = new Networking.Uri opts.uri
 
-			handler = new Routing.Handler
+			handler = new Networking.Handler
 				method: opts.method
 				uri: uri
 				schema: opts.schema
@@ -118,17 +135,17 @@ app.routing.createHandler({
 
 			handler
 
-*Routing.Request* Routing::createRequest(*Object* options)
-----------------------------------------------------------
+*Networking.Request* Networking::createRequest(*Object* options)
+----------------------------------------------------------------
 
 Creates new local or server request.
 
-Given *options* object is used to create `Routing.Request`.
+Given *options* object is used to create `Networking.Request`.
 
 #### Local request
 
 ```
-app.routing.createRequest({
+app.httpNetworking.createRequest({
   uri: '/achievements/world_2',
   onLoaded: function(res){
     if (res.isSucceed()){
@@ -143,8 +160,8 @@ app.routing.createRequest({
 #### Request to the server
 
 ```
-app.routing.createRequest({
-  method: Routing.Request.POST,
+app.httpNetworking.createRequest({
+  method: Networking.Request.POST,
   uri: 'http://server.domain/comments',
   data: {message: 'Great article! Like it.'},
   onLoaded: function(res){
@@ -157,19 +174,19 @@ app.routing.createRequest({
 
 		EXTERNAL_URL_RE = ///^[a-zA-Z]+:\/\////
 		createRequest: (opts) ->
-			assert.instanceOf @, Routing
+			assert.instanceOf @, Networking
 			assert.isPlainObject opts, '::createRequest options argument ...'
 
 			logtime = log.time 'New request'
 
 			# create a request
-			req = new Routing.Request opts
+			req = new Networking.Request opts
 
 			req.onDestroyed ->
 				log.end logtime
 
 			# create a response
-			res = new Routing.Response request: req
+			res = new Networking.Response request: req
 
 			# get handlers
 			if EXTERNAL_URL_RE.test req.uri
@@ -185,7 +202,7 @@ app.routing.createRequest({
 				log "Resolve local `#{req}` request"
 
 				onError = ->
-					res.raise Routing.Response.Error.RequestResolve req
+					res.raise Networking.Response.Error.RequestResolve req
 
 				noHandlersError = ->
 					log.warn "No handler found"

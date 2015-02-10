@@ -1,5 +1,5 @@
-Routing.Response
-================
+Networking.Response
+===================
 
 	'use strict'
 
@@ -8,10 +8,10 @@ Routing.Response
 	log = require 'log'
 	signal = require 'signal'
 
-	assert = assert.scope 'Routing.Response'
-	log = log.scope 'Routing', 'Response'
+	assert = assert.scope 'Networking.Response'
+	log = log.scope 'Networking', 'Response'
 
-	module.exports = (Routing, Impl) -> class Response
+	module.exports = (Networking, Impl) -> class Response
 
 *Array* Response.STATUSES
 -------------------------
@@ -45,9 +45,9 @@ Contains:
  - Response.SERVICE_UNAVAILABLE
 
 ```
-console.log(Routing.Response.STATUSES);
-console.log(Routing.Response.OK);
-console.log(Routing.Response.BAD_REQUEST);
+console.log(Networking.Response.STATUSES);
+console.log(Networking.Response.OK);
+console.log(Networking.Response.BAD_REQUEST);
 ```
 
 		@STATUSES = [
@@ -83,7 +83,7 @@ console.log(Routing.Response.BAD_REQUEST);
 
 		]
 
-		@Error = require('./response/error.coffee.md') Routing, Response
+		@Error = require('./response/error.coffee.md') Networking, Response
 
 *Response* Response(*Object* options)
 -------------------------------------
@@ -94,7 +94,7 @@ It's created automatically and used to handle a request.
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ...'
-			assert.instanceOf opts.request, Routing.Request, 'ctor options.request argument ...'
+			assert.instanceOf opts.request, Networking.Request, 'ctor options.request argument ...'
 
 			if opts.status?
 				assert.ok utils.has(Response.STATUSES, opts.status), 'ctor options.status argument ...'
@@ -138,8 +138,8 @@ destroyed or sent and can't be modified.
 
 		pending: false
 
-ReadOnly *Routing.Request* Response::request
---------------------------------------------
+ReadOnly *Networking.Request* Response::request
+-----------------------------------------------
 
 Reference to the created `request`.
 
@@ -157,8 +157,8 @@ Use one of the constant values provided in the `Response.STATUSES`.
 It's equal `Response.OK` by default.
 
 ```
-res.status = Routing.Response.CREATED;
-res.status = Routing.Response.PAYMENT_REQUIRED;
+res.status = Networking.Response.CREATED;
+res.status = Networking.Response.PAYMENT_REQUIRED;
 ```
 
 		status: @OK
@@ -210,7 +210,7 @@ You can change response status and data, but only synchronously.
 This method automatically parses got data which is determined by the environment.
 
 ```
-res.send(Routing.Response.OK, {user: 'Max', age: 43});
+res.send(Networking.Response.OK, {user: 'Max', age: 43});
 
 res.onSent(function(){
   console.log("Response has been sent and it's not active");
@@ -257,8 +257,8 @@ Response::raise(*Response.Error* error)
 Finishes response as failed.
 
 ```
-res.raise(new Routing.Response.Error("Login first"));
-res.raise(new Routing.Response.Error(Routing.Response.UNAUTHORIZED, "Login first"));
+res.raise(new Networking.Response.Error("Login first"));
+res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login first"));
 ```
 
 		raise: (error) ->

@@ -7,19 +7,19 @@ expect = require 'expect'
 
 pending = {}
 
-module.exports = (Routing) ->
+module.exports = (Networking) ->
 
-	Request: require('./request') Routing, pending
-	Response: require('./response') Routing, pending
+	Request: require('./request') Networking, pending
+	Response: require('./response') Networking, pending
 
-	init: (routing) ->
-		expect(routing).toBe.any Routing
+	init: (networking) ->
+		expect(networking).toBe.any Networking
 
 		# create server
 		server = http.createServer()
 
 		# start listening
-		server.listen routing.port, routing.host
+		server.listen networking.port, networking.host
 
 		# on request
 		server.on 'request', (serverReq, serverRes) ->
@@ -27,18 +27,18 @@ module.exports = (Routing) ->
 
 			# save in the stack
 			obj = pending[uid] =
-				routing: routing
+				networking: networking
 				server: server
 				req: null
 				serverReq: serverReq
 				serverRes: serverRes
 
 			type = serverReq.headers['x-expected-type']
-			type ||= Routing.Request.VIEW_TYPE
+			type ||= Networking.Request.VIEW_TYPE
 
-			obj.req = routing.createRequest
+			obj.req = networking.createRequest
 				uid: uid
-				method: Routing.Request[serverReq.method]
+				method: Networking.Request[serverReq.method]
 				uri: serverReq.url
 				data: undefined
 				type: type
@@ -64,16 +64,16 @@ module.exports = (Routing) ->
 				data += chunk
 
 			res.on 'end', ->
-				status = nodeReq.statusCode
+				status = res.statusCode
 
-				if req.type is Routing.Request.OBJECT_TYPE
+				if req.type is Networking.Request.OBJECT_TYPE
 					parsedData = utils.tryFunction JSON.parse, null, [data], data
 					callback status, parsedData
 				else
 					callback status, data
 
 		nodeReq.on 'error', (e) ->
-			callback nodeReq.statusCode, e
+			callback 500, e
 
 		if req.data?
 			nodeReq.write req.data

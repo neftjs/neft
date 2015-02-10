@@ -1,5 +1,5 @@
-Routing.Request
-===============
+Networking.Request
+==================
 
 	'use strict'
 
@@ -7,9 +7,9 @@ Routing.Request
 	assert = require 'assert'
 	signal = require 'signal'
 
-	assert = assert.scope 'Routing.Request'
+	assert = assert.scope 'Networking.Request'
 
-	module.exports = (Routing, Impl) -> class Request
+	module.exports = (Networking, Impl) -> class Request
 
 *Array* Request.METHODS
 -----------------------
@@ -54,7 +54,7 @@ Contains:
 
 Abstract class used to describe routing request.
 
-You should use `Routing::createRequest()` to create a full request.
+You should use `Networking::createRequest()` to create a full request.
 
 *options* specifies `Request::method`, `Request::uri`, `Request::data`, `Request::type`
 and signal handlers.
@@ -94,22 +94,22 @@ and signal handlers.
 *Signal* Request::destroyed()
 -----------------------------
 
-**Signal** called by the `Routing.Response` when some data is ready to be send.
+**Signal** called by the `Networking.Response` when some data is ready to be send.
 
-This signal is called before the `Routing::loaded()` signal.
+This signal is called before the `Networking::loaded()` signal.
 
 You can listen on this signal using the `onDestroyed` handler.
 
 		signal.createLazy @::, 'destroyed'
 
-*Signal* Request::loaded(*Routing.Response* res)
+*Signal* Request::loaded(*Networking.Response* res)
 ------------------------------------------------
 
-**Signal** called by the `Routing.Response` when the final data is ready.
+**Signal** called by the `Networking.Response` when the final data is ready.
 
 When this signal is called, `Request` is already destroyed.
 
-Notice, that the failed `Routing.Response` also use this signal.
+Notice, that the failed `Networking.Response` also use this signal.
 You should always use `Request::isSucceed()` to check whether request succeeded.
 
 ```
@@ -134,7 +134,7 @@ ReadOnly *Boolean* Request::pending
 
 It's `true` if the request is active, `false` if the request has been destroyed.
 
-This property is changed by the `Routing.Response`.
+This property is changed by the `Networking.Response`.
 
 		pending: false
 
@@ -178,10 +178,10 @@ Data submitted in the request body. It can be for example, a form data.
 
 		data: null
 
-*Routing.Handler* Request::handler
+*Networking.Handler* Request::handler
 ----------------------------------
 
-The currently matched `Routing.Handler`.
+The currently matched `Networking.Handler`.
 
 		handler: null
 

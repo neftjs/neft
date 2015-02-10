@@ -1,21 +1,21 @@
-Routing.Response.Error
-======================
+Networking.Response.Error
+=========================
 
 	'use strict'
 
 	utils = require 'utils'
 	assert = require 'assert'
 
-	assert = assert.scope 'Routing.Response.Error'
+	assert = assert.scope 'Networking.Response.Error'
 
-	module.exports = (Routing, Response) -> class ResponseError extends Error
+	module.exports = (Networking, Response) -> class ResponseError extends Error
 
-		@RequestResolve = RequestResolve Routing, Response, ResponseError
+		@RequestResolve = RequestResolve Networking, Response, ResponseError
 
 *Error* Error(*Integer* status, *String* message)
 -------------------------------------------------
 
-This class is used in the `Routing.Response::raise()` method and describes an error.
+This class is used in the `Networking.Response::raise()` method and describes an error.
 
 It works as standard Javascript `Error` class, but provides extra `status` value.
 
@@ -37,16 +37,16 @@ It works as standard Javascript `Error` class, but provides extra `status` value
 		name: 'ResponseError'
 		message: ''
 
-*RequestResolve* Error.RequestResolve(*Routing.Request* request)
-----------------------------------------------------------------
+*RequestResolve* Error.RequestResolve(*Networking.Request* request)
+-------------------------------------------------------------------
 
 This error is send if the request can't be resolved, because no proper handler which can
 handle the request can be found.
 
-	RequestResolve = (Routing, Response, ResponseError) -> class RequestResolve extends ResponseError
+	RequestResolve = (Networking, Response, ResponseError) -> class RequestResolve extends ResponseError
 
 		constructor: (req) ->
-			assert.instanceOf req, Routing.Request, 'ctor request argument ...'
+			assert.instanceOf req, Networking.Request, 'ctor request argument ...'
 
 			return super "No handler can be found"
 

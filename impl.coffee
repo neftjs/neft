@@ -14,7 +14,7 @@ PlatformImpl = switch true
 		require './impl/qml/index'
 
 assert PlatformImpl
-, "No routing implementation found"
+, "No networking implementation found"
 
-module.exports = (Routing) ->
-	PlatformImpl Routing
+module.exports = (Networking) ->
+	PlatformImpl Networking

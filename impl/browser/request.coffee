@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (Routing) ->
+module.exports = (Networking) ->
 
 	getHeaders: ->
 

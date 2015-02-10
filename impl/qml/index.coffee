@@ -2,22 +2,22 @@
 
 utils = require 'utils'
 
-module.exports = (Routing) ->
-	Request: require('./request.coffee') Routing
-	Response: require('./response.coffee') Routing
+module.exports = (Networking) ->
+	Request: require('./request.coffee') Networking
+	Response: require('./response.coffee') Networking
 
-	init: (routing) ->
+	init: (networking) ->
 
 		setImmediate ->
 			# send internal request
-			res = routing.createRequest
-				method: Routing.Request.GET
+			res = networking.createRequest
+				method: Networking.Request.GET
 				uri: '/docs/log/null'
 				data: null
 
-	sendRequest: (routing, opts, callback) ->
+	sendRequest: (networking, opts, callback) ->
 
-		Request = Routing.Request
+		Request = Networking.Request
 
 		xhr = new XMLHttpRequest
 

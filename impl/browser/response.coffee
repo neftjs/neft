@@ -5,9 +5,9 @@ utils = require 'utils'
 View = require 'view'
 Renderer = require 'renderer'
 
-log = log.scope 'Routing'
+log = log.scope 'Networking'
 
-module.exports = (Routing) ->
+module.exports = (Networking) ->
 
 	showAsStyles = (data) ->
 		unless data instanceof View

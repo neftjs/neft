@@ -1,5 +1,5 @@
-Routing.Uri
-===========
+Networking.Uri
+==============
 
 	'use strict'
 
@@ -7,9 +7,9 @@ Routing.Uri
 	assert = require 'assert'
 	Dict = require 'dict'
 
-	assert = assert.scope 'Routing.Uri'
+	assert = assert.scope 'Networking.Uri'
 
-	module.exports = (Routing) -> class Uri
+	module.exports = (Networking) -> class Uri
 
 		@URI_TRIM_RE = ///^\/?(.*?)\/?$///
 		@NAMES_RE = ///{([a-zA-Z0-9_$]+)\*?}///g
@@ -55,7 +55,7 @@ Routing.Uri
 *Boolean* Uri::test(*String* uri)
 ---------------------------------
 
-Test whether `Routing.Uri` is valid with given *uri* string.
+Test whether `Networking.Uri` is valid with given *uri* string.
 
 		test: (uri) ->
 			@_re.test uri
@@ -87,7 +87,7 @@ It will be used to replace uri chunks (works like standard
 string `format()` but on the named parameters).
 
 ```
-var uri = new Routing.Uri('user/{name}');
+var uri = new Networking.Uri('user/{name}');
 console.log(uri.toString({name: 'Jane'}));
 // /user/Jane
 ```

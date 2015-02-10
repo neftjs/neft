@@ -6,18 +6,18 @@ path = require 'path'
 View = require 'view'
 expect = require 'expect'
 
-log = log.scope 'Routing'
+log = log.scope 'Networking'
 
 HEADERS =
-	'Host': (obj) -> "#{obj.routing.host}:#{obj.routing.port}"
+	'Host': (obj) -> "#{obj.networking.host}:#{obj.networking.port}"
 	'Cache-Control': 'no-cache'
-	'Content-Language': (obj) -> obj.routing.language
+	'Content-Language': (obj) -> obj.networking.language
 	'X-Frame-Options': 'deny'
 
 METHOD_HEADERS =
 	OPTIONS:
 		'Access-Control-Allow-Origin': (opts) ->
-			"#{opts.routing.protocol}://#{opts.routing.host}:#{opts.routing.port}"
+			"#{opts.networking.protocol}://#{opts.networking.host}:#{opts.networking.port}"
 		'Allow': 'GET, POST, PUT, DELETE'
 
 GZIP_ENCODING_HEADERS =
@@ -66,7 +66,8 @@ prepareData = (obj, data) ->
 
 	log "Data will be send as `#{type}`"
 
-	obj.serverRes.setHeader 'Content-Type', "#{type}; charset=utf-8"
+	unless obj.serverRes.getHeader 'Content-Type'
+		obj.serverRes.setHeader 'Content-Type', "#{type}; charset=utf-8"
 
 	log.end logtime
 
@@ -102,7 +103,7 @@ sendData = do ->
 			send obj, data
 			callback()
 
-module.exports = (Routing, pending) ->
+module.exports = (Networking, pending) ->
 	setHeader: (res, name, val) ->
 		# get config obj
 		obj = pending[res.request.uid]

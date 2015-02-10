@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = (Routing, pending) ->
+module.exports = (Networking, pending) ->
 
 	getHeaders: (req) ->
 		pending[req.uid]?.serverReq.headers

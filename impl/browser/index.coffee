@@ -2,20 +2,20 @@
 
 utils = require 'utils'
 
-module.exports = (Routing) ->
-	Request: require('./request.coffee') Routing
-	Response: require('./response.coffee') Routing
+module.exports = (Networking) ->
+	Request: require('./request.coffee') Networking
+	Response: require('./response.coffee') Networking
 
-	init: (routing) ->
+	init: (networking) ->
 		# Send internal request to change the page based on the URI
 		changePage = (uri) =>
 			# send internal request
 			uid = utils.uid()
 
-			res = routing.createRequest
+			res = networking.createRequest
 				uid: uid
-				method: Routing.Request.GET
-				type: Routing.Request.VIEW_TYPE
+				method: Networking.Request.GET
+				type: Networking.Request.VIEW_TYPE
 				uri: uri
 				data: null
 
@@ -46,7 +46,7 @@ module.exports = (Routing) ->
 	###
 	sendRequest: (req, callback) ->
 
-		{Request} = Routing
+		{Request} = Networking
 
 		xhr = new XMLHttpRequest
 
