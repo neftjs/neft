@@ -5,7 +5,7 @@ utils = require 'utils'
 log = require 'log'
 
 View = require 'view'
-Routing = require 'routing'
+Networking = require 'networking'
 
 {assert} = console
 log = log.scope 'Template'
@@ -68,19 +68,7 @@ module.exports = (App) -> class AppTemplate
 		assert val and typeof val is 'string'
 		, "App.Template targetElem must be a name of the view element (string); `#{val}` given"
 
-		firstIndex = null
-		elemPlaces = ctx.view?.view.uses?.filter (elem, i) ->
-			if elem.name is val
-				firstIndex ?= i
-				true
-		assert elemPlaces
-		, "App.Template `#{ctx.view.view.path}` view doesn't have any `#{val}` elem"
-
-		if elemPlaces.length > 1
-			log.info "`#{ctx.view.view.path}` view has more than one `#{val}` uses;\n" +
-			         "only the first one will be used in the template"
-
-		ctx.targetElem = firstIndex
+		ctx.targetElem = val
 
 	storage: null
 
@@ -93,13 +81,20 @@ module.exports = (App) -> class AppTemplate
 
 	_render: (req) ->
 		expect(@).toBe.any App.Template
-		expect(req).toBe.any Routing.Request
+		expect(req).toBe.any Networking.Request
 
 		view = @view.render req, data: @storage
 
 		view
 
 	_renderTarget: (view, target) ->
-		elem = view.uses[@targetElem]
-		elem.usedUnit = null # avoid destroying target, it's AppRoute job
+		for use in view.uses
+			if use.name is @targetElem
+				elem = use
+				break
+
+		assert elem
+		, "App.Template `#{@view.view.path}` view doesn't have any `#{@targetElem}` use"
+
+		elem.usedFragment = null # avoid destroying target, it's AppRoute job
 		elem.render target

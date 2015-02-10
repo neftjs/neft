@@ -4,7 +4,7 @@ utils = require 'utils'
 expect = require 'expect'
 log = require 'log'
 
-Routing = require 'routing'
+Networking = require 'networking'
 Schema = require 'schema'
 View = require 'view'
 
@@ -14,7 +14,7 @@ log = log.scope 'Route'
 CONFIG_KEYS = [] # filled by the class properties
 HANDLERS = ['rest', 'view']
 
-module.exports = (App) -> class AppRoute
+module.exports = (app) -> class AppRoute
 
 	###
 	Get function based on its path from the App namespace.
@@ -33,15 +33,15 @@ module.exports = (App) -> class AppRoute
 		expect(type).toBe.string()
 		expect(containerName).toBe.truthy().string()
 
-		container = utils.get App, containerName
+		container = utils.get app, containerName
 
 		if typeof val is 'string'
 			[name, method] = val.split '.'
 			assert container[name]
-			, "`#{name}` #{type} doesn't exists; `App.#{containerName}.#{name}` is not provided"
+			, "`#{name}` #{type} doesn't exists; `app.#{containerName}.#{name}` is not provided"
 
 			assert typeof container[name][method] is 'function'
-			, "`App.#{containerName}.#{name}.#{method}` #{type} method is not a function"
+			, "`app.#{containerName}.#{name}.#{method}` #{type} method is not a function"
 
 			container[name][method]
 		else
@@ -67,7 +67,7 @@ module.exports = (App) -> class AppRoute
 		assert do ->
 			optsKeys = utils.merge Object.keys(opts), CONFIG_KEYS
 			utils.isEqual(CONFIG_KEYS, optsKeys)
-		, "Unprovided config key has been passed into `App.Route`:\n" +
+		, "Unprovided config key has been passed into `app.Route`:\n" +
 		  "#{JSON.stringify opts, null, 4}"
 
 		# uri
@@ -105,8 +105,8 @@ module.exports = (App) -> class AppRoute
 		if opts.callback?
 			setCallback @, opts.callback
 
-		# register route in routing
-		App.routing.createHandler
+		# register route in networking
+		app.httpNetworking.createHandler
 			method: @method
 			uri: @uri
 			schema: @schema
@@ -115,15 +115,15 @@ module.exports = (App) -> class AppRoute
 		# set object as immutable
 		Object.freeze @
 
-	method: Routing.Request.GET
+	method: Networking.Request.GET
 
 	CONFIG_KEYS.push 'method'
 
 	setMethod = (ctx, val) ->
 		expect(ctx).toBe.any AppRoute
 
-		assert utils.has(Routing.Request.METHODS, val)
-		, "Routing doesn't provide a `#{val}` method"
+		assert utils.has(Networking.Request.METHODS, val)
+		, "Networking doesn't provide a `#{val}` method"
 
 		ctx.method = val
 
@@ -135,7 +135,7 @@ module.exports = (App) -> class AppRoute
 		expect(ctx).toBe.any AppRoute
 
 		assert val and typeof val is 'string'
-		, "App.Route requires non-empty `uri` string; `#{val}` given"
+		, "app.Route requires non-empty `uri` string; `#{val}` given"
 
 		ctx.uri = val
 
@@ -150,7 +150,7 @@ module.exports = (App) -> class AppRoute
 			ctx.schema = new Schema val
 		else
 			assert val instanceof Schema
-			, "App.Route expects instance of Schema as schema; `#{val}` given"
+			, "app.Route expects instance of Schema as schema; `#{val}` given"
 
 			ctx.schema = val
 
@@ -226,13 +226,13 @@ module.exports = (App) -> class AppRoute
 		expect(ctx).toBe.any AppRoute
 
 		if typeof val is 'string'
-			view = App.views[val]
+			view = app.views[val]
 
 			assert view
 			, "`#{val}` view file can't be found"
 		else
-			assert val instanceof App.View
-			, "`#{ctx.uri}` route view is not a App.View instance; `#{val}` given"
+			assert val instanceof app.View
+			, "`#{ctx.uri}` route view is not a app.View instance; `#{val}` given"
 
 			view = val
 
@@ -246,7 +246,7 @@ module.exports = (App) -> class AppRoute
 		expect(ctx).toBe.any AppRoute
 
 		if typeof val is 'string'
-			template = App.templates[val]
+			template = app.templates[val]
 
 			assert template
 			, "`#{val}` template file can't be found; " +
@@ -255,8 +255,8 @@ module.exports = (App) -> class AppRoute
 		else
 			template = val
 
-		assert template instanceof App.Template
-		, "`#{ctx.uri}` route template is not an App.Template; `#{val}` given"
+		assert template instanceof app.Template
+		, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
 
 		ctx.template = template
 
@@ -278,8 +278,8 @@ module.exports = (App) -> class AppRoute
 
 	_onRequest: (req, res, next) =>
 		expect(@).toBe.any AppRoute
-		expect(req).toBe.any Routing.Request
-		expect(res).toBe.any Routing.Response
+		expect(req).toBe.any Networking.Request
+		expect(res).toBe.any Networking.Response
 		expect(next).toBe.function()
 
 		result = null
@@ -373,7 +373,7 @@ module.exports = (App) -> class AppRoute
 
 	_callController: (req, callback) ->
 		expect(@).toBe.any AppRoute
-		expect(req).toBe.any Routing.Request
+		expect(req).toBe.any Networking.Request
 		expect(callback).toBe.function()
 
 		assert @controller
@@ -399,22 +399,18 @@ module.exports = (App) -> class AppRoute
 
 	_renderView: (req, res, data, callback) ->
 		expect(@).toBe.any AppRoute
-		expect(req).toBe.any Routing.Request
-		expect(res).toBe.any Routing.Response
+		expect(req).toBe.any Networking.Request
+		expect(res).toBe.any Networking.Response
 		expect(callback).toBe.function()
 
-		# destroy views
-		view = renderView @, req, res, data
-
-		callback null, view
+		renderView @, req, res, data, callback
 
 	renderView = do ->
-
 		if utils.isNode
-			(ctx, req, res, data) ->
+			(ctx, req, res, data, callback) ->
 				expect(ctx).toBe.any AppRoute
-				expect(req).toBe.any Routing.Request
-				expect(res).toBe.any Routing.Response
+				expect(req).toBe.any Networking.Request
+				expect(res).toBe.any Networking.Response
 
 				view = ctx.view.render req, data: data
 
@@ -427,16 +423,16 @@ module.exports = (App) -> class AppRoute
 				res.onSent ->
 					masterView.destroy()
 
-				masterView
+				callback null, masterView
 		else
 			currentTemplate = null
 			currentTemplateView = null
 			lastView = null
 
-			(ctx, req, res, data) ->
+			(ctx, req, res, data, callback) ->
 				expect(ctx).toBe.any AppRoute
-				expect(req).toBe.any Routing.Request
-				expect(res).toBe.any Routing.Response
+				expect(req).toBe.any Networking.Request
+				expect(res).toBe.any Networking.Response
 
 				if currentTemplate isnt ctx.template
 					currentTemplateView?.destroy()
@@ -448,7 +444,9 @@ module.exports = (App) -> class AppRoute
 						currentTemplateView = ctx.template._render req
 
 				lastView?.destroy()
-				lastView = ctx.view.render req, data: data
-				currentTemplate?._renderTarget currentTemplateView, lastView
 
-				currentTemplateView or lastView
+				setImmediate ->
+					lastView = ctx.view.render req, data: data
+					currentTemplate?._renderTarget currentTemplateView, lastView
+
+					callback null, currentTemplateView or lastView

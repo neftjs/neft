@@ -7,7 +7,7 @@ log = require 'log'
 
 Dict = require 'dict'
 View = require 'view'
-Routing = require 'routing'
+Networking = require 'networking'
 
 log = log.scope 'App', 'View'
 
@@ -21,7 +21,7 @@ module.exports = (app) -> class AppView
 	view: null
 
 	render: (req, storage) ->
-		expect(req).toBe.any Routing.Request
+		expect(req).toBe.any Networking.Request
 		expect().defined(storage).toBe.object()
 
 		view = @view.clone()
@@ -65,10 +65,10 @@ module.exports = (app) -> class AppView
 					log.info "Changed `uri` won't be proceeded due to new request"
 					return
 
-				app.routing.createRequest
-					method: Routing.Request.GET
-					type: Routing.Request.VIEW_TYPE
-					url: req.handler.uri.toString dict
+				app.httpNetworking.createRequest
+					method: Networking.Request.GET
+					type: Networking.Request.VIEW_TYPE
+					uri: req.handler.uri.toString dict
 
 		dict.onChanged onDictChanged
 
@@ -92,12 +92,12 @@ module.exports = (app) -> class AppView
 			if params
 				req.handler.uri.toString params
 			else
-				req.url
+				req.uri
 
 		-> dict
 
 	, (val) ->
-		app.routing.createRequest
-			method: Routing.Request.GET
-			type: Routing.Request.VIEW_TYPE
-			url: val
+		app.httpNetworking.createRequest
+			method: Networking.Request.GET
+			type: Networking.Request.VIEW_TYPE
+			uri: val

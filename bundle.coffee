@@ -26,9 +26,9 @@ createBundle = (opts, callback) ->
 
 stack = new utils.async.Stack
 
-# createBundle type: 'node', release: true
-# stack.add createBundle, null, [type: 'node', release: false]
-# createBundle type: 'browser', release: true
+# stack.add createBundle, null, [type: 'node', release: true]
+stack.add createBundle, null, [type: 'node', release: false]
+# stack.add createBundle, null, [type: 'browser', release: true]
 stack.add createBundle, null, [type: 'browser', release: false]
 # createBundle type: 'qml', release: true
 # createBundle type: 'qml', release: false

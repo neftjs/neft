@@ -3,7 +3,7 @@
 utils = require 'utils'
 log = require 'log'
 Schema = require 'schema'
-Routing = require 'routing'
+Networking = require 'networking'
 View = require 'view'
 Renderer = require 'renderer'
 Db = require 'db'
@@ -47,9 +47,10 @@ exports = module.exports = (opts={}) ->
 	if opts.config
 		config = utils.merge utils.clone(config), opts.config
 
-	App = Object.preventExtensions
+	App =
 		config: config
-		routing: new Routing
+		httpNetworking: new Networking
+			type: Networking.HTTP
 			protocol: config.protocol
 			port: config.port
 			host: config.host
@@ -64,6 +65,8 @@ exports = module.exports = (opts={}) ->
 		views: opts.views or {}
 		templates: opts.templates or {}
 
+	Object.seal App
+
 	App.Route = AppRoute App
 	App.Template = AppTemplate App
 	App.View = AppView App
@@ -74,7 +77,7 @@ exports = module.exports = (opts={}) ->
 		styles[name] = style styles
 
 	# set styles window item
-	windowStyle = opts.styles?.Window?.withStructure()
+	windowStyle = opts.styles?.window?.withStructure()
 	windowStyle ?=
 		mainItem: new Renderer.Item
 		ids: {}
@@ -109,6 +112,6 @@ exports = module.exports = (opts={}) ->
 
 # link module
 MODULES = ['assert', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
-           'log', 'renderer', 'routing', 'schema', 'signal', 'utils', 'view', 'styles']
+           'log', 'renderer', 'networking', 'schema', 'signal', 'utils', 'view', 'styles']
 for name in MODULES
 	exports[name] = require name

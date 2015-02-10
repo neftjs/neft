@@ -19,7 +19,7 @@
 		"db-implementation": "git+ssh://git@bitbucket.org:Kildyt/db-implementation.git",
 		"db-addons": "git+ssh://git@bitbucket.org:Kildyt/db-addons.git",
 		"db-schema": "git+ssh://git@bitbucket.org:Kildyt/db-schema.git",
-		"routing": "git+ssh://git@bitbucket.org:Kildyt/routing.git",
+		"networking": "git+ssh://git@bitbucket.org:Kildyt/networking.git",
 		"view": "git+ssh://git@bitbucket.org:Kildyt/view.git",
 		"styles": "git+ssh://git@bitbucket.org:Kildyt/styles.git",
 		"view-styles": "git+ssh://git@bitbucket.org:Kildyt/view-styles.git"
