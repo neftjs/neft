@@ -25,15 +25,15 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		super self, node
 
-		# create unit
-		unit = new File.Unit self, @name, @bodyNode
-		unit.parse()
-		@unit = unit.id
+		# create fragment
+		fragment = new File.Fragment self, @name, @bodyNode
+		fragment.parse()
+		@fragment = fragment.id
 		@bodyNode.parent = undefined
 
-	unit: ''
+	fragment: ''
 	storage: null
-	usedUnits: null
+	usedFragments: null
 	data: null
 
 	render: ->
@@ -88,7 +88,7 @@ module.exports = (File) -> class Iterator extends File.Use
 	clearData: ->
 		assert.isObject @data
 
-		while length = @usedUnits.length
+		while length = @usedFragments.length
 			@popItem length - 1
 
 		@
@@ -114,8 +114,8 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		{data} = @
 
-		usedUnit = File.factory @unit
-		@usedUnits.splice i, 0, usedUnit
+		usedFragment = File.factory @fragment
+		@usedFragments.splice i, 0, usedFragment
 
 		if data instanceof List
 			each = data.items()
@@ -124,20 +124,20 @@ module.exports = (File) -> class Iterator extends File.Use
 			each = data
 			item = data[i]
 
-		# render unit with storage
-		storage = usedUnit.storage = Object.create @self.storage or null
+		# render fragment with storage
+		storage = usedFragment.storage = Object.create @self.storage or null
 		storage.each = each
 		storage.i = i
 		storage.item = item
-		usedUnit.render @
+		usedFragment.render @
 
 		# replace
-		newChild = usedUnit.node
+		newChild = usedFragment.node
 		newChild.parent = @node
 		newChild.index = i
 
 		# signal
-		usedUnit.replacedByUse @
+		usedFragment.replacedByUse @
 
 		@
 
@@ -150,9 +150,9 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@node.children[i].parent = undefined
 
-		usedUnit = @usedUnits[i]
-		usedUnit.revert().destroy()
-		@usedUnits.splice i, 1
+		usedFragment = @usedFragments[i]
+		usedFragment.revert().destroy()
+		@usedFragments.splice i, 1
 
 		@
 
@@ -169,7 +169,7 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		clone.storage = utils.cloneDeep @storage
 		clone.array = null
-		clone.usedUnits = []
+		clone.usedFragments = []
 
 		clone.updateItem = (arg1, arg2) => @updateItem.call clone, arg1, arg2
 		clone.insertItem = (arg1, arg2) => @insertItem.call clone, arg1, arg2

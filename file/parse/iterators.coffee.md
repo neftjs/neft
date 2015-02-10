@@ -33,7 +33,7 @@ feel free to append and remove elements from the list. *Iterator body* will be s
 
 #### See also
 
-- `neft:unit`
+- `neft:fragment`
 - `neft:use`
 - `Attributes evaluating`
 - `String Interpolation`

@@ -1,7 +1,7 @@
-View
-====
+Document Modeling
+=================
 
-@desc How to represent data?
+**How to represent data?**
 
 #### Introduction
 

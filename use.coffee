@@ -25,7 +25,7 @@ module.exports = (File) -> class Use
 	self: null
 	node: null
 	bodyNode: null
-	usedUnit: null
+	usedFragment: null
 	isRendered: false
 
 	render: (file) ->
@@ -36,35 +36,35 @@ module.exports = (File) -> class Use
 		if @isRendered
 			@revert()
 
-		unit = @self.units[@name]
-		if not file and not unit
-			log.warn "Can't find `#{@name}` neft:unit"
+		fragment = @self.fragments[@name]
+		if not file and not fragment
+			log.warn "Can't find `#{@name}` neft:fragment"
 			return
 
-		usedUnit = @usedUnit = file or File.factory(unit)
+		usedFragment = @usedFragment = file or File.factory(fragment)
 		unless file
-			usedUnit.storage = @self.storage
+			usedFragment.storage = @self.storage
 
-		unless usedUnit.isRendered
-			usedUnit.render @
+		unless usedFragment.isRendered
+			usedFragment.render @
 
-		usedUnit.node.parent = @node
+		usedFragment.node.parent = @node
 
 		# signal
-		usedUnit.parentUse = @
-		usedUnit.replacedByUse @
+		usedFragment.parentUse = @
+		usedFragment.replacedByUse @
 
 		@isRendered = true
 
 	revert: ->
 		return unless @isRendered
 
-		# destroy used unit
-		if @usedUnit
-			@usedUnit.node.parent = undefined
-			@usedUnit.revert().destroy()
-			@usedUnit.parentUse = null
-			@usedUnit = null
+		# destroy used fragment
+		if @usedFragment
+			@usedFragment.node.parent = undefined
+			@usedFragment.revert().destroy()
+			@usedFragment.parentUse = null
+			@usedFragment = null
 
 		@isRendered = false
 
@@ -76,8 +76,8 @@ module.exports = (File) -> class Use
 			@render()
 
 	attrChangedListener = (e) ->
-		if e.name is 'neft:unit'
-			@name = @node.attrs.get 'neft:unit'
+		if e.name is 'neft:fragment'
+			@name = @node.attrs.get 'neft:fragment'
 
 			if @isRendered
 				@revert()
@@ -92,14 +92,14 @@ module.exports = (File) -> class Use
 		clone.bodyNode = clone.node.children[0]
 		clone.render = (arg1) => @render.call clone, arg1
 		clone.revert = => @revert.call clone
-		clone.usedUnit = null
+		clone.usedFragment = null
 		clone.isRendered = false
 
 		clone.node.onVisibilityChanged visibilityChangedListener, clone
 
 		# name
 		if clone.name is ''
-			clone.name = clone.node.attrs.get 'neft:unit'
+			clone.name = clone.node.attrs.get 'neft:fragment'
 			clone.node.onAttrChanged attrChangedListener, clone
 
 		clone

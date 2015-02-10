@@ -1,9 +1,9 @@
 neft:require @xml
 =================
 
-Special XML tag used to include units from other local files.
+Special XML tag used to include fragments from other local files.
 
-All units (`neft:unit` tags) from the file defined by the `href`
+All fragments (`neft:fragment` tags) from the file defined by the `href`
 are available in file where this tag has been used.
 
 `href` is a local path relative to the file when it's used.
@@ -11,7 +11,7 @@ are available in file where this tag has been used.
 ```
 <neft:require href="./user_utils.html" />
 
-<neft:use unit="avatar" />
+<neft:use neft:fragment="avatar" />
 ```
 
 #### Namespaces
@@ -19,17 +19,17 @@ are available in file where this tag has been used.
 For better organizations, you can include external files into the namespaces.
 
 Just specify an `as` attribute.
-To each included unit, this alias will be prefixed in schema as below.
+To each included fragment, this alias will be prefixed in schema as below.
 
 ```
 <neft:require href="./user_utils.html" as="user" />
 
-<neft:use unit="user:avatar" />
+<neft:use neft:fragment="user:avatar" />
 ```
 
 #### See also
 
-- `neft:unit`
+- `neft:fragment`
 - `neft:use`
 
 .

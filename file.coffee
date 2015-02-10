@@ -34,7 +34,7 @@ module.exports = class File
 
 	@Element = require('./element/index')
 	@AttrChange = require('./attrChange') @
-	@Unit = require('./unit') @
+	@Fragment = require('./fragment') @
 	@Use = require('./use') @
 	@Input = require('./input') @
 	@Condition = require('./condition') @
@@ -107,7 +107,7 @@ module.exports = class File
 
 	constructor: do ->
 		if utils.isNode
-			units = require('./file/parse/units') File
+			fragments = require('./file/parse/fragments') File
 			attrs = require('./file/parse/attrs') File
 			attrChanges = require('./file/parse/attrChanges') File
 			iterators = require('./file/parse/iterators') File
@@ -136,7 +136,7 @@ module.exports = class File
 			File.parse @
 
 			# parse
-			units @
+			fragments @
 			attrs @
 			attrChanges @
 			iterators @
@@ -161,7 +161,7 @@ module.exports = class File
 	pathbase: ''
 	parent: null
 	attrChanges: null
-	units: null
+	fragments: null
 	uses: null
 	inputs: null
 	conditions: null

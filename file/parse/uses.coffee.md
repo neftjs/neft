@@ -1,17 +1,17 @@
 neft:use @xml
 =============
 
-Special XML tag used to place `neft:unit`.
+Special XML tag used to place `neft:fragment`.
 
 ```view,example
-<neft:unit neft:name="user">This is user</neft:unit>
+<neft:fragment neft:name="user">This is user</neft:fragment>
 
-<neft:use neft:unit="user" />
+<neft:use neft:fragment="user" />
 ```
 
 #### See also
 
-- `neft:unit`
+- `neft:fragment`
 - `neft:source`
 
 .

@@ -7,20 +7,20 @@ Any XML text and attribute value can use string interpolation.
 <h1>Welcome #{name}!</h1>
 ```
 
-In `neft:unit`s you can use got attributes from the `neft:use`, like in the example below.
+In `neft:fragment`s you can use got attributes from the `neft:use`, like in the example below.
 If no attribute with such name found, value from the global data will be used
 (data from `App Controller` etc.).
 
 ```
-<neft:unit neft:name="user">#{name}</neft:unit>
+<neft:fragment neft:name="user">#{name}</neft:fragment>
 
-<neft:use neft:unit="user" name="#{ownerName}" />
+<neft:use neft:fragment="user" name="#{ownerName}" />
 ```
 
 #### See also
 
 - `Attributes evaluating`
-- `neft:unit`
+- `neft:fragment`
 - `neft:use`
 
 .

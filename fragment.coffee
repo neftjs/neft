@@ -4,12 +4,12 @@ utils = require 'utils'
 assert = require 'assert'
 signal = require 'signal'
 
-assert = assert.scope 'View.Unit'
+assert = assert.scope 'View.Fragment'
 
-module.exports = (File) -> class Unit extends File
+module.exports = (File) -> class Fragment extends File
 
-	@__name__ = 'Unit'
-	@__path__ = 'File.Unit'
+	@__name__ = 'Fragment'
+	@__path__ = 'File.Fragment'
 
 	signal.create @, 'created'
 
@@ -18,11 +18,11 @@ module.exports = (File) -> class Unit extends File
 		assert.isString name
 		assert.notLengthOf name, 0
 
-		Unit.created @, self
+		Fragment.created @, self
 
-		# merge units from parent
-		@units = utils.clone self.units
-		delete @units?[@name] # prevent circular structure
+		# merge fragments from parent
+		@fragments = utils.clone self.fragments
+		delete @fragments?[@name] # prevent circular structure
 
 		@id = "#{self.path}:#{name}"
 
