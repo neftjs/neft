@@ -6,25 +6,25 @@ signal = require 'signal'
 log = require 'log'
 
 Dict = require 'dict'
-View = require 'view'
+Document = require 'document'
 Networking = require 'networking'
 
 log = log.scope 'App', 'View'
 
 module.exports = (app) -> class AppView
 
-	constructor: (@view) ->
+	constructor: (@document) ->
 		expect(@).toBe.any AppView
-		expect(view).toBe.any View
-		expect(view.clone).toBe.function()
+		expect(document).toBe.any Document
+		expect(document.clone).toBe.function()
 
-	view: null
+	document: null
 
 	render: (req, storage) ->
 		expect(req).toBe.any Networking.Request
 		expect().defined(storage).toBe.object()
 
-		view = @view.clone()
+		document = @document.clone()
 
 		# storage
 		utils.defineProperty GlobalStorage, 'request', utils.CONFIGURABLE, req
@@ -35,11 +35,11 @@ module.exports = (app) -> class AppView
 		storageObj = Object.create storage
 		storageObj.app = app
 		storageObj.global = GlobalStorage
-		view.storage = storageObj
+		document.storage = storageObj
 
-		view.render()
+		document.render()
 
-		view
+		document
 
 	GlobalStorage = {}
 	signal.create GlobalStorage, 'requestChanged'

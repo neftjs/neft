@@ -4,7 +4,7 @@ expect = require 'expect'
 utils = require 'utils'
 log = require 'log'
 
-View = require 'view'
+Document = require 'document'
 Networking = require 'networking'
 
 {assert} = console
@@ -12,7 +12,7 @@ log = log.scope 'Template'
 
 CONFIG_KEYS = [] # filled by the class properties
 
-module.exports = (App) -> class AppTemplate
+module.exports = (app) -> class AppTemplate
 
 	constructor: (opts) ->
 		expect(@).toBe.any AppTemplate
@@ -22,7 +22,7 @@ module.exports = (App) -> class AppTemplate
 		assert do ->
 			optsKeys = utils.merge Object.keys(opts), CONFIG_KEYS
 			utils.isEqual(CONFIG_KEYS, optsKeys)
-		, "Unprovided config key has been passed into `App.Template`:\n" +
+		, "Unprovided config key has been passed into `app.Template`:\n" +
 		  "#{JSON.stringify opts, null, 4}"
 
 		# view
@@ -43,30 +43,30 @@ module.exports = (App) -> class AppTemplate
 	CONFIG_KEYS.push 'view'
 
 	setView = (ctx, val) ->
-		expect(ctx).toBe.any App.Template
+		expect(ctx).toBe.any app.Template
 
 		if typeof val is 'string'
-			view = App.views[val]
+			document = app.documents[val]
 
-			assert view
-			, "`#{val}` view file can't be found"
+			assert document
+			, "`#{val}` document file can't be found"
 		else
-			assert val instanceof App.View
-			, "Passed template view is not an instance of a App.View; `#{val}` given"
+			assert val instanceof app.View
+			, "Passed template document is not an instance of a app.View; `#{val}` given"
 
-			view = val
+			document = val
 
-		ctx.view = view
+		ctx.view = document
 
 	targetElem: ''
 
 	CONFIG_KEYS.push 'targetElem'
 
 	setTargetElem = (ctx, val) ->
-		expect(ctx).toBe.any App.Template
+		expect(ctx).toBe.any app.Template
 
 		assert val and typeof val is 'string'
-		, "App.Template targetElem must be a name of the view element (string); `#{val}` given"
+		, "app.Template targetElem must be a name of the view element (string); `#{val}` given"
 
 		ctx.targetElem = val
 
@@ -75,26 +75,26 @@ module.exports = (App) -> class AppTemplate
 	CONFIG_KEYS.push 'storage'
 
 	setStorage = (ctx, val) ->
-		expect(ctx).toBe.any App.Template
+		expect(ctx).toBe.any app.Template
 
 		ctx.storage = val
 
 	_render: (req) ->
-		expect(@).toBe.any App.Template
+		expect(@).toBe.any app.Template
 		expect(req).toBe.any Networking.Request
 
 		view = @view.render req, data: @storage
 
 		view
 
-	_renderTarget: (view, target) ->
-		for use in view.uses
+	_renderTarget: (document, target) ->
+		for use in document.uses
 			if use.name is @targetElem
 				elem = use
 				break
 
 		assert elem
-		, "App.Template `#{@view.view.path}` view doesn't have any `#{@targetElem}` use"
+		, "app.Template `#{@view.document.path}` view doesn't have any `#{@targetElem}` use"
 
 		elem.usedFragment = null # avoid destroying target, it's AppRoute job
 		elem.render target

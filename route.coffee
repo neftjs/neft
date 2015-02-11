@@ -6,7 +6,7 @@ log = require 'log'
 
 Networking = require 'networking'
 Schema = require 'schema'
-View = require 'view'
+Document = require 'document'
 
 {assert} = console
 log = log.scope 'Route'
@@ -226,7 +226,7 @@ module.exports = (app) -> class AppRoute
 		expect(ctx).toBe.any AppRoute
 
 		if typeof val is 'string'
-			view = app.views[val]
+			view = app.documents[val]
 
 			assert view
 			, "`#{val}` view file can't be found"
@@ -343,13 +343,13 @@ module.exports = (app) -> class AppRoute
 					callback err, data
 
 		# view
-		if @view or @template
+		if req.type is Networking.Request.DOCUMENT_TYPE and @view or @template
 			stack.add (callback) =>
-				if result instanceof View
+				if result instanceof Document
 					# TODO: how to destroy this view?
 					return callback null, result
 
-				logtime = log.time "View"
+				logtime = log.time "Document"
 				@_renderView req, res, result, (err, data) ->
 					log.end logtime
 					logtime = null

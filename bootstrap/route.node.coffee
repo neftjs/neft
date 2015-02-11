@@ -5,7 +5,7 @@ fs = require 'fs'
 pathUtils = require 'path'
 mmm = require 'mmmagic'
 
-View = require 'view'
+Document = require 'document'
 Networking = require 'networking'
 
 Magic = mmm.Magic
@@ -44,7 +44,7 @@ module.exports = (app) ->
 	`//</development>`
 
 	view = new app.View do ->
-		View.fromHTML VIEW_NAME, VIEW_HTML
+		Document.fromHTML VIEW_NAME, VIEW_HTML
 
 	reservedUris = ['app.js', 'favicon.ico']
 	reservedUrisRe = do =>
@@ -75,7 +75,7 @@ module.exports = (app) ->
 				if err?
 					return callback err
 				res.setHeader 'Content-Type', mime
-				fs.readFile req.uri, 'utf-8', callback
+				fs.readFile './'+req.uri, 'utf-8', callback
 
 	new app.Route
 		uri: '*'
@@ -95,7 +95,7 @@ module.exports = (app) ->
 				return next()
 
 			# TODO: consider other robots and clients with legacy browsers
-			if req.type isnt Networking.Request.VIEW_TYPE or # omit types other than view
+			if req.type isnt Networking.Request.DOCUMENT_TYPE or # omit types other than document
 			   reservedUrisRe.test(req.uri) or # omit reserved URIs
 			   ~req.userAgent.indexOf('Googlebot') # omit google boot
 				return next()

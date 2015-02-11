@@ -4,7 +4,7 @@ utils = require 'utils'
 log = require 'log'
 Schema = require 'schema'
 Networking = require 'networking'
-View = require 'view'
+Document = require 'document'
 Renderer = require 'renderer'
 Db = require 'db'
 require 'db-implementation'
@@ -62,7 +62,7 @@ exports = module.exports = (opts={}) ->
 		controllers: opts.controllers or {}
 		handlers: opts.handlers or {}
 		routes: opts.routes or {}
-		views: opts.views or {}
+		documents: opts.documents or {}
 		templates: opts.templates or {}
 
 	Object.seal App
@@ -92,10 +92,10 @@ exports = module.exports = (opts={}) ->
 	if utils.isNode
 		bootstrapRoute App
 
-	# load views
-	for path, json of App.views
-		unless json instanceof View
-			App.views[path] = new App.View View.fromJSON path, json
+	# load documents
+	for path, json of App.documents
+		unless json instanceof Document
+			App.documents[path] = new App.View Document.fromJSON path, json
 
 	# loading files helper
 	init = (files) ->
@@ -112,6 +112,6 @@ exports = module.exports = (opts={}) ->
 
 # link module
 MODULES = ['assert', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
-           'log', 'renderer', 'networking', 'schema', 'signal', 'utils', 'view', 'styles']
+           'log', 'renderer', 'networking', 'schema', 'signal', 'utils', 'document', 'styles']
 for name in MODULES
 	exports[name] = require name
