@@ -1,4 +1,4 @@
-Attributes evaluating @xml
+Attributes evaluating @txt
 ==========================
 
 Attributes in XML are written as strings.
