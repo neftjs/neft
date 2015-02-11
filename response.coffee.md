@@ -1,5 +1,5 @@
-Networking.Response
-===================
+Response
+========
 
 	'use strict'
 

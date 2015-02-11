@@ -3,7 +3,7 @@
 zlib = require 'zlib'
 log = require 'log'
 path = require 'path'
-View = require 'view'
+Document = require 'document'
 expect = require 'expect'
 
 log = log.scope 'Networking'
@@ -39,7 +39,7 @@ Parse passed data into expected type
 ###
 isObject = (data) -> true if data and typeof data is 'object'
 isJSON = (data) -> 'application/json' if isObject data
-isView = (data) -> 'text/html' if data instanceof View
+isDocument = (data) -> 'text/html' if data instanceof Document
 
 extensions =
 	'.js': 'application/javascript'
@@ -56,7 +56,7 @@ prepareData = (obj, data) ->
 	logtime = log.time 'prepare data'
 
 	# determine data type
-	type = isView(data) or isJSON(data)
+	type = isDocument(data) or isJSON(data)
 	type ?= extensions[path.extname obj.serverReq.url]
 	type ?= 'text/plain'
 

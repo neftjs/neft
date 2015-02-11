@@ -1,6 +1,8 @@
 Networking
 ==========
 
+**HTTP, URIs, ...**
+
 Use this module to handle requests and responses (e.g. by the HTTP protocol or just
 locally to handle different URIs).
 

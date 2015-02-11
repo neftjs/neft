@@ -15,7 +15,7 @@ module.exports = (Networking) ->
 			res = networking.createRequest
 				uid: uid
 				method: Networking.Request.GET
-				type: Networking.Request.VIEW_TYPE
+				type: Networking.Request.DOCUMENT_TYPE
 				uri: uri
 				data: null
 

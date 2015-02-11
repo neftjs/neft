@@ -2,7 +2,7 @@
 
 log = require 'log'
 utils = require 'utils'
-View = require 'view'
+Document = require 'document'
 Renderer = require 'renderer'
 
 log = log.scope 'Networking'
@@ -10,7 +10,7 @@ log = log.scope 'Networking'
 module.exports = (Networking) ->
 
 	showAsStyles = (data) ->
-		unless data instanceof View
+		unless data instanceof Document
 			return false
 
 		{styles} = data

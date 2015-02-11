@@ -34,7 +34,7 @@ module.exports = (Networking) ->
 				serverRes: serverRes
 
 			type = serverReq.headers['x-expected-type']
-			type ||= Networking.Request.VIEW_TYPE
+			type ||= Networking.Request.DOCUMENT_TYPE
 
 			obj.req = networking.createRequest
 				uid: uid

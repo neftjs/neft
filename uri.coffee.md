@@ -1,5 +1,5 @@
-Networking.Uri
-==============
+Uri
+===
 
 	'use strict'
 

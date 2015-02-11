@@ -1,6 +1,7 @@
 'use strict'
 
-[log, View] = ['log', 'view'].map require
+log = require 'log'
+Document = require 'document'
 utils = require 'utils'
 Renderer = require 'renderer'
 
@@ -38,7 +39,7 @@ module.exports = (Networking) ->
 		true
 
 	showAsHtml = (data) ->
-		if not webview? or not (data instanceof View)
+		if not webview? or not (data instanceof Document)
 			return false
 
 		webview.loadHtml data.node.stringify()
@@ -46,7 +47,7 @@ module.exports = (Networking) ->
 		true
 
 	showAsStyles = (data) ->
-		unless data instanceof View
+		unless data instanceof Document
 			return false
 
 		{styles} = data

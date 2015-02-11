@@ -1,5 +1,5 @@
-Networking.Request
-==================
+Request
+=======
 
 	'use strict'
 
@@ -42,11 +42,11 @@ This constant values are used in the `Request::type` property.
 
 Contains:
  - Request.OBJECT_TYPE,
- - Request.VIEW_TYPE
+ - Request.DOCUMENT_TYPE
 
 		@TYPES = [
 			(@OBJECT_TYPE = 'object'),
-			(@VIEW_TYPE = 'view')
+			(@DOCUMENT_TYPE = 'document')
 		]
 
 *Request* Request(*Object* options)
