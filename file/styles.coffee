@@ -3,13 +3,13 @@
 utils = require 'utils'
 expect = require 'expect'
 log = require 'log'
-View = require 'view'
+Document = require 'document'
 
 if utils.isNode
 	styleParseStyles = require('./parse/styles')
 
 {isArray} = Array
-{Element} = View
+{Element} = Document
 {Tag} = Element
 
 log = log.scope 'Styles'

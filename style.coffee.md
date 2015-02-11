@@ -220,7 +220,6 @@
 			clone.file = file
 			clone.node = originalFile.node.getCopiedElement @node, file.node
 			clone.attrs = @attrs
-			clone.node.onAttrChanged attrChangedListener, clone
 
 			# clone children
 			for child in @children
@@ -235,6 +234,9 @@
 			# break for the abstract
 			unless utils.isClient
 				return clone
+
+			# attr changes
+			clone.node.onAttrChanged attrChangedListener, clone
 
 			# visibility changes
 			tmpNode = clone.node

@@ -1,8 +1,7 @@
 Styles
 ======
 
-@desc How to present informations?
-@requires utils, view, renderer
+**How to present informations?**
 
 In *Neft* we have two important modules: `View` and `Renderer` which are using to
 respectively organising data and visualize graphics.
@@ -65,18 +64,18 @@ Row {
 	'use strict'
 
 	expect = require 'expect'
-	View = require 'view'
+	Document = require 'document'
 
 	stylesFuncs = require('./file/funcs')
 	stylesStyles = require('./file/styles')
 	stylesRender = require('./file/render')
 	stylesStyle = require('./style')
 
-	expect(View).toBe.function()
+	expect(Document).toBe.function()
 
 	module.exports = (data) ->
-		stylesFuncs View
-		stylesStyles View
-		stylesRender View
+		stylesFuncs Document
+		stylesStyles Document
+		stylesRender Document
 
-		View.Style = stylesStyle View, data
+		Document.Style = stylesStyle Document, data

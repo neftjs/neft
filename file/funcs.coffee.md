@@ -12,7 +12,7 @@ neft:func @js
 
 	# link modules to be possible required by the funcs
 	links = ['db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
-	         'log', 'renderer', 'routing', 'schema', 'signal', 'utils', 'view']
+	         'log', 'renderer', 'networking', 'schema', 'signal', 'utils', 'document']
 	for link in links
 		require link
 
@@ -76,8 +76,8 @@ Object corresponding to the arguments passed to a function.
 
 			arguments: (_, args) -> args
 
-*View* globalObject.view
-------------------------
+*Document* globalObject.view
+----------------------------
 
 Global attribute which references to the current *XML* element `view` fragment.
 

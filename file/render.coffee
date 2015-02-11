@@ -7,6 +7,9 @@ log = log.scope 'Styles'
 
 module.exports = (File) ->
 
+	unless utils.isClient
+		return
+
 	queue = []
 	pending = false
 
