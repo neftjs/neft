@@ -1,5 +1,5 @@
-Renderer.Font.Loader
-====================
+Loader/Font
+===========
 
 ```
 Item {
@@ -24,8 +24,8 @@ Item {
 
 	log = log.scope 'Renderer', 'FontLoader'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Font extends signal.Emitter
-		@__name__ = 'Font'
+	module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends signal.Emitter
+		@__name__ = 'FontLoader'
 		@__path__ = 'Renderer.Loader.Font'
 
 		SOURCE_FILE = ///(\w+)\.(\w+)$///
@@ -73,5 +73,5 @@ Item {
 
 			setImmediate =>
 				Object.freeze @_data
-				Font.fonts[@name] = @
+				FontLoader.fonts[@name] = @
 				loadFont @

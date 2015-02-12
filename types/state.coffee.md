@@ -1,5 +1,5 @@
-Renderer.State
-==============
+State
+=====
 
 	'use strict'
 

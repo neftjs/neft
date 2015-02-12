@@ -1,5 +1,15 @@
-Renderer.Column
-===============
+User Interface/Column
+=====================
+
+```style
+UI.Column {
+\  spacing: 5
+\
+\  Rectangle { color: 'blue'; width: 50; height: 50; }
+\  Rectangle { color: 'green'; width: 20; height: 50; }
+\  Rectangle { color: 'red'; width: 50; height: 20; }
+}
+```
 
 	'use strict'
 
@@ -8,16 +18,6 @@ Renderer.Column
 
 *Column* Column([*Object* options, *Array* children]) : *Renderer.Item*
 -----------------------------------------------------------------------
-
-```nml,render
-Column {
-\  spacing: 5
-\
-\  Rectangle { color: 'blue'; width: 50; height: 50; }
-\  Rectangle { color: 'green'; width: 20; height: 50; }
-\  Rectangle { color: 'red'; width: 50; height: 20; }
-}
-```
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
 		@__name__ = 'Column'

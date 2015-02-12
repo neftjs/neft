@@ -1,5 +1,18 @@
-Renderer.Grid
-=============
+User Interface/Grid
+===================
+
+```style
+UI.Grid {
+\  spacing.column: 15
+\  spacing.row: 5
+\  columns: 2
+\
+\  Rectangle { color: 'blue'; width: 50; height: 50; }
+\  Rectangle { color: 'green'; width: 20; height: 50; }
+\  Rectangle { color: 'red'; width: 50; height: 20; }
+\  Rectangle { color: 'yellow'; width: 20; height: 20; }
+}
+```
 
 	'use strict'
 
@@ -18,11 +31,11 @@ Renderer.Grid
 			itemUtils.initConstructor @,
 				extends: Renderer.Item
 				data:
-					columns: 0
-					rows: 0
+					columns: 2
+					rows: Infinity
 
-*Integer* Grid::columns
------------------------
+*Integer* Grid::columns = 2
+---------------------------
 
 ### *Signal* Grid::columnsChanged(*Integer* oldValue)
 
@@ -33,8 +46,8 @@ Renderer.Grid
 				developmentSetter: (val) ->
 					expect(val).toBe.greaterThan 0
 
-*Integer* Grid::rows
---------------------
+*Integer* Grid::rows = Infinity
+-------------------------------
 
 ### *Signal* Grid::rowsChanged(*Integer* oldValue)
 
@@ -57,7 +70,7 @@ Renderer.Grid
 					row: 0
 
 			itemUtils.defineProperty
-				constructor: @
+				constructor: Grid
 				name: 'spacing'
 				valueConstructor: Spacing
 

@@ -1,5 +1,5 @@
-Renderer.Loader
-===============
+Loader
+======
 
 	'use strict'
 

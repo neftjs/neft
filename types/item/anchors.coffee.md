@@ -1,5 +1,5 @@
-Item.Anchors
-============
+Basic elements/Item/Anchors
+===========================
 
 `Item` provides simply but powerful way to describe
 relationships between items: ***anchors***.

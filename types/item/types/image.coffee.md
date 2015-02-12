@@ -1,5 +1,19 @@
-Renderer.Image
-==============
+Basic elements/Image
+====================
+
+```style
+Image {
+\  source: 'http://lorempixel.com/200/140/'
+\
+\  onLoaded: function(error){
+\    if (error){
+\      console.error("Can't load this image");
+\    } else {
+\      console.log("Image has been loaded");
+\    }
+\  }
+}
+```
 
 	'use strict'
 
@@ -17,20 +31,6 @@ This item is used to render image defined by the *Image::source* URL.
 
 If the *Renderer.Item::width* and *Renderer.Item::height* attributes are not
 specified, this *Renderer.Item* automatically uses the size of the loaded image.
-
-```nml
-Image {
-\  source: 'image/source.jpg'
-\
-\  onLoaded: (error){
-\  	if (error){
-\  	  console.error("Can't load this image");
-\  	} else {
-\  	  console.log("Image has been loaded");
-\  	}
-\  }
-}
-```
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Item
 		@__name__ = 'Image'

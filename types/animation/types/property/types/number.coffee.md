@@ -1,5 +1,5 @@
-Renderer.NumberAnimation
-========================
+Animation/NumberAnimation
+=========================
 
 	'use strict'
 

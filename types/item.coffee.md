@@ -1,11 +1,9 @@
-Renderer.Item
-=============
-
-@category styles
+Basic elements/Item
+===================
 
 	'use strict'
 
-	assert = require 'assert'
+	assert = require 'neft-assert'
 	utils = require 'utils'
 	signal = require 'signal'
 	List = require 'list'
@@ -391,21 +389,9 @@ Item {
 Item::clear()
 -------------
 
-Removes all children from the node.
+Removes all children from a node.
 
 		clear: ->
 			while child = @children[0]
 				child.parent = null
 			return
-
-*Item* Item::clone()
---------------------
-
-		clone: ->
-			throw "Not implemented"
-
-*Item* Item::cloneDeep()
-------------------------
-
-		cloneDeep: ->
-			throw "Not implemented"

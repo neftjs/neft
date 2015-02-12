@@ -1,5 +1,5 @@
-Renderer.Transition
-===================
+Transition
+==========
 
 	'use strict'
 

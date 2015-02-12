@@ -1,5 +1,7 @@
-Renderer
-========
+Rendering
+=========
+
+**Make things visible!**
 
 This module is used to make things visible on the screen.
 
@@ -14,15 +16,6 @@ AppStructure {
 	active: 'renderer'
 }
 ```
-
-#### TODO
-
-- Loader.Font
-- Loader.Image
-- UI.Column ...
-- UI.Button
-- Animation.Number
-- Form.Select, Form.Input, Form.Textarea
 
 .
 

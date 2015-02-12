@@ -1,5 +1,5 @@
-Renderer.Animation
-==================
+Animation
+=========
 
 	'use strict'
 

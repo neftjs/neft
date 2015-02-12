@@ -1,5 +1,5 @@
-Renderer.Scrollable
-===================
+User Interface/Scrollable
+=========================
 
 	'use strict'
 

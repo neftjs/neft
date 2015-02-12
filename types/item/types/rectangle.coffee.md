@@ -1,5 +1,16 @@
-Renderer.Rectangle
-==================
+Basic elements/Rectangle
+========================
+
+```style
+Rectangle {
+  width: 150
+  height: 100
+  color: 'blue'
+  border.color: 'black'
+  border.width: 5
+  radius: 10
+}
+```
 
 	'use strict'
 
@@ -12,17 +23,6 @@ Renderer.Rectangle
 -----------------------------------------------------------------------------
 
 *Renderer.Item* represents filled rectangle with an optional border and corner radius.
-
-```nml,render
-Rectangle {
-  width: 100
-  height: 100
-  color: 'blue'
-  border.color: 'black'
-  border.width: 5
-  radius: 10
-}
-```
 
 		class Rectangle extends Renderer.Item
 			@__name__ = 'Rectangle'

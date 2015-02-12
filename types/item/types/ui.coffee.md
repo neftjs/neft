@@ -1,3 +1,6 @@
+User Interface
+==============
+
 	'use strict'
 
 	module.exports = (Renderer, Impl, itemUtils) ->

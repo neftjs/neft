@@ -1,5 +1,14 @@
-Renderer.Text
-=============
+Basic elements/Text
+===================
+
+```style
+Text {
+  font.pixelSize: 30
+  font.family: 'monospace'
+  text: '<strong>Neft</strong> Renderer'
+  color: 'blue'
+}
+```
 
 	'use strict'
 
