@@ -1,8 +1,8 @@
-User Interface/Grid
-===================
+Layout/Grid
+===========
 
 ```style
-UI.Grid {
+Grid {
 \  spacing.column: 15
 \  spacing.row: 5
 \  columns: 2

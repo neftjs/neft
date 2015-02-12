@@ -1,5 +1,5 @@
-Basic elements/Rectangle
-========================
+Shapes/Rectangle
+================
 
 ```style
 Rectangle {

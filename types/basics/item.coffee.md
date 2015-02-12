@@ -1,5 +1,5 @@
-Basic elements/Item
-===================
+Basic items/Item
+================
 
 	'use strict'
 

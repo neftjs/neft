@@ -1,5 +1,5 @@
-Basic elements/Item/Transitions
-===============================
+Basic items/Item/Transitions
+============================
 
 	'use strict'
 

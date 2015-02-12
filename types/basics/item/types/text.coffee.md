@@ -1,5 +1,5 @@
-Basic elements/Text
-===================
+Basic items/Text
+================
 
 ```style
 Text {

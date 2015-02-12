@@ -1,8 +1,8 @@
-User Interface/Column
-=====================
+Layout/Column
+=============
 
 ```style
-UI.Column {
+Column {
 \  spacing: 5
 \
 \  Rectangle { color: 'blue'; width: 50; height: 50; }

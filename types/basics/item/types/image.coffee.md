@@ -1,5 +1,5 @@
-Basic elements/Image
-====================
+Basic items/Image
+=================
 
 ```style
 Image {

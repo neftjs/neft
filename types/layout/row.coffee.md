@@ -1,8 +1,8 @@
-User Interface/Row
-==================
+Layout/Row
+==========
 
 ```style
-UI.Row {
+Row {
 \  spacing: 5
 \
 \  Rectangle { color: 'blue'; width: 50; height: 50; }

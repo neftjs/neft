@@ -1,5 +1,5 @@
-Basic elements/Item/Anchors
-===========================
+Basic items/Item/Anchors
+========================
 
 `Item` provides simply but powerful way to describe
 relationships between items: ***anchors***.

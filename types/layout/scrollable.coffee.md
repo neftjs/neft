@@ -1,5 +1,5 @@
-User Interface/Scrollable
-=========================
+Layout/Scrollable
+=================
 
 	'use strict'
 

@@ -28,12 +28,16 @@ AppStructure {
 
 	exports.State = require('./types/state') exports, Impl, itemUtils
 
-	exports.Item = require('./types/item') exports, Impl, itemUtils
-	exports.Image = require('./types/item/types/image') exports, Impl, itemUtils
-	exports.Text = require('./types/item/types/text') exports, Impl, itemUtils
-	exports.Rectangle = require('./types/item/types/rectangle') exports, Impl, itemUtils
+	exports.Item = require('./types/basics/item') exports, Impl, itemUtils
+	exports.Image = require('./types/basics/item/types/image') exports, Impl, itemUtils
+	exports.Text = require('./types/basics/item/types/text') exports, Impl, itemUtils
 
-	exports.UI = require('./types/item/types/ui') exports, Impl, itemUtils
+	exports.Rectangle = require('./types/shapes/rectangle') exports, Impl, itemUtils
+
+	exports.Grid = require('./types/layout/grid') exports, Impl, itemUtils
+	exports.Column = require('./types/layout/column') exports, Impl, itemUtils
+	exports.Row = require('./types/layout/row') exports, Impl, itemUtils
+	exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
 
 	exports.Animation = require('./types/animation') exports, Impl, itemUtils
 	exports.Transition = require('./types/transition') exports, Impl, itemUtils
