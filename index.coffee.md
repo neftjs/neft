@@ -1,19 +1,19 @@
 Log
 ===
 
-@requires utils
+**Colored console**
 
 Simply to use and good looking logger used to log `info`, `warn`,
 `error` messages and functions processing times.
 
 Built to be easily implemented for the standard console output and for browsers.
 
-All loggs are removed for the *release* mode.
+All loggs are removing for the *release* mode.
 
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'assert'
+	assert = require 'neft-assert'
 
 	{bind} = Function
 	{isArray} = Array
@@ -74,14 +74,11 @@ Logged text is white.
 
 This method is also a module object, so you can use it just after requiring module.
 
-##### Example
 ```coffeescript
-log = require 'log'
+log("Log me now!");
 
-log "Log me now!"
-
-log "setName()", "db time"
-# will be logged as "setName() → db time"
+log("setName()", "db time");
+// will be logged as "setName() → db time"
 ```
 
 		log: -> @_write LogImpl.MARKERS.white fromArgs arguments
@@ -102,11 +99,8 @@ Use this method to mark successful operations.
 
 Logged text is green.
 
-##### Example
-```coffeescript
-log = require 'log'
-
-log.ok "Data has been successfully sent!"
+```
+log.ok("Data has been successfully sent!");
 ```
 
 		ok: -> @_write LogImpl.MARKERS.green fromArgs arguments
@@ -118,6 +112,10 @@ For warnings, use this method.
 
 Logged text if yellow.
 
+```
+log.warn("Example warning with some recommendations");
+```
+
 		warn: -> @_write LogImpl.MARKERS.yellow fromArgs arguments
 
 error()
@@ -126,6 +124,10 @@ error()
 If during processing, some errors occurs, use thid method to log them.
 
 Logged text is red.
+
+```
+log.error("Error occurs, ... in file ...");
+```
 
 		error: -> @_write LogImpl.MARKERS.red fromArgs arguments
 
@@ -140,16 +142,16 @@ Use it only for the synchronous operations.
 
 It's a good practice to always name variable which keeps returned *time id* as `logtime`.
 
-##### Example
-```coffeescript
-log = require 'log'
+```
+function findPath(){
+  var logtime = log.time('findPath()');
 
-findPath = ->
-  logtime = log.time 'findPath()'
+  // ... some complex algorithm ...
 
-  # ... some complex algorithm ...
+  log.end(logtime);
+}
 
-  log.end logtime
+findPath();
 ```
 
 		time: ->
@@ -192,16 +194,14 @@ This methods returns new logger with binded functions.
 
 Use this function to always log with some special prefix (e.g. module name).
 
-##### Example
-```coffeescript
-log = require "log"
-log = log.scope "Example file"
+```
+var log = log.scope("Example file");
 
-log "hello"
-# loggs "Example file → hello"
+log("hello");
+// "Example file → hello"
 
-log.info "Let's go!"
-# loggs "Example file → Let's go"
+log.info("Let's go!");
+// "Example file → Let's go"
 ```
 
 		scope: (args...) ->
