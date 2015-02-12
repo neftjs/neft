@@ -1,24 +1,25 @@
-function
+function @TODO
 ========
 
 Use this validator to check whether passed function can be properly called.
 
 Use `type` validator to check whether function was passed.
 
-### Example
 ```
-schema = new Schema
-	calculate:
-		function: true
+var schema = new Schema({
+  calculate: {
+    function: true
+  }
+});
 
-schema.validate calculate: -> throw new Error
-# TypeError: Schema: calculate must be a proper function body
+log(schema.validate(calculate: -> throw new Error));
+// TypeError: Schema: calculate must be a proper function body
 
-schema.validate calculate: -> someUnknownProperty.a = 2
-# TypeError: Schema: calculate must be a proper function body
+log(schema.validate(calculate: -> someUnknownProperty.a = 2));
+// TypeError: Schema: calculate must be a proper function body
 
-schema.validate calculate: (a, b) -> a + b
-# true
+log(schema.validate(calculate: (a, b) -> a + b));
+// true
 ```
 
 	'use strict'

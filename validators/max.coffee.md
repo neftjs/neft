@@ -5,23 +5,24 @@ Determines the maximum range from number.
 
 *value* can be lower or equal maximum.
 
-### Example
 ```
-schema = new Schema
-	age:
-		max: 200
+var schema = new Schema({
+  age: {
+    max: 200
+  }
+});
 
-schema.validate age: 201
-# RangeError: Schema: Maximum range of age is 200
+log(schema.validate({age: 201}));
+// RangeError: Schema: Maximum range of age is 200
 
-schema.validate age: 'string'
-# TypeError: Schema internal: max for age row must be a number
+log(schema.validate({age: 'string'}));
+// TypeError: Schema internal: max for age row must be a number
 
-schema.validate age: 200
-# true
+log(schema.validate({age: 200}));
+// true
 
-schema.validate age: -5
-# true
+log(schema.validate({age: -5}));
+// true
 ```
 
 	'use strict'

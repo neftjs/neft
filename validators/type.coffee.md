@@ -8,22 +8,24 @@ This valdiator uses standard *typeof* expression to check whether *value* type i
 Unlike standard `typeof`, this validator returns `undefined` for `NaN` and `null`.
 
 ```
-schema = new Schema
-	desc:
-		type: 'object'
+var schema = new Schema({
+  desc: {
+    type: 'object'
+  }
+});
 
-schema.validate desc: 231
-# TypeError: Schema: desc must be a object
+log(schema.validate({desc: 231});
+// TypeError: Schema: desc must be a object
 
-schema.validate desc: null
-# TypeError: Schema: desc must be a object
+log(schema.validate({desc: null});
+// TypeError: Schema: desc must be a object
 
-schema.validate desc: {}
-# true
+log(schema.validate({desc: {}});
+// true
 
-schema.validate desc: []
-# true
-# because in js `typeof []` is `object` ...
+log(schema.validate({desc: []});
+// true
+// because in js `typeof []` is `object` ...
 ```
 
 	'use strict'

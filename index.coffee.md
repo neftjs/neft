@@ -1,9 +1,9 @@
 Schema
 ======
 
-Module used to validate structures e.g. got data from the client.
+**Validate data**
 
-Use `schema = require 'Schema'` to get access to this module.
+Module used to validate structures e.g. got data from the client.
 
 	'use strict'
 
@@ -32,14 +32,16 @@ Given *schema* object must provides options for each possible property.
 
 Check validators documentation for more information.
 
-### Example
 ```
-new Schema
-	address:
-		required: 'string'
-		type: 'string'
-	delivery:
-		type: 'boolean'
+new Schema({
+  address: {
+    required: 'string',
+    type: 'string'
+  },
+  delivery: {
+    type: 'boolean'
+  }
+});
 ```
 
 	module.exports = class Schema
@@ -71,29 +73,30 @@ Validates given *data* object by the schema validators.
 This method throws an error if data is invalid, otherwise `true` is returned.
 To get always a boolean value, you can use `utils.tryFunction()`.
 
-### Example
 ```
-schema = new Schema
-	age:
-		required: true
-		type: 'number'
-		min: 0
-		max: 200
+var schema = new Schema({
+  age: {
+    required: true,
+    type: 'number',
+    min: 0,
+    max: 200
+  }
+});
 
-schema.validate name: 'Jony'
-# TypeError: Schema::validate(): unexpected name row
+console.log(schema.validate(name: 'Jony'));
+// TypeError: Schema::validate(): unexpected name row
 
-schema.validate age: -5
-# RangeError: Schema: Minimum range of age is 0
+console.log(schema.validate(age: -5));
+// RangeError: Schema: Minimum range of age is 0
 
-schema.validate age: 20
-# true
+console.log(schema.validate(age: 20));
+// true
 
-utils.tryFunction schema.validate, schema, [age: -1], false
-# false
+console.log(utils.tryFunction(schema.validate, schema, [age: -1], false));
+// false
 
-utils.tryFunction schema.validate, schema, [age: 5], false
-# true
+console.log(utils.tryFunction(schema.validate, schema, [age: 5], false));
+// true
 ```
 
 		validate: (data) ->

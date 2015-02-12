@@ -6,21 +6,22 @@ this validator is used to determine whether *value* is a truly array instance.
 
 Remember that `arguments` and many other array-like objects in *JavaScript* are not an arrays!
 
-### Example
 ```
-schema = new Schema
-	friends:
-		array: true
+var schema = new Schema({
+  friends: {
+    array: true
+  }
+});
 
-schema.validate friends: {}
-# TypeError: Schema: friends must be an array
+log(schema.validate({friends: {}}));
+// TypeError: Schema: friends must be an array
 
-schema.validate friends: []
-# true
+log(schema.validate({friends: []}));
+// true
 
-schema.validate {}
-# true
-# bacuse `friends` is not required ...
+log(schema.validate({}));
+// true
+// bacuse `friends` is not required ...
 ```
 
 	'use strict'

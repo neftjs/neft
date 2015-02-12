@@ -3,20 +3,21 @@ re
 
 Using this validator you can check whether *value* passed regular expression.
 
-### Example
 ```
-schema = new Schema
-	word:
-		re: ///^\S+$///
+var schema = new Schema({
+  word: {
+    re: ///^\S+$///
+  }
+});
 
-schema.validate word: ''
-# TypeError: Schema: word doesn't passed regular expression
+log(schema.validate({word: ''});
+// TypeError: Schema: word doesn't passed regular expression
 
-schema.validate word: 'a b'
-# TypeError: Schema: word doesn't passed regular expression
+log(schema.validate({word: 'a b'});
+// TypeError: Schema: word doesn't passed regular expression
 
-schema.validate word: 'abc'
-# true
+log(schema.validate({word: 'abc'});
+// true
 ```
 
 	'use strict'

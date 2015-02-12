@@ -8,38 +8,42 @@ this validator is used to determine whether passed *value* is a plain object.
 *Plain object* can't extends any custom prototypes.
 You can read more about *plain objects* in `utils.isPlainObject()`
 
-### Example
 ```
-schema = new Schema
-	dict:
-		object: true
+var schema = new Schema({
+  dict: {
+    object: true
+  }
+});
 
-schema.validate dict: []
-# TypeError: Schema: dict must be a plain object
+log(schema.validate({dict: []});
+// TypeError: Schema: dict must be a plain object
 
-schema.validate dict: null
-# TypeError: Schema: dict must be a plain object
+log(schema.validate({dict: null});
+// TypeError: Schema: dict must be a plain object
 
-schema.validate dict: Object.create({a: 1})
-# TypeError: Schema: dict must be a plain object
+log(schema.validate({dict: Object.create({a: 1})});
+// TypeError: Schema: dict must be a plain object
 
-schema.validate dict: {}
-# true
+log(schema.validate({dict: {}});
+// true
 ```
 
 This validator accepts `properties` array which determine allowed properties.
 
 ```
-schema = new Schema
-	dict:
-		object:
-			properties: ['name', 'age']
+var schema = new Schema({
+  dict: {
+    object: {
+      properties: ['name', 'age']
+    }
+  }
+});
 
-schema.validate dict: { address: 'abc' }
-# TypeError: Schema: dict doesn't provide address property
+log(schema.validate({dict: { address: 'abc' }});
+// TypeError: Schema: dict doesn't provide address property
 
-schema.validate dict: { name: 'John' }
-# true
+log(schema.validate({dict: { name: 'John' }});
+// true
 ```
 
 	'use strict'
