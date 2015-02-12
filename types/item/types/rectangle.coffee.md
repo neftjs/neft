@@ -57,7 +57,6 @@ Rectangle {
 				implementation: Impl.setRectangleRadius
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
-					expect(val).not().toBe.lessThan 0
 
 *Border* Rectangle::border
 --------------------------
@@ -89,7 +88,6 @@ Rectangle {
 				implementation: Impl.setRectangleBorderWidth
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
-					expect(val).not().toBe.lessThan 0
 
 *String* Rectangle::border.color = 'transparent'
 ------------------------------------------------

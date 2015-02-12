@@ -81,13 +81,12 @@ module.exports = (Renderer, Impl) -> exports =
 
 				oldVal = @_data[name]
 				@_data[name] = val
-				if oldVal isnt val
-					@[signalName]? oldVal
+				if oldVal isnt val and signalName of @
+					@[signalName] oldVal
 
 				# TODO: why calling on only changes doesn't work?
 				if @_data[name] is val
-					if implementation
-						implementation.call(@_item or @, val)
+					implementation?.call(@_item or @, val)
 					return true
 				else
 					return false
@@ -116,17 +115,25 @@ module.exports = (Renderer, Impl) -> exports =
 
 	createBindingSetter: (propName, setFunc) ->
 		(val) ->
+			data = @_data
+
 			# synchronize with default state
-			if @_data.states and @_data.state is '' and propName isnt 'state' and propName isnt 'parent'
-				@_data.states[''][propName] = val
+			if data.states and data.state is '' and propName isnt 'state' and propName isnt 'parent'
+				data.states[''][propName] = val
 
 			if val and isArray val.binding
+				data.bindings ?= {}
+				data.bindings[propName] = true
 				Impl.setItemBinding.call @, @, propName, val.binding
 			else
+				if data.bindings?[propName]
+					Impl.setItemBinding.call @, @, propName, null
+					data.bindings[propName] = false
 				setFunc.call @, val
 
 	createDeepBindingSetter: (namespace, propName, setFunc) ->
 		(val) ->
+			data = @_data
 			itemData = @_item._data
 
 			# synchronize with default state
@@ -136,8 +143,13 @@ module.exports = (Renderer, Impl) -> exports =
 				state[namespace][propName] ?= val
 
 			if val and isArray val.binding
+				data.bindings ?= {}
+				data.bindings[propName] = true
 				Impl.setItemBinding.call @_item, @, propName, val.binding
 			else
+				if data.bindings?[propName]
+					Impl.setItemBinding.call @_item, @, propName, null
+					data.bindings[propName] = false
 				setFunc.call @, val
 
 	setProperty: (item, key, val) ->

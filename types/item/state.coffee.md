@@ -3,42 +3,6 @@
 	utils = require 'utils'
 	assert = require 'assert'
 
-	# update = do ->
-	# 	queue = []
-	# 	queueItems = {}
-	# 	pending = false
-
-	# 	updateItem = (item) ->
-	# 		{state, states} = item
-
-	# 		# restore default state
-	# 		states[''].update item
-
-	# 		# apply states
-	# 		for stateElem in state.items()
-	# 			states[stateElem]?.update item
-
-	# 		null
-
-	# 	updateItems = ->
-	# 		pending = false
-	# 		while queue.length
-	# 			item = queue.pop()
-	# 			queueItems[item.__hash__] = false
-	# 			updateItem item
-	# 		null
-
-	# 	(item) ->
-	# 		if queueItems[item.__hash__]
-	# 			return
-
-	# 		queueItems[item.__hash__] = true
-	# 		queue.push item
-
-	# 		unless pending
-	# 			setImmediate updateItems
-	# 			pending = true
-
 	support = (item, state) ->
 		state = item.states[state]
 		unless state

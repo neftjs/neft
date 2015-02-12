@@ -141,7 +141,7 @@ module.exports = (impl) ->
 					connections.push new Connection @, elem[0], elem[1]
 
 			# update
-			@update()
+			updateBinding @
 
 		item: null
 		obj: null
@@ -167,31 +167,31 @@ module.exports = (impl) ->
 				else
 					null
 
+		updateBinding = (binding) ->
+			unless binding.args
+				return
+
+			result = utils.tryFunction binding.func, null, binding.args
+			unless result?
+				result = getDefaultValue binding
+
+			# extra func
+			if binding.extraResultFunc
+				funcResult = binding.extraResultFunc binding.item
+				if typeof funcResult is 'number' and isFinite(funcResult)
+					result += funcResult
+
+			if typeof result is 'number' and not isFinite(result)
+				result = getDefaultValue binding
+
+			binding.updatePending = true
+			binding.obj[binding.prop] = result
+			binding.updatePending = false
+
 		update: do ->
 			queue = []
 			queueHashes = {}
 			pending = false
-
-			updateBinding = (binding) ->
-				unless binding.args
-					return
-
-				result = utils.tryFunction binding.func, null, binding.args
-				unless result?
-					result = getDefaultValue binding
-
-				# extra func
-				if binding.extraResultFunc
-					funcResult = binding.extraResultFunc binding.item
-					if typeof funcResult is 'number' and isFinite(funcResult)
-						result += funcResult
-
-				if typeof result is 'number' and not isFinite(result)
-					result = getDefaultValue binding
-
-				binding.updatePending = true
-				binding.obj[binding.prop] = result
-				binding.updatePending = false
 
 			updateAll = ->
 				pending = false
@@ -236,6 +236,10 @@ module.exports = (impl) ->
 		uniqueProp = "#{obj.constructor.__name__}-#{prop}"
 
 		storage.bindings ?= {}
+
+		if storage.bindings[uniqueProp]?.updatePending
+			return
+
 		storage.bindings[uniqueProp]?.destroy()
 
 		if binding?
