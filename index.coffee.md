@@ -1,7 +1,7 @@
 Assert
 ======
 
-@category utils
+**JavaScript so dynamic**
 
 	'use strict'
 
@@ -82,7 +82,7 @@ assert.notOk(*Boolean* expression, [*String* message])
 
 	assert.notOk = (expr, msg) ->
 		if expr
-			@fail expr, true, msg, '!=', asset.notOk
+			@fail expr, true, msg, '!=', assert.notOk
 
 assert.is(*Any* actual, *Any* expected, [*String* message])
 -----------------------------------------------------------
