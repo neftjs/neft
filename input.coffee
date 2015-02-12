@@ -44,9 +44,12 @@ module.exports = (File) -> class Input
 		(file, prop) ->
 			v = getFromElement file.node, prop
 			if file.source
-				v ?= getFromElement file.source.node, prop
-				v ?= getFromObject file.source.storage, prop
-			v ?= getFromObject file.storage, prop
+				if v is undefined
+					v = getFromElement file.source.node, prop
+				if v is undefined
+					v = getFromObject file.source.storage, prop
+			if v is undefined
+				v = getFromObject file.storage, prop
 
 			v
 
