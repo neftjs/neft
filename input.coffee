@@ -22,7 +22,7 @@ module.exports = (File) -> class Input
 	@__name__ = 'Input'
 	@__path__ = 'File.Input'
 
-	RE = @RE = new RegExp '([^#]*)#{([^}]*)}([^#]*)', 'gm'
+	RE = @RE = new RegExp '([^$]*)\\${([^}]*)}([^$]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)///g
 	PROP_RE = @PROP_RE = ///(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+///
 	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+(.)?///g

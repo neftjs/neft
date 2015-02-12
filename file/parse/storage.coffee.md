@@ -4,7 +4,7 @@ String Interpolation @txt
 Any XML text and attribute value can use string interpolation.
 
 ```
-<h1>Welcome #{name}!</h1>
+<h1>Welcome ${name}!</h1>
 ```
 
 In `neft:fragment`s you can use got attributes from the `neft:use`, like in the example below.
@@ -12,9 +12,9 @@ If no attribute with such name found, value from the global data will be used
 (data from `App Controller` etc.).
 
 ```
-<neft:fragment neft:name="user">#{name}</neft:fragment>
+<neft:fragment neft:name="user">${name}</neft:fragment>
 
-<neft:use neft:fragment="user" name="#{ownerName}" />
+<neft:use neft:fragment="user" name="${ownerName}" />
 ```
 
 #### See also

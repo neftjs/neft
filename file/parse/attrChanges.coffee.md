@@ -31,7 +31,7 @@ In pratice, you can refer to some data using the string interpolation.
 
 ```
 <button neft:style="ButtonRed" neft:style:state="disabled">
-  <neft:attr name="neft:style:state" value="active" neft:if="#{user.order.length} > 0" />
+  <neft:attr name="neft:style:state" value="active" neft:if="${user.order.length} > 0" />
   Proceed to checkout
 </button>
 ```

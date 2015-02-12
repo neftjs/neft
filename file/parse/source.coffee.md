@@ -6,8 +6,8 @@ where the `neft:use` body should be placed.
 
 ```view,example
 <neft:fragment neft:name="user">
-  <name>#{name}</name>
-  <age>#{age}</age>
+  <name>${name}</name>
+  <age>${age}</age>
   <neft:source />
 </neft:fragment>
 

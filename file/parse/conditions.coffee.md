@@ -28,23 +28,27 @@ In pratice, you will use the string interpolation to conditioning the result.
 
 	'use strict'
 
+	log = require 'log'
+
+	log = log.scope 'View', 'Condition'
+
 	module.exports = (File) ->
 		{Condition} = File
 
 		(file) ->
 			conditions = []
 
-			nodes = file.node.queryAll "[#{File.HTML_NS}:if]"
+			nodes = file.node.queryAll '[neft:if]'
 
 			for node in nodes
-				attr = node.attrs.get "#{File.HTML_NS}:if"
+				attr = node.attrs.get 'neft:if'
 				continue unless attr
 
-				if attr.indexOf('#{') is -1
-					attr = '#{'+attr+'}'
+				if attr.indexOf('${') is -1
+					attr = '${'+attr+'}'
 
 				`//<development>`
-				if attr.indexOf('#{') isnt 0
+				if attr.indexOf('${') isnt 0
 					log.warn "neft:if `#{attr}` contains string interpolation, but neft:if always is a string interpolation"
 				`//</development>`
 

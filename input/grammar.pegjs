@@ -6,16 +6,16 @@ start =
   }
 
 literal =
-  "#{" d:$expr "}" { return d }
+  "${" d:$expr "}" { return d }
 
 body =
-  [a-zA-Z0-9_\-+=!@$%^&*()~\[\]\\|<>,.?/ \t\n;:'"']+
+  [a-zA-Z0-9_\-+=!@%^&*()~\[\]\\|<>,.?/ \t\n;:'"']+
 
 block =
   "{" expr "}"
 
 blockInExpr =
-  "#"? block
+  "$"? block
   / block
 
 code =

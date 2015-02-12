@@ -21,7 +21,7 @@ In the *iterator body* you have access to the three special variables:
 
 ```view,example
 <items neft:each="List('New York', 'Paris', 'Warsaw')">
-  <item>Index: #{i}; Current: #{item}; Next: #{each.get(i+1)}</item>
+  <item>Index: ${i}; Current: ${item}; Next: ${each.get(i+1)}</item>
 </items>
 ```
 
