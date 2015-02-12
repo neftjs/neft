@@ -275,6 +275,7 @@ module.exports = (impl) ->
 		hotActions: 0
 		isHot: false
 		isHidden: false
+		linkElem: null
 
 	DATA: DATA
 
@@ -322,6 +323,15 @@ module.exports = (impl) ->
 
 	setItemOpacity: (val) ->
 		updateStyles @, STYLE_OPACITY
+
+	setItemLinkUri: (val) ->
+		unless @_impl.linkElem
+			elem = @_impl.linkElem = document.createElement 'a'
+			elem.setAttribute 'class', 'link'
+			@_impl.elem.appendChild elem
+
+		@_impl.linkElem.setAttribute 'href', val
+		@_impl.linkElem.style.display = if val isnt '' then 'block' else 'none'
 
 	setItemMargin: (type, val) ->
 

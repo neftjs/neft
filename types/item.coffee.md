@@ -36,6 +36,7 @@ Basic elements/Item
 				scale: 1
 				opacity: 1
 				state: ''
+				linkUri: ''
 
 *Item* Item([*Object* options, *Array* children])
 -------------------------------------------------
@@ -336,8 +337,8 @@ Item {
 			developmentSetter: (val) ->
 				assert.isFloat val, '::rotation setter ...'
 
-*Float* Item::opacity
----------------------
+*Float* Item::opacity = 1
+-------------------------
 
 ### *Signal* Item::opacityChanged(*Float* oldValue)
 
@@ -349,6 +350,22 @@ Item {
 				assert.isFloat val, '::opacity setter ...'
 
 		require('./item/state') Renderer, Impl, @, itemUtils
+
+*String* Item::linkUri = ''
+---------------------------
+
+This attribute points to the URI which will be used when user clicks on this item.
+
+It's required for browsers, where link URIs should be known publicly.
+
+### *Signal* Item::linkUriChanged(*String* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'linkUri'
+			implementation: Impl.setItemLinkUri
+			developmentSetter: (val) ->
+				assert.isString val, '::linkUri setter ...'
 
 *Item.Margin* Item::margin
 --------------------------

@@ -56,10 +56,6 @@ span b, span strong {
 span em {
 	font-style: italic;
 }
-a {
-	text-decoration: inherit;
-	color: inherit;
-}
 code {
 	white-space: pre;
 }
@@ -67,6 +63,12 @@ img {
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
+}
+.link {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
 }
 "
 

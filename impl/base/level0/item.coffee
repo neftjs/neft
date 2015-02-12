@@ -15,6 +15,7 @@ module.exports = (impl) ->
 		scale: 1
 		rotation: 0
 		opacity: 1
+		linkUri: ''
 		bindings: null
 
 	DATA: DATA
@@ -55,6 +56,9 @@ module.exports = (impl) ->
 
 	setItemOpacity: (val) ->
 		@_impl.opacity = val
+
+	setItemLinkUri: (val) ->
+		@_impl.linkUri = val
 
 	setItemMargin: (type, val) ->
 
