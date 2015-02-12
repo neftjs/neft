@@ -98,6 +98,9 @@ module.exports = (impl) ->
 
 	utils.merge impl.utils, require('./utils')
 
+	unless isTouch
+		impl._scrollableMode ?= 'wheel'
+
 	window.addEventListener 'resize', resize = ->
 		item = impl.window
 		return unless item
