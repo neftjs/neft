@@ -1,6 +1,8 @@
 List
 ====
 
+**Powerful array**
+
 As you know, `Array`s are list-like objects in JavaScript.
 
 This helper replaces poor `Array` `API` and brings signals called when something change.
