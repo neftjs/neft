@@ -1,7 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-assert = require 'assert'
+assert = require 'neft-assert'
 
 module.exports = (signal) -> class SignalsEmitter
 
@@ -26,7 +26,7 @@ module.exports = (signal) -> class SignalsEmitter
 		signalGetter = ->
 			assert.instanceOf @, SignalsEmitter
 
-			if listeners = @_events?[name]
+			if listeners = @_signals?[name]
 				currentEmitter = @
 				signalFunc
 			else
@@ -35,8 +35,9 @@ module.exports = (signal) -> class SignalsEmitter
 		handlerGetter = ->
 			assert.instanceOf @, SignalsEmitter
 
-			@_events ?= {}
-			handlerFunc.listeners = @_events[name] ?= []
+			# http://jsperf.com/dynamic-structures
+			@_signals ?= {}
+			handlerFunc.listeners = @_signals[name] ?= []
 
 			handlerFunc
 
@@ -46,4 +47,4 @@ module.exports = (signal) -> class SignalsEmitter
 		utils.defineProperty ctor::, handlerName, null, handlerGetter, null
 
 	constructor: ->
-		@_events = null
+		@_signals = null

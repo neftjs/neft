@@ -1,13 +1,15 @@
 Signal
 ======
 
+**Better events**
+
 Signals are used as standard `events` but brings new features and fix some issues, which
 standard events based on the strings have.
 
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'assert'
+	assert = require 'neft-assert'
 
 	createSignal = (obj, name) ->
 		assert.isNotPrimitive obj
@@ -220,7 +222,7 @@ console.log(Object.keys(Object.getPrototypeOf(myDog)));
 		signal
 
 *Handler* Handler()
-===================
+-------------------
 
 Handler function used to connect and disconnect listeners.
 
