@@ -57,13 +57,6 @@
 
 			return
 
-		anchorListener = ->
-			url = @node.attrs.get 'href'
-			unless url
-				return
-
-			@file.storage.global?.uri = url
-
 		constructor: ->
 			@file = null
 			@node = null
@@ -73,7 +66,6 @@
 			@isAutoParent = false
 			@item = null
 			@scope = null
-			@isAnchorListening = false
 			@children = []
 
 			Object.preventExtensions @
@@ -117,7 +109,10 @@
 
 		updateText: ->
 			if 'text' of @item
-				@item.text = @node.stringifyChildren()
+				if @isAnchor()
+					@item.text = @node.stringify()
+				else
+					@item.text = @node.stringifyChildren()
 
 		updateVisibility: ->
 			visible = true
@@ -155,9 +150,6 @@
 
 			if @item and @isAutoParent
 				@item.parent = null
-				if @isAnchorListening
-					@item.onPointerClicked.disconnect anchorListener, @
-					@isAnchorListening = false
 
 			wasAutoParent = @isAutoParent
 
@@ -192,10 +184,6 @@
 					return
 
 				@isAutoParent = !@item.parent
-
-			if @isAnchor()
-				@item.onPointerClicked anchorListener, @
-				@isAnchorListening = true
 
 			@node.attrs.set 'neft:styleItem', @item
 
