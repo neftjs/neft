@@ -1,7 +1,7 @@
 Dict
 ====
 
-@requires utils
+**Powerful object**
 
 Basics helper which has been made to extends functionalitites of the default JavaScript.
 
