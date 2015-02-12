@@ -92,15 +92,19 @@ properties have been set and it's ready to use.
 
 This signal is asynchronous.
 
-```
-Item {
+```style
+Rectangle {
 \  width: 200
+\  height: 50
+\  color: 'green'
 \
-\  Item {
+\  Rectangle {
 \  	width: parent.width / 2
-\  	onReady: {
-\  	  console.log(this.width);
-\  	  // 100
+\  	height: parent.height / 2
+\  	color: 'yellow'
+\  	onReady: function(){
+\  	  console.log(this.width, this.height);
+\  	  // 100, 25
 \  	}
 \  }
 }
@@ -203,12 +207,12 @@ Item {
 
 Determines whether an item is visible or not.
 
-```nml,render
+```style
 Item {
 \  width: 100
 \  height: 100
 \
-\  onPointerClicked: {
+\  onPointerClicked: function(){
 \  	rect.visible = !rect.visible;
 \  	text.text = rect.visible ? "Click to hide" : "Click to show";
 \  }
@@ -216,7 +220,7 @@ Item {
 \  Rectangle {
 \  	id: rect
 \  	anchors.fill: parent
-\  	color: blue
+\  	color: 'blue'
 \  }
 \
 \  Text {

@@ -7,9 +7,9 @@ UI.Grid {
 \  spacing.row: 5
 \  columns: 2
 \
-\  Rectangle { color: 'blue'; width: 50; height: 50; }
-\  Rectangle { color: 'green'; width: 20; height: 50; }
-\  Rectangle { color: 'red'; width: 50; height: 20; }
+\  Rectangle { color: 'blue'; width: 60; height: 50; }
+\  Rectangle { color: 'green'; width: 20; height: 70; }
+\  Rectangle { color: 'red'; width: 50; height: 30; }
 \  Rectangle { color: 'yellow'; width: 20; height: 20; }
 }
 ```
