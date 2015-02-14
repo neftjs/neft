@@ -17,6 +17,31 @@ Uri
 *Uri* Uri(*String* uri)
 -----------------------
 
+This class represents URI strings with parameters.
+
+Parameter must be wrapped by the curly brackets **{...}**.
+
+**Rest parameters** are not greedy and must be wrapped with **{...*}**.
+Rest parameters don't have to be named (**{*}** is allowed).
+
+```
+var uri = new Networking.Uri('articles/{pageStart}/{pageEnd}');
+console.log(uri.match('articles/2'));
+// { pageStart: '2', pageEnd: null }
+console.log(uri.match('articles/2/4'));
+// { pageStart: '2', pageEnd: '4' }
+
+var uri = new Networking.Uri('comments/{path*}/{page}');
+console.log(uri.match('comments/article/world/test-article/4'));
+// { path: 'article/world/test-article', page: '4' }
+```
+
+Access it with:
+```
+var Networking = require('networking');
+var Uri = Networking.Uri;
+```
+
 		constructor: (uri) ->
 			assert.isString uri, 'ctor uri argument ...'
 
@@ -24,7 +49,7 @@ Uri
 
 			# uri
 			uri = Uri.URI_TRIM_RE.exec(uri)[1]
-			utils.defineProperty @, '_uri', null, "/#{uri}"
+			utils.defineProperty @, '_uri', null, uri
 
 			# names
 			names = []
@@ -47,15 +72,17 @@ Uri
 			Object.freeze @
 			Object.preventExtensions @params
 
-*Object* Uri::params
---------------------
+*Object* Uri::params = {}
+-------------------------
+
+Last **Uri::match()** result.
 
 		params: null
 
 *Boolean* Uri::test(*String* uri)
 ---------------------------------
 
-Test whether `Networking.Uri` is valid with given *uri* string.
+Test whether this URI is valid with given string.
 
 		test: (uri) ->
 			@_re.test uri
@@ -64,6 +91,9 @@ Test whether `Networking.Uri` is valid with given *uri* string.
 ---------------------------------
 
 Get parameters values from the passed string.
+
+If given string isn't valid with this uri, error will be raised.
+You should use **Uri::test()** before.
 
 		match: (uri) ->
 			assert.ok @test(uri)
@@ -80,16 +110,16 @@ Get parameters values from the passed string.
 *String* Uri::toString([*Object|Dict* params])
 ----------------------------------------------
 
-Parse `Uri` into a string.
+Parse **Uri** into a string.
 
 `params` object can be optionally passed as an argument.
 It will be used to replace uri chunks (works like standard
-string `format()` but on the named parameters).
+string formatting but on the named parameters).
 
 ```
 var uri = new Networking.Uri('user/{name}');
 console.log(uri.toString({name: 'Jane'}));
-// /user/Jane
+// user/Jane
 ```
 
 		toString: (params) ->

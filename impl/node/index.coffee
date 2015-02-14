@@ -34,7 +34,7 @@ module.exports = (Networking) ->
 				serverRes: serverRes
 
 			type = serverReq.headers['x-expected-type']
-			type ||= Networking.Request.DOCUMENT_TYPE
+			type ||= Networking.Request.HTML_TYPE
 
 			obj.req = networking.createRequest
 				uid: uid
@@ -66,7 +66,7 @@ module.exports = (Networking) ->
 			res.on 'end', ->
 				status = res.statusCode
 
-				if req.type is Networking.Request.OBJECT_TYPE
+				if req.type is Networking.Request.JSON_TYPE
 					parsedData = utils.tryFunction JSON.parse, null, [data], data
 					callback status, parsedData
 				else

@@ -6,6 +6,11 @@ Networking
 Use this module to handle requests and responses (e.g. by the HTTP protocol or just
 locally to handle different URIs).
 
+Access it with:
+```
+var Networking = require('networking');
+```
+
 	'use strict'
 
 	utils = require 'utils'
@@ -122,7 +127,10 @@ app.httpNetworking.createHandler({
 			assert.instanceOf @, Networking
 			assert.isPlainObject opts, '::createHandler options argument ...'
 
-			uri = new Networking.Uri opts.uri
+			{uri} = opts
+
+			unless uri instanceof Networking.Uri
+				uri = new Networking.Uri uri
 
 			handler = new Networking.Handler
 				method: opts.method
@@ -144,7 +152,7 @@ Creates new local or server request.
 
 Given *options* object is used to create `Networking.Request`.
 
-#### Local request
+#### Local requests
 
 ```
 app.httpNetworking.createRequest({
@@ -159,7 +167,7 @@ app.httpNetworking.createRequest({
 });
 ```
 
-#### Request to the server
+#### Requests to the server
 
 ```
 app.httpNetworking.createRequest({
@@ -203,8 +211,11 @@ app.httpNetworking.createRequest({
 			else
 				log "Resolve local `#{req}` request"
 
-				onError = ->
-					res.raise Networking.Response.Error.RequestResolve req
+				onError = (err) ->
+					if err and (typeof err is 'object' or typeof err is 'string' or typeof err is 'number')
+						res.raise err
+					else
+						res.raise Networking.Response.Error.RequestResolve req
 
 				noHandlersError = ->
 					log.warn "No handler found"
@@ -213,11 +224,14 @@ app.httpNetworking.createRequest({
 				handlers = @_handlers[req.method]
 				if handlers
 					# run handlers
+					err = null
 					utils.async.forEach handlers, (handler, i, handlers, next) ->
-						handler.exec req, res, (err) ->
+						handler.exec req, res, (_err) ->
+							if _err
+								err = _err
 							next()
 
-					, (err) ->
+					, ->
 						if err
 							onError err
 						else

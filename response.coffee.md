@@ -92,6 +92,12 @@ Class represents response for a request.
 
 It's created automatically and used to handle a request.
 
+Access it with:
+```
+var Networking = require('networking');
+var Response = Networking.Response;
+```
+
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ...'
 			assert.instanceOf opts.request, Networking.Request, 'ctor options.request argument ...'
@@ -220,7 +226,7 @@ res.onSent(function(){
 		send: (status, data) ->
 			assert.ok @pending
 
-			if data? and typeof status isnt 'number'
+			if not data? and typeof status isnt 'number'
 				data = status
 				status = @status
 
@@ -228,7 +234,7 @@ res.onSent(function(){
 				assert.ok utils.has(Response.STATUSES, status)
 				@status = status
 
-			if data?
+			if data isnt undefined
 				if @data
 					log.info "`#{@request.uri}` response data has been overwritten"
 
@@ -248,11 +254,19 @@ res.onSent(function(){
 			utils.defineProperty res, 'pending', utils.ENUMERABLE, false
 			res.request.loaded? res
 
-			Impl.send res, res.data, ->
+			{data} = res
+
+			unless res.isSucceed()
+				log.warn "Response #{res.request.uri} completed with error;\n#{data?.stack or data}"
+
+			if data instanceof Error
+				data = utils.errorToObject data
+
+			Impl.send res, data, ->
 				res.sent?()
 
-Response::raise(*Response.Error* error)
----------------------------------------
+Response::raise(*Any* error)
+----------------------------
 
 Finishes response as failed.
 
@@ -262,9 +276,10 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 ```
 
 		raise: (error) ->
-			assert.instanceOf error, Response.Error, '::raise error argument ...'
-
-			@send error.status, error
+			if error instanceof Response.Error
+				@send error.status, error
+			else
+				@send Response.INTERNAL_SERVER_ERROR, error
 
 *Boolean* Response::isSucceed()
 -------------------------------

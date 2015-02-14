@@ -12,12 +12,18 @@ Response/Error
 
 		@RequestResolve = RequestResolve Networking, Response, ResponseError
 
-*Error* Error(*Integer* status, *String* message)
--------------------------------------------------
+*Error* Error([*Integer* status, *String* message])
+---------------------------------------------------
 
 This class is used in the `Networking.Response::raise()` method and describes an error.
 
 It works as standard Javascript `Error` class, but provides extra `status` value.
+
+Access it with:
+```
+var Networking = require('networking');
+var ResponseError = Networking.Response.Error;
+```
 
 		constructor: (status, message='') ->
 			unless @ instanceof ResponseError
@@ -26,6 +32,9 @@ It works as standard Javascript `Error` class, but provides extra `status` value
 			if typeof status is 'string'
 				message = status
 				status = @status
+			else if status is undefined
+				status = @status
+				message = @message
 
 			assert.ok utils.has(Response.STATUSES, status)
 			assert.isString message
@@ -42,6 +51,12 @@ It works as standard Javascript `Error` class, but provides extra `status` value
 
 This error is send if the request can't be resolved, because no proper handler which can
 handle the request can be found.
+
+Access it with:
+```
+var Networking = require('networking');
+var RequestResolveResponseError = Networking.Response.Error.RequestResolve;
+```
 
 	RequestResolve = (Networking, Response, ResponseError) -> class RequestResolve extends ResponseError
 

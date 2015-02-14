@@ -53,13 +53,13 @@ module.exports = (Networking) ->
 		xhr.open req.method, req.uri, true
 		xhr.setRequestHeader 'X-Expected-Type', req.type
 
-		if req.type is Request.OBJECT_TYPE
+		if req.type is Request.JSON_TYPE
 			xhr.responseType = 'json'
 
 		xhr.onload = ->
 			{response} = xhr
 
-			if req.type is Request.OBJECT_TYPE and typeof response is 'string'
+			if req.type is Request.JSON_TYPE and typeof response is 'string'
 				response = utils.tryFunction JSON.parse, null, [response], response
 
 			callback xhr.status, response

@@ -16,6 +16,12 @@ Handler
 *UriNotValidError* Handler.UriNotValidError : *Error*
 -----------------------------------------------------
 
+Access it with:
+```
+var Networking = require('networking');
+var UriNotValidError = Networking.Handler.UriNotValidError;
+```
+
 	class UriNotValidError extends Error
 		constructor: (@message) -> super
 
@@ -24,6 +30,12 @@ Handler
 
 *CallbackError* Handler.CallbackError : *Error*
 -----------------------------------------------
+
+Access it with:
+```
+var Networking = require('networking');
+var CallbackError = Networking.Handler.CallbackError;
+```
 
 	class CallbackError extends Error
 
@@ -35,12 +47,18 @@ Handler
 *Handler* Handler(*Object* options)
 -----------------------------------
 
-Abstract class used to describe routing handler.
+Abstract class used to describe networking handler.
 
-You should use `Networking::createHandler()` to create full handler.
+You should use **Networking::createHandler()** to create functional handler.
 
-*options* specifies `Handler::method`, `Handler::uri`,
-`Handler::schema` and `Handler::callback`.
+*options* specifies **Handler::method**, **Handler::uri**,
+**Handler::schema** and **Handler::callback**.
+
+Access it with:
+```
+var Networking = require('networking');
+var Handler = Networking.Handler;
+```
 
 	module.exports = (Networking) -> class Handler
 
@@ -59,6 +77,8 @@ You should use `Networking::createHandler()` to create full handler.
 *String* Handler::method
 ------------------------
 
+One of the **Networking.Request.METHODS** value.
+
 		method: ''
 
 *Networking.Uri* Handler::uri
@@ -69,15 +89,26 @@ You should use `Networking::createHandler()` to create full handler.
 *Schema* Handler::schema
 ------------------------
 
+Optional schema used to validate parameters.
+
 		schema: null
 
 *Function* Handler::callback
 ----------------------------
 
+Function called to handle the request.
+
+It takes three parameters: **Networking.Request**, **Networking.Response** and
+*next* **Function** called to omit this handler.
+
 		callback: null
 
 Handler::exec(*Networking.Request* request, *Networking.Response* response, *Function* next)
 --------------------------------------------------------------------------------------------
+
+Executes a handler.
+
+This method is internally called by the **Netwroking.createRequest** on matched handlers.
 
 		exec: (req, res, next) ->
 			assert.instanceOf req, Networking.Request, '::exec request argument ...'
@@ -96,7 +127,6 @@ Handler::exec(*Networking.Request* request, *Networking.Response* response, *Fun
 
 			# validate by schema
 			if @schema
-
 				# parse params into expected types
 				for key, schemaOpts of @schema.schema
 					if params.hasOwnProperty(key) and schemaOpts.type and schemaOpts.type isnt 'string'
@@ -105,14 +135,17 @@ Handler::exec(*Networking.Request* request, *Networking.Response* response, *Fun
 				# validate schema
 				err = utils.catchError @schema.validate, @schema, [params]
 				if err instanceof Error
-					log "`#{@uri}` tests, but not passed schema\n#{err}"
 					return next err
 
 			# on callback fail
 			callbackNext = (err) =>
-
 				req.handler = null
+				next new CallbackError err
 
+			log "Use `#{@method} #{@uri}` handler"
+
+			req.handler = @
+			utils.tryFunction @callback, @, [req, res, callbackNext], (err) ->
 				if err
 					# TODO: move building errors into more generic place
 					errMsg = err
@@ -124,12 +157,7 @@ Handler::exec(*Networking.Request* request, *Networking.Response* response, *Fun
 
 					log.error "Error raised in `#{@uri}` handler\n#{errMsg}"
 
-				next new CallbackError
-
-			log "Use `#{@method} #{@uri}` handler"
-
-			req.handler = @
-			utils.tryFunction @callback, @, [req, res, callbackNext], callbackNext
+				callbackNext null
 
 			null
 
@@ -139,7 +167,7 @@ Handler::exec(*Networking.Request* request, *Networking.Response* response, *Fun
 Returns string describing the handler.
 
 ```
-"get /users/{name}"
+"get users/{name}"
 ```
 
 		toString: ->

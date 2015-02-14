@@ -29,7 +29,7 @@ module.exports = (Networking) ->
 
 			response = xhr.responseText
 
-			if opts.type is Request.OBJECT_TYPE
+			if opts.type is Request.JSON_TYPE
 				response = utils.tryFunction JSON.parse, null, [response], response
 
 			callback xhr.status, response

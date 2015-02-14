@@ -41,12 +41,14 @@ Values descrbes expected response data type.
 This constant values are used in the `Request::type` property.
 
 Contains:
- - Request.OBJECT_TYPE,
- - Request.DOCUMENT_TYPE
+ - Request.TEXT_TYPE,
+ - Request.JSON_TYPE,
+ - Request.HTML_TYPE
 
 		@TYPES = [
-			(@OBJECT_TYPE = 'object'),
-			(@DOCUMENT_TYPE = 'document')
+			(@TEXT_TYPE = 'text'),
+			(@JSON_TYPE = 'json'),
+			(@HTML_TYPE = 'html')
 		]
 
 *Request* Request(*Object* options)
@@ -56,8 +58,14 @@ Abstract class used to describe routing request.
 
 You should use `Networking::createRequest()` to create a full request.
 
-*options* specifies `Request::method`, `Request::uri`, `Request::data`, `Request::type`
+*options* specifies **Request::method**, **Request::uri**, **Request::data**, **Request::type**
 and signal handlers.
+
+Access it with:
+```
+var Networking = require('networking');
+var Request = Networking.Request;
+```
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ...'
@@ -169,7 +177,7 @@ This property describes expected response type.
 
 Check `Request.TYPES` for available types.
 
-		type: @OBJECT_TYPE
+		type: @JSON_TYPE
 
 *Object* Request::data
 ----------------------
