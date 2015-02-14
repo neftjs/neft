@@ -10,6 +10,10 @@ Built to be easily implemented for the standard console output and for browsers.
 
 All loggs are removing for the *release* mode.
 
+```
+var log = require('log');
+```
+
 	'use strict'
 
 	utils = require 'utils'
@@ -63,16 +67,14 @@ All loggs are removing for the *release* mode.
 
 		_write: console?.log or (->)
 
-log()
------
+log([*Any* messages...])
+------------------------
 
 The most basic function used to write into console.
 
 All passed arguments are concatenated with right arrow (`→`).
 
 Logged text is white.
-
-This method is also a module object, so you can use it just after requiring module.
 
 ```coffeescript
 log("Log me now!");
@@ -83,8 +85,8 @@ log("setName()", "db time");
 
 		log: -> @_write LogImpl.MARKERS.white fromArgs arguments
 
-info()
-------
+log.info([*Any* messages...])
+-----------------------------
 
 Method used to log some useful informations for debugging, to mark progress.
 
@@ -92,8 +94,8 @@ Logged text is blue.
 
 		info: -> @_write LogImpl.MARKERS.blue fromArgs arguments
 
-ok()
-----
+log.ok([*Any* messages...])
+---------------------------
 
 Use this method to mark successful operations.
 
@@ -105,8 +107,8 @@ log.ok("Data has been successfully sent!");
 
 		ok: -> @_write LogImpl.MARKERS.green fromArgs arguments
 
-warn()
-------
+log.warn([*Any* messages...])
+-----------------------------
 
 For warnings, use this method.
 
@@ -118,8 +120,8 @@ log.warn("Example warning with some recommendations");
 
 		warn: -> @_write LogImpl.MARKERS.yellow fromArgs arguments
 
-error()
--------
+log.error([*Any* messages...])
+------------------------------
 
 If during processing, some errors occurs, use thid method to log them.
 
@@ -131,8 +133,8 @@ log.error("Error occurs, ... in file ...");
 
 		error: -> @_write LogImpl.MARKERS.red fromArgs arguments
 
-time()
-------
+log.time()
+----------
 
 This method and `end()` are used to debug how long the operation takes.
 
@@ -155,7 +157,6 @@ findPath();
 ```
 
 		time: ->
-
 			{times} = LogImpl
 
 			# write
@@ -171,15 +172,14 @@ findPath();
 
 			id
 
-end()
------
+log.end(*Integer* id)
+---------------------
 
 This method is used to mark when counting time ends.
 
 See `time()` method for more informations and example.
 
 		end: (id) ->
-
 			time = LogImpl.times[id]
 			diff = LogImpl.timeDiff time
 			LogImpl.times[id] = null
@@ -187,8 +187,8 @@ See `time()` method for more informations and example.
 			str = "#{diff} ms"
 			@_write LogImpl.MARKERS.gray str
 
-scope()
--------
+log.scope([*Any* names...])
+---------------------------
 
 This methods returns new logger with binded functions.
 
@@ -205,7 +205,6 @@ log.info("Let's go!");
 ```
 
 		scope: (args...) ->
-
 			if @prefixes
 				unshift.apply args, @prefixes
 
