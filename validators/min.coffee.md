@@ -12,24 +12,26 @@ var schema = new Schema({
   }
 });
 
-log(schema.validate({age: -5}));
-// RangeError: Schema: Minimum range of age is 0
+console.log(utils.catchError(schema.validate, schema, [{age: -5}])+'');
+// "SchemaError: Minimum range of age is 0"
 
-log(schema.validate({age: 'string'}));
-// RangeError: Schema internal: max for age row must be a number
-
-log(schema.validate({age: 20}));
+console.log(schema.validate({age: 'string'}));
 // true
 
-log(schema.validate({age: 0}));
+console.log(schema.validate({age: 20}));
+// true
+
+console.log(schema.validate({age: 0}));
 // true
 ```
 
 	'use strict'
 
-	module.exports = (row, value, expected) ->
-		if typeof expected isnt 'number'
-			throw new TypeError "Schema internal: max for #{row} row must be a number"
+	assert = require 'neft-assert'
 
-		if typeof value is 'number' and value < expected
-			throw new RangeError "Schema: Minimum range of #{row} is #{expected}"
+	module.exports = (Schema) -> (row, value, expected) ->
+		assert.isFloat expected
+		, "min validator option for #{row} property must be float"
+
+		if value < expected
+			throw new Schema.Error "Minimum range of #{row} is #{expected}"

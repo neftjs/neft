@@ -1,7 +1,7 @@
 options
 =======
 
-Determine possible values for the *row*.
+Determine possible values for the *property*.
 
 ```
 var schema = new Schema({
@@ -10,16 +10,16 @@ var schema = new Schema({
   }
 });
 
-log(schema.validate({city: 'Berlin'});
-// TypeError: Schema: city value is not provided
+console.log(utils.catchError(schema.validate, schema, [{city: 'Berlin'}])+'');
+// "SchemaError: Passed city value is not acceptable"
 
-log(schema.validate({city: 'Warsaw'});
+console.log(schema.validate({city: 'Warsaw'}));
 // true
 ```
 
 This validator also accepts an object in place of array.
 
-In such case, we check whether passed *row* value exists as an object key.
+In such case, we check whether passed *property* value exists as an object key.
 
 ```
 var cities = {
@@ -37,27 +37,26 @@ var schema = new Schema({
   }
 });
 
-log(schema.validate({city: 'Moscow'});
-// TypeError: Schema: city value is not provided
+console.log(utils.catchError(schema.validate, schema, [{city: 'Moscow'}])+'');
+// "SchemaError: Passed city value is not acceptable"
 
-log(schema.validate({city: 'Paris'});
+console.log(schema.validate({city: 'Paris'}));
 // true
 ```
 
 	'use strict'
 
-	isArray = Array.isArray
-	objKeys = Object.keys
+	assert = require 'neft-assert'
+	utils = require 'utils'
 
-	module.exports = (row, value, expected) ->
+	module.exports = (Schema) -> (row, value, expected) ->
+		assert.isObject expected
+		, "options validator option for #{row} property must be an object or array"
 
-		if typeof expected isnt 'object'
-			throw new TypeError "Schema internal: options for #{row} row must be an object or array"
-
-		if isArray expected
-			passed = ~ expected.indexOf value
+		if Array.isArray(expected)
+			passed = utils.has expected, value
 		else
-			passed = ~ objKeys(expected).indexOf value + ''
+			passed = expected.hasOwnProperty value
 
 		unless passed
-			throw new TypeError "Schema: #{row} value is not provided"
+			throw new Schema.Error "Passed #{row} value is not acceptable"

@@ -3,8 +3,6 @@ type
 
 This valdiator uses standard *typeof* expression to check whether *value* type is equal required.
 
-#### NaN and null
-
 Unlike standard `typeof`, this validator returns `undefined` for `NaN` and `null`.
 
 ```
@@ -14,28 +12,31 @@ var schema = new Schema({
   }
 });
 
-log(schema.validate({desc: 231});
-// TypeError: Schema: desc must be a object
+console.log(utils.catchError(schema.validate, schema, [{desc: 231}])+'');
+// "SchemaError: desc must be a object"
 
-log(schema.validate({desc: null});
-// TypeError: Schema: desc must be a object
+console.log(utils.catchError(schema.validate, schema, [{desc: null}])+'');
+// "SchemaError: Required property desc not found"
 
-log(schema.validate({desc: {}});
+console.log(schema.validate({desc: {}}));
 // true
 
-log(schema.validate({desc: []});
+console.log(schema.validate({desc: []}));
 // true
 // because in js `typeof []` is `object` ...
+// you should use array validator instead ...
 ```
 
 	'use strict'
 
-	module.exports = (row, value, expected) ->
-		if typeof expected isnt 'string'
-			throw new TypeError "Schema internal: type for #{row} row must be a string"
+	assert = require 'neft-assert'
+
+	module.exports = (Schema) -> (row, value, expected) ->
+		assert.isString expected
+		, "type validator option for #{row} property must be a string"
 
 		if isNaN(value) or value is null
 			value = undefined
 
 		if value? and typeof value isnt expected
-			throw new TypeError "Schema: #{row} must be a #{expected}"
+			throw new Schema.Error "#{row} must be a #{expected}"

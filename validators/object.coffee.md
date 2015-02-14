@@ -15,16 +15,16 @@ var schema = new Schema({
   }
 });
 
-log(schema.validate({dict: []});
-// TypeError: Schema: dict must be a plain object
+console.log(utils.catchError(schema.validate, schema, [{dict: []}])+'');
+// "SchemaError: dict must be a plain object"
 
-log(schema.validate({dict: null});
-// TypeError: Schema: dict must be a plain object
+console.log(utils.catchError(schema.validate, schema, [{dict: null}])+'');
+// "SchemaError: Required property dict not found"
 
-log(schema.validate({dict: Object.create({a: 1})});
-// TypeError: Schema: dict must be a plain object
+console.log(utils.catchError(schema.validate, schema, [{dict: Object.create({a: 1})}])+'');
+// "SchemaError: dict must be a plain object"
 
-log(schema.validate({dict: {}});
+console.log(schema.validate({dict: {}}));
 // true
 ```
 
@@ -39,30 +39,33 @@ var schema = new Schema({
   }
 });
 
-log(schema.validate({dict: { address: 'abc' }});
-// TypeError: Schema: dict doesn't provide address property
+console.log(utils.catchError(schema.validate, schema, [{dict: { address: 'abc' }}])+'');
+// "SchemaError: dict doesn't provide address property"
 
-log(schema.validate({dict: { name: 'John' }});
+console.log(schema.validate({dict: { name: 'John' }}));
 // true
 ```
 
 	'use strict'
 
+	assert = require 'neft-assert'
 	utils = require 'utils'
 
 	{isArray} = Array
 
-	module.exports = (row, value, expected) ->
+	module.exports = (Schema) -> (row, value, expected) ->
+		unless expected
+			return
+
 		unless utils.isPlainObject value
-			throw new TypeError "Schema: #{row} must be a plain object"
+			throw new Schema.Error "#{row} must be a plain object"
 
 		# available properties
 		if props = expected?.properties
-			unless isArray props
-				throw new TypeError "Schema internal: `object.properties` must be an array"
+			assert.isArray props
 
 			for prop of value
 				unless ~props.indexOf prop
-					throw new TypeError "Schema: #{row} doesn't provide #{prop} property"
+					throw new Schema.Error "#{row} doesn't provide #{prop} property"
 
-		null
+		return
