@@ -1,5 +1,5 @@
-Loader
-======
+Loading assets
+==============
 
 	'use strict'
 

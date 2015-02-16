@@ -1,11 +1,11 @@
-Loader/Font
-===========
+Loading assets/Font
+===================
 
 ```
 Item {
   Loader.Font {
   	name: 'myFont'
-  	source: 'static/fonts/myFont.woff'
+  	sources: ['static/fonts/myFont.woff']
   }
 
   Text {
@@ -17,7 +17,7 @@ Item {
 
 	'use strict'
 
-	expect = require 'expect'
+	assert = require 'assert'
 	utils = require 'utils'
 	log = require 'log'
 	signal = require 'signal'
@@ -31,26 +31,35 @@ Item {
 		SOURCE_FILE = ///(\w+)\.(\w+)$///
 
 		loadFont = (self) ->
-			path = SOURCE_FILE.exec self.source
-			[_, name, ext] = path
-
-			if ext isnt 'woff'
-				log.warn "Recommended font format is WOFF"
-
 			unless self.name
-				self.name = name
+				for source in self.sources
+					path = SOURCE_FILE.exec self.source
+					if path
+						self.name = path[1]
+						break
 
-			Impl.loadFont self.source, self.name
+			Impl.loadFont self.sources, self.name
 
 		@fonts = {}
 
 *FontLoader* FontLoader([*Object* options])
 -------------------------------------------
 
+This class is used to load custom fonts.
+
+You can override default fonts (*sans-serif*, *sans* and *monospace*) and load new ones.
+
+Font weight and style (italic or normal) is extracted from the font source.
+
+Access it with:
+```
+Loader.Font {}
+```
+
 		constructor: ->
 			@_data =
 				name: ''
-				source: ''
+				sources: []
 			super()
 
 *String* FontLoader::name
@@ -59,19 +68,30 @@ Item {
 		utils.defineProperty @::, 'name', null, ->
 			@_data.name
 		, (val) ->
-			expect(val).toBe.truthy().string()
+			assert.isString val
 			@_data.name = val.toLowerCase()
 
-*String* FontLoader::source
----------------------------
+*String* FontLoader::sources
+----------------------------
 
-		utils.defineProperty @::, 'source', null, ->
-			@_data.source
+Place, where the font file can be found.
+
+It needs to be an array, because there is no one font type supported by all browsers.
+
+We recommend usng **WOFF** format and **TTF/OTF** for oldest Android browser.
+
+		utils.defineProperty @::, 'sources', null, ->
+			@_data.sources
 		, (val) ->
-			expect(val).toBe.truthy().string()
-			@_data.source = val
+			if val is 'string'
+				val = [val]
+			assert.isArray val
+			assert.notLengthOf val, 0
+			assert.isString val[0]
+			assert.notLengthOf val[0]
+			@_data.sources = val
 
 			setImmediate =>
 				Object.freeze @_data
-				FontLoader.fonts[@name] = @
 				loadFont @
+				FontLoader.fonts[@name] = @

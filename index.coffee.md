@@ -3,21 +3,13 @@ Rendering
 
 **Make things visible!**
 
-This module is used to make things visible on the screen.
+In opposite to the [Document Modeling](/docs/document) (which is only the logical part),
+this module defines how to render and interact with elements.
 
-In opposite to the `View` module (which is only the logic part),
-this module should define how to show and interact with elements.
-
-Basic class used in this module is `Renderer.Item`.
-It's a base for everything which can be rendered on the screen.
-
-```nml,render
-AppStructure {
-	active: 'renderer'
-}
+Access it with:
 ```
-
-.
+var Renderer = require('renderer');
+```
 
 	'use strict'
 

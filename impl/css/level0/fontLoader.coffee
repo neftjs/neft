@@ -36,16 +36,20 @@ module.exports = (impl) ->
 	isItalic = (source) ->
 		///italic///i.test source
 
-	loadFont: (source, name) ->
-		style = if isItalic(source) then 'italic' else 'normal'
-		weight = getFontWeight(source)
+	loadFont: (sources, name) ->
+		style = if isItalic(sources[0]) then 'italic' else 'normal'
+		weight = getFontWeight(sources[0])
 		name = impl.DEFAULT_FONTS[name] or name
+
+		urlStr = ''
+		for source in sources
+			urlStr += "url('#{source}') "
 
 		styles = document.createElement 'style'
 		styles.innerHTML = """
 			@font-face {
 				font-family: "#{name}";
-				src: url('#{source}');
+				src: #{urlStr}local(#{name});
 				font-style: #{style};
 				font-weight: #{weight};
 			}
