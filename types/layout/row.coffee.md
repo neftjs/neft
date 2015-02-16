@@ -1,5 +1,5 @@
-Layout/Row
-==========
+Positioning/Row
+===============
 
 ```style
 Row {

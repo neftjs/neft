@@ -1,5 +1,5 @@
-Layout
-======
+Positioning
+===========
 
 This category contains items used to position elements.
 

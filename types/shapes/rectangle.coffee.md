@@ -1,5 +1,5 @@
-Shapes/Rectangle
-================
+Drawing shapes/Rectangle
+========================
 
 ```style
 Rectangle {

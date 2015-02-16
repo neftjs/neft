@@ -41,7 +41,7 @@ Basic items/Item
 *Item* Item([*Object* options, *Array* children])
 -------------------------------------------------
 
-This is a base class for eveyrthing which is visible.
+This is a base class for everything which is visible.
 
 		constructor: (opts, children) ->
 			# optional `opts` argument

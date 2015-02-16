@@ -61,6 +61,7 @@ Loader.Font {}
 				name: ''
 				sources: []
 			super()
+			Object.freeze @
 
 *String* FontLoader::name
 -------------------------

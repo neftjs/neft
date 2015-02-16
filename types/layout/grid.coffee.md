@@ -1,5 +1,5 @@
-Layout/Grid
-===========
+Positioning/Grid
+================
 
 ```style
 Grid {

@@ -53,10 +53,33 @@ if isTouch
 SIGNALS_CURSORS =
 	'pointerClicked': 'pointer'
 
-mouseCoordsArgs = do ->
+getMouseCoords = do ->
 	getArgs = (e) ->
-		x: e.screenX
-		y: e.screenY
+		rect = e.currentTarget.getBoundingClientRect()
+		x = e.layerX - rect.left
+		y = e.layerY - rect.top
+
+		x: x
+		y: y
+
+	if isTouch
+		(e) ->
+			if e.touches.length
+				getArgs e.touches[0]
+			else
+				getArgs e.changedTouches[0]
+	else
+		getArgs
+
+getRestrictedMouseCoords = do ->
+	getArgs = (e) ->
+		rect = e.currentTarget.getBoundingClientRect()
+		x = e.layerX - rect.left
+		y = e.layerY - rect.top
+
+		if x >= 0 and y >= 0 and x <= rect.width and y <= rect.height
+			x: x
+			y: y
 
 	if isTouch
 		(e) ->
@@ -154,16 +177,16 @@ SIGNALS_ARGS =
 		if isTouch
 			e.preventDefault()
 
-		mouseCoordsArgs e
-	'pointerReleased': mouseCoordsArgs
-	'pointerClicked': mouseCoordsArgs
-	'pointerEntered': mouseCoordsArgs
-	'pointerExited': mouseCoordsArgs
+		getRestrictedMouseCoords e
+	'pointerReleased': getMouseCoords
+	'pointerClicked': getRestrictedMouseCoords
+	'pointerEntered': getRestrictedMouseCoords
+	'pointerExited': getMouseCoords
 	'pointerMove': (e) ->
 		if isTouch
 			e.preventDefault()
 
-		mouseCoordsArgs e
+		getRestrictedMouseCoords e
 
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
@@ -346,6 +369,9 @@ module.exports = (impl) ->
 
 		customFunc = (e) =>
 			arg = SIGNALS_ARGS[name]? e
+			unless arg
+				return
+
 			result = func.call @, arg
 			if result is signal.STOP_PROPAGATION
 				e.stopPropagation()

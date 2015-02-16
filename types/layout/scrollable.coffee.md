@@ -1,5 +1,5 @@
-Layout/Scrollable
-=================
+Positioning/Scrollable
+======================
 
 	'use strict'
 

@@ -1,8 +1,8 @@
-Basic items/Item/Anchors
+Positioning/Anchors @txt
 ========================
 
-`Item` provides simply but powerful way to describe
-relationships between items: ***anchors***.
+[Renderer.Item][] provides simply but powerful way to describe
+relationships between items: **anchors**.
 
 	'use strict'
 
@@ -22,55 +22,61 @@ relationships between items: ***anchors***.
 	FREE_H_LINE_REQ = 1<<4
 	FREE_V_LINE_REQ = 1<<5
 
-*Anchors* allows to *pin* one item into another using one of the 6 ***anchor lines***.
+*Anchors* Anchors()
+-------------------
 
-Three horizontal lines:
- * *top*
- * *bottom*
- * *verticalCenter*
+*Anchors* allows to *pin* one item into another using one of the six anchor lines and two
+special targets.
 
-	H_LINES =
-		top: true
-		verticalCenter: true
-		bottom: true
+You can *stick* one item line into another.
 
-And three vertical lines:
- * *left*
- * *right*
- * *horizontalCenter*
-
-	V_LINES =
-		left: true
-		horizontalCenter: true
-		right: true
-
-	module.exports = (Renderer, Impl, itemUtils) ->
-
-```
-Rectangle {
-  id: 'rect1'
-}
-
-Rectangle {
-  anchors.left: rect1.right
+```style
+Item {
+\  height: 100
+\
+\  Rectangle {
+\    id: rect1
+\    width: 100
+\    height: 100
+\    color: 'green'
+\  }
+\  
+\  Rectangle {
+\    width: 40
+\    height: 40
+\    color: 'red'
+\    anchors.left: rect1.right
+\  }
 }
 ```
 
 Left side of the *rect2* item now is anchored into the right side of the *rect1* item.
 
-This connection is updated in realtime, so if the *rect1* will change a position,
+This connection is solid, so if the *rect1* will change a position,
 *rect2* item will be automatically updated.
+
+	H_LINES =
+		top: true
+		bottom: true
+		verticalCenter: true
+
+	V_LINES =
+		left: true
+		right: true
+		horizontalCenter: true
+
+	module.exports = (Renderer, Impl, itemUtils) ->
 
 		class Anchors extends itemUtils.DeepObject
 
 			itemUtils.initConstructor @,
 				data:
 					top: null
-					verticalCenter: null
 					bottom: null
+					verticalCenter: null
 					left: null
-					horizontalCenter: null
 					right: null
+					horizontalCenter: null
 
 			createAnchorProp = (type, opts=0) ->
 				setter = (_super) -> (val) ->
@@ -84,38 +90,34 @@ This connection is updated in realtime, so if the *rect1* will change a position
 
 						[target, line] = val
 
-Item id in the anchor descriptor (*rect1* in *rect1.right*) is called a ***target***.
+Item id in the anchor descriptor (*rect1* in *rect1.right*) is called a **target**.
 
-A *parent* is a special type of the *target*.
-It refers always to the item parent.
+A **parent** is a special type of the *target*.
+It always refers to the item parent.
 
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    id: 'rect2'
-	parent: 'rect1'
-    anchors:
-        left: 'parent.right'
-    ...
+```style
+Rectangle {
+\  width: 100
+\  height: 100
+\  color: 'green'
+\
+\  Rectangle {
+\    width: 40
+\    height: 40
+\    color: 'red'
+\    anchors.left: parent.right
+\  }
+}
 ```
 
-Such reference is automatically updated if the item parent change.
-
-```coffeescript
-rect2 = Renderer.Rectangle.open 'rect2'
-rect2.parent = Renderer.window
-rect2.close()
-```
+Such reference is also automatically updated if the item parent change.
 
 						assert target is 'parent' or target is 'this' or target instanceof Renderer.Item
 						, "`(##{id}).anchors.#{type}` expects an item; `'#{val}'` given"
 
-For the peformance reasons, the *target* could be only a *parent* or a ***item sibling***.
+For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.
 
-Pointing to the *parent* by its id is not allowed, `parent` special *target* should be used.
+Pointing to the *parent* by its id is not allowed, *parent* target should be used.
 
 						# TODO: we need know scope id here
 						# setImmediate ->
@@ -125,25 +127,6 @@ Pointing to the *parent* by its id is not allowed, `parent` special *target* sho
 						# 		assert isFamily
 						# 		, "`(##{id}).anchors.#{type}` can be anchored only to the " +
 						# 		  "parent or a sibling"
-
-*Anchors* also provies two ***special anchors***: *centerIn* and *fill*.
-
-*centerIn* is a shortcut for the *horizontalCenter* and *verticalCenter*.
-
-*fill* changes the item position and its size to be always under the anchored target.
-
-Such anchors doesn't require specifing the anchor line, so only the *target* is expected.
-
-```coffeescript
-Renderer.Rectangle.create
-    id: 'rect1'
-    ...
-
-Renderer.Rectangle.create
-    anchors:
-        fill: 'rect1'
-    ...
-```
 
 						if opts & ONLY_TARGET_ALLOW
 							assert line is undefined
@@ -157,7 +140,7 @@ Renderer.Rectangle.create
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
 
 Horizontal anchors can't point to the vertical lines (and vice versa),
-so `anchors.top = 'parent.left'` is not allowed.
+so *anchors.top = parent.left* is not allowed.
 
 						if opts & H_LINE_REQ
 							assert H_LINES[line]
@@ -177,21 +160,142 @@ so `anchors.top = 'parent.left'` is not allowed.
 					@_item.anchorsChanged? @
 					Impl.setItemAnchor.call @_item, type, val
 
+*Signal* Item::anchorsChanged(*Anchors* anchors)
+------------------------------------------------
+
+This signal is called on the [Renderer.Item][] if one of it's anchors changed.
+
 				itemUtils.defineProperty
 					constructor: Anchors
 					name: type
 					namespace: 'anchors'
 					setter: setter
 
-*Anchors* Anchors(*Renderer.Item* item)
----------------------------------------
+*Array* Anchors::left
+---------------------
 
 			createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
+
+### *Signal* Anchors::leftChanged(*Array* oldValue)
+
+*Array* Anchors::right
+----------------------
+
 			createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
+
+### *Signal* Anchors::rightChanged(*Array* oldValue)
+
+*Array* Anchors::horizontalCenter
+---------------------------------
+
+```style
+Item {
+\  height: 100
+\
+\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+\  Rectangle {
+\    color: 'red'; width: 40; height: 40
+\    anchors.horizontalCenter: rect1.horizontalCenter
+\  }
+}
+```
+
 			createAnchorProp 'verticalCenter', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
+
+### *Signal* Anchors::horizontalCenterChanged(*Array* oldValue)
+
+*Array* Anchors::top
+--------------------
+
+```style
+Item {
+\  height: 100
+\
+\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+\  Rectangle {
+\    color: 'red'; width: 40; height: 40
+\    anchors.top: rect1.verticalCenter
+\  }
+}
+```
+
 			createAnchorProp 'top', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
+
+### *Signal* Anchors::topChanged(*Array* oldValue)
+
+*Array* Anchors::bottom
+------------------------
+
 			createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
+
+### *Signal* Anchors::bottomChanged(*Array* oldValue)
+
+*Array* Anchors::verticalCenter
+--------------------------------
+
+```style
+Item {
+\  height: 100
+\
+\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+\  Rectangle {
+\    color: 'red'; width: 40; height: 40
+\    anchors.verticalCenter: rect1.verticalCenter
+\  }
+}
+```
+
 			createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
+
+### *Signal* Anchors::verticalCenterChanged(*Array* oldValue)
+
+*Array* Anchors::centerIn
+-------------------------
+
+It's a shortcut for the *horizontalCenter* and *verticalCenter*.
+
+Not target line is required.
+
+```style
+Rectangle {
+\  id: rect1
+\  width: 100
+\  height: 100
+\  color: 'green'
+\
+\  Rectangle {
+\    width: 40
+\    height: 40
+\    color: 'red'
+\    anchors.centerIn: parent
+\  }
+}
+```
+
+### *Signal* Anchors::centerInChanged(*Array* oldValue)
+
+*Array* Anchors::fill
+---------------------
+
+Changes item position and its size to be always under the anchored target.
+
+Not target line is required.
+
+```style
+Item {
+\  height: 100
+\
+\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+\  Rectangle {
+\    color: 'red'
+\    opacity: 0.5
+\    anchors.fill: rect1
+\  }
+}
+```
+
+### *Signal* Anchors::fillChanged(*Array* oldValue)
+
 			createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 

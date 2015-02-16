@@ -1,5 +1,5 @@
-Shapes
-======
+Drawing shapes
+==============
 
 Category of items which are using to draw geometry shapes.
 
