@@ -38,7 +38,7 @@ module.exports = (File) -> class Use
 
 		fragment = @self.fragments[@name]
 		if not file and not fragment
-			log.warn "Can't find `#{@name}` neft:fragment"
+			# log.warn "Can't find `#{@name}` neft:fragment"
 			return
 
 		usedFragment = @usedFragment = file or File.factory(fragment)

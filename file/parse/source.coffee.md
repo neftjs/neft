@@ -1,10 +1,10 @@
 neft:source @xml
 ================
 
-Special XML tag used in `neft:fragment`s to define place,
-where the `neft:use` body should be placed.
+Special XML tag used in [neft:fragment][]s to define place,
+where the [neft:use][] body should be placed.
 
-```view,example
+```
 <neft:fragment neft:name="user">
   <name>${name}</name>
   <age>${age}</age>
@@ -15,14 +15,6 @@ where the `neft:use` body should be placed.
   <superPower>flying</superPower>
 </neft:use>
 ```
-
-#### See also
-
-- `neft:fragment`
-- `neft:use`
-- `String Interpolation`
-
-.
 
 	'use strict'
 

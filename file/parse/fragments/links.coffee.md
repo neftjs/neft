@@ -1,12 +1,12 @@
 neft:require @xml
 =================
 
-Special XML tag used to include fragments from other local files.
+Special XML tag used to include fragments from other local file.
 
-All fragments (`neft:fragment` tags) from the file defined by the `href`
-are available in file where this tag has been used.
+All fragments ([neft:fragment][] tags) from the file defined by the `href`
+are available in the file where this tag has been used.
 
-`href` is a local path relative to the file when it's used.
+**href** is a local path relative to the file where it's used.
 
 ```
 <neft:require href="./user_utils.html" />
@@ -16,23 +16,16 @@ are available in file where this tag has been used.
 
 #### Namespaces
 
-For better organizations, you can include external files into the namespaces.
+For better organizations, you can include external files into the namespace.
 
-Just specify an `as` attribute.
-To each included fragment, this alias will be prefixed in schema as below.
+Just specify an **as** attribute.
+For each included fragment, this alias will be prefixed in the schema as below.
 
 ```
 <neft:require href="./user_utils.html" as="user" />
 
 <neft:use neft:fragment="user:avatar" />
 ```
-
-#### See also
-
-- `neft:fragment`
-- `neft:use`
-
-.
 
 	'use strict'
 

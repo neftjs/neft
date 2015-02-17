@@ -8,11 +8,11 @@ the `neft:if` attribute, which makes this tag more dynamic.
 
 Let's consider an example.
 
-As you may to know from reading the `Styles` module, the `neft:style` attribute
-refers to the `Renderer.Item` from your styles.
+In the *Renderer integration* article, you will find new attribute [neft:style][], which
+refers to the [Renderer.Item][] from your styles.
 
-In this example we change the `Renderer.Item::state` dynamically, according to the
-condition (`neft:if`).
+In this example we change the [Renderer.Item::state][] dynamically, according to the
+condition ([neft:if][]).
 
 ```
 <header neft:style="header">
@@ -20,28 +20,34 @@ condition (`neft:if`).
 </header>
 ```
 
-Now, if the condition is true (`1 > 0`), `header` state will be changed to `active`.
+Now, if the condition is true (**1 > 0**), *header* state will be changed to *active*.
 
 ```
 header.state = 'active'
 ```
 
-Of course, we used really simply condition (`1 > 0`) to visualize the problem.
-In pratice, you can refer to some data using the string interpolation.
+Of course, we used really simply condition (**1 > 0**) to visualize the problem.
+In practice, you can refer to some data using the string interpolation.
 
 ```
 <button neft:style="ButtonRed" neft:style:state="disabled">
-  <neft:attr name="neft:style:state" value="active" neft:if="${user.order.length} > 0" />
+  <neft:attr name="neft:style:state" value="active" neft:if="user.order.length > 0" />
   Proceed to checkout
 </button>
 ```
 
-#### See also
+This tag can also be used to store commonly used expressions.
 
-- `neft:style`
-- `String Interpolation`
+```
+<neft:fragment neft:name="navItem">
+  <neft:attr name="isActive" value="1" neft:if="global.uri.get('path') === data.path" />
+  <neft:attr name="neft:style:state" value="active" neft:if="isActive" />
 
-.
+  <div neft:if="isActive">
+    <neft:use neft:fragment="subnav" />
+  </div>
+</neft:fragment>
+```
 
 	'use strict'
 
@@ -71,4 +77,4 @@ In pratice, you can refer to some data using the string interpolation.
 			if attrChanges.length
 				file.attrChanges = attrChanges
 
-			null
+			return

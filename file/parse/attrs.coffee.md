@@ -2,9 +2,9 @@ Attributes evaluating @txt
 ==========================
 
 Attributes in XML are written as strings.
-For easiest developing, some of them are automatically evaluating to the JavaScript objects.
+For easiest developing, some of them are automatically evaluated to the JavaScript objects.
 
-String `[...]` is evaluated to the `Array`.
+String `[...]` evaluates to the `Array`.
 ```
 <items neft:each="[1, 2]"></items>
 ```
@@ -12,17 +12,17 @@ String `[...]` is evaluated to the `Array`.
 <neft:use neft:fragment="list" items="[{name: 't-shirt'}]" />
 ```
 
-String `{...}` is evaluated to the `Object`.
+String `{...}` evaluates to the `Object`.
 ```
 <neft:use neft:fragment="user" data="{name: 'Johny'}" />
 ```
 
-String `Dict ...` is evaluated to the `Dict`.
+String `Dict(...` evaluates to the [Dict][].
 ```
 <neft:use neft:fragment="user" data="Dict({name: 'Johny'})" />
 ```
 
-String `List ...` is evaluated to the `List`.
+String `List(...` evaluates to the [List][].
 ```
 <items neft:each="List([1, 2])"></items>
 ```
@@ -35,12 +35,6 @@ Using *CoffeeScript* syntax is fully allowed.
 <items neft:each="List [1, 2]"></items>
 ```
 
-#### See also
-
-- `neft:use`
-
-.
-
 	'use strict'
 
 	utils = require 'utils'
@@ -50,7 +44,7 @@ Using *CoffeeScript* syntax is fully allowed.
 
 	attr = [null, null]
 
-	VALUE_TO_EVAL_RE = ///^(\[|\{|Dict|List)///
+	VALUE_TO_EVAL_RE = ///^(\[|\{|Dict\(|List\()///
 
 	forNode = (elem) ->
 

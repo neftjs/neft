@@ -215,7 +215,7 @@ module.exports = (File) -> class Input
 			try
 				callFunc.call @
 			catch err
-				log.warn "`#{@text}` variable is skipped due to an error;\n#{err}"
+				log.warn "Interpolated string error;\n#{err}"
 
 	clone: (original, self) ->
 		node = original.node.getCopiedElement @node, self.node

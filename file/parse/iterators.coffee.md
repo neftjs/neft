@@ -1,44 +1,36 @@
 neft:each @xml
 ==============
 
-Special XML attribute used for repetitions. It's called *iterator*.
+Special XML attribute used for repeating. It's called *iterator*.
 
 Tag children (let's call it *iterator body*) will be duplicated for each
-element defined in the `neft:each` attribute.
-Only `Array` and `List` instances are supported.
+element defined in the [neft:each][] attribute.
+Only *Array* and [List][] instances are supported.
 
-```view,example
-<items neft:each="[1, 2]">
-  <item>ping</item>
-</items>
+```
+<ul neft:each="[1, 2]">
+  <li>ping</li>
+</ul>
 ```
 
 In the *iterator body* you have access to the three special variables:
 ***each***, ***item*** and ***i***.
 
-*each* refers to the `neft:each` attribute, *item* refers to the current element and
-*i* refers to the current element index.
+***each*** refers to the *neft:each* attribute,
+***item*** refers to the current element and
+***i*** refers to the current element index.
 
-```view,example
-<items neft:each="List('New York', 'Paris', 'Warsaw')">
-  <item>Index: ${i}; Current: ${item}; Next: ${each.get(i+1)}</item>
-</items>
+```
+<ul neft:each="List('New York', 'Paris', 'Warsaw')">
+  <li>Index: ${i}; Current: ${item}; Next: ${each.get(i+1)}</li>
+</ul>
 ```
 
 #### Runtime updates
 
 It's recommended to use the `List` module to iterate.
-All changes made on the `List` will be automatically refresh your view, so
-feel free to append and remove elements from the list. *Iterator body* will be synchronized.
-
-#### See also
-
-- `neft:fragment`
-- `neft:use`
-- `Attributes evaluating`
-- `String Interpolation`
-
-.
+All changes made on the `List` will automatically refresh your view, so
+feel free to append and remove elements from the list - *iterator body* will be synchronized.
 
 	'use strict'
 

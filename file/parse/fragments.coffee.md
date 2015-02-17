@@ -3,35 +3,28 @@ neft:fragment @xml
 
 Special XML tag used to create separated and repeatable parts of the document.
 
-Each `neft:fragment` has to define a unique *name*.
+Each `neft:fragment` has to define a unique **neft:name**.
 
 ```
 <neft:fragment neft:name="user"></neft:fragment>
 ```
 
-Let's take an example: you wan't to represent database of products.
+Let's take an example: you want to represent a list of products.
 Each product has the same properties, only data changed.
-To avoid copying code, we move the common part to the `neft:fragment` and paste it later
-using the `neft:use` tag. This is faster and cleaner.
+To avoid copying code, we move the common part to the [neft:fragment][] and paste it later
+using the [neft:use][] tag. This is fast and clean.
 
-```view,example
+```
 <neft:fragment neft:name="product">
-  <type>#{type}</type>
-  <name>#{name}</name>
+  <h2>${name}</h2>
+  <span>Type: ${type}</span>
 </neft:fragment>
 
-<products>
+<section>
   <neft:use neft:fragment="product" type="electronics" name="dryer" />
   <neft:use neft:fragment="product" type="painting" name="Lucretia, Paolo Veronese" />
-</products>
+</section>
 ```
-
-#### See also
-
-- `neft:use`
-- `String Interpolation`
-
-.
 
 	'use strict'
 
