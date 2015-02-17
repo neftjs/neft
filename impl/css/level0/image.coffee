@@ -19,7 +19,8 @@ module.exports = (impl) ->
 		data.elem.appendChild image
 
 	setImageSource: (val, callback) ->
-		dataUri = DATA_URI_RE.exec val
+		if DATA_URI_RE.test val
+			val = val.replace ///\#///g, encodeURIComponent('#')
 
 		@_impl.image.src = val
 
