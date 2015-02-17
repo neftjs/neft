@@ -56,8 +56,8 @@ SIGNALS_CURSORS =
 getMouseCoords = do ->
 	getArgs = (e) ->
 		rect = e.currentTarget.getBoundingClientRect()
-		x = e.layerX - rect.left
-		y = e.layerY - rect.top
+		x = e.pageX - rect.left
+		y = e.pageY - rect.top
 
 		x: x
 		y: y
@@ -74,8 +74,8 @@ getMouseCoords = do ->
 getRestrictedMouseCoords = do ->
 	getArgs = (e) ->
 		rect = e.currentTarget.getBoundingClientRect()
-		x = e.layerX - rect.left
-		y = e.layerY - rect.top
+		x = e.pageX - rect.left
+		y = e.pageY - rect.top
 
 		if x >= 0 and y >= 0 and x <= rect.width and y <= rect.height
 			x: x
