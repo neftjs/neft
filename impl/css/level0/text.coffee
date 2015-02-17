@@ -75,7 +75,7 @@ module.exports = (impl) ->
 
 			unless pending
 				setImmediate updateAll
-				setTimeout updateAllAndClean, 100
+				setTimeout updateAllAndClean, 500
 				pending = true
 
 	reloadFontFamilyQueue = []
