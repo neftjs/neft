@@ -5,7 +5,12 @@ utils = require 'utils'
 modulePackage = require './package.json'
 
 createBundle = (opts, callback) ->
-	bundle type: opts.type, release: opts.release, path: 'index.coffee.md', (err, bundle) ->
+	bundle {
+		type: opts.type
+		release: opts.release
+		removeLogs: opts.release
+		path: 'index.coffee.md'
+	}, (err, bundle) ->
 		if err
 			return console.error err
 

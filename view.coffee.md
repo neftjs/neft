@@ -19,6 +19,18 @@ View
 *View* View(*Document* document)
 --------------------------------
 
+This class represents an HTML document.
+
+You don't have to use it manually, because all files from the **views/** folder
+are automatically wrapped in this class and are available in the **app.views** object.
+
+Access it with:
+```
+module.exports = function(app){
+  var View = app.View;
+};
+```
+
 		constructor: (@document) ->
 			assert.instanceOf @, AppView
 			assert.instanceOf document, Document
@@ -52,11 +64,46 @@ View
 *Object* DocumentGlobalData
 ---------------------------
 
+When using **app.View**, this object is automatically set as an HTML document global data
+used in the string interpolation.
+
 		DocumentGlobalData = {}
+
+*DocumentGlobalData* DocumentGlobalData.global
+----------------------------------------------
+
+It's just a cyclic reference introduced for safety
+(until you don't override *global* keyword in your HTML document).
+
 		DocumentGlobalData.global = DocumentGlobalData
 
 *Any* DocumentGlobalData.data
 -----------------------------
+
+Got data from the **app.Route**.
+
+Your data from, for example, **app.Controller** is available here.
+
+```
+// routes/index.js
+module.exports = function(app){
+  new app.Route({
+    uri: 'welcome',
+    callback: function(req, res, callback){
+      callback(null, { name: 'Lily' });
+    }
+  });
+};
+
+// views/welcome.html
+<main>
+  Hi ${data.name}!
+  <!-- Hi Lily! -->
+
+  Hi ${global.data.name}!
+  <!-- Hi Lily! -->
+</main>
+```
 
 		DocumentGlobalData.data = null
 
@@ -68,15 +115,38 @@ View
 *NeftApp* DocumentGlobalData.app
 --------------------------------
 
+Reference into the **app** object.
+
+```
+<neft:func name="creepyCode">
+  global.app.networking.createRequest({ uri: 'why/not/in/the/controller?' })
+</neft:func>
+```
+
 		utils.defineProperty DocumentGlobalData, 'app', null, app
 
 *Networking.Request* DocumentGlobalData.request
 -----------------------------------------------
 
+Reference to the current considered request.
+
+**DocumentGlobalData.requestChanged()** signal is called when this property change.
+
 		utils.defineProperty DocumentGlobalData, 'request', utils.CONFIGURABLE, null
 
 *Dict* DocumentGlobalData.uri
 -----------------------------
+
+Custom [Dict][] object which can be used to get current request parameters, change them,
+or even redirect to the other URI.
+
+```
+<neft:func name="thisShouldBeALink">
+  global.uri.get('paramName');
+  global.uri.set('page', global.uri.get('page') + 1);
+  global.uri = 'articles/funny';
+</neft:func>
+```
 
 		utils.defineProperty DocumentGlobalData, 'uri', null, do ->
 			dict = new Dict
@@ -97,7 +167,7 @@ View
 
 					app.httpNetworking.createRequest
 						method: Networking.Request.GET
-						type: Networking.Request.VIEW_TYPE
+						type: Networking.Request.HTML_TYPE
 						uri: req.handler.uri.toString dict
 
 			dict.onChanged onDictChanged
@@ -121,6 +191,18 @@ View
 *Dict* DocumentGlobalData.uri.toString([*Any* params])
 ------------------------------------------------------
 
+Works like [Networking.Uri::toString][] if **params** are given, otherwise it returns
+current request uri.
+
+```
+<span>Your current URI: ${global.uri}</span>
+
+<a href="/${global.uri.toString({page: global.uri.get('page') + 1})}">Show next page</a>
+
+<!-- it's equal to ... -->
+<a href="/${global.request.handler.uri.toString({page: global.uri.get('page') + 1})}">Show next page</a>
+```
+
 			dict.toString = (params) ->
 				if params
 					req.handler.uri.toString params
@@ -132,5 +214,5 @@ View
 		, (val) ->
 			app.httpNetworking.createRequest
 				method: Networking.Request.GET
-				type: Networking.Request.VIEW_TYPE
+				type: Networking.Request.HTML_TYPE
 				uri: val

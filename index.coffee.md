@@ -40,12 +40,15 @@ HTML documents and more.
 	#          "For production use --release option!"
 	# `//</development>`
 
-	exports = module.exports = (opts={}) ->
+	exports = module.exports = (opts={}, extraOpts={}) ->
 		# Welcome log
 		log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
 
 		{config} = pkg
 		config = utils.merge utils.clone(config), opts.config
+
+		if extraOpts?
+			utils.merge config, extraOpts
 
 *Object* app
 ------------
@@ -55,7 +58,7 @@ HTML documents and more.
 *Object* app.config = {}
 ------------------------
 
-Config object from *package.json* file.
+Config object from *package.json* file and from the *init.js* file.
 
 ```
 // package.json
@@ -73,7 +76,7 @@ Config object from *package.json* file.
 
 // init.js
 module.exports = function(NeftApp){
-  var app = NeftApp();
+  var app = NeftApp({ title: "Overridden title" });
   console.log(app.config);
   // {title: "My first application!", protocol: "http", port: ....}
 };
@@ -89,13 +92,14 @@ with the server and to create local requests.
 
 All routes created by the *App.Route* uses this networking.
 
-HTTP protocol is used by default with data specified in the *package.json*.
+HTTP protocol is used by default with the data specified in the *package.json*.
 
 			networking: new Networking
 				type: Networking.HTTP
 				protocol: config.protocol
-				port: config.port
+				port: parseInt(config.port, 10)
 				host: config.host
+				url: config.url
 				language: config.language
 
 *Object* app.models = {}

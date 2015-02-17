@@ -61,6 +61,13 @@ Class known as `app.Route` used to automate dealing with networking.
 *Route* Route(*Object* options)
 -------------------------------
 
+Access it with:
+```
+module.exports = function(app){
+  var Route = app.Route;
+};
+```
+
 		constructor: (opts) ->
 			assert.instanceOf @, AppRoute
 			assert.isPlainObject opts
@@ -421,7 +428,7 @@ before controller function with the same parameters as controller, that is
 						callback err
 
 			# view
-			if req.type is Networking.Request.HTML_TYPE and @view or @template
+			if req.type is Networking.Request.HTML_TYPE and (@view or @template)
 				stack.add (callback) =>
 					if res.data instanceof Document
 						# TODO: how to destroy this view?

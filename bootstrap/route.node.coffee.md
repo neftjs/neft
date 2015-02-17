@@ -1,17 +1,19 @@
 Standard routes @txt
 ====================
 
+**neft.io app** comes with few predefined routes.
+
 	'use strict'
 
 	utils = require 'utils'
+	log = require 'log'
 	fs = require 'fs'
 	pathUtils = require 'path'
-	mmm = require 'mmmagic'
 
 	Document = require 'document'
 	Networking = require 'networking'
 
-	Magic = mmm.Magic
+	log = log.scope 'App', 'Bootstrap'
 
 	VIEW_HTML = """
 	<!doctype html>
@@ -49,14 +51,16 @@ Standard routes @txt
 		view = new app.View do ->
 			Document.fromHTML VIEW_NAME, VIEW_HTML
 
-		reservedUris = ['app.js', 'favicon.ico']
+		reservedUris = ['app.js', 'favicon.ico', 'static']
 		reservedUrisRe = do =>
 			re = ''
 			re += "#{utils.addSlashes(uri)}|" for uri in reservedUris
 			re = re.slice 0, -1
-			new RegExp re
+			new RegExp "^(?:#{re})"
 
 #### app.js
+
+Returns build app javascript file.
 
 		new app.Route
 			uri: APP_JS_URI
@@ -65,6 +69,8 @@ Standard routes @txt
 
 #### neft.js
 
+Returns neft javascript file.
+
 		new app.Route
 			uri: NEFT_JS_URI
 			callback: (req, res, callback) ->
@@ -72,21 +78,20 @@ Standard routes @txt
 
 #### static/{path*}
 
-		magic = new Magic mmm.MAGIC_MIME_TYPE | mmm.MAGIC_MIME_ENCODING
-		new app.Route
-			uri: 'static/{path*}'
-			callback: (req, res, callback) ->
-				url = pathUtils.join 'static', req.params.path
-				unless ///^static.///.test url
-					return callback true
-
-				magic.detectFile './'+req.uri, (err, mime) ->
-					if err?
-						return callback err
-					res.setHeader 'Content-Type', mime
-					fs.readFile './'+req.uri, 'utf-8', callback
+Returns any file from the static/ folder.
 
 #### *
+
+It decides whether the full HTML document should be returned (e.g. for the Googlebot or
+text browsers) or HTML scaffolding which will run **neft.io** on the client side.
+
+#### legacy/*
+
+This URI is used by the browsers which doesn't support javascript - in such case always
+full HTML document is returned (like for searching robots).
+
+You can use this route in a browser to check whether your HTML document is proper, but
+remember to clean your cookies when you finish.
 
 		new app.Route
 			uri: '*'
@@ -108,7 +113,10 @@ Standard routes @txt
 				# TODO: consider other robots and clients with legacy browsers
 				if req.type isnt Networking.Request.HTML_TYPE or # omit types other than html
 				   reservedUrisRe.test(req.uri) or # omit reserved URIs
-				   ~req.userAgent.indexOf('Googlebot') # omit google boot
+				   utils.has(req.userAgent, 'bot') or # omit Googlebot, msnbot etc.
+				   utils.has(req.userAgent, 'Baiduspider') or # omit baidu bot
+				   utils.has(req.userAgent, 'facebook') or # omit facebook bot
+				   utils.has(req.userAgent, 'Links') # omit links text browser
 					return callback true
 
 				callback null,
