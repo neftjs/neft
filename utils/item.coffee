@@ -62,6 +62,7 @@ module.exports = (Renderer, Impl) -> exports =
 		# setter
 		if valueConstructor
 			propSetter = basicSetter = (val) ->
+				null;
 				`//<development>`
 				developmentSetter?.call @, val
 				`//</development>`
@@ -75,6 +76,7 @@ module.exports = (Renderer, Impl) -> exports =
 				return
 		else
 			propSetter = basicSetter = (val) ->
+				null;
 				`//<development>`
 				developmentSetter?.call @, val
 				`//</development>`

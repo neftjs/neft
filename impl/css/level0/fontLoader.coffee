@@ -49,7 +49,7 @@ module.exports = (impl) ->
 		styles.innerHTML = """
 			@font-face {
 				font-family: "#{name}";
-				src: #{urlStr}local(#{name});
+				src: #{urlStr};
 				font-style: #{style};
 				font-weight: #{weight};
 			}
