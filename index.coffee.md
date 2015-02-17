@@ -125,47 +125,56 @@ module.exports = function(app){
 };
 ```
 
-			models: opts.models or {}
+			models: {}
 
 *Object* app.controllers = {}
 -----------------------------
 
 Files from the *controllers* folder with objects returned by their exported functions.
 
-			controllers: opts.controllers or {}
+			controllers: {}
 
 *Object* app.routes = {}
 ------------------------
 
 Files from the *routes* folder with objects returned by their exported functions.
 
-			routes: opts.routes or {}
+			routes: {}
+
+*Object* app.styles = {}
+------------------------
+
+Files from the *styles* folder as *Function*s ready to create [Renderer.Item][]s..
+
+			styles: {}
 
 *Object* app.views = {}
 -----------------------
 
 Files from the *views* folder as *App.View* instances.
 
-			views: opts.views or {}
+			views: {}
 
 *Object* app.templates = {}
 ---------------------------
 
 Files from the *templates* folder with objects returned by their exported functions.
 
-			templates: opts.templates or {}
+			templates: {}
 
 		app.Route = AppRoute app
 		app.Template = AppTemplate app
 		app.View = AppView app
 
+		# propagate data
+		Renderer.serverUrl = app.networking.url
+
 		# initialize styles
-		{styles} = opts
-		for name, style of styles
-			styles[name] = style styles
+		for style in opts.styles when style.name?
+			app.styles[style.name] = style.file app.styles
 
 		# set styles window item
-		windowStyle = opts.styles?.window?.withStructure()
+		windowStyle = app.styles?.window?.withStructure()
 		windowStyle ?=
 			mainItem: new Renderer.Item
 			ids: {}
@@ -174,28 +183,33 @@ Files from the *templates* folder with objects returned by their exported functi
 		# load styles
 		require('styles')
 			windowStyle: windowStyle
-			styles: opts.styles
+			styles: app.styles
 
 		# load bootstrap
 		if utils.isNode
 			bootstrapRoute app
 
 		# load views
-		for path, json of app.views
-			unless json instanceof Document
-				app.views[path] = new app.View Document.fromJSON(path, json)
+		for view in opts.views when view.name?
+			app.views[view.name] = new app.View Document.fromJSON(view.name, view.file)
 
 		# loading files helper
-		init = (files) ->
-			for name, module of files
-				files[name] = module app
-			files
+		init = (files, target) ->
+			for file in files when file.name?
+				fileObj = file.file app
+
+				if target[file.name]?
+					if utils.isPlainObject(target[file.name]) and utils.isPlainObject(fileObj)
+						fileObj = utils.merge Object.create(target[file.name]), fileObj
+
+				target[file.name] = fileObj
+			return
 
 		setImmediate ->
-			init app.models
-			init app.controllers
-			init app.routes
-			init app.templates
+			init opts.models, app.models
+			init opts.controllers, app.controllers
+			init opts.routes, app.routes
+			init opts.templates, app.templates
 
 	# link module
 	MODULES = ['assert', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',

@@ -119,7 +119,7 @@ module.exports = function(app){
 
 			# set object as immutable
 			Object.preventExtensions @
-			setImmediate ->
+			setImmediate =>
 				Object.freeze @
 
 *String* Route::method = 'get'
