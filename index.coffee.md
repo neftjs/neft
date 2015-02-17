@@ -1,7 +1,5 @@
-Styles
-======
-
-**Connect document and renderer**
+Renderer integration
+====================
 
 In *Neft* we have two important modules: `View` and `Renderer` which are using to
 respectively organising data and visualize graphics.

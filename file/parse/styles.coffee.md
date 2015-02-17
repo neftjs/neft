@@ -47,17 +47,11 @@ Text {
 }
 ```
 
-```view,example
+```
 <contact neft:style="styles.articles/contact">
   <heading neft:style="header">Contact</heading>
 </contact>
 ```
-
-#### See also
-
-- `neft:style`
-
-.
 
 	'use strict'
 

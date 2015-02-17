@@ -116,10 +116,10 @@ This attribute is available, only if it's a `Renderer.Item` signal.
 				if ctx instanceof Renderer.Item
 					ctx
 
-*App.View.GlobalStorage* globalObject.global
---------------------------------------------
+*DocumentGlobalData* globalObject.global
+----------------------------------------
 
-In most cases this attribute references to the `App.View.GlobalStorage` unless you render
+In most cases this attribute references to the [DocumentGlobalData][] unless you render
 `view` in a custom way (not using `App View`).
 
 ```
