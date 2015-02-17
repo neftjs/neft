@@ -80,6 +80,8 @@ getRestrictedMouseCoords = do ->
 		if x >= 0 and y >= 0 and x <= rect.width and y <= rect.height
 			x: x
 			y: y
+		else
+			false
 
 	if isTouch
 		(e) ->
@@ -180,8 +182,6 @@ SIGNALS_ARGS =
 		getRestrictedMouseCoords e
 	'pointerReleased': getMouseCoords
 	'pointerClicked': getRestrictedMouseCoords
-	'pointerEntered': getRestrictedMouseCoords
-	'pointerExited': getMouseCoords
 	'pointerMove': (e) ->
 		if isTouch
 			e.preventDefault()
@@ -369,13 +369,11 @@ module.exports = (impl) ->
 
 		customFunc = (e) =>
 			arg = SIGNALS_ARGS[name]? e
-			unless arg
+			if arg is false
 				return
 
-			result = func.call @, arg
-			if result is signal.STOP_PROPAGATION
+			if func.call(@, arg) is signal.STOP_PROPAGATION
 				e.stopPropagation()
-			result
 
 		if typeof signalName is 'string'
 			elem.addEventListener signalName, customFunc

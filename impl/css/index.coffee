@@ -53,7 +53,7 @@ span * {
 span b, span strong {
 	font-weight: bolder;
 }
-span em {
+span i, span em {
 	font-style: italic;
 }
 code {
@@ -101,7 +101,7 @@ module.exports = (impl) ->
 	utils.merge impl.utils, require('./utils')
 
 	unless isTouch
-		impl._scrollableMode ?= 'wheel'
+		impl._scrollableUsePointer = false
 
 	window.addEventListener 'resize', resize = ->
 		item = impl.window

@@ -1,5 +1,7 @@
 'use strict'
 
+signal = require 'signal'
+
 SIGNALS =
 	'pointerClicked': 'onClicked'
 	'pointerPressed': 'onPressed'
@@ -30,11 +32,22 @@ SIGNALS_ARGS =
 		y: e.angleDelta.y
 
 module.exports = (impl) ->
-	create: (item) ->
-		storage = item._impl
-		storage.elem ?= impl.utils.createQmlObject 'Item'
-		storage.id = stylesWindow.items.push(storage) - 1
-		storage.mouseArea = null
+	DATA =
+		elem: null
+		id: ''
+		mouseArea: null
+		linkUri: ''
+		linkUriListens: false
+		bindings: null
+
+	exports =
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner DATA
+
+	create: (data) ->
+		data.elem ?= impl.utils.createQmlObject 'Item {}'
+		data.id = stylesWindow.items.push(data) - 1
 
 	setItemParent: (val) ->
 		@_impl.elem.parent = val?._impl.elem or null
@@ -69,21 +82,34 @@ module.exports = (impl) ->
 	setItemOpacity: (val) ->
 		@_impl.elem.opacity = val
 
+	setItemLinkUri: do ->
+		onLinkUriClicked = ->
+			{linkUri} = @_impl
+			if linkUri
+				__location.append linkUri
+				signal.STOP_PROPAGATION
+
+		(val) ->
+			@_impl.linkUri = val
+
+			unless @_impl.linkUriListens
+				@_impl.linkUriListens = true
+				exports.attachItemSignal.call @, 'pointerClicked', onLinkUriClicked
+
 	setItemMargin: (val) ->
 
-	# TODO: `pointerReleased` doesn't work with `pointerPressed`
 	attachItemSignal: (name, func) ->
 		storage = @_impl
 
 		# create mouse area if needed
 		unless mouseArea = storage.mouseArea
-			mouseArea = storage.mouseArea = impl.utils.createQmlObject 'MouseArea'
+			mouseArea = storage.mouseArea = impl.utils.createQmlObject 'MouseArea {}'
 			mouseArea.propagateComposedEvents = true
 			mouseArea.parent = storage.elem
 
 			{id} = storage
-			qmlUtils.createBinding mouseArea, 'width', "stylesWindow.items['#{id}'].elem.width"
-			qmlUtils.createBinding mouseArea, 'height', "stylesWindow.items['#{id}'].elem.height"
+			mouseArea.width = Qt.binding -> stylesWindow.items[id].elem.width
+			mouseArea.height = Qt.binding -> stylesWindow.items[id].elem.height
 
 		# hover
 		if HOVER_SIGNALS[name]
@@ -92,9 +118,15 @@ module.exports = (impl) ->
 		# listen on an event
 		signal = SIGNALS[name]
 
-		customFunc = (e) ->
+		customFunc = (e) =>
+			if e?
+				if e._stopPropagation
+					return
+				e.accepted = false
+
 			arg = SIGNALS_ARGS[name]? e
-			func arg
+			if func.call(@, arg) is signal.STOP_PROPAGATION and e?
+				e._stopPropagation = true
 
 		mouseArea[signal].connect customFunc
 

@@ -42,41 +42,61 @@ module.exports = (impl) ->
 			if auto
 				updateSize @
 
-	create: (item) ->
-		storage = item._impl
-		elem = storage.elem ?= impl.utils.createQmlObject 'Text'
+	onLickActivated = (link) ->
+		__location.append link
 
-		Item.create item
+	DATA =
+		autoWidth: true
+		autoHeight: true
 
-		storage.autoWidth = true
-		storage.autoHeight = true
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		elem = data.elem ?= impl.utils.createQmlObject 'Text { property string _fontFamily: ""; textFormat: Text.StyledText; font.pixelSize: 14 }'
+		elem.linkActivated.connect onLickActivated
+
+		Item.create.call @, data
+
+		# font family
+		elem.font.family = Qt.binding -> (stylesWindow.fonts[this._fontFamily] || true).name || ''
+		elem.onFontChanged.connect => updateSize @
 
 		# handlers
-		item.onWidthChanged onWidthChanged
-		item.onHeightChanged onHeightChanged
+		@onWidthChanged onWidthChanged
+		@onHeightChanged onHeightChanged
 
 		# set default styles
-		elem.font.pixelSize = 14
-		elem.font.family = 'sans-serif'
+		elem._fontFamily = 'sans-serif'
 
 	setText: (val) ->
+		Renderer = require 'renderer'
+		{SUPPORTED_HTML_TAGS} = Renderer.Text
+
+		# remove unsupported HTML tags
+		val = val.replace ///<\/?([a-zA-Z0-9]+).*?>///g, (str, tag) ->
+			if SUPPORTED_HTML_TAGS[tag]
+				str
+			else
+				''
+		val = val.replace ///(\ ){2,}///g, (str) ->
+			str.replace ///\ ///g, '&nbsp; '
+
 		@_impl.elem.text = val
 		updateSize @
 
 	setTextColor: (val) ->
-		@_impl.elem.color = val
+		@_impl.elem.color = impl.utils.toQtColor val
 
 	setTextLineHeight: (val) ->
 		@_impl.elem.lineHeight = val
-		updateSize @
 
 	setTextFontFamily: (val) ->
-		@_impl.elem.font.family = val
-		updateSize @
+		@_impl.elem._fontFamily = val.toLowerCase()
 
 	setTextFontPixelSize: (val) ->
 		@_impl.elem.font.pixelSize = val
-		updateSize @
 
 	setTextFontWeight: (val) ->
 		weight = FONT_WEIGHT[Math.round(val * (FONT_WEIGHT.length-1))]
@@ -84,8 +104,9 @@ module.exports = (impl) ->
 
 	setTextFontWordSpacing: (val) ->
 		@_impl.elem.font.wordSpacing = val
-		updateSize @
 
 	setTextFontLetterSpacing: (val) ->
 		@_impl.elem.font.letterSpacing = val
-		updateSize @
+
+	setTextFontItalic: (val) ->
+		@_impl.elem.font.italic = val

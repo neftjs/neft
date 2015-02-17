@@ -12,6 +12,8 @@ log = log.scope 'Renderer', 'Binding'
 module.exports = (impl) ->
 	{items} = impl
 
+	impl._asyncBindings ?= true
+
 	class Connection
 		constructor: (@binding, @item, @prop) ->
 			{signalChangeListener} = @
@@ -202,6 +204,9 @@ module.exports = (impl) ->
 				null
 
 			->
+				unless impl._asyncBindings
+					return updateBinding @
+
 				if queueHashes[@__hash__]
 					return
 

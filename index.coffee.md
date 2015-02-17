@@ -189,4 +189,6 @@ Column {
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val
 		Impl.setWindow val
 
+	exports.serverUrl = ''
+
 	Object.preventExtensions exports

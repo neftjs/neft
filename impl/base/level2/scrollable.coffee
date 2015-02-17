@@ -10,7 +10,7 @@ module.exports = (impl) ->
 	{Types} = impl
 	{Item, Rectangle} = Types
 
-	impl._scrollableMode ?= 'pointer'
+	impl._scrollableUsePointer ?= true
 
 	###
 	Scroll container by given x and y deltas
@@ -165,12 +165,9 @@ module.exports = (impl) ->
 		impl.setItemClip.call @, true
 
 		# signals
-		if impl._scrollableMode is 'pointer'
+		if impl._scrollableUsePointer
 			usePointer @
-		else if impl._scrollableMode is 'wheel'
-			useWheel @
-		else
-			throw new Error "Unsupported Scrollable mode"
+		useWheel @
 
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem

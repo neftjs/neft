@@ -66,7 +66,7 @@ Image source URL (absolute or relative to the page) or data URI.
 						return
 
 					if err
-						err = new Error "Can't load `#{source}` image"
+						err = new Error "Can't load `#{val}` image"
 						log.warn err.message
 					else
 						@width = opts.width
