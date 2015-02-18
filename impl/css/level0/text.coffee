@@ -8,12 +8,14 @@ isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 module.exports = (impl) ->
 	{Item, Image} = impl.Types
 	implUtils = impl.utils
+
+	# used to render not visible texts
 	hatchery = impl._hatchery
 
 	impl.DEFAULT_FONTS =
 		__proto__: null
 		'sans': 'neft-sans-family'
-		'sans-serif': 'neft-sans-family-serif'
+		'sans-serif': 'neft-sans-serif-family'
 		'monospace': 'neft-monospace-family'
 
 	textImpl = {}
@@ -22,10 +24,14 @@ module.exports = (impl) ->
 	sizeUpdatePending = false
 
 	updateSize = do ->
+		MAX_CHECKS = 5
+
 		queue = []
 		queueItems = Object.create null
 		windowLoadQueue = []
 		pending = false
+		intervalPending = false
+		intervalId = 0
 
 		textImpl.onFontReady ->
 			while elem = windowLoadQueue.pop()
@@ -35,20 +41,29 @@ module.exports = (impl) ->
 		updateAll = ->
 			pending = false
 			sizeUpdatePending = true
-			for elem in queue
-				updateSizeNow elem
+			i = 0
+			n = queue.length
+			while i < n
+				item = queue[i]
+				updateSizeNow item
+				if ++item._impl.sizeChecks >= MAX_CHECKS
+					if i is n-1
+						queue.pop()
+						n--
+					else
+						queue[i] = queue.pop()
+						i--
+						n--
+					queueItems[item.__hash__] = false
+				i++
 			sizeUpdatePending = false
 			return
 
-		updateAllAndClean = ->
+		updateAllInInterval = ->
 			updateAll()
-			while queue.length
-				item = queue.pop()
-				queueItems[item.__hash__] = false
-
-				if item._impl.textElement.parentNode is hatchery
-					item._impl.elem.appendChild item._impl.textElement
-			return
+			unless queue.length
+				clearInterval intervalId
+				intervalPending = false
 
 		updateSizeNow = (item) ->
 			{textElement} = item._impl
@@ -57,9 +72,18 @@ module.exports = (impl) ->
 				item.width = textElement.scrollWidth+1
 
 			if item._impl.autoHeight
-				item.height = textElement.scrollHeight
+				height = item.height = textElement.scrollHeight
+
+			if height > 0
+				if item._impl.textElement.parentNode is hatchery
+					item._impl.elem.appendChild item._impl.textElement
+				true
+			else
+				false
 
 		(item) ->
+			item._impl.sizeChecks = 0
+
 			if queueItems[item.__hash__]
 				return
 
@@ -75,8 +99,11 @@ module.exports = (impl) ->
 
 			unless pending
 				setImmediate updateAll
-				setTimeout updateAllAndClean, 500
 				pending = true
+
+			unless intervalPending
+				intervalId = setInterval updateAllInInterval, 500
+				intervalPending = true
 
 	reloadFontFamilyQueue = []
 	isFontReady = false
@@ -162,6 +189,7 @@ module.exports = (impl) ->
 		autoWidth: true
 		autoHeight: true
 		textElement: null
+		sizeChecks: 0
 
 	exports =
 	DATA: DATA
