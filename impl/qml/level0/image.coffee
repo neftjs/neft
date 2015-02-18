@@ -6,7 +6,7 @@ module.exports = (impl) ->
 	{Item} = impl.Types
 
 	DATA =
-		svgImageResizeListener: null
+		isSvg: false
 
 	onSvgImageResize = ->
 		if this.sourceSize.width < this.width
@@ -33,19 +33,17 @@ module.exports = (impl) ->
 
 		if ///^data:image\/svg+|\.svg$///
 			elem.fillMode = Image.PreserveAspectFit
-			unless data.svgImageResizeListener
-				data.svgImageResizeListener = ->
-					onSvgImageResize.call elem
-				elem.widthChanged.connect data.svgImageResizeListener
-				elem.heightChanged.connect data.svgImageResizeListener
-				elem.statusChanged.connect data.svgImageResizeListener
+			unless data.isSvg
+				elem.widthChanged.connect elem, onSvgImageResize
+				elem.heightChanged.connect elem, onSvgImageResize
+				elem.statusChanged.connect elem, onSvgImageResize
 		else
 			elem.fillMode = Image.Stretch
-			if data.svgImageResizeListener
-				elem.widthChanged.disconnect data.svgImageResizeListener
-				elem.heightChanged.disconnect data.svgImageResizeListener
-				elem.statusChanged.disconnect data.svgImageResizeListener
-				data.svgImageResizeListener = null
+			if data.isSvg
+				elem.widthChanged.disconnect elem, onSvgImageResize
+				elem.heightChanged.disconnect elem, onSvgImageResize
+				elem.statusChanged.disconnect elem, onSvgImageResize
+				data.isSvg = false
 
 		switch elem.status
 			when Image.Null

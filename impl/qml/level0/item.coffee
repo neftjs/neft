@@ -34,7 +34,6 @@ SIGNALS_ARGS =
 module.exports = (impl) ->
 	DATA =
 		elem: null
-		id: ''
 		mouseArea: null
 		linkUri: ''
 		linkUriListens: false
@@ -47,7 +46,6 @@ module.exports = (impl) ->
 
 	create: (data) ->
 		data.elem ?= impl.utils.createQmlObject 'Item {}'
-		data.id = stylesWindow.items.push(data) - 1
 
 	setItemParent: (val) ->
 		@_impl.elem.parent = val?._impl.elem or null
@@ -103,13 +101,12 @@ module.exports = (impl) ->
 
 		# create mouse area if needed
 		unless mouseArea = storage.mouseArea
-			mouseArea = storage.mouseArea = impl.utils.createQmlObject 'MouseArea {}'
-			mouseArea.propagateComposedEvents = true
-			mouseArea.parent = storage.elem
-
-			{id} = storage
-			mouseArea.width = Qt.binding -> stylesWindow.items[id].elem.width
-			mouseArea.height = Qt.binding -> stylesWindow.items[id].elem.height
+			mouseArea = storage.mouseArea = impl.utils.createQmlObject(
+				'MouseArea {' +
+					'propagateComposedEvents: true;' +
+					'anchors.fill: parent;' +
+				'}'
+			, storage.elem)
 
 		# hover
 		if HOVER_SIGNALS[name]

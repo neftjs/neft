@@ -8,39 +8,35 @@ FONT_WEIGHT = [
 	'Black'
 ]
 
+FONT_WEIGHT_LAST_INDEX = FONT_WEIGHT.length - 1
+
 module.exports = (impl) ->
 	{Item, Image} = impl.Types
 
 	updatePending = false
 
-	updateSize = (item) ->
-		storage = item._impl
-		{elem} = storage
+	updateSize = ->
+		data = @_impl
+		{elem} = data
 
 		updatePending = true
 
-		if storage.autoWidth
-			item.width = elem.contentWidth
+		if data.autoWidth
+			@width = elem.contentWidth
 
-		if storage.autoHeight
-			item.height = elem.contentHeight
+		if data.autoHeight
+			@height = elem.contentHeight
 
 		updatePending = false
 
 	onWidthChanged = ->
 		if not updatePending
-			{elem} = @_impl
 			auto = @_impl.autoWidth = @width is 0
 			@_impl.elem.wrapMode = if auto then Text.NoWrap else Text.Wrap
-			if auto
-				updateSize @
 
 	onHeightChanged = ->
 		if not updatePending
-			{elem} = @_impl
-			auto = @_impl.autoHeight = @height is 0
-			if auto
-				updateSize @
+			@_impl.autoHeight = @height is 0
 
 	onLickActivated = (link) ->
 		__location.append link
@@ -54,21 +50,25 @@ module.exports = (impl) ->
 	createData: impl.utils.createDataCloner Item.DATA, DATA
 
 	create: (data) ->
-		elem = data.elem ?= impl.utils.createQmlObject 'Text { property string _fontFamily: ""; textFormat: Text.StyledText; font.pixelSize: 14 }'
-		elem.linkActivated.connect onLickActivated
+		elem = data.elem ?= impl.utils.createQmlObject(
+			'Text {' +
+				'property string _fontFamily: "sans-serif";' +
+				'font.pixelSize: 14;' +
+				'font.family: (stylesWindow.fonts[this._fontFamily] || true).name || "";' +
+			'}'
+		)
 
 		Item.create.call @, data
+		
+		# update size
+		elem.onFontChanged.connect @, updateSize
 
-		# font family
-		elem.font.family = Qt.binding -> (stylesWindow.fonts[this._fontFamily] || true).name || ''
-		elem.onFontChanged.connect => updateSize @
+		# links
+		elem.linkActivated.connect onLickActivated
 
-		# handlers
+		# update autoWidth/autoHeight
 		@onWidthChanged onWidthChanged
 		@onHeightChanged onHeightChanged
-
-		# set default styles
-		elem._fontFamily = 'sans-serif'
 
 	setText: (val) ->
 		Renderer = require 'renderer'
@@ -84,7 +84,7 @@ module.exports = (impl) ->
 			str.replace ///\ ///g, '&nbsp; '
 
 		@_impl.elem.text = val
-		updateSize @
+		updateSize.call @
 
 	setTextColor: (val) ->
 		@_impl.elem.color = impl.utils.toQtColor val
@@ -99,7 +99,7 @@ module.exports = (impl) ->
 		@_impl.elem.font.pixelSize = val
 
 	setTextFontWeight: (val) ->
-		weight = FONT_WEIGHT[Math.round(val * (FONT_WEIGHT.length-1))]
+		weight = FONT_WEIGHT[(val * FONT_WEIGHT_LAST_INDEX + 0.5)|0]
 		@_impl.elem.font.weight = Font[weight]
 
 	setTextFontWordSpacing: (val) ->

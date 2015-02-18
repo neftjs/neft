@@ -10,7 +10,7 @@ module.exports = (impl) ->
 	createData: impl.utils.createDataCloner Item.DATA, DATA
 
 	create: (data) ->
-		elem = data.elem ?= impl.utils.createQmlObject 'Rectangle { color: "transparent" }'
+		data.elem ?= impl.utils.createQmlObject 'Rectangle { color: "transparent"; }'
 
 		Item.create.call @, data
 
