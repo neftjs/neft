@@ -62,7 +62,14 @@ Creates new *Networking* instance.
 			utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
 			{@type, @protocol, @port, @host, @language} = opts
 
-			url = "#{@protocol}://#{@host}:#{@port}/"
+			if opts.url?
+				assert.isString opts.url
+				assert.notLengthOf opts.url, 0
+				url = opts.url
+				if url[url.length - 1] isnt '/'
+					url += '/'
+			else
+				url = "#{@protocol}://#{@host}:#{@port}/"
 			utils.defineProperty @, 'url', utils.ENUMERABLE, url
 
 			setImmediate => Impl.init @
@@ -99,6 +106,8 @@ ReadOnly *String* Networking::url
 ---------------------------------
 
 Proper URL path contains protocol, port and host.
+
+Can be set manually if passed host and port are private.
 
 		url: ''
 
@@ -150,7 +159,7 @@ app.httpNetworking.createHandler({
 
 Creates new local or server request.
 
-Given *options* object is used to create `Networking.Request`.
+Given *options* object is used to create [Networking.Request][].
 
 #### Local requests
 

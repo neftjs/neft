@@ -3,9 +3,12 @@
 utils = require 'utils'
 http = require 'http'
 urlUtils = require 'url'
-expect = require 'expect'
+assert = require 'neft-assert'
+nodeStatic = require 'node-static'
 
 pending = {}
+
+staticServer = new nodeStatic.Server gzip: true
 
 module.exports = (Networking) ->
 
@@ -13,7 +16,7 @@ module.exports = (Networking) ->
 	Response: require('./response') Networking, pending
 
 	init: (networking) ->
-		expect(networking).toBe.any Networking
+		assert.instanceOf networking, Networking
 
 		# create server
 		server = http.createServer()
@@ -23,25 +26,40 @@ module.exports = (Networking) ->
 
 		# on request
 		server.on 'request', (serverReq, serverRes) ->
-			uid = utils.uid()
+			data = ''
 
-			# save in the stack
-			obj = pending[uid] =
-				networking: networking
-				server: server
-				req: null
-				serverReq: serverReq
-				serverRes: serverRes
+			serverReq.on 'data', (chunk) ->
+				data += chunk;
 
-			type = serverReq.headers['x-expected-type']
-			type ||= Networking.Request.HTML_TYPE
+			serverReq.on 'end', ->
+				if ///^\/static\////.test(serverReq.url)
+					staticServer.serve serverReq, serverRes
+					return
 
-			obj.req = networking.createRequest
-				uid: uid
-				method: Networking.Request[serverReq.method]
-				uri: serverReq.url
-				data: undefined
-				type: type
+				uid = utils.uid()
+
+				# save in the stack
+				obj = pending[uid] =
+					networking: networking
+					server: server
+					req: null
+					serverReq: serverReq
+					serverRes: serverRes
+
+				type = serverReq.headers['x-expected-type']
+				type ||= Networking.Request.HTML_TYPE
+
+				if data isnt ''
+					reqData = utils.tryFunction(JSON.parse, null, [data], data)
+				else
+					reqData = null
+
+				obj.req = networking.createRequest
+					uid: uid
+					method: Networking.Request[serverReq.method]
+					uri: serverReq.url
+					data: reqData
+					type: type
 
 	sendRequest: (req, callback) ->
 		urlObject = urlUtils.parse req.uri

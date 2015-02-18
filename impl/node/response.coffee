@@ -2,6 +2,7 @@
 
 zlib = require 'zlib'
 log = require 'log'
+utils = require 'utils'
 path = require 'path'
 Document = require 'document'
 expect = require 'expect'
@@ -9,15 +10,16 @@ expect = require 'expect'
 log = log.scope 'Networking'
 
 HEADERS =
-	'Host': (obj) -> "#{obj.networking.host}:#{obj.networking.port}"
+	'Host': (obj) ->
+		host = ///^(?:[a-z]+):\/\/(.+?)(?:\/)?$///.exec(obj.networking.url)
+		if host then host[1] else obj.networking.url
 	'Cache-Control': 'no-cache'
 	'Content-Language': (obj) -> obj.networking.language
 	'X-Frame-Options': 'deny'
 
 METHOD_HEADERS =
 	OPTIONS:
-		'Access-Control-Allow-Origin': (opts) ->
-			"#{opts.networking.protocol}://#{opts.networking.host}:#{opts.networking.port}"
+		'Access-Control-Allow-Origin': (obj) -> obj.networking.url
 		'Allow': 'GET, POST, PUT, DELETE'
 
 GZIP_ENCODING_HEADERS =
@@ -30,9 +32,12 @@ setHeaders = (obj, headers) ->
 	{serverRes} = obj
 
 	for name, value of headers
-		if typeof value is 'function'
-			value = value obj
-		serverRes.setHeader name, value
+		unless serverRes.getHeader(name)?
+			if typeof value is 'function'
+				value = value obj
+			serverRes.setHeader name, value
+
+	return
 
 ###
 Parse passed data into expected type
@@ -53,8 +58,6 @@ parsers =
 		html
 
 prepareData = (obj, data) ->
-	logtime = log.time 'prepare data'
-
 	# determine data type
 	type = isDocument(data) or isJSON(data)
 	type ?= extensions[path.extname obj.serverReq.url]
@@ -64,12 +67,8 @@ prepareData = (obj, data) ->
 	unless parsedData = parsers[type]?(data)
 		parsedData = data + ''
 
-	log "Data will be send as `#{type}`"
-
-	unless obj.serverRes.getHeader 'Content-Type'
+	unless obj.serverRes.getHeader('Content-Type')?
 		obj.serverRes.setHeader 'Content-Type', "#{type}; charset=utf-8"
-
-	log.end logtime
 
 	parsedData
 
@@ -87,23 +86,21 @@ sendData = do ->
 		obj.serverRes.end data
 
 	(obj, data, callback) ->
-		acceptEncodingHeader = obj.serverReq.headers['accept-encoding']
-		useGzip = acceptEncodingHeader and ~acceptEncodingHeader.indexOf 'gzip'
+		acceptEncodingHeader = obj.serverReq.headers['Accept-Encoding']
+		useGzip = acceptEncodingHeader and utils.has(acceptEncodingHeader, 'gzip')
 
 		unless useGzip
 			send obj, data
 			return callback()
 
-		logtime = log.time "gzip data"
-
 		setHeaders obj, GZIP_ENCODING_HEADERS
 
 		zlib.gzip data, (_, data) ->
-			log.end logtime
 			send obj, data
 			callback()
 
 module.exports = (Networking, pending) ->
+	exports =
 	setHeader: (res, name, val) ->
 		# get config obj
 		obj = pending[res.request.uid]
@@ -116,13 +113,12 @@ module.exports = (Networking, pending) ->
 
 		delete pending[res.request.uid]
 
-		logtime = log.time "send response by HTTP"
-
 		{serverRes} = obj
 
 		# write headers
 		setHeaders obj, HEADERS
-		setHeaders obj, headers if headers = METHOD_HEADERS[obj.serverReq.method]
+		if headers = METHOD_HEADERS[obj.serverReq.method]
+			setHeaders obj, headers
 
 		# set status
 		serverRes.statusCode = res.status
@@ -130,5 +126,7 @@ module.exports = (Networking, pending) ->
 		# send data
 		data = prepareData obj, data
 		sendData obj, data, ->
-			log.end logtime
 			callback()
+
+	redirect: (res, status, uri, callback) ->
+		exports.send res, null, callback

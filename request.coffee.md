@@ -73,16 +73,12 @@ var Request = Networking.Request;
 			assert.ok utils.has(Request.METHODS, opts.method) if opts.method?
 			assert.isString opts.uri, 'ctor options.uri argument ...'
 
-			if opts.data?
-				assert.isObject opts.data, 'ctor options.data argument ...' if opts.data?
-				{@data} = opts
-
 			if opts.type?
 				assert.ok utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...'
 				{@type} = opts
 			utils.defineProperty @, 'type', utils.ENUMERABLE, @type
 
-			{@uri} = opts
+			{@data, @uri} = opts
 			{@method} = opts if opts.method?
 
 			@uri = unescape @uri

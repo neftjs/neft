@@ -21,7 +21,7 @@ This class represents URI strings with parameters.
 
 Parameter must be wrapped by the curly brackets **{...}**.
 
-**Rest parameters** are not greedy and must be wrapped with **{...*}**.
+**Rest parameters** are not greedy and are wrapped with **{...*}** or just **..***.
 Rest parameters don't have to be named (**{*}** is allowed).
 
 ```

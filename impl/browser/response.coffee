@@ -7,8 +7,7 @@ Renderer = require 'renderer'
 
 log = log.scope 'Networking'
 
-module.exports = (Networking) ->
-
+module.exports = (Networking, impl) ->
 	showAsStyles = (data) ->
 		unless data instanceof Document
 			return false
@@ -42,3 +41,7 @@ module.exports = (Networking) ->
 		callback()
 
 	setHeader: ->
+
+	redirect: (res, status, uri, callback) ->
+		impl.changePage uri
+		callback()

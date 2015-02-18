@@ -7,29 +7,30 @@ module.exports = (Networking) ->
 	Response: require('./response.coffee') Networking
 
 	init: (networking) ->
+		__location.change.connect (uri) ->
+			# send internal request
+			networking.createRequest
+				method: Networking.Request.GET
+				type: Networking.Request.HTML_TYPE
+				uri: uri
 
 		setImmediate ->
-			# send internal request
-			res = networking.createRequest
-				method: Networking.Request.GET
-				uri: '/docs/log/null'
-				data: null
+			__location.append '/'
 
-	sendRequest: (networking, opts, callback) ->
-
-		Request = Networking.Request
+	sendRequest: (req, callback) ->
+		{Request} = Networking
 
 		xhr = new XMLHttpRequest
 
-		xhr.open opts.method, opts.uri, true
-		xhr.setRequestHeader 'X-Expected-Type', opts.type
+		xhr.open req.method, req.uri, true
+		xhr.setRequestHeader 'X-Expected-Type', req.type
 
 		xhr.onreadystatechange = ->
 			return if xhr.readyState isnt 4
 
 			response = xhr.responseText
 
-			if opts.type is Request.JSON_TYPE
+			if req.type is Request.JSON_TYPE
 				response = utils.tryFunction JSON.parse, null, [response], response
 
 			callback xhr.status, response

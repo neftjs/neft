@@ -265,6 +265,27 @@ res.onSent(function(){
 			Impl.send res, data, ->
 				res.sent?()
 
+Response::redirect([*Integer* status = Response.FOUND], *String* uri)
+---------------------------------------------------------------------
+
+		redirect: (status, uri) ->
+			if uri is undefined
+				uri = status
+				status = Response.FOUND
+
+			assert.ok @pending
+			assert.ok utils.has(Response.STATUSES, status)
+			assert.isString uri
+
+			@status = status
+			@setHeader 'Location', uri
+
+			utils.defineProperty @, 'pending', utils.ENUMERABLE, false
+			@request.loaded? @
+
+			Impl.redirect @, status, uri, =>
+				@sent?()
+
 Response::raise(*Any* error)
 ----------------------------
 

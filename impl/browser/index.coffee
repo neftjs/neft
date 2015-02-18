@@ -3,25 +3,22 @@
 utils = require 'utils'
 
 module.exports = (Networking) ->
+	impl =
+		# Send internal request to change the page based on the URI
+		changePage: (uri) ->
+			# send internal request
+			res = networking.createRequest
+				method: Networking.Request.GET
+				type: Networking.Request.HTML_TYPE
+				uri: uri
+
 	Request: require('./request.coffee') Networking
-	Response: require('./response.coffee') Networking
+	Response: require('./response.coffee') Networking, impl
 
 	init: (networking) ->
-		# Send internal request to change the page based on the URI
-		changePage = (uri) =>
-			# send internal request
-			uid = utils.uid()
-
-			res = networking.createRequest
-				uid: uid
-				method: Networking.Request.GET
-				type: Networking.Request.DOCUMENT_TYPE
-				uri: uri
-				data: null
-
 		# synchronize with browser page changing
 		window.addEventListener 'popstate', ->
-			changePage location.pathname
+			impl.changePage location.pathname
 
 		# don't refresh page on click anchor
 		document.addEventListener 'click', (e) ->
@@ -35,11 +32,11 @@ module.exports = (Networking) ->
 			e.preventDefault()
 
 			# change page to the anchor pathname
-			changePage target.pathname
+			impl.changePage target.pathname
 
 		# change page to the current one
 		setTimeout ->
-			changePage location.pathname
+			impl.changePage location.pathname
 
 	###
 	Send a XHR request and call `callback` on response.
