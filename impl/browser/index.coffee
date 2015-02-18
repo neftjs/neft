@@ -3,19 +3,20 @@
 utils = require 'utils'
 
 module.exports = (Networking) ->
-	impl =
+	impl = {}
+
+	Request: require('./request.coffee') Networking
+	Response: require('./response.coffee') Networking, impl
+
+	init: (networking) ->
 		# Send internal request to change the page based on the URI
-		changePage: (uri) ->
+		impl.changePage = (uri) ->
 			# send internal request
 			res = networking.createRequest
 				method: Networking.Request.GET
 				type: Networking.Request.HTML_TYPE
 				uri: uri
 
-	Request: require('./request.coffee') Networking
-	Response: require('./response.coffee') Networking, impl
-
-	init: (networking) ->
 		# synchronize with browser page changing
 		window.addEventListener 'popstate', ->
 			impl.changePage location.pathname
