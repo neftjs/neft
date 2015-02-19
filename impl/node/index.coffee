@@ -49,15 +49,21 @@ module.exports = (Networking) ->
 				type = serverReq.headers['x-expected-type']
 				type ||= Networking.Request.HTML_TYPE
 
+				# data
 				if data isnt ''
 					reqData = utils.tryFunction(JSON.parse, null, [data], data)
 				else
 					reqData = null
 
+				# url
+				url = serverReq.url
+				if utils.has(url, '?')
+					url = url.slice 0, url.indexOf('?')
+
 				obj.req = networking.createRequest
 					uid: uid
 					method: Networking.Request[serverReq.method]
-					uri: serverReq.url
+					uri: url
 					data: reqData
 					type: type
 

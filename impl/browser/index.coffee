@@ -29,11 +29,12 @@ module.exports = (Networking) ->
 			# omit anchors with the `target` attribute
 			return if target.nodeName isnt 'A' or target.getAttribute('target')
 
-			# avoid browser to refresh page
-			e.preventDefault()
+			if target.host is location.host and not ///^\/static\////.test(target.pathname)
+				# avoid browser to refresh page
+				e.preventDefault()
 
-			# change page to the anchor pathname
-			impl.changePage target.pathname
+				# change page to the anchor pathname
+				impl.changePage target.pathname
 
 		# change page to the current one
 		setTimeout ->
@@ -48,7 +49,10 @@ module.exports = (Networking) ->
 
 		xhr = new XMLHttpRequest
 
-		xhr.open req.method, req.uri, true
+		# prevent caching
+		uri = "#{req.uri}?now=#{Date.now()}"
+
+		xhr.open req.method, uri, true
 		xhr.setRequestHeader 'X-Expected-Type', req.type
 
 		if req.type is Request.JSON_TYPE

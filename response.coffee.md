@@ -265,7 +265,7 @@ res.onSent(function(){
 			Impl.send res, data, ->
 				res.sent?()
 
-Response::redirect([*Integer* status = Response.FOUND], *String* uri)
+Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 ---------------------------------------------------------------------
 
 		redirect: (status, uri) ->
