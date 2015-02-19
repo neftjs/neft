@@ -69,12 +69,16 @@ module.exports = (impl) ->
 			{textElement} = item._impl
 
 			if item._impl.autoWidth
-				item.width = textElement.scrollWidth+1
+				width = textElement.scrollWidth
+				if width > 0
+					item.width = width + 1
 
 			if item._impl.autoHeight
-				height = item.height = textElement.scrollHeight
+				height = textElement.scrollHeight
+				if height > 0
+					item.height = height
 
-			if height > 0
+			if item._data.height > 0
 				if item._impl.textElement.parentNode is hatchery
 					item._impl.elem.appendChild item._impl.textElement
 				true
@@ -222,7 +226,7 @@ module.exports = (impl) ->
 		@_impl.textElement.style.color = val
 
 	setTextLineHeight: (val) ->
-		pxLineHeight = val * @font.size
+		pxLineHeight = val * @font.pixelSize
 		@_impl.textElement.style.lineHeight = "#{pxLineHeight}px"
 		updateSize @
 

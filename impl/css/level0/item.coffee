@@ -54,26 +54,24 @@ SIGNALS_CURSORS =
 	'pointerClicked': 'pointer'
 
 getMouseCoords = do ->
-	getArgs = (e) ->
-		rect = e.currentTarget.getBoundingClientRect()
-		x = e.pageX - rect.left
-		y = e.pageY - rect.top
-
-		x: x
-		y: y
+	getArgs = (target, e) ->
+		rect = target.getBoundingClientRect()
+		x: e.pageX - rect.left
+		y: e.pageY - rect.top
 
 	if isTouch
 		(e) ->
 			if e.touches.length
-				getArgs e.touches[0]
+				getArgs e.currentTarget, e.touches[0]
 			else
-				getArgs e.changedTouches[0]
+				getArgs e.currentTarget, e.changedTouches[0]
 	else
-		getArgs
+		(e) ->
+			getArgs e.currentTarget, e
 
 getRestrictedMouseCoords = do ->
-	getArgs = (e) ->
-		rect = e.currentTarget.getBoundingClientRect()
+	getArgs = (target, e) ->
+		rect = target.getBoundingClientRect()
 		x = e.pageX - rect.left
 		y = e.pageY - rect.top
 
@@ -86,11 +84,12 @@ getRestrictedMouseCoords = do ->
 	if isTouch
 		(e) ->
 			if e.touches.length
-				getArgs e.touches[0]
+				getArgs e.currentTarget, e.touches[0]
 			else
-				getArgs e.changedTouches[0]
+				getArgs e.currentTarget, e.changedTouches[0]
 	else
-		getArgs
+		(e) ->
+			getArgs e.currentTarget, e
 
 SIGNALS_ARGS =
 	'pointerWheel': do ->
@@ -175,11 +174,7 @@ SIGNALS_ARGS =
 			else
 				event
 
-	'pointerPressed': (e) ->
-		if isTouch
-			e.preventDefault()
-
-		getRestrictedMouseCoords e
+	'pointerPressed': getRestrictedMouseCoords
 	'pointerReleased': getMouseCoords
 	'pointerClicked': getRestrictedMouseCoords
 	'pointerMove': (e) ->
@@ -353,8 +348,9 @@ module.exports = (impl) ->
 			elem.setAttribute 'class', 'link'
 			@_impl.elem.appendChild elem
 
-		@_impl.linkElem.setAttribute 'href', val
-		@_impl.linkElem.style.display = if val isnt '' then 'block' else 'none'
+		if @_impl.linkElem.getAttribute('href') isnt val
+			@_impl.linkElem.setAttribute 'href', val
+			@_impl.linkElem.style.display = if val isnt '' then 'block' else 'none'
 
 	setItemMargin: (type, val) ->
 
@@ -374,6 +370,7 @@ module.exports = (impl) ->
 
 			if func.call(@, arg) is signal.STOP_PROPAGATION
 				e.stopPropagation()
+			true
 
 		if typeof signalName is 'string'
 			elem.addEventListener signalName, customFunc

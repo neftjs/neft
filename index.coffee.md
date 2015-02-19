@@ -23,6 +23,7 @@ restrictive than **JavaScript**.
 Let's take a look at the example below:
 
 ```style
+var signal = require('signal');
 var RECT_SIZE = 50;
 
 Rectangle {
@@ -30,6 +31,10 @@ Rectangle {
 \  height: 200
 \  border.width: 5
 \  border.color: 'red'
+\  onPointerPressed: function(){
+\    // prevent scrolling
+\    return signal.STOP_PROPAGATION;
+\  }
 \  onPointerMove: function(e){
 \    greenRect.x = e.x - greenRect.width / 2;
 \    greenRect.y = e.y - greenRect.height / 2;
@@ -68,7 +73,7 @@ Row {
   }
 
   Rectangle {
-  	id: greenRect
+    id: greenRect
     color: 'green'
     width: 100
     height: 100
