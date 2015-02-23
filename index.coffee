@@ -2,6 +2,7 @@
 
 Renderer = require 'renderer'
 parser = require './parser'
+utils = require 'utils'
 
 {assert} = console
 
@@ -111,7 +112,7 @@ bindingAttributeToString = (obj) ->
 			elem.unshift "'this'"
 		else if id is 'this'
 			elem[0] = "'this'"
-		else if id is 'window' or ids.hasOwnProperty(id)
+		else if id is 'windowStyle' or ids.hasOwnProperty(id)
 			continue
 		else
 			binding[i] = elem.join '.'
@@ -146,7 +147,7 @@ bindingAttributeToString = (obj) ->
 			for id, i in elem
 				text += ", '#{id}']"
 
-	"{binding: [#{text}]}"
+	"[#{text}]"
 
 stringObject = (obj) ->
 	assert obj.type is OBJECT, "stringObject: type must be an object"
@@ -154,26 +155,28 @@ stringObject = (obj) ->
 	if getByType(obj.body, ID).length > 0
 		ids[obj.id] = true
 
-	isLocal = Renderer[obj.name.split('.')[0]]?
-	properties = getEachProp(getByType(obj.body, PROPERTY), 'name')
-	signals = getEachProp(getByType(obj.body, SIGNAL), 'name')
-
-	args = []
-	args.push "properties: #{JSON.stringify properties}" if properties.length
-	args.push "signals: #{JSON.stringify signals}" if signals.length
-	if args.length
-		args = "{#{args.join ', '}}"
-
+	rendererClass = Renderer[obj.name.split('.')[0]]
+	isLocal = rendererClass?
 	decl = if isLocal then "new #{obj.name}" else "#{obj.name}"
-	r = "var #{obj.id} = #{decl}(#{args or ''});\n"
+	r = "var #{obj.id} = #{decl}();\n"
+
+	properties = getEachProp(getByType(obj.body, PROPERTY), 'name')
+	for property in properties
+		r += "#{obj.id}.createProperty('#{utils.addSlashes(property)}')\n"
+
+	signals = getEachProp(getByType(obj.body, SIGNAL), 'name')
+	for signal in signals
+		r += "#{obj.id}.createSignal('#{utils.addSlashes(signal)}')\n"
 
 	for child in getByType(obj.body, OBJECT)
 		r += stringObject child
-		r += "if (#{child.id} instanceof Item){ #{child.id}.parent = #{obj.id}; }\n"
 
-	# initialize states
-	if getElemByName obj.body, ATTRIBUTE, 'states'
-		r += "#{obj.id}.states\n"
+		rendererClass = Renderer[child.name.split('.')[0]]
+
+		if rendererClass?.prototype instanceof Renderer.Extension
+			r += "#{child.id}.target = #{obj.id};\n"
+		else
+			r += "#{child.id}.parent = #{obj.id};\n"
 
 	r
 
@@ -184,10 +187,11 @@ stringAttribute = (obj, parents) ->
 	object = parents[0]
 	{value} = obj
 
-	ref = "#{object.id}."
+	parentsRef = "#{object.id}."
 	for parent in parents[1...]
-		ref += "#{parent.name}."
-	ref += "#{obj.name}"
+		parentsRef += "#{parent.name}."
+	parentsRef = parentsRef.slice 0, -1
+	ref = "#{parentsRef}.#{obj.name}"
 
 	r = "#{ref} = "
 	rPre = ''
@@ -220,13 +224,25 @@ stringAttribute = (obj, parents) ->
 				return rPre + rPost
 	else if isAnchor obj
 		r += anchorAttributeToString(obj)
-	else if isBinding obj
-		r += bindingAttributeToString(obj)
-	else if value.type is OBJECT
-		r += value.id
-		rPre += stringObjectFull value
 	else
-		r += value
+		[_, extraParentsRef, propName] = ///^(?:(.+)\.)?(.+)$///.exec obj.name
+		if extraParentsRef
+			extraParentsRef = ".#{extraParentsRef}"
+		else
+			extraParentsRef = ''
+
+		if isBinding obj
+			binding = bindingAttributeToString(obj)
+			r = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', #{binding})"
+		else
+			if ///^Styles\[///.test object.name
+				rPre = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', null);\n"
+
+			if value.type is OBJECT
+				r += value.id
+				rPre += stringObjectFull value
+			else
+				r += value
 
 	r += ";\n"
 	rPre + r + rPost
@@ -236,11 +252,11 @@ stringAttributes = (obj) ->
 
 	r = ''
 
-	for attribute in getByType(obj.body, ATTRIBUTE)
-		r += stringAttribute attribute, [obj]
-
 	for child in getByType(obj.body, OBJECT)
 		r += stringAttributes child
+
+	for attribute in getByType(obj.body, ATTRIBUTE)
+		r += stringAttribute attribute, [obj]
 
 	r
 
