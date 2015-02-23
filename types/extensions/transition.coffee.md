@@ -7,21 +7,17 @@ Transition
 	expect = require 'expect'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Transition extends itemUtils.DeepObject
+	module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
 		@__name__ = 'Transition'
 
-		itemUtils.initConstructor @,
-			data:
-				animation: null
-				property: ''
+*Transition* Transition()
+-------------------------
 
-*Transition* Transition([*Object* options])
--------------------------------------------
-
-		constructor: (item, parent) ->
-			super item, parent
-
+		constructor: ->
 			@_listener = (a1) => listener.call @, a1
+			@_animation = null
+			@_property = ''
+			super()
 
 		listener = (oldVal) ->
 			{animation} = @
@@ -33,7 +29,7 @@ Transition
 			{duration} = animation
 
 			animation.from = oldVal
-			animation.to = @_item._data[@property]
+			animation.to = @_target[@property]
 			if progress > 0
 				animation.duration = duration * progress
 
@@ -67,6 +63,18 @@ Transition
 				animation.stop()
 
 			return
+
+*Renderer.Item* Transition::target
+----------------------------------
+
+### *Signal* Transition::targetChanged([*Renderer.Item* oldValue])
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'target'
+			developmentSetter: (val) ->
+				expect().defined(val).toBe.any Renderer.Item
+			setter: (_super) -> (val) ->
 
 *Renderer.Animation* Transition::animation
 ------------------------------------------

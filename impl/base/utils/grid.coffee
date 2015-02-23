@@ -2,16 +2,21 @@
 
 utils = require 'utils'
 
-unless Uint32Array?
-	Uint32Array = (len) ->
+if typeof Uint32Array is 'undefined'
+	Uint32TypedArray = (len) ->
 		arr = []
 		for i in [0..len]
 			arr[i] = 0
 		arr
+else
+	Uint32TypedArray = Uint32Array
 
 queue = []
 queueItems = Object.create null
 pending = false
+
+columnsPositions = new Uint32TypedArray 12
+rowsPositions = new Uint32TypedArray 64
 
 updateItem = (item) ->
 	{children} = item
@@ -20,27 +25,34 @@ updateItem = (item) ->
 	# get config
 	columnSpacing = rowSpacing = 0
 
-	switch gridType
-		when exports.ALL
-			columnsLen = item.columns
-			rowsLen = item.rows
-			columnSpacing = item.spacing.column
-			rowSpacing = item.spacing.row
-		when exports.COLUMN
-			rowSpacing = item.spacing
-			columnsLen = 1
-			rowsLen = Infinity
-		when exports.ROW
-			columnSpacing = item.spacing
-			columnsLen = Infinity
-			rowsLen = 1
+	if gridType is ALL
+		columnsLen = item.columns
+		rowsLen = item.rows
+		columnSpacing = item.spacing.column
+		rowSpacing = item.spacing.row
+	else if gridType is COLUMN
+		rowSpacing = item.spacing
+		columnsLen = 1
+		rowsLen = Infinity
+	else if gridType is ROW
+		columnSpacing = item.spacing
+		columnsLen = Infinity
+		rowsLen = 1
 
 	# get tmp arrays
 	maxColumnsLen = if columnsLen is Infinity then children.length else columnsLen
-	columnsPositions = new Uint32Array maxColumnsLen
+	if columnsPositions.length < maxColumnsLen
+		columnsPositions = new Uint32TypedArray maxColumnsLen
+	else
+		for i in [0...maxColumnsLen] by 1
+			columnsPositions[i] = 0
 
 	maxRowsLen = if rowsLen is Infinity then children.length / columnsLen else rowsLen
-	rowsPositions = new Uint32Array maxRowsLen
+	if rowsPositions.length < maxRowsLen
+		rowsPositions = new Uint32TypedArray maxRowsLen
+	else
+		for i in [0...maxRowsLen] by 1
+			rowsPositions[i] = 0
 
 	# get sizes
 	i = 0
@@ -56,9 +68,9 @@ updateItem = (item) ->
 		{width, height, margin} = child
 
 		# right / bottom margins
-		if gridType & exports.ROW
+		if gridType & ROW
 			width += margin.left + margin.right + columnSpacing
-		if gridType & exports.COLUMN
+		if gridType & COLUMN
 			height += margin.top + margin.bottom + rowSpacing
 
 		# save
@@ -71,12 +83,12 @@ updateItem = (item) ->
 
 	# sum columns positions
 	last = 0
-	for column, i in columnsPositions
+	for i in [0...maxColumnsLen] by 1
 		last = columnsPositions[i] += last
 
 	# sum rows positions
 	last = 0
-	for row, i in rowsPositions
+	for i in [0...maxRowsLen] by 1
 		last = rowsPositions[i] += last
 
 	# set positions
@@ -88,10 +100,10 @@ updateItem = (item) ->
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
 
-		if gridType & exports.ROW
+		if gridType & ROW
 			child.x = child.margin.left + (if column > 0 then columnsPositions[column-1] else 0)
 
-		if gridType & exports.COLUMN
+		if gridType & COLUMN
 			child.y = child.margin.top + (if row > 0 then rowsPositions[row-1] else 0)
 
 		i++
@@ -99,9 +111,17 @@ updateItem = (item) ->
 	# set item size
 	item._impl.updatePending = true
 	if item._impl.autoWidth
-		item.width = Math.max 0, (utils.last(columnsPositions) or 0)
+		width = columnsPositions[maxColumnsLen-1]
+		if width > 0	
+			item.width = width
+		else
+			item.width = 0
 	if item._impl.autoHeight
-		item.height = Math.max 0, (utils.last(rowsPositions) or 0)
+		height = rowsPositions[maxRowsLen-1]
+		if height > 0
+			item.height = height
+		else
+			item.height = 0
 	item._impl.updatePending = false
 
 updateItems = ->
@@ -126,29 +146,30 @@ update = ->
 updateParent = ->
 	update.call @parent
 
-exports.COLUMN = 1<<0
-exports.ROW = 1<<1
-exports.ALL = (1<<2) - 1
+onWidthChanged = ->
+	unless @_impl.updatePending
+		@_impl.autoWidth = @width is 0
+
+onHeightChanged = ->
+	unless @_impl.updatePending
+		@_impl.autoHeight = @height is 0
+
+COLUMN = exports.COLUMN = 1<<0
+ROW = exports.ROW = 1<<1
+ALL = exports.ALL = (1<<2) - 1
 
 exports.DATA =
-	gridType: ''
+	gridType: 0
 	autoWidth: true
 	autoHeight: true
 	updatePending: false
 
 exports.create = (item, type) ->
-	storage = item._impl
-
-	storage.gridType = type
+	item._impl.gridType = type
 
 	# auto size
-	item.onWidthChanged ->
-		unless @_impl.updatePending
-			@_impl.autoWidth = @width is 0
-
-	item.onHeightChanged ->
-		unless @_impl.updatePending
-			@_impl.autoHeight = @height is 0
+	item.onWidthChanged onWidthChanged
+	item.onHeightChanged onHeightChanged
 
 	# update on children change
 	item.onChildrenChanged update

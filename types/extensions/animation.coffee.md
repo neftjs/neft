@@ -7,47 +7,48 @@ Animation
 	expect = require 'expect'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Animation extends signal.Emitter
+	module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
 		@__name__ = 'Animation'
-
-		itemUtils.initConstructor @,
-			data:
-				running: false
-				loop: false
-				updatePending: false
 
 		@Property = require('./animation/types/property') Renderer, Impl, @, itemUtils
 		@Number = require('./animation/types/property/types/number') Renderer, Impl, @, itemUtils
 
-*Animation* Animation([*Object* options])
------------------------------------------
+*Animation* Animation()
+-----------------------
 
-		constructor: (opts) ->
-			expect().defined(opts).toBe.simpleObject()
-
+		constructor: ->
+			@_impl = null
+			@_loop = false
+			@_updatePending = false
 			super()
 
-			itemUtils.initObject @, Impl.createAnimation
-			itemUtils.fill @, opts
+			Impl.createAnimation @, @constructor.__name__
+
+*Boolean* Animation::when
+-------------------------
+
+### *Signal* Animation::whenChanged(*Boolean* oldValue)
 
 *Signal* Animation::played()
 ----------------------------
 
-		signal.createLazy @::, 'played'
+		signal.Emitter.createSignal @, 'played'
 
 *Signal* Animation::stopped()
 -----------------------------
 
-		signal.createLazy @::, 'stopped'
+		signal.Emitter.createSignal @, 'stopped'
 
 *Boolean* Animation::running
 ----------------------------
+
+### *Signal* Animation::runningChanged(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'running'
 			setter: (_super) -> (val) ->
-				oldVal = @_data.running
+				oldVal = @_running
 				if oldVal is val
 					return
 
@@ -64,6 +65,8 @@ Animation
 *Boolean* Animation::loop
 -------------------------
 
+### *Signal* Animation::loopChanged(*Boolean* oldValue)
+
 		itemUtils.defineProperty
 			constructor: @
 			name: 'loop'
@@ -75,7 +78,7 @@ ReadOnly *Boolean* Animation::updatePending
 -------------------------------------------
 
 		utils.defineProperty @::, 'updatePending', null, ->
-			@_data.updatePending
+			@_updatePending
 		, null
 
 Animation::play()
@@ -91,3 +94,10 @@ Animation::stop()
 		stop: ->
 			@running = false
 			@
+
+		enable: ->
+			@running = true
+			super()
+
+		disable: ->
+			super()

@@ -28,11 +28,8 @@ Grid {
 			@__name__ = 'Grid'
 			@__path__ = 'Renderer.Grid'
 
-			itemUtils.initConstructor @,
-				extends: Renderer.Item
-				data:
-					columns: 2
-					rows: Infinity
+			constructor: ->
+				super()
 
 *Integer* Grid::columns = 2
 ---------------------------
@@ -42,6 +39,7 @@ Grid {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'columns'
+				defaultValue: 2
 				implementation: Impl.setGridColumns
 				developmentSetter: (val) ->
 					expect(val).toBe.greaterThan 0
@@ -54,6 +52,7 @@ Grid {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'rows'
+				defaultValue: Infinity
 				implementation: Impl.setGridRows
 				developmentSetter: (val) ->
 					expect(val).toBe.greaterThan 0
@@ -64,15 +63,13 @@ Grid {
 		class Spacing extends itemUtils.DeepObject
 			@__name__ = 'Spacing'
 
-			itemUtils.initConstructor @,
-				data:
-					column: 0
-					row: 0
-
 			itemUtils.defineProperty
 				constructor: Grid
 				name: 'spacing'
 				valueConstructor: Spacing
+
+			constructor: ->
+				super()
 
 *Float* Grid::spacing.column
 ----------------------------
@@ -82,6 +79,9 @@ Grid {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'column'
+				defaultValue: 0
+				namespace: 'spacing'
+				parentConstructor: Grid
 				implementation: Impl.setGridColumnSpacing
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
@@ -94,6 +94,9 @@ Grid {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'row'
+				defaultValue: 0
+				namespace: 'spacing'
+				parentConstructor: Grid
 				implementation: Impl.setGridRowSpacing
 				developmentSetter: (val) ->
 					expect(val).toBe.float()

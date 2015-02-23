@@ -13,79 +13,35 @@ Basic items/Item
 
 	assert = assert.scope 'Renderer.Item'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Item extends signal.Emitter
+	module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Object
 		@__name__ = 'Item'
 		@__path__ = 'Renderer.Item'
 
-		Margin = require('./item/margin') Renderer, Impl, itemUtils
-		Anchors = require('./item/anchors') Renderer, Impl, itemUtils
-		Animations = require('./item/animations') Renderer, Impl, itemUtils
-		Transitions = require('./item/transitions') Renderer, Impl, itemUtils
+		require('./item/margin') Renderer, Impl, itemUtils, Item
+		require('./item/anchors') Renderer, Impl, itemUtils, Item
+		require('./item/property') Renderer, Impl, itemUtils, Item
+		require('./item/signal') Renderer, Impl, itemUtils, Item
+		require('./item/pointer') Renderer, Impl, itemUtils, Item
 
-		itemUtils.initConstructor @,
-			data:
-				parent: null
-				clip: false
-				visible: true
-				x: 0
-				y: 0
-				z: 0
-				width: 0
-				height: 0
-				rotation: 0
-				scale: 1
-				opacity: 1
-				state: ''
-				linkUri: ''
-
-*Item* Item([*Object* options, *Array* children])
--------------------------------------------------
+*Item* Item()
+-------------
 
 This is a base class for everything which is visible.
 
-		constructor: (opts, children) ->
-			# optional `opts` argument
-			if isArray(opts) and not children?
-				children = opts
-				opts = undefined
-
+		constructor: ->
 			assert.instanceOf @, Item, 'ctor ...'
-			assert.isDefined opts, 'ctor options argument ...' if opts?
-			assert.isArray children, 'ctor children argument ...' if children?
 
-			# initialization
-			unless @__hash__
-				super()
-				itemUtils.initObject @, Impl.createItem
+			super()
 
-			if opts?
-				# initialize states
-				if opts.states?
-					@states
+			@_impl = null
+			@_parent = null
+			@_children = null
+			@_x = 0
+			@_y = 0
+			@_width = 0
+			@_height = 0
 
-				# custom properties
-				if opts.properties?
-					for propName in opts.properties
-						unless propName of @
-							itemUtils.defineProperty
-								object: @
-								name: propName
-					delete opts.properties
-
-				# custom signals
-				if opts.signals?
-					for signalName in opts.signals
-						unless signalName of @
-							signal.create @, signalName
-					delete opts.signals
-
-				# fill
-				itemUtils.fill @, opts
-
-			# append children
-			if children
-				for child in children
-					child.parent = @
+			Impl.createItem @, @constructor.__name__
 
 *Signal* Item::ready()
 ----------------------
@@ -113,41 +69,8 @@ Rectangle {
 }
 ```
 
-		readyLazySignal = signal.createLazy @::, 'ready'
-
-		readyLazySignal.onInitialized (item) ->
+		signal.Emitter.createSignal @, 'ready', null, null, (item) ->
 			setImmediate -> item.ready()
-
-*Signal* Item::pointerClicked(*Object* event)
----------------------------------------------
-
-*Signal* Item::pointerPressed(*Object* event)
----------------------------------------------
-
-*Signal* Item::pointerReleased(*Object* event)
-----------------------------------------------
-
-*Signal* Item::pointerEntered(*Object* event)
----------------------------------------------
-
-*Signal* Item::pointerExited(*Object* event)
---------------------------------------------
-
-*Signal* Item::pointerWheel(*Object* event)
--------------------------------------------
-
-*Signal* Item::pointerMove(*Object* event)
-------------------------------------------
-
-		onLazySignalInitialized = (item, signalName) ->
-			Impl.attachItemSignal.call item, signalName, item[signalName]
-
-		@SIGNALS = ['pointerClicked', 'pointerPressed', 'pointerReleased',
-		            'pointerEntered', 'pointerExited', 'pointerWheel', 'pointerMove']
-
-		for signalName in Item.SIGNALS
-			lazySignal = signal.createLazy @::, signalName
-			lazySignal.onInitialized onLazySignalInitialized
 
 *Object* Item::children
 -----------------------
@@ -177,14 +100,15 @@ Rectangle {
 
 		signal.createLazy ChildrenObject, 'popped'
 
-*Item* Item::parent
--------------------
+*Item* Item::parent = null
+--------------------------
 
 ### *Signal* Item::parentChanged(*Item* oldParent)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'parent'
+			defaultValue: null
 			implementation: Impl.setItemParent
 			setter: (_super) -> (val) ->
 				old = @parent
@@ -205,8 +129,8 @@ Rectangle {
 
 				_super.call @, val
 
-*Boolean* Item::visible
------------------------
+*Boolean* Item::visible = true
+------------------------------
 
 Determines whether an item is visible or not.
 
@@ -239,102 +163,111 @@ Item {
 		itemUtils.defineProperty
 			constructor: @
 			name: 'visible'
+			defaultValue: true
 			implementation: Impl.setItemVisible
 			developmentSetter: (val) ->
 				assert.isBoolean val, '::visible setter ...'
 
-*Boolean* Item::clip
---------------------
+*Boolean* Item::clip = false
+----------------------------
 
 ### *Signal* Item::clipChanged(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'clip'
+			defaultValue: false
 			implementation: Impl.setItemClip
 			developmentSetter: (val) ->
 				assert.isBoolean val, '::clip setter ...'
 
-*Float* Item::width
--------------------
+*Float* Item::width = 0
+-----------------------
 
 ### *Signal* Item::widthChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'width'
+			defaultValue: 0
 			implementation: Impl.setItemWidth
 			developmentSetter: (val) ->
 				assert.isFloat val, '::width setter ...'
 
-*Float* Item::height
---------------------
+*Float* Item::height = 0
+------------------------
 
 ### *Signal* Item::heightChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'height'
+			defaultValue: 0
 			implementation: Impl.setItemHeight
 			developmentSetter: (val) ->
 				assert.isFloat val, '::height setter ...'
 
-*Float* Item::x
----------------
+*Float* Item::x = 0
+-------------------
 
 ### *Signal* Item::xChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'x'
+			defaultValue: 0
 			implementation: Impl.setItemX
 			developmentSetter: (val) ->
 				assert.isFloat val, '::x setter ...'
 
-*Float* Item::y
----------------
+*Float* Item::y = 0
+-------------------
 
 ### *Signal* Item::yChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'y'
+			defaultValue: 0
 			implementation: Impl.setItemY
 			developmentSetter: (val) ->
 				assert.isFloat val, '::y setter ...'
 
-*Float* Item::z
----------------
+*Float* Item::z = 0
+-------------------
 
 ### *Signal* Item::zChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'z'
+			defaultValue: 0
 			implementation: Impl.setItemZ
 			developmentSetter: (val) ->
 				assert.isFloat val, '::z setter ...'
 
-*Float* Item::scale
--------------------
+*Float* Item::scale = 1
+-----------------------
 
 ### *Signal* Item::scaleChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'scale'
+			defaultValue: 1
 			implementation: Impl.setItemScale
 			developmentSetter: (val) ->
 				assert.isFloat val, '::scale setter ...'
 
-*Float* Item::rotation
-----------------------
+*Float* Item::rotation = 0
+--------------------------
 
 ### *Signal* Item::rotationChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'rotation'
+			defaultValue: 0
 			implementation: Impl.setItemRotation
 			developmentSetter: (val) ->
 				assert.isFloat val, '::rotation setter ...'
@@ -347,11 +280,10 @@ Item {
 		itemUtils.defineProperty
 			constructor: @
 			name: 'opacity'
+			defaultValue: 1
 			implementation: Impl.setItemOpacity
 			developmentSetter: (val) ->
 				assert.isFloat val, '::opacity setter ...'
-
-		require('./item/state') Renderer, Impl, @, itemUtils
 
 *String* Item::linkUri = ''
 ---------------------------
@@ -365,49 +297,10 @@ It's required for browsers, where link URIs should be known publicly.
 		itemUtils.defineProperty
 			constructor: @
 			name: 'linkUri'
+			defaultValue: ''
 			implementation: Impl.setItemLinkUri
 			developmentSetter: (val) ->
 				assert.isString val, '::linkUri setter ...'
-
-*Item.Margin* Item::margin
---------------------------
-
-### *Signal* Item::marginChanged(*Item.Margin* margin)
-
-		itemUtils.defineProperty
-			constructor: @
-			name: 'margin'
-			valueConstructor: Margin
-
-*Item.Anchors* Item::anchors
-----------------------------
-
-### *Signal* Item::anchorsChanged(*Item.Anchors* anchors)
-
-		itemUtils.defineProperty
-			constructor: @
-			name: 'anchors'
-			valueConstructor: Anchors
-
-*Item.Animations* Item::animations
-----------------------------------
-
-### *Signal* Item::animationsChanged(*Item.Animations* animations)
-
-		itemUtils.defineProperty
-			constructor: @
-			name: 'animations'
-			valueConstructor: Animations
-
-*Item.Transitions* Item::transitions
-------------------------------------
-
-### *Signal* Item::transitionsChanged(*Item.Transitions* transitions)
-
-		itemUtils.defineProperty
-			constructor: @
-			name: 'transitions'
-			valueConstructor: Transitions
 
 Item::clear()
 -------------

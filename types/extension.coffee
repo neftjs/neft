@@ -1,0 +1,41 @@
+'use strict'
+
+utils = require 'utils'
+signal = require 'signal'
+
+module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtils.Object
+	@__name__ = 'Extension'
+
+	onWhenChanged = ->
+		isTrue = @when
+		{running} = @
+
+		if isTrue and not running
+			@enable()
+		else if not isTrue and running
+			@disable()
+
+	constructor: ->
+		super()
+		@_impl ?= bindings: null
+		@_target = null
+		@_running = false
+		@onWhenChanged onWhenChanged
+
+	itemUtils.defineProperty
+		constructor: @
+		name: 'when'
+
+	itemUtils.defineProperty
+		constructor: @
+		name: 'target'
+
+	utils.defineProperty @::, 'running', utils.CONFIGURABLE, ->
+		@_running
+	, null
+
+	enable: ->
+		@_running = true
+
+	disable: ->
+		@_running = false

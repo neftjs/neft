@@ -31,11 +31,11 @@ Rectangle {
 \  height: 200
 \  border.width: 5
 \  border.color: 'red'
-\  onPointerPressed: function(){
+\  pointer.onPressed: function(){
 \    // prevent scrolling
 \    return signal.STOP_PROPAGATION;
 \  }
-\  onPointerMove: function(e){
+\  pointer.onMove: function(e){
 \    greenRect.x = e.x - greenRect.width / 2;
 \    greenRect.y = e.y - greenRect.height / 2;
 \  }
@@ -118,11 +118,16 @@ Styles.button/red {
 	'use strict'
 
 	utils = require 'utils'
+	signal = require 'signal'
 	Impl = require './impl'
 
 	itemUtils = require('./utils/item') exports, Impl
+	signal.create exports, 'ready'
 
-	exports.State = require('./types/state') exports, Impl, itemUtils
+	exports.Extension = require('./types/extension') exports, Impl, itemUtils
+	exports.State = require('./types/extensions/state') exports, Impl, itemUtils
+	exports.Animation = require('./types/extensions/animation') exports, Impl, itemUtils
+	exports.Transition = require('./types/extensions/transition') exports, Impl, itemUtils
 
 	exports.Item = require('./types/basics/item') exports, Impl, itemUtils
 	exports.Image = require('./types/basics/item/types/image') exports, Impl, itemUtils
@@ -134,9 +139,6 @@ Styles.button/red {
 	exports.Column = require('./types/layout/column') exports, Impl, itemUtils
 	exports.Row = require('./types/layout/row') exports, Impl, itemUtils
 	exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
-
-	exports.Animation = require('./types/animation') exports, Impl, itemUtils
-	exports.Transition = require('./types/transition') exports, Impl, itemUtils
 
 	exports.Loader = require('./types/loader') exports, Impl, itemUtils
 
@@ -179,7 +181,7 @@ Column {
 \    }, delay || 0);
 \  }
 \
-\  onPointerClicked: function(){
+\  pointer.onClicked: function(){
 \    this.hide(100);
 \  }
 \
@@ -195,5 +197,7 @@ Column {
 		Impl.setWindow val
 
 	exports.serverUrl = ''
+
+	exports.ready()
 
 	Object.preventExtensions exports

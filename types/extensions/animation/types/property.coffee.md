@@ -6,31 +6,26 @@ Animation/PropertyAnimation
 	utils = require 'utils'
 	expect = require 'expect'
 
-*PropertyAnimation* PropertyAnimation([*Object* options]) : *Renderer.Animation*
---------------------------------------------------------------------------------
+*PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
+--------------------------------------------------------------
 
 	module.exports = (Renderer, Impl, Animation, itemUtils) -> class PropertyAnimation extends Animation
 		@__name__ = 'PropertyAnimation'
 
-		itemUtils.initConstructor @,
-			extends: Animation
-			data:
-				target: null
-				property: ''
-				duration: 1000
-				delay: 0
-				from: null
-				to: null
-				updateProperty: false
+		constructor: ->
+			@_target = null
+			@_property = ''
+			super()
 
 *Renderer.Item* PropertyAnimation::target
 -----------------------------------------
 
-### *Signal* PropertyAnimation::targetChanged([*Renderer.Item* oldValue])
+### *Signal* PropertyAnimation::targetChanged(*Renderer.Item* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'target'
+			defaultValue: null
 			implementation: Impl.setPropertyAnimationTarget
 			developmentSetter: (val) ->
 				expect().defined(val).toBe.any Renderer.Item
@@ -43,6 +38,7 @@ Animation/PropertyAnimation
 		itemUtils.defineProperty
 			constructor: @
 			name: 'property'
+			defaultValue: ''
 			implementation: Impl.setPropertyAnimationProperty
 			developmentSetter: (val) ->
 				expect(val).toBe.truthy().string()
@@ -55,19 +51,21 @@ Animation/PropertyAnimation
 		itemUtils.defineProperty
 			constructor: @
 			name: 'duration'
+			defaultValue: 1000
 			implementation: Impl.setPropertyAnimationDuration
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
 				expect(val).toBe.greaterThan 0
 
-*Float* PropertyAnimation::delay
---------------------------------
+*Float* PropertyAnimation::delay = 0
+------------------------------------
 
 ### *Signal* PropertyAnimation::delayChanged(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'delay'
+			defaultValue: 0
 			implementation: Impl.setPropertyAnimationDelay
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
@@ -81,6 +79,7 @@ Animation/PropertyAnimation
 		itemUtils.defineProperty
 			constructor: @
 			name: 'updateProperty'
+			defaultValue: false
 			developmentSetter: (val) ->
 				expect(val).toBe.boolean()
 

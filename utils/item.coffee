@@ -9,24 +9,71 @@ SignalsEmitter = signal.Emitter
 
 {isArray} = Array
 
-class DeepObject extends signal.Emitter
-	constructor: (item, parent) ->
-		if parent
-			assert.instanceOf parent, @constructor
-			data = Object.create parent._data
-		else
-			data = new @constructor.DATA_CTOR
+module.exports = (Renderer, Impl) ->
 
-		@_item = item
-		@_data = data
+	class UtilsObject extends signal.Emitter
+		constructor: ->
+			assert.isNotDefined @__hash__
+			@__hash__ = utils.uid()
+			@_bindings = null
+			super()
 
-		super()
+		createBinding: (prop, val) ->
+			assert.isString prop
+			assert.ok prop of @
+			assert.isArray val if val?
 
-module.exports = (Renderer, Impl) -> exports =
+			bindings = @_bindings ?= {}
+			if bindings[prop] isnt val
+				bindings[prop] = val
+				Impl.setItemBinding.call @, '', prop, prop, val
+			return
+
+	class DeepObject extends signal.Emitter
+		constructor: ->
+			@_ref = null
+			Object.preventExtensions @
+
+		utils.defineProperty @::, '_signals', null, ->
+			@_ref._signals
+		, (val) ->
+			assert.isNotDefined @_ref._signals
+			@_ref._signals = val
+
+		_namespaceName: ''
+		_uniquePropertiesNames: {}
+
+		createBinding: (prop, val) ->
+			assert.isString prop
+			assert.ok prop of @
+			assert.isArray val if val?
+
+			ref = @_ref
+			namespaceName = @_namespaceName
+			uniqueProp = @_uniquePropertiesNames[prop]
+
+			if not val and not ref.bindings
+				return
+
+			bindings = ref.bindings ?= {}
+			if bindings[uniqueProp] isnt val
+				bindings[uniqueProp] = val
+				Impl.setItemBinding.call ref, namespaceName, prop, uniqueProp, val
+			return
+
+	DEFINE_PROPERTY_OPTS_KEYS = ['name', 'namespace', 'valueConstructor', 'implementation',
+	                             'developmentSetter', 'developmentGetter', 'setter', 'getter',
+	                             'object', 'constructor', 'defaultValue', 'parentConstructor']
+
+	propertiesDeepObjects = {}
+
+	exports =
+	Object: UtilsObject
 	DeepObject: DeepObject
 
 	defineProperty: (opts) ->
 		assert.isPlainObject opts
+		assert.isEqual utils.merge(Object.keys(opts), DEFINE_PROPERTY_OPTS_KEYS), DEFINE_PROPERTY_OPTS_KEYS
 
 		{name, namespace, valueConstructor, implementation} = opts
 
@@ -40,24 +87,54 @@ module.exports = (Renderer, Impl) -> exports =
 
 		# signal
 		signalName = "#{name}Changed"
-		if opts.hasOwnProperty 'constructor'
-			SignalsEmitter.createSignal opts.constructor, signalName
+		if namespace?
+			signalInternalName = namespace + utils.capitalize(signalName)
 		else
-			signal.createLazy prototype, signalName
+			signalInternalName = signalName
+
+		if opts.hasOwnProperty('constructor')
+			if namespace?
+				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, '_ref'
+			else
+				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, null
+		else
+			assert.isNotDefined namespace
+			signal.create prototype, signalName
 
 		# getter
-		propGetter = basicGetter = ->
-			`//<development>`
-			developmentGetter?.call @
-			`//</development>`
+		if namespace?
+			internalName = "_#{namespace}#{utils.capitalize(name)}"
+		else
+			internalName = "_#{name}"
 
-			@_data[name]
+		# default value
+		if 'defaultValue' of opts
+			if namespace?
+				opts.parentConstructor::[internalName] = opts.defaultValue
+			else
+				opts.constructor::[internalName] = opts.defaultValue
+
+		if namespace?
+			propGetter = basicGetter = ->
+				`//<development>`
+				developmentGetter?.call @
+				`//</development>`
+
+				@_ref[internalName]
+		else
+			propGetter = basicGetter = ->
+				`//<development>`
+				developmentGetter?.call @
+				`//</development>`
+
+				@[internalName]
 
 		if valueConstructor
+			assert.isString valueConstructor.__name__
+			valueConstructorInstance = propertiesDeepObjects[valueConstructor.__name__] ?= new valueConstructor
 			propGetter = ->
-				unless @_data.hasOwnProperty name
-					@_data[name] = new valueConstructor @, @_data[name]
-				basicGetter.call @
+				valueConstructorInstance._ref = @
+				valueConstructorInstance
 
 		# setter
 		if valueConstructor
@@ -66,13 +143,29 @@ module.exports = (Renderer, Impl) -> exports =
 				`//<development>`
 				developmentSetter?.call @, val
 				`//</development>`
+				return
+		else if namespace?
+			Renderer.State.supportObjectProperty namespace
+			namespaceSignalName = "#{namespace}Changed"
+			uniquePropName = namespace + utils.capitalize(name)
+			opts.constructor::_namespaceName = namespace
+			opts.constructor::_uniquePropertiesNames[name] = uniquePropName
+			propSetter = basicSetter = (val) ->
+				null;
+				`//<development>`
+				developmentSetter?.call @, val
+				`//</development>`
 
-				if val?
-					if typeof val is 'object'
-						utils.merge @[name], val
-					else
-						for key of @[name]._data
-							@[name][key] = val
+				ref = @_ref
+
+				oldVal = ref[internalName]
+				if oldVal is val
+					return
+
+				ref[internalName] = val
+				implementation?.call ref, val
+				@[signalName] oldVal
+				ref[namespaceSignalName] @
 				return
 		else
 			propSetter = basicSetter = (val) ->
@@ -81,129 +174,20 @@ module.exports = (Renderer, Impl) -> exports =
 				developmentSetter?.call @, val
 				`//</development>`
 
-				oldVal = @_data[name]
-				@_data[name] = val
-				if oldVal isnt val and signalName of @
-					@[signalName] oldVal
+				oldVal = @[internalName]
+				if oldVal is val
+					return
 
-				# TODO: why calling on only changes doesn't work?
-				if @_data[name] is val
-					implementation?.call(@_item or @, val)
-					return true
-				else
-					return false
-
-		if namespace
-			Renderer.State.supportObjectProperty namespace
-			namespaceSignalName = "#{namespace}Changed"
-			propSetter = (val) ->
-				basicSetter.call @, val
-				@_item[namespaceSignalName] @
+				@[internalName] = val
+				implementation?.call @, val
+				@[signalName] oldVal
+				return
 
 		# custom desc
 		getter = if customGetter? then customGetter(propGetter) else propGetter
 		setter = if customSetter? then customSetter(propSetter) else propSetter
 
-		# accept bindings
-		if namespace
-			setter = exports.createDeepBindingSetter namespace, name, setter
-		else
-			setter = exports.createBindingSetter name, setter
-
 		# override
-		utils.defineProperty prototype, name, utils.ENUMERABLE, getter, setter
+		utils.defineProperty prototype, name, null, getter, setter
 
 		prototype
-
-	createBindingSetter: (propName, setFunc) ->
-		(val) ->
-			data = @_data
-
-			# synchronize with default state
-			if data.states and data.state is '' and propName isnt 'state' and propName isnt 'parent'
-				data.states[''][propName] = val
-
-			if val and isArray val.binding
-				data.bindings ?= {}
-				data.bindings[propName] = true
-				Impl.setItemBinding.call @, @, propName, val.binding
-			else
-				if data.bindings?[propName]
-					Impl.setItemBinding.call @, @, propName, null
-					data.bindings[propName] = false
-				setFunc.call @, val
-
-	createDeepBindingSetter: (namespace, propName, setFunc) ->
-		(val) ->
-			data = @_data
-			itemData = @_item._data
-
-			# synchronize with default state
-			if itemData.states and itemData.state is ''
-				state = itemData.states['']
-				state[namespace] ?= {}
-				state[namespace][propName] ?= val
-
-			if val and isArray val.binding
-				data.bindings ?= {}
-				data.bindings[propName] = true
-				Impl.setItemBinding.call @_item, @, propName, val.binding
-			else
-				if data.bindings?[propName]
-					Impl.setItemBinding.call @_item, @, propName, null
-					data.bindings[propName] = false
-				setFunc.call @, val
-
-	setProperty: (item, key, val) ->
-		if typeof val is 'function' and signal.isHandlerName(key)
-			return item[key].connect val
-
-		if val? and typeof val is 'object' and key of item.constructor.prototype and not Array.isArray(val.binding) and not(val instanceof Renderer.Item) 
-			return utils.merge item[key], val
-
-		item[key] = val
-
-	fill: (item, opts) ->
-		if opts?
-			# set properties
-			for key, val of opts
-				unless key of item
-					throw new Error "Unexpected property `#{key}`"
-
-				if typeof val is 'function' and signal.isHandlerName(key)
-					continue
-
-				exports.setProperty item, key, val
-
-			# connect handlers
-			for key, val of opts
-				unless key of item
-					throw new Error "Unexpected property `#{key}`"
-
-				if typeof val is 'function' and signal.isHandlerName(key)
-					item[key].connect val
-
-	createDataCtor: (data) ->
-		func = ->
-		func.prototype = data
-		func
-
-	initConstructor: (func, opts) ->
-		assert.isFunction func
-		assert.isPlainObject opts
-
-		{data} = opts
-
-		if opts.extends
-			data = utils.merge utils.clone(opts.extends.DATA), data
-
-		func.DATA = data
-		func.DATA_CTOR = exports.createDataCtor data
-
-	initObject: (self, impl) ->
-		assert.isNotDefined self.__hash__
-
-		self.__hash__ = utils.uid()
-		self._data = new self.constructor.DATA_CTOR
-		impl? self, self.constructor.__name__
-

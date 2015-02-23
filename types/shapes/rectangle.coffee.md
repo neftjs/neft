@@ -28,11 +28,9 @@ Rectangle {
 			@__name__ = 'Rectangle'
 			@__path__ = 'Renderer.Rectangle'
 
-			itemUtils.initConstructor @,
-				extends: Renderer.Item
-				data:
-					color: 'transparent'
-					radius: 0
+			constructor: ->
+				@_color = 'transparent'
+				super()
 
 *String* Rectangle::color = 'transparent'
 -----------------------------------------
@@ -42,6 +40,7 @@ Rectangle {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'color'
+				defaultValue: 'transparent'
 				implementation: Impl.setRectangleColor
 				developmentSetter: (val) ->
 					expect(val).toBe.string()
@@ -53,7 +52,8 @@ Rectangle {
 
 			itemUtils.defineProperty
 				constructor: @
-				name: 'radius',
+				name: 'radius'
+				defaultValue: 0
 				implementation: Impl.setRectangleRadius
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
@@ -66,15 +66,13 @@ Rectangle {
 		class Border extends itemUtils.DeepObject
 			@__name__ = 'Border'
 
-			itemUtils.initConstructor @,
-				data:
-					width: 0
-					color: 'transparent'
-
 			itemUtils.defineProperty
 				constructor: Rectangle
 				name: 'border'
 				valueConstructor: Border
+
+			constructor: ->
+				super()
 
 *Float* Rectangle::border.width = 0
 -----------------------------------
@@ -84,7 +82,9 @@ Rectangle {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'width'
+				defaultValue: 0
 				namespace: 'border'
+				parentConstructor: Rectangle
 				implementation: Impl.setRectangleBorderWidth
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
@@ -97,7 +97,9 @@ Rectangle {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'color'
+				defaultValue: 'transparent'
 				namespace: 'border'
+				parentConstructor: Rectangle
 				implementation: Impl.setRectangleBorderColor
 				developmentSetter: (val) ->
 					expect(val).toBe.string()

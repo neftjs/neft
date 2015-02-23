@@ -118,7 +118,7 @@ module.exports = (impl) ->
 				args.push "return #{hash};"
 				cache[hash] = Function.apply null, args
 
-		constructor: (@item, @obj, @uniqueProp, @prop, binding, @extraResultFunc) ->
+		constructor: (@item, @ns, @uniqueProp, @prop, binding, @extraResultFunc) ->
 			Binding.prepare binding, item
 
 			# properties
@@ -134,7 +134,7 @@ module.exports = (impl) ->
 			# destroy on property value change
 			signalName = "#{prop}Changed"
 			handlerName = signal.getHandlerName signalName
-			obj[handlerName] @signalChangeListener
+			@getObj()[handlerName] @signalChangeListener
 
 			# connections
 			connections = @connections = []
@@ -143,10 +143,11 @@ module.exports = (impl) ->
 					connections.push new Connection @, elem[0], elem[1]
 
 			# update
-			updateBinding @
+			@defaultValue = @getObj()[prop]
+			@update()
 
 		item: null
-		obj: null
+		ns: ''
 		args: null
 		uniqueProp: ''
 		prop: ''
@@ -155,12 +156,18 @@ module.exports = (impl) ->
 		updatePending: false
 		connections: null
 
+		getObj: ->
+			if @ns
+				@item[@ns]
+			else
+				@item
+
 		signalChangeListener: (oldVal) ->
-			if not @updatePending and oldVal isnt @obj[@prop]
+			if not @updatePending and oldVal isnt @getObj()[@prop]
 				@destroy()
 
 		getDefaultValue = (binding) ->
-			val = binding.obj._data[binding.prop]
+			val = binding.getObj()[binding.prop]
 			switch typeof val
 				when 'string'
 					''
@@ -187,7 +194,7 @@ module.exports = (impl) ->
 				result = getDefaultValue binding
 
 			binding.updatePending = true
-			binding.obj[binding.prop] = result
+			binding.getObj()[binding.prop] = result
 			binding.updatePending = false
 
 		update: do ->
@@ -223,29 +230,30 @@ module.exports = (impl) ->
 				connection.destroy()
 
 			# remove from the list
-			objImpl = @obj._impl or @item._impl
-			objImpl.bindings[@uniqueProp] = null
+			nsImpl = @item._impl
+			nsImpl.bindings[@uniqueProp] = null
 
 			# disconnect listener
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
-			@obj[handlerName].disconnect @signalChangeListener
+			@getObj()[handlerName].disconnect @signalChangeListener
 
 			# clear props
 			@args = null
 			@connections = null
 
-	setItemBinding: (obj, prop, binding, extraResultFunc) ->
-		storage = obj._impl or @?._impl
-
-		uniqueProp = "#{obj.constructor.__name__}-#{prop}"
-
-		storage.bindings ?= {}
-
-		if storage.bindings[uniqueProp]?.updatePending
+			# restore default value
+			@getObj()[@prop] = @defaultValue
 			return
 
-		storage.bindings[uniqueProp]?.destroy()
+	setItemBinding: (ns, prop, uniqueProp, binding, extraResultFunc) ->
+		data = @_impl
+		data.bindings ?= {}
+
+		if data.bindings[uniqueProp]?.updatePending
+			return
+
+		data.bindings[uniqueProp]?.destroy()
 
 		if binding?
-			storage.bindings[uniqueProp] = new Binding @, obj, uniqueProp, prop, binding, extraResultFunc
+			data.bindings[uniqueProp] = new Binding @, ns, uniqueProp, prop, binding, extraResultFunc

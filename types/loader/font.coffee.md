@@ -24,7 +24,7 @@ Item {
 
 	log = log.scope 'Renderer', 'FontLoader'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends signal.Emitter
+	module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends itemUtils.Object
 		@__name__ = 'FontLoader'
 		@__path__ = 'Renderer.Loader.Font'
 
@@ -57,20 +57,19 @@ Loader.Font {}
 ```
 
 		constructor: ->
-			@_data =
-				name: ''
-				sources: []
+			@_name = ''
+			@_sources = []
 			super()
-			Object.freeze @
+			Object.preventExtensions @
 
 *String* FontLoader::name
 -------------------------
 
 		utils.defineProperty @::, 'name', null, ->
-			@_data.name
+			@_name
 		, (val) ->
 			assert.isString val
-			@_data.name = val.toLowerCase()
+			@_name = val.toLowerCase()
 
 *String* FontLoader::sources
 ----------------------------
@@ -82,7 +81,7 @@ It needs to be an array, because there is no one font type supported by all brow
 We recommend usng **WOFF** format and **TTF/OTF** for oldest Android browser.
 
 		utils.defineProperty @::, 'sources', null, ->
-			@_data.sources
+			@_sources
 		, (val) ->
 			if val is 'string'
 				val = [val]
@@ -90,9 +89,10 @@ We recommend usng **WOFF** format and **TTF/OTF** for oldest Android browser.
 			assert.notLengthOf val, 0
 			assert.isString val[0]
 			assert.notLengthOf val[0]
-			@_data.sources = val
+			@_sources = val
 
 			setImmediate =>
-				Object.freeze @_data
+				Object.freeze @
+				Object.freeze @_sources
 				loadFont @
 				FontLoader.fonts[@name] = @

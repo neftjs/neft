@@ -8,17 +8,13 @@ Positioning/Margins @txt
 
 	{assert} = console
 
-	module.exports = (Renderer, Impl, itemUtils) ->
+	module.exports = (Renderer, Impl, itemUtils, Item) ->
 
 		class Margin extends itemUtils.DeepObject
 			@__name__ = 'Margin'
 
-			itemUtils.initConstructor @,
-				data:
-					left: 0
-					top: 0
-					right: 0
-					bottom: 0
+			constructor: ->
+				super()
 
 *Margin* Margin()
 -----------------
@@ -51,49 +47,43 @@ Rectangle {
 ```
 
 			createMarginProp = (type) ->
-				setter = (_super) -> (val) ->
-					true;
-					`//<development>`
-					id = @_item.__hash__
+				developmentSetter = (val) ->
 					assert typeof val is 'number' and isFinite(val)
-					, "(##{id}).margin.#{type} expects a finite number; `#{val}` given"
-					`//</development>`
-
-					oldVal = @_data[type]
-					if oldVal isnt val
-						_super.call @, val
-						@_item.marginChanged? @
-						Impl.setItemMargin.call @_item, type, val
+					, "margin.#{type} expects a finite number; `#{val}` given"
 
 				itemUtils.defineProperty
 					constructor: Margin
 					name: type
+					defaultValue: 0
+					implementation: (val) ->
+						Impl.setItemMargin.call @, type, val
 					namespace: 'margin'
-					setter: setter
+					parentConstructor: Item
+					developmentSetter: developmentSetter
 
-*Float* Margin::left
---------------------
+*Float* Margin::left = 0
+------------------------
 
 ### *Signal* Margin::leftChanged(*Float* oldValue)
 
 			createMarginProp 'left'
 
-*Float* Margin::top
--------------------
+*Float* Margin::top = 0
+-----------------------
 
 ### *Signal* Margin::topChanged(*Float* oldValue)
 
 			createMarginProp 'top'
 
-*Float* Margin::right
----------------------
+*Float* Margin::right = 0
+-------------------------
 
 ### *Signal* Margin::rightChanged(*Float* oldValue)
 
 			createMarginProp 'right'
 
-*Float* Margin::bottom
-----------------------
+*Float* Margin::bottom = 0
+--------------------------
 
 ### *Signal* Margin::bottomChanged(*Float* oldValue)
 
@@ -120,3 +110,24 @@ Item {
 					@left
 				else
 					throw new Error "Margin values are different"
+
+*Item* Item()
+-------------
+
+*Item.Margin* Item::margin
+--------------------------
+
+### *Signal* Item::marginChanged(*Item.Margin* margin)
+
+		itemUtils.defineProperty
+			constructor: Item
+			name: 'margin'
+			valueConstructor: Margin
+			setter: (_super) -> (val) ->
+				{margin} = @
+				if utils.isPlainObject(val)
+					utils.merge margin, val
+				else
+					margin.left = margin.top = margin.right = margin.bottom = val
+
+		Margin

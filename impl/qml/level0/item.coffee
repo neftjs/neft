@@ -92,11 +92,12 @@ module.exports = (impl) ->
 
 			unless @_impl.linkUriListens
 				@_impl.linkUriListens = true
-				exports.attachItemSignal.call @, 'pointerClicked', onLinkUriClicked
+				@pointer.onClicked onLinkUriClicked
 
 	setItemMargin: (val) ->
 
-	attachItemSignal: (name, func) ->
+	attachItemSignal: (ns, name, signalName) ->
+		self = @
 		storage = @_impl
 
 		# create mouse area if needed
@@ -115,15 +116,16 @@ module.exports = (impl) ->
 		# listen on an event
 		signal = SIGNALS[name]
 
-		customFunc = (e) =>
+		customFunc = (e) ->
 			if e?
 				if e._stopPropagation
 					return
 				e.accepted = false
 
 			arg = SIGNALS_ARGS[name]? e
-			if func.call(@, arg) is signal.STOP_PROPAGATION and e?
+			if self[ns][signalName](arg) is signal.STOP_PROPAGATION and e?
 				e._stopPropagation = true
+			return
 
 		mouseArea[signal].connect customFunc
 

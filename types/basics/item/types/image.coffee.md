@@ -24,8 +24,8 @@ Image {
 
 	log = log.scope 'Renderer', 'Image'
 
-*Image* Image([*Object* options, *Array* children]) : *Renderer.Item*
----------------------------------------------------------------------
+*Image* Image() : *Renderer.Item*
+---------------------------------
 
 This item is used to render image defined by the *Image::source* URL.
 
@@ -36,10 +36,9 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 		@__name__ = 'Image'
 		@__path__ = 'Renderer.Image'
 
-		itemUtils.initConstructor @,
-			extends: Renderer.Item
-			data:
-				source: ''
+		constructor: ->
+			@_source = ''
+			super()
 
 *String* Image::source
 ----------------------
@@ -53,26 +52,24 @@ Image source URL (absolute or relative to the page) or data URI.
 		itemUtils.defineProperty
 			constructor: @
 			name: 'source'
+			defaultValue: ''
 			developmentSetter: (val) ->
 				expect(val).toBe.string()
 			setter: (_super) -> (val) ->
-				unless _super.call @, val
-					return false
+				_super.call @, val
 
 				Impl.setImageSource.call @, val, (err, opts) =>
-					if val isnt @_data.source
-						return
-					if @_data.hasOwnProperty('width') or @_data.hasOwnProperty('height')
+					if val isnt @source
 						return
 
 					if err
 						err = new Error "Can't load `#{val}` image"
 						log.warn err.message
-					else
+					else if @width is 0 and @height is 0
 						@width = opts.width
 						@height = opts.height
 
-					@loaded? err
+					@loaded err
 
 				true
 
@@ -85,4 +82,4 @@ image has been loaded or some error occurs.
 Always check, whether first *error* argument is defined if you need to check
 whether image is ready.
 
-		signal.createLazy @::, 'loaded'
+		signal.Emitter.createSignal @, 'loaded'

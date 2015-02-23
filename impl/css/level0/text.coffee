@@ -78,7 +78,7 @@ module.exports = (impl) ->
 				if height > 0
 					item.height = height
 
-			if item._data.height > 0
+			if item._height > 0
 				if item._impl.textElement.parentNode is hatchery
 					item._impl.elem.appendChild item._impl.textElement
 				true
@@ -98,7 +98,7 @@ module.exports = (impl) ->
 			queueItems[item.__hash__] = true
 			queue.push item
 
-			if item._data.height is 0
+			if item._height is 0
 				hatchery.appendChild item._impl.textElement
 
 			unless pending
@@ -135,7 +135,7 @@ module.exports = (impl) ->
 
 			# update
 			for item in queue
-				val = item._data.text
+				val = item._text
 				if val.indexOf('<') isnt -1
 					item._impl.textElement.innerHTML = val
 				else

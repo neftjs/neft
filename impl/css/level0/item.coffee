@@ -36,7 +36,7 @@ SIGNALS =
 	'pointerEntered': 'mouseenter'
 	'pointerExited': 'mouseleave'
 	'pointerMove': 'mousemove'
-	'pointerWheel': (elem, func) ->
+	'pointerWheel': (elem) ->
 		if isFirefox
 			'DOMMouseScroll'
 		else
@@ -203,34 +203,31 @@ module.exports = (impl) ->
 
 		getTransforms = (item) ->
 			transform = ''
-			data = item._data
-			target = item._impl
 
 			# position
 			if item._impl.isHot and transform3dSupported
-				transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
+				transform = "translate3d(#{item._x}px, #{item._y}px, 0) "
 			else
 				markAction item
-				transform = "translate(#{data.x}px, #{data.y}px) "
+				transform = "translate(#{item._x}px, #{item._y}px) "
 
 			# rotation
-			if data.rotation
-				transform += "rotate(#{rad2deg(data.rotation)}deg) "
+			if item._rotation
+				transform += "rotate(#{rad2deg(item._rotation)}deg) "
 
 			# scale
-			if data.scale isnt 1
-				transform += "scale(#{data.scale}) "
+			if item._scale isnt 1
+				transform += "scale(#{item._scale}) "
 
 			transform
 
 		updateItem = (item, styles) ->
-			data = item._data
-			target = item._impl
-			style = target.elem.style
+			data = item._impl
+			style = data.elem.style
 
-			if target.isHidden
+			if data.isHidden
 				if styles & STYLE_OPACITY
-					target.isHidden = false
+					data.isHidden = false
 					styles |= STYLE_ALL
 				else
 					return
@@ -238,14 +235,14 @@ module.exports = (impl) ->
 			if styles & STYLE_TRANSFORM
 				style[transformProp] = getTransforms item
 			if styles & STYLE_WIDTH
-				style.width = "#{data.width}px"
+				style.width = "#{item._width}px"
 			if styles & STYLE_HEIGHT
-				style.height = "#{data.height}px"
+				style.height = "#{item._height}px"
 			if styles & STYLE_OPACITY
-				style.opacity = data.opacity
+				style.opacity = item._opacity
 
-				if data.opacity is 0
-					target.isHidden = true
+				if item._opacity is 0
+					data.isHidden = true
 
 			return
 
@@ -354,26 +351,27 @@ module.exports = (impl) ->
 
 	setItemMargin: (type, val) ->
 
-	attachItemSignal: (name, func) ->
+	attachItemSignal: (ns, name, signalName) ->
+		self = @
 		{elem} = @_impl
 
-		signalName = SIGNALS[name]?(elem, func) or SIGNALS[name]
+		implName = SIGNALS[name]?(elem) or SIGNALS[name]
 
 		# break if event is not supported (e.g. some events on touch devices)
-		unless signalName?
+		unless implName?
 			return
 
-		customFunc = (e) =>
+		customFunc = (e) ->
 			arg = SIGNALS_ARGS[name]? e
 			if arg is false
 				return
 
-			if func.call(@, arg) is signal.STOP_PROPAGATION
+			if self[ns][signalName](arg) is signal.STOP_PROPAGATION
 				e.stopPropagation()
-			true
+			return
 
-		if typeof signalName is 'string'
-			elem.addEventListener signalName, customFunc
+		if typeof implName is 'string'
+			elem.addEventListener implName, customFunc
 
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]

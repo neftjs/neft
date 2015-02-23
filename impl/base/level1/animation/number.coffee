@@ -33,27 +33,27 @@ module.exports = (impl) ->
 			update()
 
 	updateAnimation = (animation) ->
-		abstractData = animation.animation._data
+		abstractAnimation = animation.animation
 
-		animation.progress = Math.max 0, Math.min 1, (now()-animation.startTime) / animation.duration
+		progress = animation.progress = Math.max 0, Math.min 1, (now()-animation.startTime) / animation.duration
 
-		if animation.progress is 1
+		if progress is 1
 			if animation.loop
 				animation.startTime = now()
 			else
 				animation.running = false
 
-		val = (animation.to - animation.from) * animation.progress + animation.from
+		val = (animation.to - animation.from) * progress + animation.from
 		target = animation.target
 		if not isNaN(val) and target
 			setter = impl.utils.SETTER_METHODS_NAMES[animation.property]
-			if not abstractData.updateProperty and setter
-				target._data[animation.property] = val
+			if progress isnt 1 and not abstractAnimation._updateProperty and setter
 				impl[setter].call target, val
 			else
-				abstractData.updatePending = true
+				abstractAnimation._updatePending = true
 				target[animation.property] = val
-				abstractData.updatePending = false
+				abstractAnimation._updatePending = false
+		return
 
 	update = ->
 		return if reqSend

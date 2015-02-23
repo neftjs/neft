@@ -95,7 +95,7 @@ module.exports = (impl) ->
 			dy = e.y - y
 			scroll item, dx, dy
 
-		item.onPointerPressed (e) ->
+		item.pointer.onPressed (e) ->
 			listen = true
 
 			item._impl.globalScale = getItemGlobalScale item
@@ -105,7 +105,7 @@ module.exports = (impl) ->
 			x = e.x; y = e.y
 
 		listenOnWindowSignals = ->
-			impl.window.onPointerReleased (e) ->
+			impl.window.pointer.onReleased (e) ->
 				listen = false
 
 				return unless focus
@@ -119,7 +119,7 @@ module.exports = (impl) ->
 
 				x = y = 0
 
-			impl.window.onPointerMove (e) ->
+			impl.window.pointer.onMove (e) ->
 				return unless listen
 
 				if pointerUsed and not focus
@@ -141,14 +141,20 @@ module.exports = (impl) ->
 			impl.onWindowReady listenOnWindowSignals
 
 	useWheel = (item) ->
-		item.onPointerWheel (e) ->
+		item.pointer.onWheel (e) ->
 			item._impl.globalScale = getItemGlobalScale item
 			x = e.x / WHEEL_DIVISOR
 			y = e.y / WHEEL_DIVISOR
 			scroll item, x, y
 
+	onWidthChanged = (oldVal) ->
+		if @width < oldVal
+			scroll @
+	onHeightChanged = (oldVal) ->
+		if @height < oldVal
+			scroll @
+
 	DATA =
-		scroll: null
 		contentItem: null
 		globalScale: 1
 
@@ -158,8 +164,6 @@ module.exports = (impl) ->
 
 	create: (data) ->
 		Item.create.call @, data
-
-		data.scroll = (x, y) => scroll @, x, y
 
 		# item props
 		impl.setItemClip.call @, true
@@ -171,13 +175,13 @@ module.exports = (impl) ->
 
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem
-			oldVal.onWidthChanged.disconnect @_impl.scroll
-			oldVal.onHeightChanged.disconnect @_impl.scroll
+			oldVal.onWidthChanged.disconnect onWidthChanged, @
+			oldVal.onHeightChanged.disconnect onHeightChanged, @
 
 		if newVal = val
 			@_impl.contentItem = newVal
-			newVal.onWidthChanged @_impl.scroll
-			newVal.onHeightChanged @_impl.scroll
+			newVal.onWidthChanged onWidthChanged, @
+			newVal.onHeightChanged onHeightChanged, @
 
 	setScrollableContentX: (val) ->
 		@_impl.contentItem?.x = -val

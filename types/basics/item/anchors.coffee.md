@@ -65,24 +65,19 @@ This connection is solid, so if the *rect1* will change a position,
 		right: true
 		horizontalCenter: true
 
-	module.exports = (Renderer, Impl, itemUtils) ->
+	module.exports = (Renderer, Impl, itemUtils, Item) ->
 
 		class Anchors extends itemUtils.DeepObject
+			@__name__ = 'Anchors'
 
-			itemUtils.initConstructor @,
-				data:
-					top: null
-					bottom: null
-					verticalCenter: null
-					left: null
-					right: null
-					horizontalCenter: null
+			constructor: ->
+				super()
 
 			createAnchorProp = (type, opts=0) ->
 				setter = (_super) -> (val) ->
 					if val?
 						`//<development>`
-						id = @_item.__hash__
+						id = @_ref.__hash__
 						allowedLines = if H_LINES[type] then H_LINES else V_LINES
 
 						assert Array.isArray(val) and val.length > 0 and val.length < 3
@@ -112,7 +107,7 @@ Rectangle {
 
 Such reference is also automatically updated if the item parent change.
 
-						assert target is 'parent' or target is 'this' or target instanceof Renderer.Item
+						assert target is 'parent' or target is 'this' or target instanceof Item
 						, "`(##{id}).anchors.#{type}` expects an item; `'#{val}'` given"
 
 For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.
@@ -157,8 +152,6 @@ so *anchors.top = parent.left* is not allowed.
 							val[0] = @
 
 					_super.call @, val
-					@_item.anchorsChanged? @
-					Impl.setItemAnchor.call @_item, type, val
 
 *Signal* Item::anchorsChanged(*Anchors* anchors)
 ------------------------------------------------
@@ -168,25 +161,29 @@ This signal is called on the [Renderer.Item][] if one of it's anchors changed.
 				itemUtils.defineProperty
 					constructor: Anchors
 					name: type
+					defaultValue: null
+					implementation: (val) ->
+						Impl.setItemAnchor.call @, type, val
 					namespace: 'anchors'
+					parentConstructor: Item
 					setter: setter
 
-*Array* Anchors::left
----------------------
+*Array* Anchors::left = null
+----------------------------
 
 			createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 
 ### *Signal* Anchors::leftChanged(*Array* oldValue)
 
-*Array* Anchors::right
-----------------------
+*Array* Anchors::right = null
+-----------------------------
 
 			createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 
 ### *Signal* Anchors::rightChanged(*Array* oldValue)
 
-*Array* Anchors::horizontalCenter
----------------------------------
+*Array* Anchors::horizontalCenter = null
+----------------------------------------
 
 ```style
 Item {
@@ -204,8 +201,8 @@ Item {
 
 ### *Signal* Anchors::horizontalCenterChanged(*Array* oldValue)
 
-*Array* Anchors::top
---------------------
+*Array* Anchors::top = null
+---------------------------
 
 ```style
 Item {
@@ -223,15 +220,15 @@ Item {
 
 ### *Signal* Anchors::topChanged(*Array* oldValue)
 
-*Array* Anchors::bottom
-------------------------
+*Array* Anchors::bottom = null
+------------------------------
 
 			createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
 
 ### *Signal* Anchors::bottomChanged(*Array* oldValue)
 
-*Array* Anchors::verticalCenter
---------------------------------
+*Array* Anchors::verticalCenter = null
+--------------------------------------
 
 ```style
 Item {
@@ -249,8 +246,8 @@ Item {
 
 ### *Signal* Anchors::verticalCenterChanged(*Array* oldValue)
 
-*Array* Anchors::centerIn
--------------------------
+*Array* Anchors::centerIn = null
+--------------------------------
 
 It's a shortcut for the *horizontalCenter* and *verticalCenter*.
 
@@ -274,8 +271,8 @@ Rectangle {
 
 ### *Signal* Anchors::centerInChanged(*Array* oldValue)
 
-*Array* Anchors::fill
----------------------
+*Array* Anchors::fill = null
+----------------------------
 
 Changes item position and its size to be always under the anchored target.
 
@@ -298,5 +295,18 @@ Item {
 
 			createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 			createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
+
+*Item* Item()
+-------------
+
+*Item.Anchors* Item::anchors
+----------------------------
+
+### *Signal* Item::anchorsChanged(*Item.Anchors* anchors)
+
+		itemUtils.defineProperty
+			constructor: Item
+			name: 'anchors'
+			valueConstructor: Anchors
 
 		Anchors

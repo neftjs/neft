@@ -21,8 +21,8 @@ Text {
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Text* Text([*Object* options, *Array* children]) : *Renderer.Item*
--------------------------------------------------------------------
+*Text* Text() : *Renderer.Item*
+-------------------------------
 
 		class Text extends Renderer.Item
 			@__name__ = 'Text'
@@ -40,12 +40,11 @@ Text {
 				u: true
 				a: true
 
-			itemUtils.initConstructor @,
-				extends: Renderer.Item
-				data:
-					text: ''
-					color: 'black'
-					lineHeight: 1
+			constructor: ->
+				@_text = ''
+				@_color = 'black'
+				@_fontPixelSize = 14
+				super()
 
 *String* Text::text
 -------------------
@@ -55,6 +54,7 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'text'
+				defaultValue: ''
 				implementation: Impl.setText
 				developmentSetter: (val) ->
 					expect(val).toBe.string()
@@ -67,6 +67,7 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'color'
+				defaultValue: 'black'
 				implementation: Impl.setTextColor
 				developmentSetter: (val) ->
 					expect(val).toBe.string()
@@ -79,6 +80,7 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'lineHeight'
+				defaultValue: 1
 				implementation: Impl.setTextLineHeight
 				developmentSetter: (val) ->
 					expect(val).toBe.truthy().float()
@@ -91,19 +93,13 @@ Text {
 		class Font extends itemUtils.DeepObject
 			@__name__ = 'Font'
 
-			itemUtils.initConstructor @,
-				data:
-					family: 'sans-serif'
-					pixelSize: 14
-					weight: 0.4
-					wordSpacing: 0
-					letterSpacing: 0
-					italic: false
-
 			itemUtils.defineProperty
 				constructor: Text
 				name: 'font'
 				valueConstructor: Font
+
+			constructor: ->
+				super()
 
 *String* Text::font.family = 'sans-serif'
 -----------------------------------------
@@ -116,7 +112,9 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'family'
+				defaultValue: 'sans-serif'
 				namespace: 'font'
+				parentConstructor: Text
 				implementation: Impl.setTextFontFamily
 				developmentSetter: (val) ->
 					expect(val).toBe.truthy().string()
@@ -140,7 +138,9 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'pixelSize'
+				defaultValue: 14
 				namespace: 'font'
+				parentConstructor: Text
 				implementation: Impl.setTextFontPixelSize
 				developmentSetter: (val) ->
 					expect(val).toBe.truthy().float()
@@ -153,7 +153,9 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'weight'
+				defaultValue: 0.4
 				namespace: 'font'
+				parentConstructor: Text
 				implementation: Impl.setTextFontWeight
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
@@ -168,7 +170,9 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'wordSpacing'
+				defaultValue: 0
 				namespace: 'font'
+				parentConstructor: Text
 				implementation: Impl.setTextFontWordSpacing
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
@@ -181,7 +185,9 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'letterSpacing'
+				defaultValue: 0
 				namespace: 'font'
+				parentConstructor: Text
 				implementation: Impl.setTextFontLetterSpacing
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
@@ -194,7 +200,9 @@ Text {
 			itemUtils.defineProperty
 				constructor: @
 				name: 'italic'
+				defaultValue: false
 				namespace: 'font'
+				parentConstructor: Text
 				implementation: Impl.setTextFontItalic
 				developmentSetter: (val) ->
 					expect(val).toBe.boolean()
