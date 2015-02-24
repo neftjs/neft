@@ -65,10 +65,13 @@ getMouseCoords = do ->
 
 	if isTouch
 		(e) ->
-			if e.touches.length
-				getArgs e.currentTarget, e.touches[0]
+			if e.touches?
+				if e.touches.length
+					getArgs e.currentTarget, e.touches[0]
+				else
+					getArgs e.currentTarget, e.changedTouches[0]
 			else
-				getArgs e.currentTarget, e.changedTouches[0]
+				getArgs e.currentTarget, e
 	else
 		(e) ->
 			getArgs e.currentTarget, e

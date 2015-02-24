@@ -90,7 +90,7 @@ Rectangle {
 					item.update ms
 				requestAnimationFrame frame
 
-			requestAnimationFrame frame
+			requestAnimationFrame? frame
 
 			(item) ->
 				items.push item

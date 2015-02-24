@@ -1,10 +1,10 @@
 Pointer events
 ==============
 
-```
+```style
 Rectangle {
-\  width: 200
-\  height: 200
+\  width: 100
+\  height: 100
 \  color: 'green'
 \
 \  State {
@@ -40,7 +40,7 @@ This signal is called when there is a click.
 
 The *event* object contains x and y position.
 
-```
+```style
 Rectangle {
 \  width: 200
 \  height: 100
@@ -54,7 +54,7 @@ Rectangle {
 \    rect.y = e.y - 5;
 \    rect.width = 10;
 \    rect.height = 10;
-\    rect.color = 'red';
+\    rect.color = 'green';
 \  }
 }
 ```
@@ -132,7 +132,7 @@ This property refers to the current pointer x position relative to the item.
 
 This property refers to the current pointer y position relative to the item.
 
-```
+```style
 var signal = require('signal');
 
 Rectangle {

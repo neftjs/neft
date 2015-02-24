@@ -25,10 +25,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 	itemUtils.defineProperty
 		constructor: @
 		name: 'when'
+		defaultValue: false
 
 	itemUtils.defineProperty
 		constructor: @
 		name: 'target'
+		defaultValue: null
 
 	utils.defineProperty @::, 'running', utils.CONFIGURABLE, ->
 		@_running

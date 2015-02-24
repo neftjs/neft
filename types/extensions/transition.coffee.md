@@ -4,7 +4,7 @@ Transition
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
@@ -14,76 +14,87 @@ Transition
 -------------------------
 
 		constructor: ->
-			@_listener = (a1) => listener.call @, a1
 			@_animation = null
 			@_property = ''
+			@_duration = 0
+			@_to = 0
 			super()
 
 		listener = (oldVal) ->
 			{animation} = @
-			if animation.updatePending
+			if not @running or animation.updatePending
 				return
 
 			{progress} = animation
 			animation.stop()
-			{duration} = animation
+			animation.duration = @_duration
 
 			animation.from = oldVal
-			animation.to = @_target[@property]
+			@_to = animation.to = @_target[@property]
 			if progress > 0
-				animation.duration = duration * progress
-
-			onStopped = ->
-				animation.onStopped.disconnect onStopped
-				animation.duration = duration
-			animation.onStopped onStopped
+				animation.duration = @_duration * progress
 
 			animation.play()
-
-		setItem = (val) ->
-			oldVal = @_item
-
-			if oldVal is val
-				return
-
-			@_item = val
-
-			if @property
-				handlerName = signal.getHandlerName "#{@property}Changed"
-
-				if oldVal
-					oldVal[handlerName].disconnect @_listener
-
-				if val
-					val[handlerName] @_listener
-
-			{animation} = @
-			if animation
-				animation.target = val
-				animation.stop()
-
 			return
+
+*Boolean* Transition::when
+--------------------------
+
+### *Signal* Transition::whenChanged(*Boolean* oldValue)
 
 *Renderer.Item* Transition::target
 ----------------------------------
 
 ### *Signal* Transition::targetChanged([*Renderer.Item* oldValue])
 
+		onTargetReady = ->
+			@_running = true
+
 		itemUtils.defineProperty
 			constructor: @
 			name: 'target'
 			developmentSetter: (val) ->
-				expect().defined(val).toBe.any Renderer.Item
+				assert.instanceOf val, Renderer.Item if val?
 			setter: (_super) -> (val) ->
+				oldVal = @target
+				if oldVal is val
+					return
+
+				{animation, property} = @
+
+				if animation
+					animation.target = val
+					animation.stop()
+
+				_super.call @, val
+
+				@_running = false
+				val.onReady onTargetReady, @
+
+				if property
+					if oldVal
+						handlerName = signal.getHandlerName "#{property}Changed"
+						oldVal[handlerName].disconnect listener, @
+
+					if val
+						handlerName = signal.getHandlerName "#{property}Changed"
+						val[handlerName] listener, @
+				return
 
 *Renderer.Animation* Transition::animation
 ------------------------------------------
 
-### Transition::animationChanged([*Renderer.Animation* oldValue])
+### Transition::animationChanged(*Renderer.Animation* oldValue)
+
+		onAnimationStopped = ->
+			@_target?[@property] = @_to
+			return
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'animation'
+			developmentSetter: (val) ->
+				assert.instanceOf val, Renderer.Animation if val?
 			setter: (_super) -> (val) ->
 				oldVal = @animation
 				if oldVal is val
@@ -91,11 +102,16 @@ Transition
 
 				_super.call @, val
 
-				oldVal?.stop()
+				if oldVal
+					oldVal.stop()
+					val.onStopped.disconnect onAnimationStopped, @
 
 				if val
-					val.target = @_item
+					@_duration = val.duration
+					val.target = @target
 					val.property = @property
+					val.onStopped onAnimationStopped, @
+				return
 
 *String* Transition::property
 -----------------------------
@@ -110,15 +126,20 @@ Transition
 				if oldVal is val
 					return
 
+				{animation, target} = @
+
+				if animation
+					animation.stop()
+					animation.property = val
+
 				_super.call @, val
 
-				if @_item
+				if target
 					if oldVal
 						handlerName = signal.getHandlerName "#{oldVal}Changed"
-						@_item[handlerName].disconnect @_listener
+						target[handlerName].disconnect listener, @
 
 					if val
 						handlerName = signal.getHandlerName "#{val}Changed"
-						@_item[handlerName] @_listener
-
-				@animation?.property = val
+						target[handlerName] listener, @
+				return

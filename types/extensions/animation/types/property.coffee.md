@@ -71,7 +71,7 @@ Animation/PropertyAnimation
 				expect(val).toBe.float()
 				expect(val).not().toBe.lessThan 0
 
-*Boolean* PropertyAnimation::updateProperty = false
+*Boolean* PropertyAnimation::updateProperty = true
 ---------------------------------------------------
 
 ### *Signal* PropertyAnimation::updatePropertyChanged(*Boolean* oldValue)
@@ -79,7 +79,7 @@ Animation/PropertyAnimation
 		itemUtils.defineProperty
 			constructor: @
 			name: 'updateProperty'
-			defaultValue: false
+			defaultValue: true
 			developmentSetter: (val) ->
 				expect(val).toBe.boolean()
 

@@ -1,7 +1,7 @@
 Keyboard events
 ===============
 
-```
+```style
 Rectangle {
 \  width: 100
 \  height: 100
