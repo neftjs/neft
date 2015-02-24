@@ -33,6 +33,15 @@ module.exports = (impl) ->
 			item.contentY = y
 			signal.STOP_PROPAGATION
 
+	canScroll = (item) ->
+		{contentX, contentY} = item
+		{contentItem, globalScale} = item._impl
+
+		xMax = contentItem.width - item.width
+		yMax = contentItem.height - item.height
+
+		contentX > 0 or contentX < xMax or contentY > 0 or contentY < yMax
+
 	getItemGlobalScale = (item) ->
 		val = item.scale
 		while item = item.parent
@@ -103,6 +112,17 @@ module.exports = (impl) ->
 			verticalContinuous.press()
 
 			x = e.x; y = e.y
+			return
+
+		item.pointer.onMove (e) ->
+			if listen and not pointerUsed
+				if Math.abs(e.x - x) + Math.abs(e.y - y) > MIN_POINTER_DELTA
+					if moveMovement(e) is signal.STOP_PROPAGATION
+						focus = true
+						pointerUsed = true
+
+					x = e.x; y = e.y
+			return
 
 		listenOnWindowSignals = ->
 			impl.window.pointer.onReleased (e) ->
@@ -118,6 +138,7 @@ module.exports = (impl) ->
 				verticalContinuous.release()
 
 				x = y = 0
+				return
 
 			impl.window.pointer.onMove (e) ->
 				return unless listen
@@ -128,12 +149,10 @@ module.exports = (impl) ->
 				horizontalContinuous.update e.x - x
 				verticalContinuous.update e.y - y
 
-				if focus or Math.abs(e.x - x) + Math.abs(e.y - y) > MIN_POINTER_DELTA
-					if moveMovement(e) is signal.STOP_PROPAGATION
-						focus = true
-						pointerUsed = true
-
+				if focus
+					moveMovement e
 					x = e.x; y = e.y
+				return
 
 		if impl.window?
 			listenOnWindowSignals()

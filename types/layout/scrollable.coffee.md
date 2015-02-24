@@ -31,16 +31,18 @@ Positioning/Scrollable
 			scrollbar.anchors.right = ['parent', 'right']
 			scrollbar.margin = 3
 			scrollbar.z = 1
-			scrollbar.onPointerPressed = ->
+			scrollbar.pointer.onPressed ->
 				unless @pressed
 					@pressed = true
 					@parent.pointer.onMove.connect @pointerMoveHandler
 					@parent.pointer.onReleased.connect @pointerReleasedHandler
+				signal.STOP_PROPAGATION
 			scrollbar.pointerReleasedHandler = ->
 				scrollbar.pressed = false
 				scrollbar.lastEvent = null
 				scrollbar.parent.pointer.onMove.disconnect scrollbar.pointerMoveHandler
 				scrollbar.parent.pointer.onReleased.disconnect scrollbar.pointerReleasedHandler
+				return
 			scrollbar.pointerMoveHandler = (e) ->
 				unless scrollbar.pressed
 					return
@@ -50,7 +52,7 @@ Positioning/Scrollable
 					contentY = Math.max 0, Math.min contentY, (scrollbar.parent.contentItem.height - scrollbar.parent.height)
 					scrollbar.parent.contentY = contentY
 				scrollbar.lastEvent = e
-				signal.STOP_PROPAGATION
+				return
 
 			thumb = new Renderer.Rectangle
 			thumb.parent = scrollbar
@@ -74,18 +76,11 @@ Positioning/Scrollable
 			]
 			thumb.border.width = 1
 			thumb.border.color = 'rgba(0, 0, 0, .2)'
-					# state: {binding: [
-					# 	[['this', 'parent'], 'state']
-					# ]}
-					# TODO
-					# onPointerEntered: ->
-					# 	@state = 'hover'
-					# onPointerExited: ->
-					# 	@state = ''
-					# states:
-					# 	hover: new Renderer.State
-					# 		color: 'rgba(0, 0, 0, .8)'
-			# ]
+
+			state = new Renderer.State
+			state.target = thumb
+			state.createBinding 'when', [[[thumb, 'pointer'], 'isHover'], '||', [scrollbar, 'pressed']]
+			state.changes.color = 'rgba(0, 0, 0, .8)'
 			
 			scrollbar
 
