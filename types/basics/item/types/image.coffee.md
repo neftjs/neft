@@ -55,23 +55,20 @@ Image source URL (absolute or relative to the page) or data URI.
 			defaultValue: ''
 			developmentSetter: (val) ->
 				expect(val).toBe.string()
-			setter: (_super) -> (val) ->
-				_super.call @, val
-
-				Impl.setImageSource.call @, val, (err, opts) =>
-					if val isnt @source
-						return
-
+			setter: do ->
+				loadCallback = (err, opts) ->
 					if err
-						err = new Error "Can't load `#{val}` image"
-						log.warn err.message
-					else if @width is 0 and @height is 0
+						log.warn "Can't load `#{@source}` image"
+					else if opts?
 						@width = opts.width
 						@height = opts.height
 
 					@loaded err
 
-				true
+				(_super) -> (val) ->
+					_super.call @, val
+					Impl.setImageSource.call @, val, loadCallback
+					return
 
 *Signal* Image::loaded([*Error* error])
 ---------------------------------------

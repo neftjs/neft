@@ -22,6 +22,8 @@ Basic items/Item
 		require('./item/property') Renderer, Impl, itemUtils, Item
 		require('./item/signal') Renderer, Impl, itemUtils, Item
 		require('./item/pointer') Renderer, Impl, itemUtils, Item
+		require('./item/keys') Renderer, Impl, itemUtils, Item
+		require('./item/styles') Renderer, Impl, itemUtils, Item
 
 *Item* Item()
 -------------
@@ -71,6 +73,27 @@ Rectangle {
 
 		signal.Emitter.createSignal @, 'ready', null, null, (item) ->
 			setImmediate -> item.ready()
+
+*Signal* Item::update(*Integer* miliseconds)
+--------------------------------------------
+
+		signal.Emitter.createSignal @, 'update', null, null, do ->
+			now = Date.now()
+			items = []
+
+			frame = ->
+				oldNow = now
+				now = Date.now()
+				ms = now - oldNow
+
+				for item in items
+					item.update ms
+				requestAnimationFrame frame
+
+			requestAnimationFrame frame
+
+			(item) ->
+				items.push item
 
 *Object* Item::children
 -----------------------

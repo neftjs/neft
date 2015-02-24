@@ -17,17 +17,17 @@ unless window.isFake
 
 		if data isnt undefined
 			# translate to origin
-			originX = data.width / a / 2
-			originY = data.height / d / 2
-			tx = data.x + a * originX
-			ty = data.y + d * originY
+			originX = data._width / a / 2
+			originY = data._height / d / 2
+			tx = data._x + a * originX
+			ty = data._y + d * originY
 
 			# scale
-			a *= data.scale
-			d *= data.scale
+			a *= data._scale
+			d *= data._scale
 
 			# rotation
-			if data.rotation % PI_2
+			if @rotation % PI_2
 				if @rotation isnt @rotationCache
 					@rotationCache = @rotation
 					@_sr = Math.sin @rotation

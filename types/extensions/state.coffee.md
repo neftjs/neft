@@ -39,13 +39,12 @@ Item states
 				@_name = utils.uid()
 				super()
 
-*Boolean* State::when
----------------------
-
-### *Signal* State::whenChanged(*Boolean* oldValue)
-
 *String* State::name
 --------------------
+
+This property is used in the [Renderer.Item::states][] list to identify various states.
+
+It's a random string by default.
 
 ### *Signal* State::nameChanged(*String* oldValue)
 
@@ -75,6 +74,10 @@ Item states
 *Renderer.Item* State::target
 -----------------------------
 
+Reference to the [Renderer.Item][] on which this state has effects.
+
+If state is created inside the [Renderer.Item][], this property is set automatically.
+
 ### *Signal* State::targetChanged(*Renderer.Item* oldValue)
 
 			itemUtils.defineProperty
@@ -98,6 +101,38 @@ Item states
 
 						if val.states.has(name)
 							@enable()
+
+*Object* State::changes
+-----------------------
+
+This objects contains all property changes brought by a state.
+
+It accepts bindings as well.
+
+*Boolean* State::when
+---------------------
+
+This boolean value indicates whether state is active or not.
+
+When comes *true*, this state is appended on the end of the [Renderer.Item::states][] list.
+
+Mostly used with bindings.
+
+```
+Grid {
+\  columns: 2
+\
+\  // reduce to one column if the window width is lower than 500 pixels
+\  State {
+\    when: windowStyle.width < 500
+\    changes: {
+\      columns: 1
+\    }
+\  }
+}
+```
+
+### *Signal* State::whenChanged(*Boolean* oldValue)
 
 			enable: ->
 				if @running
@@ -237,6 +272,14 @@ Item states
 
 *List* Item::states
 -------------------
+
+Mutable [List][] used to specify current [Renderer.Item][] states.
+
+One [Renderer.Item][] can have many states.
+
+States at the end have the highest priority.
+
+This property has a setter, which accepts strings and arrays of strings.
 
 ### *Signal* Item::statesChanged(*List* states)
 

@@ -7,8 +7,8 @@ Positioning/Scrollable
 	utils = require 'utils'
 	signal = require 'signal'
 
-*Scrollable* Scrollable([*Object* options, *Array* children]) : *Renderer.Item*
--------------------------------------------------------------------------------
+*Scrollable* Scrollable() : *Renderer.Item*
+-------------------------------------------
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 		@__name__ = 'Scrollable'

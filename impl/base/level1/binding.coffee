@@ -16,12 +16,6 @@ module.exports = (impl) ->
 
 	class Connection
 		constructor: (@binding, @item, @prop) ->
-			{signalChangeListener} = @
-
-			self = @
-			@signalChangeListener = ->
-				signalChangeListener.call self
-
 			if isArray item
 				@item = null
 				child = new Connection binding, item[0], item[1]
@@ -40,14 +34,14 @@ module.exports = (impl) ->
 			handlerName = signal.getHandlerName signalName
 
 			if @item
-				@item[handlerName]? @signalChangeListener
+				@item[handlerName]? @signalChangeListener, @
 
 		updateChild: (child) ->
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 
 			if @item
-				@item[handlerName]?.disconnect @signalChangeListener
+				@item[handlerName]?.disconnect @signalChangeListener, @
 				@item = null
 
 			if child
@@ -127,14 +121,14 @@ module.exports = (impl) ->
 			@args = Binding.getItems binding
 
 			# bind methods
-			{signalChangeListener} = @
-			@signalChangeListener = (oldVal) =>
-				signalChangeListener.call @, oldVal
+			# {signalChangeListener} = @
+			# @signalChangeListener = (oldVal) =>
+			# 	signalChangeListener.call @, oldVal
 
 			# destroy on property value change
 			signalName = "#{prop}Changed"
 			handlerName = signal.getHandlerName signalName
-			@getObj()[handlerName] @signalChangeListener
+			# @getObj()[handlerName] @signalChangeListener
 
 			# connections
 			connections = @connections = []
@@ -162,9 +156,9 @@ module.exports = (impl) ->
 			else
 				@item
 
-		signalChangeListener: (oldVal) ->
-			if not @updatePending and oldVal isnt @getObj()[@prop]
-				@destroy()
+		# signalChangeListener: (oldVal) ->
+		# 	if not @updatePending and oldVal isnt @getObj()[@prop]
+		# 		@destroy()
 
 		getDefaultValue = (binding) ->
 			val = binding.getObj()[binding.prop]
@@ -236,7 +230,7 @@ module.exports = (impl) ->
 			# disconnect listener
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
-			@getObj()[handlerName].disconnect @signalChangeListener
+			# @getObj()[handlerName].disconnect @signalChangeListener
 
 			# clear props
 			@args = null

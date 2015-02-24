@@ -41,6 +41,10 @@ SIGNALS =
 			'DOMMouseScroll'
 		else
 			'mousewheel'
+	'keysPressed': 'keydown'
+	'keysHold': 'keydown'
+	'keysReleased': 'keyup'
+	'keysInput': 'keypress'
 
 if isTouch
 	utils.merge SIGNALS,
@@ -90,6 +94,42 @@ getRestrictedMouseCoords = do ->
 	else
 		(e) ->
 			getArgs e.currentTarget, e
+
+pressedKeys = Object.create null
+
+SPECIAL_KEY_CODES =
+	32: 'Space'
+	13: 'Enter'
+	9: 'Tab'
+	27: 'Escape'
+	8: 'Backspace'
+	16: 'Shift'
+	17: 'Control'
+	18: 'Alt'
+	20: 'Caps Lock'
+	144: 'Num Lock'
+	37: 'Left'
+	38: 'Up'
+	39: 'Right'
+	40: 'Down'
+	45: 'Insert'
+	46: 'Delete'
+	36: 'Home'
+	35: 'End'
+	33: 'Page Up'
+	34: 'Page Down'
+	112: 'F1'
+	113: 'F2'
+	114: 'F3'
+	115: 'F4'
+	116: 'F5'
+	117: 'F6'
+	118: 'F7'
+	119: 'F8'
+	120: 'F9'
+	121: 'F10'
+	122: 'F11'
+	123: 'F12'
 
 SIGNALS_ARGS =
 	'pointerWheel': do ->
@@ -182,6 +222,36 @@ SIGNALS_ARGS =
 			e.preventDefault()
 
 		getRestrictedMouseCoords e
+	'keysPressed': (e) ->
+		e.preventDefault()
+
+		code = e.which or e.keyCode
+		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
+
+		if pressedKeys[key]
+			return false
+		pressedKeys[key] = true
+
+		key: key
+	'keysHold': (e) ->
+		e.preventDefault()
+
+		code = e.which or e.keyCode
+		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
+
+		key: key
+	'keysReleased': (e) ->
+		code = e.which or e.keyCode
+		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
+
+		pressedKeys[key] = false
+
+		key: key
+	'keysInput': (e) ->
+		code = e.charCode or e.which or e.keyCode
+		text = String.fromCharCode(code)
+
+		text: text
 
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
@@ -371,7 +441,10 @@ module.exports = (impl) ->
 			return
 
 		if typeof implName is 'string'
-			elem.addEventListener implName, customFunc
+			if ///^keys///.test name
+				window.addEventListener implName, customFunc
+			else
+				elem.addEventListener implName, customFunc
 
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]

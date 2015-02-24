@@ -63,7 +63,8 @@ module.exports = (Renderer, Impl) ->
 
 	DEFINE_PROPERTY_OPTS_KEYS = ['name', 'namespace', 'valueConstructor', 'implementation',
 	                             'developmentSetter', 'developmentGetter', 'setter', 'getter',
-	                             'object', 'constructor', 'defaultValue', 'parentConstructor']
+	                             'object', 'constructor', 'defaultValue', 'parentConstructor',
+	                             'signalInitializer']
 
 	propertiesDeepObjects = {}
 
@@ -94,9 +95,9 @@ module.exports = (Renderer, Impl) ->
 
 		if opts.hasOwnProperty('constructor')
 			if namespace?
-				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, '_ref'
+				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, '_ref', opts.signalInitializer
 			else
-				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, null
+				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, null, opts.signalInitializer
 		else
 			assert.isNotDefined namespace
 			signal.create prototype, signalName

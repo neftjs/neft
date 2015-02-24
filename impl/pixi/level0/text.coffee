@@ -72,15 +72,23 @@ module.exports = (impl) ->
 
 		updateText.call @
 
-	create: (item) ->
-		Image.create item
+	DATA =
+		textElement: null
+		textContainer: null
 
-		item.onWidthChanged onSizeChanged
-		item.onHeightChanged onSizeChanged
+	DATA: DATA
 
-		CssText._createTextElement item
-		{textElement} = item._impl
-		textContainer = item._impl.textContainer = document.createElement 'div'
+	createData: impl.utils.createDataCloner Item.DATA, DATA
+
+	create: (data) ->
+		Image.create.call @, data
+
+		@onWidthChanged onSizeChanged
+		@onHeightChanged onSizeChanged
+
+		CssText._createTextElement @
+		{textElement} = data
+		textContainer = data.textContainer = document.createElement 'div'
 		textContainer.appendChild textElement
 		impl._hatchery.appendChild textContainer
 		textElement.style.transformOrigin = '0 0'

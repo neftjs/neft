@@ -21,8 +21,8 @@ Grid {
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Grid* Grid([*Object* options, *Array* children]) : *Renderer.Item*
--------------------------------------------------------------------
+*Grid* Grid() : *Renderer.Item*
+-------------------------------
 
 		class Grid extends Renderer.Item
 			@__name__ = 'Grid'

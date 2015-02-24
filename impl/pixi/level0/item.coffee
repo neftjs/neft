@@ -27,9 +27,19 @@ module.exports = (impl) ->
 		mask.drawRect 0, 0, elem.width, elem.height
 		mask.endFill()
 
-	create: (item) ->
-		elem = item._impl.elem = new PIXI.DisplayObjectContainer
-		elem._data = item._data
+	DATA =
+		bindings: null
+		elem: null
+		textElement: null
+		textContainer: null
+
+	DATA: DATA
+
+	createData: impl.utils.createDataCloner DATA
+
+	create: (data) ->
+		elem = data.elem = new PIXI.DisplayObjectContainer
+		elem._data = @
 
 	setItemParent: (val) ->
 		item = @_impl.elem
@@ -100,6 +110,6 @@ module.exports = (impl) ->
 	setItemMargin: (type, val) ->
 
 	attachItemSignal: (name, signal) ->
-		{elem} = @_impl
-		elem.interactive = true
-		elem[SIGNALS[name]] = (e) -> signal e.global
+		# {elem} = @_impl
+		# elem.interactive = true
+		# elem[SIGNALS[name]] = (e) -> signal e.global

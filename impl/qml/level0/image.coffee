@@ -7,6 +7,7 @@ module.exports = (impl) ->
 
 	DATA =
 		isSvg: false
+		callback: null
 
 	onSvgImageResize = ->
 		if this.sourceSize.width < this.width
@@ -23,44 +24,55 @@ module.exports = (impl) ->
 
 		Item.create.call @, data
 
-	setImageSource: (val, callback) ->
-		data = @_impl
-		{elem} = data
+	setImageSource: do ->
+		onStatusChanged = ->
+			{elem, callback} = @_impl
+			elem.statusChanged.disconnect @, onStatusChanged
 
-		unless DATA_URI_RE.test val
-			val = impl.utils.toUrl(val)
-		elem.source = val
-
-		if ///^data:image\/svg+|\.svg$///
-			elem.fillMode = Image.PreserveAspectFit
-			unless data.isSvg
-				elem.widthChanged.connect elem, onSvgImageResize
-				elem.heightChanged.connect elem, onSvgImageResize
-				elem.statusChanged.connect elem, onSvgImageResize
-		else
-			elem.fillMode = Image.Stretch
-			if data.isSvg
-				elem.widthChanged.disconnect elem, onSvgImageResize
-				elem.heightChanged.disconnect elem, onSvgImageResize
-				elem.statusChanged.disconnect elem, onSvgImageResize
-				data.isSvg = false
-
-		switch elem.status
-			when Image.Null
-				callback "No image set"
-			when Image.Ready
-				callback null, width: elem.sourceSize.width, height: elem.sourceSize.height
-			when Image.Error
-				callback "Can't load image"
-			when Image.Loading
-				onStatusChanged = ->
-					elem.statusChanged.disconnect onStatusChanged
-
-					if elem.status is Image.Ready
-						callback null, width: elem.sourceSize.width, height: elem.sourceSize.height
-					else
-						callback "Can't load image"
-
-				elem.statusChanged.connect onStatusChanged
+			if elem.status is Image.Ready
+				if @_width is 0 and @_height is 0
+					callback.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
+				else
+					callback.call @, null
 			else
-				throw new Error "Unsupported image status #{elem.status}"
+				callback.call @, true
+
+		(val, callback) ->
+			data = @_impl
+			{elem} = data
+
+			data.callback = callback
+
+			unless DATA_URI_RE.test val
+				val = impl.utils.toUrl(val)
+			elem.source = val
+
+			if ///^data:image\/svg+|\.svg$///.test val
+				elem.fillMode = Image.PreserveAspectFit
+				unless data.isSvg
+					elem.widthChanged.connect elem, onSvgImageResize
+					elem.heightChanged.connect elem, onSvgImageResize
+					elem.statusChanged.connect elem, onSvgImageResize
+					data.isSvg = true
+			else
+				elem.fillMode = Image.Stretch
+				if data.isSvg
+					elem.widthChanged.disconnect elem, onSvgImageResize
+					elem.heightChanged.disconnect elem, onSvgImageResize
+					elem.statusChanged.disconnect elem, onSvgImageResize
+					data.isSvg = false
+
+			switch elem.status
+				when Image.Null
+					callback.call @, true
+				when Image.Ready
+					if @_width is 0 and @_height is 0
+						callback.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
+					else
+						callback.call @, null
+				when Image.Error
+					callback.call @, true
+				when Image.Loading
+					elem.statusChanged.connect @, onStatusChanged
+				else
+					throw new Error "Unsupported image status #{elem.status}"

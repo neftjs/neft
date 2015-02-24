@@ -19,8 +19,8 @@ Rectangle {
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Rectangle* Rectangle([*Object* options, *Array* children]) : *Renderer.Item*
------------------------------------------------------------------------------
+*Rectangle* Rectangle() : *Renderer.Item*
+-----------------------------------------
 
 *Renderer.Item* represents filled rectangle with an optional border and corner radius.
 
