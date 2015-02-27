@@ -3,13 +3,12 @@ Log
 
 **Colored console**
 
-Simply to use and good looking logger used to log `info`, `warn`,
-`error` messages and functions processing times.
+Simple to use and good looking logger used to log informations, warnings, 
+error messages and functions processing times.
 
-Built to be easily implemented for the standard console output and for browsers.
+All logs are removed for the *release* mode.
 
-All loggs are removing for the *release* mode.
-
+Access it with:
 ```
 var log = require('log');
 ```
@@ -30,7 +29,6 @@ var log = require('log');
 		str.substring 0, str.length - 3
 
 	class Log
-
 		@LOGS_METHODS = ['info', 'warn', 'error', 'time']
 
 		@TIMES_LEN = 50
@@ -63,32 +61,33 @@ var log = require('log');
 					@[name] = bind.apply @[name], args
 
 			@[key] = value for key, value of @
-			return utils.merge @log.bind(@), @
+			if typeof @['lo'+'g'].bind(@) is 'function'
+				return utils.merge @['lo'+'g'].bind(@), @
 
-		_write: console?.log or (->)
+		_write: console?['lo'+'g'] or (->)
 
 log([*Any* messages...])
 ------------------------
 
-The most basic function used to write into console.
+This is the most basic function used to write logs.
 
-All passed arguments are concatenated with right arrow (`→`).
+All passed arguments are concatenated using right arrow (`→`).
 
 Logged text is white.
 
-```coffeescript
+```
 log("Log me now!");
 
 log("setName()", "db time");
 // will be logged as "setName() → db time"
 ```
 
-		log: -> @_write LogImpl.MARKERS.white fromArgs arguments
+		@::['log'] = -> @_write LogImpl.MARKERS.white fromArgs arguments
 
 log.info([*Any* messages...])
 -----------------------------
 
-Method used to log some useful informations for debugging, to mark progress.
+This function is used to log debugging informations or to mark progress.
 
 Logged text is blue.
 
@@ -97,7 +96,7 @@ Logged text is blue.
 log.ok([*Any* messages...])
 ---------------------------
 
-Use this method to mark successful operations.
+This function is used to mark successful operations.
 
 Logged text is green.
 
@@ -110,9 +109,9 @@ log.ok("Data has been successfully sent!");
 log.warn([*Any* messages...])
 -----------------------------
 
-For warnings, use this method.
+This function is used to log warnings.
 
-Logged text if yellow.
+Logged text is yellow.
 
 ```
 log.warn("Example warning with some recommendations");
@@ -123,7 +122,7 @@ log.warn("Example warning with some recommendations");
 log.error([*Any* messages...])
 ------------------------------
 
-If during processing, some errors occurs, use thid method to log them.
+This function is used to log errors.
 
 Logged text is red.
 
@@ -136,13 +135,13 @@ log.error("Error occurs, ... in file ...");
 log.time()
 ----------
 
-This method and `end()` are used to debug how long the operation takes.
+This method is used to log how long some operation takes.
 
-All logs logged after this method and before `end()` will be indented.
+All logs logged after this method and before *log.end()* will be indented.
 
 Use it only for the synchronous operations.
 
-It's a good practice to always name variable which keeps returned *time id* as `logtime`.
+It's a good practice to always name variable which keeps returning *time id* as *logtime*.
 
 ```
 function findPath(){
@@ -177,7 +176,7 @@ log.end(*Integer* id)
 
 This method is used to mark when counting time ends.
 
-See `time()` method for more informations and example.
+See *log.time()* method for more informations and example.
 
 		end: (id) ->
 			time = LogImpl.times[id]
@@ -190,18 +189,15 @@ See `time()` method for more informations and example.
 log.scope([*Any* names...])
 ---------------------------
 
-This methods returns new logger with binded functions.
+This method returns a new logger with bound functions.
 
-Use this function to always log with some special prefix (e.g. module name).
+Use this function to always log with a special prefix (e.g. module name).
 
 ```
 var log = log.scope("Example file");
 
 log("hello");
 // "Example file → hello"
-
-log.info("Let's go!");
-// "Example file → Let's go"
 ```
 
 		scope: (args...) ->

@@ -6,7 +6,7 @@ performance = do ->
 	else
 		Date
 
-log = console.log
+logFunc = window['cons'+'ole']['lo'+'g']
 
 module.exports = (Log) -> class LogBrowser extends Log
 
@@ -37,4 +37,4 @@ module.exports = (Log) -> class LogBrowser extends Log
 
 		marker[0] = "#{prefix}#{marker[0]}".replace ///\n///g, "\n#{prefix}"
 
-		log.apply console, marker
+		logFunc.apply window['cons'+'ole'], marker
