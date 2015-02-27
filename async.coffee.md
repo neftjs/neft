@@ -1,61 +1,66 @@
 Asynchronous
 ============
 
+It's a subset of standard *utils* focused on support asynchronously operations.
+
+Access it with:
+```
+var utils = require('utils');
+var async = utils.async;
+```
+
 	'use strict'
 
-	[expect] = ['expect'].map require
 	utils = null
 
-	{exports} = module
 	{assert} = console
+	{exports} = module
 
 	{shift} = Array::
 	{isArray} = Array
 
 	NOP = ->
 
-utils.async.forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
--------------------------------------------------------------------------------------------------
+forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
+-------------------------------------------------------------------------------------
 
-Asynchronous version of standard `Array.prototype.forEach()` method works with arrays and
-objects as well.
+This is an asynchronous version of standard *Array.prototype.forEach()* function works
+with arrays and objects as well.
 
 *callback* function is called with parameters:
- - for array given: element value, index, array, next callback
- - for object given: key, value, object, next callback
+ - if array given: element value, index, array, next callback
+ - if object given: key, value, object, next callback
 
-Each *callback* must call got *next callback* if it finished processing.
+Each *callback* must call got *next callback*.
 
 *onEnd* function is called when the last *callback* finished processing.
 
-*context* argument is passing into the each *callback*.
+*context* argument is used to call *callback* function.
 
-### Example
 ```
-toLoadInOrder = ['users.json', 'families.js', 'relationships.js']
+var toLoadInOrder = ['users.json', 'families.js', 'relationships.js'];
 
-utils.async.forEach toLoadInOrder, (elem, i, array, next) ->
-  console.log "Load #{elem} file"
-  # on load end ...
-  next()
-, ->
-  console.log "All files are loaded!"
+utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
+  console.log("Load " + elem + " file");
+  // on load end ...
+  next();
+}, function(){
+  console.log("All files are loaded!");
+});
 
-# Load users.json
-# Load families.json
-# load relationships.json
-# All files are loaded!
+// Load users.json
+// Load families.json
+// load relationships.json
+// All files are loaded!
 ```
 
 	forEach = do ->
 
 		forArray = (arr, callback, onEnd, thisArg) ->
-
 			i = 0
 			n = arr.length
 
 			next = ->
-
 				# return and call onEnd if there is no elements to check
 				if i is n then return onEnd()
 
@@ -69,14 +74,12 @@ utils.async.forEach toLoadInOrder, (elem, i, array, next) ->
 			next()
 
 		forObject = (obj, callback, onEnd, thisArg) ->
-
 			keys = Object.keys obj
 
 			i = 0
 			n = keys.length
 
 			next = ->
-
 				# return and call onEnd if there is no pairs to check
 				if i is n
 					return onEnd()
@@ -92,91 +95,104 @@ utils.async.forEach toLoadInOrder, (elem, i, array, next) ->
 			next()
 
 		(list, callback, onEnd, thisArg) ->
-			expect(list).not().toBe.primitive()
-			expect(callback).toBe.function()
-			expect().defined(onEnd).toBe.function()
+			assert not utils.isPrimitive list
+			assert typeof callback is 'function'
+			assert typeof onEnd is 'function' if onEnd?
 
 			method = if isArray list then forArray else forObject
 			method list, callback, onEnd, thisArg
 
 			null
 
-*Stack* utils.async.Stack()
----------------------------
+*Stack* Stack()
+---------------
 
-Class used to store asynchronous functions in a proper order.
+This class is used to store functions and run them synchronously or asynchronously.
 
-### Example
 ```
-stack = new utils.async.Stack
+var stack = new utils.async.Stack;
 
-load = (src, callback) ->
-  console.log "Load #{src} file"
-  # load file async ...
-  # first callback parameter is an error ...
-  callback null, "fiel data"
+function load(src, callback){
+  console.log("Load " + src + " file");
+  // load file async ...
+  // first callback parameter is an error ...
+  callback(null, "fiel data");
+};
 
-stack.add load, null, ['items.json']
-stack.add load, null, ['users.json']
+stack.add(load, null, ['items.json']);
+stack.add(load, null, ['users.json']);
 
-stack.runAllSimultaneously ->
-  console.log "All files have been loaded!"
+stack.runAllSimultaneously(function(){
+  console.log("All files have been loaded!");
+});
 
-# Load items.json file
-# Load users.json file
-# All files have been loaded!
+// Load items.json file
+// Load users.json file
+// All files have been loaded!
 
-# or ... (simultaneous call has no order)
+// or ... (simultaneous call has no order)
 
-# Load users.json file
-# Load items.json file
-# All files have been loaded!
+// Load users.json file
+// Load items.json file
+// All files have been loaded!
 ```
 
 	class Stack
 
 		constructor: ->
-
-			###
-			One-deep array of added functions in schema [function, context, args, ...]
-			###
+			# One-deep array of added functions in schema [function, context, args, ...]
 			@_arr = []
 
-utils.async.Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
---------------------------------------------------------------------------------------
+			Object.freeze @
+
+Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
+--------------------------------------------------------------------------
 
 Adds new *function* to the stack.
 
-*function* must provide *callback* argument as the last one.
+*function* must provide a *callback* argument as the last one.
 First argument passing to the *callback* by the *function* is always an error.
 
-### Example
 ```
-stack = new utils.async.Stack
+var stack = new utils.async.Stack;
 
-add = (a, b, callback) ->
-  if isFinite(a) and isFinite(b)
-    callback null, a+b
-  else
-    callback "Finite numbers are required!"
+function add(a, b, callback){
+  if (isFinite(a) && isFinite(b)){
+    callback(null, a+b);
+  } else {
+    throw "Finite numbers are required!";
+  }
+}
 
-stack.add add, null, [1, 2]
+stack.add(add, null, [1, 2]);
+
+stack.runAll(function(err, result){
+  console.log(err, result);
+});
+// null 3
+
+stack.add(add, null, [1, NaN]);
+
+stack.runAll(function(err, result){
+  console.log(err, result);
+});
+// "Finite numbers are required!"  undefined
 ```
 
 		add: (func, context, args) ->
-			expect().defined(args).toBe.object()
+			assert utils.isObject args if args?
 
 			@_arr.push func, context, args
 
-utils.async.Stack::callNext(*Function* callback)
-------------------------------------------------
+Stack::callNext(*Function* callback)
+------------------------------------
 
 Calls first function from the stack and remove it.
 
-*callback* function gots all passed arguments by the called *function*.
+*callback* function gets all passed arguments by the called *function*.
 
 		callNext: (callback) ->
-			expect(callback).toBe.function()
+			assert typeof callback is 'function'
 
 			# on empty
 			unless @_arr.length
@@ -223,17 +239,16 @@ Calls first function from the stack and remove it.
 
 			null
 
-utils.async.Stack::runAll(*Function* callback)
-----------------------------------------------
+Stack::runAll(*Function* callback)
+----------------------------------
 
 Calls all functions from the stack one by one.
 
-*callback* function gots all passed arguments by the last called *function*.
+*callback* function gets all passed arguments by the last called *function*.
 
 Processing stops on error occurs, then *callback* function is called with got error.
 
 		runAll: (callback) ->
-
 			if typeof callback isnt 'function'
 				throw new TypeError "ASync runAll(): passed callback is not a function"
 
@@ -241,7 +256,6 @@ Processing stops on error occurs, then *callback* function is called with got er
 				return callback null
 
 			onNextCalled = (err) =>
-
 				# on err
 				if err
 					return callback err
@@ -258,15 +272,15 @@ Processing stops on error occurs, then *callback* function is called with got er
 
 			null
 
-utils.async.Stack::runAllSimultaneously(*Function* callback)
-------------------------------------------------------------
+Stack::runAllSimultaneously(*Function* callback)
+------------------------------------------------
 
 Calls all functions from the stack simultaneously (all at the same time).
 
 Processing stops on error occurs, then *callback* function is called with got error.
 
 		runAllSimultaneously: (callback) ->
-			expect(callback).toBe.function()
+			assert typeof callback is 'function'
 
 			length = n = @_arr.length / 3
 			done = 0

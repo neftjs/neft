@@ -1,3 +1,6 @@
+Properties extraction
+=====================
+
 	'use strict'
 
 	expect = require 'expect'
@@ -7,35 +10,45 @@
 *Any* utils.get(*Object* object, *String* path, [*OptionsArray* target])
 ------------------------------------------------------------------------
 
-Get needed value from the object. Arrays are supported.
-If path can't be resolved, new get.OptionsArray is returned with
-all possible results.
-Separate properties in path by dots ('.').
-For arrays add to property name two brackets ('[]')
-- look at isStringArray method to check it in other way.
+Extract property, deep property or all possible properties from an object.
+
+```
+var obj = {prop: 1};
+console.log(utils.get(obj, 'prop'));
+// 1
+
+var obj = {prop: {deep: 1}};
+console.log(utils.get(obj, 'prop.deep'));
+// 1
+
+var obj = {prop: [{deep: 1}, {deep: 2}]};
+console.log(utils.get(obj, 'prop[].deep'));
+// [1, 2]
+// 'utils.get.OptionsArray' instance ...
+
+var obj = {prop: [{deep: 1}, {deep: 2}]};
+console.log(utils.get(obj, 'prop[]'));
+// [{deep: 1}, {deep: 2}]
+// 'utils.get.OptionsArray' instance ...
+
+var obj = {prop: [{deep: {}}, {deep: {result: 1}}]};
+console.log(utils.get(obj, 'prop[].deep.result'));
+// [1]
+// 'utils.get.OptionsArray' instance ...
+```
 
 		get = utils.get = (obj, path='', target) ->
-
-			expect(obj).not().toBe.primitive()
-
 			switch typeof path
-
 				when 'object'
-
 					path = exports.clone path
-
 				when 'string'
-
 					# split path by dot's
 					path = path.split '.'
-
 				else
-
 					throw new TypeError
 
 			# check chunks
 			for key, i in path
-
 				# empty props are not supported
 				if not key.length and i
 					throw new ReferenceError "utils.get(): empty properties are not supported"
@@ -83,7 +96,6 @@ For arrays add to property name two brackets ('[]')
 
 				# break if no way exists
 				if typeof obj isnt 'object' and typeof obj isnt 'function'
-
 					# if it is no end of path, return undefined
 					if i isnt path.length - 1
 						obj = undefined
@@ -98,20 +110,19 @@ For arrays add to property name two brackets ('[]')
 *OptionsArray* utils.get.OptionsArray()
 ---------------------------------------
 
-Special version of Array, returned if result of the `get` method is a list
-of possible values and not a proper value.
+Special version of an Array, returned if result of the *utils.get()* function is a list
+of possible values and not exactly a searched value.
 
 		get.OptionsArray = class OptionsArray extends Array
 
 			constructor: -> super
 
-*boolean* utils.isStringArray(*String* value)
+*Boolean* utils.isStringArray(*String* value)
 ---------------------------------------------
 
-Check if string references into array (according to notation in `get` method).
+Check if string references into an array according to notation in the *utils.get()* function.
 
 		isStringArray = utils.isStringArray = (arg) ->
-
 			expect(arg).toBe.string()
 
-			arg.slice(-2) is '[]'
+			///\[\]$///.test arg

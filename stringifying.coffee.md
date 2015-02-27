@@ -1,3 +1,13 @@
+Stringifying
+============
+
+Standard *JSON.stringify()* doesn't support properties descriptors, prototypes, constructors
+and cyclic references.
+
+These functions solve this problem.
+
+You can also use this functions to clone complex structures.
+
 	'use strict'
 
 	expect = require 'expect'
@@ -6,40 +16,43 @@
 
 	module.exports = (utils) ->
 
-utils.simplify()
-----------------
+utils.simplify(*Object* object, [*Object* options])
+---------------------------------------------------
 
 Convert passed object into the most simplified format.
-Such object can be easily stringified.
-Use `assemble()` method to restore into initial structure.
 
-Second optional parameter is an config object.
-Possible options to define (all are `false` by default):
-  - `properties` - save properties descriptions (getters, config etc.),
-  - `protos` - save proto as object,
-  - `constructors` - include constructors functions.
+Such object can be easily stringified later using standard *JSON.stringify()*.
 
-If `protos` is `false` and `constructors` is `true` objects will be taken as instances (example 2).
+Use *utils.assemble()* function to restore object into the initial structure.
 
-Examples
-  1. ```
-     obj = {}
-     obj.self = obj
-     JSON.stringify utils.simplify obj
-     ```
-  2. ```
-     class Sample
-     	constructor: -> @fromInst = 1
-     	fromProto: 1
-     sample = new Sample
-     parts = utils.simplify sample, constructors: true
-     clone = utils.assemble json
-     # it's true because `protos` option is `false` and `constructors` is true
-     # won't work for json, because functions are not stringified - do it on your own
-     assert(clone instanceof Sample)
-     ```
+Second parameter is an config object (all 'false' by default):
+  - *properties* - save properties descriptors (getters, config etc.),
+  - *protos* - save protos as objects,
+  - *constructors* - include constructor functions.
 
-.
+If *protos* is *false* and *constructors* is *true*,
+object will be recognized as an instance (example 2).
+
+```
+var obj = {};
+obj.self = obj;
+console.log(JSON.stringify(utils.simplify(obj)));
+```
+
+```
+function Sample(){
+  this.fromInstance = 1;
+}
+Sample.prototype.fromPrototype = 1;
+
+var sample = new Sample;
+var parts = utils.simplify(sample, {constructors: true});
+var clone = utils.assemble(json);
+
+console.log(clone instanceof Sample)
+// it's true because 'protos' option is false and 'constructors' is true
+// won't work for json, because functions are not stringified ...
+```
 
 		utils.simplify = do ->
 
@@ -182,7 +195,7 @@ Examples
 utils.assemble()
 ----------------
 
-Backward `simplify()` operation.
+Backward *utils.simplify()* operation.
 
 		utils.assemble = do ->
 

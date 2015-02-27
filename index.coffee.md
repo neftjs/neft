@@ -1,19 +1,15 @@
-Utils
-=====
+Utilities
+=========
 
-@desc Don't Repeat Yourself!
-
-**Neft** framework recommends using *JavaScript* language while writing applications.
-
-Unfortunatelly, *JavaScript* doesn't have lot of useful functions.
+**JavaScript standard library so exists**
 
 This module helps to write applications faster and better,
-because it collets most commonly used functions.
+because it collects most commonly used functions.
 It's always important to don't repeating code.
 
-Require this module to use it.
+Access it with:
 ```
-utils = require 'utils'
+var utils = require('utils');
 ```
 
 	'use strict'
@@ -31,7 +27,7 @@ utils = require 'utils'
 	defObjProp = Object.defineProperty
 	{random} = Math
 
-	[expect] = ['expect'].map require
+	expect = require 'expect'
 
 	###
 	Link subfiles
@@ -44,6 +40,11 @@ utils = require 'utils'
 ----------------------
 
 Determines whether application is run in **node.js** environment.
+
+*Boolean* utils.isServer
+------------------------
+
+`utils.isNode` link.
 
 *Boolean* utils.isClient
 ------------------------
@@ -60,7 +61,7 @@ Determines whether application is run in the browser environment.
 
 Determines whether application is a part of the **QML** program.
 
-	exports.isNode = exports.isClient = exports.isBrowser = exports.isQml = false
+	exports.isNode = exports.isServer = exports.isClient = exports.isBrowser = exports.isQml = false
 
 	switch true
 
@@ -71,7 +72,7 @@ Determines whether application is a part of the **QML** program.
 			exports.isClient = exports.isQml = true
 
 		when process? and Object.prototype.toString.call(process) is '[object process]'
-			exports.isNode = true
+			exports.isNode = exports.isServer = true
 
 *Boolean* utils.is(*Any* value1, *Any* value2)
 ----------------------------------------------
@@ -85,17 +86,17 @@ In opposite to the *===* operator, this function treats two `NaN`s as equal, and
 
 ```
 console.log(utils.is('a', 'a'));
-# true
+// true
 
 console.log(utils.is(NaN, NaN));
-# true, but ...
+// true, but ...
 console.log(NaN === NaN);
-# false
+// false
 
 console.log(utils.is(-0, 0));
-# false, but ...
+// false, but ...
 console.log(-0 === 0);
-# true
+// true
 ```
 
 	exports.is = (val1, val2) ->
@@ -163,15 +164,13 @@ console.log(utils.isInteger('2'));
 Checks whether value is a primitive *JavaScript* value.
 
 In *JavaScript* (ECMAScript 5.1) we have five primitive types:
- - `null`,
+ - null,
  - string,
  - number,
  - boolean,
  - undefined.
 
-For simplify, we also include here a `null` and `undefined` types.
-
-Each of this type is not mutable (because it's primitive).
+Each of this type is immutable (because it's primitive).
 
 ```
 console.log(utils.isPrimitive(null));
@@ -227,13 +226,13 @@ Checks whether given *param* is a plain object, that is:
 console.log(utils.isPlainObject({}))
 // true
 
-console.log(utils.isPlainObject(Object.create(null)))
+console.log(utils.isPlainObject(Object.create(null));
 // true
 
 console.log(utils.isPlainObject([]))
 // false
 
-console.log(utils.isPlainObject(->))
+console.log(utils.isPlainObject(function(){}))
 // false
 
 function User(){}
@@ -451,7 +450,7 @@ Returns function bound as a getter to the given *property*.
 ```
 var object = {loaded: 2, length: 5};
 utils.defineProperty(object, 'progress', null, function(){
-	return this.loaded / this.length;
+  return this.loaded / this.length;
 }, null);
 console.log(utils.lookupGetter(object, 'progress'));
 // function(){ return this.loaded / this.length; }
@@ -632,6 +631,20 @@ Checks whether given *object* is empty, that is:
  - for arrays, if no elements exists (*length* is 0),
  - for objects, if no own properties are defined.
 
+```
+console.log(utils.isEmpty([]));
+// true
+
+console.log(utils.isEmpty([1, 2]));
+// false
+
+console.log(utils.isEmpty({}));
+// true
+
+console.log(utils.isEmpty({a: 1}));
+// false
+```
+
 .
 
 	exports.isEmpty = (object) ->
@@ -734,12 +747,15 @@ console.log(newObj.b)
 			if proto isnt null
 				expect(proto).not().toBe.primitive()
 
-			newObj = createObject proto
-			merge newObj, obj
+			if typeof obj is 'object'
+				newObj = createObject proto
+				merge newObj, obj
+			else
+				merge obj, proto
 			newObj
 
-*Boolean* utils.has(*NotPrimitive* object, *Any* value)
--------------------------------------------------------
+*Boolean* utils.has(*Any* object, *Any* value)
+----------------------------------------------
 
 Returns true if given array contains *value*.
 
@@ -762,17 +778,30 @@ console.log(utils.has(object, 'New York'))
 // true
 ```
 
+For strings, check whether it contains *value*.
+
+```
+console.log(utils.has('abc', 'b'))
+// true
+
+console.log(utils.has('abc', 'e'))
+// false
+```
+
 	has = exports.has = (obj, val) ->
-		expect(obj).toBe.object()
-
-		if isArray obj
-			!!~Array::indexOf.call obj, val
+		if typeof obj is 'string'
+			!!~obj.indexOf(val)
 		else
-			for key, value of obj when hasOwnProp.call(obj, key)
-				if value is val
-					return true
+			expect(obj).toBe.object()
 
-			false
+			if isArray obj
+				!!~Array::indexOf.call obj, val
+			else
+				for key, value of obj when hasOwnProp.call(obj, key)
+					if value is val
+						return true
+
+				false
 
 *Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target = `[]`])
 ------------------------------------------------------------------------------------------
