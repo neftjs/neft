@@ -17,6 +17,7 @@ module.exports = (impl) ->
 		opacity: 1
 		linkUri: ''
 		bindings: null
+		anchors: null
 
 	DATA: DATA
 

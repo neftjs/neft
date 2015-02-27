@@ -149,7 +149,37 @@ module.exports = (impl) ->
 				height = [[getBindingValue(item, anchor)[0], 'height']]
 				impl.setItemBinding.call item, '', 'height', 'height', height, HEIGHT_MARGIN_FUNC
 
+	COLLISIONS =
+		top:
+			['verticalCenter', 'centerIn', 'fill']
+		bottom:
+			['verticalCenter', 'centerIn', 'fill']
+		left:
+			['horizontalCenter', 'centerIn', 'fill']
+		right:
+			['horizontalCenter', 'centerIn', 'fill']
+		verticalCenter:
+			['top', 'bottom', 'centerIn', 'fill']
+		horizontalCenter:
+			['left', 'right', 'centerIn', 'fill']
+		centerIn:
+			['top', 'bottom', 'left', 'right', 'verticalCenter', 'horizontalCenter', 'fill']
+		fill:
+			['top', 'bottom', 'left', 'right', 'verticalCenter', 'horizontalCenter', 'centerIn']
+
+	exports =
 	setItemAnchor: (type, val) ->
+		anchors = @_impl.anchors ?= {}
+
+		if not val and not anchors[type]
+			return
+
+		collisions = COLLISIONS[type]
+		for collision in collisions
+			if anchors[collision]
+				exports.setItemAnchor.call @, collision, null
+
+		anchors[type] = !!val
 		BINDINGS[type] @, val
 
 	setItemMargin: do (_super = impl.setItemMargin) -> (type, val) ->
@@ -158,4 +188,4 @@ module.exports = (impl) ->
 		if bindings = @_impl.bindings
 			for prop in BINDINGS_PROPS[type]
 				bindings[prop]?.update()
-		null
+		return

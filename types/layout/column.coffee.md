@@ -13,7 +13,7 @@ Column {
 
 	'use strict'
 
-	expect = require 'expect'
+	assert = require 'assert'
 	utils = require 'utils'
 
 *Column* Column() : *Renderer.Item*
@@ -36,5 +36,9 @@ Column {
 			name: 'spacing'
 			defaultValue: 0
 			implementation: Impl.setColumnSpacing
-			developmentSetter: (val) ->
-				expect(val).toBe.float()
+			setter: (_super) -> (val) ->
+				# state doesn't distinguishes column and grid
+				if utils.isObject val
+					val = 0
+				assert.isFloat val
+				_super.call @, val

@@ -11,7 +11,9 @@ if typeof Uint32Array is 'undefined'
 else
 	Uint32TypedArray = Uint32Array
 
-queue = []
+queueIndex = 0
+queues = [[], []]
+queue = queues[queueIndex]
 queueItems = Object.create null
 pending = false
 
@@ -126,11 +128,14 @@ updateItem = (item) ->
 
 updateItems = ->
 	pending = false
-	while queue.length
-		item = queue.pop()
+	currentQueue = queue
+	queue = queues[++queueIndex % queues.length]
+
+	while currentQueue.length
+		item = currentQueue.pop()
 		queueItems[item.__hash__] = false
 		updateItem item
-	null
+	return
 
 update = ->
 	if queueItems[@__hash__]

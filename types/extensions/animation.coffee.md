@@ -10,9 +10,6 @@ Animation
 	module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
 		@__name__ = 'Animation'
 
-		@Property = require('./animation/types/property') Renderer, Impl, @, itemUtils
-		@Number = require('./animation/types/property/types/number') Renderer, Impl, @, itemUtils
-
 *Animation* Animation()
 -----------------------
 

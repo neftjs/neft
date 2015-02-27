@@ -125,9 +125,14 @@ Item {
 			valueConstructor: Margin
 			setter: (_super) -> (val) ->
 				{margin} = @
-				if utils.isPlainObject(val)
-					utils.merge margin, val
+				if utils.isObject(val)
+					margin.left = val.left if val.left?
+					margin.top = val.top if val.top?
+					margin.right = val.right if val.right?
+					margin.bottom = val.bottom if val.bottom?
 				else
 					margin.left = margin.top = margin.right = margin.bottom = val
+				_super.call @, val
+				return
 
 		Margin

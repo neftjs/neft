@@ -15,8 +15,6 @@ module.exports = (impl) ->
 	stylesWindow.widthChanged.connect resize
 	stylesWindow.heightChanged.connect resize
 
-	impl._asyncBindings = false
-
 	Types:
 		Item: require './level0/item'
 		Image: require './level0/image'

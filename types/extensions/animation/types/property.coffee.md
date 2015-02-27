@@ -9,7 +9,7 @@ Animation/PropertyAnimation
 *PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
 --------------------------------------------------------------
 
-	module.exports = (Renderer, Impl, Animation, itemUtils) -> class PropertyAnimation extends Animation
+	module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
 		@__name__ = 'PropertyAnimation'
 
 		constructor: ->

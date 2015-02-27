@@ -61,12 +61,12 @@ module.exports = (Renderer, Impl) ->
 				Impl.setItemBinding.call ref, namespaceName, prop, uniqueProp, val
 			return
 
+	Impl.DeepObject = DeepObject
+
 	DEFINE_PROPERTY_OPTS_KEYS = ['name', 'namespace', 'valueConstructor', 'implementation',
 	                             'developmentSetter', 'developmentGetter', 'setter', 'getter',
 	                             'object', 'constructor', 'defaultValue', 'parentConstructor',
 	                             'signalInitializer']
-
-	propertiesDeepObjects = {}
 
 	exports =
 	Object: UtilsObject
@@ -131,11 +131,18 @@ module.exports = (Renderer, Impl) ->
 				@[internalName]
 
 		if valueConstructor
-			assert.isString valueConstructor.__name__
-			valueConstructorInstance = propertiesDeepObjects[valueConstructor.__name__] ?= new valueConstructor
+			valCtorInsts = [new valueConstructor, new valueConstructor, new valueConstructor]
+			valCtorInstIndex = 0
+			valCtorInst = null
+			lastRef = null
 			propGetter = ->
-				valueConstructorInstance._ref = @
-				valueConstructorInstance
+				if lastRef is @
+					return valCtorInst
+
+				valCtorInstIndex = ++valCtorInstIndex % valCtorInsts.length
+				valCtorInst = valCtorInsts[valCtorInstIndex]
+				lastRef = valCtorInst._ref = @
+				valCtorInst
 
 		# setter
 		if valueConstructor

@@ -7,10 +7,8 @@ relationships between items: **anchors**.
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
-
-	{assert} = console
 
 	H_LINE = 1<<0
 	V_LINE = 1<<1
@@ -308,5 +306,19 @@ Item {
 			constructor: Item
 			name: 'anchors'
 			valueConstructor: Anchors
+			developmentSetter: (val) ->
+				assert.isObject val
+			setter: (_super) -> (val) ->
+				{anchors} = @
+				anchors.left = val.left if val.left?
+				anchors.right = val.right if val.right?
+				anchors.horizontalCenter = val.horizontalCenter if val.horizontalCenter?
+				anchors.top = val.top if val.top?
+				anchors.bottom = val.bottom if val.bottom?
+				anchors.verticalCenter = val.verticalCenter if val.verticalCenter?
+				anchors.centerIn = val.centerIn if val.centerIn?
+				anchors.fill = val.fill if val.fill?
+				_super.call @, val
+				return
 
 		Anchors

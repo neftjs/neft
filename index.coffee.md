@@ -127,6 +127,8 @@ Styles.button/red {
 	exports.Extension = require('./types/extension') exports, Impl, itemUtils
 	exports.State = require('./types/extensions/state') exports, Impl, itemUtils
 	exports.Animation = require('./types/extensions/animation') exports, Impl, itemUtils
+	exports.PropertyAnimation = require('./types/extensions/animation/types/property') exports, Impl, itemUtils
+	exports.NumberAnimation = require('./types/extensions/animation/types/property/types/number') exports, Impl, itemUtils
 	exports.Transition = require('./types/extensions/transition') exports, Impl, itemUtils
 
 	exports.Item = require('./types/basics/item') exports, Impl, itemUtils
@@ -140,25 +142,26 @@ Styles.button/red {
 	exports.Row = require('./types/layout/row') exports, Impl, itemUtils
 	exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
 
-	exports.Loader = require('./types/loader') exports, Impl, itemUtils
+	require('./types/loader') exports, Impl, itemUtils
+	exports.FontLoader = require('./types/loader/font') exports, Impl, itemUtils
 
-#### Main style - windowStyle
+#### Main style - view
 
-**/styles/window.js** file is always available as a **windowStyle**.
+**/styles/view.js** file is always available as a **view**.
 
 It's created automatically on the bootstrap.
 
 ```
-// styles/window.js
+// styles/view.js
 Rectangle {
   color: 'green'
-  // window and height are not necessary, because this item is automatically resizing
+  // width and height are not necessary, because this item is automatically resizing
 }
 
 // styles/button.js
 Rectangle {
   width: 100; height: 50
-  color: windowStyle.color // this value is also a binding
+  color: view.color // this value is also a binding
 }
 ```
 

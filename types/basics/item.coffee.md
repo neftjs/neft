@@ -23,7 +23,7 @@ Basic items/Item
 		require('./item/signal') Renderer, Impl, itemUtils, Item
 		require('./item/pointer') Renderer, Impl, itemUtils, Item
 		require('./item/keys') Renderer, Impl, itemUtils, Item
-		require('./item/styles') Renderer, Impl, itemUtils, Item
+		require('./item/document') Renderer, Impl, itemUtils, Item
 
 *Item* Item()
 -------------
@@ -99,29 +99,30 @@ Rectangle {
 -----------------------
 
 		utils.defineProperty @::, 'children', utils.ENUMERABLE, ->
-			val = Object.create ChildrenObject
-			utils.defineProperty val, 'length', utils.WRITABLE, 0
-			utils.defineProperty @, 'children', utils.ENUMERABLE, val
-			val
+			@_children ?= new ChildrenObject(@)
 		, (val) ->
 			assert.isArray val, '::children setter ...'
+			@clear()
 			for item in val
 				val.parent = @
-			null
+			return
 
 ### *Signal* Item::childrenChanged(*Object* children)
 
-		signal.createLazy @::, 'childrenChanged'
+		signal.Emitter.createSignal @, 'childrenChanged'
 
-		ChildrenObject = {}
+		class ChildrenObject extends signal.Emitter
+			constructor: ->
+				super()
+				@length = 0
 
 ### *Signal* Item.children::inserted(*Item* child, *Integer* index)
 
-		signal.createLazy ChildrenObject, 'inserted'
+		signal.Emitter.createSignal ChildrenObject, 'inserted'
 
 ### *Signal* Item.children::popped(*Item* child, *Integer* index)
 
-		signal.createLazy ChildrenObject, 'popped'
+		signal.Emitter.createSignal ChildrenObject, 'popped'
 
 *Item* Item::parent = null
 --------------------------

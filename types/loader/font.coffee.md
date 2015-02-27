@@ -3,7 +3,7 @@ Loading assets/Font
 
 ```
 Item {
-  Loader.Font {
+  FontLoader {
   	name: 'myFont'
   	sources: ['static/fonts/myFont.woff']
   }
@@ -26,7 +26,7 @@ Item {
 
 	module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends itemUtils.Object
 		@__name__ = 'FontLoader'
-		@__path__ = 'Renderer.Loader.Font'
+		@__path__ = 'Renderer.FontLoader'
 
 		SOURCE_FILE = ///(\w+)\.(\w+)$///
 
@@ -53,7 +53,7 @@ Font weight and style (italic or normal) is extracted from the font source.
 
 Access it with:
 ```
-Loader.Font {}
+FontLoader {}
 ```
 
 		constructor: ->

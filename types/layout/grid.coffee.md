@@ -16,7 +16,7 @@ Grid {
 
 	'use strict'
 
-	expect = require 'expect'
+	assert = require 'assert'
 	utils = require 'utils'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
@@ -42,7 +42,7 @@ Grid {
 				defaultValue: 2
 				implementation: Impl.setGridColumns
 				developmentSetter: (val) ->
-					expect(val).toBe.greaterThan 0
+					assert.operator val, '>', 0
 
 *Integer* Grid::rows = Infinity
 -------------------------------
@@ -55,7 +55,7 @@ Grid {
 				defaultValue: Infinity
 				implementation: Impl.setGridRows
 				developmentSetter: (val) ->
-					expect(val).toBe.greaterThan 0
+					assert.operator val, '>', 0
 
 *Spacing* Grid::spacing
 -----------------------
@@ -67,6 +67,15 @@ Grid {
 				constructor: Grid
 				name: 'spacing'
 				valueConstructor: Spacing
+				setter: (_super) -> (val) ->
+					{spacing} = @
+					if utils.isObject(val)
+						spacing.column = val.column if val.column?
+						spacing.row = val.row if val.row?
+					else
+						spacing.column = spacing.row = val
+					_super.call @, val
+					return
 
 			constructor: ->
 				super()
@@ -84,7 +93,7 @@ Grid {
 				parentConstructor: Grid
 				implementation: Impl.setGridColumnSpacing
 				developmentSetter: (val) ->
-					expect(val).toBe.float()
+					assert.isFloat val
 
 *Float* Grid::spacing.row
 -------------------------
@@ -99,7 +108,7 @@ Grid {
 				parentConstructor: Grid
 				implementation: Impl.setGridRowSpacing
 				developmentSetter: (val) ->
-					expect(val).toBe.float()
+					assert.isFloat val
 
 *Float* Grid::spacing.valueOf()
 -------------------------------

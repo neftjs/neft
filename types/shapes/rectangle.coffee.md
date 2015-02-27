@@ -70,6 +70,14 @@ Rectangle {
 				constructor: Rectangle
 				name: 'border'
 				valueConstructor: Border
+				developmentSetter: (val) ->
+					assert.isObject val
+				setter: (_super) -> (val) ->
+					{border} = @
+					border.width = val.width if val.width?
+					border.color = val.color if val.color?
+					_super.call @, val
+					return
 
 			constructor: ->
 				super()

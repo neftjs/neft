@@ -12,36 +12,41 @@ log = log.scope 'Renderer', 'Binding'
 module.exports = (impl) ->
 	{items} = impl
 
-	impl._asyncBindings ?= true
-
 	class Connection
 		constructor: (@binding, @item, @prop) ->
 			if isArray item
 				@item = null
-				child = new Connection binding, item[0], item[1]
+				child = @child = new Connection binding, item[0], item[1]
 				child.parent = @
 				@updateChild child
 			else
 				@listen()
 
+		child: null
 		binding: null
 		item: null
 		prop: null
 		parent: null
+
+		getObj: ->
+			if @item instanceof impl.DeepObject
+				@child.item[@child.prop]
+			else
+				@item
 
 		listen: ->
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 
 			if @item
-				@item[handlerName]? @signalChangeListener, @
+				@getObj()[handlerName]? @signalChangeListener, @
 
 		updateChild: (child) ->
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
 
 			if @item
-				@item[handlerName]?.disconnect @signalChangeListener, @
+				@getObj()[handlerName]?.disconnect @signalChangeListener, @
 				@item = null
 
 			if child
@@ -59,7 +64,7 @@ module.exports = (impl) ->
 				@binding.update()
 
 		getValue: ->
-			@item[@prop]
+			@getObj()[@prop]
 
 		destroy: ->
 			@updateChild null
@@ -120,15 +125,9 @@ module.exports = (impl) ->
 			@func = Binding.getFunc binding
 			@args = Binding.getItems binding
 
-			# bind methods
-			# {signalChangeListener} = @
-			# @signalChangeListener = (oldVal) =>
-			# 	signalChangeListener.call @, oldVal
-
 			# destroy on property value change
 			signalName = "#{prop}Changed"
 			handlerName = signal.getHandlerName signalName
-			# @getObj()[handlerName] @signalChangeListener
 
 			# connections
 			connections = @connections = []
@@ -155,10 +154,6 @@ module.exports = (impl) ->
 				@item[@ns]
 			else
 				@item
-
-		# signalChangeListener: (oldVal) ->
-		# 	if not @updatePending and oldVal isnt @getObj()[@prop]
-		# 		@destroy()
 
 		getDefaultValue = (binding) ->
 			val = binding.getObj()[binding.prop]
@@ -192,22 +187,24 @@ module.exports = (impl) ->
 			binding.updatePending = false
 
 		update: do ->
-			queue = []
-			queueHashes = {}
+			queueIndex = 0
+			queues = [[], []]
+			queue = queues[queueIndex]
+			queueHashes = Object.create null
 			pending = false
 
 			updateAll = ->
 				pending = false
-				while queue.length
-					binding = queue.pop()
+				currentQueue = queue
+				queue = queues[++queueIndex % queues.length]
+
+				while currentQueue.length
+					binding = currentQueue.pop()
 					queueHashes[binding.__hash__] = false
 					updateBinding binding
-				null
+				return
 
 			->
-				unless impl._asyncBindings
-					return updateBinding @
-
 				if queueHashes[@__hash__]
 					return
 
@@ -230,7 +227,6 @@ module.exports = (impl) ->
 			# disconnect listener
 			signalName = "#{@prop}Changed"
 			handlerName = signal.getHandlerName signalName
-			# @getObj()[handlerName].disconnect @signalChangeListener
 
 			# clear props
 			@args = null

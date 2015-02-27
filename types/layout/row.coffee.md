@@ -13,7 +13,7 @@ Row {
 
 	'use strict'
 
-	expect = require 'expect'
+	assert = require 'assert'
 	utils = require 'utils'
 
 *Row* Row() : *Renderer.Item*
@@ -36,5 +36,9 @@ Row {
 			name: 'spacing'
 			defaultValue: 0
 			implementation: Impl.setRowSpacing
-			developmentSetter: (val) ->
-				expect(val).toBe.float()
+			setter: (_super) -> (val) ->
+				# state doesn't distinguishes column and grid
+				if utils.isObject val
+					val = 0
+				assert.isFloat val
+				_super.call @, val

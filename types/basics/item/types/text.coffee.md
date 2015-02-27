@@ -12,7 +12,7 @@ Text {
 
 	'use strict'
 
-	expect = require 'expect'
+	assert = require 'assert'
 	utils = require 'utils'
 	signal = require 'signal'
 	log = require 'log'
@@ -57,7 +57,7 @@ Text {
 				defaultValue: ''
 				implementation: Impl.setText
 				developmentSetter: (val) ->
-					expect(val).toBe.string()
+					assert.isString val
 
 *String* Text::color = 'black'
 ------------------------------
@@ -70,7 +70,7 @@ Text {
 				defaultValue: 'black'
 				implementation: Impl.setTextColor
 				developmentSetter: (val) ->
-					expect(val).toBe.string()
+					assert.isString val
 
 *Float* Text::lineHeight = 1
 ----------------------------
@@ -83,7 +83,7 @@ Text {
 				defaultValue: 1
 				implementation: Impl.setTextLineHeight
 				developmentSetter: (val) ->
-					expect(val).toBe.truthy().float()
+					assert.isFloat val
 
 *Font* Text::font
 -----------------
@@ -97,6 +97,19 @@ Text {
 				constructor: Text
 				name: 'font'
 				valueConstructor: Font
+				developmentSetter: (val) ->
+					assert.isObject val
+				setter: (_super) -> (val) ->
+					{font} = @
+					font.family = val.family if val.family?
+					font.pixelSize = val.pixelSize if val.pixelSize?
+					font.weight = val.weight if val.weight?
+					font.wordSpacing = val.wordSpacing if val.wordSpacing?
+					font.letterSpacing = val.letterSpacing if val.letterSpacing?
+					font.italic = val.italic if val.italic?
+
+					_super.call @, val
+					return
 
 			constructor: ->
 				super()
@@ -117,13 +130,13 @@ Text {
 				parentConstructor: Text
 				implementation: Impl.setTextFontFamily
 				developmentSetter: (val) ->
-					expect(val).toBe.truthy().string()
+					assert.isString val
 
 					unless checkingFamily[val]
 						checkingFamily[val] = true
 						setTimeout =>
-							if not Renderer.Loader.Font.fonts[val]
-								log.warn "Font `#{@family}` is not loaded; use `Loader.Font` to load a font"
+							if not Renderer.FontLoader.fonts[val]
+								log.warn "Font `#{@family}` is not loaded; use `FontLoader` to load a font"
 				setter: (_super) -> (val) ->
 					if typeof val is 'string'
 						_super.call @, val.toLowerCase()
@@ -143,7 +156,7 @@ Text {
 				parentConstructor: Text
 				implementation: Impl.setTextFontPixelSize
 				developmentSetter: (val) ->
-					expect(val).toBe.truthy().float()
+					assert.isFloat val
 
 *Float* Text::font.weight = 0.4
 -------------------------------
@@ -158,9 +171,9 @@ Text {
 				parentConstructor: Text
 				implementation: Impl.setTextFontWeight
 				developmentSetter: (val) ->
-					expect(val).toBe.float()
-					expect(val).not().toBe.greaterThan 1
-					expect(val).not().toBe.lessThan 0
+					assert.isFloat val
+					assert.operator val, '>=', 0
+					assert.operator val, '<=', 1
 
 *Float* Text::font.wordSpacing = 0
 ----------------------------------
@@ -175,7 +188,7 @@ Text {
 				parentConstructor: Text
 				implementation: Impl.setTextFontWordSpacing
 				developmentSetter: (val) ->
-					expect(val).toBe.float()
+					assert.isFloat val
 
 *Float* Text::font.letterSpacing = 0
 ------------------------------------
@@ -190,7 +203,7 @@ Text {
 				parentConstructor: Text
 				implementation: Impl.setTextFontLetterSpacing
 				developmentSetter: (val) ->
-					expect(val).toBe.float()
+					assert.isFloat val
 
 *Boolean* Text::font.italic = false
 -----------------------------------
@@ -205,6 +218,6 @@ Text {
 				parentConstructor: Text
 				implementation: Impl.setTextFontItalic
 				developmentSetter: (val) ->
-					expect(val).toBe.boolean()
+					assert.isBoolean val
 
 		Text

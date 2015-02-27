@@ -132,6 +132,7 @@ module.exports = (impl) ->
 		linkUri: ''
 		linkUriListens: false
 		bindings: null
+		anchors: null
 
 	exports =
 	DATA: DATA

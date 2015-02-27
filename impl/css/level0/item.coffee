@@ -90,10 +90,13 @@ getRestrictedMouseCoords = do ->
 
 	if isTouch
 		(e) ->
-			if e.touches.length
-				getArgs e.currentTarget, e.touches[0]
+			if e.touches?
+				if e.touches.length
+					getArgs e.currentTarget, e.touches[0]
+				else
+					getArgs e.currentTarget, e.changedTouches[0]
 			else
-				getArgs e.currentTarget, e.changedTouches[0]
+				getArgs e.currentTarget, e
 	else
 		(e) ->
 			getArgs e.currentTarget, e
@@ -322,8 +325,7 @@ module.exports = (impl) ->
 		updateItems = ->
 			pending = false
 			nowTime = now()
-			n = queue.length
-			while n--
+			while queue.length
 				item = queue.pop()
 				updateItem item, queueItems[item.__hash__]
 				queueItems[item.__hash__] = 0
@@ -358,6 +360,7 @@ module.exports = (impl) ->
 
 	DATA =
 		bindings: null
+		anchors: null
 		elem: null
 		lastAction: 0
 		hotActions: 0
