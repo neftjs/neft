@@ -22,6 +22,8 @@ module.exports = (Networking, impl) ->
 			if style.item
 				hasItems = true
 				style.item.parent = Renderer.window
+				if style.isScope
+					style.item.document.show()
 
 		hasItems
 

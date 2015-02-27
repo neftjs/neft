@@ -22,6 +22,8 @@ module.exports = (Networking) ->
 			if style.item
 				hasItems = true
 				style.item.parent = Renderer.window
+				if style.isScope
+					style.item.document.show()
 
 		hasItems
 
@@ -35,3 +37,4 @@ module.exports = (Networking) ->
 
 	redirect: (res, status, uri, callback) ->
 		__location.append uri
+		callback()

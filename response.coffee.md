@@ -277,10 +277,13 @@ Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 			assert.ok utils.has(Response.STATUSES, status)
 			assert.isString uri
 
+			log "#{status} redirect to '#{uri}'"
+
 			@status = status
 			@setHeader 'Location', uri
 
 			utils.defineProperty @, 'pending', utils.ENUMERABLE, false
+			@request.destroy()
 			@request.loaded? @
 
 			Impl.redirect @, status, uri, =>
