@@ -23,16 +23,14 @@ neft:func @js
 ReadOnly *Object* globalObject
 ------------------------------
 
-Functions are created in their private scope.
-
-Each function and property defined in this object comes global in the function body.
+This object is used as a global namespace in the function bodies.
 
 		FuncGlobalFuncs =
 
 *Function* globalObject.require(*String* moduleName)
 ----------------------------------------------------
 
-Require *Neft* modules like in normal *JavaScript* file.
+Use this function to require *Neft* modules like in a normal *JavaScript* file.
 
 ```
 <neft:func name="test">
@@ -46,8 +44,10 @@ Require *Neft* modules like in normal *JavaScript* file.
 *Function* globalObject.get(*String* propertyName)
 --------------------------------------------------
 
-Function used to find data with given name in the storage, that is: `neft:use` attributes
-or global storage got from `App Route` etc.
+This function is used to find a data.
+
+It's used internally by the string interpolation to find a property in various places
+(*HTML* tag attributes, [neft:use][] tag attributes and *global* data).
 
 ```
 <neft:func name="test">
@@ -63,15 +63,15 @@ or global storage got from `App Route` etc.
 *Arguments* globalObject.arguments
 ----------------------------------
 
-Object corresponding to the arguments passed to a function.
+This object corresponds to the arguments object passed to a function.
 
 ```
 <neft:func name="followMouse">
-  var e = arguments[0]; // Renderer.Item::onPointerMove comes with event argument
+  var e = arguments[0]; // Renderer.Item::pointer.onMove comes with event argument
   return [e.x, e.y];
 </neft:func>
 
-<button neft:style="mouseArea" neft:style:onPointerMove="followMouse" />
+<button neft:style="mouseArea" neft:style:pointer:onMove="followMouse" />
 ```
 
 			arguments: (_, args) -> args
@@ -79,9 +79,9 @@ Object corresponding to the arguments passed to a function.
 *Document* globalObject.view
 ----------------------------
 
-Global attribute which references to the current *XML* element `view` fragment.
+This variable refers to the current *XML* element [neft:fragment][].
 
-This is *low-level API*.
+This is a *low-level API* and it's not documented.
 
 Using this attribute you can call other functions.
 
@@ -90,7 +90,7 @@ Using this attribute you can call other functions.
   return arguments[0] + arguments[1];
 </neft:func>
 
-<neft:func name="test">
+<neft:func name="print">
   return "1 + 3 = " + view.funcs.add(1, 3);
 </neft:func>
 ```
@@ -100,9 +100,9 @@ Using this attribute you can call other functions.
 *Renderer.Item* globalObject.item
 ---------------------------------
 
-Reference to the *low-level* `Renderer.Item` *API*.
+This variable refers to the [Renderer.Item][].
 
-This attribute is available, only if it's a `Renderer.Item` signal.
+It's available, only if it's a [Renderer.Item][] signal.
 
 ```
 <neft:func name="test">
@@ -119,8 +119,8 @@ This attribute is available, only if it's a `Renderer.Item` signal.
 *DocumentGlobalData* globalObject.global
 ----------------------------------------
 
-In most cases this attribute references to the [DocumentGlobalData][] unless you render
-`view` in a custom way (not using `App View`).
+In most cases this variable refers to the [DocumentGlobalData][] unless you render
+a view not using [app.View][].
 
 ```
 <neft:func name="changePage">
@@ -135,7 +135,7 @@ In most cases this attribute references to the [DocumentGlobalData][] unless you
 *Any* globalObject.data
 -----------------------
 
-Just a shortcut for `get('data')`.
+This variable refers to the *get('data')* value.
 
 			data: -> FuncGlobalFuncs.get.call @, 'data'
 

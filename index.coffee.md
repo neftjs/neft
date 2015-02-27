@@ -1,19 +1,20 @@
 Renderer integration
 ====================
 
-In *Neft* we have two important modules: `View` and `Renderer` which are using to
-respectively organising data and visualize graphics.
+To connect your view with the [Rendering][] engine, you need to use a [neft:style][]
+attribute.
 
-This module is used to connect this two modules and render needed things with no
-data and logic duplications.
+Using it, you can create style files or point to the id's from them.
+
+Let's consider an example below.
 
 ```
 // styles/place.js
-UI.Column {
+Column {
 \	Text {
 \		id: heading
 \		font.weight: 1
-\		font.color: 'blue'
+\		color: 'blue'
 \	}
 \
 \	Rectangle {
@@ -22,14 +23,14 @@ UI.Column {
 \		height: stats.height
 \		color: 'gray'
 \
-\		UI.Column {
+\		Column {
 \			id: stats
 \		}
 \	}
 }
 
 // styles/place/information.js
-UI.Row {
+Row {
 \	margin: 10
 \
 \	Text {

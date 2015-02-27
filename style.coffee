@@ -98,6 +98,8 @@ module.exports = (File, data) -> class Style
 			return
 
 		if @isAutoParent
+			if @isScope
+				@item.document.hide()
 			@item.parent = null
 
 		for child in @children
@@ -106,8 +108,7 @@ module.exports = (File, data) -> class Style
 		for name, val of @attrs
 			val = @file.funcs?[val] or val
 			@setAttr name, val
-
-		null
+		return
 
 	updateText: ->
 		if 'text' of @item
@@ -134,9 +135,22 @@ module.exports = (File, data) -> class Style
 		for prop, i in props
 			if i is props.length - 1
 				if typeof obj[prop] is 'function'
-					obj[prop] val
+					val = obj[prop] val
 				else
+					val = val
+
+				if not val?
 					obj[prop] = val
+				else
+					switch typeof obj[prop]
+						when 'number'
+							obj[prop] = parseFloat val
+						when 'boolean'
+							obj[prop] = !!val
+						when 'string'
+							obj[prop] = val+''
+						else
+							obj[prop] = val
 			obj = obj[prop]
 		return
 
@@ -162,6 +176,7 @@ module.exports = (File, data) -> class Style
 
 		id = @node.attrs.get 'neft:style'
 		assert.isString id
+
 		@isScope = ///^styles\.///.test id
 		@item = null
 		@scope = null
@@ -193,24 +208,27 @@ module.exports = (File, data) -> class Style
 			@isAutoParent = !@item.parent
 
 		@node.attrs.set 'neft:styleItem', @item
+		@item.document.node = @node
 
 		if @isLink()
 			@item.linkUri = @getLinkUri()
 
 	findItemParent: ->
-		assert @isAutoParent
+		if @isAutoParent and @item
+			tmpNode = @node
+			while tmpNode = tmpNode.parent
+				if item = tmpNode.attrs.get 'neft:styleItem'
+					oldParent = @item.parent
+					@item.parent = item
+					if @isScope and not oldParent
+						@item.document.show()
+					break
 
-		unless @item
-			return
+			unless item
+				@item.parent = null
 
-		tmpNode = @node
-		while tmpNode = tmpNode.parent
-			if item = tmpNode.attrs.get 'neft:styleItem'
-				@item.parent = item
-				break
-
-		unless item
-			@item.parent = null
+		for child in @children
+			child.findItemParent()
 
 		return
 

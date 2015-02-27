@@ -1,56 +1,67 @@
 neft:style @xml
 ===============
 
-Special *XML* attribute used to connect `File.Element` with `Renderer.Item`.
+This is a special *XML* attribute used to connect the [Document Modeling][] nodes with
+the [Renderer.Item][] class.
 
-As you know, `view` is used to organise your data in understood format and `Renderer` is
-used to show some stuff (images, texts etc.) on the screen. We need to connect this two
-things in some way - that's why `neft:style` *XML* attribute has been introduced.
+As you know, views are used to organize your data in an understood format and [Rendering][]
+is used to show some stuff (images, texts etc.) on the screen. We need to connect this two
+things in some way - that's why [neft:style][] *XML* attribute has been introduced.
 
-This attribute value references to the `Renderer.Item::id` attribute.
+Using this attribute, you can create a new style file by using *style.* prefix,
+or point to its item id.
 
-By default, `Window` styles file is taken.
-
-If used `Renderer.Item` defines `text` property, *XML* tag text will be used for it.
-
-```nml,include(Window)
+```
+// styles/home/header.js
 Rectangle {
-\	color: 'gray'
-\
-\	Rectangle {
-\		id: header
-\		property text: ''
-\		width: 100
-\		height: 100
-\		color: 'blue'
-\
-\		Text {
-\			text: parent.text
-\			color: 'white'
-\			anchors.centerIn: parent
-\		}
-\	}
+  anchors.fill: parent
+  color: 'red'
+  Text {
+  	id: heading
+  }
 }
+
+// views/index.html
+<header neft:style="styles.home/header">
+  <h1 neft:style="heading">Welcome!</h1>
+</header>
 ```
 
-```view,example
-<heading neft:style="header">Welcome!</heading>
+If used [Renderer.Item][] has a *text* property (e.g. [Renderer.Text][]),
+*XML* node text will be automatically set as a *text*.
+
 ```
-
-Tags with this attributes creates special scopes, so you can easily put your styles file
-into another `Renderer.Item`, just use capitalized file name.
-
-```nml,include(ArticlesContact)
-Text {
-\	id: header
-\	color: 'red'
+// styles/header.js
+Rectangle {
+\  property text: ''
+\  width: 100
+\  height: 100
+\  color: 'blue'
+\
+\  Text {
+\    text: parent.text
+\    color: 'white'
+\    anchors.centerIn: parent
+\  }
 }
+
+// views/index.html
+<header neft:style="styles.header">Welcome!</header>
 ```
 
+You can set any of the [Renderer.Item][] properties by using *neft:style:* namespace.
+
+Your *XML* property value will be automatically converted to the expected format
+(in the example below, both properties are converted into numbers).
+
 ```
-<contact neft:style="styles.articles/contact">
-  <heading neft:style="header">Contact</heading>
-</contact>
+// styles/player.js
+Item {
+  property stamina: 0.9
+}
+
+// views/player.html
+<div neft:style="styles.player" neft:style:stamina="0.7" neft:style:width="10"></div>
 ```
 
 	'use strict'
@@ -100,4 +111,4 @@ Text {
 
 		forNode file.node, null, null
 
-		null
+		return
