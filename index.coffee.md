@@ -3,8 +3,12 @@ Signal
 
 **Better events**
 
-Signals are used as standard `events` but brings new features and fix some issues, which
+Signals are used like events, but brings new features and fix some issues, which
 standard events based on the strings have.
+
+Each signal is a function and has a corresponding handler.
+The handler always is prefixed by the *on* (e.g. signal *changed* has handler *onChanged*).
+Handlers are used to connect and disconnect listeners (functions called when a signal occurs).
 
 Access it with:
 ```
@@ -46,9 +50,9 @@ var signal = require('signal');
 signal.STOP_PROPAGATION
 -----------------------
 
-Special constant value used to stop calling further listeners.
+This special constant value is used to stop calling further listeners.
 
-Must be returned by the listener, which wan't to capture a signal.
+Must be returned by a listener which want to capture a signal.
 
 ```
 var obj = {};
@@ -73,9 +77,9 @@ obj.pressed();
 *String* signal.getHandlerName(*String* signalName)
 -----------------------------------------------------
 
-Returns handler name based on the signal name.
+This function returns a handler name based on the signal name.
 
-In pratice it adds *on* prefix and capitalize the signal name.
+In practice it adds *on* prefix and capitalize the signal name.
 
 ```
 console.log(signal.getHandlerName('xChanged'));
@@ -94,9 +98,9 @@ console.log(signal.getHandlerName('xChanged'));
 *Boolean* signal.isHandlerName(*String* name)
 ---------------------------------------------
 
-Returns true if the given *name* is a proper handler name.
+This function returns *true* if the given *name* is a proper handler name.
 
-In pratice it returns true if the *name* is prefixed by *on*.
+In practice it returns *true* if the *name* is prefixed by the *on*.
 
 ```
 console.log(signal.isHandlerName('onXChanged'));
@@ -117,7 +121,7 @@ console.log(signal.isHandlerName('onxChanged'));
 *Handler* signal.create(*NotPrimitive* object, *String* name)
 -------------------------------------------------------------
 
-Creates new signal and handler for this signal in the given *object* under the given *name*.
+This function creates new signal and handler in the given *object* under the given *name*.
 
 ```
 var obj = {};
@@ -143,12 +147,11 @@ obj.renamed('Max', 'George');
 *Handler* signal.createLazy(*NotPrimitive* object, *String* name)
 -----------------------------------------------------------------
 
-Creates new lazy signal in the given *object* under the given *name*.
+This function creates a new handler in the given *object* under the given *name*.
 
-Lazy signal is a optimized version of the standard *signal.create()* function.
-It creates new *signal* function only if it's needed (any listeners wan't to listen on it).
+The signal is created on demand (only if a listener wants to listen on it).
 
-It can be also used to create signals in the prototypes.
+It can be also used to create signals in the prototype.
 
 ```
 function Dog(){
@@ -169,9 +172,6 @@ myDog.ageChanged();
 
 console.log(Object.keys(myDog));
 // ['ageChanged']
-
-console.log(Object.keys(Object.getPrototypeOf(myDog)));
-// ['onAgeChanged']
 ```
 
 	exports.createLazy = (obj, name) ->
@@ -221,11 +221,11 @@ console.log(Object.keys(Object.getPrototypeOf(myDog)));
 *Handler* Handler()
 -------------------
 
-Handler function used to connect and disconnect listeners.
+This function represents a handler function.
 
-Handler is always stored in the property prefixed by the *on* (e.g. *onWidthChanged*).
+The handler function is used to connect and disconnect listeners.
 
-If it's called it works as a alias for the *Handler.connect()*.
+If this function is called, it works like *Handler.connect()*.
 
 	createHandlerFunction = (signal) ->
 		handler = (listener, ctx) ->
@@ -241,9 +241,9 @@ If it's called it works as a alias for the *Handler.connect()*.
 Handler.connect(*Function* listener, [*Any* context])
 -----------------------------------------------------
 
-Connect new listener function to the handler.
+This function connects new listener function into a handler.
 
-Connected function will be called on each signal call.
+Connected listener will be called on each signal call.
 
 ```
 var obj = {};
@@ -262,8 +262,8 @@ obj.pressed()
 // listener 2
 ```
 
-Optional second argument will be used as a context in called listeners.
-By default, listener is called with the object, where it's added.
+The optional second argument will be used as a context in the called listeners.
+By default, the listener is called with the object where a signal is created.
 
 ```
 var obj = {standard: true};
@@ -294,7 +294,7 @@ obj.pressed();
 Handler.disconnect(*Function* listener, [*Any* context])
 --------------------------------------------------------
 
-Diconnect already connected listener.
+This function disconnects already connected listener from a handler.
 
 ```
 var obj = {};
@@ -334,7 +334,7 @@ obj.pressed()
 Handler.disconnectAll()
 -----------------------
 
-Diconnect all already connected listeners from the *handler*.
+This function disconnects all connected listeners from a handler.
 
 		disconnectAll: ->
 			assert.isFunction @
