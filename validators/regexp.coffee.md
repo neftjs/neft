@@ -1,7 +1,7 @@
 regexp
 ======
 
-Using this validator you can check whether *value* passed regular expression.
+Use this validator to check whether property value passed regular expression.
 
 ```
 var schema = new Schema({
@@ -11,10 +11,10 @@ var schema = new Schema({
 });
 
 console.log(utils.catchError(schema.validate, schema, [{word: ''}])+'');
-// "SchemaError: word doesn't passed regular expression"
+// "SchemaError: word doesn't pass regular expression"
 
 console.log(utils.catchError(schema.validate, schema, [{word: 'a b'}])+'');
-// "SchemaError: word doesn't passed regular expression"
+// "SchemaError: word doesn't pass regular expression"
 
 console.log(schema.validate({word: 'abc'}));
 // true
@@ -29,4 +29,4 @@ console.log(schema.validate({word: 'abc'}));
 		, "regexp validator option for #{row} property must be a regular expression"
 
 		unless expected.test value
-			throw new Schema.Error "#{row} doesn't passed regular expression"
+			throw new Schema.Error "#{row} doesn't pass regular expression"

@@ -5,6 +5,11 @@ Schema
 
 Module used to validate structures e.g. got data from the client.
 
+Access it with:
+```
+var Schema = require('schema');
+```
+
 	'use strict'
 
 	utils = require 'utils'
@@ -12,6 +17,15 @@ Module used to validate structures e.g. got data from the client.
 
 *SchemaError* SchemaError()
 ---------------------------
+
+This error is raised by the *Schema.prototype.validate()* method
+if given *data* doesn't pass schema.
+
+Access it with:
+```
+var Schema = require('schema');
+var SchemaError = Schema.Error;
+```
 
 	class SchemaError extends Error
 		constructor: (@message) -> super
@@ -22,11 +36,11 @@ Module used to validate structures e.g. got data from the client.
 *Schema* Schema(*Object* schema)
 --------------------------------
 
-Creates new *Schema* instance.
+Creates *Schema* instance used to validate data.
 
-Given *schema* object must provides options for each possible property.
+Given *schema* object describes expected structure of the documents.
 
-Check validators documentation for more information.
+You use validators to specify proper value for each property.
 
 ```
 new Schema({
@@ -41,7 +55,6 @@ new Schema({
 ```
 
 	module.exports = class Schema
-
 		@Error = SchemaError
 
 		constructor: (@schema) ->
@@ -65,10 +78,10 @@ It's allowed to change this object in runtime.
 
 		schema: null
 
-*Boolean* Schema::validate(*NotPrimitive* data)
------------------------------------------------
+*Boolean* Schema::validate(*Object* data)
+-----------------------------------------
 
-Validates given *data* object by the schema validators.
+Validates given *data* object by the schema.
 
 This method throws an error if data is invalid, otherwise `true` is returned.
 To get always a boolean value, you can use `utils.tryFunction()`.
@@ -103,7 +116,7 @@ console.log(utils.tryFunction(schema.validate, schema, [{age: 5}], false));
 
 #### Nested properties
 
-You can validate objects deeply by writings schemas for nested properties.
+You can validate deep objects by writings schemas for nested properties.
 
 Use dot in the property name to point where it's placed.
 
@@ -124,7 +137,8 @@ console.log(schema.validate({obj: {prop1: {name: 'Lily'}}}));
 // true
 ```
 
-This functionality uses *utils.get()*, so all features are supported (including multiple values).
+This function uses [utils.get()][] internally,
+so all its features are supported (including multiple values).
 
 ```
 var schema = new Schema({

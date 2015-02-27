@@ -1,9 +1,9 @@
 type
 ====
 
-This valdiator uses standard *typeof* expression to check whether *value* type is equal required.
+Use this validator to verify property value type.
 
-Unlike standard `typeof`, this validator returns `undefined` for `NaN` and `null`.
+Unlike standard **typeof**, this validator returns *undefined* for *NaN* and *null*.
 
 ```
 var schema = new Schema({

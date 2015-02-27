@@ -1,10 +1,9 @@
 array
 =====
 
-When `type` validator returns `object` for an array (as standard *typeof* operator),
-this validator is used to determine whether *value* is a truly array instance.
+This validator is used to determine whether *value* is a true array.
 
-Remember that `arguments` and other array-like objects in *JavaScript* are not an arrays!
+Remember that *arguments* and other array-like objects in *JavaScript* are not arrays.
 
 ```
 var schema = new Schema({

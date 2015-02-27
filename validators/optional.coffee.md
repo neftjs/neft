@@ -3,7 +3,7 @@ optional
 
 Use this validator to mark property as optional.
 
-If property value is `undefined` or `null`, it will be omitted.
+*undefined* and *null* values are omitted.
 
 ```
 var schema = new Schema({

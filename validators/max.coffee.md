@@ -1,7 +1,7 @@
 max
 ===
 
-Determines the maximum range from number.
+Determines the maximum range for number.
 
 *value* can be lower or equal maximum.
 

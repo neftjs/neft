@@ -1,7 +1,7 @@
 min
 ===
 
-Determines the minimum range from number.
+Determines the minimum range for number.
 
 *value* can be greater or equal maximum.
 

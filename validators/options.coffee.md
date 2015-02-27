@@ -1,7 +1,7 @@
 options
 =======
 
-Determine possible values for the *property*.
+This validator determines accepted property values.
 
 ```
 var schema = new Schema({
@@ -19,7 +19,7 @@ console.log(schema.validate({city: 'Warsaw'}));
 
 This validator also accepts an object in place of array.
 
-In such case, we check whether passed *property* value exists as an object key.
+In such case, we check whether property value exists as an object key.
 
 ```
 var cities = {
