@@ -3,12 +3,13 @@ List
 
 **Powerful array**
 
-As you know, `Array`s are list-like objects in JavaScript.
+This helper replaces *Array* API and adds new features,
+like signals called on each change.
 
-This helper replaces poor `Array` `API` and brings signals called when something change.
+Unfortunately, you have to use *get()* and *set()* methods
+to extract or change element in a list.
 
-Unfortunately, you have to use `get()` and `set()` methods to manipulate elements in a list.
-
+Access it with:
 ```
 var List = require('list');
 ```
@@ -16,55 +17,44 @@ var List = require('list');
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
 
 *List* List([*Any* data...])
 ----------------------------
 
-Creates new *list* based on the *given* elements.
+Creates a new list using arguments as elements.
 
-```
-var list = new List([1, 2]);
-
-console.log(list instanceof List);
-// true
-```
-
-#### Arguments notation
-
-It's allowed to pass elements as an arguments.
+*new* keyword is optional.
 
 ```
 var list = new List(1, 2);
+console.log(list instanceof List);
+// true
+
+var list = List.apply(null, [1, 2]);
+// creates a list from an array ...
 ```
 
-#### *new* keyword
-
-Using *new* keyword is not required.
-
-```
-var list = List([1, 2]);
-```
-
-	module.exports = class List
-
+	module.exports = class List extends signal.Emitter
 		@__name__ = 'List'
 		@__path__ = 'List'
 
 		constructor: ->
-
-			arr = arguments[0]
-			if arguments.length > 1 or not Array.isArray arr
-				arr = []
-				arr[i] = arg for arg, i in arguments
+			arr = []
+			for arg, i in arguments
+				arr[i] = arg
 			
 			unless @ instanceof List
-				return new List arr
+				self = Object.create List::
+			else
+				self = @
 
-			# properties
-			# TODO: mark as not enumerable (toJSON must be added)
-			utils.defineProperty @, '_data', utils.ENUMERABLE, arr
+			super()
+			self._data = arr
+
+			Object.preventExtensions self
+			self
 
 		# List is not a standard Array object
 		utils.defineProperty @::, '0', null, ->
@@ -77,36 +67,28 @@ var list = List([1, 2]);
 *Signal* List::changed(*Any* oldValue, *Integer* index)
 -------------------------------------------------------
 
-**Signal** called on each element value change.
+This signal is called for each element value change.
 
-Use ***onChanged*** handler to listen on signals.
-
-		signal.createLazy @::, 'changed'
+		signal.Emitter.createSignal @, 'changed'
 
 *Signal* List::inserted(*Any* value, *Integer* index)
 -----------------------------------------------------
 
-**Signal** called on each element insert.
+This signal is called for each inserted element.
 
-Use ***onInserted*** handler to listen on signals.
-
-		signal.createLazy @::, 'inserted'
+		signal.Emitter.createSignal @, 'inserted'
 
 *Signal* List::popped(*Any* oldValue, *Integer* index)
 ------------------------------------------------------
 
-**Signal** called on each element pop.
+This signal is called for each popped element.
 
-Use ***onPopped*** handler to listen on signals.
+		signal.Emitter.createSignal @, 'popped'
 
-		signal.createLazy @::, 'popped'
+ReadOnly *Integer* List::length
+-------------------------------
 
-*Integer* List::length
-----------------------
-
-Number of elements in a list.
-
-This property is **read-only**.
+This property stores number of elements in a list.
 
 ```
 var list = new List('a', 'b');
@@ -115,7 +97,7 @@ console.log(list.length);
 // 2
 ```
 
-		desc = utils.CONFIGURABLE | utils.ENUMERABLE
+		desc = utils.CONFIGURABLE
 		utils.defineProperty @::, 'length', desc, ->
 			@_data.length
 		, null
@@ -123,9 +105,9 @@ console.log(list.length);
 *Any* List::get(*Integer* index)
 --------------------------------
 
-Returns **value** of the element stored at given *index*.
+This method returns element stored at given *index*.
 
-For unknown elements, `undefined` is returned.
+For unknown elements, *undefined* is returned.
 
 ```
 var list = new List('a', 'b');
@@ -141,20 +123,20 @@ console.log(list.get(2));
 ```
 
 		get: (i) ->
-			expect(i).not().toBe.lessThan 0
+			assert.operator i, '>=', 0
 
 			@_data[i]
 
 *Any* List::set(*Integer* index, *Any* value)
 ---------------------------------------------
 
-Changes element *value*.
+This method changes element value.
 
 Element at given *index* must be stored in a list.
 
-`List::changed()` signal is called with the given *index* and overriden element *value*.
+*changed()* signal is called with overriden element *value* and given *index*.
 
-Given *value* is returned as a **result**.
+Given *value* is returned by this method.
 
 ```
 var types = new List('fantasy', 'Thriller');
@@ -171,9 +153,9 @@ types.set(0, 'Fantasy');
 ```
 
 		set: (i, val) ->
-			expect(i).not().toBe.lessThan 0
-			expect(i).toBe.lessThan @length
-			expect(val).not().toBe undefined
+			assert.operator i, '>=', 0
+			assert.operator i, '<', @length
+			assert.isNot val, undefined
 
 			oldVal = @_data[i]
 			if oldVal is val
@@ -182,16 +164,17 @@ types.set(0, 'Fantasy');
 			@_data[i] = val
 
 			# signal
-			@changed? oldVal, i
+			@changed oldVal, i
 
 			val
 
 *Array* List::items()
 ---------------------
 
-Returns array of all the elements stored in a list.
+This method returns array of all the elements stored in a list.
 
 Always the same instance is returned, so don't change this array manually.
+
 Use `utils.clone()` otherwise.
 
 ```
@@ -208,7 +191,7 @@ console.log(Array.isArray(list.items()));
 ```
 var list = new List('a', 'b');
 var items = list.items();
-for (var i = 0, n = items.length; i < n; i++){  
+for (var i = 0; i < items.length; i++){  
   console.log(items[i]);
 }
 // a
@@ -221,11 +204,11 @@ for (var i = 0, n = items.length; i < n; i++){
 *Any* List::append(*Any* value)
 -------------------------------
 
-Append new element at the end of a list.
+This method appends new element at the end of a list.
 
-`List::inserted()` signal is called with the element *index* and given *value*.
+*inserted()* signal is called with the given *value* and element *index*.
 
-*value* can't be a `undefined`, because this value is reserved only for unknown elements.
+*value* can't be an `undefined`, because this value is reserved only for unknown elements.
 
 ```
 var fridge = new List('apple', 'milk');
@@ -242,23 +225,23 @@ console.log(fridge.items());
 ```
 
 		append: (val) ->
-			expect(val).not().toBe undefined
+			assert.isNot val, undefined
 
 			@_data.push val
 
 			# signal
-			@inserted? val, @length - 1
+			@inserted val, @length - 1
 
 			val
 
 *Any* List::insert(*Integer* index, *Any* value)
 ------------------------------------------------
 
-Inserts new element at given position.
+This method inserts a new element at the given position.
 
-Added value is returned.
+*inserted()* signal is called with given value and index.
 
-`List::inserted()` signal is called with parameters passed to this function.
+Given *value* is returned.
 
 ```
 var list = new List('a', 'b');
@@ -275,23 +258,23 @@ console.log(list.items());
 ```
 
 		insert: (i, val) ->
-			expect(i).not().toBe.lessThan 0
-			expect(i).not().toBe.greaterThan @length
-			expect(val).not().toBe undefined
+			assert.operator i, '>=', 0
+			assert.operator i, '<', @length
+			assert.isNot val, undefined
 
 			@_data.splice i, 0, val
 
 			# signal
-			@inserted? val, i
+			@inserted val, i
 
 			val
 
 *Any* List::remove(*Any* value)
 -------------------------------
 
-Removes given *value* from a list.
+This function removes given *value* from a list.
 
-`List::popped()` signal is called with the popped element *index* as a parameter.
+*popped()* signal is called with the given *value* and popped element *index*.
 
 Given *value* is returned.
 
@@ -310,7 +293,7 @@ console.log(list.items());
 ```
 
 		remove: (val) ->
-			expect().some(@_data).toBe val
+			assert.ok utils.has(@_data, val)
 
 			i = @index val
 			if i isnt -1
@@ -321,13 +304,14 @@ console.log(list.items());
 *Any* List::pop([*Integer* index])
 ----------------------------------
 
-Removes element at given *index*, or the last element by default.
+This method removes element store at given *index*,
+or the last element if no parameter passed.
 
-Given *index* must exists in the list.
+Given *index* must exist in the list.
 
-`List::popped()` signal is called with the popped element *value* and it's *index*.
+*popped()* signal is called with the popped element *value* and it's *index*.
 
-Removed element is returned.
+The removed element value is returned.
 
 ```
 var list = new List('a', 'b');
@@ -345,25 +329,25 @@ console.log(list.items());
 
 		pop: (i) ->
 			if i isnt undefined
-				expect(i).not().toBe.lessThan 0
-				expect(i).toBe.lessThan @length
+				assert.operator i, '>=', 0
+				assert.operator i, '<', @length
+			else
+				i = @length - 1
 
-			i ?= @length - 1
 			oldVal = @_data[i]
-
 			@_data.splice i, 1
 
 			# signal
-			@popped? oldVal, i
+			@popped oldVal, i
 
 			oldVal
 
 List::clear()
 -------------
 
-Removes all elements stored in a list.
+This method removes all elements stored in a list.
 
-Notice that this method will call `List::popped()` signal on each element.
+*popped()* signal is called on each element starting from the last one.
 
 ```
 var list = new List('a', 'b');
@@ -392,11 +376,11 @@ console.log(list.items());
 *Integer* List::index(*Any* value)
 ----------------------------------
 
-Returns index of the given value in a list.
+This method returns index of the given element *value* in a list.
 
-Given value can't be a `undefined`, becuase it's used for unknown elements.
+Given value can't be an `undefined`, because this value is reserved only for unknown elements.
 
-If no value exists in this list `-1` is returned.
+If no value exists in a list, *-1* is returned.
 
 ```
 var list = new List('a', 'b');
@@ -409,14 +393,14 @@ console.log(list.index('c'));
 ```
 
 		index: (val) ->
-			expect(val).not().toBe undefined
+			assert.isNot val, undefined
 
 			@_data.indexOf val
 
 *Boolean* List::has(*Any* value)
 --------------------------------
 
-Returns true if given *value* exists in a list.
+This method checks whether given *value* exists in a list.
 
 ```
 var list = new List('a', 'b');
