@@ -49,7 +49,7 @@ var ResponseError = Networking.Response.Error;
 *RequestResolve* Error.RequestResolve(*Networking.Request* request)
 -------------------------------------------------------------------
 
-This error is send if the request can't be resolved, because no proper handler which can
+This error is sent if the request can't be resolved, because no proper handler which can
 handle the request can be found.
 
 Access it with:

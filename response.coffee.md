@@ -45,7 +45,6 @@ Contains:
  - Response.SERVICE_UNAVAILABLE
 
 ```
-console.log(Networking.Response.STATUSES);
 console.log(Networking.Response.OK);
 console.log(Networking.Response.BAD_REQUEST);
 ```
@@ -122,11 +121,9 @@ var Response = Networking.Response;
 *Signal* Response::sent()
 -------------------------
 
-**Signal** called when the response has been marked as going to be send.
+This signal is called when the response has been marked as going to be sent.
 
-On this signal, the response can't be modified.
-
-You can listen on this signal using the `onSent` handler.
+After this signal, the response can't be modified.
 
 ```
 res.onSent(function(){
@@ -139,7 +136,7 @@ res.onSent(function(){
 ReadOnly *Boolean* Response::pending
 ------------------------------------
 
-It's `true` if the response is active, `false` if the response has been
+It's *true* if the response is active, *false* if the response has been
 destroyed or sent and can't be modified.
 
 		pending: false
@@ -147,7 +144,7 @@ destroyed or sent and can't be modified.
 ReadOnly *Networking.Request* Response::request
 -----------------------------------------------
 
-Reference to the created `request`.
+Reference to the *request*.
 
 This request is active until the response is pending.
 
@@ -172,12 +169,12 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 *Any* Response::data
 --------------------
 
-Value to send. It can be set using the `Response::send()` method or manually.
+Value to send. It can be set manually or by the `Response::send()` method.
 
 ```
 res.data = {items: ['superhero toy', 'book']};
 res.data = new Error("Wrong order");
-res.data = View.fromJSON(...);
+res.data = Document.fromJSON(...);
 ```
 
 		data: null
@@ -185,7 +182,7 @@ res.data = View.fromJSON(...);
 *Response* Response::setHeader(*String* name, *String* value)
 -------------------------------------------------------------
 
-Sets a single header. If the header aready exists, its value will be replaced.
+Sets a single header. If the header already exists, its value will be replaced.
 
 Currently this method has no effect for local responses.
 
@@ -207,11 +204,11 @@ res.setHeader('Location', '/redirect/to/url');
 Response::send([*Integer* status, *Any* data])
 ----------------------------------------------
 
-Marks response as ready to send.
+Marks response as ready to be sent.
 
-This method calls `Response::sent()` signal asynchronously.
+This method calls *sent()* signal asynchronously.
 
-You can change response status and data, but only synchronously.
+You can still change response status and data, but only synchronously.
 
 This method automatically parses got data which is determined by the environment.
 
@@ -308,7 +305,7 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 *Boolean* Response::isSucceed()
 -------------------------------
 
-Returns `true` if status is in range from 200 to 299.
+Returns *true* if status is in range from 200 to 299.
 
 		isSucceed: ->
 			300 > @status >= 200

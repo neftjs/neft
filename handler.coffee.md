@@ -77,7 +77,7 @@ var Handler = Networking.Handler;
 *String* Handler::method
 ------------------------
 
-One of the **Networking.Request.METHODS** value.
+One of the **Networking.Request.METHODS** values.
 
 		method: ''
 
@@ -96,10 +96,10 @@ Optional schema used to validate parameters.
 *Function* Handler::callback
 ----------------------------
 
-Function called to handle the request.
+This function is used to handle the request.
 
-It takes three parameters: **Networking.Request**, **Networking.Response** and
-*next* **Function** called to omit this handler.
+It's called with three parameters: **Networking.Request**, **Networking.Response** and
+*next* function.
 
 		callback: null
 
@@ -108,7 +108,7 @@ Handler::exec(*Networking.Request* request, *Networking.Response* response, *Fun
 
 Executes a handler.
 
-This method is internally called by the **Netwroking.createRequest** on matched handlers.
+This method is internally called by the **Networking.createRequest** on matched handlers.
 
 		exec: (req, res, next) ->
 			assert.instanceOf req, Networking.Request, '::exec request argument ...'

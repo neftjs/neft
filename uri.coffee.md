@@ -19,9 +19,9 @@ Uri
 
 This class represents URI strings with parameters.
 
-Parameter must be wrapped by the curly brackets **{...}**.
+Parameter must be wrapped by the curly brackets **{…}**.
 
-**Rest parameters** are not greedy and are wrapped with **{...*}** or just **..***.
+**Rest parameters** are not greedy and are wrapped with **{…*}** or just **…***.
 Rest parameters don't have to be named (**{*}** is allowed).
 
 ```
@@ -82,7 +82,7 @@ Last **Uri::match()** result.
 *Boolean* Uri::test(*String* uri)
 ---------------------------------
 
-Test whether this URI is valid with given string.
+Test whether this URI is valid with the given string.
 
 		test: (uri) ->
 			@_re.test uri
@@ -90,10 +90,10 @@ Test whether this URI is valid with given string.
 *Object* Uri::match(*String* uri)
 ---------------------------------
 
-Get parameters values from the passed string.
+Get parameters from the given string.
 
-If given string isn't valid with this uri, error will be raised.
-You should use **Uri::test()** before.
+If the *uri* parameter isn't valid with this **Uri**, error will be raised.
+In such case, you should use **Uri::test()** before.
 
 		match: (uri) ->
 			assert.ok @test(uri)
@@ -110,9 +110,9 @@ You should use **Uri::test()** before.
 *String* Uri::toString([*Object|Dict* params])
 ----------------------------------------------
 
-Parse **Uri** into a string.
+Parses **Uri** into a string.
 
-`params` object can be optionally passed as an argument.
+*params* object can be optionally passed as an argument.
 It will be used to replace uri chunks (works like standard
 string formatting but on the named parameters).
 

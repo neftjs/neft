@@ -3,8 +3,8 @@ Networking
 
 **HTTP, URIs, ...**
 
-Use this module to handle requests and responses (e.g. by the HTTP protocol or just
-locally to handle different URIs).
+Use this module to handle requests and responses (e.g. by the *HTTP* protocol, or locally
+to handle different URIs).
 
 Access it with:
 ```
@@ -80,6 +80,8 @@ Creates new *Networking* instance.
 ReadOnly *String* Networking::type
 ----------------------------------
 
+Refers to the one of the *Networking.TYPES* values.
+
 		type: @HTTP
 
 ReadOnly *String* Networking::protocol
@@ -105,9 +107,9 @@ ReadOnly *String* Networking::language
 ReadOnly *String* Networking::url
 ---------------------------------
 
-Proper URL path contains protocol, port and host.
+The proper URL path contains protocol, port and host.
 
-Can be set manually if passed host and port are private.
+By default it's created from the protocol, port and host.
 
 		url: ''
 
@@ -157,7 +159,7 @@ app.httpNetworking.createHandler({
 *Networking.Request* Networking::createRequest(*Object* options)
 ----------------------------------------------------------------
 
-Creates new local or server request.
+Creates local or server request.
 
 Given *options* object is used to create [Networking.Request][].
 
