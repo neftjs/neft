@@ -189,7 +189,7 @@ Stack::callNext(*Function* callback)
 
 Calls first function from the stack and remove it.
 
-*callback* function gets all passed arguments by the called *function*.
+*callback* function gets all passed arguments from the called *function*.
 
 		callNext: (callback) ->
 			assert typeof callback is 'function'
@@ -244,9 +244,9 @@ Stack::runAll(*Function* callback)
 
 Calls all functions from the stack one by one.
 
-*callback* function gets all passed arguments by the last called *function*.
+*callback* function gets all passed arguments from the last called *function*.
 
-Processing stops on error occurs, then *callback* function is called with got error.
+Processing stops on error occurs, then *callback* function is called with the got error.
 
 		runAll: (callback) ->
 			if typeof callback isnt 'function'
@@ -277,7 +277,7 @@ Stack::runAllSimultaneously(*Function* callback)
 
 Calls all functions from the stack simultaneously (all at the same time).
 
-Processing stops on error occurs, then *callback* function is called with got error.
+Processing stops on error occurs, then *callback* function is called with the got error.
 
 		runAllSimultaneously: (callback) ->
 			assert typeof callback is 'function'

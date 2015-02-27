@@ -6,7 +6,7 @@ and cyclic references.
 
 These functions solve this problem.
 
-You can also use this functions to clone complex structures.
+You can also use these functions to clone complex structures.
 
 	'use strict'
 
@@ -30,14 +30,14 @@ Second parameter is an config object (all 'false' by default):
   - *protos* - save protos as objects,
   - *constructors* - include constructor functions.
 
-If *protos* is *false* and *constructors* is *true*,
-object will be recognized as an instance (example 2).
-
 ```
 var obj = {};
 obj.self = obj;
 console.log(JSON.stringify(utils.simplify(obj)));
 ```
+
+If *protos* is *false* and *constructors* is *true*,
+object will be recognized as an instance.
 
 ```
 function Sample(){

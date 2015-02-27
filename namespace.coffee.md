@@ -10,7 +10,8 @@ Properties extraction
 *Any* utils.get(*Object* object, *String* path, [*OptionsArray* target])
 ------------------------------------------------------------------------
 
-Extract property, deep property or all possible properties from an object.
+Use this function to extract property, deep property or
+all possible properties from an object.
 
 ```
 var obj = {prop: 1};
@@ -110,8 +111,8 @@ console.log(utils.get(obj, 'prop[].deep.result'));
 *OptionsArray* utils.get.OptionsArray()
 ---------------------------------------
 
-Special version of an Array, returned if result of the *utils.get()* function is a list
-of possible values and not exactly a searched value.
+It's a special version of *Array*, returned if the result of the *utils.get()*
+function is a list of possible values and not exactly a searched value.
 
 		get.OptionsArray = class OptionsArray extends Array
 
@@ -120,7 +121,8 @@ of possible values and not exactly a searched value.
 *Boolean* utils.isStringArray(*String* value)
 ---------------------------------------------
 
-Check if string references into an array according to notation in the *utils.get()* function.
+This function checks whether the given string references into an array according
+to notation in the *utils.get()* function.
 
 		isStringArray = utils.isStringArray = (arg) ->
 			expect(arg).toBe.string()
