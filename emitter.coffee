@@ -11,23 +11,28 @@ module.exports = (signal) -> class SignalsEmitter
 
 	handlerFunc = signal.createHandlerFunction()
 
-	listeners = currentEmitter = null
+	listeners = currentEmitter = defaultContext = null
 	signalFunc = ->
 		assert.instanceOf currentEmitter, SignalsEmitter
 		assert.isArray listeners
+		assert.isDefined defaultContext
 
-		callSignal currentEmitter, listeners, arguments
+		callSignal currentEmitter, listeners, arguments, defaultContext
 
-	@createSignal = (ctor, name) ->
+	@createSignal = (ctor, name, internalName=name, contextProp, onInitialized) ->
 		assert.isFunction ctor
 		assert.isString name
 		assert.notLengthOf name, 0
+		assert.isString internalName
+		assert.notLengthOf internalName, 0
+		assert.isFunction onInitialized if onInitialized?
 
 		signalGetter = ->
 			assert.instanceOf @, SignalsEmitter
 
-			if listeners = @_signals?[name]
+			if listeners = @_signals?[internalName]
 				currentEmitter = @
+				defaultContext = if contextProp then @[contextProp] else @
 				signalFunc
 			else
 				NOP
@@ -36,8 +41,12 @@ module.exports = (signal) -> class SignalsEmitter
 			assert.instanceOf @, SignalsEmitter
 
 			# http://jsperf.com/dynamic-structures
-			@_signals ?= {}
-			handlerFunc.listeners = @_signals[name] ?= []
+			signals = @_signals ?= {}
+			listeners = signals[internalName]
+			unless listeners
+				listeners = signals[internalName] = []
+				onInitialized? @, name, internalName
+			handlerFunc.listeners = listeners
 
 			handlerFunc
 
@@ -45,6 +54,8 @@ module.exports = (signal) -> class SignalsEmitter
 
 		handlerName = getHandlerName name
 		utils.defineProperty ctor::, handlerName, null, handlerGetter, null
+
+		handlerGetter
 
 	constructor: ->
 		@_signals = null

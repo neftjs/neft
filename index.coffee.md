@@ -6,6 +6,11 @@ Signal
 Signals are used as standard `events` but brings new features and fix some issues, which
 standard events based on the strings have.
 
+Access it with:
+```
+var signal = require('signal');
+```
+
 	'use strict'
 
 	utils = require 'utils'
@@ -151,10 +156,6 @@ function Dog(){
 
 var handler = signal.createLazy(Dog.prototype, 'ageChanged');
 
-handler.onInitialized(function(ctx, name){
-  console.log("Signal " + name + " initialized");
-});
-
 var myDog = new Dog;
 console.log(Object.keys(myDog));
 // []
@@ -162,7 +163,6 @@ console.log(Object.keys(myDog));
 myDog.onAgeChanged.connect(function(){
   console.log('Signal called');
 });
-// Signal ageChanged initialized
 
 myDog.ageChanged();
 // Signal called
@@ -182,22 +182,19 @@ console.log(Object.keys(Object.getPrototypeOf(myDog)));
 		handlerName = exports.getHandlerName name
 		handler = createHandler obj, name
 
-		exports.create handler, 'initialized'
-
 		desc = utils.ENUMERABLE | utils.CONFIGURABLE
 		utils.defineProperty obj, handlerName, desc, ->
 			signal = @[name]
 			unless signal?
 				signal = @[name] = createSignalFunction @, handler
-				handler.initialized @, name
 
 			handler.listeners = signal.listeners
 			handler
 		, null
 
-		handler
+		return
 
-	callSignal = (obj, listeners, args) ->
+	callSignal = (obj, listeners, args, ctx=obj) ->
 		i = 0
 		n = listeners.length
 		while i < n
@@ -206,7 +203,7 @@ console.log(Object.keys(Object.getPrototypeOf(myDog)));
 				listeners.splice i, 2
 				n -= 2
 			else
-				result = func.apply(listeners[i+1] or obj, args)
+				result = func.apply(listeners[i+1] or ctx, args)
 				if result is exports.STOP_PROPAGATION
 					return result
 				i += 2
@@ -215,7 +212,7 @@ console.log(Object.keys(Object.getPrototypeOf(myDog)));
 
 	createSignalFunction = (obj) ->
 		signal = ->
-			callSignal obj, listeners, arguments
+			callSignal obj, listeners, arguments, null
 
 		listeners = signal.listeners = []
 
@@ -349,6 +346,7 @@ Diconnect all already connected listeners from the *handler*.
 			return
 
 	exports.Emitter = require('./emitter')
+		create: exports.create
 		getHandlerName: exports.getHandlerName
 		createHandlerFunction: createHandlerFunction
 		callSignal: callSignal
