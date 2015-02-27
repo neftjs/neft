@@ -3,18 +3,23 @@ Dict
 
 **Powerful object**
 
-Basics helper which has been made to extends functionalitites of the default JavaScript.
+This helper replaces *Object* API and adds new features and signal called on each change.
 
-It's similar to the Python Dict helper and was designed on it, but brings a little bit more.
+Unfortunately, you have to use *get()* and *set()* methods
+to extract or change properties in a dict.
+
+Access it with:
+```
+var dict = require('dict');
+```
 
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
 
-	module.exports = class Dict
-
+	module.exports = class Dict extends signal.Emitter
 		@__name__ = 'Dict'
 		@__path__ = 'Dict'
 
@@ -26,24 +31,24 @@ It's similar to the Python Dict helper and was designed on it, but brings a litt
 *Dict* Dict.fromJSON(*String|Object* json)
 ------------------------------------------
 
-Creates new *Dict* from the json.
+Creates new *Dict* from a json.
 
-See `Dict::toJSON` to see how to stringify a *Dict* instance and use it here.
+See *Dict::toJSON* to check how to stringify a *Dict* instance and use it here.
 
 		@fromJSON = (json) ->
 			json = utils.tryFunction JSON.parse, JSON, [json], json
-			expect(json).toBe.simpleObject()
+			assert.isPlainObject json
 
 			new Dict json
 
 *Dict* Dict([*Object* data])
 ----------------------------
 
-Creates new *Dict* instance.
+Creates a new *Dict* instance.
 
 *data* parameter determines default properties with their values.
 
-Using *new* keyword is not required.
+*new* keyword is not required.
 
 ```
 var data = new Dict({
@@ -55,26 +60,33 @@ console.log(data.get('name'));
 ```
 
 		constructor: (obj={}) ->
-			expect(obj).toBe.object()
-
 			# support no `new` syntax
 			unless @ instanceof Dict
 				return new Dict obj
 
-			# properties
-			utils.defineProperty @, '__hash__', null, utils.uid()
-			utils.defineProperty @, '_data', null, obj
-			utils.defineProperty @, '_keys', utils.WRITABLE, null
-			utils.defineProperty @, '_values', utils.WRITABLE, null
-			utils.defineProperty @, '_items', utils.WRITABLE, null
-			utils.defineProperty @, '_dirty', utils.WRITABLE, ALL
+			assert.isObject obj
 
-*Integer* Dict::length
-----------------------
+			super()
+			@__hash__ = utils.uid()
+			@_data = obj
+			@_keys = null
+			@_values = null
+			@_items = null
+			@_dirty = ALL
 
-Returns amount of the keys stored in the *Dict* instance.
+			Object.preventExtensions @
 
-This value can't be changed manually.
+ReadOnly *Integer* Dict::length
+-------------------------------
+
+This property stores amount of keys existed in a *Dict*.
+
+```
+var dict = Dict({prop: 1});
+
+console.log(dict.length);
+// 1
+```
 
 		desc = utils.CONFIGURABLE | utils.ENUMERABLE
 		utils.defineProperty @::, 'length', desc, ->
@@ -84,9 +96,7 @@ This value can't be changed manually.
 *Signal* Dict::changed(*String* key, *Any* oldValue)
 ----------------------------------------------------
 
-Lazy **signal** called on each property value change.
-
-You can listen on this signal using the `onChanged` handler.
+This signal is called when a property value changes.
 
 ```
 var user = new Dict({
@@ -101,14 +111,14 @@ user.set('country', 'US');
 // country property changed from Germany to US
 ```
 
-		signal.createLazy @::, 'changed'
+		signal.Emitter.createSignal @, 'changed'
 
 *Any* Dict::get(*String* key)
 -----------------------------
 
-Get a property value stored in the *Dict*.
+This method returns given *key* property value.
 
-Returns *undefined* only for unknown properties.
+It returns *undefined* only for not existed properties.
 
 ```
 var bunny = new Dict({
@@ -127,21 +137,22 @@ console.log(bunny.get('speedZ'));
 ```
 
 		get: (key) ->
-			expect(key).toBe.truthy().string()
+			assert.isString key
+			assert.notLengthOf key, 0
 
 			@_data[key]
 
 *Any* Dict::set(*String* key, *Any* value)
 ------------------------------------------
 
-Change the property value or create a new property.
+This method is used to change property value or create a new property.
 
-Calls `Dict::changed()` **signal** if the value is different than before.
-This signal is called with two parameters *key* and *oldValue*.
+*changed()* signal is called if the value has been changed.
 
-Passed *value* can't be a `undefined`, because it's used only for unknown properties.
+Passed *value* can't be a *undefined*,
+because this value is reserved only for unknown properties.
 
-Given *value* is returned as a **result**.
+Given *value* is returned as a result of this method.
 
 ```
 var links = new Dict({
@@ -158,8 +169,9 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 ```
 
 		set: (key, val) ->
-			expect(key).toBe.truthy().string()
-			expect(val).not().toBe undefined
+			assert.isString key
+			assert.notLengthOf key, 0
+			assert.isNot val, undefined
 
 			oldVal = @_data[key]
 
@@ -174,16 +186,16 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 			@_dirty |= ALL
 
 			# signal
-			@changed? key, oldVal
+			@changed key, oldVal
 
 			val
 
 Dict::pop(*String* key)
 -----------------------
 
-Remove exists property from the *Dict*.
+This method removes an existing property from a *dict*.
 
-This method calls `Dict::changed()` **signal** with standard parameters.
+*changed()* signal is called with property key and its old value.
 
 ```
 var data = new Dict;
@@ -197,12 +209,13 @@ data.onChanged.connect(function(key, oldVal){
 });
 
 data.pop('name');
-// name property has been rmeoved
+// name property has been removed
 ```
 
 		pop: (key) ->
-			expect(key).toBe.truthy().string()
-			expect().some().keys(@_data).toBe key
+			assert.isString key
+			assert.notLengthOf key, 0
+			assert.isNot @_data[key], undefined
 
 			oldVal = @_data[key]
 			delete @_data[key]
@@ -211,16 +224,16 @@ data.pop('name');
 			@_dirty |= ALL
 
 			# signal
-			@changed? key, oldVal
+			@changed key, oldVal
 
-			null
+			return
 
 *Array* Dict::keys()
 --------------------
 
-Returns array of the existed properties names in the *Dict*.
+This method returns array of names of stored properties.
 
-It always returns the same array, so don't modify it manually.
+It always returns the same array instance, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ```
@@ -250,9 +263,9 @@ console.log(data.keys());
 *Array* Dict::values()
 ----------------------
 
-Returns array of the existed properties values in the *Dict*.
+This method returns array of values of stored properties.
 
-It always returns the same array, so don't modify it manually.
+It always returns the same array instance, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ```
@@ -282,9 +295,9 @@ console.log(data.values());
 *Array* Dict::items()
 ---------------------
 
-Returns array of key-value pairs of all existed properties.
+This method returns array of key-value pairs of all stored properties.
 
-It always returns the same arrays, so don't modify it manually.
+It always returns the same array instance, so don't modify it manually.
 Use `utils.clone()` otherwise.
 
 ```
@@ -296,6 +309,16 @@ var data = new Dict({
 console.log(data.items());
 // [['x', 10], ['y', 30]]
 ```
+
+#### Iterating over a dict
+```
+var dict = new Dict({prop1: 1, prop2: 2});
+var items = dict.items();
+for (var i = 0; i < items.length; i++){  
+  console.log(items[i][0], items[i][1]);
+}
+// ['prop1', 1]
+// ['prop2', 2]
 
 		items: ->
 			if @_dirty & ITEMS
@@ -315,9 +338,9 @@ console.log(data.items());
 *Object* Dict::toJSON()
 -----------------------
 
-Returns an object which can be stringified to JSON.
+This method returns object ready to be stringified to JSON.
 
-Check `Dict.fromJSON` to reverse this operation.
+Check *Dict.fromJSON* to reverse this operation.
 
 		toJSON: ->
 			@_data
@@ -325,7 +348,7 @@ Check `Dict.fromJSON` to reverse this operation.
 *String* Dict::toString()
 -------------------------
 
-Returns pseudo-unique string determining this *Dict* instance.
+This method returns a pseudo-unique string determining this *Dict* instance.
 
 		toString: ->
 			@__hash__
