@@ -34,15 +34,16 @@ HTML documents and more.
 
 	pkg = require './package.json'
 
-	# TODO
-	# `//<development>`
-	# log.warn "Use this bundles only for testing. " +
-	#          "For production use --release option!"
-	# `//</development>`
-
 	exports = module.exports = (opts={}, extraOpts={}) ->
-		# Welcome log
-		log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
+		# Welcome log also for release mode
+		(require('log')).ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
+
+		`//<trialVersion>`
+		(require('log')).warn "This is a trial version. Only for testing on your local machine. Licensing: http://www.neft.io/docs"
+		`//</trialVersion>`
+		`//<development>`
+		log.warn "Use this bundle only in development; type --release when it's ready"
+		`//</development>`
 
 		{config} = pkg
 		config = utils.merge utils.clone(config), opts.config
@@ -115,12 +116,13 @@ module.exports = function(app){
   };
 };
 
-// routes/user.js
+// controllers/user.js
 module.exports = function(app){
   return {
-  	get: function(req, res, callback){
-  	  callback(null, app.models['user/permission'].getPermission(req.params.userId));
-  	}
+    get: function(req, res, callback){
+      car data = app.models['user/permission'].getPermission(req.params.userId);
+      callback(null, data);
+    }
   }
 };
 ```
@@ -166,6 +168,13 @@ Files from the *templates* folder with objects returned by their exported functi
 		app.Template = AppTemplate app
 		app.View = AppView app
 
+		# unauthorized
+		`//<trialVersion>`
+		unless ///localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}///.test app.networking.url
+			(require('log')).error "Trial version can be run only locally"
+			return
+		`//</trialVersion>`
+
 		# propagate data
 		Renderer.serverUrl = app.networking.url
 
@@ -174,7 +183,7 @@ Files from the *templates* folder with objects returned by their exported functi
 			app.styles[style.name] = style.file app.styles
 
 		# set styles window item
-		windowStyle = app.styles?.window?.withStructure()
+		windowStyle = app.styles?.view?.withStructure()
 		windowStyle ?=
 			mainItem: new Renderer.Item
 			ids: {}
@@ -212,7 +221,8 @@ Files from the *templates* folder with objects returned by their exported functi
 			init opts.templates, app.templates
 
 	# link module
-	MODULES = ['assert', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
-	           'log', 'renderer', 'networking', 'schema', 'signal', 'utils', 'document', 'styles']
+	MODULES = ['utils', 'signal', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list', 'log',
+	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert']
 	for name in MODULES
 		exports[name] = require name
+	exports['neft-assert'] = exports.assert

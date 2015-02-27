@@ -190,11 +190,11 @@ Passed object will be automatically used to create [Schema][] instance.
 new app.Route({
   uri: 'user/{name}',
   schema: {
-  	name: {
-  	  required: true,
-  	  type: 'string',
-  	  regexp: /^[a-zA-Z]{3,}$/
-  	}
+    name: {
+      required: true,
+      type: 'string',
+      regexp: /^[a-zA-Z]{3,}$/
+    }
   }
 });
 ```
@@ -324,7 +324,8 @@ Valid [App.View][] or file name from the *views* folder.
 
 Special uri used to get data from the server.
 
-[Networking.Response] will be filled by the returned data from the server.
+Returned data from the server is available under the [Networking.Response::data][]
+property.
 
 If server request fails, rest functions (route callback, controller) won't be called.
 
@@ -333,7 +334,7 @@ new app.Route({
   uri: 'user/{name}',
   serverResourceUri: 'api/user/{name}',
   controller: function(req, res, callback){
-  	console.log('Got data for user', res.data.name);
+    console.log('Got data for user', res.data.name);
     callback();
   }
 })
@@ -355,8 +356,10 @@ new app.Route({
 *Function* Route::callback
 --------------------------
 
-Custom function called getting data from the server (Route::serverResourceUri) and
-before controller function with the same parameters as controller, that is 
+Custom function called before getting data from the server (Route::serverResourceUri) and
+before controller function.
+
+It's called with the same parameters as controller, that is 
 [Networking.Request][], [Networking.Response][] and *callback*.
 
 		callback: null
@@ -487,9 +490,11 @@ before controller function with the same parameters as controller, that is
 					assert.instanceOf res, Networking.Response
 
 					if currentTemplate isnt ctx.template
-						currentTemplateView?.destroy()
+						if currentTemplateView
+							currentTemplateView.destroy()
+							currentTemplateView = null
+							lastView = null
 						currentTemplate = null
-						currentTemplateView = null
 
 						if ctx.template
 							currentTemplate = ctx.template

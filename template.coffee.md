@@ -59,7 +59,7 @@ module.exports = function(app){
 *app.View* Template::view
 -------------------------
 
-Instance of an [app.View][] or path to the **views/** file in the **app.views** object.
+Instance of an [App.View][] or path to the **views/** file in the **app.views** object.
 
 		view: null
 
@@ -83,7 +83,7 @@ Instance of an [app.View][] or path to the **views/** file in the **app.views** 
 *String* Template::viewTargetUse
 --------------------------------
 
-First [neft:use][] pointing at this fragment name will be replaced by the proper [app.View][].
+First [neft:use][] pointing at this fragment name will be replaced by the proper [App.View][].
 
 ```
 // templates/index.js

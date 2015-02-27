@@ -9,6 +9,8 @@ createBundle = (opts, callback) ->
 		type: opts.type
 		release: opts.release
 		removeLogs: opts.release
+		fullVersion: true
+		minify: true
 		path: 'index.coffee.md'
 	}, (err, bundle) ->
 		if err
@@ -31,11 +33,11 @@ createBundle = (opts, callback) ->
 
 stack = new utils.async.Stack
 
-# stack.add createBundle, null, [type: 'node', release: true]
-# stack.add createBundle, null, [type: 'node', release: false]
-# stack.add createBundle, null, [type: 'browser', release: true]
-# stack.add createBundle, null, [type: 'browser', release: false]
-# stack.add createBundle, null, [type: 'qml', release: true]
+stack.add createBundle, null, [type: 'node', release: true]
+stack.add createBundle, null, [type: 'node', release: false]
+stack.add createBundle, null, [type: 'browser', release: true]
+stack.add createBundle, null, [type: 'browser', release: false]
+stack.add createBundle, null, [type: 'qml', release: true]
 stack.add createBundle, null, [type: 'qml', release: false]
 
 stack.runAll ->

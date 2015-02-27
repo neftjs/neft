@@ -46,7 +46,7 @@ module.exports = function(app){
 		render: (req, data) ->
 			assert.instanceOf req, Networking.Request
 
-			document = @document.clone()
+			document = Document.factory @document.path
 
 			# data
 			oldReq = DocumentGlobalData.request
@@ -149,7 +149,7 @@ or even redirect to the other URI.
 ```
 
 		utils.defineProperty DocumentGlobalData, 'uri', null, do ->
-			dict = new Dict
+			dict = Object.create new Dict
 			req = null
 
 			newRequestGoing = false
@@ -191,7 +191,7 @@ or even redirect to the other URI.
 *Dict* DocumentGlobalData.uri.toString([*Any* params])
 ------------------------------------------------------
 
-Works like [Networking.Uri::toString][] if **params** are given, otherwise it returns
+Works like [Networking.Uri::toString][] if *params* are given, otherwise it returns
 current request uri.
 
 ```
