@@ -1,7 +1,7 @@
 neft:use @xml
 =============
 
-Special XML tag used to place [neft:fragment][].
+This special *XML* tag is used to place the [neft:fragment][].
 
 ```
 <neft:fragment neft:name="user">

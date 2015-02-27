@@ -1,8 +1,8 @@
 Attributes evaluating @txt
 ==========================
 
-Attributes in XML are written as strings.
-For easiest developing, some of them are automatically evaluated to the JavaScript objects.
+For easiest developing, some of the *XML* attributes are automatically
+evaluated to the JavaScript objects.
 
 String `[...]` evaluates to the `Array`.
 ```
@@ -24,15 +24,7 @@ String `Dict(...` evaluates to the [Dict][].
 
 String `List(...` evaluates to the [List][].
 ```
-<items neft:each="List([1, 2])"></items>
-```
-
-#### CoffeeScript syntax
-
-Using *CoffeeScript* syntax is fully allowed.
-
-```
-<items neft:each="List [1, 2]"></items>
+<items neft:each="List(1, 2)"></items>
 ```
 
 	'use strict'
@@ -58,8 +50,7 @@ Using *CoffeeScript* syntax is fully allowed.
 
 			if VALUE_TO_EVAL_RE.test val
 				try
-					code = coffee.compile attr[1], bare: true
-					newVal = eval code
+					newVal = eval attr[1]
 					elem.attrs.set attr[0], newVal
 
 			i++

@@ -1,7 +1,8 @@
 neft:fragment @xml
 ==================
 
-Special XML tag used to create separated and repeatable parts of the document.
+This special *XML* tag is used to create separated and repeatable parts of the document
+(sometimes called *templates*).
 
 Each `neft:fragment` has to define a unique **neft:name**.
 
@@ -12,7 +13,7 @@ Each `neft:fragment` has to define a unique **neft:name**.
 Let's take an example: you want to represent a list of products.
 Each product has the same properties, only data changed.
 To avoid copying code, we move the common part to the [neft:fragment][] and paste it later
-using the [neft:use][] tag. This is fast and clean.
+using the [neft:use][] tag. This is fast and clean solution.
 
 ```
 <neft:fragment neft:name="product">

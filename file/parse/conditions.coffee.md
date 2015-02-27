@@ -1,17 +1,17 @@
 neft:if @xml
 ============
 
-Special XML attribute used to hide or show tags depends on the condition result.
+This special *XML* attribute is used to hide or show tags depends on the condition result.
 
-Considering the example below, the output always will be **<span>1 is greater than 0</span>**,
-because the condition (`1 > 0`) is always true, isn't it?
+Considering the example below, the output always will be **1 is greater than 0**,
+because the condition (*1 > 0*) is always true?
 
 ```
 <text neft:if="1 > 0">1 is greater than 0</text>
 ```
 
-If we change the condition to the `0 > 1`, which of course is a false, we will get an empty
-output, because the whole tag `<span>` will be omitted.
+If we change the condition to the *0 > 1*, which of course is a false, we will get an empty
+output, because the whole *span* tag will be omitted.
 
 In practice, you will use the string interpolation to conditioning the result.
 

@@ -1,8 +1,10 @@
 neft:source @xml
 ================
 
-Special XML tag used in [neft:fragment][]s to define place,
+This special *XML* tag is used in the [neft:fragment][] to define place,
 where the [neft:use][] body should be placed.
+
+In the example below, *superPower* tag will be placed in the *neft:source* place.
 
 ```
 <neft:fragment neft:name="user">

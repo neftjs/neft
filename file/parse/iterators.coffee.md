@@ -1,9 +1,9 @@
 neft:each @xml
 ==============
 
-Special XML attribute used for repeating. It's called *iterator*.
+This special *XML* attribute is used for repeating. It's called *iterator*.
 
-Tag children (let's call it *iterator body*) will be duplicated for each
+Tag children (let's call them *iterator body*) will be duplicated for each
 element defined in the [neft:each][] attribute.
 Only *Array* and [List][] instances are supported.
 
@@ -14,11 +14,11 @@ Only *Array* and [List][] instances are supported.
 ```
 
 In the *iterator body* you have access to the three special variables:
-***each***, ***item*** and ***i***.
+**each**, **item** and **i**:
 
-***each*** refers to the *neft:each* attribute,
-***item*** refers to the current element and
-***i*** refers to the current element index.
+- **each** refers to the *neft:each* attribute,
+- **item** refers to the current element,
+- **i** refers to the current element index.
 
 ```
 <ul neft:each="List('New York', 'Paris', 'Warsaw')">
@@ -28,9 +28,8 @@ In the *iterator body* you have access to the three special variables:
 
 #### Runtime updates
 
-It's recommended to use the `List` module to iterate.
-All changes made on the `List` will automatically refresh your view, so
-feel free to append and remove elements from the list - *iterator body* will be synchronized.
+It's recommended to use the [List][] module to iterate on it, because
+all changes made on the [List][] automatically refreshes your view.
 
 	'use strict'
 
