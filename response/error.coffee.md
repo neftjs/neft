@@ -15,9 +15,9 @@ Response/Error
 *Error* Error([*Integer* status, *String* message])
 ---------------------------------------------------
 
-This class is used in the `Networking.Response::raise()` method and describes an error.
+This class is used in the [Networking.Response::raise()][] method and describes an error.
 
-It works as standard Javascript `Error` class, but provides extra `status` value.
+It works as a standard Javascript *Error* class, but provides extra *status* value.
 
 Access it with:
 ```
@@ -49,8 +49,8 @@ var ResponseError = Networking.Response.Error;
 *RequestResolve* Error.RequestResolve(*Networking.Request* request)
 -------------------------------------------------------------------
 
-This error is sent if the request can't be resolved, because no proper handler which can
-handle the request can be found.
+This error is sent if the request can't be resolved,
+because no proper handler which can handle the request can be found.
 
 Access it with:
 ```

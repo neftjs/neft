@@ -3,8 +3,9 @@ Networking
 
 **HTTP, URIs, ...**
 
-Use this module to handle requests and responses (e.g. by the *HTTP* protocol, or locally
-to handle different URIs).
+This module cares about communication client-server and client internally.
+
+Currently only the HTTP protocol is supported.
 
 Access it with:
 ```
@@ -32,8 +33,10 @@ var Networking = require('networking');
 *Array* Networking.TYPES
 ------------------------
 
+This array contains supported types of connection.
+
 Contains:
- - Networking.HTTP
+ - Networking.HTTP.
 
 		@TYPES = [
 			(@HTTP = 'http')
@@ -42,10 +45,10 @@ Contains:
 *Networking* Networking(*Object* options)
 -----------------------------------------
 
-Creates new *Networking* instance.
+Use this constructor to create new *Networking* instance.
 
-*options* specifies `Networking::type`, `Networking::protocol`,
-`Networking::port`, `Networking::host` and `Rotuing::language`.
+*options* specifies *Networking::type*, *Networking::protocol*,
+*Networking::port*, *Networking::host*, *Networking::url* and *Networking::language*.
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ....'
@@ -66,10 +69,10 @@ Creates new *Networking* instance.
 				assert.isString opts.url
 				assert.notLengthOf opts.url, 0
 				url = opts.url
-				if url[url.length - 1] isnt '/'
-					url += '/'
+				if url[url.length - 1] is '/'
+					url = url.slice 0, -1
 			else
-				url = "#{@protocol}://#{@host}:#{@port}/"
+				url = "#{@protocol}://#{@host}:#{@port}"
 			utils.defineProperty @, 'url', utils.ENUMERABLE, url
 
 			setImmediate => Impl.init @
@@ -80,14 +83,14 @@ Creates new *Networking* instance.
 ReadOnly *String* Networking::type
 ----------------------------------
 
-Refers to the one of the *Networking.TYPES* values.
+This property refers to the one of the *Networking.TYPES* values.
 
 		type: @HTTP
 
 ReadOnly *String* Networking::protocol
 --------------------------------------
 
-		protocol: 'http'
+		protocol: ''
 
 ReadOnly *Integer* Networking::port
 -----------------------------------
@@ -99,33 +102,36 @@ ReadOnly *String* Networking::host
 
 		host: ''
 
-ReadOnly *String* Networking::language
---------------------------------------
-
-		language: ''
-
 ReadOnly *String* Networking::url
 ---------------------------------
 
-The proper URL path contains protocol, port and host.
+This property is a proper URL path contains a protocol, a port and a host.
 
-By default it's created from the protocol, port and host.
+It can be set manually if the external address is different.
+Otherwise it's created automatically.
 
 		url: ''
+
+ReadOnly *String* Networking::language
+--------------------------------------
+
+This property indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
+
+		language: ''
 
 *Networking.Handler* Networking::createHandler(*Object* options)
 ----------------------------------------------------------------
 
-Creates new *Networking.Handler* used to handle requests.
+Use this method to create new [Networking.Handler][].
 
 ```
-app.httpNetworking.createHandler({
-  method: Networking.Request.GET,
-  uri: 'users/{name}',
+app.networking.createHandler({
+  method: 'get',
+  uri: '/users/{name}',
   schema: new Schema({
     name: {
-      required: true,
-      type: 'string'
+      type: 'string',
+      min: 3
     },
   }),
   callback: function(req, res, next){
@@ -159,14 +165,14 @@ app.httpNetworking.createHandler({
 *Networking.Request* Networking::createRequest(*Object* options)
 ----------------------------------------------------------------
 
-Creates local or server request.
+Use this method to create new [Networking.Request][] and handle it.
 
-Given *options* object is used to create [Networking.Request][].
+Local and server requests are supported.
 
 #### Local requests
 
 ```
-app.httpNetworking.createRequest({
+app.networking.createRequest({
   uri: '/achievements/world_2',
   onLoaded: function(res){
     if (res.isSucceed()){
@@ -181,8 +187,8 @@ app.httpNetworking.createRequest({
 #### Requests to the server
 
 ```
-app.httpNetworking.createRequest({
-  method: Networking.Request.POST,
+app.networking.createRequest({
+  method: 'post',
   uri: 'http://server.domain/comments',
   data: {message: 'Great article! Like it.'},
   onLoaded: function(res){
@@ -238,8 +244,9 @@ app.httpNetworking.createRequest({
 					err = null
 					utils.async.forEach handlers, (handler, i, handlers, next) ->
 						handler.exec req, res, (_err) ->
-							if _err
-								err = _err
+							if _err instanceof Networking.Handler.CallbackError
+								log.error "Error in '#{handler.uri}': #{_err}"
+							err = _err
 							next()
 
 					, ->

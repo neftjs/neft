@@ -16,12 +16,10 @@ Response
 *Array* Response.STATUSES
 -------------------------
 
-Abstract values used to describe response type.
+This array contains abstract codes used to describe a response type.
 
-This values are used in the `Response::status` property and for `Response::send()` method.
-
-Each status corresponds to the HTTP numeral value
-(check http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html for more).
+Each status corresponds to the HTTP numeral value.
+Check [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html]() for more.
 
 Contains:
  - Response.OK,
@@ -42,7 +40,7 @@ Contains:
  - Response.UNSUPPORTED_MEDIA_TYPE,
  - Response.INTERNAL_SERVER_ERROR,
  - Response.NOT_IMPLEMENTED,
- - Response.SERVICE_UNAVAILABLE
+ - Response.SERVICE_UNAVAILABLE.
 
 ```
 console.log(Networking.Response.OK);
@@ -87,9 +85,9 @@ console.log(Networking.Response.BAD_REQUEST);
 *Response* Response(*Object* options)
 -------------------------------------
 
-Class represents response for a request.
+This class represents a response for a request.
 
-It's created automatically and used to handle a request.
+It's created automatically in the [Networking::createRequest()][] method.
 
 Access it with:
 ```
@@ -113,7 +111,7 @@ var Response = Networking.Response;
 			@pending = true
 
 			if opts.status?
-				@destroy()
+				@send()
 
 			# whether response will be send on the next tick
 			utils.defineProperty @, '_waitingToSend', utils.WRITABLE, false
@@ -121,9 +119,7 @@ var Response = Networking.Response;
 *Signal* Response::sent()
 -------------------------
 
-This signal is called when the response has been marked as going to be sent.
-
-After this signal, the response can't be modified.
+This signal is called when a response has been sent.
 
 ```
 res.onSent(function(){
@@ -133,31 +129,35 @@ res.onSent(function(){
 
 		signal.createLazy @::, 'sent'
 
+*Signal* Response::destroyed()
+------------------------------
+
+This signal is called when a response data is no longer in use.
+
+Check *Response::destroy()* for more.
+
+		signal.createLazy @::, 'destroyed'
+
 ReadOnly *Boolean* Response::pending
 ------------------------------------
 
-It's *true* if the response is active, *false* if the response has been
-destroyed or sent and can't be modified.
+This property indicates whether a response is not destroyed.
 
 		pending: false
 
 ReadOnly *Networking.Request* Response::request
 -----------------------------------------------
 
-Reference to the *request*.
-
-This request is active until the response is pending.
+This proeprty refers to the [Networking.Request][].
 
 		request: null
 
-*Integer* Response::status
---------------------------
+*Integer* Response::status = Response.OK
+----------------------------------------
 
-Normalized code determines response type.
+This property keeps a normalized code determines response type.
 
-Use one of the constant values provided in the `Response.STATUSES`.
-
-It's equal `Response.OK` by default.
+It refers to one of the *Response.STATUSES* values.
 
 ```
 res.status = Networking.Response.CREATED;
@@ -169,7 +169,9 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 *Any* Response::data
 --------------------
 
-Value to send. It can be set manually or by the `Response::send()` method.
+This property value will be sent to a client as a response data.
+
+It can be set manually or by the *Response::send()* method.
 
 ```
 res.data = {items: ['superhero toy', 'book']};
@@ -182,16 +184,16 @@ res.data = Document.fromJSON(...);
 *Response* Response::setHeader(*String* name, *String* value)
 -------------------------------------------------------------
 
-Sets a single header. If the header already exists, its value will be replaced.
+Use this method to set a header.
 
-Currently this method has no effect for local responses.
+Currently this method has no effect for a local requests.
 
 ```
 res.setHeader('Location', '/redirect/to/url');
 ```
 
 		setHeader: (name, val) ->
-			assert.ok @pending
+			assert.ok @request.pending
 			assert.isString name, '::setHeader name argument ...'
 			assert.notLengthOf name, 0, '::setHeader name argument ...'
 			assert.isString val, '::setHeader value argument ...'
@@ -204,24 +206,22 @@ res.setHeader('Location', '/redirect/to/url');
 Response::send([*Integer* status, *Any* data])
 ----------------------------------------------
 
-Marks response as ready to be sent.
+Use this method to send a response.
 
 This method calls *sent()* signal asynchronously.
 
-You can still change response status and data, but only synchronously.
-
-This method automatically parses got data which is determined by the environment.
+You can still change a response status and data, but only synchronously.
 
 ```
 res.send(Networking.Response.OK, {user: 'Max', age: 43});
 
 res.onSent(function(){
-  console.log("Response has been sent and it's not active");
+  console.log("Response has been sent");
 });
 ```
 
 		send: (status, data) ->
-			assert.ok @pending
+			assert.ok @request.pending
 
 			if not data? and typeof status isnt 'number'
 				data = status
@@ -246,9 +246,7 @@ res.onSent(function(){
 
 		sendData = (res) ->
 			assert.instanceOf res, Response
-			assert.ok res.pending
 
-			utils.defineProperty res, 'pending', utils.ENUMERABLE, false
 			res.request.loaded? res
 
 			{data} = res
@@ -265,12 +263,17 @@ res.onSent(function(){
 Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 ---------------------------------------------------------------------
 
+Use this method to redirect a client to the other uri.
+
+*Response.FOUND* status is typically used for a temporary redirect and *Response.MOVED* for
+a permanent redirect.
+
 		redirect: (status, uri) ->
 			if uri is undefined
 				uri = status
 				status = Response.FOUND
 
-			assert.ok @pending
+			assert.ok @request.pending
 			assert.ok utils.has(Response.STATUSES, status)
 			assert.isString uri
 
@@ -279,7 +282,6 @@ Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 			@status = status
 			@setHeader 'Location', uri
 
-			utils.defineProperty @, 'pending', utils.ENUMERABLE, false
 			@request.destroy()
 			@request.loaded? @
 
@@ -289,7 +291,7 @@ Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 Response::raise(*Any* error)
 ----------------------------
 
-Finishes response as failed.
+This method finishes a response with an error.
 
 ```
 res.raise(new Networking.Response.Error("Login first"));
@@ -305,7 +307,25 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 *Boolean* Response::isSucceed()
 -------------------------------
 
-Returns *true* if status is in range from 200 to 299.
+This method returns *true* if a response status is in the range from 200 to 299.
 
 		isSucceed: ->
 			300 > @status >= 200
+
+Response::destroy()
+-------------------
+
+Call this method if the response data is no longer in use.
+
+This functionality is typically used on the client side, when a rendered document
+is still visible until the next request.
+
+This method calls the *destroyed()* signal.
+
+		destroy: ->
+			assert.ok @pending
+
+			@pending = false
+			@destroyed?()
+
+			return

@@ -16,6 +16,8 @@ Handler
 *UriNotValidError* Handler.UriNotValidError : *Error*
 -----------------------------------------------------
 
+This error class is raised if a handler *Uri* is not valid with a request.
+
 Access it with:
 ```
 var Networking = require('networking');
@@ -30,6 +32,9 @@ var UriNotValidError = Networking.Handler.UriNotValidError;
 
 *CallbackError* Handler.CallbackError : *Error*
 -----------------------------------------------
+
+This error class is used if the handler callback function raised an error synchronously or
+asynchronously (calling a *callback* argument with an error).
 
 Access it with:
 ```
@@ -47,12 +52,14 @@ var CallbackError = Networking.Handler.CallbackError;
 *Handler* Handler(*Object* options)
 -----------------------------------
 
-Abstract class used to describe networking handler.
+This class represents a callback function called on a request.
 
-You should use **Networking::createHandler()** to create functional handler.
+Each handler must determine an *Uri*, which is compared with the got request.
 
-*options* specifies **Handler::method**, **Handler::uri**,
-**Handler::schema** and **Handler::callback**.
+You should use **Networking::createHandler()** to create a functional handler.
+
+*options* specifies a *Handler::method*, a *Handler::uri*,
+a *Handler::schema* and a *Handler::callback*.
 
 Access it with:
 ```
@@ -77,38 +84,55 @@ var Handler = Networking.Handler;
 *String* Handler::method
 ------------------------
 
-One of the **Networking.Request.METHODS** values.
+This property describes which type of a request, this handler can handle.
+
+It's one of the **Networking.Request.METHODS** values.
 
 		method: ''
 
 *Networking.Uri* Handler::uri
 -----------------------------
 
+This property is compared with a request uri.
+
+If it's not valid with the request uri, a *UriNotValidError* error is raised,
+otherwise schema is used to further validate.
+
 		uri: null
 
-*Schema* Handler::schema
-------------------------
+*Schema* Handler::schema = null
+-------------------------------
 
-Optional schema used to validate parameters.
+This property is used to determine whether a request uri is valid and can be handled by
+the handler callback.
+
+If not, a *UriNotValidError* error is raised.
+
+This property is optional in the constructor.
 
 		schema: null
 
 *Function* Handler::callback
 ----------------------------
 
-This function is used to handle the request.
+This function is used to handle a request.
 
 It's called with three parameters: **Networking.Request**, **Networking.Response** and
-*next* function.
+a *next* function.
+
+If *next* function is called, next handler is checked.
 
 		callback: null
 
 Handler::exec(*Networking.Request* request, *Networking.Response* response, *Function* next)
 --------------------------------------------------------------------------------------------
 
-Executes a handler.
+This method executes a handler, that is:
+ - compare a uri with a request,
+ - validate the request uri with a schema,
+ - call a callback.
 
-This method is internally called by the **Networking.createRequest** on matched handlers.
+It's internally called by the **Networking.createRequest()**.
 
 		exec: (req, res, next) ->
 			assert.instanceOf req, Networking.Request, '::exec request argument ...'
@@ -140,34 +164,32 @@ This method is internally called by the **Networking.createRequest** on matched 
 			# on callback fail
 			callbackNext = (err) =>
 				req.handler = null
-				next new CallbackError err
-
-			log "Use `#{@method} #{@uri}` handler"
-
-			req.handler = @
-			utils.tryFunction @callback, @, [req, res, callbackNext], (err) ->
-				if err
-					# TODO: move building errors into more generic place
+				if err? and err isnt true
 					errMsg = err
 					if err.stack?
 						if utils.isQml
 							errMsg = "#{err.message}\n#{err.stack}"
 						else
 							errMsg = err.stack
+				if errMsg
+					next new CallbackError errMsg
+				else
+					next new UriNotValidError
 
-					log.error "Error raised in `#{@uri}` handler\n#{errMsg}"
+			log "Use `#{@method} #{@uri}` handler"
 
-				callbackNext null
+			req.handler = @
+			utils.tryFunction @callback, @, [req, res, callbackNext], callbackNext
 
 			null
 
 *String* Handler::toString()
 ----------------------------
 
-Returns string describing the handler.
+This method returns a string describing a handler: a uri prefixed by a method.
 
 ```
-"get users/{name}"
+"get /users/{name}"
 ```
 
 		toString: ->

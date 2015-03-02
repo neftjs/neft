@@ -14,16 +14,16 @@ Request
 *Array* Request.METHODS
 -----------------------
 
-Available request methods which can be used in created and got requests.
+This array contains available *HTTP* methods.
 
-This constant values are used in the `Request::method` property.
+Check *Request::method* for more.
 
 Contains:
  - Request.GET,
  - Request.POST,
  - Request.PUT,
  - Request.DELETE,
- - Request.OPTIONS
+ - Request.OPTIONS.
 
 		@METHODS = [
 			(@GET = 'get'),
@@ -36,14 +36,14 @@ Contains:
 *Array* Request.TYPES
 ---------------------
 
-Values descrbes expected response data type.
+This array contains available expected types.
 
-This constant values are used in the `Request::type` property.
+Check *Request::type* for more.
 
 Contains:
  - Request.TEXT_TYPE,
  - Request.JSON_TYPE,
- - Request.HTML_TYPE
+ - Request.HTML_TYPE.
 
 		@TYPES = [
 			(@TEXT_TYPE = 'text'),
@@ -54,12 +54,12 @@ Contains:
 *Request* Request(*Object* options)
 -----------------------------------
 
-Abstract class used to describe routing request.
+This class is used to describe coming networking request.
 
-You should use `Networking::createRequest()` to create a full request.
+You should use *Networking::createRequest()* to create a full request.
 
-*options* specifies **Request::method**, **Request::uri**, **Request::data**, **Request::type**
-and signal handlers.
+*options* specifies a *Request::method*, a *Request::uri*, a *Request::data*,
+a *Request::type* and signal handlers.
 
 Access it with:
 ```
@@ -98,23 +98,21 @@ var Request = Networking.Request;
 *Signal* Request::destroyed()
 -----------------------------
 
-**Signal** called by the `Networking.Response` when some data is ready to be send.
+This signal is called by the [Networking.Response][] when data is ready to be sent.
 
-This signal is called before the `Networking::loaded()` signal.
-
-You can listen on this signal using the `onDestroyed` handler.
+It's called before the *loaded()* signal.
 
 		signal.createLazy @::, 'destroyed'
 
 *Signal* Request::loaded(*Networking.Response* res)
-------------------------------------------------
+---------------------------------------------------
 
-**Signal** called by the `Networking.Response` when the final data is ready.
+This signal is called by the [Networking.Response][] when data is going to be sent.
 
-When this signal is called, `Request` is already destroyed.
+When this signal is called, the request is already destroyed.
 
-Notice, that the failed `Networking.Response` also use this signal.
-You should always use `Request::isSucceed()` to check whether request succeeded.
+Notice, that failed response also calls this signal, therefore
+you should use [Networking.Response::isSucceed()][] to check whether request succeeded.
 
 ```
 req.onLoaded(function(res){
@@ -129,35 +127,42 @@ req.onLoaded(function(res){
 ReadOnly *String* Request::uid
 ------------------------------
 
-Pseudo unique hash.
+It's a pseudo unique hash. It's created automatically.
 
 		uid: ''
 
 ReadOnly *Boolean* Request::pending
 -----------------------------------
 
-It's `true` if the request is active, `false` if the request has been destroyed.
+This property indicates whether a request is not destroyed.
 
-This property is changed by the `Networking.Response`.
+If it's *false*, the request can't be changed.
+
+Check *destroyed()* for more.
 
 		pending: false
 
 *String* Request::method
 ------------------------
 
-Request method. Available values are described in the `Request.METHODS`.
+This property refers to one of the *Request.METHODS* values.
+
+It holds a method with which the request has been called.
 
 		method: Request.GET
 
-*String* Reuqest::uri
+*String* Request::uri
 ---------------------
 
-This property referts to the URI path.
+This property refers to the request URI path.
 
-For local requests, this property doesn't contains protocol, hostname and port.
+It can holds local and absolute paths.
 
 ```
-// for requests send to the server ...
+// for request sent to the server ...
+"http://server.domain/auth/user"
+
+// for got request on the server ...
 "http://server.domain/auth/user"
 
 // for local requests ...
@@ -171,44 +176,48 @@ For local requests, this property doesn't contains protocol, hostname and port.
 
 This property describes expected response type.
 
-Check `Request.TYPES` for available types.
+It's used in the server-client communication.
+In most cases, a server returns an HTML document for a crawler, but client
+(which renders documents on his own) expects a clean JSON response.
+That's why, these two requests have the same uri, but different expected types.
+
+It refers to one of the *Request.TYPES* values.
 
 		type: @JSON_TYPE
 
-*Object* Request::data
-----------------------
+*Object* Request::data = null
+-----------------------------
 
-Data submitted in the request body. It can be for example, a form data.
+This property holds a data sent with a request.
+It can be, for instance, a form data.
 
 		data: null
 
 *Networking.Handler* Request::handler
-----------------------------------
+-------------------------------------
 
-The currently matched `Networking.Handler`.
+This property refers to the current considered [Networking.Handler][].
+
+It's set by the [Networking.Handler][] itself.
 
 		handler: null
 
-ReadOnly *Object* Request::params
----------------------------------
+ReadOnly *Object* Request::params = {}
+--------------------------------------
 
-This property is an object containing matched parameters from the handler.
+This property keeps matched parameters by a handler in the request uri.
 
-For example, considering `users/{name}` uri,
-the "name" property is available as `req.params.name`.
-
-It's `{}` by default.
+Considering */users/{name}* [Networking.Uri],
+the 'name' property is available as *req.params.name*.
 
 		params: null
 
 ReadOnly *Object* Request::headers
 ----------------------------------
 
-The request headers object.
+This object contains request headers.
 
-Modifying this object has no effect.
-
-For client requests, this object is empty.
+For a client request, this object is empty.
 
 		Object.defineProperty @::, 'headers',
 			get: -> Impl.getHeaders(@) or {}
@@ -216,7 +225,7 @@ For client requests, this object is empty.
 ReadOnly *String* Request::userAgent
 ------------------------------------
 
-This property describes client user agent.
+This property describes a client user agent.
 
 It can be used on the client side and on the server side.
 
@@ -226,29 +235,28 @@ It can be used on the client side and on the server side.
 Request::destroy()
 ------------------
 
-Marks request as resolved. This action is terminal.
+Use this method to mark a request as resolved. This action is terminal.
 
-It's not necessary to call this method manually,
-because `response` gives a signal to destroy the request.
-
-This method calls `Request::destroyed()` signal.
+It's called automatically by the [Networking.Response][].
 
 		destroy: ->
 			assert.ok @pending
 
-			utils.defineProperty @, 'pending', utils.ENUMERABLE, false
+			@pending = false
 			@destroyed()
 
-			null
+			return
 
 *String* Request::toString()
 ----------------------------
 
-Returns string describing the request.
+This method returns a string describing the request.
+
+It contains a *Request::method*, a *Request::uri* and a *Request::type*.
 
 ```
 console.log(req.toString);
-// get /users/id as object
+// get /users/id as json
 ```
 
 		toString: ->

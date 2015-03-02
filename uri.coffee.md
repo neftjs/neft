@@ -17,11 +17,11 @@ Uri
 *Uri* Uri(*String* uri)
 -----------------------
 
-This class represents URI strings with parameters.
+This class represents a uri string with parameters.
 
-Parameter must be wrapped by the curly brackets **{…}**.
+The parameter must be wrapped by the curly brackets **{…}**.
 
-**Rest parameters** are not greedy and are wrapped with **{…*}** or just **…***.
+**Rest parameters** are not greedy and are wrapped by **{…*}** or just **…***.
 Rest parameters don't have to be named (**{*}** is allowed).
 
 ```
@@ -49,7 +49,7 @@ var Uri = Networking.Uri;
 
 			# uri
 			uri = Uri.URI_TRIM_RE.exec(uri)[1]
-			utils.defineProperty @, '_uri', null, uri
+			utils.defineProperty @, '_uri', null, "/#{uri}"
 
 			# names
 			names = []
@@ -75,14 +75,14 @@ var Uri = Networking.Uri;
 *Object* Uri::params = {}
 -------------------------
 
-Last **Uri::match()** result.
+This property holds last *Uri::match()* result.
 
 		params: null
 
 *Boolean* Uri::test(*String* uri)
 ---------------------------------
 
-Test whether this URI is valid with the given string.
+Use this method to test whether a uri is valid with the given string.
 
 		test: (uri) ->
 			@_re.test uri
@@ -90,10 +90,10 @@ Test whether this URI is valid with the given string.
 *Object* Uri::match(*String* uri)
 ---------------------------------
 
-Get parameters from the given string.
+This method returns parameters from the given string.
 
-If the *uri* parameter isn't valid with this **Uri**, error will be raised.
-In such case, you should use **Uri::test()** before.
+If the given uri is not valid with a uri, error will be raised.
+In such case, you should use the *Uri::test()* method before.
 
 		match: (uri) ->
 			assert.ok @test(uri)
@@ -110,16 +110,18 @@ In such case, you should use **Uri::test()** before.
 *String* Uri::toString([*Object|Dict* params])
 ----------------------------------------------
 
-Parses **Uri** into a string.
+This method parses a uri into a string.
 
-*params* object can be optionally passed as an argument.
-It will be used to replace uri chunks (works like standard
-string formatting but on the named parameters).
+The given *params* object is used to replace the uri parameters.
 
 ```
 var uri = new Networking.Uri('user/{name}');
+
 console.log(uri.toString({name: 'Jane'}));
-// user/Jane
+// /user/Jane
+
+console.log(uri.toString());
+// /user/{name}
 ```
 
 		toString: (params) ->
