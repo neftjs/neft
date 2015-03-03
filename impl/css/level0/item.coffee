@@ -273,15 +273,19 @@ module.exports = (impl) ->
 		queue = []
 		queueItems = {}
 
-		getTransforms = (item) ->
+		getTransforms = (item, style) ->
 			transform = ''
 
 			# position
 			if item._impl.isHot and transform3dSupported
 				transform = "translate3d(#{item._x}px, #{item._y}px, 0) "
 			else
-				markAction item
-				transform = "translate(#{item._x}px, #{item._y}px) "
+				# BUG: blurred texts sometimes
+				# transform = "translate(#{item._x}px, #{item._y}px) "
+				if markAction(item) is true
+					return getTransforms(item, style)
+				style.left = "#{item._x}px"
+				style.top = "#{item._y}px"
 
 			# rotation
 			if item._rotation
@@ -291,7 +295,7 @@ module.exports = (impl) ->
 			if item._scale isnt 1
 				transform += "scale(#{item._scale}) "
 
-			transform
+			style[transformProp] = transform
 
 		updateItem = (item, styles) ->
 			data = item._impl
@@ -305,7 +309,7 @@ module.exports = (impl) ->
 					return
 
 			if styles & STYLE_TRANSFORM
-				style[transformProp] = getTransforms item
+				getTransforms item, style
 			if styles & STYLE_WIDTH
 				style.width = "#{item._width}px"
 			if styles & STYLE_HEIGHT
@@ -344,15 +348,20 @@ module.exports = (impl) ->
 			return
 
 	markAction = (item) ->
-		storage = item._impl
+		data = item._impl
 
-		if nowTime - storage.lastAction < HOT_MAX_TIME
-			if storage.hotActions++ > HOT_MAX_ACTIONS
-				{style, id} = storage.elem
-				storage.isHot = true
+		if nowTime - data.lastAction < HOT_MAX_TIME
+			if data.hotActions++ > HOT_MAX_ACTIONS
+				{style, id} = data.elem
+				data.elem.style.left = ''
+				data.elem.style.top = ''
+				data.isHot = true
+				return true
 		else
-			storage.hotActions = 0
-			storage.lastAction = nowTime
+			data.hotActions = 0
+			data.lastAction = nowTime
+
+		false
 
 	DATA =
 		bindings: null
@@ -439,7 +448,12 @@ module.exports = (impl) ->
 				return
 
 			if self[ns][signalName](arg) is signal.STOP_PROPAGATION
+				if name is 'pointerPressed'
+					document.body.setAttribute 'class', 'unselectable'
 				e.stopPropagation()
+			else
+				if name is 'pointerReleased'
+					document.body.setAttribute 'class', ''
 			return
 
 		if typeof implName is 'string'

@@ -65,6 +65,16 @@ img {
 	height: 100%;
 	z-index: 1;
 }
+.unselectable,
+.unselectable:focus {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	outline-style:none;
+}
 "
 
 isTouch = 'ontouchstart' of window

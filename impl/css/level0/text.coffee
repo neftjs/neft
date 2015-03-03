@@ -123,7 +123,6 @@ module.exports = (impl) ->
 			document.body.appendChild styles
 
 			textImpl.fontReady()
-		, 1000
 
 	updateContent = do ->
 		queue = []
