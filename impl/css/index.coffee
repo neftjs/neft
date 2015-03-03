@@ -38,12 +38,6 @@ html, body {
 span span {
 	position: static;
 }
-span {
-	-ms-word-break: break-all;
-	word-break: break-all;
-	word-break: break-word;
-	word-wrap: break-word;
-}
 span * {
 	display: inline;
 	font-weight: inherit;

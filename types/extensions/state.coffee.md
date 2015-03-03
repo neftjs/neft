@@ -291,14 +291,20 @@ This property has a setter, which accepts strings and arrays of strings.
 				getter: do ->
 					onChanged = (oldVal, index) ->
 						{states} = @
+						unless @_stateExtensions
+							return
 						unless states.has(oldVal)
 							@_stateExtensions[oldVal]?.disable()
 						@_stateExtensions[states.get(index)]?.enable()
 
 					onInserted = (val, index) ->
+						unless @_stateExtensions
+							return
 						@_stateExtensions[@states.get(index)]?.enable()
 
 					onPopped = (oldVal, index) ->
+						unless @_stateExtensions
+							return
 						unless @states.has(oldVal)
 							@_stateExtensions[oldVal]?.disable()
 

@@ -33,18 +33,33 @@ module.exports = (impl) ->
 		if not updatePending
 			auto = @_impl.autoWidth = @width is 0
 			@_impl.elem.wrapMode = if auto then Text.NoWrap else Text.Wrap
+		if @_impl.autoWidth or @_impl.autoHeight
+			updateSize.call @
 
 	onHeightChanged = ->
 		if not updatePending
 			@_impl.autoHeight = @height is 0
+		if @_impl.autoWidth or @_impl.autoHeight
+			updateSize.call @
 
 	onLickActivated = (link) ->
 		__location.append link
 
+	onFontLoaded = (name) ->
+		fontFamily = @_impl.fontFamily
+		if name is fontFamily
+			@_impl.elem.font.family = impl.fonts[fontFamily]
+			impl.onFontLoaded.disconnect onFontLoaded, @
+			@_impl.listensOnFontLoaded = false
+		return
+
 	DATA =
 		autoWidth: true
 		autoHeight: true
+		fontFamily: 'sans-serif'
+		listensOnFontLoaded: false
 
+	exports =
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner Item.DATA, DATA
@@ -52,13 +67,14 @@ module.exports = (impl) ->
 	create: (data) ->
 		elem = data.elem ?= impl.utils.createQmlObject(
 			'Text {' +
-				'property string _fontFamily: "sans-serif";' +
 				'font.pixelSize: 14;' +
-				'font.family: (stylesWindow.fonts[this._fontFamily] || true).name || "";' +
+				'textFormat: Text.StyledText;' +
 			'}'
 		)
 
 		Item.create.call @, data
+
+		exports.setTextFontFamily.call @, data.fontFamily
 		
 		# update size
 		elem.onFontChanged.connect @, updateSize
@@ -93,7 +109,15 @@ module.exports = (impl) ->
 		@_impl.elem.lineHeight = val
 
 	setTextFontFamily: (val) ->
-		@_impl.elem._fontFamily = val.toLowerCase()
+		val = val.toLowerCase()
+		@_impl.fontFamily = val
+		if impl.fonts[val]
+			@_impl.elem.font.family = impl.fonts[val]
+		else
+			unless @_impl.listensOnFontLoaded
+				impl.onFontLoaded onFontLoaded, @
+				@_impl.listensOnFontLoaded = true
+		return
 
 	setTextFontPixelSize: (val) ->
 		@_impl.elem.font.pixelSize = val

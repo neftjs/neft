@@ -140,7 +140,7 @@ SPECIAL_KEY_CODES =
 SIGNALS_ARGS =
 	'pointerWheel': do ->
 		REQUIRED_CHECKS = 200
-		NORMALIZED_VALUE = 260
+		NORMALIZED_VALUE = 260 * 4
 
 		checks = 0
 		lastX = lastY = 0
@@ -229,8 +229,6 @@ SIGNALS_ARGS =
 
 		getRestrictedMouseCoords e
 	'keysPressed': (e) ->
-		e.preventDefault()
-
 		code = e.which or e.keyCode
 		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
 
@@ -240,8 +238,6 @@ SIGNALS_ARGS =
 
 		key: key
 	'keysHold': (e) ->
-		e.preventDefault()
-
 		code = e.which or e.keyCode
 		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
 

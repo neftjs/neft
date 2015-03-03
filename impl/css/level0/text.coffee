@@ -166,7 +166,7 @@ module.exports = (impl) ->
 			auto = @_impl.autoWidth = width is 0
 			textElement.style.whiteSpace = if auto then 'pre' else 'pre-wrap'
 			textElement.style.width = if auto then 'auto' else "#{width}px"
-			if auto
+			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
 
 	onHeightChanged = ->
@@ -175,7 +175,7 @@ module.exports = (impl) ->
 			{textElement} = @_impl
 			auto = @_impl.autoHeight = height is 0
 			textElement.style.height = if auto then 'auto' else "#{height}px"
-			if auto
+			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
 
 	SHEET = """

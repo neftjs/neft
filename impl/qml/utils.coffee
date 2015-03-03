@@ -40,6 +40,6 @@ exports.toUrl = (url) ->
 	if ///^[a-zA-Z]+:\/\////.test url
 		url
 	else
-		if url[0] is '/'
-			url = url.slice 1
+		if url[0] isnt '/'
+			url = "/#{url}"
 		require('renderer').serverUrl + url

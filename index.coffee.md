@@ -85,7 +85,7 @@ Row {
     width: 50
     height: 50
     rotation: Math.min(Math.PI / 8, Math.random() * Math.PI) // just a function
-    x: parent.x // parent here refers to the column
+    y: parent.y // parent here refers to the column
   }
 }
 ```
