@@ -95,8 +95,6 @@ Positioning/Scrollable
 
 			@onReady ->
 				{contentItem} = @
-				expect().some(@children).toBe contentItem
-
 				if @_autoVerticalScrollbar
 					@verticalScrollbar = Scrollable.createDefaultVerticalScrollbar()
 
@@ -119,11 +117,10 @@ Positioning/Scrollable
 			defaultValue: null
 			implementation: Impl.setScrollableContentItem
 			setter: (_super) -> (val) ->
-				expect(val).toBe.any Renderer.Item
-				oldVal = @contentItem
-				val.parent = @
+				if val?
+					expect(val).toBe.any Renderer.Item
+					val.parent = null
 				_super.call @, val
-				oldVal?.parent = null
 
 *Renderer.Item* Scrollable::verticalScrollbar
 ---------------------------------------------

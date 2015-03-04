@@ -36,11 +36,13 @@ SIGNALS =
 	'pointerEntered': 'mouseenter'
 	'pointerExited': 'mouseleave'
 	'pointerMove': 'mousemove'
-	'pointerWheel': (elem) ->
-		if isFirefox
-			'DOMMouseScroll'
-		else
+	'pointerWheel': do ->
+		if 'onwheel' of document.createElement("div")
+			'wheel'
+		else if document.onmousewheel isnt undefined
 			'mousewheel'
+		else
+			'MozMousePixelScroll'
 	'keysPressed': 'keydown'
 	'keysHold': 'keydown'
 	'keysReleased': 'keyup'
@@ -139,32 +141,24 @@ SPECIAL_KEY_CODES =
 
 SIGNALS_ARGS =
 	'pointerWheel': do ->
-		REQUIRED_CHECKS = 200
-		NORMALIZED_VALUE = 260 * 4
-
-		checks = 0
-		lastX = lastY = 0
+		NORMALIZED_VALUE = 3
 
 		isSlowContinuous = false
 
 		getDeltas = (e) ->
 			e.preventDefault()
 
-			x = e.wheelDeltaX || 0
-			y = e.wheelDelta || -e.detail
+			x = e.wheelDeltaX or -e.deltaX or 0
+			y = e.wheelDelta or -e.deltaY or -e.detail or 0
+
+			if isFirefox and e.deltaMode is e.DOM_DELTA_LINE
+				x *= 25
+				y *= 25
 
 			x: x
 			y: y
 
-		normalizedWheel = (e) ->
-			r = getDeltas e
-
-			r.x = Math.max(-1, Math.min(1, r.x)) * NORMALIZED_VALUE
-			r.y = Math.max(-1, Math.min(1, r.y)) * NORMALIZED_VALUE
-
-			r
-
-		continuousWheel = (e) ->
+		(e) ->
 			deltas = getDeltas e
 
 			# MAGIC!
@@ -177,48 +171,10 @@ SIGNALS_ARGS =
 					isSlowContinuous = true
 
 			if isSlowContinuous
-				deltas.x *= 25
-				deltas.y *= 25
+				deltas.x *= NORMALIZED_VALUE
+				deltas.y *= NORMALIZED_VALUE
 
 			deltas
-
-		(e) ->
-			x = e.wheelDeltaX || 0
-			y = e.wheelDelta || -e.detail
-
-			# check whether we check it enough
-			if checks < REQUIRED_CHECKS
-				absX = Math.abs x
-				absY = Math.abs y
-
-				# check if it's not first validation
-				if checks > 0
-					# check whether values change in time
-					if absX isnt lastX or absY isnt lastY
-						# always use continuous wheel
-						SIGNALS_ARGS.pointerWheel = continuousWheel
-						return continuousWheel e
-
-				# save current deltas to compare it in the next check
-				lastX = absX
-				lastY = absY
-				checks++
-			else
-				# values don't change, always use normalized wheel
-				SIGNALS_ARGS.pointerWheel = normalizedWheel
-				return normalizedWheel e
-
-			# use normalized wheel temporary
-			event = normalizedWheel e
-
-			# smooth first events
-			if checks < 4
-				event = normalizedWheel e
-				event.x /= 10
-				event.y /= 10
-				event
-			else
-				event
 
 	'pointerPressed': getRestrictedMouseCoords
 	'pointerReleased': getMouseCoords
@@ -259,33 +215,29 @@ HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
 
 module.exports = (impl) ->
-
 	STYLE_TRANSFORM = 1<<0
 	STYLE_WIDTH = 1<<1
 	STYLE_HEIGHT = 1<<2
 	STYLE_OPACITY = 1<<3
-	STYLE_ALL = (1<<4)-1
+	STYLE_SCROLL = impl.STYLE_SCROLL = 1<<4
+	STYLE_ALL = (1<<5)-1
 
 	nowTime = now()
 
-	updateStyles = do ->
+	updateStyles = impl.updateStyles = do ->
 		pending = false
 		queue = []
 		queueItems = {}
 
-		getTransforms = (item, style) ->
+		getTransforms = (item) ->
 			transform = ''
 
 			# position
 			if item._impl.isHot and transform3dSupported
 				transform = "translate3d(#{item._x}px, #{item._y}px, 0) "
 			else
-				# BUG: blurred texts sometimes
-				# transform = "translate(#{item._x}px, #{item._y}px) "
-				if markAction(item) is true
-					return getTransforms(item, style)
-				style.left = "#{item._x}px"
-				style.top = "#{item._y}px"
+				markAction item
+				transform = "translate(#{item._x}px, #{item._y}px) "
 
 			# rotation
 			if item._rotation
@@ -295,7 +247,7 @@ module.exports = (impl) ->
 			if item._scale isnt 1
 				transform += "scale(#{item._scale}) "
 
-			style[transformProp] = transform
+			transform
 
 		updateItem = (item, styles) ->
 			data = item._impl
@@ -309,16 +261,17 @@ module.exports = (impl) ->
 					return
 
 			if styles & STYLE_TRANSFORM
-				getTransforms item, style
+				style[transformProp] = getTransforms item
 			if styles & STYLE_WIDTH
 				style.width = "#{item._width}px"
 			if styles & STYLE_HEIGHT
 				style.height = "#{item._height}px"
 			if styles & STYLE_OPACITY
-				style.opacity = item._opacity
-
-				if item._opacity is 0
+				if (style.opacity = item._opacity) is 0
 					data.isHidden = true
+			if styles & STYLE_SCROLL
+				data.scrollElem.scrollLeft = item._contentX
+				data.scrollElem.scrollTop = item._contentY
 
 			return
 
@@ -350,16 +303,17 @@ module.exports = (impl) ->
 	markAction = (item) ->
 		data = item._impl
 
-		if nowTime - data.lastAction < HOT_MAX_TIME
-			if data.hotActions++ > HOT_MAX_ACTIONS
-				{style, id} = data.elem
-				data.elem.style.left = ''
-				data.elem.style.top = ''
-				data.isHot = true
-				return true
-		else
-			data.hotActions = 0
-			data.lastAction = nowTime
+		if data.hotActions isnt -1
+			if nowTime - data.lastAction < HOT_MAX_TIME
+				if data.hotActions++ > HOT_MAX_ACTIONS
+					{style, id} = data.elem
+					data.elem.style.left = ''
+					data.elem.style.top = ''
+					data.isHot = true
+					return true
+			else
+				data.hotActions = 0
+				data.lastAction = nowTime
 
 		false
 

@@ -3,7 +3,7 @@
 utils = require 'utils'
 signal = require 'signal'
 
-WHEEL_DIVISOR = 8
+WHEEL_DIVISOR = 3
 MIN_POINTER_DELTA = 5
 
 module.exports = (impl) ->
@@ -167,10 +167,10 @@ module.exports = (impl) ->
 			scroll item, x, y
 
 	onWidthChanged = (oldVal) ->
-		if @width < oldVal
+		if @contentItem.width < oldVal
 			scroll @
 	onHeightChanged = (oldVal) ->
-		if @height < oldVal
+		if @contentItem.height < oldVal
 			scroll @
 
 	DATA =
@@ -194,13 +194,15 @@ module.exports = (impl) ->
 
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem
+			impl.setItemParent.call oldVal, null
 			oldVal.onWidthChanged.disconnect onWidthChanged, @
 			oldVal.onHeightChanged.disconnect onHeightChanged, @
 
-		if newVal = val
-			@_impl.contentItem = newVal
-			newVal.onWidthChanged onWidthChanged, @
-			newVal.onHeightChanged onHeightChanged, @
+		if val
+			impl.setItemParent.call val, @
+			@_impl.contentItem = val
+			val.onWidthChanged onWidthChanged, @
+			val.onHeightChanged onHeightChanged, @
 
 	setScrollableContentX: (val) ->
 		@_impl.contentItem?.x = -val

@@ -9,11 +9,11 @@ module.exports = (impl) ->
 		item = impl.window
 		return unless item
 
-		item.width = stylesWindow.width
-		item.height = stylesWindow.height
+		item.width = __stylesWindow.width
+		item.height = __stylesWindow.height
 
-	stylesWindow.widthChanged.connect resize
-	stylesWindow.heightChanged.connect resize
+	__stylesWindow.widthChanged.connect resize
+	__stylesWindow.heightChanged.connect resize
 
 	Types:
 		Item: require './level0/item'
@@ -24,8 +24,8 @@ module.exports = (impl) ->
 		Rectangle: require './level1/rectangle'
 
 	setWindow: (item) ->
-		while child = stylesBody.children[0]
+		while child = __stylesBody.children[0]
 			child.parent = null
 
-		item._impl.elem.parent = stylesBody
+		item._impl.elem.parent = __stylesBody
 		resize()

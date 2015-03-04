@@ -1,31 +1,7 @@
 'use strict'
 
+utils = require 'utils'
 signal = require 'signal'
-
-SIGNALS =
-	'pointerClicked': 'onClicked'
-	'pointerPressed': 'onPressed'
-	'pointerReleased': 'onReleased'
-	'pointerEntered': 'onEntered'
-	'pointerExited': 'onExited'
-	'pointerMove': 'onPositionChanged'
-	'pointerWheel': 'onWheel'
-	'keysPressed': 'onPressed'
-	'keysHold': 'onPressed'
-	'keysReleased': 'onReleased'
-	'keysInput': 'onPressed'
-
-HOVER_SIGNALS =
-	'pointerEntered': true
-	'pointerExited': true
-	'pointerMove': true
-
-SIGNALS_CURSORS =
-	'pointerClicked': Qt.PointingHandCursor
-
-mouseCoordsArgs = (e) ->
-	x: e.x
-	y: e.y
 
 KEY_CODES = {}
 KEY_CODES[Qt.Key_Escape] = 'Escape'
@@ -104,6 +80,31 @@ KEY_CODES[Qt.Key_Y] = 'Y'
 KEY_CODES[Qt.Key_Z] = 'Z'
 
 pressedKeys = Object.create null
+
+SIGNALS =
+	'pointerClicked': 'onClicked'
+	'pointerPressed': 'onPressed'
+	'pointerReleased': 'onReleased'
+	'pointerEntered': 'onEntered'
+	'pointerExited': 'onExited'
+	'pointerMove': 'onPositionChanged'
+	'pointerWheel': 'onWheel'
+	'keysPressed': 'onPressed'
+	'keysHold': 'onPressed'
+	'keysReleased': 'onReleased'
+	'keysInput': 'onPressed'
+
+HOVER_SIGNALS =
+	'pointerEntered': true
+	'pointerExited': true
+	'pointerMove': true
+
+SIGNALS_CURSORS =
+	'pointerClicked': Qt.PointingHandCursor
+
+mouseCoordsArgs = (e) ->
+	x: e.x
+	y: e.y
 
 SIGNALS_ARGS =
 	'pointerPressed': mouseCoordsArgs
@@ -194,36 +195,32 @@ module.exports = (impl) ->
 	attachItemSignal: do ->
 		attachPointer = (ns, name, signalName) ->
 			self = @
-			storage = @_impl
+			data = @_impl
 
 			# create mouse area if needed
-			unless mouseArea = storage.mouseArea
-				mouseArea = storage.mouseArea = impl.utils.createQmlObject(
+			unless mouseArea = data.mouseArea
+				mouseArea = data.mouseArea = impl.utils.createQmlObject(
 					'MouseArea {' +
-						'propagateComposedEvents: true;' +
+						'onPressed: mouse.accepted = false;' +
 						'anchors.fill: parent;' +
 					'}'
-				, storage.elem)
+				, data.elem)
 
 			# hover
 			if HOVER_SIGNALS[name]
 				mouseArea.hoverEnabled = true
 
 			# listen on an event
-			signal = SIGNALS[name]
+			qmlName = SIGNALS[name]
 
 			customFunc = (e) ->
-				if e?
-					if e._stopPropagation
-						return
-					e.accepted = false
-
 				arg = SIGNALS_ARGS[name]? e
+				e?.accepted = false
 				if self[ns][signalName](arg) is signal.STOP_PROPAGATION and e?
-					e._stopPropagation = true
+					e.accepted = true
 				return
 
-			mouseArea[signal].connect customFunc
+			mouseArea[qmlName].connect customFunc
 
 			# cursor
 			if cursor = SIGNALS_CURSORS[name]
@@ -232,8 +229,8 @@ module.exports = (impl) ->
 
 		attachKeys = (ns, name, signalName) ->
 			self = @
-			signal = SIGNALS[name]
-			stylesWindow.Keys[signal].connect (e) ->
+			qmlName = SIGNALS[name]
+			stylesWindow.Keys[qmlName].connect (e) ->
 				arg = SIGNALS_ARGS[name] e
 				if self[ns][signalName](arg) is signal.STOP_PROPAGATION
 					e.accepted = true

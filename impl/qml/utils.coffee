@@ -3,7 +3,7 @@ exports.createQmlObject = do ->
 
 	createItemComponent = (type) ->
 		qmlStr = "import QtQuick 2.3; Component { #{type} }"
-		components[type] = Qt.createQmlObject qmlStr, stylesHatchery
+		components[type] = Qt.createQmlObject qmlStr, __stylesHatchery
 
 	(type, parent=null) ->
 		component = components[type] or createItemComponent(type)
