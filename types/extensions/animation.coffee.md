@@ -51,6 +51,7 @@ Animation
 
 				expect(val).toBe.boolean()
 				_super.call @, val
+				@_when = val
 
 				if val
 					Impl.playAnimation.call @

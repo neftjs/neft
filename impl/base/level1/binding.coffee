@@ -165,55 +165,26 @@ module.exports = (impl) ->
 				else
 					null
 
-		updateBinding = (binding) ->
-			unless binding.args
+		update: ->
+			unless @args
 				return
 
-			result = utils.tryFunction binding.func, null, binding.args
+			result = utils.tryFunction @func, null, @args
 			unless result?
-				result = getDefaultValue binding
+				result = getDefaultValue @
 
 			# extra func
-			if binding.extraResultFunc
-				funcResult = binding.extraResultFunc binding.item
+			if @extraResultFunc
+				funcResult = @extraResultFunc @item
 				if typeof funcResult is 'number' and isFinite(funcResult)
 					result += funcResult
 
 			if typeof result is 'number' and not isFinite(result)
-				result = getDefaultValue binding
+				result = getDefaultValue @
 
-			binding.updatePending = true
-			binding.getObj()[binding.prop] = result
-			binding.updatePending = false
-
-		update: do ->
-			queueIndex = 0
-			queues = [[], []]
-			queue = queues[queueIndex]
-			queueHashes = Object.create null
-			pending = false
-
-			updateAll = ->
-				pending = false
-				currentQueue = queue
-				queue = queues[++queueIndex % queues.length]
-
-				while currentQueue.length
-					binding = currentQueue.pop()
-					queueHashes[binding.__hash__] = false
-					updateBinding binding
-				return
-
-			->
-				if queueHashes[@__hash__]
-					return
-
-				queue.push @
-				queueHashes[@__hash__] = true
-
-				unless pending
-					setImmediate updateAll
-					pending = true
+			@updatePending = true
+			@getObj()[@prop] = result
+			@updatePending = false
 
 		destroy: ->
 			# destroy connections

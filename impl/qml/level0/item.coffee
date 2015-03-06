@@ -87,7 +87,7 @@ SIGNALS =
 	'pointerReleased': 'onReleased'
 	'pointerEntered': 'onEntered'
 	'pointerExited': 'onExited'
-	'pointerMove': 'onPositionChanged'
+	'pointerMoved': 'onPositionChanged'
 	'pointerWheel': 'onWheel'
 	'keysPressed': 'onPressed'
 	'keysHold': 'onPressed'
@@ -97,31 +97,50 @@ SIGNALS =
 HOVER_SIGNALS =
 	'pointerEntered': true
 	'pointerExited': true
-	'pointerMove': true
+	'pointerMoved': true
 
 SIGNALS_CURSORS =
 	'pointerClicked': Qt.PointingHandCursor
 
+lastMouseEvent = ready: false, x: 0, y: 0
+movementX = movementY = 0
 mouseCoordsArgs = (e) ->
+	coords = @mapToItem null, e.x, e.y
+
+	if lastMouseEvent.ready and e isnt lastMouseEvent
+		movementX = coords.x - lastMouseEvent.x
+		movementY = coords.y - lastMouseEvent.y
+
+	if e isnt lastMouseEvent
+		lastMouseEvent.ready = true
+		lastMouseEvent.x = coords.x
+		lastMouseEvent.y = coords.y
+
 	x: e.x
 	y: e.y
+	movementX: movementX
+	movementY: movementY
 
 SIGNALS_ARGS =
 	'pointerPressed': mouseCoordsArgs
 	'pointerReleased': mouseCoordsArgs
-	'pointerMove': mouseCoordsArgs
+	'pointerMoved': mouseCoordsArgs
+	'pointerEntered': ->
+		lastMouseEvent.ready = false
+	'pointerExited': ->
+		lastMouseEvent.ready = false
 	'pointerWheel': (e) ->
 		x: e.angleDelta.x
 		y: e.angleDelta.y
 	'keysPressed': (e) ->
-		if pressedKeys[e.key]
+		if pressedKeys[e.key] and pressedKeys[e.key] isnt e
 			return false
-		pressedKeys[e.key] = true
+		pressedKeys[e.key] = e
 		key: KEY_CODES[e.key] || e.text.toUpperCase()
 	'keysHold': (e) ->
 		key: KEY_CODES[e.key] || e.text.toUpperCase()
 	'keysReleased': (e) ->
-		pressedKeys[e.key] = false
+		pressedKeys[e.key] = null
 		key: KEY_CODES[e.key] || e.text.toUpperCase()
 	'keysInput': (e) ->
 		text: e.text
@@ -180,7 +199,10 @@ module.exports = (impl) ->
 		onLinkUriClicked = ->
 			{linkUri} = @_impl
 			if linkUri
-				__location.append linkUri
+				if ///^([a-z]+:)///.test linkUri
+					Qt.openUrlExternally linkUri
+				else
+					__location.append linkUri
 				signal.STOP_PROPAGATION
 
 		(val) ->
@@ -201,7 +223,8 @@ module.exports = (impl) ->
 			unless mouseArea = data.mouseArea
 				mouseArea = data.mouseArea = impl.utils.createQmlObject(
 					'MouseArea {' +
-						'onPressed: mouse.accepted = false;' +
+						'property bool accepts: false;' +
+						'onPressed: mouse.accepted = this.accepts;' +
 						'anchors.fill: parent;' +
 					'}'
 				, data.elem)
@@ -214,11 +237,14 @@ module.exports = (impl) ->
 			qmlName = SIGNALS[name]
 
 			customFunc = (e) ->
-				arg = SIGNALS_ARGS[name]? e
+				arg = SIGNALS_ARGS[name]?.call mouseArea, e
 				e?.accepted = false
 				if self[ns][signalName](arg) is signal.STOP_PROPAGATION and e?
 					e.accepted = true
 				return
+
+			if name is 'pointerClicked'
+				mouseArea.accepts = true;
 
 			mouseArea[qmlName].connect customFunc
 
@@ -230,7 +256,7 @@ module.exports = (impl) ->
 		attachKeys = (ns, name, signalName) ->
 			self = @
 			qmlName = SIGNALS[name]
-			stylesWindow.Keys[qmlName].connect (e) ->
+			__stylesWindow.Keys[qmlName].connect (e) ->
 				arg = SIGNALS_ARGS[name] e
 				if self[ns][signalName](arg) is signal.STOP_PROPAGATION
 					e.accepted = true

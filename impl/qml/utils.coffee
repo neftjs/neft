@@ -9,8 +9,9 @@ exports.createQmlObject = do ->
 		component = components[type] or createItemComponent(type)
 		component.createObject(parent)
 
+RAD = 180 / Math.PI
 exports.radToDeg = (val) ->
-	val * (180/Math.PI)
+	val * RAD
 
 exports.toQtColor = (color) ->
 	# hash
@@ -37,9 +38,10 @@ exports.toQtColor = (color) ->
 		color
 
 exports.toUrl = (url) ->
-	if ///^[a-zA-Z]+:\/\////.test url
-		url
-	else
-		if url[0] isnt '/'
-			url = "/#{url}"
-		require('renderer').serverUrl + url
+	url
+	# if ///^[a-zA-Z]+:\/\////.test url
+	# 	url
+	# else
+	# 	if url[0] isnt '/'
+	# 		url = "/#{url}"
+	# 	require('renderer').serverUrl + url

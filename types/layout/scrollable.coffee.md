@@ -34,13 +34,13 @@ Positioning/Scrollable
 			scrollbar.pointer.onPressed ->
 				unless @pressed
 					@pressed = true
-					@parent.pointer.onMove.connect @pointerMoveHandler
+					@parent.pointer.onMoved.connect @pointerMoveHandler
 					@parent.pointer.onReleased.connect @pointerReleasedHandler
 				signal.STOP_PROPAGATION
 			scrollbar.pointerReleasedHandler = ->
 				scrollbar.pressed = false
 				scrollbar.lastEvent = null
-				scrollbar.parent.pointer.onMove.disconnect scrollbar.pointerMoveHandler
+				scrollbar.parent.pointer.onMoved.disconnect scrollbar.pointerMoveHandler
 				scrollbar.parent.pointer.onReleased.disconnect scrollbar.pointerReleasedHandler
 				return
 			scrollbar.pointerMoveHandler = (e) ->

@@ -35,7 +35,7 @@ Rectangle {
 \    // prevent scrolling
 \    return signal.STOP_PROPAGATION;
 \  }
-\  pointer.onMove: function(e){
+\  pointer.onMoved: function(e){
 \    greenRect.x = e.x - greenRect.width / 2;
 \    greenRect.y = e.y - greenRect.height / 2;
 \  }

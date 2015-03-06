@@ -66,7 +66,7 @@ module.exports = (impl) ->
 			return unless amplitude
 
 			elapsed = Date.now() - timestamp
-			delta = -amplitude*0.1 * Math.exp(-elapsed / 325);
+			delta = -amplitude*0.7 * Math.exp(-elapsed / 325);
 			if Math.abs(delta) > 0.5
 				scrollProp delta
 				requestAnimationFrame anim
@@ -112,52 +112,36 @@ module.exports = (impl) ->
 			verticalContinuous.press()
 
 			x = e.x; y = e.y
-			return
+			signal.STOP_PROPAGATION
 
-		item.pointer.onMove (e) ->
-			if listen and not pointerUsed
-				if Math.abs(e.x - x) + Math.abs(e.y - y) > MIN_POINTER_DELTA
+		item.pointer.onMoved (e) ->
+			if listen
+				if pointerUsed or Math.abs(e.x - x) + Math.abs(e.y - y) > MIN_POINTER_DELTA
 					if moveMovement(e) is signal.STOP_PROPAGATION
 						focus = true
 						pointerUsed = true
 
+						horizontalContinuous.update e.x - x
+						verticalContinuous.update e.y - y
+
+						moveMovement e
 					x = e.x; y = e.y
 			return
 
-		listenOnWindowSignals = ->
-			impl.window.pointer.onReleased (e) ->
-				listen = false
+		item.pointer.onReleased (e) ->
+			listen = false
 
-				return unless focus
-				focus = false
-				pointerUsed = false
+			return unless focus
+			focus = false
+			pointerUsed = false
 
-				moveMovement e
+			moveMovement e
 
-				horizontalContinuous.release()
-				verticalContinuous.release()
+			horizontalContinuous.release()
+			verticalContinuous.release()
 
-				x = y = 0
-				return
-
-			impl.window.pointer.onMove (e) ->
-				return unless listen
-
-				if pointerUsed and not focus
-					return
-
-				horizontalContinuous.update e.x - x
-				verticalContinuous.update e.y - y
-
-				if focus
-					moveMovement e
-					x = e.x; y = e.y
-				return
-
-		if impl.window?
-			listenOnWindowSignals()
-		else
-			impl.onWindowReady listenOnWindowSignals
+			x = y = 0
+			return
 
 	useWheel = (item) ->
 		item.pointer.onWheel (e) ->

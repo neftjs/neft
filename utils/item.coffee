@@ -63,18 +63,12 @@ module.exports = (Renderer, Impl) ->
 
 	Impl.DeepObject = DeepObject
 
-	DEFINE_PROPERTY_OPTS_KEYS = ['name', 'namespace', 'valueConstructor', 'implementation',
-	                             'developmentSetter', 'developmentGetter', 'setter', 'getter',
-	                             'object', 'constructor', 'defaultValue', 'parentConstructor',
-	                             'signalInitializer']
-
 	exports =
 	Object: UtilsObject
 	DeepObject: DeepObject
 
 	defineProperty: (opts) ->
 		assert.isPlainObject opts
-		assert.isEqual utils.merge(Object.keys(opts), DEFINE_PROPERTY_OPTS_KEYS), DEFINE_PROPERTY_OPTS_KEYS
 
 		{name, namespace, valueConstructor, implementation} = opts
 
@@ -116,19 +110,21 @@ module.exports = (Renderer, Impl) ->
 				opts.constructor::[internalName] = opts.defaultValue
 
 		if namespace?
-			propGetter = basicGetter = ->
-				`//<development>`
-				developmentGetter?.call @
-				`//</development>`
+			propGetter = basicGetter = new Function "return this._ref.#{internalName};"
+			# propGetter = basicGetter = ->
+			# 	`//<development>`
+			# 	developmentGetter?.call @
+			# 	`//</development>`
 
-				@_ref[internalName]
+			# 	@_ref[internalName]
 		else
-			propGetter = basicGetter = ->
-				`//<development>`
-				developmentGetter?.call @
-				`//</development>`
+			propGetter = basicGetter = new Function "return this.#{internalName};"
+			# propGetter = basicGetter = ->
+			# 	`//<development>`
+			# 	developmentGetter?.call @
+			# 	`//</development>`
 
-				@[internalName]
+			# 	@[internalName]
 
 		if valueConstructor
 			valCtorInsts = [new valueConstructor, new valueConstructor, new valueConstructor]

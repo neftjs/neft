@@ -35,7 +35,7 @@ SIGNALS =
 	'pointerReleased': 'mouseup'
 	'pointerEntered': 'mouseenter'
 	'pointerExited': 'mouseleave'
-	'pointerMove': 'mousemove'
+	'pointerMoved': 'mousemove'
 	'pointerWheel': do ->
 		if 'onwheel' of document.createElement("div")
 			'wheel'
@@ -54,54 +54,48 @@ if isTouch
 		'pointerReleased': 'touchend'
 		'pointerEntered': 'touchstart'
 		'pointerExited': 'touchend'
-		'pointerMove': 'touchmove'
+		'pointerMoved': 'touchmove'
 
 SIGNALS_CURSORS =
 	'pointerClicked': 'pointer'
 
-getMouseCoords = do ->
-	getArgs = (target, e) ->
-		rect = target.getBoundingClientRect()
-		x: e.pageX - rect.left
-		y: e.pageY - rect.top
+lastEvent = null
+movementX = movementY = 0
+createGetMouseCoords = (type) -> (target, e) ->
+	if e is undefined
+		e = target
+		target = e.currentTarget
 
-	if isTouch
-		(e) ->
-			if e.touches?
-				if e.touches.length
-					getArgs e.currentTarget, e.touches[0]
-				else
-					getArgs e.currentTarget, e.changedTouches[0]
-			else
-				getArgs e.currentTarget, e
-	else
-		(e) ->
-			getArgs e.currentTarget, e
-
-getRestrictedMouseCoords = do ->
-	getArgs = (target, e) ->
-		rect = target.getBoundingClientRect()
-		x = e.pageX - rect.left
-		y = e.pageY - rect.top
-
-		if x >= 0 and y >= 0 and x <= rect.width and y <= rect.height
-			x: x
-			y: y
+	if isTouch and e.touches?
+		if e.touches.length
+			e = e.touches[0]
 		else
-			false
+			e = e.changedTouches[0]
 
-	if isTouch
-		(e) ->
-			if e.touches?
-				if e.touches.length
-					getArgs e.currentTarget, e.touches[0]
-				else
-					getArgs e.currentTarget, e.changedTouches[0]
-			else
-				getArgs e.currentTarget, e
-	else
-		(e) ->
-			getArgs e.currentTarget, e
+	rect = target.getBoundingClientRect()
+	x = e.pageX - rect.left
+	y = e.pageY - rect.top
+	if lastEvent? and lastEvent isnt e
+		movementX = e.pageX - lastEvent.pageX
+		movementY = e.pageY - lastEvent.pageY
+
+	if lastEvent isnt e
+		lastEvent = e
+
+	if type is 'inner'
+		if x < 0 or y < 0 or x > rect.width or y > rect.height
+			return false
+	else if type is 'outer'
+		if x >= 0 and y >= 0 and x <= rect.width and y <= rect.height
+			return false
+
+	x: x
+	y: y
+	movementX: movementX
+	movementY: movementY
+
+getMouseCoords = createGetMouseCoords ''
+getInnerMouseCoords = createGetMouseCoords 'inner'
 
 pressedKeys = Object.create null
 
@@ -176,21 +170,21 @@ SIGNALS_ARGS =
 
 			deltas
 
-	'pointerPressed': getRestrictedMouseCoords
+	'pointerPressed': getInnerMouseCoords
 	'pointerReleased': getMouseCoords
-	'pointerClicked': getRestrictedMouseCoords
-	'pointerMove': (e) ->
+	'pointerClicked': getInnerMouseCoords
+	'pointerMoved': (e) ->
 		if isTouch
 			e.preventDefault()
 
-		getRestrictedMouseCoords e
+		getInnerMouseCoords e
 	'keysPressed': (e) ->
 		code = e.which or e.keyCode
 		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
 
-		if pressedKeys[key]
+		if pressedKeys[key] and pressedKeys[key] isnt e
 			return false
-		pressedKeys[key] = true
+		pressedKeys[key] = e
 
 		key: key
 	'keysHold': (e) ->
@@ -202,7 +196,7 @@ SIGNALS_ARGS =
 		code = e.which or e.keyCode
 		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
 
-		pressedKeys[key] = false
+		pressedKeys[key] = null
 
 		key: key
 	'keysInput': (e) ->
@@ -210,6 +204,23 @@ SIGNALS_ARGS =
 		text = String.fromCharCode(code)
 
 		text: text
+
+mouseActiveItem = null
+getOuterMouseCoords = createGetMouseCoords 'outer'
+
+window.addEventListener SIGNALS.pointerReleased, (e) ->
+	if mouseActiveItem
+		coords = getMouseCoords mouseActiveItem._impl.elem, e
+		mouseActiveItem.pointer.released coords
+		mouseActiveItem = null
+	document.body.setAttribute 'class', ''
+	return
+window.addEventListener SIGNALS.pointerMoved, (e) ->
+	if mouseActiveItem
+		coords = getOuterMouseCoords mouseActiveItem._impl.elem, e
+		if coords
+			mouseActiveItem.pointer.moved coords
+	return
 
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
@@ -269,7 +280,7 @@ module.exports = (impl) ->
 			if styles & STYLE_OPACITY
 				if (style.opacity = item._opacity) is 0
 					data.isHidden = true
-			if styles & STYLE_SCROLL
+			if styles & STYLE_SCROLL and data.scrollElem
 				data.scrollElem.scrollLeft = item._contentX
 				data.scrollElem.scrollTop = item._contentY
 
@@ -398,24 +409,27 @@ module.exports = (impl) ->
 
 		customFunc = (e) ->
 			arg = SIGNALS_ARGS[name]? e
-			if arg is false
+			if arg is false or e._accepted
 				return
+
+			if name is 'pointerMoved'
+				e._accepted = true
 
 			if self[ns][signalName](arg) is signal.STOP_PROPAGATION
 				if name is 'pointerPressed'
 					document.body.setAttribute 'class', 'unselectable'
+					mouseActiveItem = self
 				e.stopPropagation()
-			else
-				if name is 'pointerReleased'
-					document.body.setAttribute 'class', ''
 			return
 
 		if typeof implName is 'string'
 			if ///^keys///.test name
 				window.addEventListener implName, customFunc
 			else
-				elem.addEventListener implName, customFunc
+				if name isnt 'pointerReleased'
+					elem.addEventListener implName, customFunc, false
 
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]
 			elem.style.cursor = cursor
+		return

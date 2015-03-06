@@ -88,8 +88,8 @@ This signal is called when the pointer leaves the item.
 
 The *event* object contains x and y delta.
 
-*Signal* Pointer::move(*Object* event)
---------------------------------------
+*Signal* Pointer::moved(*Object* event)
+---------------------------------------
 
 This signal is called when the pointer position changes.
 
@@ -99,7 +99,7 @@ The *event* object contains x and y position.
 				Impl.attachItemSignal.call pointer._ref, 'pointer', uniqueName, signalName
 
 			@SIGNALS = ['clicked', 'pressed', 'released',
-			            'entered', 'exited', 'wheel', 'move']
+			            'entered', 'exited', 'wheel', 'moved']
 
 			for signalName in @SIGNALS
 				uniqueName = "pointer#{utils.capitalize(signalName)}"
@@ -111,13 +111,13 @@ The *event* object contains x and y position.
 This property refers to the current pointer x position relative to the item.
 
 			onPositionSignalInitialized = do ->
-				onMove = (e) ->
+				onMoved = (e) ->
 					@pointer.x = e.x
 					@pointer.y = e.y
 					return
 
 				(pointer) ->
-					pointer.onMove onMove
+					pointer.onMoved onMoved
 
 			itemUtils.defineProperty
 				constructor: Pointer
@@ -168,26 +168,44 @@ Rectangle {
 
 This property holds whether the pointer is currently pressed.
 
+			isPressedInitializer = do ->
+				onPressed = ->
+					@pointer.isPressed = true
+					signal.STOP_PROPAGATION
+				onReleased = ->
+					@pointer.isPressed = false
+
+				(pointer) ->
+					pointer.onPressed onPressed
+					pointer.onReleased onReleased
+
 			itemUtils.defineProperty
 				constructor: Pointer
 				name: 'isPressed'
 				defaultValue: false
 				namespace: 'pointer'
 				parentConstructor: Item
-				signalInitializer: do ->
-					onPressed = ->
-						@pointer.isPressed = true
-					onReleased = ->
-						@pointer.isPressed = false
-
-					(pointer) ->
-						pointer.onPressed onPressed
-						pointer.onReleased onReleased
+				signalInitializer: isPressedInitializer
+				getter: (_super) -> ->
+					unless @_ref.hasOwnProperty '_pointerIsPressed'
+						isPressedInitializer @
+						@_ref._pointerIsPressed = false
+					_super.call @
 
 *Boolean* Pointer::isHover = false
 ----------------------------------
 
 This property holds whether the pointer is currently under the item.
+
+			isHoverInitializer = do ->
+				onEntered = ->
+					@pointer.isHover = true
+				onExited = ->
+					@pointer.isHover = false
+
+				(pointer) ->
+					pointer.onEntered onEntered
+					pointer.onExited onExited
 
 			itemUtils.defineProperty
 				constructor: Pointer
@@ -195,15 +213,12 @@ This property holds whether the pointer is currently under the item.
 				defaultValue: false
 				namespace: 'pointer'
 				parentConstructor: Item
-				signalInitializer: do ->
-					onEntered = ->
-						@pointer.isHover = true
-					onExited = ->
-						@pointer.isHover = false
-
-					(pointer) ->
-						pointer.onEntered onEntered
-						pointer.onExited onExited
+				signalInitializer: isHoverInitializer
+				getter: (_super) -> ->
+					unless @_ref.hasOwnProperty '_pointerIsHover'
+						isHoverInitializer @
+						@_ref._pointerIsHover = false
+					_super.call @
 
 *Item* Item()
 -------------

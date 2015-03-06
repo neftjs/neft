@@ -42,7 +42,11 @@ Grid {
 				defaultValue: 2
 				implementation: Impl.setGridColumns
 				developmentSetter: (val) ->
-					assert.operator val, '>', 0
+					assert.operator val, '>=', 0
+				setter: (_super) -> (val) ->
+					if val <= 0
+						val = 1
+					_super.call @, val
 
 *Integer* Grid::rows = Infinity
 -------------------------------
@@ -55,7 +59,11 @@ Grid {
 				defaultValue: Infinity
 				implementation: Impl.setGridRows
 				developmentSetter: (val) ->
-					assert.operator val, '>', 0
+					assert.operator val, '>=', 0
+				setter: (_super) -> (val) ->
+					if val <= 0
+						val = 1
+					_super.call @, val
 
 *Spacing* Grid::spacing
 -----------------------

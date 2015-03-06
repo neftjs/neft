@@ -38,10 +38,11 @@ module.exports = (impl) ->
 		progress = animation.progress = Math.max 0, Math.min 1, (now()-animation.startTime) / animation.duration
 
 		if progress is 1
-			if animation.loop
+			if animation.loop && abstractAnimation._when
 				animation.startTime = now()
 			else
 				animation.running = false
+				abstractAnimation.running = false
 
 		val = (animation.to - animation.from) * progress + animation.from
 		target = animation.target

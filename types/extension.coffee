@@ -26,6 +26,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 		constructor: @
 		name: 'when'
 		defaultValue: false
+		setter: (_super) -> (val) ->
+			_super.call @, !!val
 
 	itemUtils.defineProperty
 		constructor: @
