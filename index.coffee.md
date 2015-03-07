@@ -124,6 +124,8 @@ Styles.button/red {
 	itemUtils = require('./utils/item') exports, Impl
 	signal.create exports, 'ready'
 
+	exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
+
 	exports.Extension = require('./types/extension') exports, Impl, itemUtils
 	exports.State = require('./types/extensions/state') exports, Impl, itemUtils
 	exports.Animation = require('./types/extensions/animation') exports, Impl, itemUtils

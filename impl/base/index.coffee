@@ -3,6 +3,7 @@
 utils = require 'utils'
 
 exports.Types =
+	Screen: require './level0/screen'
 	Item: require './level0/item'
 	Image: require './level0/image'
 	Text: require './level0/text'

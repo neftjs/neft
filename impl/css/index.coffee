@@ -121,6 +121,7 @@ module.exports = (impl) ->
 	AbstractTypes: utils.clone impl.Types
 
 	Types:
+		Screen: require './level0/screen'
 		Item: require './level0/item'
 		Image: require './level0/image'
 		Text: require './level0/text'
