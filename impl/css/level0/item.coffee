@@ -235,11 +235,8 @@ module.exports = (impl) ->
 
 	nowTime = now()
 
-	updateStyles = impl.updateStyles = do ->
-		pending = false
-		queue = []
-		queueItems = {}
-
+	updateQueueItems = Object.create null
+	updateItem = do ->
 		getTransforms = (item) ->
 			transform = ''
 
@@ -260,9 +257,9 @@ module.exports = (impl) ->
 
 			transform
 
-		updateItem = (item, styles) ->
+		(item, styles) ->
 			data = item._impl
-			style = data.elem.style
+			style = data.elemStyle
 
 			if data.isHidden
 				if styles & STYLE_OPACITY
@@ -285,6 +282,11 @@ module.exports = (impl) ->
 				data.scrollElem.scrollTop = item._contentY
 
 			return
+
+	updateStyles = impl.updateStyles = do ->
+		pending = false
+		queue = []
+		queueItems = updateQueueItems
 
 		updateItems = ->
 			pending = false
@@ -318,8 +320,6 @@ module.exports = (impl) ->
 			if nowTime - data.lastAction < HOT_MAX_TIME
 				if data.hotActions++ > HOT_MAX_ACTIONS
 					{style, id} = data.elem
-					data.elem.style.left = ''
-					data.elem.style.top = ''
 					data.isHot = true
 					return true
 			else
@@ -332,6 +332,7 @@ module.exports = (impl) ->
 		bindings: null
 		anchors: null
 		elem: null
+		elemStyle: null
 		lastAction: 0
 		hotActions: 0
 		isHot: false
@@ -344,46 +345,60 @@ module.exports = (impl) ->
 
 	create: (data) ->
 		data.elem ?= document.createElement 'div'
+		data.elemStyle = data.elem.style
 		data.lastAction = nowTime
 
 	setItemParent: (val) ->
 		{elem} = @_impl
 
-		unless val
-			elem.parentElement?.removeChild elem
-			return
+		updateItem @, (updateQueueItems[@__hash__] or 0)
 
-		val._impl.elem.appendChild elem
+		if val
+			val._impl.elem.appendChild elem
+		else
+			elem.parentElement?.removeChild elem
+
+		return
 
 	setItemVisible: (val) ->
-		@_impl.elem.style.display = if val then 'inline' else 'none'
+		@_impl.elemStyle.display = if val then 'inline' else 'none'
+		return
 
 	setItemClip: (val) ->
-		@_impl.elem.style.overflow = if val then 'hidden' else 'visible'
+		@_impl.elemStyle.overflow = if val then 'hidden' else 'visible'
+		return
 
 	setItemWidth: (val) ->
 		updateStyles @, STYLE_WIDTH
+		return
 
 	setItemHeight: (val) ->
 		updateStyles @, STYLE_HEIGHT
+		return
 
 	setItemX: (val) ->
 		updateStyles @, STYLE_TRANSFORM
+		return
 
 	setItemY: (val) ->
 		updateStyles @, STYLE_TRANSFORM
+		return
 
 	setItemZ: (val) ->
-		@_impl.elem.style.zIndex = if val is 0 then 'auto' else val
+		@_impl.elemStyle.zIndex = if val is 0 then 'auto' else val
+		return
 
 	setItemScale: (val) ->
 		updateStyles @, STYLE_TRANSFORM
+		return
 
 	setItemRotation: (val) ->
 		updateStyles @, STYLE_TRANSFORM
+		return
 
 	setItemOpacity: (val) ->
 		updateStyles @, STYLE_OPACITY
+		return
 
 	setItemLinkUri: (val) ->
 		unless @_impl.linkElem
@@ -394,6 +409,7 @@ module.exports = (impl) ->
 		if @_impl.linkElem.getAttribute('href') isnt val
 			@_impl.linkElem.setAttribute 'href', val
 			@_impl.linkElem.style.display = if val isnt '' then 'block' else 'none'
+		return
 
 	setItemMargin: (type, val) ->
 
@@ -431,5 +447,5 @@ module.exports = (impl) ->
 
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]
-			elem.style.cursor = cursor
+			@_impl.elemStyle.cursor = cursor
 		return

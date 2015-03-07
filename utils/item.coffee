@@ -110,21 +110,19 @@ module.exports = (Renderer, Impl) ->
 				opts.constructor::[internalName] = opts.defaultValue
 
 		if namespace?
-			propGetter = basicGetter = new Function "return this._ref.#{internalName};"
-			# propGetter = basicGetter = ->
-			# 	`//<development>`
-			# 	developmentGetter?.call @
-			# 	`//</development>`
+			propGetter = basicGetter = ->
+				`//<development>`
+				developmentGetter?.call @
+				`//</development>`
 
-			# 	@_ref[internalName]
+				@_ref[internalName]
 		else
-			propGetter = basicGetter = new Function "return this.#{internalName};"
-			# propGetter = basicGetter = ->
-			# 	`//<development>`
-			# 	developmentGetter?.call @
-			# 	`//</development>`
+			propGetter = basicGetter = ->
+				`//<development>`
+				developmentGetter?.call @
+				`//</development>`
 
-			# 	@[internalName]
+				@[internalName]
 
 		if valueConstructor
 			valCtorInsts = [new valueConstructor, new valueConstructor, new valueConstructor]

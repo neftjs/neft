@@ -10,9 +10,11 @@ module.exports = (impl) ->
 
 	reqSend = false
 	pending = []
+	nowTime = 0
 
 	vsync = ->
 		reqSend = false
+		nowTime = now()
 
 		i = 0; n = pending.length
 		while i < n
@@ -35,11 +37,16 @@ module.exports = (impl) ->
 	updateAnimation = (animation) ->
 		abstractAnimation = animation.animation
 
-		progress = animation.progress = Math.max 0, Math.min 1, (now()-animation.startTime) / animation.duration
+		progress = (nowTime-animation.startTime) / animation.duration
+		if progress < 0
+			progress = 0
+		else if progress > 1
+			progress = 1
+		animation.progress = progress
 
 		if progress is 1
 			if animation.loop && abstractAnimation._when
-				animation.startTime = now()
+				animation.startTime = nowTime
 			else
 				animation.running = false
 				abstractAnimation.running = false
