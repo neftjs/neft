@@ -10,7 +10,16 @@ module.exports = (impl) ->
 	createData: impl.utils.createDataCloner Item.DATA, DATA
 
 	create: (data) ->
-		data.elem ?= impl.utils.createQmlObject 'Rectangle { color: "transparent"; }'
+		data.elem ?= impl.utils.createQmlObject 'Rectangle {' +
+			'property alias borderItem: border;' +
+			'color: "transparent";' +
+			'Rectangle {' +
+				'id: border;' +
+				'anchors.fill: parent;' +
+				'color: "transparent";' +
+				'radius: parent.radius;' +
+			'}' +
+		'}'
 
 		Item.create.call @, data
 
@@ -21,7 +30,7 @@ module.exports = (impl) ->
 		@_impl.elem.radius = val
 
 	setRectangleBorderColor: (val) ->
-		@_impl.elem.border.color = impl.utils.toQtColor val
+		@_impl.elem.borderItem.border.color = impl.utils.toQtColor val
 
 	setRectangleBorderWidth: (val) ->
-		@_impl.elem.border.width = val
+		@_impl.elem.borderItem.border.width = val
