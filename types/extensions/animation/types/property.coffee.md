@@ -109,12 +109,3 @@ ReadOnly *Float* PropertyAnimation::progress = 0
 		utils.defineProperty @::, 'progress', null, ->
 			Impl.getPropertyAnimationProgress.call @
 		, null
-
-PropertyAnimation::reverse()
-----------------------------
-
-		reverse: ->
-			tmp = @to
-			@to = @from
-			@from = tmp
-			@
