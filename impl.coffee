@@ -5,7 +5,7 @@
 utils = require 'utils'
 signal = require 'signal'
 
-impl = require './impl/base'
+impl = abstractImpl = require './impl/base'
 
 TYPES = ['Item', 'Image', 'Text', 'FontLoader'
 
@@ -22,6 +22,7 @@ platformImpl = switch true
 	when utils.isQml
 		require('./impl/qml') impl
 
+abstractTypes = utils.clone impl.Types
 if platformImpl
 	utils.mergeDeep impl, platformImpl
 
@@ -30,6 +31,13 @@ for name in TYPES
 	type = impl.Types[name]
 	type = impl.Types[name] = type(impl)
 	utils.merge impl, type
+
+# add missed function from the abstract impl
+for name in TYPES
+	type = abstractTypes[name] impl
+	for key, func of type
+		unless impl.hasOwnProperty(key)
+			impl[key] = func
 
 # merge modules
 for name, extra of impl.Extras

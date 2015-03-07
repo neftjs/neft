@@ -326,6 +326,16 @@ It's required for browsers, where link URIs should be known publicly.
 			developmentSetter: (val) ->
 				assert.isString val, '::linkUri setter ...'
 
+Item::overlap(*Renderer.Item* item)
+-----------------------------------
+
+This method checks whether two items are overlapped.
+
+		overlap: (item) ->
+			assert.instanceOf item, Item
+
+			Impl.doItemOverlap.call @, item
+
 Item::clear()
 -------------
 
