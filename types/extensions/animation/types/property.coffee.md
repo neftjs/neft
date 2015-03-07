@@ -4,7 +4,7 @@ Animation/PropertyAnimation
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 
 *PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
 --------------------------------------------------------------
@@ -15,7 +15,17 @@ Animation/PropertyAnimation
 		constructor: ->
 			@_target = null
 			@_property = ''
+			@_autoFrom = true
 			super()
+
+		getter = utils.lookupGetter @::, 'running'
+		setter = utils.lookupSetter @::, 'running'
+		utils.defineProperty @::, 'running', null, getter, do (_super = setter) -> (val) ->
+			if val and @_autoFrom and @_target
+				@from = @_target[@_property]
+				@_autoFrom = true
+			_super.call @, val
+			return
 
 *Renderer.Item* PropertyAnimation::target
 -----------------------------------------
@@ -28,7 +38,8 @@ Animation/PropertyAnimation
 			defaultValue: null
 			implementation: Impl.setPropertyAnimationTarget
 			developmentSetter: (val) ->
-				expect().defined(val).toBe.any Renderer.Item
+				if val?
+					assert.instanceOf val, Renderer.Item
 
 *String* PropertyAnimation::property
 ------------------------------------
@@ -41,7 +52,7 @@ Animation/PropertyAnimation
 			defaultValue: ''
 			implementation: Impl.setPropertyAnimationProperty
 			developmentSetter: (val) ->
-				expect(val).toBe.truthy().string()
+				assert.isString val
 
 *Float* PropertyAnimation::duration = 1000
 ------------------------------------------
@@ -54,8 +65,13 @@ Animation/PropertyAnimation
 			defaultValue: 1000
 			implementation: Impl.setPropertyAnimationDuration
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
-				expect(val).toBe.greaterThan 0
+				assert.isFloat val
+			setter: (_super) -> (val) ->
+				if val < 0
+					_super.call @, 0
+				else
+					_super.call @, val
+				return
 
 *Float* PropertyAnimation::delay = 0
 ------------------------------------
@@ -68,10 +84,33 @@ Animation/PropertyAnimation
 			defaultValue: 0
 			implementation: Impl.setPropertyAnimationDelay
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
-				expect(val).not().toBe.lessThan 0
+				assert.isFloat val
+			setter: (_super) -> (val) ->
+				if val < 0
+					_super.call @, 0
+				else
+					_super.call @, val
+				return
 
-*Boolean* PropertyAnimation::updateProperty = true
+*Boolean* PropertyAnimation::updateData = false
+-----------------------------------------------
+
+### *Signal* PropertyAnimation::updateDataChanged(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'updateData'
+			defaultValue: false
+			implementation: Impl.setPropertyAnimationUpdateData
+			developmentSetter: (val) ->
+				assert.isBoolean val
+			setter: (_super) -> (val) ->
+				unless val
+					@updateProperty = false
+				_super.call @, val
+				return
+
+*Boolean* PropertyAnimation::updateProperty = false
 ---------------------------------------------------
 
 ### *Signal* PropertyAnimation::updatePropertyChanged(*Boolean* oldValue)
@@ -79,9 +118,14 @@ Animation/PropertyAnimation
 		itemUtils.defineProperty
 			constructor: @
 			name: 'updateProperty'
-			defaultValue: true
+			defaultValue: false
+			implementation: Impl.setPropertyAnimationUpdateProperty
 			developmentSetter: (val) ->
-				expect(val).toBe.boolean()
+				assert.isBoolean val
+			setter: (_super) -> (val) ->
+				@updateData = true
+				_super.call @, val
+				return
 
 *Any* PropertyAnimation::from
 -----------------------------
@@ -92,6 +136,10 @@ Animation/PropertyAnimation
 			constructor: @
 			name: 'from'
 			implementation: Impl.setPropertyAnimationFrom
+			setter: (_super) -> (val) ->
+				@_autoFrom = false;
+				_super.call @, val
+				return
 
 *Any* PropertyAnimation::to
 ---------------------------

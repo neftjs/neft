@@ -4,7 +4,6 @@ Animation/NumberAnimation
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
 
 *NumberAnimation* NumberAnimation() : *Renderer.PropertyAnimation*
 -------------------------------------------------------------------

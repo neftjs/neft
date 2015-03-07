@@ -238,22 +238,23 @@ module.exports = (impl) ->
 	updateQueueItems = Object.create null
 	updateItem = do ->
 		getTransforms = (item) ->
+			data = item._impl
 			transform = ''
 
 			# position
-			if item._impl.isHot and transform3dSupported
-				transform = "translate3d(#{item._x}px, #{item._y}px, 0) "
+			if data.isHot and transform3dSupported
+				transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
 			else
 				markAction item
-				transform = "translate(#{item._x}px, #{item._y}px) "
+				transform = "translate(#{data.x}px, #{data.y}px) "
 
 			# rotation
-			if item._rotation
-				transform += "rotate(#{rad2deg(item._rotation)}deg) "
+			if data.rotation
+				transform += "rotate(#{rad2deg(data.rotation)}deg) "
 
 			# scale
-			if item._scale isnt 1
-				transform += "scale(#{item._scale}) "
+			if data.scale isnt 1
+				transform += "scale(#{data.scale}) "
 
 			transform
 
@@ -271,15 +272,15 @@ module.exports = (impl) ->
 			if styles & STYLE_TRANSFORM
 				style[transformProp] = getTransforms item
 			if styles & STYLE_WIDTH
-				style.width = "#{item._width}px"
+				style.width = "#{data.width}px"
 			if styles & STYLE_HEIGHT
-				style.height = "#{item._height}px"
+				style.height = "#{data.height}px"
 			if styles & STYLE_OPACITY
-				if (style.opacity = item._opacity) is 0
+				if (style.opacity = data.opacity) is 0
 					data.isHidden = true
 			if styles & STYLE_SCROLL and data.scrollElem
-				data.scrollElem.scrollLeft = item._contentX
-				data.scrollElem.scrollTop = item._contentY
+				data.scrollElem.scrollLeft = data.contentX
+				data.scrollElem.scrollTop = data.contentY
 
 			return
 
@@ -338,6 +339,13 @@ module.exports = (impl) ->
 		isHot: false
 		isHidden: false
 		linkElem: null
+		x: 0
+		y: 0
+		width: 0
+		height: 0
+		scale: 1
+		rotation: 0
+		opacity: 1
 
 	DATA: DATA
 
@@ -349,9 +357,11 @@ module.exports = (impl) ->
 		data.lastAction = nowTime
 
 	setItemParent: (val) ->
+		self = @
 		{elem} = @_impl
 
-		updateItem @, (updateQueueItems[@__hash__] or 0)
+		setImmediate ->
+			updateItem self, (updateQueueItems[self.__hash__] or 0)
 
 		if val
 			val._impl.elem.appendChild elem
@@ -369,18 +379,22 @@ module.exports = (impl) ->
 		return
 
 	setItemWidth: (val) ->
+		@_impl.width = val
 		updateStyles @, STYLE_WIDTH
 		return
 
 	setItemHeight: (val) ->
+		@_impl.height = val
 		updateStyles @, STYLE_HEIGHT
 		return
 
 	setItemX: (val) ->
+		@_impl.x = val
 		updateStyles @, STYLE_TRANSFORM
 		return
 
 	setItemY: (val) ->
+		@_impl.y = val
 		updateStyles @, STYLE_TRANSFORM
 		return
 
@@ -389,14 +403,17 @@ module.exports = (impl) ->
 		return
 
 	setItemScale: (val) ->
+		@_impl.scale = val
 		updateStyles @, STYLE_TRANSFORM
 		return
 
 	setItemRotation: (val) ->
+		@_impl.rotation = val
 		updateStyles @, STYLE_TRANSFORM
 		return
 
 	setItemOpacity: (val) ->
+		@_impl.opacity = val
 		updateStyles @, STYLE_OPACITY
 		return
 

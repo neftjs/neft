@@ -18,49 +18,47 @@ module.exports = (impl) ->
 
 		i = 0; n = pending.length
 		while i < n
-			animation = pending[i]
+			anim = pending[i]
 
-			if animation.running
-				updateAnimation animation
-
+			if anim._running
+				updateAnimation anim
 				i++
 			else
-				animation.progress = 0
-				animation.animation.running = false
 				pending[i] = utils.last(pending)
 				pending.pop()
 				n--
 
 		if pending.length
 			update()
+		return
 
-	updateAnimation = (animation) ->
-		abstractAnimation = animation.animation
+	updateAnimation = (anim) ->
+		data = anim._impl
 
-		progress = (nowTime-animation.startTime) / animation.duration
+		progress = (nowTime - data.startTime) / anim._duration
 		if progress < 0
 			progress = 0
 		else if progress > 1
 			progress = 1
-		animation.progress = progress
+		data.progress = progress
+
+		val = (anim._to - anim._from) * progress + anim._from
+		target = anim._target
+		if val is val and target # isNaN hack
+			if progress is 1 or anim._updateProperty or not data.propertySetter
+				anim._updatePending = true
+				target[anim._property] = val
+				anim._updatePending = false
+			else
+				impl[data.propertySetter].call target, val
+				if anim._updateData
+					target[data.internalPropertyName] = val
 
 		if progress is 1
-			if animation.loop && abstractAnimation._when
-				animation.startTime = nowTime
+			if anim._loop && anim._when
+				data.startTime = nowTime + anim._delay
 			else
-				animation.running = false
-				abstractAnimation.running = false
-
-		val = (animation.to - animation.from) * progress + animation.from
-		target = animation.target
-		if not isNaN(val) and target
-			setter = impl.utils.SETTER_METHODS_NAMES[animation.property]
-			if progress isnt 1 and not abstractAnimation._updateProperty and setter
-				impl[setter].call target, val
-			else
-				abstractAnimation._updatePending = true
-				target[animation.property] = val
-				abstractAnimation._updatePending = false
+				anim.running = false
 		return
 
 	update = ->
@@ -68,11 +66,19 @@ module.exports = (impl) ->
 		reqSend = true
 		requestAnimationFrame vsync
 
+	playAnimation = (anim) ->
+		nowTime = now()
+
+		data = anim._impl
+		pending.push anim
+		data.startTime = nowTime + anim._delay
+		update()
+
+		updateAnimation anim
+
 	DATA =
-		from: 0
-		to: 0
+		type: 'number'
 		startTime: 0
-		play: null
 
 	DATA: DATA
 
@@ -81,8 +87,8 @@ module.exports = (impl) ->
 	create: (data) ->
 		PropertyAnimation.create.call @, data
 
-		data.play = ->
-			pending.push @
-			@startTime = now() + @delay
-			update()
-			updateAnimation @
+	playAnimation: do (_super = impl.playAnimation) -> ->
+		_super.call @
+		if @_impl.type is 'number'
+			playAnimation @
+		return

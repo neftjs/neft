@@ -3,9 +3,6 @@
 module.exports = (impl) ->
 	DATA =
 		bindings: null
-		animation: null
-		running: false
-		loop: false
 
 	DATA: DATA
 
@@ -15,11 +12,7 @@ module.exports = (impl) ->
 		data.animation = @
 
 	setAnimationLoop: (val) ->
-		@_impl.loop = val
 
-	playAnimation: (id) ->
-		@_impl.running = true
-		@_impl.play()
+	playAnimation: ->
 
-	stopAnimation: (id) ->
-		@_impl.running = false
+	stopAnimation: ->

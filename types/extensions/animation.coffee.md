@@ -4,7 +4,7 @@ Animation
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
@@ -49,16 +49,17 @@ Animation
 				if oldVal is val
 					return
 
-				expect(val).toBe.boolean()
+				assert.isBoolean val
 				_super.call @, val
 				@_when = val
 
 				if val
 					Impl.playAnimation.call @
-					@played?()
+					@played()
 				else
 					Impl.stopAnimation.call @
-					@stopped?()
+					@stopped()
+				return
 
 *Boolean* Animation::loop
 -------------------------
@@ -70,7 +71,7 @@ Animation
 			name: 'loop'
 			implementation: Impl.setAnimationLoop
 			developmentSetter: (val) ->
-				expect(val).toBe.boolean()
+				assert.isBoolean val
 
 ReadOnly *Boolean* Animation::updatePending
 -------------------------------------------
