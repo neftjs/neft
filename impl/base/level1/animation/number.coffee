@@ -42,7 +42,7 @@ module.exports = (impl) ->
 			progress = 1
 		data.progress = progress
 
-		val = (anim._to - anim._from) * progress + anim._from
+		val = (data.to - data.from) * progress + data.from
 		target = anim._target
 		if val is val and target # isNaN hack
 			if progress is 1 or anim._updateProperty or not data.propertySetter
@@ -66,19 +66,11 @@ module.exports = (impl) ->
 		reqSend = true
 		requestAnimationFrame vsync
 
-	playAnimation = (anim) ->
-		nowTime = now()
-
-		data = anim._impl
-		pending.push anim
-		data.startTime = nowTime + anim._delay
-		update()
-
-		updateAnimation anim
-
 	DATA =
 		type: 'number'
 		startTime: 0
+		from: 0
+		to: 0
 
 	DATA: DATA
 
@@ -90,5 +82,14 @@ module.exports = (impl) ->
 	playAnimation: do (_super = impl.playAnimation) -> ->
 		_super.call @
 		if @_impl.type is 'number'
-			playAnimation @
+			nowTime = now()
+
+			data = @_impl
+			data.from = @_from
+			data.to = @_to
+			pending.push @
+			data.startTime = nowTime + @_delay
+			update()
+
+			updateAnimation @
 		return
