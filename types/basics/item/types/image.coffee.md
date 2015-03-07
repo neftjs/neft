@@ -38,6 +38,7 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 
 		constructor: ->
 			@_source = ''
+			@_isLoaded = false
 			super()
 
 *String* Image::source
@@ -63,12 +64,28 @@ Image source URL (absolute or relative to the page) or data URI.
 						@width = opts.width
 						@height = opts.height
 
+					@_isLoaded = true
+					@isLoadedChanged false
 					@loaded err
 
 				(_super) -> (val) ->
 					_super.call @, val
+					if @_isLoaded
+						@_isLoaded = false
+						@isLoadedChanged true
 					Impl.setImageSource.call @, val, loadCallback
 					return
+
+ReadOnly *Boolean* Image::isLoaded
+----------------------------------
+
+		utils.defineProperty @::, 'isLoaded', null, ->
+			@_isLoaded
+		, null
+
+### *Signal* Image::isLoadedChanged(*Boolean* oldValue)
+
+		signal.Emitter.createSignal @, 'isLoadedChanged'
 
 *Signal* Image::loaded([*Error* error])
 ---------------------------------------

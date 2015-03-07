@@ -110,6 +110,8 @@ The *event* object contains x and y position.
 
 This property refers to the current pointer x position relative to the item.
 
+### *Signal* Pointer::xChanged(*Integer* oldValue)
+
 			onPositionSignalInitialized = do ->
 				onMoved = (e) ->
 					@pointer.x = e.x
@@ -155,6 +157,8 @@ Rectangle {
 }
 ```
 
+### *Signal* Pointer::yChanged(*Integer* oldValue)
+
 			itemUtils.defineProperty
 				constructor: Pointer
 				name: 'y'
@@ -167,6 +171,8 @@ Rectangle {
 ------------------------------------
 
 This property holds whether the pointer is currently pressed.
+
+### *Signal* Pointer::isPressedChanged(*Boolean* oldValue)
 
 			isPressedInitializer = do ->
 				onPressed = ->
@@ -196,6 +202,8 @@ This property holds whether the pointer is currently pressed.
 ----------------------------------
 
 This property holds whether the pointer is currently under the item.
+
+### *Signal* Pointer::isHoverChanged(*Boolean* oldValue)
 
 			isHoverInitializer = do ->
 				onEntered = ->
