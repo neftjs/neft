@@ -26,10 +26,10 @@ Animation
 
 ### *Signal* Animation::whenChanged(*Boolean* oldValue)
 
-*Signal* Animation::played()
-----------------------------
+*Signal* Animation::started()
+-----------------------------
 
-		signal.Emitter.createSignal @, 'played'
+		signal.Emitter.createSignal @, 'started'
 
 *Signal* Animation::stopped()
 -----------------------------
@@ -54,8 +54,8 @@ Animation
 				@_when = val
 
 				if val
-					Impl.playAnimation.call @
-					@played()
+					Impl.startAnimation.call @
+					@started()
 				else
 					Impl.stopAnimation.call @
 					@stopped()
@@ -80,10 +80,10 @@ ReadOnly *Boolean* Animation::updatePending
 			@_updatePending
 		, null
 
-Animation::play()
------------------
+Animation::start()
+------------------
 
-		play: ->
+		start: ->
 			@running = true
 			@
 

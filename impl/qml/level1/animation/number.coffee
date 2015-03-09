@@ -26,11 +26,11 @@ module.exports = (impl) ->
 					"property var target: null;" +
 					"property real from;" +
 					"property real to;" +
-					"property real playDelay: 0;" +
+					"property real startDelay: 0;" +
 					"property real loopDelay: 0;" +
 					"property var duration: 0;" +
 					"property bool loop: false;" +
-					"PauseAnimation { duration: main.playDelay }" +
+					"PauseAnimation { duration: main.startDelay }" +
 					"SequentialAnimation {" +
 						"loops: main.loop ? Animation.Infinite : 1;" +
 						"#{qmlType} {" +
@@ -100,7 +100,7 @@ module.exports = (impl) ->
 		return
 
 	onStarted = ->
-		@_impl.startTime = nowTime + @_playDelay
+		@_impl.startTime = nowTime + @_startDelay
 		updateAnimation @
 		pending.push @
 	onStopped = ->
@@ -122,7 +122,7 @@ module.exports = (impl) ->
 	create: (data) ->
 		impl.Types.PropertyAnimation.create.call @, data
 
-	playAnimation: do (_super = impl.playAnimation) -> ->
+	startAnimation: do (_super = impl.startAnimation) -> ->
 		data = @_impl
 		if data.type isnt 'number' or not data.propertySetter
 			data.accepts = false
@@ -140,7 +140,7 @@ module.exports = (impl) ->
 		{elem} = data
 
 		elem.target = @_target._impl.elem
-		elem.playDelay = @_playDelay
+		elem.startDelay = @_startDelay
 		elem.loopDelay = @_loopDelay
 		elem.duration = @_duration
 		elem.loop = @_loop
@@ -153,7 +153,7 @@ module.exports = (impl) ->
 
 		impl[data.propertySetter].call @_target, elem.from
 
-		data.startTime = nowTime + @_playDelay
+		data.startTime = nowTime + @_startDelay
 		data.from = @_from
 		data.to = @_to
 		elem.start()

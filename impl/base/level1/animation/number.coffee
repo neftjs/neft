@@ -72,13 +72,13 @@ module.exports = (impl) ->
 	create: (data) ->
 		impl.Types.PropertyAnimation.create.call @, data
 
-	playAnimation: do (_super = impl.playAnimation) -> ->
+	startAnimation: do (_super = impl.startAnimation) -> ->
 		_super.call @
 		if @_impl.type is 'number'
 			data = @_impl
 			data.from = @_from
 			data.to = @_to
-			data.startTime = nowTime + @_playDelay
+			data.startTime = nowTime + @_startDelay
 			pending.push @
 
 			updateAnimation @

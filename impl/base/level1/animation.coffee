@@ -12,6 +12,6 @@ module.exports = (impl) ->
 
 	setAnimationLoop: (val) ->
 
-	playAnimation: ->
+	startAnimation: ->
 
 	stopAnimation: ->
