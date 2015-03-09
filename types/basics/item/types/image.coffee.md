@@ -39,7 +39,23 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 		constructor: ->
 			@_source = ''
 			@_isLoaded = false
+			@_autoWidth = true
+			@_autoHeight = true
 			super()
+
+		getter = utils.lookupGetter @::, 'width'
+		setter = utils.lookupSetter @::, 'width'
+		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
+			@_autoWidth = false
+			_super.call @, val
+			return
+
+		getter = utils.lookupGetter @::, 'height'
+		setter = utils.lookupSetter @::, 'height'
+		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
+			@_autoHeight = false
+			_super.call @, val
+			return
 
 *String* Image::source
 ----------------------
@@ -57,12 +73,20 @@ Image source URL (absolute or relative to the page) or data URI.
 			developmentSetter: (val) ->
 				expect(val).toBe.string()
 			setter: do ->
-				loadCallback = (err, opts) ->
+				defaultSize =
+					width: 0
+					height: 0
+
+				loadCallback = (err=null, opts) ->
 					if err
 						log.warn "Can't load `#{@source}` image"
-					else if opts?
-						@width = opts.width
-						@height = opts.height
+					else
+						if @_autoWidth
+							@width = opts.width
+							@_autoWidth = true
+						if @_autoHeight
+							@height = opts.height
+							@_autoHeight = true
 
 					@_isLoaded = true
 					@isLoadedChanged false
@@ -73,7 +97,11 @@ Image source URL (absolute or relative to the page) or data URI.
 					if @_isLoaded
 						@_isLoaded = false
 						@isLoadedChanged true
-					Impl.setImageSource.call @, val, loadCallback
+					if val
+						Impl.setImageSource.call @, val, loadCallback
+					else
+						Impl.setImageSource.call @, null, null
+						loadCallback.call @, null, defaultSize
 					return
 
 ReadOnly *Boolean* Image::isLoaded

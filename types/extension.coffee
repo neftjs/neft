@@ -20,14 +20,24 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 		@_impl ?= bindings: null
 		@_target = null
 		@_running = false
+		@_isWhenListens = false
 		@onWhenChanged onWhenChanged
+
+	signalListener = ->
+		@when = true
 
 	itemUtils.defineProperty
 		constructor: @
 		name: 'when'
 		defaultValue: false
 		setter: (_super) -> (val) ->
-			_super.call @, !!val
+			if typeof val is 'function' and val.connect?
+				unless @_isWhenListens
+					val.connect signalListener, @
+					@_isWhenListens = true
+			else
+				_super.call @, !!val
+			return
 
 	itemUtils.defineProperty
 		constructor: @

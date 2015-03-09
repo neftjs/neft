@@ -122,8 +122,8 @@ Grid {
 -------------------------------
 
 			valueOf: ->
-				if @column is @row
-					@column
+				if @_column is @_row
+					@_column
 				else
 					throw new Error "column and row grid spacing are different"
 

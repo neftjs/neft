@@ -218,3 +218,4 @@ module.exports = (impl) ->
 
 		if binding?
 			data.bindings[uniqueProp] = new Binding @, ns, uniqueProp, prop, binding, extraResultFunc
+		return

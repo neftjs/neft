@@ -73,6 +73,32 @@ Animation/PropertyAnimation
 					_super.call @, val
 				return
 
+*Float* PropertyAnimation::playDelay = 0
+----------------------------------------
+
+### *Signal* PropertyAnimation::playDelayChanged(*Float* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'playDelay'
+			defaultValue: 0
+			implementation: Impl.setPropertyAnimationPlayDelay
+			developmentSetter: (val) ->
+				assert.isFloat val
+
+*Float* PropertyAnimation::loopDelay = 0
+----------------------------------------
+
+### *Signal* PropertyAnimation::loopDelayChanged(*Float* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'loopDelay'
+			defaultValue: 0
+			implementation: Impl.setPropertyAnimationLoopDelay
+			developmentSetter: (val) ->
+				assert.isFloat val
+
 *Float* PropertyAnimation::delay = 0
 ------------------------------------
 
@@ -82,14 +108,17 @@ Animation/PropertyAnimation
 			constructor: @
 			name: 'delay'
 			defaultValue: 0
-			implementation: Impl.setPropertyAnimationDelay
 			developmentSetter: (val) ->
 				assert.isFloat val
-			setter: (_super) -> (val) ->
-				if val < 0
-					_super.call @, 0
+			getter: (_super) -> (val) ->
+				if @_playDelay is @_loopDelay
+					@_playDelay
 				else
-					_super.call @, val
+					throw new Error "playDelay and loopDelay are different"
+			setter: (_super) -> (val) ->
+				@playDelay = val
+				@loopDelay = val
+				_super.call @, val
 				return
 
 *Boolean* PropertyAnimation::updateData = false

@@ -2,15 +2,14 @@
 
 utils = require 'utils'
 
-{now} = Date
-
 module.exports = (impl) ->
 	{Types} = impl
 	{PropertyAnimation} = Types
+	{now} = Date
 
 	reqSend = false
 	pending = []
-	nowTime = 0
+	nowTime = now()
 
 	vsync = ->
 		reqSend = false
@@ -28,24 +27,25 @@ module.exports = (impl) ->
 				pending.pop()
 				n--
 
-		if pending.length
-			update()
+		requestAnimationFrame vsync
 		return
+	requestAnimationFrame vsync
 
 	updateAnimation = (anim) ->
 		data = anim._impl
 
 		progress = (nowTime - data.startTime) / anim._duration
 		if progress < 0
-			progress = 0
+			return
 		else if progress > 1
 			progress = 1
 		data.progress = progress
+		running = progress isnt 1 or (anim._loop && anim._when)
 
 		val = (data.to - data.from) * progress + data.from
 		target = anim._target
 		if val is val and target # isNaN hack
-			if progress is 1 or anim._updateProperty or not data.propertySetter
+			if not running or anim._updateProperty or not data.propertySetter
 				anim._updatePending = true
 				target[anim._property] = val
 				anim._updatePending = false
@@ -55,16 +55,11 @@ module.exports = (impl) ->
 					target[data.internalPropertyName] = val
 
 		if progress is 1
-			if anim._loop && anim._when
-				data.startTime = nowTime + anim._delay
+			if running
+				data.startTime += anim._loopDelay + anim._duration
 			else
 				anim.running = false
 		return
-
-	update = ->
-		return if reqSend
-		reqSend = true
-		requestAnimationFrame vsync
 
 	DATA =
 		type: 'number'
@@ -82,14 +77,11 @@ module.exports = (impl) ->
 	playAnimation: do (_super = impl.playAnimation) -> ->
 		_super.call @
 		if @_impl.type is 'number'
-			nowTime = now()
-
 			data = @_impl
 			data.from = @_from
 			data.to = @_to
+			data.startTime = nowTime + @_playDelay
 			pending.push @
-			data.startTime = nowTime + @_delay
-			update()
 
 			updateAnimation @
 		return

@@ -30,12 +30,9 @@ module.exports = (impl) ->
 			elem.statusChanged.disconnect @, onStatusChanged
 
 			if elem.status is Image.Ready
-				if @_width is 0 and @_height is 0
-					callback.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
-				else
-					callback.call @, null
+				callback?.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
 			else
-				callback.call @, true
+				callback?.call @, true
 
 		(val, callback) ->
 			data = @_impl
@@ -45,7 +42,7 @@ module.exports = (impl) ->
 
 			unless DATA_URI_RE.test val
 				val = impl.utils.toUrl(val)
-			elem.source = val
+			elem.source = val or ''
 
 			if ///^data:image\/svg+|\.svg$///.test val
 				elem.fillMode = Image.PreserveAspectFit
@@ -64,14 +61,11 @@ module.exports = (impl) ->
 
 			switch elem.status
 				when Image.Null
-					callback.call @, true
+					callback?.call @, true
 				when Image.Ready
-					if @_width is 0 and @_height is 0
-						callback.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
-					else
-						callback.call @, null
+					callback?.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
 				when Image.Error
-					callback.call @, true
+					callback?.call @, true
 				when Image.Loading
 					elem.statusChanged.connect @, onStatusChanged
 				else

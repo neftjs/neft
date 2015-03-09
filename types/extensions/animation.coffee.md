@@ -99,4 +99,5 @@ Animation::stop()
 			super()
 
 		disable: ->
+			@running = false
 			super()

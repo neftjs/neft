@@ -25,7 +25,9 @@ module.exports = (impl) ->
 
 	setPropertyAnimationDuration: (val) ->
 
-	setPropertyAnimationDelay: (val) ->
+	setPropertyAnimationPlayDelay: (val) ->
+
+	setPropertyAnimationLoopDelay: (val) ->
 
 	setPropertyAnimationFrom: (val) ->
 
