@@ -2,7 +2,6 @@
 
 module.exports = (impl) ->
 	{items} = impl
-	{Item, Image} = impl.Types
 
 	getRectangleSource = (item) ->
 		{width, height} = item
@@ -30,17 +29,17 @@ module.exports = (impl) ->
 		@_impl.rectangleUpdatePending = true
 		setImmediate =>
 			@_impl.rectangleUpdatePending = false
-			Image.setImageSource.call @, getRectangleSource(@)
+			impl.setImageSource.call @, getRectangleSource(@)
 
 	DATA =
 		rectangleUpdatePending: false
 
 	DATA: DATA
 
-	createData: impl.utils.createDataCloner Image.DATA, DATA
+	createData: impl.utils.createDataCloner 'Image', DATA
 
 	create: (data) ->
-		Image.create.call @, data
+		impl.Types.Image.create.call @, data
 
 		@onWidthChanged updateImage
 		@onHeightChanged updateImage

@@ -22,22 +22,24 @@ platformImpl = switch true
 	when utils.isQml
 		require('./impl/qml') impl
 
-abstractTypes = utils.clone impl.Types
+# merge types
+for name in TYPES
+	type = impl.Types[name] = impl.Types[name](impl)
+	utils.merge impl, type
+
 if platformImpl
 	utils.mergeDeep impl, platformImpl
 
 # merge types
 for name in TYPES
-	type = impl.Types[name]
-	type = impl.Types[name] = type(impl)
-	utils.merge impl, type
+	if typeof impl.Types[name] is 'function'
+		type = impl.Types[name] = impl.Types[name](impl)
+		utils.merge impl, type
 
-# add missed function from the abstract impl
+# init createData
 for name in TYPES
-	type = abstractTypes[name] impl
-	for key, func of type
-		unless impl.hasOwnProperty(key)
-			impl[key] = func
+	if impl.Types[name].createData
+		impl.Types[name].createData = impl.Types[name].createData()
 
 # merge modules
 for name, extra of impl.Extras

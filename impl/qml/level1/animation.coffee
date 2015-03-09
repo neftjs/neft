@@ -3,6 +3,8 @@
 module.exports = (impl) ->
 	DATA =
 		bindings: null
+		elem: null
+		dirty: true
 
 	DATA: DATA
 
@@ -11,7 +13,3 @@ module.exports = (impl) ->
 	create: (data) ->
 
 	setAnimationLoop: (val) ->
-
-	playAnimation: ->
-
-	stopAnimation: ->

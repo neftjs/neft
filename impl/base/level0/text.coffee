@@ -2,7 +2,6 @@
 
 module.exports = (impl) ->
 	{items} = impl
-	{Item, Image} = impl.Types
 
 	DATA =
 		text: ''
@@ -16,10 +15,10 @@ module.exports = (impl) ->
 
 	DATA: DATA
 
-	createData: impl.utils.createDataCloner Item.DATA, DATA
+	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
-		Item.create.call @, data
+		impl.Types.Item.create.call @, data
 
 	setText: (val) ->
 		@_impl.text = val

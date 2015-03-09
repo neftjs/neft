@@ -210,7 +210,7 @@ module.exports = (impl) ->
 		# set default styles
 		textElement.setAttribute 'class', 'text'
 
-	createData: impl.utils.createDataCloner Item.DATA, DATA
+	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
 		Item.create.call @, data

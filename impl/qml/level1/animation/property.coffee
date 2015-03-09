@@ -17,9 +17,9 @@ module.exports = (impl) ->
 
 	setPropertyAnimationTarget: (val) ->
 
-	setPropertyAnimationProperty: (val) ->
-		@_impl.internalPropertyName = "_#{val}"
-		@_impl.propertySetter = impl.utils.SETTER_METHODS_NAMES[val]
+	setPropertyAnimationProperty: do (_super = impl.setPropertyAnimationProperty) -> (val) ->
+		_super.call @, val
+		@_impl.dirty = true
 		return
 
 	setPropertyAnimationDuration: (val) ->
@@ -35,6 +35,7 @@ module.exports = (impl) ->
 	setPropertyAnimationUpdateData: (val) ->
 
 	setPropertyAnimationUpdateProperty: (val) ->
+		@_impl.dirty = true
 
 	getPropertyAnimationProgress: ->
 		@_impl.progress

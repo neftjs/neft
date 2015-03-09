@@ -4,15 +4,12 @@ utils = require 'utils'
 
 module.exports = (impl) ->
 	{Types} = impl
-	{PropertyAnimation} = Types
 	{now} = Date
 
-	reqSend = false
 	pending = []
 	nowTime = now()
 
 	vsync = ->
-		reqSend = false
 		nowTime = now()
 
 		i = 0; n = pending.length
@@ -36,11 +33,12 @@ module.exports = (impl) ->
 
 		progress = (nowTime - data.startTime) / anim._duration
 		if progress < 0
+			data.progress = 0
 			return
 		else if progress > 1
 			progress = 1
 		data.progress = progress
-		running = progress isnt 1 or (anim._loop && anim._when)
+		running = progress isnt 1 or (anim._running and anim._loop and anim._when)
 
 		val = (data.to - data.from) * progress + data.from
 		target = anim._target
@@ -69,10 +67,10 @@ module.exports = (impl) ->
 
 	DATA: DATA
 
-	createData: impl.utils.createDataCloner PropertyAnimation.DATA, DATA
+	createData: impl.utils.createDataCloner 'PropertyAnimation', DATA
 
 	create: (data) ->
-		PropertyAnimation.create.call @, data
+		impl.Types.PropertyAnimation.create.call @, data
 
 	playAnimation: do (_super = impl.playAnimation) -> ->
 		_super.call @
@@ -83,5 +81,13 @@ module.exports = (impl) ->
 			data.startTime = nowTime + @_playDelay
 			pending.push @
 
+			updateAnimation @
+		return
+
+	stopAnimation: do (_super = impl.stopAnimation) -> ->
+		_super.call @
+		if @_impl.type is 'number'
+			data = @_impl
+			data.startTime = 0
 			updateAnimation @
 		return

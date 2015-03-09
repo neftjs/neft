@@ -62,7 +62,7 @@ module.exports = (impl) ->
 	exports =
 	DATA: DATA
 
-	createData: impl.utils.createDataCloner Item.DATA, DATA
+	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
 		elem = data.elem ?= impl.utils.createQmlObject(

@@ -23,6 +23,9 @@ module.exports = (impl) ->
 		FontLoader: require './level0/fontLoader'
 
 		Rectangle: require './level1/rectangle'
+		Animation: require './level1/animation'
+		PropertyAnimation: require './level1/animation/property'
+		NumberAnimation: require './level1/animation/number'
 
 	setWindow: (item) ->
 		while child = __stylesBody.children[0]

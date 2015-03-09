@@ -8,7 +8,6 @@ MIN_POINTER_DELTA = 5
 
 module.exports = (impl) ->
 	{Types} = impl
-	{Item, Rectangle} = Types
 
 	impl._scrollableUsePointer ?= true
 
@@ -163,10 +162,10 @@ module.exports = (impl) ->
 
 	DATA: DATA
 
-	createData: impl.utils.createDataCloner Item.DATA, DATA
+	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
-		Item.create.call @, data
+		impl.Types.Item.create.call @, data
 
 		# item props
 		impl.setItemClip.call @, true

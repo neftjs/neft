@@ -163,7 +163,7 @@ module.exports = (impl) ->
 		data.elem ?= impl.utils.createQmlObject 'Item {}'
 
 	setItemParent: (val) ->
-		@_impl.elem.parent = val?._impl.elem or null
+		@_impl.elem.parent = val?._impl.elem or __stylesHatchery or null
 
 	setItemVisible: (val) ->
 		@_impl.elem.visible = val

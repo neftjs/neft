@@ -38,7 +38,6 @@ module.exports = (impl) ->
 	onImageLoaded = ->
 		data = @_impl
 		img = data.image
-		img.onLoaded.disconnect onImageLoaded, @
 
 		if img.source is data.source
 			callCallback.call @
@@ -65,7 +64,7 @@ module.exports = (impl) ->
 
 	DATA: DATA
 
-	createData: impl.utils.createDataCloner Item.DATA, DATA
+	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
 		self = @
