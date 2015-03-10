@@ -7,7 +7,7 @@ signal = require 'signal'
 
 impl = abstractImpl = require './impl/base'
 
-TYPES = ['Item', 'Image', 'Text', 'FontLoader', 'Screen'
+TYPES = ['Item', 'Image', 'Text', 'FontLoader', 'Screen', 'RotationSensor',
 
          'Rectangle', 'Grid', 'Column', 'Row',
          'Animation', 'PropertyAnimation', 'NumberAnimation',

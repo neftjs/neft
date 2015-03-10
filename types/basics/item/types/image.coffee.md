@@ -81,6 +81,8 @@ Image source URL (absolute or relative to the page) or data URI.
 					if err
 						log.warn "Can't load `#{@source}` image"
 					else
+						@naturalWidth = opts.width
+						@naturalHeight = opts.height
 						if @_autoWidth
 							@width = opts.width
 							@_autoWidth = true
@@ -103,6 +105,30 @@ Image source URL (absolute or relative to the page) or data URI.
 						Impl.setImageSource.call @, null, null
 						loadCallback.call @, null, defaultSize
 					return
+
+*Integer* Image::naturalWidth
+-----------------------------
+
+### *Signal* Image::naturalWidthChanged(*Integer* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'naturalWidth'
+			defaultValue: 0
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
+
+*Integer* Image::naturalHeight
+------------------------------
+
+### *Signal* Image::naturalHeightChanged(*Integer* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'naturalHeight'
+			defaultValue: 0
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
 
 ReadOnly *Boolean* Image::isLoaded
 ----------------------------------

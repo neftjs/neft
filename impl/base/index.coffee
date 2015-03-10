@@ -3,11 +3,12 @@
 utils = require 'utils'
 
 exports.Types =
-	Screen: require './level0/screen'
 	Item: require './level0/item'
 	Image: require './level0/image'
 	Text: require './level0/text'
 	FontLoader: require './level0/fontLoader'
+	Screen: require './level0/screen'
+	RotationSensor: require './level0/sensor/rotation'
 
 	Rectangle: require './level1/rectangle'
 	Grid: require './level1/grid'

@@ -125,6 +125,7 @@ Styles.button/red {
 	signal.create exports, 'ready'
 
 	exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
+	exports.RotationSensor = require('./types/namespace/sensor/rotation') exports, Impl, itemUtils
 
 	exports.Extension = require('./types/extension') exports, Impl, itemUtils
 	exports.State = require('./types/extensions/state') exports, Impl, itemUtils

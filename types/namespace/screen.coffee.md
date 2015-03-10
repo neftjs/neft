@@ -4,6 +4,7 @@ Screen
 	'use strict'
 
 	utils = require 'utils'
+	signal = require 'signal'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -72,6 +73,19 @@ Screen
 		Screen._height = 800;
 		utils.defineProperty Screen, 'height', null, ->
 			@_height
+		, null
+
+*String* Screen.orientation = 'Portrait'
+----------------------------------------
+
+May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
+
+### *Signal* Screen.orientationChanged(*String* oldValue)
+
+		Screen._orientation = 'Portrait';
+		signal.create Screen, 'orientationChanged'
+		utils.defineProperty Screen, 'orientation', null, ->
+			@_orientation
 		, null
 
 		Object.preventExtensions Screen

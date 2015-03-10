@@ -34,7 +34,7 @@ Transition
 			if progress > 0
 				animation.duration = @_duration * progress
 
-			animation.play()
+			animation.start()
 			return
 
 *Boolean* Transition::when

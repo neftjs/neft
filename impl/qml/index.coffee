@@ -16,11 +16,12 @@ module.exports = (impl) ->
 	__stylesWindow.heightChanged.connect resize
 
 	Types:
-		Screen: require './level0/screen'
 		Item: require './level0/item'
 		Image: require './level0/image'
 		Text: require './level0/text'
 		FontLoader: require './level0/fontLoader'
+		Screen: require './level0/screen'
+		RotationSensor: require './level0/sensor/rotation'
 
 		Rectangle: require './level1/rectangle'
 		Animation: require './level1/animation'
