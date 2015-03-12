@@ -34,10 +34,15 @@ Item states
 
 			constructor: ->
 				assert.lengthOf arguments, 0
+				self = @
 
 				@changes = new ChangesObject
 				@_name = utils.uid()
 				super()
+
+				setImmediate ->
+					if self.target?.states.has(self.name)
+						reloadItem self
 
 *String* State::name
 --------------------

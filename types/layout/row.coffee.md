@@ -25,6 +25,15 @@ Row {
 
 		constructor: ->
 			super()
+			@_autoWidth = true
+
+		getter = utils.lookupGetter @::, 'width'
+		setter = utils.lookupSetter @::, 'width'
+		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
+			if @_width isnt val
+				@_autoWidth = false
+			_super.call @, val
+			return
 
 *Float* Row::spacing = 0
 ------------------------
@@ -42,3 +51,9 @@ Row {
 					val = 0
 				assert.isFloat val
 				_super.call @, val
+
+		clone: ->
+			clone = super()
+			clone._autoWidth = @_autoWidth
+			clone.spacing = @_spacing
+			clone

@@ -21,4 +21,7 @@ Item::createProperty(*String* name)
 				object: @
 				name: name
 
+			@_properties ?= []
+			@_properties.push name
+
 			return

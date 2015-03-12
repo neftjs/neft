@@ -58,6 +58,13 @@ Rectangle {
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
 
+			clone: ->
+				clone = super()
+				clone.color = @_color
+				clone.radius = @_radius
+				clone.border = @border
+				clone
+
 *Border* Rectangle::border
 --------------------------
 

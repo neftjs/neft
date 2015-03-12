@@ -113,20 +113,22 @@ updateItem = (item) ->
 		i++
 
 	# set item size
-	item._impl.updatePending = true
-	if item._impl.autoWidth
+	if item._autoWidth isnt false
 		width = columnsPositions[maxColumnsLen-1]
 		if width > 0	
 			item.width = width
 		else
 			item.width = 0
-	if item._impl.autoHeight
+		item._autoWidth = true
+
+	if item._autoHeight isnt false
 		height = rowsPositions[maxRowsLen-1]
 		if height > 0
 			item.height = height
 		else
 			item.height = 0
-	item._impl.updatePending = false
+		item._autoHeight = true
+	return
 
 updateItems = ->
 	pending = false
@@ -153,30 +155,15 @@ update = ->
 updateParent = ->
 	update.call @parent
 
-onWidthChanged = ->
-	unless @_impl.updatePending
-		@_impl.autoWidth = @width is 0
-
-onHeightChanged = ->
-	unless @_impl.updatePending
-		@_impl.autoHeight = @height is 0
-
 COLUMN = exports.COLUMN = 1<<0
 ROW = exports.ROW = 1<<1
 ALL = exports.ALL = (1<<2) - 1
 
 exports.DATA =
 	gridType: 0
-	autoWidth: true
-	autoHeight: true
-	updatePending: false
 
 exports.create = (item, type) ->
 	item._impl.gridType = type
-
-	# auto size
-	item.onWidthChanged onWidthChanged
-	item.onHeightChanged onHeightChanged
 
 	# update on children change
 	item.onChildrenChanged update

@@ -46,14 +46,16 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 		getter = utils.lookupGetter @::, 'width'
 		setter = utils.lookupSetter @::, 'width'
 		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
-			@_autoWidth = false
+			if @_width isnt val
+				@_autoWidth = false
 			_super.call @, val
 			return
 
 		getter = utils.lookupGetter @::, 'height'
 		setter = utils.lookupSetter @::, 'height'
 		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-			@_autoHeight = false
+			if @_height isnt val
+				@_autoHeight = false
 			_super.call @, val
 			return
 
@@ -151,3 +153,8 @@ Always check, whether first *error* argument is defined if you need to check
 whether image is ready.
 
 		signal.Emitter.createSignal @, 'loaded'
+
+		clone: ->
+			clone = super()
+			clone.source = @_source
+			clone

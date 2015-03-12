@@ -81,6 +81,9 @@ module.exports = (impl) ->
 			data.startTime = nowTime + @_startDelay
 			pending.push @
 
+			@_updatePending = true
+			@_target[@_property] = @_from
+			@_updatePending = false
 			updateAnimation @
 		return
 

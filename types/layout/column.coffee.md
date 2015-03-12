@@ -25,6 +25,15 @@ Column {
 
 		constructor: ->
 			super()
+			@_autoHeight = true
+
+		getter = utils.lookupGetter @::, 'height'
+		setter = utils.lookupSetter @::, 'height'
+		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
+			if @_width isnt val
+				@_autoHeight = false
+			_super.call @, val
+			return
 
 *Float* Column::spacing = 0
 ---------------------------
@@ -42,3 +51,9 @@ Column {
 					val = 0
 				assert.isFloat val
 				_super.call @, val
+
+		clone: ->
+			clone = super()
+			clone._autoHeight = @_autoHeight
+			clone.spacing = @_spacing
+			clone

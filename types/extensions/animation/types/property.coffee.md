@@ -82,7 +82,7 @@ Animation/PropertyAnimation
 			constructor: @
 			name: 'startDelay'
 			defaultValue: 0
-			implementation: Impl.setPropertyAnimationPlayDelay
+			implementation: Impl.setPropertyAnimationStartDelay
 			developmentSetter: (val) ->
 				assert.isFloat val
 

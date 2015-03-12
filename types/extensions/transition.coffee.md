@@ -29,13 +29,17 @@ Transition
 			animation.stop()
 			animation.duration = @_duration
 
+			@_to = @_target[@property]
+			if animation.from is oldVal and animation.to is @_to
+				return
+
 			animation.from = oldVal
-			@_to = animation.to = @_target[@property]
+			animation.to = @_to
 			if progress > 0
 				animation.duration = @_duration * progress
 
 			animation.start()
-			return
+			signal.STOP_PROPAGATION
 
 *Boolean* Transition::when
 --------------------------
@@ -86,10 +90,6 @@ Transition
 
 ### Transition::animationChanged(*Renderer.Animation* oldValue)
 
-		onAnimationStopped = ->
-			@_target?[@property] = @_to
-			return
-
 		itemUtils.defineProperty
 			constructor: @
 			name: 'animation'
@@ -104,13 +104,11 @@ Transition
 
 				if oldVal
 					oldVal.stop()
-					val.onStopped.disconnect onAnimationStopped, @
 
 				if val
 					@_duration = val.duration
 					val.target = @target
 					val.property = @property
-					val.onStopped onAnimationStopped, @
 				return
 
 *String* Transition::property

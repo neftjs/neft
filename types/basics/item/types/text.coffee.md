@@ -85,6 +85,14 @@ Text {
 				developmentSetter: (val) ->
 					assert.isFloat val
 
+			clone: ->
+				clone = super()
+				clone.text = @_text
+				clone.color = @_color
+				clone.lineHeight = @_lineHeight
+				clone.font = @font
+				clone
+
 *Font* Text::font
 -----------------
 

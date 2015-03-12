@@ -9,65 +9,70 @@ log = log.scope 'Renderer', 'Binding'
 {assert} = console
 {isArray} = Array
 
+getPropHandlerName = do ->
+	cache = Object.create null
+	(prop) ->
+		cache[prop] ?= signal.getHandlerName "#{prop}Changed"
+
 module.exports = (impl) ->
 	{items} = impl
 
 	class Connection
-		constructor: (@binding, @item, @prop) ->
+		constructor: (@binding, @item, @prop, @parent=null) ->
+			@handlerName = getPropHandlerName prop
+
 			if isArray item
-				@item = null
-				child = @child = new Connection binding, item[0], item[1]
-				child.parent = @
-				@updateChild child
+				@child = new Connection null, item[0], item[1], @
+				@item = @child.getValue()
 			else
-				@listen()
+				@child = null
+			@connect()
 
-		child: null
-		binding: null
-		item: null
-		prop: null
-		parent: null
+			Object.preventExtensions @
 
-		getObj: ->
+		signalChangeListener = ->
+			if @parent
+				@parent.updateItem()
+			else
+				@binding.update()
+
+		getItem: ->
 			if @item instanceof impl.DeepObject
 				@child.item[@child.prop]
 			else
 				@item
 
-		listen: ->
-			signalName = "#{@prop}Changed"
-			handlerName = signal.getHandlerName signalName
-
+		connect: ->
 			if @item
-				@getObj()[handlerName]? @signalChangeListener, @
+				@getItem()[@handlerName]? signalChangeListener, @
+			return
 
-		updateChild: (child) ->
-			signalName = "#{@prop}Changed"
-			handlerName = signal.getHandlerName signalName
-
+		disconnect: ->
 			if @item
-				@getObj()[handlerName]?.disconnect @signalChangeListener, @
-				@item = null
+				@getItem()[@handlerName]?.disconnect signalChangeListener, @
+			return
 
-			if child
-				if child.item
-					@item = child.getValue()
-					@listen()
-					@signalChangeListener()
+		updateItem: ->
+			oldVal = @getItem()
+			val = @child.getValue()
+			if oldVal isnt val
+				@disconnect()
+				@item = val
+				@connect()
+
+				if @parent
+					@parent.updateItem()
 				else
-					child.updateChild()
-
-		signalChangeListener: ->
-			if @parent
-				@parent.updateChild @
-			else
-				@binding.update()
+					@binding.update()
+			return
 
 		getValue: ->
-			@getObj()[@prop]
+			@getItem()?[@prop]
 
 		destroy: ->
-			@updateChild null
+			@disconnect()
+			@child?.destroy()
+			return
 
 	class Binding
 		@prepare = (arr, item) ->
@@ -117,6 +122,7 @@ module.exports = (impl) ->
 				args.push "return #{hash};"
 				cache[hash] = Function.apply null, args
 
+		# TODO: implement fast bindings [[item, prop]]
 		constructor: (@item, @ns, @uniqueProp, @prop, binding, @extraResultFunc) ->
 			Binding.prepare binding, item
 
@@ -185,6 +191,7 @@ module.exports = (impl) ->
 			@updatePending = true
 			@getObj()[@prop] = result
 			@updatePending = false
+			return
 
 		destroy: ->
 			# destroy connections
@@ -195,16 +202,12 @@ module.exports = (impl) ->
 			nsImpl = @item._impl
 			nsImpl.bindings[@uniqueProp] = null
 
-			# disconnect listener
-			signalName = "#{@prop}Changed"
-			handlerName = signal.getHandlerName signalName
-
 			# clear props
 			@args = null
 			@connections = null
 
 			# restore default value
-			@getObj()[@prop] = @defaultValue
+			# @getObj()[@prop] = @defaultValue
 			return
 
 	setItemBinding: (ns, prop, uniqueProp, binding, extraResultFunc) ->

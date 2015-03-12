@@ -221,6 +221,7 @@ window.addEventListener SIGNALS.pointerMoved, (e) ->
 		if coords
 			mouseActiveItem.pointer.moved coords
 	return
+window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
 
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4

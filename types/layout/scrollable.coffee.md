@@ -117,9 +117,10 @@ Positioning/Scrollable
 			defaultValue: null
 			implementation: Impl.setScrollableContentItem
 			setter: (_super) -> (val) ->
+				@_contentItem?._parent = null
 				if val?
 					expect(val).toBe.any Renderer.Item
-					val.parent = null
+					val._parent = @
 				_super.call @, val
 
 *Renderer.Item* Scrollable::verticalScrollbar
@@ -165,3 +166,7 @@ Positioning/Scrollable
 			implementation: Impl.setScrollableContentY
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
+
+		clone: ->
+			clone = super()
+			clone

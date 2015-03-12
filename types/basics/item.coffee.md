@@ -345,3 +345,31 @@ Removes all children from a node.
 			while child = @children[0]
 				child.parent = null
 			return
+
+Item::clone()
+-------------
+
+		clone: ->
+			ctor = @constructor
+			if (ctor::) is (Item::) or (ctor::) instanceof Item
+				clone = new ctor
+			else
+				clone = ctor()
+
+			clone.x = @_x
+			clone.y = @_y
+			clone.z = @_z
+			clone.width = @_width
+			clone.height = @_height
+			clone.clip = @_clip
+			clone.visible = @_visible
+			clone.linkUri = @_linkUri
+			clone.scale = @_scale
+			clone.rotation = @_rotation
+			clone.opacity = @_opacity
+
+			if @_properties
+				for prop in @_properties
+					clone[prop] = @[prop]
+
+			clone

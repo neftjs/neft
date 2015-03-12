@@ -30,6 +30,24 @@ Grid {
 
 			constructor: ->
 				super()
+				@_autoWidth = true
+				@_autoHeight = true
+
+			getter = utils.lookupGetter @::, 'width'
+			setter = utils.lookupSetter @::, 'width'
+			utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
+				if @_width isnt val
+					@_autoWidth = false
+				_super.call @, val
+				return
+
+			getter = utils.lookupGetter @::, 'height'
+			setter = utils.lookupSetter @::, 'height'
+			utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
+				if @_width isnt val
+					@_autoHeight = false
+				_super.call @, val
+				return
 
 *Integer* Grid::columns = 2
 ---------------------------
@@ -64,6 +82,13 @@ Grid {
 					if val <= 0
 						val = 1
 					_super.call @, val
+
+			clone: ->
+				clone = super()
+				clone.columns = @_columns
+				clone.rows = @_rows
+				clone.spacing = @spacing
+				clone
 
 *Spacing* Grid::spacing
 -----------------------
