@@ -90,13 +90,13 @@ bindingAttributeToString = (obj) ->
 	for char in val
 		if char is '.' and lastBinding
 			lastBinding.push ''
+			continue
 
-		else if ///[a-zA-Z_]///.test char
-			if lastBinding
-				lastBinding[lastBinding.length - 1] += char
-			else
-				lastBinding = [char]
-				binding.push lastBinding
+		if lastBinding and ///[a-zA-Z_0-9]///.test(char)
+			lastBinding[lastBinding.length - 1] += char
+		else if ///[a-zA-Z_]///.test(char)
+			lastBinding = [char]
+			binding.push lastBinding
 
 		else
 			if lastBinding is null
@@ -108,11 +108,11 @@ bindingAttributeToString = (obj) ->
 	# filter by ids
 	for elem, i in binding when typeof elem isnt 'string'
 		[id] = elem
-		if id is 'parent'
+		if id is 'parent' or id is 'target'
 			elem.unshift "'this'"
 		else if id is 'this'
 			elem[0] = "'this'"
-		else if id is 'windowStyle' or ids.hasOwnProperty(id)
+		else if id is 'view' or ids.hasOwnProperty(id)
 			continue
 		else
 			binding[i] = elem.join '.'
@@ -140,16 +140,18 @@ bindingAttributeToString = (obj) ->
 		if typeof elem is 'string'
 			elem = elem.replace ///'///g, '\\\''
 			text += "'#{elem}'"
-		else
+		else if elem.length > 1
 			text += repeatString('[', elem.length-1)
 			text += "#{elem[0]}"
 			elem.shift()
 			for id, i in elem
 				text += ", '#{id}']"
+		else
+			text += "#{elem[0]}"
 
 	"[#{text}]"
 
-stringObject = (obj) ->
+stringObjectHead = (obj) ->
 	assert obj.type is OBJECT, "stringObject: type must be an object"
 
 	if getByType(obj.body, ID).length > 0
@@ -158,7 +160,7 @@ stringObject = (obj) ->
 	rendererClass = Renderer[obj.name.split('.')[0]]
 	isLocal = rendererClass?
 	decl = if isLocal then "new #{obj.name}" else "#{obj.name}"
-	r = "var #{obj.id} = #{decl}();\n"
+	r = "var #{obj.id} = ids.#{obj.id} = #{decl}();\n"
 
 	properties = getEachProp(getByType(obj.body, PROPERTY), 'name')
 	for property in properties
@@ -168,6 +170,13 @@ stringObject = (obj) ->
 	for signal in signals
 		r += "#{obj.id}.createSignal('#{utils.addSlashes(signal)}')\n"
 
+	r
+
+stringObjectChildren = (obj) ->
+	assert obj.type is OBJECT, "stringObject: type must be an object"
+
+	r = ""
+
 	for child in getByType(obj.body, OBJECT)
 		r += stringObject child
 
@@ -176,9 +185,13 @@ stringObject = (obj) ->
 		if rendererClass?.prototype instanceof Renderer.Extension
 			r += "#{child.id}.target = #{obj.id};\n"
 		else
-			r += "#{child.id}.parent = #{obj.id};\n"
+			r += "if (#{child.id} instanceof Item) #{child.id}.parent = #{obj.id};\n"
 
 	r
+
+stringObject = (obj) ->
+	r = stringObjectHead obj
+	r += stringObjectChildren obj
 
 stringAttribute = (obj, parents) ->
 	assert obj.type is ATTRIBUTE, "stringAttribute: type must be an attribute"
@@ -286,13 +299,30 @@ stringObjectFull = (obj) ->
 	code += stringFunctions obj
 	code
 
-module.exports = (file) ->
+stringViewObjectFull = (obj) ->
+	if obj.type is CODE
+		return obj.body
+
+	assert obj.type is OBJECT, "stringObjectFull: type must be an object"
+
+	code = stringObjectHead obj
+	code += "setImmediate(function(){\n"
+	code += stringObjectChildren obj
+	code += stringAttributes obj
+	code += stringFunctions obj
+	code += "});"
+	code
+
+module.exports = (file, filename) ->
 	elems = parser file
 	ids = {}
 
-	code = ''
+	code = 'var ids = {};\n'
 	for elem in elems
-		code += stringObjectFull elem
+		if filename is 'view'
+			code += stringViewObjectFull elem
+		else
+			code += stringObjectFull elem
 
 	idsKeys = Object.keys ids
 
@@ -300,13 +330,5 @@ module.exports = (file) ->
 	for elem in elems
 		if elem.type is OBJECT
 			code += "if (#{elem.id} instanceof Item) mainItem = #{elem.id};\n"
-
-	idsObject = '{'
-	for id in idsKeys
-		idsObject += "#{id}: #{id}, "
-	if idsKeys.length > 0
-		idsObject = idsObject.slice 0, -2
-	idsObject += "}"
-	code += "var ids = #{idsObject};\n"
 
 	code
