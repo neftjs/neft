@@ -62,8 +62,8 @@ var Uri = Networking.Uri;
 			re = uri
 			re = re.replace ///{?([a-zA-Z0-9_$]+)?\*}?///g, ->
 				"(.*?)"
-			re = re.replace ///\/([^/]*)///g, (_, str) ->
-				"(?:/#{str})?"
+			# re = re.replace ///\/([^/]*)///g, (_, str) ->
+			# 	"(?:/#{str})?"
 			re = re.replace Uri.NAMES_RE, ->
 				"([^/]*?)"
 			re = new RegExp "^\/?#{re}\/?$"

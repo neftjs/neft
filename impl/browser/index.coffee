@@ -29,7 +29,7 @@ module.exports = (Networking) ->
 			# omit anchors with the `target` attribute
 			return if target.nodeName isnt 'A' or target.getAttribute('target')
 
-			if target.host is location.host and not ///^\/static\////.test(target.pathname)
+			if target.href.indexOf(networking.url) is 0 and not ///^\/static\////.test(target.pathname)
 				# avoid browser to refresh page
 				e.preventDefault()
 
