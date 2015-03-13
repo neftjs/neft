@@ -156,7 +156,7 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@
 
-	attrChangedListener = (e) ->
+	attrsChangedListener = (e) ->
 		if @self.isRendered and e.name is Iterator.HTML_ATTR
 			@update()
 
@@ -175,7 +175,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.insertItem = (arg1, arg2) => @insertItem.call clone, arg1, arg2
 		clone.popItem = (arg1, arg2) => @popItem.call clone, arg1, arg2
 
-		clone.node.onAttrChanged attrChangedListener, clone
+		clone.node.onAttrsChanged attrsChangedListener, clone
 		clone.node.onVisibilityChanged visibilityChangedListener, clone
 
 		clone

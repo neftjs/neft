@@ -15,7 +15,7 @@ module.exports = (Element) ->
 		event.name = name
 		event.value = value
 
-		tag.attrChanged event
+		tag.attrsChanged event
 		eventsPool.push event
 
 	exports =

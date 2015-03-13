@@ -75,7 +75,7 @@ module.exports = (File) -> class Use
 		if @self.isRendered and not @isRendered
 			@render()
 
-	attrChangedListener = (e) ->
+	attrsChangedListener = (e) ->
 		if e.name is 'neft:fragment'
 			@name = @node.attrs.get 'neft:fragment'
 
@@ -100,6 +100,6 @@ module.exports = (File) -> class Use
 		# name
 		if clone.name is ''
 			clone.name = clone.node.attrs.get 'neft:fragment'
-			clone.node.onAttrChanged attrChangedListener, clone
+			clone.node.onAttrsChanged attrsChangedListener, clone
 
 		clone

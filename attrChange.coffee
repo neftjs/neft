@@ -22,21 +22,27 @@ module.exports = (File) -> class AttrChange
 
 		utils.fill @, opts
 
-		utils.defineProperty @, '_defaultValue', null, @target.attrs.get(@name)
+		@_defaultValue = @target.attrs.get(@name)
 
 	self: null
 	node: null
 	target: null
 	name: ''
-	value: null
 
 	update: ->
-		val = if @node.visible then @value else @_defaultValue
+		val = if @node.visible then @node.attrs.get('value') else @_defaultValue
 		@target.attrs.set @name, val
 		return
 
-	visibilityChangedListener = ->
+	onVisibilityChanged = ->
 		@update()
+
+	onAttrsChanged = (e) ->
+		if e.name is 'name'
+			throw new Error "Dynamic neft:attr name is not implemented"
+		else if e.name is 'value'
+			@update()
+		return
 
 	clone: (original, self) ->
 		clone = Object.create @
@@ -48,6 +54,7 @@ module.exports = (File) -> class AttrChange
 
 		clone.update()
 
-		clone.node.onVisibilityChanged visibilityChangedListener, clone
+		clone.node.onVisibilityChanged onVisibilityChanged, clone
+		clone.node.onAttrsChanged onAttrsChanged, clone
 
 		clone

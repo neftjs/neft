@@ -29,7 +29,7 @@ module.exports = (Element) ->
 
 			super()
 
-		SignalsEmitter.createSignal @, 'attrChanged'
+		SignalsEmitter.createSignal @, 'attrsChanged'
 
 		utils.defineProperty @::, 'attrs', null, ->
 			Tag.Attrs.tag = @

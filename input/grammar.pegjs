@@ -1,5 +1,5 @@
 start =
-  code:$code? first:literal? arr:($body literal?)* {
+  code:$code? first:literal? arr:($body literal / e:$body {return [e, null]} / e:literal {return [null, e]})* {
     var r = [code, first];
     arr.forEach(function(elem){ r.push.apply(r, elem); });
     return r

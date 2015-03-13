@@ -213,6 +213,7 @@ module.exports = class File
 	revert: do ->
 
 		listeners = require('./file/render/revert/listeners') File
+		source = require('./file/render/revert/source') File
 
 		->
 			assert.ok @isRendered
@@ -238,6 +239,9 @@ module.exports = class File
 			if @iterators
 				for iterator, i in @iterators
 					iterator.revert()
+
+			# source
+			source @, @source
 
 			@storage = null
 			@source = null
