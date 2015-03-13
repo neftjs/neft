@@ -371,6 +371,7 @@ It's called with the same parameters as controller, that is
 			assert.isFunction val
 			ctx.callback = val
 
+		lastRes = null
 		_onRequest: (req, res, next) =>
 			assert.instanceOf @, AppRoute
 			assert.instanceOf req, Networking.Request
@@ -378,6 +379,7 @@ It's called with the same parameters as controller, that is
 			assert.isFunction next
 
 			stack = new utils.async.Stack
+			viewUsed = false
 
 			masterLogtime = log.time "Handle request"
 			logtime = null
@@ -387,6 +389,14 @@ It's called with the same parameters as controller, that is
 			req.onDestroyed ->
 				log.end logtime if logtime?
 				log.end masterLogtime if masterLogtime?
+
+			# destroy response
+			res.onSent onSent = ->
+				if utils.isServer or not viewUsed
+					res.destroy()
+				else
+					lastRes?.destroy()
+					lastRes = res
 
 			# serverResourceUri
 			if @serverResourceUri
@@ -432,6 +442,7 @@ It's called with the same parameters as controller, that is
 
 			# view
 			if req.type is Networking.Request.HTML_TYPE and (@view or @template)
+				viewUsed = true
 				stack.add (callback) =>
 					if res.data instanceof Document
 						# TODO: how to destroy this view?
@@ -453,6 +464,7 @@ It's called with the same parameters as controller, that is
 				masterLogtime = null
 
 				if err?
+					res.onSent.disconnect onSent
 					return next err
 
 				if not res.data?

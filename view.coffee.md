@@ -54,9 +54,10 @@ module.exports = function(app){
 			DocumentGlobalData.requestChanged(oldReq)
 
 			dataObj = Object.create DocumentGlobalData
+			dataObj.global = dataObj
 			dataObj.data = data
-			document.storage = dataObj
 
+			document.storage = dataObj
 			document.render()
 
 			document
@@ -75,7 +76,7 @@ used in the string interpolation.
 It's just a cyclic reference introduced for safety
 (until you don't override *global* keyword in your HTML document).
 
-		DocumentGlobalData.global = DocumentGlobalData
+		DocumentGlobalData.global = null
 
 *Any* DocumentGlobalData.data
 -----------------------------

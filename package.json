@@ -1,7 +1,7 @@
 {
 	"private": true,
 	"name": "app",
-	"version": "1.0.0-rc.2",
+	"version": "1.0.0-rc.5",
 	"config": {
 		"title": "Neft.io Application",
 		"protocol": "http",

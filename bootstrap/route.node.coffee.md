@@ -33,14 +33,13 @@ Standard routes @txt
 	"""
 
 	module.exports = (app) ->
-
-		APP_JS_URI = 'app.js'
-		NEFT_JS_URI = 'neft.js'
+		APP_JS_URI = '/app.js'
+		NEFT_JS_URI = '/neft.js'
 		JS_NEFT_FILE_PATH = './neft-browser-release.js'
 		JS_BUNDLE_FILE_PATH = './build/app-browser-release.js'
 		VIEW_NAME = '_app_bootstrap'
 		VIEW_FILE = 'view.html'
-		TEXT_MODE_URI_PREFIX = '/legacy/'
+		TEXT_MODE_URI_PREFIX = '/legacy'
 		TEXT_MODE_COOKIE_NAME = 'textMode'
 
 		`//<development>`
@@ -62,19 +61,35 @@ Standard routes @txt
 
 Returns build app javascript file.
 
+		bundleFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
 		new app.Route
 			uri: APP_JS_URI
 			callback: (req, res, callback) ->
+				`//<development>`
 				fs.readFile JS_BUNDLE_FILE_PATH, 'utf-8', callback
+				`//</development>`
+				`//<production>`
+				callback null, bundleFile
+				`//</production>`
 
 #### neft.js
 
 Returns neft javascript file.
 
+		neftFile = fs.readFileSync JS_NEFT_FILE_PATH, 'utf-8'
 		new app.Route
 			uri: NEFT_JS_URI
 			callback: (req, res, callback) ->
-				fs.readFile JS_NEFT_FILE_PATH, 'utf-8', callback
+				callback null, neftFile
+
+#### favicon.ico
+
+Returns 'static/favicon.ico' file.
+
+		new app.Route
+			uri: 'favicon.ico'
+			callback: (req, res, callback) ->
+				res.redirect 'static/favicon.ico'
 
 #### static/{path*}
 
