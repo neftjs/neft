@@ -12,12 +12,15 @@ module.exports = ->
 				addEventListener: ->
 				Image: ->
 				HTMLCanvasElement: ->
+				console:
+					log: ->
 			global.location = pathname: ''
 			global.navigator = userAgent: ''
 			global.innerWidth = 1024
 			global.innerHeight = 600
 			global.scrollX = 0
 			global.scrollY = 0
+			global.screen = {}
 			global.document =
 				body:
 					appendChild: ->
@@ -76,6 +79,7 @@ module.exports = ->
 		node: ->
 			global.option = ->
 			global.task = ->
+			global.requestAnimationFrame = ->
 
 		qml: ->
 			###
@@ -101,17 +105,22 @@ module.exports = ->
 				binding: ->
 				rgba: ->
 				hsla: ->
-			global.stylesBody =
+				platform: {}
+			global.Screen = {}
+			global.__stylesBody =
 				children: []
-			global.stylesWindow =
+			global.__stylesWindow =
 				items: []
 				width: 900
 				height: 600
 				widthChanged: SIGNAL
 				heightChanged: SIGNAL
+				screen:
+					orientationChanged:
+						connect: ->
 			global.qmlUtils =
 				createBinding: ->
-			global.stylesHatchery = {}
+			global.__stylesHatchery = {}
 			global.requestAnimationFrame = ->
 
 	NODE_MODULES =
@@ -130,6 +139,8 @@ module.exports = ->
 		'uglify-js': true
 		pegjs: true
 		url: true
+		mmmagic: true
+		'node-static': true
 
 	fs = require 'fs'
 	pathUtils = require 'path'
@@ -185,7 +196,7 @@ module.exports = ->
 
 		if onlyLocal and ///^\.\.\/|^node_modules\////.test(modulePath)
 			name = ///^\.\.\/([a-z_\-A-Z]+)///.exec(modulePath)?[1]
-			if allowedRemoteModules.indexOf(name) is -1 and req isnt 'neft-assert'
+			if allowedRemoteModules.indexOf(name) is -1# and req isnt 'neft-assert'
 				return r
 
 		modules.push modulePath unless ~modules.indexOf modulePath

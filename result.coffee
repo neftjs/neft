@@ -36,50 +36,59 @@ getFile = (path) ->
 
 	file
 
-fileScope = ->
-	'use strict'
+fileScope = """(function(){
+	'use strict';
 
-	# list of modules with empty objects
-	modules = '{{declarations}}';
+	// list of modules with empty objects
+	var modules = {{declarations}};
 
-	# global object
-	globalRequire = require? and require
-	setImmediate = setTimeout
-	global = Object.create null,
-		setImmediate:
-			enumerable: true
-			get: -> setImmediate
-			set: (val) -> setImmediate = val
+	// global object
+	var globalRequire = typeof require !== 'undefined' && require;
+	var setImmediate = setTimeout;
+	var global = Object.create(null, {
+		setImmediate: {
+			enumerable: true,
+			get: function(){ return setImmediate; },
+			set: function(val){ setImmediate = val; }
+		}
+	});
 
-	# standard polyfills
-	console.assert = console.assert.bind console
+	// standard polyfills
+	console.assert = console.assert.bind(console);
 
-	# used as `require`
-	getModule = (paths, name) ->
-		modules[paths[name]] or Neft?[name] or globalRequire(name)
+	// used as `require`
+	function getModule(paths, name){
+		return modules[paths[name]] ||
+		       (typeof Neft !== "undefined" && Neft[name]) ||
+		       (typeof globalRequire === 'function' && globalRequire(name)) ||
+		       (function(){throw new Error("Cannot find module '"+name+"'");}());
+	};
 
-	# fill modules by their bodies
-	'{{init}}'
+	// fill modules by their bodies
+	{{init}}
 
-	result = modules['{{path}}']
+	var result = modules["{{path}}"];
 
-	if module?
-		module.exports = result
-	else
-		result
+	if(typeof module !== 'undefined'){
+		return module.exports = result;
+	} else {
+		return result;
+	}
+})();"""
 
-moduleScope = ->
+moduleScope = """(function(){
+	var module = {exports: modules["{{name}}"]};
+	var require = getModule.bind(null, {{paths}});
+	var exports = module.exports;
 
-	module = exports: modules['{{name}}']
-	require = getModule.bind null, '{{paths}}'
-	exports = module.exports
+	(function(){
+		{{file}}
+	}());
 
-	do -> '{{file}}'; null
-
-	module.exports
+	return module.exports;
+})();"""
 
 getDeclarations = (modules) ->
-
 	r = {}
 
 	r[name] = {} for name in modules
@@ -99,25 +108,23 @@ getModulesInit = (opts) ->
 			when '.json'
 				func = "module.exports = #{func};"
 
-		module = autoCall moduleScope
+		module = moduleScope
 		module = replaceStr module, '{{name}}', name
-		module = replaceStr module, '\'{{paths}}\'', stringify modulePaths
-		module = replaceStr module, '\'{{file}}\';', func
+		module = replaceStr module, '{{paths}}', stringify modulePaths
+		module = replaceStr module, '{{file}}', func
 
 		r += "modules['#{name}'] = #{module}"
 
 	r
-
-autoCall = (func) -> "(#{func})();"
 
 module.exports = (opts) ->
 
 	declarations = getDeclarations opts.modules
 	init = getModulesInit opts
 
-	r = autoCall fileScope
+	r = fileScope
 	r = replaceStr r, '{{path}}', opts.path
-	r = replaceStr r, '\'{{declarations}}\'', stringify declarations
-	r = replaceStr r, '\'{{init}}\';', init
+	r = replaceStr r, '{{declarations}}', stringify declarations
+	r = replaceStr r, '{{init}}', init
 
 	r

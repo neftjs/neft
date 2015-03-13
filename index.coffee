@@ -4,6 +4,8 @@ fs = require 'fs'
 assert = require 'neft-assert'
 cp = require 'child_process'
 pathUtils = require 'path'
+groundskeeper = require 'groundskeeper'
+uglify = require 'uglify-js'
 
 processFile = require './process'
 buildResult = require './result'
@@ -34,19 +36,42 @@ module.exports = (opts, callback) ->
 			paths: msg.paths
 			path: opts.path
 
+		if opts.fullVersion is true
+			bundle = bundle.replace ///\/\/<(\/)?trialVersion>;///g, '//<$1trialVersion>'
+			cleaner = groundskeeper
+				console: true
+				debugger: true
+				pragmas: ['development', 'production']
+			cleaner.write bundle
+			bundle = cleaner.toString()
+
+		# DEBUG
 		if opts.release
-			groundskeeper = require 'groundskeeper'
-			uglify = require 'uglify-js'
+			nsToRemove = ['expect', 'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions']
+
+			if opts.removeLogs
+				nsToRemove.push('log');
 
 			bundle = bundle.replace ///\/\/<(\/)?development>;///g, '//<$1development>'
 			bundle = bundle.replace ///expect, |, expect///g, ''
 			bundle = bundle.replace ///assert, |, assert///g, ''
 			cleaner = groundskeeper
-				namespace: ['expect', 'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions']
+				console: true
+				namespace: nsToRemove
 				replace: 'true'
+				pragmas: ['trialVersion']
+			cleaner.write bundle
+			bundle = cleaner.toString()
+		else
+			bundle = bundle.replace ///\/\/<(\/)?production>;///g, '//<$1production>'
+			cleaner = groundskeeper
+				console: true
+				debugger: true
+				pragmas: ['trialVersion', 'development']
 			cleaner.write bundle
 			bundle = cleaner.toString()
 
+		if opts.release or opts.minify
 			fs.writeFileSync './tmp.js', bundle, 'utf-8'
 
 			cp.exec "./node_modules/uglify-js/bin/uglifyjs " +
@@ -54,8 +79,8 @@ module.exports = (opts, callback) ->
 			"--screw-ie8 " +
 			"--compress negate_iife=false,keep_fargs " +
 			"--mangle " +
-			"--reserved 'Neft,$,require,exports' " +
-			"--beautify",
+			"--reserved 'Neft,$,require,exports,module'",
+			# "--beautify",
 				maxBuffer: 1024*1024
 				, (err, stdout, stderr) ->
 					fs.unlinkSync './tmp.js'
