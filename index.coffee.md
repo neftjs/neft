@@ -319,6 +319,7 @@ for (var i = 0; i < items.length; i++){
 }
 // ['prop1', 1]
 // ['prop2', 2]
+```
 
 		items: ->
 			if @_dirty & ITEMS
