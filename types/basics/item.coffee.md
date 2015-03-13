@@ -116,6 +116,9 @@ Rectangle {
 				super()
 				@length = 0
 
+			index: (val) -> Array::indexOf.call @, val
+			has: (val) -> @index(val) isnt -1
+
 ### *Signal* Item.children::inserted(*Item* child, *Integer* index)
 
 		signal.Emitter.createSignal ChildrenObject, 'inserted'

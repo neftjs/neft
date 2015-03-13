@@ -67,13 +67,13 @@ updateItem = (item) ->
 		row = Math.floor(i/columnsLen) % rowsLen
 
 		# child
-		{width, height, margin} = child
+		{width, height} = child
 
 		# right / bottom margins
 		if gridType & ROW
-			width += margin.left + margin.right + columnSpacing
+			width += child._marginLeft + child._marginRight + columnSpacing
 		if gridType & COLUMN
-			height += margin.top + margin.bottom + rowSpacing
+			height += child._marginTop + child._marginBottom + rowSpacing
 
 		# save
 		if width > columnsPositions[column]
@@ -105,10 +105,10 @@ updateItem = (item) ->
 		row = Math.floor(i/columnsLen) % rowsLen
 
 		if gridType & ROW
-			child.x = child.margin.left + (if column > 0 then columnsPositions[column-1] else 0)
+			child.x = child._marginLeft + (if column > 0 then columnsPositions[column-1] else 0)
 
 		if gridType & COLUMN
-			child.y = child.margin.top + (if row > 0 then rowsPositions[row-1] else 0)
+			child.y = child._marginTop + (if row > 0 then rowsPositions[row-1] else 0)
 
 		i++
 

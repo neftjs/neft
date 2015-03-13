@@ -47,6 +47,9 @@ module.exports = (impl) ->
 				anim._updatePending = true
 				target[anim._property] = val
 				anim._updatePending = false
+
+				if progress is 1 and data.propertySetter
+					impl[data.propertySetter].call target, val
 			else
 				impl[data.propertySetter].call target, val
 				if anim._updateData
@@ -56,6 +59,7 @@ module.exports = (impl) ->
 			if running
 				data.startTime += anim._loopDelay + anim._duration
 			else
+				data.startTime = 0
 				anim.running = false
 		return
 
@@ -78,19 +82,18 @@ module.exports = (impl) ->
 			data = @_impl
 			data.from = @_from
 			data.to = @_to
-			data.startTime = nowTime + @_startDelay
 			pending.push @
 
-			@_updatePending = true
-			@_target[@_property] = @_from
-			@_updatePending = false
+			data.startTime = nowTime
 			updateAnimation @
+
+			data.startTime += @_startDelay
 		return
 
 	stopAnimation: do (_super = impl.stopAnimation) -> ->
 		_super.call @
-		if @_impl.type is 'number'
-			data = @_impl
+		data = @_impl
+		if data.type is 'number' and data.startTime isnt 0
 			data.startTime = 0
 			updateAnimation @
 		return

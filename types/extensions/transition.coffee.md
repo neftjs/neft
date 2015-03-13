@@ -25,11 +25,12 @@ Transition
 			if not @running or animation.updatePending
 				return
 
+			@_to = @_target[@property]
+
 			{progress} = animation
 			animation.stop()
 			animation.duration = @_duration
 
-			@_to = @_target[@property]
 			if animation.from is oldVal and animation.to is @_to
 				return
 
@@ -39,7 +40,7 @@ Transition
 				animation.duration = @_duration * progress
 
 			animation.start()
-			signal.STOP_PROPAGATION
+			return
 
 *Boolean* Transition::when
 --------------------------

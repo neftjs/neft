@@ -19,6 +19,7 @@ Item states
 				return
 
 		class ChangesObject extends DeepChangesObject
+			utils.defineProperty @::, 'constructor', null, ChangesObject
 
 		class State extends Renderer.Extension
 			@__name__ = 'State'
@@ -173,6 +174,7 @@ Grid {
 				super()
 				target.statesChanged states
 
+		# TODO: support anchor in one state (restore default value)
 		usedBindingsPool = []
 		reloadItem = (state) ->
 			assert.instanceOf state, State
@@ -185,60 +187,6 @@ Grid {
 			usedBindings = usedBindingsPool.pop() or Object.create(null)
 			targetBindings = target._bindings
 			bindingsUsed = false
-
-			# set properties
-			for prop, val of changes
-				if utils.isObject(val) and utils.isObject(target[prop])
-					# set deep property
-					for subprop, subval of val
-						newVal = defaultState[prop][subprop]
-						if newVal is undefined
-							newVal = defaultState[prop][subprop] = target[prop][subprop]
-
-						for stateName in states by -1 when stateExtensions[stateName]?
-							state = stateExtensions[stateName].changes
-							if state.hasOwnProperty(prop) and state[prop].hasOwnProperty(subprop)
-								newVal = state[prop][subprop]
-								break
-						target[prop][subprop] = newVal
-
-					# set deep bindings
-					if val.hasOwnProperty('_bindings')
-						bindingsUsed = true
-						defaultBindings = defaultState[prop]._bindings
-
-						for stateName in states by -1 when stateExtensions[stateName]?
-							state = stateExtensions[stateName].changes
-							if state.hasOwnProperty(prop) and state[prop].hasOwnProperty('_bindings')
-								for subprop, subval of state[prop]._bindings
-									uniqueName = target[prop]._uniquePropertiesNames[subprop]
-									unless usedBindings[uniqueName]
-										defaultVal = targetBindings?[uniqueName] or null
-										if defaultBindings is undefined
-											defaultState[prop].createBinding subprop, defaultVal
-											defaultBindings = defaultState[prop]._bindings
-										else if not defaultBindings.hasOwnProperty(subprop)
-											defaultBindings[subprop] = defaultVal
-
-										target[prop].createBinding subprop, subval
-										usedBindings[uniqueName] = true
-
-						for subprop, subval of defaultBindings
-							uniqueName = target[prop]._uniquePropertiesNames[subprop]
-							unless usedBindings[uniqueName]
-								target[prop].createBinding subprop, subval
-				else
-					# set main property
-					newVal = defaultState[prop]
-					if newVal is undefined
-						newVal = defaultState[prop] = target[prop]
-
-					for stateName in states by -1 when stateExtensions[stateName]?
-						state = stateExtensions[stateName].changes
-						if state.hasOwnProperty(prop)
-							newVal = state[prop]
-							break
-					target[prop] = newVal
 
 			# set main bindings
 			if changes.hasOwnProperty('_bindings')
@@ -257,12 +205,79 @@ Grid {
 								else if not defaultBindings.hasOwnProperty(prop)
 									defaultBindings[prop] = defaultVal
 
+								unless defaultState.hasOwnProperty(prop)
+									defaultState[prop] = target[prop]
+
 								target.createBinding prop, val
 								usedBindings[prop] = true
 
 				for prop, val of defaultBindings
 					unless usedBindings[prop]
 						target.createBinding prop, val
+						target[prop] = defaultState[prop]
+
+			# set properties
+			for prop, val of changes
+				if utils.isObject(val) and utils.isObject(target[prop])
+					# set deep binding
+					if val.hasOwnProperty('_bindings')
+						bindingsUsed = true
+						defaultBindings = defaultState[prop]._bindings
+
+						for stateName in states by -1 when stateExtensions[stateName]?
+							state = stateExtensions[stateName].changes
+							if state.hasOwnProperty(prop) and state[prop].hasOwnProperty('_bindings')
+								for subprop, subval of state[prop]._bindings
+									uniqueName = target[prop]._uniquePropertiesNames[subprop]
+									unless usedBindings[uniqueName]
+										defaultVal = targetBindings?[uniqueName] or null
+										if defaultBindings is undefined
+											defaultState[prop].createBinding subprop, defaultVal
+											defaultBindings = defaultState[prop]._bindings
+										else if not defaultBindings.hasOwnProperty(subprop)
+											defaultBindings[subprop] = defaultVal
+
+										unless defaultState[prop].hasOwnProperty(subprop)
+											defaultState[prop][subprop] = target[prop][subprop]
+
+										target[prop].createBinding subprop, subval
+										usedBindings[uniqueName] = true
+
+						for subprop, subval of defaultBindings
+							uniqueName = target[prop]._uniquePropertiesNames[subprop]
+							unless usedBindings[uniqueName]
+								target[prop].createBinding subprop, subval
+								target[prop][subprop] = defaultState[prop][subprop]
+
+					# set deep property
+					for subprop, subval of val
+						uniqueName = target[prop]._uniquePropertiesNames[subprop]
+						newVal = defaultState[prop][subprop]
+						if newVal is undefined
+							newVal = defaultState[prop][subprop] = target[prop][subprop]
+
+						for stateName in states by -1 when stateExtensions[stateName]?
+							state = stateExtensions[stateName].changes
+							if state.hasOwnProperty(prop) and state[prop].hasOwnProperty(subprop)
+								newVal = state[prop][subprop]
+								break
+
+						if newVal isnt defaultState[prop][subprop] or (not target._bindings or not target._bindings[uniqueName])
+							target[prop][subprop] = newVal
+				else
+					# set main property
+					newVal = defaultState[prop]
+					if newVal is undefined
+						newVal = defaultState[prop] = target[prop]
+
+					for stateName in states by -1 when stateExtensions[stateName]?
+						state = stateExtensions[stateName].changes
+						if state.hasOwnProperty(prop)
+							newVal = state[prop]
+							break
+
+					if newVal isnt defaultState[prop] or (not target._bindings or not target._bindings[prop])
+						target[prop] = newVal
 
 			# clear usedBindings
 			if bindingsUsed
