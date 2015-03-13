@@ -45,12 +45,12 @@ var list = List.apply(null, [1, 2]);
 			for arg, i in arguments
 				arr[i] = arg
 			
-			unless @ instanceof List
-				self = Object.create List::
-			else
+			if @ instanceof List
 				self = @
+			else
+				self = Object.create List::
 
-			super()
+			signal.Emitter.call self
 			self._data = arr
 
 			Object.preventExtensions self
