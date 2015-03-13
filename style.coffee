@@ -14,17 +14,19 @@ module.exports = (File, data) -> class Style
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
 
-	listenRecursive = (style, node, event, listener) ->
+	listenTextRec = (style, node=style.node) ->
 		assert.instanceOf style, Style
 		assert.instanceOf node, File.Element
 
-		node[event]? listener, style
+		if 'onTextChanged' of node
+			style.textWatchingNodes.push node
+			node.onTextChanged textChangedListener, style
 
 		if node.children
 			for child in node.children
-				listenRecursive style, child, event, listener
+				listenTextRec style, child
 
-		null
+		return
 
 	visibilityChangedListener = ->
 		if @file.isRendered
@@ -34,7 +36,7 @@ module.exports = (File, data) -> class Style
 		if @file.isRendered
 			@updateText()
 
-	attrChangedListener = (e) ->
+	attrsChangedListener = (e) ->
 		if e.name is 'neft:style'
 			@reloadItem()
 			if @file.isRendered
@@ -69,6 +71,7 @@ module.exports = (File, data) -> class Style
 		@item = null
 		@scope = null
 		@children = []
+		@textWatchingNodes = []
 
 		Object.preventExtensions @
 
@@ -83,14 +86,10 @@ module.exports = (File, data) -> class Style
 			@updateText()
 
 		@updateVisibility()
-
-		{funcs} = @file
+		
 		for name of @attrs
 			val = @node.attrs.get name
-			if funcs?.hasOwnProperty val
-				val = funcs[val]
 			@setAttr name, val
-
 		return
 
 	revert: ->
@@ -106,7 +105,6 @@ module.exports = (File, data) -> class Style
 			child.revert()
 
 		for name, val of @attrs
-			val = @file.funcs?[val] or val
 			@setAttr name, val
 		return
 
@@ -125,32 +123,42 @@ module.exports = (File, data) -> class Style
 
 		@item?.visible = visible
 
+	ATTR_PRIMITIVE_VALUES =
+		__proto__: null
+		'null': null
+		'undefined': undefined
+		'false': false
+		'true': true
+
 	setAttr: (name, val) ->
 		assert.instanceOf @, Style
 		assert.ok @attrs.hasOwnProperty(name)
+
+		{funcs} = @file
+		if funcs?.hasOwnProperty val
+			val = funcs[val]
 
 		name = name.slice 'neft:style:'.length
 		props = name.split ':'
 		obj = @item
 		for prop, i in props
 			if i is props.length - 1
-				if typeof obj[prop] is 'function'
-					val = obj[prop] val
-				else
-					val = val
+				if ATTR_PRIMITIVE_VALUES[val]
+					val = ATTR_PRIMITIVE_VALUES[val]
 
-				if not val?
-					obj[prop] = val
-				else
+				if val?
 					switch typeof obj[prop]
 						when 'number'
-							obj[prop] = parseFloat val
+							val = parseFloat val
 						when 'boolean'
-							obj[prop] = !!val
+							val = !!val
 						when 'string'
-							obj[prop] = val+''
-						else
-							obj[prop] = val
+							val = val+''
+
+				if typeof obj[prop] is 'function'
+					obj[prop] val
+				else
+					obj[prop] = val
 			obj = obj[prop]
 		return
 
@@ -158,9 +166,9 @@ module.exports = (File, data) -> class Style
 		@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked')
 
 	getLinkUri: ->
-		uri = @node.attrs.get('href')
+		uri = @node.attrs.get('href') + ''
 		`//<development>`
-		unless ///^([a-z]+::|\/|${)///.test uri
+		unless ///^([a-z]+:|\/|\$\{)///.test uri
 			log.warn "Relative link found `#{uri}`"
 		`//</development>`
 		uri
@@ -171,6 +179,10 @@ module.exports = (File, data) -> class Style
 
 		if @item and @isAutoParent
 			@item.parent = null
+
+		if @item
+			while elem = @textWatchingNodes.pop()
+				elem.onTextChanged.disconnect textChangedListener, @
 
 		wasAutoParent = @isAutoParent
 
@@ -213,6 +225,12 @@ module.exports = (File, data) -> class Style
 		if @isLink()
 			@item.linkUri = @getLinkUri()
 
+		# text changes
+		if 'text' of @item
+			listenTextRec @
+
+		return;
+
 	findItemParent: ->
 		if @isAutoParent and @item
 			tmpNode = @node
@@ -254,7 +272,7 @@ module.exports = (File, data) -> class Style
 			return clone
 
 		# attr changes
-		clone.node.onAttrChanged attrChangedListener, clone
+		clone.node.onAttrsChanged attrsChangedListener, clone
 
 		# visibility changes
 		tmpNode = clone.node
@@ -265,9 +283,5 @@ module.exports = (File, data) -> class Style
 			tmpNode = tmpNode.parent
 			if not tmpNode or tmpNode.attrs.has('neft:style')
 				break
-
-		# text changes
-		if (not @parent and not clone.item) or (clone.item and 'text' of clone.item)
-			listenRecursive @, clone.node, 'onTextChanged', textChangedListener
 
 		clone

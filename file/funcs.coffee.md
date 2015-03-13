@@ -120,7 +120,7 @@ It's available, only if it's a [Renderer.Item][] signal.
 ----------------------------------------
 
 In most cases this variable refers to the [DocumentGlobalData][] unless you render
-a view not using [app.View][].
+a view not using [App.View][].
 
 ```
 <neft:func name="changePage">
