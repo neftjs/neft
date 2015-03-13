@@ -87,13 +87,10 @@ console.log(signal.getHandlerName('xChanged'));
 ```
 
 	exports.getHandlerName = do ->
-		cache = {}
+		cache = Object.create null
 
 		(name) ->
-			if cache.hasOwnProperty name
-				cache[name]
-			else
-				cache[name] = "on#{utils.capitalize name}"
+			cache[name] ?= "on#{utils.capitalize(name)}"
 
 *Boolean* signal.isHandlerName(*String* name)
 ---------------------------------------------
@@ -194,16 +191,14 @@ console.log(Object.keys(myDog));
 
 		return
 
-	callSignal = (obj, listeners, args, ctx=obj) ->
+	callSignal = (obj, listeners, arg1, arg2, ctx) ->
 		i = 0
-		n = listeners.length
-		while i < n
+		while i < listeners.length
 			func = listeners[i]
 			if func is null
 				listeners.splice i, 2
-				n -= 2
 			else
-				result = func.apply(listeners[i+1] or ctx, args)
+				result = func.call(listeners[i+1] or ctx, arg1, arg2)
 				if result is exports.STOP_PROPAGATION
 					return result
 				i += 2
@@ -211,8 +206,9 @@ console.log(Object.keys(myDog));
 		return
 
 	createSignalFunction = (obj) ->
-		signal = ->
-			callSignal obj, listeners, arguments, null
+		signal = (arg1, arg2) ->
+			assert.operator arguments.length, '<', 3, 'Signal accepts maximally two parameters; use object instead'
+			callSignal obj, listeners, arg1, arg2, obj
 
 		listeners = signal.listeners = []
 

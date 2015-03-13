@@ -12,12 +12,13 @@ module.exports = (signal) -> class SignalsEmitter
 	handlerFunc = signal.createHandlerFunction()
 
 	listeners = currentEmitter = defaultContext = null
-	signalFunc = ->
+	signalFunc = (arg1, arg2) ->
 		assert.instanceOf currentEmitter, SignalsEmitter
 		assert.isArray listeners
 		assert.isDefined defaultContext
+		assert.operator arguments.length, '<', 3, 'Signal accepts maximally two parameters; use object instead'
 
-		callSignal currentEmitter, listeners, arguments, defaultContext
+		callSignal currentEmitter, listeners, arg1, arg2, defaultContext
 
 	@createSignal = (ctor, name, internalName=name, contextProp, onInitialized) ->
 		assert.isFunction ctor
