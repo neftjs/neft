@@ -25,15 +25,30 @@ Column {
 
 		constructor: ->
 			super()
+			@_width = -1
+			@_height = -1
+			@_autoWidth = true
 			@_autoHeight = true
+
+		getter = utils.lookupGetter @::, 'width'
+		setter = utils.lookupSetter @::, 'width'
+		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
+			@_autoWidth = val is -1
+			_super.call @, val
+			return
 
 		getter = utils.lookupGetter @::, 'height'
 		setter = utils.lookupSetter @::, 'height'
 		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-			if @_width isnt val
-				@_autoHeight = false
+			@_autoHeight = val is -1
 			_super.call @, val
 			return
+
+*Float* Column::width = -1
+--------------------------
+
+*Float* Column::height = -1
+---------------------------
 
 *Float* Column::spacing = 0
 ---------------------------
@@ -54,6 +69,7 @@ Column {
 
 		clone: ->
 			clone = super()
+			clone._autoWidth = @_autoWidth
 			clone._autoHeight = @_autoHeight
 			clone.spacing = @_spacing
 			clone

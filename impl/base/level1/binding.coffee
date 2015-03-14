@@ -55,7 +55,7 @@ module.exports = (impl) ->
 		updateItem: ->
 			oldVal = @getItem()
 			val = @child.getValue()
-			if oldVal isnt val
+			if oldVal isnt val or utils.isObject(val)
 				@disconnect()
 				@item = val
 				@connect()
@@ -167,7 +167,9 @@ module.exports = (impl) ->
 				when 'string'
 					''
 				when 'number'
-					-1
+					0
+				when 'boolean'
+					false
 				else
 					null
 

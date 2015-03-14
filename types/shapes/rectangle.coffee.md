@@ -119,4 +119,8 @@ Rectangle {
 				developmentSetter: (val) ->
 					expect(val).toBe.string()
 
+			toJSON: ->
+				width: @width
+				color: @color
+
 		Rectangle

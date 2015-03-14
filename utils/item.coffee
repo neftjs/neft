@@ -29,6 +29,8 @@ module.exports = (Renderer, Impl) ->
 				Impl.setItemBinding.call @, '', prop, prop, val
 			return
 
+		signal.Emitter.createSignal @, 'ready'
+
 	class DeepObject extends signal.Emitter
 		constructor: ->
 			@_ref = null

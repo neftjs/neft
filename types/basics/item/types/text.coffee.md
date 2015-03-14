@@ -228,4 +228,12 @@ Text {
 				developmentSetter: (val) ->
 					assert.isBoolean val
 
+			toJSON: ->
+				family: @family
+				pixelSize: @pixelSize
+				weight: @weight
+				wordSpacing: @wordSpacing
+				letterSpacing: @letterSpacing
+				italic: @italic
+
 		Text

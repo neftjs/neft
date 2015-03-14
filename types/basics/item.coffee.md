@@ -71,9 +71,6 @@ Rectangle {
 }
 ```
 
-		signal.Emitter.createSignal @, 'ready', null, null, (item) ->
-			setImmediate -> item.ready()
-
 *Signal* Item::update(*Integer* miliseconds)
 --------------------------------------------
 
@@ -145,16 +142,22 @@ Rectangle {
 				if old
 					index = Array::indexOf.call old.children, @
 					Array::splice.call old.children, index, 1
-					old.childrenChanged? old.children
-					old.children.popped? @, index
 
 				if val?
 					assert.instanceOf val, Item, '::parent setter ...'
 					length = Array::push.call val.children, @
-					val.childrenChanged? val.children
-					val.children.inserted? @, length - 1
 
 				_super.call @, val
+
+				if old
+					old.childrenChanged old.children
+					old.children.popped @, index
+
+				if val?
+					val.childrenChanged val.children
+					val.children.inserted @, length - 1
+
+				return
 
 *Boolean* Item::visible = true
 ------------------------------

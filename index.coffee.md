@@ -202,7 +202,7 @@ Column {
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val
 		Impl.setWindow val
 
-	exports.serverUrl = ''
+	utils.defineProperty exports, 'serverUrl', utils.WRITABLE, ''
 
 	exports.ready()
 

@@ -22,7 +22,10 @@ rowsPositions = new Uint32TypedArray 64
 
 updateItem = (item) ->
 	{children} = item
-	{gridType} = item._impl
+	data = item._impl
+	{gridType} = data
+
+	data.updatePending = false
 
 	# get config
 	columnSpacing = rowSpacing = 0
@@ -128,6 +131,7 @@ updateItem = (item) ->
 		else
 			item.height = 0
 		item._autoHeight = true
+	data.updatePending = false
 	return
 
 updateItems = ->
@@ -151,6 +155,12 @@ update = ->
 	unless pending
 		setImmediate updateItems
 		pending = true
+	return
+
+updateSize = ->
+	if not @_impl.updatePending and (@_autoWidth or @_autoHeight)
+		update.call @
+	return
 
 updateParent = ->
 	update.call @parent
@@ -161,12 +171,15 @@ ALL = exports.ALL = (1<<2) - 1
 
 exports.DATA =
 	gridType: 0
+	updatePending: false
 
 exports.create = (item, type) ->
 	item._impl.gridType = type
 
-	# update on children change
+	# update item changes
 	item.onChildrenChanged update
+	item.onWidthChanged updateSize
+	item.onHeightChanged updateSize
 
 	# update on each children size change
 	item.children.onInserted (item, i) ->

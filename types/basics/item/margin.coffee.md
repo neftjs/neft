@@ -111,6 +111,12 @@ Item {
 				else
 					throw new Error "Margin values are different"
 
+			toJOSN: ->
+				left: @left
+				top: @top
+				right: @right
+				bottom: @bottom
+
 *Item* Item()
 -------------
 

@@ -35,15 +35,18 @@ Item states
 
 			constructor: ->
 				assert.lengthOf arguments, 0
-				self = @
 
 				@changes = new ChangesObject
 				@_name = utils.uid()
+				@_ready = false
 				super()
 
-				setImmediate ->
-					if self.target?.states.has(self.name)
-						reloadItem self
+				@onReady ->
+					@_ready = true
+					fillItemDefaultState @
+					if @target?.states.has(@name)
+						reloadItem @
+					return
 
 *String* State::name
 --------------------
@@ -152,7 +155,8 @@ Grid {
 					target.states.append name
 					return
 
-				reloadItem @
+				if @_ready
+					reloadItem @
 
 				super()
 				target.statesChanged target.states
@@ -169,17 +173,84 @@ Grid {
 					states.remove name
 					return
 
-				reloadItem @
+				if @_ready
+					reloadItem @
 
 				super()
 				target.statesChanged states
+
+		getSafeValue = (val) ->
+			if utils.isObject(val) and val.toJSON?
+				val.toJSON()
+			else
+				val
+
+		fillItemDefaultState = (state) ->
+			{target, changes} = state
+			stateExtensions = target._stateExtensions
+			states = target.states.items()
+			defaultState = stateExtensions['']
+
+			# set main bindings
+			if changes.hasOwnProperty('_bindings')
+				for stateName in states by -1 when stateExtensions[stateName]?
+					state = stateExtensions[stateName].changes
+					if state.hasOwnProperty('_bindings')
+						for prop of state._bindings
+							unless defaultState.hasOwnProperty(prop)
+								defaultState[prop] = getSafeValue target[prop]
+
+			# set properties
+			for prop, val of changes
+				if utils.isObject(val) and utils.isObject(target[prop])
+					# set deep binding
+					if val.hasOwnProperty('_bindings')
+						for stateName in states by -1 when stateExtensions[stateName]?
+							state = stateExtensions[stateName].changes
+							if state.hasOwnProperty(prop) and state[prop].hasOwnProperty('_bindings')
+								for subprop, subval of state[prop]._bindings
+									unless defaultState[prop].hasOwnProperty(subprop)
+										defaultState[prop][subprop] = getSafeValue target[prop][subprop]
+
+					# set deep property
+					for subprop of val
+						unless defaultState[prop].hasOwnProperty(subprop)
+							defaultState[prop][subprop] = target[prop][subprop]
+				else
+					# set main property
+					unless defaultState.hasOwnProperty(prop)
+						defaultState[prop] = getSafeValue target[prop]
+
+			return
+
+		getPropValue = (item, prop) ->
+			states = item.states.items()
+			stateExtensions = item._stateExtensions
+
+			for stateName in states by -1 when stateExtensions[stateName]?
+				state = stateExtensions[stateName].changes
+				if state.hasOwnProperty(prop)
+					return state[prop]
+
+			stateExtensions[''][prop]
+
+		getDeepPropValue = (item, prop, subprop) ->
+			states = item.states.items()
+			stateExtensions = item._stateExtensions
+
+			for stateName in states by -1 when stateExtensions[stateName]?
+				state = stateExtensions[stateName].changes
+				if state.hasOwnProperty(prop) and state[prop].hasOwnProperty(subprop)
+					return state[prop][subprop]
+
+			stateExtensions[''][prop][subprop]
 
 		# TODO: support anchor in one state (restore default value)
 		usedBindingsPool = []
 		reloadItem = (state) ->
 			assert.instanceOf state, State
 
-			{target, name, changes} = state
+			{target, changes} = state
 			stateExtensions = target._stateExtensions
 			states = target.states.items()
 			defaultState = stateExtensions['']
@@ -206,7 +277,7 @@ Grid {
 									defaultBindings[prop] = defaultVal
 
 								unless defaultState.hasOwnProperty(prop)
-									defaultState[prop] = target[prop]
+									defaultState[prop] = getSafeValue target[prop]
 
 								target.createBinding prop, val
 								usedBindings[prop] = true
@@ -214,7 +285,7 @@ Grid {
 				for prop, val of defaultBindings
 					unless usedBindings[prop]
 						target.createBinding prop, val
-						target[prop] = defaultState[prop]
+						target[prop] = getPropValue target, prop
 
 			# set properties
 			for prop, val of changes
@@ -238,7 +309,7 @@ Grid {
 											defaultBindings[subprop] = defaultVal
 
 										unless defaultState[prop].hasOwnProperty(subprop)
-											defaultState[prop][subprop] = target[prop][subprop]
+											defaultState[prop][subprop] = getSafeValue target[prop][subprop]
 
 										target[prop].createBinding subprop, subval
 										usedBindings[uniqueName] = true
@@ -247,34 +318,22 @@ Grid {
 							uniqueName = target[prop]._uniquePropertiesNames[subprop]
 							unless usedBindings[uniqueName]
 								target[prop].createBinding subprop, subval
-								target[prop][subprop] = defaultState[prop][subprop]
+								target[prop][subprop] = getDeepPropValue target, prop, subprop
 
 					# set deep property
 					for subprop, subval of val
 						uniqueName = target[prop]._uniquePropertiesNames[subprop]
-						newVal = defaultState[prop][subprop]
-						if newVal is undefined
-							newVal = defaultState[prop][subprop] = target[prop][subprop]
-
-						for stateName in states by -1 when stateExtensions[stateName]?
-							state = stateExtensions[stateName].changes
-							if state.hasOwnProperty(prop) and state[prop].hasOwnProperty(subprop)
-								newVal = state[prop][subprop]
-								break
+						unless defaultState[prop].hasOwnProperty(subprop)
+							defaultState[prop][subprop] = target[prop][subprop]
+						newVal = getDeepPropValue target, prop, subprop
 
 						if newVal isnt defaultState[prop][subprop] or (not target._bindings or not target._bindings[uniqueName])
 							target[prop][subprop] = newVal
 				else
 					# set main property
-					newVal = defaultState[prop]
-					if newVal is undefined
-						newVal = defaultState[prop] = target[prop]
-
-					for stateName in states by -1 when stateExtensions[stateName]?
-						state = stateExtensions[stateName].changes
-						if state.hasOwnProperty(prop)
-							newVal = state[prop]
-							break
+					unless defaultState.hasOwnProperty(prop)
+						defaultState[prop] = getSafeValue target[prop]
+					newVal = getPropValue target, prop
 
 					if newVal isnt defaultState[prop] or (not target._bindings or not target._bindings[prop])
 						target[prop] = newVal
