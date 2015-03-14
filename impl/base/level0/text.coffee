@@ -5,6 +5,7 @@ module.exports = (impl) ->
 
 	DATA =
 		text: ''
+		linkColor: 'blue'
 		color: 'black'
 		lineHeight: 1
 		fontFamily: 'sans-serif'
@@ -25,6 +26,9 @@ module.exports = (impl) ->
 
 	setTextColor: (val) ->
 		@_impl.color = val
+
+	setTextLinkColor: (val) ->
+		@_impl.linkColor = val
 
 	setTextLineHeight: (val) ->
 		@_impl.lineHeight = val

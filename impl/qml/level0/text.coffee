@@ -105,6 +105,9 @@ module.exports = (impl) ->
 	setTextColor: (val) ->
 		@_impl.elem.color = impl.utils.toQtColor val
 
+	setTextLinkColor: (val) ->
+		@_impl.elem.linkColor = impl.utils.toQtColor val
+
 	setTextLineHeight: (val) ->
 		@_impl.elem.lineHeight = val
 

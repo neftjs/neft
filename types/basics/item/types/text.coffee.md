@@ -72,6 +72,19 @@ Text {
 				developmentSetter: (val) ->
 					assert.isString val
 
+*String* Text::linkColor = 'blue'
+---------------------------------
+
+### *Signal* Text::linkColorChanged(*String* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'linkColor'
+				defaultValue: 'blue'
+				implementation: Impl.setTextLinkColor
+				developmentSetter: (val) ->
+					assert.isString val
+
 *Float* Text::lineHeight = 1
 ----------------------------
 

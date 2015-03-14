@@ -189,6 +189,7 @@ module.exports = (impl) ->
 	"""
 
 	DATA =
+		stylesheet: null
 		autoWidth: true
 		autoHeight: true
 		textElement: null
@@ -223,6 +224,16 @@ module.exports = (impl) ->
 
 	setTextColor: (val) ->
 		@_impl.textElement.style.color = val
+		return
+
+	setTextLinkColor: (val) ->
+		data = @_impl
+		unless data.stylesheet
+			data.stylesheet = document.createElement 'style'
+			data.elem.appendChild data.stylesheet
+			data.textElement.setAttribute 'id', "id#{@__hash__}"
+		data.stylesheet.innerHTML = "#id#{@__hash__} a { color: #{val}; }"
+		return
 
 	setTextLineHeight: (val) ->
 		pxLineHeight = val * @font.pixelSize
