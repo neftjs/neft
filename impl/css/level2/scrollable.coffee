@@ -26,7 +26,7 @@ module.exports = (impl) ->
 		scrollElem = data.scrollElem = document.createElement 'div'
 		scrollElem.style.overflow = 'scroll'
 		scrollElem.style.width = '110%'
-		scrollElem.style.height = '100%'
+		scrollElem.style.height = '110%'
 		data.elem.appendChild scrollElem
 
 		scrollElem.addEventListener 'touchstart', (e) ->
