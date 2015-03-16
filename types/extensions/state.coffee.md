@@ -37,7 +37,7 @@ Item states
 				assert.lengthOf arguments, 0
 
 				@changes = new ChangesObject
-				@_name = utils.uid()
+				defaultName = @_name = utils.uid()
 				@_ready = false
 				super()
 
@@ -46,6 +46,9 @@ Item states
 					fillItemDefaultState @
 					if @target?.states.has(@name)
 						reloadItem @
+					else
+						if @_name is defaultName and not @hasOwnProperty('_when')
+							@when = true
 					return
 
 *String* State::name

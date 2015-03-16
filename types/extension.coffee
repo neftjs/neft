@@ -31,6 +31,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 		name: 'when'
 		defaultValue: false
 		setter: (_super) -> (val) ->
+			unless @hasOwnProperty('_when')
+				@_when = false
+
 			if typeof val is 'function' and val.connect?
 				unless @_isWhenListens
 					val.connect signalListener, @
