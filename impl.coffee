@@ -9,7 +9,7 @@ impl = abstractImpl = require './impl/base'
 
 TYPES = ['Item', 'Image', 'Text', 'FontLoader', 'Screen', 'RotationSensor',
 
-         'Rectangle', 'Grid', 'Column', 'Row',
+         'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
          'Animation', 'PropertyAnimation', 'NumberAnimation',
 
          'Scrollable']

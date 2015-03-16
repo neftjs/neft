@@ -25,7 +25,7 @@ updateItem = (item) ->
 	data = item._impl
 	{gridType} = data
 
-	data.updatePending = false
+	data.updatePending = true
 
 	# get config
 	columnSpacing = rowSpacing = 0
@@ -33,14 +33,14 @@ updateItem = (item) ->
 	if gridType is ALL
 		columnsLen = item.columns
 		rowsLen = item.rows
-		columnSpacing = item.spacing.column
-		rowSpacing = item.spacing.row
+		columnSpacing = item._spacingColumn
+		rowSpacing = item._spacingRow
 	else if gridType is COLUMN
-		rowSpacing = item.spacing
+		rowSpacing = item._spacing
 		columnsLen = 1
 		rowsLen = Infinity
 	else if gridType is ROW
-		columnSpacing = item.spacing
+		columnSpacing = item._spacing
 		columnsLen = Infinity
 		rowsLen = 1
 
@@ -63,14 +63,15 @@ updateItem = (item) ->
 	i = 0
 	for child in children
 		# omit not visible children
-		unless child.visible
+		unless child._visible
 			continue
 
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
 
 		# child
-		{width, height} = child
+		width = child._width
+		height = child._height
 
 		# right / bottom margins
 		if gridType & ROW
@@ -101,7 +102,7 @@ updateItem = (item) ->
 	# set positions
 	i = 0
 	for child in children
-		unless child.visible
+		unless child._visible
 			continue
 
 		column = i % columnsLen
@@ -179,6 +180,7 @@ ROW = exports.ROW = 1<<1
 ALL = exports.ALL = (1<<2) - 1
 
 exports.DATA =
+	disableFill: true
 	gridType: 0
 	updatePending: false
 

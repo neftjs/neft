@@ -143,6 +143,7 @@ Styles.button/red {
 	exports.Grid = require('./types/layout/grid') exports, Impl, itemUtils
 	exports.Column = require('./types/layout/column') exports, Impl, itemUtils
 	exports.Row = require('./types/layout/row') exports, Impl, itemUtils
+	exports.Flow = require('./types/layout/flow') exports, Impl, itemUtils
 	exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
 
 	require('./types/loader') exports, Impl, itemUtils

@@ -21,8 +21,8 @@ updateItem = (item) ->
 		tmp = 0
 		size = 0
 		for child in children
-			if child.visible
-				tmp = child.width
+			if child._visible
+				tmp = child._width
 				if tmp > size
 					size = tmp
 
@@ -34,8 +34,8 @@ updateItem = (item) ->
 		tmp = 0
 		size = 0
 		for child in children
-			if child.visible
-				tmp = child.height
+			if child._visible
+				tmp = child._height
 				if tmp > size
 					size = tmp
 

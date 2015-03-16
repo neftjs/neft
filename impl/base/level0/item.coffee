@@ -95,7 +95,7 @@ module.exports = (impl) ->
 	attachItemSignal: (name, signal) ->
 
 	setItemFill: (type, val) ->
-		unless 'gridType' of @_impl
+		unless @_impl.disableFill
 			if @_fillWidth isnt @_fillHeight
 				impl.utils.fill.enable @
 			else if val is false
