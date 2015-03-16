@@ -146,13 +146,14 @@ SIGNALS_ARGS =
 		text: e.text
 
 module.exports = (impl) ->
-	DATA =
+	DATA = utils.merge
 		elem: null
 		mouseArea: null
 		linkUri: ''
 		linkUriListens: false
 		bindings: null
 		anchors: null
+	, impl.utils.fill.DATA
 
 	exports =
 	DATA: DATA

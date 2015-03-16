@@ -109,9 +109,9 @@ Item {
 				if @left is @top and @top is @right and @right is @bottom
 					@left
 				else
-					throw new Error "Margin values are different"
+					throw new Error "Item::margin values are different"
 
-			toJOSN: ->
+			toJSON: ->
 				left: @left
 				top: @top
 				right: @right
@@ -140,5 +140,14 @@ Item {
 					margin.left = margin.top = margin.right = margin.bottom = val
 				_super.call @, val
 				return
+
+		Item::clone = do (_super = Item::clone) -> ->
+			clone = _super.call @
+			{margin} = clone
+			margin.left = @_marginLeft
+			margin.top = @_marginTop
+			margin.right = @_marginRight
+			margin.bottom = @_marginBottom
+			clone
 
 		Margin

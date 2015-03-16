@@ -1,9 +1,11 @@
 'use strict'
 
+utils = require 'utils'
+
 module.exports = (impl) ->
 	{items} = impl
 
-	DATA =
+	DATA = utils.merge
 		parent: null
 		visible: true
 		clip: false
@@ -18,6 +20,7 @@ module.exports = (impl) ->
 		linkUri: ''
 		bindings: null
 		anchors: null
+	, impl.utils.fill.DATA
 
 	DATA: DATA
 
@@ -90,3 +93,11 @@ module.exports = (impl) ->
 		y1 < y2 + b._height
 
 	attachItemSignal: (name, signal) ->
+
+	setItemFill: (type, val) ->
+		unless 'gridType' of @_impl
+			if @_fillWidth isnt @_fillHeight
+				impl.utils.fill.enable @
+			else if val is false
+				impl.utils.fill.disable @
+		return

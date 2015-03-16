@@ -25,3 +25,10 @@ Item::createProperty(*String* name)
 			@_properties.push name
 
 			return
+
+		Item::clone = do (_super = Item::clone) -> ->
+			clone = _super.call @
+			if @_properties
+				for prop in @_properties
+					clone[prop] = @[prop]
+			clone

@@ -321,4 +321,17 @@ Item {
 				_super.call @, val
 				return
 
+		Item::clone = do (_super = Item::clone) -> ->
+			clone = _super.call @
+			{anchors} = clone
+			anchors.left = @_anchorsLeft
+			anchors.right = @_anchorsRight
+			anchors.horizontalCenter = @_anchorsHorizontalCenter
+			anchors.top = @_anchorsTop
+			anchors.bottom = @_anchorsBottom
+			anchors.verticalCenter = @_anchorsVerticalCenter
+			anchors.centerIn = @_anchorsCenterIn
+			anchors.fill = @_anchorsFill
+			clone
+
 		Anchors

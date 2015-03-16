@@ -92,7 +92,5 @@ We recommend usng **WOFF** format and **TTF/OTF** for oldest Android browser.
 			@_sources = val
 
 			setImmediate =>
-				Object.freeze @
-				Object.freeze @_sources
 				loadFont @
 				FontLoader.fonts[@name] = @

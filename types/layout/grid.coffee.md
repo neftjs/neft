@@ -32,20 +32,20 @@ Grid {
 				super()
 				@_width = -1
 				@_height = -1
-				@_autoWidth = true
-				@_autoHeight = true
+				@fill.width = true
+				@fill.height = true
 
 			getter = utils.lookupGetter @::, 'width'
 			setter = utils.lookupSetter @::, 'width'
 			utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
-				@_autoWidth = val is -1
+				@fill.width = val is -1
 				_super.call @, val
 				return
 
 			getter = utils.lookupGetter @::, 'height'
 			setter = utils.lookupSetter @::, 'height'
 			utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-				@_autoHeight = val is -1
+				@fill.height = val is -1
 				_super.call @, val
 				return
 

@@ -330,7 +330,7 @@ module.exports = (impl) ->
 
 		false
 
-	DATA =
+	DATA = utils.merge
 		bindings: null
 		anchors: null
 		elem: null
@@ -347,6 +347,7 @@ module.exports = (impl) ->
 		scale: 1
 		rotation: 0
 		opacity: 1
+	, impl.utils.fill.DATA
 
 	DATA: DATA
 

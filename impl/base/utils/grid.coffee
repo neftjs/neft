@@ -116,21 +116,21 @@ updateItem = (item) ->
 		i++
 
 	# set item size
-	if item._autoWidth isnt false
+	if item._fillWidth isnt false
 		width = columnsPositions[maxColumnsLen-1]
 		if width > 0	
 			item.width = width
 		else
 			item.width = 0
-		item._autoWidth = true
+		item._fillWidth = true
 
-	if item._autoHeight isnt false
+	if item._fillHeight isnt false
 		height = rowsPositions[maxRowsLen-1]
 		if height > 0
 			item.height = height
 		else
 			item.height = 0
-		item._autoHeight = true
+		item._fillHeight = true
 	data.updatePending = false
 	return
 
@@ -158,12 +158,21 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_impl.updatePending and (@_autoWidth or @_autoHeight)
+	if not @_impl.updatePending and (@_fillWidth or @_fillHeight)
 		update.call @
 	return
 
-updateParent = ->
-	update.call @parent
+enableChild = (child) ->
+	child.onVisibleChanged update, @
+	child.onWidthChanged update, @
+	child.onHeightChanged update, @
+	child.onMarginChanged update, @
+
+disableChild = (child) ->
+	child.onVisibleChanged.disconnect update, @
+	child.onWidthChanged.disconnect update, @
+	child.onHeightChanged.disconnect update, @
+	child.onMarginChanged.disconnect update, @
 
 COLUMN = exports.COLUMN = 1<<0
 ROW = exports.ROW = 1<<1
@@ -182,16 +191,7 @@ exports.create = (item, type) ->
 	item.onHeightChanged updateSize
 
 	# update on each children size change
-	item.children.onInserted (item, i) ->
-		item.onVisibleChanged updateParent
-		item.onWidthChanged updateParent
-		item.onHeightChanged updateParent
-		item.onMarginChanged updateParent
-
-	item.children.onPopped (item, i) ->
-		item.onVisibleChanged.disconnect updateParent
-		item.onWidthChanged.disconnect updateParent
-		item.onHeightChanged.disconnect updateParent
-		item.onMarginChanged.disconnect updateParent
+	item.children.onInserted enableChild
+	item.children.onPopped disableChild
 
 exports.update = update

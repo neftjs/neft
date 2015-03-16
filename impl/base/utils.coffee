@@ -12,6 +12,7 @@ module.exports = (impl) ->
 		'scale': 'setItemScale'
 
 	grid: require './utils/grid'
+	fill: require './utils/fill'
 
 	createDataCloner: (extend, base) ->
 		->

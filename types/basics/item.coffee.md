@@ -17,14 +17,6 @@ Basic items/Item
 		@__name__ = 'Item'
 		@__path__ = 'Renderer.Item'
 
-		require('./item/margin') Renderer, Impl, itemUtils, Item
-		require('./item/anchors') Renderer, Impl, itemUtils, Item
-		require('./item/property') Renderer, Impl, itemUtils, Item
-		require('./item/signal') Renderer, Impl, itemUtils, Item
-		require('./item/pointer') Renderer, Impl, itemUtils, Item
-		require('./item/keys') Renderer, Impl, itemUtils, Item
-		require('./item/document') Renderer, Impl, itemUtils, Item
-
 *Item* Item()
 -------------
 
@@ -109,20 +101,26 @@ Rectangle {
 		signal.Emitter.createSignal @, 'childrenChanged'
 
 		class ChildrenObject extends signal.Emitter
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_ref = ref
 				@length = 0
 
 			index: (val) -> Array::indexOf.call @, val
 			has: (val) -> @index(val) isnt -1
 
+			utils.defineProperty @::, '_signals', null, ->
+				@_ref._signals
+			, (val) ->
+				assert.isNotDefined @_ref._signals
+				@_ref._signals = val
+
 ### *Signal* Item.children::inserted(*Item* child, *Integer* index)
 
-		signal.Emitter.createSignal ChildrenObject, 'inserted'
+		signal.Emitter.createSignal ChildrenObject, 'inserted', 'childrenInserted', '_ref'
 
 ### *Signal* Item.children::popped(*Item* child, *Integer* index)
 
-		signal.Emitter.createSignal ChildrenObject, 'popped'
+		signal.Emitter.createSignal ChildrenObject, 'popped', 'childrenPopped', '_ref'
 
 *Item* Item::parent = null
 --------------------------
@@ -374,8 +372,15 @@ Item::clone()
 			clone.rotation = @_rotation
 			clone.opacity = @_opacity
 
-			if @_properties
-				for prop in @_properties
-					clone[prop] = @[prop]
-
 			clone
+
+		require('./item/margin') Renderer, Impl, itemUtils, Item
+		require('./item/fill') Renderer, Impl, itemUtils, Item
+		require('./item/anchors') Renderer, Impl, itemUtils, Item
+		require('./item/property') Renderer, Impl, itemUtils, Item
+		require('./item/signal') Renderer, Impl, itemUtils, Item
+		require('./item/pointer') Renderer, Impl, itemUtils, Item
+		require('./item/keys') Renderer, Impl, itemUtils, Item
+		require('./item/document') Renderer, Impl, itemUtils, Item
+
+		Item
