@@ -112,7 +112,7 @@ bindingAttributeToString = (obj) ->
 			elem.unshift "'this'"
 		else if id is 'this'
 			elem[0] = "'this'"
-		else if id is 'view' or ids.hasOwnProperty(id)
+		else if (id is 'view' or ids.hasOwnProperty(id)) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
 			continue
 		else
 			binding[i] = elem.join '.'
@@ -310,7 +310,7 @@ stringViewObjectFull = (obj) ->
 	code += stringObjectChildren obj
 	code += stringAttributes obj
 	code += stringFunctions obj
-	code += "});"
+	code += "});\n"
 	code
 
 module.exports = (file, filename) ->
@@ -325,6 +325,14 @@ module.exports = (file, filename) ->
 			code += stringObjectFull elem
 
 	idsKeys = Object.keys ids
+
+	if filename is 'view'
+		code += "setImmediate(function(){\n"
+	code += "for (var _id in ids){\n"
+	code += "	ids[_id].ready(); ids[_id].onReady.disconnectAll();\n"
+	code += "}\n"
+	if filename is 'view'
+		code += "});\n"
 
 	code += "var mainItem;\n"
 	for elem in elems
