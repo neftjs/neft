@@ -49,6 +49,12 @@ Flow {
 				_super.call @, val
 				return
 
+			clone: ->
+				clone = super()
+				clone.fill = @fill
+				clone.spacing = @spacing
+				clone
+
 *Float* Flow::width = -1
 ------------------------
 

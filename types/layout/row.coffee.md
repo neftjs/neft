@@ -69,5 +69,6 @@ Row {
 
 		clone: ->
 			clone = super()
+			clone.fill = @fill
 			clone.spacing = @_spacing
 			clone

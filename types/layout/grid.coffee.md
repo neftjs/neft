@@ -93,6 +93,7 @@ Grid {
 				clone = super()
 				clone.columns = @_columns
 				clone.rows = @_rows
+				clone.fill = @fill
 				clone.spacing = @spacing
 				clone
 

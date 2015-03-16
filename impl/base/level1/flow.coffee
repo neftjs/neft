@@ -1,6 +1,11 @@
 'use strict'
 
 utils = require 'utils'
+log = require 'log'
+
+log = log.scope 'Renderer', 'Flow'
+
+MAX_LOOPS = 50
 
 queueIndex = 0
 queues = [[], []]
@@ -11,6 +16,13 @@ pending = false
 updateItem = (item) ->
 	{children} = item
 	data = item._impl
+
+	if data.loops is MAX_LOOPS
+		log.error "loop detected; item has been deactivated"
+		data.loops++
+		return
+	else if data.loops > MAX_LOOPS
+		return
 
 	data.updatePending = true
 
@@ -65,6 +77,10 @@ updateItem = (item) ->
 		item._fillHeight = true
 
 	data.updatePending = false
+
+	if queueItems[item.__hash__]
+		data.loops++
+
 	return
 
 updateItems = ->
@@ -109,6 +125,7 @@ disableChild = (child) ->
 
 module.exports = (impl) ->
 	DATA =
+		loops: 0
 		disableFill: true
 		updatePending: false
 
