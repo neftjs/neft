@@ -265,9 +265,14 @@ Declarations
 
 /* TYPE */
 
+TypeNameRest
+	= "." ("/"? Variable)+
+	/ "['" (("." / "/")? Variable)+ "']"
+	/ "[\"" (("." / "/")? Variable)+ "\"]"
+
 TypeName "type name"
-	= d:$(Variable (("." / "/") Variable)*) {
-		if (d.indexOf('/') !== -1){
+	= d:$(Variable TypeNameRest?) {
+		if (d.indexOf('/') !== -1 && d.indexOf('[') === -1){
 			return d.replace(/\.([a-zA-Z0-9_/]+)$/, "['$1") + "']";
 		}
 		return d;
