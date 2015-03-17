@@ -20,7 +20,7 @@ Text {
   item.text = parseInt(item.text) + 1 + '';
 </neft:func>
 
-<span neft:style="styles.button" neft:style:pointer:onClicked="increment">0</span>
+<span neft:style="styles:button" neft:style:pointer:onClicked="increment">0</span>
 ```
 
 You can use other functions declared in the same file (considering [neft:fragment][] scopes).
@@ -36,7 +36,7 @@ You can use other functions declared in the same file (considering [neft:fragmen
   item.text = view.funcs.multiply(item.text, item.text);
 </neft:func>
 
-<span neft:style="styles.button" neft:style:pointer:onClicked="boost">1</span>
+<span neft:style="styles:button" neft:style:pointer:onClicked="boost">1</span>
 ```
 
 	'use strict'

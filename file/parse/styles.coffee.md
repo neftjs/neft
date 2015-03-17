@@ -22,7 +22,7 @@ Rectangle {
 }
 
 // views/index.html
-<header neft:style="styles.home/header">
+<header neft:style="styles:home/header">
   <h1 neft:style="heading">Welcome!</h1>
 </header>
 ```
@@ -46,7 +46,7 @@ Rectangle {
 }
 
 // views/index.html
-<header neft:style="styles.header">Welcome!</header>
+<header neft:style="styles:header">Welcome!</header>
 ```
 
 You can set any of the [Renderer.Item][] properties by using *neft:style:* namespace.
@@ -61,7 +61,7 @@ Item {
 }
 
 // views/player.html
-<div neft:style="styles.player" neft:style:stamina="0.7" neft:style:width="10"></div>
+<div neft:style="styles:player" neft:style:stamina="0.7" neft:style:width="10"></div>
 ```
 
 	'use strict'
@@ -95,7 +95,7 @@ Item {
 				style.attrs = findAttrs(node)
 				style.parent = parentStyle
 
-				node.attrs.add 'neft:styleItem', null
+				node.attrs.set 'neft:styleItem', null
 
 				if parentStyle
 					parentStyle.children.push style

@@ -82,7 +82,7 @@ module.exports = (File, data) -> class Style
 		unless @item
 			return
 
-		if 'text' of @item
+		if 'text' of @item or (@item.$ isnt null and 'text' of @item.$)
 			@updateText()
 
 		@updateVisibility()
@@ -111,6 +111,9 @@ module.exports = (File, data) -> class Style
 	updateText: ->
 		if 'text' of @item
 			@item.text = @node.stringifyChildren()
+		else if @item.$ isnt null and 'text' of @item.$
+			@item.$.text = @node.stringifyChildren()
+		return
 
 	updateVisibility: ->
 		visible = true
@@ -155,6 +158,10 @@ module.exports = (File, data) -> class Style
 						when 'string'
 							val = val+''
 
+				unless prop of obj
+					log.error "Can't set the '#{prop}' property, because this property doesn't exist"
+					continue
+
 				if typeof obj[prop] is 'function'
 					obj[prop] val
 				else
@@ -189,15 +196,22 @@ module.exports = (File, data) -> class Style
 		id = @node.attrs.get 'neft:style'
 		assert.isString id
 
-		@isScope = ///^styles\.///.test id
+		@isScope = ///^(styles|renderer)\:///.test id
 		@item = null
 		@scope = null
 		@isAutoParent = false
 
 		if @isScope
-			id = id.slice 'styles.'.length
+			if ///^renderer\:///.test id
+				id = id.slice 'renderer:'.length
+				id = utils.capitalize id
+				@scope =
+					mainItem: new Renderer[id]
+					ids: {}
+			else
+				id = id.slice 'styles:'.length
+				@scope = styles[id]?.withStructure()
 			@isAutoParent = true
-			@scope = styles[id]?.withStructure()
 			if @scope
 				@item = @scope.mainItem
 			else
@@ -226,7 +240,7 @@ module.exports = (File, data) -> class Style
 			@item.linkUri = @getLinkUri()
 
 		# text changes
-		if 'text' of @item
+		if 'text' of @item or (@item.$ isnt null and 'text' of @item.$)
 			listenTextRec @
 
 		return;

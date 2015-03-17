@@ -46,12 +46,12 @@ Row {
 }
 
 // documents/index.html
-<neft:fragment neft:name="information" neft:style="styles.place/information">
+<neft:fragment neft:name="information" neft:style="styles:place/information">
   <dt neft:style="name">${name}</dt>
   <dd neft:style="value">${value}</dd>
 </neft:fragment>
 
-<article neft:style="styles.place">
+<article neft:style="styles:place">
   <h2 neft:style="heading">Paris</h2>
   <dl neft:style="stats">
     <neft:use neft:fragment="information" name="population" value="2,234,105" />
