@@ -104,6 +104,8 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 					_super.call @, val
 
 					if val
+						assert.instanceOf val, Renderer.Item
+
 						if val._stateExtensions is null
 							val._stateExtensions = {}
 							val._stateExtensions[''] = new ChangesObject
