@@ -6,72 +6,74 @@ Screen
 	utils = require 'utils'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils) ->
+	module.exports = (Renderer, Impl, itemUtils) -> class Screen extends itemUtils.Object
 
 *Object* Screen
 ---------------
 
-		Screen = new itemUtils.Object
+		constructor: ->
+			@_isTouch = false
+			@_isDesktop = true
+			@_isPhone = false
+			@_pixelRatio = 1
+			@_width = 1024
+			@_height = 800
+			@_orientation = 'Portrait'
+			super()
 
 *Boolean* Screen.isTouch
 ------------------------
 
-		Screen._isTouch = false;
-		utils.defineProperty Screen, 'isTouch', null, ->
+		utils.defineProperty @::, 'isTouch', null, ->
 			@_isTouch
 		, null
 
 *Boolean* Screen.isMobile
 -------------------------
 
-		utils.defineProperty Screen, 'isMobile', null, ->
-			@_isTouch and (@_isTablet or @_isPhone)
+		utils.defineProperty @::, 'isMobile', null, ->
+			@isTouch and (@isTablet or @isPhone)
 		, null
 
 *Boolean* Screen.isDesktop
 --------------------------
 
-		Screen._isDesktop = true;
-		utils.defineProperty Screen, 'isDesktop', null, ->
-			not @_isTouch
+		utils.defineProperty @::, 'isDesktop', null, ->
+			not @isTouch
 		, null
 
 *Boolean* Screen.isTablet
 -------------------------
 
-		utils.defineProperty Screen, 'isTablet', null, ->
-			not @_isDesktop and not @_isPhone
+		utils.defineProperty @::, 'isTablet', null, ->
+			not @isDesktop and not @isPhone
 		, null
 
 *Boolean* Screen.isPhone
 ------------------------
 
-		Screen._isPhone = false;
-		utils.defineProperty Screen, 'isPhone', null, ->
+		utils.defineProperty @::, 'isPhone', null, ->
 			@_isPhone
 		, null
 
 *Boolean* Screen.pixelRatio
 ---------------------------
 
-		Screen._pixelRatio = 1;
-		utils.defineProperty Screen, 'pixelRatio', null, ->
+		utils.defineProperty @::, 'pixelRatio', null, ->
 			@_pixelRatio
 		, null
 
 *Boolean* Screen.width
 ----------------------
 
-		Screen._width = 1024;
-		utils.defineProperty Screen, 'width', null, ->
+		utils.defineProperty @::, 'width', null, ->
 			@_width
 		, null
 
 *Boolean* Screen.height
 -----------------------
 
-		Screen._height = 800;
-		utils.defineProperty Screen, 'height', null, ->
+		utils.defineProperty @::, 'height', null, ->
 			@_height
 		, null
 
@@ -82,13 +84,11 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
 
 ### *Signal* Screen.orientationChanged(*String* oldValue)
 
-		Screen._orientation = 'Portrait';
-		signal.create Screen, 'orientationChanged'
+		signal.Emitter.createSignal @, 'orientationChanged'
 		utils.defineProperty Screen, 'orientation', null, ->
 			@_orientation
 		, null
 
-		Object.preventExtensions Screen
-		Impl.initScreenNamespace?.call Screen
-
-		Screen
+		screen = new Screen
+		Impl.initScreenNamespace?.call screen
+		screen

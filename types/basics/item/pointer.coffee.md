@@ -30,8 +30,14 @@ Rectangle {
 
 This class enables mouse and touch handling.
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_x = 0
+				@_y = 0
+				@_isPressed = false
+				@_isHover = false
+				@_isPressedInitialized = false
+				@_isHoverInitialized = false
+				super ref
 
 *Signal* Pointer::clicked(*Object* event)
 -----------------------------------------
@@ -95,15 +101,15 @@ This signal is called when the pointer position changes.
 
 The *event* object contains x and y position.
 
-			onLazySignalInitialized = (pointer, signalName, uniqueName) ->
-				Impl.attachItemSignal.call pointer._ref, 'pointer', uniqueName, signalName
+			onLazySignalInitialized = (pointer, name) ->
+				Impl.attachItemSignal.call pointer, 'pointer', name
 
 			@SIGNALS = ['clicked', 'pressed', 'released',
 			            'entered', 'exited', 'wheel', 'moved']
 
 			for signalName in @SIGNALS
 				uniqueName = "pointer#{utils.capitalize(signalName)}"
-				signal.Emitter.createSignal @, signalName, uniqueName, '_ref', onLazySignalInitialized
+				signal.Emitter.createSignal @, signalName, onLazySignalInitialized
 
 *Integer* Pointer::x
 --------------------
@@ -114,8 +120,8 @@ This property refers to the current pointer x position relative to the item.
 
 			onPositionSignalInitialized = do ->
 				onMoved = (e) ->
-					@pointer.x = e.x
-					@pointer.y = e.y
+					@x = e.x
+					@y = e.y
 					return
 
 				(pointer) ->
@@ -176,10 +182,10 @@ This property holds whether the pointer is currently pressed.
 
 			isPressedInitializer = do ->
 				onPressed = ->
-					@pointer.isPressed = true
+					@isPressed = true
 					signal.STOP_PROPAGATION
 				onReleased = ->
-					@pointer.isPressed = false
+					@isPressed = false
 
 				(pointer) ->
 					pointer.onPressed onPressed
@@ -193,9 +199,9 @@ This property holds whether the pointer is currently pressed.
 				parentConstructor: Item
 				signalInitializer: isPressedInitializer
 				getter: (_super) -> ->
-					unless @_ref.hasOwnProperty '_pointerIsPressed'
+					unless @_isPressedInitialized
 						isPressedInitializer @
-						@_ref._pointerIsPressed = false
+						@_isPressedInitialized = true
 					_super.call @
 
 *Boolean* Pointer::isHover = false
@@ -207,9 +213,9 @@ This property holds whether the pointer is currently under the item.
 
 			isHoverInitializer = do ->
 				onEntered = ->
-					@pointer.isHover = true
+					@isHover = true
 				onExited = ->
-					@pointer.isHover = false
+					@isHover = false
 
 				(pointer) ->
 					pointer.onEntered onEntered
@@ -223,9 +229,9 @@ This property holds whether the pointer is currently under the item.
 				parentConstructor: Item
 				signalInitializer: isHoverInitializer
 				getter: (_super) -> ->
-					unless @_ref.hasOwnProperty '_pointerIsHover'
+					unless @_isHoverInitialized
 						isHoverInitializer @
-						@_ref._pointerIsHover = false
+						@_isHoverInitialized = true
 					_super.call @
 
 *Item* Item()

@@ -14,7 +14,6 @@ Animation
 -----------------------
 
 		constructor: ->
-			@_impl = null
 			@_loop = false
 			@_updatePending = false
 			super()

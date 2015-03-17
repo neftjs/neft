@@ -41,6 +41,8 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			@_isLoaded = false
 			@_autoWidth = true
 			@_autoHeight = true
+			@_naturalWidth = 0
+			@_naturalHeight = 0
 			super()
 
 		getter = utils.lookupGetter @::, 'width'

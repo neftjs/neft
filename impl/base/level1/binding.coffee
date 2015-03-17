@@ -30,30 +30,30 @@ module.exports = (impl) ->
 
 			Object.preventExtensions @
 
-		signalChangeListener = ->
-			if @parent
+		getSignalChangeListener = do ->
+			withParent = ->
 				@parent.updateItem()
-			else
+			noParent = ->
 				@binding.update()
 
-		getItem: ->
-			if @item instanceof impl.DeepObject
-				@child.item[@child.prop]
-			else
-				@item
+			(connection) ->
+				if connection.parent
+					withParent
+				else
+					noParent
 
 		connect: ->
 			if @item
-				@getItem()[@handlerName]? signalChangeListener, @
+				@item[@handlerName]? getSignalChangeListener(@), @
 			return
 
 		disconnect: ->
 			if @item
-				@getItem()[@handlerName]?.disconnect signalChangeListener, @
+				@item[@handlerName]?.disconnect getSignalChangeListener(@), @
 			return
 
 		updateItem: ->
-			oldVal = @getItem()
+			oldVal = @item
 			val = @child.getValue()
 			if oldVal isnt val or utils.isObject(val)
 				@disconnect()
@@ -67,7 +67,7 @@ module.exports = (impl) ->
 			return
 
 		getValue: ->
-			@getItem()?[@prop]
+			@item?[@prop]
 
 		destroy: ->
 			@disconnect()
@@ -92,7 +92,7 @@ module.exports = (impl) ->
 					if isArray elem
 						r += Binding.getHash elem, true
 					else if typeof elem is 'string'
-						if i is 1 and typeof arr[0] is 'object' and ///^[a-zA-Z_]///.test elem
+						if i is 1 and typeof arr[0] is 'object' and ///^[a-zA-Z_$]///.test elem
 							r += "."
 						r += elem
 					else if typeof elem is 'object'
@@ -123,11 +123,11 @@ module.exports = (impl) ->
 				cache[hash] = Function.apply null, args
 
 		# TODO: implement fast bindings [[item, prop]]
-		constructor: (@item, @ns, @uniqueProp, @prop, binding, @extraResultFunc) ->
+		constructor: (@obj, @prop, binding, @extraResultFunc=null) ->
+			item = obj._ref or obj
 			Binding.prepare binding, item
 
 			# properties
-			@__hash__ = utils.uid()
 			@func = Binding.getFunc binding
 			@args = Binding.getItems binding
 
@@ -142,27 +142,17 @@ module.exports = (impl) ->
 					connections.push new Connection @, elem[0], elem[1]
 
 			# update
-			@defaultValue = @getObj()[prop]
-			@update()
+			@updatePending = false
+			@defaultValue = @obj[prop]
+			Object.preventExtensions @
 
-		item: null
-		ns: ''
-		args: null
-		uniqueProp: ''
-		prop: ''
-		func: null
-		extraResultFunc: null
-		updatePending: false
-		connections: null
-
-		getObj: ->
-			if @ns
-				@item[@ns]
+			if item._isReady
+				@update()
 			else
-				@item
+				item.onReady @update, @
 
 		getDefaultValue = (binding) ->
-			val = binding.getObj()[binding.prop]
+			val = binding.obj[binding.prop]
 			switch typeof val
 				when 'string'
 					''
@@ -183,7 +173,7 @@ module.exports = (impl) ->
 
 			# extra func
 			if @extraResultFunc
-				funcResult = @extraResultFunc @item
+				funcResult = @extraResultFunc @obj
 				if typeof funcResult is 'number' and isFinite(funcResult)
 					result += funcResult
 
@@ -191,7 +181,7 @@ module.exports = (impl) ->
 				result = getDefaultValue @
 
 			@updatePending = true
-			@getObj()[@prop] = result
+			@obj[@prop] = result
 			@updatePending = false
 			return
 
@@ -201,8 +191,7 @@ module.exports = (impl) ->
 				connection.destroy()
 
 			# remove from the list
-			nsImpl = @item._impl
-			nsImpl.bindings[@uniqueProp] = null
+			@obj._impl.bindings[@prop] = null
 
 			# clear props
 			@args = null
@@ -212,15 +201,15 @@ module.exports = (impl) ->
 			# @getObj()[@prop] = @defaultValue
 			return
 
-	setItemBinding: (ns, prop, uniqueProp, binding, extraResultFunc) ->
+	setItemBinding: (prop, binding, extraResultFunc) ->
 		data = @_impl
 		data.bindings ?= {}
 
-		if data.bindings[uniqueProp]?.updatePending
+		if data.bindings[prop]?.updatePending
 			return
 
-		data.bindings[uniqueProp]?.destroy()
+		data.bindings[prop]?.destroy()
 
 		if binding?
-			data.bindings[uniqueProp] = new Binding @, ns, uniqueProp, prop, binding, extraResultFunc
+			data.bindings[prop] = new Binding @, prop, binding, extraResultFunc
 		return

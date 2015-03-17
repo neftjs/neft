@@ -12,6 +12,10 @@ Document Modeling integration
 
 *Document* Document()
 -------------------
+			
+			constructor: (ref) ->
+				@_node = null
+				super ref
 
 *Document.Element* Document::node
 ---------------------------------
@@ -30,14 +34,14 @@ Document Modeling integration
 
 This signal is called when the **style item** parent has been found.
 
-		signal.Emitter.createSignal Document, 'show', 'documentShow', '_ref'
+		signal.Emitter.createSignal Document, 'show'
 
 *Signal* Document::hide()
 -------------------------
 
 This signal is called when the **style item** is no longer used.
 
-		signal.Emitter.createSignal Document, 'hide', 'documentHide', '_ref'
+		signal.Emitter.createSignal Document, 'hide'
 
 *Item* Item()
 -------------

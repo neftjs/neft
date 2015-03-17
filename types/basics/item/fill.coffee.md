@@ -11,8 +11,10 @@ Positioning/Fill
 		class Fill extends itemUtils.DeepObject
 			@__name__ = 'Fill'
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_width = false
+				@_height = false
+				super ref
 
 *Fill* Fill()
 -------------
@@ -86,9 +88,8 @@ Positioning/Fill
 
 		Item::clone = do (_super = Item::clone) -> ->
 			clone = _super.call @
-			{fill} = clone
-			fill.width = @_fillWidth
-			fill.height = @_fillHeight
+			if @_fill
+				clone.fill = @fill
 			clone
 
 		Fill

@@ -27,8 +27,8 @@ Rectangle {
 *Keys* Keys()
 -------------
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				super ref
 
 *Signal* Keys::pressed(*Object* event)
 --------------------------------------
@@ -42,14 +42,13 @@ Rectangle {
 *Signal* Keys::input(*Object* event)
 ------------------------------------
 
-			onLazySignalInitialized = (keys, signalName, uniqueName) ->
-				Impl.attachItemSignal.call keys._ref, 'keys', uniqueName, signalName
+			onLazySignalInitialized = (keys, name) ->
+				Impl.attachItemSignal.call keys, 'keys', name
 
 			@SIGNALS = ['pressed', 'hold', 'released', 'input']
 
 			for signalName in @SIGNALS
-				uniqueName = "keys#{utils.capitalize(signalName)}"
-				signal.Emitter.createSignal @, signalName, uniqueName, '_ref', onLazySignalInitialized
+				signal.Emitter.createSignal @, signalName, onLazySignalInitialized
 
 *Item* Item()
 -------------

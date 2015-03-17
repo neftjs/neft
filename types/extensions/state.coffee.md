@@ -75,7 +75,7 @@ It's a random string by default.
 					if target
 						if target.states.has(name)
 							@disable()
-						target._stateExtensions[name] = undefined
+						target._stateExtensions[name] = null
 						target._stateExtensions[val] = @
 
 					_super.call @, val
@@ -101,18 +101,19 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 					if target
 						if target.states.has(name)
 							@disable()
-						target._stateExtensions[name] = undefined
+						target._stateExtensions[name] = null
 
 					_super.call @, val
 
 					if val
-						if val._stateExtensions is undefined
+						if val._stateExtensions is null
 							val._stateExtensions = {}
 							val._stateExtensions[''] = new ChangesObject
 						val._stateExtensions[name] = @
 
 						if val.states.has(name)
 							@enable()
+					return
 
 *Object* State::changes
 -----------------------
@@ -302,9 +303,8 @@ Grid {
 							state = stateExtensions[stateName].changes
 							if state.hasOwnProperty(prop) and state[prop].hasOwnProperty('_bindings')
 								for subprop, subval of state[prop]._bindings
-									uniqueName = target[prop]._uniquePropertiesNames[subprop]
-									unless usedBindings[uniqueName]
-										defaultVal = targetBindings?[uniqueName] or null
+									unless usedBindings[prop]?[subprop]
+										defaultVal = target[prop]._bindings?[subprop] or null
 										if defaultBindings is undefined
 											defaultState[prop].createBinding subprop, defaultVal
 											defaultBindings = defaultState[prop]._bindings
@@ -315,22 +315,21 @@ Grid {
 											defaultState[prop][subprop] = getSafeValue target[prop][subprop]
 
 										target[prop].createBinding subprop, subval
-										usedBindings[uniqueName] = true
+										usedBindings[prop] ?= Object.create(null)
+										usedBindings[prop][subprop] = true
 
 						for subprop, subval of defaultBindings
-							uniqueName = target[prop]._uniquePropertiesNames[subprop]
-							unless usedBindings[uniqueName]
+							unless usedBindings[prop]?[subprop]
 								target[prop].createBinding subprop, subval
 								target[prop][subprop] = getDeepPropValue target, prop, subprop
 
 					# set deep property
 					for subprop, subval of val
-						uniqueName = target[prop]._uniquePropertiesNames[subprop]
 						unless defaultState[prop].hasOwnProperty(subprop)
 							defaultState[prop][subprop] = target[prop][subprop]
 						newVal = getDeepPropValue target, prop, subprop
 
-						if newVal isnt defaultState[prop][subprop] or (not target._bindings or not target._bindings[uniqueName])
+						if newVal isnt defaultState[prop][subprop] or (not target[prop]._bindings or not target[prop]._bindings[subprop])
 							target[prop][subprop] = newVal
 				else
 					# set main property
@@ -344,7 +343,11 @@ Grid {
 			# clear usedBindings
 			if bindingsUsed
 				for prop, val of usedBindings
-					usedBindings[prop] = false
+					if typeof val is 'object'
+						for subprop of val
+							val[subprop] = false
+					else
+						usedBindings[prop] = false
 			usedBindingsPool.push usedBindings
 
 			return

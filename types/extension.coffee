@@ -16,11 +16,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 			@disable()
 
 	constructor: ->
-		super()
 		@_impl ?= bindings: null
 		@_target = null
 		@_running = false
+		@_when = false
 		@_isWhenListens = false
+		super()
 		@onWhenChanged onWhenChanged
 
 	signalListener = ->

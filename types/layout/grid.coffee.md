@@ -29,9 +29,12 @@ Grid {
 			@__path__ = 'Renderer.Grid'
 
 			constructor: ->
-				super()
 				@_width = -1
 				@_height = -1
+				@_columns = 2
+				@_rows = Infinity
+				@_spacing = null
+				super()
 				@fill.width = true
 				@fill.height = true
 
@@ -94,7 +97,8 @@ Grid {
 				clone.columns = @_columns
 				clone.rows = @_rows
 				clone.fill = @fill
-				clone.spacing = @spacing
+				if @_spacing
+					clone.spacing = @spacing
 				clone
 
 *Spacing* Grid::spacing
@@ -117,8 +121,10 @@ Grid {
 					_super.call @, val
 					return
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_column = 0
+				@_row = 0
+				super ref
 
 *Float* Grid::spacing.column
 ----------------------------

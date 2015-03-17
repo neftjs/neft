@@ -43,7 +43,9 @@ Text {
 			constructor: ->
 				@_text = ''
 				@_color = 'black'
-				@_fontPixelSize = 14
+				@_linkColor = 'blue'
+				@_lineHeight = 1
+				@_font = null
 				super()
 
 *String* Text::text
@@ -103,7 +105,8 @@ Text {
 				clone.text = @_text
 				clone.color = @_color
 				clone.lineHeight = @_lineHeight
-				clone.font = @font
+				if @_font
+					clone.font = @font
 				clone
 
 *Font* Text::font
@@ -132,8 +135,14 @@ Text {
 					_super.call @, val
 					return
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_family = 'sans-serif'
+				@_pixelSize = 14
+				@_weight = 0.4
+				@_wordSpacing = 0
+				@_letterSpacing = 0
+				@_italic = false
+				super ref
 
 *String* Text::font.family = 'sans-serif'
 -----------------------------------------

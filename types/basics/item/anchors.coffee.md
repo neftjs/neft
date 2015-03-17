@@ -68,18 +68,25 @@ This connection is solid, so if the *rect1* will change a position,
 		class Anchors extends itemUtils.DeepObject
 			@__name__ = 'Anchors'
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_top = null
+				@_bottom = null
+				@_verticalCenter = null
+				@_left = null
+				@_right = null
+				@_horizontalCenter = null
+				@_centerIn = null
+				@_fill = null
+				super ref
 
 			createAnchorProp = (type, opts=0) ->
 				setter = (_super) -> (val) ->
 					if val?
 						`//<development>`
-						id = @_ref.__hash__
 						allowedLines = if H_LINES[type] then H_LINES else V_LINES
 
 						assert Array.isArray(val) and val.length > 0 and val.length < 3
-						, "`(##{id}).anchors.#{type}` expects an array; `'#{val}'` given"
+						, "`anchors.#{type}` expects an array; `'#{val}'` given"
 
 						[target, line] = val
 
@@ -106,7 +113,7 @@ Rectangle {
 Such reference is also automatically updated if the item parent change.
 
 						assert target is 'parent' or target is 'this' or target instanceof Item
-						, "`(##{id}).anchors.#{type}` expects an item; `'#{val}'` given"
+						, "`anchors.#{type}` expects an item; `'#{val}'` given"
 
 For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.
 
@@ -118,18 +125,18 @@ Pointing to the *parent* by its id is not allowed, *parent* target should be use
 						# 		parentA = Impl.getItemParent id
 						# 		isFamily = Impl.confirmItemChild parentA, target
 						# 		assert isFamily
-						# 		, "`(##{id}).anchors.#{type}` can be anchored only to the " +
+						# 		, "`anchors.#{type}` can be anchored only to the " +
 						# 		  "parent or a sibling"
 
 						if opts & ONLY_TARGET_ALLOW
 							assert line is undefined
-							, "`(##{id}).anchors.#{type}` expects only a target to be defined; " +
+							, "`anchors.#{type}` expects only a target to be defined; " +
 							  "`'#{val}'` given;\npointing to the line is not required " +
 							  "(e.g `anchors.centerIn = 'parent'`)"
 
 						if opts & LINE_REQ
 							assert H_LINES[line] or V_LINES[line]
-							, "`(##{id}).anchors.#{type}` expects a anchor line to be defined; " +
+							, "`anchors.#{type}` expects a anchor line to be defined; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
 
 Horizontal anchors can't point to the vertical lines (and vice versa),
@@ -137,12 +144,12 @@ so *anchors.top = parent.left* is not allowed.
 
 						if opts & H_LINE_REQ
 							assert H_LINES[line]
-							, "`(##{id}).anchors.#{type}` can't be anchored to a vertical edge; " +
+							, "`anchors.#{type}` can't be anchored to a vertical edge; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
 
 						if opts & V_LINE_REQ
 							assert V_LINES[line]
-							, "`(##{id}).anchors.#{type}` can't be anchored to a horizontal edge; " +
+							, "`anchors.#{type}` can't be anchored to a horizontal edge; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
 						`//</development>`
 
@@ -323,15 +330,8 @@ Item {
 
 		Item::clone = do (_super = Item::clone) -> ->
 			clone = _super.call @
-			{anchors} = clone
-			anchors.left = @_anchorsLeft
-			anchors.right = @_anchorsRight
-			anchors.horizontalCenter = @_anchorsHorizontalCenter
-			anchors.top = @_anchorsTop
-			anchors.bottom = @_anchorsBottom
-			anchors.verticalCenter = @_anchorsVerticalCenter
-			anchors.centerIn = @_anchorsCenterIn
-			anchors.fill = @_anchorsFill
+			if @_anchors
+				clone.anchors = @anchors
 			clone
 
 		Anchors

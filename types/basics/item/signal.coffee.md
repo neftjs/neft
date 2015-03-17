@@ -18,6 +18,8 @@ Item::createSignal(*String* name)
 			assert.isString name
 			assert.notLengthOf name, 0
 
-			signal.create @, name
+			@$ ?= {}
+
+			signal.create @$, name
 
 			return

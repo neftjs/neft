@@ -16,6 +16,11 @@ Animation/PropertyAnimation
 			@_target = null
 			@_property = ''
 			@_autoFrom = true
+			@_duration = 1000
+			@_startDelay = 0
+			@_loopDelay = 0
+			@_updateData = false
+			@_updateProperty = false
 			super()
 
 		getter = utils.lookupGetter @::, 'running'

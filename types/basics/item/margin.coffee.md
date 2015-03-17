@@ -13,8 +13,12 @@ Positioning/Margins @txt
 		class Margin extends itemUtils.DeepObject
 			@__name__ = 'Margin'
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_left = 0
+				@_top = 0
+				@_right = 0
+				@_bottom = 0
+				super ref
 
 *Margin* Margin()
 -----------------
@@ -143,11 +147,8 @@ Item {
 
 		Item::clone = do (_super = Item::clone) -> ->
 			clone = _super.call @
-			{margin} = clone
-			margin.left = @_marginLeft
-			margin.top = @_marginTop
-			margin.right = @_marginRight
-			margin.bottom = @_marginBottom
+			if @_margin
+				clone.margin = @margin
 			clone
 
 		Margin

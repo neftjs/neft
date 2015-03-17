@@ -30,6 +30,8 @@ Rectangle {
 
 			constructor: ->
 				@_color = 'transparent'
+				@_radius = 0
+				@_border = null
 				super()
 
 *String* Rectangle::color = 'transparent'
@@ -62,7 +64,8 @@ Rectangle {
 				clone = super()
 				clone.color = @_color
 				clone.radius = @_radius
-				clone.border = @border
+				if @_border
+					clone.border = @border
 				clone
 
 *Border* Rectangle::border
@@ -86,8 +89,10 @@ Rectangle {
 					_super.call @, val
 					return
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_width = 0
+				@_color = 'transparent'
+				super ref
 
 *Float* Rectangle::border.width = 0
 -----------------------------------

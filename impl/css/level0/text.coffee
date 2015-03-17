@@ -27,7 +27,6 @@ module.exports = (impl) ->
 		MAX_CHECKS = 5
 
 		queue = []
-		queueItems = Object.create null
 		windowLoadQueue = []
 		pending = false
 		intervalPending = false
@@ -54,7 +53,7 @@ module.exports = (impl) ->
 						queue[i] = queue.pop()
 						i--
 						n--
-					queueItems[item.__hash__] = false
+					item._impl.pendingSize = false
 				i++
 			sizeUpdatePending = false
 			return
@@ -66,21 +65,21 @@ module.exports = (impl) ->
 				intervalPending = false
 
 		updateSizeNow = (item) ->
-			{textElement} = item._impl
+			{textElem} = item._impl
 
 			if item._impl.autoWidth
-				width = textElement.scrollWidth
+				width = textElem.scrollWidth
 				if width > 0
 					item.width = width + 1
 
 			if item._impl.autoHeight
-				height = textElement.scrollHeight
+				height = textElem.scrollHeight
 				if height > 0
 					item.height = height
 
 			if item._height > 0
-				if item._impl.textElement.parentNode is hatchery
-					item._impl.elem.appendChild item._impl.textElement
+				if item._impl.textElem.parentNode is hatchery
+					item._impl.elem.appendChild item._impl.textElem
 				true
 			else
 				false
@@ -88,18 +87,18 @@ module.exports = (impl) ->
 		(item) ->
 			item._impl.sizeChecks = 0
 
-			if queueItems[item.__hash__]
+			if item._impl.pendingSize
 				return
 
 			if not isFontReady
 				windowLoadQueue.push item
 				return
 
-			queueItems[item.__hash__] = true
+			item._impl.pendingSize = true
 			queue.push item
 
 			if item._height is 0
-				hatchery.appendChild item._impl.textElement
+				hatchery.appendChild item._impl.textElem
 
 			unless pending
 				setImmediate updateAll
@@ -126,7 +125,6 @@ module.exports = (impl) ->
 
 	updateContent = do ->
 		queue = []
-		queueItems = Object.create null
 		pending = false
 
 		updateItems = ->
@@ -136,22 +134,22 @@ module.exports = (impl) ->
 			for item in queue
 				val = item._text
 				if val.indexOf('<') isnt -1
-					item._impl.textElement.innerHTML = val
+					item._impl.textElem.innerHTML = val
 				else
-					item._impl.textElement.textContent = val
+					item._impl.textElem.textContent = val
 
 			while queue.length
 				item = queue.pop()
-				queueItems[item.__hash__] = false
+				item._impl.pendingContent = false
 				updateSize item
 
 			return
 
 		(item) ->
-			if queueItems[item.__hash__]
+			if item._impl.pendingContent
 				return
 
-			queueItems[item.__hash__] = true
+			item._impl.pendingContent = true
 			queue.push item
 
 			unless pending
@@ -161,19 +159,19 @@ module.exports = (impl) ->
 	onWidthChanged = ->
 		if not sizeUpdatePending
 			{width} = @
-			{textElement} = @_impl
+			{textElemStyle} = @_impl
 			auto = @_impl.autoWidth = width is 0
-			textElement.style.whiteSpace = if auto then 'pre' else 'pre-wrap'
-			textElement.style.width = if auto then 'auto' else "#{width}px"
+			textElemStyle.whiteSpace = if auto then 'pre' else 'pre-wrap'
+			textElemStyle.width = if auto then 'auto' else "#{width}px"
 			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
 
 	onHeightChanged = ->
 		if not sizeUpdatePending
 			{height} = @
-			{textElement} = @_impl
+			{textElemStyle} = @_impl
 			auto = @_impl.autoHeight = height is 0
-			textElement.style.height = if auto then 'auto' else "#{height}px"
+			textElemStyle.height = if auto then 'auto' else "#{height}px"
 			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
 
@@ -192,8 +190,12 @@ module.exports = (impl) ->
 		stylesheet: null
 		autoWidth: true
 		autoHeight: true
-		textElement: null
+		textElem: null
+		textElemStyle: null
 		sizeChecks: 0
+		pendingSize: false
+		pendingContent: false
+		uid: 0
 
 	exports =
 	DATA: DATA
@@ -201,15 +203,16 @@ module.exports = (impl) ->
 	_createTextElement: (item) ->
 		data = item._impl
 
-		# textElement
-		textElement = data.textElement = document.createElement 'span'
+		# textElem
+		textElem = data.textElem = document.createElement 'span'
+		data.textElemStyle = textElem.style
 
 		# handlers
 		item.onWidthChanged onWidthChanged
 		item.onHeightChanged onHeightChanged
 
 		# set default styles
-		textElement.setAttribute 'class', 'text'
+		textElem.setAttribute 'class', 'text'
 
 	createData: impl.utils.createDataCloner 'Item', DATA
 
@@ -217,56 +220,59 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 		exports._createTextElement @
-		hatchery.appendChild data.textElement
+		hatchery.appendChild data.textElem
 
 	setText: (val) ->
 		updateContent @
 
 	setTextColor: (val) ->
-		@_impl.textElement.style.color = val
+		@_impl.textElemStyle.color = val
 		return
 
-	setTextLinkColor: (val) ->
-		data = @_impl
-		unless data.stylesheet
-			data.stylesheet = document.createElement 'style'
-			data.elem.appendChild data.stylesheet
-			data.textElement.setAttribute 'id', "id#{@__hash__}"
-		data.stylesheet.innerHTML = "#id#{@__hash__} a { color: #{val}; }"
-		return
+	setTextLinkColor: do ->
+		uid = 0
+		(val) ->
+			data = @_impl
+			unless data.stylesheet
+				data.stylesheet = document.createElement 'style'
+				data.elem.appendChild data.stylesheet
+				data.textElem.setAttribute 'id', "textLinkColor#{uid}"
+				data.uid = uid++
+			data.stylesheet.innerHTML = "#textLinkColor#{data.uid} a { color: #{val}; }"
+			return
 
 	setTextLineHeight: (val) ->
 		pxLineHeight = val * @font.pixelSize
-		@_impl.textElement.style.lineHeight = "#{pxLineHeight}px"
+		@_impl.textElemStyle.lineHeight = "#{pxLineHeight}px"
 		updateSize @
 
 	setTextFontFamily: (val) ->
 		unless isFontReady
-			reloadFontFamilyQueue.push @_impl.textElement
+			reloadFontFamilyQueue.push @_impl.textElem
 
 		if impl.DEFAULT_FONTS[val]
 			val = "#{impl.DEFAULT_FONTS[val]}, #{val}"
 		else
 			val = "'#{val}'"
-		@_impl.textElement.style.fontFamily = val
+		@_impl.textElemStyle.fontFamily = val
 		updateSize @
 
 	setTextFontPixelSize: (val) ->
-		@_impl.textElement.style.fontSize = "#{val}px"
+		@_impl.textElemStyle.fontSize = "#{val}px"
 		impl.setTextLineHeight.call @, @lineHeight
 		updateSize @
 
 	setTextFontWeight: (val) ->
-		@_impl.textElement.style.fontWeight = implUtils.getFontWeight val
+		@_impl.textElemStyle.fontWeight = implUtils.getFontWeight val
 		updateSize @
 
 	setTextFontWordSpacing: (val) ->
-		@_impl.textElement.style.wordSpacing = "#{val}px"
+		@_impl.textElemStyle.wordSpacing = "#{val}px"
 		updateSize @
 
 	setTextFontLetterSpacing: (val) ->
-		@_impl.textElement.style.letterSpacing = "#{val}px"
+		@_impl.textElemStyle.letterSpacing = "#{val}px"
 		updateSize @
 
 	setTextFontItalic: (val) ->
-		@_impl.textElement.style.fontStyle = if val then 'italic' else 'normal'
+		@_impl.textElemStyle.fontStyle = if val then 'italic' else 'normal'

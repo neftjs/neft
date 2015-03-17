@@ -5,6 +5,8 @@ utils = require 'utils'
 module.exports = (impl) ->
 	{items} = impl
 
+	NOP = ->
+
 	DATA = utils.merge
 		parent: null
 		visible: true
@@ -20,6 +22,7 @@ module.exports = (impl) ->
 		linkUri: ''
 		bindings: null
 		anchors: null
+		update: null
 	, impl.utils.fill.DATA
 
 	DATA: DATA
@@ -27,6 +30,7 @@ module.exports = (impl) ->
 	createData: impl.utils.createDataCloner DATA
 
 	create: (data) ->
+		data.update = NOP
 
 	setItemParent: (val) ->
 		@_impl.parent = items[val]

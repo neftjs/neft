@@ -210,16 +210,16 @@ getOuterMouseCoords = createGetMouseCoords 'outer'
 
 window.addEventListener SIGNALS.pointerReleased, (e) ->
 	if mouseActiveItem
-		coords = getMouseCoords mouseActiveItem._impl.elem, e
-		mouseActiveItem.pointer.released coords
+		coords = getMouseCoords mouseActiveItem._ref._impl.elem, e
+		mouseActiveItem.released coords
 		mouseActiveItem = null
 	document.body.setAttribute 'class', ''
 	return
 window.addEventListener SIGNALS.pointerMoved, (e) ->
 	if mouseActiveItem
-		coords = getOuterMouseCoords mouseActiveItem._impl.elem, e
+		coords = getOuterMouseCoords mouseActiveItem._ref._impl.elem, e
 		if coords
-			mouseActiveItem.pointer.moved coords
+			mouseActiveItem.moved coords
 	return
 window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
 
@@ -236,7 +236,6 @@ module.exports = (impl) ->
 
 	nowTime = now()
 
-	updateQueueItems = Object.create null
 	updateItem = do ->
 		getTransforms = (item) ->
 			data = item._impl
@@ -288,24 +287,23 @@ module.exports = (impl) ->
 	updateStyles = impl.updateStyles = do ->
 		pending = false
 		queue = []
-		queueItems = updateQueueItems
 
 		updateItems = ->
 			pending = false
 			nowTime = now()
 			while queue.length
 				item = queue.pop()
-				updateItem item, queueItems[item.__hash__]
-				queueItems[item.__hash__] = 0
+				updateItem item, item._impl.pendingStyles
+				item._impl.pendingStyles = 0
 			return
 
-		(elem, style) ->
-			styles = queueItems[elem.__hash__]
+		(item, style) ->
+			styles = item._impl.pendingStyles
 
 			unless styles
-				queue.push elem
+				queue.push item
 
-			queueItems[elem.__hash__] = (styles |= style)
+			item._impl.pendingStyles = (styles |= style)
 
 			unless pending
 				pending = true
@@ -318,7 +316,7 @@ module.exports = (impl) ->
 	markAction = (item) ->
 		data = item._impl
 
-		if data.hotActions isnt -1
+		if data.hotActions >= 0
 			if nowTime - data.lastAction < HOT_MAX_TIME
 				if data.hotActions++ > HOT_MAX_ACTIONS
 					{style, id} = data.elem
@@ -329,6 +327,8 @@ module.exports = (impl) ->
 				data.lastAction = nowTime
 
 		false
+
+	NOP = ->
 
 	DATA = utils.merge
 		bindings: null
@@ -347,6 +347,9 @@ module.exports = (impl) ->
 		scale: 1
 		rotation: 0
 		opacity: 1
+		parent: null
+		update: null
+		pendingStyles: 0
 	, impl.utils.fill.DATA
 
 	DATA: DATA
@@ -354,6 +357,7 @@ module.exports = (impl) ->
 	createData: impl.utils.createDataCloner DATA
 
 	create: (data) ->
+		data.update ?= NOP
 		data.elem ?= document.createElement 'div'
 		data.elemStyle = data.elem.style
 		data.lastAction = nowTime
@@ -363,17 +367,22 @@ module.exports = (impl) ->
 		{elem} = @_impl
 
 		setImmediate ->
-			updateItem self, (updateQueueItems[self.__hash__] or 0)
+			updateItem self, (self._impl.pendingStyles or 0)
+
+		@_impl.parent?._impl.update.call @_impl.parent
 
 		if val
 			val._impl.elem.appendChild elem
+			val._impl.update.call val
 		else
 			elem.parentElement?.removeChild elem
+		@_impl.parent = val
 
 		return
 
 	setItemVisible: (val) ->
 		@_impl.elemStyle.display = if val then 'inline' else 'none'
+		@_parent?._impl.update.call @_parent
 		return
 
 	setItemClip: (val) ->
@@ -383,11 +392,15 @@ module.exports = (impl) ->
 	setItemWidth: (val) ->
 		@_impl.width = val
 		updateStyles @, STYLE_WIDTH
+		@_parent?._impl.update.call @_parent
+		@_impl.update.call @
 		return
 
 	setItemHeight: (val) ->
 		@_impl.height = val
 		updateStyles @, STYLE_HEIGHT
+		@_parent?._impl.update.call @_parent
+		@_impl.update.call @
 		return
 
 	setItemX: (val) ->
@@ -431,10 +444,14 @@ module.exports = (impl) ->
 		return
 
 	setItemMargin: (type, val) ->
+		@_parent?._impl.update.call @_parent
 
-	attachItemSignal: (ns, name, signalName) ->
+	attachItemSignal: (ns, signalName) ->
 		self = @
-		{elem} = @_impl
+		data = @_ref?._impl or @_impl
+		{elem} = data
+
+		name = ns + utils.capitalize(signalName)
 
 		implName = SIGNALS[name]?(elem) or SIGNALS[name]
 
@@ -450,7 +467,7 @@ module.exports = (impl) ->
 			if name is 'pointerMoved'
 				e._accepted = true
 
-			if self[ns][signalName](arg) is signal.STOP_PROPAGATION
+			if self[signalName](arg) is signal.STOP_PROPAGATION
 				if name is 'pointerPressed'
 					document.body.setAttribute 'class', 'unselectable'
 					mouseActiveItem = self
@@ -466,5 +483,5 @@ module.exports = (impl) ->
 
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]
-			@_impl.elemStyle.cursor = cursor
+			data.elemStyle.cursor = cursor
 		return

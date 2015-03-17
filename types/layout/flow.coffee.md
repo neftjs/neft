@@ -29,9 +29,10 @@ Flow {
 			@__path__ = 'Renderer.Flow'
 
 			constructor: ->
-				super()
 				@_width = -1
 				@_height = -1
+				@_spacing = null
+				super()
 				@fill.width = true
 				@fill.height = true
 
@@ -52,7 +53,8 @@ Flow {
 			clone: ->
 				clone = super()
 				clone.fill = @fill
-				clone.spacing = @spacing
+				if @_spacing
+					clone.spacing = @spacing
 				clone
 
 *Float* Flow::width = -1
@@ -81,8 +83,10 @@ Flow {
 					_super.call @, val
 					return
 
-			constructor: ->
-				super()
+			constructor: (ref) ->
+				@_column = 0
+				@_row = 0
+				super ref
 
 *Float* Flow::spacing.column
 ----------------------------

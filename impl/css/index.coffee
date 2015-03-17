@@ -65,6 +65,12 @@ img {
 	height: 100%;
 	z-index: 1;
 }
+.rect {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 0 solid transparent;
+}
 .unselectable,
 .unselectable:focus {
 	-webkit-touch-callout: none;

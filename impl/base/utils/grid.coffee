@@ -14,7 +14,6 @@ else
 queueIndex = 0
 queues = [[], []]
 queue = queues[queueIndex]
-queueItems = Object.create null
 pending = false
 
 columnsPositions = new Uint32TypedArray 12
@@ -33,14 +32,14 @@ updateItem = (item) ->
 	if gridType is ALL
 		columnsLen = item.columns
 		rowsLen = item.rows
-		columnSpacing = item._spacingColumn
-		rowSpacing = item._spacingRow
+		columnSpacing = item.spacing.column
+		rowSpacing = item.spacing.row
 	else if gridType is COLUMN
-		rowSpacing = item._spacing
+		rowSpacing = item.spacing
 		columnsLen = 1
 		rowsLen = Infinity
 	else if gridType is ROW
-		columnSpacing = item._spacing
+		columnSpacing = item.spacing
 		columnsLen = Infinity
 		rowsLen = 1
 
@@ -75,9 +74,9 @@ updateItem = (item) ->
 
 		# right / bottom margins
 		if gridType & ROW
-			width += child._marginLeft + child._marginRight + columnSpacing
+			width += child.margin.left + child.margin.right + columnSpacing
 		if gridType & COLUMN
-			height += child._marginTop + child._marginBottom + rowSpacing
+			height += child.margin.top + child.margin.bottom + rowSpacing
 
 		# save
 		if width > columnsPositions[column]
@@ -109,29 +108,29 @@ updateItem = (item) ->
 		row = Math.floor(i/columnsLen) % rowsLen
 
 		if gridType & ROW
-			child.x = child._marginLeft + (if column > 0 then columnsPositions[column-1] else 0)
+			child.x = child.margin.left + (if column > 0 then columnsPositions[column-1] else 0)
 
 		if gridType & COLUMN
-			child.y = child._marginTop + (if row > 0 then rowsPositions[row-1] else 0)
+			child.y = child.margin.top + (if row > 0 then rowsPositions[row-1] else 0)
 
 		i++
 
 	# set item size
-	if item._fillWidth isnt false
+	if item.fill.width isnt false
 		width = columnsPositions[maxColumnsLen-1]
 		if width > 0	
 			item.width = width
 		else
 			item.width = 0
-		item._fillWidth = true
+		item.fill.width = true
 
-	if item._fillHeight isnt false
+	if item.fill.height isnt false
 		height = rowsPositions[maxRowsLen-1]
 		if height > 0
 			item.height = height
 		else
 			item.height = 0
-		item._fillHeight = true
+		item.fill.height = true
 	data.updatePending = false
 	return
 
@@ -142,15 +141,15 @@ updateItems = ->
 
 	while currentQueue.length
 		item = currentQueue.pop()
-		queueItems[item.__hash__] = false
+		item._impl.pending = false
 		updateItem item
 	return
 
 update = ->
-	if queueItems[@__hash__]
+	if @_impl.pending
 		return
 
-	queueItems[@__hash__] = true
+	@_impl.pending = true
 	queue.push @
 
 	unless pending
@@ -180,6 +179,7 @@ ROW = exports.ROW = 1<<1
 ALL = exports.ALL = (1<<2) - 1
 
 exports.DATA =
+	pending: false
 	disableFill: true
 	gridType: 0
 	updatePending: false
@@ -193,7 +193,7 @@ exports.create = (item, type) ->
 	item.onHeightChanged updateSize
 
 	# update on each children size change
-	item.children.onInserted enableChild
-	item.children.onPopped disableChild
+	item.children.onInserted enableChild, item
+	item.children.onPopped disableChild, item
 
 exports.update = update

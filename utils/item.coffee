@@ -4,6 +4,9 @@ assert = require 'neft-assert'
 expect = require 'expect'
 utils = require 'utils'
 signal = require 'signal'
+log = require 'log'
+
+log = log.scope 'Renderer'
 
 SignalsEmitter = signal.Emitter
 
@@ -11,63 +14,56 @@ SignalsEmitter = signal.Emitter
 
 module.exports = (Renderer, Impl) ->
 
+	NOP = ->
+
 	class UtilsObject extends signal.Emitter
 		constructor: ->
-			assert.isNotDefined @__hash__
-			@__hash__ = utils.uid()
 			@_bindings = null
+			@_isReady = false
 			super()
+			Object.preventExtensions @
 
 		createBinding: (prop, val) ->
 			assert.isString prop
 			assert.ok prop of @
 			assert.isArray val if val?
+
+			unless prop of @
+				log.error "Binding for the '#{prop}' property can't be created, because this property doesn't exist"
+				return
+
+			if not val and (not @_bindings or not @_bindings.hasOwnProperty(prop))
+				return
 
 			bindings = @_bindings ?= {}
 			if bindings[prop] isnt val
 				bindings[prop] = val
-				Impl.setItemBinding.call @, '', prop, prop, val
+				Impl.setItemBinding.call @, prop, val
 			return
 
 		signal.Emitter.createSignal @, 'ready'
 
-	class DeepObject extends signal.Emitter
-		constructor: ->
-			@_ref = null
+	class MutableDeepObject extends signal.Emitter
+		constructor: (ref) ->
+			assert.instanceOf ref, Renderer.Item
+			@_ref = ref
+			@_bindings = null
+			@_impl = bindings: null
+			super()
+
+		createBinding: UtilsObject::createBinding
+
+	class DeepObject extends MutableDeepObject
+		constructor: (ref) ->
+			super ref
 			Object.preventExtensions @
-
-		utils.defineProperty @::, '_signals', null, ->
-			@_ref._signals
-		, (val) ->
-			assert.isNotDefined @_ref._signals
-			@_ref._signals = val
-
-		_namespaceName: ''
-		_uniquePropertiesNames: {}
-
-		createBinding: (prop, val) ->
-			assert.isString prop
-			assert.ok prop of @
-			assert.isArray val if val?
-
-			ref = @_ref
-			namespaceName = @_namespaceName
-			uniqueProp = @_uniquePropertiesNames[prop]
-
-			if not val and not ref.bindings
-				return
-
-			bindings = ref.bindings ?= {}
-			if bindings[uniqueProp] isnt val
-				bindings[uniqueProp] = val
-				Impl.setItemBinding.call ref, namespaceName, prop, uniqueProp, val
-			return
 
 	Impl.DeepObject = DeepObject
 
 	exports =
 	Object: UtilsObject
 	DeepObject: DeepObject
+	MutableDeepObject: MutableDeepObject
 
 	defineProperty: (opts) ->
 		assert.isPlainObject opts
@@ -75,7 +71,7 @@ module.exports = (Renderer, Impl) ->
 		{name, namespace, valueConstructor, implementation} = opts
 
 		`//<development>`
-		{developmentGetter, developmentSetter} = opts
+		{developmentSetter} = opts
 		`//</development>`
 
 		prototype = opts.object or opts.constructor::
@@ -84,108 +80,97 @@ module.exports = (Renderer, Impl) ->
 
 		# signal
 		signalName = "#{name}Changed"
-		if namespace?
-			signalInternalName = namespace + utils.capitalize(signalName)
-		else
-			signalInternalName = signalName
 
 		if opts.hasOwnProperty('constructor')
-			if namespace?
-				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, '_ref', opts.signalInitializer
-			else
-				SignalsEmitter.createSignal opts.constructor, signalName, signalInternalName, null, opts.signalInitializer
+			SignalsEmitter.createSignal opts.constructor, signalName, opts.signalInitializer
 		else
 			assert.isNotDefined namespace
 			signal.create prototype, signalName
 
 		# getter
-		if namespace?
-			internalName = "_#{namespace}#{utils.capitalize(name)}"
-		else
-			internalName = "_#{name}"
+		internalName = "_#{name}"
 
-		# default value
-		if 'defaultValue' of opts
-			if namespace?
-				opts.parentConstructor::[internalName] = opts.defaultValue
-			else
-				opts.constructor::[internalName] = opts.defaultValue
-
-		if namespace?
-			propGetter = basicGetter = ->
-				`//<development>`
-				developmentGetter?.call @
-				`//</development>`
-
-				@_ref[internalName]
-		else
-			propGetter = basicGetter = ->
-				`//<development>`
-				developmentGetter?.call @
-				`//</development>`
-
-				@[internalName]
-
+		propGetter = basicGetter = Function "return this.#{internalName}"
 		if valueConstructor
-			valCtorInsts = [new valueConstructor, new valueConstructor, new valueConstructor]
-			valCtorInstIndex = 0
-			valCtorInst = null
-			lastRef = null
 			propGetter = ->
-				if lastRef is @
-					return valCtorInst
-
-				valCtorInstIndex = ++valCtorInstIndex % valCtorInsts.length
-				valCtorInst = valCtorInsts[valCtorInstIndex]
-				lastRef = valCtorInst._ref = @
-				valCtorInst
+				@[internalName] ?= new valueConstructor @
 
 		# setter
 		if valueConstructor
-			propSetter = basicSetter = (val) ->
-				null;
+			if developmentSetter
 				`//<development>`
-				developmentSetter?.call @, val
+				propSetter = basicSetter = developmentSetter
 				`//</development>`
-				return
+			else
+				propSetter = basicSetter = NOP
 		else if namespace?
 			Renderer.State.supportObjectProperty namespace
 			namespaceSignalName = "#{namespace}Changed"
 			uniquePropName = namespace + utils.capitalize(name)
-			opts.constructor::_namespaceName = namespace
-			opts.constructor::_uniquePropertiesNames[name] = uniquePropName
-			propSetter = basicSetter = (val) ->
-				null;
-				`//<development>`
-				developmentSetter?.call @, val
-				`//</development>`
+			# propSetter = basicSetter = (val) ->
+			# 	null;
+			# 	`//<development>`
+			# 	developmentSetter?.call @, val
+			# 	`//</development>`
 
-				ref = @_ref
+			# 	ref = @_ref
 
-				oldVal = ref[internalName]
-				if oldVal is val
-					return
+			# 	oldVal = ref[internalName]
+			# 	if oldVal is val
+			# 		return
 
-				ref[internalName] = val
-				implementation?.call ref, val
-				@[signalName] oldVal
-				ref[namespaceSignalName] @
-				return
+			# 	ref[internalName] = val
+			# 	implementation?.call ref, val
+			# 	@[signalName] oldVal
+			# 	ref[namespaceSignalName] @
+			# 	return
+
+			funcStr = "return function(val){\n"
+			`//<development>`
+			if developmentSetter?
+				funcStr += "debug.call(this, val);\n"
+			`//</development>`
+			funcStr += "var oldVal = this.#{internalName};\n"
+			funcStr += "if (oldVal === val) return;\n"
+			funcStr += "this.#{internalName} = val;\n"
+			if implementation?
+				funcStr += "impl.call(this._ref, val);\n"
+			funcStr += "this.#{signalName}(oldVal);\n"
+			funcStr += "this._ref.#{namespaceSignalName}(this);\n"
+			funcStr += "};"
+
+			func = new Function 'impl', 'debug', funcStr
+			propSetter = basicSetter = func implementation, developmentSetter
 		else
-			propSetter = basicSetter = (val) ->
-				null;
-				`//<development>`
-				developmentSetter?.call @, val
-				`//</development>`
+			# propSetter = basicSetter = (val) ->
+			# 	null;
+			# 	`//<development>`
+			# 	developmentSetter?.call @, val
+			# 	`//</development>`
 
-				oldVal = @[internalName]
-				if oldVal is val
-					return
+			# 	oldVal = @[internalName]
+			# 	if oldVal is val
+			# 		return
 
-				@[internalName] = val
-				implementation?.call @, val
-				@[signalName] oldVal
-				return
+			# 	@[internalName] = val
+			# 	implementation?.call @, val
+			# 	@[signalName] oldVal
+			# 	return
+			funcStr = "return function(val){\n"
+			`//<development>`
+			if developmentSetter?
+				funcStr += "debug.call(this, val);\n"
+			`//</development>`
+			funcStr += "var oldVal = this.#{internalName};\n"
+			funcStr += "if (oldVal === val) return;\n"
+			funcStr += "this.#{internalName} = val;\n"
+			if implementation?
+				funcStr += "impl.call(this, val);\n"
+			funcStr += "this.#{signalName}(oldVal);\n"
+			funcStr += "};"
+
+			func = new Function 'impl', 'debug', funcStr
+			propSetter = basicSetter = func implementation, developmentSetter
 
 		# custom desc
 		getter = if customGetter? then customGetter(propGetter) else propGetter

@@ -6,6 +6,9 @@ Transition
 	utils = require 'utils'
 	assert = require 'assert'
 	signal = require 'signal'
+	log = require 'log'
+
+	log = log.scope 'Renderer', 'Transition'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
 		@__name__ = 'Transition'
@@ -22,7 +25,7 @@ Transition
 
 		listener = (oldVal) ->
 			{animation} = @
-			if not @running or animation.updatePending
+			if not @_isReady or not @running or animation.updatePending
 				return
 
 			@_to = @_target[@property]
@@ -74,16 +77,30 @@ Transition
 				_super.call @, val
 
 				@_running = false
-				val.onReady onTargetReady, @
+				if val instanceof itemUtils.Object
+					item = val
+				else if val instanceof itemUtils.MutableDeepObject
+					item = val._ref
+				else
+					setImmediate onTargetReady.bind(@)
+
+				if item
+					if item._isReady
+						@_running = true
+					else
+						item.onReady onTargetReady, @
 
 				if property
 					if oldVal
 						handlerName = signal.getHandlerName "#{property}Changed"
-						oldVal[handlerName].disconnect listener, @
+						oldVal[handlerName]?.disconnect listener, @
 
 					if val
-						handlerName = signal.getHandlerName "#{property}Changed"
-						val[handlerName] listener, @
+						if handlerName of val
+							handlerName = signal.getHandlerName "#{property}Changed"
+							val[handlerName] listener, @
+						else
+							log.error "'#{property}' property signal not found"
 				return
 
 *Renderer.Animation* Transition::animation
@@ -126,6 +143,17 @@ Transition
 					return
 
 				{animation, target} = @
+
+				if target and val.indexOf('.') isnt -1
+					chains = val.split '.'
+					n = chains.length
+					for chain, i in chains when i < n-1
+						target = target[chain]
+						unless target
+							log.error "No object found for the '#{val}' property"
+							break
+					val = chains[n-1]
+					@target = target
 
 				if animation
 					animation.stop()

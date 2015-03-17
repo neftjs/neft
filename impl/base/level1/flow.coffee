@@ -10,7 +10,6 @@ MAX_LOOPS = 50
 queueIndex = 0
 queues = [[], []]
 queue = queues[queueIndex]
-queueItems = Object.create null
 pending = false
 
 updateItem = (item) ->
@@ -27,9 +26,9 @@ updateItem = (item) ->
 	data.updatePending = true
 
 	# get config
-	maxColumn = if item._fillWidth then Infinity else item._width
-	columnSpacing = item._spacingColumn
-	rowSpacing = item._spacingRow
+	maxColumn = if item.fill.width then Infinity else item.width
+	columnSpacing = item.spacing.column
+	rowSpacing = item.spacing.row
 
 	# tmp vars
 	width = height = column = row = x = y = right = rowSpan = 0
@@ -40,19 +39,19 @@ updateItem = (item) ->
 		unless child._visible
 			continue
 
-		if column + child._marginLeft + child._width >= maxColumn
+		if column + child.margin.left + child.width >= maxColumn
 			column = 0
 			row = height
 			x = column
 		else
-			x = column + child._marginLeft
+			x = column + child.margin.left
 
 		if row > 0
-			y = row + rowSpan + child._marginTop
+			y = row + rowSpan + child.margin.top
 		else
 			y = row
 
-		right = x + child._width
+		right = x + child.width
 
 		child.x = x
 		child.y = y
@@ -60,26 +59,23 @@ updateItem = (item) ->
 		column = right
 		if column > width
 			width = column
-		column += columnSpacing + child._marginRight
+		column += columnSpacing + child.margin.right
 
 		y += child._height
 		if y > height
 			height = y
-		rowSpan = rowSpacing + child._marginBottom
+		rowSpan = rowSpacing + child.margin.bottom
 
 	# set item size
-	if item._fillWidth
+	if item.fill.width
 		item.width = width
-		item._fillWidth = true
+		item.fill.width = true
 
-	if item._fillHeight
+	if item.fill.height
 		item.height = height
-		item._fillHeight = true
+		item.fill.height = true
 
 	data.updatePending = false
-
-	if queueItems[item.__hash__]
-		data.loops++
 
 	return
 
@@ -90,43 +86,31 @@ updateItems = ->
 
 	while currentQueue.length
 		item = currentQueue.pop()
-		queueItems[item.__hash__] = false
+		item._impl.pending = false
 		updateItem item
 	return
 
 update = ->
-	if queueItems[@__hash__]
-		return
+	data = @_impl
+	unless data.pending
+		data.pending = true
+		queue.push @
 
-	queueItems[@__hash__] = true
-	queue.push @
-
-	unless pending
-		setImmediate updateItems
-		pending = true
+		unless pending
+			setImmediate updateItems
+			pending = true
 	return
 
 updateSize = ->
-	if not @_impl.updatePending and (@_fillWidth or @_fillHeight)
+	if not @_impl.updatePending and (@fill.width or @fill.height)
 		update.call @
 	return
-
-enableChild = (child) ->
-	child.onVisibleChanged update, @
-	child.onWidthChanged update, @
-	child.onHeightChanged update, @
-	child.onMarginChanged update, @
-
-disableChild = (child) ->
-	child.onVisibleChanged.disconnect update, @
-	child.onWidthChanged.disconnect update, @
-	child.onHeightChanged.disconnect update, @
-	child.onMarginChanged.disconnect update, @
 
 module.exports = (impl) ->
 	DATA =
 		loops: 0
 		disableFill: true
+		pending: false
 		updatePending: false
 
 	DATA: DATA
@@ -135,15 +119,7 @@ module.exports = (impl) ->
 
 	create: (data) ->
 		impl.Types.Item.create.call @, data
-
-		# update item changes
-		@onChildrenChanged update
-		@onWidthChanged updateSize
-		@onHeightChanged updateSize
-
-		# update on each children size change
-		@children.onInserted enableChild
-		@children.onPopped disableChild
+		data.update = update
 
 	setFlowColumnSpacing: update
 	setFlowRowSpacing: update

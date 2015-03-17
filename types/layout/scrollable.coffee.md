@@ -16,10 +16,11 @@ Positioning/Scrollable
 
 		@createDefaultVerticalScrollbar = ->
 			scrollbar = new Renderer.Item
+			scrollbar.createProperty 'lastEvent'
 			scrollbar.createProperty 'pressed'
 			scrollbar.createProperty 'pointerMoveHandler'
 			scrollbar.createProperty 'pointerReleasedHandler'
-			scrollbar.pressed = false
+			scrollbar.$.pressed = false
 			scrollbar.width = 8
 			scrollbar.createBinding 'height', [
 				[['this', 'parent'], 'height'],
@@ -32,26 +33,26 @@ Positioning/Scrollable
 			scrollbar.margin = 3
 			scrollbar.z = 1
 			scrollbar.pointer.onPressed ->
-				unless @pressed
-					@pressed = true
-					@parent.pointer.onMoved.connect @pointerMoveHandler
-					@parent.pointer.onReleased.connect @pointerReleasedHandler
+				unless @$.pressed
+					@$.pressed = true
+					@parent.pointer.onMoved.connect @$.pointerMoveHandler
+					@parent.pointer.onReleased.connect @$.pointerReleasedHandler
 				signal.STOP_PROPAGATION
-			scrollbar.pointerReleasedHandler = ->
-				scrollbar.pressed = false
-				scrollbar.lastEvent = null
-				scrollbar.parent.pointer.onMoved.disconnect scrollbar.pointerMoveHandler
-				scrollbar.parent.pointer.onReleased.disconnect scrollbar.pointerReleasedHandler
+			scrollbar.$.pointerReleasedHandler = ->
+				scrollbar.$.pressed = false
+				scrollbar.$.lastEvent = null
+				scrollbar.parent.pointer.onMoved.disconnect scrollbar.$.pointerMoveHandler
+				scrollbar.parent.pointer.onReleased.disconnect scrollbar.$.pointerReleasedHandler
 				return
-			scrollbar.pointerMoveHandler = (e) ->
-				unless scrollbar.pressed
+			scrollbar.$.pointerMoveHandler = (e) ->
+				unless scrollbar.$.pressed
 					return
-				if scrollbar.lastEvent
-					delta = (e.y - scrollbar.lastEvent.y) / (scrollbar.parent.height / scrollbar.parent.contentItem.height)
+				if scrollbar.$.lastEvent
+					delta = (e.y - scrollbar.$.lastEvent.y) / (scrollbar.parent.height / scrollbar.parent.contentItem.height)
 					contentY = scrollbar.parent.contentY + delta
 					contentY = Math.max 0, Math.min contentY, (scrollbar.parent.contentItem.height - scrollbar.parent.height)
 					scrollbar.parent.contentY = contentY
-				scrollbar.lastEvent = e
+				scrollbar.$.lastEvent = e
 				return
 
 			thumb = new Renderer.Rectangle
@@ -85,10 +86,10 @@ Positioning/Scrollable
 			scrollbar
 
 		constructor: ->
-			@_clip = false
 			@_contentItem = null
 			@_verticalScrollbar = null
 			@_autoVerticalScrollbar = true
+			@_contentX = 0
 			@_contentY = 0
 			super()
 			@clip = true

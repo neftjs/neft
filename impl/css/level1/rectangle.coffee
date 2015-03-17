@@ -8,6 +8,12 @@ module.exports = (impl) ->
 
 	DATA =
 		rect: null
+		rectStyle: null
+
+	div = do ->
+		div = document.createElement 'div'
+		div.setAttribute 'class', 'rect'
+		div
 
 	DATA: DATA
 
@@ -16,25 +22,18 @@ module.exports = (impl) ->
 	create: (data) ->
 		Item.create.call @, data
 
-		rect = data.rect = document.createElement 'div'
+		rect = data.rect = div.cloneNode(false)
 		data.elem.appendChild rect
-
-		{style} = rect
-		style.width = '100%'
-		style.height = '100%'
-		style.boxSizing = 'border-box'
-		style.borderWidth = '0'
-		style.borderStyle = 'solid'
-		style.borderColor = 'transparent'
+		data.rectStyle = rect.style
 
 	setRectangleColor: (val) ->
-		@_impl.rect.style.backgroundColor = val
+		@_impl.rectStyle.backgroundColor = val
 
 	setRectangleRadius: (val) ->
-		@_impl.rect.style.borderRadius = "#{val}px"
+		@_impl.rectStyle.borderRadius = "#{val}px"
 
 	setRectangleBorderColor: (val) ->
-		@_impl.rect.style.borderColor = val
+		@_impl.rectStyle.borderColor = val
 
 	setRectangleBorderWidth: (val) ->
-		@_impl.rect.style.borderWidth = "#{val}px"
+		@_impl.rectStyle.borderWidth = "#{val}px"

@@ -5,7 +5,6 @@ utils = require 'utils'
 queueIndex = 0
 queues = [[], []]
 queue = queues[queueIndex]
-queueItems = Object.create null
 pending = false
 
 updateItem = (item) ->
@@ -13,9 +12,9 @@ updateItem = (item) ->
 	data = item._impl
 
 	unless data.fillWidth
-		data.fillWidth = item._fillWidth
+		data.fillWidth = item.fill.width
 	unless data.fillHeight
-		data.fillHeight = item._fillHeight
+		data.fillHeight = item.fill.height
 
 	if data.fillWidth
 		tmp = 0
@@ -26,9 +25,9 @@ updateItem = (item) ->
 				if tmp > size
 					size = tmp
 
-		oldVal = item._fillWidth
+		oldVal = item.fill.width
 		item.width = size
-		item._fillWidth = oldVal
+		item.fill.width = oldVal
 
 	if data.fillHeight
 		tmp = 0
@@ -39,14 +38,14 @@ updateItem = (item) ->
 				if tmp > size
 					size = tmp
 
-		oldVal = item._fillHeight
+		oldVal = item.fill.height
 		item.height = size
-		item._fillHeight = oldVal
+		item.fill.height = oldVal
 
 	if data.fillWidth
-		data.fillWidth = item._fillWidth
+		data.fillWidth = item.fill.width
 	if data.fillHeight
-		data.fillHeight = item._fillHeight
+		data.fillHeight = item.fill.height
 
 	return
 
@@ -57,15 +56,16 @@ updateItems = ->
 
 	while currentQueue.length
 		item = currentQueue.pop()
-		queueItems[item.__hash__] = false
+		item._impl.pending = false
 		updateItem item
 	return
 
 update = ->
-	if queueItems[@__hash__]
+	data = @_impl
+	if data.pending
 		return
 
-	queueItems[@__hash__] = true
+	data.pending = true
 	queue.push @
 
 	unless pending
@@ -84,6 +84,7 @@ disableChild = (child) ->
 	child.onHeightChanged.disconnect update, @
 
 exports.DATA =
+	pending: false
 	fillWidth: false
 	fillHeight: false
 
@@ -95,8 +96,8 @@ exports.enable = (item) ->
 		enableChild.call item, child
 
 	# update on each children size change
-	item.children.onInserted enableChild
-	item.children.onPopped disableChild
+	item.children.onInserted enableChild, item
+	item.children.onPopped disableChild, item
 
 	update.call item
 
@@ -108,7 +109,7 @@ exports.disable = (item) ->
 		disableChild.call item, child
 
 	# update on each children size change
-	item.children.onInserted.disconnect enableChild
-	item.children.onPopped.disconnect disableChild
+	item.children.onInserted.disconnect enableChild, item
+	item.children.onPopped.disconnect disableChild, item
 
 exports.update = update

@@ -24,9 +24,10 @@ Column {
 		@__path__ = 'Renderer.Column'
 
 		constructor: ->
-			super()
 			@_width = -1
 			@_height = -1
+			@_spacing = 0
+			super()
 			@fill.width = true
 			@fill.height = true
 

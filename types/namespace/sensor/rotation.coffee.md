@@ -5,42 +5,44 @@ RotationSensor
 
 	utils = require 'utils'
 
-	module.exports = (Renderer, Impl, itemUtils) ->
+	module.exports = (Renderer, Impl, itemUtils) -> class RotationSensor extends itemUtils.Object
 
 *Object* RotationSensor
 -----------------------
 
-		RotationSensor = new itemUtils.Object
+		constructor: ->
+			@_active = false
+			@x = 0
+			@y = 0
+			@z = 0
+			super()
 
 *Float* RotationSensor::active = false
 --------------------------------------
 
-		RotationSensor._active = false
-		utils.defineProperty RotationSensor, 'active', null, ->
+		utils.defineProperty @::, 'active', null, ->
 			@_active
 		, (val) ->
 			@_active = val
 			if val
-				Impl.enableRotationSensor.call RotationSensor
+				Impl.enableRotationSensor.call rotationSensor
 			else
-				Impl.disableRotationSensor.call RotationSensor
+				Impl.disableRotationSensor.call rotationSensor
 			return
 
 *Float* RotationSensor::x = 0
 -----------------------------
 
-		RotationSensor.x = 0
+		x: 0
 
 *Float* RotationSensor::y = 0
 -----------------------------
 
-		RotationSensor.y = 0
+		y: 0
 
 *Float* RotationSensor::z = 0
 -----------------------------
 
-		RotationSensor.z = 0
+		z: 0
 
-		Object.preventExtensions RotationSensor
-
-		RotationSensor
+		rotationSensor = new RotationSensor

@@ -25,15 +25,32 @@ This is a base class for everything which is visible.
 		constructor: ->
 			assert.instanceOf @, Item, 'ctor ...'
 
-			super()
-
+			@constructor = @constructor
+			@$ = null
 			@_impl = null
 			@_parent = null
 			@_children = null
 			@_x = 0
 			@_y = 0
+			@_z = 0
 			@_width = 0
 			@_height = 0
+			@_visible = true
+			@_clip = false
+			@_scale = 1
+			@_rotation = 0
+			@_opacity = 1
+			@_linkUri = ''
+			@_fill = null
+			@_anchors = null
+			@_document = null
+			@_keys = null
+			@_pointer = null
+			@_margin = null
+			@_states = null
+			@_stateExtensions = null
+
+			super()
 
 			Impl.createItem @, @constructor.__name__
 
@@ -87,7 +104,7 @@ Rectangle {
 *Object* Item::children
 -----------------------
 
-		utils.defineProperty @::, 'children', utils.ENUMERABLE, ->
+		utils.defineProperty @::, 'children', null, ->
 			@_children ?= new ChildrenObject(@)
 		, (val) ->
 			assert.isArray val, '::children setter ...'
@@ -104,28 +121,25 @@ Rectangle {
 			constructor: (ref) ->
 				@_ref = ref
 				@length = 0
+				super()
 
 			index: (val) -> Array::indexOf.call @, val
 			has: (val) -> @index(val) isnt -1
 
-			utils.defineProperty @::, '_signals', null, ->
-				@_ref._signals
-			, (val) ->
-				assert.isNotDefined @_ref._signals
-				@_ref._signals = val
-
 ### *Signal* Item.children::inserted(*Item* child, *Integer* index)
 
-		signal.Emitter.createSignal ChildrenObject, 'inserted', 'childrenInserted', '_ref'
+		signal.Emitter.createSignal ChildrenObject, 'inserted'
 
 ### *Signal* Item.children::popped(*Item* child, *Integer* index)
 
-		signal.Emitter.createSignal ChildrenObject, 'popped', 'childrenPopped', '_ref'
+		signal.Emitter.createSignal ChildrenObject, 'popped'
 
 *Item* Item::parent = null
 --------------------------
 
 ### *Signal* Item::parentChanged(*Item* oldParent)
+
+		{indexOf, splice, push} = Array::
 
 		itemUtils.defineProperty
 			constructor: @
@@ -133,17 +147,17 @@ Rectangle {
 			defaultValue: null
 			implementation: Impl.setItemParent
 			setter: (_super) -> (val) ->
-				old = @parent
+				old = @_parent
 				if old is val
 					return
 
 				if old
-					index = Array::indexOf.call old.children, @
-					Array::splice.call old.children, index, 1
+					index = indexOf.call old._children, @
+					splice.call old._children, index, 1
 
 				if val?
 					assert.instanceOf val, Item, '::parent setter ...'
-					length = Array::push.call val.children, @
+					length = push.call val.children, @
 
 				_super.call @, val
 
