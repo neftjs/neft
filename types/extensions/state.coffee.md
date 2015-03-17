@@ -38,11 +38,9 @@ Item states
 
 				@changes = new ChangesObject
 				defaultName = @_name = utils.uid()
-				@_ready = false
 				super()
 
 				@onReady ->
-					@_ready = true
 					fillItemDefaultState @
 					if @target?.states.has(@name)
 						reloadItem @
@@ -159,7 +157,7 @@ Grid {
 					target.states.append name
 					return
 
-				if @_ready
+				if @_isReady
 					reloadItem @
 
 				super()
@@ -177,7 +175,7 @@ Grid {
 					states.remove name
 					return
 
-				if @_ready
+				if @_isReady
 					reloadItem @
 
 				super()

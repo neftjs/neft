@@ -61,8 +61,6 @@ Transition
 		itemUtils.defineProperty
 			constructor: @
 			name: 'target'
-			developmentSetter: (val) ->
-				assert.instanceOf val, Renderer.Item if val?
 			setter: (_super) -> (val) ->
 				oldVal = @target
 				if oldVal is val

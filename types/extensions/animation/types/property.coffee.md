@@ -42,9 +42,6 @@ Animation/PropertyAnimation
 			name: 'target'
 			defaultValue: null
 			implementation: Impl.setPropertyAnimationTarget
-			developmentSetter: (val) ->
-				if val?
-					assert.instanceOf val, Renderer.Item
 
 *String* PropertyAnimation::property
 ------------------------------------

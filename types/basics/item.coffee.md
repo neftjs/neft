@@ -29,6 +29,7 @@ This is a base class for everything which is visible.
 			@$ = null
 			@_impl = null
 			@_parent = null
+			@_sourceItem = null
 			@_children = null
 			@_x = 0
 			@_y = 0
@@ -147,6 +148,9 @@ Rectangle {
 			defaultValue: null
 			implementation: Impl.setItemParent
 			setter: (_super) -> (val) ->
+				if val?._sourceItem
+					val = val._sourceItem
+
 				old = @_parent
 				if old is val
 					return

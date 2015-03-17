@@ -128,6 +128,7 @@ Styles.button/red {
 	exports.RotationSensor = require('./types/namespace/sensor/rotation') exports, Impl, itemUtils
 
 	exports.Extension = require('./types/extension') exports, Impl, itemUtils
+	exports.Source = require('./types/extensions/source') exports, Impl, itemUtils
 	exports.State = require('./types/extensions/state') exports, Impl, itemUtils
 	exports.Animation = require('./types/extensions/animation') exports, Impl, itemUtils
 	exports.PropertyAnimation = require('./types/extensions/animation/types/property') exports, Impl, itemUtils
