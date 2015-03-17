@@ -47,17 +47,12 @@ getOuterHTML = (elem) ->
 		return getInnerHTML elem
 
 	nameRet = ret = "<" + name
-	if elem.attrsNames
-		for attrName, i in elem.attrsKeys
-			continue unless isPublic attrName
-			attrValue = elem.attrsValues[i]
-			continue if attrValue is undefined
-
-			ret += " " + attrName
-			unless attrValue?
-				ret += "=\"\"" unless booleanAttribs[attrName]
-			else
-				ret += "=\"" + attrValue + "\""
+	for attrName, attrValue of elem._attrs
+		ret += " " + attrName
+		unless attrValue?
+			ret += "=\"\"" unless booleanAttribs[attrName]
+		else
+			ret += "=\"" + attrValue + "\""
 
 	if name is 'div' and ret is nameRet
 		return getInnerHTML elem

@@ -22,20 +22,17 @@ module.exports = (Element) ->
 
 		tag: null
 
-		item: (i, target=[]) ->
+		item: (index, target=[]) ->
 			assert.isArray target
-
-			keys = exports.tag.attrsKeys
-			values = exports.tag.attrsValues
 
 			target[0] = target[1] = undefined
 
-			unless values
-				return target
-
-			while target[1] is undefined and keys.length >= i
-				target[0] = keys[i]
-				target[1] = values[i]
+			i = 0
+			for key, val of exports.tag._attrs
+				if i is index
+					target[0] = key
+					target[1] = val
+					break
 				i++
 
 			target
@@ -44,16 +41,13 @@ module.exports = (Element) ->
 			assert.isString name
 			assert.notLengthOf name, 0
 
-			exports.tag.attrsNames?[name]?
+			exports.tag._attrs.hasOwnProperty name
 
 		get: (name) ->
 			assert.isString name
 			assert.notLengthOf name, 0
 
-			i = exports.tag.attrsNames?[name]
-			return if i is undefined
-
-			exports.tag.attrsValues[i]
+			exports.tag._attrs[name]
 
 		set: (name, value) ->
 			assert.isString name
@@ -61,50 +55,11 @@ module.exports = (Element) ->
 
 			{tag} = exports
 
-			i = tag.attrsNames?[name]
-			return if i is undefined
-
-			old = tag.attrsValues[i]
-			return if old is value
-
 			# save change
-			tag.attrsValues[i] = value
+			old = tag._attrs[name]
+			tag._attrs[name] = value
 
 			# trigger event
 			triggerEvent tag, name, old
 
 			value
-
-		add: (name, val) ->
-			assert.isString name
-			assert.notLengthOf name, 0
-			assert.notOk utils.has(exports.tag.attrsNames, name)
-
-			{tag} = exports
-
-			tag.attrsKeys.push name
-			tag.attrsNames[name] = tag.attrsKeys.length - 1
-			tag.attrsValues.push val
-			return
-
-		backChanges: ->
-			assert.is exports.tag.clone, undefined
-
-			{tag} = exports
-
-			keys = tag.attrsKeys
-			return unless keys
-
-			original = Object.getPrototypeOf tag
-			valuesA = tag.attrsValues
-			valuesB = attrsValues
-
-			for value, i in valuesA
-				continue if value is valuesB[i]
-
-				valuesA[i] = utils.cloneDeep valuesB[i]
-
-				# trigger event
-				triggerEvent tag, keys[i], value
-
-			@

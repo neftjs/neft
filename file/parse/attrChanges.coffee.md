@@ -61,7 +61,7 @@ This tag can be also used to store commonly used expressions.
 				value = node.attrs.get 'value'
 
 				if target.attrs.get(name) is undefined
-					target.attrs.add name, ''
+					target.attrs.set name, ''
 
 				attrChanges.push new AttrChange
 					self: file

@@ -40,10 +40,7 @@ module.exports = (Element) ->
 
 			element = new Element.Tag
 			element.name = name
-			if (attrsNames = Object.keys attribs).length
-				element.attrsKeys = attrsNames
-				element.attrsNames = utils.arrayToObject attrsNames, attrsKeyGen, attrsValueGen
-				element.attrsValues = utils.objectToArray attribs
+			element._attrs = attribs
 
 			@_addDomElement element
 			@_tagStack.push element

@@ -107,6 +107,7 @@ module.exports = class File
 
 	constructor: do ->
 		if utils.isNode
+			rules = require('./file/parse/rules') File
 			fragments = require('./file/parse/fragments') File
 			attrs = require('./file/parse/attrs') File
 			attrChanges = require('./file/parse/attrChanges') File
@@ -136,6 +137,7 @@ module.exports = class File
 			File.parse @
 
 			# parse
+			rules @
 			fragments @
 			attrs @
 			attrChanges @

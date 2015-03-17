@@ -51,10 +51,6 @@ Included fragments will be available under the given namespace.
 
 			namespace = node.attrs.get 'as'
 
-			# remove link element
-			node.parent = undefined
-			i--; n--
-
 			# get view
 			path = pathUtils.join '/', file.pathbase, href
 			path = ///^\/(.+)\.html$///.exec(path)[1]

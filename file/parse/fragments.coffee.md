@@ -84,5 +84,4 @@ using the [neft:use][] tag. This is fast and clean solution.
 			for createdFragment in createdFragments
 				createdFragment.parse()
 
-			# if utils.isEmpty fragments
-			# 	file.fragments = null
+			return

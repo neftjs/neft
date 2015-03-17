@@ -23,9 +23,7 @@ module.exports = (Element) ->
 		constructor: ->
 			@children = []
 			@name = ''
-			@attrsKeys = null
-			@attrsNames = null
-			@attrsValues = null
+			@_attrs = {}
 
 			super()
 
@@ -39,9 +37,7 @@ module.exports = (Element) ->
 		clone: ->
 			clone = super()
 			clone.name = @name
-			clone.attrsKeys = @attrsKeys
-			clone.attrsNames = @attrsNames
-			clone.attrsValues = utils.cloneDeep @attrsValues
+			clone._attrs = utils.cloneDeep @_attrs
 			clone
 
 		cloneDeep: ->
