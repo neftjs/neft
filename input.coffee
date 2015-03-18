@@ -157,12 +157,16 @@ module.exports = (File) -> class Input
 
 		Object.preventExtensions @
 
-	queue = []
+	queueIndex = 0
+	queues = [[], []]
+	queue = queues[queueIndex]
 	pending = false
 
 	updateItems = ->
 		pending = false
-		while input = queue.pop()
+		currentQueue = queue
+		queue = queues[++queueIndex % queues.length]
+		while input = currentQueue.pop()
 			input.update()
 		return
 

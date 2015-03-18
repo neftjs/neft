@@ -57,6 +57,9 @@ module.exports = (Element) ->
 
 			# save change
 			old = tag._attrs[name]
+			if old is value
+				return
+
 			tag._attrs[name] = value
 
 			# trigger event
