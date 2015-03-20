@@ -18,6 +18,7 @@ Image {
 	'use strict'
 
 	expect = require 'expect'
+	assert = require 'assert'
 	signal = require 'signal'
 	log = require 'log'
 	utils = require 'utils'
@@ -41,8 +42,9 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			@_isLoaded = false
 			@_autoWidth = true
 			@_autoHeight = true
-			@_naturalWidth = 0
-			@_naturalHeight = 0
+			@_sourceWidth = 0
+			@_sourceHeight = 0
+			@_fillMode = 'Stretch'
 			super()
 
 		getter = utils.lookupGetter @::, 'width'
@@ -85,8 +87,8 @@ Image source URL (absolute or relative to the page) or data URI.
 					if err
 						log.warn "Can't load `#{@source}` image"
 					else
-						@naturalWidth = opts.width
-						@naturalHeight = opts.height
+						@sourceWidth = opts.width
+						@sourceHeight = opts.height
 						if @_autoWidth
 							@width = opts.width
 							@_autoWidth = true
@@ -110,29 +112,45 @@ Image source URL (absolute or relative to the page) or data URI.
 						loadCallback.call @, null, defaultSize
 					return
 
-*Integer* Image::naturalWidth
+*Integer* Image::sourceWidth
+----------------------------
+
+### *Signal* Image::sourceWidthChanged(*Integer* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'sourceWidth'
+			defaultValue: 0
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
+
+*Integer* Image::sourceHeight
 -----------------------------
 
-### *Signal* Image::naturalWidthChanged(*Integer* oldValue)
+### *Signal* Image::sourceHeightChanged(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
-			name: 'naturalWidth'
+			name: 'sourceHeight'
 			defaultValue: 0
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
 
-*Integer* Image::naturalHeight
-------------------------------
+*Integer* Image::fillMode
+-------------------------
 
-### *Signal* Image::naturalHeightChanged(*Integer* oldValue)
+### *Signal* Image::fillModeChanged(*Integer* oldValue)
+
+		FILL_MODE_OPTIONS = ['Stretch', 'PreserveAspectFit', 'Tile']
 
 		itemUtils.defineProperty
 			constructor: @
-			name: 'naturalHeight'
-			defaultValue: 0
-			developmentSetter: (val) ->
-				expect(val).toBe.float()
+			name: 'fillMode'
+			defaultValue: 'Stretch'
+			implementation: Impl.setImageFillMode
+			developmentSetter: (val='Stretch') ->
+				assert.isString val
+				assert.ok utils.has(FILL_MODE_OPTIONS, val), "Accepted fillMode values: '#{FILL_MODE_OPTIONS}'"
 
 ReadOnly *Boolean* Image::isLoaded
 ----------------------------------

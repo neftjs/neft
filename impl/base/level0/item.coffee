@@ -100,7 +100,7 @@ module.exports = (impl) ->
 
 	setItemFill: (type, val) ->
 		unless @_impl.disableFill
-			if @_fillWidth isnt @_fillHeight
+			if @_fill._width isnt @_fill._height
 				impl.utils.fill.enable @
 			else if val is false
 				impl.utils.fill.disable @

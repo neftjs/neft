@@ -28,6 +28,9 @@ module.exports = (impl) ->
 				@child = null
 			@connect()
 
+			if @item instanceof impl.Renderer.Item and not @item._isReady
+				@item.onReady @update, @
+
 			Object.preventExtensions @
 
 		getSignalChangeListener = do ->
@@ -41,6 +44,9 @@ module.exports = (impl) ->
 					withParent
 				else
 					noParent
+
+		update: ->
+			getSignalChangeListener(@).call @
 
 		connect: ->
 			if @item

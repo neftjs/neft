@@ -60,6 +60,8 @@ module.exports = (Renderer, Impl) ->
 
 	Impl.DeepObject = DeepObject
 
+	funcCache = Object.create null
+
 	exports =
 	Object: UtilsObject
 	DeepObject: DeepObject
@@ -90,7 +92,9 @@ module.exports = (Renderer, Impl) ->
 		# getter
 		internalName = "_#{name}"
 
-		propGetter = basicGetter = Function "return this.#{internalName}"
+		propGetter = basicGetter =
+		funcCache["get-#{internalName}"] ?= Function "return this.#{internalName}"
+
 		if valueConstructor
 			propGetter = ->
 				@[internalName] ?= new valueConstructor @
@@ -125,21 +129,22 @@ module.exports = (Renderer, Impl) ->
 			# 	ref[namespaceSignalName] @
 			# 	return
 
-			funcStr = "return function(val){\n"
-			`//<development>`
-			if developmentSetter?
-				funcStr += "debug.call(this, val);\n"
-			`//</development>`
-			funcStr += "var oldVal = this.#{internalName};\n"
-			funcStr += "if (oldVal === val) return;\n"
-			funcStr += "this.#{internalName} = val;\n"
-			if implementation?
-				funcStr += "impl.call(this._ref, val);\n"
-			funcStr += "this.#{signalName}(oldVal);\n"
-			funcStr += "this._ref.#{namespaceSignalName}(this);\n"
-			funcStr += "};"
+			func = funcCache["set-deep-#{namespace}-#{internalName}-#{developmentSetter?}-#{implementation?}"] ?= do ->
+				funcStr = "return function(val){\n"
+				`//<development>`
+				if developmentSetter?
+					funcStr += "debug.call(this, val);\n"
+				`//</development>`
+				funcStr += "var oldVal = this.#{internalName};\n"
+				funcStr += "if (oldVal === val) return;\n"
+				funcStr += "this.#{internalName} = val;\n"
+				if implementation?
+					funcStr += "impl.call(this._ref, val);\n"
+				funcStr += "this.#{signalName}(oldVal);\n"
+				funcStr += "this._ref.#{namespaceSignalName}(this);\n"
+				funcStr += "};"
 
-			func = new Function 'impl', 'debug', funcStr
+				func = new Function 'impl', 'debug', funcStr
 			propSetter = basicSetter = func implementation, developmentSetter
 		else
 			# propSetter = basicSetter = (val) ->
@@ -156,20 +161,21 @@ module.exports = (Renderer, Impl) ->
 			# 	implementation?.call @, val
 			# 	@[signalName] oldVal
 			# 	return
-			funcStr = "return function(val){\n"
-			`//<development>`
-			if developmentSetter?
-				funcStr += "debug.call(this, val);\n"
-			`//</development>`
-			funcStr += "var oldVal = this.#{internalName};\n"
-			funcStr += "if (oldVal === val) return;\n"
-			funcStr += "this.#{internalName} = val;\n"
-			if implementation?
-				funcStr += "impl.call(this, val);\n"
-			funcStr += "this.#{signalName}(oldVal);\n"
-			funcStr += "};"
+			func = funcCache["set-#{internalName}-#{developmentSetter?}-#{implementation?}"] ?= do ->
+				funcStr = "return function(val){\n"
+				`//<development>`
+				if developmentSetter?
+					funcStr += "debug.call(this, val);\n"
+				`//</development>`
+				funcStr += "var oldVal = this.#{internalName};\n"
+				funcStr += "if (oldVal === val) return;\n"
+				funcStr += "this.#{internalName} = val;\n"
+				if implementation?
+					funcStr += "impl.call(this, val);\n"
+				funcStr += "this.#{signalName}(oldVal);\n"
+				funcStr += "};"
 
-			func = new Function 'impl', 'debug', funcStr
+				func = new Function 'impl', 'debug', funcStr
 			propSetter = basicSetter = func implementation, developmentSetter
 
 		# custom desc

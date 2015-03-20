@@ -61,6 +61,7 @@ module.exports = (impl) ->
 		callback: null
 		source: ''
 		image: null
+		useCssBackground: false
 
 	DATA: DATA
 
@@ -84,5 +85,30 @@ module.exports = (impl) ->
 		data.callback = callback
 		data.image = getImage val
 
+		if data.useCssBackground
+			data.elemStyle.backgroundImage = "url('#{val}')"
+
 		callCallback.call @
+		return
+
+	setImageFillMode: (val) ->
+		data = @_impl
+
+		if val is 'Stretch'
+			data.useCssBackground = false
+			data.elemStyle.backgroundImage = ''
+			data.imgElem.style.display = 'block'
+		else
+			data.useCssBackground = true
+			data.elemStyle.backgroundImage = "url('#{data.source}')"
+			data.imgElem.style.display = 'none'
+
+			switch val
+				when 'PreserveAspectFit'
+					data.elemStyle.backgroundRepeat = 'no-repeat'
+					data.elemStyle.backgroundPosition = '100% 100%'
+				when 'Tile'
+					data.elemStyle.backgroundRepeat = 'repeat'
+					data.elemStyle.backgroundPosition = '0 0'
+
 		return

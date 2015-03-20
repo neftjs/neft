@@ -13,3 +13,5 @@ module.exports = (impl) ->
 
 	setImageSource: (val) ->
 		@_impl.source = val
+
+	setImageFillMode: (val) ->

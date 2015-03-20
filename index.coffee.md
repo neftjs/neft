@@ -120,6 +120,7 @@ Styles.button/red {
 	utils = require 'utils'
 	signal = require 'signal'
 	Impl = require './impl'
+	Impl.Renderer = exports
 
 	itemUtils = require('./utils/item') exports, Impl
 	signal.create exports, 'ready'
