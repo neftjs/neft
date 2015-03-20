@@ -63,26 +63,26 @@ module.exports = (impl) ->
 			unless queue.length
 				clearInterval intervalId
 				intervalPending = false
+			return
 
 		updateSizeNow = (item) ->
 			{textElem} = item._impl
 
 			if item._impl.autoWidth
-				width = textElem.scrollWidth
+				width = textElem.offsetWidth
 				if width > 0
 					item.width = width + 1
 
 			if item._impl.autoHeight
-				height = textElem.scrollHeight
+				height = textElem.offsetHeight
 				if height > 0
 					item.height = height
 
 			if item._height > 0
 				if item._impl.textElem.parentNode is hatchery
 					item._impl.elem.appendChild item._impl.textElem
-				true
-			else
-				false
+
+			return
 
 		(item) ->
 			item._impl.sizeChecks = 0
@@ -105,8 +105,9 @@ module.exports = (impl) ->
 				pending = true
 
 			unless intervalPending
-				intervalId = setInterval updateAllInInterval, 500
+				intervalId = setInterval updateAllInInterval, 100
 				intervalPending = true
+			return
 
 	reloadFontFamilyQueue = []
 	isFontReady = false
@@ -122,6 +123,7 @@ module.exports = (impl) ->
 			document.body.appendChild styles
 
 			textImpl.fontReady()
+			return
 
 	updateContent = do ->
 		queue = []
@@ -155,6 +157,7 @@ module.exports = (impl) ->
 			unless pending
 				setImmediate updateItems
 				pending = true
+			return
 
 	onWidthChanged = ->
 		if not sizeUpdatePending
@@ -165,6 +168,7 @@ module.exports = (impl) ->
 			textElemStyle.width = if auto then 'auto' else "#{width}px"
 			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
+		return
 
 	onHeightChanged = ->
 		if not sizeUpdatePending
@@ -174,6 +178,7 @@ module.exports = (impl) ->
 			textElemStyle.height = if auto then 'auto' else "#{height}px"
 			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
+		return
 
 	SHEET = """
 		.text {

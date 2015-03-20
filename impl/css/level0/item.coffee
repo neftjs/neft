@@ -1,7 +1,10 @@
 'use strict'
 
 utils = require 'utils'
+log = require 'log'
 signal = require 'signal'
+
+log = log.scope 'Renderer', 'CSS Implementation'
 
 # get transform CSS property name
 transformProp = do ->
@@ -227,106 +230,23 @@ HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
 
 module.exports = (impl) ->
-	STYLE_TRANSFORM = 1<<0
-	STYLE_WIDTH = 1<<1
-	STYLE_HEIGHT = 1<<2
-	STYLE_OPACITY = 1<<3
-	STYLE_SCROLL = impl.STYLE_SCROLL = 1<<4
-	STYLE_ALL = (1<<5)-1
-
-	nowTime = now()
-
-	updateItem = do ->
-		getTransforms = (item) ->
-			data = item._impl
-			transform = ''
-
-			# position
-			if data.isHot and transform3dSupported
-				transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
-			else
-				markAction item
-				transform = "translate(#{data.x}px, #{data.y}px) "
-
-			# rotation
-			if data.rotation
-				transform += "rotate(#{rad2deg(data.rotation)}deg) "
-
-			# scale
-			if data.scale isnt 1
-				transform += "scale(#{data.scale}) "
-
-			transform
-
-		(item, styles) ->
-			data = item._impl
-			style = data.elemStyle
-
-			if data.isHidden
-				if styles & STYLE_OPACITY
-					data.isHidden = false
-					styles |= STYLE_ALL
-				else
-					return
-
-			if styles & STYLE_TRANSFORM
-				style[transformProp] = getTransforms item
-			if styles & STYLE_WIDTH
-				style.width = "#{data.width}px"
-			if styles & STYLE_HEIGHT
-				style.height = "#{data.height}px"
-			if styles & STYLE_OPACITY
-				if (style.opacity = data.opacity) is 0
-					data.isHidden = true
-			if styles & STYLE_SCROLL and data.scrollElem
-				data.scrollElem.scrollLeft = data.contentX
-				data.scrollElem.scrollTop = data.contentY
-
-			return
-
-	updateStyles = impl.updateStyles = do ->
-		pending = false
-		queue = []
-
-		updateItems = ->
-			pending = false
-			nowTime = now()
-			while queue.length
-				item = queue.pop()
-				updateItem item, item._impl.pendingStyles
-				item._impl.pendingStyles = 0
-			return
-
-		(item, style) ->
-			styles = item._impl.pendingStyles
-
-			unless styles
-				queue.push item
-
-			item._impl.pendingStyles = (styles |= style)
-
-			unless pending
-				pending = true
-				if isTouch
-					requestAnimationFrame updateItems
-				else
-					setTimeout updateItems, 8
-			return
-
-	markAction = (item) ->
+	updateTransforms = (item) ->
 		data = item._impl
+		transform = ''
 
-		if data.hotActions >= 0
-			if nowTime - data.lastAction < HOT_MAX_TIME
-				if data.hotActions++ > HOT_MAX_ACTIONS
-					{style, id} = data.elem
-					data.isHot = true
-					return true
-			else
-				data.hotActions = 0
-				data.lastAction = nowTime
+		# position
+		transform = "translate(#{data.x}px, #{data.y}px) "
 
-		false
+		# rotation
+		if data.rotation
+			transform += "rotate(#{rad2deg(data.rotation)}deg) "
+
+		# scale
+		if data.scale isnt 1
+			transform += "scale(#{data.scale}) "
+
+		data.elemStyle[transformProp] = transform
+		return
 
 	NOP = ->
 
@@ -335,21 +255,14 @@ module.exports = (impl) ->
 		anchors: null
 		elem: null
 		elemStyle: null
-		lastAction: 0
-		hotActions: 0
-		isHot: false
-		isHidden: false
 		linkElem: null
 		x: 0
 		y: 0
-		width: 0
-		height: 0
-		scale: 1
 		rotation: 0
-		opacity: 1
+		scale: 1
 		parent: null
 		update: null
-		pendingStyles: 0
+		mozFontSubpixel: true
 	, impl.utils.fill.DATA
 
 	DATA: DATA
@@ -360,14 +273,10 @@ module.exports = (impl) ->
 		data.update ?= NOP
 		data.elem ?= document.createElement 'div'
 		data.elemStyle = data.elem.style
-		data.lastAction = nowTime
 
 	setItemParent: (val) ->
 		self = @
 		{elem} = @_impl
-
-		setImmediate ->
-			updateItem self, (self._impl.pendingStyles or 0)
 
 		@_impl.parent?._impl.update.call @_impl.parent
 
@@ -390,46 +299,61 @@ module.exports = (impl) ->
 		return
 
 	setItemWidth: (val) ->
-		@_impl.width = val
-		updateStyles @, STYLE_WIDTH
+		@_impl.elemStyle.width = "#{val}px"
 		@_parent?._impl.update.call @_parent
 		@_impl.update.call @
 		return
 
 	setItemHeight: (val) ->
-		@_impl.height = val
-		updateStyles @, STYLE_HEIGHT
+		@_impl.elemStyle.height = "#{val}px"
 		@_parent?._impl.update.call @_parent
 		@_impl.update.call @
 		return
 
 	setItemX: (val) ->
 		@_impl.x = val
-		updateStyles @, STYLE_TRANSFORM
+		updateTransforms @
 		return
 
 	setItemY: (val) ->
 		@_impl.y = val
-		updateStyles @, STYLE_TRANSFORM
+		updateTransforms @
 		return
 
 	setItemZ: (val) ->
 		@_impl.elemStyle.zIndex = if val is 0 then 'auto' else val
 		return
 
-	setItemScale: (val) ->
-		@_impl.scale = val
-		updateStyles @, STYLE_TRANSFORM
-		return
+	setItemScale: do ->
+		func = (val) ->
+			@_impl.scale = val
+			updateTransforms @
+			return
+
+		if isFirefox
+			logShowed = false
+			func = do (_super = func) -> (val) ->
+				if val isnt 1
+					unless logShowed
+						log.warn "Font subpixel antialiasing has been disabled in scaled elements"
+						logShowed = true
+
+					if @_impl.mozFontSubpixel
+						@_impl.elemStyle.MozOSXFontSmoothing = 'grayscale'
+						@_impl.mozFontSubpixel = false
+
+				_super.call @, val
+				return
+
+		func
 
 	setItemRotation: (val) ->
 		@_impl.rotation = val
-		updateStyles @, STYLE_TRANSFORM
+		updateTransforms @
 		return
 
 	setItemOpacity: (val) ->
-		@_impl.opacity = val
-		updateStyles @, STYLE_OPACITY
+		@_impl.elemStyle.opacity = val
 		return
 
 	setItemLinkUri: (val) ->

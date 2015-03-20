@@ -13,8 +13,6 @@ module.exports = (impl) ->
 		contentItem: null
 		scrollElem: null
 		globalScale: 1
-		contentX: 0
-		contentY: 0
 
 	DATA: DATA
 
@@ -44,11 +42,9 @@ module.exports = (impl) ->
 			@_impl.contentItem = val
 
 	setScrollableContentX: (val) ->
-		@_impl.contentX = val
-		impl.updateStyles @, impl.STYLE_SCROLL
+		@_impl.scrollElem.scrollLeft = val
 		return
 
 	setScrollableContentY: (val) ->
-		@_impl.contentY = val
-		impl.updateStyles @, impl.STYLE_SCROLL
+		@_impl.scrollElem.scrollTop = val
 		return

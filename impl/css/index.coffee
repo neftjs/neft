@@ -8,15 +8,15 @@ SHEET = "
 	width: 0;
 	height: 0;
 }
-#hatchery * {
-	position: absolute;
-}
 * {
 	margin: 0;
 	padding: 0;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; 
 	-webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; 
 	outline: none !important;
+	backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
 }
 #styles {
 	height: 100%;
@@ -138,14 +138,19 @@ module.exports = (impl) ->
 		Scrollable: require './level2/scrollable'
 
 	setWindow: setWindow = (item) ->
-		if document.readyState isnt 'complete'
-			document.onreadystatechange = =>
-				setWindow item
+		onLoaded = ->
+			if document.readyState is 'complete'
+				while child = body.firstChild
+					body.removeChild child
+
+				body.appendChild item._impl.elem
+
+				resize()
+				requestAnimationFrame resize
+
+		if document.readyState is 'complete'
+			onLoaded()
 		else
-			while child = body.firstChild
-				body.removeChild child
+			document.addEventListener 'readystatechange', onLoaded
 
-			body.appendChild item._impl.elem
-
-			resize()
-			requestAnimationFrame resize
+		return
