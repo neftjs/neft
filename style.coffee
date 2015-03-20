@@ -72,6 +72,7 @@ module.exports = (File, data) -> class Style
 		@scope = null
 		@children = []
 		@textWatchingNodes = []
+		@visible = true
 
 		Object.preventExtensions @
 
@@ -116,6 +117,9 @@ module.exports = (File, data) -> class Style
 		return
 
 	updateVisibility: ->
+		unless @item
+			return
+
 		visible = true
 		tmpNode = @node
 		loop
@@ -124,7 +128,10 @@ module.exports = (File, data) -> class Style
 			if not visible or not tmpNode or tmpNode.attrs.has('neft:style')
 				break
 
-		@item?.visible = visible
+		if @visible isnt visible
+			@visible = visible
+			@item.visible = visible
+		return
 
 	ATTR_PRIMITIVE_VALUES =
 		__proto__: null
@@ -170,7 +177,7 @@ module.exports = (File, data) -> class Style
 		return
 
 	isLink: ->
-		@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked')
+		@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked') and @node.attrs.get('href')?[0] isnt '#'
 
 	getLinkUri: ->
 		uri = @node.attrs.get('href') + ''
@@ -224,7 +231,7 @@ module.exports = (File, data) -> class Style
 				parent = parent.parent
 
 			scope ?= windowStyle
-			@item = scope.ids[id]
+			@item = scope.ids[id] or scope.mainItem.$?[id]
 
 			unless @item
 				unless File.Input.test id
