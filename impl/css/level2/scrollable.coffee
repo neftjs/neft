@@ -7,6 +7,8 @@ module.exports = (impl) ->
 	{Types} = impl
 	{Item, Rectangle} = Types
 
+	{round} = Math
+
 	abstractScrollable = impl.AbstractTypes.Scrollable impl
 
 	DATA =
@@ -42,9 +44,9 @@ module.exports = (impl) ->
 			@_impl.contentItem = val
 
 	setScrollableContentX: (val) ->
-		@_impl.scrollElem.scrollLeft = val
+		@_impl.scrollElem.scrollLeft = round val
 		return
 
 	setScrollableContentY: (val) ->
-		@_impl.scrollElem.scrollTop = val
+		@_impl.scrollElem.scrollTop = round val
 		return

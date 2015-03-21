@@ -20,6 +20,7 @@ module.exports = (impl) ->
 	class Connection
 		constructor: (@binding, @item, @prop, @parent=null) ->
 			@handlerName = getPropHandlerName prop
+			@isConnected = false
 
 			if isArray item
 				@child = new Connection null, item[0], item[1], @
@@ -50,12 +51,16 @@ module.exports = (impl) ->
 
 		connect: ->
 			if @item
-				@item[@handlerName]? getSignalChangeListener(@), @
+				handler = @item[@handlerName]
+				if handler?
+					@isConnected = true
+					handler getSignalChangeListener(@), @
 			return
 
 		disconnect: ->
-			if @item
-				@item[@handlerName]?.disconnect getSignalChangeListener(@), @
+			if @item and @isConnected
+				@item[@handlerName].disconnect getSignalChangeListener(@), @
+			@isConnected = false
 			return
 
 		updateItem: ->

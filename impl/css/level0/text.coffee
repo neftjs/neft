@@ -9,6 +9,8 @@ module.exports = (impl) ->
 	{Item, Image} = impl.Types
 	implUtils = impl.utils
 
+	{round} = Math
+
 	# used to render not visible texts
 	hatchery = impl._hatchery
 
@@ -247,7 +249,7 @@ module.exports = (impl) ->
 			return
 
 	setTextLineHeight: (val) ->
-		pxLineHeight = val * @font.pixelSize
+		pxLineHeight = round val * @font.pixelSize
 		@_impl.textElemStyle.lineHeight = "#{pxLineHeight}px"
 		updateSize @
 
@@ -263,6 +265,7 @@ module.exports = (impl) ->
 		updateSize @
 
 	setTextFontPixelSize: (val) ->
+		val = round val
 		@_impl.textElemStyle.fontSize = "#{val}px"
 		impl.setTextLineHeight.call @, @lineHeight
 		updateSize @

@@ -3,6 +3,8 @@
 module.exports = (impl) ->
 	{Item} = impl.Types
 
+	{round} = Math
+
 	# TODO: browsers makes borders always visible even
 	#       if the size is less than border width
 
@@ -30,10 +32,12 @@ module.exports = (impl) ->
 		@_impl.rectStyle.backgroundColor = val
 
 	setRectangleRadius: (val) ->
+		val = round val
 		@_impl.rectStyle.borderRadius = "#{val}px"
 
 	setRectangleBorderColor: (val) ->
 		@_impl.rectStyle.borderColor = val
 
 	setRectangleBorderWidth: (val) ->
+		val = round val
 		@_impl.rectStyle.borderWidth = "#{val}px"

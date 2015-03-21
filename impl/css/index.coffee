@@ -14,9 +14,6 @@ SHEET = "
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; 
 	-webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; 
 	outline: none !important;
-	backface-visibility: hidden;
-	-moz-backface-visibility: hidden;
-	-webkit-backface-visibility: hidden;
 }
 #styles {
 	height: 100%;
@@ -80,6 +77,12 @@ img {
 	-ms-user-select: none;
 	user-select: none;
 	outline-style:none;
+}
+.layer {
+	-moz-perspective: 1px; /* Firefox */
+	-webkit-transform-style: preserve-3d; /* Safari */
+	-webkit-perspective: 1000px; /* Safari */
+	-webkit-backface-visibility: hidden; /* Safari, Chrome */
 }
 "
 

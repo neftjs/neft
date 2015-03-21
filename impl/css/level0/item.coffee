@@ -228,14 +228,64 @@ window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
 
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
+USE_GPU = true
+
+# if ///^mac///i.test(navigator.platform) and devicePixelRatio > 1
+# 	USE_GPU = false
 
 module.exports = (impl) ->
-	updateTransforms = (item) ->
-		data = item._impl
+	LAYER_MIN_OPERATIONS = 2
+	LAYER_GC_DELAY = 1000
+	layers = []
+
+	if USE_GPU
+		setInterval ->
+			i = 0
+			n = layers.length
+			while i < n
+				layer = layers[i]
+				layer.operations = (layer.operations * 0.5)|0
+
+				if layer.operations < LAYER_MIN_OPERATIONS
+					if i is n-1
+						layers.pop()
+					else
+						layers[i] = layers.pop()
+					n--
+
+					if layer.isLayer
+						layer.elem.setAttribute 'class', ''
+						layer.isLayer = false
+						updateTransforms layer
+						layer.operations = 0
+				else
+					i++
+
+				layer.isInLayers = false
+			return
+		, LAYER_GC_DELAY
+
+	{round} = Math
+
+	updateTransforms = (data) ->
 		transform = ''
 
+		if USE_GPU
+			unless data.isInLayers
+				layers.push data
+				data.isInLayers = true
+
+			if data.operations >= LAYER_MIN_OPERATIONS and not data.isLayer
+				data.elem.setAttribute 'class', 'layer'
+				data.isLayer = true
+			else
+				data.operations++
+
 		# position
-		transform = "translate(#{data.x}px, #{data.y}px) "
+		if data.isLayer
+			transform = "translate3d(#{data.x}px, #{data.y}px, 0) "
+		else
+			transform = "translate(#{data.x}px, #{data.y}px) "
 
 		# rotation
 		if data.rotation
@@ -263,6 +313,9 @@ module.exports = (impl) ->
 		parent: null
 		update: null
 		mozFontSubpixel: true
+		isLayer: false
+		isInLayers: false
+		operations: 0
 	, impl.utils.fill.DATA
 
 	DATA: DATA
@@ -299,57 +352,41 @@ module.exports = (impl) ->
 		return
 
 	setItemWidth: (val) ->
+		val = round val
 		@_impl.elemStyle.width = "#{val}px"
 		@_parent?._impl.update.call @_parent
 		@_impl.update.call @
 		return
 
 	setItemHeight: (val) ->
+		val = round val
 		@_impl.elemStyle.height = "#{val}px"
 		@_parent?._impl.update.call @_parent
 		@_impl.update.call @
 		return
 
 	setItemX: (val) ->
-		@_impl.x = val
-		updateTransforms @
+		@_impl.x = round val
+		updateTransforms @_impl
 		return
 
 	setItemY: (val) ->
-		@_impl.y = val
-		updateTransforms @
+		@_impl.y = round val
+		updateTransforms @_impl
 		return
 
 	setItemZ: (val) ->
 		@_impl.elemStyle.zIndex = if val is 0 then 'auto' else val
 		return
 
-	setItemScale: do ->
-		func = (val) ->
-			@_impl.scale = val
-			updateTransforms @
-			return
-
-		if isFirefox
-			logShowed = false
-			func = do (_super = func) -> (val) ->
-				if val isnt 1
-					unless logShowed
-						log.warn "Font subpixel antialiasing has been disabled in scaled elements"
-						logShowed = true
-
-					if @_impl.mozFontSubpixel
-						@_impl.elemStyle.MozOSXFontSmoothing = 'grayscale'
-						@_impl.mozFontSubpixel = false
-
-				_super.call @, val
-				return
-
-		func
+	setItemScale: (val) ->
+		@_impl.scale = val
+		updateTransforms @_impl
+		return
 
 	setItemRotation: (val) ->
 		@_impl.rotation = val
-		updateTransforms @
+		updateTransforms @_impl
 		return
 
 	setItemOpacity: (val) ->
