@@ -26,7 +26,7 @@ module.exports = (impl) ->
 	sizeUpdatePending = false
 
 	updateSize = do ->
-		MAX_CHECKS = 5
+		MAX_CHECKS = 20
 
 		queue = []
 		windowLoadQueue = []
@@ -80,7 +80,7 @@ module.exports = (impl) ->
 				if height > 0
 					item.height = height
 
-			if item._height > 0
+			if (item._height > 0 and item._impl.elem.offsetParent) or item._impl.sizeChecks is MAX_CHECKS-1
 				if item._impl.textElem.parentNode is hatchery
 					item._impl.elem.appendChild item._impl.textElem
 
@@ -107,7 +107,7 @@ module.exports = (impl) ->
 				pending = true
 
 			unless intervalPending
-				intervalId = setInterval updateAllInInterval, 100
+				intervalId = setInterval updateAllInInterval, 200
 				intervalPending = true
 			return
 

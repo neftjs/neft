@@ -5,8 +5,9 @@ utils = require 'utils'
 SHEET = "
 #hatchery {
 	visibility: hidden;
-	width: 0;
-	height: 0;
+}
+#hatchery span {
+	display: inline-block;
 }
 * {
 	margin: 0;
@@ -16,8 +17,12 @@ SHEET = "
 	outline: none !important;
 }
 #styles {
+	position: absolute;
+	width: 100%;
 	height: 100%;
 	overflow: hidden;
+	top: 0;
+	left: 0
 }
 html, body {
 	height: 100%;
