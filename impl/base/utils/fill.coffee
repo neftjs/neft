@@ -21,7 +21,7 @@ updateItem = (item) ->
 		size = 0
 		for child in children
 			if child._visible
-				tmp = child._width
+				tmp = child._x + child._width
 				if tmp > size
 					size = tmp
 
@@ -34,7 +34,7 @@ updateItem = (item) ->
 		size = 0
 		for child in children
 			if child._visible
-				tmp = child._height
+				tmp = child._y + child._height
 				if tmp > size
 					size = tmp
 
@@ -77,11 +77,15 @@ enableChild = (child) ->
 	child.onVisibleChanged update, @
 	child.onWidthChanged update, @
 	child.onHeightChanged update, @
+	child.onXChanged update, @
+	child.onYChanged update, @
 
 disableChild = (child) ->
 	child.onVisibleChanged.disconnect update, @
 	child.onWidthChanged.disconnect update, @
 	child.onHeightChanged.disconnect update, @
+	child.onXChanged.disconnect update, @
+	child.onYChanged.disconnect update, @
 
 exports.DATA =
 	pending: false
