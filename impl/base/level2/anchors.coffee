@@ -134,8 +134,8 @@ module.exports = (impl) ->
 				unless anchor
 					BINDINGS.left item, null
 					BINDINGS.top item, null
-					impl.setItemBinding.call item, '', 'width', 'width', null
-					impl.setItemBinding.call item, '', 'height', 'height', null
+					impl.setItemBinding.call item, 'width', null
+					impl.setItemBinding.call item, 'height', null
 					return
 
 				[target] = anchor
