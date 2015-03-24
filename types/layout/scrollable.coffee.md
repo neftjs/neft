@@ -33,26 +33,23 @@ Positioning/Scrollable
 			scrollbar.margin = 3
 			scrollbar.z = 1
 			scrollbar.pointer.onPressed ->
-				unless @$.pressed
-					@$.pressed = true
-					@parent.pointer.onMoved.connect @$.pointerMoveHandler
-					@parent.pointer.onReleased.connect @$.pointerReleasedHandler
+				unless scrollbar.$.pressed
+					scrollbar.$.pressed = true
+					scrollbar.pointer.onMoved.connect scrollbar.$.pointerMoveHandler
+					scrollbar.pointer.onReleased.connect scrollbar.$.pointerReleasedHandler
 				signal.STOP_PROPAGATION
 			scrollbar.$.pointerReleasedHandler = ->
 				scrollbar.$.pressed = false
-				scrollbar.$.lastEvent = null
-				scrollbar.parent.pointer.onMoved.disconnect scrollbar.$.pointerMoveHandler
-				scrollbar.parent.pointer.onReleased.disconnect scrollbar.$.pointerReleasedHandler
+				scrollbar.pointer.onMoved.disconnect scrollbar.$.pointerMoveHandler
+				scrollbar.pointer.onReleased.disconnect scrollbar.$.pointerReleasedHandler
 				return
 			scrollbar.$.pointerMoveHandler = (e) ->
 				unless scrollbar.$.pressed
 					return
-				if scrollbar.$.lastEvent
-					delta = (e.y - scrollbar.$.lastEvent.y) / (scrollbar.parent.height / scrollbar.parent.contentItem.height)
-					contentY = scrollbar.parent.contentY + delta
-					contentY = Math.max 0, Math.min contentY, (scrollbar.parent.contentItem.height - scrollbar.parent.height)
-					scrollbar.parent.contentY = contentY
-				scrollbar.$.lastEvent = e
+				delta = e.movementY / (scrollbar.parent.height / scrollbar.parent.contentItem.height)
+				contentY = scrollbar.parent.contentY + delta
+				contentY = Math.max 0, Math.min contentY, (scrollbar.parent.contentItem.height - scrollbar.parent.height)
+				scrollbar.parent.contentY = contentY
 				return
 
 			thumb = new Renderer.Rectangle
@@ -76,13 +73,22 @@ Positioning/Scrollable
 				'/2'
 			]
 			thumb.border.width = 1
-			thumb.border.color = 'rgba(0, 0, 0, .2)'
+			thumb.border.color = 'rgb(200, 200, 200)'
 
 			state = new Renderer.State
 			state.target = thumb
-			state.createBinding 'when', [[[thumb, 'pointer'], 'isHover'], '||', [scrollbar, 'pressed']]
-			state.changes.color = 'rgba(0, 0, 0, .8)'
-			
+			state.createBinding 'when', [[[thumb, 'pointer'], 'isHover'], '||', [scrollbar.$, 'pressed']]
+			state.changes.color = 'black'
+
+			scrollbar._isReady = true
+			scrollbar.ready()
+
+			thumb._isReady = true
+			thumb.ready()
+
+			state._isReady = true
+			state.ready()
+
 			scrollbar
 
 		constructor: ->

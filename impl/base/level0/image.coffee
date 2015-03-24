@@ -14,4 +14,8 @@ module.exports = (impl) ->
 	setImageSource: (val) ->
 		@_impl.source = val
 
+	setImageSourceWidth: (val) ->
+
+	setImageSourceHeight: (val) ->
+
 	setImageFillMode: (val) ->

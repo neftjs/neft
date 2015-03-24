@@ -99,7 +99,7 @@ module.exports = (impl) ->
 			item._impl.pendingSize = true
 			queue.push item
 
-			if item._height is 0
+			if item._height is 0 or not item._impl.elem.offsetParent
 				hatchery.appendChild item._impl.textElem
 
 			unless pending
@@ -227,7 +227,6 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 		exports._createTextElement @
-		hatchery.appendChild data.textElem
 
 	setText: (val) ->
 		updateContent @

@@ -6,6 +6,7 @@ signal = require 'signal'
 
 module.exports = (impl) ->
 	{Item} = impl.Types
+	{round} = Math
 
 	cache = Object.create null
 
@@ -56,6 +57,26 @@ module.exports = (impl) ->
 			img.onLoaded onImageLoaded, @
 		return
 
+	useCssBackground = (item) ->
+		data = item._impl
+		data.useCssBackground = true
+		data.elemStyle.backgroundImage = "url('#{data.source}')"
+		data.elemStyle.backgroundPosition = '50% 50%'
+		data.imgElem.style.display = 'none'
+		return
+
+	setBackgroundSize = (item) ->
+		data = item._impl
+
+		unless data.useCssBackground
+			useCssBackground item
+
+		width = item._sourceWidth
+		height = item._sourceHeight
+		data.elemStyle.backgroundSize = "#{width}px #{height}px"
+
+		return
+
 	DATA =
 		imgElem: null
 		callback: null
@@ -91,6 +112,20 @@ module.exports = (impl) ->
 		callCallback.call @
 		return
 
+	setImageSourceWidth: (val) ->
+		data = @_impl
+
+		if val isnt data.image.width
+			setBackgroundSize @
+		return
+
+	setImageSourceHeight: (val) ->
+		data = @_impl
+
+		if val isnt data.image.height
+			setBackgroundSize @
+		return
+
 	setImageFillMode: (val) ->
 		data = @_impl
 
@@ -99,16 +134,12 @@ module.exports = (impl) ->
 			data.elemStyle.backgroundImage = ''
 			data.imgElem.style.display = 'block'
 		else
-			data.useCssBackground = true
-			data.elemStyle.backgroundImage = "url('#{data.source}')"
-			data.imgElem.style.display = 'none'
+			useCssBackground @
 
 			switch val
 				when 'PreserveAspectFit'
 					data.elemStyle.backgroundRepeat = 'no-repeat'
-					data.elemStyle.backgroundPosition = '100% 100%'
 				when 'Tile'
 					data.elemStyle.backgroundRepeat = 'repeat'
-					data.elemStyle.backgroundPosition = '0 0'
 
 		return

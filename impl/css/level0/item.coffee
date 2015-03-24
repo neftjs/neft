@@ -247,6 +247,8 @@ module.exports = (impl) ->
 				layer.operations = (layer.operations * 0.5)|0
 
 				if layer.operations < LAYER_MIN_OPERATIONS
+					layer.operations = 0
+
 					if i is n-1
 						layers.pop()
 					else
@@ -258,10 +260,11 @@ module.exports = (impl) ->
 						layer.isLayer = false
 						updateTransforms layer
 						layer.operations = 0
+						console.assert layer.isLayer is false
+
+					layer.isInLayers = false
 				else
 					i++
-
-				layer.isInLayers = false
 			return
 		, LAYER_GC_DELAY
 

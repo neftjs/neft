@@ -45,6 +45,7 @@ updateItem = (item) ->
 
 	# get tmp arrays
 	maxColumnsLen = if columnsLen is Infinity then children.length else columnsLen
+	lastColumn = maxColumnsLen - 1
 	if columnsPositions.length < maxColumnsLen
 		columnsPositions = new Uint32TypedArray maxColumnsLen
 	else
@@ -52,6 +53,7 @@ updateItem = (item) ->
 			columnsPositions[i] = 0
 
 	maxRowsLen = if rowsLen is Infinity then Math.ceil(children.length / columnsLen) else rowsLen
+	lastRow = maxRowsLen - 1
 	if rowsPositions.length < maxRowsLen
 		rowsPositions = new Uint32TypedArray maxRowsLen
 	else
@@ -72,11 +74,19 @@ updateItem = (item) ->
 		width = child._width
 		height = child._height
 
-		# right / bottom margins
+		# margins
 		if gridType & ROW
-			width += child.margin.left + child.margin.right + columnSpacing
+			width += columnSpacing
+			if column isnt 0
+				width += child.margin.left
+			if column isnt lastColumn
+				width += child.margin.right
 		if gridType & COLUMN
-			height += child.margin.top + child.margin.bottom + rowSpacing
+			height += rowSpacing
+			if row isnt 0
+				height += child.margin.top
+			if row isnt lastRow
+				height += child.margin.bottom
 
 		# save
 		if width > columnsPositions[column]
@@ -108,10 +118,16 @@ updateItem = (item) ->
 		row = Math.floor(i/columnsLen) % rowsLen
 
 		if gridType & ROW
-			child.x = child.margin.left + (if column > 0 then columnsPositions[column-1] else 0)
+			if column > 0
+				child.x = child.margin.left + columnsPositions[column-1]
+			else
+				child.x = 0
 
 		if gridType & COLUMN
-			child.y = child.margin.top + (if row > 0 then rowsPositions[row-1] else 0)
+			if row > 0
+				child.y = child.margin.top + rowsPositions[row-1]
+			else
+				child.y = 0
 
 		i++
 

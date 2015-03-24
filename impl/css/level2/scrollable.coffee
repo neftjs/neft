@@ -35,13 +35,27 @@ module.exports = (impl) ->
 
 		return
 
-	setScrollableContentItem: (val) ->
-		if oldVal = @_impl.contentItem
-			impl.setItemParent.call oldVal, null
+	setScrollableContentItem: do ->
+		onWidthChanged = ->
+			impl.setItemWidth.call @, @_width * 1.1
+			return
 
-		if val
-			@_impl.scrollElem.appendChild val._impl.elem
-			@_impl.contentItem = val
+		onHeightChanged = ->
+			impl.setItemHeight.call @, @_height * 1.1
+			return
+
+		(val) ->
+			if oldVal = @_impl.contentItem
+				impl.setItemParent.call oldVal, null
+				oldVal.onWidthChanged.disconnect onWidthChanged
+				oldVal.onHeightChanged.disconnect onHeightChanged
+
+			if val
+				@_impl.scrollElem.appendChild val._impl.elem
+				val.onWidthChanged onWidthChanged
+				val.onHeightChanged onHeightChanged
+				@_impl.contentItem = val
+			return
 
 	setScrollableContentX: (val) ->
 		@_impl.scrollElem.scrollLeft = round val

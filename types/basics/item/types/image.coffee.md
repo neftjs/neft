@@ -112,8 +112,8 @@ Image source URL (absolute or relative to the page) or data URI.
 						loadCallback.call @, null, defaultSize
 					return
 
-*Integer* Image::sourceWidth
-----------------------------
+*Integer* Image::sourceWidth = 0
+--------------------------------
 
 ### *Signal* Image::sourceWidthChanged(*Integer* oldValue)
 
@@ -121,11 +121,12 @@ Image source URL (absolute or relative to the page) or data URI.
 			constructor: @
 			name: 'sourceWidth'
 			defaultValue: 0
+			implementation: Impl.setImageSourceWidth
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
 
-*Integer* Image::sourceHeight
------------------------------
+*Integer* Image::sourceHeight = 0
+---------------------------------
 
 ### *Signal* Image::sourceHeightChanged(*Integer* oldValue)
 
@@ -133,6 +134,7 @@ Image source URL (absolute or relative to the page) or data URI.
 			constructor: @
 			name: 'sourceHeight'
 			defaultValue: 0
+			implementation: Impl.setImageSourceHeight
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
 
