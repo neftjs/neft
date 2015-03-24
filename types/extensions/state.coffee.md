@@ -272,7 +272,7 @@ Grid {
 					state = stateExtensions[stateName].changes
 					if state.hasOwnProperty('_bindings')
 						for prop, val of state._bindings
-							unless usedBindings[prop]
+							if usedBindings[prop] isnt true
 								defaultVal = targetBindings?[prop] or null
 								if defaultBindings is undefined
 									defaultState.createBinding prop, defaultVal
@@ -287,7 +287,7 @@ Grid {
 								usedBindings[prop] = true
 
 				for prop, val of defaultBindings
-					unless usedBindings[prop]
+					if usedBindings[prop] isnt true
 						target.createBinding prop, val
 						target[prop] = getPropValue target, prop
 
@@ -315,7 +315,8 @@ Grid {
 											defaultState[prop][subprop] = getSafeValue target[prop][subprop]
 
 										target[prop].createBinding subprop, subval
-										usedBindings[prop] ?= Object.create(null)
+										if typeof usedBindings[prop] isnt 'object'
+											usedBindings[prop] = Object.create(null)
 										usedBindings[prop][subprop] = true
 
 						for subprop, subval of defaultBindings
