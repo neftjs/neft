@@ -31,6 +31,8 @@ This is a base class for everything which is visible.
 			@_parent = null
 			@_sourceItem = null
 			@_children = null
+			@_previousSibling = null
+			@_nextSibling = null
 			@_x = 0
 			@_y = 0
 			@_z = 0
@@ -140,14 +142,14 @@ Rectangle {
 
 ### *Signal* Item::parentChanged(*Item* oldParent)
 
-		{indexOf, splice, push} = Array::
+		{indexOf, splice, push, shift, pop} = Array::
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'parent'
 			defaultValue: null
 			implementation: Impl.setItemParent
-			setter: (_super) -> (val) ->
+			setter: (_super) -> (val=null) ->
 				if val?._sourceItem
 					val = val._sourceItem
 
@@ -155,25 +157,79 @@ Rectangle {
 				if old is val
 					return
 
-				if old
-					index = indexOf.call old._children, @
-					splice.call old._children, index, 1
+				oldPreviousSibling = @_previousSibling
+				oldNextSibling = @_nextSibling
 
-				if val?
+				if old isnt null
+					if oldNextSibling is null
+						pop.call old._children
+					else if oldPreviousSibling is null
+						shift.call old._children
+					else
+						index = indexOf.call old._children, @
+						splice.call old._children, index, 1
+
+				if val isnt null
 					assert.instanceOf val, Item, '::parent setter ...'
 					length = push.call val.children, @
 
+				# old siblings
+				if oldPreviousSibling isnt null
+					oldPreviousSibling._nextSibling = oldNextSibling
+				if oldNextSibling isnt null
+					oldNextSibling._previousSibling = oldPreviousSibling
+
+				# new siblings
+				if val isnt null
+					previousSibling = val._children[val._children.length - 2] or null
+					@_previousSibling = previousSibling
+					previousSibling?._nextSibling = @
+				if oldNextSibling isnt null
+					@_nextSibling = null
+
 				_super.call @, val
 
-				if old
+				if old isnt null
 					old.childrenChanged old.children
 					old.children.popped @, index
-
-				if val?
+				if val isnt null
 					val.childrenChanged val.children
 					val.children.inserted @, length - 1
 
+				if oldPreviousSibling isnt null
+					oldPreviousSibling.nextSiblingChanged @
+				if oldNextSibling isnt null
+					oldNextSibling.previousSiblingChanged @
+
+				if val isnt null
+					@previousSiblingChanged oldPreviousSibling
+					previousSibling?.nextSiblingChanged null
+				if oldNextSibling isnt null
+					@nextSiblingChanged oldNextSibling
+
 				return
+
+*Item* Item::previousSibling
+----------------------------
+
+		utils.defineProperty @::, 'previousSibling', null, ->
+			@_previousSibling
+		, null
+
+### *Signal* Item::previousSiblingChanged(*Item* oldValue)
+
+		signal.Emitter.createSignal @, 'previousSiblingChanged'
+
+*Item* Item::nextSibling
+------------------------
+
+		utils.defineProperty @::, 'nextSibling', null, ->
+			@_nextSibling
+		, null
+
+### *Signal* Item::nextSiblingChanged(*Item* oldValue)
+
+		signal.Emitter.createSignal @, 'nextSiblingChanged'
 
 *Boolean* Item::visible = true
 ------------------------------
