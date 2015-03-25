@@ -145,8 +145,8 @@ SIGNALS_ARGS =
 		getDeltas = (e) ->
 			e.preventDefault()
 
-			x = e.wheelDeltaX or -e.deltaX or 0
-			y = e.wheelDelta or -e.deltaY or -e.detail or 0
+			x = e.wheelDeltaX ? -e.deltaX*3 ? 0
+			y = e.wheelDeltaY ? -e.deltaY*3 ? e.wheelDelta ? -e.detail ? 0
 
 			if isFirefox and e.deltaMode is e.DOM_DELTA_LINE
 				x *= 25

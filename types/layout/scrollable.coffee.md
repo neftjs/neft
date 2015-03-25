@@ -97,6 +97,7 @@ Positioning/Scrollable
 			@_autoVerticalScrollbar = true
 			@_contentX = 0
 			@_contentY = 0
+			@_snap = false
 			super()
 			@clip = true
 
@@ -173,6 +174,19 @@ Positioning/Scrollable
 			implementation: Impl.setScrollableContentY
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
+
+*Boolean* Scrollable::snap = false
+----------------------------------
+
+### *Signal* Scrollable::snapChanged(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'snap'
+			defaultValue: false
+			implementation: Impl.setScrollableSnap
+			developmentSetter: (val) ->
+				expect(val).toBe.boolean()
 
 		clone: ->
 			clone = super()

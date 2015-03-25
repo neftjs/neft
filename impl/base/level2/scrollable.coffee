@@ -18,16 +18,16 @@ module.exports = (impl) ->
 		{contentItem, globalScale} = item._impl
 
 		x /= globalScale
-		x = item.contentX - x
-		max = contentItem.width - item.width
+		x = item._contentX - x
+		max = contentItem._width - item._width
 		x = Math.max(0, Math.min(max, x))
 
 		y /= globalScale
-		y = item.contentY - y
-		max = contentItem.height - item.height
+		y = item._contentY - y
+		max = contentItem._height - item._height
 		y = Math.max(0, Math.min(max, y))
 
-		if item.contentX isnt x or item.contentY isnt y
+		if item._contentX isnt x or item._contentY isnt y
 			item.contentX = x
 			item.contentY = y
 			signal.STOP_PROPAGATION
@@ -51,8 +51,11 @@ module.exports = (impl) ->
 		velocity = 0
 		amplitude = 0
 		timestamp = 0
+		target = 0
+		reversed = false
+		animPending = false
 
-		scrollProp = do ->
+		scrollAxis = do ->
 			switch prop
 				when 'x'
 					(val) ->
@@ -61,33 +64,102 @@ module.exports = (impl) ->
 					(val) ->
 						scroll item, 0, val
 
-		anim = ->
-			return unless amplitude
+		contentProp = do ->
+			switch prop
+				when 'x'
+					'_contentX'
+				when 'y'
+					'_contentY'
 
-			elapsed = Date.now() - timestamp
-			delta = -amplitude*0.7 * Math.exp(-elapsed / 325);
-			if Math.abs(delta) > 0.5
-				scrollProp delta
-				requestAnimationFrame anim
+		positionProp = do ->
+			switch prop
+				when 'x'
+					'_x'
+				when 'y'
+					'_y'
+
+		sizeProp = do ->
+			switch prop
+				when 'x'
+					'_width'
+				when 'y'
+					'_height'
+
+		anim = ->
+			if amplitude isnt 0 or item._impl.snap
+				animPending = true
+				elapsed = Date.now() - timestamp
+				targetDelta = item[contentProp] - target
+
+				if (amplitude > 0 and targetDelta < 0) or (amplitude < 0 and targetDelta > 0)
+					amplitude = -amplitude
+					if reversed
+						amplitude *= 0.3
+					else
+						reversed = true
+
+				delta = amplitude * 0.7 * Math.exp(-elapsed / 325)
+
+				if targetDelta > 3 or targetDelta < -3
+					if (delta > 0 and delta <= 0.5) or (delta is 0 and targetDelta > 0)
+						delta = 3
+					else if (delta < 0 and delta >= -0.5) or delta is 0
+						delta = -3
+
+				if (targetDelta > 3 or targetDelta < -3) and (delta > 0.5 or delta < -0.5)
+					scrollAxis delta
+					requestAnimationFrame anim
+				else
+					animPending = false
+					scrollAxis targetDelta
+			return
+
+		getSnapTarget = (contentPos) ->
+			children = item._contentItem._children
+			minDiff = Infinity
+			minVal = 0
+
+			for child in children
+				diff = contentPos - child[positionProp]
+				if velocity > 0
+					diff += child[sizeProp] * 0.45
+				else
+					diff -= child[sizeProp] * 0.45
+
+				if velocity >= 0 and diff >= 0 or velocity <= 0 and diff <= 0
+					diff = Math.abs diff
+					if diff < minDiff
+						minDiff = diff
+						minVal = child[positionProp]
+			minVal
 
 		press: ->
 			velocity = amplitude = 0
+			reversed = false
 			timestamp = Date.now()
 
 		release: ->
-			if Math.abs(velocity) > 10
+			{snap} = item._impl
+
+			if Math.abs(velocity) > 10 or snap
 				amplitude = 0.8 * velocity
 				timestamp = Date.now()
+				target = item[contentProp] + amplitude*8
+				if snap
+					target = getSnapTarget target
 
-				requestAnimationFrame anim
+				unless animPending
+					anim()
+			return
 
 		update: (val) ->
 			now = Date.now()
 			elapsed = now - timestamp
 			timestamp = now
 
-			v = 100 * -val / (1 + elapsed);
-			velocity = 0.8 * v + 0.2 * velocity;
+			v = 100 * -val / (1 + elapsed)
+			velocity = 0.8 * v + 0.2 * velocity
+			return
 
 	pointerUsed = false
 	usePointer = (item) ->
@@ -122,8 +194,6 @@ module.exports = (impl) ->
 
 						horizontalContinuous.update e.x - x
 						verticalContinuous.update e.y - y
-
-						moveMovement e
 					x = e.x; y = e.y
 			return
 
@@ -143,22 +213,82 @@ module.exports = (impl) ->
 			return
 
 	useWheel = (item) ->
+		MAX_WAIT = 70
+		accepts = false
+		pending = false
+		lastActionTimestamp = 0
+		lastAcceptedActionTimestamp = 0
+		horizontalContinuous = createContinuous item, 'x'
+		verticalContinuous = createContinuous item, 'y'
+		x = y = 0
+		minX = minY = maxX = maxY = 0
+
+		timer = ->
+			now = Date.now()
+			if accepts or now - lastAcceptedActionTimestamp > MAX_WAIT
+				pending = false
+				accepts = true
+				horizontalContinuous.update x
+				verticalContinuous.update y
+				horizontalContinuous.release()
+				verticalContinuous.release()
+			else
+				requestAnimationFrame timer
+			return
+
 		item.pointer.onWheel (e) ->
+			now = Date.now()
+
+			if now - lastActionTimestamp > MAX_WAIT
+				minX = minY = maxX = maxY = 0
+				accepts = false
+
+			lastActionTimestamp = now
+			{x, y} = e
+			x /= WHEEL_DIVISOR
+			y /= WHEEL_DIVISOR
+
+			if x > 0 and x > maxX
+				maxX = x
+			else if x < minX
+				minX = x
+			if e.y > 0 and y > maxY
+				maxY = y
+			else if y < minY
+				minY = y
+
+			if (x > 0 and x < maxX * 0.35) or (x < 0 and x > minX * 0.35) or (y > 0 and y < maxY * 0.35) or (y < 0 and y > minY * 0.35)
+				accepts = true
+				return
+
+			lastAcceptedActionTimestamp = now
+
+			unless pending
+				pending = true
+				horizontalContinuous.press()
+				verticalContinuous.press()
+				requestAnimationFrame timer
+			else
+				horizontalContinuous.update x
+				verticalContinuous.update y
+
 			item._impl.globalScale = getItemGlobalScale item
-			x = e.x / WHEEL_DIVISOR
-			y = e.y / WHEEL_DIVISOR
 			scroll item, x, y
+		return
 
 	onWidthChanged = (oldVal) ->
 		if @contentItem.width < oldVal
 			scroll @
+		return
 	onHeightChanged = (oldVal) ->
 		if @contentItem.height < oldVal
 			scroll @
+		return
 
 	DATA =
 		contentItem: null
 		globalScale: 1
+		snap: false
 
 	DATA: DATA
 
@@ -174,6 +304,7 @@ module.exports = (impl) ->
 		if impl._scrollableUsePointer
 			usePointer @
 		useWheel @
+		return
 
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem
@@ -186,9 +317,16 @@ module.exports = (impl) ->
 			@_impl.contentItem = val
 			val.onWidthChanged onWidthChanged, @
 			val.onHeightChanged onHeightChanged, @
+		return
 
 	setScrollableContentX: (val) ->
 		@_impl.contentItem?.x = -val
+		return
 
 	setScrollableContentY: (val) ->
 		@_impl.contentItem?.y = -val
+		return
+
+	setScrollableSnap: (val) ->
+		@_impl.snap = val
+		return

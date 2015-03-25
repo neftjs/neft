@@ -15,6 +15,7 @@ module.exports = (impl) ->
 		contentItem: null
 		scrollElem: null
 		globalScale: 1
+		snap: false
 
 	DATA: DATA
 

@@ -306,6 +306,8 @@ Grid {
 									unless usedBindings[prop]?[subprop]
 										defaultVal = target[prop]._bindings?[subprop] or null
 										if defaultBindings is undefined
+											unless defaultState[prop] instanceof DeepChangesObject
+												defaultState[prop] = new DeepChangesObject
 											defaultState[prop].createBinding subprop, defaultVal
 											defaultBindings = defaultState[prop]._bindings
 										else if not defaultBindings.hasOwnProperty(subprop)
