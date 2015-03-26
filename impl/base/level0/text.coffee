@@ -47,3 +47,7 @@ module.exports = (impl) ->
 
 	setTextFontLetterSpacing: (val) ->
 		@_impl.fontLetterSpacing = val
+
+	setTextAlignmentHorizontal: (val) ->
+
+	setTextAlignmentVertical: (val) ->

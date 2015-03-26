@@ -191,6 +191,16 @@ module.exports = (impl) ->
 			font-family: #{impl.DEFAULT_FONTS['sans-serif']}, sans-serif;
 			margin-top: #{if isFirefox then 1 else 0}px;
 		}
+		#styles .textVerticalCenterAlign {
+			height: auto !important;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		#styles .textVerticalBottomAlign {
+			height: auto !important;
+			top: 100%;
+			transform: translateY(-100%);
+		}
 	"""
 
 	DATA =
@@ -283,3 +293,18 @@ module.exports = (impl) ->
 
 	setTextFontItalic: (val) ->
 		@_impl.textElemStyle.fontStyle = if val then 'italic' else 'normal'
+		return
+
+	setTextAlignmentHorizontal: (val) ->
+		@_impl.textElemStyle.textAlign = val
+		return
+
+	setTextAlignmentVertical: do ->
+		CLASSES =
+			top: ''
+			center: 'textVerticalCenterAlign'
+			bottom: 'textVerticalBottomAlign'
+
+		(val) ->
+			@_impl.textElem.setAttribute 'class', "text #{CLASSES[val]}"
+			return

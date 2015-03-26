@@ -143,7 +143,7 @@ module.exports = (impl) ->
 
 		Rectangle: require './level1/rectangle'
 
-		Scrollable: require './level2/scrollable'
+		# Scrollable: require './level2/scrollable'
 
 	setWindow: setWindow = (item) ->
 		onLoaded = ->

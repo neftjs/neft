@@ -98,6 +98,7 @@ Positioning/Scrollable
 			@_contentX = 0
 			@_contentY = 0
 			@_snap = false
+			@_snapItem = null
 			super()
 			@clip = true
 
@@ -187,6 +188,20 @@ Positioning/Scrollable
 			implementation: Impl.setScrollableSnap
 			developmentSetter: (val) ->
 				expect(val).toBe.boolean()
+
+*Renderer.Item* Scrollable::snapItem
+------------------------------------
+
+### *Signal* Scrollable::snapItemChanged(*Renderer.Item* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'snapItem'
+			defaultValue: null
+			implementation: Impl.setScrollableSnapItem
+			developmentSetter: (val=null) ->
+				if val?
+					expect(val).toBe.any(Renderer.Item)
 
 		clone: ->
 			clone = super()

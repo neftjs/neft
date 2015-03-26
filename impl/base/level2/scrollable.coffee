@@ -115,22 +115,23 @@ module.exports = (impl) ->
 			return
 
 		getSnapTarget = (contentPos) ->
-			children = item._contentItem._children
+			children = item._snapItem?._children or item._contentItem?._children
 			minDiff = Infinity
 			minVal = 0
 
-			for child in children
-				diff = contentPos - child[positionProp]
-				if velocity > 0
-					diff += child[sizeProp] * 0.45
-				else
-					diff -= child[sizeProp] * 0.45
+			if children
+				for child in children
+					diff = contentPos - child[positionProp]
+					if velocity > 0
+						diff += child[sizeProp] * 0.45
+					else
+						diff -= child[sizeProp] * 0.45
 
-				if velocity >= 0 and diff >= 0 or velocity <= 0 and diff <= 0
-					diff = Math.abs diff
-					if diff < minDiff
-						minDiff = diff
-						minVal = child[positionProp]
+					if velocity >= 0 and diff >= 0 or velocity <= 0 and diff <= 0
+						diff = Math.abs diff
+						if diff < minDiff
+							minDiff = diff
+							minVal = child[positionProp]
 			minVal
 
 		press: ->
@@ -329,4 +330,7 @@ module.exports = (impl) ->
 
 	setScrollableSnap: (val) ->
 		@_impl.snap = val
+		return
+
+	setScrollableSnapItem: (val) ->
 		return
