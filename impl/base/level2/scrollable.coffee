@@ -140,17 +140,21 @@ module.exports = (impl) ->
 			timestamp = Date.now()
 
 		release: ->
-			{snap} = item._impl
+			data = item._impl
+			{snap} = data
 
-			if Math.abs(velocity) > 10 or snap
-				amplitude = 0.8 * velocity
-				timestamp = Date.now()
-				target = item[contentProp] + amplitude*8
-				if snap
-					target = getSnapTarget target
+			amplitude = 0.8 * velocity
+			timestamp = Date.now()
+			target = item[contentProp] + amplitude*8
 
-				unless animPending
-					anim()
+			if snap
+				snapTarget = getSnapTarget target
+				if data.lastSnapTarget isnt snapTarget
+					target = snapTarget
+					data.lastSnapTarget = snapTarget
+
+			if not animPending and (Math.abs(velocity) > 10 or (snap and target is snapTarget))
+				anim()
 			return
 
 		update: (val) ->
@@ -290,6 +294,7 @@ module.exports = (impl) ->
 		contentItem: null
 		globalScale: 1
 		snap: false
+		lastSnapTarget: 0
 
 	DATA: DATA
 
