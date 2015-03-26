@@ -28,10 +28,10 @@ Item states
 				return if ChangesObject::hasOwnProperty propName
 
 				utils.defineProperty ChangesObject::, propName, null, ->
-					utils.defineProperty @, propName, utils.ENUMERABLE, val = new DeepChangesObject
+					utils.defineProperty @, propName, utils.ENUMERABLE | utils.WRITABLE, val = new DeepChangesObject
 					val
 				, (val) ->
-					utils.defineProperty @, propName, utils.ENUMERABLE, val
+					utils.defineProperty @, propName, utils.ENUMERABLE | utils.WRITABLE, val
 
 			constructor: ->
 				assert.lengthOf arguments, 0

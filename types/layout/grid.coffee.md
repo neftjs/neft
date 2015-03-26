@@ -111,7 +111,7 @@ Grid {
 				constructor: Grid
 				name: 'spacing'
 				valueConstructor: Spacing
-				setter: (_super) -> (val) ->
+				setter: (_super) -> (val=0) ->
 					{spacing} = @
 					if utils.isObject(val)
 						spacing.column = val.column if val.column?

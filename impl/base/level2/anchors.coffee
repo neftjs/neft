@@ -63,16 +63,6 @@ module.exports = (impl) ->
 		verticalCenter: (item) ->
 			MARGIN_FUNCS.top(item) + MARGIN_FUNCS.bottom(item)
 
-	BINDINGS_PROPS =
-		left: ['x']
-		top: ['y']
-		right: ['x']
-		bottom: ['y']
-		horizontalCenter: ['x']
-		verticalCenter: ['y']
-		centerIn: ['x', 'y']
-		fill: ['x', 'y', 'width', 'height']
-
 	BINDINGS =
 		left: (item, anchor) ->
 			unless anchor
@@ -126,9 +116,9 @@ module.exports = (impl) ->
 			BINDINGS.verticalCenter item, [target, 'verticalCenter']
 		fill: do ->
 			WIDTH_MARGIN_FUNC = (item) ->
-				- MARGIN_FUNCS.left(item) - MARGIN_FUNCS.right(item)
+				- MARGIN_FUNCS.left(item) + MARGIN_FUNCS.right(item)
 			HEIGHT_MARGIN_FUNC = (item) ->
-				- MARGIN_FUNCS.top(item) - MARGIN_FUNCS.bottom(item)
+				- MARGIN_FUNCS.top(item) + MARGIN_FUNCS.bottom(item)
 
 			(item, anchor) ->
 				unless anchor
@@ -167,6 +157,12 @@ module.exports = (impl) ->
 		fill:
 			['top', 'bottom', 'left', 'right', 'verticalCenter', 'horizontalCenter', 'centerIn']
 
+	BINDINGS_PROPS =
+		left: ['x', 'width']
+		top: ['y', 'height']
+		right: ['x', 'width']
+		bottom: ['y', 'height']
+
 	exports =
 	setItemAnchor: (type, val) ->
 		anchors = @_impl.anchors ?= {}
@@ -181,6 +177,7 @@ module.exports = (impl) ->
 
 		anchors[type] = !!val
 		BINDINGS[type] @, val
+		return
 
 	setItemMargin: do (_super = impl.setItemMargin) -> (type, val) ->
 		_super.call @, type, val

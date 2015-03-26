@@ -100,13 +100,13 @@ module.exports = (impl) ->
 
 				delta = amplitude * 0.7 * Math.exp(-elapsed / 325)
 
-				if targetDelta > 3 or targetDelta < -3
-					if (delta > 0 and delta <= 0.5) or (delta is 0 and targetDelta > 0)
-						delta = 3
-					else if (delta < 0 and delta >= -0.5) or delta is 0
-						delta = -3
+				if targetDelta > 5 or targetDelta < -5
+					if (delta > 0 and delta < 5) or (delta is 0 and targetDelta > 0)
+						delta = 5
+					else if (delta < 0 and delta > -5) or delta is 0
+						delta = -5
 
-				if (targetDelta > 3 or targetDelta < -3) and (delta > 0.5 or delta < -0.5)
+				if (targetDelta > 5 or targetDelta < -5) and (delta > 0.5 or delta < -0.5)
 					scrollAxis delta
 					requestAnimationFrame anim
 				else
