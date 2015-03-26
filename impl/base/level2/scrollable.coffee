@@ -11,35 +11,33 @@ module.exports = (impl) ->
 
 	impl._scrollableUsePointer ?= true
 
+	impl.onWindowReady ->
+		impl.window.pointer.onPressed ->
+			signal.STOP_PROPAGATION
+
 	###
 	Scroll container by given x and y deltas
 	###
 	scroll = (item, x=0, y=0) ->
-		{contentItem, globalScale} = item._impl
-
-		x /= globalScale
-		x = item._contentX - x
-		max = contentItem._width - item._width
-		x = Math.max(0, Math.min(max, x))
-
-		y /= globalScale
-		y = item._contentY - y
-		max = contentItem._height - item._height
-		y = Math.max(0, Math.min(max, y))
+		x = getLimitedX item, x
+		y = getLimitedY item, y
 
 		if item._contentX isnt x or item._contentY isnt y
 			item.contentX = x
 			item.contentY = y
 			signal.STOP_PROPAGATION
 
-	canScroll = (item) ->
-		{contentX, contentY} = item
-		{contentItem, globalScale} = item._impl
+	getLimitedX = (item, x) ->
+		x /= item._impl.globalScale
+		x = item._contentX - x
+		max = item._impl.contentItem._width - item._width
+		Math.max(0, Math.min(max, x))
 
-		xMax = contentItem.width - item.width
-		yMax = contentItem.height - item.height
-
-		contentX > 0 or contentX < xMax or contentY > 0 or contentY < yMax
+	getLimitedY = (item, y) ->
+		y /= item._impl.globalScale
+		y = item._contentY - y
+		max = item._impl.contentItem._height - item._height
+		Math.max(0, Math.min(max, y))
 
 	getItemGlobalScale = (item) ->
 		val = item.scale
@@ -180,6 +178,47 @@ module.exports = (impl) ->
 			dy = e.y - y
 			scroll item, dx, dy
 
+		onImplReady = ->
+			impl.window.pointer.onMoved (e) ->
+				if not listen
+					return
+
+				if not focus
+					if pointerUsed
+						return
+
+					if Math.abs(getLimitedX(item, e.x-x)-item._contentX) < MIN_POINTER_DELTA and Math.abs(getLimitedY(item, e.y-y)-item._contentY) < MIN_POINTER_DELTA
+						return
+
+				if moveMovement(e) is signal.STOP_PROPAGATION
+					focus = true
+					pointerUsed = true
+
+					horizontalContinuous.update e.x - x
+					verticalContinuous.update e.y - y
+				x = e.x; y = e.y
+				signal.STOP_PROPAGATION
+
+			impl.window.pointer.onReleased (e) ->
+				listen = false
+
+				return unless focus
+				focus = false
+				pointerUsed = false
+
+				moveMovement e
+
+				horizontalContinuous.release()
+				verticalContinuous.release()
+
+				x = y = 0
+				return
+
+		if impl.window?
+			onImplReady()
+		else
+			impl.onWindowReady onImplReady
+
 		item.pointer.onPressed (e) ->
 			listen = true
 
@@ -188,34 +227,6 @@ module.exports = (impl) ->
 			verticalContinuous.press()
 
 			x = e.x; y = e.y
-			signal.STOP_PROPAGATION
-
-		item.pointer.onMoved (e) ->
-			if listen
-				if pointerUsed or Math.abs(e.x - x) + Math.abs(e.y - y) > MIN_POINTER_DELTA
-					if moveMovement(e) is signal.STOP_PROPAGATION
-						focus = true
-						pointerUsed = true
-
-						horizontalContinuous.update e.x - x
-						verticalContinuous.update e.y - y
-					x = e.x; y = e.y
-			return
-
-		item.pointer.onReleased (e) ->
-			listen = false
-
-			return unless focus
-			focus = false
-			pointerUsed = false
-
-			moveMovement e
-
-			horizontalContinuous.release()
-			verticalContinuous.release()
-
-			x = y = 0
-			return
 
 	useWheel = (item) ->
 		MAX_WAIT = 70

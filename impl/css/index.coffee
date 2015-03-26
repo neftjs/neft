@@ -145,7 +145,7 @@ module.exports = (impl) ->
 
 		# Scrollable: require './level2/scrollable'
 
-	setWindow: setWindow = (item) ->
+	setWindow: (item) ->
 		onLoaded = ->
 			if document.readyState is 'complete'
 				while child = body.firstChild

@@ -101,6 +101,7 @@ getMouseCoords = createGetMouseCoords ''
 getInnerMouseCoords = createGetMouseCoords 'inner'
 
 pressedKeys = Object.create null
+isPointerPressed = false
 
 SPECIAL_KEY_CODES =
 	32: 'Space'
@@ -143,8 +144,6 @@ SIGNALS_ARGS =
 		isSlowContinuous = false
 
 		getDeltas = (e) ->
-			e.preventDefault()
-
 			x = e.wheelDeltaX ? -e.deltaX*3 ? 0
 			y = e.wheelDeltaY ? -e.deltaY*3 ? e.wheelDelta ? -e.detail ? 0
 
@@ -173,8 +172,12 @@ SIGNALS_ARGS =
 
 			deltas
 
-	'pointerPressed': getInnerMouseCoords
-	'pointerReleased': getMouseCoords
+	'pointerPressed': (e) ->
+		isPointerPressed = true
+		getInnerMouseCoords e
+	'pointerReleased': (e) ->
+		isPointerPressed = false
+		getMouseCoords e
 	'pointerClicked': getInnerMouseCoords
 	'pointerMoved': (e) ->
 		if isTouch
@@ -210,6 +213,9 @@ SIGNALS_ARGS =
 
 mouseActiveItem = null
 getOuterMouseCoords = createGetMouseCoords 'outer'
+
+window.addEventListener SIGNALS.pointerWheel, (e) ->
+	e.preventDefault();
 
 window.addEventListener SIGNALS.pointerReleased, (e) ->
 	if mouseActiveItem

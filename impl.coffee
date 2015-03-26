@@ -6,6 +6,8 @@ utils = require 'utils'
 signal = require 'signal'
 
 impl = abstractImpl = require './impl/base'
+impl.window = null
+signal.create impl, 'windowReady'
 
 TYPES = ['Item', 'Image', 'Text', 'FontLoader', 'Screen', 'RotationSensor',
 
@@ -56,8 +58,6 @@ impl.createAnimation = (animation, type) ->
 	Object.preventExtensions animation._impl
 	impl.Types[type].create.call animation, animation._impl
 
-impl.window = null
-signal.create impl, 'windowReady'
 impl.setWindow = do (_super = impl.setWindow) -> (item) ->
 	utils.defineProperty impl, 'window', utils.ENUMERABLE, item
 	_super.call impl, item

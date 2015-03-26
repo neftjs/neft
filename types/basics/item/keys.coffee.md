@@ -19,6 +19,7 @@ Rectangle {
 
 	utils = require 'utils'
 	signal = require 'signal'
+	assert = require 'assert'
 
 	module.exports = (Renderer, Impl, itemUtils, Item) ->
 		class Keys extends itemUtils.DeepObject
@@ -28,6 +29,7 @@ Rectangle {
 -------------
 
 			constructor: (ref) ->
+				@_focus = false
 				super ref
 
 *Signal* Keys::pressed(*Object* event)
@@ -49,6 +51,29 @@ Rectangle {
 
 			for signalName in @SIGNALS
 				signal.Emitter.createSignal @, signalName, onLazySignalInitialized
+
+*Boolean* Keys::focus
+---------------------
+
+### *Signal* Keys::focusChanged(*Boolean* oldValue)
+
+			focusedKeys = null
+
+			itemUtils.defineProperty
+				constructor: Keys
+				name: 'focus'
+				defaultValue: false
+				namespace: 'keys'
+				parentConstructor: Item
+				implementation: Impl.setItemKeysFocus
+				developmentSetter: (val) ->
+					assert.isBoolean val
+				setter: (_super) -> (val) ->
+					if val is true and @_focus isnt val
+						focusedKeys?.focus = false
+						focusedKeys = @
+						_super.call @, val
+					return
 
 *Item* Item()
 -------------

@@ -29,4 +29,6 @@ exports.Extras =
 exports.items = {}
 exports.utils = require('./utils') exports
 
-exports.setWindow = (id) ->
+exports.window = null
+
+exports.setWindow = (item) ->
