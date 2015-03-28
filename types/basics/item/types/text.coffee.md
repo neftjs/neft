@@ -167,7 +167,7 @@ Text {
 						checkingFamily[val] = true
 						setTimeout =>
 							if not Renderer.FontLoader.fonts[val]
-								log.warn "Font `#{@family}` is not loaded; use `FontLoader` to load a font"
+								log.warn "Font `#{@family}` is not defined; use `FontLoader` to load a font"
 				setter: (_super) -> (val) ->
 					if typeof val is 'string'
 						_super.call @, val.toLowerCase()

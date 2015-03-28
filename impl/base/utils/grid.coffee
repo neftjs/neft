@@ -1,6 +1,11 @@
 'use strict'
 
+MAX_LOOPS = 100
+
 utils = require 'utils'
+log = require 'log'
+
+log = log.scope 'Renderer'
 
 if typeof Uint32Array is 'undefined'
 	Uint32TypedArray = (len) ->
@@ -24,7 +29,7 @@ updateItem = (item) ->
 	data = item._impl
 	{gridType} = data
 
-	data.updatePending = true
+	data.gridUpdatePending = true
 
 	# get config
 	columnSpacing = rowSpacing = 0
@@ -147,7 +152,7 @@ updateItem = (item) ->
 		else
 			item.height = 0
 		item.fill.height = true
-	data.updatePending = false
+	data.gridUpdatePending = false
 	return
 
 updateItems = ->
@@ -162,10 +167,22 @@ updateItems = ->
 	return
 
 update = ->
-	if @_impl.pending
+	data = @_impl
+	if data.pending
 		return
 
-	@_impl.pending = true
+	data.pending = true
+
+	if data.gridUpdatePending
+		if data.gridUpdateLoops > MAX_LOOPS
+			return
+
+		if ++data.gridUpdateLoops is MAX_LOOPS
+			log.warn "Potential Grid/Column/Row loop detected. Recalculating on this item (#{@toString()}) has been disabled."
+			return
+	else
+		data.fillUpdateLoops = 0
+
 	queue.push @
 
 	unless pending
@@ -174,7 +191,7 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_impl.updatePending and (@_fillWidth or @_fillHeight)
+	if not @_impl.gridUpdatePending and (@_fillWidth or @_fillHeight)
 		update.call @
 	return
 
@@ -198,7 +215,8 @@ exports.DATA =
 	pending: false
 	disableFill: true
 	gridType: 0
-	updatePending: false
+	gridUpdatePending: false
+	gridUpdateLoops: 0
 
 exports.create = (item, type) ->
 	item._impl.gridType = type

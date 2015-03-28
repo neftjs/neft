@@ -1,6 +1,11 @@
 'use strict'
 
+MAX_LOOPS = 100
+
 utils = require 'utils'
+log = require 'log'
+
+log = log.scope 'Renderer'
 
 queueIndex = 0
 queues = [[], []]
@@ -10,6 +15,8 @@ pending = false
 updateItem = (item) ->
 	{children} = item
 	data = item._impl
+
+	data.fillUpdatePending = true
 
 	unless data.fillWidth
 		data.fillWidth = item.fill.width
@@ -47,6 +54,8 @@ updateItem = (item) ->
 	if data.fillHeight
 		data.fillHeight = item.fill.height
 
+	data.fillUpdatePending = false
+
 	return
 
 updateItems = ->
@@ -66,6 +75,17 @@ update = ->
 		return
 
 	data.pending = true
+
+	if data.fillUpdatePending
+		if data.fillUpdateLoops > MAX_LOOPS
+			return
+
+		if ++data.fillUpdateLoops is MAX_LOOPS
+			log.warn "Potential Item::fill.* loop detected. Recalculating on this item (#{@toString()}) has been disabled."
+			return
+	else
+		data.fillUpdateLoops = 0
+
 	queue.push @
 
 	unless pending
@@ -91,6 +111,8 @@ exports.DATA =
 	pending: false
 	fillWidth: false
 	fillHeight: false
+	fillUpdatePending: false
+	fillUpdateLoops: 0
 
 exports.enable = (item) ->
 	# update item changes

@@ -85,7 +85,7 @@ Image source URL (absolute or relative to the page) or data URI.
 
 				loadCallback = (err=null, opts) ->
 					if err
-						log.warn "Can't load `#{@source}` image"
+						log.warn "Can't load '#{@source}' image at #{@toString()}"
 					else
 						@sourceWidth = opts.width
 						@sourceHeight = opts.height

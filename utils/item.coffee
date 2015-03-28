@@ -16,8 +16,26 @@ module.exports = (Renderer, Impl) ->
 
 	NOP = ->
 
+	getObjAsString = (item) ->
+		name = item.constructor.__name__
+		name ?= Object.getPrototypeOf(item).constructor.__name__
+
+		"#{name}##{item._id}"
+
+	getObjFile = (item) ->
+		path = ''
+		tmp = item
+		while tmp
+			if path = tmp.constructor.__file__
+				break
+			else
+				tmp = tmp._parent
+
+		path or ''
+
 	class UtilsObject extends signal.Emitter
 		constructor: ->
+			@_id = ''
 			@_bindings = null
 			@_isReady = false
 			super()
@@ -25,12 +43,13 @@ module.exports = (Renderer, Impl) ->
 
 		createBinding: (prop, val) ->
 			assert.isString prop
-			assert.ok prop of @
 			assert.isArray val if val?
 
+			`//<development>`
 			unless prop of @
-				log.error "Binding for the '#{prop}' property can't be created, because this property doesn't exist"
+				log.warn "Binding on the '#{prop}' property can't be created, because this object (#{@toString()}) doesn't have such property"
 				return
+			`//</development>`
 
 			if not val and (not @_bindings or not @_bindings.hasOwnProperty(prop))
 				return
@@ -43,6 +62,9 @@ module.exports = (Renderer, Impl) ->
 
 		signal.Emitter.createSignal @, 'ready'
 
+		toString: ->
+			"#{getObjAsString(@)} in '#{getObjFile(@)}'"
+
 	class MutableDeepObject extends signal.Emitter
 		constructor: (ref) ->
 			assert.instanceOf ref, Renderer.Item
@@ -52,6 +74,9 @@ module.exports = (Renderer, Impl) ->
 			super()
 
 		createBinding: UtilsObject::createBinding
+
+		toString: ->
+			"#{getObjAsString(@_ref)}.#{@constructor.__name__} in '#{getObjFile(@_ref)}'"
 
 	class DeepObject extends MutableDeepObject
 		constructor: (ref) ->

@@ -7,8 +7,11 @@ relationships between items: **anchors**.
 	'use strict'
 
 	utils = require 'utils'
+	log = require 'log'
 	assert = require 'assert'
 	signal = require 'signal'
+
+	log = log.scope 'Renderer'
 
 	H_LINE = 1<<0
 	V_LINE = 1<<1
@@ -85,8 +88,8 @@ This connection is solid, so if the *rect1* will change a position,
 						`//<development>`
 						allowedLines = if H_LINES[type] then H_LINES else V_LINES
 
-						assert Array.isArray(val) and val.length > 0 and val.length < 3
-						, "`anchors.#{type}` expects an array; `'#{val}'` given"
+						unless Array.isArray(val) and val.length > 0 and val.length < 3
+							log.error "`anchors.#{type}` expects an array; `'#{val}'` given"
 
 						[target, line] = val
 
@@ -112,8 +115,8 @@ Rectangle {
 
 Such reference is also automatically updated if the item parent change.
 
-						assert target is 'parent' or target is 'this' or target instanceof Item
-						, "`anchors.#{type}` expects an item; `'#{val}'` given"
+						unless target is 'parent' or target is 'this' or target instanceof Item
+							log.error "`anchors.#{type}` expects an item; `'#{val}'` given"
 
 For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.
 
@@ -129,28 +132,28 @@ Pointing to the *parent* by its id is not allowed, *parent* target should be use
 						# 		  "parent or a sibling"
 
 						if opts & ONLY_TARGET_ALLOW
-							assert line is undefined
-							, "`anchors.#{type}` expects only a target to be defined; " +
-							  "`'#{val}'` given;\npointing to the line is not required " +
-							  "(e.g `anchors.centerIn = 'parent'`)"
+							unless line is undefined
+								log.error "`anchors.#{type}` expects only a target to be defined; " +
+								  "`'#{val}'` given;\npointing to the line is not required " +
+								  "(e.g `anchors.centerIn = parent`)"
 
 						if opts & LINE_REQ
-							assert H_LINES[line] or V_LINES[line]
-							, "`anchors.#{type}` expects a anchor line to be defined; " +
-							  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
+							unless H_LINES[line] or V_LINES[line]
+								log.error "`anchors.#{type}` expects a anchor line to be defined; " +
+								  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
 
 Horizontal anchors can't point to the vertical lines (and vice versa),
 so *anchors.top = parent.left* is not allowed.
 
 						if opts & H_LINE_REQ
-							assert H_LINES[line]
-							, "`anchors.#{type}` can't be anchored to a vertical edge; " +
-							  "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
+							unless H_LINES[line]
+								log.error "`anchors.#{type}` can't be anchored to a vertical edge; " +
+								  "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
 
 						if opts & V_LINE_REQ
-							assert V_LINES[line]
-							, "`anchors.#{type}` can't be anchored to a horizontal edge; " +
-							  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
+							unless V_LINES[line]
+								log.error "`anchors.#{type}` can't be anchored to a horizontal edge; " +
+								  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
 						`//</development>`
 
 						if val[0] is 'this'
