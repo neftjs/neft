@@ -29,12 +29,12 @@ Grid {
 			@__path__ = 'Renderer.Grid'
 
 			constructor: ->
-				@_width = -1
-				@_height = -1
 				@_columns = 2
 				@_rows = Infinity
 				@_spacing = null
 				super()
+				@_width = -1
+				@_height = -1
 				@fill.width = true
 				@fill.height = true
 

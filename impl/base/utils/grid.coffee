@@ -181,7 +181,7 @@ update = ->
 			log.warn "Potential Grid/Column/Row loop detected. Recalculating on this item (#{@toString()}) has been disabled."
 			return
 	else
-		data.fillUpdateLoops = 0
+		data.gridUpdateLoops = 0
 
 	queue.push @
 

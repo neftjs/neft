@@ -289,7 +289,8 @@ Grid {
 				for prop, val of defaultBindings
 					if usedBindings[prop] isnt true
 						target.createBinding prop, val
-						target[prop] = getPropValue target, prop
+						unless val
+							target[prop] = getPropValue target, prop
 
 			# set properties
 			for prop, val of changes
@@ -324,7 +325,8 @@ Grid {
 						for subprop, subval of defaultBindings
 							unless usedBindings[prop]?[subprop]
 								target[prop].createBinding subprop, subval
-								target[prop][subprop] = getDeepPropValue target, prop, subprop
+								unless subval
+									target[prop][subprop] = getDeepPropValue target, prop, subprop
 
 					# set deep property
 					for subprop, subval of val

@@ -24,10 +24,10 @@ Row {
 		@__path__ = 'Renderer.Row'
 
 		constructor: ->
-			@_width = -1
-			@_height = -1
 			@_spacing = 0
 			super()
+			@_width = -1
+			@_height = -1
 			@fill.width = true
 			@fill.height = true
 
