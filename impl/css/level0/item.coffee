@@ -64,44 +64,24 @@ SIGNALS_CURSORS =
 
 lastEvent = null
 movementX = movementY = 0
-createGetMouseCoords = (type) -> (target, e) ->
-	if e is undefined
-		e = target
-		target = e.currentTarget
-
+getMouseEvent = (e) ->
 	if isTouch and e.touches?
 		if e.touches.length
 			e = e.touches[0]
 		else
 			e = e.changedTouches[0]
 
-	rect = target.getBoundingClientRect()
-	x = e.pageX - rect.left
-	y = e.pageY - rect.top
-	if lastEvent? and lastEvent isnt e
-		movementX = e.pageX - lastEvent.pageX
-		movementY = e.pageY - lastEvent.pageY
-
 	if lastEvent isnt e
+		if lastEvent?
+			movementX = e.pageX - lastEvent.pageX
+			movementY = e.pageY - lastEvent.pageY
+
 		lastEvent = e
 
-	if type is 'inner'
-		if x < 0 or y < 0 or x > rect.width or y > rect.height
-			return false
-	else if type is 'outer'
-		if x >= 0 and y >= 0 and x <= rect.width and y <= rect.height
-			return false
-
-	x: x
-	y: y
 	movementX: movementX
 	movementY: movementY
 
-getMouseCoords = createGetMouseCoords ''
-getInnerMouseCoords = createGetMouseCoords 'inner'
-
 pressedKeys = Object.create null
-isPointerPressed = false
 
 SPECIAL_KEY_CODES =
 	32: 'Space'
@@ -144,15 +124,16 @@ SIGNALS_ARGS =
 		isSlowContinuous = false
 
 		getDeltas = (e) ->
-			x = e.wheelDeltaX ? -e.deltaX*3 ? 0
-			y = e.wheelDeltaY ? -e.deltaY*3 ? e.wheelDelta ? -e.detail ? 0
+			console.log e.wheelDeltaY, -e.deltaY*3, e.wheelDelta, -e.detail*3
+			x = e.wheelDeltaX ? -e.deltaX*3 or 0
+			y = e.wheelDeltaY ? -e.deltaY*3 or e.wheelDelta ? -e.detail*3 or 0
 
 			if isFirefox and e.deltaMode is e.DOM_DELTA_LINE
 				x *= 25
 				y *= 25
 
-			x: x
-			y: y
+			deltaX: x
+			deltaY: y
 
 		(e) ->
 			deltas = getDeltas e
@@ -172,18 +153,10 @@ SIGNALS_ARGS =
 
 			deltas
 
-	'pointerPressed': (e) ->
-		isPointerPressed = true
-		getInnerMouseCoords e
-	'pointerReleased': (e) ->
-		isPointerPressed = false
-		getMouseCoords e
-	'pointerClicked': getInnerMouseCoords
-	'pointerMoved': (e) ->
-		if isTouch
-			e.preventDefault()
-
-		getInnerMouseCoords e
+	'pointerPressed': getMouseEvent
+	'pointerReleased': getMouseEvent
+	'pointerClicked': getMouseEvent
+	'pointerMoved': getMouseEvent
 	'keysPressed': (e) ->
 		code = e.which or e.keyCode
 		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
@@ -211,27 +184,6 @@ SIGNALS_ARGS =
 
 		text: text
 
-mouseActiveItem = null
-getOuterMouseCoords = createGetMouseCoords 'outer'
-
-window.addEventListener SIGNALS.pointerWheel, (e) ->
-	e.preventDefault();
-
-window.addEventListener SIGNALS.pointerReleased, (e) ->
-	if mouseActiveItem
-		coords = getMouseCoords mouseActiveItem._ref._impl.elem, e
-		mouseActiveItem.released coords
-		mouseActiveItem = null
-	document.body.setAttribute 'class', ''
-	return
-window.addEventListener SIGNALS.pointerMoved, (e) ->
-	if mouseActiveItem
-		coords = getOuterMouseCoords mouseActiveItem._ref._impl.elem, e
-		if coords
-			mouseActiveItem.moved coords
-	return
-window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
-
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
 USE_GPU = true
@@ -243,6 +195,32 @@ module.exports = (impl) ->
 	LAYER_MIN_OPERATIONS = 2
 	LAYER_GC_DELAY = 1000
 	layers = []
+
+	mouseActiveItem = null
+
+	# window.addEventListener SIGNALS.pointerWheel, (e) ->
+	# 	e.preventDefault()
+	# , true
+
+	window.addEventListener SIGNALS.pointerReleased, (e) ->
+		mouseActiveItem ?= impl.window?.pointer
+		event = getMouseEvent e
+		mouseActiveItem?.released event
+		mouseActiveItem = null
+		document.body.setAttribute 'class', ''
+		return
+
+	window.addEventListener SIGNALS.pointerMoved, (e) ->
+		mouseActiveItem ?= impl.window?.pointer
+		event = getMouseEvent e
+		mouseActiveItem?.moved event
+		return
+
+	# window.addEventListener 'touchmove', (e) ->
+	# 	e.preventDefault()
+	# , true
+
+	window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
 
 	if USE_GPU
 		setInterval ->

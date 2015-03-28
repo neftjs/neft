@@ -97,9 +97,7 @@ The *event* object contains x and y delta.
 *Signal* Pointer::moved(*Object* event)
 ---------------------------------------
 
-This signal is called when the pointer position changes.
-
-The *event* object contains x and y position.
+This signal is called when the pointer position changed.
 
 			onLazySignalInitialized = (pointer, name) ->
 				Impl.attachItemSignal.call pointer, 'pointer', name
@@ -110,68 +108,6 @@ The *event* object contains x and y position.
 			for signalName in @SIGNALS
 				uniqueName = "pointer#{utils.capitalize(signalName)}"
 				signal.Emitter.createSignal @, signalName, onLazySignalInitialized
-
-*Integer* Pointer::x
---------------------
-
-This property refers to the current pointer x position relative to the item.
-
-### *Signal* Pointer::xChanged(*Integer* oldValue)
-
-			onPositionSignalInitialized = do ->
-				onMoved = (e) ->
-					@x = e.x
-					@y = e.y
-					return
-
-				(pointer) ->
-					pointer.onMoved onMoved
-
-			itemUtils.defineProperty
-				constructor: Pointer
-				name: 'x'
-				defaultValue: 0
-				namespace: 'pointer'
-				parentConstructor: Item
-				signalInitializer: onPositionSignalInitialized
-
-*Integer* Pointer::y
---------------------
-
-This property refers to the current pointer y position relative to the item.
-
-```style
-var signal = require('signal');
-
-Rectangle {
-\  width: 200
-\  height: 100
-\  border.width: 5
-\  border.color: 'red'
-\
-\  Rectangle {
-\    width: 20
-\    height: 20
-\    color: 'green'
-\    x: parent.pointer.x - this.width / 2
-\    y: parent.pointer.y - this.height / 2
-\    pointer.onPressed: function(){
-\      // prevent page scrolling on touch devices
-\      return signal.STOP_PROPAGATION;
-\    }
-\  }
-}
-```
-
-### *Signal* Pointer::yChanged(*Integer* oldValue)
-
-			itemUtils.defineProperty
-				constructor: Pointer
-				name: 'y'
-				defaultValue: 0
-				namespace: 'pointer'
-				parentConstructor: Item
-				signalInitializer: onPositionSignalInitialized
 
 *Boolean* Pointer::isPressed = false
 ------------------------------------

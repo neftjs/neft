@@ -4,16 +4,13 @@ utils = require 'utils'
 signal = require 'signal'
 
 WHEEL_DIVISOR = 3
-MIN_POINTER_DELTA = 5
+MIN_POINTER_DELTA = 15
 
 module.exports = (impl) ->
 	{Types} = impl
 
 	impl._scrollableUsePointer ?= true
-
-	impl.onWindowReady ->
-		impl.window.pointer.onPressed ->
-			signal.STOP_PROPAGATION
+	impl._scrollableUseWheel ?= true
 
 	###
 	Scroll container by given x and y deltas
@@ -53,6 +50,13 @@ module.exports = (impl) ->
 		reversed = false
 		animPending = false
 
+		lastSnapTargetProp = do ->
+			switch prop
+				when 'x'
+					'lastSnapTargetX'
+				when 'y'
+					'lastSnapTargetY'
+
 		scrollAxis = do ->
 			switch prop
 				when 'x'
@@ -84,32 +88,38 @@ module.exports = (impl) ->
 					'_height'
 
 		anim = ->
-			if amplitude isnt 0 or item._impl.snap
+			{snap} = item._impl
+
+			if amplitude isnt 0
 				animPending = true
 				elapsed = Date.now() - timestamp
-				targetDelta = item[contentProp] - target
 
-				if (amplitude > 0 and targetDelta < 0) or (amplitude < 0 and targetDelta > 0)
-					amplitude = -amplitude
-					if reversed
-						amplitude *= 0.3
-					else
-						reversed = true
+				if snap
+					targetDelta = item[contentProp] - target
+					if (amplitude < 0 and targetDelta < 0) or (amplitude > 0 and targetDelta > 0)
+						amplitude = -amplitude
+						if reversed
+							amplitude *= 0.3
+						else
+							reversed = true
 
-				delta = amplitude * 0.7 * Math.exp(-elapsed / 325)
+				delta = -amplitude * 0.7 * Math.exp(-elapsed / 325)
 
-				if targetDelta > 5 or targetDelta < -5
-					if (delta > 0 and delta < 5) or (delta is 0 and targetDelta > 0)
-						delta = 5
-					else if (delta < 0 and delta > -5) or delta is 0
-						delta = -5
+				if snap
+					if targetDelta > 7 or targetDelta < -7
+						if (delta > 0 and delta < 7) or (delta is 0 and targetDelta > 0)
+							delta = 7
+						else if (delta < 0 and delta > -7) or delta is 0
+							delta = -7
 
-				if (targetDelta > 5 or targetDelta < -5) and (delta > 0.5 or delta < -0.5)
+				if (not snap or targetDelta > 7 or targetDelta < -7) and (delta > 0.5 or delta < -0.5)
 					scrollAxis delta
 					requestAnimationFrame anim
 				else
 					animPending = false
 					scrollAxis targetDelta
+			else
+				animPending = false
 			return
 
 		getSnapTarget = (contentPos) ->
@@ -121,9 +131,9 @@ module.exports = (impl) ->
 				for child in children
 					diff = contentPos - child[positionProp]
 					if velocity > 0
-						diff += child[sizeProp] * 0.45
+						diff += child[sizeProp] * 0.75
 					else
-						diff -= child[sizeProp] * 0.45
+						diff -= child[sizeProp] * 0.75
 
 					if velocity >= 0 and diff >= 0 or velocity <= 0 and diff <= 0
 						diff = Math.abs diff
@@ -143,13 +153,13 @@ module.exports = (impl) ->
 
 			amplitude = 0.8 * velocity
 			timestamp = Date.now()
-			target = item[contentProp] + amplitude*8
+			target = item[contentProp] + amplitude*4
 
 			if snap
 				snapTarget = getSnapTarget target
-				if data.lastSnapTarget isnt snapTarget
+				if data[lastSnapTargetProp] isnt snapTarget
 					target = snapTarget
-					data.lastSnapTarget = snapTarget
+					data[lastSnapTargetProp] = snapTarget
 
 			if not animPending and (Math.abs(velocity) > 10 or (snap and target is snapTarget))
 				anim()
@@ -171,12 +181,10 @@ module.exports = (impl) ->
 
 		focus = false
 		listen = false
-		x = y = 0
+		dx = dy = 0
 
 		moveMovement = (e) ->
-			dx = e.x - x
-			dy = e.y - y
-			scroll item, dx, dy
+			scroll item, e.movementX + dx, e.movementY + dy
 
 		onImplReady = ->
 			impl.window.pointer.onMoved (e) ->
@@ -187,20 +195,25 @@ module.exports = (impl) ->
 					if pointerUsed
 						return
 
-					if Math.abs(getLimitedX(item, e.x-x)-item._contentX) < MIN_POINTER_DELTA and Math.abs(getLimitedY(item, e.y-y)-item._contentY) < MIN_POINTER_DELTA
+					dx += e.movementX
+					dy += e.movementY
+
+					if Math.abs(getLimitedX(item, dx)-item._contentX) < MIN_POINTER_DELTA and Math.abs(getLimitedY(item, dy)-item._contentY) < MIN_POINTER_DELTA
 						return
+
+					dx = dy = 0
 
 				if moveMovement(e) is signal.STOP_PROPAGATION
 					focus = true
 					pointerUsed = true
 
-					horizontalContinuous.update e.x - x
-					verticalContinuous.update e.y - y
-				x = e.x; y = e.y
+					horizontalContinuous.update dx + e.movementX
+					verticalContinuous.update dy + e.movementY
 				signal.STOP_PROPAGATION
 
 			impl.window.pointer.onReleased (e) ->
 				listen = false
+				dx = dy = 0
 
 				return unless focus
 				focus = false
@@ -211,7 +224,6 @@ module.exports = (impl) ->
 				horizontalContinuous.release()
 				verticalContinuous.release()
 
-				x = y = 0
 				return
 
 		if impl.window?
@@ -226,67 +238,14 @@ module.exports = (impl) ->
 			horizontalContinuous.press()
 			verticalContinuous.press()
 
-			x = e.x; y = e.y
-
-	useWheel = (item) ->
-		MAX_WAIT = 70
-		accepts = false
-		pending = false
-		lastActionTimestamp = 0
-		lastAcceptedActionTimestamp = 0
-		horizontalContinuous = createContinuous item, 'x'
-		verticalContinuous = createContinuous item, 'y'
-		x = y = 0
-		minX = minY = maxX = maxY = 0
-
-		timer = ->
-			now = Date.now()
-			if accepts or now - lastAcceptedActionTimestamp > MAX_WAIT
-				pending = false
-				accepts = true
-				horizontalContinuous.update x
-				verticalContinuous.update y
-				horizontalContinuous.release()
-				verticalContinuous.release()
-			else
-				requestAnimationFrame timer
+			x = e.x
+			y = e.y
 			return
 
+	useWheel = (item) ->
 		item.pointer.onWheel (e) ->
-			now = Date.now()
-
-			if now - lastActionTimestamp > MAX_WAIT
-				minX = minY = maxX = maxY = 0
-				accepts = false
-
-			lastActionTimestamp = now
-			{x, y} = e
-			x /= WHEEL_DIVISOR
-			y /= WHEEL_DIVISOR
-
-			if x > 0 and x > maxX
-				maxX = x
-			else if x < minX
-				minX = x
-			if e.y > 0 and y > maxY
-				maxY = y
-			else if y < minY
-				minY = y
-
-			if (x > 0 and x < maxX * 0.35) or (x < 0 and x > minX * 0.35) or (y > 0 and y < maxY * 0.35) or (y < 0 and y > minY * 0.35)
-				accepts = true
-				return
-
-			lastAcceptedActionTimestamp = now
-
-			unless pending
-				pending = true
-				horizontalContinuous.press()
-				verticalContinuous.press()
-				requestAnimationFrame timer
-			else
-				horizontalContinuous.update x
-				verticalContinuous.update y
+			x = e.deltaX / WHEEL_DIVISOR
+			y = e.deltaY / WHEEL_DIVISOR
 
 			item._impl.globalScale = getItemGlobalScale item
 			scroll item, x, y
@@ -305,7 +264,8 @@ module.exports = (impl) ->
 		contentItem: null
 		globalScale: 1
 		snap: false
-		lastSnapTarget: 0
+		lastSnapTargetX: 0
+		lastSnapTargetY: 0
 
 	DATA: DATA
 
@@ -320,7 +280,8 @@ module.exports = (impl) ->
 		# signals
 		if impl._scrollableUsePointer
 			usePointer @
-		useWheel @
+		if impl._scrollableUseWheel
+			useWheel @
 		return
 
 	setScrollableContentItem: (val) ->

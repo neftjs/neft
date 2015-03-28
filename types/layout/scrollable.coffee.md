@@ -73,7 +73,7 @@ Positioning/Scrollable
 				'/2'
 			]
 			thumb.border.width = 1
-			thumb.border.color = 'rgb(200, 200, 200)'
+			thumb.border.color = 'rgba(200, 200, 200, 0.5)'
 
 			state = new Renderer.State
 			state.target = thumb
@@ -93,24 +93,12 @@ Positioning/Scrollable
 
 		constructor: ->
 			@_contentItem = null
-			@_verticalScrollbar = null
-			@_autoVerticalScrollbar = true
 			@_contentX = 0
 			@_contentY = 0
 			@_snap = false
 			@_snapItem = null
 			super()
 			@clip = true
-
-			@onReady ->
-				{contentItem} = @
-				if @_autoVerticalScrollbar
-					@verticalScrollbar = Scrollable.createDefaultVerticalScrollbar()
-
-			@onContentYChanged ->
-				{verticalScrollbar} = @
-				if verticalScrollbar
-					verticalScrollbar.y = @contentY * @height / @contentItem.height
 
 *Boolean* Scrollable::clip = true
 ---------------------------------
@@ -131,24 +119,6 @@ Positioning/Scrollable
 					expect(val).toBe.any Renderer.Item
 					val._parent = @
 				_super.call @, val
-
-*Renderer.Item* Scrollable::verticalScrollbar
----------------------------------------------
-
-### *Signal* Scrollable::verticalScrollbarChanged([*Renderer.Item* oldValue])
-
-		itemUtils.defineProperty
-			constructor: @
-			name: 'verticalScrollbar'
-			defaultValue: null
-			setter: (_super) -> (val) ->
-				oldVal = @verticalScrollbar
-				if val?
-					expect(val).toBe.any Renderer.Item
-					val.parent = @
-				_super.call @, val
-				oldVal?.parent = null
-				@_autoVerticalScrollbar = false
 
 *Float* Scrollable::contentX = 0
 --------------------------------

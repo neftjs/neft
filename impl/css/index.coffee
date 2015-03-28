@@ -119,18 +119,23 @@ module.exports = (impl) ->
 
 	utils.merge impl.utils, require('./utils')
 
-	unless isTouch
-		impl._scrollableUsePointer = false
-
 	window.addEventListener 'resize', resize = ->
 		item = impl.window
 		return unless item
 
-		item.width = innerWidth
-		item.height = innerHeight
+		pixelRatio = window.devicePixelRatio or 1
+
+		if pixelRatio % 1 isnt 0
+			item.width = innerWidth + 1
+			item.height = innerHeight + 1
+		else
+			item.width = innerWidth
+			item.height = innerHeight
+		return
 
 	body.addEventListener 'scroll', ->
 		window.scrollTo 0, 0
+		return
 
 	AbstractTypes: utils.clone impl.Types
 
@@ -143,7 +148,8 @@ module.exports = (impl) ->
 
 		Rectangle: require './level1/rectangle'
 
-		# Scrollable: require './level2/scrollable'
+		# BUG: IE 11 bug with synchronizing
+		Scrollable: require './level2/scrollable'
 
 	setWindow: (item) ->
 		onLoaded = ->
@@ -154,7 +160,10 @@ module.exports = (impl) ->
 				body.appendChild item._impl.elem
 
 				resize()
+				setTimeout resize
+				setTimeout resize, 500
 				requestAnimationFrame resize
+			return
 
 		if document.readyState is 'complete'
 			onLoaded()

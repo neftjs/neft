@@ -9,6 +9,7 @@ module.exports = (impl) ->
 
 	DATA = utils.merge
 		bindings: null
+		anchors: null
 		update: null
 	, impl.utils.fill.DATA
 

@@ -22,7 +22,31 @@ module.exports = (impl) ->
 			obj.status = 'ready'
 			obj.width = @naturalWidth or @width
 			obj.height = @naturalHeight or @height
-			obj.loaded()
+
+			if obj.width is 0 and obj.height is 0 and ///\.svg$///.test(obj.source)
+				xhr = new XMLHttpRequest
+				xhr.overrideMimeType 'text/xml'
+				xhr.open 'get', obj.source, true
+				xhr.onload = ->
+					{responseXML} = xhr
+					svg = responseXML.querySelector 'svg'
+
+					viewBox = svg.getAttribute 'viewBox'
+					if viewBox
+						viewBox = viewBox.split ' '
+					else
+						viewBox = [0, 0, 0, 0]
+
+					obj.width = parseFloat(svg.getAttribute('width')) or parseFloat(viewBox[2])
+					obj.height = parseFloat(svg.getAttribute('height')) or parseFloat(viewBox[3])
+
+					obj.loaded()
+				xhr.onerror = ->
+					obj.status = 'error'
+					obj.loaded()
+				xhr.send()
+			else
+				obj.loaded()
 
 		obj =
 			source: src
