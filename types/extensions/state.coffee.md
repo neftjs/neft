@@ -249,7 +249,22 @@ Grid {
 
 			stateExtensions[''][prop][subprop]
 
-		# TODO: support anchor in one state (restore default value)
+		hasAnchorsForProp = do ->
+			ANCHORS_PROPS =
+				x: ['left', 'right', 'horizontalCenter', 'centerIn', 'fill']
+				y: ['top', 'bottom', 'verticalCenter', 'centerIn', 'fill']
+				width: ['fill']
+				height: ['fill']
+
+			(item, prop) ->
+				anchors = ANCHORS_PROPS[prop]
+				if anchors isnt undefined and item._anchors isnt null
+					for anchor in anchors
+						if item._anchors[anchor] isnt null
+							return true
+
+				return false
+
 		usedBindingsPool = []
 		reloadItem = (state) ->
 			assert.instanceOf state, State
@@ -287,9 +302,9 @@ Grid {
 								usedBindings[prop] = true
 
 				for prop, val of defaultBindings
-					if usedBindings[prop] isnt true
+					if usedBindings[prop] isnt true and (val or not hasAnchorsForProp(target, prop))
 						target.createBinding prop, val
-						unless val
+						if not val
 							target[prop] = getPropValue target, prop
 
 			# set properties

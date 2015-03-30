@@ -106,7 +106,6 @@ This signal is called when the pointer position changed.
 			            'entered', 'exited', 'wheel', 'moved']
 
 			for signalName in @SIGNALS
-				uniqueName = "pointer#{utils.capitalize(signalName)}"
 				signal.Emitter.createSignal @, signalName, onLazySignalInitialized
 
 *Boolean* Pointer::isPressed = false

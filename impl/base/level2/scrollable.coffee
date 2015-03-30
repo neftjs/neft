@@ -247,6 +247,9 @@ module.exports = (impl) ->
 			x = e.deltaX / WHEEL_DIVISOR
 			y = e.deltaY / WHEEL_DIVISOR
 
+			if Math.abs(y) > Math.abs(x)
+				x = y
+
 			item._impl.globalScale = getItemGlobalScale item
 			scroll item, x, y
 		return

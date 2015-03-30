@@ -3,6 +3,7 @@
 utils = require 'utils'
 signal = require 'signal'
 
+isTouch = 'ontouchstart' of window
 isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
 module.exports = (impl) ->
@@ -11,8 +12,10 @@ module.exports = (impl) ->
 
 	{round} = Math
 
-	impl._scrollableUsePointer = false
-	impl._scrollableUseWheel = false
+	unless isTouch
+		impl._scrollableUsePointer = false
+	# impl._scrollableUseWheel = false
+
 	abstractScrollable = impl.AbstractTypes.Scrollable impl
 
 	DATA =
@@ -22,8 +25,7 @@ module.exports = (impl) ->
 		snap: false
 		lastSnapTargetX: 0
 		lastSnapTargetY: 0
-		scrollX: false
-		scrollY: false
+		yScrollbar: false
 
 	DATA: DATA
 
@@ -38,54 +40,39 @@ module.exports = (impl) ->
 		scrollElem.style.overflow = 'hidden'
 		scrollElem.style.width = '100%'
 		scrollElem.style.height = '100%'
-		scrollElem.style.backgroundImage = 'url(\'\')' # Chrome bug, doesn't scroll on empty
 		data.elem.appendChild scrollElem
 
+		# searching etc.
 		scrollElem.addEventListener 'scroll', ->
-			if round(@scrollLeft) isnt self.contentX
+			if round(@scrollLeft) isnt self._contentX
 				self.contentX = @scrollLeft
-			if round(@scrollTop) isnt self.contentY
+			if round(@scrollTop) isnt self._contentY
 				self.contentY = @scrollTop
 			return
-
-		# slow mouse scrolling on firefox
-		if isFirefox
-			scrollElem.addEventListener 'wheel', (e) ->
-				if e.deltaMode is e.DOM_DELTA_LINE
-					self.contentX += e.deltaX * 10
-					self.contentY += e.deltaY * 10
-				return
 
 		return
 
 	setScrollableContentItem: do ->
-		# onWidthChanged = ->
-		# 	if @_width < @_contentItem._width and not @_impl.scrollX
-		# 		@_impl.scrollElem.style.overflowX = 'scroll'
-		# 		@_impl.scrollX = true
-		# 	else if @_width >= @_contentItem._width and @_impl.scrollX
-		# 		@_impl.scrollElem.style.overflowX = 'hidden'
-		# 		@_impl.scrollX = false
-		# 	return
-
 		onHeightChanged = ->
-			if @_height < @_contentItem._height and not @_impl.scrollY
-				@_impl.scrollElem.style.overflowY = 'scroll'
-				@_impl.scrollY = true
-			else if @_height >= @_contentItem._height and @_impl.scrollY
-				@_impl.scrollElem.style.overflowY = 'hidden'
-				@_impl.scrollY = false
+			data = @_impl
+			contentItem = @_contentItem
+			if contentItem._height <= @_height
+				if data.yScrollbar
+					data.scrollElem.style.overflowY = 'hidden'
+					data.yScrollbar = false
+			else
+				if not data.yScrollbar
+					data.scrollElem.style.overflowY = 'scroll'
+					data.yScrollbar = true
 			return
 
 		(val) ->
 			if oldVal = @_impl.contentItem
 				impl.setItemParent.call oldVal, null
-				# oldVal.onWidthChanged.disconnect onWidthChanged, @
 				oldVal.onHeightChanged.disconnect onHeightChanged, @
 
 			if val
 				@_impl.scrollElem.appendChild val._impl.elem
-				# val.onWidthChanged onWidthChanged, @
 				val.onHeightChanged onHeightChanged, @
 				@_impl.contentItem = val
 			return

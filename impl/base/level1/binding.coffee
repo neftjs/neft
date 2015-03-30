@@ -154,7 +154,6 @@ module.exports = (impl) ->
 
 			# update
 			@updatePending = false
-			@defaultValue = @obj[prop]
 			Object.preventExtensions @
 
 			if item._isReady
@@ -204,12 +203,12 @@ module.exports = (impl) ->
 			# remove from the list
 			@obj._impl.bindings[@prop] = null
 
+			# TODO: do sth with anchors and move it into the abstract
+			@obj._bindings?[@prop] = null
+
 			# clear props
 			@args = null
 			@connections = null
-
-			# restore default value
-			# @getObj()[@prop] = @defaultValue
 			return
 
 	setItemBinding: (prop, binding, extraResultFunc) ->

@@ -124,13 +124,12 @@ SIGNALS_ARGS =
 		isSlowContinuous = false
 
 		getDeltas = (e) ->
-			console.log e.wheelDeltaY, -e.deltaY*3, e.wheelDelta, -e.detail*3
-			x = e.wheelDeltaX ? -e.deltaX*3 or 0
-			y = e.wheelDeltaY ? -e.deltaY*3 or e.wheelDelta ? -e.detail*3 or 0
+			x = -e.deltaX*3 or e.wheelDeltaX ? 0
+			y = -e.deltaY*3 or e.wheelDeltaY ? e.wheelDelta ? -e.detail*3 or 0
 
 			if isFirefox and e.deltaMode is e.DOM_DELTA_LINE
-				x *= 25
-				y *= 25
+				x *= 10
+				y *= 10
 
 			deltaX: x
 			deltaY: y
@@ -198,9 +197,9 @@ module.exports = (impl) ->
 
 	mouseActiveItem = null
 
-	# window.addEventListener SIGNALS.pointerWheel, (e) ->
-	# 	e.preventDefault()
-	# , true
+	window.addEventListener SIGNALS.pointerWheel, (e) ->
+		e.preventDefault()
+	, true
 
 	window.addEventListener SIGNALS.pointerReleased, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
