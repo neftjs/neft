@@ -70,3 +70,21 @@ module.exports = (impl) ->
 					elem.statusChanged.connect @, onStatusChanged
 				else
 					throw new Error "Unsupported image status #{elem.status}"
+
+	setImageSourceWidth: (val) ->
+		@_impl.elem.sourceSize.width = val
+		return
+
+	setImageSourceHeight: (val) ->
+		@_impl.elem.sourceSize.height = val
+		return
+
+	setImageFillMode: (val) ->
+		switch val
+			when 'Stretch'
+				@_impl.elem.fillMode = Image.Stretch
+			when 'PreserveAspectFit'
+				@_impl.elem.fillMode = Image.PreserveAspectFit
+			when 'Tile'
+				@_impl.elem.fillMode = Image.Tile
+		return

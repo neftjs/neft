@@ -42,10 +42,9 @@ exports.toQtColor = (color) ->
 		color
 
 exports.toUrl = (url) ->
-	url
-	# if ///^[a-zA-Z]+:\/\////.test url
-	# 	url
-	# else
-	# 	if url[0] isnt '/'
-	# 		url = "/#{url}"
-	# 	require('renderer').serverUrl + url
+	if typeof url isnt 'string' or ///^[a-zA-Z]+?:\/\////.test(url)
+		url
+	else
+		if url[0] isnt '/'
+			url = "/#{url}"
+		require('renderer').serverUrl + url

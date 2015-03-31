@@ -137,3 +137,25 @@ module.exports = (impl) ->
 
 	setTextFontItalic: (val) ->
 		@_impl.elem.font.italic = val
+
+	setTextAlignmentHorizontal: (val) ->
+		switch val
+			when 'left'
+				@_impl.elem.horizontalAlignment = Text.AlignLeft
+			when 'center'
+				@_impl.elem.horizontalAlignment = Text.AlignHCenter
+			when 'right'
+				@_impl.elem.horizontalAlignment = Text.AlignRight
+			when 'justify'
+				@_impl.elem.horizontalAlignment = Text.AlignJustify
+		return
+
+	setTextAlignmentVertical: (val) ->
+		switch val
+			when 'top'
+				@_impl.elem.verticalAlignment = Text.AlignTop
+			when 'center'
+				@_impl.elem.verticalAlignment = Text.AlignVCenter
+			when 'bottom'
+				@_impl.elem.verticalAlignment = Text.AlignBottom
+		return

@@ -116,8 +116,6 @@ mouseCoordsArgs = (e) ->
 		lastMouseEvent.x = coords.x
 		lastMouseEvent.y = coords.y
 
-	x: e.x
-	y: e.y
 	movementX: movementX
 	movementY: movementY
 
@@ -130,8 +128,8 @@ SIGNALS_ARGS =
 	'pointerExited': ->
 		lastMouseEvent.ready = false
 	'pointerWheel': (e) ->
-		x: e.angleDelta.x
-		y: e.angleDelta.y
+		deltaX: e.angleDelta.x
+		deltaY: e.angleDelta.y
 	'keysPressed': (e) ->
 		if pressedKeys[e.key] and pressedKeys[e.key] isnt e
 			return false
@@ -146,6 +144,15 @@ SIGNALS_ARGS =
 		text: e.text
 
 module.exports = (impl) ->
+	# always accepts pointer on impl.window
+	do ->
+		__stylesMouseArea.onPressed.connect (e) ->
+			e.accepted = true
+		__stylesMouseArea.onPositionChanged.connect (e) ->
+			impl.window?._impl.mouseArea.onPositionChanged e
+		__stylesMouseArea.onReleased.connect (e) ->
+			impl.window?._impl.mouseArea.onReleased e
+
 	DATA = utils.merge
 		elem: null
 		mouseArea: null
@@ -211,14 +218,15 @@ module.exports = (impl) ->
 
 			unless @_impl.linkUriListens
 				@_impl.linkUriListens = true
-				@pointer.onClicked onLinkUriClicked
+				@pointer.onClicked onLinkUriClicked, @
+			return
 
 	setItemMargin: (val) ->
 
 	attachItemSignal: do ->
-		attachPointer = (ns, name, signalName) ->
+		attachPointer = (ns, name, uniqueName) ->
 			self = @
-			data = @_impl
+			data = @_ref._impl
 
 			# create mouse area if needed
 			unless mouseArea = data.mouseArea
@@ -231,41 +239,43 @@ module.exports = (impl) ->
 				, data.elem)
 
 			# hover
-			if HOVER_SIGNALS[name]
+			if HOVER_SIGNALS[uniqueName]
 				mouseArea.hoverEnabled = true
 
 			# listen on an event
-			qmlName = SIGNALS[name]
+			qmlName = SIGNALS[uniqueName]
 
 			customFunc = (e) ->
-				arg = SIGNALS_ARGS[name]?.call mouseArea, e
+				arg = SIGNALS_ARGS[uniqueName]?.call mouseArea, e
 				e?.accepted = false
-				if self[ns][signalName](arg) is signal.STOP_PROPAGATION and e?
+				if self[name](arg) is signal.STOP_PROPAGATION and e?
 					e.accepted = true
 				return
 
-			if name is 'pointerClicked'
+			if uniqueName is 'pointerClicked'
 				mouseArea.accepts = true;
 
 			mouseArea[qmlName].connect customFunc
 
 			# cursor
-			if cursor = SIGNALS_CURSORS[name]
+			if cursor = SIGNALS_CURSORS[uniqueName]
 				mouseArea.cursorShape = cursor
 			return
 
-		attachKeys = (ns, name, signalName) ->
+		attachKeys = (ns, name, uniqueName) ->
 			self = @
-			qmlName = SIGNALS[name]
+			qmlName = SIGNALS[uniqueName]
 			__stylesWindow.Keys[qmlName].connect (e) ->
-				arg = SIGNALS_ARGS[name] e
-				if self[ns][signalName](arg) is signal.STOP_PROPAGATION
+				arg = SIGNALS_ARGS[uniqueName] e
+				if self[name](arg) is signal.STOP_PROPAGATION
 					e.accepted = true
 				return
 			return
 
-		(ns, name, signalName) ->
-			if ///^keys///.test name
-				attachKeys.call @, ns, name, signalName
+		(ns, name) ->
+			uniqueName = ns + utils.capitalize(name)
+
+			if ns is 'keys'
+				attachKeys.call @, ns, name, uniqueName
 			else
-				attachPointer.call @, ns, name, signalName
+				attachPointer.call @, ns, name, uniqueName
