@@ -8,3 +8,12 @@ exports.prependElement = (parent, child) ->
 		parent.insertBefore child, first
 	else
 		parent.appendChild child
+
+exports.encodeImageSrc = do ->
+	DATA_URI_RE = ///^data:([a-z+/]+),(.*)$///
+
+	(val) ->
+		if DATA_URI_RE.test(val)
+			val.replace ///\#///g, encodeURIComponent('#')
+		else
+			val

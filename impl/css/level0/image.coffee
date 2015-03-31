@@ -1,7 +1,5 @@
 'use strict'
 
-DATA_URI_RE = ///^data:([a-z+/]+),(.*)$///
-
 signal = require 'signal'
 
 module.exports = (impl) ->
@@ -112,6 +110,9 @@ module.exports = (impl) ->
 
 	createData: impl.utils.createDataCloner 'Item', DATA
 
+	_getImage: getImage
+	_callCallback: callCallback
+
 	create: (data) ->
 		self = @
 		Item.create.call @, data
@@ -121,8 +122,7 @@ module.exports = (impl) ->
 		return
 
 	setImageSource: (val, callback) ->
-		if DATA_URI_RE.test val
-			val = val.replace ///\#///g, encodeURIComponent('#')
+		val = impl.utils.encodeImageSrc val
 
 		data = @_impl
 		data.imgElem.src = val

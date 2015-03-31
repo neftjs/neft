@@ -3,6 +3,8 @@
 module.exports = (impl) ->
 	{items} = impl
 
+	NOP = ->
+
 	getRectangleSource = (item) ->
 		{width, height} = item
 		strokeWidth = Math.min item.border.width*2, width, height
@@ -29,7 +31,7 @@ module.exports = (impl) ->
 		@_impl.rectangleUpdatePending = true
 		setImmediate =>
 			@_impl.rectangleUpdatePending = false
-			impl.setImageSource.call @, getRectangleSource(@)
+			impl.setImageSource.call @, getRectangleSource(@), NOP
 
 	DATA =
 		rectangleUpdatePending: false

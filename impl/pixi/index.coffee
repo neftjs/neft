@@ -93,31 +93,23 @@ canvas {
 	left: 0;
 	top: 0;
 	z-index: 0;
-}
-div, span, canvas, img {
-	position: absolute;
-	z-index: inherit;
-	-ms-word-break: break-all;
-	word-break: break-all;
-	word-break: break-word;
-	word-wrap: break-word;
-	margin: 0;
+	width: 100%;
+	height: 100%;
 }
 "
 
+pixelRatio = window.devicePixelRatio or 1
+
 unless window.isFake
 	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
-	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight, null, false, true
+	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight,
+		resolution: pixelRatio
 
 window.addEventListener 'resize', ->
 	renderer.resize innerWidth, innerHeight
 
 # body
-hatchery = document.createElement 'div'
-hatchery.style.visibility = 'hidden'
-
 window.addEventListener 'load', ->
-	document.body.appendChild hatchery
 	document.body.appendChild renderer.view
 
 	styles = document.createElement 'style'
@@ -128,7 +120,6 @@ module.exports = (impl) ->
 	{items} = impl
 
 	impl._dirty = true
-	impl._hatchery = hatchery
 
 	# render loop
 	window.addEventListener 'load', ->
@@ -159,3 +150,4 @@ module.exports = (impl) ->
 
 			resize()
 			stage.addChild item._impl.elem
+		return

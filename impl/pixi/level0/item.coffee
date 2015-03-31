@@ -12,8 +12,6 @@ SIGNALS =
 	'pointerMove': 'mousemove'
 
 module.exports = (impl) ->
-	{items} = impl
-
 	if utils.isEmpty PIXI
 		return require('../../base/level0/item') impl
 
@@ -27,11 +25,11 @@ module.exports = (impl) ->
 		mask.drawRect 0, 0, elem.width, elem.height
 		mask.endFill()
 
-	DATA =
+	DATA = utils.merge
 		bindings: null
+		anchors: null
 		elem: null
-		textElement: null
-		textContainer: null
+	, impl.utils.fill.DATA
 
 	DATA: DATA
 
@@ -40,6 +38,7 @@ module.exports = (impl) ->
 	create: (data) ->
 		elem = data.elem = new PIXI.DisplayObjectContainer
 		elem._data = @
+		return
 
 	setItemParent: (val) ->
 		item = @_impl.elem
@@ -109,7 +108,13 @@ module.exports = (impl) ->
 
 	setItemMargin: (type, val) ->
 
-	attachItemSignal: (name, signal) ->
-		# {elem} = @_impl
-		# elem.interactive = true
-		# elem[SIGNALS[name]] = (e) -> signal e.global
+	attachItemSignal: (ns, name) ->
+		self = @
+		{elem} = @_ref._impl
+		uniqueName = ns + utils.capitalize(name)
+		implName = SIGNALS[uniqueName]
+		if implName
+			elem.interactive = true
+			# TODO: more listeners
+			elem[implName] = (e) -> self[name] {}
+		return

@@ -86,7 +86,7 @@ img {
 .layer {
 	-moz-perspective: 1px; /* Firefox */
 	-webkit-transform-style: preserve-3d; /* Safari */
-	-webkit-perspective: 1000px; /* Safari */
+	-webkit-perspective: 1px; /* Safari */
 	-webkit-backface-visibility: hidden; /* Safari, Chrome */
 }
 "
