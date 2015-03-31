@@ -197,9 +197,9 @@ module.exports = (impl) ->
 
 	mouseActiveItem = null
 
-	window.addEventListener SIGNALS.pointerWheel, (e) ->
-		e.preventDefault()
-	, true
+	# window.addEventListener SIGNALS.pointerWheel, (e) ->
+	# 	e.preventDefault()
+	# , true
 
 	window.addEventListener SIGNALS.pointerReleased, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
@@ -419,6 +419,8 @@ module.exports = (impl) ->
 					document.body.setAttribute 'class', 'unselectable'
 					mouseActiveItem = self
 				e.stopPropagation()
+				if e.cancelable
+					e.preventDefault()
 			return
 
 		if typeof implName is 'string'

@@ -14,7 +14,6 @@ module.exports = (impl) ->
 
 	unless isTouch
 		impl._scrollableUsePointer = false
-	# impl._scrollableUseWheel = false
 
 	abstractScrollable = impl.AbstractTypes.Scrollable impl
 
@@ -44,9 +43,9 @@ module.exports = (impl) ->
 
 		# searching etc.
 		scrollElem.addEventListener 'scroll', ->
-			if round(@scrollLeft) isnt self._contentX
+			if round(@scrollLeft) isnt round(self._contentX)
 				self.contentX = @scrollLeft
-			if round(@scrollTop) isnt self._contentY
+			if round(@scrollTop) isnt round(self._contentY)
 				self.contentY = @scrollTop
 			return
 
