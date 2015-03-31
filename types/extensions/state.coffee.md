@@ -216,11 +216,19 @@ Grid {
 									unless defaultState[prop].hasOwnProperty(subprop)
 										defaultState[prop][subprop] = getSafeValue target[prop][subprop]
 
-					# set deep property
 					for subprop of val
+						# clear main binding
+						if target[prop]._bindings and not val._bindings?[subprop] and target[prop]._bindings[subprop] isnt undefined
+							val.createBinding subprop, null
+
+						# set deep property
 						unless defaultState[prop].hasOwnProperty(subprop)
 							defaultState[prop][subprop] = target[prop][subprop]
 				else
+					# clear main binding
+					if target._bindings and not changes._bindings?[prop] and target._bindings[prop] isnt undefined
+						changes.createBinding prop, null
+
 					# set main property
 					unless defaultState.hasOwnProperty(prop)
 						defaultState[prop] = getSafeValue target[prop]
@@ -422,15 +430,15 @@ This property has a setter, which accepts strings and arrays of strings.
 
 						_super.call @
 				setter: (_super) -> (val) ->
-					unless Array.isArray(val)
-						val = [val]
+					if typeof val is 'string'
+						val = val.split ' '
 
 					{states} = @
 
-					assert.isArray val
 					states.clear()
-					for name in val when name
-						states.append name
+					if Array.isArray(val)
+						for name in val when name
+							states.append name
 					return
 
 		State
