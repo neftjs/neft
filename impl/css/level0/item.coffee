@@ -195,6 +195,8 @@ module.exports = (impl) ->
 	LAYER_GC_DELAY = 1000
 	layers = []
 
+	impl._SIGNALS = SIGNALS
+
 	mouseActiveItem = null
 
 	# window.addEventListener SIGNALS.pointerWheel, (e) ->
@@ -215,9 +217,9 @@ module.exports = (impl) ->
 		mouseActiveItem?.moved event
 		return
 
-	# window.addEventListener 'touchmove', (e) ->
-	# 	e.preventDefault()
-	# , true
+	window.addEventListener 'touchstart', (e) ->
+		e.preventDefault()
+	, true
 
 	window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
 

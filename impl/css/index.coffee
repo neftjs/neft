@@ -34,7 +34,7 @@ html, body {
 	position: absolute;
 	z-index: 0;
 }
-#styles div, #styles span, #styles canvas, #styles img {
+#styles div, #styles span, #styles canvas, #styles img, #styles textarea {
 	position: absolute;
 }
 span span {
@@ -88,6 +88,11 @@ img {
 	-webkit-transform-style: preserve-3d; /* Safari */
 	-webkit-perspective: 1px; /* Safari */
 	-webkit-backface-visibility: hidden; /* Safari, Chrome */
+}
+textarea {
+	resize: none;
+	background: none;
+	border: none;
 }
 "
 
@@ -143,12 +148,12 @@ module.exports = (impl) ->
 		Item: require './level0/item'
 		Image: require './level0/image'
 		Text: require './level0/text'
+		TextInput: require './level0/text/input'
 		FontLoader: require './level0/fontLoader'
 		Screen: require './level0/screen'
 
 		Rectangle: require './level1/rectangle'
 
-		# BUG: IE 11 bug with synchronizing
 		Scrollable: require './level2/scrollable'
 
 	setWindow: (item) ->
