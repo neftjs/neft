@@ -52,8 +52,8 @@ Rectangle {
 			for signalName in @SIGNALS
 				signal.Emitter.createSignal @, signalName, onLazySignalInitialized
 
-*Boolean* Keys::focus
----------------------
+*Boolean* Keys::focus = false
+-----------------------------
 
 ### *Signal* Keys::focusChanged(*Boolean* oldValue)
 
@@ -69,10 +69,15 @@ Rectangle {
 				developmentSetter: (val) ->
 					assert.isBoolean val
 				setter: (_super) -> (val) ->
-					if val is true and @_focus isnt val
-						focusedKeys?.focus = false
-						focusedKeys = @
+					if @_focus isnt val
+						if val and focusedKeys isnt @
+							focusedKeys?.focus = false
+							focusedKeys = @
 						_super.call @, val
+						if not val and focusedKeys is @
+							focusedKeys = null
+							if focusedKeys isnt Renderer.window.keys
+								Renderer.window.keys.focus = true
 					return
 
 *Item* Item()

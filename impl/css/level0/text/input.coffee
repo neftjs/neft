@@ -33,11 +33,25 @@ module.exports = (impl) ->
 			self.text = @value
 			return
 
+		data.elem.addEventListener 'focus', ->
+			self.keys.focus = true
+
+		data.elem.addEventListener 'blur', ->
+			self.keys.focus = false
+
 		impl.setItemWidth.call @, 200
 		impl.setItemHeight.call @, 50
 
 		return
 
+	setText: do (_super = impl.setText) -> (val) ->
+		if @_impl.isMultiLine isnt undefined
+			@_impl.elem.value = val
+		else
+			_super.call @, val
+		return
+
 	setTextInputIsMultiLine: (val) ->
 		@_impl.isMultiLine = val
 		@text = @text.replace ///\n///g, ''
+		return

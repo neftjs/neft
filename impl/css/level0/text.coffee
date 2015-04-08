@@ -87,20 +87,22 @@ module.exports = (impl) ->
 			return
 
 		(item) ->
-			item._impl.sizeChecks = 0
+			data = item._impl
 
-			if item._impl.pendingSize
+			data.sizeChecks = 0
+
+			if data.pendingSize or (not data.autoWidth and not data.autoHeight)
 				return
 
 			if not isFontReady
 				windowLoadQueue.push item
 				return
 
-			item._impl.pendingSize = true
+			data.pendingSize = true
 			queue.push item
 
-			if item._height is 0 or not item._impl.elem.offsetParent
-				hatchery.appendChild item._impl.textElem
+			if item._height is 0 or not data.elem.offsetParent
+				hatchery.appendChild data.textElem
 
 			unless pending
 				setImmediate updateAll

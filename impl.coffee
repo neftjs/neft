@@ -62,5 +62,6 @@ impl.setWindow = do (_super = impl.setWindow) -> (item) ->
 	utils.defineProperty impl, 'window', utils.ENUMERABLE, item
 	_super.call impl, item
 	impl.windowReady()
+	item.keys.focus = true
 
 module.exports = impl

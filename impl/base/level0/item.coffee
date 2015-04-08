@@ -74,6 +74,8 @@ module.exports = (impl) ->
 
 	attachItemSignal: (name, signal) ->
 
+	setItemKeysFocus: (val) ->
+
 	setItemFill: (type, val) ->
 		unless @_impl.disableFill
 			if @_fill._width isnt @_fill._height

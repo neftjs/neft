@@ -217,9 +217,9 @@ module.exports = (impl) ->
 		mouseActiveItem?.moved event
 		return
 
-	window.addEventListener 'touchstart', (e) ->
-		e.preventDefault()
-	, true
+	# window.addEventListener 'touchstart', (e) ->
+	# 	e.preventDefault()
+	# , true
 
 	window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
 
@@ -285,6 +285,8 @@ module.exports = (impl) ->
 
 		data.elemStyle[transformProp] = transform
 		return
+
+	focusedKeys = null
 
 	NOP = ->
 
@@ -409,6 +411,9 @@ module.exports = (impl) ->
 			return
 
 		customFunc = (e) ->
+			if ns is 'keys' and self isnt focusedKeys
+				return
+
 			arg = SIGNALS_ARGS[name]? e
 			if arg is false or e._accepted
 				return
@@ -421,12 +426,12 @@ module.exports = (impl) ->
 					document.body.setAttribute 'class', 'unselectable'
 					mouseActiveItem = self
 				e.stopPropagation()
-				if e.cancelable
+				if e.cancelable and implName isnt 'touchend' and implName isnt 'touchstart'
 					e.preventDefault()
 			return
 
 		if typeof implName is 'string'
-			if ///^keys///.test name
+			if ns is 'keys'
 				window.addEventListener implName, customFunc
 			else
 				if name isnt 'pointerReleased'
@@ -435,4 +440,12 @@ module.exports = (impl) ->
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]
 			data.elemStyle.cursor = cursor
+		return
+
+	setItemKeysFocus: (val) ->
+		{keys} = @
+		if val is true
+			focusedKeys = keys
+		else if focusedKeys is keys
+			focusedKeys = null
 		return
