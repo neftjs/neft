@@ -32,4 +32,6 @@ exports.utils = require('./utils') exports
 
 exports.window = null
 
+exports.pixelRatio = 1
+
 exports.setWindow = (item) ->

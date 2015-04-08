@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'utils'
+implUtils = require '../utils'
 log = require 'log'
 signal = require 'signal'
 
@@ -39,13 +40,7 @@ SIGNALS =
 	'pointerEntered': 'mouseenter'
 	'pointerExited': 'mouseleave'
 	'pointerMoved': 'mousemove'
-	'pointerWheel': do ->
-		if 'onwheel' of document.createElement("div")
-			'wheel'
-		else if document.onmousewheel isnt undefined
-			'mousewheel'
-		else
-			'MozMousePixelScroll'
+	'pointerWheel': implUtils.wheelEvent.eventName
 	'keysPressed': 'keydown'
 	'keysHold': 'keydown'
 	'keysReleased': 'keyup'
@@ -118,40 +113,7 @@ SPECIAL_KEY_CODES =
 	123: 'F12'
 
 SIGNALS_ARGS =
-	'pointerWheel': do ->
-		NORMALIZED_VALUE = 3
-
-		isSlowContinuous = false
-
-		getDeltas = (e) ->
-			x = -e.deltaX*3 or e.wheelDeltaX ? 0
-			y = -e.deltaY*3 or e.wheelDeltaY ? e.wheelDelta ? -e.detail*3 or 0
-
-			if isFirefox and e.deltaMode is e.DOM_DELTA_LINE
-				x *= 10
-				y *= 10
-
-			deltaX: x
-			deltaY: y
-
-		(e) ->
-			deltas = getDeltas e
-
-			# MAGIC!
-			# It looks that Chrome on MacBook never gives values in range (-3, 3) as
-			# it does Firefox which always sends lower values
-			if not isSlowContinuous
-				delta = deltas.x or deltas.y or 3
-
-				if (delta > 0 and delta < 3) or (delta < 0 and delta > -3)
-					isSlowContinuous = true
-
-			if isSlowContinuous
-				deltas.x *= NORMALIZED_VALUE
-				deltas.y *= NORMALIZED_VALUE
-
-			deltas
-
+	'pointerWheel': implUtils.wheelEvent.getDelta
 	'pointerPressed': getMouseEvent
 	'pointerReleased': getMouseEvent
 	'pointerClicked': getMouseEvent

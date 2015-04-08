@@ -6,7 +6,7 @@ PIXI = require './pixi.lib.js'
 unless window.isFake
 	PI_2 = Math.PI * 2
 
-	PIXI.DisplayObject::updateTransform = ->
+	PIXI.DisplayObject::displayObjectUpdateTransform = PIXI.DisplayObject::updateTransform = ->
 		pt = @parent.worldTransform
 		wt = @worldTransform
 		data = @_data
@@ -17,14 +17,14 @@ unless window.isFake
 
 		if data isnt undefined
 			# translate to origin
-			originX = data._width / a / 2
-			originY = data._height / d / 2
-			tx = data._x + a * originX
-			ty = data._y + d * originY
+			originX = data.width / a / 2
+			originY = data.height / d / 2
+			tx = data.x + a * originX
+			ty = data.y + d * originY
 
 			# scale
-			a *= data._scale
-			d *= data._scale
+			a *= data.scale
+			d *= data.scale
 
 			# rotation
 			if @rotation % PI_2
@@ -104,6 +104,7 @@ unless window.isFake
 	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
 	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight,
 		resolution: pixelRatio
+		antialias: false
 
 window.addEventListener 'resize', ->
 	renderer.resize innerWidth, innerHeight
@@ -120,6 +121,8 @@ module.exports = (impl) ->
 	{items} = impl
 
 	impl._dirty = true
+	impl._pixiStage = stage
+	impl.pixelRatio = pixelRatio
 
 	# render loop
 	window.addEventListener 'load', ->

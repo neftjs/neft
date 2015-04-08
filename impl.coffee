@@ -17,8 +17,8 @@ TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'Screen', 'Rotation
          'Scrollable']
 
 platformImpl = switch true
-	# when utils.isBrowser and window.HTMLCanvasElement?
-	# 	require('./impl/pixi') impl
+	when utils.isBrowser and window.HTMLCanvasElement?
+		require('./impl/pixi') impl
 	when utils.isBrowser
 		require('./impl/css') impl
 	when utils.isQml
