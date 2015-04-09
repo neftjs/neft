@@ -14,11 +14,13 @@ TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'Screen', 'Rotation
          'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
          'Animation', 'PropertyAnimation', 'NumberAnimation',
 
-         'Scrollable']
+         'Scrollable',
+
+         'AmbientSound']
 
 platformImpl = switch true
-	when utils.isBrowser and window.HTMLCanvasElement?
-		require('./impl/pixi') impl
+	# when utils.isBrowser and window.HTMLCanvasElement?
+	# 	require('./impl/pixi') impl
 	when utils.isBrowser
 		require('./impl/css') impl
 	when utils.isQml
@@ -48,15 +50,10 @@ for name, extra of impl.Extras
 	extra = impl.Extras[name] = extra(impl)
 	utils.merge impl, extra
 
-impl.createItem = (item, type) ->
-	item._impl = impl.Types[type].createData?() or {}
-	Object.preventExtensions item._impl
-	impl.Types[type].create.call item, item._impl
-
-impl.createAnimation = (animation, type) ->
-	animation._impl = impl.Types[type].createData?() or {}
-	Object.preventExtensions animation._impl
-	impl.Types[type].create.call animation, animation._impl
+impl.createObject = (object, type) ->
+	object._impl = impl.Types[type].createData?() or {}
+	Object.preventExtensions object._impl
+	impl.Types[type].create.call object, object._impl
 
 impl.setWindow = do (_super = impl.setWindow) -> (item) ->
 	utils.defineProperty impl, 'window', utils.ENUMERABLE, item

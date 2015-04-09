@@ -19,7 +19,7 @@ Animation
 			@_paused = false
 			super()
 
-			Impl.createAnimation @, @constructor.__name__
+			Impl.createObject @, @constructor.__name__
 
 *Boolean* Animation::when
 -------------------------

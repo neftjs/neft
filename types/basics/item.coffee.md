@@ -55,7 +55,7 @@ This is a base class for everything which is visible.
 
 			super()
 
-			Impl.createItem @, @constructor.__name__
+			Impl.createObject @, @constructor.__name__
 
 *Signal* Item::ready()
 ----------------------
@@ -96,7 +96,8 @@ Rectangle {
 				ms = now - oldNow
 
 				for item in items
-					item.update ms
+					if item._isReady
+						item.update ms
 				requestAnimationFrame frame
 
 			requestAnimationFrame? frame

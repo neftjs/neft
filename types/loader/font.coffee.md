@@ -60,7 +60,6 @@ FontLoader {}
 			@_name = ''
 			@_sources = []
 			super()
-			Object.preventExtensions @
 
 *String* FontLoader::name
 -------------------------

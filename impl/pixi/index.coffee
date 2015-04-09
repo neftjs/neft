@@ -146,6 +146,8 @@ module.exports = (impl) ->
 		Image: require './level0/image'
 		Text: require './level0/text'
 
+		AmbientSound: require '../css/level0/sound/ambient'
+
 	setWindow: (item) ->
 		unless window.isFake
 			if stage.children.length

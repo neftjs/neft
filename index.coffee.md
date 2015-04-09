@@ -149,6 +149,8 @@ Styles.button/red {
 	exports.Flow = require('./types/layout/flow') exports, Impl, itemUtils
 	exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
 
+	exports.AmbientSound = require('./types/sound/ambient') exports, Impl, itemUtils
+
 	require('./types/loader') exports, Impl, itemUtils
 	exports.FontLoader = require('./types/loader/font') exports, Impl, itemUtils
 

@@ -23,6 +23,8 @@ exports.Types =
 
 	Scrollable: require './level2/scrollable'
 
+	AmbientSound: require './level0/sound/ambient'
+
 exports.Extras =
 	Binding: require './level1/binding'
 	Anchors: require './level2/anchors'

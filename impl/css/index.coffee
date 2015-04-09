@@ -156,6 +156,8 @@ module.exports = (impl) ->
 
 		Scrollable: require './level2/scrollable'
 
+		AmbientSound: require './level0/sound/ambient'
+
 	setWindow: (item) ->
 		onLoaded = ->
 			if document.readyState is 'complete'
