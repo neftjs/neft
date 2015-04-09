@@ -48,6 +48,9 @@ getOuterHTML = (elem) ->
 
 	nameRet = ret = "<" + name
 	for attrName, attrValue of elem._attrs
+		if ///^neft:///.test(attrName)
+			continue
+
 		ret += " " + attrName
 		unless attrValue?
 			ret += "=\"\"" unless booleanAttribs[attrName]

@@ -48,7 +48,7 @@ module.exports = class File
 			assert.notLengthOf path, 0
 			assert.notOk files[path]?
 			assert.isString html
-			assert.notLengthOf html, 0
+			assert.notLengthOf html, 0, "Can't load '#{path}' document file, because it's empty"
 
 			# get node
 			node = File.Element.fromHTML html
