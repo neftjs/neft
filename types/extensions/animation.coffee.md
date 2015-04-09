@@ -41,17 +41,24 @@ Animation
 
 ### *Signal* Animation::runningChanged(*Boolean* oldValue)
 
+		setRunningOnReady = ->
+			@running = @_when
+
 		itemUtils.defineProperty
 			constructor: @
 			name: 'running'
 			setter: (_super) -> (val) ->
+				@_when = val
+				unless @_isReady
+					@onReady setRunningOnReady
+					return
+
 				oldVal = @_running
 				if oldVal is val
 					return
 
 				assert.isBoolean val
 				_super.call @, val
-				@_when = val
 
 				if val
 					Impl.startAnimation.call @
