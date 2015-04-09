@@ -1,7 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-assert = require 'assert'
+assert = require 'neft-assert'
 signal = require 'signal'
 
 {isArray} = Array

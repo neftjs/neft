@@ -1,7 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-assert = require 'assert'
+assert = require 'neft-assert'
 
 assert = assert.scope 'View.Element.Tag.Attrs'
 

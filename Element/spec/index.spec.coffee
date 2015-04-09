@@ -4,7 +4,7 @@ Element = require('../index')
 
 describe 'View Element', ->
 
-	HTML = '<b><em>abc</em></b><div></div><p title="textTitle" class="a bb c2" data-custom="customValue"></p>'
+	HTML = '<b><em>abc</em></b><u></u><p title="textTitle" class="a bb c2" data-custom="customValue"></p>'
 	doc = null
 	b = em = div = p = null
 
@@ -34,7 +34,7 @@ describe 'View Element', ->
 			expect(doc.name).toBe ''
 			expect(b.name).toBe 'b'
 			expect(em.name).toBe 'em'
-			expect(div.name).toBe 'div'
+			expect(div.name).toBe 'u'
 
 	it 'stringify to html', ->
 
@@ -67,7 +67,7 @@ describe 'View Element', ->
 		expect(b.children.length).toBe 0
 		expect(div.children.length).toBe 1
 		expect(div.children[0]).toBe em
-		expect(doc.stringify()).toBe '<b></b><div><em>abc</em></div>'
+		expect(doc.stringify()).toBe '<b></b><u><em>abc</em></u>'
 		expect(-> em.parent = em).toThrow()
 
 		em.parent = b
@@ -129,7 +129,7 @@ describe 'View Element', ->
 
 			expect(p.attrs.get('title')).toBe 'textTitle'
 
-		it 'can be changed and removed', ->
+		it 'can be changed', ->
 
 			elem = p.clone()
 
@@ -138,11 +138,6 @@ describe 'View Element', ->
 			# change
 			elem.attrs.set 'title', 'changed value'
 			expect(elem.attrs.get 'title').toBe 'changed value'
-
-			# remove
-			expect(elem.attrs.item 0).toEqual ['title', 'changed value']
-			elem.attrs.set 'title', undefined
-			expect(elem.attrs.item 0).toEqual ['class', 'a bb c2']
 
 		it 'can store references to the objects', ->
 
@@ -156,16 +151,6 @@ describe 'View Element', ->
 			expect(elem.stringify()).toBe '<p title="[object Object]" class="a bb c2" data-custom="customValue"></p>'
 
 			elem.attrs.set 'title', title
-
-		it 'supports backing changes on cloned elements', ->
-
-			elem = p.clone()
-			title = elem.attrs.get 'title'
-
-			elem.attrs.set 'title', Math.random()
-			elem.attrs.backChanges()
-
-			expect(elem.attrs.get('title')).toBe title
 
 	describe 'index property', ->
 
@@ -184,7 +169,7 @@ describe 'View Element', ->
 
 	it 'replace() works properly', ->
 
-		elem = Element.fromHTML '<b><em></em></b><div></div><p></p>'
+		elem = Element.fromHTML '<b><em></em></b><u></u><p></p>'
 
 		[elemB, elemDiv, elemP] = elem.children
 		[elemEm] = b.children
@@ -193,7 +178,7 @@ describe 'View Element', ->
 
 		expect(elem.children.length).toBe 2
 		expect(elem.children[0]).toBe elemP
-		expect(elem.stringify()).toBe '<p></p><div></div>'
+		expect(elem.stringify()).toBe '<p></p><u></u>'
 
 		elem.replace elemP, elemB
 		elemP.parent = elem
@@ -202,23 +187,65 @@ describe 'View Element', ->
 		expect(elem.children[0]).toBe elemB
 		expect(elem.children[1]).toBe elemDiv
 		expect(elem.children[2]).toBe elemP
-		expect(elem.stringify()).toBe '<b><em></em></b><div></div><p></p>'
+		expect(elem.stringify()).toBe '<b><em></em></b><u></u><p></p>'
 
-	it 'queryAll() returns proper list', ->
+	describe 'queryAll() works with selector', ->
+		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'></div>"
+		doc2div1 = doc2.children[0]
+		doc2b = doc2div1.children[0]
+		doc2u = doc2b.children[0]
+		doc2div2 = doc2.children[1]
 
-		expect(doc.queryAll('b')).toEqual [b]
-		expect(doc.queryAll('[title]')).toEqual [p]
- 
-	it 'getting visible property works recursively', ->
+		it 'E', ->
+			expect(doc2.queryAll('div')).toEqual [doc2div1, doc2div2]
+			expect(doc2.queryAll('u')).toEqual [doc2u]
 
-		expect(b.visible).toBeTruthy()
-		b.visible = false
-		expect(b.visible).toBeFalsy()
-		expect(em.visible).toBeFalsy()
+		it 'E F', ->
+			expect(doc2.queryAll('div u')).toEqual [doc2u]
+			expect(doc2.queryAll('b u')).toEqual [doc2u]
+			expect(doc2.queryAll('b div')).toEqual []
 
-		b.visible = true
-		expect(b.visible).toBeTruthy()
-		expect(em.visible).toBeTruthy()
+		it 'E > F', ->
+			expect(doc2.queryAll('div > u')).toEqual []
+			expect(doc2.queryAll('b>u')).toEqual [doc2u]
+
+		it '[foo]', ->
+			expect(doc2.queryAll('[attr]')).toEqual [doc2u, doc2div2]
+			expect(doc2.queryAll('[color]')).toEqual [doc2u]
+			expect(doc2.queryAll('[width]')).toEqual []
+
+		it '[foo=bar]', ->
+			expect(doc2.queryAll('[attr=2]')).toEqual [doc2div2]
+			expect(doc2.queryAll('[attr="2"]')).toEqual [doc2div2]
+			expect(doc2.queryAll('[attr=\'2\']')).toEqual [doc2div2]
+			expect(doc2.queryAll('[attr=3]')).toEqual []
+
+		it '[foo^=bar]', ->
+			expect(doc2.queryAll('[color^=bl]')).toEqual [doc2u]
+			expect(doc2.queryAll('[color^="b"]')).toEqual [doc2u]
+			expect(doc2.queryAll('[color^=\'blue\']')).toEqual [doc2u]
+			expect(doc2.queryAll('[color^=lue]')).toEqual []
+
+		it '[foo$=bar]', ->
+			expect(doc2.queryAll('[color$=ue]')).toEqual [doc2u]
+			expect(doc2.queryAll('[color$="e"]')).toEqual [doc2u]
+			expect(doc2.queryAll('[color$=\'blue\']')).toEqual [doc2u]
+			expect(doc2.queryAll('[color$=blu]')).toEqual []
+
+		it '[foo*=bar]', ->
+			expect(doc2.queryAll('[color*=bl]')).toEqual [doc2u]
+			expect(doc2.queryAll('[color*="lu"]')).toEqual [doc2u]
+			expect(doc2.queryAll('[color*=\'blue\']')).toEqual [doc2u]
+			expect(doc2.queryAll('[color*=lue1]')).toEqual []
+
+		it '*', ->
+			expect(doc2.queryAll('*')).toEqual [doc2div1, doc2b, doc2u, doc2div2]
+
+		it '*[foo]', ->
+			expect(doc2.queryAll('*[color]')).toEqual [doc2u]
+
+		it 'E > * > F[foo]', ->
+			expect(doc2.queryAll('div > * > u[color]')).toEqual [doc2u]
 
 	it 'visible property is editable', ->
 
@@ -235,13 +262,13 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b a="1"></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.on 'attrChanged', (e) ->
+			tag.onAttrsChanged (e) ->
 				value = @attrs.get e.name
 				args = [@, arguments...]
 
 			tag.attrs.set 'a', 2
 
-			expect(args).toEqual [tag, name: 'a', value: '1']
+			expect(args).toEqual [tag, {name: 'a', value: '1'}, undefined]
 			expect(value).toBe 2
 
 		it 'observing visibility changes works properly', ->
@@ -250,13 +277,13 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.on 'visibilityChanged', ->
+			tag.onVisibilityChanged ->
 				value = @visible
 				args = [@, arguments...]
 
 			tag.visible = false
 
-			expect(args).toEqual [tag, true]
+			expect(args).toEqual [tag, true, undefined]
 			expect(value).toBe false
 
 		it 'observing text changes works properly', ->
@@ -265,13 +292,13 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b>a</b>').cloneDeep()
 			tag = elem.children[0].children[0]
 
-			tag.on 'textChanged', ->
+			tag.onTextChanged ->
 				text = @text
 				args = [@, arguments...]
 
 			tag.text = 'b'
 
-			expect(args).toEqual [tag, 'a']
+			expect(args).toEqual [tag, 'a', undefined]
 			expect(text).toBe 'b'
 
 		it 'observing parent changes works properly', ->
@@ -281,13 +308,13 @@ describe 'View Element', ->
 			tag1 = elem.children[0]
 			tag2 = elem.children[1]
 
-			tag2.on 'parentChanged', ->
+			tag2.onParentChanged ->
 				value = @parent
 				args = [@, arguments...]
 
 			tag2.parent = tag1
 
-			expect(args).toEqual [tag2, elem]
+			expect(args).toEqual [tag2, elem, undefined]
 			expect(value).toBe tag1
 
 		it 'disconnect() works as expected', ->
@@ -297,8 +324,8 @@ describe 'View Element', ->
 			tag = elem.children[0]
 
 			listener = -> ok = false
-			tag.on 'visibilityChanged', listener
-			tag.off 'visibilityChanged', listener
+			tag.onVisibilityChanged listener
+			tag.onVisibilityChanged.disconnect listener
 
 			tag.visible = false
 

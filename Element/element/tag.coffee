@@ -1,7 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-assert = require 'assert'
+assert = require 'neft-assert'
 signal = require 'signal'
 stringify = require './tag/stringify'
 
@@ -72,40 +72,9 @@ module.exports = (Element) ->
 
 			elem
 
-		queryAll: do ->
-			byName = (node, data) ->
-				node.name is data
+		query = require './tag/query'
 
-			byAttr = (node, data) ->
-				node.attrs?.get(data) isnt undefined
-
-			forChild = (node, testFunc, testFuncData, target) ->
-
-				for child in node.children
-					if testFunc child, testFuncData
-						target.push child
-
-					if child.children
-						forChild child, testFunc, testFuncData, target
-
-				null
-
-			(selector, target=[]) ->
-				assert.isString selector
-				assert.notLengthOf selector, 0
-				assert.isArray target
-
-				utils.clear target
-				return target unless @children
-
-				# find by attr
-				if attr = /^\[([^\]]+)\]$/.exec selector
-					forChild @, byAttr, attr[1], target
-				else
-					# find by name
-					forChild @, byName, selector, target
-
-				target
+		queryAll: query.queryAll
 
 		stringify: ->
 			stringify.getOuterHTML @
