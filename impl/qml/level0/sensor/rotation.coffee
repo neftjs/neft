@@ -3,10 +3,11 @@
 module.exports = (impl) ->
 	{degToRad} = impl.utils
 
-	sensor = null
-	qmlStr = "import QtSensors 5.0; RotationSensor { }"
-	elem = Qt.createQmlObject qmlStr, __stylesHatchery
-	{reading} = elem
+	if __stylesHatchery?
+		sensor = null
+		qmlStr = "import QtSensors 5.0; RotationSensor { }"
+		elem = Qt.createQmlObject qmlStr, __stylesHatchery
+		{reading} = elem
 
 	sync = ->
 		if not sensor or not reading

@@ -69,7 +69,7 @@ module.exports = (impl) ->
 
 		requestAnimationFrame vsync
 		return
-	requestAnimationFrame vsync
+	requestAnimationFrame? vsync
 
 	updateAnimation = (anim) ->
 		data = anim._impl

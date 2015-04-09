@@ -102,7 +102,7 @@ pixelRatio = window.devicePixelRatio or 1
 
 unless window.isFake
 	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
-	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight,
+	renderer = PIXI.autoDetectRecommendedRenderer innerWidth, innerHeight,
 		resolution: pixelRatio
 		antialias: false
 

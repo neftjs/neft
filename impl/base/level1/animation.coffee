@@ -15,3 +15,7 @@ module.exports = (impl) ->
 	startAnimation: ->
 
 	stopAnimation: ->
+
+	resumeAnimation: ->
+
+	pauseAnimation: ->

@@ -275,3 +275,5 @@ module.exports = (impl) ->
 			elem.buttonMode = true
 			elem.defaultCursor = 'pointer'
 		return
+
+	setItemKeysFocus: cssUtils.keysEvents.setItemKeysFocus

@@ -12,8 +12,8 @@ module.exports = (impl) ->
 		item.width = __stylesWindow.width
 		item.height = __stylesWindow.height
 
-	__stylesWindow.widthChanged.connect resize
-	__stylesWindow.heightChanged.connect resize
+	__stylesWindow?.widthChanged.connect resize
+	__stylesWindow?.heightChanged.connect resize
 
 	Types:
 		Item: require './level0/item'

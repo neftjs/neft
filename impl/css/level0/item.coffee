@@ -41,10 +41,6 @@ SIGNALS =
 	'pointerExited': 'mouseleave'
 	'pointerMoved': 'mousemove'
 	'pointerWheel': implUtils.wheelEvent.eventName
-	'keysPressed': 'keydown'
-	'keysHold': 'keydown'
-	'keysReleased': 'keyup'
-	'keysInput': 'keypress'
 
 if isTouch
 	utils.merge SIGNALS,
@@ -76,74 +72,12 @@ getMouseEvent = (e) ->
 	movementX: movementX
 	movementY: movementY
 
-pressedKeys = Object.create null
-
-SPECIAL_KEY_CODES =
-	32: 'Space'
-	13: 'Enter'
-	9: 'Tab'
-	27: 'Escape'
-	8: 'Backspace'
-	16: 'Shift'
-	17: 'Control'
-	18: 'Alt'
-	20: 'Caps Lock'
-	144: 'Num Lock'
-	37: 'Left'
-	38: 'Up'
-	39: 'Right'
-	40: 'Down'
-	45: 'Insert'
-	46: 'Delete'
-	36: 'Home'
-	35: 'End'
-	33: 'Page Up'
-	34: 'Page Down'
-	112: 'F1'
-	113: 'F2'
-	114: 'F3'
-	115: 'F4'
-	116: 'F5'
-	117: 'F6'
-	118: 'F7'
-	119: 'F8'
-	120: 'F9'
-	121: 'F10'
-	122: 'F11'
-	123: 'F12'
-
 SIGNALS_ARGS =
 	'pointerWheel': implUtils.wheelEvent.getDelta
 	'pointerPressed': getMouseEvent
 	'pointerReleased': getMouseEvent
 	'pointerClicked': getMouseEvent
 	'pointerMoved': getMouseEvent
-	'keysPressed': (e) ->
-		code = e.which or e.keyCode
-		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
-
-		if pressedKeys[key] and pressedKeys[key] isnt e
-			return false
-		pressedKeys[key] = e
-
-		key: key
-	'keysHold': (e) ->
-		code = e.which or e.keyCode
-		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
-
-		key: key
-	'keysReleased': (e) ->
-		code = e.which or e.keyCode
-		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
-
-		pressedKeys[key] = null
-
-		key: key
-	'keysInput': (e) ->
-		code = e.charCode or e.which or e.keyCode
-		text = String.fromCharCode(code)
-
-		text: text
 
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
@@ -182,8 +116,6 @@ module.exports = (impl) ->
 	# window.addEventListener 'touchstart', (e) ->
 	# 	e.preventDefault()
 	# , true
-
-	window.addEventListener SIGNALS.keysReleased, SIGNALS_ARGS.keysReleased
 
 	if USE_GPU
 		setInterval ->
@@ -247,8 +179,6 @@ module.exports = (impl) ->
 
 		data.elemStyle[transformProp] = transform
 		return
-
-	focusedKeys = null
 
 	NOP = ->
 
@@ -373,9 +303,6 @@ module.exports = (impl) ->
 			return
 
 		customFunc = (e) ->
-			if ns is 'keys' and self isnt focusedKeys
-				return
-
 			arg = SIGNALS_ARGS[name]? e
 			if arg is false or e._accepted
 				return
@@ -393,21 +320,12 @@ module.exports = (impl) ->
 			return
 
 		if typeof implName is 'string'
-			if ns is 'keys'
-				window.addEventListener implName, customFunc
-			else
-				if name isnt 'pointerReleased'
-					elem.addEventListener implName, customFunc, false
+			if name isnt 'pointerReleased'
+				elem.addEventListener implName, customFunc, false
 
 		# cursor
 		if cursor = SIGNALS_CURSORS[name]
 			data.elemStyle.cursor = cursor
 		return
 
-	setItemKeysFocus: (val) ->
-		{keys} = @
-		if val is true
-			focusedKeys = keys
-		else if focusedKeys is keys
-			focusedKeys = null
-		return
+	setItemKeysFocus: impl.utils.keysEvents.setItemKeysFocus

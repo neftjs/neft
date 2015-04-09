@@ -145,7 +145,7 @@ SIGNALS_ARGS =
 
 module.exports = (impl) ->
 	# always accepts pointer on impl.window
-	do ->
+	if __stylesMouseArea? then do ->
 		__stylesMouseArea.onPressed.connect (e) ->
 			e.accepted = true
 		__stylesMouseArea.onPositionChanged.connect (e) ->

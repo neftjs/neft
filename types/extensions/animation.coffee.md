@@ -16,6 +16,7 @@ Animation
 		constructor: ->
 			@_loop = false
 			@_updatePending = false
+			@_paused = false
 			super()
 
 			Impl.createAnimation @, @constructor.__name__
@@ -55,9 +56,35 @@ Animation
 				if val
 					Impl.startAnimation.call @
 					@started()
+					if @_paused
+						Impl.pauseAnimation.call @
 				else
+					if @_paused
+						@paused = false
 					Impl.stopAnimation.call @
 					@stopped()
+				return
+
+*Boolean* Animation::paused
+---------------------------
+
+### *Signal* Animation::pausedChanged(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'paused'
+			setter: (_super) -> (val) ->
+				oldVal = @_paused
+				if oldVal is val
+					return
+
+				assert.isBoolean val
+				_super.call @, val
+
+				if val
+					Impl.pauseAnimation.call @
+				else
+					Impl.resumeAnimation.call @
 				return
 
 *Boolean* Animation::loop
@@ -91,6 +118,21 @@ Animation::stop()
 
 		stop: ->
 			@running = false
+			@
+
+Animation::pause()
+------------------
+
+		pause: ->
+			if @running
+				@paused = true
+			@
+
+Animation::resume()
+-------------------
+
+		resume: ->
+			@paused = false
 			@
 
 		enable: ->

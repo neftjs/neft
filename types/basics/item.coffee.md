@@ -86,7 +86,7 @@ Rectangle {
 *Signal* Item::update(*Integer* miliseconds)
 --------------------------------------------
 
-		signal.Emitter.createSignal @, 'update', null, null, do ->
+		signal.Emitter.createSignal @, 'update', do ->
 			now = Date.now()
 			items = []
 
@@ -162,11 +162,14 @@ Rectangle {
 
 				if old isnt null
 					if oldNextSibling is null
+						assert.ok old._children[old._children.length - 1] is @
 						pop.call old._children
 					else if oldPreviousSibling is null
+						assert.ok old._children[0] is @
 						shift.call old._children
 					else
 						index = indexOf.call old._children, @
+						assert.ok index isnt -1
 						splice.call old._children, index, 1
 
 				if val isnt null
@@ -184,6 +187,8 @@ Rectangle {
 					previousSibling = val._children[val._children.length - 2] or null
 					@_previousSibling = previousSibling
 					previousSibling?._nextSibling = @
+				else
+					@_previousSibling = null
 				if oldNextSibling isnt null
 					@_nextSibling = null
 
@@ -201,9 +206,9 @@ Rectangle {
 				if oldNextSibling isnt null
 					oldNextSibling.previousSiblingChanged @
 
-				if val isnt null
-					@previousSiblingChanged oldPreviousSibling
+				if val isnt null or oldPreviousSibling isnt null
 					previousSibling?.nextSiblingChanged null
+					@previousSiblingChanged oldPreviousSibling
 				if oldNextSibling isnt null
 					@nextSiblingChanged oldNextSibling
 
