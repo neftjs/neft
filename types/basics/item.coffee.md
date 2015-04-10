@@ -163,10 +163,12 @@ Rectangle {
 
 				if old isnt null
 					if oldNextSibling is null
-						assert.ok old._children[old._children.length - 1] is @
+						index = old._children.length - 1
+						assert.ok old._children[index] is @
 						pop.call old._children
 					else if oldPreviousSibling is null
-						assert.ok old._children[0] is @
+						index = 0
+						assert.ok old._children[index] is @
 						shift.call old._children
 					else
 						index = indexOf.call old._children, @
