@@ -8,7 +8,9 @@ exports.Types =
 	Text: require './level0/text'
 	TextInput: require './level0/text/input'
 	FontLoader: require './level0/fontLoader'
+	Device: require './level0/device'
 	Screen: require './level0/screen'
+	Navigator: require './level0/navigator'
 	RotationSensor: require './level0/sensor/rotation'
 
 	Rectangle: require './level1/rectangle'

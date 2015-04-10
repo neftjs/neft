@@ -20,7 +20,9 @@ module.exports = (impl) ->
 		Image: require './level0/image'
 		Text: require './level0/text'
 		FontLoader: require './level0/fontLoader'
+		Device: require './level0/device'
 		Screen: require './level0/screen'
+		Navigator: require './level0/navigator'
 		RotationSensor: require './level0/sensor/rotation'
 
 		Rectangle: require './level1/rectangle'

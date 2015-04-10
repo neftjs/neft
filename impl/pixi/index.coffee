@@ -145,6 +145,10 @@ module.exports = (impl) ->
 		Item: require './level0/item'
 		Image: require './level0/image'
 		Text: require './level0/text'
+		Device: require '../css/level0/device'
+		Screen: require '../css/level0/screen'
+		Navigator: require '../css/level0/navigator'
+		Navigator: require '../css/level0/navigator'
 
 		AmbientSound: require '../css/level0/sound/ambient'
 

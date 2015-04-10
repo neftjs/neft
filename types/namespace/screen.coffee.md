@@ -13,9 +13,6 @@ Screen
 
 		constructor: ->
 			@_isTouch = false
-			@_isDesktop = true
-			@_isPhone = false
-			@_pixelRatio = 1
 			@_width = 1024
 			@_height = 800
 			@_orientation = 'Portrait'
@@ -26,41 +23,6 @@ Screen
 
 		utils.defineProperty @::, 'isTouch', null, ->
 			@_isTouch
-		, null
-
-*Boolean* Screen.isMobile
--------------------------
-
-		utils.defineProperty @::, 'isMobile', null, ->
-			@isTouch and (@isTablet or @isPhone)
-		, null
-
-*Boolean* Screen.isDesktop
---------------------------
-
-		utils.defineProperty @::, 'isDesktop', null, ->
-			not @isTouch
-		, null
-
-*Boolean* Screen.isTablet
--------------------------
-
-		utils.defineProperty @::, 'isTablet', null, ->
-			not @isDesktop and not @isPhone
-		, null
-
-*Boolean* Screen.isPhone
-------------------------
-
-		utils.defineProperty @::, 'isPhone', null, ->
-			@_isPhone
-		, null
-
-*Boolean* Screen.pixelRatio
----------------------------
-
-		utils.defineProperty @::, 'pixelRatio', null, ->
-			@_pixelRatio
 		, null
 
 *Boolean* Screen.width
@@ -81,6 +43,8 @@ Screen
 ----------------------------------------
 
 May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
+
+*TODO:* browser implementation
 
 ### *Signal* Screen.orientationChanged(*String* oldValue)
 

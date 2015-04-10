@@ -10,6 +10,8 @@ RotationSensor
 *Object* RotationSensor
 -----------------------
 
+*TODO:* browser implementation
+
 		constructor: ->
 			@_active = false
 			@x = 0

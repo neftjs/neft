@@ -150,7 +150,9 @@ module.exports = (impl) ->
 		Text: require './level0/text'
 		TextInput: require './level0/text/input'
 		FontLoader: require './level0/fontLoader'
+		Device: require './level0/device'
 		Screen: require './level0/screen'
+		Navigator: require './level0/navigator'
 
 		Rectangle: require './level1/rectangle'
 

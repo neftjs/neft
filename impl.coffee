@@ -9,7 +9,8 @@ impl = abstractImpl = require './impl/base'
 impl.window = null
 signal.create impl, 'windowReady'
 
-TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'Screen', 'RotationSensor',
+TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader',
+         'Device', 'Screen', 'Navigator', 'RotationSensor',
 
          'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
          'Animation', 'PropertyAnimation', 'NumberAnimation',
@@ -18,13 +19,15 @@ TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'Screen', 'Rotation
 
          'AmbientSound']
 
-platformImpl = switch true
-	# when utils.isBrowser and window.HTMLCanvasElement?
-	# 	require('./impl/pixi') impl
-	when utils.isBrowser
-		require('./impl/css') impl
-	when utils.isQml
-		require('./impl/qml') impl
+platformImpl = do ->
+	r = null
+	if utils.isBrowser and window.HTMLCanvasElement?
+		try r ?= require('./impl/pixi') impl
+	if utils.isBrowser
+		r ?= require('./impl/css') impl
+	if utils.isQml
+		r ?= require('./impl/qml') impl
+	r
 
 # merge types
 for name in TYPES
