@@ -11,14 +11,15 @@ HTML documents and more.
 
 	utils = require 'utils'
 	log = require 'log'
+	assert = require 'neft-assert'
 	Schema = require 'schema'
 	Networking = require 'networking'
 	Document = require 'document'
 	Renderer = require 'renderer'
-	require 'db-implementation'
-	require 'db-schema'
-	require 'db-addons'
-	require 'db/log.coffee'
+	# require 'db-implementation'
+	# require 'db-schema'
+	# require 'db-addons'
+	# require 'db/log.coffee'
 
 	AppRoute = require './route'
 	AppTemplate = require './template'
@@ -59,7 +60,12 @@ HTML documents and more.
 *Object* app.config = {}
 ------------------------
 
-Config object from *package.json* file and from the *init.js* file.
+Config object from the *package.json* file.
+
+Can be overriden in the *init.js* file.
+
+- *type* - accepts **app**, **game** and **text**,
+  used to detect e.g. which renderer implementation should be used
 
 ```
 // package.json
@@ -71,7 +77,8 @@ Config object from *package.json* file and from the *init.js* file.
     "protocol": "http",
     "port": 3000,
     "host": "localhost",
-    "language": "en"
+    "language": "en",
+    "type": "app"
   }
 }
 
@@ -164,6 +171,10 @@ Files from the *templates* folder with objects returned by their exported functi
 
 			templates: {}
 
+		# config.type
+		config.type ?= 'app'
+		assert.ok utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game, but '#{config.type}' got."
+
 		app.Route = AppRoute app
 		app.Template = AppTemplate app
 		app.View = AppView app
@@ -221,7 +232,7 @@ Files from the *templates* folder with objects returned by their exported functi
 			init opts.templates, app.templates
 
 	# link module
-	MODULES = ['utils', 'signal', 'db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list', 'log',
+	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log',
 	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert']
 	for name in MODULES
 		exports[name] = require name

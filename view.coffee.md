@@ -44,14 +44,10 @@ module.exports = function(app){
 ------------------------------------------------------------------
 
 		render: (req, data) ->
-			assert.instanceOf req, Networking.Request
-
 			document = Document.factory @document.path
 
 			# data
-			oldReq = DocumentGlobalData.request
-			utils.defineProperty DocumentGlobalData, 'request', utils.CONFIGURABLE, req
-			DocumentGlobalData.requestChanged(oldReq)
+			@_reloadReq req
 
 			dataObj = Object.create DocumentGlobalData
 			dataObj.global = dataObj
@@ -61,6 +57,15 @@ module.exports = function(app){
 			document.render()
 
 			document
+
+		_reloadReq: (req) ->
+			assert.instanceOf req, Networking.Request
+
+			oldReq = DocumentGlobalData.request
+			if oldReq isnt req
+				utils.defineProperty DocumentGlobalData, 'request', utils.CONFIGURABLE, req
+				DocumentGlobalData.requestChanged(oldReq)
+			return
 
 *Object* DocumentGlobalData
 ---------------------------
@@ -131,7 +136,7 @@ Reference into the **app** object.
 
 Reference to the current considered request.
 
-**DocumentGlobalData.requestChanged()** signal is called when this property change.
+The **DocumentGlobalData.requestChanged()** signal is called on this property change.
 
 		utils.defineProperty DocumentGlobalData, 'request', utils.CONFIGURABLE, null
 

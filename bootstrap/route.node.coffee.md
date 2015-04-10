@@ -23,6 +23,8 @@ Standard routes @txt
 		<title>${data.title}</title>
 		<script type="text/javascript" src="${data.neftFilePath}"></script>
 		<script type="text/javascript" src="${data.appFilePath}"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	</head>
 	<body>
 		<noscript>
@@ -35,15 +37,17 @@ Standard routes @txt
 	module.exports = (app) ->
 		APP_JS_URI = '/app.js'
 		NEFT_JS_URI = '/neft.js'
-		JS_NEFT_FILE_PATH = './neft-browser-release.js'
+		JS_NEFT_FILE_PATH = './neft-browser-app-release.js'
+		JS_NEFT_GAME_FILE_PATH = './neft-browser-game-release.js'
 		JS_BUNDLE_FILE_PATH = './build/app-browser-release.js'
 		VIEW_NAME = '_app_bootstrap'
 		VIEW_FILE = 'view.html'
-		TEXT_MODE_URI_PREFIX = '/legacy'
-		TEXT_MODE_COOKIE_NAME = 'textMode'
+		TEXT_MODE_URI_PREFIX = '/neft-type=text'
+		TYPE_COOKIE_NAME = 'neft-type'
 
 		`//<development>`
-		JS_NEFT_FILE_PATH = './neft-browser-develop.js'
+		JS_NEFT_FILE_PATH = './neft-browser-app-develop.js'
+		JS_NEFT_GAME_FILE_PATH = './neft-browser-game-develop.js'
 		JS_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
 		`//</development>`
 
@@ -57,11 +61,18 @@ Standard routes @txt
 			re = re.slice 0, -1
 			new RegExp "^(?:#{re})"
 
+		getType = (req) ->
+			{cookie} = req.headers
+			if cookie.indexOf('neft-type') isnt -1
+				///neft\-type=([a-z]+?)///.exec(cookie)[1]
+			else
+				app.config.type
+
 #### app.js
 
 Returns build app javascript file.
 
-		bundleFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
+		appFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
 		new app.Route
 			uri: APP_JS_URI
 			callback: (req, res, callback) ->
@@ -69,7 +80,7 @@ Returns build app javascript file.
 				fs.readFile JS_BUNDLE_FILE_PATH, 'utf-8', callback
 				`//</development>`
 				`//<production>`
-				callback null, bundleFile
+				callback null, appFile
 				`//</production>`
 
 #### neft.js
@@ -77,10 +88,24 @@ Returns build app javascript file.
 Returns neft javascript file.
 
 		neftFile = fs.readFileSync JS_NEFT_FILE_PATH, 'utf-8'
+		neftGameFile = fs.readFileSync JS_NEFT_GAME_FILE_PATH, 'utf-8'
 		new app.Route
 			uri: NEFT_JS_URI
 			callback: (req, res, callback) ->
-				callback null, neftFile
+				isGameType = getType(req) is 'game'
+
+				`//<development>`
+				if isGameType
+					fs.readFile JS_NEFT_GAME_FILE_PATH, 'utf-8', callback
+				else
+					fs.readFile JS_NEFT_FILE_PATH, 'utf-8', callback
+				`//</development>`
+				`//<production>`
+				if isGameType
+					callback null, neftGameFile
+				else
+					callback null, neftFile
+				`//</production>`
 
 #### favicon.ico
 
@@ -95,12 +120,7 @@ Returns 'static/favicon.ico' file.
 
 Returns any file from the static/ folder.
 
-#### *
-
-It decides whether the full HTML document should be returned (e.g. for the Googlebot or
-text browsers) or HTML scaffolding which will run **neft.io** on the client side.
-
-#### legacy/*
+#### neft-type={type}/*
 
 This URI is used by the browsers which doesn't support javascript - in such case always
 full HTML document is returned (like for searching robots).
@@ -108,24 +128,25 @@ full HTML document is returned (like for searching robots).
 You can use this route in a browser to check whether your HTML document is proper, but
 remember to clean your cookies when you finish.
 
+		route = new app.Route
+			uri: 'neft-type={type}/{rest*}'
+			callback: (req, res, callback) ->
+				res.setHeader 'Set-Cookie', "#{TYPE_COOKIE_NAME}=#{req.params.type}; path=/;"
+				res.redirect "#{app.networking.url}/#{req.params.rest}"
+
+#### *
+
+It decides whether the full HTML document should be returned (e.g. for the Googlebot or
+text browsers) or HTML scaffolding which will run **neft.io** on the client side.
+
 		new app.Route
 			uri: '*'
 			view: view
 			callback: (req, res, callback) ->
-				# text mode initialization
-				if req.uri.indexOf(TEXT_MODE_URI_PREFIX) is 0
-					redirect = req.uri.slice TEXT_MODE_URI_PREFIX.length
-					res.setHeader 'Set-Cookie', "#{TEXT_MODE_COOKIE_NAME}=true; path=/;"
-					res.setHeader 'Location', "/#{redirect}"
-					res.send Networking.Response.TEMPORARY_REDIRECT
-					return
-
 				# text mode
-				cookie = req.headers.cookie
-				if cookie and cookie.indexOf(TEXT_MODE_COOKIE_NAME) isnt -1
+				if getType(req) is 'text'
 					return callback true
 
-				# TODO: consider other robots and clients with legacy browsers
 				if req.type isnt Networking.Request.HTML_TYPE or # omit types other than html
 				   reservedUrisRe.test(req.uri) or # omit reserved URIs
 				   utils.has(req.userAgent, 'bot') or # omit Googlebot, msnbot etc.

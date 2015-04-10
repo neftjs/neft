@@ -12,6 +12,7 @@ Class known as `app.Route` used to automate dealing with networking.
 	Networking = require 'networking'
 	Schema = require 'schema'
 	Document = require 'document'
+	Dict = require 'dict'
 
 	log = log.scope 'App', 'Route'
 
@@ -398,6 +399,10 @@ It's called with the same parameters as controller, that is
 					lastRes?.destroy()
 					lastRes = res
 
+			# clear old view
+			if req.type is Networking.Request.HTML_TYPE and (@view or @template)
+				clearView @, req, res
+
 			# serverResourceUri
 			if @serverResourceUri
 				stack.add (callback) =>
@@ -447,6 +452,8 @@ It's called with the same parameters as controller, that is
 					if res.data instanceof Document
 						# TODO: how to destroy this view?
 						return callback null, res.data
+					else unless res.data?
+						res.data = new Dict
 
 					logtime = log.time "View"
 					renderView @, req, res, res.data, (err, data) ->
@@ -467,10 +474,45 @@ It's called with the same parameters as controller, that is
 					res.onSent.disconnect onSent
 					return next err
 
-				if not res.data?
+				if not res.data? and req.method is Networking.Request.GET
 					res.send 404
 				else
 					res.send 200
+
+		currentTemplate = null
+		currentTemplateView = null
+		lastView = null
+
+		clearView = do ->
+			if utils.isNode
+				(ctx, req, res) ->
+					assert.instanceOf ctx, AppRoute
+					assert.instanceOf req, Networking.Request
+					assert.instanceOf res, Networking.Response
+			else
+				(ctx, req, res) ->
+					assert.instanceOf ctx, AppRoute
+					assert.instanceOf req, Networking.Request
+					assert.instanceOf res, Networking.Response
+
+					if currentTemplate isnt ctx.template
+						if currentTemplateView
+							currentTemplateView.destroy()
+							currentTemplateView = null
+							lastView = null
+						currentTemplate = null
+
+						if ctx.template
+							currentTemplate = ctx.template
+							currentTemplateView = ctx.template._render req
+					else
+						if currentTemplate
+							currentTemplate.view._reloadReq req
+
+					if lastView
+						lastView.destroy()
+						lastView = null
+					return
 
 		renderView = do ->
 			if utils.isNode
@@ -492,30 +534,12 @@ It's called with the same parameters as controller, that is
 
 					callback null, masterView
 			else
-				currentTemplate = null
-				currentTemplateView = null
-				lastView = null
-
 				(ctx, req, res, data, callback) ->
 					assert.instanceOf ctx, AppRoute
 					assert.instanceOf req, Networking.Request
 					assert.instanceOf res, Networking.Response
 
-					if currentTemplate isnt ctx.template
-						if currentTemplateView
-							currentTemplateView.destroy()
-							currentTemplateView = null
-							lastView = null
-						currentTemplate = null
+					lastView = ctx.view.render req, data
+					currentTemplate?._renderTarget currentTemplateView, lastView
 
-						if ctx.template
-							currentTemplate = ctx.template
-							currentTemplateView = ctx.template._render req
-
-					lastView?.destroy()
-
-					setImmediate ->
-						lastView = ctx.view.render req, data
-						currentTemplate?._renderTarget currentTemplateView, lastView
-
-						callback null, currentTemplateView or lastView
+					callback null, currentTemplateView or lastView
