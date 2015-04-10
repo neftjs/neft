@@ -148,7 +148,6 @@ module.exports = (impl) ->
 		Device: require '../css/level0/device'
 		Screen: require '../css/level0/screen'
 		Navigator: require '../css/level0/navigator'
-		Navigator: require '../css/level0/navigator'
 
 		AmbientSound: require '../css/level0/sound/ambient'
 

@@ -12,7 +12,7 @@ exports.prependElement = (parent, child) ->
 		parent.appendChild child
 
 exports.encodeImageSrc = do ->
-	DATA_URI_RE = ///^data:([a-z+/]+),(.*)$///
+	DATA_URI_RE = ///^data:([a-z+/]+)///
 
 	(val) ->
 		if DATA_URI_RE.test(val)
