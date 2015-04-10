@@ -44,25 +44,36 @@ You can use other functions declared in the same file (considering [neft:fragmen
 	coffee = require 'coffee-script'
 	utils = require 'utils'
 
-	module.exports = (File) -> (file) ->
+	parseLinksFile = require('document/file/parse/fragments/links')
+	parseLinks = null
+	module.exports = (File) ->
+		parseLinks ?= parseLinksFile File
 
-		{Style} = File
-		funcs = file.funcs ?= {}
+		(file) ->
+			{Style} = File
+			funcs = file.funcs ?= {}
 
-		nodes = file.node.queryAll "#{File.HTML_NS}:func"
-		for node in nodes
-			name = node.attrs.get 'name'
-			unless name
-				throw new Error 'Func name is requried'
+			nodes = file.node.queryAll "#{File.HTML_NS}:func"
+			for node in nodes
+				name = node.attrs.get('name') or node.attrs.get('neft:name')
+				unless name
+					throw new Error 'Func name is requried'
 
-			if funcs.hasOwnProperty name
-				throw new Error "Func `#{name}` already exists"
+				if funcs.hasOwnProperty name
+					throw new Error "Func `#{name}` already exists"
 
-			body = node.stringifyChildren()
+				body = node.stringifyChildren()
 
-			funcs[name] = body
+				funcs[name] = body
 
-			# remove node
-			node.parent = null
+				# remove node
+				node.parent = null
 
-		return
+			# merge funcs from files
+			links = parseLinks file
+			for link in links
+				linkView = File.factory link.path
+				for externalFuncName, externalFunc of linkView.funcs
+					funcs[externalFuncName] ?= externalFunc
+
+			return

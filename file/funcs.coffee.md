@@ -33,7 +33,7 @@ This object is used as a global namespace in the function bodies.
 Use this function to require *Neft* modules like in a normal *JavaScript* file.
 
 ```
-<neft:func name="test">
+<neft:func neft:name="test">
   var utils = require('utils');
   return utils.arrayToObject([1, 2]);
 </neft:func>
@@ -50,7 +50,7 @@ It's used internally by the string interpolation to find a property in various p
 (*HTML* tag attributes, [neft:use][] tag attributes and *global* data).
 
 ```
-<neft:func name="test">
+<neft:func neft:name="test">
   return get('user').name;
 </neft:func>
 ```
@@ -66,7 +66,7 @@ It's used internally by the string interpolation to find a property in various p
 This object corresponds to the arguments object passed to a function.
 
 ```
-<neft:func name="followMouse">
+<neft:func neft:name="followMouse">
   var e = arguments[0]; // Renderer.Item::pointer.onMove comes with event argument
   return [e.x, e.y];
 </neft:func>
@@ -86,11 +86,11 @@ This is a *low-level API* and it's not documented.
 Using this attribute you can call other functions.
 
 ```
-<neft:func name="add">
+<neft:func neft:name="add">
   return arguments[0] + arguments[1];
 </neft:func>
 
-<neft:func name="print">
+<neft:func neft:name="print">
   return "1 + 3 = " + view.funcs.add(1, 3);
 </neft:func>
 ```
@@ -105,7 +105,7 @@ This variable refers to the [Renderer.Item][].
 It's available, only if it's a [Renderer.Item][] signal.
 
 ```
-<neft:func name="test">
+<neft:func neft:name="test">
   return item.width * item.height;
 </neft:func>
 
@@ -113,6 +113,8 @@ It's available, only if it's a [Renderer.Item][] signal.
 ```
 
 			item: (ctx) ->
+				if ctx and ctx._ref
+					ctx = ctx._ref
 				if ctx instanceof Renderer.Item
 					ctx
 
@@ -123,11 +125,11 @@ In most cases this variable refers to the [DocumentGlobalData][] unless you rend
 a view not using [App.View][].
 
 ```
-<neft:func name="changePage">
+<neft:func neft:name="changePage">
   global.uri.name = item.text;
 </neft:func>
 
-<button neft:style="enterName" neft:style:onPointerClicked="changePage" />
+<button neft:style="enterName" neft:style:pointer:onClicked="changePage" />
 ```
 
 			global: -> @storage?.global
@@ -143,7 +145,9 @@ This variable refers to the *get('data')* value.
 		Array::push.apply funcGlobalProps, Object.keys(FuncGlobalGetters)
 
 		bindFuncIntoGlobal = (func, file) ->
-			expect(func).toBe.function()
+			if typeof func isnt 'function'
+				return func
+
 			expect(file).toBe.any File
 
 			args = []

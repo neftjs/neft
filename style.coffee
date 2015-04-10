@@ -73,6 +73,8 @@ module.exports = (File, data) -> class Style
 		@children = []
 		@textWatchingNodes = []
 		@visible = true
+		@attrListeners = []
+		@isTextSet = false
 
 		Object.preventExtensions @
 
@@ -107,13 +109,27 @@ module.exports = (File, data) -> class Style
 
 		for name, val of @attrs
 			@setAttr name, val
+
+		{attrListeners} = @
+		while attrListeners.length
+			func = attrListeners.pop()
+			name = attrListeners.pop()
+			obj = attrListeners.pop()
+			obj[name].disconnect func
 		return
 
 	updateText: ->
 		if 'text' of @item
-			@item.text = @node.stringifyChildren()
+			obj = @item
 		else if @item.$ isnt null and 'text' of @item.$
-			@item.$.text = @node.stringifyChildren()
+			obj = @item.$
+
+		if obj
+			text = @node.stringifyChildren()
+
+			if text.length > 0 or @isTextSet
+				@isTextSet = true
+				obj.text = text
 		return
 
 	updateVisibility: ->
@@ -171,6 +187,7 @@ module.exports = (File, data) -> class Style
 
 				if typeof obj[prop] is 'function'
 					obj[prop] val
+					@attrListeners.push obj, prop, val
 				else
 					obj[prop] = val
 			obj = obj[prop]
