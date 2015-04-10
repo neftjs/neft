@@ -30,14 +30,6 @@ var Networking = require('networking');
 		@Request = require('./request.coffee.md') Networking, Impl.Request
 		@Response = require('./response.coffee.md') Networking, Impl.Response
 
-*Array* Networking.TYPES
-------------------------
-
-This array contains supported types of connection.
-
-Contains:
- - Networking.HTTP.
-
 		@TYPES = [
 			(@HTTP = 'http')
 		]
@@ -79,11 +71,6 @@ Use this constructor to create new *Networking* instance.
 			log.info "Start as `#{@host}:#{@port}`"
 
 			Object.freeze @
-
-ReadOnly *String* Networking::type
-----------------------------------
-
-This property refers to the one of the *Networking.TYPES* values.
 
 		type: @HTTP
 
@@ -244,9 +231,8 @@ app.networking.createRequest({
 					err = null
 					utils.async.forEach handlers, (handler, i, handlers, next) ->
 						handler.exec req, res, (_err) ->
-							if _err instanceof Networking.Handler.CallbackError
-								log.error "Error in '#{handler.uri}': #{_err}"
-							err = _err
+							if _err?
+								err = _err
 							next()
 
 					, ->
@@ -258,3 +244,20 @@ app.networking.createRequest({
 					noHandlersError()
 
 			req
+
+*Networking.Request* Networking::createServerRequest(*Object* options)
+----------------------------------------------------------------------
+
+		createServerRequest: (opts) ->
+			assert.instanceOf @, Networking
+			assert.isPlainObject opts, '::createServerRequest options argument ...'
+
+			if opts.uri?.toString?
+				opts.uri = opts.uri.toString()
+
+			unless EXTERNAL_URL_RE.test opts.uri
+				if opts.uri[0] isnt '/'
+					opts.uri = "/#{opts.uri}"
+				opts.uri = "#{@url}#{opts.uri}"
+
+			@createRequest opts

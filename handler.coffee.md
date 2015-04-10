@@ -13,42 +13,6 @@ Handler
 	assert = assert.scope 'Networking.Handler'
 	log = log.scope 'Networking', 'Handler'
 
-*UriNotValidError* Handler.UriNotValidError : *Error*
------------------------------------------------------
-
-This error class is raised if a handler *Uri* is not valid with a request.
-
-Access it with:
-```
-var Networking = require('networking');
-var UriNotValidError = Networking.Handler.UriNotValidError;
-```
-
-	class UriNotValidError extends Error
-		constructor: (@message) -> super
-
-		name: 'UriNotValid'
-		message: ''
-
-*CallbackError* Handler.CallbackError : *Error*
------------------------------------------------
-
-This error class is used if the handler callback function raised an error synchronously or
-asynchronously (calling a *callback* argument with an error).
-
-Access it with:
-```
-var Networking = require('networking');
-var CallbackError = Networking.Handler.CallbackError;
-```
-
-	class CallbackError extends Error
-
-		constructor: (@message) -> super
-
-		name: 'CallbackError'
-		message: ''
-
 *Handler* Handler(*Object* options)
 -----------------------------------
 
@@ -68,9 +32,6 @@ var Handler = Networking.Handler;
 ```
 
 	module.exports = (Networking) -> class Handler
-
-		@UriNotValidError = UriNotValidError
-		@CallbackError = CallbackError
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ...'
@@ -95,9 +56,6 @@ It's one of the **Networking.Request.METHODS** values.
 
 This property is compared with a request uri.
 
-If it's not valid with the request uri, a *UriNotValidError* error is raised,
-otherwise schema is used to further validate.
-
 		uri: null
 
 *Schema* Handler::schema = null
@@ -105,8 +63,6 @@ otherwise schema is used to further validate.
 
 This property is used to determine whether a request uri is valid and can be handled by
 the handler callback.
-
-If not, a *UriNotValidError* error is raised.
 
 This property is optional in the constructor.
 
@@ -141,11 +97,11 @@ It's internally called by the **Networking.createRequest()**.
 
 			# compare methods
 			if @method isnt req.method
-				return next new UriNotValidError
+				return next()
 
 			# test uri
 			unless @uri.test req.uri
-				return next new UriNotValidError
+				return next()
 
 			params = req.params = @uri.match req.uri
 
@@ -166,15 +122,23 @@ It's internally called by the **Networking.createRequest()**.
 				req.handler = null
 				if err? and err isnt true
 					errMsg = err
-					if err.stack?
+					if errMsg.stack?
 						if utils.isQml
 							errMsg = "#{err.message}\n#{err.stack}"
 						else
 							errMsg = err.stack
+					else if utils.isObject(errMsg)
+						errMsg = utils.tryFunction JSON.stringify, null, [errMsg], errMsg
 				if errMsg
-					next new CallbackError errMsg
+					log.error "Error in '#{@uri}': #{errMsg}"
+					if err instanceof RangeError or
+					   err instanceof TypeError or
+					   err instanceof SyntaxError or
+					   err instanceof ReferenceError
+						errMsg = "Internal Error; message has been removed"
+					next errMsg
 				else
-					next new UriNotValidError
+					next()
 
 			log "Use `#{@method} #{@uri}` handler"
 

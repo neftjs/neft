@@ -2,6 +2,7 @@
 
 utils = require 'utils'
 http = require 'http'
+https = require 'https'
 urlUtils = require 'url'
 assert = require 'neft-assert'
 nodeStatic = require 'node-static'
@@ -19,7 +20,13 @@ module.exports = (Networking) ->
 		assert.instanceOf networking, Networking
 
 		# create server
-		server = http.createServer()
+		switch networking.protocol
+			when 'http'
+				server = http.createServer()
+			when 'https'
+				server = https.createServer()
+			else
+				throw new Error "Unsupported protocol '#{networking.protocol}'"
 
 		# start listening
 		server.listen networking.port, networking.host
@@ -80,7 +87,16 @@ module.exports = (Networking) ->
 			headers:
 				'X-Expected-Type': req.type
 
-		nodeReq = http.request opts, (res) ->
+		switch urlObject.protocol
+			when 'http:'
+				reqModule = http
+			when 'https:'
+				reqModule = https
+			else
+				callback 500, new Error "Unsupported protocol '#{urlObject.protocol}'"
+				return
+
+		nodeReq = reqModule.request opts, (res) ->
 			res.setEncoding 'utf-8'
 			data = ''
 
@@ -100,6 +116,10 @@ module.exports = (Networking) ->
 			callback 500, e
 
 		if req.data?
-			nodeReq.write req.data
+			if utils.isObject(req.data)
+				data = utils.tryFunction JSON.stringify, null, [req.data], req.data
+			else
+				data = req.data
+			nodeReq.write data
 
 		nodeReq.end()

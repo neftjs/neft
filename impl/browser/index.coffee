@@ -9,8 +9,10 @@ module.exports = (Networking) ->
 	Response: require('./response.coffee') Networking, impl
 
 	init: (networking) ->
+		isReady = false
+
 		# Send internal request to change the page based on the URI
-		impl.changePage = (uri) ->
+		impl.changePage = window.location.neftChangePage = (uri) ->
 			# send internal request
 			res = networking.createRequest
 				method: Networking.Request.GET
@@ -19,7 +21,8 @@ module.exports = (Networking) ->
 
 		# synchronize with browser page changing
 		window.addEventListener 'popstate', ->
-			impl.changePage location.pathname
+			if isReady
+				impl.changePage location.pathname
 
 		# don't refresh page on click anchor
 		document.addEventListener 'click', (e) ->
@@ -37,14 +40,24 @@ module.exports = (Networking) ->
 				impl.changePage target.pathname
 
 		# change page to the current one
-		setTimeout ->
-			impl.changePage location.pathname
+		onLoaded = ->
+			if document.readyState is 'complete'
+				setTimeout ->
+					isReady = true
+					impl.changePage location.pathname
+			return
+
+		if document.readyState is 'complete'
+			onLoaded()
+		else
+			document.addEventListener 'readystatechange', onLoaded
+
+		return
 
 	###
 	Send a XHR request and call `callback` on response.
 	###
 	sendRequest: (req, callback) ->
-
 		{Request} = Networking
 
 		xhr = new XMLHttpRequest
@@ -69,4 +82,8 @@ module.exports = (Networking) ->
 		xhr.onerror = ->
 			callback xhr.status, xhr.response
 
-		xhr.send()
+		if utils.isObject req.data
+			data = utils.tryFunction JSON.stringify, null, [req.data], req.data
+		else
+			data = req.data
+		xhr.send data

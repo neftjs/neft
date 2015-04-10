@@ -252,7 +252,7 @@ res.onSent(function(){
 			{data} = res
 
 			unless res.isSucceed()
-				log.warn "Response #{res.request.uri} completed with error;\n#{data?.stack or data}"
+				log.warn "Response #{res.request.uri} completed with an error"
 
 			if data instanceof Error
 				data = utils.errorToObject data
