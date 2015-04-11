@@ -40,17 +40,31 @@ module.exports = (impl) ->
 		data.callback = ->
 			impl._dirty = true
 
+			oldTexture = contentElem.texture
+			contentElem.setTexture emptyTexture
+
 			if val?
-				texture = new PIXI.Texture(new PIXI.BaseTexture(data.image.elem))
-				contentElem.setTexture texture
-			else
-				contentElem.setTexture emptyTexture
+				unless data.image.texture
+					img = data.image.elem
 
-			contentElem.width = self.width
-			contentElem.height = self.height
+					# svg alpha bug
+					if ///^data:image\/svg+|\.svg$///.test(val)
+						canv = document.createElement 'canvas'
+						ctx = canv.getContext '2d'
+						canv.width = img.width
+						canv.height = img.height
+						ctx.drawImage img, 0, 0
+						img = canv
+
+					data.image.texture = new PIXI.Texture(new PIXI.BaseTexture(img))
+				contentElem.setTexture data.image.texture
+				impl._dirty = true
+
+				contentElem.width = self.width
+				contentElem.height = self.height
 			callback?.apply @, arguments
-		data.image = cssImage._getImage val
 
+		data.image = cssImage._getImage val
 		cssImage._callCallback.call @
 
 		return

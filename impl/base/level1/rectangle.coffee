@@ -23,7 +23,7 @@ module.exports = (impl) ->
 		"<svg width='#{width}' height='#{height}' xmlns='http://www.w3.org/2000/svg'>" +
 			"<clipPath id='clip'>" +
 				"<rect " +
-					"rx='#{item.radius}' " +
+					"rx='#{radius}' " +
 					"width='#{width}' height='#{height}' />" +
 			"</clipPath>" +
 			"<rect " +
@@ -31,7 +31,7 @@ module.exports = (impl) ->
 				"fill='#{item.color}' " +
 				"stroke='#{item.border.color}' " +
 				"stroke-width='#{strokeWidth}' " +
-				"rx='#{round radius}' " +
+				"rx='#{radius}' " +
 				"width='#{width}' height='#{height}' />" +
 		"</svg>"
 
