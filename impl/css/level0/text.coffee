@@ -20,7 +20,7 @@ module.exports = (impl) ->
 	sizeUpdatePending = false
 
 	updateSize = do ->
-		MAX_CHECKS = 20
+		MAX_CHECKS = 40
 
 		queue = []
 		windowLoadQueue = []
@@ -41,7 +41,7 @@ module.exports = (impl) ->
 			while i < n
 				item = queue[i]
 				updateSizeNow item
-				if ++item._impl.sizeChecks >= MAX_CHECKS
+				if ++item._impl.sizeChecks > MAX_CHECKS
 					if i is n-1
 						queue.pop()
 						n--
@@ -66,15 +66,19 @@ module.exports = (impl) ->
 
 			if item._impl.autoWidth
 				width = textElem.offsetWidth
+				if item.width isnt width
+					item._impl.sizeChecks = MAX_CHECKS
 				if width > 0
 					item.width = width + 1
 
 			if item._impl.autoHeight
 				height = textElem.offsetHeight
+				if item.height isnt height
+					item._impl.sizeChecks = MAX_CHECKS
 				if height > 0
 					item.height = height
 
-			if (item._height > 0 and item._impl.elem.offsetParent) or item._impl.sizeChecks is MAX_CHECKS-1
+			if (item._height > 0 and item._impl.elem.offsetParent) or item._impl.sizeChecks is MAX_CHECKS
 				if item._impl.textElem.parentNode is hatchery
 					item._impl.elem.appendChild item._impl.textElem
 
@@ -92,6 +96,12 @@ module.exports = (impl) ->
 				windowLoadQueue.push item
 				return
 
+			sizeUpdatePending = true
+			updateSizeNow item
+			sizeUpdatePending = false
+			if data.sizeChecks is MAX_CHECKS
+				return
+
 			data.pendingSize = true
 			queue.push item
 
@@ -99,11 +109,11 @@ module.exports = (impl) ->
 				hatchery.appendChild data.textElem
 
 			unless pending
-				setImmediate updateAll
+				setTimeout updateAll, 10
 				pending = true
 
 			unless intervalPending
-				intervalId = setInterval updateAllInInterval, 200
+				intervalId = setInterval updateAllInInterval, 50
 				intervalPending = true
 			return
 
