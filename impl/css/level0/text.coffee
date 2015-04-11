@@ -14,12 +14,6 @@ module.exports = (impl) ->
 	# used to render not visible texts
 	hatchery = impl._hatchery
 
-	impl.DEFAULT_FONTS =
-		__proto__: null
-		'sans': 'neft-sans-family'
-		'sans-serif': 'neft-sans-serif-family'
-		'monospace': 'neft-monospace-family'
-
 	textImpl = {}
 	signal.create textImpl, 'fontReady'
 
@@ -190,7 +184,7 @@ module.exports = (impl) ->
 			height: auto;
 			white-space: pre;
 			font-size: 14px;
-			font-family: #{impl.DEFAULT_FONTS['sans-serif']}, sans-serif;
+			font-family: #{impl.utils.DEFAULT_FONTS['sans-serif']}, sans-serif;
 			margin-top: #{if isFirefox then 1 else 0}px;
 		}
 		#styles .textVerticalCenterAlign {
@@ -268,8 +262,8 @@ module.exports = (impl) ->
 		unless isFontReady
 			reloadFontFamilyQueue.push @_impl.textElem
 
-		if impl.DEFAULT_FONTS[val]
-			val = "#{impl.DEFAULT_FONTS[val]}, #{val}"
+		if impl.utils.DEFAULT_FONTS[val]
+			val = "#{impl.utils.DEFAULT_FONTS[val]}, #{val}"
 		else
 			val = "'#{val}'"
 		@_impl.textElemStyle.fontFamily = val

@@ -2,6 +2,8 @@
 
 isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
+exports.FontLoader = require './utils/fontLoader'
+
 exports.getFontWeight = (val) ->
 	Math.round(val * 8) * 100 + 100
 
@@ -142,3 +144,9 @@ exports.keysEvents = do ->
 		else if keysEvents.focusedKeys is keys
 			keysEvents.focusedKeys = null
 		return
+
+exports.DEFAULT_FONTS =
+	__proto__: null
+	'sans': 'neft-sans-family'
+	'sans-serif': 'neft-sans-serif-family'
+	'monospace': 'neft-monospace-family'

@@ -124,6 +124,8 @@ module.exports = (impl) ->
 	impl._pixiStage = stage
 	impl.pixelRatio = pixelRatio
 
+	utils.merge impl.utils, require('../css/utils')
+
 	# render loop
 	window.addEventListener 'load', ->
 		vsync = ->
@@ -148,6 +150,7 @@ module.exports = (impl) ->
 		Device: require '../css/level0/device'
 		Screen: require '../css/level0/screen'
 		Navigator: require '../css/level0/navigator'
+		FontLoader: require '../css/level0/fontLoader'
 
 		AmbientSound: require '../css/level0/sound/ambient'
 

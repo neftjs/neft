@@ -50,14 +50,20 @@ module.exports = (impl) ->
 		data.textElem.setStyle textStyle
 		return
 
+	onFontLoaded = (font) ->
+		if font is @_impl.textStyle.fontFamily
+			@_impl.textElem.dirty = true
+			impl._dirty = true
+		return
+
 	DATA =
 		autoWidth: true
 		autoHeight: true
 		textStyle:
 			pixelSize: 13
-			fontFamily: 'Arial'
+			fontFamily: 'neft-sans-serif-family'
 			style: 'normal'
-			font: '13px Arial'
+			font: '13px neft-sans-serif-family'
 			fill: 'black'
 			align: 'left'
 			weight: 400
@@ -77,6 +83,10 @@ module.exports = (impl) ->
 		# while rendering only if text is dirty
 		data.textElem.resolution = pixelRatio
 		data.elem.addChild data.textElem
+
+		# reload on font loaded
+		unless impl.utils.loadedFonts[data.textStyle.fontFamily]
+			impl.utils.onFontLoaded onFontLoaded, @
 
 		# update autoWidth/autoHeight
 		@onWidthChanged onWidthChanged
@@ -100,6 +110,12 @@ module.exports = (impl) ->
 	setTextLineHeight: (val) ->
 
 	setTextFontFamily: (val) ->
+		if impl.utils.DEFAULT_FONTS[val]
+			val = "#{impl.utils.DEFAULT_FONTS[val]}"
+
+		unless impl.utils.loadedFonts[val]
+			impl.utils.onFontLoaded onFontLoaded, @
+
 		@_impl.textStyle.fontFamily = val
 		updateTextStyle.call @
 		updateSize.call @
