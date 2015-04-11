@@ -12,10 +12,14 @@ module.exports = (impl) ->
 
 	{round} = Math
 
-	unless isTouch
-		impl._scrollableUsePointer = false
-
 	abstractScrollable = impl.AbstractTypes.Scrollable impl
+
+	# transform looks faster, so let's use it on mobile,
+	# where search and scrollbars are not using
+	if isTouch
+		return abstractScrollable
+	else
+		impl._scrollableUsePointer = false
 
 	DATA =
 		contentItem: null

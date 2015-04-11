@@ -331,8 +331,8 @@ module.exports = (impl) ->
 			x = e.deltaX / WHEEL_DIVISOR
 			y = e.deltaY / WHEEL_DIVISOR
 
-			if Math.abs(y) > Math.abs(x)
-				x = y
+			# if Math.abs(y) > Math.abs(x)
+			# 	x = y
 
 			if x > 0 and x > maxX
 				maxX = (maxX * (i-1) + x) / i
