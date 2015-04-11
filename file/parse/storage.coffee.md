@@ -46,6 +46,9 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 						funcBody = Input.parse text
 						func = Input.createFunction funcBody
 						input = new Input.Text elem, func
+						`//<development>`
+						input.text = text
+						`//</development>`
 						input.funcBody = funcBody
 						inputs.push input
 
@@ -60,6 +63,9 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 						funcBody = Input.parse attr[1]
 						func = Input.createFunction funcBody
 						input = new Input.Attr elem, func
+						`//<development>`
+						input.text = attr[1]
+						`//</development>`
 						input.funcBody = funcBody
 						input.attrName = attr[0]
 						inputs.push input

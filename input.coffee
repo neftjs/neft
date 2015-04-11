@@ -4,6 +4,7 @@ utils = require 'utils'
 assert = require 'assert'
 log = require 'log'
 Dict = require 'dict'
+List = require 'dict'
 
 if utils.isNode
 	coffee = require 'coffee-script'
@@ -103,8 +104,14 @@ module.exports = (File) -> class Input
 							ends = ''
 						r = ''
 						for prop in props
+							`//<development>`
+							prefix += "__input.traceProp("
+							r += ", '#{prop}')"
+							`//</development>`
+							`//<production>`
 							prefix += "__input.trace("
 							r += ".#{prop})"
+							`//</production>`
 						r + ends
 					"#{prefix}#{str}"
 
@@ -153,6 +160,7 @@ module.exports = (File) -> class Input
 		@self = null
 		@funcBody = ''
 		@traces = {}
+		@text = ''
 		@updatePending = false
 
 		Object.preventExtensions @
@@ -190,6 +198,16 @@ module.exports = (File) -> class Input
 			@traces[val.__hash__] = val
 		val
 
+	traceProp: (obj, prop) ->
+		val = obj[prop]
+		if obj instanceof Dict and val is undefined
+			log.warn "Can't extract '#{prop}' property in '#{@text}'; use Dict::get() method"
+		else if obj instanceof List and val is undefined
+			log.warn "Can't extract '#{prop}' property in '#{@text}'; use List::get() method"
+		else if val
+			@trace val
+		val
+
 	render: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
@@ -222,13 +240,14 @@ module.exports = (File) -> class Input
 			try
 				callFunc.call @
 			catch err
-				log.warn "Interpolated string error;\n#{err}"
+				log.warn "Interpolated string error in '#{text}';\n#{err}"
 
 	clone: (original, self) ->
 		node = original.node.getCopiedElement @node, self.node
 
 		clone = new @constructor node, @func
 		clone.self = self
+		clone.text = @text
 
 		clone
 
