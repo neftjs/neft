@@ -82,14 +82,18 @@ module.exports = (impl) ->
 	window.addEventListener 'touchmove', checkInteractions
 
 	# wheel event
-	window.addEventListener cssUtils.wheelEvent.eventName, (e) ->
-		event = cssUtils.wheelEvent.getDelta e
-		stage = impl._pixiStage
+	do ->
+		event = originalEvent: null
+		window.addEventListener cssUtils.wheelEvent.eventName, (e) ->
+			arg = cssUtils.wheelEvent.getDelta e
+			stage = impl._pixiStage
 
-		for item in stage.interactionManager.interactiveItems
-			item.wheel? event
+			for item in stage.interactionManager.interactiveItems
+				event.originalEvent = e
+				if item.wheel?(event, arg) is signal.STOP_PROPAGATION
+					break
 
-		return
+			return
 
 	updateMask = (item) ->
 		data = item._impl
@@ -203,14 +207,12 @@ module.exports = (impl) ->
 	setItemX: (val) ->
 		val = round val
 		@_impl.x = val
-		# @_impl.elem.position.x = val
 		impl._dirty = true
 		return
 
 	setItemY: (val) ->
 		val = round val
 		@_impl.y = val
-		# @_impl.elem.position.y = round val
 		impl._dirty = true
 		return
 
@@ -257,17 +259,20 @@ module.exports = (impl) ->
 		uniqueName = ns + utils.capitalize(name)
 		implName = SIGNALS[uniqueName]
 
-		# TODO: support stop propagation on different items
 		if implName and uniqueName isnt 'pointerReleased'
 			elem.interactive = true
 			_super = elem[implName] or NOP
-			elem[implName] = (e) ->
-				if e instanceof PIXI.InteractionData
-					e = mouseEvent
-				if _super(e) isnt signal.STOP_PROPAGATION
-					if self[name](e) is signal.STOP_PROPAGATION
+			elem[implName] = (e, arg) ->
+				unless arg
+					arg = mouseEvent
+				if _super(e, arg) isnt signal.STOP_PROPAGATION
+					if self[name](arg) is signal.STOP_PROPAGATION
 						if uniqueName is 'pointerPressed'
 							mouseActiveItem = self
+						{originalEvent} = e
+						originalEvent.stopPropagation()
+						if originalEvent.cancelable and implName isnt 'touchend' and implName isnt 'touchstart'
+							originalEvent.preventDefault()
 						return signal.STOP_PROPAGATION
 				return
 						
