@@ -67,4 +67,7 @@ module.exports = (impl) ->
 		data.image = cssImage._getImage val
 		cssImage._callCallback.call @
 
+		unless /^data:/.test(val)
+			data.image.elem.crossOrigin = ''
+
 		return

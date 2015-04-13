@@ -96,6 +96,10 @@ module.exports = (impl) ->
 	setText: (val) ->
 		val = val.replace ///<br>///g, "\n"
 
+		# remove html tags
+		# TODO: add simple html support
+		val = val.replace ///<([^>]+)>///g, ""
+
 		@_impl.textElem.setText val
 		updateSize.call @
 		return
