@@ -1,5 +1,7 @@
-Pointer events
-==============
+Item/Pointer
+============
+
+#### Rectangle hover action @snippet
 
 ```style
 Rectangle {

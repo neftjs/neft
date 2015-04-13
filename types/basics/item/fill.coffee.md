@@ -1,5 +1,22 @@
-Positioning/Fill
-================
+Item/Fill
+=========
+
+#### Stretch an item to it's children @snippet
+
+```style
+Rectangle {
+\  fill.width: true
+\  fill.height: true
+\  color: 'red'
+\
+\  Rectangle {
+\    x: 30; y: 30; width: 50; height: 50; color: 'blue'
+\  }
+\  Rectangle {
+\    x: 30; y: 0; width: 50; height: 30; color: 'yellow'
+\  }
+}
+```
 
 	'use strict'
 

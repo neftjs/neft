@@ -2,7 +2,15 @@ utils = require 'utils'
 
 module.exports = (impl) ->
 
+	INTEGER_PROPERTIES:
+		__proto__: null
+		x: true
+		y: true
+		width: true
+		height: true
+
 	SETTER_METHODS_NAMES:
+		__proto__: null
 		'x': 'setItemX'
 		'y': 'setItemY'
 		'width': 'setItemWidth'

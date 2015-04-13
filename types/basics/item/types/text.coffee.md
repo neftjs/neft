@@ -1,5 +1,7 @@
-Basic items/Text
-================
+Text
+====
+
+#### Render a text @snippet
 
 ```style
 Text {
@@ -51,6 +53,10 @@ Text {
 
 *String* Text::text
 -------------------
+
+#### @todo
+
+HTML code in WebGL implementation
 
 ### *Signal* Text::textChanged(*String* oldValue)
 

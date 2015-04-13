@@ -1,5 +1,5 @@
-Positioning/Scrollable
-======================
+Scrollable
+==========
 
 	'use strict'
 

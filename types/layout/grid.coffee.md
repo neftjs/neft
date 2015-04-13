@@ -1,5 +1,7 @@
-Positioning/Grid
-================
+Grid
+====
+
+#### Position items in grid @snippet
 
 ```style
 Grid {

@@ -1,6 +1,26 @@
 Transition
 ==========
 
+#### Item transition @snippet
+
+```style
+Rectangle {
+  width: 200; height: 200;
+  color: 'red'
+
+  pointer.onClicked: function(){
+    this.x = Math.random()*300;
+  }
+
+  Transition {
+  	property: 'x'
+  	animation: NumberAnimation {
+  	  duration: 1500
+  	}
+  }
+}
+```
+
 	'use strict'
 
 	utils = require 'utils'

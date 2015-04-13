@@ -1,5 +1,15 @@
-Basic items/AmbientSound
-========================
+AmbientSound
+============
+
+#### Play a sound @snippet
+
+```
+AmbientSound {
+  running: true
+  source: '/static/sounds/bg.mp3'
+  loop: true
+}
+```
 
 	'use strict'
 

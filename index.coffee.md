@@ -36,8 +36,8 @@ Rectangle {
 \    return signal.STOP_PROPAGATION;
 \  }
 \  pointer.onMoved: function(e){
-\    greenRect.x = e.x - greenRect.width / 2;
-\    greenRect.y = e.y - greenRect.height / 2;
+\    greenRect.x += e.movementX;
+\    greenRect.y += e.movementY;
 \  }
 \
 \  Rectangle {
@@ -153,7 +153,6 @@ Styles.button/red {
 
 	exports.AmbientSound = require('./types/sound/ambient') exports, Impl, itemUtils
 
-	require('./types/loader') exports, Impl, itemUtils
 	exports.FontLoader = require('./types/loader/font') exports, Impl, itemUtils
 
 #### Main style - view
@@ -185,23 +184,23 @@ Such properties can be used to store data and can be binded as well.
 ```style
 Column {
 \  id: main
-\  property isActive: true
+\  property $.isActive: true
 \
-\  signal hide
-\  onHide: function(delay){
+\  signal $.hide
+\  $.onHide: function(delay){
 \    var self = this;
 \    setTimeout(function(){
-\      self.isActive = false;
+\      self.$.isActive = false;
 \    }, delay || 0);
 \  }
 \
 \  pointer.onClicked: function(){
-\    this.hide(100);
+\    this.$.hide(100);
 \  }
 \
 \  Rectangle {
 \    width: 100; height: 100
-\    color: main.isActive ? 'green' : 'red'
+\    color: main.$.isActive ? 'green' : 'red'
 \  }
 }
 ```

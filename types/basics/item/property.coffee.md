@@ -1,5 +1,18 @@
-Custom properties
-=================
+Item/Custom signals ($)
+=======================
+
+#### Create item custom property @snippet
+
+```
+Item {
+  id: main
+  property $.currentLife: 0.8
+
+  Text {
+  	text: "Life: " + main.$.currentLife
+  }  
+}
+```
 
 	'use strict'
 

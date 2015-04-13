@@ -1,5 +1,13 @@
-Basic items/TextInput
-=====================
+TextInput
+=========
+
+#### @todo
+
+Qml and WebGL implementations
+
+#### @todo
+
+*alignment.vertical* other than *top* looks broken at CSS implementation
 
 	'use strict'
 

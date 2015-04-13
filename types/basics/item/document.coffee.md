@@ -1,5 +1,5 @@
-Document Modeling integration
-=============================
+Item/Document
+=============
 
 	'use strict'
 
@@ -21,6 +21,24 @@ Document Modeling integration
 ---------------------------------
 
 ### *Signal* Document::nodeChanged(*Document.Element* oldValue)
+
+#### Get node attribute in a style item @snippet
+
+```
+Text {
+  text: this.document.node.attrs.get('value')
+}
+```
+
+#### Find node child in a style item @snippet
+
+```
+Text {
+\  document.onNodeChanged: function(){
+\    var inputs = this.document.node.queryAll('input[type=string]');
+\  }
+}
+```
 
 		itemUtils.defineProperty
 			constructor: Document

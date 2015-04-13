@@ -1,6 +1,10 @@
 RotationSensor
 ==============
 
+#### @todo
+
+Browser implementation
+
 	'use strict'
 
 	utils = require 'utils'
@@ -10,7 +14,20 @@ RotationSensor
 *Object* RotationSensor
 -----------------------
 
-*TODO:* browser implementation
+#### Read RotationSensor data @snippet
+
+```
+RotationSensor.active = true;
+
+Text {
+  font.pixelSize: 30
+  onUpdate: function(){
+    this.text = "x: " + RotationSensor.x + "; " +
+                "y: " + RotationSensor.y + "; " +
+                "z: " + RotationSensor.z;
+  }
+}
+```
 
 		constructor: ->
 			@_active = false

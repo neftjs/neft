@@ -1,5 +1,5 @@
-Basic items/Item
-================
+Item
+====
 
 	'use strict'
 
@@ -62,8 +62,6 @@ This is a base class for everything which is visible.
 
 This signal is called when the *Renderer.Item* is ready, that is, all
 properties have been set and it's ready to use.
-
-This signal is asynchronous.
 
 ```style
 Rectangle {
@@ -131,6 +129,16 @@ Rectangle {
 			has: (val) -> @index(val) isnt -1
 
 ### *Signal* Item.children::inserted(*Item* child, *Integer* index)
+
+#### Listen on an item child insertion @snippet
+
+```
+Item {
+\  children.onInserted: function(child){
+\    child.x *= 2;
+\  }
+}
+```
 
 		signal.Emitter.createSignal ChildrenObject, 'inserted'
 
@@ -244,12 +252,14 @@ Rectangle {
 
 Determines whether an item is visible or not.
 
+#### Manage an item visibility @snippet
+
 ```style
 Item {
 \  width: 100
 \  height: 100
 \
-\  onPointerClicked: function(){
+\  pointer.onClicked: function(){
 \  	rect.visible = !rect.visible;
 \  	text.text = rect.visible ? "Click to hide" : "Click to show";
 \  }

@@ -1,5 +1,5 @@
-Positioning/Margins @txt
-========================
+Item/Margin
+===========
 
 	'use strict'
 
@@ -26,6 +26,8 @@ Positioning/Margins @txt
 Margins are used to move an item in **anchors** and in positioning items
 ([Renderer.Column][], [Renderer.Row][] and [Renderer.Grid][]).
 
+#### Margins in Column items @snippet
+
 ```style
 Column {
   Rectangle { color: 'red'; width: 50; height: 50; }
@@ -33,6 +35,8 @@ Column {
   Rectangle { color: 'green'; width: 50; height: 50; }
 }
 ```
+
+#### Margin in anchored items @snippet
 
 ```style
 Rectangle {

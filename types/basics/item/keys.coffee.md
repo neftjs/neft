@@ -1,11 +1,14 @@
-Keyboard events
-===============
+Item/Keys
+=========
+
+#### Handle keyboard events @snippet
 
 ```style
 Rectangle {
 \  width: 100
 \  height: 100
 \  color: 'green'
+\  keys.focus: true
 \  keys.onPressed: function(){
 \    this.color = 'red';
 \  }

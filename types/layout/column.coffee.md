@@ -1,5 +1,7 @@
-Positioning/Column
-==================
+Column
+======
+
+#### Position items in column @snippet
 
 ```style
 Column {

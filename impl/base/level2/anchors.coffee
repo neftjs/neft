@@ -13,26 +13,24 @@ module.exports = (impl) ->
 	VALUES =
 		left: (item, target, arr, opts) ->
 			unless opts & PARENT
-				arr.push 'Math.round(', [target, 'x'], ')'
+				arr.push [target, 'x']
 		top: (item, target, arr, opts) ->
 			unless opts & PARENT
-				arr.push 'Math.round(', [target, 'y'], ')'
+				arr.push [target, 'y']
 		right: (item, target, arr, opts) ->
-			arr.push 'Math.round(', [target, 'width']
+			arr.push [target, 'width']
 			unless opts & PARENT
 				arr.push '+', [target, 'x']
-			arr.push ')'
 		bottom: (item, target, arr, opts) ->
-			arr.push 'Math.round(', [target, 'height']
+			arr.push [target, 'height']
 			unless opts & PARENT
 				arr.push '+', [target, 'y']
-			arr.push ')'
 		horizontalCenter: (item, target, arr, opts) ->
 			VALUES.left item, target, arr, opts
-			arr.push '+ Math.round(', [target, 'width'], '/2)'
+			arr.push '+', [target, 'width'], '/2'
 		verticalCenter: (item, target, arr, opts) ->
 			VALUES.top item, target, arr, opts
-			arr.push '+ Math.round(', [target, 'height'], '/2)'
+			arr.push '+', [target, 'height'], '/2'
 
 	getBindingValue = (item, anchor) ->
 		[target, line] = anchor
@@ -55,13 +53,13 @@ module.exports = (impl) ->
 
 	MARGIN_FUNCS =
 		left: (item) ->
-			Math.round item.margin.left
+			item.margin.left
 		top: (item) ->
-			Math.round item.margin.top
+			item.margin.top
 		right: (item) ->
-			- Math.round item.margin.right
+			- item.margin.right
 		bottom: (item) ->
-			- Math.round item.margin.bottom
+			- item.margin.bottom
 		horizontalCenter: (item) ->
 			MARGIN_FUNCS.left(item) + MARGIN_FUNCS.right(item)
 		verticalCenter: (item) ->

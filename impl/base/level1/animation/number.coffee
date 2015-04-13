@@ -42,6 +42,10 @@ module.exports = (impl) ->
 
 		val = (data.to - data.from) * progress + data.from
 		target = anim._target
+
+		if data.isIntegerProperty
+			val = Math.round val
+
 		if val is val and target # isNaN hack
 			if not running or anim._updateProperty or not data.propertySetter
 				anim._updatePending = true

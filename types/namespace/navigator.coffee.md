@@ -21,6 +21,15 @@ Navigator
 *Boolean* Navigator.language = 'en'
 ----------------------------------
 
+#### Detect client language @snippet
+
+```style
+Text {
+  text: "Your language: " + Navigator.language
+  font.pixelSize: 30
+}
+```
+
 		utils.defineProperty @::, 'language', null, ->
 			@_language
 		, null
@@ -32,10 +41,28 @@ Navigator
 			@_isBrowser
 		, null
 
+*Boolean* Navigator.isNative = false
+------------------------------------
+
+#### Detect native application @snippet
+
+```style
+Text {
+  text: Navigator.isNative ? "Native" : "Browser"
+  font.pixelSize: 30
+}
+```
+
+		utils.defineProperty @::, 'isNative', null, ->
+			not @_isBrowser
+		, null
+
 *Boolean* Navigator.isOnline = true
 -----------------------------------
 
-*TODO:* browser implementation, qml implementation
+#### @todo
+
+Browser and qml implementations 
 
 ### *Signal* Navigator.isOnlineChanged(*Boolean* oldValue)
 

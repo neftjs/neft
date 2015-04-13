@@ -1,6 +1,26 @@
 Source
 ======
 
+#### Change default children target @snippet
+
+```
+// styles/container.js
+Rectangle {
+  fill: true
+  color: 'red'
+
+  Column {
+    Source {}
+  }
+}
+
+// styles/page.js
+Styles.container {
+  // this text goes to the column
+  Text {}
+}
+```
+
 	'use strict'
 
 	assert = require 'assert'

@@ -18,22 +18,31 @@ Screen
 			@_orientation = 'Portrait'
 			super()
 
-*Boolean* Screen.isTouch
-------------------------
+*Boolean* Screen.isTouch = false
+--------------------------------
+
+#### Detect touch screen @snippet
+
+```style
+Text {
+  text: Screen.isTouch ? "Touch" : "Mouse"
+  font.pixelSize: 30
+}
+```
 
 		utils.defineProperty @::, 'isTouch', null, ->
 			@_isTouch
 		, null
 
-*Boolean* Screen.width
-----------------------
+*Boolean* Screen.width = 1024
+-----------------------------
 
 		utils.defineProperty @::, 'width', null, ->
 			@_width
 		, null
 
-*Boolean* Screen.height
------------------------
+*Boolean* Screen.height = 800
+-----------------------------
 
 		utils.defineProperty @::, 'height', null, ->
 			@_height
@@ -44,7 +53,9 @@ Screen
 
 May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
 
-*TODO:* browser implementation
+#### @todo
+
+Browser implementation 
 
 ### *Signal* Screen.orientationChanged(*String* oldValue)
 

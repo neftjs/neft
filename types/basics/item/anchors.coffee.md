@@ -1,5 +1,5 @@
-Positioning/Anchors @txt
-========================
+Item/Anchors
+============
 
 [Renderer.Item][] provides simply but powerful way to describe
 relationships between items: **anchors**.
@@ -193,6 +193,8 @@ This signal is called on the [Renderer.Item][] if one of it's anchors changed.
 *Array* Anchors::horizontalCenter = null
 ----------------------------------------
 
+#### Anchor two items @snippet
+
 ```style
 Item {
 \  height: 100
@@ -260,6 +262,8 @@ Item {
 It's a shortcut for the *horizontalCenter* and *verticalCenter*.
 
 Not target line is required.
+
+#### Place a rectangle in the center of another @snippet
 
 ```style
 Rectangle {

@@ -1,5 +1,5 @@
-Item states
-===========
+State
+=====
 
 	'use strict'
 
@@ -131,13 +131,15 @@ When comes *true*, this state is appended on the end of the [Renderer.Item::stat
 
 Mostly used with bindings.
 
+#### Reduce grid columns on small screen @snippet
+
 ```
 Grid {
 \  columns: 2
 \
-\  // reduce to one column if the window width is lower than 500 pixels
+\  // reduce to one column if the view width is lower than 500 pixels
 \  State {
-\    when: windowStyle.width < 500
+\    when: view.width < 500
 \    changes: {
 \      columns: 1
 \    }

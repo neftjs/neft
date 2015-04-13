@@ -1,5 +1,7 @@
-Positioning/Flow
-================
+Flow
+====
+
+#### Position items in natural order @snippet
 
 ```style
 Flow {

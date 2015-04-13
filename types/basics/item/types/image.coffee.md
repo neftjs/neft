@@ -1,5 +1,7 @@
-Basic items/Image
-=================
+Image
+=====
+
+#### Render an image @snippet
 
 ```style
 Image {

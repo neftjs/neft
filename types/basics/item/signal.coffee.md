@@ -1,5 +1,16 @@
-Custom signals
-==============
+Item/Custom signals ($)
+==========================
+
+#### Create item custom signal @snippet
+
+```
+Item {
+  signal $.playerCollision
+  $.onPlayerCollision: function(){
+    // boom!
+  }
+}
+```
 
 	'use strict'
 

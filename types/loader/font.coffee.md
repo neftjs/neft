@@ -1,5 +1,7 @@
-Loading assets/Font
-===================
+FontLoader
+==========
+
+#### Load a font @snippet
 
 ```
 Item {
@@ -10,7 +12,7 @@ Item {
 
   Text {
   	font.family: 'myFont'
-  	text: 'Cool font, bro!'
+  	text: 'Cool font!'
   }
 }
 ```

@@ -1,5 +1,7 @@
-Drawing shapes/Rectangle
-========================
+Rectangle
+=========
+
+#### Draw a rectangle @snippet
 
 ```style
 Rectangle {
@@ -22,7 +24,7 @@ Rectangle {
 *Rectangle* Rectangle() : *Renderer.Item*
 -----------------------------------------
 
-*Renderer.Item* represents filled rectangle with an optional border and corner radius.
+*Renderer.Rectangle* represents filled rectangle with an optional border and corner radius.
 
 		class Rectangle extends Renderer.Item
 			@__name__ = 'Rectangle'
