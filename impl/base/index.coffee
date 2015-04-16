@@ -12,6 +12,7 @@ exports.Types =
 	Screen: require './level0/screen'
 	Navigator: require './level0/navigator'
 	RotationSensor: require './level0/sensor/rotation'
+	AmbientSound: require './level0/sound/ambient'
 
 	Rectangle: require './level1/rectangle'
 	Grid: require './level1/grid'
@@ -24,8 +25,6 @@ exports.Types =
 	NumberAnimation: require './level1/animation/number'
 
 	Scrollable: require './level2/scrollable'
-
-	AmbientSound: require './level0/sound/ambient'
 
 exports.Extras =
 	Binding: require './level1/binding'

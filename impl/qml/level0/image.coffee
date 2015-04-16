@@ -1,7 +1,5 @@
 'use strict'
 
-DATA_URI_RE = ///^data:([a-z+/]+),(.*)$///
-
 module.exports = (impl) ->
 	{Item} = impl.Types
 
@@ -100,7 +98,7 @@ module.exports = (impl) ->
 
 			data.callback = callback
 
-			unless DATA_URI_RE.test val
+			unless impl.utils.DATA_URI_RE.test val
 				val = impl.utils.toUrl(val)
 			elem.source = val or ''
 

@@ -1,3 +1,5 @@
+exports.DATA_URI_RE = ///^data:([a-z+/]+),(.*)$///
+
 exports.createQmlObject = do ->
 	components = {}
 
