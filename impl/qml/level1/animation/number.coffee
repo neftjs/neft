@@ -124,7 +124,7 @@ module.exports = (impl) ->
 
 	startAnimation: do (_super = impl.startAnimation) -> ->
 		data = @_impl
-		if data.type isnt 'number' or not data.propertySetter
+		if data.type isnt 'number' or not data.propertySetter or not @_target._impl.elem.hasOwnProperty(@property)
 			data.accepts = false
 			_super.call @
 			return

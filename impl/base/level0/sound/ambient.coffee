@@ -1,7 +1,8 @@
 'use strict'
 
 module.exports = (impl) ->
-	DATA = {}
+	DATA =
+		bindings: null
 
 	DATA: DATA
 

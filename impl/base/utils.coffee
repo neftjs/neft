@@ -20,8 +20,8 @@ module.exports = (impl) ->
 		'scale': 'setItemScale'
 		'offsetX': 'setImageOffsetX'
 		'offsetY': 'setImageOffsetY'
-		'sourceWidth': 'setImagesourceWidth'
-		'sourceHeight': 'setImagesourceHeight'
+		'sourceWidth': 'setImageSourceWidth'
+		'sourceHeight': 'setImageSourceHeight'
 
 	grid: require './utils/grid'
 	fill: require './utils/fill'
