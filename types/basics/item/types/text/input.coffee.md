@@ -1,4 +1,4 @@
-TextInput
+TextInput @class
 =========
 
 #### @todo

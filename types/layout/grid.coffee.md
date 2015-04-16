@@ -1,4 +1,4 @@
-Grid
+Grid @class
 ====
 
 #### Position items in grid @snippet

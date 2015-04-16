@@ -3,7 +3,7 @@
 module.exports = (impl) ->
 	initDeviceNamespace: ->
 		@_pixelRatio = window.devicePixelRatio or 1
-		@_isDesktop = not 'ontouchstart' of window
+		@_isDesktop = not ('ontouchstart' of window)
 		@_isPhone = 'ontouchstart' of window and Math.min(@_width, @_height)/Math.max(@_width, @_height) < 0.75
 
 		@_platform = do ->

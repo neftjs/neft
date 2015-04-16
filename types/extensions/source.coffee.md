@@ -1,4 +1,4 @@
-Source
+Source @modifier
 ======
 
 #### Change default children target @snippet

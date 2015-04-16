@@ -5,6 +5,7 @@ utils = require 'utils'
 module.exports = (impl) ->
 	{Types} = impl
 	{now} = Date
+	{round} = Math
 
 	pending = []
 	nowTime = now()
@@ -20,7 +21,7 @@ module.exports = (impl) ->
 				updateAnimation anim
 				i++
 			else
-				pending[i] = utils.last(pending)
+				pending[i] = pending[n-1]
 				pending.pop()
 				n--
 
@@ -43,8 +44,8 @@ module.exports = (impl) ->
 		val = (data.to - data.from) * progress + data.from
 		target = anim._target
 
-		if data.isIntegerProperty
-			val = Math.round val
+		if data.isIntegerProperty is true
+			val = round val
 
 		if val is val and target # isNaN hack
 			if not running or anim._updateProperty or not data.propertySetter

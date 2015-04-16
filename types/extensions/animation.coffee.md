@@ -1,4 +1,4 @@
-Animation
+Animation @modifier
 =========
 
 	'use strict'

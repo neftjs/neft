@@ -1,4 +1,4 @@
-RotationSensor
+RotationSensor @namespace
 ==============
 
 #### @todo

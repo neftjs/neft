@@ -1,4 +1,4 @@
-FontLoader
+FontLoader @class
 ==========
 
 #### Load a font @snippet

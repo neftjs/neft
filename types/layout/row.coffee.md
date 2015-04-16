@@ -1,4 +1,4 @@
-Row
+Row @class
 ===
 
 #### Position items in row @snippet

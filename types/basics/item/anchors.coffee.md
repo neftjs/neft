@@ -1,4 +1,4 @@
-Item/Anchors
+Item/Anchors @extension
 ============
 
 [Renderer.Item][] provides simply but powerful way to describe

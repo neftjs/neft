@@ -18,6 +18,10 @@ module.exports = (impl) ->
 		'opacity': 'setItemOpacity'
 		'rotation': 'setItemRotation'
 		'scale': 'setItemScale'
+		'offsetX': 'setImageOffsetX'
+		'offsetY': 'setImageOffsetY'
+		'sourceWidth': 'setImagesourceWidth'
+		'sourceHeight': 'setImagesourceHeight'
 
 	grid: require './utils/grid'
 	fill: require './utils/fill'

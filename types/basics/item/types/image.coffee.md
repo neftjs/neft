@@ -1,4 +1,4 @@
-Image
+Image @class
 =====
 
 #### Render an image @snippet
@@ -140,12 +140,38 @@ Image source URL (absolute or relative to the page) or data URI.
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
 
-*Integer* Image::fillMode
--------------------------
+*Float* Image::offsetX = 0
+--------------------------
+
+### *Signal* Image::offsetXChanged(*Float* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'offsetX'
+			defaultValue: 0
+			implementation: Impl.setImageOffsetX
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
+
+*Float* Image::offsetY = 0
+--------------------------
+
+### *Signal* Image::offsetYChanged(*Float* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'offsetY'
+			defaultValue: 0
+			implementation: Impl.setImageOffsetY
+			developmentSetter: (val) ->
+				expect(val).toBe.float()
+
+*Integer* Image::fillMode = 'Stretch'
+-------------------------------------
 
 ### *Signal* Image::fillModeChanged(*Integer* oldValue)
 
-		FILL_MODE_OPTIONS = ['Stretch', 'PreserveAspectFit', 'Tile']
+		FILL_MODE_OPTIONS = ['Stretch', 'Tile']
 
 		itemUtils.defineProperty
 			constructor: @

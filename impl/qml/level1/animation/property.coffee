@@ -7,6 +7,7 @@ module.exports = (impl) ->
 		progress: 0
 		internalPropertyName: ''
 		propertySetter: null
+		isIntegerProperty: false
 
 	DATA: DATA
 

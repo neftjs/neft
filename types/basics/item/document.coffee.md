@@ -1,4 +1,4 @@
-Item/Document
+Item/Document @extension
 =============
 
 	'use strict'

@@ -10,13 +10,32 @@ module.exports = (impl) ->
 	if utils.isEmpty PIXI
 		return require('../../base/level0/image') impl
 
-	emptyTexture = PIXI.Texture.emptyTexture
+	{emptyTexture} = PIXI.Texture
+
+	updateSize = ->
+		data = @_impl
+		if data.isTiling and data.image
+			{tileScale} = data.contentElem
+			tileScale.x = (data.width / data.image.width) * (data.sourceWidth / data.image.width)
+			tileScale.y = (data.height / data.image.height) * (data.sourceHeight / data.image.height)
+		return
+
+	replaceContentElem = (type) ->
+		data = @_impl
+		data.isTiling = type is 'TilingSprite'
+		data.elem.removeChild data.contentElem
+		data.contentElem = new PIXI[type] data.contentElem.texture
+		data.elem.addChild data.contentElem
+		return
 
 	DATA =
+		isTiling: false
 		image: null
 		source: ''
 		callback: null
 		contentElem: null
+		sourceWidth: 0
+		sourceHeight: 0
 
 	DATA: DATA
 
@@ -27,6 +46,8 @@ module.exports = (impl) ->
 
 		data.contentElem = new PIXI.Sprite emptyTexture
 		data.elem.addChild data.contentElem
+		@onWidthChanged updateSize
+		@onHeightChanged updateSize
 		return
 
 	setImageSource: (val, callback) ->
@@ -60,8 +81,9 @@ module.exports = (impl) ->
 				contentElem.setTexture data.image.texture
 				impl._dirty = true
 
-				contentElem.width = self.width
-				contentElem.height = self.height
+				contentElem.width = data.width
+				contentElem.height = data.height
+				updateSize.call @
 			callback?.apply @, arguments
 
 		data.image = cssImage._getImage val
@@ -70,4 +92,36 @@ module.exports = (impl) ->
 		unless /^data:/.test(val)
 			data.image.elem.crossOrigin = ''
 
+		return
+
+	setImageSourceWidth: (val) ->
+		@_impl.sourceWidth = val
+		if @_impl.width isnt val
+			updateSize.call @
+		return
+
+	setImageSourceHeight: (val) ->
+		@_impl.sourceHeight = val
+		if @_impl.height isnt val
+			updateSize.call @
+		return
+
+	setImageFillMode: (val) ->
+		data = @_impl
+		if val is 'Tile'
+			replaceContentElem.call @, 'TilingSprite'
+		else if data.isTiling
+			replaceContentElem.call @, 'Sprite'
+		return
+
+	setImageOffsetX: (val) ->
+		unless @_impl.isTiling
+			replaceContentElem.call @, 'TilingSprite'
+		@_impl.contentElem.tilePosition.x = val
+		return
+
+	setImageOffsetY: (val) ->
+		unless @_impl.isTiling
+			replaceContentElem.call @, 'TilingSprite'
+		@_impl.contentElem.tilePosition.y = val
 		return

@@ -1,4 +1,4 @@
-Item/Pointer
+Item/Pointer @extension
 ============
 
 #### Rectangle hover action @snippet

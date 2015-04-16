@@ -79,6 +79,7 @@ unless window.isFake
 
 			# calculate alpha
 			@worldAlpha = @parent.worldAlpha
+		return
 
 SHEET = "
 body {
@@ -92,9 +93,13 @@ canvas {
 	position: absolute;
 	left: 0;
 	top: 0;
-	z-index: 0;
 	width: 100%;
 	height: 100%;
+	transform: translateZ(0);
+	-moz-perspective: 1px; /* Firefox */
+	-webkit-transform-style: preserve-3d; /* Safari */
+	-webkit-perspective: 1px; /* Safari */
+	-webkit-backface-visibility: hidden; /* Safari, Chrome */
 }
 "
 
@@ -105,6 +110,11 @@ unless window.isFake
 	renderer = PIXI.autoDetectRecommendedRenderer innerWidth, innerHeight,
 		resolution: pixelRatio
 		antialias: false
+		backgroundColor: 0xFFFFFF
+
+	if renderer.context
+		renderer.context.mozImageSmoothingEnabled = false
+		renderer.context.webkitImageSmoothingEnabled = false
 
 window.addEventListener 'resize', ->
 	renderer.resize innerWidth, innerHeight

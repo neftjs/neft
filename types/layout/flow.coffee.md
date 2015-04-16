@@ -1,4 +1,4 @@
-Flow
+Flow @class
 ====
 
 #### Position items in natural order @snippet

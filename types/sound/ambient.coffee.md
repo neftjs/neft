@@ -1,4 +1,4 @@
-AmbientSound
+AmbientSound @class
 ============
 
 #### Play a sound @snippet

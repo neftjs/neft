@@ -1,11 +1,11 @@
-Transition
+Transition @modifier
 ==========
 
 #### Item transition @snippet
 
 ```style
 Rectangle {
-  width: 200; height: 200;
+  width: 100; height: 100;
   color: 'red'
 
   pointer.onClicked: function(){

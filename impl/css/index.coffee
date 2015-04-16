@@ -46,6 +46,8 @@ span * {
 	font-size: inherit;
 	font-family: inherit;
 	font-style: inherit;
+	border: 0;
+	background: none;
 }
 span b, span strong {
 	font-weight: bolder;

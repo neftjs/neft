@@ -1,4 +1,4 @@
-Device
+Device @namespace
 ======
 
 	'use strict'
@@ -6,17 +6,18 @@ Device
 	utils = require 'utils'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Device extends itemUtils.Object
+	module.exports = (Renderer, Impl, itemUtils) ->
+		class Device extends itemUtils.Object
 
 *Object* Device
 ---------------
 
-		constructor: ->
-			@_platform = 'unix'
-			@_isDesktop = true
-			@_isPhone = false
-			@_pixelRatio = 1
-			super()
+			constructor: ->
+				@_platform = 'unix'
+				@_isDesktop = true
+				@_isPhone = false
+				@_pixelRatio = 1
+				super()
 
 *Boolean* Device.platform = 'unix'
 ----------------------------------
@@ -42,30 +43,30 @@ Text {
 }
 ```
 
-		utils.defineProperty @::, 'platform', null, ->
-			@_platform
-		, null
+			utils.defineProperty @::, 'platform', null, ->
+				@_platform
+			, null
 
 *Boolean* Device.isDesktop = true
 ---------------------------------
 
-		utils.defineProperty @::, 'isDesktop', null, ->
-			@_isDesktop
-		, null
+			utils.defineProperty @::, 'isDesktop', null, ->
+				@_isDesktop
+			, null
 
 *Boolean* Device.isTablet = false
 ---------------------------------
 
-		utils.defineProperty @::, 'isTablet', null, ->
-			not @isDesktop and not @isPhone
-		, null
+			utils.defineProperty @::, 'isTablet', null, ->
+				not @isDesktop and not @isPhone
+			, null
 
 *Boolean* Device.isPhone = false
 --------------------------------
 
-		utils.defineProperty @::, 'isPhone', null, ->
-			@_isPhone
-		, null
+			utils.defineProperty @::, 'isPhone', null, ->
+				@_isPhone
+			, null
 
 *Boolean* Device.isMobile = false
 ---------------------------------
@@ -81,9 +82,9 @@ Text {
 }
 ```
 
-		utils.defineProperty @::, 'isMobile', null, ->
-			@isTablet or @isPhone
-		, null
+			utils.defineProperty @::, 'isMobile', null, ->
+				@isTablet or @isPhone
+			, null
 
 *Boolean* Device.pixelRatio = 1
 -------------------------------
@@ -97,10 +98,10 @@ Text {
 }
 ```
 
-		utils.defineProperty @::, 'pixelRatio', null, ->
-			@_pixelRatio
-		, null
+			utils.defineProperty @::, 'pixelRatio', null, ->
+				@_pixelRatio
+			, null
 
-		Device = new Device
-		Impl.initDeviceNamespace?.call Device
-		Device
+		device = new Device
+		Impl.initDeviceNamespace?.call device
+		device

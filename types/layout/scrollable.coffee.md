@@ -1,4 +1,4 @@
-Scrollable
+Scrollable @class
 ==========
 
 	'use strict'

@@ -1,5 +1,5 @@
-Item/Custom signals ($)
-==========================
+Item/Custom signals @extension
+===================
 
 #### Create item custom signal @snippet
 

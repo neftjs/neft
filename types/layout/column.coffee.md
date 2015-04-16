@@ -1,4 +1,4 @@
-Column
+Column @class
 ======
 
 #### Position items in column @snippet

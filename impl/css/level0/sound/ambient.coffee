@@ -30,9 +30,10 @@ module.exports = (impl) ->
 
 	startAmbientSound: (val) ->
 		@_impl.elem.play()
+		if @_impl.elem.readyState is @_impl.elem.HAVE_ENOUGH_DATA
+			@_impl.elem.currentTime = 0
 		return
 
 	stopAmbientSound: (val) ->
 		@_impl.elem.pause()
-		@_impl.elem.currentTime = 0
 		return

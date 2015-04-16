@@ -1,4 +1,4 @@
-Animation/PropertyAnimation
+Animation/PropertyAnimation @modifier
 ===========================
 
 	'use strict'

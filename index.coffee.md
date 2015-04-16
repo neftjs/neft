@@ -1,4 +1,4 @@
-Rendering
+Rendering @engine
 =========
 
 **Make things visible!**
@@ -19,35 +19,6 @@ It looks very simple (very similar to the *QML*) and can be mixed with
 
 Why we do this? Let's say we need something more dynamic than **CSS** and less
 restrictive than **JavaScript**.
-
-Let's take a look at the example below:
-
-```style
-var signal = require('signal');
-var RECT_SIZE = 50;
-
-Rectangle {
-\  width: 400
-\  height: 200
-\  border.width: 5
-\  border.color: 'red'
-\  pointer.onPressed: function(){
-\    // prevent scrolling
-\    return signal.STOP_PROPAGATION;
-\  }
-\  pointer.onMoved: function(e){
-\    greenRect.x += e.movementX;
-\    greenRect.y += e.movementY;
-\  }
-\
-\  Rectangle {
-\    id: greenRect
-\    width: RECT_SIZE
-\    height: RECT_SIZE
-\    color: 'green'
-\  }
-}
-```
 
 You can mix **JavaScript** with **NML** in the same file, you can access to the nested
 properties just by using a dot (e.g. *border.width*) and items nesting looks intuitive

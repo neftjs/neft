@@ -21,6 +21,7 @@ module.exports = (impl) ->
 
 	updateSize = do ->
 		MAX_CHECKS = 40
+		CHECKS_AFTER_CHANGE = 35
 
 		queue = []
 		windowLoadQueue = []
@@ -67,14 +68,14 @@ module.exports = (impl) ->
 			if item._impl.autoWidth
 				width = textElem.offsetWidth
 				if item.width isnt width
-					item._impl.sizeChecks = MAX_CHECKS
+					item._impl.sizeChecks = CHECKS_AFTER_CHANGE
 				if width > 0
 					item.width = width + 1
 
 			if item._impl.autoHeight
 				height = textElem.offsetHeight
 				if item.height isnt height
-					item._impl.sizeChecks = MAX_CHECKS
+					item._impl.sizeChecks = CHECKS_AFTER_CHANGE
 				if height > 0
 					item.height = height
 

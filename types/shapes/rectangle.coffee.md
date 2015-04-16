@@ -1,4 +1,4 @@
-Rectangle
+Rectangle @class
 =========
 
 #### Draw a rectangle @snippet

@@ -19,3 +19,7 @@ module.exports = (impl) ->
 	setImageSourceHeight: (val) ->
 
 	setImageFillMode: (val) ->
+
+	setImageOffsetX: (val) ->
+
+	setImageOffsetY: (val) ->

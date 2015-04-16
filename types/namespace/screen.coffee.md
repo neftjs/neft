@@ -1,4 +1,4 @@
-Screen
+Screen @namespace
 ======
 
 	'use strict'
@@ -6,17 +6,18 @@ Screen
 	utils = require 'utils'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Screen extends itemUtils.Object
+	module.exports = (Renderer, Impl, itemUtils) ->
+		class Screen extends itemUtils.Object
 
 *Object* Screen
 ---------------
 
-		constructor: ->
-			@_isTouch = false
-			@_width = 1024
-			@_height = 800
-			@_orientation = 'Portrait'
-			super()
+			constructor: ->
+				@_isTouch = false
+				@_width = 1024
+				@_height = 800
+				@_orientation = 'Portrait'
+				super()
 
 *Boolean* Screen.isTouch = false
 --------------------------------
@@ -30,23 +31,23 @@ Text {
 }
 ```
 
-		utils.defineProperty @::, 'isTouch', null, ->
-			@_isTouch
-		, null
+			utils.defineProperty @::, 'isTouch', null, ->
+				@_isTouch
+			, null
 
 *Boolean* Screen.width = 1024
 -----------------------------
 
-		utils.defineProperty @::, 'width', null, ->
-			@_width
-		, null
+			utils.defineProperty @::, 'width', null, ->
+				@_width
+			, null
 
 *Boolean* Screen.height = 800
 -----------------------------
 
-		utils.defineProperty @::, 'height', null, ->
-			@_height
-		, null
+			utils.defineProperty @::, 'height', null, ->
+				@_height
+			, null
 
 *String* Screen.orientation = 'Portrait'
 ----------------------------------------
@@ -59,10 +60,10 @@ Browser implementation
 
 ### *Signal* Screen.orientationChanged(*String* oldValue)
 
-		signal.Emitter.createSignal @, 'orientationChanged'
-		utils.defineProperty Screen, 'orientation', null, ->
-			@_orientation
-		, null
+			signal.Emitter.createSignal @, 'orientationChanged'
+			utils.defineProperty Screen, 'orientation', null, ->
+				@_orientation
+			, null
 
 		screen = new Screen
 		Impl.initScreenNamespace?.call screen

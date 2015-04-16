@@ -1,4 +1,4 @@
-State
+State @modifier
 =====
 
 	'use strict'
@@ -101,8 +101,6 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 							@disable()
 						target._stateExtensions[name] = null
 
-					_super.call @, val
-
 					if val
 						assert.instanceOf val, Renderer.Item
 
@@ -111,7 +109,10 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 							val._stateExtensions[''] = new ChangesObject
 						val._stateExtensions[name] = @
 
-						if val.states.has(name)
+					_super.call @, val
+
+					if val
+						if val.states.has(name) or @_when
 							@enable()
 					return
 
@@ -193,6 +194,9 @@ Grid {
 
 		fillItemDefaultState = (state) ->
 			{target, changes} = state
+			unless target
+				return
+
 			stateExtensions = target._stateExtensions
 			states = target.states.items()
 			defaultState = stateExtensions['']

@@ -1,4 +1,4 @@
-Text
+Text @class
 ====
 
 #### Render a text @snippet

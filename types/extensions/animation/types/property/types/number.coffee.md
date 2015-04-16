@@ -1,4 +1,4 @@
-Animation/NumberAnimation
+Animation/NumberAnimation @modifier
 =========================
 
 #### Animate rectangle position @snippet
