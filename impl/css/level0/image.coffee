@@ -105,6 +105,8 @@ module.exports = (impl) ->
 		source: ''
 		image: null
 		useCssBackground: false
+		offsetX: 0
+		offsetY: 0
 
 	DATA: DATA
 
@@ -166,4 +168,20 @@ module.exports = (impl) ->
 				when 'Tile'
 					data.elemStyle.backgroundRepeat = 'repeat'
 
+		return
+
+	setImageOffsetX: (val) ->
+		data = @_impl
+		unless data.useCssBackground
+			useCssBackground @
+		data.offsetX = val
+		data.elemStyle.backgroundPosition = "#{val}px #{data.offsetY}px"
+		return
+
+	setImageOffsetY: (val) ->
+		data = @_impl
+		unless data.useCssBackground
+			useCssBackground @
+		data.offsetY = val
+		data.elemStyle.backgroundPosition = "#{data.offsetY}px #{val}px"
 		return
