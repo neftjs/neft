@@ -8,7 +8,7 @@ module.exports = (impl) ->
 
 	cache = Object.create null
 
-	createImage = (src) ->
+	createImage = (src, rsc) ->
 		img = document.createElement 'img'
 		img.src = src
 
@@ -18,8 +18,8 @@ module.exports = (impl) ->
 
 		img.addEventListener 'load', ->
 			obj.status = 'ready'
-			obj.width = @naturalWidth or @width
-			obj.height = @naturalHeight or @height
+			obj.width = rsc?.width or @naturalWidth or @width
+			obj.height = rsc?.height or @naturalHeight or @height
 
 			if obj.width is 0 and obj.height is 0 and ///\.svg$///.test(obj.source)
 				xhr = new XMLHttpRequest
@@ -55,8 +55,8 @@ module.exports = (impl) ->
 		signal.create obj, 'loaded'
 		obj
 
-	getImage = (src) ->
-		cache[src] ?= createImage(src)
+	getImage = (src, rsc) ->
+		cache[src] ?= createImage(src, rsc)
 
 	onImageLoaded = ->
 		data = @_impl
@@ -124,13 +124,16 @@ module.exports = (impl) ->
 		return
 
 	setImageSource: (val, callback) ->
-		val = impl.utils.encodeImageSrc val
+		if rsc = impl.Renderer.resources.getResource(val)
+			val = rsc.getPath()
+		else
+			val = impl.utils.encodeImageSrc val
 
 		data = @_impl
 		data.imgElem.src = val
 		data.source = val
 		data.callback = callback
-		data.image = getImage val
+		data.image = getImage val, rsc
 
 		if data.useCssBackground
 			data.elemStyle.backgroundImage = "url('#{val}')"

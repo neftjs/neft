@@ -54,6 +54,7 @@ module.exports = (impl) ->
 		if font is @_impl.textStyle.fontFamily
 			@_impl.textElem.dirty = true
 			impl._dirty = true
+			updateSize.call @
 		return
 
 	DATA =

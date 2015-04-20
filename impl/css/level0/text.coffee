@@ -197,6 +197,7 @@ module.exports = (impl) ->
 			font-size: 14px;
 			font-family: #{impl.utils.DEFAULT_FONTS['sans-serif']}, sans-serif;
 			margin-top: #{if isFirefox then 1 else 0}px;
+			z-index: -1;
 		}
 		#styles .textVerticalCenterAlign {
 			height: auto !important;

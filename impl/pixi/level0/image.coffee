@@ -37,6 +37,9 @@ module.exports = (impl) ->
 		sourceWidth: 0
 		sourceHeight: 0
 
+	ImageResourceRequest =
+		resolution: impl.pixelRatio
+
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner 'Item', DATA
@@ -51,7 +54,10 @@ module.exports = (impl) ->
 		return
 
 	setImageSource: (val, callback) ->
-		val = cssUtils.encodeImageSrc val
+		if rsc = impl.Renderer.resources.getResource val
+			val = rsc.getPath ImageResourceRequest
+		else
+			val = cssUtils.encodeImageSrc val
 
 		self = @
 		data = @_impl

@@ -39,14 +39,22 @@ module.exports = (impl) ->
 	isItalic = (source) ->
 		///italic///i.test source
 
-	loadFont: (sources, name) ->
+	loadFont: (source, name) ->
+		if rsc = impl.Renderer.resources.getResource(source)
+			sources = []
+			for _, path of rsc.paths
+				sources.push path[1]
+		else
+			sources = [source]
+
 		style = if isItalic(sources[0]) then 'italic' else 'normal'
 		weight = getFontWeight(sources[0])
 		name = impl.utils.DEFAULT_FONTS[name] or name
 
 		urlStr = ''
 		for source in sources
-			urlStr += "url('#{source}') "
+			urlStr += "url('#{source}'), "
+		urlStr = urlStr.slice 0, -2
 
 		styles = document.createElement 'style'
 		styles.innerHTML = """

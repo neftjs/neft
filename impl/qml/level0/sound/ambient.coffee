@@ -17,8 +17,11 @@ module.exports = (impl) ->
 		return
 
 	setAmbientSoundSource: (val) ->
-		unless impl.utils.DATA_URI_RE.test val
-			val = impl.utils.toUrl(val)
+		unless impl.utils.DATA_URI_RE.test(val)
+			if rsc = impl.Renderer.resources.getResource(val)
+				val = rsc.getPath()
+			else
+				val = impl.utils.toUrl(val)
 		@_impl.elem.source = val
 		return
 

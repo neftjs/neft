@@ -181,6 +181,7 @@ Column {
 		Impl.setWindow val
 
 	utils.defineProperty exports, 'serverUrl', utils.WRITABLE, ''
+	utils.defineProperty exports, 'resources', utils.WRITABLE, null
 
 	exports.ready()
 

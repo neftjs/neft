@@ -7,7 +7,7 @@ FontLoader @class
 Item {
   FontLoader {
   	name: 'myFont'
-  	sources: ['static/fonts/myFont.woff']
+  	source: 'rsc:/static/fonts/myFont'
   }
 
   Text {
@@ -34,13 +34,12 @@ Item {
 
 		loadFont = (self) ->
 			unless self.name
-				for source in self.sources
-					path = SOURCE_FILE.exec self.source
-					if path
-						self.name = path[1]
-						break
+				path = SOURCE_FILE.exec self.source
+				if path
+					self.name = path[1]
 
-			Impl.loadFont self.sources, self.name
+			Impl.loadFont self.source, self.name
+			return
 
 		@fonts = {}
 
@@ -60,7 +59,7 @@ FontLoader {}
 
 		constructor: ->
 			@_name = ''
-			@_sources = []
+			@_source = ''
 			super()
 
 *String* FontLoader::name
@@ -72,26 +71,21 @@ FontLoader {}
 			assert.isString val
 			@_name = val.toLowerCase()
 
-*String* FontLoader::sources
-----------------------------
+*String* FontLoader::source
+---------------------------
 
 Place, where the font file can be found.
 
-It needs to be an array, because there is no one font type supported by all browsers.
-
 We recommend usng **WOFF** format and **TTF/OTF** for oldest Android browser.
 
-		utils.defineProperty @::, 'sources', null, ->
-			@_sources
+		utils.defineProperty @::, 'source', null, ->
+			@_source
 		, (val) ->
-			if val is 'string'
-				val = [val]
-			assert.isArray val
+			assert.isString val
 			assert.notLengthOf val, 0
-			assert.isString val[0]
-			assert.notLengthOf val[0]
-			@_sources = val
+			@_source = val
 
 			setImmediate =>
 				loadFont @
 				FontLoader.fonts[@name] = @
+			return
