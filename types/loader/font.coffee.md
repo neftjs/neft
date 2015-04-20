@@ -43,8 +43,8 @@ Item {
 
 		@fonts = {}
 
-*FontLoader* FontLoader([*Object* options])
--------------------------------------------
+*FontLoader* FontLoader()
+-------------------------
 
 This class is used to load custom fonts.
 

@@ -9,7 +9,7 @@ impl = abstractImpl = require './impl/base'
 impl.window = null
 signal.create impl, 'windowReady'
 
-TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader',
+TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'ResourcesLoader',
          'Device', 'Screen', 'Navigator', 'RotationSensor',
 
          'Rectangle', 'Grid', 'Column', 'Row', 'Flow',

@@ -1,0 +1,78 @@
+ResourcesLoader @class
+======================
+
+#### Load all assets on the bootstrap @snippet
+
+```
+Item {
+  ResourcesLoader {
+  	id: loader
+  	resources: app.resources
+  }
+
+  Text {
+  	text: 'Progress: ' + loader.progress * 100 + '%'
+  }
+}
+```
+
+	'use strict'
+
+	assert = require 'assert'
+	utils = require 'utils'
+	log = require 'log'
+	signal = require 'signal'
+	Resources = require 'resources'
+
+	log = log.scope 'Renderer', 'ResourcesLoader'
+
+	module.exports = (Renderer, Impl, itemUtils) -> class ResourcesLoader extends itemUtils.Object
+		@__name__ = 'ResourcesLoader'
+		@__path__ = 'Renderer.ResourcesLoader'
+
+		getResources = (resources, target=[]) ->
+			for key, val of resources when resources.hasOwnProperty(key)
+				if val instanceof Resources.Resource
+					target.push val
+				else
+					getResources val, target
+			target
+
+*ResourcesLoader* ResourcesLoader()
+-----------------------------------
+
+Access it with:
+```
+ResourcesLoader {}
+```
+
+		constructor: ->
+			@_resources = Renderer.resources
+			@_progress = 0
+			super()
+			setImmediate =>
+				if @_resources
+					@progress = 0
+					Impl.loadResources.call @, getResources(@_resources)
+
+*Resources* ResourcesLoader::resources
+--------------------------------------
+
+		utils.defineProperty @::, 'resources', null, ->
+			@_resources
+		, (val) ->
+			if typeof val is 'string'
+				val = Renderer.resources.getResource val
+			assert.instanceOf val, Resources
+			@_resources = val
+
+*Float* ResourcesLoader::progress = 0
+-------------------------------------
+
+### *Signal* ResourcesLoaded::progressChanged(*Float* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'progress'
+			developmentSetter: (val) ->
+				assert.isFloat val

@@ -124,6 +124,7 @@ Styles.button/red {
 
 	exports.AmbientSound = require('./types/sound/ambient') exports, Impl, itemUtils
 
+	exports.ResourcesLoader = require('./types/loader/resources') exports, Impl, itemUtils
 	exports.FontLoader = require('./types/loader/font') exports, Impl, itemUtils
 
 #### Main style - view
