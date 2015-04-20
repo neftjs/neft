@@ -1,9 +1,13 @@
 'use strict'
 
-Resources = require './index'
+utils = require 'utils'
+
+unless utils.isServer
+	throw new Error "Resources.Parser can be run only on a server"
+
+Resources = null
 fs = require 'fs'
 log = require 'log'
-utils = require 'utils'
 assert = require 'neft-assert'
 pathUtils = require 'path'
 try
@@ -20,6 +24,9 @@ IMAGE_FORMATS =
 DEFAULT_CONFIG =
 	resolutions: [1]
 
+stack = null
+logShowed = false
+
 isResourcesPath = (path) ->
 	/\/resources\.json$/.test path
 
@@ -31,26 +38,36 @@ resolutionToString = (resolution) ->
 
 supportImageResource = (path, rsc) ->
 	unless sharp
-		log.error "Image formats are not supported, because 'sharp' module is not installed; install 'libvips' and later type 'npm install sharp'"
+		unless logShowed
+			log.error "Image formats are not supported, because 'sharp' module is not installed; install 'libvips' and later type 'npm install sharp'"
+			logShowed = true
 		return
 
 	# get size
-	stats = file.statSync path
+	stats = fs.statSync path
 	mtime = new Date stats.mtime
 
-	sharp(path).metadata (err, meta) ->
-		if err
-			return
-		{width, height} = meta
-		rsc.width = width
-		rsc.height = height
+	stack.add (callback) ->
+		sharp(path).metadata (err, meta) ->
+			if err
+				return callback err
 
-		for format in rsc.formats
-			for resolution in rsc.resolutions
-				resPath = rsc.paths[format][resolution]
-				if not fs.existsSync(resPath) or new Date(fs.statSync(resPath).mtime) < mtime
-					sharp(path).resize(width * resolution, height * resolution).toFile(resPath)
-		return
+			name = pathUtils.basename path
+			name = Resources.Resource.parseFileName name
+
+			width = Math.round meta.width / name.resolution
+			height = Math.round meta.height / name.resolution
+
+			rsc.width = width
+			rsc.height = height
+
+			for format in rsc.formats
+				for resolution in rsc.resolutions
+					resPath = rsc.paths[format][resolution]
+					if not fs.existsSync(resPath) or new Date(fs.statSync(resPath).mtime) < mtime
+						sharp(path).resize(width * resolution, height * resolution).toFile(resPath)
+			callback()
+			return
 
 parseResourcesFolder = (path) ->
 	throw "Resources folder not implemented"
@@ -170,10 +187,12 @@ getFile = (path, config) ->
 		else
 			parseResourcesFolder path, config
 	else
-		if isResourcesPath(path)
-			parseResources path, config
-		else
-			parseResourceFile path, config
+		parseResourceFile path, config
 
-exports.parse = (path) ->
-	getFile path, DEFAULT_CONFIG
+module.exports = ->
+	[Resources] = arguments
+	parse: (path, callback) ->
+		stack = new utils.async.Stack
+		rscs = getFile path, DEFAULT_CONFIG
+		stack.runAllSimultaneously (err) ->
+			callback err, rscs
