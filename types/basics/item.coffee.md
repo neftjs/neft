@@ -466,13 +466,51 @@ Item::clone()
 
 			clone
 
-		require('./item/margin') Renderer, Impl, itemUtils, Item
-		require('./item/fill') Renderer, Impl, itemUtils, Item
-		require('./item/anchors') Renderer, Impl, itemUtils, Item
+		@Spacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
+		@Alignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
+		@Anchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
+		@Margin = require('./item/margin') Renderer, Impl, itemUtils, Item
+		@Fill = require('./item/fill') Renderer, Impl, itemUtils, Item
 		require('./item/property') Renderer, Impl, itemUtils, Item
 		require('./item/signal') Renderer, Impl, itemUtils, Item
-		require('./item/pointer') Renderer, Impl, itemUtils, Item
-		require('./item/keys') Renderer, Impl, itemUtils, Item
-		require('./item/document') Renderer, Impl, itemUtils, Item
+		@Pointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
+		@Keys = require('./item/keys') Renderer, Impl, itemUtils, Item
+		@Document = require('./item/document') Renderer, Impl, itemUtils, Item
+
+*Anchors* Item::anchors
+-----------------------
+
+### *Signal* Item::anchorsChanged(*Anchors* anchors)
+
+		@Anchors @
+
+*Pointer* Item::pointer
+-----------------------
+
+		@Pointer @
+
+*Margin* Item::margin
+---------------------
+
+### *Signal* Item::marginChanged(*Margin* margin)
+
+		@Margin @
+
+*Fill* Item::fill
+-----------------
+
+### *Signal* Item::fillChanged(*Fill* fill)
+
+		@Fill @
+
+*Keys* Item::keys
+-----------------
+
+		@Keys @
+
+*Document* Item::document
+-------------------------
+
+		@Document @
 
 		Item

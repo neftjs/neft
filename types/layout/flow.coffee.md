@@ -21,43 +21,41 @@ Flow {
 	assert = require 'assert'
 	utils = require 'utils'
 
-	module.exports = (Renderer, Impl, itemUtils) ->
+	module.exports = (Renderer, Impl, itemUtils) -> class Flow extends Renderer.Item
+		@__name__ = 'Flow'
+		@__path__ = 'Renderer.Flow'
 
 *Flow* Flow() : *Renderer.Item*
 -------------------------------
 
-		class Flow extends Renderer.Item
-			@__name__ = 'Flow'
-			@__path__ = 'Renderer.Flow'
+		constructor: ->
+			@_width = -1
+			@_height = -1
+			@_spacing = null
+			super()
+			@fill.width = true
+			@fill.height = true
 
-			constructor: ->
-				@_width = -1
-				@_height = -1
-				@_spacing = null
-				super()
-				@fill.width = true
-				@fill.height = true
+		getter = utils.lookupGetter @::, 'width'
+		setter = utils.lookupSetter @::, 'width'
+		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
+			@fill.width = val is -1
+			_super.call @, val
+			return
 
-			getter = utils.lookupGetter @::, 'width'
-			setter = utils.lookupSetter @::, 'width'
-			utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
-				@fill.width = val is -1
-				_super.call @, val
-				return
+		getter = utils.lookupGetter @::, 'height'
+		setter = utils.lookupSetter @::, 'height'
+		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
+			@fill.height = val is -1
+			_super.call @, val
+			return
 
-			getter = utils.lookupGetter @::, 'height'
-			setter = utils.lookupSetter @::, 'height'
-			utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-				@fill.height = val is -1
-				_super.call @, val
-				return
-
-			clone: ->
-				clone = super()
-				clone.fill = @fill
-				if @_spacing
-					clone.spacing = @spacing
-				clone
+		clone: ->
+			clone = super()
+			clone.fill = @fill
+			if @_spacing
+				clone.spacing = @spacing
+			clone
 
 *Float* Flow::width = -1
 ------------------------
@@ -68,69 +66,6 @@ Flow {
 *Spacing* Flow::spacing
 -----------------------
 
-		class Spacing extends itemUtils.DeepObject
-			@__name__ = 'Spacing'
+### *Signal* Flow::spacingChanged(*Spacing* oldValue)
 
-			itemUtils.defineProperty
-				constructor: Flow
-				name: 'spacing'
-				valueConstructor: Spacing
-				setter: (_super) -> (val) ->
-					{spacing} = @
-					if utils.isObject(val)
-						spacing.column = val.column if val.column?
-						spacing.row = val.row if val.row?
-					else
-						spacing.column = spacing.row = val
-					_super.call @, val
-					return
-
-			constructor: (ref) ->
-				@_column = 0
-				@_row = 0
-				super ref
-
-*Float* Flow::spacing.column
-----------------------------
-
-### *Signal* Flow::spacing.columnChanged(*Float* oldValue)
-
-			itemUtils.defineProperty
-				constructor: @
-				name: 'column'
-				defaultValue: 0
-				namespace: 'spacing'
-				parentConstructor: Flow
-				implementation: Impl.setFlowColumnSpacing
-				developmentSetter: (val) ->
-					assert.isFloat val
-
-*Float* Flow::spacing.row
--------------------------
-
-### *Signal* Flow::spacing.rowChanged(*Float* oldValue)
-
-			itemUtils.defineProperty
-				constructor: @
-				name: 'row'
-				defaultValue: 0
-				namespace: 'spacing'
-				parentConstructor: Flow
-				implementation: Impl.setFlowRowSpacing
-				developmentSetter: (val) ->
-					assert.isFloat val
-
-*Float* Flow::spacing.valueOf()
--------------------------------
-
-			valueOf: ->
-				if @column is @row
-					@column
-				else
-					throw new Error "column and row flow spacing are different"
-
-			toJSON: ->
-				column: @column
-				row: @row
-
-		Flow
+		Renderer.Item.Spacing @

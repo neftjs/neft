@@ -1,21 +1,25 @@
-Item/Document @extension
-=============
+Document @extension
+===================
 
 	'use strict'
 
 	utils = require 'utils'
 	signal = require 'signal'
 
-	module.exports = (Renderer, Impl, itemUtils, Item) ->
-		class Document extends itemUtils.DeepObject
-			@__name__ = 'Document'
+	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Document extends itemUtils.DeepObject
+		@__name__ = 'Document'
+
+		itemUtils.defineProperty
+			constructor: ctor
+			name: 'document'
+			valueConstructor: Document
 
 *Document* Document()
--------------------
+---------------------
 			
-			constructor: (ref) ->
-				@_node = null
-				super ref
+		constructor: (ref) ->
+			@_node = null
+			super ref
 
 *Document.Element* Document::node
 ---------------------------------
@@ -41,39 +45,22 @@ Text {
 ```
 
 		itemUtils.defineProperty
-			constructor: Document
+			constructor: @
 			name: 'node'
 			defaultValue: null
 			namespace: 'document'
-			parentConstructor: Item
+			parentConstructor: ctor
 
 *Signal* Document::show()
 -------------------------
 
 This signal is called when the **style item** parent has been found.
 
-		signal.Emitter.createSignal Document, 'show'
+		signal.Emitter.createSignal @, 'show'
 
 *Signal* Document::hide()
 -------------------------
 
 This signal is called when the **style item** is no longer used.
 
-		signal.Emitter.createSignal Document, 'hide'
-
-*Item* Item()
--------------
-
-*Document* Item::document
--------------------------
-
-Reference to the **Document** class instance.
-
-Always use access by item, because all [Renderer.Item][]s shares the same instance.
-
-		itemUtils.defineProperty
-			constructor: Item
-			name: 'document'
-			valueConstructor: Document
-
-		Document
+		signal.Emitter.createSignal @, 'hide'

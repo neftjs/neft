@@ -1,5 +1,5 @@
-Item/Keys @extension
-=========
+Keys @extension
+===============
 
 #### Handle keyboard events @snippet
 
@@ -24,16 +24,20 @@ Rectangle {
 	signal = require 'signal'
 	assert = require 'assert'
 
-	module.exports = (Renderer, Impl, itemUtils, Item) ->
-		class Keys extends itemUtils.DeepObject
-			@__name__ = 'Keys'
+	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys extends itemUtils.DeepObject
+		@__name__ = 'Keys'
+
+		itemUtils.defineProperty
+			constructor: ctor
+			name: 'keys'
+			valueConstructor: Keys
 
 *Keys* Keys()
 -------------
 
-			constructor: (ref) ->
-				@_focus = false
-				super ref
+		constructor: (ref) ->
+			@_focus = false
+			super ref
 
 *Signal* Keys::pressed(*Object* event)
 --------------------------------------
@@ -47,51 +51,38 @@ Rectangle {
 *Signal* Keys::input(*Object* event)
 ------------------------------------
 
-			onLazySignalInitialized = (keys, name) ->
-				Impl.attachItemSignal.call keys, 'keys', name
+		onLazySignalInitialized = (keys, name) ->
+			Impl.attachItemSignal.call keys, 'keys', name
 
-			@SIGNALS = ['pressed', 'hold', 'released', 'input']
+		@SIGNALS = ['pressed', 'hold', 'released', 'input']
 
-			for signalName in @SIGNALS
-				signal.Emitter.createSignal @, signalName, onLazySignalInitialized
+		for signalName in @SIGNALS
+			signal.Emitter.createSignal @, signalName, onLazySignalInitialized
 
 *Boolean* Keys::focus = false
 -----------------------------
 
 ### *Signal* Keys::focusChanged(*Boolean* oldValue)
 
-			focusedKeys = null
-
-			itemUtils.defineProperty
-				constructor: Keys
-				name: 'focus'
-				defaultValue: false
-				namespace: 'keys'
-				parentConstructor: Item
-				implementation: Impl.setItemKeysFocus
-				developmentSetter: (val) ->
-					assert.isBoolean val
-				setter: (_super) -> (val) ->
-					if @_focus isnt val
-						if val and focusedKeys isnt @
-							focusedKeys?.focus = false
-							focusedKeys = @
-						_super.call @, val
-						if not val and focusedKeys is @
-							focusedKeys = null
-							if focusedKeys isnt Renderer.window.keys
-								Renderer.window.keys.focus = true
-					return
-
-*Item* Item()
--------------
-
-*Keys* Item::keys
------------------
+		focusedKeys = null
 
 		itemUtils.defineProperty
-			constructor: Item
-			name: 'keys'
-			valueConstructor: Keys
-
-		Keys
+			constructor: Keys
+			name: 'focus'
+			defaultValue: false
+			namespace: 'keys'
+			parentConstructor: ctor
+			implementation: Impl["set#{ctor.__name__}KeysFocus"]
+			developmentSetter: (val) ->
+				assert.isBoolean val
+			setter: (_super) -> (val) ->
+				if @_focus isnt val
+					if val and focusedKeys isnt @
+						focusedKeys?.focus = false
+						focusedKeys = @
+					_super.call @, val
+					if not val and focusedKeys is @
+						focusedKeys = null
+						if focusedKeys isnt Renderer.window.keys
+							Renderer.window.keys.focus = true
+				return

@@ -1,24 +1,43 @@
-Item/Margin @extension
-===========
+Margin @extension
+=================
 
 	'use strict'
 
 	expect = require 'expect'
 	utils = require 'utils'
+	assert = require 'assert'
 
-	{assert} = console
+	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Margin extends itemUtils.DeepObject
+		@__name__ = 'Margin'
 
-	module.exports = (Renderer, Impl, itemUtils, Item) ->
+		itemUtils.defineProperty
+			constructor: ctor
+			name: 'margin'
+			valueConstructor: Margin
+			setter: (_super) -> (val) ->
+				{margin} = @
+				if utils.isObject(val)
+					margin.left = val.left if val.left?
+					margin.top = val.top if val.top?
+					margin.right = val.right if val.right?
+					margin.bottom = val.bottom if val.bottom?
+				else
+					margin.left = margin.top = margin.right = margin.bottom = val
+				_super.call @, val
+				return
 
-		class Margin extends itemUtils.DeepObject
-			@__name__ = 'Margin'
+		ctor::clone = do (_super = ctor::clone) -> ->
+			clone = _super.call @
+			if @_margin
+				clone.margin = @margin
+			clone
 
-			constructor: (ref) ->
-				@_left = 0
-				@_top = 0
-				@_right = 0
-				@_bottom = 0
-				super ref
+		constructor: (ref) ->
+			@_left = 0
+			@_top = 0
+			@_right = 0
+			@_bottom = 0
+			super ref
 
 *Margin* Margin()
 -----------------
@@ -54,48 +73,49 @@ Rectangle {
 }
 ```
 
-			createMarginProp = (type) ->
-				developmentSetter = (val) ->
-					assert typeof val is 'number' and isFinite(val)
-					, "margin.#{type} expects a finite number; `#{val}` given"
+		implMethod = Impl["set#{ctor.__name__}Margin"]
+		createMarginProp = (type) ->
+			developmentSetter = (val) ->
+				assert typeof val is 'number' and isFinite(val)
+				, "margin.#{type} expects a finite number; `#{val}` given"
 
-				itemUtils.defineProperty
-					constructor: Margin
-					name: type
-					defaultValue: 0
-					implementation: (val) ->
-						Impl.setItemMargin.call @, type, val
-					namespace: 'margin'
-					parentConstructor: Item
-					developmentSetter: developmentSetter
+			itemUtils.defineProperty
+				constructor: Margin
+				name: type
+				defaultValue: 0
+				implementation: (val) ->
+					implMethod.call @, type, val
+				namespace: 'margin'
+				parentConstructor: ctor
+				developmentSetter: developmentSetter
 
 *Float* Margin::left = 0
 ------------------------
 
 ### *Signal* Margin::leftChanged(*Float* oldValue)
 
-			createMarginProp 'left'
+		createMarginProp 'left'
 
 *Float* Margin::top = 0
 -----------------------
 
 ### *Signal* Margin::topChanged(*Float* oldValue)
 
-			createMarginProp 'top'
+		createMarginProp 'top'
 
 *Float* Margin::right = 0
 -------------------------
 
 ### *Signal* Margin::rightChanged(*Float* oldValue)
 
-			createMarginProp 'right'
+		createMarginProp 'right'
 
 *Float* Margin::bottom = 0
 --------------------------
 
 ### *Signal* Margin::bottomChanged(*Float* oldValue)
 
-			createMarginProp 'bottom'
+		createMarginProp 'bottom'
 
 *Float* Margin::valueOf()
 --------------------------
@@ -113,46 +133,14 @@ Item {
 }
 ```
 
-			valueOf: ->
-				if @left is @top and @top is @right and @right is @bottom
-					@left
-				else
-					throw new Error "Item::margin values are different"
+		valueOf: ->
+			if @left is @top and @top is @right and @right is @bottom
+				@left
+			else
+				throw new Error "margin values are different"
 
-			toJSON: ->
-				left: @left
-				top: @top
-				right: @right
-				bottom: @bottom
-
-*Item* Item()
--------------
-
-*Item.Margin* Item::margin
---------------------------
-
-### *Signal* Item::marginChanged(*Item.Margin* margin)
-
-		itemUtils.defineProperty
-			constructor: Item
-			name: 'margin'
-			valueConstructor: Margin
-			setter: (_super) -> (val) ->
-				{margin} = @
-				if utils.isObject(val)
-					margin.left = val.left if val.left?
-					margin.top = val.top if val.top?
-					margin.right = val.right if val.right?
-					margin.bottom = val.bottom if val.bottom?
-				else
-					margin.left = margin.top = margin.right = margin.bottom = val
-				_super.call @, val
-				return
-
-		Item::clone = do (_super = Item::clone) -> ->
-			clone = _super.call @
-			if @_margin
-				clone.margin = @margin
-			clone
-
-		Margin
+		toJSON: ->
+			left: @left
+			top: @top
+			right: @right
+			bottom: @bottom
