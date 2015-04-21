@@ -18,3 +18,5 @@ module.exports = (impl) ->
 	setGridRows: grid.update
 	setGridColumnSpacing: grid.update
 	setGridRowSpacing: grid.update
+	setGridAlignmentHorizontal: grid.update
+	setGridAlignmentVertical: grid.update

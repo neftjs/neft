@@ -48,6 +48,13 @@ updateItem = (item) ->
 		columnsLen = Infinity
 		rowsLen = 1
 
+	if item._alignment
+		alignH = item._alignment._horizontal
+		alignV = item._alignment._vertical
+	else
+		alignH = 'left'
+		alignV = 'top'
+
 	# get tmp arrays
 	maxColumnsLen = if columnsLen is Infinity then children.length else columnsLen
 	lastColumn = maxColumnsLen - 1
@@ -78,20 +85,23 @@ updateItem = (item) ->
 		# child
 		width = child._width
 		height = child._height
+		margin = child._margin
 
 		# margins
 		if gridType & ROW
 			width += columnSpacing
-			if column isnt 0
-				width += child.margin.left
-			if column isnt lastColumn
-				width += child.margin.right
+			if margin
+				if column isnt 0
+					width += margin._left
+				if column isnt lastColumn
+					width += margin._right
 		if gridType & COLUMN
 			height += rowSpacing
-			if row isnt 0
-				height += child.margin.top
-			if row isnt lastRow
-				height += child.margin.bottom
+			if margin
+				if row isnt 0
+					height += margin._top
+				if row isnt lastRow
+					height += margin._bottom
 
 		# save
 		if width > columnsPositions[column]
@@ -122,17 +132,33 @@ updateItem = (item) ->
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
 
-		if gridType & ROW
-			if column > 0
-				child.x = child.margin.left + columnsPositions[column-1]
-			else
-				child.x = 0
+		margin = child._margin
 
-		if gridType & COLUMN
-			if row > 0
-				child.y = child.margin.top + rowsPositions[row-1]
+		if gridType & ROW or alignH isnt 'left'
+			if column > 0
+				x = columnsPositions[column-1]
+				if margin
+					x += margin._left
 			else
-				child.y = 0
+				x = 0
+			if alignH is 'center'
+				x += (columnsPositions[column] - x - child._width) / 2
+			else if alignH is 'right'
+				x += columnsPositions[column] - x - child._width
+			child.x = x
+
+		if gridType & COLUMN or alignV isnt 'top'
+			if row > 0
+				y = rowsPositions[row-1]
+				if margin
+					y += margin._top
+			else
+				y = 0
+			if alignV is 'center'
+				y += (rowsPositions[row] - y - child._height) / 2
+			else if alignV is 'right'
+				y += rowsPositions[row] - y - child._height
+			child.y = y
 
 		i++
 

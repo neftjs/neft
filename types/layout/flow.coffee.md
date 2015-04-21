@@ -57,12 +57,6 @@ Flow {
 				clone.spacing = @spacing
 			clone
 
-*Float* Flow::width = -1
-------------------------
-
-*Float* Flow::height = -1
--------------------------
-
 *Spacing* Flow::spacing
 -----------------------
 

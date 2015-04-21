@@ -27,6 +27,7 @@ Column {
 
 		constructor: ->
 			@_spacing = 0
+			@_alignment = null
 			super()
 			@_width = -1
 			@_height = -1
@@ -47,12 +48,6 @@ Column {
 			_super.call @, val
 			return
 
-*Float* Column::width = -1
---------------------------
-
-*Float* Column::height = -1
----------------------------
-
 *Float* Column::spacing = 0
 ---------------------------
 
@@ -69,6 +64,13 @@ Column {
 					val = 0
 				assert.isFloat val
 				_super.call @, val
+
+*Alignment* Column::alignment
+-----------------------------
+
+### *Signal* Column::alignmentChanged(*Alignment* oldValue)
+
+		Renderer.Item.Alignment @
 
 		clone: ->
 			clone = super()

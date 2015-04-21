@@ -27,6 +27,7 @@ Row {
 
 		constructor: ->
 			@_spacing = 0
+			@_alignment = null
 			super()
 			@_width = -1
 			@_height = -1
@@ -70,8 +71,16 @@ Row {
 				assert.isFloat val
 				_super.call @, val
 
+*Alignment* Row::alignment
+--------------------------
+
+### *Signal* Row::alignmentChanged(*Alignment* oldValue)
+
+		Renderer.Item.Alignment @
+
 		clone: ->
 			clone = super()
 			clone.fill = @fill
 			clone.spacing = @_spacing
+			clone.alignment = @alignment
 			clone

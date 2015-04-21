@@ -32,6 +32,7 @@ Grid {
 			@_columns = 2
 			@_rows = Infinity
 			@_spacing = null
+			@_alignment = null
 			super()
 			@_width = -1
 			@_height = -1
@@ -92,18 +93,26 @@ Grid {
 					val = 1
 				_super.call @, val
 
-		clone: ->
-			clone = super()
-			clone.columns = @_columns
-			clone.rows = @_rows
-			clone.fill = @fill
-			if @_spacing
-				clone.spacing = @spacing
-			clone
-
 *Spacing* Grid::spacing
 -----------------------
 
 ### *Signal* Grid::spacingChanged(*Spacing* oldValue)
 
 		Renderer.Item.Spacing @
+
+*Alignment* Grid::alignment
+---------------------------
+
+### *Signal* Grid::alignmentChanged(*Alignment* oldValue)
+
+		Renderer.Item.Alignment @
+
+		clone: ->
+			clone = super()
+			clone.columns = @_columns
+			clone.rows = @_rows
+			clone.fill = @fill
+			clone.alignment = @alignment
+			if @_spacing
+				clone.spacing = @spacing
+			clone
