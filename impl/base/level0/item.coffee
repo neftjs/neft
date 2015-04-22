@@ -3,8 +3,6 @@
 utils = require 'utils'
 
 module.exports = (impl) ->
-	{items} = impl
-
 	NOP = ->
 
 	DATA = utils.merge

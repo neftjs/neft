@@ -61,7 +61,7 @@ Browser implementation
 ### *Signal* Screen.orientationChanged(*String* oldValue)
 
 			signal.Emitter.createSignal @, 'orientationChanged'
-			utils.defineProperty Screen, 'orientation', null, ->
+			utils.defineProperty Screen::, 'orientation', null, ->
 				@_orientation
 			, null
 

@@ -11,14 +11,6 @@ exports.createQmlObject = do ->
 		component = components[type] or createItemComponent(type)
 		component.createObject(parent)
 
-RAD = 180 / Math.PI
-exports.radToDeg = (val) ->
-	val * RAD
-
-DEG = Math.PI / 180
-exports.degToRad = (val) ->
-	val * DEG
-
 exports.toQtColor = (color) ->
 	# hash
 	if color[0] is '#'

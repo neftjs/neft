@@ -37,3 +37,13 @@ module.exports = (impl) ->
 			json = JSON.stringify obj
 			func = Function "return #{json}"
 			func
+
+	radToDeg: do ->
+		RAD = 180 / Math.PI
+		(val) ->
+			val * RAD
+
+	degToRad: do ->
+		DEG = Math.PI / 180
+		(val) ->
+			val * DEG
