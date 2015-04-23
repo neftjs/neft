@@ -94,7 +94,8 @@ exports.queryAll = (selector, target=[]) ->
 		return target
 
 	funcs = []
-	sel = selector
+	queries = [funcs]
+	sel = selector.trim()
 	while sel.length
 		if sel[0] is '*'
 			sel = sel.slice 1
@@ -131,9 +132,15 @@ exports.queryAll = (selector, target=[]) ->
 				funcs.push anyDescendant, null, null
 			else if deep is '>'
 				funcs.push anyChild, null, null
+		else if sel[0] is ','
+			funcs = []
+			queries.push funcs
+			sel = sel.slice 1
+			sel = sel.trim()
 		else
 			throw new Error "queryAll: unexpected selector '#{sel}' in '#{selector}'"
 
-	anyDescendant @, funcs, 0, target
+	for funcs in queries
+		anyDescendant @, funcs, 0, target
 
 	target

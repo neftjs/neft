@@ -247,6 +247,10 @@ describe 'View Element', ->
 		it 'E > * > F[foo]', ->
 			expect(doc2.queryAll('div > * > u[color]')).toEqual [doc2u]
 
+		it 'E > * > F[foo], F[foo]', ->
+			expect(doc2.queryAll('div > * > u[color], div[attr]')).toEqual [doc2u, doc2div2]
+			expect(doc2.queryAll('div > * > u[color],div[attr]')).toEqual [doc2u, doc2div2]
+
 	it 'visible property is editable', ->
 
 		expect(p.visible).toBeTruthy()
