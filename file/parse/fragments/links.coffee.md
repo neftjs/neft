@@ -1,5 +1,5 @@
 neft:require @xml
-=================
+============
 
 This special *XML* tag is used to include fragments from the local file.
 

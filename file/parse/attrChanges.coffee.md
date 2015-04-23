@@ -1,5 +1,5 @@
 neft:attr @xml
-==============
+=========
 
 This special *XML* tag is used to dynamically change attributes of the parent element.
 

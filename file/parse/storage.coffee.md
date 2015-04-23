@@ -1,4 +1,4 @@
-String Interpolation @txt
+String Interpolation @learn
 =========================
 
 Any XML text and attribute value can use string interpolation.

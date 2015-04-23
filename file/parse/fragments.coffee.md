@@ -1,5 +1,5 @@
 neft:fragment @xml
-==================
+=============
 
 This special *XML* tag is used to create separated and repeatable parts of the document
 (sometimes called *templates*).

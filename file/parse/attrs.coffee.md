@@ -1,4 +1,4 @@
-Attributes evaluating @txt
+Attributes evaluating @learn
 ==========================
 
 For easiest developing, some of the *XML* attributes are automatically

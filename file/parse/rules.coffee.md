@@ -1,5 +1,11 @@
-neft:rule
+neft:rule @xml
 =========
+
+```
+<neft:rule query="input[type=string]">
+  <attrs neft:style="styles:elements/form/input/string" />
+</neft:rule>
+```
 
 	'use strict'
 

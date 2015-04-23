@@ -43,12 +43,16 @@ module.exports = (File) -> class Input
 				obj[prop]
 
 		(file, prop) ->
-			v = getFromElement file.node, prop
-			if file.source
+			if file.source instanceof File.Iterator
+				destFile = file.source.self
+			else
+				destFile = file
+			v = getFromElement destFile.node, prop
+			if source = destFile.source
 				if v is undefined
-					v = getFromElement file.source.node, prop
+					v = getFromElement source.node, prop
 				if v is undefined
-					v = getFromObject file.source.storage, prop
+					v = getFromObject source.storage, prop
 			if v is undefined
 				v = getFromObject file.storage, prop
 
@@ -104,14 +108,8 @@ module.exports = (File) -> class Input
 							ends = ''
 						r = ''
 						for prop in props
-							`//<development>`
 							prefix += "__input.traceProp("
 							r += ", '#{prop}')"
-							`//</development>`
-							`//<production>`
-							prefix += "__input.trace("
-							r += ".#{prop})"
-							`//</production>`
 						r + ends
 					"#{prefix}#{str}"
 
@@ -201,10 +199,11 @@ module.exports = (File) -> class Input
 	traceProp: (obj, prop) ->
 		val = obj[prop]
 		if obj instanceof Dict and val is undefined
-			log.warn "Can't extract '#{prop}' property in '#{@text}'; use Dict::get() method"
+			val = obj.get prop
 		else if obj instanceof List and val is undefined
-			log.warn "Can't extract '#{prop}' property in '#{@text}'; use List::get() method"
-		else if val
+			val = obj.get prop
+
+		if val
 			@trace val
 		val
 
@@ -240,7 +239,7 @@ module.exports = (File) -> class Input
 			try
 				callFunc.call @
 			catch err
-				log.warn "Interpolated string error in '#{text}';\n#{err}"
+				log.warn "Interpolated string error in '#{@text}';\n#{err}"
 
 	clone: (original, self) ->
 		node = original.node.getCopiedElement @node, self.node

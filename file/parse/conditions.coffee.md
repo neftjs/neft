@@ -1,5 +1,5 @@
 neft:if @xml
-============
+=======
 
 This special *XML* attribute is used to hide or show tags depends on the condition result.
 

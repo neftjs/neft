@@ -1,5 +1,5 @@
 neft:use @xml
-=============
+========
 
 This special *XML* tag is used to place the [neft:fragment][].
 
