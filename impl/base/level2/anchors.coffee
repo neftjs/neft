@@ -40,9 +40,15 @@ module.exports = (impl) ->
 			when 'parent'
 				opts |= PARENT
 				target = [item, 'parent']
+			when 'nextSibling'
+				target = [item, 'nextSibling']
+			when 'previousSibling'
+				target = [item, 'previousSibling']
 			when 'this'
 				opts |= THIS
 				target = item
+		if target is item.parent
+			opts |= PARENT
 
 		if line?
 			arr = []

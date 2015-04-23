@@ -139,7 +139,7 @@ Rectangle {
 
 Such reference is also automatically updated if the item parent change.
 
-					unless target is 'parent' or target is 'this' or target instanceof Item
+					unless target is 'parent' or target is 'this' or target is 'nextSibling' or target is 'previousSibling' or target instanceof Item
 						log.error "`anchors.#{type}` expects an item; `'#{val}'` given"
 
 For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.
