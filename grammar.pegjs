@@ -47,10 +47,10 @@ SourceCharacter
 	= .
 
 Letter
-	= [a-zA-Z_]
+	= [a-zA-Z_$]
 
 Word
-	= $[a-zA-Z0-9_]+
+	= $[a-zA-Z0-9_$]+
 
 Variable
 	= $(Letter Word?)
@@ -178,7 +178,7 @@ AttributeBody
 	/ "{" d:(__ d:Attribute __ { return d })* "}" AttributeEnds { return d }
 	/ "[" d:Type* "]" AttributeEnds { return d }
 	/ d:$StringLiteral AttributeEnds { return d }
-	/ value:(!AttributeEnds d:SourceCharacter {return d})+ AttributeEnds {
+	/ value:(!AttributeEnds d:($StringLiteral/SourceCharacter) {return d})+ AttributeEnds {
 		return value.join('').trim()
 	}
 
@@ -198,7 +198,8 @@ PropertyToken
 Property "custom property"
 	= PropertyToken WhiteSpace attribute:(Attribute / (d:AttributeName AttributeEnds {return d})) {
 		var name = attribute.name || attribute;
-		var obj = { type: 'property', name: name };
+		if (name.indexOf('$.') !== 0) { error('Properties can be created only in the \'$\' object. Use \'property $.'+name+'\' instead'); }
+		var obj = { type: 'property', name: name.slice(2) };
 		return typeof attribute === 'string' ? obj : [obj, attribute];
 	}
 
@@ -208,8 +209,9 @@ SignalToken
 	= "signal"
 
 Signal "signal"
-	= SignalToken WhiteSpace name:(Variable) AttributeEnds {
-		return { type: 'signal', name: name };
+	= SignalToken WhiteSpace name:(Reference / Variable) AttributeEnds {
+		if (name.indexOf('$.') !== 0) { error('Signals can be created only in the \'$\' object. Use \'signal $.'+name+'\' instead'); }
+		return { type: 'signal', name: name.slice(2) };
 	}
 
 /* ID */
@@ -295,7 +297,13 @@ Type
 			id = 'a' + uid();
 		}
 
-		return { type: 'object', name: name, id: id, body: body };
+		var obj = { type: 'object', name: name, id: id, body: body };
+
+		for (var i = 0; i < body.length; i++){
+			body[i].parent = obj;
+		}
+
+		return obj;
 	}
 
 /* CODE */

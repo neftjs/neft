@@ -35,7 +35,7 @@ isAnchor = (obj) ->
 
 	obj.name is 'anchors' or obj.name.indexOf('anchors.') is 0
 
-BINDING = ///([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z0-9_]+)///
+BINDING = ///([a-zA-Z_$][a-zA-Z0-9_$]*)\.([a-zA-Z0-9_$]+)///
 isBinding = (obj) ->
 	assert obj.type is ATTRIBUTE, "isBinding: type must be an attribute"
 
@@ -67,15 +67,60 @@ getElemByName = (arr, type, name) ->
 			return elem
 	return
 
+getObject = (obj) ->
+	while obj
+		if obj.type is 'object'
+			return obj
+		obj = obj.parent
+	return
+
+getObjectParent = (obj) ->
+	obj = getObject obj
+	unless parent = obj.parent
+		throw "Binding to the static 'parent' can't be used if an item doesn't have a parent. Use 'this.parent' if this reference must be dynamic"
+	parent.id
+
+getObjectNextSibling = (obj) ->
+	obj = getObject obj
+	index = obj.parent?.body.indexOf(obj)
+	unless sibling = obj.parent.body[index+1]
+		throw "Binding to the static 'nextSibling' can't be used if an item doesn't have a next sibling. Use 'this.nextSibling' if this reference must be dynamic"
+	sibling.id
+
+getObjectPreviousSibling = (obj) ->
+	obj = getObject obj
+	index = obj.parent?.body.indexOf(obj)
+	unless sibling = obj.parent.body[index-1]
+		throw "Binding to the static 'previousSibling' can't be used if an item doesn't have a previous sibling. Use 'this.previousSibling' if this reference must be dynamic"
+	sibling.id
+
 anchorAttributeToString = (obj) ->
 	assert obj.type is ATTRIBUTE, "anchorAttributeToString: type must be an attribute"
 
 	if typeof obj.value is 'object'
 		return "{}"
 
-	anchor = obj.value.split '.'
-	if anchor[0] is 'parent'
-		anchor[0] = "'parent'"
+	dotIndex = obj.value.lastIndexOf '.'
+	if dotIndex is -1
+		anchor = [obj.value]
+	else
+		anchor = [obj.value.slice(0, dotIndex), obj.value.slice(dotIndex+1)]
+
+	anchor[0] = switch anchor[0]
+		when 'this.parent'
+			"'parent'"
+		when 'this.nextSibling'
+			"'nextSibling'"
+		when 'this.previousSibling'
+			"'previousSibling'"
+		when 'parent'
+			getObjectParent obj
+		when 'nextSibling'
+			getObjectNextSibling obj
+		when 'previousSibling'
+			getObjectPreviousSibling obj
+		else
+			anchor[0]
 	if anchor.length > 1
 		anchor[1] = "'#{anchor[1]}'"
 	"[#{anchor}]"
@@ -87,17 +132,17 @@ bindingAttributeToString = (obj) ->
 	# split to types
 	val += ' '
 	lastBinding = null
-	for char in val
+	isString = false
+	for char, i in val
 		if char is '.' and lastBinding
 			lastBinding.push ''
 			continue
 
-		if lastBinding and ///[a-zA-Z_0-9]///.test(char)
+		if lastBinding and (isString or ///[a-zA-Z_0-9$]///.test(char))
 			lastBinding[lastBinding.length - 1] += char
-		else if ///[a-zA-Z_]///.test(char)
+		else if ///[a-zA-Z_$]///.test(char)
 			lastBinding = [char]
 			binding.push lastBinding
-
 		else
 			if lastBinding is null
 				binding[binding.length - 1] += char
@@ -105,14 +150,21 @@ bindingAttributeToString = (obj) ->
 				lastBinding = null
 				binding.push char
 
+		if /'|"/.test(char) and val[i-1] isnt '\\'
+			isString = not isString
+
 	# filter by ids
 	for elem, i in binding when typeof elem isnt 'string'
 		[id] = elem
 		if id is 'parent' or id is 'target'
-			elem.unshift "'this'"
+			elem[0] = getObjectParent obj
+		else if id is 'nextSibling'
+			elem[0] = getObjectNextSibling obj
+		else if id is 'previousSibling'
+			elem[0] = getObjectPreviousSibling obj
 		else if id is 'this'
-			elem[0] = "'this'"
-		else if (id is 'view' or ids.hasOwnProperty(id)) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
+			elem[0] = getObject(obj).id
+		else if (id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
 			continue
 		else
 			binding[i] = elem.join '.'
@@ -138,6 +190,7 @@ bindingAttributeToString = (obj) ->
 			text += ", "
 
 		if typeof elem is 'string'
+			elem = elem.replace ///\$///g, '$$$'
 			elem = elem.replace ///'///g, '\\\''
 			text += "'#{elem}'"
 		else if elem.length > 1
@@ -161,6 +214,8 @@ stringObjectHead = (obj) ->
 	isLocal = rendererClass?
 	decl = if isLocal then "new #{obj.name}" else "#{obj.name}"
 	r = "var #{obj.id} = ids.#{obj.id} = #{decl}();\n"
+	r += "#{obj.id}._id = '#{obj.id}';\n"
+	r += "#{obj.id}._isReady = false;\n"
 
 	properties = getEachProp(getByType(obj.body, PROPERTY), 'name')
 	for property in properties
@@ -231,7 +286,7 @@ stringAttribute = (obj, parents) ->
 		if rArr.length > 0
 			r += "#{rArr}]"
 		else
-			if parents.length > 1 or getElemByName(parents[0].body, PROPERTY, obj.name)
+			if parents.length > 1 or obj.name.indexOf('$.') is 0
 				r += "{}"
 			else
 				return rPre + rPost
@@ -281,7 +336,7 @@ stringFunctions = (obj) ->
 	attributes = getByType obj.body, FUNCTION
 	for attribute in attributes
 		func = Function attribute.params or [], attribute.body
-		r += "#{obj.id}.#{attribute.name}(#{func});\n"
+		r += "#{obj.id}.#{attribute.name}(#{func}, #{obj.id});\n"
 
 	for child in getByType(obj.body, OBJECT)
 		r += stringFunctions child
@@ -329,7 +384,7 @@ module.exports = (file, filename) ->
 	if filename is 'view'
 		code += "setImmediate(function(){\n"
 	code += "for (var _id in ids){\n"
-	code += "	ids[_id].ready(); ids[_id].onReady.disconnectAll();\n"
+	code += "	ids[_id]._isReady = true; ids[_id].ready(); ids[_id].onReady.disconnectAll();\n"
 	code += "}\n"
 	if filename is 'view'
 		code += "});\n"
