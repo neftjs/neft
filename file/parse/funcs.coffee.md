@@ -1,5 +1,5 @@
 neft:func @xml
-==============
+=========
 
 This special *XML* tag is used to create new functions in a view file.
 

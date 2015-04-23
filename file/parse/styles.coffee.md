@@ -1,5 +1,5 @@
 neft:style @xml
-===============
+==========
 
 This is a special *XML* attribute used to connect the [Document Modeling][] nodes with
 the [Renderer.Item][] class.

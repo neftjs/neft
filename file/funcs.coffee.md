@@ -186,26 +186,32 @@ This variable refers to the *get('data')* value.
 		File::funcs = null
 
 		if utils.isNode
-			linkFragments = (funcs, target) ->
+			linkFragment = (funcs, fragment) ->
+				unless fragment = File._files[fragment]
+					return
+
+				fragmentFuncs = fragment.funcs
+
 				for name, func of funcs
-					for _, fragmentName of target.fragments
-						fragment = File._files[fragmentName]
-						unless fragment
-							continue
+					# don't override funcs
+					if fragmentFuncs.hasOwnProperty(name)
+						return
 
-						fragmentFuncs = fragment.funcs
+					# save function
+					fragmentFuncs[name] = func
 
-						# don't override funcs
-						if fragmentFuncs.hasOwnProperty name
-							continue
+				# safe function recursively
+				linkFragments funcs, fragment
+				return
 
-						# save function
-						fragmentFuncs[name] = func
+			linkFragments = (funcs, target) ->
+				for _, fragmentName of target.fragments
+					linkFragment funcs, fragment
 
-						# safe function recursively
-						linkFragments funcs, fragment
-
-				null
+				if iterators = target.iterators
+					for iterator in iterators
+						linkFragment funcs, iterator.fragment
+				return
 
 			File.onParsed do ->
 				funcs = stylesParseFuncs File

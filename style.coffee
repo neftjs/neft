@@ -169,7 +169,7 @@ module.exports = (File, data) -> class Style
 		obj = @item
 		for prop, i in props
 			if i is props.length - 1
-				if ATTR_PRIMITIVE_VALUES[val]
+				if val of ATTR_PRIMITIVE_VALUES
 					val = ATTR_PRIMITIVE_VALUES[val]
 
 				if val?
