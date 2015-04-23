@@ -85,15 +85,33 @@ module.exports = (impl) ->
 			@child?.destroy()
 			return
 
-	class Binding
-		@prepare = (arr, item) ->
-			for elem, i in arr
-				if isArray elem
-					Binding.prepare elem, item
-				else if elem is 'this'
-					arr[i] = item
-			null
+	isSimpleBinding = (binding) ->
+		binding.length is 1 and not isArray(binding[0][0])
 
+	class SimpleBinding
+		constructor: (@obj, @prop, binding) ->
+			item = obj._ref or obj
+			target = @target = binding[0]
+			handlerName = signal.getHandlerName "#{target[1]}Changed"
+			target[0][handlerName]? @update, @
+
+			Object.preventExtensions @
+
+			if item._isReady
+				@update()
+			else
+				item.onReady @update, @
+
+		update: ->
+			@obj[@prop] = @target[0][@target[1]]
+			return
+
+		destroy: ->
+			handlerName = signal.getHandlerName "#{@target[1]}Changed"
+			@target[0][handlerName].disconnect @update, @
+			return
+
+	class Binding
 		@getHash = do ->
 			argI = 0
 
@@ -133,10 +151,8 @@ module.exports = (impl) ->
 				args.push "return #{hash};"
 				cache[hash] = Function.apply null, args
 
-		# TODO: implement fast bindings [[item, prop]]
 		constructor: (@obj, @prop, binding, @extraResultFunc=null) ->
 			item = obj._ref or obj
-			Binding.prepare binding, item
 
 			# properties
 			@func = Binding.getFunc binding
@@ -149,7 +165,7 @@ module.exports = (impl) ->
 			# connections
 			connections = @connections = []
 			for elem in binding
-				if isArray elem
+				if isArray(elem)
 					connections.push new Connection @, elem[0], elem[1]
 
 			# update
@@ -221,5 +237,8 @@ module.exports = (impl) ->
 		data.bindings[prop]?.destroy()
 
 		if binding?
-			data.bindings[prop] = new Binding @, prop, binding, extraResultFunc
+			if not extraResultFunc and isSimpleBinding(binding)
+				data.bindings[prop] = new SimpleBinding @, prop, binding
+			else
+				data.bindings[prop] = new Binding @, prop, binding, extraResultFunc
 		return
