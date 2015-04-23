@@ -16,7 +16,7 @@ module.exports = (impl) ->
 			return
 
 		if rsc = impl.Renderer.resources.getResource(source)
-			source = rsc.getPath()
+			source = 'qrc:/' + rsc.getPath()
 		else
 			source = impl.utils.toUrl(source)
 

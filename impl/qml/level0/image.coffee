@@ -7,6 +7,8 @@ module.exports = (impl) ->
 		shader: null
 		isSvg: false
 		callback: null
+		size: {width: 0, height: 0}
+		resource: null
 
 	onSvgImageResize = ->
 		if this.sourceSize.width < this.width
@@ -30,18 +32,24 @@ module.exports = (impl) ->
 				wrapMode: ShaderEffectSource.Repeat;
 				hideSource: true;
 			}
-			onOffsetXChanged: {
+			function updateOffsetX(){
 				shader.offset.x = -shader.offsetX/shader.sourceWidth;
 			}
-			onOffsetYChanged: {
+			function updateOffsetY(){
 				shader.offset.y = -shader.offsetY/shader.sourceHeight;
 			}
-			onSourceWidthChanged: {
+			function updateTileX(){
 				shader.tile.x = shader.sourceWidth/shader.width;
 			}
-			onSourceHeightChanged: {
+			function updateTileY(){
 				shader.tile.y = shader.sourceHeight/shader.height;
 			}
+			onOffsetXChanged: updateOffsetX()
+			onOffsetYChanged: updateOffsetY()
+			onSourceWidthChanged: {updateOffsetX(), updateTileX()}
+			onSourceHeightChanged: {updateOffsetY(), updateTileY()}
+			onWidthChanged: updateTileX()
+			onHeightChanged: updateTileY()
 			property point tile: Qt.point(0, 0);
 			property point offset: Qt.point(0, 0);
 			width: this.image ? this.image.width : 0;
@@ -84,12 +92,15 @@ module.exports = (impl) ->
 
 	setImageSource: do ->
 		onStatusChanged = ->
-			{elem, callback} = @_impl
+			data = @_impl
+			{elem, callback} = data
 			elem.statusChanged.disconnect @, onStatusChanged
 
 			if elem.status is Image.Ready
-				callback?.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
-			else
+				data.size.width = data.resource?.width or elem.sourceSize.width
+				data.size.height = data.resource?.height or elem.sourceSize.height
+				callback?.call @, null, data.size
+			else if elem.status is Image.Error
 				callback?.call @, true
 
 		(val, callback) ->
@@ -97,9 +108,14 @@ module.exports = (impl) ->
 			{elem} = data
 
 			data.callback = callback
+			data.resource = null
 
-			unless impl.utils.DATA_URI_RE.test val
-				val = impl.utils.toUrl(val)
+			unless impl.utils.DATA_URI_RE.test(val)
+				if rsc = impl.Renderer.resources.getResource(val)
+					data.resource = rsc
+					val = 'qrc:/' + rsc.getPath()
+				else
+					val = impl.utils.toUrl(val)
 			elem.source = val or ''
 
 			if ///^data:image\/svg+|\.svg$///.test val
@@ -118,16 +134,10 @@ module.exports = (impl) ->
 					data.isSvg = false
 
 			switch elem.status
-				when Image.Null
-					callback?.call @, true
-				when Image.Ready
-					callback?.call @, null, width: elem.sourceSize.width, height: elem.sourceSize.height
-				when Image.Error
-					callback?.call @, true
-				when Image.Loading
-					elem.statusChanged.connect @, onStatusChanged
+				when Image.Ready, Image.Error
+					onStatusChanged.call @
 				else
-					throw new Error "Unsupported image status #{elem.status}"
+					elem.statusChanged.connect @, onStatusChanged
 			return
 
 	setImageSourceWidth: (val) ->
