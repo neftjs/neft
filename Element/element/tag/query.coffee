@@ -3,7 +3,7 @@
 utils = require 'utils'
 assert = require 'neft-assert'
 
-test = (node, funcs, index, target) ->
+test = (node, funcs, index, target, single) ->
 	while index < funcs.length
 		func = funcs[index]
 
@@ -19,33 +19,39 @@ test = (node, funcs, index, target) ->
 		index += 3
 	true
 
-anyDescendant = (node, funcs, index, target) ->
+anyDescendant = (node, funcs, index, target, single) ->
 	if children = node.children
 		for child in children
-			if test(child, funcs, index, target)
+			if test(child, funcs, index, target, single)
 				target.push child
+				if single
+					return true
 
 			if child.children
-				anyDescendant child, funcs, index, target
-	return
+				if anyDescendant(child, funcs, index, target, single)
+					if single
+						return true
+	false
 anyDescendant.isIterator = true
 anyDescendant.toString = -> 'anyDescendant'
 
-anyChild = (node, funcs, index, target) ->
+anyChild = (node, funcs, index, target, single) ->
 	if children = node.children
 		for child in children
-			if test(child, funcs, index, target)
+			if test(child, funcs, index, target, single)
 				target.push child
-	return
+				if single
+					return true
+	false
 anyChild.isIterator = true
 anyChild.toString = -> 'anyChild'
 
-byName = (node, data1, _) ->
+byName = (node, data1) ->
 	node.name is data1
 byName.isIterator = false
 byName.toString = -> 'byName'
 
-byAttr = (node, data1, _) ->
+byAttr = (node, data1) ->
 	node._attrs?.hasOwnProperty data1
 byAttr.isIterator = false
 byAttr.toString = -> 'byAttr'
@@ -84,7 +90,7 @@ ENDS_WITH = /\$$/
 CONTAINS = /\*$/
 TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/
 
-exports.queryAll = (selector, target=[]) ->
+exports.queryAll = (selector, target=[], single=false) ->
 	assert.isString selector
 	assert.notLengthOf selector, 0
 	assert.isArray target
@@ -141,6 +147,11 @@ exports.queryAll = (selector, target=[]) ->
 			throw new Error "queryAll: unexpected selector '#{sel}' in '#{selector}'"
 
 	for funcs in queries
-		anyDescendant @, funcs, 0, target
+		if anyDescendant(@, funcs, 0, target, single)
+			if single
+				break
 
 	target
+
+exports.query = (selector) ->
+	exports.queryAll.call(@, selector, [], true)[0] or null

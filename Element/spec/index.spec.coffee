@@ -251,6 +251,22 @@ describe 'View Element', ->
 			expect(doc2.queryAll('div > * > u[color], div[attr]')).toEqual [doc2u, doc2div2]
 			expect(doc2.queryAll('div > * > u[color],div[attr]')).toEqual [doc2u, doc2div2]
 
+	describe 'query() works with selector', ->
+		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'></div>"
+		doc2div1 = doc2.children[0]
+		doc2b = doc2div1.children[0]
+		doc2u = doc2b.children[0]
+		doc2div2 = doc2.children[1]
+
+		it 'E', ->
+			expect(doc2.query('div')).toBe doc2div1
+			expect(doc2.query('u')).toBe doc2u
+
+		it '[foo]', ->
+			expect(doc2.query('[attr]')).toBe doc2u
+			expect(doc2.query('[color]')).toBe doc2u
+			expect(doc2.query('[width]')).toBe null
+
 	it 'visible property is editable', ->
 
 		expect(p.visible).toBeTruthy()

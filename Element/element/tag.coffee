@@ -75,6 +75,7 @@ module.exports = (Element) ->
 		query = require './tag/query'
 
 		queryAll: query.queryAll
+		query: query.query
 
 		stringify: ->
 			stringify.getOuterHTML @
