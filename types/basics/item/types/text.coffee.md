@@ -65,8 +65,8 @@ HTML code in WebGL implementation
 				name: 'text'
 				defaultValue: ''
 				implementation: Impl.setText
-				developmentSetter: (val) ->
-					assert.isString val
+				setter: (_super) -> (val) ->
+					_super.call @, val+''
 
 *String* Text::color = 'black'
 ------------------------------
