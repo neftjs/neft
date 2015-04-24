@@ -185,6 +185,8 @@ bindingAttributeToString = (obj) ->
 
 	# split
 	text = ''
+	hash = ''
+	args = []
 	for elem, i in binding
 		if binding[i-1]?
 			text += ", "
@@ -193,16 +195,25 @@ bindingAttributeToString = (obj) ->
 			elem = elem.replace ///\$///g, '$$$'
 			elem = elem.replace ///'///g, '\\\''
 			text += "'#{elem}'"
+			hash += elem
 		else if elem.length > 1
 			text += repeatString('[', elem.length-1)
 			text += "#{elem[0]}"
+			hash += "$#{args.length}"
+			args.push elem[0]
 			elem.shift()
 			for id, i in elem
 				text += ", '#{id}']"
+				hash += ".#{id}"
 		else
 			text += "#{elem[0]}"
+			hash += "$#{args.length}"
+			args.push elem[0]
 
-	"[#{text}]"
+	hash = hash.trim()
+	text = text.trim()
+
+	"['#{hash}', [#{text}], [#{args}]]"
 
 stringObjectHead = (obj) ->
 	assert obj.type is OBJECT, "stringObject: type must be an object"
