@@ -1,9 +1,10 @@
-Template
+Template @class
 ========
 
 	'use strict'
 
 	assert = require 'neft-assert'
+	signal = require 'signal'
 	utils = require 'utils'
 	log = require 'log'
 
@@ -14,7 +15,7 @@ Template
 
 	CONFIG_KEYS = [] # filled by the class properties
 
-	module.exports = (app) -> class AppTemplate
+	module.exports = (app) -> class AppTemplate extends signal.Emitter
 
 *Template* Template(*Object* options)
 -------------------------------------
@@ -43,6 +44,8 @@ module.exports = function(app){
 			, "Unprovided config key has been passed into `app.Template`:\n" +
 			  "#{JSON.stringify opts, null, 4}"
 
+			super()
+
 			# view
 			setView @, opts.view
 
@@ -52,6 +55,10 @@ module.exports = function(app){
 			# data
 			if opts.data?
 				setData @, opts.data
+
+			# signals
+			if opts.onRendered?
+				@onRendered opts.onRendered
 
 			# set object as immutable
 			Object.freeze @
@@ -159,11 +166,18 @@ module.exports = function(app){
 
 			ctx.data = val
 
+*Signal* Template::onRendered(*View.DocumentGlobalData* globalData)
+-------------------------------------------------------------------------------------------------
+
+		CONFIG_KEYS.push 'onRendered'
+		signal.Emitter.createSignal @, 'rendered'
+
 		_render: (req) ->
 			assert.instanceOf @, AppTemplate
 			assert.instanceOf req, Networking.Request
 
 			view = @view.render req, @data
+			@rendered view.storage
 
 			view
 

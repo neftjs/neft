@@ -1,4 +1,4 @@
-Standard routes @txt
+Standard routes @learn
 ====================
 
 **neft.io app** comes with few predefined routes.
@@ -37,7 +37,7 @@ Standard routes @txt
 	module.exports = (app) ->
 		APP_JS_URI = '/app.js'
 		NEFT_JS_URI = '/neft.js'
-		JS_NEFT_FILE_PATH = './neft-browser-app-release.js'
+		JS_NEFT_FILE_PATH = './neft-browser-release.js'
 		JS_NEFT_GAME_FILE_PATH = './neft-browser-game-release.js'
 		JS_BUNDLE_FILE_PATH = './build/app-browser-release.js'
 		VIEW_NAME = '_app_bootstrap'
@@ -46,7 +46,7 @@ Standard routes @txt
 		TYPE_COOKIE_NAME = 'neft-type'
 
 		`//<development>`
-		JS_NEFT_FILE_PATH = './neft-browser-app-develop.js'
+		JS_NEFT_FILE_PATH = './neft-browser-develop.js'
 		JS_NEFT_GAME_FILE_PATH = './neft-browser-game-develop.js'
 		JS_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
 		`//</development>`
@@ -63,8 +63,8 @@ Standard routes @txt
 
 		getType = (req) ->
 			{cookie} = req.headers
-			if cookie.indexOf('neft-type') isnt -1
-				///neft\-type=([a-z]+?)///.exec(cookie)[1]
+			if cookie and cookie.indexOf('neft-type') isnt -1
+				///neft\-type=([a-z]+)///.exec(cookie)[1]
 			else
 				app.config.type
 
@@ -127,6 +127,14 @@ full HTML document is returned (like for searching robots).
 
 You can use this route in a browser to check whether your HTML document is proper, but
 remember to clean your cookies when you finish.
+
+#### Switch between CSS/WebGL and text type @snippet
+
+```
+<a href="/neft-type=app/">Use CSS renderer</a>
+<a href="/neft-type=game/">Use WebGL renderer</a>
+<a href="/neft-type=text/">Use text type (robots)</a>
+```
 
 		route = new app.Route
 			uri: 'neft-type={type}/{rest*}'

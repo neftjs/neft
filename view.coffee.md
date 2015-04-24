@@ -1,4 +1,4 @@
-View
+View @class
 ====
 
 	'use strict'
@@ -171,7 +171,7 @@ or even redirect to the other URI.
 						log.info "Changed `uri` won't be proceeded due to new request"
 						return
 
-					app.httpNetworking.createRequest
+					app.networking.createRequest
 						method: Networking.Request.GET
 						type: Networking.Request.HTML_TYPE
 						uri: req.handler.uri.toString dict
@@ -218,7 +218,7 @@ current request uri.
 			-> dict
 
 		, (val) ->
-			app.httpNetworking.createRequest
+			app.networking.createRequest
 				method: Networking.Request.GET
 				type: Networking.Request.HTML_TYPE
 				uri: val

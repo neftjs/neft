@@ -1,13 +1,15 @@
 {
 	"private": true,
 	"name": "app",
-	"version": "1.0.0-rc.5",
+	"version": "0.5.0",
 	"config": {
 		"title": "Neft.io Application",
 		"protocol": "http",
 		"port": 3000,
 		"host": "0.0.0.0",
-		"language": "en"
+		"language": "en",
+		"type": "app",
+		"resources": "static/"
 	},
 	"dependencies": {
 		"utils": "git+ssh://git@github.com:Kildyt/utils.git",

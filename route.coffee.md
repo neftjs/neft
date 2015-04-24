@@ -1,4 +1,4 @@
-Route
+Route @class
 =====
 
 Class known as `app.Route` used to automate dealing with networking.

@@ -1,4 +1,4 @@
-App
+App @framework
 ===
 
 This module should be considered as a framework and scaffolding for your applications.
@@ -16,10 +16,7 @@ HTML documents and more.
 	Networking = require 'networking'
 	Document = require 'document'
 	Renderer = require 'renderer'
-	# require 'db-implementation'
-	# require 'db-schema'
-	# require 'db-addons'
-	# require 'db/log.coffee'
+	Resources = require 'resources'
 
 	AppRoute = require './route'
 	AppTemplate = require './template'
@@ -78,7 +75,8 @@ Can be overriden in the *init.js* file.
     "port": 3000,
     "host": "localhost",
     "language": "en",
-    "type": "app"
+    "type": "app",
+    "resources": "static/"
   }
 }
 
@@ -90,12 +88,23 @@ module.exports = function(NeftApp){
 };
 ```
 
+#### Use WebGL as a default renderer @snippet
+
+```
+// package.json
+{
+  "config": {
+    "type": "game"
+  }
+}
+```
+
 			config: config
 
 *Networking* app.networking
 -------------------------------
 
-Standard [Networking](/docs/networking) instance used to communicate
+Standard Networking instance used to communicate
 with the server and to create local requests.
 
 All routes created by the *App.Route* uses this networking.
@@ -171,6 +180,11 @@ Files from the *templates* folder with objects returned by their exported functi
 
 			templates: {}
 
+*Resources* app.resources
+-------------------------
+
+			resources: if opts.resources then Resources.fromJSON(opts.resources) else new Resources
+
 		# config.type
 		config.type ?= 'app'
 		assert.ok utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game, but '#{config.type}' got."
@@ -187,11 +201,12 @@ Files from the *templates* folder with objects returned by their exported functi
 		`//</trialVersion>`
 
 		# propagate data
+		Renderer.resources = app.resources
 		Renderer.serverUrl = app.networking.url
 
 		# initialize styles
 		for style in opts.styles when style.name?
-			app.styles[style.name] = style.file app.styles
+			app.styles[style.name] = style.file app
 
 		# set styles window item
 		windowStyle = app.styles?.view?.withStructure()
@@ -232,8 +247,8 @@ Files from the *templates* folder with objects returned by their exported functi
 			init opts.templates, app.templates
 
 	# link module
-	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log',
-	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert']
+	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log', 'resources',
+	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert', 'db']
 	for name in MODULES
 		exports[name] = require name
 	exports['neft-assert'] = exports.assert
