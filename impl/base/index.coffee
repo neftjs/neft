@@ -29,7 +29,7 @@ exports.Types =
 
 exports.Extras =
 	Binding: require './level1/binding'
-	Anchors: require './level2/anchors'
+	Anchors: require './level1/anchors'
 
 exports.items = {}
 exports.utils = require('./utils') exports

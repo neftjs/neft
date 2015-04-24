@@ -3,10 +3,10 @@
 utils = require 'utils'
 signal = require 'signal'
 log = require 'log'
+assert = require 'assert'
 
 log = log.scope 'Renderer', 'Binding'
 
-{assert} = console
 {isArray} = Array
 
 getPropHandlerName = do ->
@@ -86,12 +86,12 @@ module.exports = (impl) ->
 			return
 
 	isSimpleBinding = (binding) ->
-		binding.length is 1 and not isArray(binding[0][0])
+		binding[1].length is 1 and not isArray(binding[1][0][0])
 
 	class SimpleBinding
 		constructor: (@obj, @prop, binding) ->
 			item = obj._ref or obj
-			target = @target = binding[0]
+			target = @target = binding[1][0]
 			handlerName = signal.getHandlerName "#{target[1]}Changed"
 			target[0][handlerName]? @update, @
 
@@ -112,51 +112,30 @@ module.exports = (impl) ->
 			return
 
 	class Binding
-		@getHash = do ->
-			argI = 0
+		@getFunc = do ->
+			cache = Object.create null
+			(binding) ->
+				if fromCache = cache[binding[0]]
+					fromCache
+				else
+					args = []
+					for i in [0...binding[2].length] by 1
+						args[i] = "$#{i}"
 
-			(arr, isFork=false) ->
-				r = ''
-				for elem, i in arr
-					if isArray elem
-						r += Binding.getHash elem, true
-					else if typeof elem is 'string'
-						if i is 1 and typeof arr[0] is 'object' and ///^[a-zA-Z_$]///.test elem
-							r += "."
-						r += elem
-					else if typeof elem is 'object'
-						r += "$#{argI++}"
-				unless isFork
-					argI = 0
-				r
-
-		@getItems = (arr, r=[])->
-			for elem in arr
-				if isArray elem
-					Binding.getItems elem, r
-				else if typeof elem is 'object'
-					r.push elem
-			r				
-
-		@getFunc = do (cache = {}) -> (binding) ->
-			hash = Binding.getHash binding
-			if cache.hasOwnProperty hash
-				cache[hash]
-			else
-				args = Binding.getItems binding
-				for _, i in args
-					args[i] = "$#{i}"
-
-				hash ||= '0'
-				args.push "return #{hash};"
-				cache[hash] = Function.apply null, args
+					args.push "return #{binding[0] or 0};"
+					cache[binding[0]] = Function.apply null, args
 
 		constructor: (@obj, @prop, binding, @extraResultFunc=null) ->
+			assert.lengthOf binding, 3
+			assert.isString binding[0]
+			assert.isArray binding[1]
+			assert.isArray binding[2]
+
 			item = obj._ref or obj
 
 			# properties
 			@func = Binding.getFunc binding
-			@args = Binding.getItems binding
+			@args = binding[2]
 
 			# destroy on property value change
 			signalName = "#{prop}Changed"
@@ -164,7 +143,7 @@ module.exports = (impl) ->
 
 			# connections
 			connections = @connections = []
-			for elem in binding
+			for elem in binding[1]
 				if isArray(elem)
 					connections.push new Connection @, elem[0], elem[1]
 
@@ -218,9 +197,6 @@ module.exports = (impl) ->
 
 			# remove from the list
 			@obj._impl.bindings[@prop] = null
-
-			# TODO: do sth with anchors and move it into the abstract
-			@obj._bindings?[@prop] = null
 
 			# clear props
 			@args = null
