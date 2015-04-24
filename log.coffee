@@ -7,7 +7,6 @@ log = log.scope 'Db'
 {stringify} = JSON
 
 module.exports = (Db) ->
-
 	assert Db is require('db') or (Db::) instanceof require('db')
 
 	unless ~Db.__name__.indexOf('Impl')

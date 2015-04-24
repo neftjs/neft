@@ -1,14 +1,15 @@
 'use strict'
 
-[Db, _, specUtils] = ['../index.coffee.md', 'db-implementation', './utils.coffee'].map require
+Db = require '../index'
+specUtils = require './utils'
 
-Db = Db.Impl()
+Db = Db.create
+	type: 'rethinkdb'
 
 specUtils.isReady Db
 
 describe 'Db implementation', ->
 
-	DATABASE = 'test'
 	TABLE = 'test'
 	DOCUMENT =
 		name: 'Test name'
@@ -20,12 +21,12 @@ describe 'Db implementation', ->
 
 	id = null
 
-	specUtils.clean Db, DATABASE, TABLE
+	specUtils.clean Db, TABLE
 
 	it 'saves new document', ->
-
 		runs ->
-			new Db(DATABASE, TABLE).insert(DOCUMENT) (err, arg) -> id = arg
+			new Db(TABLE).insert(DOCUMENT).run (err, arg) ->
+				id = arg
 
 		waitsFor -> id
 
@@ -33,11 +34,11 @@ describe 'Db implementation', ->
 			expect(id).toEqual jasmine.any String
 
 	it 'returns created document', ->
-
 		doc = null
 
 		runs ->
-			new Db(DATABASE, TABLE, id) (err, arg) -> doc = arg
+			new Db(TABLE, id).run (err, arg) ->
+				doc = arg
 
 		waitsFor -> doc
 
@@ -53,12 +54,14 @@ describe 'Db implementation', ->
 		doc = true
 
 		runs ->
-			new Db(DATABASE, TABLE, id).remove() (err) -> end = not err
+			new Db(TABLE, id).remove().run (err) ->
+				end = not err
 
 		waitsFor -> end
 
 		runs ->
-			new Db(DATABASE, TABLE, id) (err, res) -> doc = !!res
+			new Db(TABLE, id).run (err, res) ->
+				doc = !!res
 
 		waitsFor -> not doc
 
@@ -69,17 +72,27 @@ describe 'Db implementation', ->
 	it 'saves multiple times', ->
 
 		N = 4
-
 		end = 0
+		elems = null
 
 		runs ->
 			for i in [0...N]
-				new Db(DATABASE, TABLE).insert(DOCUMENT) (err) -> end += not err
+				new Db(TABLE).insert(DOCUMENT).run (err) ->
+					end += not err
 
 		waitsFor -> end is N
 
 		runs ->
 			expect(end).toBe N
+
+		runs ->
+			new Db(TABLE).run (err, arg) ->
+				elems = arg
+
+		waitsFor -> elems
+
+		runs ->
+			expect(elems.length).toBe N
 
 	it 'supports limit and skip commands', ->
 
@@ -87,19 +100,19 @@ describe 'Db implementation', ->
 		elems = null
 
 		runs ->
-			new Db(DATABASE, TABLE).skip(1).limit(2).skip(1).update(UPDATE) (err) -> end = not err
+			new Db(TABLE).skip(1).limit(2).skip(1).update(UPDATE).run (err) ->
+				end = not err
 
 		waitsFor -> end
 
 		runs ->
-			new Db(DATABASE, TABLE) (err, arg) -> elems = arg
+			new Db(TABLE).run (err, arg) ->
+				elems = arg
 
 		waitsFor -> elems
 
 		runs ->
-
 			validate = (elem, name, age, parent) ->
-
 				expect(elem.name).toBe name
 				expect(elem.age).toBe age
 				expect(elem.parent).toBe parent
@@ -115,7 +128,8 @@ describe 'Db implementation', ->
 		elems = null
 
 		runs ->
-			new Db(DATABASE, TABLE).where('name').is(DOCUMENT.name) (err, arg) -> elems = arg
+			new Db(TABLE).where('name').is(DOCUMENT.name).run (err, arg) ->
+				elems = arg
 
 		waitsFor -> elems
 
@@ -132,7 +146,8 @@ describe 'Db implementation', ->
 		elems = null
 
 		runs ->
-			new Db(DATABASE, TABLE).where('age').gt(0).lt(2) (err, arg) -> elems = arg
+			new Db(TABLE).where('age').gt(0).lt(2).run (err, arg) ->
+				elems = arg
 
 		waitsFor -> elems
 
@@ -150,12 +165,14 @@ describe 'Db implementation', ->
 		count = true
 
 		runs ->
-			new Db(DATABASE, TABLE).remove() (err) -> end = not err
+			new Db(TABLE).remove().run (err) ->
+				end = not err
 
 		waitsFor -> end
 
 		runs ->
-			new Db(DATABASE, TABLE) (err, arg) -> count = arg.length
+			new Db(TABLE).run (err, arg) ->
+				count = arg.length
 
 		waitsFor -> not count
 

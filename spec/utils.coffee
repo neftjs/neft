@@ -3,27 +3,23 @@
 ready = false
 
 module.exports.isReady = (Db) ->
-
 	describe 'Db', ->
-
 		it 'is ready', ->
-
 			runs ->
-				Db.on Db.READY, -> ready = true
+				Db.onReady -> ready = true
 
 			waitsFor -> ready
 
 			runs ->
 				expect(ready).toBeTruthy()
 
-module.exports.clean = (Db, database, table) ->
-
+module.exports.clean = (Db, table) ->
 	it 'cleans', ->
-
 		end = false
 
 		runs ->
-			new Db(database, table).remove() (err) -> end = not err
+			new Db(table).remove().run (err) ->
+				end = not err
 
 		waitsFor -> end
 

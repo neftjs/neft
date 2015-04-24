@@ -2,7 +2,6 @@
 	"name": "db",
 	"version": "0.5.3",
 	"dependencies": {
-		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
-		"emitter": "git+ssh://git@github.com:Kildyt/emitter.git"
+		"utils": "git+ssh://git@github.com:Kildyt/utils.git"
 	}
 }
