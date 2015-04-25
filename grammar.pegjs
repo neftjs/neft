@@ -36,6 +36,20 @@
 	function uid(){
 		return Math.random().toString(16).slice(2);
 	}
+
+	function setParentRec(arr, val){
+		for (var i = 0; i < arr.length; i++){
+			var elem = arr[i];
+			if (elem.type && !elem.parent){
+				elem.parent = val;
+				if (elem.body){
+					setParentRec(elem.body, val);
+				} else if (Array.isArray(elem.value)){
+					setParentRec(elem.value, val);
+				}
+			}
+		}
+	}
 }
 
 Start
@@ -299,9 +313,7 @@ Type
 
 		var obj = { type: 'object', name: name, id: id, body: body };
 
-		for (var i = 0; i < body.length; i++){
-			body[i].parent = obj;
-		}
+		setParentRec(body, obj);
 
 		return obj;
 	}

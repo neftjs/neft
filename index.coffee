@@ -67,6 +67,20 @@ getElemByName = (arr, type, name) ->
 			return elem
 	return
 
+MODIFIERS_NAMES =
+	__proto__: null
+	State: true
+	Transition: true
+	Animation: true
+	PropertyAnimation: true
+	NumberAnimation: true
+	Source: true
+getItem = (obj) ->
+	while obj
+		if obj.type is 'object' and not MODIFIERS_NAMES[obj.name]
+			return obj
+		obj = obj.parent
+	return
 getObject = (obj) ->
 	while obj
 		if obj.type is 'object'
@@ -74,25 +88,25 @@ getObject = (obj) ->
 		obj = obj.parent
 	return
 
-getObjectParent = (obj) ->
-	obj = getObject obj
-	unless parent = obj.parent
-		throw "Binding to the static 'parent' can't be used if an item doesn't have a parent. Use 'this.parent' if this reference must be dynamic"
-	parent.id
+# getItemParent = (obj) ->
+# 	obj = getItem obj
+# 	if not obj or not (parent = obj.parent)
+# 		throw "Binding to the static 'parent' can't be used if an item doesn't have a parent. Use 'this.parent' if this reference must be dynamic"
+# 	parent.id
 
-getObjectNextSibling = (obj) ->
-	obj = getObject obj
-	index = obj.parent?.body.indexOf(obj)
-	unless sibling = obj.parent.body[index+1]
-		throw "Binding to the static 'nextSibling' can't be used if an item doesn't have a next sibling. Use 'this.nextSibling' if this reference must be dynamic"
-	sibling.id
+# getItemNextSibling = (obj) ->
+# 	obj = getItem obj
+# 	index = obj?.parent?.body.indexOf(obj)
+# 	if not obj or not (sibling = obj.parent.body[index+1])
+# 		throw "Binding to the static 'nextSibling' can't be used if an item doesn't have a next sibling. Use 'this.nextSibling' if this reference must be dynamic"
+# 	sibling.id
 
-getObjectPreviousSibling = (obj) ->
-	obj = getObject obj
-	index = obj.parent?.body.indexOf(obj)
-	unless sibling = obj.parent.body[index-1]
-		throw "Binding to the static 'previousSibling' can't be used if an item doesn't have a previous sibling. Use 'this.previousSibling' if this reference must be dynamic"
-	sibling.id
+# getItemPreviousSibling = (obj) ->
+# 	obj = getItem obj
+# 	index = obj?.parent?.body.indexOf(obj)
+# 	if not obj or not (sibling = obj.parent.body[index-1])
+# 		throw "Binding to the static 'previousSibling' can't be used if an item doesn't have a previous sibling. Use 'this.previousSibling' if this reference must be dynamic"
+# 	sibling.id
 
 anchorAttributeToString = (obj) ->
 	assert obj.type is ATTRIBUTE, "anchorAttributeToString: type must be an attribute"
@@ -100,25 +114,24 @@ anchorAttributeToString = (obj) ->
 	if typeof obj.value is 'object'
 		return "{}"
 
-	dotIndex = obj.value.lastIndexOf '.'
-	if dotIndex is -1
-		anchor = [obj.value]
-	else
-		anchor = [obj.value.slice(0, dotIndex), obj.value.slice(dotIndex+1)]
+	anchor = obj.value.split '.'
+	if anchor[0] is 'this'
+		anchor.shift()
+		anchor[0] = "this.#{anchor[0]}"
 
 	anchor[0] = switch anchor[0]
-		when 'this.parent'
+		when 'this.parent', 'parent'
 			"'parent'"
-		when 'this.nextSibling'
+		when 'this.nextSibling', 'nextSibling'
 			"'nextSibling'"
-		when 'this.previousSibling'
+		when 'this.previousSibling', 'previousSibling'
 			"'previousSibling'"
-		when 'parent'
-			getObjectParent obj
-		when 'nextSibling'
-			getObjectNextSibling obj
-		when 'previousSibling'
-			getObjectPreviousSibling obj
+		# when 'parent'
+		# 	getItemParent obj
+		# when 'nextSibling'
+		# 	getItemNextSibling obj
+		# when 'previousSibling'
+		# 	getItemPreviousSibling obj
 		else
 			anchor[0]
 	if anchor.length > 1
@@ -156,12 +169,10 @@ bindingAttributeToString = (obj) ->
 	# filter by ids
 	for elem, i in binding when typeof elem isnt 'string'
 		[id] = elem
-		if id is 'parent' or id is 'target'
-			elem[0] = getObjectParent obj
-		else if id is 'nextSibling'
-			elem[0] = getObjectNextSibling obj
-		else if id is 'previousSibling'
-			elem[0] = getObjectPreviousSibling obj
+		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling'
+			elem.unshift getItem(obj).id
+		else if id is 'target'
+			elem.unshift getObject(obj).id
 		else if id is 'this'
 			elem[0] = getObject(obj).id
 		else if (id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
