@@ -17,7 +17,7 @@ updateItem = (item) ->
 	data = item._impl
 
 	if data.loops is MAX_LOOPS
-		log.error "loop detected; item has been deactivated"
+		log.error "Potential Flow loop detected. Recalculating on this item (#{item.toString()}) has been disabled."
 		data.loops++
 		return
 	else if data.loops > MAX_LOOPS

@@ -109,6 +109,8 @@ module.exports = (impl) ->
 		destroy: ->
 			handlerName = signal.getHandlerName "#{@target[1]}Changed"
 			@target[0][handlerName].disconnect @update, @
+			# remove from the list
+			@obj._impl.bindings[@prop] = null
 			return
 
 	class Binding

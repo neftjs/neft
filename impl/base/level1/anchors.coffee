@@ -1,6 +1,9 @@
 'use strict'
 
 assert = require 'neft-assert'
+log = require 'log'
+
+log = log.scope 'Rendering', 'Anchors'
 
 {isArray} = Array
 
@@ -167,7 +170,7 @@ module.exports = (impl) ->
 		return
 
 	class Anchor
-		constructor: (@item, source, def) ->
+		constructor: (@item, @source, def) ->
 			[target, line] = def
 			@target = target
 			@line = line
@@ -207,6 +210,11 @@ module.exports = (impl) ->
 
 		update: ->
 			if @targetItem
+				`//<development>`
+				if @item._parent isnt @targetItem and @item._parent isnt @targetItem._parent
+					log.error "You can anchor only to a parent or sibling. Item: #{@item.toString()}"
+				`//</development>`
+
 				r = @getSourceValue(@item) + @getTargetValue(@targetItem)
 			else
 				r = 0
@@ -252,12 +260,12 @@ module.exports = (impl) ->
 
 		update: ->
 			for anchor in @anchors
-				anchors.update()
+				anchor.update()
 			return
 
 		destroy: ->
 			for anchor in @anchors
-				anchors.destroy()
+				anchor.destroy()
 			return
 
 	createAnchor = (item, source, def) ->

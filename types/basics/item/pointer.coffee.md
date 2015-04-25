@@ -50,27 +50,6 @@ This class enables mouse and touch handling.
 
 This signal is called when there is a click.
 
-The *event* object contains x and y position.
-
-```style
-Rectangle {
-\  width: 200
-\  height: 100
-\  border.width: 5
-\  border.color: 'red'
-\
-\  pointer.onClicked: function(e){
-\    var rect = new Rectangle;
-\    rect.parent = this;
-\    rect.x = e.x - 5;
-\    rect.y = e.y - 5;
-\    rect.width = 10;
-\    rect.height = 10;
-\    rect.color = 'green';
-\  }
-}
-```
-
 *Signal* Pointer::pressed(*Object* event)
 -----------------------------------------
 
