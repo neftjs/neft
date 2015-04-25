@@ -3,8 +3,6 @@ Properties extraction
 
 	'use strict'
 
-	expect = require 'expect'
-
 	module.exports = (utils) ->
 
 *Any* utils.get(*Object* object, *String* path, [*OptionsArray* target])
@@ -125,6 +123,10 @@ This function checks whether the given string references into an array according
 to notation in the *utils.get()* function.
 
 		isStringArray = utils.isStringArray = (arg) ->
-			expect(arg).toBe.string()
+			null
+			`//<development>`
+			if typeof arg isnt 'string'
+				throw new Error "utils.isStringArray value must be a string"
+			`//</development>`
 
 			///\[\]$///.test arg

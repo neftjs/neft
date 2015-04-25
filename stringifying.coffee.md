@@ -10,8 +10,6 @@ You can also use these functions to clone complex structures.
 
 	'use strict'
 
-	expect = require 'expect'
-
 	{isArray} = Array
 
 	module.exports = (utils) ->
@@ -55,14 +53,17 @@ console.log(clone instanceof Sample)
 ```
 
 		utils.simplify = do ->
-
 			nativeProtos = [Array::, Object::]
 			nativeCtors = [Array, Object]
 
 			(obj, opts={}) ->
-
-				expect(obj).toBe.object()
-				expect(opts).toBe.simpleObject()
+				null
+				`//<development>`
+				unless utils.isObject(obj)
+					throw new Error "utils.simplify object must be an object"
+				unless utils.isPlainObject(opts)
+					throw new Error "utils.simplify options must be a plain object"
+				`//</development>`
 
 				optsProps = opts.properties ?= false
 				optsProtos = opts.protos ?= false
@@ -192,18 +193,20 @@ console.log(clone instanceof Sample)
 				protos: protos
 				constructors: ctors
 
-utils.assemble()
-----------------
+utils.assemble(*PlainObject* object)
+------------------------------------
 
 Backward *utils.simplify()* operation.
 
 		utils.assemble = do ->
-
 			ctorPropConfig = value: null
 
 			(obj) ->
-
-				expect(obj).toBe.simpleObject()
+				null
+				`//<development>`
+				unless utils.isPlainObject(obj)
+					throw new Error "utils.assemble object must be a plain object"
+				`//</development>`
 
 				{opts, objects, references, protos, constructors} = obj
 

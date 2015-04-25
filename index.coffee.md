@@ -1,4 +1,4 @@
-Utilities
+Utilities @library
 =========
 
 **JavaScript standard library so exists**
@@ -14,7 +14,6 @@ var utils = require('utils');
 
 	'use strict'
 
-	{assert} = console
 	{toString} = Object::
 	funcToString = Function::toString
 	{isArray} = Array
@@ -26,8 +25,6 @@ var utils = require('utils');
 	getObjOwnPropDesc = Object.getOwnPropertyDescriptor
 	defObjProp = Object.defineProperty
 	{random} = Math
-
-	expect = require 'expect'
 
 	###
 	Link subfiles
@@ -183,7 +180,7 @@ console.log(utils.isPrimitive([]));
 // false
 ```
 
-	exports.isPrimitive = (val) ->
+	isPrimitive = exports.isPrimitive = (val) ->
 		val is null or
 		typeof val is 'string' or
 		typeof val is 'number' or
@@ -248,7 +245,7 @@ console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
 ```
 
 	exports.isPlainObject = (param) ->
-		unless isObject param
+		unless isObject(param)
 			return false
 
 		proto = getPrototypeOf param
@@ -296,9 +293,15 @@ console.log(config);
 ```
 
 	merge = exports.merge = (source, obj) ->
-		expect(source).not().toBe.primitive()
-		expect(obj).not().toBe.primitive()
-		expect(source).not().toBe obj
+		null
+		`//<development>`
+		if isPrimitive(source)
+			throw new Error "utils.merge source cannot be primitive"
+		if isPrimitive(obj)
+			throw new Error "utils.merge object cannot be primitive"
+		if source is obj
+			throw new Error "utils.merge source and object are the same"
+		`//</development>`
 
 		for key, value of obj when obj.hasOwnProperty(key)
 			source[key] = value
@@ -336,10 +339,15 @@ console.log(user);
 ```
 
 	mergeDeep = exports.mergeDeep = (source, obj) ->
-
-		expect(source).not().toBe.primitive()
-		expect(obj).not().toBe.primitive()
-		expect(source).not().toBe obj
+		null
+		`//<development>`
+		if isPrimitive(source)
+			throw new Error "utils.mergeDeep source cannot be primitive"
+		if isPrimitive(obj)
+			throw new Error "utils.mergeDeep object cannot be primitive"
+		if source is obj
+			throw new Error "utils.mergeDeep source and object are the same"
+		`//</development>`
 
 		for key, value of obj when hasOwnProp.call obj, key
 			sourceValue = source[key]
@@ -372,9 +380,15 @@ console.log(user);
 ```
 
 	exports.fill = (source, obj) ->
-		expect(source).not().toBe.primitive()
-		expect(obj).not().toBe.primitive()
-		expect(source).not().toBe obj
+		null
+		`//<development>`
+		if isPrimitive(source)
+			throw new Error "utils.fill source cannot be primitive"
+		if isPrimitive(obj)
+			throw new Error "utils.fill object cannot be primitive"
+		if source is obj
+			throw new Error "utils.fill source and object are the same"
+		`//</development>`
 
 		for key, value of obj when hasOwnProp.call(obj, key)
 			if key of source and not hasOwnProp.call(source, key)
@@ -400,9 +414,13 @@ console.log(object);
 ```
 
 	exports.remove = (obj, elem) ->
-		expect(obj).not().toBe.primitive()
+		null
+		`//<development>`
+		if isPrimitive(obj)
+			throw new Error "utils.remove object cannot be primitive"
+		`//</development>`
 
-		if isArray obj
+		if isArray(obj)
 			index = obj.indexOf elem
 			if index isnt -1
 				if index is 0
@@ -438,8 +456,13 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 ```
 
 	exports.getPropertyDescriptor = (obj, prop) ->
-		expect(obj).not().toBe.primitive()
-		expect(prop).toBe.string()
+		null
+		`//<development>`
+		if isPrimitive(obj)
+			throw new Error "utils.getPropertyDescriptor object cannot be primitive"
+		if typeof prop isnt 'string'
+			throw new Error "utils.getPropertyDescriptor property must be a string"
+		`//</development>`
 
 		while obj and not desc
 			desc = getObjOwnPropDesc obj, prop
@@ -463,14 +486,12 @@ console.log(utils.lookupGetter(object, 'progress'));
 ```
 
 	exports.lookupGetter = do ->
-
 		# use native function if possible
 		if Object::__lookupGetter__
 			return Function.call.bind Object::__lookupGetter__
 
 		# use polyfill
 		(obj, prop) ->
-
 			desc = exports.getPropertyDescriptor obj, prop
 			desc?.get
 
@@ -480,14 +501,12 @@ console.log(utils.lookupGetter(object, 'progress'));
 This function returns function bound as a setter to the given *property*.
 
 	exports.lookupSetter = do ->
-
 		# use native function if possible
 		if Object::__lookupSetter__
 			return Function.call.bind Object::__lookupSetter__
 
 		# use polyfill
 		(obj, prop) ->
-
 			desc = exports.getPropertyDescriptor obj, prop
 			desc?.set
 
@@ -525,7 +544,6 @@ console.log(object.length);
 	defObjProp exports, 'CONFIGURABLE', value: 1<<2
 
 	exports.defineProperty = do ->
-
 		{WRITABLE, ENUMERABLE, CONFIGURABLE} = exports
 
 		descCfg = enumerable: true, configurable: true
@@ -534,20 +552,26 @@ console.log(object.length);
 
 		# thanks to http://stackoverflow.com/a/23522755/2021829
 		isSafari = if navigator?
-				///^((?!chrome).)*safari///i.test(navigator.userAgent)
-			else
-				false
+			///^((?!chrome).)*safari///i.test(navigator.userAgent)
+		else
+			false
 
 		(obj, prop, desc, getter, setter) ->
-			expect(obj).not().toBe.primitive()
-			expect(prop).toBe.string()
-			expect().defined(desc).toBe.integer().greaterThan(0)
+			null
+			`//<development>`
+			if isPrimitive(obj)
+				throw new Error "utils.defineProperty object cannot be primitive"
+			if typeof prop isnt 'string'
+				throw new Error "utils.defineProperty property must be a string"
+			if desc? and (not exports.isInteger(desc) or desc < 0)
+				throw new Error "utils.defineProperty descriptors bitmask must be a positive integer"
+			`//</development>`
 
 			# configure value
 			if setter is undefined
 				cfg = valueCfg
-				cfg.value = getter
-				cfg.writable = desc & WRITABLE
+				valueCfg.value = getter
+				valueCfg.writable = desc & WRITABLE
 
 			# configure accessors
 			else
@@ -561,8 +585,8 @@ console.log(object.length);
 							_getter.call @
 
 				cfg = accessorsCfg
-				cfg.get = getter or undefined
-				cfg.set = setter or undefined
+				accessorsCfg.get = if typeof getter is 'function' then getter else undefined
+				accessorsCfg.set = if typeof setter is 'function' then setter else undefined
 
 			# set common config
 			cfg.enumerable = desc & ENUMERABLE
@@ -589,11 +613,10 @@ console.log(utils.clone({a: 1}))
 ```
 
 	clone = exports.clone = (param) ->
-
-		if isArray param
+		if isArray(param)
 			return param.slice()
 
-		if isObject param
+		if isObject(param)
 			result = createObject getPrototypeOf param
 
 			for key in objKeys param
@@ -621,7 +644,6 @@ console.log(clonedObj.b === obj.b)
 ```
 
 	cloneDeep = exports.cloneDeep = (param) ->
-
 		result = clone param
 
 		if isObject result
@@ -654,7 +676,11 @@ console.log(utils.isEmpty({a: 1}));
 .
 
 	exports.isEmpty = (object) ->
-		expect(object).not().toBe.primitive()
+		null
+		`//<development>`
+		if isPrimitive(object)
+			throw new Error "utils.isEmpty object cannot be primitive"
+		`//</development>`
 
 		if isArray object
 			return !object.length
@@ -675,7 +701,11 @@ console.log(utils.last([]))
 ```
 
 	exports.last = (arg) ->
-		expect(arg).not().toBe.primitive()
+		null
+		`//<development>`
+		if isPrimitive(arg)
+			throw new Error "utils.last array cannot be primitive"
+		`//</development>`
 
 		arg[arg.length - 1]
 
@@ -697,7 +727,11 @@ console.log(obj);
 ```
 
 	exports.clear = (obj) ->
-		expect(obj).not().toBe.primitive()
+		null
+		`//<development>`
+		if isPrimitive(obj)
+			throw new Error "utils.clear object cannot be primitive"
+		`//</development>`
 
 		if isArray obj
 			obj.pop() for _ in [0...obj.length] by 1
@@ -730,7 +764,6 @@ console.log(newObj.b)
 ```
 
 	setPrototypeOf = exports.setPrototypeOf = do ->
-
 		# ES6 `Object.setPrototypeOf()`
 		if typeof Object.setPrototypeOf is 'function'
 			return Object.setPrototypeOf
@@ -740,18 +773,26 @@ console.log(newObj.b)
 		tmp.__proto__ = a: 1
 		if tmp.a is 1
 			return (obj, proto) ->
-				expect(obj).not().toBe.primitive()
-				if proto isnt null
-					expect(proto).not().toBe.primitive()
+				null
+				`//<development>`
+				if isPrimitive(obj)
+					throw new Error "utils.setPrototypeOf object cannot be primitive"
+				if proto? and isPrimitive(proto)
+					throw new Error "utils.setPrototypeOf prototype cannot be primitive"
+				`//</development>`
 
 				obj.__proto__ = proto
 				obj
 
 		# object merging
 		return (obj, proto) ->
-			expect(obj).not().toBe.primitive()
-			if proto isnt null
-				expect(proto).not().toBe.primitive()
+			null
+			`//<development>`
+			if isPrimitive(obj)
+				throw new Error "utils.setPrototypeOf object cannot be primitive"
+			if proto? and isPrimitive(proto)
+				throw new Error "utils.setPrototypeOf prototype cannot be primitive"
+			`//</development>`
 
 			if typeof obj is 'object'
 				newObj = createObject proto
@@ -798,9 +839,12 @@ console.log(utils.has('abc', 'e'))
 		if typeof obj is 'string'
 			!!~obj.indexOf(val)
 		else
-			expect(obj).toBe.object()
+			`//<development>`
+			if isPrimitive(obj)
+				throw new Error "utils.has object must be a string or not primitive"
+			`//</development>`
 
-			if isArray obj
+			if isArray(obj)
 				!!~Array::indexOf.call obj, val
 			else
 				for key, value of obj when hasOwnProp.call(obj, key)
@@ -840,9 +884,14 @@ console.log(utils.objectToArray(object, function(key, val){
 		keys = objKeys obj
 		target ?= keys
 
-		expect(obj).toBe.object()
-		expect().defined(valueGen).toBe.function()
-		expect(target).toBe.array()
+		`//<development>`
+		if not isObject(obj)
+			throw new Error "utils.objectToArray object must be an object"
+		if valueGen? and typeof valueGen isnt 'function'
+			throw new Error "utils.objectToArray valueGen must be a function"
+		if not isArray(target)
+			throw new Error "utils.objectToArray target must be an array"
+		`//</development>`
 
 		for key, i in keys
 			value = if valueGen then valueGen(key, obj[key], obj) else obj[key]
@@ -882,10 +931,17 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 ```
 
 	exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
-		expect(arr).toBe.array()
-		expect().defined(keyGen).toBe.function()
-		expect().defined(valueGen).toBe.function()
-		expect(target).toBe.object()
+		null
+		`//<development>`
+		if not isArray(arr)
+			throw new Error "utils.arrayToObject array must be an array"
+		if keyGen? and typeof keyGen isnt 'function'
+			throw new Error "utils.arrayToObject keyGen must be a function"
+		if valueGen? and typeof valueGen isnt 'function'
+			throw new Error "utils.arrayToObject valueGen must be a function"
+		if not isObject(target)
+			throw new Error "utils.arrayToObject target must be an object"
+		`//</development>`
 
 		for elem, i in arr
 			key = if keyGen then keyGen(i, elem, arr) else i
@@ -906,7 +962,11 @@ console.log(utils.capitalize('name'))
 ```
 
 	exports.capitalize = (str) ->
-		expect(str).toBe.string()
+		null
+		`//<development>`
+		if typeof str isnt 'string'
+			throw new Error "utils.capitalize string must be a string"
+		`//</development>`
 
 		unless str.length
 			return ''
@@ -924,43 +984,36 @@ console.log(utils.addSlashes('a"b'))
 ```
 
 	exports.addSlashes = do ->
-
 		SLASHES_RE = ///'|"///g
 		NEW_SUB_STR = '\\$\&'
 
 		(str) ->
-			expect(str).toBe.string()
+			null
+			`//<development>`
+			if typeof str isnt 'string'
+				throw new Error "utils.addSlashes string must be a string"
+			`//</development>`
 
 			unless str.length
 				return str
 
 			str.replace SLASHES_RE, NEW_SUB_STR
 
-*String* utils.uid([*Integer* length = `8`])
---------------------------------------------
+*String* utils.uid()
+--------------------
 
-This function generates pseudo-unique hash with the given *length*
-(8 characters by default).
+This function generates unique string.
 
 ```
 console.log(utils.uid())
-// 27a1ac42
+// "50"
 ```
 
-	exports.uid = (n=8) ->
-		expect(n).toBe.integer()
-		expect(n).toBe.greaterThan 0
-
-		str = ''
-
-		loop
-			str += random().toString(16).slice 2
-			if str.length >= n then break
-
-		if str.length is n
-			str
-		else
-			str.slice 0, n
+	exports.uid = do ->
+		uid = 0
+		->
+			uid++
+			"#{uid}"
 
 *Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
 ----------------------------------------------------------------------------------------------
@@ -989,8 +1042,13 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 ```
 
 	exports.tryFunction = (func, context, args, onfail) ->
-		expect(func).toBe.function()
-		expect().defined(args).toBe.object()
+		null
+		`//<development>`
+		if typeof func isnt 'function'
+			throw new Error "utils.tryFunction function must be a function"
+		if args? and not isObject(args)
+			throw new Error "utils.tryFunction arguments must be an object"
+		`//</development>`
 
 		try
 			func.apply context, args
@@ -1019,8 +1077,13 @@ console.log(utils.catchError(test, null, [100]))
 ```
 
 	exports.catchError = (func, context, args) ->
-		expect(func).toBe.function()
-		expect().defined(args).toBe.object()
+		null
+		`//<development>`
+		if typeof func isnt 'function'
+			throw new Error "utils.catchError function must be a function"
+		if args? and not isObject(args)
+			throw new Error "utils.catchError arguments must be an object"
+		`//</development>`
 
 		try
 			func.apply context, args
@@ -1043,7 +1106,11 @@ console.log(utils.errorToObject(error));
 ```
 
 	exports.errorToObject = (error) ->
-		expect(error).toBe.any Error
+		null
+		`//<development>`
+		unless error instanceof Error
+			throw new Error "utils.errorToObject error must be an Error instance"
+		`//</development>`
 
 		name: error.name
 		message: error.message
@@ -1054,7 +1121,11 @@ console.log(utils.errorToObject(error));
 This function returns a new array or an object with own properties.
 
 	exports.getOwnProperties = (obj) ->
-		expect(obj).toBe.object()
+		null
+		`//<development>`
+		if not isObject(obj)
+			throw new Error "utils.getOwnProperties object must be an object"
+		`//</development>`
 
 		result = if isArray obj then [] else {}
 		merge result, obj
@@ -1082,11 +1153,9 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 ```
 
 	isEqual = exports.isEqual = do ->
-
 		defaultComparison = (a, b) -> a is b
 
 		forArrays = (a, b, compareFunc) ->
-
 			# prototypes are the same
 			if getPrototypeOf(a) isnt getPrototypeOf(b)
 				return false
@@ -1131,34 +1200,37 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 			true
 
 		forObjects = (a, b, compareFunc) ->
-
 			# prototypes are the same
 			if getPrototypeOf(a) isnt getPrototypeOf(b)
 				return false
 
 			# whether keys are the same
-			for key, value of a when a.hasOwnProperty key
+			for key, value of a when a.hasOwnProperty(key)
 				unless b.hasOwnProperty key
 					return false
 
-			for key, value of b when b.hasOwnProperty key
+			for key, value of b when b.hasOwnProperty(key)
 				unless a.hasOwnProperty key
 					return false
 
 			# whether values are equal
-			for key, value of a when a.hasOwnProperty key
+			for key, value of a when a.hasOwnProperty(key)
 				if value and typeof value is 'object'
 					unless isEqual value, b[key], compareFunc
 						return false
 					continue
 
-				unless compareFunc value, b[key]
+				unless compareFunc(value, b[key])
 					return false
 
 			true
 
 		(a, b, compareFunc=defaultComparison) ->
-			expect(compareFunc).toBe.function()
+			null
+			`//<development>`
+			if typeof compareFunc isnt 'function'
+				throw new Error "utils.isEqual compareFunction must be a function"
+			`//</development>`
 
 			if isArray(a) and isArray(b)
 				forArrays a, b, compareFunc
