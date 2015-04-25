@@ -169,12 +169,10 @@ bindingAttributeToString = (obj) ->
 	# filter by ids
 	for elem, i in binding when typeof elem isnt 'string'
 		[id] = elem
-		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling'
-			elem.unshift getItem(obj).id
-		else if id is 'target'
-			elem.unshift getObject(obj).id
+		if id is 'parent' or id is 'target' or id is 'nextSibling' or id is 'previousSibling'
+			elem.unshift "'this'"
 		else if id is 'this'
-			elem[0] = getObject(obj).id
+			elem[0] = "'this'"
 		else if (id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
 			continue
 		else
@@ -210,8 +208,11 @@ bindingAttributeToString = (obj) ->
 		else if elem.length > 1
 			text += repeatString('[', elem.length-1)
 			text += "#{elem[0]}"
-			hash += "$#{args.length}"
-			args.push elem[0]
+			if elem[0] is "'this'"
+				hash += "this"
+			else
+				hash += "$#{args.length}"
+				args.push elem[0]
 			elem.shift()
 			for id, i in elem
 				text += ", '#{id}']"
