@@ -22,12 +22,15 @@ module.exports = (impl) ->
 			@handlerName = getPropHandlerName prop
 			@isConnected = false
 
-			if isArray item
-				@child = new Connection null, item[0], item[1], @
+			if isArray(item)
+				@child = new Connection binding, item[0], item[1], @
 				@item = @child.getValue()
 			else
+				if @item is 'this'
+					@item = @binding.item
 				@child = null
 			@connect()
+
 
 			if @item instanceof impl.Renderer.Item and not @item._isReady
 				@item.onReady @update, @
@@ -92,8 +95,14 @@ module.exports = (impl) ->
 		constructor: (@obj, @prop, binding) ->
 			item = obj._ref or obj
 			target = @target = binding[1][0]
+
+			if target[0] is 'this'
+				@targetItem = @obj
+			else
+				@targetItem = target[0]
+
 			handlerName = signal.getHandlerName "#{target[1]}Changed"
-			target[0][handlerName]? @update, @
+			@targetItem[handlerName]? @update, @
 
 			Object.preventExtensions @
 
@@ -103,12 +112,12 @@ module.exports = (impl) ->
 				item.onReady @update, @
 
 		update: ->
-			@obj[@prop] = @target[0][@target[1]]
+			@obj[@prop] = @targetItem[@target[1]]
 			return
 
 		destroy: ->
 			handlerName = signal.getHandlerName "#{@target[1]}Changed"
-			@target[0][handlerName].disconnect @update, @
+			@targetItem[handlerName].disconnect @update, @
 			# remove from the list
 			@obj._impl.bindings[@prop] = null
 			return
@@ -133,7 +142,7 @@ module.exports = (impl) ->
 			assert.isArray binding[1]
 			assert.isArray binding[2]
 
-			item = obj._ref or obj
+			item = @item = obj._ref or obj
 
 			# properties
 			@func = Binding.getFunc binding
@@ -174,7 +183,7 @@ module.exports = (impl) ->
 			unless @args
 				return
 
-			result = utils.tryFunction @func, null, @args
+			result = utils.tryFunction @func, @item, @args
 			unless result?
 				result = getDefaultValue @
 

@@ -226,11 +226,11 @@ module.exports = (impl) ->
 		destroy: ->
 			switch @target
 				when 'parent'
-					item.onParentChanged.disconnect onParentChanged, @
+					@item.onParentChanged.disconnect onParentChanged, @
 				when 'nextSibling'
-					item.onNextSiblingChanged.disconnect onNextSiblingChanged, @
+					@item.onNextSiblingChanged.disconnect onNextSiblingChanged, @
 				when 'previousSibling'
-					item.onPreviousSiblingChanged.disconnect onPreviousSiblingChanged, @
+					@item.onPreviousSiblingChanged.disconnect onPreviousSiblingChanged, @
 
 			for handler in getSourceWatchProps[@source]
 				@item[handler].disconnect @update, @
