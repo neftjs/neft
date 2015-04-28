@@ -6,41 +6,41 @@ signal = require 'signal'
 module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtils.Object
 	@__name__ = 'Extension'
 
-	onWhenChanged = ->
-		isTrue = @when
-		{running} = @
-
-		if isTrue and not running
-			@enable()
-		else if not isTrue and running
-			@disable()
-
 	constructor: ->
 		@_impl ?= bindings: null
 		@_target = null
 		@_running = false
 		@_when = false
-		@_isWhenListens = false
+		@_whenHandler = null
 		super()
-		@onWhenChanged onWhenChanged
 
 	signalListener = ->
-		@when = true
+		unless @_when
+			@_when = true
+			@whenChanged false
+			unless @_running
+				@enable()
+		return
 
 	itemUtils.defineProperty
 		constructor: @
 		name: 'when'
 		defaultValue: false
 		setter: (_super) -> (val) ->
-			unless @hasOwnProperty('_when')
-				@_when = false
+			if @_whenHandler
+				@_whenHandler.disconnect signalListener, @
+				@_whenHandler = null
 
 			if typeof val is 'function' and val.connect?
-				unless @_isWhenListens
-					val.connect signalListener, @
-					@_isWhenListens = true
+				val.connect signalListener, @
+				@_whenHandler = val
 			else
 				_super.call @, !!val
+
+				if val and not @_running
+					@enable()
+				else if not val and @_running
+					@disable()
 			return
 
 	itemUtils.defineProperty

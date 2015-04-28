@@ -9,7 +9,7 @@ Rectangle {
 \  height: 100
 \  color: 'green'
 \
-\  State {
+\  Class {
 \    when: target.pointer.isHover
 \    changes: {
 \      color: 'red'

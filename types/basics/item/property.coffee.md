@@ -20,8 +20,6 @@ Item {
 
 	module.exports = (Renderer, Impl, itemUtils, Item) ->
 
-		Renderer.State.supportObjectProperty '$'
-
 *Item* Item()
 -------------
 

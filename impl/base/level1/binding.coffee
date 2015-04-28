@@ -31,10 +31,6 @@ module.exports = (impl) ->
 				@child = null
 			@connect()
 
-
-			if @item instanceof impl.Renderer.Item and not @item._isReady
-				@item.onReady @update, @
-
 			Object.preventExtensions @
 
 		getSignalChangeListener = do ->
@@ -106,10 +102,7 @@ module.exports = (impl) ->
 
 			Object.preventExtensions @
 
-			if item._isReady
-				@update()
-			else
-				item.onReady @update, @
+			@update()
 
 		update: ->
 			@obj[@prop] = @targetItem[@target[1]]
@@ -162,10 +155,7 @@ module.exports = (impl) ->
 			@updatePending = false
 			Object.preventExtensions @
 
-			if item._isReady
-				@update()
-			else
-				item.onReady @update, @
+			@update()
 
 		getDefaultValue = (binding) ->
 			val = binding.obj[binding.prop]

@@ -78,7 +78,10 @@ Rectangle {
 			setter: (_super) -> (val) ->
 				if @_focus isnt val
 					if val and focusedKeys isnt @
-						focusedKeys?.focus = false
+						if focusedKeys
+							focusedKeys._focus = false
+							focusedKeys.focusChanged true
+							focusedKeys._ref.keysChanged focusedKeys
 						focusedKeys = @
 					_super.call @, val
 					if not val and focusedKeys is @

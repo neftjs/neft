@@ -17,6 +17,7 @@ Rectangle {
 	'use strict'
 
 	expect = require 'expect'
+	assert = require 'assert'
 	utils = require 'utils'
 
 	module.exports = (Renderer, Impl, itemUtils) ->

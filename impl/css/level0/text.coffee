@@ -81,7 +81,7 @@ module.exports = (impl) ->
 
 			if (item._height > 0 and item._impl.elem.offsetParent) or item._impl.sizeChecks is MAX_CHECKS
 				if item._impl.textElem.parentNode is hatchery
-					item._impl.elem.appendChild item._impl.textElem
+					implUtils.prependElement item._impl.elem, item._impl.textElem
 
 			return
 
@@ -197,7 +197,6 @@ module.exports = (impl) ->
 			font-size: 14px;
 			font-family: #{impl.utils.DEFAULT_FONTS['sans-serif']}, sans-serif;
 			margin-top: #{if isFirefox then 1 else 0}px;
-			z-index: -1;
 		}
 		#styles .textVerticalCenterAlign {
 			height: auto !important;

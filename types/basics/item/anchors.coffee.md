@@ -146,15 +146,6 @@ For the peformance reasons, the *target* could be only a *parent* or a *item sib
 
 Pointing to the *parent* by its id is not allowed, *parent* target should be used.
 
-					# TODO: we need know scope id here
-					# setImmediate ->
-					# 	if target isnt 'parent'
-					# 		parentA = Impl.getItemParent id
-					# 		isFamily = Impl.confirmItemChild parentA, target
-					# 		assert isFamily
-					# 		, "`anchors.#{type}` can be anchored only to the " +
-					# 		  "parent or a sibling"
-
 					if opts & ONLY_TARGET_ALLOW
 						unless line is undefined
 							log.error "`anchors.#{type}` expects only a target to be defined; " +
@@ -163,7 +154,7 @@ Pointing to the *parent* by its id is not allowed, *parent* target should be use
 
 					if opts & LINE_REQ
 						unless H_LINES[line] or V_LINES[line]
-							log.error "`anchors.#{type}` expects a anchor line to be defined; " +
+							log.error "`anchors.#{type}` expects an anchor line to be defined; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
 
 Horizontal anchors can't point to the vertical lines (and vice versa),
@@ -171,12 +162,12 @@ so *anchors.top = parent.left* is not allowed.
 
 					if opts & H_LINE_REQ
 						unless H_LINES[line]
-							log.error "`anchors.#{type}` can't be anchored to a vertical edge; " +
+							log.error "`anchors.#{type}` can't be anchored to the vertical edge; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys H_LINES}`"
 
 					if opts & V_LINE_REQ
 						unless V_LINES[line]
-							log.error "`anchors.#{type}` can't be anchored to a horizontal edge; " +
+							log.error "`anchors.#{type}` can't be anchored to the horizontal edge; " +
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys V_LINES}`"
 					`//</development>`
 

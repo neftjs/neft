@@ -34,6 +34,7 @@ Column {
 			@fill.width = true
 			@fill.height = true
 
+		@::_width = -1
 		getter = utils.lookupGetter @::, 'width'
 		setter = utils.lookupSetter @::, 'width'
 		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
@@ -41,6 +42,7 @@ Column {
 			_super.call @, val
 			return
 
+		@::_height = -1
 		getter = utils.lookupGetter @::, 'height'
 		setter = utils.lookupSetter @::, 'height'
 		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->

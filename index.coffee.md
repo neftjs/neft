@@ -103,7 +103,7 @@ Styles.button/red {
 
 	exports.Extension = require('./types/extension') exports, Impl, itemUtils
 	exports.Source = require('./types/extensions/source') exports, Impl, itemUtils
-	exports.State = require('./types/extensions/state') exports, Impl, itemUtils
+	exports.Class = require('./types/extensions/class') exports, Impl, itemUtils
 	exports.Animation = require('./types/extensions/animation') exports, Impl, itemUtils
 	exports.PropertyAnimation = require('./types/extensions/animation/types/property') exports, Impl, itemUtils
 	exports.NumberAnimation = require('./types/extensions/animation/types/property/types/number') exports, Impl, itemUtils

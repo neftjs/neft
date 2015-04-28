@@ -133,7 +133,6 @@ module.exports = (Renderer, Impl) ->
 			else
 				propSetter = basicSetter = NOP
 		else if namespace?
-			Renderer.State.supportObjectProperty namespace
 			namespaceSignalName = "#{namespace}Changed"
 			uniquePropName = namespace + utils.capitalize(name)
 			# propSetter = basicSetter = (val) ->
@@ -208,6 +207,7 @@ module.exports = (Renderer, Impl) ->
 		setter = if customSetter? then customSetter(propSetter) else propSetter
 
 		# override
+		prototype['_' + name] = opts.defaultValue
 		utils.defineProperty prototype, name, null, getter, setter
 
 		prototype

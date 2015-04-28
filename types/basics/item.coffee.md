@@ -50,8 +50,9 @@ This is a base class for everything which is visible.
 			@_keys = null
 			@_pointer = null
 			@_margin = null
-			@_states = null
-			@_stateExtensions = null
+			@_classes = null
+			@_classExtensions = null
+			@_classList = []
 
 			super()
 
