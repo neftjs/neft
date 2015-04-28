@@ -1,6 +1,8 @@
 'use strict'
 
 grammar = '{{grammar}}'
+# fs = require 'fs'
+# grammar = fs.readFileSync './grammar.pegjs', 'utf-8'
 
 module.exports = (file) ->
 	fs = require 'fs'

@@ -16,6 +16,9 @@ CODE = 'code'
 
 ids = null
 
+uid = ->
+	'c' + Math.random().toString(16).slice(2)
+
 repeatString = (str, amount) ->
 	r = str
 	for i in [0...amount-1] by 1
@@ -69,12 +72,14 @@ getElemByName = (arr, type, name) ->
 
 MODIFIERS_NAMES =
 	__proto__: null
-	State: true
+	Class: true
 	Transition: true
 	Animation: true
 	PropertyAnimation: true
 	NumberAnimation: true
 	Source: true
+	FontLoader: true
+	ResourcesLoader: true
 getItem = (obj) ->
 	while obj
 		if obj.type is 'object' and not MODIFIERS_NAMES[obj.name]
@@ -233,8 +238,8 @@ stringObjectHead = (obj) ->
 	if getByType(obj.body, ID).length > 0
 		ids[obj.id] = true
 
-	rendererClass = Renderer[obj.name.split('.')[0]]
-	isLocal = rendererClass?
+	rendererCtor = Renderer[obj.name.split('.')[0]]
+	isLocal = rendererCtor?
 	decl = if isLocal then "new #{obj.name}" else "#{obj.name}"
 	r = "var #{obj.id} = ids.#{obj.id} = #{decl}();\n"
 	r += "#{obj.id}._id = '#{obj.id}';\n"
@@ -258,9 +263,9 @@ stringObjectChildren = (obj) ->
 	for child in getByType(obj.body, OBJECT)
 		r += stringObject child
 
-		rendererClass = Renderer[child.name.split('.')[0]]
+		rendererCtor = Renderer[child.name.split('.')[0]]
 
-		if rendererClass?.prototype instanceof Renderer.Extension
+		if rendererCtor?.prototype instanceof Renderer.Extension
 			r += "#{child.id}.target = #{obj.id};\n"
 		else
 			r += "if (#{child.id} instanceof Item) #{child.id}.parent = #{obj.id};\n"
@@ -269,10 +274,38 @@ stringObjectChildren = (obj) ->
 
 stringObject = (obj) ->
 	r = stringObjectHead obj
+
+	unless MODIFIERS_NAMES[obj.name]
+		classBody = []
+		obj.body = obj.body.filter (elem) ->
+			if elem.type is ATTRIBUTE or (elem.type is FUNCTION and elem.name isnt 'onReady')
+				classBody.push elem
+				false
+			else
+				true
+
+		defaultClass =
+			type: 'object'
+			name: 'Class'
+			id: uid()
+			body: [{
+				type: 'attribute'
+				name: 'priority'
+				value: '0'
+			}, {
+				type: 'attribute'
+				name: 'changes'
+				value: classBody
+			}]
+			parent: obj
+		obj.body.push defaultClass
+		# r += stringObjectFull defaultClass
+		# r += "#{obj.id}._defaultClasses.push(#{defaultClass.id});\n"
+		# r += "#{defaultClass.id}.target = #{obj.id};\n"
+
 	r += stringObjectChildren obj
 
 stringAttribute = (obj, parents) ->
-	assert obj.type is ATTRIBUTE, "stringAttribute: type must be an attribute"
 	assert parents[0].type is OBJECT, "stringAttribute: first parent must be an object"
 
 	object = parents[0]
@@ -282,14 +315,19 @@ stringAttribute = (obj, parents) ->
 	for parent in parents[1...]
 		parentsRef += "#{parent.name}."
 	parentsRef = parentsRef.slice 0, -1
-	ref = "#{parentsRef}.#{obj.name}"
 
-	r = "#{ref} = "
+	type = 'attr'
+	writeAsBinding = false
+	writeAsFunction = false
+	if object.name is 'Class' and parents[1]?.name is 'changes'
+		type = 'change'
+
+	r = ''
 	rPre = ''
 	rPost = ''
 	childParents = null
 
-	if Array.isArray value
+	if Array.isArray(value)
 		rArr = "["
 
 		for elem in value
@@ -297,13 +335,15 @@ stringAttribute = (obj, parents) ->
 				when OBJECT
 					rArr += "#{elem.id}, "
 					rPre += stringObjectFull elem
-				when ATTRIBUTE
+				when ATTRIBUTE, FUNCTION
 					unless childParents
 						childParents = parents.slice()
 						childParents.push obj
 					rPost += stringAttribute elem, childParents
+				# when FUNCTION
+				# 	rPost += stringAttribute elem, childParents
 				else
-					throw "Not implemented attribute type"
+					throw "Not implemented attribute type '#{elem.type}'"
 
 		rArr = rArr.slice 0, -2
 		if rArr.length > 0
@@ -313,7 +353,11 @@ stringAttribute = (obj, parents) ->
 				r += "{}"
 			else
 				return rPre + rPost
-	else if isAnchor obj
+	else if obj.type is FUNCTION
+		writeAsFunction = true
+		func = Function obj.params or [], obj.body
+		r += func
+	else if isAnchor(obj)
 		r += anchorAttributeToString(obj)
 	else
 		[_, extraParentsRef, propName] = ///^(?:(.+)\.)?(.+)$///.exec obj.name
@@ -322,12 +366,16 @@ stringAttribute = (obj, parents) ->
 		else
 			extraParentsRef = ''
 
-		if isBinding obj
+		if isBinding(obj)
 			binding = bindingAttributeToString(obj)
-			r = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', #{binding})"
+			if type is 'attr'
+				r = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', #{binding})"
+			else
+				r = binding
+			writeAsBinding = true
 		else
-			if ///^Styles\[///.test object.name
-				rPre = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', null);\n"
+			# if ///^Styles\[///.test(object.name)
+			# 	rPre = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', null);\n"
 
 			if value.type is OBJECT
 				r += value.id
@@ -335,8 +383,26 @@ stringAttribute = (obj, parents) ->
 			else
 				r += value
 
-	r += ";\n"
-	rPre + r + rPost
+	switch type
+		when 'attr'
+			ref = "#{parentsRef}.#{obj.name}"
+			if writeAsFunction
+				rPre + "#{ref}(" + r + ", #{parents[0].id});\n" + rPost
+			else if writeAsBinding
+				rPre + r + ";\n" + rPost
+			else
+				rPre + "#{ref} = " + r + ";\n" + rPost
+		when 'change'
+			path = parentsRef.slice object.id.length+'changes.'.length+1
+			path += '.' if path
+			path += obj.name
+			if writeAsBinding
+				method = 'setBinding'
+			else if writeAsFunction
+				method = 'setFunction'
+			else
+				method = 'setAttribute'
+			rPre + "#{object.id}.changes.#{method}('#{path}', #{r});\n" + rPost
 
 stringAttributes = (obj) ->
 	assert obj.type is OBJECT, "stringAttributes: type must be an object"
@@ -356,13 +422,12 @@ stringFunctions = (obj) ->
 
 	r = ''
 
-	attributes = getByType obj.body, FUNCTION
-	for attribute in attributes
-		func = Function attribute.params or [], attribute.body
-		r += "#{obj.id}.#{attribute.name}(#{func}, #{obj.id});\n"
-
 	for child in getByType(obj.body, OBJECT)
 		r += stringFunctions child
+
+	attributes = getByType obj.body, FUNCTION
+	for attribute in attributes
+		r += stringAttribute attribute, [obj]
 
 	r
 
@@ -373,6 +438,11 @@ stringObjectFull = (obj) ->
 	assert obj.type is OBJECT, "stringObjectFull: type must be an object"
 
 	code = stringObject obj
+	code += stringBody obj
+	code
+
+stringBody = (obj) ->
+	code = ''
 	code += stringAttributes obj
 	code += stringFunctions obj
 	code
@@ -386,8 +456,7 @@ stringViewObjectFull = (obj) ->
 	code = stringObjectHead obj
 	code += "setImmediate(function(){\n"
 	code += stringObjectChildren obj
-	code += stringAttributes obj
-	code += stringFunctions obj
+	code += stringBody obj
 	code += "});\n"
 	code
 
