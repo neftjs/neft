@@ -19,6 +19,8 @@ module.exports.clean = (Db, table) ->
 
 		runs ->
 			new Db(table).remove().run (err) ->
+				if err
+					console.error err
 				end = not err
 
 		waitsFor -> end

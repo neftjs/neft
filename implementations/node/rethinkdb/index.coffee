@@ -8,6 +8,7 @@ log = log.scope 'Db', 'Rethink'
 try
 	r = require 'rethinkdb'
 catch
+	exports.error = "'rethinkdb' module is not installed"
 	return;
 
 Table = require './Table.coffee'

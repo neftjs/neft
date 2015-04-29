@@ -30,7 +30,7 @@ Db.create(*Object* options)
 			(opts={}) ->
 				assert.isPlainObject opts
 
-				opts.name ?= 'neft_app'
+				opts.database ?= 'neft_app'
 
 				r = class ReadyDb extends Db
 				signal.create r, 'ready'
@@ -38,7 +38,7 @@ Db.create(*Object* options)
 				r.Table = class ReadyTable extends Table
 
 				# implementation
-				r = dbImplementation r, opts.type, opts.name, opts.config
+				r = dbImplementation r, opts.type, opts.database, opts.config
 
 				# log
 				`//<development>`
@@ -63,7 +63,7 @@ Db.create(*Object* options)
 		constructor: (table, id) ->
 			assert.instanceOf @, Db, "Use `new` to init Db query"
 			assert.isString table, "Table name must be a string"
-			assert.isString id, "Id of document must be a string" if id?
+			assert.isPrimitive id, "Id of document must be primitive" if id?
 
 			# Define if `Collection` should execute query.
 			# It not have place if any documents won't be returned
@@ -83,7 +83,7 @@ Db.create(*Object* options)
 			@_stack.add runCollectionIfNeeded, @
 
 			# get document
-			@_id = id or ''
+			@_id = id
 
 			Object.preventExtensions @
 
@@ -115,7 +115,7 @@ Db::limit(*Integer* value)
 Set limit of documents in collection.
 
 		limit: (value) ->
-			assert.notOk @_id, "limit() can not be used for document"
+			assert.notOk @_id?, "limit() can not be used for document"
 			assert.isInteger value, "Limit value must be a positive number"
 			assert.operator value, '>', 0, "Limit value must be a positive number"
 
@@ -128,7 +128,7 @@ Db::skip(*Integer* value)
 Omit documents from the begining.
 
 		skip: (value) ->
-			assert.notOk @_id, "skip() can not be used for document"
+			assert.notOk @_id?, "skip() can not be used for document"
 			assert.isInteger value, "Offset value must be a positive and finite number"
 			assert.operator value, '>', 0, "Offset value must be a positive and finite number"
 
@@ -147,7 +147,7 @@ new Db('db', 'table').where('products.amount').lt(2).gt(1).remove().run()
 ```
 
 		where: (row) ->
-			assert.notOk @_id, "where() can not be used for document"
+			assert.notOk @_id?, "where() can not be used for document"
 			assert.isString row, "Row must be a string"
 
 			@_commands.push where: row
@@ -227,7 +227,7 @@ new Db('db', 'table').insert({title: 'two'}).run();
 ```
 
 		insert: (doc) ->
-			assert.notOk @_id, "insert() can not be used for document"
+			assert.notOk @_id?, "insert() can not be used for document"
 			assert.isPlainObject doc, "Only plain objects can be inserted"
 			assert @_search, "remove() can works only with collection"
 

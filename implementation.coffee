@@ -5,7 +5,8 @@ utils = require 'utils'
 # list of implementations by the priority
 impls = switch true
 	when utils.isNode
-		rethinkdb: require './implementations/node/rethink'
+		rethinkdb: require './implementations/node/rethinkdb'
+		mysql: require './implementations/node/mysql'
 	else
 		{}
 
@@ -22,7 +23,7 @@ module.exports = (Db, type='auto', name, config) ->
 
 	impl = impls[type]
 	if typeof impl isnt 'function'
-		throw new Error "Database '#{type}' can't be initialized"
+		throw new Error "Database '#{type}' can't be initialized; " + impl.error
 
 	Db.implementation = type
 	impl Db, name, config

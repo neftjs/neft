@@ -4,7 +4,16 @@ Db = require '../index'
 specUtils = require './utils'
 
 Db = Db.create
-	type: 'rethinkdb'
+	type: 'mysql'
+	database: 'test'
+	config:
+		host: 'localhost'
+		user: ''
+		password: ''
+
+Db.onReady ->
+	# Db.mysql.pool.query 'drop table test', ->
+	Db.mysql.pool.query 'create table if not exists test (id integer auto_increment primary key, name text, age int, parent text)', ->
 
 specUtils.isReady Db
 
@@ -14,6 +23,7 @@ describe 'Db implementation', ->
 	DOCUMENT =
 		name: 'Test name'
 		age: 1
+		parent: ''
 	UPDATE =
 		name: 'Test name two'
 		age: 2
@@ -28,10 +38,10 @@ describe 'Db implementation', ->
 			new Db(TABLE).insert(DOCUMENT).run (err, arg) ->
 				id = arg
 
-		waitsFor -> id
+		waitsFor -> id?
 
 		runs ->
-			expect(id).toEqual jasmine.any String
+			expect(id).toBeDefined()
 
 	it 'returns created document', ->
 		doc = null
@@ -43,7 +53,7 @@ describe 'Db implementation', ->
 		waitsFor -> doc
 
 		runs ->
-			expect(Object.keys(doc).length).toBe 3
+			expect(Object.keys(doc).length).toBe 4
 			expect(doc.id).toBe id
 			expect(doc.name).toBe DOCUMENT.name
 			expect(doc.age).toBe DOCUMENT.age
@@ -134,7 +144,7 @@ describe 'Db implementation', ->
 		waitsFor -> elems
 
 		runs ->
-			expect(elems.length).toBe 3
+			expect(elems.length).toBe 4
 
 			elems.forEach (elem) ->
 				expect(elem.name).toBe DOCUMENT.name
@@ -152,7 +162,7 @@ describe 'Db implementation', ->
 		waitsFor -> elems
 
 		runs ->
-			expect(elems.length).toBe 3
+			expect(elems.length).toBe 4
 
 			elems.forEach (elem) ->
 				expect(elem.name).toBe DOCUMENT.name
