@@ -3,6 +3,9 @@
 utils = require 'utils'
 log = require 'log'
 
+Table = require './Table.coffee'
+Collection = require './Collection.coffee'
+
 module.exports = (Db, name, config={}) ->
 	impl =
 		data: Object.create(null)
@@ -10,8 +13,8 @@ module.exports = (Db, name, config={}) ->
 	class MemoryDb extends Db
 		@memory = impl
 
-		@Table = require('./Table.coffee')(@, impl)
-		@Collection = require('./Collection.coffee')(@, impl)
+		@Table = Table(@, impl)
+		@Collection = Collection(@, impl)
 
 		setImmediate =>
 			@ready()

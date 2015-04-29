@@ -6,6 +6,8 @@ utils = require 'utils'
 impls = switch true
 	when utils.isNode
 		rethinkdb: require './implementations/node/rethink'
+	else
+		{}
 
 impls.memory = require './implementations/all/memory'
 

@@ -10,6 +10,9 @@ try
 catch
 	return;
 
+Table = require './Table.coffee'
+Collection = require './Collection.coffee'
+
 # CONFIG
 HOST = 'localhost'
 PORT = 28015
@@ -49,8 +52,8 @@ module.exports = (Db, name, config={}) ->
 	class RethinkDb extends Db
 		@rethinkdb = impl
 
-		@Table = require('./Table.coffee')(@, impl)
-		@Collection = require('./Collection.coffee')(@, impl)
+		@Table = Table(@, impl)
+		@Collection = Collection(@, impl)
 
 		# Connect into db and load sub-files on success
 		config.host ?= HOST
