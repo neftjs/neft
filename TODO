@@ -53,4 +53,5 @@ Networking:
   ☐ Remove Response::raise
 
 App:
-  ☐ Route - short arguments
+  ✔ Route - short arguments @started(15-04-30 17:47) @done (15-04-30 18:16) @lasted(0:29)
+  ☐ Route - methods

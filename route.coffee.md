@@ -59,6 +59,14 @@ Class known as `app.Route` used to automate dealing with networking.
 
 				callback val
 
+		getUriParts = (route) ->
+			uri = route.uri._uri
+			uri = uri.replace Networking.Uri.NAMES_RE, ''
+			uri = uri.replace /\*/g, ''
+			uri = uri.replace /\/\//g, ''
+			uri = uri.replace /^\/|\/$/, ''
+			uri = uri.split '/'
+
 *Route* Route(*Object* options)
 -------------------------------
 
@@ -69,7 +77,23 @@ module.exports = function(app){
 };
 ```
 
-		constructor: (opts) ->
+Acceptable syntaxes:
+```
+*Route* Route(*String* method, *String* uri)
+*Route* Route(*String* uri)
+```
+
+		constructor: (method, uri) ->
+			if uri is undefined
+				if typeof method is 'string'
+					opts = uri: method
+				else
+					opts = method
+			else
+				opts =
+					method: method
+					uri: uri
+
 			assert.instanceOf @, AppRoute
 			assert.isPlainObject opts
 
@@ -84,31 +108,28 @@ module.exports = function(app){
 			setUri @, opts.uri
 
 			# method
-			if opts.method?
+			if opts.hasOwnProperty('method')
 				setMethod @, opts.method.toLowerCase()
 
 			# schema
-			if opts.schema?
+			if opts.hasOwnProperty('schema')
 				setSchema @, opts.schema
 
 			# controller
-			if opts.controller?
-				setController @, opts.controller
+			setController @, opts.controller
 
 			# view
-			if opts.view?
-				setView @, opts.view
+			setView @, opts.view
 
 			# template
-			if opts.template?
-				setTemplate @, opts.template
+			setTemplate @, opts.template
 
 			# serverResourceUri
-			if opts.serverResourceUri?
+			if opts.hasOwnProperty('serverResourceUri')
 				setServerResourceUri @, opts.serverResourceUri
 
 			# callback
-			if opts.callback?
+			if opts.hasOwnProperty('callback')
 				setCallback @, opts.callback
 
 			# register route in networking
@@ -262,13 +283,22 @@ module.exports = function(app){
 		setController = (ctx, val) ->
 			assert.instanceOf ctx, AppRoute
 
-			if typeof val is 'string'
-				ctx.controller = null
-				getByPath ctx, val, 'controller', 'controllers', (val) ->
+			if val is null
+				return
+
+			switch typeof val
+				when 'string'
+					ctx.controller = null
+					getByPath ctx, val, 'controller', 'controllers', (val) ->
+						ctx.controller = val
+				when 'undefined'
+					uri = getUriParts ctx
+					r = app.controllers[uri.join('/')]?[ctx.method]
+					r ?= app.controllers[uri[0...-1].join('/')]?[utils.last(uri)]
+					ctx.controller = r
+				when 'function'
 					ctx.controller = val
-			else
-				assert.isFunction val
-				ctx.controller = val
+			return
 
 *app.View* Route::view
 ----------------------
@@ -282,18 +312,28 @@ Valid [App.View][] or file name from the *views* folder.
 		setView = (ctx, val) ->
 			assert.instanceOf ctx, AppRoute
 
-			if typeof val is 'string'
-				view = app.views[val]
+			if val is null
+				return
 
-				assert view
-				, "`#{val}` view file can't be found"
-			else
-				assert val instanceof app.View
-				, "`#{ctx.uri}` route view is not a app.View instance; `#{val}` given"
+			switch typeof val
+				when 'string'
+					view = app.views[val]
 
-				view = val
+					assert view
+					, "`#{val}` view file can't be found"
+				when 'undefined'
+					uri = getUriParts ctx
+					r = app.views[uri.join('/')+'/'+ctx.method]
+					r ?= app.views[uri.join('/')]
+					view = r
+				when 'object'
+					assert val instanceof app.View
+					, "`#{ctx.uri}` route view is not a app.View instance; `#{val}` given"
+
+					view = val
 
 			ctx.view = view
+			return
 
 *app.Template* Route::template
 ------------------------------
@@ -307,18 +347,33 @@ Valid [App.View][] or file name from the *views* folder.
 		setTemplate = (ctx, val) ->
 			assert.instanceOf ctx, AppRoute
 
-			if typeof val is 'string'
-				ctx.template = app.templates[val]
-				unless ctx.template instanceof app.Template
-					setImmediate ->
-						ctx.template = app.templates[val]
-						assert ctx.template instanceof app.Template
-						, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
-			else
-				assert val instanceof app.Template
-				, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
+			if val is null
+				return
 
-				ctx.template = val
+			switch typeof val
+				when 'string'
+					ctx.template = app.templates[val]
+					unless ctx.template instanceof app.Template
+						setImmediate ->
+							ctx.template = app.templates[val]
+							assert ctx.template instanceof app.Template
+							, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
+				when 'undefined'
+					uri = getUriParts ctx
+					r = app.templates[uri.join('/')]?[ctx.method]
+					unless r
+						for i in [0...uri.length-1] by 1
+							chunk = uri[i]
+							if r = app.templates[uri[0...-i].join('/')]
+								break
+					r ?= app.templates.index
+					ctx.template = r
+				when 'object'
+					assert val instanceof app.Template
+					, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
+
+					ctx.template = val
+			return
 
 *Networking.Uri* Route::serverResourceUri
 -----------------------------------------
