@@ -53,6 +53,7 @@ This is a base class for everything which is visible.
 			@_classes = null
 			@_classExtensions = null
 			@_classList = []
+			@_classQueue = []
 
 			super()
 

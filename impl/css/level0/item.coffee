@@ -234,14 +234,12 @@ module.exports = (impl) ->
 		return
 
 	setItemWidth: (val) ->
-		val = round val
 		@_impl.elemStyle.width = "#{val}px"
 		@_parent?._impl.update.call @_parent
 		@_impl.update.call @
 		return
 
 	setItemHeight: (val) ->
-		val = round val
 		@_impl.elemStyle.height = "#{val}px"
 		@_parent?._impl.update.call @_parent
 		@_impl.update.call @

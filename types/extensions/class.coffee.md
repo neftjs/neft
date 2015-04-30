@@ -40,7 +40,7 @@ Class @modifier
 				if @_name is '' and not @_bindings?.when
 					@when = true
 				else if @_running
-					enableClass @_target, @
+					updateTargetClass enableClass, @_target, @
 				return
 
 			constructor: ->
@@ -132,6 +132,10 @@ It accepts bindings as well.
 *Float* Class::priority = 1
 ---------------------------
 
+Default class has priority 0.
+
+All inherited classes have pririty in range (0, 1).
+
 			itemUtils.defineProperty
 				constructor: @
 				name: 'priority'
@@ -140,9 +144,9 @@ It accepts bindings as well.
 					assert.isFloat val
 					_super.call @, val
 					if @_target and @_running
-						disableClass @_target, @
+						updateTargetClass disableClass, @_target, @
 						updateClassList @_target
-						enableClass @_target, @
+						updateTargetClass enableClass, @_target, @
 					return
 
 *Boolean* Class::when
@@ -183,7 +187,7 @@ Grid {
 				super()
 				@_target._classList.unshift @
 				updateClassList @_target
-				enableClass @_target, @
+				updateTargetClass enableClass, @_target, @
 				return
 
 			disable: ->
@@ -195,7 +199,7 @@ Grid {
 					return
 
 				super()
-				disableClass @_target, @
+				updateTargetClass disableClass, @_target, @
 				utils.remove @_target._classList, @
 				return
 
@@ -225,6 +229,11 @@ Grid {
 				object[path[path.length - 1]] = val
 			return
 
+		###
+		TODO: support deeper attributes properly
+		e.g. margin doesn't restore margin.left
+		and margin doesn't remove margin.left binding
+		###
 		enableClass = (item, classElem) ->
 			assert.instanceOf item, Renderer.Item
 			assert.instanceOf classElem, Class
@@ -392,6 +401,24 @@ Grid {
 					if EXTRA_RESTORE_ATTRS[lastPath]?
 						restoreExtraAttributes item, path, classElem
 
+			return
+
+		runQueue = (target) ->
+			classQueue = target._classQueue
+			[func, target, classElem] = classQueue
+			func target, classElem
+			classQueue.shift()
+			classQueue.shift()
+			classQueue.shift()
+			if classQueue.length > 0
+				runQueue target
+			return
+
+		updateTargetClass = (func, target, classElem) ->
+			classQueue = target._classQueue
+			classQueue.push func, target, classElem
+			if classQueue.length is 3
+				runQueue target
 			return
 
 *Item* Item()
