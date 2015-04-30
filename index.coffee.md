@@ -30,7 +30,7 @@ Db.create(*Object* options)
 			(opts={}) ->
 				assert.isPlainObject opts
 
-				opts.database ?= 'neft_app'
+				opts.name ?= 'neft_app'
 
 				r = class ReadyDb extends Db
 				signal.create r, 'ready'
@@ -38,7 +38,7 @@ Db.create(*Object* options)
 				r.Table = class ReadyTable extends Table
 
 				# implementation
-				r = dbImplementation r, opts.type, opts.database, opts.config
+				r = dbImplementation r, opts.type, opts.name, opts.config
 
 				# log
 				`//<development>`

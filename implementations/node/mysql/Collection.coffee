@@ -11,6 +11,7 @@ module.exports = (Db, impl) ->
 			return q
 
 		# commands
+		whereUsed = false
 		for command in commands then switch true
 			# skip
 			when command.skip?
@@ -22,7 +23,12 @@ module.exports = (Db, impl) ->
 
 			# where
 			when command.where?
-				q += "where `#{command.where}` "
+				if whereUsed
+					q += "and "
+				else
+					whereUsed = true
+					q += "where "
+				q += "`#{command.where}` "
 
 				if command.is? then q += "= " + impl.pool.escape(command.is) + " "
 				if command.lt? then q += "< " + impl.pool.escape(command.lt) + " "

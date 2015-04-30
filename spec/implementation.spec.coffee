@@ -8,8 +8,8 @@ Db = Db.create
 	database: 'test'
 	config:
 		host: 'localhost'
-		user: ''
-		password: ''
+		user: 'root'
+		password: 'root'
 
 Db.onReady ->
 	# Db.mysql.pool.query 'drop table test', ->
