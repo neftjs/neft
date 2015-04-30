@@ -1,0 +1,56 @@
+Document:
+  ✔ Element::query() @done (15-04-23 13:10)
+  ☐ Element::queryAll() :not()
+  ✔ Element::queryAll() multiple separated by comma @done (15-04-23 12:40)
+  ✔ neft:each functions scoping @done (15-04-23 14:50)
+  ☐ Add neft:bind (e.g. neft:bind="name as neft:style:value")
+  ☐ Add neft:log
+
+Renderer:
+  ☐ HTML namespace items
+  ☐ Form Item
+  ☐ Button Item
+  ☐ State::targets
+  ☐ document.query/queryAll
+  ✔ State two-dots properties support (q.g. label.font.pixelSize) @started(15-04-27 08:07) @done (15-04-30 17:28) @lasted(3 days, 9:21)
+  ☐ OSX renderer
+  ☐ Android renderer
+  ✔ Simple bindings (e.g. parent.width) @started(15-04-23 16:00) @done (15-04-23 16:17) @lasted(0:17)
+  ✔ parent/nextSibling/previousSibling as static references in bindings @started(15-04-23 14:52) @done (15-04-23 15:59) @lasted(1:07)
+  ☐ Use resources resolutions properly
+  ✔ Less restrictive Text::text setter @started(15-04-23 21:14) @done (15-04-23 21:17) @lasted(0:03)
+  ✔ Hash bindings in NML parser @started(15-04-24 15:09) @done (15-04-24 18:48) @lasted(3:39)
+  ✔ Anchors implementation without bindings @done (15-04-24 18:49)
+  ☐ Vector Graphic Items
+
+Styles:
+  ☐ Default styles
+
+Database:
+  ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)
+  ☐ Sqlite implementation
+  ☐ Postgresql implementation
+  ✔ MySQL implementation @done (15-04-30 10:01)
+  ☐ QML implementation
+  ☐ Browser implementation
+  ☐ Schema support
+
+Docs:
+  ☐ Getting Started
+  ☐ Improve Resources docs
+  ☐ Improve Db docs
+  ✔ Implement new neft changes @started(15-04-24 19:16) @done (15-04-25 10:15) @lasted(14:59)
+  ☐ Move Rendering classes up
+  ☐ Bold currently reading aside nav item on scroll
+  ☐ Mobile main -> docs -> main bugs
+
+Utils:
+ ✔ Replace expects by manual checks @started(15-04-25 10:16) @done (15-04-25 10:46) @lasted(0:30)
+
+Networking:
+  ☐ Cookies
+  ☐ Response headers
+  ☐ Remove Response::raise
+
+App:
+  ☐ Route - short arguments

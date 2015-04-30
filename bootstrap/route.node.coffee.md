@@ -155,12 +155,14 @@ text browsers) or HTML scaffolding which will run **neft.io** on the client side
 				if getType(req) is 'text'
 					return callback true
 
+				userAgent = req.headers['user-agent']
+
 				if req.type isnt Networking.Request.HTML_TYPE or # omit types other than html
 				   reservedUrisRe.test(req.uri) or # omit reserved URIs
-				   utils.has(req.userAgent, 'bot') or # omit Googlebot, msnbot etc.
-				   utils.has(req.userAgent, 'Baiduspider') or # omit baidu bot
-				   utils.has(req.userAgent, 'facebook') or # omit facebook bot
-				   utils.has(req.userAgent, 'Links') # omit links text browser
+				   utils.has(userAgent, 'bot') or # omit Googlebot, msnbot etc.
+				   utils.has(userAgent, 'Baiduspider') or # omit baidu bot
+				   utils.has(userAgent, 'facebook') or # omit facebook bot
+				   utils.has(userAgent, 'Links') # omit links text browser
 					return callback true
 
 				callback null,

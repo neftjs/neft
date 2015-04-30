@@ -231,6 +231,9 @@ Files from the *templates* folder with objects returned by their exported functi
 		# loading files helper
 		init = (files, target) ->
 			for file in files when file.name?
+				if typeof file.file isnt 'function'
+					continue
+
 				fileObj = file.file app
 
 				if target[file.name]?
