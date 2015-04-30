@@ -47,8 +47,8 @@ Class @modifier
 				assert.lengthOf arguments, 0
 
 				@_priority = 1
-				@changes = new ChangesObject
 				@_name = ''
+				@changes = new ChangesObject
 				super()
 
 				@onReady onReady
@@ -74,11 +74,14 @@ It's a random string by default.
 					if name is val
 						return
 
-					if target and name
+					if target
 						if target.classes.has(name)
 							@disable()
 						target._classExtensions[name] = null
 						target._classExtensions[val] = @
+
+					if target and val
+						target._classExtensions ?= {}
 
 					_super.call @, val
 
@@ -118,8 +121,11 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 
 					_super.call @, val
 
-					if val and (val._classes?.has(name) or @_when)
-						@enable()
+					if val
+						if name
+							@_target._classExtensions ?= {}
+						if val._classes?.has(name) or @_when
+							@enable()
 					return
 
 *Object* Class::changes
