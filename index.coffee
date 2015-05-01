@@ -483,27 +483,37 @@ module.exports = (file, filename) ->
 	elems = parser file
 	ids = {}
 	codes = {}
+	waitsCode = ''
 
+	objectIndex = 0
 	for elem, i in elems
-		isView = i is 0 and filename is 'view'
-		r = stringFile elem, isView
-		if i > 0 and elem.autoId
-			codes[elems[0].id] += r
+		if elem.type isnt 'object'
+			waitsCode += stringObjectFull elem
+			continue
+
+		isView = objectIndex is 0 and filename is 'view'
+		r = waitsCode
+		waitsCode = ''
+		r += stringFile elem, isView
+		if objectIndex > 0 and elem.autoId
+			codes._neftMain += r
 		else
 			r += "var mainItem = #{elem.id};\n"
-			if i is 0
+			if objectIndex is 0
 				codes._neftMain = r
 			else
 				codes[elem.id] = r
+		objectIndex++
+
+	if waitsCode
+		codes._neftMain = waitsCode + codes._neftMain
 
 	codes
 
 # console.log module.exports """
+# // ab
+
 # Item {
 # 	id: a
 # }
-# Text {
-# 	id: b
-# }
-# Rectangle {}
 # """#, 'view'
