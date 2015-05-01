@@ -26,14 +26,6 @@ Database @engine
 db.get(*String* key, [*Integer* options], *Function* callback)
 --------------------------------------------------------------
 
-	getWatcher = (key) ->
-		if watchers[key]
-			watchersCount[key] = watchersCount[key] + 1 or 1
-			watcher = Object.create watchers[key]
-			watcher._isConnected = true
-			Object.preventExtensions watcher
-			watcher
-
 	exports.get = (key, opts, callback) ->
 		if typeof opts is 'function'
 			callback = opts
@@ -45,7 +37,7 @@ db.get(*String* key, [*Integer* options], *Function* callback)
 		assert.isFunction callback
 
 		if opts & exports.OBSERVABLE and watchers[key]?
-			return callback null, getWatcher(key)
+			return callback null, watchers[key].spawn()
 
 		impl.get key, (err, data) ->
 			if err? or not data
@@ -56,7 +48,7 @@ db.get(*String* key, [*Integer* options], *Function* callback)
 					data = new DbList key, data, opts
 				else if utils.isObject(data)
 					data = new DbDict key, data, opts
-				data = getWatcher(key) or data
+				data = watchers[key]?.spawn() or data
 
 			callback null, data
 
@@ -139,6 +131,12 @@ db.append(*String* key, *Any* value, [*Function* callback])
 			impl.set key, data, callback
 		return
 
+	createPassProperty = (object, name) ->
+		utils.defineProperty object, name, null, ->
+			Object.getPrototypeOf(this)[name]
+		, (val) ->
+			Object.getPrototypeOf(this)[name] = val
+
 *DbList* DbList() : *List*
 --------------------------
 
@@ -157,6 +155,13 @@ db.append(*String* key, *Any* value, [*Function* callback])
 			@onChanged onChanged
 			@onInserted onChanged
 			@onPopped onChanged
+
+		spawn: ->
+			watchersCount[@_key] = watchersCount[@_key] + 1 or 1
+			watcher = Object.create watchers[@_key]
+			watcher._isConnected = true
+			Object.preventExtensions watcher
+			watcher
 
 DbList::disconnect()
 --------------------
@@ -184,6 +189,19 @@ DbList::disconnect()
 			watchers[key] = @
 
 			@onChanged onChanged
+
+		spawn: ->
+			watchersCount[@_key] = watchersCount[@_key] + 1 or 1
+			watcher = Object.create watchers[@_key]
+			watcher._isConnected = true
+
+			createPassProperty watcher, '_keys'
+			createPassProperty watcher, '_values'
+			createPassProperty watcher, '_items'
+			createPassProperty watcher, '_dirty'
+
+			Object.preventExtensions watcher
+			watcher
 
 DbDict::disconnect()
 --------------------
