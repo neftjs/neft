@@ -9,7 +9,7 @@ Document:
 Renderer:
   ☐ HTML namespace items
   ☐ Form Item
-  ☐ Button Item
+  ✔ Button Item @started(15-05-01 07:52) @done (15-05-01 09:10) @lasted(1:18)
   ☐ State::targets
   ☐ document.query/queryAll
   ✔ State two-dots properties support (q.g. label.font.pixelSize) @started(15-04-27 08:07) @done (15-04-30 17:28) @lasted(3 days, 9:21)
@@ -25,6 +25,7 @@ Renderer:
 
 Styles:
   ☐ Default styles
+  ✔ Multiple styles in one file @started(15-05-01 10:33) @done (15-05-01 11:14) @lasted(0:41)
 
 Database:
   ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)

@@ -11,6 +11,7 @@ HTML documents and more.
 
 	utils = require 'utils'
 	log = require 'log'
+	signal = require 'signal'
 	assert = require 'neft-assert'
 	Schema = require 'schema'
 	Networking = require 'networking'
@@ -185,6 +186,11 @@ Files from the *templates* folder with objects returned by their exported functi
 
 			resources: if opts.resources then Resources.fromJSON(opts.resources) else new Resources
 
+*Signal* app.ready()
+--------------------
+
+		signal.create app, 'ready'
+
 		# config.type
 		config.type ?= 'app'
 		assert.ok utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game, but '#{config.type}' got."
@@ -246,8 +252,10 @@ Files from the *templates* folder with objects returned by their exported functi
 		setImmediate ->
 			init opts.models, app.models
 			init opts.controllers, app.controllers
-			init opts.routes, app.routes
 			init opts.templates, app.templates
+			init opts.routes, app.routes
+
+			app.ready()
 
 	# link module
 	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log', 'resources',

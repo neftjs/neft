@@ -64,7 +64,8 @@ Class known as `app.Route` used to automate dealing with networking.
 			uri = uri.replace Networking.Uri.NAMES_RE, ''
 			uri = uri.replace /\*/g, ''
 			uri = uri.replace /\/\//g, ''
-			uri = uri.replace /^\/|\/$/, ''
+			uri = uri.replace /^\//, ''
+			uri = uri.replace /\/$/, ''
 			uri = uri.split '/'
 
 *Route* Route(*Object* options)
