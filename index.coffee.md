@@ -1,4 +1,4 @@
-List
+List @library
 ====
 
 **Powerful array**
@@ -17,44 +17,36 @@ var List = require('list');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'assert'
+	assert = require 'neft-assert'
 	signal = require 'signal'
 
-*List* List([*Any* data...])
-----------------------------
+*List* List([*Array* data])
+---------------------------
 
-Creates a new list using arguments as elements.
+Creates a new list.
 
 *new* keyword is optional.
 
 ```
-var list = new List(1, 2);
+var list = new List([1, 2]);
 console.log(list instanceof List);
 // true
-
-var list = List.apply(null, [1, 2]);
-// creates a list from an array ...
 ```
 
 	module.exports = class List extends signal.Emitter
 		@__name__ = 'List'
 		@__path__ = 'List'
 
-		constructor: ->
-			arr = []
-			for arg, i in arguments
-				arr[i] = arg
-			
-			if @ instanceof List
-				self = @
-			else
-				self = Object.create List::
+		constructor: (arr=[]) ->
+			assert.isArray arr
 
-			signal.Emitter.call self
-			self._data = arr
+			unless @ instanceof List
+				return new List arr
 
-			Object.preventExtensions self
-			self
+			signal.Emitter.call @
+			@_data = arr
+
+			Object.preventExtensions @
 
 		# List is not a standard Array object
 		utils.defineProperty @::, '0', null, ->
@@ -91,7 +83,7 @@ ReadOnly *Integer* List::length
 This property stores number of elements in a list.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 console.log(list.length);
 // 2
@@ -110,7 +102,7 @@ This method returns element stored at given *index*.
 For unknown elements, *undefined* is returned.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 console.log(list.get(0));
 // a
@@ -139,7 +131,7 @@ Element at given *index* must be stored in a list.
 Given *value* is returned by this method.
 
 ```
-var types = new List('fantasy', 'Thriller');
+var types = new List(['fantasy', 'Thriller']);
 
 types.onChanged.connect(function(oldVal, i){
   console.log("Element "+oldVal+" changed to "+this.get(i));
@@ -178,7 +170,7 @@ Always the same instance is returned, so don't change this array manually.
 Use `utils.clone()` otherwise.
 
 ```
-var list = new List(1, 2);
+var list = new List([1, 2]);
 
 console.log(list.items());
 // [1, 2]
@@ -189,7 +181,7 @@ console.log(Array.isArray(list.items()));
 
 #### Iterating over a list
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 var items = list.items();
 for (var i = 0; i < items.length; i++){  
   console.log(items[i]);
@@ -211,7 +203,7 @@ This method appends new element at the end of a list.
 *value* can't be an `undefined`, because this value is reserved only for unknown elements.
 
 ```
-var fridge = new List('apple', 'milk');
+var fridge = new List(['apple', 'milk']);
 
 fridge.onInserted.connect(function(val, i){
   console.log(val+" appended!");
@@ -244,7 +236,7 @@ This method inserts a new element at the given position.
 Given *value* is returned.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 list.onInserted.connect(function(val, i){
   console.log("New element "+val+" inserted at index "+i);
@@ -279,7 +271,7 @@ This function removes given *value* from a list.
 Given *value* is returned.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 console.log(list.get(1));
 // b
@@ -314,7 +306,7 @@ Given *index* must exist in the list.
 The removed element value is returned.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 console.log(list.get(1));
 // b
@@ -350,7 +342,7 @@ This method removes all elements stored in a list.
 *popped()* signal is called on each element starting from the last one.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 list.onPopped.connect(function(oldVal, i){
   console.log("Element "+oldVal+" popped!");
@@ -383,7 +375,7 @@ Given value can't be an `undefined`, because this value is reserved only for unk
 If no value exists in a list, *-1* is returned.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 console.log(list.index('b'));
 // 1
@@ -403,7 +395,7 @@ console.log(list.index('c'));
 This method checks whether given *value* exists in a list.
 
 ```
-var list = new List('a', 'b');
+var list = new List(['a', 'b']);
 
 console.log(list.has('a'));
 // true
@@ -414,3 +406,15 @@ console.log(list.has('ab123'));
 
 		has: (val) ->
 			@index(val) isnt -1
+
+*Array* List::toJSON()
+----------------------
+
+		toJSON: ->
+			@_data
+
+*String* List::toString()
+-------------------------
+
+		toString: ->
+			@__hash__
