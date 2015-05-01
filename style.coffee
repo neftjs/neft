@@ -249,6 +249,7 @@ module.exports = (File, data) -> class Style
 
 			scope ?= windowStyle
 			@item = scope.ids[id] or scope.mainItem.$?[id]
+			@item ?= scope.styles(id)
 
 			unless @item
 				unless File.Input.test id

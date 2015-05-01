@@ -186,8 +186,10 @@ This variable refers to the *get('data')* value.
 		File::funcs = null
 
 		if utils.isNode
-			linkFragment = (funcs, fragment) ->
-				unless fragment = File._files[fragment]
+			linkedFiles = Object.create null
+
+			linkFragment = (funcs, fragmentName) ->
+				unless fragment = File._files[fragmentName]
 					return
 
 				fragmentFuncs = fragment.funcs
@@ -205,8 +207,12 @@ This variable refers to the *get('data')* value.
 				return
 
 			linkFragments = (funcs, target) ->
+				if linkedFiles[target.id]
+					return
+				linkedFiles[target.id] = true
+
 				for _, fragmentName of target.fragments
-					linkFragment funcs, fragment
+					linkFragment funcs, fragmentName
 
 				if iterators = target.iterators
 					for iterator in iterators
