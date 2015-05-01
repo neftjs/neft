@@ -1,4 +1,4 @@
-Signal
+Signal @library
 ======
 
 **Better events**
@@ -28,8 +28,8 @@ var signal = require('signal');
 		handlerName = exports.getHandlerName name
 
 		assert not obj.hasOwnProperty name
-		, "Signal `#{name}` can't be created, because object `#{obj}` " +
-		  "has already defined such property"
+		, "Signal `#{name}` can't be created, because passed object " +
+		  "has such property"
 
 		obj[name] = createSignalFunction obj
 
@@ -41,8 +41,8 @@ var signal = require('signal');
 		handlerName = exports.getHandlerName name
 
 		assert not obj.hasOwnProperty handlerName
-		, "Handler `#{handlerName}` can't be created, because object `#{obj}` " +
-		  "has already defined such property"
+		, "Handler `#{handlerName}` can't be created, because passed object " +
+		  "has such property"
 
 		signal = obj[name]
 		obj[handlerName] = createHandlerFunction signal
@@ -72,7 +72,7 @@ obj.pressed();
 // listener 1
 ```
 
-	exports.STOP_PROPAGATION = 1 << 30
+	STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
 
 *String* signal.getHandlerName(*String* signalName)
 -----------------------------------------------------
@@ -191,18 +191,17 @@ console.log(Object.keys(myDog));
 
 		return
 
-	callSignal = (obj, listeners, arg1, arg2, ctx) ->
+	callSignal = (obj, listeners, arg1, arg2) ->
 		i = 0
 		while i < listeners.length
 			func = listeners[i]
 			if func is null
 				listeners.splice i, 2
 			else
-				result = func.call(listeners[i+1] or ctx, arg1, arg2)
-				if result is exports.STOP_PROPAGATION
+				result = func.call(listeners[i+1] or obj, arg1, arg2)
+				if result is STOP_PROPAGATION
 					return result
 				i += 2
-
 		return
 
 	createSignalFunction = (obj) ->
