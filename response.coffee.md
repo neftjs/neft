@@ -106,6 +106,8 @@ var Response = Networking.Response;
 			if opts.data?
 				{@data} = opts
 
+			@headers = opts.headers or {}
+
 			utils.defineProperty @, 'request', null, opts.request
 
 			@pending = true
@@ -180,6 +182,11 @@ res.data = Document.fromJSON(...);
 ```
 
 		data: null
+
+*Object* Response::headers
+--------------------------
+
+		headers: null
 
 *Response* Response::setHeader(*String* name, *String* value)
 -------------------------------------------------------------

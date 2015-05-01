@@ -33,6 +33,8 @@ module.exports = (Networking) ->
 			if req.type is Request.JSON_TYPE
 				response = utils.tryFunction JSON.parse, null, [response], response
 
-			callback xhr.status, response
+			callback
+				status: xhr.status
+				data: response
 
 		xhr.send()

@@ -1,4 +1,4 @@
-Networking
+Networking @engine
 ==========
 
 **HTTP, URIs, ...**
@@ -15,7 +15,7 @@ var Networking = require('networking');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'assert'
+	assert = require 'neft-assert'
 	log = require 'log'
 
 	assert = assert.scope 'Networking'
@@ -50,7 +50,6 @@ Use this constructor to create new *Networking* instance.
 			assert.notLengthOf opts.protocol, 0, 'ctor options.protocol argument ...'
 			assert.isInteger opts.port, 'ctor options.port argument ...'
 			assert.isString opts.host, 'ctor options.host argument ...'
-			assert.notLengthOf opts.host, 0, 'ctor options.host argument ...'
 			assert.isString opts.language, 'ctor options.language argument ...'
 			assert.notLengthOf opts.language, 0, 'ctor options.language argument ...'
 
@@ -206,9 +205,8 @@ app.networking.createRequest({
 			if EXTERNAL_URL_RE.test req.uri
 				log "Send `#{req}` request"
 
-				Impl.sendRequest req, (status, data) ->
-					res.status = status
-					res.data = data
+				Impl.sendRequest req, (opts) ->
+					utils.merge res, opts
 					res.pending = false
 					req.destroyed?()
 					req.loaded? res

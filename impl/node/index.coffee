@@ -73,6 +73,7 @@ module.exports = (Networking) ->
 					uri: url
 					data: reqData
 					type: type
+					headers: serverReq.headers
 
 	sendRequest: (req, callback) ->
 		urlObject = urlUtils.parse req.uri
@@ -93,7 +94,9 @@ module.exports = (Networking) ->
 			when 'https:'
 				reqModule = https
 			else
-				callback 500, new Error "Unsupported protocol '#{urlObject.protocol}'"
+				callback
+					status: 500
+					data: new Error "Unsupported protocol '#{urlObject.protocol}'"
 				return
 
 		nodeReq = reqModule.request opts, (res) ->
@@ -107,13 +110,16 @@ module.exports = (Networking) ->
 				status = res.statusCode
 
 				if req.type is Networking.Request.JSON_TYPE
-					parsedData = utils.tryFunction JSON.parse, null, [data], data
-					callback status, parsedData
-				else
-					callback status, data
+					data = utils.tryFunction JSON.parse, null, [data], data
+
+				callback
+					status: status
+					data: data
 
 		nodeReq.on 'error', (e) ->
-			callback 500, e
+			callback
+				status: 500
+				data: e
 
 		if req.data?
 			if utils.isObject(req.data)

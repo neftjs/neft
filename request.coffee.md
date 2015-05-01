@@ -83,6 +83,7 @@ var Request = Networking.Request;
 
 			{@data, @uri} = opts
 			{@method} = opts if opts.method?
+			@headers = opts.headers or {}
 
 			uid = opts.uid or utils.uid()
 			utils.defineProperty @, 'uid', null, uid
@@ -220,18 +221,7 @@ This object contains request headers.
 
 For a client request, this object is empty.
 
-		Object.defineProperty @::, 'headers',
-			get: -> Impl.getHeaders(@) or {}
-
-ReadOnly *String* Request::userAgent
-------------------------------------
-
-This property describes a client user agent.
-
-It can be used on the client side and on the server side.
-
-		Object.defineProperty @::, 'userAgent',
-			get: -> Impl.getUserAgent(@) or ''
+		headers: null
 
 Request::destroy()
 ------------------

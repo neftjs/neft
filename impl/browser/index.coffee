@@ -68,8 +68,8 @@ module.exports = (Networking) ->
 		xhr.open req.method, uri, true
 		xhr.setRequestHeader 'X-Expected-Type', req.type
 
-		if req.type is Request.JSON_TYPE
-			xhr.responseType = 'json'
+		# if req.type is Request.JSON_TYPE
+		# 	xhr.responseType = 'json'
 
 		xhr.onload = ->
 			{response} = xhr
@@ -77,10 +77,14 @@ module.exports = (Networking) ->
 			if req.type is Request.JSON_TYPE and typeof response is 'string'
 				response = utils.tryFunction JSON.parse, null, [response], response
 
-			callback xhr.status, response
+			callback
+				status: xhr.status
+				data: response
 
 		xhr.onerror = ->
-			callback xhr.status, xhr.response
+			callback
+				status: xhr.status
+				data: xhr.response
 
 		if utils.isObject req.data
 			data = utils.tryFunction JSON.stringify, null, [req.data], req.data
