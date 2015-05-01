@@ -4,251 +4,193 @@ Database @engine
 	'use strict'
 
 	utils = require 'utils'
-	signal = require 'signal'
 	assert = require 'neft-assert'
+	List = require 'list'
+	Dict = require 'dict'
 
-	Table = require './Table'
-	Collection = require './Collection'
+	assert = assert.scope 'Database'
 
 	NOP = ->
 
-*Db* Db()
----------
+	impl = require './implementation'
+	watchersCount = Object.create null
+	watchers = Object.create null
 
-	module.exports = class Db
-		@__name__ = 'Db'
-
-Db.create(*Object* options)
----------------------------
-
-		@create = do ->
-			dbImplementation = require './implementation'
-			dbLog = require 'log'
-			dbSchema = require './schema'
-			dbAddons = require './addons'
-
-			(opts={}) ->
-				assert.isPlainObject opts
-
-				opts.name ?= 'neft_app'
-
-				r = class ReadyDb extends Db
-				signal.create r, 'ready'
-				r.Collection = class ReadyCollection extends Collection
-				r.Table = class ReadyTable extends Table
-
-				# implementation
-				r = dbImplementation r, opts.type, opts.name, opts.config
-
-				# log
-				`//<development>`
-				# if opts.log isnt false
-				# 	r = dbLog r
-				`//</development>`
-
-				# schema
-				if opts.schema?
-					r = dbSchema r, opts.schema
-
-				# addons
-				if utils.isObject(opts.addons)
-					for type, addonOptsof of opts.addons
-						r = dbAddons[type] r, addonOpts
-
-				r
-
-		@Collection = Collection
-		@Table = Table
-
-		constructor: (table, id) ->
-			assert.instanceOf @, Db, "Use `new` to init Db query"
-			assert.isString table, "Table name must be a string"
-			assert.isPrimitive id, "Id of document must be primitive" if id?
-
-			# Define if `Collection` should execute query.
-			# It not have place if any documents won't be returned
-			# (e.g. with inserting, updating etc.)
-			@_search = true
-
-			# init properties
-			@_stack = new utils.async.Stack
-			@_commands = []
-
-			# implement table
-			@_table = new @constructor.Table @, table
-			@_stack.add 'run', @_table
-
-			# implement collection
-			@_collection = new @constructor.Collection @
-			@_stack.add runCollectionIfNeeded, @
-
-			# get document
-			@_id = id
-
-			Object.preventExtensions @
-
-		runCollectionIfNeeded = (callback) ->
-			if @_search
-				@_collection.run callback
-			else
-				callback null
-			return
-
-Db::run()
----------
-
-Initialize query.
-
-All methods and constructor returns this function (binded with public properties).
-
-```
-new Db('db', 'table', 'id').run()
-```
-
-		run: (callback = NOP) ->
-			@_stack.runAll callback
-			return
-
-Db::limit(*Integer* value)
---------------------------
-
-Set limit of documents in collection.
-
-		limit: (value) ->
-			assert.notOk @_id?, "limit() can not be used for document"
-			assert.isInteger value, "Limit value must be a positive number"
-			assert.operator value, '>', 0, "Limit value must be a positive number"
-
-			@_commands.push limit: value
-			@
-
-Db::skip(*Integer* value)
--------------------------
-
-Omit documents from the begining.
-
-		skip: (value) ->
-			assert.notOk @_id?, "skip() can not be used for document"
-			assert.isInteger value, "Offset value must be a positive and finite number"
-			assert.operator value, '>', 0, "Offset value must be a positive and finite number"
-
-			@_commands.push skip: value
-			@
-
-Db::where(*String* row)
+*Integer* db.OBSERVABLE
 -----------------------
 
-Add comparison for the *row*.
-Use extra methods to specify type and expected value.
-Use dots in *row* name for namespaces.
+	exports.OBSERVABLE = 1<<29
 
-```
-new Db('db', 'table').where('products.amount').lt(2).gt(1).remove().run()
-```
+	BITMASK = exports.OBSERVABLE
 
-		where: (row) ->
-			assert.notOk @_id?, "where() can not be used for document"
-			assert.isString row, "Row must be a string"
+db.get(*String* key, [*Integer* options], *Function* callback)
+--------------------------------------------------------------
 
-			@_commands.push where: row
-			@
+	getWatcher = (key) ->
+		if watchers[key]
+			watchersCount[key] = watchersCount[key] + 1 or 1
+			watcher = Object.create watchers[key]
+			watcher._isConnected = true
+			Object.preventExtensions watcher
+			watcher
 
-Db::is(*Any* value)
--------------------
+	exports.get = (key, opts, callback) ->
+		if typeof opts is 'function'
+			callback = opts
+			opts = 0
+		assert.isString key
+		assert.notLengthOf key, 0
+		assert.isInteger opts
+		assert.is opts | BITMASK, BITMASK, 'Invalid options bitmask'
+		assert.isFunction callback
 
-Triple comparison.
+		if opts & exports.OBSERVABLE and watchers[key]?
+			return callback null, getWatcher(key)
 
-		is: (value) ->
-			where = utils.last @_commands
+		impl.get key, (err, data) ->
+			if err? or not data
+				return callback err, data
 
-			assert where?.where?, "is() requires where()"
-			assert.notOk where?.lt, "is() can't be used with lt() on the same row"
-			assert.notOk where?.gt, "is() can't be used with gt() on the same row"
+			if opts & exports.OBSERVABLE
+				if Array.isArray(data)
+					data = new DbList key, data, opts
+				else if utils.isObject(data)
+					data = new DbDict key, data, opts
+				data = getWatcher(key) or data
 
-			where.is = value
-			@
+			callback null, data
 
-Db::lt(*Float* value)
----------------------
+		return
 
-Lower than
+db.set(*String* key, *Any* value, [*Function* callback])
+--------------------------------------------------------
 
-		lt: (value) ->
-			where = utils.last @_commands
+	exports.set = (key, val, callback=NOP) ->
+		assert.isString key
+		assert.notLengthOf key, 0
+		assert.isFunction callback
 
-			assert where?.where?, "lt() requires where()"
-			assert.notOk where?.is?, "lt() can't be used with is() on the same row"
+		watchers[key]?.disconnect()
+		impl.set key, val, callback
+		return
 
-			where.lt = value
-			@
+db.remove(*String* key, [*Any* value, *Function* callback])
+-----------------------------------------------------------
 
-Db::gt(*Float* value)
----------------------
+	exports.remove = (key, val, callback=NOP) ->
+		if typeof val is 'function'
+			callback = val
+			val = null
+		assert.isString key
+		assert.notLengthOf key, 0
+		assert.isFunction callback
 
-Greater than
+		if val?
+			exports.get key, (err, data) ->
+				if err?
+					return callback err
+				unless Array.isArray(data)
+					return callback new Error "'#{key}' is not an array"
 
-		gt: (value) ->
-			where = utils.last @_commands
+				# remove from watcher
+				if list = watchers[key]
+					if (index = list.items().indexOf(val)) isnt -1
+						list.pop index
+					else
+						for item, i in list.items()
+							if utils.isEqual(item, val)
+								list.pop i
+								break
 
-			assert where?.where?, "gt() requires where()"
-			assert.notOk where?.is?, "gt() can't be used with is() on the same row"
+				# remove from data
+				if (index = data.indexOf(val)) isnt -1
+					data.splice index, 1
+				else
+					for item, i in data
+						if utils.isEqual(item, val)
+							data.splice i, 1
+							break
 
-			where.gt = value
-			@
+				impl.set key, data, callback
+		else
+			watchers[key]?.disconnect()
+			impl.remove key, callback
+		return
 
-Db::remove()
-------------
+db.append(*String* key, *Any* value, [*Function* callback])
+-----------------------------------------------------------
 
-Remove all documents from the collection.
+	exports.append = (key, val, callback=NOP) ->
+		assert.isString key
+		assert.notLengthOf key, 0
+		assert.isFunction callback
 
-```
-new Db('db', 'table').remove().run();
-new Db('db', 'table').limit(1).remove().run();
-new Db('db', 'table').where('title').is('one').remove().run();
-new Db('db', 'table', 'id').remove().run();
-```
+		exports.get key, (err, data) ->
+			if err?
+				return callback err
 
-		remove: ->
-			assert @_search, "remove() can works only with collection"
+			data ?= []
+			unless Array.isArray(data)
+				return callback new Error "'#{key}' is not an array"
 
-			@_search = false
-			@_stack.add 'removeAll', @_collection
-			@
+			watchers[key]?.append val
 
-Db::insert(*Object* document)
------------------------------
+			data.push val
+			impl.set key, data, callback
+		return
 
-Insert new document into *Table*.
+*DbList* DbList() : *List*
+--------------------------
 
-Id of created document will be returned.
+	class DbList extends List
+		onChanged = (key) ->
+			if @_isConnected
+				impl.set @_key, @_data, NOP
+			return
 
-```
-new Db('db', 'table').insert({title: 'two'}).run();
-```
+		constructor: (key, data, opts) ->
+			@_key = key
+			super data
 
-		insert: (doc) ->
-			assert.notOk @_id?, "insert() can not be used for document"
-			assert.isPlainObject doc, "Only plain objects can be inserted"
-			assert @_search, "remove() can works only with collection"
+			watchers[key] = @
 
-			@_search = false
-			@_stack.add 'insertData', @_table, [doc]
-			@
+			@onChanged onChanged
+			@onInserted onChanged
+			@onPopped onChanged
 
-Db::update(*Object* document)
------------------------------
+DbList::disconnect()
+--------------------
 
-Update all documents in the collection.
+		disconnect: ->
+			if @_isConnected
+				@_isConnected = false
+				unless --watchersCount[@_key]
+					watchers[@_key] = null
+			return
 
-```
-new Db('db', 'table').where('name').is('one').update({name: two}).run();
-new Db('db', 'table', 'id').update({name: two}).run();
-```
+*DbDict* DbDict() : *Dict*
+--------------------------
 
-		update: (doc) ->
-			assert.isPlainObject doc, "Only plain objects can be inserted"
-			assert @_search, "remove() can works only with collection"
+	class DbDict extends Dict
+		onChanged = (key) ->
+			if @_isConnected
+				impl.set @_key, @_data, NOP
+			return
 
-			@_search = false
-			@_stack.add 'updateAll', @_collection, [doc]
-			@
+		constructor: (key, data, opts) ->
+			@_key = key
+			super data
+
+			watchers[key] = @
+
+			@onChanged onChanged
+
+DbDict::disconnect()
+--------------------
+
+		disconnect: ->
+			if @_isConnected
+				@_isConnected = false
+				unless --watchersCount[@_key]
+					watchers[@_key] = null
+			return
