@@ -15,13 +15,14 @@ var Networking = require('networking');
 	'use strict'
 
 	utils = require 'utils'
+	signal = require 'signal'
 	assert = require 'neft-assert'
 	log = require 'log'
 
 	assert = assert.scope 'Networking'
 	log = log.scope 'Networking'
 
-	module.exports = class Networking
+	module.exports = class Networking extends signal.Emitter
 
 		Impl = require('./impl') Networking
 
@@ -69,9 +70,16 @@ Use this constructor to create new *Networking* instance.
 			setImmediate => Impl.init @
 			log.info "Start as `#{@host}:#{@port}`"
 
+			super()
+
 			Object.freeze @
 
 		type: @HTTP
+
+*Signal* Networking::request(*Networking.Request* request, *Networking.Response* response)
+------------------------------------------------------------------------------------------
+
+		signal.Emitter.createSignal @, 'request'
 
 ReadOnly *String* Networking::protocol
 --------------------------------------
@@ -200,6 +208,9 @@ app.networking.createRequest({
 
 			# create a response
 			res = new Networking.Response request: req
+
+			# signal
+			@request req, res
 
 			# get handlers
 			if EXTERNAL_URL_RE.test req.uri

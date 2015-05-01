@@ -25,6 +25,9 @@ module.exports = (Networking) ->
 		xhr.open req.method, req.uri, true
 		xhr.setRequestHeader 'X-Expected-Type', req.type
 
+		if cookies = utils.tryFunction(JSON.stringify, null, [req.cookies], null)
+			xhr.setRequestHeader 'X-Cookies', cookies
+
 		xhr.onreadystatechange = ->
 			return if xhr.readyState isnt 4
 
@@ -33,8 +36,12 @@ module.exports = (Networking) ->
 			if req.type is Request.JSON_TYPE
 				response = utils.tryFunction JSON.parse, null, [response], response
 
+			if cookies = xhr.getResponseHeader('X-Cookies')
+				cookies = utils.tryFunction JSON.parse, null, [cookies], null
+
 			callback
 				status: xhr.status
 				data: response
+				cookies: cookies
 
 		xhr.send()

@@ -123,6 +123,10 @@ module.exports = (Networking, pending) ->
 		# set status
 		serverRes.statusCode = res.status
 
+		# cookies
+		if cookies = utils.tryFunction(JSON.stringify, null, [res.cookies], null)
+			serverRes.setHeader 'X-Cookies', cookies
+
 		# send data
 		data = prepareData obj, data
 		sendData obj, data, ->

@@ -107,6 +107,7 @@ var Response = Networking.Response;
 				{@data} = opts
 
 			@headers = opts.headers or {}
+			@cookies = opts.cookies or utils.cloneDeep(opts.request.cookies)
 
 			utils.defineProperty @, 'request', null, opts.request
 
@@ -187,6 +188,11 @@ res.data = Document.fromJSON(...);
 --------------------------
 
 		headers: null
+
+*Object* Response::cookies
+--------------------------
+
+		cookies: null
 
 *Response* Response::setHeader(*String* name, *String* value)
 -------------------------------------------------------------

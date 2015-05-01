@@ -84,6 +84,7 @@ var Request = Networking.Request;
 			{@data, @uri} = opts
 			{@method} = opts if opts.method?
 			@headers = opts.headers or {}
+			@cookies = opts.cookies or {}
 
 			uid = opts.uid or utils.uid()
 			utils.defineProperty @, 'uid', null, uid
@@ -222,6 +223,11 @@ This object contains request headers.
 For a client request, this object is empty.
 
 		headers: null
+
+ReadOnly *Object* Request::cookies
+----------------------------------
+
+		cookies: null
 
 Request::destroy()
 ------------------

@@ -67,6 +67,11 @@ module.exports = (Networking) ->
 				if utils.has(url, '?')
 					url = url.slice 0, url.indexOf('?')
 
+				# cookies
+				cookies = serverReq.headers['x-cookies']
+				if typeof cookies is 'string'
+					cookies = utils.tryFunction JSON.parse, null, [cookies], null
+
 				obj.req = networking.createRequest
 					uid: uid
 					method: Networking.Request[serverReq.method]
@@ -74,6 +79,7 @@ module.exports = (Networking) ->
 					data: reqData
 					type: type
 					headers: serverReq.headers
+					cookies: cookies
 
 	sendRequest: (req, callback) ->
 		urlObject = urlUtils.parse req.uri
@@ -87,6 +93,9 @@ module.exports = (Networking) ->
 			method: req.method
 			headers:
 				'X-Expected-Type': req.type
+
+		if cookies = utils.tryFunction JSON.stringify, null, [req.cookies], null
+			opts.headers['X-Cookies'] = cookies
 
 		switch urlObject.protocol
 			when 'http:'
@@ -112,9 +121,13 @@ module.exports = (Networking) ->
 				if req.type is Networking.Request.JSON_TYPE
 					data = utils.tryFunction JSON.parse, null, [data], data
 
+				if cookies = res.getHeader('x-cookies')
+					cookies = utils.tryFunction JSON.parse, null, [cookies], null
+
 				callback
 					status: status
 					data: data
+					cookies: cookies
 
 		nodeReq.on 'error', (e) ->
 			callback
