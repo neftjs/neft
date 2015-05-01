@@ -299,19 +299,20 @@ TypeBody
 
 Type
 	= __ name:TypeName WhiteSpace* "{" body:TypeBody "}" __ {
-		var id;
+		var obj = { type: 'object', name: name, id: '', autoId: false, body: body };
+
 		forEachType(body, "id", function(elem){
-			if (id){
+			if (obj.id){
 				error("item can has only one id");
 			}
-			id = elem.value;
+			obj.id = elem.value;
 		});
 
-		if (!id){
-			id = 'a' + uid();
+		if (!obj.id){
+			obj.id = 'a' + uid();
+			obj.autoId = true;
 		}
 
-		var obj = { type: 'object', name: name, id: id, body: body };
 
 		setParentRec(body, obj);
 

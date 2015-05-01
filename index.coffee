@@ -253,28 +253,6 @@ stringObjectHead = (obj) ->
 	for signal in signals
 		r += "#{obj.id}.createSignal('#{utils.addSlashes(signal)}')\n"
 
-	r
-
-stringObjectChildren = (obj) ->
-	assert obj.type is OBJECT, "stringObject: type must be an object"
-
-	r = ""
-
-	for child in getByType(obj.body, OBJECT)
-		r += stringObject child
-
-		rendererCtor = Renderer[child.name.split('.')[0]]
-
-		if rendererCtor?.prototype instanceof Renderer.Extension
-			r += "#{child.id}.target = #{obj.id};\n"
-		else
-			r += "if (#{child.id} instanceof Item) #{child.id}.parent = #{obj.id};\n"
-
-	r
-
-stringObject = (obj) ->
-	r = stringObjectHead obj
-
 	unless MODIFIERS_NAMES[obj.name]
 		classBody = []
 		obj.body = obj.body.filter (elem) ->
@@ -303,6 +281,27 @@ stringObject = (obj) ->
 		# r += "#{obj.id}._defaultClasses.push(#{defaultClass.id});\n"
 		# r += "#{defaultClass.id}.target = #{obj.id};\n"
 
+	r
+
+stringObjectChildren = (obj) ->
+	assert obj.type is OBJECT, "stringObject: type must be an object"
+
+	r = ""
+
+	for child in getByType(obj.body, OBJECT)
+		r += stringObject child
+
+		rendererCtor = Renderer[child.name.split('.')[0]]
+
+		if rendererCtor?.prototype instanceof Renderer.Extension
+			r += "#{child.id}.target = #{obj.id};\n"
+		else
+			r += "if (#{child.id} instanceof Item) #{child.id}.parent = #{obj.id};\n"
+
+	r
+
+stringObject = (obj) ->
+	r = stringObjectHead obj
 	r += stringObjectChildren obj
 
 stringAttribute = (obj, parents) ->
@@ -460,30 +459,51 @@ stringViewObjectFull = (obj) ->
 	code += "});\n"
 	code
 
-module.exports = (file, filename) ->
-	elems = parser file
+stringFile = (file, isView=false) ->
 	ids = {}
 
 	code = 'var ids = {};\n'
-	for elem in elems
-		if filename is 'view'
-			code += stringViewObjectFull elem
-		else
-			code += stringObjectFull elem
+	if isView
+		code += stringViewObjectFull file
+	else
+		code += stringObjectFull file
 
 	idsKeys = Object.keys ids
 
-	if filename is 'view'
+	if isView
 		code += "setImmediate(function(){\n"
 	code += "for (var _id in ids){\n"
 	code += "	ids[_id]._isReady = true; ids[_id].ready(); ids[_id].onReady.disconnectAll();\n"
 	code += "}\n"
-	if filename is 'view'
+	if isView
 		code += "});\n"
-
-	code += "var mainItem;\n"
-	for elem in elems
-		if elem.type is OBJECT
-			code += "if (#{elem.id} instanceof Item) mainItem = #{elem.id};\n"
-
 	code
+
+module.exports = (file, filename) ->
+	elems = parser file
+	ids = {}
+	codes = {}
+
+	for elem, i in elems
+		isView = i is 0 and filename is 'view'
+		r = stringFile elem, isView
+		if i > 0 and elem.autoId
+			codes[elems[0].id] += r
+		else
+			r += "var mainItem = #{elem.id};\n"
+			if i is 0
+				codes._neftMain = r
+			else
+				codes[elem.id] = r
+
+	codes
+
+# console.log module.exports """
+# Item {
+# 	id: a
+# }
+# Text {
+# 	id: b
+# }
+# Rectangle {}
+# """#, 'view'
