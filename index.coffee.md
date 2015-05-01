@@ -1,4 +1,4 @@
-Dict
+Dict @library
 ====
 
 **Powerful object**
@@ -16,7 +16,7 @@ var dict = require('dict');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'assert'
+	assert = require 'neft-assert'
 	signal = require 'signal'
 
 	module.exports = class Dict extends signal.Emitter
