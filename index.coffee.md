@@ -488,12 +488,15 @@ console.log(utils.lookupGetter(object, 'progress'));
 	exports.lookupGetter = do ->
 		# use native function if possible
 		if Object::__lookupGetter__
-			return Function.call.bind Object::__lookupGetter__
+			{lookupGetter} = Object::
+			(obj, prop) ->
+				getter = lookupGetter.call(obj, prop)
+				getter?.trueGetter or getter
 
 		# use polyfill
 		(obj, prop) ->
-			desc = exports.getPropertyDescriptor obj, prop
-			desc?.get
+			if desc = exports.getPropertyDescriptor(obj, prop)
+				desc.get?.trueGetter or desc.get
 
 *Function* utils.lookupSetter(*NotPrimitive* object, *String* property)
 -----------------------------------------------------------------------
@@ -576,13 +579,15 @@ console.log(object.length);
 			# configure accessors
 			else
 				# HACK: safari bug
+				# https://bugs.webkit.org/show_bug.cgi?id=132872
 				if isSafari and getter
 					_getter = getter
 					getter = ->
-						if @hasOwnProperty(prop) and @ isnt obj
+						if @ isnt obj and @hasOwnProperty(prop)
 							@[prop]
 						else
 							_getter.call @
+					getter.trueGetter = _getter
 
 				cfg = accessorsCfg
 				accessorsCfg.get = if typeof getter is 'function' then getter else undefined
@@ -999,8 +1004,8 @@ console.log(utils.addSlashes('a"b'))
 
 			str.replace SLASHES_RE, NEW_SUB_STR
 
-*String* utils.uid()
---------------------
+*String* utils.uid([*Integer* length=8])
+----------------------------------------
 
 This function generates unique string.
 
@@ -1009,11 +1014,22 @@ console.log(utils.uid())
 // "50"
 ```
 
-	exports.uid = do ->
-		uid = 0
-		->
-			uid++
-			"#{uid}"
+	exports.uid = (n=8) ->
+		null
+		`//<development>`
+		if typeof n isnt 'number' or n <= 0 or not isFinite(n)
+			throw new Error "utils.uid length must be a positive finite number"
+		`//</development>`
+
+		str = ''
+
+		loop
+			str += random().toString(16).slice 2
+			if str.length >= n then break
+
+		if str.length isnt n
+			str = str.slice 0, n
+		str
 
 *Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
 ----------------------------------------------------------------------------------------------
