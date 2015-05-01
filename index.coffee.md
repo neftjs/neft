@@ -12,6 +12,7 @@ HTML documents and more.
 	utils = require 'utils'
 	log = require 'log'
 	signal = require 'signal'
+	db = require 'db'
 	assert = require 'neft-assert'
 	Schema = require 'schema'
 	Networking = require 'networking'
@@ -205,6 +206,69 @@ Files from the *templates* folder with objects returned by their exported functi
 			(require('log')).error "Trial version can be run only locally"
 			return
 		`//</trialVersion>`
+
+*Dict* app.cookies
+------------------
+
+This object refers to the custom cookies implementation.
+
+For a server, this cookies will be added into responses.
+
+By default, client has *clientId* and *sessionId* hashes.
+
+```
+app.cookies.onChanged(function(key){
+  console.log('cookie changed', key, this.get(key));
+});
+```
+
+```
+<h1>Your clientId</h1>
+<em>${global.app.cookies.clientId}</em>
+```
+
+```
+new app.Route({
+\  method: 'post',
+\  uri: 'auth/login',
+\  callback: function(req, res, callback){
+\    if (req.cookies.superPower){
+\      res.cookies.auth = true;
+\    }
+\    callback();
+\  }
+});
+```
+
+		# cookies
+		COOKIES_KEY = '__neft_cookies'
+		app.cookies = null
+		onCookiesReady = (dict) ->
+			app.cookies = dict
+			if utils.isClient
+				dict.set 'sessionId', utils.uid(32)
+		db.get COOKIES_KEY, db.OBSERVABLE, (err, dict) ->
+			if dict
+				onCookiesReady dict
+			else
+				if utils.isClient
+					cookies = {clientId: utils.uid(32)}
+				else
+					cookies = {}
+				db.set COOKIES_KEY, cookies, (err) ->
+					db.get COOKIES_KEY, db.OBSERVABLE, (err, dict) ->
+						onCookiesReady dict
+		app.networking.onRequest (req, res) ->
+			if utils.isClient
+				utils.merge req.cookies, app.cookies._data
+			else
+				utils.merge res.cookies, app.cookies._data
+			req.onLoaded ->
+				if utils.isClient
+					for key, val of res.cookies
+						app.cookies.set key, val
+				return
+			return
 
 		# propagate data
 		Renderer.resources = app.resources
