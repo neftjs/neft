@@ -360,6 +360,9 @@ Valid [App.View][] or file name from the *views* folder.
 							assert ctx.template instanceof app.Template
 							, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
 				when 'undefined'
+					unless ctx.view
+						return
+
 					uri = getUriParts ctx
 					r = app.templates[uri.join('/')]?[ctx.method]
 					unless r
@@ -460,7 +463,7 @@ It's called with the same parameters as controller, that is
 				clearView @, req, res
 
 			# serverResourceUri
-			if @serverResourceUri
+			if @serverResourceUri and (utils.isClient or @serverResourceUri._uri isnt @uri._uri)
 				stack.add (callback) =>
 					logtime = log.time "Route server resource request"
 					app.networking.createRequest
@@ -508,8 +511,6 @@ It's called with the same parameters as controller, that is
 					if res.data instanceof Document
 						# TODO: how to destroy this view?
 						return callback null, res.data
-					else unless res.data?
-						res.data = new Dict
 
 					logtime = log.time "View"
 					renderView @, req, res, res.data, (err, data) ->
@@ -577,11 +578,13 @@ It's called with the same parameters as controller, that is
 					assert.instanceOf req, Networking.Request
 					assert.instanceOf res, Networking.Response
 
-					view = ctx.view.render req, data
+					if ctx.view
+						view = ctx.view.render req, data
 
 					if ctx.template
 						templateView = ctx.template._render req
-						ctx.template._renderTarget templateView, view
+						if view
+							ctx.template._renderTarget templateView, view
 
 					masterView = templateView or view
 
@@ -595,7 +598,8 @@ It's called with the same parameters as controller, that is
 					assert.instanceOf req, Networking.Request
 					assert.instanceOf res, Networking.Response
 
-					lastView = ctx.view.render req, data
-					currentTemplate?._renderTarget currentTemplateView, lastView
+					if ctx.view
+						lastView = ctx.view.render req, data
+						currentTemplate?._renderTarget currentTemplateView, lastView
 
 					callback null, currentTemplateView or lastView
