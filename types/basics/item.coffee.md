@@ -59,6 +59,37 @@ This is a base class for everything which is visible.
 
 			Impl.createObject @, @constructor.__name__
 
+*Item* Item.create([*Object* options])
+--------------------------------------
+
+		@create = (opts) ->
+			if opts?
+				assert.isObject opts
+
+			item = new @
+
+			if opts?
+				classElem = new Renderer.Class
+				classElem.priority = 0
+				classElem.target = item
+
+				{changes} = classElem
+				for prop, val of opts
+					if typeof val is 'function' and signal.isHandlerName(prop)
+						changes.setFunction prop, val
+					else
+						changes.setAttribute prop, val
+
+				classElem._isReady = true
+				classElem.ready()
+				classElem.onReady.disconnectAll()
+
+			item._isReady = true
+			item.ready()
+			item.onReady.disconnectAll()
+
+			item
+
 *Signal* Item::ready()
 ----------------------
 

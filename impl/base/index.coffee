@@ -26,6 +26,7 @@ exports.Types =
 	NumberAnimation: require './level1/animation/number'
 
 	Scrollable: require './level2/scrollable'
+	Button: require './level2/button'
 
 exports.Extras =
 	Binding: require './level1/binding'

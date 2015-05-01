@@ -7,15 +7,17 @@ Margin @extension
 	utils = require 'utils'
 	assert = require 'assert'
 
-	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Margin extends itemUtils.DeepObject
+	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Margin extends itemUtils.DeepObject
 		@__name__ = 'Margin'
+
+		propertyName = opts?.propertyName or 'margin'
 
 		itemUtils.defineProperty
 			constructor: ctor
-			name: 'margin'
+			name: propertyName
 			valueConstructor: Margin
 			setter: (_super) -> (val) ->
-				{margin} = @
+				margin = @[propertyName]
 				if utils.isObject(val)
 					margin.left = val.left if val.left?
 					margin.top = val.top if val.top?
@@ -28,8 +30,8 @@ Margin @extension
 
 		ctor::clone = do (_super = ctor::clone) -> ->
 			clone = _super.call @
-			if @_margin
-				clone.margin = @margin
+			if @['_' + propertyName]
+				clone[propertyName] = @[propertyName]
 			clone
 
 		constructor: (ref) ->
@@ -85,7 +87,7 @@ Rectangle {
 				defaultValue: 0
 				implementation: (val) ->
 					implMethod.call @, type, val
-				namespace: 'margin'
+				namespace: propertyName
 				parentConstructor: ctor
 				developmentSetter: developmentSetter
 

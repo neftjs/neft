@@ -244,6 +244,7 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 		exports._createTextElement @
+		data.elem.appendChild data.textElem
 
 	setText: (val) ->
 		updateContent @

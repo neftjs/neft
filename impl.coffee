@@ -15,7 +15,7 @@ TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'ResourcesLoader',
          'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
          'Animation', 'PropertyAnimation', 'NumberAnimation',
 
-         'Scrollable',
+         'Scrollable', 'Button',
 
          'AmbientSound']
 
@@ -54,7 +54,12 @@ for name, extra of impl.Extras
 	utils.merge impl, extra
 
 impl.createObject = (object, type) ->
-	object._impl = impl.Types[type].createData?() or {}
+	obj = object
+	while type and not impl.Types[type]?
+		obj = Object.getPrototypeOf(obj)
+		type = obj.constructor.__name__
+
+	object._impl = impl.Types[type]?.createData?() or {}
 	Object.preventExtensions object._impl
 	impl.Types[type].create.call object, object._impl
 
