@@ -116,12 +116,16 @@ updateItem = (item) ->
 	for i in [0...maxColumnsLen] by 1
 		last = columnsPositions[i] += last
 	columnsPositions[i-1] -= columnSpacing
+	if item.fill.width is false
+		columnsPositions[i-1] = Math.max columnsPositions[i-1], item._width
 
 	# sum rows positions
 	last = 0
 	for i in [0...maxRowsLen] by 1
 		last = rowsPositions[i] += last
 	rowsPositions[i-1] -= rowSpacing
+	if item.fill.height is false
+		rowsPositions[i-1] = Math.max rowsPositions[i-1], item._height
 
 	# set positions
 	i = 0
