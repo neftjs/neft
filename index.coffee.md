@@ -246,13 +246,13 @@ new app.Route({
 		onCookiesReady = (dict) ->
 			app.cookies = dict
 			if utils.isClient
-				dict.set 'sessionId', utils.uid(32)
+				dict.set 'sessionId', utils.uid(16)
 		db.get COOKIES_KEY, db.OBSERVABLE, (err, dict) ->
 			if dict
 				onCookiesReady dict
 			else
 				if utils.isClient
-					cookies = {clientId: utils.uid(32)}
+					cookies = {clientId: utils.uid(16)}
 				else
 					cookies = {}
 				db.set COOKIES_KEY, cookies, (err) ->
@@ -266,7 +266,8 @@ new app.Route({
 			req.onLoaded ->
 				if utils.isClient
 					for key, val of res.cookies
-						app.cookies.set key, val
+						unless utils.isEqual(app.get(key), val)
+							app.cookies.set key, val
 				return
 			return
 

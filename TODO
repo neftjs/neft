@@ -22,6 +22,7 @@ Renderer:
   ✔ Hash bindings in NML parser @started(15-04-24 15:09) @done (15-04-24 18:48) @lasted(3:39)
   ✔ Anchors implementation without bindings @done (15-04-24 18:49)
   ☐ Vector Graphic Items
+  ☐ NML parser: allow duplicated ids in different file sections
 
 Styles:
   ☐ Default styles
@@ -33,7 +34,7 @@ Database:
   ☐ Postgresql implementation
   ✔ MySQL implementation @done (15-04-30 10:01)
   ☐ QML implementation
-  ☐ Browser implementation
+  ✔ Browser implementation @started(15-05-01 18:19) @done (15-05-01 23:55) @lasted(5:36)
   ☐ Schema support
 
 Docs:
@@ -49,7 +50,7 @@ Utils:
  ✔ Replace expects by manual checks @started(15-04-25 10:16) @done (15-04-25 10:46) @lasted(0:30)
 
 Networking:
-  ☐ Cookies
+  ✔ Cookies @done (15-05-01 23:55)
   ☐ Response headers
   ☐ Remove Response::raise
 
