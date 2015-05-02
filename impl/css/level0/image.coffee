@@ -71,6 +71,8 @@ module.exports = (impl) ->
 		img = data.image
 		{callback} = data
 
+		data.imgElem.style.display = if img.status is 'ready' then 'block' else 'none'
+
 		if img.status is 'ready'
 			callback?.call @, null, img
 		else if img.status is 'error'
@@ -120,6 +122,7 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 		imgElem = data.imgElem = document.createElement 'img'
+		imgElem.style.display = 'none'
 		data.elem.appendChild imgElem
 		return
 
