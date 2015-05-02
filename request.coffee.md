@@ -97,6 +97,8 @@ var Request = Networking.Request;
 				@onDestroyed opts.onDestroyed
 			if opts.onLoaded
 				@onLoaded opts.onLoaded
+			if opts.onDataLoaded
+				@onDataLoaded opts.onDataLoaded
 
 *Signal* Request::destroyed()
 -----------------------------
@@ -126,6 +128,21 @@ req.onLoaded(function(res){
 ```
 
 		signal.createLazy @::, 'loaded'
+
+*Signal* Request::dataLoaded(*Any* error, *Any* data)
+-----------------------------------------------------
+
+```
+req.onDataLoaded(function(err, data){
+\  if (err){
+\    console.log('error!', err);
+\  } else {
+\    console.log('data:', data);
+\  }
+});
+```
+
+		signal.createLazy @::, 'dataLoaded'
 
 ReadOnly *String* Request::uid
 ------------------------------

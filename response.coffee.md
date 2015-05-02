@@ -264,7 +264,10 @@ res.onSent(function(){
 
 			{data} = res
 
-			unless res.isSucceed()
+			if res.isSucceed()
+				res.request.dataLoaded? null, @data
+			else
+				res.request.dataLoaded? @data or @status or "Unknown error"
 				log.warn "Response #{res.request.uri} completed with an error"
 
 			if data instanceof Error
@@ -297,6 +300,7 @@ a permanent redirect.
 
 			@request.destroy()
 			@request.loaded? @
+			@request.dataLoaded? null, @data
 
 			Impl.redirect @, status, uri, =>
 				@sent?()

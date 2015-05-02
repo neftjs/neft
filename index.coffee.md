@@ -221,6 +221,10 @@ app.networking.createRequest({
 					res.pending = false
 					req.destroyed?()
 					req.loaded? res
+					if res.isSucceed()
+						req.dataLoaded? null, res.data
+					else
+						req.dataLoaded? res.data or res.status or "Unknown error"
 			else
 				log "Resolve local `#{req}` request"
 
