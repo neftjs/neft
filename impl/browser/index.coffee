@@ -22,7 +22,7 @@ module.exports = (Networking) ->
 		# synchronize with browser page changing
 		window.addEventListener 'popstate', ->
 			if isReady
-				impl.changePage location.pathname
+				impl.changePage location.pathname + location.search
 
 		# don't refresh page on click anchor
 		document.addEventListener 'click', (e) ->
@@ -37,14 +37,14 @@ module.exports = (Networking) ->
 				e.preventDefault()
 
 				# change page to the anchor pathname
-				impl.changePage target.pathname
+				impl.changePage target.pathname + target.search
 
 		# change page to the current one
 		onLoaded = ->
 			if document.readyState is 'complete'
 				setTimeout ->
 					isReady = true
-					impl.changePage location.pathname
+					impl.changePage location.pathname + location.search
 			return
 
 		if document.readyState is 'complete'
@@ -63,7 +63,10 @@ module.exports = (Networking) ->
 		xhr = new XMLHttpRequest
 
 		# prevent caching
-		uri = "#{req.uri}?now=#{Date.now()}"
+		if utils.has(req.uri, '?')
+			uri = "#{req.uri}&now=#{Date.now()}"
+		else
+			uri = "#{req.uri}?now=#{Date.now()}"
 
 		xhr.open req.method, uri, true
 		xhr.setRequestHeader 'X-Expected-Type', req.type

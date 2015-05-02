@@ -60,6 +60,7 @@ var Uri = Networking.Uri;
 
 			# re
 			re = uri
+			re = re.replace /(\?)/g, '\\$1'
 			re = re.replace ///{?([a-zA-Z0-9_$]+)?\*}?///g, ->
 				"(.*?)"
 			# re = re.replace ///\/([^/]*)///g, (_, str) ->
