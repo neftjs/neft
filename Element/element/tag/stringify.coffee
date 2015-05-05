@@ -26,7 +26,7 @@ isPublic = (name) ->
 	name.indexOf('neft:') isnt 0
 
 getInnerHTML = (elem) ->
-	if elem.visible and elem.children
+	if elem.children
 		r = ""
 		for child in elem.children
 			r += getOuterHTML child

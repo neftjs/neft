@@ -197,11 +197,12 @@ module.exports = (File) -> class Input
 		val
 
 	traceProp: (obj, prop) ->
-		val = obj[prop]
-		if obj instanceof Dict and val is undefined
+		if obj instanceof Dict
 			val = obj.get prop
-		else if obj instanceof List and val is undefined
+		else if obj instanceof List
 			val = obj.get prop
+		else
+			val = obj[prop]
 
 		if val
 			@trace val
