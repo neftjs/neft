@@ -184,14 +184,18 @@ stack.runAll(function(err, result){
 
 			@_arr.push func, context, args
 
-Stack::callNext(*Function* callback)
-------------------------------------
+Stack::callNext([*Array* arguments], *Function* callback)
+---------------------------------------------------------
 
 Calls first function from the stack and remove it.
 
 *callback* function gets all passed arguments from the called *function*.
 
-		callNext: (callback) ->
+		callNext: (args, callback) ->
+			if typeof args is 'function' and not callback?
+				callback = args
+				args = null
+
 			assert typeof callback is 'function'
 
 			# on empty
@@ -201,14 +205,15 @@ Calls first function from the stack and remove it.
 			# get next
 			func = @_arr.shift()
 			context = @_arr.shift()
-			args = @_arr.shift()
+			funcArgs = @_arr.shift()
 
 			if typeof func is 'string'
-				func = context[func]
+				func = utils.get context, func
 
 			if typeof func isnt 'function'
 				throw new TypeError "ASync Stack::callNext(): function to call is not a function"
 
+			funcLength = func.length or Math.max(args?.length or 0, funcArgs?.length or 0)+1
 			syncError = null
 			called = false
 
@@ -223,17 +228,21 @@ Calls first function from the stack and remove it.
 				called = true
 				callback.apply @, arguments
 
-			# add callback into args
-			# To avoid got args array modification and to minimise memory usage,
-			# we create new object with `args` as a prototype.
+			# add callback into funcArgs
+			# To avoid got funcArgs array modification and to minimise memory usage,
+			# we create new object with `funcArgs` as a prototype.
 			# `Function::apply` expects an object and iterate by it to the `length`.
-			args = Object.create(args or null)
-			args[func.length - 1] = callbackWrapper
-			if args.length is undefined or args.length < func.length
-				args.length = func.length
+			funcArgs = Object.create(funcArgs or null)
+			funcArgs[funcLength - 1] = callbackWrapper
+			if funcArgs.length is undefined or funcArgs.length < funcLength
+				funcArgs.length = funcLength
+			if args
+				for arg, i in args
+					if i isnt funcLength - 1 and funcArgs[i] is undefined
+						funcArgs[i] = arg
 
 			# call; support sync errors
-			syncError = utils.catchError func, context, args
+			syncError = utils.catchError func, context, funcArgs
 			if syncError
 				callbackWrapper syncError
 
@@ -255,18 +264,18 @@ Processing stops on error occurs, then *callback* function is called with the go
 			unless @_arr.length
 				return callback null
 
-			onNextCalled = (err) =>
+			onNextCalled = (err, args...) =>
 				# on err
-				if err
+				if err?
 					return callback err
 
 				# call next
 				if @_arr.length
-					return callNext()
+					return callNext args
 
 				callback.apply null, arguments
 
-			callNext = => @callNext onNextCalled
+			callNext = (args) => @callNext args, onNextCalled
 
 			callNext()
 
