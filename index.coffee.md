@@ -46,8 +46,6 @@ console.log(list instanceof List);
 			signal.Emitter.call @
 			@_data = arr
 
-			Object.preventExtensions @
-
 		# List is not a standard Array object
 		utils.defineProperty @::, '0', null, ->
 			throw "You can't get elements from a list as standard properties; " +
