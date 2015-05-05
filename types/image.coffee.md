@@ -6,7 +6,7 @@ ImageResource @class
 	Schema = require 'schema'
 	utils = require 'utils'
 
-*ImageResource* ImageResource() extends *Resources.Resource*
+*ImageResource* ImageResource() : *Resources.Resource*
 ------------------------------------------------------------
 
 	module.exports = (Resources) -> class ImageResource extends Resources.Resource

@@ -68,10 +68,12 @@ Resource @class
 *String* Resource::getPath([*String* uri, *Object* request])
 ------------------------------------------------------------
 
-		getPath: (uri, req) ->
+		getPath: (uri='', req) ->
 			if req is undefined and utils.isPlainObject(uri)
 				req = uri
 				uri = ''
+
+			if uri is ''
 				file = @file
 			else
 				name = Resource.parseFileName uri
@@ -83,8 +85,8 @@ Resource @class
 			assert.isString uri
 			assert.isPlainObject req if req?
 
-			resolution ?= req.resolution or 1
-			formats ?= req.formats or @formats
+			resolution ?= req?.resolution or 1
+			formats ?= req?.formats or @formats
 
 			if file isnt @file
 				return

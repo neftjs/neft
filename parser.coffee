@@ -104,7 +104,10 @@ parseResourcesObject = (obj, dirPath, config) ->
 parseResourcesArray = (arr, dirPath, config) ->
 	obj = utils.arrayToObject arr, (_, val) ->
 		name = val.file or val
-		Resources.Resource.parseFileName(name).file
+		if isResourcesPath(name)
+			pathUtils.dirname(name)
+		else
+			Resources.Resource.parseFileName(name).file
 	parseResourcesObject obj, dirPath, config
 
 parseResourceFile = (path, config) ->
@@ -140,11 +143,11 @@ parseResourceFile = (path, config) ->
 		elem <= name.resolution
 
 	if rsc.formats
-		log.warn "Multiple formats are not currently supported; '#{rsc.formats}' got"
-		# unless utils.has(rsc.formats, name.format)
-		# 	rsc.formats.push name.format
-	# else
-	rsc.formats = [name.format]
+		# log.warn "Multiple formats are not currently supported; '#{rsc.formats}' got"
+		unless utils.has(rsc.formats, name.format)
+			rsc.formats.push name.format
+	else
+		rsc.formats = [name.format]
 
 	paths = rsc.paths = {}
 	for format in rsc.formats
@@ -181,7 +184,9 @@ getFile = (path, config) ->
 	stat = fs.statSync path
 	pathResourcesFile = pathUtils.join path, './resources.json'
 
-	if stat.isDirectory()
+	if isResourcesPath(path)
+		parseResourcesFile path, config
+	else if stat.isDirectory()
 		if fs.existsSync(pathResourcesFile)
 			parseResourcesFile pathResourcesFile, config
 		else

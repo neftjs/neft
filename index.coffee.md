@@ -1,4 +1,4 @@
-Resource Manager @engines
+Resource Manager @engine
 ================
 
 	'use strict'
@@ -16,7 +16,7 @@ Resource Manager @engines
 		@Resource = require('./resource') @
 		@ImageResource = require('./types/image') @
 
-		@URI = ///^(?:rsc|resource|resources)?:\/?\/?(.*)$///
+		@URI = ///^(?:rsc|resource|resources)?:\/?\/?(.*?)(?:\.[a-zA-Z]+)?$///
 
 		if utils.isServer
 			@parser = require('./parser') @
@@ -58,26 +58,16 @@ Resource Manager @engines
 			if typeof uri is 'string'
 				if match = Resources.URI.exec(uri)
 					uri = match[1]
-				if uri.indexOf('/') isnt -1
-					uri = uri.split '/'
-			
-			if Array.isArray(uri)
-				res = @
-				for chunk in uri
-					if chunk is ''
-						continue
-					unless res = res.getResource chunk
-						break
-			else
-				res = @[uri]
-				`//<development>`
-				unless res
-					if name = Resources.Resource.parseFileName(uri)
-						res = @[name.file]
-						if res
-							log.warn "Don't specify resource format and resolution in the URI; Got '#{uri}', but should be '#{name.file}'; This behavior won't work in the release mode!"
-				`//</development>`
-			res
+
+			chunk = uri
+			while chunk
+				if r = @[chunk]
+					rest = uri.slice chunk.length + 1
+					if rest isnt '' and r instanceof Resources
+						r = r.getResource rest
+					return r
+				chunk = chunk.slice 0, chunk.lastIndexOf('/')
+			return
 
 *Object* Resources::toJSON()
 ----------------------------
