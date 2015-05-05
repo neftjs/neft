@@ -224,8 +224,11 @@ bindingAttributeToString = (obj) ->
 				hash += ".#{id}"
 		else
 			text += "#{elem[0]}"
-			hash += "$#{args.length}"
-			args.push elem[0]
+			if elem[0] is "'this'"
+				hash += "this"
+			else
+				hash += "$#{args.length}"
+				args.push elem[0]
 
 	hash = hash.trim()
 	text = text.trim()
@@ -510,10 +513,8 @@ module.exports = (file, filename) ->
 
 	codes
 
-# console.log module.exports """
-# // ab
-
+# console.log module.exports("""
 # Item {
-# 	id: a
+# 	width: parent.width === this
 # }
-# """#, 'view'
+# """)._neftMain#, 'view'
