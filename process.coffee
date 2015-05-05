@@ -1,6 +1,15 @@
 'use strict'
 
 module.exports = ->
+	# gets argv
+	[_, _, index, opts] = process.argv
+	opts = JSON.parse opts
+	{type, onlyLocal, allowedRemoteModules} = opts
+	allowedRemoteModules ?= []
+	process.argv.splice 2, Infinity
+
+	extras = opts.extras or {}
+
 	EMULATORS =
 		browser: ->
 			###
@@ -11,9 +20,10 @@ module.exports = ->
 				isFake: true
 				addEventListener: ->
 				Image: ->
-				HTMLCanvasElement: ->
+				HTMLCanvasElement: if extras.game then (->) else null
 				console:
 					log: ->
+				navigator: {}
 			global.location = pathname: ''
 			global.navigator = userAgent: ''
 			global.innerWidth = 1024
@@ -106,6 +116,8 @@ module.exports = ->
 				rgba: ->
 				hsla: ->
 				platform: {}
+				locale: ->
+					name: ''
 			global.Screen = {}
 			global.__stylesBody =
 				children: []
@@ -121,6 +133,13 @@ module.exports = ->
 			global.qmlUtils =
 				createBinding: ->
 			global.__stylesHatchery = {}
+			global.__stylesMouseArea =
+				onPressed:
+					connect: ->
+				onPositionChanged:
+					connect: ->
+				onReleased:
+					connect: ->
 			global.requestAnimationFrame = ->
 
 	NODE_MODULES =
@@ -128,6 +147,7 @@ module.exports = ->
 		path: true
 		vm: true
 		http: true
+		https: true
 		zlib: true
 		util: true # TODO
 		events: true # TODO
@@ -141,6 +161,7 @@ module.exports = ->
 		url: true
 		mmmagic: true
 		'node-static': true
+		mysql: true
 
 	fs = require 'fs'
 	pathUtils = require 'path'
@@ -148,13 +169,6 @@ module.exports = ->
 
 	modules = []
 	paths = {}
-
-	# gets argv
-	[_, _, index, opts] = process.argv
-	opts = JSON.parse opts
-	{type, onlyLocal, allowedRemoteModules} = opts
-	allowedRemoteModules ?= []
-	process.argv.splice 2, Infinity
 
 	# Get index to require and their base path
 	base = pathUtils.dirname index
@@ -194,10 +208,11 @@ module.exports = ->
 		parentPath = pathUtils.relative base, parent.id
 		unless parentPath then return r	
 
-		if onlyLocal and ///^\.\.\/|^node_modules\////.test(modulePath)
-			name = ///^\.\.\/([a-z_\-A-Z]+)///.exec(modulePath)?[1]
-			if allowedRemoteModules.indexOf(name) is -1# and req isnt 'neft-assert'
-				return r
+		if onlyLocal
+			if ///^\.\./|^node_modules\////.test(modulePath) or not ///\.[a-zA-Z0-9]+$///.test(modulePath)
+				name = ///^\.\.\/([a-z_\-A-Z]+)///.exec(modulePath)?[1]
+				if allowedRemoteModules.indexOf(name) is -1
+					return r
 
 		modules.push modulePath unless ~modules.indexOf modulePath
 

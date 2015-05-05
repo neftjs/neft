@@ -7,7 +7,6 @@ coffee = require 'coffee-script'
 {stringify} = JSON
 
 replaceStr = (str, oldStr, newStr) ->
-
 	i = str.indexOf oldStr
 	unless ~i then return str
 
@@ -24,8 +23,10 @@ STRING_FILES =
 	'.txt': true
 
 getFile = (path) ->
-	# console.log "Include file: #{path}"
-	file = fs.readFileSync path, 'utf-8'
+	try
+		file = fs.readFileSync path, 'utf-8'
+	catch
+		return
 
 	if IS_COFFEE_RE.test path
 		isLiterate = IS_LITERATE_COFFEE_RE.test path
@@ -102,7 +103,8 @@ getModulesInit = (opts) ->
 		modulePaths = opts.paths[name] or {}
 
 		path = name
-		func = getFile path
+		unless func = getFile path
+			continue
 
 		switch pathUtils.extname name
 			when '.json'

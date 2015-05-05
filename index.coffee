@@ -36,7 +36,7 @@ module.exports = (opts, callback) ->
 			paths: msg.paths
 			path: opts.path
 
-		if opts.fullVersion is true
+		if opts.fullVersion
 			bundle = bundle.replace ///\/\/<(\/)?trialVersion>;///g, '//<$1trialVersion>'
 			cleaner = groundskeeper
 				console: true
@@ -45,7 +45,6 @@ module.exports = (opts, callback) ->
 			cleaner.write bundle
 			bundle = cleaner.toString()
 
-		# DEBUG
 		if opts.release
 			nsToRemove = ['expect', 'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions']
 
@@ -58,18 +57,20 @@ module.exports = (opts, callback) ->
 			cleaner = groundskeeper
 				console: true
 				namespace: nsToRemove
+				# namespace: ['expect', 'assert']
 				replace: 'true'
 				pragmas: ['trialVersion']
 			cleaner.write bundle
 			bundle = cleaner.toString()
 		else
-			bundle = bundle.replace ///\/\/<(\/)?production>;///g, '//<$1production>'
-			cleaner = groundskeeper
-				console: true
-				debugger: true
-				pragmas: ['trialVersion', 'development']
-			cleaner.write bundle
-			bundle = cleaner.toString()
+			bundle = bundle.replace ///<production>([^]*?)<\/production>///gm, ''
+			# bundle = bundle.replace ///\/\/<(\/)?production>;///g, '//<$1production>'
+			# cleaner = groundskeeper
+			# 	console: true
+			# 	debugger: true
+			# 	pragmas: ['trialVersion', 'development']
+			# cleaner.write bundle
+			# bundle = cleaner.toString()
 
 		if opts.release or opts.minify
 			fs.writeFileSync './tmp.js', bundle, 'utf-8'
@@ -81,7 +82,7 @@ module.exports = (opts, callback) ->
 			"--mangle " +
 			"--reserved 'Neft,$,require,exports,module'",
 			# "--beautify",
-				maxBuffer: 1024*1024
+				maxBuffer: 1024*1024*24
 				, (err, stdout, stderr) ->
 					fs.unlinkSync './tmp.js'
 
