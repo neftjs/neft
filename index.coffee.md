@@ -74,8 +74,6 @@ console.log(data.get('name'));
 			@_items = null
 			@_dirty = ALL
 
-			Object.preventExtensions @
-
 ReadOnly *Integer* Dict::length
 -------------------------------
 
