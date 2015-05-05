@@ -88,6 +88,7 @@ module.exports = (File, data) -> class Style
 		if 'text' of @item or (@item.$ isnt null and 'text' of @item.$)
 			@updateText()
 
+		@item.visible = @visible
 		@updateVisibility()
 		
 		for name of @attrs
@@ -103,6 +104,7 @@ module.exports = (File, data) -> class Style
 			if @isScope
 				@item.document.hide()
 			@item.parent = null
+		@item.visible = false
 
 		for child in @children
 			child.revert()
@@ -243,13 +245,18 @@ module.exports = (File, data) -> class Style
 					log.warn "Style file `#{id}` can't be find"
 				return
 		else
-			parent = @parent
 			while parent and not scope = parent.scope
 				parent = parent.parent
 
-			scope ?= windowStyle
-			@item = scope.ids[id] or scope.mainItem.$?[id]
-			@item ?= scope.styles(id)
+
+			parent = @parent
+			loop
+				scope = parent?.scope or windowStyle
+				@item = scope.ids[id] or scope.mainItem.$?[id]
+				@item ?= scope.styles(id)
+				if @item or scope is windowStyle
+					break
+				parent = parent.parent
 
 			unless @item
 				unless File.Input.test id
