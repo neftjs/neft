@@ -121,7 +121,7 @@ module.exports = (Networking) ->
 				if req.type is Networking.Request.JSON_TYPE
 					data = utils.tryFunction JSON.parse, null, [data], data
 
-				if cookies = res.getHeader('x-cookies')
+				if cookies = res.headers['x-cookies']
 					cookies = utils.tryFunction JSON.parse, null, [cookies], null
 
 				callback

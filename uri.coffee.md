@@ -135,5 +135,5 @@ console.log(uri.toString());
 				params = params._data
 
 			i = 0
-			escape @_uri.replace Uri.NAMES_RE, =>
-				params[@_names[i++]]
+			@_uri.replace Uri.NAMES_RE, =>
+				encodeURIComponent params[@_names[i++]]
