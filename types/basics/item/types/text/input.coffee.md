@@ -28,7 +28,7 @@ Qml and WebGL implementations
 			@__path__ = 'Renderer.TextInput'
 
 			constructor: ->
-				@_isMultiLine = false
+				@_multiLine = false
 				super()
 				@_width = 200
 				@_height = 100
@@ -39,15 +39,15 @@ Qml and WebGL implementations
 *Float* TextInput::height = 50
 ------------------------------
 
-*Boolean* TextInput::isMultiLine = false
-----------------------------------------
+*Boolean* TextInput::multiLine = false
+--------------------------------------
 
-### *Signal* TextInput::isMultiLineChanged(*Boolean* oldValue)
+### *Signal* TextInput::multiLineChanged(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
-				name: 'isMultiLine'
+				name: 'multiLine'
 				defaultValue: false
-				implementation: Impl.setTextInputIsMultiLine
+				implementation: Impl.setTextInputMultiLine
 				developmentSetter: (val) ->
 					assert.isBoolean val

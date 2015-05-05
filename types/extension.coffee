@@ -52,8 +52,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 		@_running
 	, null
 
+	signal.Emitter.createSignal @, 'runningChanged'
+
 	enable: ->
 		@_running = true
+		@runningChanged false
 
 	disable: ->
 		@_running = false
+		@runningChanged true

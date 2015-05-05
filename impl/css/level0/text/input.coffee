@@ -51,7 +51,7 @@ module.exports = (impl) ->
 			_super.call @, val
 		return
 
-	setTextInputIsMultiLine: (val) ->
+	setTextInputMultiLine: (val) ->
 		@_impl.isMultiLine = val
 		@text = @text.replace ///\n///g, ''
 		return

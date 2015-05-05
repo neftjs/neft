@@ -10,4 +10,4 @@ module.exports = (impl) ->
 	create: (data) ->
 		impl.Types.Text.create.call @, data
 
-	setTextInputIsMultiLine: (val) ->
+	setTextInputMultiLine: (val) ->

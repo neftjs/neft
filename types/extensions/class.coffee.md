@@ -186,7 +186,7 @@ Grid {
 				if @_running
 					return
 
-				if @_name and not @_target._classExtensions[@_name]
+				if @_name and not @_target.classes.has(@_name)
 					@_target.classes.append @_name
 					return
 
@@ -200,7 +200,7 @@ Grid {
 				unless @_running
 					return
 
-				if @_name and @_target._classExtensions[@_name]
+				if @_name and @_target.classes.has(@_name)
 					@_target.classes.remove @_name
 					return
 
