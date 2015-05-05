@@ -266,7 +266,7 @@ new app.Route({
 			req.onLoaded ->
 				if utils.isClient
 					for key, val of res.cookies
-						unless utils.isEqual(app.get(key), val)
+						unless utils.isEqual(app.cookies.get(key), val)
 							app.cookies.set key, val
 				return
 			return
@@ -321,6 +321,8 @@ new app.Route({
 			init opts.routes, app.routes
 
 			app.ready()
+
+		app
 
 	# link module
 	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log', 'resources',

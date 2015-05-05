@@ -5,6 +5,7 @@ Document:
   ✔ neft:each functions scoping @done (15-04-23 14:50)
   ☐ Add neft:bind (e.g. neft:bind="name as neft:style:value")
   ☐ Add neft:log
+  ☐ Error messages
 
 Renderer:
   ☐ HTML namespace items
@@ -23,6 +24,10 @@ Renderer:
   ✔ Anchors implementation without bindings @done (15-04-24 18:49)
   ☐ Vector Graphic Items
   ☐ NML parser: allow duplicated ids in different file sections
+  ☐ Button text property
+  ☐ Grid utils - use free space equal for all cells
+  ☐ Item::targetItem
+  ☐ Item: auto width/height to preserve aspect
 
 Styles:
   ☐ Default styles
@@ -53,6 +58,7 @@ Networking:
   ✔ Cookies @done (15-05-01 23:55)
   ☐ Response headers
   ☐ Remove Response::raise
+  ☐ Request and Response query
 
 App:
   ✔ Route - short arguments @started(15-04-30 17:47) @done (15-04-30 18:16) @lasted(0:29)
