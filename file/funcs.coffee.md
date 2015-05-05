@@ -11,8 +11,8 @@ neft:func @js
 		stylesParseFuncs = require './parse/funcs'
 
 	# link modules to be possible required by the funcs
-	links = ['db', 'db-addons', 'db-schema', 'dict', 'emitter', 'expect', 'list',
-	         'log', 'renderer', 'networking', 'schema', 'signal', 'utils', 'document']
+	links = ['db', 'dict', 'emitter', 'expect', 'list', 'log', 'renderer',
+	         'networking', 'schema', 'signal', 'utils', 'document', 'assert']
 	for link in links
 		require link
 
