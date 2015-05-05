@@ -121,10 +121,12 @@ module.exports = (File, data) -> class Style
 		return
 
 	updateText: ->
-		if 'text' of @item
-			obj = @item
-		else if @item.$ isnt null and 'text' of @item.$
+		if @item.$? and 'text' of @item.$
 			obj = @item.$
+		else if 'text' of @item
+			obj = @item
+		else if @item._label? and 'text' of @item._label
+			obj = @item._label
 
 		if obj
 			text = @node.stringifyChildren()
