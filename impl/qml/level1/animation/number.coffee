@@ -63,7 +63,10 @@ module.exports = (impl) ->
 				updateAnimation anim
 				i++
 			else
-				pending[i] = utils.last(pending)
+				# remove element in not ordered list
+				# this array may change due loop
+				pending[i] = pending[n-1]
+				pending[n-1] = pending[pending.length-1]
 				pending.pop()
 				n--
 

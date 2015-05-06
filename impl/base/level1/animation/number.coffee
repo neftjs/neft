@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'utils'
+assert = require 'assert'
 
 module.exports = (impl) ->
 	{Types} = impl
@@ -21,7 +22,10 @@ module.exports = (impl) ->
 				updateAnimation anim
 				i++
 			else
+				# remove element in not ordered list
+				# this array may change due loop
 				pending[i] = pending[n-1]
+				pending[n-1] = pending[pending.length-1]
 				pending.pop()
 				n--
 
@@ -44,8 +48,8 @@ module.exports = (impl) ->
 		val = (data.to - data.from) * progress + data.from
 		target = anim._target
 
-		if data.isIntegerProperty is true
-			val = round val
+		# if data.isIntegerProperty is true and progress isnt 1
+		# 	val = round val
 
 		if val is val and target # isNaN hack
 			if not running or anim._updateProperty or not data.propertySetter
@@ -53,7 +57,8 @@ module.exports = (impl) ->
 				target[anim._property] = val
 				anim._updatePending = false
 
-				if progress is 1 and data.propertySetter
+				# force impl update, because setter won't update if nothing change in data
+				if progress is 1 and data.propertySetter and target[anim._property] is val
 					impl[data.propertySetter].call target, val
 			else
 				impl[data.propertySetter].call target, val

@@ -378,15 +378,11 @@ Grid {
 				unless object
 					continue
 
-				restoreDefault = false
-
-				if bindings[attr]
-					if object._bindings[lastPath] is val
-						object.createBinding lastPath, null
-						restoreDefault = true
-				else
-					if object[lastPath] is val
-						restoreDefault = true
+				restoreDefault = true
+				for i in [classListIndex-1...0] by -1
+					if classList[i].changes._attributes.hasOwnProperty(attr)
+						restoreDefault = false
+						break
 
 				if restoreDefault
 					defaultValue = undefined
@@ -402,6 +398,7 @@ Grid {
 					if defaultIsBinding
 						object.createBinding lastPath, defaultValue
 					else
+						object.createBinding lastPath, null
 						object[lastPath] = defaultValue
 
 					if EXTRA_RESTORE_ATTRS[lastPath]?

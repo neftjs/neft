@@ -46,10 +46,11 @@ Rectangle {
 
 		listener = (oldVal) ->
 			{animation} = @
-			if not @_isReady or not @running or animation.updatePending
+			to = @_target[@property]
+			if not @_isReady or not @running or animation.updatePending or not utils.isFloat(oldVal) or not utils.isFloat(to)
 				return
 
-			@_to = @_target[@property]
+			@_to = to
 
 			{progress} = animation
 			animation.stop()
@@ -68,7 +69,7 @@ Rectangle {
 				@_durationUpdatePending = false
 
 			animation.start()
-			return
+			signal.STOP_PROPAGATION
 
 *Boolean* Transition::when
 --------------------------
