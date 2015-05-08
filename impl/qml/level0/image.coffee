@@ -44,12 +44,12 @@ module.exports = (impl) ->
 			function updateTileY(){
 				shader.tile.y = shader.sourceHeight/shader.height;
 			}
-			onOffsetXChanged: updateOffsetX()
-			onOffsetYChanged: updateOffsetY()
+			onOffsetXChanged: updateOffsetX();
+			onOffsetYChanged: updateOffsetY();
 			onSourceWidthChanged: {updateOffsetX(), updateTileX()}
 			onSourceHeightChanged: {updateOffsetY(), updateTileY()}
-			onWidthChanged: updateTileX()
-			onHeightChanged: updateTileY()
+			onWidthChanged: updateTileX();
+			onHeightChanged: updateTileY();
 			property point tile: Qt.point(0, 0);
 			property point offset: Qt.point(0, 0);
 			width: this.image ? this.image.width : 0;

@@ -379,7 +379,7 @@ Grid {
 					continue
 
 				restoreDefault = true
-				for i in [classListIndex-1...0] by -1
+				for i in [classListIndex-1..0] by -1
 					if classList[i].changes._attributes.hasOwnProperty(attr)
 						restoreDefault = false
 						break

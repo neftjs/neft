@@ -67,7 +67,7 @@ module.exports = (impl) ->
 
 			if item._impl.autoWidth
 				width = textElem.offsetWidth
-				if item.width isnt width
+				if item.width isnt width + 1
 					item._impl.sizeChecks = CHECKS_AFTER_CHANGE
 				if width > 0
 					item.width = width + 1

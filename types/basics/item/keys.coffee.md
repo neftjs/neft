@@ -79,9 +79,11 @@ Rectangle {
 				if @_focus isnt val
 					if val and focusedKeys isnt @
 						if focusedKeys
-							focusedKeys._focus = false
-							focusedKeys.focusChanged true
-							focusedKeys._ref.keysChanged focusedKeys
+							oldVal = focusedKeys
+							focusedKeys = null
+							oldVal._focus = false
+							oldVal.focusChanged true
+							oldVal._ref.keysChanged oldVal
 						focusedKeys = @
 					_super.call @, val
 					if not val and focusedKeys is @

@@ -85,7 +85,7 @@ module.exports = (impl) ->
 			return
 
 	isSimpleBinding = (binding) ->
-		binding[1].length is 1 and not isArray(binding[1][0][0])
+		binding[1].length is 1 and isArray(binding[1][0]) and not isArray(binding[1][0][0])
 
 	class SimpleBinding
 		constructor: (@obj, @prop, binding) ->

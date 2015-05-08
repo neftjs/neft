@@ -71,7 +71,8 @@ module.exports = (impl) ->
 		img = data.image
 		{callback} = data
 
-		data.imgElem.style.display = if img.status is 'ready' then 'block' else 'none'
+		unless data.useCssBackground
+			data.imgElem?.style.display = if img.status is 'ready' then 'block' else 'none'
 
 		if img.status is 'ready'
 			callback?.call @, null, img
