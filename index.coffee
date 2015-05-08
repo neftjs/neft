@@ -14,7 +14,7 @@ SIGNAL = 'signal'
 FUNCTION = 'function'
 CODE = 'code'
 
-ids = null
+ids = extensions = null
 
 uid = ->
 	'c' + Math.random().toString(16).slice(2)
@@ -80,6 +80,7 @@ MODIFIERS_NAMES =
 	Source: true
 	FontLoader: true
 	ResourcesLoader: true
+	AmbientSound: true
 getItem = (obj) ->
 	while obj
 		if obj.type is 'object' and not MODIFIERS_NAMES[obj.name]
@@ -178,7 +179,7 @@ bindingAttributeToString = (obj) ->
 			elem.unshift "'this'"
 		else if id is 'this'
 			elem[0] = "'this'"
-		else if (id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
+		else if (id is 'app' or id is 'view' or ids.hasOwnProperty(id) or extensions.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
 			continue
 		else
 			binding[i] = elem.join '.'
@@ -239,12 +240,18 @@ stringObjectHead = (obj) ->
 	assert obj.type is OBJECT, "stringObject: type must be an object"
 
 	if getByType(obj.body, ID).length > 0
-		ids[obj.id] = true
+		if MODIFIERS_NAMES[obj.name]
+			extensions[obj.id] = true
+		else
+			ids[obj.id] = true
 
 	rendererCtor = Renderer[obj.name.split('.')[0]]
 	isLocal = rendererCtor?
 	decl = if isLocal then "new #{obj.name}" else "#{obj.name}"
-	r = "var #{obj.id} = ids.#{obj.id} = #{decl}();\n"
+	if MODIFIERS_NAMES[obj.name]
+		r = "var #{obj.id} = extensions.#{obj.id} = #{decl}();\n"
+	else
+		r = "var #{obj.id} = ids.#{obj.id} = #{decl}();\n"
 	r += "#{obj.id}._id = '#{obj.id}';\n"
 	r += "#{obj.id}._isReady = false;\n"
 
@@ -464,8 +471,10 @@ stringViewObjectFull = (obj) ->
 
 stringFile = (file, isView=false) ->
 	ids = {}
+	extensions = {}
 
 	code = 'var ids = {};\n'
+	code += 'var extensions = {};\n'
 	if isView
 		code += stringViewObjectFull file
 	else
@@ -475,6 +484,9 @@ stringFile = (file, isView=false) ->
 
 	if isView
 		code += "setImmediate(function(){\n"
+	code += "for (var _id in extensions){\n"
+	code += "	extensions[_id]._isReady = true; extensions[_id].ready(); extensions[_id].onReady.disconnectAll();\n"
+	code += "}\n"
 	code += "for (var _id in ids){\n"
 	code += "	ids[_id]._isReady = true; ids[_id].ready(); ids[_id].onReady.disconnectAll();\n"
 	code += "}\n"
@@ -484,7 +496,6 @@ stringFile = (file, isView=false) ->
 
 module.exports = (file, filename) ->
 	elems = parser file
-	ids = {}
 	codes = {}
 	waitsCode = ''
 
@@ -499,7 +510,7 @@ module.exports = (file, filename) ->
 		waitsCode = ''
 		r += stringFile elem, isView
 		if objectIndex > 0 and elem.autoId
-			codes._neftMain += r
+			codes._neftMain += '(function(){' + r + '}());'
 		else
 			r += "var mainItem = #{elem.id};\n"
 			if objectIndex is 0
