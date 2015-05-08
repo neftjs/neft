@@ -1004,8 +1004,8 @@ console.log(utils.addSlashes('a"b'))
 
 			str.replace SLASHES_RE, NEW_SUB_STR
 
-*String* utils.uid([*Integer* length=8])
-----------------------------------------
+*String* utils.uid([*Integer* length=`8`])
+------------------------------------------
 
 This function generates unique string.
 
