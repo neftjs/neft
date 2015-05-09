@@ -57,7 +57,14 @@ byAttr.isIterator = false
 byAttr.toString = -> 'byAttr'
 
 byAttrValue = (node, data1, data2) ->
-	node._attrs?[data1] is data2
+	if attrs = node._attrs
+		val = attrs[data1]
+		if typeof val is typeof data2
+			val is data2
+		else
+			val+'' is data2+''
+	else
+		false
 byAttrValue.isIterator = false
 byAttrValue.toString = -> 'byAttrValue'
 
