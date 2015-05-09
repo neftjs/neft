@@ -75,6 +75,7 @@ module.exports = (File, data) -> class Style
 		@visible = true
 		@attrListeners = []
 		@isTextSet = false
+		@classes = null
 
 		Object.preventExtensions @
 
@@ -85,10 +86,15 @@ module.exports = (File, data) -> class Style
 		unless @item
 			return
 
-		if 'text' of @item or (@item.$ isnt null and 'text' of @item.$)
+		# save classes
+		if classes = @item._classes
+			unless utils.isEqual(classes.items(), @classes)
+				@classes = utils.clone(classes.items())
+
+		if 'text' of @item or (@item.$ isnt null and 'text' of @item.$) or @item.label?
 			@updateText()
 
-		@item.visible = @visible
+		@item.document.node = @node
 		@updateVisibility()
 		
 		for name of @attrs
@@ -104,7 +110,7 @@ module.exports = (File, data) -> class Style
 			if @isScope
 				@item.document.hide()
 			@item.parent = null
-		@item.visible = false
+		@item.document.node = null
 
 		for child in @children
 			child.revert()
@@ -118,6 +124,13 @@ module.exports = (File, data) -> class Style
 			name = attrListeners.pop()
 			obj = attrListeners.pop()
 			obj[name].disconnect func
+
+		# restore classes
+		if (classes = @item._classes) or @classes
+			classes.clear()
+			if @classes
+				for name in @classes
+					classes.append name
 		return
 
 	updateText: ->
@@ -125,8 +138,8 @@ module.exports = (File, data) -> class Style
 			obj = @item.$
 		else if 'text' of @item
 			obj = @item
-		else if @item._label? and 'text' of @item._label
-			obj = @item._label
+		else if @item.label? and 'text' of @item.label
+			obj = @item.label
 
 		if obj
 			text = @node.stringifyChildren()
@@ -237,8 +250,9 @@ module.exports = (File, data) -> class Style
 					mainItem: new Renderer[id]
 					ids: {}
 			else
-				id = id.slice 'styles:'.length
-				@scope = styles[id]?.withStructure()
+				match = /^styles:(.+?)(?:\:(.+?))?$/.exec id
+				[_, id, subid] = match
+				@scope = styles[id]?.withStructure(subid)
 			@isAutoParent = true
 			if @scope
 				@item = @scope.mainItem
@@ -247,18 +261,13 @@ module.exports = (File, data) -> class Style
 					log.warn "Style file `#{id}` can't be find"
 				return
 		else
-			while parent and not scope = parent.scope
-				parent = parent.parent
-
-
 			parent = @parent
 			loop
 				scope = parent?.scope or windowStyle
 				@item = scope.ids[id] or scope.mainItem.$?[id]
 				@item ?= scope.styles(id)
-				if @item or scope is windowStyle
+				if @item or ((not parent or not (parent = parent.parent)) and scope is windowStyle)
 					break
-				parent = parent.parent
 
 			unless @item
 				unless File.Input.test id
@@ -268,7 +277,6 @@ module.exports = (File, data) -> class Style
 			@isAutoParent = !@item.parent
 
 		@node.attrs.set 'neft:styleItem', @item
-		@item.document.node = @node
 
 		if @isLink()
 			@item.linkUri = @getLinkUri()
