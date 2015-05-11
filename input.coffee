@@ -48,9 +48,10 @@ module.exports = (File) -> class Input
 			else
 				destFile = file
 			v = getFromElement destFile.node, prop
-			if source = destFile.source
-				if v is undefined
-					v = getFromElement source.node, prop
+			if v is undefined and file.source instanceof File.Iterator
+				v = getFromElement file.source.node, prop
+			if v is undefined and source = destFile.source
+				v = getFromElement source.node, prop
 				if v is undefined
 					v = getFromObject source.storage, prop
 			if v is undefined
