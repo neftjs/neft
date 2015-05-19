@@ -263,24 +263,26 @@ new app.Route({
 				utils.merge req.cookies, app.cookies._data
 			else
 				utils.merge res.cookies, app.cookies._data
-			req.onLoaded ->
+			req.onLoaded.listeners.unshift ->
 				if utils.isClient
 					for key, val of res.cookies
 						unless utils.isEqual(app.cookies.get(key), val)
 							app.cookies.set key, val
 				return
+			, null
 			return
 
 		# propagate data
 		Renderer.resources = app.resources
 		Renderer.serverUrl = app.networking.url
 
-		# initialize styles
-		for style in opts.styles when style.name?
-			app.styles[style.name] = style.file app
+		if opts.styles?
+			# initialize styles
+			for style in opts.styles when style.name?
+				app.styles[style.name] = style.file app
 
-		# set styles window item
-		windowStyle = app.styles?.view?.withStructure()
+			# set styles window item
+			windowStyle = app.styles?.view?.withStructure()
 		windowStyle ?=
 			mainItem: new Renderer.Item
 			ids: {}

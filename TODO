@@ -5,7 +5,8 @@ Document:
   ✔ neft:each functions scoping @done (15-04-23 14:50)
   ☐ Add neft:bind (e.g. neft:bind="name as neft:style:value")
   ☐ Add neft:log
-  ☐ Error messages
+  ☐ Better error messages
+  ☐ Elements ids
 
 Renderer:
   ☐ HTML namespace items
@@ -24,23 +25,33 @@ Renderer:
   ✔ Anchors implementation without bindings @done (15-04-24 18:49)
   ☐ Vector Graphic Items
   ☐ NML parser: allow duplicated ids in different file sections
-  ☐ Button text property
+  ✘ Button text property @cancelled (15-05-05 11:58)
   ☐ Grid utils - use free space equal for all cells
   ☐ Item::targetItem
   ☐ Item: auto width/height to preserve aspect
+  ☐ Cocos2d-x implementation
 
 Styles:
   ☐ Default styles
   ✔ Multiple styles in one file @started(15-05-01 10:33) @done (15-05-01 11:14) @lasted(0:41)
+  ☐ Reduce styles size
+  ✔ Don't use styles on node @done (15-05-07 09:05)
+  ☐ Create substyles from NML
+  ☐ Set Image::source by default for <img> elements
+  ☐ neft:func node
+  ☐ neft:func refactor
+  ☐ neft:func scoping in more than 1 neft:each parent
+  ☐ neft:func don't remove new lines
+  ☐ Re-use created classes in creating items
 
 Database:
   ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)
-  ☐ Sqlite implementation
-  ☐ Postgresql implementation
+  ✘ Sqlite implementation @cancelled (15-05-05 11:58)
+  ✘ Postgresql implementation @cancelled (15-05-05 11:58)
   ✔ MySQL implementation @done (15-04-30 10:01)
   ☐ QML implementation
   ✔ Browser implementation @started(15-05-01 18:19) @done (15-05-01 23:55) @lasted(5:36)
-  ☐ Schema support
+  ✘ Schema support @cancelled (15-05-05 11:58)
 
 Docs:
   ☐ Getting Started
@@ -50,6 +61,7 @@ Docs:
   ☐ Move Rendering classes up
   ☐ Bold currently reading aside nav item on scroll
   ☐ Mobile main -> docs -> main bugs
+  ☐ New welcome page "Write apps. Faster."
 
 Utils:
  ✔ Replace expects by manual checks @started(15-04-25 10:16) @done (15-04-25 10:46) @lasted(0:30)
@@ -59,7 +71,14 @@ Networking:
   ☐ Response headers
   ☐ Remove Response::raise
   ☐ Request and Response query
+  ☐ Hide errors stack
 
 App:
   ✔ Route - short arguments @started(15-04-30 17:47) @done (15-04-30 18:16) @lasted(0:29)
   ☐ Route - methods
+  ☐ Addons
+  ☐ Life editor
+
+Addons:
+ ☐ OAuth
+ ☐ Login/register

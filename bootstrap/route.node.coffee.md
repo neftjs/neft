@@ -75,7 +75,7 @@ Returns build app javascript file.
 		appFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
 		new app.Route
 			uri: APP_JS_URI
-			callback: (req, res, callback) ->
+			controller: (req, res, callback) ->
 				`//<development>`
 				fs.readFile JS_BUNDLE_FILE_PATH, 'utf-8', callback
 				`//</development>`
@@ -91,7 +91,7 @@ Returns neft javascript file.
 		neftGameFile = fs.readFileSync JS_NEFT_GAME_FILE_PATH, 'utf-8'
 		new app.Route
 			uri: NEFT_JS_URI
-			callback: (req, res, callback) ->
+			controller: (req, res, callback) ->
 				isGameType = getType(req) is 'game'
 
 				`//<development>`
@@ -113,7 +113,7 @@ Returns 'static/favicon.ico' file.
 
 		new app.Route
 			uri: 'favicon.ico'
-			callback: (req, res, callback) ->
+			controller: (req, res, callback) ->
 				res.redirect 'static/favicon.ico'
 
 #### static/{path*}
@@ -138,7 +138,7 @@ remember to clean your cookies when you finish.
 
 		route = new app.Route
 			uri: 'neft-type={type}/{rest*}'
-			callback: (req, res, callback) ->
+			controller: (req, res, callback) ->
 				res.setHeader 'Set-Cookie', "#{TYPE_COOKIE_NAME}=#{req.params.type}; path=/;"
 				res.redirect "#{app.networking.url}/#{req.params.rest}"
 
@@ -150,7 +150,7 @@ text browsers) or HTML scaffolding which will run **neft.io** on the client side
 		new app.Route
 			uri: '*'
 			view: view
-			callback: (req, res, callback) ->
+			controller: (req, res, callback) ->
 				# text mode
 				if getType(req) is 'text'
 					return callback true

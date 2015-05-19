@@ -63,7 +63,8 @@ Class known as `app.Route` used to automate dealing with networking.
 			uri = route.uri._uri
 			uri = uri.replace Networking.Uri.NAMES_RE, ''
 			uri = uri.replace /\*/g, ''
-			uri = uri.replace /\/\//g, ''
+			while uri.indexOf('//') isnt -1
+				uri = uri.replace /\/\//g, '/'
 			uri = uri.replace /^\//, ''
 			uri = uri.replace /\/$/, ''
 			uri = uri.split '/'
@@ -80,20 +81,30 @@ module.exports = function(app){
 
 Acceptable syntaxes:
 ```
+*Route* Route(*String* method, *String* uri, *Object* options)
+*Route* Route(*String* uri, *Object* options)
 *Route* Route(*String* method, *String* uri)
 *Route* Route(*String* uri)
 ```
 
-		constructor: (method, uri) ->
+		constructor: (method, uri, opts={}) ->
 			if uri is undefined
 				if typeof method is 'string'
+					# uri
 					opts = uri: method
 				else
+					# opts
 					opts = method
 			else
-				opts =
-					method: method
-					uri: uri
+				if utils.isObject(uri)
+					# uri, opts
+					opts = uri
+					opts.uri ?= method
+				else
+					# method, uri
+					# method, uri, opts
+					opts.method ?= method
+					opts.uri ?= uri
 
 			assert.instanceOf @, AppRoute
 			assert.isPlainObject opts
@@ -132,6 +143,10 @@ Acceptable syntaxes:
 			# callback
 			if opts.hasOwnProperty('callback')
 				setCallback @, opts.callback
+
+			# before
+			if opts.hasOwnProperty('before')
+				setBefore @, opts.before
 
 			# register route in networking
 			app.networking.createHandler
@@ -413,14 +428,32 @@ new app.Route({
 				assert.instanceOf val, Networking.Uri
 				ctx.serverResourceUri = val
 
-*Function* Route::callback
---------------------------
+*Function* Route::before
+------------------------
 
-Custom function called before getting data from the server (Route::serverResourceUri) and
+Custom function called after getting data from the server (Route::serverResourceUri) and
 before controller function.
 
 It's called with the same parameters as controller, that is 
 [Networking.Request][], [Networking.Response][] and *callback*.
+
+		before: null
+
+		CONFIG_KEYS.push 'before'
+
+		setBefore = (ctx, val) ->
+			assert.instanceOf ctx, AppRoute
+
+			if val is null
+				return
+
+			switch typeof val
+				when 'string'
+					ctx.before = null
+					getByPath ctx, val, 'controller', 'controllers', (val) ->
+						ctx.before = val
+				when 'function'
+					ctx.before = val
 
 		callback: null
 
@@ -478,10 +511,24 @@ It's called with the same parameters as controller, that is
 							else
 								callback _res.data
 
+			# before
+			if @before
+				stack.add (callback) =>
+					logtime = log.time "Route before"
+					@before req, res, (err, data) ->
+						log.end logtime
+						logtime = null
+
+						if data isnt undefined
+							res.data = data
+
+						callback err
+
 			# custom callback
 			if @callback
 				stack.add (callback) =>
 					logtime = log.time "Route callback"
+					log.warn "Route::callback is deprecated"
 					@callback req, res, (err, data) ->
 						log.end logtime
 						logtime = null
@@ -528,6 +575,7 @@ It's called with the same parameters as controller, that is
 				masterLogtime = null
 
 				if err?
+					res.data ?= err
 					res.onSent.disconnect onSent
 					return next err
 
