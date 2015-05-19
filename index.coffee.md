@@ -1,5 +1,10 @@
-Database @engine
-================
+Database @library
+=================
+
+Access it with:
+```
+var db = require('db');
+```
 
 	'use strict'
 
@@ -25,6 +30,20 @@ Database @engine
 
 db.get(*String* key, [*Integer* options], *Function* callback)
 --------------------------------------------------------------
+
+```
+db.set('items', [], function(){
+\  db.get('items', db.OBSERVABLE, function(err, dict){
+\    dict.onInserted(function(index){
+\      console.log(this.get(index) + ' inserted!');
+\    });
+\
+\    db.append('items', 'item1', function(){
+\      // item1 inserted
+\    });
+\  });
+});
+```
 
 	exports.get = (key, opts, callback) ->
 		if typeof opts is 'function'
