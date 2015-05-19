@@ -1,4 +1,4 @@
-min
+min @validator
 ===
 
 Determines the minimum range for number.
@@ -33,5 +33,5 @@ console.log(schema.validate({age: 0}));
 		assert.isFloat expected
 		, "min validator option for #{row} property must be float"
 
-		if value < expected
+		if not value or value.length < expected
 			throw new Schema.Error "Minimum range of #{row} is #{expected}"

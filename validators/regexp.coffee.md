@@ -1,4 +1,4 @@
-regexp
+regexp @validator
 ======
 
 Use this validator to check whether property value passed regular expression.

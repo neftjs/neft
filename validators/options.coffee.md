@@ -1,4 +1,4 @@
-options
+options @validator
 =======
 
 This validator determines accepted property values.

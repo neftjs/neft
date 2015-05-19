@@ -1,4 +1,4 @@
-optional
+optional @validator
 ========
 
 Use this validator to mark property as optional.

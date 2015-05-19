@@ -1,4 +1,4 @@
-object
+object @validator
 ======
 
 This validator is used to determine whether passed *value* is an object.

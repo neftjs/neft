@@ -1,4 +1,4 @@
-max
+max @validator
 ===
 
 Determines the maximum range for number.
@@ -33,5 +33,5 @@ console.log(schema.validate({age: -5}));
 		assert.isFloat expected
 		, "max validator option for #{row} property must be float"
 
-		if value > expected
+		if not value or value.length > expected
 			throw new Schema.Error "Maximum range of #{row} is #{expected}"

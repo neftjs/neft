@@ -1,4 +1,4 @@
-Schema
+Schema @library
 ======
 
 **Validate data**

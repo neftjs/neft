@@ -1,4 +1,4 @@
-type
+type @validator
 ====
 
 Use this validator to verify property value type.

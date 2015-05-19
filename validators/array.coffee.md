@@ -1,4 +1,4 @@
-array
+array @validator
 =====
 
 This validator is used to determine whether *value* is a true array.
