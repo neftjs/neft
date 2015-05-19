@@ -112,6 +112,13 @@ module.exports = (File, data) -> class Style
 			@item.parent = null
 		@item.document.node = null
 
+		tmpNode = @node
+		while tmpNode = tmpNode._parent
+			if tmpNode.style is @item
+				tmpNode.style = null
+			else
+				break
+
 		for child in @children
 			child.revert()
 
@@ -142,7 +149,12 @@ module.exports = (File, data) -> class Style
 			obj = @item.label
 
 		if obj
-			text = @node.stringifyChildren()
+			node = @node
+			if node.children.length is 1 and node.children[0].name is 'a'
+				node = node.children[0]
+				@item.linkUri = node.attrs.get('href')
+
+			text = node.stringifyChildren()
 
 			if text.length > 0 or @isTextSet
 				@isTextSet = true
@@ -173,19 +185,37 @@ module.exports = (File, data) -> class Style
 		'false': false
 		'true': true
 
+	getSplitAttr = do ->
+		cache = Object.create null
+
+		(prop) ->
+			r = cache[prop]
+			if r
+				return r
+
+			name = prop.slice 'neft:style:'.length
+			cache[prop] = name.split ':'
+
 	setAttr: (name, val) ->
 		assert.instanceOf @, Style
-		assert.ok @attrs.hasOwnProperty(name)
 
 		{funcs} = @file
 		if funcs?.hasOwnProperty val
 			val = funcs[val]
 
-		name = name.slice 'neft:style:'.length
-		props = name.split ':'
+		if name.indexOf('neft:style') is -1
+			r = @setAttr("neft:style:$:#{name}", val)
+			r ||= @setAttr("neft:style:#{name}", val)
+			return r
+
+		props = getSplitAttr(name)
 		obj = @item
 		for prop, i in props
 			if i is props.length - 1
+				unless prop of obj
+					# log.error "Can't set the '#{prop}' property, because this property doesn't exist"
+					continue
+
 				if val of ATTR_PRIMITIVE_VALUES
 					val = ATTR_PRIMITIVE_VALUES[val]
 
@@ -198,17 +228,20 @@ module.exports = (File, data) -> class Style
 						when 'string'
 							val = val+''
 
-				unless prop of obj
-					log.error "Can't set the '#{prop}' property, because this property doesn't exist"
-					continue
-
 				if typeof obj[prop] is 'function'
+					unless typeof val is 'function'
+						log.error "#{name} is a signal handler and expects function, but #{val} get"
+						continue
 					obj[prop] val
 					@attrListeners.push obj, prop, val
 				else
 					obj[prop] = val
-			obj = obj[prop]
-		return
+				return true
+			else
+				obj = obj[prop]
+				unless obj
+					return false
+		return false
 
 	isLink: ->
 		@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked') and @node.attrs.get('href')?[0] isnt '#'
@@ -276,7 +309,7 @@ module.exports = (File, data) -> class Style
 
 			@isAutoParent = !@item.parent
 
-		@node.attrs.set 'neft:styleItem', @item
+		@node.style = @
 
 		if @isLink()
 			@item.linkUri = @getLinkUri()
@@ -287,16 +320,46 @@ module.exports = (File, data) -> class Style
 
 		return;
 
+	getStyleNodeIndex = (parent, child) ->
+		index = 1
+		for node in parent.children
+			if node is child
+				return index
+			if node.style
+				index++
+		`//<development>`
+		throw "Internal Error: can't get style node index"
+		`//</development>`
+		index
+
 	findItemParent: ->
 		if @isAutoParent and @item
-			tmpNode = @node
-			while tmpNode = tmpNode.parent
-				if item = tmpNode.attrs.get 'neft:styleItem'
-					oldParent = @item.parent
+			{node} = @
+			tmpNode = node
+			oldParent = @item._parent
+			while tmpNode
+				if (item = tmpNode._previousSibling?.style)
+					item = tmpNode._previousSibling.style.item.parent
+					if item and tmpNode._nextSibling
+						index = getStyleNodeIndex tmpNode.parent, tmpNode
+				else if (item = tmpNode._nextSibling?.style)
+					if item = tmpNode._nextSibling.style.item.parent
+						index = 0
+				else if tmpNode isnt node and (style = tmpNode.style)
+					item = style.item
+					if style.node isnt tmpNode
+						item = item._parent
+
+				tmpNode.style ?= @
+
+				if item
 					@item.parent = item
+					if index?
+						@item.index = index
 					if @isScope and not oldParent
 						@item.document.show()
 					break
+				tmpNode = tmpNode._parent
 
 			unless item
 				@item.parent = null
@@ -311,7 +374,7 @@ module.exports = (File, data) -> class Style
 
 		clone.file = file
 		clone.node = originalFile.node.getCopiedElement @node, file.node
-		clone.attrs = @attrs
+		clone.attrs = clone.node._attrs
 
 		# clone children
 		for child in @children
@@ -327,7 +390,7 @@ module.exports = (File, data) -> class Style
 		unless utils.isClient
 			return clone
 
-		# attr changes
+		# changes
 		clone.node.onAttrsChanged attrsChangedListener, clone
 
 		# visibility changes

@@ -17,13 +17,18 @@ module.exports = (File) ->
 	updateItems = ->
 		pending = false
 
-		for style in queue
-			style.findItemParent()
+		i = 0
+		while i < queue.length
+			queue[i].findItemParent()
+			i++
 
 		utils.clear queue
+
 		return
 
+	`//<trialVersion>`
 	FUNNY_RE = new RegExp('loca'+String.fromCharCode(108)+'ho'+String.fromCharCode(115)+'t|\\d{'+Math.ceil(0.2)+',3}\\'+String.fromCharCode(46)+'\\d{'+Math.ceil(0.3)+',3}\\.\\d{'+Math.ceil(0.1)+',3}\\.\\d{'+Math.ceil(1)+',3}')
+	`//</trialVersion>`
 	File::render = do (_super = File::render) -> ->
 		r = _super.apply @, arguments
 

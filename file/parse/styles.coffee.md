@@ -92,10 +92,8 @@ Item {
 				style = new Style
 				style.file = file
 				style.node = node
-				style.attrs = findAttrs(node)
+				# style.attrs = findAttrs(node)
 				style.parent = parentStyle
-
-				node.attrs.set 'neft:styleItem', null
 
 				if parentStyle
 					parentStyle.children.push style
@@ -107,7 +105,7 @@ Item {
 			for child in node.children
 				if child instanceof File.Element.Tag
 					forNode child, parentStyle
-			null
+			return
 
 		forNode file.node, null, null
 
