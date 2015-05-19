@@ -87,10 +87,10 @@ module.exports = (impl) ->
 		running = progress isnt 1 or (anim._running and anim._loop && anim._when)
 
 		target = anim._target
-		if anim._updateData
+		if anim._updateData or not running
 			val = (data.to - data.from) * progress + data.from
 
-			if anim._updateProperty
+			if anim._updateProperty or not running
 				anim._updatePending = true
 				target[anim._property] = val
 				anim._updatePending = false

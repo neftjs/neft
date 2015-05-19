@@ -191,9 +191,7 @@ Grid {
 					return
 
 				super()
-				@_target._classList.unshift @
-				updateClassList @_target
-				updateTargetClass enableClass, @_target, @
+				updateTargetClass saveAndEnableClass, @_target, @
 				return
 
 			disable: ->
@@ -205,8 +203,7 @@ Grid {
 					return
 
 				super()
-				updateTargetClass disableClass, @_target, @
-				utils.remove @_target._classList, @
+				updateTargetClass saveAndDisableClass, @_target, @
 				return
 
 		updateClassList = do ->
@@ -235,6 +232,15 @@ Grid {
 				object[path[path.length - 1]] = val
 			return
 
+		saveAndEnableClass = (item, classElem) ->
+			item._classList.unshift classElem
+			updateClassList item
+			enableClass item, classElem
+
+		saveAndDisableClass = (item, classElem) ->
+			disableClass item, classElem
+			utils.remove item._classList, classElem
+
 		###
 		TODO: support deeper attributes properly
 		e.g. margin doesn't restore margin.left
@@ -246,7 +252,8 @@ Grid {
 
 			classList = item._classList
 			classListIndex = classList.indexOf classElem
-			assert.isNot classListIndex, -1
+			if classListIndex is -1
+				return
 
 			{changes} = classElem
 			attributes = changes._attributes
@@ -357,7 +364,8 @@ Grid {
 			classList = item._classList
 			classListIndex = classList.indexOf classElem
 			classListLength = classList.length
-			assert.isNot classListIndex, -1
+			if classListIndex is -1
+				return
 
 			{changes} = classElem
 			attributes = changes._attributes
@@ -380,6 +388,10 @@ Grid {
 
 				restoreDefault = true
 				for i in [classListIndex-1..0] by -1
+					# BUG: undefined on QML (potential Array::sort bug)
+					unless classList[i]
+						continue
+
 					if classList[i].changes._attributes.hasOwnProperty(attr)
 						restoreDefault = false
 						break

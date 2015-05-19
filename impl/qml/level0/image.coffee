@@ -20,64 +20,107 @@ module.exports = (impl) ->
 	useShader = (item) ->
 		data = item._impl
 
-		data.shader = impl.utils.createQmlObject 'ShaderEffect {
+		data.shader = impl.utils.createQmlObject """
+		Item {
 			id: shader;
 			property variant image: null;
 			property double offsetX: 0;
 			property double offsetY: 0;
-			property double sourceWidth: this.image ? this.image.sourceSize.width : 0;
-			property double sourceHeight: this.image ? this.image.sourceSize.height : 0;
-			property variant src: ShaderEffectSource {
-				sourceItem: shader.image;
-				wrapMode: ShaderEffectSource.Repeat;
-				hideSource: true;
+			property int xDir: 1;
+			property int yDir: 1;
+			anchors.fill: this.image;
+			clip: true;
+
+			onOffsetXChanged: {
+				this.updateOffset();
 			}
-			function updateOffsetX(){
-				shader.offset.x = -shader.offsetX/shader.sourceWidth;
+			onOffsetYChanged: {
+				this.updateOffset();
 			}
-			function updateOffsetY(){
-				shader.offset.y = -shader.offsetY/shader.sourceHeight;
+			onWidthChanged: {
+				this.updateSize();
 			}
-			function updateTileX(){
-				shader.tile.x = shader.sourceWidth/shader.width;
+			onHeightChanged: {
+				this.updateSize();
 			}
-			function updateTileY(){
-				shader.tile.y = shader.sourceHeight/shader.height;
+			onXDirChanged: {
+				this.updateDir();
 			}
-			onOffsetXChanged: updateOffsetX();
-			onOffsetYChanged: updateOffsetY();
-			onSourceWidthChanged: {updateOffsetX(), updateTileX()}
-			onSourceHeightChanged: {updateOffsetY(), updateTileY()}
-			onWidthChanged: updateTileX();
-			onHeightChanged: updateTileY();
-			property point tile: Qt.point(0, 0);
-			property point offset: Qt.point(0, 0);
-			width: this.image ? this.image.width : 0;
-			height: this.image ? this.image.height : 0;
-			vertexShader: "
-				uniform highp mat4 qt_Matrix;
-				attribute highp vec4 qt_Vertex;
-				attribute highp vec2 qt_MultiTexCoord0;
-				varying highp vec2 coord;
-				void main() {
-					coord = qt_MultiTexCoord0;
-					gl_Position = qt_Matrix * qt_Vertex;
+			onYDirChanged: {
+				this.updateDir();
+			}
+
+			function updateSize(){
+				this.updateImages();
+				this.updateOffset();
+			}
+
+			function updateDir(){
+				var children = this.children,
+				    c00 = children[0],
+				    c10 = children[1],
+				    c01 = children[2],
+				    c11 = children[3];
+				c10.baseX = c11.baseX = c00.width * this.xDir * -1;
+				c01.baseY = c11.baseY = c00.height * this.yDir * -1;
+			}
+
+			function updateImages(){
+				var children = this.children,
+				    width = Math.floor(this.width / this.image.width) * this.image.width,
+				    height = Math.floor(this.height / this.image.height) * this.image.height;
+				if (!isFinite(width) || !isFinite(height)){
+					return;
 				}
-			";
-			fragmentShader: "
-				varying highp vec2 coord;
-				uniform sampler2D src;
-				uniform vec2 tile;
-				uniform vec2 offset;
-				void main() {
-					gl_FragColor = texture2D(src, fract(coord / tile) + offset);
+
+				for (var i = 0; i < 4; i++){
+					var child = children[i];
+					child.width = width;
+					child.height = height;
 				}
-			";
-		}'
+
+				this.updateDir();
+			}
+
+			function updateOffset(){
+				var children = this.children,
+				    offsetX = this.offsetX % this.width,
+				    offsetY = this.offsetY % this.height;
+				if (children.length !== 5){
+					return;
+				}
+
+				for (var i = 0; i < 4; i++){
+					var child = children[i];
+					child.offsetX = offsetX;
+					child.offsetY = offsetY;
+				}
+
+				this.xDir = offsetX > 0 ? 1 : -1;
+				this.yDir = offsetY > 0 ? 1 : -1;
+			}
+
+			Repeater {
+				model: 4;
+
+				Image {
+					source: shader.image ? shader.image.source : '';
+					sourceSize.width: shader.image ? shader.image.sourceSize.width : 0;
+					sourceSize.height: shader.image ? shader.image.sourceSize.height : 0;
+					fillMode: Image.Tile;
+					property double offsetX: 0;
+					property double offsetY: 0;
+					property double baseX: 0;
+					property double baseY: 0;
+					x: this.baseX + this.offsetX;
+					y: this.baseY + this.offsetY;
+				}
+			}
+		}
+		""", data.elem.parent
 
 		# TODO: what with elem children and items order
 		data.shader.image = data.elem
-		data.shader.parent = data.elem.parent
 
 		return
 
@@ -113,7 +156,7 @@ module.exports = (impl) ->
 			unless impl.utils.DATA_URI_RE.test(val)
 				if rsc = impl.Renderer.resources.getResource(val)
 					data.resource = rsc
-					val = 'qrc:/' + rsc.getPath()
+					val = 'qrc:' + rsc.getPath()
 				else
 					val = impl.utils.toUrl(val)
 			elem.source = val or ''
@@ -157,13 +200,13 @@ module.exports = (impl) ->
 		return
 
 	setImageOffsetX: (val) ->
-		unless @_impl.shader
-			useShader @
-		@_impl.shader.offsetX = val
+		# unless @_impl.shader
+		# 	useShader @
+		# @_impl.shader.offsetX = val
 		return
 
 	setImageOffsetY: (val) ->
-		unless @_impl.shader
-			useShader @
-		@_impl.shader.offsetY = val
+		# unless @_impl.shader
+		# 	useShader @
+		# @_impl.shader.offsetY = val
 		return

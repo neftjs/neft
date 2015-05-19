@@ -25,7 +25,7 @@ module.exports = (impl) ->
 		Screen: require './level0/screen'
 		Navigator: require './level0/navigator'
 		RotationSensor: require './level0/sensor/rotation'
-		AmbientSound: require './level0/sound/ambient'
+		# AmbientSound: require './level0/sound/ambient'
 
 		Rectangle: require './level1/rectangle'
 		Animation: require './level1/animation'

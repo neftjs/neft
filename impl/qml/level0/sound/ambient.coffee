@@ -19,7 +19,7 @@ module.exports = (impl) ->
 	setAmbientSoundSource: (val) ->
 		unless impl.utils.DATA_URI_RE.test(val)
 			if rsc = impl.Renderer.resources.getResource(val)
-				val = 'qrc:/' + rsc.getPath()
+				val = 'qrc:' + rsc.getPath()
 			else
 				val = impl.utils.toUrl(val)
 		@_impl.elem.source = val

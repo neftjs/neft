@@ -160,6 +160,7 @@ Rectangle {
 
 			index: (val) -> Array::indexOf.call @, val
 			has: (val) -> @index(val) isnt -1
+			indexOf: @::index
 
 ### *Signal* Item.children::inserted(*Item* child, *Integer* index)
 
@@ -198,6 +199,8 @@ Item {
 				old = @_parent
 				if old is val
 					return
+
+				assert.isNot @, val
 
 				oldPreviousSibling = @_previousSibling
 				oldNextSibling = @_nextSibling
@@ -279,6 +282,62 @@ Item {
 ### *Signal* Item::nextSiblingChanged(*Item* oldValue)
 
 		signal.Emitter.createSignal @, 'nextSiblingChanged'
+
+*Integer* Item::index
+---------------------
+
+		utils.defineProperty @::, 'index', null, ->
+			@_parent?.children.index(@) or 0
+		, (val) ->
+			assert.isInteger val
+			assert.operator val, '>=', 0
+
+			{index} = @
+			parent = @_parent
+			if index is val or not parent
+				return
+			children = parent._children
+			if children.length <= val
+				val = children.length - 1
+
+			# current siblings
+			@_previousSibling?._nextSibling = @_nextSibling
+			@_nextSibling?._previousSibling = @_previousSibling
+
+			# new siblings
+			@_previousSibling = children[val-1] or null
+			@_nextSibling = children[val] or null
+			@_previousSibling?._nextSibling = @
+			@_nextSibling?._previousSibling = @
+
+			# current siblings signals
+			@previousSiblingChanged children[index-1]
+			@nextSiblingChanged children[index+1]
+
+			# new siblings signals
+			children[index-1]?.nextSiblingChanged @
+			children[index+1]?.previousSiblingChanged @
+
+			# implementation
+			tmp = []
+			Impl.setItemParent.call @, null
+			for i in [val...children.length] by 1
+				child = children[i]
+				Impl.setItemParent.call child, null
+				tmp.push child
+
+			Impl.setItemParent.call @, parent
+			for item in tmp
+				Impl.setItemParent.call item, parent
+
+			# children array
+			Array::splice.call children, index, 1
+			if val > index
+				val--
+
+			Array::splice.call children, val, 0, @
+
+			return
 
 *Boolean* Item::visible = true
 ------------------------------

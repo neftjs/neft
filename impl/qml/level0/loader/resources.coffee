@@ -18,7 +18,7 @@ module.exports = (impl) ->
 				for resolution, path of resolutions
 					length++
 					img = impl.utils.createQmlObject 'Image { asynchronous: true }'
-					img.source = 'qrc:/' + path
+					img.source = 'qrc:' + path
 					if img.status is Image.Loading
 						img.statusChanged.connect img, onLoaded
 					else
