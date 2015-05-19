@@ -17,7 +17,7 @@ neft:rule @xml
 	commands =
 		'attrs': (command, node) ->
 			for name, val of command._attrs
-				unless node.attrs.has name
+				unless node.attrs.has(name)
 					node.attrs.set name, val
 			return
 
@@ -34,6 +34,12 @@ neft:rule @xml
 		while node = node.parent
 			i++
 		i
+
+	isMainFileRule = (node) ->
+		while node = node.parent
+			if node.name isnt '' and node.name isnt 'neft:rule'
+				return false
+		true
 
 	module.exports = (File) ->
 		parseLinks = require('./fragments/links') File
@@ -57,9 +63,11 @@ neft:rule @xml
 			for link in links
 				linkView = File.factory link.path
 				for externalRule in linkView._rules
-					rules.push
-						node: externalRule.node
-						parent: file.node
+					# load rules only from the mail file scope
+					if isMainFileRule(externalRule)
+						rules.push
+							node: externalRule.node
+							parent: file.node
 
 			for rule in rules
 				query = rule.node.attrs.get 'query'
@@ -67,9 +75,18 @@ neft:rule @xml
 					log.error "No 'query' attribute found"
 					continue
 
+				nodeCommands = []
+				for child in rule.node.children
+					if child.name is 'neft:rule'
+						subquery = query + ' ' + child.attrs.get('query')
+						child.attrs.set 'query', subquery
+						child.parent = rule.parent
+					else
+						nodeCommands.push child
+
 				nodes = rule.parent.queryAll query
 				for node in nodes
-					for command in rule.node.children
+					for command in nodeCommands
 						enterCommand command, node
 
 			return

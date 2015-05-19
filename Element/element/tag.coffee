@@ -23,6 +23,7 @@ module.exports = (Element) ->
 		constructor: ->
 			@children = []
 			@name = ''
+			@style = null
 			@_attrs = {}
 
 			super()

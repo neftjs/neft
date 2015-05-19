@@ -56,9 +56,9 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		# listen on changes
 		if each instanceof List
-			each.onChanged @updateItem
-			each.onInserted @insertItem
-			each.onPopped @popItem
+			each.onChanged @updateItem, @
+			each.onInserted @insertItem, @
+			each.onPopped @popItem, @
 
 			array = each.items()
 
@@ -75,9 +75,9 @@ module.exports = (File) -> class Iterator extends File.Use
 			@clearData()
 
 			if data instanceof List
-				data.onChanged.disconnect @updateItem
-				data.onInserted.disconnect @insertItem
-				data.onPopped.disconnect @popItem
+				data.onChanged.disconnect @updateItem, @
+				data.onInserted.disconnect @insertItem, @
+				data.onPopped.disconnect @popItem, @
 
 		@data = null
 
@@ -170,10 +170,6 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.storage = utils.cloneDeep @storage
 		clone.array = null
 		clone.usedFragments = []
-
-		clone.updateItem = (arg1, arg2) => @updateItem.call clone, arg1, arg2
-		clone.insertItem = (arg1, arg2) => @insertItem.call clone, arg1, arg2
-		clone.popItem = (arg1, arg2) => @popItem.call clone, arg1, arg2
 
 		clone.node.onAttrsChanged attrsChangedListener, clone
 		clone.node.onVisibilityChanged visibilityChangedListener, clone

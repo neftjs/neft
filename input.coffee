@@ -38,9 +38,10 @@ module.exports = (File) -> class Input
 
 		getFromObject = (obj, prop) ->
 			if obj instanceof Dict
-				obj.get prop
-			else if obj
-				obj[prop]
+				v = obj.get prop
+			if v is undefined and obj
+				v = obj[prop]
+			v
 
 		(file, prop) ->
 			if file.source instanceof File.Iterator
@@ -202,7 +203,8 @@ module.exports = (File) -> class Input
 			val = obj.get prop
 		else if obj instanceof List
 			val = obj.get prop
-		else
+
+		if val is undefined
 			val = obj[prop]
 
 		if val
