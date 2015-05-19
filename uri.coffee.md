@@ -104,7 +104,7 @@ In such case, you should use the *Uri::test()* method before.
 				val = exec[i+1]
 				if val is undefined
 					val = null
-				@params[name] = val
+				@params[name] = decodeURI val
 
 			@params
 
@@ -136,4 +136,4 @@ console.log(uri.toString());
 
 			i = 0
 			@_uri.replace Uri.NAMES_RE, =>
-				encodeURIComponent params[@_names[i++]]
+				encodeURI params[@_names[i++]]
