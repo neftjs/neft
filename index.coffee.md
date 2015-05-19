@@ -249,7 +249,7 @@ console.log(list.items());
 
 		insert: (i, val) ->
 			assert.operator i, '>=', 0
-			assert.operator i, '<', @length
+			assert.operator i, '<=', @length
 			assert.isNot val, undefined
 
 			@_data.splice i, 0, val
