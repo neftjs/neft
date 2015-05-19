@@ -1,4 +1,4 @@
-Assert
+Assert @library
 ======
 
 **JavaScript so dynamic**
@@ -306,14 +306,14 @@ assert.lengthOf(*Any* value, *Integer* length, [*String* message])
 ------------------------------------------------------------------
 
 	assert.lengthOf = (val, length, msg) ->
-		unless val.length is length
+		unless val?.length is length
 			@fail val, length, msg, '.length ===', assert.lengthOf
 
 assert.notLengthOf(*Any* value, *Integer* length, [*String* message])
 ---------------------------------------------------------------------
 
 	assert.notLengthOf = (val, length, msg) ->
-		if val.length is length
+		if val?.length is length
 			@fail val, length, msg, '.length !==', assert.notLengthOf
 
 assert.operator(*Any* value1, *String* operator, *Any* value2, [*String* message])
