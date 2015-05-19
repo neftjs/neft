@@ -1,4 +1,4 @@
-Log
+Log @library
 ===
 
 **Colored console**
@@ -29,7 +29,7 @@ var log = require('log');
 		str.substring 0, str.length - 3
 
 	class Log
-		@LOGS_METHODS = ['info', 'warn', 'error', 'time']
+		@LOGS_METHODS = ['info', 'warn', 'error', 'time', 'ok']
 
 		@TIMES_LEN = 50
 
@@ -46,10 +46,8 @@ var log = require('log');
 		@timeDiff = (since) -> Log.time() - since
 		@times = new Array Log.TIMES_LEN
 
-		prefixes: null
-
-		constructor: (@prefixes) ->
-
+		constructor: (prefixes) ->
+			@prefixes = prefixes
 			if prefixes
 				assert.isArray prefixes
 
@@ -64,7 +62,7 @@ var log = require('log');
 			if typeof @['lo'+'g'].bind(@) is 'function'
 				return utils.merge @['lo'+'g'].bind(@), @
 
-		_write: console?['lo'+'g'] or (->)
+		_write: console?['lo'+'g'].bind(console) or (->)
 
 log([*Any* messages...])
 ------------------------
@@ -213,5 +211,5 @@ log("hello");
 		when utils.isBrowser
 			require './impls/browser/index.coffee'
 
-	LogImpl = if impl then impl Log else Log
+	LogImpl = if typeof impl is 'function' then impl Log else Log
 	module.exports = new LogImpl
