@@ -1,5 +1,5 @@
 Resource @class
-========
+===============
 
 	'use strict'
 

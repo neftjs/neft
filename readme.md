@@ -5,7 +5,7 @@ resources.json @learn
 
 ```
 {
-	"file": ""
+  "file": ""
 }
 ```
 
@@ -15,8 +15,8 @@ Path to a resource file *e.g. bg@2x.jpg* or another config json file.
 
 ```
 {
-	"file": ["music.mp3"]
-	"formats": ["mp3", "ogg"]
+  "file": ["music.mp3"]
+  "formats": ["mp3", "ogg"]
 }
 ```
 
@@ -28,8 +28,8 @@ Default file format can be omitted (*mp3* in the example).
 
 ```
 {
-	"file": ["bg@3x.png"]
-	"resolutions": [3, 2, 1, 0.5, 0.25]
+  "file": ["bg@3x.png"]
+  "resolutions": [3, 2, 1, 0.5, 0.25]
 }
 ```
 
@@ -45,16 +45,16 @@ Specify resolution smaller than 1, if a file is commonly resized into smaller si
 
 ```
 {
-	"resolutions": [2, 1, 0.5],
-	"resources": {
-		"bg": {
-			"file": "bg@2x.png"
-		},
-		"level1": {
-			"file": "level1/resources.json",
-			"resolutions": [2, 1, 0.5, 0.25]
-		}
-	}
+  "resolutions": [2, 1, 0.5],
+  "resources": {
+    "bg": {
+      "file": "bg@2x.png"
+    },
+    "level1": {
+      "file": "level1/resources.json",
+      "resolutions": [2, 1, 0.5, 0.25]
+    }
+  }
 }
 ```
 
@@ -66,9 +66,9 @@ All config properties like *resolutions* and *formats* are scoped from the paren
 
 ```
 {
-	"resolutions": [2, 1],
-	"resources": [
-		"bg@2x.png"
-	]
+  "resolutions": [2, 1],
+  "resources": [
+    "bg@2x.png"
+  ]
 }
 ```

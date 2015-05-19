@@ -1,5 +1,5 @@
 Resource Manager @engine
-================
+========================
 
 	'use strict'
 

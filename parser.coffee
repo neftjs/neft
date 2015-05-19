@@ -63,7 +63,7 @@ supportImageResource = (path, rsc) ->
 
 			for format in rsc.formats
 				for resolution in rsc.resolutions
-					resPath = rsc.paths[format][resolution]
+					resPath = rsc.paths[format][resolution].slice(1)
 					if not fs.existsSync(resPath) or new Date(fs.statSync(resPath).mtime) < mtime
 						sharp(path).resize(width * resolution, height * resolution).toFile(resPath)
 			callback()
@@ -153,7 +153,7 @@ parseResourceFile = (path, config) ->
 	for format in rsc.formats
 		formatPaths = paths[format] = {}
 		for resolution in rsc.resolutions
-			resPath = "#{dirPath}/#{name.file}#{resolutionToString(resolution)}.#{format}"
+			resPath = "/#{dirPath}/#{name.file}#{resolutionToString(resolution)}.#{format}"
 			formatPaths[resolution] = resPath
 
 	if rsc instanceof Resources.ImageResource
