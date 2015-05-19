@@ -25,4 +25,4 @@ console.log(schema.validate({friends: []}));
 
 	module.exports = (Schema) -> (row, value, expected) ->
 		if expected and not isArray(value)
-			throw new Schema.Error "#{row} must be an array"
+			throw new Schema.Error row, 'array', "#{row} must be an array"

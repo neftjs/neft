@@ -59,4 +59,4 @@ console.log(schema.validate({city: 'Paris'}));
 			passed = expected.hasOwnProperty value
 
 		unless passed
-			throw new Schema.Error "Passed #{row} value is not acceptable"
+			throw new Schema.Error row, 'options', "Passed #{row} value is not acceptable"

@@ -39,4 +39,4 @@ console.log(schema.validate({desc: []}));
 			value = undefined
 
 		if value? and typeof value isnt expected
-			throw new Schema.Error "#{row} must be a #{expected}"
+			throw new Schema.Error row, 'type', "#{row} must be a #{expected}"

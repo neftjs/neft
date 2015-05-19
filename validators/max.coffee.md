@@ -34,4 +34,4 @@ console.log(schema.validate({age: -5}));
 		, "max validator option for #{row} property must be float"
 
 		if not value or value.length > expected
-			throw new Schema.Error "Maximum range of #{row} is #{expected}"
+			throw new Schema.Error row, 'max', "Maximum range of #{row} is #{expected}"

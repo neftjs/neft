@@ -29,4 +29,4 @@ console.log(schema.validate({word: 'abc'}));
 		, "regexp validator option for #{row} property must be a regular expression"
 
 		unless expected.test value
-			throw new Schema.Error "#{row} doesn't pass regular expression"
+			throw new Schema.Error row, 'regexp', "#{row} doesn't pass regular expression"

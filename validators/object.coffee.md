@@ -51,7 +51,7 @@ console.log(schema.validate({dict: { name: 'John' }}));
 			return
 
 		unless utils.isObject(value)
-			throw new Schema.Error "#{row} must be an object"
+			throw new Schema.Error row, 'object', "#{row} must be an object"
 
 		# available properties
 		if props = expected?.properties
@@ -59,6 +59,6 @@ console.log(schema.validate({dict: { name: 'John' }}));
 
 			for prop of value
 				unless ~props.indexOf prop
-					throw new Schema.Error "#{row} doesn't provide #{prop} property"
+					throw new Schema.Error row, 'object.properties', "#{row} doesn't provide #{prop} property"
 
 		return

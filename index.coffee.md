@@ -28,7 +28,7 @@ var SchemaError = Schema.Error;
 ```
 
 	class SchemaError extends Error
-		constructor: (@message) -> super
+		constructor: (@property, @validator, @message) -> super
 
 		name: 'SchemaError'
 		message: ''
@@ -173,7 +173,7 @@ console.log(schema.validate({names: ['Lily', 'Max']}));
 			# check if there is no unprovided rows
 			for row of data
 				unless @schema.hasOwnProperty row
-					throw new SchemaError "Unexpected #{row} property"
+					throw new SchemaError row, null, "Unexpected #{row} property"
 
 			# by rows
 			for row, rowValidators of @schema
@@ -183,7 +183,7 @@ console.log(schema.validate({names: ['Lily', 'Max']}));
 				values = utils.get data, row
 
 				if not values? and not rowValidators.optional
-					throw new SchemaError "Required property #{row} not found"
+					throw new SchemaError row, 'optional', "Required property #{row} not found"
 
 				# by validators
 				for validatorName, validatorOpts of rowValidators
