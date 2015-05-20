@@ -52,6 +52,26 @@ neft:rule @xml
 			localRules = file.node.queryAll 'neft:rule'
 			localRules.sort (a, b) ->
 				getNodeLength(b) - getNodeLength(a)
+
+			for rule in localRules
+				query = rule.attrs.get 'query'
+				unless query
+					log.error "neft:rule no 'query' attribute found"
+					continue
+
+				children = rule.children
+				i = 0
+				n = children.length
+				while i < n
+					child = children[i]
+					if child.name is 'neft:rule'
+						subquery = query + ' ' + child.attrs.get('query')
+						child.attrs.set 'query', subquery
+						child.parent = rule.parent
+						n--
+					else
+						i++
+
 			for localRule in localRules
 				rules.push
 					node: localRule
@@ -70,23 +90,12 @@ neft:rule @xml
 							parent: file.node
 
 			for rule in rules
-				query = rule.node.attrs.get 'query'
-				unless query
-					log.error "No 'query' attribute found"
+				unless query = rule.node.attrs.get('query')
 					continue
-
-				nodeCommands = []
-				for child in rule.node.children
-					if child.name is 'neft:rule'
-						subquery = query + ' ' + child.attrs.get('query')
-						child.attrs.set 'query', subquery
-						child.parent = rule.parent
-					else
-						nodeCommands.push child
 
 				nodes = rule.parent.queryAll query
 				for node in nodes
-					for command in nodeCommands
+					for command in rule.node.children
 						enterCommand command, node
 
 			return

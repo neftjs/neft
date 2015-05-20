@@ -32,8 +32,11 @@ module.exports = (Element) ->
 		_addDomElement: (element) ->
 			lastTag = utils.last(@_tagStack) or @node
 
-			lastTag.children.push element
+			length = lastTag.children.push element
 			element._parent = lastTag
+			if element._previousSibling = (lastTag.children[length - 2] or null)
+				element._previousSibling._nextSibling = element
+			return
 
 		onopentag: (name, attribs) ->
 			lastTag = utils.last @_tagStack

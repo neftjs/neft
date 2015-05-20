@@ -55,7 +55,7 @@ Included fragments will be available under the given namespace.
 			path = href
 			if path[0] isnt '/'
 				path = pathUtils.join '/', file.pathbase, path
-			path = ///^\/(.+)\.html$///.exec(path)[1] or path
+			path = ///^(?:\/|\\)(.+)\.html$///.exec(path)[1] or path
 			links.push
 				path: path
 				namespace: namespace

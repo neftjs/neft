@@ -44,10 +44,14 @@ module.exports = (Element) ->
 		cloneDeep: ->
 			clone = @clone()
 
+			prevChild = null
 			for child in @children
 				clonedChild = child.cloneDeep()
 				clone.children.push clonedChild
 				clonedChild._parent = clone
+				if clonedChild._previousSibling = prevChild
+					prevChild._nextSibling = clonedChild
+				prevChild = child
 
 			clone
 
