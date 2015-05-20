@@ -220,7 +220,9 @@ module.exports = (File, data) -> class Style
 			return r
 
 		props = getSplitAttr(name)
-		obj = @item
+		unless obj = @item
+			return false
+
 		for prop, i in props
 			if i is props.length - 1
 				unless prop of obj
