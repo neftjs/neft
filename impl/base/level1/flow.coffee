@@ -39,17 +39,25 @@ updateItem = (item) ->
 		unless child._visible
 			continue
 
-		if column + child.margin.left + child.width >= maxColumn
+		margin = child._margin
+
+		if column is 0
+			x = 0
+		else if column + child.width + (if margin then margin._left else 0) >= maxColumn
 			column = 0
 			row = height
 			x = column
 		else
-			x = column + child.margin.left
+			x = column
+			if margin
+				x += margin._left
 
 		if row > 0
-			y = row + rowSpan + child.margin.top
+			y = row + rowSpan
+			if margin
+				y += margin._top
 		else
-			y = row
+			y = 0
 
 		right = x + child.width
 
@@ -59,12 +67,16 @@ updateItem = (item) ->
 		column = right
 		if column > width
 			width = column
-		column += columnSpacing + child.margin.right
+		column += columnSpacing
+		if margin
+			column += margin._right
 
 		y += child._height
 		if y > height
 			height = y
-		rowSpan = rowSpacing + child.margin.bottom
+		rowSpan = rowSpacing
+		if margin
+			rowSpan += margin._bottom
 
 	# set item size
 	if item.fill.width

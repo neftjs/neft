@@ -323,8 +323,9 @@ Item {
 			Impl.setItemParent.call @, null
 			for i in [val...children.length] by 1
 				child = children[i]
-				Impl.setItemParent.call child, null
-				tmp.push child
+				if child isnt @
+					Impl.setItemParent.call child, null
+					tmp.push child
 
 			Impl.setItemParent.call @, parent
 			for item in tmp
