@@ -207,9 +207,9 @@ This variable refers to the *get('data')* value.
 				return
 
 			linkFragments = (funcs, target) ->
-				if linkedFiles[target.id]
+				if linkedFiles[target.path]
 					return
-				linkedFiles[target.id] = true
+				linkedFiles[target.path] = true
 
 				for _, fragmentName of target.fragments
 					linkFragment funcs, fragmentName

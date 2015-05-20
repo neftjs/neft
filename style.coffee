@@ -211,7 +211,7 @@ module.exports = (File, data) -> class Style
 		assert.instanceOf @, Style
 
 		{funcs} = @file
-		if funcs?.hasOwnProperty val
+		if funcs?.hasOwnProperty(val)
 			val = funcs[val]
 
 		if name.indexOf('neft:style') is -1
@@ -241,7 +241,7 @@ module.exports = (File, data) -> class Style
 
 				if typeof obj[prop] is 'function'
 					unless typeof val is 'function'
-						log.error "#{name} is a signal handler and expects function, but #{val} get"
+						log.error "#{name} is a signal handler and expects function, but #{val} got"
 						continue
 					obj[prop] val
 					@attrListeners.push obj, prop, val
