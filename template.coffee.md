@@ -167,7 +167,7 @@ module.exports = function(app){
 			ctx.data = val
 
 *Signal* Template::onRendered(*View.DocumentGlobalData* globalData)
--------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------
 
 		CONFIG_KEYS.push 'onRendered'
 		signal.Emitter.createSignal @, 'rendered'

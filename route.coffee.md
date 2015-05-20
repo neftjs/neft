@@ -471,6 +471,11 @@ It's called with the same parameters as controller, that is
 			assert.instanceOf res, Networking.Response
 			assert.isFunction next
 
+			if req.type is Networking.Request.HTML_TYPE
+				oldCurrentRoute = app.currentRoute
+				app.currentRoute = @
+				app.changed 'currentRoute', oldCurrentRoute
+
 			stack = new utils.async.Stack
 			viewUsed = false
 

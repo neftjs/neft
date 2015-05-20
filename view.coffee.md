@@ -40,10 +40,15 @@ module.exports = function(app){
 
 		document: null
 
+*Any* View::data
+----------------
+
+		data: null
+
 *Document* View::render(*Networking.Request* req, [*Object* data])
 ------------------------------------------------------------------
 
-		render: (req, data) ->
+		render: (req, @data) ->
 			document = Document.factory @document.path
 
 			# data

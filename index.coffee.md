@@ -19,6 +19,7 @@ HTML documents and more.
 	Document = require 'document'
 	Renderer = require 'renderer'
 	Resources = require 'resources'
+	Dict = require 'dict'
 
 	AppRoute = require './route'
 	AppTemplate = require './template'
@@ -51,10 +52,10 @@ HTML documents and more.
 		if extraOpts?
 			utils.merge config, extraOpts
 
-*Object* app
+*Dict* app
 ------------
 
-		app =
+		app = new Dict
 
 *Object* app.config = {}
 ------------------------
@@ -101,10 +102,10 @@ module.exports = function(NeftApp){
 }
 ```
 
-			config: config
+		app.config = config
 
 *Networking* app.networking
--------------------------------
+---------------------------
 
 Standard Networking instance used to communicate
 with the server and to create local requests.
@@ -113,13 +114,13 @@ All routes created by the *App.Route* uses this networking.
 
 HTTP protocol is used by default with the data specified in the *package.json*.
 
-			networking: new Networking
-				type: Networking.HTTP
-				protocol: config.protocol
-				port: parseInt(config.port, 10)
-				host: config.host
-				url: config.url
-				language: config.language
+		app.networking = new Networking
+			type: Networking.HTTP
+			protocol: config.protocol
+			port: parseInt(config.port, 10)
+			host: config.host
+			url: config.url
+			language: config.language
 
 *Object* app.models = {}
 ------------------------
@@ -145,47 +146,52 @@ module.exports = function(app){
 };
 ```
 
-			models: {}
+		app.models = {}
 
 *Object* app.controllers = {}
 -----------------------------
 
 Files from the *controllers* folder with objects returned by their exported functions.
 
-			controllers: {}
+		app.controllers = {}
 
 *Object* app.routes = {}
 ------------------------
 
 Files from the *routes* folder with objects returned by their exported functions.
 
-			routes: {}
+		app.routes = {}
+
+*Route* app.currentRoute
+------------------------
+
+		app.currentRoute = null
 
 *Object* app.styles = {}
 ------------------------
 
 Files from the *styles* folder as *Function*s ready to create [Renderer.Item][]s..
 
-			styles: {}
+		app.styles = {}
 
 *Object* app.views = {}
 -----------------------
 
 Files from the *views* folder as *App.View* instances.
 
-			views: {}
+		app.views = {}
 
 *Object* app.templates = {}
 ---------------------------
 
 Files from the *templates* folder with objects returned by their exported functions.
 
-			templates: {}
+		app.templates = {}
 
 *Resources* app.resources
 -------------------------
 
-			resources: if opts.resources then Resources.fromJSON(opts.resources) else new Resources
+		app.resources = if opts.resources then Resources.fromJSON(opts.resources) else new Resources
 
 *Signal* app.ready()
 --------------------
