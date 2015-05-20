@@ -29,6 +29,7 @@ module.exports = (impl) ->
 		lastSnapTargetX: 0
 		lastSnapTargetY: 0
 		yScrollbar: false
+		updateScroll: null
 
 	DATA: DATA
 
@@ -44,6 +45,14 @@ module.exports = (impl) ->
 		scrollElem.style.width = '100%'
 		scrollElem.style.height = '100%'
 		data.elem.appendChild scrollElem
+
+		data.updateScroll = ->
+			self._impl.scrollElem.scrollLeft = round self._contentX
+			self._impl.scrollElem.scrollTop = round self._contentY
+			return
+
+		# creating
+		@onParentChanged data.updateScroll
 
 		# searching etc.
 		scrollElem.addEventListener 'scroll', ->
@@ -82,8 +91,12 @@ module.exports = (impl) ->
 
 	setScrollableContentX: (val) ->
 		@_impl.scrollElem.scrollLeft = round val
+		if val > 0 and @_impl.scrollElem.scrollLeft is 0
+			setTimeout @_impl.updateScroll
 		return
 
 	setScrollableContentY: (val) ->
 		@_impl.scrollElem.scrollTop = round val
+		if val > 0 and @_impl.scrollElem.scrollTop is 0
+			setTimeout @_impl.updateScroll
 		return
