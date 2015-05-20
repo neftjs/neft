@@ -65,6 +65,9 @@ module.exports = (File, data) -> class Style
 		@file = null
 		@node = null
 		@attrs = null
+		@setAttrs = Object.create null
+		@attrValues = []
+		@attrListeners = []
 		@parent = null
 		@isScope = false
 		@isAutoParent = false
@@ -73,7 +76,6 @@ module.exports = (File, data) -> class Style
 		@children = []
 		@textWatchingNodes = []
 		@visible = true
-		@attrListeners = []
 		@isTextSet = false
 		@classes = null
 
@@ -122,9 +124,18 @@ module.exports = (File, data) -> class Style
 		for child in @children
 			child.revert()
 
-		for name, val of @attrs
-			@setAttr name, val
+		# revert attr values
+		{setAttrs, attrValues} = @
+		while attrValues.length
+			oldVal = attrValues.pop()
+			prop = attrValues.pop()
+			obj = attrValues.pop()
+			obj[prop] = oldVal
+		for attr, set of setAttrs
+			if set
+				setAttrs[attr] = false
 
+		# revert attr listeners
 		{attrListeners} = @
 		while attrListeners.length
 			func = attrListeners.pop()
@@ -235,6 +246,9 @@ module.exports = (File, data) -> class Style
 					obj[prop] val
 					@attrListeners.push obj, prop, val
 				else
+					unless @setAttrs[name]
+						@setAttrs[name] = true
+						@attrValues.push obj, prop, obj[prop]
 					obj[prop] = val
 				return true
 			else
