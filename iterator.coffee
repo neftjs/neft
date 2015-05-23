@@ -48,7 +48,7 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		# stop if no data found
 		if not isArray(each) and not (each instanceof List)
-			log.warn "Data is not an array or a List:\n#{each}"
+			log.warn "Data is not an array nor List:\n#{each}"
 			return
 
 		# set as data

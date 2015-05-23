@@ -46,7 +46,7 @@ module.exports = (File) -> class Use
 			usedFragment.storage = @self.storage
 
 		unless usedFragment.isRendered
-			usedFragment.render @
+			usedFragment = usedFragment.render @
 
 		usedFragment.node.parent = @node
 

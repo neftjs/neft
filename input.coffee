@@ -34,7 +34,7 @@ module.exports = (File) -> class Input
 	@getVal = do ->
 		getFromElement = (elem, prop) ->
 			if elem instanceof Element
-				elem.attrs.get prop
+				elem._attrs[prop]
 
 		getFromObject = (obj, prop) ->
 			if obj instanceof Dict
