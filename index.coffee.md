@@ -1107,6 +1107,61 @@ console.log(utils.catchError(test, null, [100]))
 		catch err
 			err
 
+*Function* utils.bindFunctionContext(*Function* function, *Any* context)
+------------------------------------------------------------------------
+
+Fast **Function::bind** version.
+
+This function binds only function context (with no extra arguments).
+
+Using **arguments** object in the given **function** is limited to the **function** length.
+
+```
+function func(arg1){
+  console.log(this, arg1);
+}
+
+var bindFunc = utils.bindFunctionContext(func, {ctx: 1});
+
+console.log(bindFunc('a'));
+// {ctx: 1} "a"
+
+console.log(bindFunc('a', 'b'));
+// {ctx: 1} "a"
+```
+
+	exports.bindFunctionContext = do ->
+		bindFuncs = [
+			(func, ctx) ->
+				-> func.call ctx
+			(func, ctx) ->
+				(a1) -> func.call ctx, a1
+			(func, ctx) ->
+				(a1, a2) -> func.call ctx, a1, a2
+			(func, ctx) ->
+				(a1, a2, a3) -> func.call ctx, a1, a2, a3
+			(func, ctx) ->
+				(a1, a2, a3, a4) -> func.call ctx, a1, a2, a3, a4
+			(func, ctx) ->
+				(a1, a2, a3, a4, a5) -> func.call ctx, a1, a2, a3, a4, a5
+			(func, ctx) ->
+				(a1, a2, a3, a4, a5, a6) -> func.call ctx, a1, a2, a3, a4, a5, a6
+			(func, ctx) ->
+				(a1, a2, a3, a4, a5, a6, a7) -> func.call ctx, a1, a2, a3, a4, a5, a6, a7
+		]
+
+		anyLengthBindFunc = (func, ctx) ->
+			-> func.apply ctx, arguments
+
+		(func, ctx) ->
+			null
+			`//<development>`
+			if typeof func isnt 'function'
+				throw new Error "utils.bindFunctionContext function must be a function"
+			`//</development>`
+
+			bindFuncs[func.length]?(func, ctx) or anyLengthBindFunc(func, ctx)
+
 *Object* utils.errorToObject(*Error* error)
 -------------------------------------------
 
