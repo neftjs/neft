@@ -1,5 +1,5 @@
 Standard routes @learn
-====================
+======================
 
 **neft.io app** comes with few predefined routes.
 
@@ -10,6 +10,7 @@ Standard routes @learn
 	fs = require 'fs'
 	pathUtils = require 'path'
 
+	Dict = require 'dict'
 	Document = require 'document'
 	Networking = require 'networking'
 
@@ -20,15 +21,15 @@ Standard routes @learn
 	<html>
 	<head>
 		<meta charset="utf-8">
-		<title>${data.title}</title>
-		<script type="text/javascript" src="${data.neftFilePath}"></script>
-		<script type="text/javascript" src="${data.appFilePath}"></script>
+		<title>${title}</title>
+		<script type="text/javascript" src="${neftFilePath}"></script>
+		<script type="text/javascript" src="${appFilePath}"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	</head>
 	<body>
 		<noscript>
-			<meta http-equiv="refresh" content="0; url=${data.appTextModeUrl}"></meta>
+			<meta http-equiv="refresh" content="0; url=${appTextModeUrl}"></meta>
 		</noscript>
 	</body>
 	</html>
@@ -51,8 +52,7 @@ Standard routes @learn
 		JS_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
 		`//</development>`
 
-		view = new app.View do ->
-			Document.fromHTML VIEW_NAME, VIEW_HTML
+		view = Document.fromHTML(VIEW_NAME, VIEW_HTML)
 
 		reservedUris = ['app.js', 'favicon.ico', 'static']
 		reservedUrisRe = do =>
@@ -72,10 +72,12 @@ Standard routes @learn
 
 Returns build app javascript file.
 
+		`//<production>`
 		appFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
+		`//</production>`
 		new app.Route
 			uri: APP_JS_URI
-			controller: (req, res, callback) ->
+			getData: (callback) ->
 				`//<development>`
 				fs.readFile JS_BUNDLE_FILE_PATH, 'utf-8', callback
 				`//</development>`
@@ -87,12 +89,14 @@ Returns build app javascript file.
 
 Returns neft javascript file.
 
+		`//<production>`
 		neftFile = fs.readFileSync JS_NEFT_FILE_PATH, 'utf-8'
 		neftGameFile = fs.readFileSync JS_NEFT_GAME_FILE_PATH, 'utf-8'
+		`//</production>`
 		new app.Route
 			uri: NEFT_JS_URI
-			controller: (req, res, callback) ->
-				isGameType = getType(req) is 'game'
+			getData: (callback) ->
+				isGameType = getType(@request) is 'game'
 
 				`//<development>`
 				if isGameType
@@ -113,8 +117,7 @@ Returns 'static/favicon.ico' file.
 
 		new app.Route
 			uri: 'favicon.ico'
-			controller: (req, res, callback) ->
-				res.redirect 'static/favicon.ico'
+			redirect: 'static/favicon.ico'
 
 #### static/{path*}
 
@@ -136,9 +139,11 @@ remember to clean your cookies when you finish.
 <a href="/neft-type=text/">Use text type (robots)</a>
 ```
 
-		route = new app.Route
+		new app.Route
 			uri: 'neft-type={type}/{rest*}'
-			controller: (req, res, callback) ->
+			getData: (callback) ->
+				req = @request
+				res = @response
 				res.setHeader 'Set-Cookie', "#{TYPE_COOKIE_NAME}=#{req.params.type}; path=/;"
 				res.redirect "#{app.networking.url}/#{req.params.rest}"
 
@@ -149,11 +154,12 @@ text browsers) or HTML scaffolding which will run **neft.io** on the client side
 
 		new app.Route
 			uri: '*'
-			view: view
-			controller: (req, res, callback) ->
+			getData: (callback) ->
+				req = @request
+
 				# text mode
 				if getType(req) is 'text'
-					return callback true
+					return @next()
 
 				userAgent = req.headers['user-agent']
 
@@ -163,10 +169,16 @@ text browsers) or HTML scaffolding which will run **neft.io** on the client side
 				   utils.has(userAgent, 'Baiduspider') or # omit baidu bot
 				   utils.has(userAgent, 'facebook') or # omit facebook bot
 				   utils.has(userAgent, 'Links') # omit links text browser
-					return callback true
+					return @next()
 
-				callback null,
+				callback null
+
+			destroyHTML: ->
+				@response.data.destroy()
+					
+			toHTML: ->
+				view.render
 					title: app.config.title
-					appTextModeUrl: TEXT_MODE_URI_PREFIX + req.uri
+					appTextModeUrl: TEXT_MODE_URI_PREFIX + @request.uri
 					neftFilePath: app.networking.url + NEFT_JS_URI
 					appFilePath: app.networking.url + APP_JS_URI

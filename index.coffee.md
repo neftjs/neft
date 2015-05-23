@@ -22,8 +22,6 @@ HTML documents and more.
 	Dict = require 'dict'
 
 	AppRoute = require './route'
-	AppTemplate = require './template'
-	AppView = require './view'
 
 	# build polyfills
 	# TODO: move it into separated module
@@ -53,7 +51,7 @@ HTML documents and more.
 			utils.merge config, extraOpts
 
 *Dict* app
-------------
+----------
 
 		app = new Dict
 
@@ -148,24 +146,12 @@ module.exports = function(app){
 
 		app.models = {}
 
-*Object* app.controllers = {}
------------------------------
-
-Files from the *controllers* folder with objects returned by their exported functions.
-
-		app.controllers = {}
-
 *Object* app.routes = {}
 ------------------------
 
 Files from the *routes* folder with objects returned by their exported functions.
 
 		app.routes = {}
-
-*Route* app.currentRoute
-------------------------
-
-		app.currentRoute = null
 
 *Object* app.styles = {}
 ------------------------
@@ -177,16 +163,9 @@ Files from the *styles* folder as *Function*s ready to create [Renderer.Item][]s
 *Object* app.views = {}
 -----------------------
 
-Files from the *views* folder as *App.View* instances.
+Files from the *views* folder as *Document* instances.
 
 		app.views = {}
-
-*Object* app.templates = {}
----------------------------
-
-Files from the *templates* folder with objects returned by their exported functions.
-
-		app.templates = {}
 
 *Resources* app.resources
 -------------------------
@@ -203,8 +182,6 @@ Files from the *templates* folder with objects returned by their exported functi
 		assert.ok utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game, but '#{config.type}' got."
 
 		app.Route = AppRoute app
-		app.Template = AppTemplate app
-		app.View = AppView app
 
 		# unauthorized
 		`//<trialVersion>`
@@ -305,7 +282,7 @@ new app.Route({
 
 		# load views
 		for view in opts.views when view.name?
-			app.views[view.name] = new app.View Document.fromJSON(view.name, view.file)
+			app.views[view.name] = Document.fromJSON(view.name, view.file)
 
 		# loading files helper
 		init = (files, target) ->
@@ -324,9 +301,18 @@ new app.Route({
 
 		setImmediate ->
 			init opts.models, app.models
-			init opts.controllers, app.controllers
-			init opts.templates, app.templates
 			init opts.routes, app.routes
+
+			for path, obj of app.routes
+				r = {}
+				if utils.isPlainObject(obj)
+					for method, opts of obj
+						if utils.isPlainObject(opts)
+							route = new app.Route method, opts
+							r[route.name] = route
+						else
+							r[method] = opts
+				app.routes[path] = r
 
 			app.ready()
 

@@ -72,6 +72,7 @@ Networking:
   ☐ Remove Response::raise
   ☐ Request and Response query
   ☐ Hide errors stack
+  ☐ Cookies on HTTP Cookies
 
 App:
   ✔ Route - short arguments @started(15-04-30 17:47) @done (15-04-30 18:16) @lasted(0:29)
@@ -82,3 +83,6 @@ App:
 Addons:
  ☐ OAuth
  ☐ Login/register
+
+Projects:
+  ☐ KorwinAir on Safari bad FPS

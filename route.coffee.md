@@ -1,73 +1,20 @@
 Route @class
-=====
-
-Class known as `app.Route` used to automate dealing with networking.
+============
 
 	'use strict'
 
 	utils = require 'utils'
-	log = require 'log'
-	assert = require 'neft-assert'
-
-	Networking = require 'networking'
+	assert = require 'assert'
 	Schema = require 'schema'
+	Networking = require 'networking'
 	Document = require 'document'
-	Dict = require 'dict'
 
-	log = log.scope 'App', 'Route'
+	module.exports = (app) -> class Route
 
-	CONFIG_KEYS = [] # filled by the class properties
+*Object* Route.templates
+------------------------
 
-	module.exports = (app) -> class AppRoute
-
-		###
-		Get function based on its path from the App namespace.
-
-		Parameters:
-			- *Route* route - route called this function; used to debug
-			- *String|Function* val - Function path or function itself
-			- *String* type - type of the container; used to debug
-			- *String* containerName - path to the object with functions; must exists in the `App`
-
-		Returns:
-			*Function*
-		###
-		getByPath = (route, val, type, containerName, callback) ->
-			assert.instanceOf route, AppRoute
-			assert.isString type
-			assert.isString containerName
-
-			container = utils.get app, containerName
-
-			if typeof val is 'string'
-				[name, method] = val.split '.'
-
-				if typeof container[name]?[method] is 'function'
-					callback container[name][method]
-				else
-					setImmediate ->
-						assert container[name]
-						, "`#{name}` #{type} doesn't exists; `app.#{containerName}.#{name}` is not provided"
-
-						assert typeof container[name][method] is 'function'
-						, "`app.#{containerName}.#{name}.#{method}` #{type} method is not a function"
-
-						callback container[name][method]
-			else
-				assert typeof val is 'function'
-				, "`#{route.uri}` route #{type} method is not a function"
-
-				callback val
-
-		getUriParts = (route) ->
-			uri = route.uri._uri
-			uri = uri.replace Networking.Uri.NAMES_RE, ''
-			uri = uri.replace /\*/g, ''
-			while uri.indexOf('//') isnt -1
-				uri = uri.replace /\/\//g, '/'
-			uri = uri.replace /^\//, ''
-			uri = uri.replace /\/$/, ''
-			uri = uri.split '/'
+		@templates = Object.create null
 
 *Route* Route(*Object* options)
 -------------------------------
@@ -82,577 +29,333 @@ module.exports = function(app){
 Acceptable syntaxes:
 ```
 *Route* Route(*String* method, *String* uri, *Object* options)
+*Route* Route(*String* methodWithUri, *Function* getData)
+*Route* Route(*String* methodWithUri, *Object* options)
+*Route* Route(*String* uri, *Function* getData)
 *Route* Route(*String* uri, *Object* options)
 *Route* Route(*String* method, *String* uri)
 *Route* Route(*String* uri)
+*Route* Route(*String* methodWithUri)
 ```
 
-		constructor: (method, uri, opts={}) ->
-			if uri is undefined
-				if typeof method is 'string'
-					# uri
-					opts = uri: method
+		constructor: (method, uri, opts) ->
+			if utils.isObject(method)
+				# opts
+				opts = method
+			else if utils.isObject(uri)
+				opts = uri
+			else unless utils.isObject(opts)
+				opts = {}
+
+			if typeof method is 'string' and typeof uri isnt 'string'
+				opts.uri = method
+			else if typeof method is 'string' and typeof uri is 'string'
+				opts.method ?= method
+				opts.uri ?= uri
+			if typeof uri is 'function'
+				opts.getData ?= uri
+
+			assert.isObject opts
+			opts = utils.clone opts
+
+			if typeof opts.uri is 'string'
+				# support methodWithUri e.g. 'get /home'
+				spaceIndex = opts.uri.indexOf ' '
+				if spaceIndex isnt -1
+					opts.method ?= opts.uri.slice 0, spaceIndex
+					opts.uri = opts.uri.slice spaceIndex+1
+				opts.uri = new Networking.Uri opts.uri
+			assert.instanceOf opts.uri, Networking.Uri
+
+			opts.method ?= 'get'
+			assert.isString opts.method
+			opts.method = opts.method.toLowerCase()
+			assert.ok utils.has(Networking.Request.METHODS, opts.method)
+			, "Networking doesn't provide a `#{opts.method}` method"
+
+			if opts.schema?
+				if utils.isPlainObject(opts.schema)
+					opts.schema = new Schema opts.schema
+				assert.instanceOf opts.schema, Schema
+
+			if opts.redirect?
+				if typeof opts.redirect is 'string'
+					opts.redirect = new Networking.Uri opts.redirect
 				else
-					# opts
-					opts = method
-			else
-				if utils.isObject(uri)
-					# uri, opts
-					opts = uri
-					opts.uri ?= method
-				else
-					# method, uri
-					# method, uri, opts
-					opts.method ?= method
-					opts.uri ?= uri
+					assert.isFunction opts.redirect
 
-			assert.instanceOf @, AppRoute
-			assert.isPlainObject opts
+			if utils.isObject(opts.toHTML)
+				opts.toHTML = createToHTMLFromObject opts.toHTML
 
-			# check for unprovided options
-			assert do ->
-				optsKeys = utils.merge Object.keys(opts), CONFIG_KEYS
-				utils.isEqual(CONFIG_KEYS, optsKeys)
-			, "Unprovided config key has been passed into `app.Route`:\n" +
-			  "#{JSON.stringify Object.keys(opts)}"
+			utils.merge @, opts
+			@__id__ = utils.uid()
+			@app = app
+			@name = getRouteName(@)
 
-			# uri
-			setUri @, opts.uri
-
-			# method
-			if opts.hasOwnProperty('method')
-				setMethod @, opts.method.toLowerCase()
-
-			# schema
-			if opts.hasOwnProperty('schema')
-				setSchema @, opts.schema
-
-			# controller
-			setController @, opts.controller
-
-			# view
-			setView @, opts.view
-
-			# template
-			setTemplate @, opts.template
-
-			# serverResourceUri
-			if opts.hasOwnProperty('serverResourceUri')
-				setServerResourceUri @, opts.serverResourceUri
-
-			# callback
-			if opts.hasOwnProperty('callback')
-				setCallback @, opts.callback
-
-			# before
-			if opts.hasOwnProperty('before')
-				setBefore @, opts.before
-
-			# register route in networking
 			app.networking.createHandler
 				method: @method
 				uri: @uri
 				schema: @schema
-				callback: @_onRequest
+				callback: utils.bindFunctionContext(handleRequest, @)
 
-			# set object as immutable
-			Object.preventExtensions @
-			setImmediate =>
-				Object.freeze @
+		getRouteName = (route) ->
+			assert.instanceOf route, Route
 
-*String* Route::method = 'get'
-------------------------------
+			uri = route.uri._uri
+			uri = uri.replace Networking.Uri.NAMES_RE, ''
+			uri = uri.replace /\*/g, ''
+			while uri.indexOf('//') isnt -1
+				uri = uri.replace /\/\//g, '/'
+			uri = uri.replace /^\//, ''
+			uri = uri.replace /\/$/, ''
+			uri
 
-One of the HTTP [Networking.Request.METHODS][] values.
+		routesCache = Object.create null
+		pendingRoutes = Object.create null
+		renderedRoutes = Object.create null
 
-```
-new app.Route({
-  method: 'post',
-  uri: 'user/create',
-  controller: 'user.create'
-});
-```
+		factoryRoute = do ->
+			createInstance = (route) ->
+				r = Object.create route
+				r.__hash__ = utils.uid()
+				r.factory?()
+				r
 
-		method: Networking.Request.GET
+			(route) ->
+				assert.instanceOf route, Route
 
-		CONFIG_KEYS.push 'method'
+				id = route.__id__
+				routesCache[id] ?= []
+				r = routesCache[id].pop() or createInstance(route)
+				r = Object.create r
+				r.request = r.response = null
+				r.route = r
+				r._dataPrepared = false
+				r
 
-		setMethod = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
+		destroyRoute = (route) ->
+			assert.instanceOf route, Route
 
-			assert utils.has(Networking.Request.METHODS, val)
-			, "Networking doesn't provide a `#{val}` method"
+			route.response.onSent.disconnect onResponseSent, route
+			pendingRoutes[route.__hash__] = false
+			route.destroy?()
+			if route._dataPrepared
+				switch route.request.type
+					when 'text'
+						route.destroyText?()
+					when 'json'
+						route.destroyJSON?()
+					when 'html'
+						route.destroyHTML?()
+			routesCache[route.__id__].push Object.getPrototypeOf(route)
 
-			ctx.method = val
+		resolveSyncGetDataFunc = (route) ->
+			assert.instanceOf route, Route
 
-*Networking.Uri* Route::uri
----------------------------
+			try
+				route.data = route.getData()
+			catch err
+				if route.response.status is 200
+					route.response.status = 500
+				route.data = err
 
-Valid [Networking.Uri][].
+		resolveAsyncGetDataFuncCallback = (route, err, data) ->
+			assert.instanceOf route, Route
 
-Passed string will be automatically parsed.
-
-You will find more examples and supported syntax
-in the [Networking.Uri][] documentation.
-
-```
-new app.Route({
-  uri: 'user/{name}',
-  controller: 'user.get'
-});
-```
-
-		uri: null
-
-		CONFIG_KEYS.push 'uri'
-
-		setUri = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-
-			if typeof val is 'string'
-				ctx.uri = new Networking.Uri val
+			if err?
+				if route.response.status is 200
+					route.response.status = 500
+				route.data = err
 			else
-				assert.instanceOf val, Networking.Uri
-				ctx.uri = val
+				route.data = data
 
-*Schema* Route::schema
-----------------------
+		prepareRouteData = (route) ->
+			assert.instanceOf route, Route
 
-Valid [Schema][] used to validate parameters from the uri.
+			switch route.request.type
+				when 'text'
+					data = route.toText()
+				when 'json'
+					data = route.toJSON()
+				when 'html'
+					data = route.toHTML()
+			route._dataPrepared = true
+			unless data?
+				data = ''
+			route.response.data = data
 
-It's set as [Networking.Handler::uri][].
+		onResponseSent = ->
+			if utils.isNode or @request.type isnt 'html' or not renderedRoutes[@__hash__]
+				destroyRoute @
 
-Passed object will be automatically used to create [Schema][] instance.
+		finishRequest = (route) ->
+			assert.instanceOf route, Route
+			route.response.send()
 
-```
-new app.Route({
-  uri: 'user/{name}',
-  schema: {
-    name: {
-      required: true,
-      type: 'string',
-      regexp: /^[a-zA-Z]{3,}$/
-    }
-  }
-});
-```
+		unless utils.isNode
+			Document.onRender (file) ->
+				if file.storage instanceof Route and file.constructor is Document
+					renderedRoutes[file.storage.__hash__] = file
 
-		schema: null
+			Document.onRevert (file) ->
+				if file.storage instanceof Route and file.constructor is Document and renderedRoutes[file.storage.__hash__] is file
+					renderedRoutes[file.storage.__hash__] = null
+					destroyRoute file.storage
 
-		CONFIG_KEYS.push 'schema'
-
-		setSchema = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-
-			if utils.isPlainObject val
-				ctx.schema = new Schema val
-			else
-				assert.instanceOf val, Schema
-				ctx.schema = val
-
-*Function* Route::controller
-----------------------------
-
-Controller function or a path to the file method.
-
-This function will be called with three parameters:
-[Networking.Request][], [Networking.Response][] and *callback*.
-
-First *callback* argument is always an error. If you pass it, next route will be checked.
-
-```
-new app.Route({
-  uri: 'user/{name}',
-  controller: function(req, res, callback){
-    if (req.params.name !== 'BigBob'){
-      callback(new Error("Who are you?"));
-    } else {
-      callback(null, app.models.user.getBigBob());
-    }
-  }
-});
-```
-
-Passed string will be automatically changed to the corresponding file method.
-
-```
-// controllers/user/bigbob.js
-module.exports = function(app){
-  return {
-    get: function(req, res, callback){}
-  };
-}
-
-// routes/user.js
-module.exports = function(app){
-  new app.Route({
-    uri: 'user/{name}',
-    controller: 'user/bigbob.get'
-  });
-};
-```
-
-		controller: null
-
-		CONFIG_KEYS.push 'controller'
-
-		setController = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-
-			if val is null
-				return
-
-			switch typeof val
-				when 'string'
-					ctx.controller = null
-					getByPath ctx, val, 'controller', 'controllers', (val) ->
-						ctx.controller = val
-				when 'undefined'
-					uri = getUriParts ctx
-					r = app.controllers[uri.join('/')]?[ctx.method]
-					r ?= app.controllers[uri[0...-1].join('/')]?[utils.last(uri)]
-					ctx.controller = r
-				when 'function'
-					ctx.controller = val
-			return
-
-*app.View* Route::view
-----------------------
-
-Valid [App.View][] or file name from the *views* folder.
-
-		view: null
-
-		CONFIG_KEYS.push 'view'
-
-		setView = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-
-			if val is null
-				return
-
-			switch typeof val
-				when 'string'
-					view = app.views[val]
-
-					assert view
-					, "`#{val}` view file can't be found"
-				when 'undefined'
-					uri = getUriParts ctx
-					r = app.views[uri.join('/')+'/'+ctx.method]
-					r ?= app.views[uri.join('/')]
-					view = r
-				when 'object'
-					assert val instanceof app.View
-					, "`#{ctx.uri}` route view is not a app.View instance; `#{val}` given"
-
-					view = val
-
-			ctx.view = view
-			return
-
-*app.Template* Route::template
-------------------------------
-
-[App.Template][] instance or a file name from the *templates* folder.
-
-		template: null
-
-		CONFIG_KEYS.push 'template'
-
-		setTemplate = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-
-			if val is null
-				return
-
-			switch typeof val
-				when 'string'
-					ctx.template = app.templates[val]
-					unless ctx.template instanceof app.Template
-						setImmediate ->
-							ctx.template = app.templates[val]
-							assert ctx.template instanceof app.Template
-							, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
-				when 'undefined'
-					unless ctx.view
-						return
-
-					uri = getUriParts ctx
-					r = app.templates[uri.join('/')]?[ctx.method]
-					unless r
-						for i in [0...uri.length-1] by 1
-							chunk = uri[i]
-							if r = app.templates[uri[0...-i].join('/')]
-								break
-					r ?= app.templates.index
-					ctx.template = r
-				when 'object'
-					assert val instanceof app.Template
-					, "`#{ctx.uri}` route template is not an app.Template; `#{val}` given"
-
-					ctx.template = val
-			return
-
-*Networking.Uri* Route::serverResourceUri
------------------------------------------
-
-Special uri used to get data from the server.
-
-Returned data from the server is available under the [Networking.Response::data][]
-property.
-
-If server request fails, rest functions (route callback, controller) won't be called.
-
-```
-new app.Route({
-  uri: 'user/{name}',
-  serverResourceUri: 'api/user/{name}',
-  controller: function(req, res, callback){
-    console.log('Got data for user', res.data.name);
-    callback();
-  }
-})
-```
-
-		serverResourceUri: null
-
-		CONFIG_KEYS.push 'serverResourceUri'
-
-		setServerResourceUri = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-
-			if typeof val is 'string'
-				ctx.serverResourceUri = new Networking.Uri val
-			else
-				assert.instanceOf val, Networking.Uri
-				ctx.serverResourceUri = val
-
-*Function* Route::before
-------------------------
-
-Custom function called after getting data from the server (Route::serverResourceUri) and
-before controller function.
-
-It's called with the same parameters as controller, that is 
-[Networking.Request][], [Networking.Response][] and *callback*.
-
-		before: null
-
-		CONFIG_KEYS.push 'before'
-
-		setBefore = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-
-			if val is null
-				return
-
-			switch typeof val
-				when 'string'
-					ctx.before = null
-					getByPath ctx, val, 'controller', 'controllers', (val) ->
-						ctx.before = val
-				when 'function'
-					ctx.before = val
-
-		callback: null
-
-		CONFIG_KEYS.push 'callback'
-
-		setCallback = (ctx, val) ->
-			assert.instanceOf ctx, AppRoute
-			assert.isFunction val
-			ctx.callback = val
-
-		lastRes = null
-		_onRequest: (req, res, next) =>
-			assert.instanceOf @, AppRoute
+		handleRequest = (req, res, next) ->
 			assert.instanceOf req, Networking.Request
 			assert.instanceOf res, Networking.Response
 			assert.isFunction next
 
-			if req.type is Networking.Request.HTML_TYPE
-				oldCurrentRoute = app.currentRoute
-				app.currentRoute = @
-				app.changed 'currentRoute', oldCurrentRoute
+			route = factoryRoute @
+			hash = route.__hash__
+			assert.notOk pendingRoutes[hash]
 
-			stack = new utils.async.Stack
-			viewUsed = false
+			route.request = req
+			route.response = res
+			pendingRoutes[hash] = true
 
-			masterLogtime = log.time "Handle request"
-			logtime = null
-			res.data = null
+			res.onSent onResponseSent, route
 
-			# end loggs on custom response send
-			req.onDestroyed ->
-				log.end logtime if logtime?
-				log.end masterLogtime if masterLogtime?
+			# init
+			route.init?()
 
-			# destroy response
-			res.onSent onSent = ->
-				if utils.isServer or not viewUsed
-					res.destroy()
+			unless pendingRoutes[hash]
+				return next()
+
+			# redirect
+			{redirect} = route
+			if typeof redirect is 'function'
+				redirect = route.redirect()
+				unless pendingRoutes[hash]
+					return next()
+			if typeof redirect is 'string'
+				redirect = new Networking.Uri redirect
+			if redirect instanceof Networking.Uri
+				res.redirect redirect.toString(req.params)
+				return
+
+			# getData
+			{getData} = route
+			fakeAsync = false
+			if typeof getData is 'function'
+				if getData.length is 1
+					route.getData (err, data) ->
+						fakeAsync = true
+						unless pendingRoutes[hash]
+							return next()
+						resolveAsyncGetDataFuncCallback route, err, data
+						prepareRouteData route
+						unless pendingRoutes[hash]
+							return next()
+						finishRequest route
 				else
-					lastRes?.destroy()
-					lastRes = res
-
-			# clear old view
-			if req.type is Networking.Request.HTML_TYPE and (@view or @template)
-				clearView @, req, res
-
-			# serverResourceUri
-			if @serverResourceUri and (utils.isClient or @serverResourceUri._uri isnt @uri._uri)
-				stack.add (callback) =>
-					logtime = log.time "Route server resource request"
-					app.networking.createRequest
-						uri: app.networking.url + @serverResourceUri.toString(req.params)
-						onLoaded: (_res) ->
-							log.end logtime
-							logtime = null
-
-							if _res.isSucceed()
-								res.data = _res.data
-								callback null
-							else
-								callback _res.data
-
-			# before
-			if @before
-				stack.add (callback) =>
-					logtime = log.time "Route before"
-					@before req, res, (err, data) ->
-						log.end logtime
-						logtime = null
-
-						if data isnt undefined
-							res.data = data
-
-						callback err
-
-			# custom callback
-			if @callback
-				stack.add (callback) =>
-					logtime = log.time "Route callback"
-					log.warn "Route::callback is deprecated"
-					@callback req, res, (err, data) ->
-						log.end logtime
-						logtime = null
-
-						if data isnt undefined
-							res.data = data
-
-						callback err
-
-			# controller
-			if @controller
-				stack.add (callback) =>
-					logtime = log.time "Controller"
-					@controller req, res, (err, data) ->
-						log.end logtime
-						logtime = null
-
-						if data isnt undefined
-							res.data = data
-
-						callback err
-
-			# view
-			if req.type is Networking.Request.HTML_TYPE and (@view or @template)
-				viewUsed = true
-				stack.add (callback) =>
-					if res.data instanceof Document
-						# TODO: how to destroy this view?
-						return callback null, res.data
-
-					logtime = log.time "View"
-					renderView @, req, res, res.data, (err, data) ->
-						log.end logtime
-						logtime = null
-
-						if data isnt undefined
-							res.data = data
-
-						callback err
-
-			# run all
-			stack.runAll (err) ->
-				log.end masterLogtime
-				masterLogtime = null
-
-				if err?
-					res.data ?= err
-					res.onSent.disconnect onSent
-					return next err
-
-				if not res.data? and req.method is Networking.Request.GET
-					res.send 404
-				else
-					res.send 200
-
-		currentTemplate = null
-		currentTemplateView = null
-		lastView = null
-
-		clearView = do ->
-			if utils.isNode
-				(ctx, req, res) ->
-					assert.instanceOf ctx, AppRoute
-					assert.instanceOf req, Networking.Request
-					assert.instanceOf res, Networking.Response
+					resolveSyncGetDataFunc route
+					unless pendingRoutes[hash]
+						return next()
+					prepareRouteData route
+					unless pendingRoutes[hash]
+						return next()
+					finishRequest route
 			else
-				(ctx, req, res) ->
-					assert.instanceOf ctx, AppRoute
-					assert.instanceOf req, Networking.Request
-					assert.instanceOf res, Networking.Response
+				prepareRouteData route
+				unless pendingRoutes[hash]
+					return next()
+				finishRequest route
 
-					if currentTemplate isnt ctx.template
-						if currentTemplateView
-							currentTemplateView.destroy()
-							currentTemplateView = null
-							lastView = null
-						currentTemplate = null
+			if not fakeAsync and not pendingRoutes[hash]
+				return next()
 
-						if ctx.template
-							currentTemplate = ctx.template
-							currentTemplateView = ctx.template._render req
+*String* Route::method = 'get'
+------------------------------
+
+*Networking.Uri* Route::uri
+---------------------------
+
+*App* Route::app
+----------------
+
+*Route* Route::route
+--------------------
+
+*String* Route::name
+--------------------
+
+*Schema* Route::schema
+----------------------
+
+*Any* Route::data
+-----------------
+
+*Function* Route::factory()
+---------------------------
+
+*Function* Route::init()
+------------------------
+
+*Function* Route::getData([*Function* callback])
+------------------------------------------------
+
+*Function* Route::destroy()
+---------------------------
+
+*Function* Route::destroyJSON()
+-------------------------------
+
+*Function* Route::destroyText()
+-------------------------------
+
+*Function* Route::destroyHTML()
+-------------------------------
+
+*Function|Networking.Uri* Route::redirect
+-----------------------------------------
+
+*Networking.Request* Route::request
+-----------------------------------
+
+*Networking.Response* Route::response
+-------------------------------------
+
+*Function* Route::next()
+------------------------
+
+		next: ->
+			assert.ok pendingRoutes[@__hash__]
+			destroyRoute @
+
+*Function* Route::toJSON
+------------------------
+
+		toJSON: ->
+			@data?.toJSON?() or @data
+
+*Function* Route::toText
+------------------------
+
+		toText: ->
+			@data+''
+
+*Function* Route::toHTML
+------------------------
+
+		createToHTMLFromObject = (opts) ->
+			->
+				viewName = opts.view or @name
+				tmplName = opts.template or 'index'
+				useName = opts.use or 'body'
+
+				if view = app.views[viewName]
+					r = view.render @
+				if tmpl = app.views[tmplName]
+					tmplView = Route.templates[tmplName] ?= tmpl.render(app: app)
+					if r?
+						r = tmplView.use(useName, r)
 					else
-						if currentTemplate
-							currentTemplate.view._reloadReq req
+						r = tmplView
+				r
 
-					if lastView
-						lastView.destroy()
-						lastView = null
-					return
-
-		renderView = do ->
-			if utils.isNode
-				(ctx, req, res, data, callback) ->
-					assert.instanceOf ctx, AppRoute
-					assert.instanceOf req, Networking.Request
-					assert.instanceOf res, Networking.Response
-
-					if ctx.view
-						view = ctx.view.render req, data
-
-					if ctx.template
-						templateView = ctx.template._render req
-						if view
-							ctx.template._renderTarget templateView, view
-
-					masterView = templateView or view
-
-					res.onSent ->
-						masterView.destroy()
-
-					callback null, masterView
-			else
-				(ctx, req, res, data, callback) ->
-					assert.instanceOf ctx, AppRoute
-					assert.instanceOf req, Networking.Request
-					assert.instanceOf res, Networking.Response
-
-					if ctx.view
-						lastView = ctx.view.render req, data
-						currentTemplate?._renderTarget currentTemplateView, lastView
-
-					callback null, currentTemplateView or lastView
+		toHTML: createToHTMLFromObject
+			view: ''
+			template: ''
+			use: ''
