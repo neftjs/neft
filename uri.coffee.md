@@ -26,8 +26,6 @@ Rest parameters don't have to be named (**{*}** is allowed).
 
 ```
 var uri = new Networking.Uri('articles/{pageStart}/{pageEnd}');
-console.log(uri.match('articles/2'));
-// { pageStart: '2', pageEnd: null }
 console.log(uri.match('articles/2/4'));
 // { pageStart: '2', pageEnd: '4' }
 
@@ -66,7 +64,7 @@ var Uri = Networking.Uri;
 			# re = re.replace ///\/([^/]*)///g, (_, str) ->
 			# 	"(?:/#{str})?"
 			re = re.replace Uri.NAMES_RE, ->
-				"([^/]*?)"
+				"([^/]+?)"
 			re = new RegExp "^\/?#{re}\/?$"
 			utils.defineProperty @, '_re', null, re
 

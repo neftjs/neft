@@ -255,7 +255,7 @@ res.onSent(function(){
 				@request.destroy()
 				setImmediate => sendData @
 
-			null
+			return
 
 		sendData = (res) ->
 			assert.instanceOf res, Response
@@ -274,6 +274,7 @@ res.onSent(function(){
 				data = utils.errorToObject data
 
 			Impl.send res, data, ->
+				res.destroy()
 				res.sent?()
 
 Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
@@ -303,6 +304,7 @@ a permanent redirect.
 			@request.dataLoaded? null, @data
 
 			Impl.redirect @, status, uri, =>
+				@destroy()
 				@sent?()
 
 Response::raise(*Any* error)

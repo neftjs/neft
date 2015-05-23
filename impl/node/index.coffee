@@ -4,10 +4,17 @@ utils = require 'utils'
 http = require 'http'
 https = require 'https'
 urlUtils = require 'url'
+pathUtils = require 'path'
 assert = require 'neft-assert'
 nodeStatic = require 'node-static'
 
-pending = {}
+EXT_TYPES =
+	__proto__: null
+	'.js': 'text'
+	'.txt': 'text'
+	'.json': 'json'
+
+pending = Object.create null
 
 staticServer = new nodeStatic.Server gzip: true
 
@@ -44,6 +51,7 @@ module.exports = (Networking) ->
 					return
 
 				uid = utils.uid()
+				parsedUrl = urlUtils.parse serverReq.url
 
 				# save in the stack
 				obj = pending[uid] =
@@ -54,6 +62,9 @@ module.exports = (Networking) ->
 					serverRes: serverRes
 
 				type = serverReq.headers['x-expected-type']
+				unless type
+					extname = pathUtils.extname parsedUrl.pathname
+					type = EXT_TYPES[extname]
 				type ||= Networking.Request.HTML_TYPE
 
 				# data
