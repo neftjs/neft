@@ -24,7 +24,7 @@ module.exports = (File) ->
 
 	File::styles = null
 
-	File::render = do (_super = File::render) -> ->
+	File::_render = do (_super = File::_render) -> ->
 		r = _super.apply @, arguments
 
 		# styles
@@ -44,7 +44,7 @@ module.exports = (File) ->
 
 		r
 
-	File::clone = do (_super = File::clone) -> ->
+	File::_clone = do (_super = File::_clone) -> ->
 		clone = _super.call @
 
 		# styles

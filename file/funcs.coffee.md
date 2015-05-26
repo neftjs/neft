@@ -227,7 +227,7 @@ This variable refers to the *get('data')* value.
 					# link local funcs into fragments
 					linkFragments file.funcs, file
 
-		File::clone = do (_super = File::clone) -> ->
+		File::_clone = do (_super = File::_clone) -> ->
 			clone = _super.call @
 
 			# bind funcs

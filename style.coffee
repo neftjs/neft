@@ -78,6 +78,8 @@ module.exports = (File, data) -> class Style
 		@visible = true
 		@isTextSet = false
 		@classes = null
+		@parentSet = false
+		@lastItemParent = null
 
 		Object.preventExtensions @
 
@@ -98,6 +100,9 @@ module.exports = (File, data) -> class Style
 
 		@item.document.node = @node
 		@updateVisibility()
+
+		if @lastItemParent
+			@item?.parent = @lastItemParent
 		
 		for name of @attrs
 			val = @node.attrs.get name
@@ -108,9 +113,13 @@ module.exports = (File, data) -> class Style
 		unless @item
 			return
 
+		# parent
 		if @isAutoParent
 			if @isScope
 				@item.document.hide()
+			@lastItemParent = null
+			if !@parentSet
+				@lastItemParent = @item.parent
 			@item.parent = null
 		@item.document.node = null
 
@@ -163,7 +172,9 @@ module.exports = (File, data) -> class Style
 			node = @node
 			if node.children.length is 1 and node.children[0].name is 'a'
 				node = node.children[0]
-				@item.linkUri = node.attrs.get('href')
+				href = node.attrs.get('href')
+				if typeof href is 'string'
+					@item.linkUri = href
 
 			text = node.stringifyChildren()
 
@@ -349,7 +360,8 @@ module.exports = (File, data) -> class Style
 		index
 
 	findItemParent: ->
-		if @isAutoParent and @item
+		if @isAutoParent and @item and not @item.parent
+			@parentSet = true
 			{node} = @
 			tmpNode = node
 			oldParent = @item._parent
