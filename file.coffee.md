@@ -200,49 +200,53 @@ File @class
 *File* File::render([*Any* data, *File* source])
 ------------------------------------------------
 
-		render: render = (storage, source) ->
-			assert.notOk @isRendered
-			
+		render: (storage, source) ->
 			if @clone
-				return @clone().render storage, source
+				@clone().render storage, source
+			else
+				@_render(storage, source)
 
-			if storage instanceof File.Use
-				source = storage
-				storage = null
+		_render: do ->
+			renderSource = require('./file/render/parse/source') File
 
-			if storage?
-				@storage = storage
-			@source = source
+			(storage, source) ->
+				assert.notOk @isRendered
 
-			# inputs
-			if @inputs
-				for input, i in @inputs
-					input.render()
+				if storage instanceof File.Use
+					source = storage
+					storage = null
 
-			# conditions
-			if @conditions
-				for condition, i in @conditions
-					condition.render()
+				if storage?
+					@storage = storage
+				@source = source
 
-			# uses
-			if @uses
-				for use in @uses
-					use.render()
+				# inputs
+				if @inputs
+					for input, i in @inputs
+						input.render()
 
-			# iterators
-			if @iterators
-				for iterator, i in @iterators
-					iterator.render()
+				# conditions
+				if @conditions
+					for condition, i in @conditions
+						condition.render()
 
-			# source
-			render.source @, source
+				# uses
+				if @uses
+					for use in @uses
+						use.render()
 
-			@isRendered = true
-			File.render @
+				# iterators
+				if @iterators
+					for iterator, i in @iterators
+						iterator.render()
 
-			@
+				# source
+				renderSource @, source
 
-		render.source = require('./file/render/parse/source') File
+				@isRendered = true
+				File.render @
+
+				@
 
 *File* File::revert()
 ---------------------
@@ -307,8 +311,11 @@ File @class
 		clone: ->
 			# from pool
 			if pool[@path]?.length
-				return pool[@path].pop()
+				pool[@path].pop()
+			else
+				@_clone()
 
+		_clone: ->
 			clone = Object.create @
 
 			clone.clone = undefined
@@ -316,7 +323,7 @@ File @class
 			clone.uid = utils.uid()
 			clone.isRendered = false
 			clone.node = @node.cloneDeep()
-			clone.sourceNode &&= @node.getCopiedNode @sourceNode, clone.node
+			clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
 			clone.parent = null
 			clone.storage = null
 			clone.source = null
