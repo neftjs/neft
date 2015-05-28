@@ -25,7 +25,7 @@ columnsPositions = new Uint32TypedArray 12
 rowsPositions = new Uint32TypedArray 64
 
 updateItem = (item) ->
-	{children} = item
+	{children, includeBorderMargins} = item
 	data = item._impl
 	{gridType} = data
 
@@ -91,16 +91,16 @@ updateItem = (item) ->
 		if gridType & ROW
 			width += columnSpacing
 			if margin
-				if column isnt 0
+				if includeBorderMargins or column isnt 0
 					width += margin._left
-				if column isnt lastColumn
+				if includeBorderMargins or column isnt lastColumn
 					width += margin._right
 		if gridType & COLUMN
 			height += rowSpacing
 			if margin
-				if row isnt 0
+				if includeBorderMargins or row isnt 0
 					height += margin._top
-				if row isnt lastRow
+				if includeBorderMargins or row isnt lastRow
 					height += margin._bottom
 
 		# save
@@ -141,10 +141,10 @@ updateItem = (item) ->
 		if gridType & ROW or alignH isnt 'left'
 			if column > 0
 				x = columnsPositions[column-1]
-				if margin
-					x += margin._left
 			else
 				x = 0
+			if margin and (includeBorderMargins or column > 0)
+				x += margin._left
 			if alignH is 'center'
 				x += (columnsPositions[column] - x - child._width) / 2
 			else if alignH is 'right'
@@ -154,10 +154,10 @@ updateItem = (item) ->
 		if gridType & COLUMN or alignV isnt 'top'
 			if row > 0
 				y = rowsPositions[row-1]
-				if margin
-					y += margin._top
 			else
 				y = 0
+			if margin and (includeBorderMargins or row > 0)
+				y += margin._top
 			if alignV is 'center'
 				y += (rowsPositions[row] - y - child._height) / 2
 			else if alignV is 'right'

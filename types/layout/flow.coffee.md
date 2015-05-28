@@ -32,6 +32,7 @@ Flow {
 			@_width = -1
 			@_height = -1
 			@_spacing = null
+			@_includeBorderMargins = true
 			super()
 			@fill.width = true
 			@fill.height = true
@@ -63,5 +64,18 @@ Flow {
 -----------------------
 
 ### *Signal* Flow::spacingChanged(*Spacing* oldValue)
+
+*Boolean* Flow::includeBorderMargins = true
+-------------------------------------------
+
+### *Signal* Flow::includeBorderMarginsChanged(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'includeBorderMargins'
+			defaultValue: true
+			implementation: Impl.setFlowIncludeBorderMargins
+			developmentSetter: (val) ->
+				assert.isBoolean val
 
 		Renderer.Item.Spacing @

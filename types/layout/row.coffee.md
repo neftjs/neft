@@ -28,6 +28,7 @@ Row {
 		constructor: ->
 			@_spacing = 0
 			@_alignment = null
+			@_includeBorderMargins = true
 			super()
 			@_width = -1
 			@_height = -1
@@ -79,6 +80,19 @@ Row {
 ### *Signal* Row::alignmentChanged(*Alignment* oldValue)
 
 		Renderer.Item.Alignment @
+
+*Boolean* Row::includeBorderMargins = true
+------------------------------------------
+
+### *Signal* Row::includeBorderMarginsChanged(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'includeBorderMargins'
+			defaultValue: true
+			implementation: Impl.setRowIncludeBorderMargins
+			developmentSetter: (val) ->
+				assert.isBoolean val
 
 		clone: ->
 			clone = super()

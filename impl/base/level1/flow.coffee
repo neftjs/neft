@@ -13,7 +13,7 @@ queue = queues[queueIndex]
 pending = false
 
 updateItem = (item) ->
-	{children} = item
+	{children, includeBorderMargins} = item
 	data = item._impl
 
 	if data.loops is MAX_LOOPS
@@ -49,15 +49,15 @@ updateItem = (item) ->
 			x = column
 		else
 			x = column
-			if margin
-				x += margin._left
+		if margin and (includeBorderMargins or (x isnt 0 and column isnt 0))
+			x += margin._left
 
 		if row > 0
 			y = row + rowSpan
-			if margin
-				y += margin._top
 		else
 			y = 0
+		if margin and (includeBorderMargins or row > 0)
+			y += margin._top
 
 		right = x + child.width
 
@@ -67,16 +67,20 @@ updateItem = (item) ->
 		column = right
 		if column > width
 			width = column
-		column += columnSpacing
 		if margin
 			column += margin._right
+			if includeBorderMargins and column > width
+				width = column
+		column += columnSpacing
 
 		y += child._height
-		if y > height
-			height = y
 		rowSpan = rowSpacing
 		if margin
 			rowSpan += margin._bottom
+			if includeBorderMargins
+				y += margin._bottom
+		if y > height
+			height = y
 
 	# set item size
 	if item.fill.width
@@ -135,3 +139,4 @@ module.exports = (impl) ->
 
 	setFlowColumnSpacing: update
 	setFlowRowSpacing: update
+	setFlowIncludeBorderMargins: update

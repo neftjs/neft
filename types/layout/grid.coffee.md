@@ -33,6 +33,7 @@ Grid {
 			@_rows = Infinity
 			@_spacing = null
 			@_alignment = null
+			@_includeBorderMargins = true
 			super()
 			@_width = -1
 			@_height = -1
@@ -108,6 +109,19 @@ Grid {
 ### *Signal* Grid::alignmentChanged(*Alignment* oldValue)
 
 		Renderer.Item.Alignment @
+
+*Boolean* Grid::includeBorderMargins = true
+-------------------------------------------
+
+### *Signal* Grid::includeBorderMarginsChanged(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'includeBorderMargins'
+			defaultValue: true
+			implementation: Impl.setGridIncludeBorderMargins
+			developmentSetter: (val) ->
+				assert.isBoolean val
 
 		clone: ->
 			clone = super()

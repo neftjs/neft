@@ -5,6 +5,7 @@ Margin @extension
 
 	expect = require 'expect'
 	utils = require 'utils'
+	signal = require 'signal'
 	assert = require 'assert'
 
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Margin extends itemUtils.DeepObject
@@ -76,17 +77,22 @@ Rectangle {
 ```
 
 		implMethod = Impl["set#{ctor.__name__}Margin"]
-		createMarginProp = (type) ->
+		createMarginProp = (type, extraProp) ->
 			developmentSetter = (val) ->
 				assert typeof val is 'number' and isFinite(val)
 				, "margin.#{type} expects a finite number; `#{val}` given"
 
+			extraPropSignal = extraProp + "Changed"
 			itemUtils.defineProperty
 				constructor: Margin
 				name: type
 				defaultValue: 0
 				implementation: (val) ->
 					implMethod.call @, type, val
+				setter: (_super) -> (val) ->
+					extraOldVal = @[extraProp]
+					_super.call @, val
+					@[extraPropSignal] extraOldVal
 				namespace: propertyName
 				parentConstructor: ctor
 				developmentSetter: developmentSetter
@@ -96,28 +102,52 @@ Rectangle {
 
 ### *Signal* Margin::leftChanged(*Float* oldValue)
 
-		createMarginProp 'left'
+		createMarginProp 'left', 'horizontal'
 
 *Float* Margin::top = 0
 -----------------------
 
 ### *Signal* Margin::topChanged(*Float* oldValue)
 
-		createMarginProp 'top'
+		createMarginProp 'top', 'vertical'
 
 *Float* Margin::right = 0
 -------------------------
 
 ### *Signal* Margin::rightChanged(*Float* oldValue)
 
-		createMarginProp 'right'
+		createMarginProp 'right', 'horizontal'
 
 *Float* Margin::bottom = 0
 --------------------------
 
 ### *Signal* Margin::bottomChanged(*Float* oldValue)
 
-		createMarginProp 'bottom'
+		createMarginProp 'bottom', 'vertical'
+
+*Float* Margin::horizontal = 0
+------------------------------
+
+### *Signal* Margin::horizontalChanged(*Float* oldValue)
+
+		signal.Emitter.createSignal @, 'horizontalChanged'
+
+		utils.defineProperty @::, 'horizontal', null, ->
+			@_left + @_right
+		, (val) ->
+			@left = @right = val
+
+*Float* Margin::vertical = 0
+----------------------------
+
+### *Signal* Margin::verticalChanged(*Float* oldValue)
+
+		signal.Emitter.createSignal @, 'verticalChanged'
+
+		utils.defineProperty @::, 'vertical', null, ->
+			@_top + @_bottom
+		, (val) ->
+			@top = @bottom = val
 
 *Float* Margin::valueOf()
 --------------------------

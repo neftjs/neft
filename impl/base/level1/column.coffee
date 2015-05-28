@@ -15,3 +15,4 @@ module.exports = (impl) ->
 	setColumnSpacing: grid.update
 	setColumnAlignmentHorizontal: grid.update
 	setColumnAlignmentVertical: grid.update
+	setColumnIncludeBorderMargins: grid.update
