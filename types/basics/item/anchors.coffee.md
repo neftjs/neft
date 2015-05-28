@@ -298,6 +298,8 @@ Rectangle {
 
 ### *Signal* Anchors::centerInChanged(*Array* oldValue)
 
+		createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
+
 *Array* Anchors::fill = null
 ----------------------------
 
@@ -320,5 +322,18 @@ Item {
 
 ### *Signal* Anchors::fillChanged(*Array* oldValue)
 
-		createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 		createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
+
+*Array* Anchors::fillWidth = null
+---------------------------------
+
+### *Signal* Anchors::fillWidthChanged(*Array* oldValue)
+
+		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ
+
+*Array* Anchors::fillHeight = null
+----------------------------------
+
+### *Signal* Anchors::fillHeightChanged(*Array* oldValue)
+
+		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW | FREE_V_LINE_REQ

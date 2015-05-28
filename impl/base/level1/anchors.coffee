@@ -16,8 +16,8 @@ module.exports = (impl) ->
 		bottom: 'y'
 		horizontalCenter: 'x'
 		verticalCenter: 'y'
-		fillWidth: 'width'
-		fillHeight: 'height'
+		fillWidthSize: 'width'
+		fillHeightSize: 'height'
 
 	getSourceWatchProps =
 		left: []
@@ -26,8 +26,8 @@ module.exports = (impl) ->
 		bottom: ['onHeightChanged']
 		horizontalCenter: ['onWidthChanged']
 		verticalCenter: ['onHeightChanged']
-		fillWidth: []
-		fillHeight: []
+		fillWidthSize: []
+		fillHeightSize: []
 
 	getTargetWatchProps =
 		left:
@@ -48,10 +48,10 @@ module.exports = (impl) ->
 		verticalCenter:
 			parent: ['onHeightChanged']
 			sibling: ['onYChanged', 'onHeightChanged']
-		fillWidth:
+		fillWidthSize:
 			parent: ['onWidthChanged']
 			sibling: ['onWidthChanged']
-		fillHeight:
+		fillHeightSize:
 			parent: ['onHeightChanged']
 			sibling: ['onHeightChanged']
 
@@ -68,9 +68,9 @@ module.exports = (impl) ->
 			- item._width / 2
 		verticalCenter: (item) ->
 			- item._height / 2
-		fillWidth: (item) ->
+		fillWidthSize: (item) ->
 			0
-		fillHeight: (item) ->
+		fillHeightSize: (item) ->
 			0
 
 	getTargetValue =
@@ -104,12 +104,12 @@ module.exports = (impl) ->
 				target._height / 2
 			sibling: (target) ->
 				target._y + target._height / 2
-		fillWidth:
+		fillWidthSize:
 			parent: (target) ->
 				target._width
 			sibling: (target) ->
 				target._width
-		fillHeight:
+		fillHeightSize:
 			parent: (target) ->
 				target._height
 			sibling: (target) ->
@@ -128,9 +128,9 @@ module.exports = (impl) ->
 			margin._left - margin._right
 		verticalCenter: (margin) ->
 			margin._top - margin._bottom
-		fillWidth: (margin) ->
+		fillWidthSize: (margin) ->
 			- margin._left - margin._right
-		fillHeight: (margin) ->
+		fillHeightSize: (margin) ->
 			- margin._top - margin._bottom
 
 	onParentChanged = (oldVal) ->
@@ -242,7 +242,9 @@ module.exports = (impl) ->
 
 	getBaseAnchors =
 		centerIn: ['horizontalCenter', 'verticalCenter']
-		fill: ['horizontalCenter', 'verticalCenter', 'fillWidth', 'fillHeight']
+		fillWidth: ['horizontalCenter', 'fillWidthSize']
+		fillHeight: ['verticalCenter', 'fillHeightSize']
+		fill: ['horizontalCenter', 'verticalCenter', 'fillWidthSize', 'fillHeightSize']
 
 	isMultiAnchor = (source) ->
 		!!getBaseAnchors[source]
