@@ -169,7 +169,7 @@ Element @virtual_dom
 
 		clone: ->
 			clone = new @constructor
-			clone._visible = @visible
+			clone._visible = @_visible
 			clone
 
 *Element* Element::cloneDeep()

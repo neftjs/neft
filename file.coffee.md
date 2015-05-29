@@ -140,6 +140,7 @@ File @class
 				uses = require('./file/parse/uses') File
 				storage = require('./file/parse/storage') File
 				conditions = require('./file/parse/conditions') File
+				ids = require('./file/parse/ids') File
 
 			(@path, @node) ->
 				assert.isString path
@@ -170,6 +171,7 @@ File @class
 				uses @
 				storage @
 				conditions @
+				ids @
 
 				# trigger signal
 				File.parsed @
@@ -194,6 +196,7 @@ File @class
 		iterators: null
 		storage: null
 		source: null
+		ids: null
 
 		init: ->
 
@@ -360,6 +363,12 @@ File @class
 				clone.uses = []
 				for use, i in @uses
 					clone.uses[i] = use.clone @, clone
+
+			# ids
+			if @ids
+				clone.ids = {}
+				for id, node of @ids
+					clone.ids[id] = @node.getCopiedElement node, clone.node
 
 			clone
 

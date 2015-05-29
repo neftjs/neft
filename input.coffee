@@ -8,11 +8,6 @@ List = require 'dict'
 
 if utils.isNode
 	coffee = require 'coffee-script'
-	PEG = require 'pegjs'
-	grammar = require './input/grammar.pegjs'
-
-	parser = PEG.buildParser grammar,
-		optimize: 'speed'
 
 assert = assert.scope 'View.Input'
 log = log.scope 'View', 'Input'
@@ -26,7 +21,7 @@ module.exports = (File) -> class Input
 	RE = @RE = new RegExp '([^$]*)\\${([^}]*)}([^$]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)///g
 	PROP_RE = @PROP_RE = ///(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+///
-	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+(.)?///g
+	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*(.)?///g
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON']
 
 	cache = {}
@@ -43,6 +38,13 @@ module.exports = (File) -> class Input
 				v = obj[prop]
 			v
 
+		getElement = (obj, prop) ->
+			while obj
+				if elem = obj.ids?[prop]
+					return elem
+				obj = obj.parentUse?.self or obj.self
+			return
+
 		(file, prop) ->
 			if file.source instanceof File.Iterator
 				destFile = file.source.self
@@ -57,6 +59,8 @@ module.exports = (File) -> class Input
 					v = getFromObject source.storage, prop
 			if v is undefined
 				v = getFromObject file.storage, prop
+			if v is undefined
+				v = getElement file, prop
 
 			v
 
@@ -84,11 +88,36 @@ module.exports = (File) -> class Input
 		# build toString()
 		func = ""
 
-		try
-			chunks = parser.parse text
-		catch err
-			log.error "Can't parse string literal:\n#{text}\n#{err.message}"
-			return
+		chunks = []
+		str = ''
+		isString = isBlock = false
+		innerBlocks = 0
+		i = 0
+		n = text.length
+		while i < n
+			char = text[i]
+			if char is '$' and text[i+1] is '{'
+				isBlock = true
+				chunks.push str
+				str = ''
+				i++
+			else if char is '{'
+				innerBlocks++
+				str += char
+			else if char is '}'
+				if innerBlocks > 0
+					innerBlocks--
+					str += char
+				else if isBlock
+					chunks.push str
+					str = ''
+				else
+					log.error "Interpolated string parse error: '#{text}'"
+					return
+			else
+				str += char
+			i++
+		chunks.push str
 
 		while chunks.length > 1
 			match = [chunks.shift(), chunks.shift()]
@@ -103,7 +132,7 @@ module.exports = (File) -> class Input
 					str = str.replace PROP_RE, (props) ->
 						props = props.split '.'
 						props.shift()
-						if postfix is '('
+						if postfix is '(' or postfix is '='
 							ends = '.' + props[props.length - 1]
 							props.pop()
 						else
@@ -128,11 +157,13 @@ module.exports = (File) -> class Input
 			prop ?= ''
 
 			# add into func string
-			if match[0] then func += "'#{utils.addSlashes match[0]}' + "
+			if match[0]
+				func += "'#{utils.addSlashes match[0]}' + "
 			if prop
 				func += "#{prop} + "
 
-		if chunks.length then func += "'#{utils.addSlashes chunks[0]}' + "
+		if chunks.length and chunks[0]
+			func += "'#{utils.addSlashes chunks[0]}' + "
 
 		func = 'return ' + func.slice 0, -3
 		func = utils.tryFunction coffee.compile, coffee, [func, bare: true], func

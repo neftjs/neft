@@ -30,6 +30,7 @@ Tag @virtual_dom
 				@children = []
 				@name = ''
 				@style = null
+				@_documentStyle = null
 				@_attrs = {}
 
 				super()
@@ -56,14 +57,14 @@ Tag @virtual_dom
 			cloneDeep: ->
 				clone = @clone()
 
-				prevChild = null
+				prevClonedChild = null
 				for child in @children
 					clonedChild = child.cloneDeep()
 					clone.children.push clonedChild
 					clonedChild._parent = clone
-					if clonedChild._previousSibling = prevChild
-						prevChild._nextSibling = clonedChild
-					prevChild = child
+					if clonedChild._previousSibling = prevClonedChild
+						prevClonedChild._nextSibling = clonedChild
+					prevClonedChild = clonedChild
 
 				clone
 
