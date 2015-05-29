@@ -95,10 +95,8 @@ module.exports = (File, data) -> class Style
 			unless utils.isEqual(classes.items(), @classes)
 				@classes = utils.clone(classes.items())
 
-		if 'text' of @item or (@item.$ isnt null and 'text' of @item.$) or @item.label?
-			@updateText()
-
 		@item.document.node = @node
+		@updateText()
 		@updateVisibility()
 
 		if @lastItemParent
@@ -125,8 +123,8 @@ module.exports = (File, data) -> class Style
 
 		tmpNode = @node
 		while tmpNode = tmpNode._parent
-			if tmpNode.style is @item
-				tmpNode.style = null
+			if tmpNode._documentStyle is @
+				tmpNode._documentStyle = null
 			else
 				break
 
@@ -168,14 +166,14 @@ module.exports = (File, data) -> class Style
 		else if @item.label? and 'text' of @item.label
 			obj = @item.label
 
-		if obj
-			node = @node
-			if node.children.length is 1 and node.children[0].name is 'a'
-				node = node.children[0]
-				href = node.attrs.get('href')
-				if typeof href is 'string'
-					@item.linkUri = href
+		node = @node
+		if node.children.length is 1 and node.children[0].name is 'a'
+			node = node.children[0]
+			href = node.attrs.get('href')
+			if typeof href is 'string'
+				@item.linkUri = href
 
+		if obj
 			text = node.stringifyChildren()
 
 			if text.length > 0 or @isTextSet
@@ -302,7 +300,9 @@ module.exports = (File, data) -> class Style
 		@scope = null
 		@isAutoParent = false
 
-		if @isScope
+		if id instanceof Renderer.Item
+			@item = id
+		else if @isScope
 			if ///^renderer\:///.test id
 				id = id.slice 'renderer:'.length
 				id = utils.capitalize id
@@ -330,13 +330,14 @@ module.exports = (File, data) -> class Style
 					break
 
 			unless @item
-				unless File.Input.test id
+				unless File.Input.test(id)
 					log.warn "Can't find `#{id}` style item"
 				return
 
 			@isAutoParent = !@item.parent
 
-		@node.style = @
+		@node._documentStyle = @
+		@node.style = @item
 
 		if @isLink()
 			@item.linkUri = @getLinkUri()
@@ -352,7 +353,7 @@ module.exports = (File, data) -> class Style
 		for node in parent.children
 			if node is child
 				return index
-			if node.style
+			if node._documentStyle
 				index++
 		`//<development>`
 		throw "Internal Error: can't get style node index"
@@ -363,27 +364,27 @@ module.exports = (File, data) -> class Style
 		if @isAutoParent and @item and not @item.parent
 			@parentSet = true
 			{node} = @
-			tmpNode = node
+			tmpNode = node._parent
 			oldParent = @item._parent
 			while tmpNode
-				if (item = tmpNode._previousSibling?.style)
-					item = tmpNode._previousSibling.style.item.parent
-					if item and tmpNode._nextSibling
-						index = getStyleNodeIndex tmpNode.parent, tmpNode
-				else if (item = tmpNode._nextSibling?.style)
-					if item = tmpNode._nextSibling.style.item.parent
-						index = 0
-				else if tmpNode isnt node and (style = tmpNode.style)
+				if style = tmpNode._documentStyle
 					item = style.item
 					if style.node isnt tmpNode
 						item = item._parent
 
-				tmpNode.style ?= @
+				tmpNode._documentStyle ?= @
 
 				if item
 					@item.parent = item
-					if index?
-						@item.index = index
+
+					# find index
+					tmpIndexNode = node
+					while tmpIndexNode
+						if tmpIndexNode._nextSibling?.style?.parent is item
+							@item.index = tmpIndexNode._nextSibling.style.index
+							break
+						tmpIndexNode = tmpIndexNode._parent
+
 					if @isScope and not oldParent
 						@item.document.show()
 					break
