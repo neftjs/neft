@@ -19,7 +19,29 @@ Margin @extension
 			valueConstructor: Margin
 			setter: (_super) -> (val) ->
 				margin = @[propertyName]
-				if utils.isObject(val)
+				if typeof val is 'string'
+					arr = val.split ' '
+					for elem, i in arr
+						arr[i] = parseFloat elem
+					switch arr.length
+						when 3
+							margin.top = arr[0]
+							margin.right = arr[1]
+							margin.bottom = arr[2]
+							margin.left = arr[1]
+						when 2
+							margin.top = arr[0]
+							margin.right = arr[1]
+							margin.bottom = arr[0]
+							margin.left = arr[1]
+						when 1
+							margin.left = margin.top = margin.right = margin.bottom = arr[0]
+						else
+							margin.top = arr[0]
+							margin.right = arr[1]
+							margin.bottom = arr[2]
+							margin.left = arr[3]
+				else if utils.isObject(val)
 					margin.left = val.left if val.left?
 					margin.top = val.top if val.top?
 					margin.right = val.right if val.right?
