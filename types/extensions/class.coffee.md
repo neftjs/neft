@@ -286,11 +286,11 @@ Grid {
 						log.error "Attribute '#{attr}' in '#{item.toString()}' doesn't exist"
 					`//</development>`
 					if bindings[attr]
-						object?.createBinding lastPath, val
+						object?.createBinding lastPath, val, item
 					else
 						if object
 							if object._bindings?[lastPath]
-								object.createBinding lastPath, null
+								object.createBinding lastPath, null, item
 							object[lastPath] = val
 
 			return
@@ -341,7 +341,7 @@ Grid {
 				val = Object.getPrototypeOf(object)[lastPath]
 
 			if isBinding
-				object.createBinding lastPath, val
+				object.createBinding lastPath, val, item
 			else
 				object[lastPath] = val
 			return
@@ -408,9 +408,9 @@ Grid {
 						defaultValue = Object.getPrototypeOf(object)[lastPath]
 
 					if defaultIsBinding
-						object.createBinding lastPath, defaultValue
+						object.createBinding lastPath, defaultValue, item
 					else
-						object.createBinding lastPath, null
+						object.createBinding lastPath, null, item
 						object[lastPath] = defaultValue
 
 					if EXTRA_RESTORE_ATTRS[lastPath]?

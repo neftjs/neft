@@ -41,7 +41,7 @@ module.exports = (Renderer, Impl) ->
 			super()
 			Object.preventExtensions @
 
-		createBinding: (prop, val) ->
+		createBinding: (prop, val, ctx=@) ->
 			assert.isString prop
 			assert.isArray val if val?
 
@@ -57,7 +57,7 @@ module.exports = (Renderer, Impl) ->
 			bindings = @_bindings ?= {}
 			if bindings[prop] isnt val
 				bindings[prop] = val
-				Impl.setItemBinding.call @, prop, val
+				Impl.setItemBinding.call @, prop, val, ctx
 			return
 
 		signal.Emitter.createSignal @, 'ready'

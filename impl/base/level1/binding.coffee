@@ -27,7 +27,7 @@ module.exports = (impl) ->
 				@item = @child.getValue()
 			else
 				if @item is 'this'
-					@item = @binding.item
+					@item = @binding.ctx
 				@child = null
 			@connect()
 
@@ -88,12 +88,12 @@ module.exports = (impl) ->
 		binding[1].length is 1 and isArray(binding[1][0]) and not isArray(binding[1][0][0])
 
 	class SimpleBinding
-		constructor: (@obj, @prop, binding) ->
+		constructor: (@obj, @prop, binding, ctx) ->
 			item = obj._ref or obj
 			target = @target = binding[1][0]
 
 			if target[0] is 'this'
-				@targetItem = @obj
+				@targetItem = ctx
 			else
 				@targetItem = target[0]
 
@@ -129,7 +129,7 @@ module.exports = (impl) ->
 					args.push "return #{binding[0] or 0};"
 					cache[binding[0]] = Function.apply null, args
 
-		constructor: (@obj, @prop, binding, @extraResultFunc=null) ->
+		constructor: (@obj, @prop, binding, @ctx) ->
 			assert.lengthOf binding, 3
 			assert.isString binding[0]
 			assert.isArray binding[1]
@@ -173,15 +173,9 @@ module.exports = (impl) ->
 			unless @args
 				return
 
-			result = utils.tryFunction @func, @item, @args
+			result = utils.tryFunction @func, @ctx, @args
 			unless result?
 				result = getDefaultValue @
-
-			# extra func
-			if @extraResultFunc
-				funcResult = @extraResultFunc @obj
-				if typeof funcResult is 'number' and isFinite(funcResult)
-					result += funcResult
 
 			if typeof result is 'number' and not isFinite(result)
 				result = getDefaultValue @
@@ -204,7 +198,7 @@ module.exports = (impl) ->
 			@connections = null
 			return
 
-	setItemBinding: (prop, binding, extraResultFunc) ->
+	setItemBinding: (prop, binding, ctx) ->
 		data = @_impl
 		data.bindings ?= {}
 
@@ -214,8 +208,8 @@ module.exports = (impl) ->
 		data.bindings[prop]?.destroy()
 
 		if binding?
-			if not extraResultFunc and isSimpleBinding(binding)
-				data.bindings[prop] = new SimpleBinding @, prop, binding
+			if isSimpleBinding(binding)
+				data.bindings[prop] = new SimpleBinding @, prop, binding, ctx
 			else
-				data.bindings[prop] = new Binding @, prop, binding, extraResultFunc
+				data.bindings[prop] = new Binding @, prop, binding, ctx
 		return
