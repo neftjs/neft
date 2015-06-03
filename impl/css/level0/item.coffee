@@ -53,7 +53,10 @@ if isTouch
 SIGNALS_CURSORS =
 	'pointerClicked': 'pointer'
 
-lastEvent = null
+lastEventCoords =
+	x: -1
+	y: -1
+mouseInitialized = false
 movementX = movementY = 0
 getMouseEvent = (e) ->
 	if isTouch and e.touches?
@@ -62,12 +65,15 @@ getMouseEvent = (e) ->
 		else
 			e = e.changedTouches[0]
 
-	if lastEvent isnt e
-		if lastEvent?
-			movementX = e.pageX - lastEvent.pageX
-			movementY = e.pageY - lastEvent.pageY
+	if e.pageX isnt lastEventCoords.x or e.pageY isnt lastEventCoords.y
+		if mouseInitialized
+			movementX = e.pageX - lastEventCoords.x
+			movementY = e.pageY - lastEventCoords.y
+		else
+			mouseInitialized = true
 
-		lastEvent = e
+		lastEventCoords.x = e.pageX
+		lastEventCoords.y = e.pageY
 
 	movementX: movementX
 	movementY: movementY
