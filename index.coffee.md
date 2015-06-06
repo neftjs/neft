@@ -175,7 +175,7 @@ Files from the *views* folder as *Document* instances.
 *Signal* app.ready()
 --------------------
 
-		signal.create app, 'ready'
+		signal.create app, 'onReady'
 
 		# config.type
 		config.type ?= 'app'
@@ -246,7 +246,7 @@ new app.Route({
 				utils.merge req.cookies, app.cookies._data
 			else
 				utils.merge res.cookies, app.cookies._data
-			req.onLoaded.listeners.unshift ->
+			req.onLoad.listeners.unshift ->
 				if utils.isClient
 					for key, val of res.cookies
 						unless utils.isEqual(app.cookies.get(key), val)
@@ -314,7 +314,7 @@ new app.Route({
 							r[method] = opts
 				app.routes[path] = r
 
-			app.ready()
+			app.onReady.emit()
 
 		app
 

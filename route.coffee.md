@@ -136,7 +136,7 @@ Acceptable syntaxes:
 		destroyRoute = (route) ->
 			assert.instanceOf route, Route
 
-			route.response.onSent.disconnect onResponseSent, route
+			route.response.onSend.disconnect onResponseSent, route
 			pendingRoutes[route.__hash__] = false
 			route.destroy?()
 			if route._dataPrepared
@@ -197,7 +197,7 @@ Acceptable syntaxes:
 				if file.storage instanceof Route and file.constructor is Document
 					renderedRoutes[file.storage.__hash__] = file
 
-			Document.onRevert (file) ->
+			Document.onBeforeRevert (file) ->
 				if file.storage instanceof Route and file.constructor is Document and renderedRoutes[file.storage.__hash__] is file
 					renderedRoutes[file.storage.__hash__] = null
 					destroyRoute file.storage
@@ -215,7 +215,7 @@ Acceptable syntaxes:
 			route.response = res
 			pendingRoutes[hash] = true
 
-			res.onSent onResponseSent, route
+			res.onSend onResponseSent, route
 
 			# init
 			route.init?()
