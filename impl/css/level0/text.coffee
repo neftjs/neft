@@ -134,6 +134,11 @@ module.exports = (impl) ->
 			textImpl.fontReady()
 			return
 
+	reloadFontFamily = (family) ->
+		if (@_font and @_font._family is family) or (not @_font and family is 'sans-serif')
+			@_impl.textElemStyle.fontFamily = @_impl.textElemStyle.fontFamily
+		return
+
 	updateContent = do ->
 		queue = []
 		pending = false
@@ -246,6 +251,9 @@ module.exports = (impl) ->
 		exports._createTextElement @
 		data.elem.appendChild data.textElem
 
+		if impl.utils.loadingFonts['sans-serif'] > 0
+			impl.utils.fontLoaded reloadFontFamily, @
+
 	setText: (val) ->
 		updateContent @
 
@@ -271,8 +279,8 @@ module.exports = (impl) ->
 		updateSize @
 
 	setTextFontFamily: (val) ->
-		unless isFontReady
-			reloadFontFamilyQueue.push @_impl.textElem
+		if impl.utils.loadingFonts[val] > 0
+			impl.utils.fontLoaded reloadFontFamily, @
 
 		if impl.utils.DEFAULT_FONTS[val]
 			val = "#{impl.utils.DEFAULT_FONTS[val]}, #{val}"

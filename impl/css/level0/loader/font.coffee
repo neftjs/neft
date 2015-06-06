@@ -7,8 +7,7 @@ log = log.scope 'Renderer', 'FontLoader'
 
 module.exports = (impl) ->
 	signal.create impl.utils, 'fontLoaded'
-	impl.utils.loadedFonts =
-		__proto__: null
+	impl.utils.loadingFonts = Object.create null
 
 	WEIGHTS = [
 		///hairline///i,
@@ -49,7 +48,7 @@ module.exports = (impl) ->
 
 		style = if isItalic(sources[0]) then 'italic' else 'normal'
 		weight = getFontWeight(sources[0])
-		name = impl.utils.DEFAULT_FONTS[name] or name
+		cssName = impl.utils.DEFAULT_FONTS[name] or name
 
 		urlStr = ''
 		for source in sources
@@ -59,19 +58,22 @@ module.exports = (impl) ->
 		styles = document.createElement 'style'
 		styles.innerHTML = """
 			@font-face {
-				font-family: "#{name}";
+				font-family: "#{cssName}";
 				src: #{urlStr};
 				font-style: #{style};
 				font-weight: #{weight};
 			}
 		"""
 
+		impl.utils.loadingFonts[name] ?= 0
+		impl.utils.loadingFonts[name]++
+
 		append = ->
 			document.body.appendChild styles
 
-			fontLoader = new impl.utils.FontLoader [name],
+			fontLoader = new impl.utils.FontLoader [cssName],
 				fontLoaded: ->
-					impl.utils.loadedFonts[name] = true
+					impl.utils.loadingFonts[name]--
 					impl.utils.fontLoaded name
 			fontLoader.loadFonts()
 
