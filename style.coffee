@@ -18,9 +18,9 @@ module.exports = (File, data) -> class Style
 		assert.instanceOf style, Style
 		assert.instanceOf node, File.Element
 
-		if 'onTextChanged' of node
+		if 'onTextChange' of node
 			style.textWatchingNodes.push node
-			node.onTextChanged textChangedListener, style
+			node.onTextChange textChangeListener, style
 
 		if node.children
 			for child in node.children
@@ -28,15 +28,15 @@ module.exports = (File, data) -> class Style
 
 		return
 
-	visibilityChangedListener = ->
+	visibilityChangeListener = ->
 		if @file.isRendered
 			@updateVisibility()
 
-	textChangedListener = ->
+	textChangeListener = ->
 		if @file.isRendered
 			@updateText()
 
-	attrsChangedListener = (e) ->
+	attrsChangeListener = (e) ->
 		if e.name is 'neft:style'
 			@reloadItem()
 			if @file.isRendered
@@ -114,7 +114,7 @@ module.exports = (File, data) -> class Style
 		# parent
 		if @isAutoParent
 			if @isScope
-				@item.document.hide()
+				@item.document.onHide.emit()
 			@lastItemParent = null
 			if !@parentSet
 				@lastItemParent = @item.parent
@@ -288,7 +288,7 @@ module.exports = (File, data) -> class Style
 
 		if @item
 			while elem = @textWatchingNodes.pop()
-				elem.onTextChanged.disconnect textChangedListener, @
+				elem.onTextChange.disconnect textChangeListener, @
 
 		wasAutoParent = @isAutoParent
 
@@ -386,7 +386,7 @@ module.exports = (File, data) -> class Style
 						tmpIndexNode = tmpIndexNode._parent
 
 					if @isScope and not oldParent
-						@item.document.show()
+						@item.document.onShow.emit()
 					break
 				tmpNode = tmpNode._parent
 
@@ -420,13 +420,13 @@ module.exports = (File, data) -> class Style
 			return clone
 
 		# changes
-		clone.node.onAttrsChanged attrsChangedListener, clone
+		clone.node.onAttrsChange attrsChangeListener, clone
 
 		# visibility changes
 		tmpNode = clone.node
 		loop
 			if tmpNode.attrs.has 'neft:if'
-				tmpNode.onVisibilityChanged visibilityChangedListener, clone
+				tmpNode.onVisibilityChange visibilityChangeListener, clone
 
 			tmpNode = tmpNode.parent
 			if not tmpNode or tmpNode.attrs.has('neft:style')

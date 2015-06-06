@@ -17,7 +17,7 @@ log = log.scope 'Styles'
 module.exports = (File) ->
 
 	if utils.isNode
-		File.onParsed do ->
+		File.onParse do ->
 			styles = styleParseStyles File
 			(file) ->
 				styles file

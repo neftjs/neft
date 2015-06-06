@@ -219,7 +219,7 @@ This variable refers to the *get('data')* value.
 						linkFragment funcs, iterator.fragment
 				return
 
-			File.onParsed do ->
+			File.onParse do ->
 				funcs = stylesParseFuncs File
 				(file) ->
 					funcs file
