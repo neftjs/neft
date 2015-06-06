@@ -95,56 +95,13 @@ var Request = Networking.Request;
 			@params = null
 
 			# signal handlers
-			if opts.onDestroy
-				@onDestroy opts.onDestroy
-			if opts.onLoad
-				@onLoad opts.onLoad
-			if opts.onDataLoad
-				@onDataLoad opts.onDataLoad
+			if opts.onLoadEnd
+				@onLoadEnd opts.onLoadEnd
 
-*Signal* Request::onDestroy()
------------------------------
+*Signal* Request::onLoadEnd(*Any* error, *Any* data)
+----------------------------------------------------
 
-This signal is called by the [Networking.Response][] when data is ready to be sent.
-
-It's called before the *onLoad()* signal.
-
-		signal.Emitter.createSignal @, 'onDestroy'
-
-*Signal* Request::onLoad(*Networking.Response* res)
----------------------------------------------------
-
-This signal is called by the [Networking.Response][] when data is going to be sent.
-
-When this signal is called, the request is already destroyed.
-
-Notice, that failed response also calls this signal, therefore
-you should use [Networking.Response::isSucceed()][] to check whether request succeeded.
-
-```
-req.onLoad(function(res){
-  if (res.isSucceed()){
-    console.log("Response has been sent with data " + res.data);
-  }
-});
-```
-
-		signal.Emitter.createSignal @, 'onLoad'
-
-*Signal* Request::onDataLoad(*Any* error, *Any* data)
------------------------------------------------------
-
-```
-req.onDataLoad(function(err, data){
-\  if (err){
-\    console.log('error!', err);
-\  } else {
-\    console.log('data:', data);
-\  }
-});
-```
-
-		signal.Emitter.createSignal @, 'onDataLoad'
+		signal.Emitter.createSignal @, 'onLoadEnd'
 
 ReadOnly *String* Request::uid
 ------------------------------
@@ -159,8 +116,6 @@ ReadOnly *Boolean* Request::pending
 This property indicates whether a request is not destroyed.
 
 If it's *false*, the request can't be changed.
-
-Check *destroyed()* for more.
 
 		pending: false
 
@@ -224,6 +179,11 @@ It's set by the [Networking.Handler][] itself.
 
 		handler: null
 
+*Networking.Response* Request::response
+---------------------------------------
+
+		response: null
+
 ReadOnly *Object* Request::params = {}
 --------------------------------------
 
@@ -248,21 +208,6 @@ ReadOnly *Object* Request::cookies
 
 		cookies: null
 
-Request::destroy()
-------------------
-
-Use this method to mark a request as resolved. This action is terminal.
-
-It's called automatically by the [Networking.Response][].
-
-		destroy: ->
-			assert.ok @pending
-
-			@pending = false
-			@onDestroy.emit()
-
-			return
-
 *String* Request::toString()
 ----------------------------
 
@@ -277,3 +222,15 @@ console.log(req.toString);
 
 		toString: ->
 			"#{@method} #{@uri} as #{@type}"
+
+		destroy: ->
+			assert @pending
+
+			@pending = false
+
+			res = @response
+			if res.isSucceed()
+				@onLoadEnd.emit null, res.data
+			else
+				@onLoadEnd.emit res.data or res.status or "Unknown error"
+			return

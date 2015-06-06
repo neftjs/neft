@@ -168,11 +168,11 @@ Local and server requests are supported.
 ```
 app.networking.createRequest({
   uri: '/achievements/world_2',
-  onLoaded: function(res){
-    if (res.isSucceed()){
-      console.log("Request has been loaded! Data: " + res.data);
+  onLoadEnd: function(err, data){
+    if (this.response.isSucceed()){
+      console.log("Request has been loaded! Data: " + data);
     } else {
-      console.log("Error: " + res.data);
+      console.log("Error: " + err);
     }
   }
 });
@@ -185,8 +185,8 @@ app.networking.createRequest({
   method: 'post',
   uri: 'http://server.domain/comments',
   data: {message: 'Great article! Like it.'},
-  onLoaded: function(res){
-    if (res.isSucceed()){
+  onLoadEnd: function(err, data){
+    if (this.response.isSucceed()){
       console.log("Comment has been added!");
     }
   }
@@ -202,14 +202,14 @@ app.networking.createRequest({
 
 			# create a request
 			req = new Networking.Request opts
-
-			req.onDestroy ->
+			req.onLoadEnd ->
 				log.end logtime
 
 			# create a response
 			resOpts = if utils.isObject(opts.response) then opts.response else {}
 			resOpts.request = req
 			res = new Networking.Response resOpts
+			req.response = res
 
 			# signal
 			@onRequest.emit req, res
@@ -221,12 +221,7 @@ app.networking.createRequest({
 				Impl.sendRequest req, res, (opts) ->
 					utils.merge res, opts
 					res.pending = false
-					req.onDestroy.emit()
-					req.onLoad.emit res
-					if res.isSucceed()
-						req.onDataLoad.emit null, res.data
-					else
-						req.onDataLoad.emit res.data or res.status or "Unknown error"
+					req.destroy()
 			else
 				log "Resolve local `#{req}` request"
 

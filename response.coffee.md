@@ -117,11 +117,12 @@ var Response = Networking.Response;
 
 			@pending = true
 
+			# signal handlers
+			if opts.onSend
+				@onSend opts.onSend
+
 			if opts.status?
 				@send()
-
-			# whether response will be send on the next tick
-			utils.defineProperty @, '_waitingToSend', utils.WRITABLE, false
 
 *Signal* Response::onSend()
 ---------------------------
@@ -135,15 +136,6 @@ res.onSend(function(){
 ```
 
 		signal.Emitter.createSignal @, 'onSend'
-
-*Signal* Response::donDestroy()
-------------------------------
-
-This signal is called when a response data is no longer in use.
-
-Check *Response::onDestroy()* for more.
-
-		signal.Emitter.createSignal @, 'onDestroy'
 
 ReadOnly *Boolean* Response::pending
 ------------------------------------
@@ -230,14 +222,12 @@ Response::send([*Integer* status, *Any* data])
 
 Use this method to send a response.
 
-This method calls *onSend()* signal asynchronously.
-
-You can still change a response status and data, but only synchronously.
+This method calls *onSend()* signal.
 
 ```
 res.send(Networking.Response.OK, {user: 'Max', age: 43});
 
-res.onSent(function(){
+res.onSend(function(){
   console.log("Response has been sent");
 });
 ```
@@ -254,37 +244,20 @@ res.onSent(function(){
 				@status = status
 
 			if data isnt undefined
-				if @data
-					log.info "`#{@request.uri}` response data has been overwritten"
-
 				@data = data
 
-			unless @_waitingToSend
-				@_waitingToSend = true
-				@request.destroy()
-				setImmediate => sendData @
+			@request.destroy()
 
-			return
-
-		sendData = (res) ->
-			assert.instanceOf res, Response
-
-			res.request.onLoad.emit res
-
-			{data} = res
-
-			if res.isSucceed()
-				res.request.onDataLoad.emit null, data
-			else
-				res.request.onDataLoad.emit data or res.status or "Unknown error"
-				log.warn "Response #{res.request.uri} completed with an error"
+			{data} = @
 
 			if data instanceof Error
 				data = utils.errorToObject data
 
-			Impl.send res, data, ->
-				res.destroy()
-				res.onSend.emit()
+			Impl.send @, data, =>
+				@pending = false
+				@onSend.emit()
+
+			return
 
 Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 ---------------------------------------------------------------------
@@ -309,11 +282,9 @@ a permanent redirect.
 			@setHeader 'Location', uri
 
 			@request.destroy()
-			@request.onLoad.emit @
-			@request.onDataLoad.emit null, @data
 
 			Impl.redirect @, status, uri, =>
-				@destroy()
+				@pending = false
 				@onSend.emit()
 
 Response::raise(*Any* error)
@@ -339,21 +310,3 @@ This method returns *true* if a response status is in the range from 200 to 299.
 
 		isSucceed: ->
 			300 > @status >= 200
-
-Response::destroy()
--------------------
-
-Call this method if the response data is no longer in use.
-
-This functionality is typically used on the client side, when a rendered document
-is still visible until the next request.
-
-This method calls the *destroyed()* signal.
-
-		destroy: ->
-			assert.ok @pending
-
-			@pending = false
-			@onDestroy.emit()
-
-			return
