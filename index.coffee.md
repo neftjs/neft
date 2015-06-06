@@ -101,7 +101,7 @@ var user = new Dict({
   country: 'Germany'
 });
 
-user.onChanged.connect(function(key, oldVal){
+user.onChange.connect(function(key, oldVal){
   console.log(key + " property changed from " + oldVal + " to " + this.get(key));
 });
 
@@ -109,7 +109,7 @@ user.set('country', 'US');
 // country property changed from Germany to US
 ```
 
-		signal.Emitter.createSignal @, 'changed'
+		signal.Emitter.createSignal @, 'onChange'
 
 *Any* Dict::get(*String* key)
 -----------------------------
@@ -145,7 +145,7 @@ console.log(bunny.get('speedZ'));
 
 This method is used to change property value or create a new property.
 
-*changed()* signal is called if the value has been changed.
+*onChange()* signal is called if the value has been changed.
 
 Passed *value* can't be a *undefined*,
 because this value is reserved only for unknown properties.
@@ -158,7 +158,7 @@ var links = new Dict({
   twitter: 'https://twitter.com/neft_io'
 });
 
-links.onChanged.connect(function(key, oldVal){
+links.onChange.connect(function(key, oldVal){
   console.log(key + " changed from " + oldVal + " to " + this.get(key));
 });
 
@@ -184,7 +184,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 			@_dirty |= ALL
 
 			# signal
-			@changed key, oldVal
+			@onChange.emit key, oldVal
 
 			val
 
@@ -193,14 +193,14 @@ Dict::pop(*String* key)
 
 This method removes an existing property from a *dict*.
 
-*changed()* signal is called with property key and its old value.
+*onChange()* signal is called with property key and its old value.
 
 ```
 var data = new Dict;
 
 data.set('name', 'John');
 
-data.onChanged.connect(function(key, oldVal){
+data.onChange.connect(function(key, oldVal){
   if (this.get(key) === undefined){
     console.log(key + " property has been removed");
   }
@@ -222,7 +222,7 @@ data.pop('name');
 			@_dirty |= ALL
 
 			# signal
-			@changed key, oldVal
+			@onChange key, oldVal
 
 			return
 
