@@ -107,6 +107,8 @@ var Response = Networking.Response;
 
 			if opts.data?
 				{@data} = opts
+			if opts.encoding?
+				{@encoding} = opts
 
 			@headers = opts.headers or {}
 			@cookies = opts.cookies or utils.cloneDeep(opts.request.cookies)
@@ -195,6 +197,11 @@ res.data = Document.fromJSON(...);
 --------------------------
 
 		cookies: null
+
+*String* Response::encoding = 'utf-8'
+-------------------------------------
+
+		encoding: 'utf-8'
 
 *Response* Response::setHeader(*String* name, *String* value)
 -------------------------------------------------------------

@@ -92,7 +92,7 @@ module.exports = (Networking) ->
 					headers: serverReq.headers
 					cookies: cookies
 
-	sendRequest: (req, callback) ->
+	sendRequest: (req, res, callback) ->
 		urlObject = urlUtils.parse req.uri
 
 		opts =
@@ -120,27 +120,27 @@ module.exports = (Networking) ->
 					data: new Error "Unsupported protocol '#{urlObject.protocol}'"
 				return
 
-		nodeReq = reqModule.request opts, (res) ->
-			res.setEncoding 'utf-8'
+		nodeReq = reqModule.request opts, (nodeRes) ->
+			nodeRes.setEncoding res.encoding
 
 			data = ''
 
-			res.on 'data', (chunk) ->
+			nodeRes.on 'data', (chunk) ->
 				data += chunk
 
-			res.on 'end', ->
-				status = res.statusCode
+			nodeRes.on 'end', ->
+				status = nodeRes.statusCode
 
 				if req.type is Networking.Request.JSON_TYPE
 					data = utils.tryFunction JSON.parse, null, [data], data
 
-				if cookies = res.headers['x-cookies']
+				if cookies = nodeRes.headers['x-cookies']
 					cookies = utils.tryFunction JSON.parse, null, [cookies], null
 
 				callback
 					status: status
 					data: data
-					headers: res.headers
+					headers: nodeRes.headers
 					cookies: cookies
 
 		nodeReq.on 'error', (e) ->

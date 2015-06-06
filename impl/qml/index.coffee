@@ -17,7 +17,7 @@ module.exports = (Networking) ->
 		setImmediate ->
 			__location.append '/'
 
-	sendRequest: (req, callback) ->
+	sendRequest: (req, res, callback) ->
 		{Request} = Networking
 
 		xhr = new XMLHttpRequest

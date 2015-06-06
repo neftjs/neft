@@ -207,7 +207,9 @@ app.networking.createRequest({
 				log.end logtime
 
 			# create a response
-			res = new Networking.Response request: req
+			resOpts = if utils.isObject(opts.response) then opts.response else {}
+			resOpts.request = req
+			res = new Networking.Response resOpts
 
 			# signal
 			@onRequest.emit req, res
@@ -216,7 +218,7 @@ app.networking.createRequest({
 			if EXTERNAL_URL_RE.test req.uri
 				log "Send `#{req}` request"
 
-				Impl.sendRequest req, (opts) ->
+				Impl.sendRequest req, res, (opts) ->
 					utils.merge res, opts
 					res.pending = false
 					req.onDestroy.emit()

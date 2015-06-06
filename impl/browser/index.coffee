@@ -57,7 +57,7 @@ module.exports = (Networking) ->
 	###
 	Send a XHR request and call `callback` on response.
 	###
-	sendRequest: (req, callback) ->
+	sendRequest: (req, res, callback) ->
 		{Request} = Networking
 
 		xhr = new XMLHttpRequest
