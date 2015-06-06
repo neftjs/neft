@@ -8,7 +8,7 @@ standard events based on the strings have.
 
 Each signal is a function and has a corresponding handler.
 The handler always is prefixed by the *on* (e.g. signal *changed* has handler *onChanged*).
-Handlers are used to connect and disconnect listeners (functions called when a signal occurs).
+Signals are used to connect and disconnect listeners (functions called when a signal occurs).
 
 Access it with:
 ```
@@ -20,33 +20,6 @@ var signal = require('signal');
 	utils = require 'utils'
 	assert = require 'neft-assert'
 
-	createSignal = (obj, name) ->
-		assert.isNotPrimitive obj
-		assert.isString name
-		assert.notLengthOf name, 0
-
-		handlerName = exports.getHandlerName name
-
-		assert not obj.hasOwnProperty name
-		, "Signal `#{name}` can't be created, because passed object " +
-		  "has such property"
-
-		obj[name] = createSignalFunction obj
-
-	createHandler = (obj, name) ->
-		assert.isNotPrimitive obj
-		assert.isString name
-		assert.notLengthOf name, 0
-
-		handlerName = exports.getHandlerName name
-
-		assert not obj.hasOwnProperty handlerName
-		, "Handler `#{handlerName}` can't be created, because passed object " +
-		  "has such property"
-
-		signal = obj[name]
-		obj[handlerName] = createHandlerFunction signal
-
 signal.STOP_PROPAGATION
 -----------------------
 
@@ -56,64 +29,23 @@ Must be returned by a listener which want to capture a signal.
 
 ```
 var obj = {};
-signal.create(obj, 'pressed');
+signal.create(obj, 'onPress');
 
-obj.onPressed(function(){
+obj.onPress(function(){
   console.log('listener 1');
   return signal.STOP_PROPAGATION;
 });
 
 // this listener won't be called, because first listener will capture this signal
-obj.onPressed(function(){
+obj.onPress(function(){
   console.log('listener 2');
 });
 
-obj.pressed();
+obj.onPress.emit();
 // listener 1
 ```
 
 	STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
-
-*String* signal.getHandlerName(*String* signalName)
------------------------------------------------------
-
-This function returns a handler name based on the signal name.
-
-In practice it adds *on* prefix and capitalize the signal name.
-
-```
-console.log(signal.getHandlerName('xChanged'));
-// onXChanged
-```
-
-	exports.getHandlerName = do ->
-		cache = Object.create null
-
-		(name) ->
-			cache[name] ?= "on#{utils.capitalize(name)}"
-
-*Boolean* signal.isHandlerName(*String* name)
----------------------------------------------
-
-This function returns *true* if the given *name* is a proper handler name.
-
-In practice it returns *true* if the *name* is prefixed by the *on*.
-
-```
-console.log(signal.isHandlerName('onXChanged'));
-// true
-
-console.log(signal.isHandlerName('xChanged'));
-// false
-
-console.log(signal.isHandlerName('onxChanged'));
-// false (because x is lowercase)
-```
-
-	exports.isHandlerName = (name) ->
-		assert.isString name
-
-		///^on[A-Z]///.test name
 
 *Handler* signal.create(*NotPrimitive* object, *String* name)
 -------------------------------------------------------------
@@ -123,13 +55,13 @@ This function creates new signal and handler in the given *object* under the giv
 ```
 var obj = {};
 
-signal.create(obj, 'renamed');
+signal.create(obj, 'onRename');
 
-obj.onRenamed.connect(function(){
+obj.onRename.connect(function(){
   console.log(arguments);
 });
 
-obj.renamed('Max', 'George');
+obj.onRename.emit('Max', 'George');
 // {0: "Max", 1: "George"}
 ```
 
@@ -138,58 +70,11 @@ obj.renamed('Max', 'George');
 		assert.isString name
 		assert.notLengthOf name, 0
 
-		createSignal obj, name
-		createHandler obj, name
+		assert not obj.hasOwnProperty name
+		, "Signal `#{name}` can't be created, because passed object " +
+		  "has such property"
 
-*Handler* signal.createLazy(*NotPrimitive* object, *String* name)
------------------------------------------------------------------
-
-This function creates a new handler in the given *object* under the given *name*.
-
-The signal is created on demand (only if a listener wants to listen on it).
-
-It can be also used to create signals in the prototype.
-
-```
-function Dog(){
-}
-
-var handler = signal.createLazy(Dog.prototype, 'ageChanged');
-
-var myDog = new Dog;
-console.log(Object.keys(myDog));
-// []
-
-myDog.onAgeChanged.connect(function(){
-  console.log('Signal called');
-});
-
-myDog.ageChanged();
-// Signal called
-
-console.log(Object.keys(myDog));
-// ['ageChanged']
-```
-
-	exports.createLazy = (obj, name) ->
-		assert.isNotPrimitive obj
-		assert.isString name
-		assert.notLengthOf name, 0
-
-		handlerName = exports.getHandlerName name
-		handler = createHandler obj, name
-
-		desc = utils.ENUMERABLE | utils.CONFIGURABLE
-		utils.defineProperty obj, handlerName, desc, ->
-			signal = @[name]
-			unless signal?
-				signal = @[name] = createSignalFunction @, handler
-
-			handler.listeners = signal.listeners
-			handler
-		, null
-
-		return
+		obj[name] = createSignalFunction obj
 
 	callSignal = (obj, listeners, arg1, arg2) ->
 		i = 0
@@ -204,37 +89,39 @@ console.log(Object.keys(myDog));
 				i += 2
 		return
 
-	createSignalFunction = (obj) ->
-		signal = (arg1, arg2) ->
-			assert.operator arguments.length, '<', 3, 'Signal accepts maximally two parameters; use object instead'
-			callSignal obj, listeners, arg1, arg2, obj
-
-		listeners = signal.listeners = []
-
-		signal
-
-*Handler* Handler()
+*Signal* Signal()
 -------------------
 
 This function represents a handler function.
 
 The handler function is used to connect and disconnect listeners.
 
-If this function is called, it works like *Handler.connect()*.
+If this function is called, it works like *Signal.connect()*.
 
-	createHandlerFunction = (signal) ->
+	createSignalFunction = (obj) ->
 		handler = (listener, ctx) ->
 			handler.connect listener, ctx
 
-		handler.listeners = signal?.listeners
-		utils.setPrototypeOf handler, HandlerPrototype
+		handler.obj = obj
+		handler.listeners = []
+		utils.setPrototypeOf handler, SignalPrototype
 
 		handler
 
-	HandlerPrototype =
+	SignalPrototype =
 
-Handler.connect(*Function* listener, [*Any* context])
------------------------------------------------------
+Signal.emit([*Any* argument1, *Any* argument2])
+-----------------------------------------------
+
+		emit: (arg1, arg2) ->
+			assert.isFunction @
+			assert.isArray @listeners
+			assert.operator arguments.length, '<', 3, 'Signal accepts maximally two parameters; use object instead'
+
+			callSignal @obj, @listeners, arg1, arg2
+
+Signal.connect(*Function* listener, [*Any* context])
+----------------------------------------------------
 
 This function connects new listener function into a handler.
 
@@ -242,17 +129,17 @@ Connected listener will be called on each signal call.
 
 ```
 var obj = {};
-signal.create(obj, 'pressed');
+signal.create(obj, 'onPress');
 
-obj.onPressed(function(){
+obj.onPress(function(){
   console.log('listener 1');
 });
 
-obj.onPressed.connect(function(){
+obj.onPress.connect(function(){
   console.log('listener 2');
 });
 
-obj.pressed()
+obj.onPress.emit()
 // listener 1
 // listener 2
 ```
@@ -262,18 +149,18 @@ By default, the listener is called with the object where a signal is created.
 
 ```
 var obj = {standard: true};
-signal.create(obj, 'pressed');
+signal.create(obj, 'onPress');
 
 var fakeContext = {fake: true};
-obj.onPressed(function(){
+obj.onPress(function(){
   console.log(this);
 }, fakeContext);
 
-obj.onPressed(function(){
+obj.onPress(function(){
   console.log(this);
 });
 
-obj.pressed();
+obj.onPress.emit();
 // {fake: true}
 // {standard: true}
 ```
@@ -286,24 +173,24 @@ obj.pressed();
 
 			return
 
-Handler.disconnect(*Function* listener, [*Any* context])
---------------------------------------------------------
+Signal.disconnect(*Function* listener, [*Any* context])
+-------------------------------------------------------
 
 This function disconnects already connected listener from a handler.
 
 ```
 var obj = {};
 
-signal.create(obj, 'pressed');
+signal.create(obj, 'onPress');
 
 var listener = function(){
   console.log('listener called!');
 };
 
-obj.onPressed.connect(listener);
-obj.onPressed.disconnect(listener);
+obj.onPress.connect(listener);
+obj.onPress.disconnect(listener);
 
-obj.pressed()
+obj.onPress.emit()
 // no loggs...
 ```
 
@@ -326,8 +213,8 @@ obj.pressed()
 
 			return
 
-Handler.disconnectAll()
------------------------
+Signal.disconnectAll()
+----------------------
 
 This function disconnects all connected listeners from a handler.
 
@@ -342,6 +229,5 @@ This function disconnects all connected listeners from a handler.
 
 	exports.Emitter = require('./emitter')
 		create: exports.create
-		getHandlerName: exports.getHandlerName
-		createHandlerFunction: createHandlerFunction
+		createSignalFunction: createSignalFunction
 		callSignal: callSignal

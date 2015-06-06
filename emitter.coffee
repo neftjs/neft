@@ -4,42 +4,47 @@ utils = require 'utils'
 assert = require 'neft-assert'
 
 module.exports = (signal) -> class SignalsEmitter
-
-	{getHandlerName, callSignal} = signal
+	{callSignal} = signal
 
 	NOP = ->
 
-	handlerFunc = signal.createHandlerFunction()
+	handlerFunc = signal.createSignalFunction()
 
-	tmpArr = []
-	@createSignal = (ctor, name, onInitialized) ->
-		assert.isFunction ctor
+	@emitSignal = (obj, name, arg1, arg2) ->
 		assert.isString name
 		assert.notLengthOf name, 0
 		assert.isFunction onInitialized if onInitialized?
 
-		ctor::[name] = (arg1, arg2) ->
-			assert.operator arguments.length, '<', 3, 'Signal accepts maximally two parameters; use object instead'
+		if listeners = obj._signals[name]
+			callSignal obj, listeners, arg1, arg2
+		return
 
-			callSignal @, @_signals[name] or tmpArr, arg1, arg2
+	@createSignalOnObject = (obj, name, onInitialized) ->
+		assert.isObject obj
+		assert.isString name
+		assert.notLengthOf name, 0
+		assert.isFunction onInitialized if onInitialized?
 
-		handlerGetter = ->
+		getter = ->
 			assert.instanceOf @, SignalsEmitter
 
 			# http://jsperf.com/dynamic-structures
 			signals = @_signals
-			listeners = signals[name]
-			unless listeners
+			unless listeners = signals[name]
 				listeners = signals[name] = []
 				onInitialized? @, name
+			handlerFunc.obj = @
 			handlerFunc.listeners = listeners
 
 			handlerFunc
 
-		handlerName = getHandlerName name
-		utils.defineProperty ctor::, handlerName, null, handlerGetter, null
+		utils.defineProperty obj, name, null, getter, null
 
-		handlerGetter
+		getter
+
+	@createSignal = (ctor, name, onInitialized) ->
+		assert.isFunction ctor
+		SignalsEmitter.createSignalOnObject ctor::, name, onInitialized
 
 	constructor: ->
 		@_signals = {}
