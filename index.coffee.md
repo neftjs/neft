@@ -246,7 +246,7 @@ new app.Route({
 				utils.merge req.cookies, app.cookies._data
 			else
 				utils.merge res.cookies, app.cookies._data
-			req.onLoad.listeners.unshift ->
+			req.onLoadEnd.listeners.unshift ->
 				if utils.isClient
 					for key, val of res.cookies
 						unless utils.isEqual(app.cookies.get(key), val)
