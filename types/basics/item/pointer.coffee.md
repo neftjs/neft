@@ -10,7 +10,7 @@ Rectangle {
 \  color: 'green'
 \
 \  Class {
-\    when: target.pointer.isHover
+\    when: target.pointer.hover
 \    changes: {
 \      color: 'red'
 \    }
@@ -39,117 +39,117 @@ This class enables mouse and touch handling.
 		constructor: (ref) ->
 			@_x = 0
 			@_y = 0
-			@_isPressed = false
-			@_isHover = false
-			@_isPressedInitialized = false
-			@_isHoverInitialized = false
+			@_pressed = false
+			@_hover = false
+			@_pressedInitialized = false
+			@_hoverInitialized = false
 			super ref
 
-*Signal* Pointer::clicked(*Object* event)
+*Signal* Pointer::onClick(*Object* event)
 -----------------------------------------
 
 This signal is called when there is a click.
 
-*Signal* Pointer::pressed(*Object* event)
+*Signal* Pointer::onPress(*Object* event)
 -----------------------------------------
 
 This signal is called when the pointer has been pressed under the item.
 
 The *event* object contains x and y position.
 
-*Signal* Pointer::released(*Object* event)
-------------------------------------------
+*Signal* Pointer::onRelease(*Object* event)
+-------------------------------------------
 
 The *event* object contains x and y position.
 
-*Signal* Pointer::entered(*Object* event)
+*Signal* Pointer::onEnter(*Object* event)
 -----------------------------------------
 
 This signal is called when the pointer enters the item.
 
 The *event* object contains x and y position.
 
-*Signal* Pointer::exited()
+*Signal* Pointer::onExit()
 --------------------------
 
 This signal is called when the pointer leaves the item.
 
-*Signal* Pointer::wheel(*Object* event)
----------------------------------------
+*Signal* Pointer::onWheel(*Object* event)
+-----------------------------------------
 
 The *event* object contains x and y delta.
 
-*Signal* Pointer::moved(*Object* event)
----------------------------------------
+*Signal* Pointer::onMove(*Object* event)
+----------------------------------------
 
 This signal is called when the pointer position changed.
 
 		onLazySignalInitialized = (pointer, name) ->
 			Impl.attachItemSignal.call pointer, 'pointer', name
 
-		@SIGNALS = ['clicked', 'pressed', 'released',
-		            'entered', 'exited', 'wheel', 'moved']
+		@SIGNALS = ['onClick', 'onPress', 'onRelease',
+		            'onEnter', 'onExit', 'onWheel', 'onMove']
 
 		for signalName in @SIGNALS
 			signal.Emitter.createSignal @, signalName, onLazySignalInitialized
 
-*Boolean* Pointer::isPressed = false
-------------------------------------
+*Boolean* Pointer::pressed = false
+----------------------------------
 
 This property holds whether the pointer is currently pressed.
 
-### *Signal* Pointer::isPressedChanged(*Boolean* oldValue)
+### *Signal* Pointer::onPressedChange(*Boolean* oldValue)
 
-		isPressedInitializer = do ->
-			onPressed = ->
-				@isPressed = true
+		pressedInitializer = do ->
+			onPress = ->
+				@pressed = true
 				signal.STOP_PROPAGATION
-			onReleased = ->
-				@isPressed = false
+			onRelease = ->
+				@pressed = false
 
 			(pointer) ->
-				pointer.onPressed onPressed
-				pointer.onReleased onReleased
+				pointer.onPress onPress
+				pointer.onRelease onRelease
 
 		itemUtils.defineProperty
 			constructor: Pointer
-			name: 'isPressed'
+			name: 'pressed'
 			defaultValue: false
 			namespace: 'pointer'
 			parentConstructor: ctor
-			signalInitializer: isPressedInitializer
+			signalInitializer: pressedInitializer
 			getter: (_super) -> ->
-				unless @_isPressedInitialized
-					isPressedInitializer @
-					@_isPressedInitialized = true
+				unless @_pressedInitialized
+					pressedInitializer @
+					@_pressedInitialized = true
 				_super.call @
 
-*Boolean* Pointer::isHover = false
-----------------------------------
+*Boolean* Pointer::hover = false
+--------------------------------
 
 This property holds whether the pointer is currently under the item.
 
-### *Signal* Pointer::isHoverChanged(*Boolean* oldValue)
+### *Signal* Pointer::onHoverChange(*Boolean* oldValue)
 
-		isHoverInitializer = do ->
-			onEntered = ->
-				@isHover = true
-			onExited = ->
-				@isHover = false
+		hoverInitializer = do ->
+			onEnter = ->
+				@hover = true
+			onExit = ->
+				@hover = false
 
 			(pointer) ->
-				pointer.onEntered onEntered
-				pointer.onExited onExited
+				pointer.onEnter onEnter
+				pointer.onExit onExit
 
 		itemUtils.defineProperty
 			constructor: Pointer
-			name: 'isHover'
+			name: 'hover'
 			defaultValue: false
 			namespace: 'pointer'
 			parentConstructor: ctor
-			signalInitializer: isHoverInitializer
+			signalInitializer: hoverInitializer
 			getter: (_super) -> ->
-				unless @_isHoverInitialized
-					isHoverInitializer @
-					@_isHoverInitialized = true
+				unless @_hoverInitialized
+					hoverInitializer @
+					@_hoverInitialized = true
 				_super.call @

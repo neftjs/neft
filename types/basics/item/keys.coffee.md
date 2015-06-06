@@ -39,22 +39,22 @@ Rectangle {
 			@_focus = false
 			super ref
 
-*Signal* Keys::pressed(*Object* event)
+*Signal* Keys::onPress(*Object* event)
 --------------------------------------
 
-*Signal* Keys::hold(*Object* event)
------------------------------------
+*Signal* Keys::onHold(*Object* event)
+-------------------------------------
 
-*Signal* Keys::released(*Object* event)
----------------------------------------
+*Signal* Keys::onRelease(*Object* event)
+----------------------------------------
 
-*Signal* Keys::input(*Object* event)
-------------------------------------
+*Signal* Keys::onInput(*Object* event)
+--------------------------------------
 
 		onLazySignalInitialized = (keys, name) ->
 			Impl.attachItemSignal.call keys, 'keys', name
 
-		@SIGNALS = ['pressed', 'hold', 'released', 'input']
+		@SIGNALS = ['onPress', 'onHold', 'onRelease', 'onInput']
 
 		for signalName in @SIGNALS
 			signal.Emitter.createSignal @, signalName, onLazySignalInitialized
@@ -62,7 +62,7 @@ Rectangle {
 *Boolean* Keys::focus = false
 -----------------------------
 
-### *Signal* Keys::focusChanged(*Boolean* oldValue)
+### *Signal* Keys::onFocusChange(*Boolean* oldValue)
 
 		focusedKeys = null
 
@@ -82,8 +82,8 @@ Rectangle {
 							oldVal = focusedKeys
 							focusedKeys = null
 							oldVal._focus = false
-							oldVal.focusChanged true
-							oldVal._ref.keysChanged oldVal
+							oldVal.onFocusChange.emit true
+							oldVal._ref.onKeysChange.emit oldVal
 						focusedKeys = @
 					_super.call @, val
 					if not val and focusedKeys is @

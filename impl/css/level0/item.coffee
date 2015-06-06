@@ -34,24 +34,24 @@ rad2deg = (rad) ->
 isTouch = 'ontouchstart' of window
 
 SIGNALS =
-	'pointerClicked': 'click'
-	'pointerPressed': 'mousedown'
-	'pointerReleased': 'mouseup'
-	'pointerEntered': 'mouseenter'
-	'pointerExited': 'mouseleave'
-	'pointerMoved': 'mousemove'
-	'pointerWheel': implUtils.wheelEvent.eventName
+	'pointerOnClick': 'click'
+	'pointerOnPress': 'mousedown'
+	'pointerOnRelease': 'mouseup'
+	'pointerOnEnter': 'mouseenter'
+	'pointerOnExit': 'mouseleave'
+	'pointerOnMove': 'mousemove'
+	'pointerOnWheel': implUtils.wheelEvent.eventName
 
 if isTouch
 	utils.merge SIGNALS,
-		'pointerPressed': 'touchstart'
-		'pointerReleased': 'touchend'
-		'pointerEntered': 'touchstart'
-		'pointerExited': 'touchend'
-		'pointerMoved': 'touchmove'
+		'pointerOnPress': 'touchstart'
+		'pointerOnRelease': 'touchend'
+		'pointerOnEnter': 'touchstart'
+		'pointerOnExit': 'touchend'
+		'pointerOnMove': 'touchmove'
 
 SIGNALS_CURSORS =
-	'pointerClicked': 'pointer'
+	'pointerOnClick': 'pointer'
 
 lastEventCoords =
 	x: -1
@@ -79,11 +79,11 @@ getMouseEvent = (e) ->
 	movementY: movementY
 
 SIGNALS_ARGS =
-	'pointerWheel': implUtils.wheelEvent.getDelta
-	'pointerPressed': getMouseEvent
-	'pointerReleased': getMouseEvent
-	'pointerClicked': getMouseEvent
-	'pointerMoved': getMouseEvent
+	'pointerOnWheel': implUtils.wheelEvent.getDelta
+	'pointerOnPress': getMouseEvent
+	'pointerOnRelease': getMouseEvent
+	'pointerOnClick': getMouseEvent
+	'pointerOnMove': getMouseEvent
 
 HOT_MAX_TIME = 1000
 HOT_MAX_ACTIONS = 4
@@ -108,7 +108,7 @@ module.exports = (impl) ->
 	window.addEventListener SIGNALS.pointerReleased, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
 		event = getMouseEvent e
-		mouseActiveItem?.released event
+		mouseActiveItem?.onRelease.emit event
 		mouseActiveItem = null
 		document.body.setAttribute 'class', ''
 		return
@@ -116,7 +116,7 @@ module.exports = (impl) ->
 	window.addEventListener SIGNALS.pointerMoved, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
 		event = getMouseEvent e
-		mouseActiveItem?.moved event
+		mouseActiveItem?.onMove.emit event
 		return
 
 	# window.addEventListener 'touchstart', (e) ->
@@ -311,11 +311,11 @@ module.exports = (impl) ->
 			if arg is false or e._accepted
 				return
 
-			if name is 'pointerMoved'
+			if name is 'pointerOnMove'
 				e._accepted = true
 
-			if self[signalName](arg) is signal.STOP_PROPAGATION
-				if name is 'pointerPressed'
+			if self[signalName].emit(arg) is signal.STOP_PROPAGATION
+				if name is 'pointerOnPress'
 					document.body.setAttribute 'class', 'unselectable'
 					mouseActiveItem = self
 				e.stopPropagation()
@@ -324,7 +324,7 @@ module.exports = (impl) ->
 			return
 
 		if typeof implName is 'string'
-			if name isnt 'pointerReleased'
+			if name isnt 'pointerOnRelease'
 				elem.addEventListener implName, customFunc, false
 
 		# cursor

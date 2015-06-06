@@ -41,20 +41,20 @@ AmbientSound {
 
 			Impl.createObject @, @constructor.__name__
 
-*Signal* AmbientSound::started()
+*Signal* AmbientSound::onStart()
 --------------------------------
 
-		signal.Emitter.createSignal @, 'started'
+		signal.Emitter.createSignal @, 'onStart'
 
-*Signal* AmbientSound::stopped()
---------------------------------
+*Signal* AmbientSound::onStop()
+-------------------------------
 
-		signal.Emitter.createSignal @, 'stopped'
+		signal.Emitter.createSignal @, 'onStop'
 
 *Boolean* AmbientSound::running
 -------------------------------
 
-### *Signal* AmbientSound::runningChanged(*Boolean* oldValue)
+### *Signal* AmbientSound::onRunningChange(*Boolean* oldValue)
 
 		setRunningOnReady = ->
 			@running = @_when
@@ -77,16 +77,16 @@ AmbientSound {
 
 				if val
 					Impl.startAmbientSound.call @
-					@started()
+					@onStart.emit()
 				else
 					Impl.stopAmbientSound.call @
-					@stopped()
+					@onStop.emit()
 				return
 
 *String* AmbientSound::source = ''
 ----------------------------------
 
-### *Signal* AmbientSound::sourceChanged(*String* oldValue)
+### *Signal* AmbientSound::onSourceChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -98,7 +98,7 @@ AmbientSound {
 *Boolean* AmbientSound::loop = false
 ------------------------------------
 
-### *Signal* AmbientSound::loopChanged(*Boolean* oldValue)
+### *Signal* AmbientSound::onLoopChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

@@ -7,7 +7,7 @@ Image @class
 Image {
 \  source: 'http://lorempixel.com/200/140/'
 \
-\  onLoaded: function(error){
+\  onLoad: function(error){
 \    if (error){
 \      console.error("Can't load this image");
 \    } else {
@@ -41,7 +41,7 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 
 		constructor: ->
 			@_source = ''
-			@_isLoaded = false
+			@_loaded = false
 			@_autoWidth = true
 			@_autoHeight = true
 			@_sourceWidth = 0
@@ -72,7 +72,7 @@ Image source URL (absolute or relative to the page) or data URI.
 
 *SVG* is fully supported.
 
-### *Signal* Image::sourceChanged(*String* oldValue)
+### *Signal* Image::onSourceChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -98,15 +98,18 @@ Image source URL (absolute or relative to the page) or data URI.
 							@height = opts.height
 							@_autoHeight = true
 
-					@_isLoaded = true
-					@isLoadedChanged false
-					@loaded err
+					@_loaded = true
+					@onLoadedChange.emit false
+					if err
+						@onError.emit err
+					else
+						@onLoad.emit()
 
 				(_super) -> (val) ->
 					_super.call @, val
-					if @_isLoaded
-						@_isLoaded = false
-						@isLoadedChanged true
+					if @_loaded
+						@_loaded = false
+						@onLoadedChange.emit true
 					if val
 						Impl.setImageSource.call @, val, loadCallback
 					else
@@ -117,7 +120,7 @@ Image source URL (absolute or relative to the page) or data URI.
 *Integer* Image::sourceWidth = 0
 --------------------------------
 
-### *Signal* Image::sourceWidthChanged(*Integer* oldValue)
+### *Signal* Image::onSourceWidthChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -130,7 +133,7 @@ Image source URL (absolute or relative to the page) or data URI.
 *Integer* Image::sourceHeight = 0
 ---------------------------------
 
-### *Signal* Image::sourceHeightChanged(*Integer* oldValue)
+### *Signal* Image::onSourceHeightChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -143,7 +146,7 @@ Image source URL (absolute or relative to the page) or data URI.
 *Float* Image::offsetX = 0
 --------------------------
 
-### *Signal* Image::offsetXChanged(*Float* oldValue)
+### *Signal* Image::onOffsetXChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -156,7 +159,7 @@ Image source URL (absolute or relative to the page) or data URI.
 *Float* Image::offsetY = 0
 --------------------------
 
-### *Signal* Image::offsetYChanged(*Float* oldValue)
+### *Signal* Image::onOffsetYChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -169,7 +172,7 @@ Image source URL (absolute or relative to the page) or data URI.
 *Integer* Image::fillMode = 'Stretch'
 -------------------------------------
 
-### *Signal* Image::fillModeChanged(*Integer* oldValue)
+### *Signal* Image::onFillModeChange(*Integer* oldValue)
 
 		FILL_MODE_OPTIONS = ['Stretch', 'Tile']
 
@@ -182,27 +185,26 @@ Image source URL (absolute or relative to the page) or data URI.
 				assert.isString val
 				assert.ok utils.has(FILL_MODE_OPTIONS, val), "Accepted fillMode values: '#{FILL_MODE_OPTIONS}'"
 
-ReadOnly *Boolean* Image::isLoaded
-----------------------------------
+ReadOnly *Boolean* Image::loaded
+--------------------------------
 
-		utils.defineProperty @::, 'isLoaded', null, ->
-			@_isLoaded
+		utils.defineProperty @::, 'loaded', null, ->
+			@_loaded
 		, null
 
-### *Signal* Image::isLoadedChanged(*Boolean* oldValue)
+### *Signal* Image::loadedChange(*Boolean* oldValue)
 
-		signal.Emitter.createSignal @, 'isLoadedChanged'
+		signal.Emitter.createSignal @, 'onLoadedChange'
 
-*Signal* Image::loaded([*Error* error])
----------------------------------------
+*Signal* Image::onLoad()
+------------------------
 
-This signal is called when the image loading process has been ended, that is
-image has been loaded or some error occurs.
+		signal.Emitter.createSignal @, 'onLoad'
 
-Always check, whether first *error* argument is defined if you need to check
-whether image is ready.
+*Signal* Image::onError(*Error* error)
+--------------------------------------
 
-		signal.Emitter.createSignal @, 'loaded'
+		signal.Emitter.createSignal @, 'onError'
 
 		clone: ->
 			clone = super()

@@ -54,7 +54,7 @@ Column {
 *Float* Column::spacing = 0
 ---------------------------
 
-### *Signal* Column::spacingChanged(*Float* oldValue)
+### *Signal* Column::onSpacingChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -71,14 +71,14 @@ Column {
 *Alignment* Column::alignment
 -----------------------------
 
-### *Signal* Column::alignmentChanged(*Alignment* oldValue)
+### *Signal* Column::onAlignmentChange(*Alignment* oldValue)
 
 		Renderer.Item.Alignment @
 
 *Boolean* Column::includeBorderMargins = true
 ---------------------------------------------
 
-### *Signal* Column::includeBorderMarginsChanged(*Boolean* oldValue)
+### *Signal* Column::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

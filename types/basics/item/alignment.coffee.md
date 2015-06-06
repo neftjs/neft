@@ -35,7 +35,7 @@ Alignment @extension
 *String* Alignment::horizontal = 'left'
 ---------------------------------------
 
-### *Signal* Alignment::horizontalChanged(*String* oldValue)
+### *Signal* Alignment::onHorizontalChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -52,7 +52,7 @@ Alignment @extension
 *String* Alignment::vertical = 'top'
 ------------------------------------
 
-### *Signal* Alignment::verticalChanged(*String* oldValue)
+### *Signal* Alignment::onVerticalChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

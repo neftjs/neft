@@ -24,22 +24,22 @@ Animation @modifier
 *Boolean* Animation::when
 -------------------------
 
-### *Signal* Animation::whenChanged(*Boolean* oldValue)
+### *Signal* Animation::onWhenChange(*Boolean* oldValue)
 
-*Signal* Animation::started()
+*Signal* Animation::onStart()
 -----------------------------
 
-		signal.Emitter.createSignal @, 'started'
+		signal.Emitter.createSignal @, 'onStart'
 
-*Signal* Animation::stopped()
------------------------------
+*Signal* Animation::onStop()
+----------------------------
 
-		signal.Emitter.createSignal @, 'stopped'
+		signal.Emitter.createSignal @, 'onStop'
 
 *Boolean* Animation::running
 ----------------------------
 
-### *Signal* Animation::runningChanged(*Boolean* oldValue)
+### *Signal* Animation::onRunningChange(*Boolean* oldValue)
 
 		setRunningOnReady = ->
 			@running = @_when
@@ -62,20 +62,20 @@ Animation @modifier
 
 				if val
 					Impl.startAnimation.call @
-					@started()
+					@onStart.emit()
 					if @_paused
 						Impl.pauseAnimation.call @
 				else
 					if @_paused
 						@paused = false
 					Impl.stopAnimation.call @
-					@stopped()
+					@onStop.emit()
 				return
 
 *Boolean* Animation::paused
 ---------------------------
 
-### *Signal* Animation::pausedChanged(*Boolean* oldValue)
+### *Signal* Animation::onPausedChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -97,7 +97,7 @@ Animation @modifier
 *Boolean* Animation::loop
 -------------------------
 
-### *Signal* Animation::loopChanged(*Boolean* oldValue)
+### *Signal* Animation::onLoopChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

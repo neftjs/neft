@@ -35,7 +35,7 @@ Animation/PropertyAnimation @modifier
 *Renderer.Item* PropertyAnimation::target
 -----------------------------------------
 
-### *Signal* PropertyAnimation::targetChanged(*Renderer.Item* oldValue)
+### *Signal* PropertyAnimation::onTargetChange(*Renderer.Item* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -46,7 +46,7 @@ Animation/PropertyAnimation @modifier
 *String* PropertyAnimation::property
 ------------------------------------
 
-### *Signal* PropertyAnimation::propertyChanged(*String* oldValue)
+### *Signal* PropertyAnimation::onPropertyChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -59,7 +59,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::duration = 1000
 ------------------------------------------
 
-### *Signal* PropertyAnimation::durationChanged(*Float* oldValue)
+### *Signal* PropertyAnimation::onDurationChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -78,7 +78,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::startDelay = 0
 -----------------------------------------
 
-### *Signal* PropertyAnimation::startDelayChanged(*Float* oldValue)
+### *Signal* PropertyAnimation::onStartDelayChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -91,7 +91,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::loopDelay = 0
 ----------------------------------------
 
-### *Signal* PropertyAnimation::loopDelayChanged(*Float* oldValue)
+### *Signal* PropertyAnimation::onLoopDelayChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -104,7 +104,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::delay = 0
 ------------------------------------
 
-### *Signal* PropertyAnimation::delayChanged(*Float* oldValue)
+### *Signal* PropertyAnimation::onDelayChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -126,7 +126,7 @@ Animation/PropertyAnimation @modifier
 *Boolean* PropertyAnimation::updateData = false
 -----------------------------------------------
 
-### *Signal* PropertyAnimation::updateDataChanged(*Boolean* oldValue)
+### *Signal* PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -144,7 +144,7 @@ Animation/PropertyAnimation @modifier
 *Boolean* PropertyAnimation::updateProperty = false
 ---------------------------------------------------
 
-### *Signal* PropertyAnimation::updatePropertyChanged(*Boolean* oldValue)
+### *Signal* PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -161,7 +161,7 @@ Animation/PropertyAnimation @modifier
 *Any* PropertyAnimation::from
 -----------------------------
 
-### *Signal* PropertyAnimation::fromChanged(*Any* oldValue)
+### *Signal* PropertyAnimation::onFromChange(*Any* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -175,7 +175,7 @@ Animation/PropertyAnimation @modifier
 *Any* PropertyAnimation::to
 ---------------------------
 
-### *Signal* PropertyAnimation::toChanged(*Any* oldValue)
+### *Signal* PropertyAnimation::onToChange(*Any* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

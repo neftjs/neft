@@ -60,7 +60,7 @@ This property is used in the [Renderer.Item::classes][] list to identify various
 
 It's a random string by default.
 
-### *Signal* Class::nameChanged(*String* oldValue)
+### *Signal* Class::onNameChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -96,7 +96,7 @@ Reference to the [Renderer.Item][] on which this state has effects.
 
 If state is created inside the [Renderer.Item][], this property is set automatically.
 
-### *Signal* Class::targetChanged(*Renderer.Item* oldValue)
+### *Signal* Class::onTargetChange(*Renderer.Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -142,6 +142,8 @@ Default class has priority 0.
 
 All inherited classes have pririty in range (0, 1).
 
+### *Signal* Class::onPriorityChange(*Float* oldValue)
+
 			itemUtils.defineProperty
 				constructor: @
 				name: 'priority'
@@ -180,7 +182,7 @@ Grid {
 }
 ```
 
-### *Signal* Class::whenChanged(*Boolean* oldValue)
+### *Signal* Class::onWhenChange(*Boolean* oldValue)
 
 			enable: ->
 				if @_running
@@ -450,7 +452,7 @@ Classs at the end have the highest priority.
 
 This property has a setter, which accepts strings and arrays of strings.
 
-### *Signal* Item::classesChanged(*List* classes)
+### *Signal* Item::onClassesChange(*List* classes)
 
 		Renderer.onReady ->
 			itemUtils.defineProperty
@@ -458,30 +460,30 @@ This property has a setter, which accepts strings and arrays of strings.
 				name: 'classes'
 				defaultValue: null
 				getter: do ->
-					onChanged = (oldVal, index) ->
-						onPopped.call @, oldVal, index
-						onInserted.call @, @_classes.get(index), index
-						@classesChanged @_classes
+					onChange = (oldVal, index) ->
+						onPop.call @, oldVal, index
+						onInsert.call @, @_classes.get(index), index
+						@onClassesChange.emit @_classes
 						return
 
-					onInserted = (val, index) ->
+					onInsert = (val, index) ->
 						@_classExtensions[val]?.enable()
-						@classesChanged @_classes
+						@onClassesChange.emit @_classes
 						return
 
-					onPopped = (oldVal, index) ->
+					onPop = (oldVal, index) ->
 						unless @_classes.has(oldVal)
 							@_classExtensions[oldVal]?.disable()
-						@classesChanged @_classes
+						@onClassesChange.emit @_classes
 						return
 
 					(_super) -> ->
 						unless @_classes
 							@_classExtensions ?= {}
 							list = @_classes = new List
-							list.onChanged onChanged, @
-							list.onInserted onInserted, @
-							list.onPopped onPopped, @
+							list.onChange onChange, @
+							list.onInsert onInsert, @
+							list.onPop onPop, @
 
 						_super.call @
 				setter: (_super) -> (val) ->

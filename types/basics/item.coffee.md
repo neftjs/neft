@@ -9,7 +9,7 @@ Item @class
 	List = require 'list'
 
 	{isArray} = Array
-	SignalsEmitter = signal.Emitter
+	{emitSignal} = signal.Emitter
 
 	assert = assert.scope 'Renderer.Item'
 
@@ -81,11 +81,11 @@ This is a base class for everything which is visible.
 						changes.setAttribute prop, val
 
 				classElem._isReady = true
-				classElem.ready()
+				classElem.onReady.emit()
 				classElem.onReady.disconnectAll()
 
 			item._isReady = true
-			item.ready()
+			item.onReady.emit()
 			item.onReady.disconnectAll()
 
 			item
@@ -114,10 +114,10 @@ Rectangle {
 }
 ```
 
-*Signal* Item::update(*Integer* miliseconds)
---------------------------------------------
+*Signal* Item::onUpdate(*Integer* miliseconds)
+----------------------------------------------
 
-		signal.Emitter.createSignal @, 'update', do ->
+		signal.Emitter.createSignal @, 'onUpdate', do ->
 			now = Date.now()
 			items = []
 
@@ -128,7 +128,7 @@ Rectangle {
 
 				for item in items
 					if item._isReady
-						item.update ms
+						item.onUpdate.emit ms
 				requestAnimationFrame frame
 
 			requestAnimationFrame? frame
@@ -148,9 +148,9 @@ Rectangle {
 				val.parent = @
 			return
 
-### *Signal* Item::childrenChanged(*Object* children)
+### *Signal* Item::onChildrenChange(*Object* children)
 
-		signal.Emitter.createSignal @, 'childrenChanged'
+		signal.Emitter.createSignal @, 'onChildrenChange'
 
 		class ChildrenObject extends signal.Emitter
 			constructor: (ref) ->
@@ -162,28 +162,28 @@ Rectangle {
 			has: (val) -> @index(val) isnt -1
 			indexOf: @::index
 
-### *Signal* Item.children::inserted(*Item* child, *Integer* index)
+### *Signal* Item.children::onInsert(*Item* child, *Integer* index)
 
 #### Listen on an item child insertion @snippet
 
 ```
 Item {
-\  children.onInserted: function(child){
+\  children.onInsert: function(child){
 \    child.x *= 2;
 \  }
 }
 ```
 
-		signal.Emitter.createSignal ChildrenObject, 'inserted'
+		signal.Emitter.createSignal ChildrenObject, 'onInsert'
 
-### *Signal* Item.children::popped(*Item* child, *Integer* index)
+### *Signal* Item.children::onPop(*Item* child, *Integer* index)
 
-		signal.Emitter.createSignal ChildrenObject, 'popped'
+		signal.Emitter.createSignal ChildrenObject, 'onPop'
 
 *Item* Item::parent = null
 --------------------------
 
-### *Signal* Item::parentChanged(*Item* oldParent)
+### *Signal* Item::onParentChange(*Item* oldParent)
 
 		{indexOf, splice, push, shift, pop} = Array::
 
@@ -242,22 +242,23 @@ Item {
 				_super.call @, val
 
 				if old isnt null
-					old.childrenChanged old.children
-					old.children.popped @, index
+					emitSignal old, 'onChildrenChange', old.children
+					emitSignal old.children, 'onPop', @, index
 				if val isnt null
-					val.childrenChanged val.children
-					val.children.inserted @, length - 1
+					emitSignal val, 'onChildrenChange', val.children
+					emitSignal val.children, 'onInsert', @, length - 1
 
 				if oldPreviousSibling isnt null
-					oldPreviousSibling.nextSiblingChanged @
+					emitSignal oldPreviousSibling, 'onNextSiblingChange', @
 				if oldNextSibling isnt null
-					oldNextSibling.previousSiblingChanged @
+					emitSignal oldNextSibling, 'onPreviousSiblingChange', @
 
 				if val isnt null or oldPreviousSibling isnt null
-					previousSibling?.nextSiblingChanged null
-					@previousSiblingChanged oldPreviousSibling
+					if previousSibling?
+						emitSignal previousSibling, 'onNextSiblingChange', null
+					emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
 				if oldNextSibling isnt null
-					@nextSiblingChanged oldNextSibling
+					emitSignal @, 'onNextSiblingChange', oldNextSibling
 
 				return
 
@@ -268,9 +269,9 @@ Item {
 			@_previousSibling
 		, null
 
-### *Signal* Item::previousSiblingChanged(*Item* oldValue)
+### *Signal* Item::onPreviousSiblingChange(*Item* oldValue)
 
-		signal.Emitter.createSignal @, 'previousSiblingChanged'
+		signal.Emitter.createSignal @, 'onPreviousSiblingChange'
 
 *Item* Item::nextSibling
 ------------------------
@@ -279,9 +280,9 @@ Item {
 			@_nextSibling
 		, null
 
-### *Signal* Item::nextSiblingChanged(*Item* oldValue)
+### *Signal* Item::onNextSiblingChange(*Item* oldValue)
 
-		signal.Emitter.createSignal @, 'nextSiblingChanged'
+		signal.Emitter.createSignal @, 'onNextSiblingChange'
 
 *Integer* Item::index
 ---------------------
@@ -311,12 +312,14 @@ Item {
 			@_nextSibling?._previousSibling = @
 
 			# current siblings signals
-			@previousSiblingChanged children[index-1]
-			@nextSiblingChanged children[index+1]
+			emitSignal @, 'onPreviousSiblingChange', children[index-1]
+			emitSignal @, 'nextSiblingChange', children[index+1]
 
 			# new siblings signals
-			children[index-1]?.nextSiblingChanged @
-			children[index+1]?.previousSiblingChanged @
+			if obj = children[index-1]
+				emitSignal obj, 'onNextSiblingChange', @
+			if obj = children[index+1]
+				emitSignal obj, 'onPreviousSiblingChange', @
 
 			# implementation
 			tmp = []
@@ -371,7 +374,7 @@ Item {
 }
 ```
 
-### *Signal* Item::visibleChanged(*Boolean* oldValue)
+### *Signal* Item::onVisibleChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -384,7 +387,7 @@ Item {
 *Boolean* Item::clip = false
 ----------------------------
 
-### *Signal* Item::clipChanged(*Boolean* oldValue)
+### *Signal* Item::onClipChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -397,7 +400,7 @@ Item {
 *Float* Item::width = 0
 -----------------------
 
-### *Signal* Item::widthChanged(*Float* oldValue)
+### *Signal* Item::onWidthChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -410,7 +413,7 @@ Item {
 *Float* Item::height = 0
 ------------------------
 
-### *Signal* Item::heightChanged(*Float* oldValue)
+### *Signal* Item::onHeightChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -423,7 +426,7 @@ Item {
 *Float* Item::x = 0
 -------------------
 
-### *Signal* Item::xChanged(*Float* oldValue)
+### *Signal* Item::onXChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -436,7 +439,7 @@ Item {
 *Float* Item::y = 0
 -------------------
 
-### *Signal* Item::yChanged(*Float* oldValue)
+### *Signal* Item::onYChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -449,7 +452,7 @@ Item {
 *Float* Item::z = 0
 -------------------
 
-### *Signal* Item::zChanged(*Float* oldValue)
+### *Signal* Item::onZChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -462,7 +465,7 @@ Item {
 *Float* Item::scale = 1
 -----------------------
 
-### *Signal* Item::scaleChanged(*Float* oldValue)
+### *Signal* Item::onScaleChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -475,7 +478,7 @@ Item {
 *Float* Item::rotation = 0
 --------------------------
 
-### *Signal* Item::rotationChanged(*Float* oldValue)
+### *Signal* Item::onRotationChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -488,7 +491,7 @@ Item {
 *Float* Item::opacity = 1
 -------------------------
 
-### *Signal* Item::opacityChanged(*Float* oldValue)
+### *Signal* Item::onOpacityChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -505,7 +508,7 @@ This attribute points to the URI which will be used when user clicks on this ite
 
 It's required for browsers, where link URIs should be known publicly.
 
-### *Signal* Item::linkUriChanged(*String* oldValue)
+### *Signal* Item::onLinkUriChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -573,7 +576,7 @@ Item::clone()
 *Anchors* Item::anchors
 -----------------------
 
-### *Signal* Item::anchorsChanged(*Anchors* anchors)
+### *Signal* Item::onAnchorsChange(*Anchors* anchors)
 
 		@Anchors @
 
@@ -585,14 +588,14 @@ Item::clone()
 *Margin* Item::margin
 ---------------------
 
-### *Signal* Item::marginChanged(*Margin* margin)
+### *Signal* Item::onMarginChange(*Margin* margin)
 
 		@Margin @
 
 *Fill* Item::fill
 -----------------
 
-### *Signal* Item::fillChanged(*Fill* fill)
+### *Signal* Item::onFillChange(*Fill* fill)
 
 		@Fill @
 

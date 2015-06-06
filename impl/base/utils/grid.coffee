@@ -226,16 +226,16 @@ updateSize = ->
 	return
 
 enableChild = (child) ->
-	child.onVisibleChanged update, @
-	child.onWidthChanged update, @
-	child.onHeightChanged update, @
-	child.onMarginChanged update, @
+	child.onVisibleChange update, @
+	child.onWidthChange update, @
+	child.onHeightChange update, @
+	child.onMarginChange update, @
 
 disableChild = (child) ->
-	child.onVisibleChanged.disconnect update, @
-	child.onWidthChanged.disconnect update, @
-	child.onHeightChanged.disconnect update, @
-	child.onMarginChanged.disconnect update, @
+	child.onVisibleChange.disconnect update, @
+	child.onWidthChange.disconnect update, @
+	child.onHeightChange.disconnect update, @
+	child.onMarginChange.disconnect update, @
 
 COLUMN = exports.COLUMN = 1<<0
 ROW = exports.ROW = 1<<1
@@ -252,12 +252,12 @@ exports.create = (item, type) ->
 	item._impl.gridType = type
 
 	# update item changes
-	item.onChildrenChanged update
-	item.onWidthChanged updateSize
-	item.onHeightChanged updateSize
+	item.onChildrenChange update
+	item.onWidthChange updateSize
+	item.onHeightChange updateSize
 
 	# update on each children size change
-	item.children.onInserted enableChild, item
-	item.children.onPopped disableChild, item
+	item.children.onInsert enableChild, item
+	item.children.onPop disableChild, item
 
 exports.update = update

@@ -7,7 +7,7 @@ signal = require 'signal'
 
 impl = abstractImpl = require './impl/base'
 impl.window = null
-signal.create impl, 'windowReady'
+signal.create impl, 'onWindowReady'
 
 TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'ResourcesLoader',
          'Device', 'Screen', 'Navigator', 'RotationSensor',
@@ -66,7 +66,7 @@ impl.createObject = (object, type) ->
 impl.setWindow = do (_super = impl.setWindow) -> (item) ->
 	utils.defineProperty impl, 'window', utils.ENUMERABLE, item
 	_super.call impl, item
-	impl.windowReady()
+	impl.onWindowReady.emit()
 	item.keys.focus = true
 
 module.exports = impl

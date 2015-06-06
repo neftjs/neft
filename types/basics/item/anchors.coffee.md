@@ -176,11 +176,6 @@ so *anchors.top = parent.left* is not allowed.
 
 				_super.call @, val
 
-*Signal* Item::anchorsChanged(*Anchors* anchors)
-------------------------------------------------
-
-This signal is called on the [Renderer.Item][] if one of it's anchors changed.
-
 			itemUtils.defineProperty
 				constructor: Anchors
 				name: type
@@ -196,14 +191,14 @@ This signal is called on the [Renderer.Item][] if one of it's anchors changed.
 
 		createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 
-### *Signal* Anchors::leftChanged(*Array* oldValue)
+### *Signal* Anchors::onLeftChange(*Array* oldValue)
 
 *Array* Anchors::right = null
 -----------------------------
 
 		createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 
-### *Signal* Anchors::rightChanged(*Array* oldValue)
+### *Signal* Anchors::onRightChange(*Array* oldValue)
 
 *Array* Anchors::horizontalCenter = null
 ----------------------------------------
@@ -224,7 +219,7 @@ Item {
 
 		createAnchorProp 'verticalCenter', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
 
-### *Signal* Anchors::horizontalCenterChanged(*Array* oldValue)
+### *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
 
 *Array* Anchors::top = null
 ---------------------------
@@ -243,14 +238,14 @@ Item {
 
 		createAnchorProp 'top', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
 
-### *Signal* Anchors::topChanged(*Array* oldValue)
+### *Signal* Anchors::onTopChange(*Array* oldValue)
 
 *Array* Anchors::bottom = null
 ------------------------------
 
 		createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ
 
-### *Signal* Anchors::bottomChanged(*Array* oldValue)
+### *Signal* Anchors::onBottomChange(*Array* oldValue)
 
 *Array* Anchors::verticalCenter = null
 --------------------------------------
@@ -269,7 +264,7 @@ Item {
 
 		createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ
 
-### *Signal* Anchors::verticalCenterChanged(*Array* oldValue)
+### *Signal* Anchors::onVerticalCenterChange(*Array* oldValue)
 
 *Array* Anchors::centerIn = null
 --------------------------------
@@ -296,7 +291,7 @@ Rectangle {
 }
 ```
 
-### *Signal* Anchors::centerInChanged(*Array* oldValue)
+### *Signal* Anchors::onCenterInChange(*Array* oldValue)
 
 		createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 
@@ -320,20 +315,20 @@ Item {
 }
 ```
 
-### *Signal* Anchors::fillChanged(*Array* oldValue)
+### *Signal* Anchors::onFillChange(*Array* oldValue)
 
 		createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ
 
 *Array* Anchors::fillWidth = null
 ---------------------------------
 
-### *Signal* Anchors::fillWidthChanged(*Array* oldValue)
+### *Signal* Anchors::onFillWidthChange(*Array* oldValue)
 
 		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ
 
 *Array* Anchors::fillHeight = null
 ----------------------------------
 
-### *Signal* Anchors::fillHeightChanged(*Array* oldValue)
+### *Signal* Anchors::onFillHeightChange(*Array* oldValue)
 
 		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW | FREE_V_LINE_REQ

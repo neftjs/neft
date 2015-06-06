@@ -94,18 +94,18 @@ update = ->
 	return
 
 enableChild = (child) ->
-	child.onVisibleChanged update, @
-	child.onWidthChanged update, @
-	child.onHeightChanged update, @
-	child.onXChanged update, @
-	child.onYChanged update, @
+	child.onVisibleChange update, @
+	child.onWidthChange update, @
+	child.onHeightChange update, @
+	child.onXChange update, @
+	child.onYChange update, @
 
 disableChild = (child) ->
-	child.onVisibleChanged.disconnect update, @
-	child.onWidthChanged.disconnect update, @
-	child.onHeightChanged.disconnect update, @
-	child.onXChanged.disconnect update, @
-	child.onYChanged.disconnect update, @
+	child.onVisibleChange.disconnect update, @
+	child.onWidthChange.disconnect update, @
+	child.onHeightChange.disconnect update, @
+	child.onXChange.disconnect update, @
+	child.onYChange.disconnect update, @
 
 exports.DATA =
 	pending: false
@@ -116,26 +116,26 @@ exports.DATA =
 
 exports.enable = (item) ->
 	# update item changes
-	item.onChildrenChanged update
+	item.onChildrenChange update
 
 	for child in item.children
 		enableChild.call item, child
 
 	# update on each children size change
-	item.children.onInserted enableChild, item
-	item.children.onPopped disableChild, item
+	item.children.onInsert enableChild, item
+	item.children.onPop disableChild, item
 
 	update.call item
 
 exports.disable = (item) ->
 	# update item changes
-	item.onChildrenChanged.disconnect update
+	item.onChildrenChange.disconnect update
 
 	for child in item.children
 		disableChild.call item, child
 
 	# update on each children size change
-	item.children.onInserted.disconnect enableChild, item
-	item.children.onPopped.disconnect disableChild, item
+	item.children.onInsert.disconnect enableChild, item
+	item.children.onPop.disconnect disableChild, item
 
 exports.update = update

@@ -14,7 +14,7 @@ module.exports = (impl) ->
 
 		img.addEventListener 'error', ->
 			obj.status = 'error'
-			obj.loaded()
+			obj.onLoaded.emit()
 
 		img.addEventListener 'load', ->
 			obj.status = 'ready'
@@ -38,13 +38,13 @@ module.exports = (impl) ->
 					obj.width = parseFloat(svg.getAttribute('width')) or parseFloat(viewBox[2])
 					obj.height = parseFloat(svg.getAttribute('height')) or parseFloat(viewBox[3])
 
-					obj.loaded()
+					obj.onLoaded.emit()
 				xhr.onerror = ->
 					obj.status = 'error'
-					obj.loaded()
+					obj.onLoaded.emit()
 				xhr.send()
 			else
-				obj.loaded()
+				obj.onLoaded.emit()
 
 		obj =
 			source: src
@@ -52,7 +52,7 @@ module.exports = (impl) ->
 			width: 0
 			height: 0
 			elem: img
-		signal.create obj, 'loaded'
+		signal.create obj, 'onLoaded'
 		obj
 
 	getImage = (src, rsc) ->

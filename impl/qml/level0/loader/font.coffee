@@ -27,6 +27,6 @@ module.exports = (impl) ->
 		if elem.status is FontLoader.Ready
 			onLoaded.call elem
 		else
-			elem.onStatusChanged.connect elem, onLoaded
+			elem.onStatusChange.connect elem, onLoaded
 
 		return

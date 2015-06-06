@@ -30,7 +30,7 @@ Button {
 			@__name__ = 'Button'
 			@__path__ = 'Renderer.Button'
 
-			onLabelWidthChanged = ->
+			onLabelWidthChange = ->
 				if @_fill._width
 					width = @label._width
 					if @label._margin
@@ -40,7 +40,7 @@ Button {
 					@_updatePending = false
 				return
 
-			onLabelHeightChanged = ->
+			onLabelHeightChange = ->
 				if @_fill._height
 					height = @label._height
 					if @label._margin
@@ -50,24 +50,24 @@ Button {
 					@_updatePending = false
 				return
 
-			onLabelMarginChanged = ->
+			onLabelMarginChange = ->
 				{label} = @
 				padding = @label._margin
 				label.x = padding._left
 				label.y = padding._top
 
 				if @_fill._width
-					onLabelWidthChanged.call @
+					onLabelWidthChange.call @
 				else
 					label.width = @_width - padding._left - padding._right
 
 				if @_fill._height
-					onLabelHeightChanged.call @
+					onLabelHeightChange.call @
 				else
 					label.height = @_height - padding._top - padding._bottom
 				return
 
-			onWidthChanged = ->
+			onWidthChange = ->
 				width = @_width
 				@background.width = width
 				@image.width = width
@@ -78,7 +78,7 @@ Button {
 						@label.width = width
 				return
 
-			onHeightChanged = ->
+			onHeightChange = ->
 				height = @_height
 				@background.height = height
 				@image.height = height
@@ -101,11 +101,11 @@ Button {
 				@fill.width = true
 				@fill.height = true
 
-				@onWidthChanged onWidthChanged, @
-				@onHeightChanged onHeightChanged, @
-				@label.onWidthChanged onLabelWidthChanged, @
-				@label.onHeightChanged onLabelHeightChanged, @
-				@label.onMarginChanged onLabelMarginChanged, @
+				@onWidthChange onWidthChange, @
+				@onHeightChange onHeightChange, @
+				@label.onWidthChange onLabelWidthChange, @
+				@label.onHeightChange onLabelHeightChange, @
+				@label.onMarginChange onLabelMarginChange, @
 
 				@background.parent = @
 				@image.parent = @

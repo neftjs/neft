@@ -40,7 +40,7 @@ Rectangle {
 *String* Rectangle::color = 'transparent'
 -----------------------------------------
 
-### *Signal* Rectangle::colorChanged(*String* oldValue)
+### *Signal* Rectangle::onColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -53,7 +53,7 @@ Rectangle {
 *Float* Rectangle::radius = 0
 -----------------------------
 
-### *Signal* Rectangle::radiusChanged(*Float* oldValue)
+### *Signal* Rectangle::onRadiusChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -74,7 +74,7 @@ Rectangle {
 *Border* Rectangle::border
 --------------------------
 
-### *Signal* Rectangle::borderChanged(*Border* border)
+### *Signal* Rectangle::onBorderChange(*Border* border)
 
 		class Border extends itemUtils.DeepObject
 			@__name__ = 'Border'
@@ -100,7 +100,7 @@ Rectangle {
 *Float* Rectangle::border.width = 0
 -----------------------------------
 
-### *Signal* Rectangle::border.widthChanged(*Float* oldValue)
+### *Signal* Rectangle::border.onWidthChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -115,7 +115,7 @@ Rectangle {
 *String* Rectangle::border.color = 'transparent'
 ------------------------------------------------
 
-### *Signal* Rectangle::border.colorChanged(*String* oldValue)
+### *Signal* Rectangle::border.onColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

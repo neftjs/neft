@@ -63,12 +63,12 @@ Flow {
 *Spacing* Flow::spacing
 -----------------------
 
-### *Signal* Flow::spacingChanged(*Spacing* oldValue)
+### *Signal* Flow::onSpacingChange(*Spacing* oldValue)
 
 *Boolean* Flow::includeBorderMargins = true
 -------------------------------------------
 
-### *Signal* Flow::includeBorderMarginsChanged(*Boolean* oldValue)
+### *Signal* Flow::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

@@ -69,7 +69,7 @@ ResourcesLoader {}
 *Float* ResourcesLoader::progress = 0
 -------------------------------------
 
-### *Signal* ResourcesLoaded::progressChanged(*Float* oldValue)
+### *Signal* ResourcesLoaded::onProgressChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

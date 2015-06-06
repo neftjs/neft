@@ -9,22 +9,22 @@ isTouch = 'ontouchstart' of window
 NOP = ->
 
 SIGNALS =
-	'pointerWheel': 'wheel'
+	'pointerOnWheel': 'wheel'
 
 if isTouch
 	utils.merge SIGNALS,
-		'pointerClicked': 'tap'
-		'pointerPressed': 'touchstart'
-		'pointerReleased': 'touchend'
-		'pointerMoved': 'touchmove'
+		'pointerOnClick': 'tap'
+		'pointerOnPress': 'touchstart'
+		'pointerOnRelease': 'touchend'
+		'pointerOnMove': 'touchmove'
 else
 	utils.merge SIGNALS,
-		'pointerClicked': 'click'
-		'pointerPressed': 'mousedown'
-		'pointerReleased': 'mouseup'
-		'pointerEntered': 'mouseover'
-		'pointerExited': 'mouseout'
-		'pointerMoved': 'mousemove'
+		'pointerOnClick': 'click'
+		'pointerOnPress': 'mousedown'
+		'pointerOnRelease': 'mouseup'
+		'pointerOnEnter': 'mouseover'
+		'pointerOnExit': 'mouseout'
+		'pointerOnMove': 'mousemove'
 
 
 lastEvent = null
@@ -118,15 +118,15 @@ module.exports = (impl) ->
 
 	mouseActiveItem = null
 
-	window.addEventListener SIGNALS.pointerReleased, (e) ->
+	window.addEventListener SIGNALS.pointerOnRelease, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
-		mouseActiveItem?.released mouseEvent
+		mouseActiveItem?.onRelease.emit mouseEvent
 		mouseActiveItem = null
 		return
 
-	window.addEventListener SIGNALS.pointerMoved, (e) ->
+	window.addEventListener SIGNALS.pointerOnMove, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
-		mouseActiveItem?.moved mouseEvent
+		mouseActiveItem?.onMove.emit mouseEvent
 		return
 
 	DATA = utils.merge
@@ -259,15 +259,15 @@ module.exports = (impl) ->
 		uniqueName = ns + utils.capitalize(name)
 		implName = SIGNALS[uniqueName]
 
-		if implName and uniqueName isnt 'pointerReleased'
+		if implName and uniqueName isnt 'pointerOnRelease'
 			elem.interactive = true
 			_super = elem[implName] or NOP
 			elem[implName] = (e, arg) ->
 				unless arg
 					arg = mouseEvent
 				if _super(e, arg) isnt signal.STOP_PROPAGATION
-					if self[name](arg) is signal.STOP_PROPAGATION
-						if uniqueName is 'pointerPressed'
+					if self[name].emit(arg) is signal.STOP_PROPAGATION
+						if uniqueName is 'pointerOnPress'
 							mouseActiveItem = self
 						{originalEvent} = e
 						originalEvent.stopPropagation()
@@ -276,7 +276,7 @@ module.exports = (impl) ->
 						return signal.STOP_PROPAGATION
 				return
 						
-		if uniqueName is 'pointerClicked'
+		if uniqueName is 'pointerOnClick'
 			elem.buttonMode = true
 			elem.defaultCursor = 'pointer'
 		return

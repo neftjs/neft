@@ -65,7 +65,7 @@ Grid {
 *Integer* Grid::columns = 2
 ---------------------------
 
-### *Signal* Grid::columnsChanged(*Integer* oldValue)
+### *Signal* Grid::onColumnsChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -82,7 +82,7 @@ Grid {
 *Integer* Grid::rows = Infinity
 -------------------------------
 
-### *Signal* Grid::rowsChanged(*Integer* oldValue)
+### *Signal* Grid::onRowsChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -99,21 +99,21 @@ Grid {
 *Spacing* Grid::spacing
 -----------------------
 
-### *Signal* Grid::spacingChanged(*Spacing* oldValue)
+### *Signal* Grid::onSpacingChange(*Spacing* oldValue)
 
 		Renderer.Item.Spacing @
 
 *Alignment* Grid::alignment
 ---------------------------
 
-### *Signal* Grid::alignmentChanged(*Alignment* oldValue)
+### *Signal* Grid::onAlignmentChange(*Alignment* oldValue)
 
 		Renderer.Item.Alignment @
 
 *Boolean* Grid::includeBorderMargins = true
 -------------------------------------------
 
-### *Signal* Grid::includeBorderMarginsChanged(*Boolean* oldValue)
+### *Signal* Grid::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

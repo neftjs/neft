@@ -24,7 +24,7 @@ Document @extension
 *Document.Element* Document::node
 ---------------------------------
 
-### *Signal* Document::nodeChanged(*Document.Element* oldValue)
+### *Signal* Document::onNodeChange(*Document.Element* oldValue)
 
 #### Get node attribute in a style item @snippet
 
@@ -38,7 +38,7 @@ Text {
 
 ```
 Text {
-\  document.onNodeChanged: function(){
+\  document.onNodeChange: function(){
 \    var inputs = this.document.node.queryAll('input[type=string]');
 \  }
 }
@@ -51,16 +51,16 @@ Text {
 			namespace: 'document'
 			parentConstructor: ctor
 
-*Signal* Document::show()
--------------------------
+*Signal* Document::onShow()
+---------------------------
 
 This signal is called when the **style item** parent has been found.
 
-		signal.Emitter.createSignal @, 'show'
+		signal.Emitter.createSignal @, 'onShow'
 
-*Signal* Document::hide()
--------------------------
+*Signal* Document::onHide()
+---------------------------
 
 This signal is called when the **style item** is no longer used.
 
-		signal.Emitter.createSignal @, 'hide'
+		signal.Emitter.createSignal @, 'onHide'

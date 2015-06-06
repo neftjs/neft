@@ -188,11 +188,11 @@ module.exports = (impl) ->
 
 	DELTA_VALIDATION_PENDING = 1
 
-	pointerWindowMovedListeners = []
+	pointerWindowMoveListeners = []
 	onImplReady = ->
-		impl.window.pointer.onMoved (e) ->
+		impl.window.pointer.onMove (e) ->
 			stop = false
-			for listener in pointerWindowMovedListeners
+			for listener in pointerWindowMoveListeners
 				r = listener(e)
 				if r is signal.STOP_PROPAGATION
 					stop = true
@@ -220,7 +220,7 @@ module.exports = (impl) ->
 			scroll item, e.movementX + dx, e.movementY + dy
 
 		onImplReady = ->
-			pointerWindowMovedListeners.push (e) ->
+			pointerWindowMoveListeners.push (e) ->
 				if not listen
 					return
 
@@ -373,11 +373,11 @@ module.exports = (impl) ->
 
 		return
 
-	onWidthChanged = (oldVal) ->
+	onWidthChange = (oldVal) ->
 		if @contentItem.width < oldVal
 			scroll @
 		return
-	onHeightChanged = (oldVal) ->
+	onHeightChange = (oldVal) ->
 		if @contentItem.height < oldVal
 			scroll @
 		return
@@ -409,14 +409,14 @@ module.exports = (impl) ->
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem
 			impl.setItemParent.call oldVal, null
-			oldVal.onWidthChanged.disconnect onWidthChanged, @
-			oldVal.onHeightChanged.disconnect onHeightChanged, @
+			oldVal.onWidthChange.disconnect onWidthChange, @
+			oldVal.onHeightChange.disconnect onHeightChange, @
 
 		if val
 			impl.setItemParent.call val, @
 			@_impl.contentItem = val
-			val.onWidthChanged onWidthChanged, @
-			val.onHeightChanged onHeightChanged, @
+			val.onWidthChange onWidthChange, @
+			val.onHeightChange onHeightChange, @
 		return
 
 	setScrollableContentX: (val) ->

@@ -106,7 +106,7 @@ Scrollable @class
 *Renderer.Item* Scrollable::contentItem = null
 ----------------------------------------------
 
-### *Signal* Scrollable::contentItemChanged([*Renderer.Item* oldValue])
+### *Signal* Scrollable::onContentItemChange([*Renderer.Item* oldValue])
 
 		itemUtils.defineProperty
 			constructor: @
@@ -123,7 +123,7 @@ Scrollable @class
 *Float* Scrollable::contentX = 0
 --------------------------------
 
-### *Signal* Scrollable::contentXChanged(*Float* oldValue)
+### *Signal* Scrollable::onContentXChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -136,7 +136,7 @@ Scrollable @class
 *Float* Scrollable::contentY = 0
 --------------------------------
 
-### *Signal* Scrollable::contentYChanged(*Float* oldValue)
+### *Signal* Scrollable::onContentYChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -149,7 +149,7 @@ Scrollable @class
 *Boolean* Scrollable::snap = false
 ----------------------------------
 
-### *Signal* Scrollable::snapChanged(*Boolean* oldValue)
+### *Signal* Scrollable::onSnapChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -162,7 +162,7 @@ Scrollable @class
 *Renderer.Item* Scrollable::snapItem
 ------------------------------------
 
-### *Signal* Scrollable::snapItemChanged(*Renderer.Item* oldValue)
+### *Signal* Scrollable::onSnapItemChange(*Renderer.Item* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

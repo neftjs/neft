@@ -42,7 +42,7 @@ Qml and WebGL implementations
 *Boolean* TextInput::multiLine = false
 --------------------------------------
 
-### *Signal* TextInput::multiLineChanged(*Boolean* oldValue)
+### *Signal* TextInput::onMultiLineChange(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

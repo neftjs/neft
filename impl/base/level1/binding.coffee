@@ -12,7 +12,7 @@ log = log.scope 'Renderer', 'Binding'
 getPropHandlerName = do ->
 	cache = Object.create null
 	(prop) ->
-		cache[prop] ?= signal.getHandlerName "#{prop}Changed"
+		cache[prop] ?= "on#{utils.capitalize(prop)}Change"
 
 module.exports = (impl) ->
 	{items} = impl
@@ -97,7 +97,7 @@ module.exports = (impl) ->
 			else
 				@targetItem = target[0]
 
-			handlerName = signal.getHandlerName "#{target[1]}Changed"
+			handlerName = "on#{utils.capitalize(target[1])}Change"
 			@targetItem[handlerName]? @update, @
 
 			Object.preventExtensions @
@@ -109,7 +109,7 @@ module.exports = (impl) ->
 			return
 
 		destroy: ->
-			handlerName = signal.getHandlerName "#{@target[1]}Changed"
+			handlerName = "on#{utils.capitalize(@target[1])}Change"
 			@targetItem[handlerName].disconnect @update, @
 			# remove from the list
 			@obj._impl.bindings[@prop] = null
@@ -142,8 +142,7 @@ module.exports = (impl) ->
 			@args = binding[2]
 
 			# destroy on property value change
-			signalName = "#{prop}Changed"
-			handlerName = signal.getHandlerName signalName
+			handlerName = "on#{utils.capitalize(prop)}Change"
 
 			# connections
 			connections = @connections = []

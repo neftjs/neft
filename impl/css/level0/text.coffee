@@ -15,7 +15,7 @@ module.exports = (impl) ->
 	hatchery = impl._hatchery
 
 	textImpl = {}
-	signal.create textImpl, 'fontReady'
+	signal.create textImpl, 'onFontReady'
 
 	sizeUpdatePending = false
 
@@ -131,7 +131,7 @@ module.exports = (impl) ->
 			styles.innerHTML = SHEET
 			document.body.appendChild styles
 
-			textImpl.fontReady()
+			textImpl.onFontReady.emit()
 			return
 
 	reloadFontFamily = (family) ->
@@ -173,7 +173,7 @@ module.exports = (impl) ->
 				pending = true
 			return
 
-	onWidthChanged = ->
+	onWidthChange = ->
 		if not sizeUpdatePending
 			{width} = @
 			{textElemStyle} = @_impl
@@ -184,7 +184,7 @@ module.exports = (impl) ->
 				updateSize @
 		return
 
-	onHeightChanged = ->
+	onHeightChange = ->
 		if not sizeUpdatePending
 			{height} = @
 			{textElemStyle} = @_impl
@@ -237,8 +237,8 @@ module.exports = (impl) ->
 		data.textElemStyle = textElem.style
 
 		# handlers
-		item.onWidthChanged onWidthChanged
-		item.onHeightChanged onHeightChanged
+		item.onWidthChange onWidthChange
+		item.onHeightChange onHeightChange
 
 		# set default styles
 		textElem.setAttribute 'class', 'text'

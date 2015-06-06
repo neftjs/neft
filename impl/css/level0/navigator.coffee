@@ -4,4 +4,4 @@ module.exports = (impl) ->
 	initNavigatorNamespace: ->
 		@_impl = bindings: null
 		@_language = window.navigator.language
-		@_isBrowser = true
+		@_browser = true

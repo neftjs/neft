@@ -15,8 +15,8 @@ Navigator @namespace
 			constructor: ->
 				@_impl = null
 				@_language = 'en'
-				@_isBrowser = true
-				@_isOnline = true
+				@_browser = true
+				@_online = true
 				super()
 
 *Boolean* Navigator.language = 'en'
@@ -35,41 +35,41 @@ Text {
 				@_language
 			, null
 
-*Boolean* Navigator.isBrowser = true
-------------------------------------
+*Boolean* Navigator.browser = true
+----------------------------------
 
-			utils.defineProperty @::, 'isBrowser', null, ->
-				@_isBrowser
+			utils.defineProperty @::, 'browser', null, ->
+				@_browser
 			, null
 
-*Boolean* Navigator.isNative = false
-------------------------------------
+*Boolean* Navigator.native = false
+----------------------------------
 
 #### Detect native application @snippet
 
 ```style
 Text {
-  text: Navigator.isNative ? "Native" : "Browser"
+  text: Navigator.native ? "Native" : "Browser"
   font.pixelSize: 30
 }
 ```
 
-			utils.defineProperty @::, 'isNative', null, ->
-				not @_isBrowser
+			utils.defineProperty @::, 'native', null, ->
+				not @_browser
 			, null
 
-*Boolean* Navigator.isOnline = true
------------------------------------
+*Boolean* Navigator.online = true
+---------------------------------
 
 #### @todo
 
 Browser and qml implementations 
 
-### *Signal* Navigator.isOnlineChanged(*Boolean* oldValue)
+### *Signal* Navigator.onOnlineChange(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
-				name: 'isOnline'
+				name: 'online'
 				setter: (_super) -> (val) ->
 
 		navigator = new Navigator

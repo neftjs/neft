@@ -13,26 +13,26 @@ Screen @namespace
 ---------------
 
 			constructor: ->
-				@_isTouch = false
+				@_touch = false
 				@_width = 1024
 				@_height = 800
 				@_orientation = 'Portrait'
 				super()
 
-*Boolean* Screen.isTouch = false
---------------------------------
+*Boolean* Screen.touch = false
+------------------------------
 
 #### Detect touch screen @snippet
 
 ```style
 Text {
-  text: Screen.isTouch ? "Touch" : "Mouse"
+  text: Screen.touch ? "Touch" : "Mouse"
   font.pixelSize: 30
 }
 ```
 
-			utils.defineProperty @::, 'isTouch', null, ->
-				@_isTouch
+			utils.defineProperty @::, 'touch', null, ->
+				@_touch
 			, null
 
 *Boolean* Screen.width = 1024
@@ -58,9 +58,9 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
 
 Browser implementation 
 
-### *Signal* Screen.orientationChanged(*String* oldValue)
+### *Signal* Screen.onOrientationChange(*String* oldValue)
 
-			signal.Emitter.createSignal @, 'orientationChanged'
+			signal.Emitter.createSignal @, 'onOrientationChange'
 			utils.defineProperty Screen::, 'orientation', null, ->
 				@_orientation
 			, null

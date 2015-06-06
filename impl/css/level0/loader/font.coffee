@@ -74,7 +74,7 @@ module.exports = (impl) ->
 			fontLoader = new impl.utils.FontLoader [cssName],
 				fontLoaded: ->
 					impl.utils.loadingFonts[name]--
-					impl.utils.fontLoaded name
+					impl.utils.fontLoaded.emit name
 			fontLoader.loadFonts()
 
 		if document.readyState isnt 'complete'

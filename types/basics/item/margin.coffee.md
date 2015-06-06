@@ -104,7 +104,7 @@ Rectangle {
 				assert typeof val is 'number' and isFinite(val)
 				, "margin.#{type} expects a finite number; `#{val}` given"
 
-			extraPropSignal = extraProp + "Changed"
+			extraPropSignal = "on#{utils.capitalize(extraProp)}Change"
 			itemUtils.defineProperty
 				constructor: Margin
 				name: type
@@ -114,7 +114,7 @@ Rectangle {
 				setter: (_super) -> (val) ->
 					extraOldVal = @[extraProp]
 					_super.call @, val
-					@[extraPropSignal] extraOldVal
+					@[extraPropSignal].emit extraOldVal
 				namespace: propertyName
 				parentConstructor: ctor
 				developmentSetter: developmentSetter
@@ -122,37 +122,37 @@ Rectangle {
 *Float* Margin::left = 0
 ------------------------
 
-### *Signal* Margin::leftChanged(*Float* oldValue)
+### *Signal* Margin::onLeftChange(*Float* oldValue)
 
 		createMarginProp 'left', 'horizontal'
 
 *Float* Margin::top = 0
 -----------------------
 
-### *Signal* Margin::topChanged(*Float* oldValue)
+### *Signal* Margin::onTopChange(*Float* oldValue)
 
 		createMarginProp 'top', 'vertical'
 
 *Float* Margin::right = 0
 -------------------------
 
-### *Signal* Margin::rightChanged(*Float* oldValue)
+### *Signal* Margin::onRightChange(*Float* oldValue)
 
 		createMarginProp 'right', 'horizontal'
 
 *Float* Margin::bottom = 0
 --------------------------
 
-### *Signal* Margin::bottomChanged(*Float* oldValue)
+### *Signal* Margin::onBottomChange(*Float* oldValue)
 
 		createMarginProp 'bottom', 'vertical'
 
 *Float* Margin::horizontal = 0
 ------------------------------
 
-### *Signal* Margin::horizontalChanged(*Float* oldValue)
+### *Signal* Margin::onHorizontalChange(*Float* oldValue)
 
-		signal.Emitter.createSignal @, 'horizontalChanged'
+		signal.Emitter.createSignal @, 'onHorizontalChange'
 
 		utils.defineProperty @::, 'horizontal', null, ->
 			@_left + @_right
@@ -162,9 +162,9 @@ Rectangle {
 *Float* Margin::vertical = 0
 ----------------------------
 
-### *Signal* Margin::verticalChanged(*Float* oldValue)
+### *Signal* Margin::onVerticalChange(*Float* oldValue)
 
-		signal.Emitter.createSignal @, 'verticalChanged'
+		signal.Emitter.createSignal @, 'onVerticalChange'
 
 		utils.defineProperty @::, 'vertical', null, ->
 			@_top + @_bottom

@@ -29,14 +29,14 @@ module.exports = (impl) ->
 
 		updatePending = false
 
-	onWidthChanged = ->
+	onWidthChange = ->
 		if not updatePending
 			auto = @_impl.autoWidth = @width is 0
 			@_impl.elem.wrapMode = if auto then Text.NoWrap else Text.Wrap
 		if @_impl.autoWidth or @_impl.autoHeight
 			updateSize.call @
 
-	onHeightChanged = ->
+	onHeightChange = ->
 		if not updatePending
 			@_impl.autoHeight = @height is 0
 		if @_impl.autoWidth or @_impl.autoHeight
@@ -83,8 +83,8 @@ module.exports = (impl) ->
 		elem.linkActivated.connect onLickActivated
 
 		# update autoWidth/autoHeight
-		@onWidthChanged onWidthChanged
-		@onHeightChanged onHeightChanged
+		@onWidthChange onWidthChange
+		@onHeightChange onHeightChange
 
 	setText: (val) ->
 		Renderer = require 'renderer'

@@ -58,7 +58,7 @@ Text {
 
 HTML code in WebGL implementation
 
-### *Signal* Text::textChanged(*String* oldValue)
+### *Signal* Text::onTextChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -71,7 +71,7 @@ HTML code in WebGL implementation
 *String* Text::color = 'black'
 ------------------------------
 
-### *Signal* Text::colorChanged(*String* oldValue)
+### *Signal* Text::onColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -84,7 +84,7 @@ HTML code in WebGL implementation
 *String* Text::linkColor = 'blue'
 ---------------------------------
 
-### *Signal* Text::linkColorChanged(*String* oldValue)
+### *Signal* Text::onLinkColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -97,7 +97,7 @@ HTML code in WebGL implementation
 *Float* Text::lineHeight = 1
 ----------------------------
 
-### *Signal* Text::lineHeightChanged(*Float* oldValue)
+### *Signal* Text::onLineHeightChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -119,7 +119,7 @@ HTML code in WebGL implementation
 *Font* Text::font
 -----------------
 
-### *Signal* Text::fontChanged(*Font* font)
+### *Signal* Text::onFontChange(*Font* font)
 
 		class Font extends itemUtils.DeepObject
 			@__name__ = 'Font'
@@ -154,7 +154,7 @@ HTML code in WebGL implementation
 *String* Text::font.family = 'sans-serif'
 -----------------------------------------
 
-### *Signal* Text::font.familyChanged(*String* oldValue)
+### *Signal* Text::font.onFamilyChange(*String* oldValue)
 
 			`//<development>`
 			checkingFamily = {}
@@ -183,7 +183,7 @@ HTML code in WebGL implementation
 *Float* Text::font.pixelSize = 14
 ---------------------------------
 
-### *Signal* Text::font.pixelSizeChanged(*String* oldValue)
+### *Signal* Text::font.onPixelSizeChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -198,7 +198,7 @@ HTML code in WebGL implementation
 *Float* Text::font.weight = 0.4
 -------------------------------
 
-### *Signal* Text::font.weightChanged(*Float* oldValue)
+### *Signal* Text::font.onWeightChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -215,7 +215,7 @@ HTML code in WebGL implementation
 *Float* Text::font.wordSpacing = 0
 ----------------------------------
 
-### *Signal* Text::font.wordSpacingChanged(*Float* oldValue)
+### *Signal* Text::font.onWordSpacingChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -230,7 +230,7 @@ HTML code in WebGL implementation
 *Float* Text::font.letterSpacing = 0
 ------------------------------------
 
-### *Signal* Text::font.letterSpacingChanged(*Float* oldValue)
+### *Signal* Text::font.onLetterSpacingChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -245,7 +245,7 @@ HTML code in WebGL implementation
 *Boolean* Text::font.italic = false
 -----------------------------------
 
-### *Signal* Text::font.italicChanged(*Boolean* oldValue)
+### *Signal* Text::font.onItalicChange(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -268,7 +268,7 @@ HTML code in WebGL implementation
 *Alignment* Text::alignment
 ---------------------------
 
-### *Signal* Text::alignmentChanged(*Alignment* alignment)
+### *Signal* Text::onAlignmentChange(*Alignment* alignment)
 
 		Renderer.Item.Alignment Text
 

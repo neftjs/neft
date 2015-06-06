@@ -82,25 +82,25 @@ KEY_CODES[Qt.Key_Z] = 'Z'
 pressedKeys = Object.create null
 
 SIGNALS =
-	'pointerClicked': 'onClicked'
-	'pointerPressed': 'onPressed'
-	'pointerReleased': 'onReleased'
-	'pointerEntered': 'onEntered'
-	'pointerExited': 'onExited'
-	'pointerMoved': 'onPositionChanged'
-	'pointerWheel': 'onWheel'
-	'keysPressed': 'onPressed'
-	'keysHold': 'onPressed'
-	'keysReleased': 'onReleased'
-	'keysInput': 'onPressed'
+	'pointerOnClick': 'onClicked'
+	'pointerOnPress': 'onPressed'
+	'pointerOnRelease': 'onReleased'
+	'pointerOnEnter': 'onEntered'
+	'pointerOnExit': 'onExited'
+	'pointerOnMove': 'onPositionChanged'
+	'pointerOnWheel': 'onWheel'
+	'keysOnPress': 'onPressed'
+	'keysOnHold': 'onPressed'
+	'keysOnRelease': 'onReleased'
+	'keysOnInput': 'onPressed'
 
 HOVER_SIGNALS =
-	'pointerEntered': true
-	'pointerExited': true
-	'pointerMoved': true
+	'pointerOnEnter': true
+	'pointerOnExit': true
+	'pointerOnMove': true
 
 SIGNALS_CURSORS =
-	'pointerClicked': Qt.PointingHandCursor
+	'pointerOnClick': Qt.PointingHandCursor
 
 lastMouseEvent = ready: false, x: 0, y: 0
 movementX = movementY = 0
@@ -120,27 +120,27 @@ mouseCoordsArgs = (e) ->
 	movementY: movementY
 
 SIGNALS_ARGS =
-	'pointerPressed': mouseCoordsArgs
-	'pointerReleased': mouseCoordsArgs
-	'pointerMoved': mouseCoordsArgs
-	'pointerEntered': ->
+	'pointerOnPress': mouseCoordsArgs
+	'pointerOnRelease': mouseCoordsArgs
+	'pointerOnMove': mouseCoordsArgs
+	'pointerOnEnter': ->
 		lastMouseEvent.ready = false
-	'pointerExited': ->
+	'pointerOnExit': ->
 		lastMouseEvent.ready = false
-	'pointerWheel': (e) ->
+	'pointerOnWheel': (e) ->
 		deltaX: e.angleDelta.x
 		deltaY: e.angleDelta.y
-	'keysPressed': (e) ->
+	'keysOnPress': (e) ->
 		if pressedKeys[e.key] and pressedKeys[e.key] isnt e
 			return false
 		pressedKeys[e.key] = e
 		key: KEY_CODES[e.key] || e.text.toUpperCase()
-	'keysHold': (e) ->
+	'keysOnHold': (e) ->
 		key: KEY_CODES[e.key] || e.text.toUpperCase()
-	'keysReleased': (e) ->
+	'keysOnRelease': (e) ->
 		pressedKeys[e.key] = null
 		key: KEY_CODES[e.key] || e.text.toUpperCase()
-	'keysInput': (e) ->
+	'keysOnInput': (e) ->
 		text: e.text
 
 module.exports = (impl) ->
@@ -248,11 +248,11 @@ module.exports = (impl) ->
 			customFunc = (e) ->
 				arg = SIGNALS_ARGS[uniqueName]?.call mouseArea, e
 				e?.accepted = false
-				if self[name](arg) is signal.STOP_PROPAGATION and e?
+				if self[name].emit(arg) is signal.STOP_PROPAGATION and e?
 					e.accepted = true
 				return
 
-			if uniqueName is 'pointerClicked'
+			if uniqueName is 'pointerOnClick'
 				mouseArea.accepts = true;
 
 			mouseArea[qmlName].connect customFunc
@@ -267,7 +267,7 @@ module.exports = (impl) ->
 			qmlName = SIGNALS[uniqueName]
 			__stylesWindow.Keys[qmlName].connect (e) ->
 				arg = SIGNALS_ARGS[uniqueName] e
-				if self[name](arg) is signal.STOP_PROPAGATION
+				if self[name].emit(arg) is signal.STOP_PROPAGATION
 					e.accepted = true
 				return
 			return

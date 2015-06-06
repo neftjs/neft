@@ -54,8 +54,8 @@ module.exports = (impl) ->
 	create: (data) ->
 		impl.Types.Image.create.call @, data
 
-		@onWidthChanged updateImageIfNeeded
-		@onHeightChanged updateImageIfNeeded
+		@onWidthChange updateImageIfNeeded
+		@onHeightChange updateImageIfNeeded
 
 	setRectangleColor: updateImage
 	setRectangleRadius: updateImage

@@ -26,7 +26,7 @@ module.exports = (impl) ->
 		updatePending = false
 		return
 
-	onWidthChanged = ->
+	onWidthChange = ->
 		if not updatePending
 			auto = @_impl.autoWidth = @width is 0
 			@_impl.textStyle.wordWrap = not auto
@@ -36,7 +36,7 @@ module.exports = (impl) ->
 				updateSize.call @
 		return
 
-	onHeightChanged = ->
+	onHeightChange = ->
 		if not updatePending
 			@_impl.autoHeight = @height is 0
 			if @_impl.autoWidth or @_impl.autoHeight
@@ -90,8 +90,8 @@ module.exports = (impl) ->
 			impl.utils.onFontLoaded onFontLoaded, @
 
 		# update autoWidth/autoHeight
-		@onWidthChanged onWidthChanged
-		@onHeightChanged onHeightChanged
+		@onWidthChange onWidthChange
+		@onHeightChange onHeightChange
 		return
 
 	setText: (val) ->

@@ -4,7 +4,7 @@ module.exports = (impl) ->
 	initScreenNamespace: ->
 		@_width = screen.width
 		@_height = screen.height
-		@_isTouch = 'ontouchstart' of window
+		@_touch = 'ontouchstart' of window
 
 		getOrientation = =>
 			oldVal = @_orientation
@@ -17,7 +17,7 @@ module.exports = (impl) ->
 					'Landscape'
 				when 90
 					'InvertedLandscape'
-			@orientationChanged oldVal
+			@onOrientationChange.emit oldVal
 			return
 
 		window.addEventListener 'orientationchange', getOrientation

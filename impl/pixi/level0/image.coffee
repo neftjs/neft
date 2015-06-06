@@ -49,8 +49,8 @@ module.exports = (impl) ->
 
 		data.contentElem = new PIXI.Sprite emptyTexture
 		data.elem.addChild data.contentElem
-		@onWidthChanged updateSize
-		@onHeightChanged updateSize
+		@onWidthChange updateSize
+		@onHeightChange updateSize
 		return
 
 	setImageSource: (val, callback) ->

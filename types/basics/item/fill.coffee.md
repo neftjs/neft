@@ -57,7 +57,7 @@ Rectangle {
 *Boolean* Fill::width = false
 -----------------------------
 
-### *Signal* Fill::widthChanged(*Boolean* oldValue)
+### *Signal* Fill::onWidthChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Fill
@@ -75,7 +75,7 @@ Rectangle {
 *Boolean* Fill::height = false
 ------------------------------
 
-### *Signal* Fill::heightChanged(*Boolean* oldValue)
+### *Signal* Fill::onHeightChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Fill

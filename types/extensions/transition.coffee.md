@@ -74,12 +74,12 @@ Rectangle {
 *Boolean* Transition::when
 --------------------------
 
-### *Signal* Transition::whenChanged(*Boolean* oldValue)
+### *Signal* Transition::onWhenChange(*Boolean* oldValue)
 
 *Renderer.Item* Transition::target
 ----------------------------------
 
-### *Signal* Transition::targetChanged([*Renderer.Item* oldValue])
+### *Signal* Transition::onTargetChange([*Renderer.Item* oldValue])
 
 		onTargetReady = ->
 			@_running = true
@@ -116,12 +116,12 @@ Rectangle {
 
 				if property
 					if oldVal
-						handlerName = signal.getHandlerName "#{property}Changed"
+						handlerName = "on#{utils.capitalize(property)}Change"
 						oldVal[handlerName]?.disconnect listener, @
 
 					if val
 						if handlerName of val
-							handlerName = signal.getHandlerName "#{property}Changed"
+							handlerName = "on#{utils.capitalize(property)}Change"
 							val[handlerName] listener, @
 						else
 							log.error "'#{property}' property signal not found"
@@ -130,9 +130,9 @@ Rectangle {
 *Renderer.Animation* Transition::animation
 ------------------------------------------
 
-### Transition::animationChanged(*Renderer.Animation* oldValue)
+### Transition::onAnimationChange(*Renderer.Animation* oldValue)
 
-		onDurationChanged = ->
+		onDurationChange = ->
 			unless @_durationUpdatePending
 				@_duration = @_animation._duration
 			return
@@ -150,11 +150,11 @@ Rectangle {
 				_super.call @, val
 
 				if oldVal
-					oldVal.onDurationChanged.disconnect onDurationChanged, @
+					oldVal.onDurationChange.disconnect onDurationChange, @
 					oldVal.stop()
 
 				if val
-					val.onDurationChanged onDurationChanged, @
+					val.onDurationChange onDurationChange, @
 					@_duration = val.duration
 					val.target = @target
 					val.property = @property
@@ -163,7 +163,7 @@ Rectangle {
 *String* Transition::property
 -----------------------------
 
-### Transition::propertyChanged(*String* oldValue)
+### Transition::onPropertyChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -194,10 +194,10 @@ Rectangle {
 
 				if target
 					if oldVal
-						handlerName = signal.getHandlerName "#{oldVal}Changed"
+						handlerName = "on#{utils.capitalize(oldVal)}Change"
 						target[handlerName].disconnect listener, @
 
 					if val
-						handlerName = signal.getHandlerName "#{val}Changed"
+						handlerName = "on#{utils.capitalize(val)}Change"
 						target[handlerName] listener, @
 				return

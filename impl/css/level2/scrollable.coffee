@@ -52,7 +52,7 @@ module.exports = (impl) ->
 			return
 
 		# creating
-		@onParentChanged data.updateScroll
+		@onParentChange data.updateScroll
 
 		# searching etc.
 		scrollElem.addEventListener 'scroll', ->
@@ -65,7 +65,7 @@ module.exports = (impl) ->
 		return
 
 	setScrollableContentItem: do ->
-		onHeightChanged = ->
+		onHeightChange = ->
 			data = @_impl
 			contentItem = @_contentItem
 			if contentItem._height <= @_height
@@ -81,11 +81,11 @@ module.exports = (impl) ->
 		(val) ->
 			if oldVal = @_impl.contentItem
 				impl.setItemParent.call oldVal, null
-				oldVal.onHeightChanged.disconnect onHeightChanged, @
+				oldVal.onHeightChange.disconnect onHeightChange, @
 
 			if val
 				@_impl.scrollElem.appendChild val._impl.elem
-				val.onHeightChanged onHeightChanged, @
+				val.onHeightChange onHeightChange, @
 				@_impl.contentItem = val
 			return
 

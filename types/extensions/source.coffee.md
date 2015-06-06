@@ -47,7 +47,7 @@ Styles.container {
 *Renderer.Item* Source::target
 ------------------------------
 
-### *Signal* Source::targetChanged(*Renderer.Item* oldValue)
+### *Signal* Source::onTargetChange(*Renderer.Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -63,7 +63,7 @@ Styles.container {
 *Renderer.Item* Source::effectItem
 ----------------------------------
 
-### *Signal* Source::effectItemChanged(*Renderer.Item* oldValue)
+### *Signal* Source::onEffectItemChange(*Renderer.Item* oldValue)
 
 			getDefaultEffectItem = (source) ->
 				item = source._target
@@ -97,7 +97,7 @@ Styles.container {
 *Boolean* Source::when = true
 -----------------------------
 
-### *Signal* Source::whenChanged(*Boolean* oldValue)
+### *Signal* Source::onWhenChange(*Boolean* oldValue)
 
 			enable: ->
 				if @running

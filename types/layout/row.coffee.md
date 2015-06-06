@@ -60,7 +60,7 @@ Row {
 *Float* Row::spacing = 0
 ------------------------
 
-### *Signal* Row::spacingChanged(*Float* oldValue)
+### *Signal* Row::onSpacingChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -77,14 +77,14 @@ Row {
 *Alignment* Row::alignment
 --------------------------
 
-### *Signal* Row::alignmentChanged(*Alignment* oldValue)
+### *Signal* Row::onAlignmentChange(*Alignment* oldValue)
 
 		Renderer.Item.Alignment @
 
 *Boolean* Row::includeBorderMargins = true
 ------------------------------------------
 
-### *Signal* Row::includeBorderMarginsChanged(*Boolean* oldValue)
+### *Signal* Row::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

@@ -8,7 +8,7 @@ log = require 'log'
 
 log = log.scope 'Renderer'
 
-SignalsEmitter = signal.Emitter
+{emitSignal} = signal.Emitter
 
 {isArray} = Array
 
@@ -60,7 +60,7 @@ module.exports = (Renderer, Impl) ->
 				Impl.setItemBinding.call @, prop, val, ctx
 			return
 
-		signal.Emitter.createSignal @, 'ready'
+		signal.Emitter.createSignal @, 'onReady'
 
 		toString: ->
 			"#{getObjAsString(@)} in '#{getObjFile(@)}'"
@@ -106,13 +106,13 @@ module.exports = (Renderer, Impl) ->
 		customSetter = opts.setter
 
 		# signal
-		signalName = "#{name}Changed"
+		signalName = "on#{utils.capitalize(name)}Change"
 
 		if opts.hasOwnProperty('constructor')
-			SignalsEmitter.createSignal opts.constructor, signalName, opts.signalInitializer
+			signal.Emitter.createSignal opts.constructor, signalName, opts.signalInitializer
 		else
 			assert.isNotDefined namespace
-			signal.create prototype, signalName
+			signal.Emitter.createSignalOnObject prototype, signalName, opts.signalInitializer
 
 		# getter
 		internalName = "_#{name}"
@@ -133,25 +133,8 @@ module.exports = (Renderer, Impl) ->
 			else
 				propSetter = basicSetter = NOP
 		else if namespace?
-			namespaceSignalName = "#{namespace}Changed"
+			namespaceSignalName = "on#{utils.capitalize(namespace)}Change"
 			uniquePropName = namespace + utils.capitalize(name)
-			# propSetter = basicSetter = (val) ->
-			# 	null;
-			# 	`//<development>`
-			# 	developmentSetter?.call @, val
-			# 	`//</development>`
-
-			# 	ref = @_ref
-
-			# 	oldVal = ref[internalName]
-			# 	if oldVal is val
-			# 		return
-
-			# 	ref[internalName] = val
-			# 	implementation?.call ref, val
-			# 	@[signalName] oldVal
-			# 	ref[namespaceSignalName] @
-			# 	return
 
 			func = funcCache["set-deep-#{namespace}-#{internalName}-#{developmentSetter?}-#{implementation?}"] ?= do ->
 				funcStr = "return function(val){\n"
@@ -164,27 +147,13 @@ module.exports = (Renderer, Impl) ->
 				funcStr += "this.#{internalName} = val;\n"
 				if implementation?
 					funcStr += "impl.call(this._ref, val);\n"
-				funcStr += "this.#{signalName}(oldVal);\n"
-				funcStr += "this._ref.#{namespaceSignalName}(this);\n"
+				funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
+				funcStr += "emitSignal(this._ref, '#{namespaceSignalName}', this);\n"
 				funcStr += "};"
 
-				func = new Function 'impl', 'debug', funcStr
-			propSetter = basicSetter = func implementation, developmentSetter
+				func = new Function 'impl', 'emitSignal', 'debug', funcStr
+			propSetter = basicSetter = func implementation, emitSignal, developmentSetter
 		else
-			# propSetter = basicSetter = (val) ->
-			# 	null;
-			# 	`//<development>`
-			# 	developmentSetter?.call @, val
-			# 	`//</development>`
-
-			# 	oldVal = @[internalName]
-			# 	if oldVal is val
-			# 		return
-
-			# 	@[internalName] = val
-			# 	implementation?.call @, val
-			# 	@[signalName] oldVal
-			# 	return
 			func = funcCache["set-#{internalName}-#{developmentSetter?}-#{implementation?}"] ?= do ->
 				funcStr = "return function(val){\n"
 				`//<development>`
@@ -196,11 +165,11 @@ module.exports = (Renderer, Impl) ->
 				funcStr += "this.#{internalName} = val;\n"
 				if implementation?
 					funcStr += "impl.call(this, val);\n"
-				funcStr += "this.#{signalName}(oldVal);\n"
+				funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
 				funcStr += "};"
 
-				func = new Function 'impl', 'debug', funcStr
-			propSetter = basicSetter = func implementation, developmentSetter
+				func = new Function 'impl', 'emitSignal', 'debug', funcStr
+			propSetter = basicSetter = func implementation, emitSignal, developmentSetter
 
 		# custom desc
 		getter = if customGetter? then customGetter(propGetter) else propGetter

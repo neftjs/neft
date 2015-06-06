@@ -14,8 +14,8 @@ Device @namespace
 
 			constructor: ->
 				@_platform = 'unix'
-				@_isDesktop = true
-				@_isPhone = false
+				@_desktop = true
+				@_phone = false
 				@_pixelRatio = 1
 				super()
 
@@ -47,29 +47,29 @@ Text {
 				@_platform
 			, null
 
-*Boolean* Device.isDesktop = true
----------------------------------
+*Boolean* Device.desktop = true
+-------------------------------
 
-			utils.defineProperty @::, 'isDesktop', null, ->
-				@_isDesktop
+			utils.defineProperty @::, 'desktop', null, ->
+				@_desktop
 			, null
 
-*Boolean* Device.isTablet = false
----------------------------------
+*Boolean* Device.tablet = false
+-------------------------------
 
-			utils.defineProperty @::, 'isTablet', null, ->
-				not @isDesktop and not @isPhone
+			utils.defineProperty @::, 'tablet', null, ->
+				not @desktop and not @phone
 			, null
 
-*Boolean* Device.isPhone = false
---------------------------------
+*Boolean* Device.phone = false
+------------------------------
 
-			utils.defineProperty @::, 'isPhone', null, ->
-				@_isPhone
+			utils.defineProperty @::, 'phone', null, ->
+				@_phone
 			, null
 
-*Boolean* Device.isMobile = false
----------------------------------
+*Boolean* Device.mobile = false
+-------------------------------
 
 Tablet or a phone.
 
@@ -77,13 +77,13 @@ Tablet or a phone.
 
 ```style
 Text {
-  text: Device.isMobile ? 'Mobile' : 'Desktop'
+  text: Device.mobile ? 'Mobile' : 'Desktop'
   font.pixelSize: 30
 }
 ```
 
-			utils.defineProperty @::, 'isMobile', null, ->
-				@isTablet or @isPhone
+			utils.defineProperty @::, 'mobile', null, ->
+				@tablet or @phone
 			, null
 
 *Boolean* Device.pixelRatio = 1

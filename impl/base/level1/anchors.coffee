@@ -22,38 +22,38 @@ module.exports = (impl) ->
 	getSourceWatchProps =
 		left: []
 		top: []
-		right: ['onWidthChanged']
-		bottom: ['onHeightChanged']
-		horizontalCenter: ['onWidthChanged']
-		verticalCenter: ['onHeightChanged']
+		right: ['onWidthChange']
+		bottom: ['onHeightChange']
+		horizontalCenter: ['onWidthChange']
+		verticalCenter: ['onHeightChange']
 		fillWidthSize: []
 		fillHeightSize: []
 
 	getTargetWatchProps =
 		left:
 			parent: []
-			sibling: ['onXChanged']
+			sibling: ['onXChange']
 		top:
 			parent: []
-			sibling: ['onYChanged']
+			sibling: ['onYChange']
 		right:
-			parent: ['onWidthChanged']
-			sibling: ['onXChanged', 'onWidthChanged']
+			parent: ['onWidthChange']
+			sibling: ['onXChange', 'onWidthChange']
 		bottom:
-			parent: ['onHeightChanged']
-			sibling: ['onYChanged', 'onHeightChanged']
+			parent: ['onHeightChange']
+			sibling: ['onYChange', 'onHeightChange']
 		horizontalCenter:
-			parent: ['onWidthChanged']
-			sibling: ['onXChanged', 'onWidthChanged']
+			parent: ['onWidthChange']
+			sibling: ['onXChange', 'onWidthChange']
 		verticalCenter:
-			parent: ['onHeightChanged']
-			sibling: ['onYChanged', 'onHeightChanged']
+			parent: ['onHeightChange']
+			sibling: ['onYChange', 'onHeightChange']
 		fillWidthSize:
-			parent: ['onWidthChanged']
-			sibling: ['onWidthChanged']
+			parent: ['onWidthChange']
+			sibling: ['onWidthChange']
 		fillHeightSize:
-			parent: ['onHeightChanged']
-			sibling: ['onHeightChanged']
+			parent: ['onHeightChange']
+			sibling: ['onHeightChange']
 
 	getSourceValue =
 		left: (item) ->
@@ -133,7 +133,7 @@ module.exports = (impl) ->
 		fillHeightSize: (margin) ->
 			- margin._top - margin._bottom
 
-	onParentChanged = (oldVal) ->
+	onParentChange = (oldVal) ->
 		if oldVal
 			for handler in getTargetWatchProps[@line].parent
 				oldVal[handler].disconnect @update, @
@@ -145,7 +145,7 @@ module.exports = (impl) ->
 		@update()
 		return
 
-	onNextSiblingChanged = (oldVal) ->
+	onNextSiblingChange = (oldVal) ->
 		if oldVal
 			for handler in getTargetWatchProps[@line].sibling
 				oldVal[handler].disconnect @update, @
@@ -157,7 +157,7 @@ module.exports = (impl) ->
 		@update()
 		return
 
-	onPreviousSiblingChanged = (oldVal) ->
+	onPreviousSiblingChange = (oldVal) ->
 		if oldVal
 			for handler in getTargetWatchProps[@line].sibling
 				oldVal[handler].disconnect @update, @
@@ -190,16 +190,16 @@ module.exports = (impl) ->
 			switch target
 				when 'parent'
 					@targetItem = item._parent
-					item.onParentChanged onParentChanged, @
-					onParentChanged.call @, null
+					item.onParentChange onParentChange, @
+					onParentChange.call @, null
 				when 'nextSibling'
 					@targetItem = item._nextSibling
-					item.onNextSiblingChanged onNextSiblingChanged, @
-					onNextSiblingChanged.call @, null
+					item.onNextSiblingChange onNextSiblingChange, @
+					onNextSiblingChange.call @, null
 				when 'previousSibling'
 					@targetItem = item._previousSibling
-					item.onPreviousSiblingChanged onPreviousSiblingChanged, @
-					onPreviousSiblingChanged.call @, null
+					item.onPreviousSiblingChange onPreviousSiblingChange, @
+					onPreviousSiblingChange.call @, null
 				else
 					@targetItem = target
 					for handler in getTargetWatchProps[line][@type]
@@ -226,11 +226,11 @@ module.exports = (impl) ->
 		destroy: ->
 			switch @target
 				when 'parent'
-					@item.onParentChanged.disconnect onParentChanged, @
+					@item.onParentChange.disconnect onParentChange, @
 				when 'nextSibling'
-					@item.onNextSiblingChanged.disconnect onNextSiblingChanged, @
+					@item.onNextSiblingChange.disconnect onNextSiblingChange, @
 				when 'previousSibling'
-					@item.onPreviousSiblingChanged.disconnect onPreviousSiblingChanged, @
+					@item.onPreviousSiblingChange.disconnect onPreviousSiblingChange, @
 
 			for handler in getSourceWatchProps[@source]
 				@item[handler].disconnect @update, @

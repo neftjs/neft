@@ -110,14 +110,14 @@ exports.keysEvents = do ->
 			return false
 		pressedKeys[key] = e
 
-		keysEvents.focusedKeys?.pressed key: key
+		keysEvents.focusedKeys?.onPress.emit key: key
 
 	# hold
 	window.addEventListener 'keydown', (e) ->
 		code = e.which or e.keyCode
 		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
 
-		keysEvents.focusedKeys?.hold key: key
+		keysEvents.focusedKeys?.onHold.emit key: key
 
 	# released
 	window.addEventListener 'keyup', (e) ->
@@ -126,14 +126,14 @@ exports.keysEvents = do ->
 
 		pressedKeys[key] = null
 
-		keysEvents.focusedKeys?.released key: key
+		keysEvents.focusedKeys?.onRelease.emit key: key
 
 	# input
 	window.addEventListener 'keypress', (e) ->
 		code = e.charCode or e.which or e.keyCode
 		text = String.fromCharCode(code)
 
-		keysEvents.focusedKeys?.input text: text
+		keysEvents.focusedKeys?.onInput.emit text: text
 
 	keysEvents =
 	focusedKeys: null

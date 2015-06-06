@@ -94,7 +94,7 @@ Styles.button/red {
 	Impl.Renderer = exports
 
 	itemUtils = require('./utils/item') exports, Impl
-	signal.create exports, 'ready'
+	signal.create exports, 'onReady'
 
 	exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
 	exports.Device = require('./types/namespace/device') exports, Impl, itemUtils
@@ -186,6 +186,6 @@ Column {
 	utils.defineProperty exports, 'serverUrl', utils.WRITABLE, ''
 	utils.defineProperty exports, 'resources', utils.WRITABLE, null
 
-	exports.ready()
+	exports.onReady.emit()
 
 	Object.preventExtensions exports

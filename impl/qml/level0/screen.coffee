@@ -13,7 +13,7 @@ module.exports = (impl) ->
 		{screen} = __stylesWindow
 		@_width = screen.width
 		@_height = screen.height
-		@_isTouch = !!TOUCH_OS[Qt.platform.os]
+		@_touch = !!TOUCH_OS[Qt.platform.os]
 
 		# orientation
 		getOrientation = ->
@@ -29,7 +29,7 @@ module.exports = (impl) ->
 		updateOrientation = ->
 			oldVal = @_orientation
 			@_orientation = getOrientation()
-			@orientationChanged oldVal
+			@onOrientationChange.emit oldVal
 			return
 
 		screen.orientationUpdateMask = Qt.LandscapeOrientation | Qt.PortraitOrientation |
