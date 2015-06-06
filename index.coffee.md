@@ -160,7 +160,7 @@ db.append(*String* key, *Any* value, [*Function* callback])
 --------------------------
 
 	class DbList extends List
-		onChanged = (key) ->
+		onChange = (key) ->
 			if @_isConnected
 				impl.set @_key, @_data, NOP
 			return
@@ -171,9 +171,9 @@ db.append(*String* key, *Any* value, [*Function* callback])
 
 			watchers[key] = @
 
-			@onChanged onChanged
-			@onInserted onChanged
-			@onPopped onChanged
+			@onChange onChange
+			@onInsert onChange
+			@onPop onChange
 
 		spawn: ->
 			watchersCount[@_key] = watchersCount[@_key] + 1 or 1
@@ -196,7 +196,7 @@ DbList::disconnect()
 --------------------------
 
 	class DbDict extends Dict
-		onChanged = (key) ->
+		onChange = (key) ->
 			if @_isConnected
 				impl.set @_key, @_data, NOP
 			return
@@ -207,7 +207,7 @@ DbList::disconnect()
 
 			watchers[key] = @
 
-			@onChanged onChanged
+			@onChange onChange
 
 		spawn: ->
 			watchersCount[@_key] = watchersCount[@_key] + 1 or 1
