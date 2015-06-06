@@ -8,8 +8,6 @@ Tag @virtual_dom
 	signal = require 'signal'
 	stringify = require './tag/stringify'
 
-	SignalsEmitter = signal.Emitter
-
 	assert = assert.scope 'View.Element.Tag'
 
 	isDefined = (elem) -> elem?
@@ -35,10 +33,10 @@ Tag @virtual_dom
 
 				super()
 
-*Signal* Tag::attrsChanged(*Tag.Attrs* attrs)
----------------------------------------------
+*Signal* Tag::onAttrsChange(*Tag.Attrs* attrs)
+----------------------------------------------
 
-			SignalsEmitter.createSignal @, 'attrsChanged'
+			signal.Emitter.createSignal @, 'onAttrsChange'
 
 *Tag.Attrs* Tag::attrs
 ----------------------

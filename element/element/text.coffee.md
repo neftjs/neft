@@ -7,7 +7,7 @@ Text @virtual_dom
 	assert = require 'neft-assert'
 	signal = require 'signal'
 
-	SignalsEmitter = signal.Emitter
+	{emitSignal} = signal.Emitter
 
 	assert = assert.scope 'View.Element.Text'
 
@@ -30,10 +30,10 @@ Text @virtual_dom
 				clone._text = @_text
 				clone
 
-*Signal* Text::textChanged(*String* oldValue)
----------------------------------------------
+*Signal* Text::onTextChange(*String* oldValue)
+----------------------------------------------
 
-			SignalsEmitter.createSignal @, 'textChanged'
+			signal.Emitter.createSignal @, 'onTextChange'
 
 *String* Text::text
 -------------------
@@ -50,4 +50,4 @@ Text @virtual_dom
 				@_text = value
 
 				# trigger event
-				@textChanged old
+				emitSignal @, 'onTextChange', old

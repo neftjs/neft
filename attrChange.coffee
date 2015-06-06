@@ -34,10 +34,10 @@ module.exports = (File) -> class AttrChange
 		@target.attrs.set @name, val
 		return
 
-	onVisibilityChanged = ->
+	onVisibilityChange = ->
 		@update()
 
-	onAttrsChanged = (e) ->
+	onAttrsChange = (e) ->
 		if e.name is 'name'
 			throw new Error "Dynamic neft:attr name is not implemented"
 		else if e.name is 'value'
@@ -54,7 +54,7 @@ module.exports = (File) -> class AttrChange
 
 		clone.update()
 
-		clone.node.onVisibilityChanged onVisibilityChanged, clone
-		clone.node.onAttrsChanged onAttrsChanged, clone
+		clone.node.onVisibilityChange onVisibilityChange, clone
+		clone.node.onAttrsChange onAttrsChange, clone
 
 		clone

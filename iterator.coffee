@@ -56,9 +56,9 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		# listen on changes
 		if each instanceof List
-			each.onChanged @updateItem, @
-			each.onInserted @insertItem, @
-			each.onPopped @popItem, @
+			each.onChange @updateItem, @
+			each.onInsert @insertItem, @
+			each.onPop @popItem, @
 
 			array = each.items()
 
@@ -75,9 +75,9 @@ module.exports = (File) -> class Iterator extends File.Use
 			@clearData()
 
 			if data instanceof List
-				data.onChanged.disconnect @updateItem, @
-				data.onInserted.disconnect @insertItem, @
-				data.onPopped.disconnect @popItem, @
+				data.onChange.disconnect @updateItem, @
+				data.onInsert.disconnect @insertItem, @
+				data.onPop.disconnect @popItem, @
 
 		@data = null
 
@@ -137,7 +137,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		newChild.index = i
 
 		# signal
-		usedFragment.replacedByUse @
+		usedFragment.onReplaceByUse.emit @
 
 		@
 
@@ -156,11 +156,11 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@
 
-	attrsChangedListener = (e) ->
+	attrsChangeListener = (e) ->
 		if @self.isRendered and e.name is Iterator.HTML_ATTR
 			@update()
 
-	visibilityChangedListener = (oldVal) ->
+	visibilityChangeListener = (oldVal) ->
 		if @self.isRendered and oldVal is false and not @node.data
 			@update()
 
@@ -171,7 +171,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.array = null
 		clone.usedFragments = []
 
-		clone.node.onAttrsChanged attrsChangedListener, clone
-		clone.node.onVisibilityChanged visibilityChangedListener, clone
+		clone.node.onAttrsChange attrsChangeListener, clone
+		clone.node.onVisibilityChange visibilityChangeListener, clone
 
 		clone

@@ -31,18 +31,18 @@ File @class
 		utils.merge @, Emitter::
 		Emitter.call @
 
-		signal.create @, 'parse'
-		signal.create @, 'parsed'
+		signal.create @, 'onBeforeParse'
+		signal.create @, 'onParse'
 
 *Signal* File.render(*File* file)
 ---------------------------------
 
-		signal.create @, 'render'
+		signal.create @, 'onRender'
 
 *Signal* File.revert(*File* file)
 ---------------------------------
 
-		signal.create @, 'revert'
+		signal.create @, 'onBeforeRevert'
 
 		@Element = require('./element/index')
 		@AttrChange = require('./attrChange') @
@@ -159,7 +159,7 @@ File @class
 				utils.defineProperty @, '_tmp', utils.WRITABLE, getTmp()
 
 				# trigger signal
-				File.parse @
+				File.onBeforeParse.emit @
 
 				# parse
 				rules @
@@ -174,7 +174,7 @@ File @class
 				ids @
 
 				# trigger signal
-				File.parsed @
+				File.onParse.emit @
 
 				# save to storage
 				files[@path] = @
@@ -247,7 +247,7 @@ File @class
 				renderSource @, source
 
 				@isRendered = true
-				File.render @
+				File.onRender.emit @
 
 				@
 
@@ -261,7 +261,7 @@ File @class
 				assert.ok @isRendered
 
 				@isRendered = false
-				File.revert @
+				File.onBeforeRevert.emit @
 
 				# inputs
 				if @inputs
@@ -297,15 +297,17 @@ File @class
 -----------------------------------------------------
 
 		use: (useName, view) ->
-			for use in @uses
-				if use.name is useName
-					elem = use
-					break
+			if @uses
+				for use in @uses
+					if use.name is useName
+						elem = use
+						break
 
-			unless elem
+			if elem
+				elem.render view
+			else
 				log.warn "`#{@path}` view doesn't have any `#{useName}` neft:use"
 
-			elem.render view
 			@
 
 *File* File::clone()
@@ -332,7 +334,7 @@ File @class
 			clone.source = null
 
 			# call signals
-			signal.create clone, 'replacedByUse'
+			signal.create clone, 'onReplaceByUse'
 
 			# attrChanges
 			if @attrChanges

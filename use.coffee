@@ -52,7 +52,7 @@ module.exports = (File) -> class Use
 
 		# signal
 		usedFragment.parentUse = @
-		usedFragment.replacedByUse @
+		usedFragment.onReplaceByUse.emit @
 
 		@isRendered = true
 
@@ -71,11 +71,11 @@ module.exports = (File) -> class Use
 		# restore attrs
 		# @node.attrs.backChanges()
 	
-	visibilityChangedListener = ->
+	visibilityChangeListener = ->
 		if @self.isRendered and not @isRendered
 			@render()
 
-	attrsChangedListener = (e) ->
+	attrsChangeListener = (e) ->
 		if e.name is 'neft:fragment'
 			@name = @node.attrs.get 'neft:fragment'
 
@@ -95,11 +95,11 @@ module.exports = (File) -> class Use
 		clone.usedFragment = null
 		clone.isRendered = false
 
-		clone.node.onVisibilityChanged visibilityChangedListener, clone
+		clone.node.onVisibilityChange visibilityChangeListener, clone
 
 		# name
 		if clone.name is ''
 			clone.name = clone.node.attrs.get 'neft:fragment'
-			clone.node.onAttrsChanged attrsChangedListener, clone
+			clone.node.onAttrsChange attrsChangeListener, clone
 
 		clone

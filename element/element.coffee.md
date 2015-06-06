@@ -8,11 +8,11 @@ Element @virtual_dom
 	signal = require 'signal'
 
 	{isArray} = Array
-	SignalsEmitter = signal.Emitter
+	{emitSignal} = signal.Emitter
 
 	assert = assert.scope 'View.Element'
 
-	class Element extends SignalsEmitter
+	class Element extends signal.Emitter
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
@@ -40,15 +40,15 @@ Element @virtual_dom
 
 			Object.preventExtensions @
 
-*Signal* Element::parentChanged(*Element* oldValue)
----------------------------------------------------
+*Signal* Element::onParentChange(*Element* oldValue)
+----------------------------------------------------
 
-		SignalsEmitter.createSignal @, 'parentChanged'
+		signal.Emitter.createSignal @, 'onParentChange'
 
-*Signal* Element::visibilityChanged(*Boolean* oldValue)
--------------------------------------------------------
+*Signal* Element::onVisibilityChange(*Boolean* oldValue)
+--------------------------------------------------------
 
-		SignalsEmitter.createSignal @, 'visibilityChanged'
+		signal.Emitter.createSignal @, 'onVisibilityChange'
 
 		Object.defineProperties @::,
 
@@ -143,7 +143,7 @@ Element @virtual_dom
 							@_previousSibling._nextSibling = @
 
 					# trigger signal
-					@parentChanged old
+					emitSignal @, 'onParentChange', old
 
 *Boolean* Element::visible
 --------------------------
@@ -160,7 +160,7 @@ Element @virtual_dom
 					@_visible = val
 
 					# trigger signal
-					@visibilityChanged old
+					emitSignal @, 'onVisibilityChange', old
 
 					null
 

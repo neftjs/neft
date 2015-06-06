@@ -4,11 +4,13 @@ Tag.Attrs @virtual_dom
 	'use strict'
 
 	utils = require 'utils'
+	signal = require 'signal'
 	assert = require 'neft-assert'
 
 	assert = assert.scope 'View.Element.Tag.Attrs'
 
 	{isArray} = Array
+	{emitSignal} = signal.Emitter
 
 	module.exports = (Element) ->
 		eventsPool = []
@@ -18,7 +20,7 @@ Tag.Attrs @virtual_dom
 			event.name = name
 			event.value = value
 
-			tag.attrsChanged event
+			emitSignal tag, 'onAttrsChange', event
 			eventsPool.push event
 
 		exports =

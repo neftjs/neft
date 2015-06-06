@@ -282,7 +282,7 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b a="1"></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.onAttrsChanged (e) ->
+			tag.onAttrsChange (e) ->
 				value = @attrs.get e.name
 				args = [@, arguments...]
 
@@ -297,7 +297,7 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.onVisibilityChanged ->
+			tag.onVisibilityChange ->
 				value = @visible
 				args = [@, arguments...]
 
@@ -312,7 +312,7 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b>a</b>').cloneDeep()
 			tag = elem.children[0].children[0]
 
-			tag.onTextChanged ->
+			tag.onTextChange ->
 				text = @text
 				args = [@, arguments...]
 
@@ -328,7 +328,7 @@ describe 'View Element', ->
 			tag1 = elem.children[0]
 			tag2 = elem.children[1]
 
-			tag2.onParentChanged ->
+			tag2.onParentChange ->
 				value = @parent
 				args = [@, arguments...]
 
@@ -344,8 +344,8 @@ describe 'View Element', ->
 			tag = elem.children[0]
 
 			listener = -> ok = false
-			tag.onVisibilityChanged listener
-			tag.onVisibilityChanged.disconnect listener
+			tag.onVisibilityChange listener
+			tag.onVisibilityChange.disconnect listener
 
 			tag.visible = false
 

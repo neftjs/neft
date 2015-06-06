@@ -210,10 +210,10 @@ module.exports = (File) -> class Input
 		return
 
 	if utils.isServer
-		onChanged = ->
+		onChange = ->
 			@update()
 	else
-		onChanged = ->
+		onChange = ->
 			return if @updatePending
 
 			queue.push @
@@ -225,7 +225,7 @@ module.exports = (File) -> class Input
 
 	trace: (val) ->
 		if val instanceof Dict and not @traces[val.__hash__]
-			val.onChanged onChanged, @
+			val.onChange onChange, @
 			@traces[val.__hash__] = val
 		val
 
@@ -245,7 +245,7 @@ module.exports = (File) -> class Input
 	render: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.onAttrsChanged onChanged, @
+				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
 				@trace storage
 		
@@ -254,10 +254,10 @@ module.exports = (File) -> class Input
 	revert: ->
 		for storage in Input.getStoragesArray @self
 			if storage instanceof Element
-				storage.onAttrsChanged.disconnect onChanged, @
+				storage.onAttrsChange.disconnect onChange, @
 
 		for hash, dict of @traces when dict?
-			dict.onChanged.disconnect onChanged, @
+			dict.onChange.disconnect onChange, @
 			@traces[hash] = null
 
 		return
