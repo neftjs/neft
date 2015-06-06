@@ -43,7 +43,7 @@ console.log(list instanceof List);
 			unless @ instanceof List
 				return new List arr
 
-			signal.Emitter.call @
+			super()
 			@_data = arr
 
 		# List is not a standard Array object
@@ -54,26 +54,26 @@ console.log(list instanceof List);
 			throw "You can't set elements into a list as standard properties; " +
 			      "use `List::set()` method instead"
 
-*Signal* List::changed(*Any* oldValue, *Integer* index)
--------------------------------------------------------
+*Signal* List::onChange(*Any* oldValue, *Integer* index)
+--------------------------------------------------------
 
 This signal is called for each element value change.
 
-		signal.Emitter.createSignal @, 'changed'
+		signal.Emitter.createSignal @, 'onChange'
 
-*Signal* List::inserted(*Any* value, *Integer* index)
+*Signal* List::onInsert(*Any* value, *Integer* index)
 -----------------------------------------------------
 
 This signal is called for each inserted element.
 
-		signal.Emitter.createSignal @, 'inserted'
+		signal.Emitter.createSignal @, 'onInsert'
 
-*Signal* List::popped(*Any* oldValue, *Integer* index)
-------------------------------------------------------
+*Signal* List::onPop(*Any* oldValue, *Integer* index)
+-----------------------------------------------------
 
 This signal is called for each popped element.
 
-		signal.Emitter.createSignal @, 'popped'
+		signal.Emitter.createSignal @, 'onPop'
 
 ReadOnly *Integer* List::length
 -------------------------------
@@ -124,14 +124,14 @@ This method changes element value.
 
 Element at given *index* must be stored in a list.
 
-*changed()* signal is called with overriden element *value* and given *index*.
+*onChange()* signal is called with overriden element *value* and given *index*.
 
 Given *value* is returned by this method.
 
 ```
 var types = new List(['fantasy', 'Thriller']);
 
-types.onChanged.connect(function(oldVal, i){
+types.onChange.connect(function(oldVal, i){
   console.log("Element "+oldVal+" changed to "+this.get(i));
 });
 
@@ -154,7 +154,7 @@ types.set(0, 'Fantasy');
 			@_data[i] = val
 
 			# signal
-			@changed oldVal, i
+			@onChange.emit oldVal, i
 
 			val
 
@@ -196,14 +196,14 @@ for (var i = 0; i < items.length; i++){
 
 This method appends new element at the end of a list.
 
-*inserted()* signal is called with the given *value* and element *index*.
+*onInsert()* signal is called with the given *value* and element *index*.
 
 *value* can't be an `undefined`, because this value is reserved only for unknown elements.
 
 ```
 var fridge = new List(['apple', 'milk']);
 
-fridge.onInserted.connect(function(val, i){
+fridge.onInsert.connect(function(val, i){
   console.log(val+" appended!");
 });
 
@@ -220,7 +220,7 @@ console.log(fridge.items());
 			@_data.push val
 
 			# signal
-			@inserted val, @length - 1
+			@onInsert.emit val, @length - 1
 
 			val
 
@@ -229,14 +229,14 @@ console.log(fridge.items());
 
 This method inserts a new element at the given position.
 
-*inserted()* signal is called with given value and index.
+*onInsert()* signal is called with given value and index.
 
 Given *value* is returned.
 
 ```
 var list = new List(['a', 'b']);
 
-list.onInserted.connect(function(val, i){
+list.onInsert.connect(function(val, i){
   console.log("New element "+val+" inserted at index "+i);
 });
 
@@ -255,7 +255,7 @@ console.log(list.items());
 			@_data.splice i, 0, val
 
 			# signal
-			@inserted val, i
+			@onInsert.emit val, i
 
 			val
 
@@ -264,7 +264,7 @@ console.log(list.items());
 
 This function removes given *value* from a list.
 
-*popped()* signal is called with the given *value* and popped element *index*.
+*onPop()* signal is called with the given *value* and popped element *index*.
 
 Given *value* is returned.
 
@@ -299,7 +299,7 @@ or the last element if no parameter passed.
 
 Given *index* must exist in the list.
 
-*popped()* signal is called with the popped element *value* and it's *index*.
+*onPop()* signal is called with the popped element *value* and it's *index*.
 
 The removed element value is returned.
 
@@ -328,7 +328,7 @@ console.log(list.items());
 			@_data.splice i, 1
 
 			# signal
-			@popped oldVal, i
+			@onPop.emit oldVal, i
 
 			oldVal
 
@@ -337,12 +337,12 @@ List::clear()
 
 This method removes all elements stored in a list.
 
-*popped()* signal is called on each element starting from the last one.
+*onPop()* signal is called on each element starting from the last one.
 
 ```
 var list = new List(['a', 'b']);
 
-list.onPopped.connect(function(oldVal, i){
+list.onPop.connect(function(oldVal, i){
   console.log("Element "+oldVal+" popped!");
 });
 
