@@ -325,7 +325,7 @@ module.exports = (File, data) -> class Style
 			loop
 				scope = parent?.scope or windowStyle
 				@item = scope.ids[id] or scope.mainItem.$?[id]
-				@item ?= scope.styles(id)
+				@item ?= scope.styles?(id)
 				if @item or ((not parent or not (parent = parent.parent)) and scope is windowStyle)
 					break
 
