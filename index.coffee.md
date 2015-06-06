@@ -305,7 +305,7 @@ new app.Route({
 
 			for path, obj of app.routes
 				r = {}
-				if utils.isPlainObject(obj)
+				if utils.isObject(obj) and not (obj instanceof app.Route)
 					for method, opts of obj
 						if utils.isPlainObject(opts)
 							route = new app.Route method, opts
