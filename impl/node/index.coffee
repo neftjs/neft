@@ -102,8 +102,9 @@ module.exports = (Networking) ->
 			auth: urlObject.auth
 			path: urlObject.path
 			method: req.method
-			headers:
-				'X-Expected-Type': req.type
+			headers: utils.clone(req.headers)
+
+		opts.headers['X-Expected-Type'] = req.type
 
 		if cookies = utils.tryFunction JSON.stringify, null, [req.cookies], null
 			opts.headers['X-Cookies'] = cookies
@@ -138,6 +139,7 @@ module.exports = (Networking) ->
 				callback
 					status: status
 					data: data
+					headers: res.headers
 					cookies: cookies
 
 		nodeReq.on 'error', (e) ->

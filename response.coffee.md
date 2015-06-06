@@ -265,9 +265,9 @@ res.onSent(function(){
 			{data} = res
 
 			if res.isSucceed()
-				res.request.dataLoaded? null, @data
+				res.request.dataLoaded? null, data
 			else
-				res.request.dataLoaded? @data or @status or "Unknown error"
+				res.request.dataLoaded? data or res.status or "Unknown error"
 				log.warn "Response #{res.request.uri} completed with an error"
 
 			if data instanceof Error

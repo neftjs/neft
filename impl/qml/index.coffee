@@ -23,6 +23,9 @@ module.exports = (Networking) ->
 		xhr = new XMLHttpRequest
 
 		xhr.open req.method, req.uri, true
+
+		for name, val of req.headers
+			xhr.setRequestHeader name, val
 		xhr.setRequestHeader 'X-Expected-Type', req.type
 
 		if cookies = utils.tryFunction(JSON.stringify, null, [req.cookies], null)
