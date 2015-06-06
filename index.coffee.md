@@ -76,10 +76,10 @@ Use this constructor to create new *Networking* instance.
 
 		type: @HTTP
 
-*Signal* Networking::request(*Networking.Request* request, *Networking.Response* response)
-------------------------------------------------------------------------------------------
+*Signal* Networking::onRequest(*Networking.Request* request, *Networking.Response* response)
+--------------------------------------------------------------------------------------------
 
-		signal.Emitter.createSignal @, 'request'
+		signal.Emitter.createSignal @, 'onRequest'
 
 ReadOnly *String* Networking::protocol
 --------------------------------------
@@ -203,14 +203,14 @@ app.networking.createRequest({
 			# create a request
 			req = new Networking.Request opts
 
-			req.onDestroyed ->
+			req.onDestroy ->
 				log.end logtime
 
 			# create a response
 			res = new Networking.Response request: req
 
 			# signal
-			@request req, res
+			@onRequest.emit req, res
 
 			# get handlers
 			if EXTERNAL_URL_RE.test req.uri
@@ -219,12 +219,12 @@ app.networking.createRequest({
 				Impl.sendRequest req, (opts) ->
 					utils.merge res, opts
 					res.pending = false
-					req.destroyed?()
-					req.loaded? res
+					req.onDestroy.emit()
+					req.onLoad.emit res
 					if res.isSucceed()
-						req.dataLoaded? null, res.data
+						req.onDataLoad.emit null, res.data
 					else
-						req.dataLoaded? res.data or res.status or "Unknown error"
+						req.onDataLoad.emit res.data or res.status or "Unknown error"
 			else
 				log "Resolve local `#{req}` request"
 

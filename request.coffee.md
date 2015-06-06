@@ -9,7 +9,7 @@ Request
 
 	assert = assert.scope 'Networking.Request'
 
-	module.exports = (Networking, Impl) -> class Request
+	module.exports = (Networking, Impl) -> class Request extends signal.Emitter
 
 *Array* Request.METHODS
 -----------------------
@@ -73,6 +73,8 @@ var Request = Networking.Request;
 			assert.ok utils.has(Request.METHODS, opts.method) if opts.method?
 			assert.isString opts.uri, 'ctor options.uri argument ...'
 
+			super()
+
 			if opts.uri?.toString?
 				opts.uri = opts.uri.toString()
 
@@ -93,23 +95,23 @@ var Request = Networking.Request;
 			@params = null
 
 			# signal handlers
-			if opts.onDestroyed
-				@onDestroyed opts.onDestroyed
-			if opts.onLoaded
-				@onLoaded opts.onLoaded
-			if opts.onDataLoaded
-				@onDataLoaded opts.onDataLoaded
+			if opts.onDestroy
+				@onDestroy opts.onDestroy
+			if opts.onLoad
+				@onLoad opts.onLoad
+			if opts.onDataLoad
+				@onDataLoad opts.onDataLoad
 
-*Signal* Request::destroyed()
+*Signal* Request::onDestroy()
 -----------------------------
 
 This signal is called by the [Networking.Response][] when data is ready to be sent.
 
-It's called before the *loaded()* signal.
+It's called before the *onLoad()* signal.
 
-		signal.createLazy @::, 'destroyed'
+		signal.Emitter.createSignal @, 'onDestroy'
 
-*Signal* Request::loaded(*Networking.Response* res)
+*Signal* Request::onLoad(*Networking.Response* res)
 ---------------------------------------------------
 
 This signal is called by the [Networking.Response][] when data is going to be sent.
@@ -120,20 +122,20 @@ Notice, that failed response also calls this signal, therefore
 you should use [Networking.Response::isSucceed()][] to check whether request succeeded.
 
 ```
-req.onLoaded(function(res){
+req.onLoad(function(res){
   if (res.isSucceed()){
     console.log("Response has been sent with data " + res.data);
   }
 });
 ```
 
-		signal.createLazy @::, 'loaded'
+		signal.Emitter.createSignal @, 'onLoad'
 
-*Signal* Request::dataLoaded(*Any* error, *Any* data)
+*Signal* Request::onDataLoad(*Any* error, *Any* data)
 -----------------------------------------------------
 
 ```
-req.onDataLoaded(function(err, data){
+req.onDataLoad(function(err, data){
 \  if (err){
 \    console.log('error!', err);
 \  } else {
@@ -142,7 +144,7 @@ req.onDataLoaded(function(err, data){
 });
 ```
 
-		signal.createLazy @::, 'dataLoaded'
+		signal.Emitter.createSignal @, 'onDataLoad'
 
 ReadOnly *String* Request::uid
 ------------------------------
@@ -257,7 +259,7 @@ It's called automatically by the [Networking.Response][].
 			assert.ok @pending
 
 			@pending = false
-			@destroyed()
+			@onDestroy.emit()
 
 			return
 

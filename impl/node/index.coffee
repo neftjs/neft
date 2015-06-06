@@ -122,6 +122,7 @@ module.exports = (Networking) ->
 
 		nodeReq = reqModule.request opts, (res) ->
 			res.setEncoding 'utf-8'
+
 			data = ''
 
 			res.on 'data', (chunk) ->

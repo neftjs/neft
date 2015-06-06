@@ -14,7 +14,7 @@ module.exports = (Networking) ->
 
 		{styles} = data
 		unless styles.length
-			log.warn "Can't find any `neft:style` in main view file"
+			log.warn "No `neft:style` found in main view"
 			return false
 
 		hasItems = false
@@ -23,7 +23,7 @@ module.exports = (Networking) ->
 				hasItems = true
 				style.item.parent ?= Renderer.window
 				if style.isScope
-					style.item.document.show()
+					style.item.document.onShow.emit()
 
 		hasItems
 

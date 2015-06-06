@@ -11,7 +11,7 @@ Response
 	assert = assert.scope 'Networking.Response'
 	log = log.scope 'Networking', 'Response'
 
-	module.exports = (Networking, Impl) -> class Response
+	module.exports = (Networking, Impl) -> class Response extends signal.Emitter
 
 *Array* Response.STATUSES
 -------------------------
@@ -99,6 +99,8 @@ var Response = Networking.Response;
 			assert.isPlainObject opts, 'ctor options argument ...'
 			assert.instanceOf opts.request, Networking.Request, 'ctor options.request argument ...'
 
+			super()
+
 			if opts.status?
 				assert.ok utils.has(Response.STATUSES, opts.status), 'ctor options.status argument ...'
 				{@status} = opts
@@ -119,27 +121,27 @@ var Response = Networking.Response;
 			# whether response will be send on the next tick
 			utils.defineProperty @, '_waitingToSend', utils.WRITABLE, false
 
-*Signal* Response::sent()
--------------------------
+*Signal* Response::onSend()
+---------------------------
 
 This signal is called when a response has been sent.
 
 ```
-res.onSent(function(){
+res.onSend(function(){
   console.log("Response has been sent!");
 });
 ```
 
-		signal.createLazy @::, 'sent'
+		signal.Emitter.createSignal @, 'onSend'
 
-*Signal* Response::destroyed()
+*Signal* Response::donDestroy()
 ------------------------------
 
 This signal is called when a response data is no longer in use.
 
-Check *Response::destroy()* for more.
+Check *Response::onDestroy()* for more.
 
-		signal.createLazy @::, 'destroyed'
+		signal.Emitter.createSignal @, 'onDestroy'
 
 ReadOnly *Boolean* Response::pending
 ------------------------------------
@@ -221,7 +223,7 @@ Response::send([*Integer* status, *Any* data])
 
 Use this method to send a response.
 
-This method calls *sent()* signal asynchronously.
+This method calls *onSend()* signal asynchronously.
 
 You can still change a response status and data, but only synchronously.
 
@@ -260,14 +262,14 @@ res.onSent(function(){
 		sendData = (res) ->
 			assert.instanceOf res, Response
 
-			res.request.loaded? res
+			res.request.onLoad.emit res
 
 			{data} = res
 
 			if res.isSucceed()
-				res.request.dataLoaded? null, data
+				res.request.onDataLoad.emit null, data
 			else
-				res.request.dataLoaded? data or res.status or "Unknown error"
+				res.request.onDataLoad.emit data or res.status or "Unknown error"
 				log.warn "Response #{res.request.uri} completed with an error"
 
 			if data instanceof Error
@@ -275,7 +277,7 @@ res.onSent(function(){
 
 			Impl.send res, data, ->
 				res.destroy()
-				res.sent?()
+				res.onSend.emit()
 
 Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 ---------------------------------------------------------------------
@@ -300,12 +302,12 @@ a permanent redirect.
 			@setHeader 'Location', uri
 
 			@request.destroy()
-			@request.loaded? @
-			@request.dataLoaded? null, @data
+			@request.onLoad.emit @
+			@request.onDataLoad.emit null, @data
 
 			Impl.redirect @, status, uri, =>
 				@destroy()
-				@sent?()
+				@onSend.emit()
 
 Response::raise(*Any* error)
 ----------------------------
@@ -345,6 +347,6 @@ This method calls the *destroyed()* signal.
 			assert.ok @pending
 
 			@pending = false
-			@destroyed?()
+			@onDestroy.emit()
 
 			return
