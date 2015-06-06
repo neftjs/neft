@@ -8,10 +8,10 @@ Button {
   label.text: 'Click!'
   label.font.pixelSize: 30
   label.color: 'white'
+  label.margin: 20
   background.color: 'red'
   image.source: 'http://lorempixel.com/200/140/'
   image.opacity: 0.3
-  padding: 20
   linkUri: '/order'
 }
 ```
@@ -30,9 +30,29 @@ Button {
 			@__name__ = 'Button'
 			@__path__ = 'Renderer.Button'
 
-			onPaddingChanged = ->
+			onLabelWidthChanged = ->
+				if @_fill._width
+					width = @label._width
+					if @label._margin
+						width += @label._margin._left + @label._margin._right
+					@_updatePending = true
+					@width = width
+					@_updatePending = false
+				return
+
+			onLabelHeightChanged = ->
+				if @_fill._height
+					height = @label._height
+					if @label._margin
+						height += @label._margin._top + @label._margin._bottom
+					@_updatePending = true
+					@height = height
+					@_updatePending = false
+				return
+
+			onLabelMarginChanged = ->
 				{label} = @
-				padding = @_padding
+				padding = @label._margin
 				label.x = padding._left
 				label.y = padding._top
 
@@ -47,33 +67,13 @@ Button {
 					label.height = @_height - padding._top - padding._bottom
 				return
 
-			onLabelWidthChanged = ->
-				if @_fill._width
-					width = @label._width
-					if @_padding
-						width += @_padding._left + @_padding._right
-					@_updatePending = true
-					@width = width
-					@_updatePending = false
-				return
-
-			onLabelHeightChanged = ->
-				if @_fill._height
-					height = @label._height
-					if @_padding
-						height += @_padding._top + @_padding._bottom
-					@_updatePending = true
-					@height = height
-					@_updatePending = false
-				return
-
 			onWidthChanged = ->
 				width = @_width
 				@background.width = width
 				@image.width = width
 				unless @_fill._width
-					if @_padding
-						@label.width = width - @_padding._left - @_padding._right
+					if @label._margin
+						@label.width = width - @label._margin._left - @label._margin._right
 					else
 						@label.width = width
 				return
@@ -83,15 +83,14 @@ Button {
 				@background.height = height
 				@image.height = height
 				unless @_fill._height
-					if @_padding
-						@label.height = height - @_padding._top - @_padding._bottom
+					if @label._margin
+						@label.height = height - @label._margin._top - @label._margin._bottom
 					else
 						@label.height = height
 				return
 
 			constructor: ->
 				@_updatePending = false
-				@_padding = null
 
 				@background = Renderer.Rectangle.create()
 				@image = Renderer.Image.create()
@@ -104,9 +103,9 @@ Button {
 
 				@onWidthChanged onWidthChanged, @
 				@onHeightChanged onHeightChanged, @
-				@onPaddingChanged onPaddingChanged, @
 				@label.onWidthChanged onLabelWidthChanged, @
 				@label.onHeightChanged onLabelHeightChanged, @
+				@label.onMarginChanged onLabelMarginChanged, @
 
 				@background.parent = @
 				@image.parent = @
@@ -131,13 +130,6 @@ Button {
 						@label.height = 0
 				_super.call @, val
 				return
-
-*Margin* Button::padding
-------------------------
-
-### *Signal* Button::paddingChanged(*Margin* padding)
-
-			Renderer.Item.Margin @, propertyName: 'padding'
 
 			clone: ->
 				clone = super()
