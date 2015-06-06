@@ -111,7 +111,7 @@ var Response = Networking.Response;
 				{@encoding} = opts
 
 			@headers = opts.headers or {}
-			@cookies = opts.cookies or utils.cloneDeep(opts.request.cookies)
+			@cookies = opts.cookies or {}
 
 			utils.defineProperty @, 'request', null, opts.request
 
