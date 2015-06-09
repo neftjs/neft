@@ -77,6 +77,9 @@ module.exports = (File, data) -> class Style
 		@textWatchingNodes = []
 		@visible = true
 		@isTextSet = false
+		@baseText = ''
+		@isLinkUriSet = false
+		@baseLinkUri = ''
 		@classes = null
 		@parentSet = false
 		@lastItemParent = null
@@ -119,6 +122,7 @@ module.exports = (File, data) -> class Style
 			if !@parentSet
 				@lastItemParent = @item.parent
 			@item.parent = null
+		itemDocumentNode = @item.document.node
 		@item.document.node = null
 
 		tmpNode = @node
@@ -130,6 +134,20 @@ module.exports = (File, data) -> class Style
 
 		for child in @children
 			child.revert()
+
+		# shared items
+		if itemDocumentNode._documentStyle is @
+			# revert linkUri
+			if @isLinkUriSet
+				@item.linkUri = @baseLinkUri
+				@isLinkUriSet = false
+				@baseLinkUri = ''
+
+			# revert text
+			if @isTextSet
+				@getTextObject().text = @baseText
+				@isTextSet = false
+				@baseText = ''
 
 		# revert attr values
 		{setAttrs, attrValues} = @
@@ -158,19 +176,24 @@ module.exports = (File, data) -> class Style
 					classes.append name
 		return
 
-	updateText: ->
+	getTextObject: ->
 		if @item.$? and 'text' of @item.$
-			obj = @item.$
+			@item.$
 		else if 'text' of @item
-			obj = @item
+			@item
 		else if @item.label? and 'text' of @item.label
-			obj = @item.label
+			@item.label
 
+	updateText: ->
+		obj = @getTextObject()
 		node = @node
 		if node.children.length is 1 and node.children[0].name is 'a'
 			node = node.children[0]
 			href = node.attrs.get('href')
 			if typeof href is 'string'
+				unless @isLinkUriSet
+					@isLinkUriSet = true
+					@baseLinkUri = @item.linkUri
 				@item.linkUri = href
 
 		if obj
@@ -178,6 +201,7 @@ module.exports = (File, data) -> class Style
 
 			if text.length > 0 or @isTextSet
 				@isTextSet = true
+				@baseText = obj.text
 				obj.text = text
 		return
 
