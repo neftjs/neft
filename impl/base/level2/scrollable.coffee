@@ -247,7 +247,7 @@ module.exports = (impl) ->
 					verticalContinuous.update dy + e.movementY
 				signal.STOP_PROPAGATION
 
-			impl.window.pointer.onReleased (e) ->
+			impl.window.pointer.onRelease (e) ->
 				listen = false
 				dx = dy = 0
 
@@ -267,7 +267,7 @@ module.exports = (impl) ->
 		else
 			impl.onWindowReady onImplReady
 
-		item.pointer.onPressed (e) ->
+		item.pointer.onPress (e) ->
 			listen = true
 
 			item._impl.globalScale = getItemGlobalScale item
