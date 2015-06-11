@@ -23,10 +23,10 @@ updateItem = (item) ->
 	else if data.loops > MAX_LOOPS
 		return
 
-	data.updatePending = true
+	item._updatePending = true
 
 	# get config
-	maxColumn = if item.fill.width then Infinity else item.width
+	maxColumn = if item._autoWidth then Infinity else item.width
 	columnSpacing = item.spacing.column
 	rowSpacing = item.spacing.row
 
@@ -83,15 +83,13 @@ updateItem = (item) ->
 			height = y
 
 	# set item size
-	if item.fill.width
+	if item._autoWidth
 		item.width = width
-		item.fill.width = true
 
-	if item.fill.height
+	if item._autoHeight
 		item.height = height
-		item.fill.height = true
 
-	data.updatePending = false
+	item._updatePending = false
 
 	return
 
@@ -118,16 +116,26 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_impl.updatePending and (@fill.width or @fill.height)
+	if not @_updatePending and (@_autoWidth or @_autoHeight)
 		update.call @
 	return
+
+enableChild = (child) ->
+	child.onVisibleChange update, @
+	child.onWidthChange update, @
+	child.onHeightChange update, @
+	child.onMarginChange update, @
+
+disableChild = (child) ->
+	child.onVisibleChange.disconnect update, @
+	child.onWidthChange.disconnect update, @
+	child.onHeightChange.disconnect update, @
+	child.onMarginChange.disconnect update, @
 
 module.exports = (impl) ->
 	DATA =
 		loops: 0
-		disableFill: true
 		pending: false
-		updatePending: false
 
 	DATA: DATA
 
@@ -135,7 +143,15 @@ module.exports = (impl) ->
 
 	create: (data) ->
 		impl.Types.Item.create.call @, data
-		data.update = update
+
+		# update item changes
+		@onChildrenChange update
+		@onWidthChange updateSize
+		@onHeightChange updateSize
+
+		# update on each children size change
+		@children.onInsert enableChild, @
+		@children.onPop disableChild, @
 
 	setFlowColumnSpacing: update
 	setFlowRowSpacing: update

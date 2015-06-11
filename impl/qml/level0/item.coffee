@@ -153,14 +153,13 @@ module.exports = (impl) ->
 		__stylesMouseArea.onReleased.connect (e) ->
 			impl.window?._impl.mouseArea.onReleased e
 
-	DATA = utils.merge
+	DATA =
 		elem: null
 		mouseArea: null
 		linkUri: ''
 		linkUriListens: false
 		bindings: null
 		anchors: null
-	, impl.utils.fill.DATA
 
 	exports =
 	DATA: DATA
@@ -220,8 +219,6 @@ module.exports = (impl) ->
 				@_impl.linkUriListens = true
 				@pointer.onClicked onLinkUriClicked, @
 			return
-
-	setItemMargin: (val) ->
 
 	attachItemSignal: do ->
 		attachPointer = (ns, name, uniqueName) ->

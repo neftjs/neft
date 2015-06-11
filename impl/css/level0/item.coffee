@@ -188,7 +188,7 @@ module.exports = (impl) ->
 
 	NOP = ->
 
-	DATA = utils.merge
+	DATA =
 		bindings: null
 		anchors: null
 		elem: null
@@ -199,19 +199,16 @@ module.exports = (impl) ->
 		rotation: 0
 		scale: 1
 		parent: null
-		update: null
 		mozFontSubpixel: true
 		isLayer: false
 		isInLayers: false
 		operations: 0
-	, impl.utils.fill.DATA
 
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner DATA
 
 	create: (data) ->
-		data.update ?= NOP
 		data.elem ?= document.createElement 'div'
 		data.elemStyle = data.elem.style
 
@@ -219,11 +216,8 @@ module.exports = (impl) ->
 		self = @
 		{elem} = @_impl
 
-		@_impl.parent?._impl.update.call @_impl.parent
-
 		if val
 			val._impl.elem.appendChild elem
-			val._impl.update.call val
 		else
 			elem.parentElement?.removeChild elem
 		@_impl.parent = val
@@ -232,7 +226,6 @@ module.exports = (impl) ->
 
 	setItemVisible: (val) ->
 		@_impl.elemStyle.display = if val then 'inline' else 'none'
-		@_parent?._impl.update.call @_parent
 		return
 
 	setItemClip: (val) ->
@@ -241,14 +234,10 @@ module.exports = (impl) ->
 
 	setItemWidth: (val) ->
 		@_impl.elemStyle.width = "#{val}px"
-		@_parent?._impl.update.call @_parent
-		@_impl.update.call @
 		return
 
 	setItemHeight: (val) ->
 		@_impl.elemStyle.height = "#{val}px"
-		@_parent?._impl.update.call @_parent
-		@_impl.update.call @
 		return
 
 	setItemX: (val) ->
@@ -289,9 +278,6 @@ module.exports = (impl) ->
 			@_impl.linkElem.setAttribute 'href', val
 			@_impl.linkElem.style.display = if val isnt '' then 'block' else 'none'
 		return
-
-	setItemMargin: (type, val) ->
-		@_parent?._impl.update.call @_parent
 
 	attachItemSignal: (ns, signalName) ->
 		self = @

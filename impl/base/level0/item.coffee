@@ -5,18 +5,15 @@ utils = require 'utils'
 module.exports = (impl) ->
 	NOP = ->
 
-	DATA = utils.merge
+	DATA =
 		bindings: null
 		anchors: null
-		update: null
-	, impl.utils.fill.DATA
 
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner DATA
 
 	create: (data) ->
-		data.update = NOP
 
 	setItemParent: (val) ->
 
@@ -73,11 +70,3 @@ module.exports = (impl) ->
 	attachItemSignal: (name, signal) ->
 
 	setItemKeysFocus: (val) ->
-
-	setItemFill: (type, val) ->
-		unless @_impl.disableFill
-			if @_fill._width isnt @_fill._height
-				impl.utils.fill.enable @
-			else if val is false
-				impl.utils.fill.disable @
-		return

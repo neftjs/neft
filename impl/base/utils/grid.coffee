@@ -29,7 +29,7 @@ updateItem = (item) ->
 	data = item._impl
 	{gridType} = data
 
-	data.gridUpdatePending = true
+	item._updatePending = true
 
 	# get config
 	columnSpacing = rowSpacing = 0
@@ -88,20 +88,19 @@ updateItem = (item) ->
 		margin = child._margin
 
 		# margins
-		if gridType & ROW
-			width += columnSpacing
-			if margin
-				if includeBorderMargins or column isnt 0
-					width += margin._left
-				if includeBorderMargins or column isnt lastColumn
-					width += margin._right
-		if gridType & COLUMN
-			height += rowSpacing
-			if margin
-				if includeBorderMargins or row isnt 0
-					height += margin._top
-				if includeBorderMargins or row isnt lastRow
-					height += margin._bottom
+		width += columnSpacing
+		if margin
+			if includeBorderMargins or column isnt 0
+				width += margin._left
+			if includeBorderMargins or column isnt lastColumn
+				width += margin._right
+
+		height += rowSpacing
+		if margin
+			if includeBorderMargins or row isnt 0
+				height += margin._top
+			if includeBorderMargins or row isnt lastRow
+				height += margin._bottom
 
 		# save
 		if width > columnsPositions[column]
@@ -116,7 +115,7 @@ updateItem = (item) ->
 	for i in [0...maxColumnsLen] by 1
 		last = columnsPositions[i] += last
 	columnsPositions[i-1] -= columnSpacing
-	if item.fill.width is false
+	unless item._autoWidth
 		columnsPositions[i-1] = Math.max columnsPositions[i-1], item._width
 
 	# sum rows positions
@@ -124,7 +123,7 @@ updateItem = (item) ->
 	for i in [0...maxRowsLen] by 1
 		last = rowsPositions[i] += last
 	rowsPositions[i-1] -= rowSpacing
-	if item.fill.height is false
+	unless item._autoHeight
 		rowsPositions[i-1] = Math.max rowsPositions[i-1], item._height
 
 	# set positions
@@ -138,7 +137,7 @@ updateItem = (item) ->
 
 		margin = child._margin
 
-		if gridType & ROW or alignH isnt 'left'
+		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right))
 			if column > 0
 				x = columnsPositions[column-1]
 			else
@@ -151,7 +150,7 @@ updateItem = (item) ->
 				x += columnsPositions[column] - x - child._width
 			child.x = x
 
-		if gridType & COLUMN or alignV isnt 'top'
+		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom))
 			if row > 0
 				y = rowsPositions[row-1]
 			else
@@ -167,22 +166,21 @@ updateItem = (item) ->
 		i++
 
 	# set item size
-	if item.fill.width isnt false
+	if item._autoWidth
 		width = columnsPositions[maxColumnsLen-1]
 		if width > 0	
 			item.width = width
 		else
 			item.width = 0
-		item.fill.width = true
 
-	if item.fill.height isnt false
+	if item._autoHeight
 		height = rowsPositions[maxRowsLen-1]
 		if height > 0
 			item.height = height
 		else
 			item.height = 0
-		item.fill.height = true
-	data.gridUpdatePending = false
+
+	item._updatePending = false
 	return
 
 updateItems = ->
@@ -203,7 +201,7 @@ update = ->
 
 	data.pending = true
 
-	if data.gridUpdatePending
+	if @_updatePending
 		if data.gridUpdateLoops > MAX_LOOPS
 			return
 
@@ -221,7 +219,7 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_impl.gridUpdatePending and (@_fillWidth or @_fillHeight)
+	if not @_updatePending and (@_autoWidth or @_autoHeight)
 		update.call @
 	return
 
@@ -245,7 +243,6 @@ exports.DATA =
 	pending: false
 	disableFill: true
 	gridType: 0
-	gridUpdatePending: false
 	gridUpdateLoops: 0
 
 exports.create = (item, type) ->

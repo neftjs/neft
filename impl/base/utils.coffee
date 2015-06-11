@@ -1,7 +1,6 @@
 utils = require 'utils'
 
 module.exports = (impl) ->
-
 	INTEGER_PROPERTIES:
 		__proto__: null
 		x: true
@@ -24,7 +23,6 @@ module.exports = (impl) ->
 		'sourceHeight': 'setImageSourceHeight'
 
 	grid: require './utils/grid'
-	fill: require './utils/fill'
 
 	createDataCloner: (extend, base) ->
 		->

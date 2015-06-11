@@ -92,6 +92,13 @@ module.exports = (Renderer, Impl) ->
 	DeepObject: DeepObject
 	MutableDeepObject: MutableDeepObject
 
+	getInnerPropName: do ->
+		cache =
+			__proto__: null
+			'': ''
+		(val) ->
+			cache[val] ?= '_' + val
+
 	defineProperty: (opts) ->
 		assert.isPlainObject opts
 

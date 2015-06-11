@@ -211,4 +211,5 @@ module.exports = (impl) ->
 				data.bindings[prop] = new SimpleBinding @, prop, binding, ctx
 			else
 				data.bindings[prop] = new Binding @, prop, binding, ctx
+
 		return

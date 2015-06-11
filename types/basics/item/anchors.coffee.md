@@ -85,6 +85,8 @@ This connection is solid, so if the *rect1* will change a position,
 				anchors.verticalCenter = val.verticalCenter if val.verticalCenter?
 				anchors.centerIn = val.centerIn if val.centerIn?
 				anchors.fill = val.fill if val.fill?
+				anchors.fillWidth = val.fillWidth if val.fillWidth?
+				anchors.fillHeight = val.fillHeight if val.fillHeight?
 				_super.call @, val
 				return
 
@@ -103,6 +105,8 @@ This connection is solid, so if the *rect1* will change a position,
 			@_horizontalCenter = null
 			@_centerIn = null
 			@_fill = null
+			@_fillWidth = null
+			@_fillHeight = null
 			super ref
 
 		implMethod = Impl["set#{ctor.__name__}Anchor"]
@@ -139,7 +143,7 @@ Rectangle {
 
 Such reference is also automatically updated if the item parent change.
 
-					unless target is 'parent' or target is 'this' or target is 'nextSibling' or target is 'previousSibling' or target instanceof Item
+					unless target is 'parent' or target is 'children' or target is 'this' or target is 'nextSibling' or target is 'previousSibling' or target instanceof Item
 						log.error "`anchors.#{type}` expects an item; `'#{val}'` given"
 
 For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.

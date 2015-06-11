@@ -90,11 +90,11 @@ Styles.button/red {
 
 	utils = require 'utils'
 	signal = require 'signal'
-	Impl = require './impl'
-	Impl.Renderer = exports
 
-	itemUtils = require('./utils/item') exports, Impl
 	signal.create exports, 'onReady'
+
+	Impl = require('./impl') exports
+	itemUtils = exports.itemUtils = require('./utils/item') exports, Impl
 
 	exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
 	exports.Device = require('./types/namespace/device') exports, Impl, itemUtils

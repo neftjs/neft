@@ -24,6 +24,8 @@ Grid {
 	module.exports = (Renderer, Impl, itemUtils) -> class Grid extends Renderer.Item
 		@__name__ = 'Grid'
 		@__path__ = 'Renderer.Grid'
+		@CHILDREN_AUTO_PROPS = x: true, y: true
+		@SELF_AUTO_PROPS = width: true, height: true
 
 *Grid* Grid() : *Renderer.Item*
 -------------------------------
@@ -34,17 +36,17 @@ Grid {
 			@_spacing = null
 			@_alignment = null
 			@_includeBorderMargins = true
+			@_updatePending = false
+			@_autoWidth = true
+			@_autoHeight = true
 			super()
-			@_width = -1
-			@_height = -1
-			@fill.width = true
-			@fill.height = true
 
 		@::_width = -1
 		getter = utils.lookupGetter @::, 'width'
 		setter = utils.lookupSetter @::, 'width'
 		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
-			@fill.width = val is -1
+			if not @_updatePending
+				@_autoWidth = val is -1
 			_super.call @, val
 			return
 
@@ -52,15 +54,16 @@ Grid {
 		getter = utils.lookupGetter @::, 'height'
 		setter = utils.lookupSetter @::, 'height'
 		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-			@fill.height = val is -1
+			if not @_updatePending
+				@_autoHeight = val is -1
 			_super.call @, val
 			return
 
-*Float* Grid::width = -1
-------------------------
+*String* Grid::autoWidth = 'self'
+---------------------------------
 
-*Float* Grid::height = -1
--------------------------
+*String* Grid::autoHeight = 'self'
+----------------------------------
 
 *Integer* Grid::columns = 2
 ---------------------------

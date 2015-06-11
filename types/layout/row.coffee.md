@@ -29,17 +29,17 @@ Row {
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = true
+			@_updatePending = false
+			@_autoWidth = true
+			@_autoHeight = true
 			super()
-			@_width = -1
-			@_height = -1
-			@fill.width = true
-			@fill.height = true
 
 		@::_width = -1
 		getter = utils.lookupGetter @::, 'width'
 		setter = utils.lookupSetter @::, 'width'
 		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
-			@fill.width = val is -1
+			if not @_updatePending
+				@_autoWidth = val is -1
 			_super.call @, val
 			return
 
@@ -47,15 +47,16 @@ Row {
 		getter = utils.lookupGetter @::, 'height'
 		setter = utils.lookupSetter @::, 'height'
 		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-			@fill.height = val is -1
+			if not @_updatePending
+				@_autoHeight = val is -1
 			_super.call @, val
 			return
 
-*Float* Row::width = -1
------------------------
+*String* Row::autoWidth = 'self'
+--------------------------------
 
-*Float* Row::height = -1
-------------------------
+*String* Row::autoHeight = 'self'
+---------------------------------
 
 *Float* Row::spacing = 0
 ------------------------

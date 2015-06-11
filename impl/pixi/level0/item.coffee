@@ -129,7 +129,7 @@ module.exports = (impl) ->
 		mouseActiveItem?.onMove.emit mouseEvent
 		return
 
-	DATA = utils.merge
+	DATA =
 		bindings: null
 		anchors: null
 		elem: null
@@ -140,7 +140,6 @@ module.exports = (impl) ->
 		width: 0
 		height: 0
 		scale: 1
-	, impl.utils.fill.DATA
 
 	DATA: DATA
 
@@ -250,8 +249,6 @@ module.exports = (impl) ->
 				@_impl.linkUriListens = true
 				@pointer.onClicked onLinkUriClicked, @
 			return
-
-	setItemMargin: (type, val) ->
 
 	attachItemSignal: (ns, name) ->
 		self = @

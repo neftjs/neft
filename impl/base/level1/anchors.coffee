@@ -8,6 +8,7 @@ log = log.scope 'Rendering', 'Anchors'
 {isArray} = Array
 
 module.exports = (impl) ->
+	NOP = ->
 
 	getItemProp =
 		left: 'x'
@@ -107,11 +108,29 @@ module.exports = (impl) ->
 		fillWidthSize:
 			parent: (target) ->
 				target._width
+			children: (target) ->
+				tmp = 0
+				size = 0
+				for child in target
+					if child._visible
+						tmp = Math.abs(child._x) + child._width
+						if tmp > size
+							size = tmp
+				size
 			sibling: (target) ->
 				target._width
 		fillHeightSize:
 			parent: (target) ->
 				target._height
+			children: (target) ->
+				tmp = 0
+				size = 0
+				for child in target
+					if child._visible
+						tmp = Math.abs(child._y) + child._height
+						if tmp > size
+							size = tmp
+				size
 			sibling: (target) ->
 				target._height
 
@@ -169,6 +188,20 @@ module.exports = (impl) ->
 		@update()
 		return
 
+	onChildInsert = (child) ->
+		child.onVisibleChange @update, @
+		child.onWidthChange @update, @
+		child.onHeightChange @update, @
+		child.onXChange @update, @
+		child.onYChange @update, @
+
+	onChildPop = (child) ->
+		child.onVisibleChange.disconnect @update, @
+		child.onWidthChange.disconnect @update, @
+		child.onHeightChange.disconnect @update, @
+		child.onXChange.disconnect @update, @
+		child.onYChange.disconnect @update, @
+
 	class Anchor
 		constructor: (@item, @source, def) ->
 			[target, line] = def
@@ -177,6 +210,8 @@ module.exports = (impl) ->
 
 			if target is 'parent' or item._parent is target
 				@type = 'parent'
+			else if target is 'children'
+				@type = 'children'
 			else
 				@type = 'sibling'
 
@@ -187,11 +222,21 @@ module.exports = (impl) ->
 			@getSourceValue = getSourceValue[source]
 			@getTargetValue = getTargetValue[line][@type]
 
+			if typeof @getTargetValue isnt 'function'
+				@getTargetValue = NOP
+				log.error "Anchor '#{@source}: #{def.join('.')}' is not supported"
+
 			switch target
 				when 'parent'
 					@targetItem = item._parent
 					item.onParentChange onParentChange, @
 					onParentChange.call @, null
+				when 'children'
+					@targetItem = item._children
+					item.children.onInsert onChildInsert, @
+					item.children.onPop onChildPop, @
+					for child in item.children
+						onChildInsert.call @, child, -1
 				when 'nextSibling'
 					@targetItem = item._nextSibling
 					item.onNextSiblingChange onNextSiblingChange, @
@@ -211,14 +256,14 @@ module.exports = (impl) ->
 		update: ->
 			if @targetItem
 				`//<development>`
-				if @item._parent isnt @targetItem and @item._parent isnt @targetItem._parent
+				if @targetItem isnt @item._children and @item._parent isnt @targetItem and @item._parent isnt @targetItem._parent
 					log.error "You can anchor only to a parent or sibling. Item: #{@item.toString()}"
 				`//</development>`
 
 				r = @getSourceValue(@item) + @getTargetValue(@targetItem)
 			else
 				r = 0
-			if margin = @item._margin
+			if (margin = @item._margin) and @targetItem isnt @item._children
 				r += getMarginValue[@source] margin
 			@item[@prop] = r
 			return
@@ -227,6 +272,11 @@ module.exports = (impl) ->
 			switch @target
 				when 'parent'
 					@item.onParentChange.disconnect onParentChange, @
+				when 'children'
+					item.children.onInsert.disconnect onChildInsert, @
+					item.children.onPop.disconnect onChildPop, @
+					for child in item.children
+						onChildPop.call @, child, -1
 				when 'nextSibling'
 					@item.onNextSiblingChange.disconnect onNextSiblingChange, @
 				when 'previousSibling'
@@ -246,6 +296,13 @@ module.exports = (impl) ->
 		fillHeight: ['verticalCenter', 'fillHeightSize']
 		fill: ['horizontalCenter', 'verticalCenter', 'fillWidthSize', 'fillHeightSize']
 
+	getBaseAnchorsPerAnchorType =
+		__proto__: null
+		children:
+			fillWidth: ['fillWidthSize']
+			fillHeight: ['fillHeightSize']
+			fill: ['fillWidthSize', 'fillHeightSize']
+
 	isMultiAnchor = (source) ->
 		!!getBaseAnchors[source]
 
@@ -255,7 +312,9 @@ module.exports = (impl) ->
 			@anchors = []
 			def = [def[0], '']
 
-			for line in getBaseAnchors[source]
+			baseAnchors = getBaseAnchorsPerAnchorType[def[0]]?[source]
+			baseAnchors ?= getBaseAnchors[source]
+			for line in baseAnchors
 				def[1] = line
 				anchor = new Anchor item, line, def
 				@anchors.push anchor

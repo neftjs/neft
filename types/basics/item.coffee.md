@@ -33,18 +33,17 @@ This is a base class for everything which is visible.
 			@_children = null
 			@_previousSibling = null
 			@_nextSibling = null
+			@_width = 0
+			@_height = 0
 			@_x = 0
 			@_y = 0
 			@_z = 0
-			@_width = 0
-			@_height = 0
 			@_visible = true
 			@_clip = false
 			@_scale = 1
 			@_rotation = 0
 			@_opacity = 1
 			@_linkUri = ''
-			@_fill = null
 			@_anchors = null
 			@_document = null
 			@_keys = null
@@ -191,7 +190,6 @@ Item {
 			constructor: @
 			name: 'parent'
 			defaultValue: null
-			implementation: Impl.setItemParent
 			setter: (_super) -> (val=null) ->
 				if val?._sourceItem
 					val = val._sourceItem
@@ -239,14 +237,19 @@ Item {
 				if oldNextSibling isnt null
 					@_nextSibling = null
 
-				_super.call @, val
+				# parent
+				@_parent = val
+				Impl.setItemParent.call @, val
 
+				# signals
 				if old isnt null
 					emitSignal old, 'onChildrenChange', old.children
 					emitSignal old.children, 'onPop', @, index
 				if val isnt null
 					emitSignal val, 'onChildrenChange', val.children
 					emitSignal val.children, 'onInsert', @, length - 1
+
+				emitSignal @, 'onParentChange', old
 
 				if oldPreviousSibling isnt null
 					emitSignal oldPreviousSibling, 'onNextSiblingChange', @
@@ -566,7 +569,6 @@ Item::clone()
 		@Alignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
 		@Anchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
 		@Margin = require('./item/margin') Renderer, Impl, itemUtils, Item
-		@Fill = require('./item/fill') Renderer, Impl, itemUtils, Item
 		require('./item/property') Renderer, Impl, itemUtils, Item
 		require('./item/signal') Renderer, Impl, itemUtils, Item
 		@Pointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
@@ -591,13 +593,6 @@ Item::clone()
 ### *Signal* Item::onMarginChange(*Margin* margin)
 
 		@Margin @
-
-*Fill* Item::fill
------------------
-
-### *Signal* Item::onFillChange(*Fill* fill)
-
-		@Fill @
 
 *Keys* Item::keys
 -----------------
