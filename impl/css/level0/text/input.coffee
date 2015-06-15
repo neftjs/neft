@@ -5,8 +5,6 @@ signal = require 'signal'
 module.exports = (impl) ->
 	DATA =
 		isMultiLine: false
-		autoWidth: false
-		autoHeight: false
 
 	DATA: DATA
 
@@ -15,40 +13,37 @@ module.exports = (impl) ->
 	create: (data) ->
 		self = @
 
-		data.elem ?= document.createElement 'textarea'
-		data.elem.setAttribute 'class', 'text'
-		data.textElem = data.elem
-		data.textElemStyle = data.textElem.style
+		impl.Types.Text.create.call @, data
+		{textElem} = data
 
-		impl.Types.Item.create.call @, data
+		textElem.setAttribute 'contenteditable', 'true'
+		data.textElemStyle.overflow = 'auto'
 
-		data.elem.addEventListener impl._SIGNALS.pointerWheel, (e) ->
-			if document.activeElement is @
+		data.elemStyle.cursor = 'text'
+
+		data.elem.addEventListener impl._SIGNALS.pointerOnWheel, (e) ->
+			if document.activeElement is textElem
 				e.stopPropagation()
 			return
 
-		data.elem.addEventListener 'input', ->
-			if not data.isMultiLine and ///\n///.test(@value)
-				@value = @value.replace ///\n///g, ''
-			self.text = @value
+		textElem.addEventListener 'input', ->
+			if not data.isMultiLine and ///\n///.test(textElem.textContent)
+				textElem.textContent = textElem.textContent.replace ///\n///g, ''
+			self.text = textElem.textContent
 			return
 
-		data.elem.addEventListener 'focus', ->
+		data.elem.addEventListener 'click', ->
+			textElem.focus()
+
+		textElem.addEventListener 'focus', ->
 			self.keys.focus = true
 
-		data.elem.addEventListener 'blur', ->
+		textElem.addEventListener 'blur', ->
 			self.keys.focus = false
 
 		impl.setItemWidth.call @, 200
 		impl.setItemHeight.call @, 50
 
-		return
-
-	setText: do (_super = impl.setText) -> (val) ->
-		if @_impl.isMultiLine isnt undefined
-			@_impl.elem.value = val
-		else
-			_super.call @, val
 		return
 
 	setTextInputMultiLine: (val) ->
