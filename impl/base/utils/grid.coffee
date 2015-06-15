@@ -252,6 +252,7 @@ exports.create = (item, type) ->
 	item.onChildrenChange update
 	item.onWidthChange updateSize
 	item.onHeightChange updateSize
+	item.onAlignmentChange updateSize
 
 	# update on each children size change
 	item.children.onInsert enableChild, item

@@ -231,6 +231,7 @@ module.exports = (impl) ->
 		@onChildrenChange update
 		@onWidthChange updateSize
 		@onHeightChange updateSize
+		@onAlignmentChange updateSize
 
 		# update on each children size change
 		@children.onInsert enableChild, @
