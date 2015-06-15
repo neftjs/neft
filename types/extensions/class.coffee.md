@@ -454,6 +454,38 @@ This property has a setter, which accepts strings and arrays of strings.
 
 ### *Signal* Item::onClassesChange(*List* classes)
 
+		normalizeClassesValue = (val) ->
+			if typeof val is 'string'
+				if val.indexOf(',') isnt -1
+					val = val.split ','
+				else
+					val = val.split ' '
+			val
+
+		class ClassesList extends List
+			constructor: ->
+				super()
+
+			utils.defineProperty @::, 'append', null, do (_super = @::append) ->
+				-> _super
+			, (val) ->
+				val = normalizeClassesValue val
+				if Array.isArray(val)
+					for name in val
+						if name = name.trim()
+							@append name
+				return
+
+			utils.defineProperty @::, 'remove', null, do (_super = @::remove) ->
+				-> _super
+			, (val) ->
+				val = normalizeClassesValue val
+				if Array.isArray(val)
+					for name in val
+						if name = name.trim()
+							@remove name
+				return
+
 		Renderer.onReady ->
 			itemUtils.defineProperty
 				constructor: Renderer.Item
@@ -480,19 +512,14 @@ This property has a setter, which accepts strings and arrays of strings.
 					(_super) -> ->
 						unless @_classes
 							@_classExtensions ?= {}
-							list = @_classes = new List
+							list = @_classes = new ClassesList
 							list.onChange onChange, @
 							list.onInsert onInsert, @
 							list.onPop onPop, @
 
 						_super.call @
 				setter: (_super) -> (val) ->
-					if typeof val is 'string'
-						if val.indexOf(',') isnt -1
-							val = val.split ','
-						else
-							val = val.split ' '
-
+					val = normalizeClassesValue val
 					classes = @_classes
 
 					classes.clear()
