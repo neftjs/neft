@@ -30,6 +30,7 @@ Flow {
 
 		constructor: ->
 			@_spacing = null
+			@_alignment = null
 			@_includeBorderMargins = true
 			@_updatePending = false
 			@_autoWidth = true
@@ -54,12 +55,6 @@ Flow {
 			_super.call @, val
 			return
 
-*String* Flow::autoWidth = 'self'
----------------------------------
-
-*String* Flow::autoHeight = 'self'
-----------------------------------
-
 		clone: ->
 			clone = super()
 			clone.fill = @fill
@@ -71,6 +66,15 @@ Flow {
 -----------------------
 
 ### *Signal* Flow::onSpacingChange(*Spacing* oldValue)
+
+		Renderer.Item.Spacing @
+
+*Alignment* Flow::alignment
+---------------------------
+
+### *Signal* Flow::onAlignmentChange(*Alignment* oldValue)
+
+		Renderer.Item.Alignment @
 
 *Boolean* Flow::includeBorderMargins = true
 -------------------------------------------
@@ -84,5 +88,3 @@ Flow {
 			implementation: Impl.setFlowIncludeBorderMargins
 			developmentSetter: (val) ->
 				assert.isBoolean val
-
-		Renderer.Item.Spacing @

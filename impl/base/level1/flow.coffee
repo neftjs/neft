@@ -5,12 +5,27 @@ log = require 'log'
 
 log = log.scope 'Renderer', 'Flow'
 
+if typeof Uint32Array is 'undefined'
+	Uint32TypedArray = (len) ->
+		arr = []
+		for i in [0..len]
+			arr[i] = 0
+		arr
+else
+	Uint32TypedArray = Uint32Array
+
 MAX_LOOPS = 50
 
 queueIndex = 0
 queues = [[], []]
 queue = queues[queueIndex]
 pending = false
+
+cellsWidth = new Uint32TypedArray 64
+cellsHeight = new Uint32TypedArray 64
+elementsX = new Uint32TypedArray 64
+elementsY = new Uint32TypedArray 64
+elementsCell = new Uint32TypedArray 64
 
 updateItem = (item) ->
 	{children, includeBorderMargins} = item
@@ -30,11 +45,30 @@ updateItem = (item) ->
 	columnSpacing = item.spacing.column
 	rowSpacing = item.spacing.row
 
-	# tmp vars
-	width = height = column = row = x = y = right = rowSpan = 0
+	if item._alignment
+		alignH = item._alignment._horizontal
+		alignV = item._alignment._vertical
+		align = alignH isnt 'left' or alignV isnt 'top'
+	else
+		alignH = 'left'
+		alignV = 'top'
+		align = false
 
-	# set children positions
-	for child in children
+	# get tmp arrays
+	maxLen = children.length
+	if align and elementsX.length < maxLen
+		maxLen *= 1.5
+		cellsWidth = new Uint32TypedArray maxLen
+		cellsHeight = new Uint32TypedArray maxLen
+		elementsX = new Uint32TypedArray maxLen
+		elementsY = new Uint32TypedArray maxLen
+		elementsCell = new Uint32TypedArray maxLen
+
+	# tmp vars
+	width = height = column = row = x = y = right = rowSpan = maxCell = 0
+
+	# calculate children positions
+	for child, i in children
 		# omit not visible children
 		unless child._visible
 			continue
@@ -46,7 +80,8 @@ updateItem = (item) ->
 		else if column + child.width + (if margin then margin._left else 0) >= maxColumn
 			column = 0
 			row = height
-			x = column
+			x = 0
+			maxCell++
 		else
 			x = column
 		if margin and (includeBorderMargins or (x isnt 0 and column isnt 0))
@@ -61,8 +96,13 @@ updateItem = (item) ->
 
 		right = x + child.width
 
-		child.x = x
-		child.y = y
+		if align
+			elementsX[i] = x
+			elementsY[i] = y
+			elementsCell[i] = maxCell
+		else
+			child.x = x
+			child.y = y
 
 		column = right
 		if column > width
@@ -81,6 +121,49 @@ updateItem = (item) ->
 				y += margin._bottom
 		if y > height
 			height = y
+
+		if align
+			cellsWidth[maxCell] = column
+			cellsHeight[maxCell] = y - row
+
+	# set children positions
+	if align
+		switch alignH
+			when 'left'
+				multiplierX = 0
+			when 'center'
+				multiplierX = 0.5
+			when 'right'
+				multiplierX = 1
+		switch alignV
+			when 'top'
+				multiplierY = 0
+			when 'center'
+				multiplierY = 0.5
+			when 'bottom'
+				multiplierY = 1
+		if not item._autoWidth
+			width = item._width
+		if not item._autoHeight
+			height = item._height
+		if item._autoHeight or alignV is 'top'
+			plusY = 0
+		else
+			plusY = (item._height - height) * multiplierY
+		for child, i in children
+			# omit not visible children
+			unless child._visible
+				continue
+			cell = elementsCell[i]
+			bottom = child._height
+			if child._margin
+				if includeBorderMargins or cell > 0
+					bottom += child._margin._top
+				if includeBorderMargins or cell < maxCell
+					bottom += child._margin._bottom
+
+			child.x = elementsX[i] + (width - cellsWidth[cell]) * multiplierX
+			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY
 
 	# set item size
 	if item._autoWidth

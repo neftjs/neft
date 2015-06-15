@@ -59,12 +59,6 @@ Grid {
 			_super.call @, val
 			return
 
-*String* Grid::autoWidth = 'self'
----------------------------------
-
-*String* Grid::autoHeight = 'self'
-----------------------------------
-
 *Integer* Grid::columns = 2
 ---------------------------
 

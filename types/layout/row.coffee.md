@@ -52,12 +52,6 @@ Row {
 			_super.call @, val
 			return
 
-*String* Row::autoWidth = 'self'
---------------------------------
-
-*String* Row::autoHeight = 'self'
----------------------------------
-
 *Float* Row::spacing = 0
 ------------------------
 

@@ -59,7 +59,7 @@ updateItem = (item) ->
 	maxColumnsLen = if columnsLen is Infinity then children.length else columnsLen
 	lastColumn = maxColumnsLen - 1
 	if columnsPositions.length < maxColumnsLen
-		columnsPositions = new Uint32TypedArray maxColumnsLen
+		columnsPositions = new Uint32TypedArray maxColumnsLen * 1.5
 	else
 		for i in [0...maxColumnsLen] by 1
 			columnsPositions[i] = 0
@@ -67,7 +67,7 @@ updateItem = (item) ->
 	maxRowsLen = if rowsLen is Infinity then Math.ceil(children.length / columnsLen) else rowsLen
 	lastRow = maxRowsLen - 1
 	if rowsPositions.length < maxRowsLen
-		rowsPositions = new Uint32TypedArray maxRowsLen
+		rowsPositions = new Uint32TypedArray maxRowsLen * 1.5
 	else
 		for i in [0...maxRowsLen] by 1
 			rowsPositions[i] = 0

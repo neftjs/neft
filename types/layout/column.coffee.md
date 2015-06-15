@@ -52,12 +52,6 @@ Column {
 			_super.call @, val
 			return
 
-*String* Column::autoWidth = 'self'
------------------------------------
-
-*String* Column::autoHeight = 'self'
-------------------------------------
-
 *Float* Column::spacing = 0
 ---------------------------
 
