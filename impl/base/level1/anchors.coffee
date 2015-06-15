@@ -51,9 +51,11 @@ module.exports = (impl) ->
 			sibling: ['onYChange', 'onHeightChange']
 		fillWidthSize:
 			parent: ['onWidthChange']
+			children: []
 			sibling: ['onWidthChange']
 		fillHeightSize:
 			parent: ['onHeightChange']
+			children: []
 			sibling: ['onHeightChange']
 
 	getSourceValue =
@@ -273,9 +275,9 @@ module.exports = (impl) ->
 				when 'parent'
 					@item.onParentChange.disconnect onParentChange, @
 				when 'children'
-					item.children.onInsert.disconnect onChildInsert, @
-					item.children.onPop.disconnect onChildPop, @
-					for child in item.children
+					@item.children.onInsert.disconnect onChildInsert, @
+					@item.children.onPop.disconnect onChildPop, @
+					for child in @item.children
 						onChildPop.call @, child, -1
 				when 'nextSibling'
 					@item.onNextSiblingChange.disconnect onNextSiblingChange, @
