@@ -31,7 +31,7 @@ Qml and WebGL implementations
 				@_multiLine = false
 				super()
 				@_width = 200
-				@_height = 100
+				@_height = 50
 
 *Float* TextInput::width = 200
 ------------------------------

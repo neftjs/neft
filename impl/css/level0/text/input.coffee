@@ -4,6 +4,8 @@ signal = require 'signal'
 
 module.exports = (impl) ->
 	DATA =
+		autoWidth: false
+		autoHeight: false
 		isMultiLine: false
 
 	DATA: DATA
@@ -17,6 +19,7 @@ module.exports = (impl) ->
 		{textElem} = data
 
 		textElem.setAttribute 'contenteditable', 'true'
+		data.textElemStyle.width = '100%'
 		data.textElemStyle.overflow = 'auto'
 
 		data.elemStyle.cursor = 'text'
