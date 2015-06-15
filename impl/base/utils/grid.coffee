@@ -142,12 +142,16 @@ updateItem = (item) ->
 				x = columnsPositions[column-1]
 			else
 				x = 0
-			if margin and (includeBorderMargins or column > 0)
+			if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
 				x += margin._left
 			if alignH is 'center'
 				x += (columnsPositions[column] - x - child._width) / 2
+				if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
+					x -= margin.right / 2
 			else if alignH is 'right'
 				x += columnsPositions[column] - x - child._width
+				if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
+					x -= margin.right
 			child.x = x
 
 		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom))
@@ -155,12 +159,16 @@ updateItem = (item) ->
 				y = rowsPositions[row-1]
 			else
 				y = 0
-			if margin and (includeBorderMargins or row > 0)
+			if margin and (includeBorderMargins or (row > 0 or row < rowsLen))
 				y += margin._top
 			if alignV is 'center'
 				y += (rowsPositions[row] - y - child._height) / 2
+				if margin and (includeBorderMargins or (row > 0 or row < rowsLen))
+					y -= margin.bottom / 2
 			else if alignV is 'right'
 				y += rowsPositions[row] - y - child._height
+				if margin and (includeBorderMargins or (row > 0 or row < rowsLen))
+					y -= margin.bottom
 			child.y = y
 
 		i++

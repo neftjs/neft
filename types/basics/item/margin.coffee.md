@@ -157,7 +157,7 @@ Rectangle {
 		utils.defineProperty @::, 'horizontal', null, ->
 			@_left + @_right
 		, (val) ->
-			@left = @right = val
+			@left = @right = val / 2
 
 *Float* Margin::vertical = 0
 ----------------------------
@@ -169,7 +169,7 @@ Rectangle {
 		utils.defineProperty @::, 'vertical', null, ->
 			@_top + @_bottom
 		, (val) ->
-			@top = @bottom = val
+			@top = @bottom = val / 2
 
 *Float* Margin::valueOf()
 --------------------------

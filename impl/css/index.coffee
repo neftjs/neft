@@ -37,7 +37,7 @@ html, body {
 #styles div, #styles span, #styles canvas, #styles img, #styles textarea {
 	position: absolute;
 }
-span span {
+#styles span span {
 	position: static;
 }
 span * {
