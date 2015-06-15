@@ -27,14 +27,15 @@ module.exports = (impl) ->
 	getLimitedX = (item, x) ->
 		x /= item._impl.globalScale
 		x = item._contentX - x
-		max = item._impl.contentItem._width - item._width
-		Math.max(0, Math.min(max, x))
+		max = item._impl.contentItem._width - item._width - 1
+		# remove 1 pixel to avoid bouncing if abstract sizes are not equal visual
+		Math.round Math.max(0, Math.min(max, x))
 
 	getLimitedY = (item, y) ->
 		y /= item._impl.globalScale
 		y = item._contentY - y
-		max = item._impl.contentItem._height - item._height
-		Math.max(0, Math.min(max, y))
+		max = item._impl.contentItem._height - item._height - 1
+		Math.round Math.max(0, Math.min(max, y))
 
 	getItemGlobalScale = (item) ->
 		val = item.scale
