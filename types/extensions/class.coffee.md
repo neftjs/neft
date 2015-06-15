@@ -46,7 +46,7 @@ Class @modifier
 			constructor: ->
 				assert.lengthOf arguments, 0
 
-				@_priority = 1
+				@_priority = 0
 				@_name = ''
 				@changes = new ChangesObject
 				super()
@@ -135,19 +135,19 @@ This objects contains all property changes brought by a state.
 
 It accepts bindings as well.
 
-*Float* Class::priority = 1
+*Float* Class::priority = 0
 ---------------------------
 
-Default class has priority 0.
+Default class has priority -1.
 
-All inherited classes have pririty in range (0, 1).
+All inherited classes have priority in range (-1, 0).
 
 ### *Signal* Class::onPriorityChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
 				name: 'priority'
-				defaultValue: 1
+				defaultValue: 0
 				setter: (_super) -> (val) ->
 					assert.isFloat val
 					_super.call @, val
