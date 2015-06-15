@@ -128,6 +128,8 @@ anchorAttributeToString = (obj) ->
 	anchor[0] = switch anchor[0]
 		when 'this.parent', 'parent'
 			"'parent'"
+		when 'this.children', 'children'
+			"'children'"
 		when 'this.nextSibling', 'nextSibling'
 			"'nextSibling'"
 		when 'this.previousSibling', 'previousSibling'
@@ -279,7 +281,7 @@ stringObjectHead = (obj) ->
 			body: [{
 				type: 'attribute'
 				name: 'priority'
-				value: '0'
+				value: '-1'
 			}, {
 				type: 'attribute'
 				name: 'changes'
@@ -485,10 +487,10 @@ stringFile = (file, isView=false) ->
 	if isView
 		code += "setImmediate(function(){\n"
 	code += "for (var _id in extensions){\n"
-	code += "	extensions[_id]._isReady = true; extensions[_id].ready(); extensions[_id].onReady.disconnectAll();\n"
+	code += "	extensions[_id]._isReady = true; extensions[_id].onReady.emit(); extensions[_id].onReady.disconnectAll();\n"
 	code += "}\n"
 	code += "for (var _id in ids){\n"
-	code += "	ids[_id]._isReady = true; ids[_id].ready(); ids[_id].onReady.disconnectAll();\n"
+	code += "	ids[_id]._isReady = true; ids[_id].onReady.emit(); ids[_id].onReady.disconnectAll();\n"
 	code += "}\n"
 	if isView
 		code += "});\n"
