@@ -1183,8 +1183,14 @@ console.log(utils.errorToObject(error));
 			throw new Error "utils.errorToObject error must be an Error instance"
 		`//</development>`
 
-		name: error.name
-		message: error.message
+		result =
+			name: error.name
+			message: error.message
+
+		# support custom properties
+		exports.merge result, error
+
+		result
 
 *Object* utils.getOwnProperties(*Object* object)
 ------------------------------------------------
