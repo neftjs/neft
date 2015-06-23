@@ -62,10 +62,7 @@ module.exports = (File) -> class Input
 			v
 
 	@get = (input, prop) ->
-		val = Input.getVal input.self, prop
-		input.trace val
-
-		val
+		Input.getVal input.self, prop
 
 	@getStoragesArray = do (arr = []) -> (file) ->
 		assert.instanceOf file, File
@@ -186,7 +183,7 @@ module.exports = (File) -> class Input
 
 		@self = null
 		@funcBody = ''
-		@traces = {}
+		@traces = []
 		@text = ''
 		@updatePending = false
 
@@ -219,23 +216,49 @@ module.exports = (File) -> class Input
 				pending = true
 			return
 
-	trace: (val) ->
-		if val instanceof Dict and not @traces[val.__hash__]
+	revertTraces = ->
+		{traces} = @
+		for obj, i in traces by 2
+			signal = traces[i + 1]
+			obj[signal].disconnect onChange, @
+		utils.clear traces
+		return
+
+	getNamedSignal = do ->
+		cache = Object.create null
+		(name) ->
+			cache[name] ||= "on#{utils.capitalize(name)}Change"
+
+	trace: (val, prop) ->
+		if val instanceof Dict
 			val.onChange onChange, @
-			@traces[val.__hash__] = val
+			@traces.push val, 'onChange'
+		else if val instanceof List
+			val.onChange onChange, @
+			@traces.push val, 'onChange'
+			val.onInsert onChange, @
+			@traces.push val, 'onInsert'
+			val.onPop onChange, @
+			@traces.push val, 'onPop'
 		val
 
 	traceProp: (obj, prop) ->
-		if obj instanceof Dict
-			val = obj.get prop
-		else if obj instanceof List
-			val = obj.get prop
+		if obj
+			if obj instanceof Dict
+				val = obj.get prop
+			else if obj instanceof List
+				val = obj.get prop
 
-		if val is undefined
-			val = obj[prop]
+			if val is undefined
+				val = obj[prop]
 
-		if val
-			@trace val
+			if val
+				@trace val, prop
+
+				signal = getNamedSignal prop
+				if typeof obj[signal] is 'function'
+					obj[signal] onChange, @
+					@traces.push obj, signal
 		val
 
 	render: ->
@@ -243,7 +266,7 @@ module.exports = (File) -> class Input
 			if storage instanceof Element
 				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
-				@trace storage
+				@trace storage, ''
 		
 		@update()
 
@@ -252,10 +275,10 @@ module.exports = (File) -> class Input
 			if storage instanceof Element
 				storage.onAttrsChange.disconnect onChange, @
 
-		for hash, dict of @traces when dict?
-			dict.onChange.disconnect onChange, @
-			@traces[hash] = null
-
+		revertTraces.call @
+		# for hash, dict of @tracedObjects when dict?
+		# 	dict.onChange.disconnect onChange, @
+		# 	@tracedObjects[hash] = null
 		return
 
 	update: ->
@@ -264,6 +287,7 @@ module.exports = (File) -> class Input
 
 	toString: do ->
 		callFunc = ->
+			revertTraces.call @
 			@func.call @self, @, Input.get
 
 		->
