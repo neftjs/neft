@@ -178,9 +178,9 @@ Element @virtual_dom
 		cloneDeep: ->
 			@clone()
 
-	if utils.isNode
-		Element.parser = require('./element/parser') Element
 	Element.Tag = require('./element/tag') Element
 	Element.Text = require('./element/text') Element
+	if utils.isNode
+		Element.parser = require('./element/parser') Element
 
 	module.exports = Element

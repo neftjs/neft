@@ -41,7 +41,7 @@ module.exports = (File) -> class Use
 			# log.warn "Can't find `#{@name}` neft:fragment"
 			return
 
-		usedFragment = @usedFragment = file or File.factory(fragment)
+		usedFragment = file or File.factory(fragment)
 		unless file
 			usedFragment.storage = @self.storage
 
@@ -49,6 +49,7 @@ module.exports = (File) -> class Use
 			usedFragment = usedFragment.render @
 
 		usedFragment.node.parent = @node
+		@usedFragment = usedFragment
 
 		# signal
 		usedFragment.parentUse = @

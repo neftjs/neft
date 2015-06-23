@@ -124,17 +124,17 @@ module.exports = (File) -> class Iterator extends File.Use
 			each = data
 			item = data[i]
 
+		# replace
+		newChild = usedFragment.node
+		newChild.parent = @node
+		newChild.index = i
+
 		# render fragment with storage
 		storage = usedFragment.storage = Object.create @self.storage or null
 		storage.each = each
 		storage.i = i
 		storage.item = item
 		usedFragment.render @
-
-		# replace
-		newChild = usedFragment.node
-		newChild.parent = @node
-		newChild.index = i
 
 		# signal
 		usedFragment.onReplaceByUse.emit @

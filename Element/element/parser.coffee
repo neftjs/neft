@@ -5,9 +5,9 @@ attrsKeyGen = (i, elem) -> elem
 attrsValueGen = (i, elem) -> i
 
 module.exports = (Element) ->
+	extensions = Element.Tag.extensions
 
 	class Parser
-
 		constructor: (callback) ->
 			@_callback = callback
 			@_done = false
@@ -41,7 +41,7 @@ module.exports = (Element) ->
 		onopentag: (name, attribs) ->
 			lastTag = utils.last @_tagStack
 
-			element = new Element.Tag
+			element = new (extensions[name] or Element.Tag)
 			element.name = name
 			element._attrs = attribs
 

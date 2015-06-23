@@ -6,9 +6,6 @@ log = require 'log'
 Dict = require 'dict'
 List = require 'dict'
 
-if utils.isNode
-	coffee = require 'coffee-script'
-
 assert = assert.scope 'View.Input'
 log = log.scope 'View', 'Input'
 
@@ -21,7 +18,7 @@ module.exports = (File) -> class Input
 	RE = @RE = new RegExp '([^$]*)\\${([^}]*)}([^$]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)///g
 	PROP_RE = @PROP_RE = ///(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+///
-	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*(.)?///g
+	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*(.{0,2})///g
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON']
 
 	cache = {}
@@ -132,7 +129,7 @@ module.exports = (File) -> class Input
 					str = str.replace PROP_RE, (props) ->
 						props = props.split '.'
 						props.shift()
-						if postfix is '(' or postfix is '='
+						if postfix[0] is '(' or (postfix[0] is '=' and postfix isnt '==')
 							ends = '.' + props[props.length - 1]
 							props.pop()
 						else
@@ -166,7 +163,6 @@ module.exports = (File) -> class Input
 			func += "'#{utils.addSlashes chunks[0]}' + "
 
 		func = 'return ' + func.slice 0, -3
-		func = utils.tryFunction coffee.compile, coffee, [func, bare: true], func
 
 		try
 			new Function func

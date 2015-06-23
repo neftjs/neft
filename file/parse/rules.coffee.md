@@ -65,7 +65,11 @@ neft:rule @xml
 				while i < n
 					child = children[i]
 					if child.name is 'neft:rule'
-						subquery = query + ' ' + child.attrs.get('query')
+						subquery = child.attrs.get('query')
+						if /^[A-Za-z]/.test(subquery)
+							subquery = query + ' ' + subquery
+						else
+							subquery = query + subquery
 						child.attrs.set 'query', subquery
 						child.parent = rule.parent
 						n--
