@@ -5,6 +5,6 @@ module.exports = (File) -> (file, source) ->
 		oldChild = file.sourceNode
 		newChild = source.bodyNode
 
-		newChild.parent = oldChild
+		newChild?.parent = oldChild
 
 	return
