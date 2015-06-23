@@ -229,36 +229,30 @@ module.exports = (File) -> class Input
 		(name) ->
 			cache[name] ||= "on#{utils.capitalize(name)}Change"
 
-	trace: (val, prop) ->
-		if val instanceof Dict
-			val.onChange onChange, @
-			@traces.push val, 'onChange'
-		else if val instanceof List
-			val.onChange onChange, @
-			@traces.push val, 'onChange'
-			val.onInsert onChange, @
-			@traces.push val, 'onInsert'
-			val.onPop onChange, @
-			@traces.push val, 'onPop'
-		val
-
 	traceProp: (obj, prop) ->
 		if obj
 			if obj instanceof Dict
+				obj.onChange onChange, @
+				@traces.push obj, 'onChange'
+
 				val = obj.get prop
 			else if obj instanceof List
+				obj.onChange onChange, @
+				@traces.push obj, 'onChange'
+				obj.onInsert onChange, @
+				@traces.push obj, 'onInsert'
+				obj.onPop onChange, @
+				@traces.push obj, 'onPop'
+
 				val = obj.get prop
-
-			if val is undefined
-				val = obj[prop]
-
-			if val
-				@trace val, prop
-
+			else if obj
 				signal = getNamedSignal prop
 				if typeof obj[signal] is 'function'
 					obj[signal] onChange, @
 					@traces.push obj, signal
+
+			if val is undefined
+				val = obj[prop]
 		val
 
 	render: ->
@@ -266,7 +260,7 @@ module.exports = (File) -> class Input
 			if storage instanceof Element
 				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
-				@trace storage, ''
+				@traceProp storage, ''
 		
 		@update()
 
