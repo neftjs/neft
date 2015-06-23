@@ -413,6 +413,8 @@ module.exports = (File, data) -> class Style
 						if tmpIndexNode._nextSibling?._documentStyle?.item?.parent is item
 							@item.index = tmpIndexNode._nextSibling._documentStyle.item.index
 							break
+						if tmpIndexNode isnt node and tmpIndexNode.style
+							break
 						tmpIndexNode = tmpIndexNode._parent
 
 					if @isScope and not oldParent
@@ -425,6 +427,12 @@ module.exports = (File, data) -> class Style
 
 		for child in @children
 			child.findItemParent()
+
+		# HACK
+		if item
+			while (tmpNode = tmpNode._parent) && not tmpNode.style
+				if tmpNode.name is 'neft:use'
+					tmpNode._documentStyle = tmpNode.children[0]._documentStyle
 
 		return
 
