@@ -238,7 +238,7 @@ module.exports = (impl) ->
 					item.children.onInsert onChildInsert, @
 					item.children.onPop onChildPop, @
 					for child in item.children
-						onChildInsert.call @, child, -1
+						onChildInsert.call @, child
 				when 'nextSibling'
 					@targetItem = item._nextSibling
 					item.onNextSiblingChange onNextSiblingChange, @

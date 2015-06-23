@@ -139,7 +139,7 @@ Rectangle {
 -----------------------
 
 		utils.defineProperty @::, 'children', null, ->
-			@_children ?= new ChildrenObject(@)
+			@_children ||= new ChildrenObject(@)
 		, (val) ->
 			assert.isArray val, '::children setter ...'
 			@clear()
@@ -296,33 +296,38 @@ Item {
 			assert.isInteger val
 			assert.operator val, '>=', 0
 
-			{index} = @
 			parent = @_parent
-			if index is val or not parent
+			if not parent
 				return
+			{index} = @
 			children = parent._children
 			if children.length <= val
 				val = children.length - 1
+			if index is val
+				return
+
+			oldPreviousSibling = @_previousSibling
+			oldNextSibling = @_nextSibling
 
 			# current siblings
-			@_previousSibling?._nextSibling = @_nextSibling
-			@_nextSibling?._previousSibling = @_previousSibling
+			oldPreviousSibling?._nextSibling = oldNextSibling
+			oldNextSibling?._previousSibling = oldPreviousSibling
+
+			# children array
+			Array::splice.call children, index, 1
+			if val > index
+				val--
+			Array::splice.call children, val, 0, @
 
 			# new siblings
-			@_previousSibling = children[val-1] or null
-			@_nextSibling = children[val] or null
-			@_previousSibling?._nextSibling = @
-			@_nextSibling?._previousSibling = @
-
-			# current siblings signals
-			emitSignal @, 'onPreviousSiblingChange', children[index-1]
-			emitSignal @, 'nextSiblingChange', children[index+1]
-
-			# new siblings signals
-			if obj = children[index-1]
-				emitSignal obj, 'onNextSiblingChange', @
-			if obj = children[index+1]
-				emitSignal obj, 'onPreviousSiblingChange', @
+			previousSibling = children[val-1] or null
+			previousSiblingOldNextSibling = previousSibling?._nextSibling
+			nextSibling = children[val+1] or null
+			nextSiblingOldPreviousSibling = nextSibling?._previousSibling
+			@_previousSibling = previousSibling
+			@_nextSibling = nextSibling
+			previousSibling?._nextSibling = @
+			nextSibling?._previousSibling = @
 
 			# implementation
 			tmp = []
@@ -337,12 +342,33 @@ Item {
 			for item in tmp
 				Impl.setItemParent.call item, parent
 
-			# children array
-			Array::splice.call children, index, 1
-			if val > index
-				val--
+			# current siblings signals
+			emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
+			emitSignal @, 'onNextSiblingChange', oldNextSibling
 
-			Array::splice.call children, val, 0, @
+			# new siblings signals
+			if previousSibling
+				emitSignal previousSibling, 'onNextSiblingChange', previousSiblingOldNextSibling
+			if nextSibling
+				emitSignal nextSibling, 'onPreviousSiblingChange', nextSiblingOldPreviousSibling
+
+			{index} = @
+			assert.is index, val
+			assert.is children[index], @
+			assert.is children[index-1] or null, @_previousSibling
+			assert.is children[index+1] or null, @_nextSibling
+			if @_previousSibling
+				assert.is @_previousSibling._nextSibling, @
+			else
+				assert.is index, 0
+			if @_nextSibling
+				assert.is @_nextSibling._previousSibling, @
+			else
+				assert.is index, children.length - 1
+			if oldPreviousSibling
+				assert.is oldPreviousSibling._nextSibling, oldNextSibling
+			if oldNextSibling
+				assert.is oldNextSibling._previousSibling, oldPreviousSibling
 
 			return
 

@@ -31,7 +31,7 @@ Button {
 			@__path__ = 'Renderer.Button'
 
 			onLabelWidthChange = ->
-				if @_fill._width
+				if @_autoWidth
 					width = @label._width
 					if @label._margin
 						width += @label._margin._left + @label._margin._right
@@ -41,7 +41,7 @@ Button {
 				return
 
 			onLabelHeightChange = ->
-				if @_fill._height
+				if @_autoHeight
 					height = @label._height
 					if @label._margin
 						height += @label._margin._top + @label._margin._bottom
@@ -56,12 +56,12 @@ Button {
 				label.x = padding._left
 				label.y = padding._top
 
-				if @_fill._width
+				if @_autoWidth
 					onLabelWidthChange.call @
 				else
 					label.width = @_width - padding._left - padding._right
 
-				if @_fill._height
+				if @_autoHeight
 					onLabelHeightChange.call @
 				else
 					label.height = @_height - padding._top - padding._bottom
@@ -71,7 +71,7 @@ Button {
 				width = @_width
 				@background.width = width
 				@image.width = width
-				unless @_fill._width
+				unless @_autoWidth
 					if @label._margin
 						@label.width = width - @label._margin._left - @label._margin._right
 					else
@@ -82,7 +82,7 @@ Button {
 				height = @_height
 				@background.height = height
 				@image.height = height
-				unless @_fill._height
+				unless @_autoHeight
 					if @label._margin
 						@label.height = height - @label._margin._top - @label._margin._bottom
 					else
@@ -96,10 +96,10 @@ Button {
 				@image = Renderer.Image.create()
 				@label = Renderer.Text.create()
 
-				super()
+				@_autoWidth = true
+				@_autoHeight = true
 
-				@fill.width = true
-				@fill.height = true
+				super()
 
 				@onWidthChange onWidthChange, @
 				@onHeightChange onHeightChange, @
@@ -116,7 +116,7 @@ Button {
 			setter = utils.lookupSetter @::, 'width'
 			utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
 				unless @_updatePending
-					if @fill.width = val is -1
+					if @_autoWidth = val is -1
 						@label.width = 0
 				_super.call @, val
 				return
@@ -126,7 +126,7 @@ Button {
 			setter = utils.lookupSetter @::, 'height'
 			utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
 				unless @_updatePending
-					if @fill.height = val is -1
+					if @_autoHeight = val is -1
 						@label.height = 0
 				_super.call @, val
 				return
