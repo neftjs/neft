@@ -17,6 +17,7 @@ Tag @virtual_dom
 	module.exports = (Element) ->
 		class Tag extends Element
 			@Attrs = require('./tag/attrs') Element
+			@extensions = Object.create null
 
 			@__name__ = 'Tag'
 			@__path__ = 'File.Element.Tag'
