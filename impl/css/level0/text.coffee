@@ -3,8 +3,6 @@
 utils = require 'utils'
 signal = require 'signal'
 
-isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
-
 module.exports = (impl) ->
 	{Item, Image} = impl.Types
 	implUtils = impl.utils
@@ -201,17 +199,17 @@ module.exports = (impl) ->
 			white-space: pre;
 			font-size: 14px;
 			font-family: #{impl.utils.DEFAULT_FONTS['sans-serif']}, sans-serif;
-			margin-top: #{if isFirefox then 1 else 0}px;
+			margin-top: #{if impl.utils.isFirefox then 1 else 0}px;
 		}
-		#styles .textVerticalCenterAlign {
+		.text.textVerticalCenterAlign {
 			height: auto !important;
 			top: 50%;
-			transform: translateY(-50%);
+			#{impl.utils.transformCSSProp}: translateY(-50%);
 		}
-		#styles .textVerticalBottomAlign {
+		.text.textVerticalBottomAlign {
 			height: auto !important;
 			top: 100%;
-			transform: translateY(-100%);
+			#{impl.utils.transformCSSProp}: translateY(-100%);
 		}
 	"""
 

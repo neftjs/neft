@@ -3,6 +3,23 @@
 signal = require 'signal'
 
 module.exports = (impl) ->
+	SHEET = """
+		textarea.text {
+			width: 100%;
+			height: 100%;
+		}
+		textarea.text.textVerticalCenterAlign {
+			height: 100% !important;
+			top: 0;
+			#{impl.utils.transformCSSProp}: none;
+		}
+	"""
+
+	window.addEventListener 'load', ->
+		styles = document.createElement 'style'
+		styles.innerHTML = SHEET
+		document.body.appendChild styles
+
 	DATA =
 		autoWidth: false
 		autoHeight: false
@@ -15,34 +32,21 @@ module.exports = (impl) ->
 	create: (data) ->
 		self = @
 
-		impl.Types.Text.create.call @, data
-		{textElem} = data
-
-		textElem.setAttribute 'contenteditable', 'true'
-		data.textElemStyle.width = '100%'
-		data.textElemStyle.overflow = 'auto'
-
-		data.elemStyle.cursor = 'text'
+		impl.Types.Item.create.call @, data
+		textElem = data.textElem = document.createElement 'textarea'
+		data.textElemStyle = textElem.style
+		textElem.setAttribute 'class', 'text'
+		data.elem.appendChild textElem
 
 		data.elem.addEventListener impl._SIGNALS.pointerOnWheel, (e) ->
 			if document.activeElement is textElem
 				e.stopPropagation()
 			return
 
-		textElem.addEventListener 'input', ->
-			if not data.isMultiLine and ///\n///.test(textElem.textContent)
-				textElem.textContent = textElem.textContent.replace ///\n///g, ''
-			self.text = textElem.textContent
-			return
-
-		data.elem.addEventListener 'click', ->
-			textElem.focus()
-
-		textElem.addEventListener 'focus', ->
-			self.keys.focus = true
-
-		textElem.addEventListener 'blur', ->
-			self.keys.focus = false
+		@onTextChange ->
+			textElem.value = @text
+		# textElem.addEventListener 'keyup', ->
+		# 	self.text = textElem.value
 
 		impl.setItemWidth.call @, 200
 		impl.setItemHeight.call @, 50

@@ -7,28 +7,6 @@ signal = require 'signal'
 
 log = log.scope 'Renderer', 'CSS Implementation'
 
-# get transform CSS property name
-transformProp = do ->
-	prefix = do ->
-		tmp = document.createElement 'div'
-		return 't' if tmp.style.transform?
-		return 'webkitT' if tmp.style.webkitTransform?
-		return 'mozT' if tmp.style.mozTransform?
-		return 'msT' if tmp.style.msTransform?
-
-	if prefix
-		"#{prefix}ransform"
-
-transform3dSupported = do ->
-	tmp = document.createElement 'div'
-	tmp.style[transformProp] = 'translate3d(1px,1px,0)'
-	tmp.style[transformProp].indexOf('translate3d') isnt -1
-
-isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
-
-rad2deg = (rad) ->
-	rad * 180/Math.PI
-
 {now} = Date
 
 isTouch = 'ontouchstart' of window
@@ -85,17 +63,13 @@ SIGNALS_ARGS =
 	'pointerOnClick': getMouseEvent
 	'pointerOnMove': getMouseEvent
 
-HOT_MAX_TIME = 1000
-HOT_MAX_ACTIONS = 4
-USE_GPU = true
-
-# if ///^mac///i.test(navigator.platform) and devicePixelRatio > 1
-# 	USE_GPU = false
-
 module.exports = (impl) ->
-	LAYER_MIN_OPERATIONS = 2
+	LAYER_MIN_OPERATIONS = 8
 	LAYER_GC_DELAY = 1000
+	USE_GPU = impl.utils.transform3dSupported
 	layers = []
+
+	{transformProp, rad2deg} = impl.utils
 
 	impl._SIGNALS = SIGNALS
 
@@ -163,7 +137,7 @@ module.exports = (impl) ->
 				layers.push data
 				data.isInLayers = true
 
-			if data.operations >= LAYER_MIN_OPERATIONS and not data.isLayer
+			if not data.isLayer and data.operations >= LAYER_MIN_OPERATIONS
 				data.elem.setAttribute 'class', 'layer'
 				data.isLayer = true
 			else

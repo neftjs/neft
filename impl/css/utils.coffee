@@ -1,8 +1,33 @@
 'use strict'
 
-isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
+isFirefox = exports.isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
 exports.FontLoader = require './utils/fontLoader'
+
+# get transform CSS property name
+transformProp = exports.transformProp = do ->
+	prefix = do ->
+		tmp = document.createElement 'div'
+		return 't' if tmp.style.transform?
+		return 'webkitT' if tmp.style.webkitTransform?
+		return 'mozT' if tmp.style.mozTransform?
+		return 'msT' if tmp.style.msTransform?
+
+	"#{prefix}ransform"
+
+transformCSSProp = exports.transformCSSProp = do ->
+	if transformProp.indexOf('T') isnt -1
+		'-' + transformProp.replace('T', '-t')
+	else
+		transformProp
+
+exports.transform3dSupported = do ->
+	tmp = document.createElement 'div'
+	tmp.style[transformProp] = 'translate3d(1px,1px,0)'
+	tmp.style[transformProp].indexOf('translate3d') isnt -1
+
+exports.rad2deg = (rad) ->
+	rad * 180/Math.PI
 
 exports.getFontWeight = (val) ->
 	Math.round(val * 8) * 100 + 100
