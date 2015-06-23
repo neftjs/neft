@@ -136,7 +136,7 @@ module.exports = (File, data) -> class Style
 			child.revert()
 
 		# shared items
-		if itemDocumentNode._documentStyle is @
+		if itemDocumentNode?._documentStyle is @
 			# revert linkUri
 			if @isLinkUriSet
 				@item.linkUri = @baseLinkUri
@@ -265,22 +265,27 @@ module.exports = (File, data) -> class Style
 				if val of ATTR_PRIMITIVE_VALUES
 					val = ATTR_PRIMITIVE_VALUES[val]
 
-				if val?
-					switch typeof obj[prop]
-						when 'number'
-							val = parseFloat val
-						when 'boolean'
+				switch typeof obj[prop]
+					when 'number'
+						val = parseFloat val
+					when 'boolean'
+						if val is ''
+							val = true
+						else
 							val = !!val
-						when 'string'
-							val = val+''
+					when 'string'
+						val = val+''
 
-				if typeof obj[prop] is 'function'
-					unless typeof val is 'function'
-						log.error "#{name} is a signal handler and expects function, but #{val} got"
-						continue
+				if typeof obj[prop] is 'function' and typeof val is 'function'
 					obj[prop] val
 					@attrListeners.push obj, prop, val
 				else
+					`//<development>`
+					if typeof obj[prop] is 'function' and not utils.lookupSetter(obj, prop)
+						log.error "#{name} is a signal handler and expects function, but #{val} got"
+						continue
+					`//</development>`
+
 					unless @setAttrs[name]
 						@setAttrs[name] = true
 						@attrValues.push obj, prop, obj[prop]
@@ -367,7 +372,7 @@ module.exports = (File, data) -> class Style
 			@item.linkUri = @getLinkUri()
 
 		# text changes
-		if 'text' of @item or (@item.$ isnt null and 'text' of @item.$)
+		if @getTextObject()
 			listenTextRec @
 
 		return;
@@ -403,9 +408,10 @@ module.exports = (File, data) -> class Style
 
 					# find index
 					tmpIndexNode = node
+					item = item._sourceItem or item
 					while tmpIndexNode
-						if tmpIndexNode._nextSibling?.style?.parent is item
-							@item.index = tmpIndexNode._nextSibling.style.index
+						if tmpIndexNode._nextSibling?._documentStyle?.item?.parent is item
+							@item.index = tmpIndexNode._nextSibling._documentStyle.item.index
 							break
 						tmpIndexNode = tmpIndexNode._parent
 
