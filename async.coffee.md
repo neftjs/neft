@@ -183,6 +183,7 @@ stack.runAll(function(err, result){
 			assert utils.isObject args if args?
 
 			@_arr.push func, context, args
+			@
 
 Stack::callNext([*Array* arguments], *Function* callback)
 ---------------------------------------------------------
@@ -248,8 +249,8 @@ Calls first function from the stack and remove it.
 
 			null
 
-Stack::runAll(*Function* callback)
-----------------------------------
+Stack::runAll(*Function* callback, [*Any* callbackContext])
+-----------------------------------------------------------
 
 Calls all functions from the stack one by one.
 
@@ -257,23 +258,23 @@ Calls all functions from the stack one by one.
 
 Processing stops on error occurs, then *callback* function is called with the got error.
 
-		runAll: (callback) ->
+		runAll: (callback, ctx=null) ->
 			if typeof callback isnt 'function'
 				throw new TypeError "ASync runAll(): passed callback is not a function"
 
 			unless @_arr.length
-				return callback null
+				return callback.call ctx, null
 
 			onNextCalled = (err, args...) =>
 				# on err
 				if err?
-					return callback err
+					return callback.call ctx, err
 
 				# call next
 				if @_arr.length
 					return callNext args
 
-				callback.apply null, arguments
+				callback.apply ctx, arguments
 
 			callNext = (args) => @callNext args, onNextCalled
 
@@ -281,21 +282,21 @@ Processing stops on error occurs, then *callback* function is called with the go
 
 			null
 
-Stack::runAllSimultaneously(*Function* callback)
-------------------------------------------------
+Stack::runAllSimultaneously(*Function* callback, [*Any* callbackContext])
+-------------------------------------------------------------------------
 
 Calls all functions from the stack simultaneously (all at the same time).
 
 Processing stops on error occurs, then *callback* function is called with the got error.
 
-		runAllSimultaneously: (callback) ->
+		runAllSimultaneously: (callback, ctx=null) ->
 			assert typeof callback is 'function'
 
 			length = n = @_arr.length / 3
 			done = 0
 
 			unless length
-				return callback()
+				return callback.call(ctx)
 
 			onDone = (err) ->
 				++done
@@ -305,10 +306,10 @@ Processing stops on error occurs, then *callback* function is called with the go
 
 				if err
 					done = length
-					return callback err
+					return callback.call ctx, err
 
 				if done is length
-					callback()
+					callback.call(ctx)
 
 			# run all functions
 			while n--
