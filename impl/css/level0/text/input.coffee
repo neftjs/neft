@@ -45,8 +45,8 @@ module.exports = (impl) ->
 
 		@onTextChange ->
 			textElem.value = @text
-		# textElem.addEventListener 'keyup', ->
-		# 	self.text = textElem.value
+		textElem.addEventListener 'input', ->
+			self.text = textElem.value
 
 		impl.setItemWidth.call @, 200
 		impl.setItemHeight.call @, 50

@@ -301,9 +301,9 @@ Item {
 				return
 			{index} = @
 			children = parent._children
-			if children.length <= val
-				val = children.length - 1
-			if index is val
+			if val > children.length
+				val = children.length
+			if index is val or index is val-1
 				return
 
 			oldPreviousSibling = @_previousSibling
@@ -342,16 +342,6 @@ Item {
 			for item in tmp
 				Impl.setItemParent.call item, parent
 
-			# current siblings signals
-			emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
-			emitSignal @, 'onNextSiblingChange', oldNextSibling
-
-			# new siblings signals
-			if previousSibling
-				emitSignal previousSibling, 'onNextSiblingChange', previousSiblingOldNextSibling
-			if nextSibling
-				emitSignal nextSibling, 'onPreviousSiblingChange', nextSiblingOldPreviousSibling
-
 			{index} = @
 			assert.is index, val
 			assert.is children[index], @
@@ -369,6 +359,16 @@ Item {
 				assert.is oldPreviousSibling._nextSibling, oldNextSibling
 			if oldNextSibling
 				assert.is oldNextSibling._previousSibling, oldPreviousSibling
+
+			# current siblings signals
+			emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
+			emitSignal @, 'onNextSiblingChange', oldNextSibling
+
+			# new siblings signals
+			if previousSibling
+				emitSignal previousSibling, 'onNextSiblingChange', previousSiblingOldNextSibling
+			if nextSibling
+				emitSignal nextSibling, 'onPreviousSiblingChange', nextSiblingOldPreviousSibling
 
 			return
 
