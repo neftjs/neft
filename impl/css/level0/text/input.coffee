@@ -43,6 +43,11 @@ module.exports = (impl) ->
 				e.stopPropagation()
 			return
 
+		textElem.addEventListener 'focus', ->
+			self.keys.focus = true
+		textElem.addEventListener 'blur', ->
+			self.keys.focus = false
+
 		@onTextChange ->
 			textElem.value = @text
 		textElem.addEventListener 'input', ->
