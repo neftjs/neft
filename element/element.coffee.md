@@ -58,32 +58,41 @@ Element @virtual_dom
 			index:
 				get: ->
 					@parent?.children.indexOf(@) or 0
-				set: (value) ->
+				set: (val) ->
 					assert.instanceOf @parent, Element
-					assert.isInteger value
-					assert.operator value, '>=', 0
-					assert.operator value, '<', @parent.children.length
+					assert.isInteger val
+					assert.operator val, '>=', 0
 
-					{index} = @
-					if index is value or not @_parent
+					parent = @_parent
+					if not parent
 						return
-					children = @_parent.children
-					if children.length <= value
-						value = children.length - 1
+					{index} = @
+					children = parent.children
+					if val > children.length
+						val = children.length
+					if index is val or index is val-1
+						return
 
+					# current siblings
 					@_previousSibling?._nextSibling = @_nextSibling
 					@_nextSibling?._previousSibling = @_previousSibling
 
-					@_previousSibling = children[value-1]
-					@_nextSibling = children[value]
+					# children array
+					children.splice index, 1
+					if val > index
+						val--
+					children.splice val, 0, @
+
+					# new siblings
+					@_previousSibling = children[val-1] or null
+					@_nextSibling = children[val+1] or null
 					@_previousSibling?._nextSibling = @
 					@_nextSibling?._previousSibling = @
 
-					children.splice index, 1
-					if value > index
-						value--
-
-					children.splice value, 0, @
+					assert.is index, val
+					assert.is children[index], @
+					assert.is @_previousSibling, children[index-1] or null
+					assert.is @_nextSibling, children[index+1] or null
 					return
 
 *Element* Element::nextSibling
@@ -106,13 +115,13 @@ Element @virtual_dom
 			parent:
 				get: ->
 					@_parent
-				set: (value) ->
+				set: (val) ->
 					assert.instanceOf @, Element
-					assert.instanceOf value, Element if value?
-					assert.isNot @, value
+					assert.instanceOf val, Element if val?
+					assert.isNot @, val
 
 					old = @_parent
-					return if old is value
+					return if old is val
 
 					# remove element
 					if @_parent
@@ -132,15 +141,23 @@ Element @virtual_dom
 						@_previousSibling = null
 						@_nextSibling = null
 
-					@_parent = parent = value
+					@_parent = parent = val
 
 					# append element
 					if parent
 						assert.notOk utils.has(@_parent.children, @)
-						index = parent.children.push(@)
-						if index > 2
-							@_previousSibling = parent.children[parent.children.length - 2]
+						index = parent.children.push(@) - 1
+						if index is 0
+							@_previousSibling = null
+						else
+							@_previousSibling = parent.children[index - 1]
 							@_previousSibling._nextSibling = @
+
+					assert.is @_parent, val
+					assert.is @_nextSibling, null
+					assert.is @_previousSibling, val?.children[val.children.length - 2] or null
+					if @_previousSibling
+						assert.is @_previousSibling._nextSibling, @
 
 					# trigger signal
 					emitSignal @, 'onParentChange', old

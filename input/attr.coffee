@@ -25,5 +25,6 @@ module.exports = (File, Input) -> class InputAttr extends Input
 		clone = super original, self
 		clone.attrName = @attrName
 		if isHandler(@attrName)
+			clone.traceChanges = false
 			clone.handlerFunc = utils.bindFunctionContext @toString, clone
 		clone

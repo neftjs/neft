@@ -4,7 +4,7 @@ utils = require 'utils'
 assert = require 'assert'
 log = require 'log'
 Dict = require 'dict'
-List = require 'dict'
+List = require 'list'
 
 assert = assert.scope 'View.Input'
 log = log.scope 'View', 'Input'
@@ -186,6 +186,7 @@ module.exports = (File) -> class Input
 		@traces = []
 		@text = ''
 		@updatePending = false
+		@traceChanges = true
 
 		Object.preventExtensions @
 
@@ -232,20 +233,23 @@ module.exports = (File) -> class Input
 	traceProp: (obj, prop) ->
 		if obj
 			if obj instanceof Dict
-				obj.onChange onChange, @
-				@traces.push obj, 'onChange'
+				if @traceChanges
+					obj.onChange onChange, @
+					@traces.push obj, 'onChange'
 
 				val = obj.get prop
 			else if obj instanceof List
-				obj.onChange onChange, @
-				@traces.push obj, 'onChange'
-				obj.onInsert onChange, @
-				@traces.push obj, 'onInsert'
-				obj.onPop onChange, @
-				@traces.push obj, 'onPop'
+				if @traceChanges
+					obj.onChange onChange, @
+					@traces.push obj, 'onChange'
+					obj.onInsert onChange, @
+					@traces.push obj, 'onInsert'
+					obj.onPop onChange, @
+					@traces.push obj, 'onPop'
 
-				val = obj.get prop
-			else if obj
+				if typeof prop is 'number'
+					val = obj.get prop
+			else if obj and @traceChanges
 				signal = getNamedSignal prop
 				if typeof obj[signal] is 'function'
 					obj[signal] onChange, @
