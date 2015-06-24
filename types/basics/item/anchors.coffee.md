@@ -111,7 +111,7 @@ This connection is solid, so if the *rect1* will change a position,
 
 		implMethod = Impl["set#{ctor.__name__}Anchor"]
 		createAnchorProp = (type, opts=0, getter) ->
-			setter = (_super) -> (val) ->
+			setter = (_super) -> (val=null) ->
 				if val?
 					`//<development>`
 					allowedLines = if H_LINES[type] then H_LINES else V_LINES
@@ -195,7 +195,8 @@ so *anchors.top = parent.left* is not allowed.
 ----------------------------
 
 		createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
-			@_ref.x - (@_ref._margin?._left or 0)
+			if @_ref
+				@_ref.x - (@_ref._margin?._left or 0)
 
 ### *Signal* Anchors::onLeftChange(*Array* oldValue)
 
@@ -203,7 +204,8 @@ so *anchors.top = parent.left* is not allowed.
 -----------------------------
 
 		createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
-			@_ref._x + @_ref._width + (@_ref._margin?._right or 0)
+			if @_ref
+				@_ref._x + @_ref._width + (@_ref._margin?._right or 0)
 
 ### *Signal* Anchors::onRightChange(*Array* oldValue)
 
@@ -225,7 +227,8 @@ Item {
 ```
 
 		createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
-			@_ref._x + @_ref._width / 2
+			if @_ref
+				@_ref._x + @_ref._width / 2
 
 ### *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
 
@@ -245,7 +248,8 @@ Item {
 ```
 
 		createAnchorProp 'top', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
-			@_ref._y - (@_ref._margin?._top or 0)
+			if @_ref
+				@_ref._y - (@_ref._margin?._top or 0)
 
 ### *Signal* Anchors::onTopChange(*Array* oldValue)
 
@@ -253,7 +257,8 @@ Item {
 ------------------------------
 
 		createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
-			@_ref._y + @_ref._height + (@_ref._margin?._bottom or 0)
+			if @_ref
+				@_ref._y + @_ref._height + (@_ref._margin?._bottom or 0)
 
 ### *Signal* Anchors::onBottomChange(*Array* oldValue)
 
@@ -273,7 +278,8 @@ Item {
 ```
 
 		createAnchorProp 'verticalCenter', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
-			@_ref._y + @_ref._height / 2
+			if @_ref
+				@_ref._y + @_ref._height / 2
 
 ### *Signal* Anchors::onVerticalCenterChange(*Array* oldValue)
 
@@ -305,7 +311,8 @@ Rectangle {
 ### *Signal* Anchors::onCenterInChange(*Array* oldValue)
 
 		createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ, ->
-			[@horizontalCenter, @verticalCenter]
+			if @_ref
+				[@horizontalCenter, @verticalCenter]
 
 *Array* Anchors::fill = null
 ----------------------------
@@ -330,7 +337,8 @@ Item {
 ### *Signal* Anchors::onFillChange(*Array* oldValue)
 
 		createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ, ->
-			[@_ref._x, @_ref._y, @_ref._width, @_ref._height]
+			if @_ref
+				[@_ref._x, @_ref._y, @_ref._width, @_ref._height]
 
 *Array* Anchors::fillWidth = null
 ---------------------------------
@@ -338,7 +346,8 @@ Item {
 ### *Signal* Anchors::onFillWidthChange(*Array* oldValue)
 
 		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ, ->
-			[@_ref._x, @_ref._y, @_ref._width]
+			if @_ref
+				[@_ref._x, @_ref._y, @_ref._width]
 
 *Array* Anchors::fillHeight = null
 ----------------------------------
@@ -346,4 +355,5 @@ Item {
 ### *Signal* Anchors::onFillHeightChange(*Array* oldValue)
 
 		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW | FREE_V_LINE_REQ, ->
-			[@_ref._x, @_ref._y, @_ref._height]
+			if @_ref
+				[@_ref._x, @_ref._y, @_ref._height]
