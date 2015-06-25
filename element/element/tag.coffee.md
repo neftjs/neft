@@ -27,7 +27,7 @@ Tag @virtual_dom
 
 			constructor: ->
 				@children = []
-				@name = ''
+				@name = 'neft:blank'
 				@style = null
 				@_documentStyle = null
 				@_attrs = {}

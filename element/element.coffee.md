@@ -89,10 +89,10 @@ Element @virtual_dom
 					@_previousSibling?._nextSibling = @
 					@_nextSibling?._previousSibling = @
 
-					assert.is index, val
-					assert.is children[index], @
-					assert.is @_previousSibling, children[index-1] or null
-					assert.is @_nextSibling, children[index+1] or null
+					assert.is @index, val
+					assert.is children[val], @
+					assert.is @_previousSibling, children[val-1] or null
+					assert.is @_nextSibling, children[val+1] or null
 					return
 
 *Element* Element::nextSibling

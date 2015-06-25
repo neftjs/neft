@@ -22,7 +22,7 @@ test = (node, funcs, index, target, single) ->
 anyDescendant = (node, funcs, index, target, single) ->
 	if children = node.children
 		for child in children
-			if test(child, funcs, index, target, single)
+			if child.name isnt 'neft:blank' and test(child, funcs, index, target, single)
 				target.push child
 				if single
 					return true
@@ -38,10 +38,15 @@ anyDescendant.toString = -> 'anyDescendant'
 anyChild = (node, funcs, index, target, single) ->
 	if children = node.children
 		for child in children
-			if test(child, funcs, index, target, single)
-				target.push child
-				if single
-					return true
+			if child.name is 'neft:blank'
+				if anyChild(child, funcs, index, target, single)
+					if single
+						return true
+			else
+				if test(child, funcs, index, target, single)
+					target.push child
+					if single
+						return true
 	false
 anyChild.isIterator = true
 anyChild.toString = -> 'anyChild'

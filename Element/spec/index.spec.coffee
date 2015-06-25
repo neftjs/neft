@@ -31,7 +31,7 @@ describe 'View Element', ->
 
 		it 'has proper elements names', ->
 
-			expect(doc.name).toBe ''
+			expect(doc.name).toBe 'neft:blank'
 			expect(b.name).toBe 'b'
 			expect(em.name).toBe 'em'
 			expect(div.name).toBe 'u'
@@ -190,11 +190,13 @@ describe 'View Element', ->
 		expect(elem.stringify()).toBe '<b><em></em></b><u></u><p></p>'
 
 	describe 'queryAll() works with selector', ->
-		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'></div>"
+		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
 		doc2div1 = doc2.children[0]
 		doc2b = doc2div1.children[0]
 		doc2u = doc2b.children[0]
 		doc2div2 = doc2.children[1]
+		doc2em1 = doc2div2.children[0].children[0]
+		doc2em2 = doc2div2.children[0].children[1]
 
 		it 'E', ->
 			expect(doc2.queryAll('div')).toEqual [doc2div1, doc2div2]
@@ -239,7 +241,7 @@ describe 'View Element', ->
 			expect(doc2.queryAll('[color*=lue1]')).toEqual []
 
 		it '*', ->
-			expect(doc2.queryAll('*')).toEqual [doc2div1, doc2b, doc2u, doc2div2]
+			expect(doc2.queryAll('*')).toEqual [doc2div1, doc2b, doc2u, doc2div2, doc2em1, doc2em2]
 
 		it '*[foo]', ->
 			expect(doc2.queryAll('*[color]')).toEqual [doc2u]
@@ -251,12 +253,16 @@ describe 'View Element', ->
 			expect(doc2.queryAll('div > * > u[color], div[attr]')).toEqual [doc2u, doc2div2]
 			expect(doc2.queryAll('div > * > u[color],div[attr]')).toEqual [doc2u, doc2div2]
 
+		it 'omits neft:blank', ->
+			expect(doc2.queryAll('div > em')).toEqual [doc2em1, doc2em2]
+
 	describe 'query() works with selector', ->
-		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'></div>"
+		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><neft:blank><em></em></neft:blank></div>"
 		doc2div1 = doc2.children[0]
 		doc2b = doc2div1.children[0]
 		doc2u = doc2b.children[0]
 		doc2div2 = doc2.children[1]
+		doc2em = doc2div2.children[0].children[0]
 
 		it 'E', ->
 			expect(doc2.query('div')).toBe doc2div1
@@ -267,8 +273,11 @@ describe 'View Element', ->
 			expect(doc2.query('[color]')).toBe doc2u
 			expect(doc2.query('[width]')).toBe null
 
-	it 'visible property is editable', ->
+		it 'omits neft:blank', ->
+			# jasmine bug?
+			expect(doc2.query('div > em') is doc2em).toBe true
 
+	it 'visible property is editable', ->
 		expect(p.visible).toBeTruthy()
 		p.visible = false
 		expect(p.visible).toBeFalsy()
