@@ -51,6 +51,7 @@ File @class
 		@Input = require('./input') @
 		@Condition = require('./condition') @
 		@Iterator = require('./iterator') @
+		@Log = require('./log') @
 
 *File* File.fromHTML(*String* path, *String* html)
 --------------------------------------------------
@@ -141,6 +142,7 @@ File @class
 				storage = require('./file/parse/storage') File
 				conditions = require('./file/parse/conditions') File
 				ids = require('./file/parse/ids') File
+				logs = require('./file/parse/logs') File
 
 			(@path, @node) ->
 				assert.isString path
@@ -172,6 +174,9 @@ File @class
 				storage @
 				conditions @
 				ids @
+				`//<development>`
+				logs @
+				`//</development>`
 
 				# trigger signal
 				File.onParse.emit @
@@ -197,6 +202,7 @@ File @class
 		storage: null
 		source: null
 		ids: null
+		logs: null
 
 		init: ->
 
@@ -245,6 +251,12 @@ File @class
 
 				# source
 				renderSource @, source
+
+				# logs
+				`//<development>`
+				for log in @logs
+					log.render()
+				`//</development>`
 
 				@isRendered = true
 				File.onRender.emit @
@@ -371,6 +383,13 @@ File @class
 				clone.ids = {}
 				for id, node of @ids
 					clone.ids[id] = @node.getCopiedElement node, clone.node
+
+			# logs
+			`//<development>`
+			clone.logs = []
+			for log in @logs
+				clone.logs.push log.clone @, clone
+			`//</development>`
 
 			clone
 

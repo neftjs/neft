@@ -25,19 +25,16 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 	attr = [null, null]
 
 	module.exports = (File) ->
-
 		{Input} = File
 		InputRE = Input.RE
 
 		(file) ->
-
 			{node} = file
 
 			# get inputs
 			inputs = file.inputs = []
 
 			forNode = (elem) ->
-
 				# text
 				text = elem.text
 				if text isnt undefined
