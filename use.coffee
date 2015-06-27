@@ -96,7 +96,7 @@ module.exports = (File) -> class Use
 		clone.usedFragment = null
 		clone.isRendered = false
 
-		clone.node.onVisibilityChange visibilityChangeListener, clone
+		clone.node.onVisibleChange visibilityChangeListener, clone
 
 		# name
 		if clone.name is ''

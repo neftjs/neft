@@ -45,10 +45,10 @@ Element @virtual_dom
 
 		signal.Emitter.createSignal @, 'onParentChange'
 
-*Signal* Element::onVisibilityChange(*Boolean* oldValue)
+*Signal* Element::onVisibleChange(*Boolean* oldValue)
 --------------------------------------------------------
 
-		signal.Emitter.createSignal @, 'onVisibilityChange'
+		signal.Emitter.createSignal @, 'onVisibleChange'
 
 		Object.defineProperties @::,
 
@@ -177,7 +177,7 @@ Element @virtual_dom
 					@_visible = val
 
 					# trigger signal
-					emitSignal @, 'onVisibilityChange', old
+					emitSignal @, 'onVisibleChange', old
 
 					null
 

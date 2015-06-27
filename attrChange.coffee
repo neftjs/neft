@@ -34,7 +34,7 @@ module.exports = (File) -> class AttrChange
 		@target.attrs.set @name, val
 		return
 
-	onVisibilityChange = ->
+	onVisibleChange = ->
 		@update()
 
 	onAttrsChange = (e) ->
@@ -54,7 +54,7 @@ module.exports = (File) -> class AttrChange
 
 		clone.update()
 
-		clone.node.onVisibilityChange onVisibilityChange, clone
+		clone.node.onVisibleChange onVisibleChange, clone
 		clone.node.onAttrsChange onAttrsChange, clone
 
 		clone

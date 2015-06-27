@@ -2,6 +2,16 @@
 
 Element = require('../index')
 
+isEqualArrays = (arr1, arr2) ->
+	if arr1.length isnt arr2.length
+		return false
+
+	for elem, i in arr1
+		if arr2[i] isnt elem
+			console.log elem, arr2[i], i, arr2
+			return false
+	true
+
 describe 'View Element', ->
 
 	HTML = '<b><em>abc</em></b><u></u><p title="textTitle" class="a bb c2" data-custom="customValue"></p>'
@@ -196,7 +206,7 @@ describe 'View Element', ->
 		doc2u = doc2b.children[0]
 		doc2div2 = doc2.children[1]
 		doc2em1 = doc2div2.children[0].children[0]
-		doc2em2 = doc2div2.children[0].children[1]
+		doc2em2 = doc2div2.children[1]
 
 		it 'E', ->
 			expect(doc2.queryAll('div')).toEqual [doc2div1, doc2div2]
@@ -306,7 +316,7 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.onVisibilityChange ->
+			tag.onVisibleChange ->
 				value = @visible
 				args = [@, arguments...]
 
@@ -353,8 +363,8 @@ describe 'View Element', ->
 			tag = elem.children[0]
 
 			listener = -> ok = false
-			tag.onVisibilityChange listener
-			tag.onVisibilityChange.disconnect listener
+			tag.onVisibleChange listener
+			tag.onVisibleChange.disconnect listener
 
 			tag.visible = false
 

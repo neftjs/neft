@@ -172,6 +172,6 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.usedFragments = []
 
 		clone.node.onAttrsChange attrsChangeListener, clone
-		clone.node.onVisibilityChange visibilityChangeListener, clone
+		clone.node.onVisibleChange visibilityChangeListener, clone
 
 		clone
