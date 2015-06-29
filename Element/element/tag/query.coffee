@@ -1,15 +1,17 @@
 'use strict'
 
 utils = require 'utils'
+signal = require 'signal'
 assert = require 'neft-assert'
 
-test = (node, funcs, index, target, single) ->
+{emitSignal} = signal.Emitter
+
+test = (node, funcs, index, targetFunc, targetCtx, single) ->
 	while index < funcs.length
 		func = funcs[index]
 
 		if func.isIterator
-			func node, funcs, index+3, target
-			return false
+			return func node, funcs, index+3, targetFunc, targetCtx, single
 		else
 			data1 = funcs[index + 1]
 			data2 = funcs[index + 2]
@@ -17,47 +19,72 @@ test = (node, funcs, index, target, single) ->
 				return false
 
 		index += 3
+
+	targetFunc.call targetCtx, node
 	true
 
-anyDescendant = (node, funcs, index, target, single) ->
+anyDescendant = (node, funcs, index, targetFunc, targetCtx, single) ->
 	if children = node.children
 		for child in children
-			if child.name isnt 'neft:blank' and test(child, funcs, index, target, single)
-				target.push child
+			if child.name isnt 'neft:blank' and test(child, funcs, index, targetFunc, targetCtx, single)
 				if single
 					return true
 
 			if child.children
-				if anyDescendant(child, funcs, index, target, single)
+				if anyDescendant(child, funcs, index, targetFunc, targetCtx, single)
 					if single
 						return true
 	false
 anyDescendant.isIterator = true
 anyDescendant.toString = -> 'anyDescendant'
 
-anyChild = (node, funcs, index, target, single) ->
+directParent = (node, funcs, index, targetFunc, targetCtx, single) ->
+	if parent = node._parent
+		if test(parent, funcs, index, targetFunc, targetCtx, single)
+			return true
+		if parent.name is 'neft:blank'
+			return directParent parent, funcs, index, targetFunc, targetCtx, single
+	false
+directParent.isIterator = true
+directParent.toString = -> 'directParent'
+
+anyChild = (node, funcs, index, targetFunc, targetCtx, single) ->
 	if children = node.children
 		for child in children
 			if child.name is 'neft:blank'
-				if anyChild(child, funcs, index, target, single)
+				if anyChild(child, funcs, index, targetFunc, targetCtx, single)
 					if single
 						return true
 			else
-				if test(child, funcs, index, target, single)
-					target.push child
+				if test(child, funcs, index, targetFunc, targetCtx, single)
 					if single
 						return true
 	false
 anyChild.isIterator = true
 anyChild.toString = -> 'anyChild'
 
+anyParent = (node, funcs, index, targetFunc, targetCtx, single) ->
+	if parent = node._parent
+		if test(parent, funcs, index, targetFunc, targetCtx, single)
+			return true
+		else
+			return anyParent(parent, funcs, index, targetFunc, targetCtx, single)
+	false
+anyParent.isIterator = true
+anyParent.toString = -> 'anyParent'
+
 byName = (node, data1) ->
 	node.name is data1
 byName.isIterator = false
 byName.toString = -> 'byName'
 
+byTag = (node, data1) ->
+	node is data1
+byTag.isIterator = false
+byTag.toString = -> 'byTag'
+
 byAttr = (node, data1) ->
-	node._attrs?.hasOwnProperty data1
+	node._attrs?[data1]?
 byAttr.isIterator = false
 byAttr.toString = -> 'byAttr'
 
@@ -102,14 +129,11 @@ ENDS_WITH = /\$$/
 CONTAINS = /\*$/
 TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/
 
-exports.queryAll = (selector, target=[], single=false) ->
-	assert.isString selector
-	assert.notLengthOf selector, 0
-	assert.isArray target
-	utils.clear target
-
-	unless @children
-		return target
+getQueries = (selector, reversed=false) ->
+	distantTagFunc = if reversed then anyParent else anyDescendant
+	closeTagFunc = if reversed then directParent else anyChild
+	arrFunc = if reversed then 'unshift' else 'push'
+	reversedArrFunc = if reversed then 'push' else 'unshift'
 
 	funcs = []
 	queries = [funcs]
@@ -120,8 +144,7 @@ exports.queryAll = (selector, target=[], single=false) ->
 		else if exec = TYPE.exec(sel)
 			sel = sel.slice exec[0].length
 			name = exec[0]
-			# name = name.replace ///|///g, ':'
-			funcs.push byName, name, null
+			funcs[arrFunc] byName, name, null
 		else if exec = ATTR_VALUE_SEARCH.exec(sel)
 			sel = sel.slice exec[0].length
 			[_, name, val] = exec
@@ -139,17 +162,17 @@ exports.queryAll = (selector, target=[], single=false) ->
 			if func isnt byAttrValue
 				name = name.slice 0, -1
 
-			funcs.push func, name, val
+			funcs[arrFunc] func, name, val
 		else if exec = ATTR_SEARCH.exec(sel)
 			sel = sel.slice exec[0].length
-			funcs.push byAttr, exec[1], null
+			funcs[arrFunc] byAttr, exec[1], null
 		else if exec = DEEP.exec(sel)
 			sel = sel.slice exec[0].length
 			deep = exec[0].trim()
 			if deep is ''
-				funcs.push anyDescendant, null, null
+				funcs[arrFunc] distantTagFunc, null, null
 			else if deep is '>'
-				funcs.push anyChild, null, null
+				funcs[arrFunc] closeTagFunc, null, null
 		else if sel[0] is ','
 			funcs = []
 			queries.push funcs
@@ -158,12 +181,102 @@ exports.queryAll = (selector, target=[], single=false) ->
 		else
 			throw new Error "queryAll: unexpected selector '#{sel}' in '#{selector}'"
 
+	queries
+
+exports.queryAll = (selector, target=[]) ->
+	assert.isString selector
+	assert.notLengthOf selector, 0
+	assert.isArray target
+
+	utils.clear target
+
+	unless @children
+		return target
+
+	queries = getQueries selector
+
 	for funcs in queries
-		if anyDescendant(@, funcs, 0, target, single)
+		if anyDescendant(@, funcs, 0, target.push, target, false)
 			if single
 				break
 
 	target
 
-exports.query = (selector) ->
-	exports.queryAll.call(@, selector, [], true)[0] or null
+exports.query = do ->
+	result = null
+	resultFunc = (arg) ->
+		result = arg
+
+	(selector) ->
+		assert.isString selector
+		assert.notLengthOf selector, 0
+
+		unless @children
+			return null
+
+		queries = getQueries selector
+
+		for funcs in queries
+			if anyDescendant(@, funcs, 0, resultFunc, null, true)
+				return result
+
+		null
+
+class Watcher extends signal.Emitter
+	NOP = ->
+
+	constructor: (@queries) ->
+		super()
+		Object.freeze @
+
+	signal.Emitter.createSignal @, 'onAdd'
+	signal.Emitter.createSignal @, 'onRemove'
+
+	test: (tag) ->
+		for funcs in @queries
+			if test(tag, funcs, 0, NOP, null, true)
+				return true
+		false
+
+exports.watch = (selector) ->
+	assert.isString selector
+	assert.notLengthOf selector, 0
+
+	queries = getQueries(selector, true)
+	for funcs in queries
+		if funcs[funcs.length - 3] isnt directParent
+			funcs.push anyParent, null, null
+		funcs.push byTag, @, null
+
+	watcher = new Watcher queries
+	@_watchers ?= []
+	@_watchers.push watcher
+	watcher
+
+exports.checkWatchersDeeply = (tag) ->
+	if inWatchers = tag._inWatchers
+		i = inWatchers.length
+		lastElem = true
+		while i-- > 0
+			unless inWatchers[i].test(tag)
+				emitSignal inWatchers[i], 'onRemove', tag
+				if lastElem
+					inWatchers.pop()
+				else
+					inWatchers.splice i, 1
+			lastElem = false
+
+	tmp = tag
+	while tmp = tmp._parent
+		if watchers = tmp._watchers
+			for watcher in watchers
+				if watcher.test(tag)
+					tag._inWatchers ?= []
+					tag._inWatchers.push watcher
+					emitSignal watcher, 'onAdd', tag
+
+	if tag.children
+		for child in tag.children
+			exports.checkWatchersDeeply child
+
+	return

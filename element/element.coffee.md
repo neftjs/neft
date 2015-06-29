@@ -6,6 +6,7 @@ Element @virtual_dom
 	utils = require 'utils'
 	assert = require 'neft-assert'
 	signal = require 'signal'
+	tagQuery = require './element/tag/query'
 
 	{isArray} = Array
 	{emitSignal} = signal.Emitter
@@ -161,6 +162,8 @@ Element @virtual_dom
 
 					# trigger signal
 					emitSignal @, 'onParentChange', old
+
+					tagQuery.checkWatchersDeeply @
 
 *Boolean* Element::visible
 --------------------------

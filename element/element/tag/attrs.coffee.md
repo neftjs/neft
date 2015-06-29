@@ -6,6 +6,7 @@ Tag.Attrs @virtual_dom
 	utils = require 'utils'
 	signal = require 'signal'
 	assert = require 'neft-assert'
+	tagQuery = require './query'
 
 	assert = assert.scope 'View.Element.Tag.Attrs'
 
@@ -80,5 +81,6 @@ Tag.Attrs @virtual_dom
 
 				# trigger event
 				triggerEvent tag, name, old
+				tagQuery.checkWatchersDeeply tag
 
 				value

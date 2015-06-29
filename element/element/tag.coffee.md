@@ -31,6 +31,8 @@ Tag @virtual_dom
 				@style = null
 				@_documentStyle = null
 				@_attrs = {}
+				@_watchers = null
+				@_inWatchers = null
 
 				super()
 
@@ -103,6 +105,19 @@ Tag @virtual_dom
 ----------------------------------------
 
 			query: query.query
+
+*Watcher* Element::watch(*String* query)
+----------------------------------------
+
+```
+var watcher = doc.watch('div > * > b[attr]');
+watcher.onAdd(function(tag){
+});
+watcher.onRemove(function(tag){
+});
+```
+
+			watch: query.watch
 
 *String* Element::stringify()
 -----------------------------

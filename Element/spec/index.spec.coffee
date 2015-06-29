@@ -1,5 +1,6 @@
 'use strict'
 
+utils = require 'utils'
 Element = require('../index')
 
 isEqualArrays = (arr1, arr2) ->
@@ -200,26 +201,27 @@ describe 'View Element', ->
 		expect(elem.stringify()).toBe '<b><em></em></b><u></u><p></p>'
 
 	describe 'queryAll() works with selector', ->
-		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
+		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
 		doc2div1 = doc2.children[0]
 		doc2b = doc2div1.children[0]
 		doc2u = doc2b.children[0]
+		doc2u2 = doc2b.children[0].children[0]
 		doc2div2 = doc2.children[1]
 		doc2em1 = doc2div2.children[0].children[0]
 		doc2em2 = doc2div2.children[1]
 
 		it 'E', ->
 			expect(doc2.queryAll('div')).toEqual [doc2div1, doc2div2]
-			expect(doc2.queryAll('u')).toEqual [doc2u]
+			expect(doc2.queryAll('u')).toEqual [doc2u, doc2u2]
 
 		it 'E F', ->
-			expect(doc2.queryAll('div u')).toEqual [doc2u]
-			expect(doc2.queryAll('b u')).toEqual [doc2u]
+			expect(doc2.queryAll('div u')).toEqual [doc2u, doc2u2]
+			expect(doc2.queryAll('b u')).toEqual [doc2u, doc2u2]
 			expect(doc2.queryAll('b div')).toEqual []
 
 		it 'E > F', ->
 			expect(doc2.queryAll('div > u')).toEqual []
-			expect(doc2.queryAll('b>u')).toEqual [doc2u]
+			expect(doc2.queryAll('b > u')).toEqual [doc2u]
 
 		it '[foo]', ->
 			expect(doc2.queryAll('[attr]')).toEqual [doc2u, doc2div2]
@@ -251,7 +253,7 @@ describe 'View Element', ->
 			expect(doc2.queryAll('[color*=lue1]')).toEqual []
 
 		it '*', ->
-			expect(doc2.queryAll('*')).toEqual [doc2div1, doc2b, doc2u, doc2div2, doc2em1, doc2em2]
+			expect(doc2.queryAll('*')).toEqual [doc2div1, doc2b, doc2u, doc2u2, doc2div2, doc2em1, doc2em2]
 
 		it '*[foo]', ->
 			expect(doc2.queryAll('*[color]')).toEqual [doc2u]
@@ -284,8 +286,154 @@ describe 'View Element', ->
 			expect(doc2.query('[width]')).toBe null
 
 		it 'omits neft:blank', ->
-			# jasmine bug?
-			expect(doc2.query('div > em') is doc2em).toBe true
+			expect(doc2.query('div > em')).toBe doc2em
+
+	describe 'watch()', ->
+		tags = doc2 = doc2div1 = doc2b = doc2u = doc2u2 = doc2div2 = doc2em1 = doc2em2 = null
+
+		beforeEach ->
+			tags = []
+			doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
+			doc2div1 = doc2.children[0]
+			doc2b = doc2div1.children[0]
+			doc2u = doc2b.children[0]
+			doc2u2 = doc2b.children[0].children[0]
+			doc2div2 = doc2.children[1]
+			doc2em1 = doc2div2.children[0].children[0]
+			doc2em2 = doc2div2.children[1]
+
+		it 'is a function', ->
+			expect(doc2.watch).toEqual jasmine.any Function
+
+		describe 'works with selector', ->
+			it 'E', ->
+				doc2b.parent = null
+				watcher = doc2.watch 'b'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				doc2b.parent = doc2div1
+				expect(tags).toEqual [doc2b]
+
+			it 'E F', ->
+				doc2u.parent = null
+				watcher = doc2.watch 'b u'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				doc2u.parent = doc2b
+				expect(tags).toEqual [doc2u, doc2u2]
+
+			it 'E > F', ->
+				doc2u.parent = null
+				watcher = doc2div1.watch '> u'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				doc2u.parent = doc2div1
+				expect(tags).toEqual [doc2u]
+
+			it '[foo]', ->
+				watcher = doc2div1.watch '[attr]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.attrs.set 'attr', '2'
+				expect(tags).toEqual [doc2u]
+				doc2u.attrs.set 'attr', undefined
+				expect(tags).toEqual []
+
+			it '[foo=bar]', ->
+				watcher = doc2div1.watch '[attr=2]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.attrs.set 'attr', '2'
+				expect(tags).toEqual [doc2u]
+				doc2u.attrs.set 'attr', '1'
+				expect(tags).toEqual []
+
+			it '[foo^=bar]', ->
+				watcher = doc2div1.watch '[color^=re]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.attrs.set 'color', 'red'
+				expect(tags).toEqual [doc2u]
+				doc2u.attrs.set 'color', 'blue'
+				expect(tags).toEqual []
+
+			it '[foo$=bar]', ->
+				watcher = doc2div1.watch '[color$=ed]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.attrs.set 'color', 'red'
+				expect(tags).toEqual [doc2u]
+				doc2u.attrs.set 'color', 'blue'
+				expect(tags).toEqual []
+
+			it '[foo*=bar]', ->
+				watcher = doc2div1.watch '[color*=rang]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.attrs.set 'color', 'orange'
+				expect(tags).toEqual [doc2u]
+				doc2u.attrs.set 'color', 'blue'
+				expect(tags).toEqual []
+
+			it '*', ->
+				doc2u.parent = null
+				watcher = doc2div1.watch '*'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.parent = doc2div1
+				expect(tags).toEqual [doc2u, doc2u2]
+				doc2u.parent = null
+				expect(tags).toEqual []
+
+			it '*[foo]', ->
+				watcher = doc2div1.watch '*[attr]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.attrs.set 'attr', '2'
+				expect(tags).toEqual [doc2u]
+				doc2u.attrs.set 'attr', undefined
+				expect(tags).toEqual []
+
+			it 'E > * > F[foo]', ->
+				doc2u.parent = null
+				watcher = doc2.watch 'div > * > u[color]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.parent = doc2b
+				expect(tags).toEqual [doc2u]
+				doc2u.parent = null
+				expect(tags).toEqual []
+
+			it 'E > * > F[foo], F[foo]', ->
+				doc2div1.parent = null
+				doc2div2.parent = null
+				watcher = doc2.watch 'div > * > u[color], div[attr]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2div1.parent = doc2
+				doc2div2.parent = doc2
+				expect(tags).toEqual [doc2u, doc2div2]
+				doc2div1.parent = null
+				doc2div2.parent = null
+				expect(tags).toEqual []
 
 	it 'visible property is editable', ->
 		expect(p.visible).toBeTruthy()
