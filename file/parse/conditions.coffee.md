@@ -40,14 +40,18 @@ In practice, you will use the string interpolation to conditioning the result.
 				if attr.indexOf('${') is -1
 					attr = '${'+attr+'}'
 
-				`//<development>`
-				if attr.indexOf('${') isnt 0
-					log.warn "neft:if `#{attr}` contains string interpolation, but neft:if always is a string interpolation"
-				`//</development>`
+				# `//<development>`
+				# if attr.indexOf('${') isnt 0
+				# 	log.warn "neft:if `#{attr}` contains string interpolation, but neft:if always is a string interpolation"
+				# `//</development>`
+
+				elseNode = null
+				if node.nextSibling?.attrs.has('neft:else')
+					elseNode = node.nextSibling
 
 				funcBody = File.Input.parse attr
 				func = File.Input.createFunction funcBody
-				condition = new File.Condition node, func
+				condition = new File.Condition node, elseNode, func
 				condition.funcBody = funcBody
 				conditions.push condition
 
