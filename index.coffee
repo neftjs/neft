@@ -177,7 +177,7 @@ bindingAttributeToString = (obj) ->
 	# filter by ids
 	for elem, i in binding when typeof elem isnt 'string'
 		[id] = elem
-		if id is 'parent' or id is 'target' or id is 'nextSibling' or id is 'previousSibling'
+		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling'
 			elem.unshift "'this'"
 		else if id is 'this'
 			elem[0] = "'this'"

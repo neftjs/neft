@@ -41,7 +41,7 @@
 		for (var i = 0; i < arr.length; i++){
 			var elem = arr[i];
 			if (elem.type && !elem.parent){
-				elem.parent = val;
+				// elem.parent = val;
 				if (elem.body){
 					setParentRec(elem.body, val);
 				} else if (Array.isArray(elem.value)){
@@ -189,7 +189,7 @@ AttributeEnds
 
 AttributeBody
 	= Type
-	/ "{" d:(__ d:Attribute __ { return d })* "}" AttributeEnds { return d }
+	/ "{" d:(__ d:Declaration __ { return d })* "}" AttributeEnds { return d }
 	/ "[" d:Type* "]" AttributeEnds { return d }
 	/ d:$StringLiteral AttributeEnds { return d }
 	/ value:(!AttributeEnds d:($StringLiteral/SourceCharacter) {return d})+ AttributeEnds {
@@ -312,7 +312,6 @@ Type
 			obj.id = 'a' + uid();
 			obj.autoId = true;
 		}
-
 
 		setParentRec(body, obj);
 
