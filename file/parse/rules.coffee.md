@@ -37,7 +37,7 @@ neft:rule @xml
 
 	isMainFileRule = (node) ->
 		while node = node.parent
-			if node.name isnt '' and node.name isnt 'neft:rule'
+			if node.name isnt 'neft:blank' and node.name isnt 'neft:rule'
 				return false
 		true
 

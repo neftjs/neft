@@ -221,6 +221,7 @@ describe 'View Element', ->
 
 		it 'E > F', ->
 			expect(doc2.queryAll('div > u')).toEqual []
+			expect(doc2.queryAll('div > b')).toEqual [doc2b]
 			expect(doc2.queryAll('b > u')).toEqual [doc2u]
 
 		it '[foo]', ->
