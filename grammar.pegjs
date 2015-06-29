@@ -1,6 +1,6 @@
 {
 	var RESERVED_ATTRIBUTES = {id: true};
-	var ids = {};
+	var ids;
 
 	function forEachType(arr, type, callback){
 		for (var i = 0, n = arr.length; i < n; i++){
@@ -41,7 +41,7 @@
 		for (var i = 0; i < arr.length; i++){
 			var elem = arr[i];
 			if (elem.type && !elem.parent){
-				// elem.parent = val;
+				elem.parent = val;
 				if (elem.body){
 					setParentRec(elem.body, val);
 				} else if (Array.isArray(elem.value)){
@@ -53,7 +53,7 @@
 }
 
 Start
-	= (Code / Type)*
+	= (Code / MainType)*
 
 /* HELPERS */
 
@@ -316,6 +316,12 @@ Type
 		setParentRec(body, obj);
 
 		return obj;
+	}
+
+MainType
+	= d:Type {
+		ids = {};
+		return d;
 	}
 
 /* CODE */
