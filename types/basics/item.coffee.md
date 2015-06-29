@@ -270,7 +270,17 @@ Item {
 
 		utils.defineProperty @::, 'previousSibling', null, ->
 			@_previousSibling
-		, null
+		, (val) ->
+			if val is @_previousSibling
+				return
+
+			if val
+				assert.instanceOf val, Item
+				if @_parent isnt val._parent
+					@parent = val.parent
+				@index = val.index + 1
+			else
+				@index = 0
 
 ### *Signal* Item::onPreviousSiblingChange(*Item* oldValue)
 
@@ -281,7 +291,17 @@ Item {
 
 		utils.defineProperty @::, 'nextSibling', null, ->
 			@_nextSibling
-		, null
+		, (val) ->
+			if val is @_nextSibling
+				return
+
+			if val
+				assert.instanceOf val, Item
+				if @_parent isnt val._parent
+					@parent = val.parent
+				@index = val.index
+			else if @_parent
+				@index = @_parent.children.length
 
 ### *Signal* Item::onNextSiblingChange(*Item* oldValue)
 
