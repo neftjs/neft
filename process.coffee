@@ -52,7 +52,10 @@ module.exports = ->
 					getBoundingClientRect: -> {}
 					addEventListener: ->
 					setAttribute: ->
+					getAttribute: ->
 					innerHTML: ''
+					cloneNode: ->
+						global.document.createElement()
 				createElementNS: ->
 					width: baseVal: value: null
 					height: baseVal: value: null
@@ -167,6 +170,11 @@ module.exports = ->
 	pathUtils = require 'path'
 	require 'coffee-script/register'
 
+	try
+		CoffeeCache = require 'coffee-cash'
+		CoffeeCache.setCacheDirectory '/tmp/cache/coffee'
+		CoffeeCache.register()
+
 	modules = []
 	paths = {}
 
@@ -199,7 +207,7 @@ module.exports = ->
 			return r
 
 		for module, _ of NODE_MODULES
-			if parent.id.indexOf("node_modules/#{module}") > 0
+			if parent.id.indexOf("node_modules/#{module}") > 0 or parent.id.indexOf("node_modules\\#{module}") > 0
 				return r
 
 		filename = Module._resolveFilename hiddenReq, parent
@@ -209,8 +217,8 @@ module.exports = ->
 		unless parentPath then return r	
 
 		if onlyLocal
-			if ///^\.\./|^node_modules\////.test(modulePath) or not ///\.[a-zA-Z0-9]+$///.test(modulePath)
-				name = ///^\.\.\/([a-z_\-A-Z]+)///.exec(modulePath)?[1]
+			if ///^\.\.(?:\/|\\)|^node_modules(?:\/|\\)///.test(modulePath) or not ///\.[a-zA-Z0-9]+$///.test(modulePath)
+				name = ///^\.\.(?:\/|\\)([a-z_\-A-Z]+)///.exec(modulePath)?[1]
 				if allowedRemoteModules.indexOf(name) is -1
 					return r
 

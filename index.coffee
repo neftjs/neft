@@ -6,6 +6,7 @@ cp = require 'child_process'
 pathUtils = require 'path'
 groundskeeper = require 'groundskeeper'
 uglify = require 'uglify-js'
+log = require 'log'
 
 processFile = require './process'
 buildResult = require './result'
@@ -22,7 +23,9 @@ module.exports = (opts, callback) ->
 
 	index = pathUtils.resolve fs.realpathSync('.'), opts.path
 	child = cp.fork BUNDLE_FILE_PATH, [index, JSON.stringify(opts)]#, silent: true
+	# logtime = log.time 'Resolving modules'
 	child.on 'message', (msg) ->
+		# log.end logtime
 		child.kill()
 
 		fs.unlinkSync BUNDLE_FILE_PATH
@@ -31,21 +34,26 @@ module.exports = (opts, callback) ->
 		if msg.err
 			return callback msg.err
 
+		# logtime = log.time 'Building'
 		bundle = buildResult
 			modules: msg.modules
 			paths: msg.paths
 			path: opts.path
+		# log.end logtime
 
-		if opts.fullVersion
-			bundle = bundle.replace ///\/\/<(\/)?trialVersion>;///g, '//<$1trialVersion>'
-			cleaner = groundskeeper
-				console: true
-				debugger: true
-				pragmas: ['development', 'production']
-			cleaner.write bundle
-			bundle = cleaner.toString()
+		# if opts.fullVersion
+		# 	logtime = log.time 'Full/trial version'
+		# 	bundle = bundle.replace ///\/\/<(\/)?trialVersion>;///g, '//<$1trialVersion>'
+		# 	cleaner = groundskeeper
+		# 		console: true
+		# 		debugger: true
+		# 		pragmas: ['development', 'production']
+		# 	cleaner.write bundle
+		# 	bundle = cleaner.toString()
+		# 	log.end logtime
 
 		if opts.release
+			# logtime = log.time 'Release mode'
 			nsToRemove = ['expect', 'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions']
 
 			if opts.removeLogs
@@ -62,6 +70,7 @@ module.exports = (opts, callback) ->
 				pragmas: ['trialVersion']
 			cleaner.write bundle
 			bundle = cleaner.toString()
+			# log.end logtime
 		else
 			bundle = bundle.replace ///<production>([^]*?)<\/production>///gm, ''
 			# bundle = bundle.replace ///\/\/<(\/)?production>;///g, '//<$1production>'
@@ -73,6 +82,7 @@ module.exports = (opts, callback) ->
 			# bundle = cleaner.toString()
 
 		if opts.release or opts.minify
+			# logtime = log.time 'Minimization'
 			fs.writeFileSync './tmp.js', bundle, 'utf-8'
 
 			cp.exec "./node_modules/uglify-js/bin/uglifyjs " +
@@ -84,6 +94,7 @@ module.exports = (opts, callback) ->
 			# "--beautify",
 				maxBuffer: 1024*1024*24
 				, (err, stdout, stderr) ->
+					# log.end logtime
 					fs.unlinkSync './tmp.js'
 
 					# bundle = uglify.minify bundle,

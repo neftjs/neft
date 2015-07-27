@@ -1,8 +1,11 @@
 'use strict'
 
 fs = require 'fs'
+crypto = require 'crypto'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
+
+CACHE_DIRECTORY = '/tmp/cache/coffee'
 
 {stringify} = JSON
 
@@ -28,9 +31,14 @@ getFile = (path) ->
 	catch
 		return
 
-	if IS_COFFEE_RE.test path
-		isLiterate = IS_LITERATE_COFFEE_RE.test path
-		file = coffee.compile file, bare: true, literate: isLiterate
+	if IS_COFFEE_RE.test(path)
+		digest = crypto.createHash('sha1').update(file, 'utf8').digest('hex')
+		cache = pathUtils.join CACHE_DIRECTORY, "#{digest}.js"
+		if fs.existsSync(cache)
+			file = fs.readFileSync cache, 'utf-8'
+		else
+			isLiterate = IS_LITERATE_COFFEE_RE.test path
+			file = coffee.compile file, bare: true, literate: isLiterate
 
 	if STRING_FILES[pathUtils.extname(path)]
 		file = "module.exports = #{JSON.stringify(file)}"
@@ -82,9 +90,7 @@ moduleScope = """(function(){
 	var require = getModule.bind(null, {{paths}});
 	var exports = module.exports;
 
-	(function(){
-		{{file}}
-	}());
+	{{file}}
 
 	return module.exports;
 })();"""
@@ -105,6 +111,8 @@ getModulesInit = (opts) ->
 		path = name
 		unless func = getFile path
 			continue
+
+		name = name.replace /\\/g, '\\\\'
 
 		switch pathUtils.extname name
 			when '.json'
