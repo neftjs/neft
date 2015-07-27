@@ -11,43 +11,45 @@ Text @virtual_dom
 
 	assert = assert.scope 'View.Element.Text'
 
-	module.exports = (Element) ->
-
-		class Text extends Element
-			@__name__ = 'Text'
-			@__path__ = 'File.Element.Text'
+	module.exports = (Element) -> class Text extends Element
+		@__name__ = 'Text'
+		@__path__ = 'File.Element.Text'
 
 *Text* Text() : *Element*
 -------------------------
 
-			constructor: ->
-				@_text = ''
+		constructor: ->
+			@_text = ''
 
-				super()
+			super()
 
-			clone: ->
-				clone = super()
-				clone._text = @_text
-				clone
+		clone: ->
+			clone = super()
+			clone._text = @_text
+			clone
 
 *Signal* Text::onTextChange(*String* oldValue)
 ----------------------------------------------
 
-			signal.Emitter.createSignal @, 'onTextChange'
+		signal.Emitter.createSignal @, 'onTextChange'
 
 *String* Text::text
 -------------------
 
-			utils.defineProperty @::, 'text', null, ->
-				@_text
-			, (value) ->
-				assert.isString value
+		opts = utils.CONFIGURABLE
+		utils.defineProperty @::, 'text', opts, ->
+			@_text
+		, (value) ->
+			assert.isString value
 
-				old = @_text
-				return if old is value
+			old = @_text
+			if old is value
+				return false
 
-				# set text
-				@_text = value
+			# set text
+			@_text = value
 
-				# trigger event
-				emitSignal @, 'onTextChange', old
+			# trigger event
+			emitSignal @, 'onTextChange', old
+
+			true

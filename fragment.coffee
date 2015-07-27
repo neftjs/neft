@@ -1,7 +1,7 @@
 'use script'
 
 utils = require 'utils'
-assert = require 'assert'
+assert = require 'neft-assert'
 signal = require 'signal'
 
 assert = assert.scope 'View.Fragment'

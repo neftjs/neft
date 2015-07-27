@@ -63,8 +63,8 @@ Tag.Attrs @virtual_dom
 
 				exports.tag._attrs[name]
 
-*Any* set(*String* name, *Any* value)
--------------------------------------
+*Boolean* set(*String* name, *Any* value)
+-----------------------------------------
 
 			set: (name, value) ->
 				assert.isString name
@@ -75,7 +75,7 @@ Tag.Attrs @virtual_dom
 				# save change
 				old = tag._attrs[name]
 				if old is value
-					return
+					return false
 
 				tag._attrs[name] = value
 
@@ -83,4 +83,4 @@ Tag.Attrs @virtual_dom
 				triggerEvent tag, name, old
 				tagQuery.checkWatchersDeeply tag
 
-				value
+				true

@@ -129,7 +129,17 @@ ENDS_WITH = /\$$/
 CONTAINS = /\*$/
 TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/
 
+queriesCache = Object.create null
+reversedQueriesCache = Object.create null
 getQueries = (selector, reversed=false) ->
+	# get from the cache
+	if reversed
+		if r = reversedQueriesCache[selector]
+			return r
+	else
+		if r = queriesCache[selector]
+			return r
+
 	distantTagFunc = if reversed then anyParent else anyDescendant
 	closeTagFunc = if reversed then directParent else anyChild
 	arrFunc = if reversed then 'unshift' else 'push'
@@ -181,6 +191,17 @@ getQueries = (selector, reversed=false) ->
 		else
 			throw new Error "queryAll: unexpected selector '#{sel}' in '#{selector}'"
 
+	# set iterator
+	for funcs in queries
+		if (not reversed and not funcs[0].isIterator)
+			funcs[reversedArrFunc] distantTagFunc, null, null
+
+	# save to the cache
+	if reversed
+		reversedQueriesCache[selector] = queries
+	else
+		queriesCache[selector] = queries
+
 	queries
 
 exports.queryAll = (selector, target=[]) ->
@@ -196,7 +217,7 @@ exports.queryAll = (selector, target=[]) ->
 	queries = getQueries selector
 
 	for funcs in queries
-		if anyDescendant(@, funcs, 0, target.push, target, false)
+		if funcs[0](@, funcs, 3, target.push, target, false)
 			if single
 				break
 
@@ -217,7 +238,7 @@ exports.query = do ->
 		queries = getQueries selector
 
 		for funcs in queries
-			if anyDescendant(@, funcs, 0, resultFunc, null, true)
+			if funcs[0](@, funcs, 3, resultFunc, null, true)
 				return result
 
 		null
@@ -225,9 +246,22 @@ exports.query = do ->
 class Watcher extends signal.Emitter
 	NOP = ->
 
-	constructor: (@queries) ->
+	pool = []
+
+	@create = (node, queries) ->
+		if pool.length
+			watcher = pool.pop()
+			watcher.node = node
+			watcher.queries = queries
+		else
+			watcher = new Watcher node, queries
+		node._watchers ?= []
+		node._watchers.push watcher
+		watcher
+
+	constructor: (@node, @queries) ->
 		super()
-		Object.freeze @
+		Object.preventExtensions @
 
 	signal.Emitter.createSignal @, 'onAdd'
 	signal.Emitter.createSignal @, 'onRemove'
@@ -238,42 +272,56 @@ class Watcher extends signal.Emitter
 				return true
 		false
 
+	disconnect: ->
+		assert.ok utils.has(@node._watchers, @)
+
+		@onAdd.disconnectAll()
+		@onRemove.disconnectAll()
+		index = @node._watchers.indexOf @
+		@node._watchers[index] = null
+		pool.push @
+		return
+
 exports.watch = (selector) ->
 	assert.isString selector
 	assert.notLengthOf selector, 0
 
 	queries = getQueries(selector, true)
-	for funcs in queries
-		if funcs[funcs.length - 3] isnt directParent
-			funcs.push anyParent, null, null
-		funcs.push byTag, @, null
+	# for funcs in queries
+		# if funcs[funcs.length - 3] isnt directParent
+		# 	funcs.push anyParent, null, null
+		# funcs.push byTag, @, null
 
-	watcher = new Watcher queries
-	@_watchers ?= []
-	@_watchers.push watcher
+	watcher = Watcher.create @, queries
 	watcher
 
 exports.checkWatchersDeeply = (tag) ->
 	if inWatchers = tag._inWatchers
-		i = inWatchers.length
-		lastElem = true
+		i = n = inWatchers.length
 		while i-- > 0
 			unless inWatchers[i].test(tag)
 				emitSignal inWatchers[i], 'onRemove', tag
-				if lastElem
+				if i is n - 1
 					inWatchers.pop()
 				else
 					inWatchers.splice i, 1
-			lastElem = false
+				n--
 
 	tmp = tag
 	while tmp = tmp._parent
 		if watchers = tmp._watchers
-			for watcher in watchers
-				if watcher.test(tag)
+			i = 0
+			n = watchers.length
+			while i < n
+				watcher = watchers[i]
+				if watcher is null
+					watchers.splice i, 1
+					i--; n--
+				else if watcher.test(tag)
 					tag._inWatchers ?= []
 					tag._inWatchers.push watcher
 					emitSignal watcher, 'onAdd', tag
+				i++
 
 	if tag.children
 		for child in tag.children

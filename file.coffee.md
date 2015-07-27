@@ -4,7 +4,7 @@ File @class
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'assert'
+	assert = require 'neft-assert'
 	log = require 'log'
 	Emitter = require 'emitter'
 	signal = require 'signal'
@@ -53,8 +53,8 @@ File @class
 		@Iterator = require('./iterator') @
 		@Log = require('./log') @
 
-*File* File.fromHTML(*String* path, *String* html)
---------------------------------------------------
+*File* File.fromHTML(*String* path, *String|Document.Element* html)
+-------------------------------------------------------------------
 
 		@fromHTML = do ->
 			clear = require('./file/clear') File
@@ -63,11 +63,17 @@ File @class
 				assert.isString path
 				assert.notLengthOf path, 0
 				assert.notOk files[path]?
-				assert.isString html
-				assert.notLengthOf html, 0, "Can't load '#{path}' document file, because it's empty"
+				unless html instanceof File.Element
+					assert.isString html
+
+				if html is ''
+					html = '<html></html>'
 
 				# get node
-				node = File.Element.fromHTML html
+				if html instanceof File.Element
+					node = html
+				else
+					node = File.Element.fromHTML html
 
 				# clear
 				clear node
