@@ -61,9 +61,9 @@ module.exports = (Renderer) ->
 			obj = Object.getPrototypeOf(obj)
 			type = obj.constructor.__name__
 
-		object._impl = impl.Types[type]?.createData?() or {}
+		object._impl = impl.Types[type]?.createData?() or {bindings: null}
 		Object.preventExtensions object._impl
-		impl.Types[type].create.call object, object._impl
+		impl.Types[type]?.create?.call object, object._impl
 
 	impl.setWindow = do (_super = impl.setWindow) -> (item) ->
 		utils.defineProperty impl, 'window', utils.ENUMERABLE, item

@@ -16,16 +16,24 @@ Class @modifier
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class ChangesObject
 			constructor: ->
-				@_attributes = {}
+				@_attributes = {__proto__: null}
 				@_functions = []
-				@_bindings = {}
+				@_bindings = {__proto__: null}
 
 			setAttribute: (prop, val) ->
 				@_attributes[prop] = val
 				return
 
 			setFunction: (prop, val) ->
-				@_functions.push prop, val
+				boundFunc = (arg1, arg2) ->
+					if @_component
+						arr = @_component.objectsOrderSignalArr
+						arr[arr.length - 2] = arg1
+						arr[arr.length - 1] = arg2
+						val.apply @, arr
+					else
+						val.call @, arg1, arg2
+				@_functions.push prop, boundFunc
 				return
 
 			setBinding: (prop, val) ->
@@ -36,22 +44,20 @@ Class @modifier
 		class Class extends Renderer.Extension
 			@__name__ = 'Class'
 
-			onReady = ->
-				if @_name is '' and not @_bindings?.when
-					@when = true
-				else if @_running
-					updateTargetClass enableClass, @_target, @
-				return
+			# onReady = ->
+			# 	if @_name is '' and not @_bindings?.when
+			# 		@when = true
+			# 	else if @_running
+			# 		updateTargetClass enableClass, @_target, @
+			# 	return
 
-			constructor: ->
-				assert.lengthOf arguments, 0
-
+			constructor: (component, opts) ->
 				@_priority = 0
 				@_name = ''
-				@changes = new ChangesObject
-				super()
+				@_changes = null
+				super component, opts
 
-				@onReady onReady
+				# @onReady onReady
 
 *String* Class::name
 --------------------
@@ -80,13 +86,14 @@ It's a random string by default.
 						target._classExtensions[name] = null
 						target._classExtensions[val] = @
 
-					if target and val
-						target._classExtensions ?= {}
-
 					_super.call @, val
 
-					if target._classes?.has(val)
-						@enable()
+					if target
+						if val
+							target._classExtensions ?= {}
+
+						if target._classes?.has(val)
+							@enable()
 					return
 
 *Renderer.Item* Class::target
@@ -103,7 +110,7 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 				name: 'target'
 				developmentSetter: (val) ->
 					if val?
-						assert.instanceOf val, Renderer.Item
+						assert.instanceOf val, itemUtils.Object
 				setter: (_super) -> (val) ->
 					{target, name} = @
 
@@ -112,6 +119,8 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 
 					@disable()
 
+					if target
+						utils.remove target._extensions, @
 					if name
 						if target
 							target._classExtensions[name] = null
@@ -122,6 +131,7 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 					_super.call @, val
 
 					if val
+						val._extensions.push @
 						if name
 							@_target._classExtensions ?= {}
 						if val._classes?.has(name) or @_when
@@ -134,6 +144,21 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 This objects contains all property changes brought by a state.
 
 It accepts bindings as well.
+
+			utils.defineProperty @::, 'changes', null, ->
+				@_changes ||= new ChangesObject
+			, (obj) ->
+				assert.isObject obj
+
+				{changes} = @
+				for prop, val of obj
+					if typeof val is 'function'
+						changes.setFunction prop, val
+					else if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
+						changes.setBinding prop, val
+					else
+						changes.setAttribute prop, val
+				return
 
 *Float* Class::priority = 0
 ---------------------------
@@ -185,7 +210,7 @@ Grid {
 ### *Signal* Class::onWhenChange(*Boolean* oldValue)
 
 			enable: ->
-				if @_running
+				if @_running or not @_target
 					return
 
 				if @_name and not @_target.classes.has(@_name)
@@ -197,7 +222,7 @@ Grid {
 				return
 
 			disable: ->
-				unless @_running
+				if not @_running or not @_target
 					return
 
 				if @_name and @_target.classes.has(@_name)
@@ -207,6 +232,19 @@ Grid {
 				super()
 				updateTargetClass saveAndDisableClass, @_target, @
 				return
+
+			clone: (component) ->
+				clone = new Class component
+				clone.id = @id
+				clone._name = @_name
+				clone._priority = @_priority
+				clone._changes = @_changes
+
+				if @_bindings
+					for prop, val of @_bindings
+						clone.createBinding prop, val
+
+				clone
 
 		updateClassList = do ->
 			sortFunc = (a, b) ->
@@ -276,23 +314,24 @@ Grid {
 			for attr, val of attributes
 				writeAttr = true
 				for i in [classListIndex-1..0] by -1
-					if classList[i].changes._attributes.hasOwnProperty(attr)
+					if attr of classList[i].changes._attributes
 						writeAttr = false
 						break
 				if writeAttr
 					path = splitAttribute attr
 					lastPath = path[path.length - 1]
 					object = getObject item, path
-					`//<development>`
 					unless object
 						log.error "Attribute '#{attr}' in '#{item.toString()}' doesn't exist"
-					`//</development>`
+						continue
 					if bindings[attr]
-						object?.createBinding lastPath, val, item
+						object.createBinding lastPath, val, classElem._component, item
 					else
-						if object
-							if object._bindings?[lastPath]
-								object.createBinding lastPath, null, item
+						if object._bindings?[lastPath]
+							object.createBinding lastPath, null, classElem._component, item
+						if val instanceof Renderer.Component.Link
+							object[lastPath] = val.getItem classElem._component
+						else
 							object[lastPath] = val
 
 			return
@@ -343,7 +382,7 @@ Grid {
 				val = Object.getPrototypeOf(object)[lastPath]
 
 			if isBinding
-				object.createBinding lastPath, val, item
+				object.createBinding lastPath, val, classElem._component, item
 			else
 				object[lastPath] = val
 			return
@@ -394,7 +433,7 @@ Grid {
 					unless classList[i]
 						continue
 
-					if classList[i].changes._attributes.hasOwnProperty(attr)
+					if attr of classList[i].changes._attributes
 						restoreDefault = false
 						break
 
@@ -402,7 +441,7 @@ Grid {
 					defaultValue = undefined
 					defaultIsBinding = false
 					for i in [classListIndex+1...classListLength] by 1
-						if classList[i].changes._attributes.hasOwnProperty(attr)
+						if attr of classList[i].changes._attributes
 							defaultValue = classList[i].changes._attributes[attr]
 							defaultIsBinding = !!classList[i].changes._bindings[attr]
 							break
@@ -410,9 +449,9 @@ Grid {
 						defaultValue = Object.getPrototypeOf(object)[lastPath]
 
 					if defaultIsBinding
-						object.createBinding lastPath, defaultValue, item
+						object.createBinding lastPath, defaultValue, classElem._component, item
 					else
-						object.createBinding lastPath, null, item
+						object.createBinding lastPath, null, classElem._component, item
 						object[lastPath] = defaultValue
 
 					if EXTRA_RESTORE_ATTRS[lastPath]?

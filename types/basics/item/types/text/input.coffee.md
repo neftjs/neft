@@ -27,9 +27,9 @@ Qml and WebGL implementations
 			@__name__ = 'TextInput'
 			@__path__ = 'Renderer.TextInput'
 
-			constructor: ->
+			constructor: (component, opts) ->
 				@_multiLine = false
-				super()
+				super component, opts
 				@_width = 200
 				@_height = 50
 

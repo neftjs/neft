@@ -13,13 +13,11 @@ Animation @modifier
 *Animation* Animation()
 -----------------------
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_loop = false
 			@_updatePending = false
 			@_paused = false
-			super()
-
-			Impl.createObject @, @constructor.__name__
+			super component, opts
 
 *Boolean* Animation::when
 -------------------------
@@ -41,17 +39,17 @@ Animation @modifier
 
 ### *Signal* Animation::onRunningChange(*Boolean* oldValue)
 
-		setRunningOnReady = ->
-			@running = @_when
+		# setRunningOnReady = ->
+		# 	@running = @_when
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'running'
 			setter: (_super) -> (val) ->
 				@_when = val
-				unless @_isReady
-					@onReady setRunningOnReady
-					return
+				# unless @_isReady
+				# 	@onReady setRunningOnReady
+				# 	return
 
 				oldVal = @_running
 				if oldVal is val

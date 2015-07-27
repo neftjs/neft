@@ -128,7 +128,7 @@ module.exports = (impl) ->
 		return
 
 	setImageSource: (val, callback) ->
-		if rsc = impl.Renderer.resources.getResource(val)
+		if rsc = impl.Renderer.resources?.getResource(val)
 			val = rsc.getPath()
 		else
 			val = impl.utils.encodeImageSrc val

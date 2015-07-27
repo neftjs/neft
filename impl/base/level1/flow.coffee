@@ -2,17 +2,9 @@
 
 utils = require 'utils'
 log = require 'log'
+TypedArray = require 'typed-array'
 
 log = log.scope 'Renderer', 'Flow'
-
-if typeof Uint32Array is 'undefined'
-	Uint32TypedArray = (len) ->
-		arr = []
-		for i in [0..len]
-			arr[i] = 0
-		arr
-else
-	Uint32TypedArray = Uint32Array
 
 MAX_LOOPS = 50
 
@@ -21,11 +13,11 @@ queues = [[], []]
 queue = queues[queueIndex]
 pending = false
 
-cellsWidth = new Uint32TypedArray 64
-cellsHeight = new Uint32TypedArray 64
-elementsX = new Uint32TypedArray 64
-elementsY = new Uint32TypedArray 64
-elementsCell = new Uint32TypedArray 64
+cellsWidth = new TypedArray.Uint32 64
+cellsHeight = new TypedArray.Uint32 64
+elementsX = new TypedArray.Uint32 64
+elementsY = new TypedArray.Uint32 64
+elementsCell = new TypedArray.Uint32 64
 
 updateItem = (item) ->
 	{children, includeBorderMargins} = item
@@ -58,11 +50,11 @@ updateItem = (item) ->
 	maxLen = children.length
 	if align and elementsX.length < maxLen
 		maxLen *= 1.5
-		cellsWidth = new Uint32TypedArray maxLen
-		cellsHeight = new Uint32TypedArray maxLen
-		elementsX = new Uint32TypedArray maxLen
-		elementsY = new Uint32TypedArray maxLen
-		elementsCell = new Uint32TypedArray maxLen
+		cellsWidth = new TypedArray.Uint32 maxLen
+		cellsHeight = new TypedArray.Uint32 maxLen
+		elementsX = new TypedArray.Uint32 maxLen
+		elementsY = new TypedArray.Uint32 maxLen
+		elementsCell = new TypedArray.Uint32 maxLen
 
 	# tmp vars
 	width = height = column = row = x = y = right = rowSpan = maxCell = 0

@@ -89,17 +89,17 @@ Button {
 						@label.height = height
 				return
 
-			constructor: ->
+			constructor: (component, opts) ->
 				@_updatePending = false
 
-				@background = Renderer.Rectangle.create()
-				@image = Renderer.Image.create()
-				@label = Renderer.Text.create()
+				@background = new Renderer.Rectangle()
+				@image = new Renderer.Image()
+				@label = new Renderer.Text()
 
 				@_autoWidth = true
 				@_autoHeight = true
 
-				super()
+				super component, opts
 
 				@onWidthChange onWidthChange, @
 				@onHeightChange onHeightChange, @
@@ -130,9 +130,5 @@ Button {
 						@label.height = 0
 				_super.call @, val
 				return
-
-			clone: ->
-				clone = super()
-				clone
 
 		Button

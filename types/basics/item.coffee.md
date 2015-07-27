@@ -1,5 +1,5 @@
 Item @class
-====
+===========
 
 	'use strict'
 
@@ -22,14 +22,11 @@ Item @class
 
 This is a base class for everything which is visible.
 
-		constructor: ->
+		constructor: (component, opts) ->
 			assert.instanceOf @, Item, 'ctor ...'
 
-			@constructor = @constructor
 			@$ = null
-			@_impl = null
 			@_parent = null
-			@_sourceItem = null
 			@_children = null
 			@_previousSibling = null
 			@_nextSibling = null
@@ -50,44 +47,31 @@ This is a base class for everything which is visible.
 			@_pointer = null
 			@_margin = null
 			@_classes = null
-			@_classExtensions = null
-			@_classList = []
-			@_classQueue = []
+			super component, opts
 
-			super()
+#### Custom properties
 
-			Impl.createObject @, @constructor.__name__
+```
+Item {
+\  id: main
+\  property $.currentLife: 0.8
+\
+\  Text {
+\    text: "Life: " + main.$.currentLife
+\  }  
+}
+```
 
-*Item* Item.create([*Object* options])
---------------------------------------
+#### Custom signals
 
-		@create = (opts) ->
-			if opts?
-				assert.isObject opts
-
-			item = new @
-
-			if opts?
-				classElem = new Renderer.Class
-				classElem.priority = 0
-				classElem.target = item
-
-				{changes} = classElem
-				for prop, val of opts
-					if typeof val is 'function' and signal.isHandlerName(prop)
-						changes.setFunction prop, val
-					else
-						changes.setAttribute prop, val
-
-				classElem._isReady = true
-				classElem.onReady.emit()
-				classElem.onReady.disconnectAll()
-
-			item._isReady = true
-			item.onReady.emit()
-			item.onReady.disconnectAll()
-
-			item
+```
+Item {
+\  signal $.onPlayerCollision
+\  $.onPlayerCollision: function(){
+\    // boom!
+\  }
+}
+```
 
 *Signal* Item::ready()
 ----------------------
@@ -113,6 +97,8 @@ Rectangle {
 }
 ```
 
+		signal.Emitter.createSignal @, 'onReady'
+
 *Signal* Item::onUpdate(*Integer* miliseconds)
 ----------------------------------------------
 
@@ -126,14 +112,16 @@ Rectangle {
 				ms = now - oldNow
 
 				for item in items
-					if item._isReady
-						item.onUpdate.emit ms
+					emitSignal item, 'onUpdate', ms
 				requestAnimationFrame frame
 
 			requestAnimationFrame? frame
 
 			(item) ->
 				items.push item
+
+*ReadOnly* *String* Item::id
+----------------------------
 
 *Object* Item::children
 -----------------------
@@ -151,17 +139,50 @@ Rectangle {
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
 
-		class ChildrenObject extends signal.Emitter
+		class ChildrenObject extends itemUtils.MutableDeepObject
 			constructor: (ref) ->
-				@_ref = ref
+				@_target = null
 				@length = 0
-				super()
+				super ref
+
+*Integer* Item::children::length
+--------------------------------
+
+*Item* Item::children::target
+-----------------------------
+
+### *Signal* Item::children::onTargetChange(*Item* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'target'
+				defaultValue: null
+				developmentSetter: (val) ->
+					if val?
+						assert.instanceOf val, Item
+
+*Integer* Item::children::index(*Item* value)
+---------------------------------------------
 
 			index: (val) -> Array::indexOf.call @, val
+
+*Boolean* Item::children::has(*Item* value)
+-------------------------------------------
+
 			has: (val) -> @index(val) isnt -1
 			indexOf: @::index
 
-### *Signal* Item.children::onInsert(*Item* child, *Integer* index)
+Item::children::clear()
+-----------------------
+
+Removes all children from a node.
+
+			clear: ->
+				while child = @[0]
+					child.parent = null
+				return
+
+### *Signal* Item::children::onInsert(*Item* child, *Integer* index)
 
 #### Listen on an item child insertion @snippet
 
@@ -173,11 +194,11 @@ Item {
 }
 ```
 
-		signal.Emitter.createSignal ChildrenObject, 'onInsert'
+			signal.Emitter.createSignal @, 'onInsert'
 
-### *Signal* Item.children::onPop(*Item* child, *Integer* index)
+### *Signal* Item::children::onPop(*Item* child, *Integer* index)
 
-		signal.Emitter.createSignal ChildrenObject, 'onPop'
+			signal.Emitter.createSignal @, 'onPop'
 
 *Item* Item::parent = null
 --------------------------
@@ -191,10 +212,14 @@ Item {
 			name: 'parent'
 			defaultValue: null
 			setter: (_super) -> (val=null) ->
-				if val?._sourceItem
-					val = val._sourceItem
-
 				old = @_parent
+				oldChildren = old?.children
+				valChildren = val?.children
+
+				if valChildren?._target
+					val = valChildren._target
+					valChildren = val.children
+
 				if old is val
 					return
 
@@ -205,21 +230,21 @@ Item {
 
 				if old isnt null
 					if oldNextSibling is null
-						index = old._children.length - 1
-						assert.ok old._children[index] is @
-						pop.call old._children
+						index = oldChildren.length - 1
+						assert.ok oldChildren[index] is @
+						pop.call oldChildren
 					else if oldPreviousSibling is null
 						index = 0
-						assert.ok old._children[index] is @
-						shift.call old._children
+						assert.ok oldChildren[index] is @
+						shift.call oldChildren
 					else
-						index = indexOf.call old._children, @
+						index = indexOf.call oldChildren, @
 						assert.ok index isnt -1
-						splice.call old._children, index, 1
+						splice.call oldChildren, index, 1
 
 				if val isnt null
 					assert.instanceOf val, Item, '::parent setter ...'
-					length = push.call val.children, @
+					length = push.call valChildren, @
 
 				# old siblings
 				if oldPreviousSibling isnt null
@@ -229,7 +254,7 @@ Item {
 
 				# new siblings
 				if val isnt null
-					previousSibling = val._children[val._children.length - 2] or null
+					previousSibling = valChildren[valChildren.length - 2] or null
 					@_previousSibling = previousSibling
 					previousSibling?._nextSibling = @
 				else
@@ -243,11 +268,11 @@ Item {
 
 				# signals
 				if old isnt null
-					emitSignal old, 'onChildrenChange', old.children
-					emitSignal old.children, 'onPop', @, index
+					emitSignal old, 'onChildrenChange', oldChildren
+					emitSignal oldChildren, 'onPop', @, index
 				if val isnt null
-					emitSignal val, 'onChildrenChange', val.children
-					emitSignal val.children, 'onInsert', @, length - 1
+					emitSignal val, 'onChildrenChange', valChildren
+					emitSignal valChildren, 'onInsert', @, length - 1
 
 				emitSignal @, 'onParentChange', old
 
@@ -577,46 +602,13 @@ This method checks whether two items are overlapped.
 
 			Impl.doItemOverlap.call @, item
 
-Item::clear()
--------------
-
-Removes all children from a node.
-
-		clear: ->
-			while child = @children[0]
-				child.parent = null
-			return
-
 Item::clone()
 -------------
-
-		clone: ->
-			ctor = @constructor
-			if (ctor::) is (Item::) or (ctor::) instanceof Item
-				clone = new ctor
-			else
-				clone = ctor()
-
-			clone.x = @_x
-			clone.y = @_y
-			clone.z = @_z
-			clone.width = @_width
-			clone.height = @_height
-			clone.clip = @_clip
-			clone.visible = @_visible
-			clone.linkUri = @_linkUri
-			clone.scale = @_scale
-			clone.rotation = @_rotation
-			clone.opacity = @_opacity
-
-			clone
 
 		@Spacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
 		@Alignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
 		@Anchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
 		@Margin = require('./item/margin') Renderer, Impl, itemUtils, Item
-		require('./item/property') Renderer, Impl, itemUtils, Item
-		require('./item/signal') Renderer, Impl, itemUtils, Item
 		@Pointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
 		@Keys = require('./item/keys') Renderer, Impl, itemUtils, Item
 		@Document = require('./item/document') Renderer, Impl, itemUtils, Item

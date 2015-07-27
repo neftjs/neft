@@ -39,7 +39,7 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 		@__name__ = 'Image'
 		@__path__ = 'Renderer.Image'
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_source = ''
 			@_loaded = false
 			@_autoWidth = true
@@ -47,7 +47,7 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			@_sourceWidth = 0
 			@_sourceHeight = 0
 			@_fillMode = 'Stretch'
-			super()
+			super component, opts
 
 		getter = utils.lookupGetter @::, 'width'
 		setter = utils.lookupSetter @::, 'width'
@@ -205,8 +205,3 @@ ReadOnly *Boolean* Image::loaded
 --------------------------------------
 
 		signal.Emitter.createSignal @, 'onError'
-
-		clone: ->
-			clone = super()
-			clone.source = @_source
-			clone

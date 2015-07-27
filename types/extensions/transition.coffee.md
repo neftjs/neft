@@ -36,13 +36,13 @@ Rectangle {
 *Transition* Transition()
 -------------------------
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_animation = null
 			@_property = ''
 			@_duration = 0
 			@_to = 0
 			@_durationUpdatePending = false
-			super()
+			super component, opts
 
 		listener = (oldVal) ->
 			{animation} = @
@@ -109,19 +109,17 @@ Rectangle {
 					setImmediate onTargetReady.bind(@)
 
 				if item
-					if item._isReady
-						@_running = true
-					else
-						item.onReady onTargetReady, @
+					@_running = true
+					# else
+					# 	item.onReady onTargetReady, @
 
 				if property
+					handlerName = "on#{utils.capitalize(property)}Change"
 					if oldVal
-						handlerName = "on#{utils.capitalize(property)}Change"
 						oldVal[handlerName]?.disconnect listener, @
 
 					if val
 						if handlerName of val
-							handlerName = "on#{utils.capitalize(property)}Change"
 							val[handlerName] listener, @
 						else
 							log.error "'#{property}' property signal not found"

@@ -25,14 +25,14 @@ Row {
 		@__name__ = 'Row'
 		@__path__ = 'Renderer.Row'
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = true
 			@_updatePending = false
 			@_autoWidth = true
 			@_autoHeight = true
-			super()
+			super component, opts
 
 		@::_width = -1
 		getter = utils.lookupGetter @::, 'width'
@@ -88,10 +88,3 @@ Row {
 			implementation: Impl.setRowIncludeBorderMargins
 			developmentSetter: (val) ->
 				assert.isBoolean val
-
-		clone: ->
-			clone = super()
-			clone.fill = @fill
-			clone.spacing = @_spacing
-			clone.alignment = @alignment
-			clone

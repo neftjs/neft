@@ -28,14 +28,14 @@ Flow {
 *Flow* Flow() : *Renderer.Item*
 -------------------------------
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_spacing = null
 			@_alignment = null
 			@_includeBorderMargins = true
 			@_updatePending = false
 			@_autoWidth = true
 			@_autoHeight = true
-			super()
+			super component, opts
 
 		@::_width = -1
 		getter = utils.lookupGetter @::, 'width'
@@ -54,13 +54,6 @@ Flow {
 				@_autoHeight = val is -1
 			_super.call @, val
 			return
-
-		clone: ->
-			clone = super()
-			clone.fill = @fill
-			if @_spacing
-				clone.spacing = @spacing
-			clone
 
 *Spacing* Flow::spacing
 -----------------------

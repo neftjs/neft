@@ -30,14 +30,13 @@ AmbientSound {
 *AmbientSound* AmbientSound()
 -----------------------------
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_impl = null
 			@_when = false
 			@_running = false
 			@_source = ''
 			@_loop = false
-			super()
-			Object.preventExtensions @
+			super component, opts
 
 			Impl.createObject @, @constructor.__name__
 

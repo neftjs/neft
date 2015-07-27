@@ -26,7 +26,7 @@ Item {
 
 	log = log.scope 'Renderer', 'ResourcesLoader'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class ResourcesLoader extends itemUtils.Object
+	module.exports = (Renderer, Impl, itemUtils) -> class ResourcesLoader extends itemUtils.FixedObject
 		@__name__ = 'ResourcesLoader'
 		@__path__ = 'Renderer.ResourcesLoader'
 
@@ -46,10 +46,10 @@ Access it with:
 ResourcesLoader {}
 ```
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_resources = Renderer.resources
 			@_progress = 0
-			super()
+			super component, opts
 			setImmediate =>
 				if @_resources
 					@progress = 0

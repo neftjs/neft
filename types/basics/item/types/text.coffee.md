@@ -42,14 +42,14 @@ Text {
 				u: true
 				a: true
 
-			constructor: ->
+			constructor: (component, opts) ->
 				@_text = ''
 				@_color = 'black'
 				@_linkColor = 'blue'
 				@_lineHeight = 1
 				@_font = null
 				@_alignment = null
-				super()
+				super component, opts
 
 *String* Text::text
 -------------------
@@ -106,15 +106,6 @@ HTML code in WebGL implementation
 				implementation: Impl.setTextLineHeight
 				developmentSetter: (val) ->
 					assert.isFloat val
-
-			clone: ->
-				clone = super()
-				clone.text = @_text
-				clone.color = @_color
-				clone.lineHeight = @_lineHeight
-				if @_font
-					clone.font = @font
-				clone
 
 *Font* Text::font
 -----------------

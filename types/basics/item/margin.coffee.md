@@ -51,12 +51,6 @@ Margin @extension
 				_super.call @, val
 				return
 
-		ctor::clone = do (_super = ctor::clone) -> ->
-			clone = _super.call @
-			if @['_' + propertyName]
-				clone[propertyName] = @[propertyName]
-			clone
-
 		constructor: (ref) ->
 			@_left = 0
 			@_top = 0

@@ -26,7 +26,7 @@ Item {
 
 	log = log.scope 'Renderer', 'FontLoader'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends itemUtils.Object
+	module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends itemUtils.FixedObject
 		@__name__ = 'FontLoader'
 		@__path__ = 'Renderer.FontLoader'
 
@@ -57,10 +57,10 @@ Access it with:
 FontLoader {}
 ```
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_name = ''
 			@_source = ''
-			super()
+			super component, opts
 
 *String* FontLoader::name
 -------------------------

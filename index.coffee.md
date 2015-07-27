@@ -102,12 +102,13 @@ Styles.button/red {
 	exports.RotationSensor = require('./types/namespace/sensor/rotation') exports, Impl, itemUtils
 
 	exports.Extension = require('./types/extension') exports, Impl, itemUtils
-	exports.Source = require('./types/extensions/source') exports, Impl, itemUtils
 	exports.Class = require('./types/extensions/class') exports, Impl, itemUtils
 	exports.Animation = require('./types/extensions/animation') exports, Impl, itemUtils
 	exports.PropertyAnimation = require('./types/extensions/animation/types/property') exports, Impl, itemUtils
 	exports.NumberAnimation = require('./types/extensions/animation/types/property/types/number') exports, Impl, itemUtils
 	exports.Transition = require('./types/extensions/transition') exports, Impl, itemUtils
+
+	exports.Component = require('./types/basics/component') exports, Impl, itemUtils
 
 	exports.Item = require('./types/basics/item') exports, Impl, itemUtils
 	exports.Image = require('./types/basics/item/types/image') exports, Impl, itemUtils
@@ -182,6 +183,9 @@ Column {
 	utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val
 		Impl.setWindow val
+
+	utils.defineProperty exports, 'documentGlobalNode', utils.CONFIGURABLE, null, (val) ->
+		utils.defineProperty exports, 'documentGlobalNode', utils.ENUMERABLE, val
 
 	utils.defineProperty exports, 'serverUrl', utils.WRITABLE, ''
 	utils.defineProperty exports, 'resources', utils.WRITABLE, null

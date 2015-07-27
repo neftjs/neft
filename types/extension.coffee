@@ -6,13 +6,13 @@ signal = require 'signal'
 module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtils.Object
 	@__name__ = 'Extension'
 
-	constructor: ->
+	constructor: (component, opts) ->
 		@_impl ?= bindings: null
 		@_target = null
 		@_running = false
 		@_when = false
 		@_whenHandler = null
-		super()
+		super component, opts
 
 	signalListener = ->
 		unless @_when

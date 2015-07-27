@@ -31,11 +31,11 @@ Rectangle {
 			@__name__ = 'Rectangle'
 			@__path__ = 'Renderer.Rectangle'
 
-			constructor: ->
+			constructor: (component, opts) ->
 				@_color = 'transparent'
 				@_radius = 0
 				@_border = null
-				super()
+				super component, opts
 
 *String* Rectangle::color = 'transparent'
 -----------------------------------------
@@ -62,14 +62,6 @@ Rectangle {
 				implementation: Impl.setRectangleRadius
 				developmentSetter: (val) ->
 					expect(val).toBe.float()
-
-			clone: ->
-				clone = super()
-				clone.color = @_color
-				clone.radius = @_radius
-				if @_border
-					clone.border = @border
-				clone
 
 *Border* Rectangle::border
 --------------------------

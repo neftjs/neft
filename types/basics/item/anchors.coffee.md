@@ -90,12 +90,6 @@ This connection is solid, so if the *rect1* will change a position,
 				_super.call @, val
 				return
 
-		ctor::clone = do (_super = ctor::clone) -> ->
-			clone = _super.call @
-			if @_anchors
-				clone.anchors = @anchors
-			clone
-
 		constructor: (ref) ->
 			@_top = null
 			@_bottom = null
@@ -143,8 +137,8 @@ Rectangle {
 
 Such reference is also automatically updated if the item parent change.
 
-					unless target is 'parent' or target is 'children' or target is 'this' or target is 'nextSibling' or target is 'previousSibling' or target instanceof Item
-						log.error "`anchors.#{type}` expects an item; `'#{val}'` given"
+					# unless target is 'parent' or target is 'children' or target is 'this' or target is 'nextSibling' or target is 'previousSibling' or target instanceof Item
+					# 	log.error "`anchors.#{type}` expects an item; `'#{val}'` given"
 
 For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.
 

@@ -18,16 +18,20 @@ module.exports = (impl) ->
 	{items} = impl
 
 	class Connection
-		constructor: (@binding, @item, @prop, @parent=null) ->
+		constructor: (@binding, objects, item, @prop, @parent=null) ->
 			@handlerName = getPropHandlerName prop
 			@isConnected = false
 
 			if isArray(item)
-				@child = new Connection binding, item[0], item[1], @
+				@child = new Connection binding, objects, item[0], item[1], @
 				@item = @child.getValue()
 			else
-				if @item is 'this'
-					@item = @binding.ctx
+				if item is 'this'
+					@item = binding.ctx
+				else if item is 'view'
+					@item = impl.Renderer.window
+				else
+					@item = objects[item] or impl.Renderer[item]
 				@child = null
 			@connect()
 
@@ -84,62 +88,50 @@ module.exports = (impl) ->
 			@child?.destroy()
 			return
 
-	isSimpleBinding = (binding) ->
-		binding[1].length is 1 and isArray(binding[1][0]) and not isArray(binding[1][0][0])
+	# isSimpleBinding = (binding) ->
+	# 	binding[1].length is 1 and isArray(binding[1][0]) and not isArray(binding[1][0][0])
 
-	class SimpleBinding
-		constructor: (@obj, @prop, binding, ctx) ->
-			item = obj._ref or obj
-			target = @target = binding[1][0]
+	# class SimpleBinding
+	# 	constructor: (@obj, @prop, binding, ctx) ->
+	# 		item = obj._ref or obj
+	# 		target = binding[1][0]
 
-			if target[0] is 'this'
-				@targetItem = ctx
-			else
-				@targetItem = target[0]
+	# 		@func = binding[0]
+	# 		@targetProp = target[1]
+	# 		if target[0] is 'this'
+	# 			@targetItem = ctx
+	# 		else
+	# 			@targetItem = ctx._component.itemsById[target[0]]
 
-			handlerName = "on#{utils.capitalize(target[1])}Change"
-			@targetItem[handlerName]? @update, @
+	# 		handlerName = "on#{utils.capitalize(target[1])}Change"
+	# 		@targetItem[handlerName]? @update, @
 
-			Object.preventExtensions @
+	# 		Object.preventExtensions @
 
-			@update()
+	# 		@update()
 
-		update: ->
-			@obj[@prop] = @targetItem[@target[1]]
-			return
+	# 	update: ->
+	# 		@obj[@prop] = @targetItem[@targetProp
+	# 		return
 
-		destroy: ->
-			handlerName = "on#{utils.capitalize(@target[1])}Change"
-			@targetItem[handlerName].disconnect @update, @
-			# remove from the list
-			@obj._impl.bindings[@prop] = null
-			return
+	# 	destroy: ->
+	# 		handlerName = "on#{utils.capitalize(@targetProp)}Change"
+	# 		@targetItem[handlerName].disconnect @update, @
+	# 		# remove from the list
+	# 		@obj._impl.bindings[@prop] = null
+	# 		return
 
 	class Binding
-		@getFunc = do ->
-			cache = Object.create null
-			(binding) ->
-				if fromCache = cache[binding[0]]
-					fromCache
-				else
-					args = []
-					for i in [0...binding[2].length] by 1
-						args[i] = "$#{i}"
-
-					args.push "return #{binding[0] or 0};"
-					cache[binding[0]] = Function.apply null, args
-
-		constructor: (@obj, @prop, binding, @ctx) ->
-			assert.lengthOf binding, 3
-			assert.isString binding[0]
+		constructor: (@obj, @prop, binding, component, @ctx) ->
+			assert.lengthOf binding, 2
+			assert.isFunction binding[0]
 			assert.isArray binding[1]
-			assert.isArray binding[2]
 
 			item = @item = obj._ref or obj
 
 			# properties
-			@func = Binding.getFunc binding
-			@args = binding[2]
+			@func = binding[0]
+			@args = component.objectsOrder
 
 			# destroy on property value change
 			handlerName = "on#{utils.capitalize(prop)}Change"
@@ -148,10 +140,10 @@ module.exports = (impl) ->
 			connections = @connections = []
 			for elem in binding[1]
 				if isArray(elem)
-					connections.push new Connection @, elem[0], elem[1]
+					connections.push new Connection @, component.objects, elem[0], elem[1]
 
 			# update
-			@updatePending = false
+			# @updatePending = false
 			Object.preventExtensions @
 
 			@update()
@@ -179,9 +171,9 @@ module.exports = (impl) ->
 			if typeof result is 'number' and not isFinite(result)
 				result = getDefaultValue @
 
-			@updatePending = true
+			# @updatePending = true
 			@obj[@prop] = result
-			@updatePending = false
+			# @updatePending = false
 			return
 
 		destroy: ->
@@ -197,19 +189,19 @@ module.exports = (impl) ->
 			@connections = null
 			return
 
-	setItemBinding: (prop, binding, ctx) ->
+	setItemBinding: (prop, binding, component, ctx) ->
 		data = @_impl
 		data.bindings ?= {}
 
-		if data.bindings[prop]?.updatePending
-			return
+		# if data.bindings[prop]?.updatePending
+		# 	return
 
 		data.bindings[prop]?.destroy()
 
 		if binding?
-			if isSimpleBinding(binding)
-				data.bindings[prop] = new SimpleBinding @, prop, binding, ctx
-			else
-				data.bindings[prop] = new Binding @, prop, binding, ctx
+			# if isSimpleBinding(binding)
+			# 	data.bindings[prop] = new SimpleBinding @, prop, binding, ctx
+			# else
+			data.bindings[prop] = new Binding @, prop, binding, component, ctx
 
 		return

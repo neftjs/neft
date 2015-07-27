@@ -30,7 +30,7 @@ Grid {
 *Grid* Grid() : *Renderer.Item*
 -------------------------------
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_columns = 2
 			@_rows = Infinity
 			@_spacing = null
@@ -39,7 +39,7 @@ Grid {
 			@_updatePending = false
 			@_autoWidth = true
 			@_autoHeight = true
-			super()
+			super component, opts
 
 		@::_width = -1
 		getter = utils.lookupGetter @::, 'width'
@@ -119,13 +119,3 @@ Grid {
 			implementation: Impl.setGridIncludeBorderMargins
 			developmentSetter: (val) ->
 				assert.isBoolean val
-
-		clone: ->
-			clone = super()
-			clone.columns = @_columns
-			clone.rows = @_rows
-			clone.fill = @fill
-			clone.alignment = @alignment
-			if @_spacing
-				clone.spacing = @spacing
-			clone

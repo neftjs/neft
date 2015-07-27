@@ -29,10 +29,10 @@ Rectangle {
 	module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
 		@__name__ = 'NumberAnimation'
 
-		constructor: ->
+		constructor: (component, opts) ->
 			@_from = 0
 			@_to = 0
-			super()
+			super component, opts
 
 *Float* NumberAnimation::from
 -----------------------------
