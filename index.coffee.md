@@ -1247,11 +1247,11 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 				for bValue in b
 					if bValue and typeof bValue is 'object'
-						if isEqual aValue, bValue, compareFunc
+						if isEqual(aValue, bValue, compareFunc)
 							isTrue = true
 						continue
 
-					if compareFunc aValue, bValue
+					if compareFunc(aValue, bValue)
 						isTrue = true
 						break
 
@@ -1263,11 +1263,11 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 				for aValue in a
 					if aValue and typeof aValue is 'object'
-						if isEqual bValue, aValue, compareFunc
+						if isEqual(bValue, aValue, compareFunc)
 							isTrue = true
 						continue
 
-					if compareFunc bValue, aValue
+					if compareFunc(bValue, aValue)
 						isTrue = true
 						break
 
@@ -1283,17 +1283,17 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 			# whether keys are the same
 			for key, value of a when a.hasOwnProperty(key)
-				unless b.hasOwnProperty key
+				unless b.hasOwnProperty(key)
 					return false
 
 			for key, value of b when b.hasOwnProperty(key)
-				unless a.hasOwnProperty key
+				unless a.hasOwnProperty(key)
 					return false
 
 			# whether values are equal
 			for key, value of a when a.hasOwnProperty(key)
 				if value and typeof value is 'object'
-					unless isEqual value, b[key], compareFunc
+					unless isEqual(value, b[key], compareFunc)
 						return false
 					continue
 
