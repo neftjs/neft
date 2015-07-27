@@ -177,12 +177,15 @@ module.exports = (File, data) -> class Style
 		return
 
 	getTextObject: ->
-		if @item.$? and 'text' of @item.$
-			@item.$
-		else if 'text' of @item
-			@item
-		else if @item.label? and 'text' of @item.label
-			@item.label
+		{item} = @
+		unless item
+			return
+		if item.$? and 'text' of item.$
+			item.$
+		else if 'text' of item
+			item
+		else if item.label? and 'text' of item.label
+			item.label
 
 	updateText: ->
 		obj = @getTextObject()
@@ -332,38 +335,42 @@ module.exports = (File, data) -> class Style
 		if id instanceof Renderer.Item
 			@item = id
 		else if @isScope
-			if ///^renderer\:///.test id
+			@isAutoParent = true
+			if ///^renderer\:///.test(id)
 				id = id.slice 'renderer:'.length
 				id = utils.capitalize id
 				@scope =
 					mainItem: new Renderer[id]
 					ids: {}
-			else
-				match = /^styles:(.+?)(?:\:(.+?))?$/.exec id
-				[_, id, subid] = match
-				@scope = styles[id]?.withStructure(subid)
-			@isAutoParent = true
-			if @scope
-				@item = @scope.mainItem
-			else
-				unless File.Input.test id
-					log.warn "Style file `#{id}` can't be find"
-				return
-		else
-			parent = @parent
-			loop
-				scope = parent?.scope or windowStyle
-				@item = scope.ids[id] or scope.mainItem.$?[id]
-				@item ?= scope.styles?(id)
-				if @item or ((not parent or not (parent = parent.parent)) and scope is windowStyle)
-					break
+			else if ///^styles\:///.test(id)
+				match = /^styles:(.+?)(?:\:(.+?))?(?:\:(.+?))?$/.exec id
+				[_, file, style, subid] = match
+				style ?= '_main'
+				if subid
+					parentId = "styles:#{file}:#{style}"
+					parent = @parent
+					loop
+						scope = parent?.scope or windowStyle
+						if (scope is windowStyle and file is 'view') or (parent and parent.node.attrs.get('neft:style') is parentId)
+							@item = scope?.objects[subid]# or scope?.item.$?[subid]
+						# @item ?= scope?.?(id)
+						if @item or ((not parent or not (parent = parent.parent)) and scope is windowStyle)
+							break
 
-			unless @item
-				unless File.Input.test(id)
-					log.warn "Can't find `#{id}` style item"
-				return
+					unless @item
+						unless File.Input.test(id)
+							log.warn "Can't find `#{id}` style item"
+						return
 
-			@isAutoParent = !@item.parent
+					@isAutoParent = !@item.parent
+				else
+					@scope = styles[file]?[style]?()?._component
+					if @scope
+						@item = @scope.item
+					else
+						unless File.Input.test(id)
+							log.warn "Style file `#{id}` can't be find"
+						return
 
 		@node._documentStyle = @
 		@node.style = @item
@@ -376,18 +383,6 @@ module.exports = (File, data) -> class Style
 			listenTextRec @
 
 		return;
-
-	getStyleNodeIndex = (parent, child) ->
-		index = 1
-		for node in parent.children
-			if node is child
-				return index
-			if node._documentStyle
-				index++
-		`//<development>`
-		throw "Internal Error: can't get style node index"
-		`//</development>`
-		index
 
 	findItemParent: ->
 		if @isAutoParent and @item and not @item.parent
@@ -463,8 +458,8 @@ module.exports = (File, data) -> class Style
 		# visibility changes
 		tmpNode = clone.node
 		loop
-			if tmpNode.attrs.has 'neft:if'
-				tmpNode.onVisibilityChange visibilityChangeListener, clone
+			if tmpNode.attrs.has('neft:if') or tmpNode.attrs.has('neft:else')
+				tmpNode.onVisibleChange visibilityChangeListener, clone
 
 			tmpNode = tmpNode.parent
 			if not tmpNode or tmpNode.attrs.has('neft:style')
