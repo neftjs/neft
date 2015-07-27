@@ -31,7 +31,7 @@ module.exports = (signal) -> class SignalsEmitter
 			# http://jsperf.com/dynamic-structures
 			signals = @_signals
 			unless listeners = signals[name]
-				listeners = signals[name] = []
+				listeners = signals[name] = [null, null, null, null]
 				onInitialized? @, name
 			handlerFunc.obj = @
 			handlerFunc.listeners = listeners

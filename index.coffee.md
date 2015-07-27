@@ -78,15 +78,20 @@ obj.onRename.emit('Max', 'George');
 
 	callSignal = (obj, listeners, arg1, arg2) ->
 		i = 0
-		while i < listeners.length
+		n = listeners.length
+		while i < n
 			func = listeners[i]
 			if func is null
-				listeners.splice i, 2
+				if listeners[i+2]?
+					listeners[i] = listeners[i+2]
+					listeners[i+1] = listeners[i+3]
+					listeners[i+2] = null
+					listeners[i+3] = null
+					continue
 			else
-				result = func.call(listeners[i+1] or obj, arg1, arg2)
-				if result is STOP_PROPAGATION
-					return result
-				i += 2
+				if func.call(listeners[i+1] or obj, arg1, arg2) is STOP_PROPAGATION
+					return STOP_PROPAGATION
+			i += 2
 		return
 
 *Signal* Signal()
@@ -103,7 +108,7 @@ If this function is called, it works like *Signal.connect()*.
 			handler.connect listener, ctx
 
 		handler.obj = obj
-		handler.listeners = []
+		handler.listeners = [null, null, null, null]
 		utils.setPrototypeOf handler, SignalPrototype
 
 		handler
@@ -169,7 +174,19 @@ obj.onPress.emit();
 			assert.isFunction @
 			assert.isFunction listener
 
-			@listeners.push listener, ctx
+			{listeners} = @
+
+			i = n = listeners.length
+			while (i-=2) >= 0
+				if listeners[i] isnt null
+					break
+
+			if i+2 is n
+				listeners.push listener, ctx
+			else
+				listeners[i+2] = listener
+				listeners[i+3] = ctx
+
 
 			return
 
@@ -207,6 +224,8 @@ obj.onPress.emit()
 					break
 				index += 2
 			assert.isNot index, -1
+			assert.is listeners[index], listener
+			assert.is listeners[index + 1], ctx
 
 			listeners[index] = null
 			listeners[index + 1] = null
