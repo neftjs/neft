@@ -1,6 +1,6 @@
 {
 	var RESERVED_ATTRIBUTES = {id: true};
-	var ids;
+	var ids = {};
 
 	function forEachType(arr, type, callback){
 		for (var i = 0, n = arr.length; i < n; i++){
@@ -299,7 +299,7 @@ TypeBody
 
 Type
 	= __ name:TypeName WhiteSpace* "{" body:TypeBody "}" __ {
-		var obj = { type: 'object', name: name, id: '', autoId: false, body: body };
+		var obj = { type: 'object', name: name, id: '', body: body };
 
 		forEachType(body, "id", function(elem){
 			if (obj.id){
@@ -307,11 +307,6 @@ Type
 			}
 			obj.id = elem.value;
 		});
-
-		if (!obj.id){
-			obj.id = 'a' + uid();
-			obj.autoId = true;
-		}
 
 		setParentRec(body, obj);
 
