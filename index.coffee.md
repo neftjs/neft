@@ -20,6 +20,7 @@ HTML documents and more.
 	Renderer = require 'renderer'
 	Resources = require 'resources'
 	Dict = require 'dict'
+	AppDocument = require 'app-document'
 
 	AppRoute = require './route'
 
@@ -37,9 +38,6 @@ HTML documents and more.
 		# Welcome log also for release mode
 		(require('log')).ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
 
-		`//<trialVersion>`
-		(require('log')).warn "This is a trial version. Only for testing on your local machine. Licensing: http://www.neft.io/docs"
-		`//</trialVersion>`
 		`//<development>`
 		log.warn "Use this bundle only in development; type --release when it's ready"
 		`//</development>`
@@ -183,13 +181,6 @@ Files from the *views* folder as *Document* instances.
 
 		app.Route = AppRoute app
 
-		# unauthorized
-		`//<trialVersion>`
-		unless ///localhost|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}///.test app.networking.url
-			(require('log')).error "Trial version can be run only locally"
-			return
-		`//</trialVersion>`
-
 *Dict* app.cookies
 ------------------
 
@@ -259,21 +250,35 @@ new app.Route({
 		Renderer.resources = app.resources
 		Renderer.serverUrl = app.networking.url
 
+		# set styles window item
 		if opts.styles?
+			for style in opts.styles
+				if style.name is 'view'
+					windowStyle = style.file._main()
+					break
+			windowStyle ?= new Renderer.Item
+			Renderer.window = windowStyle
+
+			stylesInitObject =
+				app: app
+				view: windowStyle
+
 			# initialize styles
 			for style in opts.styles when style.name?
-				app.styles[style.name] = style.file app
+				style.file._init stylesInitObject
+				# for name, subfile of style.file
+				# 	if name[0] isnt '_'
+				# 		subfile.init()
+				app.styles[style.name] = style.file
 
-			# set styles window item
-			windowStyle = app.styles?.view?.withStructure()
-		windowStyle ?=
-			mainItem: new Renderer.Item
-			ids: {}
-		Renderer.window = windowStyle.mainItem
+			# windowStyle._component?.init()
+
+		# load frameworks
+		AppDocument app
 
 		# load styles
 		require('styles')
-			windowStyle: windowStyle
+			windowStyle: windowStyle._component
 			styles: app.styles
 
 		# load bootstrap
@@ -307,7 +312,7 @@ new app.Route({
 				r = {}
 				if utils.isObject(obj) and not (obj instanceof app.Route)
 					for method, opts of obj
-						if utils.isPlainObject(opts)
+						if utils.isObject(opts)
 							route = new app.Route method, opts
 							r[route.name] = route
 						else
@@ -320,7 +325,8 @@ new app.Route({
 
 	# link module
 	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log', 'resources',
-	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert', 'db']
+	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert', 'db',
+	           'app-document']
 	for name in MODULES
 		exports[name] = require name
 	exports['neft-assert'] = exports.assert

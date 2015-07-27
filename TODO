@@ -1,22 +1,30 @@
 Document:
   ✔ Element::query() @done (15-04-23 13:10)
-  ☐ Element::queryAll() :not()
+  ☐ Element::queryAll() :not(), #, .
+  ✔ Element::queryAll() omit blank elements @done (15-06-25 14:13)
   ✔ Element::queryAll() multiple separated by comma @done (15-04-23 12:40)
   ✔ neft:each functions scoping @done (15-04-23 14:50)
   ☐ Add neft:bind (e.g. neft:bind="name as neft:style:value")
-  ☐ Add neft:log
+  ✔ Add neft:log @done (15-06-27 12:56)
+  ✔ Add neft:blank @done (15-06-25 14:13)
   ☐ Better error messages
-  ☐ Elements ids
+  ✔ Elements ids @done (15-06-06 19:20)
+  ✔ neft:if ... neft:else @done (15-06-29 13:28)
+  ☐ Inline styles
+  ☐ neft:func when attribute
+  ☐ mustache syntax
+  ☐ More extensions
 
 Renderer:
   ☐ HTML namespace items
   ☐ Form Item
   ✔ Button Item @started(15-05-01 07:52) @done (15-05-01 09:10) @lasted(1:18)
-  ☐ State::targets
-  ☐ document.query/queryAll
+  ☐ document.query
+  ☐ query by type
   ✔ State two-dots properties support (q.g. label.font.pixelSize) @started(15-04-27 08:07) @done (15-04-30 17:28) @lasted(3 days, 9:21)
   ☐ OSX renderer
   ☐ Android renderer
+  ☐ Cocos2d-x implementation
   ✔ Simple bindings (e.g. parent.width) @started(15-04-23 16:00) @done (15-04-23 16:17) @lasted(0:17)
   ✔ parent/nextSibling/previousSibling as static references in bindings @started(15-04-23 14:52) @done (15-04-23 15:59) @lasted(1:07)
   ☐ Use resources resolutions properly
@@ -24,15 +32,34 @@ Renderer:
   ✔ Hash bindings in NML parser @started(15-04-24 15:09) @done (15-04-24 18:48) @lasted(3:39)
   ✔ Anchors implementation without bindings @done (15-04-24 18:49)
   ☐ Vector Graphic Items
-  ☐ NML parser: allow duplicated ids in different file sections
+  ✔ NML parser: allow duplicated ids in different file sections @done (15-06-29 21:14)
+  ☐ NML parser: allow inline javascript and requires
   ✘ Button text property @cancelled (15-05-05 11:58)
   ☐ Grid utils - use free space equal for all cells
   ☐ Item::targetItem
-  ☐ Item: auto width/height to preserve aspect
-  ☐ Cocos2d-x implementation
+  ☐ Image: auto width/height to preserve aspect
+  ✔ previousSibling / nextSibling setters @done (15-06-29 15:33)
+  ☐ Auto type-casting in Animation
+  ☐ NML: Fast animations and transitons (Transition on ... {})
+  ☐ NML: Fast classes (If .. else)
+  ☐ Class::otherwise
+  ☐ Class::extends
+  ✔ NML: functions in class changes @done (15-06-29 17:04)
+  ☐ Flow/Grid/Column/Row: ::contentWidth ::contentHeight
+  ✔ Item::classes append and remove setters for strings @done (15-06-15 12:08)
+  ✔ Flow::alignment @done (15-06-15 15:02)
+  ☐ Class: deep properties e.g. margin and margin.top
+  ☐ Text::uppercase
+  ☐ PropertyAnimation::easing
+  ☐ Class::targets
+  ☐ Item::background = Rectangle
+  ☐ Item::image = Image
+  ☐ Item::order = Row/Column/Grid/Flow
+  ☐ Item::label = Text
+  ☐ Source -> Item::children.target
 
 Styles:
-  ☐ Default styles
+  ☐ Default styles (material design)
   ✔ Multiple styles in one file @started(15-05-01 10:33) @done (15-05-01 11:14) @lasted(0:41)
   ☐ Reduce styles size
   ✔ Don't use styles on node @done (15-05-07 09:05)
@@ -43,6 +70,7 @@ Styles:
   ☐ neft:func scoping in more than 1 neft:each parent
   ☐ neft:func don't remove new lines
   ☐ Re-use created classes in creating items
+  ☐ Styles <-> extensions
 
 Database:
   ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)
@@ -70,7 +98,7 @@ Networking:
   ✔ Cookies @done (15-05-01 23:55)
   ☐ Response headers
   ☐ Remove Response::raise
-  ☐ Request and Response query
+  ☐ Request and Response URL query
   ☐ Hide errors stack
   ☐ Cookies on HTTP Cookies
 

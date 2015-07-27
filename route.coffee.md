@@ -11,10 +11,12 @@ Route @class
 
 	module.exports = (app) -> class Route
 
-*Object* Route.templates
-------------------------
+		if utils.isNode
+			usedTemplates = []
+		else
+			templates = Object.create null
 
-		@templates = Object.create null
+		lastClientHTMLRoute = null
 
 *Route* Route(*Object* options)
 -------------------------------
@@ -87,7 +89,8 @@ Acceptable syntaxes:
 			if utils.isObject(opts.toHTML)
 				opts.toHTML = createToHTMLFromObject opts.toHTML
 
-			utils.merge @, opts
+			for key, val of opts
+				@[key] = val
 			@__id__ = utils.uid()
 			@app = app
 			@name = getRouteName(@)
@@ -112,7 +115,6 @@ Acceptable syntaxes:
 
 		routesCache = Object.create null
 		pendingRoutes = Object.create null
-		renderedRoutes = Object.create null
 
 		factoryRoute = do ->
 			createInstance = (route) ->
@@ -135,6 +137,9 @@ Acceptable syntaxes:
 
 		destroyRoute = (route) ->
 			assert.instanceOf route, Route
+
+			if lastClientHTMLRoute is route
+				lastClientHTMLRoute = null
 
 			route.response.onSend.disconnect onResponseSent, route
 			pendingRoutes[route.__hash__] = false
@@ -185,22 +190,17 @@ Acceptable syntaxes:
 			route.response.data = data
 
 		onResponseSent = ->
-			if utils.isNode or @request.type isnt 'html' or not renderedRoutes[@__hash__]
+			if utils.isNode or @request.type isnt 'html'
 				destroyRoute @
+
+				if utils.isNode and utils.has(usedTemplates, @response.data)
+					@response.data.destroy()
+					utils.remove usedTemplates, @response.data
+			return
 
 		finishRequest = (route) ->
 			assert.instanceOf route, Route
 			route.response.send()
-
-		unless utils.isNode
-			Document.onRender (file) ->
-				if file.storage instanceof Route and file.constructor is Document
-					renderedRoutes[file.storage.__hash__] = file
-
-			Document.onBeforeRevert (file) ->
-				if file.storage instanceof Route and file.constructor is Document and renderedRoutes[file.storage.__hash__] is file
-					renderedRoutes[file.storage.__hash__] = null
-					destroyRoute file.storage
 
 		handleRequest = (req, res, next) ->
 			assert.instanceOf req, Networking.Request
@@ -210,6 +210,11 @@ Acceptable syntaxes:
 			route = factoryRoute @
 			hash = route.__hash__
 			assert.notOk pendingRoutes[hash]
+
+			if utils.isClient
+				if lastClientHTMLRoute
+					destroyRoute lastClientHTMLRoute
+				lastClientHTMLRoute = route
 
 			route.request = req
 			route.response = res
@@ -324,20 +329,20 @@ Acceptable syntaxes:
 			assert.ok pendingRoutes[@__hash__]
 			destroyRoute @
 
-*Function* Route::toJSON
-------------------------
+*Any* Route::toJSON()
+---------------------
 
 		toJSON: ->
 			@data?.toJSON?() or @data
 
-*Function* Route::toText
+*String* Route::toText()
 ------------------------
 
 		toText: ->
 			@data+''
 
-*Function* Route::toHTML
-------------------------
+*Document* Route::toHTML()
+--------------------------
 
 		createToHTMLFromObject = (opts) ->
 			->
@@ -348,7 +353,7 @@ Acceptable syntaxes:
 				if view = app.views[viewName]
 					r = view.render @
 				if tmpl = app.views[tmplName]
-					tmplView = Route.templates[tmplName] ?= tmpl.render(app: app)
+					tmplView = Route::getTemplateView.call @, tmplName
 					if r?
 						r = tmplView.use(useName, r)
 					else
@@ -359,3 +364,16 @@ Acceptable syntaxes:
 			view: ''
 			template: ''
 			use: ''
+
+*Document* Route::getTemplateView(*String* viewName)
+----------------------------------------------------
+
+		getTemplateView: do ->
+			if utils.isNode
+				(name) ->
+					tmpl = app.views[name].render(app: app)
+					usedTemplates.push tmpl
+					tmpl
+			else
+				(name) ->
+					templates[name] ?= app.views[name].render(app: app)
