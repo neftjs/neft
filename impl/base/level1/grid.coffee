@@ -14,6 +14,7 @@ module.exports = (impl) ->
 
 		grid.create @, grid.COLUMN | grid.ROW
 
+	setGridEffectItem: grid.setEffectItem
 	setGridColumns: grid.update
 	setGridRows: grid.update
 	setGridColumnSpacing: grid.update

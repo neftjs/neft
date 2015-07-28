@@ -12,6 +12,7 @@ module.exports = (impl) ->
 
 		grid.create @, grid.ROW
 
+	setRowEffectItem: grid.setEffectItem
 	setRowSpacing: grid.update
 	setRowAlignmentHorizontal: grid.update
 	setRowAlignmentVertical: grid.update

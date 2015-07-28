@@ -29,28 +29,18 @@ Column {
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = true
-			@_updatePending = false
-			@_autoWidth = true
-			@_autoHeight = true
+			@_effectItem = null
 			super component, opts
+			@effectItem = @
 
-		@::_width = -1
-		getter = utils.lookupGetter @::, 'width'
-		setter = utils.lookupSetter @::, 'width'
-		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
-			if not @_updatePending
-				@_autoWidth = val is -1
-			_super.call @, val
-			return
-
-		@::_height = -1
-		getter = utils.lookupGetter @::, 'height'
-		setter = utils.lookupSetter @::, 'height'
-		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-			if not @_updatePending
-				@_autoHeight = val is -1
-			_super.call @, val
-			return
+		utils.defineProperty @::, 'effectItem', null, ->
+			@_effectItem
+		, (val) ->
+			if val?
+				assert.instanceOf val, Renderer.Item
+			oldVal = @_effectItem
+			@_effectItem = val
+			Impl.setColumnEffectItem.call @, val, oldVal
 
 *Float* Column::spacing = 0
 ---------------------------

@@ -17,11 +17,10 @@ columnsPositions = new TypedArray.Uint32 12
 rowsPositions = new TypedArray.Uint32 64
 
 updateItem = (item) ->
-	{children, includeBorderMargins} = item
+	{includeBorderMargins} = item
+	{children} = item._effectItem
 	data = item._impl
 	{gridType} = data
-
-	item._updatePending = true
 
 	# get config
 	columnSpacing = rowSpacing = 0
@@ -107,7 +106,7 @@ updateItem = (item) ->
 	for i in [0...maxColumnsLen] by 1
 		last = columnsPositions[i] += last
 	columnsPositions[i-1] -= columnSpacing
-	unless item._autoWidth
+	unless data.autoWidth
 		columnsPositions[i-1] = Math.max columnsPositions[i-1], item._width
 
 	# sum rows positions
@@ -115,7 +114,7 @@ updateItem = (item) ->
 	for i in [0...maxRowsLen] by 1
 		last = rowsPositions[i] += last
 	rowsPositions[i-1] -= rowSpacing
-	unless item._autoHeight
+	unless data.autoHeight
 		rowsPositions[i-1] = Math.max rowsPositions[i-1], item._height
 
 	# set positions
@@ -166,21 +165,19 @@ updateItem = (item) ->
 		i++
 
 	# set item size
-	if item._autoWidth
+	if data.autoWidth
 		width = columnsPositions[maxColumnsLen-1]
 		if width > 0	
-			item.width = width
+			item._effectItem.width = width
 		else
-			item.width = 0
+			item._effectItem.width = 0
 
-	if item._autoHeight
+	if data.autoHeight
 		height = rowsPositions[maxRowsLen-1]
 		if height > 0
-			item.height = height
+			item._effectItem.height = height
 		else
-			item.height = 0
-
-	item._updatePending = false
+			item._effectItem.height = 0
 	return
 
 updateItems = ->
@@ -191,7 +188,9 @@ updateItems = ->
 	while currentQueue.length
 		item = currentQueue.pop()
 		item._impl.pending = false
+		item._impl.updatePending = true
 		updateItem item
+		item._impl.updatePending = false
 	return
 
 update = ->
@@ -219,9 +218,19 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_updatePending and (@_autoWidth or @_autoHeight)
+	if not @_impl.updatePending and (@_impl.autoWidth or @_impl.autoHeight)
 		update.call @
 	return
+
+onWidthChange = (oldVal) ->
+	if not @_impl.updatePending
+		@_impl.autoWidth = @_width is 0 and oldVal isnt -1
+	updateSize.call @
+
+onHeightChange = (oldVal) ->
+	if not @_impl.updatePending
+		@_impl.autoHeight = @_height is 0 and oldVal isnt -1
+	updateSize.call @
 
 enableChild = (child) ->
 	child.onVisibleChange update, @
@@ -241,21 +250,50 @@ ALL = exports.ALL = (1<<2) - 1
 
 exports.DATA =
 	pending: false
+	updatePending: false
 	disableFill: true
 	gridType: 0
 	gridUpdateLoops: 0
+	autoWidth: true
+	autoHeight: true
 
 exports.create = (item, type) ->
 	item._impl.gridType = type
-
-	# update item changes
-	item.onChildrenChange update
-	item.onWidthChange updateSize
-	item.onHeightChange updateSize
 	item.onAlignmentChange updateSize
 
-	# update on each children size change
-	item.children.onInsert enableChild, item
-	item.children.onPop disableChild, item
-
 exports.update = update
+
+exports.setEffectItem = (item, oldItem) ->
+	if oldItem
+		oldItem.onChildrenChange.disconnect update, @
+		oldItem.onWidthChange.disconnect onWidthChange, @
+		oldItem.onHeightChange.disconnect onHeightChange, @
+		oldItem.children.onInsert.disconnect enableChild, @
+		oldItem.children.onPop.disconnect disableChild, @
+
+		if @_impl.autoWidth
+			oldItem.width = 0
+		if @_impl.autoHeight
+			oldItem.height = 0
+
+		for child in oldItem.children
+			disableChild.call @, child
+
+	if item
+		if @_impl.autoWidth = item.width is 0
+			item.width = -1
+		if @_impl.autoHeight = item.height is 0
+			item.height = -1
+
+		item.onChildrenChange update, @
+		item.onWidthChange onWidthChange, @
+		item.onHeightChange onHeightChange, @
+		item.children.onInsert enableChild, @
+		item.children.onPop disableChild, @
+
+		for child in item.children
+			enableChild.call @, child
+
+		update.call @
+
+	return

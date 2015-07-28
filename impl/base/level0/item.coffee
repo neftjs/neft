@@ -15,7 +15,7 @@ module.exports = (impl) ->
 
 	create: (data) ->
 
-	setItemParent: (val) ->
+	setItemParent: (val, index) ->
 
 	setItemVisible: (val) ->
 

@@ -20,7 +20,9 @@ elementsY = new TypedArray.Uint32 64
 elementsCell = new TypedArray.Uint32 64
 
 updateItem = (item) ->
-	{children, includeBorderMargins} = item
+	{includeBorderMargins} = item
+	effectItem = item._effectItem
+	{children} = effectItem
 	data = item._impl
 
 	if data.loops is MAX_LOOPS
@@ -30,10 +32,8 @@ updateItem = (item) ->
 	else if data.loops > MAX_LOOPS
 		return
 
-	item._updatePending = true
-
 	# get config
-	maxColumn = if item._autoWidth then Infinity else item.width
+	maxColumn = if data.autoWidth then Infinity else effectItem.width
 	columnSpacing = item.spacing.column
 	rowSpacing = item.spacing.row
 
@@ -69,7 +69,7 @@ updateItem = (item) ->
 
 		if column is 0
 			x = 0
-		else if column + child.width + (if margin then margin._left else 0) >= maxColumn
+		else if column + child.width + (if margin then margin._left else 0) > maxColumn
 			column = 0
 			row = height
 			x = 0
@@ -134,11 +134,11 @@ updateItem = (item) ->
 				multiplierY = 0.5
 			when 'bottom'
 				multiplierY = 1
-		if not item._autoWidth
+		if not data.autoWidth
 			width = item._width
-		if not item._autoHeight
+		if not data.autoHeight
 			height = item._height
-		if item._autoHeight or alignV is 'top'
+		if data.autoHeight or alignV is 'top'
 			plusY = 0
 		else
 			plusY = (item._height - height) * multiplierY
@@ -158,13 +158,11 @@ updateItem = (item) ->
 			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY
 
 	# set item size
-	if item._autoWidth
-		item.width = width
+	if data.autoWidth
+		item._effectItem.width = width
 
-	if item._autoHeight
-		item.height = height
-
-	item._updatePending = false
+	if data.autoHeight
+		item._effectItem.height = height
 
 	return
 
@@ -176,7 +174,9 @@ updateItems = ->
 	while currentQueue.length
 		item = currentQueue.pop()
 		item._impl.pending = false
+		item._impl.updatePending = true
 		updateItem item
+		item._impl.updatePending = false
 	return
 
 update = ->
@@ -191,9 +191,19 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_updatePending and (@_autoWidth or @_autoHeight)
+	if not @_impl.updatePending and (@_impl.autoWidth or @_impl.autoHeight)
 		update.call @
 	return
+
+onWidthChange = (oldVal) ->
+	if not @_impl.updatePending
+		@_impl.autoWidth = @_width is 0 and oldVal isnt -1
+	updateSize.call @
+
+onHeightChange = (oldVal) ->
+	if not @_impl.updatePending
+		@_impl.autoHeight = @_height is 0 and oldVal isnt -1
+	updateSize.call @
 
 enableChild = (child) ->
 	child.onVisibleChange update, @
@@ -211,6 +221,9 @@ module.exports = (impl) ->
 	DATA =
 		loops: 0
 		pending: false
+		updatePending: false
+		autoWidth: true
+		autoHeight: true
 
 	DATA: DATA
 
@@ -218,16 +231,42 @@ module.exports = (impl) ->
 
 	create: (data) ->
 		impl.Types.Item.create.call @, data
-
-		# update item changes
-		@onChildrenChange update
-		@onWidthChange updateSize
-		@onHeightChange updateSize
 		@onAlignmentChange updateSize
 
-		# update on each children size change
-		@children.onInsert enableChild, @
-		@children.onPop disableChild, @
+	setFlowEffectItem: (item, oldItem) ->
+		if oldItem
+			oldItem.onChildrenChange.disconnect update, @
+			oldItem.onWidthChange.disconnect onWidthChange, @
+			oldItem.onHeightChange.disconnect onHeightChange, @
+			oldItem.children.onInsert.disconnect enableChild, @
+			oldItem.children.onPop.disconnect disableChild, @
+
+			if @_impl.autoWidth
+				oldItem.width = 0
+			if @_impl.autoHeight
+				oldItem.height = 0
+
+			for child in oldItem.children
+				disableChild.call @, child
+
+		if item
+			if @_impl.autoWidth = item.width is 0
+				item.width = -1
+			if @_impl.autoHeight = item.height is 0
+				item.height = -1
+
+			item.onChildrenChange update, @
+			item.onWidthChange onWidthChange, @
+			item.onHeightChange onHeightChange, @
+			item.children.onInsert enableChild, @
+			item.children.onPop disableChild, @
+
+			for child in item.children
+				enableChild.call @, child
+
+			update.call @
+
+		return
 
 	setFlowColumnSpacing: update
 	setFlowRowSpacing: update

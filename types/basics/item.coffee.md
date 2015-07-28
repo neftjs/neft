@@ -141,12 +141,38 @@ Rectangle {
 
 		class ChildrenObject extends itemUtils.MutableDeepObject
 			constructor: (ref) ->
+				@_order = null
 				@_target = null
 				@length = 0
 				super ref
 
-*Integer* Item::children::length
---------------------------------
+*ReadOnly* *Integer* Item::children::length
+-------------------------------------------
+
+*Item* Item::children::order
+----------------------------
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'order'
+				defaultValue: null
+				developmentSetter: (val) ->
+					if val?
+						assert.instanceOf val, Item
+				setter: (_super) -> (val) ->
+					if @_order?.effectItem
+						@_order.effectItem = @_order
+
+					_super.call @, val
+
+					if val?
+						ref = @_ref
+						index = !!ref._background + !!ref._image + !!ref._label
+						setFakeParent val, ref, index
+						if val.effectItem
+							val.effectItem = ref
+
+					return
 
 *Item* Item::children::target
 -----------------------------
@@ -207,6 +233,15 @@ Item {
 
 		{indexOf, splice, push, shift, pop} = Array::
 
+		setFakeParent = (child, parent, index=-1) ->
+			oldParent = child._parent
+			child.parent = null
+
+			child._parent = parent
+			Impl.setItemParent.call child, parent, index
+			emitSignal child, 'onParentChange', oldParent
+			return
+
 		itemUtils.defineProperty
 			constructor: @
 			name: 'parent'
@@ -264,7 +299,7 @@ Item {
 
 				# parent
 				@_parent = val
-				Impl.setItemParent.call @, val
+				Impl.setItemParent.call @, val, -1
 
 				# signals
 				if old isnt null

@@ -186,12 +186,15 @@ module.exports = (impl) ->
 		data.elem ?= document.createElement 'div'
 		data.elemStyle = data.elem.style
 
-	setItemParent: (val) ->
+	setItemParent: (val, index) ->
 		self = @
 		{elem} = @_impl
 
 		if val
-			val._impl.elem.appendChild elem
+			if index >= 0 and (childAtIndex = val._impl.elem.children[index])
+				val._impl.elem.insertBefore elem, childAtIndex
+			else
+				val._impl.elem.appendChild elem
 		else
 			elem.parentElement?.removeChild elem
 		@_impl.parent = val
