@@ -156,7 +156,7 @@ module.exports = (impl) ->
 			unless impl.utils.DATA_URI_RE.test(val)
 				if rsc = impl.Renderer.resources.getResource(val)
 					data.resource = rsc
-					val = 'qrc:' + rsc.getPath()
+					val = 'qrc:' + rsc.resolve()
 				else
 					val = impl.utils.toUrl(val)
 			elem.source = val or ''

@@ -21,8 +21,8 @@ module.exports = (impl) ->
 		return
 
 	setAmbientSoundSource: (val) ->
-		if rsc = impl.Renderer.resources.getResource(val)
-			val = rsc.getPath()
+		if rsc = impl.Renderer.resources.resolve(val)
+			val = rsc
 		@_impl.elem.setAttribute 'src', val
 		return
 

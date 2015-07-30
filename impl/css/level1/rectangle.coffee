@@ -12,6 +12,12 @@ module.exports = (impl) ->
 		innerElem: null
 		innerElemStyle: null
 
+	COLOR_RESOURCE_REQUEST =
+		property: 'color'
+
+	BORDER_COLOR_RESOURCE_REQUEST =
+		property: 'borderColor'
+
 	div = do ->
 		div = document.createElement 'div'
 		div.setAttribute 'class', 'rect'
@@ -29,6 +35,7 @@ module.exports = (impl) ->
 		data.innerElemStyle = innerElem.style
 
 	setRectangleColor: (val) ->
+		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.innerElemStyle.backgroundColor = val
 
 	setRectangleRadius: (val) ->
@@ -36,6 +43,7 @@ module.exports = (impl) ->
 		@_impl.innerElemStyle.borderRadius = "#{val}px"
 
 	setRectangleBorderColor: (val) ->
+		val = impl.Renderer.resources?.resolve(val, BORDER_COLOR_RESOURCE_REQUEST) or val
 		@_impl.innerElemStyle.borderColor = val
 
 	setRectangleBorderWidth: (val) ->
