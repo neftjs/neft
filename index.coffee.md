@@ -76,7 +76,10 @@ Resource Manager @engine
 			if rsc instanceof Resources.Resource
 				name = Resources.Resource.parseFileName uri
 				name.file = ''
-				utils.merge name, req
+				if req?
+					for key, val of req
+						unless name[key]
+							name[key] = val
 				path = rsc.resolve '', name
 			path
 

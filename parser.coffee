@@ -187,7 +187,10 @@ getValue = (val, dirPath, config) ->
 		parseResourcesArray val, dirPath, config
 	else if utils.isObject(val)
 		if val.resources?
-			parseResourcesObject val.resources, dirPath, config
+			if Array.isArray(val.resources)
+				parseResourcesArray val.resources, dirPath, config
+			else
+				parseResourcesObject val.resources, dirPath, config
 		else
 			config = utils.clone config
 			utils.merge config, val
