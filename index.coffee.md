@@ -14,9 +14,8 @@ Resource Manager @engine
 
 		@Resources = @
 		@Resource = require('./resource') @
-		@ImageResource = require('./types/image') @
 
-		@URI = ///^(?:rsc|resource|resources)?:\/?\/?(.*?)(?:\.[a-zA-Z]+)?$///
+		@URI = ///^(?:rsc|resource|resources)?:\/?\/?(.*?)(?:@([0-9p]+)x)?(?:\.[a-zA-Z]+)?(?:\#[a-zA-Z0-9]+)?$///
 
 		if utils.isServer
 			@parser = require('./parser') @
@@ -68,6 +67,17 @@ Resource Manager @engine
 					return r
 				chunk = chunk.slice 0, chunk.lastIndexOf('/')
 			return
+
+*String* Resources::resolve(*String* uri)
+-----------------------------------------
+
+		resolve: (uri) ->
+			rsc = @getResource uri
+			if rsc instanceof Resources.Resource
+				name = Resources.Resource.parseFileName uri
+				name.file = ''
+				path = rsc.resolve '', name
+			path
 
 *Object* Resources::toJSON()
 ----------------------------

@@ -1,17 +1,16 @@
 'use strict'
 
 utils = require 'utils'
-
-unless utils.isServer
-	throw new Error "Resources.Parser can be run only on a server"
-
-Resources = null
 fs = require 'fs'
 log = require 'log'
 assert = require 'neft-assert'
 pathUtils = require 'path'
+yaml = require 'js-yaml'
 try
 	sharp = require 'sharp'
+
+unless utils.isServer
+	throw new Error "Resources.Parser can be run only on a server"
 
 log = log.scope 'Resources', 'Parser'
 
@@ -21,14 +20,23 @@ IMAGE_FORMATS =
 	jpg: true
 	jpeg: true
 	gif: true
+
 DEFAULT_CONFIG =
 	resolutions: [1]
 
+Resources = null
 stack = null
 logShowed = false
 
 isResourcesPath = (path) ->
-	/\/resources\.json$/.test path
+	/\/resources\.(?:json|yaml)$/.test path
+
+toCamelCase = (str) ->
+	words = str.split ' '
+	r = words[0]
+	for i in [1...words.length] by 1
+		r += utils.capitalize words[i]
+	r
 
 resolutionToString = (resolution) ->
 	if resolution is 1
@@ -76,7 +84,10 @@ parseResourcesFile = (path, config) ->
 	assert.isString path
 
 	file = fs.readFileSync path, 'utf-8'
-	json = JSON.parse file
+	if pathUtils.extname(path) is '.yaml'
+		json = yaml.safeLoad file
+	else
+		json = JSON.parse file
 
 	getValue json, path, config
 
@@ -122,15 +133,16 @@ parseResourceFile = (path, config) ->
 		log.error msg
 		return
 
-	if IMAGE_FORMATS[name.format]
-		rsc = new Resources.ImageResource
-	else
-		rsc = new Resources.Resource
+	rsc = new Resources.Resource
 
-	config = utils.cloneDeep config
-	utils.merge rsc, config
+	newConfig = {}
+	for key, val of config
+		newConfig[toCamelCase(key)] = utils.cloneDeep val
 
-	rsc.file = name.file
+	utils.merge rsc, newConfig
+
+	if newConfig.file
+		rsc.file = name.file
 
 	if rsc.resolutions
 		unless utils.has(rsc.resolutions, name.resolution)
@@ -156,7 +168,7 @@ parseResourceFile = (path, config) ->
 			resPath = "/#{dirPath}/#{name.file}#{resolutionToString(resolution)}.#{format}"
 			formatPaths[resolution] = resPath
 
-	if rsc instanceof Resources.ImageResource
+	if IMAGE_FORMATS[name.format]
 		supportImageResource path, rsc
 
 	rsc
@@ -174,7 +186,12 @@ getValue = (val, dirPath, config) ->
 	else if Array.isArray(val)
 		parseResourcesArray val, dirPath, config
 	else if utils.isObject(val)
-		parseResourcesObject val, dirPath, config
+		if val.resources?
+			parseResourcesObject val.resources, dirPath, config
+		else
+			config = utils.clone config
+			utils.merge config, val
+			parseResourceFile dirPath, config
 
 getFile = (path, config) ->
 	unless fs.existsSync(path)
@@ -182,13 +199,16 @@ getFile = (path, config) ->
 		return
 
 	stat = fs.statSync path
-	pathResourcesFile = pathUtils.join path, './resources.json'
+	jsonPathResourcesFile = pathUtils.join path, './resources.json'
+	yamlPathResourcesFile = pathUtils.join path, './resources.yaml'
 
 	if isResourcesPath(path)
 		parseResourcesFile path, config
 	else if stat.isDirectory()
-		if fs.existsSync(pathResourcesFile)
-			parseResourcesFile pathResourcesFile, config
+		if fs.existsSync(jsonPathResourcesFile)
+			parseResourcesFile jsonPathResourcesFile, config
+		else if fs.existsSync(yamlPathResourcesFile)
+			parseResourcesFile yamlPathResourcesFile, config
 		else
 			parseResourcesFolder path, config
 	else
@@ -200,4 +220,4 @@ module.exports = ->
 		stack = new utils.async.Stack
 		rscs = getFile path, DEFAULT_CONFIG
 		stack.runAllSimultaneously (err) ->
-			callback err, rscs
+			callback err, rscs or ''

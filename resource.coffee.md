@@ -15,7 +15,7 @@ Resource @class
 	module.exports = (Resources) -> class Resource
 		@__name__ = 'Resource'
 		@__path__ = 'Resources.Resource'
-		@FILE_NAME = ///^(.*?)(?:@([0-9p]+)x)?(?:\.([a-zA-Z0-9]+))?$///
+		@FILE_NAME = ///^(.*?)(?:@([0-9p]+)x)?(?:\.([a-zA-Z0-9]+))?(?:\#([a-zA-Z0-9]+))?$///
 
 *Resource* Resource.fromJSON(*String|Object* json)
 --------------------------------------------------
@@ -40,6 +40,7 @@ Resource @class
 				file: match[1]
 				resolution: if match[2]? then parseFloat(match[2].replace('p', '.')) else 1
 				format: match[3]
+				property: match[4]
 
 *Resource* Resource()
 ---------------------
@@ -48,12 +49,23 @@ Resource @class
 			assert.instanceOf @, Resource
 
 			@file = ''
+			@color = ''
+			@width = 0
+			@height = 0
 			@formats = null
 			@resolutions = null
 			@paths = null
-			Object.preventExtensions @
 
 *String* Resource::file = ''
+----------------------------
+
+*String* Resource::color = ''
+-----------------------------
+
+*Float* Resource::width = 0
+---------------------------
+
+*Float* Resource::height = 0
 ----------------------------
 
 *Array* Resource::formats
@@ -65,10 +77,10 @@ Resource @class
 *Object* Resource::paths
 ------------------------
 
-*String* Resource::getPath([*String* uri, *Object* request])
+*String* Resource::resolve([*String* uri, *Object* request])
 ------------------------------------------------------------
 
-		getPath: (uri='', req) ->
+		resolve: (uri='', req) ->
 			if req is undefined and utils.isPlainObject(uri)
 				req = uri
 				uri = ''
@@ -77,19 +89,31 @@ Resource @class
 				file = @file
 			else
 				name = Resource.parseFileName uri
-				file = name.file
+				{file} = name
 				resolution = name.resolution
 				if name.format
 					formats = [name.format]
+				property = name.property
 
 			assert.isString uri
 			assert.isPlainObject req if req?
 
 			resolution ?= req?.resolution or 1
 			formats ?= req?.formats or @formats
+			property ||= req?.property or 'file'
 
 			if file isnt @file
 				return
+
+			if property isnt 'file'
+				return @[property]
+
+			# get resolution from size
+			if utils.isPlainObject(req)
+				if req.width > req.height
+					req.resolution *= req.width / @width
+				else if req.width < req.height
+					req.resolution *= req.height / @height
 
 			# get best resolution
 			diff = Infinity
