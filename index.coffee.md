@@ -123,8 +123,6 @@ Styles.button/red {
 	exports.Flow = require('./types/layout/flow') exports, Impl, itemUtils
 	exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
 
-	exports.Button = require('./types/complex/button') exports, Impl, itemUtils
-
 	exports.AmbientSound = require('./types/sound/ambient') exports, Impl, itemUtils
 
 	exports.ResourcesLoader = require('./types/loader/resources') exports, Impl, itemUtils

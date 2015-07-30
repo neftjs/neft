@@ -61,25 +61,25 @@ module.exports = (impl) ->
 			return
 
 		updateSizeNow = (item) ->
-			{textElem} = item._impl
+			{innerElem} = item._impl
 
 			if item._impl.autoWidth
-				width = textElem.offsetWidth
+				width = innerElem.offsetWidth
 				if item.width isnt width + 1
 					item._impl.sizeChecks = CHECKS_AFTER_CHANGE
 				if width > 0
 					item.width = width + 1
 
 			if item._impl.autoHeight
-				height = textElem.offsetHeight
+				height = innerElem.offsetHeight
 				if item.height isnt height
 					item._impl.sizeChecks = CHECKS_AFTER_CHANGE
 				if height > 0
 					item.height = height
 
 			if (item._height > 0 and item._impl.elem.offsetParent) or item._impl.sizeChecks is MAX_CHECKS
-				if item._impl.textElem.parentNode is hatchery
-					implUtils.prependElement item._impl.elem, item._impl.textElem
+				if item._impl.innerElem.parentNode is hatchery
+					implUtils.prependElement item._impl.elem, item._impl.innerElem
 
 			return
 
@@ -105,7 +105,7 @@ module.exports = (impl) ->
 			queue.push item
 
 			if item._height is 0 or not data.elem.offsetParent
-				hatchery.appendChild data.textElem
+				hatchery.appendChild data.innerElem
 
 			unless pending
 				setTimeout updateAll, 10
@@ -134,7 +134,7 @@ module.exports = (impl) ->
 
 	reloadFontFamily = (family) ->
 		if (@_font and @_font._family is family) or (not @_font and family is 'sans-serif')
-			@_impl.textElemStyle.fontFamily = @_impl.textElemStyle.fontFamily
+			@_impl.innerElemStyle.fontFamily = @_impl.innerElemStyle.fontFamily
 		return
 
 	updateContent = do ->
@@ -148,9 +148,9 @@ module.exports = (impl) ->
 			for item in queue
 				val = item._text
 				if val.indexOf('<') isnt -1
-					item._impl.textElem.innerHTML = val
+					item._impl.innerElem.innerHTML = val
 				else
-					item._impl.textElem.textContent = val
+					item._impl.innerElem.textContent = val
 
 			while queue.length
 				item = queue.pop()
@@ -174,10 +174,10 @@ module.exports = (impl) ->
 	onWidthChange = ->
 		if not sizeUpdatePending
 			{width} = @
-			{textElemStyle} = @_impl
+			{innerElemStyle} = @_impl
 			auto = @_impl.autoWidth = width is 0
-			textElemStyle.whiteSpace = if auto then 'pre' else 'pre-wrap'
-			textElemStyle.width = if auto then 'auto' else "#{width}px"
+			innerElemStyle.whiteSpace = if auto then 'pre' else 'pre-wrap'
+			innerElemStyle.width = if auto then 'auto' else "#{width}px"
 			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
 		return
@@ -185,9 +185,9 @@ module.exports = (impl) ->
 	onHeightChange = ->
 		if not sizeUpdatePending
 			{height} = @
-			{textElemStyle} = @_impl
+			{innerElemStyle} = @_impl
 			auto = @_impl.autoHeight = height is 0
-			textElemStyle.height = if auto then 'auto' else "#{height}px"
+			innerElemStyle.height = if auto then 'auto' else "#{height}px"
 			if @_impl.autoWidth or @_impl.autoHeight
 				updateSize @
 		return
@@ -217,8 +217,8 @@ module.exports = (impl) ->
 		stylesheet: null
 		autoWidth: true
 		autoHeight: true
-		textElem: null
-		textElemStyle: null
+		innerElem: null
+		innerElemStyle: null
 		sizeChecks: 0
 		pendingSize: false
 		pendingContent: false
@@ -230,16 +230,16 @@ module.exports = (impl) ->
 	_createTextElement: (item) ->
 		data = item._impl
 
-		# textElem
-		textElem = data.textElem = document.createElement 'span'
-		data.textElemStyle = textElem.style
+		# innerElem
+		innerElem = data.innerElem = document.createElement 'span'
+		data.innerElemStyle = innerElem.style
 
 		# handlers
 		item.onWidthChange onWidthChange
 		item.onHeightChange onHeightChange
 
 		# set default styles
-		textElem.setAttribute 'class', 'text'
+		innerElem.setAttribute 'class', 'text'
 
 	createData: impl.utils.createDataCloner 'Item', DATA
 
@@ -247,7 +247,7 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 		exports._createTextElement @
-		data.elem.appendChild data.textElem
+		impl.utils.prependElement data.elem, data.innerElem
 
 		if impl.utils.loadingFonts['sans-serif'] > 0
 			impl.utils.fontLoaded reloadFontFamily, @
@@ -256,7 +256,7 @@ module.exports = (impl) ->
 		updateContent @
 
 	setTextColor: (val) ->
-		@_impl.textElemStyle.color = val
+		@_impl.innerElemStyle.color = val
 		return
 
 	setTextLinkColor: do ->
@@ -266,14 +266,14 @@ module.exports = (impl) ->
 			unless data.stylesheet
 				data.stylesheet = document.createElement 'style'
 				data.elem.appendChild data.stylesheet
-				data.textElem.setAttribute 'id', "textLinkColor#{uid}"
+				data.innerElem.setAttribute 'id', "textLinkColor#{uid}"
 				data.uid = uid++
 			data.stylesheet.innerHTML = "#textLinkColor#{data.uid} a { color: #{val}; }"
 			return
 
 	setTextLineHeight: (val) ->
 		pxLineHeight = round val * @font.pixelSize
-		@_impl.textElemStyle.lineHeight = "#{pxLineHeight}px"
+		@_impl.innerElemStyle.lineHeight = "#{pxLineHeight}px"
 		updateSize @
 
 	setTextFontFamily: (val) ->
@@ -284,33 +284,33 @@ module.exports = (impl) ->
 			val = "#{impl.utils.DEFAULT_FONTS[val]}, #{val}"
 		else
 			val = "'#{val}'"
-		@_impl.textElemStyle.fontFamily = val
+		@_impl.innerElemStyle.fontFamily = val
 		updateSize @
 
 	setTextFontPixelSize: (val) ->
 		val = round val
-		@_impl.textElemStyle.fontSize = "#{val}px"
+		@_impl.innerElemStyle.fontSize = "#{val}px"
 		impl.setTextLineHeight.call @, @lineHeight
 		updateSize @
 
 	setTextFontWeight: (val) ->
-		@_impl.textElemStyle.fontWeight = implUtils.getFontWeight val
+		@_impl.innerElemStyle.fontWeight = implUtils.getFontWeight val
 		updateSize @
 
 	setTextFontWordSpacing: (val) ->
-		@_impl.textElemStyle.wordSpacing = "#{val}px"
+		@_impl.innerElemStyle.wordSpacing = "#{val}px"
 		updateSize @
 
 	setTextFontLetterSpacing: (val) ->
-		@_impl.textElemStyle.letterSpacing = "#{val}px"
+		@_impl.innerElemStyle.letterSpacing = "#{val}px"
 		updateSize @
 
 	setTextFontItalic: (val) ->
-		@_impl.textElemStyle.fontStyle = if val then 'italic' else 'normal'
+		@_impl.innerElemStyle.fontStyle = if val then 'italic' else 'normal'
 		return
 
 	setTextAlignmentHorizontal: (val) ->
-		@_impl.textElemStyle.textAlign = val
+		@_impl.innerElemStyle.textAlign = val
 		return
 
 	setTextAlignmentVertical: do ->
@@ -320,5 +320,5 @@ module.exports = (impl) ->
 			bottom: 'textVerticalBottomAlign'
 
 		(val) ->
-			@_impl.textElem.setAttribute 'class', "text #{CLASSES[val]}"
+			@_impl.innerElem.setAttribute 'class', "text #{CLASSES[val]}"
 			return

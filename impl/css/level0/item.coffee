@@ -191,6 +191,8 @@ module.exports = (impl) ->
 		{elem} = @_impl
 
 		if val
+			if index >= 0 and val._impl.innerElem
+				index++
 			if index >= 0 and (childAtIndex = val._impl.elem.children[index])
 				val._impl.elem.insertBefore elem, childAtIndex
 			else

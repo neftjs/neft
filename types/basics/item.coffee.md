@@ -167,8 +167,7 @@ Rectangle {
 
 					if val?
 						ref = @_ref
-						index = !!ref._background + !!ref._image + !!ref._label
-						setFakeParent val, ref, index
+						setFakeParent val, ref, 0
 						if val.effectItem
 							val.effectItem = ref
 

@@ -72,7 +72,7 @@ module.exports = (impl) ->
 		{callback} = data
 
 		unless data.useCssBackground
-			data.imgElem?.style.display = if img.status is 'ready' then 'block' else 'none'
+			data.innerElem?.style.display = if img.status is 'ready' then 'block' else 'none'
 
 		if img.status is 'ready'
 			callback?.call @, null, img
@@ -87,7 +87,7 @@ module.exports = (impl) ->
 		data.useCssBackground = true
 		data.elemStyle.backgroundImage = "url('#{data.source}')"
 		data.elemStyle.backgroundPosition = '50% 50%'
-		data.imgElem.style.display = 'none'
+		data.innerElem.style.display = 'none'
 		return
 
 	setBackgroundSize = (item) ->
@@ -103,7 +103,7 @@ module.exports = (impl) ->
 		return
 
 	DATA =
-		imgElem: null
+		innerElem: null
 		callback: null
 		source: ''
 		image: null
@@ -122,9 +122,9 @@ module.exports = (impl) ->
 		self = @
 		Item.create.call @, data
 
-		imgElem = data.imgElem = document.createElement 'img'
-		imgElem.style.display = 'none'
-		data.elem.appendChild imgElem
+		innerElem = data.innerElem = document.createElement 'img'
+		innerElem.style.display = 'none'
+		data.elem.appendChild innerElem
 		return
 
 	setImageSource: (val, callback) ->
@@ -134,7 +134,7 @@ module.exports = (impl) ->
 			val = impl.utils.encodeImageSrc val
 
 		data = @_impl
-		data.imgElem.src = val
+		data.innerElem.src = val
 		data.source = val
 		data.callback = callback
 		data.image = getImage val, rsc
@@ -165,7 +165,7 @@ module.exports = (impl) ->
 		if val is 'Stretch'
 			data.useCssBackground = false
 			data.elemStyle.backgroundImage = ''
-			data.imgElem.style.display = 'block'
+			data.innerElem.style.display = 'block'
 		else
 			useCssBackground @
 

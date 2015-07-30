@@ -9,8 +9,8 @@ module.exports = (impl) ->
 	#       if the size is less than border width
 
 	DATA =
-		rect: null
-		rectStyle: null
+		innerElem: null
+		innerElemStyle: null
 
 	div = do ->
 		div = document.createElement 'div'
@@ -24,20 +24,20 @@ module.exports = (impl) ->
 	create: (data) ->
 		Item.create.call @, data
 
-		rect = data.rect = div.cloneNode(false)
-		data.elem.appendChild rect
-		data.rectStyle = rect.style
+		innerElem = data.innerElem = div.cloneNode(false)
+		impl.utils.prependElement data.elem, innerElem
+		data.innerElemStyle = innerElem.style
 
 	setRectangleColor: (val) ->
-		@_impl.rectStyle.backgroundColor = val
+		@_impl.innerElemStyle.backgroundColor = val
 
 	setRectangleRadius: (val) ->
 		val = round val
-		@_impl.rectStyle.borderRadius = "#{val}px"
+		@_impl.innerElemStyle.borderRadius = "#{val}px"
 
 	setRectangleBorderColor: (val) ->
-		@_impl.rectStyle.borderColor = val
+		@_impl.innerElemStyle.borderColor = val
 
 	setRectangleBorderWidth: (val) ->
 		val = round val
-		@_impl.rectStyle.borderWidth = "#{val}px"
+		@_impl.innerElemStyle.borderWidth = "#{val}px"

@@ -17,7 +17,7 @@ module.exports = (Renderer) ->
 	         'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
 	         'Animation', 'PropertyAnimation', 'NumberAnimation',
 
-	         'Scrollable', 'Button',
+	         'Scrollable',
 
 	         'AmbientSound']
 

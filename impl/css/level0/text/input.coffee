@@ -33,25 +33,25 @@ module.exports = (impl) ->
 		self = @
 
 		impl.Types.Item.create.call @, data
-		textElem = data.textElem = document.createElement 'textarea'
-		data.textElemStyle = textElem.style
-		textElem.setAttribute 'class', 'text'
-		data.elem.appendChild textElem
+		innerElem = data.innerElem = document.createElement 'textarea'
+		data.innerElemStyle = innerElem.style
+		innerElem.setAttribute 'class', 'text'
+		data.elem.appendChild innerElem
 
 		data.elem.addEventListener impl._SIGNALS.pointerOnWheel, (e) ->
-			if document.activeElement is textElem
+			if document.activeElement is innerElem
 				e.stopPropagation()
 			return
 
-		textElem.addEventListener 'focus', ->
+		innerElem.addEventListener 'focus', ->
 			self.keys.focus = true
-		textElem.addEventListener 'blur', ->
+		innerElem.addEventListener 'blur', ->
 			self.keys.focus = false
 
 		@onTextChange ->
-			textElem.value = @text
-		textElem.addEventListener 'input', ->
-			self.text = textElem.value
+			innerElem.value = @text
+		innerElem.addEventListener 'input', ->
+			self.text = innerElem.value
 
 		impl.setItemWidth.call @, 200
 		impl.setItemHeight.call @, 50
