@@ -68,14 +68,15 @@ Resource Manager @engine
 				chunk = chunk.slice 0, chunk.lastIndexOf('/')
 			return
 
-*String* Resources::resolve(*String* uri)
------------------------------------------
+*String* Resources::resolve(*String* uri, [*Object* request])
+-------------------------------------------------------------
 
-		resolve: (uri) ->
+		resolve: (uri, req) ->
 			rsc = @getResource uri
 			if rsc instanceof Resources.Resource
 				name = Resources.Resource.parseFileName uri
 				name.file = ''
+				utils.merge name, req
 				path = rsc.resolve '', name
 			path
 
