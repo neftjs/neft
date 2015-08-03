@@ -165,9 +165,11 @@ module.exports = ->
 		mmmagic: true
 		'node-static': true
 		mysql: true
+		'js-yaml': true
 
 	fs = require 'fs'
 	pathUtils = require 'path'
+	yaml = require 'js-yaml'
 	require 'coffee-script/register'
 
 	try
@@ -185,6 +187,8 @@ module.exports = ->
 
 	require.extensions['.pegjs'] = require.extensions['.txt'] = (module, filename) ->
 		module.exports = fs.readFileSync filename, 'utf8'
+	require.extensions['.yaml'] = (module, filename) ->
+		module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
 
 	try
 		Neft = require "./neft-#{type}-develop.js"
