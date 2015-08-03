@@ -173,8 +173,8 @@ File @class
 				rules @
 				fragments @
 				attrs @
-				attrChanges @
 				iterators @
+				attrChanges @
 				source @
 				uses @
 				storage @
