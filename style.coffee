@@ -446,9 +446,11 @@ module.exports = (File, data) -> class Style
 					tmpIndexNode = node
 					item = item._sourceItem or item
 					while tmpIndexNode
-						if tmpIndexNode._nextSibling?._documentStyle?.item?.parent is item
-							@item.index = tmpIndexNode._nextSibling._documentStyle.item.index
-							break
+						tmpSiblingNode = tmpIndexNode
+						while tmpSiblingNode = tmpSiblingNode._nextSibling
+							if tmpSiblingNode._documentStyle?.item?.parent is item
+								@item.index = tmpSiblingNode._documentStyle.item.index
+								break
 						if tmpIndexNode isnt node and tmpIndexNode.style
 							break
 						tmpIndexNode = tmpIndexNode._parent
