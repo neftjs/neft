@@ -46,6 +46,9 @@ module.exports = (File, data) -> class Style
 			@item?.linkUri = @getLinkUri()
 
 		if @file.isRendered
+			if e.name is 'class'
+				@syncClassAttr e.oldValue
+
 			return unless @attrs?.hasOwnProperty(e.name)
 			value = @node.attrs.get e.name
 			if @file.funcs?.hasOwnProperty value
@@ -101,6 +104,7 @@ module.exports = (File, data) -> class Style
 		@item.document.node = @node
 		@updateText()
 		@updateVisibility()
+		@syncClassAttr('')
 
 		if @lastItemParent
 			@item?.parent = @lastItemParent
@@ -299,6 +303,43 @@ module.exports = (File, data) -> class Style
 				unless obj
 					return false
 		return false
+
+	syncClassAttr: (oldVal) ->
+		assert.isString oldVal
+
+		{item} = @
+		unless item
+			return
+		{classes} = item
+		val = @node.attrs.get('class')
+		newClasses = val and val.split(' ')
+
+		# check removed values
+		if oldVal
+			oldClasses = oldVal.split ' '
+			for name in oldClasses
+				if not newClasses or not utils.has(newClasses, name)
+					classes.remove name
+
+		# add new classes
+		if val
+			newClasses = val.split ' '
+			prevIndex = -1
+			for name, i in newClasses
+				index = classes.index name
+				if prevIndex is -1 and index is -1
+					index = classes.length
+					classes.append name
+				else if index isnt prevIndex + 1
+					if index isnt -1
+						classes.pop index
+						if prevIndex > index
+							prevIndex--
+					index = prevIndex+1
+					classes.insert index, name
+				prevIndex = index
+
+		return
 
 	isLink: ->
 		@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked') and @node.attrs.get('href')?[0] isnt '#'
