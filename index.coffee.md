@@ -952,7 +952,8 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 			key = if keyGen then keyGen(i, elem, arr) else i
 			value = if valueGen then valueGen(i, elem, arr) else elem
 
-			target[key] = value
+			if key?
+				target[key] = value
 
 		target
 
