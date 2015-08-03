@@ -17,9 +17,18 @@ Tag.Attrs @virtual_dom
 		eventsPool = []
 
 		triggerEvent = (tag, name, value) ->
-			event = eventsPool.pop() or {}
+			event = eventsPool.pop()
+			unless event
+				event = {}
+
+				# DEPRECATED
+				utils.defineProperty event, 'value', null, ->
+					log.warn 'Tag::onAttrsChange use oldValue instead of value'
+					@oldValue
+				, null
+
 			event.name = name
-			event.value = value
+			event.oldValue = value
 
 			emitSignal tag, 'onAttrsChange', event
 			eventsPool.push event
