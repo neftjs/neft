@@ -499,6 +499,8 @@ This property has a setter, which accepts strings and arrays of strings.
 					val = val.split ','
 				else
 					val = val.split ' '
+			else if val instanceof List
+				val = val.items()
 			val
 
 		class ClassesList extends List
@@ -559,7 +561,7 @@ This property has a setter, which accepts strings and arrays of strings.
 						_super.call @
 				setter: (_super) -> (val) ->
 					val = normalizeClassesValue val
-					classes = @_classes
+					{classes} = @
 
 					classes.clear()
 					if Array.isArray(val)
