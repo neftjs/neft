@@ -14,6 +14,10 @@ SIGNAL = 'signal'
 FUNCTION = 'function'
 CODE = 'code'
 
+# options
+i = 1
+BINDING_THIS_TO_TARGET_OPTS = 1
+
 ids = idsKeys = itemsKeys = extensions = queries = null
 
 uid = ->
@@ -174,6 +178,7 @@ anchorAttributeToString = (obj) ->
 bindingAttributeToString = (obj) ->
 	binding = ['']
 	val = obj.value
+	opts = obj._parserOptions or 0
 
 	# split to types
 	val += ' '
@@ -204,9 +209,9 @@ bindingAttributeToString = (obj) ->
 		[id] = elem
 		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling' or id is 'target'
 			elem.unshift "this"
-		else if id is 'this'
-			elem[0] = "this"
-		else if (id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
+		else if opts & BINDING_THIS_TO_TARGET_OPTS and id is 'this'
+			elem.splice 1, 0, 'target'
+		else if (id is 'this' or id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
 			continue
 		else
 			binding[i] = elem.join '.'
@@ -576,7 +581,10 @@ stringify =
 					json.signals ?= []
 					json.signals.push body.name
 				else
-					throw "Unexpected object body type '#{body.type}'"
+					if stringify[body.type]?
+						children.push stringify[body.type](body)
+					else
+						throw "Unexpected object body type '#{body.type}'"
 
 		# unless MODIFIERS_NAMES[elem.name]
 		unless json.id
@@ -615,6 +623,23 @@ stringify =
 		if visibleId
 			r = "#{visibleId} = #{r}"
 		r
+	if: (elem) ->
+		cond = elem.condition
+
+		elem.type = 'object'
+		elem.name = 'Class'
+		elem.body = [{
+			type: 'attribute'
+			name: 'when'
+			value: cond
+			_parserOptions: BINDING_THIS_TO_TARGET_OPTS
+		}, {
+			type: 'attribute'
+			name: 'changes'
+			value: elem.body
+		}]
+
+		stringify.object elem
 
 getIds = (elem, ids={}) ->
 	elems = getByTypeDeep elem, 'id', (attr) ->
@@ -684,5 +709,9 @@ module.exports = (file, filename) ->
 	queries: allQueries
 
 # codes = module.exports("""
+# Image {
+# 	height: this.width
+# }
 # """).codes
+# # console.log codes
 # console.log codes[Object.keys(codes)[0]]

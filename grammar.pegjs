@@ -277,7 +277,7 @@ Declaration
 	}
 
 Declarations
-	= d:(Declaration / Code)* { return flattenArray(d) }
+	= d:(Declaration / IfStatement / Code)* { return flattenArray(d) }
 
 /* TYPE */
 
@@ -317,6 +317,15 @@ MainType
 	= d:Type {
 		ids = {};
 		return d;
+	}
+
+/* IF STATEMENT */
+
+IfStatement
+	= __ "if" WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral/SourceCharacter) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
+		var obj = { type: 'if', condition: cond, body: body };
+		setParentRec(body, obj);
+		return obj;
 	}
 
 /* CODE */
