@@ -14,7 +14,7 @@ module.exports = (Networking) ->
 		# Send internal request to change the page based on the URI
 		impl.changePage = window.location.neftChangePage = (uri) ->
 			# send internal request
-			res = networking.createRequest
+			res = networking.createLocalRequest
 				method: Networking.Request.GET
 				type: Networking.Request.HTML_TYPE
 				uri: uri

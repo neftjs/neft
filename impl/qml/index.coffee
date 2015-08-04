@@ -9,7 +9,7 @@ module.exports = (Networking) ->
 	init: (networking) ->
 		__location.change.connect (uri) ->
 			# send internal request
-			networking.createRequest
+			networking.createLocalRequest
 				method: Networking.Request.GET
 				type: Networking.Request.HTML_TYPE
 				uri: uri

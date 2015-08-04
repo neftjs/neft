@@ -83,7 +83,7 @@ module.exports = (Networking) ->
 				if typeof cookies is 'string'
 					cookies = utils.tryFunction JSON.parse, null, [cookies], null
 
-				obj.req = networking.createRequest
+				obj.req = networking.createLocalRequest
 					uid: uid
 					method: Networking.Request[serverReq.method]
 					uri: url

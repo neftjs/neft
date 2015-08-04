@@ -159,6 +159,93 @@ app.networking.createHandler({
 *Networking.Request* Networking::createRequest(*Object* options)
 ----------------------------------------------------------------
 
+		createRequest: (opts) ->
+			assert.instanceOf @, Networking
+			assert.isPlainObject opts, '::createRequest options argument ...'
+
+			if opts.uri?.toString?
+				opts.uri = opts.uri.toString()
+
+			unless EXTERNAL_URL_RE.test(opts.uri)
+				if opts.uri[0] isnt '/'
+					opts.uri = "/#{opts.uri}"
+				opts.uri = "#{@url}#{opts.uri}"
+
+			logtime = log.time 'New request'
+
+			# create a request
+			req = new Networking.Request opts
+			req.onLoadEnd ->
+				log.end logtime
+
+			# create a response
+			resOpts = if utils.isObject(opts.response) then opts.response else {}
+			resOpts.request = req
+			res = new Networking.Response resOpts
+			req.response = res
+
+			# signal
+			@onRequest.emit req, res
+
+			# get handlers
+			log "Send `#{req}` request"
+
+			Impl.sendRequest req, res, (opts) ->
+				utils.merge res, opts
+				res.pending = false
+				req.destroy()
+
+			req
+
+*Networking.Request* Networking::get(*String* uri, *Function* onLoadEnd)
+------------------------------------------------------------------------
+	
+		get: (uri, onLoadEnd) ->
+			@createRequest
+				method: 'get'
+				uri: uri
+				onLoadEnd: onLoadEnd
+
+*Networking.Request* Networking::post(*String* uri, [*Any* data], *Function* onLoadEnd)
+---------------------------------------------------------------------------------------
+
+		post: (uri, data, onLoadEnd) ->
+			if typeof data is 'function' and not onLoadEnd
+				onLoadEnd = data
+				data = null
+
+			@createRequest
+				method: 'post'
+				uri: uri
+				data: data
+				onLoadEnd: onLoadEnd
+
+*Networking.Request* Networking::put(*String* uri, [*Any* data], *Function* onLoadEnd)
+--------------------------------------------------------------------------------------
+
+		put: (uri, data, onLoadEnd) ->
+			if typeof data is 'function' and not onLoadEnd
+				onLoadEnd = data
+				data = null
+
+			@createRequest
+				method: 'put'
+				uri: uri
+				data: data
+				onLoadEnd: onLoadEnd
+
+*Networking.Request* Networking::delete(*String* uri, *Function* onLoadEnd)
+---------------------------------------------------------------------------
+
+		delete: (uri, onLoadEnd) ->
+			@createRequest
+				method: 'delete'
+				uri: uri
+				onLoadEnd: onLoadEnd
+
+*Networking.Request* Networking::createLocalRequest(*Object* options)
+---------------------------------------------------------------------
+
 Use this method to create new [Networking.Request][] and handle it.
 
 Local and server requests are supported.
@@ -194,9 +281,9 @@ app.networking.createRequest({
 ```
 
 		EXTERNAL_URL_RE = ///^[a-zA-Z]+:\/\////
-		createRequest: (opts) ->
+		createLocalRequest: (opts) ->
 			assert.instanceOf @, Networking
-			assert.isPlainObject opts, '::createRequest options argument ...'
+			assert.isPlainObject opts, '::createLocalRequest options argument ...'
 
 			logtime = log.time 'New request'
 
@@ -215,59 +302,37 @@ app.networking.createRequest({
 			@onRequest.emit req, res
 
 			# get handlers
-			if EXTERNAL_URL_RE.test req.uri
-				log "Send `#{req}` request"
+			log "Resolve local `#{req}` request"
 
-				Impl.sendRequest req, res, (opts) ->
-					utils.merge res, opts
-					res.pending = false
-					req.destroy()
-			else
-				log "Resolve local `#{req}` request"
+			onError = (err) ->
+				unless req.pending
+					return
 
-				onError = (err) ->
-					if err and (typeof err is 'object' or typeof err is 'string' or typeof err is 'number')
-						res.raise err
-					else
-						res.raise Networking.Response.Error.RequestResolve req
-
-				noHandlersError = ->
-					log.warn "No handler found"
-					onError()
-
-				handlers = @_handlers[req.method]
-				if handlers
-					# run handlers
-					err = null
-					utils.async.forEach handlers, (handler, i, handlers, next) ->
-						handler.exec req, res, (_err) ->
-							if _err?
-								err = _err
-							next()
-
-					, ->
-						if err
-							onError err
-						else
-							noHandlersError()
+				if err and (typeof err is 'object' or typeof err is 'string' or typeof err is 'number')
+					res.raise err
 				else
-					noHandlersError()
+					res.raise Networking.Response.Error.RequestResolve req
+
+			noHandlersError = ->
+				log.warn "No handler found"
+				onError()
+
+			handlers = @_handlers[req.method]
+			if handlers
+				# run handlers
+				err = null
+				utils.async.forEach handlers, (handler, i, handlers, next) ->
+					handler.exec req, res, (_err) ->
+						if _err?
+							err = _err
+						next()
+
+				, ->
+					if err
+						onError err
+					else
+						noHandlersError()
+			else
+				noHandlersError()
 
 			req
-
-*Networking.Request* Networking::createServerRequest(*Object* options)
-----------------------------------------------------------------------
-
-		createServerRequest: (opts) ->
-			assert.instanceOf @, Networking
-			assert.isPlainObject opts, '::createServerRequest options argument ...'
-
-			if opts.uri?.toString?
-				opts.uri = opts.uri.toString()
-
-			unless EXTERNAL_URL_RE.test opts.uri
-				if opts.uri[0] isnt '/'
-					opts.uri = "/#{opts.uri}"
-				opts.uri = "#{@url}#{opts.uri}"
-
-			@createRequest opts
