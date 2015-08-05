@@ -86,13 +86,20 @@ module.exports = (File, data) -> class Style
 		@classes = null
 		@parentSet = false
 		@lastItemParent = null
+		@waiting = false
 
 		Object.preventExtensions @
 
 	render: ->
+		if @waiting
+			return
+
 		for child in @children
 			child.render()
 
+		@renderItem()
+
+	renderItem: ->
 		unless @item
 			return
 
@@ -102,6 +109,7 @@ module.exports = (File, data) -> class Style
 				@classes = utils.clone(classes.items())
 
 		@item.document.node = @node
+		@item.document.visible = true
 		@updateText()
 		@updateVisibility()
 		@syncClassAttr('')
@@ -114,18 +122,82 @@ module.exports = (File, data) -> class Style
 			@setAttr name, val
 		return
 
-	revert: ->
+	revert: do ->
+		list = []
+		lastDate = 0
+
+		class DocumentHideEvent
+			constructor: ->
+				@delay = 0
+
+		event = new DocumentHideEvent
+
+		revertItemWhenPossible = (style) ->
+			if list.length is 0
+				lastDate = Date.now()
+				requestAnimationFrame sync
+
+			style.waiting = true
+			list.push style
+			return
+
+		sync = ->
+			now = Date.now()
+			diff = now - lastDate
+			lastDate = now
+
+			animationsPending = false
+
+			for style in list
+				for extension in style.item._extensions
+					if extension instanceof Renderer.PropertyAnimation and extension.running and not extension.loop
+						animationsPending = true
+						break
+				if animationsPending
+					break
+
+			if not animationsPending and (event.delay -= diff) <= 0
+				event.delay = 0
+
+				for style in list
+					style.waiting = false
+					style.revertItem()
+					style.file.readyToUse = true
+					assert.notOk style.file.isRendered
+
+				utils.clear list
+			else
+				requestAnimationFrame sync
+
+			return
+
+		->
+			if @waiting or not @item
+				return
+
+			# parent
+			if @isAutoParent and @isScope
+				@item.document.onHide.emit event
+			@item.document.visible = false
+
+			@file.readyToUse = false
+			revertItemWhenPossible @
+
+			for child in @children
+				child.revert()
+			return
+
+	revertItem: ->
 		unless @item
 			return
 
 		# parent
 		if @isAutoParent
-			if @isScope
-				@item.document.onHide.emit()
 			@lastItemParent = null
 			if !@parentSet
 				@lastItemParent = @item.parent
 			@item.parent = null
+
 		itemDocumentNode = @item.document.node
 		@item.document.node = null
 
@@ -135,9 +207,6 @@ module.exports = (File, data) -> class Style
 				tmpNode._documentStyle = null
 			else
 				break
-
-		for child in @children
-			child.revert()
 
 		# shared items
 		if itemDocumentNode?._documentStyle is @
@@ -192,6 +261,9 @@ module.exports = (File, data) -> class Style
 			item.label
 
 	updateText: ->
+		if @waiting
+			return
+
 		obj = @getTextObject()
 		node = @node
 		if node.children.length is 1 and node.children[0].name is 'a'
@@ -213,7 +285,7 @@ module.exports = (File, data) -> class Style
 		return
 
 	updateVisibility: ->
-		unless @item
+		if @waiting or not @item
 			return
 
 		visible = true
@@ -249,6 +321,9 @@ module.exports = (File, data) -> class Style
 
 	setAttr: (name, val) ->
 		assert.instanceOf @, Style
+
+		if @waiting
+			return
 
 		{funcs} = @file
 		if funcs?.hasOwnProperty(val)
@@ -307,6 +382,9 @@ module.exports = (File, data) -> class Style
 	syncClassAttr: (oldVal) ->
 		assert.isString oldVal
 
+		if @waiting
+			return
+
 		{item} = @
 		unless item
 			return
@@ -353,6 +431,9 @@ module.exports = (File, data) -> class Style
 		uri
 
 	reloadItem: ->
+		if @waiting
+			return
+
 		unless utils.isClient
 			return
 
@@ -426,6 +507,9 @@ module.exports = (File, data) -> class Style
 		return;
 
 	findItemParent: ->
+		if @waiting
+			return
+
 		if @isAutoParent and @item and not @item.parent
 			@parentSet = true
 			{node} = @
