@@ -287,7 +287,7 @@ Grid {
 		and margin doesn't remove margin.left binding
 		###
 		enableClass = (item, classElem) ->
-			assert.instanceOf item, Renderer.Item
+			assert.instanceOf item, itemUtils.Object
 			assert.instanceOf classElem, Class
 
 			classList = item._classList
@@ -399,7 +399,7 @@ Grid {
 			return
 
 		disableClass = (item, classElem) ->
-			assert.instanceOf item, Renderer.Item
+			assert.instanceOf item, itemUtils.Object
 			assert.instanceOf classElem, Class
 
 			classList = item._classList

@@ -42,6 +42,17 @@ Animation/PropertyAnimation @modifier
 			name: 'target'
 			defaultValue: null
 			implementation: Impl.setPropertyAnimationTarget
+			setter: (_super) -> (val) ->
+				oldVal = @_target
+
+				if oldVal
+					utils.remove oldVal._extensions, @
+
+				if val
+					val._extensions.push @
+
+				_super.call @, val
+				return
 
 *String* PropertyAnimation::property
 ------------------------------------

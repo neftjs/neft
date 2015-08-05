@@ -28,6 +28,7 @@ Document @extension
 		constructor: (ref) ->
 			# @_query = ''
 			@_node = null
+			@_visible = false
 			# @_isAutoParent = false
 			# @_parentDocument = @
 			# @_watcher = null
@@ -186,6 +187,18 @@ Text {
 			developmentSetter: (val) ->
 				if val?
 					assert.instanceOf val, require('document').Element.Tag
+
+*ReadOnly* *Boolean* Document::visible
+--------------------------------------
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'visible'
+			defaultValue: false
+			namespace: 'document'
+			parentConstructor: ctor
+			developmentSetter: (val) ->
+				assert.isBoolean val
 
 		# itemUtils.defineProperty
 		# 	constructor: @
@@ -502,9 +515,11 @@ This signal is called when the **style item** parent has been found.
 
 		signal.Emitter.createSignal @, 'onShow'
 
-*Signal* Document::onHide()
----------------------------
+*Signal* Document::onHide(*Object* event)
+-----------------------------------------
 
 This signal is called when the **style item** is no longer used.
+
+**event** has the *delay* property.
 
 		signal.Emitter.createSignal @, 'onHide'

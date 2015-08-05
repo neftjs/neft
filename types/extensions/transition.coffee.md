@@ -47,7 +47,7 @@ Rectangle {
 		listener = (oldVal) ->
 			{animation} = @
 			to = @_target[@property]
-			if not @_isReady or not @running or animation.updatePending or not utils.isFloat(oldVal) or not utils.isFloat(to)
+			if not animation or not @running or animation.updatePending or not utils.isFloat(oldVal) or not utils.isFloat(to)
 				return
 
 			@_to = to
@@ -100,6 +100,9 @@ Rectangle {
 
 				_super.call @, val
 
+				if oldVal
+					utils.remove oldVal._extensions, @
+
 				@_running = false
 				if val instanceof itemUtils.Object
 					item = val
@@ -109,6 +112,7 @@ Rectangle {
 					setImmediate onTargetReady.bind(@)
 
 				if item
+					item._extensions.push @
 					@_running = true
 					# else
 					# 	item.onReady onTargetReady, @

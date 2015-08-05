@@ -17,7 +17,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 	signalListener = ->
 		unless @_when
 			@_when = true
-			@whenChange.emit false
+			@onWhenChange.emit false
 			unless @_running
 				@enable()
 		return

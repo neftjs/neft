@@ -54,6 +54,9 @@ module.exports = (impl) ->
 		if val is val and target # isNaN hack
 			if not running or anim._updateProperty or not data.propertySetter
 				anim._updatePending = true
+				# when animation has been started in a signal which stopped propagation
+				if not running and target[data.internalPropertyName] is val
+					target[data.internalPropertyName] = data.from
 				target[anim._property] = val
 				anim._updatePending = false
 

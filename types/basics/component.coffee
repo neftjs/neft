@@ -47,10 +47,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		# init extensions
 		for id, item of @objects
-			if item instanceof Renderer.Item
-				for extension in item._extensions
-					if extension.name is '' and not extension._bindings?.when
-						extension.enable()
+			for extension in item._extensions
+				if !extension.name and not extension._bindings?.when
+					extension.enable()
 
 		# init objects
 		for id, item of @objects
@@ -70,15 +69,20 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		# clone and get items by ids
 		newObjects = component.objects
 		for id, item of @objects
+			if item instanceof Renderer.Extension
+				newObjects[item.id] = item.clone component
+
+		for id, item of @objects
 			if item instanceof Renderer.Item
 				if item is @item
 					newItem = component.item = item.clone component, opts
 				else
 					newItem = item.clone component
-				for extension in newItem._extensions
-					if utils.has(@idsOrder, extension.id)
-						newObjects[extension.id] = extension
 				newObjects[item.id] = newItem
+				# for extension in newItem._extensions
+				# 	if utils.has(@idsOrder, extension.id)
+				# 		newObjects[extension.id] = extension
+				# newObjects[item.id] = newItem
 
 		# fill objectsOrder
 		for object in @objectsOrder

@@ -166,14 +166,18 @@ module.exports = (Renderer, Impl) ->
 
 		clone: (component, opts) ->
 			clone = new @constructor component
-			clone.id = @id
+			if @id
+				clone.id = @id
 
 			if @$
 				clone.$ = Object.create @$
 				MutableDeepObject.call clone.$, clone
 
 			for extension in @_extensions
-				cloneExtension = extension.clone component
+				if extension.id
+					cloneExtension = component.objects[extension.id]
+				else
+					cloneExtension = extension.clone component
 				cloneExtension.target = clone
 
 			if opts
@@ -186,7 +190,7 @@ module.exports = (Renderer, Impl) ->
 	
 	class FixedObject extends UtilsObject
 		constrcutor: (component, opts) ->
-			suprt component, opts
+			super component, opts
 
 	class MutableDeepObject extends signal.Emitter
 		constructor: (ref) ->
