@@ -123,8 +123,14 @@ File @class
 			assert.ok files[path]?
 
 			# from pool
-			if pool[path]?.length
-				return pool[path].pop()
+			arr = pool[path]
+			if arr?.length
+				i = n = arr.length
+				while file = arr[--i]
+					if file.readyToUse
+						arr[i] = arr[n-1]
+						arr.pop()
+						return file
 
 			# clone original
 			file = files[path].clone()
@@ -159,6 +165,7 @@ File @class
 				# set properties
 				@pathbase = path.substring 0, path.lastIndexOf('/') + 1
 				@isRendered = false
+				@readyToUse = true
 
 				# call init
 				@init()
