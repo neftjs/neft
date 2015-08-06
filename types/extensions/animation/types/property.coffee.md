@@ -5,6 +5,9 @@ Animation/PropertyAnimation @modifier
 
 	utils = require 'utils'
 	assert = require 'assert'
+	log = require 'log'
+
+	log = log.scope 'Renderer', 'PropertyAnimation'
 
 *PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
 --------------------------------------------------------------
@@ -16,11 +19,12 @@ Animation/PropertyAnimation @modifier
 			@_target = null
 			@_property = ''
 			@_autoFrom = true
-			@_duration = 1000
+			@_duration = 250
 			@_startDelay = 0
 			@_loopDelay = 0
 			@_updateData = false
 			@_updateProperty = false
+			@_easing = null
 			super component, opts
 
 		getter = utils.lookupGetter @::, 'running'
@@ -67,15 +71,15 @@ Animation/PropertyAnimation @modifier
 			developmentSetter: (val) ->
 				assert.isString val
 
-*Float* PropertyAnimation::duration = 1000
-------------------------------------------
+*Float* PropertyAnimation::duration = 250
+-----------------------------------------
 
 ### *Signal* PropertyAnimation::onDurationChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'duration'
-			defaultValue: 1000
+			defaultValue: 250
 			implementation: Impl.setPropertyAnimationDuration
 			developmentSetter: (val) ->
 				assert.isFloat val
@@ -199,3 +203,73 @@ ReadOnly *Float* PropertyAnimation::progress = 0
 		utils.defineProperty @::, 'progress', null, ->
 			Impl.getPropertyAnimationProgress.call @
 		, null
+
+*Easing* PropertyAnimation::easing
+----------------------------------
+
+### *Signal* PropertyAnimation::onEasingChange(*Easing* value)
+	
+		utils.defineProperty @::, 'easing', null, ->
+			@_easing ||= new Easing(@)
+		, (val) ->
+			if typeof val is 'string'
+				@easing.type = val
+			else if utils.isObject(val)
+				utils.merge @easing, val
+			else if not val
+				@easing.type = 'Linear'
+
+*Easing* Easing()
+-----------------
+
+		class Easing extends itemUtils.DeepObject
+			constructor: (ref) ->
+				@_type = 'Linear'
+				super ref
+
+*String* Easing::type = 'Linear'
+--------------------------------
+
+Supported easing functions:
+*Linear*, *InQuad*, *OutQuad*, *InOutQuad*, *InCubic*, *OutCubic*,
+*InOutCubic*, *InQuart*, *OutQuart*, *InOutQuart*, *InQuint*, *OutQuint*,
+*InOutQuint*, *InSine*, *OutSine*, *InOutSine*, *InExpo*, *OutExpo*,
+*InOutExpo*, *InCirc*, *OutCirc*, *InOutCirc*, *InElastic*, *OutElastic*,
+*InOutElastic*, *InBack*, *OutBack*, *InOutBack*, *InBounce*, *OutBounce*,
+*InOutBounce*.
+
+			EASINGS = ['Linear', 'InQuad', 'OutQuad', 'InOutQuad', 'InCubic', 'OutCubic',
+				'InOutCubic', 'InQuart', 'OutQuart', 'InOutQuart', 'InQuint', 'OutQuint',
+				'InOutQuint', 'InSine', 'OutSine', 'InOutSine', 'InExpo', 'OutExpo',
+				'InOutExpo', 'InCirc', 'OutCirc', 'InOutCirc', 'InElastic', 'OutElastic',
+				'InOutElastic', 'InBack', 'OutBack', 'InOutBack', 'InBounce', 'OutBounce',
+				'InOutBounce']
+
+			EASING_ALIASES = Object.create(null)
+			for easing in EASINGS
+				EASING_ALIASES[easing] = easing
+				EASING_ALIASES[easing.toLowerCase()] = easing
+
+### *Signal* Easing::onTypeChange(*String* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'type'
+				defaultValue: 'Linear'
+				namespace: 'easing'
+				parentConstructor: PropertyAnimation
+				implementation: Impl.setPropertyAnimationEasingType
+				developmentSetter: (val) ->
+					if val
+						assert.isString val
+				setter: (_super) -> (val) ->
+					unless val
+						val = 'Linear'
+
+					type = EASING_ALIASES[val]
+					type ||= EASING_ALIASES[val.toLowerCase()]
+					unless type
+						log.warn "Easing type not recognized; '#{val}' given"
+						type = 'Linear'
+					_super.call @, type
+					return

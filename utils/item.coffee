@@ -194,7 +194,7 @@ module.exports = (Renderer, Impl) ->
 
 	class MutableDeepObject extends signal.Emitter
 		constructor: (ref) ->
-			assert.instanceOf ref, Renderer.Item
+			assert.instanceOf ref, UtilsObject
 			@_ref = ref
 			@_impl = bindings: null
 			@_component = ref._component
