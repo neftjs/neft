@@ -415,4 +415,4 @@ console.log(list.has('ab123'));
 -------------------------
 
 		toString: ->
-			@__hash__
+			@_data+''
