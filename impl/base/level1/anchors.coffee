@@ -192,17 +192,27 @@ module.exports = (impl) ->
 
 	onChildInsert = (child) ->
 		child.onVisibleChange @update, @
-		child.onWidthChange @update, @
-		child.onHeightChange @update, @
-		child.onXChange @update, @
-		child.onYChange @update, @
+		if @source is 'fillWidthSize'
+			child.onXChange @update, @
+			child.onWidthChange @update, @
+		if @source is 'fillHeightSize'
+			child.onYChange @update, @
+			child.onHeightChange @update, @
+
+		@update()
+		return
 
 	onChildPop = (child) ->
 		child.onVisibleChange.disconnect @update, @
-		child.onWidthChange.disconnect @update, @
-		child.onHeightChange.disconnect @update, @
-		child.onXChange.disconnect @update, @
-		child.onYChange.disconnect @update, @
+		if @source is 'fillWidthSize'
+			child.onXChange.disconnect @update, @
+			child.onWidthChange.disconnect @update, @
+		if @source is 'fillHeightSize'
+			child.onYChange.disconnect @update, @
+			child.onHeightChange.disconnect @update, @
+
+		@update()
+		return
 
 	class Anchor
 		constructor: (@item, @source, def) ->
@@ -256,16 +266,36 @@ module.exports = (impl) ->
 			Object.preventExtensions @
 
 		update: ->
-			if @targetItem
+			# sometimes it could be already destroyed
+			unless @item
+				return
+
+			# targetItem can be possibly different than actual value;
+			# e.g. when Anchor listener to change targetItem is not called firstly
+			switch @target
+				when 'parent'
+					targetItem = @item._parent
+				when 'children'
+					targetItem = @item._children
+				when 'nextSibling'
+					targetItem = @item._nextSibling
+				when 'previousSibling'
+					targetItem = @item._previousSibling
+				else
+					{targetItem} = @
+			if targetItem isnt @targetItem
+				return
+
+			if targetItem
 				`//<development>`
-				if @targetItem isnt @item._children and @item._parent isnt @targetItem and @item._parent isnt @targetItem._parent
+				if targetItem isnt @item._children and @item._parent isnt targetItem and @item._parent isnt targetItem._parent
 					log.error "You can anchor only to a parent or sibling. Item: #{@item.toString()}"
 				`//</development>`
 
-				r = @getSourceValue(@item) + @getTargetValue(@targetItem)
+				r = @getSourceValue(@item) + @getTargetValue(targetItem)
 			else
 				r = 0
-			if (margin = @item._margin) and @targetItem isnt @item._children
+			if (margin = @item._margin) and targetItem isnt @item._children
 				r += getMarginValue[@source] margin
 			@item[@prop] = r
 			return
@@ -290,6 +320,8 @@ module.exports = (impl) ->
 			if @targetItem
 				for handler in getTargetWatchProps[@line][@type]
 					@targetItem[handler].disconnect @update, @
+
+			@item = @targetItem = null
 			return
 
 	getBaseAnchors =
