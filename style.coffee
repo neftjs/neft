@@ -90,6 +90,76 @@ module.exports = (File, data) -> class Style
 
 		Object.preventExtensions @
 
+	showEvent = new Renderer.Item::document.constructor.ShowEvent
+	hideEvent = new Renderer.Item::document.constructor.HideEvent
+	globalShowDelay = globalHideDelay = 0
+	stylesToRender = []
+	stylesToRevert = []
+
+	updateWhenPossible = do ->
+		pending = false
+		lastDate = 0
+
+		sync = ->
+			now = Date.now()
+			diff = now - lastDate
+			lastDate = now
+
+			animationsPending = false
+
+			for style in stylesToRevert
+				for extension in style.item._extensions
+					if extension instanceof Renderer.PropertyAnimation and extension.running and not extension.loop
+						animationsPending = true
+						break
+				if animationsPending
+					break
+
+			# update delays
+			globalShowDelay -= diff
+			if globalHideDelay > 0 and not animationsPending
+				globalHideDelay -= diff
+
+			if not animationsPending 
+				# render styles
+				if globalShowDelay + globalHideDelay <= 0
+					for style in stylesToRender
+						style.waiting = false
+						style.findItemParent()
+						style.renderItem()
+						style.file.readyToUse = true
+
+					globalShowDelay = 0
+					utils.clear stylesToRender
+
+				# revert styles
+				if globalHideDelay <= 0
+					for style in stylesToRevert
+						style.waiting = false
+						style.revertItem()
+						style.file.readyToUse = true
+						assert.notOk style.file.isRendered
+
+					globalHideDelay = 0
+					utils.clear stylesToRevert
+
+			# continue
+			if stylesToRender.length or stylesToRevert.length
+				requestAnimationFrame sync
+			else
+				pending = false
+
+			return
+
+		(style) ->
+			unless pending
+				lastDate = Date.now()
+				requestAnimationFrame sync
+				pending = true
+
+			style.waiting = true
+			return
+
 	render: ->
 		if @waiting
 			return
@@ -97,10 +167,18 @@ module.exports = (File, data) -> class Style
 		for child in @children
 			child.render()
 
-		@renderItem()
+		if @isScope
+			@item.document.onShow.emit showEvent
+			globalShowDelay += showEvent.delay
+			showEvent.delay = 0
+
+		@file.readyToUse = false
+		stylesToRender.push @
+		updateWhenPossible @
+		return
 
 	renderItem: ->
-		unless @item
+		if not @item or not @file.isRendered
 			return
 
 		# save classes
@@ -115,77 +193,33 @@ module.exports = (File, data) -> class Style
 		@syncClassAttr('')
 
 		if @lastItemParent
-			@item?.parent = @lastItemParent
+			@item.parent = @lastItemParent
 		
 		for name of @attrs
 			val = @node.attrs.get name
 			@setAttr name, val
 		return
 
-	revert: do ->
-		list = []
-		lastDate = 0
-
-		class DocumentHideEvent
-			constructor: ->
-				@delay = 0
-
-		event = new DocumentHideEvent
-
-		revertItemWhenPossible = (style) ->
-			if list.length is 0
-				lastDate = Date.now()
-				requestAnimationFrame sync
-
-			style.waiting = true
-			list.push style
+	revert: ->
+		if @waiting or not @item
 			return
 
-		sync = ->
-			now = Date.now()
-			diff = now - lastDate
-			lastDate = now
+		# parent
+		if @isAutoParent and @isScope
+			@item.document.onHide.emit hideEvent
+			globalHideDelay += hideEvent.delay
+			globalShowDelay += hideEvent.nextShowDelay
+			event.delay = 0
+			event.nextShowDelay = 0
+		@item.document.visible = false
 
-			animationsPending = false
+		@file.readyToUse = false
+		stylesToRevert.push @
+		updateWhenPossible @
 
-			for style in list
-				for extension in style.item._extensions
-					if extension instanceof Renderer.PropertyAnimation and extension.running and not extension.loop
-						animationsPending = true
-						break
-				if animationsPending
-					break
-
-			if not animationsPending and (event.delay -= diff) <= 0
-				event.delay = 0
-
-				for style in list
-					style.waiting = false
-					style.revertItem()
-					style.file.readyToUse = true
-					assert.notOk style.file.isRendered
-
-				utils.clear list
-			else
-				requestAnimationFrame sync
-
-			return
-
-		->
-			if @waiting or not @item
-				return
-
-			# parent
-			if @isAutoParent and @isScope
-				@item.document.onHide.emit event
-			@item.document.visible = false
-
-			@file.readyToUse = false
-			revertItemWhenPossible @
-
-			for child in @children
-				child.revert()
-			return
+		for child in @children
+			child.revert()
+		return
 
 	revertItem: ->
 		unless @item
@@ -514,7 +548,6 @@ module.exports = (File, data) -> class Style
 			@parentSet = true
 			{node} = @
 			tmpNode = node._parent
-			oldParent = @item._parent
 			while tmpNode
 				if style = tmpNode._documentStyle
 					item = style.item
@@ -538,9 +571,6 @@ module.exports = (File, data) -> class Style
 						if tmpIndexNode isnt node and tmpIndexNode.style
 							break
 						tmpIndexNode = tmpIndexNode._parent
-
-					if @isScope and not oldParent
-						@item.document.onShow.emit()
 					break
 				tmpNode = tmpNode._parent
 

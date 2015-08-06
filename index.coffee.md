@@ -66,7 +66,6 @@ Row {
 
 	stylesFuncs = require('./file/funcs')
 	stylesStyles = require('./file/styles')
-	stylesRender = require('./file/render')
 	stylesStyle = require('./style')
 
 	expect(Document).toBe.function()
@@ -74,6 +73,5 @@ Row {
 	module.exports = (data) ->
 		stylesFuncs Document
 		stylesStyles Document
-		stylesRender Document
 
 		Document.Style = stylesStyle Document, data
