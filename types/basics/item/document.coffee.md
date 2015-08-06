@@ -508,18 +508,42 @@ Text {
 		# 		propagateParentChange @
 		# 	r
 
-*Signal* Document::onShow()
----------------------------
+*Signal* Document::onShow(*DocumentShowEvent* event)
+----------------------------------------------------
 
 This signal is called when the **style item** parent has been found.
 
 		signal.Emitter.createSignal @, 'onShow'
 
-*Signal* Document::onHide(*Object* event)
------------------------------------------
+*Signal* Document::onHide(*DocumentHideEvent* event)
+----------------------------------------------------
 
 This signal is called when the **style item** is no longer used.
 
-**event** has the *delay* property.
-
 		signal.Emitter.createSignal @, 'onHide'
+
+*DocumentShowEvent* DocumentShowEvent()
+---------------------------------------
+
+		@ShowEvent = class DocumentShowEvent
+			constructor: ->
+				@delay = 0
+				Object.preventExtensions @
+
+*Integer* DocumentShowEvent::delay = 0
+--------------------------------------
+
+*DocumentHideEvent* DocumentHideEvent()
+---------------------------------------
+
+		@HideEvent = class DocumentHideEvent
+			constructor: ->
+				@delay = 0
+				@nextShowDelay = 0
+				Object.preventExtensions @
+
+*Integer* DocumentHideEvent::delay = 0
+--------------------------------------
+
+*Integer* DocumentHideEvent::nextShowDelay = 0
+----------------------------------------------
