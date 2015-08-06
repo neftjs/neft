@@ -67,7 +67,6 @@ console.log(data.get('name'));
 			assert.isObject obj
 
 			super()
-			@__hash__ = utils.uid()
 			@_data = obj
 			@_keys = null
 			@_values = null
@@ -350,4 +349,4 @@ Check *Dict.fromJSON* to reverse this operation.
 This method returns a pseudo-unique string determining this *Dict* instance.
 
 		toString: ->
-			@__hash__
+			@_data+''
