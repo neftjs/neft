@@ -45,7 +45,10 @@ module.exports = (impl) ->
 		data.progress = progress
 		running = progress isnt 1 or (anim._running and anim._loop and anim._when)
 
-		val = data.easing anim._duration * progress, data.from, (data.to - data.from), anim._duration
+		if progress is 1
+			val = data.to
+		else
+			val = data.easing anim._duration * progress, data.from, (data.to - data.from), anim._duration
 		target = anim._target
 
 		# if data.isIntegerProperty is true and progress isnt 1
