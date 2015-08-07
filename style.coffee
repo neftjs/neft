@@ -125,8 +125,8 @@ module.exports = (File, data) -> class Style
 				if globalShowDelay + globalHideDelay <= 0
 					for style in stylesToRender
 						style.waiting = false
-						style.findItemParent()
 						style.renderItem()
+						style.findItemParent()
 						style.file.readyToUse = true
 
 					globalShowDelay = 0
