@@ -127,13 +127,14 @@ module.exports = (File) -> class Input
 						props = props.split '.'
 						props.shift()
 						if postfix[0] is '(' or (postfix[0] is '=' and postfix isnt '==')
-							ends = '.' + props[props.length - 1]
+							prefix += "__input.trace("
+							ends = ').' + props[props.length - 1]
 							props.pop()
 						else
 							ends = ''
 						r = ''
 						for prop in props
-							prefix += "__input.traceProp("
+							prefix += "__input.traceObj("
 							r += ", '#{prop}')"
 						r + ends
 					"#{prefix}#{str}"
@@ -230,26 +231,30 @@ module.exports = (File) -> class Input
 		(name) ->
 			cache[name] ||= "on#{utils.capitalize(name)}Change"
 
-	traceProp: (obj, prop) ->
+	trace: (obj) ->
+		if obj and @traceChanges
+			if obj instanceof Dict
+				obj.onChange onChange, @
+				@traces.push obj, 'onChange'
+			else if obj instanceof List
+				obj.onChange onChange, @
+				@traces.push obj, 'onChange'
+				obj.onInsert onChange, @
+				@traces.push obj, 'onInsert'
+				obj.onPop onChange, @
+				@traces.push obj, 'onPop'
+		obj
+
+	traceObj: (obj, prop) ->
+		@trace obj
+
 		if obj
 			if obj instanceof Dict
-				if @traceChanges
-					obj.onChange onChange, @
-					@traces.push obj, 'onChange'
-
 				val = obj.get prop
 			else if obj instanceof List
-				if @traceChanges
-					obj.onChange onChange, @
-					@traces.push obj, 'onChange'
-					obj.onInsert onChange, @
-					@traces.push obj, 'onInsert'
-					obj.onPop onChange, @
-					@traces.push obj, 'onPop'
-
 				if typeof prop is 'number'
 					val = obj.get prop
-			else if obj and @traceChanges
+			else
 				signal = getNamedSignal prop
 				if typeof obj[signal] is 'function'
 					obj[signal] onChange, @
@@ -264,7 +269,7 @@ module.exports = (File) -> class Input
 			if storage instanceof Element
 				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
-				@traceProp storage, ''
+				@trace storage
 		
 		@update()
 

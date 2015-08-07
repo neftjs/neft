@@ -18,6 +18,16 @@ File @class
 		files = @_files = {}
 		pool = Object.create null
 
+		getFromPool = (path) ->
+			arr = pool[path]
+			if arr?.length
+				i = n = arr.length
+				while file = arr[--i]
+					if file.readyToUse
+						arr[i] = arr[n-1]
+						arr.pop()
+						return file
+
 		getTmp = -> tmp =
 			listeners: []
 
@@ -123,14 +133,8 @@ File @class
 			assert.ok files[path]?
 
 			# from pool
-			arr = pool[path]
-			if arr?.length
-				i = n = arr.length
-				while file = arr[--i]
-					if file.readyToUse
-						arr[i] = arr[n-1]
-						arr.pop()
-						return file
+			if r = getFromPool(path)
+				return r
 
 			# clone original
 			file = files[path].clone()
@@ -233,6 +237,7 @@ File @class
 
 			(storage, source) ->
 				assert.notOk @isRendered
+				assert.ok @readyToUse
 
 				if storage instanceof File.Use
 					source = storage
@@ -340,8 +345,8 @@ File @class
 
 		clone: ->
 			# from pool
-			if pool[@path]?.length
-				pool[@path].pop()
+			if r = getFromPool(@path)
+				r
 			else
 				@_clone()
 
@@ -352,6 +357,7 @@ File @class
 			clone._tmp = getTmp()
 			clone.uid = utils.uid()
 			clone.isRendered = false
+			clone.readyToUse = true
 			clone.node = @node.cloneDeep()
 			clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
 			clone.parent = null
