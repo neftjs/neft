@@ -540,6 +540,26 @@ module.exports = (File, data) -> class Style
 
 		return;
 
+	findItemIndex = (node, item, parent) ->
+		tmpIndexNode = node
+		parent = parent.children.target or parent
+		while tmpIndexNode
+			tmpSiblingNode = tmpIndexNode
+			while tmpSiblingNode = tmpSiblingNode._nextSibling
+				if tmpSiblingNode._documentStyle?.item?.parent is parent
+					item.index = tmpSiblingNode._documentStyle.item.index
+					return
+
+			# tmpSiblingNode = tmpIndexNode
+			# while tmpSiblingNode = tmpSiblingNode._previousSibling
+			# 	if tmpSiblingNode._documentStyle?.item?.parent is parent
+			# 		item.index = tmpSiblingNode._documentStyle.item.index + 1
+			# 		return
+			if tmpIndexNode isnt node and tmpIndexNode.style
+				return
+			tmpIndexNode = tmpIndexNode._parent
+		return
+
 	findItemParent: ->
 		if @waiting
 			return
@@ -560,17 +580,7 @@ module.exports = (File, data) -> class Style
 					@item.parent = item
 
 					# find index
-					tmpIndexNode = node
-					item = item._sourceItem or item
-					while tmpIndexNode
-						tmpSiblingNode = tmpIndexNode
-						while tmpSiblingNode = tmpSiblingNode._nextSibling
-							if tmpSiblingNode._documentStyle?.item?.parent is item
-								@item.index = tmpSiblingNode._documentStyle.item.index
-								break
-						if tmpIndexNode isnt node and tmpIndexNode.style
-							break
-						tmpIndexNode = tmpIndexNode._parent
+					findItemIndex node, @item, item
 					break
 				tmpNode = tmpNode._parent
 
