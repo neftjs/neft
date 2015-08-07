@@ -12,29 +12,111 @@ module.exports = (impl) ->
 	impl._scrollableUsePointer ?= true
 	impl._scrollableUseWheel ?= true
 
+	outQuint = (t, b, c, d) ->
+		# c*((t=t/d-1)*t*t*t*t + 1) + b
+		c * (t/d) + b
+
 	###
 	Scroll container by given x and y deltas
 	###
-	scroll = (item, x=0, y=0) ->
-		x = getLimitedX item, x
-		y = getLimitedY item, y
+	scroll = do ->
+		# list = []
+		# pending = false
+		# vsyncRun = false
 
-		if item._contentX isnt x or item._contentY isnt y
-			item.contentX = x
-			item.contentY = y
-			signal.STOP_PROPAGATION
+		# getSwingY = (item, y) ->
+		# 	maxSwing = item.height * 0.4
+
+		# 	if y < 0
+		# 		max = 0
+		# 		if y < -maxSwing
+		# 			y = -maxSwing
+		# 	else
+		# 		max = item._impl.contentItem._height - item._height
+		# 		if y < max
+		# 			return y
+		# 		if y > max + maxSwing
+		# 			y = max + maxSwing
+		# 	delta = Math.max(Math.pow(Math.abs(max - y), 1.3) / 42, 2)
+		# 	if y < 0
+		# 		y += delta
+		# 		if y > 0
+		# 			y = 0
+		# 	else
+		# 		y -= delta
+		# 		if y < max
+		# 			y = max
+		# 	y
+
+		# vsync = ->
+		# 	i = 0; n = list.length
+		# 	while i < n
+		# 		item = list[i]
+
+		# 		if item._impl.swingDisabled
+		# 			i++
+		# 			continue
+
+		# 		# y
+		# 		y = getSwingY item, item.contentY
+		# 		max = getLimitedY item, y
+
+		# 		if y is max
+		# 			item._impl.swingPending = false
+		# 			item._impl.swingFramesY = 0
+		# 			item._impl.lastSwingTime = Date.now()
+		# 			list[i] = list[n-1]
+		# 			list.pop()
+		# 			i--; n--;
+
+		# 		item.contentY = Math.round y
+		# 		item._impl.swingFramesY++
+
+		# 		i++
+
+		# 	if list.length
+		# 		requestAnimationFrame vsync
+		# 	else
+		# 		pending = false
+		# 	return
+
+		(item, x=0, y=0) ->
+			deltaX = getDeltaX item, x
+			deltaY = getDeltaY item, y
+			x = Math.round item._contentX - deltaX
+			y = Math.round item._contentY - deltaY
+
+			x = limitedX = getLimitedX item, x
+			y = limitedY = getLimitedY item, y
+
+			# if item._impl.swingPending and not item._impl.swingDisabled
+			# 	y = getSwingY item, y
+
+			# unless item._impl.swingPending
+			# 	if y isnt limitedY
+			# 		item._impl.swingPending = true
+			# 		list.push item
+			# 		unless pending
+			# 			pending = true
+			# 			requestAnimationFrame vsync
+
+			if item._contentX isnt x or item._contentY isnt y
+				item.contentX = x
+				item.contentY = y
+				signal.STOP_PROPAGATION
+
+	getDeltaX = (item, x) ->
+		x / item._impl.globalScale
+
+	getDeltaY = (item, y) ->
+		y / item._impl.globalScale
 
 	getLimitedX = (item, x) ->
-		x /= item._impl.globalScale
-		x = item._contentX - x
-		max = item._impl.contentItem._width - item._width - 1
-		# remove 1 pixel to avoid bouncing if abstract sizes are not equal visual
+		max = item._impl.contentItem._width - item._width
 		Math.round Math.max(0, Math.min(max, x))
 
 	getLimitedY = (item, y) ->
-		y /= item._impl.globalScale
-		y = item._contentY - y
-		max = item._impl.contentItem._height - item._height - 1
+		max = item._impl.contentItem._height - item._height
 		Math.round Math.max(0, Math.min(max, y))
 
 	getItemGlobalScale = (item) ->
@@ -107,10 +189,10 @@ module.exports = (impl) ->
 
 				if shouldSnap
 					if targetDelta > MIN_DISTANCE_TO_SNAP or targetDelta < -MIN_DISTANCE_TO_SNAP
-						if (delta > 0 and delta < 7) or (delta is 0 and targetDelta > 0)
-							delta = 7
+						if (delta > 0 and delta < MIN_DISTANCE_TO_SNAP) or (delta is 0 and targetDelta > 0)
+							delta = Math.min(targetDelta, 7)
 						else if (delta < 0 and delta > -7) or delta is 0
-							delta = -7
+							delta = Math.max(targetDelta, -7)
 
 				if (not shouldSnap or targetDelta > MIN_DISTANCE_TO_SNAP or targetDelta < -MIN_DISTANCE_TO_SNAP) and (delta > 0.5 or delta < -0.5)
 					scrollAxis delta
@@ -243,6 +325,7 @@ module.exports = (impl) ->
 				if moveMovement(e) is signal.STOP_PROPAGATION
 					focus = true
 					pointerUsed = true
+					item._impl.swingDisabled = true
 
 					horizontalContinuous.update dx + e.movementX
 					verticalContinuous.update dy + e.movementY
@@ -255,6 +338,7 @@ module.exports = (impl) ->
 				return unless focus
 				focus = false
 				pointerUsed = false
+				item._impl.swingDisabled = false
 
 				moveMovement e
 
@@ -389,6 +473,8 @@ module.exports = (impl) ->
 		snap: false
 		lastSnapTargetX: 0
 		lastSnapTargetY: 0
+		swingPending: false
+		swingDisabled: false
 
 	DATA: DATA
 

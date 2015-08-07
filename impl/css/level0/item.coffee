@@ -79,7 +79,7 @@ module.exports = (impl) ->
 	# 	e.preventDefault()
 	# , true
 
-	window.addEventListener SIGNALS.pointerReleased, (e) ->
+	window.addEventListener SIGNALS.pointerOnRelease, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
 		event = getMouseEvent e
 		mouseActiveItem?.onRelease.emit event
@@ -87,7 +87,7 @@ module.exports = (impl) ->
 		document.body.setAttribute 'class', ''
 		return
 
-	window.addEventListener SIGNALS.pointerMoved, (e) ->
+	window.addEventListener SIGNALS.pointerOnMove, (e) ->
 		mouseActiveItem ?= impl.window?.pointer
 		event = getMouseEvent e
 		mouseActiveItem?.onMove.emit event
