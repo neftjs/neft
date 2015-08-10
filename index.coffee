@@ -557,6 +557,9 @@ stringify =
 				value = bindingAttributeToString(body)
 			value
 
+		unless elem.id
+			json.id = elem.id = "i#{utils.uid()}"
+
 		for body in elem.body
 			switch body.type
 				when 'id'
@@ -587,8 +590,6 @@ stringify =
 						throw "Unexpected object body type '#{body.type}'"
 
 		# unless MODIFIERS_NAMES[elem.name]
-		unless json.id
-			json.id = elem.id = "i#{utils.uid()}"
 		itemsKeys.push json.id
 		visibleId = json.id
 
