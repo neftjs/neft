@@ -181,6 +181,12 @@ updateItems = ->
 
 update = ->
 	data = @_impl
+
+	if data.updatePending
+		data.loops++
+	else
+		data.loops = 0
+
 	unless data.pending
 		data.pending = true
 		queue.push @
