@@ -18,7 +18,7 @@ module.exports = (File) -> class Input
 	RE = @RE = new RegExp '([^$]*)\\${([^}]*)}([^$]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)///g
 	PROP_RE = @PROP_RE = ///(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+///
-	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*(.{0,2})///g
+	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*///g
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON']
 
 	cache = {}
@@ -120,9 +120,9 @@ module.exports = (File) -> class Input
 			prop = match[1]
 
 			if prop
-				prop = prop.replace PROPS_RE, (str, _, postfix) ->
+				prop = prop.replace PROPS_RE, (str, _, index, allStr) ->
+					postfix = allStr.substr index+str.length, 2
 					prefix = ''
-					postfix ?= ''
 					str = str.replace PROP_RE, (props) ->
 						props = props.split '.'
 						props.shift()
@@ -138,7 +138,6 @@ module.exports = (File) -> class Input
 							r += ", '#{prop}')"
 						r + ends
 					"#{prefix}#{str}"
-
 				prop = prop.replace VAR_RE, (matched, prefix, elem) ->
 					if elem.indexOf('__') is 0
 						return matched
@@ -291,7 +290,7 @@ module.exports = (File) -> class Input
 	toString: do ->
 		callFunc = ->
 			revertTraces.call @
-			@func.call @self, @, Input.get
+			@func.call @node, @, Input.get
 
 		->
 			try
