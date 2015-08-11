@@ -14,13 +14,15 @@ Document:
   ☐ neft:func when attribute
   ☐ mustache syntax
   ☐ More extensions
+  ☐ XML -> HTML semantic tags
+  ☐ neft:attr join attribute
+  ☐ neft:each on Dict and Object
 
 Renderer:
   ☐ HTML namespace items
   ☐ Form Item
   ✔ Button Item @started(15-05-01 07:52) @done (15-05-01 09:10) @lasted(1:18)
-  ☐ document.query
-  ☐ query by type
+  ✔ document.query @done (15-08-03 07:38)
   ✔ State two-dots properties support (q.g. label.font.pixelSize) @started(15-04-27 08:07) @done (15-04-30 17:28) @lasted(3 days, 9:21)
   ☐ OSX renderer
   ☐ Android renderer
@@ -33,15 +35,15 @@ Renderer:
   ✔ Anchors implementation without bindings @done (15-04-24 18:49)
   ☐ Vector Graphic Items
   ✔ NML parser: allow duplicated ids in different file sections @done (15-06-29 21:14)
-  ☐ NML parser: allow inline javascript and requires
+  ✔ NML parser: allow inline javascript and requires @done (15-08-07 14:32)
   ✘ Button text property @cancelled (15-05-05 11:58)
   ☐ Grid utils - use free space equal for all cells
-  ☐ Item::targetItem
+  ✔ Item::children.target @done (15-08-03 07:38)
   ☐ Image: auto width/height to preserve aspect
   ✔ previousSibling / nextSibling setters @done (15-06-29 15:33)
   ☐ Auto type-casting in Animation
   ☐ NML: Fast animations and transitons (Transition on ... {})
-  ☐ NML: Fast classes (If .. else)
+  ✔ NML: Fast classes (If .. else) @done (15-08-03 09:28)
   ☐ Class::otherwise
   ☐ Class::extends
   ✔ NML: functions in class changes @done (15-06-29 17:04)
@@ -50,18 +52,22 @@ Renderer:
   ✔ Flow::alignment @done (15-06-15 15:02)
   ☐ Class: deep properties e.g. margin and margin.top
   ☐ Text::uppercase
-  ☐ PropertyAnimation::easing
+  ✔ PropertyAnimation::easing @done (15-08-06 09:32)
   ☐ Class::targets
   ☐ Item::background = Rectangle
-  ☐ Item::image = Image
-  ☐ Item::order = Row/Column/Grid/Flow
-  ☐ Item::label = Text
-  ☐ Source -> Item::children.target
+  ✔ Source -> Item::children.target @done (15-08-03 07:40)
+  ☐ ColorAnimation
+  ☐ Animation::loops
+  ☐ SpriteAnimation
+  ☐ Pointer and keyboard events bubbling
+  ☐ Scrollable smooth borders
+  ☐ New Call elem with when and function + fast if() {..code..}
+  ☐ PropertyAnimation::easing:: amplitude, overshoot, period
 
 Styles:
   ☐ Default styles (material design)
   ✔ Multiple styles in one file @started(15-05-01 10:33) @done (15-05-01 11:14) @lasted(0:41)
-  ☐ Reduce styles size
+  ✔ Reduce styles size @done (15-08-03 07:40)
   ✔ Don't use styles on node @done (15-05-07 09:05)
   ☐ Create substyles from NML
   ☐ Set Image::source by default for <img> elements
@@ -69,8 +75,13 @@ Styles:
   ☐ neft:func refactor
   ☐ neft:func scoping in more than 1 neft:each parent
   ☐ neft:func don't remove new lines
-  ☐ Re-use created classes in creating items
+  ☐ neft:func available in input
+  ✔ Re-use created classes in creating items @done (15-08-03 07:40)
   ☐ Styles <-> extensions
+  ✔ Document class attribute @done (15-08-03 20:50)
+  ✔ Delay hiding @done (15-08-05 17:28)
+  ☐ Check Component pool proper working
+  ☐ neft:func in Input as normal function
 
 Database:
   ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)
@@ -89,7 +100,8 @@ Docs:
   ☐ Move Rendering classes up
   ☐ Bold currently reading aside nav item on scroll
   ☐ Mobile main -> docs -> main bugs
-  ☐ New welcome page "Write apps. Faster."
+  ☐ New welcome page "Hight-level multiplatform JavaScript framework for server, browser and native mobile"
+  ☐ Twitter SPAM
 
 Utils:
  ✔ Replace expects by manual checks @started(15-04-25 10:16) @done (15-04-25 10:46) @lasted(0:30)
@@ -101,12 +113,13 @@ Networking:
   ☐ Request and Response URL query
   ☐ Hide errors stack
   ☐ Cookies on HTTP Cookies
+  ✔ Fast get/post/put/delete @done (15-08-04 09:12)
 
 App:
   ✔ Route - short arguments @started(15-04-30 17:47) @done (15-04-30 18:16) @lasted(0:29)
-  ☐ Route - methods
   ☐ Addons
   ☐ Life editor
+  ☐ Client side location
 
 Addons:
  ☐ OAuth

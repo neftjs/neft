@@ -346,13 +346,13 @@ Acceptable syntaxes:
 
 		createToHTMLFromObject = (opts) ->
 			->
-				viewName = opts.view or @name
+				viewName = opts.view or @name or 'index'
 				tmplName = opts.template or 'index'
 				useName = opts.use or 'body'
 
 				if view = app.views[viewName]
 					r = view.render @
-				if tmpl = app.views[tmplName]
+				if viewName isnt tmplName and (tmpl = app.views[tmplName])
 					tmplView = Route::getTemplateView.call @, tmplName
 					if r?
 						r = tmplView.use(useName, r)

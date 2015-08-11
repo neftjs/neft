@@ -256,9 +256,11 @@ new app.Route({
 				if style.name is 'view'
 					windowStyle = style.file._main()
 					break
-			windowStyle ?= new Renderer.Item
-			Renderer.window = windowStyle
 
+		windowStyle ?= new Renderer.Item
+		Renderer.window = windowStyle
+
+		if opts.styles?
 			stylesInitObject =
 				app: app
 				view: windowStyle
