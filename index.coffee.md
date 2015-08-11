@@ -259,6 +259,24 @@ console.log(list.items());
 
 			val
 
+*List* List::extend(*List|Array* items)
+---------------------------------------
+
+Extend the list by appending all the items in the given list.
+
+		extend: (items) ->
+			if items instanceof List
+				arr = items.items()
+			else
+				arr = items
+
+			assert.isArray arr
+
+			for val in arr
+				@append val
+
+			items
+
 *Any* List::remove(*Any* value)
 -------------------------------
 
