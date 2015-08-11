@@ -29,6 +29,7 @@ Document @extension
 			# @_query = ''
 			@_node = null
 			@_visible = false
+			@_documentStyle = null
 			# @_isAutoParent = false
 			# @_parentDocument = @
 			# @_watcher = null

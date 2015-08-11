@@ -66,9 +66,14 @@ updateItem = (item) ->
 	# get sizes
 	i = 0
 	for child in children
-		# omit not visible children
-		unless child._visible
+		# omit not visible and auto positioned children
+		if not child._visible
 			continue
+		if anchors = child._anchors
+			if gridType & ROW and anchors._autoX
+				continue
+			if gridType is COLUMN and anchors._autoY
+				continue
 
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
@@ -120,8 +125,14 @@ updateItem = (item) ->
 	# set positions
 	i = 0
 	for child in children
-		unless child._visible
+		# omit not visible and auto positioned children
+		if not child._visible
 			continue
+		if anchors = child._anchors
+			if gridType & ROW and anchors._autoX
+				continue
+			if gridType is COLUMN and anchors._autoY
+				continue
 
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
@@ -237,12 +248,14 @@ enableChild = (child) ->
 	child.onWidthChange update, @
 	child.onHeightChange update, @
 	child.onMarginChange update, @
+	child.onAnchorsChange update, @
 
 disableChild = (child) ->
 	child.onVisibleChange.disconnect update, @
 	child.onWidthChange.disconnect update, @
 	child.onHeightChange.disconnect update, @
 	child.onMarginChange.disconnect update, @
+	child.onAnchorsChange.disconnect update, @
 
 COLUMN = exports.COLUMN = 1<<0
 ROW = exports.ROW = 1<<1

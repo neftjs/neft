@@ -259,6 +259,9 @@ Item {
 
 				assert.isNot @, val
 
+				if pointer = @_pointer
+					pointer.hover = pointer.pressed = false
+
 				oldPreviousSibling = @_previousSibling
 				oldNextSibling = @_nextSibling
 
@@ -638,6 +641,18 @@ This method checks whether two items are overlapped.
 
 Item::clone()
 -------------
+
+Item::cloneDeep()
+-----------------
+
+		cloneDeep: (component) ->
+			clone = @clone component
+
+			for child in @children
+				cloneChild = child.cloneDeep component
+				cloneChild.parent = clone
+
+			clone
 
 		@Spacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
 		@Alignment = require('./item/alignment') Renderer, Impl, itemUtils, Item

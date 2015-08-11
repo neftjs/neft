@@ -101,6 +101,8 @@ This connection is solid, so if the *rect1* will change a position,
 			@_fill = null
 			@_fillWidth = null
 			@_fillHeight = null
+			@_autoX = false
+			@_autoY = false
 			super ref
 
 		implMethod = Impl["set#{ctor.__name__}Anchor"]
@@ -171,6 +173,11 @@ so *anchors.top = parent.left* is not allowed.
 
 					if val[0] is 'this'
 						val[0] = @
+
+				if opts & FREE_H_LINE_REQ
+					@_autoX = !!val
+				if opts & FREE_V_LINE_REQ
+					@_autoY = !!val
 
 				_super.call @, val
 

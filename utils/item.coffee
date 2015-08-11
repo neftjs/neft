@@ -175,7 +175,11 @@ module.exports = (Renderer, Impl) ->
 
 			for extension in @_extensions
 				if extension.id
-					cloneExtension = component.objects[extension.id]
+					if component.isDeepClone
+						cloneExtension = extension.clone component
+						component.saveClonedObject cloneExtension, extension
+					else
+						cloneExtension = component.objects[extension.id]
 				else
 					cloneExtension = extension.clone component
 				cloneExtension.target = clone

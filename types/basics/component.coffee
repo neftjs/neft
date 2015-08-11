@@ -14,6 +14,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@objectsOrder = []
 		@objectsOrderSignalArr = null
 		@isClone = !!original
+		@isDeepClone = false
 		@ready = false
 		@objectsInitQueue = []
 		@cache = original?.cache or Object.create(null)
@@ -107,35 +108,26 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		component.init()
 		component.item
 
-		# subComponent =
-		# 	item: null
-		# 	items: []
-		# 	objectsById: {}
-		# 	objectsOrder: []
-		# 	objectsOrderSignalArr: null
-		# 	idsOrder: @idsOrder
-		# 	init: @init
-		# 	createItem: @createItem
-		# 	cloneItem: @cloneItem
-		# 	cacheItem: @cacheItem
-		# 	isClone: true
-		# 	ready: true
-		# 	objectsInitQueue: []
-		# Object.preventExtensions subComponent
+	initClonedObject = (item, component) ->
+		for extension in item._extensions
+			if extension instanceof Renderer.Class
+				for name, val of extension.changes._attributes
+					if val instanceof Link
+						cloneObj = val.getItem(component).clone(component)
+						component.saveClonedObject cloneObj, val
+						initClonedObject cloneObj, component
+			if !extension.name and not extension._bindings?.when
+				extension.enable()
 
-		# # init extensions
-		# for item in subComponent.items
-		# 	for extension in item._extensions
-		# 		if extension.name is '' and not extension._bindings?.when
-		# 			extension.enable()
+		# init objects
+		if item instanceof Renderer.Item
+			item.onReady.emit()
+			item.onReady.disconnectAll()
 
-		# # init items
-		# for item in @items
-		# 	newItem = newObjects[item.id]
-		# 	newItem.onReady.emit()
-		# 	newItem.onReady.disconnectAll()
+			for child in item.children
+				initClonedObject child, component
 
-		# subComponent.item
+		item
 
 	cloneItem: (id) ->
 		assert.isString id
@@ -147,7 +139,31 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			if id is @item.id
 				@createItem()
 			else
-				@objectsById[id].clone()
+				component = new Component @
+				component.item = @item
+				component.objects = utils.clone @objects
+				component.objectsOrder = utils.clone @objectsOrder
+				component.objectsOrderSignalArr = utils.clone @objectsOrderSignalArr
+				component.isDeepClone = true
+				component.ready = true
+
+				item = @objects[id]?.cloneDeep(component)
+
+				# init extensions
+				initClonedObject item, component
+
+				item
+
+	saveClonedObject: (object, oldObject) ->
+		assert.ok @isDeepClone
+
+		@objects[object.id] = object
+		index = @objectsOrder.indexOf oldObject
+		if index isnt -1
+			@objectsOrder[index] = object
+			@objectsOrderSignalArr[index] = object
+
+		return
 
 	cacheItem: (item) ->
 		assert.instanceOf item, Renderer.Item
@@ -163,4 +179,5 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			Object.preventExtensions @
 
 		getItem: (component) ->
-			component.objects[@id]
+			obj = component.objects[@id]
+			obj

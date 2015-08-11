@@ -61,8 +61,10 @@ updateItem = (item) ->
 
 	# calculate children positions
 	for child, i in children
-		# omit not visible children
-		unless child._visible
+		# omit not visible and auto positioned children
+		if not child._visible
+			continue
+		if (anchors = child._anchors) and anchors._autoY
 			continue
 
 		margin = child._margin
@@ -143,8 +145,10 @@ updateItem = (item) ->
 		else
 			plusY = (item._height - height) * multiplierY
 		for child, i in children
-			# omit not visible children
-			unless child._visible
+			# omit not visible and auto positioned children
+			if not child._visible
+				continue
+			if (anchors = child._anchors) and anchors._autoY
 				continue
 			cell = elementsCell[i]
 			bottom = child._height
@@ -216,12 +220,14 @@ enableChild = (child) ->
 	child.onWidthChange update, @
 	child.onHeightChange update, @
 	child.onMarginChange update, @
+	child.onAnchorsChange update, @
 
 disableChild = (child) ->
 	child.onVisibleChange.disconnect update, @
 	child.onWidthChange.disconnect update, @
 	child.onHeightChange.disconnect update, @
 	child.onMarginChange.disconnect update, @
+	child.onAnchorsChange.disconnect update, @
 
 module.exports = (impl) ->
 	DATA =
