@@ -139,8 +139,8 @@ console.log(bunny.get('speedZ'));
 
 			@_data[key]
 
-*Any* Dict::set(*String* key, *Any* value)
-------------------------------------------
+*Any* Dict::set(*String* key[, *Any* value])
+--------------------------------------------
 
 This method is used to change property value or create a new property.
 
@@ -166,6 +166,11 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 ```
 
 		set: (key, val) ->
+			if val is undefined and utils.isObject(key)
+				for prop, val of key
+					@set prop, val
+				return
+
 			assert.isString key
 			assert.notLengthOf key, 0
 			assert.isNot val, undefined
