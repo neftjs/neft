@@ -49,7 +49,7 @@ module.exports = (impl) ->
 		fontFamily = @_impl.fontFamily
 		if name is fontFamily
 			@_impl.elem.font.family = impl.fonts[fontFamily]
-			impl.onFontLoaded.disconnect onFontLoaded, @
+			impl.fontLoaded.disconnect onFontLoaded, @
 			@_impl.listensOnFontLoaded = false
 		return
 
@@ -77,7 +77,7 @@ module.exports = (impl) ->
 		exports.setTextFontFamily.call @, data.fontFamily
 		
 		# update size
-		elem.onFontChanged.connect @, updateSize
+		elem.fontChanged.connect @, updateSize
 
 		# links
 		elem.linkActivated.connect onLickActivated

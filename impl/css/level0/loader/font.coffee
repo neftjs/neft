@@ -6,8 +6,9 @@ signal = require 'signal'
 log = log.scope 'Renderer', 'FontLoader'
 
 module.exports = (impl) ->
-	signal.create impl.utils, 'fontLoaded'
+	signal.create impl.utils, 'onFontLoaded'
 	impl.utils.loadingFonts = Object.create null
+	impl.utils.loadedFonts = Object.create null
 
 	WEIGHTS = [
 		///hairline///i,
@@ -74,7 +75,8 @@ module.exports = (impl) ->
 			fontLoader = new impl.utils.FontLoader [cssName],
 				fontLoaded: ->
 					impl.utils.loadingFonts[name]--
-					impl.utils.fontLoaded.emit name
+					impl.utils.loadedFonts[name] = true
+					impl.utils.onFontLoaded.emit name
 			fontLoader.loadFonts()
 
 		if document.readyState isnt 'complete'

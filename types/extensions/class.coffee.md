@@ -16,9 +16,9 @@ Class @modifier
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class ChangesObject
 			constructor: ->
-				@_attributes = {__proto__: null}
+				@_attributes = {}
 				@_functions = []
-				@_bindings = {__proto__: null}
+				@_bindings = {}
 
 			setAttribute: (prop, val) ->
 				@_attributes[prop] = val

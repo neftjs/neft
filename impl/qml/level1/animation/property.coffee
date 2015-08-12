@@ -8,6 +8,7 @@ module.exports = (impl) ->
 		internalPropertyName: ''
 		propertySetter: null
 		isIntegerProperty: false
+		easing: 'Linear'
 
 	DATA: DATA
 
@@ -37,6 +38,10 @@ module.exports = (impl) ->
 
 	setPropertyAnimationUpdateProperty: (val) ->
 		@_impl.dirty = true
+
+	setPropertyAnimationEasingType: (val) ->
+		@_impl.easing = val
+		@_impl.elem?.easing = val
 
 	getPropertyAnimationProgress: ->
 		@_impl.progress

@@ -12,7 +12,7 @@ module.exports = (impl) ->
 		@_platform = Qt.platform.os
 		@_pixelRatio = screen.devicePixelRatio
 		isTouch = !!TOUCH_OS[Qt.platform.os]
-		@_isDesktop = not isTouch
-		@_isPhone = isTouch and Math.min(@_width, @_height)/Math.max(@_width, @_height) < 0.75
+		@_desktop = not isTouch
+		@_phone = isTouch and Math.min(@_width, @_height)/Math.max(@_width, @_height) < 0.75
 
 		return

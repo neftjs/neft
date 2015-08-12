@@ -6,13 +6,13 @@ module.exports = (impl) ->
 	{items} = impl
 
 	impl.fonts = {}
-	signal.create impl, 'fontLoaded'
+	signal.create impl, 'onFontLoaded'
 
 	loadFont: (source, name) ->
 		onLoaded = ->
 			if @status is FontLoader.Ready
 				impl.fonts[name] = @name
-				impl.fontLoaded name
+				impl.onFontLoaded name
 			return
 
 		if rsc = impl.Renderer.resources.getResource(source)

@@ -253,7 +253,7 @@ module.exports = (impl) ->
 		impl.utils.prependElement data.elem, data.innerElem
 
 		if impl.utils.loadingFonts['sans-serif'] > 0
-			impl.utils.fontLoaded reloadFontFamily, @
+			impl.utils.onFontLoaded reloadFontFamily, @
 
 	setText: (val) ->
 		updateContent @
@@ -285,7 +285,7 @@ module.exports = (impl) ->
 
 	setTextFontFamily: (val) ->
 		if impl.utils.loadingFonts[val] > 0
-			impl.utils.fontLoaded reloadFontFamily, @
+			impl.utils.onFontLoaded reloadFontFamily, @
 
 		if impl.utils.DEFAULT_FONTS[val]
 			val = "#{impl.utils.DEFAULT_FONTS[val]}, #{val}"

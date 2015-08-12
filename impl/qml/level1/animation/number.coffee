@@ -29,6 +29,7 @@ module.exports = (impl) ->
 					"property real startDelay: 0;" +
 					"property real loopDelay: 0;" +
 					"property var duration: 0;" +
+					"property string easing: 'Linear';" +
 					"property bool loop: false;" +
 					"PauseAnimation { duration: main.startDelay }" +
 					"SequentialAnimation {" +
@@ -40,6 +41,7 @@ module.exports = (impl) ->
 							"duration: main.duration;" +
 							"from: main.from;" +
 							"to: main.to;" +
+							"easing.type: Easing[main.easing];" +
 						"}" +
 						"PauseAnimation { duration: main.loopDelay }" +
 					"}" +
@@ -143,6 +145,7 @@ module.exports = (impl) ->
 		{elem} = data
 
 		elem.target = @_target._impl.elem
+		elem.easing = @_impl.easing
 		elem.startDelay = @_startDelay
 		elem.loopDelay = @_loopDelay
 		elem.duration = @_duration
