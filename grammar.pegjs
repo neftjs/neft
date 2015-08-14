@@ -46,6 +46,8 @@
 					setParentRec(elem.body, val);
 				} else if (Array.isArray(elem.value)){
 					setParentRec(elem.value, val);
+				} else if (typeof elem.value === 'object'){
+					elem.value.parent = val;
 				}
 			}
 		}

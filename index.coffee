@@ -711,8 +711,17 @@ module.exports = (file, filename) ->
 
 # codes = module.exports("""
 # Image {
-# 	height: this.width
+# 	document.query: 'alert'
+# 	contentItem: Item {
+# 		document.query: '> content'
+# 	}
+# 	Item {
+# 		document.query: 'child'
+# 		Item {
+# 			document.query: 'deep'
+# 		}
+# 	}
 # }
 # """).codes
-# # console.log codes
+# console.log codes
 # console.log codes[Object.keys(codes)[0]]
