@@ -620,7 +620,7 @@ stringify =
 		if rendererCtor?
 			r = "new #{elem.name}(_c, #{json})\n"
 		else
-			r = "#{elem.name}(_c, #{json})\n"
+			r = "(typeof #{elem.name} === 'function' ? #{elem.name} : #{elem.name}._main)(_c, #{json})\n"
 		if visibleId
 			r = "#{visibleId} = #{r}"
 		r
