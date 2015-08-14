@@ -254,16 +254,16 @@ new app.Route({
 		if opts.styles?
 			for style in opts.styles
 				if style.name is 'view'
-					windowStyle = style.file._main()
+					windowStyle = style.file._main.getComponent()
 					break
 
-		windowStyle ?= new Renderer.Item
-		Renderer.window = windowStyle
+		windowStyleItem = windowStyle?.item or new Renderer.Item
+		Renderer.window = windowStyleItem
 
 		if opts.styles?
 			stylesInitObject =
 				app: app
-				view: windowStyle
+				view: windowStyleItem
 
 			# initialize styles
 			for style in opts.styles when style.name?
@@ -280,7 +280,7 @@ new app.Route({
 
 		# load styles
 		require('styles')
-			windowStyle: windowStyle._component
+			windowStyle: windowStyle
 			styles: app.styles
 
 		# load bootstrap

@@ -46,5 +46,6 @@ stack.add createBundle, null, [type: 'browser', release: false]
 # stack.add createBundle, null, [type: 'browser', extras: {game: true}, release: false]
 # stack.add createBundle, null, [type: 'qml', release: true]
 # stack.add createBundle, null, [type: 'qml', release: false]
+# stack.add createBundle, null, [type: 'cocos2d', release: false]
 
 stack.runAll ->
