@@ -18,9 +18,11 @@ module.exports = (File, data) -> class Style
 		assert.instanceOf style, Style
 		assert.instanceOf node, File.Element
 
+		style.textWatchingNodes.push node
 		if 'onTextChange' of node
-			style.textWatchingNodes.push node
 			node.onTextChange textChangeListener, style
+		if 'onVisibleChange' of node
+			node.onVisibleChange textChangeListener, style
 
 		if node.children
 			for child in node.children
@@ -476,7 +478,10 @@ module.exports = (File, data) -> class Style
 
 		if @item
 			while elem = @textWatchingNodes.pop()
-				elem.onTextChange.disconnect textChangeListener, @
+				if 'onTextChange' of elem
+					elem.onTextChange.disconnect textChangeListener, @
+				if 'onVisibleChange' of elem
+					elem.onVisibleChange.disconnect textChangeListener, @
 
 		wasAutoParent = @isAutoParent
 
