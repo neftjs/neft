@@ -33,7 +33,7 @@ module.exports = (Renderer, Impl) ->
 		path or ''
 
 	class UtilsObject extends signal.Emitter
-		initObject = (opts) ->
+		initObject = (component, opts) ->
 			for prop, val of opts
 				if typeof val is 'function'
 					@[prop] val
@@ -44,10 +44,10 @@ module.exports = (Renderer, Impl) ->
 
 			for prop, val of opts
 				if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
-					@createBinding prop, val
+					@createBinding prop, val, component
 			return
 
-		setOpts = (opts) ->
+		setOpts = (component, opts) ->
 			if typeof opts.id is 'string'
 				@id = opts.id
 			if Array.isArray(opts.properties)
@@ -67,7 +67,7 @@ module.exports = (Renderer, Impl) ->
 					else if child instanceof Renderer.Extension
 						child.target = @
 
-			classElem = createClass @_component, opts
+			classElem = createClass component, opts
 			classElem.target = @
 			return
 
@@ -120,12 +120,12 @@ module.exports = (Renderer, Impl) ->
 		constructor: (component, opts) ->
 			@id = ''
 			@_impl = null
-			@_component = component or null
 			@_bindings = null
 			@_classExtensions = null
 			@_classList = []
 			@_classQueue = []
 			@_extensions = []
+			@_component = component
 			super()
 			Object.preventExtensions @
 
@@ -136,11 +136,11 @@ module.exports = (Renderer, Impl) ->
 					@id = opts.id
 
 				if @ instanceof Renderer.Class or @ instanceof FixedObject
-					initObject.call @, opts
+					initObject.call @, component, opts
 				else
-					setOpts.call @, opts
+					setOpts.call @, component, opts
 
-		createBinding: (prop, val, component=@_component, ctx=@) ->
+		createBinding: (prop, val, component, ctx=@) ->
 			assert.isString prop
 			assert.isArray val if val?
 			assert.instanceOf component, Renderer.Component
@@ -173,19 +173,8 @@ module.exports = (Renderer, Impl) ->
 				clone.$ = Object.create @$
 				MutableDeepObject.call clone.$, clone
 
-			for extension in @_extensions
-				if extension.id
-					if component.isDeepClone
-						cloneExtension = extension.clone component
-						component.saveClonedObject cloneExtension, extension
-					else
-						cloneExtension = component.objects[extension.id]
-				else
-					cloneExtension = extension.clone component
-				cloneExtension.target = clone
-
 			if opts
-				setOpts.call clone, opts
+				setOpts.call clone, component, opts
 
 			clone
 

@@ -30,9 +30,9 @@ Class @modifier
 						arr = @_component.objectsOrderSignalArr
 						arr[arr.length - 2] = arg1
 						arr[arr.length - 1] = arg2
-						val.apply @, arr
+						val.apply @_target, arr
 					else
-						val.call @, arg1, arg2
+						val.call @_target, arg1, arg2
 				@_functions.push prop, boundFunc
 				return
 
@@ -44,20 +44,13 @@ Class @modifier
 		class Class extends Renderer.Extension
 			@__name__ = 'Class'
 
-			# onReady = ->
-			# 	if @_name is '' and not @_bindings?.when
-			# 		@when = true
-			# 	else if @_running
-			# 		updateTargetClass enableClass, @_target, @
-			# 	return
-
 			constructor: (component, opts) ->
+				assert.instanceOf component, Renderer.Component
+
 				@_priority = 0
 				@_name = ''
 				@_changes = null
 				super component, opts
-
-				# @onReady onReady
 
 *String* Class::name
 --------------------
@@ -242,7 +235,7 @@ Grid {
 
 				if @_bindings
 					for prop, val of @_bindings
-						clone.createBinding prop, val
+						clone.createBinding prop, val, component
 
 				clone
 
@@ -308,7 +301,7 @@ Grid {
 				if not object or typeof object?[path[path.length - 1]] isnt 'function'
 					log.error "Handler '#{attr}' in '#{item.toString()}' doesn't exist"
 				`//</development>`
-				object?[path[path.length - 1]]? functions[i+1], item
+				object?[path[path.length - 1]]? functions[i+1], classElem
 
 			# attributes
 			for attr, val of attributes
@@ -417,7 +410,7 @@ Grid {
 			for attr, i in functions by 2
 				path = splitAttribute attr
 				object = getObject item, path
-				object?[path[path.length - 1]]?.disconnect functions[i+1], item
+				object?[path[path.length - 1]]?.disconnect functions[i+1], classElem
 
 			# attributes
 			for attr, val of attributes

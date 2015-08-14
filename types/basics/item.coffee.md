@@ -639,20 +639,14 @@ This method checks whether two items are overlapped.
 
 			Impl.doItemOverlap.call @, item
 
-Item::clone()
--------------
+		# cloneDeep: (component) ->
+		# 	clone = @clone component
 
-Item::cloneDeep()
------------------
+		# 	for child in @children
+		# 		cloneChild = child.cloneDeep component
+		# 		cloneChild.parent = clone
 
-		cloneDeep: (component) ->
-			clone = @clone component
-
-			for child in @children
-				cloneChild = child.cloneDeep component
-				cloneChild.parent = clone
-
-			clone
+		# 	clone
 
 		@Spacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
 		@Alignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
