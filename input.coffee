@@ -89,19 +89,19 @@ module.exports = (File) -> class Input
 		i = 0
 		n = text.length
 		while i < n
-			char = text[i]
-			if char is '$' and text[i+1] is '{'
+			charStr = text[i]
+			if charStr is '$' and text[i+1] is '{'
 				isBlock = true
 				chunks.push str
 				str = ''
 				i++
-			else if char is '{'
+			else if charStr is '{'
 				innerBlocks++
-				str += char
-			else if char is '}'
+				str += charStr
+			else if charStr is '}'
 				if innerBlocks > 0
 					innerBlocks--
-					str += char
+					str += charStr
 				else if isBlock
 					chunks.push str
 					str = ''
@@ -109,7 +109,7 @@ module.exports = (File) -> class Input
 					log.error "Interpolated string parse error: '#{text}'"
 					return
 			else
-				str += char
+				str += charStr
 			i++
 		chunks.push str
 
