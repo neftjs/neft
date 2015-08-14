@@ -21,10 +21,17 @@ module.exports = (File, Input) -> class InputAttr extends Input
 		@node.attrs.set @attrName, str
 		return
 
+	createHandlerFunc = (input) ->
+		(arg1, arg2) ->
+			r = input.toString()
+			if typeof r is 'function'
+				r.call @, arg1, arg2
+			return
+
 	clone: (original, self) ->
 		clone = super original, self
 		clone.attrName = @attrName
 		if isHandler(@attrName)
 			clone.traceChanges = false
-			clone.handlerFunc = utils.bindFunctionContext @toString, clone
+			clone.handlerFunc = createHandlerFunc clone
 		clone
