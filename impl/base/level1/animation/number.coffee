@@ -54,17 +54,17 @@ module.exports = (impl) ->
 		# if data.isIntegerProperty is true and progress isnt 1
 		# 	val = round val
 
-		if val is val and target # isNaN hack
+		if val is val and target and (property = anim._property) # isNaN hack
 			if not running or anim._updateProperty or not data.propertySetter
 				anim._updatePending = true
 				# when animation has been started in a signal which stopped propagation
 				if not running and target[data.internalPropertyName] is val
 					target[data.internalPropertyName] = data.from
-				target[anim._property] = val
+				target[property] = val
 				anim._updatePending = false
 
 				# force impl update, because setter won't update if nothing change in data
-				if progress is 1 and data.propertySetter and target[anim._property] is val
+				if progress is 1 and data.propertySetter and target[property] is val
 					impl[data.propertySetter].call target, val
 			else
 				impl[data.propertySetter].call target, val
