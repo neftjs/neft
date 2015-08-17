@@ -35,16 +35,24 @@ module.exports = (Renderer, Impl) ->
 	class UtilsObject extends signal.Emitter
 		initObject = (component, opts) ->
 			for prop, val of opts
+				obj = @
+				if prop is 'document.query'
+					obj = @document
+					prop = 'query'
 				if typeof val is 'function'
-					@[prop] val
+					obj[prop] val
 				else if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
 					continue
 				else
-					@[prop] = val
+					obj[prop] = val
 
 			for prop, val of opts
+				obj = @
+				if prop is 'document.query'
+					obj = @document
+					prop = 'query'
 				if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
-					@createBinding prop, val, component
+					obj.createBinding prop, val, component
 			return
 
 		setOpts = (component, opts) ->

@@ -50,6 +50,7 @@ Class @modifier
 				@_priority = 0
 				@_name = ''
 				@_changes = null
+				@_document = null
 				super component, opts
 
 *String* Class::name
@@ -203,7 +204,7 @@ Grid {
 ### *Signal* Class::onWhenChange(*Boolean* oldValue)
 
 			enable: ->
-				if @_running or not @_target
+				if @_running or not @_target or (@_document and @_document._query)
 					return
 
 				if @_name and not @_target.classes.has(@_name)
@@ -227,17 +228,25 @@ Grid {
 				return
 
 			clone: (component) ->
-				clone = new Class component
-				clone.id = @id
-				clone._name = @_name
-				clone._priority = @_priority
-				clone._changes = @_changes
+				clone = cloneClassWithNoDocument.call @, component
 
-				if @_bindings
-					for prop, val of @_bindings
-						clone.createBinding prop, val, component
+				if query = @_document?._query
+					clone.document.query = query
 
 				clone
+
+		cloneClassWithNoDocument = (component) ->
+			clone = new Class component
+			clone.id = @id
+			clone._name = @_name
+			clone._priority = @_priority
+			clone._changes = @_changes
+
+			if @_bindings
+				for prop, val of @_bindings
+					clone.createBinding prop, val, component
+
+			clone
 
 		updateClassList = do ->
 			sortFunc = (a, b) ->
@@ -469,6 +478,134 @@ Grid {
 			if classQueue.length is 3
 				runQueue target
 			return
+
+*Document* Class::document
+--------------------------
+
+		class ClassDocument extends itemUtils.DeepObject
+			@__name__ = 'ClassDocument'
+
+### *Signal* Class::onDocumentChange(*Document* document)
+
+			itemUtils.defineProperty
+				constructor: Class
+				name: 'document'
+				valueConstructor: @
+
+*Document* Document()
+---------------------
+
+			onTargetChange = (oldVal) ->
+				if oldVal
+					oldVal.document.onNodeChange.disconnect @reloadQuery, @
+				if val = @_ref._target
+					val.document.onNodeChange @reloadQuery, @
+				if oldVal isnt val
+					@reloadQuery()
+				return
+
+			onPriorityChange = ->
+				val = @_ref.priority
+
+				for classElem in @_classesInUse
+					classElem.priority = val
+				for classElem in @_classesPool
+					classElem.priority = val
+				return
+
+			constructor: (ref) ->
+				@_query = ''
+				@_parent = null
+				@_classesInUse = []
+				@_classesPool = []
+				@_nodeWatcher = null
+				super ref
+
+				ref.onTargetChange onTargetChange, @
+				onTargetChange.call @, ref._target
+
+				ref.onPriorityChange onPriorityChange, @
+
+*String* Document::query
+------------------------
+
+### *Signal* Document::onQueryChange(*String* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'query'
+				defaultValue: ''
+				namespace: 'document'
+				parentConstructor: ClassDocument
+				developmentSetter: (val) ->
+					assert.isString val
+				setter: (_super) -> (val) ->
+					assert.notOk @_parent
+
+					if @_query is val
+						return
+
+					_super.call @, val
+					@reloadQuery()
+					return
+
+			getChildClass = (style, parentClass) ->
+				for classElem in style._classList
+					if classElem._document?._parent is parentClass
+						return classElem
+				return
+
+			connectNodeStyle = (style) ->
+				unless classElem = @_classesPool.pop()
+					classElem = cloneClassWithNoDocument.call @_ref, @_ref._component
+					classElem.document._parent = @
+					classElem.priority = @_ref._priority
+				@_classesInUse.push classElem
+				classElem.target = style
+				if not classElem._bindings?.when
+					classElem.enable()
+				return
+
+			disconnectNodeStyle = (style) ->
+				classElem = getChildClass style, @
+				classElem.target = null
+				utils.remove @_classesInUse, classElem
+				@_classesPool.push classElem
+				return
+
+			onNodeStyleChange = (oldVal, val) ->
+				if oldVal
+					disconnectNodeStyle.call @, oldVal
+				if val
+					connectNodeStyle.call @, val
+				return
+
+			onNodeAdd = (node) ->
+				node.onStyleChange onNodeStyleChange, @
+				onNodeStyleChange.call @, null, node.style
+				return
+
+			onNodeRemove = (node) ->
+				node.onStyleChange.disconnect onNodeStyleChange, @
+				if style = node._style
+					disconnectNodeStyle.call @, style
+				return
+
+			reloadQuery: ->
+				# remove old
+				@_nodeWatcher?.disconnect()
+				@_nodeWatcher = null
+				while classElem = @_classesInUse.pop()
+					classElem.target = null
+					@_classesPool.push classElem
+
+				# add new ones
+				if (query = @_query) and (target = @_ref.target) and (node = target.document.node)
+					node.queryAll query, onNodeAdd, @
+					watcher = @_nodeWatcher = node.watch query
+					watcher.onAdd onNodeAdd, @
+					watcher.onRemove onNodeRemove, @
+				return
 
 *Item* Item()
 -------------
