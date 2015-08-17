@@ -163,7 +163,7 @@ module.exports = (File, data) -> class Style
 			return
 
 	render: ->
-		if @waiting
+		if @waiting or not @item
 			return
 
 		for child in @children
@@ -525,7 +525,7 @@ module.exports = (File, data) -> class Style
 
 					@isAutoParent = !@item.parent
 				else
-					@scope = styles[file]?[style]?()?._component
+					@scope = styles[file]?[style]?.getComponent()
 					if @scope
 						@item = @scope.item
 					else
