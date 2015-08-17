@@ -108,8 +108,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		# clone extensions of this object
 		for ext in item._extensions
-			extCompId = ext._component.id
-			cloneExt = cloneItem ext, components, null, null, parentComponent
+			# extension can be already cloned if it has an id
+			cloneExt = components[ext._component.id]?.objects[ext.id]
+			cloneExt ?= cloneItem ext, components, null, null, parentComponent
 			cloneExt.target = clone
 
 		if item instanceof Renderer.Item
