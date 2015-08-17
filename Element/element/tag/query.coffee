@@ -204,24 +204,23 @@ getQueries = (selector, reversed=false) ->
 
 	queries
 
-exports.queryAll = (selector, target=[]) ->
+exports.queryAll = (selector, target=[], targetCtx=target) ->
 	assert.isString selector
 	assert.notLengthOf selector, 0
-	assert.isArray target
+	unless typeof target is 'function'
+		assert.isArray target
 
-	utils.clear target
+	if @children
+		queries = getQueries selector
+		func = if Array.isArray(target) then target.push else target
 
-	unless @children
-		return target
+		for funcs in queries
+			if funcs[0](@, funcs, 3, func, targetCtx, false)
+				if single
+					break
 
-	queries = getQueries selector
-
-	for funcs in queries
-		if funcs[0](@, funcs, 3, target.push, target, false)
-			if single
-				break
-
-	target
+	if Array.isArray(target)
+		target
 
 exports.query = do ->
 	result = null

@@ -8,6 +8,7 @@ Tag @virtual_dom
 	signal = require 'signal'
 	stringify = require './tag/stringify'
 	TypedArray = require 'typed-array'
+	Renderer = require 'renderer'
 
 	{emitSignal} = signal.Emitter
 
@@ -30,7 +31,7 @@ Tag @virtual_dom
 		constructor: ->
 			@children = []
 			@name = 'neft:blank'
-			@style = null
+			@_style = null
 			@_documentStyle = null
 			@_visible = true
 			@_attrs = {}
@@ -41,6 +42,28 @@ Tag @virtual_dom
 
 *Renderer.Item* Tag::style
 --------------------------
+
+		opts = utils.CONFIGURABLE
+		utils.defineProperty @::, 'style', opts, ->
+			@_style
+		, (val) ->
+			if val?
+				assert.instanceOf val, Renderer.Item
+
+			old = @_style
+			if old is val
+				return false
+
+			@_style = val
+
+			# trigger signal
+			emitSignal @, 'onStyleChange', old, val
+			true
+
+*Signal* Tag::onStyleChange(*Renderer.Item* oldValue)
+-----------------------------------------------------
+
+		signal.Emitter.createSignal @, 'onStyleChange'
 
 *Boolean* Tag::visible
 ----------------------
@@ -59,7 +82,6 @@ Tag @virtual_dom
 
 			# trigger signal
 			emitSignal @, 'onVisibleChange', old
-
 			true
 
 *Signal* Tag::onVisibleChange(*Boolean* oldValue)
