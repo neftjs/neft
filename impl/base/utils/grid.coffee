@@ -235,12 +235,12 @@ updateSize = ->
 
 onWidthChange = (oldVal) ->
 	if not @_impl.updatePending
-		@_impl.autoWidth = @_width is 0 and oldVal isnt -1
+		@_impl.autoWidth = @_effectItem._width is 0 and oldVal isnt -1
 	updateSize.call @
 
 onHeightChange = (oldVal) ->
 	if not @_impl.updatePending
-		@_impl.autoHeight = @_height is 0 and oldVal isnt -1
+		@_impl.autoHeight = @_effectItem._height is 0 and oldVal isnt -1
 	updateSize.call @
 
 enableChild = (child) ->
