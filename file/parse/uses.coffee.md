@@ -40,6 +40,7 @@ This special *XML* tag is used to place the [neft:fragment][].
 				return node.children?.forEach forNode
 
 			# get uses
+			node.name = 'neft:blank'
 			uses.push new File.Use file, node
 
 		forNode file.node

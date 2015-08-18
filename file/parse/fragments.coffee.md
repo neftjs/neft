@@ -56,16 +56,18 @@ using the [neft:use][] tag. This is fast and clean solution.
 
 				node = children[i]
 
-				if node.name isnt 'neft:fragment' then continue
+				if node.name isnt 'neft:fragment'
+					continue
 
-				name = node.attrs.get 'neft:name'
-				unless name then continue
+				unless name = node.attrs.get('neft:name')
+					continue
 
 				# remove node from file
 				node.parent = undefined
 				i--; n--
 
 				# get fragment
+				node.name = 'neft:blank'
 				fragment = new File.Fragment file, name, node
 				fragments[name] = fragment.id
 				createdFragments.push fragment
