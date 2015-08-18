@@ -545,15 +545,23 @@ module.exports = (File, data) -> class Style
 
 		return;
 
+	findItemWithParent = (item, parent) ->
+		tmp = item
+		while tmp = tmp._parent
+			if tmp is parent
+				return tmp
+		return
+
 	findItemIndex = (node, item, parent) ->
 		tmpIndexNode = node
 		parent = parent.children.target or parent
 		while tmpIndexNode
 			tmpSiblingNode = tmpIndexNode
 			while tmpSiblingNode = tmpSiblingNode._nextSibling
-				if tmpSiblingNode._documentStyle?.item?.parent is parent
-					item.index = tmpSiblingNode._documentStyle.item.index
-					return
+				if tmpSiblingItem = tmpSiblingNode._documentStyle?.item
+					if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
+						item.index = tmpSiblingTargetItem.index
+						return
 
 			# tmpSiblingNode = tmpIndexNode
 			# while tmpSiblingNode = tmpSiblingNode._previousSibling
