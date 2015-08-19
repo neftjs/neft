@@ -11,13 +11,23 @@ id @xml
 	module.exports = (File) -> (file) ->
 		ids = {}
 
-		nodes = file.node.queryAll '[id]'
-		for node in nodes
-			id = node.attrs.get 'id'
-			if ids.hasOwnProperty(id)
-				log.warn "Id must be unique; '#{id}' duplicated"
-				continue
-			ids[id] = node
+		forEachNodeRec = (node) ->
+			for child in node.children
+				unless child.children
+					continue
+
+				forEachNodeRec child
+
+				unless id = child.attrs.get('id')
+					continue
+
+				if ids.hasOwnProperty(id)
+					log.warn "Id must be unique; '#{id}' duplicated"
+					continue
+				ids[id] = child
+			return
+
+		forEachNodeRec file.node
 
 		unless utils.isEmpty(ids)
 			file.ids = ids

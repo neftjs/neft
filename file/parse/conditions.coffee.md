@@ -32,29 +32,36 @@ In practice, you will use the string interpolation to conditioning the result.
 		(file) ->
 			conditions = []
 
-			nodes = file.node.queryAll '[neft:if]'
+			forEachNodeRec = (node) ->
+				for child in node.children
+					unless child.children
+						continue
 
-			for node in nodes
-				attr = node.attrs.get 'neft:if'
-				continue unless attr
+					forEachNodeRec child
 
-				if attr.indexOf('${') is -1
-					attr = '${'+attr+'}'
+					attr = child.attrs.get 'neft:if'
+					continue unless attr
 
-				# `//<development>`
-				# if attr.indexOf('${') isnt 0
-				# 	log.warn "neft:if `#{attr}` contains string interpolation, but neft:if always is a string interpolation"
-				# `//</development>`
+					if attr.indexOf('${') is -1
+						attr = '${'+attr+'}'
 
-				elseNode = null
-				if node.nextSibling?.attrs.has('neft:else')
-					elseNode = node.nextSibling
+					# `//<development>`
+					# if attr.indexOf('${') isnt 0
+					# 	log.warn "neft:if `#{attr}` contains string interpolation, but neft:if always is a string interpolation"
+					# `//</development>`
 
-				funcBody = File.Input.parse attr
-				func = File.Input.createFunction funcBody
-				condition = new File.Condition node, elseNode, func
-				condition.funcBody = funcBody
-				conditions.push condition
+					elseNode = null
+					if child.nextSibling?.attrs.has('neft:else')
+						elseNode = child.nextSibling
+
+					funcBody = File.Input.parse attr
+					func = File.Input.createFunction funcBody
+					condition = new File.Condition child, elseNode, func
+					condition.funcBody = funcBody
+					conditions.push condition
+				return
+
+			forEachNodeRec file.node
 
 			if conditions.length
 				file.conditions = conditions
