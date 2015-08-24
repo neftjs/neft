@@ -161,9 +161,13 @@ Rectangle {
 						assert.instanceOf val, Item
 				setter: (_super) -> (val) ->
 					if @_order?.effectItem
+						@_order.parent = null
 						@_order.effectItem = @_order
 
 					_super.call @, val
+
+					if '_effectItem' of @_ref
+						@_ref.effectItem = if val then null else @_ref
 
 					if val?
 						ref = @_ref
@@ -255,6 +259,13 @@ Item {
 					valChildren = val.children
 
 				if old is val
+					return
+
+				# fake parent
+				if @_effectItem and @_effectItem isnt @
+					@_parent = val
+					Impl.setItemParent.call @, val, -1
+					emitSignal @, 'onParentChange', old
 					return
 
 				assert.isNot @, val

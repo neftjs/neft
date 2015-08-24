@@ -123,7 +123,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				clone.children.clear()
 
 			for child in item.children
-				cloneChild = cloneItem(child, components, null, null, component)
+				# child can be already cloned
+				cloneChild = components[child._component.id]?.objects[child.id]
+				cloneChild ?= cloneItem(child, components, null, null, component)
 				cloneChild.parent = clone
 
 			if firstChildren

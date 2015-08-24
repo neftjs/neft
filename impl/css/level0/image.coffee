@@ -128,8 +128,8 @@ module.exports = (impl) ->
 		return
 
 	setImageSource: (val, callback) ->
-		if rsc = impl.Renderer.resources?.resolve(val)
-			val = rsc
+		if rsc = impl.Renderer.resources?.getResource(val)
+			val = rsc.resolve(val)
 		else
 			val = impl.utils.encodeImageSrc val
 

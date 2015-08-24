@@ -20,10 +20,16 @@ elementsY = new TypedArray.Uint32 64
 elementsCell = new TypedArray.Uint32 64
 
 updateItem = (item) ->
+	unless item._effectItem
+		return
+
 	{includeBorderMargins} = item
 	effectItem = item._effectItem
 	{children} = effectItem
 	data = item._impl
+
+	if item.children.order
+		return
 
 	if data.loops is MAX_LOOPS
 		log.error "Potential Flow loop detected. Recalculating on this item (#{item.toString()}) has been disabled."
@@ -206,12 +212,12 @@ updateSize = ->
 	return
 
 onWidthChange = (oldVal) ->
-	if not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending
 		@_impl.autoWidth = @_effectItem._width is 0 and oldVal isnt -1
 	updateSize.call @
 
 onHeightChange = (oldVal) ->
-	if not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending
 		@_impl.autoHeight = @_effectItem._height is 0 and oldVal isnt -1
 	updateSize.call @
 

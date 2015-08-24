@@ -174,9 +174,9 @@ so *anchors.top = parent.left* is not allowed.
 					if val[0] is 'this'
 						val[0] = @
 
-				if opts & FREE_H_LINE_REQ
-					@_autoX = !!val
 				if opts & FREE_V_LINE_REQ
+					@_autoX = !!val
+				if opts & FREE_H_LINE_REQ
 					@_autoY = !!val
 
 				_super.call @, val
@@ -346,15 +346,15 @@ Item {
 
 ### *Signal* Anchors::onFillWidthChange(*Array* oldValue)
 
-		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ, ->
+		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW | FREE_V_LINE_REQ, ->
 			if @_ref
-				[@_ref._x, @_ref._y, @_ref._width]
+				[@_ref._x, @_ref._width]
 
 *Array* Anchors::fillHeight = null
 ----------------------------------
 
 ### *Signal* Anchors::onFillHeightChange(*Array* oldValue)
 
-		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW | FREE_V_LINE_REQ, ->
+		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ, ->
 			if @_ref
-				[@_ref._x, @_ref._y, @_ref._height]
+				[@_ref._y, @_ref._height]

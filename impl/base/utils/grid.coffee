@@ -17,6 +17,9 @@ columnsPositions = new TypedArray.Uint32 12
 rowsPositions = new TypedArray.Uint32 64
 
 updateItem = (item) ->
+	unless item._effectItem
+		return
+
 	{includeBorderMargins} = item
 	{children} = item._effectItem
 	data = item._impl
@@ -72,7 +75,7 @@ updateItem = (item) ->
 		if anchors = child._anchors
 			if gridType & ROW and anchors._autoX
 				continue
-			if gridType is COLUMN and anchors._autoY
+			if gridType & COLUMN and anchors._autoY
 				continue
 
 		column = i % columnsLen
@@ -131,7 +134,7 @@ updateItem = (item) ->
 		if anchors = child._anchors
 			if gridType & ROW and anchors._autoX
 				continue
-			if gridType is COLUMN and anchors._autoY
+			if gridType & COLUMN and anchors._autoY
 				continue
 
 		column = i % columnsLen
@@ -139,7 +142,7 @@ updateItem = (item) ->
 
 		margin = child._margin
 
-		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right))
+		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right) and not anchors._autoX)
 			if column > 0
 				x = columnsPositions[column-1]
 			else
@@ -156,7 +159,7 @@ updateItem = (item) ->
 					x -= margin.right
 			child.x = x
 
-		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom))
+		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom) and not anchors._autoY)
 			if row > 0
 				y = rowsPositions[row-1]
 			else
@@ -234,12 +237,12 @@ updateSize = ->
 	return
 
 onWidthChange = (oldVal) ->
-	if not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending
 		@_impl.autoWidth = @_effectItem._width is 0 and oldVal isnt -1
 	updateSize.call @
 
 onHeightChange = (oldVal) ->
-	if not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending
 		@_impl.autoHeight = @_effectItem._height is 0 and oldVal isnt -1
 	updateSize.call @
 
