@@ -129,16 +129,17 @@ ENDS_WITH = /\$$/
 CONTAINS = /\*$/
 TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/
 
-queriesCache = Object.create null
-reversedQueriesCache = Object.create null
-getQueries = (selector, reversed=false) ->
+i = 0
+OPTS_QUERY_BY_PARENTS = 1<<(i++)
+OPTS_REVERSED = 1<<(i++)
+
+queriesCache = []
+getQueries = (selector, opts=0) ->
+	reversed = !!(opts & OPTS_REVERSED)
+
 	# get from the cache
-	if reversed
-		if r = reversedQueriesCache[selector]
-			return r
-	else
-		if r = queriesCache[selector]
-			return r
+	if r = queriesCache[opts]?[selector]
+		return r
 
 	distantTagFunc = if reversed then anyParent else anyDescendant
 	closeTagFunc = if reversed then directParent else anyChild
@@ -193,54 +194,56 @@ getQueries = (selector, reversed=false) ->
 
 	# set iterator
 	for funcs in queries
-		if (not reversed and not funcs[0].isIterator)
+		if not reversed and not funcs[0].isIterator
 			funcs[reversedArrFunc] distantTagFunc, null, null
+		else if opts & OPTS_QUERY_BY_PARENTS and not funcs[0].isIterator
+			funcs[arrFunc] distantTagFunc, null, null
 
 	# save to the cache
-	if reversed
-		reversedQueriesCache[selector] = queries
-	else
-		queriesCache[selector] = queries
+	queriesCache[opts] ?= {}
+	queriesCache[opts][selector] = queries
 
 	queries
 
-exports.queryAll = (selector, target=[], targetCtx=target) ->
+exports.queryAll = (selector, target=[], targetCtx=target, opts=0) ->
 	assert.isString selector
 	assert.notLengthOf selector, 0
 	unless typeof target is 'function'
 		assert.isArray target
 
-	if @children
-		queries = getQueries selector
-		func = if Array.isArray(target) then target.push else target
+	queries = getQueries selector, opts
+	func = if Array.isArray(target) then target.push else target
 
-		for funcs in queries
-			if funcs[0](@, funcs, 3, func, targetCtx, false)
-				if single
-					break
+	for funcs in queries
+		if funcs[0](@, funcs, 3, func, targetCtx, false)
+			if single
+				break
 
 	if Array.isArray(target)
 		target
+
+exports.queryAllParents = (selector, target, targetCtx) ->
+	exports.queryAll.call @, selector, target, targetCtx, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
 
 exports.query = do ->
 	result = null
 	resultFunc = (arg) ->
 		result = arg
 
-	(selector) ->
+	(selector, opts=0) ->
 		assert.isString selector
 		assert.notLengthOf selector, 0
 
-		unless @children
-			return null
-
-		queries = getQueries selector
+		queries = getQueries selector, opts
 
 		for funcs in queries
 			if funcs[0](@, funcs, 3, resultFunc, null, true)
 				return result
 
 		null
+
+exports.queryParents = (selector) ->
+	exports.query.call @, selector, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
 
 class Watcher extends signal.Emitter
 	NOP = ->
@@ -285,7 +288,7 @@ exports.watch = (selector) ->
 	assert.isString selector
 	assert.notLengthOf selector, 0
 
-	queries = getQueries(selector, true)
+	queries = getQueries(selector, OPTS_REVERSED)
 	# for funcs in queries
 		# if funcs[funcs.length - 3] isnt directParent
 		# 	funcs.push anyParent, null, null

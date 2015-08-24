@@ -20,7 +20,5 @@ In the example below, *superPower* tag will be placed in the *neft:source* place
 
 	'use strict'
 
-	tmp = []
-
 	module.exports = (File) -> (file) ->
-		file.sourceNode = file.node.queryAll("#{File.HTML_NS}:source", tmp)[0]
+		file.sourceNode = file.node.query("#{File.HTML_NS}:source")

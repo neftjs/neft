@@ -166,6 +166,16 @@ Tag @virtual_dom
 
 		query: query.query
 
+*Array* Element::queryAllParents(*String* query)
+------------------------------------------------
+
+		queryAllParents: query.queryAllParents
+
+*Element* Element::queryParents(*String* query)
+-----------------------------------------------
+
+		queryParents: query.queryParents
+
 *Watcher* Element::watch(*String* query)
 ----------------------------------------
 
