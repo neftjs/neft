@@ -106,8 +106,14 @@ This connection is solid, so if the *rect1* will change a position,
 			super ref
 
 		implMethod = Impl["set#{ctor.__name__}Anchor"]
+		stringValuesCache = Object.create null
 		createAnchorProp = (type, opts=0, getter) ->
 			setter = (_super) -> (val=null) ->
+				if typeof val is 'string'
+					unless arr = stringValuesCache[val]
+						arr = stringValuesCache[val] = val.split '.'
+					val = arr
+
 				if val?
 					`//<development>`
 					allowedLines = if H_LINES[type] then H_LINES else V_LINES
