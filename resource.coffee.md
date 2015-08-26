@@ -38,7 +38,7 @@ Resource @class
 		@parseFileName = (name) ->
 			if name and (match = Resource.FILE_NAME.exec(name))
 				file: match[1]
-				resolution: if match[2]? then parseFloat(match[2].replace('p', '.')) else 1
+				resolution: if match[2]? then parseFloat(match[2].replace('p', '.'))
 				format: match[3]
 				property: match[4]
 
@@ -102,8 +102,8 @@ Resource @class
 			formats ?= req?.formats or @formats
 			property ||= req?.property or 'file'
 
-			if file isnt @file
-				return
+			# if file isnt @file
+			# 	return
 
 			if property isnt 'file'
 				return @[property]
@@ -120,7 +120,7 @@ Resource @class
 			rResolution = 0
 			for val in @resolutions
 				thisDiff = Math.abs(resolution - val)
-				if thisDiff < diff
+				if thisDiff < diff or (thisDiff is diff and val > rResolution)
 					diff = thisDiff
 					rResolution = val
 

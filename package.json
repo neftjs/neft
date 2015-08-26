@@ -1,0 +1,8 @@
+{
+	"private": true,
+	"name": "resources",
+	"version": "0.0.1",
+	"devDependencies": {
+	    "mkdirp": "^0.5.0"
+	}
+}

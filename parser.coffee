@@ -6,6 +6,7 @@ log = require 'log'
 assert = require 'neft-assert'
 pathUtils = require 'path'
 yaml = require 'js-yaml'
+mkdirp = require 'mkdirp'
 try
 	sharp = require 'sharp'
 
@@ -26,6 +27,7 @@ DEFAULT_CONFIG =
 
 Resources = null
 stack = null
+bgStack = null
 logShowed = false
 
 isResourcesPath = (path) ->
@@ -55,6 +57,9 @@ supportImageResource = (path, rsc) ->
 	stats = fs.statSync path
 	mtime = new Date stats.mtime
 
+	resizeImage = (path, width, height, output, callback) ->
+		sharp(path).resize(width, height).toFile(output, callback)
+
 	stack.add (callback) ->
 		sharp(path).metadata (err, meta) ->
 			if err
@@ -72,8 +77,10 @@ supportImageResource = (path, rsc) ->
 			for format in rsc.formats
 				for resolution in rsc.resolutions
 					resPath = rsc.paths[format][resolution].slice(1)
-					if not fs.existsSync(resPath) or new Date(fs.statSync(resPath).mtime) < mtime
-						sharp(path).resize(width * resolution, height * resolution).toFile(resPath)
+					if not (exists = fs.existsSync(resPath)) or new Date(fs.statSync(resPath).mtime) < mtime
+						unless exists
+							bgStack.add mkdirp, null, [pathUtils.dirname(resPath)]
+						bgStack.add resizeImage, null, [path, width * resolution, height * resolution, resPath]
 			callback()
 			return
 
@@ -125,6 +132,7 @@ parseResourceFile = (path, config) ->
 	dirPath = pathUtils.dirname path
 	name = pathUtils.basename path
 	name = Resources.Resource.parseFileName(name)
+	name.resolution ?= 1
 
 	unless fs.existsSync(path)
 		msg = "File '#{path}' doesn't exist"
@@ -154,18 +162,23 @@ parseResourceFile = (path, config) ->
 	rsc.resolutions = rsc.resolutions.filter (elem) ->
 		elem <= name.resolution
 
-	if rsc.formats
-		# log.warn "Multiple formats are not currently supported; '#{rsc.formats}' got"
-		unless utils.has(rsc.formats, name.format)
-			rsc.formats.push name.format
-	else
-		rsc.formats = [name.format]
+	if name.format
+		if rsc.formats
+			# log.warn "Multiple formats are not currently supported; '#{rsc.formats}' got"
+			unless utils.has(rsc.formats, name.format)
+				rsc.formats.push name.format
+		else
+			rsc.formats = [name.format]
+	rsc.formats ?= []
 
 	paths = rsc.paths = {}
 	for format in rsc.formats
 		formatPaths = paths[format] = {}
 		for resolution in rsc.resolutions
-			resPath = "/#{dirPath}/#{name.file}#{resolutionToString(resolution)}.#{format}"
+			resPath = ''
+			if name.resolution isnt resolution
+				resPath += '/build'
+			resPath += "/#{dirPath}/#{name.file}#{resolutionToString(resolution)}.#{format}"
 			formatPaths[resolution] = resPath
 
 	if IMAGE_FORMATS[name.format]
@@ -174,14 +187,17 @@ parseResourceFile = (path, config) ->
 	rsc
 
 getValue = (val, dirPath, config) ->
+	if utils.isObject(val)
+		config = utils.clone config
+		utils.merge config, val
+		delete config.file
+		delete config.resources
+
 	if typeof val is 'string'
 		path = pathUtils.join dirPath, val
 		getFile path, config
 	else if val?.file
 		path = pathUtils.join dirPath, val.file
-		config = utils.clone config
-		utils.merge config, val
-		delete config.file
 		getFile path, config
 	else if Array.isArray(val)
 		parseResourcesArray val, dirPath, config
@@ -221,6 +237,11 @@ module.exports = ->
 	[Resources] = arguments
 	parse: (path, callback) ->
 		stack = new utils.async.Stack
+		bgStack = new utils.async.Stack
 		rscs = getFile path, DEFAULT_CONFIG
 		stack.runAllSimultaneously (err) ->
+			if not err and bgStack.length
+				logtime = log.time 'Resize images'
+				bgStack.runAllSimultaneously ->
+					log.end logtime
 			callback err, rscs or ''

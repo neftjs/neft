@@ -81,7 +81,7 @@ Resource Manager @engine
 						unless name[key]
 							name[key] = val
 				path = rsc.resolve '', name
-			path
+			path and @resolve(path) or path
 
 *Object* Resources::toJSON()
 ----------------------------
