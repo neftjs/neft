@@ -142,7 +142,7 @@ updateItem = (item) ->
 
 		margin = child._margin
 
-		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right) and not anchors._autoX)
+		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right) and not anchors?._autoX)
 			if column > 0
 				x = columnsPositions[column-1]
 			else
@@ -159,7 +159,7 @@ updateItem = (item) ->
 					x -= margin.right
 			child.x = x
 
-		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom) and not anchors._autoY)
+		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom) and not anchors?._autoY)
 			if row > 0
 				y = rowsPositions[row-1]
 			else

@@ -49,12 +49,32 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			@_fillMode = 'Stretch'
 			super component, opts
 
+		updateSizes = ->
+			if @_autoHeight is @_autoWidth
+				return
+
+			if @_autoHeight
+				autoWidth = @_autoWidth
+				@_autoWidth = false
+				@height = @_width / @sourceWidth * @sourceHeight or 0
+				@_autoWidth = autoWidth
+				@_autoHeight = true
+
+			if @_autoWidth
+				autoHeight = @_autoHeight
+				@_autoHeight = false
+				@width = @_height / @sourceHeight * @sourceWidth or 0
+				@_autoHeight = autoHeight
+				@_autoWidth = true
+			return
+
 		getter = utils.lookupGetter @::, 'width'
 		setter = utils.lookupSetter @::, 'width'
 		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
 			if @_width isnt val
 				@_autoWidth = false
-			_super.call @, val
+				_super.call @, val
+				updateSizes.call @
 			return
 
 		getter = utils.lookupGetter @::, 'height'
@@ -62,7 +82,8 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
 			if @_height isnt val
 				@_autoHeight = false
-			_super.call @, val
+				_super.call @, val
+				updateSizes.call @
 			return
 
 *String* Image::source
@@ -97,6 +118,7 @@ Image source URL (absolute or relative to the page) or data URI.
 						if @_autoHeight
 							@height = opts.height
 							@_autoHeight = true
+						updateSizes.call @
 
 					@_loaded = true
 					@onLoadedChange.emit false

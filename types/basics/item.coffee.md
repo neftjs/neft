@@ -453,6 +453,9 @@ Item {
 			if oldNextSibling
 				assert.is oldNextSibling._previousSibling, oldPreviousSibling
 
+			# children signal
+			emitSignal parent, 'onChildrenChange', children
+
 			# current siblings signals
 			emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
 			emitSignal @, 'onNextSiblingChange', oldNextSibling
