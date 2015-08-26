@@ -54,8 +54,8 @@ module.exports = (impl) ->
 		return
 
 	setImageSource: (val, callback) ->
-		if rsc = impl.Renderer.resources.resolve(val, ImageResourceRequest)
-			val = rsc
+		if rsc = impl.Renderer.resources.getResource(val)
+			val = rsc.resolve val, ImageResourceRequest
 		else
 			val = cssUtils.encodeImageSrc val
 
@@ -92,7 +92,7 @@ module.exports = (impl) ->
 				updateSize.call @
 			callback?.apply @, arguments
 
-		data.image = cssImage._getImage val
+		data.image = cssImage._getImage val, rsc
 		cssImage._callCallback.call @
 
 		unless /^data:/.test(val)

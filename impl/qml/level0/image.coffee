@@ -124,6 +124,9 @@ module.exports = (impl) ->
 
 		return
 
+	ImageResourceRequest =
+		resolution: __stylesWindow.screen.devicePixelRatio
+
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner 'Item', DATA
@@ -156,12 +159,12 @@ module.exports = (impl) ->
 			unless impl.utils.DATA_URI_RE.test(val)
 				if rsc = impl.Renderer.resources.getResource(val)
 					data.resource = rsc
-					val = 'qrc:' + rsc.resolve()
+					val = 'qrc:' + rsc.resolve(val, ImageResourceRequest)
 				else
 					val = impl.utils.toUrl(val)
 			elem.source = val or ''
 
-			if ///^data:image\/svg+|\.svg$///.test val
+			if ///^data:image\/svg+|\.svg$///.test(val)
 				elem.fillMode = Image.PreserveAspectFit
 				unless data.isSvg
 					elem.widthChanged.connect elem, onSvgImageResize

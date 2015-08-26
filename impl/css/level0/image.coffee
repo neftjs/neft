@@ -102,6 +102,9 @@ module.exports = (impl) ->
 
 		return
 
+	ImageResourceRequest =
+		resolution: window.devicePixelRatio or 1
+
 	DATA =
 		innerElem: null
 		callback: null
@@ -129,7 +132,7 @@ module.exports = (impl) ->
 
 	setImageSource: (val, callback) ->
 		if rsc = impl.Renderer.resources?.getResource(val)
-			val = rsc.resolve(val)
+			val = rsc.resolve val, ImageResourceRequest
 		else
 			val = impl.utils.encodeImageSrc val
 
