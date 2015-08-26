@@ -142,14 +142,14 @@ updateItem = (item) ->
 				multiplierY = 0.5
 			when 'bottom'
 				multiplierY = 1
-		if not data.autoWidth
-			width = item._width
-		if not data.autoHeight
-			height = item._height
 		if data.autoHeight or alignV is 'top'
 			plusY = 0
 		else
 			plusY = (item._height - height) * multiplierY
+		if not data.autoWidth
+			width = item._width
+		if not data.autoHeight
+			height = item._height
 		for child, i in children
 			# omit not visible and auto positioned children
 			if not child._visible
@@ -169,10 +169,10 @@ updateItem = (item) ->
 
 	# set item size
 	if data.autoWidth
-		item._effectItem.width = width
+		effectItem.width = width
 
 	if data.autoHeight
-		item._effectItem.height = height
+		effectItem.height = height
 
 	return
 
@@ -207,7 +207,7 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_impl.updatePending and (@_impl.autoWidth or @_impl.autoHeight)
+	if not @_impl.updatePending
 		update.call @
 	return
 

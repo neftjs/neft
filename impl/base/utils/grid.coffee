@@ -232,7 +232,7 @@ update = ->
 	return
 
 updateSize = ->
-	if not @_impl.updatePending and (@_impl.autoWidth or @_impl.autoHeight)
+	if not @_impl.updatePending
 		update.call @
 	return
 
