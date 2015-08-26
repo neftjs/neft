@@ -46,7 +46,7 @@ module.exports = (Networking) ->
 				data += chunk;
 
 			serverReq.on 'end', ->
-				if ///^\/static\////.test(serverReq.url)
+				if ///^(?:\/static\/|\/build\/static\/)///.test(serverReq.url)
 					staticServer.serve serverReq, serverRes
 					return
 
