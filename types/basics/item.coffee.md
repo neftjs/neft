@@ -42,6 +42,7 @@ This is a base class for everything which is visible.
 			@_opacity = 1
 			@_linkUri = ''
 			@_anchors = null
+			@_layout = null
 			@_document = null
 			@_keys = null
 			@_pointer = null
@@ -141,7 +142,7 @@ Rectangle {
 
 		class ChildrenObject extends itemUtils.MutableDeepObject
 			constructor: (ref) ->
-				@_order = null
+				@_layout = null
 				@_target = null
 				@length = 0
 				super ref
@@ -149,20 +150,22 @@ Rectangle {
 *ReadOnly* *Integer* Item::children::length
 -------------------------------------------
 
-*Item* Item::children::order
-----------------------------
+*Item* Item::children::layout
+-----------------------------
+
+### *Signal* Item::children::onLayoutChange(*Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
-				name: 'order'
+				name: 'layout'
 				defaultValue: null
 				developmentSetter: (val) ->
 					if val?
 						assert.instanceOf val, Item
 				setter: (_super) -> (val) ->
-					if @_order?.effectItem
-						@_order.parent = null
-						@_order.effectItem = @_order
+					if @_layout?.effectItem
+						@_layout.parent = null
+						@_layout.effectItem = @_layout
 
 					_super.call @, val
 
@@ -665,6 +668,7 @@ This method checks whether two items are overlapped.
 		@Spacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
 		@Alignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
 		@Anchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
+		@Layout = require('./item/layout') Renderer, Impl, itemUtils, Item
 		@Margin = require('./item/margin') Renderer, Impl, itemUtils, Item
 		@Pointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
 		@Keys = require('./item/keys') Renderer, Impl, itemUtils, Item
@@ -676,6 +680,13 @@ This method checks whether two items are overlapped.
 ### *Signal* Item::onAnchorsChange(*Anchors* anchors)
 
 		@Anchors @
+
+*Layout* Item::layout
+---------------------
+
+### *Signal* Item::onLayoutChange(*Anchors* layout)
+
+		@Layout @
 
 *Pointer* Item::pointer
 -----------------------

@@ -28,7 +28,7 @@ updateItem = (item) ->
 	{children} = effectItem
 	data = item._impl
 
-	if item.children.order
+	if item.children.layout
 		return
 
 	if data.loops is MAX_LOOPS
