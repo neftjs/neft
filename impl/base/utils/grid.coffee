@@ -169,64 +169,67 @@ updateItem = (item) ->
 	# set children positions
 	i = 0
 	for child in children
-		# omit not visible and auto positioned children
+		# omit not visible children
 		if not child._visible
 			continue
+
+		column = i % columnsLen
+		row = Math.floor(i/columnsLen) % rowsLen
+		i++
+
+		# omit auto positioned children
 		if anchors = child._anchors
 			if gridType & ROW and anchors._autoX
 				continue
 			if gridType & COLUMN and anchors._autoY
 				continue
 
-		column = i % columnsLen
-		row = Math.floor(i/columnsLen) % rowsLen
-
 		margin = child._margin
 		layout = child._layout
 
+		# get column position
 		columnX = if column > 0 then columnsPositions[column-1] else 0
-		rowY = if row > 0 then rowsPositions[row-1] else 0
+		if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
+			leftMargin = margin._left
+			rightMargin = margin._right
+		else
+			leftMargin = rightMargin = 0
 
+		# get row position
+		rowY = if row > 0 then rowsPositions[row-1] else 0
+		if margin and (includeBorderMargins or (row > 0 and row < rowsLen))
+			topMargin = margin._top
+			bottomMargin = margin._bottom
+		else
+			topMargin = bottomMargin = 0
+
+		# set sizes
 		if layout
 			# set width
 			if layout._fillWidth and not autoWidth
-				child.width = columnsPositions[column] - columnX
+				child.width = columnsPositions[column] - columnX - leftMargin - rightMargin
 			
 			# set height
 			if layout._fillHeight and not autoHeight
-				child.height = rowsPositions[row] - rowY
+				child.height = rowsPositions[row] - rowY - topMargin - bottomMargin
 
 		# set x
 		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right) and not anchors?._autoX)
-			x = columnX
-			if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
-				x += margin._left
+			x = columnX + leftMargin
 			if alignH is 'center'
-				x += (columnsPositions[column] - x - child._width) / 2
-				if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
-					x -= margin.right / 2
+				x += (columnsPositions[column] - x - child._width) / 2 - rightMargin / 2
 			else if alignH is 'right'
-				x += columnsPositions[column] - x - child._width
-				if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
-					x -= margin.right
+				x += columnsPositions[column] - x - child._width - rightMargin
 			child.x = x
 
 		# set y
 		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom) and not anchors?._autoY)
-			y = rowY
-			if margin and (includeBorderMargins or (row > 0 or row < rowsLen))
-				y += margin._top
+			y = rowY + topMargin
 			if alignV is 'center'
-				y += (rowsPositions[row] - y - child._height) / 2
-				if margin and (includeBorderMargins or (row > 0 or row < rowsLen))
-					y -= margin.bottom / 2
+				y += (rowsPositions[row] - y - child._height) / 2 - bottomMargin / 2
 			else if alignV is 'right'
-				y += rowsPositions[row] - y - child._height
-				if margin and (includeBorderMargins or (row > 0 or row < rowsLen))
-					y -= margin.bottom
+				y += rowsPositions[row] - y - child._height - bottomMargin
 			child.y = y
-
-		i++
 
 	# set item size
 	if autoWidth
