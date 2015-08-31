@@ -347,7 +347,7 @@ Acceptable syntaxes:
 		createToHTMLFromObject = (opts) ->
 			->
 				viewName = opts.view or @name or 'index'
-				tmplName = opts.template or 'index'
+				tmplName = opts.template or 'template'
 				useName = opts.use or 'body'
 
 				if view = app.views[viewName]

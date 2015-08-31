@@ -10,7 +10,7 @@ createBundle = (opts, callback) ->
 		extras: opts.extras
 		release: opts.release
 		removeLogs: opts.release
-		minify: true
+		# minify: true
 		path: 'index.coffee.md'
 	}, (err, bundle) ->
 		if err

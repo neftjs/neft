@@ -17,6 +17,8 @@ Document:
   ☐ XML -> HTML semantic tags
   ☐ neft:attr join attribute
   ☐ neft:each on Dict and Object
+  ☐ Removing input tag
+  ☐ Clean node signals listeners on revert
 
 Renderer:
   ☐ HTML namespace items
@@ -26,10 +28,10 @@ Renderer:
   ✔ State two-dots properties support (q.g. label.font.pixelSize) @started(15-04-27 08:07) @done (15-04-30 17:28) @lasted(3 days, 9:21)
   ☐ OSX renderer
   ☐ Android renderer
-  ☐ Cocos2d-x implementation
+  ✘ Cocos2d-x implementation @cancelled (15-08-27 11:07)
   ✔ Simple bindings (e.g. parent.width) @started(15-04-23 16:00) @done (15-04-23 16:17) @lasted(0:17)
   ✔ parent/nextSibling/previousSibling as static references in bindings @started(15-04-23 14:52) @done (15-04-23 15:59) @lasted(1:07)
-  ☐ Use resources resolutions properly
+  ✔ Use resources resolutions properly @done (15-08-26 12:48)
   ✔ Less restrictive Text::text setter @started(15-04-23 21:14) @done (15-04-23 21:17) @lasted(0:03)
   ✔ Hash bindings in NML parser @started(15-04-24 15:09) @done (15-04-24 18:48) @lasted(3:39)
   ✔ Anchors implementation without bindings @done (15-04-24 18:49)
@@ -63,6 +65,16 @@ Renderer:
   ☐ Scrollable smooth borders
   ☐ New Call elem with when and function + fast if() {..code..}
   ☐ PropertyAnimation::easing:: amplitude, overshoot, period
+  ☐ Item::children::layout::margin support
+  ✔ Row/Column/Grid/Flow alignment vertical @done (15-08-27 11:06)
+  ☐ NML: parent in if (...)
+  ✔ Item::layout @done (15-08-28 10:54)
+  ✔ Item::children::order -> children::layout @done (15-08-28 10:54)
+  ☐ Layout::maximumWidth/Height
+  ☐ Layout::minimumWidth/Height
+  ☐ Layout::column(row)Span
+  ☐ Layout::alignment
+  ✔ Image.pixelRatio @done (15-08-31 14:50)
 
 Styles:
   ☐ Default styles (material design)
@@ -71,17 +83,20 @@ Styles:
   ✔ Don't use styles on node @done (15-05-07 09:05)
   ☐ Create substyles from NML
   ☐ Set Image::source by default for <img> elements
+  ☐ neft:func -> neft:function
   ☐ neft:func node
   ☐ neft:func refactor
   ☐ neft:func scoping in more than 1 neft:each parent
   ☐ neft:func don't remove new lines
   ☐ neft:func available in input
+  ☐ neft:func arguments
+  ☐ neft:func in Input as normal function
   ✔ Re-use created classes in creating items @done (15-08-03 07:40)
   ☐ Styles <-> extensions
   ✔ Document class attribute @done (15-08-03 20:50)
   ✔ Delay hiding @done (15-08-05 17:28)
   ☐ Check Component pool proper working
-  ☐ neft:func in Input as normal function
+  ☐ Bug on remove style file with document.query
 
 Database:
   ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)
@@ -114,12 +129,16 @@ Networking:
   ☐ Hide errors stack
   ☐ Cookies on HTTP Cookies
   ✔ Fast get/post/put/delete @done (15-08-04 09:12)
+  ☐ Allow subfolder app place e.g. /app/here/...
 
 App:
   ✔ Route - short arguments @started(15-04-30 17:47) @done (15-04-30 18:16) @lasted(0:29)
   ☐ Addons
   ☐ Life editor
   ☐ Client side location
+  ☐ CLI on NPM
+  ☐ Dict::extend
+  ☐ Cake: build static browser
 
 Addons:
  ☐ OAuth
