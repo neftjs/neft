@@ -149,7 +149,10 @@ SingleStringCharacter
 	/ LineContinuation
 
 LineContinuation
-  = "\\" LineTerminatorSequence { return ""; }
+	= "\\" LineTerminatorSequence { return ""; }
+
+InlineBrackets
+	= '(' (!')' (StringLiteral / InlineBrackets / SourceCharacter))* ')'
 
 EscapeSequence
 	= CharacterEscapeSequence
@@ -324,7 +327,7 @@ MainType
 /* IF STATEMENT */
 
 IfStatement
-	= __ "if" WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral/SourceCharacter) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
+	= __ "if" WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral/$InlineBrackets/SourceCharacter) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
 		var obj = { type: 'if', condition: cond, body: body };
 		setParentRec(body, obj);
 		return obj;
