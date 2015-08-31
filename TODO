@@ -90,13 +90,12 @@ Styles:
   ☐ neft:func don't remove new lines
   ☐ neft:func available in input
   ☐ neft:func arguments
-  ☐ neft:func in Input as normal function
   ✔ Re-use created classes in creating items @done (15-08-03 07:40)
   ☐ Styles <-> extensions
   ✔ Document class attribute @done (15-08-03 20:50)
   ✔ Delay hiding @done (15-08-05 17:28)
   ☐ Check Component pool proper working
-  ☐ Bug on remove style file with document.query
+  ✔ Bug on remove style file with document.query @done (15-08-31 15:52)
 
 Database:
   ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)

@@ -133,6 +133,7 @@ Acceptable syntaxes:
 				r.request = r.response = null
 				r.route = r
 				r._dataPrepared = false
+				r._destroyViewOnEnd = false
 				r
 
 		destroyRoute = (route) ->
@@ -152,6 +153,8 @@ Acceptable syntaxes:
 						route.destroyJSON?()
 					when 'html'
 						route.destroyHTML?()
+			if route._destroyViewOnEnd
+				route.response.data.destroy()
 			routesCache[route.__id__].push Object.getPrototypeOf(route)
 
 		resolveSyncGetDataFunc = (route) ->
@@ -362,6 +365,9 @@ Acceptable syntaxes:
 					r = tmplView.use(useName, r)
 				else
 					r = tmplView
+				@_destroyViewOnEnd = false
+			else
+				@_destroyViewOnEnd = true
 			r
 
 		createToHTMLFromObject = (opts) ->
