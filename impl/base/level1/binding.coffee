@@ -18,12 +18,21 @@ module.exports = (impl) ->
 	{items} = impl
 
 	class Connection
-		constructor: (@binding, objects, item, @prop, @parent=null) ->
+		pool = []
+
+		@factory = (binding, objects, item, prop, parent=null) ->
+			if elem = pool.pop()
+				Connection.call elem, binding, objects, item, prop, parent
+				elem
+			else
+				new Connection binding, objects, item, prop, parent
+
+		constructor: (@binding, objects, item, @prop, @parent) ->
 			@handlerName = getPropHandlerName prop
 			@isConnected = false
 
 			if isArray(item)
-				@child = new Connection binding, objects, item[0], item[1], @
+				@child = Connection.factory binding, objects, item[0], item[1], @
 				@item = @child.getValue()
 			else
 				if item is 'this'
@@ -86,6 +95,7 @@ module.exports = (impl) ->
 		destroy: ->
 			@disconnect()
 			@child?.destroy()
+			pool.push @
 			return
 
 	# isSimpleBinding = (binding) ->
@@ -122,6 +132,17 @@ module.exports = (impl) ->
 	# 		return
 
 	class Binding
+		pool = []
+
+		@factory = (obj, prop, binding, component, ctx) ->
+			if elem = pool.pop()
+				Binding.call elem, obj, prop, binding, component, ctx
+				elem
+			else
+				new Binding obj, prop, binding, component, ctx
+
+		getPropHandlerName
+
 		constructor: (@obj, @prop, binding, component, @ctx) ->
 			assert.lengthOf binding, 2
 			assert.isFunction binding[0]
@@ -134,13 +155,13 @@ module.exports = (impl) ->
 			@args = component.objectsOrder
 
 			# destroy on property value change
-			handlerName = "on#{utils.capitalize(prop)}Change"
+			handlerName = getPropHandlerName prop
 
 			# connections
-			connections = @connections = []
+			connections = @connections ||= []
 			for elem in binding[1]
 				if isArray(elem)
-					connections.push new Connection @, component.objects, elem[0], elem[1]
+					connections.push Connection.factory @, component.objects, elem[0], elem[1]
 
 			# update
 			# @updatePending = false
@@ -186,7 +207,9 @@ module.exports = (impl) ->
 
 			# clear props
 			@args = null
-			@connections = null
+			utils.clear @connections
+
+			pool.push @
 			return
 
 	setItemBinding: (prop, binding, component, ctx) ->
@@ -202,6 +225,6 @@ module.exports = (impl) ->
 			# if isSimpleBinding(binding)
 			# 	data.bindings[prop] = new SimpleBinding @, prop, binding, ctx
 			# else
-			data.bindings[prop] = new Binding @, prop, binding, component, ctx
+			data.bindings[prop] = Binding.factory @, prop, binding, component, ctx
 
 		return

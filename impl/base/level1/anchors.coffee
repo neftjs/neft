@@ -215,6 +215,15 @@ module.exports = (impl) ->
 		return
 
 	class Anchor
+		pool = []
+
+		@factory = (item, source, def) ->
+			if elem = pool.pop()
+				Anchor.call elem, item, source, def
+				elem
+			else
+				new Anchor item, source, def
+
 		constructor: (@item, @source, def) ->
 			[target, line] = def
 			@target = target
@@ -322,6 +331,8 @@ module.exports = (impl) ->
 					@targetItem[handler].disconnect @update, @
 
 			@item = @targetItem = null
+
+			pool.push @
 			return
 
 	getBaseAnchors =
@@ -341,6 +352,15 @@ module.exports = (impl) ->
 		!!getBaseAnchors[source]
 
 	class MultiAnchor
+		pool = []
+
+		@factory = (item, source, def) ->
+			if elem = pool.pop()
+				MultiAnchor.call elem, item, source, def
+				elem
+			else
+				new MultiAnchor item, source, def
+
 		constructor: (item, source, def) ->
 			assert.lengthOf def, 1
 			@anchors = []
@@ -350,8 +370,9 @@ module.exports = (impl) ->
 			baseAnchors ?= getBaseAnchors[source]
 			for line in baseAnchors
 				def[1] = line
-				anchor = new Anchor item, line, def
+				anchor = Anchor.factory item, line, def
 				@anchors.push anchor
+			return
 
 		update: ->
 			for anchor in @anchors
@@ -361,13 +382,14 @@ module.exports = (impl) ->
 		destroy: ->
 			for anchor in @anchors
 				anchor.destroy()
+			pool.push @
 			return
 
 	createAnchor = (item, source, def) ->
 		if isMultiAnchor(source)
-			new MultiAnchor item, source, def
+			MultiAnchor.factory item, source, def
 		else
-			new Anchor item, source, def
+			Anchor.factory item, source, def
 
 	exports =
 	setItemAnchor: (type, val) ->
