@@ -355,6 +355,11 @@ module.exports = (File, data) -> class Style
 			name = prop.slice 'neft:style:'.length
 			cache[prop] = name.split ':'
 
+	getInternalProperty = do ->
+		cache = Object.create null
+		(prop) ->
+			cache[prop] ||= "_#{prop}"
+
 	setAttr: (name, val) ->
 		assert.instanceOf @, Style
 
@@ -377,15 +382,22 @@ module.exports = (File, data) -> class Style
 		for prop, i in props
 			if i is props.length - 1
 				unless prop of obj
-					# log.error "Can't set the '#{prop}' property, because this property doesn't exist"
 					continue
+
+				internalProp = getInternalProperty prop
 
 				if val of ATTR_PRIMITIVE_VALUES
 					val = ATTR_PRIMITIVE_VALUES[val]
 
-				switch typeof obj[prop]
+				propType = typeof obj[prop]
+				if propType is 'object'
+					propType = typeof obj[prop]?.valueOf()
+				switch propType
 					when 'number'
+						baseVal = val
 						val = parseFloat val
+						if isNaN(val) and baseVal isnt 'NaN'
+							val = baseVal
 					when 'boolean'
 						if val is ''
 							val = true
@@ -406,7 +418,8 @@ module.exports = (File, data) -> class Style
 
 					unless @setAttrs[name]
 						@setAttrs[name] = true
-						@attrValues.push obj, prop, obj[prop]
+						internalVal = if internalProp of obj then obj[internalProp] else obj[prop]
+						@attrValues.push obj, prop, internalVal
 					obj[prop] = val
 				return true
 			else
