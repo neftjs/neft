@@ -49,6 +49,25 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			@_fillMode = 'Stretch'
 			super component, opts
 
+*Float* Image.pixelRatio = 1
+----------------------------
+
+### *Signal* Image.onPixelRatioChange(*Float* oldValue)
+
+		signal.create @, 'onPixelRatioChange'
+
+		pixelRatio = 1
+		utils.defineProperty @, 'pixelRatio', utils.CONFIGURABLE, ->
+			pixelRatio
+		, (val) ->
+			assert.isFloat val
+			if val is pixelRatio
+				return
+			oldVal = pixelRatio
+			pixelRatio = val
+			Impl.setStaticImagePixelRatio.call @, val
+			@onPixelRatioChange.emit oldVal
+
 		updateSizes = ->
 			if @_autoHeight is @_autoWidth
 				return

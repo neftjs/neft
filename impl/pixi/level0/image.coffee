@@ -53,6 +53,9 @@ module.exports = (impl) ->
 		@onHeightChange updateSize
 		return
 
+	setStaticImagePixelRatio: (val) ->
+		ImageResourceRequest.resolution = impl.pixelRatio * val
+
 	setImageSource: (val, callback) ->
 		if rsc = impl.Renderer.resources.getResource(val)
 			val = rsc.resolve val, ImageResourceRequest

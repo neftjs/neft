@@ -136,6 +136,9 @@ module.exports = (impl) ->
 
 		Item.create.call @, data
 
+	setStaticImagePixelRatio: (val) ->
+		ImageResourceRequest.resolution = __stylesWindow.screen.devicePixelRatio * val
+
 	setImageSource: do ->
 		onStatusChanged = ->
 			data = @_impl

@@ -130,6 +130,9 @@ module.exports = (impl) ->
 		data.elem.appendChild innerElem
 		return
 
+	setStaticImagePixelRatio: (val) ->
+		ImageResourceRequest.resolution = (window.devicePixelRatio or 1) * val
+
 	setImageSource: (val, callback) ->
 		if rsc = impl.Renderer.resources?.getResource(val)
 			val = rsc.resolve val, ImageResourceRequest

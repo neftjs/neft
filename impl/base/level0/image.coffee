@@ -11,6 +11,8 @@ module.exports = (impl) ->
 	create: (data) ->
 		impl.Types.Item.create.call @, data
 
+	setStaticImagePixelRatio: (val) ->
+
 	setImageSource: (val) ->
 		@_impl.source = val
 
