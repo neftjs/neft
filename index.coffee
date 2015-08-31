@@ -518,7 +518,7 @@ stringify =
 		attrToValue = (body) ->
 			{value} = body
 
-			if body.name is 'document.query'
+			if body.name is 'document.query' and not MODIFIERS_NAMES[body.parent.name]
 				if isBinding(body)
 					throw new Error 'document.query must be a string'
 				if value
@@ -549,8 +549,9 @@ stringify =
 				return false
 			else if value?.type is 'object'
 				valueCode = stringify.object value
-				postfix += ", \"#{body.name}\": ((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
-				return false
+				# postfix += ", \"#{body.name}\": ((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
+				# return false
+				value = "((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
 			else if isAnchor(body)
 				value = anchorAttributeToString(body)
 			else if isBinding(body)
@@ -572,7 +573,7 @@ stringify =
 						json[body.name] = "`#{value}`"
 				when 'function'
 					args = idsKeys+''
-					if body.params+''
+					if args and body.params+''
 						args += ","
 					args += body.params+''
 					func = "`function(#{args}){#{body.body}}`"
@@ -660,7 +661,7 @@ module.exports = (file, filename) ->
 		ids = getIds elem
 		idsKeys = Object.keys(ids).filter (id) -> !!id
 		itemsKeys = []
-		code = "var _c = new Renderer.Component\n"
+		code = "var _c = new Renderer.Component({fileName: '#{filename}'})\n"
 		if elem.type is 'code'
 			bootstrap += elem.body
 			continue
@@ -711,14 +712,12 @@ module.exports = (file, filename) ->
 
 # codes = module.exports("""
 # Image {
-# 	document.query: 'alert'
-# 	contentItem: Item {
-# 		document.query: '> content'
-# 	}
-# 	Item {
-# 		document.query: 'child'
-# 		Item {
-# 			document.query: 'deep'
+# 	Class {
+# 		when: this.ab('a')
+# 		changes: {
+# 			children.order: Flow {
+# 				text: 'abc'
+# 			}
 # 		}
 # 	}
 # }
