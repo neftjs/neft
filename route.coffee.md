@@ -176,7 +176,9 @@ Acceptable syntaxes:
 
 		prepareRouteData = (route) ->
 			assert.instanceOf route, Route
+			{response} = route
 
+			respData = response.data
 			switch route.request.type
 				when 'text'
 					data = route.toText()
@@ -184,10 +186,13 @@ Acceptable syntaxes:
 					data = route.toJSON()
 				when 'html'
 					data = route.toHTML()
+					if not (data instanceof Document) and response.data is respData
+						data = renderViewFromConfig.call route, data
 			route._dataPrepared = true
-			unless data?
-				data = ''
-			route.response.data = data
+			if data?
+				response.data = data
+			else if response.data is respData
+				response.data = ''
 
 		onResponseSent = ->
 			if utils.isNode or @request.type isnt 'html'
@@ -344,21 +349,23 @@ Acceptable syntaxes:
 *Document* Route::toHTML()
 --------------------------
 
-		createToHTMLFromObject = (opts) ->
-			->
-				viewName = opts.view or @name or 'index'
-				tmplName = opts.template or 'template'
-				useName = opts.use or 'body'
+		renderViewFromConfig = (opts) ->
+			viewName = opts?.view or @name or 'index'
+			tmplName = opts?.template or 'template'
+			useName = opts?.use or 'body'
 
-				if view = app.views[viewName]
-					r = view.render @
-				if viewName isnt tmplName and (tmpl = app.views[tmplName])
-					tmplView = Route::getTemplateView.call @, tmplName
-					if r?
-						r = tmplView.use(useName, r)
-					else
-						r = tmplView
-				r
+			if view = app.views[viewName]
+				r = view.render @
+			if viewName isnt tmplName and (tmpl = app.views[tmplName])
+				tmplView = Route::getTemplateView.call @, tmplName
+				if r?
+					r = tmplView.use(useName, r)
+				else
+					r = tmplView
+			r
+
+		createToHTMLFromObject = (opts) ->
+			-> renderViewFromConfig.call @, opts
 
 		toHTML: createToHTMLFromObject
 			view: ''
