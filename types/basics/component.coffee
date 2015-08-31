@@ -4,12 +4,17 @@ utils = require 'utils'
 assert = require 'neft-assert'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Component
-	constructor: (original=null) ->
+	constructor: (original, opts) ->
+		unless original instanceof Component
+			opts = original
+			original = null
+
 		if original?
 			assert.instanceOf original, Component
 
 		@id = original?.id or utils.uid()
 		@item = null
+		@fileName = opts?.fileName or original?.fileName or 'unknown'
 		@objects = {}
 		@idsOrder = original?.idsOrder or null
 		@objectsOrder = []

@@ -16,10 +16,7 @@ module.exports = (Renderer, Impl) ->
 	NOP = ->
 
 	getObjAsString = (item) ->
-		name = item.constructor.__name__
-		name ?= Object.getPrototypeOf(item).constructor.__name__
-
-		"#{name}##{item._id}"
+		"#{item._component?.fileName}:#{item.id}"
 
 	getObjFile = (item) ->
 		path = ''
@@ -186,8 +183,8 @@ module.exports = (Renderer, Impl) ->
 
 			clone
 
-		# toString: ->
-		# 	"#{getObjAsString(@)} in '#{getObjFile(@)}'"
+		toString: ->
+			getObjAsString @
 	
 	class FixedObject extends UtilsObject
 		constrcutor: (component, opts) ->
@@ -209,7 +206,7 @@ module.exports = (Renderer, Impl) ->
 		createBinding: UtilsObject::createBinding
 
 		toString: ->
-			"#{getObjAsString(@_ref)}.#{@constructor.__name__} in '#{getObjFile(@_ref)}'"
+			getObjAsString @_ref
 
 	class DeepObject extends MutableDeepObject
 		constructor: (ref) ->
