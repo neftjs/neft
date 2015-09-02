@@ -217,7 +217,7 @@ module.exports = (impl) ->
 
 			unless @_impl.linkUriListens
 				@_impl.linkUriListens = true
-				@pointer.onClicked onLinkUriClicked, @
+				@pointer.onClick onLinkUriClicked, @
 			return
 
 	attachItemSignal: do ->

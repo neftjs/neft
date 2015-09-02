@@ -8,14 +8,17 @@ module.exports = (impl) ->
 		internalPropertyName: ''
 		propertySetter: null
 		isIntegerProperty: false
-		easing: 'Linear'
+		easing: null
+		easingType: 'Linear'
 
+	exports =
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner 'Animation', DATA
 
 	create: (data) ->
 		impl.Types.Animation.create.call @, data
+		exports.setPropertyAnimationEasingType.call @, 'Linear'
 
 	setPropertyAnimationTarget: (val) ->
 
@@ -39,8 +42,9 @@ module.exports = (impl) ->
 	setPropertyAnimationUpdateProperty: (val) ->
 		@_impl.dirty = true
 
-	setPropertyAnimationEasingType: (val) ->
-		@_impl.easing = val
+	setPropertyAnimationEasingType: do (_super = impl.setPropertyAnimationEasingType) -> (val) ->
+		_super.call @, val
+		@_impl.easingType = val
 		@_impl.elem?.easing = val
 
 	getPropertyAnimationProgress: ->

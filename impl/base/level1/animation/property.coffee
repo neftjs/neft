@@ -139,7 +139,7 @@ module.exports = (impl) ->
 			else
 				c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b
 		InBounce: (t, b, c, d) ->
-			c - EASINGS.outBounce(d-t, 0, c, d) + b
+			c - EASINGS.OutBounce(d-t, 0, c, d) + b
 		OutBounce: (t, b, c, d) ->
 			if (t/=d) < (1/2.75)
 				c*(7.5625*t*t) + b
@@ -151,9 +151,9 @@ module.exports = (impl) ->
 				c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b
 		InOutBounce: (t, b, c, d) ->
 			if (t < d/2)
-				EASINGS.inBounce(t*2, 0, c, d) * .5 + b
+				EASINGS.InBounce(t*2, 0, c, d) * .5 + b
 			else
-				EASINGS.outBounce(t*2-d, 0, c, d) * .5 + c*.5 + b
+				EASINGS.OutBounce(t*2-d, 0, c, d) * .5 + c*.5 + b
 
 	DATA =
 		progress: 0
@@ -185,8 +185,10 @@ module.exports = (impl) ->
 	setPropertyAnimationLoopDelay: (val) ->
 
 	setPropertyAnimationFrom: (val) ->
+		@_impl.from = val
 
 	setPropertyAnimationTo: (val) ->
+		@_impl.to = val
 
 	setPropertyAnimationUpdateData: (val) ->
 

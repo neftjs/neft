@@ -145,7 +145,7 @@ module.exports = (impl) ->
 		{elem} = data
 
 		elem.target = @_target._impl.elem
-		elem.easing = @_impl.easing
+		elem.easing = @_impl.easingType
 		elem.startDelay = @_startDelay
 		elem.loopDelay = @_loopDelay
 		elem.duration = @_duration
