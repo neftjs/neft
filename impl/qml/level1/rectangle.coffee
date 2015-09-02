@@ -3,6 +3,9 @@
 module.exports = (impl) ->
 	{Item} = impl.Types
 
+	COLOR_RESOURCE_REQUEST =
+		property: 'color'
+
 	DATA = {}
 
 	DATA: DATA
@@ -24,12 +27,14 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 	setRectangleColor: (val) ->
+		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.elem.color = impl.utils.toQtColor val
 
 	setRectangleRadius: (val) ->
 		@_impl.elem.radius = val
 
 	setRectangleBorderColor: (val) ->
+		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.elem.borderItem.border.color = impl.utils.toQtColor val
 
 	setRectangleBorderWidth: (val) ->

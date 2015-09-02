@@ -4,6 +4,9 @@ module.exports = (impl) ->
 	{items} = impl
 	{round} = Math
 
+	COLOR_RESOURCE_REQUEST =
+		property: 'color'
+
 	NOP = ->
 
 	getRectangleSource = (item) ->
@@ -12,6 +15,8 @@ module.exports = (impl) ->
 		height = round item.height * pixelRatio
 		radius = round item.radius * pixelRatio
 		strokeWidth = round Math.min(item.border.width * 2 * pixelRatio, width, height)
+		color = impl.Renderer.resources?.resolve(item.color, COLOR_RESOURCE_REQUEST) or item.color
+		borderColor = impl.Renderer.resources?.resolve(item.border.color, COLOR_RESOURCE_REQUEST) or item.border.color
 
 		if width <= 0 or height <= 0
 			item._impl.isRectVisible = false
@@ -28,8 +33,8 @@ module.exports = (impl) ->
 			"</clipPath>" +
 			"<rect " +
 				"clip-path='url(#clip)' " +
-				"fill='#{item.color}' " +
-				"stroke='#{item.border.color}' " +
+				"fill='#{color}' " +
+				"stroke='#{borderColor}' " +
 				"stroke-width='#{strokeWidth}' " +
 				"rx='#{radius}' " +
 				"width='#{width}' height='#{height}' />" +

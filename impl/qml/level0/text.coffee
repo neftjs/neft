@@ -53,6 +53,9 @@ module.exports = (impl) ->
 			@_impl.listensOnFontLoaded = false
 		return
 
+	COLOR_RESOURCE_REQUEST =
+		property: 'color'
+
 	DATA =
 		autoWidth: true
 		autoHeight: true
@@ -103,9 +106,11 @@ module.exports = (impl) ->
 		updateSize.call @
 
 	setTextColor: (val) ->
+		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.elem.color = impl.utils.toQtColor val
 
 	setTextLinkColor: (val) ->
+		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.elem.linkColor = impl.utils.toQtColor val
 
 	setTextLineHeight: (val) ->

@@ -57,6 +57,9 @@ module.exports = (impl) ->
 			updateSize.call @
 		return
 
+	COLOR_RESOURCE_REQUEST =
+		property: 'color'
+
 	DATA =
 		autoWidth: true
 		autoHeight: true
@@ -106,6 +109,7 @@ module.exports = (impl) ->
 		return
 
 	setTextColor: (val) ->
+		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.textStyle.fill = val
 		updateTextStyle.call @
 		return
