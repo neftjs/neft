@@ -234,6 +234,7 @@ module.exports = (impl) ->
 						'anchors.fill: parent;' +
 					'}'
 				, data.elem)
+				mouseArea.enabled = @_ref.pointer.captureEvents
 
 			# hover
 			if HOVER_SIGNALS[uniqueName]
@@ -276,3 +277,7 @@ module.exports = (impl) ->
 				attachKeys.call @, ns, name, uniqueName
 			else
 				attachPointer.call @, ns, name, uniqueName
+
+	setItemPointerCaptureEvents: (val) ->
+		@_impl.mouseArea?.enabled = val
+		return

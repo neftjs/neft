@@ -69,4 +69,6 @@ module.exports = (impl) ->
 
 	attachItemSignal: (name, signal) ->
 
+	setItemPointerCaptureEvents: (val) ->
+
 	setItemKeysFocus: (val) ->

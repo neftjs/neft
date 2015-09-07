@@ -22,6 +22,9 @@ Rectangle {
 
 	utils = require 'utils'
 	signal = require 'signal'
+	assert = require 'assert'
+
+	NOP = ->
 
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Pointer extends itemUtils.DeepObject
 		@__name__ = 'Pointer'
@@ -37,6 +40,7 @@ Rectangle {
 This class enables mouse and touch handling.
 
 		constructor: (ref) ->
+			@_captureEvents = true
 			@_x = 0
 			@_y = 0
 			@_pressed = false
@@ -44,6 +48,21 @@ This class enables mouse and touch handling.
 			@_pressedInitialized = false
 			@_hoverInitialized = false
 			super ref
+
+*Boolean* Pointer::captureEvents = true
+---------------------------------------
+
+### *Signal* Pointer::onCaptureEventsChange(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: Pointer
+			name: 'captureEvents'
+			defaultValue: true
+			namespace: 'pointer'
+			parentConstructor: ctor
+			implementation: Impl.setItemPointerCaptureEvents
+			developmentSetter: (val) ->
+				assert.isBoolean val
 
 *Signal* Pointer::onClick(*Object* event)
 -----------------------------------------
@@ -87,6 +106,12 @@ This signal is called when the pointer position changed.
 		onLazySignalInitialized = (pointer, name) ->
 			Impl.attachItemSignal.call pointer, 'pointer', name
 
+			if name is 'onPress' or name is 'onRelease'
+				intitializePressed pointer
+			if name is 'onEnter' or name is 'onExit'
+				initializeHover pointer
+			return
+
 		@SIGNALS = ['onClick', 'onPress', 'onRelease',
 		            'onEnter', 'onExit', 'onWheel', 'onMove']
 
@@ -100,16 +125,18 @@ This property holds whether the pointer is currently pressed.
 
 ### *Signal* Pointer::onPressedChange(*Boolean* oldValue)
 
-		pressedInitializer = do ->
+		intitializePressed = do ->
 			onPress = ->
 				@pressed = true
-				signal.STOP_PROPAGATION
 			onRelease = ->
 				@pressed = false
 
 			(pointer) ->
-				pointer.onPress onPress
-				pointer.onRelease onRelease
+				unless pointer._pressedInitialized
+					pointer._pressedInitialized = true
+					pointer.onPress onPress
+					pointer.onRelease onRelease
+				return
 
 		itemUtils.defineProperty
 			constructor: Pointer
@@ -117,11 +144,9 @@ This property holds whether the pointer is currently pressed.
 			defaultValue: false
 			namespace: 'pointer'
 			parentConstructor: ctor
-			signalInitializer: pressedInitializer
+			signalInitializer: intitializePressed
 			getter: (_super) -> ->
-				unless @_pressedInitialized
-					pressedInitializer @
-					@_pressedInitialized = true
+				intitializePressed @
 				_super.call @
 
 *Boolean* Pointer::hover = false
@@ -131,15 +156,18 @@ This property holds whether the pointer is currently under the item.
 
 ### *Signal* Pointer::onHoverChange(*Boolean* oldValue)
 
-		hoverInitializer = do ->
+		initializeHover = do ->
 			onEnter = ->
 				@hover = true
 			onExit = ->
 				@hover = false
 
 			(pointer) ->
-				pointer.onEnter onEnter
-				pointer.onExit onExit
+				unless pointer._hoverInitialized
+					pointer._hoverInitialized = true
+					pointer.onEnter onEnter
+					pointer.onExit onExit
+				return
 
 		itemUtils.defineProperty
 			constructor: Pointer
@@ -147,9 +175,7 @@ This property holds whether the pointer is currently under the item.
 			defaultValue: false
 			namespace: 'pointer'
 			parentConstructor: ctor
-			signalInitializer: hoverInitializer
+			signalInitializer: initializeHover
 			getter: (_super) -> ->
-				unless @_hoverInitialized
-					hoverInitializer @
-					@_hoverInitialized = true
+				initializeHover @
 				_super.call @
