@@ -161,6 +161,7 @@ module.exports = (impl) ->
 		propertySetter: null
 		isIntegerProperty: false
 		easing: null
+		startDelay: 0
 
 	DATA: DATA
 
@@ -181,6 +182,8 @@ module.exports = (impl) ->
 	setPropertyAnimationDuration: (val) ->
 
 	setPropertyAnimationStartDelay: (val) ->
+		@_impl.startTime += val - @_impl.startDelay
+		@_impl.startDelay = val
 
 	setPropertyAnimationLoopDelay: (val) ->
 
