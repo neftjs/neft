@@ -58,7 +58,11 @@ Determines whether application is run in the browser environment.
 
 Determines whether application is a part of the *QML* program.
 
-	exports.isNode = exports.isServer = exports.isClient = exports.isBrowser = exports.isQml = false
+*Boolean* utils.isAndroid
+-------------------------
+
+	exports.isNode = exports.isServer = exports.isClient =
+	exports.isBrowser = exports.isQml = exports.isAndroid = false
 
 	switch true
 
@@ -67,6 +71,9 @@ Determines whether application is a part of the *QML* program.
 
 		when Qt?.include?
 			exports.isClient = exports.isQml = true
+
+		when android?
+			exports.isClient = exports.isAndroid = true
 
 		when process? and Object.prototype.toString.call(process) is '[object process]'
 			exports.isNode = exports.isServer = true
