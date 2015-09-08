@@ -319,7 +319,7 @@ exports.checkWatchersDeeply = (tag) ->
 				if watcher is null
 					watchers.splice i, 1
 					i--; n--
-				else if watcher.test(tag)
+				else if (not tag._inWatchers or !utils.has(tag._inWatchers, watcher)) and watcher.test(tag)
 					tag._inWatchers ?= []
 					tag._inWatchers.push watcher
 					emitSignal watcher, 'onAdd', tag
