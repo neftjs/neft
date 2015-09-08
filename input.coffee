@@ -23,6 +23,14 @@ module.exports = (File) -> class Input
 
 	cache = {}
 
+	GLOBAL =
+		Math: Math
+		Array: Array
+		Object: Object
+		Number: Number
+		RegExp: RegExp
+		String: String
+
 	@getVal = do ->
 		getFromElement = (elem, prop) ->
 			if elem instanceof Element
@@ -58,6 +66,8 @@ module.exports = (File) -> class Input
 				v = getFromObject file.storage, prop
 			if v is undefined
 				v = getElement file, prop
+			if v is undefined
+				v = GLOBAL[prop]
 
 			v
 
@@ -296,7 +306,7 @@ module.exports = (File) -> class Input
 			try
 				callFunc.call @
 			catch err
-				log.warn "Interpolated string error in '#{@text}';\n#{err}"
+				log.warn "Interpolated string error in '#{@text}';\n#{err.stack || err}"
 
 	clone: (original, self) ->
 		node = original.node.getCopiedElement @node, self.node
