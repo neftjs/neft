@@ -142,8 +142,9 @@ stack.runAllSimultaneously(function(){
 		constructor: ->
 			# One-deep array of added functions in schema [function, context, args, ...]
 			@_arr = []
+			@length = 0
 
-			Object.freeze @
+			Object.preventExtensions @
 
 Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
 --------------------------------------------------------------------------
@@ -183,6 +184,7 @@ stack.runAll(function(err, result){
 			assert utils.isObject args if args?
 
 			@_arr.push func, context, args
+			@length++
 			@
 
 Stack::callNext([*Array* arguments], *Function* callback)
@@ -204,6 +206,7 @@ Calls first function from the stack and remove it.
 				return callback()
 
 			# get next
+			@length--
 			func = @_arr.shift()
 			context = @_arr.shift()
 			funcArgs = @_arr.shift()
@@ -249,7 +252,7 @@ Calls first function from the stack and remove it.
 
 			null
 
-Stack::runAll(*Function* callback, [*Any* callbackContext])
+Stack::runAll([*Function* callback, *Any* callbackContext])
 -----------------------------------------------------------
 
 Calls all functions from the stack one by one.
@@ -258,7 +261,7 @@ Calls all functions from the stack one by one.
 
 Processing stops on error occurs, then *callback* function is called with the got error.
 
-		runAll: (callback, ctx=null) ->
+		runAll: (callback=NOP, ctx=null) ->
 			if typeof callback isnt 'function'
 				throw new TypeError "ASync runAll(): passed callback is not a function"
 
@@ -282,14 +285,14 @@ Processing stops on error occurs, then *callback* function is called with the go
 
 			null
 
-Stack::runAllSimultaneously(*Function* callback, [*Any* callbackContext])
+Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
 -------------------------------------------------------------------------
 
 Calls all functions from the stack simultaneously (all at the same time).
 
 Processing stops on error occurs, then *callback* function is called with the got error.
 
-		runAllSimultaneously: (callback, ctx=null) ->
+		runAllSimultaneously: (callback=NOP, ctx=null) ->
 			assert typeof callback is 'function'
 
 			length = n = @_arr.length / 3
