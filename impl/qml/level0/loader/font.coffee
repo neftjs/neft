@@ -12,7 +12,7 @@ module.exports = (impl) ->
 		onLoaded = ->
 			if @status is FontLoader.Ready
 				impl.fonts[name] = @name
-				impl.onFontLoaded name
+				impl.onFontLoaded.emit name
 			return
 
 		if rsc = impl.Renderer.resources.getResource(source)
@@ -27,6 +27,6 @@ module.exports = (impl) ->
 		if elem.status is FontLoader.Ready
 			onLoaded.call elem
 		else
-			elem.onStatusChange.connect elem, onLoaded
+			elem.onStatusChanged.connect elem, onLoaded
 
 		return

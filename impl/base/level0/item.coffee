@@ -71,4 +71,8 @@ module.exports = (impl) ->
 
 	setItemPointerCaptureEvents: (val) ->
 
+	setItemPointerDraggable: (val) ->
+
+	setItemPointerDragging: (val) ->
+
 	setItemKeysFocus: (val) ->

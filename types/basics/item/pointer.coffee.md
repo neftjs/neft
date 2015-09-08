@@ -41,6 +41,8 @@ This class enables mouse and touch handling.
 
 		constructor: (ref) ->
 			@_captureEvents = true
+			@_draggable = false
+			@_dragging = false
 			@_x = 0
 			@_y = 0
 			@_pressed = false
@@ -61,6 +63,36 @@ This class enables mouse and touch handling.
 			namespace: 'pointer'
 			parentConstructor: ctor
 			implementation: Impl.setItemPointerCaptureEvents
+			developmentSetter: (val) ->
+				assert.isBoolean val
+
+*Boolean* Pointer::draggable = false
+------------------------------------
+
+### *Signal* Pointer::onDraggableChange(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: Pointer
+			name: 'draggable'
+			defaultValue: false
+			namespace: 'pointer'
+			parentConstructor: ctor
+			implementation: Impl.setItemPointerDraggable
+			developmentSetter: (val) ->
+				assert.isBoolean val
+
+*Boolean* Pointer::dragging = false
+-----------------------------------
+
+### *Signal* Pointer::onDraggingChange(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: Pointer
+			name: 'dragging'
+			defaultValue: false
+			namespace: 'pointer'
+			parentConstructor: ctor
+			implementation: Impl.setItemPointerDragging
 			developmentSetter: (val) ->
 				assert.isBoolean val
 
@@ -103,8 +135,23 @@ The *event* object contains x and y delta.
 
 This signal is called when the pointer position changed.
 
+*Signal* Pointer::onDragStart()
+-------------------------------
+
+*Signal* Pointer::onDragEnd()
+-----------------------------
+
+*Signal* Pointer::onDragEnter()
+-------------------------------
+
+*Signal* Pointer::onDragExit()
+------------------------------
+
+*Signal* Pointer::onDrop()
+--------------------------
+
 		onLazySignalInitialized = (pointer, name) ->
-			Impl.attachItemSignal.call pointer, 'pointer', name
+			Impl.attachItemSignal.call pointer, 'pointer', name # TODO: send here an item
 
 			if name is 'onPress' or name is 'onRelease'
 				intitializePressed pointer
@@ -113,7 +160,9 @@ This signal is called when the pointer position changed.
 			return
 
 		@SIGNALS = ['onClick', 'onPress', 'onRelease',
-		            'onEnter', 'onExit', 'onWheel', 'onMove']
+		            'onEnter', 'onExit', 'onWheel', 'onMove',
+		            'onDragStart', 'onDragEnd',
+		            'onDragEnter', 'onDragExit', 'onDrop']
 
 		for signalName in @SIGNALS
 			signal.Emitter.createSignal @, signalName, onLazySignalInitialized

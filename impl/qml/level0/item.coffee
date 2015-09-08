@@ -89,6 +89,9 @@ SIGNALS =
 	'pointerOnExit': 'onExited'
 	'pointerOnMove': 'onPositionChanged'
 	'pointerOnWheel': 'onWheel'
+	'pointerOnDragEnter': 'onEntered'
+	'pointerOnDragExit': 'onExited'
+	'pointerOnDrop': 'onDropped'
 	'keysOnPress': 'onPressed'
 	'keysOnHold': 'onPressed'
 	'keysOnRelease': 'onReleased'
@@ -98,6 +101,11 @@ HOVER_SIGNALS =
 	'pointerOnEnter': true
 	'pointerOnExit': true
 	'pointerOnMove': true
+
+DRAG_SIGNALS =
+	'pointerOnDragEnter': true
+	'pointerOnDragExit': true
+	'pointerOnDrop': true
 
 SIGNALS_CURSORS =
 	'pointerOnClick': Qt.PointingHandCursor
@@ -144,18 +152,61 @@ SIGNALS_ARGS =
 		text: e.text
 
 module.exports = (impl) ->
+	mouseActivePointer = null
+
 	# always accepts pointer on impl.window
-	if __stylesMouseArea? then do ->
-		__stylesMouseArea.onPressed.connect (e) ->
-			e.accepted = true
-		__stylesMouseArea.onPositionChanged.connect (e) ->
-			impl.window?._impl.mouseArea.onPositionChanged e
-		__stylesMouseArea.onReleased.connect (e) ->
-			impl.window?._impl.mouseArea.onReleased e
+	__stylesMouseArea.onPressed.connect (e) ->
+		e.accepted = true
+
+	__stylesMouseArea.onPositionChanged.connect (e) ->
+		target = mouseActivePointer or impl.window?.pointer
+		if target and (mouseArea = target._ref._impl.mouseArea)
+			event = SIGNALS_ARGS.pointerOnMove.call mouseArea, e
+			target.onMove.emit event
+
+	__stylesMouseArea.onReleased.connect (e) ->
+		mouseActivePointer ?= impl.window?.pointer
+		if mouseActivePointer and (mouseArea = mouseActivePointer._ref._impl.mouseArea)
+			event = SIGNALS_ARGS.pointerOnRelease.call mouseArea, e
+			mouseActivePointer.onRelease.emit event
+		mouseActivePointer = null
+
+	getMouseArea = do ->
+		onActiveChanged = ->
+			targetDrag = @_impl.elem.Drag
+			if targetDrag.active = @pointer.dragging = @_impl.mouseArea.drag.active
+				@pointer.onDragStart.emit()
+				targetDrag.hotSpot.x = @_impl.mouseArea.mouseX
+				targetDrag.hotSpot.y = @_impl.mouseArea.mouseY
+			else
+				@pointer.onDragEnd.emit()
+
+		(item) ->
+			unless mouseArea = item._impl.mouseArea
+				mouseArea = item._impl.mouseArea = impl.utils.createQmlObject(
+					'MouseArea {' +
+						'property bool accepts: false;' +
+						'onPressed: mouse.accepted = this.accepts || this.drag.target;' +
+						'onReleased: { if (this.drag.active) { this.drag.target.Drag.drop(); } }' +
+						'anchors.fill: parent;' +
+					'}'
+				, item._impl.elem)
+				mouseArea.drag.onActiveChanged.connect item, onActiveChanged
+			mouseArea
+
+	getDropArea = (item) ->
+		unless dropArea = item._impl.dropArea
+			dropArea = item._impl.dropArea = impl.utils.createQmlObject(
+				'DropArea {' +
+					'anchors.fill: parent;' +
+				'}'
+			, item._impl.elem)
+		dropArea
 
 	DATA =
 		elem: null
 		mouseArea: null
+		dropArea: null
 		linkUri: ''
 		linkUriListens: false
 		bindings: null
@@ -221,48 +272,54 @@ module.exports = (impl) ->
 			return
 
 	attachItemSignal: do ->
-		attachPointer = (ns, name, uniqueName) ->
+		attachPointerDrag = (ns, name, uniqueName, qmlName) ->
 			self = @
 			data = @_ref._impl
 
 			# create mouse area if needed
-			unless mouseArea = data.mouseArea
-				mouseArea = data.mouseArea = impl.utils.createQmlObject(
-					'MouseArea {' +
-						'property bool accepts: false;' +
-						'onPressed: mouse.accepted = this.accepts;' +
-						'anchors.fill: parent;' +
-					'}'
-				, data.elem)
-				mouseArea.enabled = @_ref.pointer.captureEvents
+			dropArea = getDropArea @_ref
+
+			# listen on an event
+			customFunc = (e) ->
+				arg = SIGNALS_ARGS[uniqueName]?.call dropArea, e
+				self[name].emit arg
+				return
+
+			dropArea[qmlName].connect @, customFunc
+			return
+
+		attachPointerMouse = (ns, name, uniqueName, qmlName) ->
+			self = @
+			data = @_ref._impl
+
+			# create mouse area if needed
+			mouseArea = getMouseArea @_ref
 
 			# hover
 			if HOVER_SIGNALS[uniqueName]
 				mouseArea.hoverEnabled = true
 
 			# listen on an event
-			qmlName = SIGNALS[uniqueName]
-
 			customFunc = (e) ->
 				arg = SIGNALS_ARGS[uniqueName]?.call mouseArea, e
 				e?.accepted = false
-				if self[name].emit(arg) is signal.STOP_PROPAGATION and e?
+				if self[name].emit(arg) is signal.STOP_PROPAGATION and e? and uniqueName is 'pointerOnPress'
+					mouseActivePointer = @
 					e.accepted = true
 				return
 
 			if uniqueName is 'pointerOnClick'
-				mouseArea.accepts = true;
+				mouseArea.accepts = true
 
-			mouseArea[qmlName].connect customFunc
+			mouseArea[qmlName].connect @, customFunc
 
 			# cursor
 			if cursor = SIGNALS_CURSORS[uniqueName]
 				mouseArea.cursorShape = cursor
 			return
 
-		attachKeys = (ns, name, uniqueName) ->
+		attachKeys = (ns, name, uniqueName, qmlName) ->
 			self = @
-			qmlName = SIGNALS[uniqueName]
 			__stylesWindow.Keys[qmlName].connect (e) ->
 				arg = SIGNALS_ARGS[uniqueName] e
 				if self[name].emit(arg) is signal.STOP_PROPAGATION
@@ -272,12 +329,27 @@ module.exports = (impl) ->
 
 		(ns, name) ->
 			uniqueName = ns + utils.capitalize(name)
+			unless qmlName = SIGNALS[uniqueName]
+				return
 
 			if ns is 'keys'
-				attachKeys.call @, ns, name, uniqueName
+				attachKeys.call @, ns, name, uniqueName, qmlName
+			else if DRAG_SIGNALS[uniqueName]
+				attachPointerDrag.call @, ns, name, uniqueName, qmlName
 			else
-				attachPointer.call @, ns, name, uniqueName
+				attachPointerMouse.call @, ns, name, uniqueName, qmlName
 
 	setItemPointerCaptureEvents: (val) ->
-		@_impl.mouseArea?.enabled = val
+		mouseArea = getMouseArea @
+		mouseArea.enabled = val
+		return
+
+	setItemPointerDraggable: (val) ->
+		mouseArea = getMouseArea @
+		mouseArea.drag.target = if val then mouseArea.parent else null
+		return
+
+	setItemPointerDragging: (val) ->
+		mouseArea = getMouseArea @
+		@_impl.elem.Drag.active = val
 		return

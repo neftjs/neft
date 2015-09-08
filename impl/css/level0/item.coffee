@@ -73,24 +73,24 @@ module.exports = (impl) ->
 
 	impl._SIGNALS = SIGNALS
 
-	mouseActiveItem = null
+	mouseActivePointer = null
 
 	# window.addEventListener SIGNALS.pointerWheel, (e) ->
 	# 	e.preventDefault()
 	# , true
 
-	window.addEventListener SIGNALS.pointerOnRelease, (e) ->
-		mouseActiveItem ?= impl.window?.pointer
+	window.addEventListener SIGNALS.pointerOnMove, (e) ->
+		target = mouseActivePointer or impl.window?.pointer
 		event = getMouseEvent e
-		mouseActiveItem?.onRelease.emit event
-		mouseActiveItem = null
-		document.body.setAttribute 'class', ''
+		target?.onMove.emit event
 		return
 
-	window.addEventListener SIGNALS.pointerOnMove, (e) ->
-		mouseActiveItem ?= impl.window?.pointer
+	window.addEventListener SIGNALS.pointerOnRelease, (e) ->
+		mouseActivePointer ?= impl.window?.pointer
 		event = getMouseEvent e
-		mouseActiveItem?.onMove.emit event
+		mouseActivePointer?.onRelease.emit event
+		mouseActivePointer = null
+		document.body.setAttribute 'class', ''
 		return
 
 	# window.addEventListener 'touchstart', (e) ->
@@ -273,7 +273,7 @@ module.exports = (impl) ->
 
 		customFunc = (e) ->
 			arg = SIGNALS_ARGS[name]? e
-			if arg is false or e._accepted
+			if arg is false or e._accepted# or mouseActivePointer
 				return
 
 			if name is 'pointerOnMove'
@@ -282,14 +282,14 @@ module.exports = (impl) ->
 			if self[signalName].emit(arg) is signal.STOP_PROPAGATION
 				if name is 'pointerOnPress'
 					document.body.setAttribute 'class', 'unselectable'
-					mouseActiveItem = self
+					mouseActivePointer = self
 				e.stopPropagation()
 				if e.cancelable and implName isnt 'touchend' and implName isnt 'touchstart'
 					e.preventDefault()
 			return
 
 		if typeof implName is 'string'
-			if name isnt 'pointerOnRelease'
+			if name isnt 'pointerOnRelease' and name isnt 'pointerOnMove'
 				elem.addEventListener implName, customFunc, false
 
 		# cursor

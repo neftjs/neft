@@ -49,7 +49,7 @@ module.exports = (impl) ->
 		fontFamily = @_impl.fontFamily
 		if name is fontFamily
 			@_impl.elem.font.family = impl.fonts[fontFamily]
-			impl.fontLoaded.disconnect onFontLoaded, @
+			impl.onFontLoaded.disconnect onFontLoaded, @
 			@_impl.listensOnFontLoaded = false
 		return
 

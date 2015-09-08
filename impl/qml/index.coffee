@@ -32,6 +32,8 @@ module.exports = (impl) ->
 		PropertyAnimation: require './level1/animation/property'
 		NumberAnimation: require './level1/animation/number'
 
+		Scrollable: require './level2/scrollable'
+
 	setWindow: (item) ->
 		while child = __stylesBody.children[0]
 			child.parent = null
