@@ -14,22 +14,18 @@ PHRASING_ELEMENTS = ["A", "EM", "STRONG", "SMALL", "MARK", "ABBR",
                      "CANVAS", "TIME", "METER"]
 
 isRemove = (node) ->
-	switch node.name
-		when '#text'
-			if WHITE_SPACE_RE.test node.text then return true
+	if 'text' of node
+		if WHITE_SPACE_RE.test(node.text)
+			return true
 
-			unless ~PHRASING_ELEMENTS.indexOf node.parent.name
-				node.text = node.text
-					.replace(WHITE_SPACES_RE, '')
-					.replace(LINE_BREAKERS_RE, '')
+		unless ~PHRASING_ELEMENTS.indexOf(node.parent.name.toUpperCase()) # TODO: optimize it
+			node.text = node.text
+				.replace(WHITE_SPACES_RE, '')
+				.replace(LINE_BREAKERS_RE, '')
 
-			false
-
-		else
-			false
+	false
 
 removeEmptyTexts = (node) ->
-
 	nodes = node.children
 	return unless nodes
 	length = nodes.length
