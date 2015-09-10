@@ -174,7 +174,8 @@ module.exports = (File, data) -> class Style
 			globalShowDelay += showEvent.delay
 			showEvent.delay = 0
 
-		@item.visible = false
+		@item.visible = not @isAutoParent and @visible
+		@item.document.visible = false
 		@file.readyToUse = false
 		stylesToRender.push @
 		updateWhenPossible @
@@ -238,7 +239,8 @@ module.exports = (File, data) -> class Style
 
 		itemDocumentNode = @item.document.node
 		@item.document.node = null
-		@item.visible = false
+		@item.visible = @visible
+		@item.document.visible = true
 
 		tmpNode = @node
 		while tmpNode = tmpNode._parent
