@@ -152,7 +152,7 @@ updateItem = (item) ->
 		last = rowsPositions[i] += last
 	rowsPositions[i-1] -= rowSpacing
 	if autoHeight
-		freeColumnsSpace = 0
+		freeRowsSpace = 0
 	else
 		lastRowPosition = rowsPositions[i-1]
 		rowsPositions[i-1] = Math.max rowsPositions[i-1], effectItem._height
@@ -207,11 +207,17 @@ updateItem = (item) ->
 		if layout
 			# set width
 			if layout._fillWidth and not autoWidth
-				child.width = columnsPositions[column] - columnX - leftMargin - rightMargin
-			
+				width = columnsPositions[column] - columnX - leftMargin - rightMargin
+				if column isnt lastColumn
+					width -= columnSpacing
+				child.width = width
+
 			# set height
 			if layout._fillHeight and not autoHeight
-				child.height = rowsPositions[row] - rowY - topMargin - bottomMargin
+				height = rowsPositions[row] - rowY - topMargin - bottomMargin
+				if row isnt lastRow
+					height -= rowSpacing
+				child.height = height
 
 		# set x
 		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right) and not anchors?._autoX)
