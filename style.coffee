@@ -174,6 +174,7 @@ module.exports = (File, data) -> class Style
 			globalShowDelay += showEvent.delay
 			showEvent.delay = 0
 
+		@item.visible = false
 		@file.readyToUse = false
 		stylesToRender.push @
 		updateWhenPossible @
@@ -188,6 +189,7 @@ module.exports = (File, data) -> class Style
 			unless utils.isEqual(classes.items(), @classes)
 				@classes = utils.clone(classes.items())
 
+		@item.visible = @visible
 		@item.document.node = @node
 		@item.document.visible = true
 		@updateText()
@@ -236,6 +238,7 @@ module.exports = (File, data) -> class Style
 
 		itemDocumentNode = @item.document.node
 		@item.document.node = null
+		@item.visible = false
 
 		tmpNode = @node
 		while tmpNode = tmpNode._parent
@@ -321,7 +324,7 @@ module.exports = (File, data) -> class Style
 		return
 
 	updateVisibility: ->
-		if @waiting or not @item
+		if @waiting or not @item or not @visible
 			return
 
 		visible = true
@@ -332,9 +335,7 @@ module.exports = (File, data) -> class Style
 			if not visible or not tmpNode or tmpNode.attrs.has('neft:style')
 				break
 
-		if @visible isnt visible
-			@visible = visible
-			@item.visible = visible
+		@item.visible = visible
 		return
 
 	ATTR_PRIMITIVE_VALUES =
@@ -487,6 +488,7 @@ module.exports = (File, data) -> class Style
 			return
 
 		if @item and @isAutoParent
+			@item.visible = @visible
 			@item.parent = null
 
 		if @item
@@ -548,6 +550,7 @@ module.exports = (File, data) -> class Style
 
 		@node._documentStyle = @
 		@node.style = @item
+		@visible = @item.visible
 
 		if @isLink()
 			@item.linkUri = @getLinkUri()
@@ -560,9 +563,10 @@ module.exports = (File, data) -> class Style
 
 	findItemWithParent = (item, parent) ->
 		tmp = item
-		while tmp = tmp._parent
-			if tmp is parent
+		while tmp and (tmpParent = tmp._parent)
+			if tmpParent is parent
 				return tmp
+			tmp = tmpParent
 		return
 
 	findItemIndex = (node, item, parent) ->
@@ -578,9 +582,10 @@ module.exports = (File, data) -> class Style
 
 			# tmpSiblingNode = tmpIndexNode
 			# while tmpSiblingNode = tmpSiblingNode._previousSibling
-			# 	if tmpSiblingNode._documentStyle?.item?.parent is parent
-			# 		item.index = tmpSiblingNode._documentStyle.item.index + 1
-			# 		return
+			# 	if tmpSiblingItem = tmpSiblingNode._documentStyle?.item
+			# 		if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
+			# 			item.index = tmpSiblingTargetItem.index + 1
+			# 			return
 			if tmpIndexNode isnt node and tmpIndexNode.style
 				return
 			tmpIndexNode = tmpIndexNode._parent
