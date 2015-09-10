@@ -10,6 +10,8 @@ log = log.scope 'Rendering', 'Anchors'
 module.exports = (impl) ->
 	NOP = ->
 
+	MAX_LOOPS = 10
+
 	getItemProp =
 		left: 'x'
 		top: 'y'
@@ -17,18 +19,18 @@ module.exports = (impl) ->
 		bottom: 'y'
 		horizontalCenter: 'x'
 		verticalCenter: 'y'
-		fillWidthSize: 'width'
-		fillHeightSize: 'height'
+		fillWidth: 'width'
+		fillHeight: 'height'
 
 	getSourceWatchProps =
-		left: []
-		top: []
-		right: ['onWidthChange']
-		bottom: ['onHeightChange']
-		horizontalCenter: ['onWidthChange']
-		verticalCenter: ['onHeightChange']
-		fillWidthSize: []
-		fillHeightSize: []
+		left: ['onMarginChange']
+		top: ['onMarginChange']
+		right: ['onMarginChange', 'onWidthChange']
+		bottom: ['onMarginChange', 'onHeightChange']
+		horizontalCenter: ['onMarginChange', 'onWidthChange']
+		verticalCenter: ['onMarginChange', 'onHeightChange']
+		fillWidth: ['onPaddingChange']
+		fillHeight: ['onPaddingChange']
 
 	getTargetWatchProps =
 		left:
@@ -49,11 +51,11 @@ module.exports = (impl) ->
 		verticalCenter:
 			parent: ['onHeightChange']
 			sibling: ['onYChange', 'onHeightChange']
-		fillWidthSize:
+		fillWidth:
 			parent: ['onWidthChange']
 			children: []
 			sibling: ['onWidthChange']
-		fillHeightSize:
+		fillHeight:
 			parent: ['onHeightChange']
 			children: []
 			sibling: ['onHeightChange']
@@ -71,9 +73,9 @@ module.exports = (impl) ->
 			- item._width / 2
 		verticalCenter: (item) ->
 			- item._height / 2
-		fillWidthSize: (item) ->
+		fillWidth: (item) ->
 			0
-		fillHeightSize: (item) ->
+		fillHeight: (item) ->
 			0
 
 	getTargetValue =
@@ -107,7 +109,7 @@ module.exports = (impl) ->
 				target._height / 2
 			sibling: (target) ->
 				target._y + target._height / 2
-		fillWidthSize:
+		fillWidth:
 			parent: (target) ->
 				target._width
 			children: (target) ->
@@ -121,7 +123,7 @@ module.exports = (impl) ->
 				size
 			sibling: (target) ->
 				target._width
-		fillHeightSize:
+		fillHeight:
 			parent: (target) ->
 				target._height
 			children: (target) ->
@@ -136,6 +138,8 @@ module.exports = (impl) ->
 			sibling: (target) ->
 				target._height
 
+	NOP_VALUE_GETTER = (arg1) -> 0
+
 	getMarginValue =
 		left: (margin) ->
 			margin._left
@@ -149,10 +153,20 @@ module.exports = (impl) ->
 			margin._left - margin._right
 		verticalCenter: (margin) ->
 			margin._top - margin._bottom
-		fillWidthSize: (margin) ->
-			- margin._left - margin._right
-		fillHeightSize: (margin) ->
-			- margin._top - margin._bottom
+		fillWidth: NOP_VALUE_GETTER
+		fillHeight: NOP_VALUE_GETTER
+
+	getPaddingValue =
+		left: NOP_VALUE_GETTER
+		top: NOP_VALUE_GETTER
+		right: NOP_VALUE_GETTER
+		bottom: NOP_VALUE_GETTER
+		horizontalCenter: NOP_VALUE_GETTER
+		verticalCenter: NOP_VALUE_GETTER
+		fillWidth: (padding) ->
+			padding._left + padding._right
+		fillHeight: (padding) ->
+			padding._top + padding._bottom
 
 	onParentChange = (oldVal) ->
 		if oldVal
@@ -192,10 +206,10 @@ module.exports = (impl) ->
 
 	onChildInsert = (child) ->
 		child.onVisibleChange @update, @
-		if @source is 'fillWidthSize'
+		if @source is 'fillWidth'
 			child.onXChange @update, @
 			child.onWidthChange @update, @
-		if @source is 'fillHeightSize'
+		if @source is 'fillHeight'
 			child.onYChange @update, @
 			child.onHeightChange @update, @
 
@@ -204,10 +218,10 @@ module.exports = (impl) ->
 
 	onChildPop = (child) ->
 		child.onVisibleChange.disconnect @update, @
-		if @source is 'fillWidthSize'
+		if @source is 'fillWidth'
 			child.onXChange.disconnect @update, @
 			child.onWidthChange.disconnect @update, @
-		if @source is 'fillHeightSize'
+		if @source is 'fillHeight'
 			child.onYChange.disconnect @update, @
 			child.onHeightChange.disconnect @update, @
 
@@ -226,8 +240,10 @@ module.exports = (impl) ->
 
 		constructor: (@item, @source, def) ->
 			[target, line] = def
+			line ?= source
 			@target = target
 			@line = line
+			@updateLoops = 0
 
 			if target is 'parent' or item._parent is target
 				@type = 'parent'
@@ -304,9 +320,18 @@ module.exports = (impl) ->
 				r = @getSourceValue(@item) + @getTargetValue(targetItem)
 			else
 				r = 0
-			if (margin = @item._margin) and targetItem isnt @item._children
+			if margin = @item._margin
 				r += getMarginValue[@source] margin
-			@item[@prop] = r
+			if padding = @item._padding
+				r += getPaddingValue[@source] padding
+
+			if @updateLoops <= MAX_LOOPS
+				@updateLoops++
+				@item[@prop] = r
+				if --@updateLoops is MAX_LOOPS
+					log.error "Potential anchors loop detected. Recalculating on this anchor (#{@}) has been disabled."
+					@updateLoops++
+					return
 			return
 
 		destroy: ->
@@ -335,18 +360,15 @@ module.exports = (impl) ->
 			pool.push @
 			return
 
+		toString: ->
+			"#{@item.toString()}.anchors.#{@source}: #{@target}.#{@line}"
+
 	getBaseAnchors =
 		centerIn: ['horizontalCenter', 'verticalCenter']
-		fillWidth: ['horizontalCenter', 'fillWidthSize']
-		fillHeight: ['verticalCenter', 'fillHeightSize']
-		fill: ['horizontalCenter', 'verticalCenter', 'fillWidthSize', 'fillHeightSize']
+		fill: ['fillWidth', 'fillHeight']
 
 	getBaseAnchorsPerAnchorType =
 		__proto__: null
-		children:
-			fillWidth: ['fillWidthSize']
-			fillHeight: ['fillHeightSize']
-			fill: ['fillWidthSize', 'fillHeightSize']
 
 	isMultiAnchor = (source) ->
 		!!getBaseAnchors[source]

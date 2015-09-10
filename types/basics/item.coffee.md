@@ -47,6 +47,7 @@ This is a base class for everything which is visible.
 			@_keys = null
 			@_pointer = null
 			@_margin = null
+			@_padding = null
 			@_classes = null
 			super component, opts
 
@@ -699,6 +700,14 @@ This method checks whether two items are overlapped.
 ### *Signal* Item::onMarginChange(*Margin* margin)
 
 		@Margin @
+
+*Margin* Item::padding
+----------------------
+
+### *Signal* Item::onPaddingChange(*Margin* padding)
+
+		@Margin @,
+			propertyName: 'padding'
 
 *Keys* Item::keys
 -----------------

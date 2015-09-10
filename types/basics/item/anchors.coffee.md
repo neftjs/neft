@@ -343,7 +343,7 @@ Item {
 
 ### *Signal* Anchors::onFillChange(*Array* oldValue)
 
-		createAnchorProp 'fill', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ, ->
+		createAnchorProp 'fill', ONLY_TARGET_ALLOW, ->
 			if @_ref
 				[@_ref._x, @_ref._y, @_ref._width, @_ref._height]
 
@@ -352,7 +352,7 @@ Item {
 
 ### *Signal* Anchors::onFillWidthChange(*Array* oldValue)
 
-		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW | FREE_V_LINE_REQ, ->
+		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW, ->
 			if @_ref
 				[@_ref._x, @_ref._width]
 
@@ -361,6 +361,6 @@ Item {
 
 ### *Signal* Anchors::onFillHeightChange(*Array* oldValue)
 
-		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ, ->
+		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW, ->
 			if @_ref
 				[@_ref._y, @_ref._height]

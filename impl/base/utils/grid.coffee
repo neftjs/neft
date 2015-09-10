@@ -27,11 +27,11 @@ getArray = (arr, len) ->
 	arr
 
 updateItem = (item) ->
-	unless item._effectItem
+	unless effectItem = item._effectItem
 		return
 
 	{includeBorderMargins} = item
-	{children} = item._effectItem
+	{children} = effectItem
 	data = item._impl
 	{gridType} = data
 
@@ -135,8 +135,8 @@ updateItem = (item) ->
 		freeColumnsSpace = 0
 	else
 		lastColumnPosition = columnsPositions[i-1]
-		columnsPositions[i-1] = Math.max columnsPositions[i-1], item._width
-		freeColumnsSpace = Math.max 0, item._width - lastColumnPosition
+		columnsPositions[i-1] = Math.max columnsPositions[i-1], effectItem._width
+		freeColumnsSpace = Math.max 0, effectItem._width - lastColumnPosition
 
 	# expand filled columns
 	if columnsFillsSum > 0
@@ -155,8 +155,8 @@ updateItem = (item) ->
 		freeColumnsSpace = 0
 	else
 		lastRowPosition = rowsPositions[i-1]
-		rowsPositions[i-1] = Math.max rowsPositions[i-1], item._height
-		freeRowsSpace = Math.max 0, item._height - lastRowPosition
+		rowsPositions[i-1] = Math.max rowsPositions[i-1], effectItem._height
+		freeRowsSpace = Math.max 0, effectItem._height - lastRowPosition
 
 	# expand filled rows
 	if rowsFillsSum > 0
@@ -235,16 +235,16 @@ updateItem = (item) ->
 	if autoWidth
 		width = columnsPositions[maxColumnsLen-1]
 		if width > 0	
-			item._effectItem.width = width
+			effectItem.width = width
 		else
-			item._effectItem.width = 0
+			effectItem.width = 0
 
 	if autoHeight
 		height = rowsPositions[maxRowsLen-1]
 		if height > 0
-			item._effectItem.height = height
+			effectItem.height = height
 		else
-			item._effectItem.height = 0
+			effectItem.height = 0
 	return
 
 updateItems = ->
@@ -262,12 +262,12 @@ updateItems = ->
 
 update = ->
 	data = @_impl
-	if data.pending
+	if data.pending or not @_effectItem?.visible
 		return
 
 	data.pending = true
 
-	if @_updatePending
+	if data.updatePending
 		if data.gridUpdateLoops > MAX_LOOPS
 			return
 
@@ -336,16 +336,12 @@ exports.update = update
 
 exports.setEffectItem = (item, oldItem) ->
 	if oldItem
+		oldItem.onVisibleChange.disconnect update, @
 		oldItem.onChildrenChange.disconnect update, @
 		oldItem.onWidthChange.disconnect onWidthChange, @
 		oldItem.onHeightChange.disconnect onHeightChange, @
 		oldItem.children.onInsert.disconnect enableChild, @
 		oldItem.children.onPop.disconnect disableChild, @
-
-		if @_impl.autoWidth
-			oldItem.width = 0
-		if @_impl.autoHeight
-			oldItem.height = 0
 
 		for child in oldItem.children
 			disableChild.call @, child
@@ -356,6 +352,7 @@ exports.setEffectItem = (item, oldItem) ->
 		if @_impl.autoHeight = item.height is 0
 			item.height = -1
 
+		item.onVisibleChange update, @
 		item.onChildrenChange update, @
 		item.onWidthChange onWidthChange, @
 		item.onHeightChange onHeightChange, @
