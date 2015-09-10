@@ -204,7 +204,10 @@ Grid {
 ### *Signal* Class::onWhenChange(*Boolean* oldValue)
 
 			enable: ->
-				if @_running or not @_target or (@_document and @_document._query)
+				if @_running or not @_target or (hasDocQuery = (@_document and @_document._query))
+					if hasDocQuery
+						for classElem in @_document._classesInUse
+							classElem.enable()
 					return
 
 				if @_name and not @_target.classes.has(@_name)
@@ -217,6 +220,9 @@ Grid {
 
 			disable: ->
 				if not @_running or not @_target
+					if @_document and @_document._query
+						for classElem in @_document._classesInUse
+							classElem.disable()
 					return
 
 				if @_name and @_target.classes.has(@_name)
@@ -338,6 +344,7 @@ Grid {
 
 			return
 
+		# more important to less important
 		EXTRA_RESTORE_ATTRS =
 			__proto__: null
 			left: { anchors: ['x'] }
@@ -346,14 +353,24 @@ Grid {
 			bottom: { anchors: ['y'] }
 			horizontalCenter: { anchors: ['x'] }
 			verticalCenter: { anchors: ['y'] }
+			centerIn: { anchors: ['x', 'y'] }
+			fillWidth: { anchors: ['width'] }
+			fillHeight: { anchors: ['height'] }
 			fill: { anchors: ['width', 'height'] }
+			layout:
+				fillWidth: ['width', 'anchors.fillWidth', 'anchors.fill']
+				fillHeight: ['height', 'anchors.fillHeight', 'anchors.fill']
 
+		# less important to more important
 		RESTORE_ATTRS_BLOCKED_BY =
 			__proto__: null
-			x: ['anchors.left', 'anchors.right', 'anchors.horizontalCenter']
-			y: ['anchors.top', 'anchors.bottom', 'anchors.verticalCenter']
-			width: ['anchors.fill']
-			height: ['anchors.fill']
+			x: ['anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn']
+			y: ['anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn']
+			width: ['anchors.fill', 'anchors.fillWidth', 'layout.fillWidth']
+			height: ['anchors.fill', 'anchors.fillHeight', 'layout.fillHeight']
+			'anchors.fillWidth': ['layout.fillWidth']
+			'anchors.fillHeight': ['layout.fillHeight']
+			'anchors.fill': ['layout.fillWidth', 'layout.fillHeight']
 
 		restoreAttribute = (item, attr, omitClass) ->
 			assert.instanceOf item, Renderer.Item
