@@ -117,7 +117,7 @@ module.exports = (impl) ->
 				size = 0
 				for child in target
 					if child._visible
-						tmp = Math.abs(child._x) + child._width
+						tmp = child._width
 						if tmp > size
 							size = tmp
 				size
@@ -131,7 +131,7 @@ module.exports = (impl) ->
 				size = 0
 				for child in target
 					if child._visible
-						tmp = Math.abs(child._y) + child._height
+						tmp = child._height
 						if tmp > size
 							size = tmp
 				size
@@ -207,10 +207,8 @@ module.exports = (impl) ->
 	onChildInsert = (child) ->
 		child.onVisibleChange @update, @
 		if @source is 'fillWidth'
-			child.onXChange @update, @
 			child.onWidthChange @update, @
 		if @source is 'fillHeight'
-			child.onYChange @update, @
 			child.onHeightChange @update, @
 
 		@update()
@@ -219,10 +217,8 @@ module.exports = (impl) ->
 	onChildPop = (child) ->
 		child.onVisibleChange.disconnect @update, @
 		if @source is 'fillWidth'
-			child.onXChange.disconnect @update, @
 			child.onWidthChange.disconnect @update, @
 		if @source is 'fillHeight'
-			child.onYChange.disconnect @update, @
 			child.onHeightChange.disconnect @update, @
 
 		@update()
@@ -292,7 +288,7 @@ module.exports = (impl) ->
 
 		update: ->
 			# sometimes it can be already destroyed
-			if not @item or @updateLoops > MAX_LOOPS
+			if not @item or @updateLoops >= MAX_LOOPS
 				return
 
 			# targetItem can be possibly different than actual value;

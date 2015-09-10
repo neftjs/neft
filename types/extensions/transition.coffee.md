@@ -68,6 +68,7 @@ Rectangle {
 				animation.duration = @_duration * progress
 				@_durationUpdatePending = false
 
+			animation.target ?= @target
 			animation.start()
 			signal.STOP_PROPAGATION
 
@@ -139,6 +140,8 @@ Rectangle {
 				@_duration = @_animation._duration
 			return
 
+		NOP_BINDING = [(-> false)]
+
 		itemUtils.defineProperty
 			constructor: @
 			name: 'animation'
@@ -153,12 +156,13 @@ Rectangle {
 
 				if oldVal
 					oldVal.onDurationChange.disconnect onDurationChange, @
+					oldVal.target = null
 					oldVal.stop()
 
 				if val
 					val.onDurationChange onDurationChange, @
 					@_duration = val.duration
-					val.target = @target
+					val.target = null
 					val.property = @property
 				return
 
