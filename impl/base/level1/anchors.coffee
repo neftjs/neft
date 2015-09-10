@@ -291,8 +291,8 @@ module.exports = (impl) ->
 			Object.preventExtensions @
 
 		update: ->
-			# sometimes it could be already destroyed
-			unless @item
+			# sometimes it can be already destroyed
+			if not @item or @updateLoops > MAX_LOOPS
 				return
 
 			# targetItem can be possibly different than actual value;
@@ -325,13 +325,13 @@ module.exports = (impl) ->
 			if padding = @item._padding
 				r += getPaddingValue[@source] padding
 
-			if @updateLoops <= MAX_LOOPS
+			@updateLoops++
+			@item[@prop] = r
+			if @updateLoops is MAX_LOOPS
+				log.error "Potential anchors loop detected. Recalculating on this anchor (#{@}) has been disabled."
 				@updateLoops++
-				@item[@prop] = r
-				if --@updateLoops is MAX_LOOPS
-					log.error "Potential anchors loop detected. Recalculating on this anchor (#{@}) has been disabled."
-					@updateLoops++
-					return
+			else if @updateLoops < MAX_LOOPS
+				@updateLoops--
 			return
 
 		destroy: ->
@@ -430,13 +430,4 @@ module.exports = (impl) ->
 		if val
 			anchors[type] = createAnchor(@, type, val)
 
-		return
-
-	setItemMargin: do (_super = impl.setItemMargin) -> (type, val) ->
-		_super.call @, type, val
-
-		# TODO: update only needed anchors
-		if anchors = @_impl.anchors
-			for source, anchor of anchors
-				anchor?.update()
 		return
