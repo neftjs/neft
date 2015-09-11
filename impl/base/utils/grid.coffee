@@ -91,28 +91,28 @@ updateItem = (item) ->
 		height = child._height
 		margin = child._margin
 
-		if layout
-			if layout._fillWidth and not autoWidth
-				width = 0
-				unless columnsFills[column]
-					columnsFills[column] = 1
-					columnsFillsSum++
-			if layout._fillWidth and not autoHeight
-				height = 0
-				unless rowsFills[row]
-					rowsFills[row] = 1
-					rowsFillsSum++
+		if layout and layout._fillWidth and not autoWidth
+			width = 0
+			unless columnsFills[column]
+				columnsFills[column] = 1
+				columnsFillsSum++
+		if column isnt lastColumn
+			width += columnSpacing
+
+		if layout and layout._fillWidth and not autoHeight
+			height = 0
+			unless rowsFills[row]
+				rowsFills[row] = 1
+				rowsFillsSum++
+		if row isnt lastRow
+			height += rowSpacing
 
 		# margins
-		width += columnSpacing
 		if margin
 			if includeBorderMargins or column isnt 0
 				width += margin._left
 			if includeBorderMargins or column isnt lastColumn
 				width += margin._right
-
-		height += rowSpacing
-		if margin
 			if includeBorderMargins or row isnt 0
 				height += margin._top
 			if includeBorderMargins or row isnt lastRow
@@ -156,18 +156,14 @@ updateItem = (item) ->
 	last = 0
 	for i in [0...maxColumnsLen] by 1
 		last = columnsPositions[i] += last
-	if autoWidth
-		columnsPositions[lastColumn] -= columnSpacing
-	else
+	unless autoWidth
 		columnsPositions[lastColumn] = Math.max columnsPositions[lastColumn], effectItem._width
 
 	# sum rows positions
 	last = 0
 	for i in [0...maxRowsLen] by 1
 		last = rowsPositions[i] += last
-	if autoHeight
-		rowsPositions[lastRow] -= rowSpacing
-	else
+	unless autoHeight
 		rowsPositions[lastRow] = Math.max rowsPositions[lastRow], effectItem._height
 
 	# set children positions
@@ -206,33 +202,29 @@ updateItem = (item) ->
 			# set width
 			if layout._fillWidth and not autoWidth
 				width = columnsPositions[column] - columnX - leftMargin - rightMargin
-				if column isnt lastColumn
-					width -= columnSpacing
 				child.width = width
 
 			# set height
 			if layout._fillHeight and not autoHeight
 				height = rowsPositions[row] - rowY - topMargin - bottomMargin
-				if row isnt lastRow
-					height -= rowSpacing
 				child.height = height
 
 		# set x
 		if (gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right))) and not anchors?._autoX
 			x = columnX + leftMargin
 			if alignH is 'center'
-				x += (columnsPositions[column] - x - child._width) / 2 - rightMargin / 2
+				x += (columnsPositions[column] - x - columnsPositions[lastColumn]) / 2 - rightMargin / 2
 			else if alignH is 'right'
-				x += columnsPositions[column] - x - child._width - rightMargin
+				x += columnsPositions[column] - x - columnsPositions[lastColumn] - rightMargin
 			child.x = x
 
 		# set y
 		if (gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom))) and not anchors?._autoY
 			y = rowY + topMargin
 			if alignV is 'center'
-				y += (rowsPositions[row] - y - child._height) / 2 - bottomMargin / 2
+				y += (rowsPositions[row] - y - rowsPositions[lastRow]) / 2 - bottomMargin / 2
 			else if alignV is 'right'
-				y += rowsPositions[row] - y - child._height - bottomMargin
+				y += rowsPositions[row] - y - rowsPositions[lastRow1] - bottomMargin
 			child.y = y
 
 	# set item size
@@ -276,7 +268,7 @@ update = ->
 			return
 
 		if ++data.gridUpdateLoops is MAX_LOOPS
-			log.warn "Potential Grid/Column/Row loop detected. Recalculating on this item (#{@toString()}) has been disabled."
+			log.error "Potential Grid/Column/Row loop detected. Recalculating on this item (#{@toString()}) has been disabled."
 			return
 	else
 		data.gridUpdateLoops = 0

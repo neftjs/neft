@@ -3,7 +3,7 @@
 assert = require 'neft-assert'
 log = require 'log'
 
-log = log.scope 'Rendering', 'Anchors'
+log = log.scope 'Renderer', 'Anchors'
 
 {isArray} = Array
 
