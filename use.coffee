@@ -62,8 +62,8 @@ module.exports = (File) -> class Use
 
 		# destroy used fragment
 		if @usedFragment
-			@usedFragment.node.parent = undefined
 			@usedFragment.revert().destroy()
+			@usedFragment.node.parent = null
 			@usedFragment.parentUse = null
 			@usedFragment = null
 
