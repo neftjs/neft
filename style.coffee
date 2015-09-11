@@ -221,6 +221,12 @@ module.exports = (File, data) -> class Style
 		stylesToRevert.push @
 		updateWhenPossible @
 
+		# clean index finding data
+		tmpNode = @node
+		while (tmpNode = tmpNode._parent) && not tmpNode.style
+			if tmpNode.name is 'neft:use'
+				tmpNode._documentStyle = null
+
 		for child in @children
 			child.revert()
 		return
@@ -603,7 +609,8 @@ module.exports = (File, data) -> class Style
 					if style.node isnt tmpNode
 						item = item._parent
 
-				tmpNode._documentStyle ?= @
+				if tmpNode.name isnt 'neft:fragment'
+					tmpNode._documentStyle ?= @
 
 				if item
 					@item.parent = item
@@ -618,12 +625,6 @@ module.exports = (File, data) -> class Style
 
 		for child in @children
 			child.findItemParent()
-
-		# HACK
-		if item
-			while (tmpNode = tmpNode._parent) && not tmpNode.style
-				if tmpNode.name is 'neft:use'
-					tmpNode._documentStyle = tmpNode.children[0]._documentStyle
 
 		return
 
