@@ -50,27 +50,30 @@ using the [neft:use][] tag. This is fast and clean solution.
 					fragments[namespace + name] = fragment
 
 			# find fragments in file
-			children = file.node.children
-			i = -1; n = children.length
-			while ++i < n
+			forEachNodeRec = (node) ->
+				unless children = node.children
+					return
+				i = -1; n = children.length
+				while ++i < n
+					child = children[i]
 
-				node = children[i]
+					if child.name isnt 'neft:fragment'
+						forEachNodeRec child
+						continue
 
-				if node.name isnt 'neft:fragment'
-					continue
+					unless name = child.attrs.get('neft:name')
+						continue
 
-				unless name = node.attrs.get('neft:name')
-					continue
+					# remove node from file
+					child.parent = undefined
+					i--; n--
 
-				# remove node from file
-				node.parent = undefined
-				i--; n--
+					# get fragment
+					fragment = new File.Fragment file, name, child
+					fragments[name] = fragment.id
+					createdFragments.push fragment
 
-				# get fragment
-				node.name = 'neft:blank'
-				fragment = new File.Fragment file, name, node
-				fragments[name] = fragment.id
-				createdFragments.push fragment
+			forEachNodeRec file.node
 
 			# link fragments
 			for createdFragment in createdFragments
