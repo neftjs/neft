@@ -57,6 +57,9 @@ In practice, you will use the string interpolation to conditioning the result.
 					funcBody = File.Input.parse attr
 					func = File.Input.createFunction funcBody
 					condition = new File.Condition child, elseNode, func
+					`//<development>`
+					condition.text = attr
+					`//</development>`
 					condition.funcBody = funcBody
 					conditions.push condition
 				return
