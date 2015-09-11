@@ -126,45 +126,49 @@ updateItem = (item) ->
 
 		i++
 
+	# expand filled columns
+	if columnsFillsSum > 0 and not autoWidth
+		staticWidth = 0
+		for i in [0...maxColumnsLen] by 1
+			unless columnsFills[i]
+				staticWidth += columnsPositions[i]
+		freeSpace = effectItem._width - staticWidth
+		if freeSpace > 0
+			freeSpacePerColumn = freeSpace / columnsFillsSum
+			for i in [0...maxColumnsLen] by 1
+				if columnsFills[i] and columnsPositions[i] < freeSpacePerColumn
+					columnsPositions[i] += freeSpacePerColumn - columnsPositions[i]
+
+	# expand filled rows
+	if rowsFillsSum > 0 and not autoHeight
+		staticHeight = 0
+		for i in [0...maxRowsLen] by 1
+			unless rowsFills[i]
+				staticHeight += rowsPositions[i]
+		freeSpace = effectItem._height - staticHeight
+		if freeSpace > 0
+			freeSpacePerRow = freeSpace / rowsFillsSum
+			for i in [0...maxRowsLen] by 1
+				if rowsFills[i] and rowsPositions[i] < freeSpacePerRow
+					rowsPositions[i] += freeSpacePerRow - rowsPositions[i]
+
 	# sum columns positions
 	last = 0
 	for i in [0...maxColumnsLen] by 1
 		last = columnsPositions[i] += last
-	columnsPositions[i-1] -= columnSpacing
 	if autoWidth
-		freeColumnsSpace = 0
+		columnsPositions[lastColumn] -= columnSpacing
 	else
-		lastColumnPosition = columnsPositions[i-1]
-		columnsPositions[i-1] = Math.max columnsPositions[i-1], effectItem._width
-		freeColumnsSpace = Math.max 0, effectItem._width - lastColumnPosition
-
-	# expand filled columns
-	if columnsFillsSum > 0
-		sum = 0
-		for i in [0...maxColumnsLen-1] by 1
-			if columnsFills[i]
-				sum += freeColumnsSpace / columnsFillsSum
-			columnsPositions[i] += sum
+		columnsPositions[lastColumn] = Math.max columnsPositions[lastColumn], effectItem._width
 
 	# sum rows positions
 	last = 0
 	for i in [0...maxRowsLen] by 1
 		last = rowsPositions[i] += last
-	rowsPositions[i-1] -= rowSpacing
 	if autoHeight
-		freeRowsSpace = 0
+		rowsPositions[lastRow] -= rowSpacing
 	else
-		lastRowPosition = rowsPositions[i-1]
-		rowsPositions[i-1] = Math.max rowsPositions[i-1], effectItem._height
-		freeRowsSpace = Math.max 0, effectItem._height - lastRowPosition
-
-	# expand filled rows
-	if rowsFillsSum > 0
-		sum = 0
-		for i in [0...maxRowsLen-1] by 1
-			if rowsFills[i]
-				sum += freeRowsSpace / rowsFillsSum
-			rowsPositions[i] += sum
+		rowsPositions[lastRow] = Math.max rowsPositions[lastRow], effectItem._height
 
 	# set children positions
 	i = 0
@@ -177,15 +181,9 @@ updateItem = (item) ->
 		row = Math.floor(i/columnsLen) % rowsLen
 		i++
 
-		# omit auto positioned children
-		if anchors = child._anchors
-			if gridType & ROW and anchors._autoX
-				continue
-			if gridType & COLUMN and anchors._autoY
-				continue
-
 		margin = child._margin
 		layout = child._layout
+		anchors = child._anchors
 
 		# get column position
 		columnX = if column > 0 then columnsPositions[column-1] else 0
@@ -220,7 +218,7 @@ updateItem = (item) ->
 				child.height = height
 
 		# set x
-		if gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right) and not anchors?._autoX)
+		if (gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right))) and not anchors?._autoX
 			x = columnX + leftMargin
 			if alignH is 'center'
 				x += (columnsPositions[column] - x - child._width) / 2 - rightMargin / 2
@@ -229,7 +227,7 @@ updateItem = (item) ->
 			child.x = x
 
 		# set y
-		if gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom) and not anchors?._autoY)
+		if (gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom))) and not anchors?._autoY
 			y = rowY + topMargin
 			if alignV is 'center'
 				y += (rowsPositions[row] - y - child._height) / 2 - bottomMargin / 2
