@@ -6,7 +6,6 @@ Element @virtual_dom
 	utils = require 'utils'
 	assert = require 'neft-assert'
 	signal = require 'signal'
-	tagQuery = require './element/tag/query'
 
 	{isArray} = Array
 	{emitSignal} = signal.Emitter
@@ -153,7 +152,7 @@ Element @virtual_dom
 			# trigger signal
 			emitSignal @, 'onParentChange', old
 
-			tagQuery.checkWatchersDeeply @
+			Tag.query.checkWatchersDeeply @
 
 			true
 
@@ -174,9 +173,9 @@ Element @virtual_dom
 		cloneDeep: ->
 			@clone()
 
-	Element.Tag = require('./element/tag') Element
-	Element.Text = require('./element/text') Element
-	if utils.isNode
-		Element.parser = require('./element/parser') Element
+		@Tag = Tag = require('./element/tag') Element
+		@Text = require('./element/text') Element
+		if utils.isNode
+			@parser = require('./element/parser') Element
 
 	module.exports = Element

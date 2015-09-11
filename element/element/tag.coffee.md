@@ -19,7 +19,7 @@ Tag @virtual_dom
 	CSS_ID_RE = ///\#([^\s]+)///
 
 	module.exports = (Element) -> class Tag extends Element
-		@Attrs = require('./tag/attrs') Element
+		@Attrs = require('./tag/attrs') Tag
 		@extensions = Object.create null
 
 		@__name__ = 'Tag'
@@ -154,7 +154,7 @@ Tag @virtual_dom
 
 				elem
 
-		query = require './tag/query'
+		@query = query = require('./tag/query') @
 
 *Array* Element::queryAll(*String* query)
 -----------------------------------------

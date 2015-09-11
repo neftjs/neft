@@ -6,14 +6,13 @@ Tag.Attrs @virtual_dom
 	utils = require 'utils'
 	signal = require 'signal'
 	assert = require 'neft-assert'
-	tagQuery = require './query'
 
 	assert = assert.scope 'View.Element.Tag.Attrs'
 
 	{isArray} = Array
 	{emitSignal} = signal.Emitter
 
-	module.exports = (Element) ->
+	module.exports = (Tag) ->
 		eventsPool = []
 
 		triggerEvent = (tag, name, value) ->
@@ -90,6 +89,6 @@ Tag.Attrs @virtual_dom
 
 				# trigger event
 				triggerEvent tag, name, old
-				tagQuery.checkWatchersDeeply tag
+				Tag.query.checkWatchersDeeply tag
 
 				true

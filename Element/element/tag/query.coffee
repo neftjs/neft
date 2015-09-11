@@ -205,46 +205,6 @@ getQueries = (selector, opts=0) ->
 
 	queries
 
-exports.queryAll = (selector, target=[], targetCtx=target, opts=0) ->
-	assert.isString selector
-	assert.notLengthOf selector, 0
-	unless typeof target is 'function'
-		assert.isArray target
-
-	queries = getQueries selector, opts
-	func = if Array.isArray(target) then target.push else target
-
-	for funcs in queries
-		if funcs[0](@, funcs, 3, func, targetCtx, false)
-			if single
-				break
-
-	if Array.isArray(target)
-		target
-
-exports.queryAllParents = (selector, target, targetCtx) ->
-	exports.queryAll.call @, selector, target, targetCtx, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
-
-exports.query = do ->
-	result = null
-	resultFunc = (arg) ->
-		result = arg
-
-	(selector, opts=0) ->
-		assert.isString selector
-		assert.notLengthOf selector, 0
-
-		queries = getQueries selector, opts
-
-		for funcs in queries
-			if funcs[0](@, funcs, 3, resultFunc, null, true)
-				return result
-
-		null
-
-exports.queryParents = (selector) ->
-	exports.query.call @, selector, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
-
 class Watcher extends signal.Emitter
 	NOP = ->
 
@@ -284,49 +244,86 @@ class Watcher extends signal.Emitter
 		pool.push @
 		return
 
-exports.watch = (selector) ->
-	assert.isString selector
-	assert.notLengthOf selector, 0
+module.exports = (Tag) ->
+	queryAll: queryAll = (selector, target=[], targetCtx=target, opts=0) ->
+		assert.isString selector
+		assert.notLengthOf selector, 0
+		unless typeof target is 'function'
+			assert.isArray target
 
-	queries = getQueries(selector, OPTS_REVERSED)
-	# for funcs in queries
-		# if funcs[funcs.length - 3] isnt directParent
-		# 	funcs.push anyParent, null, null
-		# funcs.push byTag, @, null
+		queries = getQueries selector, opts
+		func = if Array.isArray(target) then target.push else target
 
-	watcher = Watcher.create @, queries
-	watcher
+		for funcs in queries
+			if funcs[0](@, funcs, 3, func, targetCtx, false)
+				if single
+					break
 
-exports.checkWatchersDeeply = (tag) ->
-	if inWatchers = tag._inWatchers
-		i = n = inWatchers.length
-		while i-- > 0
-			unless inWatchers[i].test(tag)
-				emitSignal inWatchers[i], 'onRemove', tag
-				if i is n - 1
-					inWatchers.pop()
-				else
-					inWatchers.splice i, 1
-				n--
+		if Array.isArray(target)
+			target
 
-	tmp = tag
-	while tmp = tmp._parent
-		if watchers = tmp._watchers
-			i = 0
-			n = watchers.length
-			while i < n
-				watcher = watchers[i]
-				if watcher is null
-					watchers.splice i, 1
-					i--; n--
-				else if (not tag._inWatchers or !utils.has(tag._inWatchers, watcher)) and watcher.test(tag)
-					tag._inWatchers ?= []
-					tag._inWatchers.push watcher
-					emitSignal watcher, 'onAdd', tag
-				i++
+	queryAllParents: (selector, target, targetCtx) ->
+		queryAll.call @, selector, target, targetCtx, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
 
-	if tag.children
-		for child in tag.children
-			exports.checkWatchersDeeply child
+	query: query = do ->
+		result = null
+		resultFunc = (arg) ->
+			result = arg
 
-	return
+		(selector, opts=0) ->
+			assert.isString selector
+			assert.notLengthOf selector, 0
+
+			queries = getQueries selector, opts
+
+			for funcs in queries
+				if funcs[0](@, funcs, 3, resultFunc, null, true)
+					return result
+
+			null
+
+	queryParents: (selector) ->
+		query.call @, selector, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
+
+	watch: (selector) ->
+		assert.isString selector
+		assert.notLengthOf selector, 0
+
+		queries = getQueries(selector, OPTS_REVERSED)
+		watcher = Watcher.create @, queries
+		watcher
+
+	checkWatchersDeeply: checkWatchersDeeply = (tag) ->
+		if inWatchers = tag._inWatchers
+			i = n = inWatchers.length
+			while i-- > 0
+				unless inWatchers[i].test(tag)
+					emitSignal inWatchers[i], 'onRemove', tag
+					if i is n - 1
+						inWatchers.pop()
+					else
+						inWatchers.splice i, 1
+					n--
+
+		tmp = tag
+		while tmp = tmp._parent
+			if watchers = tmp._watchers
+				i = 0
+				n = watchers.length
+				while i < n
+					watcher = watchers[i]
+					if watcher is null
+						watchers.splice i, 1
+						i--; n--
+					else if (not tag._inWatchers or !utils.has(tag._inWatchers, watcher)) and watcher.test(tag)
+						tag._inWatchers ?= []
+						tag._inWatchers.push watcher
+						emitSignal watcher, 'onAdd', tag
+					i++
+
+		if tag.children
+			for child in tag.children
+				if child instanceof Tag
+					checkWatchersDeeply child
+
+		return
