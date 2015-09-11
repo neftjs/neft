@@ -12,6 +12,33 @@ module.exports = (impl) ->
 
 	MAX_LOOPS = 10
 
+	queueIndex = 0
+	queues = [[], []]
+	queue = queues[queueIndex]
+	pending = false
+
+	updateItems = ->
+		pending = false
+		currentQueue = queue
+		queue = queues[++queueIndex % queues.length]
+
+		while currentQueue.length
+			anchor = currentQueue.pop()
+			anchor.pending = false
+			anchor.update()
+		return
+
+	update = ->
+		if @pending
+			return
+
+		@pending = true
+		queue.push @
+		unless pending
+			setImmediate updateItems
+			pending = true
+		return
+
 	getItemProp =
 		left: 'x'
 		top: 'y'
@@ -171,57 +198,57 @@ module.exports = (impl) ->
 	onParentChange = (oldVal) ->
 		if oldVal
 			for handler in getTargetWatchProps[@line].parent
-				oldVal[handler].disconnect @update, @
+				oldVal[handler].disconnect update, @
 
 		if val = @targetItem = @item._parent
 			for handler in getTargetWatchProps[@line].parent
-				val[handler] @update, @
+				val[handler] update, @
 
-		@update()
+		update.call @
 		return
 
 	onNextSiblingChange = (oldVal) ->
 		if oldVal
 			for handler in getTargetWatchProps[@line].sibling
-				oldVal[handler].disconnect @update, @
+				oldVal[handler].disconnect update, @
 
 		if val = @targetItem = @item._nextSibling
 			for handler in getTargetWatchProps[@line].sibling
-				val[handler] @update, @
+				val[handler] update, @
 
-		@update()
+		update.call @
 		return
 
 	onPreviousSiblingChange = (oldVal) ->
 		if oldVal
 			for handler in getTargetWatchProps[@line].sibling
-				oldVal[handler].disconnect @update, @
+				oldVal[handler].disconnect update, @
 
 		if val = @targetItem = @item._previousSibling
 			for handler in getTargetWatchProps[@line].sibling
-				val[handler] @update, @
+				val[handler] update, @
 
-		@update()
+		update.call @
 		return
 
 	onChildInsert = (child) ->
-		child.onVisibleChange @update, @
+		child.onVisibleChange update, @
 		if @source is 'fillWidth'
-			child.onWidthChange @update, @
+			child.onWidthChange update, @
 		if @source is 'fillHeight'
-			child.onHeightChange @update, @
+			child.onHeightChange update, @
 
-		@update()
+		update.call @
 		return
 
 	onChildPop = (child) ->
-		child.onVisibleChange.disconnect @update, @
+		child.onVisibleChange.disconnect update, @
 		if @source is 'fillWidth'
-			child.onWidthChange.disconnect @update, @
+			child.onWidthChange.disconnect update, @
 		if @source is 'fillHeight'
-			child.onHeightChange.disconnect @update, @
+			child.onHeightChange.disconnect update, @
 
-		@update()
+		update.call @
 		return
 
 	class Anchor
@@ -239,6 +266,7 @@ module.exports = (impl) ->
 			line ?= source
 			@target = target
 			@line = line
+			@pending = false
 			@updateLoops = 0
 
 			if target is 'parent' or item._parent is target
@@ -249,7 +277,7 @@ module.exports = (impl) ->
 				@type = 'sibling'
 
 			for handler in getSourceWatchProps[source]
-				item[handler] @update, @
+				item[handler] update, @
 
 			@prop = getItemProp[source]
 			@getSourceValue = getSourceValue[source]
@@ -281,8 +309,8 @@ module.exports = (impl) ->
 				else
 					@targetItem = item._component.objects[target]
 					for handler in getTargetWatchProps[line][@type]
-						@targetItem[handler] @update, @
-					@update()
+						@targetItem[handler] update, @
+					update.call @
 
 			Object.preventExtensions @
 
@@ -345,11 +373,11 @@ module.exports = (impl) ->
 					@item.onPreviousSiblingChange.disconnect onPreviousSiblingChange, @
 
 			for handler in getSourceWatchProps[@source]
-				@item[handler].disconnect @update, @
+				@item[handler].disconnect update, @
 
 			if @targetItem
 				for handler in getTargetWatchProps[@line][@type]
-					@targetItem[handler].disconnect @update, @
+					@targetItem[handler].disconnect update, @
 
 			@item = @targetItem = null
 
@@ -383,6 +411,7 @@ module.exports = (impl) ->
 			assert.lengthOf def, 1
 			@anchors = []
 			def = [def[0], '']
+			@pending = false
 
 			baseAnchors = getBaseAnchorsPerAnchorType[def[0]]?[source]
 			baseAnchors ?= getBaseAnchors[source]
