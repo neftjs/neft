@@ -80,7 +80,6 @@ module.exports = (File, data) -> class Style
 		@scope = null
 		@children = []
 		@textWatchingNodes = []
-		@visible = true
 		@isTextSet = false
 		@baseText = ''
 		@isLinkUriSet = false
@@ -123,17 +122,6 @@ module.exports = (File, data) -> class Style
 				globalHideDelay -= diff
 
 			if not animationsPending 
-				# render styles
-				if globalShowDelay + globalHideDelay <= 0
-					for style in stylesToRender
-						style.waiting = false
-						style.renderItem()
-						style.findItemParent()
-						style.file.readyToUse = true
-
-					globalShowDelay = 0
-					utils.clear stylesToRender
-
 				# revert styles
 				if globalHideDelay <= 0
 					for style in stylesToRevert
@@ -144,6 +132,17 @@ module.exports = (File, data) -> class Style
 
 					globalHideDelay = 0
 					utils.clear stylesToRevert
+
+				# render styles
+				if globalShowDelay + globalHideDelay <= 0
+					for style in stylesToRender
+						style.waiting = false
+						style.renderItem()
+						style.findItemParent()
+						style.file.readyToUse = true
+
+					globalShowDelay = 0
+					utils.clear stylesToRender
 
 			# continue
 			if stylesToRender.length or stylesToRevert.length
@@ -174,7 +173,6 @@ module.exports = (File, data) -> class Style
 			globalShowDelay += showEvent.delay
 			showEvent.delay = 0
 
-		@item.visible = not @isAutoParent and @visible
 		@item.document.visible = false
 		@file.readyToUse = false
 		stylesToRender.push @
@@ -190,9 +188,10 @@ module.exports = (File, data) -> class Style
 			unless utils.isEqual(classes.items(), @classes)
 				@classes = utils.clone(classes.items())
 
-		@item.visible = @visible
+		@item.visible = true
 		@item.document.node = @node
 		@item.document.visible = true
+		@baseText = @getTextObject()?.text or ''
 		@updateText()
 		@updateVisibility()
 		@syncClassAttr('')
@@ -230,6 +229,8 @@ module.exports = (File, data) -> class Style
 		unless @item
 			return
 
+		@item.visible = false
+
 		# parent
 		if @isAutoParent
 			@lastItemParent = null
@@ -239,7 +240,6 @@ module.exports = (File, data) -> class Style
 
 		itemDocumentNode = @item.document.node
 		@item.document.node = null
-		@item.visible = @visible
 		@item.document.visible = true
 
 		tmpNode = @node
@@ -249,19 +249,17 @@ module.exports = (File, data) -> class Style
 			else
 				break
 
-		# shared items
-		if itemDocumentNode?._documentStyle is @
-			# revert linkUri
-			if @isLinkUriSet
-				@item.linkUri = @baseLinkUri
-				@isLinkUriSet = false
-				@baseLinkUri = ''
+		# revert linkUri
+		if @isLinkUriSet
+			@item.linkUri = @baseLinkUri
+			@isLinkUriSet = false
+			@baseLinkUri = ''
 
-			# revert text
-			if @isTextSet
-				@getTextObject().text = @baseText
-				@isTextSet = false
-				@baseText = ''
+		# revert text
+		if @isTextSet
+			@getTextObject().text = @baseText
+			@isTextSet = false
+			@baseText = ''
 
 		# revert attr values
 		{setAttrs, attrValues} = @
@@ -320,13 +318,12 @@ module.exports = (File, data) -> class Style
 			text = node.stringifyChildren()
 
 			if text.length > 0 or @isTextSet
-				@isTextSet = true
-				@baseText = obj.text
+				@isTextSet = true	
 				obj.text = text
 		return
 
 	updateVisibility: ->
-		if @waiting or not @item or not @visible
+		if @waiting or not @item
 			return
 
 		visible = true
@@ -490,7 +487,6 @@ module.exports = (File, data) -> class Style
 			return
 
 		if @item and @isAutoParent
-			@item.visible = @visible
 			@item.parent = null
 
 		if @item
@@ -552,7 +548,7 @@ module.exports = (File, data) -> class Style
 
 		@node._documentStyle = @
 		@node.style = @item
-		@visible = @item.visible
+		@item.visible = false
 
 		if @isLink()
 			@item.linkUri = @getLinkUri()
