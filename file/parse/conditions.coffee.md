@@ -51,7 +51,7 @@ In practice, you will use the string interpolation to conditioning the result.
 					# `//</development>`
 
 					elseNode = null
-					if child.nextSibling?.attrs.has('neft:else')
+					if child.nextSibling?.attrs?.has('neft:else')
 						elseNode = child.nextSibling
 
 					funcBody = File.Input.parse attr
