@@ -38,11 +38,15 @@ all changes made on the [List][] automatically refreshes your view.
 		iterators = []
 
 		forNode = (elem) ->
-			unless elem.attrs?.get "#{File.HTML_NS}:each"
+			unless attrVal = elem.attrs?.get("#{File.HTML_NS}:each")
 				return elem.children?.forEach forNode
 
 			# get iterator
-			iterators.push new File.Iterator file, elem
+			iterator = new File.Iterator file, elem
+			iterators.push iterator
+			`//<development>`
+			iterator.text = attrVal
+			`//</development>`
 
 		forNode file.node
 

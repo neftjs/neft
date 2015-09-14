@@ -30,11 +30,13 @@ module.exports = (File) -> class Iterator extends File.Use
 		fragment.parse()
 		@fragment = fragment.id
 		@bodyNode.parent = undefined
+		@text = ''
 
 	fragment: ''
 	storage: null
 	usedFragments: null
 	data: null
+	text: ''
 
 	render: ->
 		unless @node.visible
@@ -48,7 +50,7 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		# stop if no data found
 		if not isArray(each) and not (each instanceof List)
-			log.warn "Data is not an array nor List:\n#{each}"
+			log.warn "Data is not an array nor List in '#{@text}':\n#{each}"
 			return
 
 		# set as data
@@ -170,6 +172,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		clone.storage = utils.cloneDeep @storage
 		clone.array = null
 		clone.usedFragments = []
+		clone.text = @text
 
 		clone.node.onAttrsChange attrsChangeListener, clone
 		clone.node.onVisibleChange visibilityChangeListener, clone
