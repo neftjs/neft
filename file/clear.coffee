@@ -1,27 +1,24 @@
 'use strict'
 
 WHITE_SPACE_RE = ///^\s*$///
-WHITE_SPACES_RE = ///^\s*|\s*$///gm
+WHITE_SPACES_RE = ///^(\r?\n|\r)+\s+///gm
 LINE_BREAKERS_RE = ///\r?\n|\r///g
-PHRASING_ELEMENTS = ["A", "EM", "STRONG", "SMALL", "MARK", "ABBR",
-                     "DFN", "I", "B", "S", "U", "CODE", "VAR", "SAMP",
-                     "KBD", "SUP", "SUB", "Q", "CITE", "SPAN", "BDO",
-                     "BDI", "BR", "WBR", "INS", "DEL", "IMG", "EMBED",
-                     "OBJECT", "IFRAME", "MAP", "AREA", "SCRIPT",
-                     "NOSCRIPT", "RUBY", "VIDEO", "AUDIO", "INPUT",
-                     "TEXTAREA", "SELECT", "BUTTON", "LABEL", "OUTPUT",
-                     "DATALIST", "KEYGEN", "PROGRESS", "COMMAND",
-                     "CANVAS", "TIME", "METER"]
+PHRASING_ELEMENTS = ["a", "em", "strong", "small", "mark", "abbr", "dfn", "i", "b",
+                     "s", "u", "code", "var", "samp", "kbd", "sup", "sub", "q", "cite",
+                     "span", "bdo", "bdi", "br", "wbr", "ins", "del", "img", "embed",
+                     "object", "iframe", "map", "area", "script", "noscript", "ruby",
+                     "video", "audio", "input", "textarea", "select", "button", "label",
+                     "output", "datalist", "keygen", "progress", "command", "canvas",
+                     "time", "meter"]
 
 isRemove = (node) ->
 	if 'text' of node
 		if WHITE_SPACE_RE.test(node.text)
 			return true
 
-		unless ~PHRASING_ELEMENTS.indexOf(node.parent.name.toUpperCase()) # TODO: optimize it
+		unless ~PHRASING_ELEMENTS.indexOf(node.parent.name)
 			node.text = node.text
 				.replace(WHITE_SPACES_RE, '')
-				.replace(LINE_BREAKERS_RE, '')
 
 	false
 
