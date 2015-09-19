@@ -11,12 +11,10 @@ test = (node, funcs, index, targetFunc, targetCtx, single) ->
 		func = funcs[index]
 
 		if func.isIterator
-			# console.log ' ', func+''
 			return func node, funcs, index+3, targetFunc, targetCtx, single
 		else
 			data1 = funcs[index + 1]
 			data2 = funcs[index + 2]
-			# console.log '  ', func+'', data1, data2
 			unless func(node, data1, data2)
 				return false
 
@@ -157,7 +155,8 @@ getQueries = (selector, opts=0) ->
 			sel = sel.slice 1
 		else if sel[0] is '&'
 			sel = sel.slice 1
-			funcs[arrFunc] byTag, null, null
+			unless opts & OPTS_QUERY_BY_PARENTS
+				funcs[arrFunc] byTag, null, null
 		else if exec = TYPE.exec(sel)
 			sel = sel.slice exec[0].length
 			name = exec[0]
@@ -200,16 +199,19 @@ getQueries = (selector, opts=0) ->
 
 	# set iterator
 	for funcs in queries
-		firstFunc = if reversed then funcs[funcs.length-3] else funcs[0]
+		firstFunc = if reversed and not (opts & OPTS_QUERY_BY_PARENTS)
+			funcs[funcs.length-3]
+		else
+			funcs[0]
 		if firstFunc is byTag
 			continue
 
-		if reversed and not firstFunc?.isIterator
-			funcs[reversedArrFunc] distantTagFunc, null, null
-		if not reversed and not firstFunc?.isIterator
-			funcs[reversedArrFunc] distantTagFunc, null, null
-		else if opts & OPTS_QUERY_BY_PARENTS and not funcs[0]?.isIterator
+		if opts & OPTS_QUERY_BY_PARENTS and not firstFunc?.isIterator
 			funcs[arrFunc] distantTagFunc, null, null
+		else if reversed and not firstFunc?.isIterator
+			funcs[reversedArrFunc] distantTagFunc, null, null
+		else if not reversed and not firstFunc?.isIterator
+			funcs[reversedArrFunc] distantTagFunc, null, null
 
 		if opts & OPTS_ADD_ANCHOR
 			funcs[reversedArrFunc] byTag, null, null
@@ -271,9 +273,7 @@ module.exports = (Tag) ->
 		func = if Array.isArray(target) then target.push else target
 
 		for funcs in queries
-			if funcs[0](@, funcs, 3, func, targetCtx, false)
-				if single
-					break
+			funcs[0] @, funcs, 3, func, targetCtx, false
 
 		if Array.isArray(target)
 			target

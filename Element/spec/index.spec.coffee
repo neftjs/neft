@@ -288,6 +288,22 @@ describe 'View Element', ->
 		it 'omits neft:blank', ->
 			expect(doc2.query('div > em')).toBe doc2em
 
+	describe 'queryParents() works with selector', ->
+		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><neft:blank><em></em></neft:blank></div>"
+		doc2div1 = doc2.children[0]
+		doc2b = doc2div1.children[0]
+		doc2u = doc2b.children[0]
+		doc2div2 = doc2.children[1]
+		doc2em = doc2div2.children[0].children[0]
+
+		it 'E', ->
+			expect(doc2u.queryParents('div')).toBe doc2div1
+			expect(doc2b.queryParents('div')).toBe doc2div1
+
+		it 'E > F', ->
+			expect(doc2u.queryParents('div > b')).toBe doc2div1
+			expect(doc2u.queryParents('div > b >')).toBe doc2div1
+
 	describe 'watch()', ->
 		tags = doc2 = doc2div1 = doc2b = doc2u = doc2u2 = doc2div2 = doc2em1 = doc2em2 = null
 
