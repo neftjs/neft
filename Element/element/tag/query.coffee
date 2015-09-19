@@ -194,9 +194,9 @@ getQueries = (selector, opts=0) ->
 
 	# set iterator
 	for funcs in queries
-		if not reversed and not funcs[0].isIterator
+		if not reversed and not funcs[0]?.isIterator
 			funcs[reversedArrFunc] distantTagFunc, null, null
-		else if opts & OPTS_QUERY_BY_PARENTS and not funcs[0].isIterator
+		else if opts & OPTS_QUERY_BY_PARENTS and not funcs[0]?.isIterator
 			funcs[arrFunc] distantTagFunc, null, null
 
 	# save to the cache
