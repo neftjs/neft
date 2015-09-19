@@ -46,15 +46,13 @@ updateItem = (item) ->
 	if item._alignment
 		alignH = item._alignment._horizontal
 		alignV = item._alignment._vertical
-		align = alignH isnt 'left' or alignV isnt 'top'
 	else
 		alignH = 'left'
 		alignV = 'top'
-		align = false
 
 	# get tmp arrays
 	maxLen = children.length
-	if align and elementsX.length < maxLen
+	if elementsX.length < maxLen
 		maxLen *= 1.5
 		cellsWidth = new TypedArray.Uint32 maxLen
 		cellsHeight = new TypedArray.Uint32 maxLen
@@ -69,8 +67,6 @@ updateItem = (item) ->
 	for child, i in children
 		# omit not visible and auto positioned children
 		if not child._visible
-			continue
-		if (anchors = child._anchors) and anchors._autoY
 			continue
 
 		margin = child._margin
@@ -96,13 +92,9 @@ updateItem = (item) ->
 
 		right = x + child.width
 
-		if align
-			elementsX[i] = x
-			elementsY[i] = y
-			elementsCell[i] = maxCell
-		else
-			child.x = x
-			child.y = y
+		elementsX[i] = x
+		elementsY[i] = y
+		elementsCell[i] = maxCell
 
 		column = right
 		if column > width
@@ -122,49 +114,49 @@ updateItem = (item) ->
 		if y > height
 			height = y
 
-		if align
-			cellsWidth[maxCell] = column
-			cellsHeight[maxCell] = y - row
+		cellsWidth[maxCell] = column
+		cellsHeight[maxCell] = y - row
 
 	# set children positions
-	if align
-		switch alignH
-			when 'left'
-				multiplierX = 0
-			when 'center'
-				multiplierX = 0.5
-			when 'right'
-				multiplierX = 1
-		switch alignV
-			when 'top'
-				multiplierY = 0
-			when 'center'
-				multiplierY = 0.5
-			when 'bottom'
-				multiplierY = 1
-		if data.autoHeight or alignV is 'top'
-			plusY = 0
-		else
-			plusY = (item._height - height) * multiplierY
-		if not data.autoWidth
-			width = item._width
-		if not data.autoHeight
-			height = item._height
-		for child, i in children
-			# omit not visible and auto positioned children
-			if not child._visible
-				continue
-			if (anchors = child._anchors) and anchors._autoY
-				continue
-			cell = elementsCell[i]
-			bottom = child._height
-			if child._margin
-				if includeBorderMargins or cell > 0
-					bottom += child._margin._top
-				if includeBorderMargins or cell < maxCell
-					bottom += child._margin._bottom
+	switch alignH
+		when 'left'
+			multiplierX = 0
+		when 'center'
+			multiplierX = 0.5
+		when 'right'
+			multiplierX = 1
+	switch alignV
+		when 'top'
+			multiplierY = 0
+		when 'center'
+			multiplierY = 0.5
+		when 'bottom'
+			multiplierY = 1
+	if data.autoHeight or alignV is 'top'
+		plusY = 0
+	else
+		plusY = (item._height - height) * multiplierY
+	if not data.autoWidth
+		width = item._width
+	if not data.autoHeight
+		height = item._height
+	for child, i in children
+		# omit not visible and auto positioned children
+		if not child._visible
+			continue
+		cell = elementsCell[i]
+		bottom = child._height
+		anchors = child._anchors
 
+		if child._margin
+			if includeBorderMargins or cell > 0
+				bottom += child._margin._top
+			if includeBorderMargins or cell < maxCell
+				bottom += child._margin._bottom
+
+		if not anchors or not anchors._autoX
 			child.x = elementsX[i] + (width - cellsWidth[cell]) * multiplierX
+		if not anchors or not anchors._autoY
 			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY
 
 	# set item size

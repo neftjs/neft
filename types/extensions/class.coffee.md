@@ -157,10 +157,6 @@ It accepts bindings as well.
 *Float* Class::priority = 0
 ---------------------------
 
-Default class has priority -1.
-
-All inherited classes have priority in range (-1, 0).
-
 ### *Signal* Class::onPriorityChange(*Float* oldValue)
 
 			itemUtils.defineProperty
@@ -289,6 +285,33 @@ Grid {
 			disableClass item, classElem
 			utils.remove item._classList, classElem
 
+		ATTRS_ALIAS_DEF = [
+			['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn'],
+			['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn'],
+			['width', 'anchors.fill', 'anchors.fillWidth', 'layout.fillWidth'],
+			['height', 'anchors.fill', 'anchors.fillHeight', 'layout.fillHeight']
+		]
+
+		ATTRS_ALIAS = Object.create null
+
+		for aliases in ATTRS_ALIAS_DEF
+			for prop in aliases
+				arr = ATTRS_ALIAS[prop] ?= []
+				for alias in aliases
+					if alias isnt prop
+						arr.push alias
+
+		getContainedAttributeOrAlias = (classElem, attr) ->
+			attrs = classElem.changes._attributes
+			if attr of attrs
+				attr
+			else if aliases = ATTRS_ALIAS[attr]
+				for alias in aliases
+					if alias of attrs
+						return alias
+			else
+				''
+
 		###
 		TODO: support deeper attributes properly
 		e.g. margin doesn't restore margin.left
@@ -300,6 +323,7 @@ Grid {
 
 			classList = item._classList
 			classListIndex = classList.indexOf classElem
+			classListLength = classList.length
 			if classListIndex is -1
 				return
 
@@ -320,15 +344,36 @@ Grid {
 
 			# attributes
 			for attr, val of attributes
+				path = null
 				writeAttr = true
 				for i in [classListIndex-1..0] by -1
-					if attr of classList[i].changes._attributes
+					if getContainedAttributeOrAlias(classList[i], attr)
 						writeAttr = false
 						break
+
 				if writeAttr
-					path = splitAttribute attr
-					lastPath = path[path.length - 1]
-					object = getObject item, path
+					# unset alias
+					for i in [classListIndex+1...classListLength] by 1
+						if (alias = getContainedAttributeOrAlias(classList[i], attr)) and alias isnt attr
+							defaultValue = classList[i].changes._attributes[alias]
+							defaultIsBinding = !!classList[i].changes._bindings[alias]
+
+							path = splitAttribute alias
+							object = getObject item, path
+							lastPath = path[path.length - 1]
+							unless object
+								continue
+							if defaultIsBinding
+								object.createBinding lastPath, defaultValue, classElem._component, item
+							else
+								object[lastPath] = defaultValue
+							break
+
+					# set new attribute
+					if attr isnt alias or not path
+						path = splitAttribute attr
+						lastPath = path[path.length - 1]
+						object = getObject item, path
 					unless object
 						log.error "Attribute '#{attr}' in '#{item.toString()}' doesn't exist"
 						continue
@@ -342,79 +387,6 @@ Grid {
 						else
 							object[lastPath] = val
 
-			return
-
-		# more important to less important
-		EXTRA_RESTORE_ATTRS =
-			__proto__: null
-			left: { anchors: ['x'] }
-			top: { anchors: ['y'] }
-			right: { anchors: ['x'] }
-			bottom: { anchors: ['y'] }
-			horizontalCenter: { anchors: ['x'] }
-			verticalCenter: { anchors: ['y'] }
-			centerIn: { anchors: ['x', 'y'] }
-			fillWidth: { anchors: ['width'] }
-			fillHeight: { anchors: ['height'] }
-			fill: { anchors: ['width', 'height'] }
-			layout:
-				fillWidth: ['width', 'anchors.fillWidth', 'anchors.fill']
-				fillHeight: ['height', 'anchors.fillHeight', 'anchors.fill']
-
-		# less important to more important
-		RESTORE_ATTRS_BLOCKED_BY =
-			__proto__: null
-			x: ['anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn']
-			y: ['anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn']
-			width: ['anchors.fill', 'anchors.fillWidth', 'layout.fillWidth']
-			height: ['anchors.fill', 'anchors.fillHeight', 'layout.fillHeight']
-			'anchors.fillWidth': ['layout.fillWidth']
-			'anchors.fillHeight': ['layout.fillHeight']
-			'anchors.fill': ['layout.fillWidth', 'layout.fillHeight']
-
-		restoreAttribute = (item, attr, omitClass) ->
-			assert.instanceOf item, Renderer.Item
-			assert.isString attr
-			assert.instanceOf omitClass, Class if omitClass?
-
-			# check whether it's not blocked
-			if blockedAttrs = RESTORE_ATTRS_BLOCKED_BY[attr]
-				for blockedAttr in blockedAttrs
-					path = splitAttribute blockedAttr
-					object = getObject item, path
-					lastPath = path[path.length - 1]
-					if object[lastPath]?
-						return
-
-			path = splitAttribute attr
-			object = getObject item, path
-			lastPath = path[path.length - 1]
-
-			isBinding = false
-			for classElem in item._classList
-				if classElem isnt omitClass and classElem.changes._attributes.hasOwnProperty(attr)
-					val = classElem.changes._attributes[attr]
-					isBinding = !!classElem.changes._bindings[attr]
-					break
-
-			if val is undefined
-				val = Object.getPrototypeOf(object)[lastPath]
-
-			if isBinding
-				object.createBinding lastPath, val, classElem._component, item
-			else
-				object[lastPath] = val
-			return
-
-		restoreExtraAttributes = (item, path, omitClass) ->
-			index = path.length - 1
-			obj = EXTRA_RESTORE_ATTRS
-			while obj and not Array.isArray(obj)
-				obj = obj[path[index]]
-				index--
-			if Array.isArray(obj)
-				for attr in obj
-					restoreAttribute item, attr, omitClass
 			return
 
 		disableClass = (item, classElem) ->
@@ -440,41 +412,50 @@ Grid {
 
 			# attributes
 			for attr, val of attributes
-				path = splitAttribute attr
-				object = getObject item, path
-				lastPath = path[path.length - 1]
-				unless object
-					continue
-
+				path = null
 				restoreDefault = true
 				for i in [classListIndex-1..0] by -1
 					# BUG: undefined on QML (potential Array::sort bug)
 					unless classList[i]
 						continue
 
-					if attr of classList[i].changes._attributes
+					if getContainedAttributeOrAlias(classList[i], attr)
 						restoreDefault = false
 						break
 
 				if restoreDefault
+					# get default value
 					defaultValue = undefined
 					defaultIsBinding = false
 					for i in [classListIndex+1...classListLength] by 1
-						if attr of classList[i].changes._attributes
-							defaultValue = classList[i].changes._attributes[attr]
-							defaultIsBinding = !!classList[i].changes._bindings[attr]
+						if alias = getContainedAttributeOrAlias(classList[i], attr)
+							defaultValue = classList[i].changes._attributes[alias]
+							defaultIsBinding = !!classList[i].changes._bindings[alias]
 							break
-					if defaultValue is undefined
-						defaultValue = Object.getPrototypeOf(object)[lastPath]
+					alias ||= attr
 
+					# restore attribute
+					if !!bindings[attr]
+						path = splitAttribute attr
+						object = getObject item, path
+						lastPath = path[path.length - 1]
+						unless object
+							continue
+						object.createBinding lastPath, null, classElem._component, item
+
+					# set default value
+					if attr isnt alias or not path
+						path = splitAttribute alias
+						object = getObject item, path
+						lastPath = path[path.length - 1]
+						unless object
+							continue
 					if defaultIsBinding
 						object.createBinding lastPath, defaultValue, classElem._component, item
 					else
-						object.createBinding lastPath, null, classElem._component, item
+						if defaultValue is undefined
+							defaultValue = Object.getPrototypeOf(object)[lastPath]
 						object[lastPath] = defaultValue
-
-					if EXTRA_RESTORE_ATTRS[lastPath]?
-						restoreExtraAttributes item, path, classElem
 
 			return
 
