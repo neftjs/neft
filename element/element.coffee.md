@@ -115,16 +115,18 @@ Element @virtual_dom
 
 			# remove element
 			if @_parent
-				assert.ok utils.has(@_parent.children, @)
+				oldChildren = @_parent.children
+				assert.ok utils.has(oldChildren, @)
 				if not @_nextSibling
-					assert.ok @_parent.children[@_parent.children.length - 1] is @
-					@_parent.children.pop()
+					assert.ok oldChildren[oldChildren.length - 1] is @
+					oldChildren.pop()
 				else if not @_previousSibling
-					assert.ok @_parent.children[0] is @
-					@_parent.children.shift()
+					assert.ok oldChildren[0] is @
+					oldChildren.shift()
 				else
-					index = @_parent.children.indexOf @
-					@_parent.children.splice index, 1
+					index = oldChildren.indexOf @
+					oldChildren.splice index, 1
+				emitSignal @_parent, 'onChildrenChange', oldChildren
 
 				@_previousSibling?._nextSibling = @_nextSibling
 				@_nextSibling?._previousSibling = @_previousSibling
@@ -136,11 +138,13 @@ Element @virtual_dom
 			# append element
 			if parent
 				assert.notOk utils.has(@_parent.children, @)
-				index = parent.children.push(@) - 1
+				newChildren = @_parent.children
+				index = newChildren.push(@) - 1
+				emitSignal parent, 'onChildrenChange', newChildren
 				if index is 0
 					@_previousSibling = null
 				else
-					@_previousSibling = parent.children[index - 1]
+					@_previousSibling = newChildren[index - 1]
 					@_previousSibling._nextSibling = @
 
 			assert.is @_parent, val

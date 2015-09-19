@@ -40,6 +40,13 @@ Tag @virtual_dom
 
 			super()
 
+*Array* Tag::children
+---------------------
+
+### *Signal* Tag::onChildrenChange(*Array* value)
+
+		signal.Emitter.createSignal @, 'onChildrenChange'
+
 *Renderer.Item* Tag::style
 --------------------------
 
