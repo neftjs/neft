@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'assert'
+assert = require 'neft-assert'
 utils = require 'utils'
 
 module.exports = (File, Input) -> class InputAttr extends Input

@@ -11,10 +11,12 @@ test = (node, funcs, index, targetFunc, targetCtx, single) ->
 		func = funcs[index]
 
 		if func.isIterator
+			# console.log ' ', func+''
 			return func node, funcs, index+3, targetFunc, targetCtx, single
 		else
 			data1 = funcs[index + 1]
 			data2 = funcs[index + 2]
+			# console.log '  ', func+'', data1, data2
 			unless func(node, data1, data2)
 				return false
 
@@ -132,6 +134,7 @@ TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/
 i = 0
 OPTS_QUERY_BY_PARENTS = 1<<(i++)
 OPTS_REVERSED = 1<<(i++)
+OPTS_ADD_ANCHOR = 1<<(i++)
 
 queriesCache = []
 getQueries = (selector, opts=0) ->
@@ -194,10 +197,15 @@ getQueries = (selector, opts=0) ->
 
 	# set iterator
 	for funcs in queries
+		if reversed and not funcs[funcs.length-3]?.isIterator
+			funcs[reversedArrFunc] distantTagFunc, null, null
 		if not reversed and not funcs[0]?.isIterator
 			funcs[reversedArrFunc] distantTagFunc, null, null
 		else if opts & OPTS_QUERY_BY_PARENTS and not funcs[0]?.isIterator
 			funcs[arrFunc] distantTagFunc, null, null
+
+		if opts & OPTS_ADD_ANCHOR
+			funcs[reversedArrFunc] byTag, null, null
 
 	# save to the cache
 	queriesCache[opts] ?= {}
@@ -230,6 +238,7 @@ class Watcher extends signal.Emitter
 
 	test: (tag) ->
 		for funcs in @queries
+			funcs[funcs.length-2] = @node # set byTag anchor data1
 			if test(tag, funcs, 0, NOP, null, true)
 				return true
 		false
@@ -275,7 +284,6 @@ module.exports = (Tag) ->
 			assert.notLengthOf selector, 0
 
 			queries = getQueries selector, opts
-
 			for funcs in queries
 				if funcs[0](@, funcs, 3, resultFunc, null, true)
 					return result
@@ -289,7 +297,7 @@ module.exports = (Tag) ->
 		assert.isString selector
 		assert.notLengthOf selector, 0
 
-		queries = getQueries(selector, OPTS_REVERSED)
+		queries = getQueries(selector, OPTS_REVERSED | OPTS_ADD_ANCHOR)
 		watcher = Watcher.create @, queries
 		watcher
 

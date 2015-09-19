@@ -5,9 +5,11 @@ Tag.Attrs @virtual_dom
 
 	utils = require 'utils'
 	signal = require 'signal'
+	log = require 'log'
 	assert = require 'neft-assert'
 
 	assert = assert.scope 'View.Element.Tag.Attrs'
+	log = log.scope 'View.Element.Tag.Attrs'
 
 	{isArray} = Array
 	{emitSignal} = signal.Emitter

@@ -31,8 +31,6 @@ using the [neft:use][] tag. This is fast and clean solution.
 
 	utils = require 'utils'
 
-	HASH_RE = ///////g
-
 	module.exports = (File) ->
 		parseLinks = require('./fragments/links') File
 

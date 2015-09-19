@@ -9,7 +9,6 @@ isEqualArrays = (arr1, arr2) ->
 
 	for elem, i in arr1
 		if arr2[i] isnt elem
-			console.log elem, arr2[i], i, arr2
 			return false
 	true
 
@@ -456,7 +455,7 @@ describe 'View Element', ->
 
 			tag.attrs.set 'a', 2
 
-			expect(args).toEqual [tag, {name: 'a', value: '1'}, undefined]
+			expect(args).toEqual [tag, {name: 'a', oldValue: '1'}, undefined]
 			expect(value).toBe 2
 
 		it 'observing visibility changes works properly', ->
