@@ -155,6 +155,9 @@ getQueries = (selector, opts=0) ->
 	while sel.length
 		if sel[0] is '*'
 			sel = sel.slice 1
+		else if sel[0] is '&'
+			sel = sel.slice 1
+			funcs[arrFunc] byTag, null, null
 		else if exec = TYPE.exec(sel)
 			sel = sel.slice exec[0].length
 			name = exec[0]
@@ -197,9 +200,13 @@ getQueries = (selector, opts=0) ->
 
 	# set iterator
 	for funcs in queries
-		if reversed and not funcs[funcs.length-3]?.isIterator
+		firstFunc = if reversed then funcs[funcs.length-3] else funcs[0]
+		if firstFunc is byTag
+			continue
+
+		if reversed and not firstFunc?.isIterator
 			funcs[reversedArrFunc] distantTagFunc, null, null
-		if not reversed and not funcs[0]?.isIterator
+		if not reversed and not firstFunc?.isIterator
 			funcs[reversedArrFunc] distantTagFunc, null, null
 		else if opts & OPTS_QUERY_BY_PARENTS and not funcs[0]?.isIterator
 			funcs[arrFunc] distantTagFunc, null, null
@@ -314,7 +321,7 @@ module.exports = (Tag) ->
 					n--
 
 		tmp = tag
-		while tmp = tmp._parent
+		while tmp
 			if watchers = tmp._watchers
 				i = 0
 				n = watchers.length
@@ -328,6 +335,7 @@ module.exports = (Tag) ->
 						tag._inWatchers.push watcher
 						emitSignal watcher, 'onAdd', tag
 					i++
+			tmp = tmp._parent
 
 		if tag.children
 			for child in tag.children

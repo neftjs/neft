@@ -435,6 +435,18 @@ describe 'View Element', ->
 				doc2div2.parent = null
 				expect(tags).toEqual []
 
+			it '&[foo]', ->
+				doc2u.parent = null
+				watcher = doc2u.watch '&[color]'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				doc2u.parent = doc2b
+				expect(tags).toEqual [doc2u]
+				doc2u.attrs.set 'color', undefined
+				expect(tags).toEqual []
+
 	it 'visible property is editable', ->
 		expect(p.visible).toBeTruthy()
 		p.visible = false
