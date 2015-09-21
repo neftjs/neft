@@ -355,18 +355,16 @@ Grid {
 					# unset alias
 					for i in [classListIndex+1...classListLength] by 1
 						if (alias = getContainedAttributeOrAlias(classList[i], attr)) and alias isnt attr
-							defaultValue = classList[i].changes._attributes[alias]
-							defaultIsBinding = !!classList[i].changes._bindings[alias]
-
 							path = splitAttribute alias
 							object = getObject item, path
 							lastPath = path[path.length - 1]
 							unless object
 								continue
+							defaultValue = Object.getPrototypeOf(object)[lastPath]
+							defaultIsBinding = !!classList[i].changes._bindings[alias]
 							if defaultIsBinding
-								object.createBinding lastPath, defaultValue, classElem._component, item
-							else
-								object[lastPath] = defaultValue
+								object.createBinding lastPath, null, classElem._component, item
+							object[lastPath] = defaultValue
 							break
 
 					# set new attribute
