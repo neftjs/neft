@@ -1,10 +1,10 @@
 'use strict'
 
 module.exports = (File) -> (file, source) ->
-	if file.sourceNode and source
-		oldChild = file.sourceNode
+	if file.targetNode and source
+		oldChild = file.targetNode
 		newChild = source.bodyNode
 
-		newChild?.parent = oldChild
+		newChild?.parent = null
 
 	return

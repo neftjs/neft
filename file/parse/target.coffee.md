@@ -1,16 +1,16 @@
-neft:source @xml
+neft:target @xml
 ===========
 
 This special *XML* tag is used in the [neft:fragment][] to define place,
 where the [neft:use][] body should be placed.
 
-In the example below, *superPower* tag will be placed in the *neft:source* place.
+In the example below, *superPower* tag will be placed in the *neft:target* place.
 
 ```
 <neft:fragment neft:name="user">
   <name>${name}</name>
   <age>${age}</age>
-  <neft:source />
+  <neft:target />
 </neft:fragment>
 
 <neft:use neft:fragment="user" name="Max" age="19">
@@ -21,4 +21,4 @@ In the example below, *superPower* tag will be placed in the *neft:source* place
 	'use strict'
 
 	module.exports = (File) -> (file) ->
-		file.sourceNode = file.node.query("#{File.HTML_NS}:source")
+		file.targetNode = file.node.query("#{File.HTML_NS}:target")

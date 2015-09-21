@@ -153,7 +153,7 @@ File @class
 				attrs = require('./file/parse/attrs') File
 				attrChanges = require('./file/parse/attrChanges') File
 				iterators = require('./file/parse/iterators') File
-				source = require('./file/parse/source') File
+				target = require('./file/parse/target') File
 				uses = require('./file/parse/uses') File
 				storage = require('./file/parse/storage') File
 				conditions = require('./file/parse/conditions') File
@@ -186,7 +186,7 @@ File @class
 				attrs @
 				iterators @
 				attrChanges @
-				source @
+				target @
 				uses @
 				storage @
 				conditions @
@@ -206,7 +206,7 @@ File @class
 		uid: ''
 		isRendered: false
 		node: null
-		sourceNode: null
+		targetNode: null
 		path: ''
 		pathbase: ''
 		parent: null
@@ -217,7 +217,7 @@ File @class
 		conditions: null
 		iterators: null
 		storage: null
-		source: null
+		target: null
 		ids: null
 		logs: null
 
@@ -233,7 +233,7 @@ File @class
 				@_render(storage, source)
 
 		_render: do ->
-			renderSource = require('./file/render/parse/source') File
+			renderTarget = require('./file/render/parse/target') File
 
 			(storage, source) ->
 				assert.notOk @isRendered
@@ -268,7 +268,7 @@ File @class
 						iterator.render()
 
 				# source
-				renderSource @, source
+				renderTarget @, source
 
 				# logs
 				`//<development>`
@@ -286,7 +286,7 @@ File @class
 
 		revert: do ->
 			listeners = require('./file/render/revert/listeners') File
-			source = require('./file/render/revert/source') File
+			target = require('./file/render/revert/target') File
 			->
 				assert.ok @isRendered
 
@@ -313,8 +313,8 @@ File @class
 					for iterator, i in @iterators
 						iterator.revert()
 
-				# source
-				source @, @source
+				# target
+				target @, @source
 
 				@storage = null
 				@source = null
@@ -359,7 +359,7 @@ File @class
 			clone.isRendered = false
 			clone.readyToUse = true
 			clone.node = @node.cloneDeep()
-			clone.sourceNode &&= @node.getCopiedElement @sourceNode, clone.node
+			clone.targetNode &&= @node.getCopiedElement @targetNode, clone.node
 			clone.parent = null
 			clone.storage = null
 			clone.source = null
