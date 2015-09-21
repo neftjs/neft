@@ -240,6 +240,7 @@ class Watcher extends signal.Emitter
 
 	constructor: (@node, @queries) ->
 		super()
+		@nodes = []
 		Object.preventExtensions @
 
 	signal.Emitter.createSignal @, 'onAdd'
@@ -255,10 +256,18 @@ class Watcher extends signal.Emitter
 	disconnect: ->
 		assert.ok utils.has(@node._watchers, @)
 
+		for node in @nodes
+			utils.removeFromUnorderedArray node._inWatchers, @
+			emitSignal @, 'onRemove', node
+		utils.clear @nodes
+
 		@onAdd.disconnectAll()
 		@onRemove.disconnectAll()
+
 		index = @node._watchers.indexOf @
 		@node._watchers[index] = null
+
+		@node = @queries = null
 		pool.push @
 		return
 
@@ -306,21 +315,22 @@ module.exports = (Tag) ->
 
 		queries = getQueries(selector, OPTS_REVERSED | OPTS_ADD_ANCHOR)
 		watcher = Watcher.create @, queries
+		checkWatchersDeeply @
 		watcher
 
-	checkWatchersDeeply: checkWatchersDeeply = (tag) ->
-		if inWatchers = tag._inWatchers
+	checkWatchersDeeply: checkWatchersDeeply = (node) ->
+		if inWatchers = node._inWatchers
 			i = n = inWatchers.length
 			while i-- > 0
-				unless inWatchers[i].test(tag)
-					emitSignal inWatchers[i], 'onRemove', tag
-					if i is n - 1
-						inWatchers.pop()
-					else
-						inWatchers.splice i, 1
+				unless inWatchers[i].test(node)
+					watcher = inWatchers[i]
+					inWatchers[i] = inWatchers[n-1]
+					inWatchers.pop()
+					utils.removeFromUnorderedArray watcher.nodes, node
+					emitSignal watcher, 'onRemove', node
 					n--
 
-		tmp = tag
+		tmp = node
 		while tmp
 			if watchers = tmp._watchers
 				i = 0
@@ -330,15 +340,16 @@ module.exports = (Tag) ->
 					if watcher is null
 						watchers.splice i, 1
 						i--; n--
-					else if (not tag._inWatchers or !utils.has(tag._inWatchers, watcher)) and watcher.test(tag)
-						tag._inWatchers ?= []
-						tag._inWatchers.push watcher
-						emitSignal watcher, 'onAdd', tag
+					else if (not node._inWatchers or !utils.has(node._inWatchers, watcher)) and watcher.test(node)
+						node._inWatchers ?= []
+						node._inWatchers.push watcher
+						watcher.nodes.push node
+						emitSignal watcher, 'onAdd', node
 					i++
 			tmp = tmp._parent
 
-		if tag.children
-			for child in tag.children
+		if node.children
+			for child in node.children
 				if child instanceof Tag
 					checkWatchersDeeply child
 
