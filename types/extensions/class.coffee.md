@@ -289,10 +289,16 @@ Grid {
 			['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn'],
 			['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn'],
 			['width', 'anchors.fill', 'anchors.fillWidth', 'layout.fillWidth'],
-			['height', 'anchors.fill', 'anchors.fillHeight', 'layout.fillHeight']
+			['height', 'anchors.fill', 'anchors.fillHeight', 'layout.fillHeight'],
+			['margin.horizontal', 'margin.left', 'margin.right'],
+			['margin.vertical', 'margin.top', 'margin.bottom'],
+			['padding.horizontal', 'padding.left', 'padding.right'],
+			['padding.vertical', 'padding.top', 'padding.bottom']
 		]
 
 		ATTRS_ALIAS = Object.create null
+		ATTRS_ALIAS['margin'] = ['margin.left', 'margin.right', 'margin.horizontal', 'margin.top', 'margin.bottom', 'margin.vertical']
+		ATTRS_ALIAS['padding'] = ['padding.left', 'padding.right', 'padding.horizontal', 'padding.top', 'padding.bottom', 'padding.vertical']
 
 		for aliases in ATTRS_ALIAS_DEF
 			for prop in aliases
@@ -312,11 +318,6 @@ Grid {
 			else
 				''
 
-		###
-		TODO: support deeper attributes properly
-		e.g. margin doesn't restore margin.left
-		and margin doesn't remove margin.left binding
-		###
 		enableClass = (item, classElem) ->
 			assert.instanceOf item, itemUtils.Object
 			assert.instanceOf classElem, Class
