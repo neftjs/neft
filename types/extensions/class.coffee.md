@@ -377,6 +377,11 @@ Grid {
 					unless object
 						log.error "Attribute '#{attr}' in '#{item.toString()}' doesn't exist"
 						continue
+
+					# create property on demand
+					if object instanceof itemUtils.CustomObject and not (lastPath of object)
+						itemUtils.Object.createProperty object._ref, lastPath
+
 					if bindings[attr]
 						object.createBinding lastPath, val, classElem._component, item
 					else

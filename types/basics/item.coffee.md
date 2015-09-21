@@ -25,7 +25,7 @@ This is a base class for everything which is visible.
 		constructor: (component, opts) ->
 			assert.instanceOf @, Item, 'ctor ...'
 
-			@$ = null
+			@_$ = null
 			@_parent = null
 			@_children = null
 			@_previousSibling = null
@@ -74,6 +74,10 @@ Item {
 \  }
 }
 ```
+
+		utils.defineProperty @::, '$', null, ->
+			@_$ ||= new itemUtils.CustomObject(@)
+		, null
 
 *Signal* Item::ready()
 ----------------------

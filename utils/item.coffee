@@ -56,15 +56,11 @@ module.exports = (Renderer, Impl) ->
 			if typeof opts.id is 'string'
 				@id = opts.id
 			if Array.isArray(opts.properties)
-				unless @$
-					createCustomObject.call @
 				for property in opts.properties
-					createProperty.call @, property
+					createProperty @, property
 			if Array.isArray(opts.signals)
-				unless @$
-					createCustomObject.call @
 				for signalName in opts.signals
-					createSignal.call @, signalName
+					createSignal @, signalName
 			if Array.isArray(opts.children)
 				for child in opts.children
 					if child instanceof Renderer.Item
@@ -75,10 +71,6 @@ module.exports = (Renderer, Impl) ->
 			classElem = createClass component, opts
 			classElem.target = @
 			return
-
-		createCustomObject = ->
-			@$ = Object.create(MutableDeepObject::)
-			MutableDeepObject.call @$, @
 
 		CHANGES_OMIT_ATTRIBUTES =
 			__proto__: null
@@ -102,23 +94,24 @@ module.exports = (Renderer, Impl) ->
 
 			classElem
 
-		createProperty = (name) ->
+		@createProperty = createProperty = (object, name) ->
 			assert.isString name
 			assert.notLengthOf name, 0
 
-			return if @$.hasOwnProperty(name)
+			if name of object.$
+				return
 
 			exports.defineProperty
-				object: @$
+				object: object.$
 				name: name
 
 			return
 
-		createSignal = (name) ->
+		createSignal = (object, name) ->
 			assert.isString name
 			assert.notLengthOf name, 0
 
-			signal.Emitter.createSignalOnObject @$, name
+			signal.Emitter.createSignalOnObject object._$, name
 
 			return
 
@@ -174,9 +167,9 @@ module.exports = (Renderer, Impl) ->
 			if @id
 				clone.id = @id
 
-			if @$
-				clone.$ = Object.create @$
-				MutableDeepObject.call clone.$, clone
+			if @_$
+				clone._$ = Object.create @_$
+				MutableDeepObject.call clone._$, clone
 
 			if opts
 				setOpts.call clone, component, opts
@@ -213,6 +206,10 @@ module.exports = (Renderer, Impl) ->
 			super ref
 			Object.preventExtensions @
 
+	class CustomObject extends MutableDeepObject
+		constructor: (ref) ->
+			super ref
+
 	Impl.DeepObject = DeepObject
 
 	funcCache = Object.create null
@@ -222,6 +219,7 @@ module.exports = (Renderer, Impl) ->
 	FixedObject: FixedObject
 	DeepObject: DeepObject
 	MutableDeepObject: MutableDeepObject
+	CustomObject: CustomObject
 
 	getInnerPropName: do ->
 		cache =
