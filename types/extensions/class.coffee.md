@@ -599,8 +599,9 @@ Grid {
 
 				# add new ones
 				if (query = @_query) and (target = @_ref.target) and (node = target.document.node)
-					node.queryAll query, onNodeAdd, @
 					watcher = @_nodeWatcher = node.watch query
+					for node in watcher.nodes
+						onNodeAdd.call @, node
 					watcher.onAdd onNodeAdd, @
 					watcher.onRemove onNodeRemove, @
 				return
