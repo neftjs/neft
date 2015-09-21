@@ -318,39 +318,92 @@ module.exports = (Tag) ->
 		checkWatchersDeeply @
 		watcher
 
-	checkWatchersDeeply: checkWatchersDeeply = (node) ->
-		if inWatchers = node._inWatchers
-			i = n = inWatchers.length
-			while i-- > 0
-				unless inWatchers[i].test(node)
-					watcher = inWatchers[i]
-					inWatchers[i] = inWatchers[n-1]
-					inWatchers.pop()
-					utils.removeFromUnorderedArray watcher.nodes, node
-					emitSignal watcher, 'onRemove', node
-					n--
+	checkWatchersDeeply: checkWatchersDeeply = do ->
+		queueIndex = 0
+		queues = [[], []]
+		queue = queues[queueIndex]
+		pending = false
 
-		tmp = node
-		while tmp
-			if watchers = tmp._watchers
-				i = 0
-				n = watchers.length
+		updateNodeRecursively = (node) ->
+			if inWatchers = node._inWatchers
+				i = n = inWatchers.length
+				while i-- > 0
+					unless inWatchers[i].test(node)
+						watcher = inWatchers[i]
+						inWatchers[i] = inWatchers[n-1]
+						inWatchers.pop()
+						utils.removeFromUnorderedArray watcher.nodes, node
+						emitSignal watcher, 'onRemove', node
+						n--
+
+			tmp = node
+			while tmp
+				if watchers = tmp._watchers
+					i = 0
+					n = watchers.length
+					while i < n
+						watcher = watchers[i]
+						if watcher is null
+							watchers.splice i, 1
+							i--; n--
+						else if (not node._inWatchers or !utils.has(node._inWatchers, watcher)) and watcher.test(node)
+							node._inWatchers ?= []
+							node._inWatchers.push watcher
+							watcher.nodes.push node
+							emitSignal watcher, 'onAdd', node
+						i++
+				tmp = tmp._parent
+
+			if node.children
+				for child in node.children
+					if child instanceof Tag
+						checkWatchersDeeply child
+
+			return
+
+		updateNodes = ->
+			pending = false
+			currentQueue = queue
+			queue = queues[++queueIndex % queues.length]
+
+			while currentQueue.length
+				node = currentQueue.pop()
+				updateNodeRecursively node
+			return
+
+		isChildOf = (child, parent) ->
+			tmp = child
+			while tmp = tmp._parent
+				if tmp is parent
+					return true
+			return false
+
+		if utils.isNode
+			updateNodeRecursively
+		else
+			(node) ->
+				# omit duplicates
+				if utils.has(queue, node)
+					return
+
+				# omit children of already added nodes
+				for waitingNode in queue
+					if isChildOf(node, waitingNode)
+						return
+
+				# remove children from parent node
+				i = 0; n = queue.length
 				while i < n
-					watcher = watchers[i]
-					if watcher is null
-						watchers.splice i, 1
-						i--; n--
-					else if (not node._inWatchers or !utils.has(node._inWatchers, watcher)) and watcher.test(node)
-						node._inWatchers ?= []
-						node._inWatchers.push watcher
-						watcher.nodes.push node
-						emitSignal watcher, 'onAdd', node
-					i++
-			tmp = tmp._parent
+					if isChildOf(queue[i], node)
+						utils.removeFromUnorderedArray queue, i
+						n--
+					else
+						i++
 
-		if node.children
-			for child in node.children
-				if child instanceof Tag
-					checkWatchersDeeply child
+				# add to the queue
+				queue.push node
 
-		return
+				unless pending
+					setImmediate updateNodes
+					pending = true
+				return
