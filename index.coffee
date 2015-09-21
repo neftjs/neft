@@ -153,6 +153,8 @@ anchorAttributeToString = (obj) ->
 	if anchor[0] is 'this'
 		anchor.shift()
 		anchor[0] = "this.#{anchor[0]}"
+	else if anchor[0] is 'null'
+		return 'null'
 
 	anchor[0] = switch anchor[0]
 		when 'this.parent', 'parent'
@@ -590,6 +592,9 @@ stringify =
 					else
 						throw "Unexpected object body type '#{body.type}'"
 
+		if not elem.parent and elem.name is 'Class' and not json.target
+			json.target = "`view`"
+
 		# unless MODIFIERS_NAMES[elem.name]
 		itemsKeys.push json.id
 		visibleId = json.id
@@ -651,6 +656,7 @@ getIds = (elem, ids={}) ->
 module.exports = (file, filename) ->
 	elems = parser file
 	codes = {}
+	autoInitCodes = []
 	bootstrap = ''
 	firstId = null
 	allQueries = {}
@@ -686,14 +692,18 @@ module.exports = (file, filename) ->
 		code += "_c.idsOrder = #{JSON.stringify(idsKeys)}\n"
 		code += "_c.objectsOrder = #{JSON.stringify(idsKeys).replace(/\"/g, '')}\n"
 		code += "_c.objects = #{JSON.stringify(objects).replace(/\"`|`\"/g, '')}\n"
-		code += 'return _c.createItem\n'
 
-		uid = 'n' + utils.uid()
-		id ||= uid
-		if codes[id]?
-			id = uid
-		codes[id] = code
-		firstId ?= id
+		if elem.name is 'Class'
+			code += "_c.item.enable();\n"
+			autoInitCodes.push code
+		else
+			code += 'return _c.createItem\n'
+			uid = 'n' + utils.uid()
+			id ||= uid
+			if codes[id]?
+				id = uid
+			codes[id] = code
+			firstId ?= id
 
 		# queries
 		for query, val of queries
@@ -708,6 +718,7 @@ module.exports = (file, filename) ->
 
 	bootstrap: bootstrap
 	codes: codes
+	autoInitCodes: autoInitCodes
 	queries: allQueries
 
 # codes = module.exports("""
