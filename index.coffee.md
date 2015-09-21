@@ -441,6 +441,23 @@ console.log(object);
 
 		return
 
+utils.removeFromUnorderedArray(*Array* array, *Any* element)
+------------------------------------------------------------
+
+	exports.removeFromUnorderedArray = (arr, elem) ->
+		null
+		`//<development>`
+		unless Array.isArray(arr)
+			throw new Error "utils.removeFromUnorderedArray array must be an Array"
+		`//</development>`
+
+		index = arr.indexOf elem
+		if index isnt -1
+			arr[index] = arr[arr.length-1]
+			arr.pop()
+
+		return
+
 *Object* utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
 ------------------------------------------------------------------------------
 
