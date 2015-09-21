@@ -12,6 +12,8 @@ PlatformImpl = switch true
 		require './impl/browser/index'
 	when utils.isQml
 		require './impl/qml/index'
+	when utils.isAndroid
+		require './impl/android/index'
 
 assert PlatformImpl
 , "No networking implementation found"

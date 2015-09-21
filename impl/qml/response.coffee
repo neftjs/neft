@@ -17,6 +17,7 @@ module.exports = (Networking) ->
 			log.warn "No `neft:style` found in main view"
 			return false
 
+		Renderer.window.document.node = data.node
 		hasItems = false
 		for style in styles
 			if style.item
