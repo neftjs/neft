@@ -40,7 +40,7 @@ module.exports = (impl) ->
 		///italic///i.test source
 
 	loadFont: (source, name) ->
-		if rsc = impl.Renderer.resources.getResource(source)
+		if rsc = impl.Renderer.resources?.getResource(source)
 			sources = []
 			for _, path of rsc.paths
 				sources.push path[1]

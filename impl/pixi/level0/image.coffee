@@ -57,7 +57,7 @@ module.exports = (impl) ->
 		ImageResourceRequest.resolution = impl.pixelRatio * val
 
 	setImageSource: (val, callback) ->
-		if rsc = impl.Renderer.resources.getResource(val)
+		if rsc = impl.Renderer.resources?.getResource(val)
 			val = rsc.resolve val, ImageResourceRequest
 		else
 			val = cssUtils.encodeImageSrc val

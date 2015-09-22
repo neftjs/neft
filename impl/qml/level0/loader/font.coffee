@@ -15,7 +15,7 @@ module.exports = (impl) ->
 				impl.onFontLoaded.emit name
 			return
 
-		if rsc = impl.Renderer.resources.getResource(source)
+		if rsc = impl.Renderer.resources?.getResource(source)
 			source = 'qrc:' + rsc.resolve()
 		else
 			source = impl.utils.toUrl(source)

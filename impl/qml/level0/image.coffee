@@ -160,7 +160,7 @@ module.exports = (impl) ->
 			data.resource = null
 
 			unless impl.utils.DATA_URI_RE.test(val)
-				if rsc = impl.Renderer.resources.getResource(val)
+				if rsc = impl.Renderer.resources?.getResource(val)
 					data.resource = rsc
 					val = 'qrc:' + rsc.resolve(val, ImageResourceRequest)
 				else
