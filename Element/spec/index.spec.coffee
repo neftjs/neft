@@ -200,7 +200,7 @@ describe 'View Element', ->
 		expect(elem.stringify()).toBe '<b><em></em></b><u></u><p></p>'
 
 	describe 'queryAll() works with selector', ->
-		doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
+		doc2 = Element.fromHTML "<div><b class='first second'><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
 		doc2div1 = doc2.children[0]
 		doc2b = doc2div1.children[0]
 		doc2u = doc2b.children[0]
@@ -250,6 +250,7 @@ describe 'View Element', ->
 			expect(doc2.queryAll('[color*=bl]')).toEqual [doc2u]
 			expect(doc2.queryAll('[color*="lu"]')).toEqual [doc2u]
 			expect(doc2.queryAll('[color*=\'blue\']')).toEqual [doc2u]
+			expect(doc2.queryAll('[color*=bl][color*=lu]')).toEqual [doc2u]
 			expect(doc2.queryAll('[color*=lue1]')).toEqual []
 
 		it '*', ->
@@ -347,14 +348,14 @@ describe 'View Element', ->
 				expect(tags).toEqual [doc2u]
 
 			it '[foo]', ->
-				watcher = doc2div1.watch '[attr]'
+				watcher = doc2div1.watch '[attr2]'
 				watcher.onAdd (tag) ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.attrs.set 'attr', '2'
+				doc2u.attrs.set 'attr2', '2'
 				expect(tags).toEqual [doc2u]
-				doc2u.attrs.set 'attr', undefined
+				doc2u.attrs.set 'attr2', undefined
 				expect(tags).toEqual []
 
 			it '[foo=bar]', ->
@@ -404,24 +405,26 @@ describe 'View Element', ->
 			it '*', ->
 				doc2u.parent = null
 				watcher = doc2div1.watch '*'
+				for node in watcher.nodes
+					tags.push node
 				watcher.onAdd (tag) ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
 				doc2u.parent = doc2div1
-				expect(tags).toEqual [doc2u, doc2u2]
+				expect(tags).toEqual [doc2b, doc2u, doc2u2]
 				doc2u.parent = null
-				expect(tags).toEqual []
+				expect(tags).toEqual [doc2b]
 
 			it '*[foo]', ->
-				watcher = doc2div1.watch '*[attr]'
+				watcher = doc2div1.watch '*[attr2]'
 				watcher.onAdd (tag) ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.attrs.set 'attr', '2'
+				doc2u.attrs.set 'attr2', '2'
 				expect(tags).toEqual [doc2u]
-				doc2u.attrs.set 'attr', undefined
+				doc2u.attrs.set 'attr2', undefined
 				expect(tags).toEqual []
 
 			it 'E > * > F[foo]', ->
@@ -454,6 +457,8 @@ describe 'View Element', ->
 			it '&[foo]', ->
 				doc2u.parent = null
 				watcher = doc2u.watch '&[color]'
+				for node in watcher.nodes
+					tags.push node
 				watcher.onAdd (tag) ->
 					tags.push tag
 				watcher.onRemove (tag) ->
