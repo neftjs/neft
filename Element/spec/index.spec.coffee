@@ -253,6 +253,11 @@ describe 'View Element', ->
 			expect(doc2.queryAll('[color*=bl][color*=lu]')).toEqual [doc2u]
 			expect(doc2.queryAll('[color*=lue1]')).toEqual []
 
+		it '.foo', ->
+			expect(doc2.queryAll('.first')).toEqual [doc2b]
+			expect(doc2.queryAll('.first.second')).toEqual [doc2b]
+			expect(doc2.queryAll('.first.second.third')).toEqual []
+
 		it '*', ->
 			expect(doc2.queryAll('*')).toEqual [doc2div1, doc2b, doc2u, doc2u2, doc2div2, doc2em1, doc2em2]
 

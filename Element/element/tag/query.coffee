@@ -123,6 +123,7 @@ TYPE = /^[a-zA-Z0-9|\-:_]+/
 DEEP = /^([ ]*)>([ ]*)|^([ ]+)/
 ATTR_SEARCH = /^\[([^\]]+?)\]/
 ATTR_VALUE_SEARCH = /^\[([^=]+?)=([^\]]+?)\]/
+ATTR_CLASS_SEARCH = /^\.([a-zA-Z0-9|\-_]+)/
 
 STARTS_WITH = /\^$/
 ENDS_WITH = /\$$/
@@ -182,6 +183,9 @@ getQueries = (selector, opts=0) ->
 		else if exec = ATTR_SEARCH.exec(sel)
 			sel = sel.slice exec[0].length
 			funcs[arrFunc] byAttr, exec[1], null
+		else if exec = ATTR_CLASS_SEARCH.exec(sel)
+			sel = sel.slice exec[0].length
+			funcs[arrFunc] byAttrContainsValue, 'class', exec[1]
 		else if exec = DEEP.exec(sel)
 			sel = sel.slice exec[0].length
 			deep = exec[0].trim()
