@@ -115,6 +115,16 @@ module.exports = (Renderer, Impl) ->
 
 			return
 
+		@setOpts = (object, component, opts) ->
+			if opts.id?
+				object.id = opts.id
+
+			if object instanceof Renderer.Class or object instanceof FixedObject
+				initObject.call object, component, opts
+			else
+				setOpts.call object, component, opts
+			return
+
 		constructor: (component, opts) ->
 			@id = ''
 			@_impl = null
@@ -130,13 +140,7 @@ module.exports = (Renderer, Impl) ->
 			Impl.createObject @, @constructor.__name__
 
 			if opts
-				if opts.id?
-					@id = opts.id
-
-				if @ instanceof Renderer.Class or @ instanceof FixedObject
-					initObject.call @, component, opts
-				else
-					setOpts.call @, component, opts
+				UtilsObject.setOpts @, component, opts
 
 		createBinding: (prop, val, component, ctx=@) ->
 			assert.isString prop

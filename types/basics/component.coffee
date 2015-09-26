@@ -14,6 +14,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		@id = original?.id or utils.uid()
 		@item = null
+		@itemId = original?.itemId or ''
 		@fileName = opts?.fileName or original?.fileName or 'unknown'
 		@objects = {}
 		@idsOrder = original?.idsOrder or null
@@ -25,7 +26,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@objectsInitQueue = []
 		@cache = original?.cache or Object.create(null)
 		@parent = original
-		@aliases = if original then Object.create(original.aliases) else {}
 
 		# if original
 			# @createItem = original.createItem
@@ -77,14 +77,16 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				newObj = cloneItem obj, components, null, null, comp
 
 		# initialize component
-		comp.init()
+		unless comp.ready
+			comp.init()
 		return
 
 	cloneItem = (item, components, opts, optsComponent, parentComponent) ->
 		# get cloned item component
+		needsNewComp = false
 		itemCompId = item._component.id
 		unless component = components[itemCompId]
-			newComp = true
+			needsNewComp = true
 			component = components[itemCompId] = new Component item._component
 
 		# create default class in required component
@@ -94,20 +96,19 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			clone._component = component
 		else
 			clone = item.clone component, opts
-
-		# extended item has more than one id, so remember it to the further cloning
-		if opts?.id and item.id
-			component.aliases[opts.id] = item.id
+		if item._component.item is item
+			component.item = clone
 
 		# if it's an item (all items have to have an id),
 		# let's save it in the cloned component
 		if clone.id
 			# if this item extends another (only main item - that's why opts),
 			# we save it under the proper id's
-			if (parentComponent isnt component or opts?.id) and (id = component.aliases[clone.id])
+			if item._component.item is item
 				if parentComponent isnt component
-					parentComponent.setObject clone, clone.id
-				component.setObject clone, id
+					parentComponent.setObject clone, parentComponent.itemId
+				if not component.objects[component.itemId]
+					component.setObject clone, component.itemId
 			else
 				component.setObject clone, clone.id
 
@@ -140,7 +141,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		# one item can have different extending items,
 		# but their can't use the same component;
 		# this function is recursive, so our deep component are not available for parents
-		if newComp
+		if needsNewComp
 			endComponentCloning component, components
 			components[itemCompId] = null
 
