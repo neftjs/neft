@@ -23,6 +23,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@isClone = !!original
 		@isDeepClone = false
 		@ready = false
+		@mirror = false
 		@objectsInitQueue = []
 		@cache = original?.cache or Object.create(null)
 		@parent = original
@@ -56,10 +57,11 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@objectsInitQueue = null
 		Object.freeze @
 
+	initObjects: ->
 		# init extensions
 		for id, item of @objects
 			for extension in item._extensions
-				if extension._component is @ and !extension.name and not extension._bindings?.when
+				if extension._component.ready and !extension.name and not extension._bindings?.when
 					extension.enable()
 
 		# init objects
@@ -74,28 +76,24 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		# clone no children objects (e.g. links)
 		for id, obj of comp.parent.objects
 			unless comp.objects[id]
-				newObj = cloneItem obj, components, null, null, comp
+				newObj = cloneObject obj, components, comp
 
 		# initialize component
-		unless comp.ready
-			comp.init()
+		comp.init()
 		return
 
-	cloneItem = (item, components, opts, optsComponent, parentComponent) ->
+	cloneObject = (item, components, parentComponent) ->
 		# get cloned item component
 		needsNewComp = false
 		itemCompId = item._component.id
 		unless component = components[itemCompId]
 			needsNewComp = true
 			component = components[itemCompId] = new Component item._component
+			component.mirror = parentComponent.mirror
 
 		# create default class in required component
 		# used when main item (only this type can have opts) extends other item
-		if optsComponent and opts
-			clone = item.clone optsComponent, opts
-			clone._component = component
-		else
-			clone = item.clone component, opts
+		clone = item.clone component
 		if item._component.item is item
 			component.item = clone
 
@@ -116,7 +114,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		for ext in item._extensions
 			# extension can be already cloned if it has an id
 			cloneExt = components[ext._component.id]?.objects[ext.id]
-			cloneExt ?= cloneItem ext, components, null, null, parentComponent
+			cloneExt ?= cloneObject ext, components, parentComponent
 			cloneExt.target = clone
 
 		if item instanceof Renderer.Item
@@ -131,18 +129,27 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			for child in item.children
 				# child can be already cloned
 				cloneChild = components[child._component.id]?.objects[child.id]
-				cloneChild ?= cloneItem(child, components, null, null, component)
+				cloneChild ?= cloneItem(child, components, component)
 				cloneChild.parent = clone
 
 			if firstChildren
 				for child in firstChildren
 					child.parent = clone
 
+		clone
+
+	cloneItem = (item, components, parentComponent) ->
+		itemCompId = item._component.id
+		needsNewComp = not components[itemCompId]
+		clone = cloneObject item, components, parentComponent
+
 		# one item can have different extending items,
 		# but their can't use the same component;
 		# this function is recursive, so our deep component are not available for parents
 		if needsNewComp
-			endComponentCloning component, components
+			endComponentCloning clone._component, components
+			if parentComponent.mirror
+				clone._component.initObjects()
 			components[itemCompId] = null
 
 		clone
@@ -153,15 +160,23 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			parentComponent = null
 
 		component = new Component @
+		component.mirror = not parentComponent
 
 		components = {}
 		components[component.id] = component
 		if parentComponent
 			components[parentComponent.id] = parentComponent
 
-		component.item = cloneItem @item, components, opts, parentComponent, component
+		component.item = cloneItem @item, components, component
 
-		endComponentCloning component, components
+		if opts
+			itemUtils.Object.setOpts component.item, parentComponent, opts
+
+		for id, comp of components
+			if comp?.isClone
+				endComponentCloning comp, components
+		if component.mirror
+			component.initObjects()
 
 		component
 
@@ -182,71 +197,83 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		component = @clone arg1, arg2
 		component.item
 
-	# initClonedObject = (item, component) ->
-	# 	for extension in item._extensions
-	# 		if extension instanceof Renderer.Class
-	# 			for name, val of extension.changes._attributes
-	# 				if val instanceof Link
-	# 					cloneObj = val.getItem(component).clone(component)
-	# 					component.saveClonedObject cloneObj, val
-	# 					initClonedObject cloneObj, component
-	# 		if !extension.name and not extension._bindings?.when
-	# 			extension.enable()
+	initClonedObject = (item, component) ->
+		for extension in item._extensions
+			if extension instanceof Renderer.Class
+				for name, val of extension.changes._attributes
+					if val instanceof Link
+						cloneObj = val.getItem(component).clone(component)
+						component.saveClonedObject cloneObj, val
+						initClonedObject cloneObj, component
+			if !extension.name and not extension._bindings?.when
+				extension.enable()
 
-	# 	# init objects
-	# 	if item instanceof Renderer.Item
-	# 		item.onReady.emit()
-	# 		item.onReady.disconnectAll()
+		# init objects
+		if item instanceof Renderer.Item
+			item.onReady.emit()
+			item.onReady.disconnectAll()
 
-	# 		for child in item.children
-	# 			initClonedObject child, component
+			for child in item.children
+				initClonedObject child, component
 
-	# 	item
+		item
 
-	# cloneItem: (id) ->
-	# 	assert.isString id
-	# 	assert.notLengthOf id, 0
+	cloneObject: (item) ->
+		assert.instanceOf item, itemUtils.Object
+		assert.isString item.id
+		assert.notLengthOf item.id, 0
+		assert.ok @objects[item.id]
 
-	# 	if @cache[id]
-	# 		@cache[id].pop()
-	# 	else
-	# 		if id is @item.id
-	# 			@createItem()
-	# 		else
-	# 			component = new Component @
-	# 			component.item = @item
-	# 			component.objects = utils.clone @objects
-	# 			component.objectsOrder = utils.clone @objectsOrder
-	# 			component.objectsOrderSignalArr = utils.clone @objectsOrderSignalArr
-	# 			component.isDeepClone = true
-	# 			component.ready = true
+		{id} = item
 
-	# 			item = @objects[id]?.cloneDeep(component)
+		if @cache[id]
+			@cache[id].pop()
+		else
+			if id is @item.id
+				@createItem()
+			else
+				component = new Component @
+				component.item = @item
+				component.objects = utils.clone @objects
+				component.objectsOrder = utils.clone @objectsOrder
+				component.objectsOrderSignalArr = utils.clone @objectsOrderSignalArr
+				component.isDeepClone = true
+				component.ready = true
 
-	# 			# init extensions
-	# 			initClonedObject item, component
+				item = @objects[id]
+				clone = item.clone(component)
+				component.saveClonedObject clone, item
 
-	# 			item
+				for child in item.children
+					cloneChild = child.clone component
+					component.saveClonedObject cloneChild, child
+					cloneChild.parent = clone
 
-	# saveClonedObject: (object, oldObject) ->
-	# 	assert.ok @isDeepClone
+				# init extensions
+				initClonedObject clone, component
 
-	# 	@objects[object.id] = object
-	# 	index = @objectsOrder.indexOf oldObject
-	# 	if index isnt -1
-	# 		@objectsOrder[index] = object
-	# 		@objectsOrderSignalArr[index] = object
+				clone
 
-	# 	return
+	saveClonedObject: (object, oldObject) ->
+		assert.ok @isDeepClone
 
-	# cacheItem: (item) ->
-	# 	assert.instanceOf item, Renderer.Item
-	# 	assert.isString item.id
-	# 	assert.notLengthOf item.id, 0
+		@objects[object.id] = object
+		index = @objectsOrder.indexOf oldObject
+		if index isnt -1
+			@objectsOrder[index] = object
+			@objectsOrderSignalArr[index] = object
 
-	# 	@cache[item.id] ?= []
-	# 	@cache[item.id].push item
-	# 	return
+		return
+
+	cacheObject: (item) ->
+		assert.instanceOf item, itemUtils.Object
+		assert.isString item.id
+		assert.notLengthOf item.id, 0
+		assert.ok @objects[item.id]
+
+		@cache[item.id] ?= []
+		@cache[item.id].push item
+		return
 
 	@Link = class Link
 		constructor: (@id) ->

@@ -53,6 +53,8 @@ module.exports = (Renderer, Impl) ->
 			return
 
 		setOpts = (component, opts) ->
+			assert.instanceOf component, Renderer.Component
+
 			if typeof opts.id is 'string'
 				@id = opts.id
 			if Array.isArray(opts.properties)
