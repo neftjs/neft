@@ -301,7 +301,7 @@ Grid {
 
 				clone
 
-		loadObjects = (classElem, item, sourceClassElem, loadedObjects) ->
+		loadObjects = (classElem, item, sourceClassElem=classElem, loadedObjects) ->
 			loadedObjects ?= classElem._loadedObjects ||= []
 			component = classElem._component
 

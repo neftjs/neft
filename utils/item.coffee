@@ -16,7 +16,7 @@ module.exports = (Renderer, Impl) ->
 	NOP = ->
 
 	getObjAsString = (item) ->
-		"#{item._component?.fileName}:#{item.id}"
+		"(#{item.constructor.__name__})#{item._component?.fileName}:#{item.id}"
 
 	getObjFile = (item) ->
 		path = ''
@@ -37,10 +37,20 @@ module.exports = (Renderer, Impl) ->
 					obj = @document
 					prop = 'query'
 				if typeof val is 'function'
+					`//<development>`
+					if typeof obj[prop] isnt 'function'
+						log.error "Object '#{obj}' has no function '#{prop}'"
+						continue
+					`//</development>`
 					obj[prop] val
 				else if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
 					continue
 				else
+					`//<development>`
+					unless prop of obj
+						log.error "Object '#{obj}' has no property '#{prop}'"
+						continue
+					`//</development>`
 					obj[prop] = val
 
 			for prop, val of opts
