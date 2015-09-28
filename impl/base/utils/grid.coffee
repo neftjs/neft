@@ -79,7 +79,7 @@ updateItem = (item) ->
 	i = 0
 	for child in children
 		# omit not visible and auto positioned children
-		if not child._visible
+		if not child._visible or not child._layout._enabled
 			continue
 
 		column = i % columnsLen
@@ -170,7 +170,7 @@ updateItem = (item) ->
 	i = 0
 	for child in children
 		# omit not visible children
-		if not child._visible
+		if not child._visible or not child._layout._enabled
 			continue
 
 		column = i % columnsLen
@@ -302,6 +302,7 @@ enableChild = (child) ->
 	child.onMarginChange update, @
 	child.onAnchorsChange update, @
 	child.onLayoutChange update, @
+	child.layout.onEnabledChange update, @
 
 disableChild = (child) ->
 	child.onVisibleChange.disconnect update, @
@@ -310,6 +311,7 @@ disableChild = (child) ->
 	child.onMarginChange.disconnect update, @
 	child.onAnchorsChange.disconnect update, @
 	child.onLayoutChange.disconnect update, @
+	child.layout.onEnabledChange.disconnect update, @
 
 COLUMN = exports.COLUMN = 1<<0
 ROW = exports.ROW = 1<<1

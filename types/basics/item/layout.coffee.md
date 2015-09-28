@@ -22,9 +22,22 @@ Layout @extension
 -----------------
 
 		constructor: (ref) ->
+			@_enabled = true
 			@_fillWidth = false
 			@_fillHeight = false
 			super ref
+
+*Boolean* Layout::enabled = true
+--------------------------------
+
+		itemUtils.defineProperty
+			constructor: Layout
+			name: 'enabled'
+			defaultValue: true
+			developmentSetter: (val) ->
+				assert.isBoolean val
+			namespace: propertyName
+			parentConstructor: ctor
 
 *Boolean* Layout::fillWidth = false
 -----------------------------------

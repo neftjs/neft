@@ -65,8 +65,8 @@ updateItem = (item) ->
 
 	# calculate children positions
 	for child, i in children
-		# omit not visible and auto positioned children
-		if not child._visible
+		# omit not visible
+		if not child._visible or not child._layout._enabled
 			continue
 
 		margin = child._margin
@@ -141,8 +141,8 @@ updateItem = (item) ->
 	if not data.autoHeight
 		height = item._height
 	for child, i in children
-		# omit not visible and auto positioned children
-		if not child._visible
+		# omit not visible
+		if not child._visible or not child._layout._enabled
 			continue
 		cell = elementsCell[i]
 		bottom = child._height
@@ -219,6 +219,7 @@ enableChild = (child) ->
 	child.onHeightChange update, @
 	child.onMarginChange update, @
 	child.onAnchorsChange update, @
+	child.layout.onEnabledChange update, @
 
 disableChild = (child) ->
 	child.onVisibleChange.disconnect update, @
@@ -226,6 +227,7 @@ disableChild = (child) ->
 	child.onHeightChange.disconnect update, @
 	child.onMarginChange.disconnect update, @
 	child.onAnchorsChange.disconnect update, @
+	child.layout.onEnabledChange.disconnect update, @
 
 module.exports = (impl) ->
 	DATA =
