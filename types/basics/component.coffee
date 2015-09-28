@@ -154,9 +154,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		clone
 
-	clone: (parentComponent, opts) ->
+	clone: (parentComponent, itemOpts) ->
 		unless parentComponent instanceof Component
-			opts = parentComponent
+			itemOpts = parentComponent
 			parentComponent = null
 
 		component = new Component @
@@ -169,8 +169,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		component.item = cloneItem @item, components, component
 
-		if opts
-			itemUtils.Object.setOpts component.item, parentComponent, opts
+		if itemOpts
+			itemUtils.Object.setOpts component.item, parentComponent, itemOpts
 
 		for id, comp of components
 			if comp?.isClone
@@ -197,28 +197,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		component = @clone arg1, arg2
 		component.item
 
-	initClonedObject = (item, component) ->
-		for extension in item._extensions
-			if extension instanceof Renderer.Class
-				for name, val of extension.changes._attributes
-					if val instanceof Link
-						cloneObj = val.getItem(component).clone(component)
-						component.saveClonedObject cloneObj, val
-						initClonedObject cloneObj, component
-			if !extension.name and not extension._bindings?.when
-				extension.enable()
-
-		# init objects
-		if item instanceof Renderer.Item
-			item.onReady.emit()
-			item.onReady.disconnectAll()
-
-			for child in item.children
-				initClonedObject child, component
-
-		item
-
-	cloneObject: (item) ->
+	cloneObject: (item, opts) ->
 		assert.instanceOf item, itemUtils.Object
 		assert.isString item.id
 		assert.notLengthOf item.id, 0
@@ -234,36 +213,35 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			else
 				component = new Component @
 				component.item = @item
-				component.objects = utils.clone @objects
-				component.objectsOrder = utils.clone @objectsOrder
-				component.objectsOrderSignalArr = utils.clone @objectsOrderSignalArr
+				component.objectsOrderSignalArr = new Array @objectsOrder.length+2
 				component.isDeepClone = true
 				component.ready = true
+				component.mirror = true
 
-				item = @objects[id]
-				clone = item.clone(component)
-				component.saveClonedObject clone, item
+				components = {}
+				components[component.id] = component
+				clone = cloneItem item, components, component
 
-				for child in item.children
-					cloneChild = child.clone component
-					component.saveClonedObject cloneChild, child
-					cloneChild.parent = clone
+				for key, val of @objects
+					component.objects[key] ||= val
+				for val, i in @objectsOrder
+					component.objectsOrderSignalArr[i] = component.objectsOrder[i] ||= val
 
-				# init extensions
-				initClonedObject clone, component
+				opts?.beforeInitObjects? clone
+
+				component.initObjects()
 
 				clone
 
-	saveClonedObject: (object, oldObject) ->
-		assert.ok @isDeepClone
+	setObjectById: (object, id) ->
+		assert.instanceOf object, itemUtils.Object
+		assert.isString id
+		assert.ok @objects[id]
 
-		@objects[object.id] = object
-		index = @objectsOrder.indexOf oldObject
-		if index isnt -1
-			@objectsOrder[index] = object
-			@objectsOrderSignalArr[index] = object
-
-		return
+		index = @idsOrder.indexOf id
+		@objects[id] = object
+		@objectsOrder[index] = @objectsOrderSignalArr[index] = object
+		object
 
 	cacheObject: (item) ->
 		assert.instanceOf item, itemUtils.Object

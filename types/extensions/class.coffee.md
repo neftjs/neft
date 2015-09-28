@@ -51,6 +51,8 @@ Class @modifier
 				@_name = ''
 				@_changes = null
 				@_document = null
+				@_loadedObjects = null
+				@_children = null
 				super component, opts
 
 *String* Class::name
@@ -106,18 +108,20 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 					if val?
 						assert.instanceOf val, itemUtils.Object
 				setter: (_super) -> (val) ->
-					{target, name} = @
+					{oldVal, name} = @
 
-					if target is val
+					if oldVal is val
 						return
 
 					@disable()
 
-					if target
-						utils.remove target._extensions, @
+					if oldVal
+						utils.remove oldVal._extensions, @
+						if @_running and not @_document?._query
+							unloadObjects @, oldVal
 					if name
-						if target
-							target._classExtensions[name] = null
+						if oldVal
+							oldVal._classExtensions[name] = null
 						if val
 							val._classExtensions ?= {}
 							val._classExtensions[name] = @
@@ -126,8 +130,6 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 
 					if val
 						val._extensions.push @
-						if name
-							@_target._classExtensions ?= {}
 						if val._classes?.has(name) or @_when
 							@enable()
 					return
@@ -212,6 +214,10 @@ Grid {
 
 				super()
 				updateTargetClass saveAndEnableClass, @_target, @
+
+				unless @_document?._query
+					loadObjects @, @_target
+
 				return
 
 			disable: ->
@@ -225,17 +231,109 @@ Grid {
 					@_target.classes.remove @_name
 					return
 
+				unless @_document?._query
+					unloadObjects @, @_target
+
 				super()
 				updateTargetClass saveAndDisableClass, @_target, @
 				return
+
+*Object* Class::children
+------------------------
+
+			utils.defineProperty @::, 'children', null, ->
+				@_children ||= new ChildrenObject(@)
+			, (val) ->
+				{children} = @
+
+				# clear
+				length = children.length
+				while length--
+					children.pop length
+
+				if val
+					assert.isArray val
+
+					for child in val
+						children.append child
+
+				return
+
+			class ChildrenObject
+
+*Integer* Class::children::length = 0
+-------------------------------------
+
+				constructor: (ref) ->
+					@_ref = ref
+					@length = 0
+
+*Item* Class::children::append(*Item* value)
+--------------------------------------------
+
+				append: (val) ->
+					assert.instanceOf val, Renderer.Item
+
+					@[@length++] = val
+
+					val
+
+*Item* Class::children::pop(*Integer* index)
+--------------------------------------------
+
+				pop: (i=@length-1) ->
+					assert.operator i, '>=', 0
+					assert.operator i, '<', @length
+
+					oldVal = @[i]
+					delete @[i]
+					--@length
+
+					oldVal
 
 			clone: (component) ->
 				clone = cloneClassWithNoDocument.call @, component
 
 				if query = @_document?._query
 					clone.document.query = query
+				if children = @_children
+					utils.merge clone.children, children
 
 				clone
+
+		loadObjects = (classElem, item, sourceClassElem, loadedObjects) ->
+			loadedObjects ?= classElem._loadedObjects ||= []
+			component = classElem._component
+
+			unless loadedObjects
+				assert.is classElem._loadedObjects.length, 0
+
+			# children
+			if classElem._children
+				for child in classElem._children
+					clone = component.cloneObject child,
+						beforeInitObjects: (clone) ->
+							clone._component.setObjectById sourceClassElem, sourceClassElem.id
+					loadedObjects.push clone
+					clone.parent = item
+
+			if classElem._document?._parent
+				loadObjects classElem._document._parent._ref, item, classElem, loadedObjects
+			return
+
+		unloadObjects = (classElem, item) ->
+			if loadedObjects = classElem._loadedObjects
+				component = classElem._component
+
+				for object in loadedObjects
+					object.parent = null
+					component.cacheObject object
+
+				utils.clear loadedObjects
+
+			if classElem._document?._parent
+				unloadObjects classElem._document._parent._ref, item
+			return
 
 		cloneClassWithNoDocument = (component) ->
 			clone = new Class component
@@ -547,8 +645,14 @@ Grid {
 					if @_query is val
 						return
 
+					unless @_query
+						unloadObjects @, @_target
+
 					_super.call @, val
 					@reloadQuery()
+
+					unless val
+						loadObjects @, @_target
 					return
 
 			getChildClass = (style, parentClass) ->
