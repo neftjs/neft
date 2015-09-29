@@ -21,6 +21,8 @@ module.exports = (File, data) -> class Style
 		style.textWatchingNodes.push node
 		if 'onTextChange' of node
 			node.onTextChange textChangeListener, style
+		if 'onChildrenChange' of node
+			node.onChildrenChange textChangeListener, style
 		if 'onVisibleChange' of node
 			node.onVisibleChange textChangeListener, style
 
@@ -138,7 +140,6 @@ module.exports = (File, data) -> class Style
 					for style in stylesToRender
 						style.waiting = false
 						style.renderItem()
-						style.findItemParent()
 						style.file.readyToUse = true
 
 					globalShowDelay = 0
@@ -189,15 +190,17 @@ module.exports = (File, data) -> class Style
 				@classes = utils.clone(classes.items())
 
 		@item.visible = true
+
+		if @lastItemParent
+			@item.parent = @lastItemParent
+		@findItemParent()
+
 		@item.document.node = @node
 		@item.document.visible = true
 		@baseText = @getTextObject()?.text or ''
 		@updateText()
 		@updateVisibility()
 		@syncClassAttr('')
-
-		if @lastItemParent
-			@item.parent = @lastItemParent
 		
 		for name of @attrs
 			val = @node.attrs.get name
@@ -499,6 +502,8 @@ module.exports = (File, data) -> class Style
 			while elem = @textWatchingNodes.pop()
 				if 'onTextChange' of elem
 					elem.onTextChange.disconnect textChangeListener, @
+				if 'onChildrenChange' of elem
+					elem.onChildrenChange.disconnect textChangeListener, @
 				if 'onVisibleChange' of elem
 					elem.onVisibleChange.disconnect textChangeListener, @
 
@@ -554,10 +559,11 @@ module.exports = (File, data) -> class Style
 
 		@node._documentStyle = @
 		@node.style = @item
-		@item.visible = false
 
-		if @isLink()
-			@item.linkUri = @getLinkUri()
+		if @item
+			@item.visible = false
+			if @isLink()
+				@item.linkUri = @getLinkUri()
 
 		# text changes
 		if @getTextObject()
