@@ -17,7 +17,7 @@ Margin @extension
 			constructor: ctor
 			name: propertyName
 			valueConstructor: Margin
-			setter: (_super) -> (val) ->
+			setter: (_super) -> (val=0) ->
 				margin = @[propertyName]
 				if typeof val is 'string'
 					arr = val.split ' '
