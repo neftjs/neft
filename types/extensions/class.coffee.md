@@ -315,7 +315,7 @@ Grid {
 						beforeInitObjects: (clone) ->
 							clone._component.setObjectById sourceClassElem, sourceClassElem.id
 					loadedObjects.push clone
-					clone.parent = item
+					clone.parent ?= item
 
 			if classElem._document?._parent
 				loadObjects classElem._document._parent._ref, item, classElem, loadedObjects

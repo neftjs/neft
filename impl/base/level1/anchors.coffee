@@ -337,7 +337,7 @@ module.exports = (impl) ->
 
 			if targetItem
 				`//<development>`
-				if targetItem isnt @item._children and @item._parent isnt targetItem and @item._parent isnt targetItem._parent
+				if @item._parent and targetItem isnt @item._children and @item._parent isnt targetItem and @item._parent isnt targetItem._parent
 					log.error "You can anchor only to a parent or sibling. Item '#{@item.toString()}.anchors.#{@source}: #{@target}'"
 				`//</development>`
 

@@ -154,9 +154,6 @@ module.exports = (impl) ->
 			@func = binding[0]
 			@args = component.objectsOrder
 
-			# destroy on property value change
-			handlerName = getPropHandlerName prop
-
 			# connections
 			connections = @connections ||= []
 			for elem in binding[1]
