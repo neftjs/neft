@@ -47,7 +47,7 @@ isBinding = (obj) ->
 	assert obj.type is ATTRIBUTE, "isBinding: type must be an attribute"
 
 	try
-		eval "(function(console,module,require){return (#{obj.value});}).call(null,{},{},function(){})"
+		eval "(function(console,module,require){return (#{obj.value});}).call(null,null,{},function(){})"
 		return false
 
 	# unless BINDING.test(obj.value)
@@ -512,6 +512,12 @@ bindingAttributeToString = (obj) ->
 # 	code
 
 stringify =
+	function: (elem) ->
+		args = idsKeys+''
+		if args and elem.params+''
+			args += ","
+		args += elem.params+''
+		"function(#{args}){#{elem.body}}"
 	object: (elem) ->
 		json = {}
 		children = []
@@ -554,6 +560,8 @@ stringify =
 				# postfix += ", \"#{body.name}\": ((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
 				# return false
 				value = "((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
+			else if body.type is 'function'
+				value = stringify.function body
 			else if isAnchor(body)
 				value = anchorAttributeToString(body)
 			else if isBinding(body)
@@ -574,12 +582,7 @@ stringify =
 					if value isnt false
 						json[body.name] = "`#{value}`"
 				when 'function'
-					args = idsKeys+''
-					if args and body.params+''
-						args += ","
-					args += body.params+''
-					func = "`function(#{args}){#{body.body}}`"
-					json[body.name] = func
+					json[body.name] = "`#{stringify.function body}`"
 				when 'property'
 					json.properties ?= []
 					json.properties.push body.name
@@ -689,6 +692,7 @@ module.exports = (file, filename) ->
 
 		code += '_c.item = '
 		code += elemCode
+		code += "_c.itemId = '#{elem.id}'\n"
 		code += "_c.idsOrder = #{JSON.stringify(idsKeys)}\n"
 		code += "_c.objectsOrder = #{JSON.stringify(idsKeys).replace(/\"/g, '')}\n"
 		code += "_c.objects = #{JSON.stringify(objects).replace(/\"`|`\"/g, '')}\n"
@@ -723,11 +727,12 @@ module.exports = (file, filename) ->
 
 # codes = module.exports("""
 # Image {
+# 	id: main
 # 	Class {
-# 		when: this.ab('a')
 # 		changes: {
-# 			children.order: Flow {
-# 				text: 'abc'
+# 			ab: 2
+# 			onReady: function(){
+# 				console.log(123);
 # 			}
 # 		}
 # 	}
