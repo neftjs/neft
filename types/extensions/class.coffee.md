@@ -268,18 +268,18 @@ Grid {
 					@_ref = ref
 					@length = 0
 
-*Item* Class::children::append(*Item* value)
---------------------------------------------
+*Object* Class::children::append(*Object* value)
+------------------------------------------------
 
 				append: (val) ->
-					assert.instanceOf val, Renderer.Item
+					assert.instanceOf val, itemUtils.Object
 
 					@[@length++] = val
 
 					val
 
-*Item* Class::children::pop(*Integer* index)
---------------------------------------------
+*Object* Class::children::pop(*Integer* index)
+----------------------------------------------
 
 				pop: (i=@length-1) ->
 					assert.operator i, '>=', 0
@@ -308,14 +308,16 @@ Grid {
 			unless loadedObjects
 				assert.is classElem._loadedObjects.length, 0
 
-			# children
 			if classElem._children
 				for child in classElem._children
 					clone = component.cloneObject child,
 						beforeInitObjects: (clone) ->
 							clone._component.setObjectById sourceClassElem, sourceClassElem.id
 					loadedObjects.push clone
-					clone.parent ?= item
+					if clone instanceof Renderer.Item
+						clone.parent ?= item
+					else
+						clone.target ?= item
 
 			if classElem._document?._parent
 				loadObjects classElem._document._parent._ref, item, classElem, loadedObjects
