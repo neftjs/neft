@@ -20,16 +20,20 @@ elementsY = new TypedArray.Uint32 64
 elementsCell = new TypedArray.Uint32 64
 
 updateItem = (item) ->
-	unless item._effectItem
+	unless effectItem = item._effectItem
 		return
 
 	{includeBorderMargins} = item
-	effectItem = item._effectItem
 	{children} = effectItem
 	data = item._impl
+	{autoWidth, autoHeight} = data
 
 	if item.children.layout
 		return
+
+	if layout = effectItem._layout
+		autoWidth &&= !layout._fillWidth
+		autoHeight &&= !layout._fillHeight
 
 	if data.loops is MAX_LOOPS
 		log.error "Potential Flow loop detected. Recalculating on this item (#{item.toString()}) has been disabled."
@@ -39,7 +43,7 @@ updateItem = (item) ->
 		return
 
 	# get config
-	maxColumn = if data.autoWidth then Infinity else effectItem.width
+	maxColumn = if autoWidth then Infinity else effectItem.width
 	columnSpacing = item.spacing.column
 	rowSpacing = item.spacing.row
 
@@ -66,10 +70,18 @@ updateItem = (item) ->
 	# calculate children positions
 	for child, i in children
 		# omit not visible
-		if not child._visible or not child._layout._enabled
+		if not child._visible
 			continue
 
 		margin = child._margin
+		layout = child._layout
+
+		if layout
+			unless layout._enabled
+				continue
+
+			if layout._fillWidth and not autoWidth
+				child.width = maxColumn
 
 		if column is 0
 			x = 0
@@ -132,21 +144,26 @@ updateItem = (item) ->
 			multiplierY = 0.5
 		when 'bottom'
 			multiplierY = 1
-	if data.autoHeight or alignV is 'top'
+	if autoHeight or alignV is 'top'
 		plusY = 0
 	else
 		plusY = (item._height - height) * multiplierY
-	if not data.autoWidth
+	if not autoWidth
 		width = item._width
-	if not data.autoHeight
+	if not autoHeight
 		height = item._height
 	for child, i in children
 		# omit not visible
-		if not child._visible or not child._layout._enabled
+		if not child._visible
 			continue
+
 		cell = elementsCell[i]
 		bottom = child._height
 		anchors = child._anchors
+		layout = child._layout
+
+		if layout and not layout._enabled
+			continue
 
 		if child._margin
 			if includeBorderMargins or cell > 0
@@ -160,10 +177,10 @@ updateItem = (item) ->
 			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY
 
 	# set item size
-	if data.autoWidth
+	if autoWidth
 		effectItem.width = width
 
-	if data.autoHeight
+	if autoHeight
 		effectItem.height = height
 
 	return
@@ -189,7 +206,7 @@ update = ->
 	else
 		data.loops = 0
 
-	unless data.pending
+	if not data.pending and @_effectItem?._visible
 		data.pending = true
 		queue.push @
 
@@ -204,12 +221,12 @@ updateSize = ->
 	return
 
 onWidthChange = (oldVal) ->
-	if @_effectItem and not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillWidth)
 		@_impl.autoWidth = @_effectItem._width is 0 and oldVal isnt -1
 	updateSize.call @
 
 onHeightChange = (oldVal) ->
-	if @_effectItem and not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillHeight)
 		@_impl.autoHeight = @_effectItem._height is 0 and oldVal isnt -1
 	updateSize.call @
 
@@ -219,7 +236,7 @@ enableChild = (child) ->
 	child.onHeightChange update, @
 	child.onMarginChange update, @
 	child.onAnchorsChange update, @
-	child.layout.onEnabledChange update, @
+	child.onLayoutChange update, @
 
 disableChild = (child) ->
 	child.onVisibleChange.disconnect update, @
@@ -227,7 +244,7 @@ disableChild = (child) ->
 	child.onHeightChange.disconnect update, @
 	child.onMarginChange.disconnect update, @
 	child.onAnchorsChange.disconnect update, @
-	child.layout.onEnabledChange.disconnect update, @
+	child.onLayoutChange.disconnect update, @
 
 module.exports = (impl) ->
 	DATA =
@@ -247,7 +264,9 @@ module.exports = (impl) ->
 
 	setFlowEffectItem: (item, oldItem) ->
 		if oldItem
+			oldItem.onVisibleChange.disconnect update, @
 			oldItem.onChildrenChange.disconnect update, @
+			oldItem.onLayoutChange.disconnect update, @
 			oldItem.onWidthChange.disconnect onWidthChange, @
 			oldItem.onHeightChange.disconnect onHeightChange, @
 			oldItem.children.onInsert.disconnect enableChild, @
@@ -267,7 +286,9 @@ module.exports = (impl) ->
 			if @_impl.autoHeight = item.height is 0
 				item.height = -1
 
+			item.onVisibleChange update, @
 			item.onChildrenChange update, @
+			item.onLayoutChange update, @
 			item.onWidthChange onWidthChange, @
 			item.onHeightChange onHeightChange, @
 			item.children.onInsert enableChild, @

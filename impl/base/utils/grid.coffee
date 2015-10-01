@@ -36,9 +36,12 @@ updateItem = (item) ->
 	{gridType} = data
 
 	# get config
-	autoWidth = data.autoWidth
-	autoHeight = data.autoHeight
+	{autoWidth, autoHeight} = data
 	columnSpacing = rowSpacing = 0
+
+	if layout = effectItem._layout
+		autoWidth &&= !layout._fillWidth
+		autoHeight &&= !layout._fillHeight
 
 	if gridType is ALL
 		columnsLen = item.columns
@@ -78,8 +81,8 @@ updateItem = (item) ->
 	# get columns and rows positions
 	i = 0
 	for child in children
-		# omit not visible and auto positioned children
-		if not child._visible or not child._layout._enabled
+		# omit not visible
+		if not child._visible
 			continue
 
 		column = i % columnsLen
@@ -90,6 +93,9 @@ updateItem = (item) ->
 		width = child._width
 		height = child._height
 		margin = child._margin
+
+		if layout and not layout._enabled
+			continue
 
 		if layout and layout._fillWidth and not autoWidth
 			width = 0
@@ -170,7 +176,7 @@ updateItem = (item) ->
 	i = 0
 	for child in children
 		# omit not visible children
-		if not child._visible or not child._layout._enabled
+		if not child._visible
 			continue
 
 		column = i % columnsLen
@@ -180,6 +186,9 @@ updateItem = (item) ->
 		margin = child._margin
 		layout = child._layout
 		anchors = child._anchors
+
+		if layout and not layout._enabled
+			continue
 
 		# get column position
 		columnX = if column > 0 then columnsPositions[column-1] else 0
@@ -258,7 +267,7 @@ updateItems = ->
 
 update = ->
 	data = @_impl
-	if data.pending or not @_effectItem?.visible
+	if data.pending or not @_effectItem?._visible
 		return
 
 	data.pending = true
@@ -286,12 +295,12 @@ updateSize = ->
 	return
 
 onWidthChange = (oldVal) ->
-	if @_effectItem and not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillWidth)
 		@_impl.autoWidth = @_effectItem._width is 0 and oldVal isnt -1
 	updateSize.call @
 
 onHeightChange = (oldVal) ->
-	if @_effectItem and not @_impl.updatePending
+	if @_effectItem and not @_impl.updatePending and (not (layout = @_effectItem._layout) or not layout._fillHeight)
 		@_impl.autoHeight = @_effectItem._height is 0 and oldVal isnt -1
 	updateSize.call @
 
@@ -302,7 +311,6 @@ enableChild = (child) ->
 	child.onMarginChange update, @
 	child.onAnchorsChange update, @
 	child.onLayoutChange update, @
-	child.layout.onEnabledChange update, @
 
 disableChild = (child) ->
 	child.onVisibleChange.disconnect update, @
@@ -311,7 +319,6 @@ disableChild = (child) ->
 	child.onMarginChange.disconnect update, @
 	child.onAnchorsChange.disconnect update, @
 	child.onLayoutChange.disconnect update, @
-	child.layout.onEnabledChange.disconnect update, @
 
 COLUMN = exports.COLUMN = 1<<0
 ROW = exports.ROW = 1<<1
@@ -336,6 +343,7 @@ exports.setEffectItem = (item, oldItem) ->
 	if oldItem
 		oldItem.onVisibleChange.disconnect update, @
 		oldItem.onChildrenChange.disconnect update, @
+		oldItem.onLayoutChange.disconnect update, @
 		oldItem.onWidthChange.disconnect onWidthChange, @
 		oldItem.onHeightChange.disconnect onHeightChange, @
 		oldItem.children.onInsert.disconnect enableChild, @
@@ -352,6 +360,7 @@ exports.setEffectItem = (item, oldItem) ->
 
 		item.onVisibleChange update, @
 		item.onChildrenChange update, @
+		item.onLayoutChange update, @
 		item.onWidthChange onWidthChange, @
 		item.onHeightChange onHeightChange, @
 		item.children.onInsert enableChild, @
