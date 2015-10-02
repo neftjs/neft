@@ -156,6 +156,7 @@ anchorAttributeToString = (obj) ->
 	else if anchor[0] is 'null'
 		return 'null'
 
+	useBinding = false
 	anchor[0] = switch anchor[0]
 		when 'this.parent', 'parent'
 			"'parent'"
@@ -165,17 +166,17 @@ anchorAttributeToString = (obj) ->
 			"'nextSibling'"
 		when 'this.previousSibling', 'previousSibling'
 			"'previousSibling'"
-		# when 'parent'
-		# 	getItemParent obj
-		# when 'nextSibling'
-		# 	getItemNextSibling obj
-		# when 'previousSibling'
-		# 	getItemPreviousSibling obj
 		else
-			"'#{anchor[0]}'"
+			useBinding = true
+			"#{anchor[0]}"
 	if anchor.length > 1
 		anchor[1] = "'#{anchor[1]}'"
-	"[#{anchor}]"
+	r = "[#{anchor}]"
+
+	if useBinding
+		"[function(#{idsKeys}){return #{r}}, []]"
+	else
+		r
 
 bindingAttributeToString = (obj) ->
 	binding = ['']
@@ -629,7 +630,7 @@ stringify =
 		if rendererCtor?
 			r = "new #{elem.name}(_c, #{json})\n"
 		else
-			r = "(typeof #{elem.name} === 'function' ? #{elem.name} : #{elem.name}._main)(_c, #{json})\n"
+			r = "Renderer.Component.getCloneFunction(#{elem.name}, '#{elem.name}')(_c, #{json})\n"
 		if visibleId
 			r = "#{visibleId} = #{r}"
 		r
