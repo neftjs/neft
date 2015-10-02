@@ -307,9 +307,9 @@ module.exports = (impl) ->
 					item.onPreviousSiblingChange onPreviousSiblingChange, @
 					onPreviousSiblingChange.call @, null
 				else
-					@targetItem = item._component.objects[target]
-					for handler in getTargetWatchProps[line][@type]
-						@targetItem[handler] update, @
+					if @targetItem = target
+						for handler in getTargetWatchProps[line][@type]
+							@targetItem[handler] update, @
 					update.call @
 
 			Object.preventExtensions @
@@ -332,7 +332,7 @@ module.exports = (impl) ->
 					targetItem = @item._previousSibling
 				else
 					{targetItem} = @
-			if targetItem isnt @targetItem
+			if not targetItem or targetItem isnt @targetItem
 				return
 
 			if targetItem
