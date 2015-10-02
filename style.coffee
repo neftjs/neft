@@ -309,7 +309,7 @@ module.exports = (File, data) -> class Style
 			item.label
 
 	updateText: ->
-		if @waiting
+		if @waiting or @children.length
 			return
 
 		obj = @getTextObject()
