@@ -56,7 +56,12 @@ module.exports = (impl) ->
 		obj
 
 	getImage = (src, rsc) ->
-		cache[src] ?= createImage(src, rsc)
+		if r = cache[src]
+			return r
+		r = createImage(src, rsc)
+		unless /^data:/.test(src)
+			cache[src] = r
+		r
 
 	onImageLoaded = ->
 		data = @_impl
