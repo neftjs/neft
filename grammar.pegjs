@@ -194,7 +194,7 @@ AttributeEnds
 
 AttributeBody
 	= Type
-	/ "{" d:(__ d:Declaration __ { return d })* "}" AttributeEnds { return d }
+	/ "{" d:(__ d:Declaration __ { return d })* __ "}" AttributeEnds { return d }
 	/ "[" d:Type* "]" AttributeEnds { return d }
 	/ d:$StringLiteral AttributeEnds { return d }
 	/ value:(!AttributeEnds d:($StringLiteral/SourceCharacter) {return d})+ AttributeEnds {
@@ -282,7 +282,7 @@ Declaration
 	}
 
 Declarations
-	= d:(Declaration / IfStatement / Code)* { return flattenArray(d) }
+	= d:(Declaration / IfStatement)* { return flattenArray(d) }
 
 /* TYPE */
 
