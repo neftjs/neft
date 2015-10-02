@@ -178,6 +178,12 @@ module.exports = (Renderer, Impl) ->
 						component.objectsInitQueue.push Impl.setItemBinding, @, [prop, val, component, ctx]
 			return
 
+		updateBinding: (prop) ->
+			assert.isString prop
+
+			Impl.updateItemBinding.call @, prop
+			return
+
 		clone: (component, opts) ->
 			clone = new @constructor component
 			if @id

@@ -225,3 +225,7 @@ module.exports = (impl) ->
 			data.bindings[prop] = Binding.factory @, prop, binding, component, ctx
 
 		return
+
+	updateItemBinding: (prop) ->
+		@_impl.bindings?[prop]?.update()
+		return

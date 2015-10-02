@@ -130,7 +130,7 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 
 					if val
 						val._extensions.push @
-						if val._classes?.has(name) or @_when
+						if val._classes?.has(name) or @_when or (@_priority isnt -1 and @_component.ready and !@_name and !@_bindings?.when and !@_document?._query)
 							@enable()
 					return
 
@@ -231,10 +231,11 @@ Grid {
 					@_target.classes.remove @_name
 					return
 
+				super()
+
 				unless @_document?._query
 					unloadObjects @, @_target
 
-				super()
 				updateTargetClass saveAndDisableClass, @_target, @
 				return
 
@@ -310,9 +311,8 @@ Grid {
 
 			if classElem._children
 				for child in classElem._children
-					clone = component.cloneObject child,
-						beforeInitObjects: (clone) ->
-							clone._component.setObjectById sourceClassElem, sourceClassElem.id
+					clone = component.cloneObject child
+					clone._component.setObjectById sourceClassElem, sourceClassElem.id
 					loadedObjects.push clone
 					if clone instanceof Renderer.Item
 						clone.parent ?= item
@@ -327,11 +327,9 @@ Grid {
 			if loadedObjects = classElem._loadedObjects
 				component = classElem._component
 
-				for object in loadedObjects
+				while object = loadedObjects.pop()
 					object.parent = null
 					component.cacheObject object
-
-				utils.clear loadedObjects
 
 			if classElem._document?._parent
 				unloadObjects classElem._document._parent._ref, item
