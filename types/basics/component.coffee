@@ -4,6 +4,15 @@ utils = require 'utils'
 assert = require 'neft-assert'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Component
+
+	@getCloneFunction = (func, name) ->
+		if typeof func is 'function'
+			func
+		else if func and typeof func._main is 'function'
+			func._main
+		else
+			throw new Error "'#{name}' is not an item definition"
+
 	constructor: (original, opts) ->
 		unless original instanceof Component
 			opts = original
@@ -28,7 +37,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@ready = false
 		@mirror = false
 		@objectsInitQueue = []
-		@cache = original?.cache or Object.create(null)
+		@cache = Object.create(null)
 		@parent = original
 
 		# if original
@@ -63,13 +72,14 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 	initObjects: ->
 		# init extensions
 		for id, item of @objects
-			for extension in item._extensions
-				if !extension.name and not extension._bindings?.when
-					extension.enable()
+			if @objects.hasOwnProperty(id)
+				for extension in item._extensions
+					if !extension.name and not extension._bindings?.when
+						extension.enable()
 
 		# init objects
 		for id, item of @objects
-			if item instanceof Renderer.Item
+			if @objects.hasOwnProperty(id) and item instanceof Renderer.Item
 				item.onReady.emit()
 				item.onReady.disconnectAll()
 
@@ -78,7 +88,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 	endComponentCloning = (comp, components, createdComponents) ->
 		# clone no children objects (e.g. links)
 		for id, obj of comp.parent.objects
-			unless comp.objects[id]
+			if not comp.objects[id] and id isnt comp.itemId
 				newObj = cloneObject obj, components, createdComponents, comp
 
 		# initialize component
@@ -107,8 +117,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			# if this item extends another (only main item - that's why opts),
 			# we save it under the proper id's
 			if item._component.item is item
-				# if parentComponent isnt component
-				# 	parentComponent.setObject clone, parentComponent.itemId
+				if parentComponent isnt component
+					parentComponent.setObject clone, clone.id
 				if not component.objects[component.itemId]
 					component.setObject clone, component.itemId
 			else
@@ -151,6 +161,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		# but their can't use the same component;
 		# this function is recursive, so our deep component are not available for parents
 		if needsNewComp
+			endComponentCloning components[itemCompId], components, createdComponents
 			components[itemCompId] = null
 
 		clone
@@ -174,20 +185,23 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		for comp in createdComponents
 			unless comp.item
 				comp.item = item
-				comp.setObject item, comp.itemId
+				unless comp.objects[comp.itemId]
+					comp.setObject item, comp.itemId
 		`//<development>`
 		Object.freeze createdComponents
 		`//</development>`
 		if itemOpts
 			itemUtils.Object.setOpts component.item, parentComponent, itemOpts
+		# for comp in createdComponents
+		# 	components[comp.id] = comp
+		# 	endComponentCloning comp, components, createdComponents
 		for comp in createdComponents
-			components[comp.id] = comp
-			endComponentCloning comp, components, createdComponents
+			unless comp.ready
+				endComponentCloning comp, components, createdComponents
 		if component.mirror
 			for comp in createdComponents
 				assert.ok comp.ready
 				comp.initObjects()
-
 
 		component
 
@@ -208,7 +222,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		component = @clone arg1, arg2
 		component.item
 
-	cloneObject: (item, opts) ->
+	cloneObject: (item, opts=0) ->
 		assert.instanceOf item, itemUtils.Object
 		assert.isString item.id
 		assert.notLengthOf item.id, 0
@@ -216,13 +230,15 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		{id} = item
 
-		if @cache[id]
-			@cache[id].pop()
+		if (cache = @cache[id]) and cache.length > 0
+			clone = @cache[id].pop()
 		else
 			if id is @item.id
-				@createItem()
+				clone = @createItem()
 			else
 				component = new Component @
+				baseObjects = component.objects
+				component.objects = Object.create baseObjects
 				component.item = @item
 				component.objectsOrderSignalArr = new Array @objectsOrder.length+2
 				component.isDeepClone = true
@@ -234,24 +250,38 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				clone = cloneItem item, components, component
 
 				for key, val of @objects
-					component.objects[key] ||= val
+					baseObjects[key] ||= val
 				for val, i in @objectsOrder
 					component.objectsOrderSignalArr[i] = component.objectsOrder[i] ||= val
 
-				opts?.beforeInitObjects? clone
-
-				component.initObjects()
-
-				clone
+		clone._component.initObjects()
+		clone
 
 	setObjectById: (object, id) ->
 		assert.instanceOf object, itemUtils.Object
 		assert.isString id
 		assert.ok @objects[id]
 
-		index = @idsOrder.indexOf id
+		if @objects[id] is object
+			return
+
 		@objects[id] = object
-		@objectsOrder[index] = @objectsOrderSignalArr[index] = object
+		index = @idsOrder.indexOf id
+		if index isnt -1
+			@objectsOrder[index] = @objectsOrderSignalArr[index] = object
+
+		# force update bindings
+		for id, item of @objects
+			if @objects.hasOwnProperty(id)
+				if bindings = item._bindings
+					for prop, _ of bindings
+						item.updateBinding prop
+
+				for extension in item._extensions
+					if bindings = extension._bindings
+						for prop, _ of bindings
+							extension.updateBinding prop
+
 		object
 
 	cacheObject: (item) ->
@@ -259,9 +289,18 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		assert.isString item.id
 		assert.notLengthOf item.id, 0
 		assert.ok @objects[item.id]
+		assert.ok item._component.isDeepClone
 
 		@cache[item.id] ?= []
 		@cache[item.id].push item
+
+		# disable extensions
+		objects = item._component.objects
+		for id, item of objects
+			if objects.hasOwnProperty(id)
+				for extension in item._extensions
+					extension.disable()
+
 		return
 
 	@Link = class Link
