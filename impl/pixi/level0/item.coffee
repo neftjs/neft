@@ -257,7 +257,7 @@ module.exports = (impl) ->
 		implName = SIGNALS[uniqueName]
 
 		if implName and uniqueName isnt 'pointerOnRelease'
-			elem.interactive = @_ref.pointer.captureEvents
+			elem.interactive = @_ref.pointer.enabled
 			_super = elem[implName] or NOP
 			elem[implName] = (e, arg) ->
 				unless arg
@@ -278,7 +278,7 @@ module.exports = (impl) ->
 			elem.defaultCursor = 'pointer'
 		return
 
-	setItemPointerCaptureEvents: (val) ->
+	setItemPointerEnabled: (val) ->
 		@_impl.elem.interactive = val
 
 	setItemKeysFocus: cssUtils.keysEvents.setItemKeysFocus

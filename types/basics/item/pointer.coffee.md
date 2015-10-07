@@ -40,7 +40,7 @@ Rectangle {
 This class enables mouse and touch handling.
 
 		constructor: (ref) ->
-			@_captureEvents = true
+			@_enabled = true
 			@_draggable = false
 			@_dragging = false
 			@_x = 0
@@ -51,18 +51,18 @@ This class enables mouse and touch handling.
 			@_hoverInitialized = false
 			super ref
 
-*Boolean* Pointer::captureEvents = true
----------------------------------------
+*Boolean* Pointer::enabled = true
+---------------------------------
 
-### *Signal* Pointer::onCaptureEventsChange(*Boolean* oldValue)
+### *Signal* Pointer::onEnabledChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Pointer
-			name: 'captureEvents'
+			name: 'enabled'
 			defaultValue: true
 			namespace: 'pointer'
 			parentConstructor: ctor
-			implementation: Impl.setItemPointerCaptureEvents
+			implementation: Impl.setItemPointerEnabled
 			developmentSetter: (val) ->
 				assert.isBoolean val
 

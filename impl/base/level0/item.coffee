@@ -69,7 +69,7 @@ module.exports = (impl) ->
 
 	attachItemSignal: (name, signal) ->
 
-	setItemPointerCaptureEvents: (val) ->
+	setItemPointerEnabled: (val) ->
 
 	setItemPointerDraggable: (val) ->
 

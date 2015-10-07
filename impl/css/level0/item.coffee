@@ -297,7 +297,7 @@ module.exports = (impl) ->
 			data.elemStyle.cursor = cursor
 		return
 
-	setItemPointerCaptureEvents: (val) ->
+	setItemPointerEnabled: (val) ->
 		@_impl.elemStyle.pointerEvents = if val then '' else 'none'
 		return
 

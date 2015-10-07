@@ -339,7 +339,7 @@ module.exports = (impl) ->
 			else
 				attachPointerMouse.call @, ns, name, uniqueName, qmlName
 
-	setItemPointerCaptureEvents: (val) ->
+	setItemPointerEnabled: (val) ->
 		mouseArea = getMouseArea @
 		mouseArea.enabled = val
 		return
