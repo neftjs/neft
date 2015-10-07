@@ -181,7 +181,6 @@ updateItem = (item) ->
 
 		column = i % columnsLen
 		row = Math.floor(i/columnsLen) % rowsLen
-		i++
 
 		margin = child._margin
 		layout = child._layout
@@ -235,6 +234,8 @@ updateItem = (item) ->
 			else if alignV is 'right'
 				y += rowsPositions[row] - y - rowsPositions[lastRow1] - bottomMargin
 			child.y = y
+
+		i++
 
 	# set item size
 	if autoWidth

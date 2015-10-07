@@ -21,7 +21,7 @@ module.exports = (impl) ->
 		pool = []
 
 		@factory = (binding, objects, item, prop, parent=null) ->
-			if elem = pool.pop()
+			if pool.length > 0 and (elem = pool.pop())
 				Connection.call elem, binding, objects, item, prop, parent
 				elem
 			else

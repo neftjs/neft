@@ -255,7 +255,7 @@ module.exports = (impl) ->
 		pool = []
 
 		@factory = (item, source, def) ->
-			if elem = pool.pop()
+			if pool.length > 0 and (elem = pool.pop())
 				Anchor.call elem, item, source, def
 				elem
 			else
