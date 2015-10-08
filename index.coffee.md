@@ -262,7 +262,7 @@ console.log(list.items());
 *List* List::extend(*List|Array* items)
 ---------------------------------------
 
-Extend the list by appending all the items in the given list.
+Extend this list by appending all items from the given list.
 
 		extend: (items) ->
 			if items instanceof List
@@ -336,11 +336,10 @@ console.log(list.items());
 ```
 
 		pop: (i) ->
-			if i isnt undefined
-				assert.operator i, '>=', 0
-				assert.operator i, '<', @length
-			else
+			if i is undefined
 				i = @length - 1
+			assert.operator i, '>=', 0
+			assert.operator i, '<', @length
 
 			oldVal = @_data[i]
 			@_data.splice i, 1
