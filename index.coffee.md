@@ -17,9 +17,6 @@ Resource Manager @engine
 
 		@URI = ///^(?:rsc|resource|resources)?:\/?\/?(.*?)(?:@([0-9p]+)x)?(?:\.[a-zA-Z]+)?(?:\#[a-zA-Z0-9]+)?$///
 
-		if utils.isServer
-			@parser = require('./parser') @
-
 *Resources* Resources.fromJSON(*String|Object* json)
 ----------------------------------------------------
 
