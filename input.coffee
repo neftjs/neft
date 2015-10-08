@@ -22,7 +22,6 @@ module.exports = (File) -> class Input
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON']
 
 	cache = {}
-
 	GLOBAL =
 		Math: Math
 		Array: Array
@@ -30,6 +29,8 @@ module.exports = (File) -> class Input
 		Number: Number
 		RegExp: RegExp
 		String: String
+		db: require 'db'
+		utils: require 'utils'
 
 	@getVal = do ->
 		getFromElement = (elem, prop) ->
