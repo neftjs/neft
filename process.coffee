@@ -38,6 +38,7 @@ module.exports = ->
 					classList:
 						add: ->
 					appendChild: ->
+					insertBefore: ->
 					style: {}
 					children: [
 						{
@@ -114,6 +115,13 @@ module.exports = ->
 					onExited: SIGNAL
 					onPositionChanged: SIGNAL
 					onWheel: SIGNAL
+					contentXChanged: SIGNAL
+					contentYChanged: SIGNAL
+					fontChanged: SIGNAL
+					linkActivated: SIGNAL
+					drag:
+						onActiveChanged: SIGNAL
+					Drag: {}
 					createObject: -> global.Qt.createQmlObject()
 				binding: ->
 				rgba: ->
@@ -145,6 +153,10 @@ module.exports = ->
 					connect: ->
 			global.requestAnimationFrame = ->
 
+		android: ->
+			global.android = {}
+			global._neft = {}
+
 	NODE_MODULES =
 		fs: true
 		path: true
@@ -166,6 +178,7 @@ module.exports = ->
 		'node-static': true
 		mysql: true
 		'js-yaml': true
+		mkdirp: true
 
 	fs = require 'fs'
 	pathUtils = require 'path'

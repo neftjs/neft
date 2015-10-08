@@ -81,7 +81,7 @@ module.exports = (opts, callback) ->
 			# cleaner.write bundle
 			# bundle = cleaner.toString()
 
-		if opts.release or opts.minify
+		if opts.minify# or opts.release
 			# logtime = log.time 'Minimization'
 			fs.writeFileSync './tmp.js', bundle, 'utf-8'
 
