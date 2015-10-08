@@ -72,6 +72,7 @@ module.exports = (impl) ->
 	{transformProp, rad2deg} = impl.utils
 
 	impl._SIGNALS = SIGNALS
+	implUtils = impl.utils
 
 	mouseActivePointer = null
 
@@ -172,7 +173,6 @@ module.exports = (impl) ->
 		y: 0
 		rotation: 0
 		scale: 1
-		parent: null
 		mozFontSubpixel: true
 		isLayer: false
 		isInLayers: false
@@ -186,21 +186,26 @@ module.exports = (impl) ->
 		data.elem ?= document.createElement 'div'
 		data.elemStyle = data.elem.style
 
-	setItemParent: (val, index) ->
+	setItemParent: (val) ->
 		self = @
 		{elem} = @_impl
 
 		if val
-			if index >= 0 and val._impl.innerElem
-				index++
-			if index >= 0 and (childAtIndex = val._impl.elem.children[index])
-				val._impl.elem.insertBefore elem, childAtIndex
-			else
-				val._impl.elem.appendChild elem
+			val._impl.elem.appendChild elem
 		else
 			elem.parentElement?.removeChild elem
-		@_impl.parent = val
 
+		return
+
+	setItemIndex: (val) ->
+		if childAtIndex = @_parent._children[val]
+			@_impl.elem.parentElement.insertBefore @_impl.elem, childAtIndex._impl.elem
+		else
+			@_impl.elem.parentElement.appendChild @_impl.elem
+		return
+
+	setItemBackground: (val) ->
+		implUtils.prependElement @_impl.elem, val._impl.elem
 		return
 
 	setItemVisible: (val) ->

@@ -38,6 +38,12 @@ exports.prependElement = (parent, child) ->
 	else
 		parent.appendChild child
 
+exports.insertAfter = (child, afterElem) ->
+	if afterElem.nextElement
+		afterElem.parentElement.insertBefore child, afterElem.nextElement
+	else
+		afterElem.parentElement.appendChild child
+
 exports.encodeImageSrc = do ->
 	DATA_URI_RE = ///^data:([a-z+/]+)///
 

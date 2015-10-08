@@ -49,6 +49,8 @@ This is a base class for everything which is visible.
 			@_margin = null
 			@_padding = null
 			@_classes = null
+			@_background = null
+			@_defaultBackground = null
 			super component, opts
 
 #### Custom properties
@@ -249,7 +251,9 @@ Item {
 			child.parent = null
 
 			child._parent = parent
-			Impl.setItemParent.call child, parent, index
+			Impl.setItemParent.call child, parent
+			if index >= 0
+				Impl.setItemIndex.call child, index
 			emitSignal child, 'onParentChange', oldParent
 			return
 
@@ -272,7 +276,7 @@ Item {
 				# fake parent
 				if @_effectItem and @_effectItem isnt @
 					@_parent = val
-					Impl.setItemParent.call @, val, -1
+					Impl.setItemParent.call @, val
 					emitSignal @, 'onParentChange', old
 					return
 
@@ -320,7 +324,7 @@ Item {
 
 				# parent
 				@_parent = val
-				Impl.setItemParent.call @, val, -1
+				Impl.setItemParent.call @, val
 
 				# signals
 				if old isnt null
@@ -400,6 +404,7 @@ Item {
 			parent = @_parent
 			if not parent
 				return
+
 			{index} = @
 			children = parent._children
 			if val > children.length
@@ -409,6 +414,9 @@ Item {
 
 			oldPreviousSibling = @_previousSibling
 			oldNextSibling = @_nextSibling
+
+			# implementation
+			Impl.setItemIndex.call @, val
 
 			# current siblings
 			oldPreviousSibling?._nextSibling = oldNextSibling
@@ -429,19 +437,6 @@ Item {
 			@_nextSibling = nextSibling
 			previousSibling?._nextSibling = @
 			nextSibling?._previousSibling = @
-
-			# implementation
-			tmp = []
-			Impl.setItemParent.call @, null
-			for i in [val...children.length] by 1
-				child = children[i]
-				if child isnt @
-					Impl.setItemParent.call child, null
-					tmp.push child
-
-			Impl.setItemParent.call @, parent
-			for item in tmp
-				Impl.setItemParent.call item, parent
 
 			{index} = @
 			assert.is index, val
@@ -650,6 +645,47 @@ It's required for browsers, where link URIs should be known publicly.
 			implementation: Impl.setItemLinkUri
 			developmentSetter: (val) ->
 				assert.isString val, '::linkUri setter ...'
+
+*Item* Item::background = *Rectangle*
+-------------------------------------
+
+### *Signal* Item::onBackgroundChange(*Item* oldValue)
+
+		defaultBackgroundClass = do ->
+			ext = new Renderer.Class new Renderer.Component
+			ext.priority = -1
+			ext.changes.setAttribute 'anchors.fill', ['parent']
+			ext.changes.setAttribute 'anchors.left', ['parent', 'left']
+			ext.changes.setAttribute 'anchors.top', ['parent', 'top']
+			ext
+
+		createDefaultBackground = (parent) ->
+			rect = new Renderer.Rectangle parent._component
+			ext = defaultBackgroundClass.clone parent._component
+			ext.target = rect
+			ext.enable()
+			rect
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'background'
+			defaultValue: null
+			developmentSetter: (val) ->
+				if val?
+					assert.instanceOf val, Item
+			getter: (_super) -> ->
+				unless @_background
+					@_defaultBackground ||= createDefaultBackground @
+					@background = @_defaultBackground
+				_super.call @
+			setter: (_super) -> (val) ->
+				val ||= @_defaultBackground
+				oldParent = val._parent
+				val.parent = null
+				val._parent = @
+				emitSignal val, 'onParentChange', oldParent
+				Impl.setItemBackground.call @, val
+				_super.call @, val
 
 Item::overlap(*Renderer.Item* item)
 -----------------------------------

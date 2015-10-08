@@ -15,7 +15,28 @@ module.exports = (impl) ->
 
 	create: (data) ->
 
-	setItemParent: (val, index) ->
+	setItemParent: (val) ->
+
+	setItemIndex: (val) ->
+		{parent} = @
+		children = parent.children
+		tmp = []
+		impl.setItemParent.call @, null
+		for i in [val...children.length] by 1
+			child = children[i]
+			if child isnt @
+				impl.setItemParent.call child, null
+				tmp.push child
+
+		impl.setItemParent.call @, parent
+		for item in tmp
+			impl.setItemParent.call item, parent
+
+		return
+
+	setItemBackground: (val) ->
+
+	setItemForeground: (val) ->
 
 	setItemVisible: (val) ->
 
