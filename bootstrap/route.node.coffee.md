@@ -161,7 +161,7 @@ text browsers) or HTML scaffolding which will run **neft.io** on the client side
 				if getType(req) is 'text'
 					return @next()
 
-				userAgent = req.headers['user-agent']
+				userAgent = req.headers['user-agent'] or ''
 
 				if req.type isnt Networking.Request.HTML_TYPE or # omit types other than html
 				   reservedUrisRe.test(req.uri) or # omit reserved URIs
