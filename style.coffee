@@ -305,8 +305,6 @@ module.exports = (File, data) -> class Style
 			item.$
 		else if 'text' of item
 			item
-		else if item.label? and 'text' of item.label
-			item.label
 
 	updateText: ->
 		if @waiting or @children.length
