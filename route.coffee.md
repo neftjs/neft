@@ -8,6 +8,7 @@ Route @class
 	Schema = require 'schema'
 	Networking = require 'networking'
 	Document = require 'document'
+	Dict = require 'dict'
 
 	module.exports = (app) -> class Route
 
@@ -93,7 +94,7 @@ Acceptable syntaxes:
 				@[key] = val
 			@__id__ = utils.uid()
 			@app = app
-			@name = getRouteName(@)
+			@name ||= getRouteName(@)
 
 			app.networking.createHandler
 				method: @method
@@ -165,7 +166,7 @@ Acceptable syntaxes:
 			catch err
 				if route.response.status is 200
 					route.response.status = 500
-				route.data = err
+				route.error = err
 
 		resolveAsyncGetDataFuncCallback = (route, err, data) ->
 			assert.instanceOf route, Route
@@ -173,7 +174,7 @@ Acceptable syntaxes:
 			if err?
 				if route.response.status is 200
 					route.response.status = 500
-				route.data = err
+				route.error = err
 			else
 				route.data = data
 
@@ -300,6 +301,9 @@ Acceptable syntaxes:
 *Any* Route::data
 -----------------
 
+*Any* Route::error
+------------------
+
 *Function* Route::factory()
 ---------------------------
 
@@ -341,13 +345,19 @@ Acceptable syntaxes:
 ---------------------
 
 		toJSON: ->
-			@data?.toJSON?() or @data
+			if @error
+				@error.toJSON?() or @error
+			else
+				@data?.toJSON?() or @data
 
 *String* Route::toText()
 ------------------------
 
 		toText: ->
-			@data+''
+			if @error
+				@error+''
+			else
+				@data+''
 
 *Document* Route::toHTML()
 --------------------------
@@ -365,6 +375,7 @@ Acceptable syntaxes:
 					r = tmplView.use(useName, r)
 				else
 					r = tmplView
+				tmplView.storage.routes.set useName, @
 				@_destroyViewOnEnd = false
 			else
 				@_destroyViewOnEnd = true
@@ -384,9 +395,9 @@ Acceptable syntaxes:
 		getTemplateView: do ->
 			if utils.isNode
 				(name) ->
-					tmpl = app.views[name].render(app: app)
+					tmpl = app.views[name].render(app: app, routes: new Dict)
 					usedTemplates.push tmpl
 					tmpl
 			else
 				(name) ->
-					templates[name] ?= app.views[name].render(app: app)
+					templates[name] ?= app.views[name].render(app: app, routes: new Dict)

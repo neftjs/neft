@@ -75,6 +75,11 @@ Renderer:
   ☐ Layout::column(row)Span
   ☐ Layout::alignment
   ✔ Image.pixelRatio @done (15-08-31 14:50)
+  ☐ Flow::alignment::horizontal='center' with child margin bug
+  ✔ Item::pointer::captureEvents @done (15-09-19 18:37)
+  ☐ Global classes
+  ☐ Class extensions to target (e.g. Transition)
+  ☐ Class items to target
 
 Styles:
   ☐ Default styles (material design)
@@ -96,6 +101,8 @@ Styles:
   ✔ Delay hiding @done (15-08-05 17:28)
   ☐ Check Component pool proper working
   ✔ Bug on remove style file with document.query @done (15-08-31 15:52)
+  ☐ Item property function
+  ☐ neft:fragment in tags
 
 Database:
   ✔ Refactor code @started(15-04-23 21:17) @done (15-04-24 15:08) @lasted(17:51)
@@ -116,6 +123,7 @@ Docs:
   ☐ Mobile main -> docs -> main bugs
   ☐ New welcome page "Hight-level multiplatform JavaScript framework for server, browser and native mobile", sample code - routing, view, style
   ☐ Twitter SPAM
+  ☐ Rules: 1. Don't mix different positioning models
 
 Utils:
  ✔ Replace expects by manual checks @started(15-04-25 10:16) @done (15-04-25 10:46) @lasted(0:30)
@@ -129,6 +137,7 @@ Networking:
   ☐ Cookies on HTTP Cookies
   ✔ Fast get/post/put/delete @done (15-08-04 09:12)
   ☐ Allow subfolder app place e.g. /app/here/...
+  ☐ Add location namespace
 
 App:
   ✔ Route - short arguments @started(15-04-30 17:47) @done (15-04-30 18:16) @lasted(0:29)
