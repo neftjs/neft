@@ -184,12 +184,18 @@ module.exports = (impl) ->
 		fillHeight: NOP_VALUE_GETTER
 
 	getPaddingValue =
-		left: NOP_VALUE_GETTER
-		top: NOP_VALUE_GETTER
-		right: NOP_VALUE_GETTER
-		bottom: NOP_VALUE_GETTER
-		horizontalCenter: NOP_VALUE_GETTER
-		verticalCenter: NOP_VALUE_GETTER
+		left: (padding) ->
+			- padding._left
+		top: (padding) ->
+			- padding._top
+		right: (padding) ->
+			padding._right
+		bottom: (padding) ->
+			padding._bottom
+		horizontalCenter: (padding) ->
+			- padding._left + padding._right
+		verticalCenter: (padding) ->
+			- padding._top + padding._bottom
 		fillWidth: (padding) ->
 			padding._left + padding._right
 		fillHeight: (padding) ->

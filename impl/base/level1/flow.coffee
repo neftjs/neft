@@ -24,7 +24,7 @@ updateItem = (item) ->
 		return
 
 	{includeBorderMargins} = item
-	{children} = effectItem
+	children = effectItem._children
 	data = item._impl
 	{autoWidth, autoHeight} = data
 
@@ -43,7 +43,14 @@ updateItem = (item) ->
 		return
 
 	# get config
-	maxColumn = if autoWidth then Infinity else effectItem.width
+	if padding = effectItem._padding
+		paddingTop = padding._top
+		paddingRight = padding._right
+		paddingBottom = padding._bottom
+		paddingLeft = padding._left
+	else
+		paddingTop = paddingRight = paddingBottom = paddingLeft = 0
+	maxColumn = if autoWidth then Infinity else effectItem._width - paddingLeft - paddingRight
 	columnSpacing = item.spacing.column
 	rowSpacing = item.spacing.row
 
@@ -85,12 +92,13 @@ updateItem = (item) ->
 
 		if column is 0
 			x = 0
-		else if column + child.width + (if margin then margin._left else 0) > maxColumn
+		else if column + columnSpacing + child.width + (if margin then margin._left else 0) > maxColumn
 			column = 0
 			row = height
 			x = 0
 			maxCell++
 		else
+			column += columnSpacing
 			x = column
 		if margin and (includeBorderMargins or (x isnt 0 and column isnt 0))
 			x += margin._left
@@ -115,7 +123,6 @@ updateItem = (item) ->
 			column += margin._right
 			if includeBorderMargins and column > width
 				width = column
-		column += columnSpacing
 
 		y += child._height
 		rowSpan = rowSpacing
@@ -148,13 +155,13 @@ updateItem = (item) ->
 		plusY = 0
 	else
 		plusY = (item._height - height) * multiplierY
-	if not autoWidth
-		width = item._width
-	if not autoHeight
-		height = item._height
+	unless autoWidth
+		width = item._width - paddingLeft - paddingRight
+	unless autoHeight
+		height = item._height - paddingTop - paddingBottom
 	for child, i in children
 		# omit not visible
-		if not child._visible
+		unless child._visible
 			continue
 
 		cell = elementsCell[i]
@@ -172,16 +179,16 @@ updateItem = (item) ->
 				bottom += child._margin._bottom
 
 		if not anchors or not anchors._autoX
-			child.x = elementsX[i] + (width - cellsWidth[cell]) * multiplierX
+			child.x = elementsX[i] + (width - cellsWidth[cell]) * multiplierX + paddingLeft
 		if not anchors or not anchors._autoY
-			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY
+			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY + paddingTop
 
 	# set item size
 	if autoWidth
-		effectItem.width = width
+		effectItem.width = width + paddingLeft + paddingRight
 
 	if autoHeight
-		effectItem.height = height
+		effectItem.height = height + paddingTop + paddingBottom
 
 	return
 
