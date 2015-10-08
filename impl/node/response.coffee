@@ -42,26 +42,29 @@ setHeaders = (obj, headers) ->
 ###
 Parse passed data into expected type
 ###
-isObject = (data) -> true if data and typeof data is 'object'
-isJSON = (data) -> 'application/json' if isObject data
-isDocument = (data) -> 'text/html' if data instanceof Document
-
-extensions =
-	'.js': 'application/javascript'
-	'.ico': 'image/x-icon'
-
 parsers =
 	'application/json': (data) ->
-		try JSON.stringify data
+		if data instanceof Error
+			data = utils.errorToObject data
+		try
+			JSON.stringify data
+		catch
+			data
 	'text/html': (data) ->
-		html = data.node.stringify()
-		html
+		if data instanceof Document
+			data.node.stringify()
+		else
+			data
 
-prepareData = (obj, data) ->
+prepareData = (type, obj, data) ->
 	# determine data type
-	type = isDocument(data) or isJSON(data)
-	type ?= extensions[path.extname obj.serverReq.url]
-	type ?= 'text/plain'
+	switch type
+		when 'text'
+			type = 'text/plain'
+		when 'json'
+			type = 'application/json'
+		when 'html'
+			type = 'text/html'
 
 	# parse data into type
 	unless parsedData = parsers[type]?(data)
@@ -128,7 +131,7 @@ module.exports = (Networking, pending) ->
 			serverRes.setHeader 'X-Cookies', cookies
 
 		# send data
-		data = prepareData obj, data
+		data = prepareData res.request.type, obj, data
 		sendData obj, data, ->
 			callback()
 

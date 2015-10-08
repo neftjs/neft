@@ -250,9 +250,6 @@ res.onSend(function(){
 
 			{data} = @
 
-			if data instanceof Error
-				data = utils.errorToObject data
-
 			Impl.send @, data, =>
 				@pending = false
 				@onSend.emit()
@@ -298,7 +295,7 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 ```
 
 		raise: (error) ->
-			if error instanceof Response.Error
+			if error instanceof Response.Error or isFinite(error?.status)
 				@send error.status, error
 			else
 				@send Response.INTERNAL_SERVER_ERROR, error
