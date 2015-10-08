@@ -103,7 +103,7 @@ console.log(-0 === 0);
 // true
 ```
 
-	exports.is = (val1, val2) ->
+	exports.is = Object.is or (val1, val2) ->
 		if val1 is 0 and val2 is 0
 			return 1 / val1 is 1 / val2
 		else if val1 isnt val1
@@ -611,7 +611,6 @@ console.log(object.length);
 							@[prop]
 						else
 							_getter.call @
-					getter.trueGetter = _getter
 
 				cfg = accessorsCfg
 				accessorsCfg.get = if typeof getter is 'function' then getter else undefined
@@ -681,8 +680,8 @@ console.log(clonedObj.b === obj.b)
 
 		result
 
-*Boolean* utils.isEmpty(*NotPrimitive* object)
-----------------------------------------------
+*Boolean* utils.isEmpty(*String|NotPrimitive* object)
+-----------------------------------------------------
 
 Use this function to check whether the given *object* is empty, that is:
  - for arrays, no elements exists (*length* is 0),
@@ -700,21 +699,28 @@ console.log(utils.isEmpty({}));
 
 console.log(utils.isEmpty({a: 1}));
 // false
+
+console.log(utils.isEmpty(''));
+// true
 ```
 
 .
 
 	exports.isEmpty = (object) ->
-		null
+		if typeof object is 'string'
+			return object is ''
+
 		`//<development>`
 		if isPrimitive(object)
-			throw new Error "utils.isEmpty object cannot be primitive"
+			throw new Error "utils.isEmpty object must be a string or not primitive"
 		`//</development>`
 
-		if isArray object
-			return !object.length
+		if isArray(object)
+			return not object.length
 		else
-			return !getOwnPropertyNames(object).length
+			for key of object
+				return false
+			return true
 
 *Any* utils.last(*NotPrimitive* array)
 --------------------------------------
