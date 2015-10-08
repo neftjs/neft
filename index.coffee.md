@@ -82,7 +82,7 @@ obj.onRename.emit('Max', 'George');
 		while i < n
 			func = listeners[i]
 			if func is null
-				if listeners[i+2]?
+				if i+2 < n and listeners[i+2] isnt null
 					listeners[i] = listeners[i+2]
 					listeners[i+1] = listeners[i+3]
 					listeners[i+2] = null
