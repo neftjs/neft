@@ -166,11 +166,6 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 ```
 
 		set: (key, val) ->
-			if val is undefined and utils.isObject(key)
-				for prop, val of key
-					@set prop, val
-				return
-
 			assert.isString key
 			assert.notLengthOf key, 0
 			assert.isNot val, undefined
@@ -191,6 +186,22 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 			@onChange.emit key, oldVal
 
 			val
+
+*Dict* Dict::extend(*Object|Dict* object)
+-----------------------------------------
+
+		extend: (items) ->
+			if items instanceof Dict
+				obj = items._data
+			else
+				obj = items
+
+			assert.isObject obj
+
+			for key, val of obj
+				@set key, val
+
+			items
 
 Dict::pop(*String* key)
 -----------------------
