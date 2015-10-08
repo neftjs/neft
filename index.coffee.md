@@ -18,6 +18,7 @@ var Networking = require('networking');
 	signal = require 'signal'
 	assert = require 'neft-assert'
 	log = require 'log'
+	List = require 'list'
 
 	assert = assert.scope 'Networking'
 	log = log.scope 'Networking'
@@ -56,6 +57,7 @@ Use this constructor to create new *Networking* instance.
 
 			utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
 			{@type, @protocol, @port, @host, @language} = opts
+			@pendingRequests = new List
 
 			if opts.url?
 				assert.isString opts.url
@@ -112,6 +114,9 @@ ReadOnly *String* Networking::language
 This property indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 
 		language: ''
+
+ReadOnly *List* Networking::pendingRequests
+-------------------------------------------
 
 *Networking.Handler* Networking::createHandler(*Object* options)
 ----------------------------------------------------------------
@@ -175,7 +180,8 @@ app.networking.createHandler({
 
 			# create a request
 			req = new Networking.Request opts
-			req.onLoadEnd ->
+			req.onLoadEnd =>
+				@pendingRequests.remove req
 				log.end logtime
 
 			# create a response
@@ -185,6 +191,7 @@ app.networking.createHandler({
 			req.response = res
 
 			# signal
+			@pendingRequests.append req
 			@onRequest.emit req, res
 
 			# get handlers
@@ -289,7 +296,8 @@ app.networking.createRequest({
 
 			# create a request
 			req = new Networking.Request opts
-			req.onLoadEnd ->
+			req.onLoadEnd =>
+				@pendingRequests.remove req
 				log.end logtime
 
 			# create a response
@@ -299,6 +307,7 @@ app.networking.createRequest({
 			req.response = res
 
 			# signal
+			@pendingRequests.append req
 			@onRequest.emit req, res
 
 			# get handlers
