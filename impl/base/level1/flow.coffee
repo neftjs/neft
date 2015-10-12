@@ -44,13 +44,13 @@ updateItem = (item) ->
 
 	# get config
 	if padding = effectItem._padding
-		paddingTop = padding._top
-		paddingRight = padding._right
-		paddingBottom = padding._bottom
-		paddingLeft = padding._left
+		topPadding = padding._top
+		rightPadding = padding._right
+		bottomPadding = padding._bottom
+		leftPadding = padding._left
 	else
-		paddingTop = paddingRight = paddingBottom = paddingLeft = 0
-	maxColumn = if autoWidth then Infinity else effectItem._width - paddingLeft - paddingRight
+		topPadding = rightPadding = bottomPadding = leftPadding = 0
+	maxColumn = if autoWidth then Infinity else effectItem._width - leftPadding - rightPadding
 	columnSpacing = item.spacing.column
 	rowSpacing = item.spacing.row
 
@@ -156,9 +156,9 @@ updateItem = (item) ->
 	else
 		plusY = (item._height - height) * multiplierY
 	unless autoWidth
-		width = item._width - paddingLeft - paddingRight
+		width = item._width - leftPadding - rightPadding
 	unless autoHeight
-		height = item._height - paddingTop - paddingBottom
+		height = item._height - topPadding - bottomPadding
 	for child, i in children
 		# omit not visible
 		unless child._visible
@@ -179,16 +179,16 @@ updateItem = (item) ->
 				bottom += child._margin._bottom
 
 		if not anchors or not anchors._autoX
-			child.x = elementsX[i] + (width - cellsWidth[cell]) * multiplierX + paddingLeft
+			child.x = elementsX[i] + (width - cellsWidth[cell]) * multiplierX + leftPadding
 		if not anchors or not anchors._autoY
-			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY + paddingTop
+			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY + topPadding
 
 	# set item size
 	if autoWidth
-		effectItem.width = width + paddingLeft + paddingRight
+		effectItem.width = width + leftPadding + rightPadding
 
 	if autoHeight
-		effectItem.height = height + paddingTop + paddingBottom
+		effectItem.height = height + topPadding + bottomPadding
 
 	return
 

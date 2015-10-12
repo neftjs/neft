@@ -13,18 +13,34 @@ queues = [[], []]
 queue = queues[queueIndex]
 pending = false
 
-columnsPositions = new TypedArray.Uint32 64
+visibleChildren = new TypedArray.Uint8 64
+columnsSizes = new TypedArray.Uint32 64
 columnsFills = new TypedArray.Uint8 64
-rowsPositions = new TypedArray.Uint32 64
+rowsSizes = new TypedArray.Uint32 64
 rowsFills = new TypedArray.Uint8 64
+unusedFills = new TypedArray.Uint8 64
 
 getArray = (arr, len) ->
 	if arr.length < len
-		arr = new arr.constructor len * 1.5
+		new arr.constructor len * 1.4 | 0
 	else
+		arr
+
+getCleanArray = (arr, len) ->
+	newArr = getArray arr, len
+	if newArr is arr
 		for i in [0...len] by 1
 			arr[i] = 0
-	arr
+		arr
+	else
+		newArr
+
+ALIGNMENT_TO_POINT =
+	left: 0
+	center: 0.5
+	right: 1
+	top: 0
+	bottom: 1
 
 updateItem = (item) ->
 	unless effectItem = item._effectItem
@@ -57,61 +73,74 @@ updateItem = (item) ->
 		columnsLen = Infinity
 		rowsLen = 1
 
-	if item._alignment
-		alignH = item._alignment._horizontal
-		alignV = item._alignment._vertical
+	if alignment = item._alignment
+		alignH = ALIGNMENT_TO_POINT[alignment._horizontal]
+		alignV = ALIGNMENT_TO_POINT[alignment._vertical]
 	else
-		alignH = 'left'
-		alignV = 'top'
+		alignH = 0
+		alignV = 0
+
+	if padding = effectItem._padding
+		topPadding = padding._top
+		rightPadding = padding._right
+		bottomPadding = padding._bottom
+		leftPadding = padding._left
+	else
+		topPadding = rightPadding = bottomPadding = leftPadding = 0
 
 	# get tmp variables
 	maxColumnsLen = if columnsLen is Infinity then children.length else columnsLen
-	lastColumn = maxColumnsLen - 1
-	columnsPositions = getArray columnsPositions, maxColumnsLen
-	columnsFills = getArray columnsFills, maxColumnsLen
+	columnsSizes = getCleanArray columnsSizes, maxColumnsLen
+	columnsFills = getCleanArray columnsFills, maxColumnsLen
 
 	maxRowsLen = if rowsLen is Infinity then Math.ceil(children.length / columnsLen) else rowsLen
-	lastRow = maxRowsLen - 1
-	rowsPositions = getArray rowsPositions, maxRowsLen
-	rowsFills = getArray rowsFills, maxRowsLen
+	rowsSizes = getCleanArray rowsSizes, maxRowsLen
+	rowsFills = getCleanArray rowsFills, maxRowsLen
 
-	columnsFillsSum = 0
-	rowsFillsSum = 0
+	visibleChildren = getArray visibleChildren, children.length
 
-	# get columns and rows positions
-	i = 0
-	for child in children
-		# omit not visible
-		if not child._visible
+	# get last column and last row
+	i = lastColumn = lastRow = 0
+	for child, childIndex in children
+		# check visibility
+		if not child._visible or (child._layout and not child._layout._enabled)
+			visibleChildren[childIndex] = 0
+			continue
+		visibleChildren[childIndex] = 1
+
+		# get max column and max row
+		column = i % columnsLen
+		row = Math.floor(i / columnsLen) % rowsLen
+		if column > lastColumn
+			lastColumn = column
+		if row > lastRow
+			lastRow = row
+		i++
+
+	# get columns and rows sizes
+	i = columnsFillsSum = rowsFillsSum = 0
+	for child, childIndex in children
+		unless visibleChildren[childIndex]
 			continue
 
-		column = i % columnsLen
-		row = Math.floor(i/columnsLen) % rowsLen
-
 		# child
-		layout = child._layout
 		width = child._width
 		height = child._height
 		margin = child._margin
+		layout = child._layout
 
-		if layout and not layout._enabled
-			continue
+		column = i % columnsLen
+		row = Math.floor(i / columnsLen) % rowsLen
 
-		if layout and layout._fillWidth and not autoWidth
-			width = 0
-			unless columnsFills[column]
-				columnsFills[column] = 1
+		if layout
+			if layout._fillWidth
+				width = 0
 				columnsFillsSum++
-		if column isnt lastColumn
-			width += columnSpacing
-
-		if layout and layout._fillWidth and not autoHeight
-			height = 0
-			unless rowsFills[row]
-				rowsFills[row] = 1
+				columnsFills[column] = 1
+			if layout._fillHeight
+				height = 0
 				rowsFillsSum++
-		if row isnt lastRow
-			height += rowSpacing
+				rowsFills[row] = 1
 
 		# margins
 		if margin
@@ -125,132 +154,133 @@ updateItem = (item) ->
 				height += margin._bottom
 
 		# save
-		if width > columnsPositions[column]
-			columnsPositions[column] = width
-		if height > rowsPositions[row]
-			rowsPositions[row] = height
+		if width > columnsSizes[column]
+			columnsSizes[column] = width
+		if height > rowsSizes[row]
+			rowsSizes[row] = height
 
 		i++
 
-	# expand filled columns
-	if columnsFillsSum > 0 and not autoWidth
-		staticWidth = 0
-		for i in [0...maxColumnsLen] by 1
-			unless columnsFills[i]
-				staticWidth += columnsPositions[i]
-		freeSpace = effectItem._width - staticWidth
+	# get grid size
+	if autoWidth or columnsFillsSum > 0
+		gridWidth = 0
+		for i in [0..lastColumn] by 1
+			gridWidth += columnsSizes[i]
+
+	if autoHeight or rowsFillsSum > 0
+		gridHeight = 0
+		for i in [0..lastRow] by 1
+			gridHeight += rowsSizes[i]
+
+	# expand filled cells
+	if not autoWidth and columnsFillsSum > 0
+		freeSpace = (effectItem._width - columnSpacing * lastColumn - leftPadding - rightPadding) - gridWidth
 		if freeSpace > 0
-			freeSpacePerColumn = freeSpace / columnsFillsSum
-			for i in [0...maxColumnsLen] by 1
-				if columnsFills[i] and columnsPositions[i] < freeSpacePerColumn
-					columnsPositions[i] += freeSpacePerColumn - columnsPositions[i]
+			unusedFills = getCleanArray unusedFills, lastColumn+1
+			length = lastColumn+1
+			perCell = (gridWidth + freeSpace) / length
 
-	# expand filled rows
-	if rowsFillsSum > 0 and not autoHeight
-		staticHeight = 0
-		for i in [0...maxRowsLen] by 1
-			unless rowsFills[i]
-				staticHeight += rowsPositions[i]
-		freeSpace = effectItem._height - staticHeight
+			update = true
+			while update
+				update = false
+				for i in [0..lastColumn] by 1
+					if unusedFills[i] is 0 and (columnsFills[i] is 0 or columnsSizes[i] > perCell)
+						length--
+						perCell -= (columnsSizes[i] - perCell) / length
+						unusedFills[i] = 1
+						update = true
+
+			for i in [0..lastColumn] by 1
+				if unusedFills[i] is 0
+					columnsSizes[i] = perCell
+
+	if not autoHeight and rowsFillsSum > 0
+		freeSpace = (effectItem._height - rowSpacing * lastRow - topPadding - bottomPadding) - gridHeight
 		if freeSpace > 0
-			freeSpacePerRow = freeSpace / rowsFillsSum
-			for i in [0...maxRowsLen] by 1
-				if rowsFills[i] and rowsPositions[i] < freeSpacePerRow
-					rowsPositions[i] += freeSpacePerRow - rowsPositions[i]
+			unusedFills = getCleanArray unusedFills, lastRow+1
+			length = lastRow+1
+			perCell = (gridHeight + freeSpace) / length
 
-	# sum columns positions
-	last = 0
-	for i in [0...maxColumnsLen] by 1
-		last = columnsPositions[i] += last
-	unless autoWidth
-		columnsPositions[lastColumn] = Math.max columnsPositions[lastColumn], effectItem._width
+			update = true
+			while update
+				update = false
+				for i in [0..lastRow] by 1
+					if unusedFills[i] is 0 and (rowsFills[i] is 0 or rowsSizes[i] > perCell)
+						length--
+						perCell -= (rowsSizes[i] - perCell) / length
+						unusedFills[i] = 1
+						update = true
 
-	# sum rows positions
-	last = 0
-	for i in [0...maxRowsLen] by 1
-		last = rowsPositions[i] += last
-	unless autoHeight
-		rowsPositions[lastRow] = Math.max rowsPositions[lastRow], effectItem._height
+			for i in [0..lastRow] by 1
+				if unusedFills[i] is 0
+					rowsSizes[i] = perCell
 
-	# set children positions
-	i = 0
-	for child in children
-		# omit not visible children
-		if not child._visible
+	# set children positions and sizes
+	i = cellX = cellY = 0
+	for child, childIndex in children
+		unless visibleChildren[childIndex]
 			continue
-
-		column = i % columnsLen
-		row = Math.floor(i/columnsLen) % rowsLen
 
 		margin = child._margin
 		layout = child._layout
 		anchors = child._anchors
 
-		if layout and not layout._enabled
-			continue
+		column = i % columnsLen
+		row = Math.floor(i / columnsLen) % rowsLen
 
-		# get column position
-		columnX = if column > 0 then columnsPositions[column-1] else 0
-		if margin and (includeBorderMargins or (column > 0 and column < columnsLen))
-			leftMargin = margin._left
-			rightMargin = margin._right
+		# get cell position
+		if column is 0
+			cellX = 0
+			if row is 0
+				cellY = 0
+			else
+				cellY += rowsSizes[row-1] + rowSpacing
 		else
-			leftMargin = rightMargin = 0
+			cellX += columnsSizes[column-1] + columnSpacing
 
-		# get row position
-		rowY = if row > 0 then rowsPositions[row-1] else 0
-		if margin and (includeBorderMargins or (row > 0 and row < rowsLen))
-			topMargin = margin._top
-			bottomMargin = margin._bottom
-		else
-			topMargin = bottomMargin = 0
+		# get child margins
+		leftMargin = rightMargin = 0
+		if margin
+			if includeBorderMargins or column isnt 0
+				leftMargin = margin._left
+			if includeBorderMargins or column isnt lastColumn
+				rightMargin = margin._right
+
+		topMargin = bottomMargin = 0
+		if margin
+			if includeBorderMargins or row isnt 0
+				topMargin = margin._top
+			if includeBorderMargins or row isnt lastRow
+				bottomMargin = margin._bottom
 
 		# set sizes
 		if layout
 			# set width
-			if layout._fillWidth and not autoWidth
-				width = columnsPositions[column] - columnX - leftMargin - rightMargin
+			if layout._fillWidth
+				width = columnsSizes[column] - leftMargin - rightMargin
 				child.width = width
 
 			# set height
-			if layout._fillHeight and not autoHeight
-				height = rowsPositions[row] - rowY - topMargin - bottomMargin
+			if layout._fillHeight
+				height = rowsSizes[row] - topMargin - bottomMargin
 				child.height = height
 
 		# set x
-		if (gridType & ROW or alignH isnt 'left' or (margin and (margin._left or margin._right))) and not anchors?._autoX
-			x = columnX + leftMargin
-			if alignH is 'center'
-				x += (columnsPositions[column] - x - columnsPositions[lastColumn]) / 2 - rightMargin / 2
-			else if alignH is 'right'
-				x += columnsPositions[column] - x - columnsPositions[lastColumn] - rightMargin
-			child.x = x
+		unless anchors?._autoX
+			child.x = cellX + leftMargin + leftPadding + columnsSizes[column] * alignH - child._width * alignH
 
 		# set y
-		if (gridType & COLUMN or alignV isnt 'top' or (margin and (margin._top or margin._bottom))) and not anchors?._autoY
-			y = rowY + topMargin
-			if alignV is 'center'
-				y += (rowsPositions[row] - y - rowsPositions[lastRow]) / 2 - bottomMargin / 2
-			else if alignV is 'right'
-				y += rowsPositions[row] - y - rowsPositions[lastRow1] - bottomMargin
-			child.y = y
+		unless anchors?._autoY
+			child.y = cellY + topMargin + topPadding + rowsSizes[row] * alignV - child._height * alignV
 
 		i++
 
-	# set item size
+	# set effect item size
 	if autoWidth
-		width = columnsPositions[maxColumnsLen-1]
-		if width > 0	
-			effectItem.width = width
-		else
-			effectItem.width = 0
+		effectItem.width = gridWidth + columnSpacing * lastColumn + leftPadding + rightPadding
 
 	if autoHeight
-		height = rowsPositions[maxRowsLen-1]
-		if height > 0
-			effectItem.height = height
-		else
-			effectItem.height = 0
+		effectItem.height = gridHeight + rowSpacing * lastRow + topPadding + bottomPadding
 	return
 
 updateItems = ->
