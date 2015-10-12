@@ -460,12 +460,16 @@ Item {
 			emitSignal parent, 'onChildrenChange', children
 
 			# current siblings signals
-			emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
-			emitSignal @, 'onNextSiblingChange', oldNextSibling
+			if oldPreviousSibling
+				emitSignal oldPreviousSibling, 'onNextSiblingChange', @
+			if oldNextSibling
+				emitSignal oldNextSibling, 'onPreviousSiblingChange', @
 
 			# new siblings signals
+			emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
 			if previousSibling
 				emitSignal previousSibling, 'onNextSiblingChange', previousSiblingOldNextSibling
+			emitSignal @, 'onNextSiblingChange', oldNextSibling
 			if nextSibling
 				emitSignal nextSibling, 'onPreviousSiblingChange', nextSiblingOldPreviousSibling
 
