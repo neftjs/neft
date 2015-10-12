@@ -59,10 +59,47 @@ var log = require('log');
 					@[name] = bind.apply @[name], args
 
 			@[key] = value for key, value of @
-			if typeof @['lo'+'g'].bind(@) is 'function'
-				return utils.merge @['lo'+'g'].bind(@), @
+			if typeof @['lo'+'g'] is 'function'
+				func = =>
+					@log.apply func, arguments
+				return utils.merge func, @
 
 		_write: console?['lo'+'g'].bind(console) or (->)
+
+*Integer* log.LOG
+-----------------
+
+*Integer* log.INFO
+------------------
+
+*Integer* log.OK
+----------------
+
+*Integer* log.WARN
+------------------
+
+*Integer* log.ERROR
+-------------------
+
+*Integer* log.TIME
+------------------
+
+*Integer* log.ALL
+-----------------
+
+		i = 0
+		LOG: 1<<i++
+		INFO: 1<<i++
+		OK: 1<<i++
+		WARN: 1<<i++
+		ERROR: 1<<i++
+		TIME: 1<<i++
+		ALL: (1<<i++)-1
+
+*Integer* enabled = log.ALL
+---------------------------
+
+		enabled: @::ALL
 
 log([*Any* messages...])
 ------------------------
@@ -80,7 +117,10 @@ log("setName()", "db time");
 // will be logged as "setName() → db time"
 ```
 
-		@::['log'] = -> @_write LogImpl.MARKERS.white fromArgs arguments
+		@::['log'] = ->
+			if @enabled & @LOG
+				@_write LogImpl.MARKERS.white fromArgs arguments
+			return
 
 log.info([*Any* messages...])
 -----------------------------
@@ -89,7 +129,10 @@ This function is used to log debugging informations or to mark progress.
 
 Logged text is blue.
 
-		info: -> @_write LogImpl.MARKERS.blue fromArgs arguments
+		info: ->
+			if @enabled & @INFO
+				@_write LogImpl.MARKERS.blue fromArgs arguments
+			return
 
 log.ok([*Any* messages...])
 ---------------------------
@@ -102,7 +145,10 @@ Logged text is green.
 log.ok("Data has been successfully sent!");
 ```
 
-		ok: -> @_write LogImpl.MARKERS.green fromArgs arguments
+		ok: ->
+			if @enabled & @OK
+				@_write LogImpl.MARKERS.green fromArgs arguments
+			return
 
 log.warn([*Any* messages...])
 -----------------------------
@@ -115,7 +161,10 @@ Logged text is yellow.
 log.warn("Example warning with some recommendations");
 ```
 
-		warn: -> @_write LogImpl.MARKERS.yellow fromArgs arguments
+		warn: ->
+			if @enabled & @WARN
+				@_write LogImpl.MARKERS.yellow fromArgs arguments
+			return
 
 log.error([*Any* messages...])
 ------------------------------
@@ -128,10 +177,13 @@ Logged text is red.
 log.error("Error occurs, ... in file ...");
 ```
 
-		error: -> @_write LogImpl.MARKERS.red fromArgs arguments
+		error: ->
+			if @enabled & @ERROR
+				@_write LogImpl.MARKERS.red fromArgs arguments
+			return
 
-log.time()
-----------
+*Integer* log.time()
+--------------------
 
 This method is used to log how long some operation takes.
 
@@ -154,6 +206,9 @@ findPath();
 ```
 
 		time: ->
+			unless @enabled & @TIME
+				return -1
+
 			{times} = LogImpl
 
 			# write
@@ -177,12 +232,16 @@ This method is used to mark when counting time ends.
 See *log.time()* method for more informations and example.
 
 		end: (id) ->
+			if id is -1
+				return
+
 			time = LogImpl.times[id]
 			diff = LogImpl.timeDiff time
 			LogImpl.times[id] = null
 
 			str = "#{diff} ms"
 			@_write LogImpl.MARKERS.gray str
+			return
 
 log.scope([*Any* names...])
 ---------------------------
