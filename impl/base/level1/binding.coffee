@@ -12,7 +12,7 @@ log = log.scope 'Renderer', 'Binding'
 getPropHandlerName = do ->
 	cache = Object.create null
 	(prop) ->
-		cache[prop] ?= "on#{utils.capitalize(prop)}Change"
+		cache[prop] ||= "on#{utils.capitalize(prop)}Change"
 
 module.exports = (impl) ->
 	{items} = impl

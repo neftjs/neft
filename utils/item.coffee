@@ -243,6 +243,16 @@ module.exports = (Renderer, Impl) ->
 	MutableDeepObject: MutableDeepObject
 	CustomObject: CustomObject
 
+	getPropHandlerName: getPropHandlerName = do ->
+		cache = Object.create null
+		(prop) ->
+			cache[prop] ||= "on#{utils.capitalize(prop)}Change"
+
+	getPropInternalName: getPropInternalName = do ->
+		cache = Object.create null
+		(prop) ->
+			cache[prop] ||= "_#{prop}"
+
 	getInnerPropName: do ->
 		cache =
 			__proto__: null
@@ -264,7 +274,7 @@ module.exports = (Renderer, Impl) ->
 		customSetter = opts.setter
 
 		# signal
-		signalName = "on#{utils.capitalize(name)}Change"
+		signalName = getPropHandlerName name
 
 		if opts.hasOwnProperty('constructor')
 			signal.Emitter.createSignal opts.constructor, signalName, opts.signalInitializer
@@ -273,7 +283,7 @@ module.exports = (Renderer, Impl) ->
 			signal.Emitter.createSignalOnObject prototype, signalName, opts.signalInitializer
 
 		# getter
-		internalName = "_#{name}"
+		internalName = getPropInternalName name
 
 		propGetter = basicGetter =
 		funcCache["get-#{internalName}"] ?= Function "return this.#{internalName}"

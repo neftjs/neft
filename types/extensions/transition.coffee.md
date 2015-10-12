@@ -70,7 +70,7 @@ Rectangle {
 
 			animation.target ?= @target
 			animation.start()
-			signal.STOP_PROPAGATION
+			return
 
 *Boolean* Transition::when
 --------------------------
@@ -119,7 +119,7 @@ Rectangle {
 					# 	item.onReady onTargetReady, @
 
 				if property
-					handlerName = "on#{utils.capitalize(property)}Change"
+					handlerName = itemUtils.getPropHandlerName property
 					if oldVal
 						oldVal[handlerName]?.disconnect listener, @
 
