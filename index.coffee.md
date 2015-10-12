@@ -78,6 +78,11 @@ Determines whether application is a part of the *QML* program.
 		when process? and Object.prototype.toString.call(process) is '[object process]'
 			exports.isNode = exports.isServer = true
 
+*Function* utils.NOP
+--------------------
+
+	exports.NOP = ->
+
 *Boolean* utils.is(*Any* value1, *Any* value2)
 ----------------------------------------------
 
