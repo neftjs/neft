@@ -48,7 +48,7 @@ module.exports = (File) -> class Input
 			while obj
 				if elem = obj.ids?[prop]
 					return elem
-				obj = obj.parentUse?.self or obj.self
+				obj = obj.parentUse?.self or obj.self or obj.source?.self
 			return
 
 		(file, prop) ->
