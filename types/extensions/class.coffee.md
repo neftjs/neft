@@ -443,7 +443,7 @@ Grid {
 				object = getObject item, path
 				`//<development>`
 				if not object or typeof object?[path[path.length - 1]] isnt 'function'
-					log.error "Handler '#{attr}' in '#{item.toString()}' doesn't exist"
+					log.error "Handler '#{attr}' doesn't exist in '#{item.toString()}'"
 				`//</development>`
 				object?[path[path.length - 1]]? functions[i+1], classElem
 
