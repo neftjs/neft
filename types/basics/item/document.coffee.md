@@ -28,7 +28,7 @@ Document @extension
 		constructor: (ref) ->
 			# @_query = ''
 			@_node = null
-			@_visible = true
+			@_visible = false
 			@_documentStyle = null
 			# @_isAutoParent = false
 			# @_parentDocument = @
@@ -189,13 +189,13 @@ Text {
 				if val?
 					assert.instanceOf val, require('document').Element.Tag
 
-*ReadOnly* *Boolean* Document::visible = true
----------------------------------------------
+*ReadOnly* *Boolean* Document::visible = false
+----------------------------------------------
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'visible'
-			defaultValue: true
+			defaultValue: false
 			namespace: 'document'
 			parentConstructor: ctor
 			developmentSetter: (val) ->
