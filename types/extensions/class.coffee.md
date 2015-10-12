@@ -402,6 +402,7 @@ Grid {
 		ATTRS_ALIAS = Object.create null
 		ATTRS_ALIAS['margin'] = ['margin.left', 'margin.right', 'margin.horizontal', 'margin.top', 'margin.bottom', 'margin.vertical']
 		ATTRS_ALIAS['padding'] = ['padding.left', 'padding.right', 'padding.horizontal', 'padding.top', 'padding.bottom', 'padding.vertical']
+		ATTRS_ALIAS['alignment'] = ['alignment.horizontal', 'alignment.vertical']
 
 		for aliases in ATTRS_ALIAS_DEF
 			for prop in aliases
