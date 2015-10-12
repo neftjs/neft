@@ -39,6 +39,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@objectsInitQueue = []
 		@cache = Object.create(null)
 		@parent = original
+		@disabledObjects = original?.disabledObjects or Object.create(null)
 
 		# if original
 			# @createItem = original.createItem
@@ -79,16 +80,15 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		# init objects
 		for id, item of @objects
-			if @objects.hasOwnProperty(id) and item instanceof Renderer.Item
+			if @objects.hasOwnProperty(id) and item instanceof Renderer.Item and id isnt @itemId 
 				item.onReady.emit()
-				item.onReady.disconnectAll()
 
 		return
 
 	endComponentCloning = (comp, components, createdComponents) ->
 		# clone no children objects (e.g. links)
 		for id, obj of comp.parent.objects
-			if not comp.objects[id] and id isnt comp.itemId
+			if not comp.objects[id] and id isnt comp.itemId and not comp.disabledObjects[id]
 				newObj = cloneObject obj, components, createdComponents, comp
 
 		# initialize component
@@ -202,6 +202,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			for comp in createdComponents
 				assert.ok comp.ready
 				comp.initObjects()
+		item.onReady.emit()
 
 		component
 
@@ -222,11 +223,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		component = @clone arg1, arg2
 		component.item
 
-	cloneObject: (item, opts=0) ->
+	cloneRawObject: (item, opts=0) ->
 		assert.instanceOf item, itemUtils.Object
 		assert.isString item.id
 		assert.notLengthOf item.id, 0
-		assert.ok @objects[item.id]
+		assert.ok item.id isnt @itemId
+		assert.ok @objects[item.id] or @parent?.objects[item.id]
 
 		{id} = item
 
@@ -254,6 +256,10 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				for val, i in @objectsOrder
 					component.objectsOrderSignalArr[i] = component.objectsOrder[i] ||= val
 
+		clone
+
+	cloneObject: (item, opts) ->
+		clone = @cloneRawObject item, opts
 		clone._component.initObjects()
 		clone
 
@@ -270,7 +276,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		if index isnt -1
 			@objectsOrder[index] = @objectsOrderSignalArr[index] = object
 
-		# force update bindings
+		object
+
+	updateBindings: (object) ->
 		for id, item of @objects
 			if @objects.hasOwnProperty(id)
 				if bindings = item._bindings
@@ -281,14 +289,14 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 					if bindings = extension._bindings
 						for prop, _ of bindings
 							extension.updateBinding prop
-
-		object
+		return
 
 	cacheObject: (item) ->
 		assert.instanceOf item, itemUtils.Object
 		assert.isString item.id
 		assert.notLengthOf item.id, 0
-		assert.ok @objects[item.id]
+		assert.ok @objects[item.id] or @parent?.objects[item.id]
+		assert.ok @isClone
 		assert.ok item._component.isDeepClone
 
 		@cache[item.id] ?= []

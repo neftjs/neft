@@ -275,6 +275,9 @@ Grid {
 				append: (val) ->
 					assert.instanceOf val, itemUtils.Object
 
+					unless @_ref._component.isClone
+						@_ref._component.disabledObjects[val.id] = true
+
 					@[@length++] = val
 
 					val
@@ -311,8 +314,10 @@ Grid {
 
 			if classElem._children
 				for child in classElem._children
-					clone = component.cloneObject child
+					clone = component.cloneRawObject child
 					clone._component.setObjectById sourceClassElem, sourceClassElem.id
+					clone._component.updateBindings()
+					clone._component.initObjects()
 					loadedObjects.push clone
 					if clone instanceof Renderer.Item
 						clone.parent ?= item
