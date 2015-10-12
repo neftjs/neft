@@ -80,7 +80,7 @@ updateItem = (item) ->
 		alignH = 0
 		alignV = 0
 
-	if padding = effectItem._padding
+	if padding = item._padding
 		topPadding = padding._top
 		rightPadding = padding._right
 		bottomPadding = padding._bottom
