@@ -57,10 +57,6 @@ Rectangle {
 			@_durationUpdatePending = true
 			animation.duration = @_duration
 			@_durationUpdatePending = false
-
-			if animation.from is oldVal and animation.to is @_to
-				return
-
 			animation.from = oldVal
 			animation.to = @_to
 			if progress > 0
