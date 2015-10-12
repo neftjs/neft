@@ -128,13 +128,14 @@ updateItem = (item) ->
 		rowSpan = rowSpacing
 		if margin
 			rowSpan += margin._bottom
-			if includeBorderMargins
-				y += margin._bottom
 		if y > height
 			height = y
 
 		cellsWidth[maxCell] = column
 		cellsHeight[maxCell] = y - row
+
+	if margin and includeBorderMargins
+		y += margin._bottom
 
 	# set children positions
 	switch alignH
