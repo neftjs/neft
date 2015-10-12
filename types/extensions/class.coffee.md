@@ -477,8 +477,12 @@ Grid {
 						path = splitAttribute attr
 						lastPath = path[path.length - 1]
 						object = getObject item, path
+					`//<development>`
+					if not object or not (lastPath of object)
+						log.error "Attribute '#{attr}' doesn't exist in '#{item.toString()}'"
+						continue
+					`//</development>`
 					unless object
-						log.error "Attribute '#{attr}' in '#{item.toString()}' doesn't exist"
 						continue
 
 					# create property on demand
