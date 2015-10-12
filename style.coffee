@@ -196,7 +196,6 @@ module.exports = (File, data) -> class Style
 		@findItemParent()
 
 		@item.document.node = @node
-		@item.document.visible = true
 		@baseText = @getTextObject()?.text or ''
 		@updateText()
 		@updateVisibility()
@@ -205,6 +204,8 @@ module.exports = (File, data) -> class Style
 		for name of @attrs
 			val = @node.attrs.get name
 			@setAttr name, val
+
+		@item.document.visible = true
 		return
 
 	revert: ->
@@ -301,8 +302,8 @@ module.exports = (File, data) -> class Style
 		{item} = @
 		unless item
 			return
-		if item.$? and 'text' of item.$
-			item.$
+		if item._$ and 'text' of item._$
+			item._$
 		else if 'text' of item
 			item
 
