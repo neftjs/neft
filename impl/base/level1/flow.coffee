@@ -134,8 +134,8 @@ updateItem = (item) ->
 		cellsWidth[maxCell] = column
 		cellsHeight[maxCell] = y - row
 
-	if margin and includeBorderMargins
-		y += margin._bottom
+	if includeBorderMargins
+		height = Math.max height, height+rowSpan-rowSpacing
 
 	# set children positions
 	switch alignH
