@@ -155,11 +155,11 @@ updateItem = (item) ->
 	if autoHeight or alignV is 'top'
 		plusY = 0
 	else
-		plusY = (item._height - height) * multiplierY
+		plusY = (effectItem._height - height) * multiplierY
 	unless autoWidth
-		width = item._width - leftPadding - rightPadding
+		width = effectItem._width - leftPadding - rightPadding
 	unless autoHeight
-		height = item._height - topPadding - bottomPadding
+		height = effectItem._height - topPadding - bottomPadding
 	for child, i in children
 		# omit not visible
 		unless child._visible
