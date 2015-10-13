@@ -73,7 +73,10 @@ module.exports = (File) -> class Input
 			v
 
 	@get = (input, prop) ->
-		Input.getVal input.self, prop
+		if prop is 'this'
+			input.node
+		else
+			Input.getVal input.self, prop
 
 	@getStoragesArray = do (arr = []) -> (file) ->
 		assert.instanceOf file, File
