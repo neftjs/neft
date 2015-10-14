@@ -2,8 +2,6 @@
 
 isFirefox = exports.isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
-exports.FontLoader = require './utils/fontLoader'
-
 # get transform CSS property name
 transformProp = exports.transformProp = do ->
 	prefix = do ->

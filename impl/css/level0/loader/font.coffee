@@ -72,12 +72,26 @@ module.exports = (impl) ->
 		append = ->
 			document.body.appendChild styles
 
-			fontLoader = new impl.utils.FontLoader [cssName],
-				fontLoaded: ->
+			xhr = new XMLHttpRequest
+			xhr.open 'get', sources[0], true
+			xhr.onload = ->
+				if impl.utils.loadingFonts[name] is 1
+					# probably
+					setTimeout ->
+						impl.utils.onFontLoaded.emit name
+					# maybe
+					setTimeout ->
+						impl.utils.onFontLoaded.emit name
+					, 500
+					# empty string
+					setTimeout ->
+						impl.utils.loadedFonts[name] = true
+						impl.utils.loadingFonts[name] = 0
+						impl.utils.onFontLoaded.emit name
+					, 1000
+				else
 					impl.utils.loadingFonts[name]--
-					impl.utils.loadedFonts[name] = true
-					impl.utils.onFontLoaded.emit name
-			fontLoader.loadFonts()
+			xhr.send()
 
 		if document.readyState isnt 'complete'
 			window.addEventListener 'load', append
