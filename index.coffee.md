@@ -47,8 +47,8 @@ obj.onPress.emit();
 
 	STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
 
-*Handler* signal.create(*NotPrimitive* object, *String* name)
--------------------------------------------------------------
+*Handler* signal.create([*NotPrimitive* object, *String* name])
+---------------------------------------------------------------
 
 This function creates new signal and handler in the given *object* under the given *name*.
 
@@ -66,6 +66,10 @@ obj.onRename.emit('Max', 'George');
 ```
 
 	exports.create = (obj, name) ->
+		signal = createSignalFunction obj
+		if name is undefined
+			return signal
+
 		assert.isNotPrimitive obj
 		assert.isString name
 		assert.notLengthOf name, 0
@@ -74,7 +78,7 @@ obj.onRename.emit('Max', 'George');
 		, "Signal `#{name}` can't be created, because passed object " +
 		  "has such property"
 
-		obj[name] = createSignalFunction obj
+		obj[name] = signal
 
 	callSignal = (obj, listeners, arg1, arg2) ->
 		i = 0
