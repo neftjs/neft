@@ -147,7 +147,7 @@ module.exports = (impl) ->
 			# update
 			for item in queue
 				val = item._text
-				if val.indexOf('<') isnt -1
+				if val.indexOf('<') isnt -1 or val.indexOf('&#x') isnt -1
 					item._impl.innerElem.innerHTML = val
 				else
 					item._impl.innerElem.textContent = val
