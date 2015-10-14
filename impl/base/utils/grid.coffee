@@ -162,23 +162,23 @@ updateItem = (item) ->
 		i++
 
 	# get grid size
-	if autoWidth or columnsFillsSum > 0
+	if autoWidth or columnsFillsSum > 0 or alignH isnt 0
 		gridWidth = 0
 		for i in [0..lastColumn] by 1
 			gridWidth += columnsSizes[i]
 
-	if autoHeight or rowsFillsSum > 0
+	if autoHeight or rowsFillsSum > 0 or alignV isnt 0
 		gridHeight = 0
 		for i in [0..lastRow] by 1
 			gridHeight += rowsSizes[i]
 
 	# expand filled cells
-	if not autoWidth and columnsFillsSum > 0
-		freeSpace = (effectItem._width - columnSpacing * lastColumn - leftPadding - rightPadding) - gridWidth
-		if freeSpace > 0
+	if not autoWidth
+		freeWidthSpace = (effectItem._width - columnSpacing * lastColumn - leftPadding - rightPadding) - gridWidth
+		if freeWidthSpace > 0 and columnsFillsSum > 0
 			unusedFills = getCleanArray unusedFills, lastColumn+1
 			length = lastColumn+1
-			perCell = (gridWidth + freeSpace) / length
+			perCell = (gridWidth + freeWidthSpace) / length
 
 			update = true
 			while update
@@ -193,13 +193,14 @@ updateItem = (item) ->
 			for i in [0..lastColumn] by 1
 				if unusedFills[i] is 0
 					columnsSizes[i] = perCell
+			freeWidthSpace = 0
 
-	if not autoHeight and rowsFillsSum > 0
-		freeSpace = (effectItem._height - rowSpacing * lastRow - topPadding - bottomPadding) - gridHeight
-		if freeSpace > 0
+	if not autoHeight
+		freeHeightSpace = (effectItem._height - rowSpacing * lastRow - topPadding - bottomPadding) - gridHeight
+		if freeHeightSpace > 0 and rowsFillsSum > 0
 			unusedFills = getCleanArray unusedFills, lastRow+1
 			length = lastRow+1
-			perCell = (gridHeight + freeSpace) / length
+			perCell = (gridHeight + freeHeightSpace) / length
 
 			update = true
 			while update
@@ -214,6 +215,18 @@ updateItem = (item) ->
 			for i in [0..lastRow] by 1
 				if unusedFills[i] is 0
 					rowsSizes[i] = perCell
+			freeHeightSpace = 0
+
+	# get grid content margin
+	if autoWidth
+		plusX = 0
+	else
+		plusX = freeWidthSpace * alignH
+
+	if autoHeight
+		plusY = 0
+	else
+		plusY = freeHeightSpace * alignV
 
 	# set children positions and sizes
 	i = cellX = cellY = 0
@@ -267,11 +280,11 @@ updateItem = (item) ->
 
 		# set x
 		unless anchors?._autoX
-			child.x = cellX + leftMargin + leftPadding + columnsSizes[column] * alignH - child._width * alignH
+			child.x = cellX + plusX + leftMargin + leftPadding + columnsSizes[column] * alignH - (child._width + leftMargin + rightMargin) * alignH
 
 		# set y
 		unless anchors?._autoY
-			child.y = cellY + topMargin + topPadding + rowsSizes[row] * alignV - child._height * alignV
+			child.y = cellY + plusY + topMargin + topPadding + rowsSizes[row] * alignV - (child._height + topMargin + bottomMargin) * alignV
 
 		i++
 
