@@ -88,7 +88,7 @@ updateItem = (item) ->
 				continue
 
 			if layout._fillWidth and not autoWidth
-				child.width = maxColumn
+				child.width = maxColumn - (if margin then margin.horizontal else 0)
 
 		if column is 0
 			x = 0
