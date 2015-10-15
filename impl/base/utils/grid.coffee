@@ -218,12 +218,12 @@ updateItem = (item) ->
 			freeHeightSpace = 0
 
 	# get grid content margin
-	if autoWidth
+	if autoWidth or alignH is 0
 		plusX = 0
 	else
 		plusX = freeWidthSpace * alignH
 
-	if autoHeight
+	if autoHeight or alignV is 0
 		plusY = 0
 	else
 		plusY = freeHeightSpace * alignV
