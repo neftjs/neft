@@ -333,7 +333,10 @@ Grid {
 				component = classElem._component
 
 				while object = loadedObjects.pop()
-					object.parent = null
+					if object instanceof Renderer.Item
+						object.parent = null
+					else
+						object.target = null
 					component.cacheObject object
 
 			if classElem._document?._parent
@@ -393,10 +396,14 @@ Grid {
 			['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn'],
 			['width', 'anchors.fill', 'anchors.fillWidth', 'layout.fillWidth'],
 			['height', 'anchors.fill', 'anchors.fillHeight', 'layout.fillHeight'],
-			['margin.horizontal', 'margin.left', 'margin.right'],
-			['margin.vertical', 'margin.top', 'margin.bottom'],
-			['padding.horizontal', 'padding.left', 'padding.right'],
-			['padding.vertical', 'padding.top', 'padding.bottom']
+			['margin.horizontal', 'margin.left'],
+			['margin.horizontal', 'margin.right'],
+			['margin.vertical', 'margin.top'],
+			['margin.vertical', 'margin.bottom'],
+			['padding.horizontal', 'padding.left'],
+			['padding.horizontal', 'padding.right'],
+			['padding.vertical', 'padding.top']
+			['padding.vertical', 'padding.bottom']
 		]
 
 		ATTRS_ALIAS = Object.create null
