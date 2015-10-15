@@ -18,6 +18,7 @@ cellsHeight = new TypedArray.Uint32 64
 elementsX = new TypedArray.Uint32 64
 elementsY = new TypedArray.Uint32 64
 elementsCell = new TypedArray.Uint32 64
+rowsFills = new TypedArray.Uint8 64
 
 updateItem = (item) ->
 	unless effectItem = item._effectItem
@@ -70,11 +71,16 @@ updateItem = (item) ->
 		elementsX = new TypedArray.Uint32 maxLen
 		elementsY = new TypedArray.Uint32 maxLen
 		elementsCell = new TypedArray.Uint32 maxLen
+		rowsFills = new TypedArray.Uint8 maxLen
+	else
+		for i in [0...maxLen] by 1
+			rowsFills[i] = 0
 
 	# tmp vars
 	width = height = column = row = x = y = right = rowSpan = maxCell = 0
 
 	# calculate children positions
+	rowsFillsSum = 0
 	for child, i in children
 		# omit not visible
 		if not child._visible
@@ -82,6 +88,8 @@ updateItem = (item) ->
 
 		margin = child._margin
 		layout = child._layout
+		childWidth = child._width
+		childHeight = child._height
 
 		if layout
 			unless layout._enabled
@@ -89,10 +97,14 @@ updateItem = (item) ->
 
 			if layout._fillWidth and not autoWidth
 				child.width = maxColumn - (if margin then margin.horizontal else 0)
+			if layout._fillHeight and not autoHeight
+				rowsFills[i]++
+				rowsFillsSum++
+				childHeight = 0
 
 		if column is 0
 			x = 0
-		else if column + columnSpacing + child.width + (if margin then margin._left else 0) > maxColumn
+		else if column + columnSpacing + childWidth + (if margin then margin._left else 0) > maxColumn
 			column = 0
 			row = height
 			x = 0
@@ -110,7 +122,7 @@ updateItem = (item) ->
 		if margin and (includeBorderMargins or row > 0)
 			y += margin._top
 
-		right = x + child.width
+		right = x + childWidth
 
 		elementsX[i] = x
 		elementsY[i] = y
@@ -124,7 +136,7 @@ updateItem = (item) ->
 			if includeBorderMargins and column > width
 				width = column
 
-		y += child._height
+		y += childHeight
 		rowSpan = rowSpacing
 		if margin
 			rowSpan += margin._bottom
@@ -136,6 +148,18 @@ updateItem = (item) ->
 
 	if includeBorderMargins
 		height = Math.max height, height+rowSpan-rowSpacing
+
+	# expand filled rows
+	if rowsFillsSum > 0
+		freeHeightSpace = effectItem._height - height - topPadding - bottomPadding
+		perCell = freeHeightSpace / rowsFillsSum
+
+		yShift = 0
+		for child, i in children
+			elementsY[i] += yShift
+			if rowsFills[i]
+				yShift += cellsHeight[elementsCell[i]] = child.height = perCell * rowsFills[i]
+		height += freeHeightSpace
 
 	# set children positions
 	switch alignH
@@ -209,18 +233,20 @@ updateItems = ->
 update = ->
 	data = @_impl
 
+	if data.pending or not @_effectItem?._visible
+		return
+
 	if data.updatePending
 		data.loops++
 	else
 		data.loops = 0
 
-	if not data.pending and @_effectItem?._visible
-		data.pending = true
-		queue.push @
+	data.pending = true
+	queue.push @
 
-		unless pending
-			setImmediate updateItems
-			pending = true
+	unless pending
+		setImmediate updateItems
+		pending = true
 	return
 
 updateSize = ->
