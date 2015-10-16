@@ -1,6 +1,8 @@
 utils = require 'utils'
 htmlparser = require 'htmlparser2'
 
+DEFAULT_ATTR_VALUE = utils.uid 100
+
 attrsKeyGen = (i, elem) -> elem
 attrsValueGen = (i, elem) -> i
 
@@ -94,6 +96,21 @@ module.exports = (Element) ->
 			recognizeSelfClosing: true
 			lowerCaseAttributeNames: false
 			lowerCaseTags: false
+
+		parser.onattribname = do (_super = parser.onattribname) -> (name) ->
+			_super.call @, name
+			@_attribvalue = DEFAULT_ATTR_VALUE
+
+		parser.onattribdata = do (_super = parser.onattribdata) -> (val) ->
+			if @_attribvalue is DEFAULT_ATTR_VALUE
+				@_attribvalue = ''
+			_super.call @, val
+
+		parser.onattribend = do (_super = parser.onattribend) -> ->
+			if @_attribvalue is DEFAULT_ATTR_VALUE
+				@_attribvalue = 'true'
+			_super.call @
+
 		parser.write html
 		parser.end()
 		

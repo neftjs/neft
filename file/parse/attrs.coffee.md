@@ -48,10 +48,9 @@ String `List(...` evaluates to the [List][].
 			[name, val] = attr
 			break unless name
 
-			if VALUE_TO_EVAL_RE.test val
-				try
-					newVal = eval attr[1]
-					elem.attrs.set attr[0], newVal
+			try
+				elem.attrs.set attr[0], eval(attr[1])
+
 
 			i++
 
