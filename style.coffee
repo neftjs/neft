@@ -217,8 +217,8 @@ module.exports = (File, data) -> class Style
 			@item.document.onHide.emit hideEvent
 			globalHideDelay += hideEvent.delay
 			globalShowDelay += hideEvent.nextShowDelay
-			event.delay = 0
-			event.nextShowDelay = 0
+			hideEvent.delay = 0
+			hideEvent.nextShowDelay = 0
 		@item.document.visible = false
 
 		@file.readyToUse = false
@@ -407,10 +407,7 @@ module.exports = (File, data) -> class Style
 						if isNaN(val) and baseVal isnt 'NaN'
 							val = baseVal
 					when 'boolean'
-						if val is ''
-							val = true
-						else
-							val = !!val
+						val = !!val
 					when 'string'
 						val = val+''
 
