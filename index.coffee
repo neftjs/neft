@@ -11,7 +11,7 @@ log = require 'log'
 processFile = require './process'
 buildResult = require './result'
 
-module.exports = (opts, callback) ->
+exports = module.exports = (opts, callback) ->
 	assert.isPlainObject opts
 	assert.isString opts.type
 	assert.isString opts.path
@@ -107,6 +107,24 @@ module.exports = (opts, callback) ->
 					callback err, stdout
 		else
 			callback null, bundle
+
+moduleNamespaces = []
+Module = require 'module'
+Module._load = do (_super = Module._load) -> (req, parent) ->
+	for obj in moduleNamespaces
+		if obj[req]
+			return obj[req]
+	_super.apply @, arguments
+
+exports.addModulesNamespace = (obj) ->
+	moduleNamespaces.push obj
+	return
+
+exports.removeModulesNamespace = (obj) ->
+	index = moduleNamespaces.indexOf obj
+	if index isnt -1
+		moduleNamespaces.splice index, 1
+	return
 
 # if process.argv.length > 2
 # 	[_, _, path, type] = process.argv
