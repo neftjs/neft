@@ -39,7 +39,7 @@ createBundle = (opts, callback) ->
 stack = new utils.async.Stack
 
 # stack.add createBundle, null, [type: 'node', release: true]
-# stack.add createBundle, null, [type: 'node', release: false]
+stack.add createBundle, null, [type: 'node', release: false]
 # stack.add createBundle, null, [type: 'browser', release: true]
 stack.add createBundle, null, [type: 'browser', release: false]
 # stack.add createBundle, null, [type: 'browser', extras: {game: true}, release: true]

@@ -20,7 +20,6 @@ HTML documents and more.
 	Renderer = require 'renderer'
 	Resources = require 'resources'
 	Dict = require 'dict'
-	AppDocument = require 'app-document'
 
 	AppRoute = require './route'
 
@@ -268,15 +267,7 @@ new app.Route({
 			# initialize styles
 			for style in opts.styles when style.name?
 				style.file._init stylesInitObject
-				# for name, subfile of style.file
-				# 	if name[0] isnt '_'
-				# 		subfile.init()
 				app.styles[style.name] = style.file
-
-			# windowStyle._component?.init()
-
-		# load frameworks
-		AppDocument app
 
 		# load styles
 		require('styles')
@@ -286,10 +277,6 @@ new app.Route({
 		# load bootstrap
 		if utils.isNode
 			bootstrapRoute app
-
-		# load views
-		for view in opts.views when view.name?
-			app.views[view.name] = Document.fromJSON(view.name, view.file)
 
 		# loading files helper
 		init = (files, target) ->
@@ -307,6 +294,10 @@ new app.Route({
 			return
 
 		setImmediate ->
+			# load views
+			for view in opts.views when view.name?
+				app.views[view.name] = Document.fromJSON(view.name, view.file)
+
 			init opts.models, app.models
 			init opts.routes, app.routes
 
@@ -323,12 +314,16 @@ new app.Route({
 
 			app.onReady.emit()
 
+		# load document extensions
+		if utils.isObject(opts.extensions)
+			for ext in opts.extensions
+				ext app: app
+
 		app
 
 	# link module
 	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log', 'resources',
-	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert', 'db',
-	           'app-document']
+	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert', 'db']
 	for name in MODULES
 		exports[name] = require name
 	exports['neft-assert'] = exports.assert
