@@ -157,8 +157,6 @@ app.networking.createHandler({
 			stack = @_handlers[opts.method] ?= []
 			stack.push handler
 
-			log.info "New handler `#{handler}` registered"
-
 			handler
 
 *Networking.Request* Networking::createRequest(*Object* options)
@@ -241,13 +239,18 @@ app.networking.createHandler({
 				data: data
 				onLoadEnd: onLoadEnd
 
-*Networking.Request* Networking::delete(*String* uri, *Function* onLoadEnd)
----------------------------------------------------------------------------
+*Networking.Request* Networking::delete(*String* uri, [*Any* data], *Function* onLoadEnd)
+-----------------------------------------------------------------------------------------
 
 		delete: (uri, onLoadEnd) ->
+			if typeof data is 'function' and not onLoadEnd
+				onLoadEnd = data
+				data = null
+
 			@createRequest
 				method: 'delete'
 				uri: uri
+				data: data
 				onLoadEnd: onLoadEnd
 
 *Networking.Request* Networking::createLocalRequest(*Object* options)
