@@ -14,6 +14,8 @@ getPropHandlerName = do ->
 	(prop) ->
 		cache[prop] ||= "on#{utils.capitalize(prop)}Change"
 
+MAX_LOOPS = 50
+
 module.exports = (impl) ->
 	{items} = impl
 
@@ -161,7 +163,10 @@ module.exports = (impl) ->
 					connections.push Connection.factory @, component.objects, elem[0], elem[1]
 
 			# update
-			# @updatePending = false
+			`//<development>`
+			@updatePending = false
+			@updateLoop = 0
+			`//</development>`
 			Object.preventExtensions @
 
 			@update()
@@ -182,6 +187,17 @@ module.exports = (impl) ->
 			unless @args
 				return
 
+			`//<development>`
+			if @updatePending
+				if @updateLoop > MAX_LOOPS
+					return
+				if ++@updateLoop is MAX_LOOPS
+					log.error "Potential loop detected. Property binding '#{@prop}' on item '#{@item.toString()}' has been disabled."
+					return
+			else
+				@updateLoop = 0
+			`//</development>`
+
 			result = utils.tryFunction @func, @ctx, @args
 			unless result?
 				result = getDefaultValue @
@@ -189,9 +205,13 @@ module.exports = (impl) ->
 			if typeof result is 'number' and not isFinite(result)
 				result = getDefaultValue @
 
-			# @updatePending = true
+			`//<development>`
+			@updatePending = true
+			`//</development>`
 			@obj[@prop] = result
-			# @updatePending = false
+			`//<development>`
+			@updatePending = false
+			`//</development>`
 			return
 
 		destroy: ->
@@ -212,9 +232,6 @@ module.exports = (impl) ->
 	setItemBinding: (prop, binding, component, ctx) ->
 		data = @_impl
 		data.bindings ?= {}
-
-		# if data.bindings[prop]?.updatePending
-		# 	return
 
 		data.bindings[prop]?.destroy()
 
