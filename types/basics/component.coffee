@@ -36,6 +36,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@isDeepClone = false
 		@ready = false
 		@mirror = false
+		@belongsToComponent = null
 		@objectsInitQueue = []
 		@cache = Object.create(null)
 		@parent = original
@@ -111,16 +112,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		if item._component.item is item
 			component.item = clone
 
-		# if it's an item (all items have to have an id),
-		# let's save it in the cloned component
+		# save object in the cloned component
 		if clone.id
-			# if this item extends another (only main item - that's why opts),
-			# we save it under the proper id's
 			if item._component.item is item
-				if parentComponent isnt component
-					parentComponent.setObject clone, clone.id
-				if not component.objects[component.itemId]
-					component.setObject clone, component.itemId
+				if belongsToComponent = item._component.belongsToComponent
+					components[belongsToComponent.id].setObject clone, clone.id
+				component.setObject clone, component.itemId
 			else
 				component.setObject clone, clone.id
 
@@ -173,6 +170,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		component = new Component @
 		component.mirror = not parentComponent
+		component.belongsToComponent = parentComponent
 
 		components = {}
 		components[component.id] = component
@@ -239,8 +237,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				clone = @createItem()
 			else
 				component = new Component @
-				baseObjects = component.objects
-				component.objects = Object.create baseObjects
+				component.objects = Object.create @objects
 				component.item = @item
 				component.objectsOrderSignalArr = new Array @objectsOrder.length+2
 				component.isDeepClone = true
@@ -251,8 +248,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				components[component.id] = component
 				clone = cloneItem item, components, component
 
-				for key, val of @objects
-					baseObjects[key] ||= val
 				for val, i in @objectsOrder
 					component.objectsOrderSignalArr[i] = component.objectsOrder[i] ||= val
 
