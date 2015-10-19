@@ -198,6 +198,7 @@ module.exports = (impl) ->
 			height: auto;
 			white-space: pre;
 			font-size: 14px;
+			line-height: 1;
 			font-family: #{impl.utils.DEFAULT_FONTS['sans-serif']}, sans-serif;
 			margin-top: #{if impl.utils.isFirefox then 1 else 0}px;
 		}
@@ -257,6 +258,7 @@ module.exports = (impl) ->
 
 	setText: (val) ->
 		updateContent @
+		return
 
 	setTextColor: (val) ->
 		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
@@ -279,9 +281,9 @@ module.exports = (impl) ->
 			return
 
 	setTextLineHeight: (val) ->
-		pxLineHeight = round val * @font.pixelSize
-		@_impl.innerElemStyle.lineHeight = "#{pxLineHeight}px"
+		@_impl.innerElemStyle.lineHeight = val
 		updateSize @
+		return
 
 	setTextFontFamily: (val) ->
 		if impl.utils.loadingFonts[val] > 0
@@ -293,24 +295,28 @@ module.exports = (impl) ->
 			val = "'#{val}'"
 		@_impl.innerElemStyle.fontFamily = val
 		updateSize @
+		return
 
 	setTextFontPixelSize: (val) ->
 		val = round val
 		@_impl.innerElemStyle.fontSize = "#{val}px"
-		impl.setTextLineHeight.call @, @lineHeight
 		updateSize @
+		return
 
 	setTextFontWeight: (val) ->
 		@_impl.innerElemStyle.fontWeight = implUtils.getFontWeight val
 		updateSize @
+		return
 
 	setTextFontWordSpacing: (val) ->
 		@_impl.innerElemStyle.wordSpacing = "#{val}px"
 		updateSize @
+		return
 
 	setTextFontLetterSpacing: (val) ->
 		@_impl.innerElemStyle.letterSpacing = "#{val}px"
 		updateSize @
+		return
 
 	setTextFontItalic: (val) ->
 		@_impl.innerElemStyle.fontStyle = if val then 'italic' else 'normal'

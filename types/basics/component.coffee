@@ -103,6 +103,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		unless component = components[itemCompId]
 			needsNewComp = true
 			component = components[itemCompId] = new Component item._component
+			if belongsToComponent = item._component.belongsToComponent
+				component.belongsToComponent = components[belongsToComponent.id]
 			component.mirror = parentComponent.mirror
 			createdComponents.push component
 

@@ -6,7 +6,7 @@ exports.Types =
 	Item: require './level0/item'
 	Image: require './level0/image'
 	Text: require './level0/text'
-	TextInput: require './level0/text/input'
+	TextInput: require './level0/textInput'
 	FontLoader: require './level0/loader/font'
 	ResourcesLoader: require './level0/loader/resources'
 	Device: require './level0/device'

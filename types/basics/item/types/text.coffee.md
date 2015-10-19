@@ -107,160 +107,19 @@ HTML code in WebGL implementation
 				developmentSetter: (val) ->
 					assert.isFloat val
 
-*Font* Text::font
------------------
-
-### *Signal* Text::onFontChange(*Font* font)
-
-		class Font extends itemUtils.DeepObject
-			@__name__ = 'Font'
-
-			itemUtils.defineProperty
-				constructor: Text
-				name: 'font'
-				valueConstructor: Font
-				developmentSetter: (val) ->
-					assert.isObject val
-				setter: (_super) -> (val) ->
-					{font} = @
-					font.family = val.family if val.family?
-					font.pixelSize = val.pixelSize if val.pixelSize?
-					font.weight = val.weight if val.weight?
-					font.wordSpacing = val.wordSpacing if val.wordSpacing?
-					font.letterSpacing = val.letterSpacing if val.letterSpacing?
-					font.italic = val.italic if val.italic?
-
-					_super.call @, val
-					return
-
-			constructor: (ref) ->
-				@_family = 'sans-serif'
-				@_pixelSize = 14
-				@_weight = 0.4
-				@_wordSpacing = 0
-				@_letterSpacing = 0
-				@_italic = false
-				super ref
-
-*String* Text::font.family = 'sans-serif'
------------------------------------------
-
-### *Signal* Text::font.onFamilyChange(*String* oldValue)
-
-			`//<development>`
-			checkingFamily = {}
-			`//</development>`
-			itemUtils.defineProperty
-				constructor: @
-				name: 'family'
-				defaultValue: 'sans-serif'
-				namespace: 'font'
-				parentConstructor: Text
-				implementation: Impl.setTextFontFamily
-				developmentSetter: (val) ->
-					assert.isString val
-
-					unless checkingFamily[val]
-						checkingFamily[val] = true
-						setTimeout =>
-							if not Renderer.FontLoader.fonts[val]
-								log.warn "Font `#{@family}` is not defined; use `FontLoader` to load a font"
-				setter: (_super) -> (val) ->
-					if typeof val is 'string'
-						_super.call @, val.toLowerCase()
-					else
-						_super.call @, val
-
-*Float* Text::font.pixelSize = 14
----------------------------------
-
-### *Signal* Text::font.onPixelSizeChange(*String* oldValue)
-
-			itemUtils.defineProperty
-				constructor: @
-				name: 'pixelSize'
-				defaultValue: 14
-				namespace: 'font'
-				parentConstructor: Text
-				implementation: Impl.setTextFontPixelSize
-				developmentSetter: (val) ->
-					assert.isFloat val
-
-*Float* Text::font.weight = 0.4
--------------------------------
-
-### *Signal* Text::font.onWeightChange(*Float* oldValue)
-
-			itemUtils.defineProperty
-				constructor: @
-				name: 'weight'
-				defaultValue: 0.4
-				namespace: 'font'
-				parentConstructor: Text
-				implementation: Impl.setTextFontWeight
-				developmentSetter: (val) ->
-					assert.isFloat val
-					assert.operator val, '>=', 0
-					assert.operator val, '<=', 1
-
-*Float* Text::font.wordSpacing = 0
-----------------------------------
-
-### *Signal* Text::font.onWordSpacingChange(*Float* oldValue)
-
-			itemUtils.defineProperty
-				constructor: @
-				name: 'wordSpacing'
-				defaultValue: 0
-				namespace: 'font'
-				parentConstructor: Text
-				implementation: Impl.setTextFontWordSpacing
-				developmentSetter: (val) ->
-					assert.isFloat val
-
-*Float* Text::font.letterSpacing = 0
-------------------------------------
-
-### *Signal* Text::font.onLetterSpacingChange(*Float* oldValue)
-
-			itemUtils.defineProperty
-				constructor: @
-				name: 'letterSpacing'
-				defaultValue: 0
-				namespace: 'font'
-				parentConstructor: Text
-				implementation: Impl.setTextFontLetterSpacing
-				developmentSetter: (val) ->
-					assert.isFloat val
-
-*Boolean* Text::font.italic = false
------------------------------------
-
-### *Signal* Text::font.onItalicChange(*Boolean* oldValue)
-
-			itemUtils.defineProperty
-				constructor: @
-				name: 'italic'
-				defaultValue: false
-				namespace: 'font'
-				parentConstructor: Text
-				implementation: Impl.setTextFontItalic
-				developmentSetter: (val) ->
-					assert.isBoolean val
-
-			toJSON: ->
-				family: @family
-				pixelSize: @pixelSize
-				weight: @weight
-				wordSpacing: @wordSpacing
-				letterSpacing: @letterSpacing
-				italic: @italic
-
 *Alignment* Text::alignment
 ---------------------------
 
 ### *Signal* Text::onAlignmentChange(*Alignment* alignment)
 
-		Renderer.Item.Alignment Text
+			Renderer.Item.Alignment Text
+
+*Font* Text::font
+-----------------
+
+### *Signal* Text::onFontChange(*Font* font)
+
+			@Font = require('./text/font') Renderer, Impl, itemUtils
+			@Font Text
 
 		Text
