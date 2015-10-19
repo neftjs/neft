@@ -28,6 +28,7 @@ Qml and WebGL implementations
 				@_color = 'black'
 				@_lineHeight = 1
 				@_multiLine = false
+				@_echoMode = 'normal'
 				@_alignment = null
 				@_font = null
 				super component, opts
@@ -91,6 +92,26 @@ Qml and WebGL implementations
 				implementation: Impl.setTextInputMultiLine
 				developmentSetter: (val) ->
 					assert.isBoolean val
+
+*String* TextInput::echoMode = 'normal'
+---------------------------------------
+
+Accepts 'normal' and 'password'.
+
+### *Signal* TextInput::onEchoModeChange(*String* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'echoMode'
+				defaultValue: 'normal'
+				implementation: Impl.setTextInputEchoMode
+				developmentSetter: (val) ->
+					assert.isString val
+					assert.ok val in ['', 'normal', 'password']
+				setter: (_super) -> (val) ->
+					val ||= 'normal'
+					val = val.toLowerCase()
+					_super.call @, val
 
 *Alignment* TextInput::alignment
 --------------------------------

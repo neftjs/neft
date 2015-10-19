@@ -7,7 +7,7 @@ module.exports = (impl) ->
 	{round} = Math
 
 	SHEET = """
-		textarea {
+		textarea, input[type=password] {
 			width: 100%;
 			height: 100%;
 			resize: none;
@@ -50,6 +50,7 @@ module.exports = (impl) ->
 
 	DATA =
 		isMultiLine: false
+		textareaElem: null
 		innerElem: null
 		innerElemStyle: null
 		verticalAlignment: 'top'
@@ -64,14 +65,14 @@ module.exports = (impl) ->
 		impl.Types.Item.create.call @, data
 
 		# innerElem
-		innerElem = data.innerElem = document.createElement 'textarea'
+		innerElem = data.innerElem = data.textareaElem = document.createElement 'textarea'
 		data.innerElemStyle = innerElem.style
 		data.innerElemStyle.whiteSpace = 'nowrap'
 		data.elem.appendChild innerElem
 
 		# prevent scrollable on input
 		data.elem.addEventListener impl._SIGNALS.pointerOnWheel, (e) ->
-			if document.activeElement is innerElem
+			if data.isMultiLine and document.activeElement is innerElem
 				e.stopPropagation()
 			return
 
@@ -86,11 +87,9 @@ module.exports = (impl) ->
 		innerElem.addEventListener 'blur', ->
 			self.keys.focus = false
 		@keys.onFocusChange (oldVal) ->
-			innerElem[if !oldVal then 'focus' else 'blur']()
+			data.innerElem[if !oldVal then 'focus' else 'blur']()
 
 		# update text
-		@onTextChange ->
-			innerElem.value = @text
 		innerElem.addEventListener 'input', ->
 			{value} = innerElem
 			# prevent copying new lines
@@ -110,7 +109,8 @@ module.exports = (impl) ->
 		@onHeightChange updateVerticalAlignment
 
 	setTextInputText: (val) ->
-		@_impl.innerElem.value = val
+		if @_impl.innerElem.value isnt val
+			@_impl.innerElem.value = val
 		updateVerticalAlignment.call @
 		return
 
@@ -129,6 +129,29 @@ module.exports = (impl) ->
 		data.innerElemStyle.whiteSpace = 'nowrap'
 		unless val
 			@text = @text.replace /\n/g, ''
+		return
+
+	setTextInputEchoMode: (val) ->
+		self = @
+		data = @_impl
+		switch val
+			when 'normal'
+				data.elem.removeChild data.innerElem
+				implUtils.prependElement data.elem, data.textareaElem
+				data.textareaElem.setAttribute 'style', data.innerElem.getAttribute('style')
+				data.innerElem = data.textareaElem
+				data.innerElemStyle = data.textareaElem.style
+			when 'password'
+				input = document.createElement 'input'
+				input.setAttribute 'type', 'password'
+				input.setAttribute 'style', data.innerElem.getAttribute('style')
+				data.elem.removeChild data.innerElem
+				implUtils.prependElement data.elem, input
+				data.innerElem = input
+				data.innerElemStyle = input.style
+				input.addEventListener 'input', ->
+					self.text = input.value
+					return
 		return
 
 	setTextInputFontFamily: (val) ->

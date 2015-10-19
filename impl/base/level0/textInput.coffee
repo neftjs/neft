@@ -18,6 +18,8 @@ module.exports = (impl) ->
 
 	setTextInputMultiLine: (val) ->
 
+	setTextInputEchoMode: (val) ->
+
 	setTextInputFontFamily: (val) ->
 
 	setTextInputFontPixelSize: (val) ->
