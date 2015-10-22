@@ -308,7 +308,7 @@ module.exports = (File, data) -> class Style
 			item
 
 	updateText: ->
-		if @waiting or @children.length
+		if @waiting or @children.length or @node.query('[neft:style]')
 			return
 
 		obj = @getTextObject()
@@ -393,25 +393,30 @@ module.exports = (File, data) -> class Style
 					continue
 
 				internalProp = getInternalProperty prop
+				objPropVal = if internalProp or obj then obj[internalProp] else obj[prop]
 
 				if val of ATTR_PRIMITIVE_VALUES
 					val = ATTR_PRIMITIVE_VALUES[val]
 
-				propType = typeof obj[prop]
+				propType = typeof objPropVal
 				if propType is 'object'
-					propType = typeof obj[prop]?.valueOf()
+					propType = typeof objPropVal?.valueOf()
 				switch propType
 					when 'number'
 						baseVal = val
-						val = parseFloat val
+						if typeof val isnt 'number'
+							val = parseFloat val
 						if isNaN(val) and baseVal isnt 'NaN'
 							val = baseVal
 					when 'boolean'
 						val = !!val
 					when 'string'
-						val = val+''
+						if val?
+							val = val+''
+						else
+							val = ''
 
-				if typeof obj[prop] is 'function' and typeof val is 'function'
+				if typeof val is 'function' and typeof obj[prop] is 'function'
 					obj[prop] val
 					@attrListeners.push obj, prop, val
 				else
@@ -577,25 +582,33 @@ module.exports = (File, data) -> class Style
 
 	findItemIndex = (node, item, parent) ->
 		tmpIndexNode = node
-		parent = parent.children.target or parent
-		while tmpIndexNode
-			tmpSiblingNode = tmpIndexNode
-			while tmpSiblingNode = tmpSiblingNode._nextSibling
-				if tmpSiblingItem = tmpSiblingNode._documentStyle?.item
-					if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
-						item.index = tmpSiblingTargetItem.index
-						return
+		parent = parent.children._target or parent
+		tmpSiblingNode = tmpIndexNode
 
-			# tmpSiblingNode = tmpIndexNode
-			# while tmpSiblingNode = tmpSiblingNode._previousSibling
-			# 	if tmpSiblingItem = tmpSiblingNode._documentStyle?.item
-			# 		if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
-			# 			item.index = tmpSiblingTargetItem.index + 1
-			# 			return
+		# by parents
+		while tmpIndexNode
+			# by next sibling
+			while tmpSiblingNode
+				if tmpSiblingNode isnt node
+					# get sibling item
+					if tmpSiblingItem = tmpSiblingNode._documentStyle?.item
+						if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
+							item.index = tmpSiblingTargetItem.index
+							return true
+					# check children of special tags
+					else if tmpSiblingNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
+						tmpIndexNode = tmpSiblingNode
+						tmpSiblingNode = tmpIndexNode.children[0]
+						continue
+				# check next sibling
+				tmpSiblingNode = tmpSiblingNode._nextSibling
+			# no sibling found, but parent is styled
 			if tmpIndexNode isnt node and tmpIndexNode.style
 				return
+			# check parent
 			tmpIndexNode = tmpIndexNode._parent
-		return
+			tmpSiblingNode = tmpIndexNode._nextSibling
+		return false
 
 	findItemParent: ->
 		if @waiting
@@ -611,8 +624,8 @@ module.exports = (File, data) -> class Style
 					if style.node isnt tmpNode
 						item = item._parent
 
-				if tmpNode.name isnt 'neft:fragment'
-					tmpNode._documentStyle ?= @
+				unless tmpNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
+					tmpNode._documentStyle ||= @
 
 				if item
 					@item.parent = item
