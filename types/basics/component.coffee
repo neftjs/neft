@@ -210,7 +210,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		assert.isString id
 		assert.notLengthOf id, 0
 		assert.ok @parent.objects[id]
-		assert.notOk @objects[id]
+		assert.notOk @objects.hasOwnProperty(id)
 
 		@objects[id] = object
 
@@ -293,7 +293,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		assert.isString item.id
 		assert.notLengthOf item.id, 0
 		assert.ok @objects[item.id] or @parent?.objects[item.id]
-		assert.ok @isClone
+		# assert.ok @isClone
 		assert.ok item._component.isDeepClone
 
 		@cache[item.id] ?= []
