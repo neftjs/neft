@@ -49,8 +49,9 @@ String `List(...` evaluates to the [List][].
 			break unless name
 
 			try
-				elem.attrs.set attr[0], eval(attr[1])
-
+				jsVal = eval val
+				if jsVal isnt undefined
+					elem.attrs.set name, jsVal
 
 			i++
 
