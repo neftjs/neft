@@ -15,6 +15,7 @@ Alignment @extension
 		itemUtils.defineProperty
 			constructor: ctor
 			name: 'alignment'
+			defaultValue: null
 			valueConstructor: Alignment
 			setter: (_super) -> (val) ->
 				{alignment} = @

@@ -84,6 +84,7 @@ Rectangle {
 		itemUtils.defineProperty
 			constructor: @
 			name: 'target'
+			defaultValue: null
 			setter: (_super) -> (val) ->
 				oldVal = @target
 				if oldVal is val
@@ -141,6 +142,7 @@ Rectangle {
 		itemUtils.defineProperty
 			constructor: @
 			name: 'animation'
+			defaultValue: null
 			developmentSetter: (val) ->
 				assert.instanceOf val, Renderer.Animation if val?
 			setter: (_super) -> (val) ->
@@ -170,6 +172,7 @@ Rectangle {
 		itemUtils.defineProperty
 			constructor: @
 			name: 'property'
+			defaultValue: ''
 			setter: (_super) -> (val) ->
 				oldVal = @property
 				if oldVal is val

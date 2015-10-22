@@ -18,6 +18,7 @@ Font @extension
 		itemUtils.defineProperty
 			constructor: ctor
 			name: 'font'
+			defaultValue: null
 			valueConstructor: Font
 			developmentSetter: (val) ->
 				assert.isObject val
