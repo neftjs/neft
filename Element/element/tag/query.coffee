@@ -276,6 +276,13 @@ class Watcher extends signal.Emitter
 		return
 
 module.exports = (Tag) ->
+	getSelectorCommandsLength: (selector) ->
+		sum = 0
+		queries = getQueries selector, 0
+		for query in queries
+			sum += query.length
+		sum
+
 	queryAll: queryAll = (selector, target=[], targetCtx=target, opts=0) ->
 		assert.isString selector
 		assert.notLengthOf selector, 0
