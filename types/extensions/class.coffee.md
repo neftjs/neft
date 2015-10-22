@@ -3,7 +3,7 @@ Class @modifier
 
 	'use strict'
 
-	assert = require 'assert'
+	assert = require 'neft-assert'
 	utils = require 'utils'
 	log = require 'log'
 	List = require 'list'
@@ -411,12 +411,14 @@ Grid {
 		ATTRS_ALIAS['padding'] = ['padding.left', 'padding.right', 'padding.horizontal', 'padding.top', 'padding.bottom', 'padding.vertical']
 		ATTRS_ALIAS['alignment'] = ['alignment.horizontal', 'alignment.vertical']
 
-		for aliases in ATTRS_ALIAS_DEF
-			for prop in aliases
-				arr = ATTRS_ALIAS[prop] ?= []
-				for alias in aliases
-					if alias isnt prop
-						arr.push alias
+		do ->
+			for aliases in ATTRS_ALIAS_DEF
+				for prop in aliases
+					arr = ATTRS_ALIAS[prop] ?= []
+					for alias in aliases
+						if alias isnt prop
+							arr.push alias
+			return
 
 		getContainedAttributeOrAlias = (classElem, attr) ->
 			attrs = classElem.changes._attributes
@@ -458,6 +460,7 @@ Grid {
 			for attr, val of attributes
 				path = null
 				writeAttr = true
+				alias = ''
 				for i in [classListIndex-1..0] by -1
 					if getContainedAttributeOrAlias(classList[i], attr)
 						writeAttr = false
@@ -533,6 +536,7 @@ Grid {
 			for attr, val of attributes
 				path = null
 				restoreDefault = true
+				alias = ''
 				for i in [classListIndex-1..0] by -1
 					# BUG: undefined on QML (potential Array::sort bug)
 					unless classList[i]
