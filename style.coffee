@@ -32,10 +32,6 @@ module.exports = (File, data) -> class Style
 
 		return
 
-	visibilityChangeListener = ->
-		if @file.isRendered
-			@updateVisibility()
-
 	textChangeListener = ->
 		if @file.isRendered
 			@updateText()
@@ -667,14 +663,26 @@ module.exports = (File, data) -> class Style
 		# changes
 		clone.node.onAttrsChange attrsChangeListener, clone
 
-		# visibility changes
-		tmpNode = clone.node
-		loop
-			if tmpNode.attrs.has('neft:if') or tmpNode.attrs.has('neft:else')
-				tmpNode.onVisibleChange visibilityChangeListener, clone
-
-			tmpNode = tmpNode.parent
-			if not tmpNode or tmpNode.attrs.has('neft:style')
-				break
-
 		clone
+
+	# synchronize visibility
+	{Tag} = File.Element
+	opts = utils.CONFIGURABLE
+	getter = utils.lookupGetter Tag::, 'visible'
+	setter = utils.lookupSetter Tag::, 'visible'
+	utils.defineProperty Tag::, 'visible', opts, getter, do (_super = setter) ->
+		updateVisibility = (node) ->
+			if node._style
+				node._documentStyle.updateVisibility()
+			else if node instanceof Tag
+				for child in node.children
+					updateVisibility child
+			return
+
+		(val) ->
+			if _super.call @, val
+				updateVisibility @
+				true
+			false
+
+	Style
