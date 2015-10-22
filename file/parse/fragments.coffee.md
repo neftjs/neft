@@ -63,7 +63,7 @@ using the [neft:use][] tag. This is fast and clean solution.
 						continue
 
 					# remove node from file
-					child.parent = undefined
+					child.parent = null
 					i--; n--
 
 					# get fragment
