@@ -18,6 +18,9 @@ module.exports = (impl) ->
 			line-height: 1;
 			font-family: #{impl.utils.DEFAULT_FONTS['sans-serif']}, sans-serif;
 		}
+		input[type=password] {
+			padding-top: 0 !important;
+		}
 	"""
 
 	window.addEventListener 'load', ->
