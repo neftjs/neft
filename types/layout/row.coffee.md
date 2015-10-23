@@ -26,6 +26,7 @@ Row {
 		@__path__ = 'Renderer.Row'
 
 		constructor: (component, opts) ->
+			@_padding = null
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = true
@@ -41,6 +42,14 @@ Row {
 			oldVal = @_effectItem
 			@_effectItem = val
 			Impl.setRowEffectItem.call @, val, oldVal
+
+*Margin* Row::padding
+---------------------
+
+### *Signal* Row::onPaddingChange(*Margin* padding)
+
+		Renderer.Item.Margin @,
+			propertyName: 'padding'
 
 *Float* Row::spacing = 0
 ------------------------

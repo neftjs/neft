@@ -8,7 +8,7 @@ log = log.scope 'Renderer', 'Anchors'
 {isArray} = Array
 
 module.exports = (impl) ->
-	NOP = ->
+	GET_ZERO = -> 0
 
 	MAX_LOOPS = 10
 
@@ -46,8 +46,8 @@ module.exports = (impl) ->
 		bottom: 'y'
 		horizontalCenter: 'x'
 		verticalCenter: 'y'
-		fillWidth: 'width'
-		fillHeight: 'height'
+		fillWidthSize: 'width'
+		fillHeightSize: 'height'
 
 	getSourceWatchProps =
 		left: ['onMarginChange']
@@ -56,15 +56,17 @@ module.exports = (impl) ->
 		bottom: ['onMarginChange', 'onHeightChange']
 		horizontalCenter: ['onMarginChange', 'onWidthChange']
 		verticalCenter: ['onMarginChange', 'onHeightChange']
-		fillWidth: ['onPaddingChange']
-		fillHeight: ['onPaddingChange']
+		fillWidthSize: ['onMarginChange']
+		fillHeightSize: ['onMarginChange']
 
 	getTargetWatchProps =
 		left:
 			parent: []
+			children: []
 			sibling: ['onXChange']
 		top:
 			parent: []
+			children: []
 			sibling: ['onYChange']
 		right:
 			parent: ['onWidthChange']
@@ -78,11 +80,11 @@ module.exports = (impl) ->
 		verticalCenter:
 			parent: ['onHeightChange']
 			sibling: ['onYChange', 'onHeightChange']
-		fillWidth:
+		fillWidthSize:
 			parent: ['onWidthChange']
 			children: []
 			sibling: ['onWidthChange']
-		fillHeight:
+		fillHeightSize:
 			parent: ['onHeightChange']
 			children: []
 			sibling: ['onHeightChange']
@@ -100,19 +102,23 @@ module.exports = (impl) ->
 			- item._width / 2
 		verticalCenter: (item) ->
 			- item._height / 2
-		fillWidth: (item) ->
+		fillWidthSize: (item) ->
 			0
-		fillHeight: (item) ->
+		fillHeightSize: (item) ->
 			0
 
 	getTargetValue =
 		left:
 			parent: (target) ->
 				0
+			children: (target) ->
+				0
 			sibling: (target) ->
 				target._x
 		top:
 			parent: (target) ->
+				0
+			children: (target) ->
 				0
 			sibling: (target) ->
 				target._y
@@ -136,7 +142,7 @@ module.exports = (impl) ->
 				target._height / 2
 			sibling: (target) ->
 				target._y + target._height / 2
-		fillWidth:
+		fillWidthSize:
 			parent: (target) ->
 				target._width
 			children: (target) ->
@@ -150,7 +156,7 @@ module.exports = (impl) ->
 				size
 			sibling: (target) ->
 				target._width
-		fillHeight:
+		fillHeightSize:
 			parent: (target) ->
 				target._height
 			children: (target) ->
@@ -165,8 +171,6 @@ module.exports = (impl) ->
 			sibling: (target) ->
 				target._height
 
-	NOP_VALUE_GETTER = (arg1) -> 0
-
 	getMarginValue =
 		left: (margin) ->
 			margin._left
@@ -180,26 +184,10 @@ module.exports = (impl) ->
 			margin._left - margin._right
 		verticalCenter: (margin) ->
 			margin._top - margin._bottom
-		fillWidth: NOP_VALUE_GETTER
-		fillHeight: NOP_VALUE_GETTER
-
-	getPaddingValue =
-		left: (padding) ->
-			- padding._left
-		top: (padding) ->
-			- padding._top
-		right: (padding) ->
-			padding._right
-		bottom: (padding) ->
-			padding._bottom
-		horizontalCenter: (padding) ->
-			- padding._left + padding._right
-		verticalCenter: (padding) ->
-			- padding._top + padding._bottom
-		fillWidth: (padding) ->
-			padding._left + padding._right
-		fillHeight: (padding) ->
-			padding._top + padding._bottom
+		fillWidthSize: (margin) ->
+			- margin._left - margin._right
+		fillHeightSize: (margin) ->
+			- margin._top - margin._bottom
 
 	onParentChange = (oldVal) ->
 		if oldVal
@@ -239,9 +227,9 @@ module.exports = (impl) ->
 
 	onChildInsert = (child) ->
 		child.onVisibleChange update, @
-		if @source is 'fillWidth'
+		if @source is 'fillWidthSize'
 			child.onWidthChange update, @
-		if @source is 'fillHeight'
+		if @source is 'fillHeightSize'
 			child.onHeightChange update, @
 
 		update.call @
@@ -249,9 +237,9 @@ module.exports = (impl) ->
 
 	onChildPop = (child) ->
 		child.onVisibleChange.disconnect update, @
-		if @source is 'fillWidth'
+		if @source is 'fillWidthSize'
 			child.onWidthChange.disconnect update, @
-		if @source is 'fillHeight'
+		if @source is 'fillHeightSize'
 			child.onHeightChange.disconnect update, @
 
 		update.call @
@@ -290,7 +278,7 @@ module.exports = (impl) ->
 			@getTargetValue = getTargetValue[line][@type]
 
 			if typeof @getTargetValue isnt 'function'
-				@getTargetValue = NOP
+				@getTargetValue = GET_ZERO
 				log.error "Anchor '#{@source}: #{def.join('.')}' is not supported"
 
 			switch target
@@ -352,8 +340,6 @@ module.exports = (impl) ->
 				r = 0
 			if margin = @item._margin
 				r += getMarginValue[@source] margin
-			if padding = @item._padding
-				r += getPaddingValue[@source] padding
 
 			@updateLoops++
 			@item[@prop] = r
@@ -395,7 +381,9 @@ module.exports = (impl) ->
 
 	getBaseAnchors =
 		centerIn: ['horizontalCenter', 'verticalCenter']
-		fill: ['fillWidth', 'fillHeight']
+		fillWidth: ['fillWidthSize', 'left']
+		fillHeight: ['fillHeightSize', 'top']
+		fill: ['fillWidthSize', 'fillHeightSize', 'left', 'top']
 
 	getBaseAnchorsPerAnchorType =
 		__proto__: null

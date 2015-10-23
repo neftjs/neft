@@ -92,7 +92,6 @@ Rectangle {
 }
 ```
 
-		implMethod = Impl["set#{ctor.__name__}Margin"]
 		createMarginProp = (type, extraProp) ->
 			developmentSetter = (val) ->
 				assert typeof val is 'number' and isFinite(val)
@@ -103,8 +102,6 @@ Rectangle {
 				constructor: Margin
 				name: type
 				defaultValue: 0
-				implementation: (val) ->
-					implMethod.call @, type, val
 				setter: (_super) -> (val) ->
 					extraOldVal = @[extraProp]
 					_super.call @, val

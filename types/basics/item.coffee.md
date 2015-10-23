@@ -47,7 +47,6 @@ This is a base class for everything which is visible.
 			@_keys = null
 			@_pointer = null
 			@_margin = null
-			@_padding = null
 			@_classes = null
 			@_background = null
 			@_defaultBackground = null
@@ -659,8 +658,6 @@ It's required for browsers, where link URIs should be known publicly.
 			ext = new Renderer.Class new Renderer.Component
 			ext.priority = -1
 			ext.changes.setAttribute 'anchors.fill', ['parent']
-			ext.changes.setAttribute 'anchors.left', ['parent', 'left']
-			ext.changes.setAttribute 'anchors.top', ['parent', 'top']
 			ext
 
 		createDefaultBackground = (parent) ->
@@ -744,14 +741,6 @@ This method checks whether two items are overlapped.
 ### *Signal* Item::onMarginChange(*Margin* margin)
 
 		@Margin @
-
-*Margin* Item::padding
-----------------------
-
-### *Signal* Item::onPaddingChange(*Margin* padding)
-
-		@Margin @,
-			propertyName: 'padding'
 
 *Keys* Item::keys
 -----------------

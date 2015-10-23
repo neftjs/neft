@@ -29,6 +29,7 @@ Flow {
 -------------------------------
 
 		constructor: (component, opts) ->
+			@_padding = null
 			@_spacing = null
 			@_alignment = null
 			@_includeBorderMargins = true
@@ -44,6 +45,14 @@ Flow {
 			oldVal = @_effectItem
 			@_effectItem = val
 			Impl.setFlowEffectItem.call @, val, oldVal
+
+*Margin* Flow::padding
+----------------------
+
+### *Signal* Flow::onPaddingChange(*Margin* padding)
+
+		Renderer.Item.Margin @,
+			propertyName: 'padding'
 
 *Spacing* Flow::spacing
 -----------------------

@@ -26,6 +26,7 @@ Column {
 		@__path__ = 'Renderer.Column'
 
 		constructor: (component, opts) ->
+			@_padding = null
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = true
@@ -41,6 +42,14 @@ Column {
 			oldVal = @_effectItem
 			@_effectItem = val
 			Impl.setColumnEffectItem.call @, val, oldVal
+
+*Margin* Column::padding
+------------------------
+
+### *Signal* Column::onPaddingChange(*Margin* padding)
+
+		Renderer.Item.Margin @,
+			propertyName: 'padding'
 
 *Float* Column::spacing = 0
 ---------------------------

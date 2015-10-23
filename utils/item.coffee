@@ -123,7 +123,7 @@ module.exports = (Renderer, Impl) ->
 			assert.isString name
 			assert.notLengthOf name, 0
 
-			signal.Emitter.createSignalOnObject object._$, name
+			signal.Emitter.createSignalOnObject object.$, name
 
 			return
 

@@ -31,6 +31,7 @@ Grid {
 -------------------------------
 
 		constructor: (component, opts) ->
+			@_padding = null
 			@_columns = 2
 			@_rows = Infinity
 			@_spacing = null
@@ -48,6 +49,14 @@ Grid {
 			oldVal = @_effectItem
 			@_effectItem = val
 			Impl.setGridEffectItem.call @, val, oldVal
+
+*Margin* Grid::padding
+----------------------
+
+### *Signal* Grid::onPaddingChange(*Margin* padding)
+
+		Renderer.Item.Margin @,
+			propertyName: 'padding'
 
 *Integer* Grid::columns = 2
 ---------------------------

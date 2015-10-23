@@ -392,8 +392,8 @@ Grid {
 			utils.remove item._classList, classElem
 
 		ATTRS_ALIAS_DEF = [
-			['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn'],
-			['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn'],
+			['x', 'anchors.left', 'anchors.right', 'anchors.horizontalCenter', 'anchors.centerIn', 'anchors.fill', 'anchors.fillWidth'],
+			['y', 'anchors.top', 'anchors.bottom', 'anchors.verticalCenter', 'anchors.centerIn', 'anchors.fill', 'anchors.fillHeight'],
 			['width', 'anchors.fill', 'anchors.fillWidth', 'layout.fillWidth'],
 			['height', 'anchors.fill', 'anchors.fillHeight', 'layout.fillHeight'],
 			['margin.horizontal', 'margin.left'],
@@ -677,9 +677,10 @@ Grid {
 					return
 
 			getChildClass = (style, parentClass) ->
-				for classElem in style._classList
-					if classElem._document?._parent is parentClass
-						return classElem
+				for classElem in style._extensions
+					if classElem instanceof Class
+						if classElem._document?._parent is parentClass
+							return classElem
 				return
 
 			connectNodeStyle = (style) ->

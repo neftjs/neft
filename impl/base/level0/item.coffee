@@ -60,8 +60,6 @@ module.exports = (impl) ->
 
 	setItemLinkUri: (val) ->
 
-	setItemMargin: (type, val) ->
-
 	doItemOverlap: (item) ->
 		a = @
 		b = item
