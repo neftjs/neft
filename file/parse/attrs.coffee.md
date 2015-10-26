@@ -38,6 +38,8 @@ String `List(...` evaluates to the [List][].
 
 	VALUE_TO_EVAL_RE = ///^(\[|\{|Dict\(|List\()///
 
+	evalFunc = new Function 'val', 'try { return eval(val); } catch(err){}'
+
 	forNode = (elem) ->
 
 		i = 0
@@ -48,10 +50,9 @@ String `List(...` evaluates to the [List][].
 			[name, val] = attr
 			break unless name
 
-			try
-				jsVal = eval val
-				if jsVal isnt undefined
-					elem.attrs.set name, jsVal
+			jsVal = evalFunc val
+			if jsVal isnt undefined
+				elem.attrs.set name, jsVal
 
 			i++
 
