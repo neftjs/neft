@@ -100,7 +100,8 @@ updateItem = (item) ->
 	visibleChildren = getArray visibleChildren, children.length
 
 	# get last column and last row
-	i = lastColumn = lastRow = 0
+	i = lastColumn = 0
+	lastRow = -1
 	for child, childIndex in children
 		# check visibility
 		if not child._visible or (child._layout and not child._layout._enabled)
@@ -162,19 +163,19 @@ updateItem = (item) ->
 		i++
 
 	# get grid size
+	gridWidth = 0
 	if autoWidth or columnsFillsSum > 0 or alignH isnt 0
-		gridWidth = 0
 		for i in [0..lastColumn] by 1
 			gridWidth += columnsSizes[i]
 
+	gridHeight = 0
 	if autoHeight or rowsFillsSum > 0 or alignV isnt 0
-		gridHeight = 0
 		for i in [0..lastRow] by 1
 			gridHeight += rowsSizes[i]
 
 	# expand filled cells
 	if not autoWidth
-		freeWidthSpace = (effectItem._width - columnSpacing * lastColumn - leftPadding - rightPadding) - gridWidth
+		freeWidthSpace = effectItem._width - columnSpacing * lastColumn - leftPadding - rightPadding - gridWidth
 		if freeWidthSpace > 0 and columnsFillsSum > 0
 			unusedFills = getCleanArray unusedFills, lastColumn+1
 			length = lastColumn+1
@@ -196,7 +197,7 @@ updateItem = (item) ->
 			freeWidthSpace = 0
 
 	if not autoHeight
-		freeHeightSpace = (effectItem._height - rowSpacing * lastRow - topPadding - bottomPadding) - gridHeight
+		freeHeightSpace = effectItem._height - rowSpacing * lastRow - topPadding - bottomPadding - gridHeight
 		if freeHeightSpace > 0 and rowsFillsSum > 0
 			unusedFills = getCleanArray unusedFills, lastRow+1
 			length = lastRow+1
@@ -371,7 +372,6 @@ ALL = exports.ALL = (1<<2) - 1
 exports.DATA =
 	pending: false
 	updatePending: false
-	disableFill: true
 	gridType: 0
 	gridUpdateLoops: 0
 	autoWidth: true
