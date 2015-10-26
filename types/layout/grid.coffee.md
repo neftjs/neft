@@ -24,8 +24,6 @@ Grid {
 	module.exports = (Renderer, Impl, itemUtils) -> class Grid extends Renderer.Item
 		@__name__ = 'Grid'
 		@__path__ = 'Renderer.Grid'
-		@CHILDREN_AUTO_PROPS = x: true, y: true
-		@SELF_AUTO_PROPS = width: true, height: true
 
 *Grid* Grid() : *Renderer.Item*
 -------------------------------
@@ -36,7 +34,7 @@ Grid {
 			@_rows = Infinity
 			@_spacing = null
 			@_alignment = null
-			@_includeBorderMargins = true
+			@_includeBorderMargins = false
 			@_effectItem = null
 			super component, opts
 			@effectItem = @
@@ -106,15 +104,15 @@ Grid {
 
 		Renderer.Item.Alignment @
 
-*Boolean* Grid::includeBorderMargins = true
--------------------------------------------
+*Boolean* Grid::includeBorderMargins = false
+--------------------------------------------
 
 ### *Signal* Grid::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'includeBorderMargins'
-			defaultValue: true
+			defaultValue: false
 			implementation: Impl.setGridIncludeBorderMargins
 			developmentSetter: (val) ->
 				assert.isBoolean val

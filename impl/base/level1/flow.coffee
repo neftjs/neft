@@ -8,23 +8,52 @@ log = log.scope 'Renderer', 'Flow'
 
 MAX_LOOPS = 50
 
+min = (a, b) ->
+	if a < b
+		a
+	else
+		b
+
+max = (a, b) ->
+	if a > b
+		a
+	else
+		b
+
+getArray = (arr, len) ->
+	if arr.length < len
+		new arr.constructor len * 1.4 | 0
+	else
+		arr
+
+getCleanArray = (arr, len) ->
+	newArr = getArray arr, len
+	if newArr is arr
+		for i in [0...len] by 1
+			arr[i] = 0
+		arr
+	else
+		newArr
+
 queueIndex = 0
 queues = [[], []]
 queue = queues[queueIndex]
 pending = false
 
-cellsWidth = new TypedArray.Uint32 64
-cellsHeight = new TypedArray.Uint32 64
+rowsWidth = new TypedArray.Uint32 64
+rowsHeight = new TypedArray.Uint32 64
 elementsX = new TypedArray.Uint32 64
 elementsY = new TypedArray.Uint32 64
-elementsCell = new TypedArray.Uint32 64
+elementsRow = new TypedArray.Uint32 64
+elementsBottomMargin = new TypedArray.Uint32 64
 rowsFills = new TypedArray.Uint8 64
+unusedFills = new TypedArray.Uint8 64
 
 updateItem = (item) ->
 	unless effectItem = item._effectItem
 		return
 
-	{includeBorderMargins} = item
+	{includeBorderMargins, collapseMargins} = item
 	children = effectItem._children
 	data = item._impl
 	{autoWidth, autoHeight} = data
@@ -51,7 +80,7 @@ updateItem = (item) ->
 		leftPadding = padding._left
 	else
 		topPadding = rightPadding = bottomPadding = leftPadding = 0
-	maxColumn = if autoWidth then Infinity else effectItem._width - leftPadding - rightPadding
+	maxFlowWidth = if autoWidth then Infinity else effectItem._width - leftPadding - rightPadding
 	columnSpacing = item.spacing.column
 	rowSpacing = item.spacing.row
 
@@ -64,20 +93,22 @@ updateItem = (item) ->
 
 	# get tmp arrays
 	maxLen = children.length
+	rowsFills = getCleanArray rowsFills, maxLen
 	if elementsX.length < maxLen
 		maxLen *= 1.5
-		cellsWidth = new TypedArray.Uint32 maxLen
-		cellsHeight = new TypedArray.Uint32 maxLen
-		elementsX = new TypedArray.Uint32 maxLen
-		elementsY = new TypedArray.Uint32 maxLen
-		elementsCell = new TypedArray.Uint32 maxLen
-		rowsFills = new TypedArray.Uint8 maxLen
-	else
-		for i in [0...maxLen] by 1
-			rowsFills[i] = 0
+		rowsWidth = getArray rowsWidth, maxLen
+		rowsHeight = getArray rowsHeight, maxLen
+		elementsX = getArray elementsX, maxLen
+		elementsY = getArray elementsY, maxLen
+		elementsRow = getArray elementsRow, maxLen
+		elementsBottomMargin = getArray elementsBottomMargin, maxLen
 
 	# tmp vars
-	width = height = column = row = x = y = right = rowSpan = maxCell = 0
+	flowWidth = flowHeight = 0
+	outerTopMargin = outerRightMargin = outerBottomMargin = outerLeftMargin = 0
+	currentRow = currentRowY = 0
+	lastColumnRightMargin = lastRowBottomMargin = currentRowBottomMargin = 0
+	x = y = right = bottom = 0
 
 	# calculate children positions
 	rowsFillsSum = 0
@@ -88,78 +119,168 @@ updateItem = (item) ->
 
 		margin = child._margin
 		layout = child._layout
-		childWidth = child._width
-		childHeight = child._height
+		width = child._width
+		height = child._height
 
+		# get child margins
+		if margin
+			topMargin = margin._top
+			rightMargin = margin._right
+			bottomMargin = margin._bottom
+			leftMargin = margin._left
+
+			if childLayoutMargin = child._children?._layout?._margin
+				if collapseMargins
+					topMargin = max topMargin, childLayoutMargin._top
+					rightMargin = max rightMargin, childLayoutMargin._right
+					bottomMargin = max bottomMargin, childLayoutMargin._bottom
+					leftMargin = max leftMargin, childLayoutMargin._left
+				else
+					topMargin += childLayoutMargin._top
+					rightMargin += childLayoutMargin._right
+					bottomMargin += childLayoutMargin._bottom
+					leftMargin += childLayoutMargin._left
+		else
+			topMargin = rightMargin = bottomMargin = leftMargin = 0
+
+		# width layout fill
 		if layout
 			unless layout._enabled
 				continue
 
 			if layout._fillWidth and not autoWidth
-				child.width = maxColumn - (if margin then margin.horizontal else 0)
-			if layout._fillHeight and not autoHeight
-				rowsFills[i]++
-				rowsFillsSum++
-				childHeight = 0
+				width = maxFlowWidth
+				if includeBorderMargins
+					width -= leftMargin + rightMargin
 
-		if column is 0
-			x = 0
-		else if column + columnSpacing + childWidth + (if margin then margin._left else 0) > maxColumn
-			column = 0
-			row = height
-			x = 0
-			maxCell++
-		else
-			column += columnSpacing
-			x = column
-		if margin and (includeBorderMargins or (x isnt 0 and column isnt 0))
-			x += margin._left
+				itemPending = data.pending
+				data.pending = true
+				child.width = width
+				data.pending = itemPending
 
-		if row > 0
-			y = row + rowSpan
-		else
-			y = 0
-		if margin and (includeBorderMargins or row > 0)
-			y += margin._top
+		# get child right anchor position
+		right = 0
+		if includeBorderMargins or x > 0
+			if collapseMargins
+				x += max leftMargin + (if x > 0 then columnSpacing else 0), lastColumnRightMargin
+			else
+				x += leftMargin + lastColumnRightMargin + (if x > 0 then columnSpacing else 0)
+		right += x + width
+		if includeBorderMargins
+			right += rightMargin
 
-		right = x + childWidth
+		# get x
+		if right > maxFlowWidth
+			right -= x
+			x = right - width
+			currentRowY += rowsHeight[currentRow]
+			currentRow++
+			lastRowBottomMargin = currentRowBottomMargin
+			currentRowBottomMargin = 0
 
+			# outer right margin
+			if not includeBorderMargins
+				outerRightMargin = max outerRightMargin, lastColumnRightMargin
+
+		# height layout fill
+		if layout and layout._fillHeight and not autoHeight
+			rowsFills[currentRow] = max rowsFills[currentRow], rowsFills[currentRow] + 1
+			rowsFillsSum++
+			height = 0
+			elementsBottomMargin[i] = bottomMargin
+
+		# get child bottom anchor position
+		bottom = y + height
+
+		# get y
+		y = currentRowY
+		if includeBorderMargins or y > 0
+			if collapseMargins
+				y += max lastRowBottomMargin, topMargin + (if y > 0 then rowSpacing else 0)
+			else
+				y += lastRowBottomMargin + topMargin + (if y > 0 then rowSpacing else 0)
+
+		# outer left margin
+		if not includeBorderMargins and x is 0
+			outerLeftMargin = max outerLeftMargin, leftMargin
+
+		# outer top margin
+		if not includeBorderMargins and y is 0
+			outerTopMargin = max outerTopMargin, topMargin
+
+		# last margins
+		lastColumnRightMargin = rightMargin
+		currentRowBottomMargin = max currentRowBottomMargin, bottomMargin
+
+		# save data
 		elementsX[i] = x
 		elementsY[i] = y
-		elementsCell[i] = maxCell
+		elementsRow[i] = currentRow
 
-		column = right
-		if column > width
-			width = column
-		if margin
-			column += margin._right
-			if includeBorderMargins and column > width
-				width = column
+		# flow size
+		flowWidth = max flowWidth, right
+		flowHeight = max flowHeight, y + height
 
-		y += childHeight
-		rowSpan = rowSpacing
-		if margin
-			rowSpan += margin._bottom
-		if y > height
-			height = y
+		# get cell size
+		rowsWidth[currentRow] = right
+		rowsHeight[currentRow] = flowHeight - currentRowY
 
-		cellsWidth[maxCell] = column
-		cellsHeight[maxCell] = y - row
+		# increase x and y by the size
+		x += width
+		y += height
 
+	# flow size
 	if includeBorderMargins
-		height = Math.max height, height+rowSpan-rowSpacing
+		flowHeight = max flowHeight, flowHeight + currentRowBottomMargin
+
+	# outer bottom margin
+	if not includeBorderMargins
+		outerBottomMargin = currentRowBottomMargin
+
+	# update item margin
+	item.margin.top = outerTopMargin
+	item.margin.right = outerRightMargin
+	item.margin.bottom = outerBottomMargin
+	item.margin.left = outerLeftMargin
+	if effectItem isnt item
+		# force update effect item parent
+		effectItem.onMarginChange.emit effectItem.margin
 
 	# expand filled rows
-	if rowsFillsSum > 0
-		freeHeightSpace = effectItem._height - height - topPadding - bottomPadding
-		perCell = freeHeightSpace / rowsFillsSum
+	freeHeightSpace = effectItem._height - topPadding - bottomPadding - flowHeight
+	if freeHeightSpace > 0 and rowsFillsSum > 0
+		unusedFills = getCleanArray unusedFills, currentRow+1
+		length = currentRow+1
+		perCell = (flowHeight + freeHeightSpace) / length
 
-		yShift = 0
+		update = true
+		while update
+			update = false
+			for i in [0..currentRow] by 1
+				if unusedFills[i] is 0 and (rowsFills[i] is 0 or rowsHeight[i] > perCell)
+					length--
+					perCell -= (rowsHeight[i] - perCell) / length
+					unusedFills[i] = 1
+					update = true
+
+		yShift = currentYShift = 0
 		for child, i in children
+			if elementsRow[i] is row + 1 and unusedFills[row] is 0
+				yShift += currentYShift
+				currentYShift = 0
+			row = elementsRow[i]
 			elementsY[i] += yShift
-			if rowsFills[i]
-				yShift += cellsHeight[elementsCell[i]] = child.height = perCell * rowsFills[i]
-		height += freeHeightSpace
+			if unusedFills[row] is 0
+				layout = child._layout
+				if layout and layout._fillHeight and layout._enabled
+					itemPending = data.pending
+					data.pending = true
+					child.height = perCell# - elementsBottomMargin[i]
+					data.pending = itemPending
+					unless currentYShift
+						currentYShift = perCell - rowsHeight[row]
+						rowsHeight[row] = perCell
+		freeHeightSpace = 0
 
 	# set children positions
 	switch alignH
@@ -179,41 +300,34 @@ updateItem = (item) ->
 	if autoHeight or alignV is 'top'
 		plusY = 0
 	else
-		plusY = (effectItem._height - height) * multiplierY
+		plusY = freeHeightSpace * multiplierY
 	unless autoWidth
-		width = effectItem._width - leftPadding - rightPadding
+		flowWidth = effectItem._width - leftPadding - rightPadding
 	unless autoHeight
-		height = effectItem._height - topPadding - bottomPadding
+		flowHeight = effectItem._height - topPadding - bottomPadding
 	for child, i in children
 		# omit not visible
 		unless child._visible
 			continue
 
-		cell = elementsCell[i]
-		bottom = child._height
+		cell = elementsRow[i]
 		anchors = child._anchors
 		layout = child._layout
 
 		if layout and not layout._enabled
 			continue
 
-		if child._margin
-			if includeBorderMargins or cell > 0
-				bottom += child._margin._top
-			if includeBorderMargins or cell < maxCell
-				bottom += child._margin._bottom
-
 		if not anchors or not anchors._autoX
-			child.x = elementsX[i] + (width - cellsWidth[cell]) * multiplierX + leftPadding
+			child.x = elementsX[i] + (flowWidth - rowsWidth[cell]) * multiplierX + leftPadding
 		if not anchors or not anchors._autoY
-			child.y = elementsY[i] + plusY + (cellsHeight[cell] - bottom) * multiplierY + topPadding
+			child.y = elementsY[i] + plusY + (rowsHeight[cell] - child._height) * multiplierY + topPadding
 
 	# set item size
 	if autoWidth
-		effectItem.width = width + leftPadding + rightPadding
+		effectItem.width = flowWidth + leftPadding + rightPadding
 
 	if autoHeight
-		effectItem.height = height + topPadding + bottomPadding
+		effectItem.height = flowHeight + topPadding + bottomPadding
 
 	return
 
@@ -338,3 +452,4 @@ module.exports = (impl) ->
 	setFlowColumnSpacing: update
 	setFlowRowSpacing: update
 	setFlowIncludeBorderMargins: update
+	setFlowCollapseMargins: update

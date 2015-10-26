@@ -29,7 +29,7 @@ Row {
 			@_padding = null
 			@_spacing = 0
 			@_alignment = null
-			@_includeBorderMargins = true
+			@_includeBorderMargins = false
 			@_effectItem = null
 			super component, opts
 			@effectItem = @
@@ -62,7 +62,7 @@ Row {
 			defaultValue: 0
 			implementation: Impl.setRowSpacing
 			setter: (_super) -> (val) ->
-				# state doesn't distinguishes column and grid
+				# state doesn't distinguish column and grid
 				if utils.isObject val
 					val = 0
 				assert.isFloat val
@@ -75,15 +75,15 @@ Row {
 
 		Renderer.Item.Alignment @
 
-*Boolean* Row::includeBorderMargins = true
-------------------------------------------
+*Boolean* Row::includeBorderMargins = false
+-------------------------------------------
 
 ### *Signal* Row::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'includeBorderMargins'
-			defaultValue: true
+			defaultValue: false
 			implementation: Impl.setRowIncludeBorderMargins
 			developmentSetter: (val) ->
 				assert.isBoolean val

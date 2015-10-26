@@ -18,7 +18,7 @@ Flow {
 
 	'use strict'
 
-	assert = require 'assert'
+	assert = require 'neft-assert'
 	utils = require 'utils'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Flow extends Renderer.Item
@@ -32,7 +32,8 @@ Flow {
 			@_padding = null
 			@_spacing = null
 			@_alignment = null
-			@_includeBorderMargins = true
+			@_includeBorderMargins = false
+			@_collapseMargins = false
 			@_effectItem = null
 			super component, opts
 			@effectItem = @
@@ -68,7 +69,7 @@ Flow {
 
 		Renderer.Item.Alignment @
 
-*Boolean* Flow::includeBorderMargins = true
+*Boolean* Flow::includeBorderMargins = false
 -------------------------------------------
 
 ### *Signal* Flow::onIncludeBorderMarginsChange(*Boolean* oldValue)
@@ -76,7 +77,21 @@ Flow {
 		itemUtils.defineProperty
 			constructor: @
 			name: 'includeBorderMargins'
-			defaultValue: true
+			defaultValue: false
 			implementation: Impl.setFlowIncludeBorderMargins
+			developmentSetter: (val) ->
+				assert.isBoolean val
+
+
+*Boolean* Flow::collapseMargins = false
+---------------------------------------
+
+### *Signal* Flow::onCollapseMarginsChange(*Boolean* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'collapseMargins'
+			defaultValue: false
+			implementation: Impl.setFlowCollapseMargins
 			developmentSetter: (val) ->
 				assert.isBoolean val

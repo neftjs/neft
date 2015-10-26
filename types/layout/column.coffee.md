@@ -29,7 +29,7 @@ Column {
 			@_padding = null
 			@_spacing = 0
 			@_alignment = null
-			@_includeBorderMargins = true
+			@_includeBorderMargins = false
 			@_effectItem = null
 			super component, opts
 			@effectItem = @
@@ -62,7 +62,7 @@ Column {
 			defaultValue: 0
 			implementation: Impl.setColumnSpacing
 			setter: (_super) -> (val) ->
-				# state doesn't distinguishes column and grid
+				# state doesn't distinguish column and grid
 				if utils.isObject val
 					val = 0
 				assert.isFloat val
@@ -75,15 +75,15 @@ Column {
 
 		Renderer.Item.Alignment @
 
-*Boolean* Column::includeBorderMargins = true
----------------------------------------------
+*Boolean* Column::includeBorderMargins = false
+----------------------------------------------
 
 ### *Signal* Column::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'includeBorderMargins'
-			defaultValue: true
+			defaultValue: false
 			implementation: Impl.setColumnIncludeBorderMargins
 			developmentSetter: (val) ->
 				assert.isBoolean val

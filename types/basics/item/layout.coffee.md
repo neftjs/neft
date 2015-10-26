@@ -6,7 +6,7 @@ Layout @extension
 	expect = require 'expect'
 	utils = require 'utils'
 	signal = require 'signal'
-	assert = require 'assert'
+	assert = require 'neft-assert'
 
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Layout extends itemUtils.DeepObject
 		@__name__ = 'Layout'
