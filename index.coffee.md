@@ -166,7 +166,8 @@ app.networking.createHandler({
 			assert.instanceOf @, Networking
 			assert.isPlainObject opts, '::createRequest options argument ...'
 
-			if opts.uri?.toString?
+			opts.uri ||= ''
+			if opts.uri.toString?
 				opts.uri = opts.uri.toString()
 
 			unless EXTERNAL_URL_RE.test(opts.uri)
@@ -174,10 +175,9 @@ app.networking.createHandler({
 					opts.uri = "/#{opts.uri}"
 				opts.uri = "#{@url}#{opts.uri}"
 
-			logtime = log.time 'New request'
-
 			# create a request
 			req = new Networking.Request opts
+			logtime = log.time utils.capitalize("#{req}")
 			req.onLoadEnd =>
 				@pendingRequests.remove req
 				log.end logtime
@@ -193,8 +193,6 @@ app.networking.createHandler({
 			@onRequest.emit req, res
 
 			# get handlers
-			log "Send `#{req}` request"
-
 			Impl.sendRequest req, res, (opts) ->
 				utils.merge res, opts
 				res.pending = false
@@ -295,13 +293,10 @@ app.networking.createRequest({
 			assert.instanceOf @, Networking
 			assert.isPlainObject opts, '::createLocalRequest options argument ...'
 
-			logtime = log.time 'New request'
-
 			# create a request
 			req = new Networking.Request opts
 			req.onLoadEnd =>
 				@pendingRequests.remove req
-				log.end logtime
 
 			# create a response
 			resOpts = if utils.isObject(opts.response) then opts.response else {}

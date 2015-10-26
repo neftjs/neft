@@ -140,8 +140,6 @@ It's internally called by the **Networking.createRequest()**.
 				else
 					next()
 
-			log "Use `#{@method} #{@uri}` handler"
-
 			req.handler = @
 			utils.tryFunction @callback, @, [req, res, callbackNext], callbackNext
 
