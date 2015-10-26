@@ -44,15 +44,25 @@ File @class
 		signal.create @, 'onBeforeParse'
 		signal.create @, 'onParse'
 
-*Signal* File.render(*File* file)
----------------------------------
+*Signal* File.onBeforeRender(*File* file)
+-----------------------------------------
+
+		signal.create @, 'onBeforeRender'
+
+*Signal* File.onRender(*File* file)
+-----------------------------------
 
 		signal.create @, 'onRender'
 
-*Signal* File.revert(*File* file)
----------------------------------
+*Signal* File.onBeforeRevert(*File* file)
+-----------------------------------------
 
 		signal.create @, 'onBeforeRevert'
+
+*Signal* File.onRevert(*File* file)
+-----------------------------------
+
+		signal.create @, 'onRevert'
 
 		@Element = require('./element/index')
 		@AttrChange = require('./attrChange') @
@@ -247,6 +257,8 @@ File @class
 					@storage = storage
 				@source = source
 
+				File.onBeforeRender.emit @
+
 				# inputs
 				if @inputs
 					for input, i in @inputs
@@ -320,6 +332,8 @@ File @class
 				@source = null
 
 				listeners @
+
+				File.onRevert.emit @
 
 				@
 
