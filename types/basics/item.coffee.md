@@ -354,7 +354,9 @@ Item {
 
 		utils.defineProperty @::, 'previousSibling', null, ->
 			@_previousSibling
-		, (val) ->
+		, (val=null) ->
+			assert.isNot @, val
+
 			if val is @_previousSibling
 				return
 
@@ -366,6 +368,9 @@ Item {
 			else
 				@index = 0
 
+			assert.is @_previousSibling, val
+			return
+
 ### *Signal* Item::onPreviousSiblingChange(*Item* oldValue)
 
 		signal.Emitter.createSignal @, 'onPreviousSiblingChange'
@@ -375,7 +380,9 @@ Item {
 
 		utils.defineProperty @::, 'nextSibling', null, ->
 			@_nextSibling
-		, (val) ->
+		, (val=null) ->
+			assert.isNot @, val
+
 			if val is @_nextSibling
 				return
 
@@ -386,6 +393,9 @@ Item {
 				@index = val.index
 			else if @_parent
 				@index = @_parent.children.length
+
+			assert.is @_nextSibling, val
+			return
 
 ### *Signal* Item::onNextSiblingChange(*Item* oldValue)
 
@@ -408,7 +418,7 @@ Item {
 			children = parent._children
 			if val > children.length
 				val = children.length
-			if index is val or index is val-1
+			if index is val or index is val - 1
 				return
 
 			oldPreviousSibling = @_previousSibling
@@ -437,6 +447,7 @@ Item {
 			previousSibling?._nextSibling = @
 			nextSibling?._previousSibling = @
 
+			`//<development>`
 			{index} = @
 			assert.is index, val
 			assert.is children[index], @
@@ -454,6 +465,7 @@ Item {
 				assert.is oldPreviousSibling._nextSibling, oldNextSibling
 			if oldNextSibling
 				assert.is oldNextSibling._previousSibling, oldPreviousSibling
+			`//</development>`
 
 			# children signal
 			emitSignal parent, 'onChildrenChange', children
