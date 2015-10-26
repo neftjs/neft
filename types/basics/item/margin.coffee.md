@@ -41,6 +41,11 @@ Margin @extension
 							margin.right = arr[1]
 							margin.bottom = arr[2]
 							margin.left = arr[3]
+				else if Array.isArray(val)
+					margin.top = val[0] if val.length > 0
+					margin.right = val[1] if val.length > 1
+					margin.bottom = val[2] if val.length > 2
+					margin.left = val[3] if val.length > 3
 				else if utils.isObject(val)
 					margin.left = val.left if val.left?
 					margin.top = val.top if val.top?
