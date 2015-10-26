@@ -24,25 +24,27 @@ module.exports = (File) ->
 
 	File::styles = null
 
-	File::_render = do (_super = File::_render) -> ->
-		r = _super.apply @, arguments
+	renderStyles = (arr) ->
+		for style in arr
+			style.render()
+		for style in arr
+			renderStyles style.children
+		return
 
-		# styles
-		if @styles.length
-			for style in @styles
-				style.render()
+	File.onBeforeRender (file) ->
+		renderStyles file.styles
+		return
 
-		r
+	revertStyles = (arr) ->
+		for style in arr
+			style.revert()
+		for style in arr
+			revertStyles style.children
+		return
 
-	File::revert = do (_super = File::revert) -> ->
-		r = _super.apply @, arguments
-
-		# styles
-		if @styles.length
-			for style in @styles
-				style.revert()
-
-		r
+	File.onBeforeRevert (file) ->
+		revertStyles file.styles
+		return
 
 	File::_clone = do (_super = File::_clone) -> ->
 		clone = _super.call @

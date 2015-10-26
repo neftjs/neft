@@ -97,6 +97,7 @@ Item {
 
 				if parentStyle
 					parentStyle.children.push style
+					style.index = parentStyle.children.length - 1
 				else
 					styles.push style
 

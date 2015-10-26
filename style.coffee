@@ -86,6 +86,7 @@ module.exports = (File, data) -> class Style
 		@parentSet = false
 		@lastItemParent = null
 		@waiting = false
+		@index = -1
 
 		Object.preventExtensions @
 
@@ -122,24 +123,35 @@ module.exports = (File, data) -> class Style
 			if not animationsPending 
 				# revert styles
 				if globalHideDelay <= 0
-					for style in stylesToRevert
-						style.waiting = false
-						style.revertItem()
-						style.file.readyToUse = true
-						assert.notOk style.file.isRendered
-
 					globalHideDelay = 0
-					utils.clear stylesToRevert
+
+					if stylesToRevert.length > 0
+						logtime = log.time 'Revert'
+						for style in stylesToRevert
+							style.waiting = false
+							style.revertItem()
+							style.file.readyToUse = true
+							assert.notOk style.file.isRendered
+
+						utils.clear stylesToRevert
+						log.end logtime
 
 				# render styles
 				if globalShowDelay + globalHideDelay <= 0
-					for style in stylesToRender
-						style.waiting = false
-						style.renderItem()
-						style.file.readyToUse = true
-
 					globalShowDelay = 0
-					utils.clear stylesToRender
+
+					if stylesToRender.length > 0
+						logtime = log.time 'Render'
+						for style in stylesToRender
+							style.waiting = false
+							style.renderItem()
+							style.file.readyToUse = true
+
+						for style in stylesToRender
+							style.findItemIndex()
+
+						utils.clear stylesToRender
+						log.end logtime
 
 			# continue
 			if stylesToRender.length or stylesToRevert.length
@@ -161,9 +173,6 @@ module.exports = (File, data) -> class Style
 	render: ->
 		if @waiting or not @item
 			return
-
-		for child in @children
-			child.render()
 
 		if @isScope
 			@item.document.onShow.emit showEvent
@@ -226,9 +235,6 @@ module.exports = (File, data) -> class Style
 		while (tmpNode = tmpNode._parent) && not tmpNode.style
 			if tmpNode.name is 'neft:use'
 				tmpNode._documentStyle = null
-
-		for child in @children
-			child.revert()
 		return
 
 	revertItem: ->
@@ -243,6 +249,7 @@ module.exports = (File, data) -> class Style
 			if !@parentSet
 				@lastItemParent = @item.parent
 			@item.parent = null
+			@parentSet = false
 
 		itemDocumentNode = @item.document.node
 		@item.document.node = null
@@ -583,28 +590,34 @@ module.exports = (File, data) -> class Style
 
 		# by parents
 		while tmpIndexNode
-			# by next sibling
+			# by previous sibling
 			while tmpSiblingNode
 				if tmpSiblingNode isnt node
 					# get sibling item
-					if tmpSiblingItem = tmpSiblingNode._documentStyle?.item
+					if tmpSiblingNode._documentStyle?.parentSet and (tmpSiblingItem = tmpSiblingNode._documentStyle.item)
 						if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
-							item.index = tmpSiblingTargetItem.index
-							return true
+							if item isnt tmpSiblingTargetItem
+								if item.previousSibling isnt tmpSiblingTargetItem
+									item.previousSibling = tmpSiblingTargetItem
+							return
 					# check children of special tags
 					else if tmpSiblingNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
 						tmpIndexNode = tmpSiblingNode
-						tmpSiblingNode = tmpIndexNode.children[0]
+						tmpSiblingNode = utils.last tmpIndexNode.children
 						continue
-				# check next sibling
-				tmpSiblingNode = tmpSiblingNode._nextSibling
+				# check previous sibling
+				tmpSiblingNode = tmpSiblingNode._previousSibling
 			# no sibling found, but parent is styled
 			if tmpIndexNode isnt node and tmpIndexNode.style
 				return
 			# check parent
 			tmpIndexNode = tmpIndexNode._parent
-			tmpSiblingNode = tmpIndexNode._nextSibling
-		return false
+			tmpSiblingNode = tmpIndexNode._previousSibling
+
+			# out of scope
+			if tmpIndexNode._documentStyle?.item is parent
+				return
+		return
 
 	findItemParent: ->
 		if @waiting
@@ -620,24 +633,24 @@ module.exports = (File, data) -> class Style
 					if style.node isnt tmpNode
 						item = item._parent
 
-				unless tmpNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
-					tmpNode._documentStyle ||= @
+					if item
+						@item.parent = item
+						break
+				else unless tmpNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
+					tmpNode._documentStyle = @
 
-				if item
-					@item.parent = item
-
-					# find index
-					findItemIndex node, @item, item
-					break
 				tmpNode = tmpNode._parent
 
 			unless item
 				@item.parent = null
-
-		for child in @children
-			child.findItemParent()
-
 		return
+
+	findItemIndex: ->
+		if @parentSet
+			findItemIndex.call @, @node, @item, @item.parent
+			true
+		else
+			false
 
 	clone: (originalFile, file) ->
 		clone = new Style
@@ -645,6 +658,7 @@ module.exports = (File, data) -> class Style
 		clone.file = file
 		clone.node = originalFile.node.getCopiedElement @node, file.node
 		clone.attrs = clone.node._attrs
+		clone.index = @index
 
 		# clone children
 		for child in @children
