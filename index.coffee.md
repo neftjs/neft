@@ -46,6 +46,9 @@ var log = require('log');
 		@timeDiff = (since) -> Log.time() - since
 		@times = new Array Log.TIMES_LEN
 
+		for _, i in @times
+			@times[i] = [0, '']
+
 		constructor: (prefixes) ->
 			@prefixes = prefixes
 			if prefixes
@@ -211,13 +214,11 @@ findPath();
 
 			{times} = LogImpl
 
-			# write
-			@_write LogImpl.MARKERS.bold fromArgs arguments
-
 			# get time id and set current time
-			for v, i in times when not v
+			for v, i in times when not v[0]
 				id = i
-				times[i] = LogImpl.time()
+				times[i][0] = LogImpl.time()
+				times[i][1] = fromArgs arguments
 				break
 
 			assert id?, "Log times out of range"
@@ -236,11 +237,13 @@ See *log.time()* method for more informations and example.
 				return
 
 			time = LogImpl.times[id]
-			diff = LogImpl.timeDiff time
-			LogImpl.times[id] = null
+			diff = LogImpl.timeDiff time[0]
+			diff = diff.toFixed 2
 
-			str = "#{diff} ms"
+			str = "#{time[1]}: #{diff} ms"
 			@_write LogImpl.MARKERS.gray str
+
+			time[0] = 0
 			return
 
 log.scope([*Any* names...])

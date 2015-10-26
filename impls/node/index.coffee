@@ -19,13 +19,4 @@ module.exports = (Log) -> class LogNode extends Log
 		(diff[0] * 1e9 + diff[1]) / 1e6
 
 	_write: (msg) ->
-
-		prefix = ''
-		for time in Log.times
-			prefix += time? and '  ' or ''
-
-		text = "#{prefix}#{msg}"
-		text = text.replace ///\n///g, "\n#{prefix}"
-		text += "\n"
-
-		writeStdout text
+		writeStdout msg+"\n"

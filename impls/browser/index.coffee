@@ -31,13 +31,6 @@ module.exports = do ->
 				LogBrowser.time() - since
 
 			_write: (marker) ->
-
-				prefix = ''
-				for time in Log.times
-					prefix += time? and '  ' or ''
-
-				marker[0] = "#{prefix}#{marker[0]}".replace ///\n///g, "\n#{prefix}"
-
 				logFunc.apply window['cons'+'ole'], marker
 	else
 		{}
