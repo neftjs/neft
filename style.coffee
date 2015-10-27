@@ -348,98 +348,107 @@ module.exports = (File, data) -> class Style
 		@item.visible = visible
 		return
 
-	ATTR_PRIMITIVE_VALUES =
-		__proto__: null
-		'null': null
-		'undefined': undefined
-		'false': false
-		'true': true
+	setAttr: do ->
+		ATTR_PRIMITIVE_VALUES =
+			__proto__: null
+			'null': null
+			'undefined': undefined
+			'false': false
+			'true': true
 
-	getSplitAttr = do ->
-		cache = Object.create null
+		getSplitAttr = do ->
+			cache = Object.create null
 
-		(prop) ->
-			r = cache[prop]
-			if r
-				return r
+			(prop) ->
+				r = cache[prop]
+				if r
+					return r
 
-			name = prop.slice 'neft:style:'.length
-			cache[prop] = name.split ':'
+				cache[prop] = prop.split ':'
 
-	getInternalProperty = do ->
-		cache = Object.create null
-		(prop) ->
-			cache[prop] ||= "_#{prop}"
+		getInternalProperty = do ->
+			cache = Object.create null
+			(prop) ->
+				cache[prop] ||= "_#{prop}"
 
-	setAttr: (name, val) ->
-		assert.instanceOf @, Style
+		getItemPropertyPath = do ->
+			cache = Object.create null
+			(prop) ->
+				cache[prop] ||= "style:_$:#{prop}"
 
-		if @waiting
-			return
-
-		{funcs} = @file
-		if funcs?.hasOwnProperty(val)
-			val = funcs[val]
-
-		if name.indexOf('neft:style') is -1
-			r = @setAttr("neft:style:$:#{name}", val)
-			r ||= @setAttr("neft:style:#{name}", val)
-			return r
-
-		props = getSplitAttr(name)
-		unless obj = @item
-			return false
-
-		for prop, i in props
-			if i is props.length - 1
-				unless prop of obj
-					continue
-
-				internalProp = getInternalProperty prop
-				objPropVal = if internalProp or obj then obj[internalProp] else obj[prop]
-
-				if val of ATTR_PRIMITIVE_VALUES
-					val = ATTR_PRIMITIVE_VALUES[val]
-
-				propType = typeof objPropVal
-				if propType is 'object'
-					propType = typeof objPropVal?.valueOf()
-				switch propType
-					when 'number'
-						baseVal = val
-						if typeof val isnt 'number'
-							val = parseFloat val
-						if isNaN(val) and baseVal isnt 'NaN'
-							val = baseVal
-					when 'boolean'
-						val = !!val
-					when 'string'
-						if val?
-							val = val+''
-						else
-							val = ''
-
-				if typeof val is 'function' and typeof obj[prop] is 'function'
-					obj[prop] val
-					@attrListeners.push obj, prop, val
-				else
-					`//<development>`
-					if typeof obj[prop] is 'function' and not utils.lookupSetter(obj, prop)
-						log.error "#{name} is a signal handler and expects function, but #{val} got"
-						continue
-					`//</development>`
-
-					unless @setAttrs[name]
-						@setAttrs[name] = true
-						internalVal = if internalProp of obj then obj[internalProp] else obj[prop]
-						@attrValues.push obj, prop, internalVal
-					obj[prop] = val
-				return true
-			else
-				obj = obj[prop]
-				unless obj
+		setAttr = (props, name, val) ->
+			# get object
+			obj = @node
+			for i in [0...props.length-1] by 1
+				unless obj = obj[props[i]]
 					return false
-		return false
+
+			# break if property doesn't exist
+			prop = utils.last props
+			unless prop of obj
+				return false
+
+			# parse value to the expected type
+			internalProp = getInternalProperty prop
+			objPropVal = if internalProp of obj then obj[internalProp] else obj[prop]
+
+			if val of ATTR_PRIMITIVE_VALUES
+				val = ATTR_PRIMITIVE_VALUES[val]
+
+			propType = typeof objPropVal
+			if propType is 'object'
+				propType = typeof objPropVal?.valueOf()
+			switch propType
+				when 'number'
+					baseVal = val
+					if typeof val isnt 'number'
+						val = parseFloat val
+					if isNaN(val) and baseVal isnt 'NaN'
+						val = baseVal
+				when 'boolean'
+					val = !!val
+				when 'string'
+					if val?
+						val = val+''
+					else
+						val = ''
+
+			if typeof val is 'function' and typeof obj[prop] is 'function'
+				obj[prop] val
+				@attrListeners.push obj, prop, val
+			else
+				`//<development>`
+				if typeof obj[prop] is 'function' and not utils.lookupSetter(obj, prop)
+					log.error "#{name} is a signal handler and expects a function, but #{val} got"
+				`//</development>`
+
+				unless @setAttrs[name]
+					@setAttrs[name] = true
+					@attrValues.push obj, prop, objPropVal
+				obj[prop] = val
+			return true
+
+		(name, val) ->
+			assert.instanceOf @, Style
+
+			if @waiting
+				return
+
+			props = getSplitAttr name
+
+			# omit internal attributes
+			if props[0] is 'neft'
+				return
+
+			# set attribute
+			setItemProp = name in ['class', 'name', 'children', 'attrs', 'style']
+			setItemProp ||= not setAttr.call(@, props, name, val) and props[0] isnt 'style'
+			if setItemProp
+				# object not found, try set the item custom property
+				itemPropName = getItemPropertyPath(name)
+				setAttr.call @, getSplitAttr(itemPropName), itemPropName, val
+
+			return
 
 	syncClassAttr: (oldVal) ->
 		assert.isString oldVal
@@ -482,7 +491,7 @@ module.exports = (File, data) -> class Style
 		return
 
 	isLink: ->
-		@node.name is 'a' and not @attrs?.hasOwnProperty('neft:style:onPointerClicked') and @node.attrs.get('href')?[0] isnt '#'
+		@node.name is 'a' and @node.attrs.get('href')?[0] isnt '#'
 
 	getLinkUri: ->
 		uri = @node.attrs.get('href') + ''

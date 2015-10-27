@@ -61,24 +61,10 @@ Item {
 }
 
 // views/player.html
-<div neft:style="styles:player" neft:style:stamina="0.7" neft:style:width="10"></div>
+<div neft:style="styles:player" stamina="0.7" style:width="10"></div>
 ```
 
 	'use strict'
-
-	findAttrs = (node) ->
-		# find attrs
-		attrs = null
-		i = 0
-		while (attr = node.attrs.item(i++))[0]?
-			[attrKey, attrValue] = attr
-
-			continue if attrKey.indexOf('neft:style:') isnt 0
-
-			attrs ?= {}
-			attrs[attrKey] = attrValue
-
-		attrs
 
 	module.exports = (File) -> (file) ->
 		{Style} = File
@@ -92,7 +78,6 @@ Item {
 				style = new Style
 				style.file = file
 				style.node = node
-				# style.attrs = findAttrs(node)
 				style.parent = parentStyle
 
 				if parentStyle
