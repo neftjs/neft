@@ -21,4 +21,5 @@ In the example below, *superPower* tag will be placed in the *neft:target* place
 	'use strict'
 
 	module.exports = (File) -> (file) ->
-		file.targetNode = file.node.query("#{File.HTML_NS}:target")
+		file.targetNode = file.node.query("neft:target")
+		file.targetNode?.name = 'neft:blank'
