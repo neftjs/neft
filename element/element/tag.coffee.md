@@ -19,6 +19,9 @@ Tag @virtual_dom
 	CSS_ID_RE = ///\#([^\s]+)///
 
 	module.exports = (Element) -> class Tag extends Element
+		@INTERNAL_TAGS = ['neft:attr', 'neft:fragment', 'neft:function', 'neft:rule',
+		'neft:target', 'neft:use', 'neft:require', 'neft:blank', 'neft:log']
+
 		@Attrs = require('./tag/attrs') Tag
 		@extensions = Object.create null
 

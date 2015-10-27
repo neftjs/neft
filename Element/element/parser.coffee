@@ -1,5 +1,8 @@
 utils = require 'utils'
 htmlparser = require 'htmlparser2'
+log = require 'log'
+
+log = log.scope 'Document'
 
 DEFAULT_ATTR_VALUE = utils.uid 100
 
@@ -8,6 +11,9 @@ attrsValueGen = (i, elem) -> i
 
 module.exports = (Element) ->
 	extensions = Element.Tag.extensions
+
+	internalTagsObject = utils.arrayToObject Element.Tag.INTERNAL_TAGS,
+		((_, key) -> key), (-> true), Object.create(null)
 
 	class Parser
 		constructor: (callback) ->
@@ -41,7 +47,10 @@ module.exports = (Element) ->
 			return
 
 		onopentag: (name, attribs) ->
-			lastTag = utils.last @_tagStack
+			`//<development>`
+			if /^neft:/.test(name) and not internalTagsObject[name]
+				log.warn "Unknown internal tag name '#{name}'"
+			`//</development>`
 
 			element = new (extensions[name] or Element.Tag)
 			element.name = name
@@ -51,23 +60,14 @@ module.exports = (Element) ->
 			@_tagStack.push element
 
 		ontext: (data) ->
-			#append = not _tagStack.length and @node.length and (lastTag = @node[@node.length-1]).type is 'text'
-			#append ||= _tagStack.length and (lastTag = _tagStack[_tagStack.length - 1]) and (lastTag = lastTag.children[lastTag.children.length - 1]) and lastTag.type is 'text'
+			# omit tabs and new lines
+			unless data.replace(/[\t\n]/gm, '')
+				return
 
-			# omit spaces and new lines
-			data = data.replace ///[\t\n]///gm, ''
-			return unless data
+			element = new Element.Text
 
-			# lastTag = utils.last(@_tagStack)?.children[0]
-			append = lastTag?.hasOwnProperty 'text'
-
-			if append
-				lastTag._text += data
-			else
-				element = new Element.Text
-
-				element._text = data
-				@_addDomElement element
+			element._text = data
+			@_addDomElement element
 
 		oncomment: ->
 

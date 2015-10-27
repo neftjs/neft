@@ -1,5 +1,7 @@
 'use strict'
 
+utils = require 'utils'
+
 WHITE_SPACE_RE = ///^\s*$///
 WHITE_SPACES_RE = ///^(\r?\n|\r)+\s+///gm
 LINE_BREAKERS_RE = ///\r?\n|\r///g
@@ -9,14 +11,17 @@ PHRASING_ELEMENTS = ["a", "em", "strong", "small", "mark", "abbr", "dfn", "i", "
                      "object", "iframe", "map", "area", "script", "noscript", "ruby",
                      "video", "audio", "input", "textarea", "select", "button", "label",
                      "output", "datalist", "keygen", "progress", "command", "canvas",
-                     "time", "meter"]
+                     "time", "meter", "neft:function"]
+
+PHRASING_ELEMENTS_OBJECT = utils.arrayToObject PHRASING_ELEMENTS,
+	((_, key) -> key), (-> true), Object.create(null)
 
 isRemove = (node) ->
 	if 'text' of node
 		if WHITE_SPACE_RE.test(node.text)
 			return true
 
-		unless ~PHRASING_ELEMENTS.indexOf(node.parent.name)
+		unless PHRASING_ELEMENTS_OBJECT[node.parent.name]
 			node.text = node.text
 				.replace(WHITE_SPACES_RE, '')
 
