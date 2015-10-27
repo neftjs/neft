@@ -64,14 +64,12 @@ Row {
 	expect = require 'expect'
 	Document = require 'document'
 
-	stylesFuncs = require('./file/funcs')
 	stylesStyles = require('./file/styles')
 	stylesStyle = require('./style')
 
 	expect(Document).toBe.function()
 
 	module.exports = (data) ->
-		stylesFuncs Document
 		stylesStyles Document
 
 		Document.Style = stylesStyle Document, data
