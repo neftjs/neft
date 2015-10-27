@@ -18,7 +18,8 @@ module.exports = (File) -> class Use
 		# get bodyNode
 		if node.children.length
 			bodyNode = @bodyNode = new File.Element.Tag
-			elem.parent = bodyNode while elem = node.children[0]
+			while elem = node.children[0]
+				elem.parent = bodyNode
 			bodyNode.parent = node
 
 	name: ''
@@ -27,6 +28,15 @@ module.exports = (File) -> class Use
 	bodyNode: null
 	usedFragment: null
 	isRendered: false
+
+	`//<development>`
+	usesWithNotFoundFragments = []
+	logUsesWithNoFragments = ->
+		while useElem = usesWithNotFoundFragments.pop()
+			unless useElem.usedFragment
+				log.warn "neft:fragment '#{useElem.name}' can't be find in file '#{useElem.self.path}'"
+		return
+	`//</development>`
 
 	render: (file) ->
 		assert.instanceOf file, File if file?
@@ -38,7 +48,10 @@ module.exports = (File) -> class Use
 
 		fragment = @self.fragments[@name]
 		if not file and not fragment
-			# log.warn "Can't find `#{@name}` neft:fragment"
+			`//<development>`
+			if usesWithNotFoundFragments.push(@) is 1
+				setTimeout logUsesWithNoFragments
+			`//</development>`
 			return
 
 		usedFragment = file or File.factory(fragment)
@@ -91,8 +104,6 @@ module.exports = (File) -> class Use
 		clone.self = self
 		clone.node = original.node.getCopiedElement @node, self.node
 		clone.bodyNode = clone.node.children[0]
-		clone.render = (arg1) => @render.call clone, arg1
-		clone.revert = => @revert.call clone
 		clone.usedFragment = null
 		clone.isRendered = false
 

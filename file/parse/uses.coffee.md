@@ -36,11 +36,11 @@ This special *XML* tag is used to place the [neft:fragment][].
 			unless node instanceof File.Element.Tag
 				return
 
-			if node.name isnt "#{File.HTML_NS}:use"
-				return node.children?.forEach forNode
+			node.children.forEach forNode
 
 			# get uses
-			uses.push new File.Use file, node
+			if node.name is "neft:use"
+				uses.push new File.Use file, node
 
 		forNode file.node
 
