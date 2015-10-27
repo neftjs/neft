@@ -51,6 +51,13 @@ module.exports = (File) -> class Input
 				obj = obj.parentUse?.self or obj.self or obj.source?.self
 			return
 
+		getFunction = (obj, prop) ->
+			while obj
+				if elem = obj.funcs?[prop]
+					return elem
+				obj = obj.parentUse?.self or obj.self or obj.source?.self
+			return
+
 		(file, prop) ->
 			if file.source instanceof File.Iterator
 				destFile = file.source.self
@@ -68,6 +75,10 @@ module.exports = (File) -> class Input
 				v = getFromObject file.storage, prop
 			if v is undefined
 				v = getElement file, prop
+			if v is undefined
+				v = getElement file, prop
+			if v is undefined
+				v = getFunction file, prop
 			if v is undefined
 				v = GLOBAL[prop]
 
@@ -97,6 +108,7 @@ module.exports = (File) -> class Input
 
 	@parse = (text) ->
 		# build toString()
+		text = text.replace(/[\t\n]/gm, '')
 		func = ""
 
 		chunks = []

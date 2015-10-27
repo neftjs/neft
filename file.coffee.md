@@ -72,6 +72,7 @@ File @class
 		@Condition = require('./condition') @
 		@Iterator = require('./iterator') @
 		@Log = require('./log') @
+		@Func = require('./func') @
 
 *File* File.fromHTML(*String* path, *String|Document.Element* html)
 -------------------------------------------------------------------
@@ -169,6 +170,7 @@ File @class
 				conditions = require('./file/parse/conditions') File
 				ids = require('./file/parse/ids') File
 				logs = require('./file/parse/logs') File
+				funcs = require('./file/parse/funcs') File
 
 			(@path, @node) ->
 				assert.isString path
@@ -201,6 +203,7 @@ File @class
 				storage @
 				conditions @
 				ids @
+				funcs @
 				`//<development>`
 				logs @
 				`//</development>`
@@ -230,6 +233,7 @@ File @class
 		target: null
 		ids: null
 		logs: null
+		funcs: null
 
 		init: ->
 
@@ -416,6 +420,12 @@ File @class
 				clone.ids = {}
 				for id, node of @ids
 					clone.ids[id] = @node.getCopiedElement node, clone.node
+
+			# funcs
+			if @funcs
+				clone.funcs = {}
+				for name, func of @funcs
+					clone.funcs[name] = File.Func.bindFuncIntoGlobal func, clone
 
 			# logs
 			`//<development>`
