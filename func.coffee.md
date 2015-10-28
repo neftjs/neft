@@ -127,9 +127,9 @@ It's available, only if it's a [Renderer.Item][] signal.
 			expect(file).toBe.any File
 
 			# get function
-			unless func = functionsCache[opts.body]
+			unless func = functionsCache[opts.uid]
 				args = funcGlobalProps.concat(opts.arguments)
-				func = functionsCache[opts.body] = new Function args, opts.body
+				func = functionsCache[opts.uid] = new Function args, opts.body
 
 			# get arguments array for further calls
 			args = new Array funcGlobalPropsLength + opts.arguments.length

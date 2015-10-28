@@ -60,10 +60,14 @@ You can use other functions declared in the same file (considering [neft:fragmen
 					throw new Error 'Function name is requried'
 
 				body = node.stringifyChildren()
-				args = (node.attrs.get('arguments') or '').split(',')
-				for arg, i in args
-					args[i] = arg.trim()
+				if argsAttr = node.attrs.get('arguments')
+					args = argsAttr.split(',')
+					for arg, i in args
+						args[i] = arg.trim()
+				else
+					args = []
 				funcs[name] =
+					uid: utils.uid()
 					body: body
 					arguments: args
 
