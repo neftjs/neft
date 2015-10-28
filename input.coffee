@@ -76,8 +76,6 @@ module.exports = (File) -> class Input
 			if v is undefined
 				v = getElement file, prop
 			if v is undefined
-				v = getElement file, prop
-			if v is undefined
 				v = getFunction file, prop
 			if v is undefined
 				v = GLOBAL[prop]
