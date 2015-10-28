@@ -126,7 +126,7 @@ Element @virtual_dom
 				else
 					index = oldChildren.indexOf @
 					oldChildren.splice index, 1
-				emitSignal @_parent, 'onChildrenChange', oldChildren
+				emitSignal @_parent, 'onChildrenChange', null, @
 
 				@_previousSibling?._nextSibling = @_nextSibling
 				@_nextSibling?._previousSibling = @_previousSibling
@@ -140,7 +140,7 @@ Element @virtual_dom
 				assert.notOk utils.has(@_parent.children, @)
 				newChildren = @_parent.children
 				index = newChildren.push(@) - 1
-				emitSignal parent, 'onChildrenChange', newChildren
+				emitSignal parent, 'onChildrenChange', @
 				if index is 0
 					@_previousSibling = null
 				else
@@ -160,8 +160,7 @@ Element @virtual_dom
 
 			true
 
-*Signal* Element::onParentChange(*Element* oldValue)
-----------------------------------------------------
+### *Signal* Element::onParentChange(*Element* oldValue)
 
 		signal.Emitter.createSignal @, 'onParentChange'
 

@@ -158,8 +158,8 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@
 
-	attrsChangeListener = (e) ->
-		if @self.isRendered and e.name is Iterator.HTML_ATTR
+	attrsChangeListener = (name) ->
+		if @self.isRendered and name is Iterator.HTML_ATTR
 			@update()
 
 	visibilityChangeListener = (oldVal) ->

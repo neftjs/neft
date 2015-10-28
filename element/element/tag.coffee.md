@@ -46,7 +46,7 @@ Tag @virtual_dom
 *Array* Tag::children
 ---------------------
 
-### *Signal* Tag::onChildrenChange(*Array* value)
+### *Signal* Tag::onChildrenChange(*Element* added, *Element* removed)
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
 
@@ -70,8 +70,7 @@ Tag @virtual_dom
 			emitSignal @, 'onStyleChange', old, val
 			true
 
-*Signal* Tag::onStyleChange(*Renderer.Item* oldValue)
------------------------------------------------------
+### *Signal* Tag::onStyleChange(*Renderer.Item* oldValue)
 
 		signal.Emitter.createSignal @, 'onStyleChange'
 
@@ -94,15 +93,9 @@ Tag @virtual_dom
 			emitSignal @, 'onVisibleChange', old
 			true
 
-*Signal* Tag::onVisibleChange(*Boolean* oldValue)
--------------------------------------------------
+### *Signal* Tag::onVisibleChange(*Boolean* oldValue)
 
 		signal.Emitter.createSignal @, 'onVisibleChange'
-
-*Signal* Tag::onAttrsChange(*Tag.Attrs* attrs)
-----------------------------------------------
-
-		signal.Emitter.createSignal @, 'onAttrsChange'
 
 *Tag.Attrs* Tag::attrs
 ----------------------
@@ -111,6 +104,10 @@ Tag @virtual_dom
 			Tag.Attrs.tag = @
 			Tag.Attrs
 		, null
+
+### *Signal* Tag::onAttrsChange(*String* name, *Any* oldValue)
+
+		signal.Emitter.createSignal @, 'onAttrsChange'
 
 		clone: ->
 			clone = super()

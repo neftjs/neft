@@ -37,10 +37,10 @@ module.exports = (File) -> class AttrChange
 	onVisibleChange = ->
 		@update()
 
-	onAttrsChange = (e) ->
-		if e.name is 'name'
+	onAttrsChange = (name, oldValue) ->
+		if name is 'name'
 			throw new Error "Dynamic neft:attr name is not implemented"
-		else if e.name is 'value'
+		else if name is 'value'
 			@update()
 		return
 

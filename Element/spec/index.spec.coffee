@@ -492,13 +492,13 @@ describe 'View Element', ->
 			elem = Element.fromHTML('<b a="1"></b>').cloneDeep()
 			tag = elem.children[0]
 
-			tag.onAttrsChange (e) ->
-				value = @attrs.get e.name
+			tag.onAttrsChange (name, oldVal) ->
+				value = @attrs.get name
 				args = [@, arguments...]
 
 			tag.attrs.set 'a', 2
 
-			expect(args).toEqual [tag, {name: 'a', oldValue: '1'}, undefined]
+			expect(args).toEqual [tag, 'a', '1']
 			expect(value).toBe 2
 
 		it 'observing visibility changes works properly', ->

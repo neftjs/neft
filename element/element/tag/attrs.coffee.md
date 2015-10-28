@@ -15,25 +15,6 @@ Tag.Attrs @virtual_dom
 	{emitSignal} = signal.Emitter
 
 	module.exports = (Tag) ->
-		eventsPool = []
-
-		triggerEvent = (tag, name, value) ->
-			event = eventsPool.pop()
-			unless event
-				event = {}
-
-				# DEPRECATED
-				utils.defineProperty event, 'value', null, ->
-					log.warn 'Tag::onAttrsChange use oldValue instead of value'
-					@oldValue
-				, null
-
-			event.name = name
-			event.oldValue = value
-
-			emitSignal tag, 'onAttrsChange', event
-			eventsPool.push event
-
 		exports =
 			tag: null
 
@@ -90,7 +71,7 @@ Tag.Attrs @virtual_dom
 				tag._attrs[name] = value
 
 				# trigger event
-				triggerEvent tag, name, old
+				emitSignal tag, 'onAttrsChange', name, old
 				Tag.query.checkWatchersDeeply tag
 
 				true

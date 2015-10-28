@@ -89,13 +89,14 @@ module.exports = (File) -> class Use
 		if @self.isRendered and not @isRendered
 			@render()
 
-	attrsChangeListener = (e) ->
-		if e.name is 'neft:fragment'
+	attrsChangeListener = (name) ->
+		if name is 'neft:fragment'
 			@name = @node.attrs.get 'neft:fragment'
 
 			if @isRendered
 				@revert()
 				@render()
+		return
 
 	clone: (original, self) ->
 		clone = Object.create @
