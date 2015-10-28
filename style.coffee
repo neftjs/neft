@@ -36,25 +36,25 @@ module.exports = (File, data) -> class Style
 		if @file.isRendered
 			@updateText()
 
-	attrsChangeListener = (e) ->
-		if e.name is 'neft:style'
+	attrsChangeListener = (name, oldValue) ->
+		if name is 'neft:style'
 			@reloadItem()
 			if @file.isRendered
 				@render()
 				@findItemParent()
-		else if e.name is 'href' and @isLink()
+		else if name is 'href' and @isLink()
 			@item?.linkUri = @getLinkUri()
 
 		if @file.isRendered
-			if e.name is 'class'
-				@syncClassAttr e.oldValue
+			if name is 'class'
+				@syncClassAttr oldValue
 
-			return unless @attrs?.hasOwnProperty(e.name)
-			value = @node.attrs.get e.name
+			return unless @attrs?.hasOwnProperty(name)
+			value = @node.attrs.get name
 			if @file.funcs?.hasOwnProperty value
 				log.warn "Dynamic listening on Renderer events is not supported"
 				return
-			@setAttr e.name, value
+			@setAttr name, value
 
 	reloadItemsRecursively = (style) ->
 		style.reloadItem()
