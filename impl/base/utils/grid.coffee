@@ -365,6 +365,13 @@ disableChild = (child) ->
 	child.onAnchorsChange.disconnect update, @
 	child.onLayoutChange.disconnect update, @
 
+onChildrenChange = (added, removed) ->
+	if added
+		enableChild.call @, added
+	if removed
+		disableChild.call @, removed
+	update.call @
+
 COLUMN = exports.COLUMN = 1<<0
 ROW = exports.ROW = 1<<1
 ALL = exports.ALL = (1<<2) - 1
@@ -386,12 +393,10 @@ exports.update = update
 exports.setEffectItem = (item, oldItem) ->
 	if oldItem
 		oldItem.onVisibleChange.disconnect update, @
-		oldItem.onChildrenChange.disconnect update, @
+		oldItem.onChildrenChange.disconnect onChildrenChange, @
 		oldItem.onLayoutChange.disconnect update, @
 		oldItem.onWidthChange.disconnect onWidthChange, @
 		oldItem.onHeightChange.disconnect onHeightChange, @
-		oldItem.children.onInsert.disconnect enableChild, @
-		oldItem.children.onPop.disconnect disableChild, @
 
 		for child in oldItem.children
 			disableChild.call @, child
@@ -403,12 +408,10 @@ exports.setEffectItem = (item, oldItem) ->
 			item.height = -1
 
 		item.onVisibleChange update, @
-		item.onChildrenChange update, @
+		item.onChildrenChange onChildrenChange, @
 		item.onLayoutChange update, @
 		item.onWidthChange onWidthChange, @
 		item.onHeightChange onHeightChange, @
-		item.children.onInsert enableChild, @
-		item.children.onPop disableChild, @
 
 		for child in item.children
 			enableChild.call @, child

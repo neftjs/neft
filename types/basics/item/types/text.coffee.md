@@ -117,7 +117,7 @@ HTML code in WebGL implementation
 *Font* Text::font
 -----------------
 
-### *Signal* Text::onFontChange(*Font* font)
+### *Signal* Text::onFontChange(*String* property, *Any* oldValue)
 
 			@Font = require('./text/font') Renderer, Impl, itemUtils
 			@Font Text

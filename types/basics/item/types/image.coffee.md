@@ -233,7 +233,7 @@ ReadOnly *Boolean* Image::loaded
 			@_loaded
 		, null
 
-### *Signal* Image::loadedChange(*Boolean* oldValue)
+### *Signal* Image::onLoadedChange(*Boolean* oldValue)
 
 		signal.Emitter.createSignal @, 'onLoadedChange'
 

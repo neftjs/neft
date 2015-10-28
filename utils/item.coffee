@@ -316,7 +316,7 @@ module.exports = (Renderer, Impl) ->
 				if implementation?
 					funcStr += "impl.call(this._ref, val);\n"
 				funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
-				funcStr += "emitSignal(this._ref, '#{namespaceSignalName}', this);\n"
+				funcStr += "emitSignal(this._ref, '#{namespaceSignalName}', '#{name}', oldVal);\n"
 				funcStr += "};"
 
 				func = new Function 'impl', 'emitSignal', 'debug', funcStr
@@ -344,7 +344,7 @@ module.exports = (Renderer, Impl) ->
 		setter = if customSetter? then customSetter(propSetter) else propSetter
 
 		# override
-		prototype['_' + name] = opts.defaultValue
+		prototype[internalName] = opts.defaultValue
 		utils.defineProperty prototype, name, null, getter, setter
 
 		prototype

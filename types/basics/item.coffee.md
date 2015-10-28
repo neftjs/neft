@@ -142,7 +142,7 @@ Rectangle {
 				val.parent = @
 			return
 
-### *Signal* Item::onChildrenChange(*Object* children)
+### *Signal* Item::onChildrenChange(*Item* added, *Item* removed)
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
 
@@ -203,12 +203,12 @@ Rectangle {
 ---------------------------------------------
 
 			index: (val) -> Array::indexOf.call @, val
+			indexOf: @::index
 
 *Boolean* Item::children::has(*Item* value)
 -------------------------------------------
 
 			has: (val) -> @index(val) isnt -1
-			indexOf: @::index
 
 Item::children::clear()
 -----------------------
@@ -219,24 +219,6 @@ Removes all children from a node.
 				while child = @[0]
 					child.parent = null
 				return
-
-### *Signal* Item::children::onInsert(*Item* child, *Integer* index)
-
-#### Listen on an item child insertion @snippet
-
-```
-Item {
-\  children.onInsert: function(child){
-\    child.x *= 2;
-\  }
-}
-```
-
-			signal.Emitter.createSignal @, 'onInsert'
-
-### *Signal* Item::children::onPop(*Item* child, *Integer* index)
-
-			signal.Emitter.createSignal @, 'onPop'
 
 *Item* Item::parent = null
 --------------------------
@@ -327,11 +309,9 @@ Item {
 
 				# signals
 				if old isnt null
-					emitSignal old, 'onChildrenChange', oldChildren
-					emitSignal oldChildren, 'onPop', @, index
+					emitSignal old, 'onChildrenChange', null, @
 				if val isnt null
-					emitSignal val, 'onChildrenChange', valChildren
-					emitSignal valChildren, 'onInsert', @, length - 1
+					emitSignal val, 'onChildrenChange', @
 
 				emitSignal @, 'onParentChange', old
 
@@ -468,7 +448,7 @@ Item {
 			`//</development>`
 
 			# children signal
-			emitSignal parent, 'onChildrenChange', children
+			emitSignal parent, 'onChildrenChange'
 
 			# current siblings signals
 			if oldPreviousSibling
@@ -731,14 +711,14 @@ This method checks whether two items are overlapped.
 *Anchors* Item::anchors
 -----------------------
 
-### *Signal* Item::onAnchorsChange(*Anchors* anchors)
+### *Signal* Item::onAnchorsChange(*String* property, *Array* oldValue)
 
 		@Anchors @
 
 *Layout* Item::layout
 ---------------------
 
-### *Signal* Item::onLayoutChange(*Anchors* layout)
+### *Signal* Item::onLayoutChange(*String* property, *Any* oldValue)
 
 		@Layout @
 
@@ -750,7 +730,7 @@ This method checks whether two items are overlapped.
 *Margin* Item::margin
 ---------------------
 
-### *Signal* Item::onMarginChange(*Margin* margin)
+### *Signal* Item::onMarginChange(*String* property, *Any* oldValue)
 
 		@Margin @
 

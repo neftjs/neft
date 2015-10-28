@@ -394,6 +394,13 @@ disableChild = (child) ->
 	child.onAnchorsChange.disconnect update, @
 	child.onLayoutChange.disconnect update, @
 
+onChildrenChange = (added, removed) ->
+	if added
+		enableChild.call @, added
+	if removed
+		disableChild.call @, removed
+	update.call @
+
 module.exports = (impl) ->
 	DATA =
 		loops: 0
@@ -413,12 +420,10 @@ module.exports = (impl) ->
 	setFlowEffectItem: (item, oldItem) ->
 		if oldItem
 			oldItem.onVisibleChange.disconnect update, @
-			oldItem.onChildrenChange.disconnect update, @
+			oldItem.onChildrenChange.disconnect onChildrenChange, @
 			oldItem.onLayoutChange.disconnect update, @
 			oldItem.onWidthChange.disconnect onWidthChange, @
 			oldItem.onHeightChange.disconnect onHeightChange, @
-			oldItem.children.onInsert.disconnect enableChild, @
-			oldItem.children.onPop.disconnect disableChild, @
 
 			if @_impl.autoWidth
 				oldItem.width = 0
@@ -435,12 +440,10 @@ module.exports = (impl) ->
 				item.height = -1
 
 			item.onVisibleChange update, @
-			item.onChildrenChange update, @
+			item.onChildrenChange onChildrenChange, @
 			item.onLayoutChange update, @
 			item.onWidthChange onWidthChange, @
 			item.onHeightChange onHeightChange, @
-			item.children.onInsert enableChild, @
-			item.children.onPop disableChild, @
 
 			for child in item.children
 				enableChild.call @, child

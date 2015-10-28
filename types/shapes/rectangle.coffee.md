@@ -66,7 +66,7 @@ Rectangle {
 *Border* Rectangle::border
 --------------------------
 
-### *Signal* Rectangle::onBorderChange(*Border* border)
+### *Signal* Rectangle::onBorderChange(*String* property, *Any* oldValue)
 
 		class Border extends itemUtils.DeepObject
 			@__name__ = 'Border'

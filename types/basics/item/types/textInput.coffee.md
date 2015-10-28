@@ -123,7 +123,7 @@ Accepts 'normal' and 'password'.
 *Font* TextInput::font
 ----------------------
 
-### *Signal* TextInput::onFontChange(*Font* font)
+### *Signal* TextInput::onFontChange(*String* property, *Any* oldValue)
 
 			Renderer.Text.Font TextInput
 

@@ -245,6 +245,12 @@ module.exports = (impl) ->
 		update.call @
 		return
 
+	onChildrenChange = (added, removed) ->
+		if added
+			onChildInsert.call @, added
+		if removed
+			onChildPop.call @, removed
+
 	class Anchor
 		pool = []
 
@@ -288,8 +294,7 @@ module.exports = (impl) ->
 					onParentChange.call @, null
 				when 'children'
 					@targetItem = item._children
-					item.children.onInsert onChildInsert, @
-					item.children.onPop onChildPop, @
+					item.onChildrenChange onChildrenChange, @
 					for child in item.children
 						onChildInsert.call @, child
 				when 'nextSibling'
@@ -355,8 +360,7 @@ module.exports = (impl) ->
 				when 'parent'
 					@item.onParentChange.disconnect onParentChange, @
 				when 'children'
-					@item.children.onInsert.disconnect onChildInsert, @
-					@item.children.onPop.disconnect onChildPop, @
+					@item.onChildrenChange.disconnect onChildrenChange, @
 					for child in @item.children
 						onChildPop.call @, child, -1
 				when 'nextSibling'
