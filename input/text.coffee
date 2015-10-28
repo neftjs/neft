@@ -7,6 +7,9 @@ module.exports = (File, Input) -> class InputText extends Input
 	update: ->
 		super()
 		str = @toString()
-		str += '' if typeof str isnt 'string'
+		unless str?
+			str = ''
+		else if typeof str isnt 'string'
+			str += ''
 		@node.text = str
 		return
