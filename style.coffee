@@ -440,11 +440,12 @@ module.exports = (File, data) -> class Style
 			if props[0] is 'neft'
 				return
 
-			# set attribute
-			setItemProp = name in ['class', 'name', 'children', 'attrs', 'style']
-			setItemProp ||= not setAttr.call(@, props, name, val) and props[0] isnt 'style'
-			if setItemProp
-				# object not found, try set the item custom property
+			# set attribute on node
+			unless name in ['class', 'name', 'children', 'attrs', 'style']
+				setAttr.call @, props, name, val
+
+			# set item custom property
+			if props[0] isnt 'style'
 				itemPropName = getItemPropertyPath(name)
 				setAttr.call @, getSplitAttr(itemPropName), itemPropName, val
 
