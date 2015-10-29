@@ -46,10 +46,6 @@ module.exports = (File, data) -> class Style
 		else if name is 'href' and @isLink()
 			@item?.linkUri = @getLinkUri()
 
-		if @file.isRendered
-			if name is 'class'
-				@syncClassAttr oldValue
-
 		if @attrs[name]
 			@setAttr name, @node._attrs[name], oldValue
 		return
@@ -77,7 +73,6 @@ module.exports = (File, data) -> class Style
 		@baseText = ''
 		@isLinkUriSet = false
 		@baseLinkUri = ''
-		@classes = null
 		@parentSet = false
 		@lastItemParent = null
 		@waiting = false
@@ -86,8 +81,8 @@ module.exports = (File, data) -> class Style
 
 		Object.preventExtensions @
 
-	showEvent = new Renderer.Item::document.constructor.ShowEvent
-	hideEvent = new Renderer.Item::document.constructor.HideEvent
+	showEvent = new Renderer.Item.Document.ShowEvent
+	hideEvent = new Renderer.Item.Document.HideEvent
 	globalShowDelay = globalHideDelay = 0
 	stylesToRender = []
 	stylesToRevert = []
@@ -185,11 +180,6 @@ module.exports = (File, data) -> class Style
 		if not @item or not @file.isRendered
 			return
 
-		# save classes
-		if classes = @item._classes
-			unless utils.isEqual(classes.items(), @classes)
-				@classes = utils.clone(classes.items())
-
 		@item.visible = true
 
 		if @lastItemParent
@@ -200,7 +190,6 @@ module.exports = (File, data) -> class Style
 		@baseText = @getTextObject()?.text or ''
 		@updateText()
 		@updateVisibility()
-		@syncClassAttr('')
 
 		# set attrs
 		if (attrsQueue = @attrsQueue).length
@@ -271,13 +260,6 @@ module.exports = (File, data) -> class Style
 			@getTextObject().text = @baseText
 			@isTextSet = false
 			@baseText = ''
-
-		# restore classes
-		if (classes = @item._classes) or @classes
-			classes.clear()
-			if @classes
-				for name in @classes
-					classes.append name
 		return
 
 	getTextObject: ->
@@ -343,12 +325,16 @@ module.exports = (File, data) -> class Style
 			(prop) ->
 				cache[prop] ||= "_#{prop}"
 
-		(attr, val, oldValue) ->
+		(attr, val, oldVal) ->
 			assert.instanceOf @, Style
 
 			if @waiting or not @item
-				@attrsQueue.push attr, val, oldValue
+				@attrsQueue.push attr, val, oldVal
 				return
+
+			if attr is 'class'
+				@syncClassAttr val, oldVal
+				return true
 
 			props = getSplitAttr attr
 
@@ -367,37 +353,29 @@ module.exports = (File, data) -> class Style
 			# set value
 			internalProp = getInternalProperty prop
 			if obj[internalProp] is undefined and typeof obj[prop] is 'function' and obj[prop].connect
-				if typeof oldValue is 'function'
-					obj[prop].disconnect oldValue
+				if typeof oldVal is 'function'
+					obj[prop].disconnect oldVal
 				if typeof val is 'function'
 					obj[prop] val
-			else if @node._attrs[attr] is val and val isnt oldValue
+			else if @node._attrs[attr] is val and val isnt oldVal
 				obj[prop] = val
 
 			return true
 
-	syncClassAttr: (oldVal) ->
-		assert.isString oldVal
-
-		if @waiting
-			return
-
+	syncClassAttr: (val, oldVal) ->
 		{item} = @
-		unless item
-			return
 		{classes} = item
-		val = @node.attrs.get('class')
 		newClasses = val and val.split(' ')
 
 		# check removed values
-		if oldVal
+		if oldVal and typeof oldVal is 'string'
 			oldClasses = oldVal.split ' '
 			for name in oldClasses
 				if not newClasses or not utils.has(newClasses, name)
 					classes.remove name
 
 		# add new classes
-		if val
+		if val and typeof val is 'string'
 			newClasses = val.split ' '
 			prevIndex = -1
 			for name, i in newClasses
