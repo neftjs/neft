@@ -60,7 +60,7 @@ This tag can be also used to store commonly used expressions.
 				name = node.attrs.get 'name'
 				value = node.attrs.get 'value'
 
-				if target.attrs.get(name) is undefined
+				unless target.attrs.has(name)
 					target.attrs.set name, ''
 
 				attrChanges.push new AttrChange

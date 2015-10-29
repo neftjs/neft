@@ -34,7 +34,7 @@ In practice, you will use the string interpolation to conditioning the result.
 
 			forEachNodeRec = (node) ->
 				for child in node.children
-					unless child.children
+					unless child instanceof File.Element.Tag
 						continue
 
 					forEachNodeRec child

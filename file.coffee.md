@@ -73,6 +73,7 @@ File @class
 		@Iterator = require('./iterator') @
 		@Log = require('./log') @
 		@Func = require('./func') @
+		@AttrsToSet = require('./attrsToSet') @
 
 *File* File.fromHTML(*String* path, *String|Document.Element* html)
 -------------------------------------------------------------------
@@ -171,6 +172,7 @@ File @class
 				ids = require('./file/parse/ids') File
 				logs = require('./file/parse/logs') File
 				funcs = require('./file/parse/funcs') File
+				attrSetting = require('./file/parse/attrSetting') File
 
 			(@path, @node) ->
 				assert.isString path
@@ -204,6 +206,7 @@ File @class
 				conditions @
 				ids @
 				funcs @
+				attrSetting @
 				`//<development>`
 				logs @
 				`//</development>`
@@ -234,6 +237,7 @@ File @class
 		ids: null
 		logs: null
 		funcs: null
+		attrsToSet: null
 
 		init: ->
 
@@ -426,6 +430,12 @@ File @class
 				clone.funcs = {}
 				for name, func of @funcs
 					clone.funcs[name] = File.Func.bindFuncIntoGlobal func, clone
+
+			# attrs to set
+			if @attrsToSet
+				clone.attrsToSet = []
+				for attrsToSet in @attrsToSet
+					clone.attrsToSet.push attrsToSet.clone @, clone
 
 			# logs
 			`//<development>`
