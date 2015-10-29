@@ -208,10 +208,6 @@ Grid {
 							classElem.enable()
 					return
 
-				if @_name and not @_target.classes.has(@_name)
-					@_target.classes.append @_name
-					return
-
 				super()
 				updateTargetClass saveAndEnableClass, @_target, @
 
@@ -225,10 +221,6 @@ Grid {
 					if @_document and @_document._query
 						for classElem in @_document._classesInUse
 							classElem.disable()
-					return
-
-				if @_name and @_target.classes.has(@_name)
-					@_target.classes.remove @_name
 					return
 
 				super()
@@ -748,7 +740,7 @@ Classs at the end have the highest priority.
 
 This property has a setter, which accepts strings and arrays of strings.
 
-### *Signal* Item::onClassesChange(*List* classes)
+### *Signal* Item::onClassesChange(*String* added, *String* removed)
 
 		normalizeClassesValue = (val) ->
 			if typeof val is 'string'
@@ -791,20 +783,21 @@ This property has a setter, which accepts strings and arrays of strings.
 				defaultValue: null
 				getter: do ->
 					onChange = (oldVal, index) ->
+						val = @_classes.get(index)
 						onPop.call @, oldVal, index
-						onInsert.call @, @_classes.get(index), index
-						@onClassesChange.emit @_classes
+						onInsert.call @, val, index
+						@onClassesChange.emit val, oldVal
 						return
 
 					onInsert = (val, index) ->
 						@_classExtensions[val]?.enable()
-						@onClassesChange.emit @_classes
+						@onClassesChange.emit val
 						return
 
 					onPop = (oldVal, index) ->
 						unless @_classes.has(oldVal)
 							@_classExtensions[oldVal]?.disable()
-						@onClassesChange.emit @_classes
+						@onClassesChange.emit null, oldVal
 						return
 
 					(_super) -> ->
