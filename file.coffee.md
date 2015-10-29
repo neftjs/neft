@@ -272,11 +272,6 @@ File @class
 					for input, i in @inputs
 						input.render()
 
-				# conditions
-				if @conditions
-					for condition, i in @conditions
-						condition.render()
-
 				# uses
 				if @uses
 					for use in @uses
@@ -317,11 +312,6 @@ File @class
 				if @inputs
 					for input, i in @inputs
 						input.revert()
-
-				# conditions
-				if @conditions
-					for condition, i in @conditions
-						condition.revert()
 
 				# uses
 				if @uses

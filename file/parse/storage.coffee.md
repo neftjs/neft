@@ -40,13 +40,14 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 				if text isnt undefined
 					InputRE.lastIndex = 0
 					if text and InputRE.test(text)
-						if funcBody = Input.parse text
+						if funcBody = Input.parse(text)
 							func = Input.createFunction funcBody
 							input = new Input.Text elem, func
 							`//<development>`
 							input.text = text
 							`//</development>`
 							input.funcBody = funcBody
+							elem.text = ''
 							inputs.push input
 
 				# attrs
@@ -57,7 +58,7 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 					break unless attr[0]
 
 					if Input.test attr[1]
-						if funcBody = Input.parse attr[1]
+						if funcBody = Input.parse(attr[1])
 							func = Input.createFunction funcBody
 							input = new Input.Attr elem, func
 							`//<development>`
@@ -65,6 +66,7 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 							`//</development>`
 							input.funcBody = funcBody
 							input.attrName = attr[0]
+							elem.attrs.set attr[0], null
 							inputs.push input
 
 					i++

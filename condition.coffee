@@ -4,17 +4,21 @@ log = require 'log'
 
 log = log.scope 'View', 'Condition'
 
-module.exports = (File) -> class Condition extends File.Input
+module.exports = (File) -> class Condition
 	@__name__ = 'Condition'
 	@__path__ = 'File.Condition'
 
-	constructor: (node, @elseNode=null, func) ->
-		super node, func
+	constructor: (@node, @elseNode=null) ->
+		Object.preventExtensions @
 
 	update: ->
-		super()
-		visible = @node.visible = !!@toString()
+		visible = @node.visible = !!@node.attrs.get('neft:if')
 		@elseNode?.visible = not visible
+		return
+
+	onAttrsChange = (name) ->
+		if name is 'neft:if'
+			@update()
 		return
 
 	clone: (original, self) ->
@@ -22,8 +26,8 @@ module.exports = (File) -> class Condition extends File.Input
 		if @elseNode
 			elseNode = original.node.getCopiedElement @elseNode, self.node
 
-		clone = new @constructor node, elseNode, @func
-		clone.self = self
-		clone.text = @text
+		clone = new @constructor node, elseNode
+
+		node.onAttrsChange onAttrsChange, clone
 
 		clone

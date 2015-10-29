@@ -39,29 +39,13 @@ In practice, you will use the string interpolation to conditioning the result.
 
 					forEachNodeRec child
 
-					attr = child.attrs.get 'neft:if'
-					continue unless attr
+					if child.attrs.has('neft:if')
+						elseNode = null
+						if child.nextSibling?.attrs?.has('neft:else')
+							elseNode = child.nextSibling
 
-					if attr.indexOf('${') is -1
-						attr = '${'+attr+'}'
-
-					# `//<development>`
-					# if attr.indexOf('${') isnt 0
-					# 	log.warn "neft:if `#{attr}` contains string interpolation, but neft:if always is a string interpolation"
-					# `//</development>`
-
-					elseNode = null
-					if child.nextSibling?.attrs?.has('neft:else')
-						elseNode = child.nextSibling
-
-					funcBody = File.Input.parse attr
-					func = File.Input.createFunction funcBody
-					condition = new File.Condition child, elseNode, func
-					`//<development>`
-					condition.text = attr
-					`//</development>`
-					condition.funcBody = funcBody
-					conditions.push condition
+						condition = new File.Condition child, elseNode
+						conditions.push condition
 				return
 
 			forEachNodeRec file.node
