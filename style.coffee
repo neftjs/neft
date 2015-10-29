@@ -42,6 +42,7 @@ module.exports = (File, data) -> class Style
 			if @file.isRendered
 				@render()
 				@findItemParent()
+				@findItemIndex()
 		else if name is 'href' and @isLink()
 			@item?.linkUri = @getLinkUri()
 
@@ -49,12 +50,9 @@ module.exports = (File, data) -> class Style
 			if name is 'class'
 				@syncClassAttr oldValue
 
-			return unless @attrs?.hasOwnProperty(name)
-			value = @node.attrs.get name
-			if @file.funcs?.hasOwnProperty value
-				log.warn "Dynamic listening on Renderer events is not supported"
-				return
-			@setAttr name, value
+		if @attrs[name]
+			@setAttr name, @node._attrs[name], oldValue
+		return
 
 	reloadItemsRecursively = (style) ->
 		style.reloadItem()
@@ -68,9 +66,6 @@ module.exports = (File, data) -> class Style
 		@file = null
 		@node = null
 		@attrs = null
-		@setAttrs = Object.create null
-		@attrValues = []
-		@attrListeners = []
 		@parent = null
 		@isScope = false
 		@isAutoParent = false
@@ -87,6 +82,7 @@ module.exports = (File, data) -> class Style
 		@lastItemParent = null
 		@waiting = false
 		@index = -1
+		@attrsQueue = []
 
 		Object.preventExtensions @
 
@@ -205,10 +201,12 @@ module.exports = (File, data) -> class Style
 		@updateText()
 		@updateVisibility()
 		@syncClassAttr('')
-		
-		for name of @attrs
-			val = @node.attrs.get name
-			@setAttr name, val
+
+		# set attrs
+		if (attrsQueue = @attrsQueue).length
+			for attr, i in attrsQueue by 3
+				@setAttr attr, attrsQueue[i+1], attrsQueue[i+2]
+			utils.clear attrsQueue
 
 		@item.document.visible = true
 		return
@@ -274,25 +272,6 @@ module.exports = (File, data) -> class Style
 			@isTextSet = false
 			@baseText = ''
 
-		# revert attr values
-		{setAttrs, attrValues} = @
-		while attrValues.length
-			oldVal = attrValues.pop()
-			prop = attrValues.pop()
-			obj = attrValues.pop()
-			obj[prop] = oldVal
-		for attr, set of setAttrs
-			if set
-				setAttrs[attr] = false
-
-		# revert attr listeners
-		{attrListeners} = @
-		while attrListeners.length
-			func = attrListeners.pop()
-			name = attrListeners.pop()
-			obj = attrListeners.pop()
-			obj[name].disconnect func
-
 		# restore classes
 		if (classes = @item._classes) or @classes
 			classes.clear()
@@ -349,13 +328,6 @@ module.exports = (File, data) -> class Style
 		return
 
 	setAttr: do ->
-		ATTR_PRIMITIVE_VALUES =
-			__proto__: null
-			'null': null
-			'undefined': undefined
-			'false': false
-			'true': true
-
 		getSplitAttr = do ->
 			cache = Object.create null
 
@@ -371,12 +343,15 @@ module.exports = (File, data) -> class Style
 			(prop) ->
 				cache[prop] ||= "_#{prop}"
 
-		getItemPropertyPath = do ->
-			cache = Object.create null
-			(prop) ->
-				cache[prop] ||= "style:_$:#{prop}"
+		(attr, val, oldValue) ->
+			assert.instanceOf @, Style
 
-		setAttr = (props, name, val) ->
+			if @waiting or not @item
+				@attrsQueue.push attr, val, oldValue
+				return
+
+			props = getSplitAttr attr
+
 			# get object
 			obj = @node
 			for i in [0...props.length-1] by 1
@@ -386,70 +361,20 @@ module.exports = (File, data) -> class Style
 			# break if property doesn't exist
 			prop = utils.last props
 			unless prop of obj
+				log.warn "Attribute '#{attr}' doesn't exist in item '#{@item}'"
 				return false
 
-			# parse value to the expected type
+			# set value
 			internalProp = getInternalProperty prop
-			objPropVal = if internalProp of obj then obj[internalProp] else obj[prop]
-
-			if val of ATTR_PRIMITIVE_VALUES
-				val = ATTR_PRIMITIVE_VALUES[val]
-
-			propType = typeof objPropVal
-			if propType is 'object'
-				propType = typeof objPropVal?.valueOf()
-			switch propType
-				when 'number'
-					baseVal = val
-					if typeof val isnt 'number'
-						val = parseFloat val
-					if isNaN(val) and baseVal isnt 'NaN'
-						val = baseVal
-				when 'boolean'
-					val = !!val
-				when 'string'
-					if val?
-						val = val+''
-					else
-						val = ''
-
-			if typeof val is 'function' and typeof obj[prop] is 'function'
-				obj[prop] val
-				@attrListeners.push obj, prop, val
-			else
-				`//<development>`
-				if typeof obj[prop] is 'function' and not utils.lookupSetter(obj, prop)
-					log.error "#{name} is a signal handler and expects a function, but #{val} got"
-				`//</development>`
-
-				unless @setAttrs[name]
-					@setAttrs[name] = true
-					@attrValues.push obj, prop, objPropVal
+			if obj[internalProp] is undefined and typeof obj[prop] is 'function' and obj[prop].connect
+				if typeof oldValue is 'function'
+					obj[prop].disconnect oldValue
+				if typeof val is 'function'
+					obj[prop] val
+			else if @node._attrs[attr] is val and val isnt oldValue
 				obj[prop] = val
+
 			return true
-
-		(name, val) ->
-			assert.instanceOf @, Style
-
-			if @waiting
-				return
-
-			props = getSplitAttr name
-
-			# omit internal attributes
-			if props[0] is 'neft'
-				return
-
-			# set attribute on node
-			unless name in ['class', 'name', 'children', 'attrs', 'style']
-				setAttr.call @, props, name, val
-
-			# set item custom property
-			if props[0] isnt 'style'
-				itemPropName = getItemPropertyPath(name)
-				setAttr.call @, getSplitAttr(itemPropName), itemPropName, val
-
-			return
 
 	syncClassAttr: (oldVal) ->
 		assert.isString oldVal
@@ -634,7 +559,6 @@ module.exports = (File, data) -> class Style
 			return
 
 		if @isAutoParent and @item and not @item.parent
-			@parentSet = true
 			{node} = @
 			tmpNode = node._parent
 			while tmpNode
@@ -644,6 +568,7 @@ module.exports = (File, data) -> class Style
 						item = item._parent
 
 					if item
+						@parentSet = true
 						@item.parent = item
 						break
 				else unless tmpNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
@@ -667,7 +592,7 @@ module.exports = (File, data) -> class Style
 
 		clone.file = file
 		clone.node = originalFile.node.getCopiedElement @node, file.node
-		clone.attrs = clone.node._attrs
+		clone.attrs = @attrs
 		clone.index = @index
 
 		# clone children
@@ -686,6 +611,10 @@ module.exports = (File, data) -> class Style
 
 		# changes
 		clone.node.onAttrsChange attrsChangeListener, clone
+
+		# set attrs
+		for attr of @attrs
+			clone.setAttr attr, clone.node._attrs[attr], null
 
 		clone
 

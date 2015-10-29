@@ -68,7 +68,14 @@ Item {
 
 	module.exports = (File) -> (file) ->
 		{Style} = File
-		styles = file.styles = []
+		styles = []
+
+		getStyleAttrs = (node) ->
+			attrs = {}
+			for attr of node._attrs
+				if attr.slice(0, 6) is 'style:'
+					attrs[attr] = true
+			attrs
 
 		# parse tags with `style` attr
 		forNode = (node, parentStyle) ->
@@ -79,6 +86,7 @@ Item {
 				style.file = file
 				style.node = node
 				style.parent = parentStyle
+				style.attrs = getStyleAttrs node
 
 				if parentStyle
 					parentStyle.children.push style
@@ -94,5 +102,8 @@ Item {
 			return
 
 		forNode file.node, null, null
+
+		if styles.length
+			file.styles = styles
 
 		return

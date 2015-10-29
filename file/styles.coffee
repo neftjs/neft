@@ -32,7 +32,8 @@ module.exports = (File) ->
 		return
 
 	File.onBeforeRender (file) ->
-		renderStyles file.styles
+		if styles = file.styles
+			renderStyles styles
 		return
 
 	revertStyles = (arr) ->
@@ -43,14 +44,15 @@ module.exports = (File) ->
 		return
 
 	File.onBeforeRevert (file) ->
-		revertStyles file.styles
+		if styles = file.styles
+			revertStyles styles
 		return
 
 	File::_clone = do (_super = File::_clone) -> ->
 		clone = _super.call @
 
 		# styles
-		if @styles.length
+		if @styles
 			clone.styles = []
 			for style, i in @styles
 				cloned = clone.styles[i] = style.clone @, clone
