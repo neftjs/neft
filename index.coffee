@@ -699,7 +699,8 @@ module.exports = (file, filename) ->
 		code += "_c.objects = #{JSON.stringify(objects).replace(/\"`|`\"/g, '')}\n"
 
 		if elem.name is 'Class'
-			code += "_c.item.enable();\n"
+			code += "_c.initAsEmptyDefinition()\n"
+			code += "_c.item.enable()\n"
 			autoInitCodes.push code
 		else
 			code += 'return _c.createItem\n'
