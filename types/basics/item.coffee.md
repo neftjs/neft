@@ -76,9 +76,12 @@ Item {
 }
 ```
 
-		utils.defineProperty @::, '$', null, ->
-			@_$ ||= new itemUtils.CustomObject(@)
-		, null
+### *Signal* Item::on$Change(*String* property, *Any* oldValue)
+
+		itemUtils.defineProperty
+			constructor: @
+			name: '$'
+			valueConstructor: itemUtils.CustomObject
 
 *Signal* Item::ready()
 ----------------------

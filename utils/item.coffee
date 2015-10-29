@@ -116,6 +116,7 @@ module.exports = (Renderer, Impl) ->
 			exports.defineProperty
 				object: object.$
 				name: name
+				namespace: '$'
 
 			return
 
@@ -279,7 +280,6 @@ module.exports = (Renderer, Impl) ->
 		if opts.hasOwnProperty('constructor')
 			signal.Emitter.createSignal opts.constructor, signalName, opts.signalInitializer
 		else
-			assert.isNotDefined namespace
 			signal.Emitter.createSignalOnObject prototype, signalName, opts.signalInitializer
 
 		# getter
