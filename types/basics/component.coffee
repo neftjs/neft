@@ -54,12 +54,20 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			# @cacheItem = utils.bindFunctionContext @cacheItem, @
 		Object.preventExtensions @
 
+	initSignalArr = ->
+		@objectsOrderSignalArr = utils.clone(@objectsOrder)
+		@objectsOrderSignalArr.push null, null
+
+	initAsEmptyDefinition: ->
+		initSignalArr.call @
+		Object.freeze @
+		return
+
 	init: ->
 		assert.notOk @ready
 		assert.ok @isClone
 
-		@objectsOrderSignalArr = utils.clone(@objectsOrder)
-		@objectsOrderSignalArr.push null, null
+		initSignalArr.call @
 		@ready = true
 
 		# init objects
