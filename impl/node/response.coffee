@@ -29,14 +29,12 @@ GZIP_ENCODING_HEADERS =
 ###
 Set headers in the server response
 ###
-setHeaders = (obj, headers) ->
-	{serverRes} = obj
-
+setHeaders = (res, headers, ctx) ->
 	for name, value of headers
-		unless serverRes.getHeader(name)?
+		unless res.getHeader(name)?
 			if typeof value is 'function'
-				value = value obj
-			serverRes.setHeader name, value
+				value = value ctx
+			res.setHeader name, value
 
 	return
 
@@ -64,7 +62,7 @@ parsers =
 			formData.append key, val
 		formData
 
-prepareData = (type, obj, data) ->
+prepareData = (type, res, data) ->
 	# determine data type
 	switch type
 		when 'text'
@@ -77,8 +75,8 @@ prepareData = (type, obj, data) ->
 	# parse data into expected type
 	parsedData = parsers[type](data)
 
-	if mimeType? and not obj.serverRes.getHeader('Content-Type')?
-		obj.serverRes.setHeader 'Content-Type', "#{mimeType}; charset=utf-8"
+	if mimeType? and not res.getHeader('Content-Type')?
+		res.setHeader 'Content-Type', "#{mimeType}; charset=utf-8"
 
 	parsedData
 
@@ -88,48 +86,50 @@ Send data in server response
 sendData = do ->
 	senders =
 		'text': do ->
-			send = (obj, data) ->
+			send = (res, data) ->
 				if typeof data is 'string'
 					len = Buffer.byteLength data
 				else
 					len = data and data.length
 
-				obj.serverRes.setHeader 'Content-Length', len
-				obj.serverRes.end data
+				res.setHeader 'Content-Length', len
+				res.end data
 
-			(obj, data, callback) ->
-				acceptEncodingHeader = obj.serverReq.headers['Accept-Encoding']
+			(req, res, data, callback) ->
+				acceptEncodingHeader = req?.headers['Accept-Encoding']
 				useGzip = acceptEncodingHeader and utils.has(acceptEncodingHeader, 'gzip')
 
 				unless useGzip
-					send obj, data
+					send res, data
 					return callback()
 
 				zlib.gzip data, (err, gzipData) ->
 					if err
-						send obj, data
+						send res, data
 					else
-						setHeaders obj, GZIP_ENCODING_HEADERS
-						send obj, gzipData
+						setHeaders res, GZIP_ENCODING_HEADERS
+						send res, gzipData
 					callback()
 
-		'binary': (obj, data, callback) ->
+		'binary': (req, res, data, callback) ->
 			# set headers
-			setHeaders obj, data.getHeaders()
+			setHeaders res, data.getHeaders()
 
 			# get length
 			data.getLength (err, length) ->
 				if err
 					return callback err
-				obj.serverRes.setHeader 'Content-Length', length
-				data.pipe obj.serverRes
+				res.setHeader 'Content-Length', length
+				data.pipe res
 
-	(type, obj, data, callback) ->
+	(type, req, res, data, callback) ->
 		sender = senders[type] or senders.text
-		sender obj, data, callback
+		sender req, res, data, callback
 
 module.exports = (Networking, pending) ->
 	exports =
+	_prepareData: prepareData
+	_sendData: sendData
 	setHeader: (res, name, val) ->
 		if name? and val?
 			# get config obj
@@ -143,12 +143,12 @@ module.exports = (Networking, pending) ->
 
 		delete pending[res.request.uid]
 
-		{serverRes} = obj
+		{serverReq, serverRes} = obj
 
 		# write headers
-		setHeaders obj, HEADERS
-		if headers = METHOD_HEADERS[obj.serverReq.method]
-			setHeaders obj, headers
+		setHeaders serverRes, HEADERS, obj
+		if headers = METHOD_HEADERS[serverReq.method]
+			setHeaders serverRes, headers
 
 		# set status
 		serverRes.statusCode = res.status
@@ -159,8 +159,8 @@ module.exports = (Networking, pending) ->
 
 		# send data
 		{type} = res.request
-		data = prepareData type, obj, data
-		sendData type, obj, data, (err) ->
+		data = prepareData type, serverRes, data
+		sendData type, serverReq, serverRes, data, (err) ->
 			callback err
 
 	redirect: (res, status, uri, callback) ->

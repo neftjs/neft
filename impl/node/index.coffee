@@ -22,7 +22,7 @@ staticServer = new nodeStatic.Server gzip: true
 module.exports = (Networking) ->
 
 	Request: require('./request') Networking, pending
-	Response: require('./response') Networking, pending
+	Response: Response = require('./response') Networking, pending
 
 	init: (networking) ->
 		assert.instanceOf networking, Networking
@@ -121,13 +121,6 @@ module.exports = (Networking) ->
 					data: new Error "Unsupported protocol '#{urlObject.protocol}'"
 				return
 
-		if req.type is 'binary'
-			formData = new FormData
-			if req.data
-				for key, val of req.data
-					formData.append key, val
-			utils.merge opts.headers, formData.getHeaders()
-
 		nodeReq = reqModule.request opts, (nodeRes) ->
 			nodeRes.setEncoding res.encoding
 
@@ -156,18 +149,7 @@ module.exports = (Networking) ->
 				status: 500
 				data: e
 
-		if formData
-			formData.getLength (err, length) ->
-				if err
-					return callback err
-				nodeReq.setHeader 'Content-Length', length
-				formData.pipe nodeReq
-		else
-			if req.data?
-				if utils.isObject(req.data)
-					data = utils.tryFunction JSON.stringify, null, [req.data], req.data
-				else
-					data = req.data
-				nodeReq.write data
-
-			nodeReq.end()
+		data = Response._prepareData req.type, nodeReq, req.data
+		Response._sendData req.type, null, nodeReq, data, (err) ->
+			if err
+				callback err
