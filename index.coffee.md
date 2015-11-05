@@ -321,7 +321,7 @@ app.networking.createRequest({
 					res.raise Networking.Response.Error.RequestResolve req
 
 			noHandlersError = ->
-				log.warn "No handler found"
+				log.warn "No handler found for request `#{req}`"
 				onError()
 
 			handlers = @_handlers[req.method]
