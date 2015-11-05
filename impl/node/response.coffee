@@ -105,9 +105,10 @@ sendData = do ->
 module.exports = (Networking, pending) ->
 	exports =
 	setHeader: (res, name, val) ->
-		# get config obj
-		obj = pending[res.request.uid]
-		obj.serverRes.setHeader name, val
+		if name? and val?
+			# get config obj
+			obj = pending[res.request.uid]
+			obj.serverRes.setHeader name, val
 
 	send: (res, data, callback) ->
 		# get config obj
