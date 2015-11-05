@@ -6,6 +6,7 @@ utils = require 'utils'
 path = require 'path'
 Document = require 'document'
 expect = require 'expect'
+FormData = require 'form-data'
 
 log = log.scope 'Networking'
 
@@ -43,35 +44,41 @@ setHeaders = (obj, headers) ->
 Parse passed data into expected type
 ###
 parsers =
-	'application/json': (data) ->
+	'text': (data) ->
+		data + ''
+	'json': (data) ->
 		if data instanceof Error
 			data = utils.errorToObject data
 		try
 			JSON.stringify data
 		catch
 			data
-	'text/html': (data) ->
+	'html': (data) ->
 		if data instanceof Document
 			data.node.stringify()
 		else
 			data
+	'binary': (data) ->
+		formData = new FormData
+		for key, val of data
+			formData.append key, val
+		formData
 
 prepareData = (type, obj, data) ->
 	# determine data type
 	switch type
 		when 'text'
-			type = 'text/plain'
+			mimeType = 'text/plain; charset=utf-8'
 		when 'json'
-			type = 'application/json'
+			mimeType = 'application/json; charset=utf-8'
 		when 'html'
-			type = 'text/html'
+			mimeType = 'text/html; charset=utf-8'
 
-	# parse data into type
-	unless parsedData = parsers[type]?(data)
-		parsedData = data + ''
+	# parse data into expected type
+	parsedData = parsers[type](data)
 
-	unless obj.serverRes.getHeader('Content-Type')?
-		obj.serverRes.setHeader 'Content-Type', "#{type}; charset=utf-8"
+	if mimeType? and not obj.serverRes.getHeader('Content-Type')?
+		obj.serverRes.setHeader 'Content-Type', "#{mimeType}; charset=utf-8"
 
 	parsedData
 
@@ -79,28 +86,47 @@ prepareData = (type, obj, data) ->
 Send data in server response
 ###
 sendData = do ->
-	send = (obj, data) ->
-		if typeof data is 'string'
-			len = Buffer.byteLength data
-		else
-			len = data and data.length
+	senders =
+		'text': do ->
+			send = (obj, data) ->
+				if typeof data is 'string'
+					len = Buffer.byteLength data
+				else
+					len = data and data.length
 
-		obj.serverRes.setHeader 'Content-Length', len
-		obj.serverRes.end data
+				obj.serverRes.setHeader 'Content-Length', len
+				obj.serverRes.end data
 
-	(obj, data, callback) ->
-		acceptEncodingHeader = obj.serverReq.headers['Accept-Encoding']
-		useGzip = acceptEncodingHeader and utils.has(acceptEncodingHeader, 'gzip')
+			(obj, data, callback) ->
+				acceptEncodingHeader = obj.serverReq.headers['Accept-Encoding']
+				useGzip = acceptEncodingHeader and utils.has(acceptEncodingHeader, 'gzip')
 
-		unless useGzip
-			send obj, data
-			return callback()
+				unless useGzip
+					send obj, data
+					return callback()
 
-		setHeaders obj, GZIP_ENCODING_HEADERS
+				zlib.gzip data, (err, gzipData) ->
+					if err
+						send obj, data
+					else
+						setHeaders obj, GZIP_ENCODING_HEADERS
+						send obj, gzipData
+					callback()
 
-		zlib.gzip data, (_, data) ->
-			send obj, data
-			callback()
+		'binary': (obj, data, callback) ->
+			# set headers
+			setHeaders obj, data.getHeaders()
+
+			# get length
+			data.getLength (err, length) ->
+				if err
+					return callback err
+				obj.serverRes.setHeader 'Content-Length', length
+				data.pipe obj.serverRes
+
+	(type, obj, data, callback) ->
+		sender = senders[type] or senders.text
+		sender obj, data, callback
 
 module.exports = (Networking, pending) ->
 	exports =
@@ -132,9 +158,10 @@ module.exports = (Networking, pending) ->
 			serverRes.setHeader 'X-Cookies', cookies
 
 		# send data
-		data = prepareData res.request.type, obj, data
-		sendData obj, data, ->
-			callback()
+		{type} = res.request
+		data = prepareData type, obj, data
+		sendData type, obj, data, (err) ->
+			callback err
 
 	redirect: (res, status, uri, callback) ->
 		exports.send res, null, callback

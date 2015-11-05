@@ -48,7 +48,8 @@ Contains:
 		@TYPES = [
 			(@TEXT_TYPE = 'text'),
 			(@JSON_TYPE = 'json'),
-			(@HTML_TYPE = 'html')
+			(@HTML_TYPE = 'html'),
+			(@BINARY_TYPE = 'binary')
 		]
 
 *Request* Request(*Object* options)

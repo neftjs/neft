@@ -7,6 +7,7 @@ urlUtils = require 'url'
 pathUtils = require 'path'
 assert = require 'neft-assert'
 nodeStatic = require 'node-static'
+FormData = require 'form-data'
 
 EXT_TYPES =
 	__proto__: null
@@ -120,6 +121,13 @@ module.exports = (Networking) ->
 					data: new Error "Unsupported protocol '#{urlObject.protocol}'"
 				return
 
+		if req.type is 'binary'
+			formData = new FormData
+			if req.data
+				for key, val of req.data
+					formData.append key, val
+			utils.merge opts.headers, formData.getHeaders()
+
 		nodeReq = reqModule.request opts, (nodeRes) ->
 			nodeRes.setEncoding res.encoding
 
@@ -148,11 +156,18 @@ module.exports = (Networking) ->
 				status: 500
 				data: e
 
-		if req.data?
-			if utils.isObject(req.data)
-				data = utils.tryFunction JSON.stringify, null, [req.data], req.data
-			else
-				data = req.data
-			nodeReq.write data
+		if formData
+			formData.getLength (err, length) ->
+				if err
+					return callback err
+				nodeReq.setHeader 'Content-Length', length
+				formData.pipe nodeReq
+		else
+			if req.data?
+				if utils.isObject(req.data)
+					data = utils.tryFunction JSON.stringify, null, [req.data], req.data
+				else
+					data = req.data
+				nodeReq.write data
 
-		nodeReq.end()
+			nodeReq.end()
