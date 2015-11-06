@@ -61,6 +61,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 	initAsEmptyDefinition: ->
 		initSignalArr.call @
 		Object.freeze @
+		@initObjects()
 		return
 
 	init: ->
