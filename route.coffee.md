@@ -31,14 +31,14 @@ module.exports = function(app){
 
 Acceptable syntaxes:
 ```
-*Route* Route(*String* method, *String* uri, *Object* options)
-*Route* Route(*String* methodWithUri, *Function* getData)
-*Route* Route(*String* methodWithUri, *Object* options)
-*Route* Route(*String* uri, *Function* getData)
-*Route* Route(*String* uri, *Object* options)
-*Route* Route(*String* method, *String* uri)
-*Route* Route(*String* uri)
-*Route* Route(*String* methodWithUri)
+*Route* app.Route(*String* method, *String* uri, *Object* options)
+*Route* app.Route(*String* methodWithUri, *Function* getData)
+*Route* app.Route(*String* methodWithUri, *Object* options)
+*Route* app.Route(*String* uri, *Function* getData)
+*Route* app.Route(*String* uri, *Object* options)
+*Route* app.Route(*String* method, *String* uri)
+*Route* app.Route(*String* uri)
+*Route* app.Route(*String* methodWithUri)
 ```
 
 		constructor: (method, uri, opts) ->
@@ -162,7 +162,9 @@ Acceptable syntaxes:
 			assert.instanceOf route, Route
 
 			try
-				route.data = route.getData()
+				data = route.getData()
+				if data?
+					route.data = data
 			catch err
 				if route.response.status is 200
 					route.response.status = 500
@@ -174,9 +176,15 @@ Acceptable syntaxes:
 			if err?
 				if route.response.status is 200
 					route.response.status = 500
+				if route._dataPrepared and route.error is err
+					return false
+				console.error err
 				route.error = err
 			else
+				if route._dataPrepared and route.data is data
+					return false
 				route.data = data
+			true
 
 		prepareRouteData = (route) ->
 			assert.instanceOf route, Route
@@ -190,6 +198,9 @@ Acceptable syntaxes:
 					data = route.toJSON()
 				when 'html'
 					data = route.toHTML()
+					if respData instanceof Document and route._destroyViewOnEnd
+						respData.destroy()
+						response.data = null
 					if not (data instanceof Document) and response.data is respData
 						data = renderViewFromConfig.call route, data
 			route._dataPrepared = true
@@ -209,7 +220,16 @@ Acceptable syntaxes:
 
 		finishRequest = (route) ->
 			assert.instanceOf route, Route
-			route.response.send()
+			if route.response.pending
+				route.response.send()
+			return
+
+		callNextIfNeeded = (route, next) ->
+			unless pendingRoutes[route.__hash__]
+				if route.response.pending
+					next()
+				return true
+			false
 
 		handleRequest = (req, res, next) ->
 			assert.instanceOf req, Networking.Request
@@ -256,29 +276,30 @@ Acceptable syntaxes:
 				if getData.length is 1
 					route.getData (err, data) ->
 						fakeAsync = true
-						unless pendingRoutes[hash]
-							return next()
-						resolveAsyncGetDataFuncCallback route, err, data
+						if callNextIfNeeded(route, next)
+							return
+						unless resolveAsyncGetDataFuncCallback(route, err, data)
+							return
 						prepareRouteData route
-						unless pendingRoutes[hash]
-							return next()
+						if callNextIfNeeded(route, next)
+							return
 						finishRequest route
 				else
 					resolveSyncGetDataFunc route
-					unless pendingRoutes[hash]
-						return next()
+					if callNextIfNeeded(route, next)
+						return
 					prepareRouteData route
-					unless pendingRoutes[hash]
-						return next()
+					if callNextIfNeeded(route, next)
+						return
 					finishRequest route
 			else
 				prepareRouteData route
-				unless pendingRoutes[hash]
-					return next()
+				if callNextIfNeeded(route, next)
+					return
 				finishRequest route
 
-			if not fakeAsync and not pendingRoutes[hash]
-				return next()
+			if not fakeAsync and callNextIfNeeded(route, next)
+				return
 
 *String* Route::method = 'get'
 ------------------------------
@@ -345,19 +366,19 @@ Acceptable syntaxes:
 ---------------------
 
 		toJSON: ->
-			if @error
-				@error.toJSON?() or @error
-			else
+			if @response.status < 400
 				@data?.toJSON?() or @data
+			else
+				@error.toJSON?() or @error
 
 *String* Route::toText()
 ------------------------
 
 		toText: ->
-			if @error
-				@error+''
-			else
+			if @response.status < 400
 				@data+''
+			else
+				@error+''
 
 *Document* Route::toHTML()
 --------------------------
@@ -375,6 +396,8 @@ Acceptable syntaxes:
 					r = tmplView.use(useName, r)
 				else
 					r = tmplView
+				if tmplView.storage.routes.has(useName)
+					tmplView.storage.routes.pop useName
 				tmplView.storage.routes.set useName, @
 				@_destroyViewOnEnd = false
 			else
