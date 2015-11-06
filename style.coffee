@@ -14,6 +14,8 @@ module.exports = (File, data) -> class Style
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
 
+	emptyComponent = new Renderer.Component
+
 	listenTextRec = (style, node=style.node) ->
 		assert.instanceOf style, Style
 		assert.instanceOf node, File.Element
@@ -46,7 +48,7 @@ module.exports = (File, data) -> class Style
 		else if name is 'href' and @isLink()
 			@item?.linkUri = @getLinkUri()
 
-		if @attrs[name]
+		if @attrs?[name]
 			@setAttr name, @node._attrs[name], oldValue
 		return
 
@@ -78,6 +80,7 @@ module.exports = (File, data) -> class Style
 		@waiting = false
 		@index = -1
 		@attrsQueue = []
+		@attrsClass = null
 
 		Object.preventExtensions @
 
@@ -192,10 +195,12 @@ module.exports = (File, data) -> class Style
 		@updateVisibility()
 
 		# set attrs
-		if (attrsQueue = @attrsQueue).length
-			for attr, i in attrsQueue by 3
-				@setAttr attr, attrsQueue[i+1], attrsQueue[i+2]
-			utils.clear attrsQueue
+		if @attrs
+			if (attrsQueue = @attrsQueue).length
+				for attr, i in attrsQueue by 3
+					@setAttr attr, attrsQueue[i+1], attrsQueue[i+2]
+				utils.clear attrsQueue
+			@attrsClass.enable()
 
 		@item.document.visible = true
 		return
@@ -272,7 +277,7 @@ module.exports = (File, data) -> class Style
 			item
 
 	updateText: ->
-		if @waiting or @children.length or @node.query('[neft:style]')
+		if @waiting
 			return
 
 		obj = @getTextObject()
@@ -286,7 +291,7 @@ module.exports = (File, data) -> class Style
 					@baseLinkUri = @item.linkUri
 				@item.linkUri = href
 
-		if obj
+		if obj and not @children.length and not @node.query('[neft:style]')
 			text = node.stringifyChildren()
 
 			if text.length > 0 or @isTextSet
@@ -310,15 +315,18 @@ module.exports = (File, data) -> class Style
 		return
 
 	setAttr: do ->
+		PREFIX_LENGTH = 'style:'.length
+
 		getSplitAttr = do ->
 			cache = Object.create null
 
 			(prop) ->
-				r = cache[prop]
-				if r
-					return r
+				cache[prop] ||= prop.slice(PREFIX_LENGTH).split ':'
 
-				cache[prop] = prop.split ':'
+		getPropertyPath = do ->
+			cache = Object.create null
+			(prop) ->
+				cache[prop] ||= prop.slice(PREFIX_LENGTH).replace /:/g, '.'
 
 		getInternalProperty = do ->
 			cache = Object.create null
@@ -339,7 +347,7 @@ module.exports = (File, data) -> class Style
 			props = getSplitAttr attr
 
 			# get object
-			obj = @node
+			obj = @item
 			for i in [0...props.length-1] by 1
 				unless obj = obj[props[i]]
 					return false
@@ -358,6 +366,7 @@ module.exports = (File, data) -> class Style
 				if typeof val is 'function'
 					obj[prop] val
 			else if @node._attrs[attr] is val and val isnt oldVal
+				@attrsClass.changes.setAttribute getPropertyPath(attr), val
 				obj[prop] = val
 
 			return true
@@ -424,6 +433,10 @@ module.exports = (File, data) -> class Style
 				if 'onVisibleChange' of elem
 					elem.onVisibleChange.disconnect textChangeListener, @
 
+			if @attrs
+				@attrsClass.disable()
+				@attrsClass.target = null
+
 		wasAutoParent = @isAutoParent
 
 		id = @node.attrs.get 'neft:style'
@@ -481,6 +494,8 @@ module.exports = (File, data) -> class Style
 			@item.visible = false
 			if @isLink()
 				@item.linkUri = @getLinkUri()
+			if @attrs
+				@attrsClass.target = @item
 
 		# text changes
 		if @getTextObject()
@@ -514,7 +529,7 @@ module.exports = (File, data) -> class Style
 									item.previousSibling = tmpSiblingTargetItem
 							return
 					# check children of special tags
-					else if tmpSiblingNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
+					else if tmpSiblingNode.name in 'neft:blank'
 						tmpIndexNode = tmpSiblingNode
 						tmpSiblingNode = utils.last tmpIndexNode.children
 						continue
@@ -549,7 +564,7 @@ module.exports = (File, data) -> class Style
 						@parentSet = true
 						@item.parent = item
 						break
-				else unless tmpNode.name in ['neft:blank', 'neft:fragment', 'neft:use']
+				else unless tmpNode.name in 'neft:blank'
 					tmpNode._documentStyle = @
 
 				tmpNode = tmpNode._parent
@@ -573,6 +588,11 @@ module.exports = (File, data) -> class Style
 		clone.attrs = @attrs
 		clone.index = @index
 
+		# attrs class
+		if @attrs
+			clone.attrsClass = new Renderer.Class emptyComponent
+			clone.attrsClass.priority = 9999
+
 		# clone children
 		for child in @children
 			child = child.clone originalFile, file
@@ -591,8 +611,11 @@ module.exports = (File, data) -> class Style
 		clone.node.onAttrsChange attrsChangeListener, clone
 
 		# set attrs
-		for attr of @attrs
-			clone.setAttr attr, clone.node._attrs[attr], null
+		if @attrs
+			for attr of @attrs
+				attrVal = clone.node._attrs[attr]
+				if attrVal?
+					clone.setAttr attr, attrVal, null
 
 		clone
 

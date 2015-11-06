@@ -71,9 +71,10 @@ Item {
 		styles = []
 
 		getStyleAttrs = (node) ->
-			attrs = {}
+			attrs = null
 			for attr of node._attrs
 				if attr is 'class' or attr.slice(0, 6) is 'style:'
+					attrs ?= {}
 					attrs[attr] = true
 			attrs
 
