@@ -282,7 +282,7 @@ Declaration
 	}
 
 Declarations
-	= d:(Declaration / IfStatement)* { return flattenArray(d) }
+	= d:(Declaration / IfStatement / ForStatement)* { return flattenArray(d) }
 
 /* TYPE */
 
@@ -319,7 +319,7 @@ Type
 	}
 
 MainType
-	= d:Type {
+	= d:(Type / IfStatement / ForStatement) {
 		ids = {};
 		return d;
 	}
@@ -329,6 +329,15 @@ MainType
 IfStatement
 	= __ "if" WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral/$InlineBrackets/SourceCharacter) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
 		var obj = { type: 'if', condition: cond, body: body };
+		setParentRec(body, obj);
+		return obj;
+	}
+
+/* FOR STATEMENT */
+
+ForStatement
+	= __ "for" WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
+		var obj = { type: 'for', query: cond, body: body };
 		setParentRec(body, obj);
 		return obj;
 	}
@@ -351,6 +360,6 @@ CodeBodyFunc
 	= "{" CodeBody "}"
 
 Code
-	= d:$(d:$CodeBody &{return d.trim() ? d : undefined;}) {
+	= "`" d:$(d:$CodeBody &{return d.trim() ? d : undefined;}) "`" {
 		return { type: 'code', body: d }
 	}

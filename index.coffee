@@ -576,14 +576,14 @@ stringify =
 			switch body.type
 				when 'id'
 					json.id = body.value
-				when 'object'
-					children.push stringify.object(body)
 				when 'attribute'
 					value = attrToValue body
 					if value isnt false
 						json[body.name] = "`#{value}`"
 				when 'function'
 					json[body.name] = "`#{stringify.function body}`"
+				when 'object'
+					children.push stringify.object(body)
 				when 'property'
 					json.properties ?= []
 					json.properties.push body.name
@@ -635,20 +635,54 @@ stringify =
 			r = "#{visibleId} = #{r}"
 		r
 	if: (elem) ->
-		cond = elem.condition
+		changes = []
+		body = []
+
+		for child in elem.body
+			if child.type in ['attribute', 'function']
+				changes.push child
+			else
+				body.push child
 
 		elem.type = 'object'
 		elem.name = 'Class'
 		elem.body = [{
 			type: 'attribute'
 			name: 'when'
-			value: cond
+			value: elem.condition
+			parent: elem
 			_parserOptions: BINDING_THIS_TO_TARGET_OPTS
 		}, {
 			type: 'attribute'
 			name: 'changes'
-			value: elem.body
-		}]
+			value: changes
+			parent: elem
+		}, body...]
+
+		stringify.object elem
+	for: (elem) ->
+		changes = []
+		body = []
+
+		for child in elem.body
+			if child.type in ['attribute', 'function']
+				changes.push child
+			else
+				body.push child
+
+		elem.type = 'object'
+		elem.name = 'Class'
+		elem.body = [{
+			type: 'attribute'
+			name: 'document.query'
+			value: elem.query
+			parent: elem
+		}, {
+			type: 'attribute'
+			name: 'changes'
+			value: changes
+			parent: elem
+		}, body...]
 
 		stringify.object elem
 
