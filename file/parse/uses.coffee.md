@@ -40,6 +40,7 @@ This special *XML* tag is used to place the [neft:fragment][].
 
 			# get uses
 			if node.name is "neft:use"
+				node.name = 'neft:blank'
 				uses.push new File.Use file, node
 
 		forNode file.node

@@ -63,6 +63,7 @@ using the [neft:use][] tag. This is fast and clean solution.
 						continue
 
 					# remove node from file
+					node.name = 'neft:blank'
 					child.parent = null
 					i--; n--
 
