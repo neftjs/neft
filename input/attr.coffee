@@ -10,6 +10,7 @@ module.exports = (File, Input) -> class InputAttr extends Input
 	constructor: (node, func) ->
 		@attrName = ''
 		@handlerFunc = null
+		@lastValue = NaN
 		super node, func
 
 	isHandler = (name) ->
@@ -18,7 +19,9 @@ module.exports = (File, Input) -> class InputAttr extends Input
 	update: ->
 		super()
 		str = @handlerFunc or @toString()
-		@node.attrs.set @attrName, str
+		if str isnt @lastValue
+			@lastValue = str
+			@node.attrs.set @attrName, str
 		return
 
 	createHandlerFunc = (input) ->
