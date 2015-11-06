@@ -170,7 +170,7 @@ updateItem = (item) ->
 			right += rightMargin
 
 		# get x
-		if right > maxFlowWidth
+		if right > maxFlowWidth and y > 0
 			right -= x
 			x = right - width
 			currentRowY += rowsHeight[currentRow]
