@@ -25,8 +25,10 @@ HTML documents and more.
 
 	# build polyfills
 	# TODO: move it into separated module
+	{setImmediate} = global
 	if utils.isBrowser
-		global.setImmediate = require 'emitter/node_modules/immediate'
+		# BUG: Firefox releases queue too fast
+		setImmediate = require 'emitter/node_modules/immediate'
 
 	if utils.isNode
 		bootstrapRoute = require './bootstrap/route.node'
@@ -34,6 +36,9 @@ HTML documents and more.
 	pkg = require './package.json'
 
 	exports = module.exports = (opts={}, extraOpts={}) ->
+		if utils.isBrowser
+			global.setImmediate = setImmediate
+
 		# Welcome log also for release mode
 		(require('log')).ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
 
@@ -169,8 +174,8 @@ Files from the *views* folder as *Document* instances.
 
 		app.resources = if opts.resources then Resources.fromJSON(opts.resources) else new Resources
 
-*Signal* app.ready()
---------------------
+*Signal* app.onReady()
+----------------------
 
 		signal.create app, 'onReady'
 
@@ -197,20 +202,7 @@ app.cookies.onChanged(function(key){
 
 ```
 <h1>Your clientId</h1>
-<em>${global.app.cookies.clientId}</em>
-```
-
-```
-new app.Route({
-\  method: 'post',
-\  uri: 'auth/login',
-\  callback: function(req, res, callback){
-\    if (req.cookies.superPower){
-\      res.cookies.auth = true;
-\    }
-\    callback();
-\  }
-});
+<em>${app.cookies.clientId}</em>
 ```
 
 		# cookies
