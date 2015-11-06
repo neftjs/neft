@@ -18,7 +18,7 @@ Setting attributes @learn
 
 					nodeProps = null
 					for prop of child._attrs
-						if prop in ['name', 'children', 'attrs']
+						if prop in ['name', 'children', 'attrs', 'style']
 							continue
 						unless prop of child
 							continue
