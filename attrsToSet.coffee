@@ -34,7 +34,8 @@ module.exports = (File) -> class AttrsToSet
 
 		# set current attributes
 		for attr of @attrs
-			clone.setAttribute attr, null
+			if node._attrs[attr]?
+				clone.setAttribute attr, null
 
 		# listen on changes
 		node.onAttrsChange @setAttribute, clone
