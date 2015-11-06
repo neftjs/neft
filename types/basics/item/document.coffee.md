@@ -25,13 +25,12 @@ Document @extension
 				if typeof oldVal is 'function'
 					props[attr].disconnect oldVal
 			else
+				@_updatingProperty = attr
 				props[attr] = val
 			return
 
 		onPropertyChange = (prop) ->
-			unless node = @_node
-				return
-			unless node.attrs.has(prop)
+			if @_updatingProperty is prop or not (node = @_node) or not node.attrs.has(prop)
 				return
 			node.attrs.set prop, @_ref._$[prop]
 			return
@@ -39,7 +38,7 @@ Document @extension
 		onNodeAttrsChange = (attr, oldVal) ->
 			unless props = @_ref._$
 				return
-			setProperty props, attr, @_node._attrs[attr], oldVal
+			setProperty.call @, props, attr, @_node._attrs[attr], oldVal
 			return
 
 		enableProperties = ->
@@ -49,7 +48,7 @@ Document @extension
 			for attr, val of @_node._attrs
 				if attr of props
 					@_propertiesCleanQueue.push attr, props[attr], val
-					setProperty props, attr, val, null
+					setProperty.call @, props, attr, val, null
 			return
 
 		disableProperties = ->
@@ -57,7 +56,7 @@ Document @extension
 				return
 			props = @_ref._$
 			for attr, i in propertiesCleanQueue by 3
-				setProperty props, attr, propertiesCleanQueue[i+1], propertiesCleanQueue[i+2]
+				setProperty.call @, props, attr, propertiesCleanQueue[i+1], propertiesCleanQueue[i+2]
 			utils.clear propertiesCleanQueue
 			return
 
@@ -68,6 +67,7 @@ Document @extension
 			@_node = null
 			@_visible = false
 			@_query = ''
+			@_updatingProperty = ''
 			@_propertiesCleanQueue = []
 			ref.on$Change onPropertyChange, @
 			super ref
