@@ -172,11 +172,7 @@ module.exports = (Renderer, Impl) ->
 			bindings = @_bindings ?= {}
 			if bindings[prop] isnt val
 				bindings[prop] = val
-				if component.isClone
-					if component.ready
-						Impl.setItemBinding.call @, prop, val, component, ctx
-					else
-						component.objectsInitQueue.push Impl.setItemBinding, @, [prop, val, component, ctx]
+				Impl.setItemBinding.call @, prop, val, component, ctx
 			return
 
 		updateBinding: (prop) ->
