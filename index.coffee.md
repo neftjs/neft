@@ -90,8 +90,8 @@ console.log(dict.length);
 			@keys().length
 		, null
 
-*Signal* Dict::changed(*String* key, *Any* oldValue)
-----------------------------------------------------
+*Signal* Dict::onChange(*String* key, *Any* oldValue)
+-----------------------------------------------------
 
 This signal is called when a property value changes.
 
@@ -187,6 +187,15 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 
 			val
 
+*Boolean* Dict::has(*String* key)
+---------------------------------
+
+		has: (key) ->
+			assert.isString key
+			assert.notLengthOf key, 0
+
+			@_data[key] isnt undefined
+
 *Dict* Dict::extend(*Object|Dict* object)
 -----------------------------------------
 
@@ -231,13 +240,23 @@ data.pop('name');
 			assert.isNot @_data[key], undefined
 
 			oldVal = @_data[key]
-			delete @_data[key]
+			@_data[key] = undefined
 
 			# dirty
 			@_dirty |= ALL
 
 			# signal
-			@onChange key, oldVal
+			@onChange.emit key, oldVal
+
+			return
+
+Dict::clear()
+-------------
+
+		clear: ->
+			for key, val of @_data
+				if val isnt undefined
+					@pop key
 
 			return
 
@@ -265,9 +284,10 @@ console.log(data.keys());
 				arr = @_keys ?= []
 
 				i = 0
-				for key of @_data
-					arr[i] = key
-					i++
+				for key, val of @_data
+					if val isnt undefined
+						arr[i] = key
+						i++
 
 				arr.length = i
 
@@ -298,8 +318,9 @@ console.log(data.values());
 
 				i = 0
 				for key, val of @_data
-					arr[i] = val
-					i++
+					if val isnt undefined
+						arr[i] = val
+						i++
 
 				arr.length = i
 
@@ -311,7 +332,7 @@ console.log(data.values());
 This method returns array of key-value pairs of all stored properties.
 
 It always returns the same array instance, so don't modify it manually.
-Use `utils.clone()` otherwise.
+Use `utils.cloneDeep()` otherwise.
 
 ```
 var data = new Dict({
@@ -340,10 +361,11 @@ for (var i = 0; i < items.length; i++){
 
 				i = 0
 				for key, val of @_data
-					arr[i] ?= ['', null]
-					arr[i][0] = key
-					arr[i][1] = val
-					i++
+					if val isnt undefined
+						arr[i] ?= ['', null]
+						arr[i][0] = key
+						arr[i][1] = val
+						i++
 
 				arr.length = i
 
