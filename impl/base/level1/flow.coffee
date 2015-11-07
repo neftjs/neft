@@ -111,7 +111,7 @@ updateItem = (item) ->
 	x = y = right = bottom = 0
 
 	# calculate children positions
-	rowsFillsSum = 0
+	rowsFillsSum = visibleChildrenIndex = 0
 	for child, i in children
 		# omit not visible
 		if not child._visible
@@ -170,7 +170,7 @@ updateItem = (item) ->
 			right += rightMargin
 
 		# get x
-		if right > maxFlowWidth and y > 0
+		if right > maxFlowWidth and visibleChildrenIndex > 0
 			right -= x
 			x = right - width
 			currentRowY += rowsHeight[currentRow]
@@ -228,6 +228,8 @@ updateItem = (item) ->
 		# increase x and y by the size
 		x += width
 		y += height
+
+		visibleChildrenIndex++
 
 	# flow size
 	if includeBorderMargins
