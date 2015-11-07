@@ -307,9 +307,9 @@ module.exports = (Renderer, Impl) ->
 				`//</development>`
 				funcStr += "var oldVal = this.#{internalName};\n"
 				funcStr += "if (oldVal === val) return;\n"
-				funcStr += "this.#{internalName} = val;\n"
 				if implementation?
 					funcStr += "impl.call(this._ref, val);\n"
+				funcStr += "this.#{internalName} = val;\n"
 				funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
 				funcStr += "emitSignal(this._ref, '#{namespaceSignalName}', '#{name}', oldVal);\n"
 				funcStr += "};"
@@ -325,9 +325,9 @@ module.exports = (Renderer, Impl) ->
 				`//</development>`
 				funcStr += "var oldVal = this.#{internalName};\n"
 				funcStr += "if (oldVal === val) return;\n"
-				funcStr += "this.#{internalName} = val;\n"
 				if implementation?
 					funcStr += "impl.call(this, val);\n"
+				funcStr += "this.#{internalName} = val;\n"
 				funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
 				funcStr += "};"
 

@@ -95,14 +95,12 @@ module.exports = (impl) ->
 		data.innerElem.style.display = 'none'
 		return
 
-	setBackgroundSize = (item) ->
+	setBackgroundSize = (item, width, height) ->
 		data = item._impl
 
 		unless data.useCssBackground
 			useCssBackground item
 
-		width = item._sourceWidth
-		height = item._sourceHeight
 		data.elemStyle.backgroundSize = "#{width}px #{height}px"
 
 		return
@@ -160,14 +158,14 @@ module.exports = (impl) ->
 		data = @_impl
 
 		if val isnt data.image.width
-			setBackgroundSize @
+			setBackgroundSize @, val, @_sourceHeight
 		return
 
 	setImageSourceHeight: (val) ->
 		data = @_impl
 
 		if val isnt data.image.height
-			setBackgroundSize @
+			setBackgroundSize @, @_sourceWidth, val
 		return
 
 	setImageFillMode: (val) ->
