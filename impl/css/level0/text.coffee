@@ -15,107 +15,6 @@ module.exports = (impl) ->
 	textImpl = {}
 	signal.create textImpl, 'onFontReady'
 
-	sizeUpdatePending = false
-
-	updateSize = do ->
-		MAX_CHECKS = 40
-		CHECKS_AFTER_CHANGE = 35
-
-		queue = []
-		windowLoadQueue = []
-		pending = false
-		intervalPending = false
-		intervalId = 0
-
-		textImpl.onFontReady ->
-			while elem = windowLoadQueue.pop()
-				updateSize elem
-			return
-
-		updateAll = ->
-			pending = false
-			sizeUpdatePending = true
-			i = 0
-			n = queue.length
-			while i < n
-				item = queue[i]
-				updateSizeNow item
-				if ++item._impl.sizeChecks > MAX_CHECKS
-					if i is n-1
-						queue.pop()
-						n--
-					else
-						queue[i] = queue.pop()
-						i--
-						n--
-					item._impl.pendingSize = false
-				i++
-			sizeUpdatePending = false
-			return
-
-		updateAllInInterval = ->
-			updateAll()
-			unless queue.length
-				clearInterval intervalId
-				intervalPending = false
-			return
-
-		updateSizeNow = (item) ->
-			{innerElem} = item._impl
-
-			if item._impl.autoWidth
-				width = innerElem.offsetWidth
-				if item.width isnt width + 1
-					item._impl.sizeChecks = CHECKS_AFTER_CHANGE
-				if width > 0
-					item.width = width + 1
-
-			if item._impl.autoHeight
-				height = innerElem.offsetHeight
-				if item.height isnt height
-					item._impl.sizeChecks = CHECKS_AFTER_CHANGE
-				if height > 0
-					item.height = height
-
-			if (item._height > 0 and item._impl.elem.offsetParent) or item._impl.sizeChecks is MAX_CHECKS
-				if item._impl.innerElem.parentNode is hatchery
-					implUtils.prependElement item._impl.elem, item._impl.innerElem
-
-			return
-
-		(item) ->
-			data = item._impl
-
-			data.sizeChecks = 0
-
-			if data.pendingSize or (not data.autoWidth and not data.autoHeight)
-				return
-
-			if not isFontReady
-				windowLoadQueue.push item
-				return
-
-			sizeUpdatePending = true
-			updateSizeNow item
-			sizeUpdatePending = false
-			if data.sizeChecks is MAX_CHECKS
-				return
-
-			data.pendingSize = true
-			queue.push item
-
-			if item._height is 0 or not data.elem.offsetParent
-				hatchery.appendChild data.innerElem
-
-			unless pending
-				setTimeout updateAll, 10
-				pending = true
-
-			unless intervalPending
-				intervalId = setInterval updateAllInInterval, 50
-				intervalPending = true
-			return
-
 	reloadFontFamilyQueue = []
 	isFontReady = false
 	window.addEventListener 'load', ->
@@ -137,38 +36,74 @@ module.exports = (impl) ->
 			@_impl.innerElemStyle.fontFamily = @_impl.innerElemStyle.fontFamily
 		return
 
-	updateContent = do ->
-		queue = []
-		pending = false
+	sizeUpdatePending = false
 
-		updateItems = ->
-			pending = false
+	updateSize = do ->
+		windowLoadQueue = []
 
-			# update
-			for item in queue
-				val = item._text
-				if val.indexOf('<') isnt -1 or val.indexOf('&#x') isnt -1
-					item._impl.innerElem.innerHTML = val
-				else
-					item._impl.innerElem.textContent = val
-
-			while queue.length
-				item = queue.pop()
-				item._impl.pendingContent = false
-				updateSize item
-
+		textImpl.onFontReady ->
+			while elem = windowLoadQueue.pop()
+				updateSize elem
 			return
 
 		(item) ->
-			if item._impl.pendingContent
+			data = item._impl
+			{innerElem} = data
+
+			if not data.autoWidth and not data.autoHeight
 				return
 
-			item._impl.pendingContent = true
+			if not isFontReady
+				windowLoadQueue.push item
+
+			sizeUpdatePending = true
+
+			if data.autoWidth
+				item.width = innerElem.offsetWidth
+			if data.autoHeight
+				item.height = innerElem.offsetHeight
+
+			sizeUpdatePending = false
+
+			if innerElem.parentNode is hatchery
+				implUtils.prependElement data.elem, innerElem
+			else
+				if item._height is 0
+					hatchery.appendChild data.innerElem
+					updateSize item
+			return
+
+	updateContent = do ->
+		pending = false
+		queue = []
+
+		updateItem = (item) ->
+			data = item._impl
+			if data.containsHTML
+				data.innerElem.innerHTML = item._text
+			else
+				data.innerElem.textContent = item._text
+			updateSize item
+			return
+
+		updateAll = ->
+			while item = queue.pop()
+				item._impl.contentUpdatePending = false
+				updateItem item
+			pending = false
+			return
+
+		(item) ->
+			data = item._impl
+			if data.contentUpdatePending
+				return
+
 			queue.push item
+			data.contentUpdatePending = true
 
 			unless pending
-				setImmediate updateItems
-				pending = true
+				setImmediate updateAll
+				pending = false
 			return
 
 	onWidthChange = ->
@@ -179,7 +114,7 @@ module.exports = (impl) ->
 			innerElemStyle.whiteSpace = if auto then 'pre' else 'pre-wrap'
 			innerElemStyle.width = if auto then 'auto' else "#{width}px"
 			if @_impl.autoWidth or @_impl.autoHeight
-				updateSize @
+				updateContent @
 		return
 
 	onHeightChange = ->
@@ -189,7 +124,7 @@ module.exports = (impl) ->
 			auto = @_impl.autoHeight = height is 0
 			innerElemStyle.height = if auto then 'auto' else "#{height}px"
 			if @_impl.autoWidth or @_impl.autoHeight
-				updateSize @
+				updateContent @
 		return
 
 	SHEET = """
@@ -217,16 +152,17 @@ module.exports = (impl) ->
 	COLOR_RESOURCE_REQUEST =
 		property: 'color'
 
+	CONTAINS_HTML_RE = /<|&#x/
+
 	DATA =
 		stylesheet: null
 		autoWidth: true
 		autoHeight: true
 		innerElem: null
 		innerElemStyle: null
-		sizeChecks: 0
-		pendingSize: false
-		pendingContent: false
 		uid: 0
+		contentUpdatePending: false
+		containsHTML: false
 
 	exports =
 	DATA: DATA
@@ -257,6 +193,7 @@ module.exports = (impl) ->
 			impl.utils.onFontLoaded reloadFontFamily, @
 
 	setText: (val) ->
+		@_impl.containsHTML = CONTAINS_HTML_RE.test(val)
 		updateContent @
 		return
 
@@ -282,7 +219,7 @@ module.exports = (impl) ->
 
 	setTextLineHeight: (val) ->
 		@_impl.innerElemStyle.lineHeight = val
-		updateSize @
+		updateContent @
 		return
 
 	setTextFontFamily: (val) ->
@@ -294,28 +231,28 @@ module.exports = (impl) ->
 		else
 			val = "'#{val}'"
 		@_impl.innerElemStyle.fontFamily = val
-		updateSize @
+		updateContent @
 		return
 
 	setTextFontPixelSize: (val) ->
 		val = round val
 		@_impl.innerElemStyle.fontSize = "#{val}px"
-		updateSize @
+		updateContent @
 		return
 
 	setTextFontWeight: (val) ->
 		@_impl.innerElemStyle.fontWeight = implUtils.getFontWeight val
-		updateSize @
+		updateContent @
 		return
 
 	setTextFontWordSpacing: (val) ->
 		@_impl.innerElemStyle.wordSpacing = "#{val}px"
-		updateSize @
+		updateContent @
 		return
 
 	setTextFontLetterSpacing: (val) ->
 		@_impl.innerElemStyle.letterSpacing = "#{val}px"
-		updateSize @
+		updateContent @
 		return
 
 	setTextFontItalic: (val) ->
