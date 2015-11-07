@@ -130,8 +130,8 @@ Rectangle {
 			(item) ->
 				items.push item
 
-*ReadOnly* *String* Item::id
-----------------------------
+ReadOnly *String* Item::id
+--------------------------
 
 *Object* Item::children
 -----------------------
@@ -156,13 +156,13 @@ Rectangle {
 				@length = 0
 				super ref
 
-*ReadOnly* *Integer* Item::children::length
--------------------------------------------
+ReadOnly *Integer* Item::children.length
+----------------------------------------
 
-*Item* Item::children::layout
------------------------------
+*Item* Item::children.layout
+----------------------------
 
-### *Signal* Item::children::onLayoutChange(*Item* oldValue)
+### *Signal* Item::children.onLayoutChange(*Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -189,10 +189,10 @@ Rectangle {
 
 					return
 
-*Item* Item::children::target
------------------------------
+*Item* Item::children.target
+----------------------------
 
-### *Signal* Item::children::onTargetChange(*Item* oldValue)
+### *Signal* Item::children.onTargetChange(*Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -202,19 +202,19 @@ Rectangle {
 					if val?
 						assert.instanceOf val, Item
 
-*Integer* Item::children::index(*Item* value)
----------------------------------------------
+*Integer* Item::children.index(*Item* value)
+--------------------------------------------
 
 			index: (val) -> Array::indexOf.call @, val
 			indexOf: @::index
 
-*Boolean* Item::children::has(*Item* value)
--------------------------------------------
+*Boolean* Item::children.has(*Item* value)
+------------------------------------------
 
 			has: (val) -> @index(val) isnt -1
 
-Item::children::clear()
------------------------
+Item::children.clear()
+----------------------
 
 Removes all children from a node.
 
@@ -679,7 +679,7 @@ It's required for browsers, where link URIs should be known publicly.
 				oldVal = @_background
 				if val is oldVal
 					return
-				if oldVal
+				if oldVal and oldVal._parent is @
 					oldVal._parent = null
 					emitSignal oldVal, 'onParentChange', @
 				if val

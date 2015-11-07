@@ -75,8 +75,8 @@ Document @extension
 			ref.on$Change onPropertyChange, @
 			super ref
 
-*ReadOnly* *String* Document::query
------------------------------------
+ReadOnly *String* Document::query
+---------------------------------
 
 		utils.defineProperty @::, 'query', null, ->
 			@_query
@@ -126,8 +126,8 @@ Text {
 					val.onAttrsChange onNodeAttrsChange, @
 					enableProperties.call @
 
-*ReadOnly* *Boolean* Document::visible = false
-----------------------------------------------
+ReadOnly *Boolean* Document::visible = false
+--------------------------------------------
 
 		itemUtils.defineProperty
 			constructor: @

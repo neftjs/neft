@@ -254,15 +254,15 @@ Grid {
 
 			class ChildrenObject
 
-*Integer* Class::children::length = 0
--------------------------------------
+*Integer* Class::children.length = 0
+------------------------------------
 
 				constructor: (ref) ->
 					@_ref = ref
 					@length = 0
 
-*Object* Class::children::append(*Object* value)
-------------------------------------------------
+*Object* Class::children.append(*Object* value)
+-----------------------------------------------
 
 				append: (val) ->
 					assert.instanceOf val, itemUtils.Object
@@ -274,8 +274,8 @@ Grid {
 
 					val
 
-*Object* Class::children::pop(*Integer* index)
-----------------------------------------------
+*Object* Class::children.pop(*Integer* index)
+---------------------------------------------
 
 				pop: (i=@length-1) ->
 					assert.operator i, '>=', 0
