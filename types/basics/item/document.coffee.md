@@ -29,10 +29,13 @@ Document @extension
 				props[attr] = val
 			return
 
-		onPropertyChange = (prop) ->
+		onPropertyChange = (prop, oldVal) ->
 			if @_updatingProperty is prop or not (node = @_node) or not node.attrs.has(prop)
 				return
-			node.attrs.set prop, @_ref._$[prop]
+			if oldVal is undefined
+				setProperty.call @, @_ref._$, prop, node._attrs[prop], oldVal
+			else
+				node.attrs.set prop, @_ref._$[prop]
 			return
 
 		onNodeAttrsChange = (attr, oldVal) ->
