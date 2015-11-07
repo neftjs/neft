@@ -38,7 +38,7 @@ describe 'pop()', ->
 
 	it 'removes key', ->
 		dict = Dict a: 1
-		expect(dict.pop 'a').toBe dict
+		dict.pop 'a'
 		expect(dict.get 'a').toBe undefined
 
 describe 'keys()', ->
@@ -90,7 +90,7 @@ describe 'json stringified', ->
 		expect(dict2.items()).toEqual dict.items()
 		expect(dict2).toEqual jasmine.any Dict
 
-describe 'onChanged signal', ->
+describe 'onChange signal', ->
 
 	dict = listener = null
 	ok = false
@@ -108,59 +108,25 @@ describe 'onChanged signal', ->
 
 	afterEach ->
 		expect(ok).toBeTruthy()
-		dict.onChanged.disconnect listener
+		dict.onChange.disconnect listener
 
 	it 'works with set() on new item', ->
 		dict = Dict()
-		dict.onChanged listener
+		dict.onChange listener
 		dict.set 'a', 1
 		expect(args).toEqual [['a', undefined]]
 		expect(items).toEqual [['a', 1]]
 
 	it 'works with set() on item change', ->
 		dict = Dict a: 1
-		dict.onChanged listener
+		dict.onChange listener
 		dict.set 'a', 2
 		expect(args).toEqual [['a', 1]]
 		expect(items).toEqual [['a', 2]]
 
 	it 'works with pop()', ->
 		dict = Dict a: 1
-		dict.onChanged listener
+		dict.onChange listener
 		dict.pop 'a'
 		expect(args).toEqual [['a', 1]]
 		expect(items).toEqual []
-
-describe 'properties', ->
-
-	it 'getter/setter works', ->
-		NAME = 'abc'
-		NAME2 = '123'
-
-		dict = Dict()
-		Dict.defineProperty dict, 'name'
-
-		expect(dict.name).toBe undefined
-		dict.name = NAME
-		expect(dict.name).toBe NAME
-		expect(dict.get 'name').toBe NAME
-
-		dict.set 'name', NAME2
-		expect(dict.name).toBe NAME2
-		expect(dict.get 'name').toBe NAME2
-
-	it 'custom signals are calling', ->
-		dict = Dict()
-		Dict.defineProperty dict, 'name'
-
-		i = 0
-		args = []
-		dict.onNameChanged ->
-			args.push [arguments...]
-			i++
-
-		dict.name = 2
-		dict.name = 25
-
-		expect(i).toBe 2
-		expect(args).toEqual [[undefined], [2]]
