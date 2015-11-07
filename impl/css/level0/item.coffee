@@ -205,7 +205,10 @@ module.exports = (impl) ->
 		return
 
 	setItemBackground: (val) ->
-		implUtils.prependElement @_impl.elem, val._impl.elem
+		if (oldElem = @_background?._impl.elem)?.parentNode is @_impl.elem
+			@_impl.elem.removeChild oldElem
+		if val
+			implUtils.prependElement @_impl.elem, val._impl.elem
 		return
 
 	setItemVisible: (val) ->

@@ -676,10 +676,18 @@ It's required for browsers, where link URIs should be known publicly.
 				_super.call @
 			setter: (_super) -> (val) ->
 				val ||= @_defaultBackground
-				oldParent = val._parent
-				val.parent = null
-				val._parent = @
-				emitSignal val, 'onParentChange', oldParent
+				oldVal = @_background
+				if val is oldVal
+					return
+				if oldVal
+					oldVal._parent = null
+					emitSignal oldVal, 'onParentChange', @
+				if val
+					oldParent = val._parent
+					if val._previousSibling or val._nextSibling
+						val.parent = null
+					val._parent = @
+					emitSignal val, 'onParentChange', oldParent
 				Impl.setItemBackground.call @, val
 				_super.call @, val
 
