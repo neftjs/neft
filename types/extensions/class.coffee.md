@@ -13,6 +13,8 @@ Class @modifier
 *Class* Class()
 ---------------
 
+	NESTED_CLASSES_PRIORITY_INCREASE = 0.000001
+
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class ChangesObject
 			constructor: ->
@@ -172,6 +174,12 @@ It accepts bindings as well.
 						updateTargetClass disableClass, @_target, @
 						updateClassList @_target
 						updateTargetClass enableClass, @_target, @
+
+					# update children classes
+					if children = @_children
+						for child in children
+							if child instanceof Class
+								child.priority = val + NESTED_CLASSES_PRIORITY_INCREASE
 					return
 
 *Boolean* Class::when
@@ -269,6 +277,9 @@ Grid {
 
 					unless @_ref._component.isClone
 						@_ref._component.disabledObjects[val.id] = true
+
+					if val instanceof Class
+						val.priority = @_ref.priority + NESTED_CLASSES_PRIORITY_INCREASE
 
 					@[@length++] = val
 
