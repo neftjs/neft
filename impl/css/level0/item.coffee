@@ -34,6 +34,9 @@ SIGNALS_CURSORS =
 lastEventCoords =
 	x: -1
 	y: -1
+mouseEvent =
+	movementX: 0
+	movementY: 0
 mouseInitialized = false
 movementX = movementY = 0
 getMouseEvent = (e) ->
@@ -53,8 +56,9 @@ getMouseEvent = (e) ->
 		lastEventCoords.x = e.pageX
 		lastEventCoords.y = e.pageY
 
-	movementX: movementX
-	movementY: movementY
+	mouseEvent.movementX = movementX
+	mouseEvent.movementY = movementY
+	mouseEvent
 
 SIGNALS_ARGS =
 	'pointerOnWheel': implUtils.wheelEvent.getDelta

@@ -64,6 +64,10 @@ exports.wheelEvent =
 
 		isSlowContinuous = false
 
+		event =
+			deltaX: 0
+			deltaY: 0
+
 		getDeltas = (e) ->
 			x = -e.deltaX*3 or e.wheelDeltaX ? 0
 			y = -e.deltaY*3 or e.wheelDeltaY ? e.wheelDelta ? -e.detail*3 or 0
@@ -72,26 +76,26 @@ exports.wheelEvent =
 				x *= 10
 				y *= 10
 
-			deltaX: x
-			deltaY: y
+			event.deltaX = x
+			event.deltaY = y
 
 		(e) ->
-			deltas = getDeltas e
+			getDeltas e
 
 			# MAGIC!
 			# It looks that Chrome on MacBook never gives values in range (-3, 3) as
-			# it does Firefox which always sends lower values
+			# it does Firefox which always send lower values
 			if not isSlowContinuous
-				delta = deltas.x or deltas.y or 3
+				delta = event.deltaX or event.deltaY or 3
 
 				if (delta > 0 and delta < 3) or (delta < 0 and delta > -3)
 					isSlowContinuous = true
 
 			if isSlowContinuous
-				deltas.x *= NORMALIZED_VALUE
-				deltas.y *= NORMALIZED_VALUE
+				event.deltaX *= NORMALIZED_VALUE
+				event.deltaY *= NORMALIZED_VALUE
 
-			deltas
+			event
 
 exports.keysEvents = do ->
 	SPECIAL_KEY_CODES =
