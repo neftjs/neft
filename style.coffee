@@ -225,7 +225,7 @@ module.exports = (File, data) -> class Style
 		# clean index finding data
 		tmpNode = @node
 		while (tmpNode = tmpNode._parent) && not tmpNode.style
-			if tmpNode.name is 'neft:use'
+			if tmpNode.name is 'neft:blank'
 				tmpNode._documentStyle = null
 		return
 
@@ -280,10 +280,11 @@ module.exports = (File, data) -> class Style
 		if @waiting
 			return
 
-		obj = @getTextObject()
-		node = @node
-		if node.children.length is 1 and node.children[0].name is 'a'
-			node = node.children[0]
+		{node} = @
+		hasStyledChild = @children.length or node.query('[neft:style]')
+
+		if not hasStyledChild and (anchor = node.query('> a'))
+			node = anchor
 			href = node.attrs.get('href')
 			if typeof href is 'string'
 				unless @isLinkUriSet
@@ -291,7 +292,8 @@ module.exports = (File, data) -> class Style
 					@baseLinkUri = @item.linkUri
 				@item.linkUri = href
 
-		if obj and not @children.length and not @node.query('[neft:style]')
+		obj = @getTextObject()
+		if obj and not hasStyledChild
 			text = node.stringifyChildren()
 
 			if text.length > 0 or @isTextSet
@@ -529,7 +531,7 @@ module.exports = (File, data) -> class Style
 									item.previousSibling = tmpSiblingTargetItem
 							return
 					# check children of special tags
-					else if tmpSiblingNode.name in 'neft:blank'
+					else if tmpSiblingNode.name is 'neft:blank'
 						tmpIndexNode = tmpSiblingNode
 						tmpSiblingNode = utils.last tmpIndexNode.children
 						continue
@@ -564,7 +566,7 @@ module.exports = (File, data) -> class Style
 						@parentSet = true
 						@item.parent = item
 						break
-				else unless tmpNode.name in 'neft:blank'
+				else unless tmpNode.name is 'neft:blank'
 					tmpNode._documentStyle = @
 
 				tmpNode = tmpNode._parent
