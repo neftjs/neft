@@ -423,6 +423,14 @@ Grid {
 			else
 				''
 
+		getPropertyDefaultValue = (obj, prop) ->
+			proto = Object.getPrototypeOf obj
+			innerProp = itemUtils.getInnerPropName(prop)
+			if innerProp or proto
+				proto[innerProp]
+			else
+				proto[prop]
+
 		enableClass = (item, classElem) ->
 			assert.instanceOf item, itemUtils.Object
 			assert.instanceOf classElem, Class
@@ -467,7 +475,7 @@ Grid {
 							lastPath = path[path.length - 1]
 							unless object
 								continue
-							defaultValue = Object.getPrototypeOf(object)[lastPath]
+							defaultValue = getPropertyDefaultValue object, lastPath
 							defaultIsBinding = !!classList[i].changes._bindings[alias]
 							if defaultIsBinding
 								object.createBinding lastPath, null, classElem._component, item
@@ -570,7 +578,7 @@ Grid {
 						object.createBinding lastPath, defaultValue, classElem._component, item
 					else
 						if defaultValue is undefined
-							defaultValue = Object.getPrototypeOf(object)[lastPath]
+							defaultValue = getPropertyDefaultValue object, lastPath
 						object[lastPath] = defaultValue
 
 			return

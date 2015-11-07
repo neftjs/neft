@@ -251,9 +251,8 @@ module.exports = (Renderer, Impl) ->
 			cache[prop] ||= "_#{prop}"
 
 	getInnerPropName: do ->
-		cache =
-			__proto__: null
-			'': ''
+		cache = Object.create(null)
+		cache[''] = ''
 		(val) ->
 			cache[val] ?= '_' + val
 
