@@ -479,17 +479,18 @@ Grid {
 						path = splitAttribute attr
 						lastPath = path[path.length - 1]
 						object = getObject item, path
-					`//<development>`
-					if not object or not (lastPath of object)
-						log.error "Attribute '#{attr}' doesn't exist in '#{item.toString()}'"
-						continue
-					`//</development>`
-					unless object
-						continue
 
 					# create property on demand
 					if object instanceof itemUtils.CustomObject and not (lastPath of object)
 						itemUtils.Object.createProperty object._ref, lastPath
+					else
+						`//<development>`
+						if not object or not (lastPath of object)
+							log.error "Attribute '#{attr}' doesn't exist in '#{item.toString()}'"
+							continue
+						`//</development>`
+						unless object
+							continue
 
 					if bindings[attr]
 						object.createBinding lastPath, val, classElem._component, item
