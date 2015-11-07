@@ -13,8 +13,6 @@ Class @modifier
 *Class* Class()
 ---------------
 
-	NESTED_CLASSES_PRIORITY_INCREASE = 0.000001
-
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class ChangesObject
 			constructor: ->
@@ -50,6 +48,8 @@ Class @modifier
 				assert.instanceOf component, Renderer.Component
 
 				@_priority = 0
+				@_inheritsPriority = 0
+				@_nestingPriority = 0
 				@_name = ''
 				@_changes = null
 				@_document = null
@@ -158,28 +158,20 @@ It accepts bindings as well.
 						changes.setAttribute prop, val
 				return
 
-*Float* Class::priority = 0
----------------------------
+*Integer* Class::priority = 0
+-----------------------------
 
-### *Signal* Class::onPriorityChange(*Float* oldValue)
+### *Signal* Class::onPriorityChange(*Integer* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
 				name: 'priority'
 				defaultValue: 0
+				developmentSetter: (val) ->
+					assert.isInteger val
 				setter: (_super) -> (val) ->
-					assert.isFloat val
 					_super.call @, val
-					if @_target and @_running
-						updateTargetClass disableClass, @_target, @
-						updateClassList @_target
-						updateTargetClass enableClass, @_target, @
-
-					# update children classes
-					if children = @_children
-						for child in children
-							if child instanceof Class
-								child.priority = val + NESTED_CLASSES_PRIORITY_INCREASE
+					updatePriorities @
 					return
 
 *Boolean* Class::when
@@ -279,7 +271,7 @@ Grid {
 						@_ref._component.disabledObjects[val.id] = true
 
 					if val instanceof Class
-						val.priority = @_ref.priority + NESTED_CLASSES_PRIORITY_INCREASE
+						updateChildPriorities @_ref, val
 
 					@[@length++] = val
 
@@ -325,6 +317,7 @@ Grid {
 					if clone instanceof Renderer.Item
 						clone.parent ?= item
 					else
+						updateChildPriorities classElem, clone
 						clone.target ?= item
 
 			if classElem._document?._parent
@@ -346,11 +339,69 @@ Grid {
 				unloadObjects classElem._document._parent._ref, item
 			return
 
+		updateChildPriorities = (parent, child) ->
+			child._inheritsPriority = parent._inheritsPriority + parent._priority
+			child._nestingPriority = parent._nestingPriority + 1 + (child._document?._priority or 0)
+			updatePriorities child
+			return
+
+		updatePriorities = (classElem) ->
+			# refresh if needed
+			if classElem._running and ifClassListWillChange(classElem)
+				target = classElem._target
+				updateTargetClass disableClass, target, classElem
+				updateClassList target
+				updateTargetClass enableClass, target, classElem
+
+			# children
+			if children = classElem._children
+				for child in children
+					if child instanceof Class
+						updateChildPriorities classElem, child
+
+			# loaded objects
+			if loadedObjects = classElem._loadedObjects
+				for child in loadedObjects
+					if child instanceof Class
+						updateChildPriorities classElem, child
+
+			# document
+			if document = classElem._document
+				{_inheritsPriority, _nestingPriority} = classElem
+				for child in document._classesInUse
+					child._inheritsPriority = _inheritsPriority
+					child._nestingPriority = _nestingPriority
+					updatePriorities child
+				for child in document._classesPool
+					child._inheritsPriority = _inheritsPriority
+					child._nestingPriority = _nestingPriority
+			return
+
+		ifClassListWillChange = (classElem) ->
+			target = classElem._target
+			classList = target._classList
+			index = classList.indexOf classElem
+
+			if index > 0 and classListSortFunc(classElem, classList[index-1]) < 0
+				return true
+			if classList.length isnt index+1 and classListSortFunc(classElem, classList[index+1]) > 0
+				return true
+			false
+
+		classListSortFunc = (a, b) ->
+			(b._priority + b._inheritsPriority) - (a._priority + a._inheritsPriority) or
+			(b._nestingPriority) - (a._nestingPriority)
+
+		updateClassList = (item) ->
+			item._classList.sort classListSortFunc
+
 		cloneClassWithNoDocument = (component) ->
 			clone = new Class component
 			clone.id = @id
 			clone._name = @_name
 			clone._priority = @_priority
+			clone._inheritsPriority = @_inheritsPriority
+			clone._nestingPriority = @_nestingPriority
 			clone._changes = @_changes
 
 			if @_bindings
@@ -358,12 +409,6 @@ Grid {
 					clone.createBinding prop, val, component
 
 			clone
-
-		updateClassList = do ->
-			sortFunc = (a, b) ->
-				b._priority - a._priority
-			(item) ->
-				item._classList.sort sortFunc
 
 		splitAttribute = do ->
 			cache = Object.create null
@@ -387,7 +432,8 @@ Grid {
 
 		saveAndEnableClass = (item, classElem) ->
 			item._classList.unshift classElem
-			updateClassList item
+			if ifClassListWillChange(classElem)
+				updateClassList item
 			enableClass item, classElem
 
 		saveAndDisableClass = (item, classElem) ->
@@ -637,27 +683,17 @@ Grid {
 					@reloadQuery()
 				return
 
-			onPriorityChange = ->
-				val = @_ref.priority
-
-				for classElem in @_classesInUse
-					classElem.priority = val
-				for classElem in @_classesPool
-					classElem.priority = val
-				return
-
 			constructor: (ref) ->
 				@_query = ''
 				@_parent = null
 				@_classesInUse = []
 				@_classesPool = []
 				@_nodeWatcher = null
+				@_priority = 0
 				super ref
 
 				ref.onTargetChange onTargetChange, @
 				onTargetChange.call @, ref._target
-
-				ref.onPriorityChange onPriorityChange, @
 
 *String* Document::query
 ------------------------
@@ -684,6 +720,15 @@ Grid {
 					_super.call @, val
 					@reloadQuery()
 
+					# update priority
+					if @_ref._priority < 1
+						Document = require 'document'
+						cmdLen = Document.Element.Tag.query.getSelectorCommandsLength(val)
+						oldPriority = @_priority
+						@_priority = cmdLen
+						@_ref._nestingPriority += cmdLen - oldPriority
+						updatePriorities @_ref
+
 					unless val
 						loadObjects @, @_target
 					return
@@ -699,7 +744,6 @@ Grid {
 				unless classElem = @_classesPool.pop()
 					classElem = cloneClassWithNoDocument.call @_ref, @_ref._component
 					classElem.document._parent = @
-					classElem.priority = @_ref._priority
 				@_classesInUse.push classElem
 				classElem.target = style
 				if not classElem._bindings?.when
