@@ -5,10 +5,13 @@ Route @class
 
 	utils = require 'utils'
 	assert = require 'assert'
+	log = require 'log'
 	Schema = require 'schema'
 	Networking = require 'networking'
 	Document = require 'document'
 	Dict = require 'dict'
+
+	log = log.scope 'App', 'Route'
 
 	module.exports = (app) -> class Route
 
@@ -388,6 +391,7 @@ Acceptable syntaxes:
 			tmplName = opts?.template or 'template'
 			useName = opts?.use or 'body'
 
+			logtime = log.time 'Render'
 			if view = app.views[viewName]
 				r = view.render @
 			if viewName isnt tmplName and (tmpl = app.views[tmplName])
@@ -402,6 +406,7 @@ Acceptable syntaxes:
 				@_destroyViewOnEnd = false
 			else
 				@_destroyViewOnEnd = true
+			log.end logtime
 			r
 
 		createToHTMLFromObject = (opts) ->
