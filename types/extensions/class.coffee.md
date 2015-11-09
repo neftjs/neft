@@ -47,6 +47,7 @@ Class @modifier
 			constructor: (component, opts) ->
 				assert.instanceOf component, Renderer.Component
 
+				@_classUid = utils.uid()
 				@_priority = 0
 				@_inheritsPriority = 0
 				@_nestingPriority = 0
@@ -110,7 +111,8 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 					if val?
 						assert.instanceOf val, itemUtils.Object
 				setter: (_super) -> (val) ->
-					{oldVal, name} = @
+					oldVal = @_target
+					{name} = @
 
 					if oldVal is val
 						return
@@ -398,6 +400,7 @@ Grid {
 		cloneClassWithNoDocument = (component) ->
 			clone = new Class component
 			clone.id = @id
+			clone._classUid = @_classUid
 			clone._name = @_name
 			clone._priority = @_priority
 			clone._inheritsPriority = @_inheritsPriority
@@ -661,6 +664,13 @@ Grid {
 *Document* Class::document
 --------------------------
 
+		class ClassChildDocument
+			constructor: (parent) ->
+				@_ref = parent._ref
+				@_parent = parent
+				@_multiplicity = 0
+				Object.preventExtensions @
+
 		class ClassDocument extends itemUtils.DeepObject
 			@__name__ = 'ClassDocument'
 
@@ -685,7 +695,6 @@ Grid {
 
 			constructor: (ref) ->
 				@_query = ''
-				@_parent = null
 				@_classesInUse = []
 				@_classesPool = []
 				@_nodeWatcher = null
@@ -741,17 +750,34 @@ Grid {
 				return
 
 			connectNodeStyle = (style) ->
+				# omit duplications
+				uid = @_ref._classUid
+				for classElem in style._extensions
+					if classElem instanceof Class
+						if classElem isnt @_ref and classElem._classUid is uid
+							classElem._document._multiplicity++
+							return
+
+				# get class
 				unless classElem = @_classesPool.pop()
 					classElem = cloneClassWithNoDocument.call @_ref, @_ref._component
-					classElem.document._parent = @
+					classElem._document = new ClassChildDocument @
+
+				# save
 				@_classesInUse.push classElem
 				classElem.target = style
+
+				# run if needed
 				if not classElem._bindings?.when
 					classElem.enable()
 				return
 
 			disconnectNodeStyle = (style) ->
-				classElem = getChildClass style, @
+				unless classElem = getChildClass(style, @)
+					return
+				if classElem._document._multiplicity > 0
+					classElem._document._multiplicity--
+					return
 				classElem.target = null
 				utils.remove @_classesInUse, classElem
 				@_classesPool.push classElem
