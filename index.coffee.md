@@ -81,22 +81,25 @@ obj.onRename.emit('Max', 'George');
 		obj[name] = signal
 
 	callSignal = (obj, listeners, arg1, arg2) ->
-		i = 0
+		i = shift = 0
 		n = listeners.length
+		result = 0
 		while i < n
 			func = listeners[i]
 			if func is null
-				if i+2 < n and listeners[i+2] isnt null
-					listeners[i] = listeners[i+2]
-					listeners[i+1] = listeners[i+3]
-					listeners[i+2] = null
-					listeners[i+3] = null
-					continue
+				shift -= 2
 			else
-				if func.call(listeners[i+1] or obj, arg1, arg2) is STOP_PROPAGATION
-					return STOP_PROPAGATION
+				ctx = listeners[i+1]
+				if shift isnt 0
+					listeners[i+shift] = func
+					listeners[i+shift+1] = ctx
+					listeners[i] = null
+					listeners[i+1] = null
+
+				if result is 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
+					result = STOP_PROPAGATION
 			i += 2
-		return
+		return result
 
 *Signal* Signal()
 -------------------
@@ -112,7 +115,7 @@ If this function is called, it works like *Signal.connect()*.
 			handler.connect listener, ctx
 
 		handler.obj = obj
-		handler.listeners = [null, null, null, null]
+		handler.listeners = []
 		utils.setPrototypeOf handler, SignalPrototype
 
 		handler
@@ -190,7 +193,6 @@ obj.onPress.emit();
 			else
 				listeners[i+2] = listener
 				listeners[i+3] = ctx
-
 
 			return
 
