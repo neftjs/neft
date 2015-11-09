@@ -58,7 +58,7 @@ updateItem = (item) ->
 	data = item._impl
 	{autoWidth, autoHeight} = data
 
-	if item.children.layout
+	if item._children?._layout
 		return
 
 	if layout = effectItem._layout
@@ -153,10 +153,7 @@ updateItem = (item) ->
 				if includeBorderMargins
 					width -= leftMargin + rightMargin
 
-				itemPending = data.pending
-				data.pending = true
 				child.width = width
-				data.pending = itemPending
 
 		# get child right anchor position
 		right = 0
@@ -275,10 +272,7 @@ updateItem = (item) ->
 			if unusedFills[row] is 0
 				layout = child._layout
 				if layout and layout._fillHeight and layout._enabled
-					itemPending = data.pending
-					data.pending = true
 					child.height = perCell# - elementsBottomMargin[i]
-					data.pending = itemPending
 					unless currentYShift
 						currentYShift = perCell - rowsHeight[row]
 						rowsHeight[row] = perCell
