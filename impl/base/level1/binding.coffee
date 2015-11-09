@@ -80,15 +80,15 @@ module.exports = (impl) ->
 		updateItem: ->
 			oldVal = @item
 			val = @child.getValue()
-			if oldVal isnt val or utils.isObject(val)
+			if oldVal isnt val
 				@disconnect()
 				@item = val
 				@connect()
-
-				if @parent
-					@parent.updateItem()
-				else
+				unless @parent
 					@binding.update()
+
+			if @parent
+				@parent.updateItem()
 			return
 
 		getValue: ->
