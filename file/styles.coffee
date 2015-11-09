@@ -1,18 +1,9 @@
 'use strict'
 
 utils = require 'utils'
-expect = require 'expect'
-log = require 'log'
-Document = require 'document'
 
 if utils.isNode
 	styleParseStyles = require('./parse/styles')
-
-{isArray} = Array
-{Element} = Document
-{Tag} = Element
-
-log = log.scope 'Styles'
 
 module.exports = (File) ->
 

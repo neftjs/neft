@@ -61,13 +61,10 @@ Row {
 
 	'use strict'
 
-	expect = require 'expect'
 	Document = require 'document'
 
 	stylesStyles = require('./file/styles')
 	stylesStyle = require('./style')
-
-	expect(Document).toBe.function()
 
 	module.exports = (data) ->
 		stylesStyles Document
