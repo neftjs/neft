@@ -36,8 +36,6 @@ module.exports = (impl) ->
 			@_impl.innerElemStyle.fontFamily = @_impl.innerElemStyle.fontFamily
 		return
 
-	sizeUpdatePending = false
-
 	updateSize = do ->
 		windowLoadQueue = []
 
@@ -56,14 +54,12 @@ module.exports = (impl) ->
 			if not isFontReady
 				windowLoadQueue.push item
 
-			sizeUpdatePending = true
-
+			data.sizeUpdatePending = true
 			if data.autoWidth
 				item.width = innerElem.offsetWidth
 			if data.autoHeight
 				item.height = innerElem.offsetHeight
-
-			sizeUpdatePending = false
+			data.sizeUpdatePending = false
 
 			if innerElem.parentNode is hatchery
 				implUtils.prependElement data.elem, innerElem
@@ -107,7 +103,7 @@ module.exports = (impl) ->
 			return
 
 	onWidthChange = ->
-		if not sizeUpdatePending
+		if not @_impl.sizeUpdatePending
 			{width} = @
 			{innerElemStyle} = @_impl
 			auto = @_impl.autoWidth = width is 0
@@ -118,7 +114,7 @@ module.exports = (impl) ->
 		return
 
 	onHeightChange = ->
-		if not sizeUpdatePending
+		if not @_impl.sizeUpdatePending
 			{height} = @
 			{innerElemStyle} = @_impl
 			auto = @_impl.autoHeight = height is 0
@@ -163,6 +159,7 @@ module.exports = (impl) ->
 		uid: 0
 		contentUpdatePending: false
 		containsHTML: false
+		sizeUpdatePending: false
 
 	exports =
 	DATA: DATA
