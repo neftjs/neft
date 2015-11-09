@@ -21,17 +21,19 @@ Font @extension
 			defaultValue: null
 			valueConstructor: Font
 			developmentSetter: (val) ->
-				assert.isObject val
+				if val?
+					assert.isObject val
 			setter: (_super) -> (val) ->
-				{font} = @
-				font.family = val.family if val.family?
-				font.pixelSize = val.pixelSize if val.pixelSize?
-				font.weight = val.weight if val.weight?
-				font.wordSpacing = val.wordSpacing if val.wordSpacing?
-				font.letterSpacing = val.letterSpacing if val.letterSpacing?
-				font.italic = val.italic if val.italic?
-
 				_super.call @, val
+
+				if utils.isObject(val)
+					{font} = @
+					font.family = val.family if val.family?
+					font.pixelSize = val.pixelSize if val.pixelSize?
+					font.weight = val.weight if val.weight?
+					font.wordSpacing = val.wordSpacing if val.wordSpacing?
+					font.letterSpacing = val.letterSpacing if val.letterSpacing?
+					font.italic = val.italic if val.italic?
 				return
 
 		constructor: (ref) ->
