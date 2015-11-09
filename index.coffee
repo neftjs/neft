@@ -78,12 +78,10 @@ getByTypeDeep = (elem, type, callback) ->
 	for child in elem.body
 		if child.type is type
 			callback child
-		switch child.type
-			when 'object'
-				getByTypeDeep child, type, callback
-			when 'attribute'
-				if child.value?.type is 'object'
-					getByTypeDeep child.value, type, callback
+		if child.body?
+			getByTypeDeep child, type, callback
+		else if child.value?.body
+			getByTypeDeep child.value, type, callback
 
 	return
 
