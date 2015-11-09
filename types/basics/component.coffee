@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'utils'
+signal = require 'signal'
 assert = require 'neft-assert'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Component
@@ -52,6 +53,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@createItem.getComponent = @clone
 			# @cloneItem = utils.bindFunctionContext @cloneItem, @
 			# @cacheItem = utils.bindFunctionContext @cacheItem, @
+
+		@onObjectChange = null
+
 		Object.preventExtensions @
 
 	initSignalArr = ->
@@ -68,6 +72,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		assert.notOk @ready
 		assert.ok @isClone
 
+		@onObjectChange ?= signal.create()
 		initSignalArr.call @
 		@ready = true
 
@@ -251,6 +256,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				component.objects = Object.create @objects
 				component.item = @item
 				component.objectsOrderSignalArr = new Array @objectsOrder.length+2
+				component.onObjectChange = @onObjectChange
 				component.isDeepClone = true
 				component.ready = true
 				component.mirror = true
@@ -260,7 +266,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				clone = cloneItem item, components, component
 
 				for val, i in @objectsOrder
-					component.objectsOrderSignalArr[i] = component.objectsOrder[i] ||= val
+					component.objectsOrder[i] = component.objectsOrderSignalArr[i] ||= val
 
 		clone
 
@@ -269,33 +275,33 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		clone._component.initObjects()
 		clone
 
+	cloneComponentObject: ->
+		comp = new Component @
+		comp.objects = Object.create @objects
+		comp.item = @item
+		comp.objectsOrder = Object.create @objectsOrder
+		comp.objectsOrderSignalArr = Object.create @objectsOrderSignalArr
+		comp.onObjectChange = @onObjectChange
+		comp.isDeepClone = true
+		comp.ready = true
+		comp.mirror = true
+		comp
+
 	setObjectById: (object, id) ->
 		assert.instanceOf object, itemUtils.Object
 		assert.isString id
 		assert.ok @objects[id]
 
-		if @objects[id] is object
+		if (oldVal = @objects[id]) is object
 			return
 
 		@objects[id] = object
 		index = @idsOrder.indexOf id
 		if index isnt -1
 			@objectsOrder[index] = @objectsOrderSignalArr[index] = object
+			@onObjectChange.emit id, oldVal
 
 		object
-
-	updateBindings: (object) ->
-		for id, item of @objects
-			if @objects.hasOwnProperty(id)
-				if bindings = item._bindings
-					for prop, _ of bindings
-						item.updateBinding prop
-
-				for extension in item._extensions
-					if bindings = extension._bindings
-						for prop, _ of bindings
-							extension.updateBinding prop
-		return
 
 	cacheObject: (item) ->
 		assert.instanceOf item, itemUtils.Object

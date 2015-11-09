@@ -5,6 +5,7 @@ Class @modifier
 
 	assert = require 'neft-assert'
 	utils = require 'utils'
+	signal = require 'signal'
 	log = require 'log'
 	List = require 'list'
 
@@ -122,7 +123,7 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 					if oldVal
 						utils.remove oldVal._extensions, @
 						if @_running and not @_document?._query
-							unloadObjects @, oldVal
+							unloadObjects @, @_component, oldVal
 					if name
 						if oldVal
 							oldVal._classExtensions[name] = null
@@ -214,7 +215,7 @@ Grid {
 				updateTargetClass saveAndEnableClass, @_target, @
 
 				unless @_document?._query
-					loadObjects @, @_target
+					loadObjects @, @_component, @_target
 
 				return
 
@@ -302,18 +303,18 @@ Grid {
 
 				clone
 
-		loadObjects = (classElem, item, sourceClassElem=classElem, loadedObjects) ->
+		loadObjects = (classElem, component, item, sourceClassElem=classElem, loadedObjects) ->
 			loadedObjects ?= classElem._loadedObjects ||= []
-			component = classElem._component
 
 			unless loadedObjects
 				assert.is classElem._loadedObjects.length, 0
 
+			forceUpdateBindings = false
 			if classElem._children
 				for child in classElem._children
-					clone = component.cloneRawObject child
+					clone = classElem._component.cloneRawObject child
+					clone._component.onObjectChange = signal.create()
 					clone._component.setObjectById sourceClassElem, sourceClassElem.id
-					clone._component.updateBindings()
 					clone._component.initObjects()
 					loadedObjects.push clone
 					if clone instanceof Renderer.Item
@@ -322,8 +323,12 @@ Grid {
 						updateChildPriorities classElem, clone
 						clone.target ?= item
 
+					if utils.has(component.idsOrder, child.id)
+						forceUpdateBindings = true
+						component.setObjectById clone, child.id
+
 			if classElem._document?._parent
-				loadObjects classElem._document._parent._ref, item, classElem, loadedObjects
+				loadObjects classElem._document._parent._ref, component, item, classElem, loadedObjects
 			return
 
 		unloadObjects = (classElem, item) ->
@@ -739,7 +744,7 @@ Grid {
 						updatePriorities @_ref
 
 					unless val
-						loadObjects @, @_target
+						loadObjects @, @_component, @_target
 					return
 
 			getChildClass = (style, parentClass) ->
@@ -754,13 +759,14 @@ Grid {
 				uid = @_ref._classUid
 				for classElem in style._extensions
 					if classElem instanceof Class
-						if classElem isnt @_ref and classElem._classUid is uid
+						if classElem isnt @_ref and classElem._classUid is uid and classElem._document instanceof ClassChildDocument
 							classElem._document._multiplicity++
 							return
 
 				# get class
 				unless classElem = @_classesPool.pop()
-					classElem = cloneClassWithNoDocument.call @_ref, @_ref._component
+					newComp = @_ref._component.cloneComponentObject()
+					classElem = cloneClassWithNoDocument.call @_ref, newComp
 					classElem._document = new ClassChildDocument @
 
 				# save

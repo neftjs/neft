@@ -22,28 +22,25 @@ module.exports = (impl) ->
 	class Connection
 		pool = []
 
-		@factory = (binding, objects, item, prop, parent=null) ->
+		@factory = (binding, item, prop, parent=null) ->
 			if pool.length > 0 and (elem = pool.pop())
-				Connection.call elem, binding, objects, item, prop, parent
+				Connection.call elem, binding, item, prop, parent
 				elem
 			else
-				new Connection binding, objects, item, prop, parent
+				new Connection binding, item, prop, parent
 
-		constructor: (@binding, objects, item, @prop, @parent) ->
+		constructor: (@binding, item, @prop, @parent) ->
 			@handlerName = getPropHandlerName prop
 			@isConnected = false
 
+			@itemId = ''
 			if isArray(item)
-				@child = Connection.factory binding, objects, item[0], item[1], @
+				@child = Connection.factory binding, item[0], item[1], @
 				@item = @child.getValue()
 			else
-				if item is 'this'
-					@item = binding.ctx
-				else if item is 'view'
-					@item = impl.Renderer.window
-				else
-					@item = objects[item] or impl.Renderer[item]
+				@itemId = item
 				@child = null
+				@item = Binding.getItemById binding, item
 			@connect()
 
 			Object.preventExtensions @
@@ -79,7 +76,10 @@ module.exports = (impl) ->
 
 		updateItem: ->
 			oldVal = @item
-			val = @child.getValue()
+			if @child
+				val = @child.getValue()
+			else
+				val = Binding.getItemById @binding, @itemId
 			if oldVal isnt val
 				@disconnect()
 				@item = val
@@ -143,14 +143,29 @@ module.exports = (impl) ->
 			else
 				new Binding obj, prop, binding, component, ctx
 
-		getPropHandlerName
+		@getItemById = (binding, item) ->
+			if item is 'this'
+				binding.ctx
+			else if item is 'view'
+				impl.Renderer.window
+			else
+				binding.component.objects[item] or impl.Renderer[item]
 
-		constructor: (@obj, @prop, binding, component, @ctx) ->
+		onComponentObjectChange = (id) ->
+			for conn in @connections
+				while conn.child
+					conn = conn.child
+				if conn.itemId is id
+					conn.updateItem()
+			return
+
+		constructor: (@obj, @prop, binding, @component, @ctx) ->
 			assert.lengthOf binding, 2
 			assert.isFunction binding[0]
 			assert.isArray binding[1]
 
 			item = @item = obj._ref or obj
+			component.onObjectChange? onComponentObjectChange, @
 
 			# properties
 			@func = binding[0]
@@ -160,7 +175,7 @@ module.exports = (impl) ->
 			connections = @connections ||= []
 			for elem in binding[1]
 				if isArray(elem)
-					connections.push Connection.factory @, component.objects, elem[0], elem[1]
+					connections.push Connection.factory @, elem[0], elem[1]
 
 			# update
 			`//<development>`
@@ -225,6 +240,7 @@ module.exports = (impl) ->
 			# clear props
 			@args = null
 			utils.clear @connections
+			@component.onObjectChange?.disconnect onComponentObjectChange, @
 
 			pool.push @
 			return
@@ -241,8 +257,4 @@ module.exports = (impl) ->
 			# else
 			data.bindings[prop] = Binding.factory @, prop, binding, component, ctx
 
-		return
-
-	updateItemBinding: (prop) ->
-		@_impl.bindings?[prop]?.update()
 		return
