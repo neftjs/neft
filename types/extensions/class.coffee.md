@@ -491,7 +491,7 @@ Grid {
 		getPropertyDefaultValue = (obj, prop) ->
 			proto = Object.getPrototypeOf obj
 			innerProp = itemUtils.getInnerPropName(prop)
-			if innerProp or proto
+			if innerProp of proto
 				proto[innerProp]
 			else
 				proto[prop]
@@ -517,7 +517,7 @@ Grid {
 				object = getObject item, path
 				`//<development>`
 				if not object or typeof object?[path[path.length - 1]] isnt 'function'
-					log.error "Handler '#{attr}' doesn't exist in '#{item.toString()}'"
+					log.error "Handler '#{attr}' doesn't exist in '#{item.toString()}', from '#{classElem.toString()}'"
 				`//</development>`
 				object?[path[path.length - 1]]? functions[i+1], classElem
 
@@ -559,7 +559,7 @@ Grid {
 					else
 						`//<development>`
 						if not object or not (lastPath of object)
-							log.error "Attribute '#{attr}' doesn't exist in '#{item.toString()}'"
+							log.error "Attribute '#{attr}' doesn't exist in '#{item.toString()}', from '#{classElem.toString()}'"
 							continue
 						`//</development>`
 						unless object
@@ -639,6 +639,10 @@ Grid {
 						lastPath = path[path.length - 1]
 						unless object
 							continue
+					`//<development>`
+					unless lastPath of object
+						continue
+					`//</development>`
 					if defaultIsBinding
 						object.createBinding lastPath, defaultValue, classElem._component, item
 					else
