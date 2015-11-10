@@ -1,5 +1,7 @@
 'use strict'
 
+signal = require 'signal'
+
 isFirefox = exports.isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 
 # get transform CSS property name
@@ -177,6 +179,10 @@ exports.keysEvents = do ->
 		else if keysEvents.focusedKeys is keys
 			keysEvents.focusedKeys = null
 		return
+
+signal.create exports, 'onFontLoaded'
+exports.loadingFonts = Object.create null
+exports.loadedFonts = Object.create null
 
 exports.DEFAULT_FONTS =
 	__proto__: null

@@ -1,15 +1,10 @@
 'use strict'
 
 log = require 'log'
-signal = require 'signal'
 
 log = log.scope 'Renderer', 'FontLoader'
 
 module.exports = (impl) ->
-	signal.create impl.utils, 'onFontLoaded'
-	impl.utils.loadingFonts = Object.create null
-	impl.utils.loadedFonts = Object.create null
-
 	WEIGHTS = [
 		///hairline///i,
 		///thin///i,
@@ -77,18 +72,18 @@ module.exports = (impl) ->
 			xhr.onload = ->
 				if impl.utils.loadingFonts[name] is 1
 					# probably
-					setTimeout ->
+					requestAnimationFrame ->
 						impl.utils.onFontLoaded.emit name
 					# maybe
 					setTimeout ->
 						impl.utils.onFontLoaded.emit name
-					, 500
+					, 1000
 					# empty string
 					setTimeout ->
 						impl.utils.loadedFonts[name] = true
 						impl.utils.loadingFonts[name] = 0
 						impl.utils.onFontLoaded.emit name
-					, 1000
+					, 2000
 				else
 					impl.utils.loadingFonts[name]--
 			xhr.send()

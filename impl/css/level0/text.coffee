@@ -12,9 +12,6 @@ module.exports = (impl) ->
 	# used to render not visible texts
 	hatchery = impl._hatchery
 
-	textImpl = {}
-	signal.create textImpl, 'onFontReady'
-
 	reloadFontFamilyQueue = []
 	isFontReady = false
 	window.addEventListener 'load', ->
@@ -27,8 +24,6 @@ module.exports = (impl) ->
 			styles = document.createElement 'style'
 			styles.innerHTML = SHEET
 			document.body.appendChild styles
-
-			textImpl.onFontReady.emit()
 			return
 
 	reloadFontFamily = (family) ->
@@ -36,38 +31,111 @@ module.exports = (impl) ->
 			@_impl.innerElemStyle.fontFamily = @_impl.innerElemStyle.fontFamily
 		return
 
-	updateSize = do ->
-		windowLoadQueue = []
+	fontSizes = Object.create null
 
-		textImpl.onFontReady ->
-			while elem = windowLoadQueue.pop()
-				updateSize elem
+	getTextSizeWidth = do ->
+		canvas = document.createElement 'canvas'
+		ctx = canvas.getContext? '2d'
+		(font, text) ->
+			fontSize = fontSizes[font] ||= Object.create null
+			fontSize[text] ||= (
+				ctx.font = font;
+				ctx.measureText(text).width or 0.1
+			)
+
+	loadingTextsByFonts = Object.create null
+	implUtils.onFontLoaded (name) ->
+		# clear widths
+		for font, sizes of fontSizes
+			for char of sizes
+				sizes[char] = 0
+
+		# update texts sizes
+		if arr = loadingTextsByFonts[name]
+			for item in arr
+				if item._impl.containsHTML
+					updateHTMLTextSize item
+				else
+					updatePlainTextSize item					
+			if implUtils.loadedFonts[name]
+				loadingTextsByFonts[name] = null
+		return
+
+	updatePlainTextSize = (item) ->
+		data = item._impl
+
+		if not data.autoWidth and not data.autoHeight
 			return
 
-		(item) ->
-			data = item._impl
-			{innerElem} = data
+		text = item._text
+		if font = item._font
+			fontFamily = font._family
+			pixelSize = font._pixelSize
+			letterSpacing = font._letterSpacing
+			wordSpacing = font._wordSpacing
+		else
+			fontFamily = 'sans-serif'
+			pixelSize = 14
+			letterSpacing = 0
+			wordSpacing = 0
 
-			if not data.autoWidth and not data.autoHeight
-				return
+		if implUtils.loadingFonts[fontFamily]
+			arr = loadingTextsByFonts[fontFamily] ||= []
+			arr.push item
 
-			if not isFontReady
-				windowLoadQueue.push item
+		fontDef = data.font
+		x = width = 0
+		height = lineHeight = pixelSize * item._lineHeight
+		maxWidth = if data.autoWidth then Infinity else item._width
+		for char in text
+			charWidth = getTextSizeWidth fontDef, char
+			charWidth += letterSpacing
+			if wordSpacing isnt 0 and char is ' '
+				charWidth += wordSpacing
+			if x + charWidth > maxWidth
+				height += lineHeight
+				x = 0
+			x += charWidth
+			if x > width
+				width = x
 
-			data.sizeUpdatePending = true
-			if data.autoWidth
-				item.width = innerElem.offsetWidth
-			if data.autoHeight
-				item.height = innerElem.offsetHeight
-			data.sizeUpdatePending = false
+		data.sizeUpdatePending = true
+		if data.autoWidth
+			item.width = width
+		if data.autoHeight
+			item.height = height
+		data.sizeUpdatePending = false
+		return
 
-			if innerElem.parentNode is hatchery
-				implUtils.prependElement data.elem, innerElem
-			else
-				if item._height is 0
-					hatchery.appendChild data.innerElem
-					updateSize item
+	updateHTMLTextSize = (item) ->
+		data = item._impl
+		{innerElem} = data
+
+		if not data.autoWidth and not data.autoHeight
 			return
+
+		if font = item._font
+			fontFamily = font._family
+		else
+			fontFamily = 'sans-serif'
+
+		if implUtils.loadingFonts[fontFamily]
+			arr = loadingTextsByFonts[fontFamily] ||= []
+			arr.push item
+
+		data.sizeUpdatePending = true
+		if data.autoWidth
+			item.width = innerElem.offsetWidth
+		if data.autoHeight
+			item.height = innerElem.offsetHeight
+		data.sizeUpdatePending = false
+
+		if innerElem.parentNode is hatchery
+			implUtils.prependElement data.elem, innerElem
+		else if item._height is 0
+			hatchery.appendChild data.innerElem
+			updateHTMLTextSize item
+		return
 
 	updateContent = do ->
 		pending = false
@@ -75,11 +143,20 @@ module.exports = (impl) ->
 
 		updateItem = (item) ->
 			data = item._impl
-			if data.containsHTML
-				data.innerElem.innerHTML = item._text
+			if (text = item._text)
+				if data.containsHTML
+					data.innerElem.innerHTML = text
+					updateHTMLTextSize item
+				else
+					data.innerElem.textContent = text
+					updatePlainTextSize item
 			else
-				data.innerElem.textContent = item._text
-			updateSize item
+				data.sizeUpdatePending = true
+				if data.autoWidth
+					item.width = 0
+				if data.autoHeight
+					item.height = 0
+				data.sizeUpdatePending = false
 			return
 
 		updateAll = ->
@@ -99,7 +176,7 @@ module.exports = (impl) ->
 
 			unless pending
 				setImmediate updateAll
-				pending = false
+				pending = true
 			return
 
 	onWidthChange = ->
@@ -123,6 +200,14 @@ module.exports = (impl) ->
 				updateContent @
 		return
 
+	updateTextStyle = (item) ->
+		data = item._impl
+		{innerElemStyle} = data
+		{fontWeight, fontSize, fontFamily} = innerElemStyle
+		fontFamily ||= implUtils.DEFAULT_FONTS['sans-serif']
+		data.font = "#{fontWeight} #{fontSize} #{fontFamily}"
+		return
+
 	SHEET = """
 		.text {
 			width: auto;
@@ -130,7 +215,7 @@ module.exports = (impl) ->
 			white-space: pre;
 			font-size: 14px;
 			line-height: 1;
-			font-family: #{impl.utils.DEFAULT_FONTS['sans-serif']}, sans-serif;
+			font-family: #{implUtils.DEFAULT_FONTS['sans-serif']}, sans-serif;
 			margin-top: #{if impl.utils.isFirefox then 1 else 0}px;
 		}
 		.text.textVerticalCenterAlign {
@@ -160,6 +245,7 @@ module.exports = (impl) ->
 		contentUpdatePending: false
 		containsHTML: false
 		sizeUpdatePending: false
+		font: "14px #{implUtils.DEFAULT_FONTS['sans-serif']}"
 
 	exports =
 	DATA: DATA
@@ -228,17 +314,20 @@ module.exports = (impl) ->
 		else
 			val = "'#{val}'"
 		@_impl.innerElemStyle.fontFamily = val
+		updateTextStyle @
 		updateContent @
 		return
 
 	setTextFontPixelSize: (val) ->
 		val = round val
 		@_impl.innerElemStyle.fontSize = "#{val}px"
+		updateTextStyle @
 		updateContent @
 		return
 
 	setTextFontWeight: (val) ->
 		@_impl.innerElemStyle.fontWeight = implUtils.getFontWeight val
+		updateTextStyle @
 		updateContent @
 		return
 
