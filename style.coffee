@@ -39,13 +39,7 @@ module.exports = (File, data) -> class Style
 			@updateText()
 
 	attrsChangeListener = (name, oldValue) ->
-		if name is 'neft:style'
-			@reloadItem()
-			if @file.isRendered
-				@render()
-				@findItemParent()
-				@findItemIndex()
-		else if name is 'href' and @isLink()
+		if name is 'href' and @isLink()
 			@item?.linkUri = @getLinkUri()
 
 		if @attrs?[name]
@@ -423,23 +417,7 @@ module.exports = (File, data) -> class Style
 		unless utils.isClient
 			return
 
-		if @item and @isAutoParent
-			@item.parent = null
-
-		if @item
-			while elem = @textWatchingNodes.pop()
-				if 'onTextChange' of elem
-					elem.onTextChange.disconnect textChangeListener, @
-				if 'onChildrenChange' of elem
-					elem.onChildrenChange.disconnect textChangeListener, @
-				if 'onVisibleChange' of elem
-					elem.onVisibleChange.disconnect textChangeListener, @
-
-			if @attrs
-				@attrsClass.disable()
-				@attrsClass.target = null
-
-		wasAutoParent = @isAutoParent
+		assert.notOk @item
 
 		id = @node.attrs.get 'neft:style'
 		assert.isString id
@@ -469,8 +447,7 @@ module.exports = (File, data) -> class Style
 					loop
 						scope = parent?.scope or windowStyle
 						if (scope is windowStyle and file is 'view') or (parent and parent.node.attrs.get('neft:style') is parentId)
-							@item = scope?.objects[subid]# or scope?.item.$?[subid]
-						# @item ?= scope?.?(id)
+							@item = scope?.objects[subid]
 						if @item or ((not parent or not (parent = parent.parent)) and scope is windowStyle)
 							break
 
