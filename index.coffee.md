@@ -650,7 +650,11 @@ console.log(utils.clone({a: 1}))
 			return param.slice()
 
 		if isObject(param)
-			result = createObject getPrototypeOf param
+			proto = getPrototypeOf param
+			if proto is Object::
+				result = {}
+			else
+				result = createObject proto
 
 			for key in objKeys param
 				result[key] = param[key]
