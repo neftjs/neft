@@ -16,6 +16,9 @@ module.exports = (File) -> class Condition
 		@elseNode?.visible = not visible
 		return
 
+	render: ->
+		@update()
+
 	onAttrsChange = (name) ->
 		if name is 'neft:if'
 			@update()

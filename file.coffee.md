@@ -282,6 +282,11 @@ File @class
 					for iterator, i in @iterators
 						iterator.render()
 
+				# conditions
+				if @conditions
+					for condition, i in @conditions
+						condition.render()
+
 				# source
 				renderTarget @, source
 
