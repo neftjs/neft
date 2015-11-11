@@ -515,7 +515,7 @@ module.exports = (File, data) -> class Style
 
 	findItemIndex = (node, item, parent) ->
 		tmpIndexNode = node
-		parent = parent.children._target or parent
+		parent = parent._children?._target or parent
 		tmpSiblingNode = tmpIndexNode
 
 		# by parents
