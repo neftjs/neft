@@ -32,10 +32,13 @@ Rectangle {
 			@__path__ = 'Renderer.Rectangle'
 
 			constructor: (component, opts) ->
+				super component
 				@_color = 'transparent'
 				@_radius = 0
 				@_border = null
-				super component, opts
+
+				if opts
+					itemUtils.Object.initialize @, opts
 
 *String* Rectangle::color = 'transparent'
 -----------------------------------------

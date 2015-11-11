@@ -37,13 +37,15 @@ Font @extension
 				return
 
 		constructor: (ref) ->
+			super ref
 			@_family = 'sans-serif'
 			@_pixelSize = 14
 			@_weight = 0.4
 			@_wordSpacing = 0
 			@_letterSpacing = 0
 			@_italic = false
-			super ref
+
+			Object.preventExtensions @
 
 *String* Font.family = 'sans-serif'
 -----------------------------------------

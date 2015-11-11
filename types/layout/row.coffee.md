@@ -26,12 +26,16 @@ Row {
 		@__path__ = 'Renderer.Row'
 
 		constructor: (component, opts) ->
+			super component
 			@_padding = null
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = false
 			@_effectItem = null
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
+			
 			@effectItem = @
 
 		utils.defineProperty @::, 'effectItem', null, ->

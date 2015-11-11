@@ -91,6 +91,7 @@ This connection is solid, so if the *rect1* will change a position,
 				return
 
 		constructor: (ref) ->
+			super ref
 			@_top = null
 			@_bottom = null
 			@_verticalCenter = null
@@ -103,7 +104,8 @@ This connection is solid, so if the *rect1* will change a position,
 			@_fillHeight = null
 			@_autoX = false
 			@_autoY = false
-			super ref
+
+			Object.preventExtensions @
 
 		implMethod = Impl["set#{ctor.__name__}Anchor"]
 		stringValuesCache = Object.create null

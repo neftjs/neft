@@ -33,8 +33,8 @@ module.exports = (impl) ->
 			@handlerName = getPropHandlerName prop
 			@isConnected = false
 
-			@itemId = ''
 			if isArray(item)
+				@itemId = ''
 				@child = Connection.factory binding, item[0], item[1], @
 				@item = @child.getValue()
 			else
@@ -92,7 +92,10 @@ module.exports = (impl) ->
 			return
 
 		getValue: ->
-			@item?[@prop]
+			if @item
+				@item[@prop]
+			else
+				null
 
 		destroy: ->
 			@disconnect()
@@ -149,7 +152,7 @@ module.exports = (impl) ->
 			else if item is 'view'
 				impl.Renderer.window
 			else
-				binding.component.objects[item] or impl.Renderer[item]
+				binding.component.objects[item] or impl.Renderer[item] or null
 
 		onComponentObjectChange = (id) ->
 			for conn in @connections

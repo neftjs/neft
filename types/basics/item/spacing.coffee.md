@@ -27,9 +27,11 @@ Spacing @extension
 				return
 
 		constructor: (ref) ->
+			super ref
 			@_column = 0
 			@_row = 0
-			super ref
+
+			Object.preventExtensions @
 
 *Float* Spacing::column
 -----------------------

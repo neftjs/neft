@@ -30,9 +30,12 @@ Rectangle {
 		@__name__ = 'NumberAnimation'
 
 		constructor: (component, opts) ->
+			super component
 			@_from = 0
 			@_to = 0
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
 
 *Float* NumberAnimation::from
 -----------------------------

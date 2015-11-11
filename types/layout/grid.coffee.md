@@ -29,6 +29,7 @@ Grid {
 -------------------------------
 
 		constructor: (component, opts) ->
+			super component
 			@_padding = null
 			@_columns = 2
 			@_rows = Infinity
@@ -36,7 +37,10 @@ Grid {
 			@_alignment = null
 			@_includeBorderMargins = false
 			@_effectItem = null
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
+			
 			@effectItem = @
 
 		utils.defineProperty @::, 'effectItem', null, ->

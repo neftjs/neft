@@ -40,6 +40,7 @@ Rectangle {
 This class enables mouse and touch handling.
 
 		constructor: (ref) ->
+			super ref
 			@_enabled = true
 			@_draggable = false
 			@_dragging = false
@@ -49,7 +50,8 @@ This class enables mouse and touch handling.
 			@_hover = false
 			@_pressedInitialized = false
 			@_hoverInitialized = false
-			super ref
+
+			Object.preventExtensions @
 
 *Boolean* Pointer::enabled = true
 ---------------------------------

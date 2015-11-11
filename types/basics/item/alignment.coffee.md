@@ -29,9 +29,11 @@ Alignment @extension
 				return
 
 		constructor: (ref) ->
+			super ref
 			@_horizontal = 'left'
 			@_vertical = 'top'
-			super ref
+
+			Object.preventExtensions @
 
 *String* Alignment::horizontal = 'left'
 ---------------------------------------

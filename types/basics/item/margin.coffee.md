@@ -57,11 +57,13 @@ Margin @extension
 				return
 
 		constructor: (ref) ->
+			super ref
 			@_left = 0
 			@_top = 0
 			@_right = 0
 			@_bottom = 0
-			super ref
+
+			Object.preventExtensions @
 
 *Margin* Margin()
 -----------------

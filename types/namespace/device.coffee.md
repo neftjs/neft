@@ -13,11 +13,13 @@ Device @namespace
 ---------------
 
 			constructor: ->
+				super()
 				@_platform = 'unix'
 				@_desktop = true
 				@_phone = false
 				@_pixelRatio = 1
-				super()
+
+				Object.preventExtensions @
 
 *Boolean* Device.platform = 'unix'
 ----------------------------------

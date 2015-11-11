@@ -13,11 +13,12 @@ Navigator @namespace
 ------------------
 
 			constructor: ->
-				@_impl = null
+				super()
 				@_language = 'en'
 				@_browser = true
 				@_online = true
-				super()
+
+				Object.preventExtensions @
 
 *Boolean* Navigator.language = 'en'
 ----------------------------------

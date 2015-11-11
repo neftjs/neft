@@ -22,10 +22,12 @@ Layout @extension
 -----------------
 
 		constructor: (ref) ->
+			super ref
 			@_enabled = true
 			@_fillWidth = false
 			@_fillHeight = false
-			super ref
+
+			Object.preventExtensions @
 
 *Boolean* Layout::enabled = true
 --------------------------------

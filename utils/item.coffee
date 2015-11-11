@@ -8,7 +8,8 @@ log = require 'log'
 
 log = log.scope 'Renderer'
 
-{emitSignal} = signal.Emitter
+{Emitter} = signal
+{emitSignal} = Emitter
 
 {isArray} = Array
 
@@ -29,7 +30,7 @@ module.exports = (Renderer, Impl) ->
 
 		path or ''
 
-	class UtilsObject extends signal.Emitter
+	class UtilsObject extends Emitter
 		initObject = (component, opts) ->
 			for prop, val of opts
 				obj = @
@@ -138,7 +139,13 @@ module.exports = (Renderer, Impl) ->
 				setOpts.call object, component, opts
 			return
 
-		constructor: (component, opts) ->
+		@initialize = (object, opts) ->
+			UtilsObject.setOpts object, object._component, opts
+			Object.preventExtensions object
+
+		constructor: (component) ->
+			Emitter.call @
+
 			@id = ''
 			@_impl = null
 			@_bindings = null
@@ -147,13 +154,8 @@ module.exports = (Renderer, Impl) ->
 			@_classQueue = []
 			@_extensions = []
 			@_component = component
-			super()
-			Object.preventExtensions @
 
 			Impl.createObject @, @constructor.__name__
-
-			if opts
-				UtilsObject.setOpts @, component, opts
 
 		createBinding: (prop, val, component, ctx=@) ->
 			assert.isString prop
@@ -217,7 +219,6 @@ module.exports = (Renderer, Impl) ->
 	class DeepObject extends MutableDeepObject
 		constructor: (ref) ->
 			super ref
-			Object.preventExtensions @
 
 	class CustomObject extends MutableDeepObject
 		constructor: (ref) ->

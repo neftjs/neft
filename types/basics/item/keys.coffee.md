@@ -36,8 +36,9 @@ Rectangle {
 -------------
 
 		constructor: (ref) ->
-			@_focus = false
 			super ref
+			@_focus = false
+			Object.preventExtensions @
 
 *Signal* Keys::onPress(*Object* event)
 --------------------------------------

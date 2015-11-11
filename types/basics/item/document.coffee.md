@@ -67,13 +67,16 @@ Document @extension
 ---------------------
 
 		constructor: (ref) ->
+			super ref
 			@_node = null
 			@_visible = false
 			@_query = ''
 			@_updatingProperty = ''
 			@_propertiesCleanQueue = []
+
+			Object.preventExtensions @
+
 			ref.on$Change onPropertyChange, @
-			super ref
 
 ReadOnly *String* Document::query
 ---------------------------------

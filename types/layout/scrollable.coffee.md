@@ -87,12 +87,16 @@ Scrollable @class
 		# 	scrollbar
 
 		constructor: (component, opts) ->
+			super component
 			@_contentItem = null
 			@_contentX = 0
 			@_contentY = 0
 			@_snap = false
 			@_snapItem = null
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
+			
 			@clip = true
 
 *Boolean* Scrollable::clip = true

@@ -13,11 +13,11 @@ Animation @modifier
 *Animation* Animation()
 -----------------------
 
-		constructor: (component, opts) ->
+		constructor: (component) ->
+			super component
 			@_loop = false
 			@_updatePending = false
 			@_paused = false
-			super component, opts
 
 *Boolean* Animation::when
 -------------------------

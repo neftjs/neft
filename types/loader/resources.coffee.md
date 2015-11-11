@@ -47,13 +47,16 @@ ResourcesLoader {}
 ```
 
 		constructor: (component, opts) ->
+			super component
 			@_resources = Renderer.resources
 			@_progress = 0
-			super component, opts
 			setImmediate =>
 				if @_resources
 					@progress = 0
 					Impl.loadResources.call @, getResources(@_resources)
+
+			if opts
+				itemUtils.Object.initialize @, opts
 
 *Resources* ResourcesLoader::resources
 --------------------------------------

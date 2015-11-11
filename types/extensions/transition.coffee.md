@@ -37,12 +37,15 @@ Rectangle {
 -------------------------
 
 		constructor: (component, opts) ->
+			super component
 			@_animation = null
 			@_property = ''
 			@_duration = 0
 			@_to = 0
 			@_durationUpdatePending = false
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
 
 		listener = (oldVal) ->
 			{animation} = @

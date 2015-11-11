@@ -48,6 +48,7 @@ Class @modifier
 			constructor: (component, opts) ->
 				assert.instanceOf component, Renderer.Component
 
+				super component
 				@_classUid = utils.uid()
 				@_priority = 0
 				@_inheritsPriority = 0
@@ -57,7 +58,9 @@ Class @modifier
 				@_document = null
 				@_loadedObjects = null
 				@_children = null
-				super component, opts
+
+				if opts
+					itemUtils.Object.initialize @, opts
 
 *String* Class::name
 --------------------
@@ -391,7 +394,7 @@ Grid {
 
 			if index > 0 and classListSortFunc(classElem, classList[index-1]) < 0
 				return true
-			if classList.length isnt index+1 and classListSortFunc(classElem, classList[index+1]) > 0
+			if index < classList.length-1 and classListSortFunc(classElem, classList[index+1]) > 0
 				return true
 			false
 

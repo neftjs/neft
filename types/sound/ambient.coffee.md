@@ -31,14 +31,14 @@ AmbientSound {
 -----------------------------
 
 		constructor: (component, opts) ->
-			@_impl = null
+			super component
 			@_when = false
 			@_running = false
 			@_source = ''
 			@_loop = false
-			super component, opts
 
-			Impl.createObject @, @constructor.__name__
+			if opts
+				itemUtils.Object.initialize @, opts
 
 *Signal* AmbientSound::onStart()
 --------------------------------

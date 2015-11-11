@@ -58,9 +58,12 @@ FontLoader {}
 ```
 
 		constructor: (component, opts) ->
+			super component
 			@_name = ''
 			@_source = ''
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
 
 *String* FontLoader::name
 -------------------------

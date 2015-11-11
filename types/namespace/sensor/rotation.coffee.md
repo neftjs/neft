@@ -31,11 +31,13 @@ Text {
 ```
 
 			constructor: ->
+				super()
 				@_active = false
 				@x = 0
 				@y = 0
 				@z = 0
-				super()
+
+				Object.preventExtensions @
 
 *Float* RotationSensor::active = false
 --------------------------------------

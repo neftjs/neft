@@ -15,7 +15,8 @@ Animation/PropertyAnimation @modifier
 	module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
 		@__name__ = 'PropertyAnimation'
 
-		constructor: (component, opts) ->
+		constructor: (component) ->
+			super component
 			@_target = null
 			@_property = ''
 			@_autoFrom = true
@@ -25,7 +26,6 @@ Animation/PropertyAnimation @modifier
 			@_updateData = false
 			@_updateProperty = false
 			@_easing = null
-			super component, opts
 
 		getter = utils.lookupGetter @::, 'running'
 		setter = utils.lookupSetter @::, 'running'

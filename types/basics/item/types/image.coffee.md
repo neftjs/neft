@@ -40,6 +40,7 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 		@__path__ = 'Renderer.Image'
 
 		constructor: (component, opts) ->
+			super component
 			@_source = ''
 			@_loaded = false
 			@_autoWidth = true
@@ -47,7 +48,9 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			@_sourceWidth = 0
 			@_sourceHeight = 0
 			@_fillMode = 'Stretch'
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
 
 *Float* Image.pixelRatio = 1
 ----------------------------

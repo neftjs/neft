@@ -24,6 +24,7 @@ Qml and WebGL implementations
 			@__path__ = 'Renderer.TextInput'
 
 			constructor: (component, opts) ->
+				super component
 				@_text = ''
 				@_color = 'black'
 				@_lineHeight = 1
@@ -31,9 +32,11 @@ Qml and WebGL implementations
 				@_echoMode = 'normal'
 				@_alignment = null
 				@_font = null
-				super component, opts
 				@_width = 100
 				@_height = 50
+
+				if opts
+					itemUtils.Object.initialize @, opts
 
 *Float* TextInput::width = 100
 ------------------------------

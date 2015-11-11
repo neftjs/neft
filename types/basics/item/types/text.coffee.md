@@ -43,13 +43,16 @@ Text {
 				a: true
 
 			constructor: (component, opts) ->
+				super component
 				@_text = ''
 				@_color = 'black'
 				@_linkColor = 'blue'
 				@_lineHeight = 1
 				@_font = null
 				@_alignment = null
-				super component, opts
+
+				if opts
+					itemUtils.Object.initialize @, opts
 
 *String* Text::text
 -------------------

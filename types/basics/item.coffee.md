@@ -25,6 +25,7 @@ This is a base class for everything which is visible.
 		constructor: (component, opts) ->
 			assert.instanceOf @, Item, 'ctor ...'
 
+			super component
 			@_$ = null
 			@_parent = null
 			@_children = null
@@ -50,7 +51,9 @@ This is a base class for everything which is visible.
 			@_classes = null
 			@_background = null
 			@_defaultBackground = null
-			super component, opts
+
+			if opts
+				itemUtils.Object.initialize @, opts
 
 #### Custom properties
 

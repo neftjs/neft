@@ -13,11 +13,13 @@ Screen @namespace
 ---------------
 
 			constructor: ->
+				super()
 				@_touch = false
 				@_width = 1024
 				@_height = 800
 				@_orientation = 'Portrait'
-				super()
+
+				Object.preventExtensions @
 
 *Boolean* Screen.touch = false
 ------------------------------
