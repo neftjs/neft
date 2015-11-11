@@ -47,6 +47,7 @@ module.exports = (Element) ->
 			return
 
 		onopentag: (name, attribs) ->
+			null;
 			`//<development>`
 			if /^neft:/.test(name) and not internalTagsObject[name]
 				log.warn "Unknown internal tag name '#{name}'"

@@ -231,20 +231,24 @@ class Watcher extends signal.Emitter
 
 	pool = []
 
+	@watchers = []
+
 	@create = (node, queries) ->
 		if pool.length
 			watcher = pool.pop()
 			watcher.node = node
 			watcher.queries = queries
+			watcher.forceUpdate = true
 		else
 			watcher = new Watcher node, queries
-		node._watchers ?= []
-		node._watchers.push watcher
+			Watcher.watchers.push watcher
 		watcher
 
 	constructor: (@node, @queries) ->
 		super()
+		@uid = utils.uid()
 		@nodes = []
+		@forceUpdate = true
 		Object.preventExtensions @
 
 	signal.Emitter.createSignal @, 'onAdd'
@@ -258,18 +262,16 @@ class Watcher extends signal.Emitter
 		false
 
 	disconnect: ->
-		assert.ok utils.has(@node._watchers, @)
+		assert.ok @node
 
-		for node in @nodes
-			utils.removeFromUnorderedArray node._inWatchers, @
+		{uid, nodes} = @
+
+		while node = nodes.pop()
+			node._inWatchers[uid] = false
 			emitSignal @, 'onRemove', node
-		utils.clear @nodes
 
 		@onAdd.disconnectAll()
 		@onRemove.disconnectAll()
-
-		index = @node._watchers.indexOf @
-		@node._watchers[index] = null
 
 		@node = @queries = null
 		pool.push @
@@ -324,62 +326,56 @@ module.exports = (Tag) ->
 		assert.isString selector
 		assert.notLengthOf selector, 0
 
-		queries = getQueries(selector, OPTS_REVERSED | OPTS_ADD_ANCHOR)
+		queries = getQueries selector, OPTS_REVERSED | OPTS_ADD_ANCHOR
 		watcher = Watcher.create @, queries
 		checkWatchersDeeply @
 		watcher
 
 	checkWatchersDeeply: checkWatchersDeeply = do ->
-		queueIndex = 0
-		queues = [[], []]
-		queue = queues[queueIndex]
 		pending = false
 
-		updateNodeRecursively = (node) ->
-			if inWatchers = node._inWatchers
-				i = n = inWatchers.length
-				while i-- > 0
-					unless inWatchers[i].test(node)
-						watcher = inWatchers[i]
-						inWatchers[i] = inWatchers[n-1]
-						inWatchers.pop()
-						utils.removeFromUnorderedArray watcher.nodes, node
-						emitSignal watcher, 'onRemove', node
-						n--
+		i = 0
+		CHECK_WATCHERS_THIS = 1 << i++
+		CHECK_WATCHERS_CHILDREN = 1 << i++
+		CHECK_WATCHERS_ALL = (1 << i++) - 1
 
-			tmp = node
-			while tmp
-				if watchers = tmp._watchers
-					i = 0
-					n = watchers.length
-					while i < n
-						watcher = watchers[i]
-						if watcher is null
-							watchers.splice i, 1
-							i--; n--
-						else if (not node._inWatchers or !utils.has(node._inWatchers, watcher)) and watcher.test(node)
-							node._inWatchers ?= []
-							node._inWatchers.push watcher
-							watcher.nodes.push node
-							emitSignal watcher, 'onAdd', node
-						i++
-				tmp = tmp._parent
+		checkRec = (watcher, watcherUid, node, update) ->
+			unless update & CHECK_WATCHERS_THIS
+				update |= node._checkWatchers
 
-			if node.children
+			if update & CHECK_WATCHERS_THIS
+				inWatchers = node._inWatchers
+				if (not inWatchers or not inWatchers[watcherUid]) and watcher.test(node)
+					# add in node
+					unless inWatchers
+						node._inWatchers = {}
+					node._inWatchers[watcherUid] = true
+
+					# add in watcher
+					watcher.nodes.push node
+					emitSignal watcher, 'onAdd', node
+				else if inWatchers and inWatchers[watcherUid] and not watcher.test(node)
+					# remove from node
+					node._inWatchers[watcherUid] = false
+
+					# remove from watcher
+					utils.removeFromUnorderedArray watcher.nodes, node
+					emitSignal watcher, 'onRemove', node
+
+			# check recursively
+			if update & CHECK_WATCHERS_CHILDREN
 				for child in node.children
 					if child instanceof Tag
-						checkWatchersDeeply child
-
+						if update & CHECK_WATCHERS_THIS or child._checkWatchers
+							checkRec watcher, watcherUid, child, update
 			return
 
-		updateNodes = ->
-			pending = false
-			currentQueue = queue
-			queue = queues[++queueIndex % queues.length]
-
-			while currentQueue.length
-				node = currentQueue.pop()
-				updateNodeRecursively node
+		clearRec = (node) ->
+			if node._checkWatchers isnt 0
+				node._checkWatchers = 0
+				for child in node.children
+					if child instanceof Tag and child._checkWatchers
+						clearRec child
 			return
 
 		isChildOf = (child, parent) ->
@@ -387,34 +383,56 @@ module.exports = (Tag) ->
 			while tmp = tmp._parent
 				if tmp is parent
 					return true
-			return false
+			false
 
-		if utils.isNode
-			updateNodeRecursively
-		else
-			(node) ->
-				# omit duplicates
-				if utils.has(queue, node)
-					return
+		updateWatcher = (watcher) ->
+			# remove invalid nodes
+			nodes = watcher.nodes
+			watcherNode = watcher.node
+			i = n = nodes.length
+			while i-- > 0
+				node = nodes[i]
+				if node isnt watcherNode and not isChildOf(node, watcherNode)
+					# remove from node
+					node._inWatchers[watcher.uid] = false
 
-				# omit children of already added nodes
-				for waitingNode in queue
-					if isChildOf(node, waitingNode)
-						return
+					# remove from watcher
+					nodes[i] = nodes[n-1]
+					nodes.pop()
+					emitSignal watcher, 'onRemove', node
+					n--
 
-				# remove children from parent node
-				i = 0; n = queue.length
-				while i < n
-					if isChildOf(queue[i], node)
-						utils.removeFromUnorderedArray queue, i
-						n--
-					else
-						i++
+			# find new nodes
+			if watcher.forceUpdate
+				checkRec watcher, watcher.uid, watcher.node, CHECK_WATCHERS_ALL
+				watcher.forceUpdate = false
+			else
+				checkRec watcher, watcher.uid, watcher.node, 0
 
-				# add to the queue
-				queue.push node
+			return
 
-				unless pending
-					setImmediate updateNodes
-					pending = true
-				return
+		updateWatchers = ->
+			pending = false
+			{watchers} = Watcher
+
+			for watcher in watchers
+				if watcher.node
+					updateWatcher watcher
+
+			for watcher in watchers
+				if watcher.node
+					clearRec watcher.node
+			return
+
+		(node) ->
+			tmp = node
+			node._checkWatchers |= CHECK_WATCHERS_THIS
+			while tmp = tmp._parent
+				if tmp._checkWatchers & CHECK_WATCHERS_CHILDREN
+					break
+				tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN
+
+			unless pending
+				setImmediate updateWatchers
+				pending = true
+			return

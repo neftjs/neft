@@ -38,8 +38,9 @@ Tag @virtual_dom
 			@_documentStyle = null
 			@_visible = true
 			@_attrs = {}
-			@_watchers = null
+
 			@_inWatchers = null
+			@_checkWatchers = 0
 
 			super()
 
