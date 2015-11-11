@@ -8,10 +8,11 @@ module.exports = (File, Input) -> class InputAttr extends Input
 	@__path__ = 'File.Input.Attr'
 
 	constructor: (node, func) ->
+		Input.call this, node, func
 		@attrName = ''
 		@handlerFunc = null
 		@lastValue = NaN
-		super node, func
+		Object.preventExtensions @
 
 	isHandler = (name) ->
 		/^on[A-Z]|\:on[A-Z][A-Za-z0-9_$]*$/.test(name)

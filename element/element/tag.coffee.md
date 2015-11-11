@@ -32,6 +32,8 @@ Tag @virtual_dom
 -----------------------
 
 		constructor: ->
+			Element.call this
+
 			@children = []
 			@name = 'neft:blank'
 			@_style = null
@@ -42,7 +44,10 @@ Tag @virtual_dom
 			@_inWatchers = null
 			@_checkWatchers = 0
 
-			super()
+			`//<development>`
+			if @constructor is Tag
+				Object.preventExtensions @
+			`//</development>`
 
 *Array* Tag::children
 ---------------------
@@ -111,7 +116,7 @@ Tag @virtual_dom
 		signal.Emitter.createSignal @, 'onAttrsChange'
 
 		clone: ->
-			clone = super()
+			clone = new Tag
 			clone.name = @name
 			clone._visible = @_visible
 			clone._attrs = utils.cloneDeep @_attrs

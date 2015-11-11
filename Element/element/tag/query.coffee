@@ -5,6 +5,7 @@ signal = require 'signal'
 assert = require 'neft-assert'
 
 {emitSignal} = signal.Emitter
+Tag = null
 
 test = (node, funcs, index, targetFunc, targetCtx, single) ->
 	while index < funcs.length
@@ -24,16 +25,15 @@ test = (node, funcs, index, targetFunc, targetCtx, single) ->
 	true
 
 anyDescendant = (node, funcs, index, targetFunc, targetCtx, single) ->
-	if children = node.children
-		for child in children
+	for child in node.children
+		if child instanceof Tag
 			if child.name isnt 'neft:blank' and test(child, funcs, index, targetFunc, targetCtx, single)
 				if single
 					return true
 
-			if child.children
-				if anyDescendant(child, funcs, index, targetFunc, targetCtx, single)
-					if single
-						return true
+			if anyDescendant(child, funcs, index, targetFunc, targetCtx, single)
+				if single
+					return true
 	false
 anyDescendant.isIterator = true
 anyDescendant.toString = -> 'anyDescendant'
@@ -49,8 +49,8 @@ directParent.isIterator = true
 directParent.toString = -> 'directParent'
 
 anyChild = (node, funcs, index, targetFunc, targetCtx, single) ->
-	if children = node.children
-		for child in children
+	for child in node.children
+		if child instanceof Tag
 			if child.name is 'neft:blank'
 				if anyChild(child, funcs, index, targetFunc, targetCtx, single)
 					if single
@@ -84,38 +84,39 @@ byTag.isIterator = false
 byTag.toString = -> 'byTag'
 
 byAttr = (node, data1) ->
-	node._attrs?[data1]?
+	node._attrs[data1] isnt undefined
 byAttr.isIterator = false
 byAttr.toString = -> 'byAttr'
 
 byAttrValue = (node, data1, data2) ->
-	if attrs = node._attrs
-		val = attrs[data1]
-		if typeof val is typeof data2
-			val is data2
-		else
-			val+'' is data2+''
-	else
-		false
+	`node._attrs[data1] == data2`
 byAttrValue.isIterator = false
 byAttrValue.toString = -> 'byAttrValue'
 
 byAttrStartsWithValue = (node, data1, data2) ->
-	node._attrs?[data1]?.indexOf?(data2) is 0
+	attr = node._attrs[data1]
+	if typeof attr is 'string'
+		attr.indexOf(data2) is 0
+	else
+		false
 byAttrStartsWithValue.isIterator = false
 byAttrStartsWithValue.toString = -> 'byAttrStartsWithValue'
 
 byAttrEndsWithValue = (node, data1, data2) ->
-	val = node._attrs?[data1]
-	if typeof val is 'string'
-		val.indexOf(data2, val.length - data2.length) isnt -1
+	attr = node._attrs[data1]
+	if typeof attr is 'string'
+		attr.indexOf(data2, attr.length - data2.length) > -1
 	else
 		false
 byAttrEndsWithValue.isIterator = false
 byAttrEndsWithValue.toString = -> 'byAttrEndsWithValue'
 
 byAttrContainsValue = (node, data1, data2) ->
-	node._attrs?[data1]?.indexOf?(data2) > -1
+	attr = node._attrs[data1]
+	if typeof attr is 'string'
+		attr.indexOf(data2) > -1
+	else
+		false
 byAttrContainsValue.isIterator = false
 byAttrContainsValue.toString = -> 'byAttrContainsValue'
 
@@ -277,7 +278,9 @@ class Watcher extends signal.Emitter
 		pool.push @
 		return
 
-module.exports = (Tag) ->
+module.exports = (_Tag) ->
+	Tag = _Tag
+
 	getSelectorCommandsLength: (selector) ->
 		sum = 0
 		queries = getQueries selector, 0

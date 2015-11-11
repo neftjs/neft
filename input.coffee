@@ -215,8 +215,6 @@ module.exports = (File) -> class Input
 		@updatePending = false
 		@traceChanges = true
 
-		Object.preventExtensions @
-
 	queueIndex = 0
 	queues = [[], []]
 	queue = queues[queueIndex]

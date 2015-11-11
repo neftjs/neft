@@ -20,10 +20,10 @@ module.exports = (File) -> class Iterator extends File.Use
 		assert.instanceOf self, File
 		assert.instanceOf node, File.Element
 
+		super self, node
+
 		prefix = if self.name then "#{self.name}-" else ''
 		@name = "#{prefix}each[#{utils.uid()}]"
-
-		super self, node
 
 		# create fragment
 		fragment = new File.Fragment self, @name, @bodyNode

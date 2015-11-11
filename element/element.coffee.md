@@ -8,11 +8,12 @@ Element @virtual_dom
 	signal = require 'signal'
 
 	{isArray} = Array
-	{emitSignal} = signal.Emitter
+	{Emitter} = signal
+	{emitSignal} = Emitter
 
 	assert = assert.scope 'View.Element'
 
-	class Element extends signal.Emitter
+	class Element extends Emitter
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
@@ -31,13 +32,16 @@ Element @virtual_dom
 -------------------
 
 		constructor: ->
+			Emitter.call this
+
 			@_parent = null
 			@_nextSibling = null
 			@_previousSibling = null
 
-			super()
-
-			Object.preventExtensions @
+			`//<development>`
+			if @constructor is Element
+				Object.preventExtensions @
+			`//</development>`
 
 *Integer* Element::index
 ------------------------
@@ -168,7 +172,7 @@ Element @virtual_dom
 --------------------------
 
 		clone: ->
-			new @constructor
+			new Element
 
 *Element* Element::cloneDeep()
 ------------------------------

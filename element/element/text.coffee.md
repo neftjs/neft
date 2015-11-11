@@ -19,12 +19,17 @@ Text @virtual_dom
 -------------------------
 
 		constructor: ->
+			Element.call this
+
 			@_text = ''
 
-			super()
+			`//<development>`
+			if @constructor is Text
+				Object.preventExtensions @
+			`//</development>`
 
 		clone: ->
-			clone = super()
+			clone = new Text
 			clone._text = @_text
 			clone
 

@@ -5,8 +5,9 @@ module.exports = (File, Input) -> class InputText extends Input
 	@__path__ = 'File.Input.Text'
 
 	constructor: (node, func) ->
+		Input.call this, node, func
 		@lastValue = NaN
-		super node, func
+		Object.preventExtensions @
 
 	update: ->
 		super()
