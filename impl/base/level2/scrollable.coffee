@@ -478,6 +478,10 @@ module.exports = (impl) ->
 
 	DATA: DATA
 
+	_getLimitedX: getLimitedX
+
+	_getLimitedY: getLimitedY
+
 	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->

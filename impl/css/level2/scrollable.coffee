@@ -55,11 +55,13 @@ module.exports = (impl) ->
 		@onParentChange data.updateScroll
 
 		# searching etc.
-		scrollElem.addEventListener 'scroll', ->
-			if round(@scrollLeft) isnt round(self._contentX)
-				self.contentX = @scrollLeft
-			if round(@scrollTop) isnt round(self._contentY)
-				self.contentY = @scrollTop
+		scrollElem.addEventListener 'scroll', (e) ->
+			x = abstractScrollable._getLimitedX self, @scrollLeft
+			y = abstractScrollable._getLimitedY self, @scrollTop
+			if round(x) isnt round(self._contentX)
+				self.contentX = x
+			if round(y) isnt round(self._contentY)
+				self.contentY = y
 			return
 
 		return
