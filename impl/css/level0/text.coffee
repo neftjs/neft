@@ -204,6 +204,8 @@ module.exports = (impl) ->
 		data = item._impl
 		{innerElemStyle} = data
 		{fontWeight, fontSize, fontFamily} = innerElemStyle
+		fontWeight ||= '400'
+		fontSize ||= '14px'
 		fontFamily ||= implUtils.DEFAULT_FONTS['sans-serif']
 		data.font = "#{fontWeight} #{fontSize} #{fontFamily}"
 		return
