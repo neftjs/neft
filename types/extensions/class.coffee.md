@@ -805,7 +805,8 @@ Grid {
 
 			onNodeAdd = (node) ->
 				node.onStyleChange onNodeStyleChange, @
-				onNodeStyleChange.call @, null, node.style
+				if style = node._style
+					connectNodeStyle.call @, style
 				return
 
 			onNodeRemove = (node) ->
