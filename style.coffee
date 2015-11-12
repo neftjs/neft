@@ -46,21 +46,13 @@ module.exports = (File, data) -> class Style
 			@setAttr name, @node._attrs[name], oldValue
 		return
 
-	reloadItemsRecursively = (style) ->
-		style.reloadItem()
-
-		for child in style.children
-			reloadItemsRecursively child
-
-		return
-
 	constructor: ->
 		@file = null
 		@node = null
 		@attrs = null
 		@parent = null
 		@isScope = false
-		@isAutoParent = false
+		@isAutoParent = true
 		@item = null
 		@scope = null
 		@children = []
@@ -75,6 +67,7 @@ module.exports = (File, data) -> class Style
 		@index = -1
 		@attrsQueue = []
 		@attrsClass = null
+		@isRendered = false
 
 		Object.preventExtensions @
 
@@ -159,8 +152,20 @@ module.exports = (File, data) -> class Style
 			return
 
 	render: ->
-		if @waiting or not @item
+		if @waiting
 			return
+
+		assert.notOk @isRendered
+
+		if @isAutoParent and not @getVisibility()
+			return
+
+		unless @item
+			@reloadItem()
+		unless @item
+			return
+
+		@isRendered = true
 
 		if @isScope
 			@item.document.onShow.emit showEvent
@@ -200,8 +205,10 @@ module.exports = (File, data) -> class Style
 		return
 
 	revert: ->
-		if @waiting or not @item
+		if @waiting or not @isRendered
 			return
+
+		@isRendered = false
 
 		# parent
 		if @isAutoParent and @isScope
@@ -295,19 +302,27 @@ module.exports = (File, data) -> class Style
 				obj.text = text
 		return
 
-	updateVisibility: ->
-		if @waiting or not @item
-			return
-
+	getVisibility: ->
 		visible = true
 		tmpNode = @node
 		loop
-			visible = tmpNode.visible
-			tmpNode = tmpNode.parent
-			if not visible or not tmpNode or tmpNode.attrs.has('neft:style')
+			visible = tmpNode._visible
+			tmpNode = tmpNode._parent
+			if not visible or not tmpNode
 				break
+		visible
 
-		@item.visible = visible
+	updateVisibility: ->
+		if @waiting
+			return
+
+		visible = @getVisibility()
+
+		if visible and not @isRendered and @file.isRendered
+			@render()
+
+		if @item
+			@item.visible = visible
 		return
 
 	setAttr: do ->
@@ -445,15 +460,18 @@ module.exports = (File, data) -> class Style
 					parentId = "styles:#{file}:#{style}"
 					parent = @parent
 					loop
-						scope = parent?.scope or windowStyle
-						if (scope is windowStyle and file is 'view') or (parent and parent.node.attrs.get('neft:style') is parentId)
-							@item = scope?.objects[subid]
+						if parent and parent.node.attrs.get('neft:style') is parentId
+							unless parent.scope
+								# parent is not ready yet
+								return
+							@item = parent.scope.objects[subid]
+						else if not parent?.scope and file is 'view'
+							@item = windowStyle.objects[subid]
 						if @item or ((not parent or not (parent = parent.parent)) and scope is windowStyle)
 							break
 
 					unless @item
-						unless File.Input.test(id)
-							log.warn "Can't find `#{id}` style item"
+						log.warn "Can't find `#{id}` style item"
 						return
 
 					@isAutoParent = !@item.parent
@@ -462,11 +480,9 @@ module.exports = (File, data) -> class Style
 					if @scope
 						@item = @scope.item
 					else
-						unless File.Input.test(id)
-							log.warn "Style file `#{id}` can't be find"
+						log.warn "Style file `#{id}` can't be find"
 						return
 
-		@node._documentStyle = @
 		@node.style = @item
 
 		if @item
@@ -567,6 +583,11 @@ module.exports = (File, data) -> class Style
 		clone.attrs = @attrs
 		clone.index = @index
 
+		clone.node._documentStyle = clone
+
+		styleAttr = clone.node._attrs['neft:style']
+		clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
+
 		# attrs class
 		if @attrs
 			clone.attrsClass = new Renderer.Class emptyComponent
@@ -577,10 +598,6 @@ module.exports = (File, data) -> class Style
 			child = child.clone originalFile, file
 			child.parent = clone
 			clone.children.push child
-
-		# reload items
-		unless @parent
-			reloadItemsRecursively clone
 
 		# break for the abstract
 		unless utils.isClient
@@ -605,9 +622,12 @@ module.exports = (File, data) -> class Style
 	setter = utils.lookupSetter Tag::, 'visible'
 	utils.defineProperty Tag::, 'visible', opts, getter, do (_super = setter) ->
 		updateVisibility = (node) ->
-			if node._style
-				node._documentStyle.updateVisibility()
-			else if node instanceof Tag
+			if style = node._documentStyle
+				hasItem = !!style.item
+				style.updateVisibility()
+				if hasItem and style.isAutoParent
+					return
+			if node instanceof Tag
 				for child in node.children
 					updateVisibility child
 			return

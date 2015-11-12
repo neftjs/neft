@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'utils'
+assert = require 'assert'
 
 if utils.isNode
 	styleParseStyles = require('./parse/styles')
@@ -15,12 +16,33 @@ module.exports = (File) ->
 
 	File::styles = null
 
-	renderStyles = (arr) ->
-		for style in arr
-			style.render()
-		for style in arr
-			renderStyles style.children
-		return
+	renderStyles = do ->
+		pending = false
+		queue = []
+
+		render = (arr) ->
+			for style in arr
+				style.render()
+			for style in arr
+				render style.children
+			return
+
+		renderAll = ->
+			pending = false
+			length = queue.length
+			for arr in queue
+				render arr
+			assert.ok queue.length is length
+			utils.clear queue
+			return
+
+		(arr) ->
+			queue.push arr
+
+			unless pending
+				requestAnimationFrame renderAll
+				pending = true
+			return
 
 	File.onBeforeRender (file) ->
 		if styles = file.styles
