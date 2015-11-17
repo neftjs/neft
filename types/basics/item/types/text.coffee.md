@@ -48,6 +48,8 @@ Text {
 				@_color = 'black'
 				@_linkColor = 'blue'
 				@_lineHeight = 1
+				@_contentWidth = 0
+				@_contentHeight = 0
 				@_font = null
 				@_alignment = null
 
@@ -56,10 +58,6 @@ Text {
 
 *String* Text::text
 -------------------
-
-#### @todo
-
-HTML code in WebGL implementation
 
 ### *Signal* Text::onTextChange(*String* oldValue)
 
@@ -107,6 +105,30 @@ HTML code in WebGL implementation
 				name: 'lineHeight'
 				defaultValue: 1
 				implementation: Impl.setTextLineHeight
+				developmentSetter: (val) ->
+					assert.isFloat val
+
+ReadOnly *Float* Text::contentWidth
+-----------------------------------
+
+### *Signal* Text::onContentWidthChange(*Float* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'contentWidth'
+				defaultValue: 0
+				developmentSetter: (val) ->
+					assert.isFloat val
+
+ReadOnly *Float* Text::contentHeight
+------------------------------------
+
+### *Signal* Text::onContentHeightChange(*Float* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'contentHeight'
+				defaultValue: 0
 				developmentSetter: (val) ->
 					assert.isFloat val
 

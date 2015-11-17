@@ -29,6 +29,8 @@ module.exports = (Renderer) ->
 			r ?= require('./impl/css') impl
 		if utils.isQml
 			r ?= require('./impl/qml') impl
+		if utils.isAndroid
+			r ?= require('./impl/android') impl
 		r
 
 	# merge types
