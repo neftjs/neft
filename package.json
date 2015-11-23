@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "sample-project",
+  "version": "0.0.1",
+  "config": {
+    "title": "Neft.io Project",
+    "protocol": "http",
+    "port": 3000,
+    "host": "localhost",
+    "url": "http://localhost:3000/",
+    "language": "en",
+    "type": "app"
+  },
+  "dependencies": {
+    "neft-document-form": "git+ssh://git@bitbucket.org:Kildyt/document-form.git",
+    "neft-styles-material-design": "git+ssh://git@bitbucket.org:Kildyt/styles-material-design.git"
+  },
+  "scripts": {
+    "prestart": "neft build browser",
+    "start": "neft run node"
+  }
+}
