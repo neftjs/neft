@@ -1,0 +1,8 @@
+{
+	"name": "android-runtime",
+	"description": "Neft.io runtime for Android",
+	"private": true,
+	"version": "0.0.1",
+	"author": "Neft.io <contact@neft.io>",
+	"License": "Apache-2.0"
+}
