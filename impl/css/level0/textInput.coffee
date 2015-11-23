@@ -173,20 +173,12 @@ module.exports = (impl) ->
 		@_impl.innerElemStyle.fontSize = "#{val}px"
 		return
 
-	setTextInputFontWeight: (val) ->
-		@_impl.innerElemStyle.fontWeight = implUtils.getFontWeight val
-		return
-
 	setTextInputFontWordSpacing: (val) ->
 		@_impl.innerElemStyle.wordSpacing = "#{val}px"
 		return
 
 	setTextInputFontLetterSpacing: (val) ->
 		@_impl.innerElemStyle.letterSpacing = "#{val}px"
-		return
-
-	setTextInputFontItalic: (val) ->
-		@_impl.innerElemStyle.fontStyle = if val then 'italic' else 'normal'
 		return
 
 	setTextInputAlignmentHorizontal: (val) ->

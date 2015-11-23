@@ -68,13 +68,12 @@ module.exports = (impl) ->
 			return
 
 		text = item._text
+		{fontFamily} = data.innerElemStyle
 		if font = item._font
-			fontFamily = font._family
 			pixelSize = font._pixelSize
 			letterSpacing = font._letterSpacing
 			wordSpacing = font._wordSpacing
 		else
-			fontFamily = 'sans-serif'
 			pixelSize = 14
 			letterSpacing = 0
 			wordSpacing = 0
@@ -114,10 +113,7 @@ module.exports = (impl) ->
 		if not data.autoWidth and not data.autoHeight
 			return
 
-		if font = item._font
-			fontFamily = font._family
-		else
-			fontFamily = 'sans-serif'
+		{fontFamily} = data.innerElemStyle
 
 		if implUtils.loadingFonts[fontFamily]
 			arr = loadingTextsByFonts[fontFamily] ||= []
@@ -327,12 +323,6 @@ module.exports = (impl) ->
 		updateContent @
 		return
 
-	setTextFontWeight: (val) ->
-		@_impl.innerElemStyle.fontWeight = implUtils.getFontWeight val
-		updateTextStyle @
-		updateContent @
-		return
-
 	setTextFontWordSpacing: (val) ->
 		@_impl.innerElemStyle.wordSpacing = "#{val}px"
 		updateContent @
@@ -341,10 +331,6 @@ module.exports = (impl) ->
 	setTextFontLetterSpacing: (val) ->
 		@_impl.innerElemStyle.letterSpacing = "#{val}px"
 		updateContent @
-		return
-
-	setTextFontItalic: (val) ->
-		@_impl.innerElemStyle.fontStyle = if val then 'italic' else 'normal'
 		return
 
 	setTextAlignmentHorizontal: (val) ->

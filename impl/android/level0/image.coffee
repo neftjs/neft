@@ -2,32 +2,37 @@
 
 module.exports = (impl) ->
 	{bridge} = impl
-	{outActions, actions, items, strings} = bridge
+	{outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
 
-	DATA =
-		itemId: 0
+	DATA = {}
+
+	bridge.listen bridge.inActions.IMAGE_SIZE, (reader) ->
+		image = reader.getItem()
+		width = reader.getFloat()
+		height = reader.getFloat()
+
+		# text.width = width
+		# text.height = height
+		return
 
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
+		if data.id is 0
+			pushAction outActions.CREATE_IMAGE
+			data.id = bridge.getId this
+
 		impl.Types.Item.create.call @, data
-
-		if data.itemId is 0
-			actions.push outActions.CREATE_IMAGE
-			data.itemId = bridge.lastId++
-
-			actions.push outActions.SET_ITEM_PARENT
-			items.push data.itemId, data.id
 		return
 
 	setStaticImagePixelRatio: (val) ->
 
 	setImageSource: (val) ->
-		actions.push outActions.SET_IMAGE_SOURCE
-		items.push @_impl.itemId
-		strings.push val
+		pushAction outActions.SET_IMAGE_SOURCE
+		pushItem @
+		pushString val or ""
 		return
 
 	setImageSourceWidth: (val) ->

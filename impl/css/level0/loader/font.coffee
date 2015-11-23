@@ -5,47 +5,7 @@ log = require 'log'
 log = log.scope 'Renderer', 'FontLoader'
 
 module.exports = (impl) ->
-	WEIGHTS = [
-		///hairline///i,
-		///thin///i,
-		///ultra.*light///i,
-		///extra.*light///i,
-		///light///i,
-		///book///i,
-		///normal|regular|roman|plain///i,
-		///medium///i,
-		///demi.*bold|semi.*bold///i,
-		///bold///i,
-		///extra.*bold|extra///i,
-		///heavy///i,
-		///black///i,
-		///extra.*black///i,
-		///ultra.*black|ultra///i
-	]
-
-	getFontWeight = (source) ->
-		for re, i in WEIGHTS
-			if re.test source
-				return impl.utils.getFontWeight i/(WEIGHTS.length-1)
-
-		log.warn "Can't find font weight in the got source; `#{source}` got."
-		400
-
-	isItalic = (source) ->
-		///italic///i.test source
-
-	loadFont: (source, name) ->
-		if rsc = impl.Renderer.resources?.getResource(source)
-			sources = []
-			for _, path of rsc.paths
-				sources.push path[1]
-		else
-			sources = [source]
-
-		style = if isItalic(sources[0]) then 'italic' else 'normal'
-		weight = getFontWeight(sources[0])
-		cssName = impl.utils.DEFAULT_FONTS[name] or name
-
+	loadFont: (name, source, weight, italic, sources) ->
 		urlStr = ''
 		for source in sources
 			urlStr += "url('#{source}'), "
@@ -54,10 +14,10 @@ module.exports = (impl) ->
 		styles = document.createElement 'style'
 		styles.innerHTML = """
 			@font-face {
-				font-family: "#{cssName}";
+				font-family: "#{name}";
 				src: #{urlStr};
-				font-style: #{style};
-				font-weight: #{weight};
+				font-style: normal;
+				font-weight: 400;
 			}
 		"""
 

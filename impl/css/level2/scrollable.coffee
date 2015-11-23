@@ -82,13 +82,12 @@ module.exports = (impl) ->
 
 		(val) ->
 			if oldVal = @_impl.contentItem
-				impl.setItemParent.call oldVal, null
 				oldVal.onHeightChange.disconnect onHeightChange, @
 
 			if val
-				@_impl.scrollElem.appendChild val._impl.elem
 				val.onHeightChange onHeightChange, @
 				@_impl.contentItem = val
+				@_impl.scrollElem.appendChild val._impl.elem
 			return
 
 	setScrollableContentX: (val) ->

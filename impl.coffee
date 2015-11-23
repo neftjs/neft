@@ -65,6 +65,8 @@ module.exports = (Renderer) ->
 
 		object._impl = impl.Types[type]?.createData?() or {bindings: null}
 		Object.preventExtensions object._impl
+
+	impl.initializeObject = (object, type) ->
 		impl.Types[type]?.create?.call object, object._impl
 
 	impl.setWindow = do (_super = impl.setWindow) -> (item) ->

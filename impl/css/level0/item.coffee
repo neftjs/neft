@@ -11,61 +11,9 @@ log = log.scope 'Renderer', 'CSS Implementation'
 
 isTouch = 'ontouchstart' of window
 
-SIGNALS =
-	'pointerOnClick': 'click'
-	'pointerOnPress': 'mousedown'
-	'pointerOnRelease': 'mouseup'
-	'pointerOnEnter': 'mouseenter'
-	'pointerOnExit': 'mouseleave'
-	'pointerOnMove': 'mousemove'
-	'pointerOnWheel': implUtils.wheelEvent.eventName
-
-if isTouch
-	utils.merge SIGNALS,
-		'pointerOnPress': 'touchstart'
-		'pointerOnRelease': 'touchend'
-		'pointerOnEnter': 'touchstart'
-		'pointerOnExit': 'touchend'
-		'pointerOnMove': 'touchmove'
-
 SIGNALS_CURSORS =
-	'pointerOnClick': 'pointer'
-
-lastEventCoords =
-	x: -1
-	y: -1
-mouseEvent =
-	movementX: 0
-	movementY: 0
-mouseInitialized = false
-movementX = movementY = 0
-getMouseEvent = (e) ->
-	if isTouch and e.touches?
-		if e.touches.length
-			e = e.touches[0]
-		else
-			e = e.changedTouches[0]
-
-	if e.pageX isnt lastEventCoords.x or e.pageY isnt lastEventCoords.y
-		if mouseInitialized
-			movementX = e.pageX - lastEventCoords.x
-			movementY = e.pageY - lastEventCoords.y
-		else
-			mouseInitialized = true
-
-		lastEventCoords.x = e.pageX
-		lastEventCoords.y = e.pageY
-
-	mouseEvent.movementX = movementX
-	mouseEvent.movementY = movementY
-	mouseEvent
-
-SIGNALS_ARGS =
-	'pointerOnWheel': implUtils.wheelEvent.getDelta
-	'pointerOnPress': getMouseEvent
-	'pointerOnRelease': getMouseEvent
-	'pointerOnClick': getMouseEvent
-	'pointerOnMove': getMouseEvent
+	pointer:
+		onClick: 'pointer'
 
 module.exports = (impl) ->
 	LAYER_MIN_OPERATIONS = 8
@@ -75,32 +23,7 @@ module.exports = (impl) ->
 
 	{transformProp, rad2deg} = impl.utils
 
-	impl._SIGNALS = SIGNALS
 	implUtils = impl.utils
-
-	mouseActivePointer = null
-
-	# window.addEventListener SIGNALS.pointerWheel, (e) ->
-	# 	e.preventDefault()
-	# , true
-
-	window.addEventListener SIGNALS.pointerOnMove, (e) ->
-		target = mouseActivePointer or impl.window?.pointer
-		event = getMouseEvent e
-		target?.onMove.emit event
-		return
-
-	window.addEventListener SIGNALS.pointerOnRelease, (e) ->
-		mouseActivePointer ?= impl.window?.pointer
-		event = getMouseEvent e
-		mouseActivePointer?.onRelease.emit event
-		mouseActivePointer = null
-		document.body.setAttribute 'class', ''
-		return
-
-	# window.addEventListener 'touchstart', (e) ->
-	# 	e.preventDefault()
-	# , true
 
 	if USE_GPU
 		setInterval ->
@@ -167,7 +90,7 @@ module.exports = (impl) ->
 
 	NOP = ->
 
-	DATA =
+	DATA = utils.merge
 		bindings: null
 		anchors: null
 		elem: null
@@ -181,6 +104,7 @@ module.exports = (impl) ->
 		isLayer: false
 		isInLayers: false
 		operations: 0
+	, impl.pointer.DATA
 
 	DATA: DATA
 
@@ -198,6 +122,8 @@ module.exports = (impl) ->
 			val._impl.elem.appendChild elem
 		else
 			elem.parentElement?.removeChild elem
+
+		impl.pointer.setItemParent.call @, val
 
 		return
 
@@ -271,46 +197,12 @@ module.exports = (impl) ->
 		return
 
 	attachItemSignal: (ns, signalName) ->
-		self = @
-		data = @_ref?._impl or @_impl
-		{elem} = data
-
-		name = ns + utils.capitalize(signalName)
-
-		implName = SIGNALS[name]?(elem) or SIGNALS[name]
-
-		# break if event is not supported (e.g. some events on touch devices)
-		unless implName?
-			return
-
-		customFunc = (e) ->
-			arg = SIGNALS_ARGS[name]? e
-			if arg is false or e._accepted# or mouseActivePointer
-				return
-
-			if name is 'pointerOnMove'
-				e._accepted = true
-
-			if self[signalName].emit(arg) is signal.STOP_PROPAGATION
-				if name is 'pointerOnPress'
-					document.body.setAttribute 'class', 'unselectable'
-					mouseActivePointer = self
-				e.stopPropagation()
-				if e.cancelable and implName isnt 'touchend' and implName isnt 'touchstart'
-					e.preventDefault()
-			return
-
-		if typeof implName is 'string'
-			if name isnt 'pointerOnRelease' and name isnt 'pointerOnMove'
-				elem.addEventListener implName, customFunc, false
+		if ns is 'pointer'
+			impl.pointer.attachItemSignal.call @, signalName
 
 		# cursor
-		if cursor = SIGNALS_CURSORS[name]
-			data.elemStyle.cursor = cursor
-		return
-
-	setItemPointerEnabled: (val) ->
-		@_impl.elemStyle.pointerEvents = if val then '' else 'none'
+		if cursor = SIGNALS_CURSORS[ns]?[signalName]
+			@_ref._impl.elemStyle.cursor = cursor
 		return
 
 	setItemKeysFocus: impl.utils.keysEvents.setItemKeysFocus

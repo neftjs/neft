@@ -1,7 +1,56 @@
 'use strict'
 
 module.exports = (impl) ->
+	eventName = do ->
+		if 'onwheel' of document.createElement("div")
+			'wheel'
+		else if document.onmousewheel isnt undefined
+			'mousewheel'
+		else
+			'MozMousePixelScroll'
+
+	getNormalizedEvent = do ->
+		NORMALIZED_VALUE = 3
+
+		isSlowContinuous = false
+
+		event =
+			deltaX: 0
+			deltaY: 0
+
+		getDeltas = (e) ->
+			x = -e.deltaX*3 or e.wheelDeltaX ? 0
+			y = -e.deltaY*3 or e.wheelDeltaY ? e.wheelDelta ? -e.detail*3 or 0
+
+			if impl.utils.isFirefox and e.deltaMode is e.DOM_DELTA_LINE
+				x *= 10
+				y *= 10
+
+			event.deltaX = x
+			event.deltaY = y
+
+		(e) ->
+			getDeltas e
+
+			# MAGIC!
+			# It looks that Chrome on MacBook never gives values in range (-3, 3) as
+			# it does Firefox which always send lower values
+			if not isSlowContinuous
+				delta = event.deltaX or event.deltaY or 3
+
+				if (delta > 0 and delta < 3) or (delta < 0 and delta > -3)
+					isSlowContinuous = true
+
+			if isSlowContinuous
+				event.deltaX *= NORMALIZED_VALUE
+				event.deltaY *= NORMALIZED_VALUE
+
+			event
+
 	initDeviceNamespace: ->
+		device = this
+		{pointer} = this
+
 		@_pixelRatio = window.devicePixelRatio or 1
 		@_desktop = not ('ontouchstart' of window)
 		@_phone = 'ontouchstart' of window and Math.min(@_width, @_height)/Math.max(@_width, @_height) < 0.75
@@ -10,18 +59,58 @@ module.exports = (impl) ->
 			{userAgent} = navigator
 			switch true
 				when /Android/i.test(userAgent)
-					'android'
+					'Android'
 				when /iPhone|iPad|iPod/i.test(userAgent)
-					'ios'
+					'iOS'
 				when /BlackBerry/i.test(userAgent)
-					'blackberry'
+					'BlackBerry'
 				when /IEMobile|WPDesktop/i.test(userAgent)
-					'winphone'
+					'WindowsPhone'
 				when /Linux|X11/i.test(userAgent)
-					'linux'
+					'Linux'
 				when /Windows/i.test(userAgent)
-					'windows'
+					'Windows'
 				when /Mac_PowerPC|Macintosh/i.test(userAgent)
-					'osx'
+					'OSX'
 				else
-					'unix'
+					'Unix'
+
+		updatePointerEvent = (event) ->
+			obj = event.touches?[0] or event.changedTouches?[0] or event
+
+			pointer.x = obj.pageX
+			pointer.y = obj.pageY
+			return
+
+		onPointerPress = (e) ->
+			updatePointerEvent e
+			device.onPointerPress.emit pointer
+			return
+
+		window.addEventListener 'mousedown', onPointerPress
+		window.addEventListener 'touchstart', onPointerPress
+
+		onPointerRelease = (e) ->
+			updatePointerEvent e
+			device.onPointerRelease.emit pointer
+			return
+
+		window.addEventListener 'mouseup', onPointerRelease
+		window.addEventListener 'touchend', onPointerRelease
+
+		onPointerMove = (e) ->
+			updatePointerEvent e
+			device.onPointerMove.emit pointer
+			return
+
+		window.addEventListener 'mousemove', onPointerMove
+		window.addEventListener 'touchmove', onPointerMove
+
+		onPointerWheel = (e) ->
+			e.stopPropagation()
+			event = getNormalizedEvent e
+			pointer.deltaX = event.deltaX
+			pointer.deltaY = event.deltaY
+			device.onPointerWheel.emit pointer
+
+		window.addEventListener eventName, onPointerWheel
