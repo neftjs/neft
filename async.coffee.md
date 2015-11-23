@@ -13,7 +13,7 @@ var async = utils.async;
 
 	utils = null
 
-	{assert} = console
+	assert = console.assert.bind console
 	{exports} = module
 
 	{shift} = Array::

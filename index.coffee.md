@@ -313,10 +313,35 @@ console.log(config);
 			throw new Error "utils.merge object cannot be primitive"
 		if source is obj
 			throw new Error "utils.merge source and object are the same"
+		if arguments.length > 2
+			throw new Error "utils.merge expects only two arguments; use utils.mergeAll instead"
 		`//</development>`
 
 		for key, value of obj when obj.hasOwnProperty(key)
 			source[key] = value
+
+		source
+
+*NotPrimitive* utils.mergeAll(*NotPrimitive* source, *NotPrimitive* objects...)
+-------------------------------------------------------------------------------
+
+	exports.mergeAll = (source) ->
+		null
+		`//<development>`
+		if isPrimitive(source)
+			throw new Error "utils.merge source cannot be primitive"
+		`//</development>`
+
+		for i in [1...arguments.length] by 1
+			if (obj = arguments[i])?
+				`//<development>`
+				if isPrimitive(obj)
+					throw new Error "utils.mergeAll object cannot be primitive"
+				if source is obj
+					throw new Error "utils.mergeAll source and object are the same"
+				`//</development>`
+				for key, value of obj when obj.hasOwnProperty(key)
+					source[key] = value
 
 		source
 
