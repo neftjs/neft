@@ -80,6 +80,11 @@ module.exports = (impl) ->
 				val = @child.getValue()
 			else
 				val = Binding.getItemById @binding, @itemId
+
+			if oldVal and not @isConnected
+				@connect()
+				oldVal = null
+
 			if oldVal isnt val
 				@disconnect()
 				@item = val
