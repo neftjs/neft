@@ -24,13 +24,9 @@ module.exports = (impl) ->
 
 	setTextInputFontPixelSize: (val) ->
 
-	setTextInputFontWeight: (val) ->
-
 	setTextInputFontWordSpacing: (val) ->
 
 	setTextInputFontLetterSpacing: (val) ->
-
-	setTextInputFontItalic: (val) ->
 
 	setTextInputAlignmentHorizontal: (val) ->
 

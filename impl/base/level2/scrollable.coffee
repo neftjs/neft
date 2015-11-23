@@ -103,7 +103,8 @@ module.exports = (impl) ->
 			if item._contentX isnt x or item._contentY isnt y
 				item.contentX = x
 				item.contentY = y
-				signal.STOP_PROPAGATION
+				return true
+			false
 
 	getDeltaX = (item, x) ->
 		x / item._impl.globalScale
@@ -300,7 +301,8 @@ module.exports = (impl) ->
 		dx = dy = 0
 
 		moveMovement = (e) ->
-			scroll item, e.movementX + dx, e.movementY + dy
+			unless scroll(item, e.movementX + dx, e.movementY + dy)
+				e.stopPropagation = false
 
 		onImplReady = ->
 			pointerWindowMoveListeners.push (e) ->
@@ -392,7 +394,9 @@ module.exports = (impl) ->
 				x = e.deltaX / WHEEL_DIVISOR
 				y = e.deltaY / WHEEL_DIVISOR
 				item._impl.globalScale = getItemGlobalScale item
-				return scroll(item, x, y)
+				unless scroll(item, x, y)
+					e.stopPropagation = false
+				return 
 
 			now = Date.now()
 
@@ -439,7 +443,7 @@ module.exports = (impl) ->
 				return signal.STOP_PROPAGATION
 
 			item._impl.globalScale = getItemGlobalScale item
-			if scroll(item, x, y) is signal.STOP_PROPAGATION
+			if scroll(item, x, y)
 				lastAcceptedActionTimestamp = now
 
 				unless pending
@@ -453,8 +457,8 @@ module.exports = (impl) ->
 				wheelUsed = true
 				used = true
 
-			if used
-				signal.STOP_PROPAGATION
+			unless used
+				e.stopPropagation = false
 
 		return
 
@@ -499,12 +503,10 @@ module.exports = (impl) ->
 
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem
-			impl.setItemParent.call oldVal, null
 			oldVal.onWidthChange.disconnect onWidthChange, @
 			oldVal.onHeightChange.disconnect onHeightChange, @
 
 		if val
-			impl.setItemParent.call val, @
 			@_impl.contentItem = val
 			val.onWidthChange onWidthChange, @
 			val.onHeightChange onHeightChange, @

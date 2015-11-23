@@ -33,8 +33,6 @@ module.exports = (impl) ->
 
 	setTextFontPixelSize: (val) ->
 
-	setTextFontWeight: (val) ->
-
 	setTextFontWordSpacing: (val) ->
 
 	setTextFontLetterSpacing: (val) ->

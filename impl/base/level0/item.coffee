@@ -3,11 +3,15 @@
 utils = require 'utils'
 
 module.exports = (impl) ->
+	pointer = impl.pointer = require('./item/pointer') impl
+
 	NOP = ->
 
 	DATA =
 		bindings: null
 		anchors: null
+		capturePointer: 0
+		childrenCapturesPointer: 0
 
 	DATA: DATA
 
@@ -16,6 +20,7 @@ module.exports = (impl) ->
 	create: (data) ->
 
 	setItemParent: (val) ->
+		pointer.setItemParent.call @, val
 
 	setItemIndex: (val) ->
 		{parent} = @
@@ -87,11 +92,16 @@ module.exports = (impl) ->
 		y1 < y2 + b._height
 
 	attachItemSignal: (name, signal) ->
+		if name is 'pointer'
+			pointer.attachItemSignal.call @, signal
 
 	setItemPointerEnabled: (val) ->
+		pointer.setItemPointerEnabled.call @, val
 
 	setItemPointerDraggable: (val) ->
+		pointer.setItemPointerDraggable.call @, val
 
-	setItemPointerDragging: (val) ->
+	setItemPointerDragActive: (val) ->
+		pointer.setItemPointerDragActive.call @, val
 
 	setItemKeysFocus: (val) ->
