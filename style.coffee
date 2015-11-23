@@ -446,13 +446,7 @@ module.exports = (File, data) -> class Style
 			@item = id
 		else if @isScope
 			@isAutoParent = true
-			if ///^renderer\:///.test(id)
-				id = id.slice 'renderer:'.length
-				id = utils.capitalize id
-				@scope =
-					mainItem: new Renderer[id]
-					ids: {}
-			else if ///^styles\:///.test(id)
+			if ///^styles\:///.test(id)
 				match = /^styles:(.+?)(?:\:(.+?))?(?:\:(.+?))?$/.exec id
 				[_, file, style, subid] = match
 				style ?= '_main'
@@ -590,7 +584,7 @@ module.exports = (File, data) -> class Style
 
 		# attrs class
 		if @attrs
-			clone.attrsClass = new Renderer.Class emptyComponent
+			clone.attrsClass = Renderer.Class.New emptyComponent
 			clone.attrsClass.priority = 9999
 
 		# clone children
