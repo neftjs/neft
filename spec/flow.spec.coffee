@@ -37,14 +37,14 @@ describe 'Flow', ->
 			setTimeout onReadyCallback
 
 		comp = new Renderer.Component
-		flow = new Flow comp
+		flow = Flow.New comp
 		flow.onWidthChange onReady
 		flow.onHeightChange onReady
 		flow.onMarginChange onReady
 
 		items = []
 		for i in [0...3]
-			item = items[i] = new Item comp
+			item = items[i] = Item.New comp
 			item.parent = flow
 			item.onXChange onReady
 			item.onYChange onReady

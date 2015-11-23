@@ -38,6 +38,14 @@ Item {
 					getResources val, target
 			target
 
+*ResourcesLoader* ResourcesLoader.New(*Component* component, [*Object* options])
+--------------------------------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new ResourcesLoader
+			itemUtils.Object.initialize item, component, opts
+			item
+
 *ResourcesLoader* ResourcesLoader()
 -----------------------------------
 
@@ -46,17 +54,14 @@ Access it with:
 ResourcesLoader {}
 ```
 
-		constructor: (component, opts) ->
-			super component
+		constructor: ->
+			super()
 			@_resources = Renderer.resources
 			@_progress = 0
 			setImmediate =>
 				if @_resources
 					@progress = 0
 					Impl.loadResources.call @, getResources(@_resources)
-
-			if opts
-				itemUtils.Object.initialize @, opts
 
 *Resources* ResourcesLoader::resources
 --------------------------------------

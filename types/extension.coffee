@@ -6,8 +6,8 @@ signal = require 'signal'
 module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtils.Object
 	@__name__ = 'Extension'
 
-	constructor: (component) ->
-		super component
+	constructor: ->
+		super()
 		@_impl ?= bindings: null
 		@_target = null
 		@_running = false

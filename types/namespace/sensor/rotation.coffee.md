@@ -1,16 +1,13 @@
 RotationSensor @namespace
 ==============
 
-#### @todo
-
-Browser implementation
-
 	'use strict'
 
 	utils = require 'utils'
+	signal = require 'signal'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
-		class RotationSensor extends itemUtils.Object
+		class RotationSensor extends signal.Emitter
 
 *Object* RotationSensor
 -----------------------
@@ -55,17 +52,11 @@ Text {
 *Float* RotationSensor::x = 0
 -----------------------------
 
-			x: 0
-
 *Float* RotationSensor::y = 0
 -----------------------------
 
-			y: 0
-
 *Float* RotationSensor::z = 0
 -----------------------------
-
-			z: 0
 
 		rotationSensor = new RotationSensor
 		rotationSensor

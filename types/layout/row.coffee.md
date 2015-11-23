@@ -18,25 +18,29 @@ Row {
 	assert = require 'assert'
 	utils = require 'utils'
 
-*Row* Row() : *Renderer.Item*
------------------------------
-
 	module.exports = (Renderer, Impl, itemUtils) -> class Row extends Renderer.Item
 		@__name__ = 'Row'
 		@__path__ = 'Renderer.Row'
 
-		constructor: (component, opts) ->
-			super component
+*Row* Row.New(*Component* component, [*Object* options])
+--------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Row
+			itemUtils.Object.initialize item, component, opts
+			item.effectItem = item
+			item
+
+*Row* Row() : *Renderer.Item*
+-----------------------------
+
+		constructor: ->
+			super()
 			@_padding = null
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = false
 			@_effectItem = null
-
-			if opts
-				itemUtils.Object.initialize @, opts
-			
-			@effectItem = @
 
 		utils.defineProperty @::, 'effectItem', null, ->
 			@_effectItem

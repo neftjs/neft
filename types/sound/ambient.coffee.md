@@ -27,18 +27,23 @@ AmbientSound {
 		@__name__ = 'AmbientSound'
 		@__path__ = 'Renderer.AmbientSound'
 
+*AmbientSound* AmbientSound.New(*Component* component, [*Object* options])
+--------------------------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new AmbientSound
+			itemUtils.Object.initialize item, component, opts
+			item
+
 *AmbientSound* AmbientSound()
 -----------------------------
 
-		constructor: (component, opts) ->
-			super component
+		constructor: ->
+			super()
 			@_when = false
 			@_running = false
 			@_source = ''
 			@_loop = false
-
-			if opts
-				itemUtils.Object.initialize @, opts
 
 *Signal* AmbientSound::onStart()
 --------------------------------

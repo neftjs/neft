@@ -33,19 +33,24 @@ Rectangle {
 	module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
 		@__name__ = 'Transition'
 
+*Transition* Transition.New(*Component* component, [*Object* options])
+----------------------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Transition
+			itemUtils.Object.initialize item, component, opts
+			item
+
 *Transition* Transition()
 -------------------------
 
-		constructor: (component, opts) ->
-			super component
+		constructor: ->
+			super()
 			@_animation = null
 			@_property = ''
 			@_duration = 0
 			@_to = 0
 			@_durationUpdatePending = false
-
-			if opts
-				itemUtils.Object.initialize @, opts
 
 		listener = (oldVal) ->
 			{animation} = @

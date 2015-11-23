@@ -23,19 +23,24 @@ Rectangle {
 
 	utils = require 'utils'
 
-*NumberAnimation* NumberAnimation() : *Renderer.PropertyAnimation*
--------------------------------------------------------------------
-
 	module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
 		@__name__ = 'NumberAnimation'
 
-		constructor: (component, opts) ->
-			super component
+*NumberAnimation* NumberAnimation.New(*Component* component, [*Object* options])
+--------------------------------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new NumberAnimation
+			itemUtils.Object.initialize item, component, opts
+			item
+
+*NumberAnimation* NumberAnimation() : *Renderer.PropertyAnimation*
+-------------------------------------------------------------------
+
+		constructor: ->
+			super()
 			@_from = 0
 			@_to = 0
-
-			if opts
-				itemUtils.Object.initialize @, opts
 
 *Float* NumberAnimation::from
 -----------------------------

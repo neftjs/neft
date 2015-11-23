@@ -22,23 +22,28 @@ Rectangle {
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
+		class Rectangle extends Renderer.Item
+			@__name__ = 'Rectangle'
+			@__path__ = 'Renderer.Rectangle'
+
+*Rectangle* Rectangle.New(*Component* component, [*Object* options])
+--------------------------------------------------------------------
+
+			@New = (component, opts) ->
+				item = new Rectangle
+				itemUtils.Object.initialize item, component, opts
+				item
+
 *Rectangle* Rectangle() : *Renderer.Item*
 -----------------------------------------
 
 *Renderer.Rectangle* represents filled rectangle with an optional border and corner radius.
 
-		class Rectangle extends Renderer.Item
-			@__name__ = 'Rectangle'
-			@__path__ = 'Renderer.Rectangle'
-
-			constructor: (component, opts) ->
-				super component
+			constructor: ->
+				super()
 				@_color = 'transparent'
 				@_radius = 0
 				@_border = null
-
-				if opts
-					itemUtils.Object.initialize @, opts
 
 *String* Rectangle::color = 'transparent'
 -----------------------------------------
@@ -50,6 +55,11 @@ Rectangle {
 				name: 'color'
 				defaultValue: 'transparent'
 				implementation: Impl.setRectangleColor
+				implementationValue: do ->
+					RESOURCE_REQUEST =
+						property: 'color'
+					(val) ->
+						Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 				developmentSetter: (val) ->
 					expect(val).toBe.string()
 
@@ -119,6 +129,11 @@ Rectangle {
 				namespace: 'border'
 				parentConstructor: Rectangle
 				implementation: Impl.setRectangleBorderColor
+				implementationValue: do ->
+					RESOURCE_REQUEST =
+						property: 'color'
+					(val) ->
+						Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 				developmentSetter: (val) ->
 					expect(val).toBe.string()
 

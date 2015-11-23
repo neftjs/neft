@@ -18,25 +18,29 @@ Column {
 	assert = require 'assert'
 	utils = require 'utils'
 
-*Column* Column() : *Renderer.Item*
------------------------------------
-
 	module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
 		@__name__ = 'Column'
 		@__path__ = 'Renderer.Column'
 
-		constructor: (component, opts) ->
-			super component
+*Column* Column.New(*Component* component, [*Object* options])
+--------------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Column
+			itemUtils.Object.initialize item, component, opts
+			item.effectItem = item
+			item
+
+*Column* Column() : *Renderer.Item*
+-----------------------------------
+
+		constructor: ->
+			super()
 			@_padding = null
 			@_spacing = 0
 			@_alignment = null
 			@_includeBorderMargins = false
 			@_effectItem = null
-
-			if opts
-				itemUtils.Object.initialize @, opts
-			
-			@effectItem = @
 
 		utils.defineProperty @::, 'effectItem', null, ->
 			@_effectItem

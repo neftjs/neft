@@ -5,6 +5,9 @@ Font @extension
 
 	assert = require 'assert'
 	utils = require 'utils'
+	log = require 'log'
+
+	log = log.scope 'Renderer', 'Font'
 
 *Alignment* Alignment()
 -----------------------
@@ -47,6 +50,11 @@ Font @extension
 
 			Object.preventExtensions @
 
+		setFontFamilyImpl = Impl["set#{ctor.__name__}FontFamily"]
+		reloadFontFamily = (font) ->
+			name = Renderer.FontLoader.getInternalFontName font._family, font._weight, font._italic
+			setFontFamilyImpl.call font._ref, name
+
 *String* Font.family = 'sans-serif'
 -----------------------------------------
 
@@ -61,20 +69,11 @@ Font @extension
 			defaultValue: 'sans-serif'
 			namespace: 'font'
 			parentConstructor: ctor
-			implementation: Impl["set#{ctor.__name__}FontFamily"]
 			developmentSetter: (val) ->
 				assert.isString val
-
-				unless checkingFamily[val]
-					checkingFamily[val] = true
-					setTimeout =>
-						if not Renderer.FontLoader.fonts[val]
-							log.warn "Font `#{@family}` is not defined; use `FontLoader` to load a font"
 			setter: (_super) -> (val) ->
-				if typeof val is 'string'
-					_super.call @, val.toLowerCase()
-				else
-					_super.call @, val
+				_super.call @, val
+				reloadFontFamily @
 
 *Float* Font.pixelSize = 14
 ---------------------------------
@@ -102,11 +101,13 @@ Font @extension
 			defaultValue: 0.4
 			namespace: 'font'
 			parentConstructor: ctor
-			implementation: Impl["set#{ctor.__name__}FontWeight"]
 			developmentSetter: (val) ->
 				assert.isFloat val
 				assert.operator val, '>=', 0
 				assert.operator val, '<=', 1
+			setter: (_super) -> (val) ->
+				_super.call @, val
+				reloadFontFamily @
 
 *Float* Font.wordSpacing = 0
 ----------------------------------
@@ -149,9 +150,11 @@ Font @extension
 			defaultValue: false
 			namespace: 'font'
 			parentConstructor: ctor
-			implementation: Impl["set#{ctor.__name__}FontItalic"]
 			developmentSetter: (val) ->
 				assert.isBoolean val
+			setter: (_super) -> (val) ->
+				_super.call @, val
+				reloadFontFamily @
 
 		toJSON: ->
 			family: @family

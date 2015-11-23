@@ -27,6 +27,18 @@ Image {
 
 	log = log.scope 'Renderer', 'Image'
 
+	module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Item
+		@__name__ = 'Image'
+		@__path__ = 'Renderer.Image'
+
+*Image* Image.New(*Component* component, [*Object* options])
+------------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Image
+			itemUtils.Object.initialize item, component, opts
+			item
+
 *Image* Image() : *Renderer.Item*
 ---------------------------------
 
@@ -35,12 +47,8 @@ This item is used to render image defined by the *Image::source* URL.
 If the *Renderer.Item::width* and *Renderer.Item::height* attributes are not
 specified, this *Renderer.Item* automatically uses the size of the loaded image.
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Item
-		@__name__ = 'Image'
-		@__path__ = 'Renderer.Image'
-
-		constructor: (component, opts) ->
-			super component
+		constructor: ->
+			super()
 			@_source = ''
 			@_loaded = false
 			@_autoWidth = true
@@ -48,9 +56,6 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			@_sourceWidth = 0
 			@_sourceHeight = 0
 			@_fillMode = 'Stretch'
-
-			if opts
-				itemUtils.Object.initialize @, opts
 
 *Float* Image.pixelRatio = 1
 ----------------------------
@@ -124,6 +129,9 @@ Image source URL (absolute or relative to the page) or data URI.
 			developmentSetter: (val) ->
 				expect(val).toBe.string()
 			setter: do ->
+				RESOURCE_REQUEST =
+					resolution: 1
+
 				defaultSize =
 					width: 0
 					height: 0
@@ -155,6 +163,8 @@ Image source URL (absolute or relative to the page) or data URI.
 						@_loaded = false
 						@onLoadedChange.emit true
 					if val
+						RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio
+						val = Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 						Impl.setImageSource.call @, val, loadCallback
 					else
 						Impl.setImageSource.call @, null, null

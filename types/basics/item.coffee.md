@@ -17,15 +17,23 @@ Item @class
 		@__name__ = 'Item'
 		@__path__ = 'Renderer.Item'
 
+*Item* Item.New(*Component* component, [*Object* options])
+----------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Item
+			itemUtils.Object.initialize item, component, opts
+			item
+
 *Item* Item()
 -------------
 
 This is a base class for everything which is visible.
 
-		constructor: (component, opts) ->
+		constructor: ->
 			assert.instanceOf @, Item, 'ctor ...'
 
-			super component
+			super()
 			@_$ = null
 			@_parent = null
 			@_children = null
@@ -51,9 +59,6 @@ This is a base class for everything which is visible.
 			@_classes = null
 			@_background = null
 			@_defaultBackground = null
-
-			if opts
-				itemUtils.Object.initialize @, opts
 
 #### Custom properties
 
@@ -237,8 +242,8 @@ Removes all children from a node.
 			oldParent = child._parent
 			child.parent = null
 
-			child._parent = parent
 			Impl.setItemParent.call child, parent
+			child._parent = parent
 			if index >= 0
 				Impl.setItemIndex.call child, index
 			emitSignal child, 'onParentChange', oldParent
@@ -262,8 +267,8 @@ Removes all children from a node.
 
 				# fake parent
 				if @_effectItem and @_effectItem isnt @
-					@_parent = val
 					Impl.setItemParent.call @, val
+					@_parent = val
 					emitSignal @, 'onParentChange', old
 					return
 
@@ -310,8 +315,8 @@ Removes all children from a node.
 					@_nextSibling = null
 
 				# parent
-				@_parent = val
 				Impl.setItemParent.call @, val
+				@_parent = val
 
 				# signals
 				if old isnt null
@@ -578,10 +583,10 @@ Item {
 			developmentSetter: (val) ->
 				assert.isFloat val, '::y setter ...'
 
-*Float* Item::z = 0
--------------------
+*Integer* Item::z = 0
+---------------------
 
-### *Signal* Item::onZChange(*Float* oldValue)
+### *Signal* Item::onZChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -589,7 +594,7 @@ Item {
 			defaultValue: 0
 			implementation: Impl.setItemZ
 			developmentSetter: (val) ->
-				assert.isFloat val, '::z setter ...'
+				assert.isInteger val, '::z setter ...'
 
 *Float* Item::scale = 1
 -----------------------
@@ -653,13 +658,13 @@ It's required for browsers, where link URIs should be known publicly.
 ### *Signal* Item::onBackgroundChange(*Item* oldValue)
 
 		defaultBackgroundClass = do ->
-			ext = new Renderer.Class new Renderer.Component
+			ext = Renderer.Class.New new Renderer.Component
 			ext.priority = -1
 			ext.changes.setAttribute 'anchors.fill', ['parent']
 			ext
 
 		createDefaultBackground = (parent) ->
-			rect = new Renderer.Rectangle parent._component
+			rect = Renderer.Rectangle.New parent._component
 			ext = defaultBackgroundClass.clone parent._component
 			ext.target = rect
 			ext.enable()
@@ -718,7 +723,7 @@ This method checks whether two items are overlapped.
 		@Anchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
 		@Layout = require('./item/layout') Renderer, Impl, itemUtils, Item
 		@Margin = require('./item/margin') Renderer, Impl, itemUtils, Item
-		@Pointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
+		@createPointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
 		@Keys = require('./item/keys') Renderer, Impl, itemUtils, Item
 		@Document = require('./item/document') Renderer, Impl, itemUtils, Item
 
@@ -739,7 +744,7 @@ This method checks whether two items are overlapped.
 *Pointer* Item::pointer
 -----------------------
 
-		@Pointer @
+		@Pointer = @createPointer @
 
 *Margin* Item::margin
 ---------------------

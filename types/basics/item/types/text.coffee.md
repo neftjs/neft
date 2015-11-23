@@ -23,9 +23,6 @@ Text {
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*Text* Text() : *Renderer.Item*
--------------------------------
-
 		class Text extends Renderer.Item
 			@__name__ = 'Text'
 			@__path__ = 'Renderer.Text'
@@ -42,8 +39,19 @@ Text {
 				u: true
 				a: true
 
-			constructor: (component, opts) ->
-				super component
+*Text* Text.New(*Component* component, [*Object* options])
+----------------------------------------------------------
+
+			@New = (component, opts) ->
+				item = new Text
+				itemUtils.Object.initialize item, component, opts
+				item
+
+*Text* Text() : *Renderer.Item*
+-------------------------------
+
+			constructor: ->
+				super()
 				@_text = ''
 				@_color = 'black'
 				@_linkColor = 'blue'
@@ -52,9 +60,6 @@ Text {
 				@_contentHeight = 0
 				@_font = null
 				@_alignment = null
-
-				if opts
-					itemUtils.Object.initialize @, opts
 
 *String* Text::text
 -------------------
@@ -79,6 +84,11 @@ Text {
 				name: 'color'
 				defaultValue: 'black'
 				implementation: Impl.setTextColor
+				implementationValue: do ->
+					RESOURCE_REQUEST =
+						property: 'color'
+					(val) ->
+						Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 				developmentSetter: (val) ->
 					assert.isString val
 
@@ -92,6 +102,11 @@ Text {
 				name: 'linkColor'
 				defaultValue: 'blue'
 				implementation: Impl.setTextLinkColor
+				implementationValue: do ->
+					RESOURCE_REQUEST =
+						property: 'color'
+					(val) ->
+						Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 				developmentSetter: (val) ->
 					assert.isString val
 

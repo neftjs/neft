@@ -16,15 +16,23 @@ Qml and WebGL implementations
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 
-*TextInput* TextInput() : *Renderer.Item*
------------------------------------------
-
 		class TextInput extends Renderer.Item
 			@__name__ = 'TextInput'
 			@__path__ = 'Renderer.TextInput'
 
-			constructor: (component, opts) ->
-				super component
+*TextInput* TextInput.New(*Component* component, [*Object* options])
+--------------------------------------------------------------------
+
+			@New = (component, opts) ->
+				item = new TextInput
+				itemUtils.Object.initialize item, component, opts
+				item
+
+*TextInput* TextInput() : *Renderer.Item*
+-----------------------------------------
+
+			constructor: ->
+				super()
 				@_text = ''
 				@_color = 'black'
 				@_lineHeight = 1
@@ -34,9 +42,6 @@ Qml and WebGL implementations
 				@_font = null
 				@_width = 100
 				@_height = 50
-
-				if opts
-					itemUtils.Object.initialize @, opts
 
 *Float* TextInput::width = 100
 ------------------------------

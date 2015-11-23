@@ -5,15 +5,17 @@ Navigator @namespace
 
 	utils = require 'utils'
 	signal = require 'signal'
+	assert = require 'assert'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
-		class Navigator extends itemUtils.Object
+		class Navigator extends signal.Emitter
 
 *Object* Navigator
 ------------------
 
 			constructor: ->
 				super()
+				@_impl = bindings: null
 				@_language = 'en'
 				@_browser = true
 				@_online = true
@@ -21,7 +23,7 @@ Navigator @namespace
 				Object.preventExtensions @
 
 *Boolean* Navigator.language = 'en'
-----------------------------------
+-----------------------------------
 
 #### Detect client language @snippet
 
@@ -62,16 +64,13 @@ Text {
 *Boolean* Navigator.online = true
 ---------------------------------
 
-#### @todo
-
-Browser and qml implementations 
-
 ### *Signal* Navigator.onOnlineChange(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
 				name: 'online'
-				setter: (_super) -> (val) ->
+				developmentSetter: (val) ->
+					assert.isBoolean val
 
 		navigator = new Navigator
 		Impl.initNavigatorNamespace?.call navigator

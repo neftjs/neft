@@ -9,14 +9,14 @@ Animation/PropertyAnimation @modifier
 
 	log = log.scope 'Renderer', 'PropertyAnimation'
 
-*PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
---------------------------------------------------------------
-
 	module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
 		@__name__ = 'PropertyAnimation'
 
-		constructor: (component) ->
-			super component
+*PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
+--------------------------------------------------------------
+
+		constructor: ->
+			super()
 			@_target = null
 			@_property = ''
 			@_autoFrom = true

@@ -11,9 +11,6 @@ Class @modifier
 
 	log = log.scope 'Rendering', 'Class'
 
-*Class* Class()
----------------
-
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class ChangesObject
 			constructor: ->
@@ -45,10 +42,19 @@ Class @modifier
 		class Class extends Renderer.Extension
 			@__name__ = 'Class'
 
-			constructor: (component, opts) ->
-				assert.instanceOf component, Renderer.Component
+*Class* Class.New(*Component* component, [*Object* options])
+------------------------------------------------------------
 
-				super component
+			@New = (component, opts) ->
+				item = new Class
+				itemUtils.Object.initialize item, component, opts
+				item
+
+*Class* Class()
+---------------
+
+			constructor: ->
+				super()
 				@_classUid = utils.uid()
 				@_priority = 0
 				@_inheritsPriority = 0
@@ -58,9 +64,6 @@ Class @modifier
 				@_document = null
 				@_loadedObjects = null
 				@_children = null
-
-				if opts
-					itemUtils.Object.initialize @, opts
 
 *String* Class::name
 --------------------
@@ -406,7 +409,7 @@ Grid {
 			item._classList.sort classListSortFunc
 
 		cloneClassWithNoDocument = (component) ->
-			clone = new Class component
+			clone = Class.New component
 			clone.id = @id
 			clone._classUid = @_classUid
 			clone._name = @_name

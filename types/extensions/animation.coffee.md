@@ -13,8 +13,8 @@ Animation @modifier
 *Animation* Animation()
 -----------------------
 
-		constructor: (component) ->
-			super component
+		constructor: ->
+			super()
 			@_loop = false
 			@_updatePending = false
 			@_paused = false

@@ -7,9 +7,6 @@ Scrollable @class
 	utils = require 'utils'
 	signal = require 'signal'
 
-*Scrollable* Scrollable() : *Renderer.Item*
--------------------------------------------
-
 	module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 		@__name__ = 'Scrollable'
 		@__path__ = 'Renderer.Scrollable'
@@ -86,18 +83,25 @@ Scrollable @class
 
 		# 	scrollbar
 
-		constructor: (component, opts) ->
-			super component
+*Scrollable* Scrollable.New(*Component* component, [*Object* options])
+----------------------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Scrollable
+			itemUtils.Object.initialize item, component, opts
+			item.clip = true
+			item
+
+*Scrollable* Scrollable() : *Renderer.Item*
+-------------------------------------------
+
+		constructor: ->
+			super()
 			@_contentItem = null
 			@_contentX = 0
 			@_contentY = 0
 			@_snap = false
 			@_snapItem = null
-
-			if opts
-				itemUtils.Object.initialize @, opts
-			
-			@clip = true
 
 *Boolean* Scrollable::clip = true
 ---------------------------------
@@ -113,10 +117,11 @@ Scrollable @class
 			defaultValue: null
 			implementation: Impl.setScrollableContentItem
 			setter: (_super) -> (val) ->
-				@_contentItem?._parent = null
+				@_contentItem?.parent = null
 				if val?
 					expect(val).toBe.any Renderer.Item
-					val._parent = @
+					val.parent = @
+					val.index = 0
 				_super.call @, val
 
 *Float* Scrollable::contentX = 0
@@ -131,6 +136,9 @@ Scrollable @class
 			implementation: Impl.setScrollableContentX
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
+			setter: (_super) -> (val) ->
+				@_contentItem?._x = -val
+				_super.call @, val
 
 *Float* Scrollable::contentY = 0
 --------------------------------
@@ -144,6 +152,9 @@ Scrollable @class
 			implementation: Impl.setScrollableContentY
 			developmentSetter: (val) ->
 				expect(val).toBe.float()
+			setter: (_super) -> (val) ->
+				@_contentItem?._y = -val
+				_super.call @, val
 
 *Boolean* Scrollable::snap = false
 ----------------------------------

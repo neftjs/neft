@@ -25,22 +25,26 @@ Flow {
 		@__name__ = 'Flow'
 		@__path__ = 'Renderer.Flow'
 
+*Flow* Flow.New(*Component* component, [*Object* options])
+----------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Flow
+			itemUtils.Object.initialize item, component, opts
+			item.effectItem = item
+			item
+
 *Flow* Flow() : *Renderer.Item*
 -------------------------------
 
-		constructor: (component, opts) ->
-			super component
+		constructor: ->
+			super()
 			@_padding = null
 			@_spacing = null
 			@_alignment = null
 			@_includeBorderMargins = false
 			@_collapseMargins = false
 			@_effectItem = null
-
-			if opts
-				itemUtils.Object.initialize @, opts
-			
-			@effectItem = @
 
 		utils.defineProperty @::, 'effectItem', null, ->
 			@_effectItem

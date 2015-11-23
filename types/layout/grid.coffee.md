@@ -25,11 +25,20 @@ Grid {
 		@__name__ = 'Grid'
 		@__path__ = 'Renderer.Grid'
 
+*Grid* Grid.New(*Component* component, [*Object* options])
+----------------------------------------------------------
+
+		@New = (component, opts) ->
+			item = new Grid
+			itemUtils.Object.initialize item, component, opts
+			item.effectItem = item
+			item
+
 *Grid* Grid() : *Renderer.Item*
 -------------------------------
 
-		constructor: (component, opts) ->
-			super component
+		constructor: ->
+			super()
 			@_padding = null
 			@_columns = 2
 			@_rows = Infinity
@@ -37,11 +46,6 @@ Grid {
 			@_alignment = null
 			@_includeBorderMargins = false
 			@_effectItem = null
-
-			if opts
-				itemUtils.Object.initialize @, opts
-			
-			@effectItem = @
 
 		utils.defineProperty @::, 'effectItem', null, ->
 			@_effectItem

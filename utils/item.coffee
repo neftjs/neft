@@ -93,7 +93,7 @@ module.exports = (Renderer, Impl) ->
 			children: true
 
 		createClass = (component, opts) ->
-			classElem = new Renderer.Class component
+			classElem = Renderer.Class.New component
 			classElem.priority = -1
 
 			{changes} = classElem
@@ -139,11 +139,15 @@ module.exports = (Renderer, Impl) ->
 				setOpts.call object, component, opts
 			return
 
-		@initialize = (object, opts) ->
-			UtilsObject.setOpts object, object._component, opts
+		@initialize = (object, component, opts) ->
+			assert.instanceOf component, Renderer.Component
 			Object.preventExtensions object
+			object._component = component
+			Impl.initializeObject object, object.constructor.__name__
+			if opts
+				UtilsObject.setOpts object, component, opts
 
-		constructor: (component) ->
+		constructor: ->
 			Emitter.call @
 
 			@id = ''
@@ -153,7 +157,7 @@ module.exports = (Renderer, Impl) ->
 			@_classList = []
 			@_classQueue = []
 			@_extensions = []
-			@_component = component
+			@_component = null
 
 			Impl.createObject @, @constructor.__name__
 
@@ -178,7 +182,7 @@ module.exports = (Renderer, Impl) ->
 			return
 
 		clone: (component, opts) ->
-			clone = new @constructor component
+			clone = @constructor.New component
 			if @id
 				clone.id = @id
 
@@ -254,7 +258,7 @@ module.exports = (Renderer, Impl) ->
 	defineProperty: (opts) ->
 		assert.isPlainObject opts
 
-		{name, namespace, valueConstructor, implementation} = opts
+		{name, namespace, valueConstructor, implementation, implementationValue} = opts
 
 		`//<development>`
 		{developmentSetter} = opts
@@ -303,14 +307,17 @@ module.exports = (Renderer, Impl) ->
 				funcStr += "var oldVal = this.#{internalName};\n"
 				funcStr += "if (oldVal === val) return;\n"
 				if implementation?
-					funcStr += "impl.call(this._ref, val);\n"
+					if implementationValue?
+						funcStr += "impl.call(this._ref, implValue(val));\n"
+					else
+						funcStr += "impl.call(this._ref, val);\n"
 				funcStr += "this.#{internalName} = val;\n"
 				funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
 				funcStr += "emitSignal(this._ref, '#{namespaceSignalName}', '#{name}', oldVal);\n"
 				funcStr += "};"
 
-				func = new Function 'impl', 'emitSignal', 'debug', funcStr
-			propSetter = basicSetter = func implementation, emitSignal, developmentSetter
+				func = new Function 'impl', 'implValue', 'emitSignal', 'debug', funcStr
+			propSetter = basicSetter = func implementation, implementationValue, emitSignal, developmentSetter
 		else
 			func = funcCache["set-#{internalName}-#{developmentSetter?}-#{implementation?}"] ?= do ->
 				funcStr = "return function(val){\n"
@@ -321,13 +328,16 @@ module.exports = (Renderer, Impl) ->
 				funcStr += "var oldVal = this.#{internalName};\n"
 				funcStr += "if (oldVal === val) return;\n"
 				if implementation?
-					funcStr += "impl.call(this, val);\n"
+					if implementationValue?
+						funcStr += "impl.call(this, implValue(val));\n"
+					else
+						funcStr += "impl.call(this, val);\n"
 				funcStr += "this.#{internalName} = val;\n"
 				funcStr += "emitSignal(this, '#{signalName}', oldVal);\n"
 				funcStr += "};"
 
-				func = new Function 'impl', 'emitSignal', 'debug', funcStr
-			propSetter = basicSetter = func implementation, emitSignal, developmentSetter
+				func = new Function 'impl', 'implValue', 'emitSignal', 'debug', funcStr
+			propSetter = basicSetter = func implementation, implementationValue, emitSignal, developmentSetter
 
 		# custom desc
 		getter = if customGetter? then customGetter(propGetter) else propGetter
