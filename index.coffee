@@ -626,7 +626,7 @@ stringify =
 
 		rendererCtor = Renderer[elem.name.split('.')[0]]
 		if rendererCtor?
-			r = "new Renderer.#{elem.name}(_c, #{json})\n"
+			r = "Renderer.#{elem.name}.New(_c, #{json})\n"
 		else
 			r = "Renderer.Component.getCloneFunction(#{elem.name}, '#{elem.name}')(_c, #{json})\n"
 		if visibleId
