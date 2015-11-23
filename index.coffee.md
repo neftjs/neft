@@ -20,8 +20,8 @@ var signal = require('signal');
 	utils = require 'utils'
 	assert = require 'neft-assert'
 
-signal.STOP_PROPAGATION
------------------------
+*Integer* signal.STOP_PROPAGATION
+---------------------------------
 
 This special constant value is used to stop calling further listeners.
 
@@ -80,6 +80,15 @@ obj.onRename.emit('Max', 'George');
 
 		obj[name] = signal
 
+*Boolean* signal.isEmpty(*Signal* signal)
+-----------------------------------------
+
+	exports.isEmpty = (signal) ->
+		for func in signal.listeners by 2
+			if func isnt null
+				return false
+		return true
+
 	callSignal = (obj, listeners, arg1, arg2) ->
 		i = shift = 0
 		n = listeners.length
@@ -96,7 +105,7 @@ obj.onRename.emit('Max', 'George');
 					listeners[i] = null
 					listeners[i+1] = null
 
-				if result is 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
+				if result <= 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
 					result = STOP_PROPAGATION
 			i += 2
 		return result
