@@ -1,18 +1,10 @@
 'use strict'
 
-Renderer = require 'renderer'
 parser = require './parser'
-utils = require 'utils'
 
-{assert} = console
+{utils, Renderer, assert} = Neft
 
-OBJECT = 'object'
-ID = 'id'
-PROPERTY = 'property'
 ATTRIBUTE = 'attribute'
-SIGNAL = 'signal'
-FUNCTION = 'function'
-CODE = 'code'
 
 # options
 i = 1
@@ -20,29 +12,17 @@ BINDING_THIS_TO_TARGET_OPTS = 1
 
 ids = idsKeys = itemsKeys = extensions = queries = null
 
-uid = ->
-	'c' + Math.random().toString(16).slice(2)
-
 repeatString = (str, amount) ->
 	r = str
 	for i in [0...amount-1] by 1
 		r += str
 	r
 
-concatArrayElements = (arrA, arrB) ->
-	assert arrA.length is arrB.length
-
-	for elem, i in arrA
-		arrA[i] += arrB[i]
-
-	arrA
-
 isAnchor = (obj) ->
 	assert obj.type is ATTRIBUTE, "isAnchor: type must be an attribute"
 
 	obj.name is 'anchors' or obj.name.indexOf('anchors.') is 0
 
-# BINDING = ///([a-zA-Z_$][a-zA-Z0-9_$]*)\.([a-zA-Z0-9_$]+)///
 isBinding = (obj) ->
 	assert obj.type is ATTRIBUTE, "isBinding: type must be an attribute"
 
@@ -50,26 +30,7 @@ isBinding = (obj) ->
 		eval "(function(console,module,require){return (#{obj.value});}).call(null,null,{},function(){})"
 		return false
 
-	# unless BINDING.test(obj.value)
-	# 	console.log obj.value
-	# 	return false
-
 	true
-
-getByType = (arr, type) ->
-	r = []
-	for elem in arr
-		if elem.type is type
-			r.push elem
-	r
-
-getByTypeRec = (arr, type, r=[]) ->
-	for elem in arr
-		if elem.type is type
-			r.push elem
-		if elem.body
-			getByTypeRec elem.body, type, r
-	r
 
 getByTypeDeep = (elem, type, callback) ->
 	if elem.type is type
@@ -85,18 +46,6 @@ getByTypeDeep = (elem, type, callback) ->
 
 	return
 
-getEachProp = (arr, prop) ->
-	r = []
-	for elem in arr
-		r.push elem[prop]
-	r
-
-getElemByName = (arr, type, name) ->
-	for elem in arr
-		if elem.type is type and elem.name is name
-			return elem
-	return
-
 MODIFIERS_NAMES =
 	__proto__: null
 	Class: true
@@ -104,42 +53,8 @@ MODIFIERS_NAMES =
 	Animation: true
 	PropertyAnimation: true
 	NumberAnimation: true
-	Source: true
 	FontLoader: true
 	ResourcesLoader: true
-	AmbientSound: true
-getItem = (obj) ->
-	while obj
-		if obj.type is 'object' and not MODIFIERS_NAMES[obj.name]
-			return obj
-		obj = obj.parent
-	return
-getObject = (obj) ->
-	while obj
-		if obj.type is 'object'
-			return obj
-		obj = obj.parent
-	return
-
-# getItemParent = (obj) ->
-# 	obj = getItem obj
-# 	if not obj or not (parent = obj.parent)
-# 		throw "Binding to the static 'parent' can't be used if an item doesn't have a parent. Use 'this.parent' if this reference must be dynamic"
-# 	parent.id
-
-# getItemNextSibling = (obj) ->
-# 	obj = getItem obj
-# 	index = obj?.parent?.body.indexOf(obj)
-# 	if not obj or not (sibling = obj.parent.body[index+1])
-# 		throw "Binding to the static 'nextSibling' can't be used if an item doesn't have a next sibling. Use 'this.nextSibling' if this reference must be dynamic"
-# 	sibling.id
-
-# getItemPreviousSibling = (obj) ->
-# 	obj = getItem obj
-# 	index = obj?.parent?.body.indexOf(obj)
-# 	if not obj or not (sibling = obj.parent.body[index-1])
-# 		throw "Binding to the static 'previousSibling' can't be used if an item doesn't have a previous sibling. Use 'this.previousSibling' if this reference must be dynamic"
-# 	sibling.id
 
 anchorAttributeToString = (obj) ->
 	assert obj.type is ATTRIBUTE, "anchorAttributeToString: type must be an attribute"
@@ -234,12 +149,8 @@ bindingAttributeToString = (obj) ->
 	# split
 	text = ''
 	hash = ''
-	# args = []
 	for elem, i in binding
 		if typeof elem is 'string'
-			# elem = elem.replace ///\$///g, '$$$'
-			# elem = elem.replace ///'///g, '\\\''
-			# text += "'#{elem}'"
 			hash += elem
 		else if elem.length > 1
 			if binding[i-1]? and text
@@ -251,264 +162,23 @@ bindingAttributeToString = (obj) ->
 				hash += "this"
 			else
 				hash += "#{elem[0]}"
-				# args.push elem[0]
 			elem.shift()
 			for id, i in elem
 				text += ", '#{id}']"
 				hash += ".#{id}"
 		else
-			# text += "#{elem[0]}"
 			if elem[0] is "this"
 				hash += "this"
 			else
 				hash += "#{elem[0]}"
-				# args.push elem[0]
 
 	hash = hash.trim()
 	text = text.trim()
 
-	# func = new Function hash
 	args = idsKeys+''
 	func = "function(#{args}){return #{hash}}"
 
 	"[#{func}, [#{text}]]"
-
-# stringObjectHead = (obj) ->
-# 	assert obj.type is OBJECT, "stringObject: type must be an object"
-
-# 	if getByType(obj.body, ID).length > 0
-# 		if MODIFIERS_NAMES[obj.name]
-# 			extensions[obj.id] = true
-# 		else
-# 			ids[obj.id] = true
-
-# 	rendererCtor = Renderer[obj.name.split('.')[0]]
-# 	isLocal = rendererCtor?
-# 	decl = if isLocal then "new #{obj.name}" else "#{obj.name}"
-# 	if MODIFIERS_NAMES[obj.name]
-# 		r = "#{decl}('#{obj.id}', _i)\n"
-# 	else
-# 		r = "#{decl}('#{obj.id}', _i)\n"
-
-# 		properties = getEachProp(getByType(obj.body, PROPERTY), 'name')
-# 		for property in properties
-# 			r += "_d.createProperty('#{utils.addSlashes(property)}')\n"
-
-# 		signals = getEachProp(getByType(obj.body, SIGNAL), 'name')
-# 		for signal in signals
-# 			r += "_d.createSignal('#{utils.addSlashes(signal)}')\n"
-
-# 	unless MODIFIERS_NAMES[obj.name]
-# 		classBody = []
-# 		obj.body = obj.body.filter (elem) ->
-# 			if elem.type is ATTRIBUTE or (elem.type is FUNCTION and elem.name isnt 'onReady')
-# 				classBody.push elem
-# 				false
-# 			else
-# 				true
-
-# 		defaultClass =
-# 			type: 'object'
-# 			name: 'Class'
-# 			id: uid()
-# 			autoId: true
-# 			body: [{
-# 				type: 'attribute'
-# 				name: 'changes'
-# 				value: classBody
-# 			}]
-# 			parent: obj
-# 		obj.body.push defaultClass
-# 		# r += stringObjectFull defaultClass
-# 		# r += "#{obj.id}._defaultClasses.push(#{defaultClass.id});\n"
-# 		# r += "#{defaultClass.id}.target = #{obj.id};\n"
-
-# 	r
-
-# stringObjectChildren = (obj) ->
-# 	assert obj.type is OBJECT, "stringObject: type must be an object"
-
-# 	r = ""
-
-# 	for child in getByType(obj.body, OBJECT)
-# 		r += stringObject child
-
-# 		rendererCtor = Renderer[child.name.split('.')[0]]
-
-# 		# if rendererCtor?.prototype instanceof Renderer.Extension
-# 		# 	r += "_d.targets.append(_i)\n"
-# 		# else
-# 		# 	r += "#{child.id}.parent = #{obj.id};\n"
-
-# 	r
-
-# stringObject = (obj) ->
-# 	r = stringObjectHead obj
-# 	r += stringObjectChildren obj
-
-# stringAttribute = (obj, parents) ->
-# 	assert parents[0].type is OBJECT, "stringAttribute: first parent must be an object"
-
-# 	object = parents[0]
-# 	{value} = obj
-
-# 	parentsRef = "_d."
-# 	for parent in parents[1...]
-# 		parentsRef += "#{parent.name}."
-# 	parentsRef = parentsRef.slice 0, -1
-
-# 	type = 'attr'
-# 	writeAsBinding = false
-# 	writeAsFunction = false
-# 	if object.name is 'Class' and parents[1]?.name is 'changes'
-# 		type = 'change'
-
-# 	r = ''
-# 	rPre = ''
-# 	rPost = ''
-# 	childParents = null
-
-# 	if Array.isArray(value)
-# 		rArr = "["
-
-# 		for elem in value
-# 			switch elem.type
-# 				when OBJECT
-# 					rArr += "#{elem.id}, "
-# 					rPre += stringObjectFull elem
-# 				when ATTRIBUTE, FUNCTION
-# 					unless childParents
-# 						childParents = parents.slice()
-# 						childParents.push obj
-# 					rPost += stringAttribute elem, childParents
-# 				# when FUNCTION
-# 				# 	rPost += stringAttribute elem, childParents
-# 				else
-# 					throw "Not implemented attribute type '#{elem.type}'"
-
-# 		rArr = rArr.slice 0, -2
-# 		if rArr.length > 0
-# 			r += "#{rArr}]"
-# 		else
-# 			if parents.length > 1 or obj.name.indexOf('$.') is 0
-# 				r += "{}"
-# 			else
-# 				return rPre + rPost
-# 	else if obj.type is FUNCTION
-# 		writeAsFunction = true
-# 		func = Function obj.params or [], obj.body
-# 		r += func
-# 	else if isAnchor(obj)
-# 		r += anchorAttributeToString(obj)
-# 	else
-# 		[_, extraParentsRef, propName] = ///^(?:(.+)\.)?(.+)$///.exec obj.name
-# 		if extraParentsRef
-# 			extraParentsRef = ".#{extraParentsRef}"
-# 		else
-# 			extraParentsRef = ''
-
-# 		if isBinding(obj)
-# 			binding = bindingAttributeToString(obj)
-# 			if type is 'attr'
-# 				r = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', #{binding})"
-# 			else
-# 				r = binding
-# 			writeAsBinding = true
-# 		else
-# 			# if ///^Styles\[///.test(object.name)
-# 			# 	rPre = "#{parentsRef}#{extraParentsRef}.createBinding('#{propName}', null);\n"
-
-# 			if value.type is OBJECT
-# 				r += value.id
-# 				rPre += stringObjectFull value
-# 			else
-# 				r += value
-
-# 	switch type
-# 		when 'attr'
-# 			ref = "#{parentsRef}.#{obj.name}"
-# 			if writeAsFunction
-# 				rPre + "#{ref}(" + r + ", #{parents[0].id})\n" + rPost
-# 			else if writeAsBinding
-# 				rPre + r + ";\n" + rPost
-# 			else
-# 				rPre + "#{ref} = " + r + "\n" + rPost
-# 		when 'change'
-# 			path = parentsRef.slice object.id.length+'changes.'.length+1
-# 			path += '.' if path
-# 			path += obj.name
-# 			if writeAsBinding
-# 				method = 'setBinding'
-# 			else if writeAsFunction
-# 				method = 'setFunction'
-# 			else
-# 				method = 'setAttribute'
-# 			rPre + "_d.changes.#{method}('#{path}', #{r})\n" + rPost
-
-# stringAttributes = (obj) ->
-# 	assert obj.type is OBJECT, "stringAttributes: type must be an object"
-
-# 	r = ''
-
-# 	for child in getByType(obj.body, OBJECT)
-# 		r += stringAttributes child
-
-# 	for attribute in getByType(obj.body, ATTRIBUTE)
-# 		r += stringAttribute attribute, [obj]
-
-# 	r
-
-# stringFunctions = (obj) ->
-# 	assert obj.type is OBJECT, "stringFunctions: type must be an object"
-
-# 	r = ''
-
-# 	for child in getByType(obj.body, OBJECT)
-# 		r += stringFunctions child
-
-# 	attributes = getByType obj.body, FUNCTION
-# 	for attribute in attributes
-# 		r += stringAttribute attribute, [obj]
-
-# 	r
-
-# stringObjectFull = (obj) ->
-# 	if obj.type is CODE
-# 		return obj.body
-
-# 	assert obj.type is OBJECT, "stringObjectFull: type must be an object"
-
-# 	code = stringObject obj
-# 	code += stringBody obj
-# 	code
-
-# stringBody = (obj) ->
-# 	code = ''
-# 	code += stringAttributes obj
-# 	code += stringFunctions obj
-# 	code
-
-# stringViewObjectFull = (obj) ->
-# 	if obj.type is CODE
-# 		return obj.body
-
-# 	assert obj.type is OBJECT, "stringObjectFull: type must be an object"
-
-# 	code = stringObjectHead obj
-# 	code += stringObjectChildren obj
-# 	code += stringBody obj
-# 	code
-
-# stringFile = (file, isView=false) ->
-# 	ids = {}
-# 	extensions = {}
-
-# 	# if isView
-# 	# 	code += stringViewObjectFull file
-# 	# else
-# 	code += stringObjectFull file
-
-# 	code
 
 stringify =
 	function: (elem) ->
@@ -556,8 +226,6 @@ stringify =
 				return false
 			else if value?.type is 'object'
 				valueCode = stringify.object value
-				# postfix += ", \"#{body.name}\": ((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
-				# return false
 				value = "((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
 			else if body.type is 'function'
 				value = stringify.function body
@@ -597,7 +265,6 @@ stringify =
 		if not elem.parent and elem.name is 'Class' and not json.target
 			json.target = "`view`"
 
-		# unless MODIFIERS_NAMES[elem.name]
 		itemsKeys.push json.id
 		visibleId = json.id
 
@@ -758,19 +425,3 @@ module.exports = (file, filename) ->
 	codes: codes
 	autoInitCodes: autoInitCodes
 	queries: allQueries
-
-# codes = module.exports("""
-# Image {
-# 	id: main
-# 	Class {
-# 		changes: {
-# 			ab: 2
-# 			onReady: function(){
-# 				console.log(123);
-# 			}
-# 		}
-# 	}
-# }
-# """).codes
-# console.log codes
-# console.log codes[Object.keys(codes)[0]]

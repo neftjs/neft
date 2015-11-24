@@ -1,8 +1,8 @@
 'use strict'
 
-grammar = '{{grammar}}'
-# fs = require 'fs'
-# grammar = fs.readFileSync './grammar.pegjs', 'utf-8'
+fs = require 'fs'
+pathUtils = require 'path'
+grammar = fs.readFileSync pathUtils.resolve(__dirname, './grammar.pegjs'), 'utf-8'
 
 module.exports = (file) ->
 	fs = require 'fs'
