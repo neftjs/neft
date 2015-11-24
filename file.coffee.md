@@ -79,6 +79,10 @@ File @class
 -------------------------------------------------------------------
 
 		@fromHTML = do ->
+			unless utils.isNode
+				return (path, html) ->
+					throw new Error "Document.fromHTML is available only on the server"
+
 			clear = require('./file/clear') File
 
 			(path, html) ->
