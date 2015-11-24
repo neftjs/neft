@@ -9,6 +9,12 @@ CACHE_DIRECTORY = '/tmp/cache/coffee'
 
 {stringify} = JSON
 
+IS_COFFEE_RE = ///\.(coffee|litcoffee|coffee.md)$///
+IS_LITERATE_COFFEE_RE = ///\.(litcoffee|coffee.md)$///
+STRING_FILES =
+	'.pegjs': true
+	'.txt': true
+
 replaceStr = (str, oldStr, newStr) ->
 	i = str.indexOf oldStr
 	unless ~i then return str
@@ -19,18 +25,13 @@ replaceStr = (str, oldStr, newStr) ->
 
 	r
 
-IS_COFFEE_RE = ///\.(coffee|litcoffee|coffee.md)$///
-IS_LITERATE_COFFEE_RE = ///\.(litcoffee|coffee.md)$///
-STRING_FILES =
-	'.pegjs': true
-	'.txt': true
-
 getFile = (path) ->
 	try
 		file = fs.readFileSync path, 'utf-8'
 	catch
 		return
 
+	# compile coffee-script files and cache it
 	if IS_COFFEE_RE.test(path)
 		digest = crypto.createHash('sha1').update(file, 'utf8').digest('hex')
 		cache = pathUtils.join CACHE_DIRECTORY, "#{digest}.js"
@@ -39,6 +40,7 @@ getFile = (path) ->
 		else
 			isLiterate = IS_LITERATE_COFFEE_RE.test path
 			file = coffee.compile file, bare: true, literate: isLiterate
+			fs.writeFileSync cache, file, 'utf-8'
 
 	if STRING_FILES[pathUtils.extname(path)]
 		file = "module.exports = #{JSON.stringify(file)}"
@@ -61,9 +63,6 @@ fileScope = """(function(){
 			set: function(val){ setImmediate = val; }
 		}
 	});
-
-	// standard polyfills
-	console.assert = console.assert.bind(console);
 
 	// used as `require`
 	function getModule(paths, name){
@@ -98,7 +97,8 @@ moduleScope = """(function(){
 getDeclarations = (modules) ->
 	r = {}
 
-	r[name] = {} for name in modules
+	for name in modules
+		r[name] = {}
 
 	r
 
@@ -128,7 +128,6 @@ getModulesInit = (opts) ->
 	r
 
 module.exports = (opts) ->
-
 	declarations = getDeclarations opts.modules
 	init = getModulesInit opts
 

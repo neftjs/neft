@@ -4,7 +4,7 @@ module.exports = ->
 	# gets argv
 	[_, _, index, opts] = process.argv
 	opts = JSON.parse opts
-	{type, onlyLocal, allowedRemoteModules} = opts
+	{platform, onlyLocal, allowedRemoteModules} = opts
 	allowedRemoteModules ?= []
 	process.argv.splice 2, Infinity
 
@@ -95,9 +95,9 @@ module.exports = ->
 			global.task = ->
 			global.requestAnimationFrame = ->
 
-		qml: ->
+		qt: ->
 			###
-			Provide necessary standard browser globals
+			Provide necessary standard qt globals
 			###
 			SIGNAL =
 				connect: ->
@@ -154,8 +154,15 @@ module.exports = ->
 			global.requestAnimationFrame = ->
 
 		android: ->
+			global.requestAnimationFrame = ->
 			global.android = {}
-			global._neft = {}
+			global._neft =
+				http:
+					request: -> 0
+					onResponse: ->
+				renderer:
+					transferData: ->
+					onUpdateView: ->
 
 	NODE_MODULES =
 		fs: true
@@ -196,15 +203,16 @@ module.exports = ->
 	# Get index to require and their base path
 	base = pathUtils.dirname index
 
-	EMULATORS[type]()
+	EMULATORS[platform]()
 
 	require.extensions['.pegjs'] = require.extensions['.txt'] = (module, filename) ->
 		module.exports = fs.readFileSync filename, 'utf8'
 	require.extensions['.yaml'] = (module, filename) ->
 		module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
 
-	try
-		Neft = require "./neft-#{type}-develop.js"
+	if opts.neftFilePath
+		Neft = require opts.neftFilePath
+	global.Neft = ->
 
 	###
 	Override standard `Module._load()` to capture all required modules and files
@@ -236,7 +244,7 @@ module.exports = ->
 		if onlyLocal
 			if ///^\.\.(?:\/|\\)|^node_modules(?:\/|\\)///.test(modulePath) or not ///\.[a-zA-Z0-9]+$///.test(modulePath)
 				name = ///^\.\.(?:\/|\\)([a-z_\-A-Z]+)///.exec(modulePath)?[1]
-				if allowedRemoteModules.indexOf(name) is -1
+				if allowedRemoteModules.indexOf(name) is -1 and not /^neft\-/.test(req)
 					return r
 
 		modules.push modulePath unless ~modules.indexOf modulePath
