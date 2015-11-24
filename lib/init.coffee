@@ -1,0 +1,90 @@
+'use strict'
+
+fs = require 'fs'
+pathUtils = require 'path'
+global.Neft = require '../bundle/neft-node-develop.js'
+
+{log} = Neft
+
+# parse arguments
+ARGS_WITH_COMMANDS =
+	create: true
+	build: true
+	run: true
+
+PLATFORMS =
+	node: true
+	browser: true
+	android: true
+	qt: true
+
+args =
+	help: false
+	version: false
+	create: ''
+	build: ''
+	run: ''
+
+options =
+	release: false
+	verbose: false
+	out: ''
+
+argOutput = ''
+for arg, i in process.argv when i > 1
+	if arg.slice(0, 2) is '--'
+		if arg.indexOf('=') >= 0
+			[name, value] = arg.split('=')
+		else
+			name = arg.slice(2)
+			value = true
+
+		if options[name] is undefined
+			log.error "Unexpected option '"+arg+"'"
+			args.help = true
+
+		options[name] = value
+	else
+		if argOutput
+			args[argOutput] = arg
+			argOutput = ''
+		else
+			if args[arg] is undefined
+				log.error "Unexpected command '"+arg+"'"
+				args.help = true
+
+			args[arg] = true
+
+		if ARGS_WITH_COMMANDS[arg]
+			argOutput = arg
+
+if process.argv.length <= 2
+	args.help = true
+
+# verify
+if args.build is true or args.run is true
+	log.error "No platform specified"
+	args.help = true
+else if (args.build and not PLATFORMS[args.build]) or args.run and not PLATFORMS[args.run]
+	log.error "Unsupported platform"
+	args.help = true
+
+# options
+unless options.verbose
+	log.enabled = log.ERROR | log.OK
+
+# commands
+if args.help
+	log '\n'+fs.readFileSync(pathUtils.resolve(__dirname, '../README'), 'utf-8')
+
+else if args.version
+	log require('../package.json').version
+
+else if args.create
+	require('./tasks/create') args.create, options
+
+else if args.build
+	require('./tasks/build') args.build, options
+
+else if args.run
+	require('./tasks/run') args.run, options

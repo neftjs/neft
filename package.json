@@ -1,0 +1,27 @@
+{
+  "name": "neft",
+  "version": "0.0.2",
+  "preferGlobal": true,
+  "author": "Neft.io <contact@neft.io>",
+  "description": "Command-line interface for building Neft.io projects",
+  "bin": {
+    "neft": "./bin/neft.js"
+  },
+  "main": "./lib/neft-cli.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "coffee-script": "^1.10.0",
+    "fs-extra": "^0.24.0",
+    "groundskeeper": "^0.1.11",
+    "js-yaml": "^3.3.1",
+    "mkdirp": "^0.5.0",
+    "mustache": "^2.2.0",
+    "open": "0.0.5",
+    "pegjs": "^0.8.0"
+  },
+  "devDependencies": {
+    "sample-project": "git+ssh://git@bitbucket.org:Kildyt/sample-project.git",
+    "android-runtime": "git+ssh://git@bitbucket.org:Kildyt/android-runtime.git",
+    "qt-runtime": "git+ssh://git@bitbucket.org:Kildyt/qt-runtime.git"
+  }
+}
