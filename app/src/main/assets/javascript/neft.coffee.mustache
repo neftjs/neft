@@ -1,0 +1,63 @@
+# temporarily disable typed arrays
+Int8Array = Uint8Array = Uint8ClampedArray = Int16Array =
+Uint16Array = Int32Array = Uint32Array = Float32Array = Float64Array = undefined
+
+###
+Console
+###
+console = do ->
+	getMessage = (args) ->
+		Array::join.call args, ' '
+
+	Object.preventExtensions
+		assert: (assertion, msg) ->
+			unless assertion
+				throw new Error msg
+		log: ->
+			_neft.console.log getMessage(arguments)
+		info: ->
+			_neft.console.info getMessage(arguments)
+		warn: ->
+			_neft.console.warn getMessage(arguments)
+		error: ->
+			_neft.console.error getMessage(arguments)
+		trace: ->
+			err = new Error
+			err.name = 'Trace'
+			err.message = getMessage arguments
+			Error.captureStackTrace err, trace
+			console.error err.stack
+
+###
+Timers
+###
+setTimeout = clearTimeout = null
+do ->
+	shots = Object.create null
+
+	_neft.timers.registerCallback (id) ->
+		if timer = shots[id]
+			delete shots[id]
+			timer[0].apply null, timer[1]
+		return
+
+	setTimeout = (func, delay, args...) ->
+		if delay < 0
+			delay = 0
+		id = _neft.timers.shot delay
+		shots[id] = [func, args]
+		id
+
+	clearTimeout = (id) ->
+		delete shots[id]
+		return
+
+###
+Neft code
+###
+`{{&neftCode}}`
+
+###
+Application code
+###
+`{{&appCode}}`

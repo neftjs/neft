@@ -1,0 +1,15 @@
+package {{&package.android.package}};
+
+import android.os.Bundle;
+
+import io.neft.Renderer.WindowView;
+
+public class MainActivity extends io.neft.MainActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        this.view = (WindowView) findViewById(R.id.layout);
+        this.init();
+    }
+}
