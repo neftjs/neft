@@ -12,7 +12,7 @@ saveBundle = require './build/saveBundle'
 clear = (platform, callback) ->
 	fs.remove './index.js', callback
 
-module.exports = (platform, options) ->
+module.exports = (platform, options, callback) ->
 	unless cliUtils.verifyNeftProject('./')
 		return
 
@@ -35,11 +35,4 @@ module.exports = (platform, options) ->
 	stack.add clear, null, [platform, options]
 
 	# run
-	stack.runAll (err) ->
-		if err
-			return log.error err?.stack or err
-
-		# debug log
-		unless options.release
-			log.warn "Use this bundles only for testing. " +
-				"For production use --release option"
+	stack.runAll callback

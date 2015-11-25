@@ -7,7 +7,7 @@ Commands:
   version            prints using Neft version
   create             creates new project at specified path
   build <Platform>   copies platform files and create application bundle
-  run <Platform>     runs your application
+  run <Platform>     builds and runs your application
 
 Platforms:
   node
@@ -18,4 +18,5 @@ Platforms:
 Options:
   --release          used to build and run release version of your application
   --verbose          prints debug informations from the building process
-  --out=PATH         used with build to specify custom output path
+  --out=PATH         used to generate android APK file or complete bundle
+                     ready to publish on a server

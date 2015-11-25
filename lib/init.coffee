@@ -18,6 +18,9 @@ PLATFORMS =
 	android: true
 	qt: true
 
+DEFAULT_OPTIONS_VALUES =
+	out: 'build'
+
 args =
 	help: false
 	version: false
@@ -35,9 +38,10 @@ for arg, i in process.argv when i > 1
 	if arg.slice(0, 2) is '--'
 		if arg.indexOf('=') >= 0
 			[name, value] = arg.split('=')
+			name = name.slice(2)
 		else
 			name = arg.slice(2)
-			value = true
+			value = DEFAULT_OPTIONS_VALUES[name] or true
 
 		if options[name] is undefined
 			log.error "Unexpected option '"+arg+"'"
@@ -83,8 +87,10 @@ else if args.version
 else if args.create
 	require('./tasks/create') args.create, options
 
-else if args.build
-	require('./tasks/build') args.build, options
+else if (platform = args.build or args.run)
+	require('./tasks/build') platform, options, (err) ->
+		if err
+			return log.error err?.stack or err
 
-else if args.run
-	require('./tasks/run') args.run, options
+		if args.run
+			require('./tasks/run') platform, options
