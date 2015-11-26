@@ -308,7 +308,7 @@ module.exports = (File, data) -> class Style
 		loop
 			visible = tmpNode._visible
 			tmpNode = tmpNode._parent
-			if not visible or not tmpNode
+			if not visible or not tmpNode or tmpNode._style
 				break
 		visible
 
