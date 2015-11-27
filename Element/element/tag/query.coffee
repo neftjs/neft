@@ -428,6 +428,9 @@ module.exports = (_Tag) ->
 			return
 
 		(node) ->
+			unless node instanceof Tag
+				return
+
 			tmp = node
 			node._checkWatchers |= CHECK_WATCHERS_THIS
 			while tmp = tmp._parent
