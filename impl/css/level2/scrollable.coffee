@@ -62,6 +62,7 @@ module.exports = (impl) ->
 				self.contentX = x
 			if round(y) isnt round(self._contentY)
 				self.contentY = y
+			data.updateScroll()
 			return
 
 		return

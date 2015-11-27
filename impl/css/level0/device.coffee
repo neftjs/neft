@@ -1,14 +1,6 @@
 'use strict'
 
 module.exports = (impl) ->
-	eventName = do ->
-		if 'onwheel' of document.createElement("div")
-			'wheel'
-		else if document.onmousewheel isnt undefined
-			'mousewheel'
-		else
-			'MozMousePixelScroll'
-
 	getNormalizedEvent = do ->
 		NORMALIZED_VALUE = 3
 
@@ -113,4 +105,4 @@ module.exports = (impl) ->
 			pointer.deltaY = event.deltaY
 			device.onPointerWheel.emit pointer
 
-		window.addEventListener eventName, onPointerWheel
+		window.addEventListener impl.utils.pointerWheelEventName, onPointerWheel

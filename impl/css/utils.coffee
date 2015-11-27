@@ -53,6 +53,14 @@ exports.encodeImageSrc = do ->
 		else
 			val
 
+exports.pointerWheelEventName = do ->
+	if 'onwheel' of document.createElement("div")
+		'wheel'
+	else if document.onmousewheel isnt undefined
+		'mousewheel'
+	else
+		'MozMousePixelScroll'
+
 exports.keysEvents = do ->
 	SPECIAL_KEY_CODES =
 		32: 'Space'

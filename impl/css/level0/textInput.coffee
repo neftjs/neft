@@ -74,7 +74,7 @@ module.exports = (impl) ->
 		data.elem.appendChild innerElem
 
 		# prevent scrollable on input
-		data.elem.addEventListener impl._SIGNALS.pointerOnWheel, (e) ->
+		data.elem.addEventListener impl.utils.pointerWheelEventName, (e) ->
 			if data.isMultiLine and document.activeElement is innerElem
 				e.stopPropagation()
 			return
