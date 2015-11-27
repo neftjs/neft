@@ -13,7 +13,7 @@ module.exports = (impl) ->
 		CAPTURED = 1<<0
 		STOP_PROPAGATION = 1<<1
 
-		(type, item, ex, ey, onItem, parentX, parentY, parentScale) ->
+		checkChildren = (type, item, ex, ey, onItem, parentX, parentY, parentScale) ->
 			result = childrenResult = childrenCapturesPointer = 0
 			x = y = w = h = scale = rotation = t1 = t2 = rey = rsin = rcos = 0.0
 
@@ -70,7 +70,7 @@ module.exports = (impl) ->
 
 				# test children
 				if childrenCapturesPointer > 0
-					childrenResult = captureItems(type, child, ex, ey, onItem, x, y, scale)
+					childrenResult = checkChildren(type, child, ex, ey, onItem, x, y, scale)
 					if childrenResult & STOP_PROPAGATION
 						return STOP_PROPAGATION
 					result |= childrenResult
@@ -84,6 +84,34 @@ module.exports = (impl) ->
 						if onItem(child)
 							return STOP_PROPAGATION
 			return result
+
+		(type, item, ex, ey, onItem) ->
+			x = y = childrenCapturesPointer = 0
+			w = item._width
+			h = item._height
+			scale = 1
+
+			data = item._impl
+
+			if type & MOVE
+				childrenCapturesPointer = data.childrenCapturesMovePointer
+			else
+				childrenCapturesPointer = data.childrenCapturesClickPointer
+
+			# test children
+			if childrenCapturesPointer > 0
+				childrenResult = checkChildren(type, item, ex, ey, onItem, x, y, scale)
+				if childrenResult & STOP_PROPAGATION
+					return STOP_PROPAGATION
+			else
+				childrenResult = 0
+
+			# test this item
+			if data.capturePointer & type
+				if childrenResult & CAPTURED or isPointInBox(ex, ey, x, y, w, h)
+					if onItem(item)
+						return STOP_PROPAGATION
+			return
 
 	itemsToRelease = []
 	itemsToMove = []
@@ -110,7 +138,7 @@ module.exports = (impl) ->
 
 			(e) ->
 				if impl.window._impl.childrenCapturesClickPointer > 0
-					captureItems PRESS, impl.window, e._x, e._y, onItem, 0, 0, 1
+					captureItems PRESS, impl.window, e._x, e._y, onItem
 				return
 
 		# support release and click events
@@ -128,7 +156,7 @@ module.exports = (impl) ->
 				event._stopPropagation = false
 
 				if impl.window._impl.childrenCapturesClickPointer > 0
-					captureItems CLICK, impl.window, e._x, e._y, onItem, 0, 0, 1
+					captureItems CLICK, impl.window, e._x, e._y, onItem
 
 				unless event._stopPropagation
 					for item in itemsToRelease by -1
@@ -163,7 +191,7 @@ module.exports = (impl) ->
 				flag = (flag % 2) + 1
 
 				if impl.window._impl.childrenCapturesMovePointer > 0
-					captureItems MOVE, impl.window, e._x, e._y, onItem, 0, 0, 1
+					captureItems MOVE, impl.window, e._x, e._y, onItem
 
 				for item in itemsToMove
 					if event._stopPropagation
@@ -200,7 +228,7 @@ module.exports = (impl) ->
 				if impl.window._impl.childrenCapturesClickPointer > 0
 					event._deltaX = e._deltaX
 					event._deltaY = e._deltaY
-					captureItems WHEEL, impl.window, e._x, e._y, onItem, 0, 0, 1
+					captureItems WHEEL, impl.window, e._x, e._y, onItem
 				return
 
 	i = 0
