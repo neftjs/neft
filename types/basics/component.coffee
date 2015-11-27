@@ -256,14 +256,14 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				component.objects = Object.create @objects
 				component.item = @item
 				component.objectsOrderSignalArr = new Array @objectsOrder.length+2
-				component.onObjectChange = @onObjectChange
 				component.isDeepClone = true
 				component.ready = true
 				component.mirror = true
 
 				components = {}
 				components[component.id] = component
-				clone = cloneItem item, components, component
+				createdComponents = [component]
+				clone = cloneItem item, components, createdComponents, component
 
 				for val, i in @objectsOrder
 					component.objectsOrder[i] = component.objectsOrderSignalArr[i] ||= val
@@ -309,7 +309,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		assert.notLengthOf item.id, 0
 		assert.ok @objects[item.id] or @parent?.objects[item.id]
 		# assert.ok @isClone
-		assert.ok item._component.isDeepClone
+		itemComp = item._component.belongsToComponent or item._component
+		assert.ok itemComp.isDeepClone
 
 		@cache[item.id] ?= []
 		@cache[item.id].push item

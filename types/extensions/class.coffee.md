@@ -319,14 +319,16 @@ Grid {
 			if classElem._children
 				for child in classElem._children
 					clone = classElem._component.cloneRawObject child
-					clone._component.onObjectChange = signal.create()
-					clone._component.setObjectById sourceClassElem, sourceClassElem.id
-					clone._component.initObjects()
+					cloneComp = clone._component.belongsToComponent or clone._component
+					cloneComp.onObjectChange = signal.create()
+					cloneComp.setObjectById sourceClassElem, sourceClassElem.id
+					cloneComp.initObjects()
 					loadedObjects.push clone
 					if clone instanceof Renderer.Item
 						clone.parent ?= item
 					else
-						updateChildPriorities classElem, clone
+						if clone instanceof Class
+							updateChildPriorities classElem, clone
 						clone.target ?= item
 
 					if utils.has(component.idsOrder, child.id)
