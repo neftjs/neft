@@ -2,9 +2,8 @@
 
 utils = require 'utils'
 
-WHITE_SPACE_RE = ///^\s*$///
+WHITE_SPACE_RE = ///^(\r?\n|\r)+\s+$///m
 WHITE_SPACES_RE = ///^(\r?\n|\r)+\s+///gm
-LINE_BREAKERS_RE = ///\r?\n|\r///g
 PHRASING_ELEMENTS = ["a", "em", "strong", "small", "mark", "abbr", "dfn", "i", "b",
                      "s", "u", "code", "var", "samp", "kbd", "sup", "sub", "q", "cite",
                      "span", "bdo", "bdi", "br", "wbr", "ins", "del", "img", "embed",
