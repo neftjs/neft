@@ -23,7 +23,7 @@ SINGLE_TAG =
 	wbr: true
 
 isPublic = (name) ->
-	name.indexOf('neft:') isnt 0
+	not /^(?:neft:|style:)/.test name
 
 getInnerHTML = (elem) ->
 	if elem.children
@@ -48,7 +48,7 @@ getOuterHTML = (elem) ->
 
 	nameRet = ret = "<" + name
 	for attrName, attrValue of elem._attrs
-		if ///^neft:///.test(attrName)
+		unless isPublic(attrName)
 			continue
 
 		ret += " " + attrName
