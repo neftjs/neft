@@ -99,7 +99,7 @@ module.exports = (Networking) ->
 				status: xhr.status
 				data: xhr.response
 
-		if utils.isObject req.data
+		if utils.isObject(req.data)
 			data = utils.tryFunction JSON.stringify, null, [req.data], req.data
 		else
 			data = req.data

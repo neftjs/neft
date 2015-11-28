@@ -92,7 +92,9 @@ sendData = do ->
 				else
 					len = data and data.length
 
-				res.setHeader 'Content-Length', len
+				if isFinite(len)
+					res.setHeader 'Content-Length', len
+
 				res.end data
 
 			(req, res, data, callback) ->
