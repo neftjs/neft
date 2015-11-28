@@ -21,7 +21,7 @@ module.exports = (impl) ->
 	setRectangleColor: (val) ->
 		pushAction outActions.SET_RECTANGLE_COLOR
 		pushItem @
-		pushString val
+		pushString impl.utils.colorToHex(val)
 		return
 
 	setRectangleRadius: (val) ->
@@ -33,7 +33,7 @@ module.exports = (impl) ->
 	setRectangleBorderColor: (val) ->
 		pushAction outActions.SET_RECTANGLE_BORDER_COLOR
 		pushItem @
-		pushString val
+		pushString impl.utils.colorToHex(val)
 		return
 
 	setRectangleBorderWidth: (val) ->

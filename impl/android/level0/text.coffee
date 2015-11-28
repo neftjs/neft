@@ -35,7 +35,7 @@ module.exports = (impl) ->
 	setTextColor: (val) ->
 		pushAction outActions.SET_TEXT_COLOR
 		pushItem @
-		pushString val
+		pushString impl.utils.colorToHex(val)
 		return
 
 	setTextLinkColor: (val) ->
@@ -61,7 +61,6 @@ module.exports = (impl) ->
 	setTextFontLetterSpacing: (val) ->
 
 	setTextFontItalic: (val) ->
-		
 
 	setTextAlignmentHorizontal: (val) ->
 
