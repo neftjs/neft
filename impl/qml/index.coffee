@@ -47,4 +47,8 @@ module.exports = (Networking) ->
 				data: response
 				cookies: cookies
 
-		xhr.send()
+		if utils.isObject(req.data)
+			data = utils.tryFunction JSON.stringify, null, [req.data], req.data
+		else
+			data = req.data
+		xhr.send data
