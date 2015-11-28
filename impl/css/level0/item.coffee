@@ -127,11 +127,16 @@ module.exports = (impl) ->
 
 		return
 
-	setItemIndex: (val) ->
-		if childAtIndex = @_parent._children[val]
-			@_impl.elem.parentElement.insertBefore @_impl.elem, childAtIndex._impl.elem
-		else
-			@_impl.elem.parentElement.appendChild @_impl.elem
+	insertItemBefore: (val) ->
+		parent = if val then val._parent else @_parent
+		valElem = if val then val._impl.elem else null
+		oldParent = @_impl.elem.parentElement
+		newParent = parent._impl.elem
+
+		if oldParent isnt newParent
+			impl.pointer.setItemParent.call @, newParent
+
+		newParent.insertBefore @_impl.elem, valElem
 		return
 
 	setItemBackground: (val) ->

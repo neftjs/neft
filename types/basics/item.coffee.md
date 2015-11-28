@@ -242,10 +242,12 @@ Removes all children from a node.
 			oldParent = child._parent
 			child.parent = null
 
-			Impl.setItemParent.call child, parent
-			child._parent = parent
 			if index >= 0
-				Impl.setItemIndex.call child, index
+				Impl.insertItemBefore.call child, parent.children[index]
+			else
+				Impl.setItemParent.call child, parent
+
+			child._parent = parent
 			emitSignal child, 'onParentChange', oldParent
 			return
 
@@ -322,7 +324,7 @@ Removes all children from a node.
 				if old isnt null
 					emitSignal old, 'onChildrenChange', null, @
 				if val isnt null
-					emitSignal val, 'onChildrenChange', @
+					emitSignal val, 'onChildrenChange', @, null
 
 				emitSignal @, 'onParentChange', old
 
@@ -353,11 +355,10 @@ Removes all children from a node.
 
 			if val
 				assert.instanceOf val, Item
-				if @_parent isnt val._parent
-					@parent = val.parent
-				@index = val.index + 1
+				@nextSibling = val._nextSibling
 			else
-				@index = 0
+				assert.isDefined @_parent
+				@nextSibling = @_parent.children[0]
 
 			assert.is @_previousSibling, val
 			return
@@ -373,77 +374,76 @@ Removes all children from a node.
 			@_nextSibling
 		, (val=null) ->
 			assert.isNot @, val
+			if val
+				assert.instanceOf val, Item
+				assert.isDefined val._parent
+			else
+				assert.isDefined @_parent
 
 			if val is @_nextSibling
 				return
 
-			if val
-				assert.instanceOf val, Item
-				if @_parent isnt val._parent
-					@parent = val.parent
-				@index = val.index
-			else if @_parent
-				@index = @_parent.children.length
-
-			assert.is @_nextSibling, val
-			return
-
-### *Signal* Item::onNextSiblingChange(*Item* oldValue)
-
-		signal.Emitter.createSignal @, 'onNextSiblingChange'
-
-*Integer* Item::index
----------------------
-
-		utils.defineProperty @::, 'index', null, ->
-			@_parent?.children.index(@) or 0
-		, (val) ->
-			assert.isInteger val
-			assert.operator val, '>=', 0
-
-			parent = @_parent
-			if not parent
-				return
-
-			{index} = @
-			children = parent._children
-			if val > children.length
-				val = children.length
-			if index is val or index is val - 1
-				return
-
+			oldParent = @_parent
+			oldChildren = oldParent._children
 			oldPreviousSibling = @_previousSibling
 			oldNextSibling = @_nextSibling
 
 			# implementation
-			Impl.setItemIndex.call @, val
+			if val
+				newParent = val._parent
+				newChildren = newParent._children
+				Impl.insertItemBefore.call @, val
+			else
+				newParent = oldParent
+				newChildren = oldChildren
+				Impl.setItemParent.call @, null
+				@_parent = null
+				Impl.setItemParent.call @, newParent
+
+			# new parent
+			@_parent = newParent
 
 			# current siblings
 			oldPreviousSibling?._nextSibling = oldNextSibling
 			oldNextSibling?._previousSibling = oldPreviousSibling
 
 			# children array
-			Array::splice.call children, index, 1
-			if val > index
-				val--
-			Array::splice.call children, val, 0, @
+			oldIndex = oldChildren.index(@)
+			Array::splice.call oldChildren, oldIndex, 1
+			if val
+				newIndex = newChildren.indexOf(val)
+				Array::splice.call newChildren, newIndex, 0, @
+			else
+				newIndex = newChildren.length
+				Array::push.call newChildren, @
 
 			# new siblings
-			previousSibling = children[val-1] or null
-			previousSiblingOldNextSibling = previousSibling?._nextSibling
-			nextSibling = children[val+1] or null
-			nextSiblingOldPreviousSibling = nextSibling?._previousSibling
+			if newIndex > 0
+				previousSibling = newChildren[newIndex-1]
+				previousSiblingOldNextSibling = previousSibling._nextSibling
+				previousSibling._nextSibling = @
+			else
+				previousSibling = previousSiblingOldNextSibling = null
+
+			if newChildren.length > newIndex+1
+				nextSibling = newChildren[newIndex+1]
+				nextSiblingOldPreviousSibling = nextSibling._previousSibling
+				nextSibling._previousSibling = @
+			else
+				nextSibling = nextSiblingOldPreviousSibling = null
+
 			@_previousSibling = previousSibling
 			@_nextSibling = nextSibling
-			previousSibling?._nextSibling = @
-			nextSibling?._previousSibling = @
 
 			`//<development>`
 			{index} = @
-			assert.is index, val
-			assert.is children[index], @
-			assert.is children[index-1] or null, @_previousSibling
-			assert.is children[index+1] or null, @_nextSibling
+			assert.is @_nextSibling, val
+			assert.is @_parent, newParent
+			assert.is newChildren[index], @
+			assert.is newChildren[index-1] or null, @_previousSibling
+			assert.is newChildren[index+1] or null, @_nextSibling
+			if val
+				assert.is @_parent, val._parent
 			if @_previousSibling
 				assert.is @_previousSibling._nextSibling, @
 			else
@@ -451,7 +451,7 @@ Removes all children from a node.
 			if @_nextSibling
 				assert.is @_nextSibling._previousSibling, @
 			else
-				assert.is index, children.length - 1
+				assert.is index, newChildren.length-1
 			if oldPreviousSibling
 				assert.is oldPreviousSibling._nextSibling, oldNextSibling
 			if oldNextSibling
@@ -459,7 +459,12 @@ Removes all children from a node.
 			`//</development>`
 
 			# children signal
-			emitSignal parent, 'onChildrenChange'
+			if oldParent isnt newParent
+				emitSignal oldChildren, 'onChildrenChange', null, @
+				emitSignal newChildren, 'onChildrenChange', @, null
+				emitSignal @, 'onParentChange', oldParent
+			else
+				emitSignal newChildren, 'onChildrenChange', null, null
 
 			# current siblings signals
 			if oldPreviousSibling
@@ -474,6 +479,29 @@ Removes all children from a node.
 			emitSignal @, 'onNextSiblingChange', oldNextSibling
 			if nextSibling
 				emitSignal nextSibling, 'onPreviousSiblingChange', nextSiblingOldPreviousSibling
+
+			return
+
+### *Signal* Item::onNextSiblingChange(*Item* oldValue)
+
+		signal.Emitter.createSignal @, 'onNextSiblingChange'
+
+*Integer* Item::index
+---------------------
+
+		utils.defineProperty @::, 'index', null, ->
+			@_parent?.children.index @
+		, (val) ->
+			assert.isInteger val
+			assert.isDefined @_parent
+			assert.operator val, '>=', 0
+			assert.operator val, '<=', @_parent._children.length
+
+			children = @_parent._children
+			if val >= children.length
+				@nextSibling = null
+			else if (valItem = children[val]) isnt @
+				@nextSibling = valItem
 
 			return
 

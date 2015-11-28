@@ -123,7 +123,7 @@ module.exports = (impl) ->
 
 			CREATE_ITEM: i++
 			SET_ITEM_PARENT: i++
-			SET_ITEM_INDEX: i++
+			INSERT_ITEM_BEFORE: i++
 			SET_ITEM_VISIBLE: i++
 			SET_ITEM_CLIP: i++
 			SET_ITEM_WIDTH: i++

@@ -22,20 +22,28 @@ module.exports = (impl) ->
 	setItemParent: (val) ->
 		pointer.setItemParent.call @, val
 
-	setItemIndex: (val) ->
-		{parent} = @
-		children = parent.children
-		tmp = []
+	insertItemBefore: (val) ->
+		# remove this item
 		impl.setItemParent.call @, null
-		for i in [val...children.length] by 1
+		@_parent = null
+
+		# remove all items to the given value
+		parent = if val then val.parent else @parent
+		{children} = parent
+		tmp = []
+		valIndex = if val then val.index else -1
+		for i in [valIndex...children.length] by 1
 			child = children[i]
 			if child isnt @
 				impl.setItemParent.call child, null
+				child._parent = null
 				tmp.push child
 
 		impl.setItemParent.call @, parent
+		@_parent = parent
 		for item in tmp
 			impl.setItemParent.call item, parent
+			item._parent = parent
 
 		return
 
