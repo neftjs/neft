@@ -1,8 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-
-{assert} = console
+assert = require 'assert'
 
 # platform specified
 PlatformImpl = switch true
