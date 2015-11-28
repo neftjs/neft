@@ -27,18 +27,6 @@ Text {
 			@__name__ = 'Text'
 			@__path__ = 'Renderer.Text'
 
-			SUPPORTED_HTML_TAGS = @SUPPORTED_HTML_TAGS =
-				__proto__: null
-				b: true
-				strong: true
-				em: true
-				br: true
-				font: true
-				i: true
-				s: true
-				u: true
-				a: true
-
 *Text* Text.New(*Component* component, [*Object* options])
 ----------------------------------------------------------
 
@@ -60,6 +48,42 @@ Text {
 				@_contentHeight = 0
 				@_font = null
 				@_alignment = null
+				@_autoWidth = true
+				@_autoHeight = true
+				@_width = -1
+				@_height = -1
+
+*Float* Text::width = -1
+------------------------
+
+			_width: -1
+			getter = utils.lookupGetter @::, 'width'
+			itemWidthSetter = utils.lookupSetter @::, 'width'
+			utils.defineProperty @::, 'width', null, getter, do (_super = itemWidthSetter) -> (val) ->
+				oldAutoWidth = @_autoWidth
+				if @_autoWidth = val is -1
+					_super.call @, @_contentWidth
+				else
+					_super.call @, val
+				if @_autoWidth or @_autoHeight
+					Impl.updateTextContentSize.call @
+				if oldAutoWidth isnt @_autoWidth
+					Impl.setTextWrap.call @, not @_autoWidth
+				return
+
+*Float* Text::height = -1
+-------------------------
+
+			_height: -1
+			getter = utils.lookupGetter @::, 'height'
+			itemHeightSetter = utils.lookupSetter @::, 'height'
+			utils.defineProperty @::, 'height', null, getter, do (_super = itemHeightSetter) -> (val) ->
+				if @_autoHeight = val is -1
+					_super.call @, @_contentHeight
+					Impl.updateTextContentSize.call @
+				else
+					_super.call @, val
+				return
 
 *String* Text::text
 -------------------
@@ -134,6 +158,11 @@ ReadOnly *Float* Text::contentWidth
 				defaultValue: 0
 				developmentSetter: (val) ->
 					assert.isFloat val
+				setter: (_super) -> (val) ->
+					_super.call @, val
+					if @_autoWidth
+						itemWidthSetter.call @, val
+					return
 
 ReadOnly *Float* Text::contentHeight
 ------------------------------------
@@ -146,6 +175,11 @@ ReadOnly *Float* Text::contentHeight
 				defaultValue: 0
 				developmentSetter: (val) ->
 					assert.isFloat val
+				setter: (_super) -> (val) ->
+					_super.call @, val
+					if @_autoHeight
+						itemHeightSetter.call @, val
+					return
 
 *Alignment* Text::alignment
 ---------------------------

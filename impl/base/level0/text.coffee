@@ -3,16 +3,7 @@
 module.exports = (impl) ->
 	{items} = impl
 
-	DATA =
-		text: ''
-		linkColor: 'blue'
-		color: 'black'
-		lineHeight: 1
-		fontFamily: 'sans-serif'
-		fontPixelSize: 14
-		fontWeight: 0.5
-		fontWordSpacing: 0
-		fontLetterSpacing: 0
+	DATA = {}
 
 	DATA: DATA
 
@@ -22,6 +13,10 @@ module.exports = (impl) ->
 		impl.Types.Item.create.call @, data
 
 	setText: (val) ->
+
+	setTextWrap: (val) ->
+
+	updateTextContentSize: ->
 
 	setTextColor: (val) ->
 

@@ -64,9 +64,6 @@ module.exports = (impl) ->
 	updatePlainTextSize = (item) ->
 		data = item._impl
 
-		if not data.autoWidth and not data.autoHeight
-			return
-
 		text = item._text
 		{fontFamily} = data.innerElemStyle
 		if font = item._font
@@ -85,7 +82,7 @@ module.exports = (impl) ->
 		fontDef = data.font
 		x = width = 0
 		height = lineHeight = pixelSize * item._lineHeight
-		maxWidth = if data.autoWidth then Infinity else item._width
+		maxWidth = if data.wrap then item._width else Infinity
 		for char in text
 			charWidth = getTextSizeWidth fontDef, char
 			charWidth += letterSpacing
@@ -98,20 +95,13 @@ module.exports = (impl) ->
 			if x > width
 				width = x
 
-		data.sizeUpdatePending = true
-		if data.autoWidth
-			item.width = width
-		if data.autoHeight
-			item.height = height
-		data.sizeUpdatePending = false
+		item.contentWidth = width
+		item.contentHeight = height
 		return
 
 	updateHTMLTextSize = (item) ->
 		data = item._impl
 		{innerElem} = data
-
-		if not data.autoWidth and not data.autoHeight
-			return
 
 		{fontFamily} = data.innerElemStyle
 
@@ -119,12 +109,8 @@ module.exports = (impl) ->
 			arr = loadingTextsByFonts[fontFamily] ||= []
 			arr.push item
 
-		data.sizeUpdatePending = true
-		if data.autoWidth
-			item.width = innerElem.offsetWidth
-		if data.autoHeight
-			item.height = innerElem.offsetHeight
-		data.sizeUpdatePending = false
+		item.contentWidth = innerElem.offsetWidth
+		item.contentHeight = innerElem.offsetHeight
 
 		if innerElem.parentNode is hatchery
 			implUtils.prependElement data.elem, innerElem
@@ -139,20 +125,19 @@ module.exports = (impl) ->
 
 		updateItem = (item) ->
 			data = item._impl
+			isAutoSize = item._autoWidth or item._autoHeight
 			if (text = item._text)
 				if data.containsHTML
 					data.innerElem.innerHTML = text
-					updateHTMLTextSize item
+					if isAutoSize
+						updateHTMLTextSize item
 				else
 					data.innerElem.textContent = text
-					updatePlainTextSize item
+					if isAutoSize
+						updatePlainTextSize item
 			else
-				data.sizeUpdatePending = true
-				if data.autoWidth
-					item.width = 0
-				if data.autoHeight
-					item.height = 0
-				data.sizeUpdatePending = false
+				item.contentWidth = 0
+				item.contentHeight = 0
 			return
 
 		updateAll = ->
@@ -175,27 +160,6 @@ module.exports = (impl) ->
 				pending = true
 			return
 
-	onWidthChange = ->
-		if not @_impl.sizeUpdatePending
-			{width} = @
-			{innerElemStyle} = @_impl
-			auto = @_impl.autoWidth = width is 0
-			innerElemStyle.whiteSpace = if auto then 'pre' else 'pre-wrap'
-			innerElemStyle.width = if auto then 'auto' else "#{width}px"
-			if @_impl.autoWidth or @_impl.autoHeight
-				updateContent @
-		return
-
-	onHeightChange = ->
-		if not @_impl.sizeUpdatePending
-			{height} = @
-			{innerElemStyle} = @_impl
-			auto = @_impl.autoHeight = height is 0
-			innerElemStyle.height = if auto then 'auto' else "#{height}px"
-			if @_impl.autoWidth or @_impl.autoHeight
-				updateContent @
-		return
-
 	updateTextStyle = (item) ->
 		data = item._impl
 		{innerElemStyle} = data
@@ -217,12 +181,10 @@ module.exports = (impl) ->
 			margin-top: #{if impl.utils.isFirefox then 1 else 0}px;
 		}
 		.text.textVerticalCenterAlign {
-			height: auto !important;
 			top: 50%;
 			#{impl.utils.transformCSSProp}: translateY(-50%);
 		}
 		.text.textVerticalBottomAlign {
-			height: auto !important;
 			top: 100%;
 			#{impl.utils.transformCSSProp}: translateY(-100%);
 		}
@@ -235,15 +197,13 @@ module.exports = (impl) ->
 
 	DATA =
 		stylesheet: null
-		autoWidth: true
-		autoHeight: true
+		wrap: false
 		innerElem: null
 		innerElemStyle: null
 		uid: 0
 		contentUpdatePending: false
 		containsHTML: false
-		sizeUpdatePending: false
-		font: "14px #{implUtils.DEFAULT_FONTS['sans-serif']}"
+		font: "14px #{implUtils.DEFAULT_FONTS['sans-serif']}, sans-serif"
 
 	exports =
 	DATA: DATA
@@ -254,10 +214,6 @@ module.exports = (impl) ->
 		# innerElem
 		innerElem = data.innerElem = document.createElement 'span'
 		data.innerElemStyle = innerElem.style
-
-		# handlers
-		item.onWidthChange onWidthChange
-		item.onHeightChange onHeightChange
 
 		# set default styles
 		innerElem.setAttribute 'class', 'text'
@@ -275,6 +231,18 @@ module.exports = (impl) ->
 
 	setText: (val) ->
 		@_impl.containsHTML = CONTAINS_HTML_RE.test(val)
+		updateContent @
+		return
+
+	setTextWrap: (val) ->
+		data = @_impl
+		data.wrap = val
+
+		data.innerElemStyle.whiteSpace = if val then 'pre-wrap' else 'pre'
+		data.innerElemStyle.width = if val then "100%" else 'auto'
+		return
+
+	updateTextContentSize: ->
 		updateContent @
 		return
 
