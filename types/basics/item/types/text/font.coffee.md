@@ -53,6 +53,7 @@ Font @extension
 		setFontFamilyImpl = Impl["set#{ctor.__name__}FontFamily"]
 		reloadFontFamily = (font) ->
 			name = Renderer.FontLoader.getInternalFontName font._family, font._weight, font._italic
+			name ||= 'sans-serif'
 			setFontFamilyImpl.call font._ref, name
 
 *String* Font.family = 'sans-serif'
