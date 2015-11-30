@@ -16,7 +16,6 @@ Rectangle {
 
 	'use strict'
 
-	expect = require 'expect'
 	assert = require 'assert'
 	utils = require 'utils'
 
@@ -61,7 +60,7 @@ Rectangle {
 					(val) ->
 						Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 				developmentSetter: (val) ->
-					expect(val).toBe.string()
+					assert.isString val
 
 *Float* Rectangle::radius = 0
 -----------------------------
@@ -74,7 +73,7 @@ Rectangle {
 				defaultValue: 0
 				implementation: Impl.setRectangleRadius
 				developmentSetter: (val) ->
-					expect(val).toBe.float()
+					assert.isFloat val
 
 *Border* Rectangle::border
 --------------------------
@@ -115,7 +114,7 @@ Rectangle {
 				parentConstructor: Rectangle
 				implementation: Impl.setRectangleBorderWidth
 				developmentSetter: (val) ->
-					expect(val).toBe.float()
+					assert.isFloat val
 
 *String* Rectangle::border.color = 'transparent'
 ------------------------------------------------
@@ -135,7 +134,7 @@ Rectangle {
 					(val) ->
 						Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 				developmentSetter: (val) ->
-					expect(val).toBe.string()
+					assert.isString val
 
 			toJSON: ->
 				width: @width

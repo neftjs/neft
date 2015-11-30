@@ -3,7 +3,6 @@ Margin @extension
 
 	'use strict'
 
-	expect = require 'expect'
 	utils = require 'utils'
 	signal = require 'signal'
 	assert = require 'assert'

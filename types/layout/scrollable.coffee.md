@@ -3,9 +3,9 @@ Scrollable @class
 
 	'use strict'
 
-	expect = require 'expect'
 	utils = require 'utils'
 	signal = require 'signal'
+	assert = require 'assert'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 		@__name__ = 'Scrollable'
@@ -119,7 +119,7 @@ Scrollable @class
 			setter: (_super) -> (val) ->
 				@_contentItem?.parent = null
 				if val?
-					expect(val).toBe.any Renderer.Item
+					assert.instanceOf val, Renderer.Item
 					val.parent = @
 					val.index = 0
 				_super.call @, val
@@ -135,7 +135,7 @@ Scrollable @class
 			defaultValue: 0
 			implementation: Impl.setScrollableContentX
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
+				assert.isFloat val
 			setter: (_super) -> (val) ->
 				@_contentItem?._x = -val
 				_super.call @, val
@@ -151,7 +151,7 @@ Scrollable @class
 			defaultValue: 0
 			implementation: Impl.setScrollableContentY
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
+				assert.isFloat val
 			setter: (_super) -> (val) ->
 				@_contentItem?._y = -val
 				_super.call @, val
@@ -167,7 +167,7 @@ Scrollable @class
 			defaultValue: false
 			implementation: Impl.setScrollableSnap
 			developmentSetter: (val) ->
-				expect(val).toBe.boolean()
+				assert.isBoolean val
 
 *Renderer.Item* Scrollable::snapItem
 ------------------------------------
@@ -181,4 +181,4 @@ Scrollable @class
 			implementation: Impl.setScrollableSnapItem
 			developmentSetter: (val=null) ->
 				if val?
-					expect(val).toBe.any(Renderer.Item)
+					assert.instanceOf val, Renderer.Item

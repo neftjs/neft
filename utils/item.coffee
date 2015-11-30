@@ -1,7 +1,6 @@
 'use strict'
 
 assert = require 'neft-assert'
-expect = require 'expect'
 utils = require 'utils'
 signal = require 'signal'
 log = require 'log'
