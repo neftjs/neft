@@ -19,7 +19,6 @@ Image {
 
 	'use strict'
 
-	expect = require 'expect'
 	assert = require 'assert'
 	signal = require 'signal'
 	log = require 'log'
@@ -51,11 +50,13 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			super()
 			@_source = ''
 			@_loaded = false
-			@_autoWidth = true
-			@_autoHeight = true
 			@_sourceWidth = 0
 			@_sourceHeight = 0
 			@_fillMode = 'Stretch'
+			@_autoWidth = true
+			@_autoHeight = true
+			@_width = -1
+			@_height = -1
 
 *Float* Image.pixelRatio = 1
 ----------------------------
@@ -76,7 +77,10 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 			Impl.setStaticImagePixelRatio.call @, val
 			@onPixelRatioChange.emit oldVal
 
-		updateSizes = ->
+*Float* Image::width = -1
+-------------------------
+
+		updateSize = ->
 			if @_autoHeight is @_autoWidth
 				return
 
@@ -95,30 +99,31 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 				@_autoWidth = true
 			return
 
+		_width: -1
 		getter = utils.lookupGetter @::, 'width'
-		setter = utils.lookupSetter @::, 'width'
-		utils.defineProperty @::, 'width', null, getter, do (_super = setter) -> (val) ->
-			if @_width isnt val
-				@_autoWidth = false
-				_super.call @, val
-				updateSizes.call @
+		itemWidthSetter = utils.lookupSetter @::, 'width'
+		utils.defineProperty @::, 'width', null, getter, do (_super = itemWidthSetter) -> (val) ->
+			@_autoWidth = val is -1
+			_super.call @, val
+			updateSize.call @
 			return
 
+*Float* Image::height = -1
+--------------------------
+
+		_height: -1
 		getter = utils.lookupGetter @::, 'height'
-		setter = utils.lookupSetter @::, 'height'
-		utils.defineProperty @::, 'height', null, getter, do (_super = setter) -> (val) ->
-			if @_height isnt val
-				@_autoHeight = false
-				_super.call @, val
-				updateSizes.call @
+		itemHeightSetter = utils.lookupSetter @::, 'height'
+		utils.defineProperty @::, 'height', null, getter, do (_super = itemHeightSetter) -> (val) ->
+			@_autoHeight = val is -1
+			_super.call @, val
+			updateSize.call @
 			return
 
 *String* Image::source
 ----------------------
 
-Image source URL (absolute or relative to the page) or data URI.
-
-*SVG* is fully supported.
+Image source URL or data URI.
 
 ### *Signal* Image::onSourceChange(*String* oldValue)
 
@@ -127,7 +132,7 @@ Image source URL (absolute or relative to the page) or data URI.
 			name: 'source'
 			defaultValue: ''
 			developmentSetter: (val) ->
-				expect(val).toBe.string()
+				assert.isString val
 			setter: do ->
 				RESOURCE_REQUEST =
 					resolution: 1
@@ -137,18 +142,24 @@ Image source URL (absolute or relative to the page) or data URI.
 					height: 0
 
 				loadCallback = (err=null, opts) ->
+					assert.isString opts.source
+
+					if @source isnt opts.source
+						return
+
 					if err
 						log.warn "Can't load '#{@source}' image at #{@toString()}"
 					else
+						assert.isFloat opts.width
+						assert.isFloat opts.height
+
 						@sourceWidth = opts.width
 						@sourceHeight = opts.height
 						if @_autoWidth
-							@width = opts.width
-							@_autoWidth = true
+							itemWidthSetter.call @, opts.width
 						if @_autoHeight
-							@height = opts.height
-							@_autoHeight = true
-						updateSizes.call @
+							itemHeightSetter.call @, opts.height
+						updateSize.call @
 
 					@_loaded = true
 					@onLoadedChange.emit false
@@ -171,10 +182,10 @@ Image source URL (absolute or relative to the page) or data URI.
 						loadCallback.call @, null, defaultSize
 					return
 
-*Integer* Image::sourceWidth = 0
---------------------------------
+*Float* Image::sourceWidth = 0
+------------------------------
 
-### *Signal* Image::onSourceWidthChange(*Integer* oldValue)
+### *Signal* Image::onSourceWidthChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -182,12 +193,12 @@ Image source URL (absolute or relative to the page) or data URI.
 			defaultValue: 0
 			implementation: Impl.setImageSourceWidth
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
+				assert.isFloat val
 
-*Integer* Image::sourceHeight = 0
----------------------------------
+*Float* Image::sourceHeight = 0
+-------------------------------
 
-### *Signal* Image::onSourceHeightChange(*Integer* oldValue)
+### *Signal* Image::onSourceHeightChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -195,7 +206,7 @@ Image source URL (absolute or relative to the page) or data URI.
 			defaultValue: 0
 			implementation: Impl.setImageSourceHeight
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
+				assert.isFloat val
 
 *Float* Image::offsetX = 0
 --------------------------
@@ -208,7 +219,7 @@ Image source URL (absolute or relative to the page) or data URI.
 			defaultValue: 0
 			implementation: Impl.setImageOffsetX
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
+				assert.isFloat val
 
 *Float* Image::offsetY = 0
 --------------------------
@@ -221,7 +232,7 @@ Image source URL (absolute or relative to the page) or data URI.
 			defaultValue: 0
 			implementation: Impl.setImageOffsetY
 			developmentSetter: (val) ->
-				expect(val).toBe.float()
+				assert.isFloat val
 
 *Integer* Image::fillMode = 'Stretch'
 -------------------------------------
