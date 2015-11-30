@@ -4,7 +4,7 @@ neft:function @js
 	'use strict'
 
 	utils = require 'utils'
-	expect = require 'expect'
+	assert = require 'assert'
 	Renderer = require 'renderer'
 
 	# link modules to be possible required by the funcs
@@ -124,7 +124,7 @@ It's available, only if it's a [Renderer.Item][] signal.
 
 		exports =
 		bindFuncIntoGlobal: (opts, file) ->
-			expect(file).toBe.any File
+			assert.instanceOf file, File
 
 			# get function
 			unless func = functionsCache[opts.uid]
