@@ -150,11 +150,6 @@ This signal is called when the pointer position changed.
 
 		onLazySignalInitialized = (pointer, name) ->
 			Impl.attachItemSignal.call pointer, 'pointer', name # TODO: send here an item
-
-			if name is 'onPress' or name is 'onRelease'
-				intitializePressed pointer
-			if name is 'onEnter' or name is 'onExit'
-				initializeHover pointer
 			return
 
 		@SIGNALS = ['onClick', 'onPress', 'onRelease',
@@ -173,7 +168,8 @@ This property holds whether the pointer is currently pressed.
 ### *Signal* Pointer::onPressedChange(*Boolean* oldValue)
 
 		intitializePressed = do ->
-			onPress = ->
+			onPress = (event) ->
+				event.stopPropagation = false
 				@pressed = true
 			onRelease = ->
 				@pressed = false
@@ -227,8 +223,8 @@ This property holds whether the pointer is currently under the item.
 				initializeHover @
 				_super.call @
 
-*PointerEvent* PointerEvent()
------------------------------
+*PointerEvent* PointerEvent() : DevicePointerEvent
+--------------------------------------------------
 
 Events order:
  1. Press
@@ -247,11 +243,13 @@ Stopped 'Exit' event will emit 'Release' event on this item.
 		@PointerEvent = class PointerEvent
 			constructor: ->
 				@_stopPropagation = true
+				@_checkSiblings = false
 				@_ensureRelease = true
 				@_ensureMove = true
-				@_deltaX = 0
-				@_deltaY = 0
 				Object.preventExtensions @
+
+			@:: = Object.create Renderer.Device.pointer
+			@::constructor = PointerEvent
 
 *Boolean* PointerEvent::stopPropagation = true
 ----------------------------------------------
@@ -265,6 +263,20 @@ This property is 'false' by default except the 'onPress' signal.
 			, (val) ->
 				assert.isBoolean val
 				@_stopPropagation = val
+
+*Boolean* PointerEvent::checkSiblings = false
+---------------------------------------------
+
+By default first deepest captured item will propagate this event only by parents.
+
+Change this value to test previous siblings as well.
+When you activate this property, you need to disable it manually.
+
+			utils.defineProperty @::, 'checkSiblings', null, ->
+				@_checkSiblings
+			, (val) ->
+				assert.isBoolean val
+				@_checkSiblings = val
 
 *Boolean* PointerEvent::ensureRelease = true
 --------------------------------------------
@@ -293,20 +305,6 @@ Can be changed only in 'onPress' signal.
 			, (val) ->
 				assert.isBoolean val
 				@_ensureMove = val
-
-ReadOnly *Float* PointerEvent::deltaX
--------------------------------------
-
-			utils.defineProperty @::, 'deltaX', null, ->
-				@_deltaX
-			, null
-
-ReadOnly *Float* PointerEvent::deltaY
--------------------------------------
-
-			utils.defineProperty @::, 'deltaY', null, ->
-				@_deltaY
-			, null
 
 *PointerEvent* Pointer.event
 ----------------------------
