@@ -4,6 +4,9 @@ utils = require 'utils'
 assert = require 'assert'
 
 module.exports = (impl) ->
+
+	utils.merge impl.utils, require('./utils')
+
 	exports =
 	Types:
 		Item: require './level0/item'
@@ -146,6 +149,8 @@ module.exports = (impl) ->
 
 			CREATE_TEXT: i++
 			SET_TEXT: i++
+			SET_TEXT_WRAP: i++
+			UPDATE_TEXT_CONTENT_SIZE: i++
 			SET_TEXT_COLOR: i++
 			SET_TEXT_LINE_HEIGHT: i++
 			SET_TEXT_FONT_FAMILY: i++

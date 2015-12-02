@@ -28,10 +28,10 @@ module.exports = (impl) ->
 		@_parent = null
 
 		# remove all items to the given value
-		parent = if val then val.parent else @parent
+		parent = val.parent
 		{children} = parent
 		tmp = []
-		valIndex = if val then val.index else -1
+		valIndex = val.index
 		for i in [valIndex...children.length] by 1
 			child = children[i]
 			if child isnt @

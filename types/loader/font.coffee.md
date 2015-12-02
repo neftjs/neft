@@ -94,7 +94,7 @@ FontLoader {
 				obj[weightInt] = name
 
 				# load font
-				Impl.loadFont name, source, weight, italic, sources
+				Impl.loadFont name, source, sources
 				return
 
 		loadFontIfReady = (loader) ->

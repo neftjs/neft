@@ -148,6 +148,6 @@ exports.loadedFonts = Object.create null
 
 exports.DEFAULT_FONTS =
 	__proto__: null
-	'sans': 'neft-sans-4-normal'
-	'sans-serif': 'neft-sans-serif-4-normal'
-	'monospace': 'neft-monospace-4-normal'
+	'sans': 'neft-sans-6-normal'
+	'sans-serif': 'neft-sans-serif-6-normal'
+	'monospace': 'neft-monospace-6-normal'

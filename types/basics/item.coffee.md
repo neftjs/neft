@@ -242,7 +242,7 @@ Removes all children from a node.
 			oldParent = child._parent
 			child.parent = null
 
-			if index >= 0
+			if index >= 0 and parent.children.length < index
 				Impl.insertItemBefore.call child, parent.children[index]
 			else
 				Impl.setItemParent.call child, parent

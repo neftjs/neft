@@ -85,18 +85,10 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 				return
 
 			if @_autoHeight
-				autoWidth = @_autoWidth
-				@_autoWidth = false
-				@height = @_width / @sourceWidth * @sourceHeight or 0
-				@_autoWidth = autoWidth
-				@_autoHeight = true
+				itemHeightSetter.call @, @_width / @sourceWidth * @sourceHeight or 0
 
 			if @_autoWidth
-				autoHeight = @_autoHeight
-				@_autoHeight = false
-				@width = @_height / @sourceHeight * @sourceWidth or 0
-				@_autoHeight = autoHeight
-				@_autoWidth = true
+				itemWidthSetter.call @, @_height / @sourceHeight * @sourceWidth or 0
 			return
 
 		_width: -1
@@ -137,15 +129,13 @@ Image source URL or data URI.
 				RESOURCE_REQUEST =
 					resolution: 1
 
-				defaultSize =
+				defaultResult =
+					source: ''
 					width: 0
 					height: 0
 
 				loadCallback = (err=null, opts) ->
 					assert.isString opts.source
-
-					if @source isnt opts.source
-						return
 
 					if err
 						log.warn "Can't load '#{@source}' image at #{@toString()}"
@@ -179,7 +169,8 @@ Image source URL or data URI.
 						Impl.setImageSource.call @, val, loadCallback
 					else
 						Impl.setImageSource.call @, null, null
-						loadCallback.call @, null, defaultSize
+						defaultResult.source = val
+						loadCallback.call @, null, defaultResult
 					return
 
 *Float* Image::sourceWidth = 0

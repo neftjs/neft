@@ -315,7 +315,6 @@ Grid {
 			unless loadedObjects
 				assert.is classElem._loadedObjects.length, 0
 
-			forceUpdateBindings = false
 			if classElem._children
 				for child in classElem._children
 					clone = classElem._component.cloneRawObject child
@@ -332,7 +331,6 @@ Grid {
 						clone.target ?= item
 
 					if utils.has(component.idsOrder, child.id)
-						forceUpdateBindings = true
 						component.setObjectById clone, child.id
 
 			if classElem._document?._parent

@@ -26,6 +26,11 @@ Qml and WebGL implementations
 			@New = (component, opts) ->
 				item = new TextInput
 				itemUtils.Object.initialize item, component, opts
+
+				# set default font family
+				if name = Renderer.FontLoader.getInternalFontName('sans-serif', 14, false)
+					Impl.setTextInputFontFamily.call item, name
+
 				item
 
 *TextInput* TextInput() : *Renderer.Item*

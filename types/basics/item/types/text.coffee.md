@@ -33,6 +33,11 @@ Text {
 			@New = (component, opts) ->
 				item = new Text
 				itemUtils.Object.initialize item, component, opts
+
+				# set default font family
+				if name = Renderer.FontLoader.getInternalFontName('sans-serif', 14, false)
+					Impl.setTextFontFamily.call item, name
+
 				item
 
 *Text* Text() : *Renderer.Item*

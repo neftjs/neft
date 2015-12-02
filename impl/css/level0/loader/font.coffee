@@ -5,7 +5,7 @@ log = require 'log'
 log = log.scope 'Renderer', 'FontLoader'
 
 module.exports = (impl) ->
-	loadFont: (name, source, weight, italic, sources) ->
+	loadFont: (name, source, sources) ->
 		urlStr = ''
 		for source in sources
 			urlStr += "url('#{source}'), "
