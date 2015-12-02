@@ -39,7 +39,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		@mirror = false
 		@belongsToComponent = null
 		@objectsInitQueue = []
-		@cache = Object.create(null)
 		@parent = original
 		@disabledObjects = original?.disabledObjects or Object.create(null)
 
@@ -246,27 +245,24 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		{id} = item
 
-		if (cache = @cache[id]) and cache.length > 0
-			clone = @cache[id].pop()
+		if id is @item.id
+			clone = @createItem()
 		else
-			if id is @item.id
-				clone = @createItem()
-			else
-				component = new Component @
-				component.objects = Object.create @objects
-				component.item = @item
-				component.objectsOrderSignalArr = new Array @objectsOrder.length+2
-				component.isDeepClone = true
-				component.ready = true
-				component.mirror = true
+			component = new Component @
+			component.objects = Object.create @objects
+			component.item = @item
+			component.objectsOrderSignalArr = new Array @objectsOrder.length+2
+			component.isDeepClone = true
+			component.ready = true
+			component.mirror = true
 
-				components = {}
-				components[component.id] = component
-				createdComponents = [component]
-				clone = cloneItem item, components, createdComponents, component
+			components = {}
+			components[component.id] = component
+			createdComponents = [component]
+			clone = cloneItem item, components, createdComponents, component
 
-				for val, i in @objectsOrder
-					component.objectsOrder[i] = component.objectsOrderSignalArr[i] ||= val
+			for val, i in @objectsOrder
+				component.objectsOrder[i] = component.objectsOrderSignalArr[i] ||= val
 
 		clone
 
@@ -299,30 +295,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		index = @idsOrder.indexOf id
 		if index isnt -1
 			@objectsOrder[index] = @objectsOrderSignalArr[index] = object
-			@onObjectChange.emit id, oldVal
+			@onObjectChange?.emit id, oldVal
 
 		object
-
-	cacheObject: (item) ->
-		assert.instanceOf item, itemUtils.Object
-		assert.isString item.id
-		assert.notLengthOf item.id, 0
-		assert.ok @objects[item.id] or @parent?.objects[item.id]
-		# assert.ok @isClone
-		itemComp = item._component.belongsToComponent or item._component
-		assert.ok itemComp.isDeepClone
-
-		@cache[item.id] ?= []
-		@cache[item.id].push item
-
-		# disable extensions
-		objects = item._component.objects
-		for id, item of objects
-			if objects.hasOwnProperty(id)
-				for extension in item._extensions
-					extension.disable()
-
-		return
 
 	@Link = class Link
 		constructor: (@id) ->

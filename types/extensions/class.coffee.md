@@ -62,7 +62,6 @@ Class @modifier
 				@_name = ''
 				@_changes = null
 				@_document = null
-				@_loadedObjects = null
 				@_children = null
 
 *String* Class::name
@@ -275,6 +274,7 @@ Grid {
 
 				append: (val) ->
 					assert.instanceOf val, itemUtils.Object
+					assert.isNot val, @_ref
 
 					unless @_ref._component.isClone
 						@_ref._component.disabledObjects[val.id] = true
@@ -304,52 +304,33 @@ Grid {
 
 				if query = @_document?._query
 					clone.document.query = query
-				if children = @_children
-					utils.merge clone.children, children
 
 				clone
 
-		loadObjects = (classElem, component, item, sourceClassElem=classElem, loadedObjects) ->
-			loadedObjects ?= classElem._loadedObjects ||= []
-
-			unless loadedObjects
-				assert.is classElem._loadedObjects.length, 0
-
-			if classElem._children
-				for child in classElem._children
-					clone = classElem._component.cloneRawObject child
-					cloneComp = clone._component.belongsToComponent or clone._component
-					cloneComp.onObjectChange = signal.create()
-					cloneComp.setObjectById sourceClassElem, sourceClassElem.id
-					cloneComp.initObjects()
-					loadedObjects.push clone
-					if clone instanceof Renderer.Item
-						clone.parent ?= item
+		loadObjects = (classElem, component, item) ->
+			if children = classElem._children
+				for child in children
+					if child instanceof Renderer.Item
+						child.parent ?= item
 					else
-						if clone instanceof Class
-							updateChildPriorities classElem, clone
-						clone.target ?= item
+						if child instanceof Class
+							updateChildPriorities classElem, child
+						child.target ?= item
 
-					if utils.has(component.idsOrder, child.id)
-						component.setObjectById clone, child.id
-
-			if classElem._document?._parent
-				loadObjects classElem._document._parent._ref, component, item, classElem, loadedObjects
+			# if classElem._document?._parent
+			# 	loadObjects classElem._document._parent._ref, component, item
 			return
 
 		unloadObjects = (classElem, item) ->
-			if loadedObjects = classElem._loadedObjects
-				component = classElem._component
-
-				while object = loadedObjects.pop()
-					if object instanceof Renderer.Item
-						object.parent = null
+			if children = classElem._children
+				for child in children
+					if child instanceof Renderer.Item
+						child.parent = null
 					else
-						object.target = null
-					component.cacheObject object
+						child.target = null
 
-			if classElem._document?._parent
-				unloadObjects classElem._document._parent._ref, item
+			# if classElem._document?._parent
+			# 	unloadObjects classElem._document._parent._ref, item
 			return
 
 		updateChildPriorities = (parent, child) ->
@@ -369,12 +350,6 @@ Grid {
 			# children
 			if children = classElem._children
 				for child in children
-					if child instanceof Class
-						updateChildPriorities classElem, child
-
-			# loaded objects
-			if loadedObjects = classElem._loadedObjects
-				for child in loadedObjects
 					if child instanceof Class
 						updateChildPriorities classElem, child
 
@@ -421,6 +396,18 @@ Grid {
 			if @_bindings
 				for prop, val of @_bindings
 					clone.createBinding prop, val, component
+
+			if children = @_children
+				for child, i in children
+					childClone = component.cloneRawObject child
+					cloneComp = childClone._component.belongsToComponent or childClone._component
+					cloneComp.onObjectChange ?= signal.create()
+					cloneComp.setObjectById childClone, @id
+					cloneComp.initObjects()
+					if utils.has(component.idsOrder, child.id)
+						component.setObjectById childClone, child.id
+
+					clone.children.append childClone
 
 			clone
 
