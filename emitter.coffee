@@ -14,7 +14,7 @@ module.exports = (signal) -> class SignalsEmitter
 		assert.isString name
 		assert.notLengthOf name, 0
 
-		if listeners = obj._signals[name]
+		if obj and (listeners = obj._signals[name])
 			return callSignal obj, listeners, arg1, arg2
 
 	@createSignalOnObject = (obj, name, onInitialized) ->
