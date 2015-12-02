@@ -10,6 +10,7 @@ log = log.scope 'Styles'
 
 module.exports = (File, data) -> class Style
 	{windowStyle, styles} = data
+	{Tag} = File.Element
 
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
@@ -222,12 +223,6 @@ module.exports = (File, data) -> class Style
 		@file.readyToUse = false
 		stylesToRevert.push @
 		updateWhenPossible @
-
-		# clean index finding data
-		tmpNode = @node
-		while (tmpNode = tmpNode._parent) && not tmpNode.style
-			if tmpNode.name is 'neft:blank'
-				tmpNode._documentStyle = null
 		return
 
 	revertItem: ->
@@ -247,13 +242,6 @@ module.exports = (File, data) -> class Style
 		itemDocumentNode = @item.document.node
 		@item.document.node = null
 		@item.document.visible = true
-
-		tmpNode = @node
-		while tmpNode = tmpNode._parent
-			if tmpNode._documentStyle is @
-				tmpNode._documentStyle = null
-			else
-				break
 
 		# revert linkUri
 		if @isLinkUriSet
@@ -509,7 +497,7 @@ module.exports = (File, data) -> class Style
 		while tmpIndexNode
 			# by previous sibling
 			while tmpSiblingNode
-				if tmpSiblingNode isnt node
+				if tmpSiblingNode isnt node and tmpSiblingNode instanceof Tag
 					# get sibling item
 					if tmpSiblingNode._documentStyle?.parentSet and (tmpSiblingItem = tmpSiblingNode._documentStyle.item)
 						if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
@@ -518,7 +506,7 @@ module.exports = (File, data) -> class Style
 									item.previousSibling = tmpSiblingTargetItem
 							return
 					# check children of special tags
-					else if tmpSiblingNode.name is 'neft:blank'
+					else unless tmpSiblingNode._documentStyle
 						tmpIndexNode = tmpSiblingNode
 						tmpSiblingNode = utils.last tmpIndexNode.children
 						continue
@@ -528,12 +516,12 @@ module.exports = (File, data) -> class Style
 			if tmpIndexNode isnt node and tmpIndexNode.style
 				return
 			# check parent
-			tmpIndexNode = tmpIndexNode._parent
-			tmpSiblingNode = tmpIndexNode._previousSibling
+			if tmpIndexNode = tmpIndexNode._parent
+				tmpSiblingNode = tmpIndexNode._previousSibling
 
-			# out of scope
-			if tmpIndexNode._documentStyle?.item is parent
-				return
+				# out of scope
+				if tmpIndexNode._documentStyle?.item is parent
+					return
 		return
 
 	findItemParent: ->
@@ -553,8 +541,6 @@ module.exports = (File, data) -> class Style
 						@parentSet = true
 						@item.parent = item
 						break
-				else unless tmpNode.name is 'neft:blank'
-					tmpNode._documentStyle = @
 
 				tmpNode = tmpNode._parent
 
