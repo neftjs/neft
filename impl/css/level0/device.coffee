@@ -74,29 +74,53 @@ module.exports = (impl) ->
 			pointer.y = obj.pageY
 			return
 
-		onPointerPress = (e) ->
-			updatePointerEvent e
-			device.onPointerPress.emit pointer
-			return
+		do ->
+			touchEvents = 0
+			onPointerPress = (e) ->
+				if e instanceof TouchEvent
+					touchEvents++
+				else if e instanceof MouseEvent
+					if touchEvents > 0
+						touchEvents--
+						return
+				updatePointerEvent e
+				device.onPointerPress.emit pointer
+				return
 
-		window.addEventListener 'mousedown', onPointerPress
-		window.addEventListener 'touchstart', onPointerPress
+			window.addEventListener 'mousedown', onPointerPress
+			window.addEventListener 'touchstart', onPointerPress
 
-		onPointerRelease = (e) ->
-			updatePointerEvent e
-			device.onPointerRelease.emit pointer
-			return
+		do ->
+			touchEvents = 0
+			onPointerRelease = (e) ->
+				if e instanceof TouchEvent
+					touchEvents++
+				else if e instanceof MouseEvent
+					if touchEvents > 0
+						touchEvents--
+						return
+				updatePointerEvent e
+				device.onPointerRelease.emit pointer
+				return
 
-		window.addEventListener 'mouseup', onPointerRelease
-		window.addEventListener 'touchend', onPointerRelease
+			window.addEventListener 'mouseup', onPointerRelease
+			window.addEventListener 'touchend', onPointerRelease
 
-		onPointerMove = (e) ->
-			updatePointerEvent e
-			device.onPointerMove.emit pointer
-			return
+		do ->
+			touchEvents = 0
+			onPointerMove = (e) ->
+				if e instanceof TouchEvent
+					touchEvents++
+				else if e instanceof MouseEvent
+					if touchEvents > 0
+						touchEvents--
+						return
+				updatePointerEvent e
+				device.onPointerMove.emit pointer
+				return
 
-		window.addEventListener 'mousemove', onPointerMove
-		window.addEventListener 'touchmove', onPointerMove
+			window.addEventListener 'mousemove', onPointerMove
+			window.addEventListener 'touchmove', onPointerMove
 
 		onPointerWheel = (e) ->
 			e.stopPropagation()
