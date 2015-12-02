@@ -18,5 +18,4 @@ Platforms:
 Options:
   --release          used to build and run release version of your application
   --verbose          prints debug informations from the building process
-  --out=PATH         used to generate android APK file or complete bundle
-                     ready to publish on a server
+  --out=PATH         used to generate complete bundle ready to publish on a server
