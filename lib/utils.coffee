@@ -40,7 +40,7 @@ exports.forEachFileDeep = (dir, onFile, onEnd) ->
 				onFile path, stat
 				onReady()
 			else
-				exports.forEachFile path, onFile, onReady
+				exports.forEachFileDeep path, onFile, onReady
 
 	fs.readdir dir, (err, files) ->
 		if err or files.length is 0
