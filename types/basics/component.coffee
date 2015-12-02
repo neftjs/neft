@@ -245,7 +245,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		{id} = item
 
-		if id is @item.id
+		if id is @itemId
 			clone = @createItem()
 		else
 			component = new Component @

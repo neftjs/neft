@@ -14,12 +14,15 @@ Class @modifier
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class ChangesObject
 			constructor: ->
+				@_links = []
 				@_attributes = {}
 				@_functions = []
 				@_bindings = {}
 
 			setAttribute: (prop, val) ->
 				@_attributes[prop] = val
+				if val instanceof Renderer.Component.Link
+					@_links.push val
 				return
 
 			setFunction: (prop, val) ->
@@ -383,6 +386,17 @@ Grid {
 		updateClassList = (item) ->
 			item._classList.sort classListSortFunc
 
+		cloneClassChild = (classElem, component, child) ->
+			clone = component.cloneRawObject child
+			cloneComp = clone._component.belongsToComponent or clone._component
+			cloneComp.onObjectChange ?= signal.create()
+			if classElem.id
+				cloneComp.setObjectById clone, classElem.id
+			cloneComp.initObjects()
+			if utils.has(component.idsOrder, clone.id)
+				component.setObjectById clone, clone.id
+			return clone
+
 		cloneClassWithNoDocument = (component) ->
 			clone = Class.New component
 			clone.id = @id
@@ -397,17 +411,16 @@ Grid {
 				for prop, val of @_bindings
 					clone.createBinding prop, val, component
 
+			# clone children
 			if children = @_children
 				for child, i in children
-					childClone = component.cloneRawObject child
-					cloneComp = childClone._component.belongsToComponent or childClone._component
-					cloneComp.onObjectChange ?= signal.create()
-					cloneComp.setObjectById childClone, @id
-					cloneComp.initObjects()
-					if utils.has(component.idsOrder, child.id)
-						component.setObjectById childClone, child.id
-
+					childClone = cloneClassChild clone, component, child
 					clone.children.append childClone
+
+			# clone links
+			if (changes = @_changes)
+				for link in changes._links
+					linkClone = cloneClassChild clone, component, link.getItem(@_component)
 
 			clone
 
