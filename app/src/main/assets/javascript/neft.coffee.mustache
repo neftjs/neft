@@ -25,13 +25,13 @@ console = do ->
 			err = new Error
 			err.name = 'Trace'
 			err.message = getMessage arguments
-			Error.captureStackTrace err, trace
+			Error.captureStackTrace err, console.trace
 			console.error err.stack
 
 ###
 Timers
 ###
-setTimeout = clearTimeout = null
+setTimeout = clearTimeout = setImmediate = null
 do ->
 	shots = Object.create null
 
@@ -42,9 +42,14 @@ do ->
 		return
 
 	setTimeout = (func, delay, args...) ->
-		if delay < 0
-			delay = 0
+		if delay < 4
+			delay = 4
 		id = _neft.timers.shot delay
+		shots[id] = [func, args]
+		id
+
+	setImmediate = (func, args...) ->
+		id = _neft.timers.shot 0
 		shots[id] = [func, args]
 		id
 
