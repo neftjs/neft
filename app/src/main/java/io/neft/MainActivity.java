@@ -18,6 +18,7 @@ public class MainActivity extends FragmentActivity {
     private static final String TAG = "Neft";
 
     public WindowView view;
+    public Timers timers;
 
     protected void init(){
         // get javascript file
@@ -25,7 +26,7 @@ public class MainActivity extends FragmentActivity {
 
         // initialize
         new Http();
-        new Timers();
+        this.timers = new Timers();
         Renderer renderer = new Renderer(this);
 
         Native.init(neft);

@@ -60,15 +60,15 @@ class Reader {
 
 public class Renderer extends Thread {
     private static final long MIN_FRAME_DELAY = 16;
-    private static final int OUT_ARRAYS_VALUE = 10;
-    private static final int OUT_ARRAYS_INCREASE_VALUE = 10;
+    private static final int OUT_ARRAYS_VALUE = 64;
+    private static final int OUT_ARRAYS_INCREASE_VALUE = 24;
 
     public enum InAction {
         SET_WINDOW,
 
         CREATE_ITEM,
         SET_ITEM_PARENT,
-        SET_ITEM_INDEX,
+        INSERT_ITEM_BEFORE,
         SET_ITEM_VISIBLE,
         SET_ITEM_CLIP,
         SET_ITEM_WIDTH,
@@ -91,6 +91,8 @@ public class Renderer extends Thread {
 
         CREATE_TEXT,
         SET_TEXT,
+        SET_TEXT_WRAP,
+        UPDATE_TEXT_CONTENT_SIZE,
         SET_TEXT_COLOR,
         SET_TEXT_LINE_HEIGHT,
         SET_TEXT_FONT_FAMILY,
@@ -127,7 +129,6 @@ public class Renderer extends Thread {
     final private InAction[] InActionValues = InAction.values();
 
     private long delay = 0;
-    private boolean dirty = true;
 
     private byte[] outActions;
     private boolean[] outBooleans;
@@ -150,6 +151,7 @@ public class Renderer extends Thread {
     final public Navigator navigator;
     final public Reader reader;
     final public HashMap<InAction, Action> actions = new HashMap<>();
+    public boolean dirty = true;
 
     public Renderer(MainActivity mainActivity){
         super();
@@ -188,6 +190,14 @@ public class Renderer extends Thread {
         Rectangle.register(this);
 
         Native.renderer_init(this);
+    }
+
+    public float pxToDp(float px){
+        return px / device.pixelRatio;
+    }
+
+    public float dpToPx(float dp){
+        return dp * device.pixelRatio;
     }
 
     public void updateView(final byte[] actions, final boolean[] booleans, final int[] integers, final float[] floats, final String[] strings) {
@@ -282,11 +292,11 @@ public class Renderer extends Thread {
 
     public void onAnimationFrame() {
         final long delay = SystemClock.elapsedRealtime();
-        if (delay - this.delay >= MIN_FRAME_DELAY){
-            this.delay = delay;
+        if (delay - this.delay >= MIN_FRAME_DELAY && mainActivity.timers.immediateTimers == 0){
             sendData();
             Native.renderer_callAnimationFrame();
-            if (dirty) {
+            if (dirty && mainActivity.timers.immediateTimers == 0) {
+                this.delay = delay;
                 window.invalidate();
                 this.dirty = false;
             }

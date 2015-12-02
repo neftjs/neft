@@ -37,34 +37,50 @@ public class Rectangle extends Item {
         renderer.actions.put(Renderer.InAction.SET_RECTANGLE_COLOR, new Action() {
             @Override
             void work(Reader reader) {
-                ((Rectangle) reader.getItem()).color = Item.colorFromString(reader.getString());
+                ((Rectangle) reader.getItem()).setColor(reader.getString());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_RECTANGLE_RADIUS, new Action() {
             @Override
             void work(Reader reader) {
-                ((Rectangle) reader.getItem()).radius = reader.getFloat() * reader.renderer.device.pixelRatio;
+                ((Rectangle) reader.getItem()).setRadius(reader.getFloat());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_RECTANGLE_BORDER_COLOR, new Action() {
             @Override
             void work(Reader reader) {
-                ((Rectangle) reader.getItem()).borderColor = Item.colorFromString(reader.getString());
+                ((Rectangle) reader.getItem()).setBorderColor(reader.getString());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_RECTANGLE_BORDER_WIDTH, new Action() {
             @Override
             void work(Reader reader) {
-                ((Rectangle) reader.getItem()).borderWidth = reader.getFloat() * reader.renderer.device.pixelRatio;
+                ((Rectangle) reader.getItem()).setBorderWidth(reader.getFloat());
             }
         });
     }
 
     public Rectangle(Renderer renderer){
         super(renderer);
+    }
+
+    public void setColor(String val){
+        color = Item.parseRGBA(val);
+    }
+
+    public void setRadius(float val){
+        radius = renderer.dpToPx(val);
+    }
+
+    public void setBorderColor(String val){
+        borderColor = Item.parseRGBA(val);
+    }
+
+    public void setBorderWidth(float val){
+        borderWidth = renderer.dpToPx(val);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP) // TODO

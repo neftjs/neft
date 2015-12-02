@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.caverock.androidsvg.SVGParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,8 +32,11 @@ public class Image extends Item {
     static int MAX_HEIGHT = 960;
     static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+    static final HashMap<String, Bitmap> bitmaps = new HashMap<>();
+
+    protected Bitmap bitmap;
+
     public String source;
-    public Bitmap bitmap;
 
     static void register(Renderer renderer){
         renderer.actions.put(Renderer.InAction.CREATE_IMAGE, new Action() {
@@ -45,6 +50,41 @@ public class Image extends Item {
             @Override
             void work(Reader reader) {
                 ((Image) reader.getItem()).setSource(reader.getString());
+            }
+        });
+
+        renderer.actions.put(Renderer.InAction.SET_IMAGE_SOURCE_WIDTH, new Action() {
+            @Override
+            void work(Reader reader) {
+                ((Image) reader.getItem()).setSourceWidth(reader.getFloat());
+            }
+        });
+
+        renderer.actions.put(Renderer.InAction.SET_IMAGE_SOURCE_HEIGHT, new Action() {
+            @Override
+            void work(Reader reader) {
+                ((Image) reader.getItem()).setSourceHeight(reader.getFloat());
+            }
+        });
+
+        renderer.actions.put(Renderer.InAction.SET_IMAGE_FILL_MODE, new Action() {
+            @Override
+            void work(Reader reader) {
+                ((Image) reader.getItem()).setFillMode(reader.getString());
+            }
+        });
+
+        renderer.actions.put(Renderer.InAction.SET_IMAGE_OFFSET_X, new Action() {
+            @Override
+            void work(Reader reader) {
+                ((Image) reader.getItem()).setOffsetX(reader.getFloat());
+            }
+        });
+
+        renderer.actions.put(Renderer.InAction.SET_IMAGE_OFFSET_Y, new Action() {
+            @Override
+            void work(Reader reader) {
+                ((Image) reader.getItem()).setOffsetY(reader.getFloat());
             }
         });
     }
@@ -61,71 +101,79 @@ public class Image extends Item {
         }
     }
 
-    private void pushSize(){
+    private void onLoad(){
         renderer.pushAction(Renderer.OutAction.IMAGE_SIZE);
-        renderer.pushFloat(bitmap.getWidth() / renderer.device.pixelRatio);
-        renderer.pushFloat(bitmap.getHeight() / renderer.device.pixelRatio);
+        renderer.pushItem(this);
+        renderer.pushString(source);
+        renderer.pushBoolean(true);
+        renderer.pushFloat(renderer.pxToDp(bitmap.getWidth()));
+        renderer.pushFloat(renderer.pxToDp(bitmap.getHeight()));
     }
 
-    private void setUrlSource(final String val){
-//        final Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    InputStream in = new URL(val).openStream();
-//                    if (source == val) {
-//                        bitmap = BitmapFactory.decodeStream(in);
-//                        pushSize();
-//                    }
-//                } catch (Exception e){
-//                    e.printStackTrace();
+    private void onError(){
+        renderer.pushAction(Renderer.OutAction.IMAGE_SIZE);
+        renderer.pushItem(this);
+        renderer.pushString(source);
+        renderer.pushBoolean(false);
+        renderer.pushFloat(0);
+        renderer.pushFloat(0);
+    }
+
+    private void loadResourceSource(String val){
+        try {
+            InputStream in = renderer.mainActivity.getAssets().open(val.substring(1));
+            if (in == null){
+                onError();
+                return;
+            }
+
+//                if (val.endsWith(".svg")){
+//                    SVG svg = SVG.getFromInputStream(in);
+//                    Drawable drawable = new PictureDrawable(svg.renderToPicture());
 //                }
-//            }
-//        });
-//
-//        thread.start();
+
+            bitmap = BitmapFactory.decodeStream(in);
+            if (bitmap == null){
+                onError();
+                return;
+            }
+
+            // resize too large bitmaps
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            if (width > MAX_WIDTH && height > MAX_HEIGHT){
+                if (width > height){
+                    height = height * MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                } else {
+                    width = width * MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                }
+
+                bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+            }
+
+            onLoad();
+        } catch (IOException e) {
+            e.printStackTrace();
+            onError();
+        }
     }
 
-    private void setResourceSource(String val){
-//        try {
-//            InputStream in = renderer.mainActivity.getAssets().open(val.substring(1));
-//            if (in == null){
-//                return;
-//            }
-//
-////                if (val.endsWith(".svg")){
-////                    SVG svg = SVG.getFromInputStream(in);
-////                    Drawable drawable = new PictureDrawable(svg.renderToPicture());
-////                }
-//
-//            bitmap = BitmapFactory.decodeStream(in);
-//            if (bitmap == null){
-//                return;
-//            }
-//
-//            // resize too large bitmaps
-//            int width = bitmap.getWidth();
-//            int height = bitmap.getHeight();
-//            if (width > MAX_WIDTH && height > MAX_HEIGHT){
-//                if (width > height){
-//                    height = height * MAX_WIDTH / width;
-//                    width = MAX_WIDTH;
-//                } else {
-//                    width = width * MAX_HEIGHT / height;
-//                    height = MAX_HEIGHT;
-//                }
-//
-//                bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-//            }
-//
-//            pushSize();
-//            return;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    private void loadUrlSource(String val){
+        try {
+            InputStream in = new URL(val).openStream();
+            if (source == val) {
+                bitmap = BitmapFactory.decodeStream(in);
+                onLoad();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            onError();
+        }
     }
 
-    private void setDataUriSource(String val){
+    private void loadDataUriSource(String val){
 //        Pattern svgDataUri = Pattern.compile("^data:image/svg(?:.*);(?:.*)?,(.*)$");
 //        Matcher svgDataUriMatch = svgDataUri.matcher(val);
 //
@@ -155,13 +203,31 @@ public class Image extends Item {
             return;
         }
 
-        // set asset file
-        if (val.startsWith("/static")) {
-            setResourceSource(val);
-        } else if (val.startsWith("data:")) {
-            setDataUriSource(val);
+        // get bitmap from cache if exists
+        Bitmap fromCache = bitmaps.get(source);
+        if (fromCache != null) {
+            bitmap = fromCache;
+            onLoad();
         } else {
-            setUrlSource(val);
+            final Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // set asset file
+                    if (source.startsWith("/static")) {
+                        loadResourceSource(source);
+                    } else if (source.startsWith("data:")) {
+                        loadDataUriSource(source);
+                    } else {
+                        loadUrlSource(source);
+                    }
+
+                    if (bitmap != null){
+                        bitmaps.put(source, bitmap);
+                        renderer.dirty = true;
+                    }
+                }
+            });
+            thread.start();
         }
     }
 

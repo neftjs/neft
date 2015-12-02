@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.lang.Integer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,52 +69,52 @@ public class Item {
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_INDEX, new Action() {
+        renderer.actions.put(Renderer.InAction.INSERT_ITEM_BEFORE, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().setIndex(reader.getInteger());
+                reader.getItem().insertBefore(reader.getItem());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_VISIBLE, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().visible = reader.getBoolean();
+                reader.getItem().setVisible(reader.getBoolean());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_CLIP, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().clip = reader.getBoolean();
+                reader.getItem().setClip(reader.getBoolean());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_WIDTH, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().width = reader.getFloat() * reader.renderer.device.pixelRatio;
+                reader.getItem().setWidth(reader.getFloat());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_HEIGHT, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().height = reader.getFloat() * reader.renderer.device.pixelRatio;
+                reader.getItem().setHeight(reader.getFloat());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_X, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().x = reader.getFloat() * reader.renderer.device.pixelRatio;
+                reader.getItem().setX(reader.getFloat());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_Y, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().y = reader.getFloat() * reader.renderer.device.pixelRatio;
+                reader.getItem().setY(reader.getFloat());
             }
         });
 
@@ -127,28 +128,28 @@ public class Item {
         renderer.actions.put(Renderer.InAction.SET_ITEM_SCALE, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().scale = reader.getFloat();
+                reader.getItem().setScale(reader.getFloat());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_ROTATION, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().rotation = reader.getFloat() * 180 / PI;
+                reader.getItem().setRotation(reader.getFloat());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_OPACITY, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().opacity = reader.getInteger();
+                reader.getItem().setOpacity(reader.getInteger());
             }
         });
 
         renderer.actions.put(Renderer.InAction.SET_ITEM_BACKGROUND, new Action() {
             @Override
             void work(Reader reader) {
-                reader.getItem().background = reader.getItem();
+                reader.getItem().setBackground(reader.getItem());
             }
         });
     }
@@ -161,37 +162,11 @@ public class Item {
         childrenByZIndex = new ArrayList<>();
     }
 
-    static int colorFromString(String val){
-        Pattern rgb = Pattern.compile("rgb *\\( *([0-9.]+), *([0-9.]+), *([0-9.]+) *\\)");
-        Pattern rgba = Pattern.compile("rgba *\\( *([0-9.]+), *([0-9.]+), *([0-9.]+), *([0-9.]+) *\\)");
-        Pattern shortHex = Pattern.compile("^#[0-9a-f]{3}$");
-        Matcher match;
-
-        val = val.toLowerCase().trim();
-
-        if (val == "transparent" || val == ""){
-            return Color.argb(0, 0, 0, 0);
-        } else if ((match = rgb.matcher(val)).matches()){
-            return Color.rgb(Integer.valueOf(match.group(1)),
-                    Integer.valueOf(match.group(2)),
-                    Integer.valueOf(match.group(3)));
-        } else if ((match = rgba.matcher(val)).matches()) {
-            return Color.argb(Math.round(Float.valueOf(match.group(4)) * 255),
-                    Integer.valueOf(match.group(1)),
-                    Integer.valueOf(match.group(2)),
-                    Integer.valueOf(match.group(3)));
-        } else if (shortHex.matcher(val).matches()) {
-            return Color.parseColor("#" + val.charAt(1) + val.charAt(1) +
-                    val.charAt(2) + val.charAt(2) +
-                    val.charAt(3) + val.charAt(3));
-        } else {
-            try {
-                return Color.parseColor(val);
-            } catch (IllegalArgumentException error){
-                Log.e("Neft", "Unknown color '"+val+"'");
-                return Color.BLUE;
-            }
-        }
+    static int parseRGBA(String val){
+        final long color = Long.parseLong(val, 16);
+        return (int) (
+            ((color & 0x000000FF) << 24) | //AA______
+            ((color & 0xFFFFFF00) >>  8)); //__RRGGBB
     }
 
     public void setParent(Item val){
@@ -217,14 +192,52 @@ public class Item {
             val.sortChildrenByZIndex();
         }
 
-        parent = val;
+        this.parent = val;
     }
 
-    public void setIndex(int val){
-        final ArrayList<Item> array = parent.childrenWithZIndex > 0 ? parent.children : parent.childrenByZIndex;
-        array.remove(this);
-        array.set(val, this);
-        parent.sortChildrenByZIndex();
+    public void insertBefore(Item val){
+        // remove item from current parent
+        setParent(null);
+
+        // insert
+        if (zIndex != 0){
+            if (val.parent.childrenWithZIndex++ == 0){
+                val.parent.createChildrenArray();
+            } else {
+                val.parent.children.set(val.parent.children.indexOf(val), this);
+            }
+        }
+
+        if (val.parent.childrenWithZIndex > 0){
+            val.parent.childrenByZIndex.add(this);
+            val.parent.sortChildrenByZIndex();
+        } else {
+            val.parent.childrenByZIndex.set(val.parent.childrenByZIndex.indexOf(val), this);
+        }
+    }
+
+    public void setVisible(boolean val){
+        visible = val;
+    }
+
+    public void setClip(boolean val){
+        clip = val;
+    }
+
+    public void setWidth(float val){
+        width = renderer.dpToPx(val);
+    }
+
+    public void setHeight(float val){
+        height = renderer.dpToPx(val);
+    }
+
+    public void setX(float val){
+        x = renderer.dpToPx(val);
+    }
+
+    public void setY(float val){
+        y = renderer.dpToPx(val);
     }
 
     public void setZ(int val){
@@ -240,6 +253,22 @@ public class Item {
         parent.sortChildrenByZIndex();
     }
 
+    public void setScale(float val){
+        scale = val;
+    }
+
+    public void setRotation(float val){
+        rotation = val * 180 / PI;
+    }
+
+    public void setOpacity(int val){
+        opacity = val;
+    }
+
+    public void setBackground(Item val){
+        background = val;
+    }
+
     private void createChildrenArray(){
         if (children == null){
             children = new ArrayList<>();
@@ -249,7 +278,9 @@ public class Item {
     }
 
     public void sortChildrenByZIndex(){
-        Collections.sort(childrenByZIndex, zIndexComparator);
+        if (childrenWithZIndex > 0) {
+            Collections.sort(childrenByZIndex, zIndexComparator);
+        }
     }
 
     protected void drawShape(Canvas canvas, int alpha){
@@ -258,7 +289,7 @@ public class Item {
 
     protected void draw(Canvas canvas, int alpha) {
         if (opacity < 255) {
-            alpha *= opacity / 255;
+            alpha = Math.round(alpha * (opacity / 255f));
         }
 
         canvas.save();
