@@ -3,6 +3,7 @@ package io.neft;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,6 +28,7 @@ public class Http {
                 try {
                     URL url = new URL(path);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setUseCaches(false);
 
                     // set method
                     conn.setRequestMethod(method.toUpperCase());
@@ -39,8 +41,18 @@ public class Http {
                     try {
                         // set data
                         if (!method.equals("get")) {
-                            OutputStream out = new BufferedOutputStream(conn.getOutputStream());
+                            conn.setDoOutput(true);
+                            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
                             out.write(data.getBytes());
+                        }
+
+                        // get response code
+                        int respCode = conn.getResponseCode();
+
+                        // end of wrong response code
+                        if (respCode >= 400 && respCode < 500){
+                            Native.http_onResponse(id, "", respCode, "", "");
+                            return;
                         }
 
                         // read response
@@ -59,7 +71,7 @@ public class Http {
                             cookies = "";
                         }
 
-                        Native.http_onResponse(id, "", conn.getResponseCode(), resp + "", cookies);
+                        Native.http_onResponse(id, "", respCode, resp + "", cookies);
                     } finally {
                         conn.disconnect();
                     }
