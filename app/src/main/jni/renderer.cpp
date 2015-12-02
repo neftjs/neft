@@ -169,16 +169,32 @@ extern "C" void Java_io_neft_Native_renderer_1init(JNIEnv * env, jobject obj, jo
 extern "C" void Java_io_neft_Native_renderer_1callAnimationFrame(JNIEnv * env, jobject obj) {
     using namespace renderer;
 
-    const int length = animationFrameCalls.size();
-    const unsigned argc = 0;
-    Local<Value> argv[argc] = {};
+    // enter isolate
+    Isolate* isolate = JS::GetIsolate();
+    Locker locker(isolate);
+    Isolate::Scope isolate_scope(isolate);
+    HandleScope handle_scope(isolate);
 
+    // get local context and enter it
+    Local<Context> context = Local<Context>::New(isolate, JS::GetContext());
+    Context::Scope context_scope(context);
+
+    // call all registered functions
+    const int length = animationFrameCalls.size();
     for (int i = 0; i < length; i++){
         Persistent<Function, CopyablePersistentTraits<Function>> func = animationFrameCalls[i];
-        JS::CallFunction(func, argc, argv);
+
+        // get local function
+        Local<Function> localFunc = Local<Function>::New(isolate, func);
+
+        // call function
+        localFunc->Call(context->Global(), 0, NULL);
+
+        // clear persistent
         func.Reset();
     }
 
+    // remove called functions
     animationFrameCalls.erase(animationFrameCalls.begin(), animationFrameCalls.begin() + length);
 }
 
