@@ -32,14 +32,21 @@ module.exports = (Networking) ->
 				uri: '/'
 
 	sendRequest: (req, res, callback) ->
-		_neft.http.request 'http://example.com/', 'get', [], ''
-
 		headers = []
 		for name, val of req.headers
 			headers.push name, val
+		headers.push 'content-type', 'text/plain'
+		headers.push 'charset', 'utf-8'
+		headers.push 'x-expected-type', req.type
+
+		if cookies = utils.tryFunction(JSON.stringify, null, [req.cookies], null)
+			headers.push 'x-cookies', cookies
 
 		if typeof (data = req.data) isnt 'string'
 			data = utils.tryFunction JSON.stringify, null, [data], data+''
+
+		if typeof data is 'string'
+			headers.push 'content-length', data.length
 
 		id = _neft.http.request req.uri, req.method, headers, data
 
