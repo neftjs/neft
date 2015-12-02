@@ -14,6 +14,10 @@ module.exports = (impl) ->
 	STOP_ASIDE_PROPAGATION = 1<<1
 	STOP_PROPAGATION = 1<<2
 
+	Scrollable = null
+	impl.Renderer.onReady ->
+		{Scrollable} = this
+
 	captureItems = do ->
 		checkChildren = (type, item, ex, ey, onItem, parentX, parentY, parentScale) ->
 			result = 0
@@ -40,6 +44,10 @@ module.exports = (impl) ->
 				h = child._height * parentScale
 				scale = child._scale
 				rotation = child._rotation
+
+				if item instanceof Scrollable and child is item._contentItem
+					x -= item.contentX * parentScale
+					y -= item.contentY * parentScale
 
 				# add scale
 				if scale isnt 1

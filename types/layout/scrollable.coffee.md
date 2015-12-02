@@ -136,9 +136,6 @@ Scrollable @class
 			implementation: Impl.setScrollableContentX
 			developmentSetter: (val) ->
 				assert.isFloat val
-			setter: (_super) -> (val) ->
-				@_contentItem?._x = -val
-				_super.call @, val
 
 *Float* Scrollable::contentY = 0
 --------------------------------
@@ -152,9 +149,6 @@ Scrollable @class
 			implementation: Impl.setScrollableContentY
 			developmentSetter: (val) ->
 				assert.isFloat val
-			setter: (_super) -> (val) ->
-				@_contentItem?._y = -val
-				_super.call @, val
 
 *Boolean* Scrollable::snap = false
 ----------------------------------
