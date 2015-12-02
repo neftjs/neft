@@ -261,8 +261,18 @@ Removes all children from a node.
 				valChildren = val?.children
 
 				if valChildren?._target
-					val = valChildren._target
-					valChildren = val.children
+					# detect whether target is a child of this item
+					containsItem = false
+					tmpItem = valChildren._target
+					while tmpItem
+						if tmpItem is @
+							containsItem = true
+							break
+						tmpItem = tmpItem._parent
+
+					unless containsItem
+						val = valChildren._target
+						valChildren = val.children
 
 				if old is val
 					return
