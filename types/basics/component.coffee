@@ -58,6 +58,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		Object.preventExtensions @
 
 	initSignalArr = ->
+		for id, i in @idsOrder
+			@objectsOrder[i] ||= @objects[id] or null
+
 		@objectsOrderSignalArr = utils.clone(@objectsOrder)
 		@objectsOrderSignalArr.push null, null
 
@@ -261,8 +264,8 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			createdComponents = [component]
 			clone = cloneItem item, components, createdComponents, component
 
-			for val, i in @objectsOrder
-				component.objectsOrder[i] = component.objectsOrderSignalArr[i] ||= val
+			for val, i in @idsOrder
+				component.objectsOrder[i] = component.objectsOrderSignalArr[i] ||= @objectsOrder[i]
 
 		clone
 
@@ -281,12 +284,13 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		comp.isDeepClone = true
 		comp.ready = true
 		comp.mirror = true
+		assert.is comp.objectsOrder.length, comp.idsOrder.length
 		comp
 
 	setObjectById: (object, id) ->
 		assert.instanceOf object, itemUtils.Object
 		assert.isString id
-		assert.ok @objects[id]
+		assert.ok @objects[id] or @parent?.objects[id]
 
 		if (oldVal = @objects[id]) is object
 			return

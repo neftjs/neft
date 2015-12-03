@@ -319,21 +319,17 @@ Grid {
 						if child instanceof Class
 							updateChildPriorities classElem, child
 						child.target ?= item
-
-			# if classElem._document?._parent
-			# 	loadObjects classElem._document._parent._ref, component, item
 			return
 
 		unloadObjects = (classElem, item) ->
 			if children = classElem._children
 				for child in children
 					if child instanceof Renderer.Item
-						child.parent = null
+						if child.parent is item
+							child.parent = null
 					else
-						child.target = null
-
-			# if classElem._document?._parent
-			# 	unloadObjects classElem._document._parent._ref, item
+						if child.target is item
+							child.target = null
 			return
 
 		updateChildPriorities = (parent, child) ->
@@ -390,11 +386,12 @@ Grid {
 			clone = component.cloneRawObject child
 			cloneComp = clone._component.belongsToComponent or clone._component
 			cloneComp.onObjectChange ?= signal.create()
-			if classElem.id
-				cloneComp.setObjectById clone, classElem.id
-			cloneComp.initObjects()
-			if utils.has(component.idsOrder, clone.id)
-				component.setObjectById clone, clone.id
+			if component.isDeepClone
+				if classElem.id
+					cloneComp.setObjectById clone, classElem.id
+				cloneComp.initObjects()
+				if utils.has(component.idsOrder, clone.id)
+					component.setObjectById clone, clone.id
 			return clone
 
 		cloneClassWithNoDocument = (component) ->
@@ -411,13 +408,13 @@ Grid {
 				for prop, val of @_bindings
 					clone.createBinding prop, val, component
 
-			if component.isDeepClone
-				# clone children
-				if children = @_children
-					for child, i in children
-						childClone = cloneClassChild clone, component, child
-						clone.children.append childClone
+			# clone children
+			if children = @_children
+				for child, i in children
+					childClone = cloneClassChild clone, component, child
+					clone.children.append childClone
 
+			if component.isDeepClone
 				# clone links
 				if (changes = @_changes)
 					for link in changes._links
