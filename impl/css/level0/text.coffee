@@ -83,17 +83,31 @@ module.exports = (impl) ->
 		x = width = 0
 		height = lineHeight = pixelSize * item._lineHeight
 		maxWidth = if data.wrap then item._width else Infinity
-		for char in text
-			charWidth = getTextSizeWidth fontDef, char
-			charWidth += letterSpacing
-			if wordSpacing isnt 0 and char is ' '
-				charWidth += wordSpacing
-			if x + charWidth > maxWidth
+		wordWidth = charWidth = 0
+		textLength = text.length
+		char = ''
+
+		for i in [0..textLength] by 1
+			if i < textLength
+				char = text[i]
+				charWidth = getTextSizeWidth fontDef, char
+				charWidth += letterSpacing
+
+			if i is textLength or char is ' '
+				if x + wordWidth > maxWidth
+					height += lineHeight
+					x = 0
+				x += wordWidth
+				if x > width
+					width = x
+				if char is ' '
+					x += charWidth + wordSpacing
+				wordWidth = 0
+			else if char is '\n'
 				height += lineHeight
 				x = 0
-			x += charWidth
-			if x > width
-				width = x
+			else
+				wordWidth += charWidth
 
 		item.contentWidth = width
 		item.contentHeight = height
