@@ -411,16 +411,17 @@ Grid {
 				for prop, val of @_bindings
 					clone.createBinding prop, val, component
 
-			# clone children
-			if children = @_children
-				for child, i in children
-					childClone = cloneClassChild clone, component, child
-					clone.children.append childClone
+			if component.isDeepClone
+				# clone children
+				if children = @_children
+					for child, i in children
+						childClone = cloneClassChild clone, component, child
+						clone.children.append childClone
 
-			# clone links
-			if (changes = @_changes)
-				for link in changes._links
-					linkClone = cloneClassChild clone, component, link.getItem(@_component)
+				# clone links
+				if (changes = @_changes)
+					for link in changes._links
+						linkClone = cloneClassChild clone, component, link.getItem(@_component)
 
 			clone
 
