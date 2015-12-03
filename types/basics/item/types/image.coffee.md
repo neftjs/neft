@@ -135,11 +135,10 @@ Image source URL or data URI.
 					height: 0
 
 				loadCallback = (err=null, opts) ->
-					assert.isString opts.source
-
 					if err
 						log.warn "Can't load '#{@source}' image at #{@toString()}"
 					else
+						assert.isString opts.source
 						assert.isFloat opts.width
 						assert.isFloat opts.height
 
