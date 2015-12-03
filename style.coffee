@@ -403,7 +403,7 @@ module.exports = (File, data) -> class Style
 		return
 
 	isLink: ->
-		@node.name is 'a' and @node.attrs.get('href')?[0] isnt '#'
+		@node.name is 'a' and @node.attrs.has('href') and @node.attrs.get('href')?[0] isnt '#'
 
 	getLinkUri: ->
 		uri = @node.attrs.get('href') + ''
