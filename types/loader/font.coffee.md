@@ -61,7 +61,7 @@ FontLoader {
 				0.4
 
 			isItalic = (source) ->
-				/italic/i.test source
+				/italic|oblique/i.test source
 
 			(loader) ->
 				# get best source
