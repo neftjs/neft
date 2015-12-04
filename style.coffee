@@ -146,7 +146,7 @@ module.exports = (File, data) -> class Style
 		(style) ->
 			unless pending
 				lastDate = Date.now()
-				requestAnimationFrame sync
+				setImmediate sync
 				pending = true
 
 			style.waiting = true

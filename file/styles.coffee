@@ -40,7 +40,7 @@ module.exports = (File) ->
 			queue.push arr
 
 			unless pending
-				requestAnimationFrame renderAll
+				setImmediate renderAll
 				pending = true
 			return
 
