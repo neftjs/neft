@@ -6,6 +6,11 @@ pathUtils = require 'path'
 
 {log} = Neft
 
+DEFAULT_LOCAL_FILE =
+	android:
+		ndkDir: ''
+		sdkDir: ''
+
 module.exports = (platform, options, callback) ->
 	mode = if options.release then 'release' else 'develop'
 	neftFileName = "neft-#{platform}-#{mode}.js"
@@ -25,8 +30,7 @@ module.exports = (platform, options, callback) ->
 				return callback err
 
 			unless fs.existsSync('./local.json')
-				log.error "'local.json' configuration file not found"
-				return
+				fs.writeFileSync './local.json', JSON.stringify(DEFAULT_LOCAL_FILE, null, 4)
 
 			config =
 				platform: platform
