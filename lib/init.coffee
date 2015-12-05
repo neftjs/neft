@@ -30,7 +30,6 @@ args =
 
 options =
 	release: false
-	verbose: false
 	out: ''
 
 argOutput = ''
@@ -72,10 +71,6 @@ if args.build is true or args.run is true
 else if (args.build and not PLATFORMS[args.build]) or args.run and not PLATFORMS[args.run]
 	log.error "Unsupported platform"
 	args.help = true
-
-# options
-unless options.verbose
-	log.enabled = log.ERROR | log.OK
 
 # commands
 if args.help
