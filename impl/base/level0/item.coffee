@@ -49,8 +49,6 @@ module.exports = (impl) ->
 
 	setItemBackground: (val) ->
 
-	setItemForeground: (val) ->
-
 	setItemVisible: (val) ->
 
 	setItemClip: (val) ->

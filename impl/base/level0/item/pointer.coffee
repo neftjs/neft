@@ -140,12 +140,16 @@ module.exports = (impl) ->
 		# support release and click events
 		Device.onPointerRelease do ->
 			onItem = (item) ->
-				emitSignal item._pointer, 'onRelease', event
-				index = itemsToRelease.indexOf item
-				if index >= 0
-					itemsToRelease[index] = null
-				if utils.has(pressedItems, item)
-					emitSignal item.pointer, 'onClick', event
+				data = item._impl
+				if data.capturePointer & RELEASE
+					emitSignal item._pointer, 'onRelease', event
+				if data.capturePointer & PRESS
+					index = itemsToRelease.indexOf item
+					if index >= 0
+						itemsToRelease[index] = null
+				if data.capturePointer & CLICK
+					if utils.has(pressedItems, item)
+						emitSignal item.pointer, 'onClick', event
 				if event._stopPropagation
 					return STOP_PROPAGATION
 				return getEventStatus()
@@ -181,7 +185,8 @@ module.exports = (impl) ->
 					hoverItems.push item
 					emitSignal item.pointer, 'onEnter', event
 
-				emitSignal item._pointer, 'onMove', event
+				if data.capturePointer & MOVE
+					emitSignal item._pointer, 'onMove', event
 				if event._stopPropagation
 					return STOP_PROPAGATION
 				return getEventStatus()
@@ -219,10 +224,11 @@ module.exports = (impl) ->
 		Device.onPointerWheel do ->
 			onItem = (item) ->
 				event._stopPropagation = true
-				if (pointer = item._pointer) and not signal.isEmpty(pointer.onWheel)
-					emitSignal pointer, 'onWheel', event
-				if event._stopPropagation
-					return STOP_PROPAGATION
+				if item._impl.capturePointer & WHEEL
+					if (pointer = item._pointer) and not signal.isEmpty(pointer.onWheel)
+						emitSignal pointer, 'onWheel', event
+					if event._stopPropagation
+						return STOP_PROPAGATION
 				return getEventStatus()
 
 			(e) ->
