@@ -77,7 +77,7 @@ module.exports = (impl) ->
 		do ->
 			touchEvents = 0
 			onPointerPress = (e) ->
-				if e instanceof TouchEvent
+				if TouchEvent? and e instanceof TouchEvent
 					touchEvents++
 				else if e instanceof MouseEvent
 					if touchEvents > 0
@@ -93,7 +93,7 @@ module.exports = (impl) ->
 		do ->
 			touchEvents = 0
 			onPointerRelease = (e) ->
-				if e instanceof TouchEvent
+				if TouchEvent? and e instanceof TouchEvent
 					touchEvents++
 				else if e instanceof MouseEvent
 					if touchEvents > 0
@@ -109,7 +109,7 @@ module.exports = (impl) ->
 		do ->
 			touchEvents = 0
 			onPointerMove = (e) ->
-				if e instanceof TouchEvent
+				if TouchEvent? and e instanceof TouchEvent
 					touchEvents++
 				else if e instanceof MouseEvent
 					if touchEvents > 0
