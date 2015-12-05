@@ -106,8 +106,9 @@ canvas {
 pixelRatio = window.devicePixelRatio or 1
 
 unless window.isFake
-	stage = new PIXI.Stage 0xFFFFFF, true # bgColor, interactive
-	renderer = PIXI.autoDetectRecommendedRenderer innerWidth, innerHeight,
+	stage = new PIXI.Container
+	stage.interactive = false
+	renderer = PIXI.autoDetectRenderer innerWidth, innerHeight,
 		resolution: pixelRatio
 		antialias: false
 		backgroundColor: 0xFFFFFF

@@ -6,61 +6,6 @@ PIXI = require '../pixi.lib.js'
 
 isTouch = 'ontouchstart' of window
 
-NOP = ->
-
-SIGNALS =
-	'pointerOnWheel': 'wheel'
-
-if isTouch
-	utils.merge SIGNALS,
-		'pointerOnClick': 'tap'
-		'pointerOnPress': 'touchstart'
-		'pointerOnRelease': 'touchend'
-		'pointerOnMove': 'touchmove'
-else
-	utils.merge SIGNALS,
-		'pointerOnClick': 'click'
-		'pointerOnPress': 'mousedown'
-		'pointerOnRelease': 'mouseup'
-		'pointerOnEnter': 'mouseover'
-		'pointerOnExit': 'mouseout'
-		'pointerOnMove': 'mousemove'
-
-
-lastEvent = null
-mouseEvent =
-	movementX: 0
-	movementY: 0
-getMouseMovement = (e) ->
-	if isTouch and e.touches?
-		if e.touches.length
-			e = e.touches[0]
-		else
-			e = e.changedTouches[0]
-
-	if lastEvent isnt e
-		if lastEvent?
-			mouseEvent.movementX = e.pageX - lastEvent.pageX
-			mouseEvent.movementY = e.pageY - lastEvent.pageY
-
-		lastEvent = e
-	return
-
-if isTouch
-	window.addEventListener 'touchmove', getMouseMovement
-	window.addEventListener 'touchstart', (e) ->
-		if e.touches.length
-			e = e.touches[0]
-		else
-			e = e.changedTouches[0]
-
-		lastEvent =
-			pageX: e.pageX
-			pageY: e.pageY
-		return
-else
-	window.addEventListener 'mousemove', getMouseMovement
-
 module.exports = (impl) ->
 	cssUtils = require '../../css/utils'
 
@@ -71,29 +16,6 @@ module.exports = (impl) ->
 
 	unless isTouch
 		impl._scrollableUsePointer = false
-
-	# interactions on mouse move
-	checkInteractions = ->
-		if not impl._dirty and impl._pixiStage.interactive
-			impl._pixiStage.interactionManager.update()
-		return
-
-	window.addEventListener 'mousemove', checkInteractions
-	window.addEventListener 'touchmove', checkInteractions
-
-	# wheel event
-	do ->
-		event = originalEvent: null
-		window.addEventListener cssUtils.wheelEvent.eventName, (e) ->
-			arg = cssUtils.wheelEvent.getDelta e
-			stage = impl._pixiStage
-
-			for item in stage.interactionManager.interactiveItems
-				event.originalEvent = e
-				if item.wheel?(event, arg) is signal.STOP_PROPAGATION
-					break
-
-			return
 
 	updateMask = (item) ->
 		data = item._impl
@@ -116,20 +38,7 @@ module.exports = (impl) ->
 		(item) ->
 			item._impl.elem.children.sort compare
 
-	mouseActiveItem = null
-
-	window.addEventListener SIGNALS.pointerOnRelease, (e) ->
-		mouseActiveItem ?= impl.window?.pointer
-		mouseActiveItem?.onRelease.emit mouseEvent
-		mouseActiveItem = null
-		return
-
-	window.addEventListener SIGNALS.pointerOnMove, (e) ->
-		mouseActiveItem ?= impl.window?.pointer
-		mouseActiveItem?.onMove.emit mouseEvent
-		return
-
-	DATA =
+	DATA = utils.merge
 		bindings: null
 		anchors: null
 		elem: null
@@ -140,13 +49,14 @@ module.exports = (impl) ->
 		width: 0
 		height: 0
 		scale: 1
+	, impl.pointer.DATA
 
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner DATA
 
 	create: (data) ->
-		elem = data.elem = new PIXI.DisplayObjectContainer
+		elem = data.elem = new PIXI.Container
 		elem._data = data
 		elem.z = 0
 		return
@@ -160,6 +70,16 @@ module.exports = (impl) ->
 		else
 			item.parent.removeChild item
 
+		impl.pointer.setItemParent.call @, val
+
+		impl._dirty = true
+		return
+
+	setItemBackground: (val) ->
+		if @_background?._impl.elem.parent is @_impl.elem
+			@_impl.elem.removeChild @_background._impl.elem
+		if val
+			@_impl.elem.addChildAt val._impl.elem, 0
 		impl._dirty = true
 		return
 
@@ -185,7 +105,6 @@ module.exports = (impl) ->
 
 	setItemWidth: (val) ->
 		{elem} = @_impl
-		val = round val
 		@_impl.width = val
 		@_impl.contentElem?.width = val
 		if elem.mask?
@@ -195,7 +114,6 @@ module.exports = (impl) ->
 
 	setItemHeight: (val) ->
 		{elem} = @_impl
-		val = round val
 		@_impl.height = val
 		@_impl.contentElem?.height = val
 		if elem.mask?
@@ -204,13 +122,11 @@ module.exports = (impl) ->
 		return
 
 	setItemX: (val) ->
-		val = round val
 		@_impl.x = val
 		impl._dirty = true
 		return
 
 	setItemY: (val) ->
-		val = round val
 		@_impl.y = val
 		impl._dirty = true
 		return
@@ -233,52 +149,43 @@ module.exports = (impl) ->
 		impl._dirty = true
 
 	setItemLinkUri: do ->
-		onLinkUriClicked = ->
+		hoverElements = 0
+
+		onClick = (event) ->
 			{linkUri} = @_impl
 			if linkUri
 				if ///^([a-z]+:)///.test linkUri
 					window.location.href = linkUri
 				else
 					window.location.neftChangePage? linkUri
-				signal.STOP_PROPAGATION
+			else
+				event.stopPropagation = false
+			return
+
+		onEnter = ->
+			if @_impl.linkUri
+				if hoverElements++ is 0
+					document.body.style.cursor = 'pointer'
+			return
+
+		onExit = ->
+			if --hoverElements is 0
+				document.body.style.cursor = 'default'
+			return
 
 		(val) ->
 			@_impl.linkUri = val
 
 			unless @_impl.linkUriListens
 				@_impl.linkUriListens = true
-				@pointer.onClicked onLinkUriClicked, @
+				@pointer.onClick onClick, @
+				@pointer.onEnter onEnter, @
+				@pointer.onExit onExit, @
 			return
 
-	attachItemSignal: (ns, name) ->
-		self = @
-		{elem} = @_ref._impl
-		uniqueName = ns + utils.capitalize(name)
-		implName = SIGNALS[uniqueName]
-
-		if implName and uniqueName isnt 'pointerOnRelease'
-			elem.interactive = @_ref.pointer.enabled
-			_super = elem[implName] or NOP
-			elem[implName] = (e, arg) ->
-				unless arg
-					arg = mouseEvent
-				if _super(e, arg) isnt signal.STOP_PROPAGATION
-					if self[name].emit(arg) is signal.STOP_PROPAGATION
-						if uniqueName is 'pointerOnPress'
-							mouseActiveItem = self
-						{originalEvent} = e
-						originalEvent.stopPropagation()
-						if originalEvent.cancelable and implName isnt 'touchend' and implName isnt 'touchstart'
-							originalEvent.preventDefault()
-						return signal.STOP_PROPAGATION
-				return
-						
-		if uniqueName is 'pointerOnClick'
-			elem.buttonMode = true
-			elem.defaultCursor = 'pointer'
+	attachItemSignal: (ns, signalName) ->
+		if ns is 'pointer'
+			impl.pointer.attachItemSignal.call @, signalName
 		return
-
-	setItemPointerEnabled: (val) ->
-		@_impl.elem.interactive = val
 
 	setItemKeysFocus: cssUtils.keysEvents.setItemKeysFocus

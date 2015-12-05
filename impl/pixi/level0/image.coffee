@@ -4,13 +4,15 @@ utils = require 'utils'
 PIXI = require '../pixi.lib.js'
 
 module.exports = (impl) ->
+	{pixelRatio} = impl
+
 	cssUtils = require('../../css/utils')
 	cssImage = require('../../css/level0/image') impl
 
-	if utils.isEmpty PIXI
+	if utils.isEmpty(PIXI)
 		return require('../../base/level0/image') impl
 
-	{emptyTexture} = PIXI.Texture
+	emptyTexture = PIXI.Texture.EMPTY
 
 	updateSize = ->
 		data = @_impl
@@ -24,8 +26,37 @@ module.exports = (impl) ->
 		data = @_impl
 		data.isTiling = type is 'TilingSprite'
 		data.elem.removeChild data.contentElem
-		data.contentElem = new PIXI[type] data.contentElem.texture
+		if data.isTiling
+			data.contentElem = new PIXI.extras.TilingSprite data.contentElem.texture
+		else
+			data.contentElem = new PIXI.Sprite data.contentElem.texture
 		data.elem.addChild data.contentElem
+		return
+
+	onSvgImageResize = ->
+		data = @_impl
+		{image, contentElem} = data
+		tex = image.texture
+		baseTex = tex?.baseTexture
+
+		if not tex or baseTex.width < @width * pixelRatio or baseTex.height < @height * pixelRatio
+			canvas = baseTex?.source or document.createElement('canvas')
+			ctx = canvas.getContext '2d'
+
+			canvas.width = width = @width * 1.2 * pixelRatio or 1
+			canvas.height = height = @height * 1.2 * pixelRatio or 1
+			ctx.drawImage image.elem, 0, 0, image.width, image.height, 0, 0, width, height
+			if tex
+				tex.update()
+			else
+				image.texture = new PIXI.Texture new PIXI.BaseTexture(canvas)
+				contentElem.texture = image.texture
+			for item in image.svgItems
+				itemData = item._impl
+				itemData.contentElem.scale.x = itemData.contentElem.scale.y = 1
+				itemData.contentElem.width = itemData.width
+				itemData.contentElem.height = itemData.height
+			impl._dirty = true
 		return
 
 	DATA =
@@ -36,9 +67,7 @@ module.exports = (impl) ->
 		contentElem: null
 		sourceWidth: 0
 		sourceHeight: 0
-
-	ImageResourceRequest =
-		resolution: impl.pixelRatio
+		isSvg: false
 
 	DATA: DATA
 
@@ -54,48 +83,46 @@ module.exports = (impl) ->
 		return
 
 	setStaticImagePixelRatio: (val) ->
-		ImageResourceRequest.resolution = impl.pixelRatio * val
 
 	setImageSource: (val, callback) ->
-		if rsc = impl.Renderer.resources?.getResource(val)
-			val = rsc.resolve val, ImageResourceRequest
-		else
-			val = cssUtils.encodeImageSrc val
-
 		self = @
 		data = @_impl
 		{contentElem} = data
 
+		if data.isSvg
+			utils.remove data.image.svgItems, self
+			self.onWidthChange.disconnect onSvgImageResize
+			self.onHeightChange.disconnect onSvgImageResize
+			data.isSvg = false
+
 		data.source = val
-		data.callback = ->
+		data.callback = (err, opts) ->
 			impl._dirty = true
 
-			oldTexture = contentElem.texture
-			contentElem.setTexture emptyTexture
+			contentElem.texture = emptyTexture
 
-			if val?
+			if not err and val?
+				if ///^data:image\/svg+|\.svg$///.test(val)
+					data.image.svgItems ||= []
+					data.image.svgItems.push self
+					onSvgImageResize.call self
+					unless data.isSvg
+						self.onWidthChange onSvgImageResize
+						self.onHeightChange onSvgImageResize
+						data.isSvg = true
 				unless data.image.texture
 					img = data.image.elem
-
-					# svg alpha bug
-					if ///^data:image\/svg+|\.svg$///.test(val)
-						canv = document.createElement 'canvas'
-						ctx = canv.getContext '2d'
-						canv.width = img.width
-						canv.height = img.height
-						ctx.drawImage img, 0, 0
-						img = canv
-
-					data.image.texture = new PIXI.Texture(new PIXI.BaseTexture(img))
-				contentElem.setTexture data.image.texture
+					data.image.texture = new PIXI.Texture new PIXI.BaseTexture(img)
+				contentElem.texture = data.image.texture
 				impl._dirty = true
 
+				contentElem.scale.x = contentElem.scale.y = 1
 				contentElem.width = data.width
 				contentElem.height = data.height
 				updateSize.call @
-			callback?.apply @, arguments
+			callback?.call @, err, opts
 
-		data.image = cssImage._getImage val, rsc
+		data.image = cssImage._getImage val
 		cssImage._callCallback.call @
 
 		unless /^data:/.test(val)
