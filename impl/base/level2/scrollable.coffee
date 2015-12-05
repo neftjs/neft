@@ -513,11 +513,13 @@ module.exports = (impl) ->
 		return
 
 	setScrollableContentX: (val) ->
-		@_impl.contentItem?.x = -val
+		if item = @_impl.contentItem
+			impl.setItemX.call item, -val
 		return
 
 	setScrollableContentY: (val) ->
-		@_impl.contentItem?.y = -val
+		if item = @_impl.contentItem
+			impl.setItemY.call item, -val
 		return
 
 	setScrollableSnap: (val) ->
