@@ -4,6 +4,8 @@ module.exports = (impl) ->
 	{bridge} = impl
 	{outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
 
+	colorUtils = require '../../base/utils/color'
+
 	bridge.listen bridge.inActions.TEXT_SIZE, (reader) ->
 		text = reader.getItem()
 		width = reader.getFloat()
@@ -52,7 +54,7 @@ module.exports = (impl) ->
 	setTextColor: (val) ->
 		pushAction outActions.SET_TEXT_COLOR
 		pushItem @
-		pushString impl.utils.colorToHex(val, 'black')
+		pushInteger colorUtils.toRGBAHex(val, 'black')
 		return
 
 	setTextLinkColor: (val) ->

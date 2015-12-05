@@ -5,8 +5,6 @@ assert = require 'assert'
 
 module.exports = (impl) ->
 
-	utils.merge impl.utils, require('./utils')
-
 	exports =
 	Types:
 		Item: require './level0/item'

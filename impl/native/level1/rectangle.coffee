@@ -4,6 +4,8 @@ module.exports = (impl) ->
 	{bridge} = impl
 	{outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
 
+	colorUtils = require '../../base/utils/color'
+
 	DATA = {}
 
 	DATA: DATA
@@ -21,7 +23,7 @@ module.exports = (impl) ->
 	setRectangleColor: (val) ->
 		pushAction outActions.SET_RECTANGLE_COLOR
 		pushItem @
-		pushString impl.utils.colorToHex(val)
+		pushInteger colorUtils.toRGBAHex(val)
 		return
 
 	setRectangleRadius: (val) ->
@@ -33,7 +35,7 @@ module.exports = (impl) ->
 	setRectangleBorderColor: (val) ->
 		pushAction outActions.SET_RECTANGLE_BORDER_COLOR
 		pushItem @
-		pushString impl.utils.colorToHex(val)
+		pushInteger colorUtils.toRGBAHex(val)
 		return
 
 	setRectangleBorderWidth: (val) ->
