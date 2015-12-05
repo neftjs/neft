@@ -244,6 +244,7 @@ module.exports = (impl) ->
 			impl.utils.onFontLoaded reloadFontFamily, @
 
 	setText: (val) ->
+		val = val.replace /<[bB][rR]\s?\/?>/g, "\n"
 		@_impl.containsHTML = CONTAINS_HTML_RE.test(val)
 		updateContent @
 		return
