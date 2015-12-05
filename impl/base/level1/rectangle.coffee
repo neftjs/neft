@@ -4,25 +4,24 @@ module.exports = (impl) ->
 	{items} = impl
 	{round} = Math
 
-	COLOR_RESOURCE_REQUEST =
-		property: 'color'
-
 	NOP = ->
 
 	getRectangleSource = (item) ->
+		data = item._impl
 		{pixelRatio} = impl
+
+		if item.width <= 0 or item.height <= 0
+			data.isRectVisible = false
+			return null
+		else
+			data.isRectVisible = true
+
 		width = round item.width * pixelRatio
 		height = round item.height * pixelRatio
 		radius = round item.radius * pixelRatio
 		strokeWidth = round Math.min(item.border.width * 2 * pixelRatio, width, height)
-		color = impl.Renderer.resources?.resolve(item.color, COLOR_RESOURCE_REQUEST) or item.color
-		borderColor = impl.Renderer.resources?.resolve(item.border.color, COLOR_RESOURCE_REQUEST) or item.border.color
-
-		if width <= 0 or height <= 0
-			item._impl.isRectVisible = false
-			return null
-		else
-			item._impl.isRectVisible = true
+		color = data.color
+		borderColor = data.borderColor
 
 		"data:image/svg+xml;utf8," +
 		"<svg width='#{width}' height='#{height}' xmlns='http://www.w3.org/2000/svg'>" +
@@ -50,6 +49,8 @@ module.exports = (impl) ->
 		return
 
 	DATA =
+		color: 'transparent'
+		borderColor: 'transparent'
 		isRectVisible: false
 
 	DATA: DATA
@@ -62,7 +63,14 @@ module.exports = (impl) ->
 		@onWidthChange updateImageIfNeeded
 		@onHeightChange updateImageIfNeeded
 
-	setRectangleColor: updateImage
+	setRectangleColor: (val) ->
+		@_impl.color = val
+		updateImage.call @
+
 	setRectangleRadius: updateImage
-	setRectangleBorderColor: updateImage
+
+	setRectangleBorderColor: (val) ->
+		@_impl.borderColor = val
+		updateImage.call @
+
 	setRectangleBorderWidth: updateImage
