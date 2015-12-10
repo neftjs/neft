@@ -13,7 +13,6 @@ Platforms:
   node
   browser
   android
-  qt
 
 Options:
   --release          used to build and run release version of your application
