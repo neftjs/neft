@@ -4,14 +4,15 @@ fs = require 'fs'
 bundleBuilder = require 'bundle-builder'
 pathUtils = require 'path'
 
-{log} = Neft
+{utils, log} = Neft
 
 DEFAULT_LOCAL_FILE =
 	android:
-		ndkDir: ''
-		sdkDir: ''
+		sdkDir: '$ANDROID_HOME'
+	qt:
+		dir: ''
 
-module.exports = (platform, options, callback) ->
+module.exports = (platform, options, app, callback) ->
 	mode = if options.release then 'release' else 'develop'
 	neftFileName = "neft-#{platform}-#{mode}.js"
 	neftFilePath = "../../../bundle/neft-#{platform}-develop.js"
@@ -29,12 +30,17 @@ module.exports = (platform, options, callback) ->
 			if err
 				return callback err
 
-			unless fs.existsSync('./local.json')
-				fs.writeFileSync './local.json', JSON.stringify(DEFAULT_LOCAL_FILE, null, 4)
+			if fs.existsSync('./local.json')
+				local = JSON.parse fs.readFileSync './local.json', 'utf-8'
+				local = utils.mergeAll {}, DEFAULT_LOCAL_FILE, local
+			else
+				local = DEFAULT_LOCAL_FILE
+			fs.writeFileSync './local.json', JSON.stringify(local, null, 4)
 
 			config =
 				platform: platform
 				release: options.release
+				app: app
 				mode: mode
 				neftFileName: neftFileName
 				neftCode: fs.readFileSync pathUtils.resolve(__dirname, neftFilePath), 'utf-8'

@@ -20,19 +20,24 @@ module.exports = (platform, options, callback) ->
 	fs.ensureDirSync './build'
 
 	stack = new utils.async.Stack
+	args = [platform, options, null]
 
 	# create temporary 'index.js' file
-	stack.add parseApp, null, [platform, options]
+	stack.add ((platform, options, callback) ->
+		parseApp platform, options, (err, app) ->
+			args[2] = app
+			callback err
+	), null, args
 
 	# create bundle files
-	stack.add createBundle, null, [platform, options]
+	stack.add createBundle, null, args
 
 	# save output if needed
 	if options.out
-		stack.add saveBundle, null, [platform, options]
+		stack.add saveBundle, null, args
 
 	# clear
-	stack.add clear, null, [platform, options]
+	stack.add clear, null, args
 
 	# run
 	stack.runAll callback
