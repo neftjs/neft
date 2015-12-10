@@ -15,10 +15,10 @@ public class Screen {
     public Screen(Renderer renderer) {
         Display display = renderer.mainActivity.getWindowManager().getDefaultDisplay();
 
-        // screen size
+        // SCREEN_SIZE
         final float pixelRatio = renderer.device.pixelRatio;
-        this.width = display.getWidth() / pixelRatio;// + (pixelRatio % 1 > 0 ? 1 : 0);
-        this.height = display.getHeight() / pixelRatio;// + (pixelRatio % 1 > 0 ? 1 : 0);
+        this.width = display.getWidth() / pixelRatio;
+        this.height = display.getHeight() / pixelRatio;
 
         renderer.pushAction(Renderer.OutAction.SCREEN_SIZE);
         renderer.pushFloat(width);
