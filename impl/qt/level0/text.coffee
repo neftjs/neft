@@ -53,8 +53,10 @@ module.exports = (impl) ->
 			@_impl.listensOnFontLoaded = false
 		return
 
-	COLOR_RESOURCE_REQUEST =
-		property: 'color'
+	QML_OBJECT_DEF = 'Text {' +
+			'font.pixelSize: 14;' +
+			'textFormat: Text.StyledText;' +
+		'}'
 
 	DATA =
 		autoWidth: true
@@ -68,12 +70,7 @@ module.exports = (impl) ->
 	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
-		elem = data.elem ?= impl.utils.createQmlObject(
-			'Text {' +
-				'font.pixelSize: 14;' +
-				'textFormat: Text.StyledText;' +
-			'}'
-		)
+		elem = data.elem ?= impl.utils.createQmlObject QML_OBJECT_DEF
 
 		Item.create.call @, data
 
@@ -90,8 +87,7 @@ module.exports = (impl) ->
 		@onHeightChange onHeightChange
 
 	setText: (val) ->
-		Renderer = require 'renderer'
-		{SUPPORTED_HTML_TAGS} = Renderer.Text
+		{SUPPORTED_HTML_TAGS} = impl.Renderer.Text
 
 		# remove unsupported HTML tags
 		val = val.replace ///<\/?([a-zA-Z0-9]+).*?>///g, (str, tag) ->
@@ -105,19 +101,20 @@ module.exports = (impl) ->
 		@_impl.elem.text = val
 		updateSize.call @
 
+	setTextWrap: (val) ->
+
+	updateTextContentSize: ->
+
 	setTextColor: (val) ->
-		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.elem.color = impl.utils.toQtColor val
 
 	setTextLinkColor: (val) ->
-		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.elem.linkColor = impl.utils.toQtColor val
 
 	setTextLineHeight: (val) ->
 		@_impl.elem.lineHeight = val
 
 	setTextFontFamily: (val) ->
-		val = val.toLowerCase()
 		@_impl.fontFamily = val
 		if impl.fonts[val]
 			@_impl.elem.font.family = impl.fonts[val]
@@ -130,18 +127,11 @@ module.exports = (impl) ->
 	setTextFontPixelSize: (val) ->
 		@_impl.elem.font.pixelSize = val
 
-	setTextFontWeight: (val) ->
-		weight = FONT_WEIGHT[(val * FONT_WEIGHT_LAST_INDEX + 0.5)|0]
-		@_impl.elem.font.weight = Font[weight]
-
 	setTextFontWordSpacing: (val) ->
 		@_impl.elem.font.wordSpacing = val
 
 	setTextFontLetterSpacing: (val) ->
 		@_impl.elem.font.letterSpacing = val
-
-	setTextFontItalic: (val) ->
-		@_impl.elem.font.italic = val
 
 	setTextAlignmentHorizontal: (val) ->
 		switch val

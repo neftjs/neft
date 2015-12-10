@@ -27,6 +27,17 @@ Text {
 			@__name__ = 'Text'
 			@__path__ = 'Renderer.Text'
 
+			@SUPPORTED_HTML_TAGS =
+				b: true
+				strong: true
+				em: true
+				br: true
+				font: true
+				i: true
+				s: true
+				u: true
+				a: true
+
 *Text* Text.New(*Component* component, [*Object* options])
 ----------------------------------------------------------
 

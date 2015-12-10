@@ -8,7 +8,7 @@ module.exports = (impl) ->
 	impl.fonts = {}
 	signal.create impl, 'onFontLoaded'
 
-	loadFont: (source, name) ->
+	loadFont: (name, source, sources) ->
 		onLoaded = ->
 			if @status is FontLoader.Ready
 				impl.fonts[name] = @name

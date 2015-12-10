@@ -27,8 +27,8 @@ module.exports = (Renderer) ->
 			try r ?= require('./impl/pixi') impl
 		if utils.isBrowser
 			r ?= require('./impl/css') impl
-		if utils.isQml
-			r ?= require('./impl/qml') impl
+		if utils.isQt
+			r ?= require('./impl/qt') impl
 		if utils.isAndroid
 			r ?= require('./impl/native') impl
 		r

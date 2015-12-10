@@ -7,7 +7,10 @@ module.exports = (impl) ->
 		shader: null
 		isSvg: false
 		callback: null
-		size: {width: 0, height: 0}
+		image:
+			source: ''
+			width: 0
+			height: 0
 		resource: null
 
 	onSvgImageResize = ->
@@ -124,9 +127,6 @@ module.exports = (impl) ->
 
 		return
 
-	ImageResourceRequest =
-		resolution: __stylesWindow.screen.devicePixelRatio
-
 	DATA: DATA
 
 	createData: impl.utils.createDataCloner 'Item', DATA
@@ -137,7 +137,6 @@ module.exports = (impl) ->
 		Item.create.call @, data
 
 	setStaticImagePixelRatio: (val) ->
-		ImageResourceRequest.resolution = __stylesWindow.screen.devicePixelRatio * val
 
 	setImageSource: do ->
 		onStatusChanged = ->
@@ -146,9 +145,9 @@ module.exports = (impl) ->
 			elem.statusChanged.disconnect @, onStatusChanged
 
 			if elem.status is Image.Ready
-				data.size.width = data.resource?.width or elem.sourceSize.width
-				data.size.height = data.resource?.height or elem.sourceSize.height
-				callback?.call @, null, data.size
+				data.image.width = data.resource?.width or elem.sourceSize.width
+				data.image.height = data.resource?.height or elem.sourceSize.height
+				callback?.call @, null, data.image
 			else if elem.status is Image.Error
 				callback?.call @, true
 
@@ -156,15 +155,16 @@ module.exports = (impl) ->
 			data = @_impl
 			{elem} = data
 
+			data.image.source = val
 			data.callback = callback
 			data.resource = null
 
 			unless impl.utils.DATA_URI_RE.test(val)
-				if rsc = impl.Renderer.resources?.getResource(val)
-					data.resource = rsc
-					val = 'qrc:' + rsc.resolve(val, ImageResourceRequest)
-				else
-					val = impl.utils.toUrl(val)
+				# if rsc = impl.Renderer.resources?.getResource(val)
+				# 	data.resource = rsc
+				# 	val = 'qrc:' + rsc.resolve(val, ImageResourceRequest)
+				# else
+				val = impl.utils.toUrl(val)
 			elem.source = val or ''
 
 			if ///^data:image\/svg+|\.svg$///.test(val)
