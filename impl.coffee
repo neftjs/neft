@@ -9,8 +9,8 @@ PlatformImpl = switch true
 		require './impl/node/index'
 	when utils.isBrowser
 		require './impl/browser/index'
-	when utils.isQml
-		require './impl/qml/index'
+	when utils.isQt
+		require './impl/qt/index'
 	when utils.isAndroid
 		require './impl/android/index'
 

@@ -123,7 +123,7 @@ It's internally called by the **Networking.createRequest()**.
 				if err? and err isnt true
 					errMsg = err
 					if errMsg.stack?
-						if utils.isQml
+						if utils.isQt
 							errMsg = "#{err.message}\n#{err.stack}"
 						else
 							errMsg = err.stack

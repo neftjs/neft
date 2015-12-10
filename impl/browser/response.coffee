@@ -13,7 +13,7 @@ module.exports = (Networking, impl) ->
 			return false
 
 		{styles} = data
-		unless styles.length
+		unless styles?.length
 			log.warn "No `neft:style` found in main view"
 			return false
 
