@@ -105,7 +105,6 @@ updateItem = (item) ->
 
 	# tmp vars
 	flowWidth = flowHeight = 0
-	outerTopMargin = outerRightMargin = outerBottomMargin = outerLeftMargin = 0
 	currentRow = currentRowY = 0
 	lastColumnRightMargin = lastRowBottomMargin = currentRowBottomMargin = 0
 	x = y = right = bottom = 0
@@ -175,10 +174,6 @@ updateItem = (item) ->
 			lastRowBottomMargin = currentRowBottomMargin
 			currentRowBottomMargin = 0
 
-			# outer right margin
-			if not includeBorderMargins
-				outerRightMargin = max outerRightMargin, lastColumnRightMargin
-
 		# height layout fill
 		if layout and layout._fillHeight and not autoHeight
 			rowsFills[currentRow] = max rowsFills[currentRow], rowsFills[currentRow] + 1
@@ -196,14 +191,6 @@ updateItem = (item) ->
 				y += max lastRowBottomMargin, topMargin + (if y > 0 then rowSpacing else 0)
 			else
 				y += lastRowBottomMargin + topMargin + (if y > 0 then rowSpacing else 0)
-
-		# outer left margin
-		if not includeBorderMargins and x is 0
-			outerLeftMargin = max outerLeftMargin, leftMargin
-
-		# outer top margin
-		if not includeBorderMargins and y is 0
-			outerTopMargin = max outerTopMargin, topMargin
 
 		# last margins
 		lastColumnRightMargin = rightMargin
@@ -231,19 +218,6 @@ updateItem = (item) ->
 	# flow size
 	if includeBorderMargins
 		flowHeight = max flowHeight, flowHeight + currentRowBottomMargin
-
-	# outer bottom margin
-	if not includeBorderMargins
-		outerBottomMargin = currentRowBottomMargin
-
-	# update item margin
-	item.margin.top = outerTopMargin
-	item.margin.right = outerRightMargin
-	item.margin.bottom = outerBottomMargin
-	item.margin.left = outerLeftMargin
-	if effectItem isnt item
-		# force update effect item parent
-		effectItem.onMarginChange.emit effectItem.margin
 
 	# expand filled rows
 	freeHeightSpace = effectItem._height - topPadding - bottomPadding - flowHeight
