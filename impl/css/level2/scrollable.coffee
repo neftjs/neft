@@ -20,6 +20,7 @@ module.exports = (impl) ->
 		return abstractScrollable
 	else
 		impl._scrollableUsePointer = false
+		impl._scrollableUseWheel = false
 
 	DATA =
 		contentItem: null
