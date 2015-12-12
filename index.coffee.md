@@ -23,22 +23,12 @@ HTML documents and more.
 
 	AppRoute = require './route'
 
-	# build polyfills
-	# TODO: move it into separated module
-	{setImmediate} = global
-	if utils.isBrowser
-		# BUG: Firefox releases queue too fast
-		setImmediate = require 'emitter/node_modules/immediate'
-
 	if utils.isNode
 		bootstrapRoute = require './bootstrap/route.node'
 
 	pkg = require './package.json'
 
 	exports = module.exports = (opts={}, extraOpts={}) ->
-		if utils.isBrowser
-			global.setImmediate = setImmediate
-
 		# Welcome log also for release mode
 		(require('log')).ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
 
