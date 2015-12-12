@@ -61,6 +61,12 @@ var AssertionError = assert.AssertionError;
 
 			Error.captureStackTrace? @, opts.stackStartFunction
 
+			# TODO: fix this issues in platform runtimes
+			if utils.isAndroid
+				console.error @stack or @message
+			else if utils.isQt
+				console.trace()
+
 	createFailFunction = (assert) ->
 		func = (actual, expected, msg, operator, stackStartFunction) ->
 			throw new assert.AssertionError
