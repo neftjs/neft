@@ -139,8 +139,8 @@ console.log(bunny.get('speedZ'));
 
 			@_data[key]
 
-*Any* Dict::set(*String* key[, *Any* value])
---------------------------------------------
+*Any* Dict::set(*String* key, *Any* value)
+------------------------------------------
 
 This method is used to change property value or create a new property.
 
