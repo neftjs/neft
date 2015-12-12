@@ -29,6 +29,8 @@ exports.toRGBAHex = do ->
 		blue: 0x0000ffff
 		teal: 0x008080ff
 		aqua: 0x00ffffff
+		orange: 0xffa500ff
+		aliceblue: 0xf0f8ffff
 		antiquewhite: 0xfaebd7ff
 		aquamarine: 0x7fffd4ff
 		azure: 0xf0ffffff
