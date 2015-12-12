@@ -9,7 +9,7 @@ performance = do ->
 logFunc = window['cons'+'ole']['lo'+'g']
 
 module.exports = do ->
-	if ///chrome///i.test(navigator.userAgent)
+	if ///chrome|safari///i.test(navigator.userAgent) or webkit?
 		(Log) -> class LogBrowser extends Log
 			@MARKERS = do ->
 				tmp = ['', '']

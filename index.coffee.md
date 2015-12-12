@@ -270,7 +270,7 @@ log("hello");
 	impl = switch true
 		when utils.isNode
 			require './impls/node/index.coffee'
-		when utils.isBrowser
+		when utils.isBrowser, utils.isIOS
 			require './impls/browser/index.coffee'
 
 	LogImpl = if typeof impl is 'function' then impl Log else Log
