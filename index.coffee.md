@@ -68,8 +68,7 @@ Can be overriden in the *init.js* file.
     "port": 3000,
     "host": "localhost",
     "language": "en",
-    "type": "app",
-    "resources": "static/"
+    "type": "app"
   }
 }
 
