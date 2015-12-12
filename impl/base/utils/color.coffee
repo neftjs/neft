@@ -267,7 +267,7 @@ exports.toRGBAHex = do ->
 			a = alphaToHex match[4]
 
 		else
-			return exports.colorToHex(defaultColor)
+			return exports.toRGBAHex(defaultColor)
 
 		return r << 24 |
 			g << 16 |
