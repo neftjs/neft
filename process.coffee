@@ -11,7 +11,7 @@ module.exports = ->
 	extras = opts.extras or {}
 
 	EMULATORS =
-		browser: ->
+		browser: browserEnv = ->
 			###
 			Provide necessary standard browser globals
 			###
@@ -163,6 +163,11 @@ module.exports = ->
 				renderer:
 					transferData: ->
 					onUpdateView: ->
+
+		ios: ->
+			browserEnv()
+			global._neft =
+				platform: 'ios'
 
 	NODE_MODULES =
 		fs: true
