@@ -87,6 +87,9 @@ module.exports = (impl) ->
 			return result
 
 		(type, item, ex, ey, onItem) ->
+			unless item
+				return
+
 			x = y = 0
 			w = item._width
 			h = item._height
