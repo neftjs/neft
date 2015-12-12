@@ -40,7 +40,6 @@ var log = require('log');
 			blue: (str) -> "INFO: #{str}"
 			yellow: (str) -> "WARN: #{str}"
 			red: (str) -> "ERROR: #{str}"
-			bold: (str) -> "**#{str}**"
 
 		@time = Date.now
 		@timeDiff = (since) -> Log.time() - since
