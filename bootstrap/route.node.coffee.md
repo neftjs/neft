@@ -38,8 +38,8 @@ Standard routes @learn
 	module.exports = (app) ->
 		APP_JS_URI = '/app.js'
 		NEFT_JS_URI = '/neft.js'
-		JS_NEFT_FILE_PATH = './neft-browser-release.js'
-		JS_NEFT_GAME_FILE_PATH = './neft-browser-game-release.js'
+		JS_NEFT_FILE_PATH = './build/neft-browser-release.js'
+		JS_NEFT_GAME_FILE_PATH = './build/neft-browser-game-release.js'
 		JS_BUNDLE_FILE_PATH = './build/app-browser-release.js'
 		VIEW_NAME = '_app_bootstrap'
 		VIEW_FILE = 'view.html'
@@ -47,8 +47,8 @@ Standard routes @learn
 		TYPE_COOKIE_NAME = 'neft-type'
 
 		`//<development>`
-		JS_NEFT_FILE_PATH = './neft-browser-develop.js'
-		JS_NEFT_GAME_FILE_PATH = './neft-browser-game-develop.js'
+		JS_NEFT_FILE_PATH = './build/neft-browser-develop.js'
+		JS_NEFT_GAME_FILE_PATH = './build/neft-browser-game-develop.js'
 		JS_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
 		`//</development>`
 
@@ -73,7 +73,8 @@ Standard routes @learn
 Returns build app javascript file.
 
 		`//<production>`
-		appFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
+		try
+			appFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
 		`//</production>`
 		new app.Route
 			uri: APP_JS_URI
@@ -90,8 +91,9 @@ Returns build app javascript file.
 Returns neft javascript file.
 
 		`//<production>`
-		neftFile = fs.readFileSync JS_NEFT_FILE_PATH, 'utf-8'
-		neftGameFile = fs.readFileSync JS_NEFT_GAME_FILE_PATH, 'utf-8'
+		try
+			neftFile = fs.readFileSync JS_NEFT_FILE_PATH, 'utf-8'
+			neftGameFile = fs.readFileSync JS_NEFT_GAME_FILE_PATH, 'utf-8'
 		`//</production>`
 		new app.Route
 			uri: NEFT_JS_URI
