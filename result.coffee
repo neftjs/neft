@@ -53,23 +53,13 @@ fileScope = """(function(){
 	// list of modules with empty objects
 	var modules = {{declarations}};
 
-	// global object
-	var globalRequire = typeof require !== 'undefined' && require;
-	var setImmediate = setTimeout;
-	var global = Object.create(null, {
-		setImmediate: {
-			enumerable: true,
-			get: function(){ return setImmediate; },
-			set: function(val){ setImmediate = val; }
-		}
-	});
-
 	// used as `require`
 	function getModule(paths, name){
-		return modules[paths[name]] ||
+		var path = paths[name];
+		return (path in modules ? modules[path] :
 		       (typeof Neft !== "undefined" && Neft[name]) ||
-		       (typeof globalRequire === 'function' && globalRequire(name)) ||
-		       (function(){throw new Error("Cannot find module '"+name+"'");}());
+		       (typeof require === 'function' && require(name)) ||
+		       (function(){throw new Error("Cannot find module '"+name+"'");}()));
 	};
 
 	// fill modules by their bodies
