@@ -64,7 +64,7 @@ module.exports = (impl) ->
 	updatePlainTextSize = (item) ->
 		data = item._impl
 
-		text = item._text
+		text = data.text
 		{fontFamily} = data.innerElemStyle
 		if font = item._font
 			pixelSize = font._pixelSize
@@ -140,7 +140,7 @@ module.exports = (impl) ->
 		updateItem = (item) ->
 			data = item._impl
 			isAutoSize = item._autoWidth or item._autoHeight
-			if (text = item._text)
+			if (text = data.text)
 				if data.containsHTML
 					data.innerElem.innerHTML = text
 					if isAutoSize
@@ -217,6 +217,7 @@ module.exports = (impl) ->
 		uid: 0
 		contentUpdatePending: false
 		containsHTML: false
+		text: ''
 		font: "14px #{implUtils.DEFAULT_FONTS['sans-serif']}, sans-serif"
 
 	exports =
@@ -245,6 +246,7 @@ module.exports = (impl) ->
 
 	setText: (val) ->
 		val = val.replace /<[bB][rR]\s?\/?>/g, "\n"
+		@_impl.text = val
 		@_impl.containsHTML = CONTAINS_HTML_RE.test(val)
 		updateContent @
 		return
