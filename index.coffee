@@ -7,7 +7,9 @@ groundskeeper = require 'groundskeeper'
 uglify = require 'uglify-js'
 Module = require 'module'
 
-{utils, log, assert} = Neft
+utils = require 'utils'
+log = require 'log'
+assert = require './node_modules/assert'
 
 processFile = require './process'
 buildResult = require './result'
@@ -22,6 +24,9 @@ module.exports = (opts, callback) ->
 	assert.isFunction callback
 
 	BUNDLE_FILE_PATH = __dirname + "/bundle.#{utils.uid()}.tmp.js"
+
+	unless opts.verbose
+		log.enabled = log.ERROR
 
 	logtime = log.time 'Resolve bundle modules'
 	fs.writeFileSync BUNDLE_FILE_PATH, "(#{processFile})()"
@@ -62,12 +67,14 @@ module.exports = (opts, callback) ->
 			cleaner.write bundle
 			bundle = cleaner.toString()
 			log.end logtime
+		else
+			bundle = bundle.replace ///<production>([^]*?)<\/production>///gm, ''
 
 		if opts.minify
 			logtime = log.time 'Minimalize'
 			fs.writeFileSync './tmp.js', bundle, 'utf-8'
 
-			cp.exec "./node_modules/uglify-js/bin/uglifyjs " +
+			cp.exec "uglifyjs " +
 			"./tmp.js " +
 			"--screw-ie8 " +
 			"--compress negate_iife=false,keep_fargs " +
