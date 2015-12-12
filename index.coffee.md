@@ -302,9 +302,8 @@ app.cookies.onChanged(function(key){
 
 		app
 
-	# link module
-	MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log', 'resources',
-	           'renderer', 'networking', 'schema', 'document', 'styles', 'assert', 'db']
+	# link modules
+	MODULES = ['utils', 'signal', 'dict', 'list', 'log', 'Resources',
+	           'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db']
 	for name in MODULES
-		exports[name] = require name
-	exports['neft-assert'] = exports.assert
+		exports[name] = exports[name.toLowerCase()] = require name.toLowerCase()
