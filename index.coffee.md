@@ -61,19 +61,26 @@ Determines whether application is a part of the *QML* program.
 *Boolean* utils.isAndroid
 -------------------------
 
+*Boolean* utils.isIOS
+---------------------
+
 	exports.isNode = exports.isServer = exports.isClient =
-	exports.isBrowser = exports.isQml = exports.isAndroid = false
+	exports.isBrowser = exports.isQml = exports.isAndroid =
+	exports.isIOS = false
 
 	switch true
-
-		when window?.document?
-			exports.isClient = exports.isBrowser = true
 
 		when Qt?.include?
 			exports.isClient = exports.isQml = true
 
 		when android?
 			exports.isClient = exports.isAndroid = true
+
+		when _neft?.platform is 'ios'
+			exports.isClient = exports.isIOS = true
+
+		when window?.document?
+			exports.isClient = exports.isBrowser = true
 
 		when process? and Object.prototype.toString.call(process) is '[object process]'
 			exports.isNode = exports.isServer = true
