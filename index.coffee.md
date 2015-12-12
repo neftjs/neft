@@ -53,10 +53,10 @@ Determines whether application is run in the **node.js** environment.
 
 Determines whether application is run in the browser environment.
 
-*Boolean* utils.isQml
----------------------
+*Boolean* utils.isQt
+--------------------
 
-Determines whether application is a part of the *QML* program.
+Determines whether application is a part of the *Qt* program.
 
 *Boolean* utils.isAndroid
 -------------------------
@@ -65,13 +65,13 @@ Determines whether application is a part of the *QML* program.
 ---------------------
 
 	exports.isNode = exports.isServer = exports.isClient =
-	exports.isBrowser = exports.isQml = exports.isAndroid =
+	exports.isBrowser = exports.isQt = exports.isAndroid =
 	exports.isIOS = false
 
 	switch true
 
 		when Qt?.include?
-			exports.isClient = exports.isQml = true
+			exports.isClient = exports.isQt = true
 
 		when android?
 			exports.isClient = exports.isAndroid = true
