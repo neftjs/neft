@@ -269,7 +269,7 @@ exports.toRGBAHex = do ->
 		else
 			return exports.toRGBAHex(defaultColor)
 
-		return r << 24 |
+		return (r << 24 |
 			g << 16 |
 			b << 8 |
-			a >>> 0
+			a) >>> 0
