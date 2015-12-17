@@ -491,9 +491,6 @@ module.exports = (impl) ->
 	create: (data) ->
 		impl.Types.Item.create.call @, data
 
-		# item props
-		impl.setItemClip.call @, true
-
 		# signals
 		if impl._scrollableUsePointer
 			usePointer @
