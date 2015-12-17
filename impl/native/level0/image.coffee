@@ -1,5 +1,7 @@
 'use strict'
 
+utils = require 'utils'
+
 module.exports = (impl) ->
 	{bridge} = impl
 	{outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge

@@ -6,6 +6,7 @@ module.exports = (impl) ->
 
 	bridge.listen bridge.inActions.FONT_LOAD, (reader) ->
 		source = reader.getString()
+		success = reader.getBoolean()
 		return
 
 	loadFont: (name, source, sources) ->

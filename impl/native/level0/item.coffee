@@ -32,14 +32,14 @@ module.exports = (impl) ->
 		impl.pointer.setItemParent.call @, val
 		return
 
-	# insertItemBefore: (val) ->
-	# 	pushAction outActions.INSERT_ITEM_BEFORE
-	# 	pushItem @
-	# 	pushItem val
+	insertItemBefore: (val) ->
+		pushAction outActions.INSERT_ITEM_BEFORE
+		pushItem @
+		pushItem val
 
-	# 	if val and val._parent isnt @_parent
-	# 		impl.pointer.setItemParent.call @, val._parent
-	# 	return
+		if val and val._parent isnt @_parent
+			impl.pointer.setItemParent.call @, val._parent
+		return
 
 	setItemBackground: (val) ->
 		pushAction outActions.SET_ITEM_BACKGROUND

@@ -15,12 +15,36 @@ module.exports = (impl) ->
 		text.contentHeight = height
 		return
 
-	updateTextContentSize = (item) ->
-		pushAction outActions.UPDATE_TEXT_CONTENT_SIZE
-		pushItem item
-		return
+	updateTextContentSize = do ->
+		pending = false
+		queue = []
 
-	DATA = {}
+		update = (item) ->
+			pushAction outActions.UPDATE_TEXT_CONTENT_SIZE
+			pushItem item
+			return
+
+		updateAll = (item) ->
+			while item = queue.pop()
+				item._impl.sizeUpdatePending = false
+				update item
+			pending = false
+			return
+
+		(item) ->
+			if item._impl.sizeUpdatePending
+				return
+
+			item._impl.sizeUpdatePending = true
+			queue.push item
+
+			unless pending
+				setImmediate updateAll
+				pending = true
+			return
+
+	DATA =
+		sizeUpdatePending: false
 
 	DATA: DATA
 
@@ -34,6 +58,12 @@ module.exports = (impl) ->
 		impl.Types.Item.create.call @, data
 
 	setText: (val) ->
+		val = val.replace ///<[bB][rR]\s?\/?>///g, "\n"
+
+		# remove html tags
+		# TODO: add simple html support
+		val = val.replace ///<([^>]+)>///g, ""
+
 		pushAction outActions.SET_TEXT
 		pushItem @
 		pushString val

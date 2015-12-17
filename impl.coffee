@@ -29,7 +29,7 @@ module.exports = (Renderer) ->
 			r ?= require('./impl/css') impl
 		if utils.isQt
 			r ?= require('./impl/qt') impl
-		if utils.isAndroid
+		if utils.isAndroid or utils.isIOS
 			r ?= require('./impl/native') impl
 		r
 
