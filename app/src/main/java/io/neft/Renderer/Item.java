@@ -1,27 +1,7 @@
 package io.neft.Renderer;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import java.lang.Integer;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Item {
     protected final Renderer renderer;
@@ -39,20 +19,9 @@ public class Item {
     public boolean clip = false;
     public Item parent;
     public Item background;
-
-    // children array is used only if item contains children with custom z-index
-    public ArrayList<Item> children;
-
-    public int childrenWithZIndex = 0;
-    public final ArrayList<Item> childrenByZIndex;
+    public final ArrayList<Item> children;
 
     private static final float PI = (float) Math.PI;
-
-    private static final Comparator<Item> zIndexComparator = new Comparator<Item>(){
-        public int compare(Item a, Item b){
-            return b.zIndex - a.zIndex;
-        }
-    };
 
     static void register(Renderer renderer){
         renderer.actions.put(Renderer.InAction.CREATE_ITEM, new Action() {
@@ -159,61 +128,35 @@ public class Item {
         this.id = renderer.items.size();
         renderer.items.add(this);
 
-        childrenByZIndex = new ArrayList<>();
+        children = new ArrayList<>();
     }
 
-    static int parseRGBA(String val){
-        final long color = Long.parseLong(val, 16);
-        return (int) (
-            ((color & 0x000000FF) << 24) | //AA______
-            ((color & 0xFFFFFF00) >>  8)); //__RRGGBB
+    static int parseRGBA(int val){
+        return ((val & 0xFFFFFF00) >> 8) |  // __RRGGBB
+                ((val & 0x000000FF) << 24); // AA______
     }
 
     public void setParent(Item val){
         if (parent != null){
-            parent.childrenByZIndex.remove(this);
-
-            if (zIndex != 0 && --parent.childrenWithZIndex > 0){
-                parent.children.remove(this);
-            }
+            parent.children.remove(this);
         }
 
         if (val != null){
-            val.childrenByZIndex.add(this);
-
-            if (zIndex != 0){
-                if (val.childrenWithZIndex++ == 0){
-                    val.createChildrenArray();
-                } else {
-                    val.children.add(this);
-                }
-            }
-
-            val.sortChildrenByZIndex();
+            val.children.add(this);
         }
 
         this.parent = val;
     }
 
     public void insertBefore(Item val){
-        // remove item from current parent
-        setParent(null);
-
-        // insert
-        if (zIndex != 0){
-            if (val.parent.childrenWithZIndex++ == 0){
-                val.parent.createChildrenArray();
-            } else {
-                val.parent.children.set(val.parent.children.indexOf(val), this);
-            }
+        if (parent != null){
+            parent.children.remove(this);
         }
 
-        if (val.parent.childrenWithZIndex > 0){
-            val.parent.childrenByZIndex.add(this);
-            val.parent.sortChildrenByZIndex();
-        } else {
-            val.parent.childrenByZIndex.set(val.parent.childrenByZIndex.indexOf(val), this);
-        }
+        final Item parent = val.parent;
+        final int index = parent.children.indexOf(val);
+        parent.children.add(index, this);
+        this.parent = parent;
     }
 
     public void setVisible(boolean val){
@@ -242,15 +185,7 @@ public class Item {
 
     public void setZ(int val){
         zIndex = val;
-        if (val != 0){
-            if (parent.childrenWithZIndex++ == 0) {
-                parent.createChildrenArray();
-            }
-        } else {
-            parent.childrenWithZIndex--;
-        }
-
-        parent.sortChildrenByZIndex();
+        // TODO
     }
 
     public void setScale(float val){
@@ -267,20 +202,6 @@ public class Item {
 
     public void setBackground(Item val){
         background = val;
-    }
-
-    private void createChildrenArray(){
-        if (children == null){
-            children = new ArrayList<>();
-        }
-        children.clear();
-        children.addAll(childrenByZIndex);
-    }
-
-    public void sortChildrenByZIndex(){
-        if (childrenWithZIndex > 0) {
-            Collections.sort(childrenByZIndex, zIndexComparator);
-        }
     }
 
     protected void drawShape(Canvas canvas, int alpha){
@@ -314,8 +235,6 @@ public class Item {
             canvas.translate(-originX, -originY);
         }
 
-        // opacity
-
         // clip
         if (clip){
             canvas.clipRect(0, 0, width, height);
@@ -330,7 +249,7 @@ public class Item {
         drawShape(canvas, alpha);
 
         // render children
-        for (Item child : childrenByZIndex){
+        for (Item child : children){
             if (child.visible) {
                 child.draw(canvas, alpha);
             }

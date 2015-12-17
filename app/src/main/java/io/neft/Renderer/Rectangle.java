@@ -37,7 +37,7 @@ public class Rectangle extends Item {
         renderer.actions.put(Renderer.InAction.SET_RECTANGLE_COLOR, new Action() {
             @Override
             void work(Reader reader) {
-                ((Rectangle) reader.getItem()).setColor(reader.getString());
+                ((Rectangle) reader.getItem()).setColor(reader.getInteger());
             }
         });
 
@@ -51,7 +51,7 @@ public class Rectangle extends Item {
         renderer.actions.put(Renderer.InAction.SET_RECTANGLE_BORDER_COLOR, new Action() {
             @Override
             void work(Reader reader) {
-                ((Rectangle) reader.getItem()).setBorderColor(reader.getString());
+                ((Rectangle) reader.getItem()).setBorderColor(reader.getInteger());
             }
         });
 
@@ -67,7 +67,7 @@ public class Rectangle extends Item {
         super(renderer);
     }
 
-    public void setColor(String val){
+    public void setColor(int val){
         color = Item.parseRGBA(val);
     }
 
@@ -75,7 +75,7 @@ public class Rectangle extends Item {
         radius = renderer.dpToPx(val);
     }
 
-    public void setBorderColor(String val){
+    public void setBorderColor(int val){
         borderColor = Item.parseRGBA(val);
     }
 

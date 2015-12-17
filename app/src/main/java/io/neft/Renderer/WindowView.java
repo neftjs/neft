@@ -2,12 +2,19 @@ package io.neft.Renderer;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.widget.RelativeLayout;
 
-public class WindowView extends View {
+public class WindowView extends ViewGroup {
     public Item windowItem;
     public Renderer renderer;
 
@@ -22,6 +29,12 @@ public class WindowView extends View {
 
     public WindowView(Context context, AttributeSet attrs){
         super(context, attrs);
+        this.setWillNotDraw(false);
+        this.requestFocus();
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b){
     }
 
     @Override
@@ -33,25 +46,26 @@ public class WindowView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        final float pixelRatio = renderer.device.pixelRatio;
+        return renderer.device.onTouchEvent(event);
+    }
 
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                renderer.pushAction(Renderer.OutAction.POINTER_PRESS);
-                break;
-            case MotionEvent.ACTION_UP:
-                renderer.pushAction(Renderer.OutAction.POINTER_RELEASE);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                renderer.pushAction(Renderer.OutAction.POINTER_MOVE);
-                break;
-            default:
-                return true;
-        }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        return renderer.device.onKey(keyCode, event);
+    }
 
-        renderer.pushFloat(event.getX() / pixelRatio);
-        renderer.pushFloat(event.getY() / pixelRatio);
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event){
+        return renderer.device.onKey(keyCode, event);
+    }
 
-        return true;
+    @Override
+    public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event){
+        return renderer.device.onKey(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyPreIme(int keyCode, KeyEvent event){
+        return renderer.device.onKey(keyCode, event);
     }
 }

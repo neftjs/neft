@@ -40,9 +40,10 @@ public class Text extends Item {
     public float fontPixelSize;
     public float contentWidth = 0;
     public float contentHeight = 0;
-    public float alignmentHorizontal = alignment.get("top");
-    public float alignmentVertical = alignment.get("left");
+    public float alignmentHorizontal = alignment.get("left");
+    public float alignmentVertical = alignment.get("top");
 
+    protected String linesText = "";
     protected ArrayList<Line> lines;
     protected int linesLength;
     protected String[] words;
@@ -82,7 +83,7 @@ public class Text extends Item {
         renderer.actions.put(Renderer.InAction.SET_TEXT_COLOR, new Action() {
             @Override
             void work(Reader reader) {
-                ((Text) reader.getItem()).setColor(reader.getString());
+                ((Text) reader.getItem()).setColor(reader.getInteger());
             }
         });
 
@@ -152,8 +153,12 @@ public class Text extends Item {
                     renderer.dirty = true;
                     renderer.pushAction(Renderer.OutAction.FONT_LOAD);
                     renderer.pushString(name);
+                    renderer.pushBoolean(true);
                 } else {
                     Log.e("JAVA", "Loading font's by URL is not currently supported");
+                    renderer.pushAction(Renderer.OutAction.FONT_LOAD);
+                    renderer.pushString(name);
+                    renderer.pushBoolean(false);
                 }
             }
         });
@@ -176,7 +181,7 @@ public class Text extends Item {
         wrap = val;
     }
 
-    public void setColor(String val){
+    public void setColor(int val){
         color = Item.parseRGBA(val);
     }
 
@@ -212,6 +217,7 @@ public class Text extends Item {
 
     public void updateContentSize(){
         linesLength = 0;
+        linesText = text;
 
         if (words != null){
             updatePaint();
@@ -306,7 +312,7 @@ public class Text extends Item {
         for (int i = 0; i < linesLength; i++){
             final Line line = lines.get(i);
 
-            canvas.drawText(text,
+            canvas.drawText(linesText,
                     line.textStart, line.textEnd,
                     (this.width - line.width) * alignmentHorizontal, line.y + shiftY,
                     paint);

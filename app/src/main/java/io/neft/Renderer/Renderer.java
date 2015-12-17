@@ -64,6 +64,9 @@ public class Renderer extends Thread {
     private static final int OUT_ARRAYS_INCREASE_VALUE = 24;
 
     public enum InAction {
+        DEVICE_SHOW_KEYBOARD,
+        DEVICE_HIDE_KEYBOARD,
+
         SET_WINDOW,
 
         CREATE_ITEM,
@@ -121,6 +124,12 @@ public class Renderer extends Thread {
         POINTER_PRESS,
         POINTER_RELEASE,
         POINTER_MOVE,
+        DEVICE_KEYBOARD_SHOW,
+        DEVICE_KEYBOARD_HIDE,
+        KEY_PRESS,
+        KEY_HOLD,
+        KEY_INPUT,
+        KEY_RELEASE,
         IMAGE_SIZE,
         TEXT_SIZE,
         FONT_LOAD,
