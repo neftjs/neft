@@ -93,14 +93,14 @@ module.exports = (impl) ->
 				charWidth = getTextSizeWidth fontDef, char
 				charWidth += letterSpacing
 
-			if i is textLength or char is ' '
+			if i is textLength or char is ' ' or char is '-'
 				if x + wordWidth > maxWidth
 					height += lineHeight
 					x = 0
 				x += wordWidth
 				if x > width
 					width = x
-				if char is ' '
+				if char is ' ' or char is '-'
 					x += charWidth + wordSpacing
 				wordWidth = 0
 			else if char is '\n'
