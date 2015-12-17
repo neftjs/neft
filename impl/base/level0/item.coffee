@@ -109,5 +109,3 @@ module.exports = (impl) ->
 
 	setItemPointerDragActive: (val) ->
 		pointer.setItemPointerDragActive.call @, val
-
-	setItemKeysFocus: (val) ->

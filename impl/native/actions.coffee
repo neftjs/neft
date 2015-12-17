@@ -8,11 +8,20 @@ exports.in = do (i=0) ->
 	POINTER_PRESS: i++
 	POINTER_RELEASE: i++
 	POINTER_MOVE: i++
+	DEVICE_KEYBOARD_SHOW: i++
+	DEVICE_KEYBOARD_HIDE: i++
+	KEY_PRESS: i++
+	KEY_HOLD: i++
+	KEY_INPUT: i++
+	KEY_RELEASE: i++
 	IMAGE_SIZE: i++
 	TEXT_SIZE: i++
 	FONT_LOAD: i++
 
 exports.out = do (i=0) ->
+	DEVICE_SHOW_KEYBOARD: i++
+	DEVICE_HIDE_KEYBOARD: i++
+
 	SET_WINDOW: i++
 
 	CREATE_ITEM: i++

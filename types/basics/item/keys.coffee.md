@@ -27,6 +27,8 @@ Rectangle {
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys extends itemUtils.DeepObject
 		@__name__ = 'Keys'
 
+		{Device} = Renderer
+
 		itemUtils.defineProperty
 			constructor: ctor
 			name: 'keys'
@@ -40,25 +42,22 @@ Rectangle {
 			@_focus = false
 			Object.preventExtensions @
 
-*Signal* Keys::onPress(*Object* event)
---------------------------------------
+*Signal* Keys::onPress(*KeysEvent* event)
+-----------------------------------------
 
-*Signal* Keys::onHold(*Object* event)
--------------------------------------
-
-*Signal* Keys::onRelease(*Object* event)
+*Signal* Keys::onHold(*KeysEvent* event)
 ----------------------------------------
 
-*Signal* Keys::onInput(*Object* event)
---------------------------------------
+*Signal* Keys::onRelease(*KeysEvent* event)
+-------------------------------------------
 
-		onLazySignalInitialized = (keys, name) ->
-			Impl.attachItemSignal.call keys, 'keys', name
+*Signal* Keys::onInput(*KeysEvent* event)
+-----------------------------------------
 
 		@SIGNALS = ['onPress', 'onHold', 'onRelease', 'onInput']
 
 		for signalName in @SIGNALS
-			signal.Emitter.createSignal @, signalName, onLazySignalInitialized
+			signal.Emitter.createSignal @, signalName
 
 *Boolean* Keys::focus = false
 -----------------------------
@@ -73,7 +72,6 @@ Rectangle {
 			defaultValue: false
 			namespace: 'keys'
 			parentConstructor: ctor
-			implementation: Impl["set#{ctor.__name__}KeysFocus"]
 			developmentSetter: (val) ->
 				assert.isBoolean val
 			setter: (_super) -> (val) ->
@@ -92,3 +90,30 @@ Rectangle {
 						if focusedKeys isnt Renderer.window.keys
 							Renderer.window.keys.focus = true
 				return
+
+		Device.onKeyPress (event) ->
+			focusedKeys?.onPress.emit keysEvent
+
+		Device.onKeyHold (event) ->
+			focusedKeys?.onHold.emit keysEvent
+
+		Device.onKeyRelease (event) ->
+			focusedKeys?.onRelease.emit keysEvent
+
+		Device.onKeyInput (event) ->
+			focusedKeys?.onInput.emit keysEvent
+
+*KeysEvent* KeysEvent() : DeviceKeyboardEvent
+---------------------------------------------
+
+		@KeysEvent = class KeysEvent
+			constructor: ->
+				Object.preventExtensions @
+
+			@:: = Object.create Device.keyboard
+			@::constructor = KeysEvent
+
+*KeysEvent* Keys.event
+----------------------
+
+		@event = keysEvent = new KeysEvent

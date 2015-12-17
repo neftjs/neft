@@ -187,5 +187,3 @@ module.exports = (impl) ->
 		if ns is 'pointer'
 			impl.pointer.attachItemSignal.call @, signalName
 		return
-
-	setItemKeysFocus: cssUtils.keysEvents.setItemKeysFocus

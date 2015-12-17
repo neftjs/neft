@@ -209,5 +209,3 @@ module.exports = (impl) ->
 		if cursor = SIGNALS_CURSORS[ns]?[signalName]
 			@_ref._impl.elemStyle.cursor = cursor
 		return
-
-	setItemKeysFocus: impl.utils.keysEvents.setItemKeysFocus

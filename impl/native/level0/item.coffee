@@ -106,5 +106,3 @@ module.exports = (impl) ->
 		pushItem @
 		pushInteger val * 255 | 0
 		return
-
-	setItemKeysFocus: (val) ->

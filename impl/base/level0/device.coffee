@@ -2,3 +2,7 @@
 
 module.exports = (impl) ->
 	initDeviceNamespace: ->
+
+	showDeviceKeyboard: ->
+
+	hideDeviceKeyboard: ->

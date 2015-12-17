@@ -19,6 +19,7 @@ Device @namespace
 				@_phone = false
 				@_pixelRatio = 1
 				@_pointer = new DevicePointerEvent
+				@_keyboard = new DeviceKeyboardEvent
 
 				Object.preventExtensions @
 
@@ -132,6 +133,33 @@ ReadOnly *DevicePointerEvent* Device.pointer
 
 			signal.Emitter.createSignal @, 'onPointerWheel'
 
+ReadOnly *DeviceKeyboardEvent* Device.keyboard
+----------------------------------------------
+
+			utils.defineProperty Device::, 'keyboard', null, ->
+				@_keyboard
+			, null
+
+*Signal* Device.onKeyPress(*DeviceKeyboardEvent* event)
+-------------------------------------------------------
+
+			signal.Emitter.createSignal @, 'onKeyPress'
+
+*Signal* Device.onKeyHold(*DeviceKeyboardEvent* event)
+------------------------------------------------------
+
+			signal.Emitter.createSignal @, 'onKeyHold'
+
+*Signal* Device.onKeyRelease(*DeviceKeyboardEvent* event)
+---------------------------------------------------------
+
+			signal.Emitter.createSignal @, 'onKeyRelease'
+
+*Signal* Device.onKeyInput(*DeviceKeyboardEvent* event)
+-------------------------------------------------------
+
+			signal.Emitter.createSignal @, 'onKeyInput'
+
 *DevicePointerEvent* DevicePointerEvent()
 -----------------------------------------
 
@@ -220,6 +248,61 @@ ReadOnly *Float* DevicePointerEvent::deltaY
 				name: 'deltaY'
 				defaultValue: 0
 
+*DeviceKeyboardEvent* DeviceKeyboardEvent()
+-------------------------------------------
+
+		class DeviceKeyboardEvent extends signal.Emitter
+			constructor: ->
+				super()
+
+				@_visible = false
+				@_key = ''
+				@_text = ''
+
+				Object.preventExtensions @
+
+ReadOnly *Boolean* DeviceKeyboardEvent::visible
+----------------------------------------------
+
+### *Signal* DeviceKeyboardEvent::onVisibleChange(*Boolean* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'visible'
+				defaultValue: false
+
+ReadOnly *String* DeviceKeyboardEvent::key
+------------------------------------------
+
+### *Signal* DeviceKeyboardEvent::onKeyChange(*String* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'key'
+				defaultValue: ''
+
+ReadOnly *String* DeviceKeyboardEvent::text
+-------------------------------------------
+
+### *Signal* DeviceKeyboardEvent::onTextChange(*String* oldValue)
+
+			itemUtils.defineProperty
+				constructor: @
+				name: 'text'
+				defaultValue: ''
+
+DeviceKeyboardEvent::show()
+---------------------------
+
+			show: ->
+				Impl.showDeviceKeyboard.call device
+
+DeviceKeyboardEvent::hide()
+---------------------------
+
+			hide: ->
+				Impl.hideDeviceKeyboard.call device
+
 		device = new Device
-		Impl.initDeviceNamespace?.call device
+		Impl.initDeviceNamespace.call device
 		device
