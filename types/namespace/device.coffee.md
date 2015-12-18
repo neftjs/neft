@@ -185,12 +185,6 @@ ReadOnly *Float* DevicePointerEvent::x
 				constructor: @
 				name: 'x'
 				defaultValue: 0
-				setter: (_super) -> (val) ->
-					oldVal = @_x
-					if oldVal isnt val
-						_super.call @, val
-						@movementX = val - oldVal
-					return
 
 ReadOnly *Float* DevicePointerEvent::y
 --------------------------------------
@@ -201,12 +195,6 @@ ReadOnly *Float* DevicePointerEvent::y
 				constructor: @
 				name: 'y'
 				defaultValue: 0
-				setter: (_super) -> (val) ->
-					oldVal = @_y
-					if oldVal isnt val
-						_super.call @, val
-						@movementY = val - oldVal
-					return
 
 ReadOnly *Float* DevicePointerEvent::movementX
 ----------------------------------------------
@@ -303,6 +291,23 @@ DeviceKeyboardEvent::hide()
 			hide: ->
 				Impl.hideDeviceKeyboard.call device
 
+		# create new instance
 		device = new Device
+
+		# support pointer movement
+		do ->
+			x = y = 0
+			updateMovement = (event) ->
+				event.movementX = event.x - x
+				event.movementY = event.y - y
+				x = event.x
+				y = event.y
+				return
+
+			device.onPointerPress updateMovement
+			device.onPointerRelease updateMovement
+			device.onPointerMove updateMovement
+
+		# initialize by the implementation
 		Impl.initDeviceNamespace.call device
 		device
