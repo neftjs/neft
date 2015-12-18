@@ -16,9 +16,6 @@ module.exports = (impl) ->
 		width = reader.getFloat()
 		height = reader.getFloat()
 
-		if image.source isnt source
-			return
-
 		image._impl.imageLoadCallback?.call image, not success,
 			source: source
 			width: width
