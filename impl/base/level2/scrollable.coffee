@@ -12,74 +12,10 @@ module.exports = (impl) ->
 	impl._scrollableUsePointer ?= true
 	impl._scrollableUseWheel ?= true
 
-	outQuint = (t, b, c, d) ->
-		# c*((t=t/d-1)*t*t*t*t + 1) + b
-		c * (t/d) + b
-
 	###
 	Scroll container by given x and y deltas
 	###
 	scroll = do ->
-		# list = []
-		# pending = false
-		# vsyncRun = false
-
-		# getSwingY = (item, y) ->
-		# 	maxSwing = item.height * 0.4
-
-		# 	if y < 0
-		# 		max = 0
-		# 		if y < -maxSwing
-		# 			y = -maxSwing
-		# 	else
-		# 		max = item._impl.contentItem._height - item._height
-		# 		if y < max
-		# 			return y
-		# 		if y > max + maxSwing
-		# 			y = max + maxSwing
-		# 	delta = Math.max(Math.pow(Math.abs(max - y), 1.3) / 42, 2)
-		# 	if y < 0
-		# 		y += delta
-		# 		if y > 0
-		# 			y = 0
-		# 	else
-		# 		y -= delta
-		# 		if y < max
-		# 			y = max
-		# 	y
-
-		# vsync = ->
-		# 	i = 0; n = list.length
-		# 	while i < n
-		# 		item = list[i]
-
-		# 		if item._impl.swingDisabled
-		# 			i++
-		# 			continue
-
-		# 		# y
-		# 		y = getSwingY item, item.contentY
-		# 		max = getLimitedY item, y
-
-		# 		if y is max
-		# 			item._impl.swingPending = false
-		# 			item._impl.swingFramesY = 0
-		# 			item._impl.lastSwingTime = Date.now()
-		# 			list[i] = list[n-1]
-		# 			list.pop()
-		# 			i--; n--;
-
-		# 		item.contentY = Math.round y
-		# 		item._impl.swingFramesY++
-
-		# 		i++
-
-		# 	if list.length
-		# 		requestAnimationFrame vsync
-		# 	else
-		# 		pending = false
-		# 	return
-
 		(item, x=0, y=0) ->
 			deltaX = getDeltaX item, x
 			deltaY = getDeltaY item, y
@@ -88,17 +24,6 @@ module.exports = (impl) ->
 
 			x = limitedX = getLimitedX item, x
 			y = limitedY = getLimitedY item, y
-
-			# if item._impl.swingPending and not item._impl.swingDisabled
-			# 	y = getSwingY item, y
-
-			# unless item._impl.swingPending
-			# 	if y isnt limitedY
-			# 		item._impl.swingPending = true
-			# 		list.push item
-			# 		unless pending
-			# 			pending = true
-			# 			requestAnimationFrame vsync
 
 			if item._contentX isnt x or item._contentY isnt y
 				item.contentX = x
@@ -245,12 +170,6 @@ module.exports = (impl) ->
 			if snap
 				snapTarget = getSnapTarget target
 				shouldSnap = data[lastSnapTargetProp] isnt snapTarget
-				# top
-				# shouldSnap ||= item[contentProp] < snapTarget
-				# # bottom
-				# if not shouldSnap and snapTarget + snapTarget[sizeProp] < item[contentProp] + item[sizeProp]
-				# 	shouldSnap = true
-				# 	snapTarget += snapTarget[sizeProp] - item[sizeProp]
 				if shouldSnap
 					target = snapTarget
 					data[lastSnapTargetProp] = snapTarget
@@ -419,9 +338,6 @@ module.exports = (impl) ->
 
 			x = e.deltaX / WHEEL_DIVISOR
 			y = e.deltaY / WHEEL_DIVISOR
-
-			# if Math.abs(y) > Math.abs(x)
-			# 	x = y
 
 			if x > 0 and x > maxX
 				maxX = (maxX * (i-1) + x) / i
