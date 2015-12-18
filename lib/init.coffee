@@ -17,6 +17,7 @@ PLATFORMS =
 	browser: true
 	android: true
 	qt: true
+	ios: true
 
 DEFAULT_OPTIONS_VALUES =
 	out: 'build'

@@ -17,7 +17,8 @@ Recognized types:
  - node: node, server,
  - browser: browser, client,
  - qt: qt, client, native,
- - android: android, client, native.
+ - android: android, client, native,
+ - ios: ios, client, native.
 
 	PLATFORM_TYPES =
 		node:
@@ -28,6 +29,9 @@ Recognized types:
 			client: true
 			native: true
 		android:
+			client: true
+			native: true
+		ios:
 			client: true
 			native: true
 

@@ -13,6 +13,7 @@ Platforms:
   node
   browser
   android
+  ios
 
 Options:
   --release          used to build and run release version of your application
