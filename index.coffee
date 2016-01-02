@@ -27,7 +27,8 @@ isBinding = (obj) ->
 	assert obj.type is ATTRIBUTE, "isBinding: type must be an attribute"
 
 	try
-		eval "(function(console,module,require){return (#{obj.value});}).call(null,null,{},function(){})"
+		func = new Function 'console', "'use strict'; return #{obj.value};"
+		func.call null
 		return false
 
 	true
@@ -123,6 +124,9 @@ bindingAttributeToString = (obj) ->
 	# filter by ids
 	for elem, i in binding when typeof elem isnt 'string'
 		[id] = elem
+		if id is 'Renderer'
+			elem.shift()
+			[id] = elem
 		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling' or id is 'target'
 			elem.unshift "this"
 		else if opts & BINDING_THIS_TO_TARGET_OPTS and id is 'this'
