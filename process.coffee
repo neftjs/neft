@@ -15,15 +15,15 @@ module.exports = ->
 			###
 			Provide necessary standard browser globals
 			###
-			global.window =
-				document: {}
-				isFake: true
-				addEventListener: ->
-				Image: ->
-				HTMLCanvasElement: if extras.game then (->) else null
-				console:
-					log: ->
-				navigator: {}
+			global.window = global
+			global.document = {}
+			global.isFake = true
+			global.addEventListener = ->
+			global.Image = ->
+			global.HTMLCanvasElement = if extras.game then (->) else null
+			global.console =
+				log: ->
+			global.navigator = {}
 			global.location = pathname: ''
 			global.navigator = userAgent: ''
 			global.innerWidth = 1024
@@ -57,6 +57,7 @@ module.exports = ->
 					innerHTML: ''
 					cloneNode: ->
 						global.document.createElement()
+					getContext: ->
 				createElementNS: ->
 					width: baseVal: value: null
 					height: baseVal: value: null
@@ -85,6 +86,8 @@ module.exports = ->
 				getElementById: ->
 				addEventListener: ->
 				querySelector: ->
+				createTextNode: ->
+					{}
 			global.history =
 				pushState: ->
 			global.requestAnimationFrame = ->
@@ -156,6 +159,7 @@ module.exports = ->
 		android: ->
 			global.requestAnimationFrame = ->
 			global.android = {}
+			global.setImmediate = ->
 			global._neft =
 				http:
 					request: -> 0
@@ -166,6 +170,8 @@ module.exports = ->
 
 		ios: ->
 			browserEnv()
+			global.MutationObserver = ->
+				observe: ->
 			global._neft =
 				platform: 'ios'
 
@@ -191,6 +197,8 @@ module.exports = ->
 		mysql: true
 		'js-yaml': true
 		mkdirp: true
+		'form-data': true
+		qs: true
 
 	fs = require 'fs'
 	pathUtils = require 'path'
