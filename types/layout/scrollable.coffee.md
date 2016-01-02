@@ -7,6 +7,8 @@ Scrollable @class
 	signal = require 'signal'
 	assert = require 'assert'
 
+	{emitSignal} = signal.Emitter
+
 	module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
 		@__name__ = 'Scrollable'
 		@__path__ = 'Renderer.Scrollable'
@@ -117,11 +119,11 @@ Scrollable @class
 			defaultValue: null
 			implementation: Impl.setScrollableContentItem
 			setter: (_super) -> (val) ->
-				@_contentItem?.parent = null
 				if val?
 					assert.instanceOf val, Renderer.Item
-					val.parent = @
-					val.index = 0
+					val.parent = null
+					val._parent = this
+					emitSignal val, 'onParentChange', null
 				_super.call @, val
 
 *Float* Scrollable::contentX = 0

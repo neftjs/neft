@@ -19,94 +19,86 @@ module.exports = (impl) ->
 		{Scrollable} = this
 
 	captureItems = do ->
-		checkChildren = (type, item, ex, ey, onItem, parentX, parentY, parentScale) ->
+		checkItem = (type, item, ex, ey, onItem, parentX, parentY, parentScale) ->
 			result = 0
 			x = y = w = h = scale = rotation = t1 = t2 = rey = rsin = rcos = 0.0
 
-			# TODO: support z-index
-			for child in item._children by -1
-				# omit not visible children
-				unless child._visible
-					continue
+			# omit not visible children
+			unless item._visible
+				return result
 
-				# omit children with no pointer events listeners
-				data = child._impl
+			# omit children with no pointer events listeners
+			data = item._impl
 
-				# omit children with disabled pointer
-				pointer = child._pointer
-				if pointer and not pointer._enabled
-					continue
+			# omit children with disabled pointer
+			pointer = item._pointer
+			if pointer and not pointer._enabled
+				return result
 
-				# get coordinates
-				x = parentX + child._x * parentScale
-				y = parentY + child._y * parentScale
-				w = child._width * parentScale
-				h = child._height * parentScale
-				scale = child._scale
-				rotation = child._rotation
+			# get coordinates
+			x = parentX + item._x * parentScale
+			y = parentY + item._y * parentScale
+			w = item._width * parentScale
+			h = item._height * parentScale
+			scale = item._scale
+			rotation = item._rotation
 
-				if item instanceof Scrollable and child is item._contentItem
-					x -= item.contentX * parentScale
-					y -= item.contentY * parentScale
+			# add scale
+			if scale isnt 1
+				t1 = w * scale
+				t2 = h * scale
+				x += (w - t1) / 2
+				y += (h - t2) / 2
+				w = t1
+				h = t2
 
-				# add scale
-				if scale isnt 1
-					t1 = w * scale
-					t2 = h * scale
-					x += (w - t1) / 2
-					y += (h - t2) / 2
-					w = t1
-					h = t2
+			# add rotation
+			if rotation isnt 0
+				rsin = sin -rotation
+				rcos = cos -rotation
+				t1 = x + w/2
+				t2 = y + h/2
+				rey = rcos * (ex-t1) - rsin * (ey-t2) + t1
+				ey = rsin * (ex-t1) + rcos * (ey-t2) + t2
+				ex = rey
 
-				# add rotation
-				if rotation isnt 0
-					rsin = sin -rotation
-					rcos = cos -rotation
-					t1 = x + w/2
-					t2 = y + h/2
-					rey = rcos * (ex-t1) - rsin * (ey-t2) + t1
-					ey = rsin * (ex-t1) + rcos * (ey-t2) + t2
-					ex = rey
+			# omit outer point for clipped items
+			if item._clip and not isPointInBox(ex, ey, x, y, w, h)
+				return result
 
-				# omit outer point for clipped items
-				if child._clip and not isPointInBox(ex, ey, x, y, w, h)
-					continue
-
+			unless result & STOP_ASIDE_PROPAGATION
 				# test children
-				result = checkChildren(type, child, ex, ey, onItem, x, y, scale)
-				if result & STOP_PROPAGATION
-					return STOP_PROPAGATION
+				# TODO: support z-index
+				for child in item._children by -1
+					result |= checkItem(type, child, ex, ey, onItem, x, y, scale)
+					if result & STOP_PROPAGATION
+						return result
+					if result & STOP_ASIDE_PROPAGATION
+						break
 
-				# test this child
-				if result & PROPAGATE_UP or isPointInBox(ex, ey, x, y, w, h)
-					result = onItem(child)
+				# test content item
+				if item instanceof Scrollable and item._contentItem
+					result |= checkItem(
+						type,
+						item._contentItem,
+						ex, ey,
+						onItem,
+						x - item.contentX * parentScale, y - item.contentY * parentScale,
+						scale
+					)
+					if result & (STOP_PROPAGATION | STOP_ASIDE_PROPAGATION)
+						return result
 
-				# break if needed
-				if result & (STOP_PROPAGATION | STOP_ASIDE_PROPAGATION)
-					return result
+			# test this child
+			if result & PROPAGATE_UP or isPointInBox(ex, ey, x, y, w, h)
+				result |= onItem(item)
+
 			return result
 
 		(type, item, ex, ey, onItem) ->
-			unless item
-				return
-
-			x = y = 0
-			w = item._width
-			h = item._height
-			scale = 1
-
-			data = item._impl
-
-			# test children
-			childrenResult = checkChildren(type, item, ex, ey, onItem, x, y, scale)
-			if childrenResult & STOP_PROPAGATION
-				return STOP_PROPAGATION
-
-			# test this item
-			if childrenResult & PROPAGATE_UP or isPointInBox(ex, ey, x, y, w, h)
-				if onItem(item)
-					return STOP_PROPAGATION
-			return
+			if item
+				return checkItem type, item, ex, ey, onItem, 0, 0, 1
+			return 0
 
 	itemsToRelease = []
 	itemsToMove = []
@@ -118,7 +110,10 @@ module.exports = (impl) ->
 		{event} = impl.Renderer.Item.Pointer
 
 		getEventStatus = ->
-			PROPAGATE_UP | (if event._checkSiblings then 0 else STOP_ASIDE_PROPAGATION)
+			if event._checkSiblings
+				PROPAGATE_UP
+			else
+				PROPAGATE_UP | STOP_ASIDE_PROPAGATION
 
 		# support press event
 		Device.onPointerPress do ->
@@ -255,7 +250,6 @@ module.exports = (impl) ->
 		# onDragEnter: 1 << i++
 		# onDragExit: 1 << i++
 		# onDrop: 1 << i++
-		# onWheel: 1 << i++
 
 	DATA:
 		pointerHover: false

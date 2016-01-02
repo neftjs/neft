@@ -84,6 +84,8 @@ module.exports = (impl) ->
 
 		(val) ->
 			if oldVal = @_impl.contentItem
+				if oldVal._impl.elem.parentElement is @_impl.scrollElem
+					@_impl.scrollElem.removeChild oldVal._impl.elem
 				oldVal.onHeightChange.disconnect onHeightChange, @
 
 			if val
