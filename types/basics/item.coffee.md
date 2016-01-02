@@ -239,7 +239,6 @@ Removes all children from a node.
 		{indexOf, splice, push, shift, pop} = Array::
 
 		setFakeParent = (child, parent, index=-1) ->
-			oldParent = child._parent
 			child.parent = null
 
 			if index >= 0 and parent.children.length < index
@@ -248,7 +247,7 @@ Removes all children from a node.
 				Impl.setItemParent.call child, parent
 
 			child._parent = parent
-			emitSignal child, 'onParentChange', oldParent
+			emitSignal child, 'onParentChange', null
 			return
 
 		itemUtils.defineProperty
