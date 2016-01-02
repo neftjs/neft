@@ -13,7 +13,7 @@ module.exports = (impl) ->
 				require('./ios') impl
 
 	exports =
-	Types:
+	Types: utils.merge
 		Item: require './level0/item'
 		Image: require './level0/image'
 		Text: require './level0/text'
@@ -27,6 +27,7 @@ module.exports = (impl) ->
 		AmbientSound: require './level0/sound/ambient'
 
 		Rectangle: require './level1/rectangle'
+	, platform.Types
 
 	bridge: bridge = platform.bridge
 

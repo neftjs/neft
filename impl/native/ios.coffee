@@ -8,6 +8,9 @@ actionsDef = require './actions'
 _neft.renderer = {}
 
 module.exports = (impl) ->
+	Types:
+		Scrollable: require './level2/scrollable'
+
 	bridge: do ->
 		itemsById = new Array 20000 # 20k
 		listeners = Object.create null
