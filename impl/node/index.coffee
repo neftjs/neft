@@ -8,6 +8,7 @@ pathUtils = require 'path'
 assert = require 'neft-assert'
 nodeStatic = require 'node-static'
 FormData = require 'form-data'
+qs = require 'qs'
 
 EXT_TYPES =
 	__proto__: null
@@ -70,7 +71,11 @@ module.exports = (Networking) ->
 
 				# data
 				if data isnt ''
-					reqData = utils.tryFunction(JSON.parse, null, [data], data)
+					switch serverReq.headers['content-type']
+						when 'application/x-www-form-urlencoded'
+							reqData = qs.parse data
+						else
+							reqData = utils.tryFunction(JSON.parse, null, [data], data)
 				else
 					reqData = null
 
