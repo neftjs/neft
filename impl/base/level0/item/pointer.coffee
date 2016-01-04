@@ -118,10 +118,12 @@ module.exports = (impl) ->
 		# support press event
 		Device.onPointerPress do ->
 			onItem = (item) ->
-				if item._impl.capturePointer & PRESS
+				{capturePointer} = item._impl
+				if capturePointer & CLICK
+					pressedItems.push item
+				if capturePointer & PRESS
 					event._ensureRelease = event._ensureMove = event._stopPropagation = true
 					emitSignal item.pointer, 'onPress', event
-					pressedItems.push item
 					if event._ensureRelease
 						itemsToRelease.push item
 					if event._ensureMove
@@ -129,11 +131,11 @@ module.exports = (impl) ->
 					if event._stopPropagation
 						return STOP_PROPAGATION
 					return getEventStatus()
-				0
+				STOP_ASIDE_PROPAGATION
 
 			(e) ->
 				event._checkSiblings = false
-				captureItems PRESS, impl.window, e._x, e._y, onItem
+				captureItems PRESS | CLICK, impl.window, e._x, e._y, onItem
 				return
 
 		# support release and click events
@@ -154,7 +156,7 @@ module.exports = (impl) ->
 					if event._stopPropagation
 						return STOP_PROPAGATION
 					return getEventStatus()
-				0
+				STOP_ASIDE_PROPAGATION
 
 			(e) ->
 				event._stopPropagation = false
@@ -193,7 +195,7 @@ module.exports = (impl) ->
 					if event._stopPropagation
 						return STOP_PROPAGATION
 					return getEventStatus()
-				0
+				STOP_ASIDE_PROPAGATION
 
 			(e) ->
 				event._stopPropagation = false
@@ -234,7 +236,7 @@ module.exports = (impl) ->
 						if event._stopPropagation
 							return STOP_PROPAGATION
 						return getEventStatus()
-				0
+				STOP_ASIDE_PROPAGATION
 
 			(e) ->
 				event._checkSiblings = false
