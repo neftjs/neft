@@ -1,4 +1,4 @@
-setImmediate = do ->
+window.setImmediate = do ->
 	running = false
 	queue = []
 
@@ -32,4 +32,4 @@ setImmediate = do ->
 			running = true
 		return
 
-Neft = `{{&neftCode}}`;
+window.Neft = `{{&neftCode}}`;
