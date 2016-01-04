@@ -79,11 +79,6 @@ module.exports = (Networking) ->
 				else
 					reqData = null
 
-				# url
-				url = serverReq.url
-				if utils.has(url, '?')
-					url = url.slice 0, url.indexOf('?')
-
 				# cookies
 				cookies = serverReq.headers['x-cookies']
 				if typeof cookies is 'string'
@@ -92,14 +87,14 @@ module.exports = (Networking) ->
 				obj.req = networking.createLocalRequest
 					uid: uid
 					method: Networking.Request[serverReq.method]
-					uri: url
+					uri: serverReq.url
 					data: reqData
 					type: type
 					headers: serverReq.headers
 					cookies: cookies
 
 	sendRequest: (req, res, callback) ->
-		urlObject = urlUtils.parse req.uri
+		urlObject = urlUtils.parse req.uri.toString()
 
 		opts =
 			protocol: urlObject.protocol

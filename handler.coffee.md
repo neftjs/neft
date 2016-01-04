@@ -100,10 +100,10 @@ It's internally called by the **Networking.createRequest()**.
 				return next()
 
 			# test uri
-			unless @uri.test req.uri
+			unless @uri.test(req.uri.path)
 				return next()
 
-			params = req.params = @uri.match req.uri
+			params = req.params = @uri.match req.uri.path
 
 			# validate by schema
 			if @schema

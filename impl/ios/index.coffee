@@ -25,10 +25,11 @@ module.exports = (Networking) ->
 		xhr = new XMLHttpRequest
 
 		# prevent caching
-		if utils.has(req.uri, '?')
-			uri = "#{req.uri}&now=#{Date.now()}"
+		uri = req.uri.toString()
+		if utils.has(uri, '?')
+			uri = "#{uri}&now=#{Date.now()}"
 		else
-			uri = "#{req.uri}?now=#{Date.now()}"
+			uri = "#{uri}?now=#{Date.now()}"
 
 		xhr.open req.method, uri, true
 

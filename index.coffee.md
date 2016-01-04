@@ -166,9 +166,7 @@ app.networking.createHandler({
 			assert.instanceOf @, Networking
 			assert.isPlainObject opts, '::createRequest options argument ...'
 
-			opts.uri ||= ''
-			if opts.uri.toString?
-				opts.uri = opts.uri.toString()
+			opts.uri = if opts.uri then opts.uri+'' else ''
 
 			unless EXTERNAL_URL_RE.test(opts.uri)
 				if opts.uri[0] isnt '/'

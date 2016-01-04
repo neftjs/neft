@@ -73,22 +73,25 @@ var Request = Networking.Request;
 			assert.isPlainObject opts, 'ctor options argument ...'
 			assert.isString opts.uid if opts.uid?
 			assert.ok utils.has(Request.METHODS, opts.method) if opts.method?
-			assert.isString opts.uri, 'ctor options.uri argument ...'
+			unless opts.uri instanceof Networking.Uri
+				assert.isString opts.uri, 'ctor options.uri argument ...'
 
 			super()
-
-			if opts.uri?.toString?
-				opts.uri = opts.uri.toString()
 
 			if opts.type?
 				assert.ok utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...'
 				{@type} = opts
 			utils.defineProperty @, 'type', utils.ENUMERABLE, @type
 
-			{@data, @uri} = opts
+			{@data, @headers, @cookies} = opts
 			{@method} = opts if opts.method?
-			@headers = opts.headers or {}
-			@cookies = opts.cookies or {}
+			@headers ||= {}
+			@cookies ||= {}
+
+			if typeof opts.uri is 'string'
+				@uri = new Networking.Uri opts.uri
+			else
+				{@uri} = opts
 
 			uid = opts.uid or utils.uid()
 			utils.defineProperty @, 'uid', null, uid
@@ -130,8 +133,8 @@ It holds a method with which the request has been called.
 
 		method: Request.GET
 
-*String* Request::uri
----------------------
+*Networking.Uri* Request::uri
+-----------------------------
 
 This property refers to the request URI path.
 
@@ -148,7 +151,7 @@ It can holds local and absolute paths.
 "/user/user_id"
 ```
 
-		uri: ''
+		uri: null
 
 *String* Request::type
 ----------------------
