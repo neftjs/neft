@@ -63,7 +63,7 @@ Standard routes @learn
 
 		getType = (req) ->
 			{cookie} = req.headers
-			if cookie and cookie.indexOf('neft-type') isnt -1
+			if cookie and cookie.indexOf(TYPE_COOKIE_NAME) isnt -1
 				///neft\-type=([a-z]+)///.exec(cookie)[1]
 			else
 				app.config.type
@@ -142,12 +142,12 @@ remember to clean your cookies when you finish.
 ```
 
 		new app.Route
-			uri: 'neft-type={type}/{rest*}'
+			uri: 'neft-type={type}{rest*}'
 			getData: (callback) ->
 				req = @request
 				res = @response
 				res.setHeader 'Set-Cookie', "#{TYPE_COOKIE_NAME}=#{req.params.type}; path=/;"
-				res.redirect "#{app.networking.url}/#{req.params.rest}"
+				res.redirect "#{app.networking.url}#{req.params.rest}"
 
 #### *
 
