@@ -43,7 +43,8 @@ Check *Request::type* for more.
 Contains:
  - Request.TEXT_TYPE,
  - Request.JSON_TYPE,
- - Request.HTML_TYPE.
+ - Request.HTML_TYPE,
+ - Request.BINARY_TYPE.
 
 		@TYPES = [
 			(@TEXT_TYPE = 'text'),
