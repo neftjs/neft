@@ -416,10 +416,16 @@ module.exports = (impl) ->
 
 	setScrollableContentItem: (val) ->
 		if oldVal = @_impl.contentItem
+			impl.setItemParent.call oldVal, null
 			oldVal.onWidthChange.disconnect onWidthChange, @
 			oldVal.onHeightChange.disconnect onHeightChange, @
 
 		if val
+			if @children.length > 0
+				impl.insertItemBefore.call val, @children[0]
+			else
+				impl.setItemParent.call val, @
+
 			@_impl.contentItem = val
 			val.onWidthChange onWidthChange, @
 			val.onHeightChange onHeightChange, @
