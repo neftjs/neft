@@ -77,7 +77,7 @@ module.exports = (impl) ->
 						break
 
 				# test content item
-				if item instanceof Scrollable and item._contentItem
+				if item instanceof Scrollable and item._contentItem and not (result & STOP_ASIDE_PROPAGATION)
 					result |= checkItem(
 						type,
 						item._contentItem,
@@ -86,7 +86,7 @@ module.exports = (impl) ->
 						x - item.contentX * parentScale, y - item.contentY * parentScale,
 						scale
 					)
-					if result & (STOP_PROPAGATION | STOP_ASIDE_PROPAGATION)
+					if result & STOP_PROPAGATION
 						return result
 
 			# test this child
@@ -118,8 +118,8 @@ module.exports = (impl) ->
 		# support press event
 		Device.onPointerPress do ->
 			onItem = (item) ->
-				event._ensureRelease = event._ensureMove = event._stopPropagation = true
 				if item._impl.capturePointer & PRESS
+					event._ensureRelease = event._ensureMove = event._stopPropagation = true
 					emitSignal item.pointer, 'onPress', event
 					pressedItems.push item
 					if event._ensureRelease
@@ -128,7 +128,8 @@ module.exports = (impl) ->
 						itemsToMove.push item
 					if event._stopPropagation
 						return STOP_PROPAGATION
-				return getEventStatus()
+					return getEventStatus()
+				0
 
 			(e) ->
 				event._checkSiblings = false
@@ -139,24 +140,27 @@ module.exports = (impl) ->
 		Device.onPointerRelease do ->
 			onItem = (item) ->
 				data = item._impl
-				if data.capturePointer & RELEASE
+				{capturePointer} = data
+				if capturePointer & RELEASE
 					emitSignal item._pointer, 'onRelease', event
-				if data.capturePointer & PRESS
+				if capturePointer & PRESS
 					index = itemsToRelease.indexOf item
 					if index >= 0
 						itemsToRelease[index] = null
-				if data.capturePointer & CLICK
+				if capturePointer & CLICK
 					if utils.has(pressedItems, item)
 						emitSignal item.pointer, 'onClick', event
-				if event._stopPropagation
-					return STOP_PROPAGATION
-				return getEventStatus()
+				if capturePointer & (RELEASE | CLICK)
+					if event._stopPropagation
+						return STOP_PROPAGATION
+					return getEventStatus()
+				0
 
 			(e) ->
 				event._stopPropagation = false
 				event._checkSiblings = false
 
-				captureItems CLICK, impl.window, e._x, e._y, onItem
+				captureItems RELEASE | CLICK, impl.window, e._x, e._y, onItem
 
 				unless event._stopPropagation
 					for item in itemsToRelease by -1
@@ -176,25 +180,27 @@ module.exports = (impl) ->
 
 			onItem = (item) ->
 				data = item._impl
-				if data.capturePointer & MOVE
+				{capturePointer} = data
+				if capturePointer & (ENTER | EXIT | MOVE)
 					data.pointerMoveFlag = flag
-				if data.capturePointer & (ENTER | EXIT) and not data.pointerHover
+				if capturePointer & (ENTER | EXIT) and not data.pointerHover
 					data.pointerHover = true
 					hoverItems.push item
 					emitSignal item.pointer, 'onEnter', event
-
-				if data.capturePointer & MOVE
+				if capturePointer & MOVE
 					emitSignal item._pointer, 'onMove', event
-				if event._stopPropagation
-					return STOP_PROPAGATION
-				return getEventStatus()
+				if capturePointer & (ENTER | EXIT | MOVE)
+					if event._stopPropagation
+						return STOP_PROPAGATION
+					return getEventStatus()
+				0
 
 			(e) ->
 				event._stopPropagation = false
 				event._checkSiblings = false
 				flag = (flag % 2) + 1
 
-				captureItems MOVE, impl.window, e._x, e._y, onItem
+				captureItems ENTER | EXIT | MOVE, impl.window, e._x, e._y, onItem
 
 				for item in itemsToMove
 					if event._stopPropagation
@@ -225,9 +231,10 @@ module.exports = (impl) ->
 				if item._impl.capturePointer & WHEEL
 					if (pointer = item._pointer) and not signal.isEmpty(pointer.onWheel)
 						emitSignal pointer, 'onWheel', event
-					if event._stopPropagation
-						return STOP_PROPAGATION
-				return getEventStatus()
+						if event._stopPropagation
+							return STOP_PROPAGATION
+						return getEventStatus()
+				0
 
 			(e) ->
 				event._checkSiblings = false
@@ -242,9 +249,9 @@ module.exports = (impl) ->
 		onRelease: RELEASE = 1 << i++
 		onMove: MOVE = 1 << i++
 		onWheel: WHEEL = 1 << i++
-		onClick: CLICK = (1 << i++) | PRESS | RELEASE
-		onEnter: ENTER = (1 << i++) | MOVE
-		onExit: EXIT = (1 << i++) | MOVE
+		onClick: CLICK = 1 << i++
+		onEnter: ENTER = 1 << i++
+		onExit: EXIT = 1 << i++
 		# onDragStart: 1 << i++
 		# onDragEnd: 1 << i++
 		# onDragEnter: 1 << i++
