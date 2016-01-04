@@ -254,6 +254,7 @@ app.cookies.onChanged(function(key){
 		require('styles')
 			windowStyle: windowStyle
 			styles: app.styles
+			resources: app.resources
 
 		# load bootstrap
 		if utils.isNode
