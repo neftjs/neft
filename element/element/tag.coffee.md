@@ -22,6 +22,8 @@ Tag @virtual_dom
 		@INTERNAL_TAGS = ['neft:attr', 'neft:fragment', 'neft:function', 'neft:rule',
 		'neft:target', 'neft:use', 'neft:require', 'neft:blank', 'neft:log']
 
+		@DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null
+
 		@Attrs = require('./tag/attrs') Tag
 		@extensions = Object.create null
 
@@ -202,17 +204,17 @@ watcher.onRemove(function(tag){
 
 		watch: query.watch
 
-*String* Element::stringify()
------------------------------
+*String* Element::stringify([*Object* replacements])
+----------------------------------------------------
 
-		stringify: ->
-			stringify.getOuterHTML @
+		stringify: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
+			stringify.getOuterHTML @, replacements
 
-*String* Element::stringifyChildren()
--------------------------------------
+*String* Element::stringifyChildren([*Object* replacements])
+------------------------------------------------------------
 
-		stringifyChildren: ->
-			stringify.getInnerHTML @
+		stringifyChildren: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
+			stringify.getInnerHTML @, replacements
 
 Element::replace(*Element* oldElement, *Element* newElement)
 ------------------------------------------------------------

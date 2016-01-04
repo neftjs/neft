@@ -16,7 +16,7 @@ module.exports = (File) -> class Log
 		else
 			log = [@node.stringifyChildren()]
 			for key, val of @node._attrs
-				log.push "#{key}=", val
+				log.push key, '=', val
 			console.log.apply console, log
 		return
 

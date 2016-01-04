@@ -25,28 +25,31 @@ SINGLE_TAG =
 isPublic = (name) ->
 	not /^(?:neft:|style:)/.test name
 
-getInnerHTML = (elem) ->
+getInnerHTML = (elem, replacements) ->
 	if elem.children
 		r = ""
 		for child in elem.children
-			r += getOuterHTML child
+			r += getOuterHTML child, replacements
 		r
 	else
 		""
 
-getOuterHTML = (elem) ->
+getOuterHTML = (elem, replacements) ->
 	if elem._visible is false
 		return ""
 
 	if elem._text isnt undefined
 		return elem._text
 
+	if replacements and replacer = replacements[elem.name]
+		elem = replacer(elem) or elem
+
 	name = elem.name
 
 	if not name or not isPublic(name)
-		return getInnerHTML elem
+		return getInnerHTML elem, replacements
 
-	nameRet = ret = "<" + name
+	ret = "<" + name
 	for attrName, attrValue of elem._attrs
 		unless isPublic(attrName)
 			continue
@@ -57,13 +60,10 @@ getOuterHTML = (elem) ->
 		else
 			ret += "=\"" + attrValue + "\""
 
-	if name is 'div' and ret is nameRet
-		return getInnerHTML elem
-
 	if SINGLE_TAG[name]
 		ret + ">"
 	else
-		ret + ">" + getInnerHTML(elem) + "</" + name + ">"
+		ret + ">" + getInnerHTML(elem, replacements) + "</" + name + ">"
 
 module.exports =
 	getInnerHTML: getInnerHTML
