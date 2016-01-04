@@ -170,7 +170,7 @@ Files from the *views* folder as *Document* instances.
 
 		# config.type
 		config.type ?= 'app'
-		assert.ok utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game, but '#{config.type}' got."
+		assert.ok utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game/text, but '#{config.type}' got."
 
 		app.Route = AppRoute app
 
