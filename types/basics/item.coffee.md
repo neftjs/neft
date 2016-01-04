@@ -258,6 +258,7 @@ Removes all children from a node.
 				old = @_parent
 				oldChildren = old?.children
 				valChildren = val?.children
+				existsInOldChildren = true
 
 				if valChildren?._target
 					# detect whether target is a child of this item
@@ -274,13 +275,6 @@ Removes all children from a node.
 						valChildren = val.children
 
 				if old is val
-					return
-
-				# fake parent
-				if @_effectItem and @_effectItem isnt @
-					Impl.setItemParent.call @, val
-					@_parent = val
-					emitSignal @, 'onParentChange', old
 					return
 
 				assert.isNot @, val
@@ -302,8 +296,10 @@ Removes all children from a node.
 						shift.call oldChildren
 					else
 						index = indexOf.call oldChildren, @
-						assert.ok index isnt -1
-						splice.call oldChildren, index, 1
+						if index is -1
+							existsInOldChildren = false
+						else
+							splice.call oldChildren, index, 1
 
 				if val isnt null
 					assert.instanceOf val, Item, '::parent setter ...'
@@ -330,7 +326,7 @@ Removes all children from a node.
 				@_parent = val
 
 				# signals
-				if old isnt null
+				if old isnt null and existsInOldChildren
 					emitSignal old, 'onChildrenChange', null, @
 				if val isnt null
 					emitSignal val, 'onChildrenChange', @, null
