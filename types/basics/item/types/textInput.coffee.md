@@ -1,10 +1,6 @@
 TextInput @class
 =========
 
-#### @todo
-
-Qml and WebGL implementations
-
 	'use strict'
 
 	assert = require 'assert'
@@ -30,6 +26,11 @@ Qml and WebGL implementations
 				# set default font family
 				if name = Renderer.FontLoader.getInternalFontName('sans-serif', 14, false)
 					Impl.setTextInputFontFamily.call item, name
+
+				# focus on pointer press
+				item.pointer.onPress ->
+					@keys.focus = true
+				, item
 
 				item
 
