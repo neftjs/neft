@@ -40,6 +40,7 @@ exports.out = do (i=0) ->
 	SET_ITEM_ROTATION: i++
 	SET_ITEM_OPACITY: i++
 	SET_ITEM_BACKGROUND: i++
+	SET_ITEM_KEYS_FOCUS: i++
 
 	CREATE_IMAGE: i++
 	SET_IMAGE_SOURCE: i++

@@ -70,6 +70,7 @@ Rectangle {
 			constructor: Keys
 			name: 'focus'
 			defaultValue: false
+			implementation: Impl.setItemKeysFocus
 			namespace: 'keys'
 			parentConstructor: ctor
 			developmentSetter: (val) ->
@@ -80,6 +81,7 @@ Rectangle {
 						if focusedKeys
 							oldVal = focusedKeys
 							focusedKeys = null
+							Impl.setItemKeysFocus.call oldVal._ref, false
 							oldVal._focus = false
 							oldVal.onFocusChange.emit true
 							oldVal._ref.onKeysChange.emit oldVal
