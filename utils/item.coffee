@@ -229,8 +229,6 @@ module.exports = (Renderer, Impl) ->
 
 	Impl.DeepObject = DeepObject
 
-	funcCache = Object.create null
-
 	exports =
 	Object: UtilsObject
 	FixedObject: FixedObject
@@ -278,8 +276,7 @@ module.exports = (Renderer, Impl) ->
 		# getter
 		internalName = getPropInternalName name
 
-		propGetter = basicGetter =
-		funcCache["get-#{internalName}"] ?= Function "return this.#{internalName}"
+		propGetter = basicGetter = Function "return this.#{internalName}"
 
 		if valueConstructor
 			propGetter = ->
@@ -297,7 +294,7 @@ module.exports = (Renderer, Impl) ->
 			namespaceSignalName = "on#{utils.capitalize(namespace)}Change"
 			uniquePropName = namespace + utils.capitalize(name)
 
-			func = funcCache["set-deep-#{namespace}-#{internalName}-#{developmentSetter?}-#{implementation?}"] ?= do ->
+			func = do ->
 				funcStr = "return function(val){\n"
 				`//<development>`
 				if developmentSetter?
@@ -318,7 +315,7 @@ module.exports = (Renderer, Impl) ->
 				func = new Function 'impl', 'implValue', 'emitSignal', 'debug', funcStr
 			propSetter = basicSetter = func implementation, implementationValue, emitSignal, developmentSetter
 		else
-			func = funcCache["set-#{internalName}-#{developmentSetter?}-#{implementation?}"] ?= do ->
+			func = do ->
 				funcStr = "return function(val){\n"
 				`//<development>`
 				if developmentSetter?
