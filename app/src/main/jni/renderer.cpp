@@ -124,11 +124,6 @@ namespace renderer {
         jniEnv->CallVoidMethod(jniObj, jniUpdateView, outActions, outBooleans, outInts, outFloats, outStrings);
 
         // clear
-        jniEnv->ReleaseByteArrayElements(outActions, outActionsFill, 0);
-        jniEnv->ReleaseBooleanArrayElements(outBooleans, outBooleansFill, 0);
-        jniEnv->ReleaseIntArrayElements(outInts, outIntsFill, 0);
-        jniEnv->ReleaseFloatArrayElements(outFloats, outFloatsFill, 0);
-
         jniEnv->DeleteLocalRef(outActions);
         jniEnv->DeleteLocalRef(outBooleans);
         jniEnv->DeleteLocalRef(outInts);
