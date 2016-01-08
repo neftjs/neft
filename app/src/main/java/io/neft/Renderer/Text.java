@@ -11,46 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Text extends Item {
-    private class Line {
-        public int textStart;
-        public int textEnd;
-        public float width;
-        public float y;
-    }
-
-    private static final FontMetrics fontMetrics = new FontMetrics();
-
-    private static final HashMap<String, Float> alignment;
-    static {
-        alignment = new HashMap<>();
-        alignment.put("top", 0f);
-        alignment.put("center", 0.5f);
-        alignment.put("bottom", 1f);
-        alignment.put("left", 0f);
-        alignment.put("right", 1f);
-    };
-
-    public String text = "";
-    public int color = Color.BLACK;
-    public boolean wrap = false;
-    public float lineHeight = 1;
-    public float wordSpacing = 0;
-    public float letterSpacing = 0;
-    public String fontFamily = "";
-    public float fontPixelSize;
-    public float contentWidth = 0;
-    public float contentHeight = 0;
-    public float alignmentHorizontal = alignment.get("left");
-    public float alignmentVertical = alignment.get("top");
-
-    protected String linesText = "";
-    protected ArrayList<Line> lines;
-    protected int linesLength;
-    protected String[] words;
-
-    static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    static final HashMap<String, Typeface> fonts = new HashMap<>();
-
     static void register(Renderer renderer){
         renderer.actions.put(Renderer.InAction.CREATE_TEXT, new Action() {
             @Override
@@ -144,6 +104,46 @@ public class Text extends Item {
         });
     }
 
+    private class Line {
+        public int textStart;
+        public int textEnd;
+        public float width;
+        public float y;
+    }
+
+    private static final FontMetrics fontMetrics = new FontMetrics();
+
+    private static final HashMap<String, Float> alignment;
+    static {
+        alignment = new HashMap<>();
+        alignment.put("top", 0f);
+        alignment.put("center", 0.5f);
+        alignment.put("bottom", 1f);
+        alignment.put("left", 0f);
+        alignment.put("right", 1f);
+    };
+
+    static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    static final HashMap<String, Typeface> fonts = new HashMap<>();
+
+    public String text = "";
+    public int color = Color.BLACK;
+    public boolean wrap = false;
+    public float lineHeight = 1;
+    public float wordSpacing = 0;
+    public float letterSpacing = 0;
+    public String fontFamily = "";
+    public float fontPixelSize;
+    public float contentWidth = 0;
+    public float contentHeight = 0;
+    public float alignmentHorizontal = alignment.get("left");
+    public float alignmentVertical = alignment.get("top");
+
+    protected String linesText = "";
+    protected ArrayList<Line> lines;
+    protected int linesLength;
+    protected String[] words;
+
     public static void loadFont(final String name, final String source, final Renderer renderer){
         final Thread thread = new Thread(new Runnable() {
             @Override
@@ -183,6 +183,7 @@ public class Text extends Item {
 
     public void setColor(int val){
         color = Item.parseRGBA(val);
+        invalidate();
     }
 
     public void setLineHeight(float val){
@@ -191,6 +192,7 @@ public class Text extends Item {
 
     public void setFontFamily(String val){
         fontFamily = val;
+        invalidate();
     }
 
     public void setFontPixelSize(float val){
@@ -279,6 +281,8 @@ public class Text extends Item {
             contentWidth = contentHeight = 0;
         }
 
+        invalidate();
+
         // push data
         renderer.pushAction(Renderer.OutAction.TEXT_SIZE);
         renderer.pushItem(this);
@@ -298,7 +302,7 @@ public class Text extends Item {
     }
 
     @Override
-    protected void drawShape(Canvas canvas, int alpha){
+    protected void drawShape(final Canvas canvas, final int alpha){
         if (contentWidth <= 0 || contentHeight <= 0){
             return;
         }

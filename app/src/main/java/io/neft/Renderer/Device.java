@@ -3,12 +3,10 @@ package io.neft.Renderer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,9 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import java.util.EnumSet;
 
 public class Device {
     static final String[] keyCodes;
@@ -306,6 +301,7 @@ public class Device {
             super(context);
             this.device = device;
             this.setInputType(InputType.TYPE_CLASS_TEXT);
+            this.setVisibility(View.INVISIBLE);
 
             // set layout to get onKeyPreIme
             this.layout(0, 0, 1, 1);
@@ -345,6 +341,7 @@ public class Device {
     public final boolean isPhone;
     public Renderer renderer;
     public boolean keyboardVisible = false;
+    public MotionEvent pointerDownEvent;
 
     public final KeyboardText keyboardText;
 
@@ -411,6 +408,7 @@ public class Device {
     public boolean onTouchEvent(MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                pointerDownEvent = event;
                 renderer.pushAction(Renderer.OutAction.POINTER_PRESS);
                 break;
             case MotionEvent.ACTION_UP:

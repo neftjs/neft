@@ -8,6 +8,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,23 +31,6 @@ import java.util.regex.Pattern;
 import io.neft.Renderer.Renderer;
 
 public class Image extends Item {
-    abstract class LoadHandler {
-        void work(String source, Bitmap bitmap){ throw new UnsupportedOperationException(); }
-    }
-
-    static int MAX_WIDTH = 1280;
-    static int MAX_HEIGHT = 960;
-    static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-
-    static final HashMap<String, Bitmap> cache = new HashMap<>();
-    static final HashMap<String, ArrayList<LoadHandler>> loading = new HashMap<>();
-
-    protected Bitmap bitmap;
-    protected final Rect srcRect = new Rect();
-    protected final Rect dstRect = new Rect();
-
-    public String source;
-
     static void register(Renderer renderer){
         renderer.actions.put(Renderer.InAction.CREATE_IMAGE, new Action() {
             @Override
@@ -97,16 +82,25 @@ public class Image extends Item {
         });
     }
 
-    public Image(Renderer renderer){
-        super(renderer);
+    abstract class LoadHandler {
+        void work(String source, Bitmap bitmap){ throw new UnsupportedOperationException(); }
     }
 
-    @Override
-    protected void drawShape(Canvas canvas, int alpha){
-        if (bitmap != null) {
-            paint.setAlpha(alpha);
-            canvas.drawBitmap(bitmap, srcRect, dstRect, paint);
-        }
+    static int MAX_WIDTH = 1280;
+    static int MAX_HEIGHT = 960;
+    static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+
+    static final HashMap<String, Bitmap> cache = new HashMap<>();
+    static final HashMap<String, ArrayList<LoadHandler>> loading = new HashMap<>();
+
+    protected Bitmap bitmap;
+    protected final Rect srcRect = new Rect();
+    protected final Rect dstRect = new Rect();
+
+    public String source;
+
+    public Image(Renderer renderer){
+        super(renderer);
     }
 
     @Override
@@ -244,6 +238,7 @@ public class Image extends Item {
         // remove source
         if (val.equals("")){
             bitmap = null;
+            invalidate();
             return;
         }
 
@@ -251,6 +246,7 @@ public class Image extends Item {
         Bitmap fromCache = cache.get(val);
         if (fromCache != null) {
             bitmap = fromCache;
+            invalidate();
             onLoad();
             return;
         }
@@ -269,6 +265,7 @@ public class Image extends Item {
                 } else {
                     self.onError();
                 }
+                self.invalidate();
                 renderer.dirty = true;
             }
         };
@@ -309,11 +306,17 @@ public class Image extends Item {
                 }
 
                 // call handlers
-                final ArrayList<LoadHandler> loadingArray = loading.get(val);
-                for (final LoadHandler handler : loadingArray){
-                    handler.work(val, bitmap);
-                }
-                loading.remove(val);
+                final Bitmap finalBitmap = bitmap;
+                renderer.mainActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final ArrayList<LoadHandler> loadingArray = loading.get(val);
+                        for (final LoadHandler handler : loadingArray) {
+                            handler.work(val, finalBitmap);
+                        }
+                        loading.remove(val);
+                    }
+                });
             }
         });
         thread.start();
@@ -337,5 +340,13 @@ public class Image extends Item {
 
     public void setOffsetY(float val){
         // TODO
+    }
+
+    @Override
+    protected void drawShape(final Canvas canvas, final int alpha){
+        if (bitmap != null) {
+            paint.setAlpha(alpha);
+            canvas.drawBitmap(bitmap, srcRect, dstRect, paint);
+        }
     }
 }

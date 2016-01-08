@@ -1,29 +1,24 @@
 package io.neft.Renderer;
 
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+
 import java.util.ArrayList;
 
 public class Item {
-    protected final Renderer renderer;
+    static int parseRGBA(int val) {
+        return ((val & 0xFFFFFF00) >> 8) |  // __RRGGBB
+                ((val & 0x000000FF) << 24); // AA______
+    }
 
-    public final int id;
-    public float x = 0;
-    public float y = 0;
-    public float width = 0;
-    public float height = 0;
-    public float scale = 1f;
-    public float rotation = 0f;
-    public int opacity = 255;
-    public int zIndex = 0;
-    public boolean visible = true;
-    public boolean clip = false;
-    public Item parent;
-    public Item background;
-    public final ArrayList<Item> children;
+    static boolean equalsRectF(RectF a, RectF b) {
+        if (a == b) return true;
+        if (a == null || b == null) return false;
+        return a.left == b.left && a.top == b.top && a.right == b.right && a.bottom == b.bottom;
+    }
 
-    private static final float PI = (float) Math.PI;
-
-    static void register(Renderer renderer){
+    static void register(Renderer renderer) {
         renderer.actions.put(Renderer.InAction.CREATE_ITEM, new Action() {
             @Override
             void work(Reader reader) {
@@ -123,7 +118,38 @@ public class Item {
         });
     }
 
-    public Item(Renderer renderer){
+    protected final Renderer renderer;
+
+    public final int id;
+    public float x = 0;
+    public float y = 0;
+    public float width = 0;
+    public float height = 0;
+    public float scale = 1f;
+    public float rotation = 0f;
+    public int opacity = 255;
+    public int zIndex = 0;
+    public boolean visible = true;
+    public boolean clip = false;
+    public Item parent;
+    public Item background;
+    public final ArrayList<Item> children;
+
+    public final Matrix matrix = new Matrix();
+    protected final float[] matrixValues = new float[]{0, 0, 0, 0, 0, 0, 0, 0, 1};
+    protected boolean dirtyMatrix = false;
+
+    protected boolean dirty = false;
+    protected boolean dirtyChildren = false;
+    public final RectF bounds = new RectF();
+    public final RectF globalBounds = new RectF();
+    protected final RectF oldGlobalBounds = new RectF();
+    protected final Matrix globalMatrix = new Matrix();
+    protected final RectF redrawRect = new RectF();
+
+    private static final float PI = (float) Math.PI;
+
+    public Item(Renderer renderer) {
         this.renderer = renderer;
         this.id = renderer.items.size();
         renderer.items.add(this);
@@ -131,109 +157,251 @@ public class Item {
         children = new ArrayList<>();
     }
 
-    static int parseRGBA(int val){
-        return ((val & 0xFFFFFF00) >> 8) |  // __RRGGBB
-                ((val & 0x000000FF) << 24); // AA______
+    protected void invalidate() {
+        if (this.dirty){
+            return;
+        }
+        this.dirty = true;
+        Item parent = this.parent;
+        while (parent != null && !parent.dirtyChildren){
+            parent.dirtyChildren = true;
+            parent = parent.parent;
+        }
     }
 
-    public void setParent(Item val){
+    protected void updateMatrix() {
+        float a = 1;
+        float b = 0;
+        float c = 0;
+        float d = 1;
+        float tx = 0;
+        float ty = 0;
+
+        final float originX = width / 2;
+        final float originY = height / 2;
+
+        // translate to the origin
+        tx = x + originX;
+        ty = y + originY;
+
+        // scale
+        a = scale;
+        d = scale;
+
+        // rotate
+        if (rotation != 0) {
+            final float sr = (float) Math.sin(rotation);
+            final float cr = (float) Math.cos(rotation);
+
+            final float ac = a;
+            final float dc = d;
+
+            a = ac * cr;
+            b = dc * sr;
+            c = ac * -sr;
+            d = dc * cr;
+        }
+
+        // translate to the position
+        tx += a * -originX + c * -originY;
+        ty += b * -originX + d * -originY;
+
+        // save
+        matrixValues[0] = a;
+        matrixValues[1] = c;
+        matrixValues[2] = tx;
+        matrixValues[3] = b;
+        matrixValues[4] = d;
+        matrixValues[5] = ty;
+        matrix.setValues(matrixValues);
+    }
+
+    public void setParent(Item val) {
         if (parent != null){
             parent.children.remove(this);
+            parent.invalidate();
         }
 
         if (val != null){
             val.children.add(this);
+            val.invalidate();
         }
 
         this.parent = val;
+        invalidate();
     }
 
-    public void insertBefore(Item val){
+    public void insertBefore(Item val) {
         if (parent != null){
             parent.children.remove(this);
+            parent.invalidate();
         }
 
         final Item parent = val.parent;
         final int index = parent.children.indexOf(val);
         parent.children.add(index, this);
+        parent.invalidate();
         this.parent = parent;
+        invalidate();
     }
 
-    public void setVisible(boolean val){
+    public void setVisible(boolean val) {
         visible = val;
+        invalidate();
     }
 
-    public void setClip(boolean val){
+    public void setClip(boolean val) {
         clip = val;
+        invalidate();
     }
 
-    public void setWidth(float val){
+    public void setWidth(float val) {
         width = renderer.dpToPx(val);
+        bounds.right = width;
+        dirtyMatrix = true;
+        invalidate();
     }
 
-    public void setHeight(float val){
+    public void setHeight(float val) {
         height = renderer.dpToPx(val);
+        bounds.bottom = height;
+        dirtyMatrix = true;
+        invalidate();
     }
 
-    public void setX(float val){
+    public void setX(float val) {
         x = renderer.dpToPx(val);
+        dirtyMatrix = true;
+        invalidate();
     }
 
-    public void setY(float val){
+    public void setY(float val) {
         y = renderer.dpToPx(val);
+        dirtyMatrix = true;
+        invalidate();
     }
 
-    public void setZ(int val){
+    public void setZ(int val) {
         zIndex = val;
         // TODO
     }
 
-    public void setScale(float val){
+    public void setScale(float val) {
         scale = val;
+        dirtyMatrix = true;
+        invalidate();
     }
 
-    public void setRotation(float val){
-        rotation = val * 180 / PI;
+    public void setRotation(float val) {
+        rotation = val;// * 180 / PI;
+        dirtyMatrix = true;
+        invalidate();
     }
 
-    public void setOpacity(int val){
+    public void setOpacity(int val) {
         opacity = val;
+        invalidate();
     }
 
-    public void setBackground(Item val){
+    public void setBackground(Item val) {
         background = val;
+        invalidate();
     }
 
-    protected void drawShape(Canvas canvas, int alpha){
+    protected void measure(final Matrix globalMatrix, RectF viewRect, final ArrayList<RectF> dirtyRects, final boolean forceUpdateBounds) {
+        final boolean isDirty = forceUpdateBounds || dirty || dirtyMatrix;
+
+        // break on no changes
+        if (!dirtyChildren) {
+            if (!isDirty) {
+                return;
+            }
+        }
+
+        // update transform
+        if (dirtyMatrix) {
+            updateMatrix();
+        }
+
+        // include local transform
+        this.globalMatrix.setConcat(globalMatrix, matrix);
+
+        // update bounds
+        if (isDirty) {
+            oldGlobalBounds.set(globalBounds);
+            globalBounds.set(bounds);
+            this.globalMatrix.mapRect(globalBounds);
+
+            // add rectangle to redraw
+            if (dirty || dirtyMatrix || !Item.equalsRectF(globalBounds, oldGlobalBounds)) {
+                redrawRect.set(oldGlobalBounds);
+                redrawRect.union(globalBounds);
+                if (redrawRect.intersect(viewRect)) {
+                    boolean redrawRectIncluded = false;
+                    for (final RectF dirtyRect : dirtyRects) {
+                        if (RectF.intersects(dirtyRect, redrawRect)) {
+                            dirtyRect.union(redrawRect);
+                            redrawRectIncluded = true;
+                            break;
+                        }
+                    }
+                    if (!redrawRectIncluded) {
+                        dirtyRects.add(redrawRect);
+                    }
+                }
+
+                dirty = false;
+            }
+        }
+
+        // clip
+        if (clip) {
+            viewRect = globalBounds;
+        }
+
+        final boolean forceChildrenUpdate = forceUpdateBounds || dirtyMatrix;
+        if (forceChildrenUpdate || dirtyChildren) {
+            // measure background
+            if (background != null) {
+                background.measure(this.globalMatrix, viewRect, dirtyRects, forceChildrenUpdate);
+            }
+
+            // measure children
+            for (final Item child : children) {
+                child.measure(this.globalMatrix, viewRect, dirtyRects, forceChildrenUpdate);
+            }
+
+            // clear
+            dirtyChildren = false;
+            dirtyMatrix = false;
+        }
+    }
+
+    protected void measure(final Matrix globalMatrix, final RectF viewRect, final ArrayList<RectF> dirtyRects) {
+        measure(globalMatrix, viewRect, dirtyRects, false);
+    }
+
+    protected void drawShape(final Canvas canvas, final int alpha) {
 
     }
 
-    protected void draw(Canvas canvas, int alpha) {
+    protected void drawChildren(final Canvas canvas, final int alpha, final RectF rect) {
+        for (final Item child : children){
+            if (child.visible) {
+                child.draw(canvas, alpha, rect);
+            }
+        }
+    }
+
+    protected void draw(final Canvas canvas, int alpha, final RectF rect) {
         if (opacity < 255) {
             alpha = Math.round(alpha * (opacity / 255f));
         }
 
         canvas.save();
 
-        // translate to position
-        canvas.translate(x, y);
-
-        if (scale != 1 || rotation != 0) {
-            final float originX = width / 2;
-            final float originY = height / 2;
-
-            // translate to origin
-            canvas.translate(originX, originY);
-
-            // scale
-            canvas.scale(scale, scale);
-
-            // rotation
-            canvas.rotate(rotation);
-
-            // translate to position
-            canvas.translate(-originX, -originY);
-        }
+        // transform
+        canvas.concat(matrix);
 
         // clip
         if (clip){
@@ -242,18 +410,16 @@ public class Item {
 
         // background
         if (background != null){
-            background.draw(canvas, alpha);
+            background.draw(canvas, alpha, rect);
         }
 
         // shape
-        drawShape(canvas, alpha);
+        if (RectF.intersects(rect, globalBounds)) {
+            drawShape(canvas, alpha);
+        }
 
         // render children
-        for (Item child : children){
-            if (child.visible) {
-                child.draw(canvas, alpha);
-            }
-        }
+        drawChildren(canvas, alpha, rect);
 
         canvas.restore();
     }

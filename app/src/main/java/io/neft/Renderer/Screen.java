@@ -1,6 +1,7 @@
 package io.neft.Renderer;
 
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -9,6 +10,7 @@ public class Screen {
 
     public final float width;
     public final float height;
+    public final RectF rect;
 
     static void register(Renderer renderer){}
 
@@ -19,6 +21,7 @@ public class Screen {
         final float pixelRatio = renderer.device.pixelRatio;
         this.width = display.getWidth() / pixelRatio;
         this.height = display.getHeight() / pixelRatio;
+        this.rect = new RectF(0, 0, display.getWidth(), display.getHeight());
 
         renderer.pushAction(Renderer.OutAction.SCREEN_SIZE);
         renderer.pushFloat(width);

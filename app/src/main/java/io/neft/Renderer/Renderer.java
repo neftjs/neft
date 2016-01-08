@@ -1,15 +1,12 @@
 package io.neft.Renderer;
 
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import io.neft.MainActivity;
@@ -33,27 +30,27 @@ class Reader {
     public int floatsIndex = 0;
     public int stringsIndex = 0;
 
-    public Reader(Renderer renderer){
+    public Reader(Renderer renderer) {
         this.renderer = renderer;
     }
 
-    public Item getItem(){
+    public Item getItem() {
         return renderer.items.get(integers[integersIndex++]);
     }
 
-    public boolean getBoolean(){
+    public boolean getBoolean() {
         return booleans[booleansIndex++];
     }
 
-    public int getInteger(){
+    public int getInteger() {
         return integers[integersIndex++];
     }
 
-    public float getFloat(){
+    public float getFloat() {
         return floats[floatsIndex++];
     }
 
-    public String getString(){
+    public String getString() {
         return strings[stringsIndex++];
     }
 }
@@ -112,6 +109,12 @@ public class Renderer extends Thread {
         SET_RECTANGLE_RADIUS,
         SET_RECTANGLE_BORDER_COLOR,
         SET_RECTANGLE_BORDER_WIDTH,
+
+        CREATE_SCROLLABLE,
+        SET_SCROLLABLE_CONTENT_ITEM,
+        SET_SCROLLABLE_CONTENT_X,
+        SET_SCROLLABLE_CONTENT_Y,
+        ACTIVATE_SCROLLABLE
     };
 
     public enum OutAction {
@@ -133,6 +136,8 @@ public class Renderer extends Thread {
         IMAGE_SIZE,
         TEXT_SIZE,
         FONT_LOAD,
+        SCROLLABLE_CONTENT_X,
+        SCROLLABLE_CONTENT_Y
     };
 
     final private InAction[] InActionValues = InAction.values();
@@ -160,9 +165,13 @@ public class Renderer extends Thread {
     final public Navigator navigator;
     final public Reader reader;
     final public HashMap<InAction, Action> actions = new HashMap<>();
-    public boolean dirty = true;
 
-    public Renderer(MainActivity mainActivity){
+    public boolean dirty = true;
+    public ArrayList<RectF> dirtyRects = new ArrayList<>();
+    private Matrix measureMatrix = new Matrix();
+    private Rect dirtyRect = new Rect();
+
+    public Renderer(MainActivity mainActivity) {
         super();
 
         this.mainActivity = mainActivity;
@@ -196,16 +205,16 @@ public class Renderer extends Thread {
         Image.register(this);
         Text.register(this);
         Rectangle.register(this);
-        Rectangle.register(this);
+        Scrollable.register(this);
 
         Native.renderer_init(this);
     }
 
-    public float pxToDp(float px){
+    public float pxToDp(float px) {
         return px / device.pixelRatio;
     }
 
-    public float dpToPx(float dp){
+    public float dpToPx(float dp) {
         return dp * device.pixelRatio;
     }
 
@@ -235,7 +244,7 @@ public class Renderer extends Thread {
         sendData();
     }
 
-    public void pushAction(OutAction val){
+    public void pushAction(OutAction val) {
         if (outActionsIndex == outActions.length){
             final byte[] newArray = new byte[outActionsIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outActions, 0, newArray, 0, outActionsIndex);
@@ -244,11 +253,11 @@ public class Renderer extends Thread {
         outActions[outActionsIndex++] = (byte) val.ordinal();
     }
 
-    public void pushItem(Item val){
+    public void pushItem(Item val) {
         pushInteger(val.id);
     }
 
-    public void pushBoolean(boolean val){
+    public void pushBoolean(boolean val) {
         if (outBooleansIndex == outBooleans.length){
             final boolean[] newArray = new boolean[outBooleansIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outBooleans, 0, newArray, 0, outBooleansIndex);
@@ -257,7 +266,7 @@ public class Renderer extends Thread {
         outBooleans[outBooleansIndex++] = val;
     }
 
-    public void pushInteger(int val){
+    public void pushInteger(int val) {
         if (outIntegersIndex == outIntegers.length){
             final int[] newArray = new int[outIntegersIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outIntegers, 0, newArray, 0, outIntegersIndex);
@@ -266,7 +275,7 @@ public class Renderer extends Thread {
         outIntegers[outIntegersIndex++] = val;
     }
 
-    public void pushFloat(float val){
+    public void pushFloat(float val) {
         if (outFloatsIndex == outFloats.length){
             final float[] newArray = new float[outFloatsIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outFloats, 0, newArray, 0, outFloatsIndex);
@@ -275,7 +284,7 @@ public class Renderer extends Thread {
         outFloats[outFloatsIndex++] = val;
     }
 
-    public void pushString(String val){
+    public void pushString(String val) {
         if (outStringsIndex == outStrings.length){
             final String[] newArray = new String[outStringsIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outStrings, 0, newArray, 0, outStringsIndex);
@@ -284,7 +293,7 @@ public class Renderer extends Thread {
         outStrings[outStringsIndex++] = val;
     }
 
-    private void sendData(){
+    private void sendData() {
         if (outActionsIndex > 0){
             final int outActionsIndex = this.outActionsIndex;
             final int outBooleansIndex = this.outBooleansIndex;
@@ -306,14 +315,27 @@ public class Renderer extends Thread {
             Native.renderer_callAnimationFrame();
             if (dirty && mainActivity.timers.immediateTimers == 0) {
                 this.delay = delay;
-                window.invalidate();
+                this.draw();
                 this.dirty = false;
             }
         }
         window.post(runnable);
     }
 
-    public void run(){
+    public void run() {
         onAnimationFrame();
+    }
+
+    private void draw() {
+        // measure window item
+        dirtyRects.clear();
+        if (mainActivity.view.windowItem != null) {
+            mainActivity.view.windowItem.measure(measureMatrix, screen.rect, dirtyRects);
+        }
+
+        for (final RectF rect : dirtyRects) {
+            rect.roundOut(dirtyRect);
+            window.invalidate(dirtyRect);
+        }
     }
 }

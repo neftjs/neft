@@ -2,21 +2,18 @@ package io.neft.Renderer;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.text.InputType;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.BaseInputConnection;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
-import android.widget.RelativeLayout;
 
 public class WindowView extends ViewGroup {
     public Item windowItem;
     public Renderer renderer;
+    public final Rect canvasDirtyRect = new Rect();
+    public final RectF dirtyRect = new RectF();
 
     static void register(Renderer renderer){
         renderer.actions.put(Renderer.InAction.SET_WINDOW, new Action() {
@@ -29,18 +26,30 @@ public class WindowView extends ViewGroup {
 
     public WindowView(Context context, AttributeSet attrs){
         super(context, attrs);
+
         this.setWillNotDraw(false);
         this.requestFocus();
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b){
+
     }
 
     @Override
     protected void onDraw(Canvas canvas){
         if (windowItem != null){
-            windowItem.draw(canvas, 255);
+            canvas.getClipBounds(canvasDirtyRect);
+            dirtyRect.set(canvasDirtyRect);
+            windowItem.draw(canvas, 255, dirtyRect);
+
+            // DEBUG
+//            for (final RectF dirtyRect : renderer.dirtyRects) {
+//                Paint paint = new Paint();
+//                paint.setStyle(Paint.Style.FILL);
+//                paint.setColor(Color.argb(100, (int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
+//                canvas.drawRect(dirtyRect, paint);
+//            }
         }
     }
 
