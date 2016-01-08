@@ -78,6 +78,11 @@ TextInput @class
 				name: 'color'
 				defaultValue: 'black'
 				implementation: Impl.setTextInputColor
+				implementationValue: do ->
+					RESOURCE_REQUEST =
+						property: 'color'
+					(val) ->
+						Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
 				developmentSetter: (val) ->
 					assert.isString val
 
