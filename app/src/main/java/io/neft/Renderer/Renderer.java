@@ -309,17 +309,13 @@ public class Renderer extends Thread {
     }
 
     public void onAnimationFrame() {
-        final long delay = SystemClock.elapsedRealtime();
-        if (delay - this.delay >= MIN_FRAME_DELAY && mainActivity.timers.immediateTimers == 0){
-            sendData();
-            Native.renderer_callAnimationFrame();
-            if (dirty && mainActivity.timers.immediateTimers == 0) {
-                this.delay = delay;
-                this.draw();
-                this.dirty = false;
-            }
+        window.postDelayed(runnable, MIN_FRAME_DELAY);
+        sendData();
+        Native.renderer_callAnimationFrame();
+        if (dirty) {
+            this.draw();
+            this.dirty = false;
         }
-        window.post(runnable);
     }
 
     public void run() {

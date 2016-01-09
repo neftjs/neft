@@ -30,11 +30,20 @@ namespace timers {
         args.GetReturnValue().Set(Integer::New(isolate, id));
     }
 
+    void immediate(const FunctionCallbackInfo<Value>& args) {
+        Isolate *isolate = JS::GetIsolate();
+        Isolate::Scope isolate_scope(isolate);
+
+        Local<Function> callback = Local<Function>::New(isolate, args[0].As<Function>());
+        isolate->EnqueueMicrotask(callback);
+    }
+
     int main() {
         Persistent<Object, CopyablePersistentTraits<Object>> jsObject;
         jsObject = JS::CreateObject(JS::GetGlobalNeftObject(), "timers");
         JS::LinkFunction(jsObject, "registerCallback", timers::registerCallback);
         JS::LinkFunction(jsObject, "shot", timers::shot);
+        JS::LinkFunction(jsObject, "immediate", timers::immediate);
         return 0;
     }
 }

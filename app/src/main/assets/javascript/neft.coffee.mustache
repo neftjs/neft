@@ -38,20 +38,69 @@ do ->
 	_neft.timers.registerCallback (id) ->
 		if timer = shots[id]
 			delete shots[id]
-			timer[0].apply null, timer[1]
+			timer()
 		return
 
-	setTimeout = (func, delay, args...) ->
-		if delay < 4
+	setTimeout = (func, delay, arg1, arg2, arg3) ->
+		if typeof func isnt 'function'
+			throw new TypeError "'callback' argument must be a function"
+
+		if typeof delay isnt 'number'
+			delay = parseInt delay
+		if isNaN(delay)
 			delay = 4
+
+		argc = arguments.length
+		switch argc
+			when 1, 2
+				callFunc = func
+			when 3
+				callFunc = ->
+					func arg1
+			when 4
+				callFunc = ->
+					func arg1, arg2
+			when 5
+				callFunc = ->
+					func arg1, arg2, arg3
+			else
+				args = new Array argc - 2
+				for i in [2...argc] by 1
+					args[i - 2] = arguments[i]
+				callFunc = ->
+					func.apply null, args
+
 		id = _neft.timers.shot delay
-		shots[id] = [func, args]
+		shots[id] = callFunc
 		id
 
-	setImmediate = (func, args...) ->
-		id = _neft.timers.shot 0
-		shots[id] = [func, args]
-		id
+	setImmediate = (func, arg1, arg2, arg3) ->
+		if typeof func isnt 'function'
+			throw new TypeError "'callback' argument must be a function"
+
+		argc = arguments.length
+		switch argc
+			when 1
+				callFunc = func
+			when 2
+				callFunc = ->
+					func arg1
+			when 3
+				callFunc = ->
+					func arg1, arg2
+			when 4
+				callFunc = ->
+					func arg1, arg2, arg3
+			else
+				args = new Array argc - 1
+				for i in [1...argc] by 1
+					args[i - 1] = arguments[i]
+				callFunc = ->
+					func.apply null, args
+
+		_neft.timers.immediate callFunc
+
+		-1
 
 	clearTimeout = (id) ->
 		delete shots[id]

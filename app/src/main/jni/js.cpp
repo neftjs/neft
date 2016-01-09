@@ -131,6 +131,9 @@ namespace JS {
             Handle<Object> global = context->Global();
             global_.Reset(isolate, global);
 
+            // Set config
+            isolate->SetAutorunMicrotasks(true);
+
             // Prepare global object
             globalAndroid_ = JS::CreateObject(global_, "android");
             globalNeft_ = JS::CreateObject(global_, "_neft");
