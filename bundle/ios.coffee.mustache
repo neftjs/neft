@@ -24,8 +24,11 @@ window.setImmediate = do ->
 			element.data = ++calls%2 ? "a" : "b"
 
 	(func) ->
-		if arguments.length > 1
-			args = Array::slice.call arguments, 1
+		argc = arguments.length
+		if argc > 1
+			args = new Array argc - 1
+			for i in [1...argc] by 1
+				args[i - 1] = arguments[i]
 		queue.push func, args
 		unless running
 			update()
