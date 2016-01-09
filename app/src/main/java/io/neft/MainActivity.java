@@ -4,6 +4,7 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class MainActivity extends FragmentActivity {
 
     public WindowView view;
     public Timers timers;
+    public Renderer renderer;
 
     protected void init(){
         // get javascript file
@@ -27,7 +29,7 @@ public class MainActivity extends FragmentActivity {
         // initialize
         new Http();
         this.timers = new Timers();
-        Renderer renderer = new Renderer(this);
+        this.renderer = new Renderer(this);
 
         Native.init(neft);
         renderer.run();
@@ -51,4 +53,10 @@ public class MainActivity extends FragmentActivity {
         }
         return "";
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return renderer.device.onTouchEvent(event);
+    }
+
 }

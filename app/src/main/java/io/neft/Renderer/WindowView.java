@@ -2,6 +2,8 @@ package io.neft.Renderer;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -44,9 +46,11 @@ public class WindowView extends ViewGroup {
             windowItem.draw(canvas, 255, dirtyRect);
 
             // DEBUG
+//            final Paint paint = new Paint();
+//            paint.setStyle(Paint.Style.FILL);
+//            paint.setColor(Color.argb(100, (int) (Math.random() * 100) + 155, (int) (Math.random() * 100), (int) (Math.random() * 100)));
+//            canvas.drawRect(canvasDirtyRect, paint);
 //            for (final RectF dirtyRect : renderer.dirtyRects) {
-//                Paint paint = new Paint();
-//                paint.setStyle(Paint.Style.FILL);
 //                paint.setColor(Color.argb(100, (int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
 //                canvas.drawRect(dirtyRect, paint);
 //            }

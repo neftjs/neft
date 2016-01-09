@@ -1,9 +1,6 @@
 package io.neft.Renderer;
 
-import android.graphics.Point;
 import android.graphics.RectF;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 
 public class Screen {

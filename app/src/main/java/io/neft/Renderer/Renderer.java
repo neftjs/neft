@@ -80,6 +80,7 @@ public class Renderer extends Thread {
         SET_ITEM_ROTATION,
         SET_ITEM_OPACITY,
         SET_ITEM_BACKGROUND,
+        SET_ITEM_KEYS_FOCUS,
 
         CREATE_IMAGE,
         SET_IMAGE_SOURCE,
@@ -101,6 +102,19 @@ public class Renderer extends Thread {
         SET_TEXT_FONT_LETTER_SPACING,
         SET_TEXT_ALIGNMENT_HORIZONTAL,
         SET_TEXT_ALIGNMENT_VERTICAL,
+
+        CREATE_TEXT_INPUT,
+        SET_TEXT_INPUT_TEXT,
+        SET_TEXT_INPUT_COLOR,
+        SET_TEXT_INPUT_LINE_HEIGHT,
+        SET_TEXT_INPUT_MULTI_LINE,
+        SET_TEXT_INPUT_ECHO_MODE,
+        SET_TEXT_INPUT_FONT_FAMILY,
+        SET_TEXT_FONT_INPUT_PIXEL_SIZE,
+        SET_TEXT_FONT_INPUT_WORD_SPACING,
+        SET_TEXT_FONT_INPUT_LETTER_SPACING,
+        SET_TEXT_INPUT_ALIGNMENT_HORIZONTAL,
+        SET_TEXT_INPUT_ALIGNMENT_VERTICAL,
 
         LOAD_FONT,
 
@@ -204,6 +218,7 @@ public class Renderer extends Thread {
         Item.register(this);
         Image.register(this);
         Text.register(this);
+        TextInput.register(this);
         Rectangle.register(this);
         Scrollable.register(this);
 

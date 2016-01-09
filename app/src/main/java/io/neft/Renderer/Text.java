@@ -10,6 +10,8 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.neft.Utils.ColorUtils;
+
 public class Text extends Item {
     static void register(Renderer renderer){
         renderer.actions.put(Renderer.InAction.CREATE_TEXT, new Action() {
@@ -130,8 +132,6 @@ public class Text extends Item {
     public int color = Color.BLACK;
     public boolean wrap = false;
     public float lineHeight = 1;
-    public float wordSpacing = 0;
-    public float letterSpacing = 0;
     public String fontFamily = "";
     public float fontPixelSize;
     public float contentWidth = 0;
@@ -182,7 +182,7 @@ public class Text extends Item {
     }
 
     public void setColor(int val){
-        color = Item.parseRGBA(val);
+        color = ColorUtils.RGBAtoARGB(val);
         invalidate();
     }
 
@@ -192,7 +192,6 @@ public class Text extends Item {
 
     public void setFontFamily(String val){
         fontFamily = val;
-        invalidate();
     }
 
     public void setFontPixelSize(float val){
@@ -201,20 +200,22 @@ public class Text extends Item {
 
     // TODO
     public void setFontWordSpacing(float val){
-//        wordSpacing = renderer.dpToPx(val);
+
     }
 
     // TODO
     public void setFontLetterSpacing(float val){
-//        letterSpacing = renderer.dpToPx(val);
+
     }
 
     public void setAlignmentHorizontal(String val){
         alignmentHorizontal = alignment.get(val);
+        invalidate();
     }
 
     public void setAlignmentVertical(String val){
         alignmentVertical = alignment.get(val);
+        invalidate();
     }
 
     public void updateContentSize(){
@@ -230,9 +231,9 @@ public class Text extends Item {
             final float lineHeightPx = lineHeight * fontPixelSize;
             final float maxWidth = this.width;
             final float spaceWidth = paint.measureText(" ");
-            final float fontTop = -fontMetrics.ascent - fontMetrics.descent/3;
+            final float fontTop = lineHeightPx - fontMetrics.descent;
             float x = 0, width = 0;
-            float height = fontTop;
+            float height = 0;
             int textPointer = 0, lineStart = 0, lineLength = 0;
 
             for (int i = 0; i <= wordsLength; i++){
@@ -255,7 +256,7 @@ public class Text extends Item {
                     line.textStart = lineStart;
                     line.textEnd = lineStart + lineLength - 1;
                     line.width = x - spaceWidth;
-                    line.y = height;
+                    line.y = height + fontTop;
 
                     // clear
                     lineStart = textPointer;
@@ -276,7 +277,7 @@ public class Text extends Item {
             }
 
             contentWidth = width;
-            contentHeight = height - fontTop;
+            contentHeight = height;
         } else {
             contentWidth = contentHeight = 0;
         }
@@ -291,7 +292,7 @@ public class Text extends Item {
     }
 
     protected void updatePaint(){
-        Typeface font = fonts.get(fontFamily);
+        final Typeface font = fonts.get(fontFamily);
         if (font != null) {
             paint.setTypeface(font);
         } else {

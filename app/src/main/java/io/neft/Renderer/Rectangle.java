@@ -1,23 +1,11 @@
 package io.neft.Renderer;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import io.neft.Renderer.Item;
+import io.neft.Utils.ColorUtils;
 
 public class Rectangle extends Item {
     static void register(Renderer renderer) {
@@ -95,7 +83,7 @@ public class Rectangle extends Item {
     }
 
     public void setColor(int val) {
-        color = Item.parseRGBA(val);
+        color = ColorUtils.RGBAtoARGB(val);
         invalidate();
     }
 
@@ -106,7 +94,7 @@ public class Rectangle extends Item {
     }
 
     public void setBorderColor(int val) {
-        borderColor = Item.parseRGBA(val);
+        borderColor = ColorUtils.RGBAtoARGB(val);
         invalidate();
     }
 

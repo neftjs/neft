@@ -147,11 +147,9 @@ public class Scrollable extends Item {
 
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         active = false;
-                    } else {
-                        return true;
                     }
                 }
-                return false;
+                return active;
             }
         });
     }
@@ -178,6 +176,7 @@ public class Scrollable extends Item {
         }
 
         this.contentItem = item;
+        invalidate();
 
         if (item != null) {
             item.parent = this;
@@ -236,7 +235,6 @@ public class Scrollable extends Item {
                 this.viewRect.set(globalBounds);
                 contentMatrix.mapRect(this.viewRect);
 
-                this.dirtyRects.clear();
                 contentItem.measure(this.globalMatrix, this.viewRect, this.dirtyRects, forceChildrenUpdate);
                 contentMatrix.setTranslate(-contentX, -contentY);
 
@@ -248,6 +246,8 @@ public class Scrollable extends Item {
                         contentMatrix.mapRect(rect);
                         dirtyRects.add(rect);
                     }
+
+                    this.dirtyRects.clear();
                 }
             }
         }
@@ -255,17 +255,10 @@ public class Scrollable extends Item {
 
     @Override
     protected void drawShape(final Canvas canvas, final int alpha) {
-
-    }
-
-    @Override
-    protected void drawChildren(final Canvas canvas, final int alpha, final RectF rect) {
         if (contentItem != null) {
             canvas.translate(-contentX, -contentY);
             view.drawOnItem(canvas, alpha);
             canvas.translate(contentX, contentY);
         }
-
-        super.drawChildren(canvas, alpha, rect);
     }
 }

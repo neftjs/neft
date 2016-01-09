@@ -6,18 +6,9 @@ import android.graphics.RectF;
 
 import java.util.ArrayList;
 
+import io.neft.Utils.RectFUtils;
+
 public class Item {
-    static int parseRGBA(int val) {
-        return ((val & 0xFFFFFF00) >> 8) |  // __RRGGBB
-                ((val & 0x000000FF) << 24); // AA______
-    }
-
-    static boolean equalsRectF(RectF a, RectF b) {
-        if (a == b) return true;
-        if (a == null || b == null) return false;
-        return a.left == b.left && a.top == b.top && a.right == b.right && a.bottom == b.bottom;
-    }
-
     static void register(Renderer renderer) {
         renderer.actions.put(Renderer.InAction.CREATE_ITEM, new Action() {
             @Override
@@ -114,6 +105,13 @@ public class Item {
             @Override
             void work(Reader reader) {
                 reader.getItem().setBackground(reader.getItem());
+            }
+        });
+
+        renderer.actions.put(Renderer.InAction.SET_ITEM_KEYS_FOCUS, new Action() {
+            @Override
+            void work(Reader reader) {
+                reader.getItem().setKeysFocus(reader.getBoolean());
             }
         });
     }
@@ -308,14 +306,16 @@ public class Item {
         invalidate();
     }
 
+    public void setKeysFocus(boolean val) {
+
+    }
+
     protected void measure(final Matrix globalMatrix, RectF viewRect, final ArrayList<RectF> dirtyRects, final boolean forceUpdateBounds) {
         final boolean isDirty = forceUpdateBounds || dirty || dirtyMatrix;
 
         // break on no changes
-        if (!dirtyChildren) {
-            if (!isDirty) {
-                return;
-            }
+        if (!dirtyChildren && !isDirty) {
+            return;
         }
 
         // update transform
@@ -333,7 +333,7 @@ public class Item {
             this.globalMatrix.mapRect(globalBounds);
 
             // add rectangle to redraw
-            if (dirty || dirtyMatrix || !Item.equalsRectF(globalBounds, oldGlobalBounds)) {
+            if (dirty || dirtyMatrix || !RectFUtils.equals(globalBounds, oldGlobalBounds)) {
                 redrawRect.set(oldGlobalBounds);
                 redrawRect.union(globalBounds);
                 if (redrawRect.intersect(viewRect)) {
@@ -385,14 +385,6 @@ public class Item {
 
     }
 
-    protected void drawChildren(final Canvas canvas, final int alpha, final RectF rect) {
-        for (final Item child : children){
-            if (child.visible) {
-                child.draw(canvas, alpha, rect);
-            }
-        }
-    }
-
     protected void draw(final Canvas canvas, int alpha, final RectF rect) {
         if (opacity < 255) {
             alpha = Math.round(alpha * (opacity / 255f));
@@ -419,7 +411,11 @@ public class Item {
         }
 
         // render children
-        drawChildren(canvas, alpha, rect);
+        for (final Item child : children){
+            if (child.visible) {
+                child.draw(canvas, alpha, rect);
+            }
+        }
 
         canvas.restore();
     }
