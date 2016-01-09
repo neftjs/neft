@@ -85,8 +85,16 @@ module.exports = (impl) ->
 				e.preventDefault()
 
 		# manage focus
-		innerElem.addEventListener 'focus', ->
-			self.keys.focus = true
+		pressed = false
+		data.elem.addEventListener 'mousedown', (e) ->
+			pressed = true
+		data.elem.addEventListener 'mouseup', (e) ->
+			pressed = false
+		innerElem.addEventListener 'focus', (e) ->
+			if pressed
+				e.preventDefault()
+			else
+				self.keys.focus = true
 		innerElem.addEventListener 'blur', ->
 			self.keys.focus = false
 		@keys.onFocusChange (oldVal) ->

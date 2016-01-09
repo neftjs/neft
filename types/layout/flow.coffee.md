@@ -60,7 +60,7 @@ Flow {
 
 ### *Signal* Flow::onPaddingChange(*Margin* padding)
 
-		Renderer.Item.Margin @,
+		Renderer.Item.createMargin @,
 			propertyName: 'padding'
 
 *Spacing* Flow::spacing
@@ -68,14 +68,14 @@ Flow {
 
 ### *Signal* Flow::onSpacingChange(*Spacing* oldValue)
 
-		Renderer.Item.Spacing @
+		Renderer.Item.createSpacing @
 
 *Alignment* Flow::alignment
 ---------------------------
 
 ### *Signal* Flow::onAlignmentChange(*Alignment* oldValue)
 
-		Renderer.Item.Alignment @
+		Renderer.Item.createAlignment @
 
 *Boolean* Flow::includeBorderMargins = false
 -------------------------------------------

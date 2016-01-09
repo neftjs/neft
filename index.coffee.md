@@ -90,8 +90,10 @@ Styles.button/red {
 
 	utils = require 'utils'
 	signal = require 'signal'
+	assert = require 'assert'
 
 	signal.create exports, 'onReady'
+	signal.create exports, 'onWindowChange'
 
 	Impl = require('./impl') exports
 	itemUtils = exports.itemUtils = require('./utils/item') exports, Impl
@@ -179,11 +181,10 @@ Column {
 ```
 
 	utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
+		assert.instanceOf val, exports.Item
 		utils.defineProperty exports, 'window', utils.ENUMERABLE, val
+		exports.onWindowChange.emit null
 		Impl.setWindow val
-
-	utils.defineProperty exports, 'documentGlobalNode', utils.CONFIGURABLE, null, (val) ->
-		utils.defineProperty exports, 'documentGlobalNode', utils.ENUMERABLE, val
 
 	utils.defineProperty exports, 'serverUrl', utils.WRITABLE, ''
 	utils.defineProperty exports, 'resources', utils.WRITABLE, null

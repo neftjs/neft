@@ -61,7 +61,7 @@ Grid {
 
 ### *Signal* Grid::onPaddingChange(*Margin* padding)
 
-		Renderer.Item.Margin @,
+		Renderer.Item.createMargin @,
 			propertyName: 'padding'
 
 *Integer* Grid::columns = 2
@@ -103,14 +103,14 @@ Grid {
 
 ### *Signal* Grid::onSpacingChange(*Spacing* oldValue)
 
-		Renderer.Item.Spacing @
+		Renderer.Item.createSpacing @
 
 *Alignment* Grid::alignment
 ---------------------------
 
 ### *Signal* Grid::onAlignmentChange(*Alignment* oldValue)
 
-		Renderer.Item.Alignment @
+		Renderer.Item.createAlignment @
 
 *Boolean* Grid::includeBorderMargins = false
 --------------------------------------------

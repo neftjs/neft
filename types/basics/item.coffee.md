@@ -751,28 +751,28 @@ This method checks whether two items are overlapped.
 
 		# 	clone
 
-		@Spacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
-		@Alignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
-		@Anchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
-		@Layout = require('./item/layout') Renderer, Impl, itemUtils, Item
-		@Margin = require('./item/margin') Renderer, Impl, itemUtils, Item
+		@createSpacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
+		@createAlignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
+		@createAnchors = require('./item/anchors') Renderer, Impl, itemUtils, Item
+		@createLayout = require('./item/layout') Renderer, Impl, itemUtils, Item
+		@createMargin = require('./item/margin') Renderer, Impl, itemUtils, Item
 		@createPointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
-		@Keys = require('./item/keys') Renderer, Impl, itemUtils, Item
-		@Document = require('./item/document') Renderer, Impl, itemUtils, Item
+		@createKeys = require('./item/keys') Renderer, Impl, itemUtils, Item
+		@createDocument = require('./item/document') Renderer, Impl, itemUtils, Item
 
 *Anchors* Item::anchors
 -----------------------
 
 ### *Signal* Item::onAnchorsChange(*String* property, *Array* oldValue)
 
-		@Anchors @
+		@createAnchors @
 
 *Layout* Item::layout
 ---------------------
 
 ### *Signal* Item::onLayoutChange(*String* property, *Any* oldValue)
 
-		@Layout @
+		@createLayout @
 
 *Pointer* Item::pointer
 -----------------------
@@ -784,16 +784,16 @@ This method checks whether two items are overlapped.
 
 ### *Signal* Item::onMarginChange(*String* property, *Any* oldValue)
 
-		@Margin @
+		@createMargin @
 
 *Keys* Item::keys
 -----------------
 
-		@Keys @
+		@Keys = @createKeys @
 
 *Document* Item::document
 -------------------------
 
-		@Document @
+		@Document = @createDocument @
 
 		Item

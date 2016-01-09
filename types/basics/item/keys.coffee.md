@@ -34,6 +34,11 @@ Rectangle {
 			name: 'keys'
 			valueConstructor: Keys
 
+*Boolean* Keys.focusWindowOnPointerPress = true
+-----------------------------------------------
+
+		@focusWindowOnPointerPress = true
+
 *Keys* Keys()
 -------------
 
@@ -65,6 +70,17 @@ Rectangle {
 ### *Signal* Keys::onFocusChange(*Boolean* oldValue)
 
 		focusedKeys = null
+		focusChangeOnPointerPress = false
+
+		Renderer.onReady ->
+			Renderer.Device.onPointerPress ->
+				focusChangeOnPointerPress = false
+
+		Renderer.onWindowChange ->
+			@window.pointer.onPress ->
+				if Keys.focusWindowOnPointerPress and not focusChangeOnPointerPress
+					@keys.focus = true
+			, @window
 
 		itemUtils.defineProperty
 			constructor: Keys
@@ -77,6 +93,8 @@ Rectangle {
 				assert.isBoolean val
 			setter: (_super) -> (val) ->
 				if @_focus isnt val
+					if val
+						focusChangeOnPointerPress = true
 					if val and focusedKeys isnt @
 						if focusedKeys
 							oldVal = focusedKeys

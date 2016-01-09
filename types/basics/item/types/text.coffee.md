@@ -202,14 +202,14 @@ ReadOnly *Float* Text::contentHeight
 
 ### *Signal* Text::onAlignmentChange(*Alignment* alignment)
 
-			Renderer.Item.Alignment Text
+			Renderer.Item.createAlignment Text
 
 *Font* Text::font
 -----------------
 
 ### *Signal* Text::onFontChange(*String* property, *Any* oldValue)
 
-			@Font = require('./text/font') Renderer, Impl, itemUtils
-			@Font Text
+			@createFont = require('./text/font') Renderer, Impl, itemUtils
+			@createFont Text
 
 		Text

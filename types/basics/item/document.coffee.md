@@ -10,7 +10,7 @@ Document @extension
 
 	log = log.scope 'Renderer', 'Document'
 
-	module.exports = (Renderer, Impl, itemUtils, Item) -> exports = (ctor) -> class ItemDocument extends itemUtils.DeepObject
+	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
 		@__name__ = 'Document'
 
 		itemUtils.defineProperty
@@ -158,7 +158,7 @@ This signal is called when the **style item** is no longer used.
 *DocumentShowEvent* DocumentShowEvent()
 ---------------------------------------
 
-		exports.ShowEvent = class DocumentShowEvent
+		@ShowEvent = class DocumentShowEvent
 			constructor: ->
 				@delay = 0
 				Object.preventExtensions @
@@ -169,7 +169,7 @@ This signal is called when the **style item** is no longer used.
 *DocumentHideEvent* DocumentHideEvent()
 ---------------------------------------
 
-		exports.HideEvent = class DocumentHideEvent
+		@HideEvent = class DocumentHideEvent
 			constructor: ->
 				@delay = 0
 				@nextShowDelay = 0

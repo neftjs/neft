@@ -56,7 +56,7 @@ Column {
 
 ### *Signal* Column::onPaddingChange(*Margin* padding)
 
-		Renderer.Item.Margin @,
+		Renderer.Item.createMargin @,
 			propertyName: 'padding'
 
 *Float* Column::spacing = 0
@@ -81,7 +81,7 @@ Column {
 
 ### *Signal* Column::onAlignmentChange(*Alignment* oldValue)
 
-		Renderer.Item.Alignment @
+		Renderer.Item.createAlignment @
 
 *Boolean* Column::includeBorderMargins = false
 ----------------------------------------------

@@ -56,7 +56,7 @@ Row {
 
 ### *Signal* Row::onPaddingChange(*Margin* padding)
 
-		Renderer.Item.Margin @,
+		Renderer.Item.createMargin @,
 			propertyName: 'padding'
 
 *Float* Row::spacing = 0
@@ -81,7 +81,7 @@ Row {
 
 ### *Signal* Row::onAlignmentChange(*Alignment* oldValue)
 
-		Renderer.Item.Alignment @
+		Renderer.Item.createAlignment @
 
 *Boolean* Row::includeBorderMargins = false
 -------------------------------------------

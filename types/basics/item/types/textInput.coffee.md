@@ -29,10 +29,16 @@ TextInput @class
 
 				# focus on pointer press
 				item.pointer.onPress ->
-					@keys.focus = true
+					if TextInput.keysFocusOnPointerPress
+						@keys.focus = true
 				, item
 
 				item
+
+*Boolean* TextInput.keysFocusOnPointerPress = true
+--------------------------------------------------
+
+			@keysFocusOnPointerPress = true
 
 *TextInput* TextInput() : *Renderer.Item*
 -----------------------------------------
@@ -137,13 +143,13 @@ Accepts 'normal' and 'password'.
 
 ### *Signal* TextInput::onAlignmentChange(*Alignment* alignment)
 
-			Renderer.Item.Alignment TextInput
+			Renderer.Item.createAlignment TextInput
 
 *Font* TextInput::font
 ----------------------
 
 ### *Signal* TextInput::onFontChange(*String* property, *Any* oldValue)
 
-			Renderer.Text.Font TextInput
+			Renderer.Text.createFont TextInput
 
 		TextInput
