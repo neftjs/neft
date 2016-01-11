@@ -80,7 +80,7 @@ Item {
 
 		# parse tags with `style` attr
 		forNode = (node, parentStyle) ->
-			if attr = node.attrs.get 'neft:style'
+			if attr = node.getAttr('neft:style')
 				id = attr
 
 				style = new Style
