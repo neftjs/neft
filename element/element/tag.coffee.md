@@ -24,7 +24,6 @@ Tag @virtual_dom
 
 		@DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null
 
-		@Attrs = require('./tag/attrs') Tag
 		@extensions = Object.create null
 
 		@__name__ = 'Tag'
@@ -55,17 +54,56 @@ Tag @virtual_dom
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
 
-*Tag.Attrs* Tag::attrs
-----------------------
-
-		utils.defineProperty @::, 'attrs', null, ->
-			Tag.Attrs.tag = @
-			Tag.Attrs
-		, null
-
 ### *Signal* Tag::onAttrsChange(*String* name, *Any* oldValue)
 
 		signal.Emitter.createSignal @, 'onAttrsChange'
+
+*Array* Tag::getAttrByIndex(*Integer* index, [*Array* target])
+--------------------------------------------------------------
+
+		getAttrByIndex: (index, target=[]) ->
+			assert.isArray target
+
+			target[0] = target[1] = undefined
+
+			i = 0
+			for key, val of @_attrs
+				if i is index
+					target[0] = key
+					target[1] = val
+					break
+				i++
+
+			target
+
+*Any* Tag::getAttr(*String* name)
+---------------------------------
+
+		getAttr: (name) ->
+			assert.isString name
+			assert.notLengthOf name, 0
+
+			@_attrs[name]
+
+*Boolean* Tag::setAttr(*String* name, *Any* value)
+--------------------------------------------------
+
+		setAttr: (name, value) ->
+			assert.isString name
+			assert.notLengthOf name, 0
+
+			# save change
+			old = @_attrs[name]
+			if old is value
+				return false
+
+			@_attrs[name] = value
+
+			# trigger event
+			emitSignal @, 'onAttrsChange', name, old
+			query.checkWatchersDeeply @
+
+			true
 
 		clone: ->
 			clone = new Tag
