@@ -85,9 +85,9 @@ Row {
 				replacements[tagName] = do (_super, attr) -> (elem) ->
 					elem = _super(elem) or elem
 
-					attrVal = elem.attrs.get attr
+					attrVal = elem.getAttr attr
 					if attrVal and rsc = resources.resolve(attrVal)
-						elem.attrs.set attr, rsc
+						elem.setAttr attr, rsc
 
 					elem
 
