@@ -274,22 +274,31 @@ assert.isNotArray(*Any* value, [*String* message])
 		if Array.isArray val
 			@fail val, 'array', msg, 'isn\'t', assert.isNotArray
 
-assert.isEqual(*Any* value1, *Any* value2, [*String* message])
---------------------------------------------------------------
+assert.isEqual(*Any* value1, *Any* value2, [*String* message, *Object* options])
+--------------------------------------------------------------------------------
 
 This function checks whether given values are equal.
 
 Check [utils.isEqual()][] for details.
 
-	assert.isEqual = (val1, val2, msg) ->
-		unless utils.isEqual val1, val2
+**options** accepts:
+ - *Integer* maxDeep.
+
+	assert.isEqual = (val1, val2, msg, opts) ->
+		if typeof msg is 'object'
+			opts = msg
+			msg = undefined
+		unless utils.isEqual val1, val2, opts?.maxDeep
 			@fail val1, val2, msg, 'equal', assert.isEqual
 
-assert.isNotEqual(*Any* value1, *Any* value2, [*String* message])
------------------------------------------------------------------
+assert.isNotEqual(*Any* value1, *Any* value2, [*String* message, *Object* options])
+-----------------------------------------------------------------------------------
 
-	assert.isNotEqual = (val1, val2, msg) ->
-		if utils.isEqual val1, val2
+	assert.isNotEqual = (val1, val2, msg, opts) ->
+		if typeof msg is 'object'
+			opts = msg
+			msg = undefined
+		if utils.isEqual val1, val2, opts?.maxDeep
 			@fail val1, val2, msg, 'isn\'t equal', assert.isNotEqual
 
 assert.instanceOf(*Object* object, *Function* constructor, [*String* message])
