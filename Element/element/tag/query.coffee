@@ -5,7 +5,7 @@ signal = require 'signal'
 assert = require 'neft-assert'
 
 {emitSignal} = signal.Emitter
-Tag = null
+Tag = Text = null
 
 test = (node, funcs, index, targetFunc, targetCtx, single) ->
 	while index < funcs.length
@@ -26,11 +26,12 @@ test = (node, funcs, index, targetFunc, targetCtx, single) ->
 
 anyDescendant = (node, funcs, index, targetFunc, targetCtx, single) ->
 	for child in node.children
-		if child instanceof Tag
-			if child.name isnt 'neft:blank' and test(child, funcs, index, targetFunc, targetCtx, single)
+		if not (child instanceof Tag) or child.name isnt 'neft:blank'
+			if test(child, funcs, index, targetFunc, targetCtx, single)
 				if single
 					return true
 
+		if child instanceof Tag
 			if anyDescendant(child, funcs, index, targetFunc, targetCtx, single)
 				if single
 					return true
@@ -50,15 +51,14 @@ directParent.toString = -> 'directParent'
 
 anyChild = (node, funcs, index, targetFunc, targetCtx, single) ->
 	for child in node.children
-		if child instanceof Tag
-			if child.name is 'neft:blank'
-				if anyChild(child, funcs, index, targetFunc, targetCtx, single)
-					if single
-						return true
-			else
-				if test(child, funcs, index, targetFunc, targetCtx, single)
-					if single
-						return true
+		if child instanceof Tag and child.name is 'neft:blank'
+			if anyChild(child, funcs, index, targetFunc, targetCtx, single)
+				if single
+					return true
+		else
+			if test(child, funcs, index, targetFunc, targetCtx, single)
+				if single
+					return true
 	false
 anyChild.isIterator = true
 anyChild.toString = -> 'anyChild'
@@ -74,9 +74,17 @@ anyParent.isIterator = true
 anyParent.toString = -> 'anyParent'
 
 byName = (node, data1) ->
-	node.name is data1
+	if node instanceof Tag
+		node.name is data1
+	else if data1 is '#text' and node instanceof Text
+		true
 byName.isIterator = false
 byName.toString = -> 'byName'
+
+byInstance = (node, data1) ->
+	node instanceof data1
+byInstance.isIterator = false
+byInstance.toString = -> 'byInstance'
 
 byTag = (node, data1) ->
 	node is data1
@@ -84,43 +92,49 @@ byTag.isIterator = false
 byTag.toString = -> 'byTag'
 
 byAttr = (node, data1) ->
-	node._attrs[data1] isnt undefined
+	if node instanceof Tag
+		node._attrs[data1] isnt undefined
+	else
+		false
 byAttr.isIterator = false
 byAttr.toString = -> 'byAttr'
 
 byAttrValue = (node, data1, data2) ->
-	`node._attrs[data1] == data2`
+	if node instanceof Tag
+		`node._attrs[data1] == data2`
+	else
+		false
 byAttrValue.isIterator = false
 byAttrValue.toString = -> 'byAttrValue'
 
 byAttrStartsWithValue = (node, data1, data2) ->
-	attr = node._attrs[data1]
-	if typeof attr is 'string'
-		attr.indexOf(data2) is 0
-	else
-		false
+	if node instanceof Tag
+		attr = node._attrs[data1]
+		if typeof attr is 'string'
+			return attr.indexOf(data2) is 0
+	false
 byAttrStartsWithValue.isIterator = false
 byAttrStartsWithValue.toString = -> 'byAttrStartsWithValue'
 
 byAttrEndsWithValue = (node, data1, data2) ->
-	attr = node._attrs[data1]
-	if typeof attr is 'string'
-		attr.indexOf(data2, attr.length - data2.length) > -1
-	else
-		false
+	if node instanceof Tag
+		attr = node._attrs[data1]
+		if typeof attr is 'string'
+			return attr.indexOf(data2, attr.length - data2.length) > -1
+	false
 byAttrEndsWithValue.isIterator = false
 byAttrEndsWithValue.toString = -> 'byAttrEndsWithValue'
 
 byAttrContainsValue = (node, data1, data2) ->
-	attr = node._attrs[data1]
-	if typeof attr is 'string'
-		attr.indexOf(data2) > -1
-	else
-		false
+	if node instanceof Tag
+		attr = node._attrs[data1]
+		if typeof attr is 'string'
+			return attr.indexOf(data2) > -1
+	false
 byAttrContainsValue.isIterator = false
 byAttrContainsValue.toString = -> 'byAttrContainsValue'
 
-TYPE = /^[a-zA-Z0-9|\-:_]+/
+TYPE = /^#?[a-zA-Z0-9|\-:_]+/
 DEEP = /^([ ]*)>([ ]*)|^([ ]+)/
 ATTR_SEARCH = /^\[([^\]]+?)\]/
 ATTR_VALUE_SEARCH = /^\[([^=]+?)=([^\]]+?)\]/
@@ -155,6 +169,7 @@ getQueries = (selector, opts=0) ->
 	while sel.length
 		if sel[0] is '*'
 			sel = sel.slice 1
+			funcs[arrFunc] byInstance, Tag, null
 		else if sel[0] is '&'
 			sel = sel.slice 1
 			unless opts & OPTS_QUERY_BY_PARENTS
@@ -278,8 +293,9 @@ class Watcher extends signal.Emitter
 		pool.push @
 		return
 
-module.exports = (_Tag) ->
+module.exports = (Element, _Tag) ->
 	Tag = _Tag
+	Text = Element.Text
 
 	getSelectorCommandsLength: (selector) ->
 		sum = 0
@@ -366,18 +382,17 @@ module.exports = (_Tag) ->
 					emitSignal watcher, 'onRemove', node
 
 			# check recursively
-			if update & CHECK_WATCHERS_CHILDREN
+			if update & CHECK_WATCHERS_CHILDREN and node instanceof Tag
 				for child in node.children
-					if child instanceof Tag
-						if update & CHECK_WATCHERS_THIS or child._checkWatchers
-							checkRec watcher, watcherUid, child, update
+					if update & CHECK_WATCHERS_THIS or child._checkWatchers
+						checkRec watcher, watcherUid, child, update
 			return
 
 		clearRec = (node) ->
-			if node._checkWatchers isnt 0
-				node._checkWatchers = 0
+			node._checkWatchers = 0
+			if node instanceof Tag
 				for child in node.children
-					if child instanceof Tag and child._checkWatchers
+					if child._checkWatchers > 0
 						clearRec child
 			return
 
@@ -428,9 +443,6 @@ module.exports = (_Tag) ->
 			return
 
 		(node) ->
-			unless node instanceof Tag
-				return
-
 			tmp = node
 			node._checkWatchers |= CHECK_WATCHERS_THIS
 			while tmp = tmp._parent

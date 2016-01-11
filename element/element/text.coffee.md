@@ -56,5 +56,6 @@ Text @virtual_dom
 
 			# trigger event
 			emitSignal @, 'onTextChange', old
+			Element.Tag.query.checkWatchersDeeply @
 
 			true

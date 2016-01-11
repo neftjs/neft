@@ -37,6 +37,12 @@ Element @virtual_dom
 			@_parent = null
 			@_nextSibling = null
 			@_previousSibling = null
+			@_style = null
+			@_documentStyle = null
+			@_visible = true
+
+			@_inWatchers = null
+			@_checkWatchers = 0
 
 			`//<development>`
 			if @constructor is Element
@@ -168,6 +174,53 @@ Element @virtual_dom
 
 		signal.Emitter.createSignal @, 'onParentChange'
 
+*Renderer.Item* Element::style
+------------------------------
+
+		opts = utils.CONFIGURABLE
+		utils.defineProperty @::, 'style', opts, ->
+			@_style
+		, (val) ->
+			if val?
+				assert.instanceOf val, Renderer.Item
+
+			old = @_style
+			if old is val
+				return false
+
+			@_style = val
+
+			# trigger signal
+			emitSignal @, 'onStyleChange', old, val
+			true
+
+### *Signal* Element::onStyleChange(*Renderer.Item* oldValue)
+
+		signal.Emitter.createSignal @, 'onStyleChange'
+
+*Boolean* Element::visible
+--------------------------
+
+		opts = utils.CONFIGURABLE
+		utils.defineProperty @::, 'visible', opts, ->
+			@_visible
+		, (val) ->
+			assert.isBoolean val
+
+			old = @_visible
+			if old is val
+				return false
+
+			@_visible = val
+
+			# trigger signal
+			emitSignal @, 'onVisibleChange', old
+			true
+
+### *Signal* Element::onVisibleChange(*Boolean* oldValue)
+
+		signal.Emitter.createSignal @, 'onVisibleChange'
+
 *Element* Element::clone()
 --------------------------
 
@@ -180,8 +233,8 @@ Element @virtual_dom
 		cloneDeep: ->
 			@clone()
 
-		@Tag = Tag = require('./element/tag') Element
 		@Text = require('./element/text') Element
+		@Tag = Tag = require('./element/tag') Element
 		if utils.isNode
 			@parser = require('./element/parser') Element
 

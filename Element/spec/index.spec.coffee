@@ -173,11 +173,11 @@ describe 'View Element', ->
 		assert.is elem.stringify(), '<b><em></em></b><u></u><p></p>'
 
 	describe 'queryAll() works with selector', ->
-		doc2 = Element.fromHTML "<div><b class='first second'><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
+		doc2 = Element.fromHTML "<div><b class='first second'><u color='blue' attr='1'>text1<u></u></u></b></div><div attr='2'><neft:blank><em>text2</em></neft:blank><em></em></div>"
 		doc2div1 = doc2.children[0]
 		doc2b = doc2div1.children[0]
 		doc2u = doc2b.children[0]
-		doc2u2 = doc2b.children[0].children[0]
+		doc2u2 = doc2u.children[1]
 		doc2div2 = doc2.children[1]
 		doc2em1 = doc2div2.children[0].children[0]
 		doc2em2 = doc2div2.children[1]
@@ -249,6 +249,12 @@ describe 'View Element', ->
 			assert.isEqual doc2.queryAll('div > * > u[color], div[attr]'), [doc2u, doc2div2], maxDeep: 1
 			assert.isEqual doc2.queryAll('div > * > u[color],div[attr]'), [doc2u, doc2div2], maxDeep: 1
 
+		it '#text', ->
+			assert.isEqual doc2.queryAll('#text'), [doc2u.children[0], doc2em1.children[0]], maxDeep: 1
+
+		it 'E #text', ->
+			assert.isEqual doc2.queryAll('em #text'), [doc2em1.children[0]], maxDeep: 1
+
 		it 'omits neft:blank', ->
 			assert.isEqual doc2.queryAll('div > em'), [doc2em1, doc2em2], maxDeep: 1
 
@@ -293,7 +299,7 @@ describe 'View Element', ->
 
 		beforeEach ->
 			tags = []
-			doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em></em></neft:blank><em></em></div>"
+			doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em>text1</em></neft:blank><em></em></div>"
 			doc2div1 = doc2.children[0]
 			doc2b = doc2div1.children[0]
 			doc2u = doc2b.children[0]
@@ -483,6 +489,20 @@ describe 'View Element', ->
 					doc2u.attrs.set 'color', undefined
 					whenChange tags, ->
 						assert.isEqual tags, []
+						done()
+
+			it '#text', (done) ->
+				watcher = doc2.watch '#text'
+				watcher.onAdd (tag) ->
+					tags.push tag
+				watcher.onRemove (tag) ->
+					utils.remove tags, tag
+				whenChange tags, ->
+					assert.isEqual tags, [doc2em1.children[0]], maxDeep: 1
+					newText = new Element.Text
+					newText.parent = doc2em2
+					whenChange tags, ->
+						assert.isEqual tags, [doc2em1.children[0], newText], maxDeep: 1
 						done()
 
 	it 'visible property is editable', ->

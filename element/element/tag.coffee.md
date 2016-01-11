@@ -36,20 +36,17 @@ Tag @virtual_dom
 		constructor: ->
 			Element.call this
 
-			@children = []
 			@name = 'neft:blank'
-			@_style = null
-			@_documentStyle = null
-			@_visible = true
+			@children = []
 			@_attrs = {}
-
-			@_inWatchers = null
-			@_checkWatchers = 0
 
 			`//<development>`
 			if @constructor is Tag
 				Object.preventExtensions @
 			`//</development>`
+
+*String* Tag::name
+------------------
 
 *Array* Tag::children
 ---------------------
@@ -57,53 +54,6 @@ Tag @virtual_dom
 ### *Signal* Tag::onChildrenChange(*Element* added, *Element* removed)
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
-
-*Renderer.Item* Tag::style
---------------------------
-
-		opts = utils.CONFIGURABLE
-		utils.defineProperty @::, 'style', opts, ->
-			@_style
-		, (val) ->
-			if val?
-				assert.instanceOf val, Renderer.Item
-
-			old = @_style
-			if old is val
-				return false
-
-			@_style = val
-
-			# trigger signal
-			emitSignal @, 'onStyleChange', old, val
-			true
-
-### *Signal* Tag::onStyleChange(*Renderer.Item* oldValue)
-
-		signal.Emitter.createSignal @, 'onStyleChange'
-
-*Boolean* Tag::visible
-----------------------
-
-		opts = utils.CONFIGURABLE
-		utils.defineProperty @::, 'visible', opts, ->
-			@_visible
-		, (val) ->
-			assert.isBoolean val
-
-			old = @_visible
-			if old is val
-				return false
-
-			@_visible = val
-
-			# trigger signal
-			emitSignal @, 'onVisibleChange', old
-			true
-
-### *Signal* Tag::onVisibleChange(*Boolean* oldValue)
-
-		signal.Emitter.createSignal @, 'onVisibleChange'
 
 *Tag.Attrs* Tag::attrs
 ----------------------
@@ -169,7 +119,7 @@ Tag @virtual_dom
 
 				elem
 
-		@query = query = require('./tag/query') @
+		@query = query = require('./tag/query') Element, @
 
 *Array* Element::queryAll(*String* query)
 -----------------------------------------
