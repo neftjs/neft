@@ -172,10 +172,10 @@ Image source URL or data URI.
 						loadCallback.call @, null, defaultResult
 					return
 
-*Float* Image::sourceWidth = 0
-------------------------------
+Hidden *Float* Image::sourceWidth = 0
+-------------------------------------
 
-### *Signal* Image::onSourceWidthChange(*Float* oldValue)
+### Hidden *Signal* Image::onSourceWidthChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -185,10 +185,10 @@ Image source URL or data URI.
 			developmentSetter: (val) ->
 				assert.isFloat val
 
-*Float* Image::sourceHeight = 0
--------------------------------
+Hidden *Float* Image::sourceHeight = 0
+--------------------------------------
 
-### *Signal* Image::onSourceHeightChange(*Float* oldValue)
+### Hidden *Signal* Image::onSourceHeightChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -198,10 +198,10 @@ Image source URL or data URI.
 			developmentSetter: (val) ->
 				assert.isFloat val
 
-*Float* Image::offsetX = 0
---------------------------
+Hidden *Float* Image::offsetX = 0
+---------------------------------
 
-### *Signal* Image::onOffsetXChange(*Float* oldValue)
+### Hidden *Signal* Image::onOffsetXChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -211,10 +211,10 @@ Image source URL or data URI.
 			developmentSetter: (val) ->
 				assert.isFloat val
 
-*Float* Image::offsetY = 0
---------------------------
+Hidden *Float* Image::offsetY = 0
+---------------------------------
 
-### *Signal* Image::onOffsetYChange(*Float* oldValue)
+### Hidden *Signal* Image::onOffsetYChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -224,10 +224,10 @@ Image source URL or data URI.
 			developmentSetter: (val) ->
 				assert.isFloat val
 
-*Integer* Image::fillMode = 'Stretch'
--------------------------------------
+Hidden *Integer* Image::fillMode = 'Stretch'
+--------------------------------------------
 
-### *Signal* Image::onFillModeChange(*Integer* oldValue)
+### Hidden *Signal* Image::onFillModeChange(*Integer* oldValue)
 
 		FILL_MODE_OPTIONS = ['Stretch', 'Tile']
 

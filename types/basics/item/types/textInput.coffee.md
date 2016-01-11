@@ -92,10 +92,10 @@ TextInput @class
 				developmentSetter: (val) ->
 					assert.isString val
 
-*Float* TextInput::lineHeight = 1
----------------------------------
+Hidden *Float* TextInput::lineHeight = 1
+----------------------------------------
 
-### *Signal* TextInput::onLineHeightChange(*Float* oldValue)
+### Hidden *Signal* TextInput::onLineHeightChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -138,10 +138,10 @@ Accepts 'normal' and 'password'.
 					val = val.toLowerCase()
 					_super.call @, val
 
-*Alignment* TextInput::alignment
---------------------------------
+Hidden *Alignment* TextInput::alignment
+---------------------------------------
 
-### *Signal* TextInput::onAlignmentChange(*Alignment* alignment)
+### Hidden *Signal* TextInput::onAlignmentChange(*Alignment* alignment)
 
 			Renderer.Item.createAlignment TextInput
 

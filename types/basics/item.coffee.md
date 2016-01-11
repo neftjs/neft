@@ -616,10 +616,10 @@ Item {
 			developmentSetter: (val) ->
 				assert.isFloat val, '::y setter ...'
 
-*Integer* Item::z = 0
----------------------
+Hidden *Integer* Item::z = 0
+----------------------------
 
-### *Signal* Item::onZChange(*Integer* oldValue)
+### Hidden *Signal* Item::onZChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

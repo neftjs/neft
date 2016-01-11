@@ -110,10 +110,10 @@ Font @extension
 				_super.call @, val
 				reloadFontFamily @
 
-*Float* Font.wordSpacing = 0
-----------------------------------
+Hidden *Float* Font.wordSpacing = 0
+-----------------------------------
 
-### *Signal* Font.onWordSpacingChange(*Float* oldValue)
+### Hidden *Signal* Font.onWordSpacingChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -125,10 +125,10 @@ Font @extension
 			developmentSetter: (val) ->
 				assert.isFloat val
 
-*Float* Font.letterSpacing = 0
-------------------------------------
+Hidden *Float* Font.letterSpacing = 0
+-------------------------------------
 
-### *Signal* Font.onLetterSpacingChange(*Float* oldValue)
+### Hidden *Signal* Font.onLetterSpacingChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -141,7 +141,7 @@ Font @extension
 				assert.isFloat val
 
 *Boolean* Font.italic = false
------------------------------------
+-----------------------------
 
 ### *Signal* Font.onItalicChange(*Boolean* oldValue)
 

@@ -150,10 +150,10 @@ Text {
 				developmentSetter: (val) ->
 					assert.isString val
 
-*Float* Text::lineHeight = 1
-----------------------------
+Hidden *Float* Text::lineHeight = 1
+-----------------------------------
 
-### *Signal* Text::onLineHeightChange(*Float* oldValue)
+### Hidden *Signal* Text::onLineHeightChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
