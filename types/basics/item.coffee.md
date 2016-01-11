@@ -117,10 +117,10 @@ Rectangle {
 
 		signal.Emitter.createSignal @, 'onReady'
 
-*Signal* Item::onUpdate(*Integer* miliseconds)
-----------------------------------------------
+*Signal* Item::onAnimationFrame(*Integer* miliseconds)
+------------------------------------------------------
 
-		signal.Emitter.createSignal @, 'onUpdate', do ->
+		signal.Emitter.createSignal @, 'onAnimationFrame', do ->
 			now = Date.now()
 			items = []
 
@@ -130,7 +130,7 @@ Rectangle {
 				ms = now - oldNow
 
 				for item in items
-					emitSignal item, 'onUpdate', ms
+					emitSignal item, 'onAnimationFrame', ms
 				requestAnimationFrame frame
 
 			requestAnimationFrame? frame
