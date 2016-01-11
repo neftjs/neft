@@ -1280,8 +1280,8 @@ This function returns a new array or an object with own properties.
 		merge result, obj
 		result
 
-*Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction])
------------------------------------------------------------------------------------------
+*Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep=Infinity])
+---------------------------------------------------------------------------------------------------------------------
 
 Use this function to compare two objects or arrays deeply.
 
@@ -1304,7 +1304,7 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 	isEqual = exports.isEqual = do ->
 		defaultComparison = (a, b) -> a is b
 
-		forArrays = (a, b, compareFunc) ->
+		forArrays = (a, b, compareFunc, maxDeep) ->
 			# prototypes are the same
 			if getPrototypeOf(a) isnt getPrototypeOf(b)
 				return false
@@ -1314,12 +1314,15 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 				return false
 
 			# values are the same
+			if maxDeep <= 0
+				return true
+
 			for aValue in a
 				isTrue = false
 
 				for bValue in b
 					if bValue and typeof bValue is 'object'
-						if isEqual(aValue, bValue, compareFunc)
+						if isEqual(aValue, bValue, compareFunc, maxDeep - 1)
 							isTrue = true
 						continue
 
@@ -1335,7 +1338,7 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 				for aValue in a
 					if aValue and typeof aValue is 'object'
-						if isEqual(bValue, aValue, compareFunc)
+						if isEqual(bValue, aValue, compareFunc, maxDeep - 1)
 							isTrue = true
 						continue
 
@@ -1348,7 +1351,7 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 			true
 
-		forObjects = (a, b, compareFunc) ->
+		forObjects = (a, b, compareFunc, maxDeep) ->
 			# prototypes are the same
 			if getPrototypeOf(a) isnt getPrototypeOf(b)
 				return false
@@ -1363,9 +1366,12 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 					return false
 
 			# whether values are equal
+			if maxDeep <= 0
+				return true
+
 			for key, value of a when a.hasOwnProperty(key)
 				if value and typeof value is 'object'
-					unless isEqual(value, b[key], compareFunc)
+					unless isEqual(value, b[key], compareFunc, maxDeep - 1)
 						return false
 					continue
 
@@ -1374,16 +1380,24 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 			true
 
-		(a, b, compareFunc=defaultComparison) ->
-			null
+		(a, b, compareFunc=defaultComparison, maxDeep=Infinity) ->
+			if typeof compareFunc is 'number'
+				maxDeep = compareFunc
+				compareFunc = defaultComparison
+
 			`//<development>`
 			if typeof compareFunc isnt 'function'
 				throw new Error "utils.isEqual compareFunction must be a function"
+			if typeof maxDeep isnt 'number'
+				throw new Error "utils.isEqual maxDeep must be a number"
 			`//</development>`
 
+			if maxDeep < 0
+				return compareFunc a, b
+
 			if isArray(a) and isArray(b)
-				forArrays a, b, compareFunc
+				forArrays a, b, compareFunc, maxDeep
 			else if isObject(a) and isObject(b)
-				forObjects a, b, compareFunc
+				forObjects a, b, compareFunc, maxDeep
 			else
 				return compareFunc a, b
