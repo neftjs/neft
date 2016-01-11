@@ -51,25 +51,19 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 							inputs.push input
 
 				# attrs
-				i = 0
-				loop
-					break unless elem.attrs
-					elem.attrs.item i, attr
-					break unless attr[0]
-
-					if Input.test attr[1]
-						if funcBody = Input.parse(attr[1])
-							func = Input.createFunction funcBody
-							input = new Input.Attr elem, func
-							`//<development>`
-							input.text = attr[1]
-							`//</development>`
-							input.funcBody = funcBody
-							input.attrName = attr[0]
-							elem.attrs.set attr[0], null
-							inputs.push input
-
-					i++
+				if elem._attrs
+					for name, val of elem._attrs
+						if Input.test(val)
+							if funcBody = Input.parse(val)
+								func = Input.createFunction funcBody
+								input = new Input.Attr elem, func
+								`//<development>`
+								input.text = val
+								`//</development>`
+								input.funcBody = funcBody
+								input.attrName = name
+								elem.setAttr name, null
+								inputs.push input
 
 				elem.children?.forEach forNode
 

@@ -57,11 +57,11 @@ This tag can be also used to store commonly used expressions.
 
 			for node in nodes
 				target = node.parent
-				name = node.attrs.get 'name'
-				value = node.attrs.get 'value'
+				name = node.getAttr 'name'
+				value = node.getAttr 'value'
 
-				unless target.attrs.has(name)
-					target.attrs.set name, ''
+				unless target.hasAttr(name)
+					target.setAttr name, ''
 
 				attrChanges.push new AttrChange
 					self: file

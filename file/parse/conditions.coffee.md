@@ -39,9 +39,9 @@ In practice, you will use the string interpolation to conditioning the result.
 
 					forEachNodeRec child
 
-					if child.attrs.has('neft:if')
+					if child.hasAttr('neft:if')
 						elseNode = null
-						if child.nextSibling?.attrs?.has('neft:else')
+						if child.nextSibling?.hasAttr?('neft:else')
 							elseNode = child.nextSibling
 
 						condition = new File.Condition child, elseNode

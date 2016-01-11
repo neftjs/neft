@@ -17,8 +17,8 @@ neft:rule @xml
 	commands =
 		'attrs': (command, node) ->
 			for name, val of command._attrs
-				unless node.attrs.has(name)
-					node.attrs.set name, val
+				unless node.hasAttr(name)
+					node.setAttr name, val
 			return
 
 	enterCommand = (command, node) ->
@@ -54,7 +54,7 @@ neft:rule @xml
 				getNodeLength(b) - getNodeLength(a)
 
 			for rule in localRules
-				query = rule.attrs.get 'query'
+				query = rule.getAttr 'query'
 				unless query
 					log.error "neft:rule no 'query' attribute found"
 					continue
@@ -65,12 +65,12 @@ neft:rule @xml
 				while i < n
 					child = children[i]
 					if child.name is 'neft:rule'
-						subquery = child.attrs.get('query')
+						subquery = child.getAttr('query')
 						if /^[A-Za-z]/.test(subquery)
 							subquery = query + ' ' + subquery
 						else
 							subquery = query + subquery
-						child.attrs.set 'query', subquery
+						child.setAttr 'query', subquery
 						child.parent = rule.parent
 						n--
 					else
@@ -94,7 +94,7 @@ neft:rule @xml
 							parent: file.node
 
 			for rule in rules
-				unless query = rule.node.attrs.get('query')
+				unless query = rule.node.getAttr('query')
 					continue
 
 				nodes = rule.parent.queryAll query

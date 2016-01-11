@@ -46,10 +46,10 @@ Included fragments will be available under the given namespace.
 			if node.name isnt "#{File.HTML_NS}:require"
 				continue
 
-			href = node.attrs.get 'href'
+			href = node.getAttr 'href'
 			unless href then continue
 
-			namespace = node.attrs.get 'as'
+			namespace = node.getAttr 'as'
 
 			# get view
 			path = href

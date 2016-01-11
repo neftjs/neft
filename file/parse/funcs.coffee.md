@@ -55,12 +55,12 @@ You can use other functions declared in the same file (considering [neft:fragmen
 
 			nodes = file.node.queryAll "neft:function"
 			for node in nodes
-				name = node.attrs.get('name') or node.attrs.get('neft:name')
+				name = node.getAttr('name') or node.getAttr('neft:name')
 				unless name
 					throw new Error 'Function name is requried'
 
 				body = node.stringifyChildren()
-				if argsAttr = node.attrs.get('arguments')
+				if argsAttr = node.getAttr('arguments')
 					args = argsAttr.split(',')
 					for arg, i in args
 						args[i] = arg.trim()

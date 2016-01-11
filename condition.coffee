@@ -12,7 +12,7 @@ module.exports = (File) -> class Condition
 		Object.preventExtensions @
 
 	update: ->
-		visible = @node.visible = !!@node.attrs.get('neft:if')
+		visible = @node.visible = !!@node.getAttr('neft:if')
 		@elseNode?.visible = not visible
 		return
 

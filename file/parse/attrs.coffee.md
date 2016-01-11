@@ -41,20 +41,11 @@ String `List(...` evaluates to the [List][].
 	evalFunc = new Function 'val', 'try { return eval(\'(\'+val+\')\'); } catch(err){}'
 
 	forNode = (elem) ->
-
-		i = 0
-		loop
-			break unless elem.attrs
-			elem.attrs.item i, attr
-
-			[name, val] = attr
-			break unless name
-
-			jsVal = evalFunc val
-			if jsVal isnt undefined
-				elem.attrs.set name, jsVal
-
-			i++
+		if elem._attrs
+			for name, val of elem._attrs
+				jsVal = evalFunc val
+				if jsVal isnt undefined
+					elem.setAttr name, jsVal
 
 		elem.children?.forEach forNode
 

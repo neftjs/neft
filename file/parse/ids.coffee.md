@@ -18,7 +18,7 @@ id @xml
 
 				forEachNodeRec child
 
-				unless id = child.attrs.get('id')
+				unless id = child.getAttr('id')
 					continue
 
 				if ids.hasOwnProperty(id)

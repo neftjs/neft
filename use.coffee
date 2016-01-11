@@ -82,16 +82,13 @@ module.exports = (File) -> class Use
 
 		@isRendered = false
 
-		# restore attrs
-		# @node.attrs.backChanges()
-	
 	visibilityChangeListener = ->
 		if @self.isRendered and not @isRendered
 			@render()
 
 	attrsChangeListener = (name) ->
 		if name is 'neft:fragment'
-			@name = @node.attrs.get 'neft:fragment'
+			@name = @node.getAttr 'neft:fragment'
 
 			if @isRendered
 				@revert()
@@ -112,7 +109,7 @@ module.exports = (File) -> class Use
 
 		# name
 		if clone.name is ''
-			clone.name = clone.node.attrs.get 'neft:fragment'
+			clone.name = clone.node.getAttr 'neft:fragment'
 			clone.node.onAttrsChange attrsChangeListener, clone
 
 		clone

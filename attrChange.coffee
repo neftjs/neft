@@ -22,7 +22,7 @@ module.exports = (File) -> class AttrChange
 
 		utils.fill @, opts
 
-		@_defaultValue = @target.attrs.get(@name)
+		@_defaultValue = @target.getAttr(@name)
 
 	self: null
 	node: null
@@ -30,8 +30,8 @@ module.exports = (File) -> class AttrChange
 	name: ''
 
 	update: ->
-		val = if @node.visible then @node.attrs.get('value') else @_defaultValue
-		@target.attrs.set @name, val
+		val = if @node.visible then @node.getAttr('value') else @_defaultValue
+		@target.setAttr @name, val
 		return
 
 	onVisibleChange = ->

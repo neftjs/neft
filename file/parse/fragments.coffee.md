@@ -59,7 +59,7 @@ using the [neft:use][] tag. This is fast and clean solution.
 						forEachNodeRec child
 						continue
 
-					unless name = child.attrs.get('neft:name')
+					unless name = child.getAttr('neft:name')
 						continue
 
 					# remove node from file
