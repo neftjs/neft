@@ -274,7 +274,7 @@ module.exports = (File, data) -> class Style
 
 		if not hasStyledChild and (anchor = node.query('> a'))
 			node = anchor
-			href = node.attrs.get('href')
+			href = node.getAttr('href')
 			if typeof href is 'string'
 				unless @isLinkUriSet
 					@isLinkUriSet = true
@@ -403,10 +403,10 @@ module.exports = (File, data) -> class Style
 		return
 
 	isLink: ->
-		@node.name is 'a' and @node.attrs.has('href') and @node.attrs.get('href')?[0] isnt '#'
+		@node.name is 'a' and @node.getAttr('href')? and @node.getAttr('href')?[0] isnt '#'
 
 	getLinkUri: ->
-		uri = @node.attrs.get('href') + ''
+		uri = @node.getAttr('href') + ''
 		`//<development>`
 		unless ///^([a-z]+:|\/|\$\{)///.test uri
 			log.warn "Relative link found `#{uri}`"
@@ -422,7 +422,7 @@ module.exports = (File, data) -> class Style
 
 		assert.notOk @item
 
-		id = @node.attrs.get 'neft:style'
+		id = @node.getAttr 'neft:style'
 		assert.isString id
 
 		@isScope = ///^(styles|renderer)\:///.test id
@@ -442,7 +442,7 @@ module.exports = (File, data) -> class Style
 					parentId = "styles:#{file}:#{style}"
 					parent = @parent
 					loop
-						if parent and parent.node.attrs.get('neft:style') is parentId
+						if parent and parent.node.getAttr('neft:style') is parentId
 							unless parent.scope
 								# parent is not ready yet
 								return
