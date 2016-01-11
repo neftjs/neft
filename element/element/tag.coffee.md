@@ -8,7 +8,6 @@ Tag @virtual_dom
 	signal = require 'signal'
 	stringify = require './tag/stringify'
 	TypedArray = require 'typed-array'
-	Renderer = require 'renderer'
 
 	{emitSignal} = signal.Emitter
 
@@ -75,6 +74,15 @@ Tag @virtual_dom
 				i++
 
 			target
+
+*Boolean* Tag::hasAttr(*String* name)
+-------------------------------------
+
+		hasAttr: (name) ->
+			assert.isString name
+			assert.notLengthOf name, 0
+
+			@_attrs.hasOwnProperty name
 
 *Any* Tag::getAttr(*String* name)
 ---------------------------------
