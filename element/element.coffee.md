@@ -181,9 +181,6 @@ Element @virtual_dom
 		utils.defineProperty @::, 'style', opts, ->
 			@_style
 		, (val) ->
-			if val?
-				assert.instanceOf val, Renderer.Item
-
 			old = @_style
 			if old is val
 				return false
