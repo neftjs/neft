@@ -30,12 +30,12 @@ Document @extension
 			return
 
 		onPropertyChange = (prop, oldVal) ->
-			if @_updatingProperty is prop or not (node = @_node) or not node.attrs.has(prop)
+			if @_updatingProperty is prop or not (node = @_node) or not node.hasAttr(prop)
 				return
 			if oldVal is undefined
 				setProperty.call @, @_ref._$, prop, node._attrs[prop], oldVal
 			else
-				node.attrs.set prop, @_ref._$[prop]
+				node.setAttr prop, @_ref._$[prop]
 			return
 
 		onNodeAttrsChange = (attr, oldVal) ->
@@ -97,7 +97,7 @@ ReadOnly *String* Document::query
 
 ```
 Text {
-  text: this.document.node.attrs.get('value')
+  text: this.document.node.getAttr('value')
 }
 ```
 
