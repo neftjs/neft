@@ -51,25 +51,17 @@ This tag can be also used to store commonly used expressions.
 		{AttrChange} = File
 
 		(file) ->
-			attrChanges = []
+			{attrChanges} = file
 
-			nodes = file.node.queryAll "#{File.HTML_NS}:attr"
+			nodes = file.node.queryAll "neft:attr"
 
 			for node in nodes
 				target = node.parent
 				name = node.getAttr 'name'
-				value = node.getAttr 'value'
 
 				unless target.hasAttr(name)
 					target.setAttr name, ''
 
-				attrChanges.push new AttrChange
-					self: file
-					node: node
-					target: target
-					name: name
-
-			if attrChanges.length
-				file.attrChanges = attrChanges
+				attrChanges.push new AttrChange file, node, target, name
 
 			return

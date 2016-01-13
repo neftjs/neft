@@ -22,8 +22,6 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 
 	'use strict'
 
-	attr = [null, null]
-
 	module.exports = (File) ->
 		{Input} = File
 		InputRE = Input.RE
@@ -32,7 +30,7 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 			{node} = file
 
 			# get inputs
-			inputs = file.inputs = []
+			{inputs} = file
 
 			forNode = (elem) ->
 				# text
@@ -41,12 +39,10 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 					InputRE.lastIndex = 0
 					if text and InputRE.test(text)
 						if funcBody = Input.parse(text)
-							func = Input.createFunction funcBody
-							input = new Input.Text elem, func
-							`//<development>`
-							input.text = text
-							`//</development>`
-							input.funcBody = funcBody
+							`//<production>`
+							text = ''
+							`//</production>`
+							input = new Input.Text file, elem, text, funcBody
 							elem.text = ''
 							inputs.push input
 
@@ -56,12 +52,11 @@ Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the
 						if Input.test(val)
 							if funcBody = Input.parse(val)
 								func = Input.createFunction funcBody
-								input = new Input.Attr elem, func
+								text = ''
 								`//<development>`
-								input.text = val
+								text = val
 								`//</development>`
-								input.funcBody = funcBody
-								input.attrName = name
+								input = new Input.Attr file, elem, text, funcBody, name
 								elem.setAttr name, null
 								inputs.push input
 

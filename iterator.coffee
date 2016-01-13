@@ -16,27 +16,53 @@ module.exports = (File) -> class Iterator extends File.Use
 
 	@HTML_ATTR = "#{File.HTML_NS}:each"
 
-	constructor: (@self, node) ->
-		assert.instanceOf self, File
-		assert.instanceOf node, File.Element
+	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Iterator) - 1
 
-		super self, node
+	i = File.Use.JSON_ARGS_LENGTH
+	JSON_NAME = i++
+	JSON_TEXT = i++
+	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-		prefix = if self.name then "#{self.name}-" else ''
-		@name = "#{prefix}each[#{utils.uid()}]"
+	@_fromJSON = (file, arr, obj) ->
+		unless obj
+			node = file.node.getChildByAccessPath arr[JSON_NODE]
+			obj = new Iterator file, node, arr[JSON_NAME]
+		obj.text = arr[JSON_TEXT]
+		obj
+
+	attrsChangeListener = (name) ->
+		if @file.isRendered and name is 'neft:each'
+			@update()
+
+	visibilityChangeListener = (oldVal) ->
+		if @file.isRendered and oldVal is false and not @node.data
+			@update()
+
+	constructor: (file, node, fragmentId) ->
+		assert.isString fragmentId
+		assert.notLengthOf fragmentId, 0
+
+		super file, node
+
+		# prefix = if file.name then "#{file.name}-" else ''
+		# @name = "#{prefix}each[#{utils.uid()}]"
+		@name = fragmentId
+		@usedFragments = []
 
 		# create fragment
-		fragment = new File.Fragment self, @name, @bodyNode
-		fragment.parse()
-		@fragment = fragment.id
-		@bodyNode.parent = undefined
+		# fragment = new File.Fragment file, @name, @bodyNode
+		# fragment.parse()
+		# @fragmentId = fragment.id
+		# @bodyNode.parent = undefined
 		@text = ''
 
-	fragment: ''
-	storage: null
-	usedFragments: null
-	data: null
-	text: ''
+		node.onAttrsChange attrsChangeListener, @
+		node.onVisibleChange visibilityChangeListener, @
+
+		`//<development>`
+		if @constructor is Iterator
+			Object.preventExtensions @
+		`//</development>`
 
 	render: ->
 		unless @node.visible
@@ -116,7 +142,7 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		{data} = @
 
-		usedFragment = File.factory @fragment
+		usedFragment = File.factory @fragmentId
 		@usedFragments.splice i, 0, usedFragment
 
 		if data instanceof List
@@ -132,7 +158,7 @@ module.exports = (File) -> class Iterator extends File.Use
 		newChild.index = i
 
 		# render fragment with storage
-		storage = usedFragment.storage = Object.create @self.storage or null
+		storage = usedFragment.storage = Object.create @file.storage or null
 		storage.each = each
 		storage.i = i
 		storage.item = item
@@ -158,23 +184,15 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		@
 
-	attrsChangeListener = (name) ->
-		if @self.isRendered and name is Iterator.HTML_ATTR
-			@update()
+	clone: (original, file) ->
+		node = original.node.getCopiedElement @node, file.node
 
-	visibilityChangeListener = (oldVal) ->
-		if @self.isRendered and oldVal is false and not @node.data
-			@update()
+		new Iterator file, node, @name
 
-	clone: (original, self) ->
-		clone = super
-
-		clone.storage = utils.cloneDeep @storage
-		clone.array = null
-		clone.usedFragments = []
-		clone.text = @text
-
-		clone.node.onAttrsChange attrsChangeListener, clone
-		clone.node.onVisibleChange visibilityChangeListener, clone
-
-		clone
+	toJSON: (key, arr) ->
+		unless arr
+			arr = new Array JSON_ARGS_LENGTH
+			arr[0] = JSON_CTOR_ID
+		arr[JSON_NAME] = @name
+		arr[JSON_TEXT] = @text
+		super key, arr

@@ -51,7 +51,7 @@ You can use other functions declared in the same file (considering [neft:fragmen
 
 		(file) ->
 			{Style} = File
-			funcs = file.funcs ?= {}
+			{funcs} = file
 
 			nodes = file.node.queryAll "neft:function"
 			for node in nodes
@@ -82,8 +82,5 @@ You can use other functions declared in the same file (considering [neft:fragmen
 				for externalFuncName of linkView.funcs
 					if externalFunc = linkViewProto.funcs[externalFuncName]
 						funcs[externalFuncName] ?= externalFunc
-
-			if utils.isEmpty(funcs)
-				file.funcs = null
 
 			return

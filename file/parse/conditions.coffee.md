@@ -30,7 +30,7 @@ In practice, you will use the string interpolation to conditioning the result.
 		{Condition} = File
 
 		(file) ->
-			conditions = []
+			{conditions} = file
 
 			forEachNodeRec = (node) ->
 				for child in node.children
@@ -44,11 +44,7 @@ In practice, you will use the string interpolation to conditioning the result.
 						if child.nextSibling?.hasAttr?('neft:else')
 							elseNode = child.nextSibling
 
-						condition = new File.Condition child, elseNode
-						conditions.push condition
+						conditions.push new File.Condition file, child, elseNode
 				return
 
 			forEachNodeRec file.node
-
-			if conditions.length
-				file.conditions = conditions

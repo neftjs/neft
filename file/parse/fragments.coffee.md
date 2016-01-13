@@ -35,7 +35,7 @@ using the [neft:use][] tag. This is fast and clean solution.
 		parseLinks = require('./fragments/links') File
 
 		(file) ->
-			fragments = file.fragments ?= {}
+			{fragments} = file
 			createdFragments = []
 
 			# merge fragments from files
@@ -68,7 +68,9 @@ using the [neft:use][] tag. This is fast and clean solution.
 					i--; n--
 
 					# get fragment
-					fragment = new File.Fragment file, name, child
+					fragment = new File.Fragment name, child
+					fragment.fragments = utils.clone file.fragments
+					delete fragment.fragments[name]
 					fragments[name] = fragment.id
 					createdFragments.push fragment
 
@@ -77,8 +79,6 @@ using the [neft:use][] tag. This is fast and clean solution.
 			# link fragments
 			for createdFragment in createdFragments
 				for fragmentName, fragmentId of fragments
-					# if fragmentId is createdFragment.id
-					# 	continue
 					if createdFragment.fragments.hasOwnProperty fragmentName
 						continue
 
@@ -86,6 +86,6 @@ using the [neft:use][] tag. This is fast and clean solution.
 
 			# parse fragments
 			for createdFragment in createdFragments
-				createdFragment.parse()
+				File.parse createdFragment
 
 			return

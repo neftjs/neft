@@ -8,26 +8,41 @@ assert = assert.scope 'View.AttrChange'
 log = log.scope 'View', 'AttrChange'
 
 module.exports = (File) -> class AttrChange
-
 	@__name__ = 'AttrChange'
 	@__path__ = 'File.AttrChange'
 
-	constructor: (opts) ->
-		assert.isPlainObject opts
-		assert.instanceOf opts.self, File
-		assert.instanceOf opts.node, File.Element
-		assert.instanceOf opts.target, File.Element
-		assert.isString opts.name
-		assert.notLengthOf opts.name, 0
+	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(AttrChange) - 1
 
-		utils.fill @, opts
+	i = 1
+	JSON_NODE = i++
+	JSON_TARGET = i++
+	JSON_NAME = i++
+	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-		@_defaultValue = @target.getAttr(@name)
+	@_fromJSON = (file, arr, obj) ->
+		unless obj
+			node = file.node.getChildByAccessPath arr[JSON_NODE]
+			target = file.node.getChildByAccessPath arr[JSON_TARGET]
+			obj = new AttrChange file, node, target, arr[JSON_NAME]
+		obj
 
-	self: null
-	node: null
-	target: null
-	name: ''
+	constructor: (@file, @node, @target, @name) ->
+		assert.instanceOf file, File
+		assert.instanceOf node, File.Element
+		assert.instanceOf target, File.Element
+		assert.isString name
+		assert.notLengthOf name, 0
+
+		@_defaultValue = target.getAttr name
+
+		@update()
+		node.onVisibleChange onVisibleChange, @
+		node.onAttrsChange onAttrsChange, @
+
+		`//<development>`
+		if @constructor is AttrChange
+			Object.preventExtensions @
+		`//</development>`
 
 	update: ->
 		val = if @node.visible then @node.getAttr('value') else @_defaultValue
@@ -44,17 +59,17 @@ module.exports = (File) -> class AttrChange
 			@update()
 		return
 
-	clone: (original, self) ->
-		clone = Object.create @
+	clone: (original, file) ->
+		node = original.node.getCopiedElement @node, file.node
+		target = original.node.getCopiedElement @target, file.node
 
-		clone.clone = undefined
-		clone.self = self
-		clone.node = original.node.getCopiedElement @node, self.node
-		clone.target = original.node.getCopiedElement @target, self.node
+		new AttrChange file, node, target, @name
 
-		clone.update()
-
-		clone.node.onVisibleChange onVisibleChange, clone
-		clone.node.onAttrsChange onAttrsChange, clone
-
-		clone
+	toJSON: (key, arr) ->
+		unless arr
+			arr = new Array JSON_ARGS_LENGTH
+			arr[0] = JSON_CTOR_ID
+		arr[JSON_NODE] = @node.getAccessPath @file.node
+		arr[JSON_TARGET] = @target.getAccessPath @file.node
+		arr[JSON_NAME] = @name
+		arr

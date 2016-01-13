@@ -1,17 +1,43 @@
 'use strict'
 
 utils = require 'utils'
+assert = require 'assert'
 log = require 'log'
 
 module.exports = (File) -> class AttrsToSet
 	@__name__ = 'AttrsToSet'
 	@__path__ = 'File.AttrsToSet'
 
-	attrsKeyGen = (_, value) -> value
-	attrsValueGen = -> true
+	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(AttrsToSet) - 1
 
-	constructor: (@node, @attrs) ->
-		Object.preventExtensions @
+	i = 1
+	JSON_NODE = i++
+	JSON_ATTRS = i++
+	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
+
+	@_fromJSON = (file, arr, obj) ->
+		unless obj
+			node = file.node.getChildByAccessPath arr[JSON_NODE]
+			obj = new AttrsToSet file, node, arr[JSON_ATTRS]
+		obj
+
+	constructor: (@file, @node, @attrs) ->
+		assert.instanceOf file, File
+		assert.instanceOf node, File.Element
+		assert.isPlainObject attrs
+
+		# set current attributes
+		for attr of @attrs
+			if node._attrs[attr]?
+				clone.setAttribute attr, null
+
+		# listen on changes
+		node.onAttrsChange @setAttribute, clone
+
+		`//<development>`
+		if @constructor is AttrsToSet
+			Object.preventExtensions @
+		`//</development>`
 
 	setAttribute: (attr, oldValue) ->
 		unless @attrs[attr]
@@ -27,17 +53,15 @@ module.exports = (File) -> class AttrsToSet
 			@node[attr] = val
 		return
 
-	clone: (original, self) ->
-		node = original.node.getCopiedElement @node, self.node
+	clone: (original, file) ->
+		node = original.node.getCopiedElement @node, file.node
 
-		clone = new AttrsToSet node, @attrs
+		new AttrsToSet file, node, @attrs
 
-		# set current attributes
-		for attr of @attrs
-			if node._attrs[attr]?
-				clone.setAttribute attr, null
-
-		# listen on changes
-		node.onAttrsChange @setAttribute, clone
-
-		clone
+	toJSON: (key, arr) ->
+		unless arr
+			arr = new Array JSON_ARGS_LENGTH
+			arr[0] = JSON_CTOR_ID
+		arr[JSON_NODE] = @node.getAccessPath @file.node
+		arr[JSON_ATTRS] = @attrs
+		arr

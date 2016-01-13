@@ -1,14 +1,43 @@
 'use strict'
 
 utils = require 'utils'
+assert = require 'assert'
 
 module.exports = (File) -> class Log
 	@__name__ = 'Log'
 	@__path__ = 'File.Log'
 
-	constructor: (@node) ->
-		@self = null
-		Object.preventExtensions @
+	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Log) - 1
+
+	i = 1
+	JSON_NODE = i++
+	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
+
+	@_fromJSON = (file, arr, obj) ->
+		unless obj
+			node = file.node.getChildByAccessPath arr[JSON_NODE]
+			obj = new Log file, node
+		obj
+
+	listenOnTextChange = (node, log) ->
+		if node instanceof File.Element.Text
+			node.onTextChange log.log, log
+		else
+			for child in node.children
+				listenOnTextChange child, log
+		return
+
+	constructor: (@file, @node) ->
+		assert.instanceOf file, File
+		assert.instanceOf node, File.Element
+
+		node.onAttrsChange @log, @
+		listenOnTextChange node, @
+
+		`//<development>`
+		if @constructor is Log
+			Object.preventExtensions @
+		`//</development>`
 
 	render: ->
 		if utils.isEmpty(@node._attrs)
@@ -21,24 +50,17 @@ module.exports = (File) -> class Log
 		return
 
 	log: ->
-		if @self.isRendered
+		if @file.isRendered
 			@render()
 
-	listenOnTextChange = (node, log) ->
-		if node instanceof File.Element.Text
-			node.onTextChange log.log, log
-		else
-			for child in node.children
-				listenOnTextChange child, log
-		return
+	clone: (original, file) ->
+		node = original.node.getCopiedElement @node, file.node
 
-	clone: (original, self) ->
-		node = original.node.getCopiedElement @node, self.node
+		new Log file, node
 
-		clone = new @constructor node
-		clone.self = self
-
-		node.onAttrsChange @log, clone
-		listenOnTextChange node, clone
-
-		clone
+	toJSON: (key, arr) ->
+		unless arr
+			arr = new Array JSON_ARGS_LENGTH
+			arr[0] = JSON_CTOR_ID
+		arr[JSON_NODE] = @node.getAccessPath @file.node
+		arr

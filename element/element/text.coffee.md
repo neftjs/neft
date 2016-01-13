@@ -15,14 +15,14 @@ Text @virtual_dom
 		@__name__ = 'Text'
 		@__path__ = 'File.Element.Text'
 
-		JSON_ID = @JSON_ID = Element.JSON_CTORS.push(Text) - 1
+		JSON_CTOR_ID = @JSON_CTOR_ID = Element.JSON_CTORS.push(Text) - 1
 
-		i = Element.JSON_LENGTH
+		i = Element.JSON_ARGS_LENGTH
 		JSON_TEXT = i++
-		JSON_LENGTH = @JSON_LENGTH = i
+		JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-		@fromJSONArray = (arr, obj=new Text) ->
-			Element.fromJSONArray arr, obj
+		@_fromJSON = (arr, obj=new Text) ->
+			Element._fromJSON arr, obj
 			obj.text = arr[JSON_TEXT]
 			obj
 
@@ -73,8 +73,8 @@ Text @virtual_dom
 
 		toJSON: (arr) ->
 			unless arr
-				arr = new Array JSON_LENGTH
-				arr[0] = JSON_ID
+				arr = new Array JSON_ARGS_LENGTH
+				arr[0] = JSON_CTOR_ID
 			super arr
 			arr[JSON_TEXT] = @text
 			arr

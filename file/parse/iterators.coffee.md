@@ -33,22 +33,29 @@ all changes made on the [List][] automatically refreshes your view.
 
 	'use strict'
 
+	utils = require 'utils'
+
 	module.exports = (File) -> (file) ->
-		# get iterators
-		iterators = []
+		{iterators} = file
 
 		forNode = (elem) ->
 			unless attrVal = elem.attrs?.get("#{File.HTML_NS}:each")
 				return elem.children?.forEach forNode
 
+			prefix = if file.name then "#{file.name}-" else ''
+			name = "#{prefix}each[#{utils.uid()}]"
+
+			# get fragment
+			bodyNode = new File.Element.Tag
+			for child in elem.children
+				child.parent = bodyNode
+			fragment = new File.Fragment name, bodyNode
+
 			# get iterator
-			iterator = new File.Iterator file, elem
+			iterator = new File.Iterator file, elem, name
 			iterators.push iterator
 			`//<development>`
 			iterator.text = attrVal
 			`//</development>`
 
 		forNode file.node
-
-		if iterators.length
-			file.iterators = iterators

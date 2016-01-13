@@ -4,9 +4,9 @@ neft:log @xml
 	'use strict'
 
 	module.exports = (File) -> (file) ->
-		file.logs = []
+		{logs} = file
 
 		for node in file.node.queryAll('neft:log')
-			file.logs.push new File.Log node
+			logs.push new File.Log file, node
 
 		return

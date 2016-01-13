@@ -28,16 +28,16 @@ Tag @virtual_dom
 		@__name__ = 'Tag'
 		@__path__ = 'File.Element.Tag'
 
-		JSON_ID = @JSON_ID = Element.JSON_CTORS.push(Tag) - 1
+		JSON_CTOR_ID = @JSON_CTOR_ID = Element.JSON_CTORS.push(Tag) - 1
 
-		i = Element.JSON_LENGTH
+		i = Element.JSON_ARGS_LENGTH
 		JSON_NAME = i++
 		JSON_CHILDREN = i++
 		JSON_ATTRS = i++
-		JSON_LENGTH = @JSON_LENGTH = i
+		JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-		@fromJSONArray = (arr, obj=new Tag) ->
-			Element.fromJSONArray arr, obj
+		@_fromJSON = (arr, obj=new Tag) ->
+			Element._fromJSON arr, obj
 			obj.name = arr[JSON_NAME]
 			obj._attrs = arr[JSON_ATTRS]
 
@@ -175,7 +175,7 @@ Tag @virtual_dom
 					if elem is @
 						break
 
-				# go by indexes in copied parent
+				# walk by indexes in copied parent
 				elem = copiedParent
 				while i-- > 0
 					index = arr[i]
@@ -183,30 +183,33 @@ Tag @virtual_dom
 
 				elem
 
-		@query = query = require('./tag/query') Element, @
+*Tag* Tag::getChildByAccessPath(*Array* accessPath)
+---------------------------------------------------
 
-*Array* Element::queryAll(*String* query)
------------------------------------------
+		getChildByAccessPath: (arr) ->
+			assert.isArray arr
+
+			elem = @
+			for i in arr by -1
+				unless elem = elem.children[i]
+					return null
+
+			elem
+
+*Array* Tag::queryAll(*String* query)
+-------------------------------------
+
+		@query = query = require('./tag/query') Element, @
 
 		queryAll: query.queryAll
 
-*Element* Element::query(*String* query)
-----------------------------------------
+*Element* Tag::query(*String* query)
+------------------------------------
 
 		query: query.query
 
-*Array* Element::queryAllParents(*String* query)
-------------------------------------------------
-
-		queryAllParents: query.queryAllParents
-
-*Element* Element::queryParents(*String* query)
------------------------------------------------
-
-		queryParents: query.queryParents
-
-*Watcher* Element::watch(*String* query)
-----------------------------------------
+*Watcher* Tag::watch(*String* query)
+------------------------------------
 
 ```
 var watcher = doc.watch('div > * > b[attr]');
@@ -218,20 +221,20 @@ watcher.onRemove(function(tag){
 
 		watch: query.watch
 
-*String* Element::stringify([*Object* replacements])
-----------------------------------------------------
+*String* Tag::stringify([*Object* replacements])
+------------------------------------------------
 
 		stringify: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
 			stringify.getOuterHTML @, replacements
 
-*String* Element::stringifyChildren([*Object* replacements])
-------------------------------------------------------------
+*String* Tag::stringifyChildren([*Object* replacements])
+--------------------------------------------------------
 
 		stringifyChildren: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
 			stringify.getInnerHTML @, replacements
 
-Element::replace(*Element* oldElement, *Element* newElement)
-------------------------------------------------------------
+Tag::replace(*Element* oldElement, *Element* newElement)
+--------------------------------------------------------
 
 		replace: (oldElement, newElement) ->
 			assert.instanceOf oldElement, Element
@@ -249,8 +252,8 @@ Element::replace(*Element* oldElement, *Element* newElement)
 
 		toJSON: (arr) ->
 			unless arr
-				arr = new Array JSON_LENGTH
-				arr[0] = JSON_ID
+				arr = new Array JSON_ARGS_LENGTH
+				arr[0] = JSON_CTOR_ID
 			super arr
 			arr[JSON_NAME] = @name
 			children = arr[JSON_CHILDREN] = []

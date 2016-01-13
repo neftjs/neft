@@ -5,13 +5,14 @@ Setting attributes @learn
 
 	module.exports = (File) ->
 		{AttrsToSet} = File
+		{Tag} = File.Element
 
 		(file) ->
-			attrsToSet = []
+			{attrsToSet} = file
 
 			forEachNodeRec = (node) ->
 				for child in node.children
-					unless child instanceof File.Element.Tag
+					unless child instanceof Tag
 						continue
 
 					forEachNodeRec child
@@ -26,12 +27,9 @@ Setting attributes @learn
 						nodeProps[prop] = true
 
 					if nodeProps
-						attrsToSet.push new AttrsToSet child, nodeProps
+						attrsToSet.push new AttrsToSet file, child, nodeProps
 				return
 
 			forEachNodeRec file.node
-
-			if attrsToSet.length
-				file.attrsToSet = attrsToSet
 
 			return

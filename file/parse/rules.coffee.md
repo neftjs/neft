@@ -44,9 +44,11 @@ neft:rule @xml
 	module.exports = (File) ->
 		parseLinks = require('./fragments/links') File
 
+		fileRules = Object.create null
+
 		(file) ->
 			rules = []
-			utils.defineProperty file, '_rules', null, rules
+			fileRules[file.path] = rules
 
 			# get rules from this file
 			localRules = file.node.queryAll 'neft:rule'
@@ -86,7 +88,7 @@ neft:rule @xml
 			links = parseLinks file
 			for link in links
 				linkView = File.factory link.path
-				for externalRule in linkView._rules
+				for externalRule in fileRules[linkView.path]
 					# load rules only from the mail file scope
 					if isMainFileRule(externalRule)
 						rules.push

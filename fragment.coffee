@@ -7,27 +7,28 @@ signal = require 'signal'
 assert = assert.scope 'View.Fragment'
 
 module.exports = (File) -> class Fragment extends File
-
 	@__name__ = 'Fragment'
 	@__path__ = 'File.Fragment'
 
-	constructor: (self, @name, node) ->
-		assert.instanceOf self, File
-		assert.isString name
-		assert.notLengthOf name, 0
+	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Fragment) - 1
 
-		# merge fragments from parent
-		@fragments = utils.clone self.fragments
-		delete @fragments?[@name] # prevent circular structure
+	i = File.JSON_ARGS_LENGTH
+	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-		@id = "#{self.path}:#{name}"
+	constructor: (path, node) ->
+		super path, node
 
-		@_node = node
-
-	id: ''
-	name: ''
-
-	if utils.isNode
-		@::parse = ->
-			File.call @, @id, @_node
-			delete @_node
+		`//<development>`
+		if @constructor is Fragment
+			Object.preventExtensions @
+		`//</development>`
+	
+	utils.defineProperty @::, 'name', null, ->
+		@node.getAttr 'neft:name'
+	, null
+	
+	toJSON: (key, arr) ->
+		unless arr
+			arr = new Array JSON_ARGS_LENGTH
+			arr[0] = JSON_CTOR_ID
+		super key, arr

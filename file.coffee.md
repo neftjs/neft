@@ -13,7 +13,9 @@ File @class
 	assert = assert.scope 'View'
 	log = log.scope 'View'
 
-	module.exports = class File
+	{Emitter} = signal
+
+	module.exports = class File extends Emitter
 		files = @_files = {}
 		pool = Object.create null
 
@@ -27,11 +29,28 @@ File @class
 						arr.pop()
 						return file
 
-		getTmp = -> tmp =
-			listeners: []
-
 		@__name__ = 'File'
 		@__path__ = 'File'
+
+		@JSON_CTORS = []
+		JSON_CTOR_ID = @JSON_CTOR_ID = @JSON_CTORS.push(File) - 1
+
+		i = 1
+		JSON_PATH = i++
+		JSON_NODE = i++
+		JSON_TARGET_NODE = i++
+		JSON_FRAGMENTS = i++
+		JSON_ATTR_CHANGES = i++
+		JSON_INPUTS = i++
+		JSON_CONDITIONS = i++
+		JSON_ITERATORS = i++
+		JSON_USES = i++
+		JSON_IDS = i++
+		JSON_FUNCS = i++
+		JSON_ATTRS_TO_SET = i++
+		JSON_LOGS = i++
+		JSON_STYLES = i++
+		JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
 		@HTML_NS = 'neft'
 
@@ -101,37 +120,62 @@ File @class
 				clear node
 
 				# create file
-				file = new File path, node
+				File.fromElement path, node
 
-				file
+*File* File.fromJSON(*String|Object* json)
+------------------------------------------
 
-*File* File.fromJSON(*String* path, *String|Object* json)
----------------------------------------------------------
-
-		@fromJSON = do (ctorsCache={}) -> (path, json) ->
-			assert.isString path
-			assert.notLengthOf path, 0
-			assert.notOk files[path]?
-
+		@fromJSON = (json) ->
 			# parse json
 			if typeof json is 'string'
 				json = utils.tryFunction JSON.parse, null, [json], json
 
-			assert.isPlainObject json
+			assert.isArray json
 
-			# put ctors
-			ns = File: File, Dict: Dict, List: List
-			for i, ctor of ctors = json.constructors
-				ctorsCache[ctor] ?= utils.get ns, ctor
-				ctors[i] = ctorsCache[ctor]
+			file = File.JSON_CTORS[json[0]]._fromJSON json
 
-			# assemble
-			json = utils.assemble json
+			assert.notOk files[file.path]?
 
 			# save to storage
-			files[path] = json
+			files[file.path] = file
 
-			json
+			file
+
+		@_fromJSON = do ->
+			parseObject = (file, obj, target) ->
+				for key, val of obj
+					target[key] = File.JSON_CTORS[val[0]]._fromJSON file, val
+				return
+
+			parseArray = (file, arr, target) ->
+				for val in arr
+					target.push File.JSON_CTORS[val[0]]._fromJSON file, val
+				return
+
+			(arr, obj) ->
+				unless obj
+					node = File.Element.fromJSON arr[JSON_NODE]
+					obj = new File arr[JSON_PATH], node
+
+				if arr[JSON_TARGET_NODE]
+					obj.targetNode = node.getChildByAccessPath arr[JSON_TARGET_NODE]
+
+				parseObject obj, arr[JSON_FRAGMENTS], obj.fragments
+				parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
+				parseArray obj, arr[JSON_INPUTS], obj.inputs
+				parseArray obj, arr[JSON_CONDITIONS], obj.conditions
+				parseArray obj, arr[JSON_ITERATORS], obj.iterators
+				parseArray obj, arr[JSON_USES], obj.uses
+
+				for id, path of arr[JSON_IDS]
+					obj.ids[id] = obj.node.getChildByAccessPath path
+
+				parseObject obj, arr[JSON_FUNCS], obj.funcs
+				parseArray obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet
+				parseArray obj, arr[JSON_LOGS], obj.logs
+				parseArray obj, arr[JSON_STYLES], obj.styles
+
+				obj
 
 *File* File.factory(*String* path)
 ----------------------------------
@@ -155,97 +199,107 @@ File @class
 
 			file
 
-*File* File(*String* path, *Element* element)
----------------------------------------------
+*File* File.fromElement(*String* path, *Element* element)
+---------------------------------------------------------
 
-		constructor: do ->
-			if utils.isNode
-				rules = require('./file/parse/rules') File
-				fragments = require('./file/parse/fragments') File
-				attrs = require('./file/parse/attrs') File
-				attrChanges = require('./file/parse/attrChanges') File
-				iterators = require('./file/parse/iterators') File
-				target = require('./file/parse/target') File
-				uses = require('./file/parse/uses') File
-				storage = require('./file/parse/storage') File
-				conditions = require('./file/parse/conditions') File
-				ids = require('./file/parse/ids') File
-				logs = require('./file/parse/logs') File
-				funcs = require('./file/parse/funcs') File
-				attrSetting = require('./file/parse/attrSetting') File
+		@fromElement = (path, node) ->
+			assert.isString path
+			assert.notLengthOf path, 0
+			assert.instanceOf node, File.Element
+			assert.notOk files[path]?
 
-			(@path, @node) ->
-				assert.isString path
-				assert.notLengthOf path, 0
-				assert.instanceOf node, File.Element
-				assert.notOk files[path]?
+			file = new File path, node
 
-				# set properties
-				@pathbase = path.substring 0, path.lastIndexOf('/') + 1
-				@isRendered = false
-				@readyToUse = true
+			# save to storage
+			files[file.path] = file
 
-				# call init
-				@init()
+		@parse = do ->
+			unless utils.isNode
+				return (file) ->
+					throw new Error "Document.parse is available only on the server"
 
-				# clone tmp
-				utils.defineProperty @, '_tmp', utils.WRITABLE, getTmp()
+			rules = require('./file/parse/rules') File
+			fragments = require('./file/parse/fragments') File
+			attrs = require('./file/parse/attrs') File
+			attrChanges = require('./file/parse/attrChanges') File
+			iterators = require('./file/parse/iterators') File
+			target = require('./file/parse/target') File
+			uses = require('./file/parse/uses') File
+			storage = require('./file/parse/storage') File
+			conditions = require('./file/parse/conditions') File
+			ids = require('./file/parse/ids') File
+			logs = require('./file/parse/logs') File
+			funcs = require('./file/parse/funcs') File
+			attrSetting = require('./file/parse/attrSetting') File
+
+			(file) ->
+				assert.instanceOf file, File
 
 				# trigger signal
-				File.onBeforeParse.emit @
+				File.onBeforeParse.emit file
 
 				# parse
-				rules @
-				fragments @
-				attrs @
-				iterators @
-				attrChanges @
-				target @
-				uses @
-				storage @
-				conditions @
-				ids @
-				funcs @
-				attrSetting @
+				rules file
+				fragments file
+				attrs file
+				iterators file
+				attrChanges file
+				target file
+				uses file
+				storage file
+				conditions file
+				ids file
+				funcs file
+				attrSetting file
 				`//<development>`
-				logs @
+				logs file
 				`//</development>`
 
 				# trigger signal
-				File.onParse.emit @
+				File.onParse.emit file
 
-				# save to storage
-				files[@path] = @
+*File* File(*String* path, *Element* element)
+---------------------------------------------
 
-				@
+		constructor: (@path, @node) ->
+			assert.isString path
+			assert.notLengthOf path, 0
+			assert.instanceOf node, File.Element
 
-		uid: ''
-		isRendered: false
-		node: null
-		targetNode: null
-		path: ''
-		pathbase: ''
-		parent: null
-		attrChanges: null
-		fragments: null
-		uses: null
-		inputs: null
-		conditions: null
-		iterators: null
-		storage: null
-		target: null
-		ids: null
-		logs: null
-		funcs: null
-		attrsToSet: null
+			super()
 
-		init: ->
+			@isClone = false
+			@uid = utils.uid()
+			@isRendered = false
+			@readyToUse = true
+			@targetNode = null
+			@parent = null
+			@storage = null
+			@source = null
+			@parentUse = null
+
+			@fragments = {}
+			@attrChanges = []
+			@inputs = []
+			@conditions = []
+			@iterators = []
+			@uses = []
+			@ids = {}
+			@funcs = {}
+			@attrsToSet = []
+			@logs = []
+			@styles = []
+
+			`//<development>`
+			if @constructor is File
+				Object.preventExtensions @
+			`//</development>`
 
 *File* File::render([*Any* data, *File* source])
 ------------------------------------------------
 
 		render: (storage, source) ->
-			if @clone
+			unless @isClone
 				@clone().render storage, source
 			else
 				@_render(storage, source)
@@ -305,7 +359,6 @@ File @class
 ---------------------
 
 		revert: do ->
-			listeners = require('./file/render/revert/listeners') File
 			target = require('./file/render/revert/target') File
 			->
 				assert.ok @isRendered
@@ -334,8 +387,6 @@ File @class
 				@storage = null
 				@source = null
 
-				listeners @
-
 				File.onRevert.emit @
 
 				@
@@ -357,6 +408,11 @@ File @class
 
 			@
 
+*Signal* File::onReplaceByUse(*File.Use* use)
+---------------------------------------------
+
+		Emitter.createSignal @, 'onReplaceByUse'
+
 *File* File::clone()
 --------------------
 
@@ -368,76 +424,48 @@ File @class
 				@_clone()
 
 		_clone: ->
-			clone = Object.create @
+			clone = new File @path, @node.cloneDeep()
+			clone.isClone = true
+			clone.fragments = @fragments
 
-			clone.clone = undefined
-			clone._tmp = getTmp()
-			clone.uid = utils.uid()
-			clone.isRendered = false
-			clone.readyToUse = true
-			clone.node = @node.cloneDeep()
-			clone.targetNode &&= @node.getCopiedElement @targetNode, clone.node
-			clone.parent = null
-			clone.storage = null
-			clone.source = null
-
-			# call signals
-			signal.create clone, 'onReplaceByUse'
+			if @targetNode
+				targetNode = @node.getCopiedElement @targetNode, clone.node
 
 			# attrChanges
-			if @attrChanges
-				clone.attrChanges = []
-				for attrChange, i in @attrChanges
-					clone.attrChanges[i] = attrChange.clone @, clone
+			for attrChange in @attrChanges
+				clone.attrChanges.push attrChange.clone @, clone
 
 			# inputs
-			if @inputs
-				clone.inputs = []
-				for input, i in @inputs
-					clone.inputs[i] = input.clone @, clone
+			for input in @inputs
+				clone.inputs.push input.clone @, clone
 
 			# conditions
-			if @conditions
-				clone.conditions = []
-				for condition, i in @conditions
-					clone.conditions[i] = condition.clone @, clone
+			for condition in @conditions
+				clone.conditions.push condition.clone @, clone
 
 			# iterators
-			if @iterators
-				clone.iterators = []
-				for iterator, i in @iterators
-					clone.iterators[i] = iterator.clone @, clone
+			for iterator in @iterators
+				clone.iterators.push iterator.clone @, clone
 
 			# uses
-			if @uses
-				clone.uses = []
-				for use, i in @uses
-					clone.uses[i] = use.clone @, clone
+			for use in @uses
+				clone.uses.push use.clone @, clone
 
 			# ids
-			if @ids
-				clone.ids = {}
-				for id, node of @ids
-					clone.ids[id] = @node.getCopiedElement node, clone.node
+			for id, node of @ids
+				clone.ids[id] = @node.getCopiedElement node, clone.node
 
 			# funcs
-			if @funcs
-				clone.funcs = {}
-				for name, func of @funcs
-					clone.funcs[name] = File.Func.bindFuncIntoGlobal func, clone
+			for name, func of @funcs
+				clone.funcs[name] = File.Func.bindFuncIntoGlobal func, clone
 
 			# attrs to set
-			if @attrsToSet
-				clone.attrsToSet = []
-				for attrsToSet in @attrsToSet
-					clone.attrsToSet.push attrsToSet.clone @, clone
+			for attrsToSet in @attrsToSet
+				clone.attrsToSet.push attrsToSet.clone @, clone
 
 			# logs
-			`//<development>`
-			clone.logs = []
 			for log in @logs
 				clone.logs.push log.clone @, clone
-			`//</development>`
 
 			clone
 
@@ -454,16 +482,41 @@ File::destroy()
 			pathPool.push @
 			return
 
-		toSimplifiedObject: ->
-			utils.simplify @, properties: false, protos: false, constructors: true
-
 *Object* File::toJSON()
 -----------------------
 
-		toJSON: ->
-			json = @toSimplifiedObject()
+		toJSON: (key, arr) ->
+			unless arr
+				arr = new Array JSON_ARGS_LENGTH
+				arr[0] = JSON_CTOR_ID
+			arr[JSON_PATH] = @path
+			arr[JSON_NODE] = @node.toJSON()
 
-			for i, ctor of ctors = json.constructors
-				ctors[i] = ctor.__path__
+			# targetNode
+			if @targetNode
+				arr[JSON_TARGET_NODE] = @targetNode.getAccessPath @node
 
-			json
+			arr[JSON_FRAGMENTS] = @fragments
+			arr[JSON_ATTR_CHANGES] = @attrChanges
+			arr[JSON_INPUTS] = @inputs
+			arr[JSON_CONDITIONS] = @conditions
+			arr[JSON_ITERATORS] = @iterators
+			arr[JSON_USES] = @uses
+
+			ids = arr[JSON_IDS] = {}
+			for id, node of @ids
+				ids[id] = node.getAccessPath @node
+
+			arr[JSON_FUNCS] = @funcs
+			arr[JSON_ATTRS_TO_SET] = @attrsToSet
+
+			`//<development>`
+			arr[JSON_LOGS] = @logs
+			`//</development>`
+			`//<production>`
+			arr[JSON_LOGS] = []
+			`//</production>`
+
+			arr[JSON_STYLES] = @styles
+
+			arr

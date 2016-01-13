@@ -9,7 +9,7 @@ id @xml
 	log = log.scope 'Document'
 
 	module.exports = (File) -> (file) ->
-		ids = {}
+		{ids} = file
 
 		forEachNodeRec = (node) ->
 			for child in node.children
@@ -28,6 +28,3 @@ id @xml
 			return
 
 		forEachNodeRec file.node
-
-		unless utils.isEmpty(ids)
-			file.ids = ids

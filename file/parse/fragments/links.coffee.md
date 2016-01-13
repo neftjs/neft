@@ -54,7 +54,8 @@ Included fragments will be available under the given namespace.
 			# get view
 			path = href
 			if path[0] isnt '/'
-				path = pathUtils.join '/', file.pathbase, path
+				pathbase = file.path.substring 0, file.path.lastIndexOf('/') + 1
+				path = pathUtils.join '/', pathbase, path
 			path = ///^(?:\/|\\)(.+)\.html$///.exec(path)?[1] or path
 			links.push
 				path: path

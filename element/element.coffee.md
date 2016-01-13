@@ -18,11 +18,11 @@ Element @virtual_dom
 		@__path__ = 'File.Element'
 
 		@JSON_CTORS = []
-		JSON_ID = @JSON_ID = @JSON_CTORS.push(Element) - 1
+		JSON_CTOR_ID = @JSON_CTOR_ID = @JSON_CTORS.push(Element) - 1
 
 		i = 1
 		JSON_VISIBLE = i++
-		JSON_LENGTH = @JSON_LENGTH = i
+		JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
 *Element* Element.fromHTML(*String* html)
 -----------------------------------------
@@ -43,14 +43,14 @@ Element @virtual_dom
 				json = JSON.parse json
 
 			assert.isArray json
-			assert.lengthOf json, 1
+			Element.JSON_CTORS[json[0]]._fromJSON json
 
-			elem = null
-			Element.JSON_CTORS[json[0]].fromJSONArray json
-
-		@fromJSONArray = (arr, obj=new Element) ->
+		@_fromJSON = (arr, obj=new Element) ->
 			obj.visible = arr[JSON_VISIBLE] is 1
 			obj
+
+		@Text = require('./element/text') Element
+		@Tag = Tag = require('./element/tag') Element
 
 *Element* Element()
 -------------------
@@ -242,6 +242,36 @@ Element @virtual_dom
 
 		signal.Emitter.createSignal @, 'onVisibleChange'
 
+*Array* Element::queryAllParents(*String* query)
+------------------------------------------------
+
+		queryAllParents: Tag.query.queryAllParents
+
+*Element* Element::queryParents(*String* query)
+-----------------------------------------------
+
+		queryParents: Tag.query.queryParents
+
+*Array* Element::getAccessPath([*Tag* toParent])
+------------------------------------------------
+	
+		getAccessPath: (toParent) ->
+			if toParent?
+				assert.instanceOf toParent, Tag
+
+			arr = []
+
+			i = 0
+			elem = @
+			parent = @
+			while parent = elem._parent
+				arr.push parent.children.indexOf(elem)
+				elem = parent
+				if parent is toParent
+					break
+
+			arr
+
 *Element* Element::clone()
 --------------------------
 
@@ -259,13 +289,11 @@ Element @virtual_dom
 
 		toJSON: (arr) ->
 			unless arr
-				arr = new Array JSON_LENGTH
-				arr[0] = JSON_ID
+				arr = new Array JSON_ARGS_LENGTH
+				arr[0] = JSON_CTOR_ID
 			arr[JSON_VISIBLE] = if @visible then 1 else 0
 			arr
 
-		@Text = require('./element/text') Element
-		@Tag = Tag = require('./element/tag') Element
 		if utils.isNode
 			@parser = require('./element/parser') Element
 

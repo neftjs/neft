@@ -15,13 +15,27 @@ module.exports = (File) -> class Input
 	@__name__ = 'Input'
 	@__path__ = 'File.Input'
 
+	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Input) - 1
+
+	i = 1
+	JSON_NODE = @JSON_NODE = i++
+	JSON_TEXT = @JSON_TEXT = i++
+	JSON_FUNC_BODY = @JSON_FUNC_BODY = i++
+	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
+
+	@_fromJSON = (file, arr, obj) ->
+		unless obj
+			node = file.node.getChildByAccessPath arr[JSON_NODE]
+			obj = new Input file, node, arr[JSON_TEXT], arr[JSON_FUNC_BODY]
+		obj
+
 	RE = @RE = new RegExp '([^$]*)\\${([^}]*)}([^$]*)', 'gm'
 	VAR_RE = @VAR_RE = ///(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)///g
 	PROP_RE = @PROP_RE = ///(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+///
 	PROPS_RE = @PROPS_RE = ///[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*///g
 	CONSTANT_VARS = @CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON']
 
-	cache = {}
+	cache = Object.create null
 	GLOBAL =
 		Math: Math
 		Array: Array
@@ -48,19 +62,19 @@ module.exports = (File) -> class Input
 			while obj
 				if elem = obj.ids?[prop]
 					return elem
-				obj = obj.parentUse?.self or obj.self or obj.source?.self
+				obj = obj.parentUse?.file or obj.file or obj.source?.file
 			return
 
 		getFunction = (obj, prop) ->
 			while obj
 				if elem = obj.funcs?[prop]
 					return elem
-				obj = obj.parentUse?.self or obj.self or obj.source?.self
+				obj = obj.parentUse?.file or obj.file or obj.source?.file
 			return
 
 		(file, prop) ->
 			if file.source instanceof File.Iterator
-				destFile = file.source.self
+				destFile = file.source.file
 			else
 				destFile = file
 			if v is undefined and source = destFile.source
@@ -86,7 +100,7 @@ module.exports = (File) -> class Input
 		if prop is 'this'
 			input.node
 		else
-			Input.getVal input.self, prop
+			Input.getVal input.file, prop
 
 	@getStoragesArray = do (arr = []) -> (file) ->
 		assert.instanceOf file, File
@@ -95,8 +109,8 @@ module.exports = (File) -> class Input
 		arr[1] = file.source?.node
 		arr[2] = file.source?.storage
 		arr[3] = file.storage
-		arr[4] = file.source?.self?.node
-		arr[5] = file.source?.self?.source?.node
+		arr[4] = file.source?.file?.node
+		arr[5] = file.source?.file?.source?.node
 
 		arr
 
@@ -201,19 +215,21 @@ module.exports = (File) -> class Input
 
 		new Function '__input', '__get', funcBody
 
-	@fromAssembled = (input) ->
-		input.func = cache[input.funcBody] ?= Input.createFunction(input.funcBody)
-
-	constructor: (@node, @func) ->
+	constructor: (@file, @node, @text, @funcBody) ->
+		assert.instanceOf file, File
 		assert.instanceOf node, File.Element
-		assert.isFunction func
+		assert.isString text
+		assert.isString funcBody
 
-		@self = null
-		@funcBody = ''
 		@traces = []
-		@text = ''
 		@updatePending = false
 		@traceChanges = true
+		@func = cache[@funcBody] ?= Input.createFunction @funcBody
+
+		`//<development>`
+		if @constructor is Input
+			Object.preventExtensions @
+		`//</development>`
 
 	queueIndex = 0
 	queues = [[], []]
@@ -289,7 +305,7 @@ module.exports = (File) -> class Input
 		val
 
 	render: ->
-		for storage in Input.getStoragesArray @self
+		for storage in Input.getStoragesArray @file
 			if storage instanceof Element
 				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
@@ -298,14 +314,11 @@ module.exports = (File) -> class Input
 		@update()
 
 	revert: ->
-		for storage in Input.getStoragesArray @self
+		for storage in Input.getStoragesArray @file
 			if storage instanceof Element
 				storage.onAttrsChange.disconnect onChange, @
 
 		revertTraces.call @
-		# for hash, dict of @tracedObjects when dict?
-		# 	dict.onChange.disconnect onChange, @
-		# 	@tracedObjects[hash] = null
 		return
 
 	update: ->
@@ -323,14 +336,19 @@ module.exports = (File) -> class Input
 			catch err
 				log.warn "Interpolated string error in '#{@text}';\n#{err.stack || err}"
 
-	clone: (original, self) ->
-		node = original.node.getCopiedElement @node, self.node
+	clone: (original, file) ->
+		node = original.node.getCopiedElement @node, file.node
 
-		clone = new @constructor node, @func
-		clone.self = self
-		clone.text = @text
+		new Input file, node, @text, @funcBody
 
-		clone
+	toJSON: (key, arr) ->
+		unless arr
+			arr = new Array JSON_ARGS_LENGTH
+			arr[0] = JSON_CTOR_ID
+		arr[JSON_NODE] = @node.getAccessPath @file.node
+		arr[JSON_TEXT] = @text
+		arr[JSON_FUNC_BODY] = @funcBody
+		arr
 
 	@Text = require('./input/text.coffee') File, @
 	@Attr = require('./input/attr.coffee') File, @
