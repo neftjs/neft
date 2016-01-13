@@ -70,13 +70,12 @@ obj.onRename.emit('Max', 'George');
 		if name is undefined
 			return signal
 
-		assert.isNotPrimitive obj
-		assert.isString name
-		assert.notLengthOf name, 0
+		assert.isNotPrimitive obj, 'signal object cannot be primitive'
+		assert.isString name, 'signal name must be a string'
+		assert.notLengthOf name, 0, 'signal name cannot be empty'
 
-		assert not obj.hasOwnProperty name
-		, "Signal `#{name}` can't be created, because passed object " +
-		  "has such property"
+		assert not obj.hasOwnProperty(name)
+		, "signal object has already defined '#{name}' property"
 
 		obj[name] = signal
 
