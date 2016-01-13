@@ -1103,14 +1103,14 @@ console.log(utils.uid())
 			str = str.slice 0, n
 		str
 
-*Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onfail])
+*Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onFail])
 ----------------------------------------------------------------------------------------------
 
 Use this function to call the given *function* with *context* and *arguments*.
 
-If *function* throws an error, *onfail* is returned.
+If *function* throws an error, *onFail* is returned.
 
-If *onfail* is a function, it will be called with the caught error.
+If *onFail* is a function, it will be called with the caught error.
 
 ```
 function test(size){
@@ -1129,7 +1129,7 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 // undefined
 ```
 
-	exports.tryFunction = (func, context, args, onfail) ->
+	exports.tryFunction = (func, context, args, onFail) ->
 		null
 		`//<development>`
 		if typeof func isnt 'function'
@@ -1141,7 +1141,7 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 		try
 			func.apply context, args
 		catch err
-			if typeof onfail is 'function' then onfail(err) else onfail
+			if typeof onFail is 'function' then onFail(err) else onFail
 
 *Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
 -------------------------------------------------------------------------------
@@ -1197,42 +1197,34 @@ var bindFunc = utils.bindFunctionContext(func, {ctx: 1});
 
 console.log(bindFunc('a'));
 // {ctx: 1} "a"
-
-console.log(bindFunc('a', 'b'));
-// {ctx: 1} "a"
 ```
 
-	exports.bindFunctionContext = do ->
-		bindFuncs = [
-			(func, ctx) ->
+	exports.bindFunctionContext = (func, ctx) ->
+		null
+		`//<development>`
+		if typeof func isnt 'function'
+			throw new Error "utils.bindFunctionContext function must be a function"
+		`//</development>`
+
+		switch func.length
+			when 0
 				-> func.call ctx
-			(func, ctx) ->
+			when 1
 				(a1) -> func.call ctx, a1
-			(func, ctx) ->
+			when 2
 				(a1, a2) -> func.call ctx, a1, a2
-			(func, ctx) ->
+			when 3
 				(a1, a2, a3) -> func.call ctx, a1, a2, a3
-			(func, ctx) ->
+			when 4
 				(a1, a2, a3, a4) -> func.call ctx, a1, a2, a3, a4
-			(func, ctx) ->
+			when 5
 				(a1, a2, a3, a4, a5) -> func.call ctx, a1, a2, a3, a4, a5
-			(func, ctx) ->
+			when 6
 				(a1, a2, a3, a4, a5, a6) -> func.call ctx, a1, a2, a3, a4, a5, a6
-			(func, ctx) ->
+			when 7
 				(a1, a2, a3, a4, a5, a6, a7) -> func.call ctx, a1, a2, a3, a4, a5, a6, a7
-		]
-
-		anyLengthBindFunc = (func, ctx) ->
-			-> func.apply ctx, arguments
-
-		(func, ctx) ->
-			null
-			`//<development>`
-			if typeof func isnt 'function'
-				throw new Error "utils.bindFunctionContext function must be a function"
-			`//</development>`
-
-			bindFuncs[func.length]?(func, ctx) or anyLengthBindFunc(func, ctx)
+			else
+				-> func.apply ctx, arguments
 
 *Object* utils.errorToObject(*Error* error)
 -------------------------------------------
@@ -1280,8 +1272,8 @@ This function returns a new array or an object with own properties.
 		merge result, obj
 		result
 
-*Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep=Infinity])
----------------------------------------------------------------------------------------------------------------------
+*Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep=`Infinity`])
+-----------------------------------------------------------------------------------------------------------------------
 
 Use this function to compare two objects or arrays deeply.
 
