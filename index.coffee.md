@@ -278,7 +278,7 @@ app.cookies.onChanged(function(key){
 		setImmediate ->
 			# load views
 			for view in opts.views when view.name?
-				app.views[view.name] = Document.fromJSON(view.name, view.file)
+				app.views[view.name] = Document.fromJSON view.file
 
 			init opts.models, app.models
 			init opts.routes, app.routes
