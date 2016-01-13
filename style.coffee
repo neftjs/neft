@@ -15,6 +15,28 @@ module.exports = (File, data) -> class Style
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
 
+	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Style) - 1
+
+	i = 1
+	JSON_NODE = i++
+	JSON_ATTRS = i++
+	JSON_CHILDREN = i++
+	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
+
+	@_fromJSON = (file, arr, obj) ->
+		unless obj
+			obj = new Style
+		obj.file = file
+		obj.node = file.node.getChildByAccessPath arr[JSON_NODE]
+		obj.attrs = arr[JSON_ATTRS]
+
+		for child in arr[JSON_CHILDREN]
+			cloneChild = Style._fromJSON file, child
+			cloneChild.parent = obj
+			obj.children.push cloneChild
+
+		obj
+
 	emptyComponent = new Renderer.Component
 
 	listenTextRec = (style, node=style.node) ->
@@ -65,7 +87,6 @@ module.exports = (File, data) -> class Style
 		@parentSet = false
 		@lastItemParent = null
 		@waiting = false
-		@index = -1
 		@attrsQueue = []
 		@attrsClass = null
 		@isRendered = false
@@ -561,7 +582,6 @@ module.exports = (File, data) -> class Style
 		clone.file = file
 		clone.node = originalFile.node.getCopiedElement @node, file.node
 		clone.attrs = @attrs
-		clone.index = @index
 
 		clone.node._documentStyle = clone
 
@@ -594,6 +614,15 @@ module.exports = (File, data) -> class Style
 					clone.setAttr attr, attrVal, null
 
 		clone
+
+	toJSON: (key, arr) ->
+		unless arr
+			arr = new Array JSON_ARGS_LENGTH
+			arr[0] = JSON_CTOR_ID
+		arr[JSON_NODE] = @node.getAccessPath @file.node
+		arr[JSON_ATTRS] = @attrs
+		arr[JSON_CHILDREN] = @children
+		arr
 
 	# synchronize visibility
 	{Tag} = File.Element

@@ -14,8 +14,6 @@ module.exports = (File) ->
 			(file) ->
 				styles file
 
-	File::styles = null
-
 	renderStyles = do ->
 		pending = false
 		queue = []
@@ -65,9 +63,7 @@ module.exports = (File) ->
 		clone = _super.call @
 
 		# styles
-		if @styles
-			clone.styles = []
-			for style, i in @styles
-				cloned = clone.styles[i] = style.clone @, clone
+		for style, i in @styles
+			clone.styles.push style.clone @, clone
 
 		clone

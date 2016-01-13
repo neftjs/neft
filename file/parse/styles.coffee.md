@@ -68,7 +68,7 @@ Item {
 
 	module.exports = (File) -> (file) ->
 		{Style} = File
-		styles = []
+		{styles} = file
 
 		getStyleAttrs = (node) ->
 			attrs = null
@@ -91,7 +91,6 @@ Item {
 
 				if parentStyle
 					parentStyle.children.push style
-					style.index = parentStyle.children.length - 1
 				else
 					styles.push style
 
@@ -103,8 +102,5 @@ Item {
 			return
 
 		forNode file.node, null, null
-
-		if styles.length
-			file.styles = styles
 
 		return
