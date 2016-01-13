@@ -11,14 +11,10 @@ module.exports = (File) -> class Fragment extends File
 	@__name__ = 'Fragment'
 	@__path__ = 'File.Fragment'
 
-	signal.create @, 'onCreate'
-
 	constructor: (self, @name, node) ->
 		assert.instanceOf self, File
 		assert.isString name
 		assert.notLengthOf name, 0
-
-		Fragment.onCreate.emit @, self
 
 		# merge fragments from parent
 		@fragments = utils.clone self.fragments

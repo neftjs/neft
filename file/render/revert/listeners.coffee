@@ -1,7 +1,5 @@
 'use strict'
 
-[Emitter] = ['emitter'].map require
-
 module.exports = (File) -> (file) ->
 	
 	{listeners} = file._tmp

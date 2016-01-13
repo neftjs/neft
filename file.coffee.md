@@ -6,7 +6,6 @@ File @class
 	utils = require 'utils'
 	assert = require 'neft-assert'
 	log = require 'log'
-	Emitter = require 'emitter'
 	signal = require 'signal'
 	Dict = require 'dict'
 	List = require 'list'
@@ -34,13 +33,10 @@ File @class
 		@__name__ = 'File'
 		@__path__ = 'File'
 
-		@CREATE = 'create'
-		@ERROR = 'error'
 		@HTML_NS = 'neft'
 
-		utils.merge @, Emitter::
-		Emitter.call @
-
+		signal.create @, 'onCreate'
+		signal.create @, 'onError'
 		signal.create @, 'onBeforeParse'
 		signal.create @, 'onParse'
 
@@ -143,7 +139,7 @@ File @class
 		@factory = (path) ->
 			unless files.hasOwnProperty path
 				# TODO: trigger here instance of `LoadError` class
-				File.trigger File.ERROR, path
+				File.onError.emit path
 
 			assert.isString path
 			assert.ok files[path]?
@@ -155,7 +151,7 @@ File @class
 			# clone original
 			file = files[path].clone()
 
-			File.trigger File.CREATE, file
+			File.onCreate.emit file
 
 			file
 
