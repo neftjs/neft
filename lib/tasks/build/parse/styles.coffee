@@ -124,13 +124,13 @@ module.exports = (platform, app, callback) ->
 
 						splitQuery = query.split ','
 						for query in splitQuery
-							app.stylesQueries.push
+							app.styleQueries.push
 								query: query
 								style: val
 								dirPriority: dirPriority
 
 				# sort queries
-				app.stylesQueries.sort queriesSortFunc
+				app.styleQueries.sort queriesSortFunc
 
 				queriesJson = JSON.stringify currentQueries, null, 4
 				fs.writeFile QUERIES, queriesJson, callback

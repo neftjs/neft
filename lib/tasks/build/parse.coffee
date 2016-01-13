@@ -19,7 +19,7 @@ module.exports = (platform, options, callback) ->
 		routes: []
 		views: []
 		styles: []
-		stylesQueries: []
+		styleQueries: []
 		resources: null
 		config: null
 

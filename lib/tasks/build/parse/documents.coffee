@@ -25,7 +25,7 @@ module.exports = (platform, app, callback) ->
 			require(pathUtils.join(realpath, '/node_modules/', key))()
 	bundleBuilder.removeModulesNamespace Neft
 
-	styles = styles({windowStyle: null, styles: {}})
+	styles {windowStyle: null, styles: {}, queries: app.styleQueries}
 	utils.clear Document._files
 
 	Document.onError onErrorListener = (name) ->
@@ -33,16 +33,11 @@ module.exports = (platform, app, callback) ->
 
 	parseFile = (name, path) ->
 		html = fs.readFileSync path, 'utf-8'
-		htmlNode = Document.Element.fromHTML html
-
-		for elem in app.stylesQueries
-			nodes = htmlNode.queryAll elem.query
-			for node in nodes
-				unless node.getAttr('neft:style')
-					node.setAttr 'neft:style', elem.style
-
-		file = Document.fromHTML name, htmlNode
+		file = Document.fromHTML name, html
 		Document.parse file
+
+		Document.Style.extendDocumentByStyles file
+
 		file
 
 	saveView = (name, view, callback) ->
