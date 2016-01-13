@@ -15,7 +15,7 @@ DEFAULT_LOCAL_FILE =
 module.exports = (platform, options, app, callback) ->
 	mode = if options.release then 'release' else 'develop'
 	neftFileName = "neft-#{platform}-#{mode}.js"
-	neftFilePath = "../../../bundle/neft-#{platform}-develop.js"
+	neftFilePath = "../../../bundle/neft-#{platform}-#{mode}.js"
 
 	bundleBuilder
 		path: 'index.js'
