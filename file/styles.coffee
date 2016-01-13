@@ -3,17 +3,7 @@
 utils = require 'utils'
 assert = require 'assert'
 
-if utils.isNode
-	styleParseStyles = require('./parse/styles')
-
 module.exports = (File) ->
-
-	if utils.isNode
-		File.onParse do ->
-			styles = styleParseStyles File
-			(file) ->
-				styles file
-
 	renderStyles = do ->
 		pending = false
 		queue = []

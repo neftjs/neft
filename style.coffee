@@ -9,7 +9,7 @@ Renderer = require 'renderer'
 log = log.scope 'Styles'
 
 module.exports = (File, data) -> class Style
-	{windowStyle, styles} = data
+	{windowStyle, styles, queries} = data
 	{Tag} = File.Element
 
 	@__name__ = 'Style'
@@ -22,6 +22,48 @@ module.exports = (File, data) -> class Style
 	JSON_ATTRS = i++
 	JSON_CHILDREN = i++
 	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
+
+	@extendDocumentByStyles = do ->
+		getStyleAttrs = (node) ->
+			attrs = null
+			for attr of node._attrs
+				if attr is 'class' or attr.slice(0, 6) is 'style:'
+					attrs ?= {}
+					attrs[attr] = true
+			attrs
+
+		forNode = (file, node, parentStyle) ->
+			if attr = node.getAttr('neft:style')
+				style = new Style
+				style.file = file
+				style.node = node
+				style.parent = parentStyle
+				style.attrs = getStyleAttrs node
+
+				if parentStyle
+					parentStyle.children.push style
+				else
+					file.styles.push style
+
+				parentStyle = style
+
+			for child in node.children
+				if child instanceof File.Element.Tag
+					forNode file, child, parentStyle
+			return
+
+		(file) ->
+			assert.instanceOf file, File
+
+			for elem in queries
+				nodes = file.node.queryAll elem.query
+				for node in nodes
+					unless node.hasAttr('neft:style')
+						node.setAttr 'neft:style', elem.style
+
+			forNode file, file.node, null
+
+			file
 
 	@_fromJSON = (file, arr, obj) ->
 		unless obj
