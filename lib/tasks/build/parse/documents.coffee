@@ -41,7 +41,9 @@ module.exports = (platform, app, callback) ->
 				unless node.getAttr('neft:style')
 					node.setAttr 'neft:style', elem.style
 
-		Document.fromHTML name, htmlNode
+		file = Document.fromHTML name, htmlNode
+		Document.parse file
+		file
 
 	saveView = (name, view, callback) ->
 		json = JSON.stringify view
