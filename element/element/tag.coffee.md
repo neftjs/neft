@@ -28,6 +28,24 @@ Tag @virtual_dom
 		@__name__ = 'Tag'
 		@__path__ = 'File.Element.Tag'
 
+		JSON_ID = @JSON_ID = Element.JSON_CTORS.push(Tag) - 1
+
+		i = Element.JSON_LENGTH
+		JSON_NAME = i++
+		JSON_CHILDREN = i++
+		JSON_ATTRS = i++
+		JSON_LENGTH = @JSON_LENGTH = i
+
+		@fromJSONArray = (arr, obj=new Tag) ->
+			Element.fromJSONArray arr, obj
+			obj.name = arr[JSON_NAME]
+			obj._attrs = arr[JSON_ATTRS]
+
+			for child in arr[JSON_CHILDREN]
+				Element.fromJSON(child).parent = obj
+
+			obj
+
 *Tag* Tag() : *Element*
 -----------------------
 
@@ -228,3 +246,17 @@ Element::replace(*Element* oldElement, *Element* newElement)
 			newElement.index = index
 
 			null
+
+		toJSON: (arr) ->
+			unless arr
+				arr = new Array JSON_LENGTH
+				arr[0] = JSON_ID
+			super arr
+			arr[JSON_NAME] = @name
+			children = arr[JSON_CHILDREN] = []
+			arr[JSON_ATTRS] = @_attrs
+
+			for child in @children
+				children.push child.toJSON()
+
+			arr

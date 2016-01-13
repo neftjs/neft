@@ -17,6 +17,13 @@ Element @virtual_dom
 		@__name__ = 'Element'
 		@__path__ = 'File.Element'
 
+		@JSON_CTORS = []
+		JSON_ID = @JSON_ID = @JSON_CTORS.push(Element) - 1
+
+		i = 1
+		JSON_VISIBLE = i++
+		JSON_LENGTH = @JSON_LENGTH = i
+
 *Element* Element.fromHTML(*String* html)
 -----------------------------------------
 
@@ -27,6 +34,23 @@ Element @virtual_dom
 				throw "Creating Views from HTML files is allowed only on a server"
 
 			Element.parser.parse html
+
+*Element* Element.fromJSON(*Array|String* json)
+-----------------------------------------------
+
+		@fromJSON = (json) ->
+			if typeof json is 'string'
+				json = JSON.parse json
+
+			assert.isArray json
+			assert.lengthOf json, 1
+
+			elem = null
+			Element.JSON_CTORS[json[0]].fromJSONArray json
+
+		@fromJSONArray = (arr, obj=new Element) ->
+			obj.visible = arr[JSON_VISIBLE] is 1
+			obj
 
 *Element* Element()
 -------------------
@@ -229,6 +253,16 @@ Element @virtual_dom
 
 		cloneDeep: ->
 			@clone()
+
+*Array* Element::toJSON()
+-------------------------
+
+		toJSON: (arr) ->
+			unless arr
+				arr = new Array JSON_LENGTH
+				arr[0] = JSON_ID
+			arr[JSON_VISIBLE] = if @visible then 1 else 0
+			arr
 
 		@Text = require('./element/text') Element
 		@Tag = Tag = require('./element/tag') Element
