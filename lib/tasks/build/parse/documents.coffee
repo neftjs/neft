@@ -28,7 +28,7 @@ module.exports = (platform, app, callback) ->
 	styles = styles({windowStyle: null, styles: {}})
 	utils.clear Document._files
 
-	Document.on Document.ERROR, onErrorListener = (name) ->
+	Document.onError onErrorListener = (name) ->
 		parseFile name, "./views/#{name}.html"
 
 	parseFile = (name, path) ->
@@ -38,8 +38,8 @@ module.exports = (platform, app, callback) ->
 		for elem in app.stylesQueries
 			nodes = htmlNode.queryAll elem.query
 			for node in nodes
-				unless node.attrs.get('neft:style')
-					node.attrs.set 'neft:style', elem.style
+				unless node.getAttr('neft:style')
+					node.setAttr 'neft:style', elem.style
 
 		Document.fromHTML name, htmlNode
 
@@ -64,7 +64,7 @@ module.exports = (platform, app, callback) ->
 				name: name
 				path: "#{OUT_DIR}/#{name}.json"
 
-		Document.off Document.ERROR, onErrorListener
+		Document.onError.disconnect onErrorListener
 
 		log.end logtime
 		callback null
