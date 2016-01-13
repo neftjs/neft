@@ -254,6 +254,7 @@ app.cookies.onChanged(function(key){
 		require('styles')
 			windowStyle: windowStyle
 			styles: app.styles
+			queries: opts.styleQueries
 			resources: app.resources
 
 		# load bootstrap
