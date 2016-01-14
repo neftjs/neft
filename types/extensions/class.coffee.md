@@ -8,6 +8,7 @@ Class @modifier
 	signal = require 'signal'
 	log = require 'log'
 	List = require 'list'
+	TagQuery = require 'document/element/element/tag/query'
 
 	log = log.scope 'Rendering', 'Class'
 
@@ -744,8 +745,7 @@ Grid {
 
 					# update priority
 					if @_ref._priority < 1
-						Document = require 'document'
-						cmdLen = Document.Element.Tag.query.getSelectorCommandsLength(val)
+						cmdLen = TagQuery.getSelectorCommandsLength val
 						oldPriority = @_priority
 						@_priority = cmdLen
 						@_ref._nestingPriority += cmdLen - oldPriority
