@@ -24,8 +24,7 @@ module.exports = (platform, options, callback) ->
 		config: null
 
 	stack.add linkFiles, null, [platform, app]
-	if platform isnt 'node'
-		stack.add linkStyles, null, [platform, app]
+	stack.add linkStyles, null, [platform, app]
 	stack.add linkDocuments, null, [platform, app]
 	stack.add linkResources, null, [platform, app]
 

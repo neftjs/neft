@@ -36,7 +36,8 @@ module.exports = (platform, app, callback) ->
 		file = Document.fromHTML name, html
 		Document.parse file
 
-		Document.Style.extendDocumentByStyles file
+		if platform isnt 'node'
+			Document.Style.extendDocumentByStyles file
 
 		file
 
