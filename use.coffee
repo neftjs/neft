@@ -81,6 +81,9 @@ module.exports = (File) -> class Use
 		unless file
 			usedFragment.storage = @file.storage
 
+		if file
+			file.parentUse?.detachUsedFragment()
+
 		unless usedFragment.isRendered
 			usedFragment = usedFragment.render @
 
