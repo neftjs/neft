@@ -90,8 +90,8 @@ File @class
 		@Func = require('./func') @
 		@AttrsToSet = require('./attrsToSet') @
 
-*File* File.fromHTML(*String* path, *String|Document.Element* html)
--------------------------------------------------------------------
+*File* File.fromHTML(*String* path, *String* html)
+--------------------------------------------------
 
 		@fromHTML = do ->
 			unless utils.isNode
@@ -104,23 +104,34 @@ File @class
 				assert.isString path
 				assert.notLengthOf path, 0
 				assert.notOk files[path]?
-				unless html instanceof File.Element
-					assert.isString html
+				assert.isString html
 
 				if html is ''
 					html = '<html></html>'
 
 				# get node
-				if html instanceof File.Element
-					node = html
-				else
-					node = File.Element.fromHTML html
+				node = File.Element.fromHTML html
 
 				# clear
 				clear node
 
 				# create file
 				File.fromElement path, node
+
+*File* File.fromElement(*String* path, *Element* element)
+---------------------------------------------------------
+
+		@fromElement = (path, node) ->
+			assert.isString path
+			assert.notLengthOf path, 0
+			assert.instanceOf node, File.Element
+			assert.notOk files[path]?
+
+			# create
+			file = new File path, node
+
+			# save to storage
+			files[file.path] = file
 
 *File* File.fromJSON(*String|Object* json)
 ------------------------------------------
@@ -177,46 +188,13 @@ File @class
 
 				obj
 
-*File* File.factory(*String* path)
-----------------------------------
-
-		@factory = (path) ->
-			unless files.hasOwnProperty path
-				# TODO: trigger here instance of `LoadError` class
-				File.onError.emit path
-
-			assert.isString path
-			assert.ok files[path]?
-
-			# from pool
-			if r = getFromPool(path)
-				return r
-
-			# clone original
-			file = files[path].clone()
-
-			File.onCreate.emit file
-
-			file
-
-*File* File.fromElement(*String* path, *Element* element)
----------------------------------------------------------
-
-		@fromElement = (path, node) ->
-			assert.isString path
-			assert.notLengthOf path, 0
-			assert.instanceOf node, File.Element
-			assert.notOk files[path]?
-
-			file = new File path, node
-
-			# save to storage
-			files[file.path] = file
+File.parse(*File* file)
+-----------------------
 
 		@parse = do ->
 			unless utils.isNode
 				return (file) ->
-					throw new Error "Document.parse is available only on the server"
+					throw new Error "Document.parse() is available only on the server"
 
 			rules = require('./file/parse/rules') File
 			fragments = require('./file/parse/fragments') File
@@ -257,6 +235,28 @@ File @class
 
 				# trigger signal
 				File.onParse.emit file
+
+*File* File.factory(*String* path)
+----------------------------------
+
+		@factory = (path) ->
+			unless files.hasOwnProperty path
+				# TODO: trigger here instance of `LoadError` class
+				File.onError.emit path
+
+			assert.isString path
+			assert.ok files[path]?
+
+			# from pool
+			if r = getFromPool(path)
+				return r
+
+			# clone original
+			file = files[path].clone()
+
+			File.onCreate.emit file
+
+			file
 
 *File* File(*String* path, *Element* element)
 ---------------------------------------------
