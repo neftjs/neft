@@ -161,7 +161,7 @@ text browsers) or HTML scaffolding which will run **neft.io** on the client side
 				req = @request
 
 				# text mode
-				if getType(req) is 'text'
+				if getType(req) is 'text' or req.headers['x-expected-type']
 					return @next()
 
 				userAgent = req.headers['user-agent'] or ''
