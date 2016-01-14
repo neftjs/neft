@@ -52,7 +52,8 @@ Standard routes @learn
 		JS_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
 		`//</development>`
 
-		view = Document.fromHTML(VIEW_NAME, VIEW_HTML)
+		view = Document.fromHTML VIEW_NAME, VIEW_HTML
+		Document.parse view
 
 		reservedUris = ['app.js', 'favicon.ico', 'static']
 		reservedUrisRe = do =>
@@ -149,7 +150,7 @@ remember to clean your cookies when you finish.
 				res.setHeader 'Set-Cookie', "#{TYPE_COOKIE_NAME}=#{req.params.type}; path=/;"
 				res.redirect "#{app.networking.url}#{req.params.rest}"
 
-#### *
+#### Default route
 
 It decides whether the full HTML document should be returned (e.g. for the Googlebot or
 text browsers) or HTML scaffolding which will run **neft.io** on the client side.
