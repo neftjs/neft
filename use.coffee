@@ -99,11 +99,17 @@ module.exports = (File) -> class Use
 		# destroy used fragment
 		if @usedFragment
 			@usedFragment.revert().destroy()
-			@usedFragment.node.parent = null
-			@usedFragment.parentUse = null
-			@usedFragment = null
 
 		@isRendered = false
+		return
+
+	detachUsedFragment: ->
+		assert.isDefined @usedFragment
+
+		@usedFragment.node.parent = null
+		@usedFragment.parentUse = null
+		@usedFragment = null
+		return
 
 	clone: (original, file) ->
 		node = original.node.getCopiedElement @node, file.node

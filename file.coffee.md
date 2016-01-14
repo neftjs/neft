@@ -366,6 +366,9 @@ File.parse(*File* file)
 				@isRendered = false
 				File.onBeforeRevert.emit @
 
+				# parent use
+				@parentUse?.detachUsedFragment()
+
 				# inputs
 				if @inputs
 					for input, i in @inputs
