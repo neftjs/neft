@@ -450,9 +450,13 @@ module.exports = (Element, _Tag) ->
 				pending = true
 			return
 
-module.exports.getSelectorCommandsLength = (selector) ->
+module.exports.getSelectorCommandsLength = (selector, beginQuery=0, endQuery=Infinity) ->
 	sum = 0
 	queries = getQueries selector, 0
-	for query in queries
+	for query, i in queries
+		if i < beginQuery
+			continue
+		if i >= endQuery
+			break
 		sum += query.length
 	sum
