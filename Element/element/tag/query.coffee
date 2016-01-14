@@ -297,12 +297,7 @@ module.exports = (Element, _Tag) ->
 	Tag = _Tag
 	Text = Element.Text
 
-	getSelectorCommandsLength: (selector) ->
-		sum = 0
-		queries = getQueries selector, 0
-		for query in queries
-			sum += query.length
-		sum
+	getSelectorCommandsLength: module.exports.getSelectorCommandsLength
 
 	queryAll: queryAll = (selector, target=[], targetCtx=target, opts=0) ->
 		assert.isString selector
@@ -454,3 +449,10 @@ module.exports = (Element, _Tag) ->
 				setImmediate updateWatchers
 				pending = true
 			return
+
+module.exports.getSelectorCommandsLength = (selector) ->
+	sum = 0
+	queries = getQueries selector, 0
+	for query in queries
+		sum += query.length
+	sum
