@@ -223,8 +223,8 @@ This property holds whether the pointer is currently under the item.
 				initializeHover @
 				_super.call @
 
-*PointerEvent* PointerEvent() : DevicePointerEvent
---------------------------------------------------
+*PointerEvent* PointerEvent() : *DevicePointerEvent*
+----------------------------------------------------
 
 Events order:
  1. Press

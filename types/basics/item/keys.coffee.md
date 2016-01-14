@@ -123,8 +123,8 @@ Rectangle {
 		Device.onKeyInput (event) ->
 			focusedKeys?.onInput.emit keysEvent
 
-*KeysEvent* KeysEvent() : DeviceKeyboardEvent
----------------------------------------------
+*KeysEvent* KeysEvent() : *DeviceKeyboardEvent*
+-----------------------------------------------
 
 		@KeysEvent = class KeysEvent
 			constructor: ->
