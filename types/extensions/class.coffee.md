@@ -745,7 +745,12 @@ Grid {
 
 					# update priority
 					if @_ref._priority < 1
-						cmdLen = TagQuery.getSelectorCommandsLength val
+						# TODO
+						# while calculating selector priority we take only the first query
+						# as a priority for the whole selector;
+						# to fix this we can split selector with multiple queries ('a, b')
+						# into separated class instances
+						cmdLen = TagQuery.getSelectorCommandsLength val, 0, 1
 						oldPriority = @_priority
 						@_priority = cmdLen
 						@_ref._nestingPriority += cmdLen - oldPriority
