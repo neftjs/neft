@@ -1,16 +1,10 @@
 List @library
-====
+=============
 
-**Powerful array**
-
-This helper replaces *Array* API and adds new features,
-like signals called on each change.
-
-Unfortunately, you have to use *get()* and *set()* methods
-to extract or change element in a list.
+Module used for data-binding on arrays.
 
 Access it with:
-```
+```javascript
 var List = require('list');
 ```
 
@@ -20,22 +14,20 @@ var List = require('list');
 	assert = require 'neft-assert'
 	signal = require 'signal'
 
+	module.exports = class List extends signal.Emitter
+		@__name__ = 'List'
+		@__path__ = 'List'
+
 *List* List([*Array* data])
 ---------------------------
 
-Creates a new list.
+Creates a new list instance.
 
-*new* keyword is optional.
-
-```
+```javascript
 var list = new List([1, 2]);
 console.log(list instanceof List);
 // true
 ```
-
-	module.exports = class List extends signal.Emitter
-		@__name__ = 'List'
-		@__path__ = 'List'
 
 		constructor: (arr=[]) ->
 			assert.isArray arr
@@ -48,39 +40,39 @@ console.log(list instanceof List);
 
 		# List is not a standard Array object
 		utils.defineProperty @::, '0', null, ->
-			throw "You can't get elements from a list as standard properties; " +
+			throw "Can't get elements from a list as properties; " +
 			      "use `List::get()` method instead"
 		, ->
-			throw "You can't set elements into a list as standard properties; " +
+			throw "Can't set elements into a list with properties; " +
 			      "use `List::set()` method instead"
 
 *Signal* List::onChange(*Any* oldValue, *Integer* index)
 --------------------------------------------------------
 
-This signal is called for each element value change.
+Signal called on each value change.
 
 		signal.Emitter.createSignal @, 'onChange'
 
 *Signal* List::onInsert(*Any* value, *Integer* index)
 -----------------------------------------------------
 
-This signal is called for each inserted element.
+Signal called when a value was added.
 
 		signal.Emitter.createSignal @, 'onInsert'
 
 *Signal* List::onPop(*Any* oldValue, *Integer* index)
 -----------------------------------------------------
 
-This signal is called for each popped element.
+Signal called when a value was removed.
 
 		signal.Emitter.createSignal @, 'onPop'
 
 ReadOnly *Integer* List::length
 -------------------------------
 
-This property stores number of elements in a list.
+Amount of values stored in the list.
 
-```
+```javascript
 var list = new List(['a', 'b']);
 
 console.log(list.length);
@@ -95,11 +87,13 @@ console.log(list.length);
 *Any* List::get(*Integer* index)
 --------------------------------
 
-This method returns element stored at given *index*.
+Returns the value under the given index.
 
-For unknown elements, *undefined* is returned.
+Returns `undefined` for unknown index.
 
-```
+The index can't be negative.
+
+```javascript
 var list = new List(['a', 'b']);
 
 console.log(list.get(0));
@@ -120,23 +114,23 @@ console.log(list.get(2));
 *Any* List::set(*Integer* index, *Any* value)
 ---------------------------------------------
 
-This method changes element value.
+Sets the given value under the given index.
 
-Element at given *index* must be stored in a list.
+The index must exists in the list.
 
-*onChange()* signal is called with overriden element *value* and given *index*.
+The value can't be an `undefined`. Use [pop()][list/List::pop()] instead.
 
-Given *value* is returned by this method.
+Calls [onChange()][list/List::onChange()] signal.
 
-```
+```javascript
 var types = new List(['fantasy', 'Thriller']);
 
 types.onChange.connect(function(oldVal, i){
-  console.log("Element "+oldVal+" changed to "+this.get(i));
+  console.log("element "+oldVal+" changed to "+this.get(i));
 });
 
 types.set(0, 'Fantasy');
-// Element fantasy changed to Fantasy
+// element fantasy changed to Fantasy
 
 types.set(0, 'Fantasy');
 // nothing changed ...
@@ -161,13 +155,11 @@ types.set(0, 'Fantasy');
 *Array* List::items()
 ---------------------
 
-This method returns array of all the elements stored in a list.
+Returns ar array of the stored values in the list.
 
-Always the same instance is returned, so don't change this array manually.
+Always returns the same array instance.
 
-Use `utils.clone()` otherwise.
-
-```
+```javascript
 var list = new List([1, 2]);
 
 console.log(list.items());
@@ -177,8 +169,8 @@ console.log(Array.isArray(list.items()));
 // true
 ```
 
-#### Iterating over a list
-```
+### Iterate over a list
+```javascript
 var list = new List(['a', 'b']);
 var items = list.items();
 for (var i = 0; i < items.length; i++){  
@@ -194,13 +186,13 @@ for (var i = 0; i < items.length; i++){
 *Any* List::append(*Any* value)
 -------------------------------
 
-This method appends new element at the end of a list.
+Adds the given value on the end on the list.
 
-*onInsert()* signal is called with the given *value* and element *index*.
+The value can't be an `undefined`.
 
-*value* can't be an `undefined`, because this value is reserved only for unknown elements.
+Calls [onInsert()][list/List::onInsert()] signal.
 
-```
+```javascript
 var fridge = new List(['apple', 'milk']);
 
 fridge.onInsert.connect(function(val, i){
@@ -227,21 +219,23 @@ console.log(fridge.items());
 *Any* List::insert(*Integer* index, *Any* value)
 ------------------------------------------------
 
-This method inserts a new element at the given position.
+Add the given value under the given index.
 
-*onInsert()* signal is called with given value and index.
+The index can't be greater than the list length.
 
-Given *value* is returned.
+The value can't be an `undefined`.
 
-```
+Calls [onInsert()][list/List::onInsert()] signal.
+
+```javascript
 var list = new List(['a', 'b']);
 
 list.onInsert.connect(function(val, i){
-  console.log("New element "+val+" inserted at index "+i);
+  console.log("new element "+val+" inserted at index "+i);
 });
 
 list.insert(1, 'c');
-// New element c inserted at index 1
+// new element c inserted at index 1
 
 console.log(list.items());
 // ['a', 'c', 'b']
@@ -262,7 +256,9 @@ console.log(list.items());
 *List* List::extend(*List|Array* items)
 ---------------------------------------
 
-Extend this list by appending all items from the given list.
+Appends all values stored in the given items into the list.
+
+Calls [onInsert()][list/List::onInsert()] signal for each value.
 
 		extend: (items) ->
 			if items instanceof List
@@ -280,13 +276,11 @@ Extend this list by appending all items from the given list.
 *Any* List::remove(*Any* value)
 -------------------------------
 
-This function removes given *value* from a list.
+Removes the given value from the list.
 
-*onPop()* signal is called with the given *value* and popped element *index*.
+Calls [onPop()][list/List::onPop()] signal.
 
-Given *value* is returned.
-
-```
+```javascript
 var list = new List(['a', 'b']);
 
 console.log(list.get(1));
@@ -312,16 +306,13 @@ console.log(list.items());
 *Any* List::pop([*Integer* index])
 ----------------------------------
 
-This method removes element store at given *index*,
-or the last element if no parameter passed.
+Removes the value stored in the list under the given index.
 
-Given *index* must exist in the list.
+The index must exists in the list.
 
-*onPop()* signal is called with the popped element *value* and it's *index*.
+Calls [onPop()][list/List::onPop()] signal.
 
-The removed element value is returned.
-
-```
+```javascript
 var list = new List(['a', 'b']);
 
 console.log(list.get(1));
@@ -352,11 +343,11 @@ console.log(list.items());
 List::clear()
 -------------
 
-This method removes all elements stored in a list.
+Removes all values stored in the list.
 
-*onPop()* signal is called on each element starting from the last one.
+Calls [onPop()][list/List::onPop()] signal for each value.
 
-```
+```javascript
 var list = new List(['a', 'b']);
 
 list.onPop.connect(function(oldVal, i){
@@ -383,13 +374,11 @@ console.log(list.items());
 *Integer* List::index(*Any* value)
 ----------------------------------
 
-This method returns index of the given element *value* in a list.
+Returns the given value index in the list.
 
-Given value can't be an `undefined`, because this value is reserved only for unknown elements.
+Returns `-1` if the value doesn't exist in the list.
 
-If no value exists in a list, *-1* is returned.
-
-```
+```javascript
 var list = new List(['a', 'b']);
 
 console.log(list.index('b'));
@@ -407,7 +396,7 @@ console.log(list.index('c'));
 *Boolean* List::has(*Any* value)
 --------------------------------
 
-This method checks whether given *value* exists in a list.
+Returns `true` if the given value exists in the list.
 
 ```
 var list = new List(['a', 'b']);
