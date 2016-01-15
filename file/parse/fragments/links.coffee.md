@@ -1,27 +1,19 @@
 neft:require @xml
-============
+=================
 
-This special *XML* tag is used to include fragments from the local file.
+Tag used to link [neft:fragment][document/neft:fragment]s from a file and use them.
 
-All fragments ([neft:fragment][] tags) from the external file 
-are available in the file where this tag has been used.
-
-**href** is a local path relative to the file where it's used.
-
-```
+```xml
 <neft:require href="./user_utils.html" />
 
 <neft:use neft:fragment="avatar" />
 ```
 
-#### Namespaces
+## Namespace
 
-For better organizations you can include external files into the namespace.
+Optional argument `as` will link all fragments into the specified namespace.
 
-To do this, specify an **as** attribute.
-Included fragments will be available under the given namespace.
-
-```
+```xml
 <neft:require href="./user_utils.html" as="user" />
 
 <neft:use neft:fragment="user:avatar" />
@@ -32,7 +24,6 @@ Included fragments will be available under the given namespace.
 	pathUtils = require 'path'
 
 	module.exports = (File) -> (file) ->
-
 		# prepare
 		links = []
 

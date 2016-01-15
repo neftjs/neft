@@ -1,30 +1,29 @@
 Attributes evaluating @learn
-==========================
+============================
 
-For easiest developing, some of the *XML* attributes are automatically
-evaluated to the JavaScript objects.
+Some of the attributes are automatically evaluated to the JavaScript objects.
 
-String `[...]` evaluates to the `Array`.
-```
+String `[...]` evaluates to the array.
+```xml
 <items neft:each="[1, 2]"></items>
-```
+```xml
 ```
 <neft:use neft:fragment="list" items="[{name: 't-shirt'}]" />
 ```
 
-String `{...}` evaluates to the `Object`.
-```
+String `{...}` evaluates to the object.
+```xml
 <neft:use neft:fragment="user" data="{name: 'Johny'}" />
 ```
 
-String `Dict(...` evaluates to the [Dict][].
-```
+String `Dict(...` evaluates to the [Dict][dict/Dict].
+```xml
 <neft:use neft:fragment="user" data="Dict({name: 'Johny'})" />
 ```
 
-String `List(...` evaluates to the [List][].
-```
-<items neft:each="List(1, 2)"></items>
+String `List(...` evaluates to the [List][list/List].
+```xml
+<items neft:each="List([1, 2])"></items>
 ```
 
 	'use strict'
@@ -32,11 +31,6 @@ String `List(...` evaluates to the [List][].
 	utils = require 'utils'
 	Dict = require 'dict'
 	List = require 'list'
-	coffee = require 'coffee-script' if utils.isNode
-
-	attr = [null, null]
-
-	VALUE_TO_EVAL_RE = ///^(\[|\{|Dict\(|List\()///
 
 	evalFunc = new Function 'val', 'try { return eval(\'(\'+val+\')\'); } catch(err){}'
 
@@ -50,5 +44,4 @@ String `List(...` evaluates to the [List][].
 		elem.children?.forEach forNode
 
 	module.exports = (File) -> (file) ->
-
 		forNode file.node

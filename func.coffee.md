@@ -7,12 +7,6 @@ neft:function @js
 	assert = require 'assert'
 	Renderer = require 'renderer'
 
-	# link modules to be possible required by the funcs
-	# links = ['db', 'dict', 'emitter', 'expect', 'list', 'log', 'renderer',
-	#          'networking', 'schema', 'signal', 'utils', 'document', 'assert']
-	# for link in links
-	# 	require link
-
 	module.exports = (File) ->
 
 		{Input, Fragment} = File
@@ -20,19 +14,19 @@ neft:function @js
 ReadOnly *Object* globalObject
 ------------------------------
 
-This object is used as a global namespace in the function bodies.
+Used as a global namespace in the function body.
 
 		FuncGlobalFuncs =
 
 *Function* globalObject.require(*String* moduleName)
 ----------------------------------------------------
 
-Use this function to require *Neft* modules like in a normal *JavaScript* file.
+Requires standard Neft modules.
 
-```
+```xml
 <neft:func neft:name="test">
-  var utils = require('utils');
-  return utils.arrayToObject([1, 2]);
+	var utils = require('utils');
+	return utils.arrayToObject([1, 2]);
 </neft:func>
 ```
 
@@ -41,14 +35,13 @@ Use this function to require *Neft* modules like in a normal *JavaScript* file.
 *Function* globalObject.get(*String* propertyName)
 --------------------------------------------------
 
-This function is used to find a data.
+Gets property value from the local scope.
 
-It's used internally by the string interpolation to find a property in various places
-(*HTML* tag attributes, [neft:use][] tag attributes and *global* data).
+It's internally used in the string interpolation.
 
-```
+```xml
 <neft:func neft:name="test">
-  return get('user').name;
+	return get('user').name;
 </neft:func>
 ```
 
@@ -60,15 +53,15 @@ It's used internally by the string interpolation to find a property in various p
 *Arguments* globalObject.arguments
 ----------------------------------
 
-This object corresponds to the arguments object passed to the function.
+Array-like object with arguments passed to the function.
 
-```
+```xml
 <neft:func neft:name="followMouse">
-  var e = arguments[0]; // Renderer.Item::pointer.onMove comes with event argument
-  return [e.x, e.y];
+	var e = arguments[0]; // Renderer.Item::pointer.onMove comes with event argument
+	return [e.x, e.y];
 </neft:func>
 
-<button neft:style="mouseArea" neft:style:pointer:onMove="followMouse" />
+<button neft:style:pointer:onMove="${followMouse}" />
 ```
 
 			arguments: (_, args) -> args
@@ -76,19 +69,15 @@ This object corresponds to the arguments object passed to the function.
 *Document* globalObject.view
 ----------------------------
 
-This variable refers to the current *XML* element [neft:fragment][].
+Reference to the [File][document/File] where the function is placed.
 
-This is a *low-level API* and it's not documented.
-
-Using this attribute you can call other functions.
-
-```
+```xml
 <neft:func neft:name="add">
-  return arguments[0] + arguments[1];
+	return arguments[0] + arguments[1];
 </neft:func>
 
 <neft:func neft:name="print">
-  return "1 + 3 = " + view.funcs.add(1, 3);
+	return "1 + 3 = " + view.funcs.add(1, 3);
 </neft:func>
 ```
 
@@ -97,16 +86,16 @@ Using this attribute you can call other functions.
 *Renderer.Item* globalObject.item
 ---------------------------------
 
-This variable refers to the [Renderer.Item][].
+Reference to the [Renderer.Item][renderer/Item].
 
-It's available, only if it's a [Renderer.Item][] signal.
+It's available when the function was call on the style signal.
 
-```
+```xml
 <neft:func neft:name="test">
-  return item.width * item.height;
+	item.width += 10;
 </neft:func>
 
-<rectangle neft:style="rectangle" neft:style:onPointerClicked="test" />
+<rectangle neft:style:pointer:onClick="${test}" />
 ```
 
 			item: (ctx) ->

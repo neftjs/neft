@@ -1,6 +1,17 @@
 id @xml
 =======
 
+[Tag][document/Tag] with the id attribute is saved in the local scope
+(file, [neft:fragment][document/neft:fragment], [neft:each][document/neft:each] etc.)
+and it's available in the string interpolation.
+
+Id must be unique in the scope.
+
+```xml
+<h1 id="heading">Heading</h1>
+<span>${heading.stringify()}</span>
+```
+
 	'use strict'
 
 	utils = require 'utils'

@@ -1,23 +1,10 @@
 String Interpolation @learn
-=========================
+===========================
 
-Any XML text and attribute value can use string interpolation.
+[Text][document/Text] and [Tag][document/Tag] attribute value can use string interpolation.
 
-```
+```xml
 <h1>Welcome ${name}!</h1>
-```
-
-In the [neft:fragment][] you can refers to the:
-- *neft:fragment* tag attributes,
-- [neft:use][] tag attributes.
-
-Global data object ([DocumentGlobalData][] if you use [App][]) is checked as the last.
-.
-
-```
-<neft:fragment neft:name="user">${name}</neft:fragment>
-
-<neft:use neft:fragment="user" name="${ownerName}" />
 ```
 
 	'use strict'

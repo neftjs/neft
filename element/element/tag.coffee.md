@@ -211,12 +211,10 @@ Tag @virtual_dom
 *Watcher* Tag::watch(*String* query)
 ------------------------------------
 
-```
+```javascript
 var watcher = doc.watch('div > * > b[attr]');
-watcher.onAdd(function(tag){
-});
-watcher.onRemove(function(tag){
-});
+watcher.onAdd(function(tag){});
+watcher.onRemove(function(tag){});
 ```
 
 		watch: query.watch

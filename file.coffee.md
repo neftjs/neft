@@ -407,7 +407,7 @@ File.parse(*File* file)
 			if elem
 				elem.render view
 			else
-				log.warn "`#{@path}` view doesn't have any `#{useName}` neft:use"
+				log.warn "'#{@path}' view doesn't have '#{useName}' neft:use"
 
 			@
 

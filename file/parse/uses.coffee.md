@@ -1,28 +1,34 @@
 neft:use @xml
-========
+=============
 
-This special *XML* tag is used to place the [neft:fragment][].
+Tag used to place a [neft:fragment][document/neft:fragment].
 
-```
+```xml
 <neft:fragment neft:name="user">
-  This is user
+  This is a user
 </neft:fragment>
 
 <neft:use neft:fragment="user" />
 ```
 
-**neft:fragment** attribute can be dynamic and determined by the string interpolation.
+`neft:fragment` attribute can be changed in runtime.
 
+```xml
+<neft:fragment neft:name="h1">
+  <h1>H1 heading</h1>
+</neft:fragment>
+
+<neft:use neft:fragment="h${data.level}" />
 ```
+
+`neft:use` attributes are available in the [neft:fragment][document/neft:fragment] scope.
+
+```xml
 <neft:fragment neft:name="h1">
   <h1>H1: ${data}</h1>
 </neft:fragment>
 
-<neft:fragment neft:name="h2">
-  <h2>H2: ${data}</h2>
-</neft:fragment>
-
-<neft:use neft:fragment="h${data.level}" data="${data.text}" />
+<neft:use neft:fragment="h1" data="Test heading" />
 ```
 
 	'use strict'
