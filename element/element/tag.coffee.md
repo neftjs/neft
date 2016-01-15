@@ -196,8 +196,8 @@ Tag @virtual_dom
 
 			elem
 
-*Array* Tag::queryAll(*String* query)
--------------------------------------
+*Array* Tag::queryAll(*String* query, [*Function* onElement, *Any* onElementContext])
+-------------------------------------------------------------------------------------
 
 		@query = query = require('./tag/query') Element, @
 
