@@ -1,15 +1,10 @@
 Dict @library
-====
+=============
 
-**Powerful object**
-
-This helper replaces *Object* API and adds new features and signal called on each change.
-
-Unfortunately, you have to use *get()* and *set()* methods
-to extract or change properties in a dict.
+Module used for data-binding on objects.
 
 Access it with:
-```
+```javascript
 var dict = require('dict');
 ```
 
@@ -31,9 +26,9 @@ var dict = require('dict');
 *Dict* Dict.fromJSON(*String|Object* json)
 ------------------------------------------
 
-Creates new *Dict* from a json.
+Creates a new *Dict* from a json string.
 
-See *Dict::toJSON* to check how to stringify a *Dict* instance and use it here.
+This function should be used with [toJSON()][dict/Dict::toJSON()] output.
 
 		@fromJSON = (json) ->
 			json = utils.tryFunction JSON.parse, JSON, [json], json
@@ -44,13 +39,11 @@ See *Dict::toJSON* to check how to stringify a *Dict* instance and use it here.
 *Dict* Dict([*Object* data])
 ----------------------------
 
-Creates a new *Dict* instance.
+Creates a new dict instance.
 
-*data* parameter determines default properties with their values.
+The given data parameter determines default keys with their values.
 
-*new* keyword is not required.
-
-```
+```javascript
 var data = new Dict({
   name: 'xyz'
 });
@@ -76,9 +69,9 @@ console.log(data.get('name'));
 ReadOnly *Integer* Dict::length
 -------------------------------
 
-This property stores amount of keys existed in a *Dict*.
+Amount of keys stored in a dict.
 
-```
+```javascript
 var dict = Dict({prop: 1});
 
 console.log(dict.length);
@@ -93,9 +86,9 @@ console.log(dict.length);
 *Signal* Dict::onChange(*String* key, *Any* oldValue)
 -----------------------------------------------------
 
-This signal is called when a property value changes.
+Signal called on each key value change.
 
-```
+```javascript
 var user = new Dict({
   country: 'Germany'
 });
@@ -113,11 +106,11 @@ user.set('country', 'US');
 *Any* Dict::get(*String* key)
 -----------------------------
 
-This method returns given *key* property value.
+Returns value for the given key.
 
-It returns *undefined* only for not existed properties.
+Returns `undefined` for unknown or removed keys.
 
-```
+```javascript
 var bunny = new Dict({
   speedX: 5,
   speedY: 2
@@ -142,16 +135,13 @@ console.log(bunny.get('speedZ'));
 *Any* Dict::set(*String* key, *Any* value)
 ------------------------------------------
 
-This method is used to change property value or create a new property.
+Sets the given value for the given key stored in the dict.
 
-*onChange()* signal is called if the value has been changed.
+The value can't be an undefined. Use [pop()][dict/Dict::pop()] instead.
 
-Passed *value* can't be a *undefined*,
-because this value is reserved only for unknown properties.
+Calls [onChange()][dict/Dict::onChange()] signal.
 
-Given *value* is returned as a result of this method.
-
-```
+```javascript
 var links = new Dict({
   facebook: 'https://facebook.com/neft.io',
   twitter: 'https://twitter.com/neft_io'
@@ -190,6 +180,8 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 *Boolean* Dict::has(*String* key)
 ---------------------------------
 
+Returns `true` if the given key exists in the dict.
+
 		has: (key) ->
 			assert.isString key
 			assert.notLengthOf key, 0
@@ -198,6 +190,10 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 
 *Dict* Dict::extend(*Object|Dict* object)
 -----------------------------------------
+
+Sets all keys with their values from the given object.
+
+Calls [onChange()][dict/Dict::onChange()] signal for each key.
 
 		extend: (items) ->
 			if items instanceof Dict
@@ -215,11 +211,13 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 Dict::pop(*String* key)
 -----------------------
 
-This method removes an existing property from a *dict*.
+Removes the given key from the dict.
 
-*onChange()* signal is called with property key and its old value.
+The key must exists in the dict.
 
-```
+Calls [onChange()][dict/Dict::onChange()] signal.
+
+```javascript
 var data = new Dict;
 
 data.set('name', 'John');
@@ -253,6 +251,10 @@ data.pop('name');
 Dict::clear()
 -------------
 
+Removes all stored keys from the dict.
+
+Calls [onChange()][dict/Dict::onChange()] signal for each stored key.
+
 		clear: ->
 			for key, val of @_data
 				if val isnt undefined
@@ -260,15 +262,14 @@ Dict::clear()
 
 			return
 
-*Array* Dict::keys()
---------------------
+ReadOnly *Array* Dict::keys()
+-----------------------------
 
-This method returns array of names of stored properties.
+Returns an array of keys stored in the dict.
 
-It always returns the same array instance, so don't modify it manually.
-Use `utils.clone()` otherwise.
+Always returns the same array instance.
 
-```
+```javascript
 var data = new Dict({
   x: 10,
   y: 30
@@ -296,12 +297,11 @@ console.log(data.keys());
 *Array* Dict::values()
 ----------------------
 
-This method returns array of values of stored properties.
+Returns an array of values stored in the dict.
 
-It always returns the same array instance, so don't modify it manually.
-Use `utils.clone()` otherwise.
+Always returns the same array instance.
 
-```
+```javascript
 var data = new Dict({
   x: 10,
   y: 30
@@ -329,12 +329,11 @@ console.log(data.values());
 *Array* Dict::items()
 ---------------------
 
-This method returns array of key-value pairs of all stored properties.
+Returns an array of key-value pairs stored in the dict.
 
-It always returns the same array instance, so don't modify it manually.
-Use `utils.cloneDeep()` otherwise.
+Always returns the same array instance.
 
-```
+```javascript
 var data = new Dict({
   x: 10,
   y: 30
@@ -344,8 +343,8 @@ console.log(data.items());
 // [['x', 10], ['y', 30]]
 ```
 
-#### Iterating over a dict
-```
+### Iterate over a dict
+```javascript
 var dict = new Dict({prop1: 1, prop2: 2});
 var items = dict.items();
 for (var i = 0; i < items.length; i++){  
@@ -374,9 +373,9 @@ for (var i = 0; i < items.length; i++){
 *Object* Dict::toJSON()
 -----------------------
 
-This method returns object ready to be stringified to JSON.
+Returns data ready to be stringified.
 
-Check *Dict.fromJSON* to reverse this operation.
+Use [fromJSON()][dict/Dict.fromJSON()] to reverse this operation.
 
 		toJSON: ->
 			@_data
@@ -384,7 +383,7 @@ Check *Dict.fromJSON* to reverse this operation.
 *String* Dict::toString()
 -------------------------
 
-This method returns a pseudo-unique string determining this *Dict* instance.
+Returns a string identyfing the dict.
 
 		toString: ->
 			@_data+''
