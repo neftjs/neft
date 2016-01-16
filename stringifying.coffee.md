@@ -1,13 +1,6 @@
 Stringifying
 ============
 
-Standard *JSON.stringify()* doesn't support properties descriptors, prototypes, constructors
-and cyclic references.
-
-These functions solve this problem.
-
-You can also use these functions to clone complex structures.
-
 	'use strict'
 
 	{isArray} = Array
@@ -17,18 +10,18 @@ You can also use these functions to clone complex structures.
 utils.simplify(*Object* object, [*Object* options])
 ---------------------------------------------------
 
-Convert passed object into the most simplified format.
+Convert the given object into the most simplified format with no cyclic references and more.
 
 Such object can be easily stringified later using standard *JSON.stringify()*.
 
-Use *utils.assemble()* function to restore object into the initial structure.
+Use utils.assemble() function to restore the object into the initial structure.
 
 Second parameter is an config object (all 'false' by default):
   - *properties* - save properties descriptors (getters, config etc.),
   - *protos* - save protos as objects,
   - *constructors* - include constructor functions.
 
-```
+```javascript
 var obj = {};
 obj.self = obj;
 console.log(JSON.stringify(utils.simplify(obj)));
@@ -37,7 +30,7 @@ console.log(JSON.stringify(utils.simplify(obj)));
 If *protos* is *false* and *constructors* is *true*,
 object will be recognized as an instance.
 
-```
+```javascript
 function Sample(){
   this.fromInstance = 1;
 }
@@ -196,7 +189,7 @@ console.log(clone instanceof Sample)
 utils.assemble(*PlainObject* object)
 ------------------------------------
 
-Backward *utils.simplify()* operation.
+Backward utils.simplify() operation.
 
 		utils.assemble = do ->
 			ctorPropConfig = value: null

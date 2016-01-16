@@ -1,14 +1,8 @@
-Utilities @library
-=========
-
-**JavaScript standard library so exists**
-
-This module helps to write applications faster and better.
-
-It collects most commonly used helpers.
+Utils @library
+==============
 
 Access it with:
-```
+```javascript
 var utils = require('utils');
 ```
 
@@ -33,36 +27,32 @@ var utils = require('utils');
 	require('./stringifying') exports
 	require('./async') exports
 
-*Boolean* utils.isNode
-----------------------
+ReadOnly *Boolean* utils.isNode
+-------------------------------
 
-Determines whether application is run in the **node.js** environment.
+`true` if the application is running in the node.js environment.
 
-*Boolean* utils.isServer
-------------------------
+ReadOnly *Boolean* utils.isServer
+---------------------------------
 
 `utils.isNode` link.
 
-*Boolean* utils.isClient
-------------------------
+ReadOnly *Boolean* utils.isClient
+---------------------------------
 
 `utils.isNode` inverse.
 
-*Boolean* utils.isBrowser
--------------------------
+ReadOnly *Boolean* utils.isBrowser
+----------------------------------
 
-Determines whether application is run in the browser environment.
+ReadOnly *Boolean* utils.isQt
+-----------------------------
 
-*Boolean* utils.isQt
---------------------
+ReadOnly *Boolean* utils.isAndroid
+----------------------------------
 
-Determines whether application is a part of the *Qt* program.
-
-*Boolean* utils.isAndroid
--------------------------
-
-*Boolean* utils.isIOS
----------------------
+ReadOnly *Boolean* utils.isIOS
+------------------------------
 
 	exports.isNode = exports.isServer = exports.isClient =
 	exports.isBrowser = exports.isQt = exports.isAndroid =
@@ -88,19 +78,21 @@ Determines whether application is a part of the *Qt* program.
 *Function* utils.NOP
 --------------------
 
+No operation (an empty function).
+
 	exports.NOP = ->
 
 *Boolean* utils.is(*Any* value1, *Any* value2)
 ----------------------------------------------
 
-This function determines whether two values are exactly equal.
+Returns `true` if the given values are exactly the same.
 
 It's the *Object.is()* function polyfill (introduced in ECMAScript 6).
 
-In opposite to the *===* operator, this function treats two *NaN*s as equal, and
-*-0* and *+0* as not equal.
+In opposite to the `===` operator, this function treats two *NaN*s as equal, and
+`-0` and `+0` as not equal.
 
-```
+```javascript
 console.log(utils.is('a', 'a'));
 // true
 
@@ -126,9 +118,9 @@ console.log(-0 === 0);
 *Boolean* utils.isFloat(*Any* value)
 ------------------------------------
 
-This function checks whether the given value is a finite number.
+Returns `true` if the given value is a finite number.
 
-```
+```javascript
 console.log(utils.isFloat(10));
 // true
 
@@ -151,9 +143,9 @@ console.log(utils.isFloat('10'));
 *Boolean* utils.isInteger(*Any* value)
 --------------------------------------
 
-This function checks whether the given value is an integer.
+Returns `true` if the given value is an integer.
 
-```
+```javascript
 console.log(utils.isInteger(10));
 // true
 
@@ -177,18 +169,9 @@ console.log(utils.isInteger('2'));
 *Boolean* utils.isPrimitive(*Any* value)
 ----------------------------------------
 
-This function checks whether the given value is a primitive value.
+Returns `true` if the given value is a `null`, string, number, boolean or an `undefined`.
 
-In ECMAScript 5.1 we have five primitive types:
- - null,
- - string,
- - number,
- - boolean,
- - undefined.
-
-Each of this type is immutable (because it's primitive).
-
-```
+```javascript
 console.log(utils.isPrimitive(null));
 // true
 
@@ -209,11 +192,9 @@ console.log(utils.isPrimitive([]));
 *Boolean* utils.isObject(*Any* value)
 -------------------------------------
 
-This function checks whether the given value is an object.
+Returns `true` if the given value is an object (object, array, but not a `null`).
 
-*null* is not treated as an object.
-
-```
+```javascript
 console.log(utils.isObject({}));
 // true
 
@@ -236,13 +217,10 @@ console.log(utils.isObject(function(){}));
 *Boolean* utils.isPlainObject(*Any* value)
 ------------------------------------------
 
-This function checks whether the given value is a plain object, that is:
- - object with no prototype,
- - object with standard *Object* prototype.
+Returns `true` if the given value is an object with no prototype,
+or with a prototype equal the `Object.prototype`.
 
-Arrays and instances of classes are not a plain objects.
-
-```
+```javascript
 console.log(utils.isPlainObject({}))
 // true
 
@@ -282,9 +260,9 @@ console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
 *Boolean* utils.isArguments(*Any* value)
 ----------------------------------------
 
-This function returns true if the given value is an arguments object.
+Returns `true` if the given value is an arguments object.
 
-```
+```javascript
 (function(){
   console.log(utils.isArguments(arguments))
   // true
@@ -300,11 +278,11 @@ console.log(utils.isArguments({}))
 *NotPrimitive* utils.merge(*NotPrimitive* source, *NotPrimitive* object)
 ------------------------------------------------------------------------
 
-This function overrides the given *source* object by the given *object* own properties.
+Overrides the given source object properties by the given object own properties.
 
-The *source* object is returned.
+The source object is returned.
 
-```
+```javascript
 var config = {a: 1, b: 2};
 utils.merge(config, {b: 99, d: 100});
 console.log(config);
@@ -332,6 +310,15 @@ console.log(config);
 *NotPrimitive* utils.mergeAll(*NotPrimitive* source, *NotPrimitive* objects...)
 -------------------------------------------------------------------------------
 
+Like the utils.merge(), but the amount of objects to merge is unknown.
+
+```javascript
+var config = {a: 1};
+utils.merge(config, {b: 2}, {c: 3});
+console.log(config);
+// {a: 1, b: 2, c: 3}
+```
+
 	exports.mergeAll = (source) ->
 		null
 		`//<development>`
@@ -355,14 +342,12 @@ console.log(config);
 *NotPrimitive* utils.mergeDeep(*NotPrimitive* source, *NotPrimitive* object)
 ----------------------------------------------------------------------------
 
-This function overrides the given *source* object and all its objects
-by the given *object* own properties.
+Overrides the given source object properties and all its objects
+by the given object own properties.
 
-Only objects are merging deeply (no arrays and functions).
+The source object is returned.
 
-The *source* object is returned.
-
-```
+```javascript
 var user = {
   name: 'test',
   carsByName: {
@@ -407,11 +392,12 @@ console.log(user);
 *NotPrimitive* utils.fill(*NotPrimitive* source, *NotPrimitive* object)
 -----------------------------------------------------------------------
 
-This function translates the given *object* own properties into
-the *source* object if they are defined in the
-*source* prototype and are not defined in the *source* as own properties.
+Sets the given object properties into the given source object if the property
+exists in the given source, but it's not defined as an own property.
 
-```
+The source object is returned.
+
+```javascript
 function User(){
 }
 
@@ -443,9 +429,9 @@ console.log(user);
 utils.remove(*NotPrimitive* object, *Any* element)
 --------------------------------------------------
 
-This function removes an array element or an object property.
+Removes an array element or an object property from the given object.
 
-```
+```javascript
 var array = ['a', 'b', 'c'];
 utils.remove(array, 'b');
 console.log(array);
@@ -481,6 +467,10 @@ console.log(object);
 utils.removeFromUnorderedArray(*Array* array, *Any* element)
 ------------------------------------------------------------
 
+Removes the given element from the given array.
+
+Elements order may be changed.
+
 	exports.removeFromUnorderedArray = (arr, elem) ->
 		null
 		`//<development>`
@@ -498,11 +488,9 @@ utils.removeFromUnorderedArray(*Array* array, *Any* element)
 *Object* utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
 ------------------------------------------------------------------------------
 
-This function returns descriptor of the given *property* defined in the given *object*.
+Returns the descriptor of the given property defined in the given object.
 
-Unlike *Object.getOwnPropertyDescriptor()*, all the *object* prototypes are checked.
-
-```
+```javascript
 function User(){
   this.age = 0;
 }
@@ -535,9 +523,9 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 *Function* utils.lookupGetter(*NotPrimitive* object, *String* property)
 -----------------------------------------------------------------------
 
-This function returns function bound as a getter to the given *property*.
+Returns the given property getter function defined in the given object.
 
-```
+```javascript
 var object = {loaded: 2, length: 5};
 utils.defineProperty(object, 'progress', null, function(){
   return this.loaded / this.length;
@@ -562,7 +550,7 @@ console.log(utils.lookupGetter(object, 'progress'));
 *Function* utils.lookupSetter(*NotPrimitive* object, *String* property)
 -----------------------------------------------------------------------
 
-This function returns function bound as a setter to the given *property*.
+Returns the given property setter function defined in the given object.
 
 	exports.lookupSetter = do ->
 		# use native function if possible
@@ -577,14 +565,14 @@ This function returns function bound as a setter to the given *property*.
 *NotPrimitive* utils.defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
 --------------------------------------------------------------------------------------------------------------------------------------
 
-This function defines the given *property* in the given *object*.
+Defines the given property in the given object.
 
-*descriptors* is a bitmask contains *utils.WRITABLE*, *utils.ENUMERABLE* and
-*utils.CONFIGURABLE*.
+The descriptors argument is a bitmask accepting
+`utils.WRITABLE`, `utils.ENUMERABLE` and `utils.CONFIGURABLE`.
 
-*value* becomes a getter if the given *setter* is not an *undefined*.
+The value argument becomes a getter function if the given setter is not an undefined.
 
-```
+```javascript
 var object = {};
 
 var desc = utils.ENUMERABLE | utils.WRITABLE | utils.CONFIGURABLE;
@@ -665,11 +653,9 @@ console.log(object.length);
 *Any* utils.clone(*Any* param)
 ------------------------------
 
-This function clones arrays and objects.
+Returns clone of the given array or object.
 
-Functions are not cloned.
-
-```
+```javascript
 console.log(utils.clone([1, 2]))
 // [1, 2]
 
@@ -698,9 +684,9 @@ console.log(utils.clone({a: 1}))
 *Any* utils.cloneDeep(*Any* param)
 ----------------------------------
 
-This function clones arrays and objects deeply.
+Returns deep clone of the given array or object.
 
-```
+```javascript
 var obj2 = {ba: 1};
 var obj = {a: 1, b: obj2};
 
@@ -724,11 +710,9 @@ console.log(clonedObj.b === obj.b)
 *Boolean* utils.isEmpty(*String|NotPrimitive* object)
 -----------------------------------------------------
 
-Use this function to check whether the given *object* is empty, that is:
- - for arrays, no elements exists (*length* is 0),
- - for objects, no own properties are defined.
+Returns `true` if the given array has no elements, of the given object has no own properties.
 
-```
+```javascript
 console.log(utils.isEmpty([]));
 // true
 
@@ -744,8 +728,6 @@ console.log(utils.isEmpty({a: 1}));
 console.log(utils.isEmpty(''));
 // true
 ```
-
-.
 
 	exports.isEmpty = (object) ->
 		if typeof object is 'string'
@@ -766,9 +748,9 @@ console.log(utils.isEmpty(''));
 *Any* utils.last(*NotPrimitive* array)
 --------------------------------------
 
-This function returns the last element of the given *array*.
+Returns the last element of the given array, or an array-like object.
 
-```
+```javascript
 console.log(utils.last(['a', 'b']))
 // b
 
@@ -788,9 +770,9 @@ console.log(utils.last([]))
 *NotPrimitive* utils.clear(*NotPrimitive* object)
 -------------------------------------------------
 
-Use this function to remove all elements from an array, or all own properties from an object.
+Removes all elements from the given array, or all own properties from the given object.
 
-```
+```javascript
 var arr = ['a', 'b'];
 utils.clear(arr);
 console.log(arr);
@@ -819,11 +801,11 @@ console.log(obj);
 *Object* utils.setPrototypeOf(*NotPrimitive* object, *NotPrimitive|Null* prototype)
 -----------------------------------------------------------------------------------
 
-This function changes the given *object* prototype into the given *prototype*.
+Changes the given object prototype into the given prototype.
 
-This method on some environments returns a new object.
+**This function on some environments returns a new object.**
 
-```
+```javascript
 var obj = {a: 1};
 var prototype = {b: 100};
 
@@ -880,9 +862,9 @@ console.log(newObj.b)
 *Boolean* utils.has(*Any* object, *Any* value)
 ----------------------------------------------
 
-This function returns true if the given array contains the given *value*.
+Returns `true` if the given array contains the given value.
 
-```
+```javascript
 console.log(utils.has(['a'], 'a'))
 // true
 
@@ -890,9 +872,9 @@ console.log(utils.has(['a'], 'b'))
 // false
 ```
 
-For objects, only own enumerable properties are checked.
+Returns `true` if the given object has an own property names as the given value.
 
-```
+```javascript
 var object = {
   city: 'New York'
 }
@@ -901,9 +883,9 @@ console.log(utils.has(object, 'New York'))
 // true
 ```
 
-For strings, checks whether it contains the given *value*.
+Returns `true` if the given string contains the given value.
 
-```
+```javascript
 console.log(utils.has('abc', 'b'))
 // true
 
@@ -932,16 +914,16 @@ console.log(utils.has('abc', 'e'))
 *Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target = `[]`])
 ------------------------------------------------------------------------------------------
 
-This function translates the given *object* into the array.
+Translates the given object into an array.
 
-Array elements are determined by the *valueGen* function.
-*valueGen* function is called with property name, property value and given *object*.
+Array elements are determined by the given valueGen function.
+The valueGen function is called with the property name, property value and the given object.
 
-By default, array elements are equal properties values.
+By default, the valueGen returns the object property value.
 
-Elements are set into the *target* array (new array by default).
+Created elements are set into the given target array (a new array by default).
 
-```
+```javascript
 var object = {
   type: 'dog',
   name: 'Bandit'
@@ -978,18 +960,19 @@ console.log(utils.objectToArray(object, function(key, val){
 *Object* utils.arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, *Object* target = `{}`])
 -------------------------------------------------------------------------------------------------------------
 
-This function translates the given *array* into the object with keys defined by
-the *keyGen* function and values defined by the *valueGen* function.
+Translates the given array into an object.
 
-Keys are equal array element indexes by default.
-Values are equal array elements by default.
+Object keys are determined by the given keyGen function.
+Object key values are determined by the given valueGen function.
+The keyGen and valueGen functions are called with the array element index,
+array element value and the array itself.
 
-*keyGen* and *valueGen* functions are called with element index,
-element value and given *array*.
+By default, the keyGen function returns the array element index.
+By default, the valueGen function returns the array element value.
 
-Properties are set into the *target* object (new object by default).
+Created proeprties are set into the given target object (a new object by default).
 
-```
+```javascript
 console.log(utils.arrayToObject(['a', 'b']))
 // {0: 'a', 1: 'b'}
 
@@ -1031,9 +1014,9 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 *String* utils.capitalize(*String* string)
 ------------------------------------------
 
-Use this function to capitalize the given *string*.
+Capitalizes the given string.
 
-```
+```javascript
 console.log(utils.capitalize('name'))
 // Name
 ```
@@ -1053,9 +1036,9 @@ console.log(utils.capitalize('name'))
 *String* utils.addSlashes(*String* string)
 ------------------------------------------
 
-Use this function to add backslashes before each *'* and *"* character.
+Adds backslashes before each `'` and `"` characters found in the given string.
 
-```
+```javascript
 console.log(utils.addSlashes('a"b'))
 // a\"b
 ```
@@ -1079,9 +1062,11 @@ console.log(utils.addSlashes('a"b'))
 *String* utils.uid([*Integer* length=`8`])
 ------------------------------------------
 
-This function generates unique string.
+Returns pseudo-unique string with the given length.
 
-```
+This function doesn't quarantee uniqueness of the returned data.
+
+```javascript
 console.log(utils.uid())
 // "50"
 ```
@@ -1106,13 +1091,13 @@ console.log(utils.uid())
 *Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onFail])
 ----------------------------------------------------------------------------------------------
 
-Use this function to call the given *function* with *context* and *arguments*.
+Calls the given function with the given context and arguments.
 
-If *function* throws an error, *onFail* is returned.
+If the function throws an error, the given onFail value is returned.
 
-If *onFail* is a function, it will be called with the caught error.
+If the given onFail is a function, it will be called with the caught error.
 
-```
+```javascript
 function test(size){
   if (size === 0){
     throw "Wrong size!";
@@ -1146,11 +1131,11 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 *Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
 -------------------------------------------------------------------------------
 
-Use this function to call the given *function* with *context* and *arguments*.
+Calls the given function with the given context and arguments.
 
-Only caught error is returned.
+Returns caught error.
 
-```
+```javascript
 function test(size){
   if (size === 0){
     throw "Wrong size!";
@@ -1182,13 +1167,10 @@ console.log(utils.catchError(test, null, [100]))
 *Function* utils.bindFunctionContext(*Function* function, *Any* context)
 ------------------------------------------------------------------------
 
-Fast **Function::bind** version.
+Returns a new function calling the given function with the given context and
+arguments in an amount lower or equal the function length.
 
-This function binds only function context (with no extra arguments).
-
-Using **arguments** object in the given **function** is limited to the **function** length.
-
-```
+```javascript
 function func(arg1){
   console.log(this, arg1);
 }
@@ -1229,12 +1211,11 @@ console.log(bindFunc('a'));
 *Object* utils.errorToObject(*Error* error)
 -------------------------------------------
 
-This function takes an *Error* instance and returns a plain object with
-the *error* name and message.
+Returns a plain object with the given error name, message and other custom properties.
 
-Standard error *name* and *message* properties are not enumerable.
+Standard error `name` and `message` properties are not enumerable.
 
-```
+```javascript
 var error = new ReferenceError('error message!');
 console.log(utils.errorToObject(error));
 // {name: 'ReferenceError', message: 'error message!'}
@@ -1259,7 +1240,7 @@ console.log(utils.errorToObject(error));
 *Object* utils.getOwnProperties(*Object* object)
 ------------------------------------------------
 
-This function returns a new array or an object with own properties.
+Returns an array or an object with own properties associated in the given object.
 
 	exports.getOwnProperties = (obj) ->
 		null
@@ -1275,11 +1256,12 @@ This function returns a new array or an object with own properties.
 *Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep=`Infinity`])
 -----------------------------------------------------------------------------------------------------------------------
 
-Use this function to compare two objects or arrays deeply.
+Returns `true` if the given objects have equal values.
 
-Optional *compareFunction* is used to determine whether two values are equal.
+The given compareFunction is used to compare two values (which at least one them is primitive).
+By default the compareFunction uses triple comparison (`===`).
 
-```
+```javascript
 console.log(utils.isEqual([0, 1], [1, 0]))
 // true
 

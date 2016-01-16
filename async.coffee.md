@@ -1,10 +1,8 @@
 Asynchronous
 ============
 
-It's a subset of standard *utils* focused on support asynchronously operations.
-
 Access it with:
-```
+```javascript
 var utils = require('utils');
 var async = utils.async;
 ```
@@ -24,20 +22,14 @@ var async = utils.async;
 forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
 -------------------------------------------------------------------------------------
 
-This is an asynchronous version of standard *Array.prototype.forEach()* function works
-with arrays and objects as well.
+This is an asynchronous version of the standard `Array.prototype.forEach()` function
+which works with arrays and objects.
 
-*callback* function is called with parameters:
- - if array given: element value, index, array, next callback
- - if object given: key, value, object, next callback
+The given callback function is called with parameters:
+ - if an array given: element value, index, array, next callback
+ - if an object given: key, value, object, next callback
 
-Each *callback* must call got *next callback*.
-
-*onEnd* function is called when the last *callback* finished processing.
-
-*context* argument is used to call *callback* function.
-
-```
+```javascript
 var toLoadInOrder = ['users.json', 'families.js', 'relationships.js'];
 
 utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
@@ -62,7 +54,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 
 			next = ->
 				# return and call onEnd if there is no elements to check
-				if i is n then return onEnd()
+				if i is n then return onEnd.call thisArg
 
 				# increase counter
 				i++
@@ -82,7 +74,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 			next = ->
 				# return and call onEnd if there is no pairs to check
 				if i is n
-					return onEnd()
+					return onEnd.call thisArg
 
 				# call callback func
 				key = keys[i]
@@ -107,9 +99,9 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 *Stack* Stack()
 ---------------
 
-This class is used to store functions and run them synchronously or asynchronously.
+Stores functions and runs them synchronously or asynchronously.
 
-```
+```javascript
 var stack = new utils.async.Stack;
 
 function load(src, callback){
@@ -149,12 +141,12 @@ stack.runAllSimultaneously(function(){
 Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
 --------------------------------------------------------------------------
 
-Adds new *function* to the stack.
+Adds the given function to the stack.
 
-*function* must provide a *callback* argument as the last one.
-First argument passing to the *callback* by the *function* is always an error.
+The function must provide a callback argument as the last argument.
+The first argument of the callback function is always an error.
 
-```
+```javascript
 var stack = new utils.async.Stack;
 
 function add(a, b, callback){
@@ -190,9 +182,7 @@ stack.runAll(function(err, result){
 Stack::callNext([*Array* arguments], *Function* callback)
 ---------------------------------------------------------
 
-Calls first function from the stack and remove it.
-
-*callback* function gets all passed arguments from the called *function*.
+Calls the first function from the stack and remove it.
 
 		callNext: (args, callback) ->
 			if typeof args is 'function' and not callback?
@@ -234,7 +224,7 @@ Calls first function from the stack and remove it.
 
 			# add callback into funcArgs
 			# To avoid got funcArgs array modification and to minimise memory usage,
-			# we create new object with `funcArgs` as a prototype.
+			# we create a new object with the `funcArgs` as a prototype.
 			# `Function::apply` expects an object and iterate by it to the `length`.
 			funcArgs = Object.create(funcArgs or null)
 			funcArgs[funcLength - 1] = callbackWrapper
@@ -257,9 +247,7 @@ Stack::runAll([*Function* callback, *Any* callbackContext])
 
 Calls all functions from the stack one by one.
 
-*callback* function gets all passed arguments from the last called *function*.
-
-Processing stops on error occurs, then *callback* function is called with the got error.
+When an error occurs, processing stops and the callback function is called with the got error.
 
 		runAll: (callback=NOP, ctx=null) ->
 			if typeof callback isnt 'function'
@@ -290,7 +278,7 @@ Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
 
 Calls all functions from the stack simultaneously (all at the same time).
 
-Processing stops on error occurs, then *callback* function is called with the got error.
+When an error occurs, processing stops and the callback function is called with the got error.
 
 		runAllSimultaneously: (callback=NOP, ctx=null) ->
 			assert typeof callback is 'function'
