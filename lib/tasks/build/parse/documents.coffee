@@ -31,14 +31,15 @@ module.exports = (platform, app, callback) ->
 	Document.onError onErrorListener = (name) ->
 		parseFile name, "./views/#{name}.html"
 
+	Document.onParse onParseListener = (file) ->
+		if platform isnt 'node'
+			Document.Style.extendDocumentByStyles file
+		return
+
 	parseFile = (name, path) ->
 		html = fs.readFileSync path, 'utf-8'
 		file = Document.fromHTML name, html
 		Document.parse file
-
-		if platform isnt 'node'
-			Document.Style.extendDocumentByStyles file
-
 		file
 
 	saveView = (name, view, callback) ->
@@ -63,6 +64,7 @@ module.exports = (platform, app, callback) ->
 				path: "#{OUT_DIR}/#{name}.json"
 
 		Document.onError.disconnect onErrorListener
+		Document.onParse.disconnect onParseListener
 
 		log.end logtime
 		callback null
