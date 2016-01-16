@@ -33,8 +33,7 @@ module.exports = (File) ->
 			return
 
 	File.onBeforeRender (file) ->
-		if styles = file.styles
-			renderStyles styles
+		renderStyles file.styles
 		return
 
 	revertStyles = (arr) ->
@@ -45,8 +44,7 @@ module.exports = (File) ->
 		return
 
 	File.onBeforeRevert (file) ->
-		if styles = file.styles
-			revertStyles styles
+		revertStyles file.styles
 		return
 
 	File::_clone = do (_super = File::_clone) -> ->
