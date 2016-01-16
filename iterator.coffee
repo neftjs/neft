@@ -10,7 +10,7 @@ log = require 'log'
 assert = assert.scope 'View.Iterator'
 log = log.scope 'View', 'Iterator'
 
-module.exports = (File) -> class Iterator extends File.Use
+module.exports = (File) -> class Iterator
 	@__name__ = 'Iterator'
 	@__path__ = 'File.Iterator'
 
@@ -18,8 +18,9 @@ module.exports = (File) -> class Iterator extends File.Use
 
 	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Iterator) - 1
 
-	i = File.Use.JSON_ARGS_LENGTH
+	i = 1
 	JSON_NAME = i++
+	JSON_NODE = i++
 	JSON_TEXT = i++
 	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
@@ -38,15 +39,16 @@ module.exports = (File) -> class Iterator extends File.Use
 		if @file.isRendered and oldVal is false and not @node.data
 			@update()
 
-	constructor: (file, node, fragmentId) ->
-		assert.isString fragmentId
-		assert.notLengthOf fragmentId, 0
+	constructor: (@file, @node, @name) ->
+		assert.instanceOf file, File
+		assert.instanceOf node, File.Element
+		assert.isString name
+		assert.notLengthOf name, 0
 
-		super file, node
-
-		@name = fragmentId
 		@usedFragments = []
 		@text = ''
+		@data = null
+		@isRendered = false
 
 		node.onAttrsChange attrsChangeListener, @
 		node.onVisibleChange visibilityChangeListener, @
@@ -86,6 +88,8 @@ module.exports = (File) -> class Iterator extends File.Use
 		for _, i in array
 			@insertItem i
 
+		@isRendered = true
+
 		null
 
 	revert: ->
@@ -100,6 +104,7 @@ module.exports = (File) -> class Iterator extends File.Use
 				data.onPop.disconnect @popItem, @
 
 		@data = null
+		@isRendered = false
 
 	update: ->
 		@revert()
@@ -134,7 +139,7 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		{data} = @
 
-		usedFragment = File.factory @fragmentId
+		usedFragment = File.factory @name
 		@usedFragments.splice i, 0, usedFragment
 
 		if data instanceof List
@@ -150,11 +155,11 @@ module.exports = (File) -> class Iterator extends File.Use
 		newChild.index = i
 
 		# render fragment with storage
-		storage = usedFragment.storage = Object.create @file.storage or null
+		storage = Object.create @file.storage or null
 		storage.each = each
 		storage.i = i
 		storage.item = item
-		usedFragment.render @
+		usedFragment.render storage, @
 
 		# signal
 		usedFragment.onReplaceByUse.emit @
@@ -186,5 +191,6 @@ module.exports = (File) -> class Iterator extends File.Use
 			arr = new Array JSON_ARGS_LENGTH
 			arr[0] = JSON_CTOR_ID
 		arr[JSON_NAME] = @name
+		arr[JSON_NODE] = @node.getAccessPath @file.node
 		arr[JSON_TEXT] = @text
-		super key, arr
+		arr

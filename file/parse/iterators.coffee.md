@@ -35,25 +35,35 @@ Use [List][list/List] to bind changes made in the array.
 
 	module.exports = (File) -> (file) ->
 		{iterators} = file
+		createdFragments = []
 
 		forNode = (elem) ->
-			unless attrVal = elem.attrs?.get("#{File.HTML_NS}:each")
-				return elem.children?.forEach forNode
+			unless attrVal = elem.getAttr("neft:each")
+				for child in elem.children
+					if child instanceof File.Element.Tag
+						forNode child
+				return
 
-			prefix = if file.name then "#{file.name}-" else ''
-			name = "#{prefix}each[#{utils.uid()}]"
+			path = "#{file.path}:each[#{utils.uid()}]"
 
 			# get fragment
 			bodyNode = new File.Element.Tag
-			for child in elem.children
+			while child = elem.children[0]
 				child.parent = bodyNode
-			fragment = new File name, bodyNode
+			fragment = new File path, bodyNode
+			createdFragments.push fragment
 
 			# get iterator
-			iterator = new File.Iterator file, elem, name
+			iterator = new File.Iterator file, elem, path
 			iterators.push iterator
 			`//<development>`
 			iterator.text = attrVal
 			`//</development>`
 
 		forNode file.node
+
+		# parse created fragments
+		for fragment in createdFragments
+			File.parse fragment
+
+		return
