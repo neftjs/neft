@@ -62,8 +62,6 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
 					# get fragment
 					path = "#{file.path}:#{name}"
 					fragment = new File path, child
-					fragment.fragments = utils.clone file.fragments
-					delete fragment.fragments[path]
 					fragments[name] = path
 					createdFragments.push fragment
 
@@ -72,10 +70,7 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
 			# link fragments
 			for createdFragment in createdFragments
 				for fragmentName, fragmentId of fragments
-					if createdFragment.fragments.hasOwnProperty fragmentName
-						continue
-
-					createdFragment.fragments[fragmentName] = fragmentId
+					createdFragment.fragments[fragmentName] ?= fragmentId
 
 			# parse fragments
 			for createdFragment in createdFragments

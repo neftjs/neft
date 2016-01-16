@@ -51,6 +51,7 @@ Use [List][list/List] to bind changes made in the array.
 			while child = elem.children[0]
 				child.parent = bodyNode
 			fragment = new File path, bodyNode
+			utils.merge fragment.fragments, file.fragments
 			createdFragments.push fragment
 
 			# get iterator
