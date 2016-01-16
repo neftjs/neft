@@ -1,8 +1,8 @@
 neft:target @xml
 ================
 
-Tag used in the [neft:fragment][document/neft:fragment] to define,
-where the [neft:use][document/neft:use] body should be placed.
+Tag used in the [neft:fragment][document/neft:fragment@xml] to define,
+where the [neft:use][document/neft:use@xml] body should be placed.
 
 ```xml
 <neft:fragment neft:name="user">

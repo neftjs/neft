@@ -1,7 +1,7 @@
 neft:require @xml
 =================
 
-Tag used to link [neft:fragment][document/neft:fragment]s from a file and use them.
+Tag used to link [neft:fragment][document/neft:fragment@xml]s from a file and use them.
 
 ```xml
 <neft:require href="./user_utils.html" />

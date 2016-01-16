@@ -1,7 +1,7 @@
 neft:use @xml
 =============
 
-Tag used to place a [neft:fragment][document/neft:fragment].
+Tag used to place a [neft:fragment][document/neft:fragment@xml].
 
 ```xml
 <neft:fragment neft:name="user">
@@ -21,7 +21,7 @@ Tag used to place a [neft:fragment][document/neft:fragment].
 <neft:use neft:fragment="h${data.level}" />
 ```
 
-`neft:use` attributes are available in the [neft:fragment][document/neft:fragment] scope.
+`neft:use` attributes are available in the [neft:fragment][document/neft:fragment@xml] scope.
 
 ```xml
 <neft:fragment neft:name="h1">
