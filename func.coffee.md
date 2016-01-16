@@ -9,7 +9,7 @@ neft:function @js
 
 	module.exports = (File) ->
 
-		{Input, Fragment} = File
+		{Input} = File
 
 ReadOnly *Object* globalObject
 ------------------------------

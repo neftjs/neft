@@ -60,10 +60,11 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
 					i--; n--
 
 					# get fragment
-					fragment = new File.Fragment name, child
+					path = "#{file.path}:#{name}"
+					fragment = new File path, child
 					fragment.fragments = utils.clone file.fragments
-					delete fragment.fragments[name]
-					fragments[name] = fragment.id
+					delete fragment.fragments[path]
+					fragments[name] = path
 					createdFragments.push fragment
 
 			forEachNodeRec file.node

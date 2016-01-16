@@ -47,7 +47,7 @@ Use [List][list/List] to bind changes made in the array.
 			bodyNode = new File.Element.Tag
 			for child in elem.children
 				child.parent = bodyNode
-			fragment = new File.Fragment name, bodyNode
+			fragment = new File name, bodyNode
 
 			# get iterator
 			iterator = new File.Iterator file, elem, name

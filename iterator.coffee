@@ -44,16 +44,8 @@ module.exports = (File) -> class Iterator extends File.Use
 
 		super file, node
 
-		# prefix = if file.name then "#{file.name}-" else ''
-		# @name = "#{prefix}each[#{utils.uid()}]"
 		@name = fragmentId
 		@usedFragments = []
-
-		# create fragment
-		# fragment = new File.Fragment file, @name, @bodyNode
-		# fragment.parse()
-		# @fragmentId = fragment.id
-		# @bodyNode.parent = undefined
 		@text = ''
 
 		node.onAttrsChange attrsChangeListener, @

@@ -81,7 +81,6 @@ File @class
 
 		@Element = require('./element/index')
 		@AttrChange = require('./attrChange') @
-		@Fragment = require('./fragment') @
 		@Use = require('./use') @
 		@Input = require('./input') @
 		@Condition = require('./condition') @
@@ -130,9 +129,6 @@ File @class
 			# create
 			file = new File path, node
 
-			# save to storage
-			files[file.path] = file
-
 *File* File.fromJSON(*String|Object* json)
 ------------------------------------------
 
@@ -171,7 +167,7 @@ File @class
 				if arr[JSON_TARGET_NODE]
 					obj.targetNode = node.getChildByAccessPath arr[JSON_TARGET_NODE]
 
-				parseObject obj, arr[JSON_FRAGMENTS], obj.fragments
+				utils.merge obj.fragments, arr[JSON_FRAGMENTS]
 				parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
 				parseArray obj, arr[JSON_INPUTS], obj.inputs
 				parseArray obj, arr[JSON_CONDITIONS], obj.conditions
@@ -212,6 +208,9 @@ File.parse(*File* file)
 
 			(file) ->
 				assert.instanceOf file, File
+				assert.notOk files[file.path]?
+
+				files[file.path] = file
 
 				# trigger signal
 				File.onBeforeParse.emit file
