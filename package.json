@@ -1,7 +1,13 @@
 {
-	"name": "db",
-	"version": "0.6.0",
-	"dependencies": {
-		"utils": "git+ssh://git@github.com:Kildyt/utils.git"
-	}
+  "private": true,
+  "name": "db",
+  "version": "0.6.0",
+  "description": "Neft.io utility library",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/db.git"
+  },
+  "bugs": "https://github.com/Neft-io/db/issues"
 }
