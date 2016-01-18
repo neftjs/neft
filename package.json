@@ -1,8 +1,12 @@
 {
   "private": true,
   "name": "nml",
-  "description": "NML language parser",
-  "dependencies": {
-    "pegjs": "git://github.com/dmajda/pegjs.git#master"
-  }
+  "description": "Neft Marked Language parser",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/nml-parser.git"
+  },
+  "bugs": "https://github.com/Neft-io/nml-parser/issues"
 }
