@@ -164,9 +164,9 @@ module.exports = ->
 				http:
 					request: -> 0
 					onResponse: ->
-				renderer:
+				native:
 					transferData: ->
-					onUpdateView: ->
+					onData: ->
 
 		ios: ->
 			browserEnv()
@@ -252,7 +252,7 @@ module.exports = ->
 
 		modulePath = pathUtils.relative base, filename
 		parentPath = pathUtils.relative base, parent.id
-		unless parentPath then return r	
+		unless parentPath then return r
 
 		if onlyLocal
 			if ///^\.\.(?:\/|\\)|^node_modules(?:\/|\\)///.test(modulePath) or not ///\.[a-zA-Z0-9]+$///.test(modulePath)
