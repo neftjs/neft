@@ -2,6 +2,7 @@
   "private": true,
   "name": "sample-project",
   "version": "0.0.1",
+  "description": "Sample Neft.io project",
   "config": {
     "title": "Neft.io Project",
     "protocol": "http",
@@ -12,11 +13,18 @@
     "type": "app"
   },
   "dependencies": {
-    "neft-document-form": "git+ssh://git@bitbucket.org:Kildyt/document-form.git",
-    "neft-styles-material-design": "git+ssh://git@bitbucket.org:Kildyt/styles-material-design.git"
+  	"coffee-script": "^1.10.0",
+    "node-static": "^0.7.6",
+    "form-data": "1.0.0-rc3",
+    "qs": "^6.0.1"
   },
-  "scripts": {
-    "prestart": "neft build browser",
-    "start": "neft run node"
+  "android": {
+    "package": "io.neft.sample",
+    "application": {
+      "label": "Neft.io Sample Project"
+    }
+  },
+  "devDependencies": {
+    "neft": "0.8.0"
   }
 }

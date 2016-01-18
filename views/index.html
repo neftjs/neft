@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>${app.config.title}</title>
+
+<body>
+ 	<h1>Sample app</h1>
+
+	<h2>Order</h2>
+	<p>Products to order: ${order.length}</p>
+	<button pointer:onClick="${route.send()}">
+		<neft:log orderStatusPending="${orderStatus.pending}" />
+		<span neft:if="${orderStatus.pending}">Wait for a server</span>
+		<span neft:else>
+			<span neft:if="${orderStatus.loaded}">
+				${orderStatus.error}${orderStatus.response}
+			</span>
+			<span neft:else>Send</span>
+		</span>
+	</button>
+
+	<h2>Products</h2>
+	<!-- `route` is global -->
+	<neft:log route="${route}" data="${route.data}" />
+	<p neft:if="${data.length === 0}">Oops.. Nothing here</p>
+	<ul neft:each="${data}">
+		<li>
+			<p>${item.name}</p>
+			<div class="options right">
+				<button pointer:onClick="${route.orderProduct(item)}">Order</button>
+			</div>
+		</li>
+	</ul>
+</body>
