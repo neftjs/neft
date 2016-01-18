@@ -7,6 +7,7 @@ coffee = require 'coffee-script'
 cp = require 'child_process'
 
 OUT_DIR = './build/android/'
+CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}app/src/main/java/io/neft/CustomApp/"
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
 ANDROID_BUNDLE_DIR = './build/android/'
 
@@ -30,6 +31,10 @@ module.exports = (config, callback) ->
 				mustacheFiles.push path
 				return false
 			true
+	log.end logtime
+
+	logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
+	fs.copySync "./native/android", CUSTOM_NATIVE_OUT_DIR
 	log.end logtime
 
 	logtime = log.time "Copy static files into '#{STATIC_OUT_DIR}'"
