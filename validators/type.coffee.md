@@ -1,9 +1,7 @@
 type @validator
 ===============
 
-Verifies the tested value type.
-
-Unlike the standard `typeof`, this validator returns `undefined` for `NaN` and `null`.
+Verifies the tested value type using the `typeof`.
 
 ```javascript
 var schema = new Schema({
@@ -14,9 +12,6 @@ var schema = new Schema({
 
 console.log(utils.catchError(schema.validate, schema, [{desc: 231}])+'');
 // "SchemaError: desc must be a object"
-
-console.log(utils.catchError(schema.validate, schema, [{desc: null}])+'');
-// "SchemaError: Required property desc not found"
 
 console.log(schema.validate({desc: {}}));
 // true
@@ -35,8 +30,5 @@ console.log(schema.validate({desc: []}));
 		assert.isString expected
 		, "type validator option for #{row} property must be a string"
 
-		if isNaN(value) or value is null
-			value = undefined
-
-		if value? and typeof value isnt expected
+		if typeof value isnt expected
 			throw new Schema.Error row, 'type', "#{row} must be a #{expected}"
