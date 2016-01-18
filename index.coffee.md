@@ -75,7 +75,7 @@ Unit.describe(*String* message, *Function* tests)
 Unit.it(*String* message, *Function* test)
 ------------------------------------------
 
-**test** can contains optional *callback* argument.
+The given test function can contains optional *callback* argument.
 
 	exports.it = (msg, func) ->
 		testScope = currentScope
@@ -115,8 +115,8 @@ Unit.beforeEach(*Function* code)
 		currentScope.beforeFunctions.push func
 		return
 
-Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = 1000])
----------------------------------------------------------------------------------------
+Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
+-----------------------------------------------------------------------------------------
 
 	exports.whenChange = do ->
 		listeners = []
