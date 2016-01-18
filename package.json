@@ -1,29 +1,21 @@
 {
-	"private": true,
-	"name": "app",
-	"version": "0.7.1",
-	"config": {
-		"title": "Neft.io Application",
-		"protocol": "http",
-		"port": 3000,
-		"host": "0.0.0.0",
-		"language": "en",
-		"type": "app",
-		"resources": "static/"
-	},
-	"dependencies": {
-		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
-		"schema": "git+ssh://git@bitbucket.org:Kildyt/schema.git",
-		"expect": "git+ssh://git@github.com:Kildyt/expect.git",
-		"emitter": "git+ssh://git@bitbucket.org:Kildyt/emitter.git",
-		"log": "git+ssh://git@bitbucket.org:Kildyt/log.git",
-		"db": "git+ssh://git@github.com:Kildyt/Db.git",
-		"db-implementation": "git+ssh://git@bitbucket.org:Kildyt/db-implementation.git",
-		"db-addons": "git+ssh://git@bitbucket.org:Kildyt/db-addons.git",
-		"db-schema": "git+ssh://git@bitbucket.org:Kildyt/db-schema.git",
-		"networking": "git+ssh://git@bitbucket.org:Kildyt/networking.git",
-		"view": "git+ssh://git@bitbucket.org:Kildyt/view.git",
-		"styles": "git+ssh://git@bitbucket.org:Kildyt/styles.git",
-		"view-styles": "git+ssh://git@bitbucket.org:Kildyt/view-styles.git"
-	}
+  "private": true,
+  "name": "app",
+  "version": "0.7.1",
+  "description": "Neft.io main application",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/app.git"
+  },
+  "bugs": "https://github.com/Neft-io/app/issues",
+  "config": {
+    "title": "Neft.io Application",
+    "protocol": "http",
+    "port": 3000,
+    "host": "localhost",
+    "language": "en",
+    "type": "app"
+  }
 }
