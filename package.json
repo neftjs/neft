@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "ios-runtime",
+  "version": "0.0.1",
+  "description": "Neft.io runtime for the iOS",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/ios-runtime.git"
+  },
+  "bugs": "https://github.com/Neft-io/ios-runtime/issues"
+}
