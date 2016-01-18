@@ -9,9 +9,6 @@ Font @extension
 
 	log = log.scope 'Renderer', 'Font'
 
-*Alignment* Alignment()
------------------------
-
 	module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Font extends itemUtils.DeepObject
 		@__name__ = 'Font'
 

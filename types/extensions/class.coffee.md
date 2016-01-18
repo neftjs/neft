@@ -675,8 +675,8 @@ Grid {
 				runQueue target
 			return
 
-*Document* Class::document
---------------------------
+*ClassDocument* Class::document
+-------------------------------
 
 		class ClassChildDocument
 			constructor: (parent) ->
@@ -688,15 +688,12 @@ Grid {
 		class ClassDocument extends itemUtils.DeepObject
 			@__name__ = 'ClassDocument'
 
-### *Signal* Class::onDocumentChange(*Document* document)
+### *Signal* Class::onDocumentChange(*ClassDocument* document)
 
 			itemUtils.defineProperty
 				constructor: Class
 				name: 'document'
 				valueConstructor: @
-
-*Document* Document()
----------------------
 
 			onTargetChange = (oldVal) ->
 				if oldVal
@@ -706,6 +703,9 @@ Grid {
 				if oldVal isnt val
 					@reloadQuery()
 				return
+
+*ClassDocument* ClassDocument()
+-------------------------------
 
 			constructor: (ref) ->
 				@_query = ''
@@ -718,10 +718,10 @@ Grid {
 				ref.onTargetChange onTargetChange, @
 				onTargetChange.call @, ref._target
 
-*String* Document::query
-------------------------
+*String* ClassDocument::query
+-----------------------------
 
-### *Signal* Document::onQueryChange(*String* oldValue)
+### *Signal* ClassDocument::onQueryChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -835,9 +835,6 @@ Grid {
 					watcher.onAdd onNodeAdd, @
 					watcher.onRemove onNodeRemove, @
 				return
-
-*Item* Item()
--------------
 
 *List* Item::classes
 --------------------

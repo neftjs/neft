@@ -189,7 +189,7 @@ ReadOnly *Float* DevicePointerEvent::x
 ReadOnly *Float* DevicePointerEvent::y
 --------------------------------------
 
-### *Signal* DevicePointerEvent::onXChange(*Float* oldValue)
+### *Signal* DevicePointerEvent::onYChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

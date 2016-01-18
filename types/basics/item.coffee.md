@@ -60,7 +60,7 @@ This is a base class for everything which is visible.
 			@_background = null
 			@_defaultBackground = null
 
-#### Custom properties
+## Custom properties
 
 ```
 Item {
@@ -73,7 +73,7 @@ Item {
 }
 ```
 
-#### Custom signals
+## Custom signals
 
 ```
 Item {

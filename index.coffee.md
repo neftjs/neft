@@ -6,7 +6,7 @@ Rendering @engine
 In opposite to the [Document Modeling](/docs/document) (which is only the logical part),
 this module defines how to render and interact with elements.
 
-#### Item
+#### Item type
 
 Everything what is visible is an [Renderer.Item][].
 
