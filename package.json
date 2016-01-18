@@ -1,9 +1,16 @@
 {
-	"private": true,
-	"name": "bundle",
-	"version": "0.0.1",
-	"devDependencies": {
-		"fs-extra": "~0.8.1",
-		"glob": "^4.0.0"
-	}
+  "private": true,
+  "name": "bundle",
+  "version": "0.0.1",
+  "description": "Neft.io bundle builder",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/bundle-builder.git"
+  },
+  "bugs": "https://github.com/Neft-io/bundle-builder/issues",
+  "devDependencies": {
+    "fs-extra": "~0.8.1"
+  }
 }
