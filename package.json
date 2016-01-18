@@ -1,13 +1,13 @@
 {
-	"private": true,
-	"name": "styles",
-	"version": "0.0.1",
-	"description": "Neft.io Document and Renderer connector",
-	"license": "Apache 2.0",
-	"homepage": "http://neft.io",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Neft-io/styles.git"
-	},
-	"bugs": "https://github.com/Neft-io/styles/issues"
+  "private": true,
+  "name": "styles",
+  "version": "0.0.1",
+  "description": "Neft.io Document and Renderer connector",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/styles.git"
+  },
+  "bugs": "https://github.com/Neft-io/styles/issues"
 }
