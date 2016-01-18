@@ -1,13 +1,13 @@
 {
-	"private": true,
-	"name": "unit",
-	"version": "0.0.1",
-	"description": "Neft.io unit tests library",
-	"license": "Apache 2.0",
-	"homepage": "http://neft.io",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Neft-io/unit.git"
-	},
-	"bugs": "https://github.com/Neft-io/unit/issues"
+  "private": true,
+  "name": "unit",
+  "version": "0.0.1",
+  "description": "Neft.io unit tests library",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/unit.git"
+  },
+  "bugs": "https://github.com/Neft-io/unit/issues"
 }
