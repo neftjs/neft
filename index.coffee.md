@@ -1,17 +1,10 @@
 Signal @library
-======
+===============
 
-**Better events**
-
-Signals are used like events, but brings new features and fix some issues, which
-standard events based on the strings have.
-
-Each signal is a function and has a corresponding handler.
-The handler always is prefixed by the *on* (e.g. signal *changed* has handler *onChanged*).
-Signals are used to connect and disconnect listeners (functions called when a signal occurs).
+Signal is a function with listeners which can be emitted.
 
 Access it with:
-```
+```javascript
 var signal = require('signal');
 ```
 
@@ -23,11 +16,11 @@ var signal = require('signal');
 *Integer* signal.STOP_PROPAGATION
 ---------------------------------
 
-This special constant value is used to stop calling further listeners.
+Special constant used to stop calling further listeners.
 
-Must be returned by a listener which want to capture a signal.
+Must be returned by the listener function.
 
-```
+```javascrpt
 var obj = {};
 signal.create(obj, 'onPress');
 
@@ -47,12 +40,14 @@ obj.onPress.emit();
 
 	STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
 
-*Handler* signal.create([*NotPrimitive* object, *String* name])
----------------------------------------------------------------
+*Signal* signal.create([*NotPrimitive* object, *String* name])
+--------------------------------------------------------------
 
-This function creates new signal and handler in the given *object* under the given *name*.
+Creates a new signal in the given object under the given name property.
 
-```
+Returns created signal.
+
+```javascript
 var obj = {};
 
 signal.create(obj, 'onRename');
@@ -72,21 +67,26 @@ obj.onRename.emit('Max', 'George');
 
 		assert.isNotPrimitive obj, 'signal object cannot be primitive'
 		assert.isString name, 'signal name must be a string'
-		assert.notLengthOf name, 0, 'signal name cannot be empty'
+		assert.notLengthOf name, 0, 'signal name cannot be an empty string'
 
 		assert not obj.hasOwnProperty(name)
-		, "signal object has already defined '#{name}' property"
+		, "signal object has already defined the '#{name}' property"
 
 		obj[name] = signal
 
 *Boolean* signal.isEmpty(*Signal* signal)
 -----------------------------------------
 
+Returns `true` if the given signal has no listeners.
+
 	exports.isEmpty = (signal) ->
 		for func in signal.listeners by 2
 			if func isnt null
 				return false
 		return true
+
+*Signal* Signal()
+-----------------
 
 	callSignal = (obj, listeners, arg1, arg2) ->
 		i = shift = 0
@@ -109,15 +109,6 @@ obj.onRename.emit('Max', 'George');
 			i += 2
 		return result
 
-*Signal* Signal()
--------------------
-
-This function represents a handler function.
-
-The handler function is used to connect and disconnect listeners.
-
-If this function is called, it works like *Signal.connect()*.
-
 	createSignalFunction = (obj) ->
 		handler = (listener, ctx) ->
 			handler.connect listener, ctx
@@ -130,24 +121,26 @@ If this function is called, it works like *Signal.connect()*.
 
 	SignalPrototype =
 
-Signal.emit([*Any* argument1, *Any* argument2])
------------------------------------------------
+Signal::emit([*Any* argument1, *Any* argument2])
+------------------------------------------------
+
+Call all of the signal listeners with the given arguments (2 maximally).
 
 		emit: (arg1, arg2) ->
-			assert.isFunction @
-			assert.isArray @listeners
-			assert.operator arguments.length, '<', 3, 'Signal accepts maximally two parameters; use object instead'
+			assert.isFunction @, "emit must be called on a signal function"
+			assert.isArray @listeners, "emit must be called on a signal function"
+			assert.operator arguments.length, '<', 3, 'signal accepts maximally two parameters; use object instead'
 
 			callSignal @obj, @listeners, arg1, arg2
 
-Signal.connect(*Function* listener, [*Any* context])
-----------------------------------------------------
+Signal::connect(*Function* listener, [*Any* context])
+-----------------------------------------------------
 
-This function connects new listener function into a handler.
+Adds the given listener function into the signal listeners.
 
-Connected listener will be called on each signal call.
+By default, the signal function works like this method.
 
-```
+```javascript
 var obj = {};
 signal.create(obj, 'onPress');
 
@@ -164,10 +157,10 @@ obj.onPress.emit()
 // listener 2
 ```
 
-The optional second argument will be used as a context in the called listeners.
-By default, the listener is called with the object where a signal is created.
+The given context will be used as a context in listener calling.
+By default, the listener is called with the object on which the signal is created.
 
-```
+```javascript
 var obj = {standard: true};
 signal.create(obj, 'onPress');
 
@@ -186,8 +179,8 @@ obj.onPress.emit();
 ```
 
 		connect: (listener, ctx=null) ->
-			assert.isFunction @
-			assert.isFunction listener
+			assert.isFunction @, "connect must be called on a signal function"
+			assert.isFunction listener, "listener is not a function"
 
 			{listeners} = @
 
@@ -207,9 +200,9 @@ obj.onPress.emit();
 Signal.disconnect(*Function* listener, [*Any* context])
 -------------------------------------------------------
 
-This function disconnects already connected listener from a handler.
+Returns the given listener function from the signal listeners.
 
-```
+```javascript
 var obj = {};
 
 signal.create(obj, 'onPress');
@@ -226,8 +219,8 @@ obj.onPress.emit()
 ```
 
 		disconnect: (listener, ctx=null) ->
-			assert.isFunction @
-			assert.isFunction listener
+			assert.isFunction @, "disconnect must be called on a signal function"
+			assert.isFunction listener, "listener is not a function"
 
 			{listeners} = @
 			index = 0
@@ -237,7 +230,7 @@ obj.onPress.emit()
 				if index is -1 or listeners[index+1] is ctx
 					break
 				index += 2
-			assert.isNot index, -1
+			assert.isNot index, -1, "listener doesn't exist in this signal"
 			assert.is listeners[index], listener
 			assert.is listeners[index + 1], ctx
 
@@ -249,10 +242,10 @@ obj.onPress.emit()
 Signal.disconnectAll()
 ----------------------
 
-This function disconnects all connected listeners from a handler.
+Removes all the signal listeners.
 
 		disconnectAll: ->
-			assert.isFunction @
+			assert.isFunction @, "disconnectAll must be called on a signal function"
 
 			{listeners} = @
 			for _, i in listeners
