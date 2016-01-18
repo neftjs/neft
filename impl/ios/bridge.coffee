@@ -16,12 +16,13 @@ module.exports = (bridge) ->
 		floats: floats
 		strings: strings
 
-	_neft.renderer.onUpdateView bridge.onData
+	_neft.native =
+		onData: bridge.onData
 
 	sendData: ->
-		if actionsIndex <= 0
+		if actions.length <= 0
 			return
-		webkit.messageHandlers.updateView.postMessage outDataObject
+		webkit.messageHandlers.transferData.postMessage outDataObject
 		utils.clear actions
 		utils.clear booleans
 		utils.clear integers

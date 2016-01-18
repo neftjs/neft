@@ -40,7 +40,7 @@ exports.onData = (actions, booleans, integers, floats, strings) ->
 		assert.isFunction func, "unknown native action got '#{action}'"
 		func reader
 
-	exports.pushData()
+	exports.sendData()
 	return
 
 exports.addActionListener = (action, listener) ->
