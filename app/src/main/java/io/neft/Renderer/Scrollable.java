@@ -12,40 +12,46 @@ import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.OutAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
+
 public class Scrollable extends Item {
-    static void register(Renderer renderer) {
-        renderer.actions.put(Renderer.InAction.CREATE_SCROLLABLE, new Action() {
+    static void register(final MainActivity app) {
+        app.client.actions.put(InAction.CREATE_SCROLLABLE, new Action() {
             @Override
-            void work(Reader reader) {
-                new Scrollable(reader.renderer);
+            public void work(Reader reader) {
+                new Scrollable(app);
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_SCROLLABLE_CONTENT_ITEM, new Action() {
+        app.client.actions.put(InAction.SET_SCROLLABLE_CONTENT_ITEM, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Scrollable) reader.getItem()).setContentItem(reader.getItem());
+            public void work(Reader reader) {
+                ((Scrollable) app.renderer.getItemFromReader(reader)).setContentItem(app.renderer.getItemFromReader(reader));
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_SCROLLABLE_CONTENT_X, new Action() {
+        app.client.actions.put(InAction.SET_SCROLLABLE_CONTENT_X, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Scrollable) reader.getItem()).setContentX(reader.getFloat());
+            public void work(Reader reader) {
+                ((Scrollable) app.renderer.getItemFromReader(reader)).setContentX(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_SCROLLABLE_CONTENT_Y, new Action() {
+        app.client.actions.put(InAction.SET_SCROLLABLE_CONTENT_Y, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Scrollable) reader.getItem()).setContentY(reader.getFloat());
+            public void work(Reader reader) {
+                ((Scrollable) app.renderer.getItemFromReader(reader)).setContentY(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.ACTIVATE_SCROLLABLE, new Action() {
+        app.client.actions.put(InAction.ACTIVATE_SCROLLABLE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Scrollable) reader.getItem()).activate();
+            public void work(Reader reader) {
+                ((Scrollable) app.renderer.getItemFromReader(reader)).activate();
             }
         });
     }
@@ -94,14 +100,14 @@ public class Scrollable extends Item {
 
             if (oldl != l) {
                 scrollable.contentX = l;
-                renderer.pushAction(Renderer.OutAction.SCROLLABLE_CONTENT_X);
-                renderer.pushFloat(l);
+                app.client.pushAction(OutAction.SCROLLABLE_CONTENT_X);
+                app.client.pushFloat(l);
             }
 
             if (oldt != t) {
                 scrollable.contentY = t;
-                renderer.pushAction(Renderer.OutAction.SCROLLABLE_CONTENT_Y);
-                renderer.pushFloat(t);
+                app.client.pushAction(OutAction.SCROLLABLE_CONTENT_Y);
+                app.client.pushFloat(t);
             }
 
             scrollable.invalidate();
@@ -133,13 +139,13 @@ public class Scrollable extends Item {
     private Rect dirtyRect = new Rect();
     private RectF viewRect = new RectF();
 
-    public Scrollable(final Renderer renderer) {
-        super(renderer);
+    public Scrollable(final MainActivity app) {
+        super(app);
 
-        this.view = new ScrollableView(this, renderer.mainActivity.getApplicationContext());
-        renderer.mainActivity.view.addView(view);
+        this.view = new ScrollableView(this, app.getApplicationContext());
+        app.view.addView(view);
 
-        renderer.mainActivity.view.setOnTouchListener(new View.OnTouchListener() {
+        app.view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (active) {
@@ -196,7 +202,7 @@ public class Scrollable extends Item {
 
         if (dirty) {
             final long now = SystemClock.uptimeMillis();
-            final MotionEvent lastDownEvent = renderer.device.pointerDownEvent;
+            final MotionEvent lastDownEvent = app.renderer.device.pointerDownEvent;
             final MotionEvent downEvent = MotionEvent.obtain(
                     now,
                     now,
@@ -207,7 +213,7 @@ public class Scrollable extends Item {
             );
             view.onWindowTouchEvent(downEvent);
         } else {
-            view.onWindowTouchEvent(renderer.device.pointerDownEvent);
+            view.onWindowTouchEvent(app.renderer.device.pointerDownEvent);
         }
     }
 

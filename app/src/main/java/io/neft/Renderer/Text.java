@@ -10,98 +10,103 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.OutAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
 import io.neft.Utils.ColorUtils;
 
 public class Text extends Item {
-    static void register(Renderer renderer){
-        renderer.actions.put(Renderer.InAction.CREATE_TEXT, new Action() {
+    static void register(final MainActivity app){
+        app.client.actions.put(InAction.CREATE_TEXT, new Action() {
             @Override
-            void work(Reader reader) {
-                new Text(reader.renderer);
+            public void work(Reader reader) {
+                new Text(app);
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT, new Action() {
+        app.client.actions.put(InAction.SET_TEXT, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setText(reader.getString());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setText(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_WRAP, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_WRAP, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setWrap(reader.getBoolean());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setWrap(reader.getBoolean());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.UPDATE_TEXT_CONTENT_SIZE, new Action() {
+        app.client.actions.put(InAction.UPDATE_TEXT_CONTENT_SIZE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).updateContentSize();
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).updateContentSize();
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_COLOR, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_COLOR, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setColor(reader.getInteger());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setColor(reader.getInteger());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_LINE_HEIGHT, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_LINE_HEIGHT, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setLineHeight(reader.getFloat());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setLineHeight(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_FONT_FAMILY, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_FONT_FAMILY, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setFontFamily(reader.getString());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setFontFamily(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_FONT_PIXEL_SIZE, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_FONT_PIXEL_SIZE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setFontPixelSize(reader.getFloat());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setFontPixelSize(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_FONT_WORD_SPACING, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_FONT_WORD_SPACING, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setFontWordSpacing(reader.getFloat());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setFontWordSpacing(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_FONT_LETTER_SPACING, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_FONT_LETTER_SPACING, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setFontLetterSpacing(reader.getFloat());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setFontLetterSpacing(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_ALIGNMENT_HORIZONTAL, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_ALIGNMENT_HORIZONTAL, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setAlignmentHorizontal(reader.getString());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setAlignmentHorizontal(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_ALIGNMENT_VERTICAL, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_ALIGNMENT_VERTICAL, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Text) reader.getItem()).setAlignmentVertical(reader.getString());
+            public void work(Reader reader) {
+                ((Text) app.renderer.getItemFromReader(reader)).setAlignmentVertical(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.LOAD_FONT, new Action() {
+        app.client.actions.put(InAction.LOAD_FONT, new Action() {
             @Override
-            void work(Reader reader) {
-                Text.loadFont(reader.getString(), reader.getString(), reader.renderer);
+            public void work(Reader reader) {
+                Text.loadFont(reader.getString(), reader.getString(), app);
             }
         });
     }
@@ -144,21 +149,20 @@ public class Text extends Item {
     protected int linesLength;
     protected String[] words;
 
-    public static void loadFont(final String name, final String source, final Renderer renderer){
+    public static void loadFont(final String name, final String source, final MainActivity app){
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 if (source.startsWith("/static")){
-                    fonts.put(name, Typeface.createFromAsset(renderer.mainActivity.getAssets(), source.substring(1)));
-                    renderer.dirty = true;
-                    renderer.pushAction(Renderer.OutAction.FONT_LOAD);
-                    renderer.pushString(name);
-                    renderer.pushBoolean(true);
+                    fonts.put(name, Typeface.createFromAsset(app.getAssets(), source.substring(1)));
+                    app.client.pushAction(OutAction.FONT_LOAD);
+                    app.client.pushString(name);
+                    app.client.pushBoolean(true);
                 } else {
                     Log.e("JAVA", "Loading font's by URL is not currently supported");
-                    renderer.pushAction(Renderer.OutAction.FONT_LOAD);
-                    renderer.pushString(name);
-                    renderer.pushBoolean(false);
+                    app.client.pushAction(OutAction.FONT_LOAD);
+                    app.client.pushString(name);
+                    app.client.pushBoolean(false);
                 }
             }
         });
@@ -166,10 +170,10 @@ public class Text extends Item {
         thread.start();
     }
 
-    public Text(Renderer renderer){
-        super(renderer);
+    public Text(MainActivity app){
+        super(app);
         this.lines = new ArrayList<>();
-        this.fontPixelSize = renderer.dpToPx(14);
+        this.fontPixelSize = app.renderer.dpToPx(14);
     }
 
     public void setText(String val){
@@ -195,7 +199,7 @@ public class Text extends Item {
     }
 
     public void setFontPixelSize(float val){
-        fontPixelSize = renderer.dpToPx(val);
+        fontPixelSize = app.renderer.dpToPx(val);
     }
 
     // TODO
@@ -285,10 +289,10 @@ public class Text extends Item {
         invalidate();
 
         // push data
-        renderer.pushAction(Renderer.OutAction.TEXT_SIZE);
-        renderer.pushItem(this);
-        renderer.pushFloat(renderer.pxToDp(contentWidth));
-        renderer.pushFloat(renderer.pxToDp(contentHeight));
+        app.client.pushAction(OutAction.TEXT_SIZE);
+        app.renderer.pushItem(this);
+        app.client.pushFloat(app.renderer.pxToDp(contentWidth));
+        app.client.pushFloat(app.renderer.pxToDp(contentHeight));
     }
 
     protected void updatePaint(){

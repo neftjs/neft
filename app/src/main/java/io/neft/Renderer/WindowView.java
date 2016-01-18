@@ -11,17 +11,22 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
+
 public class WindowView extends ViewGroup {
     public Item windowItem;
     public Renderer renderer;
     public final Rect canvasDirtyRect = new Rect();
     public final RectF dirtyRect = new RectF();
 
-    static void register(Renderer renderer){
-        renderer.actions.put(Renderer.InAction.SET_WINDOW, new Action() {
+    static void register(final MainActivity app){
+        app.client.actions.put(InAction.SET_WINDOW, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.renderer.window.windowItem = reader.getItem();
+            public void work(Reader reader) {
+                app.view.windowItem = app.renderer.getItemFromReader(reader);
             }
         });
     }

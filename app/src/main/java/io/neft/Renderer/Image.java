@@ -5,17 +5,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
@@ -25,59 +17,61 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import io.neft.Renderer.Renderer;
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.OutAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
 
 public class Image extends Item {
-    static void register(Renderer renderer){
-        renderer.actions.put(Renderer.InAction.CREATE_IMAGE, new Action() {
+    static void register(final MainActivity app){
+        app.client.actions.put(InAction.CREATE_IMAGE, new Action() {
             @Override
-            void work(Reader reader) {
-                new Image(reader.renderer);
+            public void work(Reader reader) {
+                new Image(app);
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_IMAGE_SOURCE, new Action() {
+        app.client.actions.put(InAction.SET_IMAGE_SOURCE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Image) reader.getItem()).setSource(reader.getString());
+            public void work(Reader reader) {
+                ((Image) app.renderer.getItemFromReader(reader)).setSource(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_IMAGE_SOURCE_WIDTH, new Action() {
+        app.client.actions.put(InAction.SET_IMAGE_SOURCE_WIDTH, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Image) reader.getItem()).setSourceWidth(reader.getFloat());
+            public void work(Reader reader) {
+                ((Image) app.renderer.getItemFromReader(reader)).setSourceWidth(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_IMAGE_SOURCE_HEIGHT, new Action() {
+        app.client.actions.put(InAction.SET_IMAGE_SOURCE_HEIGHT, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Image) reader.getItem()).setSourceHeight(reader.getFloat());
+            public void work(Reader reader) {
+                ((Image) app.renderer.getItemFromReader(reader)).setSourceHeight(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_IMAGE_FILL_MODE, new Action() {
+        app.client.actions.put(InAction.SET_IMAGE_FILL_MODE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Image) reader.getItem()).setFillMode(reader.getString());
+            public void work(Reader reader) {
+                ((Image) app.renderer.getItemFromReader(reader)).setFillMode(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_IMAGE_OFFSET_X, new Action() {
+        app.client.actions.put(InAction.SET_IMAGE_OFFSET_X, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Image) reader.getItem()).setOffsetX(reader.getFloat());
+            public void work(Reader reader) {
+                ((Image) app.renderer.getItemFromReader(reader)).setOffsetX(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_IMAGE_OFFSET_Y, new Action() {
+        app.client.actions.put(InAction.SET_IMAGE_OFFSET_Y, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Image) reader.getItem()).setOffsetY(reader.getFloat());
+            public void work(Reader reader) {
+                ((Image) app.renderer.getItemFromReader(reader)).setOffsetY(reader.getFloat());
             }
         });
     }
@@ -99,8 +93,8 @@ public class Image extends Item {
 
     public String source;
 
-    public Image(Renderer renderer){
-        super(renderer);
+    public Image(MainActivity app){
+        super(app);
     }
 
     @Override
@@ -119,21 +113,21 @@ public class Image extends Item {
         srcRect.right = bitmap.getWidth();
         srcRect.bottom = bitmap.getHeight();
 
-        renderer.pushAction(Renderer.OutAction.IMAGE_SIZE);
-        renderer.pushItem(this);
-        renderer.pushString(source);
-        renderer.pushBoolean(true);
-        renderer.pushFloat(renderer.pxToDp(bitmap.getWidth()));
-        renderer.pushFloat(renderer.pxToDp(bitmap.getHeight()));
+        app.client.pushAction(OutAction.IMAGE_SIZE);
+        app.renderer.pushItem(this);
+        app.client.pushString(source);
+        app.client.pushBoolean(true);
+        app.client.pushFloat(app.renderer.pxToDp(bitmap.getWidth()));
+        app.client.pushFloat(app.renderer.pxToDp(bitmap.getHeight()));
     }
 
     private void onError(){
-        renderer.pushAction(Renderer.OutAction.IMAGE_SIZE);
-        renderer.pushItem(this);
-        renderer.pushString(source);
-        renderer.pushBoolean(false);
-        renderer.pushFloat(0);
-        renderer.pushFloat(0);
+        app.client.pushAction(OutAction.IMAGE_SIZE);
+        app.renderer.pushItem(this);
+        app.client.pushString(source);
+        app.client.pushBoolean(false);
+        app.client.pushFloat(0);
+        app.client.pushFloat(0);
     }
 
     static private Bitmap getBitmapFromSVG(SVG svg){
@@ -155,10 +149,10 @@ public class Image extends Item {
         return getBitmapFromSVG(svg);
     }
 
-    static private Bitmap loadResourceSource(Renderer renderer, String val){
+    static private Bitmap loadResourceSource(MainActivity app, String val){
         try {
             // get file
-            InputStream in = renderer.mainActivity.getAssets().open(val.substring(1));
+            InputStream in = app.getAssets().open(val.substring(1));
             if (in == null){
                 return null;
             }
@@ -172,7 +166,7 @@ public class Image extends Item {
         }
     }
 
-    static private Bitmap loadUrlSource(Renderer renderer, String val){
+    static private Bitmap loadUrlSource(MainActivity app, String val){
         try {
             InputStream in = new URL(val).openStream();
             if (val.endsWith(".svg")){
@@ -186,7 +180,7 @@ public class Image extends Item {
         }
     }
 
-    static private Bitmap loadDataUriSource(Renderer renderer, String val){
+    static private Bitmap loadDataUriSource(MainActivity app, String val){
         return null;
 //        Pattern svgDataUri = Pattern.compile("^data:image/svg(?:.*);(?:.*)?,(.*)$");
 //        Matcher svgDataUriMatch = svgDataUri.matcher(val);
@@ -266,7 +260,6 @@ public class Image extends Item {
                     self.onError();
                 }
                 self.invalidate();
-                renderer.dirty = true;
             }
         };
 
@@ -288,11 +281,11 @@ public class Image extends Item {
             public void run() {
                 Bitmap bitmap;
                 if (val.startsWith("/static")) {
-                    bitmap = loadResourceSource(renderer, val);
+                    bitmap = loadResourceSource(app, val);
                 } else if (val.startsWith("data:")) {
-                    bitmap = loadDataUriSource(renderer, val);
+                    bitmap = loadDataUriSource(app, val);
                 } else {
-                    bitmap = loadUrlSource(renderer, val);
+                    bitmap = loadUrlSource(app, val);
                 }
 
                 // validate bitmap
@@ -307,7 +300,7 @@ public class Image extends Item {
 
                 // call handlers
                 final Bitmap finalBitmap = bitmap;
-                renderer.mainActivity.runOnUiThread(new Runnable() {
+                app.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         final ArrayList<LoadHandler> loadingArray = loading.get(val);

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import io.neft.Client.Client;
+import io.neft.CustomApp.CustomApp;
 import io.neft.Renderer.Renderer;
 import io.neft.Renderer.WindowView;
 
@@ -19,20 +21,24 @@ public class MainActivity extends FragmentActivity {
     private static final String TAG = "Neft";
 
     public WindowView view;
-    public Timers timers;
-    public Renderer renderer;
+    public CustomApp customApp;
+    final public Http http = new Http();
+    final public Timers timers = new Timers();
+    final public Client client = new Client();
+    final public Renderer renderer = new Renderer();
 
     protected void init(){
         // get javascript file
         String neft = getAssetFile("javascript/neft.js");
 
         // initialize
-        new Http();
-        this.timers = new Timers();
-        this.renderer = new Renderer(this);
+        this.customApp = new CustomApp(this);
+        renderer.app = this;
+        view.renderer = renderer;
+        renderer.init(this);
 
         Native.init(neft);
-        renderer.run();
+        renderer.onAnimationFrame();
     }
 
     private String getAssetFile(String path) {

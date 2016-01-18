@@ -15,91 +15,95 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
 import io.neft.Utils.ColorUtils;
 
 public class TextInput extends Item {
-    static void register(Renderer renderer) {
-        renderer.actions.put(Renderer.InAction.CREATE_TEXT_INPUT, new Action() {
+    static void register(final MainActivity app) {
+        app.client.actions.put(InAction.CREATE_TEXT_INPUT, new Action() {
             @Override
-            void work(Reader reader) {
-                new TextInput(reader.renderer);
+            public void work(Reader reader) {
+                new TextInput(app);
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_TEXT, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_TEXT, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setText(reader.getString());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setText(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_COLOR, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_COLOR, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setColor(reader.getInteger());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setColor(reader.getInteger());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_LINE_HEIGHT, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_LINE_HEIGHT, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setLineHeight(reader.getFloat());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setLineHeight(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_MULTI_LINE, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_MULTI_LINE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setMultiLine(reader.getBoolean());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setMultiLine(reader.getBoolean());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_ECHO_MODE, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_ECHO_MODE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setEchoMode(reader.getString());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setEchoMode(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_FONT_FAMILY, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_FONT_FAMILY, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setFontFamily(reader.getString());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setFontFamily(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_FONT_INPUT_PIXEL_SIZE, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_FONT_INPUT_PIXEL_SIZE, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setFontPixelSize(reader.getFloat());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setFontPixelSize(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_FONT_INPUT_WORD_SPACING, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_FONT_INPUT_WORD_SPACING, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setWordSpacing(reader.getFloat());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setWordSpacing(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_FONT_INPUT_LETTER_SPACING, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_FONT_INPUT_LETTER_SPACING, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setLetterSpacing(reader.getFloat());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setLetterSpacing(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_ALIGNMENT_HORIZONTAL, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_ALIGNMENT_HORIZONTAL, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setAlignmentHorizontal(reader.getString());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setAlignmentHorizontal(reader.getString());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_TEXT_INPUT_ALIGNMENT_VERTICAL, new Action() {
+        app.client.actions.put(InAction.SET_TEXT_INPUT_ALIGNMENT_VERTICAL, new Action() {
             @Override
-            void work(Reader reader) {
-                ((TextInput) reader.getItem()).setAlignmentVertical(reader.getString());
+            public void work(Reader reader) {
+                ((TextInput) app.renderer.getItemFromReader(reader)).setAlignmentVertical(reader.getString());
             }
         });
     }
@@ -130,16 +134,16 @@ public class TextInput extends Item {
     public boolean focus = false;
     public int color = Color.BLACK;
 
-    public TextInput(Renderer renderer){
-        super(renderer);
-        Context context = renderer.mainActivity.getApplicationContext();
+    public TextInput(MainActivity app){
+        super(app);
+        Context context = app.getApplicationContext();
         ViewGroup container = new RelativeLayout(context);
-        container.layout(0, 0, (int) renderer.screen.width, (int) renderer.screen.height);
+        container.layout(0, 0, (int) app.renderer.screen.width, (int) app.renderer.screen.height);
         this.view = new InputView(context);
         view.setBackgroundColor(Color.TRANSPARENT);
         view.setPadding(0, 0, 0, 0);
         container.addView(view);
-        renderer.mainActivity.view.addView(container);
+        app.view.addView(container);
 
         // default config
         setWidth(100);
@@ -203,7 +207,7 @@ public class TextInput extends Item {
     }
 
     public void setFontPixelSize(float val) {
-        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, renderer.dpToPx(val));
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, app.renderer.dpToPx(val));
     }
 
     public void setWordSpacing(float val) {
@@ -242,11 +246,11 @@ public class TextInput extends Item {
         focus = val;
         view.active = val;
         if (val) {
-            renderer.device.showKeyboard();
+            app.renderer.device.showKeyboard();
             view.requestFocus();
         } else {
             view.clearFocus();
-            renderer.device.hideKeyboard();
+            app.renderer.device.hideKeyboard();
         }
         invalidate();
     }

@@ -5,42 +5,46 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
 import io.neft.Utils.ColorUtils;
 
 public class Rectangle extends Item {
-    static void register(Renderer renderer) {
-        renderer.actions.put(Renderer.InAction.CREATE_RECTANGLE, new Action() {
+    static void register(final MainActivity app) {
+        app.client.actions.put(InAction.CREATE_RECTANGLE, new Action() {
             @Override
-            void work(Reader reader) {
-                new Rectangle(reader.renderer);
+            public void work(Reader reader) {
+                new Rectangle(app);
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_RECTANGLE_COLOR, new Action() {
+        app.client.actions.put(InAction.SET_RECTANGLE_COLOR, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Rectangle) reader.getItem()).setColor(reader.getInteger());
+            public void work(Reader reader) {
+                ((Rectangle) app.renderer.getItemFromReader(reader)).setColor(reader.getInteger());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_RECTANGLE_RADIUS, new Action() {
+        app.client.actions.put(InAction.SET_RECTANGLE_RADIUS, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Rectangle) reader.getItem()).setRadius(reader.getFloat());
+            public void work(Reader reader) {
+                ((Rectangle) app.renderer.getItemFromReader(reader)).setRadius(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_RECTANGLE_BORDER_COLOR, new Action() {
+        app.client.actions.put(InAction.SET_RECTANGLE_BORDER_COLOR, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Rectangle) reader.getItem()).setBorderColor(reader.getInteger());
+            public void work(Reader reader) {
+                ((Rectangle) app.renderer.getItemFromReader(reader)).setBorderColor(reader.getInteger());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_RECTANGLE_BORDER_WIDTH, new Action() {
+        app.client.actions.put(InAction.SET_RECTANGLE_BORDER_WIDTH, new Action() {
             @Override
-            void work(Reader reader) {
-                ((Rectangle) reader.getItem()).setBorderWidth(reader.getFloat());
+            public void work(Reader reader) {
+                ((Rectangle) app.renderer.getItemFromReader(reader)).setBorderWidth(reader.getFloat());
             }
         });
     }
@@ -53,8 +57,8 @@ public class Rectangle extends Item {
     public int borderColor = Color.TRANSPARENT;
     public float borderWidth = 0;
 
-    public Rectangle(Renderer renderer) {
-        super(renderer);
+    public Rectangle(MainActivity app) {
+        super(app);
     }
 
     protected void updatePath() {
@@ -88,7 +92,7 @@ public class Rectangle extends Item {
     }
 
     public void setRadius(float val) {
-        radius = renderer.dpToPx(val);
+        radius = app.renderer.dpToPx(val);
         updatePath();
         invalidate();
     }
@@ -99,7 +103,7 @@ public class Rectangle extends Item {
     }
 
     public void setBorderWidth(float val) {
-        borderWidth = renderer.dpToPx(val);
+        borderWidth = app.renderer.dpToPx(val);
         invalidate();
     }
 

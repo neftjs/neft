@@ -15,6 +15,55 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.OutAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
+
+class KeyboardText extends EditText {
+    private final MainActivity app;
+
+    public KeyboardText(Context context, final MainActivity app){
+        super(context);
+        this.app = app;
+        this.setInputType(InputType.TYPE_CLASS_TEXT);
+        this.setVisibility(View.INVISIBLE);
+
+        // set layout to get onKeyPreIme
+        this.layout(0, 0, 1, 1);
+
+        this.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                return app.renderer.device.onKey(keyCode, event);
+            }
+        });
+
+        this.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                final int startIndex = start + before;
+                final int endIndex = start + count;
+                if (endIndex > startIndex) {
+                    final CharSequence text = s.subSequence(startIndex, endIndex);
+                    app.client.pushAction(OutAction.KEY_INPUT);
+                    app.client.pushString(text.toString());
+                }
+            }
+        });
+    }
+
+    public boolean onKeyPreIme(int keyCode, KeyEvent event){
+        return app.renderer.device.onKey(keyCode, event);
+    }
+}
+
 public class Device {
     static final String[] keyCodes;
 
@@ -294,135 +343,94 @@ public class Device {
         }
     }
 
-    class KeyboardText extends EditText {
-        private final Device device;
-
-        public KeyboardText(Context context, final Device device){
-            super(context);
-            this.device = device;
-            this.setInputType(InputType.TYPE_CLASS_TEXT);
-            this.setVisibility(View.INVISIBLE);
-
-            // set layout to get onKeyPreIme
-            this.layout(0, 0, 1, 1);
-
-            this.setOnKeyListener(new OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    return device.onKey(keyCode, event);
-                }
-            });
-
-            this.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {
-                }
-
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    final int startIndex = start + before;
-                    final int endIndex = start + count;
-                    if (endIndex > startIndex) {
-                        final CharSequence text = s.subSequence(startIndex, endIndex);
-                        device.renderer.pushAction(Renderer.OutAction.KEY_INPUT);
-                        device.renderer.pushString(text.toString());
-                    }
-                }
-            });
-        }
-
-        public boolean onKeyPreIme(int keyCode, KeyEvent event){
-            return device.onKey(keyCode, event);
-        }
-    }
-
-    public final float pixelRatio;
-    public final boolean isPhone;
-    public Renderer renderer;
+    public float pixelRatio;
+    public boolean isPhone;
+    public MainActivity app;
     public boolean keyboardVisible = false;
     public MotionEvent pointerDownEvent;
 
-    public final KeyboardText keyboardText;
+    public KeyboardText keyboardText;
 
-    static void register(Renderer renderer){
-        renderer.actions.put(Renderer.InAction.DEVICE_SHOW_KEYBOARD, new Action() {
-            @Override
-            void work(Reader reader) {
-                reader.renderer.device.showKeyboard();
-            }
-        });
-
-        renderer.actions.put(Renderer.InAction.DEVICE_HIDE_KEYBOARD, new Action() {
-            @Override
-            void work(Reader reader) {
-                reader.renderer.device.hideKeyboard();
-            }
-        });
-    }
-
-    public Device(Renderer renderer){
-        this.renderer = renderer;
+    static void init(Device device, MainActivity app) {
+        device.app = app;
 
         // create EditText to handle KeyInput
-        this.keyboardText = new KeyboardText(renderer.mainActivity.getApplicationContext(), this);
-        renderer.mainActivity.view.addView(keyboardText);
+        device.keyboardText = new KeyboardText(app.getApplicationContext(), app);
+        app.view.addView(device.keyboardText);
 
         // hide keyboard
-        final Window window = ((Activity) renderer.mainActivity.view.getContext()).getWindow();
+        final Window window = ((Activity) app.view.getContext()).getWindow();
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         // DEVICE_PIXEL_RATIO
-        final DisplayMetrics metrics = renderer.mainActivity.getResources().getDisplayMetrics();
-        this.pixelRatio = metrics.density;
-        renderer.pushAction(Renderer.OutAction.DEVICE_PIXEL_RATIO);
-        renderer.pushFloat(pixelRatio);
+        final DisplayMetrics metrics = app.getResources().getDisplayMetrics();
+        device.pixelRatio = metrics.density;
+        app.client.pushAction(OutAction.DEVICE_PIXEL_RATIO);
+        app.client.pushFloat(device.pixelRatio);
 
         // DEVICE_IS_PHONE
-        this.isPhone = (renderer.mainActivity.getResources().getConfiguration().screenLayout
+        device.isPhone = (app.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-        renderer.pushAction(Renderer.OutAction.DEVICE_IS_PHONE);
-        renderer.pushBoolean(isPhone);
+        app.client.pushAction(OutAction.DEVICE_IS_PHONE);
+        app.client.pushBoolean(device.isPhone);
+    }
+
+    static void register(MainActivity app){
+        final Device device = app.renderer.device;
+
+        app.client.actions.put(InAction.DEVICE_SHOW_KEYBOARD, new Action() {
+            @Override
+            public void work(Reader reader) {
+                device.showKeyboard();
+            }
+        });
+
+        app.client.actions.put(InAction.DEVICE_HIDE_KEYBOARD, new Action() {
+            @Override
+            public void work(Reader reader) {
+                device.hideKeyboard();
+            }
+        });
     }
 
     void showKeyboard(){
-        InputMethodManager imm = (InputMethodManager) renderer.mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInputFromWindow(renderer.mainActivity.view.getWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+        InputMethodManager imm = (InputMethodManager) app.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInputFromWindow(app.view.getWindowToken(), InputMethodManager.SHOW_FORCED, 0);
         keyboardText.requestFocus();
 
         this.keyboardVisible = true;
-        renderer.pushAction(Renderer.OutAction.DEVICE_KEYBOARD_SHOW);
+        app.client.pushAction(OutAction.DEVICE_KEYBOARD_SHOW);
     }
 
     void hideKeyboard(){
-        InputMethodManager imm = (InputMethodManager) renderer.mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(renderer.mainActivity.view.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) app.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(app.view.getWindowToken(), 0);
         keyboardText.clearFocus();
         keyboardText.setText(null);
 
         this.keyboardVisible = false;
-        renderer.pushAction(Renderer.OutAction.DEVICE_KEYBOARD_HIDE);
+        app.client.pushAction(OutAction.DEVICE_KEYBOARD_HIDE);
     }
 
     public boolean onTouchEvent(MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 pointerDownEvent = event;
-                renderer.pushAction(Renderer.OutAction.POINTER_PRESS);
+                app.client.pushAction(OutAction.POINTER_PRESS);
                 break;
             case MotionEvent.ACTION_UP:
-                renderer.pushAction(Renderer.OutAction.POINTER_RELEASE);
+                app.client.pushAction(OutAction.POINTER_RELEASE);
                 break;
             case MotionEvent.ACTION_MOVE:
-                renderer.pushAction(Renderer.OutAction.POINTER_MOVE);
+                app.client.pushAction(OutAction.POINTER_MOVE);
                 break;
             default:
                 return true;
         }
 
-        renderer.pushFloat(event.getX() / pixelRatio);
-        renderer.pushFloat(event.getY() / pixelRatio);
+        app.client.pushFloat(event.getX() / pixelRatio);
+        app.client.pushFloat(event.getY() / pixelRatio);
 
         return true;
     }
@@ -435,19 +443,19 @@ public class Device {
 
         switch (event.getAction()){
             case KeyEvent.ACTION_DOWN:
-                renderer.pushAction(Renderer.OutAction.KEY_PRESS);
+                app.client.pushAction(OutAction.KEY_PRESS);
                 break;
             case KeyEvent.ACTION_UP:
-                renderer.pushAction(Renderer.OutAction.KEY_RELEASE);
+                app.client.pushAction(OutAction.KEY_RELEASE);
                 break;
             case KeyEvent.ACTION_MULTIPLE:
-                renderer.pushAction(Renderer.OutAction.KEY_HOLD);
+                app.client.pushAction(OutAction.KEY_HOLD);
                 break;
             default:
                 return false;
         }
 
-        renderer.pushString(keyCodes[keyCode]);
+        app.client.pushString(keyCodes[keyCode]);
 
         return keyCode == KeyEvent.KEYCODE_BACK;
     }

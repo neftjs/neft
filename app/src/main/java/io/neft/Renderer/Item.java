@@ -6,117 +6,121 @@ import android.graphics.RectF;
 
 import java.util.ArrayList;
 
+import io.neft.Client.Action;
+import io.neft.Client.InAction;
+import io.neft.Client.Reader;
+import io.neft.MainActivity;
 import io.neft.Utils.RectFUtils;
 
 public class Item {
-    static void register(Renderer renderer) {
-        renderer.actions.put(Renderer.InAction.CREATE_ITEM, new Action() {
+    static void register(final MainActivity app) {
+        app.client.actions.put(InAction.CREATE_ITEM, new Action() {
             @Override
-            void work(Reader reader) {
-                new Item(reader.renderer);
+            public void work(Reader reader) {
+                new Item(app);
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_PARENT, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_PARENT, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setParent(reader.getItem());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setParent(app.renderer.getItemFromReader(reader));
             }
         });
 
-        renderer.actions.put(Renderer.InAction.INSERT_ITEM_BEFORE, new Action() {
+        app.client.actions.put(InAction.INSERT_ITEM_BEFORE, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().insertBefore(reader.getItem());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).insertBefore(app.renderer.getItemFromReader(reader));
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_VISIBLE, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_VISIBLE, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setVisible(reader.getBoolean());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setVisible(reader.getBoolean());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_CLIP, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_CLIP, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setClip(reader.getBoolean());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setClip(reader.getBoolean());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_WIDTH, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_WIDTH, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setWidth(reader.getFloat());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setWidth(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_HEIGHT, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_HEIGHT, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setHeight(reader.getFloat());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setHeight(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_X, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_X, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setX(reader.getFloat());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setX(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_Y, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_Y, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setY(reader.getFloat());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setY(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_Z, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_Z, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setZ(reader.getInteger());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setZ(reader.getInteger());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_SCALE, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_SCALE, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setScale(reader.getFloat());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setScale(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_ROTATION, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_ROTATION, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setRotation(reader.getFloat());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setRotation(reader.getFloat());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_OPACITY, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_OPACITY, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setOpacity(reader.getInteger());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setOpacity(reader.getInteger());
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_BACKGROUND, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_BACKGROUND, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setBackground(reader.getItem());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setBackground(app.renderer.getItemFromReader(reader));
             }
         });
 
-        renderer.actions.put(Renderer.InAction.SET_ITEM_KEYS_FOCUS, new Action() {
+        app.client.actions.put(InAction.SET_ITEM_KEYS_FOCUS, new Action() {
             @Override
-            void work(Reader reader) {
-                reader.getItem().setKeysFocus(reader.getBoolean());
+            public void work(Reader reader) {
+                app.renderer.getItemFromReader(reader).setKeysFocus(reader.getBoolean());
             }
         });
     }
 
-    protected final Renderer renderer;
+    protected final MainActivity app;
 
     public final int id;
     public float x = 0;
@@ -145,12 +149,10 @@ public class Item {
     protected final Matrix globalMatrix = new Matrix();
     protected final RectF redrawRect = new RectF();
 
-    private static final float PI = (float) Math.PI;
-
-    public Item(Renderer renderer) {
-        this.renderer = renderer;
-        this.id = renderer.items.size();
-        renderer.items.add(this);
+    public Item(MainActivity app) {
+        this.app = app;
+        this.id = app.renderer.items.size();
+        app.renderer.items.add(this);
 
         children = new ArrayList<>();
     }
@@ -254,27 +256,27 @@ public class Item {
     }
 
     public void setWidth(float val) {
-        width = renderer.dpToPx(val);
+        width = app.renderer.dpToPx(val);
         bounds.right = width;
         dirtyMatrix = true;
         invalidate();
     }
 
     public void setHeight(float val) {
-        height = renderer.dpToPx(val);
+        height = app.renderer.dpToPx(val);
         bounds.bottom = height;
         dirtyMatrix = true;
         invalidate();
     }
 
     public void setX(float val) {
-        x = renderer.dpToPx(val);
+        x = app.renderer.dpToPx(val);
         dirtyMatrix = true;
         invalidate();
     }
 
     public void setY(float val) {
-        y = renderer.dpToPx(val);
+        y = app.renderer.dpToPx(val);
         dirtyMatrix = true;
         invalidate();
     }
@@ -291,7 +293,7 @@ public class Item {
     }
 
     public void setRotation(float val) {
-        rotation = val;// * 180 / PI;
+        rotation = val;
         dirtyMatrix = true;
         invalidate();
     }

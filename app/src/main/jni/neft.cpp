@@ -11,6 +11,7 @@
 #include "renderer.cpp"
 #include "http.cpp"
 #include "timers.cpp"
+#include "client.cpp"
 
 using namespace v8;
 
@@ -24,6 +25,7 @@ extern "C" void Java_io_neft_Native_init(JNIEnv * env, jobject obj, jstring js) 
     timers::main();
     console::main();
     renderer::main();
+    client::main();
 
     // Run script
     JS::Run();
