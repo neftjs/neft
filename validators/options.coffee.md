@@ -1,9 +1,9 @@
 options @validator
-=======
+==================
 
-This validator determines accepted property values.
+Determines accepted property values.
 
-```
+```javascript
 var schema = new Schema({
   city: {
     options: ['Paris', 'Warsaw']
@@ -17,11 +17,9 @@ console.log(schema.validate({city: 'Warsaw'}));
 // true
 ```
 
-This validator also accepts an object in place of array.
+If the object has been given, validator checks whether the tested value exists as an object key.
 
-In such case, we check whether property value exists as an object key.
-
-```
+```javascript
 var cities = {
   Paris: {
     country: 'France'

@@ -1,17 +1,18 @@
 object @validator
-======
+=================
 
-This validator is used to determine whether passed *value* is an object.
-Check [utils.isObject()][] for explanation.
+Determines whether the tested value is an object.
 
-```
+The [utils.isObject()][utils/utils.isObject()] is used internally.
+
+```javascript
 var schema = new Schema({
   dict: {
     object: true
   }
 });
 
-console.log(utils.catchError(schema.validate, schema, [{dict: []}])+'');
+console.log(utils.catchError(schema.validate, schema, [{dict: 'text'}])+'');
 // "SchemaError: dict must be an object"
 
 console.log(utils.catchError(schema.validate, schema, [{dict: null}])+'');
@@ -21,9 +22,9 @@ console.log(schema.validate({dict: {}}));
 // true
 ```
 
-This validator accepts `properties` to describe allowed properties.
+This validator accepts the properties array used to describe the allowed properties.
 
-```
+```javascript
 var schema = new Schema({
   dict: {
     object: {
@@ -43,8 +44,6 @@ console.log(schema.validate({dict: { name: 'John' }}));
 
 	assert = require 'neft-assert'
 	utils = require 'utils'
-
-	{isArray} = Array
 
 	module.exports = (Schema) -> (row, value, expected) ->
 		unless expected

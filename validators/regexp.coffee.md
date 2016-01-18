@@ -1,9 +1,9 @@
 regexp @validator
-======
+=================
 
-Use this validator to check whether property value passed regular expression.
+Checks whether the tested value passed the given regular expression.
 
-```
+```javascript
 var schema = new Schema({
   word: {
     regexp: /^\S+$/
@@ -11,10 +11,10 @@ var schema = new Schema({
 });
 
 console.log(utils.catchError(schema.validate, schema, [{word: ''}])+'');
-// "SchemaError: word doesn't pass regular expression"
+// "SchemaError: word doesn't pass the regular expression"
 
 console.log(utils.catchError(schema.validate, schema, [{word: 'a b'}])+'');
-// "SchemaError: word doesn't pass regular expression"
+// "SchemaError: word doesn't pass the regular expression"
 
 console.log(schema.validate({word: 'abc'}));
 // true
@@ -26,7 +26,7 @@ console.log(schema.validate({word: 'abc'}));
 
 	module.exports = (Schema) -> (row, value, expected) ->
 		assert expected instanceof RegExp
-		, "regexp validator option for #{row} property must be a regular expression"
+		, "regexp validator option for the #{row} property must be a regular expression"
 
 		unless expected.test value
-			throw new Schema.Error row, 'regexp', "#{row} doesn't pass regular expression"
+			throw new Schema.Error row, 'regexp', "#{row} doesn't pass the regular expression"

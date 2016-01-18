@@ -1,11 +1,9 @@
 array @validator
-=====
+================
 
-This validator is used to determine whether *value* is a true array.
+Determines whether the tested value is an array.
 
-Remember that *arguments* and other array-like objects in *JavaScript* are not arrays.
-
-```
+```javascript
 var schema = new Schema({
   friends: {
     array: true

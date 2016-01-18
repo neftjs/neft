@@ -1,11 +1,11 @@
 type @validator
-====
+===============
 
-Use this validator to verify property value type.
+Verifies the tested value type.
 
-Unlike standard **typeof**, this validator returns *undefined* for *NaN* and *null*.
+Unlike the standard `typeof`, this validator returns `undefined` for `NaN` and `null`.
 
-```
+```javascript
 var schema = new Schema({
   desc: {
     type: 'object'

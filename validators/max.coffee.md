@@ -1,11 +1,11 @@
 max @validator
-===
+==============
 
-Determines the maximum range for number.
+Determines the maximum range of the number.
 
-*value* can be lower or equal maximum.
+The tested value can be lower or equal maximum.
 
-```
+```javascript
 var schema = new Schema({
   age: {
     max: 200

@@ -1,11 +1,11 @@
 min @validator
-===
+==============
 
-Determines the minimum range for number.
+Determines the minimum range on the number.
 
-*value* can be greater or equal maximum.
+The tested value can be greater or equal maximum.
 
-```
+```javascript
 var schema = new Schema({
   age: {
     min: 0

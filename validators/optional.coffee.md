@@ -1,11 +1,11 @@
 optional @validator
-========
+===================
 
-Use this validator to mark property as optional.
+Marks the property as optional.
 
-*undefined* and *null* values are omitted.
+An `undefined` and a `null` values are omitted.
 
-```
+```javascript
 var schema = new Schema({
   name: {
     optional: true,
