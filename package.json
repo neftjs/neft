@@ -1,5 +1,13 @@
 {
-	"private": true,
-	"name": "neft-assert",
-	"version": "0.0.1"
+  "private": true,
+  "name": "neft-assert",
+  "version": "0.0.1",
+  "description": "Neft.io assertions library",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/assert.git"
+  },
+  "bugs": "https://github.com/Neft-io/assert/issues"
 }
