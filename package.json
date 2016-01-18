@@ -2,7 +2,7 @@
   "private": true,
   "name": "db",
   "version": "0.6.0",
-  "description": "Neft.io utility library",
+  "description": "Neft.io database library",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
   "repository": {
