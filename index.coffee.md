@@ -305,7 +305,7 @@ app.cookies.onChanged(function(key){
 		app
 
 	# link modules
-	MODULES = ['utils', 'signal', 'dict', 'list', 'log', 'Resources',
+	MODULES = ['utils', 'signal', 'dict', 'list', 'log', 'Resources', 'native',
 	           'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db']
 	for name in MODULES
 		exports[name] = exports[name.toLowerCase()] = require name.toLowerCase()
