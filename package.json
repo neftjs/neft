@@ -1,5 +1,13 @@
 {
-	"private": true,
-	"name": "log",
-	"version": "0.0.1"
+  "private": true,
+  "name": "log",
+  "version": "0.0.1",
+  "description": "Neft.io logging library",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/log.git"
+  },
+  "bugs": "https://github.com/Neft-io/log/issues"
 }
