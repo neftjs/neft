@@ -1,5 +1,13 @@
 {
 	"private": true,
 	"name": "list",
-	"version": "0.0.1"
+	"version": "0.0.1",
+	"description": "Neft.io list library used for array data-binding",
+	"license": "Apache 2.0",
+	"homepage": "http://neft.io",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Neft-io/list.git"
+	},
+	"bugs": "https://github.com/Neft-io/list/issues"
 }
