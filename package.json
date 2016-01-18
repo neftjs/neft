@@ -1,9 +1,13 @@
 {
-	"private": true,
-	"name": "view",
-	"version": "0.7.0",
-	"dependencies": {
-		"htmlparser2": ">=3.3.0",
-		"coffee-script": ">=1.6.3"
-	}
+  "private": true,
+  "name": "document",
+  "version": "0.7.0",
+  "description": "Neft.io document engine",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/document.git"
+  },
+  "bugs": "https://github.com/Neft-io/document/issues"
 }
