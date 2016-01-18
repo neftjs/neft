@@ -2,13 +2,18 @@
   "name": "neft",
   "version": "0.0.2",
   "preferGlobal": true,
-  "author": "Neft.io <contact@neft.io>",
   "description": "Command-line interface for building Neft.io projects",
   "bin": {
     "neft": "./bin/neft.js"
   },
   "main": "./lib/neft-cli.js",
-  "license": "Apache-2.0",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/neft-cli.git"
+  },
+  "bugs": "https://github.com/Neft-io/neft-cli/issues",
   "dependencies": {
     "coffee-script": "^1.10.0",
     "fs-extra": "^0.24.0",
