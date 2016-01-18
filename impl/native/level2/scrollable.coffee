@@ -8,11 +8,13 @@ module.exports = (impl) ->
 	{outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
 
 	bridge.listen bridge.inActions.SCROLLABLE_CONTENT_X, (reader) ->
-		reader.getItem().contentX = reader.getFloat()
+		item = bridge.getItemFromReader reader
+		item.contentX = reader.getFloat()
 		return
 
 	bridge.listen bridge.inActions.SCROLLABLE_CONTENT_Y, (reader) ->
-		reader.getItem().contentY = reader.getFloat()
+		item = bridge.getItemFromReader reader
+		item.contentY = reader.getFloat()
 		return
 
 	onPointerPress = ->

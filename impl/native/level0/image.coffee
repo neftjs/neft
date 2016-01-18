@@ -10,7 +10,7 @@ module.exports = (impl) ->
 		imageLoadCallback: null
 
 	bridge.listen bridge.inActions.IMAGE_SIZE, (reader) ->
-		image = reader.getItem()
+		image = bridge.getItemFromReader reader
 		source = reader.getString()
 		success = reader.getBoolean()
 		width = reader.getFloat()
