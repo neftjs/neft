@@ -9,9 +9,6 @@ Resource @class
 
 	log = log.scope 'Resources', 'Resource'
 
-*Resource* Resource()
----------------------
-
 	module.exports = (Resources) -> class Resource
 		@__name__ = 'Resource'
 		@__path__ = 'Resources.Resource'
