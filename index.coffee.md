@@ -1,15 +1,8 @@
 Log @library
-===
-
-**Colored console**
-
-Simple to use and good looking logger used to log informations, warnings, 
-error messages and functions processing times.
-
-All logs are removed for the *release* mode.
+============
 
 Access it with:
-```
+```javascript
 var log = require('log');
 ```
 
@@ -101,18 +94,16 @@ var log = require('log');
 *Integer* enabled = log.ALL
 ---------------------------
 
+Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
+
 		enabled: @::ALL
 
 log([*Any* messages...])
 ------------------------
 
-This is the most basic function used to write logs.
+Prints the given messages into the console.
 
-All passed arguments are concatenated using right arrow (`→`).
-
-Logged text is white.
-
-```
+```javascript
 log("Log me now!");
 
 log("setName()", "db time");
@@ -127,9 +118,7 @@ log("setName()", "db time");
 log.info([*Any* messages...])
 -----------------------------
 
-This function is used to log debugging informations or to mark progress.
-
-Logged text is blue.
+Prints the given messages into the console with a blue color.
 
 		info: ->
 			if @enabled & @INFO
@@ -139,11 +128,9 @@ Logged text is blue.
 log.ok([*Any* messages...])
 ---------------------------
 
-This function is used to mark successful operations.
+Prints the given messages into the console with a green color.
 
-Logged text is green.
-
-```
+```javascript
 log.ok("Data has been successfully sent!");
 ```
 
@@ -155,11 +142,9 @@ log.ok("Data has been successfully sent!");
 log.warn([*Any* messages...])
 -----------------------------
 
-This function is used to log warnings.
+Prints the given messages into the console with a yellow color.
 
-Logged text is yellow.
-
-```
+```javascript
 log.warn("Example warning with some recommendations");
 ```
 
@@ -171,11 +156,9 @@ log.warn("Example warning with some recommendations");
 log.error([*Any* messages...])
 ------------------------------
 
-This function is used to log errors.
+Prints the given messages into the console with a red color.
 
-Logged text is red.
-
-```
+```javascript
 log.error("Error occurs, ... in file ...");
 ```
 
@@ -187,15 +170,9 @@ log.error("Error occurs, ... in file ...");
 *Integer* log.time()
 --------------------
 
-This method is used to log how long some operation takes.
+Returns an id used to measure execution time by the `log.end()` function.
 
-All logs logged after this method and before *log.end()* will be indented.
-
-Use it only for the synchronous operations.
-
-It's a good practice to always name variable which keeps returning *time id* as *logtime*.
-
-```
+```javascript
 function findPath(){
   var logtime = log.time('findPath()');
 
@@ -227,9 +204,7 @@ findPath();
 log.end(*Integer* id)
 ---------------------
 
-This method is used to mark when counting time ends.
-
-See *log.time()* method for more informations and example.
+Prints an information about the execution time for the given timer id.
 
 		end: (id) ->
 			if id is -1
@@ -248,11 +223,11 @@ See *log.time()* method for more informations and example.
 log.scope([*Any* names...])
 ---------------------------
 
-This method returns a new logger with bound functions.
+Returns a new `log` function.
 
-Use this function to always log with a special prefix (e.g. module name).
+All prints will be prefixed by the given names.
 
-```
+```javascript
 var log = log.scope("Example file");
 
 log("hello");
