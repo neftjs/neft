@@ -221,8 +221,8 @@ assert.isFunction(*Function* value, [*String* message])
 		if typeof val isnt 'function'
 			@fail val, 'function', msg, 'is', assert.isFunction
 
-assert.isFunction(*Any* value, [*String* message])
---------------------------------------------------
+assert.isNotFunction(*Any* value, [*String* message])
+-----------------------------------------------------
 
 	assert.isNotFunction = (val, msg) ->
 		if typeof val is 'function'
