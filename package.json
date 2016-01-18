@@ -1,4 +1,13 @@
 {
+	"private": true,
 	"name": "utils",
-	"version": "1.0.6"
+	"version": "1.0.6",
+	"description": "Neft.io utility library",
+	"license": "Apache 2.0",
+	"homepage": "http://neft.io",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Neft-io/utils.git"
+	},
+	"bugs": "https://github.com/Neft-io/utils/issues"
 }
