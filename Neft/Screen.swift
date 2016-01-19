@@ -1,16 +1,20 @@
-import SpriteKit
+import UIKit
 
-extension Renderer {
-    class Screen: Renderer.BaseType {
-        override init(app: GameViewController){
-            super.init(app: app)
-            
-            // SCREEN_SIZE
-            let mainScreen = UIScreen.mainScreen()
-            let size = mainScreen.bounds
-            renderer.pushAction(OutActions.SCREEN_SIZE)
-            renderer.pushFloat(size.width)
-            renderer.pushFloat(size.height)
-        }
+class Screen {
+    var rect: CGRect
+    
+    class func register(app: GameViewController){
+        
+    }
+    
+    init(_ app: GameViewController) {
+        // SCREEN_SIZE
+        let mainScreen = UIScreen.mainScreen()
+        let size = mainScreen.bounds
+        self.rect = size
+        app.client.pushAction(OutAction.SCREEN_SIZE)
+        app.client.pushFloat(size.width)
+        app.client.pushFloat(size.height)
     }
 }
+

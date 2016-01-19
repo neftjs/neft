@@ -2,26 +2,6 @@
 window._neft =
 	platform: 'ios'
 
-# requestAnimationFrame
-window.requestAnimationFrame = do ->
-	queue = []
-	now = Date.now()
-
-	_neft.onAnimationFrame = ->
-		frameNow = Date.now()
-		timeDiff = frameNow - now
-
-		{length} = queue
-		for i in [0...length] by 1
-			queue.shift() timeDiff
-
-		now = frameNow
-		return
-
-	(func) ->
-		queue.push func
-		return
-
 ###
 Neft code
 ###

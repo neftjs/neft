@@ -1,204 +1,383 @@
-import SpriteKit
+import UIKit
 
-extension Renderer {
-    class Item: Renderer.BaseType {
-        class Node: SKNode {
-            let id: Int
-            let transformNode = SKNode()
-            var childrenNode: SKNode
-            var cropNode: SKCropNode?
-            var cropNodeMask: SKSpriteNode?
-            var x: CGFloat = 0
-            var y: CGFloat = 0
-            var width: CGFloat = 0
-            var height: CGFloat = 0
-            var clip: Bool = false
-            var background: Node?
-            
-            init(_ renderer: Renderer) {
-                self.childrenNode = self.transformNode
-                self.id = renderer.items.count
-                super.init()
-                renderer.items.append(self)
-                self.addChild(self.transformNode)
+extension Array where Element: Renderer.Object {
+    func indexOfObject(object: Element) -> Int? {
+        let length = self.count
+        var index = 0
+        while index < length {
+            if self[index] === object {
+                return index
             }
+            index += 1
+        }
+        return nil
+    }
+    
+    mutating func removeObject(object: Element) -> Bool {
+        if let index = self.indexOfObject(object) {
+            self.removeAtIndex(index)
+            return true;
+        }
+        return false;
+    }
+}
 
-            required init?(coder aDecoder: NSCoder) {
-                fatalError("init(coder:) has not been implemented")
-            }
+class Item: Renderer.Object {
+    class func register(app: GameViewController) {
+        app.client.actions[InAction.CREATE_ITEM] = {
+            (reader: Reader) in
+            Item(app)
         }
-        
-        override init(app: GameViewController){
-            super.init(app: app)
-            Renderer.actions[InActions.SET_WINDOW] = self.setAsWindow
-            Renderer.actions[InActions.CREATE_ITEM] = self.create
-            Renderer.actions[InActions.SET_ITEM_PARENT] = self.setParent
-            Renderer.actions[InActions.SET_ITEM_VISIBLE] = self.setVisible
-            Renderer.actions[InActions.SET_ITEM_CLIP] = self.setClip
-            Renderer.actions[InActions.SET_ITEM_WIDTH] = self.setWidth
-            Renderer.actions[InActions.SET_ITEM_HEIGHT] = self.setHeight
-            Renderer.actions[InActions.SET_ITEM_X] = self.setX
-            Renderer.actions[InActions.SET_ITEM_Y] = self.setY
-            Renderer.actions[InActions.SET_ITEM_Z] = self.setZ
-            Renderer.actions[InActions.SET_ITEM_SCALE] = self.setScale
-            Renderer.actions[InActions.SET_ITEM_ROTATION] = self.setRotation
-            Renderer.actions[InActions.SET_ITEM_OPACITY] = self.setOpacity
-            Renderer.actions[InActions.SET_ITEM_BACKGROUND] = self.setBackground
+        app.client.actions[InAction.SET_ITEM_PARENT] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setParent(app.renderer.getObjectFromReader(reader) as? Item)
         }
-        
-        func setAsWindow(reader: Reader) {
-            let item = renderer.getItem(reader)!
-            app.scene?.removeAllChildren()
-            app.scene?.addChild(item)
-            item.setScale(0.5)
+        app.client.actions[InAction.INSERT_ITEM_BEFORE] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .insertBefore(app.renderer.getObjectFromReader(reader) as! Item)
         }
-        
-        func create(reader: Reader){
-            Node(renderer)
+        app.client.actions[InAction.SET_ITEM_VISIBLE] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setVisible(reader.getBoolean())
         }
-        
-        func setParent(reader: Reader){
-            let item = renderer.getItem(reader)!
-            if let parent = renderer.getItem(reader) {
-                (parent as! Node).childrenNode.addChild(item)
-            } else {
-                item.removeFromParent()
-            }
+        app.client.actions[InAction.SET_ITEM_CLIP] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setClip(reader.getBoolean())
         }
-        
-        func insertBefore(reader: Reader){
-            print("not implemented")
-            let item = renderer.getItem(reader)!
-            let target = renderer.getItem(reader)!
-//            target.parent?.addChild(item)
+        app.client.actions[InAction.SET_ITEM_WIDTH] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setWidth(reader.getFloat())
         }
-        
-        func setVisible(reader: Reader){
-            let item = renderer.getItem(reader)!
-            item.hidden = !reader.getBoolean()
+        app.client.actions[InAction.SET_ITEM_HEIGHT] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setHeight(reader.getFloat())
         }
+        app.client.actions[InAction.SET_ITEM_X] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setX(reader.getFloat())
+        }
+        app.client.actions[InAction.SET_ITEM_Y] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setY(reader.getFloat())
+        }
+        app.client.actions[InAction.SET_ITEM_Z] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setZ(reader.getInteger())
+        }
+        app.client.actions[InAction.SET_ITEM_SCALE] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setScale(reader.getFloat())
+        }
+        app.client.actions[InAction.SET_ITEM_ROTATION] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setRotation(reader.getFloat())
+        }
+        app.client.actions[InAction.SET_ITEM_OPACITY] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setOpacity(reader.getInteger())
+        }
+        app.client.actions[InAction.SET_ITEM_BACKGROUND] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setBackground(app.renderer.getObjectFromReader(reader) as? Item)
+        }
+        app.client.actions[InAction.SET_ITEM_KEYS_FOCUS] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Item)
+                .setKeysFocus(reader.getBoolean())
+        }
+    }
+    
+    var x: CGFloat = 0
+    var y: CGFloat = 0
+    var z: Int = 0
+    var width: CGFloat = 0
+    var height: CGFloat = 0
+    var scale: CGFloat = 1
+    var rotation: CGFloat = 0
+    var opacity: CGFloat = 1
+    var visible: Bool = true
+    var clip: Bool = false
+    var parent: Item?
+    var background: Item?
+    var children = [Item]()
+    
+    var transform = CGAffineTransform(a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0)
+    
+    internal private(set) var dirty = false
+    internal var dirtyChildren = false
+    internal var dirtyTransform = false
+    var bounds = CGRect()
+    var globalBounds = CGRect()
+    
+    internal func invalidate() {
+        if dirty {
+           return
+        }
+        dirty = true
+        var parent = self.parent
+        while parent != nil && !parent!.dirtyChildren {
+            parent!.dirtyChildren = true
+            parent = parent!.parent
+        }
+    }
+    
+    private func updateTransform() {
+        var a: CGFloat = 1
+        var b: CGFloat = 0
+        var c: CGFloat = 0
+        var d: CGFloat = 1
+        var tx: CGFloat = 0
+        var ty: CGFloat = 0
         
-        func setClip(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = reader.getBoolean()
-            assert(item.clip != val)
-            item.clip = val
+        let originX = width / 2
+        let originY = height / 2
+        
+        // translate to the origin
+        tx = x + originX
+        ty = y + originY
+        
+        // scale
+        a = scale
+        d = scale
+        
+        // rotate
+        if rotation != 0 {
+            let sr = sin(rotation)
+            let cr = cos(rotation)
             
-            // create crop node
-            if item.cropNode == nil {
-                let cropNode = SKCropNode()
-//                let sprite = SKSpriteNode(color: UIColor.blackColor(), size: CGSize(width: 1000, height: 1000))
-                let shape = SKShapeNode(rect: CGRect(x: 0, y: 0, width: 1000, height: 1000))
-                shape.fillColor = UIColor.blackColor()
-                let tex = (app.view as! SKView).textureFromNode(shape)
-                let mask = SKSpriteNode(texture: tex)
-
-                mask.alpha = 0
-//                cropNode.maskNode = mask
-                
-                item.cropNode = cropNode
-                item.cropNodeMask = mask
-            }
+            let ac = a
+            let dc = d
             
-            // get old and new container
-            var oldContainer: SKNode
-            var newContainer: SKNode
-            if val {
-                oldContainer = item.transformNode
-                newContainer = item.cropNode!
-                oldContainer.addChild(newContainer)
-                
-//                item.cropNodeMask!.size.width = item.width
-//                item.cropNodeMask!.size.height = item.height
-            } else {
-                oldContainer = item.cropNode!
-                newContainer = item.transformNode
-                oldContainer.removeFromParent()
-            }
+            a = ac * cr
+            b = dc * sr
+            c = ac * -sr
+            d = dc * cr
+        }
+        
+        // translate to the position
+        tx += a * -originX + c * -originY
+        ty += b * -originX + d * -originY
+        
+        // save
+        self.transform = CGAffineTransformMake(a, b, c, d, tx, ty)
+    }
+    
+    internal func updateBounds() {
+        bounds.size.width = width
+        bounds.size.height = height
+    }
+    
+    func setParent(val: Item?) {
+        if parent != nil {
+            parent!.children.removeObject(self)
+            parent!.invalidate()
+        }
+        
+        if val != nil {
+            val!.children.append(self)
+            val!.invalidate()
+        }
+        
+        self.parent = val
+        invalidate()
+    }
+    
+    func insertBefore(val: Item) {
+        if parent != nil {
+            parent!.children.removeObject(self)
+            parent!.invalidate()
+        }
+        
+        let newParent = val.parent!
+        let index = newParent.children.indexOfObject(val)!
+        newParent.children.insert(self, atIndex: index)
+        self.parent = newParent
+        newParent.invalidate()
+        invalidate()
+    }
+    
+    func setVisible(val: Bool) {
+        self.visible = val
+        invalidate()
+    }
+    
+    func setClip(val: Bool) {
+        self.clip = val
+        invalidate()
+    }
+    
+    func setWidth(val: CGFloat) {
+        self.width = val
+        invalidate()
+        dirtyTransform = true
+        updateBounds()
+    }
+    
+    func setHeight(val: CGFloat) {
+        self.height = val
+        invalidate()
+        dirtyTransform = true
+        updateBounds()
+    }
+    
+    func setX(val: CGFloat) {
+        self.x = val
+        invalidate()
+        dirtyTransform = true
+    }
+    
+    func setY(val: CGFloat) {
+        self.y = val
+        invalidate()
+        dirtyTransform = true
+    }
+    
+    func setZ(val: Int) {
+        self.z = val
+        invalidate()
+    }
+    
+    func setScale(val: CGFloat) {
+        self.scale = val
+        invalidate()
+        dirtyTransform = true
+    }
+    
+    func setRotation(val: CGFloat) {
+        self.rotation = val
+        invalidate()
+        dirtyTransform = true
+    }
+    
+    func setOpacity(val: Int) {
+        self.opacity = CGFloat(val) / 255
+        invalidate()
+    }
+    
+    func setBackground(val: Item?) {
+        self.background = val
+        invalidate()
+    }
+    
+    func setKeysFocus(val: Bool) {
+        
+    }
+    
+    func measure(var globalTransform: CGAffineTransform, var _ viewRect: CGRect, inout _ dirtyRects: [CGRect], forceUpdateBounds: Bool = false) {
+        let isDirty = forceUpdateBounds || dirty || dirtyTransform
+        
+        // break on no changes
+        if !dirtyChildren && !isDirty {
+            return
+        }
+        
+        // update transform
+        if dirtyTransform {
+            updateTransform()
+        }
+        
+        // include local transform
+        globalTransform = CGAffineTransformConcat(transform, globalTransform)
+        
+        // update bounds
+        if isDirty {
+            let oldGlobalBounds = globalBounds
+            globalBounds = CGRectApplyAffineTransform(bounds, globalTransform)
             
-            // toggle containers
-            item.childrenNode = newContainer
-            
-            // move children to the new container
-            for child in oldContainer.children {
-                if child != newContainer {
-                    child.removeFromParent()
-                    newContainer.addChild(child)
+            // add rectangle to redraw
+            if dirty || dirtyTransform || !CGRectEqualToRect(globalBounds, oldGlobalBounds) {
+                var redrawRect = CGRectUnion(oldGlobalBounds, globalBounds)
+                redrawRect = CGRectIntersection(redrawRect, viewRect)
+                if !CGRectIsEmpty(redrawRect) {
+                    var i = 0
+                    let length = dirtyRects.count
+                    while i < length {
+                        if CGRectIntersectsRect(dirtyRects[i], redrawRect) {
+                            dirtyRects[i] = CGRectUnion(dirtyRects[i], redrawRect)
+                            break
+                        }
+                        i += 1
+                    }
+                    if i == length {
+                        dirtyRects.append(redrawRect)
+                    }
                 }
+                
+                dirty = false
             }
         }
         
-        func setWidth(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = reader.getFloat()
-            item.width = val
-            item.position.x = item.x + val / 2
-            item.transformNode.position.x = -val / 2
+        // clip
+        if clip {
+            viewRect = globalBounds
+        }
+        
+        let forceChildrenUpdate = forceUpdateBounds || dirtyTransform
+        if forceChildrenUpdate || dirtyChildren {
+            // measure background
+            background?.measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
             
-            if item.clip {
-//                item.cropNodeMask!.size.width = val
+            // measure children
+            var i = 0
+            let children = self.children
+            let length = children.count
+            while i < length {
+                children[i].measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
+                i += 1
             }
-        }
-        
-        func setHeight(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = reader.getFloat()
-            item.height = val
-            item.position.y = -item.y - val / 2
-            item.transformNode.position.y = val / 2
             
-            if item.clip {
-//                item.cropNodeMask!.size.height = val
+            // clear
+            dirtyChildren = false
+            dirtyTransform = false
+        }
+    }
+    
+    func drawShape(context: CGContextRef, inRect rect: CGRect) {
+        
+    }
+    
+    func draw(context: CGContextRef, inRect rect: CGRect) {
+        CGContextSaveGState(context)
+
+        // set opacity
+        CGContextSetAlpha(context, opacity)
+        
+        // transform
+        CGContextConcatCTM(context, transform)
+        
+        // clip
+        if clip {
+            CGContextClipToRect(context, bounds)
+        }
+        
+        // background
+        background?.draw(context, inRect: rect)
+        
+        // shape
+        if CGRectIntersectsRect(rect, globalBounds) {
+            drawShape(context, inRect: rect)
+        }
+    
+        // render children
+        for child in children {
+            if child.visible {
+                child.draw(context, inRect: rect)
             }
         }
         
-        func setX(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = reader.getFloat()
-            item.x = val
-            item.position.x = val + item.width / 2
-        }
-        
-        func setY(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = reader.getFloat()
-            item.y = val
-            item.position.y = -val - item.height / 2
-        }
-        
-        func setZ(reader: Reader){
-            let item = renderer.getItem(reader)!
-            let val = CGFloat(reader.getInteger())
-            item.zPosition = val
-        }
-        
-        func setScale(reader: Reader){
-            let item = renderer.getItem(reader)!
-            item.setScale(reader.getFloat())
-        }
-        
-        func setRotation(reader: Reader){
-            let item = renderer.getItem(reader)!
-            item.zRotation = -reader.getFloat()
-        }
-        
-        func setOpacity(reader: Reader){
-            let item = renderer.getItem(reader)!
-            let val = CGFloat(reader.getInteger()) / 255
-            item.alpha = val
-        }
-        
-        func setBackground(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = renderer.getItem(reader) as? Node
-            if item.background != nil {
-                item.background?.removeFromParent()
-                item.background = nil
-            }
-            if val != nil {
-                item.childrenNode.insertChild(val!, atIndex: 0)
-                item.background = val
-            }
-        }
+        CGContextRestoreGState(context)
     }
 }

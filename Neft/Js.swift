@@ -1,7 +1,7 @@
 import WebKit
 
 class Js: NSObject, WKScriptMessageHandler {
-    private let webView: WKWebView
+    let webView: WKWebView
     
     private var handlers: Dictionary<String, (message: AnyObject) -> ()> = [:]
     
@@ -13,7 +13,8 @@ class Js: NSObject, WKScriptMessageHandler {
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         
-        webView = WKWebView(frame: CGRect(), configuration: config)
+        webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1, height: 1), configuration: config)
+        webView.hidden = true
         
         super.init();
         
@@ -49,6 +50,8 @@ class Js: NSObject, WKScriptMessageHandler {
             if request != nil {
                 pendingRequests.removeValueForKey(id)
                 request!(message: message.body.objectForKey("response")!)
+            } else {
+                print("Response has no handler; id '\(id)'")
             }
         default:
             let handler = handlers[message.name]

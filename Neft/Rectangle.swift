@@ -1,81 +1,92 @@
-import SpriteKit
+import UIKit
 
-extension Renderer {
-    class Rectangle: Renderer.BaseType {
-        class Node: Item.Node {
-            let shape = SKShapeNode()
-            var radius: CGFloat = 0
-            override var width: CGFloat {
-                didSet {
-                    self.updatePath()
-                }
-            }
-            override var height: CGFloat {
-                didSet {
-                    self.updatePath()
-                }
-            }
-            
-            override init(_ renderer: Renderer) {
-                super.init(renderer)
-                self.shape.lineWidth = 0
-                self.shape.lineJoin = .Miter
-                self.childrenNode.addChild(self.shape)
-            }
-
-            required init?(coder aDecoder: NSCoder) {
-                fatalError("init(coder:) has not been implemented")
-            }
-            
-            private func updatePath(){
-                let path = CGPathCreateMutable()
-                let rect = CGRect(x: 0, y: -height, width: width, height: height)
-                let radius = min(self.radius, width / 2, height / 2)
-                if radius > 0 {
-                    CGPathAddRoundedRect(path, nil, rect, radius, radius)
-                } else {
-                    CGPathAddRect(path, nil, rect)
-                }
-                shape.path = path
-            }
+class Rectangle: Item {
+    override class func register(app: GameViewController){
+        app.client.actions[InAction.CREATE_RECTANGLE] = {
+            (reader: Reader) in
+            Rectangle(app)
         }
-        
-        override init(app: GameViewController){
-            super.init(app: app)
-            Renderer.actions[InActions.CREATE_RECTANGLE] = self.create
-            Renderer.actions[InActions.SET_RECTANGLE_COLOR] = self.setColor
-            Renderer.actions[InActions.SET_RECTANGLE_RADIUS] = self.setRadius
-            Renderer.actions[InActions.SET_RECTANGLE_BORDER_COLOR] = self.setBorderColor
-            Renderer.actions[InActions.SET_RECTANGLE_BORDER_WIDTH] = self.setBorderWidth
+        app.client.actions[InAction.SET_RECTANGLE_COLOR] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Rectangle)
+                .setColor(reader.getInteger())
         }
-        
-        func create(reader: Reader){
-            Node(renderer)
+        app.client.actions[InAction.SET_RECTANGLE_RADIUS] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Rectangle)
+                .setRadius(reader.getFloat())
         }
-        
-        func setColor(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let color = reader.getInteger()
-            item.shape.fillColor = hexColorToUIColor(color)
+        app.client.actions[InAction.SET_RECTANGLE_BORDER_COLOR] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Rectangle)
+                .setBorderColor(reader.getInteger())
         }
-        
-        func setRadius(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = reader.getFloat()
-            item.radius = val
-            item.updatePath()
-        }
-        
-        func setBorderColor(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let color = reader.getInteger()
-            item.shape.strokeColor = hexColorToUIColor(color)
-        }
-        
-        func setBorderWidth(reader: Reader){
-            let item = renderer.getItem(reader) as! Node
-            let val = reader.getFloat()
-            item.shape.lineWidth = val
+        app.client.actions[InAction.SET_RECTANGLE_BORDER_WIDTH] = {
+            (reader: Reader) in
+            (app.renderer.getObjectFromReader(reader) as! Rectangle)
+                .setBorderWidth(reader.getFloat())
         }
     }
+    
+    class ShapeLayer: CAShapeLayer {
+        static let defaultFillColor = UIColor.clearColor().CGColor
+        static let defaultBorderColor = UIColor.clearColor().CGColor
+        
+        override init() {
+            super.init()
+            self.fillColor = ShapeLayer.defaultFillColor
+            self.borderColor = ShapeLayer.defaultBorderColor
+            self.miterLimit = 0
+        }
+
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+    
+    var layer = ShapeLayer()
+    var radius: CGFloat = 0
+    
+    private func updatePath() {
+        let rect = CGRect(x: 0, y: 0, width: width, height: height)
+        if radius > 0 {
+            let radius = min(self.radius, width / 2, height / 2)
+            layer.path = CGPathCreateWithRoundedRect(rect, radius, radius, nil)
+        } else {
+            layer.path = CGPathCreateWithRect(rect, nil)
+        }
+    }
+    
+    override func updateBounds() {
+        super.updateBounds()
+        layer.frame.size = bounds.size
+        updatePath()
+    }
+    
+    func setColor(val: Int){
+        layer.fillColor = Color.hexColorToCGColor(val)
+        invalidate()
+    }
+    
+    func setRadius(val: CGFloat){
+        self.radius = val
+        updatePath()
+        invalidate()
+    }
+    
+    func setBorderColor(val: Int){
+        layer.strokeColor = Color.hexColorToCGColor(val)
+        invalidate()
+    }
+    
+    func setBorderWidth(val: CGFloat){
+        layer.lineWidth = val * 2
+        layer.masksToBounds = val > 0 // hide outer border
+        invalidate()
+    }
+    
+    override func drawShape(context: CGContextRef, inRect rect: CGRect) {
+        layer.renderInContext(context)
+    }
 }
+

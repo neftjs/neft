@@ -1,51 +1,67 @@
-//
-//  GameViewController.swift
-//  Neft
-//
-//  Created by Krystian Kruk on 07.12.2015.
-//  Copyright (c) 2015 Neft.io. All rights reserved.
-//
-
 import UIKit
-import SpriteKit
+
+public extension CGFloat {
+    /**
+     Returns a random floating point number between 0.0 and 1.0, inclusive.
+     */
+    public static func random() -> CGFloat {
+        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    }
+}
 
 class GameViewController: UIViewController {
+    let client = Client()
+    let renderer = Renderer()
+    var window: Window!
+    var customApp: CustomApp!
     
-    var scene: GameScene?
-    var renderer: Renderer?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    class Window: UIView {
+        var app: GameViewController!
+        var windowItem: Item?
+        let background = CAShapeLayer()
         
-        self.renderer = Renderer(app: self)
-
-        if let scene = GameScene(fileNamed: "GameScene") {
-            scene.app = self
-            self.scene = scene;
+        override func didMoveToSuperview() {
+            background.fillColor = UIColor.whiteColor().CGColor
+            background.path = CGPathCreateWithRect(CGRect(x: 0, y: 0, width: frame.width, height: frame.height), nil)
+        }
+        
+        override func drawRect(rect: CGRect) {
+            let context = UIGraphicsGetCurrentContext()!
+            background.renderInContext(context)
+            windowItem?.draw(context, inRect: rect)
             
-            // Configure the view.
-            let skView = self.view as! SKView
-//            skView.userInteractionEnabled = false
-            skView.showsFPS = true
-            skView.showsNodeCount = true
-            skView.showsDrawCount = true
-            
-            /* Sprite Kit applies additional optimizations to improve rendering performance */
-//            skView.ignoresSiblingOrder = true
-//            skView.shouldCullNonVisibleNodes = false
-            
-            /* Set the scale mode to scale to fit the window */
-            scene.size = skView.bounds.size
-            scene.scaleMode = .AspectFill
-            scene.anchorPoint.y = 1
-            skView.paused = true
-            
-            skView.presentScene(scene)
+            // DEBUG dirty rectangles
+//            CGContextSetRGBFillColor(context, CGFloat.random(), CGFloat.random(), CGFloat.random(), 0.3);
+//            CGContextFillRect(context, rect);
         }
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.customApp = CustomApp(app: self)
+        
+        renderer.app = self
+        
+        view.addSubview(self.client.js.webView)
+        (UIApplication.sharedApplication() as! NeftApplication).renderer = renderer
+        
+        client.actions[InAction.SET_WINDOW] = {
+            (reader: Reader) in
+            self.window.windowItem = self.renderer.getObjectFromReader(reader) as? Item
+            self.window.setNeedsDisplay()
+        }
+        
+        self.window = Window(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        self.window.app = self
+        self.view.addSubview(self.window)
+        
+        self.renderer.load()
+        self.client.js.runScript("neft")
+    }
+
     override func shouldAutorotate() -> Bool {
-        return true
+        return false
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -58,7 +74,6 @@ class GameViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 
     override func prefersStatusBarHidden() -> Bool {

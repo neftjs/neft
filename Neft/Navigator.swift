@@ -1,16 +1,16 @@
-import SpriteKit
+import Foundation
 
-extension Renderer {
-    class Navigator: Renderer.BaseType {
-        override init(app: GameViewController){
-            super.init(app: app)
-            
-            // NAVIGATOR_LANGUAGE
-            renderer.pushAction(OutActions.NAVIGATOR_LANGUAGE)
-            renderer.pushString(NSLocale.preferredLanguages()[0])
-            
-            // NAVIGATOR_ONLINE
-            // TODO
-        }
+class Navigator {
+    class func register(app: GameViewController){
+        
+    }
+    
+    init(_ app: GameViewController) {
+        // NAVIGATOR_LANGUAGE
+        app.client.pushAction(OutAction.NAVIGATOR_LANGUAGE)
+        app.client.pushString(NSLocale.preferredLanguages()[0])
+        
+        // NAVIGATOR_ONLINE
+        // TODO
     }
 }
