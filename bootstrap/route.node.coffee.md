@@ -1,8 +1,6 @@
 Standard routes @learn
 ======================
 
-**neft.io app** comes with few predefined routes.
-
 	'use strict'
 
 	utils = require 'utils'
@@ -69,9 +67,9 @@ Standard routes @learn
 			else
 				app.config.type
 
-#### app.js
+## app.js
 
-Returns build app javascript file.
+Returns the application javascript file.
 
 		`//<production>`
 		try
@@ -87,9 +85,9 @@ Returns build app javascript file.
 				callback null, appFile
 				`//</production>`
 
-#### neft.js
+## neft.js
 
-Returns neft javascript file.
+Returns the neft javascript file.
 
 		`//<production>`
 		try
@@ -114,7 +112,7 @@ Returns neft javascript file.
 					callback null, neftFile
 				`//</production>`
 
-#### favicon.ico
+## favicon.ico
 
 Returns 'static/favicon.ico' file.
 
@@ -122,21 +120,19 @@ Returns 'static/favicon.ico' file.
 			uri: 'favicon.ico'
 			redirect: 'static/favicon.ico'
 
-#### static/{path*}
+## static/{path*}
 
 Returns any file from the static/ folder.
 
-#### neft-type={type}/*
+## neft-type={type}/*
 
-This URI is used by the browsers which doesn't support javascript - in such case always
-full HTML document is returned (like for searching robots).
+URI used by the browser which doesn't support javascript - in such case always
+full HTML document is returned (like for the searching robots).
 
-You can use this route in a browser to check whether your HTML document is proper, but
-remember to clean your cookies when you finish.
+You can use this route in a browser to check whether your HTML document is proper.
+Clean your cookies when you finish.
 
-#### Switch between CSS/WebGL and text type @snippet
-
-```
+```html
 <a href="/neft-type=app/">Use CSS renderer</a>
 <a href="/neft-type=game/">Use WebGL renderer</a>
 <a href="/neft-type=text/">Use text type (robots)</a>
@@ -150,10 +146,10 @@ remember to clean your cookies when you finish.
 				res.setHeader 'Set-Cookie', "#{TYPE_COOKIE_NAME}=#{req.params.type}; path=/;"
 				res.redirect "#{app.networking.url}#{req.params.rest}"
 
-#### Default route
+## Default route
 
 It decides whether the full HTML document should be returned (e.g. for the Googlebot or
-text browsers) or HTML scaffolding which will run **neft.io** on the client side.
+text browsers) or the HTML scaffolding which will run **neft.io** on the client side.
 
 		new app.Route
 			uri: '*'
@@ -178,7 +174,7 @@ text browsers) or HTML scaffolding which will run **neft.io** on the client side
 
 			destroyHTML: ->
 				@response.data.destroy()
-					
+
 			toHTML: ->
 				view.render
 					title: app.config.title

@@ -26,14 +26,14 @@ Route @class
 -------------------------------
 
 Access it with:
-```
+```javascript
 module.exports = function(app){
   var Route = app.Route;
 };
 ```
 
 Acceptable syntaxes:
-```
+```javascript
 *Route* app.Route(*String* method, *String* uri, *Object* options)
 *Route* app.Route(*String* methodWithUri, *Function* getData)
 *Route* app.Route(*String* methodWithUri, *Object* options)

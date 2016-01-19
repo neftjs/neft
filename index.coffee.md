@@ -1,11 +1,5 @@
 App @framework
-===
-
-This module should be considered as a framework and scaffolding for your applications.
-
-Manual access to each neft.io library and engine is still available.
-This is just a high-level API for even easier dealing with networking routes,
-HTML documents and more.
+==============
 
 	'use strict'
 
@@ -54,41 +48,36 @@ Config object from the *package.json* file.
 
 Can be overriden in the *init.js* file.
 
-- *type* - accepts **app**, **game** and **text**,
-  used to detect e.g. which renderer implementation should be used
+### type
 
-```
-// package.json
-{
-  "name": "neft.io app",
-  "version": "0.1.0",
-  "config": {
-    "title": "My first application!",
-    "protocol": "http",
-    "port": 3000,
-    "host": "localhost",
-    "language": "en",
-    "type": "app"
-  }
-}
+`app` type (the default one) uses renderer on the client side.
 
-// init.js
-module.exports = function(NeftApp){
-  var app = NeftApp({ title: "Overridden title" });
-  console.log(app.config);
-  // {title: "My first application!", protocol: "http", port: ....}
-};
-```
+`game` type uses special renderer (if exists) focused on more performance goals.
 
-#### Use WebGL as a default renderer @snippet
+`text` type always return HTML document with no renderer on the client side.
+It's used for the crawlers (e.g. GoogleBot) or browsers with no javascript support.
 
-```
-// package.json
-{
-  "config": {
-    "type": "game"
-  }
-}
+```javascript
+`// package.json
+`{
+`	"name": "neft.io app",
+`	"version": "0.1.0",
+`	"config": {
+`		"title": "My first application!",
+`		"protocol": "http",
+`		"port": 3000,
+`		"host": "localhost",
+`		"language": "en",
+`		"type": "app"
+`	}
+`}
+`
+`// init.js
+`module.exports = function(NeftApp){
+`	var app = NeftApp({ title: "Overridden title" });
+`	console.log(app.config);
+`	// {title: "My first application!", protocol: "http", port: ....}
+`};
 ```
 
 		app.config = config
@@ -116,23 +105,23 @@ HTTP protocol is used by default with the data specified in the *package.json*.
 
 Files from the *models* folder with objects returned by their exported functions.
 
-```
-// models/user/permission.js
-module.exports = function(app){
-  return {
-    getPermission: function(id){}
-  };
-};
-
-// controllers/user.js
-module.exports = function(app){
-  return {
-    get: function(req, res, callback){
-      car data = app.models['user/permission'].getPermission(req.params.userId);
-      callback(null, data);
-    }
-  }
-};
+```javascript
+`// models/user/permission.js
+`module.exports = function(app){
+`	return {
+`		getPermission: function(id){}
+`	};
+`};
+`
+`// controllers/user.js
+`module.exports = function(app){
+`	return {
+`		get: function(req, res, callback){
+`			car data = app.models['user/permission'].getPermission(req.params.userId);
+`			callback(null, data);
+`		}
+`	}
+`};
 ```
 
 		app.models = {}
@@ -147,14 +136,15 @@ Files from the *routes* folder with objects returned by their exported functions
 *Object* app.styles = {}
 ------------------------
 
-Files from the *styles* folder as *Function*s ready to create [Renderer.Item][]s..
+Files from the *styles* folder as *Function*s
+ready to create new [Renderer.Item][renderer/Item]s.
 
 		app.styles = {}
 
 *Object* app.views = {}
 -----------------------
 
-Files from the *views* folder as *Document* instances.
+Files from the *views* folder as the [Document][document/File] instances.
 
 		app.views = {}
 
@@ -165,6 +155,8 @@ Files from the *views* folder as *Document* instances.
 
 *Signal* app.onReady()
 ----------------------
+
+Called when all modules, views, styled etc. have been loaded.
 
 		signal.create app, 'onReady'
 
@@ -177,19 +169,20 @@ Files from the *views* folder as *Document* instances.
 *Dict* app.cookies
 ------------------
 
-This object refers to the custom cookies implementation.
+On the client side, this object refers to the last received cookies
+from the networking request.
 
-For a server, this cookies will be added into responses.
+On the server side, this cookies object are added into the each networking response.
 
 By default, client has *clientId* and *sessionId* hashes.
 
-```
-app.cookies.onChanged(function(key){
-  console.log('cookie changed', key, this.get(key));
-});
+```javascript
+`app.cookies.onChange(function(key){
+`	console.log('cookie changed', key, this.get(key));
+`});
 ```
 
-```
+```xml
 <h1>Your clientId</h1>
 <em>${app.cookies.clientId}</em>
 ```
