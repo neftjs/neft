@@ -267,7 +267,7 @@ assert.isNotArray(*Any* value, [*String* message])
 assert.isEqual(*Any* value1, *Any* value2, [*String* message, *Object* options])
 --------------------------------------------------------------------------------
 
-Check [utils.isEqual()][utils.isEqual()] for more details.
+Check [utils.isEqual()][utils/utils.isEqual()] for more details.
 
 The given options object accepts: *Integer* maxDeep.
 
