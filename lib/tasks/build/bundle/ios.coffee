@@ -8,6 +8,7 @@ cp = require 'child_process'
 pathUtils = require 'path'
 
 OUT_DIR = './build/ios/'
+CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/"
 STATIC_OUT_DIR = "#{OUT_DIR}static"
 ANDROID_BUNDLE_DIR = './build/ios/'
 
@@ -36,6 +37,10 @@ module.exports = (config, callback) ->
 				mustacheFiles.push path
 				return false
 			true
+	log.end logtime
+
+	logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
+	fs.copySync "./native/ios", CUSTOM_NATIVE_OUT_DIR
 	log.end logtime
 
 	# check whether otfinfo is installed
