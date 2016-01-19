@@ -1,12 +1,8 @@
 Assert @library
-======
-
-**JavaScript so dynamic**
-
-This module is used to write tests.
+===============
 
 Access it with:
-```
+```javascript
 var assert = require('assert');
 ```
 
@@ -25,7 +21,7 @@ assert(*Boolean* expression, [*String* message])
 ---------------------------------
 
 Access it with:
-```
+```javascript
 var assert = require('assert');
 var AssertionError = assert.AssertionError;
 ```
@@ -80,9 +76,7 @@ var AssertionError = assert.AssertionError;
 *assert* assert.scope(*String* message)
 ---------------------------------------
 
-This function returns standard *assert* function with all features.
-
-All fail messages will be prefixed by given *message*.
+All fail messages will be prefixed by the given *message*.
 
 	assert.scope = (msg) ->
 		msg = "#{@_scope}#{msg}"
@@ -127,7 +121,7 @@ assert.isNot(*Any* actual, *Any* expected, [*String* message])
 assert.isDefined(*Any* value, [*String* message])
 -------------------------------------------------
 
-This function checks whether given *value* is *undefined* or *null*.
+Checks whether the given value is an undefined or a null.
 
 	assert.isDefined = (val, msg) ->
 		unless val?
@@ -143,9 +137,7 @@ assert.isNotDefined(*Any* value, [*String* message])
 assert.isPrimitive(*Any* value, [*String* message])
 ---------------------------------------------------
 
-This function checks whether given value is a primitive value.
-
-Check [utils.isPrimitive()][] for details.
+Check [utils.isPrimitive()][utils/utils.isPrimitive()] for more details.
 
 	assert.isPrimitive = (val, msg) ->
 		unless utils.isPrimitive val
@@ -245,9 +237,7 @@ assert.isNotObject(*Any* value, [*String* message])
 assert.isPlainObject(*PlainObject* value, [*String* message])
 -------------------------------------------------------------
 
-This function checks whether given value is a plain object.
-
-Check [utils.isPlainObject()][] for details.
+Check [utils.isPlainObject()][utils/utils.isPlainObject()] for more details.
 
 	assert.isPlainObject = (val, msg) ->
 		unless utils.isPlainObject val
@@ -277,12 +267,9 @@ assert.isNotArray(*Any* value, [*String* message])
 assert.isEqual(*Any* value1, *Any* value2, [*String* message, *Object* options])
 --------------------------------------------------------------------------------
 
-This function checks whether given values are equal.
+Check [utils.isEqual()][utils.isEqual()] for more details.
 
-Check [utils.isEqual()][] for details.
-
-**options** accepts:
- - *Integer* maxDeep.
+The given options object accepts: *Integer* maxDeep.
 
 	assert.isEqual = (val1, val2, msg, opts) ->
 		if typeof msg is 'object'
@@ -334,9 +321,9 @@ assert.notLengthOf(*Any* value, *Integer* length, [*String* message])
 assert.operator(*Any* value1, *String* operator, *Any* value2, [*String* message])
 ----------------------------------------------------------------------------------
 
-This function is used to compare two values.
+Used to compare the two given values.
 
-```
+```javascript
 assert.operator(2, '>', 1);
 ```
 
@@ -359,9 +346,9 @@ assert.operator(2, '>', 1);
 assert.match(*Any* value, *RegExp* regexp, [*String* message])
 --------------------------------------------------------------
 
-This function is used to check whether a given value tests given regexp.
+Used to check whether the given value tests the given regexp.
 
-```
+```javascript
 assert.match('12', /[0-9]+/);
 ```
 
