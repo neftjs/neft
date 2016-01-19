@@ -1,4 +1,4 @@
-Animation/PropertyAnimation @modifier
+PropertyAnimation @modifier
 ===========================
 
 	'use strict'
@@ -39,7 +39,7 @@ Animation/PropertyAnimation @modifier
 *Renderer.Item* PropertyAnimation::target
 -----------------------------------------
 
-### *Signal* PropertyAnimation::onTargetChange(*Renderer.Item* oldValue)
+## *Signal* PropertyAnimation::onTargetChange(*Renderer.Item* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -61,7 +61,7 @@ Animation/PropertyAnimation @modifier
 *String* PropertyAnimation::property
 ------------------------------------
 
-### *Signal* PropertyAnimation::onPropertyChange(*String* oldValue)
+## *Signal* PropertyAnimation::onPropertyChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -74,7 +74,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::duration = 250
 -----------------------------------------
 
-### *Signal* PropertyAnimation::onDurationChange(*Float* oldValue)
+## *Signal* PropertyAnimation::onDurationChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -93,7 +93,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::startDelay = 0
 -----------------------------------------
 
-### *Signal* PropertyAnimation::onStartDelayChange(*Float* oldValue)
+## *Signal* PropertyAnimation::onStartDelayChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -106,7 +106,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::loopDelay = 0
 ----------------------------------------
 
-### *Signal* PropertyAnimation::onLoopDelayChange(*Float* oldValue)
+## *Signal* PropertyAnimation::onLoopDelayChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -119,7 +119,7 @@ Animation/PropertyAnimation @modifier
 *Float* PropertyAnimation::delay = 0
 ------------------------------------
 
-### *Signal* PropertyAnimation::onDelayChange(*Float* oldValue)
+## *Signal* PropertyAnimation::onDelayChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -141,7 +141,7 @@ Animation/PropertyAnimation @modifier
 *Boolean* PropertyAnimation::updateData = false
 -----------------------------------------------
 
-### *Signal* PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
+## *Signal* PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -159,7 +159,7 @@ Animation/PropertyAnimation @modifier
 *Boolean* PropertyAnimation::updateProperty = false
 ---------------------------------------------------
 
-### *Signal* PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
+## *Signal* PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -176,7 +176,7 @@ Animation/PropertyAnimation @modifier
 *Any* PropertyAnimation::from
 -----------------------------
 
-### *Signal* PropertyAnimation::onFromChange(*Any* oldValue)
+## *Signal* PropertyAnimation::onFromChange(*Any* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -190,7 +190,7 @@ Animation/PropertyAnimation @modifier
 *Any* PropertyAnimation::to
 ---------------------------
 
-### *Signal* PropertyAnimation::onToChange(*Any* oldValue)
+## *Signal* PropertyAnimation::onToChange(*Any* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -207,8 +207,8 @@ ReadOnly *Float* PropertyAnimation::progress = 0
 *Easing* PropertyAnimation::easing
 ----------------------------------
 
-### *Signal* PropertyAnimation::onEasingChange(*Easing* value)
-	
+## *Signal* PropertyAnimation::onEasingChange(*Easing* value)
+
 		utils.defineProperty @::, 'easing', null, ->
 			@_easing ||= new Easing(@)
 		, (val) ->
@@ -231,12 +231,12 @@ ReadOnly *Float* PropertyAnimation::progress = 0
 --------------------------------
 
 Supported easing functions:
-*Linear*, *InQuad*, *OutQuad*, *InOutQuad*, *InCubic*, *OutCubic*,
-*InOutCubic*, *InQuart*, *OutQuart*, *InOutQuart*, *InQuint*, *OutQuint*,
-*InOutQuint*, *InSine*, *OutSine*, *InOutSine*, *InExpo*, *OutExpo*,
-*InOutExpo*, *InCirc*, *OutCirc*, *InOutCirc*, *InElastic*, *OutElastic*,
-*InOutElastic*, *InBack*, *OutBack*, *InOutBack*, *InBounce*, *OutBounce*,
-*InOutBounce*.
+Linear, InQuad, OutQuad, InOutQuad, InCubic, OutCubic,
+InOutCubic, InQuart, OutQuart, InOutQuart, InQuint, OutQuint,
+InOutQuint, InSine, OutSine, InOutSine, InExpo, OutExpo,
+InOutExpo, InCirc, OutCirc, InOutCirc, InElastic, OutElastic,
+InOutElastic, InBack, OutBack, InOutBack, InBounce, OutBounce,
+InOutBounce.
 
 			EASINGS = ['Linear', 'InQuad', 'OutQuad', 'InOutQuad', 'InCubic', 'OutCubic',
 				'InOutCubic', 'InQuart', 'OutQuart', 'InOutQuart', 'InQuint', 'OutQuint',
@@ -250,7 +250,7 @@ Supported easing functions:
 				EASING_ALIASES[easing] = easing
 				EASING_ALIASES[easing.toLowerCase()] = easing
 
-### *Signal* Easing::onTypeChange(*String* oldValue)
+## *Signal* Easing::onTypeChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

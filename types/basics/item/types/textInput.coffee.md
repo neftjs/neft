@@ -1,5 +1,5 @@
 TextInput @class
-=========
+================
 
 	'use strict'
 
@@ -64,7 +64,7 @@ TextInput @class
 *String* TextInput::text
 ------------------------
 
-### *Signal* TextInput::onTextChange(*String* oldValue)
+## *Signal* TextInput::onTextChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -77,7 +77,7 @@ TextInput @class
 *String* TextInput::color = 'black'
 -----------------------------------
 
-### *Signal* TextInput::onColorChange(*String* oldValue)
+## *Signal* TextInput::onColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -108,7 +108,7 @@ Hidden *Float* TextInput::lineHeight = 1
 *Boolean* TextInput::multiLine = false
 --------------------------------------
 
-### *Signal* TextInput::onMultiLineChange(*Boolean* oldValue)
+## *Signal* TextInput::onMultiLineChange(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -123,7 +123,7 @@ Hidden *Float* TextInput::lineHeight = 1
 
 Accepts 'normal' and 'password'.
 
-### *Signal* TextInput::onEchoModeChange(*String* oldValue)
+## *Signal* TextInput::onEchoModeChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -148,7 +148,7 @@ Hidden *Alignment* TextInput::alignment
 *Font* TextInput::font
 ----------------------
 
-### *Signal* TextInput::onFontChange(*String* property, *Any* oldValue)
+## *Signal* TextInput::onFontChange(*String* property, *Any* oldValue)
 
 			Renderer.Text.createFont TextInput
 

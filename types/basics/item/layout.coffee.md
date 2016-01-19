@@ -43,7 +43,7 @@ Layout @extension
 *Boolean* Layout::fillWidth = false
 -----------------------------------
 
-### *Signal* Layout::onFillWidthChange(*Boolean* oldValue)
+## *Signal* Layout::onFillWidthChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Layout
@@ -57,7 +57,7 @@ Layout @extension
 *Boolean* Layout::fillHeight = false
 -----------------------------------
 
-### *Signal* Layout::onFillHeightChange(*Boolean* oldValue)
+## *Signal* Layout::onFillHeightChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Layout

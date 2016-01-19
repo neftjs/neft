@@ -1,13 +1,11 @@
 AmbientSound @class
-============
+===================
 
-#### Play a sound @snippet
-
-```
+```nml
 AmbientSound {
-  running: true
-  source: '/static/sounds/bg.mp3'
-  loop: true
+	running: true
+	source: '/static/sounds/bg.mp3'
+	loop: true
 }
 ```
 
@@ -58,7 +56,7 @@ AmbientSound {
 *Boolean* AmbientSound::running
 -------------------------------
 
-### *Signal* AmbientSound::onRunningChange(*Boolean* oldValue)
+## *Signal* AmbientSound::onRunningChange(*Boolean* oldValue)
 
 		setRunningOnReady = ->
 			@running = @_when
@@ -90,7 +88,7 @@ AmbientSound {
 *String* AmbientSound::source = ''
 ----------------------------------
 
-### *Signal* AmbientSound::onSourceChange(*String* oldValue)
+## *Signal* AmbientSound::onSourceChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -102,7 +100,7 @@ AmbientSound {
 *Boolean* AmbientSound::loop = false
 ------------------------------------
 
-### *Signal* AmbientSound::onLoopChange(*Boolean* oldValue)
+## *Signal* AmbientSound::onLoopChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

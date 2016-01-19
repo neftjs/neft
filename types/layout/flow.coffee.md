@@ -1,18 +1,16 @@
 Flow @class
-====
+===========
 
-#### Position items in natural order @snippet
-
-```style
+```nml
 Flow {
-\  width: 90
-\  spacing.column: 15
-\  spacing.row: 5
-\
-\  Rectangle { color: 'blue'; width: 60; height: 50; }
-\  Rectangle { color: 'green'; width: 20; height: 70; }
-\  Rectangle { color: 'red'; width: 50; height: 30; }
-\  Rectangle { color: 'yellow'; width: 20; height: 20; }
+	width: 90
+	spacing.column: 15
+	spacing.row: 5
+
+	Rectangle { color: 'blue'; width: 60; height: 50; }
+	Rectangle { color: 'green'; width: 20; height: 70; }
+	Rectangle { color: 'red'; width: 50; height: 30; }
+	Rectangle { color: 'yellow'; width: 20; height: 20; }
 }
 ```
 
@@ -58,7 +56,7 @@ Flow {
 *Margin* Flow::padding
 ----------------------
 
-### *Signal* Flow::onPaddingChange(*Margin* padding)
+## *Signal* Flow::onPaddingChange(*Margin* padding)
 
 		Renderer.Item.createMargin @,
 			propertyName: 'padding'
@@ -66,21 +64,21 @@ Flow {
 *Spacing* Flow::spacing
 -----------------------
 
-### *Signal* Flow::onSpacingChange(*Spacing* oldValue)
+## *Signal* Flow::onSpacingChange(*Spacing* oldValue)
 
 		Renderer.Item.createSpacing @
 
 *Alignment* Flow::alignment
 ---------------------------
 
-### *Signal* Flow::onAlignmentChange(*Alignment* oldValue)
+## *Signal* Flow::onAlignmentChange(*Alignment* oldValue)
 
 		Renderer.Item.createAlignment @
 
 *Boolean* Flow::includeBorderMargins = false
 -------------------------------------------
 
-### *Signal* Flow::onIncludeBorderMarginsChange(*Boolean* oldValue)
+## *Signal* Flow::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -94,7 +92,7 @@ Flow {
 *Boolean* Flow::collapseMargins = false
 ---------------------------------------
 
-### *Signal* Flow::onCollapseMarginsChange(*Boolean* oldValue)
+## *Signal* Flow::onCollapseMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

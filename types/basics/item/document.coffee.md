@@ -91,23 +91,19 @@ ReadOnly *String* Document::query
 *Document.Element* Document::node
 ---------------------------------
 
-### *Signal* Document::onNodeChange(*Document.Element* oldValue)
+## *Signal* Document::onNodeChange(*Document.Element* oldValue)
 
-#### Get node attribute in a style item @snippet
-
-```
+```nml
 Text {
   text: this.document.node.getAttr('value')
 }
 ```
 
-#### Find node child in a style item @snippet
-
-```
+```nml
 Text {
-\  document.onNodeChange: function(){
-\    var inputs = this.document.node.queryAll('input[type=string]');
-\  }
+	document.onNodeChange: function(){
+		var inputs = this.document.node.queryAll('input[type=string]');
+	}
 }
 ```
 
@@ -144,14 +140,14 @@ ReadOnly *Boolean* Document::visible = false
 *Signal* Document::onShow(*DocumentShowEvent* event)
 ----------------------------------------------------
 
-This signal is called when the **style item** parent has been found.
+This signal is called when the style item parent has been found.
 
 		signal.Emitter.createSignal @, 'onShow'
 
 *Signal* Document::onHide(*DocumentHideEvent* event)
 ----------------------------------------------------
 
-This signal is called when the **style item** is no longer used.
+This signal is called when the style item is no longer used.
 
 		signal.Emitter.createSignal @, 'onHide'
 
@@ -163,8 +159,8 @@ This signal is called when the **style item** is no longer used.
 				@delay = 0
 				Object.preventExtensions @
 
-*Integer* DocumentShowEvent::delay = 0
---------------------------------------
+Hidden *Integer* DocumentShowEvent::delay = 0
+---------------------------------------------
 
 *DocumentHideEvent* DocumentHideEvent()
 ---------------------------------------
@@ -175,8 +171,8 @@ This signal is called when the **style item** is no longer used.
 				@nextShowDelay = 0
 				Object.preventExtensions @
 
-*Integer* DocumentHideEvent::delay = 0
---------------------------------------
+Hidden *Integer* DocumentHideEvent::delay = 0
+---------------------------------------------
 
-*Integer* DocumentHideEvent::nextShowDelay = 0
-----------------------------------------------
+Hidden *Integer* DocumentHideEvent::nextShowDelay = 0
+-----------------------------------------------------

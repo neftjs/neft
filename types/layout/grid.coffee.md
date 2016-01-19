@@ -1,18 +1,16 @@
 Grid @class
-====
+===========
 
-#### Position items in grid @snippet
-
-```style
+```nml
 Grid {
-\  spacing.column: 15
-\  spacing.row: 5
-\  columns: 2
-\
-\  Rectangle { color: 'blue'; width: 60; height: 50; }
-\  Rectangle { color: 'green'; width: 20; height: 70; }
-\  Rectangle { color: 'red'; width: 50; height: 30; }
-\  Rectangle { color: 'yellow'; width: 20; height: 20; }
+	spacing.column: 15
+	spacing.row: 5
+	columns: 2
+
+	Rectangle { color: 'blue'; width: 60; height: 50; }
+	Rectangle { color: 'green'; width: 20; height: 70; }
+	Rectangle { color: 'red'; width: 50; height: 30; }
+	Rectangle { color: 'yellow'; width: 20; height: 20; }
 }
 ```
 
@@ -59,7 +57,7 @@ Grid {
 *Margin* Grid::padding
 ----------------------
 
-### *Signal* Grid::onPaddingChange(*Margin* padding)
+## *Signal* Grid::onPaddingChange(*Margin* padding)
 
 		Renderer.Item.createMargin @,
 			propertyName: 'padding'
@@ -67,7 +65,7 @@ Grid {
 *Integer* Grid::columns = 2
 ---------------------------
 
-### *Signal* Grid::onColumnsChange(*Integer* oldValue)
+## *Signal* Grid::onColumnsChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -84,7 +82,7 @@ Grid {
 *Integer* Grid::rows = Infinity
 -------------------------------
 
-### *Signal* Grid::onRowsChange(*Integer* oldValue)
+## *Signal* Grid::onRowsChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -101,21 +99,21 @@ Grid {
 *Spacing* Grid::spacing
 -----------------------
 
-### *Signal* Grid::onSpacingChange(*Spacing* oldValue)
+## *Signal* Grid::onSpacingChange(*Spacing* oldValue)
 
 		Renderer.Item.createSpacing @
 
 *Alignment* Grid::alignment
 ---------------------------
 
-### *Signal* Grid::onAlignmentChange(*Alignment* oldValue)
+## *Signal* Grid::onAlignmentChange(*Alignment* oldValue)
 
 		Renderer.Item.createAlignment @
 
 *Boolean* Grid::includeBorderMargins = false
 --------------------------------------------
 
-### *Signal* Grid::onIncludeBorderMarginsChange(*Boolean* oldValue)
+## *Signal* Grid::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

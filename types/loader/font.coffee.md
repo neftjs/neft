@@ -1,19 +1,17 @@
 FontLoader @class
 =================
 
-#### Load a font @snippet
-
-```
+```nml
 Item {
-  Text {
-  	font.family: 'myFont'
-  	text: 'Cool font!'
-  }
+	Text {
+		font.family: 'myFont'
+		text: 'Cool font!'
+	}
 }
 
 FontLoader {
-  name: 'myFont'
-  source: 'rsc:/static/fonts/myFont'
+	name: 'myFont'
+	source: 'rsc:/static/fonts/myFont'
 }
 ```
 
@@ -148,14 +146,14 @@ FontLoader {
 *FontLoader* FontLoader()
 -------------------------
 
-This class is used to load custom fonts.
+Class used to load custom fonts.
 
-You can override default fonts (*sans-serif*, *sans* and *monospace*) and load new ones.
+You can override default fonts (*sans-serif*, *sans* and *monospace*).
 
-Font weight and style (italic or normal) is extracted from the font source.
+The font weight and the style (italic or normal) is extracted from the font source path.
 
 Access it with:
-```
+```nml
 FontLoader {}
 ```
 
@@ -181,9 +179,7 @@ FontLoader {}
 *String* FontLoader::source
 ---------------------------
 
-We recommend usng **WOFF** format and **TTF/OTF** for oldest Android browser.
-
-Font weight is detected by the filename.
+We recommend usng **WOFF** format and **TTF/OTF** for the oldest Android browser.
 
 Must contains one of:
  - hairline (weight=0),

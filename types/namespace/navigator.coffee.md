@@ -1,5 +1,5 @@
 Navigator @namespace
-=========
+====================
 
 	'use strict'
 
@@ -25,12 +25,10 @@ Navigator @namespace
 *Boolean* Navigator.language = 'en'
 -----------------------------------
 
-#### Detect client language @snippet
-
-```style
+```nml
 Text {
-  text: "Your language: " + Navigator.language
-  font.pixelSize: 30
+	text: "Your language: " + Navigator.language
+	font.pixelSize: 30
 }
 ```
 
@@ -48,12 +46,10 @@ Text {
 *Boolean* Navigator.native = false
 ----------------------------------
 
-#### Detect native application @snippet
-
 ```style
 Text {
-  text: Navigator.native ? "Native" : "Browser"
-  font.pixelSize: 30
+	text: Navigator.native ? "Native" : "Browser"
+	font.pixelSize: 30
 }
 ```
 
@@ -64,7 +60,7 @@ Text {
 *Boolean* Navigator.online = true
 ---------------------------------
 
-### *Signal* Navigator.onOnlineChange(*Boolean* oldValue)
+## *Signal* Navigator.onOnlineChange(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

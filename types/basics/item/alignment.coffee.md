@@ -9,7 +9,7 @@ Alignment @extension
 *Alignment* Alignment()
 -----------------------
 
-	module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Alignment extends itemUtils.DeepObject		
+	module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Alignment extends itemUtils.DeepObject
 		@__name__ = 'Alignment'
 
 		itemUtils.defineProperty
@@ -38,7 +38,7 @@ Alignment @extension
 *String* Alignment::horizontal = 'left'
 ---------------------------------------
 
-### *Signal* Alignment::onHorizontalChange(*String* oldValue)
+## *Signal* Alignment::onHorizontalChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -55,7 +55,7 @@ Alignment @extension
 *String* Alignment::vertical = 'top'
 ------------------------------------
 
-### *Signal* Alignment::onVerticalChange(*String* oldValue)
+## *Signal* Alignment::onVerticalChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

@@ -1,5 +1,5 @@
 Screen @namespace
-======
+=================
 
 	'use strict'
 
@@ -26,12 +26,10 @@ Screen @namespace
 ReadOnly *Boolean* Screen.touch = false
 ---------------------------------------
 
-#### Detect touch screen @snippet
-
-```style
+```nml
 Text {
-  text: Screen.touch ? "Touch" : "Mouse"
-  font.pixelSize: 30
+	text: Screen.touch ? "Touch" : "Mouse"
+	font.pixelSize: 30
 }
 ```
 
@@ -58,7 +56,7 @@ ReadOnly *String* Screen.orientation = 'Portrait'
 
 May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
 
-### *Signal* Screen.onOrientationChange(*String* oldValue)
+## *Signal* Screen.onOrientationChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

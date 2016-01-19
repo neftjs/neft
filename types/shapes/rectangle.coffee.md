@@ -1,16 +1,14 @@
 Rectangle @class
-=========
+================
 
-#### Draw a rectangle @snippet
-
-```style
+```nml
 Rectangle {
-  width: 150
-  height: 100
-  color: 'blue'
-  border.color: 'black'
-  border.width: 5
-  radius: 10
+	width: 150
+	height: 100
+	color: 'blue'
+	border.color: 'black'
+	border.width: 5
+	radius: 10
 }
 ```
 
@@ -36,8 +34,6 @@ Rectangle {
 *Rectangle* Rectangle() : *Renderer.Item*
 -----------------------------------------
 
-*Renderer.Rectangle* represents filled rectangle with an optional border and corner radius.
-
 			constructor: ->
 				super()
 				@_color = 'transparent'
@@ -47,7 +43,7 @@ Rectangle {
 *String* Rectangle::color = 'transparent'
 -----------------------------------------
 
-### *Signal* Rectangle::onColorChange(*String* oldValue)
+## *Signal* Rectangle::onColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -65,7 +61,7 @@ Rectangle {
 *Float* Rectangle::radius = 0
 -----------------------------
 
-### *Signal* Rectangle::onRadiusChange(*Float* oldValue)
+## *Signal* Rectangle::onRadiusChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -78,7 +74,7 @@ Rectangle {
 *Border* Rectangle::border
 --------------------------
 
-### *Signal* Rectangle::onBorderChange(*String* property, *Any* oldValue)
+## *Signal* Rectangle::onBorderChange(*String* property, *Any* oldValue)
 
 		class Border extends itemUtils.DeepObject
 			@__name__ = 'Border'
@@ -104,7 +100,7 @@ Rectangle {
 *Float* Rectangle::border.width = 0
 -----------------------------------
 
-### *Signal* Rectangle::border.onWidthChange(*Float* oldValue)
+## *Signal* Rectangle::border.onWidthChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -119,7 +115,7 @@ Rectangle {
 *String* Rectangle::border.color = 'transparent'
 ------------------------------------------------
 
-### *Signal* Rectangle::border.onColorChange(*String* oldValue)
+## *Signal* Rectangle::border.onColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

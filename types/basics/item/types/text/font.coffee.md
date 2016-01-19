@@ -54,9 +54,9 @@ Font @extension
 			setFontFamilyImpl.call font._ref, name
 
 *String* Font.family = 'sans-serif'
------------------------------------------
+-----------------------------------
 
-### *Signal* Font.onFamilyChange(*String* oldValue)
+## *Signal* Font.onFamilyChange(*String* oldValue)
 
 		`//<development>`
 		checkingFamily = {}
@@ -74,9 +74,9 @@ Font @extension
 				reloadFontFamily @
 
 *Float* Font.pixelSize = 14
----------------------------------
+---------------------------
 
-### *Signal* Font.onPixelSizeChange(*String* oldValue)
+## *Signal* Font.onPixelSizeChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -89,9 +89,11 @@ Font @extension
 				assert.isFloat val
 
 *Float* Font.weight = 0.4
--------------------------------
+-------------------------
 
-### *Signal* Font.onWeightChange(*Float* oldValue)
+In range from 0 to 1.
+
+## *Signal* Font.onWeightChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -140,7 +142,7 @@ Hidden *Float* Font.letterSpacing = 0
 *Boolean* Font.italic = false
 -----------------------------
 
-### *Signal* Font.onItalicChange(*Boolean* oldValue)
+## *Signal* Font.onItalicChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

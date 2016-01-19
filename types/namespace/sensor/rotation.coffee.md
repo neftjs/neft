@@ -1,5 +1,5 @@
 RotationSensor @namespace
-==============
+=========================
 
 	'use strict'
 
@@ -12,18 +12,16 @@ RotationSensor @namespace
 *Object* RotationSensor
 -----------------------
 
-#### Read RotationSensor data @snippet
-
-```
+```nml
 RotationSensor.active = true;
 
 Text {
-  font.pixelSize: 30
-  onUpdate: function(){
-    this.text = "x: " + RotationSensor.x + "; " +
-                "y: " + RotationSensor.y + "; " +
-                "z: " + RotationSensor.z;
-  }
+	font.pixelSize: 30
+	onUpdate: function(){
+		this.text = "x: " + RotationSensor.x + "; " +
+			"y: " + RotationSensor.y + "; " +
+			"z: " + RotationSensor.z;
+	}
 }
 ```
 

@@ -67,34 +67,29 @@ Margin @extension
 *Margin* Margin()
 -----------------
 
-Margins are used to move an item in **anchors** and in positioning items
-([Renderer.Column][], [Renderer.Row][] and [Renderer.Grid][]).
+Margins are used in anchors and within layout items.
 
-#### Margins in Column items @snippet
+```nml
+Rectangle {
+	width: 100
+	height: 100
+	color: 'red'
 
-```style
-Column {
-  Rectangle { color: 'red'; width: 50; height: 50; }
-  Rectangle { color: 'yellow'; width: 50; height: 50; margin.top: 20; }
-  Rectangle { color: 'green'; width: 50; height: 50; }
+	Rectangle {
+		width: 100
+		height: 50
+		color: 'yellow'
+		anchors.left: parent.right
+		margin.left: 20
+	}
 }
 ```
 
-#### Margin in anchored items @snippet
-
-```style
-Rectangle {
-\  width: 100
-\  height: 100
-\  color: 'red'
-\
-\  Rectangle {
-\    width: 100
-\    height: 50
-\    color: 'yellow'
-\    anchors.left: parent.right
-\    margin.left: 20
-\  }
+```nml
+Column {
+	Rectangle { color: 'red'; width: 50; height: 50; }
+	Rectangle { color: 'yellow'; width: 50; height: 50; margin.top: 20; }
+	Rectangle { color: 'green'; width: 50; height: 50; }
 }
 ```
 
@@ -119,35 +114,37 @@ Rectangle {
 *Float* Margin::left = 0
 ------------------------
 
-### *Signal* Margin::onLeftChange(*Float* oldValue)
+## *Signal* Margin::onLeftChange(*Float* oldValue)
 
 		createMarginProp 'left', 'horizontal'
 
 *Float* Margin::top = 0
 -----------------------
 
-### *Signal* Margin::onTopChange(*Float* oldValue)
+## *Signal* Margin::onTopChange(*Float* oldValue)
 
 		createMarginProp 'top', 'vertical'
 
 *Float* Margin::right = 0
 -------------------------
 
-### *Signal* Margin::onRightChange(*Float* oldValue)
+## *Signal* Margin::onRightChange(*Float* oldValue)
 
 		createMarginProp 'right', 'horizontal'
 
 *Float* Margin::bottom = 0
 --------------------------
 
-### *Signal* Margin::onBottomChange(*Float* oldValue)
+## *Signal* Margin::onBottomChange(*Float* oldValue)
 
 		createMarginProp 'bottom', 'vertical'
 
 *Float* Margin::horizontal = 0
 ------------------------------
 
-### *Signal* Margin::onHorizontalChange(*Float* oldValue)
+Sum of the left and right margin.
+
+## *Signal* Margin::onHorizontalChange(*Float* oldValue)
 
 		signal.Emitter.createSignal @, 'onHorizontalChange'
 
@@ -159,7 +156,9 @@ Rectangle {
 *Float* Margin::vertical = 0
 ----------------------------
 
-### *Signal* Margin::onVerticalChange(*Float* oldValue)
+Sum of the top and bottom margin.
+
+## *Signal* Margin::onVerticalChange(*Float* oldValue)
 
 		signal.Emitter.createSignal @, 'onVerticalChange'
 
@@ -170,19 +169,6 @@ Rectangle {
 
 *Float* Margin::valueOf()
 --------------------------
-
-Returns a float if all margin values are equal, otherwise an error is raised.
-
-```
-Item {
-  margin: 10
-  margin.left: 10
-  onReady: function(){
-  	console.log(+this.margin);
-  	// 10
-  }
-}
-```
 
 		valueOf: ->
 			if @left is @top and @top is @right and @right is @bottom

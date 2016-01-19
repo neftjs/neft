@@ -1,5 +1,5 @@
 Animation @modifier
-=========
+===================
 
 	'use strict'
 
@@ -22,7 +22,7 @@ Animation @modifier
 *Boolean* Animation::when
 -------------------------
 
-### *Signal* Animation::onWhenChange(*Boolean* oldValue)
+## *Signal* Animation::onWhenChange(*Boolean* oldValue)
 
 *Signal* Animation::onStart()
 -----------------------------
@@ -37,20 +37,13 @@ Animation @modifier
 *Boolean* Animation::running
 ----------------------------
 
-### *Signal* Animation::onRunningChange(*Boolean* oldValue)
-
-		# setRunningOnReady = ->
-		# 	@running = @_when
+## *Signal* Animation::onRunningChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
 			name: 'running'
 			setter: (_super) -> (val) ->
 				@_when = val
-				# unless @_isReady
-				# 	@onReady setRunningOnReady
-				# 	return
-
 				oldVal = @_running
 				if oldVal is val
 					return
@@ -73,7 +66,7 @@ Animation @modifier
 *Boolean* Animation::paused
 ---------------------------
 
-### *Signal* Animation::onPausedChange(*Boolean* oldValue)
+## *Signal* Animation::onPausedChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -95,7 +88,7 @@ Animation @modifier
 *Boolean* Animation::loop
 -------------------------
 
-### *Signal* Animation::onLoopChange(*Boolean* oldValue)
+## *Signal* Animation::onLoopChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

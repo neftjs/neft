@@ -1,14 +1,12 @@
 Text @class
-====
+===========
 
-#### Render a text @snippet
-
-```style
+```nml
 Text {
-  font.pixelSize: 30
-  font.family: 'monospace'
-  text: '<strong>Neft</strong> Renderer'
-  color: 'blue'
+	font.pixelSize: 30
+	font.family: 'monospace'
+	text: '<strong>Neft</strong> Renderer'
+	color: 'blue'
 }
 ```
 
@@ -104,7 +102,7 @@ Text {
 *String* Text::text
 -------------------
 
-### *Signal* Text::onTextChange(*String* oldValue)
+## *Signal* Text::onTextChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -117,7 +115,7 @@ Text {
 *String* Text::color = 'black'
 ------------------------------
 
-### *Signal* Text::onColorChange(*String* oldValue)
+## *Signal* Text::onColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -135,7 +133,7 @@ Text {
 *String* Text::linkColor = 'blue'
 ---------------------------------
 
-### *Signal* Text::onLinkColorChange(*String* oldValue)
+## *Signal* Text::onLinkColorChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -166,7 +164,7 @@ Hidden *Float* Text::lineHeight = 1
 ReadOnly *Float* Text::contentWidth
 -----------------------------------
 
-### *Signal* Text::onContentWidthChange(*Float* oldValue)
+## *Signal* Text::onContentWidthChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -183,7 +181,7 @@ ReadOnly *Float* Text::contentWidth
 ReadOnly *Float* Text::contentHeight
 ------------------------------------
 
-### *Signal* Text::onContentHeightChange(*Float* oldValue)
+## *Signal* Text::onContentHeightChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -200,14 +198,14 @@ ReadOnly *Float* Text::contentHeight
 *Alignment* Text::alignment
 ---------------------------
 
-### *Signal* Text::onAlignmentChange(*Alignment* alignment)
+## *Signal* Text::onAlignmentChange(*Alignment* alignment)
 
 			Renderer.Item.createAlignment Text
 
 *Font* Text::font
 -----------------
 
-### *Signal* Text::onFontChange(*String* property, *Any* oldValue)
+## *Signal* Text::onFontChange(*String* property, *Any* oldValue)
 
 			@createFont = require('./text/font') Renderer, Impl, itemUtils
 			@createFont Text

@@ -1,5 +1,5 @@
 Device @namespace
-======
+=================
 
 	'use strict'
 
@@ -38,12 +38,10 @@ Possible values are:
  - Unix,
  - OSX.
 
-#### Detect client device platform @snippet
-
-```style
+```nml
 Text {
-  text: "You are using: " + Device.platform
-  font.pixelSize: 30
+	text: "You are using: " + Device.platform
+	font.pixelSize: 30
 }
 ```
 
@@ -77,12 +75,10 @@ Text {
 
 Tablet or a phone.
 
-#### Detect mobile device @snippet
-
-```style
+```nml
 Text {
-  text: Device.mobile ? 'Mobile' : 'Desktop'
-  font.pixelSize: 30
+	text: Device.mobile ? 'Mobile' : 'Desktop'
+	font.pixelSize: 30
 }
 ```
 
@@ -93,12 +89,10 @@ Text {
 *Boolean* Device.pixelRatio = 1
 -------------------------------
 
-#### Detect retina display @snippet
-
-```style
+```nml
 Text {
-  text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
-  font.pixelSize: 30
+	text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
+	font.pixelSize: 30
 }
 ```
 
@@ -179,7 +173,7 @@ ReadOnly *DeviceKeyboardEvent* Device.keyboard
 ReadOnly *Float* DevicePointerEvent::x
 --------------------------------------
 
-### *Signal* DevicePointerEvent::onXChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onXChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -189,7 +183,7 @@ ReadOnly *Float* DevicePointerEvent::x
 ReadOnly *Float* DevicePointerEvent::y
 --------------------------------------
 
-### *Signal* DevicePointerEvent::onYChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onYChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -199,7 +193,7 @@ ReadOnly *Float* DevicePointerEvent::y
 ReadOnly *Float* DevicePointerEvent::movementX
 ----------------------------------------------
 
-### *Signal* DevicePointerEvent::onMovementXChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onMovementXChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -209,7 +203,7 @@ ReadOnly *Float* DevicePointerEvent::movementX
 ReadOnly *Float* DevicePointerEvent::movementY
 ----------------------------------------------
 
-### *Signal* DevicePointerEvent::onMovementYChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onMovementYChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -219,7 +213,7 @@ ReadOnly *Float* DevicePointerEvent::movementY
 ReadOnly *Float* DevicePointerEvent::deltaX
 ----------------------------------------------
 
-### *Signal* DevicePointerEvent::onDeltaXChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onDeltaXChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -229,7 +223,7 @@ ReadOnly *Float* DevicePointerEvent::deltaX
 ReadOnly *Float* DevicePointerEvent::deltaY
 ----------------------------------------------
 
-### *Signal* DevicePointerEvent::onDeltaYChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onDeltaYChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -252,7 +246,7 @@ ReadOnly *Float* DevicePointerEvent::deltaY
 ReadOnly *Boolean* DeviceKeyboardEvent::visible
 ----------------------------------------------
 
-### *Signal* DeviceKeyboardEvent::onVisibleChange(*Boolean* oldValue)
+## *Signal* DeviceKeyboardEvent::onVisibleChange(*Boolean* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -262,7 +256,7 @@ ReadOnly *Boolean* DeviceKeyboardEvent::visible
 ReadOnly *String* DeviceKeyboardEvent::key
 ------------------------------------------
 
-### *Signal* DeviceKeyboardEvent::onKeyChange(*String* oldValue)
+## *Signal* DeviceKeyboardEvent::onKeyChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -272,7 +266,7 @@ ReadOnly *String* DeviceKeyboardEvent::key
 ReadOnly *String* DeviceKeyboardEvent::text
 -------------------------------------------
 
-### *Signal* DeviceKeyboardEvent::onTextChange(*String* oldValue)
+## *Signal* DeviceKeyboardEvent::onTextChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

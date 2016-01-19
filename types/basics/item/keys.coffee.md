@@ -1,20 +1,18 @@
 Keys @extension
 ===============
 
-#### Handle keyboard events @snippet
-
-```style
+```nml
 Rectangle {
-\  width: 100
-\  height: 100
-\  color: 'green'
-\  keys.focus: true
-\  keys.onPressed: function(){
-\    this.color = 'red';
-\  }
-\  keys.onReleased: function(){
-\    this.color = 'green';
-\  }
+	width: 100
+	height: 100
+	color: 'green'
+	keys.focus: true
+	keys.onPressed: function(){
+		this.color = 'red';
+	}
+	keys.onReleased: function(){
+		this.color = 'green';
+	}
 }
 ```
 
@@ -67,7 +65,7 @@ Rectangle {
 *Boolean* Keys::focus = false
 -----------------------------
 
-### *Signal* Keys::onFocusChange(*Boolean* oldValue)
+## *Signal* Keys::onFocusChange(*Boolean* oldValue)
 
 		focusedKeys = null
 		focusChangeOnPointerPress = false

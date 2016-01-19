@@ -1,19 +1,16 @@
 Image @class
-=====
+============
 
-#### Render an image @snippet
-
-```style
+```nml
 Image {
-\  source: 'http://lorempixel.com/200/140/'
-\
-\  onLoad: function(error){
-\    if (error){
-\      console.error("Can't load this image");
-\    } else {
-\      console.log("Image has been loaded");
-\    }
-\  }
+	source: 'http://lorempixel.com/200/140/'
+	onLoad: function(error){
+		if (error){
+			console.error("Can't load this image");
+		} else {
+			console.log("Image has been loaded");
+		}
+	}
 }
 ```
 
@@ -41,11 +38,6 @@ Image {
 *Image* Image() : *Renderer.Item*
 ---------------------------------
 
-This item is used to render image defined by the *Image::source* URL.
-
-If the *Renderer.Item::width* and *Renderer.Item::height* attributes are not
-specified, this *Renderer.Item* automatically uses the size of the loaded image.
-
 		constructor: ->
 			super()
 			@_source = ''
@@ -61,7 +53,7 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 *Float* Image.pixelRatio = 1
 ----------------------------
 
-### *Signal* Image.onPixelRatioChange(*Float* oldValue)
+## *Signal* Image.onPixelRatioChange(*Float* oldValue)
 
 		signal.create @, 'onPixelRatioChange'
 
@@ -115,9 +107,9 @@ specified, this *Renderer.Item* automatically uses the size of the loaded image.
 *String* Image::source
 ----------------------
 
-Image source URL or data URI.
+The image source URL or data URI.
 
-### *Signal* Image::onSourceChange(*String* oldValue)
+## *Signal* Image::onSourceChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -247,7 +239,7 @@ ReadOnly *Boolean* Image::loaded
 			@_loaded
 		, null
 
-### *Signal* Image::onLoadedChange(*Boolean* oldValue)
+## *Signal* Image::onLoadedChange(*Boolean* oldValue)
 
 		signal.Emitter.createSignal @, 'onLoadedChange'
 

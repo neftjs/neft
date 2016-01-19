@@ -1,15 +1,13 @@
 Row @class
-===
+==========
 
-#### Position items in row @snippet
-
-```style
+```nml
 Row {
-\  spacing: 5
-\
-\  Rectangle { color: 'blue'; width: 50; height: 50; }
-\  Rectangle { color: 'green'; width: 20; height: 50; }
-\  Rectangle { color: 'red'; width: 50; height: 20; }
+	spacing: 5
+
+	Rectangle { color: 'blue'; width: 50; height: 50; }
+	Rectangle { color: 'green'; width: 20; height: 50; }
+	Rectangle { color: 'red'; width: 50; height: 20; }
 }
 ```
 
@@ -54,7 +52,7 @@ Row {
 *Margin* Row::padding
 ---------------------
 
-### *Signal* Row::onPaddingChange(*Margin* padding)
+## *Signal* Row::onPaddingChange(*Margin* padding)
 
 		Renderer.Item.createMargin @,
 			propertyName: 'padding'
@@ -62,7 +60,7 @@ Row {
 *Float* Row::spacing = 0
 ------------------------
 
-### *Signal* Row::onSpacingChange(*Float* oldValue)
+## *Signal* Row::onSpacingChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -79,14 +77,14 @@ Row {
 *Alignment* Row::alignment
 --------------------------
 
-### *Signal* Row::onAlignmentChange(*Alignment* oldValue)
+## *Signal* Row::onAlignmentChange(*Alignment* oldValue)
 
 		Renderer.Item.createAlignment @
 
 *Boolean* Row::includeBorderMargins = false
 -------------------------------------------
 
-### *Signal* Row::onIncludeBorderMarginsChange(*Boolean* oldValue)
+## *Signal* Row::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

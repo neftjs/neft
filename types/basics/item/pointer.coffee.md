@@ -1,20 +1,18 @@
 Pointer @extension
 ==================
 
-#### Rectangle hover action @snippet
-
-```style
+```nml
 Rectangle {
-\  width: 100
-\  height: 100
-\  color: 'green'
-\
-\  Class {
-\    when: target.pointer.hover
-\    changes: {
-\      color: 'red'
-\    }
-\  }
+	width: 100
+	height: 100
+	color: 'green'
+
+	Class {
+		when: target.pointer.hover
+		changes: {
+			color: 'red'
+		}
+	}
 }
 ```
 
@@ -37,7 +35,7 @@ Rectangle {
 *Pointer* Pointer()
 -------------------
 
-This class enables mouse and touch handling.
+Enables mouse and touch handling.
 
 		constructor: (ref) ->
 			super ref
@@ -54,7 +52,7 @@ This class enables mouse and touch handling.
 *Boolean* Pointer::enabled = true
 ---------------------------------
 
-### *Signal* Pointer::onEnabledChange(*Boolean* oldValue)
+## *Signal* Pointer::onEnabledChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Pointer
@@ -66,10 +64,10 @@ This class enables mouse and touch handling.
 			developmentSetter: (val) ->
 				assert.isBoolean val
 
-*Boolean* Pointer::draggable = false
-------------------------------------
+Hidden *Boolean* Pointer::draggable = false
+-------------------------------------------
 
-### *Signal* Pointer::onDraggableChange(*Boolean* oldValue)
+## Hidden *Signal* Pointer::onDraggableChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Pointer
@@ -81,10 +79,10 @@ This class enables mouse and touch handling.
 			developmentSetter: (val) ->
 				assert.isBoolean val
 
-*Boolean* Pointer::dragActive = false
--------------------------------------
+Hidden *Boolean* Pointer::dragActive = false
+--------------------------------------------
 
-### *Signal* Pointer::onDragActiveChange(*Boolean* oldValue)
+## Hidden *Signal* Pointer::onDragActiveChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: Pointer
@@ -99,54 +97,38 @@ This class enables mouse and touch handling.
 *Signal* Pointer::onClick(*PointerEvent* event)
 -----------------------------------------------
 
-This signal is called when there is a click.
-
 *Signal* Pointer::onPress(*PointerEvent* event)
 -----------------------------------------------
-
-This signal is called when the pointer has been pressed under the item.
 
 *Signal* Pointer::onRelease(*PointerEvent* event)
 -------------------------------------------------
 
-The *event* object contains x and y position.
-
 *Signal* Pointer::onEnter(*PointerEvent* event)
 -----------------------------------------------
-
-This signal is called when the pointer enters the item.
-
-The *event* object contains x and y position.
 
 *Signal* Pointer::onExit(*PointerEvent* event)
 ----------------------------------------------
 
-This signal is called when the pointer leaves the item.
-
-*Signal* Pointer::onWheel(*Object* event)
------------------------------------------
-
-The *event* object contains x and y delta.
+*Signal* Pointer::onWheel(*PointerEvent* event)
+-----------------------------------------------
 
 *Signal* Pointer::onMove(*PointerEvent* event)
 ----------------------------------------------
 
-This signal is called when the pointer position changed.
+Hidden *Signal* Pointer::onDragStart()
+--------------------------------------
 
-*Signal* Pointer::onDragStart()
--------------------------------
+Hidden *Signal* Pointer::onDragEnd()
+------------------------------------
 
-*Signal* Pointer::onDragEnd()
------------------------------
+Hidden *Signal* Pointer::onDragEnter()
+--------------------------------------
 
-*Signal* Pointer::onDragEnter()
--------------------------------
+Hidden *Signal* Pointer::onDragExit()
+-------------------------------------
 
-*Signal* Pointer::onDragExit()
-------------------------------
-
-*Signal* Pointer::onDrop()
---------------------------
+Hidden *Signal* Pointer::onDrop()
+---------------------------------
 
 		onLazySignalInitialized = (pointer, name) ->
 			Impl.attachItemSignal.call pointer, 'pointer', name # TODO: send here an item
@@ -163,9 +145,9 @@ This signal is called when the pointer position changed.
 *Boolean* Pointer::pressed = false
 ----------------------------------
 
-This property holds whether the pointer is currently pressed.
+Whether the pointer is currently pressed.
 
-### *Signal* Pointer::onPressedChange(*Boolean* oldValue)
+## *Signal* Pointer::onPressedChange(*Boolean* oldValue)
 
 		intitializePressed = do ->
 			onPress = (event) ->
@@ -195,9 +177,9 @@ This property holds whether the pointer is currently pressed.
 *Boolean* Pointer::hover = false
 --------------------------------
 
-This property holds whether the pointer is currently under the item.
+Whether the pointer is currently under the item.
 
-### *Signal* Pointer::onHoverChange(*Boolean* oldValue)
+## *Signal* Pointer::onHoverChange(*Boolean* oldValue)
 
 		initializeHover = do ->
 			onEnter = ->
@@ -267,10 +249,9 @@ This property is 'false' by default except the 'onPress' signal.
 *Boolean* PointerEvent::checkSiblings = false
 ---------------------------------------------
 
-By default first deepest captured item will propagate this event only by parents.
+By default first deepest captured item will propagate this event only by his parents.
 
 Change this value to test previous siblings as well.
-When you activate this property, you need to disable it manually.
 
 			utils.defineProperty @::, 'checkSiblings', null, ->
 				@_checkSiblings
@@ -282,9 +263,9 @@ When you activate this property, you need to disable it manually.
 --------------------------------------------
 
 Define whether pressed item should get 'onRelease' signal even
-if pointer has been released outside of this item.
+if the pointer has been released outside of this item.
 
-Can be changed only in 'onPress' signal.
+Can be changed only in the 'onPress' signal.
 
 			utils.defineProperty @::, 'ensureRelease', null, ->
 				@_ensureRelease
@@ -295,10 +276,10 @@ Can be changed only in 'onPress' signal.
 *Boolean* PointerEvent::ensureMove = true
 -----------------------------------------
 
-Define whether pressed item should get 'onMove' signals even
-if pointer is outside of this item.
+Define whether the pressed item should get 'onMove' signals even
+if the pointer is outside of this item.
 
-Can be changed only in 'onPress' signal.
+Can be changed only in the 'onPress' signal.
 
 			utils.defineProperty @::, 'ensureMove', null, ->
 				@_ensureMove

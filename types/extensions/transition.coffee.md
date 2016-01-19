@@ -1,23 +1,21 @@
 Transition @modifier
-==========
+====================
 
-#### Item transition @snippet
-
-```style
+```nml
 Rectangle {
-  width: 100; height: 100;
-  color: 'red'
+	width: 100; height: 100;
+	color: 'red'
 
-  pointer.onClicked: function(){
-    this.x = Math.random()*300;
-  }
+	pointer.onClicked: function(){
+		this.x = Math.random()*300;
+	}
 
-  Transition {
-  	property: 'x'
-  	animation: NumberAnimation {
-  	  duration: 1500
-  	}
-  }
+	Transition {
+		property: 'x'
+		animation: NumberAnimation {
+			duration: 1500
+		}
+	}
 }
 ```
 
@@ -79,12 +77,12 @@ Rectangle {
 *Boolean* Transition::when
 --------------------------
 
-### *Signal* Transition::onWhenChange(*Boolean* oldValue)
+## *Signal* Transition::onWhenChange(*Boolean* oldValue)
 
 *Renderer.Item* Transition::target
 ----------------------------------
 
-### *Signal* Transition::onTargetChange([*Renderer.Item* oldValue])
+## *Signal* Transition::onTargetChange([*Renderer.Item* oldValue])
 
 		onTargetReady = ->
 			@_running = true

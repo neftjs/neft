@@ -1,9 +1,6 @@
 Anchors @extension
 ==================
 
-[Renderer.Item][] provides simply but powerful way to describe
-relationships between items: **anchors**.
-
 	'use strict'
 
 	utils = require 'utils'
@@ -26,35 +23,34 @@ relationships between items: **anchors**.
 *Anchors* Anchors()
 -------------------
 
-*Anchors* allows to *pin* one item into another using one of the six anchor lines and two
-special targets.
+Anchors describe position relations between two items.
 
-You can *stick* one item line into another.
+Each item has few lines: top, bottom, verticalCenter, left, right, horizontalCenter.
 
-```style
+Anchors give a posibility to say, that a line of the first item must be
+always in the same position as a line of the second item.
+
+Anchors work only between siblings and in relation to the direct parent.
+
+```nml
 Item {
-\  height: 100
-\
-\  Rectangle {
-\    id: rect1
-\    width: 100
-\    height: 100
-\    color: 'green'
-\  }
-\  
-\  Rectangle {
-\    width: 40
-\    height: 40
-\    color: 'red'
-\    anchors.left: rect1.right
-\  }
+	height: 100
+
+	Rectangle {
+		id: rect1
+		width: 100
+		height: 100
+		color: 'green'
+	}
+
+	Rectangle {
+		width: 40
+		height: 40
+		color: 'red'
+		anchors.left: rect1.right
+	}
 }
 ```
-
-Left side of the *rect2* item now is anchored into the right side of the *rect1* item.
-
-This connection is solid, so if the *rect1* will change a position,
-*rect2* item will be automatically updated.
 
 	H_LINES =
 		top: true
@@ -125,34 +121,20 @@ This connection is solid, so if the *rect1* will change a position,
 
 					[target, line] = val
 
-Item id in the anchor descriptor (*rect1* in *rect1.right*) is called a **target**.
-
-A **parent** is a special type of the *target*.
-It always refers to the item parent.
-
-```style
+```nml
 Rectangle {
-\  width: 100
-\  height: 100
-\  color: 'green'
-\
-\  Rectangle {
-\    width: 40
-\    height: 40
-\    color: 'red'
-\    anchors.left: parent.right
-\  }
+	width: 100
+	height: 100
+	color: 'green'
+
+	Rectangle {
+		width: 40
+		height: 40
+		color: 'red'
+		anchors.left: parent.right
+	}
 }
 ```
-
-Such reference is also automatically updated if the item parent change.
-
-					# unless target is 'parent' or target is 'children' or target is 'this' or target is 'nextSibling' or target is 'previousSibling' or target instanceof Item
-					# 	log.error "`anchors.#{type}` expects an item; `'#{val}'` given"
-
-For the peformance reasons, the *target* could be only a *parent* or a *item sibling*.
-
-Pointing to the *parent* by its id is not allowed, *parent* target should be used.
 
 					if opts & ONLY_TARGET_ALLOW
 						unless line is undefined
@@ -166,7 +148,7 @@ Pointing to the *parent* by its id is not allowed, *parent* target should be use
 							  "`'#{val}'` given;\nuse one of the `#{Object.keys allowedLines}`"
 
 Horizontal anchors can't point to the vertical lines (and vice versa),
-so *anchors.top = parent.left* is not allowed.
+so `anchors.top = parent.left` is not allowed.
 
 					if opts & H_LINE_REQ
 						unless H_LINES[line]
@@ -207,7 +189,7 @@ so *anchors.top = parent.left* is not allowed.
 			if @_ref
 				@_ref.x - (@_ref._margin?._left or 0)
 
-### *Signal* Anchors::onLeftChange(*Array* oldValue)
+## *Signal* Anchors::onLeftChange(*Array* oldValue)
 
 *Array* Anchors::right = null
 -----------------------------
@@ -216,22 +198,20 @@ so *anchors.top = parent.left* is not allowed.
 			if @_ref
 				@_ref._x + @_ref._width + (@_ref._margin?._right or 0)
 
-### *Signal* Anchors::onRightChange(*Array* oldValue)
+## *Signal* Anchors::onRightChange(*Array* oldValue)
 
 *Array* Anchors::horizontalCenter = null
 ----------------------------------------
 
-#### Anchor two items @snippet
-
-```style
+```nml
 Item {
-\  height: 100
-\
-\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-\  Rectangle {
-\    color: 'red'; width: 40; height: 40
-\    anchors.horizontalCenter: rect1.horizontalCenter
-\  }
+	height: 100
+
+	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+	Rectangle {
+		color: 'red'; width: 40; height: 40
+		anchors.horizontalCenter: rect1.horizontalCenter
+	}
 }
 ```
 
@@ -239,20 +219,20 @@ Item {
 			if @_ref
 				@_ref._x + @_ref._width / 2
 
-### *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
+## *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
 
 *Array* Anchors::top = null
 ---------------------------
 
-```style
+```nml
 Item {
-\  height: 100
-\
-\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-\  Rectangle {
-\    color: 'red'; width: 40; height: 40
-\    anchors.top: rect1.verticalCenter
-\  }
+	height: 100
+
+	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+	Rectangle {
+		color: 'red'; width: 40; height: 40
+		anchors.top: rect1.verticalCenter
+	}
 }
 ```
 
@@ -260,7 +240,7 @@ Item {
 			if @_ref
 				@_ref._y - (@_ref._margin?._top or 0)
 
-### *Signal* Anchors::onTopChange(*Array* oldValue)
+## *Signal* Anchors::onTopChange(*Array* oldValue)
 
 *Array* Anchors::bottom = null
 ------------------------------
@@ -269,20 +249,20 @@ Item {
 			if @_ref
 				@_ref._y + @_ref._height + (@_ref._margin?._bottom or 0)
 
-### *Signal* Anchors::onBottomChange(*Array* oldValue)
+## *Signal* Anchors::onBottomChange(*Array* oldValue)
 
 *Array* Anchors::verticalCenter = null
 --------------------------------------
 
-```style
+```nml
 Item {
-\  height: 100
-\
-\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-\  Rectangle {
-\    color: 'red'; width: 40; height: 40
-\    anchors.verticalCenter: rect1.verticalCenter
-\  }
+	height: 100
+
+	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+	Rectangle {
+		color: 'red'; width: 40; height: 40
+		anchors.verticalCenter: rect1.verticalCenter
+	}
 }
 ```
 
@@ -290,34 +270,32 @@ Item {
 			if @_ref
 				@_ref._y + @_ref._height / 2
 
-### *Signal* Anchors::onVerticalCenterChange(*Array* oldValue)
+## *Signal* Anchors::onVerticalCenterChange(*Array* oldValue)
 
 *Array* Anchors::centerIn = null
 --------------------------------
 
-It's a shortcut for the *horizontalCenter* and *verticalCenter*.
+It's a shortcut for the horizontalCenter and verticalCenter anchors.
 
-Not target line is required.
+No target line is required.
 
-#### Place a rectangle in the center of another @snippet
-
-```style
+```nml
 Rectangle {
-\  id: rect1
-\  width: 100
-\  height: 100
-\  color: 'green'
-\
-\  Rectangle {
-\    width: 40
-\    height: 40
-\    color: 'red'
-\    anchors.centerIn: parent
-\  }
+	id: rect1
+	width: 100
+	height: 100
+	color: 'green'
+
+	Rectangle {
+		width: 40
+		height: 40
+		color: 'red'
+		anchors.centerIn: parent
+	}
 }
 ```
 
-### *Signal* Anchors::onCenterInChange(*Array* oldValue)
+## *Signal* Anchors::onCenterInChange(*Array* oldValue)
 
 		createAnchorProp 'centerIn', ONLY_TARGET_ALLOW | FREE_H_LINE_REQ | FREE_V_LINE_REQ, ->
 			if @_ref
@@ -326,24 +304,24 @@ Rectangle {
 *Array* Anchors::fill = null
 ----------------------------
 
-Changes item position and its size to be always under the anchored target.
+Changes item position and its size to be always equal the anchored target.
 
-Not target line is required.
+No target line is required.
 
-```style
+```nml
 Item {
-\  height: 100
-\
-\  Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-\  Rectangle {
-\    color: 'red'
-\    opacity: 0.5
-\    anchors.fill: rect1
-\  }
+	height: 100
+
+	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+	Rectangle {
+		color: 'red'
+		opacity: 0.5
+		anchors.fill: rect1
+	}
 }
 ```
 
-### *Signal* Anchors::onFillChange(*Array* oldValue)
+## *Signal* Anchors::onFillChange(*Array* oldValue)
 
 		createAnchorProp 'fill', ONLY_TARGET_ALLOW, ->
 			if @_ref
@@ -352,7 +330,7 @@ Item {
 *Array* Anchors::fillWidth = null
 ---------------------------------
 
-### *Signal* Anchors::onFillWidthChange(*Array* oldValue)
+## *Signal* Anchors::onFillWidthChange(*Array* oldValue)
 
 		createAnchorProp 'fillWidth', ONLY_TARGET_ALLOW, ->
 			if @_ref
@@ -361,7 +339,7 @@ Item {
 *Array* Anchors::fillHeight = null
 ----------------------------------
 
-### *Signal* Anchors::onFillHeightChange(*Array* oldValue)
+## *Signal* Anchors::onFillHeightChange(*Array* oldValue)
 
 		createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW, ->
 			if @_ref

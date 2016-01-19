@@ -36,7 +36,7 @@ Spacing @extension
 *Float* Spacing::column
 -----------------------
 
-### *Signal* Spacing::onColumnChange(*Float* oldValue)
+## *Signal* Spacing::onColumnChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -51,7 +51,7 @@ Spacing @extension
 *Float* Spacing::row
 --------------------
 
-### *Signal* Spacing::onRowChange(*Float* oldValue)
+## *Signal* Spacing::onRowChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

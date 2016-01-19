@@ -71,11 +71,12 @@ Class @modifier
 *String* Class::name
 --------------------
 
-This property is used in the [Renderer.Item::classes][] list to identify various classes.
+This property is used in the [Item::classes][renderer/Item::classes] list
+to identify various classes.
 
 It's a random string by default.
 
-### *Signal* Class::onNameChange(*String* oldValue)
+## *Signal* Class::onNameChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -108,11 +109,11 @@ It's a random string by default.
 *Renderer.Item* Class::target
 -----------------------------
 
-Reference to the [Renderer.Item][] on which this state has effects.
+Reference to the [Item][renderer/Item] on which this class has effects.
 
-If state is created inside the [Renderer.Item][], this property is set automatically.
+If state is created inside the [Item][renderer/Item], this property is set automatically.
 
-### *Signal* Class::onTargetChange(*Renderer.Item* oldValue)
+## *Signal* Class::onTargetChange(*Renderer.Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -151,9 +152,9 @@ If state is created inside the [Renderer.Item][], this property is set automatic
 *Object* Class::changes
 -----------------------
 
-This objects contains all property changes brought by a state.
+This objects contains all properties to change on the target item.
 
-It accepts bindings as well.
+It accepts bindings and listeners as well.
 
 			utils.defineProperty @::, 'changes', null, ->
 				@_changes ||= new ChangesObject
@@ -173,7 +174,7 @@ It accepts bindings as well.
 *Integer* Class::priority = 0
 -----------------------------
 
-### *Signal* Class::onPriorityChange(*Integer* oldValue)
+## *Signal* Class::onPriorityChange(*Integer* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -189,29 +190,28 @@ It accepts bindings as well.
 *Boolean* Class::when
 ---------------------
 
-This boolean value indicates whether state is active or not.
+Indicates whether the class is active or not.
 
-When comes *true*, this state is appended on the end of the [Renderer.Item::classes][] list.
+When it's `true`, this state is appended on the
+end of the [Item::classes][renderer/Item::classes] list.
 
 Mostly used with bindings.
 
-#### Reduce grid columns on small screen @snippet
-
-```
+```nml
 Grid {
-\  columns: 2
-\
-\  // reduce to one column if the view width is lower than 500 pixels
-\  Class {
-\    when: view.width < 500
-\    changes: {
-\      columns: 1
-\    }
-\  }
+	columns: 2
+
+	// reduce to one column if the view width is lower than 500 pixels
+	Class {
+		when: view.width < 500
+		changes: {
+			columns: 1
+		}
+	}
 }
 ```
 
-### *Signal* Class::onWhenChange(*Boolean* oldValue)
+## *Signal* Class::onWhenChange(*Boolean* oldValue)
 
 			enable: ->
 				if @_running or not @_target or (hasDocQuery = (@_document and @_document._query))
@@ -688,7 +688,7 @@ Grid {
 		class ClassDocument extends itemUtils.DeepObject
 			@__name__ = 'ClassDocument'
 
-### *Signal* Class::onDocumentChange(*ClassDocument* document)
+## *Signal* Class::onDocumentChange(*ClassDocument* document)
 
 			itemUtils.defineProperty
 				constructor: Class
@@ -721,7 +721,7 @@ Grid {
 *String* ClassDocument::query
 -----------------------------
 
-### *Signal* ClassDocument::onQueryChange(*String* oldValue)
+## *Signal* ClassDocument::onQueryChange(*String* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -839,15 +839,11 @@ Grid {
 *List* Item::classes
 --------------------
 
-Mutable [List][] used to specify current [Renderer.Item][] classes.
+Classs at the end of the list have the highest priority.
 
-One [Renderer.Item][] can have many classes.
+This property has a setter, which accepts a string and an array of strings.
 
-Classs at the end have the highest priority.
-
-This property has a setter, which accepts strings and arrays of strings.
-
-### *Signal* Item::onClassesChange(*String* added, *String* removed)
+## *Signal* Item::onClassesChange(*String* added, *String* removed)
 
 		normalizeClassesValue = (val) ->
 			if typeof val is 'string'

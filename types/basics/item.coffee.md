@@ -60,31 +60,31 @@ This is a base class for everything which is visible.
 			@_background = null
 			@_defaultBackground = null
 
-## Custom properties
+### Custom properties
 
-```
+```nml
 Item {
-\  id: main
-\  property $.currentLife: 0.8
-\
-\  Text {
-\    text: "Life: " + main.$.currentLife
-\  }  
+	id: main
+	property $.currentLife: 0.8
+
+	Text {
+	  text: "Life: " + main.$.currentLife
+	}
 }
 ```
 
-## Custom signals
+### Custom signals
 
-```
+```nml
 Item {
-\  signal $.onPlayerCollision
-\  $.onPlayerCollision: function(){
-\    // boom!
-\  }
+	signal $.onPlayerCollision
+	$.onPlayerCollision: function(){
+		// boom!
+	}
 }
 ```
 
-### *Signal* Item::on$Change(*String* property, *Any* oldValue)
+## *Signal* Item::on$Change(*String* property, *Any* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -94,24 +94,24 @@ Item {
 *Signal* Item::ready()
 ----------------------
 
-This signal is called when the *Renderer.Item* is ready, that is, all
+Called when the Item is ready, that is, all
 properties have been set and it's ready to use.
 
-```style
+```nml
 Rectangle {
-\  width: 200
-\  height: 50
-\  color: 'green'
-\
-\  Rectangle {
-\  	width: parent.width / 2
-\  	height: parent.height / 2
-\  	color: 'yellow'
-\  	onReady: function(){
-\  	  console.log(this.width, this.height);
-\  	  // 100, 25
-\  	}
-\  }
+	width: 200
+	height: 50
+	color: 'green'
+
+	Rectangle {
+		width: parent.width / 2
+		height: parent.height / 2
+		color: 'yellow'
+		onReady: function(){
+			console.log(this.width, this.height);
+			// 100, 25
+		}
+	}
 }
 ```
 
@@ -153,7 +153,7 @@ ReadOnly *String* Item::id
 				val.parent = @
 			return
 
-### *Signal* Item::onChildrenChange(*Item* added, *Item* removed)
+## *Signal* Item::onChildrenChange(*Item* added, *Item* removed)
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
 
@@ -170,7 +170,10 @@ ReadOnly *Integer* Item::children.length
 *Item* Item::children.layout
 ----------------------------
 
-### *Signal* Item::children.onLayoutChange(*Item* oldValue)
+Item used to position children items.
+Can be e.g. [Flow][renderer/Flow], [Grid][renderer/Grid] etc.
+
+## *Signal* Item::children.onLayoutChange(*Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -200,7 +203,10 @@ ReadOnly *Integer* Item::children.length
 *Item* Item::children.target
 ----------------------------
 
-### *Signal* Item::children.onTargetChange(*Item* oldValue)
+A new child trying to be added into the item with the `children.target` defined
+will be added into the `target` item.
+
+## *Signal* Item::children.onTargetChange(*Item* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -213,18 +219,22 @@ ReadOnly *Integer* Item::children.length
 *Integer* Item::children.index(*Item* value)
 --------------------------------------------
 
+Returns an index of the given child in the children array.
+
 			index: (val) -> Array::indexOf.call @, val
 			indexOf: @::index
 
 *Boolean* Item::children.has(*Item* value)
 ------------------------------------------
 
+Returns `true` if the given item is an item child.
+
 			has: (val) -> @index(val) isnt -1
 
 Item::children.clear()
 ----------------------
 
-Removes all children from a node.
+Removes all children from the item.
 
 			clear: ->
 				while child = @[0]
@@ -234,7 +244,7 @@ Removes all children from a node.
 *Item* Item::parent = null
 --------------------------
 
-### *Signal* Item::onParentChange(*Item* oldParent)
+## *Signal* Item::onParentChange(*Item* oldParent)
 
 		{indexOf, splice, push, shift, pop} = Array::
 
@@ -368,7 +378,7 @@ Removes all children from a node.
 			assert.is @_previousSibling, val
 			return
 
-### *Signal* Item::onPreviousSiblingChange(*Item* oldValue)
+## *Signal* Item::onPreviousSiblingChange(*Item* oldValue)
 
 		signal.Emitter.createSignal @, 'onPreviousSiblingChange'
 
@@ -487,7 +497,7 @@ Removes all children from a node.
 
 			return
 
-### *Signal* Item::onNextSiblingChange(*Item* oldValue)
+## *Signal* Item::onNextSiblingChange(*Item* oldValue)
 
 		signal.Emitter.createSignal @, 'onNextSiblingChange'
 
@@ -515,33 +525,31 @@ Removes all children from a node.
 
 Determines whether an item is visible or not.
 
-#### Manage an item visibility @snippet
-
-```style
+```nml
 Item {
-\  width: 100
-\  height: 100
-\
-\  pointer.onClicked: function(){
-\  	rect.visible = !rect.visible;
-\  	text.text = rect.visible ? "Click to hide" : "Click to show";
-\  }
-\
-\  Rectangle {
-\  	id: rect
-\  	anchors.fill: parent
-\  	color: 'blue'
-\  }
-\
-\  Text {
-\  	id: text
-\  	text: "Click to hide"
-\  	anchors.centerIn: parent
-\  }
+	width: 100
+	height: 100
+
+	pointer.onClicked: function(){
+		rect.visible = !rect.visible;
+		text.text = rect.visible ? "Click to hide" : "Click to show";
+	}
+
+	Rectangle {
+		id: rect
+		anchors.fill: parent
+		color: 'blue'
+	}
+
+	Text {
+		id: text
+		text: "Click to hide"
+		anchors.centerIn: parent
+	}
 }
 ```
 
-### *Signal* Item::onVisibleChange(*Boolean* oldValue)
+## *Signal* Item::onVisibleChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -554,7 +562,7 @@ Item {
 *Boolean* Item::clip = false
 ----------------------------
 
-### *Signal* Item::onClipChange(*Boolean* oldValue)
+## *Signal* Item::onClipChange(*Boolean* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -567,7 +575,7 @@ Item {
 *Float* Item::width = 0
 -----------------------
 
-### *Signal* Item::onWidthChange(*Float* oldValue)
+## *Signal* Item::onWidthChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -580,7 +588,7 @@ Item {
 *Float* Item::height = 0
 ------------------------
 
-### *Signal* Item::onHeightChange(*Float* oldValue)
+## *Signal* Item::onHeightChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -593,7 +601,7 @@ Item {
 *Float* Item::x = 0
 -------------------
 
-### *Signal* Item::onXChange(*Float* oldValue)
+## *Signal* Item::onXChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -606,7 +614,7 @@ Item {
 *Float* Item::y = 0
 -------------------
 
-### *Signal* Item::onYChange(*Float* oldValue)
+## *Signal* Item::onYChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -619,7 +627,7 @@ Item {
 Hidden *Integer* Item::z = 0
 ----------------------------
 
-### Hidden *Signal* Item::onZChange(*Integer* oldValue)
+## Hidden *Signal* Item::onZChange(*Integer* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -632,7 +640,7 @@ Hidden *Integer* Item::z = 0
 *Float* Item::scale = 1
 -----------------------
 
-### *Signal* Item::onScaleChange(*Float* oldValue)
+## *Signal* Item::onScaleChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -645,7 +653,16 @@ Hidden *Integer* Item::z = 0
 *Float* Item::rotation = 0
 --------------------------
 
-### *Signal* Item::onRotationChange(*Float* oldValue)
+```nml
+Rectangle {
+	width: 100
+	height: 100
+	color: 'red'
+	rotation: Math.PI / 4
+}
+```
+
+## *Signal* Item::onRotationChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -658,7 +675,7 @@ Hidden *Integer* Item::z = 0
 *Float* Item::opacity = 1
 -------------------------
 
-### *Signal* Item::onOpacityChange(*Float* oldValue)
+## *Signal* Item::onOpacityChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -671,11 +688,9 @@ Hidden *Integer* Item::z = 0
 *String* Item::linkUri = ''
 ---------------------------
 
-This attribute points to the URI which will be used when user clicks on this item.
+Points to the URI which will be used when user clicks on this item.
 
-It's required for browsers, where link URIs should be known publicly.
-
-### *Signal* Item::onLinkUriChange(*String* oldValue)
+## *Signal* Item::onLinkUriChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -688,7 +703,11 @@ It's required for browsers, where link URIs should be known publicly.
 *Item* Item::background = *Rectangle*
 -------------------------------------
 
-### *Signal* Item::onBackgroundChange(*Item* oldValue)
+An item used as a background for the item.
+
+By default, background is filled to his parent.
+
+## *Signal* Item::onBackgroundChange(*Item* oldValue)
 
 		defaultBackgroundClass = do ->
 			ext = Renderer.Class.New new Renderer.Component
@@ -735,21 +754,12 @@ It's required for browsers, where link URIs should be known publicly.
 Item::overlap(*Renderer.Item* item)
 -----------------------------------
 
-This method checks whether two items are overlapped.
+Returns `true` if two items overlaps.
 
 		overlap: (item) ->
 			assert.instanceOf item, Item
 
 			Impl.doItemOverlap.call @, item
-
-		# cloneDeep: (component) ->
-		# 	clone = @clone component
-
-		# 	for child in @children
-		# 		cloneChild = child.cloneDeep component
-		# 		cloneChild.parent = clone
-
-		# 	clone
 
 		@createSpacing = require('./item/spacing') Renderer, Impl, itemUtils, Item
 		@createAlignment = require('./item/alignment') Renderer, Impl, itemUtils, Item
@@ -763,14 +773,14 @@ This method checks whether two items are overlapped.
 *Anchors* Item::anchors
 -----------------------
 
-### *Signal* Item::onAnchorsChange(*String* property, *Array* oldValue)
+## *Signal* Item::onAnchorsChange(*String* property, *Array* oldValue)
 
 		@createAnchors @
 
 *Layout* Item::layout
 ---------------------
 
-### *Signal* Item::onLayoutChange(*String* property, *Any* oldValue)
+## *Signal* Item::onLayoutChange(*String* property, *Any* oldValue)
 
 		@createLayout @
 
@@ -782,7 +792,7 @@ This method checks whether two items are overlapped.
 *Margin* Item::margin
 ---------------------
 
-### *Signal* Item::onMarginChange(*String* property, *Any* oldValue)
+## *Signal* Item::onMarginChange(*String* property, *Any* oldValue)
 
 		@createMargin @
 

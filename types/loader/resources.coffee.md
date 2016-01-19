@@ -1,18 +1,16 @@
 ResourcesLoader @class
 ======================
 
-#### Load all assets on the bootstrap @snippet
-
-```
+```nml
 Item {
-  ResourcesLoader {
-  	id: loader
-  	resources: app.resources
-  }
+	ResourcesLoader {
+		id: loader
+		resources: app.resources
+	}
 
-  Text {
-  	text: 'Progress: ' + loader.progress * 100 + '%'
-  }
+	Text {
+		text: 'Progress: ' + loader.progress * 100 + '%'
+	}
 }
 ```
 
@@ -50,7 +48,7 @@ Item {
 -----------------------------------
 
 Access it with:
-```
+```nml
 ResourcesLoader {}
 ```
 
@@ -77,7 +75,7 @@ ResourcesLoader {}
 *Float* ResourcesLoader::progress = 0
 -------------------------------------
 
-### *Signal* ResourcesLoaded::onProgressChange(*Float* oldValue)
+## *Signal* ResourcesLoaded::onProgressChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
