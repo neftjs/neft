@@ -14,9 +14,7 @@ Request
 *Array* Request.METHODS
 -----------------------
 
-This array contains available *HTTP* methods.
-
-Check *Request::method* for more.
+Contains available *HTTP* methods.
 
 Contains:
  - Request.GET,
@@ -36,9 +34,7 @@ Contains:
 *Array* Request.TYPES
 ---------------------
 
-This array contains available expected types.
-
-Check *Request::type* for more.
+Contains available expected types.
 
 Contains:
  - Request.TEXT_TYPE,
@@ -56,15 +52,13 @@ Contains:
 *Request* Request(*Object* options)
 -----------------------------------
 
-This class is used to describe coming networking request.
+Class used to describe coming networking request.
 
-You should use *Networking::createRequest()* to create a full request.
-
-*options* specifies a *Request::method*, a *Request::uri*, a *Request::data*,
-a *Request::type* and signal handlers.
+You should use [Networking::createRequest()][networking/Networking::createRequest()]
+to create a full request.
 
 Access it with:
-```
+```javascript
 var Networking = require('networking');
 var Request = Networking.Request;
 ```
@@ -111,36 +105,36 @@ var Request = Networking.Request;
 ReadOnly *String* Request::uid
 ------------------------------
 
-It's a pseudo unique hash. It's created automatically.
+Pseudo unique hash. It's created automatically.
 
 		uid: ''
 
 ReadOnly *Boolean* Request::pending
 -----------------------------------
 
-This property indicates whether a request is not destroyed.
+Indicates whether the request is not destroyed.
 
-If it's *false*, the request can't be changed.
+If it's `false`, the request can't be changed.
 
 		pending: false
 
 *String* Request::method
 ------------------------
 
-This property refers to one of the *Request.METHODS* values.
+This property refers to one of the `Request.METHODS` values.
 
-It holds a method with which the request has been called.
+Holds a method with which the request has been called.
 
 		method: Request.GET
 
 *Networking.Uri* Request::uri
 -----------------------------
 
-This property refers to the request URI path.
+Refers to the request URI path.
 
 It can holds local and absolute paths.
 
-```
+```javascript
 // for request sent to the server ...
 "http://server.domain/auth/user"
 
@@ -156,11 +150,11 @@ It can holds local and absolute paths.
 *String* Request::type
 ----------------------
 
-This property describes expected response type.
+Describes the expected response type.
 
 It's used in the server-client communication.
-In most cases, a server returns an HTML document for a crawler, but client
-(which renders documents on his own) expects a clean JSON response.
+In most cases, a server returns a HTML document for a crawler, but client
+(which renders documents on his own side) expects a clean JSON response.
 That's why, these two requests have the same uri, but different expected types.
 
 It refers to one of the *Request.TYPES* values.
@@ -170,41 +164,39 @@ It refers to one of the *Request.TYPES* values.
 *Object* Request::data = null
 -----------------------------
 
-This property holds a data sent with a request.
+Holds a data sent with a request.
 It can be, for instance, a form data.
 
 		data: null
 
-*Networking.Handler* Request::handler
--------------------------------------
+ReadOnly *Networking.Handler* Request::handler
+----------------------------------------------
 
-This property refers to the current considered [Networking.Handler][].
-
-It's set by the [Networking.Handler][] itself.
+Refers to the currently considered [Handler][networking/Handler].
 
 		handler: null
 
-*Networking.Response* Request::response
----------------------------------------
+ReadOnly *Networking.Response* Request::response
+------------------------------------------------
 
 		response: null
 
 ReadOnly *Object* Request::params = {}
 --------------------------------------
 
-This property keeps matched parameters by a handler in the request uri.
+Keeps matched parameters by the handler from the request uri.
 
-Considering */users/{name}* [Networking.Uri],
-the 'name' property is available as *req.params.name*.
+Considering the */users/{name}* URI,
+the 'name' property is available as the *params.name*.
 
 		params: null
 
 ReadOnly *Object* Request::headers
 ----------------------------------
 
-This object contains request headers.
+Contains request headers.
 
-For a client request, this object is empty.
+For the client request, this object is empty.
 
 		headers: null
 
@@ -216,11 +208,11 @@ ReadOnly *Object* Request::cookies
 *String* Request::toString()
 ----------------------------
 
-This method returns a string describing the request.
+Returns a string describing the request.
 
-It contains a *Request::method*, a *Request::uri* and a *Request::type*.
+It contains a method, uri and a type.
 
-```
+```javascript
 console.log(req.toString);
 // get /users/id as json
 ```

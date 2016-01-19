@@ -16,7 +16,7 @@ Response
 *Array* Response.STATUSES
 -------------------------
 
-This array contains abstract codes used to describe a response type.
+Contains abstract codes used to describe the response type.
 
 Each status corresponds to the HTTP numeral value.
 Check [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html]() for more.
@@ -42,7 +42,7 @@ Contains:
  - Response.NOT_IMPLEMENTED,
  - Response.SERVICE_UNAVAILABLE.
 
-```
+```javascript
 console.log(Networking.Response.OK);
 console.log(Networking.Response.BAD_REQUEST);
 ```
@@ -85,12 +85,8 @@ console.log(Networking.Response.BAD_REQUEST);
 *Response* Response(*Object* options)
 -------------------------------------
 
-This class represents a response for a request.
-
-It's created automatically in the [Networking::createRequest()][] method.
-
 Access it with:
-```
+```javascript
 var Networking = require('networking');
 var Response = Networking.Response;
 ```
@@ -127,11 +123,11 @@ var Response = Networking.Response;
 *Signal* Response::onSend()
 ---------------------------
 
-This signal is called when a response has been sent.
+Called when the response has been sent.
 
-```
+```javascript
 res.onSend(function(){
-  console.log("Response has been sent!");
+	console.log("Response has been sent!");
 });
 ```
 
@@ -140,25 +136,25 @@ res.onSend(function(){
 ReadOnly *Boolean* Response::pending
 ------------------------------------
 
-This property indicates whether a response is not destroyed.
+Indicates whether the response is not destroyed.
 
 		pending: false
 
 ReadOnly *Networking.Request* Response::request
 -----------------------------------------------
 
-This proeprty refers to the [Networking.Request][].
+Refers to the [Request][networking/Request].
 
 		request: null
 
 *Integer* Response::status = Response.OK
 ----------------------------------------
 
-This property keeps a normalized code determines response type.
+Keeps a normalized code determined the response type.
 
 It refers to one of the *Response.STATUSES* values.
 
-```
+```javascript
 res.status = Networking.Response.CREATED;
 res.status = Networking.Response.PAYMENT_REQUIRED;
 ```
@@ -168,11 +164,9 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 *Any* Response::data
 --------------------
 
-This property value will be sent to a client as a response data.
+Value sent to the client.
 
-It can be set manually or by the *Response::send()* method.
-
-```
+```javascript
 res.data = {items: ['superhero toy', 'book']};
 res.data = new Error("Wrong order");
 res.data = Document.fromJSON(...);
@@ -198,11 +192,7 @@ res.data = Document.fromJSON(...);
 *Response* Response::setHeader(*String* name, *String* value)
 -------------------------------------------------------------
 
-Use this method to set a header.
-
-Currently this method has no effect for a local requests.
-
-```
+```javascript
 res.setHeader('Location', '/redirect/to/url');
 ```
 
@@ -220,16 +210,14 @@ res.setHeader('Location', '/redirect/to/url');
 Response::send([*Integer* status, *Any* data])
 ----------------------------------------------
 
-Use this method to send a response.
+This method calls the [onSend()][networking/Response::onSend()] signal.
 
-This method calls *onSend()* signal.
-
-```
-res.send(Networking.Response.OK, {user: 'Max', age: 43});
-
+```javascript
 res.onSend(function(){
-  console.log("Response has been sent");
+	console.log("Response has been sent");
 });
+
+res.send(Networking.Response.OK, {user: 'Max', age: 43});
 ```
 
 		send: (status, data) ->
@@ -259,10 +247,8 @@ res.onSend(function(){
 Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 ---------------------------------------------------------------------
 
-Use this method to redirect a client to the other uri.
-
-*Response.FOUND* status is typically used for a temporary redirect and *Response.MOVED* for
-a permanent redirect.
+The *Response.FOUND* status is typically used for the temporary redirection.
+The *Response.MOVED* for is a permanent redirection.
 
 		redirect: (status, uri) ->
 			if uri is undefined
@@ -287,9 +273,9 @@ a permanent redirect.
 Response::raise(*Any* error)
 ----------------------------
 
-This method finishes a response with an error.
+Finishes the response with an error.
 
-```
+```javascript
 res.raise(new Networking.Response.Error("Login first"));
 res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login first"));
 ```
@@ -303,7 +289,7 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 *Boolean* Response::isSucceed()
 -------------------------------
 
-This method returns *true* if a response status is in the range from 200 to 299.
+Returns `true` if the response status is in range from 200 to 299.
 
 		isSucceed: ->
 			300 > @status >= 200

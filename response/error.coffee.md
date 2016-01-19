@@ -1,4 +1,4 @@
-Response/Error
+Response Error
 ==============
 
 	'use strict'
@@ -15,12 +15,10 @@ Response/Error
 *Error* Error([*Integer* status, *String* message])
 ---------------------------------------------------
 
-This class is used in the [Networking.Response::raise()][] method and describes an error.
-
-It works as a standard Javascript *Error* class, but provides extra *status* value.
+It works as a standard Javascript *Error* class, but provides an extra *status* value.
 
 Access it with:
-```
+```javascript
 var Networking = require('networking');
 var ResponseError = Networking.Response.Error;
 ```
@@ -53,7 +51,7 @@ This error is sent if the request can't be resolved,
 because no proper handler which can handle the request can be found.
 
 Access it with:
-```
+```javascript
 var Networking = require('networking');
 var RequestResolveResponseError = Networking.Response.Error.RequestResolve;
 ```

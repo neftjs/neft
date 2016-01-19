@@ -16,17 +16,15 @@ Handler
 *Handler* Handler(*Object* options)
 -----------------------------------
 
-This class represents a callback function called on a request.
+Represents a callback function called on the request.
 
-Each handler must determine an *Uri*, which is compared with the got request.
+Each handler must determine an uri, which is compared with the got request URI.
 
-You should use **Networking::createHandler()** to create a functional handler.
-
-*options* specifies a *Handler::method*, a *Handler::uri*,
-a *Handler::schema* and a *Handler::callback*.
+You should use [createHandler()][networking/Networking::createHandler()] to create
+a functional handler.
 
 Access it with:
-```
+```javascript
 var Networking = require('networking');
 var Handler = Networking.Handler;
 ```
@@ -45,50 +43,45 @@ var Handler = Networking.Handler;
 *String* Handler::method
 ------------------------
 
-This property describes which type of a request, this handler can handle.
-
-It's one of the **Networking.Request.METHODS** values.
+Describes which type of the request, this handler can handle.
 
 		method: ''
 
 *Networking.Uri* Handler::uri
 -----------------------------
 
-This property is compared with a request uri.
+This property is compared with the request uri.
 
 		uri: null
 
 *Schema* Handler::schema = null
 -------------------------------
 
-This property is used to determine whether a request uri is valid and can be handled by
-the handler callback.
-
-This property is optional in the constructor.
+Used to determine whether the request uri is valid and can be handled by the handler callback.
 
 		schema: null
 
 *Function* Handler::callback
 ----------------------------
 
-This function is used to handle a request.
+Function used to handle the request.
 
 It's called with three parameters: **Networking.Request**, **Networking.Response** and
 a *next* function.
 
-If *next* function is called, next handler is checked.
+If the *next* function is called, the next handler is checked.
 
 		callback: null
 
 Handler::exec(*Networking.Request* request, *Networking.Response* response, *Function* next)
 --------------------------------------------------------------------------------------------
 
-This method executes a handler, that is:
- - compare a uri with a request,
- - validate the request uri with a schema,
- - call a callback.
+Executes the handler, that is:
+ - compares the uri with the request,
+ - validates the request uri with the schema,
+ - calls the handler callback.
 
-It's internally called by the **Networking.createRequest()**.
+It's internally called by the [createRequest()][networking/Networking::createRequest()].
 
 		exec: (req, res, next) ->
 			assert.instanceOf req, Networking.Request, '::exec request argument ...'
@@ -148,9 +141,9 @@ It's internally called by the **Networking.createRequest()**.
 *String* Handler::toString()
 ----------------------------
 
-This method returns a string describing a handler: a uri prefixed by a method.
+Returns a string describing the handler.
 
-```
+```javascript
 "get /users/{name}"
 ```
 

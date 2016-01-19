@@ -1,14 +1,12 @@
 Networking @engine
-==========
-
-**HTTP, URIs, ...**
+==================
 
 This module cares about communication client-server and client internally.
 
 Currently only the HTTP protocol is supported.
 
 Access it with:
-```
+```javascript
 var Networking = require('networking');
 ```
 
@@ -38,11 +36,6 @@ var Networking = require('networking');
 
 *Networking* Networking(*Object* options)
 -----------------------------------------
-
-Use this constructor to create new *Networking* instance.
-
-*options* specifies *Networking::type*, *Networking::protocol*,
-*Networking::port*, *Networking::host*, *Networking::url* and *Networking::language*.
 
 		constructor: (opts) ->
 			assert.isPlainObject opts, 'ctor options argument ....'
@@ -101,7 +94,7 @@ ReadOnly *String* Networking::host
 ReadOnly *String* Networking::url
 ---------------------------------
 
-This property is a proper URL path contains a protocol, a port and a host.
+URL path contains a protocol, port and a host.
 
 It can be set manually if the external address is different.
 Otherwise it's created automatically.
@@ -111,7 +104,7 @@ Otherwise it's created automatically.
 ReadOnly *String* Networking::language
 --------------------------------------
 
-This property indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
+Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 
 		language: ''
 
@@ -121,21 +114,21 @@ ReadOnly *List* Networking::pendingRequests
 *Networking.Handler* Networking::createHandler(*Object* options)
 ----------------------------------------------------------------
 
-Use this method to create new [Networking.Handler][].
+Use this method to create a new [Handler][netowrking/Handler].
 
-```
+```javscript
 app.networking.createHandler({
-  method: 'get',
-  uri: '/users/{name}',
-  schema: new Schema({
-    name: {
-      type: 'string',
-      min: 3
-    },
-  }),
-  callback: function(req, res, next){
-    res.raise(new Networking.Response.Error(Networking.Response.NOT_IMPLEMENTED));
-  }
+	method: 'get',
+	uri: '/users/{name}',
+	schema: new Schema({
+		name: {
+			type: 'string',
+			min: 3
+		},
+	}),
+	callback: function(req, res, next){
+		res.raise(new Networking.Response.Error(Networking.Response.NOT_IMPLEMENTED));
+	}
 });
 ```
 
@@ -200,7 +193,7 @@ app.networking.createHandler({
 
 *Networking.Request* Networking::get(*String* uri, *Function* onLoadEnd)
 ------------------------------------------------------------------------
-	
+
 		get: (uri, onLoadEnd) ->
 			@createRequest
 				method: 'get'
@@ -252,37 +245,37 @@ app.networking.createHandler({
 *Networking.Request* Networking::createLocalRequest(*Object* options)
 ---------------------------------------------------------------------
 
-Use this method to create new [Networking.Request][] and handle it.
+Use this method to create a new [Request][networking/Request] and handle it.
 
 Local and server requests are supported.
 
-#### Local requests
+### Local requests
 
-```
+```javascript
 app.networking.createRequest({
-  uri: '/achievements/world_2',
-  onLoadEnd: function(err, data){
-    if (this.response.isSucceed()){
-      console.log("Request has been loaded! Data: " + data);
-    } else {
-      console.log("Error: " + err);
-    }
-  }
+	uri: '/achievements/world_2',
+	onLoadEnd: function(err, data){
+		if (this.response.isSucceed()){
+			console.log("Request has been loaded! Data: " + data);
+		} else {
+			console.log("Error: " + err);
+		}
+	}
 });
 ```
 
-#### Requests to the server
+### Requests to the server
 
-```
+```javascript
 app.networking.createRequest({
-  method: 'post',
-  uri: 'http://server.domain/comments',
-  data: {message: 'Great article! Like it.'},
-  onLoadEnd: function(err, data){
-    if (this.response.isSucceed()){
-      console.log("Comment has been added!");
-    }
-  }
+	method: 'post',
+	uri: 'http://server.domain/comments',
+	data: {message: 'Great article! Like it.'},
+	onLoadEnd: function(err, data){
+		if (this.response.isSucceed()){
+			console.log("Comment has been added!");
+		}
+	}
 });
 ```
 
