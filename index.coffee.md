@@ -11,7 +11,7 @@ var List = require('list');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	signal = require 'signal'
 
 	module.exports = class List extends signal.Emitter
@@ -173,7 +173,7 @@ console.log(Array.isArray(list.items()));
 ```javascript
 var list = new List(['a', 'b']);
 var items = list.items();
-for (var i = 0; i < items.length; i++){  
+for (var i = 0; i < items.length; i++){
   console.log(items[i]);
 }
 // a
@@ -366,7 +366,7 @@ console.log(list.items());
 ```
 
 		clear: ->
-			while @_data.length 
+			while @_data.length
 				@pop()
 
 			null
