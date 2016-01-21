@@ -96,7 +96,9 @@ var Uri = Networking.Uri;
 			else
 				@params = null
 				names = null
-				re = null
+				re = uri
+				re = re.replace /(\?)/g, '\\$1'
+				re = new RegExp "^\/?#{re}\/?$"
 
 			utils.defineProperty @, '_names', null, names
 			utils.defineProperty @, '_re', null, re
@@ -178,10 +180,7 @@ This property holds last *Uri::match()* result.
 Use this method to test whether a uri is valid with the given string.
 
 		test: (uri) ->
-			if @_re?
-				@_re.test uri
-			else
-				@_uri is uri
+			@_re.test uri
 
 *Object* Uri::match(*String* uri)
 ---------------------------------
@@ -194,7 +193,7 @@ In such case, you should use the *Uri::test()* method before.
 		match: (uri) ->
 			assert.ok @test(uri)
 
-			if @_re?
+			if @_names?
 				exec = @_re.exec uri
 				for name, i in @_names
 					val = exec[i+1]
