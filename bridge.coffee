@@ -2,7 +2,7 @@
 
 utils = require 'utils'
 log = require 'log'
-assert = require 'neft-assert'
+assert = require 'assert'
 
 listeners = Object.create null
 

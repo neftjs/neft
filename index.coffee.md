@@ -1,9 +1,9 @@
-Native
-======
+Native @library
+===============
 
 	'use strict'
 
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	log = require 'log'
 
 	actions = require './actions'
