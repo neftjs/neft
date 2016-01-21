@@ -1,4 +1,5 @@
 setImmediate = do ->
+	ready = false
 	running = false
 	queue = []
 
@@ -37,6 +38,11 @@ setImmediate = do ->
 		->
 			setTimeout callAll, 0
 
+	# Firefox sometimes calls setImmediate before the code execution end
+	setTimeout ->
+		ready = true
+		callAll()
+
 	(func) ->
 		argc = arguments.length
 		if argc > 1
@@ -44,7 +50,7 @@ setImmediate = do ->
 			for i in [1...argc] by 1
 				args[i - 1] = arguments[i]
 		queue.push func, args
-		unless running
+		if ready and not running
 			update()
 			running = true
 		return
