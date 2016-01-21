@@ -11,7 +11,7 @@ var signal = require('signal');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 
 *Integer* signal.STOP_PROPAGATION
 ---------------------------------
