@@ -230,6 +230,8 @@ module.exports = ->
 		Neft = require opts.neftFilePath
 	global.Neft = ->
 
+	ASSERT_MODULE_PATH = fs.realpathSync('') + '/node_modules/assert'
+
 	###
 	Override standard `Module._load()` to capture all required modules and files
 	###
@@ -240,7 +242,7 @@ module.exports = ->
 
 		hiddenReq = req
 		if req is 'assert'
-			hiddenReq = arguments[0] = 'neft-assert'
+			hiddenReq = arguments[0] = ASSERT_MODULE_PATH
 
 		r = _super.apply @, arguments
 
@@ -268,7 +270,7 @@ module.exports = ->
 		mpaths = paths[parentPath] ?= {}
 		mpaths[req] = modulePath
 
-		if req is 'neft-assert'
+		if req is ASSERT_MODULE_PATH
 			mpaths['assert'] = modulePath
 
 		r
