@@ -7,9 +7,7 @@ groundskeeper = require 'groundskeeper'
 uglify = require 'uglify-js'
 Module = require 'module'
 
-utils = require 'utils'
-log = require 'log'
-assert = require './node_modules/assert'
+{utils, log, assert} = Neft
 
 processFile = require './process'
 buildResult = require './result'
