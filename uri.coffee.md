@@ -44,14 +44,14 @@ Uri
 *Uri* Uri(*String* uri)
 -----------------------
 
-This class represents a uri string with parameters.
+Represents an uri string with parameters.
 
 The parameter must be wrapped by the curly brackets **{…}**.
 
-**Rest parameters** are not greedy and are wrapped by **{…*}** or just **…***.
+**Rest parameters** are not greedy and are wrapped by the **{…*}** or just **…***.
 Rest parameters don't have to be named (**{*}** is allowed).
 
-```
+```javascript
 var uri = new Networking.Uri('articles/{pageStart}/{pageEnd}');
 console.log(uri.match('articles/2/4'));
 // { pageStart: '2', pageEnd: '4' }
@@ -62,7 +62,7 @@ console.log(uri.match('comments/article/world/test-article/4'));
 ```
 
 Access it with:
-```
+```javascript
 var Networking = require('networking');
 var Uri = Networking.Uri;
 ```
@@ -84,7 +84,7 @@ var Uri = Networking.Uri;
 				while (exec = Uri.NAMES_RE.exec(uri))?
 					names.push exec[1]
 					@params[exec[1]] = null
-				
+
 				Object.preventExtensions @params
 
 				# re
@@ -166,7 +166,7 @@ var Uri = Networking.Uri;
 *Object* Uri::params
 --------------------
 
-This property holds last *Uri::match()* result.
+Holds the last *Uri::match()* result.
 
 *Object* Uri::query
 -------------------
@@ -177,7 +177,7 @@ This property holds last *Uri::match()* result.
 *Boolean* Uri::test(*String* uri)
 ---------------------------------
 
-Use this method to test whether a uri is valid with the given string.
+Test whether the uri is valid with the given string.
 
 		test: (uri) ->
 			@_re.test uri
@@ -185,10 +185,9 @@ Use this method to test whether a uri is valid with the given string.
 *Object* Uri::match(*String* uri)
 ---------------------------------
 
-This method returns parameters from the given string.
+Returns found parameters from the given string.
 
-If the given uri is not valid with a uri, error will be raised.
-In such case, you should use the *Uri::test()* method before.
+If the given uri is not valid with the uri, error will be raised.
 
 		match: (uri) ->
 			assert.ok @test(uri)
@@ -206,11 +205,11 @@ In such case, you should use the *Uri::test()* method before.
 *String* Uri::toString([*Object|Dict* params])
 ----------------------------------------------
 
-This method parses an uri into a string.
+Parses the uri into a string.
 
-The given *params* object is used to replace the uri parameters.
+The given params object is used to replace the uri parameters.
 
-```
+```javascript
 var uri = new Networking.Uri('user/{name}');
 
 console.log(uri.toString({name: 'Jane'}));

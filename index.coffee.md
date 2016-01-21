@@ -114,7 +114,7 @@ ReadOnly *List* Networking::pendingRequests
 *Networking.Handler* Networking::createHandler(*Object* options)
 ----------------------------------------------------------------
 
-Use this method to create a new [Handler][netowrking/Handler].
+Use this method to create a new [Handler][networking/Handler].
 
 ```javscript
 app.networking.createHandler({
@@ -154,6 +154,8 @@ app.networking.createHandler({
 
 *Networking.Request* Networking::createRequest(*Object* options)
 ----------------------------------------------------------------
+
+The given options object corresponds to the [Request][networking/Request] properties.
 
 		createRequest: (opts) ->
 			assert.instanceOf @, Networking
@@ -246,6 +248,8 @@ app.networking.createHandler({
 ---------------------------------------------------------------------
 
 Use this method to create a new [Request][networking/Request] and handle it.
+
+The given options object corresponds to the [Request][networking/Request] properties.
 
 Local and server requests are supported.
 
