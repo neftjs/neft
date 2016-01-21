@@ -11,7 +11,7 @@ AmbientSound @class
 
 	'use strict'
 
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	utils = require 'utils'
 	signal = require 'signal'
 	List = require 'list'

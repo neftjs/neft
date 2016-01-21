@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'neft-assert'
+assert = require 'assert'
 log = require 'log'
 
 log = log.scope 'Renderer', 'Anchors'

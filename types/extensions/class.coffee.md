@@ -3,7 +3,7 @@ Class @modifier
 
 	'use strict'
 
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	utils = require 'utils'
 	signal = require 'signal'
 	log = require 'log'

@@ -2,7 +2,7 @@
 
 utils = require 'utils'
 signal = require 'signal'
-assert = require 'neft-assert'
+assert = require 'assert'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Component
 
@@ -46,7 +46,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 			# @createItem = original.createItem
 			# @cloneItem = original.cloneItem
 			# @cacheItem = original.cacheItem
-		# else	
+		# else
 		@clone = utils.bindFunctionContext @clone, @
 		@createItem = utils.bindFunctionContext @createItem, @
 		@createItem.getComponent = @clone
@@ -97,7 +97,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 		# init objects
 		for id, item of @objects
-			if @objects.hasOwnProperty(id) and item instanceof Renderer.Item and id isnt @itemId 
+			if @objects.hasOwnProperty(id) and item instanceof Renderer.Item and id isnt @itemId
 				item.onReady.emit()
 
 		return

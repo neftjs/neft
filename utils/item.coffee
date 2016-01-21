@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'neft-assert'
+assert = require 'assert'
 utils = require 'utils'
 signal = require 'signal'
 log = require 'log'
@@ -196,7 +196,7 @@ module.exports = (Renderer, Impl) ->
 
 		toString: ->
 			getObjAsString @
-	
+
 	class FixedObject extends UtilsObject
 		constrcutor: (component, opts) ->
 			super component, opts

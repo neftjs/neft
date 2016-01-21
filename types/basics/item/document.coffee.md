@@ -5,7 +5,7 @@ Document @extension
 
 	utils = require 'utils'
 	signal = require 'signal'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	log = require 'log'
 
 	log = log.scope 'Renderer', 'Document'
