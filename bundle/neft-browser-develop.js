@@ -1,39 +1,83 @@
-/*
-Neft.io - Server + Native + Browser
-Contact: <contact@neft.io>
+var Neft, setImmediate;
 
-Version: 0.7.1
-Target: browser
-Mode: develop
+setImmediate = (function() {
+  var callAll, queue, running, update;
+  running = false;
+  queue = [];
+  callAll = function() {
+    var args, func, i, j, length, ref;
+    running = false;
+    length = queue.length;
+    for (i = j = 0, ref = length; j < ref; i = j += 2) {
+      func = queue.shift();
+      args = queue.shift();
+      func.apply(null, args);
+    }
+  };
+  update = (function() {
+    var Mutation, calls, element, observer;
+    if (!(Mutation = window.MutationObserver || window.WebKitMutationObserver)) {
+      return;
+    }
+    calls = 0;
+    observer = new Mutation(callAll);
+    element = document.createTextNode('');
+    observer.observe(element, {
+      characterData: true
+    });
+    return function() {
+      var ref;
+      return element.data = (ref = ++calls % 2) != null ? ref : {
+        "a": "b"
+      };
+    };
+  })();
+  update || (update = (function() {
+    var channel;
+    if ((typeof window !== "undefined" && window !== null ? window.setImmediate : void 0) || (typeof MessageChannel === "undefined" || MessageChannel === null)) {
+      return;
+    }
+    channel = new MessageChannel();
+    channel.port1.onmessage = callAll;
+    return function() {
+      return channel.port2.postMessage(0);
+    };
+  })());
+  update || (update = (function() {
+    return function() {
+      return setTimeout(callAll, 0);
+    };
+  })());
+  return function(func) {
+    var argc, args, i, j, ref;
+    argc = arguments.length;
+    if (argc > 1) {
+      args = new Array(argc - 1);
+      for (i = j = 1, ref = argc; j < ref; i = j += 1) {
+        args[i - 1] = arguments[i];
+      }
+    }
+    queue.push(func, args);
+    if (!running) {
+      update();
+      running = true;
+    }
+  };
+})();
 
-Copyright (C) 2014-2015 Neft.io - All Rights Reserved
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential
-
-*/
-var Neft = (function(){
+Neft = (function(){
 'use strict';
 
 // list of modules with empty objects
-var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../neft-assert/index.coffee.md":{},"../log/impls/browser/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/browser/localStorage.coffee":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/browser/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/browser/request.coffee":{},"node_modules/expect/index.coffee.md":{},"../emitter/index.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/css/index.coffee":{},"../renderer/impl/css/utils.coffee":{},"../renderer/impl/css/level0/item.coffee":{},"../renderer/impl/css/level0/image.coffee":{},"../renderer/impl/css/level0/text.coffee":{},"../renderer/impl/css/level0/textInput.coffee":{},"../renderer/impl/css/level0/loader/font.coffee":{},"../renderer/impl/css/level0/loader/resources.coffee":{},"../renderer/impl/css/level0/device.coffee":{},"../renderer/impl/css/level0/screen.coffee":{},"../renderer/impl/css/level0/navigator.coffee":{},"../renderer/impl/css/level0/sensor/rotation.coffee":{},"../renderer/impl/css/level1/rectangle.coffee":{},"../renderer/impl/css/level2/scrollable.coffee":{},"../renderer/impl/css/level0/sound/ambient.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/attrs.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/fragment.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/clear.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/listeners.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/browser/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"../emitter/node_modules/immediate/lib/nextTick.js":{},"../emitter/node_modules/immediate/lib/mutation.js":{},"../emitter/node_modules/immediate/lib/messageChannel.js":{},"../emitter/node_modules/immediate/lib/stateChange.js":{},"../emitter/node_modules/immediate/lib/timeout.js":{},"../emitter/node_modules/immediate/lib/index.js":{},"package.json":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee.md":{},"index.coffee.md":{}};
-
-// global object
-var globalRequire = typeof require !== 'undefined' && require;
-var setImmediate = setTimeout;
-var global = Object.create(null, {
-	setImmediate: {
-		enumerable: true,
-		get: function(){ return setImmediate; },
-		set: function(val){ setImmediate = val; }
-	}
-});
+var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../neft-assert/index.coffee.md":{},"../log/impls/browser/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/browser/localStorage.coffee":{},"../db/implementations/browser.coffee":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/browser/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/browser/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/css/index.coffee":{},"../renderer/impl/css/utils.coffee":{},"../renderer/impl/css/level0/item.coffee":{},"../renderer/impl/css/level0/image.coffee":{},"../renderer/impl/css/level0/text.coffee":{},"../renderer/impl/css/level0/textInput.coffee":{},"../renderer/impl/css/level0/loader/font.coffee":{},"../renderer/impl/css/level0/loader/resources.coffee":{},"../renderer/impl/css/level0/device.coffee":{},"../renderer/impl/css/level0/screen.coffee":{},"../renderer/impl/css/level0/navigator.coffee":{},"../renderer/impl/css/level0/sensor/rotation.coffee":{},"../renderer/impl/css/level1/rectangle.coffee":{},"../renderer/impl/css/level2/scrollable.coffee":{},"../renderer/impl/css/level0/sound/ambient.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/browser/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"package.json":{},"../native/actions.coffee":{},"../native/bridge.coffee":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
 
 // used as `require`
 function getModule(paths, name){
-	return modules[paths[name]] ||
+	var path = paths[name];
+	return (path in modules ? modules[path] :
 	       (typeof Neft !== "undefined" && Neft[name]) ||
-	       (typeof globalRequire === 'function' && globalRequire(name)) ||
-	       (function(){throw new Error("Cannot find module '"+name+"'");}());
+	       (typeof require === 'function' && require(name)) ||
+	       (function(){throw new Error("Cannot find module '"+name+"'");}()));
 };
 
 // fill modules by their bodies
@@ -390,7 +434,7 @@ var exports = module.exports;
       n = arr.length;
       next = function() {
         if (i === n) {
-          return onEnd();
+          return onEnd.call(thisArg);
         }
         i++;
         return callback.call(thisArg, arr[i - 1], i - 1, arr, next);
@@ -405,7 +449,7 @@ var exports = module.exports;
       next = function() {
         var key;
         if (i === n) {
-          return onEnd();
+          return onEnd.call(thisArg);
         }
         key = keys[i];
         callback.call(thisArg, key, obj[key], obj, next);
@@ -623,17 +667,20 @@ var exports = module.exports;
 
   require('./async')(exports);
 
-  exports.isNode = exports.isServer = exports.isClient = exports.isBrowser = exports.isQml = exports.isAndroid = false;
+  exports.isNode = exports.isServer = exports.isClient = exports.isBrowser = exports.isQt = exports.isAndroid = exports.isIOS = false;
 
   switch (true) {
-    case (typeof window !== "undefined" && window !== null ? window.document : void 0) != null:
-      exports.isClient = exports.isBrowser = true;
-      break;
     case (typeof Qt !== "undefined" && Qt !== null ? Qt.include : void 0) != null:
-      exports.isClient = exports.isQml = true;
+      exports.isClient = exports.isQt = true;
       break;
     case typeof android !== "undefined" && android !== null:
       exports.isClient = exports.isAndroid = true;
+      break;
+    case (typeof _neft !== "undefined" && _neft !== null ? _neft.platform : void 0) === 'ios':
+      exports.isClient = exports.isIOS = true;
+      break;
+    case (typeof window !== "undefined" && window !== null ? window.document : void 0) != null:
+      exports.isClient = exports.isBrowser = true;
       break;
     case (typeof process !== "undefined" && process !== null) && Object.prototype.toString.call(process) === '[object process]':
       exports.isNode = exports.isServer = true;
@@ -1218,7 +1265,7 @@ var exports = module.exports;
     return str;
   };
 
-  exports.tryFunction = function(func, context, args, onfail) {
+  exports.tryFunction = function(func, context, args, onFail) {
     var err;
     null;
     //<development>;
@@ -1233,10 +1280,10 @@ var exports = module.exports;
       return func.apply(context, args);
     } catch (_error) {
       err = _error;
-      if (typeof onfail === 'function') {
-        return onfail(err);
+      if (typeof onFail === 'function') {
+        return onFail(err);
       } else {
-        return onfail;
+        return onFail;
       }
     }
   };
@@ -1260,59 +1307,52 @@ var exports = module.exports;
     }
   };
 
-  exports.bindFunctionContext = (function() {
-    var anyLengthBindFunc, bindFuncs;
-    bindFuncs = [
-      function(func, ctx) {
+  exports.bindFunctionContext = function(func, ctx) {
+    null;
+    //<development>;
+    if (typeof func !== 'function') {
+      throw new Error("utils.bindFunctionContext function must be a function");
+    }
+    //</development>;
+    switch (func.length) {
+      case 0:
         return function() {
           return func.call(ctx);
         };
-      }, function(func, ctx) {
+      case 1:
         return function(a1) {
           return func.call(ctx, a1);
         };
-      }, function(func, ctx) {
+      case 2:
         return function(a1, a2) {
           return func.call(ctx, a1, a2);
         };
-      }, function(func, ctx) {
+      case 3:
         return function(a1, a2, a3) {
           return func.call(ctx, a1, a2, a3);
         };
-      }, function(func, ctx) {
+      case 4:
         return function(a1, a2, a3, a4) {
           return func.call(ctx, a1, a2, a3, a4);
         };
-      }, function(func, ctx) {
+      case 5:
         return function(a1, a2, a3, a4, a5) {
           return func.call(ctx, a1, a2, a3, a4, a5);
         };
-      }, function(func, ctx) {
+      case 6:
         return function(a1, a2, a3, a4, a5, a6) {
           return func.call(ctx, a1, a2, a3, a4, a5, a6);
         };
-      }, function(func, ctx) {
+      case 7:
         return function(a1, a2, a3, a4, a5, a6, a7) {
           return func.call(ctx, a1, a2, a3, a4, a5, a6, a7);
         };
-      }
-    ];
-    anyLengthBindFunc = function(func, ctx) {
-      return function() {
-        return func.apply(ctx, arguments);
-      };
-    };
-    return function(func, ctx) {
-      var _name;
-      null;
-      //<development>;
-      if (typeof func !== 'function') {
-        throw new Error("utils.bindFunctionContext function must be a function");
-      }
-      //</development>;
-      return (typeof bindFuncs[_name = func.length] === "function" ? bindFuncs[_name](func, ctx) : void 0) || anyLengthBindFunc(func, ctx);
-    };
-  })();
+      default:
+        return function() {
+          return func.apply(ctx, arguments);
+        };
+    }
+  };
 
   exports.errorToObject = function(error) {
     var result;
@@ -1348,7 +1388,7 @@ var exports = module.exports;
     defaultComparison = function(a, b) {
       return a === b;
     };
-    forArrays = function(a, b, compareFunc) {
+    forArrays = function(a, b, compareFunc, maxDeep) {
       var aValue, bValue, isTrue, _i, _j, _k, _l, _len, _len1, _len2, _len3;
       if (getPrototypeOf(a) !== getPrototypeOf(b)) {
         return false;
@@ -1356,13 +1396,16 @@ var exports = module.exports;
       if (a.length !== b.length) {
         return false;
       }
+      if (maxDeep <= 0) {
+        return true;
+      }
       for (_i = 0, _len = a.length; _i < _len; _i++) {
         aValue = a[_i];
         isTrue = false;
         for (_j = 0, _len1 = b.length; _j < _len1; _j++) {
           bValue = b[_j];
           if (bValue && typeof bValue === 'object') {
-            if (isEqual(aValue, bValue, compareFunc)) {
+            if (isEqual(aValue, bValue, compareFunc, maxDeep - 1)) {
               isTrue = true;
             }
             continue;
@@ -1382,7 +1425,7 @@ var exports = module.exports;
         for (_l = 0, _len3 = a.length; _l < _len3; _l++) {
           aValue = a[_l];
           if (aValue && typeof aValue === 'object') {
-            if (isEqual(bValue, aValue, compareFunc)) {
+            if (isEqual(bValue, aValue, compareFunc, maxDeep - 1)) {
               isTrue = true;
             }
             continue;
@@ -1398,7 +1441,7 @@ var exports = module.exports;
       }
       return true;
     };
-    forObjects = function(a, b, compareFunc) {
+    forObjects = function(a, b, compareFunc, maxDeep) {
       var key, value;
       if (getPrototypeOf(a) !== getPrototypeOf(b)) {
         return false;
@@ -1419,13 +1462,16 @@ var exports = module.exports;
           }
         }
       }
+      if (maxDeep <= 0) {
+        return true;
+      }
       for (key in a) {
         value = a[key];
         if (!(a.hasOwnProperty(key))) {
           continue;
         }
         if (value && typeof value === 'object') {
-          if (!isEqual(value, b[key], compareFunc)) {
+          if (!isEqual(value, b[key], compareFunc, maxDeep - 1)) {
             return false;
           }
           continue;
@@ -1436,20 +1482,32 @@ var exports = module.exports;
       }
       return true;
     };
-    return function(a, b, compareFunc) {
+    return function(a, b, compareFunc, maxDeep) {
       if (compareFunc == null) {
         compareFunc = defaultComparison;
       }
-      null;
+      if (maxDeep == null) {
+        maxDeep = Infinity;
+      }
+      if (typeof compareFunc === 'number') {
+        maxDeep = compareFunc;
+        compareFunc = defaultComparison;
+      }
       //<development>;
       if (typeof compareFunc !== 'function') {
         throw new Error("utils.isEqual compareFunction must be a function");
       }
+      if (typeof maxDeep !== 'number') {
+        throw new Error("utils.isEqual maxDeep must be a number");
+      }
       //</development>;
+      if (maxDeep < 0) {
+        return compareFunc(a, b);
+      }
       if (isArray(a) && isArray(b)) {
-        return forArrays(a, b, compareFunc);
+        return forArrays(a, b, compareFunc, maxDeep);
       } else if (isObject(a) && isObject(b)) {
-        return forObjects(a, b, compareFunc);
+        return forObjects(a, b, compareFunc, maxDeep);
       } else {
         return compareFunc(a, b);
       }
@@ -1510,7 +1568,11 @@ var exports = module.exports;
       if (typeof Error.captureStackTrace === "function") {
         Error.captureStackTrace(this, opts.stackStartFunction);
       }
-      console.error(this.message);
+      if (utils.isAndroid) {
+        console.error(this.stack || this.message);
+      } else if (utils.isQt) {
+        console.trace();
+      }
     }
 
     return AssertionError;
@@ -1687,14 +1749,22 @@ var exports = module.exports;
     }
   };
 
-  assert.isEqual = function(val1, val2, msg) {
-    if (!utils.isEqual(val1, val2)) {
+  assert.isEqual = function(val1, val2, msg, opts) {
+    if (typeof msg === 'object') {
+      opts = msg;
+      msg = void 0;
+    }
+    if (!utils.isEqual(val1, val2, opts != null ? opts.maxDeep : void 0)) {
       return this.fail(val1, val2, msg, 'equal', assert.isEqual);
     }
   };
 
-  assert.isNotEqual = function(val1, val2, msg) {
-    if (utils.isEqual(val1, val2)) {
+  assert.isNotEqual = function(val1, val2, msg, opts) {
+    if (typeof msg === 'object') {
+      opts = msg;
+      msg = void 0;
+    }
+    if (utils.isEqual(val1, val2, opts != null ? opts.maxDeep : void 0)) {
       return this.fail(val1, val2, msg, 'isn\'t equal', assert.isNotEqual);
     }
   };
@@ -1787,7 +1857,7 @@ var exports = module.exports;
   logFunc = window['cons' + 'ole']['lo' + 'g'];
 
   module.exports = (function() {
-    if (/chrome/i.test(navigator.userAgent)) {
+    if (/chrome|safari/i.test(navigator.userAgent) || (typeof webkit !== "undefined" && webkit !== null)) {
       return function(Log) {
         var LogBrowser;
         return LogBrowser = (function(_super) {
@@ -1897,9 +1967,6 @@ var exports = module.exports;
       },
       red: function(str) {
         return "ERROR: " + str;
-      },
-      bold: function(str) {
-        return "**" + str + "**";
       }
     };
 
@@ -2045,6 +2112,7 @@ var exports = module.exports;
       case utils.isNode:
         return require('./impls/node/index.coffee');
       case utils.isBrowser:
+      case utils.isIOS:
         return require('./impls/browser/index.coffee');
     }
   })();
@@ -2085,7 +2153,7 @@ var exports = module.exports;
         var listeners;
         assert.isString(name);
         assert.notLengthOf(name, 0);
-        if (listeners = obj._signals[name]) {
+        if (obj && (listeners = obj._signals[name])) {
           return callSignal(obj, listeners, arg1, arg2);
         }
       };
@@ -2155,10 +2223,10 @@ var exports = module.exports;
     if (name === void 0) {
       return signal;
     }
-    assert.isNotPrimitive(obj);
-    assert.isString(name);
-    assert.notLengthOf(name, 0);
-    assert(!obj.hasOwnProperty(name, ("Signal `" + name + "` can't be created, because passed object ") + "has such property"));
+    assert.isNotPrimitive(obj, 'signal object cannot be primitive');
+    assert.isString(name, 'signal name must be a string');
+    assert.notLengthOf(name, 0, 'signal name cannot be an empty string');
+    assert(!obj.hasOwnProperty(name), "signal object has already defined the '" + name + "' property");
     return obj[name] = signal;
   };
 
@@ -2213,9 +2281,9 @@ var exports = module.exports;
 
   SignalPrototype = {
     emit: function(arg1, arg2) {
-      assert.isFunction(this);
-      assert.isArray(this.listeners);
-      assert.operator(arguments.length, '<', 3, 'Signal accepts maximally two parameters; use object instead');
+      assert.isFunction(this, "emit must be called on a signal function");
+      assert.isArray(this.listeners, "emit must be called on a signal function");
+      assert.operator(arguments.length, '<', 3, 'signal accepts maximally two parameters; use object instead');
       return callSignal(this.obj, this.listeners, arg1, arg2);
     },
     connect: function(listener, ctx) {
@@ -2223,8 +2291,8 @@ var exports = module.exports;
       if (ctx == null) {
         ctx = null;
       }
-      assert.isFunction(this);
-      assert.isFunction(listener);
+      assert.isFunction(this, "connect must be called on a signal function");
+      assert.isFunction(listener, "listener is not a function");
       listeners = this.listeners;
       i = n = listeners.length;
       while ((i -= 2) >= 0) {
@@ -2244,8 +2312,8 @@ var exports = module.exports;
       if (ctx == null) {
         ctx = null;
       }
-      assert.isFunction(this);
-      assert.isFunction(listener);
+      assert.isFunction(this, "disconnect must be called on a signal function");
+      assert.isFunction(listener, "listener is not a function");
       listeners = this.listeners;
       index = 0;
       while (true) {
@@ -2255,7 +2323,7 @@ var exports = module.exports;
         }
         index += 2;
       }
-      assert.isNot(index, -1);
+      assert.isNot(index, -1, "listener doesn't exist in this signal");
       assert.is(listeners[index], listener);
       assert.is(listeners[index + 1], ctx);
       listeners[index] = null;
@@ -2263,7 +2331,7 @@ var exports = module.exports;
     },
     disconnectAll: function() {
       var i, listeners, _, _i, _len;
-      assert.isFunction(this);
+      assert.isFunction(this, "disconnectAll must be called on a signal function");
       listeners = this.listeners;
       for (i = _i = 0, _len = listeners.length; _i < _len; i = ++_i) {
         _ = listeners[i];
@@ -2321,9 +2389,9 @@ var exports = module.exports;
     }
 
     utils.defineProperty(List.prototype, '0', null, function() {
-      throw "You can't get elements from a list as standard properties; " + "use `List::get()` method instead";
+      throw "Can't get elements from a list as properties; " + "use `List::get()` method instead";
     }, function() {
-      throw "You can't set elements into a list as standard properties; " + "use `List::set()` method instead";
+      throw "Can't set elements into a list with properties; " + "use `List::set()` method instead";
     });
 
     signal.Emitter.createSignal(List, 'onChange');
@@ -2686,6 +2754,27 @@ var exports = module.exports;
 
 
 return module.exports;
+})();modules['../db/implementations/browser.coffee'] = (function(){
+var module = {exports: modules["../db/implementations/browser.coffee"]};
+var require = getModule.bind(null, {"./browser/localStorage":"../db/implementations/browser/localStorage.coffee"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var localStorageImpl;
+
+  localStorageImpl = require('./browser/localStorage');
+
+  module.exports = (function() {
+    if (window.localStorage != null) {
+      return localStorageImpl;
+    }
+  })();
+
+}).call(this);
+
+
+return module.exports;
 })();modules['../db/implementations/memory.coffee'] = (function(){
 var module = {exports: modules["../db/implementations/memory.coffee"]};
 var require = getModule.bind(null, {"utils":"../utils/index.coffee.md"});
@@ -2722,26 +2811,23 @@ var exports = module.exports;
 return module.exports;
 })();modules['../db/implementation.coffee'] = (function(){
 var module = {exports: modules["../db/implementation.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","./implementations/browser/localStorage":"../db/implementations/browser/localStorage.coffee","./implementations/memory":"../db/implementations/memory.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","./implementations/browser":"../db/implementations/browser.coffee","./implementations/memory":"../db/implementations/memory.coffee"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var browserLocalStorage, memory, utils;
+  var utils;
 
   utils = require('utils');
 
-  if (utils.isBrowser) {
-    browserLocalStorage = require('./implementations/browser/localStorage');
-  }
-
-  memory = require('./implementations/memory');
-
-  if ((typeof window !== "undefined" && window !== null) && (window.localStorage != null)) {
-    module.exports = browserLocalStorage;
-  } else {
-    module.exports = memory;
-  }
+  module.exports = (function() {
+    var impl;
+    if (utils.isBrowser) {
+      impl = require('./implementations/browser');
+    }
+    impl || (impl = require('./implementations/memory'));
+    return impl;
+  })();
 
 }).call(this);
 
@@ -3034,13 +3120,11 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, isArray, utils;
+  var assert, utils;
 
   assert = require('neft-assert');
 
   utils = require('utils');
-
-  isArray = Array.isArray;
 
   module.exports = function(Schema) {
     return function(row, value, expected) {
@@ -3173,9 +3257,9 @@ var exports = module.exports;
 
   module.exports = function(Schema) {
     return function(row, value, expected) {
-      assert(expected instanceof RegExp, "regexp validator option for " + row + " property must be a regular expression");
+      assert(expected instanceof RegExp, "regexp validator option for the " + row + " property must be a regular expression");
       if (!expected.test(value)) {
-        throw new Schema.Error(row, 'regexp', "" + row + " doesn't pass regular expression");
+        throw new Schema.Error(row, 'regexp', "" + row + " doesn't pass the regular expression");
       }
     };
   };
@@ -3198,10 +3282,7 @@ var exports = module.exports;
   module.exports = function(Schema) {
     return function(row, value, expected) {
       assert.isString(expected, "type validator option for " + row + " property must be a string");
-      if (isNaN(value) || value === null) {
-        value = void 0;
-      }
-      if ((value != null) && typeof value !== expected) {
+      if (typeof value !== expected) {
         throw new Schema.Error(row, 'type', "" + row + " must be a " + expected);
       }
     };
@@ -3380,10 +3461,11 @@ var exports = module.exports;
         var Request, cookies, data, name, uri, val, xhr, _ref;
         Request = Networking.Request;
         xhr = new XMLHttpRequest;
-        if (utils.has(req.uri, '?')) {
-          uri = "" + req.uri + "&now=" + (Date.now());
+        uri = req.uri.toString();
+        if (utils.has(uri, '?')) {
+          uri = "" + uri + "&now=" + (Date.now());
         } else {
-          uri = "" + req.uri + "?now=" + (Date.now());
+          uri = "" + uri + "?now=" + (Date.now());
         }
         xhr.open(req.method, uri, true);
         _ref = req.headers;
@@ -3449,8 +3531,10 @@ var exports = module.exports;
         return require('./impl/node/index');
       case utils.isBrowser:
         return require('./impl/browser/index');
-      case utils.isQml:
-        return require('./impl/qml/index');
+      case utils.isIOS:
+        return require('./impl/ios/index');
+      case utils.isQt:
+        return require('./impl/qt/index');
       case utils.isAndroid:
         return require('./impl/android/index');
     }
@@ -3479,372 +3563,105 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['node_modules/expect/index.coffee.md'] = (function(){
-var module = {exports: modules["node_modules/expect/index.coffee.md"]};
-var require = getModule.bind(null, {});
+})();modules['../document/element/element/text.coffee.md'] = (function(){
+var module = {exports: modules["../document/element/element/text.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, createMatcher, createValidator, every, expect, inverse, isArray, isInteger, keys, raise, silent, some, validators, value;
-
-  isArray = Array.isArray;
-
-  assert = console.assert;
-
-  value = null;
-
-  silent = every = some = inverse = keys = false;
-
-  createValidator = function(func) {
-    return function(_value) {
-      value = _value;
-      func();
-      return validators;
-    };
-  };
-
-  raise = function(msg) {
-    inverse = inverse ? ' not' : '';
-    return assert(false, msg());
-  };
-
-  createMatcher = function(func, msg) {
-    var exit, test;
-    test = function(value) {
-      if (silent && (value == null)) {
-        return true;
-      }
-      return func(value);
-    };
-    exit = function(ok) {
-      if (inverse) {
-        ok = !ok;
-      }
-      if (!ok) {
-        return raise(msg);
-      }
-    };
-    return function() {
-      var isObject, key, ok, val, values;
-      values = value;
-      if (every || some) {
-        isObject = value && typeof value === 'object';
-        assert(isObject, "expect.some/every() expects object, but `" + value + "` passed");
-      }
-      if (some || every) {
-        ok = every;
-        for (key in value) {
-          val = value[key];
-          if (test(keys ? key : val) === some) {
-            ok = some;
-            break;
-          }
-        }
-      } else {
-        ok = test(value);
-      }
-      exit(ok);
-      return validators.toBe;
-    };
-  };
-
-  expect = module.exports = createValidator(function() {
-    return silent = every = some = inverse = keys = false;
-  });
-
-  validators = {};
-
-  validators.defined = createValidator(function() {
-    return silent = true;
-  });
-
-  validators.every = createValidator(function() {
-    return every = true;
-  });
-
-  validators.some = createValidator(function() {
-    return some = true;
-  });
-
-  validators.keys = createValidator(function() {
-    var isObject;
-    isObject = value !== null && typeof value === 'object' && !isArray(value);
-    if (!some) {
-      throw "Use `expect().keys()` with some()";
-    }
-    if (!isObject) {
-      throw "Use `expect().some().keys()` with objects";
-    }
-    return keys = true;
-  });
-
-  validators.not = function() {
-    inverse = true;
-    return validators;
-  };
-
-  validators.toBe = (function() {
-    var expected, matcher;
-    expected = null;
-    matcher = createMatcher(function(value) {
-      return value === expected;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be `" + expected + "`";
-    });
-    return function(_expected) {
-      expected = _expected;
-      return matcher();
-    };
-  })();
-
-  validators.toBe.object = createMatcher(function(value) {
-    return typeof value === 'object' && value !== null;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be an object";
-  });
-
-  validators.toBe.simpleObject = createMatcher(function(value) {
-    var proto, r;
-    r = typeof value === 'object';
-    r && (r = value !== null);
-    if (r && (proto = Object.getPrototypeOf(value))) {
-      r && (r = proto === Object.prototype);
-      r && (r = !Object.getPrototypeOf(proto));
-    }
-    return r;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a simple object";
-  });
-
-  validators.toBe.string = createMatcher(function(value) {
-    return typeof value === 'string';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a string";
-  });
-
-  validators.toBe.boolean = createMatcher(function(value) {
-    return typeof value === 'boolean';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a boolean";
-  });
-
-  validators.toBe["function"] = createMatcher(function(value) {
-    return typeof value === 'function';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a function";
-  });
-
-  validators.toBe.float = createMatcher(function(value) {
-    return typeof value === 'number' && isFinite(value);
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a float";
-  });
-
-  isInteger = Number.isInteger || function(value) {
-    return typeof value === "number" && isFinite(value) && value > -9007199254740992 && value < 9007199254740992 && Math.floor(value) === value;
-  };
-
-  validators.toBe.integer = createMatcher(isInteger, function() {
-    return "Expected `" + value + "`" + inverse + " to be an integer";
-  });
-
-  validators.toBe.array = createMatcher(function(value) {
-    return isArray(value);
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be an array";
-  });
-
-  validators.toBe.truthy = createMatcher(function(value) {
-    return !!value;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be truthy";
-  });
-
-  validators.toBe.falsy = createMatcher(function(value) {
-    return !value;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be falsy";
-  });
-
-  validators.toBe.primitive = createMatcher(function(value) {
-    return value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || typeof value === 'undefined';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " not to be a primitive value";
-  });
-
-  validators.toBe.any = (function() {
-    var ctor, matcher;
-    ctor = null;
-    matcher = createMatcher(function(value) {
-      return value instanceof ctor;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be any " + ctor.name;
-    });
-    return function(_ctor) {
-      ctor = _ctor;
-      return matcher();
-    };
-  })();
-
-  validators.toBe.greaterThan = (function() {
-    var matcher, number;
-    number = 0;
-    matcher = createMatcher(function(value) {
-      return value > number;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be greater than " + number;
-    });
-    return function(_number) {
-      number = _number;
-      return matcher();
-    };
-  })();
-
-  validators.toBe.lessThan = (function() {
-    var matcher, number;
-    number = 0;
-    matcher = createMatcher(function(value) {
-      return value < number;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be less than " + number;
-    });
-    return function(_number) {
-      number = _number;
-      return matcher();
-    };
-  })();
-
-  validators.toMatchRe = (function() {
-    var expected, matcher;
-    expected = null;
-    matcher = createMatcher(function(value) {
-      return expected.test(value);
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to test `" + expected + "`";
-    });
-    return function(_expected) {
-      expected = _expected;
-      return matcher();
-    };
-  })();
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../emitter/index.coffee.md'] = (function(){
-var module = {exports: modules["../emitter/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","expect":"node_modules/expect/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var Emitter, expect, utils;
+  var assert, emitSignal, signal, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   utils = require('utils');
 
-  expect = require('expect');
+  assert = require('neft-assert');
 
-  module.exports = Emitter = (function() {
-    function Emitter() {
-      utils.defineProperty(this, '_events', utils.CONFIGURABLE, null);
-    }
+  signal = require('signal');
 
-    Emitter.prototype.getListeners = function(name) {
-      var _base;
-      expect(name).toBe.truthy().string();
-      if (!this._events) {
-        utils.defineProperty(this, '_events', null, {});
-      }
-      return (_base = this._events)[name] != null ? _base[name] : _base[name] = [];
-    };
+  emitSignal = signal.Emitter.emitSignal;
 
-    Emitter.prototype.on = function(name, listener) {
-      var listeners;
-      expect(name).toBe.truthy().string();
-      expect(listener).toBe["function"]();
-      listeners = this.getListeners(name);
-      listeners.push(listener);
-      return this;
-    };
+  assert = assert.scope('View.Element.Text');
 
-    Emitter.prototype.once = function(name, listener) {
-      var listenerOnce;
-      expect(name).toBe.truthy().string();
-      expect(listener).toBe["function"]();
-      listenerOnce = (function(_this) {
-        return function() {
-          _this.off(name, listenerOnce);
-          return listener.apply(_this, arguments);
-        };
-      })(this);
-      return this.on(name, listenerOnce);
-    };
+  module.exports = function(Element) {
+    var Text;
+    return Text = (function(_super) {
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_TEXT, i, opts;
 
-    Emitter.prototype.off = function(name, listener) {
-      var i, index, listeners, _, _i, _len;
-      expect(name).toBe.truthy().string();
-      expect(listener).toBe["function"]();
-      switch (arguments.length) {
-        case 2:
-          listeners = this.getListeners(name);
-          if (!listeners) {
-            break;
-          }
-          index = listeners.indexOf(listener);
-          if (~index) {
-            listeners[index] = null;
-          }
-          break;
-        case 1:
-          listeners = this.getListeners(name);
-          if (!listeners) {
-            break;
-          }
-          for (i = _i = 0, _len = listeners.length; _i < _len; i = ++_i) {
-            _ = listeners[i];
-            listeners[i] = null;
-          }
-          break;
-        case 0:
-          for (name in this._events) {
-            this.off(name);
-          }
-      }
-      return this;
-    };
+      __extends(Text, _super);
 
-    Emitter.prototype.trigger = function(name, param) {
-      var i, listener, listeners, n, tmp;
-      expect(name).toBe.truthy().string();
-      expect(arguments.length).not().toBe.greaterThan(2);
-      if (this._events && this._events.hasOwnProperty(name)) {
-        listeners = this.getListeners(name);
-        i = 0;
-        n = listeners.length;
-        while (i < n) {
-          listener = listeners[i];
-          if (listener === null) {
-            if (i !== n - 1) {
-              tmp = listeners[n - 1];
-              listeners[n - 1] = listener;
-              listeners[i] = tmp;
-            }
-            listeners.pop();
-            n--;
-            continue;
-          }
-          listener.call(this, param);
-          i++;
+      Text.__name__ = 'Text';
+
+      Text.__path__ = 'File.Element.Text';
+
+      JSON_CTOR_ID = Text.JSON_CTOR_ID = Element.JSON_CTORS.push(Text) - 1;
+
+      i = Element.JSON_ARGS_LENGTH;
+
+      JSON_TEXT = i++;
+
+      JSON_ARGS_LENGTH = Text.JSON_ARGS_LENGTH = i;
+
+      Text._fromJSON = function(arr, obj) {
+        if (obj == null) {
+          obj = new Text;
         }
+        Element._fromJSON(arr, obj);
+        obj.text = arr[JSON_TEXT];
+        return obj;
+      };
+
+      function Text() {
+        Element.call(this);
+        this._text = '';
+        //<development>;
+        if (this.constructor === Text) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
       }
-      return this;
-    };
 
-    return Emitter;
+      Text.prototype.clone = function() {
+        var clone;
+        clone = new Text;
+        clone._text = this._text;
+        return clone;
+      };
 
-  })();
+      signal.Emitter.createSignal(Text, 'onTextChange');
+
+      opts = utils.CONFIGURABLE;
+
+      utils.defineProperty(Text.prototype, 'text', opts, function() {
+        return this._text;
+      }, function(value) {
+        var old;
+        assert.isString(value);
+        old = this._text;
+        if (old === value) {
+          return false;
+        }
+        this._text = value;
+        emitSignal(this, 'onTextChange', old);
+        Element.Tag.query.checkWatchersDeeply(this);
+        return true;
+      });
+
+      Text.prototype.toJSON = function(arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        Text.__super__.toJSON.call(this, arr);
+        arr[JSON_TEXT] = this.text;
+        return arr;
+      };
+
+      return Text;
+
+    })(Element);
+  };
 
 }).call(this);
 
@@ -3883,17 +3700,17 @@ var exports = module.exports;
   };
 
   isPublic = function(name) {
-    return name.indexOf('neft:') !== 0;
+    return !/^(?:neft:|style:)/.test(name);
   };
 
-  getInnerHTML = function(elem) {
+  getInnerHTML = function(elem, replacements) {
     var child, r, _i, _len, _ref;
     if (elem.children) {
       r = "";
       _ref = elem.children;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         child = _ref[_i];
-        r += getOuterHTML(child);
+        r += getOuterHTML(child, replacements);
       }
       return r;
     } else {
@@ -3901,23 +3718,26 @@ var exports = module.exports;
     }
   };
 
-  getOuterHTML = function(elem) {
-    var attrName, attrValue, name, nameRet, ret, _ref;
+  getOuterHTML = function(elem, replacements) {
+    var attrName, attrValue, name, replacer, ret, _ref;
     if (elem._visible === false) {
       return "";
     }
     if (elem._text !== void 0) {
       return elem._text;
     }
+    if (replacements && (replacer = replacements[elem.name])) {
+      elem = replacer(elem) || elem;
+    }
     name = elem.name;
     if (!name || !isPublic(name)) {
-      return getInnerHTML(elem);
+      return getInnerHTML(elem, replacements);
     }
-    nameRet = ret = "<" + name;
+    ret = "<" + name;
     _ref = elem._attrs;
     for (attrName in _ref) {
       attrValue = _ref[attrName];
-      if (/^neft:/.test(attrName)) {
+      if (!isPublic(attrName)) {
         continue;
       }
       ret += " " + attrName;
@@ -3929,13 +3749,10 @@ var exports = module.exports;
         ret += "=\"" + attrValue + "\"";
       }
     }
-    if (name === 'div' && ret === nameRet) {
-      return getInnerHTML(elem);
-    }
     if (SINGLE_TAG[name]) {
       return ret + ">";
     } else {
-      return ret + ">" + getInnerHTML(elem) + "</" + name + ">";
+      return ret + ">" + getInnerHTML(elem, replacements) + "</" + name + ">";
     }
   };
 
@@ -3967,8 +3784,8 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../typed-array/index.coffee'] = (function(){
-var module = {exports: modules["../typed-array/index.coffee"]};
+})();modules['../typed-array/index.coffee.md'] = (function(){
+var module = {exports: modules["../typed-array/index.coffee.md"]};
 var require = getModule.bind(null, {});
 var exports = module.exports;
 
@@ -4053,6 +3870,2646 @@ var exports = module.exports;
 
 
 return module.exports;
+})();modules['../document/element/element/tag.coffee.md'] = (function(){
+var module = {exports: modules["../document/element/element/tag.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","./tag/stringify":"../document/element/element/tag/stringify.coffee","typed-array":"../typed-array/index.coffee.md","./tag/query":"../document/element/element/tag/query.coffee"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var CSS_ID_RE, TypedArray, assert, emitSignal, isDefined, signal, stringify, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  utils = require('utils');
+
+  assert = require('neft-assert');
+
+  signal = require('signal');
+
+  stringify = require('./tag/stringify');
+
+  TypedArray = require('typed-array');
+
+  emitSignal = signal.Emitter.emitSignal;
+
+  assert = assert.scope('View.Element.Tag');
+
+  isDefined = function(elem) {
+    return elem != null;
+  };
+
+  CSS_ID_RE = /\#([^\s]+)/;
+
+  module.exports = function(Element) {
+    var Tag;
+    return Tag = (function(_super) {
+      var JSON_ARGS_LENGTH, JSON_ATTRS, JSON_CHILDREN, JSON_CTOR_ID, JSON_NAME, i, query;
+
+      __extends(Tag, _super);
+
+      Tag.INTERNAL_TAGS = ['neft:attr', 'neft:fragment', 'neft:function', 'neft:rule', 'neft:target', 'neft:use', 'neft:require', 'neft:blank', 'neft:log'];
+
+      Tag.DEFAULT_STRINGIFY_REPLACEMENTS = Object.create(null);
+
+      Tag.extensions = Object.create(null);
+
+      Tag.__name__ = 'Tag';
+
+      Tag.__path__ = 'File.Element.Tag';
+
+      JSON_CTOR_ID = Tag.JSON_CTOR_ID = Element.JSON_CTORS.push(Tag) - 1;
+
+      i = Element.JSON_ARGS_LENGTH;
+
+      JSON_NAME = i++;
+
+      JSON_CHILDREN = i++;
+
+      JSON_ATTRS = i++;
+
+      JSON_ARGS_LENGTH = Tag.JSON_ARGS_LENGTH = i;
+
+      Tag._fromJSON = function(arr, obj) {
+        var child, _i, _len, _ref;
+        if (obj == null) {
+          obj = new Tag;
+        }
+        Element._fromJSON(arr, obj);
+        obj.name = arr[JSON_NAME];
+        obj._attrs = arr[JSON_ATTRS];
+        _ref = arr[JSON_CHILDREN];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          child = _ref[_i];
+          Element.fromJSON(child).parent = obj;
+        }
+        return obj;
+      };
+
+      function Tag() {
+        Element.call(this);
+        this.name = 'neft:blank';
+        this.children = [];
+        this._attrs = {};
+        //<development>;
+        if (this.constructor === Tag) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      signal.Emitter.createSignal(Tag, 'onChildrenChange');
+
+      signal.Emitter.createSignal(Tag, 'onAttrsChange');
+
+      Tag.prototype.getAttrByIndex = function(index, target) {
+        var key, val, _ref;
+        if (target == null) {
+          target = [];
+        }
+        assert.isArray(target);
+        target[0] = target[1] = void 0;
+        i = 0;
+        _ref = this._attrs;
+        for (key in _ref) {
+          val = _ref[key];
+          if (i === index) {
+            target[0] = key;
+            target[1] = val;
+            break;
+          }
+          i++;
+        }
+        return target;
+      };
+
+      Tag.prototype.hasAttr = function(name) {
+        assert.isString(name);
+        assert.notLengthOf(name, 0);
+        return this._attrs.hasOwnProperty(name);
+      };
+
+      Tag.prototype.getAttr = function(name) {
+        assert.isString(name);
+        assert.notLengthOf(name, 0);
+        return this._attrs[name];
+      };
+
+      Tag.prototype.setAttr = function(name, value) {
+        var old;
+        assert.isString(name);
+        assert.notLengthOf(name, 0);
+        old = this._attrs[name];
+        if (old === value) {
+          return false;
+        }
+        this._attrs[name] = value;
+        emitSignal(this, 'onAttrsChange', name, old);
+        query.checkWatchersDeeply(this);
+        return true;
+      };
+
+      Tag.prototype.clone = function() {
+        var clone;
+        clone = new Tag;
+        clone.name = this.name;
+        clone._visible = this._visible;
+        clone._attrs = utils.cloneDeep(this._attrs);
+        return clone;
+      };
+
+      Tag.prototype.cloneDeep = function() {
+        var child, clone, clonedChild, prevClonedChild, _i, _len, _ref;
+        clone = this.clone();
+        prevClonedChild = null;
+        _ref = this.children;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          child = _ref[_i];
+          clonedChild = child.cloneDeep();
+          clone.children.push(clonedChild);
+          clonedChild._parent = clone;
+          if (clonedChild._previousSibling = prevClonedChild) {
+            prevClonedChild._nextSibling = clonedChild;
+          }
+          prevClonedChild = clonedChild;
+        }
+        return clone;
+      };
+
+      Tag.prototype.getCopiedElement = (function() {
+        var arr;
+        arr = new TypedArray.Uint16(256);
+        return function(lookForElement, copiedParent) {
+          var elem, index, parent;
+          assert.instanceOf(this, Tag);
+          assert.instanceOf(lookForElement, Element);
+          assert.instanceOf(copiedParent, Element);
+          if (lookForElement === this) {
+            return copiedParent;
+          }
+          i = 0;
+          elem = lookForElement;
+          while (parent = elem._parent) {
+            arr[i++] = parent.children.indexOf(elem);
+            elem = parent;
+            if (elem === this) {
+              break;
+            }
+          }
+          elem = copiedParent;
+          while (i-- > 0) {
+            index = arr[i];
+            elem = elem.children[index];
+          }
+          return elem;
+        };
+      })();
+
+      Tag.prototype.getChildByAccessPath = function(arr) {
+        var elem, _i;
+        assert.isArray(arr);
+        elem = this;
+        for (_i = arr.length - 1; _i >= 0; _i += -1) {
+          i = arr[_i];
+          if (!(elem = elem.children[i])) {
+            return null;
+          }
+        }
+        return elem;
+      };
+
+      Tag.query = query = require('./tag/query')(Element, Tag);
+
+      Tag.prototype.queryAll = query.queryAll;
+
+      Tag.prototype.query = query.query;
+
+      Tag.prototype.watch = query.watch;
+
+      Tag.prototype.stringify = function(replacements) {
+        if (replacements == null) {
+          replacements = Tag.DEFAULT_STRINGIFY_REPLACEMENTS;
+        }
+        return stringify.getOuterHTML(this, replacements);
+      };
+
+      Tag.prototype.stringifyChildren = function(replacements) {
+        if (replacements == null) {
+          replacements = Tag.DEFAULT_STRINGIFY_REPLACEMENTS;
+        }
+        return stringify.getInnerHTML(this, replacements);
+      };
+
+      Tag.prototype.replace = function(oldElement, newElement) {
+        var index;
+        assert.instanceOf(oldElement, Element);
+        assert.instanceOf(newElement, Element);
+        assert.is(oldElement.parent, this);
+        index = this.children.indexOf(oldElement);
+        oldElement.parent = void 0;
+        newElement.parent = this;
+        newElement.index = index;
+        return null;
+      };
+
+      Tag.prototype.toJSON = function(arr) {
+        var child, children, _i, _len, _ref;
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        Tag.__super__.toJSON.call(this, arr);
+        arr[JSON_NAME] = this.name;
+        children = arr[JSON_CHILDREN] = [];
+        arr[JSON_ATTRS] = this._attrs;
+        _ref = this.children;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          child = _ref[_i];
+          children.push(child.toJSON());
+        }
+        return arr;
+      };
+
+      return Tag;
+
+    })(Element);
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/element/element/tag/query.coffee'] = (function(){
+var module = {exports: modules["../document/element/element/tag/query.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUE_SEARCH, CONTAINS, DEEP, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Text, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byInstance, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  utils = require('utils');
+
+  signal = require('signal');
+
+  assert = require('neft-assert');
+
+  emitSignal = signal.Emitter.emitSignal;
+
+  Tag = Text = null;
+
+  test = function(node, funcs, index, targetFunc, targetCtx, single) {
+    var data1, data2, func;
+    while (index < funcs.length) {
+      func = funcs[index];
+      if (func.isIterator) {
+        return func(node, funcs, index + 3, targetFunc, targetCtx, single);
+      } else {
+        data1 = funcs[index + 1];
+        data2 = funcs[index + 2];
+        if (!func(node, data1, data2)) {
+          return false;
+        }
+      }
+      index += 3;
+    }
+    targetFunc.call(targetCtx, node);
+    return true;
+  };
+
+  anyDescendant = function(node, funcs, index, targetFunc, targetCtx, single) {
+    var child, _i, _len, _ref;
+    _ref = node.children;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      child = _ref[_i];
+      if (!(child instanceof Tag) || child.name !== 'neft:blank') {
+        if (test(child, funcs, index, targetFunc, targetCtx, single)) {
+          if (single) {
+            return true;
+          }
+        }
+      }
+      if (child instanceof Tag) {
+        if (anyDescendant(child, funcs, index, targetFunc, targetCtx, single)) {
+          if (single) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
+  anyDescendant.isIterator = true;
+
+  anyDescendant.toString = function() {
+    return 'anyDescendant';
+  };
+
+  directParent = function(node, funcs, index, targetFunc, targetCtx, single) {
+    var parent;
+    if (parent = node._parent) {
+      if (test(parent, funcs, index, targetFunc, targetCtx, single)) {
+        return true;
+      }
+      if (parent.name === 'neft:blank') {
+        return directParent(parent, funcs, index, targetFunc, targetCtx, single);
+      }
+    }
+    return false;
+  };
+
+  directParent.isIterator = true;
+
+  directParent.toString = function() {
+    return 'directParent';
+  };
+
+  anyChild = function(node, funcs, index, targetFunc, targetCtx, single) {
+    var child, _i, _len, _ref;
+    _ref = node.children;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      child = _ref[_i];
+      if (child instanceof Tag && child.name === 'neft:blank') {
+        if (anyChild(child, funcs, index, targetFunc, targetCtx, single)) {
+          if (single) {
+            return true;
+          }
+        }
+      } else {
+        if (test(child, funcs, index, targetFunc, targetCtx, single)) {
+          if (single) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
+  anyChild.isIterator = true;
+
+  anyChild.toString = function() {
+    return 'anyChild';
+  };
+
+  anyParent = function(node, funcs, index, targetFunc, targetCtx, single) {
+    var parent;
+    if (parent = node._parent) {
+      if (test(parent, funcs, index, targetFunc, targetCtx, single)) {
+        return true;
+      } else {
+        return anyParent(parent, funcs, index, targetFunc, targetCtx, single);
+      }
+    }
+    return false;
+  };
+
+  anyParent.isIterator = true;
+
+  anyParent.toString = function() {
+    return 'anyParent';
+  };
+
+  byName = function(node, data1) {
+    if (node instanceof Tag) {
+      return node.name === data1;
+    } else if (data1 === '#text' && node instanceof Text) {
+      return true;
+    }
+  };
+
+  byName.isIterator = false;
+
+  byName.toString = function() {
+    return 'byName';
+  };
+
+  byInstance = function(node, data1) {
+    return node instanceof data1;
+  };
+
+  byInstance.isIterator = false;
+
+  byInstance.toString = function() {
+    return 'byInstance';
+  };
+
+  byTag = function(node, data1) {
+    return node === data1;
+  };
+
+  byTag.isIterator = false;
+
+  byTag.toString = function() {
+    return 'byTag';
+  };
+
+  byAttr = function(node, data1) {
+    if (node instanceof Tag) {
+      return node._attrs[data1] !== void 0;
+    } else {
+      return false;
+    }
+  };
+
+  byAttr.isIterator = false;
+
+  byAttr.toString = function() {
+    return 'byAttr';
+  };
+
+  byAttrValue = function(node, data1, data2) {
+    if (node instanceof Tag) {
+      return node._attrs[data1] == data2;
+    } else {
+      return false;
+    }
+  };
+
+  byAttrValue.isIterator = false;
+
+  byAttrValue.toString = function() {
+    return 'byAttrValue';
+  };
+
+  byAttrStartsWithValue = function(node, data1, data2) {
+    var attr;
+    if (node instanceof Tag) {
+      attr = node._attrs[data1];
+      if (typeof attr === 'string') {
+        return attr.indexOf(data2) === 0;
+      }
+    }
+    return false;
+  };
+
+  byAttrStartsWithValue.isIterator = false;
+
+  byAttrStartsWithValue.toString = function() {
+    return 'byAttrStartsWithValue';
+  };
+
+  byAttrEndsWithValue = function(node, data1, data2) {
+    var attr;
+    if (node instanceof Tag) {
+      attr = node._attrs[data1];
+      if (typeof attr === 'string') {
+        return attr.indexOf(data2, attr.length - data2.length) > -1;
+      }
+    }
+    return false;
+  };
+
+  byAttrEndsWithValue.isIterator = false;
+
+  byAttrEndsWithValue.toString = function() {
+    return 'byAttrEndsWithValue';
+  };
+
+  byAttrContainsValue = function(node, data1, data2) {
+    var attr;
+    if (node instanceof Tag) {
+      attr = node._attrs[data1];
+      if (typeof attr === 'string') {
+        return attr.indexOf(data2) > -1;
+      }
+    }
+    return false;
+  };
+
+  byAttrContainsValue.isIterator = false;
+
+  byAttrContainsValue.toString = function() {
+    return 'byAttrContainsValue';
+  };
+
+  TYPE = /^#?[a-zA-Z0-9|\-:_]+/;
+
+  DEEP = /^([ ]*)>([ ]*)|^([ ]+)/;
+
+  ATTR_SEARCH = /^\[([^\]]+?)\]/;
+
+  ATTR_VALUE_SEARCH = /^\[([^=]+?)=([^\]]+?)\]/;
+
+  ATTR_CLASS_SEARCH = /^\.([a-zA-Z0-9|\-_]+)/;
+
+  STARTS_WITH = /\^$/;
+
+  ENDS_WITH = /\$$/;
+
+  CONTAINS = /\*$/;
+
+  TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/;
+
+  i = 0;
+
+  OPTS_QUERY_BY_PARENTS = 1 << (i++);
+
+  OPTS_REVERSED = 1 << (i++);
+
+  OPTS_ADD_ANCHOR = 1 << (i++);
+
+  queriesCache = [];
+
+  getQueries = function(selector, opts) {
+    var arrFunc, closeTagFunc, deep, distantTagFunc, exec, firstFunc, func, funcs, name, queries, r, reversed, reversedArrFunc, sel, val, _, _i, _len, _ref;
+    if (opts == null) {
+      opts = 0;
+    }
+    reversed = !!(opts & OPTS_REVERSED);
+    if (r = (_ref = queriesCache[opts]) != null ? _ref[selector] : void 0) {
+      return r;
+    }
+    distantTagFunc = reversed ? anyParent : anyDescendant;
+    closeTagFunc = reversed ? directParent : anyChild;
+    arrFunc = reversed ? 'unshift' : 'push';
+    reversedArrFunc = reversed ? 'push' : 'unshift';
+    funcs = [];
+    queries = [funcs];
+    sel = selector.trim();
+    while (sel.length) {
+      if (sel[0] === '*') {
+        sel = sel.slice(1);
+        funcs[arrFunc](byInstance, Tag, null);
+      } else if (sel[0] === '&') {
+        sel = sel.slice(1);
+        if (!(opts & OPTS_QUERY_BY_PARENTS)) {
+          funcs[arrFunc](byTag, null, null);
+        }
+      } else if (exec = TYPE.exec(sel)) {
+        sel = sel.slice(exec[0].length);
+        name = exec[0];
+        funcs[arrFunc](byName, name, null);
+      } else if (exec = ATTR_VALUE_SEARCH.exec(sel)) {
+        sel = sel.slice(exec[0].length);
+        _ = exec[0], name = exec[1], val = exec[2];
+        val = TRIM_ATTR_VALUE.exec(val)[1];
+        if (STARTS_WITH.test(name)) {
+          func = byAttrStartsWithValue;
+        } else if (ENDS_WITH.test(name)) {
+          func = byAttrEndsWithValue;
+        } else if (CONTAINS.test(name)) {
+          func = byAttrContainsValue;
+        } else {
+          func = byAttrValue;
+        }
+        if (func !== byAttrValue) {
+          name = name.slice(0, -1);
+        }
+        funcs[arrFunc](func, name, val);
+      } else if (exec = ATTR_SEARCH.exec(sel)) {
+        sel = sel.slice(exec[0].length);
+        funcs[arrFunc](byAttr, exec[1], null);
+      } else if (exec = ATTR_CLASS_SEARCH.exec(sel)) {
+        sel = sel.slice(exec[0].length);
+        funcs[arrFunc](byAttrContainsValue, 'class', exec[1]);
+      } else if (exec = DEEP.exec(sel)) {
+        sel = sel.slice(exec[0].length);
+        deep = exec[0].trim();
+        if (deep === '') {
+          funcs[arrFunc](distantTagFunc, null, null);
+        } else if (deep === '>') {
+          funcs[arrFunc](closeTagFunc, null, null);
+        }
+      } else if (sel[0] === ',') {
+        funcs = [];
+        queries.push(funcs);
+        sel = sel.slice(1);
+        sel = sel.trim();
+      } else {
+        throw new Error("queryAll: unexpected selector '" + sel + "' in '" + selector + "'");
+      }
+    }
+    for (_i = 0, _len = queries.length; _i < _len; _i++) {
+      funcs = queries[_i];
+      firstFunc = reversed && !(opts & OPTS_QUERY_BY_PARENTS) ? funcs[funcs.length - 3] : funcs[0];
+      if (firstFunc === byTag) {
+        continue;
+      }
+      if (opts & OPTS_QUERY_BY_PARENTS && !(firstFunc != null ? firstFunc.isIterator : void 0)) {
+        funcs[arrFunc](distantTagFunc, null, null);
+      } else if (reversed && !(firstFunc != null ? firstFunc.isIterator : void 0)) {
+        funcs[reversedArrFunc](distantTagFunc, null, null);
+      } else if (!reversed && !(firstFunc != null ? firstFunc.isIterator : void 0)) {
+        funcs[reversedArrFunc](distantTagFunc, null, null);
+      }
+      if (opts & OPTS_ADD_ANCHOR) {
+        funcs[reversedArrFunc](byTag, null, null);
+      }
+    }
+    if (queriesCache[opts] == null) {
+      queriesCache[opts] = {};
+    }
+    queriesCache[opts][selector] = queries;
+    return queries;
+  };
+
+  Watcher = (function(_super) {
+    var NOP, pool;
+
+    __extends(Watcher, _super);
+
+    NOP = function() {};
+
+    pool = [];
+
+    Watcher.watchers = [];
+
+    Watcher.create = function(node, queries) {
+      var watcher;
+      if (pool.length) {
+        watcher = pool.pop();
+        watcher.node = node;
+        watcher.queries = queries;
+        watcher.forceUpdate = true;
+      } else {
+        watcher = new Watcher(node, queries);
+        Watcher.watchers.push(watcher);
+      }
+      return watcher;
+    };
+
+    function Watcher(node, queries) {
+      this.node = node;
+      this.queries = queries;
+      Watcher.__super__.constructor.call(this);
+      this.uid = utils.uid();
+      this.nodes = [];
+      this.forceUpdate = true;
+      Object.preventExtensions(this);
+    }
+
+    signal.Emitter.createSignal(Watcher, 'onAdd');
+
+    signal.Emitter.createSignal(Watcher, 'onRemove');
+
+    Watcher.prototype.test = function(tag) {
+      var funcs, _i, _len, _ref;
+      _ref = this.queries;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        funcs = _ref[_i];
+        funcs[funcs.length - 2] = this.node;
+        if (test(tag, funcs, 0, NOP, null, true)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    Watcher.prototype.disconnect = function() {
+      var node, nodes, uid;
+      assert.ok(this.node);
+      uid = this.uid, nodes = this.nodes;
+      while (node = nodes.pop()) {
+        node._inWatchers[uid] = false;
+        emitSignal(this, 'onRemove', node);
+      }
+      this.onAdd.disconnectAll();
+      this.onRemove.disconnectAll();
+      this.node = this.queries = null;
+      pool.push(this);
+    };
+
+    return Watcher;
+
+  })(signal.Emitter);
+
+  module.exports = function(Element, _Tag) {
+    var checkWatchersDeeply, query, queryAll;
+    Tag = _Tag;
+    Text = Element.Text;
+    return {
+      getSelectorCommandsLength: module.exports.getSelectorCommandsLength,
+      queryAll: queryAll = function(selector, target, targetCtx, opts) {
+        var func, funcs, queries, _i, _len;
+        if (target == null) {
+          target = [];
+        }
+        if (targetCtx == null) {
+          targetCtx = target;
+        }
+        if (opts == null) {
+          opts = 0;
+        }
+        assert.isString(selector);
+        assert.notLengthOf(selector, 0);
+        if (typeof target !== 'function') {
+          assert.isArray(target);
+        }
+        queries = getQueries(selector, opts);
+        func = Array.isArray(target) ? target.push : target;
+        for (_i = 0, _len = queries.length; _i < _len; _i++) {
+          funcs = queries[_i];
+          funcs[0](this, funcs, 3, func, targetCtx, false);
+        }
+        if (Array.isArray(target)) {
+          return target;
+        }
+      },
+      queryAllParents: function(selector, target, targetCtx) {
+        return queryAll.call(this, selector, target, targetCtx, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS);
+      },
+      query: query = (function() {
+        var result, resultFunc;
+        result = null;
+        resultFunc = function(arg) {
+          return result = arg;
+        };
+        return function(selector, opts) {
+          var funcs, queries, _i, _len;
+          if (opts == null) {
+            opts = 0;
+          }
+          assert.isString(selector);
+          assert.notLengthOf(selector, 0);
+          queries = getQueries(selector, opts);
+          for (_i = 0, _len = queries.length; _i < _len; _i++) {
+            funcs = queries[_i];
+            if (funcs[0](this, funcs, 3, resultFunc, null, true)) {
+              return result;
+            }
+          }
+          return null;
+        };
+      })(),
+      queryParents: function(selector) {
+        return query.call(this, selector, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS);
+      },
+      watch: function(selector) {
+        var queries, watcher;
+        assert.isString(selector);
+        assert.notLengthOf(selector, 0);
+        queries = getQueries(selector, OPTS_REVERSED | OPTS_ADD_ANCHOR);
+        watcher = Watcher.create(this, queries);
+        checkWatchersDeeply(this);
+        return watcher;
+      },
+      checkWatchersDeeply: checkWatchersDeeply = (function() {
+        var CHECK_WATCHERS_ALL, CHECK_WATCHERS_CHILDREN, CHECK_WATCHERS_THIS, checkRec, clearRec, isChildOf, pending, updateWatcher, updateWatchers;
+        pending = false;
+        i = 0;
+        CHECK_WATCHERS_THIS = 1 << i++;
+        CHECK_WATCHERS_CHILDREN = 1 << i++;
+        CHECK_WATCHERS_ALL = (1 << i++) - 1;
+        checkRec = function(watcher, watcherUid, node, update) {
+          var child, inWatchers, _i, _len, _ref;
+          if (!(update & CHECK_WATCHERS_THIS)) {
+            update |= node._checkWatchers;
+          }
+          if (update & CHECK_WATCHERS_THIS) {
+            inWatchers = node._inWatchers;
+            if ((!inWatchers || !inWatchers[watcherUid]) && watcher.test(node)) {
+              if (!inWatchers) {
+                node._inWatchers = {};
+              }
+              node._inWatchers[watcherUid] = true;
+              watcher.nodes.push(node);
+              emitSignal(watcher, 'onAdd', node);
+            } else if (inWatchers && inWatchers[watcherUid] && !watcher.test(node)) {
+              node._inWatchers[watcherUid] = false;
+              utils.removeFromUnorderedArray(watcher.nodes, node);
+              emitSignal(watcher, 'onRemove', node);
+            }
+          }
+          if (update & CHECK_WATCHERS_CHILDREN && node instanceof Tag) {
+            _ref = node.children;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              child = _ref[_i];
+              if (update & CHECK_WATCHERS_THIS || child._checkWatchers) {
+                checkRec(watcher, watcherUid, child, update);
+              }
+            }
+          }
+        };
+        clearRec = function(node) {
+          var child, _i, _len, _ref;
+          node._checkWatchers = 0;
+          if (node instanceof Tag) {
+            _ref = node.children;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              child = _ref[_i];
+              if (child._checkWatchers > 0) {
+                clearRec(child);
+              }
+            }
+          }
+        };
+        isChildOf = function(child, parent) {
+          var tmp;
+          tmp = child;
+          while (tmp = tmp._parent) {
+            if (tmp === parent) {
+              return true;
+            }
+          }
+          return false;
+        };
+        updateWatcher = function(watcher) {
+          var n, node, nodes, watcherNode;
+          nodes = watcher.nodes;
+          watcherNode = watcher.node;
+          i = n = nodes.length;
+          while (i-- > 0) {
+            node = nodes[i];
+            if (node !== watcherNode && !isChildOf(node, watcherNode)) {
+              node._inWatchers[watcher.uid] = false;
+              nodes[i] = nodes[n - 1];
+              nodes.pop();
+              emitSignal(watcher, 'onRemove', node);
+              n--;
+            }
+          }
+          if (watcher.forceUpdate) {
+            checkRec(watcher, watcher.uid, watcher.node, CHECK_WATCHERS_ALL);
+            watcher.forceUpdate = false;
+          } else {
+            checkRec(watcher, watcher.uid, watcher.node, 0);
+          }
+        };
+        updateWatchers = function() {
+          var watcher, watchers, _i, _j, _len, _len1;
+          pending = false;
+          watchers = Watcher.watchers;
+          for (_i = 0, _len = watchers.length; _i < _len; _i++) {
+            watcher = watchers[_i];
+            if (watcher.node) {
+              updateWatcher(watcher);
+            }
+          }
+          for (_j = 0, _len1 = watchers.length; _j < _len1; _j++) {
+            watcher = watchers[_j];
+            if (watcher.node) {
+              clearRec(watcher.node);
+            }
+          }
+        };
+        return function(node) {
+          var tmp;
+          tmp = node;
+          node._checkWatchers |= CHECK_WATCHERS_THIS;
+          while (tmp = tmp._parent) {
+            if (tmp._checkWatchers & CHECK_WATCHERS_CHILDREN) {
+              break;
+            }
+            tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN;
+          }
+          if (!pending) {
+            setImmediate(updateWatchers);
+            pending = true;
+          }
+        };
+      })()
+    };
+  };
+
+  module.exports.getSelectorCommandsLength = function(selector, beginQuery, endQuery) {
+    var queries, query, sum, _i, _len;
+    if (beginQuery == null) {
+      beginQuery = 0;
+    }
+    if (endQuery == null) {
+      endQuery = Infinity;
+    }
+    sum = 0;
+    queries = getQueries(selector, 0);
+    for (i = _i = 0, _len = queries.length; _i < _len; i = ++_i) {
+      query = queries[i];
+      if (i < beginQuery) {
+        continue;
+      }
+      if (i >= endQuery) {
+        break;
+      }
+      sum += query.length;
+    }
+    return sum;
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/element/element.coffee.md'] = (function(){
+var module = {exports: modules["../document/element/element.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","./element/text":"../document/element/element/text.coffee.md","./element/tag":"../document/element/element/tag.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var Element, Emitter, assert, emitSignal, isArray, signal, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  utils = require('utils');
+
+  assert = require('neft-assert');
+
+  signal = require('signal');
+
+  isArray = Array.isArray;
+
+  Emitter = signal.Emitter;
+
+  emitSignal = Emitter.emitSignal;
+
+  assert = assert.scope('View.Element');
+
+  Element = (function(_super) {
+    var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_VISIBLE, Tag, i, opts;
+
+    __extends(Element, _super);
+
+    Element.__name__ = 'Element';
+
+    Element.__path__ = 'File.Element';
+
+    Element.JSON_CTORS = [];
+
+    JSON_CTOR_ID = Element.JSON_CTOR_ID = Element.JSON_CTORS.push(Element) - 1;
+
+    i = 1;
+
+    JSON_VISIBLE = i++;
+
+    JSON_ARGS_LENGTH = Element.JSON_ARGS_LENGTH = i;
+
+    Element.fromHTML = function(html) {
+      assert.isString(html);
+      if (!utils.isNode) {
+        throw "Creating Views from HTML files is allowed only on a server";
+      }
+      return Element.parser.parse(html);
+    };
+
+    Element.fromJSON = function(json) {
+      if (typeof json === 'string') {
+        json = JSON.parse(json);
+      }
+      assert.isArray(json);
+      return Element.JSON_CTORS[json[0]]._fromJSON(json);
+    };
+
+    Element._fromJSON = function(arr, obj) {
+      if (obj == null) {
+        obj = new Element;
+      }
+      obj.visible = arr[JSON_VISIBLE] === 1;
+      return obj;
+    };
+
+    Element.Text = require('./element/text')(Element);
+
+    Element.Tag = Tag = require('./element/tag')(Element);
+
+    function Element() {
+      Emitter.call(this);
+      this._parent = null;
+      this._nextSibling = null;
+      this._previousSibling = null;
+      this._style = null;
+      this._documentStyle = null;
+      this._visible = true;
+      this._inWatchers = null;
+      this._checkWatchers = 0;
+      //<development>;
+      if (this.constructor === Element) {
+        Object.preventExtensions(this);
+      }
+      //</development>;
+    }
+
+    opts = utils.CONFIGURABLE;
+
+    utils.defineProperty(Element.prototype, 'index', opts, function() {
+      var _ref;
+      return ((_ref = this.parent) != null ? _ref.children.indexOf(this) : void 0) || 0;
+    }, function(val) {
+      var children, index, parent, _ref, _ref1, _ref2, _ref3;
+      assert.instanceOf(this.parent, Element);
+      assert.isInteger(val);
+      assert.operator(val, '>=', 0);
+      parent = this._parent;
+      if (!parent) {
+        return false;
+      }
+      index = this.index;
+      children = parent.children;
+      if (val > children.length) {
+        val = children.length;
+      }
+      if (index === val || index === val - 1) {
+        return false;
+      }
+      if ((_ref = this._previousSibling) != null) {
+        _ref._nextSibling = this._nextSibling;
+      }
+      if ((_ref1 = this._nextSibling) != null) {
+        _ref1._previousSibling = this._previousSibling;
+      }
+      children.splice(index, 1);
+      if (val > index) {
+        val--;
+      }
+      children.splice(val, 0, this);
+      this._previousSibling = children[val - 1] || null;
+      this._nextSibling = children[val + 1] || null;
+      if ((_ref2 = this._previousSibling) != null) {
+        _ref2._nextSibling = this;
+      }
+      if ((_ref3 = this._nextSibling) != null) {
+        _ref3._previousSibling = this;
+      }
+      assert.is(this.index, val);
+      assert.is(children[val], this);
+      assert.is(this._previousSibling, children[val - 1] || null);
+      assert.is(this._nextSibling, children[val + 1] || null);
+      return true;
+    });
+
+    opts = utils.CONFIGURABLE;
+
+    utils.defineProperty(Element.prototype, 'nextSibling', opts, function() {
+      return this._nextSibling;
+    }, null);
+
+    opts = utils.CONFIGURABLE;
+
+    utils.defineProperty(Element.prototype, 'previousSibling', opts, function() {
+      return this._previousSibling;
+    }, null);
+
+    opts = utils.CONFIGURABLE;
+
+    utils.defineProperty(Element.prototype, 'parent', opts, function() {
+      return this._parent;
+    }, function(val) {
+      var index, newChildren, old, oldChildren, parent, _ref, _ref1;
+      assert.instanceOf(this, Element);
+      if (val != null) {
+        assert.instanceOf(val, Element);
+      }
+      assert.isNot(this, val);
+      old = this._parent;
+      if (old === val) {
+        return false;
+      }
+      if (this._parent) {
+        oldChildren = this._parent.children;
+        assert.ok(utils.has(oldChildren, this));
+        if (!this._nextSibling) {
+          assert.ok(oldChildren[oldChildren.length - 1] === this);
+          oldChildren.pop();
+        } else if (!this._previousSibling) {
+          assert.ok(oldChildren[0] === this);
+          oldChildren.shift();
+        } else {
+          index = oldChildren.indexOf(this);
+          oldChildren.splice(index, 1);
+        }
+        emitSignal(this._parent, 'onChildrenChange', null, this);
+        if ((_ref = this._previousSibling) != null) {
+          _ref._nextSibling = this._nextSibling;
+        }
+        if ((_ref1 = this._nextSibling) != null) {
+          _ref1._previousSibling = this._previousSibling;
+        }
+        this._previousSibling = null;
+        this._nextSibling = null;
+      }
+      this._parent = parent = val;
+      if (parent) {
+        assert.notOk(utils.has(this._parent.children, this));
+        newChildren = this._parent.children;
+        index = newChildren.push(this) - 1;
+        emitSignal(parent, 'onChildrenChange', this);
+        if (index === 0) {
+          this._previousSibling = null;
+        } else {
+          this._previousSibling = newChildren[index - 1];
+          this._previousSibling._nextSibling = this;
+        }
+      }
+      assert.is(this._parent, val);
+      assert.is(this._nextSibling, null);
+      assert.is(this._previousSibling, (val != null ? val.children[val.children.length - 2] : void 0) || null);
+      if (this._previousSibling) {
+        assert.is(this._previousSibling._nextSibling, this);
+      }
+      emitSignal(this, 'onParentChange', old);
+      Tag.query.checkWatchersDeeply(this);
+      return true;
+    });
+
+    signal.Emitter.createSignal(Element, 'onParentChange');
+
+    opts = utils.CONFIGURABLE;
+
+    utils.defineProperty(Element.prototype, 'style', opts, function() {
+      return this._style;
+    }, function(val) {
+      var old;
+      old = this._style;
+      if (old === val) {
+        return false;
+      }
+      this._style = val;
+      emitSignal(this, 'onStyleChange', old, val);
+      return true;
+    });
+
+    signal.Emitter.createSignal(Element, 'onStyleChange');
+
+    opts = utils.CONFIGURABLE;
+
+    utils.defineProperty(Element.prototype, 'visible', opts, function() {
+      return this._visible;
+    }, function(val) {
+      var old;
+      assert.isBoolean(val);
+      old = this._visible;
+      if (old === val) {
+        return false;
+      }
+      this._visible = val;
+      emitSignal(this, 'onVisibleChange', old);
+      return true;
+    });
+
+    signal.Emitter.createSignal(Element, 'onVisibleChange');
+
+    Element.prototype.queryAllParents = Tag.query.queryAllParents;
+
+    Element.prototype.queryParents = Tag.query.queryParents;
+
+    Element.prototype.getAccessPath = function(toParent) {
+      var arr, elem, parent;
+      if (toParent != null) {
+        assert.instanceOf(toParent, Tag);
+      }
+      arr = [];
+      i = 0;
+      elem = this;
+      parent = this;
+      while (parent = elem._parent) {
+        arr.push(parent.children.indexOf(elem));
+        elem = parent;
+        if (parent === toParent) {
+          break;
+        }
+      }
+      return arr;
+    };
+
+    Element.prototype.clone = function() {
+      return new Element;
+    };
+
+    Element.prototype.cloneDeep = function() {
+      return this.clone();
+    };
+
+    Element.prototype.toJSON = function(arr) {
+      if (!arr) {
+        arr = new Array(JSON_ARGS_LENGTH);
+        arr[0] = JSON_CTOR_ID;
+      }
+      arr[JSON_VISIBLE] = this.visible ? 1 : 0;
+      return arr;
+    };
+
+    if (utils.isNode) {
+      Element.parser = require('./element/parser')(Element);
+    }
+
+    return Element;
+
+  })(Emitter);
+
+  module.exports = Element;
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/element/index.coffee'] = (function(){
+var module = {exports: modules["../document/element/index.coffee"]};
+var require = getModule.bind(null, {"./element":"../document/element/element.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  module.exports = require('./element');
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/attrChange.coffee'] = (function(){
+var module = {exports: modules["../document/attrChange.coffee"]};
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert, log, utils;
+
+  assert = require('neft-assert');
+
+  utils = require('utils');
+
+  log = require('log');
+
+  assert = assert.scope('View.AttrChange');
+
+  log = log.scope('View', 'AttrChange');
+
+  module.exports = function(File) {
+    var AttrChange;
+    return AttrChange = (function() {
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_NAME, JSON_NODE, JSON_TARGET, i, onAttrsChange, onVisibleChange;
+
+      AttrChange.__name__ = 'AttrChange';
+
+      AttrChange.__path__ = 'File.AttrChange';
+
+      JSON_CTOR_ID = AttrChange.JSON_CTOR_ID = File.JSON_CTORS.push(AttrChange) - 1;
+
+      i = 1;
+
+      JSON_NODE = i++;
+
+      JSON_TARGET = i++;
+
+      JSON_NAME = i++;
+
+      JSON_ARGS_LENGTH = AttrChange.JSON_ARGS_LENGTH = i;
+
+      AttrChange._fromJSON = function(file, arr, obj) {
+        var node, target;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          target = file.node.getChildByAccessPath(arr[JSON_TARGET]);
+          obj = new AttrChange(file, node, target, arr[JSON_NAME]);
+        }
+        return obj;
+      };
+
+      function AttrChange(file, node, target, name) {
+        this.file = file;
+        this.node = node;
+        this.target = target;
+        this.name = name;
+        assert.instanceOf(file, File);
+        assert.instanceOf(node, File.Element);
+        assert.instanceOf(target, File.Element);
+        assert.isString(name);
+        assert.notLengthOf(name, 0);
+        this._defaultValue = target.getAttr(name);
+        this.update();
+        node.onVisibleChange(onVisibleChange, this);
+        node.onAttrsChange(onAttrsChange, this);
+        //<development>;
+        if (this.constructor === AttrChange) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      AttrChange.prototype.update = function() {
+        var val;
+        val = this.node.visible ? this.node.getAttr('value') : this._defaultValue;
+        this.target.setAttr(this.name, val);
+      };
+
+      onVisibleChange = function() {
+        return this.update();
+      };
+
+      onAttrsChange = function(name, oldValue) {
+        if (name === 'name') {
+          throw new Error("Dynamic neft:attr name is not implemented");
+        } else if (name === 'value') {
+          this.update();
+        }
+      };
+
+      AttrChange.prototype.clone = function(original, file) {
+        var node, target;
+        node = original.node.getCopiedElement(this.node, file.node);
+        target = original.node.getCopiedElement(this.target, file.node);
+        return new AttrChange(file, node, target, this.name);
+      };
+
+      AttrChange.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        arr[JSON_TARGET] = this.target.getAccessPath(this.file.node);
+        arr[JSON_NAME] = this.name;
+        return arr;
+      };
+
+      return AttrChange;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/use.coffee'] = (function(){
+var module = {exports: modules["../document/use.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert, log, utils;
+
+  utils = require('utils');
+
+  assert = require('neft-assert');
+
+  log = require('log');
+
+  assert = assert.scope('View.Use');
+
+  log = log.scope('View', 'Use');
+
+  module.exports = function(File) {
+    var Use;
+    return Use = (function() {
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_NODE, attrsChangeListener, i, logUsesWithNoFragments, usesWithNotFoundFragments, visibilityChangeListener;
+
+      Use.__name__ = 'Use';
+
+      Use.__path__ = 'File.Use';
+
+      JSON_CTOR_ID = Use.JSON_CTOR_ID = File.JSON_CTORS.push(Use) - 1;
+
+      i = 1;
+
+      JSON_NODE = i++;
+
+      JSON_ARGS_LENGTH = Use.JSON_ARGS_LENGTH = i;
+
+      Use._fromJSON = function(file, arr, obj) {
+        var node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          obj = new Use(file, node);
+        }
+        return obj;
+      };
+
+      visibilityChangeListener = function() {
+        if (this.file.isRendered && !this.isRendered) {
+          return this.render();
+        }
+      };
+
+      attrsChangeListener = function(name) {
+        if (name === 'neft:fragment') {
+          this.name = this.node.getAttr('neft:fragment');
+          if (this.isRendered) {
+            this.revert();
+            this.render();
+          }
+        }
+      };
+
+      function Use(file, node) {
+        this.file = file;
+        this.node = node;
+        assert.instanceOf(file, File);
+        assert.instanceOf(node, File.Element);
+        this.name = node.getAttr('neft:fragment');
+        this.usedFragment = null;
+        this.isRendered = false;
+        node.onVisibleChange(visibilityChangeListener, this);
+        node.onAttrsChange(attrsChangeListener, this);
+        //<development>;
+        if (this.constructor === Use) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      //<development>;
+
+      usesWithNotFoundFragments = [];
+
+      logUsesWithNoFragments = function() {
+        var useElem;
+        while (useElem = usesWithNotFoundFragments.pop()) {
+          if (!useElem.usedFragment) {
+            log.warn("neft:fragment '" + useElem.name + "' can't be find in file '" + useElem.file.path + "'");
+          }
+        }
+      };
+
+      //</development>;
+
+      Use.prototype.render = function(file) {
+        var fragment, usedFragment, _ref;
+        if (file != null) {
+          assert.instanceOf(file, File);
+        }
+        if (!this.node.visible) {
+          return;
+        }
+        if (this.isRendered) {
+          this.revert();
+        }
+        fragment = this.file.fragments[this.name];
+        if (!file && !fragment) {
+          //<development>;
+          if (usesWithNotFoundFragments.push(this) === 1) {
+            setTimeout(logUsesWithNoFragments);
+          }
+          //</development>;
+          return;
+        }
+        usedFragment = file || File.factory(fragment);
+        if (!file) {
+          usedFragment.storage = this.file.storage;
+        }
+        if (file) {
+          if ((_ref = file.parentUse) != null) {
+            _ref.detachUsedFragment();
+          }
+        }
+        if (!usedFragment.isRendered) {
+          usedFragment = usedFragment.render(this);
+        }
+        usedFragment.node.parent = this.node;
+        this.usedFragment = usedFragment;
+        usedFragment.parentUse = this;
+        usedFragment.onReplaceByUse.emit(this);
+        return this.isRendered = true;
+      };
+
+      Use.prototype.revert = function() {
+        if (!this.isRendered) {
+          return;
+        }
+        if (this.usedFragment) {
+          this.usedFragment.revert().destroy();
+        }
+        this.isRendered = false;
+      };
+
+      Use.prototype.detachUsedFragment = function() {
+        assert.isDefined(this.usedFragment);
+        this.usedFragment.node.parent = null;
+        this.usedFragment.parentUse = null;
+        this.usedFragment = null;
+      };
+
+      Use.prototype.clone = function(original, file) {
+        var node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        return new Use(file, node);
+      };
+
+      Use.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        return arr;
+      };
+
+      return Use;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/input.coffee'] = (function(){
+var module = {exports: modules["../document/input.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","db":"../db/index.coffee.md","./input/text.coffee":"../document/input/text.coffee","./input/attr.coffee":"../document/input/attr.coffee"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var Dict, List, assert, log, utils;
+
+  utils = require('utils');
+
+  assert = require('neft-assert');
+
+  log = require('log');
+
+  Dict = require('dict');
+
+  List = require('list');
+
+  assert = assert.scope('View.Input');
+
+  log = log.scope('View', 'Input');
+
+  module.exports = function(File) {
+    var Input;
+    return Input = (function() {
+      var CONSTANT_VARS, Element, GLOBAL, JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_FUNC_BODY, JSON_NODE, JSON_TEXT, PROPS_RE, PROP_RE, RE, VAR_RE, cache, getNamedSignal, i, onChange, pending, queue, queueIndex, queues, revertTraces, updateItems;
+
+      Element = File.Element;
+
+      Input.__name__ = 'Input';
+
+      Input.__path__ = 'File.Input';
+
+      JSON_CTOR_ID = Input.JSON_CTOR_ID = File.JSON_CTORS.push(Input) - 1;
+
+      i = 1;
+
+      JSON_NODE = Input.JSON_NODE = i++;
+
+      JSON_TEXT = Input.JSON_TEXT = i++;
+
+      JSON_FUNC_BODY = Input.JSON_FUNC_BODY = i++;
+
+      JSON_ARGS_LENGTH = Input.JSON_ARGS_LENGTH = i;
+
+      Input._fromJSON = function(file, arr, obj) {
+        var node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          obj = new Input(file, node, arr[JSON_TEXT], arr[JSON_FUNC_BODY]);
+        }
+        return obj;
+      };
+
+      RE = Input.RE = new RegExp('([^$]*)\\${([^}]*)}([^$]*)', 'gm');
+
+      VAR_RE = Input.VAR_RE = /(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)/g;
+
+      PROP_RE = Input.PROP_RE = /(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+/;
+
+      PROPS_RE = Input.PROPS_RE = /[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*/g;
+
+      CONSTANT_VARS = Input.CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON'];
+
+      cache = Object.create(null);
+
+      GLOBAL = {
+        Math: Math,
+        Array: Array,
+        Object: Object,
+        Number: Number,
+        RegExp: RegExp,
+        String: String,
+        db: require('db'),
+        utils: require('utils')
+      };
+
+      Input.getVal = (function() {
+        var getElement, getFromElement, getFromObject, getFunction;
+        getFromElement = function(elem, prop) {
+          if (elem instanceof Element) {
+            return elem._attrs[prop];
+          }
+        };
+        getFromObject = function(obj, prop) {
+          var v;
+          if (obj instanceof Dict) {
+            v = obj.get(prop);
+          }
+          if (v === void 0 && obj) {
+            v = obj[prop];
+          }
+          return v;
+        };
+        getElement = function(obj, prop) {
+          var elem, _ref, _ref1, _ref2;
+          while (obj) {
+            if (elem = (_ref = obj.ids) != null ? _ref[prop] : void 0) {
+              return elem;
+            }
+            obj = ((_ref1 = obj.parentUse) != null ? _ref1.file : void 0) || obj.file || ((_ref2 = obj.source) != null ? _ref2.file : void 0);
+          }
+        };
+        getFunction = function(obj, prop) {
+          var elem, _ref, _ref1, _ref2;
+          while (obj) {
+            if (elem = (_ref = obj.funcs) != null ? _ref[prop] : void 0) {
+              return elem;
+            }
+            obj = ((_ref1 = obj.parentUse) != null ? _ref1.file : void 0) || obj.file || ((_ref2 = obj.source) != null ? _ref2.file : void 0);
+          }
+        };
+        return function(file, prop) {
+          var destFile, source, v;
+          if (file.source instanceof File.Iterator) {
+            destFile = file.source.file;
+          } else {
+            destFile = file;
+          }
+          if (v === void 0 && (source = destFile.source)) {
+            v = getFromElement(source.node, prop);
+          }
+          if (v === void 0 && file.source instanceof File.Iterator) {
+            v = getFromElement(file.source.node, prop);
+          }
+          if (v === void 0) {
+            v = getFromElement(destFile.node, prop);
+          }
+          if (v === void 0 && source) {
+            v = getFromObject(source.storage, prop);
+          }
+          if (v === void 0) {
+            v = getFromObject(file.storage, prop);
+          }
+          if (v === void 0) {
+            v = getElement(file, prop);
+          }
+          if (v === void 0) {
+            v = getFunction(file, prop);
+          }
+          if (v === void 0) {
+            v = GLOBAL[prop];
+          }
+          return v;
+        };
+      })();
+
+      Input.get = function(input, prop) {
+        if (prop === 'this') {
+          return input.node;
+        } else {
+          return Input.getVal(input.file, prop);
+        }
+      };
+
+      Input.getStoragesArray = (function(arr) {
+        return function(file) {
+          var _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
+          assert.instanceOf(file, File);
+          arr[0] = file.node;
+          arr[1] = (_ref = file.source) != null ? _ref.node : void 0;
+          arr[2] = (_ref1 = file.source) != null ? _ref1.storage : void 0;
+          arr[3] = file.storage;
+          arr[4] = (_ref2 = file.source) != null ? (_ref3 = _ref2.file) != null ? _ref3.node : void 0 : void 0;
+          arr[5] = (_ref4 = file.source) != null ? (_ref5 = _ref4.file) != null ? (_ref6 = _ref5.source) != null ? _ref6.node : void 0 : void 0 : void 0;
+          return arr;
+        };
+      })([]);
+
+      Input.test = function(str) {
+        RE.lastIndex = 0;
+        return RE.test(str);
+      };
+
+      Input.parse = function(text) {
+        var charStr, chunks, err, func, innerBlocks, isBlock, isString, match, n, prop, str;
+        text = text.replace(/[\t\n]/gm, '');
+        func = "";
+        chunks = [];
+        str = '';
+        isString = isBlock = false;
+        innerBlocks = 0;
+        i = 0;
+        n = text.length;
+        while (i < n) {
+          charStr = text[i];
+          if (charStr === '$' && text[i + 1] === '{') {
+            isBlock = true;
+            chunks.push(str);
+            str = '';
+            i++;
+          } else if (charStr === '{') {
+            innerBlocks++;
+            str += charStr;
+          } else if (charStr === '}') {
+            if (innerBlocks > 0) {
+              innerBlocks--;
+              str += charStr;
+            } else if (isBlock) {
+              chunks.push(str);
+              str = '';
+            } else {
+              log.error("Interpolated string parse error: '" + text + "'");
+              return;
+            }
+          } else {
+            str += charStr;
+          }
+          i++;
+        }
+        chunks.push(str);
+        while (chunks.length > 1) {
+          match = [chunks.shift(), chunks.shift()];
+          prop = match[1];
+          if (prop) {
+            prop = prop.replace(PROPS_RE, function(str, _, index, allStr) {
+              var postfix, prefix;
+              postfix = allStr.substr(index + str.length, 2);
+              prefix = '';
+              str = str.replace(PROP_RE, function(props) {
+                var ends, r, _i, _len;
+                props = props.split('.');
+                props.shift();
+                if (postfix[0] === '(' || (postfix[0] === '=' && postfix !== '==')) {
+                  prefix += "__input.trace(";
+                  ends = ').' + props[props.length - 1];
+                  props.pop();
+                } else {
+                  ends = '';
+                }
+                r = '';
+                for (_i = 0, _len = props.length; _i < _len; _i++) {
+                  prop = props[_i];
+                  prefix += "__input.traceObj(";
+                  r += ", '" + prop + "')";
+                }
+                return r + ends;
+              });
+              return "" + prefix + str;
+            });
+            prop = prop.replace(VAR_RE, function(matched, prefix, elem) {
+              if (elem.indexOf('__') === 0) {
+                return matched;
+              }
+              if (prefix.trim() || !utils.has(CONSTANT_VARS, elem)) {
+                str = "__get(__input, '" + (utils.addSlashes(elem)) + "')";
+              } else {
+                str = elem;
+              }
+              return "" + prefix + str;
+            });
+          }
+          if (prop == null) {
+            prop = '';
+          }
+          if (match[0]) {
+            func += "'" + (utils.addSlashes(match[0])) + "' + ";
+          }
+          if (prop) {
+            func += "" + prop + " + ";
+          }
+        }
+        if (chunks.length && chunks[0]) {
+          func += "'" + (utils.addSlashes(chunks[0])) + "' + ";
+        }
+        func = 'return ' + func.slice(0, -3);
+        try {
+          new Function(func);
+        } catch (_error) {
+          err = _error;
+          log.error("Can't parse string literal:\n" + text + "\n" + err.message + "\n" + func);
+        }
+        return func;
+      };
+
+      Input.createFunction = function(funcBody) {
+        assert.isString(funcBody);
+        assert.notLengthOf(funcBody, 0);
+        return new Function('__input', '__get', funcBody);
+      };
+
+      function Input(file, node, text, funcBody) {
+        var _name;
+        this.file = file;
+        this.node = node;
+        this.text = text;
+        this.funcBody = funcBody;
+        assert.instanceOf(file, File);
+        assert.instanceOf(node, File.Element);
+        assert.isString(text);
+        assert.isString(funcBody);
+        this.traces = [];
+        this.updatePending = false;
+        this.traceChanges = true;
+        this.func = cache[_name = this.funcBody] != null ? cache[_name] : cache[_name] = Input.createFunction(this.funcBody);
+        //<development>;
+        if (this.constructor === Input) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      queueIndex = 0;
+
+      queues = [[], []];
+
+      queue = queues[queueIndex];
+
+      pending = false;
+
+      updateItems = function() {
+        var currentQueue, input;
+        pending = false;
+        currentQueue = queue;
+        queue = queues[++queueIndex % queues.length];
+        while (input = currentQueue.pop()) {
+          input.update();
+        }
+      };
+
+      if (utils.isServer) {
+        onChange = function() {
+          return this.update();
+        };
+      } else {
+        onChange = function() {
+          if (this.updatePending) {
+            return;
+          }
+          queue.push(this);
+          this.updatePending = true;
+          if (!pending) {
+            setImmediate(updateItems);
+            pending = true;
+          }
+        };
+      }
+
+      revertTraces = function() {
+        var obj, signal, traces, _i, _len;
+        traces = this.traces;
+        for (i = _i = 0, _len = traces.length; _i < _len; i = _i += 2) {
+          obj = traces[i];
+          signal = traces[i + 1];
+          obj[signal].disconnect(onChange, this);
+        }
+        utils.clear(traces);
+      };
+
+      getNamedSignal = (function() {
+        cache = Object.create(null);
+        return function(name) {
+          return cache[name] || (cache[name] = "on" + (utils.capitalize(name)) + "Change");
+        };
+      })();
+
+      Input.prototype.trace = function(obj) {
+        if (obj && this.traceChanges) {
+          if (obj instanceof Dict) {
+            obj.onChange(onChange, this);
+            this.traces.push(obj, 'onChange');
+          } else if (obj instanceof List) {
+            obj.onChange(onChange, this);
+            this.traces.push(obj, 'onChange');
+            obj.onInsert(onChange, this);
+            this.traces.push(obj, 'onInsert');
+            obj.onPop(onChange, this);
+            this.traces.push(obj, 'onPop');
+          }
+        }
+        return obj;
+      };
+
+      Input.prototype.traceObj = function(obj, prop) {
+        var signal, val;
+        this.trace(obj);
+        if (obj) {
+          if (obj instanceof Dict) {
+            val = obj.get(prop);
+          } else if (obj instanceof List) {
+            if (typeof prop === 'number') {
+              val = obj.get(prop);
+            }
+          } else {
+            signal = getNamedSignal(prop);
+            if (typeof obj[signal] === 'function') {
+              obj[signal](onChange, this);
+              this.traces.push(obj, signal);
+            }
+          }
+          if (val === void 0) {
+            val = obj[prop];
+          }
+        }
+        return val;
+      };
+
+      Input.prototype.render = function() {
+        var storage, _i, _len, _ref;
+        _ref = Input.getStoragesArray(this.file);
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          storage = _ref[_i];
+          if (storage instanceof Element) {
+            storage.onAttrsChange(onChange, this);
+          } else if (storage instanceof Dict) {
+            this.trace(storage);
+          }
+        }
+        return this.update();
+      };
+
+      Input.prototype.revert = function() {
+        var storage, _i, _len, _ref;
+        _ref = Input.getStoragesArray(this.file);
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          storage = _ref[_i];
+          if (storage instanceof Element) {
+            storage.onAttrsChange.disconnect(onChange, this);
+          }
+        }
+        revertTraces.call(this);
+      };
+
+      Input.prototype.update = function() {
+        this.updatePending = false;
+      };
+
+      Input.prototype.toString = (function() {
+        var callFunc;
+        callFunc = function() {
+          revertTraces.call(this);
+          return this.func.call(this.node, this, Input.get);
+        };
+        return function() {
+          var err;
+          try {
+            return callFunc.call(this);
+          } catch (_error) {
+            err = _error;
+            return log.warn("Interpolated string error in '" + this.text + "';\n" + (err.stack || err));
+          }
+        };
+      })();
+
+      Input.prototype.clone = function(original, file) {
+        var node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        return new Input(file, node, this.text, this.funcBody);
+      };
+
+      Input.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        arr[JSON_TEXT] = this.text;
+        arr[JSON_FUNC_BODY] = this.funcBody;
+        return arr;
+      };
+
+      Input.Text = require('./input/text.coffee')(File, Input);
+
+      Input.Attr = require('./input/attr.coffee')(File, Input);
+
+      return Input;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/input/text.coffee'] = (function(){
+var module = {exports: modules["../document/input/text.coffee"]};
+var require = getModule.bind(null, {});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  module.exports = function(File, Input) {
+    var InputText;
+    return InputText = (function(_super) {
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_FUNC_BODY, JSON_NODE, JSON_TEXT;
+
+      __extends(InputText, _super);
+
+      InputText.__name__ = 'InputText';
+
+      InputText.__path__ = 'File.Input.Text';
+
+      JSON_CTOR_ID = InputText.JSON_CTOR_ID = File.JSON_CTORS.push(InputText) - 1;
+
+      JSON_NODE = Input.JSON_NODE, JSON_TEXT = Input.JSON_TEXT, JSON_FUNC_BODY = Input.JSON_FUNC_BODY;
+
+      JSON_ARGS_LENGTH = Input.JSON_ARGS_LENGTH;
+
+      InputText._fromJSON = function(file, arr, obj) {
+        var node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          obj = new InputText(file, node, arr[JSON_TEXT], arr[JSON_FUNC_BODY]);
+        }
+        return obj;
+      };
+
+      function InputText(file, node, text, funcBody) {
+        Input.call(this, file, node, text, funcBody);
+        this.lastValue = NaN;
+        //<development>;
+        if (this.constructor === InputText) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      InputText.prototype.update = function() {
+        var str;
+        InputText.__super__.update.call(this);
+        str = this.toString();
+        if (str == null) {
+          str = '';
+        } else if (typeof str !== 'string') {
+          str += '';
+        }
+        if (str !== this.lastValue) {
+          this.lastValue = str;
+          this.node.text = str;
+        }
+      };
+
+      InputText.prototype.clone = function(original, file) {
+        var node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        return new InputText(file, node, this.text, this.funcBody);
+      };
+
+      InputText.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        InputText.__super__.toJSON.call(this, key, arr);
+        return arr;
+      };
+
+      return InputText;
+
+    })(Input);
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/input/attr.coffee'] = (function(){
+var module = {exports: modules["../document/input/attr.coffee"]};
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  assert = require('neft-assert');
+
+  utils = require('utils');
+
+  module.exports = function(File, Input) {
+    var InputAttr;
+    return InputAttr = (function(_super) {
+      var JSON_ARGS_LENGTH, JSON_ATTR_NAME, JSON_CTOR_ID, JSON_FUNC_BODY, JSON_NODE, JSON_TEXT, createHandlerFunc, i, isHandler;
+
+      __extends(InputAttr, _super);
+
+      InputAttr.__name__ = 'InputAttr';
+
+      InputAttr.__path__ = 'File.Input.Attr';
+
+      JSON_CTOR_ID = InputAttr.JSON_CTOR_ID = File.JSON_CTORS.push(InputAttr) - 1;
+
+      i = Input.JSON_ARGS_LENGTH;
+
+      JSON_NODE = Input.JSON_NODE, JSON_TEXT = Input.JSON_TEXT, JSON_FUNC_BODY = Input.JSON_FUNC_BODY;
+
+      JSON_ATTR_NAME = i++;
+
+      JSON_ARGS_LENGTH = InputAttr.JSON_ARGS_LENGTH = i;
+
+      InputAttr._fromJSON = function(file, arr, obj) {
+        var node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          obj = new InputAttr(file, node, arr[JSON_TEXT], arr[JSON_FUNC_BODY], arr[JSON_ATTR_NAME]);
+        }
+        return obj;
+      };
+
+      isHandler = function(name) {
+        return /^on[A-Z]|\:on[A-Z][A-Za-z0-9_$]*$/.test(name);
+      };
+
+      function InputAttr(file, node, text, funcBody, attrName) {
+        this.attrName = attrName;
+        assert.isString(attrName);
+        assert.notLengthOf(attrName, 0);
+        Input.call(this, file, node, text, funcBody);
+        this.lastValue = NaN;
+        if (isHandler(attrName)) {
+          this.traceChanges = false;
+          this.handlerFunc = createHandlerFunc(clone);
+        } else {
+          this.handlerFunc = null;
+        }
+        //<development>;
+        if (this.constructor === InputAttr) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      InputAttr.prototype.update = function() {
+        var str;
+        InputAttr.__super__.update.call(this);
+        str = this.handlerFunc || this.toString();
+        if (str !== this.lastValue) {
+          this.lastValue = str;
+          this.node.setAttr(this.attrName, str);
+        }
+      };
+
+      createHandlerFunc = function(input) {
+        return function(arg1, arg2) {
+          var r;
+          r = input.toString();
+          if (typeof r === 'function') {
+            r.call(this, arg1, arg2);
+          }
+        };
+      };
+
+      InputAttr.prototype.clone = function(original, file) {
+        var node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        return new InputAttr(file, node, this.text, this.funcBody, this.attrName);
+      };
+
+      InputAttr.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        InputAttr.__super__.toJSON.call(this, key, arr);
+        arr[JSON_ATTR_NAME] = this.attrName;
+        return arr;
+      };
+
+      return InputAttr;
+
+    })(Input);
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/condition.coffee'] = (function(){
+var module = {exports: modules["../document/condition.coffee"]};
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert;
+
+  assert = require('assert');
+
+  module.exports = function(File) {
+    var Condition;
+    return Condition = (function() {
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_ELSE_NODE, JSON_NODE, i, onAttrsChange;
+
+      Condition.__name__ = 'Condition';
+
+      Condition.__path__ = 'File.Condition';
+
+      JSON_CTOR_ID = Condition.JSON_CTOR_ID = File.JSON_CTORS.push(Condition) - 1;
+
+      i = 1;
+
+      JSON_NODE = i++;
+
+      JSON_ELSE_NODE = i++;
+
+      JSON_ARGS_LENGTH = Condition.JSON_ARGS_LENGTH = i;
+
+      Condition._fromJSON = function(file, arr, obj) {
+        var elseNode, node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          if (arr[JSON_ELSE_NODE]) {
+            elseNode = file.node.getChildByAccessPath(arr[JSON_ELSE_NODE]);
+          }
+          obj = new Condition(file, node, elseNode);
+        }
+        return obj;
+      };
+
+      onAttrsChange = function(name) {
+        if (name === 'neft:if') {
+          this.update();
+        }
+      };
+
+      function Condition(file, node, elseNode) {
+        this.file = file;
+        this.node = node;
+        this.elseNode = elseNode != null ? elseNode : null;
+        assert.instanceOf(file, File);
+        assert.instanceOf(node, File.Element);
+        if (elseNode != null) {
+          assert.instanceOf(elseNode, File.Element);
+        }
+        node.onAttrsChange(onAttrsChange, this);
+        //<development>;
+        if (this.constructor === Condition) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      Condition.prototype.update = function() {
+        var visible, _ref;
+        visible = this.node.visible = !!this.node.getAttr('neft:if');
+        if ((_ref = this.elseNode) != null) {
+          _ref.visible = !visible;
+        }
+      };
+
+      Condition.prototype.render = function() {
+        return this.update();
+      };
+
+      Condition.prototype.clone = function(original, file) {
+        var elseNode, node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        if (this.elseNode) {
+          elseNode = original.node.getCopiedElement(this.elseNode, file.node);
+        }
+        return new Condition(file, node, elseNode);
+      };
+
+      Condition.prototype.toJSON = function(key, arr) {
+        var _ref;
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        arr[JSON_ELSE_NODE] = (_ref = this.elseNode) != null ? _ref.getAccessPath(this.file.node) : void 0;
+        return arr;
+      };
+
+      return Condition;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/iterator.coffee'] = (function(){
+var module = {exports: modules["../document/iterator.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","list":"../list/index.coffee.md","log":"../log/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var List, assert, isArray, log, utils;
+
+  utils = require('utils');
+
+  assert = require('neft-assert');
+
+  List = require('list');
+
+  log = require('log');
+
+  isArray = Array.isArray;
+
+  assert = assert.scope('View.Iterator');
+
+  log = log.scope('View', 'Iterator');
+
+  module.exports = function(File) {
+    var Iterator;
+    return Iterator = (function() {
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_NAME, JSON_NODE, JSON_TEXT, attrsChangeListener, i, visibilityChangeListener;
+
+      Iterator.__name__ = 'Iterator';
+
+      Iterator.__path__ = 'File.Iterator';
+
+      Iterator.HTML_ATTR = "" + File.HTML_NS + ":each";
+
+      JSON_CTOR_ID = Iterator.JSON_CTOR_ID = File.JSON_CTORS.push(Iterator) - 1;
+
+      i = 1;
+
+      JSON_NAME = i++;
+
+      JSON_NODE = i++;
+
+      JSON_TEXT = i++;
+
+      JSON_ARGS_LENGTH = Iterator.JSON_ARGS_LENGTH = i;
+
+      Iterator._fromJSON = function(file, arr, obj) {
+        var node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          obj = new Iterator(file, node, arr[JSON_NAME]);
+        }
+        obj.text = arr[JSON_TEXT];
+        return obj;
+      };
+
+      attrsChangeListener = function(name) {
+        if (this.file.isRendered && name === 'neft:each') {
+          return this.update();
+        }
+      };
+
+      visibilityChangeListener = function(oldVal) {
+        if (this.file.isRendered && oldVal === false && !this.node.data) {
+          return this.update();
+        }
+      };
+
+      function Iterator(file, node, name) {
+        this.file = file;
+        this.node = node;
+        this.name = name;
+        assert.instanceOf(file, File);
+        assert.instanceOf(node, File.Element);
+        assert.isString(name);
+        assert.notLengthOf(name, 0);
+        this.usedFragments = [];
+        this.text = '';
+        this.data = null;
+        this.isRendered = false;
+        node.onAttrsChange(attrsChangeListener, this);
+        node.onVisibleChange(visibilityChangeListener, this);
+        //<development>;
+        if (this.constructor === Iterator) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      Iterator.prototype.render = function() {
+        var array, each, _, _i, _len;
+        if (!this.node.visible) {
+          return;
+        }
+        each = this.node.getAttr(Iterator.HTML_ATTR);
+        if (each === this.data) {
+          return;
+        }
+        if (!isArray(each) && !(each instanceof List)) {
+          return;
+        }
+        this.data = array = each;
+        if (each instanceof List) {
+          each.onChange(this.updateItem, this);
+          each.onInsert(this.insertItem, this);
+          each.onPop(this.popItem, this);
+          array = each.items();
+        }
+        for (i = _i = 0, _len = array.length; _i < _len; i = ++_i) {
+          _ = array[i];
+          this.insertItem(i);
+        }
+        this.isRendered = true;
+        return null;
+      };
+
+      Iterator.prototype.revert = function() {
+        var data;
+        data = this.data;
+        if (data) {
+          this.clearData();
+          if (data instanceof List) {
+            data.onChange.disconnect(this.updateItem, this);
+            data.onInsert.disconnect(this.insertItem, this);
+            data.onPop.disconnect(this.popItem, this);
+          }
+        }
+        this.data = null;
+        return this.isRendered = false;
+      };
+
+      Iterator.prototype.update = function() {
+        this.revert();
+        return this.render();
+      };
+
+      Iterator.prototype.clearData = function() {
+        var length;
+        assert.isObject(this.data);
+        while (length = this.usedFragments.length) {
+          this.popItem(length - 1);
+        }
+        return this;
+      };
+
+      Iterator.prototype.updateItem = function(elem, i) {
+        if (i == null) {
+          i = elem;
+        }
+        assert.isObject(this.data);
+        assert.isInteger(i);
+        this.popItem(i);
+        this.insertItem(i);
+        return this;
+      };
+
+      Iterator.prototype.insertItem = function(elem, i) {
+        var data, each, item, newChild, storage, usedFragment;
+        if (i == null) {
+          i = elem;
+        }
+        assert.isObject(this.data);
+        assert.isInteger(i);
+        data = this.data;
+        usedFragment = File.factory(this.name);
+        this.usedFragments.splice(i, 0, usedFragment);
+        if (data instanceof List) {
+          each = data.items();
+          item = data.get(i);
+        } else {
+          each = data;
+          item = data[i];
+        }
+        newChild = usedFragment.node;
+        newChild.parent = this.node;
+        newChild.index = i;
+        storage = Object.create(this.file.storage || null);
+        storage.each = each;
+        storage.i = i;
+        storage.item = item;
+        usedFragment.render(storage, this);
+        usedFragment.onReplaceByUse.emit(this);
+        return this;
+      };
+
+      Iterator.prototype.popItem = function(elem, i) {
+        var usedFragment;
+        if (i == null) {
+          i = elem;
+        }
+        assert.isObject(this.data);
+        assert.isInteger(i);
+        this.node.children[i].parent = void 0;
+        usedFragment = this.usedFragments[i];
+        usedFragment.revert().destroy();
+        this.usedFragments.splice(i, 1);
+        return this;
+      };
+
+      Iterator.prototype.clone = function(original, file) {
+        var node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        return new Iterator(file, node, this.name);
+      };
+
+      Iterator.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_NAME] = this.name;
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        arr[JSON_TEXT] = this.text;
+        return arr;
+      };
+
+      return Iterator;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../document/log.coffee'] = (function(){
+var module = {exports: modules["../document/log.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert, utils;
+
+  utils = require('utils');
+
+  assert = require('assert');
+
+  module.exports = function(File) {
+    var Log;
+    return Log = (function() {
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_NODE, i, listenOnTextChange;
+
+      Log.__name__ = 'Log';
+
+      Log.__path__ = 'File.Log';
+
+      JSON_CTOR_ID = Log.JSON_CTOR_ID = File.JSON_CTORS.push(Log) - 1;
+
+      i = 1;
+
+      JSON_NODE = i++;
+
+      JSON_ARGS_LENGTH = Log.JSON_ARGS_LENGTH = i;
+
+      Log._fromJSON = function(file, arr, obj) {
+        var node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          obj = new Log(file, node);
+        }
+        return obj;
+      };
+
+      listenOnTextChange = function(node, log) {
+        var child, _i, _len, _ref;
+        if (node instanceof File.Element.Text) {
+          node.onTextChange(log.log, log);
+        } else {
+          _ref = node.children;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            child = _ref[_i];
+            listenOnTextChange(child, log);
+          }
+        }
+      };
+
+      function Log(file, node) {
+        this.file = file;
+        this.node = node;
+        assert.instanceOf(file, File);
+        assert.instanceOf(node, File.Element);
+        node.onAttrsChange(this.log, this);
+        listenOnTextChange(node, this);
+        //<development>;
+        if (this.constructor === Log) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
+      }
+
+      Log.prototype.render = function() {
+        var key, log, val, _ref;
+        if (utils.isEmpty(this.node._attrs)) {
+          console.log(this.node.stringifyChildren());
+        } else {
+          log = [this.node.stringifyChildren()];
+          _ref = this.node._attrs;
+          for (key in _ref) {
+            val = _ref[key];
+            log.push(key, '=', val);
+          }
+          console.log.apply(console, log);
+        }
+      };
+
+      Log.prototype.log = function() {
+        if (this.file.isRendered) {
+          return this.render();
+        }
+      };
+
+      Log.prototype.clone = function(original, file) {
+        var node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        return new Log(file, node);
+      };
+
+      Log.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        return arr;
+      };
+
+      return Log;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
 })();modules['../renderer/impl.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl.coffee"]};
 var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","./impl/base":"../renderer/impl/base/index.coffee","./impl/css":"../renderer/impl/css/index.coffee"});
@@ -4090,14 +6547,14 @@ var exports = module.exports;
           r = require('./impl/css')(impl);
         }
       }
-      if (utils.isQml) {
+      if (utils.isQt) {
         if (r == null) {
-          r = require('./impl/qml')(impl);
+          r = require('./impl/qt')(impl);
         }
       }
-      if (utils.isAndroid) {
+      if (utils.isAndroid || utils.isIOS) {
         if (r == null) {
-          r = require('./impl/android')(impl);
+          r = require('./impl/native')(impl);
         }
       }
       return r;
@@ -4188,27 +6645,31 @@ var exports = module.exports;
       setItemParent: function(val) {
         return pointer.setItemParent.call(this, val);
       },
-      setItemIndex: function(val) {
-        var child, children, i, item, parent, tmp, _i, _j, _len, _ref;
-        parent = this.parent;
+      insertItemBefore: function(val) {
+        var child, children, i, item, parent, tmp, valIndex, _i, _j, _len, _ref;
+        impl.setItemParent.call(this, null);
+        this._parent = null;
+        parent = val.parent;
         children = parent.children;
         tmp = [];
-        impl.setItemParent.call(this, null);
-        for (i = _i = val, _ref = children.length; _i < _ref; i = _i += 1) {
+        valIndex = val.index;
+        for (i = _i = valIndex, _ref = children.length; _i < _ref; i = _i += 1) {
           child = children[i];
           if (child !== this) {
             impl.setItemParent.call(child, null);
+            child._parent = null;
             tmp.push(child);
           }
         }
         impl.setItemParent.call(this, parent);
+        this._parent = parent;
         for (_j = 0, _len = tmp.length; _j < _len; _j++) {
           item = tmp[_j];
           impl.setItemParent.call(item, parent);
+          item._parent = parent;
         }
       },
       setItemBackground: function(val) {},
-      setItemForeground: function(val) {},
       setItemVisible: function(val) {},
       setItemClip: function(val) {},
       setItemWidth: function(val) {},
@@ -4309,17 +6770,7 @@ var exports = module.exports;
   module.exports = function(impl) {
     var DATA, items;
     items = impl.items;
-    DATA = {
-      text: '',
-      linkColor: 'blue',
-      color: 'black',
-      lineHeight: 1,
-      fontFamily: 'sans-serif',
-      fontPixelSize: 14,
-      fontWeight: 0.5,
-      fontWordSpacing: 0,
-      fontLetterSpacing: 0
-    };
+    DATA = {};
     return {
       DATA: DATA,
       createData: impl.utils.createDataCloner('Item', DATA),
@@ -4327,6 +6778,8 @@ var exports = module.exports;
         return impl.Types.Item.create.call(this, data);
       },
       setText: function(val) {},
+      setTextWrap: function(val) {},
+      updateTextContentSize: function() {},
       setTextColor: function(val) {},
       setTextLinkColor: function(val) {},
       setTextLineHeight: function(val) {},
@@ -4386,7 +6839,7 @@ var exports = module.exports;
   'use strict';
   module.exports = function(impl) {
     return {
-      loadFont: function(sources, name) {}
+      loadFont: function(name, source, sources) {}
     };
   };
 
@@ -4420,7 +6873,9 @@ var exports = module.exports;
   'use strict';
   module.exports = function(impl) {
     return {
-      initDeviceNamespace: function() {}
+      initDeviceNamespace: function() {},
+      showDeviceKeyboard: function() {},
+      hideDeviceKeyboard: function() {}
     };
   };
 
@@ -4515,28 +6970,26 @@ var exports = module.exports;
 (function() {
   'use strict';
   module.exports = function(impl) {
-    var COLOR_RESOURCE_REQUEST, DATA, NOP, getRectangleSource, items, round, updateImage, updateImageIfNeeded;
+    var DATA, NOP, getRectangleSource, items, round, updateImage, updateImageIfNeeded;
     items = impl.items;
     round = Math.round;
-    COLOR_RESOURCE_REQUEST = {
-      property: 'color'
-    };
     NOP = function() {};
     getRectangleSource = function(item) {
-      var borderColor, color, height, pixelRatio, radius, strokeWidth, width, _ref, _ref1;
+      var borderColor, color, data, height, pixelRatio, radius, strokeWidth, width;
+      data = item._impl;
       pixelRatio = impl.pixelRatio;
+      if (item.width <= 0 || item.height <= 0) {
+        data.isRectVisible = false;
+        return null;
+      } else {
+        data.isRectVisible = true;
+      }
       width = round(item.width * pixelRatio);
       height = round(item.height * pixelRatio);
       radius = round(item.radius * pixelRatio);
       strokeWidth = round(Math.min(item.border.width * 2 * pixelRatio, width, height));
-      color = ((_ref = impl.Renderer.resources) != null ? _ref.resolve(item.color, COLOR_RESOURCE_REQUEST) : void 0) || item.color;
-      borderColor = ((_ref1 = impl.Renderer.resources) != null ? _ref1.resolve(item.border.color, COLOR_RESOURCE_REQUEST) : void 0) || item.border.color;
-      if (width <= 0 || height <= 0) {
-        item._impl.isRectVisible = false;
-        return null;
-      } else {
-        item._impl.isRectVisible = true;
-      }
+      color = data.color;
+      borderColor = data.borderColor;
       return "data:image/svg+xml;utf8," + ("<svg width='" + width + "' height='" + height + "' xmlns='http://www.w3.org/2000/svg'>") + "<clipPath id='clip'>" + "<rect " + ("rx='" + radius + "' ") + ("width='" + width + "' height='" + height + "' />") + "</clipPath>" + "<rect " + "clip-path='url(#clip)' " + ("fill='" + color + "' ") + ("stroke='" + borderColor + "' ") + ("stroke-width='" + strokeWidth + "' ") + ("rx='" + radius + "' ") + ("width='" + width + "' height='" + height + "' />") + "</svg>";
     };
     updateImage = function() {
@@ -4548,6 +7001,8 @@ var exports = module.exports;
       }
     };
     DATA = {
+      color: 'transparent',
+      borderColor: 'transparent',
       isRectVisible: false
     };
     return {
@@ -4558,9 +7013,15 @@ var exports = module.exports;
         this.onWidthChange(updateImageIfNeeded);
         return this.onHeightChange(updateImageIfNeeded);
       },
-      setRectangleColor: updateImage,
+      setRectangleColor: function(val) {
+        this._impl.color = val;
+        return updateImage.call(this);
+      },
       setRectangleRadius: updateImage,
-      setRectangleBorderColor: updateImage,
+      setRectangleBorderColor: function(val) {
+        this._impl.borderColor = val;
+        return updateImage.call(this);
+      },
       setRectangleBorderWidth: updateImage
     };
   };
@@ -4665,7 +7126,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/base/level1/flow.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/base/level1/flow.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","typed-array":"../typed-array/index.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","typed-array":"../typed-array/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -4744,7 +7205,7 @@ var exports = module.exports;
   unusedFills = new TypedArray.Uint8(64);
 
   updateItem = function(item) {
-    var alignH, alignV, anchors, autoHeight, autoWidth, bottom, bottomMargin, bottomPadding, cell, child, childLayoutMargin, children, collapseMargins, columnSpacing, currentRow, currentRowBottomMargin, currentRowY, currentYShift, data, effectItem, flowHeight, flowWidth, freeHeightSpace, height, i, includeBorderMargins, lastColumnRightMargin, lastRowBottomMargin, layout, leftMargin, leftPadding, length, margin, maxFlowWidth, maxLen, multiplierX, multiplierY, outerBottomMargin, outerLeftMargin, outerRightMargin, outerTopMargin, padding, perCell, plusY, right, rightMargin, rightPadding, row, rowSpacing, rowsFillsSum, topMargin, topPadding, update, visibleChildrenIndex, width, x, y, yShift, _i, _j, _k, _l, _len, _len1, _len2, _ref, _ref1, _ref2;
+    var alignH, alignV, anchors, autoHeight, autoWidth, bottom, bottomMargin, bottomPadding, cell, child, childLayoutMargin, children, collapseMargins, columnSpacing, currentRow, currentRowBottomMargin, currentRowY, currentYShift, data, effectItem, flowHeight, flowWidth, freeHeightSpace, height, i, includeBorderMargins, lastColumnRightMargin, lastRowBottomMargin, layout, leftMargin, leftPadding, length, margin, maxFlowWidth, maxLen, multiplierX, multiplierY, padding, perCell, plusY, right, rightMargin, rightPadding, row, rowSpacing, rowsFillsSum, topMargin, topPadding, update, visibleChildrenIndex, width, x, y, yShift, _i, _j, _k, _l, _len, _len1, _len2, _ref, _ref1, _ref2;
     if (!(effectItem = item._effectItem)) {
       return;
     }
@@ -4796,7 +7257,6 @@ var exports = module.exports;
       elementsBottomMargin = getArray(elementsBottomMargin, maxLen);
     }
     flowWidth = flowHeight = 0;
-    outerTopMargin = outerRightMargin = outerBottomMargin = outerLeftMargin = 0;
     currentRow = currentRowY = 0;
     lastColumnRightMargin = lastRowBottomMargin = currentRowBottomMargin = 0;
     x = y = right = bottom = 0;
@@ -4862,9 +7322,6 @@ var exports = module.exports;
         currentRow++;
         lastRowBottomMargin = currentRowBottomMargin;
         currentRowBottomMargin = 0;
-        if (!includeBorderMargins) {
-          outerRightMargin = max(outerRightMargin, lastColumnRightMargin);
-        }
       }
       if (layout && layout._fillHeight && !autoHeight) {
         rowsFills[currentRow] = max(rowsFills[currentRow], rowsFills[currentRow] + 1);
@@ -4881,12 +7338,6 @@ var exports = module.exports;
           y += lastRowBottomMargin + topMargin + (y > 0 ? rowSpacing : 0);
         }
       }
-      if (!includeBorderMargins && x === 0) {
-        outerLeftMargin = max(outerLeftMargin, leftMargin);
-      }
-      if (!includeBorderMargins && y === 0) {
-        outerTopMargin = max(outerTopMargin, topMargin);
-      }
       lastColumnRightMargin = rightMargin;
       currentRowBottomMargin = max(currentRowBottomMargin, bottomMargin);
       elementsX[i] = x;
@@ -4902,16 +7353,6 @@ var exports = module.exports;
     }
     if (includeBorderMargins) {
       flowHeight = max(flowHeight, flowHeight + currentRowBottomMargin);
-    }
-    if (!includeBorderMargins) {
-      outerBottomMargin = currentRowBottomMargin;
-    }
-    item.margin.top = outerTopMargin;
-    item.margin.right = outerRightMargin;
-    item.margin.bottom = outerBottomMargin;
-    item.margin.left = outerLeftMargin;
-    if (effectItem !== item) {
-      effectItem.onMarginChange.emit(effectItem.margin);
     }
     freeHeightSpace = effectItem._height - topPadding - bottomPadding - flowHeight;
     if (freeHeightSpace > 0 && rowsFillsSum > 0) {
@@ -5629,7 +8070,7 @@ var exports = module.exports;
   MIN_POINTER_DELTA = 7;
 
   module.exports = function(impl) {
-    var DATA, DELTA_VALIDATION_PENDING, Types, createContinuous, getDeltaX, getDeltaY, getItemGlobalScale, getLimitedX, getLimitedY, lastActionTimestamp, onHeightChange, onImplReady, onWidthChange, outQuint, pointerUsed, pointerWindowMoveListeners, scroll, usePointer, useWheel, wheelUsed;
+    var DATA, DELTA_VALIDATION_PENDING, Types, createContinuous, getDeltaX, getDeltaY, getItemGlobalScale, getLimitedX, getLimitedY, lastActionTimestamp, onHeightChange, onImplReady, onWidthChange, pointerUsed, pointerWindowMoveListeners, scroll, usePointer, useWheel, wheelUsed;
     Types = impl.Types;
     if (impl._scrollableUsePointer == null) {
       impl._scrollableUsePointer = true;
@@ -5637,9 +8078,6 @@ var exports = module.exports;
     if (impl._scrollableUseWheel == null) {
       impl._scrollableUseWheel = true;
     }
-    outQuint = function(t, b, c, d) {
-      return c * (t / d) + b;
-    };
 
     /*
     	Scroll container by given x and y deltas
@@ -6066,7 +8504,6 @@ var exports = module.exports;
       createData: impl.utils.createDataCloner('Item', DATA),
       create: function(data) {
         impl.Types.Item.create.call(this, data);
-        impl.setItemClip.call(this, true);
         if (impl._scrollableUsePointer) {
           usePointer(this);
         }
@@ -6077,25 +8514,31 @@ var exports = module.exports;
       setScrollableContentItem: function(val) {
         var oldVal;
         if (oldVal = this._impl.contentItem) {
+          impl.setItemParent.call(oldVal, null);
           oldVal.onWidthChange.disconnect(onWidthChange, this);
           oldVal.onHeightChange.disconnect(onHeightChange, this);
         }
         if (val) {
+          if (this.children.length > 0) {
+            impl.insertItemBefore.call(val, this.children[0]);
+          } else {
+            impl.setItemParent.call(val, this);
+          }
           this._impl.contentItem = val;
           val.onWidthChange(onWidthChange, this);
           val.onHeightChange(onHeightChange, this);
         }
       },
       setScrollableContentX: function(val) {
-        var _ref;
-        if ((_ref = this._impl.contentItem) != null) {
-          _ref.x = -val;
+        var item;
+        if (item = this._impl.contentItem) {
+          impl.setItemX.call(item, -val);
         }
       },
       setScrollableContentY: function(val) {
-        var _ref;
-        if ((_ref = this._impl.contentItem) != null) {
-          _ref.y = -val;
+        var item;
+        if (item = this._impl.contentItem) {
+          impl.setItemY.call(item, -val);
         }
       },
       setScrollableSnap: function(val) {
@@ -7112,7 +9555,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/base/utils/grid.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/base/utils/grid.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","typed-array":"../typed-array/index.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","typed-array":"../typed-array/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -7828,6 +10271,16 @@ var exports = module.exports;
     };
   })();
 
+  exports.pointerWheelEventName = (function() {
+    if ('onwheel' in document.createElement("div")) {
+      return 'wheel';
+    } else if (document.onmousewheel !== void 0) {
+      return 'mousewheel';
+    } else {
+      return 'MozMousePixelScroll';
+    }
+  })();
+
   exports.keysEvents = (function() {
     var SPECIAL_KEY_CODES, keysEvents, pressedKeys;
     SPECIAL_KEY_CODES = {
@@ -7837,10 +10290,10 @@ var exports = module.exports;
       27: 'Escape',
       8: 'Backspace',
       16: 'Shift',
-      17: 'Control',
+      17: 'Ctrl',
       18: 'Alt',
-      20: 'Caps Lock',
-      144: 'Num Lock',
+      20: 'CapsLock',
+      144: 'NumLock',
       37: 'Left',
       38: 'Up',
       39: 'Right',
@@ -7849,8 +10302,8 @@ var exports = module.exports;
       46: 'Delete',
       36: 'Home',
       35: 'End',
-      33: 'Page Up',
-      34: 'Page Down',
+      33: 'PageUp',
+      34: 'PageDown',
       112: 'F1',
       113: 'F2',
       114: 'F3',
@@ -7924,9 +10377,9 @@ var exports = module.exports;
 
   exports.DEFAULT_FONTS = {
     __proto__: null,
-    'sans': 'neft-sans-4-normal',
-    'sans-serif': 'neft-sans-serif-4-normal',
-    'monospace': 'neft-monospace-4-normal'
+    'sans': 'neft-sans-6-normal',
+    'sans-serif': 'neft-sans-serif-6-normal',
+    'monospace': 'neft-monospace-6-normal'
   };
 
 }).call(this);
@@ -8067,13 +10520,16 @@ var exports = module.exports;
         }
         impl.pointer.setItemParent.call(this, val);
       },
-      setItemIndex: function(val) {
-        var childAtIndex;
-        if (childAtIndex = this._parent._children[val]) {
-          this._impl.elem.parentElement.insertBefore(this._impl.elem, childAtIndex._impl.elem);
-        } else {
-          this._impl.elem.parentElement.appendChild(this._impl.elem);
+      insertItemBefore: function(val) {
+        var newParent, oldParent, parent, valElem;
+        parent = val ? val._parent : this._parent;
+        valElem = val ? val._impl.elem : null;
+        oldParent = this._impl.elem.parentElement;
+        newParent = parent._impl.elem;
+        if (oldParent !== newParent) {
+          impl.pointer.setItemParent.call(this, newParent);
         }
+        newParent.insertBefore(this._impl.elem, valElem);
       },
       setItemBackground: function(val) {
         var oldElem, _ref1, _ref2;
@@ -8138,8 +10594,7 @@ var exports = module.exports;
         if (cursor = (_ref1 = SIGNALS_CURSORS[ns]) != null ? _ref1[signalName] : void 0) {
           this._ref._impl.elemStyle.cursor = cursor;
         }
-      },
-      setItemKeysFocus: impl.utils.keysEvents.setItemKeysFocus
+      }
     };
   };
 
@@ -8386,7 +10841,7 @@ var exports = module.exports;
   signal = require('signal');
 
   module.exports = function(impl) {
-    var COLOR_RESOURCE_REQUEST, CONTAINS_HTML_RE, DATA, Image, Item, SHEET, exports, fontSizes, getTextSizeWidth, hatchery, implUtils, isFontReady, loadingTextsByFonts, onHeightChange, onWidthChange, reloadFontFamily, reloadFontFamilyQueue, round, updateContent, updateHTMLTextSize, updatePlainTextSize, updateTextStyle, _ref;
+    var COLOR_RESOURCE_REQUEST, CONTAINS_HTML_RE, DATA, Image, Item, SHEET, exports, fontSizes, getTextSizeWidth, hatchery, implUtils, isFontReady, loadingTextsByFonts, reloadFontFamily, reloadFontFamilyQueue, round, updateContent, updateHTMLTextSize, updatePlainTextSize, updateTextStyle, _ref;
     _ref = impl.Types, Item = _ref.Item, Image = _ref.Image;
     implUtils = impl.utils;
     round = Math.round;
@@ -8445,12 +10900,9 @@ var exports = module.exports;
       }
     });
     updatePlainTextSize = function(item) {
-      var arr, char, charWidth, data, font, fontDef, fontFamily, height, letterSpacing, lineHeight, maxWidth, pixelSize, text, width, wordSpacing, x, _i, _len;
+      var arr, char, charWidth, data, font, fontDef, fontFamily, height, i, letterSpacing, lineHeight, maxWidth, pixelSize, text, textLength, width, wordSpacing, wordWidth, x, _i;
       data = item._impl;
-      if (!data.autoWidth && !data.autoHeight) {
-        return;
-      }
-      text = item._text;
+      text = data.text;
       fontFamily = data.innerElemStyle.fontFamily;
       if (font = item._font) {
         pixelSize = font._pixelSize;
@@ -8468,52 +10920,50 @@ var exports = module.exports;
       fontDef = data.font;
       x = width = 0;
       height = lineHeight = pixelSize * item._lineHeight;
-      maxWidth = data.autoWidth ? Infinity : item._width;
-      for (_i = 0, _len = text.length; _i < _len; _i++) {
-        char = text[_i];
-        charWidth = getTextSizeWidth(fontDef, char);
-        charWidth += letterSpacing;
-        if (wordSpacing !== 0 && char === ' ') {
-          charWidth += wordSpacing;
+      maxWidth = data.wrap ? item._width : Infinity;
+      wordWidth = charWidth = 0;
+      textLength = text.length;
+      char = '';
+      for (i = _i = 0; _i <= textLength; i = _i += 1) {
+        if (i < textLength) {
+          char = text[i];
+          charWidth = getTextSizeWidth(fontDef, char);
+          charWidth += letterSpacing;
         }
-        if (x + charWidth > maxWidth) {
+        if (i === textLength || char === ' ' || char === '-') {
+          if (x + wordWidth > maxWidth) {
+            height += lineHeight;
+            x = 0;
+          }
+          x += wordWidth;
+          if (x > width) {
+            width = x;
+          }
+          if (char === ' ' || char === '-') {
+            x += charWidth + wordSpacing;
+          }
+          wordWidth = 0;
+        } else if (char === '\n') {
           height += lineHeight;
           x = 0;
-        }
-        x += charWidth;
-        if (x > width) {
-          width = x;
+        } else {
+          wordWidth += charWidth;
         }
       }
-      data.sizeUpdatePending = true;
-      if (data.autoWidth) {
-        item.width = width;
-      }
-      if (data.autoHeight) {
-        item.height = height;
-      }
-      data.sizeUpdatePending = false;
+      item.contentWidth = width;
+      item.contentHeight = height;
     };
     updateHTMLTextSize = function(item) {
       var arr, data, fontFamily, innerElem;
       data = item._impl;
       innerElem = data.innerElem;
-      if (!data.autoWidth && !data.autoHeight) {
-        return;
-      }
       fontFamily = data.innerElemStyle.fontFamily;
       if (implUtils.loadingFonts[fontFamily]) {
         arr = loadingTextsByFonts[fontFamily] || (loadingTextsByFonts[fontFamily] = []);
         arr.push(item);
       }
-      data.sizeUpdatePending = true;
-      if (data.autoWidth) {
-        item.width = innerElem.offsetWidth;
-      }
-      if (data.autoHeight) {
-        item.height = innerElem.offsetHeight;
-      }
-      data.sizeUpdatePending = false;
+      item.contentWidth = innerElem.offsetWidth;
+      item.contentHeight = innerElem.offsetHeight;
       if (innerElem.parentNode === hatchery) {
         implUtils.prependElement(data.elem, innerElem);
       } else if (item._height === 0) {
@@ -8526,25 +10976,24 @@ var exports = module.exports;
       pending = false;
       queue = [];
       updateItem = function(item) {
-        var data, text;
+        var data, isAutoSize, text;
         data = item._impl;
-        if ((text = item._text)) {
+        isAutoSize = item._autoWidth || item._autoHeight;
+        if ((text = data.text)) {
           if (data.containsHTML) {
             data.innerElem.innerHTML = text;
-            updateHTMLTextSize(item);
+            if (isAutoSize) {
+              updateHTMLTextSize(item);
+            }
           } else {
             data.innerElem.textContent = text;
-            updatePlainTextSize(item);
+            if (isAutoSize) {
+              updatePlainTextSize(item);
+            }
           }
         } else {
-          data.sizeUpdatePending = true;
-          if (data.autoWidth) {
-            item.width = 0;
-          }
-          if (data.autoHeight) {
-            item.height = 0;
-          }
-          data.sizeUpdatePending = false;
+          item.contentWidth = 0;
+          item.contentHeight = 0;
         }
       };
       updateAll = function() {
@@ -8569,31 +11018,6 @@ var exports = module.exports;
         }
       };
     })();
-    onWidthChange = function() {
-      var auto, innerElemStyle, width;
-      if (!this._impl.sizeUpdatePending) {
-        width = this.width;
-        innerElemStyle = this._impl.innerElemStyle;
-        auto = this._impl.autoWidth = width === 0;
-        innerElemStyle.whiteSpace = auto ? 'pre' : 'pre-wrap';
-        innerElemStyle.width = auto ? 'auto' : "" + width + "px";
-        if (this._impl.autoWidth || this._impl.autoHeight) {
-          updateContent(this);
-        }
-      }
-    };
-    onHeightChange = function() {
-      var auto, height, innerElemStyle;
-      if (!this._impl.sizeUpdatePending) {
-        height = this.height;
-        innerElemStyle = this._impl.innerElemStyle;
-        auto = this._impl.autoHeight = height === 0;
-        innerElemStyle.height = auto ? 'auto' : "" + height + "px";
-        if (this._impl.autoWidth || this._impl.autoHeight) {
-          updateContent(this);
-        }
-      }
-    };
     updateTextStyle = function(item) {
       var data, fontFamily, fontSize, fontWeight, innerElemStyle;
       data = item._impl;
@@ -8604,22 +11028,21 @@ var exports = module.exports;
       fontFamily || (fontFamily = implUtils.DEFAULT_FONTS['sans-serif']);
       data.font = "" + fontWeight + " " + fontSize + " " + fontFamily;
     };
-    SHEET = ".text {\n	width: auto;\n	height: auto;\n	white-space: pre;\n	font-size: 14px;\n	line-height: 1;\n	font-family: " + implUtils.DEFAULT_FONTS['sans-serif'] + ", sans-serif;\n	margin-top: " + (impl.utils.isFirefox ? 1 : 0) + "px;\n}\n.text.textVerticalCenterAlign {\n	height: auto !important;\n	top: 50%;\n	" + impl.utils.transformCSSProp + ": translateY(-50%);\n}\n.text.textVerticalBottomAlign {\n	height: auto !important;\n	top: 100%;\n	" + impl.utils.transformCSSProp + ": translateY(-100%);\n}";
+    SHEET = ".text {\n	width: auto;\n	height: auto;\n	white-space: pre;\n	font-size: 14px;\n	line-height: 1;\n	font-family: " + implUtils.DEFAULT_FONTS['sans-serif'] + ", sans-serif;\n	margin-top: " + (impl.utils.isFirefox ? 1 : 0) + "px;\n}\n.text.textVerticalCenterAlign {\n	top: 50%;\n	" + impl.utils.transformCSSProp + ": translateY(-50%);\n}\n.text.textVerticalBottomAlign {\n	top: 100%;\n	" + impl.utils.transformCSSProp + ": translateY(-100%);\n}";
     COLOR_RESOURCE_REQUEST = {
       property: 'color'
     };
-    CONTAINS_HTML_RE = /<|&#x/;
+    CONTAINS_HTML_RE = /<|&#/;
     DATA = {
       stylesheet: null,
-      autoWidth: true,
-      autoHeight: true,
+      wrap: false,
       innerElem: null,
       innerElemStyle: null,
       uid: 0,
       contentUpdatePending: false,
       containsHTML: false,
-      sizeUpdatePending: false,
-      font: "14px " + implUtils.DEFAULT_FONTS['sans-serif']
+      text: '',
+      font: "14px " + implUtils.DEFAULT_FONTS['sans-serif'] + ", sans-serif"
     };
     return exports = {
       DATA: DATA,
@@ -8628,8 +11051,6 @@ var exports = module.exports;
         data = item._impl;
         innerElem = data.innerElem = document.createElement('span');
         data.innerElemStyle = innerElem.style;
-        item.onWidthChange(onWidthChange);
-        item.onHeightChange(onHeightChange);
         return innerElem.setAttribute('class', 'text');
       },
       createData: impl.utils.createDataCloner('Item', DATA),
@@ -8642,7 +11063,19 @@ var exports = module.exports;
         }
       },
       setText: function(val) {
+        val = val.replace(/<[bB][rR]\s?\/?>/g, "\n");
+        this._impl.text = val;
         this._impl.containsHTML = CONTAINS_HTML_RE.test(val);
+        updateContent(this);
+      },
+      setTextWrap: function(val) {
+        var data;
+        data = this._impl;
+        data.wrap = val;
+        data.innerElemStyle.whiteSpace = val ? 'pre-wrap' : 'pre';
+        data.innerElemStyle.width = val ? "100%" : 'auto';
+      },
+      updateTextContentSize: function() {
         updateContent(this);
       },
       setTextColor: function(val) {
@@ -8780,14 +11213,14 @@ var exports = module.exports;
       DATA: DATA,
       createData: impl.utils.createDataCloner('Item', DATA),
       create: function(data) {
-        var innerElem, self;
+        var innerElem, pressed, self;
         self = this;
         impl.Types.Item.create.call(this, data);
         innerElem = data.innerElem = data.textareaElem = document.createElement('textarea');
         data.innerElemStyle = innerElem.style;
         data.innerElemStyle.whiteSpace = 'nowrap';
         data.elem.appendChild(innerElem);
-        data.elem.addEventListener(impl._SIGNALS.pointerOnWheel, function(e) {
+        data.elem.addEventListener(impl.utils.pointerWheelEventName, function(e) {
           if (data.isMultiLine && document.activeElement === innerElem) {
             e.stopPropagation();
           }
@@ -8798,8 +11231,19 @@ var exports = module.exports;
             return e.preventDefault();
           }
         });
-        innerElem.addEventListener('focus', function() {
-          return self.keys.focus = true;
+        pressed = false;
+        data.elem.addEventListener('mousedown', function(e) {
+          return pressed = true;
+        });
+        data.elem.addEventListener('mouseup', function(e) {
+          return pressed = false;
+        });
+        innerElem.addEventListener('focus', function(e) {
+          if (pressed) {
+            return e.preventDefault();
+          } else {
+            return self.keys.focus = true;
+          }
         });
         innerElem.addEventListener('blur', function() {
           return self.keys.focus = false;
@@ -8920,7 +11364,7 @@ var exports = module.exports;
 
   module.exports = function(impl) {
     return {
-      loadFont: function(name, source, weight, italic, sources) {
+      loadFont: function(name, source, sources) {
         var append, styles, urlStr, _base, _i, _len;
         urlStr = '';
         for (_i = 0, _len = sources.length; _i < _len; _i++) {
@@ -9029,16 +11473,7 @@ var exports = module.exports;
 (function() {
   'use strict';
   module.exports = function(impl) {
-    var eventName, getNormalizedEvent;
-    eventName = (function() {
-      if ('onwheel' in document.createElement("div")) {
-        return 'wheel';
-      } else if (document.onmousewheel !== void 0) {
-        return 'mousewheel';
-      } else {
-        return 'MozMousePixelScroll';
-      }
-    })();
+    var getNormalizedEvent;
     getNormalizedEvent = (function() {
       var NORMALIZED_VALUE, event, getDeltas, isSlowContinuous;
       NORMALIZED_VALUE = 3;
@@ -9076,7 +11511,7 @@ var exports = module.exports;
     })();
     return {
       initDeviceNamespace: function() {
-        var device, onPointerMove, onPointerPress, onPointerRelease, onPointerWheel, pointer, updatePointerEvent;
+        var device, onPointerWheel, pointer, updatePointerEvent;
         device = this;
         pointer = this.pointer;
         this._pixelRatio = window.devicePixelRatio || 1;
@@ -9110,24 +11545,60 @@ var exports = module.exports;
           pointer.x = obj.pageX;
           pointer.y = obj.pageY;
         };
-        onPointerPress = function(e) {
-          updatePointerEvent(e);
-          device.onPointerPress.emit(pointer);
-        };
-        window.addEventListener('mousedown', onPointerPress);
-        window.addEventListener('touchstart', onPointerPress);
-        onPointerRelease = function(e) {
-          updatePointerEvent(e);
-          device.onPointerRelease.emit(pointer);
-        };
-        window.addEventListener('mouseup', onPointerRelease);
-        window.addEventListener('touchend', onPointerRelease);
-        onPointerMove = function(e) {
-          updatePointerEvent(e);
-          device.onPointerMove.emit(pointer);
-        };
-        window.addEventListener('mousemove', onPointerMove);
-        window.addEventListener('touchmove', onPointerMove);
+        (function() {
+          var onPointerPress, touchEvents;
+          touchEvents = 0;
+          onPointerPress = function(e) {
+            if ((typeof TouchEvent !== "undefined" && TouchEvent !== null) && e instanceof TouchEvent) {
+              touchEvents++;
+            } else if (e instanceof MouseEvent) {
+              if (touchEvents > 0) {
+                touchEvents--;
+                return;
+              }
+            }
+            updatePointerEvent(e);
+            device.onPointerPress.emit(pointer);
+          };
+          window.addEventListener('mousedown', onPointerPress);
+          return window.addEventListener('touchstart', onPointerPress);
+        })();
+        (function() {
+          var onPointerRelease, touchEvents;
+          touchEvents = 0;
+          onPointerRelease = function(e) {
+            if ((typeof TouchEvent !== "undefined" && TouchEvent !== null) && e instanceof TouchEvent) {
+              touchEvents++;
+            } else if (e instanceof MouseEvent) {
+              if (touchEvents > 0) {
+                touchEvents--;
+                return;
+              }
+            }
+            updatePointerEvent(e);
+            device.onPointerRelease.emit(pointer);
+          };
+          window.addEventListener('mouseup', onPointerRelease);
+          return window.addEventListener('touchend', onPointerRelease);
+        })();
+        (function() {
+          var onPointerMove, touchEvents;
+          touchEvents = 0;
+          onPointerMove = function(e) {
+            if ((typeof TouchEvent !== "undefined" && TouchEvent !== null) && e instanceof TouchEvent) {
+              touchEvents++;
+            } else if (e instanceof MouseEvent) {
+              if (touchEvents > 0) {
+                touchEvents--;
+                return;
+              }
+            }
+            updatePointerEvent(e);
+            device.onPointerMove.emit(pointer);
+          };
+          window.addEventListener('mousemove', onPointerMove);
+          return window.addEventListener('touchmove', onPointerMove);
+        })();
         onPointerWheel = function(e) {
           var event;
           e.stopPropagation();
@@ -9136,7 +11607,7 @@ var exports = module.exports;
           pointer.deltaY = event.deltaY;
           return device.onPointerWheel.emit(pointer);
         };
-        return window.addEventListener(eventName, onPointerWheel);
+        return window.addEventListener(impl.utils.pointerWheelEventName, onPointerWheel);
       }
     };
   };
@@ -9338,6 +11809,7 @@ var exports = module.exports;
       return abstractScrollable;
     } else {
       impl._scrollableUsePointer = false;
+      impl._scrollableUseWheel = false;
     }
     DATA = {
       contentItem: null,
@@ -9376,6 +11848,7 @@ var exports = module.exports;
           if (round(y) !== round(self._contentY)) {
             self.contentY = y;
           }
+          data.updateScroll();
         });
       },
       setScrollableContentItem: (function() {
@@ -9399,6 +11872,9 @@ var exports = module.exports;
         return function(val) {
           var oldVal;
           if (oldVal = this._impl.contentItem) {
+            if (oldVal._impl.elem.parentElement === this._impl.scrollElem) {
+              this._impl.scrollElem.removeChild(oldVal._impl.elem);
+            }
             oldVal.onHeightChange.disconnect(onHeightChange, this);
           }
           if (val) {
@@ -9485,7 +11961,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var cos, isPointInBox, signal, sin, utils;
+  var cos, emitSignal, isPointInBox, signal, sin, utils;
 
   utils = require('utils');
 
@@ -9493,84 +11969,90 @@ var exports = module.exports;
 
   sin = Math.sin, cos = Math.cos;
 
+  emitSignal = signal.Emitter.emitSignal;
+
   isPointInBox = function(ex, ey, x, y, w, h) {
-    return ex >= x && ey >= y && ex <= x + w && ey <= y + h;
+    return ex >= x && ey >= y && ex < x + w && ey < y + h;
   };
 
   module.exports = function(impl) {
-    var CLICK, ENTER, EVENTS, EXIT, MOVE, PRESS, RELEASE, WHEEL, captureItems, hoverItems, i, itemsToMove, itemsToRelease, pressedItems;
+    var CLICK, ENTER, EVENTS, EXIT, MOVE, PRESS, PROPAGATE_UP, RELEASE, STOP_ASIDE_PROPAGATION, STOP_PROPAGATION, Scrollable, WHEEL, captureItems, hoverItems, i, itemsToMove, itemsToRelease, pressedItems;
+    PROPAGATE_UP = 1 << 0;
+    STOP_ASIDE_PROPAGATION = 1 << 1;
+    STOP_PROPAGATION = 1 << 2;
+    Scrollable = null;
+    impl.Renderer.onReady(function() {
+      return Scrollable = this.Scrollable, this;
+    });
     captureItems = (function() {
-      var CAPTURED, STOP_PROPAGATION;
-      CAPTURED = 1 << 0;
-      STOP_PROPAGATION = 1 << 1;
-      return function(type, item, ex, ey, onItem, parentX, parentY, parentScale) {
-        var child, childrenCapturesPointer, childrenResult, data, h, pointer, rcos, result, rey, rotation, rsin, scale, t1, t2, w, x, y, _i, _ref;
-        result = childrenResult = childrenCapturesPointer = 0;
+      var checkItem;
+      checkItem = function(type, item, ex, ey, onItem, parentX, parentY, parentScale) {
+        var child, data, h, pointer, rcos, result, rey, rotation, rsin, scale, t1, t2, w, x, y, _i, _ref;
+        result = 0;
         x = y = w = h = scale = rotation = t1 = t2 = rey = rsin = rcos = 0.0;
-        _ref = item._children;
-        for (_i = _ref.length - 1; _i >= 0; _i += -1) {
-          child = _ref[_i];
-          if (!child._visible) {
-            continue;
-          }
-          data = child._impl;
-          if (type & MOVE) {
-            childrenCapturesPointer = data.childrenCapturesMovePointer;
-          } else {
-            childrenCapturesPointer = data.childrenCapturesClickPointer;
-          }
-          if (childrenCapturesPointer <= 0 && data.capturePointer <= 0) {
-            continue;
-          }
-          pointer = child._pointer;
-          if (pointer && !pointer._enabled) {
-            continue;
-          }
-          x = parentX + child._x * parentScale;
-          y = parentY + child._y * parentScale;
-          w = child._width * parentScale;
-          h = child._height * parentScale;
-          scale = child._scale;
-          rotation = child._rotation;
-          if (scale !== 1) {
-            t1 = w * scale;
-            t2 = h * scale;
-            x += (w - t1) / 2;
-            y += (h - t2) / 2;
-            w = t1;
-            h = t2;
-          }
-          if (rotation !== 0) {
-            rsin = sin(-rotation);
-            rcos = cos(-rotation);
-            t1 = x + w / 2;
-            t2 = y + h / 2;
-            rey = rcos * (ex - t1) - rsin * (ey - t2) + t1;
-            ey = rsin * (ex - t1) + rcos * (ey - t2) + t2;
-            ex = rey;
-          }
-          if (child._clip && !isPointInBox(ex, ey, x, y, w, h)) {
-            continue;
-          }
-          if (childrenCapturesPointer > 0) {
-            childrenResult = captureItems(type, child, ex, ey, onItem, x, y, scale);
-            if (childrenResult & STOP_PROPAGATION) {
-              return STOP_PROPAGATION;
+        if (!item._visible) {
+          return result;
+        }
+        data = item._impl;
+        pointer = item._pointer;
+        if (pointer && !pointer._enabled) {
+          return result;
+        }
+        x = parentX + item._x * parentScale;
+        y = parentY + item._y * parentScale;
+        w = item._width * parentScale;
+        h = item._height * parentScale;
+        scale = item._scale;
+        rotation = item._rotation;
+        if (scale !== 1) {
+          t1 = w * scale;
+          t2 = h * scale;
+          x += (w - t1) / 2;
+          y += (h - t2) / 2;
+          w = t1;
+          h = t2;
+        }
+        if (rotation !== 0) {
+          rsin = sin(-rotation);
+          rcos = cos(-rotation);
+          t1 = x + w / 2;
+          t2 = y + h / 2;
+          rey = rcos * (ex - t1) - rsin * (ey - t2) + t1;
+          ey = rsin * (ex - t1) + rcos * (ey - t2) + t2;
+          ex = rey;
+        }
+        if (item._clip && !isPointInBox(ex, ey, x, y, w, h)) {
+          return result;
+        }
+        if (!(result & STOP_ASIDE_PROPAGATION)) {
+          _ref = item._children;
+          for (_i = _ref.length - 1; _i >= 0; _i += -1) {
+            child = _ref[_i];
+            result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
+            if (result & STOP_PROPAGATION) {
+              return result;
             }
-            result |= childrenResult;
-          } else {
-            childrenResult = 0;
+            if (result & STOP_ASIDE_PROPAGATION) {
+              break;
+            }
           }
-          if (data.capturePointer & type) {
-            if (childrenResult & CAPTURED || isPointInBox(ex, ey, x, y, w, h)) {
-              result |= CAPTURED;
-              if (onItem(child)) {
-                return STOP_PROPAGATION;
-              }
+          if (item instanceof Scrollable && item._contentItem && !(result & STOP_ASIDE_PROPAGATION)) {
+            result |= checkItem(type, item._contentItem, ex, ey, onItem, x - item.contentX * parentScale, y - item.contentY * parentScale, scale);
+            if (result & STOP_PROPAGATION) {
+              return result;
             }
           }
         }
+        if (result & PROPAGATE_UP || isPointInBox(ex, ey, x, y, w, h)) {
+          result |= onItem(item);
+        }
         return result;
+      };
+      return function(type, item, ex, ey, onItem) {
+        if (item) {
+          return checkItem(type, item, ex, ey, onItem, 0, 0, 1);
+        }
+        return 0;
       };
     })();
     itemsToRelease = [];
@@ -9578,57 +12060,83 @@ var exports = module.exports;
     pressedItems = [];
     hoverItems = [];
     impl.Renderer.onReady(function() {
-      var Device, event;
+      var Device, event, getEventStatus;
       Device = impl.Renderer.Device;
       event = impl.Renderer.Item.Pointer.event;
+      getEventStatus = function() {
+        if (event._checkSiblings) {
+          return PROPAGATE_UP;
+        } else {
+          return PROPAGATE_UP | STOP_ASIDE_PROPAGATION;
+        }
+      };
       Device.onPointerPress((function() {
         var onItem;
         onItem = function(item) {
-          event._ensureRelease = event._ensureMove = event._stopPropagation = true;
-          if (!signal.isEmpty(item.pointer.onPress)) {
-            item.pointer.onPress.emit(event);
+          var capturePointer;
+          capturePointer = item._impl.capturePointer;
+          if (capturePointer & CLICK) {
             pressedItems.push(item);
+          }
+          if (capturePointer & PRESS) {
+            event._ensureRelease = event._ensureMove = event._stopPropagation = true;
+            emitSignal(item.pointer, 'onPress', event);
             if (event._ensureRelease) {
               itemsToRelease.push(item);
             }
             if (event._ensureMove) {
               itemsToMove.push(item);
             }
-            return event._stopPropagation;
+            if (event._stopPropagation) {
+              return STOP_PROPAGATION;
+            }
+            return getEventStatus();
           }
-          return false;
+          return STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
-          if (impl.window._impl.childrenCapturesClickPointer > 0) {
-            captureItems(PRESS, impl.window, e._x, e._y, onItem, 0, 0, 1);
-          }
+          event._checkSiblings = false;
+          captureItems(PRESS | CLICK, impl.window, e._x, e._y, onItem);
         };
       })());
       Device.onPointerRelease((function() {
         var onItem;
         onItem = function(item) {
-          var index;
-          index = itemsToRelease.indexOf(item);
-          item.pointer.onRelease.emit(event);
-          if (index >= 0) {
-            itemsToRelease[index] = null;
+          var capturePointer, data, index;
+          data = item._impl;
+          capturePointer = data.capturePointer;
+          if (capturePointer & RELEASE) {
+            emitSignal(item._pointer, 'onRelease', event);
           }
-          if (utils.has(pressedItems, item)) {
-            item.pointer.onClick.emit(event);
+          if (capturePointer & PRESS) {
+            index = itemsToRelease.indexOf(item);
+            if (index >= 0) {
+              itemsToRelease[index] = null;
+            }
           }
-          return event._stopPropagation;
+          if (capturePointer & CLICK) {
+            if (utils.has(pressedItems, item)) {
+              emitSignal(item.pointer, 'onClick', event);
+            }
+          }
+          if (capturePointer & (RELEASE | CLICK)) {
+            if (event._stopPropagation) {
+              return STOP_PROPAGATION;
+            }
+            return getEventStatus();
+          }
+          return STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
           var item, _i;
           event._stopPropagation = false;
-          if (impl.window._impl.childrenCapturesClickPointer > 0) {
-            captureItems(CLICK, impl.window, e._x, e._y, onItem, 0, 0, 1);
-          }
+          event._checkSiblings = false;
+          captureItems(RELEASE | CLICK, impl.window, e._x, e._y, onItem);
           if (!event._stopPropagation) {
             for (_i = itemsToRelease.length - 1; _i >= 0; _i += -1) {
               item = itemsToRelease[_i];
               if (item) {
-                item.pointer.onRelease.emit(event);
+                emitSignal(item.pointer, 'onRelease', event);
                 if (event._stopPropagation) {
                   break;
                 }
@@ -9644,26 +12152,34 @@ var exports = module.exports;
         var flag, onItem;
         flag = 0;
         onItem = function(item) {
-          var data;
+          var capturePointer, data;
           data = item._impl;
-          if (data.capturePointer & MOVE) {
+          capturePointer = data.capturePointer;
+          if (capturePointer & (ENTER | EXIT | MOVE)) {
             data.pointerMoveFlag = flag;
           }
-          if (data.capturePointer & (ENTER | EXIT) && !data.pointerHover) {
+          if (capturePointer & (ENTER | EXIT) && !data.pointerHover) {
             data.pointerHover = true;
             hoverItems.push(item);
-            item.pointer.onEnter.emit(event);
+            emitSignal(item.pointer, 'onEnter', event);
           }
-          item.pointer.onMove.emit(event);
-          return event._stopPropagation;
+          if (capturePointer & MOVE) {
+            emitSignal(item._pointer, 'onMove', event);
+          }
+          if (capturePointer & (ENTER | EXIT | MOVE)) {
+            if (event._stopPropagation) {
+              return STOP_PROPAGATION;
+            }
+            return getEventStatus();
+          }
+          return STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
           var data, i, item, _i, _j, _k, _len, _len1;
           event._stopPropagation = false;
+          event._checkSiblings = false;
           flag = (flag % 2) + 1;
-          if (impl.window._impl.childrenCapturesMovePointer > 0) {
-            captureItems(MOVE, impl.window, e._x, e._y, onItem, 0, 0, 1);
-          }
+          captureItems(ENTER | EXIT | MOVE, impl.window, e._x, e._y, onItem);
           for (_i = 0, _len = itemsToMove.length; _i < _len; _i++) {
             item = itemsToMove[_i];
             if (event._stopPropagation) {
@@ -9671,7 +12187,7 @@ var exports = module.exports;
             }
             data = item._impl;
             if (data.pointerMoveFlag !== flag) {
-              item.pointer.onMove.emit(event);
+              emitSignal(item.pointer, 'onMove', event);
             }
           }
           for (i = _j = hoverItems.length - 1; _j >= 0; i = _j += -1) {
@@ -9681,7 +12197,7 @@ var exports = module.exports;
               data.pointerHover = false;
               data.pointerMoveFlag = 0;
               hoverItems.splice(i, 1);
-              item.pointer.onExit.emit(event);
+              emitSignal(item.pointer, 'onExit', event);
             }
           }
           for (_k = 0, _len1 = itemsToMove.length; _k < _len1; _k++) {
@@ -9696,19 +12212,22 @@ var exports = module.exports;
       return Device.onPointerWheel((function() {
         var onItem;
         onItem = function(item) {
+          var pointer;
           event._stopPropagation = true;
-          if (!signal.isEmpty(item.pointer.onWheel)) {
-            item.pointer.onWheel.emit(event);
-            return event._stopPropagation;
+          if (item._impl.capturePointer & WHEEL) {
+            if ((pointer = item._pointer) && !signal.isEmpty(pointer.onWheel)) {
+              emitSignal(pointer, 'onWheel', event);
+              if (event._stopPropagation) {
+                return STOP_PROPAGATION;
+              }
+              return getEventStatus();
+            }
           }
-          return false;
+          return STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
-          if (impl.window._impl.childrenCapturesClickPointer > 0) {
-            event._deltaX = e._deltaX;
-            event._deltaY = e._deltaY;
-            captureItems(WHEEL, impl.window, e._x, e._y, onItem, 0, 0, 1);
-          }
+          event._checkSiblings = false;
+          captureItems(WHEEL, impl.window, e._x, e._y, onItem);
         };
       })());
     });
@@ -9719,57 +12238,22 @@ var exports = module.exports;
         onRelease: RELEASE = 1 << i++,
         onMove: MOVE = 1 << i++,
         onWheel: WHEEL = 1 << i++,
-        onClick: CLICK = (1 << i++) | PRESS | RELEASE,
-        onEnter: ENTER = (1 << i++) | MOVE,
-        onExit: EXIT = (1 << i++) | MOVE
+        onClick: CLICK = 1 << i++,
+        onEnter: ENTER = 1 << i++,
+        onExit: EXIT = 1 << i++
       },
       DATA: {
         pointerHover: false,
         pointerMoveFlag: 0,
-        capturePointer: 0,
-        childrenCapturesClickPointer: 0,
-        childrenCapturesMovePointer: 0
+        capturePointer: 0
       },
-      setItemParent: function(val) {
-        var clickAmount, data, moveAmount, parent;
-        data = this._impl;
-        clickAmount = data.childrenCapturesClickPointer;
-        if (data.capturePointer & (PRESS | RELEASE | WHEEL)) {
-          clickAmount++;
-        }
-        moveAmount = data.childrenCapturesMovePointer;
-        if (data.capturePointer & MOVE) {
-          moveAmount++;
-        }
-        if (clickAmount > 0 || moveAmount > 0) {
-          parent = this;
-          while (parent = parent._parent) {
-            parent._impl.childrenCapturesClickPointer -= clickAmount;
-            parent._impl.childrenCapturesMovePointer -= moveAmount;
-          }
-          parent = val;
-          while (parent) {
-            parent._impl.childrenCapturesClickPointer += clickAmount;
-            parent._impl.childrenCapturesMovePointer += moveAmount;
-            parent = parent._parent;
-          }
-        }
-      },
+      setItemParent: function(val) {},
       attachItemSignal: function(signal) {
-        var clickPlus, data, eventId, item, movePlus, parent;
+        var data, eventId, item;
         item = this._ref;
         data = item._impl;
         if (!(eventId = EVENTS[signal])) {
           return;
-        }
-        clickPlus = eventId & (PRESS | RELEASE | WHEEL) && +(!(data.capturePointer & (PRESS | RELEASE | WHEEL)));
-        movePlus = eventId & MOVE && +(!(data.capturePointer & MOVE));
-        if (clickPlus > 0 || movePlus > 0) {
-          parent = item;
-          while (parent = parent._parent) {
-            parent._impl.childrenCapturesClickPointer += clickPlus;
-            parent._impl.childrenCapturesMovePointer += movePlus;
-          }
         }
         data.capturePointer |= eventId;
       },
@@ -9785,18 +12269,16 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/utils/item.coffee'] = (function(){
 var module = {exports: modules["../renderer/utils/item.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","expect":"node_modules/expect/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Emitter, assert, emitSignal, expect, isArray, log, signal, utils,
+  var Emitter, assert, emitSignal, isArray, log, signal, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   assert = require('neft-assert');
-
-  expect = require('expect');
 
   utils = require('utils');
 
@@ -9813,7 +12295,7 @@ var exports = module.exports;
   isArray = Array.isArray;
 
   module.exports = function(Renderer, Impl) {
-    var CustomObject, DeepObject, FixedObject, MutableDeepObject, NOP, UtilsObject, exports, funcCache, getObjAsString, getObjFile, getPropHandlerName, getPropInternalName;
+    var CustomObject, DeepObject, FixedObject, MutableDeepObject, NOP, UtilsObject, exports, getObjAsString, getObjFile, getPropHandlerName, getPropInternalName;
     NOP = function() {};
     getObjAsString = function(item) {
       var _ref;
@@ -10104,7 +12586,6 @@ var exports = module.exports;
 
     })(MutableDeepObject);
     Impl.DeepObject = DeepObject;
-    funcCache = Object.create(null);
     return exports = {
       Object: UtilsObject,
       FixedObject: FixedObject,
@@ -10134,7 +12615,7 @@ var exports = module.exports;
         };
       })(),
       defineProperty: function(opts) {
-        var basicGetter, basicSetter, customGetter, customSetter, developmentSetter, func, getter, implementation, implementationValue, internalName, name, namespace, namespaceSignalName, propGetter, propSetter, prototype, setter, signalName, uniquePropName, valueConstructor, _name, _name1, _name2;
+        var basicGetter, basicSetter, customGetter, customSetter, developmentSetter, func, getter, implementation, implementationValue, internalName, name, namespace, namespaceSignalName, propGetter, propSetter, prototype, setter, signalName, uniquePropName, valueConstructor;
         assert.isPlainObject(opts);
         name = opts.name, namespace = opts.namespace, valueConstructor = opts.valueConstructor, implementation = opts.implementation, implementationValue = opts.implementationValue;
         //<development>;
@@ -10150,7 +12631,7 @@ var exports = module.exports;
           signal.Emitter.createSignalOnObject(prototype, signalName, opts.signalInitializer);
         }
         internalName = getPropInternalName(name);
-        propGetter = basicGetter = funcCache[_name = "get-" + internalName] != null ? funcCache[_name] : funcCache[_name] = Function("return this." + internalName);
+        propGetter = basicGetter = Function("return this." + internalName);
         if (valueConstructor) {
           propGetter = function() {
             return this[internalName] != null ? this[internalName] : this[internalName] = new valueConstructor(this);
@@ -10167,7 +12648,7 @@ var exports = module.exports;
         } else if (namespace != null) {
           namespaceSignalName = "on" + (utils.capitalize(namespace)) + "Change";
           uniquePropName = namespace + utils.capitalize(name);
-          func = funcCache[_name1 = "set-deep-" + namespace + "-" + internalName + "-" + (developmentSetter != null) + "-" + (implementation != null)] != null ? funcCache[_name1] : funcCache[_name1] = (function() {
+          func = (function() {
             var funcStr;
             funcStr = "return function(val){\n";
             //<development>;
@@ -10192,7 +12673,7 @@ var exports = module.exports;
           })();
           propSetter = basicSetter = func(implementation, implementationValue, emitSignal, developmentSetter);
         } else {
-          func = funcCache[_name2 = "set-" + internalName + "-" + (developmentSetter != null) + "-" + (implementation != null)] != null ? funcCache[_name2] : funcCache[_name2] = (function() {
+          func = (function() {
             var funcStr;
             funcStr = "return function(val){\n";
             //<development>;
@@ -10316,7 +12797,7 @@ var exports = module.exports;
   signal = require('signal');
 
   module.exports = function(Renderer, Impl, itemUtils) {
-    var Device, DevicePointerEvent, device, _ref;
+    var Device, DeviceKeyboardEvent, DevicePointerEvent, device;
     Device = (function(_super) {
       __extends(Device, _super);
 
@@ -10327,6 +12808,7 @@ var exports = module.exports;
         this._phone = false;
         this._pixelRatio = 1;
         this._pointer = new DevicePointerEvent;
+        this._keyboard = new DeviceKeyboardEvent;
         Object.preventExtensions(this);
       }
 
@@ -10366,6 +12848,18 @@ var exports = module.exports;
 
       signal.Emitter.createSignal(Device, 'onPointerWheel');
 
+      utils.defineProperty(Device.prototype, 'keyboard', null, function() {
+        return this._keyboard;
+      }, null);
+
+      signal.Emitter.createSignal(Device, 'onKeyPress');
+
+      signal.Emitter.createSignal(Device, 'onKeyHold');
+
+      signal.Emitter.createSignal(Device, 'onKeyRelease');
+
+      signal.Emitter.createSignal(Device, 'onKeyInput');
+
       return Device;
 
     })(signal.Emitter);
@@ -10386,33 +12880,13 @@ var exports = module.exports;
       itemUtils.defineProperty({
         constructor: DevicePointerEvent,
         name: 'x',
-        defaultValue: 0,
-        setter: function(_super) {
-          return function(val) {
-            var oldVal;
-            oldVal = this._x;
-            if (oldVal !== val) {
-              _super.call(this, val);
-              this.movementX = val - oldVal;
-            }
-          };
-        }
+        defaultValue: 0
       });
 
       itemUtils.defineProperty({
         constructor: DevicePointerEvent,
         name: 'y',
-        defaultValue: 0,
-        setter: function(_super) {
-          return function(val) {
-            var oldVal;
-            oldVal = this._y;
-            if (oldVal !== val) {
-              _super.call(this, val);
-              this.movementY = val - oldVal;
-            }
-          };
-        }
+        defaultValue: 0
       });
 
       itemUtils.defineProperty({
@@ -10442,10 +12916,61 @@ var exports = module.exports;
       return DevicePointerEvent;
 
     })(signal.Emitter);
+    DeviceKeyboardEvent = (function(_super) {
+      __extends(DeviceKeyboardEvent, _super);
+
+      function DeviceKeyboardEvent() {
+        DeviceKeyboardEvent.__super__.constructor.call(this);
+        this._visible = false;
+        this._key = '';
+        this._text = '';
+        Object.preventExtensions(this);
+      }
+
+      itemUtils.defineProperty({
+        constructor: DeviceKeyboardEvent,
+        name: 'visible',
+        defaultValue: false
+      });
+
+      itemUtils.defineProperty({
+        constructor: DeviceKeyboardEvent,
+        name: 'key',
+        defaultValue: ''
+      });
+
+      itemUtils.defineProperty({
+        constructor: DeviceKeyboardEvent,
+        name: 'text',
+        defaultValue: ''
+      });
+
+      DeviceKeyboardEvent.prototype.show = function() {
+        return Impl.showDeviceKeyboard.call(device);
+      };
+
+      DeviceKeyboardEvent.prototype.hide = function() {
+        return Impl.hideDeviceKeyboard.call(device);
+      };
+
+      return DeviceKeyboardEvent;
+
+    })(signal.Emitter);
     device = new Device;
-    if ((_ref = Impl.initDeviceNamespace) != null) {
-      _ref.call(device);
-    }
+    (function() {
+      var updateMovement, x, y;
+      x = y = 0;
+      updateMovement = function(event) {
+        event.movementX = event.x - x;
+        event.movementY = event.y - y;
+        x = event.x;
+        y = event.y;
+      };
+      device.onPointerPress(updateMovement);
+      device.onPointerRelease(updateMovement);
+      return device.onPointerMove(updateMovement);
+    })();
+    Impl.initDeviceNamespace.call(device);
     return device;
   };
 
@@ -10676,12 +13201,12 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/extensions/class.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/extensions/class.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md"});
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md","document/element/element/tag/query":"../document/element/element/tag/query.coffee"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var List, assert, log, signal, utils,
+  var List, TagQuery, assert, log, signal, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10695,12 +13220,15 @@ var exports = module.exports;
 
   List = require('list');
 
+  TagQuery = require('document/element/element/tag/query');
+
   log = log.scope('Rendering', 'Class');
 
   module.exports = function(Renderer, Impl, itemUtils) {
-    var ATTRS_ALIAS, ATTRS_ALIAS_DEF, ChangesObject, Class, ClassChildDocument, ClassDocument, ClassesList, classListSortFunc, cloneClassWithNoDocument, disableClass, enableClass, getContainedAttributeOrAlias, getObject, getPropertyDefaultValue, ifClassListWillChange, loadObjects, normalizeClassesValue, runQueue, saveAndDisableClass, saveAndEnableClass, setAttribute, splitAttribute, unloadObjects, updateChildPriorities, updateClassList, updatePriorities, updateTargetClass;
+    var ATTRS_ALIAS, ATTRS_ALIAS_DEF, ChangesObject, Class, ClassChildDocument, ClassDocument, ClassesList, classListSortFunc, cloneClassChild, cloneClassWithNoDocument, disableClass, enableClass, getContainedAttributeOrAlias, getObject, getPropertyDefaultValue, ifClassListWillChange, loadObjects, normalizeClassesValue, runQueue, saveAndDisableClass, saveAndEnableClass, setAttribute, splitAttribute, unloadObjects, updateChildPriorities, updateClassList, updatePriorities, updateTargetClass;
     ChangesObject = (function() {
       function ChangesObject() {
+        this._links = [];
         this._attributes = {};
         this._functions = [];
         this._bindings = {};
@@ -10708,6 +13236,9 @@ var exports = module.exports;
 
       ChangesObject.prototype.setAttribute = function(prop, val) {
         this._attributes[prop] = val;
+        if (val instanceof Renderer.Component.Link) {
+          this._links.push(val);
+        }
       };
 
       ChangesObject.prototype.setFunction = function(prop, val) {
@@ -10757,7 +13288,6 @@ var exports = module.exports;
         this._name = '';
         this._changes = null;
         this._document = null;
-        this._loadedObjects = null;
         this._children = null;
       }
 
@@ -10939,6 +13469,7 @@ var exports = module.exports;
 
         ChildrenObject.prototype.append = function(val) {
           assert.instanceOf(val, itemUtils.Object);
+          assert.isNot(val, this._ref);
           if (!this._ref._component.isClone) {
             this._ref._component.disabledObjects[val.id] = true;
           }
@@ -10967,13 +13498,10 @@ var exports = module.exports;
       })();
 
       Class.prototype.clone = function(component) {
-        var children, clone, query, _ref;
+        var clone, query, _ref;
         clone = cloneClassWithNoDocument.call(this, component);
         if (query = (_ref = this._document) != null ? _ref._query : void 0) {
           clone.document.query = query;
-        }
-        if (children = this._children) {
-          utils.merge(clone.children, children);
         }
         return clone;
       };
@@ -10981,62 +13509,41 @@ var exports = module.exports;
       return Class;
 
     })(Renderer.Extension);
-    loadObjects = function(classElem, component, item, sourceClassElem, loadedObjects) {
-      var child, clone, forceUpdateBindings, _i, _len, _ref, _ref1;
-      if (sourceClassElem == null) {
-        sourceClassElem = classElem;
-      }
-      if (loadedObjects == null) {
-        loadedObjects = classElem._loadedObjects || (classElem._loadedObjects = []);
-      }
-      if (!loadedObjects) {
-        assert.is(classElem._loadedObjects.length, 0);
-      }
-      forceUpdateBindings = false;
-      if (classElem._children) {
-        _ref = classElem._children;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          child = _ref[_i];
-          clone = classElem._component.cloneRawObject(child);
-          clone._component.onObjectChange = signal.create();
-          clone._component.setObjectById(sourceClassElem, sourceClassElem.id);
-          clone._component.initObjects();
-          loadedObjects.push(clone);
-          if (clone instanceof Renderer.Item) {
-            if (clone.parent == null) {
-              clone.parent = item;
+    loadObjects = function(classElem, component, item) {
+      var child, children, _i, _len;
+      if (children = classElem._children) {
+        for (_i = 0, _len = children.length; _i < _len; _i++) {
+          child = children[_i];
+          if (child instanceof Renderer.Item) {
+            if (child.parent == null) {
+              child.parent = item;
             }
           } else {
-            updateChildPriorities(classElem, clone);
-            if (clone.target == null) {
-              clone.target = item;
+            if (child instanceof Class) {
+              updateChildPriorities(classElem, child);
+            }
+            if (child.target == null) {
+              child.target = item;
             }
           }
-          if (utils.has(component.idsOrder, child.id)) {
-            forceUpdateBindings = true;
-            component.setObjectById(clone, child.id);
-          }
         }
-      }
-      if ((_ref1 = classElem._document) != null ? _ref1._parent : void 0) {
-        loadObjects(classElem._document._parent._ref, component, item, classElem, loadedObjects);
       }
     };
     unloadObjects = function(classElem, item) {
-      var component, loadedObjects, object, _ref;
-      if (loadedObjects = classElem._loadedObjects) {
-        component = classElem._component;
-        while (object = loadedObjects.pop()) {
-          if (object instanceof Renderer.Item) {
-            object.parent = null;
+      var child, children, _i, _len;
+      if (children = classElem._children) {
+        for (_i = 0, _len = children.length; _i < _len; _i++) {
+          child = children[_i];
+          if (child instanceof Renderer.Item) {
+            if (child.parent === item) {
+              child.parent = null;
+            }
           } else {
-            object.target = null;
+            if (child.target === item) {
+              child.target = null;
+            }
           }
-          component.cacheObject(object);
         }
-      }
-      if ((_ref = classElem._document) != null ? _ref._parent : void 0) {
-        unloadObjects(classElem._document._parent._ref, item);
       }
     };
     updateChildPriorities = function(parent, child) {
@@ -11046,7 +13553,7 @@ var exports = module.exports;
       updatePriorities(child);
     };
     updatePriorities = function(classElem) {
-      var child, children, document, loadedObjects, target, _i, _inheritsPriority, _j, _k, _l, _len, _len1, _len2, _len3, _nestingPriority, _ref, _ref1;
+      var child, children, document, target, _i, _inheritsPriority, _j, _k, _len, _len1, _len2, _nestingPriority, _ref, _ref1;
       if (classElem._running && ifClassListWillChange(classElem)) {
         target = classElem._target;
         updateTargetClass(disableClass, target, classElem);
@@ -11061,26 +13568,18 @@ var exports = module.exports;
           }
         }
       }
-      if (loadedObjects = classElem._loadedObjects) {
-        for (_j = 0, _len1 = loadedObjects.length; _j < _len1; _j++) {
-          child = loadedObjects[_j];
-          if (child instanceof Class) {
-            updateChildPriorities(classElem, child);
-          }
-        }
-      }
       if (document = classElem._document) {
         _inheritsPriority = classElem._inheritsPriority, _nestingPriority = classElem._nestingPriority;
         _ref = document._classesInUse;
-        for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-          child = _ref[_k];
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          child = _ref[_j];
           child._inheritsPriority = _inheritsPriority;
           child._nestingPriority = _nestingPriority;
           updatePriorities(child);
         }
         _ref1 = document._classesPool;
-        for (_l = 0, _len3 = _ref1.length; _l < _len3; _l++) {
-          child = _ref1[_l];
+        for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+          child = _ref1[_k];
           child._inheritsPriority = _inheritsPriority;
           child._nestingPriority = _nestingPriority;
         }
@@ -11105,8 +13604,26 @@ var exports = module.exports;
     updateClassList = function(item) {
       return item._classList.sort(classListSortFunc);
     };
+    cloneClassChild = function(classElem, component, child) {
+      var clone, cloneComp;
+      clone = component.cloneRawObject(child);
+      cloneComp = clone._component.belongsToComponent || clone._component;
+      if (cloneComp.onObjectChange == null) {
+        cloneComp.onObjectChange = signal.create();
+      }
+      if (component.isDeepClone) {
+        if (classElem.id) {
+          cloneComp.setObjectById(clone, classElem.id);
+        }
+        cloneComp.initObjects();
+        if (utils.has(component.idsOrder, clone.id)) {
+          component.setObjectById(clone, clone.id);
+        }
+      }
+      return clone;
+    };
     cloneClassWithNoDocument = function(component) {
-      var clone, prop, val, _ref;
+      var changes, child, childClone, children, clone, i, link, linkClone, prop, val, _i, _j, _len, _len1, _ref, _ref1;
       clone = Class.New(component);
       clone.id = this.id;
       clone._classUid = this._classUid;
@@ -11120,6 +13637,22 @@ var exports = module.exports;
         for (prop in _ref) {
           val = _ref[prop];
           clone.createBinding(prop, val, component);
+        }
+      }
+      if (children = this._children) {
+        for (i = _i = 0, _len = children.length; _i < _len; i = ++_i) {
+          child = children[i];
+          childClone = cloneClassChild(clone, component, child);
+          clone.children.append(childClone);
+        }
+      }
+      if (component.isDeepClone) {
+        if ((changes = this._changes)) {
+          _ref1 = changes._links;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            link = _ref1[_j];
+            linkClone = cloneClassChild(clone, component, link.getItem(this._component));
+          }
         }
       }
       return clone;
@@ -11460,7 +13993,7 @@ var exports = module.exports;
         },
         setter: function(_super) {
           return function(val) {
-            var Document, cmdLen, oldPriority;
+            var cmdLen, oldPriority;
             assert.notOk(this._parent);
             if (this._query === val) {
               return;
@@ -11471,8 +14004,7 @@ var exports = module.exports;
             _super.call(this, val);
             this.reloadQuery();
             if (this._ref._priority < 1) {
-              Document = require('document');
-              cmdLen = Document.Element.Tag.query.getSelectorCommandsLength(val);
+              cmdLen = TagQuery.getSelectorCommandsLength(val, 0, 1);
               oldPriority = this._priority;
               this._priority = cmdLen;
               this._ref._nestingPriority += cmdLen - oldPriority;
@@ -12453,7 +14985,6 @@ var exports = module.exports;
         this.mirror = false;
         this.belongsToComponent = null;
         this.objectsInitQueue = [];
-        this.cache = Object.create(null);
         this.parent = original;
         this.disabledObjects = (original != null ? original.disabledObjects : void 0) || Object.create(null);
         this.clone = utils.bindFunctionContext(this.clone, this);
@@ -12464,6 +14995,12 @@ var exports = module.exports;
       }
 
       initSignalArr = function() {
+        var i, id, _base, _i, _len, _ref;
+        _ref = this.idsOrder;
+        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+          id = _ref[i];
+          (_base = this.objectsOrder)[i] || (_base[i] = this.objects[id] || null);
+        }
         this.objectsOrderSignalArr = utils.clone(this.objectsOrder);
         return this.objectsOrderSignalArr.push(null, null);
       };
@@ -12670,7 +15207,7 @@ var exports = module.exports;
       };
 
       Component.prototype.cloneRawObject = function(item, opts) {
-        var cache, clone, component, components, i, id, val, _base, _i, _len, _ref, _ref1;
+        var clone, component, components, createdComponents, i, id, val, _base, _i, _len, _ref, _ref1;
         if (opts == null) {
           opts = 0;
         }
@@ -12680,28 +15217,24 @@ var exports = module.exports;
         assert.ok(item.id !== this.itemId);
         assert.ok(this.objects[item.id] || ((_ref = this.parent) != null ? _ref.objects[item.id] : void 0));
         id = item.id;
-        if ((cache = this.cache[id]) && cache.length > 0) {
-          clone = this.cache[id].pop();
+        if (id === this.itemId) {
+          clone = this.createItem();
         } else {
-          if (id === this.item.id) {
-            clone = this.createItem();
-          } else {
-            component = new Component(this);
-            component.objects = Object.create(this.objects);
-            component.item = this.item;
-            component.objectsOrderSignalArr = new Array(this.objectsOrder.length + 2);
-            component.onObjectChange = this.onObjectChange;
-            component.isDeepClone = true;
-            component.ready = true;
-            component.mirror = true;
-            components = {};
-            components[component.id] = component;
-            clone = cloneItem(item, components, component);
-            _ref1 = this.objectsOrder;
-            for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-              val = _ref1[i];
-              component.objectsOrder[i] = (_base = component.objectsOrderSignalArr)[i] || (_base[i] = val);
-            }
+          component = new Component(this);
+          component.objects = Object.create(this.objects);
+          component.item = this.item;
+          component.objectsOrderSignalArr = new Array(this.objectsOrder.length + 2);
+          component.isDeepClone = true;
+          component.ready = true;
+          component.mirror = true;
+          components = {};
+          components[component.id] = component;
+          createdComponents = [component];
+          clone = cloneItem(item, components, createdComponents, component);
+          _ref1 = this.idsOrder;
+          for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+            val = _ref1[i];
+            component.objectsOrder[i] = (_base = component.objectsOrderSignalArr)[i] || (_base[i] = this.objectsOrder[i]);
           }
         }
         return clone;
@@ -12725,14 +15258,15 @@ var exports = module.exports;
         comp.isDeepClone = true;
         comp.ready = true;
         comp.mirror = true;
+        assert.is(comp.objectsOrder.length, comp.idsOrder.length);
         return comp;
       };
 
       Component.prototype.setObjectById = function(object, id) {
-        var index, oldVal;
+        var index, oldVal, _ref, _ref1;
         assert.instanceOf(object, itemUtils.Object);
         assert.isString(id);
-        assert.ok(this.objects[id]);
+        assert.ok(this.objects[id] || ((_ref = this.parent) != null ? _ref.objects[id] : void 0));
         if ((oldVal = this.objects[id]) === object) {
           return;
         }
@@ -12740,33 +15274,11 @@ var exports = module.exports;
         index = this.idsOrder.indexOf(id);
         if (index !== -1) {
           this.objectsOrder[index] = this.objectsOrderSignalArr[index] = object;
-          this.onObjectChange.emit(id, oldVal);
-        }
-        return object;
-      };
-
-      Component.prototype.cacheObject = function(item) {
-        var extension, id, objects, _base, _i, _len, _name, _ref, _ref1;
-        assert.instanceOf(item, itemUtils.Object);
-        assert.isString(item.id);
-        assert.notLengthOf(item.id, 0);
-        assert.ok(this.objects[item.id] || ((_ref = this.parent) != null ? _ref.objects[item.id] : void 0));
-        assert.ok(item._component.isDeepClone);
-        if ((_base = this.cache)[_name = item.id] == null) {
-          _base[_name] = [];
-        }
-        this.cache[item.id].push(item);
-        objects = item._component.objects;
-        for (id in objects) {
-          item = objects[id];
-          if (objects.hasOwnProperty(id)) {
-            _ref1 = item._extensions;
-            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-              extension = _ref1[_i];
-              extension.disable();
-            }
+          if ((_ref1 = this.onObjectChange) != null) {
+            _ref1.emit(id, oldVal);
           }
         }
+        return object;
       };
 
       Component.Link = Link = (function() {
@@ -12875,7 +15387,7 @@ var exports = module.exports;
 
       signal.Emitter.createSignal(Item, 'onReady');
 
-      signal.Emitter.createSignal(Item, 'onUpdate', (function() {
+      signal.Emitter.createSignal(Item, 'onAnimationFrame', (function() {
         var frame, items, now;
         now = Date.now();
         items = [];
@@ -12886,7 +15398,7 @@ var exports = module.exports;
           ms = now - oldNow;
           for (_i = 0, _len = items.length; _i < _len; _i++) {
             item = items[_i];
-            emitSignal(item, 'onUpdate', ms);
+            emitSignal(item, 'onAnimationFrame', ms);
           }
           return requestAnimationFrame(frame);
         };
@@ -12988,18 +15500,17 @@ var exports = module.exports;
       _ref = Array.prototype, indexOf = _ref.indexOf, splice = _ref.splice, push = _ref.push, shift = _ref.shift, pop = _ref.pop;
 
       setFakeParent = function(child, parent, index) {
-        var oldParent;
         if (index == null) {
           index = -1;
         }
-        oldParent = child._parent;
         child.parent = null;
-        Impl.setItemParent.call(child, parent);
-        child._parent = parent;
-        if (index >= 0) {
-          Impl.setItemIndex.call(child, index);
+        if (index >= 0 && parent.children.length < index) {
+          Impl.insertItemBefore.call(child, parent.children[index]);
+        } else {
+          Impl.setItemParent.call(child, parent);
         }
-        emitSignal(child, 'onParentChange', oldParent);
+        child._parent = parent;
+        emitSignal(child, 'onParentChange', null);
       };
 
       itemUtils.defineProperty({
@@ -13008,24 +15519,30 @@ var exports = module.exports;
         defaultValue: null,
         setter: function(_super) {
           return function(val) {
-            var index, length, old, oldChildren, oldNextSibling, oldPreviousSibling, pointer, previousSibling, valChildren;
+            var containsItem, existsInOldChildren, index, length, old, oldChildren, oldNextSibling, oldPreviousSibling, pointer, previousSibling, tmpItem, valChildren;
             if (val == null) {
               val = null;
             }
             old = this._parent;
             oldChildren = old != null ? old.children : void 0;
             valChildren = val != null ? val.children : void 0;
+            existsInOldChildren = true;
             if (valChildren != null ? valChildren._target : void 0) {
-              val = valChildren._target;
-              valChildren = val.children;
+              containsItem = false;
+              tmpItem = valChildren._target;
+              while (tmpItem) {
+                if (tmpItem === this) {
+                  containsItem = true;
+                  break;
+                }
+                tmpItem = tmpItem._parent;
+              }
+              if (!containsItem) {
+                val = valChildren._target;
+                valChildren = val.children;
+              }
             }
             if (old === val) {
-              return;
-            }
-            if (this._effectItem && this._effectItem !== this) {
-              Impl.setItemParent.call(this, val);
-              this._parent = val;
-              emitSignal(this, 'onParentChange', old);
               return;
             }
             assert.isNot(this, val);
@@ -13045,8 +15562,11 @@ var exports = module.exports;
                 shift.call(oldChildren);
               } else {
                 index = indexOf.call(oldChildren, this);
-                assert.ok(index !== -1);
-                splice.call(oldChildren, index, 1);
+                if (index === -1) {
+                  existsInOldChildren = false;
+                } else {
+                  splice.call(oldChildren, index, 1);
+                }
               }
             }
             if (val !== null) {
@@ -13073,11 +15593,11 @@ var exports = module.exports;
             }
             Impl.setItemParent.call(this, val);
             this._parent = val;
-            if (old !== null) {
+            if (old !== null && existsInOldChildren) {
               emitSignal(old, 'onChildrenChange', null, this);
             }
             if (val !== null) {
-              emitSignal(val, 'onChildrenChange', this);
+              emitSignal(val, 'onChildrenChange', this, null);
             }
             emitSignal(this, 'onParentChange', old);
             if (oldPreviousSibling !== null) {
@@ -13111,12 +15631,10 @@ var exports = module.exports;
         }
         if (val) {
           assert.instanceOf(val, Item);
-          if (this._parent !== val._parent) {
-            this.parent = val.parent;
-          }
-          this.index = val.index + 1;
+          this.nextSibling = val._nextSibling;
         } else {
-          this.index = 0;
+          assert.isDefined(this._parent);
+          this.nextSibling = this._parent.children[0];
         }
         assert.is(this._previousSibling, val);
       });
@@ -13126,78 +15644,77 @@ var exports = module.exports;
       utils.defineProperty(Item.prototype, 'nextSibling', null, function() {
         return this._nextSibling;
       }, function(val) {
+        var index, newChildren, newIndex, newParent, nextSibling, nextSiblingOldPreviousSibling, oldChildren, oldIndex, oldNextSibling, oldParent, oldPreviousSibling, previousSibling, previousSiblingOldNextSibling;
         if (val == null) {
           val = null;
         }
         assert.isNot(this, val);
+        if (val) {
+          assert.instanceOf(val, Item);
+          assert.isDefined(val._parent);
+        } else {
+          assert.isDefined(this._parent);
+        }
         if (val === this._nextSibling) {
           return;
         }
-        if (val) {
-          assert.instanceOf(val, Item);
-          if (this._parent !== val._parent) {
-            this.parent = val.parent;
-          }
-          this.index = val.index;
-        } else if (this._parent) {
-          this.index = this._parent.children.length;
-        }
-        assert.is(this._nextSibling, val);
-      });
-
-      signal.Emitter.createSignal(Item, 'onNextSiblingChange');
-
-      utils.defineProperty(Item.prototype, 'index', null, function() {
-        var _ref1;
-        return ((_ref1 = this._parent) != null ? _ref1.children.index(this) : void 0) || 0;
-      }, function(val) {
-        var children, index, nextSibling, nextSiblingOldPreviousSibling, oldNextSibling, oldPreviousSibling, parent, previousSibling, previousSiblingOldNextSibling;
-        assert.isInteger(val);
-        assert.operator(val, '>=', 0);
-        parent = this._parent;
-        if (!parent) {
-          return;
-        }
-        index = this.index;
-        children = parent._children;
-        if (val > children.length) {
-          val = children.length;
-        }
-        if (index === val || index === val - 1) {
-          return;
-        }
+        oldParent = this._parent;
+        oldChildren = oldParent._children;
         oldPreviousSibling = this._previousSibling;
         oldNextSibling = this._nextSibling;
-        Impl.setItemIndex.call(this, val);
+        if (val) {
+          newParent = val._parent;
+          newChildren = newParent._children;
+          Impl.insertItemBefore.call(this, val);
+        } else {
+          newParent = oldParent;
+          newChildren = oldChildren;
+          Impl.setItemParent.call(this, null);
+          this._parent = null;
+          Impl.setItemParent.call(this, newParent);
+        }
+        this._parent = newParent;
         if (oldPreviousSibling != null) {
           oldPreviousSibling._nextSibling = oldNextSibling;
         }
         if (oldNextSibling != null) {
           oldNextSibling._previousSibling = oldPreviousSibling;
         }
-        Array.prototype.splice.call(children, index, 1);
-        if (val > index) {
-          val--;
+        oldIndex = oldChildren.index(this);
+        Array.prototype.splice.call(oldChildren, oldIndex, 1);
+        if (val) {
+          newIndex = newChildren.indexOf(val);
+          Array.prototype.splice.call(newChildren, newIndex, 0, this);
+        } else {
+          newIndex = newChildren.length;
+          Array.prototype.push.call(newChildren, this);
         }
-        Array.prototype.splice.call(children, val, 0, this);
-        previousSibling = children[val - 1] || null;
-        previousSiblingOldNextSibling = previousSibling != null ? previousSibling._nextSibling : void 0;
-        nextSibling = children[val + 1] || null;
-        nextSiblingOldPreviousSibling = nextSibling != null ? nextSibling._previousSibling : void 0;
+        if (newIndex > 0) {
+          previousSibling = newChildren[newIndex - 1];
+          previousSiblingOldNextSibling = previousSibling._nextSibling;
+          previousSibling._nextSibling = this;
+        } else {
+          previousSibling = previousSiblingOldNextSibling = null;
+        }
+        if (newChildren.length > newIndex + 1) {
+          nextSibling = newChildren[newIndex + 1];
+          nextSiblingOldPreviousSibling = nextSibling._previousSibling;
+          nextSibling._previousSibling = this;
+        } else {
+          nextSibling = nextSiblingOldPreviousSibling = null;
+        }
         this._previousSibling = previousSibling;
         this._nextSibling = nextSibling;
-        if (previousSibling != null) {
-          previousSibling._nextSibling = this;
-        }
-        if (nextSibling != null) {
-          nextSibling._previousSibling = this;
-        }
         //<development>;
         index = this.index;
-        assert.is(index, val);
-        assert.is(children[index], this);
-        assert.is(children[index - 1] || null, this._previousSibling);
-        assert.is(children[index + 1] || null, this._nextSibling);
+        assert.is(this._nextSibling, val);
+        assert.is(this._parent, newParent);
+        assert.is(newChildren[index], this);
+        assert.is(newChildren[index - 1] || null, this._previousSibling);
+        assert.is(newChildren[index + 1] || null, this._nextSibling);
+        if (val) {
+          assert.is(this._parent, val._parent);
+        }
         if (this._previousSibling) {
           assert.is(this._previousSibling._nextSibling, this);
         } else {
@@ -13206,7 +15723,7 @@ var exports = module.exports;
         if (this._nextSibling) {
           assert.is(this._nextSibling._previousSibling, this);
         } else {
-          assert.is(index, children.length - 1);
+          assert.is(index, newChildren.length - 1);
         }
         if (oldPreviousSibling) {
           assert.is(oldPreviousSibling._nextSibling, oldNextSibling);
@@ -13215,7 +15732,13 @@ var exports = module.exports;
           assert.is(oldNextSibling._previousSibling, oldPreviousSibling);
         }
         //</development>;
-        emitSignal(parent, 'onChildrenChange');
+        if (oldParent !== newParent) {
+          emitSignal(oldChildren, 'onChildrenChange', null, this);
+          emitSignal(newChildren, 'onChildrenChange', this, null);
+          emitSignal(this, 'onParentChange', oldParent);
+        } else {
+          emitSignal(newChildren, 'onChildrenChange', null, null);
+        }
         if (oldPreviousSibling) {
           emitSignal(oldPreviousSibling, 'onNextSiblingChange', this);
         }
@@ -13229,6 +15752,25 @@ var exports = module.exports;
         emitSignal(this, 'onNextSiblingChange', oldNextSibling);
         if (nextSibling) {
           emitSignal(nextSibling, 'onPreviousSiblingChange', nextSiblingOldPreviousSibling);
+        }
+      });
+
+      signal.Emitter.createSignal(Item, 'onNextSiblingChange');
+
+      utils.defineProperty(Item.prototype, 'index', null, function() {
+        var _ref1;
+        return (_ref1 = this._parent) != null ? _ref1.children.index(this) : void 0;
+      }, function(val) {
+        var children, valItem;
+        assert.isInteger(val);
+        assert.isDefined(this._parent);
+        assert.operator(val, '>=', 0);
+        assert.operator(val, '<=', this._parent._children.length);
+        children = this._parent._children;
+        if (val >= children.length) {
+          this.nextSibling = null;
+        } else if ((valItem = children[val]) !== this) {
+          this.nextSibling = valItem;
         }
       });
 
@@ -13408,33 +15950,33 @@ var exports = module.exports;
         return Impl.doItemOverlap.call(this, item);
       };
 
-      Item.Spacing = require('./item/spacing')(Renderer, Impl, itemUtils, Item);
+      Item.createSpacing = require('./item/spacing')(Renderer, Impl, itemUtils, Item);
 
-      Item.Alignment = require('./item/alignment')(Renderer, Impl, itemUtils, Item);
+      Item.createAlignment = require('./item/alignment')(Renderer, Impl, itemUtils, Item);
 
-      Item.Anchors = require('./item/anchors')(Renderer, Impl, itemUtils, Item);
+      Item.createAnchors = require('./item/anchors')(Renderer, Impl, itemUtils, Item);
 
-      Item.Layout = require('./item/layout')(Renderer, Impl, itemUtils, Item);
+      Item.createLayout = require('./item/layout')(Renderer, Impl, itemUtils, Item);
 
-      Item.Margin = require('./item/margin')(Renderer, Impl, itemUtils, Item);
+      Item.createMargin = require('./item/margin')(Renderer, Impl, itemUtils, Item);
 
       Item.createPointer = require('./item/pointer')(Renderer, Impl, itemUtils, Item);
 
-      Item.Keys = require('./item/keys')(Renderer, Impl, itemUtils, Item);
+      Item.createKeys = require('./item/keys')(Renderer, Impl, itemUtils, Item);
 
-      Item.Document = require('./item/document')(Renderer, Impl, itemUtils, Item);
+      Item.createDocument = require('./item/document')(Renderer, Impl, itemUtils, Item);
 
-      Item.Anchors(Item);
+      Item.createAnchors(Item);
 
-      Item.Layout(Item);
+      Item.createLayout(Item);
 
       Item.Pointer = Item.createPointer(Item);
 
-      Item.Margin(Item);
+      Item.createMargin(Item);
 
-      Item.Keys(Item);
+      Item.Keys = Item.createKeys(Item);
 
-      Item.Document(Item);
+      Item.Document = Item.createDocument(Item);
 
       Item;
 
@@ -13936,16 +16478,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/layout.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/layout.coffee.md"]};
-var require = getModule.bind(null, {"expect":"node_modules/expect/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, expect, signal, utils,
+  var assert, signal, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  expect = require('expect');
 
   utils = require('utils');
 
@@ -14024,16 +16564,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/margin.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/margin.coffee.md"]};
-var require = getModule.bind(null, {"expect":"node_modules/expect/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, expect, signal, utils,
+  var assert, signal, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  expect = require('expect');
 
   utils = require('utils');
 
@@ -14295,12 +16833,6 @@ var exports = module.exports;
 
         onLazySignalInitialized = function(pointer, name) {
           Impl.attachItemSignal.call(pointer, 'pointer', name);
-          if (name === 'onPress' || name === 'onRelease') {
-            intitializePressed(pointer);
-          }
-          if (name === 'onEnter' || name === 'onExit') {
-            initializeHover(pointer);
-          }
         };
 
         Pointer.SIGNALS = ['onClick', 'onPress', 'onRelease', 'onEnter', 'onExit', 'onWheel', 'onMove', 'onDragStart', 'onDragEnd', 'onDragEnter', 'onDragExit', 'onDrop'];
@@ -14313,7 +16845,8 @@ var exports = module.exports;
 
         intitializePressed = (function() {
           var onPress, onRelease;
-          onPress = function() {
+          onPress = function(event) {
+            event.stopPropagation = false;
             return this.pressed = true;
           };
           onRelease = function() {
@@ -14378,18 +16911,28 @@ var exports = module.exports;
         Pointer.PointerEvent = PointerEvent = (function() {
           function PointerEvent() {
             this._stopPropagation = true;
+            this._checkSiblings = false;
             this._ensureRelease = true;
             this._ensureMove = true;
-            this._deltaX = 0;
-            this._deltaY = 0;
             Object.preventExtensions(this);
           }
+
+          PointerEvent.prototype = Object.create(Renderer.Device.pointer);
+
+          PointerEvent.prototype.constructor = PointerEvent;
 
           utils.defineProperty(PointerEvent.prototype, 'stopPropagation', null, function() {
             return this._stopPropagation;
           }, function(val) {
             assert.isBoolean(val);
             return this._stopPropagation = val;
+          });
+
+          utils.defineProperty(PointerEvent.prototype, 'checkSiblings', null, function() {
+            return this._checkSiblings;
+          }, function(val) {
+            assert.isBoolean(val);
+            return this._checkSiblings = val;
           });
 
           utils.defineProperty(PointerEvent.prototype, 'ensureRelease', null, function() {
@@ -14405,14 +16948,6 @@ var exports = module.exports;
             assert.isBoolean(val);
             return this._ensureMove = val;
           });
-
-          utils.defineProperty(PointerEvent.prototype, 'deltaX', null, function() {
-            return this._deltaX;
-          }, null);
-
-          utils.defineProperty(PointerEvent.prototype, 'deltaY', null, function() {
-            return this._deltaY;
-          }, null);
 
           return PointerEvent;
 
@@ -14451,11 +16986,13 @@ var exports = module.exports;
     return function(ctor) {
       var Keys;
       return Keys = (function(_super) {
-        var focusedKeys, onLazySignalInitialized, signalName, _i, _len, _ref;
+        var Device, KeysEvent, focusChangeOnPointerPress, focusedKeys, keysEvent, signalName, _i, _len, _ref;
 
         __extends(Keys, _super);
 
         Keys.__name__ = 'Keys';
+
+        Device = Renderer.Device;
 
         itemUtils.defineProperty({
           constructor: ctor,
@@ -14463,33 +17000,47 @@ var exports = module.exports;
           valueConstructor: Keys
         });
 
+        Keys.focusWindowOnPointerPress = true;
+
         function Keys(ref) {
           Keys.__super__.constructor.call(this, ref);
           this._focus = false;
           Object.preventExtensions(this);
         }
 
-        onLazySignalInitialized = function(keys, name) {
-          return Impl.attachItemSignal.call(keys, 'keys', name);
-        };
-
         Keys.SIGNALS = ['onPress', 'onHold', 'onRelease', 'onInput'];
 
         _ref = Keys.SIGNALS;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           signalName = _ref[_i];
-          signal.Emitter.createSignal(Keys, signalName, onLazySignalInitialized);
+          signal.Emitter.createSignal(Keys, signalName);
         }
 
         focusedKeys = null;
+
+        focusChangeOnPointerPress = false;
+
+        Renderer.onReady(function() {
+          return Renderer.Device.onPointerPress(function() {
+            return focusChangeOnPointerPress = false;
+          });
+        });
+
+        Renderer.onWindowChange(function() {
+          return this.window.pointer.onPress(function() {
+            if (Keys.focusWindowOnPointerPress && !focusChangeOnPointerPress) {
+              return this.keys.focus = true;
+            }
+          }, this.window);
+        });
 
         itemUtils.defineProperty({
           constructor: Keys,
           name: 'focus',
           defaultValue: false,
+          implementation: Impl.setItemKeysFocus,
           namespace: 'keys',
           parentConstructor: ctor,
-          implementation: Impl["set" + ctor.__name__ + "KeysFocus"],
           developmentSetter: function(val) {
             return assert.isBoolean(val);
           },
@@ -14497,10 +17048,14 @@ var exports = module.exports;
             return function(val) {
               var oldVal;
               if (this._focus !== val) {
+                if (val) {
+                  focusChangeOnPointerPress = true;
+                }
                 if (val && focusedKeys !== this) {
                   if (focusedKeys) {
                     oldVal = focusedKeys;
                     focusedKeys = null;
+                    Impl.setItemKeysFocus.call(oldVal._ref, false);
                     oldVal._focus = false;
                     oldVal.onFocusChange.emit(true);
                     oldVal._ref.onKeysChange.emit(oldVal);
@@ -14518,6 +17073,37 @@ var exports = module.exports;
             };
           }
         });
+
+        Device.onKeyPress(function(event) {
+          return focusedKeys != null ? focusedKeys.onPress.emit(keysEvent) : void 0;
+        });
+
+        Device.onKeyHold(function(event) {
+          return focusedKeys != null ? focusedKeys.onHold.emit(keysEvent) : void 0;
+        });
+
+        Device.onKeyRelease(function(event) {
+          return focusedKeys != null ? focusedKeys.onRelease.emit(keysEvent) : void 0;
+        });
+
+        Device.onKeyInput(function(event) {
+          return focusedKeys != null ? focusedKeys.onInput.emit(keysEvent) : void 0;
+        });
+
+        Keys.KeysEvent = KeysEvent = (function() {
+          function KeysEvent() {
+            Object.preventExtensions(this);
+          }
+
+          KeysEvent.prototype = Object.create(Device.keyboard);
+
+          KeysEvent.prototype.constructor = KeysEvent;
+
+          return KeysEvent;
+
+        })();
+
+        Keys.event = keysEvent = new KeysEvent;
 
         return Keys;
 
@@ -14551,8 +17137,7 @@ var exports = module.exports;
   log = log.scope('Renderer', 'Document');
 
   module.exports = function(Renderer, Impl, itemUtils, Item) {
-    var exports;
-    return exports = function(ctor) {
+    return function(ctor) {
       var ItemDocument;
       return ItemDocument = (function(_super) {
         var DocumentHideEvent, DocumentShowEvent, disableProperties, enableProperties, onNodeAttrsChange, onPropertyChange, setProperty;
@@ -14583,13 +17168,13 @@ var exports = module.exports;
 
         onPropertyChange = function(prop, oldVal) {
           var node;
-          if (this._updatingProperty === prop || !(node = this._node) || !node.attrs.has(prop)) {
+          if (this._updatingProperty === prop || !(node = this._node) || !node.hasAttr(prop)) {
             return;
           }
           if (oldVal === void 0) {
             setProperty.call(this, this._ref._$, prop, node._attrs[prop], oldVal);
           } else {
-            node.attrs.set(prop, this._ref._$[prop]);
+            node.setAttr(prop, this._ref._$[prop]);
           }
         };
 
@@ -14689,7 +17274,7 @@ var exports = module.exports;
 
         signal.Emitter.createSignal(ItemDocument, 'onHide');
 
-        exports.ShowEvent = DocumentShowEvent = (function() {
+        ItemDocument.ShowEvent = DocumentShowEvent = (function() {
           function DocumentShowEvent() {
             this.delay = 0;
             Object.preventExtensions(this);
@@ -14699,7 +17284,7 @@ var exports = module.exports;
 
         })();
 
-        exports.HideEvent = DocumentHideEvent = (function() {
+        ItemDocument.HideEvent = DocumentHideEvent = (function() {
           function DocumentHideEvent() {
             this.delay = 0;
             this.nextShowDelay = 0;
@@ -14722,16 +17307,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/types/image.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/types/image.coffee.md"]};
-var require = getModule.bind(null, {"expect":"node_modules/expect/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, expect, log, signal, utils,
+  var assert, log, signal, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  expect = require('expect');
 
   assert = require('assert');
 
@@ -14746,7 +17329,7 @@ var exports = module.exports;
   module.exports = function(Renderer, Impl, itemUtils) {
     var Image;
     return Image = (function(_super) {
-      var FILL_MODE_OPTIONS, getter, pixelRatio, setter, updateSizes;
+      var FILL_MODE_OPTIONS, getter, itemHeightSetter, itemWidthSetter, pixelRatio, updateSize;
 
       __extends(Image, _super);
 
@@ -14765,11 +17348,13 @@ var exports = module.exports;
         Image.__super__.constructor.call(this);
         this._source = '';
         this._loaded = false;
-        this._autoWidth = true;
-        this._autoHeight = true;
         this._sourceWidth = 0;
         this._sourceHeight = 0;
         this._fillMode = 'Stretch';
+        this._autoWidth = true;
+        this._autoHeight = true;
+        this._width = -1;
+        this._height = -1;
       }
 
       signal.create(Image, 'onPixelRatioChange');
@@ -14790,68 +17375,60 @@ var exports = module.exports;
         return this.onPixelRatioChange.emit(oldVal);
       });
 
-      updateSizes = function() {
-        var autoHeight, autoWidth;
+      updateSize = function() {
         if (this._autoHeight === this._autoWidth) {
           return;
         }
         if (this._autoHeight) {
-          autoWidth = this._autoWidth;
-          this._autoWidth = false;
-          this.height = this._width / this.sourceWidth * this.sourceHeight || 0;
-          this._autoWidth = autoWidth;
-          this._autoHeight = true;
+          itemHeightSetter.call(this, this._width / this.sourceWidth * this.sourceHeight || 0);
         }
         if (this._autoWidth) {
-          autoHeight = this._autoHeight;
-          this._autoHeight = false;
-          this.width = this._height / this.sourceHeight * this.sourceWidth || 0;
-          this._autoHeight = autoHeight;
-          this._autoWidth = true;
+          itemWidthSetter.call(this, this._height / this.sourceHeight * this.sourceWidth || 0);
         }
       };
 
+      Image.prototype._width = -1;
+
       getter = utils.lookupGetter(Image.prototype, 'width');
 
-      setter = utils.lookupSetter(Image.prototype, 'width');
+      itemWidthSetter = utils.lookupSetter(Image.prototype, 'width');
 
       utils.defineProperty(Image.prototype, 'width', null, getter, (function(_super) {
         return function(val) {
-          if (this._width !== val) {
-            this._autoWidth = false;
-            _super.call(this, val);
-            updateSizes.call(this);
-          }
+          this._autoWidth = val === -1;
+          _super.call(this, val);
+          updateSize.call(this);
         };
-      })(setter));
+      })(itemWidthSetter));
+
+      Image.prototype._height = -1;
 
       getter = utils.lookupGetter(Image.prototype, 'height');
 
-      setter = utils.lookupSetter(Image.prototype, 'height');
+      itemHeightSetter = utils.lookupSetter(Image.prototype, 'height');
 
       utils.defineProperty(Image.prototype, 'height', null, getter, (function(_super) {
         return function(val) {
-          if (this._height !== val) {
-            this._autoHeight = false;
-            _super.call(this, val);
-            updateSizes.call(this);
-          }
+          this._autoHeight = val === -1;
+          _super.call(this, val);
+          updateSize.call(this);
         };
-      })(setter));
+      })(itemHeightSetter));
 
       itemUtils.defineProperty({
         constructor: Image,
         name: 'source',
         defaultValue: '',
         developmentSetter: function(val) {
-          return expect(val).toBe.string();
+          return assert.isString(val);
         },
         setter: (function() {
-          var RESOURCE_REQUEST, defaultSize, loadCallback;
+          var RESOURCE_REQUEST, defaultResult, loadCallback;
           RESOURCE_REQUEST = {
             resolution: 1
           };
-          defaultSize = {
+          defaultResult = {
+            source: '',
             width: 0,
             height: 0
           };
@@ -14862,17 +17439,18 @@ var exports = module.exports;
             if (err) {
               log.warn("Can't load '" + this.source + "' image at " + (this.toString()));
             } else {
+              assert.isString(opts.source);
+              assert.isFloat(opts.width);
+              assert.isFloat(opts.height);
               this.sourceWidth = opts.width;
               this.sourceHeight = opts.height;
               if (this._autoWidth) {
-                this.width = opts.width;
-                this._autoWidth = true;
+                itemWidthSetter.call(this, opts.width);
               }
               if (this._autoHeight) {
-                this.height = opts.height;
-                this._autoHeight = true;
+                itemHeightSetter.call(this, opts.height);
               }
-              updateSizes.call(this);
+              updateSize.call(this);
             }
             this._loaded = true;
             this.onLoadedChange.emit(false);
@@ -14896,7 +17474,8 @@ var exports = module.exports;
                 Impl.setImageSource.call(this, val, loadCallback);
               } else {
                 Impl.setImageSource.call(this, null, null);
-                loadCallback.call(this, null, defaultSize);
+                defaultResult.source = val;
+                loadCallback.call(this, null, defaultResult);
               }
             };
           };
@@ -14909,7 +17488,7 @@ var exports = module.exports;
         defaultValue: 0,
         implementation: Impl.setImageSourceWidth,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
+          return assert.isFloat(val);
         }
       });
 
@@ -14919,7 +17498,7 @@ var exports = module.exports;
         defaultValue: 0,
         implementation: Impl.setImageSourceHeight,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
+          return assert.isFloat(val);
         }
       });
 
@@ -14929,7 +17508,7 @@ var exports = module.exports;
         defaultValue: 0,
         implementation: Impl.setImageOffsetX,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
+          return assert.isFloat(val);
         }
       });
 
@@ -14939,7 +17518,7 @@ var exports = module.exports;
         defaultValue: 0,
         implementation: Impl.setImageOffsetY,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
+          return assert.isFloat(val);
         }
       });
 
@@ -15002,7 +17581,7 @@ var exports = module.exports;
   module.exports = function(Renderer, Impl, itemUtils) {
     var Text;
     Text = (function(_super) {
-      var SUPPORTED_HTML_TAGS;
+      var getter, itemHeightSetter, itemWidthSetter;
 
       __extends(Text, _super);
 
@@ -15010,8 +17589,7 @@ var exports = module.exports;
 
       Text.__path__ = 'Renderer.Text';
 
-      SUPPORTED_HTML_TAGS = Text.SUPPORTED_HTML_TAGS = {
-        __proto__: null,
+      Text.SUPPORTED_HTML_TAGS = {
         b: true,
         strong: true,
         em: true,
@@ -15024,9 +17602,12 @@ var exports = module.exports;
       };
 
       Text.New = function(component, opts) {
-        var item;
+        var item, name;
         item = new Text;
         itemUtils.Object.initialize(item, component, opts);
+        if (name = Renderer.FontLoader.getInternalFontName('sans-serif', 14, false)) {
+          Impl.setTextFontFamily.call(item, name);
+        }
         return item;
       };
 
@@ -15040,7 +17621,52 @@ var exports = module.exports;
         this._contentHeight = 0;
         this._font = null;
         this._alignment = null;
+        this._autoWidth = true;
+        this._autoHeight = true;
+        this._width = -1;
+        this._height = -1;
       }
+
+      Text.prototype._width = -1;
+
+      getter = utils.lookupGetter(Text.prototype, 'width');
+
+      itemWidthSetter = utils.lookupSetter(Text.prototype, 'width');
+
+      utils.defineProperty(Text.prototype, 'width', null, getter, (function(_super) {
+        return function(val) {
+          var oldAutoWidth;
+          oldAutoWidth = this._autoWidth;
+          if (this._autoWidth = val === -1) {
+            _super.call(this, this._contentWidth);
+          } else {
+            _super.call(this, val);
+          }
+          if (this._autoWidth || this._autoHeight) {
+            Impl.updateTextContentSize.call(this);
+          }
+          if (oldAutoWidth !== this._autoWidth) {
+            Impl.setTextWrap.call(this, !this._autoWidth);
+          }
+        };
+      })(itemWidthSetter));
+
+      Text.prototype._height = -1;
+
+      getter = utils.lookupGetter(Text.prototype, 'height');
+
+      itemHeightSetter = utils.lookupSetter(Text.prototype, 'height');
+
+      utils.defineProperty(Text.prototype, 'height', null, getter, (function(_super) {
+        return function(val) {
+          if (this._autoHeight = val === -1) {
+            _super.call(this, this._contentHeight);
+            Impl.updateTextContentSize.call(this);
+          } else {
+            _super.call(this, val);
+          }
+        };
+      })(itemHeightSetter));
 
       itemUtils.defineProperty({
         constructor: Text,
@@ -15110,6 +17736,14 @@ var exports = module.exports;
         defaultValue: 0,
         developmentSetter: function(val) {
           return assert.isFloat(val);
+        },
+        setter: function(_super) {
+          return function(val) {
+            _super.call(this, val);
+            if (this._autoWidth) {
+              itemWidthSetter.call(this, val);
+            }
+          };
         }
       });
 
@@ -15119,14 +17753,22 @@ var exports = module.exports;
         defaultValue: 0,
         developmentSetter: function(val) {
           return assert.isFloat(val);
+        },
+        setter: function(_super) {
+          return function(val) {
+            _super.call(this, val);
+            if (this._autoHeight) {
+              itemHeightSetter.call(this, val);
+            }
+          };
         }
       });
 
-      Renderer.Item.Alignment(Text);
+      Renderer.Item.createAlignment(Text);
 
-      Text.Font = require('./text/font')(Renderer, Impl, itemUtils);
+      Text.createFont = require('./text/font')(Renderer, Impl, itemUtils);
 
-      Text.Font(Text);
+      Text.createFont(Text);
 
       return Text;
 
@@ -15222,6 +17864,7 @@ var exports = module.exports;
         reloadFontFamily = function(font) {
           var name;
           name = Renderer.FontLoader.getInternalFontName(font._family, font._weight, font._italic);
+          name || (name = 'sans-serif');
           return setFontFamilyImpl.call(font._ref, name);
         };
 
@@ -15372,11 +18015,21 @@ var exports = module.exports;
       TextInput.__path__ = 'Renderer.TextInput';
 
       TextInput.New = function(component, opts) {
-        var item;
+        var item, name;
         item = new TextInput;
         itemUtils.Object.initialize(item, component, opts);
+        if (name = Renderer.FontLoader.getInternalFontName('sans-serif', 14, false)) {
+          Impl.setTextInputFontFamily.call(item, name);
+        }
+        item.pointer.onPress(function() {
+          if (TextInput.keysFocusOnPointerPress) {
+            return this.keys.focus = true;
+          }
+        }, item);
         return item;
       };
+
+      TextInput.keysFocusOnPointerPress = true;
 
       function TextInput() {
         TextInput.__super__.constructor.call(this);
@@ -15408,6 +18061,16 @@ var exports = module.exports;
         name: 'color',
         defaultValue: 'black',
         implementation: Impl.setTextInputColor,
+        implementationValue: (function() {
+          var RESOURCE_REQUEST;
+          RESOURCE_REQUEST = {
+            property: 'color'
+          };
+          return function(val) {
+            var _ref;
+            return ((_ref = Renderer.resources) != null ? _ref.resolve(val, RESOURCE_REQUEST) : void 0) || val;
+          };
+        })(),
         developmentSetter: function(val) {
           return assert.isString(val);
         }
@@ -15451,9 +18114,9 @@ var exports = module.exports;
         }
       });
 
-      Renderer.Item.Alignment(TextInput);
+      Renderer.Item.createAlignment(TextInput);
 
-      Renderer.Text.Font(TextInput);
+      Renderer.Text.createFont(TextInput);
 
       return TextInput;
 
@@ -15467,16 +18130,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/shapes/rectangle.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/shapes/rectangle.coffee.md"]};
-var require = getModule.bind(null, {"expect":"node_modules/expect/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, expect, utils,
+  var assert, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  expect = require('expect');
 
   assert = require('assert');
 
@@ -15521,7 +18182,7 @@ var exports = module.exports;
           };
         })(),
         developmentSetter: function(val) {
-          return expect(val).toBe.string();
+          return assert.isString(val);
         }
       });
 
@@ -15531,7 +18192,7 @@ var exports = module.exports;
         defaultValue: 0,
         implementation: Impl.setRectangleRadius,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
+          return assert.isFloat(val);
         }
       });
 
@@ -15579,7 +18240,7 @@ var exports = module.exports;
         parentConstructor: Rectangle,
         implementation: Impl.setRectangleBorderWidth,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
+          return assert.isFloat(val);
         }
       });
 
@@ -15601,7 +18262,7 @@ var exports = module.exports;
           };
         })(),
         developmentSetter: function(val) {
-          return expect(val).toBe.string();
+          return assert.isString(val);
         }
       });
 
@@ -15677,7 +18338,7 @@ var exports = module.exports;
         return Impl.setGridEffectItem.call(this, val, oldVal);
       });
 
-      Renderer.Item.Margin(Grid, {
+      Renderer.Item.createMargin(Grid, {
         propertyName: 'padding'
       });
 
@@ -15717,9 +18378,9 @@ var exports = module.exports;
         }
       });
 
-      Renderer.Item.Spacing(Grid);
+      Renderer.Item.createSpacing(Grid);
 
-      Renderer.Item.Alignment(Grid);
+      Renderer.Item.createAlignment(Grid);
 
       itemUtils.defineProperty({
         constructor: Grid,
@@ -15793,7 +18454,7 @@ var exports = module.exports;
         return Impl.setColumnEffectItem.call(this, val, oldVal);
       });
 
-      Renderer.Item.Margin(Column, {
+      Renderer.Item.createMargin(Column, {
         propertyName: 'padding'
       });
 
@@ -15813,7 +18474,7 @@ var exports = module.exports;
         }
       });
 
-      Renderer.Item.Alignment(Column);
+      Renderer.Item.createAlignment(Column);
 
       itemUtils.defineProperty({
         constructor: Column,
@@ -15887,7 +18548,7 @@ var exports = module.exports;
         return Impl.setRowEffectItem.call(this, val, oldVal);
       });
 
-      Renderer.Item.Margin(Row, {
+      Renderer.Item.createMargin(Row, {
         propertyName: 'padding'
       });
 
@@ -15907,7 +18568,7 @@ var exports = module.exports;
         }
       });
 
-      Renderer.Item.Alignment(Row);
+      Renderer.Item.createAlignment(Row);
 
       itemUtils.defineProperty({
         constructor: Row,
@@ -15982,13 +18643,13 @@ var exports = module.exports;
         return Impl.setFlowEffectItem.call(this, val, oldVal);
       });
 
-      Renderer.Item.Margin(Flow, {
+      Renderer.Item.createMargin(Flow, {
         propertyName: 'padding'
       });
 
-      Renderer.Item.Spacing(Flow);
+      Renderer.Item.createSpacing(Flow);
 
-      Renderer.Item.Alignment(Flow);
+      Renderer.Item.createAlignment(Flow);
 
       itemUtils.defineProperty({
         constructor: Flow,
@@ -16021,20 +18682,22 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/layout/scrollable.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/layout/scrollable.coffee.md"]};
-var require = getModule.bind(null, {"expect":"node_modules/expect/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var expect, signal, utils,
+  var assert, emitSignal, signal, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  expect = require('expect');
 
   utils = require('utils');
 
   signal = require('signal');
+
+  assert = require('assert');
+
+  emitSignal = signal.Emitter.emitSignal;
 
   module.exports = function(Renderer, Impl, itemUtils) {
     var Scrollable;
@@ -16069,14 +18732,11 @@ var exports = module.exports;
         implementation: Impl.setScrollableContentItem,
         setter: function(_super) {
           return function(val) {
-            var _ref;
-            if ((_ref = this._contentItem) != null) {
-              _ref.parent = null;
-            }
             if (val != null) {
-              expect(val).toBe.any(Renderer.Item);
-              val.parent = this;
-              val.index = 0;
+              assert.instanceOf(val, Renderer.Item);
+              val.parent = null;
+              val._parent = this;
+              emitSignal(val, 'onParentChange', null);
             }
             return _super.call(this, val);
           };
@@ -16089,16 +18749,7 @@ var exports = module.exports;
         defaultValue: 0,
         implementation: Impl.setScrollableContentX,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
-        },
-        setter: function(_super) {
-          return function(val) {
-            var _ref;
-            if ((_ref = this._contentItem) != null) {
-              _ref._x = -val;
-            }
-            return _super.call(this, val);
-          };
+          return assert.isFloat(val);
         }
       });
 
@@ -16108,16 +18759,7 @@ var exports = module.exports;
         defaultValue: 0,
         implementation: Impl.setScrollableContentY,
         developmentSetter: function(val) {
-          return expect(val).toBe.float();
-        },
-        setter: function(_super) {
-          return function(val) {
-            var _ref;
-            if ((_ref = this._contentItem) != null) {
-              _ref._y = -val;
-            }
-            return _super.call(this, val);
-          };
+          return assert.isFloat(val);
         }
       });
 
@@ -16127,7 +18769,7 @@ var exports = module.exports;
         defaultValue: false,
         implementation: Impl.setScrollableSnap,
         developmentSetter: function(val) {
-          return expect(val).toBe.boolean();
+          return assert.isBoolean(val);
         }
       });
 
@@ -16141,7 +18783,7 @@ var exports = module.exports;
             val = null;
           }
           if (val != null) {
-            return expect(val).toBe.any(Renderer.Item);
+            return assert.instanceOf(val, Renderer.Item);
           }
         }
       });
@@ -16675,7 +19317,7 @@ var exports = module.exports;
           return 0.4;
         };
         isItalic = function(source) {
-          return /italic/i.test(source);
+          return /italic|oblique/i.test(source);
         };
         return function(loader) {
           var i, italic, italicStr, name, obj, path, rsc, source, sources, weight, weightInt, _, _i, _len, _name, _ref, _ref1, _ref2;
@@ -16707,7 +19349,7 @@ var exports = module.exports;
           obj = fontsByName[_name = loader.name] != null ? fontsByName[_name] : fontsByName[_name] = {};
           obj = obj[italic] != null ? obj[italic] : obj[italic] = new Array(WEIGHTS.length);
           obj[weightInt] = name;
-          Impl.loadFont(name, source, weight, italic, sources);
+          Impl.loadFont(name, source, sources);
         };
       })();
 
@@ -16805,18 +19447,22 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/index.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","./impl":"../renderer/impl.coffee","./utils/item":"../renderer/utils/item.coffee","./types/namespace/screen":"../renderer/types/namespace/screen.coffee.md","./types/namespace/device":"../renderer/types/namespace/device.coffee.md","./types/namespace/navigator":"../renderer/types/namespace/navigator.coffee.md","./types/namespace/sensor/rotation":"../renderer/types/namespace/sensor/rotation.coffee.md","./types/extension":"../renderer/types/extension.coffee","./types/extensions/class":"../renderer/types/extensions/class.coffee.md","./types/extensions/animation":"../renderer/types/extensions/animation.coffee.md","./types/extensions/animation/types/property":"../renderer/types/extensions/animation/types/property.coffee.md","./types/extensions/animation/types/property/types/number":"../renderer/types/extensions/animation/types/property/types/number.coffee.md","./types/extensions/transition":"../renderer/types/extensions/transition.coffee.md","./types/basics/component":"../renderer/types/basics/component.coffee","./types/basics/item":"../renderer/types/basics/item.coffee.md","./types/basics/item/types/image":"../renderer/types/basics/item/types/image.coffee.md","./types/basics/item/types/text":"../renderer/types/basics/item/types/text.coffee.md","./types/basics/item/types/textInput":"../renderer/types/basics/item/types/textInput.coffee.md","./types/shapes/rectangle":"../renderer/types/shapes/rectangle.coffee.md","./types/layout/grid":"../renderer/types/layout/grid.coffee.md","./types/layout/column":"../renderer/types/layout/column.coffee.md","./types/layout/row":"../renderer/types/layout/row.coffee.md","./types/layout/flow":"../renderer/types/layout/flow.coffee.md","./types/layout/scrollable":"../renderer/types/layout/scrollable.coffee.md","./types/sound/ambient":"../renderer/types/sound/ambient.coffee.md","./types/loader/resources":"../renderer/types/loader/resources.coffee.md","./types/loader/font":"../renderer/types/loader/font.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl":"../renderer/impl.coffee","./utils/item":"../renderer/utils/item.coffee","./types/namespace/screen":"../renderer/types/namespace/screen.coffee.md","./types/namespace/device":"../renderer/types/namespace/device.coffee.md","./types/namespace/navigator":"../renderer/types/namespace/navigator.coffee.md","./types/namespace/sensor/rotation":"../renderer/types/namespace/sensor/rotation.coffee.md","./types/extension":"../renderer/types/extension.coffee","./types/extensions/class":"../renderer/types/extensions/class.coffee.md","./types/extensions/animation":"../renderer/types/extensions/animation.coffee.md","./types/extensions/animation/types/property":"../renderer/types/extensions/animation/types/property.coffee.md","./types/extensions/animation/types/property/types/number":"../renderer/types/extensions/animation/types/property/types/number.coffee.md","./types/extensions/transition":"../renderer/types/extensions/transition.coffee.md","./types/basics/component":"../renderer/types/basics/component.coffee","./types/basics/item":"../renderer/types/basics/item.coffee.md","./types/basics/item/types/image":"../renderer/types/basics/item/types/image.coffee.md","./types/basics/item/types/text":"../renderer/types/basics/item/types/text.coffee.md","./types/basics/item/types/textInput":"../renderer/types/basics/item/types/textInput.coffee.md","./types/shapes/rectangle":"../renderer/types/shapes/rectangle.coffee.md","./types/layout/grid":"../renderer/types/layout/grid.coffee.md","./types/layout/column":"../renderer/types/layout/column.coffee.md","./types/layout/row":"../renderer/types/layout/row.coffee.md","./types/layout/flow":"../renderer/types/layout/flow.coffee.md","./types/layout/scrollable":"../renderer/types/layout/scrollable.coffee.md","./types/sound/ambient":"../renderer/types/sound/ambient.coffee.md","./types/loader/resources":"../renderer/types/loader/resources.coffee.md","./types/loader/font":"../renderer/types/loader/font.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Impl, itemUtils, signal, utils;
+  var Impl, assert, itemUtils, signal, utils;
 
   utils = require('utils');
 
   signal = require('signal');
 
+  assert = require('assert');
+
   signal.create(exports, 'onReady');
+
+  signal.create(exports, 'onWindowChange');
 
   Impl = require('./impl')(exports);
 
@@ -16871,12 +19517,10 @@ var exports = module.exports;
   exports.FontLoader = require('./types/loader/font')(exports, Impl, itemUtils);
 
   utils.defineProperty(exports, 'window', utils.CONFIGURABLE, null, function(val) {
+    assert.instanceOf(val, exports.Item);
     utils.defineProperty(exports, 'window', utils.ENUMERABLE, val);
+    exports.onWindowChange.emit(null);
     return Impl.setWindow(val);
-  });
-
-  utils.defineProperty(exports, 'documentGlobalNode', utils.CONFIGURABLE, null, function(val) {
-    return utils.defineProperty(exports, 'documentGlobalNode', utils.ENUMERABLE, val);
   });
 
   utils.defineProperty(exports, 'serverUrl', utils.WRITABLE, '');
@@ -16891,2451 +19535,24 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../document/element/element/tag.coffee.md'] = (function(){
-var module = {exports: modules["../document/element/element/tag.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","./tag/stringify":"../document/element/element/tag/stringify.coffee","typed-array":"../typed-array/index.coffee","renderer":"../renderer/index.coffee.md","./tag/attrs":"../document/element/element/tag/attrs.coffee.md","./tag/query":"../document/element/element/tag/query.coffee"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var CSS_ID_RE, Renderer, TypedArray, assert, emitSignal, isDefined, signal, stringify, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('neft-assert');
-
-  signal = require('signal');
-
-  stringify = require('./tag/stringify');
-
-  TypedArray = require('typed-array');
-
-  Renderer = require('renderer');
-
-  emitSignal = signal.Emitter.emitSignal;
-
-  assert = assert.scope('View.Element.Tag');
-
-  isDefined = function(elem) {
-    return elem != null;
-  };
-
-  CSS_ID_RE = /\#([^\s]+)/;
-
-  module.exports = function(Element) {
-    var Tag;
-    return Tag = (function(_super) {
-      var opts, query;
-
-      __extends(Tag, _super);
-
-      Tag.INTERNAL_TAGS = ['neft:attr', 'neft:fragment', 'neft:function', 'neft:rule', 'neft:target', 'neft:use', 'neft:require', 'neft:blank', 'neft:log'];
-
-      Tag.Attrs = require('./tag/attrs')(Tag);
-
-      Tag.extensions = Object.create(null);
-
-      Tag.__name__ = 'Tag';
-
-      Tag.__path__ = 'File.Element.Tag';
-
-      function Tag() {
-        Element.call(this);
-        this.children = [];
-        this.name = 'neft:blank';
-        this._style = null;
-        this._documentStyle = null;
-        this._visible = true;
-        this._attrs = {};
-        this._inWatchers = null;
-        this._checkWatchers = 0;
-        //<development>;
-        if (this.constructor === Tag) {
-          Object.preventExtensions(this);
-        }
-        //</development>;
-      }
-
-      signal.Emitter.createSignal(Tag, 'onChildrenChange');
-
-      opts = utils.CONFIGURABLE;
-
-      utils.defineProperty(Tag.prototype, 'style', opts, function() {
-        return this._style;
-      }, function(val) {
-        var old;
-        if (val != null) {
-          assert.instanceOf(val, Renderer.Item);
-        }
-        old = this._style;
-        if (old === val) {
-          return false;
-        }
-        this._style = val;
-        emitSignal(this, 'onStyleChange', old, val);
-        return true;
-      });
-
-      signal.Emitter.createSignal(Tag, 'onStyleChange');
-
-      opts = utils.CONFIGURABLE;
-
-      utils.defineProperty(Tag.prototype, 'visible', opts, function() {
-        return this._visible;
-      }, function(val) {
-        var old;
-        assert.isBoolean(val);
-        old = this._visible;
-        if (old === val) {
-          return false;
-        }
-        this._visible = val;
-        emitSignal(this, 'onVisibleChange', old);
-        return true;
-      });
-
-      signal.Emitter.createSignal(Tag, 'onVisibleChange');
-
-      utils.defineProperty(Tag.prototype, 'attrs', null, function() {
-        Tag.Attrs.tag = this;
-        return Tag.Attrs;
-      }, null);
-
-      signal.Emitter.createSignal(Tag, 'onAttrsChange');
-
-      Tag.prototype.clone = function() {
-        var clone;
-        clone = new Tag;
-        clone.name = this.name;
-        clone._visible = this._visible;
-        clone._attrs = utils.cloneDeep(this._attrs);
-        return clone;
-      };
-
-      Tag.prototype.cloneDeep = function() {
-        var child, clone, clonedChild, prevClonedChild, _i, _len, _ref;
-        clone = this.clone();
-        prevClonedChild = null;
-        _ref = this.children;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          child = _ref[_i];
-          clonedChild = child.cloneDeep();
-          clone.children.push(clonedChild);
-          clonedChild._parent = clone;
-          if (clonedChild._previousSibling = prevClonedChild) {
-            prevClonedChild._nextSibling = clonedChild;
-          }
-          prevClonedChild = clonedChild;
-        }
-        return clone;
-      };
-
-      Tag.prototype.getCopiedElement = (function() {
-        var arr;
-        arr = new TypedArray.Uint16(256);
-        return function(lookForElement, copiedParent) {
-          var elem, i, index, parent;
-          assert.instanceOf(this, Tag);
-          assert.instanceOf(lookForElement, Element);
-          assert.instanceOf(copiedParent, Element);
-          if (lookForElement === this) {
-            return copiedParent;
-          }
-          i = 0;
-          elem = lookForElement;
-          while (parent = elem._parent) {
-            arr[i++] = parent.children.indexOf(elem);
-            elem = parent;
-            if (elem === this) {
-              break;
-            }
-          }
-          elem = copiedParent;
-          while (i-- > 0) {
-            index = arr[i];
-            elem = elem.children[index];
-          }
-          return elem;
-        };
-      })();
-
-      Tag.query = query = require('./tag/query')(Tag);
-
-      Tag.prototype.queryAll = query.queryAll;
-
-      Tag.prototype.query = query.query;
-
-      Tag.prototype.queryAllParents = query.queryAllParents;
-
-      Tag.prototype.queryParents = query.queryParents;
-
-      Tag.prototype.watch = query.watch;
-
-      Tag.prototype.stringify = function() {
-        return stringify.getOuterHTML(this);
-      };
-
-      Tag.prototype.stringifyChildren = function() {
-        return stringify.getInnerHTML(this);
-      };
-
-      Tag.prototype.replace = function(oldElement, newElement) {
-        var index;
-        assert.instanceOf(oldElement, Element);
-        assert.instanceOf(newElement, Element);
-        assert.is(oldElement.parent, this);
-        index = this.children.indexOf(oldElement);
-        oldElement.parent = void 0;
-        newElement.parent = this;
-        newElement.index = index;
-        return null;
-      };
-
-      return Tag;
-
-    })(Element);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/element/element/tag/attrs.coffee.md'] = (function(){
-var module = {exports: modules["../document/element/element/tag/attrs.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, emitSignal, isArray, log, signal, utils;
-
-  utils = require('utils');
-
-  signal = require('signal');
-
-  log = require('log');
-
-  assert = require('neft-assert');
-
-  assert = assert.scope('View.Element.Tag.Attrs');
-
-  log = log.scope('View.Element.Tag.Attrs');
-
-  isArray = Array.isArray;
-
-  emitSignal = signal.Emitter.emitSignal;
-
-  module.exports = function(Tag) {
-    var exports;
-    return exports = {
-      tag: null,
-      item: function(index, target) {
-        var i, key, val, _ref;
-        if (target == null) {
-          target = [];
-        }
-        assert.isArray(target);
-        target[0] = target[1] = void 0;
-        i = 0;
-        _ref = exports.tag._attrs;
-        for (key in _ref) {
-          val = _ref[key];
-          if (i === index) {
-            target[0] = key;
-            target[1] = val;
-            break;
-          }
-          i++;
-        }
-        return target;
-      },
-      has: function(name) {
-        assert.isString(name);
-        assert.notLengthOf(name, 0);
-        return exports.tag._attrs.hasOwnProperty(name);
-      },
-      get: function(name) {
-        assert.isString(name);
-        assert.notLengthOf(name, 0);
-        return exports.tag._attrs[name];
-      },
-      set: function(name, value) {
-        var old, tag;
-        assert.isString(name);
-        assert.notLengthOf(name, 0);
-        tag = exports.tag;
-        old = tag._attrs[name];
-        if (old === value) {
-          return false;
-        }
-        tag._attrs[name] = value;
-        emitSignal(tag, 'onAttrsChange', name, old);
-        Tag.query.checkWatchersDeeply(tag);
-        return true;
-      }
-    };
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/element/element/tag/query.coffee'] = (function(){
-var module = {exports: modules["../document/element/element/tag/query.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUE_SEARCH, CONTAINS, DEEP, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  signal = require('signal');
-
-  assert = require('neft-assert');
-
-  emitSignal = signal.Emitter.emitSignal;
-
-  Tag = null;
-
-  test = function(node, funcs, index, targetFunc, targetCtx, single) {
-    var data1, data2, func;
-    while (index < funcs.length) {
-      func = funcs[index];
-      if (func.isIterator) {
-        return func(node, funcs, index + 3, targetFunc, targetCtx, single);
-      } else {
-        data1 = funcs[index + 1];
-        data2 = funcs[index + 2];
-        if (!func(node, data1, data2)) {
-          return false;
-        }
-      }
-      index += 3;
-    }
-    targetFunc.call(targetCtx, node);
-    return true;
-  };
-
-  anyDescendant = function(node, funcs, index, targetFunc, targetCtx, single) {
-    var child, _i, _len, _ref;
-    _ref = node.children;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      child = _ref[_i];
-      if (child instanceof Tag) {
-        if (child.name !== 'neft:blank' && test(child, funcs, index, targetFunc, targetCtx, single)) {
-          if (single) {
-            return true;
-          }
-        }
-        if (anyDescendant(child, funcs, index, targetFunc, targetCtx, single)) {
-          if (single) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  };
-
-  anyDescendant.isIterator = true;
-
-  anyDescendant.toString = function() {
-    return 'anyDescendant';
-  };
-
-  directParent = function(node, funcs, index, targetFunc, targetCtx, single) {
-    var parent;
-    if (parent = node._parent) {
-      if (test(parent, funcs, index, targetFunc, targetCtx, single)) {
-        return true;
-      }
-      if (parent.name === 'neft:blank') {
-        return directParent(parent, funcs, index, targetFunc, targetCtx, single);
-      }
-    }
-    return false;
-  };
-
-  directParent.isIterator = true;
-
-  directParent.toString = function() {
-    return 'directParent';
-  };
-
-  anyChild = function(node, funcs, index, targetFunc, targetCtx, single) {
-    var child, _i, _len, _ref;
-    _ref = node.children;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      child = _ref[_i];
-      if (child instanceof Tag) {
-        if (child.name === 'neft:blank') {
-          if (anyChild(child, funcs, index, targetFunc, targetCtx, single)) {
-            if (single) {
-              return true;
-            }
-          }
-        } else {
-          if (test(child, funcs, index, targetFunc, targetCtx, single)) {
-            if (single) {
-              return true;
-            }
-          }
-        }
-      }
-    }
-    return false;
-  };
-
-  anyChild.isIterator = true;
-
-  anyChild.toString = function() {
-    return 'anyChild';
-  };
-
-  anyParent = function(node, funcs, index, targetFunc, targetCtx, single) {
-    var parent;
-    if (parent = node._parent) {
-      if (test(parent, funcs, index, targetFunc, targetCtx, single)) {
-        return true;
-      } else {
-        return anyParent(parent, funcs, index, targetFunc, targetCtx, single);
-      }
-    }
-    return false;
-  };
-
-  anyParent.isIterator = true;
-
-  anyParent.toString = function() {
-    return 'anyParent';
-  };
-
-  byName = function(node, data1) {
-    return node.name === data1;
-  };
-
-  byName.isIterator = false;
-
-  byName.toString = function() {
-    return 'byName';
-  };
-
-  byTag = function(node, data1) {
-    return node === data1;
-  };
-
-  byTag.isIterator = false;
-
-  byTag.toString = function() {
-    return 'byTag';
-  };
-
-  byAttr = function(node, data1) {
-    return node._attrs[data1] !== void 0;
-  };
-
-  byAttr.isIterator = false;
-
-  byAttr.toString = function() {
-    return 'byAttr';
-  };
-
-  byAttrValue = function(node, data1, data2) {
-    return node._attrs[data1] == data2;
-  };
-
-  byAttrValue.isIterator = false;
-
-  byAttrValue.toString = function() {
-    return 'byAttrValue';
-  };
-
-  byAttrStartsWithValue = function(node, data1, data2) {
-    var attr;
-    attr = node._attrs[data1];
-    if (typeof attr === 'string') {
-      return attr.indexOf(data2) === 0;
-    } else {
-      return false;
-    }
-  };
-
-  byAttrStartsWithValue.isIterator = false;
-
-  byAttrStartsWithValue.toString = function() {
-    return 'byAttrStartsWithValue';
-  };
-
-  byAttrEndsWithValue = function(node, data1, data2) {
-    var attr;
-    attr = node._attrs[data1];
-    if (typeof attr === 'string') {
-      return attr.indexOf(data2, attr.length - data2.length) > -1;
-    } else {
-      return false;
-    }
-  };
-
-  byAttrEndsWithValue.isIterator = false;
-
-  byAttrEndsWithValue.toString = function() {
-    return 'byAttrEndsWithValue';
-  };
-
-  byAttrContainsValue = function(node, data1, data2) {
-    var attr;
-    attr = node._attrs[data1];
-    if (typeof attr === 'string') {
-      return attr.indexOf(data2) > -1;
-    } else {
-      return false;
-    }
-  };
-
-  byAttrContainsValue.isIterator = false;
-
-  byAttrContainsValue.toString = function() {
-    return 'byAttrContainsValue';
-  };
-
-  TYPE = /^[a-zA-Z0-9|\-:_]+/;
-
-  DEEP = /^([ ]*)>([ ]*)|^([ ]+)/;
-
-  ATTR_SEARCH = /^\[([^\]]+?)\]/;
-
-  ATTR_VALUE_SEARCH = /^\[([^=]+?)=([^\]]+?)\]/;
-
-  ATTR_CLASS_SEARCH = /^\.([a-zA-Z0-9|\-_]+)/;
-
-  STARTS_WITH = /\^$/;
-
-  ENDS_WITH = /\$$/;
-
-  CONTAINS = /\*$/;
-
-  TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/;
-
-  i = 0;
-
-  OPTS_QUERY_BY_PARENTS = 1 << (i++);
-
-  OPTS_REVERSED = 1 << (i++);
-
-  OPTS_ADD_ANCHOR = 1 << (i++);
-
-  queriesCache = [];
-
-  getQueries = function(selector, opts) {
-    var arrFunc, closeTagFunc, deep, distantTagFunc, exec, firstFunc, func, funcs, name, queries, r, reversed, reversedArrFunc, sel, val, _, _i, _len, _ref;
-    if (opts == null) {
-      opts = 0;
-    }
-    reversed = !!(opts & OPTS_REVERSED);
-    if (r = (_ref = queriesCache[opts]) != null ? _ref[selector] : void 0) {
-      return r;
-    }
-    distantTagFunc = reversed ? anyParent : anyDescendant;
-    closeTagFunc = reversed ? directParent : anyChild;
-    arrFunc = reversed ? 'unshift' : 'push';
-    reversedArrFunc = reversed ? 'push' : 'unshift';
-    funcs = [];
-    queries = [funcs];
-    sel = selector.trim();
-    while (sel.length) {
-      if (sel[0] === '*') {
-        sel = sel.slice(1);
-      } else if (sel[0] === '&') {
-        sel = sel.slice(1);
-        if (!(opts & OPTS_QUERY_BY_PARENTS)) {
-          funcs[arrFunc](byTag, null, null);
-        }
-      } else if (exec = TYPE.exec(sel)) {
-        sel = sel.slice(exec[0].length);
-        name = exec[0];
-        funcs[arrFunc](byName, name, null);
-      } else if (exec = ATTR_VALUE_SEARCH.exec(sel)) {
-        sel = sel.slice(exec[0].length);
-        _ = exec[0], name = exec[1], val = exec[2];
-        val = TRIM_ATTR_VALUE.exec(val)[1];
-        if (STARTS_WITH.test(name)) {
-          func = byAttrStartsWithValue;
-        } else if (ENDS_WITH.test(name)) {
-          func = byAttrEndsWithValue;
-        } else if (CONTAINS.test(name)) {
-          func = byAttrContainsValue;
-        } else {
-          func = byAttrValue;
-        }
-        if (func !== byAttrValue) {
-          name = name.slice(0, -1);
-        }
-        funcs[arrFunc](func, name, val);
-      } else if (exec = ATTR_SEARCH.exec(sel)) {
-        sel = sel.slice(exec[0].length);
-        funcs[arrFunc](byAttr, exec[1], null);
-      } else if (exec = ATTR_CLASS_SEARCH.exec(sel)) {
-        sel = sel.slice(exec[0].length);
-        funcs[arrFunc](byAttrContainsValue, 'class', exec[1]);
-      } else if (exec = DEEP.exec(sel)) {
-        sel = sel.slice(exec[0].length);
-        deep = exec[0].trim();
-        if (deep === '') {
-          funcs[arrFunc](distantTagFunc, null, null);
-        } else if (deep === '>') {
-          funcs[arrFunc](closeTagFunc, null, null);
-        }
-      } else if (sel[0] === ',') {
-        funcs = [];
-        queries.push(funcs);
-        sel = sel.slice(1);
-        sel = sel.trim();
-      } else {
-        throw new Error("queryAll: unexpected selector '" + sel + "' in '" + selector + "'");
-      }
-    }
-    for (_i = 0, _len = queries.length; _i < _len; _i++) {
-      funcs = queries[_i];
-      firstFunc = reversed && !(opts & OPTS_QUERY_BY_PARENTS) ? funcs[funcs.length - 3] : funcs[0];
-      if (firstFunc === byTag) {
-        continue;
-      }
-      if (opts & OPTS_QUERY_BY_PARENTS && !(firstFunc != null ? firstFunc.isIterator : void 0)) {
-        funcs[arrFunc](distantTagFunc, null, null);
-      } else if (reversed && !(firstFunc != null ? firstFunc.isIterator : void 0)) {
-        funcs[reversedArrFunc](distantTagFunc, null, null);
-      } else if (!reversed && !(firstFunc != null ? firstFunc.isIterator : void 0)) {
-        funcs[reversedArrFunc](distantTagFunc, null, null);
-      }
-      if (opts & OPTS_ADD_ANCHOR) {
-        funcs[reversedArrFunc](byTag, null, null);
-      }
-    }
-    if (queriesCache[opts] == null) {
-      queriesCache[opts] = {};
-    }
-    queriesCache[opts][selector] = queries;
-    return queries;
-  };
-
-  Watcher = (function(_super) {
-    var NOP, pool;
-
-    __extends(Watcher, _super);
-
-    NOP = function() {};
-
-    pool = [];
-
-    Watcher.watchers = [];
-
-    Watcher.create = function(node, queries) {
-      var watcher;
-      if (pool.length) {
-        watcher = pool.pop();
-        watcher.node = node;
-        watcher.queries = queries;
-        watcher.forceUpdate = true;
-      } else {
-        watcher = new Watcher(node, queries);
-        Watcher.watchers.push(watcher);
-      }
-      return watcher;
-    };
-
-    function Watcher(node, queries) {
-      this.node = node;
-      this.queries = queries;
-      Watcher.__super__.constructor.call(this);
-      this.uid = utils.uid();
-      this.nodes = [];
-      this.forceUpdate = true;
-      Object.preventExtensions(this);
-    }
-
-    signal.Emitter.createSignal(Watcher, 'onAdd');
-
-    signal.Emitter.createSignal(Watcher, 'onRemove');
-
-    Watcher.prototype.test = function(tag) {
-      var funcs, _i, _len, _ref;
-      _ref = this.queries;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        funcs = _ref[_i];
-        funcs[funcs.length - 2] = this.node;
-        if (test(tag, funcs, 0, NOP, null, true)) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    Watcher.prototype.disconnect = function() {
-      var node, nodes, uid;
-      assert.ok(this.node);
-      uid = this.uid, nodes = this.nodes;
-      while (node = nodes.pop()) {
-        node._inWatchers[uid] = false;
-        emitSignal(this, 'onRemove', node);
-      }
-      this.onAdd.disconnectAll();
-      this.onRemove.disconnectAll();
-      this.node = this.queries = null;
-      pool.push(this);
-    };
-
-    return Watcher;
-
-  })(signal.Emitter);
-
-  module.exports = function(_Tag) {
-    var checkWatchersDeeply, query, queryAll;
-    Tag = _Tag;
-    return {
-      getSelectorCommandsLength: function(selector) {
-        var queries, query, sum, _i, _len;
-        sum = 0;
-        queries = getQueries(selector, 0);
-        for (_i = 0, _len = queries.length; _i < _len; _i++) {
-          query = queries[_i];
-          sum += query.length;
-        }
-        return sum;
-      },
-      queryAll: queryAll = function(selector, target, targetCtx, opts) {
-        var func, funcs, queries, _i, _len;
-        if (target == null) {
-          target = [];
-        }
-        if (targetCtx == null) {
-          targetCtx = target;
-        }
-        if (opts == null) {
-          opts = 0;
-        }
-        assert.isString(selector);
-        assert.notLengthOf(selector, 0);
-        if (typeof target !== 'function') {
-          assert.isArray(target);
-        }
-        queries = getQueries(selector, opts);
-        func = Array.isArray(target) ? target.push : target;
-        for (_i = 0, _len = queries.length; _i < _len; _i++) {
-          funcs = queries[_i];
-          funcs[0](this, funcs, 3, func, targetCtx, false);
-        }
-        if (Array.isArray(target)) {
-          return target;
-        }
-      },
-      queryAllParents: function(selector, target, targetCtx) {
-        return queryAll.call(this, selector, target, targetCtx, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS);
-      },
-      query: query = (function() {
-        var result, resultFunc;
-        result = null;
-        resultFunc = function(arg) {
-          return result = arg;
-        };
-        return function(selector, opts) {
-          var funcs, queries, _i, _len;
-          if (opts == null) {
-            opts = 0;
-          }
-          assert.isString(selector);
-          assert.notLengthOf(selector, 0);
-          queries = getQueries(selector, opts);
-          for (_i = 0, _len = queries.length; _i < _len; _i++) {
-            funcs = queries[_i];
-            if (funcs[0](this, funcs, 3, resultFunc, null, true)) {
-              return result;
-            }
-          }
-          return null;
-        };
-      })(),
-      queryParents: function(selector) {
-        return query.call(this, selector, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS);
-      },
-      watch: function(selector) {
-        var queries, watcher;
-        assert.isString(selector);
-        assert.notLengthOf(selector, 0);
-        queries = getQueries(selector, OPTS_REVERSED | OPTS_ADD_ANCHOR);
-        watcher = Watcher.create(this, queries);
-        checkWatchersDeeply(this);
-        return watcher;
-      },
-      checkWatchersDeeply: checkWatchersDeeply = (function() {
-        var CHECK_WATCHERS_ALL, CHECK_WATCHERS_CHILDREN, CHECK_WATCHERS_THIS, checkRec, clearRec, isChildOf, pending, updateWatcher, updateWatchers;
-        pending = false;
-        i = 0;
-        CHECK_WATCHERS_THIS = 1 << i++;
-        CHECK_WATCHERS_CHILDREN = 1 << i++;
-        CHECK_WATCHERS_ALL = (1 << i++) - 1;
-        checkRec = function(watcher, watcherUid, node, update) {
-          var child, inWatchers, _i, _len, _ref;
-          if (!(update & CHECK_WATCHERS_THIS)) {
-            update |= node._checkWatchers;
-          }
-          if (update & CHECK_WATCHERS_THIS) {
-            inWatchers = node._inWatchers;
-            if ((!inWatchers || !inWatchers[watcherUid]) && watcher.test(node)) {
-              if (!inWatchers) {
-                node._inWatchers = {};
-              }
-              node._inWatchers[watcherUid] = true;
-              watcher.nodes.push(node);
-              emitSignal(watcher, 'onAdd', node);
-            } else if (inWatchers && inWatchers[watcherUid] && !watcher.test(node)) {
-              node._inWatchers[watcherUid] = false;
-              utils.removeFromUnorderedArray(watcher.nodes, node);
-              emitSignal(watcher, 'onRemove', node);
-            }
-          }
-          if (update & CHECK_WATCHERS_CHILDREN) {
-            _ref = node.children;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              child = _ref[_i];
-              if (child instanceof Tag) {
-                if (update & CHECK_WATCHERS_THIS || child._checkWatchers) {
-                  checkRec(watcher, watcherUid, child, update);
-                }
-              }
-            }
-          }
-        };
-        clearRec = function(node) {
-          var child, _i, _len, _ref;
-          if (node._checkWatchers !== 0) {
-            node._checkWatchers = 0;
-            _ref = node.children;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              child = _ref[_i];
-              if (child instanceof Tag && child._checkWatchers) {
-                clearRec(child);
-              }
-            }
-          }
-        };
-        isChildOf = function(child, parent) {
-          var tmp;
-          tmp = child;
-          while (tmp = tmp._parent) {
-            if (tmp === parent) {
-              return true;
-            }
-          }
-          return false;
-        };
-        updateWatcher = function(watcher) {
-          var n, node, nodes, watcherNode;
-          nodes = watcher.nodes;
-          watcherNode = watcher.node;
-          i = n = nodes.length;
-          while (i-- > 0) {
-            node = nodes[i];
-            if (node !== watcherNode && !isChildOf(node, watcherNode)) {
-              node._inWatchers[watcher.uid] = false;
-              nodes[i] = nodes[n - 1];
-              nodes.pop();
-              emitSignal(watcher, 'onRemove', node);
-              n--;
-            }
-          }
-          if (watcher.forceUpdate) {
-            checkRec(watcher, watcher.uid, watcher.node, CHECK_WATCHERS_ALL);
-            watcher.forceUpdate = false;
-          } else {
-            checkRec(watcher, watcher.uid, watcher.node, 0);
-          }
-        };
-        updateWatchers = function() {
-          var watcher, watchers, _i, _j, _len, _len1;
-          pending = false;
-          watchers = Watcher.watchers;
-          for (_i = 0, _len = watchers.length; _i < _len; _i++) {
-            watcher = watchers[_i];
-            if (watcher.node) {
-              updateWatcher(watcher);
-            }
-          }
-          for (_j = 0, _len1 = watchers.length; _j < _len1; _j++) {
-            watcher = watchers[_j];
-            if (watcher.node) {
-              clearRec(watcher.node);
-            }
-          }
-        };
-        return function(node) {
-          var tmp;
-          tmp = node;
-          node._checkWatchers |= CHECK_WATCHERS_THIS;
-          while (tmp = tmp._parent) {
-            if (tmp._checkWatchers & CHECK_WATCHERS_CHILDREN) {
-              break;
-            }
-            tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN;
-          }
-          if (!pending) {
-            setImmediate(updateWatchers);
-            pending = true;
-          }
-        };
-      })()
-    };
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/element/element/text.coffee.md'] = (function(){
-var module = {exports: modules["../document/element/element/text.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, emitSignal, signal, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('neft-assert');
-
-  signal = require('signal');
-
-  emitSignal = signal.Emitter.emitSignal;
-
-  assert = assert.scope('View.Element.Text');
-
-  module.exports = function(Element) {
-    var Text;
-    return Text = (function(_super) {
-      var opts;
-
-      __extends(Text, _super);
-
-      Text.__name__ = 'Text';
-
-      Text.__path__ = 'File.Element.Text';
-
-      function Text() {
-        Element.call(this);
-        this._text = '';
-        //<development>;
-        if (this.constructor === Text) {
-          Object.preventExtensions(this);
-        }
-        //</development>;
-      }
-
-      Text.prototype.clone = function() {
-        var clone;
-        clone = new Text;
-        clone._text = this._text;
-        return clone;
-      };
-
-      signal.Emitter.createSignal(Text, 'onTextChange');
-
-      opts = utils.CONFIGURABLE;
-
-      utils.defineProperty(Text.prototype, 'text', opts, function() {
-        return this._text;
-      }, function(value) {
-        var old;
-        assert.isString(value);
-        old = this._text;
-        if (old === value) {
-          return false;
-        }
-        this._text = value;
-        emitSignal(this, 'onTextChange', old);
-        return true;
-      });
-
-      return Text;
-
-    })(Element);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/element/element.coffee.md'] = (function(){
-var module = {exports: modules["../document/element/element.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","./element/tag":"../document/element/element/tag.coffee.md","./element/text":"../document/element/element/text.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var Element, Emitter, assert, emitSignal, isArray, signal, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('neft-assert');
-
-  signal = require('signal');
-
-  isArray = Array.isArray;
-
-  Emitter = signal.Emitter;
-
-  emitSignal = Emitter.emitSignal;
-
-  assert = assert.scope('View.Element');
-
-  Element = (function(_super) {
-    var Tag, opts;
-
-    __extends(Element, _super);
-
-    Element.__name__ = 'Element';
-
-    Element.__path__ = 'File.Element';
-
-    Element.fromHTML = function(html) {
-      assert.isString(html);
-      if (!utils.isNode) {
-        throw "Creating Views from HTML files is allowed only on a server";
-      }
-      return Element.parser.parse(html);
-    };
-
-    function Element() {
-      Emitter.call(this);
-      this._parent = null;
-      this._nextSibling = null;
-      this._previousSibling = null;
-      //<development>;
-      if (this.constructor === Element) {
-        Object.preventExtensions(this);
-      }
-      //</development>;
-    }
-
-    opts = utils.CONFIGURABLE;
-
-    utils.defineProperty(Element.prototype, 'index', opts, function() {
-      var _ref;
-      return ((_ref = this.parent) != null ? _ref.children.indexOf(this) : void 0) || 0;
-    }, function(val) {
-      var children, index, parent, _ref, _ref1, _ref2, _ref3;
-      assert.instanceOf(this.parent, Element);
-      assert.isInteger(val);
-      assert.operator(val, '>=', 0);
-      parent = this._parent;
-      if (!parent) {
-        return false;
-      }
-      index = this.index;
-      children = parent.children;
-      if (val > children.length) {
-        val = children.length;
-      }
-      if (index === val || index === val - 1) {
-        return false;
-      }
-      if ((_ref = this._previousSibling) != null) {
-        _ref._nextSibling = this._nextSibling;
-      }
-      if ((_ref1 = this._nextSibling) != null) {
-        _ref1._previousSibling = this._previousSibling;
-      }
-      children.splice(index, 1);
-      if (val > index) {
-        val--;
-      }
-      children.splice(val, 0, this);
-      this._previousSibling = children[val - 1] || null;
-      this._nextSibling = children[val + 1] || null;
-      if ((_ref2 = this._previousSibling) != null) {
-        _ref2._nextSibling = this;
-      }
-      if ((_ref3 = this._nextSibling) != null) {
-        _ref3._previousSibling = this;
-      }
-      assert.is(this.index, val);
-      assert.is(children[val], this);
-      assert.is(this._previousSibling, children[val - 1] || null);
-      assert.is(this._nextSibling, children[val + 1] || null);
-      return true;
-    });
-
-    opts = utils.CONFIGURABLE;
-
-    utils.defineProperty(Element.prototype, 'nextSibling', opts, function() {
-      return this._nextSibling;
-    }, null);
-
-    opts = utils.CONFIGURABLE;
-
-    utils.defineProperty(Element.prototype, 'previousSibling', opts, function() {
-      return this._previousSibling;
-    }, null);
-
-    opts = utils.CONFIGURABLE;
-
-    utils.defineProperty(Element.prototype, 'parent', opts, function() {
-      return this._parent;
-    }, function(val) {
-      var index, newChildren, old, oldChildren, parent, _ref, _ref1;
-      assert.instanceOf(this, Element);
-      if (val != null) {
-        assert.instanceOf(val, Element);
-      }
-      assert.isNot(this, val);
-      old = this._parent;
-      if (old === val) {
-        return false;
-      }
-      if (this._parent) {
-        oldChildren = this._parent.children;
-        assert.ok(utils.has(oldChildren, this));
-        if (!this._nextSibling) {
-          assert.ok(oldChildren[oldChildren.length - 1] === this);
-          oldChildren.pop();
-        } else if (!this._previousSibling) {
-          assert.ok(oldChildren[0] === this);
-          oldChildren.shift();
-        } else {
-          index = oldChildren.indexOf(this);
-          oldChildren.splice(index, 1);
-        }
-        emitSignal(this._parent, 'onChildrenChange', null, this);
-        if ((_ref = this._previousSibling) != null) {
-          _ref._nextSibling = this._nextSibling;
-        }
-        if ((_ref1 = this._nextSibling) != null) {
-          _ref1._previousSibling = this._previousSibling;
-        }
-        this._previousSibling = null;
-        this._nextSibling = null;
-      }
-      this._parent = parent = val;
-      if (parent) {
-        assert.notOk(utils.has(this._parent.children, this));
-        newChildren = this._parent.children;
-        index = newChildren.push(this) - 1;
-        emitSignal(parent, 'onChildrenChange', this);
-        if (index === 0) {
-          this._previousSibling = null;
-        } else {
-          this._previousSibling = newChildren[index - 1];
-          this._previousSibling._nextSibling = this;
-        }
-      }
-      assert.is(this._parent, val);
-      assert.is(this._nextSibling, null);
-      assert.is(this._previousSibling, (val != null ? val.children[val.children.length - 2] : void 0) || null);
-      if (this._previousSibling) {
-        assert.is(this._previousSibling._nextSibling, this);
-      }
-      emitSignal(this, 'onParentChange', old);
-      Tag.query.checkWatchersDeeply(this);
-      return true;
-    });
-
-    signal.Emitter.createSignal(Element, 'onParentChange');
-
-    Element.prototype.clone = function() {
-      return new Element;
-    };
-
-    Element.prototype.cloneDeep = function() {
-      return this.clone();
-    };
-
-    Element.Tag = Tag = require('./element/tag')(Element);
-
-    Element.Text = require('./element/text')(Element);
-
-    if (utils.isNode) {
-      Element.parser = require('./element/parser')(Element);
-    }
-
-    return Element;
-
-  })(Emitter);
-
-  module.exports = Element;
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/element/index.coffee'] = (function(){
-var module = {exports: modules["../document/element/index.coffee"]};
-var require = getModule.bind(null, {"./element":"../document/element/element.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  module.exports = require('./element');
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/attrChange.coffee'] = (function(){
-var module = {exports: modules["../document/attrChange.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, log, utils;
-
-  assert = require('neft-assert');
-
-  utils = require('utils');
-
-  log = require('log');
-
-  assert = assert.scope('View.AttrChange');
-
-  log = log.scope('View', 'AttrChange');
-
-  module.exports = function(File) {
-    var AttrChange;
-    return AttrChange = (function() {
-      var onAttrsChange, onVisibleChange;
-
-      AttrChange.__name__ = 'AttrChange';
-
-      AttrChange.__path__ = 'File.AttrChange';
-
-      function AttrChange(opts) {
-        assert.isPlainObject(opts);
-        assert.instanceOf(opts.self, File);
-        assert.instanceOf(opts.node, File.Element);
-        assert.instanceOf(opts.target, File.Element);
-        assert.isString(opts.name);
-        assert.notLengthOf(opts.name, 0);
-        utils.fill(this, opts);
-        this._defaultValue = this.target.attrs.get(this.name);
-      }
-
-      AttrChange.prototype.self = null;
-
-      AttrChange.prototype.node = null;
-
-      AttrChange.prototype.target = null;
-
-      AttrChange.prototype.name = '';
-
-      AttrChange.prototype.update = function() {
-        var val;
-        val = this.node.visible ? this.node.attrs.get('value') : this._defaultValue;
-        this.target.attrs.set(this.name, val);
-      };
-
-      onVisibleChange = function() {
-        return this.update();
-      };
-
-      onAttrsChange = function(name, oldValue) {
-        if (name === 'name') {
-          throw new Error("Dynamic neft:attr name is not implemented");
-        } else if (name === 'value') {
-          this.update();
-        }
-      };
-
-      AttrChange.prototype.clone = function(original, self) {
-        var clone;
-        clone = Object.create(this);
-        clone.clone = void 0;
-        clone.self = self;
-        clone.node = original.node.getCopiedElement(this.node, self.node);
-        clone.target = original.node.getCopiedElement(this.target, self.node);
-        clone.update();
-        clone.node.onVisibleChange(onVisibleChange, clone);
-        clone.node.onAttrsChange(onAttrsChange, clone);
-        return clone;
-      };
-
-      return AttrChange;
-
-    })();
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/fragment.coffee'] = (function(){
-var module = {exports: modules["../document/fragment.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use script';
-  var assert, signal, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('neft-assert');
-
-  signal = require('signal');
-
-  assert = assert.scope('View.Fragment');
-
-  module.exports = function(File) {
-    var Fragment;
-    return Fragment = (function(_super) {
-      __extends(Fragment, _super);
-
-      Fragment.__name__ = 'Fragment';
-
-      Fragment.__path__ = 'File.Fragment';
-
-      signal.create(Fragment, 'onCreate');
-
-      function Fragment(self, name, node) {
-        var _ref;
-        this.name = name;
-        assert.instanceOf(self, File);
-        assert.isString(name);
-        assert.notLengthOf(name, 0);
-        Fragment.onCreate.emit(this, self);
-        this.fragments = utils.clone(self.fragments);
-        if ((_ref = this.fragments) != null) {
-          delete _ref[this.name];
-        }
-        this.id = "" + self.path + ":" + name;
-        this._node = node;
-      }
-
-      Fragment.prototype.id = '';
-
-      Fragment.prototype.name = '';
-
-      if (utils.isNode) {
-        Fragment.prototype.parse = function() {
-          File.call(this, this.id, this._node);
-          return delete this._node;
-        };
-      }
-
-      return Fragment;
-
-    })(File);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/use.coffee'] = (function(){
-var module = {exports: modules["../document/use.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, log, utils;
-
-  utils = require('utils');
-
-  assert = require('neft-assert');
-
-  log = require('log');
-
-  assert = assert.scope('View.Use');
-
-  log = log.scope('View', 'Use');
-
-  module.exports = function(File) {
-    var Use;
-    return Use = (function() {
-      var attrsChangeListener, logUsesWithNoFragments, usesWithNotFoundFragments, visibilityChangeListener;
-
-      Use.__name__ = 'Use';
-
-      Use.__path__ = 'File.Use';
-
-      function Use(self, node) {
-        var bodyNode, elem;
-        this.self = self;
-        this.node = node;
-        assert.instanceOf(self, File);
-        assert.instanceOf(node, File.Element);
-        if (node.children.length) {
-          bodyNode = this.bodyNode = new File.Element.Tag;
-          while (elem = node.children[0]) {
-            elem.parent = bodyNode;
-          }
-          bodyNode.parent = node;
-        }
-      }
-
-      Use.prototype.name = '';
-
-      Use.prototype.self = null;
-
-      Use.prototype.node = null;
-
-      Use.prototype.bodyNode = null;
-
-      Use.prototype.usedFragment = null;
-
-      Use.prototype.isRendered = false;
-
-      //<development>;
-
-      usesWithNotFoundFragments = [];
-
-      logUsesWithNoFragments = function() {
-        var useElem;
-        while (useElem = usesWithNotFoundFragments.pop()) {
-          if (!useElem.usedFragment) {
-            log.warn("neft:fragment '" + useElem.name + "' can't be find in file '" + useElem.self.path + "'");
-          }
-        }
-      };
-
-      //</development>;
-
-      Use.prototype.render = function(file) {
-        var fragment, usedFragment;
-        if (file != null) {
-          assert.instanceOf(file, File);
-        }
-        if (!this.node.visible) {
-          return;
-        }
-        if (this.isRendered) {
-          this.revert();
-        }
-        fragment = this.self.fragments[this.name];
-        if (!file && !fragment) {
-          //<development>;
-          if (usesWithNotFoundFragments.push(this) === 1) {
-            setTimeout(logUsesWithNoFragments);
-          }
-          //</development>;
-          return;
-        }
-        usedFragment = file || File.factory(fragment);
-        if (!file) {
-          usedFragment.storage = this.self.storage;
-        }
-        if (!usedFragment.isRendered) {
-          usedFragment = usedFragment.render(this);
-        }
-        usedFragment.node.parent = this.node;
-        this.usedFragment = usedFragment;
-        usedFragment.parentUse = this;
-        usedFragment.onReplaceByUse.emit(this);
-        return this.isRendered = true;
-      };
-
-      Use.prototype.revert = function() {
-        if (!this.isRendered) {
-          return;
-        }
-        if (this.usedFragment) {
-          this.usedFragment.revert().destroy();
-          this.usedFragment.node.parent = null;
-          this.usedFragment.parentUse = null;
-          this.usedFragment = null;
-        }
-        return this.isRendered = false;
-      };
-
-      visibilityChangeListener = function() {
-        if (this.self.isRendered && !this.isRendered) {
-          return this.render();
-        }
-      };
-
-      attrsChangeListener = function(name) {
-        if (name === 'neft:fragment') {
-          this.name = this.node.attrs.get('neft:fragment');
-          if (this.isRendered) {
-            this.revert();
-            this.render();
-          }
-        }
-      };
-
-      Use.prototype.clone = function(original, self) {
-        var clone;
-        clone = Object.create(this);
-        clone.clone = void 0;
-        clone.self = self;
-        clone.node = original.node.getCopiedElement(this.node, self.node);
-        clone.bodyNode = clone.node.children[0];
-        clone.usedFragment = null;
-        clone.isRendered = false;
-        clone.node.onVisibleChange(visibilityChangeListener, clone);
-        if (clone.name === '') {
-          clone.name = clone.node.attrs.get('neft:fragment');
-          clone.node.onAttrsChange(attrsChangeListener, clone);
-        }
-        return clone;
-      };
-
-      return Use;
-
-    })();
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/input.coffee'] = (function(){
-var module = {exports: modules["../document/input.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","db":"../db/index.coffee.md","./input/text.coffee":"../document/input/text.coffee","./input/attr.coffee":"../document/input/attr.coffee"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var Dict, List, assert, log, utils;
-
-  utils = require('utils');
-
-  assert = require('neft-assert');
-
-  log = require('log');
-
-  Dict = require('dict');
-
-  List = require('list');
-
-  assert = assert.scope('View.Input');
-
-  log = log.scope('View', 'Input');
-
-  module.exports = function(File) {
-    var Input;
-    return Input = (function() {
-      var CONSTANT_VARS, Element, GLOBAL, PROPS_RE, PROP_RE, RE, VAR_RE, cache, getNamedSignal, onChange, pending, queue, queueIndex, queues, revertTraces, updateItems;
-
-      Element = File.Element;
-
-      Input.__name__ = 'Input';
-
-      Input.__path__ = 'File.Input';
-
-      RE = Input.RE = new RegExp('([^$]*)\\${([^}]*)}([^$]*)', 'gm');
-
-      VAR_RE = Input.VAR_RE = /(^|\s|\[|:|\()([a-zA-Z_$][\w:_]*)+(?!:)/g;
-
-      PROP_RE = Input.PROP_RE = /(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+/;
-
-      PROPS_RE = Input.PROPS_RE = /[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)+\s*/g;
-
-      CONSTANT_VARS = Input.CONSTANT_VARS = ['undefined', 'false', 'true', 'null', 'this', 'JSON'];
-
-      cache = {};
-
-      GLOBAL = {
-        Math: Math,
-        Array: Array,
-        Object: Object,
-        Number: Number,
-        RegExp: RegExp,
-        String: String,
-        db: require('db'),
-        utils: require('utils')
-      };
-
-      Input.getVal = (function() {
-        var getElement, getFromElement, getFromObject, getFunction;
-        getFromElement = function(elem, prop) {
-          if (elem instanceof Element) {
-            return elem._attrs[prop];
-          }
-        };
-        getFromObject = function(obj, prop) {
-          var v;
-          if (obj instanceof Dict) {
-            v = obj.get(prop);
-          }
-          if (v === void 0 && obj) {
-            v = obj[prop];
-          }
-          return v;
-        };
-        getElement = function(obj, prop) {
-          var elem, _ref, _ref1, _ref2;
-          while (obj) {
-            if (elem = (_ref = obj.ids) != null ? _ref[prop] : void 0) {
-              return elem;
-            }
-            obj = ((_ref1 = obj.parentUse) != null ? _ref1.self : void 0) || obj.self || ((_ref2 = obj.source) != null ? _ref2.self : void 0);
-          }
-        };
-        getFunction = function(obj, prop) {
-          var elem, _ref, _ref1, _ref2;
-          while (obj) {
-            if (elem = (_ref = obj.funcs) != null ? _ref[prop] : void 0) {
-              return elem;
-            }
-            obj = ((_ref1 = obj.parentUse) != null ? _ref1.self : void 0) || obj.self || ((_ref2 = obj.source) != null ? _ref2.self : void 0);
-          }
-        };
-        return function(file, prop) {
-          var destFile, source, v;
-          if (file.source instanceof File.Iterator) {
-            destFile = file.source.self;
-          } else {
-            destFile = file;
-          }
-          if (v === void 0 && (source = destFile.source)) {
-            v = getFromElement(source.node, prop);
-          }
-          if (v === void 0 && file.source instanceof File.Iterator) {
-            v = getFromElement(file.source.node, prop);
-          }
-          if (v === void 0) {
-            v = getFromElement(destFile.node, prop);
-          }
-          if (v === void 0 && source) {
-            v = getFromObject(source.storage, prop);
-          }
-          if (v === void 0) {
-            v = getFromObject(file.storage, prop);
-          }
-          if (v === void 0) {
-            v = getElement(file, prop);
-          }
-          if (v === void 0) {
-            v = getFunction(file, prop);
-          }
-          if (v === void 0) {
-            v = GLOBAL[prop];
-          }
-          return v;
-        };
-      })();
-
-      Input.get = function(input, prop) {
-        if (prop === 'this') {
-          return input.node;
-        } else {
-          return Input.getVal(input.self, prop);
-        }
-      };
-
-      Input.getStoragesArray = (function(arr) {
-        return function(file) {
-          var _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6;
-          assert.instanceOf(file, File);
-          arr[0] = file.node;
-          arr[1] = (_ref = file.source) != null ? _ref.node : void 0;
-          arr[2] = (_ref1 = file.source) != null ? _ref1.storage : void 0;
-          arr[3] = file.storage;
-          arr[4] = (_ref2 = file.source) != null ? (_ref3 = _ref2.self) != null ? _ref3.node : void 0 : void 0;
-          arr[5] = (_ref4 = file.source) != null ? (_ref5 = _ref4.self) != null ? (_ref6 = _ref5.source) != null ? _ref6.node : void 0 : void 0 : void 0;
-          return arr;
-        };
-      })([]);
-
-      Input.test = function(str) {
-        RE.lastIndex = 0;
-        return RE.test(str);
-      };
-
-      Input.parse = function(text) {
-        var charStr, chunks, err, func, i, innerBlocks, isBlock, isString, match, n, prop, str;
-        text = text.replace(/[\t\n]/gm, '');
-        func = "";
-        chunks = [];
-        str = '';
-        isString = isBlock = false;
-        innerBlocks = 0;
-        i = 0;
-        n = text.length;
-        while (i < n) {
-          charStr = text[i];
-          if (charStr === '$' && text[i + 1] === '{') {
-            isBlock = true;
-            chunks.push(str);
-            str = '';
-            i++;
-          } else if (charStr === '{') {
-            innerBlocks++;
-            str += charStr;
-          } else if (charStr === '}') {
-            if (innerBlocks > 0) {
-              innerBlocks--;
-              str += charStr;
-            } else if (isBlock) {
-              chunks.push(str);
-              str = '';
-            } else {
-              log.error("Interpolated string parse error: '" + text + "'");
-              return;
-            }
-          } else {
-            str += charStr;
-          }
-          i++;
-        }
-        chunks.push(str);
-        while (chunks.length > 1) {
-          match = [chunks.shift(), chunks.shift()];
-          prop = match[1];
-          if (prop) {
-            prop = prop.replace(PROPS_RE, function(str, _, index, allStr) {
-              var postfix, prefix;
-              postfix = allStr.substr(index + str.length, 2);
-              prefix = '';
-              str = str.replace(PROP_RE, function(props) {
-                var ends, r, _i, _len;
-                props = props.split('.');
-                props.shift();
-                if (postfix[0] === '(' || (postfix[0] === '=' && postfix !== '==')) {
-                  prefix += "__input.trace(";
-                  ends = ').' + props[props.length - 1];
-                  props.pop();
-                } else {
-                  ends = '';
-                }
-                r = '';
-                for (_i = 0, _len = props.length; _i < _len; _i++) {
-                  prop = props[_i];
-                  prefix += "__input.traceObj(";
-                  r += ", '" + prop + "')";
-                }
-                return r + ends;
-              });
-              return "" + prefix + str;
-            });
-            prop = prop.replace(VAR_RE, function(matched, prefix, elem) {
-              if (elem.indexOf('__') === 0) {
-                return matched;
-              }
-              if (prefix.trim() || !utils.has(CONSTANT_VARS, elem)) {
-                str = "__get(__input, '" + (utils.addSlashes(elem)) + "')";
-              } else {
-                str = elem;
-              }
-              return "" + prefix + str;
-            });
-          }
-          if (prop == null) {
-            prop = '';
-          }
-          if (match[0]) {
-            func += "'" + (utils.addSlashes(match[0])) + "' + ";
-          }
-          if (prop) {
-            func += "" + prop + " + ";
-          }
-        }
-        if (chunks.length && chunks[0]) {
-          func += "'" + (utils.addSlashes(chunks[0])) + "' + ";
-        }
-        func = 'return ' + func.slice(0, -3);
-        try {
-          new Function(func);
-        } catch (_error) {
-          err = _error;
-          log.error("Can't parse string literal:\n" + text + "\n" + err.message + "\n" + func);
-        }
-        return func;
-      };
-
-      Input.createFunction = function(funcBody) {
-        assert.isString(funcBody);
-        assert.notLengthOf(funcBody, 0);
-        return new Function('__input', '__get', funcBody);
-      };
-
-      Input.fromAssembled = function(input) {
-        var _name;
-        return input.func = cache[_name = input.funcBody] != null ? cache[_name] : cache[_name] = Input.createFunction(input.funcBody);
-      };
-
-      function Input(node, func) {
-        this.node = node;
-        this.func = func;
-        assert.instanceOf(node, File.Element);
-        assert.isFunction(func);
-        this.self = null;
-        this.funcBody = '';
-        this.traces = [];
-        this.text = '';
-        this.updatePending = false;
-        this.traceChanges = true;
-      }
-
-      queueIndex = 0;
-
-      queues = [[], []];
-
-      queue = queues[queueIndex];
-
-      pending = false;
-
-      updateItems = function() {
-        var currentQueue, input;
-        pending = false;
-        currentQueue = queue;
-        queue = queues[++queueIndex % queues.length];
-        while (input = currentQueue.pop()) {
-          input.update();
-        }
-      };
-
-      if (utils.isServer) {
-        onChange = function() {
-          return this.update();
-        };
-      } else {
-        onChange = function() {
-          if (this.updatePending) {
-            return;
-          }
-          queue.push(this);
-          this.updatePending = true;
-          if (!pending) {
-            setImmediate(updateItems);
-            pending = true;
-          }
-        };
-      }
-
-      revertTraces = function() {
-        var i, obj, signal, traces, _i, _len;
-        traces = this.traces;
-        for (i = _i = 0, _len = traces.length; _i < _len; i = _i += 2) {
-          obj = traces[i];
-          signal = traces[i + 1];
-          obj[signal].disconnect(onChange, this);
-        }
-        utils.clear(traces);
-      };
-
-      getNamedSignal = (function() {
-        cache = Object.create(null);
-        return function(name) {
-          return cache[name] || (cache[name] = "on" + (utils.capitalize(name)) + "Change");
-        };
-      })();
-
-      Input.prototype.trace = function(obj) {
-        if (obj && this.traceChanges) {
-          if (obj instanceof Dict) {
-            obj.onChange(onChange, this);
-            this.traces.push(obj, 'onChange');
-          } else if (obj instanceof List) {
-            obj.onChange(onChange, this);
-            this.traces.push(obj, 'onChange');
-            obj.onInsert(onChange, this);
-            this.traces.push(obj, 'onInsert');
-            obj.onPop(onChange, this);
-            this.traces.push(obj, 'onPop');
-          }
-        }
-        return obj;
-      };
-
-      Input.prototype.traceObj = function(obj, prop) {
-        var signal, val;
-        this.trace(obj);
-        if (obj) {
-          if (obj instanceof Dict) {
-            val = obj.get(prop);
-          } else if (obj instanceof List) {
-            if (typeof prop === 'number') {
-              val = obj.get(prop);
-            }
-          } else {
-            signal = getNamedSignal(prop);
-            if (typeof obj[signal] === 'function') {
-              obj[signal](onChange, this);
-              this.traces.push(obj, signal);
-            }
-          }
-          if (val === void 0) {
-            val = obj[prop];
-          }
-        }
-        return val;
-      };
-
-      Input.prototype.render = function() {
-        var storage, _i, _len, _ref;
-        _ref = Input.getStoragesArray(this.self);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          storage = _ref[_i];
-          if (storage instanceof Element) {
-            storage.onAttrsChange(onChange, this);
-          } else if (storage instanceof Dict) {
-            this.trace(storage);
-          }
-        }
-        return this.update();
-      };
-
-      Input.prototype.revert = function() {
-        var storage, _i, _len, _ref;
-        _ref = Input.getStoragesArray(this.self);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          storage = _ref[_i];
-          if (storage instanceof Element) {
-            storage.onAttrsChange.disconnect(onChange, this);
-          }
-        }
-        revertTraces.call(this);
-      };
-
-      Input.prototype.update = function() {
-        this.updatePending = false;
-      };
-
-      Input.prototype.toString = (function() {
-        var callFunc;
-        callFunc = function() {
-          revertTraces.call(this);
-          return this.func.call(this.node, this, Input.get);
-        };
-        return function() {
-          var err;
-          try {
-            return callFunc.call(this);
-          } catch (_error) {
-            err = _error;
-            return log.warn("Interpolated string error in '" + this.text + "';\n" + (err.stack || err));
-          }
-        };
-      })();
-
-      Input.prototype.clone = function(original, self) {
-        var clone, node;
-        node = original.node.getCopiedElement(this.node, self.node);
-        clone = new this.constructor(node, this.func);
-        clone.self = self;
-        clone.text = this.text;
-        return clone;
-      };
-
-      Input.Text = require('./input/text.coffee')(File, Input);
-
-      Input.Attr = require('./input/attr.coffee')(File, Input);
-
-      return Input;
-
-    })();
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/input/text.coffee'] = (function(){
-var module = {exports: modules["../document/input/text.coffee"]};
-var require = getModule.bind(null, {});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  module.exports = function(File, Input) {
-    var InputText;
-    return InputText = (function(_super) {
-      __extends(InputText, _super);
-
-      InputText.__name__ = 'InputText';
-
-      InputText.__path__ = 'File.Input.Text';
-
-      function InputText(node, func) {
-        Input.call(this, node, func);
-        this.lastValue = NaN;
-        Object.preventExtensions(this);
-      }
-
-      InputText.prototype.update = function() {
-        var str;
-        InputText.__super__.update.call(this);
-        str = this.toString();
-        if (str == null) {
-          str = '';
-        } else if (typeof str !== 'string') {
-          str += '';
-        }
-        if (str !== this.lastValue) {
-          this.lastValue = str;
-          this.node.text = str;
-        }
-      };
-
-      return InputText;
-
-    })(Input);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/input/attr.coffee'] = (function(){
-var module = {exports: modules["../document/input/attr.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  assert = require('neft-assert');
-
-  utils = require('utils');
-
-  module.exports = function(File, Input) {
-    var InputAttr;
-    return InputAttr = (function(_super) {
-      var createHandlerFunc, isHandler;
-
-      __extends(InputAttr, _super);
-
-      InputAttr.__name__ = 'InputAttr';
-
-      InputAttr.__path__ = 'File.Input.Attr';
-
-      function InputAttr(node, func) {
-        Input.call(this, node, func);
-        this.attrName = '';
-        this.handlerFunc = null;
-        this.lastValue = NaN;
-        Object.preventExtensions(this);
-      }
-
-      isHandler = function(name) {
-        return /^on[A-Z]|\:on[A-Z][A-Za-z0-9_$]*$/.test(name);
-      };
-
-      InputAttr.prototype.update = function() {
-        var str;
-        InputAttr.__super__.update.call(this);
-        str = this.handlerFunc || this.toString();
-        if (str !== this.lastValue) {
-          this.lastValue = str;
-          this.node.attrs.set(this.attrName, str);
-        }
-      };
-
-      createHandlerFunc = function(input) {
-        return function(arg1, arg2) {
-          var r;
-          r = input.toString();
-          if (typeof r === 'function') {
-            r.call(this, arg1, arg2);
-          }
-        };
-      };
-
-      InputAttr.prototype.clone = function(original, self) {
-        var clone;
-        clone = InputAttr.__super__.clone.call(this, original, self);
-        clone.attrName = this.attrName;
-        if (isHandler(this.attrName)) {
-          clone.traceChanges = false;
-          clone.handlerFunc = createHandlerFunc(clone);
-        }
-        return clone;
-      };
-
-      return InputAttr;
-
-    })(Input);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/condition.coffee'] = (function(){
-var module = {exports: modules["../document/condition.coffee"]};
-var require = getModule.bind(null, {"log":"../log/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var log;
-
-  log = require('log');
-
-  log = log.scope('View', 'Condition');
-
-  module.exports = function(File) {
-    var Condition;
-    return Condition = (function() {
-      var onAttrsChange;
-
-      Condition.__name__ = 'Condition';
-
-      Condition.__path__ = 'File.Condition';
-
-      function Condition(node, elseNode) {
-        this.node = node;
-        this.elseNode = elseNode != null ? elseNode : null;
-        Object.preventExtensions(this);
-      }
-
-      Condition.prototype.update = function() {
-        var visible, _ref;
-        visible = this.node.visible = !!this.node.attrs.get('neft:if');
-        if ((_ref = this.elseNode) != null) {
-          _ref.visible = !visible;
-        }
-      };
-
-      Condition.prototype.render = function() {
-        return this.update();
-      };
-
-      onAttrsChange = function(name) {
-        if (name === 'neft:if') {
-          this.update();
-        }
-      };
-
-      Condition.prototype.clone = function(original, self) {
-        var clone, elseNode, node;
-        node = original.node.getCopiedElement(this.node, self.node);
-        if (this.elseNode) {
-          elseNode = original.node.getCopiedElement(this.elseNode, self.node);
-        }
-        clone = new this.constructor(node, elseNode);
-        node.onAttrsChange(onAttrsChange, clone);
-        return clone;
-      };
-
-      return Condition;
-
-    })();
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/iterator.coffee'] = (function(){
-var module = {exports: modules["../document/iterator.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","list":"../list/index.coffee.md","log":"../log/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var List, assert, isArray, log, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('neft-assert');
-
-  List = require('list');
-
-  log = require('log');
-
-  isArray = Array.isArray;
-
-  assert = assert.scope('View.Iterator');
-
-  log = log.scope('View', 'Iterator');
-
-  module.exports = function(File) {
-    var Iterator;
-    return Iterator = (function(_super) {
-      var attrsChangeListener, visibilityChangeListener;
-
-      __extends(Iterator, _super);
-
-      Iterator.__name__ = 'Iterator';
-
-      Iterator.__path__ = 'File.Iterator';
-
-      Iterator.HTML_ATTR = "" + File.HTML_NS + ":each";
-
-      function Iterator(self, node) {
-        var fragment, prefix;
-        this.self = self;
-        assert.instanceOf(self, File);
-        assert.instanceOf(node, File.Element);
-        Iterator.__super__.constructor.call(this, self, node);
-        prefix = self.name ? "" + self.name + "-" : '';
-        this.name = "" + prefix + "each[" + (utils.uid()) + "]";
-        fragment = new File.Fragment(self, this.name, this.bodyNode);
-        fragment.parse();
-        this.fragment = fragment.id;
-        this.bodyNode.parent = void 0;
-        this.text = '';
-      }
-
-      Iterator.prototype.fragment = '';
-
-      Iterator.prototype.storage = null;
-
-      Iterator.prototype.usedFragments = null;
-
-      Iterator.prototype.data = null;
-
-      Iterator.prototype.text = '';
-
-      Iterator.prototype.render = function() {
-        var array, each, i, _, _i, _len;
-        if (!this.node.visible) {
-          return;
-        }
-        each = this.node.attrs.get(Iterator.HTML_ATTR);
-        if (each === this.data) {
-          return;
-        }
-        if (!isArray(each) && !(each instanceof List)) {
-          return;
-        }
-        this.data = array = each;
-        if (each instanceof List) {
-          each.onChange(this.updateItem, this);
-          each.onInsert(this.insertItem, this);
-          each.onPop(this.popItem, this);
-          array = each.items();
-        }
-        for (i = _i = 0, _len = array.length; _i < _len; i = ++_i) {
-          _ = array[i];
-          this.insertItem(i);
-        }
-        return null;
-      };
-
-      Iterator.prototype.revert = function() {
-        var data;
-        data = this.data;
-        if (data) {
-          this.clearData();
-          if (data instanceof List) {
-            data.onChange.disconnect(this.updateItem, this);
-            data.onInsert.disconnect(this.insertItem, this);
-            data.onPop.disconnect(this.popItem, this);
-          }
-        }
-        return this.data = null;
-      };
-
-      Iterator.prototype.update = function() {
-        this.revert();
-        return this.render();
-      };
-
-      Iterator.prototype.clearData = function() {
-        var length;
-        assert.isObject(this.data);
-        while (length = this.usedFragments.length) {
-          this.popItem(length - 1);
-        }
-        return this;
-      };
-
-      Iterator.prototype.updateItem = function(elem, i) {
-        if (i == null) {
-          i = elem;
-        }
-        assert.isObject(this.data);
-        assert.isInteger(i);
-        this.popItem(i);
-        this.insertItem(i);
-        return this;
-      };
-
-      Iterator.prototype.insertItem = function(elem, i) {
-        var data, each, item, newChild, storage, usedFragment;
-        if (i == null) {
-          i = elem;
-        }
-        assert.isObject(this.data);
-        assert.isInteger(i);
-        data = this.data;
-        usedFragment = File.factory(this.fragment);
-        this.usedFragments.splice(i, 0, usedFragment);
-        if (data instanceof List) {
-          each = data.items();
-          item = data.get(i);
-        } else {
-          each = data;
-          item = data[i];
-        }
-        newChild = usedFragment.node;
-        newChild.parent = this.node;
-        newChild.index = i;
-        storage = usedFragment.storage = Object.create(this.self.storage || null);
-        storage.each = each;
-        storage.i = i;
-        storage.item = item;
-        usedFragment.render(this);
-        usedFragment.onReplaceByUse.emit(this);
-        return this;
-      };
-
-      Iterator.prototype.popItem = function(elem, i) {
-        var usedFragment;
-        if (i == null) {
-          i = elem;
-        }
-        assert.isObject(this.data);
-        assert.isInteger(i);
-        this.node.children[i].parent = void 0;
-        usedFragment = this.usedFragments[i];
-        usedFragment.revert().destroy();
-        this.usedFragments.splice(i, 1);
-        return this;
-      };
-
-      attrsChangeListener = function(name) {
-        if (this.self.isRendered && name === Iterator.HTML_ATTR) {
-          return this.update();
-        }
-      };
-
-      visibilityChangeListener = function(oldVal) {
-        if (this.self.isRendered && oldVal === false && !this.node.data) {
-          return this.update();
-        }
-      };
-
-      Iterator.prototype.clone = function(original, self) {
-        var clone;
-        clone = Iterator.__super__.clone.apply(this, arguments);
-        clone.storage = utils.cloneDeep(this.storage);
-        clone.array = null;
-        clone.usedFragments = [];
-        clone.text = this.text;
-        clone.node.onAttrsChange(attrsChangeListener, clone);
-        clone.node.onVisibleChange(visibilityChangeListener, clone);
-        return clone;
-      };
-
-      return Iterator;
-
-    })(File.Use);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/log.coffee'] = (function(){
-var module = {exports: modules["../document/log.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var utils;
-
-  utils = require('utils');
-
-  module.exports = function(File) {
-    var Log;
-    return Log = (function() {
-      var listenOnTextChange;
-
-      Log.__name__ = 'Log';
-
-      Log.__path__ = 'File.Log';
-
-      function Log(node) {
-        this.node = node;
-        this.self = null;
-        Object.preventExtensions(this);
-      }
-
-      Log.prototype.render = function() {
-        var key, log, val, _ref;
-        if (utils.isEmpty(this.node._attrs)) {
-          console.log(this.node.stringifyChildren());
-        } else {
-          log = [this.node.stringifyChildren()];
-          _ref = this.node._attrs;
-          for (key in _ref) {
-            val = _ref[key];
-            log.push("" + key + "=", val);
-          }
-          console.log.apply(console, log);
-        }
-      };
-
-      Log.prototype.log = function() {
-        if (this.self.isRendered) {
-          return this.render();
-        }
-      };
-
-      listenOnTextChange = function(node, log) {
-        var child, _i, _len, _ref;
-        if (node instanceof File.Element.Text) {
-          node.onTextChange(log.log, log);
-        } else {
-          _ref = node.children;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            child = _ref[_i];
-            listenOnTextChange(child, log);
-          }
-        }
-      };
-
-      Log.prototype.clone = function(original, self) {
-        var clone, node;
-        node = original.node.getCopiedElement(this.node, self.node);
-        clone = new this.constructor(node);
-        clone.self = self;
-        node.onAttrsChange(this.log, clone);
-        listenOnTextChange(node, clone);
-        return clone;
-      };
-
-      return Log;
-
-    })();
-  };
-
-}).call(this);
-
-
-return module.exports;
 })();modules['../document/func.coffee.md'] = (function(){
 var module = {exports: modules["../document/func.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","expect":"node_modules/expect/index.coffee.md","renderer":"../renderer/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","renderer":"../renderer/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Renderer, expect, utils;
+  var Renderer, assert, utils;
 
   utils = require('utils');
 
-  expect = require('expect');
+  assert = require('assert');
 
   Renderer = require('renderer');
 
   module.exports = function(File) {
-    var Fragment, FuncGlobalFuncs, FuncGlobalGetters, Input, exports, funcGlobalProps, funcGlobalPropsLength, functionsCache, globalContext;
-    Input = File.Input, Fragment = File.Fragment;
+    var FuncGlobalFuncs, FuncGlobalGetters, Input, exports, funcGlobalProps, funcGlobalPropsLength, functionsCache, globalContext;
+    Input = File.Input;
     FuncGlobalFuncs = {
       require: require,
       get: function(prop) {
@@ -19366,7 +19583,7 @@ var exports = module.exports;
     return exports = {
       bindFuncIntoGlobal: function(opts, file) {
         var args, customArgsLength, func, globalFunc, i, prop, _i, _len;
-        expect(file).toBe.any(File);
+        assert.instanceOf(file, File);
         if (!(func = functionsCache[opts.uid])) {
           args = funcGlobalProps.concat(opts["arguments"]);
           func = functionsCache[opts.uid] = new Function(args, opts.body);
@@ -19404,38 +19621,66 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/attrsToSet.coffee'] = (function(){
 var module = {exports: modules["../document/attrsToSet.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var log, utils;
+  var assert, log, utils;
 
   utils = require('utils');
+
+  assert = require('assert');
 
   log = require('log');
 
   module.exports = function(File) {
     var AttrsToSet;
     return AttrsToSet = (function() {
-      var attrsKeyGen, attrsValueGen;
+      var JSON_ARGS_LENGTH, JSON_ATTRS, JSON_CTOR_ID, JSON_NODE, i;
 
       AttrsToSet.__name__ = 'AttrsToSet';
 
       AttrsToSet.__path__ = 'File.AttrsToSet';
 
-      attrsKeyGen = function(_, value) {
-        return value;
+      JSON_CTOR_ID = AttrsToSet.JSON_CTOR_ID = File.JSON_CTORS.push(AttrsToSet) - 1;
+
+      i = 1;
+
+      JSON_NODE = i++;
+
+      JSON_ATTRS = i++;
+
+      JSON_ARGS_LENGTH = AttrsToSet.JSON_ARGS_LENGTH = i;
+
+      AttrsToSet._fromJSON = function(file, arr, obj) {
+        var node;
+        if (!obj) {
+          node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+          obj = new AttrsToSet(file, node, arr[JSON_ATTRS]);
+        }
+        return obj;
       };
 
-      attrsValueGen = function() {
-        return true;
-      };
-
-      function AttrsToSet(node, attrs) {
+      function AttrsToSet(file, node, attrs) {
+        var attr;
+        this.file = file;
         this.node = node;
         this.attrs = attrs;
-        Object.preventExtensions(this);
+        assert.instanceOf(file, File);
+        assert.instanceOf(node, File.Element);
+        assert.isPlainObject(attrs);
+        for (attr in this.attrs) {
+          if (node._attrs[attr] != null) {
+            clone.setAttribute(attr, null);
+          }
+        }
+        node.onAttrsChange(this.setAttribute, clone);
+        //<development>;
+        if (this.constructor === AttrsToSet) {
+          Object.preventExtensions(this);
+        }
+        //</development>;
       }
 
       AttrsToSet.prototype.setAttribute = function(attr, oldValue) {
@@ -19456,96 +19701,25 @@ var exports = module.exports;
         }
       };
 
-      AttrsToSet.prototype.clone = function(original, self) {
-        var attr, clone, node;
-        node = original.node.getCopiedElement(this.node, self.node);
-        clone = new AttrsToSet(node, this.attrs);
-        for (attr in this.attrs) {
-          if (node._attrs[attr] != null) {
-            clone.setAttribute(attr, null);
-          }
+      AttrsToSet.prototype.clone = function(original, file) {
+        var node;
+        node = original.node.getCopiedElement(this.node, file.node);
+        return new AttrsToSet(file, node, this.attrs);
+      };
+
+      AttrsToSet.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
         }
-        node.onAttrsChange(this.setAttribute, clone);
-        return clone;
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        arr[JSON_ATTRS] = this.attrs;
+        return arr;
       };
 
       return AttrsToSet;
 
     })();
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/file/clear.coffee'] = (function(){
-var module = {exports: modules["../document/file/clear.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var LINE_BREAKERS_RE, PHRASING_ELEMENTS, PHRASING_ELEMENTS_OBJECT, WHITE_SPACES_RE, WHITE_SPACE_RE, isRemove, removeEmptyTexts, utils;
-
-  utils = require('utils');
-
-  WHITE_SPACE_RE = /^\s*$/;
-
-  WHITE_SPACES_RE = /^(\r?\n|\r)+\s+/gm;
-
-  LINE_BREAKERS_RE = /\r?\n|\r/g;
-
-  PHRASING_ELEMENTS = ["a", "em", "strong", "small", "mark", "abbr", "dfn", "i", "b", "s", "u", "code", "var", "samp", "kbd", "sup", "sub", "q", "cite", "span", "bdo", "bdi", "br", "wbr", "ins", "del", "img", "embed", "object", "iframe", "map", "area", "script", "noscript", "ruby", "video", "audio", "input", "textarea", "select", "button", "label", "output", "datalist", "keygen", "progress", "command", "canvas", "time", "meter", "neft:function"];
-
-  PHRASING_ELEMENTS_OBJECT = utils.arrayToObject(PHRASING_ELEMENTS, (function(_, key) {
-    return key;
-  }), (function() {
-    return true;
-  }), Object.create(null));
-
-  isRemove = function(node) {
-    if ('text' in node) {
-      if (WHITE_SPACE_RE.test(node.text)) {
-        return true;
-      }
-      if (!PHRASING_ELEMENTS_OBJECT[node.parent.name]) {
-        node.text = node.text.replace(WHITE_SPACES_RE, '');
-      }
-    }
-    return false;
-  };
-
-  removeEmptyTexts = function(node) {
-    var elem, i, j, length, nodes, _i, _j, _len, _ref;
-    nodes = node.children;
-    if (!nodes) {
-      return;
-    }
-    length = nodes.length;
-    j = 0;
-    for (i = _i = 0; _i <= length; i = _i += 1) {
-      elem = nodes[j];
-      if (!elem) {
-        break;
-      }
-      if (isRemove(elem)) {
-        elem.parent = void 0;
-        j--;
-      }
-      j++;
-    }
-    _ref = node.children;
-    for (i = _j = 0, _len = _ref.length; _j < _len; i = ++_j) {
-      elem = _ref[i];
-      if (elem.name !== 'script') {
-        removeEmptyTexts(elem);
-      }
-    }
-    return null;
-  };
-
-  module.exports = function(File) {
-    return removeEmptyTexts;
   };
 
 }).call(this);
@@ -19569,35 +19743,6 @@ var exports = module.exports;
           newChild.parent = oldChild;
         }
       }
-    };
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../document/file/render/revert/listeners.coffee'] = (function(){
-var module = {exports: modules["../document/file/render/revert/listeners.coffee"]};
-var require = getModule.bind(null, {"emitter":"../emitter/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var Emitter;
-
-  Emitter = ['emitter'].map(require)[0];
-
-  module.exports = function(File) {
-    return function(file) {
-      var listener, listeners, node, signalName;
-      listeners = file._tmp.listeners;
-      while (listeners.length) {
-        listener = listeners.pop();
-        signalName = listeners.pop();
-        node = listeners.pop();
-        node[signalName].disconnect(listener);
-      }
-      return null;
     };
   };
 
@@ -19631,20 +19776,20 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/file.coffee.md'] = (function(){
 var module = {exports: modules["../document/file.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","emitter":"../emitter/index.coffee.md","signal":"../signal/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","./element/index":"../document/element/index.coffee","./attrChange":"../document/attrChange.coffee","./fragment":"../document/fragment.coffee","./use":"../document/use.coffee","./input":"../document/input.coffee","./condition":"../document/condition.coffee","./iterator":"../document/iterator.coffee","./log":"../document/log.coffee","./func":"../document/func.coffee.md","./attrsToSet":"../document/attrsToSet.coffee","./file/clear":"../document/file/clear.coffee","./file/render/parse/target":"../document/file/render/parse/target.coffee","./file/render/revert/listeners":"../document/file/render/revert/listeners.coffee","./file/render/revert/target":"../document/file/render/revert/target.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","./element/index":"../document/element/index.coffee","./attrChange":"../document/attrChange.coffee","./use":"../document/use.coffee","./input":"../document/input.coffee","./condition":"../document/condition.coffee","./iterator":"../document/iterator.coffee","./log":"../document/log.coffee","./func":"../document/func.coffee.md","./attrsToSet":"../document/attrsToSet.coffee","./file/render/parse/target":"../document/file/render/parse/target.coffee","./file/render/revert/target":"../document/file/render/revert/target.coffee"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Dict, Emitter, File, List, assert, log, signal, utils;
+  var Dict, Emitter, File, List, assert, log, signal, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   utils = require('utils');
 
   assert = require('neft-assert');
 
   log = require('log');
-
-  Emitter = require('emitter');
 
   signal = require('signal');
 
@@ -19656,12 +19801,12 @@ var exports = module.exports;
 
   log = log.scope('View');
 
-  module.exports = File = (function() {
-    var files, getFromPool, getTmp, pool, _class;
+  Emitter = signal.Emitter;
 
-    function File() {
-      return _class.apply(this, arguments);
-    }
+  module.exports = File = (function(_super) {
+    var JSON_ARGS_LENGTH, JSON_ATTRS_TO_SET, JSON_ATTR_CHANGES, JSON_CONDITIONS, JSON_CTOR_ID, JSON_FRAGMENTS, JSON_FUNCS, JSON_IDS, JSON_INPUTS, JSON_ITERATORS, JSON_LOGS, JSON_NODE, JSON_PATH, JSON_STYLES, JSON_TARGET_NODE, JSON_USES, files, getFromPool, i, pool;
+
+    __extends(File, _super);
 
     files = File._files = {};
 
@@ -19682,26 +19827,51 @@ var exports = module.exports;
       }
     };
 
-    getTmp = function() {
-      var tmp;
-      return tmp = {
-        listeners: []
-      };
-    };
-
     File.__name__ = 'File';
 
     File.__path__ = 'File';
 
-    File.CREATE = 'create';
+    File.JSON_CTORS = [];
 
-    File.ERROR = 'error';
+    JSON_CTOR_ID = File.JSON_CTOR_ID = File.JSON_CTORS.push(File) - 1;
+
+    i = 1;
+
+    JSON_PATH = i++;
+
+    JSON_NODE = i++;
+
+    JSON_TARGET_NODE = i++;
+
+    JSON_FRAGMENTS = i++;
+
+    JSON_ATTR_CHANGES = i++;
+
+    JSON_INPUTS = i++;
+
+    JSON_CONDITIONS = i++;
+
+    JSON_ITERATORS = i++;
+
+    JSON_USES = i++;
+
+    JSON_IDS = i++;
+
+    JSON_FUNCS = i++;
+
+    JSON_ATTRS_TO_SET = i++;
+
+    JSON_LOGS = i++;
+
+    JSON_STYLES = i++;
+
+    JSON_ARGS_LENGTH = File.JSON_ARGS_LENGTH = i;
 
     File.HTML_NS = 'neft';
 
-    utils.merge(File, Emitter.prototype);
+    signal.create(File, 'onCreate');
 
-    Emitter.call(File);
+    signal.create(File, 'onError');
 
     signal.create(File, 'onBeforeParse');
 
@@ -19719,8 +19889,6 @@ var exports = module.exports;
 
     File.AttrChange = require('./attrChange')(File);
 
-    File.Fragment = require('./fragment')(File);
-
     File.Use = require('./use')(File);
 
     File.Input = require('./input')(File);
@@ -19737,62 +19905,140 @@ var exports = module.exports;
 
     File.fromHTML = (function() {
       var clear;
+      if (!utils.isNode) {
+        return function(path, html) {
+          throw new Error("Document.fromHTML is available only on the server");
+        };
+      }
       clear = require('./file/clear')(File);
       return function(path, html) {
-        var file, node;
+        var node;
         assert.isString(path);
         assert.notLengthOf(path, 0);
         assert.notOk(files[path] != null);
-        if (!(html instanceof File.Element)) {
-          assert.isString(html);
-        }
+        assert.isString(html);
         if (html === '') {
           html = '<html></html>';
         }
-        if (html instanceof File.Element) {
-          node = html;
-        } else {
-          node = File.Element.fromHTML(html);
-        }
+        node = File.Element.fromHTML(html);
         clear(node);
-        file = new File(path, node);
-        return file;
+        return File.fromElement(path, node);
       };
     })();
 
-    File.fromJSON = (function(ctorsCache) {
-      return function(path, json) {
-        var ctor, ctors, i, ns, _ref;
-        assert.isString(path);
-        assert.notLengthOf(path, 0);
-        assert.notOk(files[path] != null);
-        if (typeof json === 'string') {
-          json = utils.tryFunction(JSON.parse, null, [json], json);
+    File.fromElement = function(path, node) {
+      var file;
+      assert.isString(path);
+      assert.notLengthOf(path, 0);
+      assert.instanceOf(node, File.Element);
+      assert.notOk(files[path] != null);
+      return file = new File(path, node);
+    };
+
+    File.fromJSON = function(json) {
+      var file;
+      if (typeof json === 'string') {
+        json = utils.tryFunction(JSON.parse, null, [json], json);
+      }
+      assert.isArray(json);
+      file = File.JSON_CTORS[json[0]]._fromJSON(json);
+      assert.notOk(files[file.path] != null);
+      files[file.path] = file;
+      return file;
+    };
+
+    File._fromJSON = (function() {
+      var parseArray, parseObject;
+      parseObject = function(file, obj, target) {
+        var key, val;
+        for (key in obj) {
+          val = obj[key];
+          target[key] = File.JSON_CTORS[val[0]]._fromJSON(file, val);
         }
-        assert.isPlainObject(json);
-        ns = {
-          File: File,
-          Dict: Dict,
-          List: List
-        };
-        _ref = ctors = json.constructors;
-        for (i in _ref) {
-          ctor = _ref[i];
-          if (ctorsCache[ctor] == null) {
-            ctorsCache[ctor] = utils.get(ns, ctor);
-          }
-          ctors[i] = ctorsCache[ctor];
-        }
-        json = utils.assemble(json);
-        files[path] = json;
-        return json;
       };
-    })({});
+      parseArray = function(file, arr, target) {
+        var val, _i, _len;
+        for (_i = 0, _len = arr.length; _i < _len; _i++) {
+          val = arr[_i];
+          target.push(File.JSON_CTORS[val[0]]._fromJSON(file, val));
+        }
+      };
+      return function(arr, obj) {
+        var id, node, path, _ref;
+        if (!obj) {
+          node = File.Element.fromJSON(arr[JSON_NODE]);
+          obj = new File(arr[JSON_PATH], node);
+        }
+        if (arr[JSON_TARGET_NODE]) {
+          obj.targetNode = node.getChildByAccessPath(arr[JSON_TARGET_NODE]);
+        }
+        utils.merge(obj.fragments, arr[JSON_FRAGMENTS]);
+        parseArray(obj, arr[JSON_ATTR_CHANGES], obj.attrChanges);
+        parseArray(obj, arr[JSON_INPUTS], obj.inputs);
+        parseArray(obj, arr[JSON_CONDITIONS], obj.conditions);
+        parseArray(obj, arr[JSON_ITERATORS], obj.iterators);
+        parseArray(obj, arr[JSON_USES], obj.uses);
+        _ref = arr[JSON_IDS];
+        for (id in _ref) {
+          path = _ref[id];
+          obj.ids[id] = obj.node.getChildByAccessPath(path);
+        }
+        parseObject(obj, arr[JSON_FUNCS], obj.funcs);
+        parseArray(obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet);
+        parseArray(obj, arr[JSON_LOGS], obj.logs);
+        parseArray(obj, arr[JSON_STYLES], obj.styles);
+        return obj;
+      };
+    })();
+
+    File.parse = (function() {
+      var attrChanges, attrSetting, attrs, conditions, fragments, funcs, ids, iterators, logs, rules, storage, target, uses;
+      if (!utils.isNode) {
+        return function(file) {
+          throw new Error("Document.parse() is available only on the server");
+        };
+      }
+      rules = require('./file/parse/rules')(File);
+      fragments = require('./file/parse/fragments')(File);
+      attrs = require('./file/parse/attrs')(File);
+      attrChanges = require('./file/parse/attrChanges')(File);
+      iterators = require('./file/parse/iterators')(File);
+      target = require('./file/parse/target')(File);
+      uses = require('./file/parse/uses')(File);
+      storage = require('./file/parse/storage')(File);
+      conditions = require('./file/parse/conditions')(File);
+      ids = require('./file/parse/ids')(File);
+      logs = require('./file/parse/logs')(File);
+      funcs = require('./file/parse/funcs')(File);
+      attrSetting = require('./file/parse/attrSetting')(File);
+      return function(file) {
+        assert.instanceOf(file, File);
+        assert.notOk(files[file.path] != null);
+        files[file.path] = file;
+        File.onBeforeParse.emit(file);
+        rules(file);
+        fragments(file);
+        attrs(file);
+        iterators(file);
+        attrChanges(file);
+        target(file);
+        uses(file);
+        storage(file);
+        conditions(file);
+        ids(file);
+        funcs(file);
+        attrSetting(file);
+        //<development>;
+        logs(file);
+        //</development>;
+        return File.onParse.emit(file);
+      };
+    })();
 
     File.factory = function(path) {
       var file, r;
       if (!files.hasOwnProperty(path)) {
-        File.trigger(File.ERROR, path);
+        File.onError.emit(path);
       }
       assert.isString(path);
       assert.ok(files[path] != null);
@@ -19800,103 +20046,46 @@ var exports = module.exports;
         return r;
       }
       file = files[path].clone();
-      File.trigger(File.CREATE, file);
+      File.onCreate.emit(file);
       return file;
     };
 
-    _class = (function() {
-      var attrChanges, attrSetting, attrs, conditions, fragments, funcs, ids, iterators, logs, rules, storage, target, uses;
-      if (utils.isNode) {
-        rules = require('./file/parse/rules')(File);
-        fragments = require('./file/parse/fragments')(File);
-        attrs = require('./file/parse/attrs')(File);
-        attrChanges = require('./file/parse/attrChanges')(File);
-        iterators = require('./file/parse/iterators')(File);
-        target = require('./file/parse/target')(File);
-        uses = require('./file/parse/uses')(File);
-        storage = require('./file/parse/storage')(File);
-        conditions = require('./file/parse/conditions')(File);
-        ids = require('./file/parse/ids')(File);
-        logs = require('./file/parse/logs')(File);
-        funcs = require('./file/parse/funcs')(File);
-        attrSetting = require('./file/parse/attrSetting')(File);
+    function File(path, node) {
+      this.path = path;
+      this.node = node;
+      assert.isString(path);
+      assert.notLengthOf(path, 0);
+      assert.instanceOf(node, File.Element);
+      File.__super__.constructor.call(this);
+      this.isClone = false;
+      this.uid = utils.uid();
+      this.isRendered = false;
+      this.readyToUse = true;
+      this.targetNode = null;
+      this.parent = null;
+      this.storage = null;
+      this.source = null;
+      this.parentUse = null;
+      this.fragments = {};
+      this.attrChanges = [];
+      this.inputs = [];
+      this.conditions = [];
+      this.iterators = [];
+      this.uses = [];
+      this.ids = {};
+      this.funcs = {};
+      this.attrsToSet = [];
+      this.logs = [];
+      this.styles = [];
+      //<development>;
+      if (this.constructor === File) {
+        Object.preventExtensions(this);
       }
-      return function(path, node) {
-        this.path = path;
-        this.node = node;
-        assert.isString(path);
-        assert.notLengthOf(path, 0);
-        assert.instanceOf(node, File.Element);
-        assert.notOk(files[path] != null);
-        this.pathbase = path.substring(0, path.lastIndexOf('/') + 1);
-        this.isRendered = false;
-        this.readyToUse = true;
-        this.init();
-        utils.defineProperty(this, '_tmp', utils.WRITABLE, getTmp());
-        File.onBeforeParse.emit(this);
-        rules(this);
-        fragments(this);
-        attrs(this);
-        iterators(this);
-        attrChanges(this);
-        target(this);
-        uses(this);
-        storage(this);
-        conditions(this);
-        ids(this);
-        funcs(this);
-        attrSetting(this);
-        //<development>;
-        logs(this);
-        //</development>;
-        File.onParse.emit(this);
-        files[this.path] = this;
-        return this;
-      };
-    })();
-
-    File.prototype.uid = '';
-
-    File.prototype.isRendered = false;
-
-    File.prototype.node = null;
-
-    File.prototype.targetNode = null;
-
-    File.prototype.path = '';
-
-    File.prototype.pathbase = '';
-
-    File.prototype.parent = null;
-
-    File.prototype.attrChanges = null;
-
-    File.prototype.fragments = null;
-
-    File.prototype.uses = null;
-
-    File.prototype.inputs = null;
-
-    File.prototype.conditions = null;
-
-    File.prototype.iterators = null;
-
-    File.prototype.storage = null;
-
-    File.prototype.target = null;
-
-    File.prototype.ids = null;
-
-    File.prototype.logs = null;
-
-    File.prototype.funcs = null;
-
-    File.prototype.attrsToSet = null;
-
-    File.prototype.init = function() {};
+      //</development>;
+    }
 
     File.prototype.render = function(storage, source) {
-      if (this.clone) {
+      if (!this.isClone) {
         return this.clone().render(storage, source);
       } else {
         return this._render(storage, source);
@@ -19907,7 +20096,7 @@ var exports = module.exports;
       var renderTarget;
       renderTarget = require('./file/render/parse/target')(File);
       return function(storage, source) {
-        var condition, i, input, iterator, use, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4;
+        var condition, input, iterator, use, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4;
         assert.notOk(this.isRendered);
         assert.ok(this.readyToUse);
         if (storage instanceof File.Use) {
@@ -19962,39 +20151,40 @@ var exports = module.exports;
     })();
 
     File.prototype.revert = (function() {
-      var listeners, target;
-      listeners = require('./file/render/revert/listeners')(File);
+      var target;
       target = require('./file/render/revert/target')(File);
       return function() {
-        var i, input, iterator, use, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        var input, iterator, use, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
         assert.ok(this.isRendered);
         this.isRendered = false;
         File.onBeforeRevert.emit(this);
+        if ((_ref = this.parentUse) != null) {
+          _ref.detachUsedFragment();
+        }
         if (this.inputs) {
-          _ref = this.inputs;
-          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-            input = _ref[i];
+          _ref1 = this.inputs;
+          for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+            input = _ref1[i];
             input.revert();
           }
         }
         if (this.uses) {
-          _ref1 = this.uses;
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            use = _ref1[_j];
+          _ref2 = this.uses;
+          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+            use = _ref2[_j];
             use.revert();
           }
         }
         if (this.iterators) {
-          _ref2 = this.iterators;
-          for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
-            iterator = _ref2[i];
+          _ref3 = this.iterators;
+          for (i = _k = 0, _len2 = _ref3.length; _k < _len2; i = ++_k) {
+            iterator = _ref3[i];
             iterator.revert();
           }
         }
         target(this, this.source);
         this.storage = null;
         this.source = null;
-        listeners(this);
         File.onRevert.emit(this);
         return this;
       };
@@ -20015,10 +20205,12 @@ var exports = module.exports;
       if (elem) {
         elem.render(view);
       } else {
-        log.warn("`" + this.path + "` view doesn't have any `" + useName + "` neft:use");
+        log.warn("'" + this.path + "' view doesn't have '" + useName + "' neft:use");
       }
       return this;
     };
+
+    Emitter.createSignal(File, 'onReplaceByUse');
 
     File.prototype.clone = function() {
       var r;
@@ -20030,91 +20222,58 @@ var exports = module.exports;
     };
 
     File.prototype._clone = function() {
-      var attrChange, attrsToSet, clone, condition, func, i, id, input, iterator, name, node, use, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
-      clone = Object.create(this);
-      clone.clone = void 0;
-      clone._tmp = getTmp();
-      clone.uid = utils.uid();
-      clone.isRendered = false;
-      clone.readyToUse = true;
-      clone.node = this.node.cloneDeep();
-      clone.targetNode && (clone.targetNode = this.node.getCopiedElement(this.targetNode, clone.node));
-      clone.parent = null;
-      clone.storage = null;
-      clone.source = null;
-      signal.create(clone, 'onReplaceByUse');
-      if (this.attrChanges) {
-        clone.attrChanges = [];
-        _ref = this.attrChanges;
-        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-          attrChange = _ref[i];
-          clone.attrChanges[i] = attrChange.clone(this, clone);
-        }
+      var attrChange, attrsToSet, clone, condition, func, id, input, iterator, name, node, targetNode, use, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
+      clone = new File(this.path, this.node.cloneDeep());
+      clone.isClone = true;
+      clone.fragments = this.fragments;
+      if (this.targetNode) {
+        targetNode = this.node.getCopiedElement(this.targetNode, clone.node);
       }
-      if (this.inputs) {
-        clone.inputs = [];
-        _ref1 = this.inputs;
-        for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
-          input = _ref1[i];
-          clone.inputs[i] = input.clone(this, clone);
-        }
+      _ref = this.attrChanges;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        attrChange = _ref[_i];
+        clone.attrChanges.push(attrChange.clone(this, clone));
       }
-      if (this.conditions) {
-        clone.conditions = [];
-        _ref2 = this.conditions;
-        for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
-          condition = _ref2[i];
-          clone.conditions[i] = condition.clone(this, clone);
-        }
+      _ref1 = this.inputs;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        input = _ref1[_j];
+        clone.inputs.push(input.clone(this, clone));
       }
-      if (this.iterators) {
-        clone.iterators = [];
-        _ref3 = this.iterators;
-        for (i = _l = 0, _len3 = _ref3.length; _l < _len3; i = ++_l) {
-          iterator = _ref3[i];
-          clone.iterators[i] = iterator.clone(this, clone);
-        }
+      _ref2 = this.conditions;
+      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+        condition = _ref2[_k];
+        clone.conditions.push(condition.clone(this, clone));
       }
-      if (this.uses) {
-        clone.uses = [];
-        _ref4 = this.uses;
-        for (i = _m = 0, _len4 = _ref4.length; _m < _len4; i = ++_m) {
-          use = _ref4[i];
-          clone.uses[i] = use.clone(this, clone);
-        }
+      _ref3 = this.iterators;
+      for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+        iterator = _ref3[_l];
+        clone.iterators.push(iterator.clone(this, clone));
       }
-      if (this.ids) {
-        clone.ids = {};
-        _ref5 = this.ids;
-        for (id in _ref5) {
-          node = _ref5[id];
-          clone.ids[id] = this.node.getCopiedElement(node, clone.node);
-        }
+      _ref4 = this.uses;
+      for (_m = 0, _len4 = _ref4.length; _m < _len4; _m++) {
+        use = _ref4[_m];
+        clone.uses.push(use.clone(this, clone));
       }
-      if (this.funcs) {
-        clone.funcs = {};
-        _ref6 = this.funcs;
-        for (name in _ref6) {
-          func = _ref6[name];
-          clone.funcs[name] = File.Func.bindFuncIntoGlobal(func, clone);
-        }
+      _ref5 = this.ids;
+      for (id in _ref5) {
+        node = _ref5[id];
+        clone.ids[id] = this.node.getCopiedElement(node, clone.node);
       }
-      if (this.attrsToSet) {
-        clone.attrsToSet = [];
-        _ref7 = this.attrsToSet;
-        for (_n = 0, _len5 = _ref7.length; _n < _len5; _n++) {
-          attrsToSet = _ref7[_n];
-          clone.attrsToSet.push(attrsToSet.clone(this, clone));
-        }
+      _ref6 = this.funcs;
+      for (name in _ref6) {
+        func = _ref6[name];
+        clone.funcs[name] = File.Func.bindFuncIntoGlobal(func, clone);
       }
-      //<development>;
-      clone.logs = [];
+      _ref7 = this.attrsToSet;
+      for (_n = 0, _len5 = _ref7.length; _n < _len5; _n++) {
+        attrsToSet = _ref7[_n];
+        clone.attrsToSet.push(attrsToSet.clone(this, clone));
+      }
       _ref8 = this.logs;
       for (_o = 0, _len6 = _ref8.length; _o < _len6; _o++) {
         log = _ref8[_o];
         clone.logs.push(log.clone(this, clone));
       }
-      //</development>;
       return clone;
     };
 
@@ -20128,28 +20287,42 @@ var exports = module.exports;
       pathPool.push(this);
     };
 
-    File.prototype.toSimplifiedObject = function() {
-      return utils.simplify(this, {
-        properties: false,
-        protos: false,
-        constructors: true
-      });
-    };
-
-    File.prototype.toJSON = function() {
-      var ctor, ctors, i, json, _ref;
-      json = this.toSimplifiedObject();
-      _ref = ctors = json.constructors;
-      for (i in _ref) {
-        ctor = _ref[i];
-        ctors[i] = ctor.__path__;
+    File.prototype.toJSON = function(key, arr) {
+      var id, ids, node, _ref;
+      if (!arr) {
+        arr = new Array(JSON_ARGS_LENGTH);
+        arr[0] = JSON_CTOR_ID;
       }
-      return json;
+      arr[JSON_PATH] = this.path;
+      arr[JSON_NODE] = this.node.toJSON();
+      if (this.targetNode) {
+        arr[JSON_TARGET_NODE] = this.targetNode.getAccessPath(this.node);
+      }
+      arr[JSON_FRAGMENTS] = this.fragments;
+      arr[JSON_ATTR_CHANGES] = this.attrChanges;
+      arr[JSON_INPUTS] = this.inputs;
+      arr[JSON_CONDITIONS] = this.conditions;
+      arr[JSON_ITERATORS] = this.iterators;
+      arr[JSON_USES] = this.uses;
+      ids = arr[JSON_IDS] = {};
+      _ref = this.ids;
+      for (id in _ref) {
+        node = _ref[id];
+        ids[id] = node.getAccessPath(this.node);
+      }
+      arr[JSON_FUNCS] = this.funcs;
+      arr[JSON_ATTRS_TO_SET] = this.attrsToSet;
+      //<development>;
+      arr[JSON_LOGS] = this.logs;
+      //</development>;
+      //;
+      arr[JSON_STYLES] = this.styles;
+      return arr;
     };
 
     return File;
 
-  })();
+  })(Emitter);
 
 }).call(this);
 
@@ -20195,7 +20368,7 @@ var exports = module.exports;
         return false;
       }
       styles = data.styles;
-      if (!styles.length) {
+      if (!(styles != null ? styles.length : void 0)) {
         log.warn("No `neft:style` found in main view");
         return false;
       }
@@ -20249,7 +20422,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var Dict, assert, utils;
+  var Dict, QUERY_ASSIGNMENT, QUERY_SEPARATOR, assert, isArray, parseQuery, utils;
 
   utils = require('utils');
 
@@ -20257,7 +20430,39 @@ var exports = module.exports;
 
   Dict = require('dict');
 
+  isArray = Array.isArray;
+
   assert = assert.scope('Networking.Uri');
+
+  QUERY_SEPARATOR = '&';
+
+  QUERY_ASSIGNMENT = '=';
+
+  parseQuery = function(query) {
+    var arr, assignmentIndex, name, param, result, resultVal, val, _i, _len;
+    result = {};
+    arr = query.split(QUERY_SEPARATOR);
+    for (_i = 0, _len = arr.length; _i < _len; _i++) {
+      param = arr[_i];
+      assignmentIndex = param.indexOf(QUERY_ASSIGNMENT);
+      if (assignmentIndex !== -1) {
+        name = param.slice(0, assignmentIndex);
+        val = param.slice(assignmentIndex + 1);
+      } else {
+        name = param;
+        val = '';
+      }
+      resultVal = result[name];
+      if (resultVal === void 0) {
+        result[name] = val;
+      } else if (isArray(resultVal)) {
+        resultVal.push(val);
+      } else {
+        result[name] = [resultVal, val];
+      }
+    }
+    return result;
+  };
 
   module.exports = function(Networking) {
     var Uri;
@@ -20267,32 +20472,76 @@ var exports = module.exports;
       Uri.NAMES_RE = /{([a-zA-Z0-9_$]+)\*?}/g;
 
       function Uri(uri) {
-        var exec, names, re;
+        var authIndex, exec, hashIndex, hostIndex, names, protocolIndex, queryString, re, searchIndex;
         assert.isString(uri, 'ctor uri argument ...');
-        this.params = {};
+        uri = uri.trim();
+        utils.defineProperty(this, '_uri', null, uri);
         uri = Uri.URI_TRIM_RE.exec(uri)[1];
-        utils.defineProperty(this, '_uri', null, "/" + uri);
-        names = [];
-        while ((exec = Uri.NAMES_RE.exec(uri)) != null) {
-          names.push(exec[1]);
-          this.params[exec[1]] = null;
+        if (Uri.NAMES_RE.test(uri) || uri.indexOf('*') !== -1) {
+          Uri.NAMES_RE.lastIndex = 0;
+          this.params = {};
+          names = [];
+          while ((exec = Uri.NAMES_RE.exec(uri)) != null) {
+            names.push(exec[1]);
+            this.params[exec[1]] = null;
+          }
+          Object.preventExtensions(this.params);
+          re = uri;
+          re = re.replace(/(\?)/g, '\\$1');
+          re = re.replace(/{?([a-zA-Z0-9_$]+)?\*}?/g, "(.*?)");
+          re = re.replace(Uri.NAMES_RE, "([^/]+)");
+          re = new RegExp("^\/?" + re + "\/?$");
+        } else {
+          this.params = null;
+          names = null;
+          re = uri;
+          re = re.replace(/(\?)/g, '\\$1');
+          re = new RegExp("^\/?" + re + "\/?$");
         }
         utils.defineProperty(this, '_names', null, names);
-        re = uri;
-        re = re.replace(/(\?)/g, '\\$1');
-        re = re.replace(/{?([a-zA-Z0-9_$]+)?\*}?/g, function() {
-          return "(.*?)";
-        });
-        re = re.replace(Uri.NAMES_RE, function() {
-          return "([^/]+?)";
-        });
-        re = new RegExp("^\/?" + re + "\/?$");
         utils.defineProperty(this, '_re', null, re);
+        hashIndex = uri.lastIndexOf('#');
+        if (hashIndex !== -1) {
+          this.hash = uri.slice(hashIndex + 1);
+          uri = uri.slice(0, hashIndex);
+        } else {
+          this.hash = '';
+        }
+        searchIndex = uri.indexOf('?');
+        if (searchIndex !== -1) {
+          queryString = uri.slice(searchIndex + 1);
+          uri = uri.slice(0, searchIndex);
+          this.query = parseQuery(queryString);
+        } else {
+          this.query = {};
+        }
+        protocolIndex = uri.indexOf(':');
+        if (protocolIndex !== -1 && uri.slice(0, protocolIndex).indexOf('/') === -1) {
+          this.protocol = uri.slice(0, protocolIndex);
+          uri = uri.slice(protocolIndex + 1);
+          while (uri[0] === '/') {
+            uri = uri.slice(1);
+          }
+        } else {
+          this.protocol = '';
+        }
+        authIndex = uri.indexOf('@');
+        if (authIndex !== -1 && uri.slice(0, authIndex).indexOf('/') === -1) {
+          this.auth = uri.slice(0, authIndex);
+          uri = uri.slice(authIndex + 1);
+        } else {
+          this.auth = '';
+        }
+        hostIndex = uri.indexOf('/');
+        if (hostIndex !== -1 && uri.slice(0, hostIndex).indexOf('.') !== -1) {
+          this.host = uri.slice(0, hostIndex);
+          uri = uri.slice(hostIndex + 1);
+        } else {
+          this.host = '';
+        }
+        this.path = "/" + uri;
         Object.freeze(this);
-        Object.preventExtensions(this.params);
       }
-
-      Uri.prototype.params = null;
 
       Uri.prototype.test = function(uri) {
         return this._re.test(uri);
@@ -20301,22 +20550,24 @@ var exports = module.exports;
       Uri.prototype.match = function(uri) {
         var exec, i, name, val, _i, _len, _ref;
         assert.ok(this.test(uri));
-        exec = this._re.exec(uri);
-        _ref = this._names;
-        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-          name = _ref[i];
-          val = exec[i + 1];
-          if (val === void 0) {
-            val = null;
+        if (this._names != null) {
+          exec = this._re.exec(uri);
+          _ref = this._names;
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            name = _ref[i];
+            val = exec[i + 1];
+            if (val === void 0) {
+              val = null;
+            }
+            this.params[name] = decodeURI(val);
           }
-          this.params[name] = decodeURI(val);
         }
         return this.params;
       };
 
       Uri.prototype.toString = function(params) {
         var i;
-        if (params != null) {
+        if ((params != null) && (this._re != null)) {
           assert.isObject(params, 'toString() params argument ...');
         } else {
           return this._uri;
@@ -20394,10 +20645,10 @@ var exports = module.exports;
         if (this.method !== req.method) {
           return next();
         }
-        if (!this.uri.test(req.uri)) {
+        if (!this.uri.test(req.uri.path)) {
           return next();
         }
-        params = req.params = this.uri.match(req.uri);
+        params = req.params = this.uri.match(req.uri.path);
         if (this.schema) {
           _ref = this.schema.schema;
           for (key in _ref) {
@@ -20418,7 +20669,7 @@ var exports = module.exports;
             if ((err != null) && err !== true) {
               errMsg = err;
               if (errMsg.stack != null) {
-                if (utils.isQml) {
+                if (utils.isQt) {
                   errMsg = "" + err.message + "\n" + err.stack;
                 } else {
                   errMsg = err.stack;
@@ -20485,7 +20736,7 @@ var exports = module.exports;
       Request.TYPES = [(Request.TEXT_TYPE = 'text'), (Request.JSON_TYPE = 'json'), (Request.HTML_TYPE = 'html'), (Request.BINARY_TYPE = 'binary')];
 
       function Request(opts) {
-        var uid, _ref;
+        var uid;
         assert.isPlainObject(opts, 'ctor options argument ...');
         if (opts.uid != null) {
           assert.isString(opts.uid);
@@ -20493,22 +20744,26 @@ var exports = module.exports;
         if (opts.method != null) {
           assert.ok(utils.has(Request.METHODS, opts.method));
         }
-        assert.isString(opts.uri, 'ctor options.uri argument ...');
-        Request.__super__.constructor.call(this);
-        if (((_ref = opts.uri) != null ? _ref.toString : void 0) != null) {
-          opts.uri = opts.uri.toString();
+        if (!(opts.uri instanceof Networking.Uri)) {
+          assert.isString(opts.uri, 'ctor options.uri argument ...');
         }
+        Request.__super__.constructor.call(this);
         if (opts.type != null) {
           assert.ok(utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...');
           this.type = opts.type;
         }
         utils.defineProperty(this, 'type', utils.ENUMERABLE, this.type);
-        this.data = opts.data, this.uri = opts.uri;
+        this.data = opts.data, this.headers = opts.headers, this.cookies = opts.cookies;
         if (opts.method != null) {
           this.method = opts.method;
         }
-        this.headers = opts.headers || {};
-        this.cookies = opts.cookies || {};
+        this.headers || (this.headers = {});
+        this.cookies || (this.cookies = {});
+        if (typeof opts.uri === 'string') {
+          this.uri = new Networking.Uri(opts.uri);
+        } else {
+          this.uri = opts.uri;
+        }
         uid = opts.uid || utils.uid();
         utils.defineProperty(this, 'uid', null, uid);
         this.pending = true;
@@ -20526,7 +20781,7 @@ var exports = module.exports;
 
       Request.prototype.method = Request.GET;
 
-      Request.prototype.uri = '';
+      Request.prototype.uri = null;
 
       Request.prototype.type = Request.JSON_TYPE;
 
@@ -20907,10 +21162,7 @@ var exports = module.exports;
       var logtime, req, res, resOpts;
       assert.instanceOf(this, Networking);
       assert.isPlainObject(opts, '::createRequest options argument ...');
-      opts.uri || (opts.uri = '');
-      if (opts.uri.toString != null) {
-        opts.uri = opts.uri.toString();
-      }
+      opts.uri = opts.uri ? opts.uri + '' : '';
       if (!EXTERNAL_URL_RE.test(opts.uri)) {
         if (opts.uri[0] !== '/') {
           opts.uri = "/" + opts.uri;
@@ -21444,11 +21696,14 @@ var exports = module.exports;
         tmplName = (opts != null ? opts.template : void 0) || 'template';
         useName = (opts != null ? opts.use : void 0) || 'body';
         logtime = log.time('Render');
+        if (viewName !== tmplName && (tmpl = app.views[tmplName])) {
+          tmplView = Route.prototype.getTemplateView.call(this, tmplName);
+          tmplView.use(useName, null);
+        }
         if (view = app.views[viewName]) {
           r = view.render(this);
         }
-        if (viewName !== tmplName && (tmpl = app.views[tmplName])) {
-          tmplView = Route.prototype.getTemplateView.call(this, tmplName);
+        if (tmplView) {
           if (r != null) {
             r = tmplView.use(useName, r);
           } else {
@@ -21508,210 +21763,391 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../emitter/node_modules/immediate/lib/nextTick.js'] = (function(){
-var module = {exports: modules["../emitter/node_modules/immediate/lib/nextTick.js"]};
-var require = getModule.bind(null, {});
-var exports = module.exports;
-
-'use strict';
-exports.test = function () {
-  // Don't get fooled by e.g. browserify environments.
-  return typeof process === 'object' && !process.browser;
-};
-
-exports.install = function (func) {
-  return function () {
-    process.nextTick(func);
-  };
-};
-
-return module.exports;
-})();modules['../emitter/node_modules/immediate/lib/mutation.js'] = (function(){
-var module = {exports: modules["../emitter/node_modules/immediate/lib/mutation.js"]};
-var require = getModule.bind(null, {});
-var exports = module.exports;
-
-'use strict';
-//based off rsvp https://github.com/tildeio/rsvp.js
-//license https://github.com/tildeio/rsvp.js/blob/master/LICENSE
-//https://github.com/tildeio/rsvp.js/blob/master/lib/rsvp/asap.js
-
-var Mutation = typeof window === 'object' && (window.MutationObserver || window.WebKitMutationObserver);
-
-exports.test = function () {
-  return Mutation;
-};
-
-exports.install = function (handle) {
-  var called = 0;
-  var observer = new Mutation(handle);
-  var element = window.document.createTextNode('');
-  observer.observe(element, {
-    characterData: true
-  });
-  return function () {
-    element.data = (called = ++called % 2);
-  };
-};
-
-return module.exports;
-})();modules['../emitter/node_modules/immediate/lib/messageChannel.js'] = (function(){
-var module = {exports: modules["../emitter/node_modules/immediate/lib/messageChannel.js"]};
-var require = getModule.bind(null, {});
-var exports = module.exports;
-
-'use strict';
-
-exports.test = function () {
-  if (typeof window !== 'object' || window.setImmediate) {
-    // we can only get here in IE10
-    // which doesn't handel postMessage well
-    return false;
-  }
-  return typeof window.MessageChannel !== 'undefined';
-};
-
-exports.install = function (func) {
-  var channel = new window.MessageChannel();
-  channel.port1.onmessage = func;
-  return function () {
-    channel.port2.postMessage(0);
-  };
-};
-
-return module.exports;
-})();modules['../emitter/node_modules/immediate/lib/stateChange.js'] = (function(){
-var module = {exports: modules["../emitter/node_modules/immediate/lib/stateChange.js"]};
-var require = getModule.bind(null, {});
-var exports = module.exports;
-
-'use strict';
-
-exports.test = function () {
-  return window &&
-         'document' in window &&
-         'onreadystatechange' in window.document.createElement('script');
-};
-
-exports.install = function (handle) {
-  return function () {
-
-    // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-    // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-    var scriptEl = window.document.createElement('script');
-    scriptEl.onreadystatechange = function () {
-      handle();
-
-      scriptEl.onreadystatechange = null;
-      scriptEl.parentNode.removeChild(scriptEl);
-      scriptEl = null;
-    };
-    window.document.documentElement.appendChild(scriptEl);
-
-    return handle;
-  };
-};
-
-return module.exports;
-})();modules['../emitter/node_modules/immediate/lib/timeout.js'] = (function(){
-var module = {exports: modules["../emitter/node_modules/immediate/lib/timeout.js"]};
-var require = getModule.bind(null, {});
-var exports = module.exports;
-
-'use strict';
-exports.test = function () {
-  return true;
-};
-
-exports.install = function (t) {
-  return function () {
-    setTimeout(t, 0);
-  };
-};
-
-return module.exports;
-})();modules['../emitter/node_modules/immediate/lib/index.js'] = (function(){
-var module = {exports: modules["../emitter/node_modules/immediate/lib/index.js"]};
-var require = getModule.bind(null, {"./nextTick":"../emitter/node_modules/immediate/lib/nextTick.js","./mutation":"../emitter/node_modules/immediate/lib/mutation.js","./messageChannel":"../emitter/node_modules/immediate/lib/messageChannel.js","./stateChange":"../emitter/node_modules/immediate/lib/stateChange.js","./timeout":"../emitter/node_modules/immediate/lib/timeout.js"});
-var exports = module.exports;
-
-'use strict';
-var types = [
-  require('./nextTick'),
-  require('./mutation'),
-  require('./messageChannel'),
-  require('./stateChange'),
-  require('./timeout')
-];
-var draining;
-var queue = [];
-function drainQueue() {
-  draining = true;
-  var i, oldQueue;
-  var len = queue.length;
-  while (len) {
-    oldQueue = queue;
-    queue = [];
-    i = -1;
-    while (++i < len) {
-      oldQueue[i]();
-    }
-    len = queue.length;
-  }
-  draining = false;
-}
-var scheduleDrain;
-var i = -1;
-var len = types.length;
-while (++ i < len) {
-  if (types[i].test()) {
-    scheduleDrain = types[i].install(drainQueue);
-    break;
-  }
-}
-module.exports = immediate;
-function immediate(task) {
-  if (queue.push(task) === 1 && !draining) {
-    scheduleDrain();
-  }
-}
-
-return module.exports;
 })();modules['package.json'] = (function(){
 var module = {exports: modules["package.json"]};
 var require = getModule.bind(null, {});
 var exports = module.exports;
 
 module.exports = {
-	"private": true,
-	"name": "app",
-	"version": "0.7.1",
-	"config": {
-		"title": "Neft.io Application",
-		"protocol": "http",
-		"port": 3000,
-		"host": "0.0.0.0",
-		"language": "en",
-		"type": "app",
-		"resources": "static/"
-	},
-	"dependencies": {
-		"utils": "git+ssh://git@github.com:Kildyt/utils.git",
-		"schema": "git+ssh://git@bitbucket.org:Kildyt/schema.git",
-		"expect": "git+ssh://git@github.com:Kildyt/expect.git",
-		"emitter": "git+ssh://git@bitbucket.org:Kildyt/emitter.git",
-		"log": "git+ssh://git@bitbucket.org:Kildyt/log.git",
-		"db": "git+ssh://git@github.com:Kildyt/Db.git",
-		"db-implementation": "git+ssh://git@bitbucket.org:Kildyt/db-implementation.git",
-		"db-addons": "git+ssh://git@bitbucket.org:Kildyt/db-addons.git",
-		"db-schema": "git+ssh://git@bitbucket.org:Kildyt/db-schema.git",
-		"networking": "git+ssh://git@bitbucket.org:Kildyt/networking.git",
-		"view": "git+ssh://git@bitbucket.org:Kildyt/view.git",
-		"styles": "git+ssh://git@bitbucket.org:Kildyt/styles.git",
-		"view-styles": "git+ssh://git@bitbucket.org:Kildyt/view-styles.git"
-	}
+  "private": true,
+  "name": "app",
+  "version": "0.7.1",
+  "description": "Neft.io main application",
+  "license": "Apache 2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/app.git"
+  },
+  "bugs": "https://github.com/Neft-io/app/issues",
+  "config": {
+    "title": "Neft.io Application",
+    "protocol": "http",
+    "port": 3000,
+    "host": "localhost",
+    "language": "en",
+    "type": "app"
+  }
 }
 ;
+
+return module.exports;
+})();modules['../native/actions.coffee'] = (function(){
+var module = {exports: modules["../native/actions.coffee"]};
+var require = getModule.bind(null, {});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  exports["in"] = (function(i) {
+    return {
+      EVENT: i++,
+      SCREEN_SIZE: i++,
+      SCREEN_ORIENTATION: i++,
+      NAVIGATOR_LANGUAGE: i++,
+      NAVIGATOR_ONLINE: i++,
+      DEVICE_PIXEL_RATIO: i++,
+      DEVICE_IS_PHONE: i++,
+      POINTER_PRESS: i++,
+      POINTER_RELEASE: i++,
+      POINTER_MOVE: i++,
+      DEVICE_KEYBOARD_SHOW: i++,
+      DEVICE_KEYBOARD_HIDE: i++,
+      KEY_PRESS: i++,
+      KEY_HOLD: i++,
+      KEY_INPUT: i++,
+      KEY_RELEASE: i++,
+      IMAGE_SIZE: i++,
+      TEXT_SIZE: i++,
+      FONT_LOAD: i++,
+      SCROLLABLE_CONTENT_X: i++,
+      SCROLLABLE_CONTENT_Y: i++
+    };
+  })(0);
+
+  exports.out = (function(i) {
+    return {
+      CALL_FUNCTION: i++,
+      DEVICE_SHOW_KEYBOARD: i++,
+      DEVICE_HIDE_KEYBOARD: i++,
+      SET_WINDOW: i++,
+      CREATE_ITEM: i++,
+      SET_ITEM_PARENT: i++,
+      INSERT_ITEM_BEFORE: i++,
+      SET_ITEM_VISIBLE: i++,
+      SET_ITEM_CLIP: i++,
+      SET_ITEM_WIDTH: i++,
+      SET_ITEM_HEIGHT: i++,
+      SET_ITEM_X: i++,
+      SET_ITEM_Y: i++,
+      SET_ITEM_Z: i++,
+      SET_ITEM_SCALE: i++,
+      SET_ITEM_ROTATION: i++,
+      SET_ITEM_OPACITY: i++,
+      SET_ITEM_BACKGROUND: i++,
+      SET_ITEM_KEYS_FOCUS: i++,
+      CREATE_IMAGE: i++,
+      SET_IMAGE_SOURCE: i++,
+      SET_IMAGE_SOURCE_WIDTH: i++,
+      SET_IMAGE_SOURCE_HEIGHT: i++,
+      SET_IMAGE_FILL_MODE: i++,
+      SET_IMAGE_OFFSET_X: i++,
+      SET_IMAGE_OFFSET_Y: i++,
+      CREATE_TEXT: i++,
+      SET_TEXT: i++,
+      SET_TEXT_WRAP: i++,
+      UPDATE_TEXT_CONTENT_SIZE: i++,
+      SET_TEXT_COLOR: i++,
+      SET_TEXT_LINE_HEIGHT: i++,
+      SET_TEXT_FONT_FAMILY: i++,
+      SET_TEXT_FONT_PIXEL_SIZE: i++,
+      SET_TEXT_FONT_WORD_SPACING: i++,
+      SET_TEXT_FONT_LETTER_SPACING: i++,
+      SET_TEXT_ALIGNMENT_HORIZONTAL: i++,
+      SET_TEXT_ALIGNMENT_VERTICAL: i++,
+      CREATE_TEXT_INPUT: i++,
+      SET_TEXT_INPUT_TEXT: i++,
+      SET_TEXT_INPUT_COLOR: i++,
+      SET_TEXT_INPUT_LINE_HEIGHT: i++,
+      SET_TEXT_INPUT_MULTI_LINE: i++,
+      SET_TEXT_INPUT_ECHO_MODE: i++,
+      SET_TEXT_INPUT_FONT_FAMILY: i++,
+      SET_TEXT_FONT_INPUT_PIXEL_SIZE: i++,
+      SET_TEXT_FONT_INPUT_WORD_SPACING: i++,
+      SET_TEXT_FONT_INPUT_LETTER_SPACING: i++,
+      SET_TEXT_INPUT_ALIGNMENT_HORIZONTAL: i++,
+      SET_TEXT_INPUT_ALIGNMENT_VERTICAL: i++,
+      LOAD_FONT: i++,
+      CREATE_RECTANGLE: i++,
+      SET_RECTANGLE_COLOR: i++,
+      SET_RECTANGLE_RADIUS: i++,
+      SET_RECTANGLE_BORDER_COLOR: i++,
+      SET_RECTANGLE_BORDER_WIDTH: i++,
+      CREATE_SCROLLABLE: i++,
+      SET_SCROLLABLE_CONTENT_ITEM: i++,
+      SET_SCROLLABLE_CONTENT_X: i++,
+      SET_SCROLLABLE_CONTENT_Y: i++,
+      ACTIVATE_SCROLLABLE: i++
+    };
+  })(0);
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../native/bridge.coffee'] = (function(){
+var module = {exports: modules["../native/bridge.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert, impl, listeners, log, reader, utils;
+
+  utils = require('utils');
+
+  log = require('log');
+
+  assert = require('neft-assert');
+
+  listeners = Object.create(null);
+
+  reader = {
+    booleans: null,
+    booleansIndex: 0,
+    integers: null,
+    integersIndex: 0,
+    floats: null,
+    floatsIndex: 0,
+    strings: null,
+    stringsIndex: 0,
+    getBoolean: function() {
+      return this.booleans[this.booleansIndex++];
+    },
+    getInteger: function() {
+      return this.integers[this.integersIndex++];
+    },
+    getFloat: function() {
+      return this.floats[this.floatsIndex++];
+    },
+    getString: function() {
+      return this.strings[this.stringsIndex++];
+    }
+  };
+
+  Object.preventExtensions(reader);
+
+  exports.onData = function(actions, booleans, integers, floats, strings) {
+    var action, func, _i, _len;
+    reader.booleans = booleans;
+    reader.booleansIndex = 0;
+    reader.integers = integers;
+    reader.integersIndex = 0;
+    reader.floats = floats;
+    reader.floatsIndex = 0;
+    reader.strings = strings;
+    reader.stringsIndex = 0;
+    for (_i = 0, _len = actions.length; _i < _len; _i++) {
+      action = actions[_i];
+      func = listeners[action];
+      assert.isFunction(func, "unknown native action got '" + action + "'");
+      func(reader);
+    }
+    exports.sendData();
+  };
+
+  exports.addActionListener = function(action, listener) {
+    assert.isInteger(action);
+    assert.isFunction(listener);
+    assert.isNotDefined(listeners[action], "action '" + action + "' already has a listener");
+    listeners[action] = listener;
+  };
+
+  exports.sendData = function() {};
+
+  exports.pushAction = function(val) {};
+
+  exports.pushBoolean = function(val) {};
+
+  exports.pushInteger = function(val) {};
+
+  exports.pushFloat = function(val) {};
+
+  exports.pushString = function(val) {};
+
+  impl = (function() {
+    switch (true) {
+      case utils.isAndroid:
+        return require('./impl/android/bridge');
+      case utils.isIOS:
+        return require('./impl/ios/bridge');
+    }
+  })();
+
+  if (impl != null) {
+    utils.merge(exports, impl(exports));
+  }
+
+  //<development>;
+
+  exports.pushAction = (function(_super) {
+    return function(val) {
+      assert.isInteger(val, "integer expected, but '" + val + "' given");
+      _super(val);
+    };
+  })(exports.pushAction);
+
+  exports.pushBoolean = (function(_super) {
+    return function(val) {
+      assert.isBoolean(val, "boolean expected, but '" + val + "' given");
+      _super(val);
+    };
+  })(exports.pushBoolean);
+
+  exports.pushInteger = (function(_super) {
+    return function(val) {
+      assert.isInteger(val, "integer expected, but '" + val + "' given");
+      _super(val);
+    };
+  })(exports.pushInteger);
+
+  exports.pushFloat = (function(_super) {
+    return function(val) {
+      assert.isFloat(val, "float expected, but '" + val + "' given");
+      _super(val);
+    };
+  })(exports.pushFloat);
+
+  exports.pushString = (function(_super) {
+    return function(val) {
+      assert.isString(val, "string expected, but '" + val + "' given");
+      _super(val);
+    };
+  })(exports.pushString);
+
+  //</development>;
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../native/index.coffee.md'] = (function(){
+var module = {exports: modules["../native/index.coffee.md"]};
+var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","./actions":"../native/actions.coffee","./bridge":"../native/bridge.coffee"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var CALL_FUNCTION, CALL_FUNCTION_WITH_CALLBACK, EVENT_BOOLEAN_TYPE, EVENT_FLOAT_TYPE, EVENT_NULL_TYPE, EVENT_STRING_TYPE, actions, assert, bridge, i, listeners, log, pushPending, sendData, _ref;
+
+  assert = require('neft-assert');
+
+  log = require('log');
+
+  actions = require('./actions');
+
+  bridge = require('./bridge');
+
+  _ref = actions.out, CALL_FUNCTION = _ref.CALL_FUNCTION, CALL_FUNCTION_WITH_CALLBACK = _ref.CALL_FUNCTION_WITH_CALLBACK;
+
+  i = 0;
+
+  EVENT_NULL_TYPE = i++;
+
+  EVENT_BOOLEAN_TYPE = i++;
+
+  EVENT_FLOAT_TYPE = i++;
+
+  EVENT_STRING_TYPE = i++;
+
+  listeners = Object.create(null);
+
+  bridge.addActionListener(actions["in"].EVENT, (function(args) {
+    return function(reader) {
+      var argsLen, arr, func, name, _i, _j, _len;
+      name = reader.getString();
+      argsLen = reader.getInteger();
+      for (i = _i = 0; _i < argsLen; i = _i += 1) {
+        switch (reader.getInteger()) {
+          case EVENT_NULL_TYPE:
+            args[i] = null;
+            break;
+          case EVENT_BOOLEAN_TYPE:
+            args[i] = reader.getBoolean();
+            break;
+          case EVENT_FLOAT_TYPE:
+            args[i] = reader.getFloat();
+            break;
+          case EVENT_STRING_TYPE:
+            args[i] = reader.getString();
+        }
+      }
+      if (arr = listeners[name]) {
+        for (_j = 0, _len = arr.length; _j < _len; _j++) {
+          func = arr[_j];
+          func.apply(null, args);
+        }
+      } else {
+        log.warn("No listeners added for the native event '" + name + "'");
+      }
+    };
+  })([]));
+
+  pushPending = false;
+
+  sendData = function() {
+    pushPending = false;
+    bridge.sendData();
+  };
+
+  exports.callFunction = function(name, arg1, arg2, arg3) {
+    var arg, argsLen, _i;
+    assert.isString(name);
+    assert.notLengthOf(name, 0);
+    bridge.pushAction(CALL_FUNCTION);
+    bridge.pushString(name);
+    argsLen = arguments.length - 1;
+    bridge.pushInteger(argsLen);
+    for (i = _i = 0; 0 <= argsLen ? _i < argsLen : _i > argsLen; i = 0 <= argsLen ? ++_i : --_i) {
+      arg = arguments[i + 1];
+      switch (typeof arg) {
+        case 'boolean':
+          bridge.pushInteger(EVENT_BOOLEAN_TYPE);
+          bridge.pushBoolean(arg);
+          break;
+        case 'number':
+          assert.isFloat(arg, "NaN can't be passed to the native function");
+          bridge.pushInteger(EVENT_FLOAT_TYPE);
+          bridge.pushFloat(arg);
+          break;
+        case 'string':
+          bridge.pushInteger(EVENT_STRING_TYPE);
+          bridge.pushString(arg);
+          break;
+        default:
+          if (arg != null) {
+            log.warn("Native function can be called with a boolean, " + ("float or a string, but '" + arg + "' given"));
+          }
+          bridge.pushInteger(EVENT_NULL_TYPE);
+      }
+    }
+    if (!pushPending) {
+      pushPending = true;
+      setImmediate(sendData);
+    }
+  };
+
+  exports.on = function(name, listener) {
+    var eventListeners;
+    assert.isString(name);
+    assert.notLengthOf(name, 0);
+    assert.isFunction(listener);
+    eventListeners = listeners[name] != null ? listeners[name] : listeners[name] = [];
+    eventListeners.push(listener);
+  };
+
+}).call(this);
+
 
 return module.exports;
 })();modules['../styles/file/styles.coffee'] = (function(){
@@ -21721,28 +22157,14 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, styleParseStyles, utils;
+  var assert, utils;
 
   utils = require('utils');
 
   assert = require('assert');
 
-  if (utils.isNode) {
-    styleParseStyles = require('./parse/styles');
-  }
-
   module.exports = function(File) {
     var renderStyles, revertStyles;
-    if (utils.isNode) {
-      File.onParse((function() {
-        var styles;
-        styles = styleParseStyles(File);
-        return function(file) {
-          return styles(file);
-        };
-      })());
-    }
-    File.prototype.styles = null;
     renderStyles = (function() {
       var pending, queue, render, renderAll;
       pending = false;
@@ -21772,16 +22194,13 @@ var exports = module.exports;
       return function(arr) {
         queue.push(arr);
         if (!pending) {
-          requestAnimationFrame(renderAll);
+          setImmediate(renderAll);
           pending = true;
         }
       };
     })();
     File.onBeforeRender(function(file) {
-      var styles;
-      if (styles = file.styles) {
-        renderStyles(styles);
-      }
+      renderStyles(file.styles);
     });
     revertStyles = function(arr) {
       var style, _i, _j, _len, _len1;
@@ -21795,22 +22214,16 @@ var exports = module.exports;
       }
     };
     File.onBeforeRevert(function(file) {
-      var styles;
-      if (styles = file.styles) {
-        revertStyles(styles);
-      }
+      revertStyles(file.styles);
     });
     return File.prototype._clone = (function(_super) {
       return function() {
-        var clone, cloned, i, style, _i, _len, _ref;
+        var clone, i, style, _i, _len, _ref;
         clone = _super.call(this);
-        if (this.styles) {
-          clone.styles = [];
-          _ref = this.styles;
-          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-            style = _ref[i];
-            cloned = clone.styles[i] = style.clone(this, clone);
-          }
+        _ref = this.styles;
+        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+          style = _ref[i];
+          clone.styles.push(style.clone(this, clone));
         }
         return clone;
       };
@@ -21845,13 +22258,101 @@ var exports = module.exports;
   module.exports = function(File, data) {
     var Style;
     return Style = (function() {
-      var Tag, attrsChangeListener, emptyComponent, findItemIndex, findItemWithParent, getter, globalHideDelay, globalShowDelay, hideEvent, listenTextRec, opts, setter, showEvent, styles, stylesToRender, stylesToRevert, textChangeListener, updateWhenPossible, windowStyle;
+      var JSON_ARGS_LENGTH, JSON_ATTRS, JSON_CHILDREN, JSON_CTOR_ID, JSON_NODE, Tag, attrsChangeListener, emptyComponent, findItemIndex, findItemWithParent, getter, globalHideDelay, globalShowDelay, hideEvent, i, listenTextRec, opts, queries, setter, showEvent, styles, stylesToRender, stylesToRevert, textChangeListener, updateWhenPossible, windowStyle;
 
-      windowStyle = data.windowStyle, styles = data.styles;
+      windowStyle = data.windowStyle, styles = data.styles, queries = data.queries;
+
+      Tag = File.Element.Tag;
 
       Style.__name__ = 'Style';
 
       Style.__path__ = 'File.Style';
+
+      JSON_CTOR_ID = Style.JSON_CTOR_ID = File.JSON_CTORS.push(Style) - 1;
+
+      i = 1;
+
+      JSON_NODE = i++;
+
+      JSON_ATTRS = i++;
+
+      JSON_CHILDREN = i++;
+
+      JSON_ARGS_LENGTH = Style.JSON_ARGS_LENGTH = i;
+
+      Style.extendDocumentByStyles = (function() {
+        var forNode, getStyleAttrs;
+        getStyleAttrs = function(node) {
+          var attr, attrs;
+          attrs = null;
+          for (attr in node._attrs) {
+            if (attr === 'class' || attr.slice(0, 6) === 'style:') {
+              if (attrs == null) {
+                attrs = {};
+              }
+              attrs[attr] = true;
+            }
+          }
+          return attrs;
+        };
+        forNode = function(file, node, parentStyle) {
+          var attr, child, style, _i, _len, _ref;
+          if (attr = node.getAttr('neft:style')) {
+            style = new Style;
+            style.file = file;
+            style.node = node;
+            style.parent = parentStyle;
+            style.attrs = getStyleAttrs(node);
+            if (parentStyle) {
+              parentStyle.children.push(style);
+            } else {
+              file.styles.push(style);
+            }
+            parentStyle = style;
+          }
+          _ref = node.children;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            child = _ref[_i];
+            if (child instanceof File.Element.Tag) {
+              forNode(file, child, parentStyle);
+            }
+          }
+        };
+        return function(file) {
+          var elem, node, nodes, _i, _j, _len, _len1;
+          assert.instanceOf(file, File);
+          for (_i = 0, _len = queries.length; _i < _len; _i++) {
+            elem = queries[_i];
+            nodes = file.node.queryAll(elem.query);
+            for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
+              node = nodes[_j];
+              if (!node.hasAttr('neft:style')) {
+                node.setAttr('neft:style', elem.style);
+              }
+            }
+          }
+          forNode(file, file.node, null);
+          return file;
+        };
+      })();
+
+      Style._fromJSON = function(file, arr, obj) {
+        var child, cloneChild, _i, _len, _ref;
+        if (!obj) {
+          obj = new Style;
+        }
+        obj.file = file;
+        obj.node = file.node.getChildByAccessPath(arr[JSON_NODE]);
+        obj.attrs = arr[JSON_ATTRS];
+        _ref = arr[JSON_CHILDREN];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          child = _ref[_i];
+          cloneChild = Style._fromJSON(file, child);
+          cloneChild.parent = obj;
+          obj.children.push(cloneChild);
+        }
+        return obj;
+      };
 
       emptyComponent = new Renderer.Component;
 
@@ -21917,7 +22418,6 @@ var exports = module.exports;
         this.parentSet = false;
         this.lastItemParent = null;
         this.waiting = false;
-        this.index = -1;
         this.attrsQueue = [];
         this.attrsClass = null;
         this.isRendered = false;
@@ -22006,7 +22506,7 @@ var exports = module.exports;
         return function(style) {
           if (!pending) {
             lastDate = Date.now();
-            requestAnimationFrame(sync);
+            setImmediate(sync);
             pending = true;
           }
           style.waiting = true;
@@ -22040,7 +22540,7 @@ var exports = module.exports;
       };
 
       Style.prototype.renderItem = function() {
-        var attr, attrsQueue, i, _i, _len, _ref;
+        var attr, attrsQueue, _i, _len, _ref;
         if (!this.item || !this.file.isRendered) {
           return;
         }
@@ -22067,7 +22567,6 @@ var exports = module.exports;
       };
 
       Style.prototype.revert = function() {
-        var tmpNode;
         if (this.waiting || !this.isRendered) {
           return;
         }
@@ -22083,16 +22582,10 @@ var exports = module.exports;
         this.file.readyToUse = false;
         stylesToRevert.push(this);
         updateWhenPossible(this);
-        tmpNode = this.node;
-        while ((tmpNode = tmpNode._parent) && !tmpNode.style) {
-          if (tmpNode.name === 'neft:blank') {
-            tmpNode._documentStyle = null;
-          }
-        }
       };
 
       Style.prototype.revertItem = function() {
-        var itemDocumentNode, tmpNode;
+        var itemDocumentNode;
         if (!this.item) {
           return;
         }
@@ -22108,14 +22601,6 @@ var exports = module.exports;
         itemDocumentNode = this.item.document.node;
         this.item.document.node = null;
         this.item.document.visible = true;
-        tmpNode = this.node;
-        while (tmpNode = tmpNode._parent) {
-          if (tmpNode._documentStyle === this) {
-            tmpNode._documentStyle = null;
-          } else {
-            break;
-          }
-        }
         if (this.isLinkUriSet) {
           this.item.linkUri = this.baseLinkUri;
           this.isLinkUriSet = false;
@@ -22150,7 +22635,7 @@ var exports = module.exports;
         hasStyledChild = this.children.length || node.query('[neft:style]');
         if (!hasStyledChild && (anchor = node.query('> a'))) {
           node = anchor;
-          href = node.attrs.get('href');
+          href = node.getAttr('href');
           if (typeof href === 'string') {
             if (!this.isLinkUriSet) {
               this.isLinkUriSet = true;
@@ -22176,7 +22661,7 @@ var exports = module.exports;
         while (true) {
           visible = tmpNode._visible;
           tmpNode = tmpNode._parent;
-          if (!visible || !tmpNode) {
+          if (!visible || !tmpNode || tmpNode._style) {
             break;
           }
         }
@@ -22222,7 +22707,7 @@ var exports = module.exports;
           };
         })();
         return function(attr, val, oldVal) {
-          var i, internalProp, obj, prop, props, _i, _ref;
+          var internalProp, obj, prop, props, _i, _ref;
           assert.instanceOf(this, Style);
           if (this.waiting || !this.item) {
             this.attrsQueue.push(attr, val, oldVal);
@@ -22261,7 +22746,7 @@ var exports = module.exports;
       })();
 
       Style.prototype.syncClassAttr = function(val, oldVal) {
-        var classes, i, index, item, name, newClasses, oldClasses, prevIndex, _i, _j, _len, _len1;
+        var classes, index, item, name, newClasses, oldClasses, prevIndex, _i, _j, _len, _len1;
         item = this.item;
         classes = item.classes;
         newClasses = val && val.split(' ');
@@ -22300,12 +22785,12 @@ var exports = module.exports;
 
       Style.prototype.isLink = function() {
         var _ref;
-        return this.node.name === 'a' && ((_ref = this.node.attrs.get('href')) != null ? _ref[0] : void 0) !== '#';
+        return this.node.name === 'a' && (this.node.getAttr('href') != null) && ((_ref = this.node.getAttr('href')) != null ? _ref[0] : void 0) !== '#';
       };
 
       Style.prototype.getLinkUri = function() {
         var uri;
-        uri = this.node.attrs.get('href') + '';
+        uri = this.node.getAttr('href') + '';
         //<development>;
         if (!/^([a-z]+:|\/|\$\{)/.test(uri)) {
           log.warn("Relative link found `" + uri + "`");
@@ -22323,7 +22808,7 @@ var exports = module.exports;
           return;
         }
         assert.notOk(this.item);
-        id = this.node.attrs.get('neft:style');
+        id = this.node.getAttr('neft:style');
         assert.isString(id);
         this.isScope = /^(styles|renderer)\:/.test(id);
         this.item = null;
@@ -22343,7 +22828,7 @@ var exports = module.exports;
               parentId = "styles:" + file + ":" + style;
               parent = this.parent;
               while (true) {
-                if (parent && parent.node.attrs.get('neft:style') === parentId) {
+                if (parent && parent.node.getAttr('neft:style') === parentId) {
                   if (!parent.scope) {
                     return;
                   }
@@ -22404,7 +22889,7 @@ var exports = module.exports;
         tmpSiblingNode = tmpIndexNode;
         while (tmpIndexNode) {
           while (tmpSiblingNode) {
-            if (tmpSiblingNode !== node) {
+            if (tmpSiblingNode !== node && tmpSiblingNode instanceof Tag) {
               if (((_ref1 = tmpSiblingNode._documentStyle) != null ? _ref1.parentSet : void 0) && (tmpSiblingItem = tmpSiblingNode._documentStyle.item)) {
                 if (tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)) {
                   if (item !== tmpSiblingTargetItem) {
@@ -22414,7 +22899,7 @@ var exports = module.exports;
                   }
                   return;
                 }
-              } else if (tmpSiblingNode.name === 'neft:blank') {
+              } else if (!tmpSiblingNode._documentStyle) {
                 tmpIndexNode = tmpSiblingNode;
                 tmpSiblingNode = utils.last(tmpIndexNode.children);
                 continue;
@@ -22425,10 +22910,11 @@ var exports = module.exports;
           if (tmpIndexNode !== node && tmpIndexNode.style) {
             return;
           }
-          tmpIndexNode = tmpIndexNode._parent;
-          tmpSiblingNode = tmpIndexNode._previousSibling;
-          if (((_ref2 = tmpIndexNode._documentStyle) != null ? _ref2.item : void 0) === parent) {
-            return;
+          if (tmpIndexNode = tmpIndexNode._parent) {
+            tmpSiblingNode = tmpIndexNode._previousSibling;
+            if (((_ref2 = tmpIndexNode._documentStyle) != null ? _ref2.item : void 0) === parent) {
+              return;
+            }
           }
         }
       };
@@ -22452,8 +22938,6 @@ var exports = module.exports;
                 this.item.parent = item;
                 break;
               }
-            } else if (tmpNode.name !== 'neft:blank') {
-              tmpNode._documentStyle = this;
             }
             tmpNode = tmpNode._parent;
           }
@@ -22478,7 +22962,6 @@ var exports = module.exports;
         clone.file = file;
         clone.node = originalFile.node.getCopiedElement(this.node, file.node);
         clone.attrs = this.attrs;
-        clone.index = this.index;
         clone.node._documentStyle = clone;
         styleAttr = clone.node._attrs['neft:style'];
         clone.isAutoParent = !/^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr);
@@ -22506,6 +22989,17 @@ var exports = module.exports;
           }
         }
         return clone;
+      };
+
+      Style.prototype.toJSON = function(key, arr) {
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+        arr[JSON_ATTRS] = this.attrs;
+        arr[JSON_CHILDREN] = this.children;
+        return arr;
       };
 
       Tag = File.Element.Tag;
@@ -22555,24 +23049,51 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../styles/index.coffee.md'] = (function(){
-var module = {exports: modules["../styles/index.coffee.md"]};
-var require = getModule.bind(null, {"document":"../document/index.coffee.md","./file/styles":"../styles/file/styles.coffee","./style":"../styles/style.coffee"});
+})();modules['../styles/index.coffee'] = (function(){
+var module = {exports: modules["../styles/index.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","document":"../document/index.coffee.md","./file/styles":"../styles/file/styles.coffee","./style":"../styles/style.coffee"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Document, stylesStyle, stylesStyles;
+  var ATTR_RESOURCES, Document, Style, styles, utils;
+
+  utils = require('utils');
 
   Document = require('document');
 
-  stylesStyles = require('./file/styles');
+  styles = require('./file/styles');
 
-  stylesStyle = require('./style');
+  Style = require('./style');
+
+  ATTR_RESOURCES = module.exports.ATTR_RESOURCES = {
+    img: ['src']
+  };
 
   module.exports = function(data) {
-    stylesStyles(Document);
-    return Document.Style = stylesStyle(Document, data);
+    var attr, attrs, replacements, resources, tagName, _i, _len, _super;
+    styles(Document);
+    Document.Style = Style(Document, data);
+    resources = data.resources;
+    replacements = Document.Element.Tag.DEFAULT_STRINGIFY_REPLACEMENTS;
+    for (tagName in ATTR_RESOURCES) {
+      attrs = ATTR_RESOURCES[tagName];
+      for (_i = 0, _len = attrs.length; _i < _len; _i++) {
+        attr = attrs[_i];
+        _super = replacements[tagName] || utils.NOP;
+        replacements[tagName] = (function(_super, attr) {
+          return function(elem) {
+            var attrVal, rsc;
+            elem = _super(elem) || elem;
+            attrVal = elem.getAttr(attr);
+            if (attrVal && (rsc = resources.resolve(attrVal))) {
+              elem.setAttr(attr, rsc);
+            }
+            return elem;
+          };
+        })(_super, attr);
+      }
+    }
   };
 
 }).call(this);
@@ -22581,12 +23102,12 @@ var exports = module.exports;
 return module.exports;
 })();modules['index.coffee.md'] = (function(){
 var module = {exports: modules["index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","db":"../db/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md","resources":"../resources/index.coffee.md","dict":"../dict/index.coffee.md","./route":"route.coffee.md","emitter/node_modules/immediate":"../emitter/node_modules/immediate/lib/index.js","./package.json":"package.json","emitter":"../emitter/index.coffee.md","expect":"node_modules/expect/index.coffee.md","list":"../list/index.coffee.md","styles":"../styles/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","db":"../db/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md","resources":"../resources/index.coffee.md","dict":"../dict/index.coffee.md","./route":"route.coffee.md","./package.json":"package.json","list":"../list/index.coffee.md","native":"../native/index.coffee.md","styles":"../styles/index.coffee"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var AppRoute, Dict, Document, MODULES, Networking, Renderer, Resources, Schema, assert, bootstrapRoute, db, exports, log, name, pkg, setImmediate, signal, utils, _i, _len;
+  var AppRoute, Dict, Document, MODULES, Networking, Renderer, Resources, Schema, assert, bootstrapRoute, db, exports, log, name, pkg, signal, utils, _i, _len;
 
   utils = require('utils');
 
@@ -22612,12 +23133,6 @@ var exports = module.exports;
 
   AppRoute = require('./route');
 
-  setImmediate = global.setImmediate;
-
-  if (utils.isBrowser) {
-    setImmediate = require('emitter/node_modules/immediate');
-  }
-
   if (utils.isNode) {
     bootstrapRoute = require('./bootstrap/route.node');
   }
@@ -22631,9 +23146,6 @@ var exports = module.exports;
     }
     if (extraOpts == null) {
       extraOpts = {};
-    }
-    if (utils.isBrowser) {
-      global.setImmediate = setImmediate;
     }
     (require('log')).ok("Welcome! Neft.io v" + pkg.version + "; Feedback appreciated");
     //<development>;
@@ -22663,7 +23175,7 @@ var exports = module.exports;
     if (config.type == null) {
       config.type = 'app';
     }
-    assert.ok(utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game, but '" + config.type + "' got.");
+    assert.ok(utils.has(['app', 'game', 'text'], config.type), "Unexpected app.config.type value. Accepted app/game/text, but '" + config.type + "' got.");
     app.Route = AppRoute(app);
     COOKIES_KEY = '__neft_cookies';
     app.cookies = null;
@@ -22742,7 +23254,9 @@ var exports = module.exports;
     }
     require('styles')({
       windowStyle: windowStyle,
-      styles: app.styles
+      styles: app.styles,
+      queries: opts.styleQueries,
+      resources: app.resources
     });
     if (utils.isNode) {
       bootstrapRoute(app);
@@ -22772,7 +23286,7 @@ var exports = module.exports;
       for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
         view = _ref2[_k];
         if (view.name != null) {
-          app.views[view.name] = Document.fromJSON(view.name, view.file);
+          app.views[view.name] = Document.fromJSON(view.file);
         }
       }
       init(opts.models, app.models);
@@ -22808,14 +23322,12 @@ var exports = module.exports;
     return app;
   };
 
-  MODULES = ['utils', 'signal', 'dict', 'emitter', 'expect', 'list', 'log', 'resources', 'renderer', 'networking', 'schema', 'document', 'styles', 'assert', 'db'];
+  MODULES = ['utils', 'signal', 'dict', 'list', 'log', 'Resources', 'native', 'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db'];
 
   for (_i = 0, _len = MODULES.length; _i < _len; _i++) {
     name = MODULES[_i];
-    exports[name] = require(name);
+    exports[name] = exports[name.toLowerCase()] = require(name.toLowerCase());
   }
-
-  exports['neft-assert'] = exports.assert;
 
 }).call(this);
 
@@ -22831,5 +23343,3 @@ if(typeof module !== 'undefined'){
 	return result;
 }
 })();;
-
-if (typeof module !== 'undefined') module.exports = Neft;

@@ -1,8 +1,57 @@
-var Neft = (function(){
+window.setImmediate = (function() {
+  var callAll, queue, running, update;
+  running = false;
+  queue = [];
+  callAll = function() {
+    var args, func, i, j, length, ref;
+    running = false;
+    length = queue.length;
+    for (i = j = 0, ref = length; j < ref; i = j += 2) {
+      func = queue.shift();
+      args = queue.shift();
+      func.apply(null, args);
+    }
+  };
+  update = (function() {
+    var Mutation, calls, element, observer;
+    if (!(Mutation = window.MutationObserver || window.WebKitMutationObserver)) {
+      return;
+    }
+    calls = 0;
+    observer = new Mutation(callAll);
+    element = document.createTextNode('');
+    observer.observe(element, {
+      characterData: true
+    });
+    return function() {
+      var ref;
+      return element.data = (ref = ++calls % 2) != null ? ref : {
+        "a": "b"
+      };
+    };
+  })();
+  return function(func) {
+    var argc, args, i, j, ref;
+    argc = arguments.length;
+    if (argc > 1) {
+      args = new Array(argc - 1);
+      for (i = j = 1, ref = argc; j < ref; i = j += 1) {
+        args[i - 1] = arguments[i];
+      }
+    }
+    queue.push(func, args);
+    if (!running) {
+      update();
+      running = true;
+    }
+  };
+})();
+
+window.Neft = (function(){
 'use strict';
 
 // list of modules with empty objects
-var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../neft-assert/index.coffee.md":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/android/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/android/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/native/index.coffee":{},"../native/actions.coffee":{},"../native/impl/android/bridge.coffee":{},"../native/bridge.coffee":{},"../renderer/impl/native/android.coffee":{},"../renderer/impl/native/level2/scrollable.coffee":{},"../renderer/impl/native/level0/item.coffee":{},"../renderer/impl/native/level0/image.coffee":{},"../renderer/impl/native/level0/text.coffee":{},"../renderer/impl/native/level0/textInput.coffee":{},"../renderer/impl/native/level0/loader/font.coffee":{},"../renderer/impl/native/level0/loader/resources.coffee":{},"../renderer/impl/native/level0/device.coffee":{},"../renderer/impl/native/level0/screen.coffee":{},"../renderer/impl/native/level0/navigator.coffee":{},"../renderer/impl/native/level0/sensor/rotation.coffee":{},"../renderer/impl/native/level0/sound/ambient.coffee":{},"../renderer/impl/native/level1/rectangle.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/impl/base/utils/color.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/android/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"package.json":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
+var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../neft-assert/index.coffee.md":{},"../log/impls/browser/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/ios/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/ios/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/native/index.coffee":{},"../native/actions.coffee":{},"../native/impl/ios/bridge.coffee":{},"../native/bridge.coffee":{},"../renderer/impl/native/ios.coffee":{},"../renderer/impl/native/level2/scrollable.coffee":{},"../renderer/impl/native/level0/item.coffee":{},"../renderer/impl/native/level0/image.coffee":{},"../renderer/impl/native/level0/text.coffee":{},"../renderer/impl/native/level0/textInput.coffee":{},"../renderer/impl/native/level0/loader/font.coffee":{},"../renderer/impl/native/level0/loader/resources.coffee":{},"../renderer/impl/native/level0/device.coffee":{},"../renderer/impl/native/level0/screen.coffee":{},"../renderer/impl/native/level0/navigator.coffee":{},"../renderer/impl/native/level0/sensor/rotation.coffee":{},"../renderer/impl/native/level0/sound/ambient.coffee":{},"../renderer/impl/native/level1/rectangle.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/impl/base/utils/color.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/ios/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"package.json":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
 
 // used as `require`
 function getModule(paths, name){
@@ -1767,9 +1816,87 @@ var exports = module.exports;
 
 
 return module.exports;
+})();modules['../log/impls/browser/index.coffee'] = (function(){
+var module = {exports: modules["../log/impls/browser/index.coffee"]};
+var require = getModule.bind(null, {});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var logFunc, performance,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  performance = (function() {
+    var _ref;
+    if ((_ref = window.performance) != null ? _ref.now : void 0) {
+      return window.performance;
+    } else {
+      return Date;
+    }
+  })();
+
+  logFunc = window['cons' + 'ole']['lo' + 'g'];
+
+  module.exports = (function() {
+    if (/chrome|safari/i.test(navigator.userAgent) || (typeof webkit !== "undefined" && webkit !== null)) {
+      return function(Log) {
+        var LogBrowser;
+        return LogBrowser = (function(_super) {
+          __extends(LogBrowser, _super);
+
+          function LogBrowser() {
+            return LogBrowser.__super__.constructor.apply(this, arguments);
+          }
+
+          LogBrowser.MARKERS = (function() {
+            var marker, tmp;
+            tmp = ['', ''];
+            marker = function(color, style, msg) {
+              if (style == null) {
+                style = 'normal';
+              }
+              tmp[0] = "%c" + msg;
+              tmp[1] = "color: " + color + "; font-weight: " + style;
+              return tmp;
+            };
+            return {
+              white: marker.bind(null, 'black', null),
+              green: marker.bind(null, 'green', null),
+              gray: marker.bind(null, 'gray', null),
+              blue: marker.bind(null, 'blue', null),
+              yellow: marker.bind(null, 'orange', null),
+              red: marker.bind(null, 'red', null),
+              bold: marker.bind(null, 'black', 'bold')
+            };
+          })();
+
+          LogBrowser.time = performance.now.bind(performance);
+
+          LogBrowser.timeDiff = function(since) {
+            return LogBrowser.time() - since;
+          };
+
+          LogBrowser.prototype._write = function(marker) {
+            return logFunc.apply(window['cons' + 'ole'], marker);
+          };
+
+          return LogBrowser;
+
+        })(Log);
+      };
+    } else {
+      return {};
+    }
+  })();
+
+}).call(this);
+
+
+return module.exports;
 })();modules['../log/index.coffee.md'] = (function(){
 var module = {exports: modules["../log/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impls/browser/index.coffee":"../log/impls/browser/index.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -3194,9 +3321,9 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../networking/impl/android/index.coffee'] = (function(){
-var module = {exports: modules["../networking/impl/android/index.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","./request":"../networking/impl/android/request.coffee","./response":"../networking/impl/android/response.coffee"});
+})();modules['../networking/impl/ios/index.coffee'] = (function(){
+var module = {exports: modules["../networking/impl/ios/index.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","./request.coffee":"../networking/impl/ios/request.coffee","./response.coffee":"../networking/impl/ios/response.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -3206,27 +3333,13 @@ var exports = module.exports;
   utils = require('utils');
 
   module.exports = function(Networking) {
-    var requests;
-    requests = Object.create(null);
-    _neft.http.onResponse(function(id, error, code, resp, cookies) {
-      var request;
-      request = requests[id];
-      delete requests[id];
-      if (request.type === Networking.Request.JSON_TYPE) {
-        resp = utils.tryFunction(JSON.parse, null, [resp], resp);
-      }
-      cookies = utils.tryFunction(JSON.parse, null, [cookies], null);
-      request.callback({
-        status: code,
-        data: resp || error,
-        cookies: cookies
-      });
-    });
+    var impl;
+    impl = {};
     return {
-      Request: require('./request')(Networking),
-      Response: require('./response')(Networking),
+      Request: require('./request.coffee')(Networking),
+      Response: require('./response.coffee')(Networking, impl),
       init: function(networking) {
-        return setImmediate(function() {
+        setImmediate(function() {
           return networking.createLocalRequest({
             method: Networking.Request.GET,
             type: Networking.Request.HTML_TYPE,
@@ -3234,31 +3347,57 @@ var exports = module.exports;
           });
         });
       },
+
+      /*
+      	Send a XHR request and call `callback` on response.
+       */
       sendRequest: function(req, res, callback) {
-        var cookies, data, headers, id, name, val, _ref;
-        headers = [];
+        var Request, cookies, data, name, uri, val, xhr, _ref;
+        Request = Networking.Request;
+        xhr = new XMLHttpRequest;
+        uri = req.uri.toString();
+        if (utils.has(uri, '?')) {
+          uri = "" + uri + "&now=" + (Date.now());
+        } else {
+          uri = "" + uri + "?now=" + (Date.now());
+        }
+        xhr.open(req.method, uri, true);
         _ref = req.headers;
         for (name in _ref) {
           val = _ref[name];
-          headers.push(name, val);
+          xhr.setRequestHeader(name, val);
         }
-        headers.push('content-type', 'text/plain');
-        headers.push('charset', 'utf-8');
-        headers.push('x-expected-type', req.type);
+        xhr.setRequestHeader('X-Expected-Type', req.type);
         if (cookies = utils.tryFunction(JSON.stringify, null, [req.cookies], null)) {
-          headers.push('x-cookies', cookies);
+          xhr.setRequestHeader('X-Cookies', cookies);
         }
-        if (typeof (data = req.data) !== 'string') {
-          data = utils.tryFunction(JSON.stringify, null, [data], data + '');
-        }
-        if (typeof data === 'string') {
-          headers.push('content-length', data.length);
-        }
-        id = _neft.http.request(req.uri, req.method, headers, data);
-        requests[id] = {
-          type: req.type,
-          callback: callback
+        xhr.onload = function() {
+          var response;
+          response = xhr.response;
+          if (req.type === Request.JSON_TYPE && typeof response === 'string') {
+            response = utils.tryFunction(JSON.parse, null, [response], response);
+          }
+          if (cookies = xhr.getResponseHeader('X-Cookies')) {
+            cookies = utils.tryFunction(JSON.parse, null, [cookies], null);
+          }
+          return callback({
+            status: xhr.status,
+            data: response,
+            cookies: cookies
+          });
         };
+        xhr.onerror = function() {
+          return callback({
+            status: xhr.status,
+            data: xhr.response
+          });
+        };
+        if (utils.isObject(req.data)) {
+          data = utils.tryFunction(JSON.stringify, null, [req.data], req.data);
+        } else {
+          data = req.data;
+        }
+        return xhr.send(data);
       }
     };
   };
@@ -3269,7 +3408,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/impl.coffee'] = (function(){
 var module = {exports: modules["../networking/impl.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl/android/index":"../networking/impl/android/index.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl/ios/index":"../networking/impl/ios/index.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -3305,8 +3444,8 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../networking/impl/android/request.coffee'] = (function(){
-var module = {exports: modules["../networking/impl/android/request.coffee"]};
+})();modules['../networking/impl/ios/request.coffee'] = (function(){
+var module = {exports: modules["../networking/impl/ios/request.coffee"]};
 var require = getModule.bind(null, {});
 var exports = module.exports;
 
@@ -9836,7 +9975,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/native/index.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/native/index.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./android":"../renderer/impl/native/android.coffee","./level0/item":"../renderer/impl/native/level0/item.coffee","./level0/image":"../renderer/impl/native/level0/image.coffee","./level0/text":"../renderer/impl/native/level0/text.coffee","./level0/textInput":"../renderer/impl/native/level0/textInput.coffee","./level0/loader/font":"../renderer/impl/native/level0/loader/font.coffee","./level0/loader/resources":"../renderer/impl/native/level0/loader/resources.coffee","./level0/device":"../renderer/impl/native/level0/device.coffee","./level0/screen":"../renderer/impl/native/level0/screen.coffee","./level0/navigator":"../renderer/impl/native/level0/navigator.coffee","./level0/sensor/rotation":"../renderer/impl/native/level0/sensor/rotation.coffee","./level0/sound/ambient":"../renderer/impl/native/level0/sound/ambient.coffee","./level1/rectangle":"../renderer/impl/native/level1/rectangle.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./ios":"../renderer/impl/native/ios.coffee","./level0/item":"../renderer/impl/native/level0/item.coffee","./level0/image":"../renderer/impl/native/level0/image.coffee","./level0/text":"../renderer/impl/native/level0/text.coffee","./level0/textInput":"../renderer/impl/native/level0/textInput.coffee","./level0/loader/font":"../renderer/impl/native/level0/loader/font.coffee","./level0/loader/resources":"../renderer/impl/native/level0/loader/resources.coffee","./level0/device":"../renderer/impl/native/level0/device.coffee","./level0/screen":"../renderer/impl/native/level0/screen.coffee","./level0/navigator":"../renderer/impl/native/level0/navigator.coffee","./level0/sensor/rotation":"../renderer/impl/native/level0/sensor/rotation.coffee","./level0/sound/ambient":"../renderer/impl/native/level0/sound/ambient.coffee","./level1/rectangle":"../renderer/impl/native/level1/rectangle.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -9988,58 +10127,60 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../native/impl/android/bridge.coffee'] = (function(){
-var module = {exports: modules["../native/impl/android/bridge.coffee"]};
-var require = getModule.bind(null, {});
+})();modules['../native/impl/ios/bridge.coffee'] = (function(){
+var module = {exports: modules["../native/impl/ios/bridge.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
+  var utils;
+
+  utils = require('utils');
+
   module.exports = function(bridge) {
-    var actions, actionsIndex, booleans, booleansIndex, floats, floatsIndex, integers, integersIndex, strings, stringsIndex;
+    var actions, booleans, floats, integers, outDataObject, strings;
     actions = [];
-    actionsIndex = 0;
     booleans = [];
-    booleansIndex = 0;
     integers = [];
-    integersIndex = 0;
     floats = [];
-    floatsIndex = 0;
     strings = [];
-    stringsIndex = 0;
-    _neft["native"].onData(bridge.onData);
+    outDataObject = {
+      actions: actions,
+      booleans: booleans,
+      integers: integers,
+      floats: floats,
+      strings: strings
+    };
+    _neft["native"] = {
+      onData: bridge.onData
+    };
     return {
       sendData: function() {
-        var tmpActionsIndex, tmpBooleansIndex, tmpFloatsIndex, tmpIntegersIndex, tmpStringsIndex;
-        if (actionsIndex <= 0) {
+        if (actions.length <= 0) {
           return;
         }
-        tmpActionsIndex = actionsIndex;
-        tmpBooleansIndex = booleansIndex;
-        tmpIntegersIndex = integersIndex;
-        tmpFloatsIndex = floatsIndex;
-        tmpStringsIndex = stringsIndex;
-        actionsIndex = 0;
-        booleansIndex = 0;
-        integersIndex = 0;
-        floatsIndex = 0;
-        stringsIndex = 0;
-        _neft["native"].transferData(actions, tmpActionsIndex, booleans, tmpBooleansIndex, integers, tmpIntegersIndex, floats, tmpFloatsIndex, strings, tmpStringsIndex);
+        webkit.messageHandlers.transferData.postMessage(outDataObject);
+        utils.clear(actions);
+        utils.clear(booleans);
+        utils.clear(integers);
+        utils.clear(floats);
+        utils.clear(strings);
       },
       pushAction: function(val) {
-        actions[actionsIndex++] = val;
+        actions.push(val);
       },
       pushBoolean: function(val) {
-        booleans[booleansIndex++] = val;
+        booleans.push(val);
       },
       pushInteger: function(val) {
-        integers[integersIndex++] = val;
+        integers.push(val);
       },
       pushFloat: function(val) {
-        floats[floatsIndex++] = val;
+        floats.push(val);
       },
       pushString: function(val) {
-        strings[stringsIndex++] = val;
+        strings.push(val);
       }
     };
   };
@@ -10050,7 +10191,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../native/bridge.coffee'] = (function(){
 var module = {exports: modules["../native/bridge.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl/android/bridge":"../native/impl/android/bridge.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl/ios/bridge":"../native/impl/ios/bridge.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -10184,20 +10325,24 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../renderer/impl/native/android.coffee'] = (function(){
-var module = {exports: modules["../renderer/impl/native/android.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","native/actions":"../native/actions.coffee","native/bridge":"../native/bridge.coffee","./level2/scrollable":"../renderer/impl/native/level2/scrollable.coffee"});
+})();modules['../renderer/impl/native/ios.coffee'] = (function(){
+var module = {exports: modules["../renderer/impl/native/ios.coffee"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","native/actions":"../native/actions.coffee","native/bridge":"../native/bridge.coffee","./level2/scrollable":"../renderer/impl/native/level2/scrollable.coffee"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, nativeActions, nativeBridge;
+  var assert, nativeActions, nativeBridge, utils;
+
+  utils = require('utils');
 
   assert = require('assert');
 
   nativeActions = require('native/actions');
 
   nativeBridge = require('native/bridge');
+
+  _neft.renderer = {};
 
   module.exports = function(impl) {
     return {
@@ -10207,11 +10352,10 @@ var exports = module.exports;
       bridge: (function() {
         var itemsById, lastId, vsync;
         itemsById = new Array(20000);
-        itemsById.push(null);
         lastId = 0;
         vsync = function() {
           requestAnimationFrame(vsync);
-          return nativeBridge.sendData();
+          nativeBridge.sendData();
         };
         requestAnimationFrame(vsync);
         return {
@@ -10220,8 +10364,8 @@ var exports = module.exports;
           listen: nativeBridge.addActionListener,
           getId: function(item) {
             assert.instanceOf(item, impl.Renderer.Item);
-            itemsById[++lastId] = item;
-            return lastId;
+            itemsById[lastId] = item;
+            return lastId++;
           },
           getItemFromReader: function(reader) {
             return itemsById[reader.integers[reader.integersIndex++]];
@@ -10231,7 +10375,7 @@ var exports = module.exports;
             if (val !== null) {
               assert.instanceOf(val, impl.Renderer.Item);
             }
-            nativeBridge.pushInteger(val !== null ? val._impl.id : 0);
+            nativeBridge.pushInteger(val !== null ? val._impl.id : -1);
           },
           pushBoolean: nativeBridge.pushBoolean,
           pushInteger: nativeBridge.pushInteger,
@@ -19689,8 +19833,8 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../networking/impl/android/response.coffee'] = (function(){
-var module = {exports: modules["../networking/impl/android/response.coffee"]};
+})();modules['../networking/impl/ios/response.coffee'] = (function(){
+var module = {exports: modules["../networking/impl/ios/response.coffee"]};
 var require = getModule.bind(null, {"log":"../log/index.coffee.md","utils":"../utils/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md"});
 var exports = module.exports;
 
