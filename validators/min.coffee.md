@@ -27,7 +27,7 @@ console.log(schema.validate({age: 0}));
 
 	'use strict'
 
-	assert = require 'neft-assert'
+	assert = require 'assert'
 
 	module.exports = (Schema) -> (row, value, expected) ->
 		assert.isFloat expected

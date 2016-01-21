@@ -11,7 +11,7 @@ var Schema = require('schema');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 
 *SchemaError* SchemaError()
 ---------------------------

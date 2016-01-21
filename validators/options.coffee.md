@@ -44,7 +44,7 @@ console.log(schema.validate({city: 'Paris'}));
 
 	'use strict'
 
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	utils = require 'utils'
 
 	module.exports = (Schema) -> (row, value, expected) ->
