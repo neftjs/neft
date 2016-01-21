@@ -1,14 +1,13 @@
 'use strict'
 
 fs = require 'fs'
-assert = require 'neft-assert'
 pathUtils = require 'path'
 yaml = require 'js-yaml'
 mkdirp = require 'mkdirp'
 try
 	sharp = require 'sharp'
 
-{utils, log, Resources} = Neft
+{utils, log, assert, Resources} = Neft
 
 log = log.scope 'Resources', 'Parser'
 

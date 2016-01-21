@@ -51,7 +51,7 @@ window.Neft = (function(){
 'use strict';
 
 // list of modules with empty objects
-var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../neft-assert/index.coffee.md":{},"../log/impls/browser/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/ios/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/ios/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/native/index.coffee":{},"../native/actions.coffee":{},"../native/impl/ios/bridge.coffee":{},"../native/bridge.coffee":{},"../renderer/impl/native/ios.coffee":{},"../renderer/impl/native/level2/scrollable.coffee":{},"../renderer/impl/native/level0/item.coffee":{},"../renderer/impl/native/level0/image.coffee":{},"../renderer/impl/native/level0/text.coffee":{},"../renderer/impl/native/level0/textInput.coffee":{},"../renderer/impl/native/level0/loader/font.coffee":{},"../renderer/impl/native/level0/loader/resources.coffee":{},"../renderer/impl/native/level0/device.coffee":{},"../renderer/impl/native/level0/screen.coffee":{},"../renderer/impl/native/level0/navigator.coffee":{},"../renderer/impl/native/level0/sensor/rotation.coffee":{},"../renderer/impl/native/level0/sound/ambient.coffee":{},"../renderer/impl/native/level1/rectangle.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/impl/base/utils/color.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/ios/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"package.json":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
+var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../assert/index.coffee.md":{},"../log/impls/browser/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/ios/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/ios/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/native/index.coffee":{},"../native/actions.coffee":{},"../native/impl/ios/bridge.coffee":{},"../native/bridge.coffee":{},"../renderer/impl/native/ios.coffee":{},"../renderer/impl/native/level2/scrollable.coffee":{},"../renderer/impl/native/level0/item.coffee":{},"../renderer/impl/native/level0/image.coffee":{},"../renderer/impl/native/level0/text.coffee":{},"../renderer/impl/native/level0/textInput.coffee":{},"../renderer/impl/native/level0/loader/font.coffee":{},"../renderer/impl/native/level0/loader/resources.coffee":{},"../renderer/impl/native/level0/device.coffee":{},"../renderer/impl/native/level0/screen.coffee":{},"../renderer/impl/native/level0/navigator.coffee":{},"../renderer/impl/native/level0/sensor/rotation.coffee":{},"../renderer/impl/native/level0/sound/ambient.coffee":{},"../renderer/impl/native/level1/rectangle.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/impl/base/utils/color.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/ios/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"package.json":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
 
 // used as `require`
 function getModule(paths, name){
@@ -1500,8 +1500,8 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../neft-assert/index.coffee.md'] = (function(){
-var module = {exports: modules["../neft-assert/index.coffee.md"]};
+})();modules['../assert/index.coffee.md'] = (function(){
+var module = {exports: modules["../assert/index.coffee.md"]};
 var require = getModule.bind(null, {"utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
@@ -1896,7 +1896,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../log/index.coffee.md'] = (function(){
 var module = {exports: modules["../log/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impls/browser/index.coffee":"../log/impls/browser/index.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./impls/browser/index.coffee":"../log/impls/browser/index.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -1906,7 +1906,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   bind = Function.bind;
 
@@ -2109,7 +2109,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../signal/emitter.coffee'] = (function(){
 var module = {exports: modules["../signal/emitter.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -2118,7 +2118,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   module.exports = function(signal) {
     var SignalsEmitter;
@@ -2186,7 +2186,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../signal/index.coffee.md'] = (function(){
 var module = {exports: modules["../signal/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./emitter":"../signal/emitter.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./emitter":"../signal/emitter.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -2195,7 +2195,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30;
 
@@ -2334,7 +2334,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../list/index.coffee.md'] = (function(){
 var module = {exports: modules["../list/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -2345,7 +2345,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   signal = require('signal');
 
@@ -2499,7 +2499,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../dict/index.coffee.md'] = (function(){
 var module = {exports: modules["../dict/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -2510,7 +2510,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   signal = require('signal');
 
@@ -2761,7 +2761,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../db/index.coffee.md'] = (function(){
 var module = {exports: modules["../db/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","list":"../list/index.coffee.md","dict":"../dict/index.coffee.md","./implementation":"../db/implementation.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","list":"../list/index.coffee.md","dict":"../dict/index.coffee.md","./implementation":"../db/implementation.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -2772,7 +2772,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   List = require('list');
 
@@ -3041,14 +3041,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../schema/validators/object.coffee.md'] = (function(){
 var module = {exports: modules["../schema/validators/object.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert, utils;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -3092,14 +3092,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../schema/validators/max.coffee.md'] = (function(){
 var module = {exports: modules["../schema/validators/max.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   module.exports = function(Schema) {
     return function(row, value, expected) {
@@ -3116,14 +3116,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../schema/validators/min.coffee.md'] = (function(){
 var module = {exports: modules["../schema/validators/min.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   module.exports = function(Schema) {
     return function(row, value, expected) {
@@ -3140,14 +3140,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../schema/validators/options.coffee.md'] = (function(){
 var module = {exports: modules["../schema/validators/options.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert, utils;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -3172,14 +3172,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../schema/validators/regexp.coffee.md'] = (function(){
 var module = {exports: modules["../schema/validators/regexp.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   module.exports = function(Schema) {
     return function(row, value, expected) {
@@ -3196,14 +3196,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../schema/validators/type.coffee.md'] = (function(){
 var module = {exports: modules["../schema/validators/type.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   module.exports = function(Schema) {
     return function(row, value, expected) {
@@ -3220,7 +3220,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../schema/index.coffee.md'] = (function(){
 var module = {exports: modules["../schema/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./validators/array":"../schema/validators/array.coffee.md","./validators/object":"../schema/validators/object.coffee.md","./validators/optional":"../schema/validators/optional.coffee.md","./validators/max":"../schema/validators/max.coffee.md","./validators/min":"../schema/validators/min.coffee.md","./validators/options":"../schema/validators/options.coffee.md","./validators/regexp":"../schema/validators/regexp.coffee.md","./validators/type":"../schema/validators/type.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./validators/array":"../schema/validators/array.coffee.md","./validators/object":"../schema/validators/object.coffee.md","./validators/optional":"../schema/validators/optional.coffee.md","./validators/max":"../schema/validators/max.coffee.md","./validators/min":"../schema/validators/min.coffee.md","./validators/options":"../schema/validators/options.coffee.md","./validators/regexp":"../schema/validators/regexp.coffee.md","./validators/type":"../schema/validators/type.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -3231,7 +3231,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   SchemaError = (function(_super) {
     __extends(SchemaError, _super);
@@ -3408,7 +3408,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/impl.coffee'] = (function(){
 var module = {exports: modules["../networking/impl.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl/ios/index":"../networking/impl/ios/index.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./impl/ios/index":"../networking/impl/ios/index.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -3459,7 +3459,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/element/element/text.coffee.md'] = (function(){
 var module = {exports: modules["../document/element/element/text.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -3470,7 +3470,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   signal = require('signal');
 
@@ -3766,7 +3766,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/element/element/tag.coffee.md'] = (function(){
 var module = {exports: modules["../document/element/element/tag.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","./tag/stringify":"../document/element/element/tag/stringify.coffee","typed-array":"../typed-array/index.coffee.md","./tag/query":"../document/element/element/tag/query.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md","./tag/stringify":"../document/element/element/tag/stringify.coffee","typed-array":"../typed-array/index.coffee.md","./tag/query":"../document/element/element/tag/query.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -3777,7 +3777,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   signal = require('signal');
 
@@ -4035,7 +4035,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/element/element/tag/query.coffee'] = (function(){
 var module = {exports: modules["../document/element/element/tag/query.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -4048,7 +4048,7 @@ var exports = module.exports;
 
   signal = require('signal');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   emitSignal = signal.Emitter.emitSignal;
 
@@ -4688,7 +4688,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/element/element.coffee.md'] = (function(){
 var module = {exports: modules["../document/element/element.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","./element/text":"../document/element/element/text.coffee.md","./element/tag":"../document/element/element/tag.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md","./element/text":"../document/element/element/text.coffee.md","./element/tag":"../document/element/element/tag.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -4699,7 +4699,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   signal = require('signal');
 
@@ -5002,14 +5002,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/attrChange.coffee'] = (function(){
 var module = {exports: modules["../document/attrChange.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert, log, utils;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -5118,7 +5118,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/use.coffee'] = (function(){
 var module = {exports: modules["../document/use.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -5127,7 +5127,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = require('log');
 
@@ -5291,7 +5291,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/input.coffee'] = (function(){
 var module = {exports: modules["../document/input.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","db":"../db/index.coffee.md","./input/text.coffee":"../document/input/text.coffee","./input/attr.coffee":"../document/input/attr.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","db":"../db/index.coffee.md","./input/text.coffee":"../document/input/text.coffee","./input/attr.coffee":"../document/input/attr.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -5300,7 +5300,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = require('log');
 
@@ -5851,7 +5851,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/input/attr.coffee'] = (function(){
 var module = {exports: modules["../document/input/attr.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -5860,7 +5860,7 @@ var exports = module.exports;
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -5964,7 +5964,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/condition.coffee'] = (function(){
 var module = {exports: modules["../document/condition.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -6070,7 +6070,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/iterator.coffee'] = (function(){
 var module = {exports: modules["../document/iterator.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","list":"../list/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","list":"../list/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -6079,7 +6079,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   List = require('list');
 
@@ -6295,7 +6295,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/log.coffee'] = (function(){
 var module = {exports: modules["../document/log.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -7793,7 +7793,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/base/level1/animation/number.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/base/level1/animation/number.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -8448,7 +8448,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/base/level1/binding.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/base/level1/binding.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -8762,14 +8762,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/base/level1/anchors.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/base/level1/anchors.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var assert, isArray, log;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = require('log');
 
@@ -9975,7 +9975,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/native/index.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/native/index.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./ios":"../renderer/impl/native/ios.coffee","./level0/item":"../renderer/impl/native/level0/item.coffee","./level0/image":"../renderer/impl/native/level0/image.coffee","./level0/text":"../renderer/impl/native/level0/text.coffee","./level0/textInput":"../renderer/impl/native/level0/textInput.coffee","./level0/loader/font":"../renderer/impl/native/level0/loader/font.coffee","./level0/loader/resources":"../renderer/impl/native/level0/loader/resources.coffee","./level0/device":"../renderer/impl/native/level0/device.coffee","./level0/screen":"../renderer/impl/native/level0/screen.coffee","./level0/navigator":"../renderer/impl/native/level0/navigator.coffee","./level0/sensor/rotation":"../renderer/impl/native/level0/sensor/rotation.coffee","./level0/sound/ambient":"../renderer/impl/native/level0/sound/ambient.coffee","./level1/rectangle":"../renderer/impl/native/level1/rectangle.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./ios":"../renderer/impl/native/ios.coffee","./level0/item":"../renderer/impl/native/level0/item.coffee","./level0/image":"../renderer/impl/native/level0/image.coffee","./level0/text":"../renderer/impl/native/level0/text.coffee","./level0/textInput":"../renderer/impl/native/level0/textInput.coffee","./level0/loader/font":"../renderer/impl/native/level0/loader/font.coffee","./level0/loader/resources":"../renderer/impl/native/level0/loader/resources.coffee","./level0/device":"../renderer/impl/native/level0/device.coffee","./level0/screen":"../renderer/impl/native/level0/screen.coffee","./level0/navigator":"../renderer/impl/native/level0/navigator.coffee","./level0/sensor/rotation":"../renderer/impl/native/level0/sensor/rotation.coffee","./level0/sound/ambient":"../renderer/impl/native/level0/sound/ambient.coffee","./level1/rectangle":"../renderer/impl/native/level1/rectangle.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -10191,7 +10191,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../native/bridge.coffee'] = (function(){
 var module = {exports: modules["../native/bridge.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl/ios/bridge":"../native/impl/ios/bridge.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./impl/ios/bridge":"../native/impl/ios/bridge.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -10202,7 +10202,7 @@ var exports = module.exports;
 
   log = require('log');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   listeners = Object.create(null);
 
@@ -10327,7 +10327,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/native/ios.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/native/ios.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","native/actions":"../native/actions.coffee","native/bridge":"../native/bridge.coffee","./level2/scrollable":"../renderer/impl/native/level2/scrollable.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","native/actions":"../native/actions.coffee","native/bridge":"../native/bridge.coffee","./level2/scrollable":"../renderer/impl/native/level2/scrollable.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -10459,7 +10459,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/native/level0/item.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/native/level0/item.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -11475,7 +11475,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/base/utils/color.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/base/utils/color.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -11761,7 +11761,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/utils/item.coffee'] = (function(){
 var module = {exports: modules["../renderer/utils/item.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -11770,7 +11770,7 @@ var exports = module.exports;
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -12204,7 +12204,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/namespace/screen.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/namespace/screen.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -12472,7 +12472,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/namespace/navigator.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/namespace/navigator.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -12693,7 +12693,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/extensions/class.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/extensions/class.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md","document/element/element/tag/query":"../document/element/element/tag/query.coffee"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md","document/element/element/tag/query":"../document/element/element/tag/query.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -12702,7 +12702,7 @@ var exports = module.exports;
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -13735,7 +13735,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/extensions/animation.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/extensions/animation.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -13875,7 +13875,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/extensions/animation/types/property.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/extensions/animation/types/property.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -14196,7 +14196,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/extensions/transition.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/extensions/transition.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -14424,7 +14424,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/component.coffee'] = (function(){
 var module = {exports: modules["../renderer/types/basics/component.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -14435,7 +14435,7 @@ var exports = module.exports;
 
   signal = require('signal');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   module.exports = function(Renderer, Impl, itemUtils) {
     var Component;
@@ -14800,7 +14800,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","list":"../list/index.coffee.md","./item/spacing":"../renderer/types/basics/item/spacing.coffee.md","./item/alignment":"../renderer/types/basics/item/alignment.coffee.md","./item/anchors":"../renderer/types/basics/item/anchors.coffee.md","./item/layout":"../renderer/types/basics/item/layout.coffee.md","./item/margin":"../renderer/types/basics/item/margin.coffee.md","./item/pointer":"../renderer/types/basics/item/pointer.coffee.md","./item/keys":"../renderer/types/basics/item/keys.coffee.md","./item/document":"../renderer/types/basics/item/document.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","list":"../list/index.coffee.md","./item/spacing":"../renderer/types/basics/item/spacing.coffee.md","./item/alignment":"../renderer/types/basics/item/alignment.coffee.md","./item/anchors":"../renderer/types/basics/item/anchors.coffee.md","./item/layout":"../renderer/types/basics/item/layout.coffee.md","./item/margin":"../renderer/types/basics/item/margin.coffee.md","./item/pointer":"../renderer/types/basics/item/pointer.coffee.md","./item/keys":"../renderer/types/basics/item/keys.coffee.md","./item/document":"../renderer/types/basics/item/document.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -14809,7 +14809,7 @@ var exports = module.exports;
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -15483,7 +15483,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/spacing.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/spacing.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -15585,7 +15585,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/alignment.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/alignment.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -15696,7 +15696,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/anchors.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/anchors.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -15970,7 +15970,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/layout.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/layout.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -15983,7 +15983,7 @@ var exports = module.exports;
 
   signal = require('signal');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   module.exports = function(Renderer, Impl, itemUtils, Item) {
     return function(ctor, opts) {
@@ -16056,7 +16056,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/margin.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/margin.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -16242,7 +16242,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/pointer.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/pointer.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -16459,7 +16459,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/keys.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/keys.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -16609,7 +16609,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/document.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/document.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -16622,7 +16622,7 @@ var exports = module.exports;
 
   signal = require('signal');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = require('log');
 
@@ -16799,7 +16799,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/types/image.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/types/image.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -17051,7 +17051,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/types/text.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/types/text.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","./text/font":"../renderer/types/basics/item/types/text/font.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","./text/font":"../renderer/types/basics/item/types/text/font.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -17274,7 +17274,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/types/text/font.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/types/text/font.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -17478,7 +17478,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/basics/item/types/textInput.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/basics/item/types/textInput.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -17622,7 +17622,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/shapes/rectangle.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/shapes/rectangle.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -17777,7 +17777,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/layout/grid.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/layout/grid.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -17895,7 +17895,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/layout/column.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/layout/column.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -17989,7 +17989,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/layout/row.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/layout/row.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18083,7 +18083,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/layout/flow.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/layout/flow.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18092,7 +18092,7 @@ var exports = module.exports;
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -18174,7 +18174,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/layout/scrollable.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/layout/scrollable.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18291,7 +18291,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/sound/ambient.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/sound/ambient.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","list":"../list/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","list":"../list/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18300,7 +18300,7 @@ var exports = module.exports;
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   utils = require('utils');
 
@@ -18415,7 +18415,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../resources/resource.coffee.md'] = (function(){
 var module = {exports: modules["../resources/resource.coffee.md"]};
-var require = getModule.bind(null, {"log":"../log/index.coffee.md","utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"log":"../log/index.coffee.md","utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18426,7 +18426,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = log.scope('Resources', 'Resource');
 
@@ -18556,7 +18556,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../resources/index.coffee.md'] = (function(){
 var module = {exports: modules["../resources/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./resource":"../resources/resource.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./resource":"../resources/resource.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18567,7 +18567,7 @@ var exports = module.exports;
 
   log = require('log');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = log.scope('Resources');
 
@@ -18661,7 +18661,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/loader/resources.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/loader/resources.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","resources":"../resources/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","resources":"../resources/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18761,7 +18761,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/types/loader/font.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/types/loader/font.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -18939,7 +18939,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/index.coffee.md'] = (function(){
 var module = {exports: modules["../renderer/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","./impl":"../renderer/impl.coffee","./utils/item":"../renderer/utils/item.coffee","./types/namespace/screen":"../renderer/types/namespace/screen.coffee.md","./types/namespace/device":"../renderer/types/namespace/device.coffee.md","./types/namespace/navigator":"../renderer/types/namespace/navigator.coffee.md","./types/namespace/sensor/rotation":"../renderer/types/namespace/sensor/rotation.coffee.md","./types/extension":"../renderer/types/extension.coffee","./types/extensions/class":"../renderer/types/extensions/class.coffee.md","./types/extensions/animation":"../renderer/types/extensions/animation.coffee.md","./types/extensions/animation/types/property":"../renderer/types/extensions/animation/types/property.coffee.md","./types/extensions/animation/types/property/types/number":"../renderer/types/extensions/animation/types/property/types/number.coffee.md","./types/extensions/transition":"../renderer/types/extensions/transition.coffee.md","./types/basics/component":"../renderer/types/basics/component.coffee","./types/basics/item":"../renderer/types/basics/item.coffee.md","./types/basics/item/types/image":"../renderer/types/basics/item/types/image.coffee.md","./types/basics/item/types/text":"../renderer/types/basics/item/types/text.coffee.md","./types/basics/item/types/textInput":"../renderer/types/basics/item/types/textInput.coffee.md","./types/shapes/rectangle":"../renderer/types/shapes/rectangle.coffee.md","./types/layout/grid":"../renderer/types/layout/grid.coffee.md","./types/layout/column":"../renderer/types/layout/column.coffee.md","./types/layout/row":"../renderer/types/layout/row.coffee.md","./types/layout/flow":"../renderer/types/layout/flow.coffee.md","./types/layout/scrollable":"../renderer/types/layout/scrollable.coffee.md","./types/sound/ambient":"../renderer/types/sound/ambient.coffee.md","./types/loader/resources":"../renderer/types/loader/resources.coffee.md","./types/loader/font":"../renderer/types/loader/font.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","./impl":"../renderer/impl.coffee","./utils/item":"../renderer/utils/item.coffee","./types/namespace/screen":"../renderer/types/namespace/screen.coffee.md","./types/namespace/device":"../renderer/types/namespace/device.coffee.md","./types/namespace/navigator":"../renderer/types/namespace/navigator.coffee.md","./types/namespace/sensor/rotation":"../renderer/types/namespace/sensor/rotation.coffee.md","./types/extension":"../renderer/types/extension.coffee","./types/extensions/class":"../renderer/types/extensions/class.coffee.md","./types/extensions/animation":"../renderer/types/extensions/animation.coffee.md","./types/extensions/animation/types/property":"../renderer/types/extensions/animation/types/property.coffee.md","./types/extensions/animation/types/property/types/number":"../renderer/types/extensions/animation/types/property/types/number.coffee.md","./types/extensions/transition":"../renderer/types/extensions/transition.coffee.md","./types/basics/component":"../renderer/types/basics/component.coffee","./types/basics/item":"../renderer/types/basics/item.coffee.md","./types/basics/item/types/image":"../renderer/types/basics/item/types/image.coffee.md","./types/basics/item/types/text":"../renderer/types/basics/item/types/text.coffee.md","./types/basics/item/types/textInput":"../renderer/types/basics/item/types/textInput.coffee.md","./types/shapes/rectangle":"../renderer/types/shapes/rectangle.coffee.md","./types/layout/grid":"../renderer/types/layout/grid.coffee.md","./types/layout/column":"../renderer/types/layout/column.coffee.md","./types/layout/row":"../renderer/types/layout/row.coffee.md","./types/layout/flow":"../renderer/types/layout/flow.coffee.md","./types/layout/scrollable":"../renderer/types/layout/scrollable.coffee.md","./types/sound/ambient":"../renderer/types/sound/ambient.coffee.md","./types/loader/resources":"../renderer/types/loader/resources.coffee.md","./types/loader/font":"../renderer/types/loader/font.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -19029,7 +19029,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/func.coffee.md'] = (function(){
 var module = {exports: modules["../document/func.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","renderer":"../renderer/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","renderer":"../renderer/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -19113,7 +19113,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/attrsToSet.coffee'] = (function(){
 var module = {exports: modules["../document/attrsToSet.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -19268,7 +19268,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/file.coffee.md'] = (function(){
 var module = {exports: modules["../document/file.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","./element/index":"../document/element/index.coffee","./attrChange":"../document/attrChange.coffee","./use":"../document/use.coffee","./input":"../document/input.coffee","./condition":"../document/condition.coffee","./iterator":"../document/iterator.coffee","./log":"../document/log.coffee","./func":"../document/func.coffee.md","./attrsToSet":"../document/attrsToSet.coffee","./file/render/parse/target":"../document/file/render/parse/target.coffee","./file/render/revert/target":"../document/file/render/revert/target.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","dict":"../dict/index.coffee.md","list":"../list/index.coffee.md","./element/index":"../document/element/index.coffee","./attrChange":"../document/attrChange.coffee","./use":"../document/use.coffee","./input":"../document/input.coffee","./condition":"../document/condition.coffee","./iterator":"../document/iterator.coffee","./log":"../document/log.coffee","./func":"../document/func.coffee.md","./attrsToSet":"../document/attrsToSet.coffee","./file/render/parse/target":"../document/file/render/parse/target.coffee","./file/render/revert/target":"../document/file/render/revert/target.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -19279,7 +19279,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = require('log');
 
@@ -19903,7 +19903,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/uri.coffee.md'] = (function(){
 var module = {exports: modules["../networking/uri.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","dict":"../dict/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","dict":"../dict/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -20080,7 +20080,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/handler.coffee.md'] = (function(){
 var module = {exports: modules["../networking/handler.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -20195,7 +20195,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/request.coffee.md'] = (function(){
 var module = {exports: modules["../networking/request.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -20310,7 +20310,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/response.coffee.md'] = (function(){
 var module = {exports: modules["../networking/response.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","./response/error.coffee.md":"../networking/response/error.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","./response/error.coffee.md":"../networking/response/error.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -20459,7 +20459,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/response/error.coffee.md'] = (function(){
 var module = {exports: modules["../networking/response/error.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -20536,7 +20536,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../networking/index.coffee.md'] = (function(){
 var module = {exports: modules["../networking/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md","./impl":"../networking/impl.coffee","./uri.coffee.md":"../networking/uri.coffee.md","./handler.coffee.md":"../networking/handler.coffee.md","./request.coffee.md":"../networking/request.coffee.md","./response.coffee.md":"../networking/response.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md","./impl":"../networking/impl.coffee","./uri.coffee.md":"../networking/uri.coffee.md","./handler.coffee.md":"../networking/handler.coffee.md","./request.coffee.md":"../networking/request.coffee.md","./response.coffee.md":"../networking/response.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -20549,7 +20549,7 @@ var exports = module.exports;
 
   signal = require('signal');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = require('log');
 
@@ -20791,7 +20791,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['route.coffee.md'] = (function(){
 var module = {exports: modules["route.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","dict":"../dict/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","dict":"../dict/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -21280,14 +21280,14 @@ module.exports = {
 return module.exports;
 })();modules['../native/index.coffee.md'] = (function(){
 var module = {exports: modules["../native/index.coffee.md"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","log":"../log/index.coffee.md","./actions":"../native/actions.coffee","./bridge":"../native/bridge.coffee"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","./actions":"../native/actions.coffee","./bridge":"../native/bridge.coffee"});
 var exports = module.exports;
 
 (function() {
   'use strict';
   var CALL_FUNCTION, CALL_FUNCTION_WITH_CALLBACK, EVENT_BOOLEAN_TYPE, EVENT_FLOAT_TYPE, EVENT_NULL_TYPE, EVENT_STRING_TYPE, actions, assert, bridge, i, listeners, log, pushPending, sendData, _ref;
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   log = require('log');
 
@@ -21399,7 +21399,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../styles/file/styles.coffee'] = (function(){
 var module = {exports: modules["../styles/file/styles.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -21483,7 +21483,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['../styles/style.coffee'] = (function(){
 var module = {exports: modules["../styles/style.coffee"]};
-var require = getModule.bind(null, {"neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","renderer":"../renderer/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","log":"../log/index.coffee.md","renderer":"../renderer/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
@@ -22349,7 +22349,7 @@ var exports = module.exports;
 return module.exports;
 })();modules['index.coffee.md'] = (function(){
 var module = {exports: modules["index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","db":"../db/index.coffee.md","neft-assert":"../neft-assert/index.coffee.md","assert":"../neft-assert/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md","resources":"../resources/index.coffee.md","dict":"../dict/index.coffee.md","./route":"route.coffee.md","./package.json":"package.json","list":"../list/index.coffee.md","native":"../native/index.coffee.md","styles":"../styles/index.coffee"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","db":"../db/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md","resources":"../resources/index.coffee.md","dict":"../dict/index.coffee.md","./route":"route.coffee.md","./package.json":"package.json","list":"../list/index.coffee.md","native":"../native/index.coffee.md","styles":"../styles/index.coffee"});
 var exports = module.exports;
 
 (function() {
@@ -22364,7 +22364,7 @@ var exports = module.exports;
 
   db = require('db');
 
-  assert = require('neft-assert');
+  assert = require('assert');
 
   Schema = require('schema');
 
