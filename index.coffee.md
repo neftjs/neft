@@ -14,7 +14,7 @@ var Networking = require('networking');
 
 	utils = require 'utils'
 	signal = require 'signal'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	log = require 'log'
 	List = require 'list'
 
