@@ -56,7 +56,7 @@ module.exports = (impl) ->
 				if item._impl.containsHTML
 					updateHTMLTextSize item
 				else
-					updatePlainTextSize item					
+					updatePlainTextSize item
 			if implUtils.loadedFonts[name]
 				loadingTextsByFonts[name] = null
 		return
@@ -207,7 +207,7 @@ module.exports = (impl) ->
 	COLOR_RESOURCE_REQUEST =
 		property: 'color'
 
-	CONTAINS_HTML_RE = /<|&#x/
+	CONTAINS_HTML_RE = /<|&#/
 
 	DATA =
 		stylesheet: null
