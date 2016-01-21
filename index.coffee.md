@@ -1,5 +1,5 @@
-Unit
-====
+Unit @library
+=============
 
 	'use strict'
 
