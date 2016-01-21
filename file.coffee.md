@@ -4,7 +4,7 @@ File @class
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	log = require 'log'
 	signal = require 'signal'
 	Dict = require 'dict'

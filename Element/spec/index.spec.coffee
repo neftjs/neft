@@ -2,7 +2,7 @@
 
 unit = require 'unit'
 utils = require 'utils'
-assert = require 'neft-assert'
+assert = require 'assert'
 
 Element = require('../index')
 
@@ -98,7 +98,7 @@ describe 'View Element', ->
 
 			# b.children[0].parent = undefined
 			# em.parent = b
-	
+
 	it 'can be cloned deep', ->
 		clone = b.cloneDeep()
 

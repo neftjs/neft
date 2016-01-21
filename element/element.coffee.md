@@ -4,7 +4,7 @@ Element @virtual_dom
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	signal = require 'signal'
 
 	{isArray} = Array
@@ -194,7 +194,7 @@ Element @virtual_dom
 
 			true
 
-### *Signal* Element::onParentChange(*Element* oldValue)
+## *Signal* Element::onParentChange(*Element* oldValue)
 
 		signal.Emitter.createSignal @, 'onParentChange'
 
@@ -215,7 +215,7 @@ Element @virtual_dom
 			emitSignal @, 'onStyleChange', old, val
 			true
 
-### *Signal* Element::onStyleChange(*Renderer.Item* oldValue)
+## *Signal* Element::onStyleChange(*Renderer.Item* oldValue)
 
 		signal.Emitter.createSignal @, 'onStyleChange'
 
@@ -238,7 +238,7 @@ Element @virtual_dom
 			emitSignal @, 'onVisibleChange', old
 			true
 
-### *Signal* Element::onVisibleChange(*Boolean* oldValue)
+## *Signal* Element::onVisibleChange(*Boolean* oldValue)
 
 		signal.Emitter.createSignal @, 'onVisibleChange'
 
@@ -254,7 +254,7 @@ Element @virtual_dom
 
 *Array* Element::getAccessPath([*Tag* toParent])
 ------------------------------------------------
-	
+
 		getAccessPath: (toParent) ->
 			if toParent?
 				assert.instanceOf toParent, Tag

@@ -1,7 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-assert = require 'neft-assert'
+assert = require 'assert'
 log = require 'log'
 Dict = require 'dict'
 List = require 'list'
@@ -310,7 +310,7 @@ module.exports = (File) -> class Input
 				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
 				@trace storage
-		
+
 		@update()
 
 	revert: ->

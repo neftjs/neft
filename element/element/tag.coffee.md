@@ -4,7 +4,7 @@ Tag @virtual_dom
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	signal = require 'signal'
 	stringify = require './tag/stringify'
 	TypedArray = require 'typed-array'
@@ -67,11 +67,11 @@ Tag @virtual_dom
 *Array* Tag::children
 ---------------------
 
-### *Signal* Tag::onChildrenChange(*Element* added, *Element* removed)
+## *Signal* Tag::onChildrenChange(*Element* added, *Element* removed)
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
 
-### *Signal* Tag::onAttrsChange(*String* name, *Any* oldValue)
+## *Signal* Tag::onAttrsChange(*String* name, *Any* oldValue)
 
 		signal.Emitter.createSignal @, 'onAttrsChange'
 

@@ -2,7 +2,7 @@
 
 utils = require 'utils'
 signal = require 'signal'
-assert = require 'neft-assert'
+assert = require 'assert'
 
 {emitSignal} = signal.Emitter
 Tag = Text = null

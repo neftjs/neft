@@ -1,7 +1,7 @@
 'use strict'
 
 utils = require 'utils'
-assert = require 'neft-assert'
+assert = require 'assert'
 log = require 'log'
 
 assert = assert.scope 'View.Use'
