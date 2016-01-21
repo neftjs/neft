@@ -5,7 +5,7 @@ Resource Manager @engine
 
 	utils = require 'utils'
 	log = require 'log'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 
 	log = log.scope 'Resources'
 

@@ -5,7 +5,7 @@ Resource @class
 
 	log = require 'log'
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 
 	log = log.scope 'Resources', 'Resource'
 
@@ -125,7 +125,7 @@ Resource @class
 			for format in formats
 				if r = @paths[format]?[rResolution]
 					return r
-						
+
 			return
 
 *Object* Resource::toJSON()
