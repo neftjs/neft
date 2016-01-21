@@ -1,6 +1,6 @@
 {
   "name": "neft",
-  "version": "0.8.1",
+  "version": "0.8.11",
   "preferGlobal": true,
   "description": "Command-line interface for building Neft.io projects",
   "bin": {
@@ -25,7 +25,8 @@
     "pegjs": "^0.8.0",
     "form-data": "1.0.0-rc3",
     "qs": "^6.0.1",
-    "node-static": "^0.7.6"
+    "node-static": "^0.7.6",
+    "nml-parser": "Neft-io/nml-parser"
   },
   "devDependencies": {
     "sample-project": "git+ssh://git@bitbucket.org:Kildyt/sample-project.git",
