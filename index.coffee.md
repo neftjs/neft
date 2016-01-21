@@ -9,7 +9,7 @@ var log = require('log');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 
 	{bind} = Function
 	{isArray} = Array
