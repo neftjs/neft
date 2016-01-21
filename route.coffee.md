@@ -392,10 +392,12 @@ Acceptable syntaxes:
 			useName = opts?.use or 'body'
 
 			logtime = log.time 'Render'
-			if view = app.views[viewName]
-				r = view.render @
 			if viewName isnt tmplName and (tmpl = app.views[tmplName])
 				tmplView = Route::getTemplateView.call @, tmplName
+				tmplView.use useName, null
+			if view = app.views[viewName]
+				r = view.render @
+			if tmplView
 				if r?
 					r = tmplView.use(useName, r)
 				else
