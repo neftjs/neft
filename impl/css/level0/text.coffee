@@ -64,8 +64,7 @@ module.exports = (impl) ->
 	updatePlainTextSize = (item) ->
 		data = item._impl
 
-		text = data.text
-		{fontFamily} = data.innerElemStyle
+		{text, fontFamily} = data
 		if font = item._font
 			pixelSize = font._pixelSize
 			letterSpacing = font._letterSpacing
@@ -115,9 +114,7 @@ module.exports = (impl) ->
 
 	updateHTMLTextSize = (item) ->
 		data = item._impl
-		{innerElem} = data
-
-		{fontFamily} = data.innerElemStyle
+		{innerElem, fontFamily} = data
 
 		if implUtils.loadingFonts[fontFamily]
 			arr = loadingTextsByFonts[fontFamily] ||= []
@@ -176,8 +173,8 @@ module.exports = (impl) ->
 
 	updateTextStyle = (item) ->
 		data = item._impl
-		{innerElemStyle} = data
-		{fontWeight, fontSize, fontFamily} = innerElemStyle
+		{innerElemStyle, fontFamily} = data
+		{fontWeight, fontSize} = innerElemStyle
 		fontWeight ||= '400'
 		fontSize ||= '14px'
 		fontFamily ||= implUtils.DEFAULT_FONTS['sans-serif']
@@ -219,6 +216,7 @@ module.exports = (impl) ->
 		containsHTML: false
 		text: ''
 		font: "14px #{implUtils.DEFAULT_FONTS['sans-serif']}, sans-serif"
+		fontFamily: implUtils.DEFAULT_FONTS['sans-serif']
 
 	exports =
 	DATA: DATA
@@ -289,6 +287,8 @@ module.exports = (impl) ->
 		return
 
 	setTextFontFamily: (val) ->
+		@_impl.fontFamily = val
+
 		if impl.utils.loadingFonts[val] > 0
 			impl.utils.onFontLoaded reloadFontFamily, @
 
