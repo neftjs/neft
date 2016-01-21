@@ -50,11 +50,11 @@ Can be overriden in the *init.js* file.
 
 ### type
 
-`app` type (the default one) uses renderer on the client side.
+The `app` type (the default one) uses renderer on the client side.
 
-`game` type uses special renderer (if exists) focused on more performance goals.
+The `game` type uses special renderer (if exists) focused on more performance goals.
 
-`text` type always return HTML document with no renderer on the client side.
+The `text` type always return HTML document with no renderer on the client side.
 It's used for the crawlers (e.g. GoogleBot) or browsers with no javascript support.
 
 ```javascript
@@ -117,7 +117,7 @@ Files from the *models* folder with objects returned by their exported functions
 `module.exports = function(app){
 `	return {
 `		get: function(req, res, callback){
-`			car data = app.models['user/permission'].getPermission(req.params.userId);
+`			var data = app.models['user/permission'].getPermission(req.params.userId);
 `			callback(null, data);
 `		}
 `	}
