@@ -2,11 +2,11 @@ AmbientSound @class
 ===================
 
 ```nml
-AmbientSound {
-	running: true
-	source: '/static/sounds/bg.mp3'
-	loop: true
-}
+`AmbientSound {
+`	running: true
+`	source: '/static/sounds/bg.mp3'
+`	loop: true
+`}
 ```
 
 	'use strict'

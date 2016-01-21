@@ -2,16 +2,16 @@ ResourcesLoader @class
 ======================
 
 ```nml
-Item {
-	ResourcesLoader {
-		id: loader
-		resources: app.resources
-	}
-
-	Text {
-		text: 'Progress: ' + loader.progress * 100 + '%'
-	}
-}
+`Item {
+`	ResourcesLoader {
+`		id: loader
+`		resources: app.resources
+`	}
+`
+`	Text {
+`		text: 'Progress: ' + loader.progress * 100 + '%'
+`	}
+`}
 ```
 
 	'use strict'

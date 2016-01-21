@@ -95,7 +95,7 @@ TextInput @class
 Hidden *Float* TextInput::lineHeight = 1
 ----------------------------------------
 
-### Hidden *Signal* TextInput::onLineHeightChange(*Float* oldValue)
+## Hidden *Signal* TextInput::onLineHeightChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @
@@ -141,7 +141,7 @@ Accepts 'normal' and 'password'.
 Hidden *Alignment* TextInput::alignment
 ---------------------------------------
 
-### Hidden *Signal* TextInput::onAlignmentChange(*Alignment* alignment)
+## Hidden *Signal* TextInput::onAlignmentChange(*Alignment* alignment)
 
 			Renderer.Item.createAlignment TextInput
 

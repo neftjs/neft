@@ -94,17 +94,17 @@ ReadOnly *String* Document::query
 ## *Signal* Document::onNodeChange(*Document.Element* oldValue)
 
 ```nml
-Text {
-  text: this.document.node.getAttr('value')
-}
+`Text {
+`  text: this.document.node.getAttr('value')
+`}
 ```
 
 ```nml
-Text {
-	document.onNodeChange: function(){
-		var inputs = this.document.node.queryAll('input[type=string]');
-	}
-}
+`Text {
+`	document.onNodeChange: function(){
+`		var inputs = this.document.node.queryAll('input[type=string]');
+`	}
+`}
 ```
 
 		itemUtils.defineProperty

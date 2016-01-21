@@ -2,13 +2,13 @@ Row @class
 ==========
 
 ```nml
-Row {
-	spacing: 5
-
-	Rectangle { color: 'blue'; width: 50; height: 50; }
-	Rectangle { color: 'green'; width: 20; height: 50; }
-	Rectangle { color: 'red'; width: 50; height: 20; }
-}
+`Row {
+`	spacing: 5
+`
+`	Rectangle { color: 'blue'; width: 50; height: 50; }
+`	Rectangle { color: 'green'; width: 20; height: 50; }
+`	Rectangle { color: 'red'; width: 50; height: 20; }
+`}
 ```
 
 	'use strict'

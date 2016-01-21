@@ -2,14 +2,14 @@ Rectangle @class
 ================
 
 ```nml
-Rectangle {
-	width: 150
-	height: 100
-	color: 'blue'
-	border.color: 'black'
-	border.width: 5
-	radius: 10
-}
+`Rectangle {
+`	width: 150
+`	height: 100
+`	color: 'blue'
+`	border.color: 'black'
+`	border.width: 5
+`	radius: 10
+`}
 ```
 
 	'use strict'

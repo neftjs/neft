@@ -63,25 +63,25 @@ This is a base class for everything which is visible.
 ### Custom properties
 
 ```nml
-Item {
-	id: main
-	property $.currentLife: 0.8
-
-	Text {
-	  text: "Life: " + main.$.currentLife
-	}
-}
+`Item {
+`	id: main
+`	property $.currentLife: 0.8
+`
+`	Text {
+`	  text: "Life: " + main.$.currentLife
+`	}
+`}
 ```
 
 ### Custom signals
 
 ```nml
-Item {
-	signal $.onPlayerCollision
-	$.onPlayerCollision: function(){
-		// boom!
-	}
-}
+`Item {
+`	signal $.onPlayerCollision
+`	$.onPlayerCollision: function(){
+`		// boom!
+`	}
+`}
 ```
 
 ## *Signal* Item::on$Change(*String* property, *Any* oldValue)
@@ -98,21 +98,21 @@ Called when the Item is ready, that is, all
 properties have been set and it's ready to use.
 
 ```nml
-Rectangle {
-	width: 200
-	height: 50
-	color: 'green'
-
-	Rectangle {
-		width: parent.width / 2
-		height: parent.height / 2
-		color: 'yellow'
-		onReady: function(){
-			console.log(this.width, this.height);
-			// 100, 25
-		}
-	}
-}
+`Rectangle {
+`	width: 200
+`	height: 50
+`	color: 'green'
+`
+`	Rectangle {
+`		width: parent.width / 2
+`		height: parent.height / 2
+`		color: 'yellow'
+`		onReady: function(){
+`			console.log(this.width, this.height);
+`			// 100, 25
+`		}
+`	}
+`}
 ```
 
 		signal.Emitter.createSignal @, 'onReady'
@@ -526,27 +526,26 @@ Removes all children from the item.
 Determines whether an item is visible or not.
 
 ```nml
-Item {
-	width: 100
-	height: 100
-
-	pointer.onClicked: function(){
-		rect.visible = !rect.visible;
-		text.text = rect.visible ? "Click to hide" : "Click to show";
-	}
-
-	Rectangle {
-		id: rect
-		anchors.fill: parent
-		color: 'blue'
-	}
-
-	Text {
-		id: text
-		text: "Click to hide"
-		anchors.centerIn: parent
-	}
-}
+`Item {
+`	width: 100
+`	height: 100
+`	pointer.onClicked: function(){
+`		rect.visible = !rect.visible;
+`		text.text = rect.visible ? "Click to hide" : "Click to show";
+`	}
+`
+`	Rectangle {
+`		id: rect
+`		anchors.fill: parent
+`		color: 'blue'
+`	}
+`
+`	Text {
+`		id: text
+`		text: "Click to hide"
+`		anchors.centerIn: parent
+`	}
+`}
 ```
 
 ## *Signal* Item::onVisibleChange(*Boolean* oldValue)
@@ -654,12 +653,12 @@ Hidden *Integer* Item::z = 0
 --------------------------
 
 ```nml
-Rectangle {
-	width: 100
-	height: 100
-	color: 'red'
-	rotation: Math.PI / 4
-}
+`Rectangle {
+`	width: 100
+`	height: 100
+`	color: 'red'
+`	rotation: Math.PI / 4
+`}
 ```
 
 ## *Signal* Item::onRotationChange(*Float* oldValue)

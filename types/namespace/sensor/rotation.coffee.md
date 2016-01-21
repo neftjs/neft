@@ -13,16 +13,16 @@ RotationSensor @namespace
 -----------------------
 
 ```nml
-RotationSensor.active = true;
-
-Text {
-	font.pixelSize: 30
-	onUpdate: function(){
-		this.text = "x: " + RotationSensor.x + "; " +
-			"y: " + RotationSensor.y + "; " +
-			"z: " + RotationSensor.z;
-	}
-}
+`RotationSensor.active = true;
+`
+`Text {
+`	font.pixelSize: 30
+`	onUpdate: function(){
+`		this.text = "x: " + RotationSensor.x + "; " +
+`			"y: " + RotationSensor.y + "; " +
+`			"z: " + RotationSensor.z;
+`	}
+`}
 ```
 
 			constructor: ->

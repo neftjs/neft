@@ -2,21 +2,20 @@ Transition @modifier
 ====================
 
 ```nml
-Rectangle {
-	width: 100; height: 100;
-	color: 'red'
-
-	pointer.onClicked: function(){
-		this.x = Math.random()*300;
-	}
-
-	Transition {
-		property: 'x'
-		animation: NumberAnimation {
-			duration: 1500
-		}
-	}
-}
+`Rectangle {
+`	width: 100; height: 100;
+`	color: 'red'
+`	pointer.onClicked: function(){
+`		this.x = Math.random()*300;
+`	}
+`
+`	Transition {
+`		property: 'x'
+`		animation: NumberAnimation {
+`			duration: 1500
+`		}
+`	}
+`}
 ```
 
 	'use strict'
@@ -136,7 +135,7 @@ Rectangle {
 *Renderer.Animation* Transition::animation
 ------------------------------------------
 
-### Transition::onAnimationChange(*Renderer.Animation* oldValue)
+## *Signal* Transition::onAnimationChange(*Renderer.Animation* oldValue)
 
 		onDurationChange = ->
 			unless @_durationUpdatePending
@@ -173,7 +172,7 @@ Rectangle {
 *String* Transition::property
 -----------------------------
 
-### Transition::onPropertyChange(*String* oldValue)
+## *Signal* Transition::onPropertyChange(*String* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

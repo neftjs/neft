@@ -27,10 +27,10 @@ ReadOnly *Boolean* Screen.touch = false
 ---------------------------------------
 
 ```nml
-Text {
-	text: Screen.touch ? "Touch" : "Mouse"
-	font.pixelSize: 30
-}
+`Text {
+`	text: Screen.touch ? "Touch" : "Mouse"
+`	font.pixelSize: 30
+`}
 ```
 
 			utils.defineProperty @::, 'touch', null, ->

@@ -2,16 +2,16 @@ Image @class
 ============
 
 ```nml
-Image {
-	source: 'http://lorempixel.com/200/140/'
-	onLoad: function(error){
-		if (error){
-			console.error("Can't load this image");
-		} else {
-			console.log("Image has been loaded");
-		}
-	}
-}
+`Image {
+`	source: 'http://lorempixel.com/200/140/'
+`	onLoad: function(error){
+`		if (error){
+`			console.error("Can't load this image");
+`		} else {
+`			console.log("Image has been loaded");
+`		}
+`	}
+`}
 ```
 
 	'use strict'
@@ -167,7 +167,7 @@ The image source URL or data URI.
 Hidden *Float* Image::sourceWidth = 0
 -------------------------------------
 
-### Hidden *Signal* Image::onSourceWidthChange(*Float* oldValue)
+## Hidden *Signal* Image::onSourceWidthChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -180,7 +180,7 @@ Hidden *Float* Image::sourceWidth = 0
 Hidden *Float* Image::sourceHeight = 0
 --------------------------------------
 
-### Hidden *Signal* Image::onSourceHeightChange(*Float* oldValue)
+## Hidden *Signal* Image::onSourceHeightChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -193,7 +193,7 @@ Hidden *Float* Image::sourceHeight = 0
 Hidden *Float* Image::offsetX = 0
 ---------------------------------
 
-### Hidden *Signal* Image::onOffsetXChange(*Float* oldValue)
+## Hidden *Signal* Image::onOffsetXChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -206,7 +206,7 @@ Hidden *Float* Image::offsetX = 0
 Hidden *Float* Image::offsetY = 0
 ---------------------------------
 
-### Hidden *Signal* Image::onOffsetYChange(*Float* oldValue)
+## Hidden *Signal* Image::onOffsetYChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -219,7 +219,7 @@ Hidden *Float* Image::offsetY = 0
 Hidden *Integer* Image::fillMode = 'Stretch'
 --------------------------------------------
 
-### Hidden *Signal* Image::onFillModeChange(*Integer* oldValue)
+## Hidden *Signal* Image::onFillModeChange(*Integer* oldValue)
 
 		FILL_MODE_OPTIONS = ['Stretch', 'Tile']
 

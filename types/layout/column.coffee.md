@@ -2,13 +2,13 @@ Column @class
 =============
 
 ```nml
-Column {
-	spacing: 5
-
-	Rectangle { color: 'blue'; width: 50; height: 50; }
-	Rectangle { color: 'green'; width: 20; height: 50; }
-	Rectangle { color: 'red'; width: 50; height: 20; }
-}
+`Column {
+`	spacing: 5
+`
+`	Rectangle { color: 'blue'; width: 50; height: 50; }
+`	Rectangle { color: 'green'; width: 20; height: 50; }
+`	Rectangle { color: 'red'; width: 50; height: 20; }
+`}
 ```
 
 	'use strict'

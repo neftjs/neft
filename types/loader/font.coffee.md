@@ -2,17 +2,17 @@ FontLoader @class
 =================
 
 ```nml
-Item {
-	Text {
-		font.family: 'myFont'
-		text: 'Cool font!'
-	}
-}
-
-FontLoader {
-	name: 'myFont'
-	source: 'rsc:/static/fonts/myFont'
-}
+`Item {
+`	Text {
+`		font.family: 'myFont'
+`		text: 'Cool font!'
+`	}
+`}
+`
+`FontLoader {
+`	name: 'myFont'
+`	source: 'rsc:/static/fonts/myFont'
+`}
 ```
 
 	'use strict'

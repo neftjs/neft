@@ -26,10 +26,10 @@ Navigator @namespace
 -----------------------------------
 
 ```nml
-Text {
-	text: "Your language: " + Navigator.language
-	font.pixelSize: 30
-}
+`Text {
+`	text: "Your language: " + Navigator.language
+`	font.pixelSize: 30
+`}
 ```
 
 			utils.defineProperty @::, 'language', null, ->
@@ -47,10 +47,10 @@ Text {
 ----------------------------------
 
 ```style
-Text {
-	text: Navigator.native ? "Native" : "Browser"
-	font.pixelSize: 30
-}
+`Text {
+`	text: Navigator.native ? "Native" : "Browser"
+`	font.pixelSize: 30
+`}
 ```
 
 			utils.defineProperty @::, 'native', null, ->

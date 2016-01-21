@@ -112,7 +112,7 @@ In range from 0 to 1.
 Hidden *Float* Font.wordSpacing = 0
 -----------------------------------
 
-### Hidden *Signal* Font.onWordSpacingChange(*Float* oldValue)
+## Hidden *Signal* Font.onWordSpacingChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -127,7 +127,7 @@ Hidden *Float* Font.wordSpacing = 0
 Hidden *Float* Font.letterSpacing = 0
 -------------------------------------
 
-### Hidden *Signal* Font.onLetterSpacingChange(*Float* oldValue)
+## Hidden *Signal* Font.onLetterSpacingChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @

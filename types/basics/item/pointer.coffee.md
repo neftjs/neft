@@ -2,18 +2,18 @@ Pointer @extension
 ==================
 
 ```nml
-Rectangle {
-	width: 100
-	height: 100
-	color: 'green'
-
-	Class {
-		when: target.pointer.hover
-		changes: {
-			color: 'red'
-		}
-	}
-}
+`Rectangle {
+`	width: 100
+`	height: 100
+`	color: 'green'
+`
+`	Class {
+`		when: target.pointer.hover
+`		changes: {
+`			color: 'red'
+`		}
+`	}
+`}
 ```
 
 	'use strict'

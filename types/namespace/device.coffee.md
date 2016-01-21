@@ -39,10 +39,10 @@ Possible values are:
  - OSX.
 
 ```nml
-Text {
-	text: "You are using: " + Device.platform
-	font.pixelSize: 30
-}
+`Text {
+`	text: "You are using: " + Device.platform
+`	font.pixelSize: 30
+`}
 ```
 
 			utils.defineProperty @::, 'platform', null, ->
@@ -76,10 +76,10 @@ Text {
 Tablet or a phone.
 
 ```nml
-Text {
-	text: Device.mobile ? 'Mobile' : 'Desktop'
-	font.pixelSize: 30
-}
+`Text {
+`	text: Device.mobile ? 'Mobile' : 'Desktop'
+`	font.pixelSize: 30
+`}
 ```
 
 			utils.defineProperty @::, 'mobile', null, ->
@@ -90,10 +90,10 @@ Text {
 -------------------------------
 
 ```nml
-Text {
-	text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
-	font.pixelSize: 30
-}
+`Text {
+`	text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
+`	font.pixelSize: 30
+`}
 ```
 
 			utils.defineProperty @::, 'pixelRatio', null, ->

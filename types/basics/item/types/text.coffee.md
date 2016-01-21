@@ -2,12 +2,12 @@ Text @class
 ===========
 
 ```nml
-Text {
-	font.pixelSize: 30
-	font.family: 'monospace'
-	text: '<strong>Neft</strong> Renderer'
-	color: 'blue'
-}
+`Text {
+`	font.pixelSize: 30
+`	font.family: 'monospace'
+`	text: '<strong>Neft</strong> Renderer'
+`	color: 'blue'
+`}
 ```
 
 	'use strict'
@@ -151,7 +151,7 @@ Text {
 Hidden *Float* Text::lineHeight = 1
 -----------------------------------
 
-### Hidden *Signal* Text::onLineHeightChange(*Float* oldValue)
+## Hidden *Signal* Text::onLineHeightChange(*Float* oldValue)
 
 			itemUtils.defineProperty
 				constructor: @

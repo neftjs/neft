@@ -2,18 +2,18 @@ Keys @extension
 ===============
 
 ```nml
-Rectangle {
-	width: 100
-	height: 100
-	color: 'green'
-	keys.focus: true
-	keys.onPressed: function(){
-		this.color = 'red';
-	}
-	keys.onReleased: function(){
-		this.color = 'green';
-	}
-}
+`Rectangle {
+`	width: 100
+`	height: 100
+`	color: 'green'
+`	keys.focus: true
+`	keys.onPressed: function(){
+`		this.color = 'red';
+`	}
+`	keys.onReleased: function(){
+`		this.color = 'green';
+`	}
+`}
 ```
 
 	'use strict'

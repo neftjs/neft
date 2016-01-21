@@ -33,23 +33,23 @@ always in the same position as a line of the second item.
 Anchors work only between siblings and in relation to the direct parent.
 
 ```nml
-Item {
-	height: 100
-
-	Rectangle {
-		id: rect1
-		width: 100
-		height: 100
-		color: 'green'
-	}
-
-	Rectangle {
-		width: 40
-		height: 40
-		color: 'red'
-		anchors.left: rect1.right
-	}
-}
+`Item {
+`	height: 100
+`
+`	Rectangle {
+`		id: rect1
+`		width: 100
+`		height: 100
+`		color: 'green'
+`	}
+`
+`	Rectangle {
+`		width: 40
+`		height: 40
+`		color: 'red'
+`		anchors.left: rect1.right
+`	}
+`}
 ```
 
 	H_LINES =
@@ -122,18 +122,18 @@ Item {
 					[target, line] = val
 
 ```nml
-Rectangle {
-	width: 100
-	height: 100
-	color: 'green'
-
-	Rectangle {
-		width: 40
-		height: 40
-		color: 'red'
-		anchors.left: parent.right
-	}
-}
+`Rectangle {
+`	width: 100
+`	height: 100
+`	color: 'green'
+`
+`	Rectangle {
+`		width: 40
+`		height: 40
+`		color: 'red'
+`		anchors.left: parent.right
+`	}
+`}
 ```
 
 					if opts & ONLY_TARGET_ALLOW
@@ -204,15 +204,15 @@ so `anchors.top = parent.left` is not allowed.
 ----------------------------------------
 
 ```nml
-Item {
-	height: 100
-
-	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-	Rectangle {
-		color: 'red'; width: 40; height: 40
-		anchors.horizontalCenter: rect1.horizontalCenter
-	}
-}
+`Item {
+`	height: 100
+`
+`	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+`	Rectangle {
+`		color: 'red'; width: 40; height: 40
+`		anchors.horizontalCenter: rect1.horizontalCenter
+`	}
+`}
 ```
 
 		createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
@@ -225,15 +225,15 @@ Item {
 ---------------------------
 
 ```nml
-Item {
-	height: 100
-
-	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-	Rectangle {
-		color: 'red'; width: 40; height: 40
-		anchors.top: rect1.verticalCenter
-	}
-}
+`Item {
+`	height: 100
+`
+`	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+`	Rectangle {
+`		color: 'red'; width: 40; height: 40
+`		anchors.top: rect1.verticalCenter
+`	}
+`}
 ```
 
 		createAnchorProp 'top', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
@@ -255,15 +255,15 @@ Item {
 --------------------------------------
 
 ```nml
-Item {
-	height: 100
-
-	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-	Rectangle {
-		color: 'red'; width: 40; height: 40
-		anchors.verticalCenter: rect1.verticalCenter
-	}
-}
+`Item {
+`	height: 100
+`
+`	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+`	Rectangle {
+`		color: 'red'; width: 40; height: 40
+`		anchors.verticalCenter: rect1.verticalCenter
+`	}
+`}
 ```
 
 		createAnchorProp 'verticalCenter', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
@@ -280,19 +280,19 @@ It's a shortcut for the horizontalCenter and verticalCenter anchors.
 No target line is required.
 
 ```nml
-Rectangle {
-	id: rect1
-	width: 100
-	height: 100
-	color: 'green'
-
-	Rectangle {
-		width: 40
-		height: 40
-		color: 'red'
-		anchors.centerIn: parent
-	}
-}
+`Rectangle {
+`	id: rect1
+`	width: 100
+`	height: 100
+`	color: 'green'
+`
+`	Rectangle {
+`		width: 40
+`		height: 40
+`		color: 'red'
+`		anchors.centerIn: parent
+`	}
+`}
 ```
 
 ## *Signal* Anchors::onCenterInChange(*Array* oldValue)
@@ -309,16 +309,16 @@ Changes item position and its size to be always equal the anchored target.
 No target line is required.
 
 ```nml
-Item {
-	height: 100
-
-	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-	Rectangle {
-		color: 'red'
-		opacity: 0.5
-		anchors.fill: rect1
-	}
-}
+`Item {
+`	height: 100
+`
+`	Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+`	Rectangle {
+`		color: 'red'
+`		opacity: 0.5
+`		anchors.fill: rect1
+`	}
+`}
 ```
 
 ## *Signal* Anchors::onFillChange(*Array* oldValue)

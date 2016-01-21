@@ -2,16 +2,16 @@ Grid @class
 ===========
 
 ```nml
-Grid {
-	spacing.column: 15
-	spacing.row: 5
-	columns: 2
-
-	Rectangle { color: 'blue'; width: 60; height: 50; }
-	Rectangle { color: 'green'; width: 20; height: 70; }
-	Rectangle { color: 'red'; width: 50; height: 30; }
-	Rectangle { color: 'yellow'; width: 20; height: 20; }
-}
+`Grid {
+`	spacing.column: 15
+`	spacing.row: 5
+`	columns: 2
+`
+`	Rectangle { color: 'blue'; width: 60; height: 50; }
+`	Rectangle { color: 'green'; width: 20; height: 70; }
+`	Rectangle { color: 'red'; width: 50; height: 30; }
+`	Rectangle { color: 'yellow'; width: 20; height: 20; }
+`}
 ```
 
 	'use strict'

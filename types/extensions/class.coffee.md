@@ -198,17 +198,16 @@ end of the [Item::classes][renderer/Item::classes] list.
 Mostly used with bindings.
 
 ```nml
-Grid {
-	columns: 2
-
-	// reduce to one column if the view width is lower than 500 pixels
-	Class {
-		when: view.width < 500
-		changes: {
-			columns: 1
-		}
-	}
-}
+`Grid {
+`	columns: 2
+`	// reduce to one column if the view width is lower than 500 pixels
+`	Class {
+`		when: view.width < 500
+`		changes: {
+`			columns: 1
+`		}
+`	}
+`}
 ```
 
 ## *Signal* Class::onWhenChange(*Boolean* oldValue)
