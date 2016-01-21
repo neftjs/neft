@@ -1,5 +1,5 @@
-Typed Array
-===========
+Typed Array @library
+====================
 
 	'use strict'
 
