@@ -7,7 +7,7 @@ App @framework
 	log = require 'log'
 	signal = require 'signal'
 	db = require 'db'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	Schema = require 'schema'
 	Networking = require 'networking'
 	Document = require 'document'
