@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "bundle",
+  "name": "bundle-builder",
   "version": "0.0.1",
   "description": "Neft.io bundle builder",
   "license": "Apache 2.0",
