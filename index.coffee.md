@@ -2,14 +2,14 @@ Database @library
 =================
 
 Access it with:
-```
+```javascript
 var db = require('db');
 ```
 
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	List = require 'list'
 	Dict = require 'dict'
 
@@ -31,7 +31,7 @@ var db = require('db');
 db.get(*String* key, [*Integer* options], *Function* callback)
 --------------------------------------------------------------
 
-```
+```javascript
 db.set('items', [], function(){
 \  db.get('items', db.OBSERVABLE, function(err, dict){
 \    dict.onInserted(function(index){
