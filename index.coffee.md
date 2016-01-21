@@ -11,7 +11,7 @@ var dict = require('dict');
 	'use strict'
 
 	utils = require 'utils'
-	assert = require 'neft-assert'
+	assert = require 'assert'
 	signal = require 'signal'
 
 	module.exports = class Dict extends signal.Emitter
@@ -347,7 +347,7 @@ console.log(data.items());
 ```javascript
 var dict = new Dict({prop1: 1, prop2: 2});
 var items = dict.items();
-for (var i = 0; i < items.length; i++){  
+for (var i = 0; i < items.length; i++){
   console.log(items[i][0], items[i][1]);
 }
 // ['prop1', 1]
