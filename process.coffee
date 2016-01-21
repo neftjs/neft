@@ -174,6 +174,9 @@ module.exports = ->
 				observe: ->
 			global._neft =
 				platform: 'ios'
+				native:
+					onData: ->
+					transferData: ->
 
 	NODE_MODULES =
 		fs: true
