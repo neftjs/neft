@@ -25,6 +25,7 @@ exports.in = do (i=0) ->
 	FONT_LOAD: i++
 	SCROLLABLE_CONTENT_X: i++
 	SCROLLABLE_CONTENT_Y: i++
+	TEXT_INPUT_TEXT: i++
 
 exports.out = do (i=0) ->
 	# basic
