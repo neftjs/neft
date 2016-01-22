@@ -63,28 +63,30 @@ class TextInput: Item {
                 .setAlignmentVertical(reader.getString())
         }
     }
-    
+
     private let fieldView = UITextField()
     private let areaView = UITextView()
     private var view: UIView
-    
+
     var fontFamily = "Helvetica"
     var fontPixelSize: CGFloat = 14
     var multiLine = false
     var focus = false
-    
+    var text = ""
+    var invalidateFrames = 0
+
     override init(_ app: GameViewController) {
         view = fieldView
-        
+
         super.init(app)
-        
+
         // default size
         setWidth(100)
         setHeight(50)
-        
+
         // set default font
         updateFont()
-        
+
         // views container
         let container = UIView()
         container.frame = app.renderer.screen.rect
@@ -96,7 +98,22 @@ class TextInput: Item {
         fieldView.userInteractionEnabled = false
         areaView.userInteractionEnabled = false
     }
-    
+
+    private func detectTextChange() {
+        var text = ""
+        if multiLine {
+            text = areaView.text
+        } else if fieldView.text != nil {
+            text = fieldView.text!
+        }
+        if (self.text != text){
+            self.text = text
+            app.client.pushAction(OutAction.TEXT_INPUT_TEXT)
+            app.renderer.pushObject(self)
+            app.client.pushString(text)
+        }
+    }
+
     private func reloadView() {
         let oldView = view
         if multiLine {
@@ -105,45 +122,45 @@ class TextInput: Item {
             view = fieldView
         }
         guard oldView != view else { return }
-        
+
         // visibility
         view.hidden = false
         oldView.hidden = true
-        
+
         // font
         if multiLine {
             areaView.font = fieldView.font
         } else {
             fieldView.font = areaView.font
         }
-        
+
         // bounds
         view.frame.size = bounds.size
-        
+
         // position
         view.frame.origin = globalBounds.origin
-        
+
         // text
         if multiLine {
             areaView.text = fieldView.text
         } else {
             fieldView.text = areaView.text
         }
-        
+
         // color
         if multiLine {
             areaView.textColor = fieldView.textColor
         } else {
             fieldView.textColor = areaView.textColor
         }
-        
+
         // horizontal alignment
         if multiLine {
             areaView.textAlignment = fieldView.textAlignment
         } else {
             fieldView.textAlignment = areaView.textAlignment
         }
-        
+
         // focus
         if focus {
             oldView.userInteractionEnabled = false
@@ -152,7 +169,7 @@ class TextInput: Item {
             view.becomeFirstResponder()
         }
     }
-    
+
     private func updateFont() {
         let font = UIFont(name: fontFamily, size: fontPixelSize)
         if multiLine {
@@ -161,13 +178,14 @@ class TextInput: Item {
             fieldView.font = font
         }
     }
-    
+
     override func updateBounds() {
         super.updateBounds()
         view.frame.size = bounds.size
     }
-    
+
     func setText(val: String) {
+        self.text = val
         if multiLine {
             areaView.text = val
         } else {
@@ -175,7 +193,7 @@ class TextInput: Item {
         }
         invalidate()
     }
-    
+
     func setColor(val: Int) {
         let color = Color.hexColorToUIColor(val)
         if multiLine {
@@ -185,17 +203,17 @@ class TextInput: Item {
         }
         invalidate()
     }
-    
+
     func setLineHeight(val: CGFloat) {
         // TODO
     }
-    
+
     func setMultiLine(val: Bool) {
         multiLine = val
         reloadView()
         invalidate()
     }
-    
+
     // TODO: 'password' echo mode is not supported in multiline textinput
     func setEchoMode(val: String) {
         switch val {
@@ -205,7 +223,7 @@ class TextInput: Item {
             fieldView.secureTextEntry = false
         }
     }
-    
+
     func setFontFamily(val: String) {
         let fontName = Text.fonts[val]
         if fontName != nil {
@@ -214,21 +232,21 @@ class TextInput: Item {
             invalidate()
         }
     }
-    
+
     func setFontPixelSize(val: CGFloat) {
         self.fontPixelSize = val
         updateFont()
         invalidate()
     }
-    
+
     func setFontWordSpacing(val: CGFloat) {
         // TODO
     }
-    
+
     func setFontLetterSpacing(val: CGFloat) {
         // TODO
     }
-    
+
     func setAlignmentHorizontal(val: String) {
         var alignment: NSTextAlignment?
         switch val {
@@ -239,14 +257,14 @@ class TextInput: Item {
         default:
             alignment = .Left
         }
-        
+
         if multiLine {
             areaView.textAlignment = alignment!
         } else {
             fieldView.textAlignment = alignment!
         }
     }
-    
+
     func setAlignmentVertical(val: String) {
         // TODO
         switch val {
@@ -255,7 +273,7 @@ class TextInput: Item {
         default: break
         }
     }
-    
+
     override func setKeysFocus(val: Bool) {
         super.setKeysFocus(val)
         focus = val
@@ -266,26 +284,31 @@ class TextInput: Item {
         } else {
             view.resignFirstResponder()
         }
-        
+
         invalidate()
+        detectTextChange()
+        invalidateFrames = 10
     }
-    
+
     override func measure(globalTransform: CGAffineTransform, _ viewRect: CGRect, inout _ dirtyRects: [CGRect], forceUpdateBounds: Bool) {
         let dirtyPosition = forceUpdateBounds || dirtyTransform
-        
+
         super.measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceUpdateBounds)
-        
+
         if dirtyPosition {
             view.frame.origin = globalBounds.origin
         }
-        if focus {
+        if focus || invalidateFrames > 0 {
+            if invalidateFrames > 0 {
+                invalidateFrames -= 1
+            }
+            detectTextChange()
             invalidate()
         }
     }
-    
+
     override func drawShape(context: CGContextRef, inRect rect: CGRect) {
         view.drawViewHierarchyInRect(bounds, afterScreenUpdates: false)
     }
-    
-}
 
+}
