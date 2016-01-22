@@ -6,6 +6,15 @@ module.exports = (impl) ->
 
 	colorUtils = require '../../base/utils/color'
 
+	bridge.listen bridge.inActions.TEXT_INPUT_TEXT, (reader) ->
+		textInput = bridge.getItemFromReader reader
+		text = reader.getString()
+
+		oldValue = textInput.text
+		textInput._text = text
+		textInput.onTextChange.emit oldValue
+		return
+
 	DATA = {}
 
 	DATA: DATA
