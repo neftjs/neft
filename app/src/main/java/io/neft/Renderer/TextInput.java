@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 
 import io.neft.Client.Action;
 import io.neft.Client.InAction;
+import io.neft.Client.OutAction;
 import io.neft.Client.Reader;
 import io.neft.MainActivity;
 import io.neft.Utils.ColorUtils;
@@ -111,8 +114,23 @@ public class TextInput extends Item {
     private class InputView extends EditText {
         public boolean active = false;
 
-        public InputView(Context context) {
+        public InputView(Context context, final TextInput textInput) {
             super(context);
+
+            this.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                	final MainActivity app = textInput.app;
+                    app.client.pushAction(OutAction.TEXT_INPUT_TEXT);
+                    app.renderer.pushItem(textInput);
+                    app.client.pushString(getText().toString());
+                }
+            });
         }
 
         @Override
@@ -139,7 +157,7 @@ public class TextInput extends Item {
         Context context = app.getApplicationContext();
         ViewGroup container = new RelativeLayout(context);
         container.layout(0, 0, (int) app.renderer.screen.width, (int) app.renderer.screen.height);
-        this.view = new InputView(context);
+        this.view = new InputView(context, this);
         view.setBackgroundColor(Color.TRANSPARENT);
         view.setPadding(0, 0, 0, 0);
         container.addView(view);
