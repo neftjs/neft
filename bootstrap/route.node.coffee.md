@@ -179,5 +179,5 @@ text browsers) or the HTML scaffolding which will run **neft.io** on the client 
 				view.render
 					title: app.config.title
 					appTextModeUrl: TEXT_MODE_URI_PREFIX + @request.uri
-					neftFilePath: app.networking.url + NEFT_JS_URI
-					appFilePath: app.networking.url + APP_JS_URI
+					neftFilePath: NEFT_JS_URI
+					appFilePath: APP_JS_URI
