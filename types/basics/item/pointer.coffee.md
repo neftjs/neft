@@ -233,12 +233,10 @@ Stopped 'Exit' event will emit 'Release' event on this item.
 			@:: = Object.create Renderer.Device.pointer
 			@::constructor = PointerEvent
 
-*Boolean* PointerEvent::stopPropagation = true
-----------------------------------------------
+*Boolean* PointerEvent::stopPropagation = false
+-----------------------------------------------
 
-Disable this property in 'onPress' signal to propagate event further.
-
-This property is 'false' by default except the 'onPress' signal.
+Enable this property to stop further event propagation.
 
 			utils.defineProperty @::, 'stopPropagation', null, ->
 				@_stopPropagation

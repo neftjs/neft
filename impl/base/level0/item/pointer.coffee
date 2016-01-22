@@ -122,7 +122,7 @@ module.exports = (impl) ->
 				if capturePointer & CLICK
 					pressedItems.push item
 				if capturePointer & PRESS
-					event._ensureRelease = event._ensureMove = event._stopPropagation = true
+					event._ensureRelease = event._ensureMove = true
 					emitSignal item.pointer, 'onPress', event
 					if event._ensureRelease
 						itemsToRelease.push item
@@ -134,6 +134,7 @@ module.exports = (impl) ->
 				STOP_ASIDE_PROPAGATION
 
 			(e) ->
+				event._stopPropagation = false
 				event._checkSiblings = false
 				captureItems PRESS | CLICK, impl.window, e._x, e._y, onItem
 				return
