@@ -90,9 +90,9 @@ Keys @extension
 			developmentSetter: (val) ->
 				assert.isBoolean val
 			setter: (_super) -> (val) ->
+				if val
+					focusChangeOnPointerPress = true
 				if @_focus isnt val
-					if val
-						focusChangeOnPointerPress = true
 					if val and focusedKeys isnt @
 						if focusedKeys
 							oldVal = focusedKeys
