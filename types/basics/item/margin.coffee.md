@@ -15,6 +15,7 @@ Margin @extension
 		itemUtils.defineProperty
 			constructor: ctor
 			name: propertyName
+			defaultValue: 0
 			valueConstructor: Margin
 			setter: (_super) -> (val=0) ->
 				margin = @[propertyName]

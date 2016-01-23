@@ -15,6 +15,7 @@ Spacing @extension
 		itemUtils.defineProperty
 			constructor: ctor
 			name: 'spacing'
+			defaultValue: 0
 			valueConstructor: Spacing
 			setter: (_super) -> (val) ->
 				{spacing} = @
