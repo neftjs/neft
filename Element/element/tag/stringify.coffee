@@ -51,14 +51,10 @@ getOuterHTML = (elem, replacements) ->
 
 	ret = "<" + name
 	for attrName, attrValue of elem._attrs
-		unless isPublic(attrName)
+		if not attrValue? or not isPublic(attrName)
 			continue
 
-		ret += " " + attrName
-		unless attrValue?
-			ret += "=\"\"" unless booleanAttribs[attrName]
-		else
-			ret += "=\"" + attrValue + "\""
+		ret += " " + attrName + "=\"" + attrValue + "\""
 
 	if SINGLE_TAG[name]
 		ret + ">"
@@ -68,21 +64,3 @@ getOuterHTML = (elem, replacements) ->
 module.exports =
 	getInnerHTML: getInnerHTML
 	getOuterHTML: getOuterHTML
-
-booleanAttribs =
-	__proto__: null
-	async: true
-	autofocus: true
-	autoplay: true
-	checked: true
-	controls: true
-	defer: true
-	disabled: true
-	hidden: true
-	loop: true
-	multiple: true
-	open: true
-	readonly: true
-	required: true
-	scoped: true
-	selected: true
