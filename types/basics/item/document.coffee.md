@@ -41,7 +41,8 @@ Document @extension
 		onNodeAttrsChange = (attr, oldVal) ->
 			unless props = @_ref._$
 				return
-			setProperty.call @, props, attr, @_node._attrs[attr], oldVal
+			if attr of props
+				setProperty.call @, props, attr, @_node._attrs[attr], oldVal
 			return
 
 		enableProperties = ->
