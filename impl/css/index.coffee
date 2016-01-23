@@ -12,8 +12,8 @@ SHEET = "
 * {
 	margin: 0;
 	padding: 0;
-	-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; 
-	-webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; 
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+	-webkit-focus-ring-color: rgba(255, 255, 255, 0) !important;
 	outline: none !important;
 }
 #styles {
@@ -28,7 +28,7 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
+	-webkit-overflow-scrolling: touch;
 }
 #body {
 	position: absolute;

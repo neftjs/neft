@@ -123,7 +123,6 @@ module.exports = (impl) ->
 			window.addEventListener 'touchmove', onPointerMove
 
 		onPointerWheel = (e) ->
-			e.stopPropagation()
 			event = getNormalizedEvent e
 			pointer.deltaX = event.deltaX
 			pointer.deltaY = event.deltaY

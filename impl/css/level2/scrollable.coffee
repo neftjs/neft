@@ -1,36 +1,10 @@
 'use strict'
 
-utils = require 'utils'
-signal = require 'signal'
-
-isTouch = 'ontouchstart' of window
-isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
-
 module.exports = (impl) ->
-	{Types} = impl
-	{Item, Rectangle} = Types
-
-	{round} = Math
-
-	abstractScrollable = impl.AbstractTypes.Scrollable impl
-
-	# transform looks faster, so let's use it on mobile,
-	# where search and scrollbars are not using
-	if isTouch
-		return abstractScrollable
-	else
-		impl._scrollableUsePointer = false
-		impl._scrollableUseWheel = false
-
 	DATA =
 		contentItem: null
 		scrollElem: null
-		globalScale: 1
-		snap: false
-		lastSnapTargetX: 0
-		lastSnapTargetY: 0
 		yScrollbar: false
-		updateScroll: null
 
 	DATA: DATA
 
@@ -39,7 +13,7 @@ module.exports = (impl) ->
 	create: (data) ->
 		self = @
 
-		abstractScrollable.create.call @, data
+		impl.Types.Item.create.call @, data
 
 		scrollElem = data.scrollElem = document.createElement 'div'
 		scrollElem.style.overflow = 'hidden'
@@ -47,25 +21,47 @@ module.exports = (impl) ->
 		scrollElem.style.height = '100%'
 		data.elem.appendChild scrollElem
 
-		data.updateScroll = ->
-			self._impl.scrollElem.scrollLeft = round self._contentX
-			self._impl.scrollElem.scrollTop = round self._contentY
+		@onParentChange ->
+			scrollElem.scrollLeft = self._contentX
+			scrollElem.scrollTop = self._contentY
 			return
 
-		# creating
-		@onParentChange data.updateScroll
+		setContentX = (val) ->
+			max = self._impl.contentItem?._width - self._width or 0
+			if val < 0
+				val = 0
+			if val > max
+				val = max
 
-		# searching etc.
-		scrollElem.addEventListener 'scroll', (e) ->
-			x = abstractScrollable._getLimitedX self, @scrollLeft
-			y = abstractScrollable._getLimitedY self, @scrollTop
-			if round(x) isnt round(self._contentX)
-				self.contentX = x
-			if round(y) isnt round(self._contentY)
-				self.contentY = y
-			data.updateScroll()
+			oldVal = self.contentX
+			if val isnt oldVal
+				self._contentX = val
+				self.onContentXChange.emit oldVal
+
+		setContentY = (val) ->
+			max = self._impl.contentItem?._height - self._height or 0
+			if val < 0
+				val = 0
+			if val > max
+				val = max
+
+			oldVal = self.contentY
+			if val isnt oldVal
+				self._contentY = val
+				self.onContentYChange.emit oldVal
+
+		syncScroll = ->
+			setContentX @scrollLeft
+			setContentY @scrollTop
 			return
 
+		# safari scroll event throttling fix
+		scrollElem.addEventListener impl.utils.pointerWheelEventName, (e) ->
+			if e.deltaX?
+				setContentX @scrollLeft + e.deltaX
+				setContentY @scrollTop + e.deltaY
+
+		scrollElem.addEventListener 'scroll', syncScroll
 		return
 
 	setScrollableContentItem: do ->
@@ -95,13 +91,15 @@ module.exports = (impl) ->
 			return
 
 	setScrollableContentX: (val) ->
-		@_impl.scrollElem.scrollLeft = round val
-		if val > 0 and @_impl.scrollElem.scrollLeft is 0
-			setTimeout @_impl.updateScroll
+		@_impl.scrollElem.scrollLeft = val
 		return
 
 	setScrollableContentY: (val) ->
-		@_impl.scrollElem.scrollTop = round val
-		if val > 0 and @_impl.scrollElem.scrollTop is 0
-			setTimeout @_impl.updateScroll
+		@_impl.scrollElem.scrollTop = val
+		return
+
+	setScrollableSnap: (val) ->
+		return
+
+	setScrollableSnapItem: (val) ->
 		return

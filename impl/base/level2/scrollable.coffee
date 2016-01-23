@@ -22,8 +22,8 @@ module.exports = (impl) ->
 			x = Math.round item._contentX - deltaX
 			y = Math.round item._contentY - deltaY
 
-			x = limitedX = getLimitedX item, x
-			y = limitedY = getLimitedY item, y
+			x = getLimitedX item, x
+			y = getLimitedY item, y
 
 			if item._contentX isnt x or item._contentY isnt y
 				item.contentX = x
@@ -315,7 +315,7 @@ module.exports = (impl) ->
 				item._impl.globalScale = getItemGlobalScale item
 				unless scroll(item, x, y)
 					e.stopPropagation = false
-				return 
+				return
 
 			now = Date.now()
 
