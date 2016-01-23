@@ -133,36 +133,37 @@ module.exports = (impl) ->
 		queues = [[], []]
 		queue = queues[currentQueue]
 
-		updateItem = (item) ->
-			data = item._impl
-			isAutoSize = item._autoWidth or item._autoHeight
-			if (text = data.text)
-				if data.containsHTML
-					if isAutoSize
-						updateHTMLTextSize item
-				else
-					if isAutoSize
-						updatePlainTextSize item
-			else
-				data.contentWidth = 0
-				data.contentHeight = 0
-			return
-
 		updateAll = ->
+			thisQueue = queue
 			currentQueue = ++currentQueue % 2
 			queue = queues[currentQueue]
-
 			pending = false
-			for item in queue
+
+			# set content
+			for item in thisQueue
 				data = item._impl
 				data.contentUpdatePending = false
 				if data.containsHTML
 					data.innerElem.innerHTML = data.text
 				else
 					data.innerElem.textContent = data.text
-			for item in queue
-				updateItem item
-			while item = queue.pop()
+
+			# measure
+			for item in thisQueue
+				data = item._impl
+				isAutoSize = item._autoWidth or item._autoHeight
+				if data.text
+					if isAutoSize
+						if data.containsHTML
+							updateHTMLTextSize item
+						else
+							updatePlainTextSize item
+				else
+					data.contentWidth = 0
+					data.contentHeight = 0
+
+			# set sizes
+			while item = thisQueue.pop()
 				data = item._impl
 				item.contentWidth = data.contentWidth
 				item.contentHeight = data.contentHeight
