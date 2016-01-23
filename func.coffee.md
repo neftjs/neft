@@ -24,10 +24,10 @@ Used as a global namespace in the function body.
 Requires standard Neft modules.
 
 ```xml
-<neft:func neft:name="test">
+<neft:function neft:name="test">
 	var utils = require('utils');
 	return utils.arrayToObject([1, 2]);
-</neft:func>
+</neft:function>
 ```
 
 			require: require
@@ -40,9 +40,9 @@ Gets property value from the local scope.
 It's internally used in the string interpolation.
 
 ```xml
-<neft:func neft:name="test">
+<neft:function neft:name="test">
 	return get('user').name;
-</neft:func>
+</neft:function>
 ```
 
 			get: (prop) ->
@@ -56,10 +56,10 @@ It's internally used in the string interpolation.
 Array-like object with arguments passed to the function.
 
 ```xml
-<neft:func neft:name="followMouse">
+<neft:function neft:name="followMouse">
 	var e = arguments[0]; // Renderer.Item::pointer.onMove comes with event argument
 	return [e.x, e.y];
-</neft:func>
+</neft:function>
 
 <button neft:style:pointer:onMove="${followMouse}" />
 ```
@@ -72,13 +72,13 @@ Array-like object with arguments passed to the function.
 Reference to the [File][document/File] where the function is placed.
 
 ```xml
-<neft:func neft:name="add">
+<neft:function neft:name="add">
 	return arguments[0] + arguments[1];
-</neft:func>
+</neft:function>
 
-<neft:func neft:name="print">
+<neft:function neft:name="print">
 	return "1 + 3 = " + view.funcs.add(1, 3);
-</neft:func>
+</neft:function>
 ```
 
 			view: -> @
@@ -91,9 +91,9 @@ Reference to the [Renderer.Item][renderer/Item].
 It's available when the function was call on the style signal.
 
 ```xml
-<neft:func neft:name="test">
+<neft:function neft:name="test">
 	item.width += 10;
-</neft:func>
+</neft:function>
 
 <rectangle neft:style:pointer:onClick="${test}" />
 ```
