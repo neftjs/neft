@@ -53,10 +53,7 @@ module.exports = (impl) ->
 		# update texts sizes
 		if arr = loadingTextsByFonts[name]
 			for item in arr
-				if item._impl.containsHTML
-					updateHTMLTextSize item
-				else
-					updatePlainTextSize item
+				updateContent item
 			if implUtils.loadedFonts[name]
 				loadingTextsByFonts[name] = null
 		return
@@ -108,8 +105,8 @@ module.exports = (impl) ->
 			else
 				wordWidth += charWidth
 
-		item.contentWidth = width
-		item.contentHeight = height
+		data.contentWidth = width
+		data.contentHeight = height
 		return
 
 	updateHTMLTextSize = (item) ->
@@ -120,42 +117,55 @@ module.exports = (impl) ->
 			arr = loadingTextsByFonts[fontFamily] ||= []
 			arr.push item
 
-		item.contentWidth = innerElem.offsetWidth
-		item.contentHeight = innerElem.offsetHeight
+		data.contentWidth = innerElem.offsetWidth
+		data.contentHeight = innerElem.offsetHeight
 
 		if innerElem.parentNode is hatchery
 			implUtils.prependElement data.elem, innerElem
-		else if item._height is 0
+		else if data.contentHeight is 0
 			hatchery.appendChild data.innerElem
-			updateHTMLTextSize item
+			updateContent item
 		return
 
 	updateContent = do ->
 		pending = false
-		queue = []
+		currentQueue = 0
+		queues = [[], []]
+		queue = queues[currentQueue]
 
 		updateItem = (item) ->
 			data = item._impl
 			isAutoSize = item._autoWidth or item._autoHeight
 			if (text = data.text)
 				if data.containsHTML
-					data.innerElem.innerHTML = text
 					if isAutoSize
 						updateHTMLTextSize item
 				else
-					data.innerElem.textContent = text
 					if isAutoSize
 						updatePlainTextSize item
 			else
-				item.contentWidth = 0
-				item.contentHeight = 0
+				data.contentWidth = 0
+				data.contentHeight = 0
 			return
 
 		updateAll = ->
-			while item = queue.pop()
-				item._impl.contentUpdatePending = false
-				updateItem item
+			currentQueue = ++currentQueue % 2
+			queue = queues[currentQueue]
+
 			pending = false
+			for item in queue
+				data = item._impl
+				data.contentUpdatePending = false
+				if data.containsHTML
+					data.innerElem.innerHTML = data.text
+				else
+					data.innerElem.textContent = data.text
+			for item in queue
+				updateItem item
+			while item = queue.pop()
+				data = item._impl
+				item.contentWidth = data.contentWidth
+				item.contentHeight = data.contentHeight
 			return
 
 		(item) ->
@@ -217,6 +227,8 @@ module.exports = (impl) ->
 		text: ''
 		font: "14px #{implUtils.DEFAULT_FONTS['sans-serif']}, sans-serif"
 		fontFamily: implUtils.DEFAULT_FONTS['sans-serif']
+		contentWidth: 0
+		contentHeight: 0
 
 	exports =
 	DATA: DATA
