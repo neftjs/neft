@@ -241,4 +241,6 @@ exports.parse = (path, callback) ->
 			logtime = log.time 'Resize images'
 			bgStack.runAllSimultaneously ->
 				log.end logtime
-		callback err, rscs or ''
+		unless utils.isPlainObject(rscs)
+			rscs = {}
+		callback err, rscs
