@@ -227,6 +227,7 @@ By default, client has *clientId* and *sessionId* hashes.
 		if opts.styles?
 			for style in opts.styles
 				if style.name is 'view'
+					style.file._init app: app, view: null
 					windowStyle = style.file._main.getComponent()
 					break
 
@@ -240,7 +241,8 @@ By default, client has *clientId* and *sessionId* hashes.
 
 			# initialize styles
 			for style in opts.styles when style.name?
-				style.file._init stylesInitObject
+				if style.name isnt 'view'
+					style.file._init stylesInitObject
 				app.styles[style.name] = style.file
 
 		# load styles
