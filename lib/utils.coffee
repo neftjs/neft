@@ -11,13 +11,11 @@ exports.verifyNeftProject = (path) ->
 	src = pathUtils.resolve path, './package.json'
 	if fs.existsSync(src)
 		json = JSON.parse fs.readFileSync src, 'utf-8'
-		if json.devDependencies?.neft
+		if json.config?.type
 			result = true
 
 	unless result
-		log.error "No project found"
-		log.info "Valid project must specify 'neft' module in the 'devDependencies' " +
-			"of his package.json file"
+		log.error "No Neft project found"
 
 	result
 
@@ -51,6 +49,6 @@ exports.forEachFileDeep = (dir, onFile, onEnd) ->
 				length++
 				filePath = "#{dir}/#{file}"
 				proceedFile filePath
-			
+
 		return
 	return
