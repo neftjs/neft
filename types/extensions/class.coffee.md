@@ -213,8 +213,9 @@ Mostly used with bindings.
 ## *Signal* Class::onWhenChange(*Boolean* oldValue)
 
 			enable: ->
-				if @_running or not @_target or (hasDocQuery = (@_document and @_document._query))
-					if hasDocQuery
+				docQuery = @_document?._query
+				if @_running or not @_target or docQuery
+					if docQuery
 						for classElem in @_document._classesInUse
 							classElem.enable()
 					return
