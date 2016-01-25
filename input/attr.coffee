@@ -33,7 +33,7 @@ module.exports = (File, Input) -> class InputAttr extends Input
 
 		if isHandler(attrName)
 			@traceChanges = false
-			@handlerFunc = createHandlerFunc clone
+			@handlerFunc = createHandlerFunc @
 		else
 			@handlerFunc = null
 
