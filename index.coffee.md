@@ -4,7 +4,7 @@ Schema @library
 Module used to validate structures.
 
 Access it with:
-```
+```javascript
 var Schema = require('schema');
 ```
 
