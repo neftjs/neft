@@ -40,10 +40,10 @@ module.exports = (impl) ->
 
 		setContentY = (val) ->
 			max = self._impl.contentItem?._height - self._height or 0
-			if val < 0
-				val = 0
 			if val > max
 				val = max
+			if val < 0
+				val = 0
 
 			oldVal = self.contentY
 			if val isnt oldVal
