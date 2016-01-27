@@ -28,8 +28,8 @@
     "node-static": "^0.7.6",
     "nml-parser": "Neft-io/nml-parser#fb499b5",
     "bundle-builder": "Neft-io/bundle-builder#baaa87f",
-    "sample-project": "Neft-io/sample-project#efe5e5b",
-    "android-runtime": "Neft-io/android-runtime#cb68e33",
+    "sample-project": "Neft-io/sample-project#ec1224e",
+    "android-runtime": "Neft-io/android-runtime#2654be7",
     "ios-runtime": "Neft-io/ios-runtime#646ed4e"
   }
 }
