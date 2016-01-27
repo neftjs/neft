@@ -82,7 +82,7 @@ module.exports = (config, callback) ->
 
 		logtime = log.time 'Create android APK file'
 		apkMode = if config.release then 'release' else 'debug'
-		gradlewMode = if config.release then 'assembleRelease' else 'assembleDebug'
+		gradlewMode = 'assembleDebug'
 		if /^win/.test(process.platform)
 			exec = "cd #{ANDROID_BUNDLE_DIR} && ./gradlew.bat #{gradlewMode}"
 		else

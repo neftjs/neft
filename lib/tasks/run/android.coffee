@@ -53,7 +53,7 @@ module.exports = (options) ->
 			return
 
 		# run app
-		cp.exec "#{adbPath} shell am start -a android.intent.action.MAIN -n io.neft/#{packageFile.android.package}.MainActivity", (err) ->
+		shell = cp.exec "#{adbPath} shell am start -a android.intent.action.MAIN -n #{packageFile.android.package}/.MainActivity", (err) ->
 			if err
 				logcat.kill()
 				console.error err
