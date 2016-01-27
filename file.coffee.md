@@ -179,7 +179,11 @@ File @class
 
 				parseObject obj, arr[JSON_FUNCS], obj.funcs
 				parseArray obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet
+
+				`//<development>`
 				parseArray obj, arr[JSON_LOGS], obj.logs
+				`//</development>`
+
 				parseArray obj, arr[JSON_STYLES], obj.styles
 
 				obj
