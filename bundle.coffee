@@ -1,10 +1,14 @@
 fs = require 'fs'
-bundle = require 'bundle-builder'
 utils = require 'utils'
 Mustache = require 'mustache'
 coffee = require 'coffee-script'
 
-modulePackage = require './package.json'
+global.Neft =
+	utils: require 'utils'
+	log: require 'log'
+	assert: require './node_modules/assert'
+
+bundle = require 'bundle-builder'
 
 createBundle = (opts, callback) ->
 	bundle {
