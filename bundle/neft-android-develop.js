@@ -3429,7 +3429,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var SINGLE_TAG, booleanAttribs, getInnerHTML, getOuterHTML, isPublic;
+  var SINGLE_TAG, getInnerHTML, getOuterHTML, isPublic;
 
   SINGLE_TAG = {
     __proto__: null,
@@ -3492,17 +3492,10 @@ var exports = module.exports;
     _ref = elem._attrs;
     for (attrName in _ref) {
       attrValue = _ref[attrName];
-      if (!isPublic(attrName)) {
+      if ((attrValue == null) || !isPublic(attrName)) {
         continue;
       }
-      ret += " " + attrName;
-      if (attrValue == null) {
-        if (!booleanAttribs[attrName]) {
-          ret += "=\"\"";
-        }
-      } else {
-        ret += "=\"" + attrValue + "\"";
-      }
+      ret += " " + attrName + "=\"" + attrValue + "\"";
     }
     if (SINGLE_TAG[name]) {
       return ret + ">";
@@ -3514,25 +3507,6 @@ var exports = module.exports;
   module.exports = {
     getInnerHTML: getInnerHTML,
     getOuterHTML: getOuterHTML
-  };
-
-  booleanAttribs = {
-    __proto__: null,
-    async: true,
-    autofocus: true,
-    autoplay: true,
-    checked: true,
-    controls: true,
-    defer: true,
-    disabled: true,
-    hidden: true,
-    loop: true,
-    multiple: true,
-    open: true,
-    readonly: true,
-    required: true,
-    scoped: true,
-    selected: true
   };
 
 }).call(this);
@@ -5767,7 +5741,7 @@ var exports = module.exports;
         this.lastValue = NaN;
         if (isHandler(attrName)) {
           this.traceChanges = false;
-          this.handlerFunc = createHandlerFunc(clone);
+          this.handlerFunc = createHandlerFunc(this);
         } else {
           this.handlerFunc = null;
         }
@@ -7839,7 +7813,7 @@ var exports = module.exports;
      */
     scroll = (function() {
       return function(item, x, y) {
-        var deltaX, deltaY, limitedX, limitedY;
+        var deltaX, deltaY;
         if (x == null) {
           x = 0;
         }
@@ -7850,8 +7824,8 @@ var exports = module.exports;
         deltaY = getDeltaY(item, y);
         x = Math.round(item._contentX - deltaX);
         y = Math.round(item._contentY - deltaY);
-        x = limitedX = getLimitedX(item, x);
-        y = limitedY = getLimitedY(item, y);
+        x = getLimitedX(item, x);
+        y = getLimitedY(item, y);
         if (item._contentX !== x || item._contentY !== y) {
           item.contentX = x;
           item.contentY = y;
@@ -9914,7 +9888,8 @@ var exports = module.exports;
       TEXT_SIZE: i++,
       FONT_LOAD: i++,
       SCROLLABLE_CONTENT_X: i++,
-      SCROLLABLE_CONTENT_Y: i++
+      SCROLLABLE_CONTENT_Y: i++,
+      TEXT_INPUT_TEXT: i++
     };
   })(0);
 
@@ -10650,6 +10625,14 @@ var exports = module.exports;
     bridge = impl.bridge;
     outActions = bridge.outActions, pushAction = bridge.pushAction, pushItem = bridge.pushItem, pushBoolean = bridge.pushBoolean, pushInteger = bridge.pushInteger, pushFloat = bridge.pushFloat, pushString = bridge.pushString;
     colorUtils = require('../../base/utils/color');
+    bridge.listen(bridge.inActions.TEXT_INPUT_TEXT, function(reader) {
+      var oldValue, text, textInput;
+      textInput = bridge.getItemFromReader(reader);
+      text = reader.getString();
+      oldValue = textInput.text;
+      textInput._text = text;
+      textInput.onTextChange.emit(oldValue);
+    });
     DATA = {};
     return {
       DATA: DATA,
@@ -11141,7 +11124,7 @@ var exports = module.exports;
             pressedItems.push(item);
           }
           if (capturePointer & PRESS) {
-            event._ensureRelease = event._ensureMove = event._stopPropagation = true;
+            event._ensureRelease = event._ensureMove = true;
             emitSignal(item.pointer, 'onPress', event);
             if (event._ensureRelease) {
               itemsToRelease.push(item);
@@ -11157,6 +11140,7 @@ var exports = module.exports;
           return STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
+          event._stopPropagation = false;
           event._checkSiblings = false;
           captureItems(PRESS | CLICK, impl.window, e._x, e._y, onItem);
         };
@@ -12754,12 +12738,13 @@ var exports = module.exports;
       });
 
       Class.prototype.enable = function() {
-        var classElem, hasDocQuery, _i, _len, _ref, _ref1;
-        if (this._running || !this._target || (hasDocQuery = this._document && this._document._query)) {
-          if (hasDocQuery) {
-            _ref = this._document._classesInUse;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              classElem = _ref[_i];
+        var classElem, docQuery, _i, _len, _ref, _ref1, _ref2;
+        docQuery = (_ref = this._document) != null ? _ref._query : void 0;
+        if (this._running || !this._target || docQuery) {
+          if (docQuery) {
+            _ref1 = this._document._classesInUse;
+            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+              classElem = _ref1[_i];
               classElem.enable();
             }
           }
@@ -12767,7 +12752,7 @@ var exports = module.exports;
         }
         Class.__super__.enable.call(this);
         updateTargetClass(saveAndEnableClass, this._target, this);
-        if (!((_ref1 = this._document) != null ? _ref1._query : void 0)) {
+        if (!((_ref2 = this._document) != null ? _ref2._query : void 0)) {
           loadObjects(this, this._component, this._target);
         }
       };
@@ -15363,6 +15348,7 @@ var exports = module.exports;
         itemUtils.defineProperty({
           constructor: ctor,
           name: 'spacing',
+          defaultValue: 0,
           valueConstructor: Spacing,
           setter: function(_super) {
             return function(val) {
@@ -15942,6 +15928,7 @@ var exports = module.exports;
         itemUtils.defineProperty({
           constructor: ctor,
           name: propertyName,
+          defaultValue: 0,
           valueConstructor: Margin,
           setter: function(_super) {
             return function(val) {
@@ -16395,10 +16382,10 @@ var exports = module.exports;
           setter: function(_super) {
             return function(val) {
               var oldVal;
+              if (val) {
+                focusChangeOnPointerPress = true;
+              }
               if (this._focus !== val) {
-                if (val) {
-                  focusChangeOnPointerPress = true;
-                }
                 if (val && focusedKeys !== this) {
                   if (focusedKeys) {
                     oldVal = focusedKeys;
@@ -16531,7 +16518,9 @@ var exports = module.exports;
           if (!(props = this._ref._$)) {
             return;
           }
-          setProperty.call(this, props, attr, this._node._attrs[attr], oldVal);
+          if (attr in props) {
+            setProperty.call(this, props, attr, this._node._attrs[attr], oldVal);
+          }
         };
 
         enableProperties = function() {
@@ -21113,7 +21102,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.7.1",
+  "version": "0.8.15",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -22333,6 +22322,10 @@ var exports = module.exports;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         style = _ref[_i];
         if (style.name === 'view') {
+          style.file._init({
+            app: app,
+            view: null
+          });
           windowStyle = style.file._main.getComponent();
           break;
         }
@@ -22351,7 +22344,9 @@ var exports = module.exports;
         if (!(style.name != null)) {
           continue;
         }
-        style.file._init(stylesInitObject);
+        if (style.name !== 'view') {
+          style.file._init(stylesInitObject);
+        }
         app.styles[style.name] = style.file;
       }
     }

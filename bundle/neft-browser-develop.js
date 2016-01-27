@@ -1,7 +1,8 @@
 var Neft, setImmediate;
 
 setImmediate = (function() {
-  var callAll, queue, running, update;
+  var callAll, queue, ready, running, update;
+  ready = false;
   running = false;
   queue = [];
   callAll = function() {
@@ -48,6 +49,10 @@ setImmediate = (function() {
       return setTimeout(callAll, 0);
     };
   })());
+  setTimeout(function() {
+    ready = true;
+    return callAll();
+  });
   return function(func) {
     var argc, args, i, j, ref;
     argc = arguments.length;
@@ -58,7 +63,7 @@ setImmediate = (function() {
       }
     }
     queue.push(func, args);
-    if (!running) {
+    if (ready && !running) {
       update();
       running = true;
     }
@@ -3674,7 +3679,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var SINGLE_TAG, booleanAttribs, getInnerHTML, getOuterHTML, isPublic;
+  var SINGLE_TAG, getInnerHTML, getOuterHTML, isPublic;
 
   SINGLE_TAG = {
     __proto__: null,
@@ -3737,17 +3742,10 @@ var exports = module.exports;
     _ref = elem._attrs;
     for (attrName in _ref) {
       attrValue = _ref[attrName];
-      if (!isPublic(attrName)) {
+      if ((attrValue == null) || !isPublic(attrName)) {
         continue;
       }
-      ret += " " + attrName;
-      if (attrValue == null) {
-        if (!booleanAttribs[attrName]) {
-          ret += "=\"\"";
-        }
-      } else {
-        ret += "=\"" + attrValue + "\"";
-      }
+      ret += " " + attrName + "=\"" + attrValue + "\"";
     }
     if (SINGLE_TAG[name]) {
       return ret + ">";
@@ -3759,25 +3757,6 @@ var exports = module.exports;
   module.exports = {
     getInnerHTML: getInnerHTML,
     getOuterHTML: getOuterHTML
-  };
-
-  booleanAttribs = {
-    __proto__: null,
-    async: true,
-    autofocus: true,
-    autoplay: true,
-    checked: true,
-    controls: true,
-    defer: true,
-    disabled: true,
-    hidden: true,
-    loop: true,
-    multiple: true,
-    open: true,
-    readonly: true,
-    required: true,
-    scoped: true,
-    selected: true
   };
 
 }).call(this);
@@ -6012,7 +5991,7 @@ var exports = module.exports;
         this.lastValue = NaN;
         if (isHandler(attrName)) {
           this.traceChanges = false;
-          this.handlerFunc = createHandlerFunc(clone);
+          this.handlerFunc = createHandlerFunc(this);
         } else {
           this.handlerFunc = null;
         }
@@ -8084,7 +8063,7 @@ var exports = module.exports;
      */
     scroll = (function() {
       return function(item, x, y) {
-        var deltaX, deltaY, limitedX, limitedY;
+        var deltaX, deltaY;
         if (x == null) {
           x = 0;
         }
@@ -8095,8 +8074,8 @@ var exports = module.exports;
         deltaY = getDeltaY(item, y);
         x = Math.round(item._contentX - deltaX);
         y = Math.round(item._contentY - deltaY);
-        x = limitedX = getLimitedX(item, x);
-        y = limitedY = getLimitedY(item, y);
+        x = getLimitedX(item, x);
+        y = getLimitedY(item, y);
         if (item._contentX !== x || item._contentY !== y) {
           item.contentX = x;
           item.contentY = y;
@@ -10090,7 +10069,7 @@ var exports = module.exports;
 
   utils = require('utils');
 
-  SHEET = "#hatchery { visibility: hidden; } #hatchery span { display: inline-block; } * { margin: 0; padding: 0; -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; outline: none !important; } #styles { position: absolute; width: 100%; height: 100%; overflow: hidden; top: 0; left: 0 } html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; } #body { position: absolute; z-index: 0; } #styles div, #styles span, #styles canvas, #styles img, #styles textarea { position: absolute; } #styles span span { position: static; } span * { display: inline; font-weight: inherit; font-size: inherit; font-family: inherit; font-style: inherit; border: 0; background: none; } span b, span strong { font-weight: bolder; } span i, span em { font-style: italic; } code { white-space: pre; } img { width: 100%; height: 100%; pointer-events: none; } .link { position: absolute; width: 100%; height: 100%; z-index: 1; } .rect { width: 100%; height: 100%; box-sizing: border-box; border: 0 solid transparent; } .unselectable, .unselectable:focus { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline-style:none; } .layer { -moz-perspective: 1px; /* Firefox */ -webkit-transform-style: preserve-3d; /* Safari */ -webkit-perspective: 1px; /* Safari */ -webkit-backface-visibility: hidden; /* Safari, Chrome */ }";
+  SHEET = "#hatchery { visibility: hidden; } #hatchery span { display: inline-block; } * { margin: 0; padding: 0; -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; outline: none !important; } #styles { position: absolute; width: 100%; height: 100%; overflow: hidden; top: 0; left: 0 } html, body { height: 100%; margin: 0; padding: 0; -webkit-overflow-scrolling: touch; } #body { position: absolute; z-index: 0; } #styles div, #styles span, #styles canvas, #styles img, #styles textarea { position: absolute; } #styles span span { position: static; } span * { display: inline; font-weight: inherit; font-size: inherit; font-family: inherit; font-style: inherit; border: 0; background: none; } span b, span strong { font-weight: bolder; } span i, span em { font-style: italic; } code { white-space: pre; } img { width: 100%; height: 100%; pointer-events: none; } .link { position: absolute; width: 100%; height: 100%; z-index: 1; } .rect { width: 100%; height: 100%; box-sizing: border-box; border: 0 solid transparent; } .unselectable, .unselectable:focus { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline-style:none; } .layer { -moz-perspective: 1px; /* Firefox */ -webkit-transform-style: preserve-3d; /* Safari */ -webkit-perspective: 1px; /* Safari */ -webkit-backface-visibility: hidden; /* Safari, Chrome */ }";
 
   isTouch = 'ontouchstart' in window;
 
@@ -10888,11 +10867,7 @@ var exports = module.exports;
       if (arr = loadingTextsByFonts[name]) {
         for (_i = 0, _len = arr.length; _i < _len; _i++) {
           item = arr[_i];
-          if (item._impl.containsHTML) {
-            updateHTMLTextSize(item);
-          } else {
-            updatePlainTextSize(item);
-          }
+          updateContent(item);
         }
         if (implUtils.loadedFonts[name]) {
           loadingTextsByFonts[name] = null;
@@ -10902,8 +10877,7 @@ var exports = module.exports;
     updatePlainTextSize = function(item) {
       var arr, char, charWidth, data, font, fontDef, fontFamily, height, i, letterSpacing, lineHeight, maxWidth, pixelSize, text, textLength, width, wordSpacing, wordWidth, x, _i;
       data = item._impl;
-      text = data.text;
-      fontFamily = data.innerElemStyle.fontFamily;
+      text = data.text, fontFamily = data.fontFamily;
       if (font = item._font) {
         pixelSize = font._pixelSize;
         letterSpacing = font._letterSpacing;
@@ -10950,59 +10924,70 @@ var exports = module.exports;
           wordWidth += charWidth;
         }
       }
-      item.contentWidth = width;
-      item.contentHeight = height;
+      data.contentWidth = width;
+      data.contentHeight = height;
     };
     updateHTMLTextSize = function(item) {
       var arr, data, fontFamily, innerElem;
       data = item._impl;
-      innerElem = data.innerElem;
-      fontFamily = data.innerElemStyle.fontFamily;
+      innerElem = data.innerElem, fontFamily = data.fontFamily;
       if (implUtils.loadingFonts[fontFamily]) {
         arr = loadingTextsByFonts[fontFamily] || (loadingTextsByFonts[fontFamily] = []);
         arr.push(item);
       }
-      item.contentWidth = innerElem.offsetWidth;
-      item.contentHeight = innerElem.offsetHeight;
+      data.contentWidth = innerElem.offsetWidth;
+      data.contentHeight = innerElem.offsetHeight;
       if (innerElem.parentNode === hatchery) {
         implUtils.prependElement(data.elem, innerElem);
-      } else if (item._height === 0) {
+      } else if (data.contentHeight === 0) {
         hatchery.appendChild(data.innerElem);
-        updateHTMLTextSize(item);
+        updateContent(item);
       }
     };
     updateContent = (function() {
-      var pending, queue, updateAll, updateItem;
+      var currentQueue, pending, queue, queues, updateAll;
       pending = false;
-      queue = [];
-      updateItem = function(item) {
-        var data, isAutoSize, text;
-        data = item._impl;
-        isAutoSize = item._autoWidth || item._autoHeight;
-        if ((text = data.text)) {
+      currentQueue = 0;
+      queues = [[], []];
+      queue = queues[currentQueue];
+      updateAll = function() {
+        var data, isAutoSize, item, thisQueue, _i, _j, _len, _len1;
+        thisQueue = queue;
+        currentQueue = ++currentQueue % 2;
+        queue = queues[currentQueue];
+        pending = false;
+        for (_i = 0, _len = thisQueue.length; _i < _len; _i++) {
+          item = thisQueue[_i];
+          data = item._impl;
+          data.contentUpdatePending = false;
           if (data.containsHTML) {
-            data.innerElem.innerHTML = text;
+            data.innerElem.innerHTML = data.text;
+          } else {
+            data.innerElem.textContent = data.text;
+          }
+        }
+        for (_j = 0, _len1 = thisQueue.length; _j < _len1; _j++) {
+          item = thisQueue[_j];
+          data = item._impl;
+          isAutoSize = item._autoWidth || item._autoHeight;
+          if (data.text) {
             if (isAutoSize) {
-              updateHTMLTextSize(item);
+              if (data.containsHTML) {
+                updateHTMLTextSize(item);
+              } else {
+                updatePlainTextSize(item);
+              }
             }
           } else {
-            data.innerElem.textContent = text;
-            if (isAutoSize) {
-              updatePlainTextSize(item);
-            }
+            data.contentWidth = 0;
+            data.contentHeight = 0;
           }
-        } else {
-          item.contentWidth = 0;
-          item.contentHeight = 0;
         }
-      };
-      updateAll = function() {
-        var item;
-        while (item = queue.pop()) {
-          item._impl.contentUpdatePending = false;
-          updateItem(item);
+        while (item = thisQueue.pop()) {
+          data = item._impl;
+          item.contentWidth = data.contentWidth;
+          item.contentHeight = data.contentHeight;
         }
-        pending = false;
       };
       return function(item) {
         var data;
@@ -11021,8 +11006,8 @@ var exports = module.exports;
     updateTextStyle = function(item) {
       var data, fontFamily, fontSize, fontWeight, innerElemStyle;
       data = item._impl;
-      innerElemStyle = data.innerElemStyle;
-      fontWeight = innerElemStyle.fontWeight, fontSize = innerElemStyle.fontSize, fontFamily = innerElemStyle.fontFamily;
+      innerElemStyle = data.innerElemStyle, fontFamily = data.fontFamily;
+      fontWeight = innerElemStyle.fontWeight, fontSize = innerElemStyle.fontSize;
       fontWeight || (fontWeight = '400');
       fontSize || (fontSize = '14px');
       fontFamily || (fontFamily = implUtils.DEFAULT_FONTS['sans-serif']);
@@ -11042,7 +11027,10 @@ var exports = module.exports;
       contentUpdatePending: false,
       containsHTML: false,
       text: '',
-      font: "14px " + implUtils.DEFAULT_FONTS['sans-serif'] + ", sans-serif"
+      font: "14px " + implUtils.DEFAULT_FONTS['sans-serif'] + ", sans-serif",
+      fontFamily: implUtils.DEFAULT_FONTS['sans-serif'],
+      contentWidth: 0,
+      contentHeight: 0
     };
     return exports = {
       DATA: DATA,
@@ -11107,6 +11095,7 @@ var exports = module.exports;
         updateContent(this);
       },
       setTextFontFamily: function(val) {
+        this._impl.fontFamily = val;
         if (impl.utils.loadingFonts[val] > 0) {
           impl.utils.onFontLoaded(reloadFontFamily, this);
         }
@@ -11601,7 +11590,6 @@ var exports = module.exports;
         })();
         onPointerWheel = function(e) {
           var event;
-          e.stopPropagation();
           event = getNormalizedEvent(e);
           pointer.deltaX = event.deltaX;
           pointer.deltaY = event.deltaY;
@@ -11784,72 +11772,75 @@ var exports = module.exports;
 return module.exports;
 })();modules['../renderer/impl/css/level2/scrollable.coffee'] = (function(){
 var module = {exports: modules["../renderer/impl/css/level2/scrollable.coffee"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md"});
+var require = getModule.bind(null, {});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var isFirefox, isTouch, signal, utils;
-
-  utils = require('utils');
-
-  signal = require('signal');
-
-  isTouch = 'ontouchstart' in window;
-
-  isFirefox = navigator.userAgent.indexOf('Firefox') !== -1;
-
   module.exports = function(impl) {
-    var DATA, Item, Rectangle, Types, abstractScrollable, round;
-    Types = impl.Types;
-    Item = Types.Item, Rectangle = Types.Rectangle;
-    round = Math.round;
-    abstractScrollable = impl.AbstractTypes.Scrollable(impl);
-    if (isTouch) {
-      return abstractScrollable;
-    } else {
-      impl._scrollableUsePointer = false;
-      impl._scrollableUseWheel = false;
-    }
+    var DATA;
     DATA = {
       contentItem: null,
       scrollElem: null,
-      globalScale: 1,
-      snap: false,
-      lastSnapTargetX: 0,
-      lastSnapTargetY: 0,
-      yScrollbar: false,
-      updateScroll: null
+      yScrollbar: false
     };
     return {
       DATA: DATA,
       createData: impl.utils.createDataCloner('Item', DATA),
       create: function(data) {
-        var scrollElem, self;
+        var scrollElem, self, setContentX, setContentY, syncScroll;
         self = this;
-        abstractScrollable.create.call(this, data);
+        impl.Types.Item.create.call(this, data);
         scrollElem = data.scrollElem = document.createElement('div');
         scrollElem.style.overflow = 'hidden';
         scrollElem.style.width = '100%';
         scrollElem.style.height = '100%';
         data.elem.appendChild(scrollElem);
-        data.updateScroll = function() {
-          self._impl.scrollElem.scrollLeft = round(self._contentX);
-          self._impl.scrollElem.scrollTop = round(self._contentY);
-        };
-        this.onParentChange(data.updateScroll);
-        scrollElem.addEventListener('scroll', function(e) {
-          var x, y;
-          x = abstractScrollable._getLimitedX(self, this.scrollLeft);
-          y = abstractScrollable._getLimitedY(self, this.scrollTop);
-          if (round(x) !== round(self._contentX)) {
-            self.contentX = x;
-          }
-          if (round(y) !== round(self._contentY)) {
-            self.contentY = y;
-          }
-          data.updateScroll();
+        this.onParentChange(function() {
+          scrollElem.scrollLeft = self._contentX;
+          scrollElem.scrollTop = self._contentY;
         });
+        setContentX = function(val) {
+          var max, oldVal, _ref;
+          max = ((_ref = self._impl.contentItem) != null ? _ref._width : void 0) - self._width || 0;
+          if (val < 0) {
+            val = 0;
+          }
+          if (val > max) {
+            val = max;
+          }
+          oldVal = self.contentX;
+          if (val !== oldVal) {
+            self._contentX = val;
+            return self.onContentXChange.emit(oldVal);
+          }
+        };
+        setContentY = function(val) {
+          var max, oldVal, _ref;
+          max = ((_ref = self._impl.contentItem) != null ? _ref._height : void 0) - self._height || 0;
+          if (val > max) {
+            val = max;
+          }
+          if (val < 0) {
+            val = 0;
+          }
+          oldVal = self.contentY;
+          if (val !== oldVal) {
+            self._contentY = val;
+            return self.onContentYChange.emit(oldVal);
+          }
+        };
+        syncScroll = function() {
+          setContentX(this.scrollLeft);
+          setContentY(this.scrollTop);
+        };
+        scrollElem.addEventListener(impl.utils.pointerWheelEventName, function(e) {
+          if (e.deltaX != null) {
+            setContentX(this.scrollLeft + e.deltaX);
+            return setContentY(this.scrollTop + e.deltaY);
+          }
+        });
+        scrollElem.addEventListener('scroll', syncScroll);
       },
       setScrollableContentItem: (function() {
         var onHeightChange;
@@ -11885,17 +11876,13 @@ var exports = module.exports;
         };
       })(),
       setScrollableContentX: function(val) {
-        this._impl.scrollElem.scrollLeft = round(val);
-        if (val > 0 && this._impl.scrollElem.scrollLeft === 0) {
-          setTimeout(this._impl.updateScroll);
-        }
+        this._impl.scrollElem.scrollLeft = val;
       },
       setScrollableContentY: function(val) {
-        this._impl.scrollElem.scrollTop = round(val);
-        if (val > 0 && this._impl.scrollElem.scrollTop === 0) {
-          setTimeout(this._impl.updateScroll);
-        }
-      }
+        this._impl.scrollElem.scrollTop = val;
+      },
+      setScrollableSnap: function(val) {},
+      setScrollableSnapItem: function(val) {}
     };
   };
 
@@ -12079,7 +12066,7 @@ var exports = module.exports;
             pressedItems.push(item);
           }
           if (capturePointer & PRESS) {
-            event._ensureRelease = event._ensureMove = event._stopPropagation = true;
+            event._ensureRelease = event._ensureMove = true;
             emitSignal(item.pointer, 'onPress', event);
             if (event._ensureRelease) {
               itemsToRelease.push(item);
@@ -12095,6 +12082,7 @@ var exports = module.exports;
           return STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
+          event._stopPropagation = false;
           event._checkSiblings = false;
           captureItems(PRESS | CLICK, impl.window, e._x, e._y, onItem);
         };
@@ -13406,12 +13394,13 @@ var exports = module.exports;
       });
 
       Class.prototype.enable = function() {
-        var classElem, hasDocQuery, _i, _len, _ref, _ref1;
-        if (this._running || !this._target || (hasDocQuery = this._document && this._document._query)) {
-          if (hasDocQuery) {
-            _ref = this._document._classesInUse;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              classElem = _ref[_i];
+        var classElem, docQuery, _i, _len, _ref, _ref1, _ref2;
+        docQuery = (_ref = this._document) != null ? _ref._query : void 0;
+        if (this._running || !this._target || docQuery) {
+          if (docQuery) {
+            _ref1 = this._document._classesInUse;
+            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+              classElem = _ref1[_i];
               classElem.enable();
             }
           }
@@ -13419,7 +13408,7 @@ var exports = module.exports;
         }
         Class.__super__.enable.call(this);
         updateTargetClass(saveAndEnableClass, this._target, this);
-        if (!((_ref1 = this._document) != null ? _ref1._query : void 0)) {
+        if (!((_ref2 = this._document) != null ? _ref2._query : void 0)) {
           loadObjects(this, this._component, this._target);
         }
       };
@@ -16015,6 +16004,7 @@ var exports = module.exports;
         itemUtils.defineProperty({
           constructor: ctor,
           name: 'spacing',
+          defaultValue: 0,
           valueConstructor: Spacing,
           setter: function(_super) {
             return function(val) {
@@ -16594,6 +16584,7 @@ var exports = module.exports;
         itemUtils.defineProperty({
           constructor: ctor,
           name: propertyName,
+          defaultValue: 0,
           valueConstructor: Margin,
           setter: function(_super) {
             return function(val) {
@@ -17047,10 +17038,10 @@ var exports = module.exports;
           setter: function(_super) {
             return function(val) {
               var oldVal;
+              if (val) {
+                focusChangeOnPointerPress = true;
+              }
               if (this._focus !== val) {
-                if (val) {
-                  focusChangeOnPointerPress = true;
-                }
                 if (val && focusedKeys !== this) {
                   if (focusedKeys) {
                     oldVal = focusedKeys;
@@ -17183,7 +17174,9 @@ var exports = module.exports;
           if (!(props = this._ref._$)) {
             return;
           }
-          setProperty.call(this, props, attr, this._node._attrs[attr], oldVal);
+          if (attr in props) {
+            setProperty.call(this, props, attr, this._node._attrs[attr], oldVal);
+          }
         };
 
         enableProperties = function() {
@@ -21771,7 +21764,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.7.1",
+  "version": "0.8.15",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -21821,7 +21814,8 @@ var exports = module.exports;
       TEXT_SIZE: i++,
       FONT_LOAD: i++,
       SCROLLABLE_CONTENT_X: i++,
-      SCROLLABLE_CONTENT_Y: i++
+      SCROLLABLE_CONTENT_Y: i++,
+      TEXT_INPUT_TEXT: i++
     };
   })(0);
 
@@ -23230,6 +23224,10 @@ var exports = module.exports;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         style = _ref[_i];
         if (style.name === 'view') {
+          style.file._init({
+            app: app,
+            view: null
+          });
           windowStyle = style.file._main.getComponent();
           break;
         }
@@ -23248,7 +23246,9 @@ var exports = module.exports;
         if (!(style.name != null)) {
           continue;
         }
-        style.file._init(stylesInitObject);
+        if (style.name !== 'view') {
+          style.file._init(stylesInitObject);
+        }
         app.styles[style.name] = style.file;
       }
     }
