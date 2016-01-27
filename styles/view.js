@@ -20,7 +20,7 @@ Rectangle {
 	property $.text: ''
 	color: 'orange'
 	children.layout: Row {
-		padding: '5 10'
+		padding: '10 15'
 	}
 
 	Text {

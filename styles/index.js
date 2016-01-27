@@ -1,5 +1,4 @@
 for ('h1'){
-	background.color: 'orange'
 	font.pixelSize: 37
 	margin.bottom: 20
 }
