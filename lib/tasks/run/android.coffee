@@ -14,7 +14,7 @@ module.exports = (options) ->
 	local = JSON.parse fs.readFileSync('./local.json', 'utf-8')
 	adbPath = "#{local.android.sdkDir}/platform-tools/adb"
 	apkFileName = 'app-debug.apk'
-	cp.exec "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}", (err) ->
+	adb = cp.exec "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}", (err) ->
 		log.end logtime
 		if err
 			console.error err
@@ -57,3 +57,6 @@ module.exports = (options) ->
 			if err
 				logcat.kill()
 				console.error err
+
+	adb.stderr.on 'data', (data) ->
+		console.log data+''

@@ -9,8 +9,6 @@ pathUtils = require 'path'
 DEFAULT_LOCAL_FILE =
 	android:
 		sdkDir: '$ANDROID_HOME'
-	qt:
-		dir: ''
 
 module.exports = (platform, options, app, callback) ->
 	mode = if options.release then 'release' else 'develop'

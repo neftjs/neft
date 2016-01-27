@@ -18,6 +18,13 @@ module.exports = (config, callback) ->
 
 	mustacheFiles = []
 
+	# check whether android sdk dir is specified
+	if config.local.android.sdkDir is '$ANDROID_HOME'
+		sdkDir = (cp.execSync('echo $ANDROID_HOME')+'').trim()
+		unless config.local.android.sdkDir = sdkDir
+			log.error "Specify Android SDK directory in 'local.json'"
+			return
+
 	logtime = log.time "Copy android files into '#{OUT_DIR}'"
 	if fs.existsSync(OUT_DIR)
 		fs.removeSync OUT_DIR
@@ -75,8 +82,7 @@ module.exports = (config, callback) ->
 
 		logtime = log.time 'Create android APK file'
 		apkMode = if config.release then 'release' else 'debug'
-		# gradlewMode = if config.release then 'assembleRelease' else 'assembleDebug'
-		gradlewMode = 'assembleDebug'
+		gradlewMode = if config.release then 'assembleRelease' else 'assembleDebug'
 		if /^win/.test(process.platform)
 			exec = "cd #{ANDROID_BUNDLE_DIR} && ./gradlew.bat #{gradlewMode}"
 		else
