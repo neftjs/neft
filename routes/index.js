@@ -3,7 +3,7 @@ var Dict = require('dict');
 
 module.exports = function(app){
 	return {
-		// create app.Route with given URI
+		// create app.Route
 		'get /': {
 			init: function(){
 				this.order = new List();
@@ -43,7 +43,7 @@ module.exports = function(app){
 						err = 'No internet connection';
 					}
 
-					self.orderStatus.set({
+					self.orderStatus.extend({
 						loaded: true,
 						pending: false,
 						error: err ? err+'' : '',
