@@ -19466,7 +19466,9 @@ var exports = module.exports;
         }
         parseObject(obj, arr[JSON_FUNCS], obj.funcs);
         parseArray(obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet);
+        //<development>;
         parseArray(obj, arr[JSON_LOGS], obj.logs);
+        //</development>;
         parseArray(obj, arr[JSON_STYLES], obj.styles);
         return obj;
       };
@@ -21246,7 +21248,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.15",
+  "version": "0.8.16",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
