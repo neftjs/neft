@@ -26,10 +26,10 @@
     "form-data": "1.0.0-rc3",
     "qs": "^6.0.1",
     "node-static": "^0.7.6",
-    "nml-parser": "Neft-io/nml-parser#6b6dbaa",
-    "bundle-builder": "Neft-io/bundle-builder#74c94db",
-    "sample-project": "Neft-io/sample-project#384f5b3",
-    "android-runtime": "Neft-io/android-runtime#473a7f5",
-    "ios-runtime": "Neft-io/ios-runtime#a118ec0"
+    "nml-parser": "Neft-io/nml-parser#fb499b5",
+    "bundle-builder": "Neft-io/bundle-builder#baaa87f",
+    "sample-project": "Neft-io/sample-project#efe5e5b",
+    "android-runtime": "Neft-io/android-runtime#cb68e33",
+    "ios-runtime": "Neft-io/ios-runtime#646ed4e"
   }
 }
