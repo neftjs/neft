@@ -5,7 +5,7 @@ Transition @modifier
 `Rectangle {
 `	width: 100; height: 100;
 `	color: 'red'
-`	pointer.onClicked: function(){
+`	pointer.onClick: function(){
 `		this.x = Math.random()*300;
 `	}
 `

@@ -529,7 +529,7 @@ Determines whether an item is visible or not.
 `Item {
 `	width: 100
 `	height: 100
-`	pointer.onClicked: function(){
+`	pointer.onClick: function(){
 `		rect.visible = !rect.visible;
 `		text.text = rect.visible ? "Click to hide" : "Click to show";
 `	}
