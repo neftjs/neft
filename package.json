@@ -11,7 +11,7 @@
   },
   "bugs": "https://github.com/Neft-io/bundle-builder/issues",
   "dependencies": {
-    "fs-extra": "~0.8.1",
+    "fs-extra": "^0.26.0",
     "coffee-cache": "^1.0.2"
   }
 }

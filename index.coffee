@@ -70,20 +70,17 @@ module.exports = (opts, callback) ->
 
 		if opts.minify
 			logtime = log.time 'Minimalize'
-			fs.writeFileSync './tmp.js', bundle, 'utf-8'
-
-			cp.exec "uglifyjs " +
-			"./tmp.js " +
-			"--screw-ie8 " +
-			"--compress negate_iife=false,keep_fargs " +
-			"--mangle " +
-			"--reserved 'Neft,$,require,exports,module'",
-				maxBuffer: 1024*1024*24
-				, (err, stdout, stderr) ->
-					log.end logtime
-					fs.unlinkSync './tmp.js'
-
-					callback err, stdout
+			result = uglify.minify bundle,
+				fromString: true
+				mangle: true
+				mangleProperties:
+					reserved: ['Neft', '$', 'require', 'exports', 'module']
+				compress:
+					negate_iife: false
+					keep_fargs: true
+					screw_ie8: true
+			log.end logtime
+			callback null, result.code
 		else
 			callback null, bundle
 
