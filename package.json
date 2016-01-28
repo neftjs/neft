@@ -1,6 +1,6 @@
 {
   "name": "neft",
-  "version": "0.8.19",
+  "version": "0.8.20",
   "preferGlobal": true,
   "description": "Command-line interface for building Neft.io projects",
   "bin": {
@@ -29,7 +29,7 @@
     "uglify-js": "^2.6.1",
     "coffee-cache": "^1.0.2",
     "nml-parser": "Neft-io/nml-parser#c2d305f",
-    "bundle-builder": "Neft-io/bundle-builder#421a072",
+    "bundle-builder": "Neft-io/bundle-builder#db9dd7c",
     "sample-project": "Neft-io/sample-project#ec1224e",
     "android-runtime": "Neft-io/android-runtime#2654be7",
     "ios-runtime": "Neft-io/ios-runtime#646ed4e"
