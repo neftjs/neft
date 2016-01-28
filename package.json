@@ -1,13 +1,13 @@
 {
   "name": "neft",
-  "version": "0.8.17",
+  "version": "0.8.18",
   "preferGlobal": true,
   "description": "Command-line interface for building Neft.io projects",
   "bin": {
     "neft": "./bin/neft.js"
   },
   "main": "./lib/neft-cli.js",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "bundle-builder": "Neft-io/bundle-builder#baaa87f",
     "sample-project": "Neft-io/sample-project#ec1224e",
     "android-runtime": "Neft-io/android-runtime#2654be7",
-    "ios-runtime": "Neft-io/ios-runtime#646ed4e"
+    "ios-runtime": "Neft-io/ios-runtime#646ed4e",
+    "uglify-js": "^2.6.1"
   }
 }
