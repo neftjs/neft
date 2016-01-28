@@ -139,8 +139,10 @@ File @class
 
 			assert.isArray json
 
-			file = File.JSON_CTORS[json[0]]._fromJSON json
+			if file = files[json[JSON_PATH]]
+				return file
 
+			file = File.JSON_CTORS[json[0]]._fromJSON json
 			assert.notOk files[file.path]?
 
 			# save to storage
