@@ -256,7 +256,7 @@ FunctionBodyCode
 	= FunctionBodyAny (StringLiteral FunctionBodyAny)* FunctionBodyAny
 
 FunctionBodyAny
-	= [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\n;:]*
+	= [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\r\n;:]*
 
 FunctionBodyFunc
 	= "{" FunctionBody "}"
@@ -354,7 +354,7 @@ CodeBodyAny
 	= CodeBodyAnyChar*
 
 CodeBodyAnyChar
-	= (!(name:TypeName WhiteSpace* "{")) [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\n;:]
+	= (!(name:TypeName WhiteSpace* "{")) [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\r\n;:]
 
 CodeBodyFunc
 	= "{" CodeBody "}"
