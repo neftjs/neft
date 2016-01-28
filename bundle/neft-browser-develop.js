@@ -5223,7 +5223,7 @@ var exports = module.exports;
   module.exports = function(File) {
     var Use;
     return Use = (function() {
-      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_NODE, attrsChangeListener, i, logUsesWithNoFragments, usesWithNotFoundFragments, visibilityChangeListener;
+      var JSON_ARGS_LENGTH, JSON_CTOR_ID, JSON_NODE, attrsChangeListener, i, logUsesWithNoFragments, queue, queuePending, runQueue, usesWithNotFoundFragments, visibilityChangeListener;
 
       Use.__name__ = 'Use';
 
@@ -5262,6 +5262,24 @@ var exports = module.exports;
         }
       };
 
+      queue = [];
+
+      queuePending = false;
+
+      runQueue = function() {
+        var file, style;
+        style = queue.shift();
+        file = queue.shift();
+        if (style.isRendered) {
+          style.renderFragment(file);
+        }
+        if (queue.length) {
+          requestAnimationFrame(runQueue);
+        } else {
+          queuePending = false;
+        }
+      };
+
       function Use(file, node) {
         this.file = file;
         this.node = node;
@@ -5295,7 +5313,7 @@ var exports = module.exports;
       //</development>;
 
       Use.prototype.render = function(file) {
-        var fragment, usedFragment, _ref;
+        var useAsync;
         if (file != null) {
           assert.instanceOf(file, File);
         }
@@ -5305,12 +5323,26 @@ var exports = module.exports;
         if (this.isRendered) {
           this.revert();
         }
+        this.isRendered = true;
+        useAsync = utils.isClient;
+        useAsync && (useAsync = this.node.hasAttr('neft:async'));
+        useAsync && (useAsync = this.node.getAttr('neft:async') !== false);
+        if (useAsync) {
+          queue.push(this, file);
+          if (!queuePending) {
+            requestAnimationFrame(runQueue);
+            queuePending = true;
+          }
+        } else {
+          this.renderFragment(file);
+        }
+      };
+
+      Use.prototype.renderFragment = function(file) {
+        var fragment, usedFragment, _ref;
         fragment = this.file.fragments[this.name];
         if (!file && !fragment) {
           //<development>;
-          if (usesWithNotFoundFragments.push(this) === 1) {
-            setTimeout(logUsesWithNoFragments);
-          }
           //</development>;
           return;
         }
@@ -5330,7 +5362,6 @@ var exports = module.exports;
         this.usedFragment = usedFragment;
         usedFragment.parentUse = this;
         usedFragment.onReplaceByUse.emit(this);
-        return this.isRendered = true;
       };
 
       Use.prototype.revert = function() {
@@ -20103,33 +20134,27 @@ var exports = module.exports;
         }
         this.source = source;
         File.onBeforeRender.emit(this);
-        if (this.inputs) {
-          _ref = this.inputs;
-          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-            input = _ref[i];
-            input.render();
-          }
+        _ref = this.inputs;
+        for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+          input = _ref[i];
+          input.render();
         }
-        if (this.uses) {
-          _ref1 = this.uses;
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            use = _ref1[_j];
+        _ref1 = this.uses;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          use = _ref1[_j];
+          if (!use.isRendered) {
             use.render();
           }
         }
-        if (this.iterators) {
-          _ref2 = this.iterators;
-          for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
-            iterator = _ref2[i];
-            iterator.render();
-          }
+        _ref2 = this.iterators;
+        for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
+          iterator = _ref2[i];
+          iterator.render();
         }
-        if (this.conditions) {
-          _ref3 = this.conditions;
-          for (i = _l = 0, _len3 = _ref3.length; _l < _len3; i = ++_l) {
-            condition = _ref3[i];
-            condition.render();
-          }
+        _ref3 = this.conditions;
+        for (i = _l = 0, _len3 = _ref3.length; _l < _len3; i = ++_l) {
+          condition = _ref3[i];
+          condition.render();
         }
         renderTarget(this, source);
         //<development>;
@@ -21766,7 +21791,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.16",
+  "version": "0.8.17",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
