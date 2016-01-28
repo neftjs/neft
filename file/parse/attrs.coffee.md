@@ -38,7 +38,7 @@ String `List(...` evaluates to the [List][list/List].
 		if elem._attrs
 			for name, val of elem._attrs
 				jsVal = evalFunc val
-				if jsVal isnt undefined
+				if jsVal isnt undefined and not (jsVal instanceof RegExp)
 					elem.setAttr name, jsVal
 
 		elem.children?.forEach forNode
