@@ -19453,6 +19453,9 @@ var exports = module.exports;
         json = utils.tryFunction(JSON.parse, null, [json], json);
       }
       assert.isArray(json);
+      if (file = files[json[JSON_PATH]]) {
+        return file;
+      }
       file = File.JSON_CTORS[json[0]]._fromJSON(json);
       assert.notOk(files[file.path] != null);
       files[file.path] = file;
@@ -19795,38 +19798,44 @@ var exports = module.exports;
       pathPool.push(this);
     };
 
-    File.prototype.toJSON = function(key, arr) {
-      var id, ids, node, _ref;
-      if (!arr) {
-        arr = new Array(JSON_ARGS_LENGTH);
-        arr[0] = JSON_CTOR_ID;
-      }
-      arr[JSON_PATH] = this.path;
-      arr[JSON_NODE] = this.node.toJSON();
-      if (this.targetNode) {
-        arr[JSON_TARGET_NODE] = this.targetNode.getAccessPath(this.node);
-      }
-      arr[JSON_FRAGMENTS] = this.fragments;
-      arr[JSON_ATTR_CHANGES] = this.attrChanges;
-      arr[JSON_INPUTS] = this.inputs;
-      arr[JSON_CONDITIONS] = this.conditions;
-      arr[JSON_ITERATORS] = this.iterators;
-      arr[JSON_USES] = this.uses;
-      ids = arr[JSON_IDS] = {};
-      _ref = this.ids;
-      for (id in _ref) {
-        node = _ref[id];
-        ids[id] = node.getAccessPath(this.node);
-      }
-      arr[JSON_FUNCS] = this.funcs;
-      arr[JSON_ATTRS_TO_SET] = this.attrsToSet;
-      //<development>;
-      arr[JSON_LOGS] = this.logs;
-      //</development>;
-      //;
-      arr[JSON_STYLES] = this.styles;
-      return arr;
-    };
+    File.prototype.toJSON = (function() {
+      var callToJSON;
+      callToJSON = function(elem) {
+        return elem.toJSON();
+      };
+      return function(key, arr) {
+        var id, ids, node, _ref;
+        if (!arr) {
+          arr = new Array(JSON_ARGS_LENGTH);
+          arr[0] = JSON_CTOR_ID;
+        }
+        arr[JSON_PATH] = this.path;
+        arr[JSON_NODE] = this.node.toJSON();
+        if (this.targetNode) {
+          arr[JSON_TARGET_NODE] = this.targetNode.getAccessPath(this.node);
+        }
+        arr[JSON_FRAGMENTS] = this.fragments;
+        arr[JSON_ATTR_CHANGES] = this.attrChanges.map(callToJSON);
+        arr[JSON_INPUTS] = this.inputs.map(callToJSON);
+        arr[JSON_CONDITIONS] = this.conditions.map(callToJSON);
+        arr[JSON_ITERATORS] = this.iterators.map(callToJSON);
+        arr[JSON_USES] = this.uses.map(callToJSON);
+        ids = arr[JSON_IDS] = {};
+        _ref = this.ids;
+        for (id in _ref) {
+          node = _ref[id];
+          ids[id] = node.getAccessPath(this.node);
+        }
+        arr[JSON_FUNCS] = this.funcs;
+        arr[JSON_ATTRS_TO_SET] = this.attrsToSet;
+        //<development>;
+        arr[JSON_LOGS] = this.logs.map(callToJSON);
+        //</development>;
+        //;
+        arr[JSON_STYLES] = this.styles.map(callToJSON);
+        return arr;
+      };
+    })();
 
     return File;
 
@@ -21273,7 +21282,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.21",
+  "version": "0.8.22",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -22254,16 +22263,22 @@ var exports = module.exports;
         return clone;
       };
 
-      Style.prototype.toJSON = function(key, arr) {
-        if (!arr) {
-          arr = new Array(JSON_ARGS_LENGTH);
-          arr[0] = JSON_CTOR_ID;
-        }
-        arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
-        arr[JSON_ATTRS] = this.attrs;
-        arr[JSON_CHILDREN] = this.children;
-        return arr;
-      };
+      Style.prototype.toJSON = (function() {
+        var callToJSON;
+        callToJSON = function(elem) {
+          return elem.toJSON();
+        };
+        return function(key, arr) {
+          if (!arr) {
+            arr = new Array(JSON_ARGS_LENGTH);
+            arr[0] = JSON_CTOR_ID;
+          }
+          arr[JSON_NODE] = this.node.getAccessPath(this.file.node);
+          arr[JSON_ATTRS] = this.attrs;
+          arr[JSON_CHILDREN] = this.children.map(callToJSON);
+          return arr;
+        };
+      })();
 
       Tag = File.Element.Tag;
 
