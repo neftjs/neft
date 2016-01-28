@@ -210,7 +210,7 @@ module.exports = ->
 
 	try
 		CoffeeCache = require 'coffee-cash'
-		CoffeeCache.setCacheDirectory '/tmp/cache/coffee'
+		CoffeeCache.setCacheDirectory __dirname + '/.tmp'
 		CoffeeCache.register()
 
 	modules = []
