@@ -1,11 +1,12 @@
 'use strict'
 
-fs = require 'fs'
+fs = require 'fs-extra'
 crypto = require 'crypto'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
 
 CACHE_DIRECTORY = __dirname + '/.tmp'
+fs.ensureDirSync CACHE_DIRECTORY
 
 {stringify} = JSON
 

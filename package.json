@@ -10,7 +10,8 @@
     "url": "https://github.com/Neft-io/bundle-builder.git"
   },
   "bugs": "https://github.com/Neft-io/bundle-builder/issues",
-  "devDependencies": {
-    "fs-extra": "~0.8.1"
+  "dependencies": {
+    "fs-extra": "~0.8.1",
+    "coffee-cache": "^1.0.2"
   }
 }
