@@ -3,6 +3,7 @@
 # Neft CLI
 
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Neft-io/neft)
+<a href="https://twitter.com/neft_io"><img src="https://g.twimg.com/about/feature-corporate/image/followbutton.png" alt="Twitter" height="20" /></a>
 
 Neft is an Open Source JavaScript Framework made for server-browser-native applications. Neft.io is easy-to-use, fast and feature-focused.
 
