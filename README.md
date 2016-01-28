@@ -7,14 +7,3 @@
 This module is used to parse and render HTML documents in Neft.
 
 [Documentation](http://www.neft.io/docs/document/index.coffee.md)
-
-## Installation
-
-In your Neft application folder find the `package.json` file and adds:
-```json
-{
-    "dependencies": {
-        "neft-document-form": "Neft-io/document-form"
-    }
-}
-```
