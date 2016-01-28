@@ -5,7 +5,7 @@ crypto = require 'crypto'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
 
-CACHE_DIRECTORY = '/tmp/cache/coffee'
+CACHE_DIRECTORY = __dirname + '/.tmp'
 
 {stringify} = JSON
 
