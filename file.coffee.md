@@ -490,38 +490,42 @@ File::destroy()
 *Object* File::toJSON()
 -----------------------
 
-		toJSON: (key, arr) ->
-			unless arr
-				arr = new Array JSON_ARGS_LENGTH
-				arr[0] = JSON_CTOR_ID
-			arr[JSON_PATH] = @path
-			arr[JSON_NODE] = @node.toJSON()
+		toJSON: do ->
+			callToJSON = (elem) ->
+				elem.toJSON()
 
-			# targetNode
-			if @targetNode
-				arr[JSON_TARGET_NODE] = @targetNode.getAccessPath @node
+			(key, arr) ->
+				unless arr
+					arr = new Array JSON_ARGS_LENGTH
+					arr[0] = JSON_CTOR_ID
+				arr[JSON_PATH] = @path
+				arr[JSON_NODE] = @node.toJSON()
 
-			arr[JSON_FRAGMENTS] = @fragments
-			arr[JSON_ATTR_CHANGES] = @attrChanges
-			arr[JSON_INPUTS] = @inputs
-			arr[JSON_CONDITIONS] = @conditions
-			arr[JSON_ITERATORS] = @iterators
-			arr[JSON_USES] = @uses
+				# targetNode
+				if @targetNode
+					arr[JSON_TARGET_NODE] = @targetNode.getAccessPath @node
 
-			ids = arr[JSON_IDS] = {}
-			for id, node of @ids
-				ids[id] = node.getAccessPath @node
+				arr[JSON_FRAGMENTS] = @fragments
+				arr[JSON_ATTR_CHANGES] = @attrChanges.map callToJSON
+				arr[JSON_INPUTS] = @inputs.map callToJSON
+				arr[JSON_CONDITIONS] = @conditions.map callToJSON
+				arr[JSON_ITERATORS] = @iterators.map callToJSON
+				arr[JSON_USES] = @uses.map callToJSON
 
-			arr[JSON_FUNCS] = @funcs
-			arr[JSON_ATTRS_TO_SET] = @attrsToSet
+				ids = arr[JSON_IDS] = {}
+				for id, node of @ids
+					ids[id] = node.getAccessPath @node
 
-			`//<development>`
-			arr[JSON_LOGS] = @logs
-			`//</development>`
-			`//<production>`
-			arr[JSON_LOGS] = []
-			`//</production>`
+				arr[JSON_FUNCS] = @funcs
+				arr[JSON_ATTRS_TO_SET] = @attrsToSet
 
-			arr[JSON_STYLES] = @styles
+				`//<development>`
+				arr[JSON_LOGS] = @logs.map callToJSON
+				`//</development>`
+				`//<production>`
+				arr[JSON_LOGS] = []
+				`//</production>`
 
-			arr
+				arr[JSON_STYLES] = @styles.map callToJSON
+
+				arr
