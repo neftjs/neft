@@ -19,6 +19,6 @@ module.exports = (dest, options) ->
 	fs.removeSync "#{dest}/.git"
 
 	log "Install modules (may take a while)"
-	cp.execSync "cd #{dest}; npm install"
+	cp.execSync "cd #{dest} & npm install"
 
 	log.ok "Project created in '#{dest}'"
