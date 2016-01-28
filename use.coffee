@@ -104,8 +104,8 @@ module.exports = (File) -> class Use
 		fragment = @file.fragments[@name]
 		if not file and not fragment
 			`//<development>`
-			if usesWithNotFoundFragments.push(@) is 1
-				setTimeout logUsesWithNoFragments
+			# if usesWithNotFoundFragments.push(@) is 1
+			# 	setTimeout logUsesWithNoFragments
 			`//</development>`
 			return
 
