@@ -6,8 +6,8 @@ Some of the attributes are automatically evaluated to the JavaScript objects.
 String `[...]` evaluates to the array.
 ```xml
 <items neft:each="[1, 2]"></items>
-```xml
 ```
+```xml
 <neft:use neft:fragment="list" items="[{name: 't-shirt'}]" />
 ```
 

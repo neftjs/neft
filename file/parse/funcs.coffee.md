@@ -3,7 +3,7 @@ neft:function @xml
 
 Tag used to create functions in the view.
 
-```
+```xml
 <neft:function name="multiply" arguments="a, b">
   return a * b;
 </neft:function>
