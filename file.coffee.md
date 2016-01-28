@@ -325,24 +325,21 @@ File.parse(*File* file)
 				File.onBeforeRender.emit @
 
 				# inputs
-				if @inputs
-					for input, i in @inputs
-						input.render()
+				for input, i in @inputs
+					input.render()
 
 				# uses
-				if @uses
-					for use in @uses
+				for use in @uses
+					unless use.isRendered
 						use.render()
 
 				# iterators
-				if @iterators
-					for iterator, i in @iterators
-						iterator.render()
+				for iterator, i in @iterators
+					iterator.render()
 
 				# conditions
-				if @conditions
-					for condition, i in @conditions
-						condition.render()
+				for condition, i in @conditions
+					condition.render()
 
 				# source
 				renderTarget @, source
