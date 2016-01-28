@@ -31,6 +31,16 @@ Tag used to place a [neft:fragment][document/neft:fragment@xml].
 <neft:use neft:fragment="h1" data="Test heading" />
 ```
 
+## neft:async
+
+Renders fragment on the first free animation frame.
+
+Use this attribute to render less important elements.
+
+```xml
+<neft:use neft:fragment="body" neft:async />
+```
+
 	'use strict'
 
 	utils = require 'utils'

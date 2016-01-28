@@ -36,6 +36,22 @@ module.exports = (File) -> class Use
 				@render()
 		return
 
+	queue = []
+	queuePending = false
+
+	runQueue = ->
+		style = queue.shift()
+		file = queue.shift()
+
+		if style.isRendered
+			style.renderFragment file
+
+		if queue.length
+			requestAnimationFrame runQueue
+		else
+			queuePending = false
+		return
+
 	constructor: (@file, @node) ->
 		assert.instanceOf file, File
 		assert.instanceOf node, File.Element
@@ -69,6 +85,22 @@ module.exports = (File) -> class Use
 		if @isRendered
 			@revert()
 
+		@isRendered = true
+
+		useAsync = utils.isClient
+		useAsync &&= @node.hasAttr 'neft:async'
+		useAsync &&= @node.getAttr('neft:async') isnt false
+		if useAsync
+			queue.push this, file
+			unless queuePending
+				requestAnimationFrame runQueue
+				queuePending = true
+		else
+			@renderFragment file
+
+		return
+
+	renderFragment: (file) ->
 		fragment = @file.fragments[@name]
 		if not file and not fragment
 			`//<development>`
@@ -94,7 +126,7 @@ module.exports = (File) -> class Use
 		usedFragment.parentUse = @
 		usedFragment.onReplaceByUse.emit @
 
-		@isRendered = true
+		return
 
 	revert: ->
 		return unless @isRendered
