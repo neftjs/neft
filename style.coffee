@@ -165,7 +165,7 @@ module.exports = (File, data) -> class Style
 			if globalHideDelay > 0 and not animationsPending
 				globalHideDelay -= diff
 
-			if not animationsPending 
+			if not animationsPending
 				# revert styles
 				if globalHideDelay <= 0
 					globalHideDelay = 0
@@ -349,7 +349,7 @@ module.exports = (File, data) -> class Style
 			text = node.stringifyChildren()
 
 			if text.length > 0 or @isTextSet
-				@isTextSet = true	
+				@isTextSet = true
 				obj.text = text
 		return
 
@@ -657,14 +657,18 @@ module.exports = (File, data) -> class Style
 
 		clone
 
-	toJSON: (key, arr) ->
-		unless arr
-			arr = new Array JSON_ARGS_LENGTH
-			arr[0] = JSON_CTOR_ID
-		arr[JSON_NODE] = @node.getAccessPath @file.node
-		arr[JSON_ATTRS] = @attrs
-		arr[JSON_CHILDREN] = @children
-		arr
+	toJSON: do ->
+		callToJSON = (elem) ->
+			elem.toJSON()
+
+		(key, arr) ->
+			unless arr
+				arr = new Array JSON_ARGS_LENGTH
+				arr[0] = JSON_CTOR_ID
+			arr[JSON_NODE] = @node.getAccessPath @file.node
+			arr[JSON_ATTRS] = @attrs
+			arr[JSON_CHILDREN] = @children.map callToJSON
+			arr
 
 	# synchronize visibility
 	{Tag} = File.Element
