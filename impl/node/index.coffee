@@ -52,8 +52,13 @@ module.exports = (Networking) ->
 					staticServer.serve serverReq, serverRes
 					return
 
+				{url} = serverReq
+
+				# remove 'now'
+				url = url.replace /(?:&|\?)now=\d+/, ''
+
 				uid = utils.uid()
-				parsedUrl = urlUtils.parse serverReq.url
+				parsedUrl = urlUtils.parse url
 
 				# save in the stack
 				obj = pending[uid] =
@@ -87,7 +92,7 @@ module.exports = (Networking) ->
 				obj.req = networking.createLocalRequest
 					uid: uid
 					method: Networking.Request[serverReq.method]
-					uri: serverReq.url
+					uri: url
 					data: reqData
 					type: type
 					headers: serverReq.headers
