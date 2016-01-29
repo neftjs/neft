@@ -189,6 +189,8 @@ module.exports = (impl) ->
 		fontWeight ||= '400'
 		fontSize ||= '14px'
 		fontFamily ||= implUtils.DEFAULT_FONTS['sans-serif']
+		if defaultFontFamily = impl.utils.NEFT_DEFAULT_FONTS[fontFamily]
+			fontFamily += ", #{defaultFontFamily}"
 		data.font = "#{fontWeight} #{fontSize} #{fontFamily}"
 		return
 

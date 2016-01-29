@@ -151,3 +151,9 @@ exports.DEFAULT_FONTS =
 	'sans': 'neft-sans-6-normal'
 	'sans-serif': 'neft-sans-serif-6-normal'
 	'monospace': 'neft-monospace-6-normal'
+
+exports.NEFT_DEFAULT_FONTS =
+	__proto__: null
+	'neft-sans-6-normal': 'sans'
+	'neft-sans-serif-6-normal': 'sans-serif'
+	'neft-monospace-6-normal': 'monospace'
