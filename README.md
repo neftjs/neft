@@ -53,6 +53,8 @@ Apache 2.0
 
 ### Routing
 
+*routes/index.js*
+
 ```javascript
 var Dict = require('dict');
 module.exports = function(app){
@@ -63,7 +65,7 @@ module.exports = function(app){
                     clicks: 0
                 });
             },
-            increaseClicks: function(){
+            increaseClick: function(){
                 this.data.set('clicks', this.data.get('clicks')+1);
             }
         }
@@ -73,12 +75,28 @@ module.exports = function(app){
 
 ### View
 
+*views/index.html*
+
 ```html
-<p class="large" clicks="${data.clicks}">Clicks ${data.clicks}</p>
-<button style:pointer:onClick="${route.increaseClick}">+</button>
+<body>
+    <p class="large" clicks="${data.clicks}">Clicks ${data.clicks}</p>
+    <button style:pointer:onClick="${route.increaseClick()}">+</button>
+</body>
 ```
 
 ### Styles
+
+*styles/view.js*
+
+```javascript
+Scrollable {
+    contentItem: Flow {
+        document.query: 'body'
+    }
+}
+```
+
+*styles/index.js*
 
 ```javascript
 Text {
