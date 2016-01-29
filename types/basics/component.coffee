@@ -290,6 +290,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 	setObjectById: (object, id) ->
 		assert.instanceOf object, itemUtils.Object
 		assert.isString id
+		assert.ok object.id is id
 		assert.ok @objects[id] or @parent?.objects[id]
 
 		if (oldVal = @objects[id]) is object

@@ -388,10 +388,10 @@ Mostly used with bindings.
 			cloneComp = clone._component.belongsToComponent or clone._component
 			cloneComp.onObjectChange ?= signal.create()
 			if component.isDeepClone
-				if classElem.id
-					cloneComp.setObjectById clone, classElem.id
+				if clone.id
+					cloneComp.setObjectById clone, clone.id
 				cloneComp.initObjects()
-				if utils.has(component.idsOrder, clone.id)
+				if component.objects[clone.id]
 					component.setObjectById clone, clone.id
 			return clone
 
