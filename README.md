@@ -112,6 +112,11 @@ Text {
 for ('p.large'){
     font.pixelSize: 23
 }
+
+for ('button'){
+    border.color: 'gray'
+    border.width: 2
+}
 ```
 
 ## Components
