@@ -38598,6 +38598,13 @@ var exports = module.exports;
     'monospace': 'neft-monospace-6-normal'
   };
 
+  exports.NEFT_DEFAULT_FONTS = {
+    __proto__: null,
+    'neft-sans-6-normal': 'sans',
+    'neft-sans-serif-6-normal': 'sans-serif',
+    'neft-monospace-6-normal': 'monospace'
+  };
+
 }).call(this);
 
 
@@ -49649,7 +49656,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.23",
+  "version": "0.8.24",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",

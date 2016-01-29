@@ -10392,6 +10392,13 @@ var exports = module.exports;
     'monospace': 'neft-monospace-6-normal'
   };
 
+  exports.NEFT_DEFAULT_FONTS = {
+    __proto__: null,
+    'neft-sans-6-normal': 'sans',
+    'neft-sans-serif-6-normal': 'sans-serif',
+    'neft-monospace-6-normal': 'monospace'
+  };
+
 }).call(this);
 
 
@@ -11035,13 +11042,16 @@ var exports = module.exports;
       };
     })();
     updateTextStyle = function(item) {
-      var data, fontFamily, fontSize, fontWeight, innerElemStyle;
+      var data, defaultFontFamily, fontFamily, fontSize, fontWeight, innerElemStyle;
       data = item._impl;
       innerElemStyle = data.innerElemStyle, fontFamily = data.fontFamily;
       fontWeight = innerElemStyle.fontWeight, fontSize = innerElemStyle.fontSize;
       fontWeight || (fontWeight = '400');
       fontSize || (fontSize = '14px');
       fontFamily || (fontFamily = implUtils.DEFAULT_FONTS['sans-serif']);
+      if (defaultFontFamily = impl.utils.NEFT_DEFAULT_FONTS[fontFamily]) {
+        fontFamily += ", " + defaultFontFamily;
+      }
       data.font = "" + fontWeight + " " + fontSize + " " + fontFamily;
     };
     SHEET = ".text {\n	width: auto;\n	height: auto;\n	white-space: pre;\n	font-size: 14px;\n	line-height: 1;\n	font-family: " + implUtils.DEFAULT_FONTS['sans-serif'] + ", sans-serif;\n	margin-top: " + (impl.utils.isFirefox ? 1 : 0) + "px;\n}\n.text.textVerticalCenterAlign {\n	top: 50%;\n	" + impl.utils.transformCSSProp + ": translateY(-50%);\n}\n.text.textVerticalBottomAlign {\n	top: 100%;\n	" + impl.utils.transformCSSProp + ": translateY(-100%);\n}";
@@ -21800,7 +21810,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.23",
+  "version": "0.8.24",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
