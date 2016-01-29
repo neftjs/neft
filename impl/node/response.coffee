@@ -5,7 +5,6 @@ log = require 'log'
 utils = require 'utils'
 path = require 'path'
 Document = require 'document'
-expect = require 'expect'
 FormData = require 'form-data'
 
 log = log.scope 'Networking'
