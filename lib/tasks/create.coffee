@@ -1,5 +1,6 @@
 'use strict'
 
+os = require 'os'
 fs = require 'fs-extra'
 pathUtils = require 'path'
 cp = require 'child_process'
@@ -19,6 +20,10 @@ module.exports = (dest, options) ->
 	fs.removeSync "#{dest}/.git"
 
 	log "Install modules (may take a while)"
-	cp.execSync "cd #{dest} & npm install"
+
+	if os.platform() is 'win32'
+		cp.execSync "cd #{dest} & npm install"
+	else
+		cp.execSync "cd #{dest} ; npm install"
 
 	log.ok "Project created in '#{dest}'"
