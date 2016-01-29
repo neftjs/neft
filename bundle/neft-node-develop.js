@@ -2,7 +2,7 @@ module.exports = (function(){
 'use strict';
 
 // list of modules with empty objects
-var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../assert/index.coffee.md":{},"../log/impls/node/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/node/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/node/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/decode.json":{},"../document/node_modules/htmlparser2/node_modules/entities/lib/decode_codepoint.js":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/entities.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/legacy.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/xml.json":{},"../document/node_modules/htmlparser2/lib/Tokenizer.js":{},"../document/node_modules/htmlparser2/lib/Parser.js":{},"../document/node_modules/htmlparser2/node_modules/domelementtype/index.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/node.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/element.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/index.js":{},"../document/node_modules/htmlparser2/lib/index.js":{},"../document/element/element/parser.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/clear.coffee":{},"../document/file/parse/rules.coffee.md":{},"../document/file/parse/fragments/links.coffee.md":{},"../document/file/parse/fragments.coffee.md":{},"../document/file/parse/attrs.coffee.md":{},"../document/file/parse/attrChanges.coffee.md":{},"../document/file/parse/iterators.coffee.md":{},"../document/file/parse/target.coffee.md":{},"../document/file/parse/uses.coffee.md":{},"../document/file/parse/storage.coffee.md":{},"../document/file/parse/conditions.coffee.md":{},"../document/file/parse/ids.coffee.md":{},"../document/file/parse/logs.coffee.md":{},"../document/file/parse/funcs.coffee.md":{},"../document/file/parse/attrSetting.coffee.md":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"node_modules/expect/index.coffee.md":{},"../networking/impl/node/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"bootstrap/route.node.coffee.md":{},"package.json":{},"../native/actions.coffee":{},"../native/bridge.coffee":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
+var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../assert/index.coffee.md":{},"../log/impls/node/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/node/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/node/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/decode.json":{},"../document/node_modules/htmlparser2/node_modules/entities/lib/decode_codepoint.js":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/entities.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/legacy.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/xml.json":{},"../document/node_modules/htmlparser2/lib/Tokenizer.js":{},"../document/node_modules/htmlparser2/lib/Parser.js":{},"../document/node_modules/htmlparser2/node_modules/domelementtype/index.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/node.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/element.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/index.js":{},"../document/node_modules/htmlparser2/lib/index.js":{},"../document/element/element/parser.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/clear.coffee":{},"../document/file/parse/rules.coffee.md":{},"../document/file/parse/fragments/links.coffee.md":{},"../document/file/parse/fragments.coffee.md":{},"../document/file/parse/attrs.coffee.md":{},"../document/file/parse/attrChanges.coffee.md":{},"../document/file/parse/iterators.coffee.md":{},"../document/file/parse/target.coffee.md":{},"../document/file/parse/uses.coffee.md":{},"../document/file/parse/storage.coffee.md":{},"../document/file/parse/conditions.coffee.md":{},"../document/file/parse/ids.coffee.md":{},"../document/file/parse/logs.coffee.md":{},"../document/file/parse/funcs.coffee.md":{},"../document/file/parse/attrSetting.coffee.md":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/node/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"bootstrap/route.node.coffee.md":{},"package.json":{},"../native/actions.coffee":{},"../native/bridge.coffee":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
 
 // used as `require`
 function getModule(paths, name){
@@ -21093,268 +21093,14 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['node_modules/expect/index.coffee.md'] = (function(){
-var module = {exports: modules["node_modules/expect/index.coffee.md"]};
-var require = getModule.bind(null, {});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, createMatcher, createValidator, every, expect, inverse, isArray, isInteger, keys, raise, silent, some, validators, value;
-
-  isArray = Array.isArray;
-
-  assert = console.assert;
-
-  value = null;
-
-  silent = every = some = inverse = keys = false;
-
-  createValidator = function(func) {
-    return function(_value) {
-      value = _value;
-      func();
-      return validators;
-    };
-  };
-
-  raise = function(msg) {
-    inverse = inverse ? ' not' : '';
-    return assert(false, msg());
-  };
-
-  createMatcher = function(func, msg) {
-    var exit, test;
-    test = function(value) {
-      if (silent && (value == null)) {
-        return true;
-      }
-      return func(value);
-    };
-    exit = function(ok) {
-      if (inverse) {
-        ok = !ok;
-      }
-      if (!ok) {
-        return raise(msg);
-      }
-    };
-    return function() {
-      var isObject, key, ok, val, values;
-      values = value;
-      if (every || some) {
-        isObject = value && typeof value === 'object';
-        assert(isObject, "expect.some/every() expects object, but `" + value + "` passed");
-      }
-      if (some || every) {
-        ok = every;
-        for (key in value) {
-          val = value[key];
-          if (test(keys ? key : val) === some) {
-            ok = some;
-            break;
-          }
-        }
-      } else {
-        ok = test(value);
-      }
-      exit(ok);
-      return validators.toBe;
-    };
-  };
-
-  expect = module.exports = createValidator(function() {
-    return silent = every = some = inverse = keys = false;
-  });
-
-  validators = {};
-
-  validators.defined = createValidator(function() {
-    return silent = true;
-  });
-
-  validators.every = createValidator(function() {
-    return every = true;
-  });
-
-  validators.some = createValidator(function() {
-    return some = true;
-  });
-
-  validators.keys = createValidator(function() {
-    var isObject;
-    isObject = value !== null && typeof value === 'object' && !isArray(value);
-    if (!some) {
-      throw "Use `expect().keys()` with some()";
-    }
-    if (!isObject) {
-      throw "Use `expect().some().keys()` with objects";
-    }
-    return keys = true;
-  });
-
-  validators.not = function() {
-    inverse = true;
-    return validators;
-  };
-
-  validators.toBe = (function() {
-    var expected, matcher;
-    expected = null;
-    matcher = createMatcher(function(value) {
-      return value === expected;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be `" + expected + "`";
-    });
-    return function(_expected) {
-      expected = _expected;
-      return matcher();
-    };
-  })();
-
-  validators.toBe.object = createMatcher(function(value) {
-    return typeof value === 'object' && value !== null;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be an object";
-  });
-
-  validators.toBe.simpleObject = createMatcher(function(value) {
-    var proto, r;
-    r = typeof value === 'object';
-    r && (r = value !== null);
-    if (r && (proto = Object.getPrototypeOf(value))) {
-      r && (r = proto === Object.prototype);
-      r && (r = !Object.getPrototypeOf(proto));
-    }
-    return r;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a simple object";
-  });
-
-  validators.toBe.string = createMatcher(function(value) {
-    return typeof value === 'string';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a string";
-  });
-
-  validators.toBe.boolean = createMatcher(function(value) {
-    return typeof value === 'boolean';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a boolean";
-  });
-
-  validators.toBe["function"] = createMatcher(function(value) {
-    return typeof value === 'function';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a function";
-  });
-
-  validators.toBe.float = createMatcher(function(value) {
-    return typeof value === 'number' && isFinite(value);
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be a float";
-  });
-
-  isInteger = Number.isInteger || function(value) {
-    return typeof value === "number" && isFinite(value) && value > -9007199254740992 && value < 9007199254740992 && Math.floor(value) === value;
-  };
-
-  validators.toBe.integer = createMatcher(isInteger, function() {
-    return "Expected `" + value + "`" + inverse + " to be an integer";
-  });
-
-  validators.toBe.array = createMatcher(function(value) {
-    return isArray(value);
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be an array";
-  });
-
-  validators.toBe.truthy = createMatcher(function(value) {
-    return !!value;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be truthy";
-  });
-
-  validators.toBe.falsy = createMatcher(function(value) {
-    return !value;
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " to be falsy";
-  });
-
-  validators.toBe.primitive = createMatcher(function(value) {
-    return value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || typeof value === 'undefined';
-  }, function() {
-    return "Expected `" + value + "`" + inverse + " not to be a primitive value";
-  });
-
-  validators.toBe.any = (function() {
-    var ctor, matcher;
-    ctor = null;
-    matcher = createMatcher(function(value) {
-      return value instanceof ctor;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be any " + ctor.name;
-    });
-    return function(_ctor) {
-      ctor = _ctor;
-      return matcher();
-    };
-  })();
-
-  validators.toBe.greaterThan = (function() {
-    var matcher, number;
-    number = 0;
-    matcher = createMatcher(function(value) {
-      return value > number;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be greater than " + number;
-    });
-    return function(_number) {
-      number = _number;
-      return matcher();
-    };
-  })();
-
-  validators.toBe.lessThan = (function() {
-    var matcher, number;
-    number = 0;
-    matcher = createMatcher(function(value) {
-      return value < number;
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to be less than " + number;
-    });
-    return function(_number) {
-      number = _number;
-      return matcher();
-    };
-  })();
-
-  validators.toMatchRe = (function() {
-    var expected, matcher;
-    expected = null;
-    matcher = createMatcher(function(value) {
-      return expected.test(value);
-    }, function() {
-      return "Expected `" + value + "`" + inverse + " to test `" + expected + "`";
-    });
-    return function(_expected) {
-      expected = _expected;
-      return matcher();
-    };
-  })();
-
-}).call(this);
-
-
-return module.exports;
 })();modules['../networking/impl/node/response.coffee'] = (function(){
 var module = {exports: modules["../networking/impl/node/response.coffee"]};
-var require = getModule.bind(null, {"log":"../log/index.coffee.md","utils":"../utils/index.coffee.md","document":"../document/index.coffee.md","expect":"node_modules/expect/index.coffee.md"});
+var require = getModule.bind(null, {"log":"../log/index.coffee.md","utils":"../utils/index.coffee.md","document":"../document/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Document, FormData, GZIP_ENCODING_HEADERS, HEADERS, METHOD_HEADERS, expect, log, parsers, path, prepareData, sendData, setHeaders, utils, zlib;
+  var Document, FormData, GZIP_ENCODING_HEADERS, HEADERS, METHOD_HEADERS, log, parsers, path, prepareData, sendData, setHeaders, utils, zlib;
 
   zlib = require('zlib');
 
@@ -21365,8 +21111,6 @@ var exports = module.exports;
   path = require('path');
 
   Document = require('document');
-
-  expect = require('expect');
 
   FormData = require('form-data');
 
@@ -23074,7 +22818,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.22",
+  "version": "0.8.23",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",

@@ -1,6 +1,6 @@
 {
   "name": "neft",
-  "version": "0.8.22",
+  "version": "0.8.23",
   "preferGlobal": true,
   "description": "Command-line interface for building Neft.io projects",
   "bin": {

@@ -21800,7 +21800,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.22",
+  "version": "0.8.23",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
