@@ -12,19 +12,21 @@ Supported platforms: Node, Browsers (HTML5 / WebGL), iOS and Android.
 Neft guarantees the same code across platforms.
 
 Best features:
- - Native renderers,
- - Virtual DOM,
- - HTML document extensions,
- - Dynamic styles,
- - Data binding (route-view-style),
- - Routing,
- - Resources system,
- - Custom native communication,
- - and more …
+- Native renderers,
+- Virtual DOM,
+- HTML document extensions,
+- Dynamic styles,
+- Data binding (route-view-style),
+- Routing,
+- Resources system,
+- Custom native communication,
+- and more …
 
-* [Official website](http://www.neft.io/)
-* [Get Started](http://www.neft.io/get-started/index.md)
-* [Documentation](http://www.neft.io/docs/app/index.coffee.md)
+## Links
+
+- [Official website](http://www.neft.io/)
+- [Get Started](http://www.neft.io/get-started/index.md)
+- [Documentation](http://www.neft.io/docs/app/index.coffee.md)
 
 ## Installation
 
