@@ -495,6 +495,9 @@ File::destroy()
 				elem.toJSON()
 
 			(key, arr) ->
+				if @isClone and original = File._files[@path]
+					return original.toJSON key, arr
+
 				unless arr
 					arr = new Array JSON_ARGS_LENGTH
 					arr[0] = JSON_CTOR_ID
