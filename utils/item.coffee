@@ -304,7 +304,7 @@ module.exports = (Renderer, Impl) ->
 				funcStr += "if (oldVal === val) return;\n"
 				if implementation?
 					if implementationValue?
-						funcStr += "impl.call(this._ref, implValue(val));\n"
+						funcStr += "impl.call(this._ref, implValue.call(this._ref, val));\n"
 					else
 						funcStr += "impl.call(this._ref, val);\n"
 				funcStr += "this.#{internalName} = val;\n"
@@ -325,7 +325,7 @@ module.exports = (Renderer, Impl) ->
 				funcStr += "if (oldVal === val) return;\n"
 				if implementation?
 					if implementationValue?
-						funcStr += "impl.call(this, implValue(val));\n"
+						funcStr += "impl.call(this, implValue.call(this, val));\n"
 					else
 						funcStr += "impl.call(this, val);\n"
 				funcStr += "this.#{internalName} = val;\n"
