@@ -42,6 +42,7 @@ Image @class
 			super()
 			@_source = ''
 			@_loaded = false
+			@_resolution = 1
 			@_sourceWidth = 0
 			@_sourceHeight = 0
 			@_fillMode = 'Stretch'
@@ -126,21 +127,28 @@ The image source URL or data URI.
 					width: 0
 					height: 0
 
+				setSize = (size) ->
+					assert.isFloat size.width
+					assert.isFloat size.height
+
+					@sourceWidth = size.width
+					@sourceHeight = size.height
+					if @_autoWidth
+						itemWidthSetter.call @, size.width
+					if @_autoHeight
+						itemHeightSetter.call @, size.height
+					updateSize.call @
+					return
+
 				loadCallback = (err=null, opts) ->
 					if err
 						log.warn "Can't load '#{@source}' image at #{@toString()}"
 					else
 						assert.isString opts.source
-						assert.isFloat opts.width
-						assert.isFloat opts.height
-
-						@sourceWidth = opts.width
-						@sourceHeight = opts.height
-						if @_autoWidth
-							itemWidthSetter.call @, opts.width
-						if @_autoHeight
-							itemHeightSetter.call @, opts.height
-						updateSize.call @
+						if @sourceWidth is 0 or @sourceHeight is 0
+							setSize.call @, opts
+						else
+							@resolution = opts.width / @sourceWidth
 
 					@_loaded = true
 					@onLoadedChange.emit false
@@ -148,21 +156,40 @@ The image source URL or data URI.
 						@onError.emit err
 					else
 						@onLoad.emit()
+					return
 
 				(_super) -> (val) ->
 					_super.call @, val
 					if @_loaded
 						@_loaded = false
 						@onLoadedChange.emit true
+					@sourceWidth = 0
+					@sourceHeight = 0
+					@resolution = 1
 					if val
-						RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio
-						val = Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
+						if res = Renderer.resources?.getResource(val)
+							RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio
+							val = res.resolve RESOURCE_REQUEST
+							setSize.call @, res
 						Impl.setImageSource.call @, val, loadCallback
 					else
 						Impl.setImageSource.call @, null, null
 						defaultResult.source = val
 						loadCallback.call @, null, defaultResult
 					return
+
+ReadOnly *Float* Image::resolution = 1
+--------------------------------------
+
+		itemUtils.defineProperty
+			constructor: @
+			name: 'resolution'
+			defaultValue: 1
+			setter: (_super) -> (val) ->
+				_super.call @, val
+				Impl.setImageSourceWidth.call @, @_sourceWidth * val
+				Impl.setImageSourceHeight.call @, @_sourceHeight * val
+				return
 
 Hidden *Float* Image::sourceWidth = 0
 -------------------------------------
@@ -174,6 +201,8 @@ Hidden *Float* Image::sourceWidth = 0
 			name: 'sourceWidth'
 			defaultValue: 0
 			implementation: Impl.setImageSourceWidth
+			implementationValue: (val) ->
+				val * @_resolution
 			developmentSetter: (val) ->
 				assert.isFloat val
 
@@ -187,6 +216,8 @@ Hidden *Float* Image::sourceHeight = 0
 			name: 'sourceHeight'
 			defaultValue: 0
 			implementation: Impl.setImageSourceHeight
+			implementationValue: (val) ->
+				val * @_resolution
 			developmentSetter: (val) ->
 				assert.isFloat val
 

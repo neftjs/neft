@@ -157,14 +157,14 @@ module.exports = (impl) ->
 	setImageSourceWidth: (val) ->
 		data = @_impl
 
-		if val isnt data.image.width
+		if data.image and val > 0 and val isnt data.image.width
 			setBackgroundSize @, val, @_sourceHeight
 		return
 
 	setImageSourceHeight: (val) ->
 		data = @_impl
 
-		if val isnt data.image.height
+		if data.image and val > 0 and val isnt data.image.height
 			setBackgroundSize @, @_sourceWidth, val
 		return
 
