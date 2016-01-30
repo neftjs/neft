@@ -27,6 +27,7 @@ module.exports = (impl) ->
 				pending[i] = pending[n-1]
 				pending[n-1] = pending[pending.length-1]
 				pending.pop()
+				anim._impl.pending = false
 				n--
 
 		requestAnimationFrame vsync
@@ -51,15 +52,9 @@ module.exports = (impl) ->
 			val = data.easing anim._duration * progress, data.from, (data.to - data.from), anim._duration
 		target = anim._target
 
-		# if data.isIntegerProperty is true and progress isnt 1
-		# 	val = round val
-
 		if val is val and target and (property = anim._property) # isNaN hack
 			if not running or anim._updateProperty or not data.propertySetter
 				anim._updatePending = true
-				# when animation has been started in a signal which stopped propagation
-				if not running and target[data.internalPropertyName] is val
-					target[data.internalPropertyName] = data.from
 				target[property] = val
 				anim._updatePending = false
 
@@ -81,6 +76,7 @@ module.exports = (impl) ->
 
 	DATA =
 		type: 'number'
+		pending: false
 		startTime: 0
 		pauseTime: 0
 		from: 0
@@ -99,7 +95,9 @@ module.exports = (impl) ->
 			data = @_impl
 			data.from = @_from
 			data.to = @_to
-			pending.push @
+			unless data.pending
+				pending.push @
+				data.pending = true
 
 			data.startTime = nowTime
 			updateAnimation @
@@ -119,7 +117,9 @@ module.exports = (impl) ->
 		_super.call @
 		if @_impl.type is 'number'
 			data = @_impl
-			pending.push @
+			unless data.pending
+				pending.push @
+				data.pending = true
 
 			data.startTime += Date.now() - data.pauseTime
 			data.pauseTime = 0
