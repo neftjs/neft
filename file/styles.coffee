@@ -10,7 +10,8 @@ module.exports = (File) ->
 
 		render = (arr) ->
 			for style in arr
-				style.render()
+				unless style.isRendered
+					style.render()
 			for style in arr
 				render style.children
 			return
