@@ -29,10 +29,10 @@ module.exports = (File) -> class AttrsToSet
 		# set current attributes
 		for attr of @attrs
 			if node._attrs[attr]?
-				clone.setAttribute attr, null
+				this.setAttribute attr, null
 
 		# listen on changes
-		node.onAttrsChange @setAttribute, clone
+		node.onAttrsChange @setAttribute, this
 
 		`//<development>`
 		if @constructor is AttrsToSet
