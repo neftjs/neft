@@ -131,10 +131,9 @@ Tag @virtual_dom
 
 			true
 
-		clone: ->
-			clone = new Tag
+		clone: (clone = new Tag) ->
+			super clone
 			clone.name = @name
-			clone._visible = @_visible
 			clone._attrs = utils.cloneDeep @_attrs
 			clone
 

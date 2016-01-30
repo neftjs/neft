@@ -39,8 +39,8 @@ Text @virtual_dom
 				Object.preventExtensions @
 			`//</development>`
 
-		clone: ->
-			clone = new Text
+		clone: (clone = new Text) ->
+			super clone
 			clone._text = @_text
 			clone
 

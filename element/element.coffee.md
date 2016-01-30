@@ -275,8 +275,9 @@ Element @virtual_dom
 *Element* Element::clone()
 --------------------------
 
-		clone: ->
-			new Element
+		clone: (clone = new Element) ->
+			clone._visible = @_visible
+			clone
 
 *Element* Element::cloneDeep()
 ------------------------------
