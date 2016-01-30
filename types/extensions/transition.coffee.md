@@ -47,7 +47,6 @@ Transition @modifier
 			@_property = ''
 			@_duration = 0
 			@_to = 0
-			@_durationUpdatePending = false
 
 		listener = (oldVal) ->
 			{animation} = @
@@ -57,17 +56,10 @@ Transition @modifier
 
 			@_to = to
 
-			{progress} = animation
 			animation.stop()
-			@_durationUpdatePending = true
 			animation.duration = @_duration
-			@_durationUpdatePending = false
 			animation.from = oldVal
 			animation.to = @_to
-			if progress > 0
-				@_durationUpdatePending = true
-				animation.duration = @_duration * progress
-				@_durationUpdatePending = false
 
 			animation.target ?= @target
 			animation.start()
@@ -137,13 +129,6 @@ Transition @modifier
 
 ## *Signal* Transition::onAnimationChange(*Renderer.Animation* oldValue)
 
-		onDurationChange = ->
-			unless @_durationUpdatePending
-				@_duration = @_animation._duration
-			return
-
-		NOP_BINDING = [(-> false)]
-
 		itemUtils.defineProperty
 			constructor: @
 			name: 'animation'
@@ -158,12 +143,10 @@ Transition @modifier
 				_super.call @, val
 
 				if oldVal
-					oldVal.onDurationChange.disconnect onDurationChange, @
 					oldVal.target = null
 					oldVal.stop()
 
 				if val
-					val.onDurationChange onDurationChange, @
 					@_duration = val.duration
 					val.target = null
 					val.property = @property
