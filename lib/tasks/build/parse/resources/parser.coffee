@@ -5,7 +5,8 @@ pathUtils = require 'path'
 yaml = require 'js-yaml'
 mkdirp = require 'mkdirp'
 try
-	sharp = require 'sharp'
+	sharpModulePath = pathUtils.join fs.realpathSync(''), '/node_modules/sharp'
+	sharp = require sharpModulePath
 
 {utils, log, assert, Resources} = Neft
 
@@ -44,7 +45,7 @@ resolutionToString = (resolution) ->
 supportImageResource = (path, rsc) ->
 	unless sharp
 		unless logShowed
-			log.error "Image resources are not supported, because 'sharp' module is not installed"
+			log.warn "Install 'sharp' module for full image resources support; 'npm install sharp'"
 			logShowed = true
 		return
 
