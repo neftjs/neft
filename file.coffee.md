@@ -179,7 +179,7 @@ File @class
 				for id, path of arr[JSON_IDS]
 					obj.ids[id] = obj.node.getChildByAccessPath path
 
-				parseObject obj, arr[JSON_FUNCS], obj.funcs
+				utils.merge obj.funcs, arr[JSON_FUNCS]
 				parseArray obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet
 
 				`//<development>`

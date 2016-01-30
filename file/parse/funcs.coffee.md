@@ -53,10 +53,8 @@ Tag used to create functions in the view.
 			# merge funcs from files
 			links = parseLinks file
 			for link in links
-				linkView = File.factory link.path
-				linkViewProto = Object.getPrototypeOf linkView
-				for externalFuncName of linkView.funcs
-					if externalFunc = linkViewProto.funcs[externalFuncName]
-						funcs[externalFuncName] ?= externalFunc
+				linkView = File._files[link.path]
+				for externalFuncName, externalFunc of linkView.funcs
+					funcs[externalFuncName] ?= externalFunc
 
 			return
