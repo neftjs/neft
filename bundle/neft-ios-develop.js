@@ -7830,6 +7830,7 @@ var exports = module.exports;
           pending[i] = pending[n - 1];
           pending[n - 1] = pending[pending.length - 1];
           pending.pop();
+          anim._impl.pending = false;
           n--;
         }
       }
@@ -7859,9 +7860,6 @@ var exports = module.exports;
       if (val === val && target && (property = anim._property)) {
         if (!running || anim._updateProperty || !data.propertySetter) {
           anim._updatePending = true;
-          if (!running && target[data.internalPropertyName] === val) {
-            target[data.internalPropertyName] = data.from;
-          }
           target[property] = val;
           anim._updatePending = false;
           if (progress === 1 && data.propertySetter && target[property] === val) {
@@ -7885,6 +7883,7 @@ var exports = module.exports;
     };
     DATA = {
       type: 'number',
+      pending: false,
       startTime: 0,
       pauseTime: 0,
       from: 0,
@@ -7904,7 +7903,10 @@ var exports = module.exports;
             data = this._impl;
             data.from = this._from;
             data.to = this._to;
-            pending.push(this);
+            if (!data.pending) {
+              pending.push(this);
+              data.pending = true;
+            }
             data.startTime = nowTime;
             updateAnimation(this);
             data.startTime += this._startDelay;
@@ -7928,7 +7930,10 @@ var exports = module.exports;
           _super.call(this);
           if (this._impl.type === 'number') {
             data = this._impl;
-            pending.push(this);
+            if (!data.pending) {
+              pending.push(this);
+              data.pending = true;
+            }
             data.startTime += Date.now() - data.pauseTime;
             data.pauseTime = 0;
           }
@@ -13120,11 +13125,11 @@ var exports = module.exports;
         cloneComp.onObjectChange = signal.create();
       }
       if (component.isDeepClone) {
-        if (classElem.id) {
-          cloneComp.setObjectById(clone, classElem.id);
+        if (clone.id) {
+          cloneComp.setObjectById(clone, clone.id);
         }
         cloneComp.initObjects();
-        if (utils.has(component.idsOrder, clone.id)) {
+        if (component.objects[clone.id]) {
           component.setObjectById(clone, clone.id);
         }
       }
@@ -14234,7 +14239,7 @@ var exports = module.exports;
   module.exports = function(Renderer, Impl, itemUtils) {
     var Transition;
     return Transition = (function(_super) {
-      var NOP_BINDING, listener, onDurationChange, onTargetReady;
+      var listener, onTargetReady;
 
       __extends(Transition, _super);
 
@@ -14253,29 +14258,20 @@ var exports = module.exports;
         this._property = '';
         this._duration = 0;
         this._to = 0;
-        this._durationUpdatePending = false;
       }
 
       listener = function(oldVal) {
-        var animation, progress, to;
+        var animation, to;
         animation = this.animation;
         to = this._target[this.property];
         if (!animation || !this.running || animation.updatePending || !utils.isFloat(oldVal) || !utils.isFloat(to)) {
           return;
         }
         this._to = to;
-        progress = animation.progress;
         animation.stop();
-        this._durationUpdatePending = true;
         animation.duration = this._duration;
-        this._durationUpdatePending = false;
         animation.from = oldVal;
         animation.to = this._to;
-        if (progress > 0) {
-          this._durationUpdatePending = true;
-          animation.duration = this._duration * progress;
-          this._durationUpdatePending = false;
-        }
         if (animation.target == null) {
           animation.target = this.target;
         }
@@ -14337,18 +14333,6 @@ var exports = module.exports;
         }
       });
 
-      onDurationChange = function() {
-        if (!this._durationUpdatePending) {
-          this._duration = this._animation._duration;
-        }
-      };
-
-      NOP_BINDING = [
-        (function() {
-          return false;
-        })
-      ];
-
       itemUtils.defineProperty({
         constructor: Transition,
         name: 'animation',
@@ -14367,12 +14351,10 @@ var exports = module.exports;
             }
             _super.call(this, val);
             if (oldVal) {
-              oldVal.onDurationChange.disconnect(onDurationChange, this);
               oldVal.target = null;
               oldVal.stop();
             }
             if (val) {
-              val.onDurationChange(onDurationChange, this);
               this._duration = val.duration;
               val.target = null;
               val.property = this.property;
@@ -14774,6 +14756,7 @@ var exports = module.exports;
         var index, oldVal, _ref, _ref1;
         assert.instanceOf(object, itemUtils.Object);
         assert.isString(id);
+        assert.ok(object.id === id);
         assert.ok(this.objects[id] || ((_ref = this.parent) != null ? _ref.objects[id] : void 0));
         if ((oldVal = this.objects[id]) === object) {
           return;
@@ -21282,7 +21265,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.24",
+  "version": "0.8.25",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
