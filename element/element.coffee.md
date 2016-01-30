@@ -279,12 +279,6 @@ Element @virtual_dom
 			clone._visible = @_visible
 			clone
 
-*Element* Element::cloneDeep()
-------------------------------
-
-		cloneDeep: ->
-			@clone()
-
 *Array* Element::toJSON()
 -------------------------
 

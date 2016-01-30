@@ -137,12 +137,18 @@ Tag @virtual_dom
 			clone._attrs = utils.cloneDeep @_attrs
 			clone
 
+*Tag* Tag::cloneDeep()
+----------------------
+
 		cloneDeep: ->
 			clone = @clone()
 
 			prevClonedChild = null
 			for child in @children
-				clonedChild = child.cloneDeep()
+				if child instanceof Tag
+					clonedChild = child.cloneDeep()
+				else
+					clonedChild = child.clone()
 				clone.children.push clonedChild
 				clonedChild._parent = clone
 				if clonedChild._previousSibling = prevClonedChild
