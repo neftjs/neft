@@ -49,8 +49,6 @@ getFile = (path) ->
 	file
 
 fileScope = """(function(){
-	'use strict';
-
 	// list of modules with empty objects
 	var modules = {{declarations}};
 
