@@ -37,26 +37,26 @@ Document @extension
 			return
 
 		onPropertyChange = (prop, oldVal) ->
-			if @_updatingProperty is prop or not (node = @_node) or not node.hasAttr(prop)
+			if @_updatingProperty is prop or not (node = @_node) or not node.attrs.has(prop)
 				return
 			if oldVal is undefined
-				setProperty.call @, @_ref._$, prop, node._attrs[prop], oldVal
+				setProperty.call @, @_ref._$, prop, node.attrs.get(prop), oldVal
 			else
-				node.setAttr prop, @_ref._$[prop]
+				node.attrs.set prop, @_ref._$[prop]
 			return
 
 		onNodeAttrsChange = (attr, oldVal) ->
 			unless props = @_ref._$
 				return
 			if attr of props
-				setProperty.call @, props, attr, @_node._attrs[attr], oldVal
+				setProperty.call @, props, attr, @_node.attrs.get(attr), oldVal
 			return
 
 		enableProperties = ->
 			unless props = @_ref._$
 				return
 			# attrs to properties
-			for attr, val of @_node._attrs
+			for attr, val of @_node.attrs._data
 				if attr of props
 					@_propertiesCleanQueue.push attr, props[attr], val
 					setProperty.call @, props, attr, val, null
@@ -103,7 +103,7 @@ ReadOnly *String* Document::query
 
 ```nml
 `Text {
-`  text: this.document.node.getAttr('value')
+`  text: this.document.node.attrs.get('value')
 `}
 ```
 
