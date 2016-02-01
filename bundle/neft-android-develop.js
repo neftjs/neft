@@ -16494,9 +16494,18 @@ var exports = module.exports;
     return function(ctor) {
       var ItemDocument;
       return ItemDocument = (function(_super) {
-        var DocumentHideEvent, DocumentShowEvent, disableProperties, enableProperties, onNodeAttrsChange, onPropertyChange, setProperty;
+        var DocElement, DocTag, DocText, Document, DocumentHideEvent, DocumentShowEvent, disableProperties, enableProperties, onNodeAttrsChange, onPropertyChange, setProperty;
 
         __extends(ItemDocument, _super);
+
+        Document = DocElement = DocTag = DocText = null;
+
+        setImmediate(function() {
+          Document = require('document');
+          DocElement = Document.Element;
+          DocTag = DocElement.Tag;
+          return DocText = DocElement.Text;
+        });
 
         ItemDocument.__name__ = 'Document';
 
@@ -16597,17 +16606,17 @@ var exports = module.exports;
           parentConstructor: ctor,
           developmentSetter: function(val) {
             if (val != null) {
-              return assert.instanceOf(val, require('document').Element.Tag);
+              return assert.instanceOf(val, DocElement);
             }
           },
           setter: function(_super) {
             return function(val) {
-              if (this._node) {
+              if (this._node instanceof DocTag) {
                 this._node.onAttrsChange.disconnect(onNodeAttrsChange, this);
                 disableProperties.call(this);
               }
               _super.call(this, val);
-              if (val) {
+              if (val instanceof DocTag) {
                 val.onAttrsChange(onNodeAttrsChange, this);
                 return enableProperties.call(this);
               }
@@ -21162,7 +21171,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.27",
+  "version": "0.9.0",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -21412,11 +21421,11 @@ var exports = module.exports;
   module.exports = function(File, data) {
     var Style;
     return Style = (function() {
-      var JSON_ARGS_LENGTH, JSON_ATTRS, JSON_CHILDREN, JSON_CTOR_ID, JSON_NODE, Tag, attrsChangeListener, emptyComponent, findItemIndex, findItemWithParent, getter, globalHideDelay, globalShowDelay, hideEvent, i, listenTextRec, opts, queries, setter, showEvent, styles, stylesToRender, stylesToRevert, textChangeListener, updateWhenPossible, windowStyle;
+      var JSON_ARGS_LENGTH, JSON_ATTRS, JSON_CHILDREN, JSON_CTOR_ID, JSON_NODE, Tag, Text, attrsChangeListener, emptyComponent, findItemIndex, findItemWithParent, getter, globalHideDelay, globalShowDelay, hideEvent, i, listenTextRec, opts, queries, setter, showEvent, styles, stylesToRender, stylesToRevert, textChangeListener, updateWhenPossible, windowStyle, _ref;
 
       windowStyle = data.windowStyle, styles = data.styles, queries = data.queries;
 
-      Tag = File.Element.Tag;
+      _ref = File.Element, Tag = _ref.Tag, Text = _ref.Text;
 
       Style.__name__ = 'Style';
 
@@ -21450,13 +21459,14 @@ var exports = module.exports;
           return attrs;
         };
         forNode = function(file, node, parentStyle) {
-          var attr, child, style, _i, _len, _ref;
-          if (attr = node.getAttr('neft:style')) {
+          var attr, child, isText, style, _i, _len, _ref1;
+          isText = node instanceof Text;
+          if (isText || (attr = node.getAttr('neft:style'))) {
             style = new Style;
             style.file = file;
             style.node = node;
             style.parent = parentStyle;
-            style.attrs = getStyleAttrs(node);
+            style.attrs = !isText && getStyleAttrs(node);
             if (parentStyle) {
               parentStyle.children.push(style);
             } else {
@@ -21464,10 +21474,10 @@ var exports = module.exports;
             }
             parentStyle = style;
           }
-          _ref = node.children;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            child = _ref[_i];
-            if (child instanceof File.Element.Tag) {
+          if (!isText) {
+            _ref1 = node.children;
+            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+              child = _ref1[_i];
               forNode(file, child, parentStyle);
             }
           }
@@ -21480,6 +21490,10 @@ var exports = module.exports;
             nodes = file.node.queryAll(elem.query);
             for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
               node = nodes[_j];
+              if (!(node instanceof Tag)) {
+                log.warn("document.query can be attached only to tags; " + ("query '" + elem.query + "' has been omitted for this node"));
+                continue;
+              }
               if (!node.hasAttr('neft:style')) {
                 node.setAttr('neft:style', elem.style);
               }
@@ -21491,16 +21505,16 @@ var exports = module.exports;
       })();
 
       Style._fromJSON = function(file, arr, obj) {
-        var child, cloneChild, _i, _len, _ref;
+        var child, cloneChild, _i, _len, _ref1;
         if (!obj) {
           obj = new Style;
         }
         obj.file = file;
         obj.node = file.node.getChildByAccessPath(arr[JSON_NODE]);
         obj.attrs = arr[JSON_ATTRS];
-        _ref = arr[JSON_CHILDREN];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          child = _ref[_i];
+        _ref1 = arr[JSON_CHILDREN];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          child = _ref1[_i];
           cloneChild = Style._fromJSON(file, child);
           cloneChild.parent = obj;
           obj.children.push(cloneChild);
@@ -21511,26 +21525,24 @@ var exports = module.exports;
       emptyComponent = new Renderer.Component;
 
       listenTextRec = function(style, node) {
-        var child, _i, _len, _ref;
+        var child, _i, _len, _ref1;
         if (node == null) {
           node = style.node;
         }
         assert.instanceOf(style, Style);
         assert.instanceOf(node, File.Element);
         style.textWatchingNodes.push(node);
-        if ('onTextChange' in node) {
+        node.onVisibleChange(textChangeListener, style);
+        if (node instanceof Text) {
           node.onTextChange(textChangeListener, style);
         }
-        if ('onChildrenChange' in node) {
+        if (node instanceof Tag) {
           node.onChildrenChange(textChangeListener, style);
         }
-        if ('onVisibleChange' in node) {
-          node.onVisibleChange(textChangeListener, style);
-        }
         if (node.children) {
-          _ref = node.children;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            child = _ref[_i];
+          _ref1 = node.children;
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            child = _ref1[_i];
             listenTextRec(style, child);
           }
         }
@@ -21543,13 +21555,13 @@ var exports = module.exports;
       };
 
       attrsChangeListener = function(name, oldValue) {
-        var _ref, _ref1;
+        var _ref1, _ref2;
         if (name === 'href' && this.isLink()) {
-          if ((_ref = this.item) != null) {
-            _ref.linkUri = this.getLinkUri();
+          if ((_ref1 = this.item) != null) {
+            _ref1.linkUri = this.getLinkUri();
           }
         }
-        if ((_ref1 = this.attrs) != null ? _ref1[name] : void 0) {
+        if ((_ref2 = this.attrs) != null ? _ref2[name] : void 0) {
           this.setAttr(name, this.node._attrs[name], oldValue);
         }
       };
@@ -21593,16 +21605,16 @@ var exports = module.exports;
         pending = false;
         lastDate = 0;
         sync = function() {
-          var animationsPending, diff, extension, logtime, now, style, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref;
+          var animationsPending, diff, extension, logtime, now, style, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref1;
           now = Date.now();
           diff = now - lastDate;
           lastDate = now;
           animationsPending = false;
           for (_i = 0, _len = stylesToRevert.length; _i < _len; _i++) {
             style = stylesToRevert[_i];
-            _ref = style.item._extensions;
-            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-              extension = _ref[_j];
+            _ref1 = style.item._extensions;
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              extension = _ref1[_j];
               if (extension instanceof Renderer.PropertyAnimation && extension.running && !extension.loop) {
                 animationsPending = true;
                 break;
@@ -21694,7 +21706,7 @@ var exports = module.exports;
       };
 
       Style.prototype.renderItem = function() {
-        var attr, attrsQueue, _i, _len, _ref;
+        var attr, attrsQueue, _i, _len, _ref1;
         if (!this.item || !this.file.isRendered) {
           return;
         }
@@ -21704,7 +21716,7 @@ var exports = module.exports;
         }
         this.findItemParent();
         this.item.document.node = this.node;
-        this.baseText = ((_ref = this.getTextObject()) != null ? _ref.text : void 0) || '';
+        this.baseText = ((_ref1 = this.getTextObject()) != null ? _ref1.text : void 0) || '';
         this.updateText();
         this.updateVisibility();
         if (this.attrs) {
@@ -21773,7 +21785,9 @@ var exports = module.exports;
         if (!item) {
           return;
         }
-        if (item._$ && 'text' in item._$) {
+        if (this.node instanceof Text) {
+          return item;
+        } else if (item._$ && 'text' in item._$) {
           return item._$;
         } else if ('text' in item) {
           return item;
@@ -21781,29 +21795,54 @@ var exports = module.exports;
       };
 
       Style.prototype.updateText = function() {
-        var anchor, hasStyledChild, href, node, obj, text;
+        var anchor, hasParentWithText, href, isText, node, obj, parent, text, _ref1;
         if (this.waiting) {
           return;
         }
         node = this.node;
-        hasStyledChild = this.children.length || node.query('[neft:style]');
-        if (!hasStyledChild && (anchor = node.query('> a'))) {
-          node = anchor;
-          href = node.getAttr('href');
-          if (typeof href === 'string') {
-            if (!this.isLinkUriSet) {
-              this.isLinkUriSet = true;
-              this.baseLinkUri = this.item.linkUri;
+        isText = node instanceof Text;
+        anchor = node;
+        while (anchor = anchor.parent) {
+          if (anchor.style) {
+            break;
+          }
+          if (anchor.name === 'a') {
+            href = anchor.getAttr('href');
+            if (typeof href === 'string') {
+              if (!this.isLinkUriSet) {
+                this.isLinkUriSet = true;
+                this.baseLinkUri = this.item.linkUri;
+              }
+              this.item.linkUri = href;
             }
-            this.item.linkUri = href;
+            break;
           }
         }
         obj = this.getTextObject();
-        if (obj && !hasStyledChild) {
-          text = node.stringifyChildren();
-          if (text.length > 0 || this.isTextSet) {
-            this.isTextSet = true;
-            obj.text = text;
+        if (obj) {
+          hasParentWithText = false;
+          parent = node;
+          while (parent = parent.parent) {
+            if ((_ref1 = parent._documentStyle) != null ? _ref1.isTextSet : void 0) {
+              hasParentWithText = true;
+              break;
+            }
+          }
+          if (hasParentWithText) {
+            if (isText) {
+              this.item.visible = false;
+            }
+          } else {
+            if (isText) {
+              text = node.text;
+              this.item.visible = text.length > 0;
+            } else {
+              text = node.stringifyChildren();
+            }
+            if (text.length > 0 || this.isTextSet) {
+              this.isTextSet = true;
+              obj.text = text;
+            }
           }
         }
       };
@@ -21827,7 +21866,11 @@ var exports = module.exports;
         if (this.waiting) {
           return;
         }
-        visible = this.getVisibility();
+        if (this.node instanceof Text && !this.isTextSet) {
+          visible = false;
+        } else {
+          visible = this.getVisibility();
+        }
         if (visible && !this.isRendered && this.file.isRendered) {
           this.render();
         }
@@ -21861,7 +21904,7 @@ var exports = module.exports;
           };
         })();
         return function(attr, val, oldVal) {
-          var internalProp, obj, prop, props, _i, _ref;
+          var internalProp, obj, prop, props, _i, _ref1;
           assert.instanceOf(this, Style);
           if (this.waiting || !this.item) {
             this.attrsQueue.push(attr, val, oldVal);
@@ -21873,7 +21916,7 @@ var exports = module.exports;
           }
           props = getSplitAttr(attr);
           obj = this.item;
-          for (i = _i = 0, _ref = props.length - 1; _i < _ref; i = _i += 1) {
+          for (i = _i = 0, _ref1 = props.length - 1; _i < _ref1; i = _i += 1) {
             if (!(obj = obj[props[i]])) {
               return false;
             }
@@ -21938,8 +21981,8 @@ var exports = module.exports;
       };
 
       Style.prototype.isLink = function() {
-        var _ref;
-        return this.node.name === 'a' && (this.node.getAttr('href') != null) && ((_ref = this.node.getAttr('href')) != null ? _ref[0] : void 0) !== '#';
+        var _ref1;
+        return this.node.name === 'a' && (this.node.getAttr('href') != null) && ((_ref1 = this.node.getAttr('href')) != null ? _ref1[0] : void 0) !== '#';
       };
 
       Style.prototype.getLinkUri = function() {
@@ -21954,7 +21997,7 @@ var exports = module.exports;
       };
 
       Style.prototype.reloadItem = function() {
-        var file, id, match, parent, parentId, style, subid, _, _ref, _ref1;
+        var file, id, match, parent, parentId, style, subid, _, _ref1, _ref2;
         if (this.waiting) {
           return;
         }
@@ -21962,14 +22005,19 @@ var exports = module.exports;
           return;
         }
         assert.notOk(this.item);
-        id = this.node.getAttr('neft:style');
-        assert.isString(id);
-        this.isScope = /^(styles|renderer)\:/.test(id);
+        if (this.node instanceof Tag) {
+          id = this.node.getAttr('neft:style');
+          assert.isString(id);
+          this.isScope = /^(styles|renderer)\:/.test(id);
+        } else if (this.node instanceof Text) {
+          id = Renderer.Text.New(emptyComponent);
+          assert.isNotDefined(this.item);
+        }
         this.item = null;
         this.scope = null;
-        this.isAutoParent = false;
         if (id instanceof Renderer.Item) {
           this.item = id;
+          this.isAutoParent = !id.parent;
         } else if (this.isScope) {
           this.isAutoParent = true;
           if (/^styles\:/.test(id)) {
@@ -22000,7 +22048,7 @@ var exports = module.exports;
               }
               this.isAutoParent = !this.item.parent;
             } else {
-              this.scope = (_ref = styles[file]) != null ? (_ref1 = _ref[style]) != null ? _ref1.getComponent() : void 0 : void 0;
+              this.scope = (_ref1 = styles[file]) != null ? (_ref2 = _ref1[style]) != null ? _ref2.getComponent() : void 0 : void 0;
               if (this.scope) {
                 this.item = this.scope.item;
               } else {
@@ -22009,6 +22057,8 @@ var exports = module.exports;
               }
             }
           }
+        } else {
+          this.isAutoParent = false;
         }
         this.node.style = this.item;
         if (this.item) {
@@ -22037,14 +22087,14 @@ var exports = module.exports;
       };
 
       findItemIndex = function(node, item, parent) {
-        var tmpIndexNode, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref, _ref1, _ref2;
+        var tmpIndexNode, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref1, _ref2, _ref3;
         tmpIndexNode = node;
-        parent = ((_ref = parent._children) != null ? _ref._target : void 0) || parent;
+        parent = ((_ref1 = parent._children) != null ? _ref1._target : void 0) || parent;
         tmpSiblingNode = tmpIndexNode;
         while (tmpIndexNode) {
           while (tmpSiblingNode) {
             if (tmpSiblingNode !== node && tmpSiblingNode instanceof Tag) {
-              if (((_ref1 = tmpSiblingNode._documentStyle) != null ? _ref1.parentSet : void 0) && (tmpSiblingItem = tmpSiblingNode._documentStyle.item)) {
+              if (((_ref2 = tmpSiblingNode._documentStyle) != null ? _ref2.parentSet : void 0) && (tmpSiblingItem = tmpSiblingNode._documentStyle.item)) {
                 if (tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)) {
                   if (item !== tmpSiblingTargetItem) {
                     if (item.previousSibling !== tmpSiblingTargetItem) {
@@ -22066,7 +22116,7 @@ var exports = module.exports;
           }
           if (tmpIndexNode = tmpIndexNode._parent) {
             tmpSiblingNode = tmpIndexNode._previousSibling;
-            if (((_ref2 = tmpIndexNode._documentStyle) != null ? _ref2.item : void 0) === parent) {
+            if (((_ref3 = tmpIndexNode._documentStyle) != null ? _ref3.item : void 0) === parent) {
               return;
             }
           }
@@ -22111,21 +22161,23 @@ var exports = module.exports;
       };
 
       Style.prototype.clone = function(originalFile, file) {
-        var attr, attrVal, child, clone, styleAttr, _i, _len, _ref;
+        var attr, attrVal, child, clone, node, styleAttr, _i, _len, _ref1;
         clone = new Style;
         clone.file = file;
-        clone.node = originalFile.node.getCopiedElement(this.node, file.node);
+        node = clone.node = originalFile.node.getCopiedElement(this.node, file.node);
         clone.attrs = this.attrs;
-        clone.node._documentStyle = clone;
-        styleAttr = clone.node._attrs['neft:style'];
-        clone.isAutoParent = !/^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr);
+        node._documentStyle = clone;
+        if (node instanceof Tag) {
+          styleAttr = node._attrs['neft:style'];
+          clone.isAutoParent = !/^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr);
+        }
         if (this.attrs) {
           clone.attrsClass = Renderer.Class.New(emptyComponent);
           clone.attrsClass.priority = 9999;
         }
-        _ref = this.children;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          child = _ref[_i];
+        _ref1 = this.children;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          child = _ref1[_i];
           child = child.clone(originalFile, file);
           child.parent = clone;
           clone.children.push(child);
@@ -22133,7 +22185,9 @@ var exports = module.exports;
         if (!utils.isClient) {
           return clone;
         }
-        clone.node.onAttrsChange(attrsChangeListener, clone);
+        if (node instanceof Tag) {
+          clone.node.onAttrsChange(attrsChangeListener, clone);
+        }
         if (this.attrs) {
           for (attr in this.attrs) {
             attrVal = clone.node._attrs[attr];
@@ -22173,7 +22227,7 @@ var exports = module.exports;
       utils.defineProperty(Tag.prototype, 'visible', opts, getter, (function(_super) {
         var updateVisibility;
         updateVisibility = function(node) {
-          var child, hasItem, style, _i, _len, _ref;
+          var child, hasItem, style, _i, _len, _ref1;
           if (style = node._documentStyle) {
             hasItem = !!style.item;
             style.updateVisibility();
@@ -22182,9 +22236,9 @@ var exports = module.exports;
             }
           }
           if (node instanceof Tag) {
-            _ref = node.children;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              child = _ref[_i];
+            _ref1 = node.children;
+            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+              child = _ref1[_i];
               updateVisibility(child);
             }
           }

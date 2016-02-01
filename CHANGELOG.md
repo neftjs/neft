@@ -2,6 +2,10 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
+## 0.9.0 - New features
+### Styles
+- [Text elements now are rendered as Text items](https://github.com/Neft-io/styles/commit/573da994f915ceaafed8244ec939475ec3efa5af)
+
 ## 0.8.27 - Bugs fixes
 ### Renderer
 - [Image::resolution added; retina images sizes now are properly recognized](https://github.com/Neft-io/renderer/commit/8cc24a60aaafa4f22d0db599f5c452410cdfb948)
