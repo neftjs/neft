@@ -24,7 +24,7 @@ TextInput @class
 				itemUtils.Object.initialize item, component, opts
 
 				# set default font family
-				if name = Renderer.FontLoader.getInternalFontName('sans-serif', 14, false)
+				if name = Renderer.FontLoader.getInternalFontName('sans-serif', 0.4, false)
 					Impl.setTextInputFontFamily.call item, name
 
 				# focus on pointer press
