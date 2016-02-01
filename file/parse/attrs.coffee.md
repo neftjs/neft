@@ -32,16 +32,23 @@ String `List(...` evaluates to the [List][list/List].
 	Dict = require 'dict'
 	List = require 'list'
 
-	evalFunc = new Function 'val', 'try { return eval(\'(\'+val+\')\'); } catch(err){}'
-
-	forNode = (elem) ->
-		if elem._attrs
-			for name, val of elem._attrs
-				jsVal = evalFunc val
-				if jsVal isnt undefined and not (jsVal instanceof RegExp)
-					elem.setAttr name, jsVal
-
-		elem.children?.forEach forNode
+	evalFunc = new Function 'val', 'Dict', 'List', 'try { return eval(\'(\'+val+\')\'); } catch(err){}'
 
 	module.exports = (File) -> (file) ->
+		{Tag} = File.Element
+		{attrsToParse} = file
+
+		forNode = (elem) ->
+			for name, val of elem._attrs
+				jsVal = evalFunc val, Dict, List
+				if utils.isObject(jsVal)
+					attrsToParse.push elem, name
+				else if jsVal isnt undefined
+					elem.setAttr name, jsVal
+
+			for child in elem.children
+				if child instanceof Tag
+					forNode child
+			return
+
 		forNode file.node

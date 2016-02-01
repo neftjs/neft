@@ -39,6 +39,7 @@ File @class
 		JSON_PATH = i++
 		JSON_NODE = i++
 		JSON_TARGET_NODE = i++
+		JSON_ATTRS_TO_PARSE = i++
 		JSON_FRAGMENTS = i++
 		JSON_ATTR_CHANGES = i++
 		JSON_INPUTS = i++
@@ -166,8 +167,16 @@ File @class
 					node = File.Element.fromJSON arr[JSON_NODE]
 					obj = new File arr[JSON_PATH], node
 
+				# targetNode
 				if arr[JSON_TARGET_NODE]
 					obj.targetNode = node.getChildByAccessPath arr[JSON_TARGET_NODE]
+
+				# attrsToParse
+				{attrsToParse} = obj
+				jsonAttrsToParse = arr[JSON_ATTRS_TO_PARSE]
+				for attrNode, i in jsonAttrsToParse by 2
+					attrsToParse.push node.getChildByAccessPath(attrNode)
+					attrsToParse.push jsonAttrsToParse[i+1]
 
 				utils.merge obj.fragments, arr[JSON_FRAGMENTS]
 				parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
@@ -224,8 +233,8 @@ File.parse(*File* file)
 				# parse
 				rules file
 				fragments file
-				attrs file
 				iterators file
+				attrs file
 				attrChanges file
 				target file
 				uses file
@@ -283,6 +292,7 @@ File.parse(*File* file)
 			@source = null
 			@parentUse = null
 
+			@attrsToParse = []
 			@fragments = {}
 			@attrChanges = []
 			@inputs = []
@@ -426,7 +436,16 @@ File.parse(*File* file)
 			if r = getFromPool(@path)
 				r
 			else
-				@_clone()
+				if @isClone and (original = files[@path])
+					original._clone()
+				else
+					@_clone()
+
+		parseAttr = do ->
+			cache = Object.create null
+			(val) ->
+				func = cache[val] ?= new Function 'Dict', 'List', "return #{val}"
+				func Dict, List
 
 		_clone: ->
 			clone = new File @path, @node.cloneDeep()
@@ -435,6 +454,13 @@ File.parse(*File* file)
 
 			if @targetNode
 				clone.targetNode = @node.getCopiedElement @targetNode, clone.node
+
+			# attrsToParse
+			{attrsToParse} = @
+			for attrNode, i in attrsToParse by 2
+				attrNode = @node.getCopiedElement attrNode, clone.node
+				attrName = attrsToParse[i+1]
+				attrNode.setAttr attrName, parseAttr(attrNode.getAttr(attrName))
 
 			# attrChanges
 			for attrChange in @attrChanges
@@ -507,6 +533,12 @@ File::destroy()
 				# targetNode
 				if @targetNode
 					arr[JSON_TARGET_NODE] = @targetNode.getAccessPath @node
+
+				# attrsToParse
+				attrsToParse = arr[JSON_ATTRS_TO_PARSE] = new Array @attrsToParse.length
+				for attrNode, i in @attrsToParse by 2
+					attrsToParse[i] = attrNode.getAccessPath @node
+					attrsToParse[i+1] = @attrsToParse[i+1]
 
 				arr[JSON_FRAGMENTS] = @fragments
 				arr[JSON_ATTR_CHANGES] = @attrChanges.map callToJSON
