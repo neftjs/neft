@@ -11,6 +11,13 @@ Document @extension
 	log = log.scope 'Renderer', 'Document'
 
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
+		Document = DocElement = DocTag = DocText = null
+		setImmediate ->
+			Document = require 'document'
+			DocElement = Document.Element
+			DocTag = DocElement.Tag
+			DocText = DocElement.Text
+
 		@__name__ = 'Document'
 
 		itemUtils.defineProperty
@@ -116,13 +123,13 @@ ReadOnly *String* Document::query
 			parentConstructor: ctor
 			developmentSetter: (val) ->
 				if val?
-					assert.instanceOf val, require('document').Element.Tag
+					assert.instanceOf val, DocElement
 			setter: (_super) -> (val) ->
-				if @_node
+				if @_node instanceof DocTag
 					@_node.onAttrsChange.disconnect onNodeAttrsChange, @
 					disableProperties.call @
 				_super.call @, val
-				if val
+				if val instanceof DocTag
 					val.onAttrsChange onNodeAttrsChange, @
 					enableProperties.call @
 
