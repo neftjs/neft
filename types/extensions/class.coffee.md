@@ -387,12 +387,11 @@ Mostly used with bindings.
 			clone = component.cloneRawObject child
 			cloneComp = clone._component.belongsToComponent or clone._component
 			cloneComp.onObjectChange ?= signal.create()
-			if component.isDeepClone
-				if clone.id
-					cloneComp.setObjectById clone, clone.id
-				cloneComp.initObjects()
-				if component.objects[clone.id]
-					component.setObjectById clone, clone.id
+			if clone.id
+				cloneComp.setObjectById clone, clone.id
+			cloneComp.initObjects()
+			if component.objects[clone.id]
+				component.setObjectById clone, clone.id
 			return clone
 
 		cloneClassWithNoDocument = (component) ->
