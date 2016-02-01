@@ -10,7 +10,8 @@ log = log.scope 'Styles'
 
 module.exports = (File, data) -> class Style
 	{windowStyle, styles, queries} = data
-	{Tag, Text} = File.Element
+	{Element} = File
+	{Tag, Text} = Element
 
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
@@ -710,11 +711,10 @@ module.exports = (File, data) -> class Style
 			arr
 
 	# synchronize visibility
-	{Tag} = File.Element
 	opts = utils.CONFIGURABLE
-	getter = utils.lookupGetter Tag::, 'visible'
-	setter = utils.lookupSetter Tag::, 'visible'
-	utils.defineProperty Tag::, 'visible', opts, getter, do (_super = setter) ->
+	getter = utils.lookupGetter Element::, 'visible'
+	setter = utils.lookupSetter Element::, 'visible'
+	utils.defineProperty Element::, 'visible', opts, getter, do (_super = setter) ->
 		updateVisibility = (node) ->
 			if style = node._documentStyle
 				hasItem = !!style.item
