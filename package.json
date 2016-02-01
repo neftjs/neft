@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "renderer",
-  "version": "0.8.25",
+  "version": "0.8.27",
   "description": "Neft.io styles renderer",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
