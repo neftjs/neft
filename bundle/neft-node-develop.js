@@ -1,4 +1,4 @@
-module.exports = (function(){
+var Neft = (function(){
 // list of modules with empty objects
 var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../assert/index.coffee.md":{},"../log/impls/node/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/node/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/node/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/decode.json":{},"../document/node_modules/htmlparser2/node_modules/entities/lib/decode_codepoint.js":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/entities.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/legacy.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/xml.json":{},"../document/node_modules/htmlparser2/lib/Tokenizer.js":{},"../document/node_modules/htmlparser2/lib/Parser.js":{},"../document/node_modules/htmlparser2/node_modules/domelementtype/index.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/node.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/element.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/index.js":{},"../document/node_modules/htmlparser2/lib/index.js":{},"../document/element/element/parser.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/clear.coffee":{},"../document/file/parse/rules.coffee.md":{},"../document/file/parse/fragments/links.coffee.md":{},"../document/file/parse/fragments.coffee.md":{},"../document/file/parse/attrs.coffee.md":{},"../document/file/parse/attrChanges.coffee.md":{},"../document/file/parse/iterators.coffee.md":{},"../document/file/parse/target.coffee.md":{},"../document/file/parse/uses.coffee.md":{},"../document/file/parse/storage.coffee.md":{},"../document/file/parse/conditions.coffee.md":{},"../document/file/parse/ids.coffee.md":{},"../document/file/parse/logs.coffee.md":{},"../document/file/parse/funcs.coffee.md":{},"../document/file/parse/attrSetting.coffee.md":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/node/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"bootstrap/route.node.coffee.md":{},"package.json":{},"../native/actions.coffee":{},"../native/bridge.coffee":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
 
@@ -11977,15 +11977,17 @@ var exports = module.exports;
           return result;
         }
         if (!(result & STOP_ASIDE_PROPAGATION)) {
-          _ref = item._children;
-          for (_i = _ref.length - 1; _i >= 0; _i += -1) {
-            child = _ref[_i];
-            result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
-            if (result & STOP_PROPAGATION) {
-              return result;
-            }
-            if (result & STOP_ASIDE_PROPAGATION) {
-              break;
+          if (item._children) {
+            _ref = item._children;
+            for (_i = _ref.length - 1; _i >= 0; _i += -1) {
+              child = _ref[_i];
+              result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
+              if (result & STOP_PROPAGATION) {
+                return result;
+              }
+              if (result & STOP_ASIDE_PROPAGATION) {
+                break;
+              }
             }
           }
           if (item instanceof Scrollable && item._contentItem && !(result & STOP_ASIDE_PROPAGATION)) {
@@ -12613,7 +12615,7 @@ var exports = module.exports;
             funcStr += "if (oldVal === val) return;\n";
             if (implementation != null) {
               if (implementationValue != null) {
-                funcStr += "impl.call(this._ref, implValue(val));\n";
+                funcStr += "impl.call(this._ref, implValue.call(this._ref, val));\n";
               } else {
                 funcStr += "impl.call(this._ref, val);\n";
               }
@@ -12638,7 +12640,7 @@ var exports = module.exports;
             funcStr += "if (oldVal === val) return;\n";
             if (implementation != null) {
               if (implementationValue != null) {
-                funcStr += "impl.call(this, implValue(val));\n";
+                funcStr += "impl.call(this, implValue.call(this, val));\n";
               } else {
                 funcStr += "impl.call(this, val);\n";
               }
@@ -13565,14 +13567,12 @@ var exports = module.exports;
       if (cloneComp.onObjectChange == null) {
         cloneComp.onObjectChange = signal.create();
       }
-      if (component.isDeepClone) {
-        if (clone.id) {
-          cloneComp.setObjectById(clone, clone.id);
-        }
-        cloneComp.initObjects();
-        if (component.objects[clone.id]) {
-          component.setObjectById(clone, clone.id);
-        }
+      if (clone.id) {
+        cloneComp.setObjectById(clone, clone.id);
+      }
+      cloneComp.initObjects();
+      if (component.objects[clone.id]) {
+        component.setObjectById(clone, clone.id);
       }
       return clone;
     };
@@ -17284,6 +17284,7 @@ var exports = module.exports;
         Image.__super__.constructor.call(this);
         this._source = '';
         this._loaded = false;
+        this._resolution = 1;
         this._sourceWidth = 0;
         this._sourceHeight = 0;
         this._fillMode = 'Stretch';
@@ -17359,7 +17360,7 @@ var exports = module.exports;
           return assert.isString(val);
         },
         setter: (function() {
-          var RESOURCE_REQUEST, defaultResult, loadCallback;
+          var RESOURCE_REQUEST, defaultResult, loadCallback, setSize;
           RESOURCE_REQUEST = {
             resolution: 1
           };
@@ -17367,6 +17368,19 @@ var exports = module.exports;
             source: '',
             width: 0,
             height: 0
+          };
+          setSize = function(size) {
+            assert.isFloat(size.width);
+            assert.isFloat(size.height);
+            this.sourceWidth = size.width;
+            this.sourceHeight = size.height;
+            if (this._autoWidth) {
+              itemWidthSetter.call(this, size.width);
+            }
+            if (this._autoHeight) {
+              itemHeightSetter.call(this, size.height);
+            }
+            updateSize.call(this);
           };
           loadCallback = function(err, opts) {
             if (err == null) {
@@ -17376,37 +17390,37 @@ var exports = module.exports;
               log.warn("Can't load '" + this.source + "' image at " + (this.toString()));
             } else {
               assert.isString(opts.source);
-              assert.isFloat(opts.width);
-              assert.isFloat(opts.height);
-              this.sourceWidth = opts.width;
-              this.sourceHeight = opts.height;
-              if (this._autoWidth) {
-                itemWidthSetter.call(this, opts.width);
+              if (this.sourceWidth === 0 || this.sourceHeight === 0) {
+                setSize.call(this, opts);
+              } else {
+                this.resolution = opts.width / this.sourceWidth;
               }
-              if (this._autoHeight) {
-                itemHeightSetter.call(this, opts.height);
-              }
-              updateSize.call(this);
             }
             this._loaded = true;
             this.onLoadedChange.emit(false);
             if (err) {
-              return this.onError.emit(err);
+              this.onError.emit(err);
             } else {
-              return this.onLoad.emit();
+              this.onLoad.emit();
             }
           };
           return function(_super) {
             return function(val) {
-              var _ref;
+              var res, _ref;
               _super.call(this, val);
               if (this._loaded) {
                 this._loaded = false;
                 this.onLoadedChange.emit(true);
               }
+              this.sourceWidth = 0;
+              this.sourceHeight = 0;
+              this.resolution = 1;
               if (val) {
-                RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio;
-                val = ((_ref = Renderer.resources) != null ? _ref.resolve(val, RESOURCE_REQUEST) : void 0) || val;
+                if (res = (_ref = Renderer.resources) != null ? _ref.getResource(val) : void 0) {
+                  RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio;
+                  val = res.resolve(RESOURCE_REQUEST);
+                  setSize.call(this, res);
+                }
                 Impl.setImageSource.call(this, val, loadCallback);
               } else {
                 Impl.setImageSource.call(this, null, null);
@@ -17420,9 +17434,25 @@ var exports = module.exports;
 
       itemUtils.defineProperty({
         constructor: Image,
+        name: 'resolution',
+        defaultValue: 1,
+        setter: function(_super) {
+          return function(val) {
+            _super.call(this, val);
+            Impl.setImageSourceWidth.call(this, this._sourceWidth * val);
+            Impl.setImageSourceHeight.call(this, this._sourceHeight * val);
+          };
+        }
+      });
+
+      itemUtils.defineProperty({
+        constructor: Image,
         name: 'sourceWidth',
         defaultValue: 0,
         implementation: Impl.setImageSourceWidth,
+        implementationValue: function(val) {
+          return val * this._resolution;
+        },
         developmentSetter: function(val) {
           return assert.isFloat(val);
         }
@@ -17433,6 +17463,9 @@ var exports = module.exports;
         name: 'sourceHeight',
         defaultValue: 0,
         implementation: Impl.setImageSourceHeight,
+        implementationValue: function(val) {
+          return val * this._resolution;
+        },
         developmentSetter: function(val) {
           return assert.isFloat(val);
         }
@@ -22808,7 +22841,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.26",
+  "version": "0.8.27",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -23211,7 +23244,9 @@ var exports = module.exports;
         var style, _i, _j, _len, _len1;
         for (_i = 0, _len = arr.length; _i < _len; _i++) {
           style = arr[_i];
-          style.render();
+          if (!style.isRendered) {
+            style.render();
+          }
         }
         for (_j = 0, _len1 = arr.length; _j < _len1; _j++) {
           style = arr[_j];
@@ -24393,3 +24428,4 @@ if(typeof module !== 'undefined'){
 	return result;
 }
 })();;
+module.exports = Neft;

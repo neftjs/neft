@@ -38460,6 +38460,14 @@ var exports = module.exports;
     return tmp.style[transformProp].indexOf('translate3d') !== -1;
   })();
 
+  exports.onWindowLoad = function(callback) {
+    if (document.readyState === 'complete') {
+      callback();
+    } else {
+      window.addEventListener('load', callback);
+    }
+  };
+
   exports.rad2deg = function(rad) {
     return rad * 180 / Math.PI;
   };
@@ -39412,13 +39420,50 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var log;
+  var SAMPLE_TEXT, log;
 
   log = require('log');
 
   log = log.scope('Renderer', 'FontLoader');
 
+  SAMPLE_TEXT = 'ABC¬Ō∑ę†ī¨^óĻ„‚ąś∂ń©ķ∆Żł…ĺ«żźć√ļńĶ≤≥÷Ń™€ßį§¶•Ľľ–≠ŕŘ‹›řŖŗ°Š‚—Īő';
+
   module.exports = function(impl) {
+    var detectLoad, emitLoadedSignal, implUtils, markAsLoaded;
+    implUtils = impl.utils;
+    detectLoad = function(name) {
+      var elem1, elem2, sync;
+      elem1 = document.createElement('span');
+      elem1.textContent = SAMPLE_TEXT;
+      elem1.style.fontFamily = "sans-serif";
+      impl._hatchery.appendChild(elem1);
+      elem2 = document.createElement('span');
+      elem2.textContent = SAMPLE_TEXT;
+      elem2.style.fontFamily = "" + name + ", sans-serif";
+      impl._hatchery.appendChild(elem2);
+      sync = function() {
+        if (elem1.offsetWidth !== elem2.offsetWidth || implUtils.loadedFonts[name]) {
+          impl._hatchery.removeChild(elem1);
+          impl._hatchery.removeChild(elem2);
+          return markAsLoaded(name);
+        } else {
+          return requestAnimationFrame(sync);
+        }
+      };
+      return requestAnimationFrame(sync);
+    };
+    emitLoadedSignal = function(name) {
+      if (!implUtils.loadedFonts[name]) {
+        return implUtils.onFontLoaded.emit(name);
+      }
+    };
+    markAsLoaded = function(name) {
+      if (!implUtils.loadedFonts[name]) {
+        implUtils.loadedFonts[name] = true;
+        implUtils.loadingFonts[name] = 0;
+        implUtils.onFontLoaded.emit(name);
+      }
+    };
     return {
       loadFont: function(name, source, sources) {
         var append, styles, urlStr, _base, _i, _len;
@@ -39430,30 +39475,30 @@ var exports = module.exports;
         urlStr = urlStr.slice(0, -2);
         styles = document.createElement('style');
         styles.innerHTML = "@font-face {\n	font-family: \"" + name + "\";\n	src: " + urlStr + ";\n	font-style: normal;\n	font-weight: 400;\n}";
-        if ((_base = impl.utils.loadingFonts)[name] == null) {
+        if ((_base = implUtils.loadingFonts)[name] == null) {
           _base[name] = 0;
         }
-        impl.utils.loadingFonts[name]++;
+        implUtils.loadingFonts[name]++;
         append = function() {
           var xhr;
           document.body.appendChild(styles);
+          detectLoad(name);
           xhr = new XMLHttpRequest;
           xhr.open('get', sources[0], true);
           xhr.onload = function() {
-            if (impl.utils.loadingFonts[name] === 1) {
-              requestAnimationFrame(function() {
-                return impl.utils.onFontLoaded.emit(name);
-              });
-              setTimeout(function() {
-                return impl.utils.onFontLoaded.emit(name);
-              }, 1000);
+            var emitFontLoadedSignal;
+            if (implUtils.loadingFonts[name] === 1) {
+              emitFontLoadedSignal = function() {
+                return emitLoadedSignal(name);
+              };
+              setTimeout(emitFontLoadedSignal, 50);
+              setTimeout(emitFontLoadedSignal, 500);
+              setTimeout(emitFontLoadedSignal, 1000);
               return setTimeout(function() {
-                impl.utils.loadedFonts[name] = true;
-                impl.utils.loadingFonts[name] = 0;
-                return impl.utils.onFontLoaded.emit(name);
+                return markAsLoaded(name);
               }, 2000);
             } else {
-              return impl.utils.loadingFonts[name]--;
+              return implUtils.loadingFonts[name]--;
             }
           };
           return xhr.send();
@@ -39684,15 +39729,17 @@ var exports = module.exports;
           return result;
         }
         if (!(result & STOP_ASIDE_PROPAGATION)) {
-          _ref = item._children;
-          for (_i = _ref.length - 1; _i >= 0; _i += -1) {
-            child = _ref[_i];
-            result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
-            if (result & STOP_PROPAGATION) {
-              return result;
-            }
-            if (result & STOP_ASIDE_PROPAGATION) {
-              break;
+          if (item._children) {
+            _ref = item._children;
+            for (_i = _ref.length - 1; _i >= 0; _i += -1) {
+              child = _ref[_i];
+              result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
+              if (result & STOP_PROPAGATION) {
+                return result;
+              }
+              if (result & STOP_ASIDE_PROPAGATION) {
+                break;
+              }
             }
           }
           if (item instanceof Scrollable && item._contentItem && !(result & STOP_ASIDE_PROPAGATION)) {
@@ -40098,14 +40145,14 @@ var exports = module.exports;
       setImageSourceWidth: function(val) {
         var data;
         data = this._impl;
-        if (val !== data.image.width) {
+        if (data.image && val > 0 && val !== data.image.width) {
           setBackgroundSize(this, val, this._sourceHeight);
         }
       },
       setImageSourceHeight: function(val) {
         var data;
         data = this._impl;
-        if (val !== data.image.height) {
+        if (data.image && val > 0 && val !== data.image.height) {
           setBackgroundSize(this, this._sourceWidth, val);
         }
       },
@@ -40545,7 +40592,7 @@ var exports = module.exports;
             funcStr += "if (oldVal === val) return;\n";
             if (implementation != null) {
               if (implementationValue != null) {
-                funcStr += "impl.call(this._ref, implValue(val));\n";
+                funcStr += "impl.call(this._ref, implValue.call(this._ref, val));\n";
               } else {
                 funcStr += "impl.call(this._ref, val);\n";
               }
@@ -40570,7 +40617,7 @@ var exports = module.exports;
             funcStr += "if (oldVal === val) return;\n";
             if (implementation != null) {
               if (implementationValue != null) {
-                funcStr += "impl.call(this, implValue(val));\n";
+                funcStr += "impl.call(this, implValue.call(this, val));\n";
               } else {
                 funcStr += "impl.call(this, val);\n";
               }
@@ -41497,14 +41544,12 @@ var exports = module.exports;
       if (cloneComp.onObjectChange == null) {
         cloneComp.onObjectChange = signal.create();
       }
-      if (component.isDeepClone) {
-        if (clone.id) {
-          cloneComp.setObjectById(clone, clone.id);
-        }
-        cloneComp.initObjects();
-        if (component.objects[clone.id]) {
-          component.setObjectById(clone, clone.id);
-        }
+      if (clone.id) {
+        cloneComp.setObjectById(clone, clone.id);
+      }
+      cloneComp.initObjects();
+      if (component.objects[clone.id]) {
+        component.setObjectById(clone, clone.id);
       }
       return clone;
     };
@@ -45216,6 +45261,7 @@ var exports = module.exports;
         Image.__super__.constructor.call(this);
         this._source = '';
         this._loaded = false;
+        this._resolution = 1;
         this._sourceWidth = 0;
         this._sourceHeight = 0;
         this._fillMode = 'Stretch';
@@ -45291,7 +45337,7 @@ var exports = module.exports;
           return assert.isString(val);
         },
         setter: (function() {
-          var RESOURCE_REQUEST, defaultResult, loadCallback;
+          var RESOURCE_REQUEST, defaultResult, loadCallback, setSize;
           RESOURCE_REQUEST = {
             resolution: 1
           };
@@ -45299,6 +45345,19 @@ var exports = module.exports;
             source: '',
             width: 0,
             height: 0
+          };
+          setSize = function(size) {
+            assert.isFloat(size.width);
+            assert.isFloat(size.height);
+            this.sourceWidth = size.width;
+            this.sourceHeight = size.height;
+            if (this._autoWidth) {
+              itemWidthSetter.call(this, size.width);
+            }
+            if (this._autoHeight) {
+              itemHeightSetter.call(this, size.height);
+            }
+            updateSize.call(this);
           };
           loadCallback = function(err, opts) {
             if (err == null) {
@@ -45308,37 +45367,37 @@ var exports = module.exports;
               log.warn("Can't load '" + this.source + "' image at " + (this.toString()));
             } else {
               assert.isString(opts.source);
-              assert.isFloat(opts.width);
-              assert.isFloat(opts.height);
-              this.sourceWidth = opts.width;
-              this.sourceHeight = opts.height;
-              if (this._autoWidth) {
-                itemWidthSetter.call(this, opts.width);
+              if (this.sourceWidth === 0 || this.sourceHeight === 0) {
+                setSize.call(this, opts);
+              } else {
+                this.resolution = opts.width / this.sourceWidth;
               }
-              if (this._autoHeight) {
-                itemHeightSetter.call(this, opts.height);
-              }
-              updateSize.call(this);
             }
             this._loaded = true;
             this.onLoadedChange.emit(false);
             if (err) {
-              return this.onError.emit(err);
+              this.onError.emit(err);
             } else {
-              return this.onLoad.emit();
+              this.onLoad.emit();
             }
           };
           return function(_super) {
             return function(val) {
-              var _ref;
+              var res, _ref;
               _super.call(this, val);
               if (this._loaded) {
                 this._loaded = false;
                 this.onLoadedChange.emit(true);
               }
+              this.sourceWidth = 0;
+              this.sourceHeight = 0;
+              this.resolution = 1;
               if (val) {
-                RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio;
-                val = ((_ref = Renderer.resources) != null ? _ref.resolve(val, RESOURCE_REQUEST) : void 0) || val;
+                if (res = (_ref = Renderer.resources) != null ? _ref.getResource(val) : void 0) {
+                  RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio;
+                  val = res.resolve(RESOURCE_REQUEST);
+                  setSize.call(this, res);
+                }
                 Impl.setImageSource.call(this, val, loadCallback);
               } else {
                 Impl.setImageSource.call(this, null, null);
@@ -45352,9 +45411,25 @@ var exports = module.exports;
 
       itemUtils.defineProperty({
         constructor: Image,
+        name: 'resolution',
+        defaultValue: 1,
+        setter: function(_super) {
+          return function(val) {
+            _super.call(this, val);
+            Impl.setImageSourceWidth.call(this, this._sourceWidth * val);
+            Impl.setImageSourceHeight.call(this, this._sourceHeight * val);
+          };
+        }
+      });
+
+      itemUtils.defineProperty({
+        constructor: Image,
         name: 'sourceWidth',
         defaultValue: 0,
         implementation: Impl.setImageSourceWidth,
+        implementationValue: function(val) {
+          return val * this._resolution;
+        },
         developmentSetter: function(val) {
           return assert.isFloat(val);
         }
@@ -45365,6 +45440,9 @@ var exports = module.exports;
         name: 'sourceHeight',
         defaultValue: 0,
         implementation: Impl.setImageSourceHeight,
+        implementationValue: function(val) {
+          return val * this._resolution;
+        },
         developmentSetter: function(val) {
           return assert.isFloat(val);
         }
@@ -49647,7 +49725,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.26",
+  "version": "0.8.27",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -50050,7 +50128,9 @@ var exports = module.exports;
         var style, _i, _j, _len, _len1;
         for (_i = 0, _len = arr.length; _i < _len; _i++) {
           style = arr[_i];
-          style.render();
+          if (!style.isRendered) {
+            style.render();
+          }
         }
         for (_j = 0, _len1 = arr.length; _j < _len1; _j++) {
           style = arr[_j];

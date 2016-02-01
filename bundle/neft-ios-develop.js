@@ -11255,15 +11255,17 @@ var exports = module.exports;
           return result;
         }
         if (!(result & STOP_ASIDE_PROPAGATION)) {
-          _ref = item._children;
-          for (_i = _ref.length - 1; _i >= 0; _i += -1) {
-            child = _ref[_i];
-            result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
-            if (result & STOP_PROPAGATION) {
-              return result;
-            }
-            if (result & STOP_ASIDE_PROPAGATION) {
-              break;
+          if (item._children) {
+            _ref = item._children;
+            for (_i = _ref.length - 1; _i >= 0; _i += -1) {
+              child = _ref[_i];
+              result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
+              if (result & STOP_PROPAGATION) {
+                return result;
+              }
+              if (result & STOP_ASIDE_PROPAGATION) {
+                break;
+              }
             }
           }
           if (item instanceof Scrollable && item._contentItem && !(result & STOP_ASIDE_PROPAGATION)) {
@@ -12177,7 +12179,7 @@ var exports = module.exports;
             funcStr += "if (oldVal === val) return;\n";
             if (implementation != null) {
               if (implementationValue != null) {
-                funcStr += "impl.call(this._ref, implValue(val));\n";
+                funcStr += "impl.call(this._ref, implValue.call(this._ref, val));\n";
               } else {
                 funcStr += "impl.call(this._ref, val);\n";
               }
@@ -12202,7 +12204,7 @@ var exports = module.exports;
             funcStr += "if (oldVal === val) return;\n";
             if (implementation != null) {
               if (implementationValue != null) {
-                funcStr += "impl.call(this, implValue(val));\n";
+                funcStr += "impl.call(this, implValue.call(this, val));\n";
               } else {
                 funcStr += "impl.call(this, val);\n";
               }
@@ -13129,14 +13131,12 @@ var exports = module.exports;
       if (cloneComp.onObjectChange == null) {
         cloneComp.onObjectChange = signal.create();
       }
-      if (component.isDeepClone) {
-        if (clone.id) {
-          cloneComp.setObjectById(clone, clone.id);
-        }
-        cloneComp.initObjects();
-        if (component.objects[clone.id]) {
-          component.setObjectById(clone, clone.id);
-        }
+      if (clone.id) {
+        cloneComp.setObjectById(clone, clone.id);
+      }
+      cloneComp.initObjects();
+      if (component.objects[clone.id]) {
+        component.setObjectById(clone, clone.id);
       }
       return clone;
     };
@@ -16848,6 +16848,7 @@ var exports = module.exports;
         Image.__super__.constructor.call(this);
         this._source = '';
         this._loaded = false;
+        this._resolution = 1;
         this._sourceWidth = 0;
         this._sourceHeight = 0;
         this._fillMode = 'Stretch';
@@ -16923,7 +16924,7 @@ var exports = module.exports;
           return assert.isString(val);
         },
         setter: (function() {
-          var RESOURCE_REQUEST, defaultResult, loadCallback;
+          var RESOURCE_REQUEST, defaultResult, loadCallback, setSize;
           RESOURCE_REQUEST = {
             resolution: 1
           };
@@ -16931,6 +16932,19 @@ var exports = module.exports;
             source: '',
             width: 0,
             height: 0
+          };
+          setSize = function(size) {
+            assert.isFloat(size.width);
+            assert.isFloat(size.height);
+            this.sourceWidth = size.width;
+            this.sourceHeight = size.height;
+            if (this._autoWidth) {
+              itemWidthSetter.call(this, size.width);
+            }
+            if (this._autoHeight) {
+              itemHeightSetter.call(this, size.height);
+            }
+            updateSize.call(this);
           };
           loadCallback = function(err, opts) {
             if (err == null) {
@@ -16940,37 +16954,37 @@ var exports = module.exports;
               log.warn("Can't load '" + this.source + "' image at " + (this.toString()));
             } else {
               assert.isString(opts.source);
-              assert.isFloat(opts.width);
-              assert.isFloat(opts.height);
-              this.sourceWidth = opts.width;
-              this.sourceHeight = opts.height;
-              if (this._autoWidth) {
-                itemWidthSetter.call(this, opts.width);
+              if (this.sourceWidth === 0 || this.sourceHeight === 0) {
+                setSize.call(this, opts);
+              } else {
+                this.resolution = opts.width / this.sourceWidth;
               }
-              if (this._autoHeight) {
-                itemHeightSetter.call(this, opts.height);
-              }
-              updateSize.call(this);
             }
             this._loaded = true;
             this.onLoadedChange.emit(false);
             if (err) {
-              return this.onError.emit(err);
+              this.onError.emit(err);
             } else {
-              return this.onLoad.emit();
+              this.onLoad.emit();
             }
           };
           return function(_super) {
             return function(val) {
-              var _ref;
+              var res, _ref;
               _super.call(this, val);
               if (this._loaded) {
                 this._loaded = false;
                 this.onLoadedChange.emit(true);
               }
+              this.sourceWidth = 0;
+              this.sourceHeight = 0;
+              this.resolution = 1;
               if (val) {
-                RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio;
-                val = ((_ref = Renderer.resources) != null ? _ref.resolve(val, RESOURCE_REQUEST) : void 0) || val;
+                if (res = (_ref = Renderer.resources) != null ? _ref.getResource(val) : void 0) {
+                  RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio;
+                  val = res.resolve(RESOURCE_REQUEST);
+                  setSize.call(this, res);
+                }
                 Impl.setImageSource.call(this, val, loadCallback);
               } else {
                 Impl.setImageSource.call(this, null, null);
@@ -16984,9 +16998,25 @@ var exports = module.exports;
 
       itemUtils.defineProperty({
         constructor: Image,
+        name: 'resolution',
+        defaultValue: 1,
+        setter: function(_super) {
+          return function(val) {
+            _super.call(this, val);
+            Impl.setImageSourceWidth.call(this, this._sourceWidth * val);
+            Impl.setImageSourceHeight.call(this, this._sourceHeight * val);
+          };
+        }
+      });
+
+      itemUtils.defineProperty({
+        constructor: Image,
         name: 'sourceWidth',
         defaultValue: 0,
         implementation: Impl.setImageSourceWidth,
+        implementationValue: function(val) {
+          return val * this._resolution;
+        },
         developmentSetter: function(val) {
           return assert.isFloat(val);
         }
@@ -16997,6 +17027,9 @@ var exports = module.exports;
         name: 'sourceHeight',
         defaultValue: 0,
         implementation: Impl.setImageSourceHeight,
+        implementationValue: function(val) {
+          return val * this._resolution;
+        },
         developmentSetter: function(val) {
           return assert.isFloat(val);
         }
@@ -21273,7 +21306,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.8.26",
+  "version": "0.8.27",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -21436,7 +21469,9 @@ var exports = module.exports;
         var style, _i, _j, _len, _len1;
         for (_i = 0, _len = arr.length; _i < _len; _i++) {
           style = arr[_i];
-          style.render();
+          if (!style.isRendered) {
+            style.render();
+          }
         }
         for (_j = 0, _len1 = arr.length; _j < _len1; _j++) {
           style = arr[_j];
