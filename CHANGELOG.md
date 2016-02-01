@@ -1,5 +1,7 @@
 # Changelog
 
+*Neft is in beta. All stupidness are treated as bugs.*
+
 ## 0.8.27 - Bugs fixes
 ### Renderer
 - [Image::resolution added; retina images sizes now are properly recognized](https://github.com/Neft-io/renderer/commit/8cc24a60aaafa4f22d0db599f5c452410cdfb948)
