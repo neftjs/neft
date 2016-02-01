@@ -28,10 +28,10 @@ module.exports = (impl) ->
 
 		setContentX = (val) ->
 			max = self._impl.contentItem?._width - self._width or 0
-			if val < 0
-				val = 0
 			if val > max
 				val = max
+			if val < 0
+				val = 0
 
 			oldVal = self.contentX
 			if val isnt oldVal
