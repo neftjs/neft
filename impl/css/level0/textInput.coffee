@@ -48,9 +48,6 @@ module.exports = (impl) ->
 				padding = freeSpace
 		data.innerElemStyle.paddingTop = "#{padding}px"
 
-	COLOR_RESOURCE_REQUEST =
-		property: 'color'
-
 	DATA =
 		isMultiLine: false
 		textareaElem: null
@@ -126,7 +123,6 @@ module.exports = (impl) ->
 		return
 
 	setTextInputColor: (val) ->
-		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.innerElemStyle.color = val
 		return
 

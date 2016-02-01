@@ -8,7 +8,7 @@ module.exports = (impl) ->
 
 	cache = Object.create null
 
-	createImage = (src, rsc) ->
+	createImage = (src) ->
 		img = document.createElement 'img'
 		img.src = src
 
@@ -18,8 +18,8 @@ module.exports = (impl) ->
 
 		img.addEventListener 'load', ->
 			obj.status = 'ready'
-			obj.width = rsc?.width or @naturalWidth or @width
-			obj.height = rsc?.height or @naturalHeight or @height
+			obj.width = @naturalWidth or @width
+			obj.height = @naturalHeight or @height
 
 			if obj.width is 0 and obj.height is 0 and ///\.svg$///.test(obj.source)
 				xhr = new XMLHttpRequest
@@ -55,10 +55,10 @@ module.exports = (impl) ->
 		signal.create obj, 'onLoaded'
 		obj
 
-	getImage = (src, rsc) ->
+	getImage = (src) ->
 		if r = cache[src]
 			return r
-		r = createImage(src, rsc)
+		r = createImage src
 		unless /^data:/.test(src)
 			cache[src] = r
 		r
@@ -105,9 +105,6 @@ module.exports = (impl) ->
 
 		return
 
-	ImageResourceRequest =
-		resolution: window.devicePixelRatio or 1
-
 	DATA =
 		innerElem: null
 		callback: null
@@ -134,19 +131,15 @@ module.exports = (impl) ->
 		return
 
 	setStaticImagePixelRatio: (val) ->
-		ImageResourceRequest.resolution = (window.devicePixelRatio or 1) * val
 
 	setImageSource: (val, callback) ->
-		if rsc = impl.Renderer.resources?.getResource(val)
-			val = rsc.resolve val, ImageResourceRequest
-		else
-			val = impl.utils.encodeImageSrc val
+		val = impl.utils.encodeImageSrc val
 
 		data = @_impl
 		data.innerElem.src = val
 		data.source = val
 		data.callback = callback
-		data.image = getImage val, rsc
+		data.image = getImage val
 
 		if data.useCssBackground
 			data.elemStyle.backgroundImage = "url('#{val}')"

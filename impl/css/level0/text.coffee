@@ -213,9 +213,6 @@ module.exports = (impl) ->
 		}
 	"""
 
-	COLOR_RESOURCE_REQUEST =
-		property: 'color'
-
 	CONTAINS_HTML_RE = /<|&#/
 
 	DATA =
@@ -276,16 +273,12 @@ module.exports = (impl) ->
 		return
 
 	setTextColor: (val) ->
-		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
 		@_impl.innerElemStyle.color = val
 		return
 
 	setTextLinkColor: do ->
-		RSC_REQ =
-			property: 'linkColor'
 		uid = 0
 		(val) ->
-			val = impl.Renderer.resources?.resolve(val, RSC_REQ) or val
 			data = @_impl
 			unless data.stylesheet
 				data.stylesheet = document.createElement 'style'
