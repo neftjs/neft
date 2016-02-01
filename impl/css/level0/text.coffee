@@ -14,17 +14,16 @@ module.exports = (impl) ->
 
 	reloadFontFamilyQueue = []
 	isFontReady = false
-	window.addEventListener 'load', ->
-		setTimeout ->
-			isFontReady = true
+	implUtils.onWindowLoad ->
+		isFontReady = true
 
-			while elem = reloadFontFamilyQueue.pop()
-				elem.style.fontFamily = elem.style.fontFamily
+		while elem = reloadFontFamilyQueue.pop()
+			elem.style.fontFamily = elem.style.fontFamily
 
-			styles = document.createElement 'style'
-			styles.innerHTML = SHEET
-			document.body.appendChild styles
-			return
+		styles = document.createElement 'style'
+		styles.innerHTML = SHEET
+		document.body.appendChild styles
+		return
 
 	reloadFontFamily = (family) ->
 		if (@_font and @_font._family is family) or (not @_font and family is 'sans-serif')

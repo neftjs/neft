@@ -26,6 +26,13 @@ exports.transform3dSupported = do ->
 	tmp.style[transformProp] = 'translate3d(1px,1px,0)'
 	tmp.style[transformProp].indexOf('translate3d') isnt -1
 
+exports.onWindowLoad = (callback) ->
+	if document.readyState is 'complete'
+		callback()
+	else
+		window.addEventListener 'load', callback
+	return
+
 exports.rad2deg = (rad) ->
 	rad * 180/Math.PI
 
