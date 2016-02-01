@@ -597,7 +597,7 @@ module.exports = (File, data) -> class Style
 		while tmpIndexNode
 			# by previous sibling
 			while tmpSiblingNode
-				if tmpSiblingNode isnt node and tmpSiblingNode instanceof Tag
+				if tmpSiblingNode isnt node
 					# get sibling item
 					if tmpSiblingNode._documentStyle?.parentSet and (tmpSiblingItem = tmpSiblingNode._documentStyle.item)
 						if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
