@@ -434,7 +434,7 @@ File.parse(*File* file)
 			clone.fragments = @fragments
 
 			if @targetNode
-				targetNode = @node.getCopiedElement @targetNode, clone.node
+				clone.targetNode = @node.getCopiedElement @targetNode, clone.node
 
 			# attrChanges
 			for attrChange in @attrChanges
