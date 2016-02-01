@@ -10,7 +10,7 @@ log = log.scope 'Styles'
 
 module.exports = (File, data) -> class Style
 	{windowStyle, styles, queries} = data
-	{Tag} = File.Element
+	{Tag, Text} = File.Element
 
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
@@ -33,12 +33,13 @@ module.exports = (File, data) -> class Style
 			attrs
 
 		forNode = (file, node, parentStyle) ->
-			if attr = node.getAttr('neft:style')
+			isText = node instanceof Text
+			if isText or (attr = node.getAttr('neft:style'))
 				style = new Style
 				style.file = file
 				style.node = node
 				style.parent = parentStyle
-				style.attrs = getStyleAttrs node
+				style.attrs = not isText and getStyleAttrs node
 
 				if parentStyle
 					parentStyle.children.push style
@@ -47,8 +48,8 @@ module.exports = (File, data) -> class Style
 
 				parentStyle = style
 
-			for child in node.children
-				if child instanceof File.Element.Tag
+			unless isText
+				for child in node.children
 					forNode file, child, parentStyle
 			return
 
@@ -58,6 +59,10 @@ module.exports = (File, data) -> class Style
 			for elem in queries
 				nodes = file.node.queryAll elem.query
 				for node in nodes
+					unless node instanceof Tag
+						log.warn "document.query can be attached only to tags; " +
+							"query '#{elem.query}' has been omitted for this node"
+						continue
 					unless node.hasAttr('neft:style')
 						node.setAttr 'neft:style', elem.style
 
@@ -86,12 +91,11 @@ module.exports = (File, data) -> class Style
 		assert.instanceOf node, File.Element
 
 		style.textWatchingNodes.push node
-		if 'onTextChange' of node
+		node.onVisibleChange textChangeListener, style
+		if node instanceof Text
 			node.onTextChange textChangeListener, style
-		if 'onChildrenChange' of node
+		if node instanceof Tag
 			node.onChildrenChange textChangeListener, style
-		if 'onVisibleChange' of node
-			node.onVisibleChange textChangeListener, style
 
 		if node.children
 			for child in node.children
@@ -323,7 +327,9 @@ module.exports = (File, data) -> class Style
 		{item} = @
 		unless item
 			return
-		if item._$ and 'text' of item._$
+		if @node instanceof Text
+			item
+		else if item._$ and 'text' of item._$
 			item._$
 		else if 'text' of item
 			item
@@ -333,24 +339,46 @@ module.exports = (File, data) -> class Style
 			return
 
 		{node} = @
-		hasStyledChild = @children.length or node.query('[neft:style]')
+		isText = node instanceof Text
 
-		if not hasStyledChild and (anchor = node.query('> a'))
-			node = anchor
-			href = node.getAttr('href')
-			if typeof href is 'string'
-				unless @isLinkUriSet
-					@isLinkUriSet = true
-					@baseLinkUri = @item.linkUri
-				@item.linkUri = href
+		# linkUri
+		anchor = node
+		while anchor = anchor.parent
+			if anchor.style
+				break
+			if anchor.name is 'a'
+				href = anchor.getAttr('href')
+				if typeof href is 'string'
+					unless @isLinkUriSet
+						@isLinkUriSet = true
+						@baseLinkUri = @item.linkUri
+					@item.linkUri = href
+				break
 
+		# text
 		obj = @getTextObject()
-		if obj and not hasStyledChild
-			text = node.stringifyChildren()
+		if obj
+			# break if already has a parent with text
+			hasParentWithText = false
+			parent = node
+			while parent = parent.parent
+				if parent._documentStyle?.isTextSet
+					hasParentWithText = true
+					break
 
-			if text.length > 0 or @isTextSet
-				@isTextSet = true
-				obj.text = text
+			if hasParentWithText
+				if isText
+					@item.visible = false
+			else
+				if isText
+					text = node.text
+					@item.visible = text.length > 0
+				else
+					text = node.stringifyChildren()
+
+				if text.length > 0 or @isTextSet
+					@isTextSet = true
+					obj.text = text
 		return
 
 	getVisibility: ->
@@ -367,7 +395,10 @@ module.exports = (File, data) -> class Style
 		if @waiting
 			return
 
-		visible = @getVisibility()
+		if @node instanceof Text and not @isTextSet
+			visible = false
+		else
+			visible = @getVisibility()
 
 		if visible and not @isRendered and @file.isRendered
 			@render()
@@ -485,16 +516,20 @@ module.exports = (File, data) -> class Style
 
 		assert.notOk @item
 
-		id = @node.getAttr 'neft:style'
-		assert.isString id
+		if @node instanceof Tag
+			id = @node.getAttr 'neft:style'
+			assert.isString id
+			@isScope = ///^(styles|renderer)\:///.test id
+		else if @node instanceof Text
+			id = Renderer.Text.New emptyComponent
+			assert.isNotDefined @item
 
-		@isScope = ///^(styles|renderer)\:///.test id
 		@item = null
 		@scope = null
-		@isAutoParent = false
 
 		if id instanceof Renderer.Item
 			@item = id
+			@isAutoParent = not id.parent
 		else if @isScope
 			@isAutoParent = true
 			if ///^styles\:///.test(id)
@@ -527,6 +562,8 @@ module.exports = (File, data) -> class Style
 					else
 						log.warn "Style file `#{id}` can't be find"
 						return
+		else
+			@isAutoParent = false
 
 		@node.style = @item
 
@@ -622,13 +659,14 @@ module.exports = (File, data) -> class Style
 		clone = new Style
 
 		clone.file = file
-		clone.node = originalFile.node.getCopiedElement @node, file.node
+		node = clone.node = originalFile.node.getCopiedElement @node, file.node
 		clone.attrs = @attrs
 
-		clone.node._documentStyle = clone
+		node._documentStyle = clone
 
-		styleAttr = clone.node._attrs['neft:style']
-		clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
+		if node instanceof Tag
+			styleAttr = node._attrs['neft:style']
+			clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
 
 		# attrs class
 		if @attrs
@@ -646,7 +684,8 @@ module.exports = (File, data) -> class Style
 			return clone
 
 		# changes
-		clone.node.onAttrsChange attrsChangeListener, clone
+		if node instanceof Tag
+			clone.node.onAttrsChange attrsChangeListener, clone
 
 		# set attrs
 		if @attrs
