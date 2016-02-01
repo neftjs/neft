@@ -29,6 +29,7 @@ Neft guarantees the same code across platforms.
 - [Official website](http://www.neft.io/)
 - [Get Started](http://www.neft.io/get-started/index.md)
 - [Documentation](http://www.neft.io/docs/app/index.coffee.md)
+- [Changelog](https://github.com/Neft-io/neft-cli/blob/master/CHANGELOG.md)
 
 ## Installation
 
