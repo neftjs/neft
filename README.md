@@ -3,6 +3,7 @@
 # Neft CLI
 
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Neft-io/neft)
+[![npm version](https://badge.fury.io/js/neft.svg)](https://badge.fury.io/js/neft)
 <a href="https://twitter.com/neft_io"><img src="https://g.twimg.com/about/feature-corporate/image/followbutton.png" alt="Twitter" height="20" /></a>
 
 Neft is an Open Source JavaScript Framework made for server-browser-native applications. Neft.io is easy-to-use, fast and feature-focused.
@@ -11,8 +12,9 @@ Supported platforms: Node, Browsers (HTML5 / WebGL), iOS and Android.
 
 Neft guarantees the same code across platforms.
 
-Best features:
-- Native renderers,
+## Best features
+
+- Native renderers (4 times faster than PhoneGap),
 - Virtual DOM,
 - HTML document extensions,
 - Dynamic styles,
@@ -20,7 +22,7 @@ Best features:
 - Routing,
 - Resources system,
 - Custom native communication,
-- and more …
+- [and more …](http://www.neft.io/docs/app/index.coffee.md)
 
 ## Links
 
