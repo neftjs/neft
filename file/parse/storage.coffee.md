@@ -11,6 +11,7 @@ String Interpolation @learn
 
 	module.exports = (File) ->
 		{Input} = File
+		{Tag, Text} = File.Element
 		InputRE = Input.RE
 
 		(file) ->
@@ -21,8 +22,8 @@ String Interpolation @learn
 
 			forNode = (elem) ->
 				# text
-				text = elem.text
-				if text isnt undefined
+				if elem instanceof Text
+					{text} = elem
 					InputRE.lastIndex = 0
 					if text and InputRE.test(text)
 						if funcBody = Input.parse(text)
@@ -34,8 +35,8 @@ String Interpolation @learn
 							inputs.push input
 
 				# attrs
-				if elem._attrs
-					for name, val of elem._attrs
+				else if elem instanceof Tag
+					for name, val of elem.attrs._data
 						if Input.test(val)
 							if funcBody = Input.parse(val)
 								func = Input.createFunction funcBody
@@ -44,9 +45,11 @@ String Interpolation @learn
 								text = val
 								`//</development>`
 								input = new Input.Attr file, elem, text, funcBody, name
-								elem.setAttr name, null
+								elem.attrs.set name, null
 								inputs.push input
 
-				elem.children?.forEach forNode
+					for child in elem.children
+						forNode child
+				return
 
 			forNode node

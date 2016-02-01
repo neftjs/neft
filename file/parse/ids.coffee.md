@@ -29,7 +29,7 @@ Id must be unique in the scope.
 
 				forEachNodeRec child
 
-				unless id = child.getAttr('id')
+				unless id = child.attrs.get('id')
 					continue
 
 				if ids.hasOwnProperty(id)

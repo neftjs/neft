@@ -93,7 +93,7 @@ byTag.toString = -> 'byTag'
 
 byAttr = (node, data1) ->
 	if node instanceof Tag
-		node._attrs[data1] isnt undefined
+		node.attrs._data[data1] isnt undefined
 	else
 		false
 byAttr.isIterator = false
@@ -101,7 +101,7 @@ byAttr.toString = -> 'byAttr'
 
 byAttrValue = (node, data1, data2) ->
 	if node instanceof Tag
-		`node._attrs[data1] == data2`
+		`node.attrs._data[data1] == data2`
 	else
 		false
 byAttrValue.isIterator = false
@@ -109,7 +109,7 @@ byAttrValue.toString = -> 'byAttrValue'
 
 byAttrStartsWithValue = (node, data1, data2) ->
 	if node instanceof Tag
-		attr = node._attrs[data1]
+		attr = node.attrs._data[data1]
 		if typeof attr is 'string'
 			return attr.indexOf(data2) is 0
 	false
@@ -118,7 +118,7 @@ byAttrStartsWithValue.toString = -> 'byAttrStartsWithValue'
 
 byAttrEndsWithValue = (node, data1, data2) ->
 	if node instanceof Tag
-		attr = node._attrs[data1]
+		attr = node.attrs._data[data1]
 		if typeof attr is 'string'
 			return attr.indexOf(data2, attr.length - data2.length) > -1
 	false
@@ -127,7 +127,7 @@ byAttrEndsWithValue.toString = -> 'byAttrEndsWithValue'
 
 byAttrContainsValue = (node, data1, data2) ->
 	if node instanceof Tag
-		attr = node._attrs[data1]
+		attr = node.attrs._data[data1]
 		if typeof attr is 'string'
 			return attr.indexOf(data2) > -1
 	false

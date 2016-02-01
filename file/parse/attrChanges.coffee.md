@@ -22,10 +22,10 @@ Tag used to dynamically change an attribute of the parent element.
 
 			for node in nodes
 				target = node.parent
-				name = node.getAttr 'name'
+				name = node.attrs.get 'name'
 
-				unless target.hasAttr(name)
-					target.setAttr name, ''
+				unless target.attrs.has(name)
+					target.attrs.set name, ''
 
 				attrChanges.push new AttrChange file, node, target, name
 

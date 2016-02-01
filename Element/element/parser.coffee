@@ -55,7 +55,7 @@ module.exports = (Element) ->
 
 			element = new (extensions[name] or Element.Tag)
 			element.name = name
-			element._attrs = attribs
+			element.attrs._data = attribs
 
 			@_addDomElement element
 			@_tagStack.push element
@@ -114,5 +114,5 @@ module.exports = (Element) ->
 
 		parser.write html
 		parser.end()
-		
+
 		r

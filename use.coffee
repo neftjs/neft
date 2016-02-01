@@ -29,7 +29,7 @@ module.exports = (File) -> class Use
 
 	attrsChangeListener = (name) ->
 		if name is 'neft:fragment'
-			@name = @node.getAttr 'neft:fragment'
+			@name = @node.attrs.get 'neft:fragment'
 
 			if @isRendered
 				@revert()
@@ -56,7 +56,7 @@ module.exports = (File) -> class Use
 		assert.instanceOf file, File
 		assert.instanceOf node, File.Element
 
-		@name = node.getAttr 'neft:fragment'
+		@name = node.attrs.get 'neft:fragment'
 		@usedFragment = null
 		@isRendered = false
 
@@ -88,8 +88,8 @@ module.exports = (File) -> class Use
 		@isRendered = true
 
 		useAsync = utils.isClient
-		useAsync &&= @node.hasAttr 'neft:async'
-		useAsync &&= @node.getAttr('neft:async') isnt false
+		useAsync &&= @node.attrs.has 'neft:async'
+		useAsync &&= @node.attrs.get('neft:async') isnt false
 		if useAsync
 			queue.push this, file
 			unless queuePending

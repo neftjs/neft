@@ -39,7 +39,7 @@ Tag @virtual_dom
 		@_fromJSON = (arr, obj=new Tag) ->
 			Element._fromJSON arr, obj
 			obj.name = arr[JSON_NAME]
-			obj._attrs = arr[JSON_ATTRS]
+			obj.attrs._data = arr[JSON_ATTRS]
 
 			for child in arr[JSON_CHILDREN]
 				Element.fromJSON(child).parent = obj
@@ -54,7 +54,7 @@ Tag @virtual_dom
 
 			@name = 'neft:blank'
 			@children = []
-			@_attrs = {}
+			@attrs = new Attrs @
 
 			`//<development>`
 			if @constructor is Tag
@@ -71,70 +71,17 @@ Tag @virtual_dom
 
 		signal.Emitter.createSignal @, 'onChildrenChange'
 
-## *Signal* Tag::onAttrsChange(*String* name, *Any* oldValue)
+*Attrs* Tag::attrs
+------------------
+
+## *Signal* Tag::onAttrsChange(*String* attribute, *Any* oldValue)
 
 		signal.Emitter.createSignal @, 'onAttrsChange'
-
-*Array* Tag::getAttrByIndex(*Integer* index, [*Array* target])
---------------------------------------------------------------
-
-		getAttrByIndex: (index, target=[]) ->
-			assert.isArray target
-
-			target[0] = target[1] = undefined
-
-			i = 0
-			for key, val of @_attrs
-				if i is index
-					target[0] = key
-					target[1] = val
-					break
-				i++
-
-			target
-
-*Boolean* Tag::hasAttr(*String* name)
--------------------------------------
-
-		hasAttr: (name) ->
-			assert.isString name
-			assert.notLengthOf name, 0
-
-			@_attrs.hasOwnProperty name
-
-*Any* Tag::getAttr(*String* name)
----------------------------------
-
-		getAttr: (name) ->
-			assert.isString name
-			assert.notLengthOf name, 0
-
-			@_attrs[name]
-
-*Boolean* Tag::setAttr(*String* name, *Any* value)
---------------------------------------------------
-
-		setAttr: (name, value) ->
-			assert.isString name
-			assert.notLengthOf name, 0
-
-			# save change
-			old = @_attrs[name]
-			if old is value
-				return false
-
-			@_attrs[name] = value
-
-			# trigger event
-			emitSignal @, 'onAttrsChange', name, old
-			query.checkWatchersDeeply @
-
-			true
 
 		clone: (clone = new Tag) ->
 			super clone
 			clone.name = @name
-			clone._attrs = utils.cloneDeep @_attrs
+			utils.merge clone.attrs._data, @attrs._data
 			clone
 
 *Tag* Tag::cloneDeep()
@@ -260,9 +207,71 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 			super arr
 			arr[JSON_NAME] = @name
 			children = arr[JSON_CHILDREN] = []
-			arr[JSON_ATTRS] = @_attrs
+			arr[JSON_ATTRS] = @attrs._data
 
 			for child in @children
 				children.push child.toJSON()
 
 			arr
+
+*Attrs* Attrs()
+---------------
+
+		class Attrs
+			constructor: (@_ref) ->
+				@_data = {}
+				Object.preventExtensions @
+
+*Array* Attrs::item(*Integer* index, [*Array* target])
+------------------------------------------------------
+
+			item: (index, target=[]) ->
+				assert.isArray target
+
+				target[0] = target[1] = undefined
+
+				i = 0
+				for key, val of @_data
+					if i is index
+						target[0] = key
+						target[1] = val
+						break
+					i++
+
+				target
+
+*Boolean* Attrs::has(*String* name)
+-----------------------------------
+
+			has: (name) ->
+				assert.isString name
+				assert.notLengthOf name, 0
+
+				@_data.hasOwnProperty name
+
+*Any* Attrs::get(*String* name)
+-------------------------------
+
+			get: (name) ->
+				assert.isString name
+				assert.notLengthOf name, 0
+
+				@_data[name]
+
+*Any* Attrs::set(*String* name, *Any* value)
+--------------------------------------------
+
+			set: (name, value) ->
+				assert.isString name
+				assert.notLengthOf name, 0
+
+				# save change
+				old = @_data[name]
+				if old isnt value
+					@_data[name] = value
+
+					# trigger event
+					emitSignal @_ref, 'onAttrsChange', name, old
+					query.checkWatchersDeeply @_ref
+
+				value

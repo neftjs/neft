@@ -110,34 +110,34 @@ describe 'View Element', ->
 
 	describe 'attrs', ->
 		it 'are filled properly', ->
-			assert.isEqual doc.getAttrByIndex(0), [undefined, undefined]
-			assert.isEqual div.getAttrByIndex(0), [undefined, undefined]
-			assert.isEqual p.getAttrByIndex(0), ['title', 'textTitle']
-			assert.isEqual p.getAttrByIndex(1), ['class', 'a bb c2']
-			assert.isEqual p.getAttrByIndex(2), ['data-custom', 'customValue']
+			assert.isEqual doc.attrs.item(0), [undefined, undefined]
+			assert.isEqual div.attrs.item(0), [undefined, undefined]
+			assert.isEqual p.attrs.item(0), ['title', 'textTitle']
+			assert.isEqual p.attrs.item(1), ['class', 'a bb c2']
+			assert.isEqual p.attrs.item(2), ['data-custom', 'customValue']
 
-			assert.is p.getAttr('title'), 'textTitle'
+			assert.is p.attrs.get('title'), 'textTitle'
 
 		it 'can be changed', ->
 			elem = p.clone()
 
-			assert.is elem.getAttr('title'), 'textTitle'
+			assert.is elem.attrs.get('title'), 'textTitle'
 
 			# change
-			elem.setAttr 'title', 'changed value'
-			assert.is elem.getAttr('title'), 'changed value'
+			elem.attrs.set 'title', 'changed value'
+			assert.is elem.attrs.get('title'), 'changed value'
 
 		it 'can store references to the objects', ->
 			elem = p.clone()
-			title = elem.getAttr 'title'
+			title = elem.attrs.get 'title'
 			obj = a: 1
 
 			# change
-			elem.setAttr 'title', obj
-			assert.is elem.getAttr('title'), obj
+			elem.attrs.set 'title', obj
+			assert.is elem.attrs.get('title'), obj
 			assert.is elem.stringify(), '<p title="[object Object]" class="a bb c2" data-custom="customValue"></p>'
 
-			elem.setAttr 'title', title
+			elem.attrs.set 'title', title
 
 	describe 'index property', ->
 		it 'returns child index in the parent', ->
@@ -348,10 +348,10 @@ describe 'View Element', ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.setAttr 'attr2', '2'
+				doc2u.attrs.set 'attr2', '2'
 				whenChange tags, ->
 					assert.isEqual tags, [doc2u], maxDeep: 1
-					doc2u.setAttr 'attr2', undefined
+					doc2u.attrs.set 'attr2', undefined
 					whenChange tags, ->
 						assert.isEqual tags, []
 						done()
@@ -362,10 +362,10 @@ describe 'View Element', ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.setAttr 'attr', '2'
+				doc2u.attrs.set 'attr', '2'
 				whenChange tags, ->
 					assert.isEqual tags, [doc2u], maxDeep: 1
-					doc2u.setAttr 'attr', '1'
+					doc2u.attrs.set 'attr', '1'
 					whenChange tags, ->
 						assert.isEqual tags, []
 						done()
@@ -376,10 +376,10 @@ describe 'View Element', ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.setAttr 'color', 'red'
+				doc2u.attrs.set 'color', 'red'
 				whenChange tags, ->
 					assert.isEqual tags, [doc2u], maxDeep: 1
-					doc2u.setAttr 'color', 'blue'
+					doc2u.attrs.set 'color', 'blue'
 					whenChange tags, ->
 						assert.isEqual tags, []
 						done()
@@ -390,10 +390,10 @@ describe 'View Element', ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.setAttr 'color', 'red'
+				doc2u.attrs.set 'color', 'red'
 				whenChange tags, ->
 					assert.isEqual tags, [doc2u], maxDeep: 1
-					doc2u.setAttr 'color', 'blue'
+					doc2u.attrs.set 'color', 'blue'
 					whenChange tags, ->
 						assert.isEqual tags, []
 						done()
@@ -404,10 +404,10 @@ describe 'View Element', ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.setAttr 'color', 'orange'
+				doc2u.attrs.set 'color', 'orange'
 				whenChange tags, ->
 					assert.isEqual tags, [doc2u], maxDeep: 1
-					doc2u.setAttr 'color', 'blue'
+					doc2u.attrs.set 'color', 'blue'
 					whenChange tags, ->
 						assert.isEqual tags, []
 						done()
@@ -435,10 +435,10 @@ describe 'View Element', ->
 					tags.push tag
 				watcher.onRemove (tag) ->
 					utils.remove tags, tag
-				doc2u.setAttr 'attr2', '2'
+				doc2u.attrs.set 'attr2', '2'
 				whenChange tags, ->
 					assert.isEqual tags, [doc2u], maxDeep: 1
-					doc2u.setAttr 'attr2', undefined
+					doc2u.attrs.set 'attr2', undefined
 					whenChange tags, ->
 						assert.isEqual tags, []
 						done()
@@ -486,7 +486,7 @@ describe 'View Element', ->
 				doc2u.parent = doc2b
 				whenChange tags, ->
 					assert.isEqual tags, [doc2u], maxDeep: 1
-					doc2u.setAttr 'color', undefined
+					doc2u.attrs.set 'color', undefined
 					whenChange tags, ->
 						assert.isEqual tags, []
 						done()
@@ -518,10 +518,10 @@ describe 'View Element', ->
 			tag = elem.children[0]
 
 			tag.onAttrsChange (name, oldVal) ->
-				value = @getAttr name
+				value = @attrs.get name
 				args = [@, arguments...]
 
-			tag.setAttr 'a', 2
+			tag.attrs.set 'a', 2
 
 			assert.isEqual args, [tag, 'a', '1'], maxDeep: 1
 			assert.is value, 2

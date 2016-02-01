@@ -460,7 +460,7 @@ File.parse(*File* file)
 			for attrNode, i in attrsToParse by 2
 				attrNode = @node.getCopiedElement attrNode, clone.node
 				attrName = attrsToParse[i+1]
-				attrNode.setAttr attrName, parseAttr(attrNode.getAttr(attrName))
+				attrNode.attrs.set attrName, parseAttr(attrNode.attrs.get(attrName))
 
 			# attrChanges
 			for attrChange in @attrChanges

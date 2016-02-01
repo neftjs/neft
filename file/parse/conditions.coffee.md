@@ -23,9 +23,9 @@ Attribute used to hide or show the tag depends on the condition result.
 
 					forEachNodeRec child
 
-					if child.hasAttr('neft:if')
+					if child.attrs.has('neft:if')
 						elseNode = null
-						if child.nextSibling?.hasAttr?('neft:else')
+						if child.nextSibling?.attrs.has?('neft:else')
 							elseNode = child.nextSibling
 
 						conditions.push new File.Condition file, child, elseNode

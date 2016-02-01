@@ -47,7 +47,7 @@ module.exports = (File, Input) -> class InputAttr extends Input
 		str = @handlerFunc or @toString()
 		if str isnt @lastValue
 			@lastValue = str
-			@node.setAttr @attrName, str
+			@node.attrs.set @attrName, str
 		return
 
 	createHandlerFunc = (input) ->

@@ -38,7 +38,7 @@ Use [List][list/List] to bind changes made in the array.
 		createdFragments = []
 
 		forNode = (elem) ->
-			unless attrVal = elem.getAttr("neft:each")
+			unless attrVal = elem.attrs.get("neft:each")
 				for child in elem.children
 					if child instanceof File.Element.Tag
 						forNode child

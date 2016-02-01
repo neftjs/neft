@@ -39,12 +39,12 @@ String `List(...` evaluates to the [List][list/List].
 		{attrsToParse} = file
 
 		forNode = (elem) ->
-			for name, val of elem._attrs
+			for name, val of elem.attrs._data
 				jsVal = evalFunc val, Dict, List
 				if utils.isObject(jsVal)
 					attrsToParse.push elem, name
 				else if jsVal isnt undefined
-					elem.setAttr name, jsVal
+					elem.attrs.set name, jsVal
 
 			for child in elem.children
 				if child instanceof Tag

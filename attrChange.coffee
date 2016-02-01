@@ -33,7 +33,7 @@ module.exports = (File) -> class AttrChange
 		assert.isString name
 		assert.notLengthOf name, 0
 
-		@_defaultValue = target.getAttr name
+		@_defaultValue = target.attrs.get name
 
 		@update()
 		node.onVisibleChange onVisibleChange, @
@@ -45,8 +45,8 @@ module.exports = (File) -> class AttrChange
 		`//</development>`
 
 	update: ->
-		val = if @node.visible then @node.getAttr('value') else @_defaultValue
-		@target.setAttr @name, val
+		val = if @node.visible then @node.attrs.get('value') else @_defaultValue
+		@target.attrs.set @name, val
 		return
 
 	onVisibleChange = ->

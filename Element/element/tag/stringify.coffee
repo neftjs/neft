@@ -50,7 +50,7 @@ getOuterHTML = (elem, replacements) ->
 		return getInnerHTML elem, replacements
 
 	ret = "<" + name
-	for attrName, attrValue of elem._attrs
+	for attrName, attrValue of elem.attrs._data
 		if not attrValue? or not isPublic(attrName)
 			continue
 

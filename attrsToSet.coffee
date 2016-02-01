@@ -28,7 +28,7 @@ module.exports = (File) -> class AttrsToSet
 
 		# set current attributes
 		for attr of @attrs
-			if node._attrs[attr]?
+			if node.attrs._data[attr]?
 				this.setAttribute attr, null
 
 		# listen on changes
@@ -43,7 +43,7 @@ module.exports = (File) -> class AttrsToSet
 		unless @attrs[attr]
 			return
 
-		val = @node._attrs[attr]
+		val = @node.attrs._data[attr]
 		if typeof @node[attr] is 'function' and @node[attr].connect
 			if typeof oldValue is 'function'
 				@node[attr].disconnect oldValue

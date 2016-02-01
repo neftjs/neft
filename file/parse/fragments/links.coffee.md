@@ -37,10 +37,10 @@ Optional argument `as` will link all fragments into the specified namespace.
 			if node.name isnt "#{File.HTML_NS}:require"
 				continue
 
-			href = node.getAttr 'href'
+			href = node.attrs.get 'href'
 			unless href then continue
 
-			namespace = node.getAttr 'as'
+			namespace = node.attrs.get 'as'
 
 			# get view
 			path = href

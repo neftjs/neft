@@ -11,6 +11,7 @@ log = log.scope 'View', 'Input'
 
 module.exports = (File) -> class Input
 	{Element} = File
+	{Tag} = Element
 
 	@__name__ = 'Input'
 	@__path__ = 'File.Input'
@@ -49,7 +50,7 @@ module.exports = (File) -> class Input
 	@getVal = do ->
 		getFromElement = (elem, prop) ->
 			if elem instanceof Element
-				elem._attrs[prop]
+				elem.attrs._data[prop]
 
 		getFromObject = (obj, prop) ->
 			if obj instanceof Dict
@@ -306,7 +307,7 @@ module.exports = (File) -> class Input
 
 	render: ->
 		for storage in Input.getStoragesArray @file
-			if storage instanceof Element
+			if storage instanceof Tag
 				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
 				@trace storage
@@ -315,7 +316,7 @@ module.exports = (File) -> class Input
 
 	revert: ->
 		for storage in Input.getStoragesArray @file
-			if storage instanceof Element
+			if storage instanceof Tag
 				storage.onAttrsChange.disconnect onChange, @
 
 		revertTraces.call @

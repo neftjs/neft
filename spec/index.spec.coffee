@@ -134,7 +134,7 @@ describe 'View', ->
 		renderParse view
 		expect(view.node.stringify()).toBe ''
 
-		elem.setAttr 'x', 1
+		elem.attrs.set 'x', 1
 		expect(view.node.stringify()).toBe '<b></b>'
 
 	it 'reverted view is identical as before render', ->
@@ -161,7 +161,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		expect(elem.getAttr 'data').toEqual data
+		expect(elem.attrs.get 'data').toEqual data
 
 	it 'parses array in attrs into Array instance', ->
 
@@ -170,7 +170,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		expect(elem.getAttr 'data').toEqual data
+		expect(elem.attrs.get 'data').toEqual data
 
 	it 'parses dict in attrs into Dict instance', ->
 
@@ -179,7 +179,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		attrValue = elem.getAttr 'data'
+		attrValue = elem.attrs.get 'data'
 		expect(attrValue).toEqual jasmine.any Dict
 		expect(attrValue.items()).toEqual data.items()
 
@@ -190,7 +190,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		attrValue = elem.getAttr 'data'
+		attrValue = elem.attrs.get 'data'
 		expect(attrValue).toEqual jasmine.any List
 		expect(attrValue.items()).toEqual data.items()
 
@@ -226,12 +226,12 @@ describe 'View Storage', ->
 			elem = view.node.children[0]
 
 			renderParse view
-			elem.setAttr 'x', 1
+			elem.attrs.set 'x', 1
 			waits 4
 			runs ->
 				expect(view.node.stringify()).toBe '1'
 				view.revert()
-				expect(elem.getAttr('x')).toBe '2'
+				expect(elem.attrs.get('x')).toBe '2'
 
 		it 'on storage', ->
 
@@ -327,7 +327,7 @@ describe 'View Condition', ->
 			elem = view.node.children[0]
 
 			renderParse view
-			elem.setAttr 'x', 2
+			elem.attrs.set 'x', 2
 			waits 4
 			runs ->
 				expect(view.node.stringify()).toBe '<b>OK</b>'
