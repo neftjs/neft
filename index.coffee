@@ -57,7 +57,11 @@ module.exports = (opts, callback) ->
 				namespaces.push 'log'
 
 			bundle = bundle.replace ///\/\/<(\/)?development>;///g, '//<$1development>'
-			bundle = bundle.replace ///assert, |, assert///g, ''
+			bundle = bundle.replace /, assert,;/g, ', '
+			bundle = bundle.replace /\ assert, |, assert;/g, ' '
+			if opts.removeLogs
+				bundle = bundle.replace /, log,;/g, ', '
+				bundle = bundle.replace /\ log, |, log;/g, ' '
 			cleaner = groundskeeper
 				console: true
 				namespace: namespaces
