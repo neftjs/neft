@@ -2,6 +2,21 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
+## 0.9.1 - Bugs fixes
+### Renderer
+- [CSS Scrollable minus contentX bug fixed](https://github.com/Neft-io/renderer/commit/2e6c374d6d074f54e6afb48d0bad23a6afd2babe)
+- [Default Text and TextInput font weight fixed](https://github.com/Neft-io/renderer/commit/390bb20f44544eb586b30d5d2a44f65ac08f52ff)
+
+### Document:
+- [File clearing improved: texts now are properly trimmed](https://github.com/Neft-io/document/commit/9f1190e5d17892cc2c252b2cbfc9caaa0d15d55e)
+- ['neft:target' rendering bug fixed](https://github.com/Neft-io/document/commit/c80e7225c29b1e1a321010d29d2129ece9eb0447)
+- [Parsed attrs now are properly stringified and cloning](https://github.com/Neft-io/document/commit/4b0a32c27b16b7ad30791d17a05b1d130d6e8e99)
+- [Tag::*Attr changed to Tag::attrs::*](https://github.com/Neft-io/document/commit/e456a28f4f08903301286a5b406a5c9fb04fc332)
+
+### Styles:
+- [Finding indexes for Text elements fixed](https://github.com/Neft-io/styles/commit/3de5b28b231879e23752222c6979fc1dc05102d7)
+- [Text element visible synchronization fixed](https://github.com/Neft-io/styles/commit/4666a8305960940bb1e768695867799f93609ebd)
+
 ## 0.9.0 - New features
 ### Styles
 - [Text elements now are rendered as Text items](https://github.com/Neft-io/styles/commit/573da994f915ceaafed8244ec939475ec3efa5af)
