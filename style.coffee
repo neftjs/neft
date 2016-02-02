@@ -360,17 +360,18 @@ module.exports = (File, data) -> class Style
 		obj = @getTextObject()
 		if obj
 			# break if already has a parent with text
-			hasParentWithText = false
+			shouldSetText = true
 			parent = node
 			while parent = parent.parent
 				if parent._documentStyle?.isTextSet
-					hasParentWithText = true
+					shouldSetText = false
 					break
 
-			if hasParentWithText
-				if isText
-					@item.visible = false
-			else
+			# break if has a styles children
+			if shouldSetText and node instanceof Tag and node.query('[neft:style]')
+				shouldSetText = false
+
+			if shouldSetText
 				if isText
 					text = node.text
 					@item.visible = text.length > 0
@@ -380,6 +381,9 @@ module.exports = (File, data) -> class Style
 				if text.length > 0 or @isTextSet
 					@isTextSet = true
 					obj.text = text
+			else
+				if isText
+					@item.visible = false
 		return
 
 	getVisibility: ->
