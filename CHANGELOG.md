@@ -2,6 +2,16 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
+## 0.9.2 - Bugs fixes
+### Bundle builder
+- ['release' mode bug with removing vars declarations fixed](https://github.com/Neft-io/bundle-builder/commit/beb90f970a8373e2cb4e6630dbece9fec275acd8)
+
+### Renderer
+- [Bug with trying to watch text elements fixed](https://github.com/Neft-io/renderer/commit/a58191573d00f1c2a1dd879b471fd9259f0b223a)
+
+### Styles
+- [Text now are not set if tag contains styled children](https://github.com/Neft-io/styles/commit/2005a5c698333a51c21f8828c108d9ca4c2344f4)
+
 ## 0.9.1 - Bugs fixes
 ### Renderer
 - [CSS Scrollable minus contentX bug fixed](https://github.com/Neft-io/renderer/commit/2e6c374d6d074f54e6afb48d0bad23a6afd2babe)

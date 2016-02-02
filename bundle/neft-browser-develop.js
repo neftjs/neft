@@ -5102,16 +5102,14 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/attrChange.coffee'] = (function(){
 var module = {exports: modules["../document/attrChange.coffee"]};
-var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, log, utils;
+  var assert, log;
 
   assert = require('assert');
-
-  utils = require('utils');
 
   log = require('log');
 
@@ -14166,7 +14164,7 @@ var exports = module.exports;
           classElem.target = null;
           this._classesPool.push(classElem);
         }
-        if ((query = this._query) && (target = this._ref.target) && (node = target.document.node)) {
+        if ((query = this._query) && (target = this._ref.target) && (node = target.document.node) && node.watch) {
           watcher = this._nodeWatcher = node.watch(query);
           watcher.onAdd(onNodeAdd, this);
           watcher.onRemove(onNodeRemove, this);
@@ -21903,7 +21901,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -22769,7 +22767,7 @@ var exports = module.exports;
       };
 
       Style.prototype.updateText = function() {
-        var anchor, hasParentWithText, href, isText, node, obj, parent, text, _ref;
+        var anchor, href, isText, node, obj, parent, shouldSetText, text, _ref;
         if (this.waiting) {
           return;
         }
@@ -22794,19 +22792,18 @@ var exports = module.exports;
         }
         obj = this.getTextObject();
         if (obj) {
-          hasParentWithText = false;
+          shouldSetText = true;
           parent = node;
           while (parent = parent.parent) {
             if ((_ref = parent._documentStyle) != null ? _ref.isTextSet : void 0) {
-              hasParentWithText = true;
+              shouldSetText = false;
               break;
             }
           }
-          if (hasParentWithText) {
-            if (isText) {
-              this.item.visible = false;
-            }
-          } else {
+          if (shouldSetText && node instanceof Tag && node.query('[neft:style]')) {
+            shouldSetText = false;
+          }
+          if (shouldSetText) {
             if (isText) {
               text = node.text;
               this.item.visible = text.length > 0;
@@ -22816,6 +22813,10 @@ var exports = module.exports;
             if (text.length > 0 || this.isTextSet) {
               this.isTextSet = true;
               obj.text = text;
+            }
+          } else {
+            if (isText) {
+              this.item.visible = false;
             }
           }
         }
