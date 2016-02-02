@@ -829,7 +829,7 @@ Mostly used with bindings.
 					@_classesPool.push classElem
 
 				# add new ones
-				if (query = @_query) and (target = @_ref.target) and (node = target.document.node)
+				if (query = @_query) and (target = @_ref.target) and (node = target.document.node) and node.watch
 					watcher = @_nodeWatcher = node.watch query
 					watcher.onAdd onNodeAdd, @
 					watcher.onRemove onNodeRemove, @
