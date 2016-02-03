@@ -123,6 +123,7 @@ module.exports = (File, data) -> class Style
 		@parent = null
 		@isScope = false
 		@isAutoParent = true
+		@enabled = true
 		@item = null
 		@scope = null
 		@children = []
@@ -221,7 +222,7 @@ module.exports = (File, data) -> class Style
 			return
 
 	render: ->
-		if @waiting
+		if @waiting or not @enabled
 			return
 
 		assert.notOk @isRendered
@@ -248,7 +249,7 @@ module.exports = (File, data) -> class Style
 		return
 
 	renderItem: ->
-		if not @item or not @file.isRendered
+		if not @item or not @file.isRendered or not @enabled
 			return
 
 		@item.visible = true
@@ -549,6 +550,7 @@ module.exports = (File, data) -> class Style
 							unless parent.scope
 								# parent is not ready yet
 								return
+							scopeParent = parent
 							@item = parent.scope.objects[subid]
 						else if not parent?.scope and file is 'view'
 							@item = windowStyle.objects[subid]
@@ -558,6 +560,13 @@ module.exports = (File, data) -> class Style
 					unless @item
 						log.warn "Can't find `#{id}` style item"
 						return
+
+					# disable parent's with no possibility to properly synchronize
+					if scopeParent
+						parent = @
+						while (parent = parent.parent) isnt scopeParent
+							if parent.isAutoParent
+								parent.enabled = false
 
 					@isAutoParent = !@item.parent
 				else
