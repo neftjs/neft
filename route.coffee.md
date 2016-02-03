@@ -181,7 +181,6 @@ Acceptable syntaxes:
 					route.response.status = 500
 				if route._dataPrepared and route.error is err
 					return false
-				console.error err
 				route.error = err
 			else
 				if route._dataPrepared and route.data is data
