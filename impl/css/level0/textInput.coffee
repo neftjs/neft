@@ -144,7 +144,10 @@ module.exports = (impl) ->
 		switch val
 			when 'normal'
 				data.elem.removeChild data.innerElem
-				implUtils.prependElement data.elem, data.textareaElem
+				if @_background
+					implUtils.insertAfter data.innerElem, @_background._impl.elem
+				else
+					implUtils.prependElement data.elem, data.textareaElem
 				data.textareaElem.setAttribute 'style', data.innerElem.getAttribute('style')
 				data.innerElem = data.textareaElem
 				data.innerElemStyle = data.textareaElem.style
@@ -153,7 +156,10 @@ module.exports = (impl) ->
 				input.setAttribute 'type', 'password'
 				input.setAttribute 'style', data.innerElem.getAttribute('style')
 				data.elem.removeChild data.innerElem
-				implUtils.prependElement data.elem, input
+				if @_background
+					implUtils.insertAfter input, @_background._impl.elem
+				else
+					implUtils.prependElement data.elem, input
 				data.innerElem = input
 				data.innerElemStyle = input.style
 				input.addEventListener 'input', ->
