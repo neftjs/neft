@@ -37,18 +37,15 @@ Document @extension
 			return
 
 		onPropertyChange = (prop, oldVal) ->
-			if @_updatingProperty is prop or not (node = @_node) or not node.attrs.has(prop)
+			if @_updatingProperty is prop or not (node = @_node)
 				return
-			if oldVal is undefined
-				setProperty.call @, @_ref._$, prop, node.attrs.get(prop), oldVal
-			else
-				node.attrs.set prop, @_ref._$[prop]
+			node.attrs.set prop, @_ref._$[prop]
 			return
 
 		onNodeAttrsChange = (attr, oldVal) ->
 			unless props = @_ref._$
 				return
-			if attr of props
+			if props.hasOwnProperty(attr)
 				setProperty.call @, props, attr, @_node.attrs.get(attr), oldVal
 			return
 
