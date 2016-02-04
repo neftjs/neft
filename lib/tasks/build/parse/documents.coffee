@@ -31,9 +31,14 @@ module.exports = (platform, app, callback) ->
 	Document.onError onErrorListener = (name) ->
 		parseFile name, "./views/#{name}.html"
 
+	Document.onBeforeParse onBeforeParseListener = (file) ->
+		if platform isnt 'node'
+			Document.Style.applyStyleQueriesInDocument file
+		return
+
 	Document.onParse onParseListener = (file) ->
 		if platform isnt 'node'
-			Document.Style.extendDocumentByStyles file
+			Document.Style.createStylesInDocument file
 		return
 
 	parseFile = (name, path) ->
@@ -64,6 +69,7 @@ module.exports = (platform, app, callback) ->
 				path: "#{OUT_DIR}/#{name}.json"
 
 		Document.onError.disconnect onErrorListener
+		Document.onBeforeParse.disconnect onBeforeParseListener
 		Document.onParse.disconnect onParseListener
 
 		log.end logtime
