@@ -24,7 +24,22 @@ module.exports = (File, data) -> class Style
 	JSON_CHILDREN = i++
 	JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-	@extendDocumentByStyles = do ->
+	@applyStyleQueriesInDocument = (file) ->
+		assert.instanceOf file, File
+
+		for elem in queries
+			nodes = file.node.queryAll elem.query
+			for node in nodes
+				unless node instanceof Tag
+					log.warn "document.query can be attached only to tags; " +
+						"query '#{elem.query}' has been omitted for this node"
+					continue
+				unless node.attrs.has('neft:style')
+					node.attrs.set 'neft:style', elem.style
+
+		file
+
+	@createStylesInDocument = do ->
 		getStyleAttrs = (node) ->
 			attrs = null
 			for attr of node.attrs._data
@@ -56,20 +71,16 @@ module.exports = (File, data) -> class Style
 
 		(file) ->
 			assert.instanceOf file, File
-
-			for elem in queries
-				nodes = file.node.queryAll elem.query
-				for node in nodes
-					unless node instanceof Tag
-						log.warn "document.query can be attached only to tags; " +
-							"query '#{elem.query}' has been omitted for this node"
-						continue
-					unless node.attrs.has('neft:style')
-						node.attrs.set 'neft:style', elem.style
-
 			forNode file, file.node, null
-
 			file
+
+	@extendDocumentByStyles = (file) ->
+		assert.instanceOf file, File
+
+		Style.applyStyleQueriesInDocument file
+		Style.createStylesInDocument file
+
+		file
 
 	@_fromJSON = (file, arr, obj) ->
 		unless obj
