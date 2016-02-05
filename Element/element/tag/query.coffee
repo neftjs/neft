@@ -145,6 +145,13 @@ ENDS_WITH = /\$$/
 CONTAINS = /\*$/
 TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/
 
+ATTR_VALUES =
+	__proto__: null
+	'true': true
+	'false': false
+	'null': null
+	'undefined': undefined
+
 i = 0
 OPTS_QUERY_BY_PARENTS = 1<<(i++)
 OPTS_REVERSED = 1<<(i++)
@@ -181,7 +188,10 @@ getQueries = (selector, opts=0) ->
 		else if exec = ATTR_VALUE_SEARCH.exec(sel)
 			sel = sel.slice exec[0].length
 			[_, name, val] = exec
-			val = TRIM_ATTR_VALUE.exec(val)[1]
+			if val of ATTR_VALUES
+				val = ATTR_VALUES[val]
+			else
+				val = TRIM_ATTR_VALUE.exec(val)[1]
 
 			if STARTS_WITH.test(name)
 				func = byAttrStartsWithValue
