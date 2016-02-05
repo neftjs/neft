@@ -45,7 +45,7 @@ Document @extension
 		onNodeAttrsChange = (attr, oldVal) ->
 			unless props = @_ref._$
 				return
-			if props.hasOwnProperty(attr)
+			if attr of props
 				setProperty.call @, props, attr, @_node.attrs.get(attr), oldVal
 			return
 
