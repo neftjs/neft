@@ -297,10 +297,14 @@ By default, client has *clientId* and *sessionId* hashes.
 			for ext in opts.extensions
 				ext app: app
 
+		# exports app classes
+		exports.app =
+			Route: app.Route
+
 		app
 
 	# link modules
-	MODULES = ['utils', 'signal', 'dict', 'list', 'log', 'Resources', 'native',
+	MODULES = ['utils', 'signal', 'Dict', 'List', 'log', 'Resources', 'native',
 	           'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db']
 	for name in MODULES
 		exports[name] = exports[name.toLowerCase()] = require name.toLowerCase()
