@@ -438,12 +438,13 @@ module.exports = (Element, _Tag) ->
 			return
 
 		(node) ->
+			node._checkWatchers = CHECK_WATCHERS_THIS
 			tmp = node
-			node._checkWatchers |= CHECK_WATCHERS_THIS
-			while tmp = tmp._parent
+			while tmp
 				if tmp._checkWatchers & CHECK_WATCHERS_CHILDREN
 					break
 				tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN
+				tmp = tmp._parent
 
 			unless pending
 				setImmediate updateWatchers
