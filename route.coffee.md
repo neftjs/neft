@@ -192,6 +192,9 @@ Acceptable syntaxes:
 			assert.instanceOf route, Route
 			{response} = route
 
+			if route.error
+				log.error "Error in route '#{route.uri}':\n#{route.error}"
+
 			respData = response.data
 			switch route.request.type
 				when 'text'
