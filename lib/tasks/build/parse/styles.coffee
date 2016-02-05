@@ -34,6 +34,10 @@ module.exports = (platform, app, callback) ->
 		if /^neft\-styles\-/.test(key)
 			inputDirs.push path: "node_modules/#{key}", prefix: "#{key}/"
 
+	if utils.isObject(packageConfig.styles)
+		for key, val of packageConfig.styles
+			inputDirs.push path: val, prefix: "#{key}/"
+
 	for dir, i in inputDirs then do (dir) ->
 		if dir.prefix
 			inputDirPriorities[dir.prefix] = i
