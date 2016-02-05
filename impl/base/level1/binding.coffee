@@ -173,7 +173,8 @@ module.exports = (impl) ->
 			assert.isArray binding[1]
 
 			item = @item = obj._ref or obj
-			component.onObjectChange? onComponentObjectChange, @
+			if @listensOnComponentObjectChange = component.onObjectChange?
+				component.onObjectChange onComponentObjectChange, @
 
 			# properties
 			@func = binding[0]
@@ -190,7 +191,7 @@ module.exports = (impl) ->
 			@updatePending = false
 			@updateLoop = 0
 			`//</development>`
-			Object.preventExtensions @
+			Object.seal @
 
 			@update()
 
@@ -248,7 +249,8 @@ module.exports = (impl) ->
 			# clear props
 			@args = null
 			utils.clear @connections
-			@component.onObjectChange?.disconnect onComponentObjectChange, @
+			if @listensOnComponentObjectChange
+				@component.onObjectChange.disconnect onComponentObjectChange, @
 
 			pool.push @
 			return
