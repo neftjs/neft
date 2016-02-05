@@ -264,7 +264,7 @@ module.exports = ->
 		if onlyLocal
 			if ///^\.\.(?:\/|\\)|^node_modules(?:\/|\\)///.test(modulePath) or not ///\.[a-zA-Z0-9]+$///.test(modulePath)
 				name = ///^\.\.(?:\/|\\)([a-z_\-A-Z]+)///.exec(modulePath)?[1]
-				if allowedRemoteModules.indexOf(name) is -1 and not /^neft\-/.test(req)
+				if allowedRemoteModules.indexOf(name) is -1 and not /^neft\-document\-/.test(req)
 					return r
 
 		modules.push modulePath unless ~modules.indexOf modulePath
