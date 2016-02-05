@@ -446,7 +446,7 @@ module.exports = (File, data) -> class Style
 		(attr, val, oldVal) ->
 			assert.instanceOf @, Style
 
-			if @waiting or not @item
+			if @waiting or not @isRendered or not @item
 				@attrsQueue.push attr, val, oldVal
 				return
 
@@ -487,17 +487,17 @@ module.exports = (File, data) -> class Style
 		newClasses = val and val.split(' ')
 
 		# check removed values
-		if oldVal and typeof oldVal is 'string'
+		if typeof oldVal is 'string' and oldVal isnt ''
 			oldClasses = oldVal.split ' '
-			for name in oldClasses
+			for name in oldClasses when name isnt ''
 				if not newClasses or not utils.has(newClasses, name)
 					classes.remove name
 
 		# add new classes
-		if val and typeof val is 'string'
+		if typeof val is 'string' and val isnt ''
 			newClasses = val.split ' '
 			prevIndex = -1
-			for name, i in newClasses
+			for name, i in newClasses when name isnt ''
 				index = classes.index name
 				if prevIndex is -1 and index is -1
 					index = classes.length
@@ -674,7 +674,7 @@ module.exports = (File, data) -> class Style
 		return
 
 	findItemIndex: ->
-		if @parentSet
+		if @parentSet or not @isAutoParent
 			findItemIndex.call @, @node, @item, @item.parent
 			true
 		else
