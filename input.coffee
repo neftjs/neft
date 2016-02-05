@@ -310,7 +310,7 @@ module.exports = (File) -> class Input
 			if storage instanceof Tag
 				storage.onAttrsChange onChange, @
 			else if storage instanceof Dict
-				@trace storage
+				storage.onChange onChange, @
 
 		@update()
 
@@ -318,6 +318,8 @@ module.exports = (File) -> class Input
 		for storage in Input.getStoragesArray @file
 			if storage instanceof Tag
 				storage.onAttrsChange.disconnect onChange, @
+			else if storage instanceof Dict
+				storage.onChange.disconnect onChange, @
 
 		revertTraces.call @
 		return
