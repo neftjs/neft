@@ -227,8 +227,10 @@ module.exports = ->
 		module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
 
 	if opts.neftFilePath
-		Neft = require opts.neftFilePath
-	global.Neft = ->
+		console.log = ->
+		global.Neft = require opts.neftFilePath
+	else
+		global.Neft = ->
 
 	ASSERT_MODULE_PATH = fs.realpathSync('') + '/node_modules/assert'
 
