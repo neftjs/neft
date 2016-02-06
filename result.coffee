@@ -120,11 +120,7 @@ module.exports = (opts) ->
 	declarations = getDeclarations opts.modules
 	init = getModulesInit opts
 
-	r = ''
-	if opts.platform is 'node'
-		r += "require('coffee-script/register');\n"
-	r += fileScope
-
+	r = fileScope
 	r = replaceStr r, '{{path}}', opts.path
 	r = replaceStr r, '{{declarations}}', stringify declarations
 	r = replaceStr r, '{{init}}', init
