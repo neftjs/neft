@@ -2,6 +2,11 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
+## 0.9.7 - Bugs fixes
+
+### Log
+- ['enabled' now works for scoped log instances](https://github.com/Neft-io/log/commit/675280f800fc8a460cad8565f1be2c27c92a4117)
+
 ## 0.9.4 - Bugs fixes
 
 ### Renderer

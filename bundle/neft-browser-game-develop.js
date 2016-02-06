@@ -1946,7 +1946,7 @@ var exports = module.exports;
   };
 
   Log = (function() {
-    var i, _, _i, _len, _ref;
+    var i, isEnabled, _, _i, _len, _ref;
 
     Log.LOGS_METHODS = ['info', 'warn', 'error', 'time', 'ok'];
 
@@ -1987,8 +1987,9 @@ var exports = module.exports;
       Log.times[i] = [0, ''];
     }
 
-    function Log(prefixes) {
+    function Log(prefixes, parentScope) {
       var args, func, key, name, value, _j, _len1, _ref1;
+      this.parentScope = parentScope;
       this.prefixes = prefixes;
       if (prefixes) {
         assert.isArray(prefixes);
@@ -2034,39 +2035,49 @@ var exports = module.exports;
 
     Log.prototype.enabled = Log.prototype.ALL;
 
+    isEnabled = function(log, type) {
+      if (!(log.enabled & type)) {
+        return false;
+      } else if (log.parentScope) {
+        return isEnabled(log.parentScope, type);
+      } else {
+        return true;
+      }
+    };
+
     Log.prototype['log'] = function() {
-      if (this.enabled & this.LOG) {
+      if (isEnabled(this, this.LOG)) {
         this._write(LogImpl.MARKERS.white(fromArgs(arguments)));
       }
     };
 
     Log.prototype.info = function() {
-      if (this.enabled & this.INFO) {
+      if (isEnabled(this, this.INFO)) {
         this._write(LogImpl.MARKERS.blue(fromArgs(arguments)));
       }
     };
 
     Log.prototype.ok = function() {
-      if (this.enabled & this.OK) {
+      if (isEnabled(this, this.OK)) {
         this._write(LogImpl.MARKERS.green(fromArgs(arguments)));
       }
     };
 
     Log.prototype.warn = function() {
-      if (this.enabled & this.WARN) {
+      if (isEnabled(this, this.WARN)) {
         this._write(LogImpl.MARKERS.yellow(fromArgs(arguments)));
       }
     };
 
     Log.prototype.error = function() {
-      if (this.enabled & this.ERROR) {
+      if (isEnabled(this, this.ERROR)) {
         this._write(LogImpl.MARKERS.red(fromArgs(arguments)));
       }
     };
 
     Log.prototype.time = function() {
       var id, times, v, _j, _len1;
-      if (!(this.enabled & this.TIME)) {
+      if (!isEnabled(this, this.TIME)) {
         return -1;
       }
       times = LogImpl.times;
@@ -2103,7 +2114,7 @@ var exports = module.exports;
       if (this.prefixes) {
         unshift.apply(args, this.prefixes);
       }
-      return new LogImpl(args);
+      return new LogImpl(args, this);
     };
 
     return Log;
@@ -49763,7 +49774,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.9.5",
+  "version": "0.9.7",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
