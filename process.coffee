@@ -231,8 +231,8 @@ module.exports = ->
 		module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
 
 	if opts.neftFilePath
-		console.log = ->
 		global.Neft = require opts.neftFilePath
+		Neft.log.enabled = 0
 	else
 		global.Neft = ->
 
