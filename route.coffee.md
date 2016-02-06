@@ -9,6 +9,7 @@ Route @class
 	Schema = require 'schema'
 	Networking = require 'networking'
 	Document = require 'document'
+	Renderer = require 'renderer'
 	Dict = require 'dict'
 
 	log = log.scope 'App', 'Route'
@@ -225,6 +226,8 @@ Acceptable syntaxes:
 
 		finishRequest = (route) ->
 			assert.instanceOf route, Route
+			if route.response.data instanceof Document
+				Renderer.window.document.node = route.response.data.node
 			if route.response.pending
 				route.response.send()
 			return
