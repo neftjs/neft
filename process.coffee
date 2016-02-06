@@ -92,6 +92,10 @@ module.exports = ->
 				pushState: ->
 			global.requestAnimationFrame = ->
 			global.Image = global.document.createElement
+			global.XMLHttpRequest = class XMLHttpRequest
+				open: ->
+				setRequestHeader: ->
+				send: ->
 
 		node: ->
 			global.option = ->
