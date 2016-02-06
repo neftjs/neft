@@ -41,7 +41,7 @@ var log = require('log');
 		for _, i in @times
 			@times[i] = [0, '']
 
-		constructor: (prefixes) ->
+		constructor: (prefixes, @parentScope) ->
 			@prefixes = prefixes
 			if prefixes
 				assert.isArray prefixes
@@ -98,6 +98,14 @@ Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
 		enabled: @::ALL
 
+		isEnabled = (log, type) ->
+			unless log.enabled & type
+				false
+			else if log.parentScope
+				isEnabled log.parentScope, type
+			else
+				true
+
 log([*Any* messages...])
 ------------------------
 
@@ -111,7 +119,7 @@ log("setName()", "db time");
 ```
 
 		@::['log'] = ->
-			if @enabled & @LOG
+			if isEnabled(@, @LOG)
 				@_write LogImpl.MARKERS.white fromArgs arguments
 			return
 
@@ -121,7 +129,7 @@ log.info([*Any* messages...])
 Prints the given messages into the console with a blue color.
 
 		info: ->
-			if @enabled & @INFO
+			if isEnabled(@, @INFO)
 				@_write LogImpl.MARKERS.blue fromArgs arguments
 			return
 
@@ -135,7 +143,7 @@ log.ok("Data has been successfully sent!");
 ```
 
 		ok: ->
-			if @enabled & @OK
+			if isEnabled(@, @OK)
 				@_write LogImpl.MARKERS.green fromArgs arguments
 			return
 
@@ -149,7 +157,7 @@ log.warn("Example warning with some recommendations");
 ```
 
 		warn: ->
-			if @enabled & @WARN
+			if isEnabled(@, @WARN)
 				@_write LogImpl.MARKERS.yellow fromArgs arguments
 			return
 
@@ -163,7 +171,7 @@ log.error("Error occurs, ... in file ...");
 ```
 
 		error: ->
-			if @enabled & @ERROR
+			if isEnabled(@, @ERROR)
 				@_write LogImpl.MARKERS.red fromArgs arguments
 			return
 
@@ -185,7 +193,7 @@ findPath();
 ```
 
 		time: ->
-			unless @enabled & @TIME
+			unless isEnabled(@, @TIME)
 				return -1
 
 			{times} = LogImpl
@@ -238,7 +246,7 @@ log("hello");
 			if @prefixes
 				unshift.apply args, @prefixes
 
-			new LogImpl args
+			new LogImpl args, this
 
 	# implementation
 	impl = switch true
