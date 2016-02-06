@@ -149,6 +149,8 @@ module.exports = (File, data) -> class Style
 		@attrsQueue = []
 		@attrsClass = null
 		@isRendered = false
+		@visibilityClass = Renderer.Class.New emptyComponent
+		@visibilityClass.priority = -2
 
 		Object.seal @
 
@@ -259,11 +261,18 @@ module.exports = (File, data) -> class Style
 		updateWhenPossible @
 		return
 
+	renderRec: ->
+		@render()
+		for style in @children
+			unless style.isRendered
+				style.renderRec()
+		return
+
 	renderItem: ->
 		if not @item or not @file.isRendered or not @enabled
 			return
 
-		@item.visible = true
+		@setItemVisible true
 
 		if @lastItemParent
 			@item.parent = @lastItemParent
@@ -309,7 +318,7 @@ module.exports = (File, data) -> class Style
 		unless @item
 			return
 
-		@item.visible = false
+		@setItemVisible false
 
 		# parent
 		if @isAutoParent
@@ -386,7 +395,7 @@ module.exports = (File, data) -> class Style
 			if shouldSetText
 				if isText
 					text = node.text
-					@item.visible = text.length > 0
+					@setItemVisible text.length > 0
 				else
 					text = node.stringifyChildren()
 
@@ -395,7 +404,7 @@ module.exports = (File, data) -> class Style
 					obj.text = text
 			else
 				if isText
-					@item.visible = false
+					@setItemVisible false
 		return
 
 	getVisibility: ->
@@ -418,10 +427,19 @@ module.exports = (File, data) -> class Style
 			visible = @getVisibility()
 
 		if visible and not @isRendered and @file.isRendered
-			@render()
+			@renderRec()
 
 		if @item
-			@item.visible = visible
+			@setItemVisible visible
+		return
+
+	setItemVisible: (val) ->
+		{visibilityClass} = @
+		visible = visibilityClass.changes._attributes.visible
+		if visible isnt val
+			visibilityClass.disable()
+			visibilityClass.changes.setAttribute 'visible', val
+			visibilityClass.enable()
 		return
 
 	setAttr: do ->
@@ -593,11 +611,12 @@ module.exports = (File, data) -> class Style
 		@node.style = @item
 
 		if @item
-			@item.visible = false
+			@setItemVisible false
 			if @isLink()
 				@item.linkUri = @getLinkUri()
 			if @attrs
 				@attrsClass.target = @item
+			@visibilityClass.target = @item
 
 		# text changes
 		if @getTextObject()
