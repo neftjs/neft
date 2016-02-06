@@ -4073,7 +4073,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUE_SEARCH, CONTAINS, DEEP, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Text, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byInstance, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
+  var ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUES, ATTR_VALUE_SEARCH, CONTAINS, DEEP, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Text, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byInstance, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -4331,6 +4331,14 @@ var exports = module.exports;
 
   TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/;
 
+  ATTR_VALUES = {
+    __proto__: null,
+    'true': true,
+    'false': false,
+    'null': null,
+    'undefined': void 0
+  };
+
   i = 0;
 
   OPTS_QUERY_BY_PARENTS = 1 << (i++);
@@ -4373,7 +4381,11 @@ var exports = module.exports;
       } else if (exec = ATTR_VALUE_SEARCH.exec(sel)) {
         sel = sel.slice(exec[0].length);
         _ = exec[0], name = exec[1], val = exec[2];
-        val = TRIM_ATTR_VALUE.exec(val)[1];
+        if (val in ATTR_VALUES) {
+          val = ATTR_VALUES[val];
+        } else {
+          val = TRIM_ATTR_VALUE.exec(val)[1];
+        }
         if (STARTS_WITH.test(name)) {
           func = byAttrStartsWithValue;
         } else if (ENDS_WITH.test(name)) {
@@ -4675,13 +4687,14 @@ var exports = module.exports;
         };
         return function(node) {
           var tmp;
+          node._checkWatchers = CHECK_WATCHERS_THIS;
           tmp = node;
-          node._checkWatchers |= CHECK_WATCHERS_THIS;
-          while (tmp = tmp._parent) {
+          while (tmp) {
             if (tmp._checkWatchers & CHECK_WATCHERS_CHILDREN) {
               break;
             }
             tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN;
+            tmp = tmp._parent;
           }
           if (!pending) {
             setImmediate(updateWatchers);
@@ -6909,14 +6922,16 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/attrChange.coffee'] = (function(){
 var module = {exports: modules["../document/attrChange.coffee"]};
-var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, log;
+  var assert, log, utils;
 
   assert = require('assert');
+
+  utils = require('utils');
 
   log = require('log');
 
@@ -7633,7 +7648,7 @@ var exports = module.exports;
           if (storage instanceof Tag) {
             storage.onAttrsChange(onChange, this);
           } else if (storage instanceof Dict) {
-            this.trace(storage);
+            storage.onChange(onChange, this);
           }
         }
         return this.update();
@@ -7646,6 +7661,8 @@ var exports = module.exports;
           storage = _ref[_i];
           if (storage instanceof Tag) {
             storage.onAttrsChange.disconnect(onChange, this);
+          } else if (storage instanceof Dict) {
+            storage.onChange.disconnect(onChange, this);
           }
         }
         revertTraces.call(this);
@@ -10593,7 +10610,7 @@ var exports = module.exports;
         assert.isFunction(binding[0]);
         assert.isArray(binding[1]);
         item = this.item = obj._ref || obj;
-        if (typeof component.onObjectChange === "function") {
+        if (this.listensOnComponentObjectChange = component.onObjectChange != null) {
           component.onObjectChange(onComponentObjectChange, this);
         }
         this.func = binding[0];
@@ -10610,7 +10627,7 @@ var exports = module.exports;
         this.updatePending = false;
         this.updateLoop = 0;
         //</development>;
-        Object.preventExtensions(this);
+        Object.seal(this);
         this.update();
       }
 
@@ -10664,7 +10681,7 @@ var exports = module.exports;
       };
 
       Binding.prototype.destroy = function() {
-        var connection, _i, _len, _ref, _ref1;
+        var connection, _i, _len, _ref;
         _ref = this.connections;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           connection = _ref[_i];
@@ -10673,8 +10690,8 @@ var exports = module.exports;
         this.obj._impl.bindings[this.prop] = null;
         this.args = null;
         utils.clear(this.connections);
-        if ((_ref1 = this.component.onObjectChange) != null) {
-          _ref1.disconnect(onComponentObjectChange, this);
+        if (this.listensOnComponentObjectChange) {
+          this.component.onObjectChange.disconnect(onComponentObjectChange, this);
         }
         pool.push(this);
       };
@@ -17121,14 +17138,10 @@ var exports = module.exports;
 
         onPropertyChange = function(prop, oldVal) {
           var node;
-          if (this._updatingProperty === prop || !(node = this._node) || !node.attrs.has(prop)) {
+          if (this._updatingProperty === prop || !(node = this._node)) {
             return;
           }
-          if (oldVal === void 0) {
-            setProperty.call(this, this._ref._$, prop, node.attrs.get(prop), oldVal);
-          } else {
-            node.attrs.set(prop, this._ref._$[prop]);
-          }
+          node.attrs.set(prop, this._ref._$[prop]);
         };
 
         onNodeAttrsChange = function(attr, oldVal) {
@@ -19729,7 +19742,7 @@ var exports = module.exports;
       var child, _i, _ref;
       if (node instanceof Text) {
         node.text = node.text.replace(/^[\s\uFEFF\xA0]+/g, '');
-        node.text = node.text.replace(/([^\r\n]+)(?:[\s\uFEFF\xA0]+)$/g, '$1');
+        node.text = node.text.replace(/([^\r\n]+)(?:[\s\uFEFF\xA0]*)$/g, '$1');
         if (node.text.length === 0) {
           node.parent = null;
         }
@@ -22267,12 +22280,12 @@ var exports = module.exports;
 return module.exports;
 })();modules['route.coffee.md'] = (function(){
 var module = {exports: modules["route.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","dict":"../dict/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md","dict":"../dict/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Dict, Document, Networking, Schema, assert, log, utils;
+  var Dict, Document, Networking, Renderer, Schema, assert, log, utils;
 
   utils = require('utils');
 
@@ -22285,6 +22298,8 @@ var exports = module.exports;
   Networking = require('networking');
 
   Document = require('document');
+
+  Renderer = require('renderer');
 
   Dict = require('dict');
 
@@ -22483,7 +22498,6 @@ var exports = module.exports;
           if (route._dataPrepared && route.error === err) {
             return false;
           }
-          console.error(err);
           route.error = err;
         } else {
           if (route._dataPrepared && route.data === data) {
@@ -22498,6 +22512,9 @@ var exports = module.exports;
         var data, respData, response;
         assert.instanceOf(route, Route);
         response = route.response;
+        if (route.error) {
+          log.error("Error in route '" + route.uri + "':\n" + route.error);
+        }
         respData = response.data;
         switch (route.request.type) {
           case 'text':
@@ -22536,6 +22553,9 @@ var exports = module.exports;
 
       finishRequest = function(route) {
         assert.instanceOf(route, Route);
+        if (route.response.data instanceof Document) {
+          Renderer.window.document.node = route.response.data.node;
+        }
         if (route.response.pending) {
           route.response.send();
         }
@@ -22872,7 +22892,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -23386,7 +23406,27 @@ var exports = module.exports;
 
       JSON_ARGS_LENGTH = Style.JSON_ARGS_LENGTH = i;
 
-      Style.extendDocumentByStyles = (function() {
+      Style.applyStyleQueriesInDocument = function(file) {
+        var elem, node, nodes, _i, _j, _len, _len1;
+        assert.instanceOf(file, File);
+        for (_i = 0, _len = queries.length; _i < _len; _i++) {
+          elem = queries[_i];
+          nodes = file.node.queryAll(elem.query);
+          for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
+            node = nodes[_j];
+            if (!(node instanceof Tag)) {
+              log.warn("document.query can be attached only to tags; " + ("query '" + elem.query + "' has been omitted for this node"));
+              continue;
+            }
+            if (!node.attrs.has('neft:style')) {
+              node.attrs.set('neft:style', elem.style);
+            }
+          }
+        }
+        return file;
+      };
+
+      Style.createStylesInDocument = (function() {
         var forNode, getStyleAttrs;
         getStyleAttrs = function(node) {
           var attr, attrs;
@@ -23426,26 +23466,18 @@ var exports = module.exports;
           }
         };
         return function(file) {
-          var elem, node, nodes, _i, _j, _len, _len1;
           assert.instanceOf(file, File);
-          for (_i = 0, _len = queries.length; _i < _len; _i++) {
-            elem = queries[_i];
-            nodes = file.node.queryAll(elem.query);
-            for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
-              node = nodes[_j];
-              if (!(node instanceof Tag)) {
-                log.warn("document.query can be attached only to tags; " + ("query '" + elem.query + "' has been omitted for this node"));
-                continue;
-              }
-              if (!node.attrs.has('neft:style')) {
-                node.attrs.set('neft:style', elem.style);
-              }
-            }
-          }
           forNode(file, file.node, null);
           return file;
         };
       })();
+
+      Style.extendDocumentByStyles = function(file) {
+        assert.instanceOf(file, File);
+        Style.applyStyleQueriesInDocument(file);
+        Style.createStylesInDocument(file);
+        return file;
+      };
 
       Style._fromJSON = function(file, arr, obj) {
         var child, cloneChild, _i, _len, _ref;
@@ -23516,6 +23548,7 @@ var exports = module.exports;
         this.parent = null;
         this.isScope = false;
         this.isAutoParent = true;
+        this.enabled = true;
         this.item = null;
         this.scope = null;
         this.children = [];
@@ -23623,7 +23656,7 @@ var exports = module.exports;
       })();
 
       Style.prototype.render = function() {
-        if (this.waiting) {
+        if (this.waiting || !this.enabled) {
           return;
         }
         assert.notOk(this.isRendered);
@@ -23650,7 +23683,7 @@ var exports = module.exports;
 
       Style.prototype.renderItem = function() {
         var attr, attrsQueue, _i, _len, _ref;
-        if (!this.item || !this.file.isRendered) {
+        if (!this.item || !this.file.isRendered || !this.enabled) {
           return;
         }
         this.item.visible = true;
@@ -23852,7 +23885,7 @@ var exports = module.exports;
         return function(attr, val, oldVal) {
           var internalProp, obj, prop, props, _i, _ref;
           assert.instanceOf(this, Style);
-          if (this.waiting || !this.item) {
+          if (this.waiting || !this.isRendered || !this.item) {
             this.attrsQueue.push(attr, val, oldVal);
             return;
           }
@@ -23893,20 +23926,25 @@ var exports = module.exports;
         item = this.item;
         classes = item.classes;
         newClasses = val && val.split(' ');
-        if (oldVal && typeof oldVal === 'string') {
+        if (typeof oldVal === 'string' && oldVal !== '') {
           oldClasses = oldVal.split(' ');
           for (_i = 0, _len = oldClasses.length; _i < _len; _i++) {
             name = oldClasses[_i];
-            if (!newClasses || !utils.has(newClasses, name)) {
-              classes.remove(name);
+            if (name !== '') {
+              if (!newClasses || !utils.has(newClasses, name)) {
+                classes.remove(name);
+              }
             }
           }
         }
-        if (val && typeof val === 'string') {
+        if (typeof val === 'string' && val !== '') {
           newClasses = val.split(' ');
           prevIndex = -1;
           for (i = _j = 0, _len1 = newClasses.length; _j < _len1; i = ++_j) {
             name = newClasses[i];
+            if (!(name !== '')) {
+              continue;
+            }
             index = classes.index(name);
             if (prevIndex === -1 && index === -1) {
               index = classes.length;
@@ -23943,7 +23981,7 @@ var exports = module.exports;
       };
 
       Style.prototype.reloadItem = function() {
-        var file, id, match, parent, parentId, style, subid, _, _ref, _ref1;
+        var file, id, match, parent, parentId, scopeParent, style, subid, _, _ref, _ref1;
         if (this.waiting) {
           return;
         }
@@ -23980,6 +24018,7 @@ var exports = module.exports;
                   if (!parent.scope) {
                     return;
                   }
+                  scopeParent = parent;
                   this.item = parent.scope.objects[subid];
                 } else if (!(parent != null ? parent.scope : void 0) && file === 'view') {
                   this.item = windowStyle.objects[subid];
@@ -23991,6 +24030,14 @@ var exports = module.exports;
               if (!this.item) {
                 log.warn("Can't find `" + id + "` style item");
                 return;
+              }
+              if (scopeParent) {
+                parent = this;
+                while ((parent = parent.parent) !== scopeParent) {
+                  if (parent.isAutoParent) {
+                    parent.enabled = false;
+                  }
+                }
               }
               this.isAutoParent = !this.item.parent;
             } else {
@@ -24098,7 +24145,7 @@ var exports = module.exports;
       };
 
       Style.prototype.findItemIndex = function() {
-        if (this.parentSet) {
+        if (this.parentSet || !this.isAutoParent) {
           findItemIndex.call(this, this.node, this.item, this.item.parent);
           return true;
         } else {
@@ -24483,10 +24530,13 @@ var exports = module.exports;
         });
       }
     }
+    exports.app = {
+      Route: app.Route
+    };
     return app;
   };
 
-  MODULES = ['utils', 'signal', 'dict', 'list', 'log', 'Resources', 'native', 'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db'];
+  MODULES = ['utils', 'signal', 'Dict', 'List', 'log', 'Resources', 'native', 'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db'];
 
   for (_i = 0, _len = MODULES.length; _i < _len; _i++) {
     name = MODULES[_i];

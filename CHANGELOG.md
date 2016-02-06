@@ -2,6 +2,27 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
+## 0.9.3 - Bugs fixes
+### Neft-CLI
+- [Applying style queries through neft:fragment/neft:each bug fixed](https://github.com/Neft-io/neft-cli/commit/0733b4ccfeb0e9178f53eaa95ca9f388dafb3b28)
+- ['Neft' object now is global on Node](https://github.com/Neft-io/neft-cli/commit/42a9414cffb0d8d30cc5da1bc0ed5709adffeb3d)
+- [App 'package.json' 'styles' object may contains paths for external styles](https://github.com/Neft-io/neft-cli/commit/a0b3d6c80d4f19403a19aecf7aa9adb90a92aa1d)
+
+### Renderer
+- [CSS TextInput 'password' echoMode positioning bug fixed](https://github.com/Neft-io/renderer/commit/148e50de6d0cc51278e714f39b83848b3e4e3386)
+
+### Styles
+- [Unsynchronized tags now are not rendered](https://github.com/Neft-io/styles/commit/ce526f459d6e4e3d5eaed200379a54c734c74944)
+
+### Document
+- [Texts clearing right trim bug fixed](https://github.com/Neft-io/document/commit/e7ea4ec810a01bfa3fb7133f7439c0311fd5134d)
+- [String interpolation listening changes on global object fixed](https://github.com/Neft-io/document/commit/3f4eb236a680bf6161507e98298e6fcbc0adeb5a)
+- [Tag::watch() bug with omitting changes on the main tag fixed](https://github.com/Neft-io/document/commit/fb4d7eab7b2712cd4f93547140f2725359b87517)
+- [Tag::query() now uses javascript values for string booleans,null,undefined in comparison](https://github.com/Neft-io/document/commit/2866069884c1d5eedbc2346908b23ce702612c44)
+
+### Networking:
+- [Client impls now longer add styles into window](https://github.com/Neft-io/networking/commit/2ed1df853643b57be11e9c904e3fd31a4a3297a5)
+
 ## 0.9.2 - Bugs fixes
 ### Bundle builder
 - ['release' mode bug with removing vars declarations fixed](https://github.com/Neft-io/bundle-builder/commit/beb90f970a8373e2cb4e6630dbece9fec275acd8)

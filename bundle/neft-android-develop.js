@@ -1,6 +1,6 @@
 var Neft = (function(){
 // list of modules with empty objects
-var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../assert/index.coffee.md":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/android/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/android/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/native/index.coffee":{},"../native/actions.coffee":{},"../native/impl/android/bridge.coffee":{},"../native/bridge.coffee":{},"../renderer/impl/native/android.coffee":{},"../renderer/impl/native/level2/scrollable.coffee":{},"../renderer/impl/native/level0/item.coffee":{},"../renderer/impl/native/level0/image.coffee":{},"../renderer/impl/native/level0/text.coffee":{},"../renderer/impl/native/level0/textInput.coffee":{},"../renderer/impl/native/level0/loader/font.coffee":{},"../renderer/impl/native/level0/loader/resources.coffee":{},"../renderer/impl/native/level0/device.coffee":{},"../renderer/impl/native/level0/screen.coffee":{},"../renderer/impl/native/level0/navigator.coffee":{},"../renderer/impl/native/level0/sensor/rotation.coffee":{},"../renderer/impl/native/level0/sound/ambient.coffee":{},"../renderer/impl/native/level1/rectangle.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/impl/base/utils/color.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/android/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"package.json":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
+var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../assert/index.coffee.md":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/android/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/android/request.coffee":{},"../networking/impl/android/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/native/index.coffee":{},"../native/actions.coffee":{},"../native/impl/android/bridge.coffee":{},"../native/bridge.coffee":{},"../renderer/impl/native/android.coffee":{},"../renderer/impl/native/level2/scrollable.coffee":{},"../renderer/impl/native/level0/item.coffee":{},"../renderer/impl/native/level0/image.coffee":{},"../renderer/impl/native/level0/text.coffee":{},"../renderer/impl/native/level0/textInput.coffee":{},"../renderer/impl/native/level0/loader/font.coffee":{},"../renderer/impl/native/level0/loader/resources.coffee":{},"../renderer/impl/native/level0/device.coffee":{},"../renderer/impl/native/level0/screen.coffee":{},"../renderer/impl/native/level0/navigator.coffee":{},"../renderer/impl/native/level0/sensor/rotation.coffee":{},"../renderer/impl/native/level0/sound/ambient.coffee":{},"../renderer/impl/native/level1/rectangle.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/impl/base/utils/color.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"route.coffee.md":{},"package.json":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
 
 // used as `require`
 function getModule(paths, name){
@@ -3316,6 +3316,922 @@ var exports = module.exports;
 
 
 return module.exports;
+})();modules['../networking/impl/android/response.coffee'] = (function(){
+var module = {exports: modules["../networking/impl/android/response.coffee"]};
+var require = getModule.bind(null, {});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  module.exports = function(Networking) {
+    return {
+      send: function(res, data, callback) {
+        return callback();
+      },
+      setHeader: function() {},
+      redirect: function(res, status, uri, callback) {
+        networking.createLocalRequest({
+          method: Networking.Request.GET,
+          type: Networking.Request.HTML_TYPE,
+          uri: uri
+        });
+        return callback();
+      }
+    };
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../networking/uri.coffee.md'] = (function(){
+var module = {exports: modules["../networking/uri.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","dict":"../dict/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var Dict, QUERY_ASSIGNMENT, QUERY_SEPARATOR, assert, isArray, parseQuery, utils;
+
+  utils = require('utils');
+
+  assert = require('assert');
+
+  Dict = require('dict');
+
+  isArray = Array.isArray;
+
+  assert = assert.scope('Networking.Uri');
+
+  QUERY_SEPARATOR = '&';
+
+  QUERY_ASSIGNMENT = '=';
+
+  parseQuery = function(query) {
+    var arr, assignmentIndex, name, param, result, resultVal, val, _i, _len;
+    result = {};
+    arr = query.split(QUERY_SEPARATOR);
+    for (_i = 0, _len = arr.length; _i < _len; _i++) {
+      param = arr[_i];
+      assignmentIndex = param.indexOf(QUERY_ASSIGNMENT);
+      if (assignmentIndex !== -1) {
+        name = param.slice(0, assignmentIndex);
+        val = param.slice(assignmentIndex + 1);
+      } else {
+        name = param;
+        val = '';
+      }
+      resultVal = result[name];
+      if (resultVal === void 0) {
+        result[name] = val;
+      } else if (isArray(resultVal)) {
+        resultVal.push(val);
+      } else {
+        result[name] = [resultVal, val];
+      }
+    }
+    return result;
+  };
+
+  module.exports = function(Networking) {
+    var Uri;
+    return Uri = (function() {
+      Uri.URI_TRIM_RE = /^\/?(.*?)\/?$/;
+
+      Uri.NAMES_RE = /{([a-zA-Z0-9_$]+)\*?}/g;
+
+      function Uri(uri) {
+        var authIndex, exec, hashIndex, hostIndex, names, protocolIndex, queryString, re, searchIndex;
+        assert.isString(uri, 'ctor uri argument ...');
+        uri = uri.trim();
+        utils.defineProperty(this, '_uri', null, uri);
+        uri = Uri.URI_TRIM_RE.exec(uri)[1];
+        if (Uri.NAMES_RE.test(uri) || uri.indexOf('*') !== -1) {
+          Uri.NAMES_RE.lastIndex = 0;
+          this.params = {};
+          names = [];
+          while ((exec = Uri.NAMES_RE.exec(uri)) != null) {
+            names.push(exec[1]);
+            this.params[exec[1]] = null;
+          }
+          Object.preventExtensions(this.params);
+          re = uri;
+          re = re.replace(/(\?)/g, '\\$1');
+          re = re.replace(/{?([a-zA-Z0-9_$]+)?\*}?/g, "(.*?)");
+          re = re.replace(Uri.NAMES_RE, "([^/]+)");
+          re = new RegExp("^\/?" + re + "\/?$");
+        } else {
+          this.params = null;
+          names = null;
+          re = uri;
+          re = re.replace(/(\?)/g, '\\$1');
+          re = new RegExp("^\/?" + re + "\/?$");
+        }
+        utils.defineProperty(this, '_names', null, names);
+        utils.defineProperty(this, '_re', null, re);
+        hashIndex = uri.lastIndexOf('#');
+        if (hashIndex !== -1) {
+          this.hash = uri.slice(hashIndex + 1);
+          uri = uri.slice(0, hashIndex);
+        } else {
+          this.hash = '';
+        }
+        searchIndex = uri.indexOf('?');
+        if (searchIndex !== -1) {
+          queryString = uri.slice(searchIndex + 1);
+          uri = uri.slice(0, searchIndex);
+          this.query = parseQuery(queryString);
+        } else {
+          this.query = {};
+        }
+        protocolIndex = uri.indexOf(':');
+        if (protocolIndex !== -1 && uri.slice(0, protocolIndex).indexOf('/') === -1) {
+          this.protocol = uri.slice(0, protocolIndex);
+          uri = uri.slice(protocolIndex + 1);
+          while (uri[0] === '/') {
+            uri = uri.slice(1);
+          }
+        } else {
+          this.protocol = '';
+        }
+        authIndex = uri.indexOf('@');
+        if (authIndex !== -1 && uri.slice(0, authIndex).indexOf('/') === -1) {
+          this.auth = uri.slice(0, authIndex);
+          uri = uri.slice(authIndex + 1);
+        } else {
+          this.auth = '';
+        }
+        hostIndex = uri.indexOf('/');
+        if (hostIndex !== -1 && uri.slice(0, hostIndex).indexOf('.') !== -1) {
+          this.host = uri.slice(0, hostIndex);
+          uri = uri.slice(hostIndex + 1);
+        } else {
+          this.host = '';
+        }
+        this.path = "/" + uri;
+        Object.freeze(this);
+      }
+
+      Uri.prototype.test = function(uri) {
+        return this._re.test(uri);
+      };
+
+      Uri.prototype.match = function(uri) {
+        var exec, i, name, val, _i, _len, _ref;
+        assert.ok(this.test(uri));
+        if (this._names != null) {
+          exec = this._re.exec(uri);
+          _ref = this._names;
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            name = _ref[i];
+            val = exec[i + 1];
+            if (val === void 0) {
+              val = null;
+            }
+            this.params[name] = decodeURI(val);
+          }
+        }
+        return this.params;
+      };
+
+      Uri.prototype.toString = function(params) {
+        var i;
+        if ((params != null) && (this._re != null)) {
+          assert.isObject(params, 'toString() params argument ...');
+        } else {
+          return this._uri;
+        }
+        if (params instanceof Dict) {
+          params = params._data;
+        }
+        i = 0;
+        return this._uri.replace(Uri.NAMES_RE, (function(_this) {
+          return function() {
+            return encodeURI(params[_this._names[i++]]);
+          };
+        })(this));
+      };
+
+      return Uri;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../networking/handler.coffee.md'] = (function(){
+var module = {exports: modules["../networking/handler.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var Schema, assert, log, parse, stringify, utils;
+
+  utils = require('utils');
+
+  assert = require('assert');
+
+  log = require('log');
+
+  Schema = require('schema');
+
+  parse = JSON.parse, stringify = JSON.stringify;
+
+  assert = assert.scope('Networking.Handler');
+
+  log = log.scope('Networking', 'Handler');
+
+  module.exports = function(Networking) {
+    var Handler;
+    return Handler = (function() {
+      function Handler(opts) {
+        assert.isPlainObject(opts, 'ctor options argument ...');
+        assert.ok(utils.has(Networking.Request.METHODS, opts.method), 'ctor options.method argument ...');
+        assert.instanceOf(opts.uri, Networking.Uri, 'ctor options.uri argument ...');
+        if (opts.schema != null) {
+          assert.instanceOf(opts.schema, Schema, 'ctor options.schema argument ...');
+        }
+        assert.isFunction(opts.callback, 'ctor options.callback argument ...');
+        this.method = opts.method, this.uri = opts.uri, this.schema = opts.schema, this.callback = opts.callback;
+      }
+
+      Handler.prototype.method = '';
+
+      Handler.prototype.uri = null;
+
+      Handler.prototype.schema = null;
+
+      Handler.prototype.callback = null;
+
+      Handler.prototype.exec = function(req, res, next) {
+        var callbackNext, err, key, params, schemaOpts, _ref;
+        assert.instanceOf(req, Networking.Request, '::exec request argument ...');
+        assert.instanceOf(res, Networking.Response, '::exec response argument ...');
+        assert.isFunction(next, '::exec next argument ...');
+        if (this.method !== req.method) {
+          return next();
+        }
+        if (!this.uri.test(req.uri.path)) {
+          return next();
+        }
+        params = req.params = this.uri.match(req.uri.path);
+        if (this.schema) {
+          _ref = this.schema.schema;
+          for (key in _ref) {
+            schemaOpts = _ref[key];
+            if (params.hasOwnProperty(key) && schemaOpts.type && schemaOpts.type !== 'string') {
+              params[key] = utils.tryFunction(parse, null, [params[key]], params[key]);
+            }
+          }
+          err = utils.catchError(this.schema.validate, this.schema, [params]);
+          if (err instanceof Error) {
+            return next(err);
+          }
+        }
+        callbackNext = (function(_this) {
+          return function(err) {
+            var errMsg;
+            req.handler = null;
+            if ((err != null) && err !== true) {
+              errMsg = err;
+              if (errMsg.stack != null) {
+                if (utils.isQt) {
+                  errMsg = "" + err.message + "\n" + err.stack;
+                } else {
+                  errMsg = err.stack;
+                }
+              } else if (utils.isObject(errMsg)) {
+                errMsg = utils.tryFunction(JSON.stringify, null, [errMsg], errMsg);
+              }
+            }
+            if (errMsg) {
+              log.error("Error in '" + _this.uri + "': " + errMsg);
+              if (err instanceof RangeError || err instanceof TypeError || err instanceof SyntaxError || err instanceof ReferenceError) {
+                errMsg = "Internal Error; message has been removed";
+              }
+              return next(errMsg);
+            } else {
+              return next();
+            }
+          };
+        })(this);
+        req.handler = this;
+        utils.tryFunction(this.callback, this, [req, res, callbackNext], callbackNext);
+        return null;
+      };
+
+      Handler.prototype.toString = function() {
+        return "" + this.method + " " + this.uri;
+      };
+
+      return Handler;
+
+    })();
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../networking/request.coffee.md'] = (function(){
+var module = {exports: modules["../networking/request.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert, signal, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  utils = require('utils');
+
+  assert = require('assert');
+
+  signal = require('signal');
+
+  assert = assert.scope('Networking.Request');
+
+  module.exports = function(Networking, Impl) {
+    var Request;
+    return Request = (function(_super) {
+      __extends(Request, _super);
+
+      Request.METHODS = [(Request.GET = 'get'), (Request.POST = 'post'), (Request.PUT = 'put'), (Request.DELETE = 'delete'), (Request.OPTIONS = 'options')];
+
+      Request.TYPES = [(Request.TEXT_TYPE = 'text'), (Request.JSON_TYPE = 'json'), (Request.HTML_TYPE = 'html'), (Request.BINARY_TYPE = 'binary')];
+
+      function Request(opts) {
+        var uid;
+        assert.isPlainObject(opts, 'ctor options argument ...');
+        if (opts.uid != null) {
+          assert.isString(opts.uid);
+        }
+        if (opts.method != null) {
+          assert.ok(utils.has(Request.METHODS, opts.method));
+        }
+        if (!(opts.uri instanceof Networking.Uri)) {
+          assert.isString(opts.uri, 'ctor options.uri argument ...');
+        }
+        Request.__super__.constructor.call(this);
+        if (opts.type != null) {
+          assert.ok(utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...');
+          this.type = opts.type;
+        }
+        utils.defineProperty(this, 'type', utils.ENUMERABLE, this.type);
+        this.data = opts.data, this.headers = opts.headers, this.cookies = opts.cookies;
+        if (opts.method != null) {
+          this.method = opts.method;
+        }
+        this.headers || (this.headers = {});
+        this.cookies || (this.cookies = {});
+        if (typeof opts.uri === 'string') {
+          this.uri = new Networking.Uri(opts.uri);
+        } else {
+          this.uri = opts.uri;
+        }
+        uid = opts.uid || utils.uid();
+        utils.defineProperty(this, 'uid', null, uid);
+        this.pending = true;
+        this.params = null;
+        if (opts.onLoadEnd) {
+          this.onLoadEnd(opts.onLoadEnd);
+        }
+      }
+
+      signal.Emitter.createSignal(Request, 'onLoadEnd');
+
+      Request.prototype.uid = '';
+
+      Request.prototype.pending = false;
+
+      Request.prototype.method = Request.GET;
+
+      Request.prototype.uri = null;
+
+      Request.prototype.type = Request.JSON_TYPE;
+
+      Request.prototype.data = null;
+
+      Request.prototype.handler = null;
+
+      Request.prototype.response = null;
+
+      Request.prototype.params = null;
+
+      Request.prototype.headers = null;
+
+      Request.prototype.cookies = null;
+
+      Request.prototype.toString = function() {
+        return "" + this.method + " " + this.uri + " as " + this.type;
+      };
+
+      Request.prototype.destroy = function() {
+        var res;
+        assert(this.pending);
+        this.pending = false;
+        res = this.response;
+        if (res.isSucceed()) {
+          this.onLoadEnd.emit(null, res.data);
+        } else {
+          this.onLoadEnd.emit(res.data || res.status || "Unknown error");
+        }
+      };
+
+      return Request;
+
+    })(signal.Emitter);
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../networking/response.coffee.md'] = (function(){
+var module = {exports: modules["../networking/response.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","./response/error.coffee.md":"../networking/response/error.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var assert, log, signal, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  utils = require('utils');
+
+  assert = require('assert');
+
+  log = require('log');
+
+  signal = require('signal');
+
+  assert = assert.scope('Networking.Response');
+
+  log = log.scope('Networking', 'Response');
+
+  module.exports = function(Networking, Impl) {
+    var Response;
+    return Response = (function(_super) {
+      __extends(Response, _super);
+
+      Response.STATUSES = [(Response.OK = 200), (Response.CREATED = 201), (Response.ACCEPTED = 202), (Response.NO_CONTENT = 204), (Response.MOVED = 301), (Response.FOUND = 302), (Response.NOT_MODIFIED = 304), (Response.TEMPORARY_REDIRECT = 307), (Response.BAD_REQUEST = 400), (Response.UNAUTHORIZED = 401), (Response.PAYMENT_REQUIRED = 402), (Response.FORBIDDEN = 403), (Response.NOT_FOUND = 404), (Response.METHOD_NOT_ALLOWED = 405), (Response.NOT_ACCEPTABLE = 406), (Response.CONFLICT = 409), (Response.PRECONDITION_FAILED = 412), (Response.UNSUPPORTED_MEDIA_TYPE = 415), (Response.INTERNAL_SERVER_ERROR = 500), (Response.NOT_IMPLEMENTED = 501), (Response.SERVICE_UNAVAILABLE = 503)];
+
+      Response.Error = require('./response/error.coffee.md')(Networking, Response);
+
+      function Response(opts) {
+        assert.isPlainObject(opts, 'ctor options argument ...');
+        assert.instanceOf(opts.request, Networking.Request, 'ctor options.request argument ...');
+        Response.__super__.constructor.call(this);
+        if (opts.status != null) {
+          assert.ok(utils.has(Response.STATUSES, opts.status), 'ctor options.status argument ...');
+          this.status = opts.status;
+        }
+        if (opts.data != null) {
+          this.data = opts.data;
+        }
+        if (opts.encoding != null) {
+          this.encoding = opts.encoding;
+        }
+        this.headers = opts.headers || {};
+        this.cookies = opts.cookies || {};
+        utils.defineProperty(this, 'request', null, opts.request);
+        this.pending = true;
+        if (opts.onSend) {
+          this.onSend(opts.onSend);
+        }
+        if (opts.status != null) {
+          this.send();
+        }
+      }
+
+      signal.Emitter.createSignal(Response, 'onSend');
+
+      Response.prototype.pending = false;
+
+      Response.prototype.request = null;
+
+      Response.prototype.status = Response.OK;
+
+      Response.prototype.data = null;
+
+      Response.prototype.headers = null;
+
+      Response.prototype.cookies = null;
+
+      Response.prototype.encoding = 'utf-8';
+
+      Response.prototype.setHeader = function(name, val) {
+        assert.ok(this.request.pending);
+        assert.isString(name, '::setHeader name argument ...');
+        assert.notLengthOf(name, 0, '::setHeader name argument ...');
+        assert.isString(val, '::setHeader value argument ...');
+        assert.notLengthOf(val, 0, '::setHeader value argument ...');
+        Impl.setHeader(this, name, val);
+        return this;
+      };
+
+      Response.prototype.send = function(status, data) {
+        assert.ok(this.request.pending);
+        if ((data == null) && typeof status !== 'number') {
+          data = status;
+          status = this.status;
+        }
+        if (status != null) {
+          assert.ok(utils.has(Response.STATUSES, status));
+          this.status = status;
+        }
+        if (data !== void 0) {
+          this.data = data;
+        }
+        this.request.destroy();
+        data = this.data;
+        Impl.send(this, data, (function(_this) {
+          return function() {
+            _this.pending = false;
+            return _this.onSend.emit();
+          };
+        })(this));
+      };
+
+      Response.prototype.redirect = function(status, uri) {
+        if (uri === void 0) {
+          uri = status;
+          status = Response.FOUND;
+        }
+        assert.ok(this.request.pending);
+        assert.ok(utils.has(Response.STATUSES, status));
+        assert.isString(uri);
+        log("" + status + " redirect to '" + uri + "'");
+        this.status = status;
+        this.setHeader('Location', uri);
+        this.request.destroy();
+        return Impl.redirect(this, status, uri, (function(_this) {
+          return function() {
+            _this.pending = false;
+            return _this.onSend.emit();
+          };
+        })(this));
+      };
+
+      Response.prototype.raise = function(error) {
+        if (error instanceof Response.Error || isFinite(error != null ? error.status : void 0)) {
+          return this.send(error.status, error);
+        } else {
+          return this.send(Response.INTERNAL_SERVER_ERROR, error);
+        }
+      };
+
+      Response.prototype.isSucceed = function() {
+        var _ref;
+        return (300 > (_ref = this.status) && _ref >= 200);
+      };
+
+      return Response;
+
+    })(signal.Emitter);
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../networking/response/error.coffee.md'] = (function(){
+var module = {exports: modules["../networking/response/error.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var RequestResolve, assert, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  utils = require('utils');
+
+  assert = require('assert');
+
+  assert = assert.scope('Networking.Response.Error');
+
+  module.exports = function(Networking, Response) {
+    var ResponseError;
+    return ResponseError = (function(_super) {
+      __extends(ResponseError, _super);
+
+      ResponseError.RequestResolve = RequestResolve(Networking, Response, ResponseError);
+
+      function ResponseError(status, message) {
+        if (message == null) {
+          message = '';
+        }
+        if (!(this instanceof ResponseError)) {
+          return new ResponseError(status, message);
+        }
+        if (typeof status === 'string') {
+          message = status;
+          status = this.status;
+        } else if (status === void 0) {
+          status = this.status;
+          message = this.message;
+        }
+        assert.ok(utils.has(Response.STATUSES, status));
+        assert.isString(message);
+        this.status = status;
+        this.message = message;
+      }
+
+      ResponseError.prototype.status = Response.INTERNAL_SERVER_ERROR;
+
+      ResponseError.prototype.name = 'ResponseError';
+
+      ResponseError.prototype.message = '';
+
+      return ResponseError;
+
+    })(Error);
+  };
+
+  RequestResolve = function(Networking, Response, ResponseError) {
+    return RequestResolve = (function(_super) {
+      __extends(RequestResolve, _super);
+
+      function RequestResolve(req) {
+        assert.instanceOf(req, Networking.Request, 'ctor request argument ...');
+        return RequestResolve.__super__.constructor.call(this, "No handler can be found");
+      }
+
+      RequestResolve.prototype.status = Response.BAD_REQUEST;
+
+      RequestResolve.prototype.name = 'RequestResolveResponseError';
+
+      return RequestResolve;
+
+    })(ResponseError);
+  };
+
+}).call(this);
+
+
+return module.exports;
+})();modules['../networking/index.coffee.md'] = (function(){
+var module = {exports: modules["../networking/index.coffee.md"]};
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md","./impl":"../networking/impl.coffee","./uri.coffee.md":"../networking/uri.coffee.md","./handler.coffee.md":"../networking/handler.coffee.md","./request.coffee.md":"../networking/request.coffee.md","./response.coffee.md":"../networking/response.coffee.md"});
+var exports = module.exports;
+
+(function() {
+  'use strict';
+  var List, Networking, assert, log, signal, utils,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  utils = require('utils');
+
+  signal = require('signal');
+
+  assert = require('assert');
+
+  log = require('log');
+
+  List = require('list');
+
+  assert = assert.scope('Networking');
+
+  log = log.scope('Networking');
+
+  module.exports = Networking = (function(_super) {
+    var EXTERNAL_URL_RE, Impl;
+
+    __extends(Networking, _super);
+
+    Impl = require('./impl')(Networking);
+
+    Networking.Uri = require('./uri.coffee.md')(Networking);
+
+    Networking.Handler = require('./handler.coffee.md')(Networking);
+
+    Networking.Request = require('./request.coffee.md')(Networking, Impl.Request);
+
+    Networking.Response = require('./response.coffee.md')(Networking, Impl.Response);
+
+    Networking.TYPES = [(Networking.HTTP = 'http')];
+
+    function Networking(opts) {
+      var url;
+      assert.isPlainObject(opts, 'ctor options argument ....');
+      assert.isString(opts.type, 'ctor options.type argument ...');
+      assert.ok(utils.has(Networking.TYPES, opts.type));
+      assert.isString(opts.protocol, 'ctor options.protocol argument ...');
+      assert.notLengthOf(opts.protocol, 0, 'ctor options.protocol argument ...');
+      assert.isInteger(opts.port, 'ctor options.port argument ...');
+      assert.isString(opts.host, 'ctor options.host argument ...');
+      assert.isString(opts.language, 'ctor options.language argument ...');
+      assert.notLengthOf(opts.language, 0, 'ctor options.language argument ...');
+      utils.defineProperty(this, '_handlers', utils.CONFIGURABLE, {});
+      this.type = opts.type, this.protocol = opts.protocol, this.port = opts.port, this.host = opts.host, this.language = opts.language;
+      this.pendingRequests = new List;
+      if (opts.url != null) {
+        assert.isString(opts.url);
+        assert.notLengthOf(opts.url, 0);
+        url = opts.url;
+        if (url[url.length - 1] === '/') {
+          url = url.slice(0, -1);
+        }
+      } else {
+        url = "" + this.protocol + "://" + this.host + ":" + this.port;
+      }
+      utils.defineProperty(this, 'url', utils.ENUMERABLE, url);
+      setImmediate((function(_this) {
+        return function() {
+          return Impl.init(_this);
+        };
+      })(this));
+      log.info("Start as `" + this.host + ":" + this.port + "`");
+      Networking.__super__.constructor.call(this);
+      Object.freeze(this);
+    }
+
+    Networking.prototype.type = Networking.HTTP;
+
+    signal.Emitter.createSignal(Networking, 'onRequest');
+
+    Networking.prototype.protocol = '';
+
+    Networking.prototype.port = 0;
+
+    Networking.prototype.host = '';
+
+    Networking.prototype.url = '';
+
+    Networking.prototype.language = '';
+
+    Networking.prototype.createHandler = function(opts) {
+      var handler, stack, uri, _base, _name;
+      assert.instanceOf(this, Networking);
+      assert.isPlainObject(opts, '::createHandler options argument ...');
+      uri = opts.uri;
+      if (!(uri instanceof Networking.Uri)) {
+        uri = new Networking.Uri(uri);
+      }
+      handler = new Networking.Handler({
+        method: opts.method,
+        uri: uri,
+        schema: opts.schema,
+        callback: opts.callback
+      });
+      stack = (_base = this._handlers)[_name = opts.method] != null ? _base[_name] : _base[_name] = [];
+      stack.push(handler);
+      return handler;
+    };
+
+    Networking.prototype.createRequest = function(opts) {
+      var logtime, req, res, resOpts;
+      assert.instanceOf(this, Networking);
+      assert.isPlainObject(opts, '::createRequest options argument ...');
+      opts.uri = opts.uri ? opts.uri + '' : '';
+      if (!EXTERNAL_URL_RE.test(opts.uri)) {
+        if (opts.uri[0] !== '/') {
+          opts.uri = "/" + opts.uri;
+        }
+        opts.uri = "" + this.url + opts.uri;
+      }
+      req = new Networking.Request(opts);
+      logtime = log.time(utils.capitalize("" + req));
+      req.onLoadEnd((function(_this) {
+        return function() {
+          _this.pendingRequests.remove(req);
+          return log.end(logtime);
+        };
+      })(this));
+      resOpts = utils.isObject(opts.response) ? opts.response : {};
+      resOpts.request = req;
+      res = new Networking.Response(resOpts);
+      req.response = res;
+      this.pendingRequests.append(req);
+      this.onRequest.emit(req, res);
+      Impl.sendRequest(req, res, function(opts) {
+        utils.merge(res, opts);
+        res.pending = false;
+        return req.destroy();
+      });
+      return req;
+    };
+
+    Networking.prototype.get = function(uri, onLoadEnd) {
+      return this.createRequest({
+        method: 'get',
+        uri: uri,
+        onLoadEnd: onLoadEnd
+      });
+    };
+
+    Networking.prototype.post = function(uri, data, onLoadEnd) {
+      if (typeof data === 'function' && !onLoadEnd) {
+        onLoadEnd = data;
+        data = null;
+      }
+      return this.createRequest({
+        method: 'post',
+        uri: uri,
+        data: data,
+        onLoadEnd: onLoadEnd
+      });
+    };
+
+    Networking.prototype.put = function(uri, data, onLoadEnd) {
+      if (typeof data === 'function' && !onLoadEnd) {
+        onLoadEnd = data;
+        data = null;
+      }
+      return this.createRequest({
+        method: 'put',
+        uri: uri,
+        data: data,
+        onLoadEnd: onLoadEnd
+      });
+    };
+
+    Networking.prototype["delete"] = function(uri, onLoadEnd) {
+      var data;
+      if (typeof data === 'function' && !onLoadEnd) {
+        onLoadEnd = data;
+        data = null;
+      }
+      return this.createRequest({
+        method: 'delete',
+        uri: uri,
+        data: data,
+        onLoadEnd: onLoadEnd
+      });
+    };
+
+    EXTERNAL_URL_RE = /^[a-zA-Z]+:\/\//;
+
+    Networking.prototype.createLocalRequest = function(opts) {
+      var err, handlers, noHandlersError, onError, req, res, resOpts;
+      assert.instanceOf(this, Networking);
+      assert.isPlainObject(opts, '::createLocalRequest options argument ...');
+      req = new Networking.Request(opts);
+      req.onLoadEnd((function(_this) {
+        return function() {
+          return _this.pendingRequests.remove(req);
+        };
+      })(this));
+      resOpts = utils.isObject(opts.response) ? opts.response : {};
+      resOpts.request = req;
+      res = new Networking.Response(resOpts);
+      req.response = res;
+      this.pendingRequests.append(req);
+      this.onRequest.emit(req, res);
+      log("Resolve local `" + req + "` request");
+      onError = function(err) {
+        if (!req.pending) {
+          return;
+        }
+        if (err && (typeof err === 'object' || typeof err === 'string' || typeof err === 'number')) {
+          return res.raise(err);
+        } else {
+          return res.raise(Networking.Response.Error.RequestResolve(req));
+        }
+      };
+      noHandlersError = function() {
+        log.warn("No handler found for request `" + req + "`");
+        return onError();
+      };
+      handlers = this._handlers[req.method];
+      if (handlers) {
+        err = null;
+        utils.async.forEach(handlers, function(handler, i, handlers, next) {
+          return handler.exec(req, res, function(_err) {
+            if (_err != null) {
+              err = _err;
+            }
+            return next();
+          });
+        }, function() {
+          if (err) {
+            return onError(err);
+          } else {
+            return noHandlersError();
+          }
+        });
+      } else {
+        noHandlersError();
+      }
+      return req;
+    };
+
+    return Networking;
+
+  })(signal.Emitter);
+
+}).call(this);
+
+
+return module.exports;
 })();modules['../document/element/element/text.coffee.md'] = (function(){
 var module = {exports: modules["../document/element/element/text.coffee.md"]};
 var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
@@ -3890,7 +4806,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUE_SEARCH, CONTAINS, DEEP, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Text, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byInstance, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
+  var ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUES, ATTR_VALUE_SEARCH, CONTAINS, DEEP, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Text, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byInstance, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -4148,6 +5064,14 @@ var exports = module.exports;
 
   TRIM_ATTR_VALUE = /(?:'|")?([^'"]*)/;
 
+  ATTR_VALUES = {
+    __proto__: null,
+    'true': true,
+    'false': false,
+    'null': null,
+    'undefined': void 0
+  };
+
   i = 0;
 
   OPTS_QUERY_BY_PARENTS = 1 << (i++);
@@ -4190,7 +5114,11 @@ var exports = module.exports;
       } else if (exec = ATTR_VALUE_SEARCH.exec(sel)) {
         sel = sel.slice(exec[0].length);
         _ = exec[0], name = exec[1], val = exec[2];
-        val = TRIM_ATTR_VALUE.exec(val)[1];
+        if (val in ATTR_VALUES) {
+          val = ATTR_VALUES[val];
+        } else {
+          val = TRIM_ATTR_VALUE.exec(val)[1];
+        }
         if (STARTS_WITH.test(name)) {
           func = byAttrStartsWithValue;
         } else if (ENDS_WITH.test(name)) {
@@ -4492,13 +5420,14 @@ var exports = module.exports;
         };
         return function(node) {
           var tmp;
+          node._checkWatchers = CHECK_WATCHERS_THIS;
           tmp = node;
-          node._checkWatchers |= CHECK_WATCHERS_THIS;
-          while (tmp = tmp._parent) {
+          while (tmp) {
             if (tmp._checkWatchers & CHECK_WATCHERS_CHILDREN) {
               break;
             }
             tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN;
+            tmp = tmp._parent;
           }
           if (!pending) {
             setImmediate(updateWatchers);
@@ -4852,14 +5781,16 @@ var exports = module.exports;
 return module.exports;
 })();modules['../document/attrChange.coffee'] = (function(){
 var module = {exports: modules["../document/attrChange.coffee"]};
-var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md"});
+var require = getModule.bind(null, {"/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","utils":"../utils/index.coffee.md","log":"../log/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var assert, log;
+  var assert, log, utils;
 
   assert = require('assert');
+
+  utils = require('utils');
 
   log = require('log');
 
@@ -5576,7 +6507,7 @@ var exports = module.exports;
           if (storage instanceof Tag) {
             storage.onAttrsChange(onChange, this);
           } else if (storage instanceof Dict) {
-            this.trace(storage);
+            storage.onChange(onChange, this);
           }
         }
         return this.update();
@@ -5589,6 +6520,8 @@ var exports = module.exports;
           storage = _ref[_i];
           if (storage instanceof Tag) {
             storage.onAttrsChange.disconnect(onChange, this);
+          } else if (storage instanceof Dict) {
+            storage.onChange.disconnect(onChange, this);
           }
         }
         revertTraces.call(this);
@@ -8536,7 +9469,7 @@ var exports = module.exports;
         assert.isFunction(binding[0]);
         assert.isArray(binding[1]);
         item = this.item = obj._ref || obj;
-        if (typeof component.onObjectChange === "function") {
+        if (this.listensOnComponentObjectChange = component.onObjectChange != null) {
           component.onObjectChange(onComponentObjectChange, this);
         }
         this.func = binding[0];
@@ -8553,7 +9486,7 @@ var exports = module.exports;
         this.updatePending = false;
         this.updateLoop = 0;
         //</development>;
-        Object.preventExtensions(this);
+        Object.seal(this);
         this.update();
       }
 
@@ -8607,7 +9540,7 @@ var exports = module.exports;
       };
 
       Binding.prototype.destroy = function() {
-        var connection, _i, _len, _ref, _ref1;
+        var connection, _i, _len, _ref;
         _ref = this.connections;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           connection = _ref[_i];
@@ -8616,8 +9549,8 @@ var exports = module.exports;
         this.obj._impl.bindings[this.prop] = null;
         this.args = null;
         utils.clear(this.connections);
-        if ((_ref1 = this.component.onObjectChange) != null) {
-          _ref1.disconnect(onComponentObjectChange, this);
+        if (this.listensOnComponentObjectChange) {
+          this.component.onObjectChange.disconnect(onComponentObjectChange, this);
         }
         pool.push(this);
       };
@@ -16541,14 +17474,10 @@ var exports = module.exports;
 
         onPropertyChange = function(prop, oldVal) {
           var node;
-          if (this._updatingProperty === prop || !(node = this._node) || !node.attrs.has(prop)) {
+          if (this._updatingProperty === prop || !(node = this._node)) {
             return;
           }
-          if (oldVal === void 0) {
-            setProperty.call(this, this._ref._$, prop, node.attrs.get(prop), oldVal);
-          } else {
-            node.attrs.set(prop, this._ref._$[prop]);
-          }
+          node.attrs.set(prop, this._ref._$[prop]);
         };
 
         onNodeAttrsChange = function(attr, oldVal) {
@@ -19795,970 +20724,14 @@ var exports = module.exports;
 
 
 return module.exports;
-})();modules['../networking/impl/android/response.coffee'] = (function(){
-var module = {exports: modules["../networking/impl/android/response.coffee"]};
-var require = getModule.bind(null, {"log":"../log/index.coffee.md","utils":"../utils/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var Document, Renderer, log, utils;
-
-  log = require('log');
-
-  utils = require('utils');
-
-  Document = require('document');
-
-  Renderer = require('renderer');
-
-  log = log.scope('Networking');
-
-  module.exports = function(Networking) {
-    var showAsStyles;
-    showAsStyles = function(data) {
-      var hasItems, style, styles, _base, _i, _len;
-      if (!(data instanceof Document)) {
-        return false;
-      }
-      styles = data.styles;
-      if (!(styles != null ? styles.length : void 0)) {
-        log.warn("No `neft:style` found in main view");
-        return false;
-      }
-      Renderer.window.document.node = data.node;
-      hasItems = false;
-      for (_i = 0, _len = styles.length; _i < _len; _i++) {
-        style = styles[_i];
-        if (style.item) {
-          hasItems = true;
-          if ((_base = style.item).parent == null) {
-            _base.parent = Renderer.window;
-          }
-          if (style.isScope) {
-            style.item.document.onShow.emit();
-          }
-        }
-      }
-      return hasItems;
-    };
-    return {
-      send: function(res, data, callback) {
-        showAsStyles(data);
-        return callback();
-      },
-      setHeader: function() {},
-      redirect: function(res, status, uri, callback) {
-        networking.createLocalRequest({
-          method: Networking.Request.GET,
-          type: Networking.Request.HTML_TYPE,
-          uri: uri
-        });
-        return callback();
-      }
-    };
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../networking/uri.coffee.md'] = (function(){
-var module = {exports: modules["../networking/uri.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","dict":"../dict/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var Dict, QUERY_ASSIGNMENT, QUERY_SEPARATOR, assert, isArray, parseQuery, utils;
-
-  utils = require('utils');
-
-  assert = require('assert');
-
-  Dict = require('dict');
-
-  isArray = Array.isArray;
-
-  assert = assert.scope('Networking.Uri');
-
-  QUERY_SEPARATOR = '&';
-
-  QUERY_ASSIGNMENT = '=';
-
-  parseQuery = function(query) {
-    var arr, assignmentIndex, name, param, result, resultVal, val, _i, _len;
-    result = {};
-    arr = query.split(QUERY_SEPARATOR);
-    for (_i = 0, _len = arr.length; _i < _len; _i++) {
-      param = arr[_i];
-      assignmentIndex = param.indexOf(QUERY_ASSIGNMENT);
-      if (assignmentIndex !== -1) {
-        name = param.slice(0, assignmentIndex);
-        val = param.slice(assignmentIndex + 1);
-      } else {
-        name = param;
-        val = '';
-      }
-      resultVal = result[name];
-      if (resultVal === void 0) {
-        result[name] = val;
-      } else if (isArray(resultVal)) {
-        resultVal.push(val);
-      } else {
-        result[name] = [resultVal, val];
-      }
-    }
-    return result;
-  };
-
-  module.exports = function(Networking) {
-    var Uri;
-    return Uri = (function() {
-      Uri.URI_TRIM_RE = /^\/?(.*?)\/?$/;
-
-      Uri.NAMES_RE = /{([a-zA-Z0-9_$]+)\*?}/g;
-
-      function Uri(uri) {
-        var authIndex, exec, hashIndex, hostIndex, names, protocolIndex, queryString, re, searchIndex;
-        assert.isString(uri, 'ctor uri argument ...');
-        uri = uri.trim();
-        utils.defineProperty(this, '_uri', null, uri);
-        uri = Uri.URI_TRIM_RE.exec(uri)[1];
-        if (Uri.NAMES_RE.test(uri) || uri.indexOf('*') !== -1) {
-          Uri.NAMES_RE.lastIndex = 0;
-          this.params = {};
-          names = [];
-          while ((exec = Uri.NAMES_RE.exec(uri)) != null) {
-            names.push(exec[1]);
-            this.params[exec[1]] = null;
-          }
-          Object.preventExtensions(this.params);
-          re = uri;
-          re = re.replace(/(\?)/g, '\\$1');
-          re = re.replace(/{?([a-zA-Z0-9_$]+)?\*}?/g, "(.*?)");
-          re = re.replace(Uri.NAMES_RE, "([^/]+)");
-          re = new RegExp("^\/?" + re + "\/?$");
-        } else {
-          this.params = null;
-          names = null;
-          re = uri;
-          re = re.replace(/(\?)/g, '\\$1');
-          re = new RegExp("^\/?" + re + "\/?$");
-        }
-        utils.defineProperty(this, '_names', null, names);
-        utils.defineProperty(this, '_re', null, re);
-        hashIndex = uri.lastIndexOf('#');
-        if (hashIndex !== -1) {
-          this.hash = uri.slice(hashIndex + 1);
-          uri = uri.slice(0, hashIndex);
-        } else {
-          this.hash = '';
-        }
-        searchIndex = uri.indexOf('?');
-        if (searchIndex !== -1) {
-          queryString = uri.slice(searchIndex + 1);
-          uri = uri.slice(0, searchIndex);
-          this.query = parseQuery(queryString);
-        } else {
-          this.query = {};
-        }
-        protocolIndex = uri.indexOf(':');
-        if (protocolIndex !== -1 && uri.slice(0, protocolIndex).indexOf('/') === -1) {
-          this.protocol = uri.slice(0, protocolIndex);
-          uri = uri.slice(protocolIndex + 1);
-          while (uri[0] === '/') {
-            uri = uri.slice(1);
-          }
-        } else {
-          this.protocol = '';
-        }
-        authIndex = uri.indexOf('@');
-        if (authIndex !== -1 && uri.slice(0, authIndex).indexOf('/') === -1) {
-          this.auth = uri.slice(0, authIndex);
-          uri = uri.slice(authIndex + 1);
-        } else {
-          this.auth = '';
-        }
-        hostIndex = uri.indexOf('/');
-        if (hostIndex !== -1 && uri.slice(0, hostIndex).indexOf('.') !== -1) {
-          this.host = uri.slice(0, hostIndex);
-          uri = uri.slice(hostIndex + 1);
-        } else {
-          this.host = '';
-        }
-        this.path = "/" + uri;
-        Object.freeze(this);
-      }
-
-      Uri.prototype.test = function(uri) {
-        return this._re.test(uri);
-      };
-
-      Uri.prototype.match = function(uri) {
-        var exec, i, name, val, _i, _len, _ref;
-        assert.ok(this.test(uri));
-        if (this._names != null) {
-          exec = this._re.exec(uri);
-          _ref = this._names;
-          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-            name = _ref[i];
-            val = exec[i + 1];
-            if (val === void 0) {
-              val = null;
-            }
-            this.params[name] = decodeURI(val);
-          }
-        }
-        return this.params;
-      };
-
-      Uri.prototype.toString = function(params) {
-        var i;
-        if ((params != null) && (this._re != null)) {
-          assert.isObject(params, 'toString() params argument ...');
-        } else {
-          return this._uri;
-        }
-        if (params instanceof Dict) {
-          params = params._data;
-        }
-        i = 0;
-        return this._uri.replace(Uri.NAMES_RE, (function(_this) {
-          return function() {
-            return encodeURI(params[_this._names[i++]]);
-          };
-        })(this));
-      };
-
-      return Uri;
-
-    })();
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../networking/handler.coffee.md'] = (function(){
-var module = {exports: modules["../networking/handler.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var Schema, assert, log, parse, stringify, utils;
-
-  utils = require('utils');
-
-  assert = require('assert');
-
-  log = require('log');
-
-  Schema = require('schema');
-
-  parse = JSON.parse, stringify = JSON.stringify;
-
-  assert = assert.scope('Networking.Handler');
-
-  log = log.scope('Networking', 'Handler');
-
-  module.exports = function(Networking) {
-    var Handler;
-    return Handler = (function() {
-      function Handler(opts) {
-        assert.isPlainObject(opts, 'ctor options argument ...');
-        assert.ok(utils.has(Networking.Request.METHODS, opts.method), 'ctor options.method argument ...');
-        assert.instanceOf(opts.uri, Networking.Uri, 'ctor options.uri argument ...');
-        if (opts.schema != null) {
-          assert.instanceOf(opts.schema, Schema, 'ctor options.schema argument ...');
-        }
-        assert.isFunction(opts.callback, 'ctor options.callback argument ...');
-        this.method = opts.method, this.uri = opts.uri, this.schema = opts.schema, this.callback = opts.callback;
-      }
-
-      Handler.prototype.method = '';
-
-      Handler.prototype.uri = null;
-
-      Handler.prototype.schema = null;
-
-      Handler.prototype.callback = null;
-
-      Handler.prototype.exec = function(req, res, next) {
-        var callbackNext, err, key, params, schemaOpts, _ref;
-        assert.instanceOf(req, Networking.Request, '::exec request argument ...');
-        assert.instanceOf(res, Networking.Response, '::exec response argument ...');
-        assert.isFunction(next, '::exec next argument ...');
-        if (this.method !== req.method) {
-          return next();
-        }
-        if (!this.uri.test(req.uri.path)) {
-          return next();
-        }
-        params = req.params = this.uri.match(req.uri.path);
-        if (this.schema) {
-          _ref = this.schema.schema;
-          for (key in _ref) {
-            schemaOpts = _ref[key];
-            if (params.hasOwnProperty(key) && schemaOpts.type && schemaOpts.type !== 'string') {
-              params[key] = utils.tryFunction(parse, null, [params[key]], params[key]);
-            }
-          }
-          err = utils.catchError(this.schema.validate, this.schema, [params]);
-          if (err instanceof Error) {
-            return next(err);
-          }
-        }
-        callbackNext = (function(_this) {
-          return function(err) {
-            var errMsg;
-            req.handler = null;
-            if ((err != null) && err !== true) {
-              errMsg = err;
-              if (errMsg.stack != null) {
-                if (utils.isQt) {
-                  errMsg = "" + err.message + "\n" + err.stack;
-                } else {
-                  errMsg = err.stack;
-                }
-              } else if (utils.isObject(errMsg)) {
-                errMsg = utils.tryFunction(JSON.stringify, null, [errMsg], errMsg);
-              }
-            }
-            if (errMsg) {
-              log.error("Error in '" + _this.uri + "': " + errMsg);
-              if (err instanceof RangeError || err instanceof TypeError || err instanceof SyntaxError || err instanceof ReferenceError) {
-                errMsg = "Internal Error; message has been removed";
-              }
-              return next(errMsg);
-            } else {
-              return next();
-            }
-          };
-        })(this);
-        req.handler = this;
-        utils.tryFunction(this.callback, this, [req, res, callbackNext], callbackNext);
-        return null;
-      };
-
-      Handler.prototype.toString = function() {
-        return "" + this.method + " " + this.uri;
-      };
-
-      return Handler;
-
-    })();
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../networking/request.coffee.md'] = (function(){
-var module = {exports: modules["../networking/request.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","signal":"../signal/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, signal, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('assert');
-
-  signal = require('signal');
-
-  assert = assert.scope('Networking.Request');
-
-  module.exports = function(Networking, Impl) {
-    var Request;
-    return Request = (function(_super) {
-      __extends(Request, _super);
-
-      Request.METHODS = [(Request.GET = 'get'), (Request.POST = 'post'), (Request.PUT = 'put'), (Request.DELETE = 'delete'), (Request.OPTIONS = 'options')];
-
-      Request.TYPES = [(Request.TEXT_TYPE = 'text'), (Request.JSON_TYPE = 'json'), (Request.HTML_TYPE = 'html'), (Request.BINARY_TYPE = 'binary')];
-
-      function Request(opts) {
-        var uid;
-        assert.isPlainObject(opts, 'ctor options argument ...');
-        if (opts.uid != null) {
-          assert.isString(opts.uid);
-        }
-        if (opts.method != null) {
-          assert.ok(utils.has(Request.METHODS, opts.method));
-        }
-        if (!(opts.uri instanceof Networking.Uri)) {
-          assert.isString(opts.uri, 'ctor options.uri argument ...');
-        }
-        Request.__super__.constructor.call(this);
-        if (opts.type != null) {
-          assert.ok(utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...');
-          this.type = opts.type;
-        }
-        utils.defineProperty(this, 'type', utils.ENUMERABLE, this.type);
-        this.data = opts.data, this.headers = opts.headers, this.cookies = opts.cookies;
-        if (opts.method != null) {
-          this.method = opts.method;
-        }
-        this.headers || (this.headers = {});
-        this.cookies || (this.cookies = {});
-        if (typeof opts.uri === 'string') {
-          this.uri = new Networking.Uri(opts.uri);
-        } else {
-          this.uri = opts.uri;
-        }
-        uid = opts.uid || utils.uid();
-        utils.defineProperty(this, 'uid', null, uid);
-        this.pending = true;
-        this.params = null;
-        if (opts.onLoadEnd) {
-          this.onLoadEnd(opts.onLoadEnd);
-        }
-      }
-
-      signal.Emitter.createSignal(Request, 'onLoadEnd');
-
-      Request.prototype.uid = '';
-
-      Request.prototype.pending = false;
-
-      Request.prototype.method = Request.GET;
-
-      Request.prototype.uri = null;
-
-      Request.prototype.type = Request.JSON_TYPE;
-
-      Request.prototype.data = null;
-
-      Request.prototype.handler = null;
-
-      Request.prototype.response = null;
-
-      Request.prototype.params = null;
-
-      Request.prototype.headers = null;
-
-      Request.prototype.cookies = null;
-
-      Request.prototype.toString = function() {
-        return "" + this.method + " " + this.uri + " as " + this.type;
-      };
-
-      Request.prototype.destroy = function() {
-        var res;
-        assert(this.pending);
-        this.pending = false;
-        res = this.response;
-        if (res.isSucceed()) {
-          this.onLoadEnd.emit(null, res.data);
-        } else {
-          this.onLoadEnd.emit(res.data || res.status || "Unknown error");
-        }
-      };
-
-      return Request;
-
-    })(signal.Emitter);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../networking/response.coffee.md'] = (function(){
-var module = {exports: modules["../networking/response.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","signal":"../signal/index.coffee.md","./response/error.coffee.md":"../networking/response/error.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var assert, log, signal, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('assert');
-
-  log = require('log');
-
-  signal = require('signal');
-
-  assert = assert.scope('Networking.Response');
-
-  log = log.scope('Networking', 'Response');
-
-  module.exports = function(Networking, Impl) {
-    var Response;
-    return Response = (function(_super) {
-      __extends(Response, _super);
-
-      Response.STATUSES = [(Response.OK = 200), (Response.CREATED = 201), (Response.ACCEPTED = 202), (Response.NO_CONTENT = 204), (Response.MOVED = 301), (Response.FOUND = 302), (Response.NOT_MODIFIED = 304), (Response.TEMPORARY_REDIRECT = 307), (Response.BAD_REQUEST = 400), (Response.UNAUTHORIZED = 401), (Response.PAYMENT_REQUIRED = 402), (Response.FORBIDDEN = 403), (Response.NOT_FOUND = 404), (Response.METHOD_NOT_ALLOWED = 405), (Response.NOT_ACCEPTABLE = 406), (Response.CONFLICT = 409), (Response.PRECONDITION_FAILED = 412), (Response.UNSUPPORTED_MEDIA_TYPE = 415), (Response.INTERNAL_SERVER_ERROR = 500), (Response.NOT_IMPLEMENTED = 501), (Response.SERVICE_UNAVAILABLE = 503)];
-
-      Response.Error = require('./response/error.coffee.md')(Networking, Response);
-
-      function Response(opts) {
-        assert.isPlainObject(opts, 'ctor options argument ...');
-        assert.instanceOf(opts.request, Networking.Request, 'ctor options.request argument ...');
-        Response.__super__.constructor.call(this);
-        if (opts.status != null) {
-          assert.ok(utils.has(Response.STATUSES, opts.status), 'ctor options.status argument ...');
-          this.status = opts.status;
-        }
-        if (opts.data != null) {
-          this.data = opts.data;
-        }
-        if (opts.encoding != null) {
-          this.encoding = opts.encoding;
-        }
-        this.headers = opts.headers || {};
-        this.cookies = opts.cookies || {};
-        utils.defineProperty(this, 'request', null, opts.request);
-        this.pending = true;
-        if (opts.onSend) {
-          this.onSend(opts.onSend);
-        }
-        if (opts.status != null) {
-          this.send();
-        }
-      }
-
-      signal.Emitter.createSignal(Response, 'onSend');
-
-      Response.prototype.pending = false;
-
-      Response.prototype.request = null;
-
-      Response.prototype.status = Response.OK;
-
-      Response.prototype.data = null;
-
-      Response.prototype.headers = null;
-
-      Response.prototype.cookies = null;
-
-      Response.prototype.encoding = 'utf-8';
-
-      Response.prototype.setHeader = function(name, val) {
-        assert.ok(this.request.pending);
-        assert.isString(name, '::setHeader name argument ...');
-        assert.notLengthOf(name, 0, '::setHeader name argument ...');
-        assert.isString(val, '::setHeader value argument ...');
-        assert.notLengthOf(val, 0, '::setHeader value argument ...');
-        Impl.setHeader(this, name, val);
-        return this;
-      };
-
-      Response.prototype.send = function(status, data) {
-        assert.ok(this.request.pending);
-        if ((data == null) && typeof status !== 'number') {
-          data = status;
-          status = this.status;
-        }
-        if (status != null) {
-          assert.ok(utils.has(Response.STATUSES, status));
-          this.status = status;
-        }
-        if (data !== void 0) {
-          this.data = data;
-        }
-        this.request.destroy();
-        data = this.data;
-        Impl.send(this, data, (function(_this) {
-          return function() {
-            _this.pending = false;
-            return _this.onSend.emit();
-          };
-        })(this));
-      };
-
-      Response.prototype.redirect = function(status, uri) {
-        if (uri === void 0) {
-          uri = status;
-          status = Response.FOUND;
-        }
-        assert.ok(this.request.pending);
-        assert.ok(utils.has(Response.STATUSES, status));
-        assert.isString(uri);
-        log("" + status + " redirect to '" + uri + "'");
-        this.status = status;
-        this.setHeader('Location', uri);
-        this.request.destroy();
-        return Impl.redirect(this, status, uri, (function(_this) {
-          return function() {
-            _this.pending = false;
-            return _this.onSend.emit();
-          };
-        })(this));
-      };
-
-      Response.prototype.raise = function(error) {
-        if (error instanceof Response.Error || isFinite(error != null ? error.status : void 0)) {
-          return this.send(error.status, error);
-        } else {
-          return this.send(Response.INTERNAL_SERVER_ERROR, error);
-        }
-      };
-
-      Response.prototype.isSucceed = function() {
-        var _ref;
-        return (300 > (_ref = this.status) && _ref >= 200);
-      };
-
-      return Response;
-
-    })(signal.Emitter);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../networking/response/error.coffee.md'] = (function(){
-var module = {exports: modules["../networking/response/error.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var RequestResolve, assert, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  assert = require('assert');
-
-  assert = assert.scope('Networking.Response.Error');
-
-  module.exports = function(Networking, Response) {
-    var ResponseError;
-    return ResponseError = (function(_super) {
-      __extends(ResponseError, _super);
-
-      ResponseError.RequestResolve = RequestResolve(Networking, Response, ResponseError);
-
-      function ResponseError(status, message) {
-        if (message == null) {
-          message = '';
-        }
-        if (!(this instanceof ResponseError)) {
-          return new ResponseError(status, message);
-        }
-        if (typeof status === 'string') {
-          message = status;
-          status = this.status;
-        } else if (status === void 0) {
-          status = this.status;
-          message = this.message;
-        }
-        assert.ok(utils.has(Response.STATUSES, status));
-        assert.isString(message);
-        this.status = status;
-        this.message = message;
-      }
-
-      ResponseError.prototype.status = Response.INTERNAL_SERVER_ERROR;
-
-      ResponseError.prototype.name = 'ResponseError';
-
-      ResponseError.prototype.message = '';
-
-      return ResponseError;
-
-    })(Error);
-  };
-
-  RequestResolve = function(Networking, Response, ResponseError) {
-    return RequestResolve = (function(_super) {
-      __extends(RequestResolve, _super);
-
-      function RequestResolve(req) {
-        assert.instanceOf(req, Networking.Request, 'ctor request argument ...');
-        return RequestResolve.__super__.constructor.call(this, "No handler can be found");
-      }
-
-      RequestResolve.prototype.status = Response.BAD_REQUEST;
-
-      RequestResolve.prototype.name = 'RequestResolveResponseError';
-
-      return RequestResolve;
-
-    })(ResponseError);
-  };
-
-}).call(this);
-
-
-return module.exports;
-})();modules['../networking/index.coffee.md'] = (function(){
-var module = {exports: modules["../networking/index.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","signal":"../signal/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","list":"../list/index.coffee.md","./impl":"../networking/impl.coffee","./uri.coffee.md":"../networking/uri.coffee.md","./handler.coffee.md":"../networking/handler.coffee.md","./request.coffee.md":"../networking/request.coffee.md","./response.coffee.md":"../networking/response.coffee.md"});
-var exports = module.exports;
-
-(function() {
-  'use strict';
-  var List, Networking, assert, log, signal, utils,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  utils = require('utils');
-
-  signal = require('signal');
-
-  assert = require('assert');
-
-  log = require('log');
-
-  List = require('list');
-
-  assert = assert.scope('Networking');
-
-  log = log.scope('Networking');
-
-  module.exports = Networking = (function(_super) {
-    var EXTERNAL_URL_RE, Impl;
-
-    __extends(Networking, _super);
-
-    Impl = require('./impl')(Networking);
-
-    Networking.Uri = require('./uri.coffee.md')(Networking);
-
-    Networking.Handler = require('./handler.coffee.md')(Networking);
-
-    Networking.Request = require('./request.coffee.md')(Networking, Impl.Request);
-
-    Networking.Response = require('./response.coffee.md')(Networking, Impl.Response);
-
-    Networking.TYPES = [(Networking.HTTP = 'http')];
-
-    function Networking(opts) {
-      var url;
-      assert.isPlainObject(opts, 'ctor options argument ....');
-      assert.isString(opts.type, 'ctor options.type argument ...');
-      assert.ok(utils.has(Networking.TYPES, opts.type));
-      assert.isString(opts.protocol, 'ctor options.protocol argument ...');
-      assert.notLengthOf(opts.protocol, 0, 'ctor options.protocol argument ...');
-      assert.isInteger(opts.port, 'ctor options.port argument ...');
-      assert.isString(opts.host, 'ctor options.host argument ...');
-      assert.isString(opts.language, 'ctor options.language argument ...');
-      assert.notLengthOf(opts.language, 0, 'ctor options.language argument ...');
-      utils.defineProperty(this, '_handlers', utils.CONFIGURABLE, {});
-      this.type = opts.type, this.protocol = opts.protocol, this.port = opts.port, this.host = opts.host, this.language = opts.language;
-      this.pendingRequests = new List;
-      if (opts.url != null) {
-        assert.isString(opts.url);
-        assert.notLengthOf(opts.url, 0);
-        url = opts.url;
-        if (url[url.length - 1] === '/') {
-          url = url.slice(0, -1);
-        }
-      } else {
-        url = "" + this.protocol + "://" + this.host + ":" + this.port;
-      }
-      utils.defineProperty(this, 'url', utils.ENUMERABLE, url);
-      setImmediate((function(_this) {
-        return function() {
-          return Impl.init(_this);
-        };
-      })(this));
-      log.info("Start as `" + this.host + ":" + this.port + "`");
-      Networking.__super__.constructor.call(this);
-      Object.freeze(this);
-    }
-
-    Networking.prototype.type = Networking.HTTP;
-
-    signal.Emitter.createSignal(Networking, 'onRequest');
-
-    Networking.prototype.protocol = '';
-
-    Networking.prototype.port = 0;
-
-    Networking.prototype.host = '';
-
-    Networking.prototype.url = '';
-
-    Networking.prototype.language = '';
-
-    Networking.prototype.createHandler = function(opts) {
-      var handler, stack, uri, _base, _name;
-      assert.instanceOf(this, Networking);
-      assert.isPlainObject(opts, '::createHandler options argument ...');
-      uri = opts.uri;
-      if (!(uri instanceof Networking.Uri)) {
-        uri = new Networking.Uri(uri);
-      }
-      handler = new Networking.Handler({
-        method: opts.method,
-        uri: uri,
-        schema: opts.schema,
-        callback: opts.callback
-      });
-      stack = (_base = this._handlers)[_name = opts.method] != null ? _base[_name] : _base[_name] = [];
-      stack.push(handler);
-      return handler;
-    };
-
-    Networking.prototype.createRequest = function(opts) {
-      var logtime, req, res, resOpts;
-      assert.instanceOf(this, Networking);
-      assert.isPlainObject(opts, '::createRequest options argument ...');
-      opts.uri = opts.uri ? opts.uri + '' : '';
-      if (!EXTERNAL_URL_RE.test(opts.uri)) {
-        if (opts.uri[0] !== '/') {
-          opts.uri = "/" + opts.uri;
-        }
-        opts.uri = "" + this.url + opts.uri;
-      }
-      req = new Networking.Request(opts);
-      logtime = log.time(utils.capitalize("" + req));
-      req.onLoadEnd((function(_this) {
-        return function() {
-          _this.pendingRequests.remove(req);
-          return log.end(logtime);
-        };
-      })(this));
-      resOpts = utils.isObject(opts.response) ? opts.response : {};
-      resOpts.request = req;
-      res = new Networking.Response(resOpts);
-      req.response = res;
-      this.pendingRequests.append(req);
-      this.onRequest.emit(req, res);
-      Impl.sendRequest(req, res, function(opts) {
-        utils.merge(res, opts);
-        res.pending = false;
-        return req.destroy();
-      });
-      return req;
-    };
-
-    Networking.prototype.get = function(uri, onLoadEnd) {
-      return this.createRequest({
-        method: 'get',
-        uri: uri,
-        onLoadEnd: onLoadEnd
-      });
-    };
-
-    Networking.prototype.post = function(uri, data, onLoadEnd) {
-      if (typeof data === 'function' && !onLoadEnd) {
-        onLoadEnd = data;
-        data = null;
-      }
-      return this.createRequest({
-        method: 'post',
-        uri: uri,
-        data: data,
-        onLoadEnd: onLoadEnd
-      });
-    };
-
-    Networking.prototype.put = function(uri, data, onLoadEnd) {
-      if (typeof data === 'function' && !onLoadEnd) {
-        onLoadEnd = data;
-        data = null;
-      }
-      return this.createRequest({
-        method: 'put',
-        uri: uri,
-        data: data,
-        onLoadEnd: onLoadEnd
-      });
-    };
-
-    Networking.prototype["delete"] = function(uri, onLoadEnd) {
-      var data;
-      if (typeof data === 'function' && !onLoadEnd) {
-        onLoadEnd = data;
-        data = null;
-      }
-      return this.createRequest({
-        method: 'delete',
-        uri: uri,
-        data: data,
-        onLoadEnd: onLoadEnd
-      });
-    };
-
-    EXTERNAL_URL_RE = /^[a-zA-Z]+:\/\//;
-
-    Networking.prototype.createLocalRequest = function(opts) {
-      var err, handlers, noHandlersError, onError, req, res, resOpts;
-      assert.instanceOf(this, Networking);
-      assert.isPlainObject(opts, '::createLocalRequest options argument ...');
-      req = new Networking.Request(opts);
-      req.onLoadEnd((function(_this) {
-        return function() {
-          return _this.pendingRequests.remove(req);
-        };
-      })(this));
-      resOpts = utils.isObject(opts.response) ? opts.response : {};
-      resOpts.request = req;
-      res = new Networking.Response(resOpts);
-      req.response = res;
-      this.pendingRequests.append(req);
-      this.onRequest.emit(req, res);
-      log("Resolve local `" + req + "` request");
-      onError = function(err) {
-        if (!req.pending) {
-          return;
-        }
-        if (err && (typeof err === 'object' || typeof err === 'string' || typeof err === 'number')) {
-          return res.raise(err);
-        } else {
-          return res.raise(Networking.Response.Error.RequestResolve(req));
-        }
-      };
-      noHandlersError = function() {
-        log.warn("No handler found for request `" + req + "`");
-        return onError();
-      };
-      handlers = this._handlers[req.method];
-      if (handlers) {
-        err = null;
-        utils.async.forEach(handlers, function(handler, i, handlers, next) {
-          return handler.exec(req, res, function(_err) {
-            if (_err != null) {
-              err = _err;
-            }
-            return next();
-          });
-        }, function() {
-          if (err) {
-            return onError(err);
-          } else {
-            return noHandlersError();
-          }
-        });
-      } else {
-        noHandlersError();
-      }
-      return req;
-    };
-
-    return Networking;
-
-  })(signal.Emitter);
-
-}).call(this);
-
-
-return module.exports;
 })();modules['route.coffee.md'] = (function(){
 var module = {exports: modules["route.coffee.md"]};
-var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","dict":"../dict/index.coffee.md"});
+var require = getModule.bind(null, {"utils":"../utils/index.coffee.md","/Users/krystian/Projects/Neft/app/node_modules/assert":"../assert/index.coffee.md","assert":"../assert/index.coffee.md","log":"../log/index.coffee.md","schema":"../schema/index.coffee.md","networking":"../networking/index.coffee.md","document":"../document/index.coffee.md","renderer":"../renderer/index.coffee.md","dict":"../dict/index.coffee.md"});
 var exports = module.exports;
 
 (function() {
   'use strict';
-  var Dict, Document, Networking, Schema, assert, log, utils;
+  var Dict, Document, Networking, Renderer, Schema, assert, log, utils;
 
   utils = require('utils');
 
@@ -20771,6 +20744,8 @@ var exports = module.exports;
   Networking = require('networking');
 
   Document = require('document');
+
+  Renderer = require('renderer');
 
   Dict = require('dict');
 
@@ -20969,7 +20944,6 @@ var exports = module.exports;
           if (route._dataPrepared && route.error === err) {
             return false;
           }
-          console.error(err);
           route.error = err;
         } else {
           if (route._dataPrepared && route.data === data) {
@@ -20984,6 +20958,9 @@ var exports = module.exports;
         var data, respData, response;
         assert.instanceOf(route, Route);
         response = route.response;
+        if (route.error) {
+          log.error("Error in route '" + route.uri + "':\n" + route.error);
+        }
         respData = response.data;
         switch (route.request.type) {
           case 'text':
@@ -21022,6 +20999,9 @@ var exports = module.exports;
 
       finishRequest = function(route) {
         assert.instanceOf(route, Route);
+        if (route.response.data instanceof Document) {
+          Renderer.window.document.node = route.response.data.node;
+        }
         if (route.response.pending) {
           route.response.send();
         }
@@ -21219,7 +21199,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -21493,7 +21473,27 @@ var exports = module.exports;
 
       JSON_ARGS_LENGTH = Style.JSON_ARGS_LENGTH = i;
 
-      Style.extendDocumentByStyles = (function() {
+      Style.applyStyleQueriesInDocument = function(file) {
+        var elem, node, nodes, _i, _j, _len, _len1;
+        assert.instanceOf(file, File);
+        for (_i = 0, _len = queries.length; _i < _len; _i++) {
+          elem = queries[_i];
+          nodes = file.node.queryAll(elem.query);
+          for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
+            node = nodes[_j];
+            if (!(node instanceof Tag)) {
+              log.warn("document.query can be attached only to tags; " + ("query '" + elem.query + "' has been omitted for this node"));
+              continue;
+            }
+            if (!node.attrs.has('neft:style')) {
+              node.attrs.set('neft:style', elem.style);
+            }
+          }
+        }
+        return file;
+      };
+
+      Style.createStylesInDocument = (function() {
         var forNode, getStyleAttrs;
         getStyleAttrs = function(node) {
           var attr, attrs;
@@ -21533,26 +21533,18 @@ var exports = module.exports;
           }
         };
         return function(file) {
-          var elem, node, nodes, _i, _j, _len, _len1;
           assert.instanceOf(file, File);
-          for (_i = 0, _len = queries.length; _i < _len; _i++) {
-            elem = queries[_i];
-            nodes = file.node.queryAll(elem.query);
-            for (_j = 0, _len1 = nodes.length; _j < _len1; _j++) {
-              node = nodes[_j];
-              if (!(node instanceof Tag)) {
-                log.warn("document.query can be attached only to tags; " + ("query '" + elem.query + "' has been omitted for this node"));
-                continue;
-              }
-              if (!node.attrs.has('neft:style')) {
-                node.attrs.set('neft:style', elem.style);
-              }
-            }
-          }
           forNode(file, file.node, null);
           return file;
         };
       })();
+
+      Style.extendDocumentByStyles = function(file) {
+        assert.instanceOf(file, File);
+        Style.applyStyleQueriesInDocument(file);
+        Style.createStylesInDocument(file);
+        return file;
+      };
 
       Style._fromJSON = function(file, arr, obj) {
         var child, cloneChild, _i, _len, _ref;
@@ -21623,6 +21615,7 @@ var exports = module.exports;
         this.parent = null;
         this.isScope = false;
         this.isAutoParent = true;
+        this.enabled = true;
         this.item = null;
         this.scope = null;
         this.children = [];
@@ -21730,7 +21723,7 @@ var exports = module.exports;
       })();
 
       Style.prototype.render = function() {
-        if (this.waiting) {
+        if (this.waiting || !this.enabled) {
           return;
         }
         assert.notOk(this.isRendered);
@@ -21757,7 +21750,7 @@ var exports = module.exports;
 
       Style.prototype.renderItem = function() {
         var attr, attrsQueue, _i, _len, _ref;
-        if (!this.item || !this.file.isRendered) {
+        if (!this.item || !this.file.isRendered || !this.enabled) {
           return;
         }
         this.item.visible = true;
@@ -21959,7 +21952,7 @@ var exports = module.exports;
         return function(attr, val, oldVal) {
           var internalProp, obj, prop, props, _i, _ref;
           assert.instanceOf(this, Style);
-          if (this.waiting || !this.item) {
+          if (this.waiting || !this.isRendered || !this.item) {
             this.attrsQueue.push(attr, val, oldVal);
             return;
           }
@@ -22000,20 +21993,25 @@ var exports = module.exports;
         item = this.item;
         classes = item.classes;
         newClasses = val && val.split(' ');
-        if (oldVal && typeof oldVal === 'string') {
+        if (typeof oldVal === 'string' && oldVal !== '') {
           oldClasses = oldVal.split(' ');
           for (_i = 0, _len = oldClasses.length; _i < _len; _i++) {
             name = oldClasses[_i];
-            if (!newClasses || !utils.has(newClasses, name)) {
-              classes.remove(name);
+            if (name !== '') {
+              if (!newClasses || !utils.has(newClasses, name)) {
+                classes.remove(name);
+              }
             }
           }
         }
-        if (val && typeof val === 'string') {
+        if (typeof val === 'string' && val !== '') {
           newClasses = val.split(' ');
           prevIndex = -1;
           for (i = _j = 0, _len1 = newClasses.length; _j < _len1; i = ++_j) {
             name = newClasses[i];
+            if (!(name !== '')) {
+              continue;
+            }
             index = classes.index(name);
             if (prevIndex === -1 && index === -1) {
               index = classes.length;
@@ -22050,7 +22048,7 @@ var exports = module.exports;
       };
 
       Style.prototype.reloadItem = function() {
-        var file, id, match, parent, parentId, style, subid, _, _ref, _ref1;
+        var file, id, match, parent, parentId, scopeParent, style, subid, _, _ref, _ref1;
         if (this.waiting) {
           return;
         }
@@ -22087,6 +22085,7 @@ var exports = module.exports;
                   if (!parent.scope) {
                     return;
                   }
+                  scopeParent = parent;
                   this.item = parent.scope.objects[subid];
                 } else if (!(parent != null ? parent.scope : void 0) && file === 'view') {
                   this.item = windowStyle.objects[subid];
@@ -22098,6 +22097,14 @@ var exports = module.exports;
               if (!this.item) {
                 log.warn("Can't find `" + id + "` style item");
                 return;
+              }
+              if (scopeParent) {
+                parent = this;
+                while ((parent = parent.parent) !== scopeParent) {
+                  if (parent.isAutoParent) {
+                    parent.enabled = false;
+                  }
+                }
               }
               this.isAutoParent = !this.item.parent;
             } else {
@@ -22205,7 +22212,7 @@ var exports = module.exports;
       };
 
       Style.prototype.findItemIndex = function() {
-        if (this.parentSet) {
+        if (this.parentSet || !this.isAutoParent) {
           findItemIndex.call(this, this.node, this.item, this.item.parent);
           return true;
         } else {
@@ -22590,10 +22597,13 @@ var exports = module.exports;
         });
       }
     }
+    exports.app = {
+      Route: app.Route
+    };
     return app;
   };
 
-  MODULES = ['utils', 'signal', 'dict', 'list', 'log', 'Resources', 'native', 'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db'];
+  MODULES = ['utils', 'signal', 'Dict', 'List', 'log', 'Resources', 'native', 'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db'];
 
   for (_i = 0, _len = MODULES.length; _i < _len; _i++) {
     name = MODULES[_i];
