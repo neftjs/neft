@@ -43,6 +43,7 @@ module.exports = (opts, callback) ->
 
 		logtime = log.time 'Build bundle'
 		bundle = buildResult
+			platform: opts.platform
 			modules: msg.modules
 			paths: msg.paths
 			path: opts.path
