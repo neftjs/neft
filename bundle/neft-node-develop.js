@@ -1,4 +1,5 @@
-var Neft = (function(){
+var Neft = require('coffee-script/register');
+(function(){
 // list of modules with empty objects
 var modules = {"../utils/namespace.coffee.md":{},"../utils/stringifying.coffee.md":{},"../utils/async.coffee.md":{},"../utils/index.coffee.md":{},"../assert/index.coffee.md":{},"../log/impls/node/index.coffee":{},"../log/index.coffee.md":{},"../signal/emitter.coffee":{},"../signal/index.coffee.md":{},"../list/index.coffee.md":{},"../dict/index.coffee.md":{},"../db/implementations/memory.coffee":{},"../db/implementation.coffee":{},"../db/index.coffee.md":{},"../schema/validators/array.coffee.md":{},"../schema/validators/object.coffee.md":{},"../schema/validators/optional.coffee.md":{},"../schema/validators/max.coffee.md":{},"../schema/validators/min.coffee.md":{},"../schema/validators/options.coffee.md":{},"../schema/validators/regexp.coffee.md":{},"../schema/validators/type.coffee.md":{},"../schema/index.coffee.md":{},"../networking/impl/node/index.coffee":{},"../networking/impl.coffee":{},"../networking/impl/node/request.coffee":{},"../document/element/element/text.coffee.md":{},"../document/element/element/tag/stringify.coffee":{},"../typed-array/index.coffee.md":{},"../document/element/element/tag.coffee.md":{},"../document/element/element/tag/query.coffee":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/decode.json":{},"../document/node_modules/htmlparser2/node_modules/entities/lib/decode_codepoint.js":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/entities.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/legacy.json":{},"../document/node_modules/htmlparser2/node_modules/entities/maps/xml.json":{},"../document/node_modules/htmlparser2/lib/Tokenizer.js":{},"../document/node_modules/htmlparser2/lib/Parser.js":{},"../document/node_modules/htmlparser2/node_modules/domelementtype/index.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/node.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/lib/element.js":{},"../document/node_modules/htmlparser2/node_modules/domhandler/index.js":{},"../document/node_modules/htmlparser2/lib/index.js":{},"../document/element/element/parser.coffee":{},"../document/element/element.coffee.md":{},"../document/element/index.coffee":{},"../document/attrChange.coffee":{},"../document/use.coffee":{},"../document/input.coffee":{},"../document/input/text.coffee":{},"../document/input/attr.coffee":{},"../document/condition.coffee":{},"../document/iterator.coffee":{},"../document/log.coffee":{},"../renderer/impl.coffee":{},"../renderer/impl/base/level0/item.coffee":{},"../renderer/impl/base/level0/image.coffee":{},"../renderer/impl/base/level0/text.coffee":{},"../renderer/impl/base/level0/textInput.coffee":{},"../renderer/impl/base/level0/loader/font.coffee":{},"../renderer/impl/base/level0/loader/resources.coffee":{},"../renderer/impl/base/level0/device.coffee":{},"../renderer/impl/base/level0/screen.coffee":{},"../renderer/impl/base/level0/navigator.coffee":{},"../renderer/impl/base/level0/sensor/rotation.coffee":{},"../renderer/impl/base/level0/sound/ambient.coffee":{},"../renderer/impl/base/level1/rectangle.coffee":{},"../renderer/impl/base/level1/grid.coffee":{},"../renderer/impl/base/level1/column.coffee":{},"../renderer/impl/base/level1/row.coffee":{},"../renderer/impl/base/level1/flow.coffee":{},"../renderer/impl/base/level1/animation.coffee":{},"../renderer/impl/base/level1/animation/property.coffee":{},"../renderer/impl/base/level1/animation/number.coffee":{},"../renderer/impl/base/level2/scrollable.coffee":{},"../renderer/impl/base/level1/binding.coffee":{},"../renderer/impl/base/level1/anchors.coffee":{},"../renderer/impl/base/utils.coffee":{},"../renderer/impl/base/utils/grid.coffee":{},"../renderer/impl/base/index.coffee":{},"../renderer/impl/base/level0/item/pointer.coffee":{},"../renderer/utils/item.coffee":{},"../renderer/types/namespace/screen.coffee.md":{},"../renderer/types/namespace/device.coffee.md":{},"../renderer/types/namespace/navigator.coffee.md":{},"../renderer/types/namespace/sensor/rotation.coffee.md":{},"../renderer/types/extension.coffee":{},"../renderer/types/extensions/class.coffee.md":{},"../renderer/types/extensions/animation.coffee.md":{},"../renderer/types/extensions/animation/types/property.coffee.md":{},"../renderer/types/extensions/animation/types/property/types/number.coffee.md":{},"../renderer/types/extensions/transition.coffee.md":{},"../renderer/types/basics/component.coffee":{},"../renderer/types/basics/item.coffee.md":{},"../renderer/types/basics/item/spacing.coffee.md":{},"../renderer/types/basics/item/alignment.coffee.md":{},"../renderer/types/basics/item/anchors.coffee.md":{},"../renderer/types/basics/item/layout.coffee.md":{},"../renderer/types/basics/item/margin.coffee.md":{},"../renderer/types/basics/item/pointer.coffee.md":{},"../renderer/types/basics/item/keys.coffee.md":{},"../renderer/types/basics/item/document.coffee.md":{},"../renderer/types/basics/item/types/image.coffee.md":{},"../renderer/types/basics/item/types/text.coffee.md":{},"../renderer/types/basics/item/types/text/font.coffee.md":{},"../renderer/types/basics/item/types/textInput.coffee.md":{},"../renderer/types/shapes/rectangle.coffee.md":{},"../renderer/types/layout/grid.coffee.md":{},"../renderer/types/layout/column.coffee.md":{},"../renderer/types/layout/row.coffee.md":{},"../renderer/types/layout/flow.coffee.md":{},"../renderer/types/layout/scrollable.coffee.md":{},"../renderer/types/sound/ambient.coffee.md":{},"../resources/resource.coffee.md":{},"../resources/index.coffee.md":{},"../renderer/types/loader/resources.coffee.md":{},"../renderer/types/loader/font.coffee.md":{},"../renderer/index.coffee.md":{},"../document/func.coffee.md":{},"../document/attrsToSet.coffee":{},"../document/file/clear.coffee":{},"../document/file/parse/rules.coffee.md":{},"../document/file/parse/fragments/links.coffee.md":{},"../document/file/parse/fragments.coffee.md":{},"../document/file/parse/attrs.coffee.md":{},"../document/file/parse/attrChanges.coffee.md":{},"../document/file/parse/iterators.coffee.md":{},"../document/file/parse/target.coffee.md":{},"../document/file/parse/uses.coffee.md":{},"../document/file/parse/storage.coffee.md":{},"../document/file/parse/conditions.coffee.md":{},"../document/file/parse/ids.coffee.md":{},"../document/file/parse/logs.coffee.md":{},"../document/file/parse/funcs.coffee.md":{},"../document/file/parse/attrSetting.coffee.md":{},"../document/file/render/parse/target.coffee":{},"../document/file/render/revert/target.coffee":{},"../document/file.coffee.md":{},"../document/index.coffee.md":{},"../networking/impl/node/response.coffee":{},"../networking/uri.coffee.md":{},"../networking/handler.coffee.md":{},"../networking/request.coffee.md":{},"../networking/response.coffee.md":{},"../networking/response/error.coffee.md":{},"../networking/index.coffee.md":{},"route.coffee.md":{},"bootstrap/route.node.coffee.md":{},"package.json":{},"../native/actions.coffee":{},"../native/bridge.coffee":{},"../native/index.coffee.md":{},"../styles/file/styles.coffee":{},"../styles/style.coffee":{},"../styles/index.coffee":{},"index.coffee.md":{}};
 
@@ -2621,6 +2622,10 @@ var exports = module.exports;
         arr.length = i;
       }
       return this._values;
+    };
+
+    Dict.prototype.toObject = function() {
+      return this._data;
     };
 
     Dict.prototype.toJSON = function() {
@@ -22892,7 +22897,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -23323,7 +23328,7 @@ var exports = module.exports;
         }
       };
     })();
-    File.onBeforeRender(function(file) {
+    File.onRender(function(file) {
       renderStyles(file.styles);
     });
     revertStyles = function(arr) {
@@ -23563,7 +23568,9 @@ var exports = module.exports;
         this.attrsQueue = [];
         this.attrsClass = null;
         this.isRendered = false;
-        Object.preventExtensions(this);
+        this.visibilityClass = Renderer.Class.New(emptyComponent);
+        this.visibilityClass.priority = -2;
+        Object.seal(this);
       }
 
       showEvent = new Renderer.Item.Document.ShowEvent;
@@ -23681,12 +23688,24 @@ var exports = module.exports;
         updateWhenPossible(this);
       };
 
+      Style.prototype.renderRec = function() {
+        var style, _i, _len, _ref;
+        this.render();
+        _ref = this.children;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          style = _ref[_i];
+          if (!style.isRendered) {
+            style.renderRec();
+          }
+        }
+      };
+
       Style.prototype.renderItem = function() {
         var attr, attrsQueue, _i, _len, _ref;
         if (!this.item || !this.file.isRendered || !this.enabled) {
           return;
         }
-        this.item.visible = true;
+        this.setItemVisible(true);
         if (this.lastItemParent) {
           this.item.parent = this.lastItemParent;
         }
@@ -23731,7 +23750,7 @@ var exports = module.exports;
         if (!this.item) {
           return;
         }
-        this.item.visible = false;
+        this.setItemVisible(false);
         if (this.isAutoParent) {
           this.lastItemParent = null;
           if (!this.parentSet) {
@@ -23810,7 +23829,7 @@ var exports = module.exports;
           if (shouldSetText) {
             if (isText) {
               text = node.text;
-              this.item.visible = text.length > 0;
+              this.setItemVisible(text.length > 0);
             } else {
               text = node.stringifyChildren();
             }
@@ -23820,7 +23839,7 @@ var exports = module.exports;
             }
           } else {
             if (isText) {
-              this.item.visible = false;
+              this.setItemVisible(false);
             }
           }
         }
@@ -23851,10 +23870,21 @@ var exports = module.exports;
           visible = this.getVisibility();
         }
         if (visible && !this.isRendered && this.file.isRendered) {
-          this.render();
+          this.renderRec();
         }
         if (this.item) {
-          this.item.visible = visible;
+          this.setItemVisible(visible);
+        }
+      };
+
+      Style.prototype.setItemVisible = function(val) {
+        var visibilityClass, visible;
+        visibilityClass = this.visibilityClass;
+        visible = visibilityClass.changes._attributes.visible;
+        if (visible !== val) {
+          visibilityClass.disable();
+          visibilityClass.changes.setAttribute('visible', val);
+          visibilityClass.enable();
         }
       };
 
@@ -24055,13 +24085,14 @@ var exports = module.exports;
         }
         this.node.style = this.item;
         if (this.item) {
-          this.item.visible = false;
+          this.setItemVisible(false);
           if (this.isLink()) {
             this.item.linkUri = this.getLinkUri();
           }
           if (this.attrs) {
             this.attrsClass.target = this.item;
           }
+          this.visibilityClass.target = this.item;
         }
         if (this.getTextObject()) {
           listenTextRec(this);
@@ -24080,14 +24111,15 @@ var exports = module.exports;
       };
 
       findItemIndex = function(node, item, parent) {
-        var tmpIndexNode, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref, _ref1, _ref2;
+        var tmpIndexNode, tmpSiblingDocStyle, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref, _ref1;
         tmpIndexNode = node;
         parent = ((_ref = parent._children) != null ? _ref._target : void 0) || parent;
         tmpSiblingNode = tmpIndexNode;
         while (tmpIndexNode) {
           while (tmpSiblingNode) {
             if (tmpSiblingNode !== node) {
-              if (((_ref1 = tmpSiblingNode._documentStyle) != null ? _ref1.parentSet : void 0) && (tmpSiblingItem = tmpSiblingNode._documentStyle.item)) {
+              tmpSiblingDocStyle = tmpSiblingNode._documentStyle;
+              if ((tmpSiblingDocStyle != null ? tmpSiblingDocStyle.parentSet : void 0) && (tmpSiblingItem = tmpSiblingDocStyle.item)) {
                 if (tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)) {
                   if (item !== tmpSiblingTargetItem) {
                     if (item.previousSibling !== tmpSiblingTargetItem) {
@@ -24107,9 +24139,10 @@ var exports = module.exports;
           if (tmpIndexNode !== node && tmpIndexNode.style) {
             return;
           }
-          if (tmpIndexNode = tmpIndexNode._parent) {
-            tmpSiblingNode = tmpIndexNode._previousSibling;
-            if (((_ref2 = tmpIndexNode._documentStyle) != null ? _ref2.item : void 0) === parent) {
+          if (tmpSiblingNode = tmpIndexNode._previousSibling) {
+            tmpIndexNode = tmpSiblingNode;
+          } else if (tmpIndexNode = tmpIndexNode._parent) {
+            if (((_ref1 = tmpIndexNode._documentStyle) != null ? _ref1.item : void 0) === parent) {
               return;
             }
           }

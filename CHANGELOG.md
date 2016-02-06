@@ -2,6 +2,15 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
+## 0.9.4 - Bugs fixes
+
+### Renderer
+- [CSS TextInput focus management fixed](https://github.com/Neft-io/renderer/commit/4e7ebcd428c9b69a772c8d1e57dce463e458e214)
+
+### Styles
+- [Finding style index while document synchronisation bugs fixed](https://github.com/Neft-io/styles/commit/052a278d0ac05339e433dcf8ca0dea02e7fbda44)
+- [Item visibility management fixed](https://github.com/Neft-io/styles/commit/da65272a12b5106084af5f42c0ca61bf282abccd)
+
 ## 0.9.3 - Bugs fixes
 ### Neft-CLI
 - [Applying style queries through neft:fragment/neft:each bug fixed](https://github.com/Neft-io/neft-cli/commit/0733b4ccfeb0e9178f53eaa95ca9f388dafb3b28)

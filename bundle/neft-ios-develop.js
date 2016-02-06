@@ -2683,6 +2683,10 @@ var exports = module.exports;
       return this._values;
     };
 
+    Dict.prototype.toObject = function() {
+      return this._data;
+    };
+
     Dict.prototype.toJSON = function() {
       return this._data;
     };
@@ -21343,7 +21347,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -21534,7 +21538,7 @@ var exports = module.exports;
         }
       };
     })();
-    File.onBeforeRender(function(file) {
+    File.onRender(function(file) {
       renderStyles(file.styles);
     });
     revertStyles = function(arr) {
@@ -21774,7 +21778,9 @@ var exports = module.exports;
         this.attrsQueue = [];
         this.attrsClass = null;
         this.isRendered = false;
-        Object.preventExtensions(this);
+        this.visibilityClass = Renderer.Class.New(emptyComponent);
+        this.visibilityClass.priority = -2;
+        Object.seal(this);
       }
 
       showEvent = new Renderer.Item.Document.ShowEvent;
@@ -21892,12 +21898,24 @@ var exports = module.exports;
         updateWhenPossible(this);
       };
 
+      Style.prototype.renderRec = function() {
+        var style, _i, _len, _ref;
+        this.render();
+        _ref = this.children;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          style = _ref[_i];
+          if (!style.isRendered) {
+            style.renderRec();
+          }
+        }
+      };
+
       Style.prototype.renderItem = function() {
         var attr, attrsQueue, _i, _len, _ref;
         if (!this.item || !this.file.isRendered || !this.enabled) {
           return;
         }
-        this.item.visible = true;
+        this.setItemVisible(true);
         if (this.lastItemParent) {
           this.item.parent = this.lastItemParent;
         }
@@ -21942,7 +21960,7 @@ var exports = module.exports;
         if (!this.item) {
           return;
         }
-        this.item.visible = false;
+        this.setItemVisible(false);
         if (this.isAutoParent) {
           this.lastItemParent = null;
           if (!this.parentSet) {
@@ -22021,7 +22039,7 @@ var exports = module.exports;
           if (shouldSetText) {
             if (isText) {
               text = node.text;
-              this.item.visible = text.length > 0;
+              this.setItemVisible(text.length > 0);
             } else {
               text = node.stringifyChildren();
             }
@@ -22031,7 +22049,7 @@ var exports = module.exports;
             }
           } else {
             if (isText) {
-              this.item.visible = false;
+              this.setItemVisible(false);
             }
           }
         }
@@ -22062,10 +22080,21 @@ var exports = module.exports;
           visible = this.getVisibility();
         }
         if (visible && !this.isRendered && this.file.isRendered) {
-          this.render();
+          this.renderRec();
         }
         if (this.item) {
-          this.item.visible = visible;
+          this.setItemVisible(visible);
+        }
+      };
+
+      Style.prototype.setItemVisible = function(val) {
+        var visibilityClass, visible;
+        visibilityClass = this.visibilityClass;
+        visible = visibilityClass.changes._attributes.visible;
+        if (visible !== val) {
+          visibilityClass.disable();
+          visibilityClass.changes.setAttribute('visible', val);
+          visibilityClass.enable();
         }
       };
 
@@ -22266,13 +22295,14 @@ var exports = module.exports;
         }
         this.node.style = this.item;
         if (this.item) {
-          this.item.visible = false;
+          this.setItemVisible(false);
           if (this.isLink()) {
             this.item.linkUri = this.getLinkUri();
           }
           if (this.attrs) {
             this.attrsClass.target = this.item;
           }
+          this.visibilityClass.target = this.item;
         }
         if (this.getTextObject()) {
           listenTextRec(this);
@@ -22291,14 +22321,15 @@ var exports = module.exports;
       };
 
       findItemIndex = function(node, item, parent) {
-        var tmpIndexNode, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref, _ref1, _ref2;
+        var tmpIndexNode, tmpSiblingDocStyle, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref, _ref1;
         tmpIndexNode = node;
         parent = ((_ref = parent._children) != null ? _ref._target : void 0) || parent;
         tmpSiblingNode = tmpIndexNode;
         while (tmpIndexNode) {
           while (tmpSiblingNode) {
             if (tmpSiblingNode !== node) {
-              if (((_ref1 = tmpSiblingNode._documentStyle) != null ? _ref1.parentSet : void 0) && (tmpSiblingItem = tmpSiblingNode._documentStyle.item)) {
+              tmpSiblingDocStyle = tmpSiblingNode._documentStyle;
+              if ((tmpSiblingDocStyle != null ? tmpSiblingDocStyle.parentSet : void 0) && (tmpSiblingItem = tmpSiblingDocStyle.item)) {
                 if (tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)) {
                   if (item !== tmpSiblingTargetItem) {
                     if (item.previousSibling !== tmpSiblingTargetItem) {
@@ -22318,9 +22349,10 @@ var exports = module.exports;
           if (tmpIndexNode !== node && tmpIndexNode.style) {
             return;
           }
-          if (tmpIndexNode = tmpIndexNode._parent) {
-            tmpSiblingNode = tmpIndexNode._previousSibling;
-            if (((_ref2 = tmpIndexNode._documentStyle) != null ? _ref2.item : void 0) === parent) {
+          if (tmpSiblingNode = tmpIndexNode._previousSibling) {
+            tmpIndexNode = tmpSiblingNode;
+          } else if (tmpIndexNode = tmpIndexNode._parent) {
+            if (((_ref1 = tmpIndexNode._documentStyle) != null ? _ref1.item : void 0) === parent) {
               return;
             }
           }
