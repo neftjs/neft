@@ -150,7 +150,7 @@ module.exports = (File, data) -> class Style
 		@attrsClass = null
 		@isRendered = false
 
-		Object.preventExtensions @
+		Object.seal @
 
 	showEvent = new Renderer.Item.Document.ShowEvent
 	hideEvent = new Renderer.Item.Document.HideEvent
@@ -624,7 +624,8 @@ module.exports = (File, data) -> class Style
 			while tmpSiblingNode
 				if tmpSiblingNode isnt node
 					# get sibling item
-					if tmpSiblingNode._documentStyle?.parentSet and (tmpSiblingItem = tmpSiblingNode._documentStyle.item)
+					tmpSiblingDocStyle = tmpSiblingNode._documentStyle
+					if tmpSiblingDocStyle?.parentSet and (tmpSiblingItem = tmpSiblingDocStyle.item)
 						if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
 							if item isnt tmpSiblingTargetItem
 								if item.previousSibling isnt tmpSiblingTargetItem
@@ -641,9 +642,9 @@ module.exports = (File, data) -> class Style
 			if tmpIndexNode isnt node and tmpIndexNode.style
 				return
 			# check parent
-			if tmpIndexNode = tmpIndexNode._parent
-				tmpSiblingNode = tmpIndexNode._previousSibling
-
+			if tmpSiblingNode = tmpIndexNode._previousSibling
+				tmpIndexNode = tmpSiblingNode
+			else if tmpIndexNode = tmpIndexNode._parent
 				# out of scope
 				if tmpIndexNode._documentStyle?.item is parent
 					return

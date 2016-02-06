@@ -33,7 +33,7 @@ module.exports = (File) ->
 				pending = true
 			return
 
-	File.onBeforeRender (file) ->
+	File.onRender (file) ->
 		renderStyles file.styles
 		return
 
