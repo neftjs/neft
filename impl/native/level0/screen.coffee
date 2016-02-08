@@ -12,12 +12,12 @@ module.exports = (impl) ->
 		callback()
 		return
 
-	# bridge.listen bridge.inActions.SCREEN_ORIENTATION, (reader) ->
-	# 	return
+	bridge.listen bridge.inActions.SCREEN_ORIENTATION, (reader) ->
+		screen.orientation = reader.getString()
+		return
 
 	initScreenNamespace: (_callback) ->
 		callback = _callback
 		screen = this
 
-		@_touch = true
-		# @_orientation TODO
+		@_touch = true # TODO
