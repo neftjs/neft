@@ -34,8 +34,10 @@ module.exports = (platform, options, app, callback) ->
 				return callback err
 
 			if fs.existsSync('./local.json')
-				local = JSON.parse fs.readFileSync './local.json', 'utf-8'
-				local = utils.mergeAll {}, DEFAULT_LOCAL_FILE, local
+				localFile = JSON.parse fs.readFileSync './local.json', 'utf-8'
+				local = {}
+				utils.mergeDeep local, DEFAULT_LOCAL_FILE
+				utils.mergeDeep local, localFile
 			else
 				local = DEFAULT_LOCAL_FILE
 			fs.writeFileSync './local.json', JSON.stringify(local, null, 4)
