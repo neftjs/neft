@@ -647,11 +647,10 @@ module.exports = (File, data) -> class Style
 					if tmpSiblingDocStyle?.parentSet and (tmpSiblingItem = tmpSiblingDocStyle.item)
 						if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
 							if item isnt tmpSiblingTargetItem
-								if item.previousSibling isnt tmpSiblingTargetItem
-									item.previousSibling = tmpSiblingTargetItem
+								item.previousSibling = tmpSiblingTargetItem
 							return
 					# check children of special tags
-					else unless tmpSiblingNode._documentStyle
+					else unless tmpSiblingDocStyle
 						tmpIndexNode = tmpSiblingNode
 						tmpSiblingNode = utils.last tmpIndexNode.children
 						continue
@@ -666,6 +665,14 @@ module.exports = (File, data) -> class Style
 			else if tmpIndexNode = tmpIndexNode._parent
 				# out of scope
 				if tmpIndexNode._documentStyle?.item is parent
+					# no styled previous siblings found;
+					# add item as the first node defined element
+					targetChild = null
+					for child, i in parent.children
+						if child isnt item and child.document.node
+							targetChild = child
+							break
+					item.nextSibling = targetChild
 					return
 		return
 
