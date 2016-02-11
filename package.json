@@ -1,6 +1,6 @@
 {
   "name": "neft",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "preferGlobal": true,
   "description": "Command-line interface for building Neft.io projects",
   "bin": {
@@ -34,7 +34,7 @@
     "nml-parser": "Neft-io/nml-parser#c2d305f",
     "bundle-builder": "Neft-io/bundle-builder#7db7744",
     "sample-project": "Neft-io/sample-project#ec1224e",
-    "android-runtime": "Neft-io/android-runtime#2654be7",
+    "android-runtime": "Neft-io/android-runtime#v0.9.11",
     "ios-runtime": "Neft-io/ios-runtime#646ed4e"
   }
 }

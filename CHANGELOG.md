@@ -2,13 +2,15 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
-## 0.9.7 - Bugs fixes
+## 0.9.11 - Bugs fixes
+### Neft-CLI
+- [New 'local.android' compile properties added](https://github.com/Neft-io/neft-cli/commit/be96fe4c3fbf13af5bc87514e6f657af8b1124fb)
 
+## 0.9.7 - Bugs fixes
 ### Log
 - ['enabled' now works for scoped log instances](https://github.com/Neft-io/log/commit/675280f800fc8a460cad8565f1be2c27c92a4117)
 
 ## 0.9.4 - Bugs fixes
-
 ### Renderer
 - [CSS TextInput focus management fixed](https://github.com/Neft-io/renderer/commit/4e7ebcd428c9b69a772c8d1e57dce463e458e214)
 
