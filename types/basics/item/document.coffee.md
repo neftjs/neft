@@ -26,18 +26,18 @@ Document @extension
 			valueConstructor: ItemDocument
 
 		setProperty = (props, attr, val, oldVal) ->
-			if typeof props[attr] is 'function' and props[attr].connect
-				if typeof val is 'function'
-					props[attr] val
-				if typeof oldVal is 'function'
-					props[attr].disconnect oldVal
+			prop = props[attr]
+			if typeof prop is 'function' and prop.connect
+				if typeof val is 'function' and prop isnt val
+					prop val
+				if typeof oldVal is 'function' and prop isnt oldVal
+					prop.disconnect oldVal
 			else
-				@_updatingProperty = attr
 				props[attr] = val
 			return
 
 		onPropertyChange = (prop, oldVal) ->
-			if @_updatingProperty is prop or not (node = @_node)
+			if not (node = @_node)
 				return
 			node.attrs.set prop, @_ref._$[prop]
 			return
@@ -76,10 +76,9 @@ Document @extension
 			@_node = null
 			@_visible = false
 			@_query = ''
-			@_updatingProperty = ''
 			@_propertiesCleanQueue = []
 
-			Object.preventExtensions @
+			Object.seal @
 
 			ref.on$Change onPropertyChange, @
 
