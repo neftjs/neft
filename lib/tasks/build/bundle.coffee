@@ -9,6 +9,11 @@ pathUtils = require 'path'
 DEFAULT_LOCAL_FILE =
 	android:
 		sdkDir: '$ANDROID_HOME'
+		compileSdkVersion: 23
+		buildToolsVersion: "23"
+		dependencies: [
+			"com.android.support:appcompat-v7:23.0.0"
+		]
 
 module.exports = (platform, options, app, callback) ->
 	mode = if options.release then 'release' else 'develop'
