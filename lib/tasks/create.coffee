@@ -36,6 +36,6 @@ module.exports = (dest, options) ->
 	fs.writeFileSync "#{dest}/package.json", JSON.stringify(packageJson, 0, 2)
 
 	# rename .npmignore
-	fs.move "#{dest}/.npmignore", "#{dest}/.gitignore", {}
+	fs.move "#{dest}/.npmignore", "#{dest}/.gitignore", ->
 
 	log.ok "Project created in '#{dest}'"
