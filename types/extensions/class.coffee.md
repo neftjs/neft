@@ -749,7 +749,7 @@ Mostly used with bindings.
 						# as a priority for the whole selector;
 						# to fix this we can split selector with multiple queries ('a, b')
 						# into separated class instances
-						cmdLen = TagQuery.getSelectorCommandsLength val, 0, 1
+						cmdLen = TagQuery.getSelectorPriority val, 0, 1
 						oldPriority = @_priority
 						@_priority = cmdLen
 						@_ref._nestingPriority += cmdLen - oldPriority
