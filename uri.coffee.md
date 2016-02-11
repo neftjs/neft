@@ -149,7 +149,7 @@ var Uri = Networking.Uri;
 			# path
 			@path = "/#{uri}"
 
-			Object.freeze @
+			Object.seal @
 
 *String* Uri::protocol
 ----------------------
@@ -199,6 +199,8 @@ If the given uri is not valid with the uri, error will be raised.
 					if val is undefined
 						val = null
 					@params[name] = decodeURI val
+			else
+				@params ?= {}
 
 			@params
 
