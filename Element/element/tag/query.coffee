@@ -7,6 +7,10 @@ assert = require 'assert'
 {emitSignal} = signal.Emitter
 Tag = Text = null
 
+DEFAULT_PRIORITY = 0
+ELEMENTS_PRIORITY = 1
+ATTRS_PRIORITY = 100
+
 test = (node, funcs, index, targetFunc, targetCtx, single) ->
 	while index < funcs.length
 		func = funcs[index]
@@ -37,6 +41,7 @@ anyDescendant = (node, funcs, index, targetFunc, targetCtx, single) ->
 					return true
 	false
 anyDescendant.isIterator = true
+anyDescendant.priority = DEFAULT_PRIORITY
 anyDescendant.toString = -> 'anyDescendant'
 
 directParent = (node, funcs, index, targetFunc, targetCtx, single) ->
@@ -47,6 +52,7 @@ directParent = (node, funcs, index, targetFunc, targetCtx, single) ->
 			return directParent parent, funcs, index, targetFunc, targetCtx, single
 	false
 directParent.isIterator = true
+directParent.priority = DEFAULT_PRIORITY
 directParent.toString = -> 'directParent'
 
 anyChild = (node, funcs, index, targetFunc, targetCtx, single) ->
@@ -61,6 +67,7 @@ anyChild = (node, funcs, index, targetFunc, targetCtx, single) ->
 					return true
 	false
 anyChild.isIterator = true
+anyChild.priority = DEFAULT_PRIORITY
 anyChild.toString = -> 'anyChild'
 
 anyParent = (node, funcs, index, targetFunc, targetCtx, single) ->
@@ -71,6 +78,7 @@ anyParent = (node, funcs, index, targetFunc, targetCtx, single) ->
 			return anyParent(parent, funcs, index, targetFunc, targetCtx, single)
 	false
 anyParent.isIterator = true
+anyParent.priority = DEFAULT_PRIORITY
 anyParent.toString = -> 'anyParent'
 
 byName = (node, data1) ->
@@ -79,16 +87,19 @@ byName = (node, data1) ->
 	else if data1 is '#text' and node instanceof Text
 		true
 byName.isIterator = false
+byName.priority = ELEMENTS_PRIORITY
 byName.toString = -> 'byName'
 
 byInstance = (node, data1) ->
 	node instanceof data1
 byInstance.isIterator = false
+byInstance.priority = DEFAULT_PRIORITY
 byInstance.toString = -> 'byInstance'
 
 byTag = (node, data1) ->
 	node is data1
 byTag.isIterator = false
+byTag.priority = DEFAULT_PRIORITY
 byTag.toString = -> 'byTag'
 
 byAttr = (node, data1) ->
@@ -97,6 +108,7 @@ byAttr = (node, data1) ->
 	else
 		false
 byAttr.isIterator = false
+byAttr.priority = ATTRS_PRIORITY
 byAttr.toString = -> 'byAttr'
 
 byAttrValue = (node, data1, data2) ->
@@ -105,6 +117,7 @@ byAttrValue = (node, data1, data2) ->
 	else
 		false
 byAttrValue.isIterator = false
+byAttrValue.priority = ATTRS_PRIORITY
 byAttrValue.toString = -> 'byAttrValue'
 
 byAttrStartsWithValue = (node, data1, data2) ->
@@ -114,6 +127,7 @@ byAttrStartsWithValue = (node, data1, data2) ->
 			return attr.indexOf(data2) is 0
 	false
 byAttrStartsWithValue.isIterator = false
+byAttrStartsWithValue.priority = ATTRS_PRIORITY
 byAttrStartsWithValue.toString = -> 'byAttrStartsWithValue'
 
 byAttrEndsWithValue = (node, data1, data2) ->
@@ -123,6 +137,7 @@ byAttrEndsWithValue = (node, data1, data2) ->
 			return attr.indexOf(data2, attr.length - data2.length) > -1
 	false
 byAttrEndsWithValue.isIterator = false
+byAttrEndsWithValue.priority = ATTRS_PRIORITY
 byAttrEndsWithValue.toString = -> 'byAttrEndsWithValue'
 
 byAttrContainsValue = (node, data1, data2) ->
@@ -132,6 +147,7 @@ byAttrContainsValue = (node, data1, data2) ->
 			return attr.indexOf(data2) > -1
 	false
 byAttrContainsValue.isIterator = false
+byAttrContainsValue.priority = ATTRS_PRIORITY
 byAttrContainsValue.toString = -> 'byAttrContainsValue'
 
 TYPE = /^#?[a-zA-Z0-9|\-:_]+/
@@ -470,4 +486,16 @@ module.exports.getSelectorCommandsLength = (selector, beginQuery=0, endQuery=Inf
 		if i >= endQuery
 			break
 		sum += query.length
+	sum
+
+module.exports.getSelectorPriority = (selector, beginQuery=0, endQuery=Infinity) ->
+	sum = 0
+	queries = getQueries selector, 0
+	for query, i in queries
+		if i < beginQuery
+			continue
+		if i >= endQuery
+			break
+		for func in query by 3
+			sum += func.priority
 	sum
