@@ -1,10 +1,19 @@
 'use strict'
 
+semver = require 'semver'
 fs = require 'fs'
 pathUtils = require 'path'
 global.Neft = require '../bundle/neft-node-develop.js'
 
 {log} = Neft
+
+# warning for legacy node version
+do ->
+	currentVersion = process.version
+	expectedVersion = require('../package.json').engines.node
+	unless semver.satisfies(currentVersion, expectedVersion)
+		log.error "Node version '#{currentVersion}' " +
+			"is lower than expected '#{expectedVersion}'"
 
 # parse arguments
 ARGS_WITH_COMMANDS =
