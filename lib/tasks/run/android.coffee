@@ -12,7 +12,12 @@ module.exports = (options) ->
 	logtime = log.time 'Install APK'
 	packageFile = JSON.parse fs.readFileSync('./package.json', 'utf-8')
 	local = JSON.parse fs.readFileSync('./local.json', 'utf-8')
-	adbPath = "#{local.android.sdkDir}/platform-tools/adb"
+
+	{sdkDir} = local.android
+	if sdkDir is '$ANDROID_HOME'
+		sdkDir = (cp.execSync('echo $ANDROID_HOME')+'').trim()
+
+	adbPath = "#{sdkDir}/platform-tools/adb"
 	apkFileName = 'app-debug.apk'
 	adb = cp.exec "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}", (err) ->
 		log.end logtime
