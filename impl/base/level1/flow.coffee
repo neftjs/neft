@@ -6,7 +6,7 @@ TypedArray = require 'typed-array'
 
 log = log.scope 'Renderer', 'Flow'
 
-MAX_LOOPS = 50
+MAX_LOOPS = 150
 
 min = (a, b) ->
 	if a < b
@@ -314,16 +314,26 @@ updateItems = ->
 		item._impl.updatePending = false
 	return
 
+cleanPending = false
+cleanQueue = []
+clean = ->
+	cleanPending = false
+	while data = cleanQueue.pop()
+		if data.loops < MAX_LOOPS
+			data.loops = 0
+	return
+
 update = ->
 	data = @_impl
 
 	if data.pending or not @_effectItem?._visible
 		return
 
-	if data.updatePending
-		data.loops++
-	else
-		data.loops = 0
+	unless data.loops++
+		cleanQueue.push data
+		unless cleanPending
+			setTimeout clean
+			cleanPending = true
 
 	data.pending = true
 	queue.push @
