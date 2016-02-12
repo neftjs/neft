@@ -161,8 +161,16 @@ ReadOnly *String* Item::id
 			constructor: (ref) ->
 				@_layout = null
 				@_target = null
+				@firstChild = null
+				@lastChild = null
 				@length = 0
 				super ref
+
+ReadOnly *Item* Item::children.firstChild
+-----------------------------------------
+
+ReadOnly *Item* Item::children.lastChild
+----------------------------------------
 
 ReadOnly *Integer* Item::children.length
 ----------------------------------------
@@ -216,20 +224,46 @@ will be added into the `target` item.
 					if val?
 						assert.instanceOf val, Item
 
+*Item* Item::children.get(*Integer* index)
+------------------------------------------
+
+Returns an item with the given index.
+
+			get: (val) ->
+				assert.operator val, '>', 0
+				assert.operator val, '<', @length
+
+				if val < @length/2
+					sibling = @first
+					while val > 0
+						sibling = sibling.nextSibling
+						val--
+				else
+					sibling = @last
+					while val > 0
+						sibling = sibling.previousSibling
+						val--
+
+				sibling
+
 *Integer* Item::children.index(*Item* value)
 --------------------------------------------
 
 Returns an index of the given child in the children array.
 
-			index: (val) -> Array::indexOf.call @, val
-			indexOf: @::index
+			index: (val) ->
+				if @has(val)
+					val.index
+				else
+					-1
 
 *Boolean* Item::children.has(*Item* value)
 ------------------------------------------
 
 Returns `true` if the given item is an item child.
 
-			has: (val) -> @index(val) isnt -1
+			has: (val) ->
+				@_ref is val._parent
 
 Item::children.clear()
 ----------------------
@@ -237,16 +271,14 @@ Item::children.clear()
 Removes all children from the item.
 
 			clear: ->
-				while child = @[0]
-					child.parent = null
+				while last = @last
+					last.parent = null
 				return
 
 *Item* Item::parent = null
 --------------------------
 
 ## *Signal* Item::onParentChange(*Item* oldParent)
-
-		{indexOf, splice, push, shift, pop} = Array::
 
 		setFakeParent = (child, parent, index=-1) ->
 			child.parent = null
@@ -268,7 +300,6 @@ Removes all children from the item.
 				old = @_parent
 				oldChildren = old?.children
 				valChildren = val?.children
-				existsInOldChildren = true
 
 				if valChildren?._target
 					# detect whether target is a child of this item
@@ -292,30 +323,12 @@ Removes all children from the item.
 				if pointer = @_pointer
 					pointer.hover = pointer.pressed = false
 
-				oldPreviousSibling = @_previousSibling
-				oldNextSibling = @_nextSibling
-
-				if old isnt null
-					if oldNextSibling is null
-						index = oldChildren.length - 1
-						assert.ok oldChildren[index] is @
-						pop.call oldChildren
-					else if oldPreviousSibling is null
-						index = 0
-						assert.ok oldChildren[index] is @
-						shift.call oldChildren
-					else
-						index = indexOf.call oldChildren, @
-						if index is -1
-							existsInOldChildren = false
-						else
-							splice.call oldChildren, index, 1
-
 				if val isnt null
 					assert.instanceOf val, Item, '::parent setter ...'
-					length = push.call valChildren, @
 
 				# old siblings
+				oldPreviousSibling = @_previousSibling
+				oldNextSibling = @_nextSibling
 				if oldPreviousSibling isnt null
 					oldPreviousSibling._nextSibling = oldNextSibling
 				if oldNextSibling isnt null
@@ -323,20 +336,37 @@ Removes all children from the item.
 
 				# new siblings
 				if val isnt null
-					previousSibling = valChildren[valChildren.length - 2] or null
-					@_previousSibling = previousSibling
-					previousSibling?._nextSibling = @
+					if previousSibling = @_previousSibling = valChildren.lastChild
+						previousSibling._nextSibling = @
 				else
 					@_previousSibling = null
 				if oldNextSibling isnt null
 					@_nextSibling = null
 
+				# children
+				if oldChildren
+					oldChildren.length -= 1
+					if oldChildren.firstChild is @
+						oldChildren.firstChild = oldNextSibling
+					if oldChildren.lastChild is @
+						oldChildren.lastChild = oldPreviousSibling
+				if valChildren
+					if ++valChildren.length is 1
+						valChildren.firstChild = @
+					valChildren.lastChild = @
+
 				# parent
 				Impl.setItemParent.call @, val
 				@_parent = val
 
+				`//<development>`
+				assert.is @nextSibling, null
+				if val
+					assert.is val.children.lastChild, @
+				`//</development>`
+
 				# signals
-				if old isnt null and existsInOldChildren
+				if old isnt null
 					emitSignal old, 'onChildrenChange', null, @
 				if val isnt null
 					emitSignal val, 'onChildrenChange', @, null
@@ -349,7 +379,7 @@ Removes all children from the item.
 					emitSignal oldNextSibling, 'onPreviousSiblingChange', @
 
 				if val isnt null or oldPreviousSibling isnt null
-					if previousSibling?
+					if previousSibling
 						emitSignal previousSibling, 'onNextSiblingChange', null
 					emitSignal @, 'onPreviousSiblingChange', oldPreviousSibling
 				if oldNextSibling isnt null
@@ -370,10 +400,14 @@ Removes all children from the item.
 
 			if val
 				assert.instanceOf val, Item
-				@nextSibling = val._nextSibling
+				nextSibling = val._nextSibling
+				if not nextSibling and val._parent isnt @_parent
+					@parent = val._parent
+				else
+					@nextSibling = nextSibling
 			else
 				assert.isDefined @_parent
-				@nextSibling = @_parent.children[0]
+				@nextSibling = @_parent.children.firstChild
 
 			assert.is @_previousSibling, val
 			return
@@ -399,7 +433,7 @@ Removes all children from the item.
 				return
 
 			oldParent = @_parent
-			oldChildren = oldParent._children
+			oldChildren = oldParent?._children
 			oldPreviousSibling = @_previousSibling
 			oldNextSibling = @_nextSibling
 
@@ -422,51 +456,47 @@ Removes all children from the item.
 			oldPreviousSibling?._nextSibling = oldNextSibling
 			oldNextSibling?._previousSibling = oldPreviousSibling
 
-			# children array
-			oldIndex = oldChildren.index(@)
-			Array::splice.call oldChildren, oldIndex, 1
-			if val
-				newIndex = newChildren.indexOf(val)
-				Array::splice.call newChildren, newIndex, 0, @
-			else
-				newIndex = newChildren.length
-				Array::push.call newChildren, @
-
 			# new siblings
-			if newIndex > 0
-				previousSibling = newChildren[newIndex-1]
-				previousSiblingOldNextSibling = previousSibling._nextSibling
-				previousSibling._nextSibling = @
-			else
-				previousSibling = previousSiblingOldNextSibling = null
+			previousSibling = previousSiblingOldNextSibling = null
+			nextSibling = nextSiblingOldPreviousSibling = null
+			if val
+				if previousSibling = val._previousSibling
+					previousSiblingOldNextSibling = previousSibling._nextSibling
+					previousSibling._nextSibling = @
 
-			if newChildren.length > newIndex+1
-				nextSibling = newChildren[newIndex+1]
+				nextSibling = val
 				nextSiblingOldPreviousSibling = nextSibling._previousSibling
 				nextSibling._previousSibling = @
 			else
-				nextSibling = nextSiblingOldPreviousSibling = null
+				if previousSibling = newChildren.lastChild
+					previousSibling._nextSibling = @
 
 			@_previousSibling = previousSibling
 			@_nextSibling = nextSibling
 
+			# children
+			if oldChildren
+				oldChildren.length -= 1
+				unless oldPreviousSibling
+					oldChildren.firstChild = oldNextSibling
+				unless oldNextSibling
+					oldChildren.lastChild = oldPreviousSibling
+			if newChildren
+				newChildren.length += 1
+				if newChildren.firstChild is val
+					newChildren.firstChild = @
+				unless val
+					newChildren.lastChild = @
+
 			`//<development>`
-			{index} = @
 			assert.is @_nextSibling, val
 			assert.is @_parent, newParent
-			assert.is newChildren[index], @
-			assert.is newChildren[index-1] or null, @_previousSibling
-			assert.is newChildren[index+1] or null, @_nextSibling
 			if val
 				assert.is @_parent, val._parent
 			if @_previousSibling
 				assert.is @_previousSibling._nextSibling, @
-			else
-				assert.is index, 0
 			if @_nextSibling
 				assert.is @_nextSibling._previousSibling, @
-			else
-				assert.is index, newChildren.length-1
 			if oldPreviousSibling
 				assert.is oldPreviousSibling._nextSibling, oldNextSibling
 			if oldNextSibling
@@ -475,7 +505,8 @@ Removes all children from the item.
 
 			# children signal
 			if oldParent isnt newParent
-				emitSignal oldChildren, 'onChildrenChange', null, @
+				if oldChildren
+					emitSignal oldChildren, 'onChildrenChange', null, @
 				emitSignal newChildren, 'onChildrenChange', @, null
 				emitSignal @, 'onParentChange', oldParent
 			else
@@ -505,17 +536,21 @@ Removes all children from the item.
 ---------------------
 
 		utils.defineProperty @::, 'index', null, ->
-			@_parent?.children.index @
+			index = 0
+			sibling = @
+			while sibling = sibling.previousSibling
+				index++
+			index
 		, (val) ->
 			assert.isInteger val
 			assert.isDefined @_parent
 			assert.operator val, '>=', 0
 			assert.operator val, '<=', @_parent._children.length
 
-			children = @_parent._children
+			{children} = @parent
 			if val >= children.length
 				@nextSibling = null
-			else if (valItem = children[val]) isnt @
+			else if (valItem = children.get(val)) isnt @
 				@nextSibling = valItem
 
 			return

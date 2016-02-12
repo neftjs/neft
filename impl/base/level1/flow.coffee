@@ -55,6 +55,7 @@ updateItem = (item) ->
 
 	{includeBorderMargins, collapseMargins} = item
 	children = effectItem._children
+	firstChild = children.firstChild
 	data = item._impl
 	{autoWidth, autoHeight} = data
 
@@ -111,7 +112,11 @@ updateItem = (item) ->
 
 	# calculate children positions
 	rowsFillsSum = visibleChildrenIndex = 0
-	for child, i in children
+	nextChild = firstChild
+	i = -1
+	while child = nextChild
+		i += 1
+		nextChild = child.nextSibling
 		# omit not visible
 		if not child._visible
 			continue
@@ -237,7 +242,11 @@ updateItem = (item) ->
 					update = true
 
 		yShift = currentYShift = 0
-		for child, i in children
+		nextChild = firstChild
+		i = -1
+		while child = nextChild
+			i += 1
+			nextChild = child.nextSibling
 			if elementsRow[i] is row + 1 and unusedFills[row] is 0
 				yShift += currentYShift
 				currentYShift = 0
@@ -275,7 +284,11 @@ updateItem = (item) ->
 		flowWidth = effectItem._width - leftPadding - rightPadding
 	unless autoHeight
 		flowHeight = effectItem._height - topPadding - bottomPadding
-	for child, i in children
+	nextChild = firstChild
+	i = -1
+	while child = nextChild
+		i += 1
+		nextChild = child.nextSibling
 		# omit not visible
 		unless child._visible
 			continue
@@ -411,8 +424,10 @@ module.exports = (impl) ->
 			if @_impl.autoHeight
 				oldItem.height = 0
 
-			for child in oldItem.children
+			child = oldItem.children.firstChild
+			while child
 				disableChild.call @, child
+				child = child.nextSibling
 
 		if item
 			if @_impl.autoWidth = item.width is 0
@@ -426,8 +441,10 @@ module.exports = (impl) ->
 			item.onWidthChange onWidthChange, @
 			item.onHeightChange onHeightChange, @
 
-			for child in item.children
+			child = item.children.firstChild
+			while child
 				enableChild.call @, child
+				child = child.nextSibling
 
 			update.call @
 

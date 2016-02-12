@@ -70,12 +70,14 @@ module.exports = (impl) ->
 				# test children
 				# TODO: support z-index
 				if item._children
-					for child in item._children by -1
+					child = item._children.lastChild
+					while child
 						result |= checkItem(type, child, ex, ey, onItem, x, y, scale)
 						if result & STOP_PROPAGATION
 							return result
 						if result & STOP_ASIDE_PROPAGATION
 							break
+						child = child.previousSibling
 
 				# test content item
 				if item instanceof Scrollable and item._contentItem and not (result & STOP_ASIDE_PROPAGATION)

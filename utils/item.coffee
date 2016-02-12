@@ -140,7 +140,7 @@ module.exports = (Renderer, Impl) ->
 
 		@initialize = (object, component, opts) ->
 			assert.instanceOf component, Renderer.Component
-			Object.preventExtensions object
+			Object.seal object
 			object._component = component
 			Impl.initializeObject object, object.constructor.__name__
 			if opts

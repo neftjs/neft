@@ -133,7 +133,8 @@ module.exports = (impl) ->
 			minVal = 0
 
 			if children
-				for child in children
+				child = children.firstChild
+				while child
 					diff = contentPos - child[positionProp]
 					if velocity > 0
 						diff += child[sizeProp] * 0.5
@@ -145,6 +146,8 @@ module.exports = (impl) ->
 						if diff < minDiff
 							minDiff = diff
 							minVal = child[positionProp]
+
+					child = child.nextSibling
 
 			if minDiff is Infinity
 				child?[positionProp] or 0
@@ -422,7 +425,7 @@ module.exports = (impl) ->
 
 		if val
 			if @children.length > 0
-				impl.insertItemBefore.call val, @children[0]
+				impl.insertItemBefore.call val, @children.first
 			else
 				impl.setItemParent.call val, @
 

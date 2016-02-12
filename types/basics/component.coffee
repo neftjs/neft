@@ -155,11 +155,13 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				firstChildren = Array::slice.call clone.children
 				clone.children.clear()
 
-			for child in item.children
+			child = item.children.firstChild
+			while child
 				# child can be already cloned
 				cloneChild = components[child._component.id]?.objects[child.id]
 				cloneChild ?= cloneItem(child, components, createdComponents, component)
 				cloneChild.parent = clone
+				child = child.nextSibling
 
 			if firstChildren
 				for child in firstChildren

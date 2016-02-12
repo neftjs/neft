@@ -48,6 +48,7 @@ updateItem = (item) ->
 
 	{includeBorderMargins} = item
 	{children} = effectItem
+	firstChild = children.firstChild
 	data = item._impl
 	{gridType} = data
 
@@ -102,7 +103,11 @@ updateItem = (item) ->
 	# get last column and last row
 	i = lastColumn = 0
 	lastRow = -1
-	for child, childIndex in children
+	nextChild = firstChild
+	childIndex = -1
+	while child = nextChild
+		childIndex += 1
+		nextChild = child.nextSibling
 		# check visibility
 		if not child._visible or (child._layout and not child._layout._enabled)
 			visibleChildren[childIndex] = 0
@@ -120,7 +125,11 @@ updateItem = (item) ->
 
 	# get columns and rows sizes
 	i = columnsFillsSum = rowsFillsSum = 0
-	for child, childIndex in children
+	nextChild = firstChild
+	childIndex = -1
+	while child = nextChild
+		childIndex += 1
+		nextChild = child.nextSibling
 		unless visibleChildren[childIndex]
 			continue
 
@@ -231,7 +240,11 @@ updateItem = (item) ->
 
 	# set children positions and sizes
 	i = cellX = cellY = 0
-	for child, childIndex in children
+	nextChild = firstChild
+	childIndex = -1
+	while child = nextChild
+		childIndex += 1
+		nextChild = child.nextSibling
 		unless visibleChildren[childIndex]
 			continue
 
@@ -399,8 +412,10 @@ exports.setEffectItem = (item, oldItem) ->
 		oldItem.onWidthChange.disconnect onWidthChange, @
 		oldItem.onHeightChange.disconnect onHeightChange, @
 
-		for child in oldItem.children
+		child = oldItem.children.firstChild
+		while child
 			disableChild.call @, child
+			child = child.nextSibling
 
 	if item
 		if @_impl.autoWidth = item.width is 0
@@ -414,8 +429,10 @@ exports.setEffectItem = (item, oldItem) ->
 		item.onWidthChange onWidthChange, @
 		item.onHeightChange onHeightChange, @
 
-		for child in item.children
+		child = item.children.firstChild
+		while child
 			enableChild.call @, child
+			child = child.nextSibling
 
 		update.call @
 

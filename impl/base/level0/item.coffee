@@ -31,13 +31,13 @@ module.exports = (impl) ->
 		parent = val.parent
 		{children} = parent
 		tmp = []
-		valIndex = val.index
-		for i in [valIndex...children.length] by 1
-			child = children[i]
+		child = val
+		while child
 			if child isnt @
 				impl.setItemParent.call child, null
 				child._parent = null
 				tmp.push child
+			child = child.nextSibling
 
 		impl.setItemParent.call @, parent
 		@_parent = parent

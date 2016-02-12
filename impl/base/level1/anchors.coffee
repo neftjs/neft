@@ -148,11 +148,13 @@ module.exports = (impl) ->
 			children: (target) ->
 				tmp = 0
 				size = 0
-				for child in target
+				child = target.firstChild
+				while child
 					if child._visible
 						tmp = child._width
 						if tmp > size
 							size = tmp
+					child = child.nextSibling
 				size
 			sibling: (target) ->
 				target._width
@@ -162,11 +164,13 @@ module.exports = (impl) ->
 			children: (target) ->
 				tmp = 0
 				size = 0
-				for child in target
+				child = target.firstChild
+				while child
 					if child._visible
 						tmp = child._height
 						if tmp > size
 							size = tmp
+					child = child.nextSibling
 				size
 			sibling: (target) ->
 				target._height
@@ -295,8 +299,10 @@ module.exports = (impl) ->
 				when 'children'
 					@targetItem = item._children
 					item.onChildrenChange onChildrenChange, @
-					for child in item.children
+					child = @targetItem.firstChild
+					while child
 						onChildInsert.call @, child
+						child = child.nextSibling
 				when 'nextSibling'
 					@targetItem = item._nextSibling
 					item.onNextSiblingChange onNextSiblingChange, @
@@ -361,8 +367,10 @@ module.exports = (impl) ->
 					@item.onParentChange.disconnect onParentChange, @
 				when 'children'
 					@item.onChildrenChange.disconnect onChildrenChange, @
-					for child in @item.children
+					child = @item.children.firstChild
+					while child
 						onChildPop.call @, child, -1
+						child = child.nextSibling
 				when 'nextSibling'
 					@item.onNextSiblingChange.disconnect onNextSiblingChange, @
 				when 'previousSibling'
