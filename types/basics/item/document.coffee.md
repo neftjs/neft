@@ -33,11 +33,13 @@ Document @extension
 				if typeof oldVal is 'function' and prop isnt oldVal
 					prop.disconnect oldVal
 			else
+				@_updatePending = true
 				props[attr] = val
+				@_updatePending = false
 			return
 
 		onPropertyChange = (prop, oldVal) ->
-			if not (node = @_node)
+			if @_updatePending or not (node = @_node)
 				return
 			node.attrs.set prop, @_ref._$[prop]
 			return
@@ -77,6 +79,7 @@ Document @extension
 			@_visible = false
 			@_query = ''
 			@_propertiesCleanQueue = []
+			@_updatePending = false
 
 			Object.seal @
 
