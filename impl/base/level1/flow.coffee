@@ -396,6 +396,7 @@ module.exports = (impl) ->
 	create: (data) ->
 		impl.Types.Item.create.call @, data
 		@onAlignmentChange updateSize
+		@onPaddingChange update
 
 	setFlowEffectItem: (item, oldItem) ->
 		if oldItem

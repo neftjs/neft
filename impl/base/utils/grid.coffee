@@ -387,6 +387,7 @@ exports.DATA =
 exports.create = (item, type) ->
 	item._impl.gridType = type
 	item.onAlignmentChange updateSize
+	item.onPaddingChange updateSize
 
 exports.update = update
 
