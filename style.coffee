@@ -668,10 +668,12 @@ module.exports = (File, data) -> class Style
 					# no styled previous siblings found;
 					# add item as the first node defined element
 					targetChild = null
-					for child, i in parent.children
+					child = parent.children.firstChild
+					while child
 						if child isnt item and child.document.node
 							targetChild = child
 							break
+						child = child.nextSibling
 					item.nextSibling = targetChild
 					return
 		return
