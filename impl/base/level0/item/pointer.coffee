@@ -76,7 +76,7 @@ module.exports = (impl) ->
 							return result
 						if result & STOP_ASIDE_PROPAGATION
 							break
-						child = child.previousSibling
+						child = child.belowSibling
 
 				# test content item
 				if item instanceof Scrollable and item._contentItem and not (result & STOP_ASIDE_PROPAGATION)
