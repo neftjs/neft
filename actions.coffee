@@ -46,7 +46,6 @@ exports.out = do (i=0) ->
 	SET_ITEM_HEIGHT: i++
 	SET_ITEM_X: i++
 	SET_ITEM_Y: i++
-	SET_ITEM_Z: i++
 	SET_ITEM_SCALE: i++
 	SET_ITEM_ROTATION: i++
 	SET_ITEM_OPACITY: i++
