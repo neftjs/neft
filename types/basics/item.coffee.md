@@ -260,16 +260,16 @@ will be added into the `target` item.
 Returns an item with the given index.
 
 			get: (val) ->
-				assert.operator val, '>', 0
+				assert.operator val, '>=', 0
 				assert.operator val, '<', @length
 
 				if val < @length/2
-					sibling = @first
+					sibling = @firstChild
 					while val > 0
 						sibling = sibling.nextSibling
 						val--
 				else
-					sibling = @last
+					sibling = @lastChild
 					while val > 0
 						sibling = sibling.previousSibling
 						val--
@@ -527,7 +527,7 @@ Removes all children from the item.
 				nextChild = newChildren._bottomChild
 				while child = nextChild
 					nextChild = child._aboveSibling
-					if child._z > val or (child._z is val and isNextSibling(item, child))
+					if child._z > z or (child._z is z and isNextSibling(item, child))
 						item._aboveSibling = child
 						if item._belowSibling = child._belowSibling
 							item._belowSibling._aboveSibling = item
