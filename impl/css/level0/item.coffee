@@ -117,14 +117,10 @@ module.exports = (impl) ->
 	setItemParent: (val) ->
 		self = @
 		{elem} = @_impl
+		elem.parentElement?.removeChild elem
 
 		if val
 			val._impl.elem.appendChild elem
-		else
-			elem.parentElement?.removeChild elem
-
-		impl.pointer.setItemParent.call @, val
-
 		return
 
 	insertItemBefore: (val) ->
@@ -132,10 +128,6 @@ module.exports = (impl) ->
 		valElem = if val then val._impl.elem else null
 		oldParent = @_impl.elem.parentElement
 		newParent = parent._impl.elem
-
-		if oldParent isnt newParent
-			impl.pointer.setItemParent.call @, newParent
-
 		newParent.insertBefore @_impl.elem, valElem
 		return
 
@@ -170,10 +162,6 @@ module.exports = (impl) ->
 	setItemY: (val) ->
 		@_impl.y = round val
 		updateTransforms @_impl
-		return
-
-	setItemZ: (val) ->
-		@_impl.elemStyle.zIndex = if val is 0 then 'auto' else val
 		return
 
 	setItemScale: (val) ->

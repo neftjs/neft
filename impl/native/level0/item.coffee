@@ -29,16 +29,12 @@ module.exports = (impl) ->
 		pushAction outActions.SET_ITEM_PARENT
 		pushItem @
 		pushItem val
-		impl.pointer.setItemParent.call @, val
 		return
 
 	insertItemBefore: (val) ->
 		pushAction outActions.INSERT_ITEM_BEFORE
 		pushItem @
 		pushItem val
-
-		if val and val._parent isnt @_parent
-			impl.pointer.setItemParent.call @, val._parent
 		return
 
 	setItemBackground: (val) ->
@@ -81,12 +77,6 @@ module.exports = (impl) ->
 		pushAction outActions.SET_ITEM_Y
 		pushItem @
 		pushFloat val
-		return
-
-	setItemZ: (val) ->
-		pushAction outActions.SET_ITEM_Z
-		pushItem @
-		pushInteger val
 		return
 
 	setItemScale: (val) ->

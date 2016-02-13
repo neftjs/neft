@@ -5,10 +5,10 @@ module.exports = (impl) ->
 
 	DATA: DATA
 
-	createData: impl.utils.createDataCloner 'Text', DATA
+	createData: impl.utils.createDataCloner 'Item', DATA
 
 	create: (data) ->
-		impl.Types.Text.create.call @, data
+		impl.Types.Item.create.call @, data
 
 	setTextInputText: (val) ->
 

@@ -339,6 +339,13 @@ Removes all children from the item.
 				child = nextChild
 			return
 
+		insertItemInImpl = (item) ->
+			if aboveSibling = item._aboveSibling
+				Impl.insertItemBefore.call item, aboveSibling
+			else
+				Impl.setItemParent.call item, item._parent
+			return
+
 		itemUtils.defineProperty
 			constructor: @
 			name: 'parent'
@@ -429,8 +436,8 @@ Removes all children from the item.
 						valChildren._bottomChild = @
 
 				# parent
-				Impl.setItemParent.call @, val
 				@_parent = val
+				insertItemInImpl @
 
 				`//<development>`
 				assert.is @nextSibling, null
@@ -550,17 +557,12 @@ Removes all children from the item.
 			oldPreviousSibling = @_previousSibling
 			oldNextSibling = @_nextSibling
 
-			# implementation
 			if val
 				newParent = val._parent
 				newChildren = newParent._children
-				Impl.insertItemBefore.call @, val
 			else
 				newParent = oldParent
 				newChildren = oldChildren
-				Impl.setItemParent.call @, null
-				@_parent = null
-				Impl.setItemParent.call @, newParent
 
 			# new parent
 			@_parent = newParent
@@ -624,6 +626,9 @@ Removes all children from the item.
 				newChildren._topChild = @
 			unless @_belowSibling
 				newChildren._bottomChild = @
+
+			# implementation
+			insertItemInImpl @
 
 			`//<development>`
 			assert.is @_nextSibling, val
@@ -818,7 +823,6 @@ Determines whether an item is visible or not.
 			constructor: @
 			name: 'z'
 			defaultValue: 0
-			implementation: Impl.setItemZ
 			developmentSetter: (val) ->
 				assert.isFloat val, '::z setter ...'
 			setter: (_super) -> (val) ->
@@ -887,6 +891,10 @@ Determines whether an item is visible or not.
 						children._topChild = oldBelowSibling
 				else
 					children._topChild = @
+
+				# implementation
+				if oldAboveSibling isnt @_aboveSibling
+					insertItemInImpl @
 
 				`//<development>`
 				assert.isNot @_belowSibling, @

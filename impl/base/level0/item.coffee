@@ -20,7 +20,6 @@ module.exports = (impl) ->
 	create: (data) ->
 
 	setItemParent: (val) ->
-		pointer.setItemParent.call @, val
 
 	insertItemBefore: (val) ->
 		# remove this item
@@ -60,8 +59,6 @@ module.exports = (impl) ->
 	setItemX: (val) ->
 
 	setItemY: (val) ->
-
-	setItemZ: (val) ->
 
 	setItemScale: (val) ->
 

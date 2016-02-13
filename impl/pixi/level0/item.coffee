@@ -28,16 +28,6 @@ module.exports = (impl) ->
 		mask.endFill()
 		return
 
-	updateDepthIndexes = do ->
-		compare = (a, b) ->
-			if a.z < b.z
-				-1
-			if a.z > b.z
-				1
-			0
-		(item) ->
-			item._impl.elem.children.sort compare
-
 	DATA = utils.merge
 		bindings: null
 		anchors: null
@@ -64,13 +54,10 @@ module.exports = (impl) ->
 	setItemParent: (val) ->
 		item = @_impl.elem
 		parent = val?._impl.elem
+		item.parent?.removeChild item
 
 		if parent
 			parent.addChild item
-		else
-			item.parent.removeChild item
-
-		impl.pointer.setItemParent.call @, val
 
 		impl._dirty = true
 		return
@@ -130,11 +117,6 @@ module.exports = (impl) ->
 		@_impl.y = val
 		impl._dirty = true
 		return
-
-	setItemZ: (val) ->
-		@_impl.elem.z = val
-		updateDepthIndexes @
-		impl._dirty = true
 
 	setItemScale: (val) ->
 		@_impl.scale = val

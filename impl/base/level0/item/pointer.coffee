@@ -267,9 +267,6 @@ module.exports = (impl) ->
 		pointerMoveFlag: 0
 		capturePointer: 0
 
-	setItemParent: (val) ->
-		return
-
 	attachItemSignal: (signal) ->
 		item = @_ref
 		data = item._impl
