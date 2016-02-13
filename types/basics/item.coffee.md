@@ -39,6 +39,8 @@ This is a base class for everything which is visible.
 			@_children = null
 			@_previousSibling = null
 			@_nextSibling = null
+			@_belowSibling = null
+			@_aboveSibling = null
 			@_width = 0
 			@_height = 0
 			@_x = 0
@@ -161,19 +163,47 @@ ReadOnly *String* Item::id
 			constructor: (ref) ->
 				@_layout = null
 				@_target = null
-				@firstChild = null
-				@lastChild = null
-				@length = 0
+				@_firstChild = null
+				@_lastChild = null
+				@_bottomChild = null
+				@_topChild = null
+				@_length = 0
 				super ref
 
 ReadOnly *Item* Item::children.firstChild
 -----------------------------------------
 
+			utils.defineProperty @::, 'firstChild', null, ->
+				@_firstChild
+			, null
+
 ReadOnly *Item* Item::children.lastChild
 ----------------------------------------
 
+			utils.defineProperty @::, 'lastChild', null, ->
+				@_lastChild
+			, null
+
+ReadOnly *Item* Item::children.bottomChild
+------------------------------------------
+
+			utils.defineProperty @::, 'bottomChild', null, ->
+				@_bottomChild
+			, null
+
+ReadOnly *Item* Item::children.topChild
+---------------------------------------
+
+			utils.defineProperty @::, 'topChild', null, ->
+				@_topChild
+			, null
+
 ReadOnly *Integer* Item::children.length
 ----------------------------------------
+
+			utils.defineProperty @::, 'length', null, ->
+				@_length
+			, null
 
 *Item* Item::children.layout
 ----------------------------
@@ -283,13 +313,30 @@ Removes all children from the item.
 		setFakeParent = (child, parent, index=-1) ->
 			child.parent = null
 
-			if index >= 0 and parent.children.length < index
+			if index >= 0 and parent.children._length < index
 				Impl.insertItemBefore.call child, parent.children[index]
 			else
 				Impl.setItemParent.call child, parent
 
 			child._parent = parent
 			emitSignal child, 'onParentChange', null
+			return
+
+		updateZSiblingsForAppendedItem = (item, z, newChildren) ->
+			child = newChildren._topChild
+			while child
+				if child._z <= z
+					if item._aboveSibling = child._aboveSibling
+						item._aboveSibling._belowSibling = item
+					item._belowSibling = child
+					child._aboveSibling = item
+					return
+				unless nextChild = child._belowSibling
+					item._aboveSibling = child
+					child._belowSibling = item
+					item._belowSibling = null
+					return
+				child = nextChild
 			return
 
 		itemUtils.defineProperty
@@ -345,15 +392,41 @@ Removes all children from the item.
 
 				# children
 				if oldChildren
-					oldChildren.length -= 1
+					oldChildren._length -= 1
 					if oldChildren.firstChild is @
-						oldChildren.firstChild = oldNextSibling
+						oldChildren._firstChild = oldNextSibling
 					if oldChildren.lastChild is @
-						oldChildren.lastChild = oldPreviousSibling
+						oldChildren._lastChild = oldPreviousSibling
 				if valChildren
-					if ++valChildren.length is 1
-						valChildren.firstChild = @
-					valChildren.lastChild = @
+					if ++valChildren._length is 1
+						valChildren._firstChild = @
+					valChildren._lastChild = @
+
+				# old z-index siblings
+				oldBelowSibling = @_belowSibling
+				oldAboveSibling = @_aboveSibling
+				if oldBelowSibling isnt null
+					oldBelowSibling._aboveSibling = oldAboveSibling
+				if oldAboveSibling isnt null
+					oldAboveSibling._belowSibling = oldBelowSibling
+
+				# new z-index siblings
+				if valChildren
+					updateZSiblingsForAppendedItem @, @_z, valChildren
+				else
+					@_belowSibling = @_aboveSibling = null
+
+				# z-index children
+				if oldChildren
+					unless oldAboveSibling
+						oldChildren._topChild = oldBelowSibling
+					unless oldBelowSibling
+						oldChildren._bottomChild = oldAboveSibling
+				if valChildren
+					unless @_aboveSibling
+						valChildren._topChild = @
+					unless @_belowSibling
+						valChildren._bottomChild = @
 
 				# parent
 				Impl.setItemParent.call @, val
@@ -419,6 +492,46 @@ Removes all children from the item.
 *Item* Item::nextSibling
 ------------------------
 
+		isNextSibling = (item, sibling) ->
+			while item
+				nextItem = item._nextSibling
+				if nextItem is sibling
+					return true
+				item = nextItem
+			return false
+
+		isPreviousSibling = (item, sibling) ->
+			while item
+				prevItem = item._previousSibling
+				if prevItem is sibling
+					return true
+				item = prevItem
+			return false
+
+		updateZSiblingsForInsertedItem = (item, nextSibling, z, newChildren) ->
+			if nextSibling._z is z
+				# simple case - the same z-index as in nextSibling
+				if item._belowSibling = nextSibling._belowSibling
+					item._belowSibling._aboveSibling = item
+				item._aboveSibling = nextSibling
+				nextSibling._belowSibling = item
+			else
+				# hard case - different z-indexes
+				nextChild = newChildren._bottomChild
+				while child = nextChild
+					nextChild = child._aboveSibling
+					if child._z > val or (child._z is val and isNextSibling(item, child))
+						item._aboveSibling = child
+						if item._belowSibling = child._belowSibling
+							item._belowSibling._aboveSibling = item
+						child._belowSibling = item
+						break
+					unless nextChild
+						item._aboveSibling = null
+						item._belowSibling = child
+						child._aboveSibling = item
+			return
+
 		utils.defineProperty @::, 'nextSibling', null, ->
 			@_nextSibling
 		, (val=null) ->
@@ -476,17 +589,41 @@ Removes all children from the item.
 
 			# children
 			if oldChildren
-				oldChildren.length -= 1
+				oldChildren._length -= 1
 				unless oldPreviousSibling
-					oldChildren.firstChild = oldNextSibling
+					oldChildren._firstChild = oldNextSibling
 				unless oldNextSibling
-					oldChildren.lastChild = oldPreviousSibling
-			if newChildren
-				newChildren.length += 1
-				if newChildren.firstChild is val
-					newChildren.firstChild = @
-				unless val
-					newChildren.lastChild = @
+					oldChildren._lastChild = oldPreviousSibling
+			newChildren._length += 1
+			if newChildren.firstChild is val
+				newChildren._firstChild = @
+			unless val
+				newChildren._lastChild = @
+
+			# old z-index siblings
+			oldBelowSibling = @_belowSibling
+			oldAboveSibling = @_aboveSibling
+			if oldBelowSibling isnt null
+				oldBelowSibling._aboveSibling = oldAboveSibling
+			if oldAboveSibling isnt null
+				oldAboveSibling._belowSibling = oldBelowSibling
+
+			# new z-index siblings
+			if nextSibling
+				updateZSiblingsForInsertedItem @, nextSibling, @_z, newChildren
+			else
+				updateZSiblingsForAppendedItem @, @_z, newChildren
+
+			# z-index children
+			if oldChildren
+				unless oldAboveSibling
+					oldChildren._topChild = oldBelowSibling
+				unless oldBelowSibling
+					oldChildren._bottomChild = oldAboveSibling
+			unless @_aboveSibling
+				newChildren._topChild = @
+			unless @_belowSibling
+				newChildren._bottomChild = @
 
 			`//<development>`
 			assert.is @_nextSibling, val
@@ -505,12 +642,12 @@ Removes all children from the item.
 
 			# children signal
 			if oldParent isnt newParent
-				if oldChildren
-					emitSignal oldChildren, 'onChildrenChange', null, @
-				emitSignal newChildren, 'onChildrenChange', @, null
+				if oldParent
+					emitSignal oldParent, 'onChildrenChange', null, @
+				emitSignal newParent, 'onChildrenChange', @, null
 				emitSignal @, 'onParentChange', oldParent
 			else
-				emitSignal newChildren, 'onChildrenChange', null, null
+				emitSignal newParent, 'onChildrenChange', null, null
 
 			# current siblings signals
 			if oldPreviousSibling
@@ -531,6 +668,20 @@ Removes all children from the item.
 ## *Signal* Item::onNextSiblingChange(*Item* oldValue)
 
 		signal.Emitter.createSignal @, 'onNextSiblingChange'
+
+ReadOnly *Item* Item::belowSibling
+----------------------------------
+
+		utils.defineProperty @::, 'belowSibling', null, ->
+			@_belowSibling
+		, null
+
+ReadOnly *Item* Item::aboveSibling
+----------------------------------
+
+		utils.defineProperty @::, 'aboveSibling', null, ->
+			@_aboveSibling
+		, null
 
 *Integer* Item::index
 ---------------------
@@ -658,10 +809,10 @@ Determines whether an item is visible or not.
 			developmentSetter: (val) ->
 				assert.isFloat val, '::y setter ...'
 
-Hidden *Integer* Item::z = 0
-----------------------------
+*Float* Item::z = 0
+-------------------
 
-## Hidden *Signal* Item::onZChange(*Integer* oldValue)
+## *Signal* Item::onZChange(*Float* oldValue)
 
 		itemUtils.defineProperty
 			constructor: @
@@ -669,7 +820,85 @@ Hidden *Integer* Item::z = 0
 			defaultValue: 0
 			implementation: Impl.setItemZ
 			developmentSetter: (val) ->
-				assert.isInteger val, '::z setter ...'
+				assert.isFloat val, '::z setter ...'
+			setter: (_super) -> (val) ->
+				oldVal = @_z
+				if oldVal is val
+					return
+
+				_super.call @, val
+
+				unless parent = @_parent
+					return
+				children = parent._children
+				oldAboveSibling = @_aboveSibling
+				oldBelowSibling = @_belowSibling
+
+				# new siblings
+				if val > oldVal
+					nextChild = @_aboveSibling
+					while child = nextChild
+						nextChild = child._aboveSibling
+						if child._z > val or (child._z is val and isNextSibling(@, child))
+							if oldAboveSibling is child
+								break
+							@_aboveSibling = child
+							if @_belowSibling = child._belowSibling
+								@_belowSibling._aboveSibling = @
+							child._belowSibling = @
+							break
+						unless nextChild
+							@_aboveSibling = null
+							@_belowSibling = child
+							child._aboveSibling = @
+
+				if val < oldVal
+					prevChild = @_belowSibling
+					while child = prevChild
+						prevChild = child._belowSibling
+						if child._z < val or (child._z is val and isPreviousSibling(@, child))
+							if oldBelowSibling is child
+								break
+							@_belowSibling = child
+							aboveSibling = child._aboveSibling
+							if @_aboveSibling = child._aboveSibling
+								@_aboveSibling._belowSibling = @
+							child._aboveSibling = @
+							break
+						unless prevChild
+							@_belowSibling = null
+							@_aboveSibling = child
+							child._belowSibling = @
+
+				# clean old siblings
+				if oldBelowSibling and oldBelowSibling isnt @_belowSibling
+					oldBelowSibling._aboveSibling = oldAboveSibling
+				if oldAboveSibling and oldAboveSibling isnt @_aboveSibling
+					oldAboveSibling._belowSibling = oldBelowSibling
+
+				# new children
+				if @_belowSibling
+					if children._bottomChild is @
+						children._bottomChild = oldAboveSibling
+				else
+					children._bottomChild = @
+				if @_aboveSibling
+					if children._topChild is @
+						children._topChild = oldBelowSibling
+				else
+					children._topChild = @
+
+				`//<development>`
+				assert.isNot @_belowSibling, @
+				assert.isNot @_belowSibling?._belowSibling, @
+				assert.isNot @_aboveSibling, @
+				assert.isNot @_aboveSibling?._aboveSibling, @
+				if @_belowSibling
+					assert.is @_belowSibling._aboveSibling, @
+				if @_aboveSibling
+					assert.is @_aboveSibling._belowSibling, @
+				`//</development>`
+				return
 
 *Float* Item::scale = 1
 -----------------------
