@@ -19,7 +19,6 @@ public enum InAction {
     SET_ITEM_HEIGHT,
     SET_ITEM_X,
     SET_ITEM_Y,
-    SET_ITEM_Z,
     SET_ITEM_SCALE,
     SET_ITEM_ROTATION,
     SET_ITEM_OPACITY,

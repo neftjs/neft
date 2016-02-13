@@ -77,13 +77,6 @@ public class Item {
             }
         });
 
-        app.client.actions.put(InAction.SET_ITEM_Z, new Action() {
-            @Override
-            public void work(Reader reader) {
-                app.renderer.getItemFromReader(reader).setZ(reader.getInteger());
-            }
-        });
-
         app.client.actions.put(InAction.SET_ITEM_SCALE, new Action() {
             @Override
             public void work(Reader reader) {
@@ -130,7 +123,6 @@ public class Item {
     public float scale = 1f;
     public float rotation = 0f;
     public int opacity = 255;
-    public int zIndex = 0;
     public boolean visible = true;
     public boolean clip = false;
     public Item parent;
@@ -279,11 +271,6 @@ public class Item {
         y = app.renderer.dpToPx(val);
         dirtyMatrix = true;
         invalidate();
-    }
-
-    public void setZ(int val) {
-        zIndex = val;
-        // TODO
     }
 
     public void setScale(float val) {
