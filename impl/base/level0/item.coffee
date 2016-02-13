@@ -36,7 +36,7 @@ module.exports = (impl) ->
 				impl.setItemParent.call child, null
 				child._parent = null
 				tmp.push child
-			child = child.nextSibling
+			child = child.aboveSibling
 
 		impl.setItemParent.call @, parent
 		@_parent = parent
