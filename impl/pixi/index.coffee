@@ -82,6 +82,12 @@ unless window.isFake
 		return
 
 SHEET = "
+#hatchery {
+	visibility: hidden;
+}
+#hatchery span {
+	display: inline-block;
+}
 body {
 	margin: 0;
 	overflow: hidden;
@@ -121,7 +127,10 @@ window.addEventListener 'resize', ->
 	renderer.resize innerWidth, innerHeight
 
 # body
+hatchery = document.createElement 'div'
+hatchery.setAttribute 'id', 'hatchery'
 window.addEventListener 'load', ->
+	document.body.appendChild hatchery
 	document.body.appendChild renderer.view
 
 	styles = document.createElement 'style'
@@ -131,6 +140,7 @@ window.addEventListener 'load', ->
 module.exports = (impl) ->
 	{items} = impl
 
+	impl._hatchery = hatchery
 	impl._dirty = true
 	impl._pixiStage = stage
 	impl.pixelRatio = pixelRatio
