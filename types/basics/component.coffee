@@ -91,9 +91,15 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 		# init extensions
 		for id, item of @objects
 			if @objects.hasOwnProperty(id)
-				for extension in item._extensions
+				extensions = item._extensions
+				i = 0
+				{length} = extensions
+				while extension = extensions[i++]
 					if !extension.name and not extension._bindings?.when
 						extension.enable()
+						if extensions.length < length
+							i--
+							length--
 
 		# init objects
 		for id, item of @objects
