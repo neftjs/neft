@@ -167,6 +167,7 @@ Tag @virtual_dom
 var watcher = doc.watch('div > * > b[attr]');
 watcher.onAdd(function(tag){});
 watcher.onRemove(function(tag){});
+watcher.disconnect();
 ```
 
 		watch: query.watch

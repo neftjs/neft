@@ -286,12 +286,14 @@ class Watcher extends signal.Emitter
 			Watcher.watchers.push watcher
 		watcher
 
-	constructor: (@node, @queries) ->
+	constructor: (node, queries) ->
 		super()
+		@node = node
+		@queries = queries
 		@uid = utils.uid()
 		@nodes = []
 		@forceUpdate = true
-		Object.preventExtensions @
+		Object.seal @
 
 	signal.Emitter.createSignal @, 'onAdd'
 	signal.Emitter.createSignal @, 'onRemove'
@@ -378,6 +380,11 @@ module.exports = (Element, _Tag) ->
 		CHECK_WATCHERS_THIS = 1 << i++
 		CHECK_WATCHERS_CHILDREN = 1 << i++
 		CHECK_WATCHERS_ALL = (1 << i++) - 1
+		CHECK_WATCHERS_SWITCH_1 = i << i++
+		CHECK_WATCHERS_SWITCH_2 = i << i++
+
+		currentWatchersSwitch = CHECK_WATCHERS_SWITCH_1
+		nextWatchersSwitch = CHECK_WATCHERS_SWITCH_2
 
 		checkRec = (watcher, watcherUid, node, update) ->
 			unless update & CHECK_WATCHERS_THIS
@@ -410,10 +417,14 @@ module.exports = (Element, _Tag) ->
 			return
 
 		clearRec = (node) ->
-			node._checkWatchers = 0
-			if node instanceof Tag
-				for child in node.children
-					if child._checkWatchers > 0
+			checkWatchers = node._checkWatchers
+			if checkWatchers > 0
+				if checkWatchers & currentWatchersSwitch
+					node._checkWatchers = checkWatchers & ~nextWatchersSwitch
+				else
+					node._checkWatchers = 0
+				if node instanceof Tag
+					for child in node.children
 						clearRec child
 			return
 
@@ -454,6 +465,10 @@ module.exports = (Element, _Tag) ->
 			pending = false
 			{watchers} = Watcher
 
+			tmp = currentWatchersSwitch
+			currentWatchersSwitch = nextWatchersSwitch
+			nextWatchersSwitch = tmp
+
 			for watcher in watchers
 				if watcher.node
 					updateWatcher watcher
@@ -464,12 +479,13 @@ module.exports = (Element, _Tag) ->
 			return
 
 		(node) ->
+			thisFlag = CHECK_WATCHERS_CHILDREN | currentWatchersSwitch
 			node._checkWatchers = CHECK_WATCHERS_THIS
 			tmp = node
 			while tmp
-				if tmp._checkWatchers & CHECK_WATCHERS_CHILDREN
+				if tmp._checkWatchers & currentWatchersSwitch
 					break
-				tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN
+				tmp._checkWatchers |= thisFlag
 				tmp = tmp._parent
 
 			unless pending
