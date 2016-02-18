@@ -2,27 +2,29 @@
 
 # Neft
 
+## JavaScript. Everywhere.
+
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Neft-io/neft)
 [![npm version](https://badge.fury.io/js/neft.svg)](https://badge.fury.io/js/neft)
 <a href="https://twitter.com/neft_io"><img src="https://g.twimg.com/about/feature-corporate/image/followbutton.png" alt="Twitter" height="20" /></a>
 
-Neft is an Open Source JavaScript Framework made for server-browser-native applications. Neft.io is easy-to-use, fast and feature-focused.
+*Native, Browser, Server*
 
-Supported platforms: Node, Browsers (HTML5 / WebGL), iOS and Android.
+### Manifest
 
-Neft guarantees the same code across platforms.
+1. One Routing for all.
+2. Virtual HTML document for native.
+3. Abstract styles with platform-specified elements.
 
-## Best features
+### Why?
 
-- Native renderers (4 times faster than PhoneGap),
-- Virtual DOM,
-- HTML document extensions,
-- Dynamic styles,
-- Data binding (route-view-style),
-- Routing,
-- Resources system,
-- Custom native communication,
-- [and more …](http://www.neft.io/docs/app/index.coffee.md)
+We ❤ ️JavaScript. It's simple to learn and widely supported language.
+Native apps need to be **trully** native - very fast and with platform-specified elements.
+If you have a native app, why not to reduce it and use like a mobile website?
+Have a mobile version of your website? Change few styles and prepare a normal website.
+Needs to be visible in Google? Run Node and serve HTML documents used in the client app for a better logic separation.
+
+Now you know, why Neft was created - **Don't repeat boring stuff. Focus on client.**
 
 ## Links
 
