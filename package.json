@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "ios-runtime",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "Neft.io runtime for iOS",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
