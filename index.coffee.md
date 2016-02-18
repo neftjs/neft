@@ -173,7 +173,9 @@ console.log(schema.validate({names: ['Lily', 'Max']}));
 				# multiple values by `utils.get()`
 				values = utils.get data, row
 
-				if not values? and not rowValidators.optional
+				if not values?
+					if rowValidators.optional
+						continue
 					throw new SchemaError row, 'optional', "Required property #{row} not found"
 
 				# by validators
