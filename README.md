@@ -26,6 +26,13 @@ Needs to be visible in Google? Run Node and serve HTML documents used in the cli
 
 Now you know, why Neft was created - **Don't repeat boring stuff. Focus on client.**
 
+### Supported platforms
+
+- Node >= 0.11.14,
+- Browsers (HTML5 or WebGL) IE >= 9,
+- Android >= 2.2.0 (API 8),
+- iOS >= 8.0.
+
 ## Links
 
 - [Official website](http://www.neft.io/)
