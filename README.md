@@ -24,7 +24,7 @@ If you have a native app, why not to reduce it and use like a mobile website?
 Have a mobile version of your website? Change few styles and prepare a normal website.
 Needs to be visible in Google? Run Node and serve HTML documents used in the client app for a better logic separation.
 
-Now you know, why Neft was created - **Don't repeat boring stuff. Focus on client.**
+Now you know, why Neft was created - **Don't repeat boring stuff. Focus on a client.**
 
 ### Supported platforms
 
