@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "dict",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "description": "Neft.io dict library used for object data-binding",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
