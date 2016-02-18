@@ -152,14 +152,14 @@ app.networking.createHandler({
 
 			handler
 
-*Networking.Request* Networking::createRequest(*Object* options)
-----------------------------------------------------------------
+*Networking.Request* Networking::createRequest(*Object|Networking.Request* options)
+-----------------------------------------------------------------------------------
 
 The given options object corresponds to the [Request][networking/Request] properties.
 
 		createRequest: (opts) ->
 			assert.instanceOf @, Networking
-			assert.isPlainObject opts, '::createRequest options argument ...'
+			assert.isObject opts, '::createRequest options argument ...'
 
 			opts.uri = if opts.uri then opts.uri+'' else ''
 
@@ -169,7 +169,10 @@ The given options object corresponds to the [Request][networking/Request] proper
 				opts.uri = "#{@url}#{opts.uri}"
 
 			# create a request
-			req = new Networking.Request opts
+			if opts instanceof Networking.Request
+				req = opts
+			else
+				req = new Networking.Request opts
 			logtime = log.time utils.capitalize("#{req}")
 			req.onLoadEnd =>
 				@pendingRequests.remove req
@@ -244,8 +247,8 @@ The given options object corresponds to the [Request][networking/Request] proper
 				data: data
 				onLoadEnd: onLoadEnd
 
-*Networking.Request* Networking::createLocalRequest(*Object* options)
----------------------------------------------------------------------
+*Networking.Request* Networking::createLocalRequest(*Object|Networking.Request* options)
+----------------------------------------------------------------------------------------
 
 Use this method to create a new [Request][networking/Request] and handle it.
 
@@ -286,10 +289,13 @@ app.networking.createRequest({
 		EXTERNAL_URL_RE = ///^[a-zA-Z]+:\/\////
 		createLocalRequest: (opts) ->
 			assert.instanceOf @, Networking
-			assert.isPlainObject opts, '::createLocalRequest options argument ...'
+			assert.isObject opts, '::createLocalRequest options argument ...'
 
 			# create a request
-			req = new Networking.Request opts
+			if opts instanceof Networking.Request
+				req = opts
+			else
+				req = new Networking.Request opts
 			req.onLoadEnd =>
 				@pendingRequests.remove req
 
