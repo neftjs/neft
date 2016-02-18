@@ -2784,7 +2784,7 @@ var exports = module.exports;
   localStorageImpl = require('./browser/localStorage');
 
   module.exports = (function() {
-    if (window.localStorage != null) {
+    if ((typeof window !== "undefined" && window !== null ? window.localStorage : void 0) != null) {
       return localStorageImpl;
     }
   })();
@@ -3385,7 +3385,10 @@ var exports = module.exports;
       for (row in _ref) {
         rowValidators = _ref[row];
         values = utils.get(data, row);
-        if ((values == null) && !rowValidators.optional) {
+        if (values == null) {
+          if (rowValidators.optional) {
+            continue;
+          }
           throw new SchemaError(row, 'optional', "Required property " + row + " not found");
         }
         for (validatorName in rowValidators) {
@@ -4155,7 +4158,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUES, ATTR_VALUE_SEARCH, CONTAINS, DEEP, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Text, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byInstance, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
+  var ATTRS_PRIORITY, ATTR_CLASS_SEARCH, ATTR_SEARCH, ATTR_VALUES, ATTR_VALUE_SEARCH, CONTAINS, DEEP, DEFAULT_PRIORITY, ELEMENTS_PRIORITY, ENDS_WITH, OPTS_ADD_ANCHOR, OPTS_QUERY_BY_PARENTS, OPTS_REVERSED, STARTS_WITH, TRIM_ATTR_VALUE, TYPE, Tag, Text, Watcher, anyChild, anyDescendant, anyParent, assert, byAttr, byAttrContainsValue, byAttrEndsWithValue, byAttrStartsWithValue, byAttrValue, byInstance, byName, byTag, directParent, emitSignal, getQueries, i, queriesCache, signal, test, utils,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -4168,6 +4171,12 @@ var exports = module.exports;
   emitSignal = signal.Emitter.emitSignal;
 
   Tag = Text = null;
+
+  DEFAULT_PRIORITY = 0;
+
+  ELEMENTS_PRIORITY = 1;
+
+  ATTRS_PRIORITY = 100;
 
   test = function(node, funcs, index, targetFunc, targetCtx, single) {
     var data1, data2, func;
@@ -4213,6 +4222,8 @@ var exports = module.exports;
 
   anyDescendant.isIterator = true;
 
+  anyDescendant.priority = DEFAULT_PRIORITY;
+
   anyDescendant.toString = function() {
     return 'anyDescendant';
   };
@@ -4231,6 +4242,8 @@ var exports = module.exports;
   };
 
   directParent.isIterator = true;
+
+  directParent.priority = DEFAULT_PRIORITY;
 
   directParent.toString = function() {
     return 'directParent';
@@ -4260,6 +4273,8 @@ var exports = module.exports;
 
   anyChild.isIterator = true;
 
+  anyChild.priority = DEFAULT_PRIORITY;
+
   anyChild.toString = function() {
     return 'anyChild';
   };
@@ -4278,6 +4293,8 @@ var exports = module.exports;
 
   anyParent.isIterator = true;
 
+  anyParent.priority = DEFAULT_PRIORITY;
+
   anyParent.toString = function() {
     return 'anyParent';
   };
@@ -4292,6 +4309,8 @@ var exports = module.exports;
 
   byName.isIterator = false;
 
+  byName.priority = ELEMENTS_PRIORITY;
+
   byName.toString = function() {
     return 'byName';
   };
@@ -4302,6 +4321,8 @@ var exports = module.exports;
 
   byInstance.isIterator = false;
 
+  byInstance.priority = DEFAULT_PRIORITY;
+
   byInstance.toString = function() {
     return 'byInstance';
   };
@@ -4311,6 +4332,8 @@ var exports = module.exports;
   };
 
   byTag.isIterator = false;
+
+  byTag.priority = DEFAULT_PRIORITY;
 
   byTag.toString = function() {
     return 'byTag';
@@ -4326,6 +4349,8 @@ var exports = module.exports;
 
   byAttr.isIterator = false;
 
+  byAttr.priority = ATTRS_PRIORITY;
+
   byAttr.toString = function() {
     return 'byAttr';
   };
@@ -4339,6 +4364,8 @@ var exports = module.exports;
   };
 
   byAttrValue.isIterator = false;
+
+  byAttrValue.priority = ATTRS_PRIORITY;
 
   byAttrValue.toString = function() {
     return 'byAttrValue';
@@ -4357,6 +4384,8 @@ var exports = module.exports;
 
   byAttrStartsWithValue.isIterator = false;
 
+  byAttrStartsWithValue.priority = ATTRS_PRIORITY;
+
   byAttrStartsWithValue.toString = function() {
     return 'byAttrStartsWithValue';
   };
@@ -4374,6 +4403,8 @@ var exports = module.exports;
 
   byAttrEndsWithValue.isIterator = false;
 
+  byAttrEndsWithValue.priority = ATTRS_PRIORITY;
+
   byAttrEndsWithValue.toString = function() {
     return 'byAttrEndsWithValue';
   };
@@ -4390,6 +4421,8 @@ var exports = module.exports;
   };
 
   byAttrContainsValue.isIterator = false;
+
+  byAttrContainsValue.priority = ATTRS_PRIORITY;
 
   byAttrContainsValue.toString = function() {
     return 'byAttrContainsValue';
@@ -4554,13 +4587,13 @@ var exports = module.exports;
     };
 
     function Watcher(node, queries) {
+      Watcher.__super__.constructor.call(this);
       this.node = node;
       this.queries = queries;
-      Watcher.__super__.constructor.call(this);
       this.uid = utils.uid();
       this.nodes = [];
       this.forceUpdate = true;
-      Object.preventExtensions(this);
+      Object.seal(this);
     }
 
     signal.Emitter.createSignal(Watcher, 'onAdd');
@@ -4669,12 +4702,16 @@ var exports = module.exports;
         return watcher;
       },
       checkWatchersDeeply: checkWatchersDeeply = (function() {
-        var CHECK_WATCHERS_ALL, CHECK_WATCHERS_CHILDREN, CHECK_WATCHERS_THIS, checkRec, clearRec, isChildOf, pending, updateWatcher, updateWatchers;
+        var CHECK_WATCHERS_ALL, CHECK_WATCHERS_CHILDREN, CHECK_WATCHERS_SWITCH_1, CHECK_WATCHERS_SWITCH_2, CHECK_WATCHERS_THIS, checkRec, clearRec, currentWatchersSwitch, isChildOf, nextWatchersSwitch, pending, updateWatcher, updateWatchers;
         pending = false;
         i = 0;
         CHECK_WATCHERS_THIS = 1 << i++;
         CHECK_WATCHERS_CHILDREN = 1 << i++;
         CHECK_WATCHERS_ALL = (1 << i++) - 1;
+        CHECK_WATCHERS_SWITCH_1 = i << i++;
+        CHECK_WATCHERS_SWITCH_2 = i << i++;
+        currentWatchersSwitch = CHECK_WATCHERS_SWITCH_1;
+        nextWatchersSwitch = CHECK_WATCHERS_SWITCH_2;
         checkRec = function(watcher, watcherUid, node, update) {
           var child, inWatchers, _i, _len, _ref;
           if (!(update & CHECK_WATCHERS_THIS)) {
@@ -4706,13 +4743,18 @@ var exports = module.exports;
           }
         };
         clearRec = function(node) {
-          var child, _i, _len, _ref;
-          node._checkWatchers = 0;
-          if (node instanceof Tag) {
-            _ref = node.children;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              child = _ref[_i];
-              if (child._checkWatchers > 0) {
+          var checkWatchers, child, _i, _len, _ref;
+          checkWatchers = node._checkWatchers;
+          if (checkWatchers > 0) {
+            if (checkWatchers & currentWatchersSwitch) {
+              node._checkWatchers = checkWatchers & ~nextWatchersSwitch;
+            } else {
+              node._checkWatchers = 0;
+            }
+            if (node instanceof Tag) {
+              _ref = node.children;
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                child = _ref[_i];
                 clearRec(child);
               }
             }
@@ -4751,9 +4793,12 @@ var exports = module.exports;
           }
         };
         updateWatchers = function() {
-          var watcher, watchers, _i, _j, _len, _len1;
+          var tmp, watcher, watchers, _i, _j, _len, _len1;
           pending = false;
           watchers = Watcher.watchers;
+          tmp = currentWatchersSwitch;
+          currentWatchersSwitch = nextWatchersSwitch;
+          nextWatchersSwitch = tmp;
           for (_i = 0, _len = watchers.length; _i < _len; _i++) {
             watcher = watchers[_i];
             if (watcher.node) {
@@ -4768,14 +4813,15 @@ var exports = module.exports;
           }
         };
         return function(node) {
-          var tmp;
+          var thisFlag, tmp;
+          thisFlag = CHECK_WATCHERS_CHILDREN | currentWatchersSwitch;
           node._checkWatchers = CHECK_WATCHERS_THIS;
           tmp = node;
           while (tmp) {
-            if (tmp._checkWatchers & CHECK_WATCHERS_CHILDREN) {
+            if (tmp._checkWatchers & currentWatchersSwitch) {
               break;
             }
-            tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN;
+            tmp._checkWatchers |= thisFlag;
             tmp = tmp._parent;
           }
           if (!pending) {
@@ -4806,6 +4852,32 @@ var exports = module.exports;
         break;
       }
       sum += query.length;
+    }
+    return sum;
+  };
+
+  module.exports.getSelectorPriority = function(selector, beginQuery, endQuery) {
+    var func, queries, query, sum, _i, _j, _len, _len1;
+    if (beginQuery == null) {
+      beginQuery = 0;
+    }
+    if (endQuery == null) {
+      endQuery = Infinity;
+    }
+    sum = 0;
+    queries = getQueries(selector, 0);
+    for (i = _i = 0, _len = queries.length; _i < _len; i = ++_i) {
+      query = queries[i];
+      if (i < beginQuery) {
+        continue;
+      }
+      if (i >= endQuery) {
+        break;
+      }
+      for (_j = 0, _len1 = query.length; _j < _len1; _j += 3) {
+        func = query[_j];
+        sum += func.priority;
+      }
     }
     return sum;
   };
@@ -6699,29 +6771,27 @@ var exports = module.exports;
       DATA: DATA,
       createData: impl.utils.createDataCloner(DATA),
       create: function(data) {},
-      setItemParent: function(val) {
-        return pointer.setItemParent.call(this, val);
-      },
+      setItemParent: function(val) {},
       insertItemBefore: function(val) {
-        var child, children, i, item, parent, tmp, valIndex, _i, _j, _len, _ref;
+        var child, children, item, parent, tmp, _i, _len;
         impl.setItemParent.call(this, null);
         this._parent = null;
         parent = val.parent;
         children = parent.children;
         tmp = [];
-        valIndex = val.index;
-        for (i = _i = valIndex, _ref = children.length; _i < _ref; i = _i += 1) {
-          child = children[i];
+        child = val;
+        while (child) {
           if (child !== this) {
             impl.setItemParent.call(child, null);
             child._parent = null;
             tmp.push(child);
           }
+          child = child.aboveSibling;
         }
         impl.setItemParent.call(this, parent);
         this._parent = parent;
-        for (_j = 0, _len = tmp.length; _j < _len; _j++) {
-          item = tmp[_j];
+        for (_i = 0, _len = tmp.length; _i < _len; _i++) {
+          item = tmp[_i];
           impl.setItemParent.call(item, parent);
           item._parent = parent;
         }
@@ -6733,7 +6803,6 @@ var exports = module.exports;
       setItemHeight: function(val) {},
       setItemX: function(val) {},
       setItemY: function(val) {},
-      setItemZ: function(val) {},
       setItemScale: function(val) {},
       setItemRotation: function(val) {},
       setItemOpacity: function(val) {},
@@ -6865,9 +6934,9 @@ var exports = module.exports;
     DATA = {};
     return {
       DATA: DATA,
-      createData: impl.utils.createDataCloner('Text', DATA),
+      createData: impl.utils.createDataCloner('Item', DATA),
       create: function(data) {
-        return impl.Types.Text.create.call(this, data);
+        return impl.Types.Item.create.call(this, data);
       },
       setTextInputText: function(val) {},
       setTextInputColor: function(val) {},
@@ -7188,7 +7257,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var MAX_LOOPS, TypedArray, disableChild, elementsBottomMargin, elementsRow, elementsX, elementsY, enableChild, getArray, getCleanArray, log, max, min, onChildrenChange, onHeightChange, onWidthChange, pending, queue, queueIndex, queues, rowsFills, rowsHeight, rowsWidth, unusedFills, update, updateItem, updateItems, updateSize, utils;
+  var MAX_LOOPS, TypedArray, clean, cleanPending, cleanQueue, disableChild, elementsBottomMargin, elementsRow, elementsX, elementsY, enableChild, getArray, getCleanArray, log, max, min, onChildrenChange, onHeightChange, onWidthChange, pending, queue, queueIndex, queues, rowsFills, rowsHeight, rowsWidth, unusedFills, update, updateItem, updateItems, updateSize, utils;
 
   utils = require('utils');
 
@@ -7198,7 +7267,7 @@ var exports = module.exports;
 
   log = log.scope('Renderer', 'Flow');
 
-  MAX_LOOPS = 50;
+  MAX_LOOPS = 150;
 
   min = function(a, b) {
     if (a < b) {
@@ -7262,12 +7331,13 @@ var exports = module.exports;
   unusedFills = new TypedArray.Uint8(64);
 
   updateItem = function(item) {
-    var alignH, alignV, anchors, autoHeight, autoWidth, bottom, bottomMargin, bottomPadding, cell, child, childLayoutMargin, children, collapseMargins, columnSpacing, currentRow, currentRowBottomMargin, currentRowY, currentYShift, data, effectItem, flowHeight, flowWidth, freeHeightSpace, height, i, includeBorderMargins, lastColumnRightMargin, lastRowBottomMargin, layout, leftMargin, leftPadding, length, margin, maxFlowWidth, maxLen, multiplierX, multiplierY, padding, perCell, plusY, right, rightMargin, rightPadding, row, rowSpacing, rowsFillsSum, topMargin, topPadding, update, visibleChildrenIndex, width, x, y, yShift, _i, _j, _k, _l, _len, _len1, _len2, _ref, _ref1, _ref2;
+    var alignH, alignV, anchors, autoHeight, autoWidth, bottom, bottomMargin, bottomPadding, cell, child, childLayoutMargin, children, collapseMargins, columnSpacing, currentRow, currentRowBottomMargin, currentRowY, currentYShift, data, effectItem, firstChild, flowHeight, flowWidth, freeHeightSpace, height, i, includeBorderMargins, lastColumnRightMargin, lastRowBottomMargin, layout, leftMargin, leftPadding, length, margin, maxFlowWidth, maxLen, multiplierX, multiplierY, nextChild, padding, perCell, plusY, right, rightMargin, rightPadding, row, rowSpacing, rowsFillsSum, topMargin, topPadding, update, visibleChildrenIndex, width, x, y, yShift, _i, _ref, _ref1, _ref2;
     if (!(effectItem = item._effectItem)) {
       return;
     }
     includeBorderMargins = item.includeBorderMargins, collapseMargins = item.collapseMargins;
     children = effectItem._children;
+    firstChild = children.firstChild;
     data = item._impl;
     autoWidth = data.autoWidth, autoHeight = data.autoHeight;
     if ((_ref = item._children) != null ? _ref._layout : void 0) {
@@ -7318,8 +7388,11 @@ var exports = module.exports;
     lastColumnRightMargin = lastRowBottomMargin = currentRowBottomMargin = 0;
     x = y = right = bottom = 0;
     rowsFillsSum = visibleChildrenIndex = 0;
-    for (i = _i = 0, _len = children.length; _i < _len; i = ++_i) {
-      child = children[i];
+    nextChild = firstChild;
+    i = -1;
+    while (child = nextChild) {
+      i += 1;
+      nextChild = child.nextSibling;
       if (!child._visible) {
         continue;
       }
@@ -7419,7 +7492,7 @@ var exports = module.exports;
       update = true;
       while (update) {
         update = false;
-        for (i = _j = 0; _j <= currentRow; i = _j += 1) {
+        for (i = _i = 0; _i <= currentRow; i = _i += 1) {
           if (unusedFills[i] === 0 && (rowsFills[i] === 0 || rowsHeight[i] > perCell)) {
             length--;
             perCell -= (rowsHeight[i] - perCell) / length;
@@ -7429,8 +7502,11 @@ var exports = module.exports;
         }
       }
       yShift = currentYShift = 0;
-      for (i = _k = 0, _len1 = children.length; _k < _len1; i = ++_k) {
-        child = children[i];
+      nextChild = firstChild;
+      i = -1;
+      while (child = nextChild) {
+        i += 1;
+        nextChild = child.nextSibling;
         if (elementsRow[i] === row + 1 && unusedFills[row] === 0) {
           yShift += currentYShift;
           currentYShift = 0;
@@ -7481,8 +7557,11 @@ var exports = module.exports;
     if (!autoHeight) {
       flowHeight = effectItem._height - topPadding - bottomPadding;
     }
-    for (i = _l = 0, _len2 = children.length; _l < _len2; i = ++_l) {
-      child = children[i];
+    nextChild = firstChild;
+    i = -1;
+    while (child = nextChild) {
+      i += 1;
+      nextChild = child.nextSibling;
       if (!child._visible) {
         continue;
       }
@@ -7521,16 +7600,32 @@ var exports = module.exports;
     }
   };
 
+  cleanPending = false;
+
+  cleanQueue = [];
+
+  clean = function() {
+    var data;
+    cleanPending = false;
+    while (data = cleanQueue.pop()) {
+      if (data.loops < MAX_LOOPS) {
+        data.loops = 0;
+      }
+    }
+  };
+
   update = function() {
     var data, _ref;
     data = this._impl;
     if (data.pending || !((_ref = this._effectItem) != null ? _ref._visible : void 0)) {
       return;
     }
-    if (data.updatePending) {
-      data.loops++;
-    } else {
-      data.loops = 0;
+    if (!data.loops++) {
+      cleanQueue.push(data);
+      if (!cleanPending) {
+        setTimeout(clean);
+        cleanPending = true;
+      }
     }
     data.pending = true;
     queue.push(this);
@@ -7604,10 +7699,11 @@ var exports = module.exports;
       createData: impl.utils.createDataCloner('Item', DATA),
       create: function(data) {
         impl.Types.Item.create.call(this, data);
-        return this.onAlignmentChange(updateSize);
+        this.onAlignmentChange(updateSize);
+        return this.onPaddingChange(update);
       },
       setFlowEffectItem: function(item, oldItem) {
-        var child, _i, _j, _len, _len1, _ref, _ref1;
+        var child;
         if (oldItem) {
           oldItem.onVisibleChange.disconnect(update, this);
           oldItem.onChildrenChange.disconnect(onChildrenChange, this);
@@ -7620,10 +7716,10 @@ var exports = module.exports;
           if (this._impl.autoHeight) {
             oldItem.height = 0;
           }
-          _ref = oldItem.children;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            child = _ref[_i];
+          child = oldItem.children.firstChild;
+          while (child) {
             disableChild.call(this, child);
+            child = child.nextSibling;
           }
         }
         if (item) {
@@ -7638,10 +7734,10 @@ var exports = module.exports;
           item.onLayoutChange(update, this);
           item.onWidthChange(onWidthChange, this);
           item.onHeightChange(onHeightChange, this);
-          _ref1 = item.children;
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            child = _ref1[_j];
+          child = item.children.firstChild;
+          while (child) {
             enableChild.call(this, child);
+            child = child.nextSibling;
           }
           update.call(this);
         }
@@ -8278,13 +8374,13 @@ var exports = module.exports;
         }
       };
       getSnapTarget = function(contentPos) {
-        var child, children, diff, minDiff, minVal, _i, _len, _ref, _ref1;
+        var child, children, diff, minDiff, minVal, _ref, _ref1;
         children = ((_ref = item._snapItem) != null ? _ref._children : void 0) || ((_ref1 = item._contentItem) != null ? _ref1._children : void 0);
         minDiff = Infinity;
         minVal = 0;
         if (children) {
-          for (_i = 0, _len = children.length; _i < _len; _i++) {
-            child = children[_i];
+          child = children.firstChild;
+          while (child) {
             diff = contentPos - child[positionProp];
             if (velocity > 0) {
               diff += child[sizeProp] * 0.5;
@@ -8298,6 +8394,7 @@ var exports = module.exports;
                 minVal = child[positionProp];
               }
             }
+            child = child.nextSibling;
           }
         }
         if (minDiff === Infinity) {
@@ -8582,7 +8679,7 @@ var exports = module.exports;
         }
         if (val) {
           if (this.children.length > 0) {
-            impl.insertItemBefore.call(val, this.children[0]);
+            impl.insertItemBefore.call(val, this.children.first);
           } else {
             impl.setItemParent.call(val, this);
           }
@@ -9121,17 +9218,18 @@ var exports = module.exports;
           return target._width;
         },
         children: function(target) {
-          var child, size, tmp, _i, _len;
+          var child, size, tmp;
           tmp = 0;
           size = 0;
-          for (_i = 0, _len = target.length; _i < _len; _i++) {
-            child = target[_i];
+          child = target.firstChild;
+          while (child) {
             if (child._visible) {
               tmp = child._width;
               if (tmp > size) {
                 size = tmp;
               }
             }
+            child = child.nextSibling;
           }
           return size;
         },
@@ -9144,17 +9242,18 @@ var exports = module.exports;
           return target._height;
         },
         children: function(target) {
-          var child, size, tmp, _i, _len;
+          var child, size, tmp;
           tmp = 0;
           size = 0;
-          for (_i = 0, _len = target.length; _i < _len; _i++) {
-            child = target[_i];
+          child = target.firstChild;
+          while (child) {
             if (child._visible) {
               tmp = child._height;
               if (tmp > size) {
                 size = tmp;
               }
             }
+            child = child.nextSibling;
           }
           return size;
         },
@@ -9287,7 +9386,7 @@ var exports = module.exports;
       };
 
       function Anchor(item, source, def) {
-        var child, handler, line, target, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        var child, handler, line, target, _i, _j, _len, _len1, _ref, _ref1;
         this.item = item;
         this.source = source;
         target = def[0], line = def[1];
@@ -9326,10 +9425,10 @@ var exports = module.exports;
           case 'children':
             this.targetItem = item._children;
             item.onChildrenChange(onChildrenChange, this);
-            _ref1 = item.children;
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              child = _ref1[_j];
+            child = this.targetItem.firstChild;
+            while (child) {
               onChildInsert.call(this, child);
+              child = child.nextSibling;
             }
             break;
           case 'nextSibling':
@@ -9344,9 +9443,9 @@ var exports = module.exports;
             break;
           default:
             if (this.targetItem = target) {
-              _ref2 = getTargetWatchProps[line][this.type];
-              for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-                handler = _ref2[_k];
+              _ref1 = getTargetWatchProps[line][this.type];
+              for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                handler = _ref1[_j];
                 this.targetItem[handler](update, this);
               }
             }
@@ -9403,17 +9502,17 @@ var exports = module.exports;
       };
 
       Anchor.prototype.destroy = function() {
-        var child, handler, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        var child, handler, _i, _j, _len, _len1, _ref, _ref1;
         switch (this.target) {
           case 'parent':
             this.item.onParentChange.disconnect(onParentChange, this);
             break;
           case 'children':
             this.item.onChildrenChange.disconnect(onChildrenChange, this);
-            _ref = this.item.children;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              child = _ref[_i];
+            child = this.item.children.firstChild;
+            while (child) {
               onChildPop.call(this, child, -1);
+              child = child.nextSibling;
             }
             break;
           case 'nextSibling':
@@ -9422,15 +9521,15 @@ var exports = module.exports;
           case 'previousSibling':
             this.item.onPreviousSiblingChange.disconnect(onPreviousSiblingChange, this);
         }
-        _ref1 = getSourceWatchProps[this.source];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          handler = _ref1[_j];
+        _ref = getSourceWatchProps[this.source];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          handler = _ref[_i];
           this.item[handler].disconnect(update, this);
         }
         if (this.targetItem) {
-          _ref2 = getTargetWatchProps[this.line][this.type];
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            handler = _ref2[_k];
+          _ref1 = getTargetWatchProps[this.line][this.type];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            handler = _ref1[_j];
             this.targetItem[handler].disconnect(update, this);
           }
         }
@@ -9684,12 +9783,13 @@ var exports = module.exports;
   };
 
   updateItem = function(item) {
-    var alignH, alignV, alignment, anchors, autoHeight, autoWidth, bottomMargin, bottomPadding, cellX, cellY, child, childIndex, children, column, columnSpacing, columnsFillsSum, columnsLen, data, effectItem, freeHeightSpace, freeWidthSpace, gridHeight, gridType, gridWidth, height, i, includeBorderMargins, lastColumn, lastRow, layout, leftMargin, leftPadding, length, margin, maxColumnsLen, maxRowsLen, padding, perCell, plusX, plusY, rightMargin, rightPadding, row, rowSpacing, rowsFillsSum, rowsLen, topMargin, topPadding, update, width, _i, _j, _k, _l, _len, _len1, _len2, _m, _n, _o, _p, _q;
+    var alignH, alignV, alignment, anchors, autoHeight, autoWidth, bottomMargin, bottomPadding, cellX, cellY, child, childIndex, children, column, columnSpacing, columnsFillsSum, columnsLen, data, effectItem, firstChild, freeHeightSpace, freeWidthSpace, gridHeight, gridType, gridWidth, height, i, includeBorderMargins, lastColumn, lastRow, layout, leftMargin, leftPadding, length, margin, maxColumnsLen, maxRowsLen, nextChild, padding, perCell, plusX, plusY, rightMargin, rightPadding, row, rowSpacing, rowsFillsSum, rowsLen, topMargin, topPadding, update, width, _i, _j, _k, _l, _m, _n;
     if (!(effectItem = item._effectItem)) {
       return;
     }
     includeBorderMargins = item.includeBorderMargins;
     children = effectItem.children;
+    firstChild = children.firstChild;
     data = item._impl;
     gridType = data.gridType;
     autoWidth = data.autoWidth, autoHeight = data.autoHeight;
@@ -9736,8 +9836,11 @@ var exports = module.exports;
     visibleChildren = getArray(visibleChildren, children.length);
     i = lastColumn = 0;
     lastRow = -1;
-    for (childIndex = _i = 0, _len = children.length; _i < _len; childIndex = ++_i) {
-      child = children[childIndex];
+    nextChild = firstChild;
+    childIndex = -1;
+    while (child = nextChild) {
+      childIndex += 1;
+      nextChild = child.nextSibling;
       if (!child._visible || (child._layout && !child._layout._enabled)) {
         visibleChildren[childIndex] = 0;
         continue;
@@ -9754,8 +9857,11 @@ var exports = module.exports;
       i++;
     }
     i = columnsFillsSum = rowsFillsSum = 0;
-    for (childIndex = _j = 0, _len1 = children.length; _j < _len1; childIndex = ++_j) {
-      child = children[childIndex];
+    nextChild = firstChild;
+    childIndex = -1;
+    while (child = nextChild) {
+      childIndex += 1;
+      nextChild = child.nextSibling;
       if (!visibleChildren[childIndex]) {
         continue;
       }
@@ -9801,13 +9907,13 @@ var exports = module.exports;
     }
     gridWidth = 0;
     if (autoWidth || columnsFillsSum > 0 || alignH !== 0) {
-      for (i = _k = 0; _k <= lastColumn; i = _k += 1) {
+      for (i = _i = 0; _i <= lastColumn; i = _i += 1) {
         gridWidth += columnsSizes[i];
       }
     }
     gridHeight = 0;
     if (autoHeight || rowsFillsSum > 0 || alignV !== 0) {
-      for (i = _l = 0; _l <= lastRow; i = _l += 1) {
+      for (i = _j = 0; _j <= lastRow; i = _j += 1) {
         gridHeight += rowsSizes[i];
       }
     }
@@ -9820,7 +9926,7 @@ var exports = module.exports;
         update = true;
         while (update) {
           update = false;
-          for (i = _m = 0; _m <= lastColumn; i = _m += 1) {
+          for (i = _k = 0; _k <= lastColumn; i = _k += 1) {
             if (unusedFills[i] === 0 && (columnsFills[i] === 0 || columnsSizes[i] > perCell)) {
               length--;
               perCell -= (columnsSizes[i] - perCell) / length;
@@ -9829,7 +9935,7 @@ var exports = module.exports;
             }
           }
         }
-        for (i = _n = 0; _n <= lastColumn; i = _n += 1) {
+        for (i = _l = 0; _l <= lastColumn; i = _l += 1) {
           if (unusedFills[i] === 0) {
             columnsSizes[i] = perCell;
           }
@@ -9846,7 +9952,7 @@ var exports = module.exports;
         update = true;
         while (update) {
           update = false;
-          for (i = _o = 0; _o <= lastRow; i = _o += 1) {
+          for (i = _m = 0; _m <= lastRow; i = _m += 1) {
             if (unusedFills[i] === 0 && (rowsFills[i] === 0 || rowsSizes[i] > perCell)) {
               length--;
               perCell -= (rowsSizes[i] - perCell) / length;
@@ -9855,7 +9961,7 @@ var exports = module.exports;
             }
           }
         }
-        for (i = _p = 0; _p <= lastRow; i = _p += 1) {
+        for (i = _n = 0; _n <= lastRow; i = _n += 1) {
           if (unusedFills[i] === 0) {
             rowsSizes[i] = perCell;
           }
@@ -9874,8 +9980,11 @@ var exports = module.exports;
       plusY = freeHeightSpace * alignV;
     }
     i = cellX = cellY = 0;
-    for (childIndex = _q = 0, _len2 = children.length; _q < _len2; childIndex = ++_q) {
-      child = children[childIndex];
+    nextChild = firstChild;
+    childIndex = -1;
+    while (child = nextChild) {
+      childIndex += 1;
+      nextChild = child.nextSibling;
       if (!visibleChildren[childIndex]) {
         continue;
       }
@@ -10044,23 +10153,24 @@ var exports = module.exports;
 
   exports.create = function(item, type) {
     item._impl.gridType = type;
-    return item.onAlignmentChange(updateSize);
+    item.onAlignmentChange(updateSize);
+    return item.onPaddingChange(updateSize);
   };
 
   exports.update = update;
 
   exports.setEffectItem = function(item, oldItem) {
-    var child, _i, _j, _len, _len1, _ref, _ref1;
+    var child;
     if (oldItem) {
       oldItem.onVisibleChange.disconnect(update, this);
       oldItem.onChildrenChange.disconnect(onChildrenChange, this);
       oldItem.onLayoutChange.disconnect(update, this);
       oldItem.onWidthChange.disconnect(onWidthChange, this);
       oldItem.onHeightChange.disconnect(onHeightChange, this);
-      _ref = oldItem.children;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        child = _ref[_i];
+      child = oldItem.children.firstChild;
+      while (child) {
         disableChild.call(this, child);
+        child = child.nextSibling;
       }
     }
     if (item) {
@@ -10075,10 +10185,10 @@ var exports = module.exports;
       item.onLayoutChange(update, this);
       item.onWidthChange(onWidthChange, this);
       item.onHeightChange(onHeightChange, this);
-      _ref1 = item.children;
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        child = _ref1[_j];
+      child = item.children.firstChild;
+      while (child) {
         enableChild.call(this, child);
+        child = child.nextSibling;
       }
       update.call(this);
     }
@@ -38302,7 +38412,7 @@ var exports = module.exports;
 
 (function() {
   'use strict';
-  var PIXI, PI_2, SHEET, pixelRatio, renderer, stage, utils;
+  var PIXI, PI_2, SHEET, hatchery, pixelRatio, renderer, stage, utils;
 
   utils = require('utils');
 
@@ -38367,7 +38477,7 @@ var exports = module.exports;
     };
   }
 
-  SHEET = "body { margin: 0; overflow: hidden; } html, body { height: 100%; } canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform: translateZ(0); -moz-perspective: 1px; /* Firefox */ -webkit-transform-style: preserve-3d; /* Safari */ -webkit-perspective: 1px; /* Safari */ -webkit-backface-visibility: hidden; /* Safari, Chrome */ }";
+  SHEET = "#hatchery { visibility: hidden; } #hatchery span { display: inline-block; } body { margin: 0; overflow: hidden; } html, body { height: 100%; } canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform: translateZ(0); -moz-perspective: 1px; /* Firefox */ -webkit-transform-style: preserve-3d; /* Safari */ -webkit-perspective: 1px; /* Safari */ -webkit-backface-visibility: hidden; /* Safari, Chrome */ }";
 
   pixelRatio = window.devicePixelRatio || 1;
 
@@ -38389,8 +38499,13 @@ var exports = module.exports;
     return renderer.resize(innerWidth, innerHeight);
   });
 
+  hatchery = document.createElement('div');
+
+  hatchery.setAttribute('id', 'hatchery');
+
   window.addEventListener('load', function() {
     var styles;
+    document.body.appendChild(hatchery);
     document.body.appendChild(renderer.view);
     styles = document.createElement('style');
     styles.innerHTML = SHEET;
@@ -38400,6 +38515,7 @@ var exports = module.exports;
   module.exports = function(impl) {
     var items, resize;
     items = impl.items;
+    impl._hatchery = hatchery;
     impl._dirty = true;
     impl._pixiStage = stage;
     impl.pixelRatio = pixelRatio;
@@ -38687,7 +38803,7 @@ var exports = module.exports;
   isTouch = 'ontouchstart' in window;
 
   module.exports = function(impl) {
-    var DATA, cssUtils, round, updateDepthIndexes, updateMask;
+    var DATA, cssUtils, round, updateMask;
     cssUtils = require('../../css/utils');
     if (utils.isEmpty(PIXI)) {
       return require('../../base/level0/item')(impl);
@@ -38706,21 +38822,6 @@ var exports = module.exports;
       mask.drawRect(0, 0, data.width, data.height);
       mask.endFill();
     };
-    updateDepthIndexes = (function() {
-      var compare;
-      compare = function(a, b) {
-        if (a.z < b.z) {
-          -1;
-        }
-        if (a.z > b.z) {
-          1;
-        }
-        return 0;
-      };
-      return function(item) {
-        return item._impl.elem.children.sort(compare);
-      };
-    })();
     DATA = utils.merge({
       bindings: null,
       anchors: null,
@@ -38743,15 +38844,15 @@ var exports = module.exports;
         elem.z = 0;
       },
       setItemParent: function(val) {
-        var item, parent;
+        var item, parent, _ref;
         item = this._impl.elem;
         parent = val != null ? val._impl.elem : void 0;
+        if ((_ref = item.parent) != null) {
+          _ref.removeChild(item);
+        }
         if (parent) {
           parent.addChild(item);
-        } else {
-          item.parent.removeChild(item);
         }
-        impl.pointer.setItemParent.call(this, val);
         impl._dirty = true;
       },
       setItemBackground: function(val) {
@@ -38812,11 +38913,6 @@ var exports = module.exports;
       setItemY: function(val) {
         this._impl.y = val;
         impl._dirty = true;
-      },
-      setItemZ: function(val) {
-        this._impl.elem.z = val;
-        updateDepthIndexes(this);
-        return impl._dirty = true;
       },
       setItemScale: function(val) {
         this._impl.scale = val;
@@ -39732,8 +39828,8 @@ var exports = module.exports;
     });
     captureItems = (function() {
       var checkItem;
-      checkItem = function(type, item, ex, ey, onItem, parentX, parentY, parentScale) {
-        var child, data, h, pointer, rcos, result, rey, rotation, rsin, scale, t1, t2, w, x, y, _i, _ref;
+      checkItem = function(item, ex, ey, onItem, parentX, parentY, parentScale) {
+        var child, data, h, pointer, rcos, result, rey, rotation, rsin, scale, t1, t2, w, x, y;
         result = 0;
         x = y = w = h = scale = rotation = t1 = t2 = rey = rsin = rcos = 0.0;
         if (!item._visible) {
@@ -39772,20 +39868,20 @@ var exports = module.exports;
         }
         if (!(result & STOP_ASIDE_PROPAGATION)) {
           if (item._children) {
-            _ref = item._children;
-            for (_i = _ref.length - 1; _i >= 0; _i += -1) {
-              child = _ref[_i];
-              result |= checkItem(type, child, ex, ey, onItem, x, y, scale);
+            child = item._children.topChild;
+            while (child) {
+              result |= checkItem(child, ex, ey, onItem, x, y, scale);
               if (result & STOP_PROPAGATION) {
                 return result;
               }
               if (result & STOP_ASIDE_PROPAGATION) {
                 break;
               }
+              child = child.belowSibling;
             }
           }
           if (item instanceof Scrollable && item._contentItem && !(result & STOP_ASIDE_PROPAGATION)) {
-            result |= checkItem(type, item._contentItem, ex, ey, onItem, x - item.contentX * parentScale, y - item.contentY * parentScale, scale);
+            result |= checkItem(item._contentItem, ex, ey, onItem, x - item.contentX * parentScale, y - item.contentY * parentScale, scale);
             if (result & STOP_PROPAGATION) {
               return result;
             }
@@ -39796,9 +39892,9 @@ var exports = module.exports;
         }
         return result;
       };
-      return function(type, item, ex, ey, onItem) {
+      return function(item, ex, ey, onItem) {
         if (item) {
-          return checkItem(type, item, ex, ey, onItem, 0, 0, 1);
+          return checkItem(item, ex, ey, onItem, 0, 0, 1);
         }
         return 0;
       };
@@ -39840,12 +39936,12 @@ var exports = module.exports;
             }
             return getEventStatus();
           }
-          return STOP_ASIDE_PROPAGATION;
+          return PROPAGATE_UP | STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
           event._stopPropagation = false;
           event._checkSiblings = false;
-          captureItems(PRESS | CLICK, impl.window, e._x, e._y, onItem);
+          captureItems(impl.window, e._x, e._y, onItem);
         };
       })());
       Device.onPointerRelease((function() {
@@ -39874,13 +39970,13 @@ var exports = module.exports;
             }
             return getEventStatus();
           }
-          return STOP_ASIDE_PROPAGATION;
+          return PROPAGATE_UP | STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
           var item, _i;
           event._stopPropagation = false;
           event._checkSiblings = false;
-          captureItems(RELEASE | CLICK, impl.window, e._x, e._y, onItem);
+          captureItems(impl.window, e._x, e._y, onItem);
           if (!event._stopPropagation) {
             for (_i = itemsToRelease.length - 1; _i >= 0; _i += -1) {
               item = itemsToRelease[_i];
@@ -39921,14 +40017,14 @@ var exports = module.exports;
             }
             return getEventStatus();
           }
-          return STOP_ASIDE_PROPAGATION;
+          return PROPAGATE_UP | STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
           var data, i, item, _i, _j, _k, _len, _len1;
           event._stopPropagation = false;
           event._checkSiblings = false;
           flag = (flag % 2) + 1;
-          captureItems(ENTER | EXIT | MOVE, impl.window, e._x, e._y, onItem);
+          captureItems(impl.window, e._x, e._y, onItem);
           for (_i = 0, _len = itemsToMove.length; _i < _len; _i++) {
             item = itemsToMove[_i];
             if (event._stopPropagation) {
@@ -39972,11 +40068,11 @@ var exports = module.exports;
               return getEventStatus();
             }
           }
-          return STOP_ASIDE_PROPAGATION;
+          return PROPAGATE_UP | STOP_ASIDE_PROPAGATION;
         };
         return function(e) {
           event._checkSiblings = false;
-          captureItems(WHEEL, impl.window, e._x, e._y, onItem);
+          captureItems(impl.window, e._x, e._y, onItem);
         };
       })());
     });
@@ -39996,7 +40092,6 @@ var exports = module.exports;
         pointerMoveFlag: 0,
         capturePointer: 0
       },
-      setItemParent: function(val) {},
       attachItemSignal: function(signal) {
         var data, eventId, item;
         item = this._ref;
@@ -40327,7 +40422,7 @@ var exports = module.exports;
       };
 
       setOpts = function(component, opts) {
-        var child, classElem, property, signalName, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+        var child, classElem, property, signalName, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
         assert.instanceOf(component, Renderer.Component);
         if (typeof opts.id === 'string') {
           this.id = opts.id;
@@ -40352,7 +40447,7 @@ var exports = module.exports;
             child = _ref2[_k];
             if (child instanceof Renderer.Item) {
               child.parent = this;
-            } else if (child instanceof Renderer.Extension) {
+            } else if (child instanceof Renderer.Extension && !((_ref3 = child._bindings) != null ? _ref3.target : void 0)) {
               child.target = this;
             }
           }
@@ -40419,7 +40514,7 @@ var exports = module.exports;
 
       UtilsObject.initialize = function(object, component, opts) {
         assert.instanceOf(component, Renderer.Component);
-        Object.preventExtensions(object);
+        Object.seal(object);
         object._component = component;
         Impl.initializeObject(object, object.constructor.__name__);
         if (opts) {
@@ -41968,7 +42063,7 @@ var exports = module.exports;
             _super.call(this, val);
             this.reloadQuery();
             if (this._ref._priority < 1) {
-              cmdLen = TagQuery.getSelectorCommandsLength(val, 0, 1);
+              cmdLen = TagQuery.getSelectorPriority(val, 0, 1);
               oldPriority = this._priority;
               this._priority = cmdLen;
               this._ref._nestingPriority += cmdLen - oldPriority;
@@ -42973,23 +43068,28 @@ var exports = module.exports;
       };
 
       Component.prototype.initObjects = function() {
-        var extension, id, item, _i, _len, _ref, _ref1, _ref2, _ref3;
+        var extension, extensions, i, id, item, length, _ref, _ref1, _ref2;
         _ref = this.objects;
         for (id in _ref) {
           item = _ref[id];
           if (this.objects.hasOwnProperty(id)) {
-            _ref1 = item._extensions;
-            for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-              extension = _ref1[_i];
-              if (!extension.name && !((_ref2 = extension._bindings) != null ? _ref2.when : void 0)) {
+            extensions = item._extensions;
+            i = 0;
+            length = extensions.length;
+            while (extension = extensions[i++]) {
+              if (!extension.name && !((_ref1 = extension._bindings) != null ? _ref1.when : void 0)) {
                 extension.enable();
+                if (extensions.length < length) {
+                  i--;
+                  length--;
+                }
               }
             }
           }
         }
-        _ref3 = this.objects;
-        for (id in _ref3) {
-          item = _ref3[id];
+        _ref2 = this.objects;
+        for (id in _ref2) {
+          item = _ref2[id];
           if (this.objects.hasOwnProperty(id) && item instanceof Renderer.Item && id !== this.itemId) {
             item.onReady.emit();
           }
@@ -43009,7 +43109,7 @@ var exports = module.exports;
       };
 
       cloneObject = function(item, components, createdComponents, parentComponent) {
-        var belongsToComponent, child, clone, cloneChild, cloneExt, component, ext, firstChildren, itemCompId, needsNewComp, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _ref3;
+        var belongsToComponent, child, clone, cloneChild, cloneExt, component, ext, firstChildren, itemCompId, needsNewComp, _i, _j, _len, _len1, _ref, _ref1, _ref2;
         needsNewComp = false;
         itemCompId = item._component.id;
         if (!(component = components[itemCompId])) {
@@ -43049,18 +43149,18 @@ var exports = module.exports;
             firstChildren = Array.prototype.slice.call(clone.children);
             clone.children.clear();
           }
-          _ref2 = item.children;
-          for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-            child = _ref2[_j];
-            cloneChild = (_ref3 = components[child._component.id]) != null ? _ref3.objects[child.id] : void 0;
+          child = item.children.firstChild;
+          while (child) {
+            cloneChild = (_ref2 = components[child._component.id]) != null ? _ref2.objects[child.id] : void 0;
             if (cloneChild == null) {
               cloneChild = cloneItem(child, components, createdComponents, component);
             }
             cloneChild.parent = clone;
+            child = child.nextSibling;
           }
           if (firstChildren) {
-            for (_k = 0, _len2 = firstChildren.length; _k < _len2; _k++) {
-              child = firstChildren[_k];
+            for (_j = 0, _len1 = firstChildren.length; _j < _len1; _j++) {
+              child = firstChildren[_j];
               child.parent = clone;
             }
           }
@@ -43276,7 +43376,7 @@ var exports = module.exports;
   module.exports = function(Renderer, Impl, itemUtils) {
     var Item;
     return Item = (function(_super) {
-      var ChildrenObject, createDefaultBackground, defaultBackgroundClass, indexOf, pop, push, setFakeParent, shift, splice, _ref;
+      var ChildrenObject, createDefaultBackground, defaultBackgroundClass, insertItemInImpl, isNextSibling, isPreviousSibling, setFakeParent, updateZSiblingsForAppendedItem, updateZSiblingsForInsertedItem;
 
       __extends(Item, _super);
 
@@ -43299,6 +43399,8 @@ var exports = module.exports;
         this._children = null;
         this._previousSibling = null;
         this._nextSibling = null;
+        this._belowSibling = null;
+        this._aboveSibling = null;
         this._width = 0;
         this._height = 0;
         this._x = 0;
@@ -43372,9 +43474,33 @@ var exports = module.exports;
         function ChildrenObject(ref) {
           this._layout = null;
           this._target = null;
-          this.length = 0;
+          this._firstChild = null;
+          this._lastChild = null;
+          this._bottomChild = null;
+          this._topChild = null;
+          this._length = 0;
           ChildrenObject.__super__.constructor.call(this, ref);
         }
+
+        utils.defineProperty(ChildrenObject.prototype, 'firstChild', null, function() {
+          return this._firstChild;
+        }, null);
+
+        utils.defineProperty(ChildrenObject.prototype, 'lastChild', null, function() {
+          return this._lastChild;
+        }, null);
+
+        utils.defineProperty(ChildrenObject.prototype, 'bottomChild', null, function() {
+          return this._bottomChild;
+        }, null);
+
+        utils.defineProperty(ChildrenObject.prototype, 'topChild', null, function() {
+          return this._topChild;
+        }, null);
+
+        utils.defineProperty(ChildrenObject.prototype, 'length', null, function() {
+          return this._length;
+        }, null);
 
         itemUtils.defineProperty({
           constructor: ChildrenObject,
@@ -43418,20 +43544,42 @@ var exports = module.exports;
           }
         });
 
-        ChildrenObject.prototype.index = function(val) {
-          return Array.prototype.indexOf.call(this, val);
+        ChildrenObject.prototype.get = function(val) {
+          var sibling;
+          assert.operator(val, '>=', 0);
+          assert.operator(val, '<', this.length);
+          if (val < this.length / 2) {
+            sibling = this.firstChild;
+            while (val > 0) {
+              sibling = sibling.nextSibling;
+              val--;
+            }
+          } else {
+            sibling = this.lastChild;
+            while (val > 0) {
+              sibling = sibling.previousSibling;
+              val--;
+            }
+          }
+          return sibling;
         };
 
-        ChildrenObject.prototype.indexOf = ChildrenObject.prototype.index;
+        ChildrenObject.prototype.index = function(val) {
+          if (this.has(val)) {
+            return val.index;
+          } else {
+            return -1;
+          }
+        };
 
         ChildrenObject.prototype.has = function(val) {
-          return this.index(val) !== -1;
+          return this._ref === val._parent;
         };
 
         ChildrenObject.prototype.clear = function() {
-          var child;
-          while (child = this[0]) {
-            child.parent = null;
+          var last;
+          while (last = this.last) {
+            last.parent = null;
           }
         };
 
@@ -43439,14 +43587,12 @@ var exports = module.exports;
 
       })(itemUtils.MutableDeepObject);
 
-      _ref = Array.prototype, indexOf = _ref.indexOf, splice = _ref.splice, push = _ref.push, shift = _ref.shift, pop = _ref.pop;
-
       setFakeParent = function(child, parent, index) {
         if (index == null) {
           index = -1;
         }
         child.parent = null;
-        if (index >= 0 && parent.children.length < index) {
+        if (index >= 0 && parent.children._length < index) {
           Impl.insertItemBefore.call(child, parent.children[index]);
         } else {
           Impl.setItemParent.call(child, parent);
@@ -43455,20 +43601,50 @@ var exports = module.exports;
         emitSignal(child, 'onParentChange', null);
       };
 
+      updateZSiblingsForAppendedItem = function(item, z, newChildren) {
+        var child, nextChild;
+        child = newChildren._topChild;
+        while (child) {
+          if (child._z <= z) {
+            if (item._aboveSibling = child._aboveSibling) {
+              item._aboveSibling._belowSibling = item;
+            }
+            item._belowSibling = child;
+            child._aboveSibling = item;
+            return;
+          }
+          if (!(nextChild = child._belowSibling)) {
+            item._aboveSibling = child;
+            child._belowSibling = item;
+            item._belowSibling = null;
+            return;
+          }
+          child = nextChild;
+        }
+      };
+
+      insertItemInImpl = function(item) {
+        var aboveSibling;
+        if (aboveSibling = item._aboveSibling) {
+          Impl.insertItemBefore.call(item, aboveSibling);
+        } else {
+          Impl.setItemParent.call(item, item._parent);
+        }
+      };
+
       itemUtils.defineProperty({
         constructor: Item,
         name: 'parent',
         defaultValue: null,
         setter: function(_super) {
           return function(val) {
-            var containsItem, existsInOldChildren, index, length, old, oldChildren, oldNextSibling, oldPreviousSibling, pointer, previousSibling, tmpItem, valChildren;
+            var containsItem, old, oldAboveSibling, oldBelowSibling, oldChildren, oldNextSibling, oldPreviousSibling, pointer, previousSibling, tmpItem, valChildren;
             if (val == null) {
               val = null;
             }
             old = this._parent;
             oldChildren = old != null ? old.children : void 0;
             valChildren = val != null ? val.children : void 0;
-            existsInOldChildren = true;
             if (valChildren != null ? valChildren._target : void 0) {
               containsItem = false;
               tmpItem = valChildren._target;
@@ -43491,30 +43667,11 @@ var exports = module.exports;
             if (pointer = this._pointer) {
               pointer.hover = pointer.pressed = false;
             }
-            oldPreviousSibling = this._previousSibling;
-            oldNextSibling = this._nextSibling;
-            if (old !== null) {
-              if (oldNextSibling === null) {
-                index = oldChildren.length - 1;
-                assert.ok(oldChildren[index] === this);
-                pop.call(oldChildren);
-              } else if (oldPreviousSibling === null) {
-                index = 0;
-                assert.ok(oldChildren[index] === this);
-                shift.call(oldChildren);
-              } else {
-                index = indexOf.call(oldChildren, this);
-                if (index === -1) {
-                  existsInOldChildren = false;
-                } else {
-                  splice.call(oldChildren, index, 1);
-                }
-              }
-            }
             if (val !== null) {
               assert.instanceOf(val, Item, '::parent setter ...');
-              length = push.call(valChildren, this);
             }
+            oldPreviousSibling = this._previousSibling;
+            oldNextSibling = this._nextSibling;
             if (oldPreviousSibling !== null) {
               oldPreviousSibling._nextSibling = oldNextSibling;
             }
@@ -43522,9 +43679,7 @@ var exports = module.exports;
               oldNextSibling._previousSibling = oldPreviousSibling;
             }
             if (val !== null) {
-              previousSibling = valChildren[valChildren.length - 2] || null;
-              this._previousSibling = previousSibling;
-              if (previousSibling != null) {
+              if (previousSibling = this._previousSibling = valChildren.lastChild) {
                 previousSibling._nextSibling = this;
               }
             } else {
@@ -43533,9 +43688,59 @@ var exports = module.exports;
             if (oldNextSibling !== null) {
               this._nextSibling = null;
             }
-            Impl.setItemParent.call(this, val);
+            if (oldChildren) {
+              oldChildren._length -= 1;
+              if (oldChildren.firstChild === this) {
+                oldChildren._firstChild = oldNextSibling;
+              }
+              if (oldChildren.lastChild === this) {
+                oldChildren._lastChild = oldPreviousSibling;
+              }
+            }
+            if (valChildren) {
+              if (++valChildren._length === 1) {
+                valChildren._firstChild = this;
+              }
+              valChildren._lastChild = this;
+            }
+            oldBelowSibling = this._belowSibling;
+            oldAboveSibling = this._aboveSibling;
+            if (oldBelowSibling !== null) {
+              oldBelowSibling._aboveSibling = oldAboveSibling;
+            }
+            if (oldAboveSibling !== null) {
+              oldAboveSibling._belowSibling = oldBelowSibling;
+            }
+            if (valChildren) {
+              updateZSiblingsForAppendedItem(this, this._z, valChildren);
+            } else {
+              this._belowSibling = this._aboveSibling = null;
+            }
+            if (oldChildren) {
+              if (!oldAboveSibling) {
+                oldChildren._topChild = oldBelowSibling;
+              }
+              if (!oldBelowSibling) {
+                oldChildren._bottomChild = oldAboveSibling;
+              }
+            }
+            if (valChildren) {
+              if (!this._aboveSibling) {
+                valChildren._topChild = this;
+              }
+              if (!this._belowSibling) {
+                valChildren._bottomChild = this;
+              }
+            }
             this._parent = val;
-            if (old !== null && existsInOldChildren) {
+            insertItemInImpl(this);
+            //<development>;
+            assert.is(this.nextSibling, null);
+            if (val) {
+              assert.is(val.children.lastChild, this);
+            }
+            //</development>;
+            if (old !== null) {
               emitSignal(old, 'onChildrenChange', null, this);
             }
             if (val !== null) {
@@ -43549,7 +43754,7 @@ var exports = module.exports;
               emitSignal(oldNextSibling, 'onPreviousSiblingChange', this);
             }
             if (val !== null || oldPreviousSibling !== null) {
-              if (previousSibling != null) {
+              if (previousSibling) {
                 emitSignal(previousSibling, 'onNextSiblingChange', null);
               }
               emitSignal(this, 'onPreviousSiblingChange', oldPreviousSibling);
@@ -43564,6 +43769,7 @@ var exports = module.exports;
       utils.defineProperty(Item.prototype, 'previousSibling', null, function() {
         return this._previousSibling;
       }, function(val) {
+        var nextSibling;
         if (val == null) {
           val = null;
         }
@@ -43573,20 +43779,78 @@ var exports = module.exports;
         }
         if (val) {
           assert.instanceOf(val, Item);
-          this.nextSibling = val._nextSibling;
+          nextSibling = val._nextSibling;
+          if (!nextSibling && val._parent !== this._parent) {
+            this.parent = val._parent;
+          } else {
+            this.nextSibling = nextSibling;
+          }
         } else {
           assert.isDefined(this._parent);
-          this.nextSibling = this._parent.children[0];
+          this.nextSibling = this._parent.children.firstChild;
         }
         assert.is(this._previousSibling, val);
       });
 
       signal.Emitter.createSignal(Item, 'onPreviousSiblingChange');
 
+      isNextSibling = function(item, sibling) {
+        var nextItem;
+        while (item) {
+          nextItem = item._nextSibling;
+          if (nextItem === sibling) {
+            return true;
+          }
+          item = nextItem;
+        }
+        return false;
+      };
+
+      isPreviousSibling = function(item, sibling) {
+        var prevItem;
+        while (item) {
+          prevItem = item._previousSibling;
+          if (prevItem === sibling) {
+            return true;
+          }
+          item = prevItem;
+        }
+        return false;
+      };
+
+      updateZSiblingsForInsertedItem = function(item, nextSibling, z, newChildren) {
+        var child, nextChild;
+        if (nextSibling._z === z) {
+          if (item._belowSibling = nextSibling._belowSibling) {
+            item._belowSibling._aboveSibling = item;
+          }
+          item._aboveSibling = nextSibling;
+          nextSibling._belowSibling = item;
+        } else {
+          nextChild = newChildren._bottomChild;
+          while (child = nextChild) {
+            nextChild = child._aboveSibling;
+            if (child._z > z || (child._z === z && isNextSibling(item, child))) {
+              item._aboveSibling = child;
+              if (item._belowSibling = child._belowSibling) {
+                item._belowSibling._aboveSibling = item;
+              }
+              child._belowSibling = item;
+              break;
+            }
+            if (!nextChild) {
+              item._aboveSibling = null;
+              item._belowSibling = child;
+              child._aboveSibling = item;
+            }
+          }
+        }
+      };
+
       utils.defineProperty(Item.prototype, 'nextSibling', null, function() {
         return this._nextSibling;
       }, function(val) {
-        var index, newChildren, newIndex, newParent, nextSibling, nextSiblingOldPreviousSibling, oldChildren, oldIndex, oldNextSibling, oldParent, oldPreviousSibling, previousSibling, previousSiblingOldNextSibling;
+        var newChildren, newParent, nextSibling, nextSiblingOldPreviousSibling, oldAboveSibling, oldBelowSibling, oldChildren, oldNextSibling, oldParent, oldPreviousSibling, previousSibling, previousSiblingOldNextSibling;
         if (val == null) {
           val = null;
         }
@@ -43601,19 +43865,15 @@ var exports = module.exports;
           return;
         }
         oldParent = this._parent;
-        oldChildren = oldParent._children;
+        oldChildren = oldParent != null ? oldParent._children : void 0;
         oldPreviousSibling = this._previousSibling;
         oldNextSibling = this._nextSibling;
         if (val) {
           newParent = val._parent;
           newChildren = newParent._children;
-          Impl.insertItemBefore.call(this, val);
         } else {
           newParent = oldParent;
           newChildren = oldChildren;
-          Impl.setItemParent.call(this, null);
-          this._parent = null;
-          Impl.setItemParent.call(this, newParent);
         }
         this._parent = newParent;
         if (oldPreviousSibling != null) {
@@ -43622,50 +43882,78 @@ var exports = module.exports;
         if (oldNextSibling != null) {
           oldNextSibling._previousSibling = oldPreviousSibling;
         }
-        oldIndex = oldChildren.index(this);
-        Array.prototype.splice.call(oldChildren, oldIndex, 1);
+        previousSibling = previousSiblingOldNextSibling = null;
+        nextSibling = nextSiblingOldPreviousSibling = null;
         if (val) {
-          newIndex = newChildren.indexOf(val);
-          Array.prototype.splice.call(newChildren, newIndex, 0, this);
-        } else {
-          newIndex = newChildren.length;
-          Array.prototype.push.call(newChildren, this);
-        }
-        if (newIndex > 0) {
-          previousSibling = newChildren[newIndex - 1];
-          previousSiblingOldNextSibling = previousSibling._nextSibling;
-          previousSibling._nextSibling = this;
-        } else {
-          previousSibling = previousSiblingOldNextSibling = null;
-        }
-        if (newChildren.length > newIndex + 1) {
-          nextSibling = newChildren[newIndex + 1];
+          if (previousSibling = val._previousSibling) {
+            previousSiblingOldNextSibling = previousSibling._nextSibling;
+            previousSibling._nextSibling = this;
+          }
+          nextSibling = val;
           nextSiblingOldPreviousSibling = nextSibling._previousSibling;
           nextSibling._previousSibling = this;
         } else {
-          nextSibling = nextSiblingOldPreviousSibling = null;
+          if (previousSibling = newChildren.lastChild) {
+            previousSibling._nextSibling = this;
+          }
         }
         this._previousSibling = previousSibling;
         this._nextSibling = nextSibling;
+        if (oldChildren) {
+          oldChildren._length -= 1;
+          if (!oldPreviousSibling) {
+            oldChildren._firstChild = oldNextSibling;
+          }
+          if (!oldNextSibling) {
+            oldChildren._lastChild = oldPreviousSibling;
+          }
+        }
+        newChildren._length += 1;
+        if (newChildren.firstChild === val) {
+          newChildren._firstChild = this;
+        }
+        if (!val) {
+          newChildren._lastChild = this;
+        }
+        oldBelowSibling = this._belowSibling;
+        oldAboveSibling = this._aboveSibling;
+        if (oldBelowSibling !== null) {
+          oldBelowSibling._aboveSibling = oldAboveSibling;
+        }
+        if (oldAboveSibling !== null) {
+          oldAboveSibling._belowSibling = oldBelowSibling;
+        }
+        if (nextSibling) {
+          updateZSiblingsForInsertedItem(this, nextSibling, this._z, newChildren);
+        } else {
+          updateZSiblingsForAppendedItem(this, this._z, newChildren);
+        }
+        if (oldChildren) {
+          if (!oldAboveSibling) {
+            oldChildren._topChild = oldBelowSibling;
+          }
+          if (!oldBelowSibling) {
+            oldChildren._bottomChild = oldAboveSibling;
+          }
+        }
+        if (!this._aboveSibling) {
+          newChildren._topChild = this;
+        }
+        if (!this._belowSibling) {
+          newChildren._bottomChild = this;
+        }
+        insertItemInImpl(this);
         //<development>;
-        index = this.index;
         assert.is(this._nextSibling, val);
         assert.is(this._parent, newParent);
-        assert.is(newChildren[index], this);
-        assert.is(newChildren[index - 1] || null, this._previousSibling);
-        assert.is(newChildren[index + 1] || null, this._nextSibling);
         if (val) {
           assert.is(this._parent, val._parent);
         }
         if (this._previousSibling) {
           assert.is(this._previousSibling._nextSibling, this);
-        } else {
-          assert.is(index, 0);
         }
         if (this._nextSibling) {
           assert.is(this._nextSibling._previousSibling, this);
-        } else {
-          assert.is(index, newChildren.length - 1);
         }
         if (oldPreviousSibling) {
           assert.is(oldPreviousSibling._nextSibling, oldNextSibling);
@@ -43675,11 +43963,13 @@ var exports = module.exports;
         }
         //</development>;
         if (oldParent !== newParent) {
-          emitSignal(oldChildren, 'onChildrenChange', null, this);
-          emitSignal(newChildren, 'onChildrenChange', this, null);
+          if (oldParent) {
+            emitSignal(oldParent, 'onChildrenChange', null, this);
+          }
+          emitSignal(newParent, 'onChildrenChange', this, null);
           emitSignal(this, 'onParentChange', oldParent);
         } else {
-          emitSignal(newChildren, 'onChildrenChange', null, null);
+          emitSignal(newParent, 'onChildrenChange', null, null);
         }
         if (oldPreviousSibling) {
           emitSignal(oldPreviousSibling, 'onNextSiblingChange', this);
@@ -43699,19 +43989,32 @@ var exports = module.exports;
 
       signal.Emitter.createSignal(Item, 'onNextSiblingChange');
 
+      utils.defineProperty(Item.prototype, 'belowSibling', null, function() {
+        return this._belowSibling;
+      }, null);
+
+      utils.defineProperty(Item.prototype, 'aboveSibling', null, function() {
+        return this._aboveSibling;
+      }, null);
+
       utils.defineProperty(Item.prototype, 'index', null, function() {
-        var _ref1;
-        return (_ref1 = this._parent) != null ? _ref1.children.index(this) : void 0;
+        var index, sibling;
+        index = 0;
+        sibling = this;
+        while (sibling = sibling.previousSibling) {
+          index++;
+        }
+        return index;
       }, function(val) {
         var children, valItem;
         assert.isInteger(val);
         assert.isDefined(this._parent);
         assert.operator(val, '>=', 0);
         assert.operator(val, '<=', this._parent._children.length);
-        children = this._parent._children;
+        children = this.parent.children;
         if (val >= children.length) {
           this.nextSibling = null;
-        } else if ((valItem = children[val]) !== this) {
+        } else if ((valItem = children.get(val)) !== this) {
           this.nextSibling = valItem;
         }
       });
@@ -43780,9 +44083,104 @@ var exports = module.exports;
         constructor: Item,
         name: 'z',
         defaultValue: 0,
-        implementation: Impl.setItemZ,
         developmentSetter: function(val) {
-          return assert.isInteger(val, '::z setter ...');
+          return assert.isFloat(val, '::z setter ...');
+        },
+        setter: function(_super) {
+          return function(val) {
+            var aboveSibling, child, children, nextChild, oldAboveSibling, oldBelowSibling, oldVal, parent, prevChild, _ref, _ref1;
+            oldVal = this._z;
+            if (oldVal === val) {
+              return;
+            }
+            _super.call(this, val);
+            if (!(parent = this._parent)) {
+              return;
+            }
+            children = parent._children;
+            oldAboveSibling = this._aboveSibling;
+            oldBelowSibling = this._belowSibling;
+            if (val > oldVal) {
+              nextChild = this._aboveSibling;
+              while (child = nextChild) {
+                nextChild = child._aboveSibling;
+                if (child._z > val || (child._z === val && isNextSibling(this, child))) {
+                  if (oldAboveSibling === child) {
+                    break;
+                  }
+                  this._aboveSibling = child;
+                  if (this._belowSibling = child._belowSibling) {
+                    this._belowSibling._aboveSibling = this;
+                  }
+                  child._belowSibling = this;
+                  break;
+                }
+                if (!nextChild) {
+                  this._aboveSibling = null;
+                  this._belowSibling = child;
+                  child._aboveSibling = this;
+                }
+              }
+            }
+            if (val < oldVal) {
+              prevChild = this._belowSibling;
+              while (child = prevChild) {
+                prevChild = child._belowSibling;
+                if (child._z < val || (child._z === val && isPreviousSibling(this, child))) {
+                  if (oldBelowSibling === child) {
+                    break;
+                  }
+                  this._belowSibling = child;
+                  aboveSibling = child._aboveSibling;
+                  if (this._aboveSibling = child._aboveSibling) {
+                    this._aboveSibling._belowSibling = this;
+                  }
+                  child._aboveSibling = this;
+                  break;
+                }
+                if (!prevChild) {
+                  this._belowSibling = null;
+                  this._aboveSibling = child;
+                  child._belowSibling = this;
+                }
+              }
+            }
+            if (oldBelowSibling && oldBelowSibling !== this._belowSibling) {
+              oldBelowSibling._aboveSibling = oldAboveSibling;
+            }
+            if (oldAboveSibling && oldAboveSibling !== this._aboveSibling) {
+              oldAboveSibling._belowSibling = oldBelowSibling;
+            }
+            if (this._belowSibling) {
+              if (children._bottomChild === this) {
+                children._bottomChild = oldAboveSibling;
+              }
+            } else {
+              children._bottomChild = this;
+            }
+            if (this._aboveSibling) {
+              if (children._topChild === this) {
+                children._topChild = oldBelowSibling;
+              }
+            } else {
+              children._topChild = this;
+            }
+            if (oldAboveSibling !== this._aboveSibling) {
+              insertItemInImpl(this);
+            }
+            //<development>;
+            assert.isNot(this._belowSibling, this);
+            assert.isNot((_ref = this._belowSibling) != null ? _ref._belowSibling : void 0, this);
+            assert.isNot(this._aboveSibling, this);
+            assert.isNot((_ref1 = this._aboveSibling) != null ? _ref1._aboveSibling : void 0, this);
+            if (this._belowSibling) {
+              assert.is(this._belowSibling._aboveSibling, this);
+            }
+            if (this._aboveSibling) {
+              assert.is(this._aboveSibling._belowSibling, this);
+            }
+            //</development>;
+          };
         }
       });
 
@@ -45106,22 +45504,25 @@ var exports = module.exports;
         });
 
         setProperty = function(props, attr, val, oldVal) {
-          if (typeof props[attr] === 'function' && props[attr].connect) {
-            if (typeof val === 'function') {
-              props[attr](val);
+          var prop;
+          prop = props[attr];
+          if (typeof prop === 'function' && prop.connect) {
+            if (typeof val === 'function' && prop !== val) {
+              prop(val);
             }
-            if (typeof oldVal === 'function') {
-              props[attr].disconnect(oldVal);
+            if (typeof oldVal === 'function' && prop !== oldVal) {
+              prop.disconnect(oldVal);
             }
           } else {
-            this._updatingProperty = attr;
+            this._updatePending = true;
             props[attr] = val;
+            this._updatePending = false;
           }
         };
 
         onPropertyChange = function(prop, oldVal) {
           var node;
-          if (this._updatingProperty === prop || !(node = this._node)) {
+          if (this._updatePending || !(node = this._node)) {
             return;
           }
           node.attrs.set(prop, this._ref._$[prop]);
@@ -45170,9 +45571,9 @@ var exports = module.exports;
           this._node = null;
           this._visible = false;
           this._query = '';
-          this._updatingProperty = '';
           this._propertiesCleanQueue = [];
-          Object.preventExtensions(this);
+          this._updatePending = false;
+          Object.seal(this);
           ref.on$Change(onPropertyChange, this);
         }
 
@@ -48536,7 +48937,7 @@ var exports = module.exports;
           this.host = '';
         }
         this.path = "/" + uri;
-        Object.freeze(this);
+        Object.seal(this);
       }
 
       Uri.prototype.test = function(uri) {
@@ -48556,6 +48957,10 @@ var exports = module.exports;
               val = null;
             }
             this.params[name] = decodeURI(val);
+          }
+        } else {
+          if (this.params == null) {
+            this.params = {};
           }
         }
         return this.params;
@@ -49157,7 +49562,7 @@ var exports = module.exports;
     Networking.prototype.createRequest = function(opts) {
       var logtime, req, res, resOpts;
       assert.instanceOf(this, Networking);
-      assert.isPlainObject(opts, '::createRequest options argument ...');
+      assert.isObject(opts, '::createRequest options argument ...');
       opts.uri = opts.uri ? opts.uri + '' : '';
       if (!EXTERNAL_URL_RE.test(opts.uri)) {
         if (opts.uri[0] !== '/') {
@@ -49165,7 +49570,11 @@ var exports = module.exports;
         }
         opts.uri = "" + this.url + opts.uri;
       }
-      req = new Networking.Request(opts);
+      if (opts instanceof Networking.Request) {
+        req = opts;
+      } else {
+        req = new Networking.Request(opts);
+      }
       logtime = log.time(utils.capitalize("" + req));
       req.onLoadEnd((function(_this) {
         return function() {
@@ -49240,8 +49649,12 @@ var exports = module.exports;
     Networking.prototype.createLocalRequest = function(opts) {
       var err, handlers, noHandlersError, onError, req, res, resOpts;
       assert.instanceOf(this, Networking);
-      assert.isPlainObject(opts, '::createLocalRequest options argument ...');
-      req = new Networking.Request(opts);
+      assert.isObject(opts, '::createLocalRequest options argument ...');
+      if (opts instanceof Networking.Request) {
+        req = opts;
+      } else {
+        req = new Networking.Request(opts);
+      }
       req.onLoadEnd((function(_this) {
         return function() {
           return _this.pendingRequests.remove(req);
@@ -49774,7 +50187,7 @@ var exports = module.exports;
 module.exports = {
   "private": true,
   "name": "app",
-  "version": "0.9.7",
+  "version": "0.9.12",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
@@ -49844,7 +50257,6 @@ var exports = module.exports;
       SET_ITEM_HEIGHT: i++,
       SET_ITEM_X: i++,
       SET_ITEM_Y: i++,
-      SET_ITEM_Z: i++,
       SET_ITEM_SCALE: i++,
       SET_ITEM_ROTATION: i++,
       SET_ITEM_OPACITY: i++,
@@ -50988,7 +51400,7 @@ var exports = module.exports;
       };
 
       findItemIndex = function(node, item, parent) {
-        var tmpIndexNode, tmpSiblingDocStyle, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref, _ref1;
+        var child, targetChild, tmpIndexNode, tmpSiblingDocStyle, tmpSiblingItem, tmpSiblingNode, tmpSiblingTargetItem, _ref, _ref1;
         tmpIndexNode = node;
         parent = ((_ref = parent._children) != null ? _ref._target : void 0) || parent;
         tmpSiblingNode = tmpIndexNode;
@@ -50999,13 +51411,11 @@ var exports = module.exports;
               if ((tmpSiblingDocStyle != null ? tmpSiblingDocStyle.parentSet : void 0) && (tmpSiblingItem = tmpSiblingDocStyle.item)) {
                 if (tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)) {
                   if (item !== tmpSiblingTargetItem) {
-                    if (item.previousSibling !== tmpSiblingTargetItem) {
-                      item.previousSibling = tmpSiblingTargetItem;
-                    }
+                    item.previousSibling = tmpSiblingTargetItem;
                   }
                   return;
                 }
-              } else if (!tmpSiblingNode._documentStyle) {
+              } else if (!tmpSiblingDocStyle) {
                 tmpIndexNode = tmpSiblingNode;
                 tmpSiblingNode = utils.last(tmpIndexNode.children);
                 continue;
@@ -51020,6 +51430,16 @@ var exports = module.exports;
             tmpIndexNode = tmpSiblingNode;
           } else if (tmpIndexNode = tmpIndexNode._parent) {
             if (((_ref1 = tmpIndexNode._documentStyle) != null ? _ref1.item : void 0) === parent) {
+              targetChild = null;
+              child = parent.children.firstChild;
+              while (child) {
+                if (child !== item && child.document.node) {
+                  targetChild = child;
+                  break;
+                }
+                child = child.nextSibling;
+              }
+              item.nextSibling = targetChild;
               return;
             }
           }
@@ -51332,7 +51752,11 @@ var exports = module.exports;
           for (key in _ref) {
             val = _ref[key];
             if (!utils.isEqual(app.cookies.get(key), val)) {
-              app.cookies.set(key, val);
+              if (val === void 0) {
+                app.cookies.pop(key);
+              } else {
+                app.cookies.set(key, val);
+              }
             }
           }
         }

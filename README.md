@@ -1,6 +1,6 @@
 <a href="http://www.neft.io"><img src="http://www.neft.io/static/images/neft-white.svg" alt="Neft" width="200"></a>
 
-# Neft CLI
+# Neft
 
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Neft-io/neft)
 [![npm version](https://badge.fury.io/js/neft.svg)](https://badge.fury.io/js/neft)

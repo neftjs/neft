@@ -2,6 +2,32 @@
 
 *Neft is in beta. All stupidness are treated as bugs.*
 
+## 0.9.12 - Bugs fixes
+### Renderer
+- [Class now uses document.query priority instead of commands length](https://github.com/Neft-io/renderer/commit/47edc96f40313a251532b5aa758b9ad53430fc97)
+- [Fixed properties <-> node attrs synch cleaning](https://github.com/Neft-io/renderer/commit/2ae80fe4cb9229a378af0a76565d88ca11e57501)
+- [Better Flow loops detected](https://github.com/Neft-io/renderer/commit/a98d736260fdae16af3f4f9b534d9efcfc3a7b3f)
+- [Fixed bugs with properties <-> node attributes synchronization](https://github.com/Neft-io/renderer/commit/e9ed10f0587c94a4424adbdc6d482a6b01855188)
+- [Flow/Grid now updates on runtime padding change](https://github.com/Neft-io/renderer/commit/3caea11a855036105f33636bb76231bbf7f55609)
+- [Item::children now is not an array; use linked list](https://github.com/Neft-io/renderer/commit/d0fcf015df2f52e12aeb98793512a7dd0c5b9371)
+- [Pointer bug with events propagation fixed](https://github.com/Neft-io/renderer/commit/a5fbc32c36d0c9bbbd0e1562df246e8b46155135)
+- [Item::children::topChild/bottomChild z indexes linked list added](https://github.com/Neft-io/renderer/commit/5bd05d587e1ccbafb2a9dc7e5e66de52fa65a26c)
+- [Classes with custom targets now are supported](https://github.com/Neft-io/renderer/commit/75d15343e1da00bf991c21257000b3c8443486ff)
+
+### Styles
+- [Better synchronization for nodes with no previous siblings](https://github.com/Neft-io/styles/commit/b2dd4a49f75a553e7cddbc18ef07d4e40b88d789)
+
+### Schema
+- [Optional properties now are omitted if don't exist](https://github.com/Neft-io/schema/commit/8a7dd64f0d5baeb4181bde6578440bb2ca2a608d)
+
+### Document
+- [Element.Tag.query.getSelectorPriority() added](https://github.com/Neft-io/document/commit/f124f4cbe8d75fb863e13d2e7aa876a057f9d1a1)
+- [Tag::watch() bug with finding updates from 'watch()' signals fixed](https://github.com/Neft-io/document/commit/c01b328f9e9a81f99bd012ddcd0cf1cec4b3b3c5)
+
+### Networking
+- [Uri::match() now always returns an object](https://github.com/Neft-io/networking/commit/1bf273829d8b011df4f845b29647bfe0312bcece)
+- [createRequest() now accepts a Request instance](https://github.com/Neft-io/networking/commit/493009d90fa0c2eb16f946d9c54b4da796e5bea6)
+
 ## 0.9.11 - Bugs fixes
 ### Neft-CLI
 - [New 'local.android' compile properties added](https://github.com/Neft-io/neft-cli/commit/be96fe4c3fbf13af5bc87514e6f657af8b1124fb)
