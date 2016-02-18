@@ -370,6 +370,12 @@ for (var i = 0; i < items.length; i++){
 
 			@_values
 
+*Object* Dict::toObject()
+-------------------------
+
+		toObject: ->
+			@_data
+
 *Object* Dict::toJSON()
 -----------------------
 
