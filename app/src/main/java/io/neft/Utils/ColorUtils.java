@@ -12,8 +12,8 @@ public class ColorUtils {
     }
 
     public static int byAlpha(int argb, int alpha) {
-        float left = (255 - argb & 0xFF) / 255f;
-        float right = (255 - alpha & 0xFF) / 255f;
-        return setAlpha(argb, (int) (255 - left * right * 255));
+        float left = (argb >> 24 & 0xFF) / 255f;
+        float right = (alpha & 0xFF) / 255f;
+        return setAlpha(argb, (int) (left * right * 255f));
     }
 }

@@ -109,17 +109,15 @@ public class Rectangle extends Item {
 
     @Override
     protected void drawShape(final Canvas canvas, final int alpha) {
-        paint.setAlpha(alpha);
-
         // fill
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(color);
+        paint.setColor(ColorUtils.byAlpha(color, alpha));
         canvas.drawPath(path, paint);
 
         // stroke
         if (borderWidth > 0) {
             paint.setStyle(Paint.Style.STROKE);
-            paint.setColor(borderColor);
+            paint.setColor(ColorUtils.byAlpha(borderColor, alpha));
             paint.setStrokeWidth(borderWidth);
             canvas.drawPath(path, paint);
         }
