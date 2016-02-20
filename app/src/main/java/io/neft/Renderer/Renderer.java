@@ -43,7 +43,7 @@ public class Renderer {
     public float dpToPx(float dp) {
         return dp * device.pixelRatio;
     }
-    
+
     public void pushItem(Item val) {
         app.client.pushInteger(val.id);
     }
@@ -72,6 +72,7 @@ public class Renderer {
         Image.register(app);
         Text.register(app);
         TextInput.register(app);
+        NativeItem.register(app);
         Rectangle.register(app);
         Scrollable.register(app);
     }

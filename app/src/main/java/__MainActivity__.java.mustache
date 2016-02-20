@@ -10,6 +10,11 @@ public class MainActivity extends io.neft.MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.view = (WindowView) findViewById(R.id.layout);
+
+        {{#androidExtensions}}
+        new io.neft.Extensions.{{&name}}.{{&name}}(this);
+        {{/androidExtensions}}
+
         this.init();
     }
 }

@@ -6,9 +6,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import io.neft.Client.Action;
@@ -21,6 +23,9 @@ public class WindowView extends ViewGroup {
     public Renderer renderer;
     public final Rect canvasDirtyRect = new Rect();
     public final RectF dirtyRect = new RectF();
+    final Paint paint = new Paint();
+    public long frameDelay = 0;
+    public long frameTime = 0;
 
     static void register(final MainActivity app){
         app.client.actions.put(InAction.SET_WINDOW, new Action() {
@@ -36,6 +41,9 @@ public class WindowView extends ViewGroup {
 
         this.setWillNotDraw(false);
         this.requestFocus();
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
     }
 
     @Override
@@ -46,8 +54,13 @@ public class WindowView extends ViewGroup {
     @Override
     protected void onDraw(Canvas canvas){
         if (windowItem != null){
+            long time = System.currentTimeMillis();
+            this.frameDelay = time - frameTime;
+
             canvas.getClipBounds(canvasDirtyRect);
             dirtyRect.set(canvasDirtyRect);
+
+            canvas.drawRect(canvasDirtyRect, paint);
             windowItem.draw(canvas, 255, dirtyRect);
 
             // DEBUG
@@ -59,6 +72,8 @@ public class WindowView extends ViewGroup {
 //                paint.setColor(Color.argb(100, (int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
 //                canvas.drawRect(dirtyRect, paint);
 //            }
+
+            this.frameTime = time;
         }
     }
 

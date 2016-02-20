@@ -350,6 +350,10 @@ public class Item {
 
         final boolean forceChildrenUpdate = forceUpdateBounds || dirtyMatrix;
         if (forceChildrenUpdate || dirtyChildren) {
+            // clear
+            dirtyChildren = false;
+            dirtyMatrix = false;
+
             // measure background
             if (background != null) {
                 background.measure(this.globalMatrix, viewRect, dirtyRects, forceChildrenUpdate);
@@ -359,10 +363,6 @@ public class Item {
             for (final Item child : children) {
                 child.measure(this.globalMatrix, viewRect, dirtyRects, forceChildrenUpdate);
             }
-
-            // clear
-            dirtyChildren = false;
-            dirtyMatrix = false;
         }
     }
 
