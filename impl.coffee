@@ -11,7 +11,7 @@ module.exports = (Renderer) ->
 	impl.window = null
 	signal.create impl, 'onWindowReady'
 
-	TYPES = ['Item', 'Image', 'Text', 'TextInput', 'FontLoader', 'ResourcesLoader',
+	TYPES = ['Item', 'Image', 'Text', 'TextInput', 'Native', 'FontLoader', 'ResourcesLoader',
 	         'Device', 'Screen', 'Navigator', 'RotationSensor',
 
 	         'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
@@ -64,9 +64,14 @@ module.exports = (Renderer) ->
 			type = obj.constructor.__name__
 
 		object._impl = impl.Types[type]?.createData?() or {bindings: null}
-		Object.preventExtensions object._impl
+		Object.seal object._impl
 
 	impl.initializeObject = (object, type) ->
+		obj = object
+		while type and not impl.Types[type]?
+			obj = Object.getPrototypeOf(obj)
+			type = obj.constructor.__name__
+
 		impl.Types[type]?.create?.call object, object._impl
 
 	impl.setWindow = do (_super = impl.setWindow) -> (item) ->

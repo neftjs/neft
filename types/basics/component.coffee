@@ -8,7 +8,10 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
 	@getCloneFunction = (func, name) ->
 		if typeof func is 'function'
-			func
+			if (func::) instanceof Renderer.Item
+				utils.bindFunctionContext(func.New, func)
+			else
+				func
 		else if func and typeof func._main is 'function'
 			func._main
 		else
