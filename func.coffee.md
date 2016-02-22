@@ -108,7 +108,6 @@ It's available when the function was call on the style signal.
 		Array::push.apply funcGlobalProps, Object.keys(FuncGlobalGetters)
 		funcGlobalPropsLength = funcGlobalProps.length
 
-		globalContext = {}
 		functionsCache = Object.create null
 
 		exports =
@@ -141,4 +140,4 @@ It's available when the function was call on the style signal.
 					args[funcGlobalPropsLength + i] = arguments[i]
 
 				# call function
-				func.apply globalContext, args
+				func.apply this, args
