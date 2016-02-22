@@ -196,7 +196,7 @@ module.exports = (File) -> class Input
 			if match[0]
 				func += "'#{utils.addSlashes match[0]}' + "
 			if prop
-				func += "#{prop} + "
+				func += "(#{prop}) + "
 
 		if chunks.length and chunks[0]
 			func += "'#{utils.addSlashes chunks[0]}' + "
