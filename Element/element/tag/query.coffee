@@ -342,8 +342,21 @@ module.exports = (Element, _Tag) ->
 		if Array.isArray(target)
 			target
 
-	queryAllParents: (selector, target, targetCtx) ->
-		queryAll.call @, selector, target, targetCtx, OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
+	queryAllParents: (selector, target=[], targetCtx=target) ->
+		unless typeof target is 'function'
+			assert.isArray target
+		func = if Array.isArray(target) then target.push else target
+		opts = OPTS_REVERSED | OPTS_QUERY_BY_PARENTS
+
+		onNode = (node) ->
+			func.call targetCtx, node
+			queryAll.call node, selector, onNode, null, opts
+			return
+
+		queryAll.call @, selector, onNode, null, opts
+
+		if Array.isArray(target)
+			target
 
 	query: query = do ->
 		result = null
