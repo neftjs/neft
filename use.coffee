@@ -102,14 +102,14 @@ module.exports = (File) -> class Use
 
 	renderFragment: (file) ->
 		fragment = @file.fragments[@name]
-		if not file and not fragment
+		if not file and not fragment and not File._files[@name]
 			`//<development>`
 			# if usesWithNotFoundFragments.push(@) is 1
 			# 	setTimeout logUsesWithNoFragments
 			`//</development>`
 			return
 
-		usedFragment = file or File.factory(fragment)
+		usedFragment = file or File.factory(fragment or @name)
 		unless file
 			usedFragment.storage = @file.storage
 
