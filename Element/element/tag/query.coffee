@@ -288,6 +288,8 @@ class Watcher extends signal.Emitter
 
 	constructor: (node, queries) ->
 		super()
+		@_nodesToAdd = []
+		@_nodesToRemove = []
 		@node = node
 		@queries = queries
 		@uid = utils.uid()
@@ -388,16 +390,13 @@ module.exports = (Element, _Tag) ->
 
 	checkWatchersDeeply: checkWatchersDeeply = do ->
 		pending = false
+		watchersWithNodesToAdd = []
+		watchersWithNodesToRemove = []
 
 		i = 0
 		CHECK_WATCHERS_THIS = 1 << i++
 		CHECK_WATCHERS_CHILDREN = 1 << i++
 		CHECK_WATCHERS_ALL = (1 << i++) - 1
-		CHECK_WATCHERS_SWITCH_1 = i << i++
-		CHECK_WATCHERS_SWITCH_2 = i << i++
-
-		currentWatchersSwitch = CHECK_WATCHERS_SWITCH_1
-		nextWatchersSwitch = CHECK_WATCHERS_SWITCH_2
 
 		checkRec = (watcher, watcherUid, node, update) ->
 			unless update & CHECK_WATCHERS_THIS
@@ -413,14 +412,16 @@ module.exports = (Element, _Tag) ->
 
 					# add in watcher
 					watcher.nodes.push node
-					emitSignal watcher, 'onAdd', node
+					if watcher._nodesToAdd.push(node) is 1
+						watchersWithNodesToAdd.push watcher
 				else if inWatchers and inWatchers[watcherUid] and not watcher.test(node)
 					# remove from node
 					node._inWatchers[watcherUid] = false
 
 					# remove from watcher
 					utils.removeFromUnorderedArray watcher.nodes, node
-					emitSignal watcher, 'onRemove', node
+					if watcher._nodesToRemove.push(node) is 1
+						watchersWithNodesToRemove.push watcher
 
 			# check recursively
 			if update & CHECK_WATCHERS_CHILDREN and node instanceof Tag
@@ -430,12 +431,8 @@ module.exports = (Element, _Tag) ->
 			return
 
 		clearRec = (node) ->
-			checkWatchers = node._checkWatchers
-			if checkWatchers > 0
-				if checkWatchers & currentWatchersSwitch
-					node._checkWatchers = checkWatchers & ~nextWatchersSwitch
-				else
-					node._checkWatchers = 0
+			if node._checkWatchers > 0
+				node._checkWatchers = 0
 				if node instanceof Tag
 					for child in node.children
 						clearRec child
@@ -462,7 +459,8 @@ module.exports = (Element, _Tag) ->
 					# remove from watcher
 					nodes[i] = nodes[n-1]
 					nodes.pop()
-					emitSignal watcher, 'onRemove', node
+					if watcher._nodesToRemove.push(node) is 1
+						watchersWithNodesToRemove.push watcher
 					n--
 
 			# find new nodes
@@ -478,27 +476,34 @@ module.exports = (Element, _Tag) ->
 			pending = false
 			{watchers} = Watcher
 
-			tmp = currentWatchersSwitch
-			currentWatchersSwitch = nextWatchersSwitch
-			nextWatchersSwitch = tmp
-
+			# update watchers
 			for watcher in watchers
 				if watcher.node
 					updateWatcher watcher
 
+			# clear nodes
 			for watcher in watchers
 				if watcher.node
 					clearRec watcher.node
+
+			# emit signals
+			while watcher = watchersWithNodesToRemove.pop()
+				nodesToRemove = watcher._nodesToRemove
+				while node = nodesToRemove.pop()
+					emitSignal watcher, 'onRemove', node
+			while watcher = watchersWithNodesToAdd.pop()
+				nodesToAdd = watcher._nodesToAdd
+				while node = nodesToAdd.pop()
+					emitSignal watcher, 'onAdd', node
 			return
 
 		(node) ->
-			thisFlag = CHECK_WATCHERS_CHILDREN | currentWatchersSwitch
 			node._checkWatchers = CHECK_WATCHERS_THIS
 			tmp = node
 			while tmp
-				if tmp._checkWatchers & currentWatchersSwitch
+				if tmp._checkWatchers & CHECK_WATCHERS_CHILDREN
 					break
-				tmp._checkWatchers |= thisFlag
+				tmp._checkWatchers |= CHECK_WATCHERS_CHILDREN
 				tmp = tmp._parent
 
 			unless pending
