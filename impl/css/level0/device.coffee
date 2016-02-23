@@ -43,6 +43,8 @@ module.exports = (impl) ->
 		device = this
 		{pointer} = this
 
+		impl.utils.keysEvents.device = device
+
 		@_pixelRatio = window.devicePixelRatio or 1
 		@_desktop = not ('ontouchstart' of window)
 		@_phone = 'ontouchstart' of window and Math.min(@_width, @_height)/Math.max(@_width, @_height) < 0.75

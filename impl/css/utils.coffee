@@ -114,14 +114,20 @@ exports.keysEvents = do ->
 			return false
 		pressedKeys[key] = e
 
-		keysEvents.focusedKeys?.onPress.emit key: key
+		if device = keysEvents.device
+			{keyboard} = device
+			keyboard.key = key
+			device.onKeyPress.emit keyboard
 
 	# hold
 	window.addEventListener 'keydown', (e) ->
 		code = e.which or e.keyCode
 		key = SPECIAL_KEY_CODES[code] or String.fromCharCode(code)
 
-		keysEvents.focusedKeys?.onHold.emit key: key
+		if device = keysEvents.device
+			{keyboard} = device
+			keyboard.key = key
+			device.onKeyHold.emit keyboard
 
 	# released
 	window.addEventListener 'keyup', (e) ->
@@ -130,24 +136,23 @@ exports.keysEvents = do ->
 
 		pressedKeys[key] = null
 
-		keysEvents.focusedKeys?.onRelease.emit key: key
+		if device = keysEvents.device
+			{keyboard} = device
+			keyboard.key = key
+			device.onKeyRelease.emit keyboard
 
 	# input
 	window.addEventListener 'keypress', (e) ->
 		code = e.charCode or e.which or e.keyCode
 		text = String.fromCharCode(code)
 
-		keysEvents.focusedKeys?.onInput.emit text: text
+		if device = keysEvents.device
+			{keyboard} = device
+			keyboard.text = text
+			device.onKeyInput.emit keyboard
 
 	keysEvents =
-		focusedKeys: null
-		setItemKeysFocus: (val) ->
-			{keys} = @
-			if val is true
-				keysEvents.focusedKeys = keys
-			else if keysEvents.focusedKeys is keys
-				keysEvents.focusedKeys = null
-			return
+		device: null
 
 signal.create exports, 'onFontLoaded'
 exports.loadingFonts = Object.create null
