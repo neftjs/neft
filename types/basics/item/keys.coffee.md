@@ -37,6 +37,11 @@ Keys @extension
 
 		@focusWindowOnPointerPress = true
 
+*Item* Keys.focusedItem
+-----------------------
+
+		@focusedItem = null
+
 *Keys* Keys()
 -------------
 
@@ -102,9 +107,11 @@ Keys @extension
 							oldVal.onFocusChange.emit true
 							oldVal._ref.onKeysChange.emit oldVal
 						focusedKeys = @
+						Keys.focusedItem = @_ref
 					_super.call @, val
 					if not val and focusedKeys is @
 						focusedKeys = null
+						Keys.focusedItem = null
 						if focusedKeys isnt Renderer.window.keys
 							Renderer.window.keys.focus = true
 				return
