@@ -41,8 +41,14 @@ Tag @virtual_dom
 			obj.name = arr[JSON_NAME]
 			obj.attrs._data = arr[JSON_ATTRS]
 
+			prevChild = null
 			for child in arr[JSON_CHILDREN]
-				Element.fromJSON(child).parent = obj
+				childObj = Element.fromJSON child
+				obj.children.push childObj
+				childObj._parent = obj
+				if childObj._previousSibling = prevChild
+					prevChild._nextSibling = childObj
+				prevChild = childObj
 
 			obj
 
@@ -58,7 +64,7 @@ Tag @virtual_dom
 
 			`//<development>`
 			if @constructor is Tag
-				Object.preventExtensions @
+				Object.seal @
 			`//</development>`
 
 *String* Tag::name

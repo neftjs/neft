@@ -46,7 +46,7 @@ Element @virtual_dom
 			Element.JSON_CTORS[json[0]]._fromJSON json
 
 		@_fromJSON = (arr, obj=new Element) ->
-			obj.visible = arr[JSON_VISIBLE] is 1
+			obj._visible = arr[JSON_VISIBLE] is 1
 			obj
 
 		@Text = require('./element/text') Element
@@ -65,12 +65,13 @@ Element @virtual_dom
 			@_documentStyle = null
 			@_visible = true
 
+			@_watchers = null
 			@_inWatchers = null
 			@_checkWatchers = 0
 
 			`//<development>`
 			if @constructor is Element
-				Object.preventExtensions @
+				Object.seal @
 			`//</development>`
 
 *Integer* Element::index

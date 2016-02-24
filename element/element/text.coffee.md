@@ -23,7 +23,7 @@ Text @virtual_dom
 
 		@_fromJSON = (arr, obj=new Text) ->
 			Element._fromJSON arr, obj
-			obj.text = arr[JSON_TEXT]
+			obj._text = arr[JSON_TEXT]
 			obj
 
 *Text* Text() : *Element*
@@ -36,7 +36,7 @@ Text @virtual_dom
 
 			`//<development>`
 			if @constructor is Text
-				Object.preventExtensions @
+				Object.seal @
 			`//</development>`
 
 		clone: (clone = new Text) ->
