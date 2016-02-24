@@ -93,7 +93,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 	initObjects: ->
 		# init extensions
 		for id, item of @objects
-			if @objects.hasOwnProperty(id)
+			if @objects.hasOwnProperty(id) and not (item instanceof Renderer.Class)
 				extensions = item._extensions
 				i = 0
 				{length} = extensions
@@ -149,11 +149,12 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				component.setObject clone, clone.id
 
 		# clone extensions of this object
-		for ext in item._extensions
-			# extension can be already cloned if it has an id
-			cloneExt = components[ext._component.id]?.objects[ext.id]
-			cloneExt ?= cloneObject ext, components, createdComponents, parentComponent
-			cloneExt.target = clone
+		unless item instanceof Renderer.Class
+			for ext in item._extensions
+				# extension can be already cloned if it has an id
+				cloneExt = components[ext._component.id]?.objects[ext.id]
+				cloneExt ?= cloneObject ext, components, createdComponents, parentComponent
+				cloneExt.target = clone
 
 		if item instanceof Renderer.Item
 			# if we extend another item,

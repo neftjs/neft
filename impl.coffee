@@ -21,6 +21,10 @@ module.exports = (Renderer) ->
 
 	         'AmbientSound']
 
+	ABSTRACT_TYPES =
+		'Class': true
+		'Transition': true
+
 	platformImpl = do ->
 		r = null
 		if utils.isBrowser and window.HTMLCanvasElement?
@@ -58,21 +62,23 @@ module.exports = (Renderer) ->
 		utils.merge impl, extra
 
 	impl.createObject = (object, type) ->
-		obj = object
-		while type and not impl.Types[type]?
-			obj = Object.getPrototypeOf(obj)
-			type = obj.constructor.__name__
+		unless ABSTRACT_TYPES[type]
+			obj = object
+			while type and not impl.Types[type]?
+				obj = Object.getPrototypeOf(obj)
+				type = obj.constructor.__name__
 
 		object._impl = impl.Types[type]?.createData?() or {bindings: null}
 		Object.seal object._impl
 
 	impl.initializeObject = (object, type) ->
-		obj = object
-		while type and not impl.Types[type]?
-			obj = Object.getPrototypeOf(obj)
-			type = obj.constructor.__name__
+		unless ABSTRACT_TYPES[type]
+			obj = object
+			while type and not impl.Types[type]?
+				obj = Object.getPrototypeOf(obj)
+				type = obj.constructor.__name__
 
-		impl.Types[type]?.create?.call object, object._impl
+			impl.Types[type]?.create?.call object, object._impl
 
 	impl.setWindow = do (_super = impl.setWindow) -> (item) ->
 		utils.defineProperty impl, 'window', utils.ENUMERABLE, item

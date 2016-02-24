@@ -57,9 +57,10 @@ Class @modifier
 *Class* Class()
 ---------------
 
+			lastUid = 0
 			constructor: ->
 				super()
-				@_classUid = utils.uid()
+				@_classUid = (lastUid++)+''
 				@_priority = 0
 				@_inheritsPriority = 0
 				@_nestingPriority = 0
@@ -73,8 +74,6 @@ Class @modifier
 
 This property is used in the [Item::classes][renderer/Item::classes] list
 to identify various classes.
-
-It's a random string by default.
 
 ## *Signal* Class::onNameChange(*String* oldValue)
 
@@ -482,15 +481,15 @@ Mostly used with bindings.
 			return
 
 		getContainedAttributeOrAlias = (classElem, attr) ->
-			attrs = classElem.changes._attributes
-			if attr of attrs
-				attr
-			else if aliases = ATTRS_ALIAS[attr]
-				for alias in aliases
-					if alias of attrs
-						return alias
-			else
-				''
+			if changes = classElem._changes
+				attrs = changes._attributes
+				if attrs[attr] isnt undefined
+					return attr
+				else if aliases = ATTRS_ALIAS[attr]
+					for alias in aliases
+						if attrs[alias] isnt undefined
+							return alias
+			return ''
 
 		getPropertyDefaultValue = (obj, prop) ->
 			proto = Object.getPrototypeOf obj
@@ -510,7 +509,9 @@ Mostly used with bindings.
 			if classListIndex is -1
 				return
 
-			{changes} = classElem
+			unless changes = classElem._changes
+				return
+
 			attributes = changes._attributes
 			bindings = changes._bindings
 			functions = changes._functions
@@ -591,7 +592,9 @@ Mostly used with bindings.
 			if classListIndex is -1
 				return
 
-			{changes} = classElem
+			unless changes = classElem._changes
+				return
+
 			attributes = changes._attributes
 			bindings = changes._bindings
 			functions = changes._functions

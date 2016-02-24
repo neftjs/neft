@@ -93,7 +93,7 @@ module.exports = (Renderer, Impl) ->
 
 		createClass = (component, opts) ->
 			classElem = Renderer.Class.New component
-			classElem.priority = -1
+			classElem._priority = -1
 
 			{changes} = classElem
 			for prop, val of opts
@@ -152,11 +152,12 @@ module.exports = (Renderer, Impl) ->
 			@id = ''
 			@_impl = null
 			@_bindings = null
-			@_classExtensions = null
-			@_classList = []
-			@_classQueue = []
-			@_extensions = []
 			@_component = null
+			unless this instanceof Renderer.Class
+				@_classExtensions = null
+				@_classList = []
+				@_classQueue = []
+				@_extensions = []
 
 			Impl.createObject @, @constructor.__name__
 
@@ -198,7 +199,7 @@ module.exports = (Renderer, Impl) ->
 			getObjAsString @
 
 	class FixedObject extends UtilsObject
-		constrcutor: (component, opts) ->
+		constructor: (component, opts) ->
 			super component, opts
 
 	class MutableDeepObject extends signal.Emitter
@@ -208,10 +209,10 @@ module.exports = (Renderer, Impl) ->
 			@_impl = bindings: null
 			@_component = ref._component
 			@_bindings = null
-			@_classExtensions = null
-			@_classList = []
-			@_classQueue = []
-			@_extensions = []
+			# @_classExtensions = null
+			# @_classList = []
+			# @_classQueue = []
+			# @_extensions = []
 			super()
 
 		createBinding: UtilsObject::createBinding

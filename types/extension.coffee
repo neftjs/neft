@@ -8,7 +8,6 @@ module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtil
 
 	constructor: ->
 		super()
-		@_impl ?= bindings: null
 		@_target = null
 		@_running = false
 		@_when = false
