@@ -12,6 +12,8 @@ Class @modifier
 
 	log = log.scope 'Rendering', 'Class'
 
+	{emitSignal} = signal.Emitter
+
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class ChangesObject
 			constructor: ->
@@ -305,8 +307,11 @@ Mostly used with bindings.
 			clone: (component) ->
 				clone = cloneClassWithNoDocument.call @, component
 
-				if query = @_document?._query
-					clone.document.query = query
+				if doc = @_document
+					cloneDoc = clone.document
+					cloneDoc.query = doc.query
+					for name, arr of doc._signals
+						cloneDoc._signals[name] = utils.clone arr
 
 				clone
 
@@ -421,23 +426,11 @@ Mostly used with bindings.
 
 			clone
 
-		splitAttribute = do ->
-			cache = Object.create null
-			(attr) ->
-				cache[attr] ?= attr.split '.'
-
-		getObject = (item, path) ->
-			len = path.length - 1
-			i = 0
-			while i < len
-				unless item = item[path[i]]
-					return null
-				i++
-			item
+		{splitAttribute, getObjectByPath} = itemUtils
 
 		setAttribute = (item, attr, val) ->
 			path = splitAttribute attr
-			if object = getObject(item, path)
+			if object = getObjectByPath(item, path)
 				object[path[path.length - 1]] = val
 			return
 
@@ -519,7 +512,7 @@ Mostly used with bindings.
 			# functions
 			for attr, i in functions by 2
 				path = splitAttribute attr
-				object = getObject item, path
+				object = getObjectByPath item, path
 				`//<development>`
 				if not object or typeof object?[path[path.length - 1]] isnt 'function'
 					log.error "Handler '#{attr}' doesn't exist in '#{item.toString()}', from '#{classElem.toString()}'"
@@ -541,7 +534,7 @@ Mostly used with bindings.
 					for i in [classListIndex+1...classListLength] by 1
 						if (alias = getContainedAttributeOrAlias(classList[i], attr)) and alias isnt attr
 							path = splitAttribute alias
-							object = getObject item, path
+							object = getObjectByPath item, path
 							lastPath = path[path.length - 1]
 							unless object
 								continue
@@ -556,7 +549,7 @@ Mostly used with bindings.
 					if attr isnt alias or not path
 						path = splitAttribute attr
 						lastPath = path[path.length - 1]
-						object = getObject item, path
+						object = getObjectByPath item, path
 
 					# create property on demand
 					if object instanceof itemUtils.CustomObject and not (lastPath of object)
@@ -602,7 +595,7 @@ Mostly used with bindings.
 			# functions
 			for attr, i in functions by 2
 				path = splitAttribute attr
-				object = getObject item, path
+				object = getObjectByPath item, path
 				object?[path[path.length - 1]]?.disconnect functions[i+1], classElem
 
 			# attributes
@@ -633,7 +626,7 @@ Mostly used with bindings.
 					# restore attribute
 					if !!bindings[attr]
 						path = splitAttribute attr
-						object = getObject item, path
+						object = getObjectByPath item, path
 						lastPath = path[path.length - 1]
 						unless object
 							continue
@@ -642,7 +635,7 @@ Mostly used with bindings.
 					# set default value
 					if attr isnt alias or not path
 						path = splitAttribute alias
-						object = getObject item, path
+						object = getObjectByPath item, path
 						lastPath = path[path.length - 1]
 						unless object
 							continue
@@ -724,6 +717,16 @@ Mostly used with bindings.
 -----------------------------
 
 ## *Signal* ClassDocument::onQueryChange(*String* oldValue)
+
+*Signal* ClassDocument::onNodeAdd(*Document.Element* node)
+----------------------------------------------------------
+
+			signal.Emitter.createSignal @, 'onNodeAdd'
+
+*Signal* ClassDocument::onNodeRemove(*Document.Element* node)
+-------------------------------------------------------------
+
+			signal.Emitter.createSignal @, 'onNodeRemove'
 
 			itemUtils.defineProperty
 				constructor: @
@@ -815,12 +818,14 @@ Mostly used with bindings.
 				node.onStyleChange onNodeStyleChange, @
 				if style = node._style
 					connectNodeStyle.call @, style
+				emitSignal @, 'onNodeAdd', node
 				return
 
 			onNodeRemove = (node) ->
 				node.onStyleChange.disconnect onNodeStyleChange, @
 				if style = node._style
 					disconnectNodeStyle.call @, style
+				emitSignal @, 'onNodeRemove', node
 				return
 
 			reloadQuery: ->

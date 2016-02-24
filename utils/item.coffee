@@ -32,17 +32,16 @@ module.exports = (Renderer, Impl) ->
 	class UtilsObject extends Emitter
 		initObject = (component, opts) ->
 			for prop, val of opts
-				obj = @
-				if prop is 'document.query'
-					obj = @document
-					prop = 'query'
+				path = exports.splitAttribute prop
+				prop = path[path.length - 1]
+				obj = exports.getObjectByPath @, path
 				if typeof val is 'function'
 					`//<development>`
 					if typeof obj[prop] isnt 'function'
 						log.error "Object '#{obj}' has no function '#{prop}'"
 						continue
 					`//</development>`
-					obj[prop] val
+					obj[prop] exports.bindSignalListener(@, val)
 				else if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
 					continue
 				else
@@ -54,10 +53,9 @@ module.exports = (Renderer, Impl) ->
 					obj[prop] = val
 
 			for prop, val of opts
-				obj = @
-				if prop is 'document.query'
-					obj = @document
-					prop = 'query'
+				path = exports.splitAttribute prop
+				prop = path[path.length - 1]
+				obj = exports.getObjectByPath @, path
 				if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
 					obj.createBinding prop, val, component
 			return
@@ -252,6 +250,30 @@ module.exports = (Renderer, Impl) ->
 		cache[''] = ''
 		(val) ->
 			cache[val] ?= '_' + val
+
+	splitAttribute: do ->
+		cache = Object.create null
+		(attr) ->
+			cache[attr] ?= attr.split '.'
+
+	getObjectByPath: (item, path) ->
+		len = path.length - 1
+		i = 0
+		while i < len
+			unless item = item[path[i]]
+				return null
+			i++
+		item
+
+	bindSignalListener: (object, func) ->
+		(arg1, arg2) ->
+			if comp = object._component
+				arr = comp.objectsOrderSignalArr
+				arr[arr.length - 2] = arg1
+				arr[arr.length - 1] = arg2
+				func.apply object, arr
+			else
+				func.call object, arg1, arg2
 
 	defineProperty: (opts) ->
 		assert.isPlainObject opts
