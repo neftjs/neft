@@ -173,7 +173,10 @@ OPTS_QUERY_BY_PARENTS = 1<<(i++)
 OPTS_REVERSED = 1<<(i++)
 OPTS_ADD_ANCHOR = 1<<(i++)
 
+MAX_QUERIES_CACHE_LENGTH = 2000
+QUERIES_CACHE_OVERFLOW_REDUCTION = 100
 queriesCache = []
+queriesCacheLengths = []
 getQueries = (selector, opts=0) ->
 	reversed = !!(opts & OPTS_REVERSED)
 
@@ -263,8 +266,20 @@ getQueries = (selector, opts=0) ->
 			funcs[reversedArrFunc] byTag, null, null
 
 	# save to the cache
-	queriesCache[opts] ?= {}
-	queriesCache[opts][selector] = queries
+	unless cache = queriesCache[opts]
+		cache = queriesCache[opts] = {}
+		queriesCacheLengths[opts] = 0
+	cache[selector] = queries
+
+	# clean cache if needed
+	if (queriesCacheLengths[opts] += 1) > MAX_QUERIES_CACHE_LENGTH
+		removed = 0
+		for key of cache
+			delete cache[key]
+			removed += 1
+			if removed >= QUERIES_CACHE_OVERFLOW_REDUCTION
+				break
+		queriesCacheLengths[opts] -= removed
 
 	queries
 
