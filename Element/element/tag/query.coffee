@@ -286,7 +286,7 @@ getQueries = (selector, opts=0) ->
 class Watcher extends signal.Emitter
 	NOP = ->
 
-	uid = 0
+	lastUid = 0
 	pool = []
 
 	@create = (node, queries) ->
@@ -308,7 +308,7 @@ class Watcher extends signal.Emitter
 		@_forceUpdate = true
 		@node = node
 		@queries = queries
-		@uid = (uid++)+''
+		@uid = (lastUid++)+''
 		@nodes = []
 		Object.seal @
 
