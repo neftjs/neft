@@ -154,85 +154,16 @@ module.exports = (File, data) -> class Style
 
 		Object.seal @
 
-	showEvent = new Renderer.Item.Document.ShowEvent
-	hideEvent = new Renderer.Item.Document.HideEvent
-	globalShowDelay = globalHideDelay = 0
 	stylesToRender = []
-	stylesToRevert = []
-
-	updateWhenPossible = do ->
-		pending = false
-		lastDate = 0
-
-		sync = ->
-			now = Date.now()
-			diff = now - lastDate
-			lastDate = now
-
-			animationsPending = false
-
-			for style in stylesToRevert
-				for extension in style.item._extensions
-					if extension instanceof Renderer.PropertyAnimation and extension.running and not extension.loop
-						animationsPending = true
-						break
-				if animationsPending
-					break
-
-			# update delays
-			globalShowDelay -= diff
-			if globalHideDelay > 0 and not animationsPending
-				globalHideDelay -= diff
-
-			if not animationsPending
-				# revert styles
-				if globalHideDelay <= 0
-					globalHideDelay = 0
-
-					if stylesToRevert.length > 0
-						logtime = log.time 'Revert'
-						for style in stylesToRevert
-							style.waiting = false
-							style.revertItem()
-							style.file.readyToUse = true
-							assert.notOk style.file.isRendered
-
-						utils.clear stylesToRevert
-						log.end logtime
-
-				# render styles
-				if globalShowDelay + globalHideDelay <= 0
-					globalShowDelay = 0
-
-					if stylesToRender.length > 0
-						logtime = log.time 'Render'
-						for style in stylesToRender
-							style.waiting = false
-							style.renderItem()
-							style.file.readyToUse = true
-
-						for style in stylesToRender
-							style.findItemIndex()
-
-						utils.clear stylesToRender
-						log.end logtime
-
-			# continue
-			if stylesToRender.length or stylesToRevert.length
-				requestAnimationFrame sync
-			else
-				pending = false
-
-			return
-
-		(style) ->
-			unless pending
-				lastDate = Date.now()
-				setImmediate sync
-				pending = true
-
-			style.waiting = true
-			return
+	renderStylesPending = false
+	renderStyles = ->
+		renderStylesPending = false
+		for style in stylesToRender
+			style.renderItem()
+		for style in stylesToRender
+			style.findItemIndex()
+		utils.clear stylesToRender
+		return
 
 	render: ->
 		if @waiting or not @enabled
@@ -251,14 +182,14 @@ module.exports = (File, data) -> class Style
 		@isRendered = true
 
 		if @isScope
-			@item.document.onShow.emit showEvent
-			globalShowDelay += showEvent.delay
-			showEvent.delay = 0
+			@item.document.onShow.emit()
 
 		@item.document.visible = false
-		@file.readyToUse = false
+
 		stylesToRender.push @
-		updateWhenPossible @
+		unless renderStylesPending
+			renderStylesPending = true
+			setImmediate renderStyles
 		return
 
 	renderRec: ->
@@ -302,16 +233,10 @@ module.exports = (File, data) -> class Style
 
 		# parent
 		if @isAutoParent and @isScope
-			@item.document.onHide.emit hideEvent
-			globalHideDelay += hideEvent.delay
-			globalShowDelay += hideEvent.nextShowDelay
-			hideEvent.delay = 0
-			hideEvent.nextShowDelay = 0
+			@item.document.onHide.emit()
 		@item.document.visible = false
 
-		@file.readyToUse = false
-		stylesToRevert.push @
-		updateWhenPossible @
+		@revertItem()
 		return
 
 	revertItem: ->
@@ -633,6 +558,9 @@ module.exports = (File, data) -> class Style
 		return
 
 	findItemIndex = (node, item, parent) ->
+		if not @file.isRendered
+			return
+
 		tmpIndexNode = node
 		parent = parent._children?._target or parent
 		tmpSiblingNode = tmpIndexNode

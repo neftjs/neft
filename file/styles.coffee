@@ -4,34 +4,12 @@ utils = require 'utils'
 assert = require 'assert'
 
 module.exports = (File) ->
-	renderStyles = do ->
-		pending = false
-		queue = []
-
-		render = (arr) ->
-			for style in arr
-				unless style.isRendered
-					style.render()
-			for style in arr
-				render style.children
-			return
-
-		renderAll = ->
-			pending = false
-			length = queue.length
-			for arr in queue
-				render arr
-			assert.ok queue.length is length
-			utils.clear queue
-			return
-
-		(arr) ->
-			queue.push arr
-
-			unless pending
-				setImmediate renderAll
-				pending = true
-			return
+	renderStyles = (arr) ->
+		for style in arr
+			style.render()
+		for style in arr
+			renderStyles style.children
+		return
 
 	File.onRender (file) ->
 		renderStyles file.styles
