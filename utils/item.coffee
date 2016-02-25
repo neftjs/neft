@@ -203,15 +203,12 @@ module.exports = (Renderer, Impl) ->
 	class MutableDeepObject extends signal.Emitter
 		constructor: (ref) ->
 			assert.instanceOf ref, UtilsObject
+			super()
 			@_ref = ref
 			@_impl = bindings: null
 			@_component = ref._component
 			@_bindings = null
-			# @_classExtensions = null
-			# @_classList = []
-			# @_classQueue = []
-			# @_extensions = []
-			super()
+			@_extensions = []
 
 		createBinding: UtilsObject::createBinding
 
