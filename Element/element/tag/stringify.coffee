@@ -1,27 +1,5 @@
 'use strict'
 
-SINGLE_TAG =
-	__proto__: null
-	area: true
-	base: true
-	basefont: true
-	br: true
-	col: true
-	command: true
-	embed: true
-	frame: true
-	hr: true
-	img: true
-	input: true
-	isindex: true
-	keygen: true
-	link: true
-	meta: true
-	param: true
-	source: true
-	track: true
-	wbr: true
-
 isPublic = (name) ->
 	not /^(?:neft:|style:)/.test name
 
@@ -56,10 +34,10 @@ getOuterHTML = (elem, replacements) ->
 
 		ret += " " + attrName + "=\"" + attrValue + "\""
 
-	if SINGLE_TAG[name]
-		ret + ">"
+	if innerHTML = getInnerHTML(elem, replacements)
+		ret + ">" + innerHTML + "</" + name + ">"
 	else
-		ret + ">" + getInnerHTML(elem, replacements) + "</" + name + ">"
+		ret + " />"
 
 module.exports =
 	getInnerHTML: getInnerHTML
