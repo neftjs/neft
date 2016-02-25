@@ -29,7 +29,7 @@ getOuterHTML = (elem, replacements) ->
 
 	ret = "<" + name
 	for attrName, attrValue of elem.attrs._data
-		if not attrValue? or not isPublic(attrName)
+		if not attrValue? or typeof attrValue is 'function' or not isPublic(attrName)
 			continue
 
 		ret += " " + attrName + "=\"" + attrValue + "\""
