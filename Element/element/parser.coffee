@@ -97,6 +97,7 @@ module.exports = (Element) ->
 			recognizeSelfClosing: true
 			lowerCaseAttributeNames: false
 			lowerCaseTags: false
+			recognizeCDATA: true
 
 		parser.onattribname = do (_super = parser.onattribname) -> (name) ->
 			_super.call @, name
@@ -111,6 +112,10 @@ module.exports = (Element) ->
 			if @_attribvalue is DEFAULT_ATTR_VALUE
 				@_attribvalue = 'true'
 			_super.call @
+
+		# support neft:function
+		html = html.replace /<neft:function([^>]*)>/g, '$&<![CDATA['
+		html = html.replace /<\/neft:function>/gi, ']]>$&'
 
 		parser.write html
 		parser.end()
