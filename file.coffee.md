@@ -63,20 +63,28 @@ File @class
 *Signal* File.onBeforeRender(*File* file)
 -----------------------------------------
 
+Corresponding node handler: *neft:onBeforeRender=""*.
+
 		signal.create @, 'onBeforeRender'
 
 *Signal* File.onRender(*File* file)
 -----------------------------------
+
+Corresponding node handler: *neft:onRender=""*.
 
 		signal.create @, 'onRender'
 
 *Signal* File.onBeforeRevert(*File* file)
 -----------------------------------------
 
+Corresponding node handler: *neft:onBeforeRevert=""*.
+
 		signal.create @, 'onBeforeRevert'
 
 *Signal* File.onRevert(*File* file)
 -----------------------------------
+
+Corresponding node handler: *neft:onRevert=""*.
 
 		signal.create @, 'onRevert'
 
@@ -275,6 +283,11 @@ File.parse(*File* file)
 *File* File(*String* path, *Element* element)
 ---------------------------------------------
 
+		@emitNodeSignal = emitNodeSignal = (file, attrName, attr1, attr2) ->
+			if nodeSignal = file.node.attrs.get(attrName)
+				nodeSignal?.call? file, attr1, attr2
+			return
+
 		constructor: (@path, @node) ->
 			assert.isString path
 			assert.notLengthOf path, 0
@@ -335,6 +348,7 @@ File.parse(*File* file)
 				@source = source
 
 				File.onBeforeRender.emit @
+				emitNodeSignal @, 'neft:onBeforeRender'
 
 				# inputs
 				for input, i in @inputs
@@ -364,6 +378,7 @@ File.parse(*File* file)
 
 				@isRendered = true
 				File.onRender.emit @
+				emitNodeSignal @, 'neft:onRender'
 
 				@
 
@@ -377,6 +392,7 @@ File.parse(*File* file)
 
 				@isRendered = false
 				File.onBeforeRevert.emit @
+				emitNodeSignal @, 'neft:onBeforeRevert'
 
 				# parent use
 				@parentUse?.detachUsedFragment()
@@ -403,6 +419,7 @@ File.parse(*File* file)
 				@source = null
 
 				File.onRevert.emit @
+				emitNodeSignal @, 'neft:onRevert'
 
 				@
 
@@ -425,6 +442,8 @@ File.parse(*File* file)
 
 *Signal* File::onReplaceByUse(*File.Use* use)
 ---------------------------------------------
+
+Corresponding node handler: *neft:onReplaceByUse=""*.
 
 		Emitter.createSignal @, 'onReplaceByUse'
 

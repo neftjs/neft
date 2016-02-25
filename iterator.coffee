@@ -163,6 +163,7 @@ module.exports = (File) -> class Iterator
 
 		# signal
 		usedFragment.onReplaceByUse.emit @
+		File.emitNodeSignal usedFragment, 'neft:onReplaceByUse', @
 
 		@
 

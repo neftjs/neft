@@ -125,6 +125,7 @@ module.exports = (File) -> class Use
 		# signal
 		usedFragment.parentUse = @
 		usedFragment.onReplaceByUse.emit @
+		File.emitNodeSignal usedFragment, 'neft:onReplaceByUse', @
 
 		return
 
