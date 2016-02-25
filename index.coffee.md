@@ -89,24 +89,37 @@ Returns `true` if the given signal has no listeners.
 -----------------
 
 	callSignal = (obj, listeners, arg1, arg2) ->
-		i = shift = 0
+		i = 0
 		n = listeners.length
 		result = 0
+		containsGaps = false
 		while i < n
 			func = listeners[i]
 			if func is null
-				shift -= 2
+				containsGaps = true
 			else
 				ctx = listeners[i+1]
-				if shift isnt 0
-					listeners[i+shift] = func
-					listeners[i+shift+1] = ctx
-					listeners[i] = null
-					listeners[i+1] = null
-
 				if result <= 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
 					result = STOP_PROPAGATION
+					if containsGaps
+						break
 			i += 2
+
+		if containsGaps
+			shift = 0
+			while i < n
+				func = listeners[i]
+				if func is null
+					shift -= 2
+				else if shift > 0
+					assert.isNotDefined listeners[i+shift]
+					assert.isNotDefined listeners[i+shift+1]
+					listeners[i+shift] = func
+					listeners[i+shift+1] = listeners[i+1]
+					listeners[i] = null
+					listeners[i+1] = null
+				i += 2
+
 		return result
 
 	createSignalFunction = (obj) ->
@@ -192,6 +205,8 @@ obj.onPress.emit();
 			if i+2 is n
 				listeners.push listener, ctx
 			else
+				assert.isNotDefined listeners[i+2]
+				assert.isNotDefined listeners[i+3]
 				listeners[i+2] = listener
 				listeners[i+3] = ctx
 
