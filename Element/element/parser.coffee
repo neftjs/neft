@@ -93,7 +93,7 @@ module.exports = (Element) ->
 			r = node
 
 		parser = new htmlparser.Parser handler,
-			xmlMode: false
+			xmlMode: true
 			recognizeSelfClosing: true
 			lowerCaseAttributeNames: false
 			lowerCaseTags: false

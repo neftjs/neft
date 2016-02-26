@@ -56,10 +56,11 @@ getOuterHTML = (elem, replacements) ->
 
 		ret += " " + attrName + "=\"" + attrValue + "\""
 
-	if SINGLE_TAG[name]
-		ret + ">"
+	innerHTML = getInnerHTML elem, replacements
+	if not innerHTML and SINGLE_TAG[name]
+		ret + " />"
 	else
-		ret + ">" + getInnerHTML(elem, replacements) + "</" + name + ">"
+		ret + ">" + innerHTML + "</" + name + ">"
 
 module.exports =
 	getInnerHTML: getInnerHTML
