@@ -34,7 +34,7 @@
     "nml-parser": "Neft-io/nml-parser#c2d305f",
     "bundle-builder": "Neft-io/bundle-builder#7db7744",
     "sample-project": "Neft-io/sample-project#ec1224e",
-    "android-runtime": "Neft-io/android-runtime#v0.9.12",
-    "ios-runtime": "Neft-io/ios-runtime#0.9.12"
+    "android-runtime": "Neft-io/android-runtime#f2effdb",
+    "ios-runtime": "Neft-io/ios-runtime#9fa80d6"
   }
 }
