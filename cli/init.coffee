@@ -84,7 +84,7 @@ else if (args.build and not PLATFORMS[args.build]) or args.run and not PLATFORMS
 
 # commands
 if args.help
-	log '\n'+fs.readFileSync(pathUtils.resolve(__dirname, '../README'), 'utf-8')
+	log '\n'+fs.readFileSync(pathUtils.resolve(__dirname, './README'), 'utf-8')
 
 else if args.version
 	log require('../package.json').version

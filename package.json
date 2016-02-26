@@ -6,7 +6,7 @@
   "bin": {
     "neft": "./bin/neft.js"
   },
-  "main": "./lib/neft-cli.js",
+  "main": "./cli/neft-cli.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "repository": {
