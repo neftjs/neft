@@ -27,17 +27,17 @@ module.exports = (File) -> class AttrChange
 		obj
 
 	constructor: (@file, @node, @target, @name) ->
-		assert.instanceOf file, File
-		assert.instanceOf node, File.Element
-		assert.instanceOf target, File.Element
-		assert.isString name
-		assert.notLengthOf name, 0
+		assert.instanceOf @file, File
+		assert.instanceOf @node, File.Element
+		assert.instanceOf @target, File.Element
+		assert.isString @name
+		assert.notLengthOf @name, 0
 
-		@_defaultValue = target.attrs.get name
+		@_defaultValue = @target.attrs.get @name
 
 		@update()
-		node.onVisibleChange onVisibleChange, @
-		node.onAttrsChange onAttrsChange, @
+		@node.onVisibleChange onVisibleChange, @
+		@node.onAttrsChange onAttrsChange, @
 
 		`//<development>`
 		if @constructor is AttrChange

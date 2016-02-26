@@ -24,14 +24,14 @@ module.exports = (File, Input) -> class InputAttr extends Input
 		/^on[A-Z]|\:on[A-Z][A-Za-z0-9_$]*$/.test name
 
 	constructor: (file, node, text, funcBody, @attrName) ->
-		assert.isString attrName
-		assert.notLengthOf attrName, 0
+		assert.isString @attrName
+		assert.notLengthOf @attrName, 0
 
 		Input.call this, file, node, text, funcBody
 
 		@lastValue = NaN
 
-		if isHandler(attrName)
+		if isHandler(@attrName)
 			@traceChanges = false
 			@handlerFunc = createHandlerFunc @
 		else

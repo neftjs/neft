@@ -53,15 +53,15 @@ module.exports = (File) -> class Use
 		return
 
 	constructor: (@file, @node) ->
-		assert.instanceOf file, File
-		assert.instanceOf node, File.Element
+		assert.instanceOf @file, File
+		assert.instanceOf @node, File.Element
 
-		@name = node.attrs.get 'neft:fragment'
+		@name = @node.attrs.get 'neft:fragment'
 		@usedFragment = null
 		@isRendered = false
 
-		node.onVisibleChange visibilityChangeListener, @
-		node.onAttrsChange attrsChangeListener, @
+		@node.onVisibleChange visibilityChangeListener, @
+		@node.onAttrsChange attrsChangeListener, @
 
 		`//<development>`
 		if @constructor is Use

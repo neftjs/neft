@@ -22,17 +22,17 @@ module.exports = (File) -> class AttrsToSet
 		obj
 
 	constructor: (@file, @node, @attrs) ->
-		assert.instanceOf file, File
-		assert.instanceOf node, File.Element
-		assert.isPlainObject attrs
+		assert.instanceOf @file, File
+		assert.instanceOf @node, File.Element
+		assert.isPlainObject @attrs
 
 		# set current attributes
 		for attr of @attrs
-			if node.attrs._data[attr]?
+			if @node.attrs._data[attr]?
 				this.setAttribute attr, null
 
 		# listen on changes
-		node.onAttrsChange @setAttribute, this
+		@node.onAttrsChange @setAttribute, this
 
 		`//<development>`
 		if @constructor is AttrsToSet

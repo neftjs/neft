@@ -40,18 +40,18 @@ module.exports = (File) -> class Iterator
 			@update()
 
 	constructor: (@file, @node, @name) ->
-		assert.instanceOf file, File
-		assert.instanceOf node, File.Element
-		assert.isString name
-		assert.notLengthOf name, 0
+		assert.instanceOf @file, File
+		assert.instanceOf @node, File.Element
+		assert.isString @name
+		assert.notLengthOf @name, 0
 
 		@usedFragments = []
 		@text = ''
 		@data = null
 		@isRendered = false
 
-		node.onAttrsChange attrsChangeListener, @
-		node.onVisibleChange visibilityChangeListener, @
+		@node.onAttrsChange attrsChangeListener, @
+		@node.onVisibleChange visibilityChangeListener, @
 
 		`//<development>`
 		if @constructor is Iterator

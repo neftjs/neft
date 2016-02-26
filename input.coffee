@@ -217,10 +217,10 @@ module.exports = (File) -> class Input
 		new Function '__input', '__get', funcBody
 
 	constructor: (@file, @node, @text, @funcBody) ->
-		assert.instanceOf file, File
-		assert.instanceOf node, File.Element
-		assert.isString text
-		assert.isString funcBody
+		assert.instanceOf @file, File
+		assert.instanceOf @node, File.Element
+		assert.isString @text
+		assert.isString @funcBody
 
 		@traces = []
 		@updatePending = false

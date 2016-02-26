@@ -27,12 +27,12 @@ module.exports = (File) -> class Condition
 		return
 
 	constructor: (@file, @node, @elseNode=null) ->
-		assert.instanceOf file, File
-		assert.instanceOf node, File.Element
+		assert.instanceOf @file, File
+		assert.instanceOf @node, File.Element
 		if elseNode?
-			assert.instanceOf elseNode, File.Element
+			assert.instanceOf @elseNode, File.Element
 
-		node.onAttrsChange onAttrsChange, @
+		@node.onAttrsChange onAttrsChange, @
 
 		`//<development>`
 		if @constructor is Condition

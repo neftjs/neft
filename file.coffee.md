@@ -289,9 +289,9 @@ File.parse(*File* file)
 			return
 
 		constructor: (@path, @node) ->
-			assert.isString path
-			assert.notLengthOf path, 0
-			assert.instanceOf node, File.Element
+			assert.isString @path
+			assert.notLengthOf @path, 0
+			assert.instanceOf @node, File.Element
 
 			super()
 
