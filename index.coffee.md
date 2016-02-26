@@ -53,12 +53,12 @@ new Schema({
 		@Error = SchemaError
 
 		constructor: (@schema) ->
-			assert.isPlainObject schema
+			assert.isPlainObject @schema
 
-			assert.notOk utils.isEmpty(schema)
+			assert.notOk utils.isEmpty(@schema)
 			, "Schema: schema can't be empty"
 
-			for row, elem of schema
+			for row, elem of @schema
 				assert utils.isPlainObject(elem)
 				, "Schema: schema for #{row} row is not an object"
 
