@@ -7,11 +7,13 @@ coffee = require 'coffee-script'
 cp = require 'child_process'
 
 OUT_DIR = './build/android/'
-CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}app/src/main/java/io/neft/CustomApp/"
+NATIVE_OUT_DIR = "#{OUT_DIR}app/src/main/java/io/neft/"
+EXT_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}Extensions/"
+CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}CustomApp/"
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
 ANDROID_BUNDLE_DIR = './build/android/'
 
-{log} = Neft
+{utils, log} = Neft
 
 module.exports = (config, callback) ->
 	androidRuntimePath = pathUtils.resolve __dirname, '../../../../node_modules/android-runtime'
@@ -48,6 +50,17 @@ module.exports = (config, callback) ->
 	fs.copySync './static', STATIC_OUT_DIR
 	if fs.existsSync('./build/static')
 		fs.copySync './build/static', STATIC_OUT_DIR
+	log.end logtime
+
+	logtime = log.time "Copy extensions files"
+	config.androidExtensions = []
+	for ext in config.extensions
+		nativeDirPath = "#{ext.path}native/android"
+		if fs.existsSync(nativeDirPath)
+			name = utils.capitalize ext.name
+			config.androidExtensions.push
+				name: name
+			fs.copySync nativeDirPath, "#{EXT_NATIVE_OUT_DIR}#{name}"
 	log.end logtime
 
 	logtime = log.time "Prepare android files"
