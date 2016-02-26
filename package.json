@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "typed-array",
-  "version": "1.0.0",
+  "version": "0.9.12",
   "description": "Neft.io TypedArray utility library",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
