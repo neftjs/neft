@@ -61,3 +61,6 @@
 [submodule "assert"]
 	path = assert
 	url = https://github.com/Neft-io/assert
+[submodule "sample-project"]
+	path = sample-project
+	url = https://github.com/Neft-io/sample-project
