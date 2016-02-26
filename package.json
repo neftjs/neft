@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "nml-parser",
-  "version": "0.0.1",
+  "version": "0.9.12",
   "description": "Neft Marked Language parser",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
