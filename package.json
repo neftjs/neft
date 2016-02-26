@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "utils",
-  "version": "1.0.6",
+  "version": "0.9.12",
   "description": "Neft.io utility library",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
