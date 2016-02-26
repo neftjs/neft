@@ -1,0 +1,63 @@
+[submodule "document"]
+	path = document
+	url = https://github.com/Neft-io/document
+[submodule "renderer"]
+	path = renderer
+	url = https://github.com/Neft-io/renderer
+[submodule "android-runtime"]
+	path = android-runtime
+	url = https://github.com/Neft-io/android-runtime
+[submodule "ios-runtime"]
+	path = ios-runtime
+	url = https://github.com/Neft-io/ios-runtime
+[submodule "app"]
+	path = app
+	url = https://github.com/Neft-io/app
+[submodule "resources"]
+	path = resources
+	url = https://github.com/Neft-io/resources
+[submodule "networking"]
+	path = networking
+	url = https://github.com/Neft-io/networking
+[submodule "native"]
+	path = native
+	url = https://github.com/Neft-io/native
+[submodule "utils"]
+	path = utils
+	url = https://github.com/Neft-io/utils
+[submodule "schema"]
+	path = schema
+	url = https://github.com/Neft-io/schema
+[submodule "signal"]
+	path = signal
+	url = https://github.com/Neft-io/signal
+[submodule "list"]
+	path = list
+	url = https://github.com/Neft-io/list
+[submodule "dict"]
+	path = dict
+	url = https://github.com/Neft-io/dict
+[submodule "styles"]
+	path = styles
+	url = https://github.com/Neft-io/styles
+[submodule "nml-parser"]
+	path = nml-parser
+	url = https://github.com/Neft-io/nml-parser
+[submodule "typed-array"]
+	path = typed-array
+	url = https://github.com/Neft-io/typed-array
+[submodule "db"]
+	path = db
+	url = https://github.com/Neft-io/db
+[submodule "bundle-builder"]
+	path = bundle-builder
+	url = https://github.com/Neft-io/bundle-builder
+[submodule "log"]
+	path = log
+	url = https://github.com/Neft-io/log
+[submodule "unit"]
+	path = unit
+	url = https://github.com/Neft-io/unit
+[submodule "assert"]
+	path = assert
+	url = https://github.com/Neft-io/assert
