@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "assert",
-  "version": "0.0.1",
+  "version": "0.9.12",
   "description": "Neft.io assertions library",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
