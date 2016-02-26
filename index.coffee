@@ -31,11 +31,11 @@ module.exports = (opts, callback) ->
 
 	index = pathUtils.resolve fs.realpathSync('.'), opts.path
 	child = cp.fork BUNDLE_FILE_PATH, [index, JSON.stringify(opts)]
+	child.on 'exit', ->
+		fs.unlinkSync BUNDLE_FILE_PATH
 	child.on 'message', (msg) ->
 		log.end logtime
 		child.kill()
-
-		fs.unlinkSync BUNDLE_FILE_PATH
 
 		# on error
 		if msg.err
