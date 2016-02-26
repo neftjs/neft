@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
 "use strict";
-require("../lib/neft-cli.js");
+require("../cli/neft-cli.js");

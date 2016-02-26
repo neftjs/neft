@@ -6,7 +6,7 @@
   "bin": {
     "neft": "./bin/neft.js"
   },
-  "main": "./lib/neft-cli.js",
+  "main": "./cli/neft-cli.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "repository": {
@@ -17,10 +17,13 @@
   "engines": {
     "node": ">=0.11.14"
   },
+  "scripts": {
+    "bundle": "coffee --nodejs --harmony bundle.coffee"
+  },
   "dependencies": {
     "coffee-script": "^1.10.0",
     "fs-extra": "^0.24.0",
-    "groundskeeper": "^0.1.11",
+    "htmlparser2": "^3.9.0",
     "js-yaml": "^3.3.1",
     "mkdirp": "^0.5.0",
     "mustache": "^2.2.0",
@@ -36,5 +39,8 @@
     "sample-project": "Neft-io/sample-project#ec1224e",
     "android-runtime": "Neft-io/android-runtime#f2effdb",
     "ios-runtime": "Neft-io/ios-runtime#9fa80d6"
+  },
+  "devDependencies": {
+    "mustache": "^2.2.1"
   }
 }
