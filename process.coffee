@@ -4,7 +4,7 @@ module.exports = ->
 	# gets argv
 	[_, _, index, opts] = process.argv
 	opts = JSON.parse opts
-	{platform, onlyLocal, allowedRemoteModules} = opts
+	{platform, onlyLocal, allowedRemoteModules, modulesDir} = opts
 	allowedRemoteModules ?= []
 	process.argv.splice 2, Infinity
 
@@ -210,6 +210,7 @@ module.exports = ->
 	fs = require 'fs'
 	pathUtils = require 'path'
 	yaml = require 'js-yaml'
+	Module = require 'module'
 	require 'coffee-script/register'
 
 	try
@@ -236,8 +237,6 @@ module.exports = ->
 	else
 		global.Neft = ->
 
-	ASSERT_MODULE_PATH = fs.realpathSync('') + '/node_modules/assert'
-
 	###
 	Override standard `Module._load()` to capture all required modules and files
 	###
@@ -246,11 +245,15 @@ module.exports = ->
 		if Neft?[req]
 			return Neft[req]
 
-		hiddenReq = req
-		if req is 'assert'
-			hiddenReq = arguments[0] = ASSERT_MODULE_PATH
-
-		r = _super.apply @, arguments
+		moduleReq = req
+		if modulesDir? and req[0] isnt '.'
+			moduleReq = "#{modulesDir}#{req}"
+			try
+				r = _super.call @, moduleReq, parent
+			catch
+				moduleReq = req
+		if moduleReq is req
+			r = _super.call @, moduleReq, parent
 
 		if NODE_MODULES[req]
 			return r
@@ -259,7 +262,7 @@ module.exports = ->
 			if parent.id.indexOf("node_modules/#{module}") > 0 or parent.id.indexOf("node_modules\\#{module}") > 0
 				return r
 
-		filename = Module._resolveFilename hiddenReq, parent
+		filename = Module._resolveFilename moduleReq, parent
 
 		modulePath = pathUtils.relative base, filename
 		parentPath = pathUtils.relative base, parent.id
@@ -275,9 +278,6 @@ module.exports = ->
 
 		mpaths = paths[parentPath] ?= {}
 		mpaths[req] = modulePath
-
-		if req is ASSERT_MODULE_PATH
-			mpaths['assert'] = modulePath
 
 		r
 
