@@ -1,9 +1,9 @@
-resources.json @learn
+resources json @learn
 =====================
 
-#### file
+## File
 
-```
+```json
 {
   "file": ""
 }
@@ -11,9 +11,9 @@ resources.json @learn
 
 Path to a resource file *e.g. bg@2x.jpg* or another config json file.
 
-#### formats
+## Formats
 
-```
+```json
 {
   "file": ["music.mp3"]
   "formats": ["mp3", "ogg"]
@@ -24,9 +24,9 @@ Array of available formats of the **file**.
 
 Default file format can be omitted (*mp3* in the example).
 
-#### resolutions
+## Resolutions
 
-```
+```json
 {
   "file": ["bg@3x.png"]
   "resolutions": [3, 2, 1, 0.5, 0.25]
@@ -41,9 +41,9 @@ Default file resolution can be omitted (*3* in the example).
 
 Specify resolution smaller than 1, if a file is commonly resized into smaller sizes.
 
-#### resources
+## Resources list
 
-```
+```json
 {
   "resolutions": [2, 1, 0.5],
   "resources": {
@@ -62,9 +62,9 @@ Object contained resource id and it's resource object.
 
 All config properties like *resolutions* and *formats* are scoped from the parent object or file.
 
-##### Array notation
+### Array notation
 
-```
+```json
 {
   "resolutions": [2, 1],
   "resources": [
