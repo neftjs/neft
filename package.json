@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "list",
-  "version": "0.0.1",
+  "version": "0.9.12",
   "description": "Neft.io list library used for array data-binding",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
