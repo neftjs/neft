@@ -266,6 +266,8 @@ module.exports = (impl) ->
 				new Anchor item, source, def
 
 		constructor: (@item, @source, def) ->
+			item = @item
+			source = @source
 			[target, line] = def
 			line ?= source
 			@target = target

@@ -30,17 +30,17 @@ module.exports = (impl) ->
 				new Connection binding, item, prop, parent
 
 		constructor: (@binding, item, @prop, @parent) ->
-			@handlerName = getPropHandlerName prop
+			@handlerName = getPropHandlerName @prop
 			@isConnected = false
 
 			if isArray(item)
 				@itemId = ''
-				@child = Connection.factory binding, item[0], item[1], @
+				@child = Connection.factory @binding, item[0], item[1], @
 				@item = @child.getValue()
 			else
 				@itemId = item
 				@child = null
-				@item = Binding.getItemById binding, item
+				@item = Binding.getItemById @binding, item
 			@connect()
 
 			Object.preventExtensions @
@@ -172,13 +172,13 @@ module.exports = (impl) ->
 			assert.isFunction binding[0]
 			assert.isArray binding[1]
 
-			item = @item = obj._ref or obj
-			if @listensOnComponentObjectChange = component.onObjectChange?
-				component.onObjectChange onComponentObjectChange, @
+			item = @item = @obj._ref or @obj
+			if @listensOnComponentObjectChange = @component.onObjectChange?
+				@component.onObjectChange onComponentObjectChange, @
 
 			# properties
 			@func = binding[0]
-			@args = component.objectsOrder
+			@args = @component.objectsOrder
 
 			# connections
 			connections = @connections ||= []
