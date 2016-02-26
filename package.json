@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "sample-project",
-  "version": "0.0.1",
+  "version": "0.9.12",
   "description": "Sample Neft.io project",
   "config": {
     "title": "Neft.io Project",
@@ -13,7 +13,7 @@
     "type": "app"
   },
   "dependencies": {
-  	"coffee-script": "^1.10.0",
+    "coffee-script": "^1.10.0",
     "node-static": "^0.7.6",
     "form-data": "1.0.0-rc3",
     "qs": "^6.0.1",
