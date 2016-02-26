@@ -40,17 +40,17 @@ createBundle = (opts, callback) ->
 
 stack = new utils.async.Stack
 
-# stack.add createBundle, null, [platform: 'node', release: true]
+stack.add createBundle, null, [platform: 'node', release: true]
 stack.add createBundle, null, [platform: 'node', release: false]
-# stack.add createBundle, null, [platform: 'browser', release: true]
+stack.add createBundle, null, [platform: 'browser', release: true]
 stack.add createBundle, null, [platform: 'browser', release: false]
-# stack.add createBundle, null, [platform: 'browser', extras: {game: true}, release: true]
-# stack.add createBundle, null, [platform: 'browser', extras: {game: true}, release: false]
+stack.add createBundle, null, [platform: 'browser', extras: {game: true}, release: true]
+stack.add createBundle, null, [platform: 'browser', extras: {game: true}, release: false]
 # stack.add createBundle, null, [platform: 'qt', release: true]
 # stack.add createBundle, null, [platform: 'qt', release: false]
-# stack.add createBundle, null, [platform: 'android', release: true]
-# stack.add createBundle, null, [platform: 'android', release: false]
-# stack.add createBundle, null, [platform: 'ios', release: true]
-# stack.add createBundle, null, [platform: 'ios', release: false]
+stack.add createBundle, null, [platform: 'android', release: true]
+stack.add createBundle, null, [platform: 'android', release: false]
+stack.add createBundle, null, [platform: 'ios', release: true]
+stack.add createBundle, null, [platform: 'ios', release: false]
 
 stack.runAll ->
