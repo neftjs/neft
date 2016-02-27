@@ -1,10 +1,10 @@
 'use strict'
 
 zlib = require 'zlib'
-log = require 'log'
-utils = require 'utils'
+log = require 'neft-log'
+utils = require 'neft-utils'
 path = require 'path'
-Document = require 'document'
+Document = require 'neft-document'
 FormData = require 'form-data'
 
 log = log.scope 'Networking'

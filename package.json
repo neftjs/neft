@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "networking",
+  "name": "neft-networking",
   "version": "0.9.12",
   "description": "Neft.io networking library",
   "license": "Apache 2.0",
