@@ -3,17 +3,17 @@ App @framework
 
 	'use strict'
 
-	utils = require 'utils'
-	log = require 'log'
-	signal = require 'signal'
-	db = require 'db'
-	assert = require 'assert'
-	Schema = require 'schema'
-	Networking = require 'networking'
-	Document = require 'document'
-	Renderer = require 'renderer'
-	Resources = require 'resources'
-	Dict = require 'dict'
+	utils = require 'neft-utils'
+	log = require 'neft-log'
+	signal = require 'neft-signal'
+	db = require 'neft-db'
+	assert = require 'neft-assert'
+	Schema = require 'neft-schema'
+	Networking = require 'neft-networking'
+	Document = require 'neft-document'
+	Renderer = require 'neft-renderer'
+	Resources = require 'neft-resources'
+	Dict = require 'neft-dict'
 
 	AppRoute = require './route'
 

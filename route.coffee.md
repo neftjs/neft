@@ -3,14 +3,14 @@ Route @class
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	log = require 'log'
-	Schema = require 'schema'
-	Networking = require 'networking'
-	Document = require 'document'
-	Renderer = require 'renderer'
-	Dict = require 'dict'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	log = require 'neft-log'
+	Schema = require 'neft-schema'
+	Networking = require 'neft-networking'
+	Document = require 'neft-document'
+	Renderer = require 'neft-renderer'
+	Dict = require 'neft-dict'
 
 	log = log.scope 'App', 'Route'
 
