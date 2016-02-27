@@ -3,9 +3,9 @@ Resources @engine
 
 	'use strict'
 
-	utils = require 'utils'
-	log = require 'log'
-	assert = require 'assert'
+	utils = require 'neft-utils'
+	log = require 'neft-log'
+	assert = require 'neft-assert'
 
 	log = log.scope 'Resources'
 

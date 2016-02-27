@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "resources",
+  "name": "neft-resources",
   "version": "0.9.12",
   "description": "Neft.io resources library",
   "license": "Apache 2.0",
