@@ -3,9 +3,9 @@ Animation @modifier
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	signal = require 'signal'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	signal = require 'neft-signal'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
 		@__name__ = 'Animation'

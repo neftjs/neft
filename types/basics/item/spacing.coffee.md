@@ -3,8 +3,8 @@ Spacing @extension
 
 	'use strict'
 
-	assert = require 'assert'
-	utils = require 'utils'
+	assert = require 'neft-assert'
+	utils = require 'neft-utils'
 
 *Spacing* Spacing()
 -------------------

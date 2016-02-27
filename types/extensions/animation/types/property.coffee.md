@@ -3,9 +3,9 @@ PropertyAnimation @modifier
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	log = require 'log'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	log = require 'neft-log'
 
 	log = log.scope 'Renderer', 'PropertyAnimation'
 

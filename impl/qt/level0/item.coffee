@@ -1,7 +1,7 @@
 'use strict'
 
-utils = require 'utils'
-signal = require 'signal'
+utils = require 'neft-utils'
+signal = require 'neft-signal'
 
 KEY_CODES = Object.create null
 KEY_CODES[Qt.Key_Escape] = 'Escape'

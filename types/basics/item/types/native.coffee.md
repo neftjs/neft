@@ -3,8 +3,8 @@ Native @class
 
 	'use strict'
 
-	utils = require 'utils'
-	nativeBridge = require 'native'
+	utils = require 'neft-utils'
+	nativeBridge = require 'neft-native'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 

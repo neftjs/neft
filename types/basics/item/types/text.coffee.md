@@ -12,10 +12,10 @@ Text @class
 
 	'use strict'
 
-	assert = require 'assert'
-	utils = require 'utils'
-	signal = require 'signal'
-	log = require 'log'
+	assert = require 'neft-assert'
+	utils = require 'neft-utils'
+	signal = require 'neft-signal'
+	log = require 'neft-log'
 
 	log = log.scope 'Renderer', 'Text'
 

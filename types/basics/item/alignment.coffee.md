@@ -3,8 +3,8 @@ Alignment @extension
 
 	'use strict'
 
-	assert = require 'assert'
-	utils = require 'utils'
+	assert = require 'neft-assert'
+	utils = require 'neft-utils'
 
 *Alignment* Alignment()
 -----------------------

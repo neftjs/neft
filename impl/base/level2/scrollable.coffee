@@ -1,7 +1,7 @@
 'use strict'
 
-utils = require 'utils'
-signal = require 'signal'
+utils = require 'neft-utils'
+signal = require 'neft-signal'
 
 WHEEL_DIVISOR = 3
 MIN_POINTER_DELTA = 7

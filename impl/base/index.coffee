@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'utils'
+utils = require 'neft-utils'
 
 exports.Types =
 	Item: require './level0/item'

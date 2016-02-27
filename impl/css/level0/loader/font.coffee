@@ -1,6 +1,6 @@
 'use strict'
 
-log = require 'log'
+log = require 'neft-log'
 
 log = log.scope 'Renderer', 'FontLoader'
 

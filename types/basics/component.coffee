@@ -1,8 +1,8 @@
 'use strict'
 
-utils = require 'utils'
-signal = require 'signal'
-assert = require 'assert'
+utils = require 'neft-utils'
+signal = require 'neft-signal'
+assert = require 'neft-assert'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Component
 

@@ -18,7 +18,7 @@ NumberAnimation @modifier
 
 	'use strict'
 
-	utils = require 'utils'
+	utils = require 'neft-utils'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
 		@__name__ = 'NumberAnimation'
