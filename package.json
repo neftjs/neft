@@ -19,7 +19,7 @@
   },
   "scripts": {
     "bundle": "coffee --nodejs --harmony bundle.coffee",
-    "postinstall": "git submodule init && git submodule update"
+    "preversion": "preversion.coffee"
   },
   "dependencies": {
     "coffee-script": "^1.10.0",
