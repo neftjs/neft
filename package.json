@@ -2,13 +2,16 @@
   "name": "neft",
   "version": "0.9.13",
   "preferGlobal": true,
-  "description": "Command-line interface for building Neft.io projects",
+  "description": "JavaScript. Everywhere.",
+  "keywords": ["framework", "native", "android", "ios", "webgl"],
   "bin": {
     "neft": "./bin/neft.js"
   },
-  "main": "./index.coffee",
+  "main": "./cli/bundle/neft-node-develop.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
+  "author": "Krystian Kruk <krystian@neft.io>",
+  "contributors": [],
   "repository": {
     "type": "git",
     "url": "https://github.com/Neft-io/neft.git"
@@ -34,7 +37,11 @@
     "qs": "^6.0.1",
     "node-static": "^0.7.6",
     "uglify-js": "^2.6.1",
-    "semver": "^5.1.0"
+    "semver": "^5.1.0",
+    "neft-android-runtime": "git@github.com:Neft-io/android-runtime.git#8f97f3a",
+    "neft-ios-runtime": "git@github.com:Neft-io/ios-runtime.git#b0ef00d",
+    "neft-sample-project": "git@github.com:Neft-io/sample-project.git#7c18564",
+    "neft-nml-parser": "git@github.com:Neft-io/nml-parser.git#e0d07cf"
   },
   "devDependencies": {
     "mustache": "^2.2.1"
