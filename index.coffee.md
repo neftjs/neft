@@ -8,8 +8,8 @@ var log = require('log');
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
 
 	{bind} = Function
 	{isArray} = Array
