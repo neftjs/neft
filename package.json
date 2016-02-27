@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "schema",
+  "name": "neft-schema",
   "version": "0.9.12",
   "description": "Neft.io schema library",
   "license": "Apache 2.0",

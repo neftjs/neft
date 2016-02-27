@@ -24,7 +24,7 @@ console.log(schema.validate({desc: []}));
 
 	'use strict'
 
-	assert = require 'assert'
+	assert = require 'neft-assert'
 
 	module.exports = (Schema) -> (row, value, expected) ->
 		assert.isString expected

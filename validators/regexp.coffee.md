@@ -22,7 +22,7 @@ console.log(schema.validate({word: 'abc'}));
 
 	'use strict'
 
-	assert = require 'assert'
+	assert = require 'neft-assert'
 
 	module.exports = (Schema) -> (row, value, expected) ->
 		assert expected instanceof RegExp
