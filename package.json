@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "native",
+  "name": "neft-native",
   "version": "0.10.0",
   "description": "Neft.io native communication library",
   "license": "Apache 2.0",
