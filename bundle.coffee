@@ -1,9 +1,12 @@
 fs = require 'fs'
 Mustache = require 'mustache'
 coffee = require 'coffee-script'
-global.Neft = require './index'
 
-{utils} = Neft
+global.Neft =
+	utils: utils = require 'neft-utils'
+	log: require 'neft-log'
+	assert: require 'neft-assert'
+
 bundle = require 'neft-bundle-builder'
 
 createBundle = (opts, callback) ->
