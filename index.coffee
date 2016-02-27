@@ -1,9 +1,17 @@
 'use strict'
 
-exports = module.exports = require './app'
-
-# link modules
-MODULES = ['utils', 'signal', 'Dict', 'List', 'log', 'Resources', 'native',
-           'Renderer', 'Networking', 'Schema', 'Document', 'Styles', 'assert', 'db']
-for name in MODULES
-	exports[name] = exports[name.toLowerCase()] = require name.toLowerCase()
+exports = module.exports = require 'neft-app'
+exports.utils = require 'neft-utils'
+exports.signal = require 'neft-signal'
+exports.Dict = require 'neft-dict'
+exports.List = require 'neft-list'
+exports.log = require 'neft-log'
+exports.Resources = require 'neft-resources'
+exports.native = require 'neft-native'
+exports.Renderer = require 'neft-renderer'
+exports.Networking = require 'neft-networking'
+exports.Schema = require 'neft-schema'
+exports.Document = require 'neft-document'
+exports.Styles = require 'neft-styles'
+exports.assert = require 'neft-assert'
+exports.db = require 'neft-db'
