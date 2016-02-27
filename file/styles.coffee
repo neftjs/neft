@@ -1,8 +1,5 @@
 'use strict'
 
-utils = require 'utils'
-assert = require 'assert'
-
 module.exports = (File) ->
 	renderStyles = (arr) ->
 		for style in arr

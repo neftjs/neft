@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "styles",
+  "name": "neft-styles",
   "version": "0.9.12",
   "description": "Neft.io Document and Renderer connector",
   "license": "Apache 2.0",
