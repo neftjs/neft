@@ -3,7 +3,7 @@
 semver = require 'semver'
 fs = require 'fs'
 pathUtils = require 'path'
-global.Neft = require '../exports'
+global.Neft = require './bundle/neft-node-develop'
 
 {log} = Neft
 
