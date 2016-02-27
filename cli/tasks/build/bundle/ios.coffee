@@ -15,7 +15,7 @@ ANDROID_BUNDLE_DIR = './build/ios/'
 {log} = Neft
 
 module.exports = (config, callback) ->
-	iosRuntimePath = pathUtils.resolve __dirname, '../../../../node_modules/ios-runtime'
+	iosRuntimePath = pathUtils.resolve __dirname, '../../../../node_modules/neft-ios-runtime'
 
 	mustacheFiles = []
 	coffeeFiles = []
