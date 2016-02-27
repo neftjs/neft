@@ -18,7 +18,8 @@
     "node": ">=0.11.14"
   },
   "scripts": {
-    "bundle": "coffee --nodejs --harmony bundle.coffee"
+    "bundle": "coffee --nodejs --harmony bundle.coffee",
+    "postinstall": "git submodule init && git submodule update"
   },
   "dependencies": {
     "coffee-script": "^1.10.0",
