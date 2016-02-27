@@ -10,9 +10,9 @@ var List = require('list');
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	signal = require 'signal'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	signal = require 'neft-signal'
 
 	module.exports = class List extends signal.Emitter
 		@__name__ = 'List'
