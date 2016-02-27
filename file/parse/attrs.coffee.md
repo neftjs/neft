@@ -28,9 +28,9 @@ String `List(...` evaluates to the [List][list/List].
 
 	'use strict'
 
-	utils = require 'utils'
-	Dict = require 'dict'
-	List = require 'list'
+	utils = require 'neft-utils'
+	Dict = require 'neft-dict'
+	List = require 'neft-list'
 
 	evalFunc = new Function 'val', 'Dict', 'List', 'try { return eval(\'(\'+val+\')\'); } catch(err){}'
 

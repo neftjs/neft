@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "document",
+  "name": "neft-document",
   "version": "0.9.12",
   "description": "Neft.io document engine",
   "license": "Apache 2.0",

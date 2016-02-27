@@ -43,7 +43,7 @@ Use this attribute to render less important elements.
 
 	'use strict'
 
-	utils = require 'utils'
+	utils = require 'neft-utils'
 
 	module.exports = (File) -> (file) ->
 		uses = []

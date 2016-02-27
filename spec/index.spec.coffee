@@ -1,7 +1,7 @@
 'use strict'
 
 View = require('../index.coffee.md')
-[utils, signal, Dict, List] = ['utils', 'signal', 'dict', 'list'].map require
+[utils, signal, Dict, List] = ['neft-utils', 'neft-signal', 'neft-dict', 'neft-list'].map require
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 

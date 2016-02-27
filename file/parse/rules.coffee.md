@@ -16,8 +16,8 @@ Adds attributes if not exists.
 
 	'use strict'
 
-	utils = require 'utils'
-	log = require 'log'
+	utils = require 'neft-utils'
+	log = require 'neft-log'
 
 	log = log.scope 'Document', 'neft:rule'
 

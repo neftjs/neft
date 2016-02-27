@@ -21,7 +21,7 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
 
 	'use strict'
 
-	utils = require 'utils'
+	utils = require 'neft-utils'
 
 	module.exports = (File) ->
 		parseLinks = require('./fragments/links') File
