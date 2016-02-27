@@ -28,11 +28,11 @@ module.exports = (File) -> class Log
 		return
 
 	constructor: (@file, @node) ->
-		assert.instanceOf file, File
-		assert.instanceOf node, File.Element
+		assert.instanceOf @file, File
+		assert.instanceOf @node, File.Element
 
-		node.onAttrsChange @log, @
-		listenOnTextChange node, @
+		@node.onAttrsChange @log, @
+		listenOnTextChange @node, @
 
 		`//<development>`
 		if @constructor is Log
