@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'utils'
+utils = require 'neft-utils'
 data = Object.create null
 
 exports.get = (key, callback) ->

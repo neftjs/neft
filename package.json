@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "db",
+  "name": "neft-db",
   "version": "0.9.12",
   "description": "Neft.io database library",
   "license": "Apache 2.0",
