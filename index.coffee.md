@@ -10,9 +10,9 @@ var dict = require('dict');
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	signal = require 'signal'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	signal = require 'neft-signal'
 
 	module.exports = class Dict extends signal.Emitter
 		@__name__ = 'Dict'
