@@ -8,7 +8,7 @@ var assert = require('assert');
 
 	'use strict'
 
-	utils = require 'utils'
+	utils = require 'neft-utils'
 
 assert(*Boolean* expression, [*String* message])
 ------------------------------------------------
