@@ -1,9 +1,9 @@
 'use strict'
 
-utils = require 'utils'
-assert = require 'assert'
-List = require 'list'
-log = require 'log'
+utils = require 'neft-utils'
+assert = require 'neft-assert'
+List = require 'neft-list'
+log = require 'neft-log'
 
 {isArray} = Array
 

@@ -1,8 +1,8 @@
 'use strict'
 
-utils = require 'utils'
-assert = require 'assert'
-log = require 'log'
+utils = require 'neft-utils'
+assert = require 'neft-assert'
+log = require 'neft-log'
 
 module.exports = (File) -> class AttrsToSet
 	@__name__ = 'AttrsToSet'

@@ -1,8 +1,8 @@
 'use strict'
 
-assert = require 'assert'
-utils = require 'utils'
-log = require 'log'
+assert = require 'neft-assert'
+utils = require 'neft-utils'
+log = require 'neft-log'
 
 assert = assert.scope 'View.AttrChange'
 log = log.scope 'View', 'AttrChange'

@@ -3,9 +3,9 @@ Text @virtual_dom
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	signal = require 'signal'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	signal = require 'neft-signal'
 
 	{emitSignal} = signal.Emitter
 

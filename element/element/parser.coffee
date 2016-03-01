@@ -1,6 +1,6 @@
-utils = require 'utils'
+utils = require 'neft-utils'
 htmlparser = require 'htmlparser2'
-log = require 'log'
+log = require 'neft-log'
 
 log = log.scope 'Document'
 

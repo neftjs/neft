@@ -17,8 +17,7 @@ Tag used to create functions in the view.
 
 	'use strict'
 
-	coffee = require 'coffee-script'
-	utils = require 'utils'
+	utils = require 'neft-utils'
 
 	parseLinksFile = require('./fragments/links')
 	parseLinks = null

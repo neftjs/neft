@@ -1,10 +1,10 @@
 'use strict'
 
-utils = require 'utils'
-assert = require 'assert'
-log = require 'log'
-Dict = require 'dict'
-List = require 'list'
+utils = require 'neft-utils'
+assert = require 'neft-assert'
+log = require 'neft-log'
+Dict = require 'neft-dict'
+List = require 'neft-list'
 
 assert = assert.scope 'View.Input'
 log = log.scope 'View', 'Input'
@@ -44,8 +44,8 @@ module.exports = (File) -> class Input
 		Number: Number
 		RegExp: RegExp
 		String: String
-		db: require 'db'
-		utils: require 'utils'
+		db: require 'neft-db'
+		utils: require 'neft-utils'
 
 	@getVal = do ->
 		getFromElement = (elem, prop) ->
