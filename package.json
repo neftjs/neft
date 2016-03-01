@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "sample-project",
+  "name": "neft-sample-project",
   "version": "0.9.12",
   "description": "Sample Neft.io project",
   "config": {
