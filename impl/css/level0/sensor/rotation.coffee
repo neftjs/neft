@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'assert'
+assert = require 'neft-assert'
 
 module.exports = (impl) ->
 	{degToRad} = impl.utils

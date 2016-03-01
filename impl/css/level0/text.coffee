@@ -1,7 +1,7 @@
 'use strict'
 
-utils = require 'utils'
-signal = require 'signal'
+utils = require 'neft-utils'
+signal = require 'neft-signal'
 
 module.exports = (impl) ->
 	{Item, Image} = impl.Types

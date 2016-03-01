@@ -1,8 +1,8 @@
 'use strict'
 
-utils = require 'utils'
-log = require 'log'
-TypedArray = require 'typed-array'
+utils = require 'neft-utils'
+log = require 'neft-log'
+TypedArray = require 'neft-typed-array'
 
 log = log.scope 'Renderer', 'Flow'
 

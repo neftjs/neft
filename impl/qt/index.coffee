@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'utils'
+utils = require 'neft-utils'
 
 module.exports = (impl) ->
 	utils.merge impl.utils, require('./utils')

@@ -1,7 +1,7 @@
 'use strict'
 
-utils = require 'utils'
-signal = require 'signal'
+utils = require 'neft-utils'
+signal = require 'neft-signal'
 PIXI = require '../pixi.lib.js'
 
 isTouch = 'ontouchstart' of window

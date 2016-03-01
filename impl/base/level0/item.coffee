@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'utils'
+utils = require 'neft-utils'
 
 module.exports = (impl) ->
 	pointer = impl.pointer = require('./item/pointer') impl

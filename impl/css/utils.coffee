@@ -1,6 +1,6 @@
 'use strict'
 
-signal = require 'signal'
+signal = require 'neft-signal'
 
 isFirefox = exports.isFirefox = navigator.userAgent.indexOf('Firefox') isnt -1
 

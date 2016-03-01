@@ -16,8 +16,8 @@ Flow @class
 
 	'use strict'
 
-	assert = require 'assert'
-	utils = require 'utils'
+	assert = require 'neft-assert'
+	utils = require 'neft-utils'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Flow extends Renderer.Item
 		@__name__ = 'Flow'

@@ -3,9 +3,9 @@ Margin @extension
 
 	'use strict'
 
-	utils = require 'utils'
-	signal = require 'signal'
-	assert = require 'assert'
+	utils = require 'neft-utils'
+	signal = require 'neft-signal'
+	assert = require 'neft-assert'
 
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Margin extends itemUtils.DeepObject
 		@__name__ = 'Margin'

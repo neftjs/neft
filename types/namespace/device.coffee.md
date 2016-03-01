@@ -3,8 +3,8 @@ Device @namespace
 
 	'use strict'
 
-	utils = require 'utils'
-	signal = require 'signal'
+	utils = require 'neft-utils'
+	signal = require 'neft-signal'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class Device extends signal.Emitter

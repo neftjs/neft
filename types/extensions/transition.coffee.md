@@ -20,10 +20,10 @@ Transition @modifier
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	signal = require 'signal'
-	log = require 'log'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	signal = require 'neft-signal'
+	log = require 'neft-log'
 
 	log = log.scope 'Renderer', 'Transition'
 
