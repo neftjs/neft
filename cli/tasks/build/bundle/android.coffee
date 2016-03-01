@@ -16,7 +16,7 @@ ANDROID_BUNDLE_DIR = './build/android/'
 {utils, log} = Neft
 
 module.exports = (config, callback) ->
-	androidRuntimePath = pathUtils.resolve __dirname, '../../../../node_modules/android-runtime'
+	androidRuntimePath = pathUtils.resolve __dirname, '../../../../node_modules/neft-android-runtime'
 
 	mustacheFiles = []
 

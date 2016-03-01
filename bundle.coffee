@@ -1,10 +1,13 @@
 fs = require 'fs'
 Mustache = require 'mustache'
 coffee = require 'coffee-script'
-global.Neft = require './exports'
 
-{utils} = Neft
-bundle = require './bundle-builder'
+global.Neft =
+	utils: utils = require 'neft-utils'
+	log: require 'neft-log'
+	assert: require 'neft-assert'
+
+bundle = require 'neft-bundle-builder'
 
 createBundle = (opts, callback) ->
 	bundle {
@@ -14,7 +17,6 @@ createBundle = (opts, callback) ->
 		removeLogs: opts.release
 		minify: opts.release
 		path: "index.coffee"
-		modulesDir: "#{__dirname}/"
 	}, (err, bundle) ->
 		if err
 			return console.error err

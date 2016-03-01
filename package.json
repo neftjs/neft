@@ -2,13 +2,16 @@
   "name": "neft",
   "version": "0.9.13",
   "preferGlobal": true,
-  "description": "Command-line interface for building Neft.io projects",
+  "description": "JavaScript. Everywhere.",
+  "keywords": ["framework", "native", "android", "ios", "webgl"],
   "bin": {
     "neft": "./bin/neft.js"
   },
-  "main": "./cli/neft-cli.js",
+  "main": "./cli/bundle/neft-node-develop.js",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
+  "author": "Krystian Kruk <krystian@neft.io>",
+  "contributors": [],
   "repository": {
     "type": "git",
     "url": "https://github.com/Neft-io/neft.git"
@@ -18,7 +21,9 @@
     "node": ">=0.11.14"
   },
   "scripts": {
-    "bundle": "coffee --nodejs --harmony bundle.coffee"
+    "bundle": "coffee --nodejs --harmony bundle.coffee",
+    "preversion": "preversion.coffee",
+    "checkout-master": "git checkout master; git pull; find ./node_modules/neft-* -type d -maxdepth 0 -execdir sh -c 'echo \\\\n\\\\n$0\\\\n; cd ./node_modules/$0; git checkout master; git pull' {} \\;"
   },
   "dependencies": {
     "coffee-script": "^1.10.0",
@@ -34,11 +39,10 @@
     "node-static": "^0.7.6",
     "uglify-js": "^2.6.1",
     "semver": "^5.1.0",
-    "nml-parser": "Neft-io/nml-parser#c2d305f",
-    "bundle-builder": "Neft-io/bundle-builder#7db7744",
-    "sample-project": "Neft-io/sample-project#ec1224e",
-    "android-runtime": "Neft-io/android-runtime#f2effdb",
-    "ios-runtime": "Neft-io/ios-runtime#9fa80d6"
+    "neft-android-runtime": "git@github.com:Neft-io/android-runtime.git#8f97f3a",
+    "neft-ios-runtime": "git@github.com:Neft-io/ios-runtime.git#b0ef00d",
+    "neft-sample-project": "git@github.com:Neft-io/sample-project.git#7c18564",
+    "neft-nml-parser": "git@github.com:Neft-io/nml-parser.git#e0d07cf"
   },
   "devDependencies": {
     "mustache": "^2.2.1"
