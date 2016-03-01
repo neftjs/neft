@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "app",
+  "name": "neft-app",
   "version": "0.9.4",
   "description": "Neft.io main application",
   "license": "Apache 2.0",
