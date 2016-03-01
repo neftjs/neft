@@ -2,7 +2,7 @@
 
 Schema = require '../index.coffee.md'
 
-utils = require 'utils'
+utils = require 'neft-utils'
 
 VALIDATORS =
 	required:
