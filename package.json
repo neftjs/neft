@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "unit",
+  "name": "neft-unit",
   "version": "0.9.12",
   "description": "Neft.io unit tests library",
   "license": "Apache 2.0",

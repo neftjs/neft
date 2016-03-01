@@ -3,8 +3,8 @@ Unit @library
 
 	'use strict'
 
-	utils = require 'utils'
-	log = require 'log'
+	utils = require 'neft-utils'
+	log = require 'neft-log'
 
 	{isArray} = Array
 
