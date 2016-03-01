@@ -8,10 +8,10 @@ var db = require('db');
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	List = require 'list'
-	Dict = require 'dict'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	List = require 'neft-list'
+	Dict = require 'neft-dict'
 
 	assert = assert.scope 'Database'
 
