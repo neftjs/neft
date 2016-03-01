@@ -1,7 +1,7 @@
 'use strict'
 
 pathUtils = require 'path'
-nmlParser = require 'nml-parser'
+nmlParser = require 'neft-nml-parser'
 
 {utils, Renderer} = Neft
 
@@ -21,8 +21,8 @@ module.exports = (file) ->
 	code = ""
 
 	# scope types
-	code += "Renderer = require('renderer')\n"
-	code += "onReady = require('signal').create()\n"
+	code += "Renderer = require('neft-renderer')\n"
+	code += "onReady = require('neft-signal').create()\n"
 	code += "{Image, Device, Navigator, Screen, RotationSensor} = Renderer\n"
 	code += "view = app = null\n"
 
@@ -38,7 +38,7 @@ module.exports = (file) ->
 	for fileId, val of data.codes
 		if typeof val?.link is 'string'
 			code += "exports.#{fileId} = exports.#{val.link}\n"
-		else	
+		else
 			code += "exports.#{fileId} = `(function(){ #{val} }())`\n"
 
 	code += "exports._init = (opts) -> \n"

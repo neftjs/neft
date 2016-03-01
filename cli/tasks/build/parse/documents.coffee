@@ -2,7 +2,7 @@
 
 fs = require 'fs-extra'
 pathUtils = require 'path'
-bundleBuilder = require 'bundle-builder'
+bundleBuilder = require 'neft-bundle-builder'
 
 cliUtils = require '../../../utils'
 
