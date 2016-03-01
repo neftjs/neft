@@ -1,4 +1,4 @@
-utils = require 'utils'
+utils = require 'neft-utils'
 List = require './index'
 
 describe 'ctor', ->
