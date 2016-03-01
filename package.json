@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "signal",
+  "name": "neft-signal",
   "version": "0.9.12",
   "description": "Neft.io signal library",
   "license": "Apache 2.0",
