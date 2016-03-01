@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "log",
+  "name": "neft-log",
   "version": "0.9.7",
   "description": "Neft.io logging library",
   "license": "Apache 2.0",
