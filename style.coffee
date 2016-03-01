@@ -346,13 +346,16 @@ module.exports = (File, data) -> class Style
 		if @waiting
 			return
 
-		if @node instanceof Text and not @isTextSet
+		if @node instanceof Text and not @isTextSet and @isRendered
 			visible = false
 		else
 			visible = @getVisibility()
 
 		if visible and not @isRendered and @file.isRendered
 			@renderRec()
+
+			if @node instanceof Text and not @isTextSet
+				visible = false
 
 		if @item
 			@setItemVisible visible
