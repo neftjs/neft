@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'utils'
+utils = require 'neft-utils'
 
 module.exports = (Networking) ->
 	Request: require('./request.coffee') Networking

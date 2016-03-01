@@ -1,6 +1,6 @@
 'use strict'
 
-Document = require 'document'
+Document = require 'neft-document'
 
 module.exports = (Networking, impl) ->
 	uriPop = false

@@ -3,10 +3,10 @@ Handler
 
 	'use strict'
 
-	utils = require 'utils'
-	assert = require 'assert'
-	log = require 'log'
-	Schema = require 'schema'
+	utils = require 'neft-utils'
+	assert = require 'neft-assert'
+	log = require 'neft-log'
+	Schema = require 'neft-schema'
 
 	{parse, stringify} = JSON
 
