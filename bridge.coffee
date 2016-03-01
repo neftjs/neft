@@ -1,8 +1,8 @@
 'use strict'
 
-utils = require 'utils'
-log = require 'log'
-assert = require 'assert'
+utils = require 'neft-utils'
+log = require 'neft-log'
+assert = require 'neft-assert'
 
 listeners = Object.create null
 
