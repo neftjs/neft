@@ -1,48 +1,40 @@
+'use strict'
+
 Dict = require './index'
 
 describe 'ctor', ->
-
 	it 'creates new dict', ->
 		dict = Dict a: 1
 		expect(dict).toEqual jasmine.any Dict
 
-describe 'get()', ->
-
-	it 'returns key value', ->
-		dict = Dict a: 1
-		expect(dict.get 'a').toBe 1
-
-	it 'returns `undefined` for unknown', ->
-		dict = Dict()
-		expect(dict.get 'abc').toBe undefined
+describe 'values can be accessed by keys', ->
+	dict = Dict a: 1
+	expect(dict.a).toBe 1
+	expect(dict.abc).toBe undefined
 
 describe 'set()', ->
-
 	it 'set key value', ->
 		dict = Dict()
 		dict.set 'a', 1
-		expect(dict.get 'a').toBe 1
+		expect(dict.a).toBe 1
 
 	it 'overrides keys', ->
 		dict = Dict a: 1
 		dict.set 'a', 2
-		expect(dict.get 'a').toBe 2
+		expect(dict.a).toBe 2
 
 describe 'length', ->
-
 	it 'returns amount of keys', ->
 		dict = Dict a: 1, b: 2
 		expect(dict.length).toBe 2
 
 describe 'pop()', ->
-
 	it 'removes key', ->
 		dict = Dict a: 1
 		dict.pop 'a'
-		expect(dict.get 'a').toBe undefined
+		expect(dict.a).toBe undefined
 
 describe 'keys()', ->
-
 	it 'returns keys as an array', ->
 		dict = Dict a: 1, b: 2
 		expect(dict.keys()).toEqual ['a', 'b']
@@ -55,7 +47,6 @@ describe 'keys()', ->
 		expect(dict.keys()).toEqual ['a', 'b']
 
 describe 'values()', ->
-
 	it 'returns key values as an array', ->
 		dict = Dict a: 1, b: 2
 		expect(dict.values()).toEqual [1, 2]
@@ -68,7 +59,6 @@ describe 'values()', ->
 		expect(dict.values()).toEqual [1, 2]
 
 describe 'items()', ->
-
 	it 'returns an array of key - value pairs', ->
 		dict = Dict a: 1, b: 2
 		expect(dict.items()).toEqual [['a', 1], ['b', 2]]
@@ -81,7 +71,6 @@ describe 'items()', ->
 		expect(dict.items()).toEqual [['a', 1], ['b', 2]]
 
 describe 'json stringified', ->
-
 	it 'is a reversed operation', ->
 		dict = Dict a: 1, b: 2
 		json = JSON.stringify dict
@@ -91,11 +80,9 @@ describe 'json stringified', ->
 		expect(dict2).toEqual jasmine.any Dict
 
 describe 'onChange signal', ->
-
 	dict = listener = null
 	ok = false
 	args = items = null
-
 
 	beforeEach ->
 		ok = false

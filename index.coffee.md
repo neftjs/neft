@@ -48,23 +48,28 @@ var data = new Dict({
   name: 'xyz'
 });
 
-console.log(data.get('name'));
+console.log(data.name);
 // xyz
 ```
 
-		constructor: (obj={}) ->
+		constructor: (obj) ->
 			# support no `new` syntax
 			unless @ instanceof Dict
 				return new Dict obj
 
-			assert.isObject obj
+			if obj?
+				assert.isObject obj
 
 			super()
-			@_data = obj
-			@_keys = null
-			@_values = null
-			@_items = null
-			@_dirty = ALL
+
+			utils.defineProperty @, '_signals', utils.WRITABLE, @_signals
+			utils.defineProperty @, '_keys', utils.WRITABLE, null
+			utils.defineProperty @, '_values', utils.WRITABLE, null
+			utils.defineProperty @, '_items', utils.WRITABLE, null
+			utils.defineProperty @, '_dirty', utils.WRITABLE, ALL
+
+			if utils.isObject(obj)
+				utils.merge this, obj
 
 ReadOnly *Integer* Dict::length
 -------------------------------
@@ -94,7 +99,7 @@ var user = new Dict({
 });
 
 user.onChange.connect(function(key, oldVal){
-  console.log(key + " property changed from " + oldVal + " to " + this.get(key));
+  console.log(key + " property changed from " + oldVal + " to " + this[key]);
 });
 
 user.set('country', 'US');
@@ -102,35 +107,6 @@ user.set('country', 'US');
 ```
 
 		signal.Emitter.createSignal @, 'onChange'
-
-*Any* Dict::get(*String* key)
------------------------------
-
-Returns value for the given key.
-
-Returns `undefined` for unknown or removed keys.
-
-```javascript
-var bunny = new Dict({
-  speedX: 5,
-  speedY: 2
-});
-
-console.log(bunny.get('speedX'));
-// 5
-
-console.log(bunny.get('speedY'));
-// 2
-
-console.log(bunny.get('speedZ'));
-// undefined
-```
-
-		get: (key) ->
-			assert.isString key
-			assert.notLengthOf key, 0
-
-			@_data[key]
 
 *Any* Dict::set(*String* key, *Any* value)
 ------------------------------------------
@@ -148,7 +124,7 @@ var links = new Dict({
 });
 
 links.onChange.connect(function(key, oldVal){
-  console.log(key + " changed from " + oldVal + " to " + this.get(key));
+  console.log(key + " changed from " + oldVal + " to " + this[key]);
 });
 
 links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
@@ -160,14 +136,14 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 			assert.notLengthOf key, 0
 			assert.isNot val, undefined
 
-			oldVal = @_data[key]
+			oldVal = @[key]
 
 			# break if value didn't change
 			if oldVal is val
-				return @
+				return val
 
 			# update value
-			@_data[key] = val
+			@[key] = val
 
 			# dirty
 			@_dirty |= ALL
@@ -186,7 +162,7 @@ Returns `true` if the given key exists in the dict.
 			assert.isString key
 			assert.notLengthOf key, 0
 
-			@_data[key] isnt undefined
+			@[key] isnt undefined
 
 *Dict* Dict::extend(*Object|Dict* object)
 -----------------------------------------
@@ -195,21 +171,17 @@ Sets all keys with their values from the given object.
 
 Calls [onChange()][dict/Dict::onChange()] signal for each key.
 
-		extend: (items) ->
-			if items instanceof Dict
-				obj = items._data
-			else
-				obj = items
-
+		extend: (obj) ->
 			assert.isObject obj
 
 			for key, val of obj
-				@set key, val
+				if obj.hasOwnProperty(key)
+					@set key, val
 
-			items
+			@
 
-Dict::pop(*String* key)
------------------------
+*Any* Dict::pop(*String* key)
+-----------------------------
 
 Removes the given key from the dict.
 
@@ -223,7 +195,7 @@ var data = new Dict;
 data.set('name', 'John');
 
 data.onChange.connect(function(key, oldVal){
-  if (this.get(key) === undefined){
+  if (this[key] === undefined){
     console.log(key + " property has been removed");
   }
 });
@@ -235,10 +207,10 @@ data.pop('name');
 		pop: (key) ->
 			assert.isString key
 			assert.notLengthOf key, 0
-			assert.isNot @_data[key], undefined
+			assert.isNot @[key], undefined
 
-			oldVal = @_data[key]
-			@_data[key] = undefined
+			oldVal = @[key]
+			@[key] = undefined
 
 			# dirty
 			@_dirty |= ALL
@@ -246,7 +218,7 @@ data.pop('name');
 			# signal
 			@onChange.emit key, oldVal
 
-			return
+			oldVal
 
 Dict::clear()
 -------------
@@ -256,8 +228,8 @@ Removes all stored keys from the dict.
 Calls [onChange()][dict/Dict::onChange()] signal for each stored key.
 
 		clear: ->
-			for key, val of @_data
-				if val isnt undefined
+			for key, val of this
+				if @hasOwnProperty(key) and val isnt undefined
 					@pop key
 
 			return
@@ -285,8 +257,8 @@ console.log(data.keys());
 				arr = @_keys ?= []
 
 				i = 0
-				for key, val of @_data
-					if val isnt undefined
+				for key, val of @
+					if @hasOwnProperty(key) and val isnt undefined
 						arr[i] = key
 						i++
 
@@ -317,8 +289,8 @@ console.log(data.values());
 				arr = @_values ?= []
 
 				i = 0
-				for key, val of @_data
-					if val isnt undefined
+				for key, val of @
+					if @hasOwnProperty(key) and val isnt undefined
 						arr[i] = val
 						i++
 
@@ -359,8 +331,8 @@ for (var i = 0; i < items.length; i++){
 				arr = @_values ?= []
 
 				i = 0
-				for key, val of @_data
-					if val isnt undefined
+				for key, val of @
+					if @hasOwnProperty(key) and val isnt undefined
 						arr[i] ?= ['', null]
 						arr[i][0] = key
 						arr[i][1] = val
@@ -369,27 +341,3 @@ for (var i = 0; i < items.length; i++){
 				arr.length = i
 
 			@_values
-
-*Object* Dict::toObject()
--------------------------
-
-		toObject: ->
-			@_data
-
-*Object* Dict::toJSON()
------------------------
-
-Returns data ready to be stringified.
-
-Use [fromJSON()][dict/Dict.fromJSON()] to reverse this operation.
-
-		toJSON: ->
-			@_data
-
-*String* Dict::toString()
--------------------------
-
-Returns a string identyfing the dict.
-
-		toString: ->
-			@_data+''
