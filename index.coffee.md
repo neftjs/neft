@@ -135,11 +135,11 @@ Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay =
 				listener = listeners[i]
 
 				if not utils.isEqual(listener.object, listener.objectCopy, 1)
-					listeners.shift()
+					listeners.splice i, 1
 					unless tryFunction(listener.callback)
 						currentTest.onEnd()
 				else if Date.now() - listener.createTimestamp > listener.maxDelay
-					listeners.shift()
+					listeners.splice i, 1
 					printError new Error "unit.whenChange waits too long"
 					currentTest.onEnd()
 				else
