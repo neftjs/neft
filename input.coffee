@@ -287,17 +287,12 @@ module.exports = (File) -> class Input
 		@trace obj
 
 		if obj
-			if obj instanceof List
-				if typeof prop is 'number'
-					val = obj.get prop
-			else
-				signal = getNamedSignal prop
-				if typeof obj[signal] is 'function'
-					obj[signal] onChange, @
-					@traces.push obj, signal
+			signal = getNamedSignal prop
+			if typeof obj[signal] is 'function'
+				obj[signal] onChange, @
+				@traces.push obj, signal
 
-			if val is undefined
-				val = obj[prop]
+			val = obj[prop]
 		val
 
 	render: ->
