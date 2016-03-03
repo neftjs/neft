@@ -53,11 +53,8 @@ module.exports = (File) -> class Input
 				elem.attrs._data[prop]
 
 		getFromObject = (obj, prop) ->
-			if obj instanceof Dict
-				v = obj.get prop
-			if v is undefined and obj
-				v = obj[prop]
-			v
+			if obj
+				obj[prop]
 
 		getElement = (obj, prop) ->
 			while obj
@@ -290,9 +287,7 @@ module.exports = (File) -> class Input
 		@trace obj
 
 		if obj
-			if obj instanceof Dict
-				val = obj.get prop
-			else if obj instanceof List
+			if obj instanceof List
 				if typeof prop is 'number'
 					val = obj.get prop
 			else
