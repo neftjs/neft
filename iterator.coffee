@@ -82,8 +82,6 @@ module.exports = (File) -> class Iterator
 			each.onInsert @insertItem, @
 			each.onPop @popItem, @
 
-			array = each.items()
-
 		# add items
 		for _, i in array
 			@insertItem i
@@ -142,12 +140,8 @@ module.exports = (File) -> class Iterator
 		usedFragment = File.factory @name
 		@usedFragments.splice i, 0, usedFragment
 
-		if data instanceof List
-			each = data.items()
-			item = data.get i
-		else
-			each = data
-			item = data[i]
+		each = data
+		item = data[i]
 
 		# replace
 		newChild = usedFragment.node
