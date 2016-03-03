@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "neft-binding",
+  "version": "0.9.12",
+  "description": "Neft.io binding manager",
+  "license": "Apache-2.0",
+  "homepage": "http://neft.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neft-io/neft-binding.git"
+  },
+  "bugs": "https://github.com/Neft-io/neft-binding/issues"
+}
