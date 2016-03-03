@@ -48,15 +48,16 @@ Document @extension
 			unless props = @_ref._$
 				return
 			if attr of props
-				setProperty.call @, props, attr, @_node.attrs.get(attr), oldVal
+				setProperty.call @, props, attr, @_node.attrs[attr], oldVal
 			return
 
 		enableProperties = ->
 			unless props = @_ref._$
 				return
 			# attrs to properties
-			for attr, val of @_node.attrs._data
-				if attr of props
+			{attrs} = @_node
+			for attr, val of attrs
+				if attrs.hasOwnProperty(attr) and attr of props
 					@_propertiesCleanQueue.push attr, props[attr], val
 					setProperty.call @, props, attr, val, null
 			return
@@ -102,7 +103,7 @@ ReadOnly *String* Document::query
 
 ```nml
 `Text {
-`  text: this.document.node.attrs.get('value')
+`  text: this.document.node.attrs.value
 `}
 ```
 
