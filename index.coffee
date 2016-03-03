@@ -24,7 +24,7 @@ module.exports = (data) ->
 			replacements[tagName] = do (_super, attr) -> (elem) ->
 				elem = _super(elem) or elem
 
-				attrVal = elem.attrs.get attr
+				attrVal = elem.attrs[attr]
 				if attrVal and rsc = resources.resolve(attrVal)
 					elem.attrs.set attr, rsc
 
