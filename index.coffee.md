@@ -178,7 +178,7 @@ By default, client has *clientId* and *sessionId* hashes.
 
 ```javascript
 `app.cookies.onChange(function(key){
-`	console.log('cookie changed', key, this.get(key));
+`	console.log('cookie changed', key, this[key]);
 `});
 ```
 
@@ -207,13 +207,13 @@ By default, client has *clientId* and *sessionId* hashes.
 						onCookiesReady dict
 		app.networking.onRequest (req, res) ->
 			if utils.isClient
-				utils.merge req.cookies, app.cookies._data
+				utils.merge req.cookies, app.cookies
 			else
-				utils.merge res.cookies, app.cookies._data
+				utils.merge res.cookies, app.cookies
 			req.onLoadEnd.listeners.unshift ->
 				if utils.isClient
 					for key, val of res.cookies
-						unless utils.isEqual(app.cookies.get(key), val)
+						unless utils.isEqual(app.cookies[key], val)
 							app.cookies.set key, val
 				return
 			, null
