@@ -49,7 +49,7 @@ module.exports = (File) -> class Input
 
 	@getVal = do ->
 		getFromElement = (elem, prop) ->
-			if elem instanceof Element
+			if elem instanceof Element and elem.attrs.hasOwnProperty(prop)
 				elem.attrs[prop]
 
 		getFromObject = (obj, prop) ->
