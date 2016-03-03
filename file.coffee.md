@@ -284,7 +284,7 @@ File.parse(*File* file)
 ---------------------------------------------
 
 		@emitNodeSignal = emitNodeSignal = (file, attrName, attr1, attr2) ->
-			if nodeSignal = file.node.attrs.get(attrName)
+			if nodeSignal = file.node.attrs[attrName]
 				nodeSignal?.call? file, attr1, attr2
 			return
 
@@ -479,7 +479,7 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
 			for attrNode, i in attrsToParse by 2
 				attrNode = @node.getCopiedElement attrNode, clone.node
 				attrName = attrsToParse[i+1]
-				attrNode.attrs.set attrName, parseAttr(attrNode.attrs.get(attrName))
+				attrNode.attrs.set attrName, parseAttr(attrNode.attrs[attrName])
 
 			# attrChanges
 			for attrChange in @attrChanges

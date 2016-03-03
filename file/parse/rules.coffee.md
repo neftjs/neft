@@ -23,7 +23,7 @@ Adds attributes if not exists.
 
 	commands =
 		'attrs': (command, node) ->
-			for name, val of command.attrs._data
+			for name, val of command.attrs when command.attrs.hasOwnProperty(name)
 				unless node.attrs.has(name)
 					node.attrs.set name, val
 			return
@@ -63,7 +63,7 @@ Adds attributes if not exists.
 				getNodeLength(b) - getNodeLength(a)
 
 			for rule in localRules
-				query = rule.attrs.get 'query'
+				query = rule.attrs.query
 				unless query
 					log.error "neft:rule no 'query' attribute found"
 					continue
@@ -74,7 +74,7 @@ Adds attributes if not exists.
 				while i < n
 					child = children[i]
 					if child.name is 'neft:rule'
-						subquery = child.attrs.get('query')
+						subquery = child.attrs['query']
 						if /^[A-Za-z]/.test(subquery)
 							subquery = query + ' ' + subquery
 						else
@@ -103,7 +103,7 @@ Adds attributes if not exists.
 							parent: file.node
 
 			for rule in rules
-				unless query = rule.node.attrs.get('query')
+				unless query = rule.node.attrs['query']
 					continue
 
 				nodes = rule.parent.queryAll query

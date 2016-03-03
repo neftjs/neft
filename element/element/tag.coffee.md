@@ -39,7 +39,7 @@ Tag @virtual_dom
 		@_fromJSON = (arr, obj=new Tag) ->
 			Element._fromJSON arr, obj
 			obj.name = arr[JSON_NAME]
-			obj.attrs._data = arr[JSON_ATTRS]
+			utils.merge obj.attrs, arr[JSON_ATTRS]
 
 			prevChild = null
 			for child in arr[JSON_CHILDREN]
@@ -87,7 +87,7 @@ Tag @virtual_dom
 		clone: (clone = new Tag) ->
 			super clone
 			clone.name = @name
-			utils.merge clone.attrs._data, @attrs._data
+			utils.merge clone.attrs, @attrs
 			clone
 
 *Tag* Tag::cloneDeep()
@@ -214,7 +214,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 			super arr
 			arr[JSON_NAME] = @name
 			children = arr[JSON_CHILDREN] = []
-			arr[JSON_ATTRS] = @attrs._data
+			arr[JSON_ATTRS] = @attrs
 
 			for child in @children
 				children.push child.toJSON()
@@ -225,9 +225,8 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 ---------------
 
 		class Attrs
-			constructor: (@_ref) ->
-				@_data = {}
-				Object.preventExtensions @
+			constructor: (ref) ->
+				utils.defineProperty @, '_ref', 0, ref
 
 *Array* Attrs::item(*Integer* index, [*Array* target])
 ------------------------------------------------------
@@ -238,8 +237,8 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 				target[0] = target[1] = undefined
 
 				i = 0
-				for key, val of @_data
-					if i is index
+				for key, val of @
+					if @hasOwnProperty(key) and i is index
 						target[0] = key
 						target[1] = val
 						break
@@ -254,16 +253,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 				assert.isString name
 				assert.notLengthOf name, 0
 
-				@_data.hasOwnProperty name
-
-*Any* Attrs::get(*String* name)
--------------------------------
-
-			get: (name) ->
-				assert.isString name
-				assert.notLengthOf name, 0
-
-				@_data[name]
+				@hasOwnProperty name
 
 *Any* Attrs::set(*String* name, *Any* value)
 --------------------------------------------
@@ -273,9 +263,9 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 				assert.notLengthOf name, 0
 
 				# save change
-				old = @_data[name]
+				old = @[name]
 				if old isnt value
-					@_data[name] = value
+					@[name] = value
 
 					# trigger event
 					emitSignal @_ref, 'onAttrsChange', name, old

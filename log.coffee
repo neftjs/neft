@@ -40,11 +40,12 @@ module.exports = (File) -> class Log
 		`//</development>`
 
 	render: ->
-		if utils.isEmpty(@node.attrs._data)
+		if utils.isEmpty(@node.attrs)
 			console.log @node.stringifyChildren()
 		else
+			{attrs} = @node
 			log = [@node.stringifyChildren()]
-			for key, val of @node.attrs._data
+			for key, val of attrs when attrs.hasOwnProperty(key)
 				log.push key, '=', val
 			console.log.apply console, log
 		return

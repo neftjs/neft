@@ -50,7 +50,7 @@ module.exports = (File) -> class Input
 	@getVal = do ->
 		getFromElement = (elem, prop) ->
 			if elem instanceof Element
-				elem.attrs._data[prop]
+				elem.attrs[prop]
 
 		getFromObject = (obj, prop) ->
 			if obj

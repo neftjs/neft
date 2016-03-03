@@ -39,7 +39,7 @@ String `List(...` evaluates to the [List][list/List].
 		{attrsToParse} = file
 
 		forNode = (elem) ->
-			for name, val of elem.attrs._data
+			for name, val of elem.attrs when elem.attrs.hasOwnProperty(name)
 				jsVal = evalFunc val, Dict, List
 				if utils.isObject(jsVal)
 					attrsToParse.push elem, name

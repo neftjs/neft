@@ -21,7 +21,7 @@ In the tag children you have access to the three special variables:
 
 ```xml
 <ul neft:each="List(['New York', 'Paris', 'Warsaw'])">
-  <li>Index: ${i}; Current: ${item}; Next: ${each.get(i+1)}</li>
+  <li>Index: ${i}; Current: ${item}; Next: ${each[i+1]}</li>
 </ul>
 ```
 
@@ -38,7 +38,7 @@ Use [List][list/List] to bind changes made in the array.
 		createdFragments = []
 
 		forNode = (elem) ->
-			unless attrVal = elem.attrs.get("neft:each")
+			unless attrVal = elem.attrs["neft:each"]
 				for child in elem.children
 					if child instanceof File.Element.Tag
 						forNode child

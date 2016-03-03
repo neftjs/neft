@@ -50,7 +50,10 @@ getOuterHTML = (elem, replacements) ->
 		return getInnerHTML elem, replacements
 
 	ret = "<" + name
-	for attrName, attrValue of elem.attrs._data
+	{attrs} = elem
+	for attrName, attrValue of attrs
+		if not attrs.hasOwnProperty(attrName)
+			continue
 		if not attrValue? or typeof attrValue is 'function' or not isPublic(attrName)
 			continue
 

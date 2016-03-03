@@ -62,7 +62,7 @@ module.exports = (File) -> class Iterator
 		unless @node.visible
 			return
 
-		each = @node.attrs.get Iterator.HTML_ATTR
+		each = @node.attrs[Iterator.HTML_ATTR]
 
 		# stop if nothing changed
 		if each is @data

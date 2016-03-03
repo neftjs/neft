@@ -30,12 +30,12 @@ Tag used to create functions in the view.
 
 			nodes = file.node.queryAll "neft:function"
 			for node in nodes
-				name = node.attrs.get('name') or node.attrs.get('neft:name')
+				name = node.attrs['name'] or node.attrs['neft:name']
 				unless name
 					throw new Error 'Function name is requried'
 
 				body = node.stringifyChildren()
-				if argsAttr = node.attrs.get('arguments')
+				if argsAttr = node.attrs['arguments']
 					args = argsAttr.split(',')
 					for arg, i in args
 						args[i] = arg.trim()
