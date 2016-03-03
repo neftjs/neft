@@ -36,8 +36,8 @@ String Interpolation @learn
 
 				# attrs
 				else if elem instanceof Tag
-					for name, val of elem.attrs._data
-						if Input.test(val)
+					for name, val of elem.attrs
+						if elem.attrs.hasOwnProperty(name) and Input.test(val)
 							if funcBody = Input.parse(val)
 								func = Input.createFunction funcBody
 								text = ''

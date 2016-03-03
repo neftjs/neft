@@ -161,7 +161,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		expect(elem.attrs.get 'data').toEqual data
+		expect(elem.attrs.data).toEqual data
 
 	it 'parses array in attrs into Array instance', ->
 
@@ -170,7 +170,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		expect(elem.attrs.get 'data').toEqual data
+		expect(elem.attrs.get.data).toEqual data
 
 	it 'parses dict in attrs into Dict instance', ->
 
@@ -179,7 +179,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		attrValue = elem.attrs.get 'data'
+		attrValue = elem.attrs.get.data
 		expect(attrValue).toEqual jasmine.any Dict
 		expect(attrValue.items()).toEqual data.items()
 
@@ -190,7 +190,7 @@ describe 'View', ->
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
 		[elem] = view.node.children
 
-		attrValue = elem.attrs.get 'data'
+		attrValue = elem.attrs.get.data
 		expect(attrValue).toEqual jasmine.any List
 		expect(attrValue.items()).toEqual data.items()
 
@@ -231,7 +231,7 @@ describe 'View Storage', ->
 			runs ->
 				expect(view.node.stringify()).toBe '1'
 				view.revert()
-				expect(elem.attrs.get('x')).toBe '2'
+				expect(elem.attrs.x).toBe '2'
 
 		it 'on storage', ->
 
@@ -259,7 +259,7 @@ describe 'View Storage', ->
 
 		it 'on storage deep', ->
 
-			source = View.fromHTML uid(), '#{dict.get \'x\'}'
+			source = View.fromHTML uid(), '#{dict[\'x\']}'
 			view = source.clone()
 
 			storage = dict: Dict x: 1

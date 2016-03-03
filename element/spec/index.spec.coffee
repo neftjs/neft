@@ -1,8 +1,8 @@
 'use strict'
 
-unit = require 'unit'
-utils = require 'utils'
-assert = require 'assert'
+unit = require 'neft-unit'
+utils = require 'neft-utils'
+assert = require 'neft-assert'
 
 Element = require('../index')
 
@@ -116,25 +116,25 @@ describe 'View Element', ->
 			assert.isEqual p.attrs.item(1), ['class', 'a bb c2']
 			assert.isEqual p.attrs.item(2), ['data-custom', 'customValue']
 
-			assert.is p.attrs.get('title'), 'textTitle'
+			assert.is p.attrs['title'], 'textTitle'
 
 		it 'can be changed', ->
 			elem = p.clone()
 
-			assert.is elem.attrs.get('title'), 'textTitle'
+			assert.is elem.attrs['title'], 'textTitle'
 
 			# change
 			elem.attrs.set 'title', 'changed value'
-			assert.is elem.attrs.get('title'), 'changed value'
+			assert.is elem.attrs['title'], 'changed value'
 
 		it 'can store references to the objects', ->
 			elem = p.clone()
-			title = elem.attrs.get 'title'
+			title = elem.attrs['title']
 			obj = a: 1
 
 			# change
 			elem.attrs.set 'title', obj
-			assert.is elem.attrs.get('title'), obj
+			assert.is elem.attrs['title'], obj
 			assert.is elem.stringify(), '<p title="[object Object]" class="a bb c2" data-custom="customValue"></p>'
 
 			elem.attrs.set 'title', title
@@ -518,7 +518,7 @@ describe 'View Element', ->
 			tag = elem.children[0]
 
 			tag.onAttrsChange (name, oldVal) ->
-				value = @attrs.get name
+				value = @attrs[name]
 				args = [@, arguments...]
 
 			tag.attrs.set 'a', 2

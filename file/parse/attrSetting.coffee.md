@@ -28,7 +28,7 @@ Potentially it's more useful with more specific [Element][document/Element]s fro
 					forEachNodeRec child
 
 					nodeProps = null
-					for prop of child.attrs._data
+					for prop of child.attrs when child.attrs.hasOwnProperty(prop)
 						if prop in ['name', 'children', 'attrs', 'style']
 							continue
 						unless prop of child

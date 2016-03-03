@@ -55,7 +55,7 @@ module.exports = (Element) ->
 
 			element = new (extensions[name] or Element.Tag)
 			element.name = name
-			element.attrs._data = attribs
+			utils.merge element.attrs, attribs
 
 			@_addDomElement element
 			@_tagStack.push element

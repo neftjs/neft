@@ -51,7 +51,7 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
 						forEachNodeRec child
 						continue
 
-					unless name = child.attrs.get('neft:name')
+					unless name = child.attrs['neft:name']
 						continue
 
 					# remove node from file

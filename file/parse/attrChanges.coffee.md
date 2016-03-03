@@ -22,7 +22,7 @@ Tag used to dynamically change an attribute of the parent element.
 
 			for node in nodes
 				target = node.parent
-				name = node.attrs.get 'name'
+				name = node.attrs.name
 
 				unless target.attrs.has(name)
 					target.attrs.set name, ''
