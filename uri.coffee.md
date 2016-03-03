@@ -227,9 +227,6 @@ console.log(uri.toString());
 			else
 				return @_uri
 
-			if params instanceof Dict
-				params = params._data
-
 			i = 0
 			@_uri.replace Uri.NAMES_RE, =>
 				encodeURI params[@_names[i++]]
