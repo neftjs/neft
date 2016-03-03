@@ -29,22 +29,25 @@ console.log(list instanceof List);
 // true
 ```
 
-		constructor: (arr=[]) ->
-			assert.isArray arr
-
+		constructor: (arr) ->
 			unless @ instanceof List
 				return new List arr
 
-			super()
-			@_data = arr
+			if arr?
+				assert.isObject arr
 
-		# List is not a standard Array object
-		utils.defineProperty @::, '0', null, ->
-			throw "Can't get elements from a list as properties; " +
-			      "use `List::get()` method instead"
-		, ->
-			throw "Can't set elements into a list with properties; " +
-			      "use `List::set()` method instead"
+			super()
+			@length = 0
+
+			if utils.isObject(arr)
+				for val, i in arr
+					@[i] = val
+					@length++
+
+		# merge Array prototype into the List prototype
+		for key in Object.getOwnPropertyNames(Array::)
+			if key isnt 'constructor'
+				@::[key] = Array::[key]
 
 *Signal* List::onChange(*Any* oldValue, *Integer* index)
 --------------------------------------------------------
@@ -79,38 +82,6 @@ console.log(list.length);
 // 2
 ```
 
-		desc = utils.CONFIGURABLE
-		utils.defineProperty @::, 'length', desc, ->
-			@_data.length
-		, null
-
-*Any* List::get(*Integer* index)
---------------------------------
-
-Returns the value under the given index.
-
-Returns `undefined` for unknown index.
-
-The index can't be negative.
-
-```javascript
-var list = new List(['a', 'b']);
-
-console.log(list.get(0));
-// a
-
-console.log(list.get(1));
-// b
-
-console.log(list.get(2));
-// undefined
-```
-
-		get: (i) ->
-			assert.operator i, '>=', 0
-
-			@_data[i]
-
 *Any* List::set(*Integer* index, *Any* value)
 ---------------------------------------------
 
@@ -126,7 +97,7 @@ Calls [onChange()][list/List::onChange()] signal.
 var types = new List(['fantasy', 'Thriller']);
 
 types.onChange.connect(function(oldVal, i){
-  console.log("element "+oldVal+" changed to "+this.get(i));
+  console.log("element "+oldVal+" changed to "+this[i]);
 });
 
 types.set(0, 'Fantasy');
@@ -141,47 +112,16 @@ types.set(0, 'Fantasy');
 			assert.operator i, '<', @length
 			assert.isNot val, undefined
 
-			oldVal = @_data[i]
+			oldVal = @[i]
 			if oldVal is val
 				return val
 
-			@_data[i] = val
+			@[i] = val
 
 			# signal
 			@onChange.emit oldVal, i
 
 			val
-
-*Array* List::items()
----------------------
-
-Returns ar array of the stored values in the list.
-
-Always returns the same array instance.
-
-```javascript
-var list = new List([1, 2]);
-
-console.log(list.items());
-// [1, 2]
-
-console.log(Array.isArray(list.items()));
-// true
-```
-
-### Iterate over a list
-```javascript
-var list = new List(['a', 'b']);
-var items = list.items();
-for (var i = 0; i < items.length; i++){
-  console.log(items[i]);
-}
-// a
-// b
-```
-
-		items: ->
-			@_data
 
 *Any* List::append(*Any* value)
 -------------------------------
@@ -209,7 +149,7 @@ console.log(fridge.items());
 		append: (val) ->
 			assert.isNot val, undefined
 
-			@_data.push val
+			@push val
 
 			# signal
 			@onInsert.emit val, @length - 1
@@ -246,32 +186,27 @@ console.log(list.items());
 			assert.operator i, '<=', @length
 			assert.isNot val, undefined
 
-			@_data.splice i, 0, val
+			@splice i, 0, val
 
 			# signal
 			@onInsert.emit val, i
 
 			val
 
-*List* List::extend(*List|Array* items)
----------------------------------------
+*List* List::extend(*Object* items)
+-----------------------------------
 
 Appends all values stored in the given items into the list.
 
 Calls [onInsert()][list/List::onInsert()] signal for each value.
 
 		extend: (items) ->
-			if items instanceof List
-				arr = items.items()
-			else
-				arr = items
+			assert.isObject items
 
-			assert.isArray arr
-
-			for val in arr
+			for val in items
 				@append val
 
-			items
+			@
 
 *Any* List::remove(*Any* value)
 -------------------------------
@@ -283,19 +218,19 @@ Calls [onPop()][list/List::onPop()] signal.
 ```javascript
 var list = new List(['a', 'b']);
 
-console.log(list.get(1));
+console.log(list[1]);
 // b
 
 list.remove('b');
-console.log(list.get(1));
+console.log(list[1]);
 // undefined
 
-console.log(list.items());
+console.log(list);
 // ['a']
 ```
 
 		remove: (val) ->
-			assert.ok utils.has(@_data, val)
+			assert.ok utils.has(@, val)
 
 			i = @index val
 			if i isnt -1
@@ -315,14 +250,14 @@ Calls [onPop()][list/List::onPop()] signal.
 ```javascript
 var list = new List(['a', 'b']);
 
-console.log(list.get(1));
+console.log(list[1]);
 // b
 
 list.pop(1);
-console.log(list.get(1));
+console.log(list[1]);
 // undefined
 
-console.log(list.items());
+console.log(list);
 // ['a']
 ```
 
@@ -332,8 +267,8 @@ console.log(list.items());
 			assert.operator i, '>=', 0
 			assert.operator i, '<', @length
 
-			oldVal = @_data[i]
-			@_data.splice i, 1
+			oldVal = @[i]
+			@splice i, 1
 
 			# signal
 			@onPop.emit oldVal, i
@@ -361,15 +296,15 @@ list.clear()
 // Element b popped!
 // Element a popped!
 
-console.log(list.items());
+console.log(list);
 // []
 ```
 
 		clear: ->
-			while @_data.length
+			while @length > 0
 				@pop()
 
-			null
+			return
 
 *Integer* List::index(*Any* value)
 ----------------------------------
@@ -391,7 +326,7 @@ console.log(list.index('c'));
 		index: (val) ->
 			assert.isNot val, undefined
 
-			@_data.indexOf val
+			@indexOf val
 
 *Boolean* List::has(*Any* value)
 --------------------------------
@@ -411,14 +346,11 @@ console.log(list.has('ab123'));
 		has: (val) ->
 			@index(val) isnt -1
 
-*Array* List::toJSON()
-----------------------
+*Array* List::toArray()
+-----------------------
 
-		toJSON: ->
-			@_data
-
-*String* List::toString()
--------------------------
-
-		toString: ->
-			@_data+''
+		toArray: ->
+			arr = new Array @length
+			for val, i in this
+				arr[i] = val
+			arr
