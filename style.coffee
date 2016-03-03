@@ -42,7 +42,7 @@ module.exports = (File, data) -> class Style
 	@createStylesInDocument = do ->
 		getStyleAttrs = (node) ->
 			attrs = null
-			for attr of node.attrs._data
+			for attr of node.attrs when node.attrs.hasOwnProperty(attr)
 				if attr is 'class' or attr.slice(0, 6) is 'style:'
 					attrs ?= {}
 					attrs[attr] = true
@@ -50,7 +50,7 @@ module.exports = (File, data) -> class Style
 
 		forNode = (file, node, parentStyle) ->
 			isText = node instanceof Text
-			if isText or (attr = node.attrs.get('neft:style'))
+			if isText or (attr = node.attrs['neft:style'])
 				style = new Style
 				style.file = file
 				style.node = node
@@ -124,7 +124,7 @@ module.exports = (File, data) -> class Style
 			@item?.linkUri = @getLinkUri()
 
 		if @attrs?[name]
-			@setAttr name, @node.attrs._data[name], oldValue
+			@setAttr name, @node.attrs[name], oldValue
 		return
 
 	constructor: ->
@@ -294,7 +294,7 @@ module.exports = (File, data) -> class Style
 			if anchor.style
 				break
 			if anchor.name is 'a'
-				href = anchor.attrs.get('href')
+				href = anchor.attrs.href
 				if typeof href is 'string'
 					unless @isLinkUriSet
 						@isLinkUriSet = true
@@ -421,7 +421,7 @@ module.exports = (File, data) -> class Style
 					obj[prop].disconnect oldVal
 				if typeof val is 'function'
 					obj[prop] val
-			else if @node.attrs._data[attr] is val and val isnt oldVal
+			else if @node.attrs[attr] is val and val isnt oldVal
 				@attrsClass.changes.setAttribute getPropertyPath(attr), val
 				obj[prop] = val
 
@@ -460,10 +460,10 @@ module.exports = (File, data) -> class Style
 		return
 
 	isLink: ->
-		@node.name is 'a' and @node.attrs.get('href')? and @node.attrs.get('href')?[0] isnt '#'
+		@node.name is 'a' and @node.attrs.href? and @node.attrs.href?[0] isnt '#'
 
 	getLinkUri: ->
-		uri = @node.attrs.get('href') + ''
+		uri = @node.attrs.href + ''
 		`//<development>`
 		unless ///^([a-z]+:|\/|\$\{)///.test uri
 			log.warn "Relative link found `#{uri}`"
@@ -480,7 +480,7 @@ module.exports = (File, data) -> class Style
 		assert.notOk @item
 
 		if @node instanceof Tag
-			id = @node.attrs.get 'neft:style'
+			id = @node.attrs['neft:style']
 			assert.isString id
 			@isScope = ///^(styles|renderer)\:///.test id
 		else if @node instanceof Text
@@ -503,7 +503,7 @@ module.exports = (File, data) -> class Style
 					parentId = "styles:#{file}:#{style}"
 					parent = @parent
 					loop
-						if parent and parent.node.attrs.get('neft:style') is parentId
+						if parent and parent.node.attrs['neft:style'] is parentId
 							unless parent.scope
 								# parent is not ready yet
 								return
@@ -650,7 +650,7 @@ module.exports = (File, data) -> class Style
 		node._documentStyle = clone
 
 		if node instanceof Tag
-			styleAttr = node.attrs._data['neft:style']
+			styleAttr = node.attrs['neft:style']
 			clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
 
 		# attrs class
@@ -675,7 +675,7 @@ module.exports = (File, data) -> class Style
 		# set attrs
 		if @attrs
 			for attr of @attrs
-				attrVal = clone.node.attrs._data[attr]
+				attrVal = clone.node.attrs[attr]
 				if attrVal?
 					clone.setAttr attr, attrVal, null
 
