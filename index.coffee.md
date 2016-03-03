@@ -197,37 +197,27 @@ DbList::disconnect()
 
 	class DbDict extends Dict
 		onChange = (key) ->
-			if @_isConnected
-				impl.set @_key, @_data, NOP
+			if @_watchersCount > 0
+				impl.set @_key, @, NOP
 			return
 
 		constructor: (key, data, opts) ->
-			@_key = key
 			super data
 
+			utils.defineProperty @, '_key', 0, key
+			utils.defineProperty @, '_watchersCount', utils.WRITABLE, 0
 			watchers[key] = @
 
 			@onChange onChange
 
 		spawn: ->
-			watchersCount[@_key] = watchersCount[@_key] + 1 or 1
-			watcher = Object.create watchers[@_key]
-			watcher._isConnected = true
-
-			createPassProperty watcher, '_keys'
-			createPassProperty watcher, '_values'
-			createPassProperty watcher, '_items'
-			createPassProperty watcher, '_dirty'
-
-			Object.preventExtensions watcher
-			watcher
+			@_watchersCount += 1
+			@
 
 DbDict::disconnect()
 --------------------
 
 		disconnect: ->
-			if @_isConnected
-				@_isConnected = false
-				unless --watchersCount[@_key]
-					watchers[@_key] = null
+			unless --watchersCount[@_key]
+				watchers[@_key] = null
 			return
