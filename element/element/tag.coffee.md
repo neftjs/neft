@@ -228,10 +228,13 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 			constructor: (ref) ->
 				utils.defineProperty @, '_ref', 0, ref
 
+			NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
+			utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Attrs
+
 *Array* Attrs::item(*Integer* index, [*Array* target])
 ------------------------------------------------------
 
-			item: (index, target=[]) ->
+			utils.defineProperty @::, 'item', NOT_ENUMERABLE, (index, target=[]) ->
 				assert.isArray target
 
 				target[0] = target[1] = undefined
@@ -249,7 +252,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 *Boolean* Attrs::has(*String* name)
 -----------------------------------
 
-			has: (name) ->
+			utils.defineProperty @::, 'has', NOT_ENUMERABLE, (name) ->
 				assert.isString name
 				assert.notLengthOf name, 0
 
@@ -258,7 +261,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 *Any* Attrs::set(*String* name, *Any* value)
 --------------------------------------------
 
-			set: (name, value) ->
+			utils.defineProperty @::, 'set', NOT_ENUMERABLE, (name, value) ->
 				assert.isString name
 				assert.notLengthOf name, 0
 
