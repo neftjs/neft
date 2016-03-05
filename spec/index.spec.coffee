@@ -1,12 +1,18 @@
 'use strict'
 
-View = require('../index.coffee.md')
-[utils, signal, Dict, List] = ['neft-utils', 'neft-signal', 'neft-dict', 'neft-list'].map require
+View = require '../index.coffee.md'
+utils = require 'neft-utils'
+signal = require 'neft-signal'
+Dict = require 'neft-dict'
+List = require 'neft-list'
+unit = require 'neft-unit'
+assert = require 'neft-assert'
+
+{describe, it} = unit
 
 uid = do (i = 0) -> -> "index_#{i++}.html"
 
 renderParse = (view, opts) ->
-
 	view.storage = opts?.storage
 	view.render opts?.source
 
@@ -16,403 +22,420 @@ renderParse = (view, opts) ->
 	view.render opts?.source
 
 describe 'View', ->
-
 	it 'can be created using HTML', ->
-
 		view = View.fromHTML uid(), '<b></b>'
-		expect(view).toEqual jasmine.any View
+		View.parse view
+		assert.instanceOf view, View
 
 	it 'clears got HTML', ->
-
 		view = View.fromHTML uid(), '<!--comment--><div>   </div>'
-		expect(view.node.stringify()).toBe '<div></div>'
+		View.parse view
+		assert.is view.node.stringify(), '<div></div>'
 
-	it 'finds units', ->
-
-		view = View.fromHTML uid(), '<x:unit name="a"></x:unit>'
-		expect(view.units).not.toEqual {}
+	it 'finds fragments', ->
+		view = View.fromHTML uid(), '<neft:fragment neft:name="a"></neft:fragment>'
+		View.parse view
+		assert.is Object.keys(view.fragments).length, 1
 
 	it 'finds uses', ->
-
-		view = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
-		expect(view.uses).not.toEqual []
-
-	describe 'requires', ->
-
-		it 'finds properly', ->
-
-			first = uid()
-			View.fromHTML first, '<b></b>'
-			view = View.fromHTML uid(), '<x:require rel="view" href="'+first+'">'
-			expect(view.links.length).toBe 1
-
-		describe 'shares units', ->
-
-			it 'without namespace', ->
-
-				first = 'namespace/'+uid()
-				View.fromHTML first, '<x:unit name="a"></x:unit>'
-				view = View.fromHTML uid(), '<x:require rel="view" href="'+first+'">'
-				expect(Object.keys(view.units).length).toBe 1
-				expect(Object.keys(view.units)[0]).toBe 'a'
-
-			it 'with namespace', ->
-
-				first = uid()
-				View.fromHTML first, '<x:unit name="a"></x:unit>'
-				view = View.fromHTML uid(), '<x:require rel="view" href="'+first+'" as="ns">'
-				expect(Object.keys(view.units).length).toBe 1
-				expect(Object.keys(view.units)[0]).toBe 'ns:a'
+		view = View.fromHTML uid(), '<neft:fragment neft:name="a"><b></b></neft:fragment><neft:use neft:fragment="a" />'
+		View.parse view
+		assert.is view.uses.length, 1
 
 	it 'can be cloned and destroyed', ->
-
 		view = View.fromHTML uid(), '<b></b>'
+		View.parse view
 		clone = view.clone()
 
-		expect(view).not.toBe clone
-		expect(view.node).not.toBe clone.node
-		expect(view.node.stringify()).toBe clone.node.stringify()
+		assert.isNot view, clone
+		assert.isNot view.node, clone.node
+		assert.is view.node.stringify(), clone.node.stringify()
 
 	it 'is pooled on factory', ->
-
 		path = uid()
-		view_start = View.fromHTML path, '<b></b>'
-		view_factored = View.factory path
-		view_factored.destroy()
-		view_refactored = View.factory path
+		viewStart = View.fromHTML path, '<b></b>'
+		View.parse viewStart
 
-		expect(view_factored).not.toBe view_start
-		expect(view_factored).toBe view_refactored
+		viewFactored = View.factory path
+		viewFactored.destroy()
+		viewRefactored = View.factory path
 
-	it 'can replace uses by units', ->
+		assert.isNot viewFactored, viewStart
+		assert.is viewFactored, viewRefactored
 
-		view = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
+describe 'neft:use', ->
+	it 'is replaced by neft:fragment', ->
+		view = View.fromHTML uid(), """
+			<neft:fragment neft:name="a"><b></b></neft:fragment>
+			<neft:use neft:fragment="a" />
+		"""
+		View.parse view
 		view = view.clone()
 
 		renderParse view
-		expect(view.node.stringify()).toBe '<b></b>'
-		view.revert()
-		expect(view.node.children[0].name).toBe 'x:a'
+		assert.is view.node.stringify(), '<b></b>'
 
-	it 'can replace uses by units in units', ->
-
-		source = View.fromHTML uid(), '<x:unit name="b">1</x:unit><x:unit name="a"><x:b></x:b></x:unit><x:a></x:a>'
-		view = source.clone();
-
-		renderParse view
-		expect(source.node.children[0].name).toBe 'x:a'
-		expect(view.node.stringify()).toBe '1'
-
-	it 'can render clone separately', ->
-
-		source = View.fromHTML uid(), '<x:unit name="a"><b></b></x:unit><x:a></x:a>'
+	it 'is replaced in neft:fragment', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="b">1</neft:fragment>
+			<neft:fragment neft:name="a"><neft:use neft:fragment="b" /></neft:fragment>
+			<neft:use neft:fragment="a" />
+		"""
+		View.parse source
 		view = source.clone()
 
 		renderParse view
-		expect(view.node.stringify()).toBe '<b></b>'
-		expect(source.node.children[0].name).toBe 'x:a'
+		assert.is view.node.stringify(), '1'
 
-	it 'can put elem body in unit', ->
-
-		source = View.fromHTML uid(), '
-			<x:unit name="a"><x:source></x:source></x:unit>
-			<x:a><b></b></x:a>'
+describe 'neft:target', ->
+	it 'is replaced by the neft:use body', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a">
+				<neft:target />
+			</neft:fragment>
+			<neft:use neft:fragment="a"><b></b></neft:use>
+		"""
+		View.parse source
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.children[0].name).toBe 'x:a'
-		expect(view.node.stringify()).toBe '<b></b>'
+		assert.is view.node.stringify(), '<b></b>'
 
-	it '`source` element supports updates', ->
-
-		source = View.fromHTML uid(), '
-			<x:unit name="a"><x:source x:if="#{x} == 1"></x:source></x:unit>
-			<x:a x="0"><b></b></x:a>'
+	it 'can be hidden', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a">
+				<neft:target neft:if="${attrs.x === 1}" />
+			</neft:fragment>
+			<neft:use neft:fragment="a" x="0"><b></b></neft:use>
+		"""
+		View.parse source
 		view = source.clone()
 		elem = view.node.children[0]
 
 		renderParse view
-		expect(view.node.stringify()).toBe ''
+		assert.is view.node.stringify(), ''
 
 		elem.attrs.set 'x', 1
-		expect(view.node.stringify()).toBe '<b></b>'
+		assert.is view.node.stringify(), '<b></b>'
 
-	it 'reverted view is identical as before render', ->
-
-		view = View.fromHTML uid(), '
-			<x:unit name="b"><ul x:each="#{data}"><div x:if="#{each[i]} > 0">1</div></ul></x:unit>
-			<x:unit name="a"><x:b data="#{data}"></x:b></x:unit>
-			<x:a data="[0,1]"></x:a>'
-		view = view.clone()
-
-		ver1 = utils.simplify view
-		view.render()
-		view.revert()
-		ver2 = utils.simplify view
-
-		expect(JSON.stringify(ver1)).toBe JSON.stringify(ver2)
-
-		expect(view.render.bind(view)).not.toThrow()
-
-	it 'parses object in attrs into Object instance', ->
-
+describe 'attributes', ->
+	it 'are parsed to objects', ->
 		data = a: 1
 		json = JSON.stringify data
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
-		[elem] = view.node.children
+		View.parse view
 
-		expect(elem.attrs.data).toEqual data
+		assert.isEqual view.render().node.children[0].attrs.data, data
 
-	it 'parses array in attrs into Array instance', ->
-
+	it 'are parsed to arrays', ->
 		data = [1, 2]
 		json = JSON.stringify data
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
-		[elem] = view.node.children
+		View.parse view
 
-		expect(elem.attrs.get.data).toEqual data
+		assert.isEqual view.render().node.children[0].attrs.data, data
 
-	it 'parses dict in attrs into Dict instance', ->
-
+	it 'are parsed to Dicts', ->
 		data = Dict a: 1
-		json = "Dict a: 1"
+		json = "Dict({a: 1})"
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
-		[elem] = view.node.children
+		View.parse view
 
-		attrValue = elem.attrs.get.data
-		expect(attrValue).toEqual jasmine.any Dict
-		expect(attrValue.items()).toEqual data.items()
+		attrValue = view.render().node.children[0].attrs.data
+		assert.instanceOf attrValue, Dict
+		assert.isEqual attrValue, data
 
-	it 'parses list in attrs into List instance', ->
-
-		data = List 1, 2
-		json = "List 1, 2"
+	it 'are parsed to Lists', ->
+		data = List [1, 2]
+		json = "List([1, 2])"
 		view = View.fromHTML uid(), "<a data='#{json}'></a>"
-		[elem] = view.node.children
+		View.parse view
 
-		attrValue = elem.attrs.get.data
-		expect(attrValue).toEqual jasmine.any List
-		expect(attrValue.items()).toEqual data.items()
+		attrValue = view.render().node.children[0].attrs.data
+		assert.instanceOf attrValue, List
+		assert.isEqual attrValue, data
 
-describe 'View Storage', ->
+describe 'neft:require', ->
+	describe 'shares fragments', ->
+		it 'without namespace', ->
+			first = 'namespace/'+uid()
+			view1 = View.fromHTML first, '<neft:fragment neft:name="a"></neft:fragment>'
+			View.parse view1
 
-	describe 'inputs are replaced', ->
+			view2 = View.fromHTML uid(), '<neft:require href="'+first+'" />'
+			View.parse view2
 
-		it 'by elem attrs', ->
+			assert.is Object.keys(view2.fragments).length, 1
+			assert.is Object.keys(view2.fragments)[0], 'a'
 
-			source = View.fromHTML uid(), '<x:unit name="a">#{x}</x:unit><x:a x="2"></x:a>'
+		it 'with namespace', ->
+			first = uid()
+			view1 = View.fromHTML first, '<neft:fragment neft:name="a"></neft:fragment>'
+			View.parse view1
+
+			view2 = View.fromHTML uid(), '<neft:require href="'+first+'" as="ns">'
+			View.parse view2
+
+			assert.is Object.keys(view2.fragments).length, 1
+			assert.is Object.keys(view2.fragments)[0], 'ns:a'
+
+
+describe 'string interpolation', ->
+	describe '`attrs`', ->
+		it 'support neft:fragment', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a" x="2">${attrs.x}</neft:fragment>
+				<neft:use neft:fragment="a" />
+			"""
+			View.parse source
 			view = source.clone()
 
 			renderParse view
-			expect(source.node.children[0].name).toBe 'x:a'
-			expect(view.node.stringify()).toBe '2'
+			assert.is view.node.stringify(), '2'
 
-		it 'by passed storage', ->
-
-			source = View.fromHTML uid(), '<x:unit name="a">#{x}, #{b.a}</x:unit><x:a/>'
+		it 'support neft:use', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a" x="1">${attrs.x}</neft:fragment>
+				<neft:use neft:fragment="a" x="2" />
+			"""
+			View.parse source
 			view = source.clone()
 
-			renderParse view,
-				storage: x: 2, b: {a: 1}
-			expect(source.node.children[0].name).toBe 'x:a'
-			expect(view.node.stringify()).toBe '2, 1'
+			renderParse view
+			assert.is view.node.stringify(), '2'
 
-	describe 'supports realtime changes', ->
+	it '`this` refers to the global storage', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a">${this.x}, ${this.b.a}</neft:fragment>
+			<neft:use neft:fragment="a" />
+		"""
+		View.parse source
+		view = source.clone()
 
-		it 'on attrs', ->
+		renderParse view,
+			storage: x: 2, b: {a: 1}
+		assert.is view.node.stringify(), '2, 1'
 
-			source = View.fromHTML uid(), '<x:unit name="a">#{x}</x:unit><x:a x="2" y="1"></x:a>'
+	it '`ids` refers to nodes', ->
+		source = View.fromHTML uid(), """
+			<a id="first" label="12" visible="false" />
+			${ids.first.attrs.label}
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '12'
+
+		view.node.children[0].attrs.set 'label', 23
+		assert.is view.node.stringify(), '23'
+
+	it 'file `ids` are accessed in fragments', ->
+		source = View.fromHTML uid(), """
+			<a id="first" label="12" visible="false" />
+			<neft:fragment neft:name="a">
+				${ids.first.attrs.label}
+			</neft:fragment>
+			<neft:use neft:fragment="a" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '12'
+
+		view.node.children[0].attrs.set 'label', 23
+		assert.is view.node.stringify(), '23'
+
+	it '`funcs` refers to neft:functions', ->
+		source = View.fromHTML uid(), """
+			<neft:function neft:name="pow" arguments="num">
+				return num * num;
+			</neft:function>
+			${funcs.pow(3)}
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '9'
+
+	it 'file `funcs` are accessed in neft:functions', ->
+		source = View.fromHTML uid(), """
+			<neft:function neft:name="pow" arguments="num">
+				return num * num;
+			</neft:function>
+			<neft:fragment neft:name="a">
+				${funcs.pow(3)}
+			</neft:fragment>
+			<neft:use neft:fragment="a" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '9'
+
+	it 'handler is called on signal', ->
+		source = View.fromHTML uid(), """
+			<span x="1" onAttrsChange="${this.onAttrsChange(2)}" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		calls = 0
+		renderParse view,
+			storage:
+				onAttrsChange: (val) ->
+					calls += 1
+					assert.is val, 2
+
+		view.node.children[0].attrs.set 'x', 2
+		assert.is calls, 1
+
+	it 'returned handler is called on signal with context and parameters', ->
+		source = View.fromHTML uid(), """
+			<span x="1" onAttrsChange="${this.onAttrsChange}" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		calls = 0
+		renderParse view,
+			storage:
+				onAttrsChange: (prop, oldVal) ->
+					calls += 1
+					assert.is this, view.node.children[0]
+					assert.is prop, 'x'
+					assert.is oldVal, 1
+
+		view.node.children[0].attrs.set 'x', 2
+		assert.is calls, 1
+
+	describe 'support realtime changes', ->
+		it 'on `attrs`', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a">${attrs.x}</neft:fragment>
+				<neft:use neft:fragment="a" x="2" y="1" />
+			"""
+			View.parse source
 			view = source.clone()
 			elem = view.node.children[0]
 
 			renderParse view
 			elem.attrs.set 'x', 1
-			waits 4
-			runs ->
-				expect(view.node.stringify()).toBe '1'
-				view.revert()
-				expect(elem.attrs.x).toBe '2'
+			assert.is view.node.stringify(), '1'
 
-		it 'on storage', ->
-
-			source = View.fromHTML uid(), '#{x}'
+		it 'on `this`', ->
+			source = View.fromHTML uid(), "${this.x}"
+			View.parse source
 			view = source.clone()
 
-			storage = Dict x: 1
+			storage = new Dict x: 1
 
 			renderParse view,
 				storage: storage
-			expect(view.node.stringify()).toBe '1'
+			assert.is view.node.stringify(), '1'
 
 			storage.set 'x', 2
-			waits 4
-			runs ->
-				expect(view.node.stringify()).toBe '2'
+			assert.is view.node.stringify(), '2'
 
-			waits 4
-			runs ->
-				view.revert()
-				storage.set 'x', 1
-				renderParse view,
-					storage: storage
-				expect(view.node.stringify()).toBe '1'
-
-		it 'on storage deep', ->
-
-			source = View.fromHTML uid(), '#{dict[\'x\']}'
+		it 'on `this` deeply', ->
+			source = View.fromHTML uid(), "${this.dict.x}"
+			View.parse source
 			view = source.clone()
 
-			storage = dict: Dict x: 1
+			storage = dict: new Dict x: 1
 
 			renderParse view,
 				storage: storage
-			expect(view.node.stringify()).toBe '1'
+			assert.is view.node.stringify(), '1'
 
 			storage.dict.set 'x', 2
-			waits 4
-			runs ->
-				expect(view.node.stringify()).toBe '2'
+			assert.is view.node.stringify(), '2'
 
-describe 'View Condition', ->
-
-	describe 'works in file', ->
-
-		it 'with positive expression', ->
-
-			source = View.fromHTML uid(), '<div><b x:if="2 > 1">1</b></div>'
-			view = source.clone()
-
-			renderParse view
-			expect(view.node.stringify()).toBe '<div><b>1</b></div>'
-
-		it 'with negative expression', ->
-
-			source = View.fromHTML uid(), '<div><b x:if="1 > 2">1</b></div>'
-			view = source.clone()
-
-			renderParse view
-			expect(view.node.stringify()).toBe '<div></div>'
-
-	it 'works in units', ->
-
-		source = View.fromHTML uid(), '<x:unit name="a"><b x:if="1 > 2">1</b></x:unit><x:a></x:a>'
+describe 'neft:if', ->
+	it 'works with positive expression', ->
+		source = View.fromHTML uid(), '<div><b neft:if="${2 > 1}">1</b></div>'
+		View.parse source
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.children[0].name).toBe 'x:a'
-		expect(view.node.stringify()).toBe ''
+		assert.is view.node.stringify(), '<div><b>1</b></div>'
 
-	it 'can be declared using storage input', ->
-
-		source = View.fromHTML uid(), '<div><b x:if="#{x} > 1">1</b></div>'
+	it 'works with negative expression', ->
+		source = View.fromHTML uid(), '<div><b neft:if="${1 > 2}">1</b></div>'
+		View.parse source
 		view = source.clone()
 
-		renderParse view, storage: x: 1
-		expect(view.node.stringify()).toBe '<div></div>'
+		renderParse view
+		assert.is view.node.stringify(), '<div></div>'
 
-		view.revert()
-		renderParse view, storage: x: 2
-		expect(view.node.stringify()).toBe '<div><b>1</b></div>'
+	it 'supports runtime updates', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a">
+				<b neft:if="${attrs.x > 1}">OK</b>
+				<b neft:if="${attrs.x === 1}">FAIL</b>
+			</neft:fragment>
+			<neft:use neft:fragment="a" x="1" />
+		"""
+		View.parse source
+		view = source.clone()
+		elem = view.node.children[0]
 
-	describe 'supports storage observer', ->
+		renderParse view
+		assert.is view.node.stringify(), '<b>FAIL</b>'
+		elem.attrs.set 'x', 2
+		assert.is view.node.stringify(), '<b>OK</b>'
 
-		it 'in changing visibility', ->
-
-			source = View.fromHTML uid(), '<x:unit name="a">' +
-			                              '    <b x:if="#{x} > 1">OK</b>' +
-			                              '    <b x:if="#{x} == 1">FAIL</b>' +
-			                              '</x:unit>' +
-			                              '<x:a x="1"></x:a>'
-			view = source.clone()
-			elem = view.node.children[0]
-
-			renderParse view
-			elem.attrs.set 'x', 2
-			waits 4
-			runs ->
-				expect(view.node.stringify()).toBe '<b>OK</b>'
-				view.revert()
-				expect(view.node.children[0].name).toBe 'x:a'
-
-		it 'in replacing uses', ->
-
-			source = View.fromHTML uid(), '<x:unit name="a">OK</x:unit>' +
-			                              '<x:a x:if="#{x} == 1"></x:a>'
-			view = source.clone()
-
-			storage = Dict x: 0
-
-			renderParse view, storage: storage
-			expect(view.node.stringify()).toBe ''
-
-			storage.set 'x', 1
-			waits 4
-			runs ->
-				expect(view.node.stringify()).toBe 'OK'
-
-describe 'View Iterator', ->
-
+describe 'neft:each', ->
 	it 'loops expected times', ->
-
-		source = View.fromHTML uid(), '<ul x:each="[0,0]">1</ul>'
+		source = View.fromHTML uid(), '<ul neft:each="[0,0]">1</ul>'
+		View.parse source
 		view = source.clone()
 
 		renderParse view
-		expect(view.node.stringify()).toBe '<ul>11</ul>'
+		assert.is view.node.stringify(), '<ul>11</ul>'
 
-	it 'provides `item` property', ->
-
-		source = View.fromHTML uid(), '<ul x:each="[1,2]">#{item}</ul>'
+	it 'provides `this.item` property', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.item}</ul>'
+		View.parse source
 		view = source.clone()
 
 		renderParse view
-		expect(view.node.stringify()).toBe '<ul>12</ul>'
+		assert.is view.node.stringify(), '<ul>12</ul>'
 
-	it 'render data in loops', ->
-
-		view = View.fromHTML uid(), '<ul x:each="[{v:1},{v:2}]">#{each[i].v}</ul>'
-		view = view.clone()
-
-		renderParse view
-		expect(view.node.stringify()).toBe '<ul>12</ul>'
-
-	it 'works with cloned files', ->
-
-		source = View.fromHTML uid(), '<ul x:each="[1,2]">#{each[i]}</ul>'
+	it 'provides `this.i` property', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.i}</ul>'
+		View.parse source
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.stringify()).toBe '<ul></ul>'
-		expect(view.node.stringify()).toBe '<ul>12</ul>'
+		assert.is view.node.stringify(), '<ul>01</ul>'
 
-	it 'works in units with uses', ->
-
-		source = View.fromHTML uid(), '<x:unit name="b">#{data}</x:unit>
-			<x:unit name="a"><ul x:each="#{data}"><x:b data="#{each[i]}"/></ul></x:unit>
-			<x:a data="[1,2]"></x:a>'
+	it 'provides `this.each` property', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.each}</ul>'
+		View.parse source
 		view = source.clone()
 
 		renderParse view
-		expect(source.node.children[0].name).toBe 'x:a'
-		expect(view.node.stringify()).toBe '' +
-			'<ul>12</ul>'
+		assert.is view.node.stringify(), '<ul>1,21,2</ul>'
 
-	it 'supports updates', ->
-
-		source = View.fromHTML uid(), '<ul x:each="#{arr}">#{each[i]}</ul>'
+	it 'supports runtime updates', ->
+		source = View.fromHTML uid(), '<ul neft:each="${this.arr}">${this.each[this.i]}</ul>'
+		View.parse source
 		view = source.clone()
 
-		storage = arr: arr = List [1, 2]
+		storage = arr: arr = new List [1, 2]
 
 		renderParse view, storage: storage
-		expect(view.node.stringify()).toBe '<ul>12</ul>'
+		assert.is view.node.stringify(), '<ul>12</ul>'
 
 		arr.insert 1, 'a'
-		expect(view.node.stringify()).toBe '<ul>1a2</ul>'
+		assert.is view.node.stringify(), '<ul>1a2</ul>'
 
 		arr.pop 1
-		expect(view.node.stringify()).toBe '<ul>12</ul>'
+		assert.is view.node.stringify(), '<ul>12</ul>'
 
 		arr.append 3
-		expect(view.node.stringify()).toBe '<ul>123</ul>'
-
+		assert.is view.node.stringify(), '<ul>123</ul>'
