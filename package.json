@@ -15,8 +15,11 @@
   },
   "devDependencies": {
     "coffee-script": "latest",
+    "neft-unit": "Neft-io/neft-unit"
+  },
+  "dependencies": {
     "neft-utils": "Neft-io/neft-utils",
-    "neft-unit": "Neft-io/neft-unit",
-    "neft-assert": "Neft-io/neft-assert"
+    "neft-assert": "Neft-io/neft-assert",
+    "neft-signal": "Neft-io/neft-signal"
   }
 }
