@@ -266,8 +266,8 @@ File.parse(*File* file)
 				# TODO: trigger here instance of `LoadError` class
 				File.onError.emit path
 
-			assert.isString path
-			assert.ok files[path]?
+			assert.isString path, "path is not a string"
+			assert.ok files[path]?, "the given file path doesn't exist"
 
 			# from pool
 			if r = getFromPool(path)
@@ -287,6 +287,9 @@ File.parse(*File* file)
 			if nodeSignal = file.node.attrs[attrName]
 				nodeSignal?.call? file, attr1, attr2
 			return
+
+		onNodeAttrsChange = (name) ->
+			@inputAttrs.set name, @node.attrs[name]
 
 		constructor: (@path, @node) ->
 			assert.isString @path
@@ -317,6 +320,12 @@ File.parse(*File* file)
 			@attrsToSet = []
 			@logs = []
 			@styles = []
+			@inputIds = new Dict
+			@inputFuncs = new Dict
+			@inputAttrs = new Dict
+			@inputArgs = [@inputIds, @inputFuncs, @inputAttrs]
+
+			@node.onAttrsChange onNodeAttrsChange, @
 
 			`//<development>`
 			if @constructor is File
@@ -485,6 +494,16 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
 			for attrChange in @attrChanges
 				clone.attrChanges.push attrChange.clone @, clone
 
+			# ids
+			for id, node of @ids
+				clone.ids[id] = @node.getCopiedElement node, clone.node
+			clone.inputIds.extend clone.ids
+
+			# funcs
+			for name, func of @funcs
+				clone.funcs[name] = File.Func.bindFuncIntoGlobal func, clone
+			clone.inputFuncs.extend clone.funcs
+
 			# inputs
 			for input in @inputs
 				clone.inputs.push input.clone @, clone
@@ -500,14 +519,6 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
 			# uses
 			for use in @uses
 				clone.uses.push use.clone @, clone
-
-			# ids
-			for id, node of @ids
-				clone.ids[id] = @node.getCopiedElement node, clone.node
-
-			# funcs
-			for name, func of @funcs
-				clone.funcs[name] = File.Func.bindFuncIntoGlobal func, clone
 
 			# attrs to set
 			for attrsToSet in @attrsToSet

@@ -39,7 +39,6 @@ String Interpolation @learn
 					for name, val of elem.attrs
 						if elem.attrs.hasOwnProperty(name) and Input.test(val)
 							if funcBody = Input.parse(val)
-								func = Input.createFunction funcBody
 								text = ''
 								`//<development>`
 								text = val

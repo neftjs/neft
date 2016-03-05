@@ -47,7 +47,7 @@ Optional argument `as` will link all fragments into the specified namespace.
 			if path[0] isnt '/'
 				pathbase = file.path.substring 0, file.path.lastIndexOf('/') + 1
 				path = pathUtils.join '/', pathbase, path
-			path = ///^(?:\/|\\)(.+)\.html$///.exec(path)?[1] or path
+			path = ///^(?:\/|\\)(.+)$///.exec(path)?[1] or path
 			links.push
 				path: path
 				namespace: namespace
