@@ -9,5 +9,14 @@
     "type": "git",
     "url": "https://github.com/Neft-io/list.git"
   },
-  "bugs": "https://github.com/Neft-io/list/issues"
+  "bugs": "https://github.com/Neft-io/list/issues",
+  "scripts": {
+    "test": "coffee test.spec.coffee"
+  },
+  "devDependencies": {
+    "coffee-script": "latest",
+    "neft-utils": "Neft-io/neft-utils",
+    "neft-unit": "Neft-io/neft-unit",
+    "neft-assert": "Neft-io/neft-assert"
+  }
 }
