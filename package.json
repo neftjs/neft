@@ -9,5 +9,8 @@
     "type": "git",
     "url": "https://github.com/Neft-io/unit.git"
   },
-  "bugs": "https://github.com/Neft-io/unit/issues"
+  "bugs": "https://github.com/Neft-io/unit/issues",
+  "devDependencies": {
+    "neft-log": "Neft-io/neft-log"
+  }
 }
