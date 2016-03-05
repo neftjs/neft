@@ -15,6 +15,7 @@ Unit @library
 			@message = ''
 			@tests = []
 			@beforeFunctions = []
+			@afterFunctions = []
 
 	class Test
 		constructor: ->
@@ -63,6 +64,7 @@ Unit.describe(*String* message, *Function* tests)
 		describe = new Describe
 		describe.message = msg
 		Array::push.apply describe.beforeFunctions, currentScope.beforeFunctions
+		Array::push.apply describe.afterFunctions, currentScope.afterFunctions
 
 		currentScope.tests.push describe
 		scopes.push describe
@@ -86,6 +88,11 @@ The given test function can contains optional *callback* argument.
 			callCallback = test.onEnd = ->
 				unless callbackCalled
 					callbackCalled = true
+
+					# call after functions
+					for afterFunc in testScope.afterFunctions
+						afterFunc()
+
 					callback()
 				return
 
@@ -113,6 +120,13 @@ Unit.beforeEach(*Function* code)
 
 	exports.beforeEach = (func) ->
 		currentScope.beforeFunctions.push func
+		return
+
+Unit.afterEach(*Function* code)
+-------------------------------
+
+	exports.afterEach = (func) ->
+		currentScope.afterFunctions.push func
 		return
 
 Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
