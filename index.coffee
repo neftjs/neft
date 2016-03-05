@@ -1,22 +1,16 @@
 'use strict'
 
 parser = require './parser'
+bindingParser = require 'neft-binding/parser'
 
 {utils, Renderer, assert} = Neft
 
 ATTRIBUTE = 'attribute'
 
 # options
-i = 1
-BINDING_THIS_TO_TARGET_OPTS = 1
+{BINDING_THIS_TO_TARGET_OPTS} = bindingParser
 
 ids = idsKeys = itemsKeys = extensions = queries = null
-
-repeatString = (str, amount) ->
-	r = str
-	for i in [0...amount-1] by 1
-		r += str
-	r
 
 isAnchor = (obj) ->
 	assert obj.type is ATTRIBUTE, "isAnchor: type must be an attribute"
@@ -26,12 +20,7 @@ isAnchor = (obj) ->
 isBinding = (obj) ->
 	assert obj.type is ATTRIBUTE, "isBinding: type must be an attribute"
 
-	try
-		func = new Function 'console', "'use strict'; return #{obj.value};"
-		func.call null
-		return false
-
-	true
+	bindingParser.isBinding obj.value
 
 getByTypeDeep = (elem, type, callback) ->
 	if elem.type is type
@@ -92,97 +81,15 @@ anchorAttributeToString = (obj) ->
 	else
 		r
 
+isPublicBindingId = (id) ->
+	id is 'this' or id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer
+
 bindingAttributeToString = (obj) ->
-	binding = ['']
-	val = obj.value
-	opts = obj._parserOptions or 0
-
-	# split to types
-	val += ' '
-	lastBinding = null
-	isString = false
-	for char, i in val
-		if char is '.' and lastBinding
-			lastBinding.push ''
-			continue
-
-		if lastBinding and (isString or ///[a-zA-Z_0-9$]///.test(char))
-			lastBinding[lastBinding.length - 1] += char
-		else if ///[a-zA-Z_$]///.test(char)
-			lastBinding = [char]
-			binding.push lastBinding
-		else
-			if lastBinding is null
-				binding[binding.length - 1] += char
-			else
-				lastBinding = null
-				binding.push char
-
-		if /'|"/.test(char) and val[i-1] isnt '\\'
-			isString = not isString
-
-	# filter by ids
-	for elem, i in binding when typeof elem isnt 'string'
-		[id] = elem
-		if id is 'Renderer'
-			elem.shift()
-			[id] = elem
-		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling' or id is 'target'
-			elem.unshift "this"
-		else if opts & BINDING_THIS_TO_TARGET_OPTS and id is 'this'
-			elem.splice 1, 0, 'target'
-		else if (id is 'this' or id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer) and (i is 0 or binding[i-1][binding[i-1].length - 1] isnt '.')
-			continue
-		else
-			binding[i] = elem.join '.'
-
-	# split texts
-	i = -1
-	n = binding.length
-	while ++i < n
-		if typeof binding[i] is 'string'
-			if typeof binding[i-1] is 'string'
-				binding[i-1] += binding[i]
-
-			else if binding[i].trim() isnt ''
-				continue
-
-			binding.splice i, 1
-			n--
-
-	# split
-	text = ''
-	hash = ''
-	for elem, i in binding
-		if typeof elem is 'string'
-			hash += elem
-		else if elem.length > 1
-			if binding[i-1]? and text
-				text += ", "
-
-			text += repeatString('[', elem.length-1)
-			text += "'#{elem[0]}'"
-			if elem[0] is "this"
-				hash += "this"
-			else
-				hash += "#{elem[0]}"
-			elem.shift()
-			for id, i in elem
-				text += ", '#{id}']"
-				hash += ".#{id}"
-		else
-			if elem[0] is "this"
-				hash += "this"
-			else
-				hash += "#{elem[0]}"
-
-	hash = hash.trim()
-	text = text.trim()
-
+	binding = bindingParser.parse obj.value, isPublicBindingId, obj._parserOptions
 	args = idsKeys+''
-	func = "function(#{args}){return #{hash}}"
+	func = "function(#{args}){return #{binding.hash}}"
 
-	"[#{func}, [#{text}]]"
+	"[#{func}, [#{binding.connections}]]"
 
 stringify =
 	function: (elem) ->
