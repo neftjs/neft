@@ -71,6 +71,9 @@ console.log(data.name);
 			if utils.isObject(obj)
 				utils.merge this, obj
 
+		NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
+		utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Dict
+
 ReadOnly *Integer* Dict::length
 -------------------------------
 
@@ -83,7 +86,7 @@ console.log(dict.length);
 // 1
 ```
 
-		desc = utils.CONFIGURABLE | utils.ENUMERABLE
+		desc = NOT_ENUMERABLE
 		utils.defineProperty @::, 'length', desc, ->
 			@keys().length
 		, null
@@ -131,7 +134,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 // googlePlus changed from undefined to https://...
 ```
 
-		set: (key, val) ->
+		utils.defineProperty @::, 'set', NOT_ENUMERABLE, (key, val) ->
 			assert.isString key
 			assert.notLengthOf key, 0
 			assert.isNot val, undefined
@@ -158,7 +161,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 
 Returns `true` if the given key exists in the dict.
 
-		has: (key) ->
+		utils.defineProperty @::, 'has', NOT_ENUMERABLE, (key) ->
 			assert.isString key
 			assert.notLengthOf key, 0
 
@@ -171,7 +174,7 @@ Sets all keys with their values from the given object.
 
 Calls [onChange()][dict/Dict::onChange()] signal for each key.
 
-		extend: (obj) ->
+		utils.defineProperty @::, 'extend', NOT_ENUMERABLE, (obj) ->
 			assert.isObject obj
 
 			for key, val of obj
@@ -204,7 +207,7 @@ data.pop('name');
 // name property has been removed
 ```
 
-		pop: (key) ->
+		utils.defineProperty @::, 'pop', NOT_ENUMERABLE, (key) ->
 			assert.isString key
 			assert.notLengthOf key, 0
 			assert.isNot @[key], undefined
@@ -227,7 +230,7 @@ Removes all stored keys from the dict.
 
 Calls [onChange()][dict/Dict::onChange()] signal for each stored key.
 
-		clear: ->
+		utils.defineProperty @::, 'clear', NOT_ENUMERABLE, ->
 			for key, val of this
 				if @hasOwnProperty(key) and val isnt undefined
 					@pop key
@@ -251,7 +254,7 @@ console.log(data.keys());
 // ['x', 'y']
 ```
 
-		keys: ->
+		utils.defineProperty @::, 'keys', NOT_ENUMERABLE, ->
 			if @_dirty & KEYS
 				@_dirty ^= KEYS
 				arr = @_keys ?= []
@@ -283,7 +286,7 @@ console.log(data.values());
 // [10, 30]
 ```
 
-		values: ->
+		utils.defineProperty @::, 'values', NOT_ENUMERABLE, ->
 			if @_dirty & VALUES
 				@_dirty ^= VALUES
 				arr = @_values ?= []
@@ -326,7 +329,7 @@ for (var i = 0; i < items.length; i++){
 // ['prop2', 2]
 ```
 
-		items: ->
+		utils.defineProperty @::, 'items', NOT_ENUMERABLE, ->
 			if @_dirty & ITEMS
 				arr = @_values ?= []
 
