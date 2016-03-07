@@ -11,7 +11,7 @@
   },
   "bugs": "https://github.com/Neft-io/document/issues",
   "scripts": {
-    "test": "find . -name *.spec.coffee -not -path \"./node_modules/*\" -execdir coffee $1 {} \\;"
+    "test": "coffee ./spec/*.spec.coffee && coffee ./element/spec/*.spec.coffee"
   },
   "devDependencies": {
     "coffee-script": "latest",
