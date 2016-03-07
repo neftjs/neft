@@ -5,7 +5,6 @@ neft:function @js
 
 	utils = require 'neft-utils'
 	assert = require 'neft-assert'
-	Renderer = require 'neft-renderer'
 
 	module.exports = (File) ->
 
@@ -82,27 +81,6 @@ Reference to the [File][document/File] where the function is placed.
 ```
 
 			view: -> @
-
-*Renderer.Item* globalObject.item
----------------------------------
-
-Reference to the [Renderer.Item][renderer/Item].
-
-It's available when the function was call on the style signal.
-
-```xml
-<neft:function neft:name="test">
-	item.width += 10;
-</neft:function>
-
-<rectangle neft:style:pointer:onClick="${test}" />
-```
-
-			item: (ctx) ->
-				if ctx and ctx._ref
-					ctx = ctx._ref
-				if ctx instanceof Renderer.Item
-					ctx
 
 		funcGlobalProps = Object.keys(FuncGlobalFuncs)
 		Array::push.apply funcGlobalProps, Object.keys(FuncGlobalGetters)
