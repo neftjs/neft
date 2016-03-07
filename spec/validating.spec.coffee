@@ -1,30 +1,31 @@
 'use strict'
 
 Schema = require '../index.coffee.md'
+unit = require 'neft-unit'
+assert = require 'neft-assert'
+
+{describe, it} = unit
+SchemaError = Schema.Error
 
 describe 'Schema validating', ->
-
 	it 'only provided rows in the schema can be saved', ->
-
 		SCHEMA =
-			first:
-				required: true
-
+			first: {}
 		DOC =
 			noProvided: 2
 
-		run = -> new Schema(SCHEMA).validate DOC
+		try
+			new Schema(SCHEMA).validate DOC
+		catch err
 
-		expect(run).toThrow 'Schema::validate(): unexpected noProvided row'
+		assert.instanceOf err, SchemaError
+		assert.is err.message, 'Unexpected noProvided property'
 
 	it 'sub properties are validated properly', ->
-
 		SCHEMA =
 			first:
-				required: true
 				type: 'object'
 			'first.second':
-				required: true
 				type: 'boolean'
 
 		DOC =
@@ -33,18 +34,20 @@ describe 'Schema validating', ->
 
 		err = null
 
-		run = -> new Schema(SCHEMA).validate DOC
+		try
+			new Schema(SCHEMA).validate DOC
+		catch err
 
-		expect(run).toThrow 'Schema: first.second must be a boolean'
+		assert.instanceOf err, SchemaError
+		assert.is err.message, 'first.second must be a boolean'
 
 	it 'sub property arrays are validated properly', ->
-
 		SCHEMA =
 			first:
 				type: 'object'
 				array: true
+				optional: true
 			'first[]':
-				required: true
 				type: 'boolean'
 
 		DOC =
@@ -52,21 +55,22 @@ describe 'Schema validating', ->
 
 		err = null
 
-		run = -> new Schema(SCHEMA).validate DOC
+		try
+			new Schema(SCHEMA).validate DOC
+		catch err
 
-		expect(run).toThrow 'Schema: first[] must be a boolean'
+		assert.instanceOf err, SchemaError
+		assert.is err.message, 'first[] must be a boolean'
 
 	it 'sub property array properties are validated properly', ->
-
 		SCHEMA =
 			first:
 				type: 'object'
 				array: true
+				optional: true
 			'first[]':
-				required: true
 				type: 'object'
 			'first[].second':
-				required: true
 				type: 'boolean'
 
 		DOC =
@@ -74,6 +78,9 @@ describe 'Schema validating', ->
 
 		err = null
 
-		run = -> new Schema(SCHEMA).validate DOC
+		try
+			new Schema(SCHEMA).validate DOC
+		catch err
 
-		expect(run).toThrow 'Schema: first[].second must be a boolean'
+		assert.instanceOf err, SchemaError
+		assert.is err.message, 'first[].second must be a boolean'

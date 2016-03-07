@@ -33,5 +33,5 @@ console.log(schema.validate({age: -5}));
 		assert.isFloat expected
 		, "max validator option for #{row} property must be float"
 
-		if not value or value.length > expected
+		if not value or value > expected
 			throw new Schema.Error row, 'max', "Maximum range of #{row} is #{expected}"

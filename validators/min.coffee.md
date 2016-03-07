@@ -33,5 +33,5 @@ console.log(schema.validate({age: 0}));
 		assert.isFloat expected
 		, "min validator option for #{row} property must be float"
 
-		if not value or value.length < expected
+		if not value or value < expected
 			throw new Schema.Error row, 'min', "Minimum range of #{row} is #{expected}"
