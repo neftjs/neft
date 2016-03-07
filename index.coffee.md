@@ -27,6 +27,7 @@ Unit @library
 	messages = []
 	currentScope = scopes[0]
 	currentTest = null
+	testsPassed = true
 
 	errorToString = (err) ->
 		msg = ''
@@ -43,6 +44,7 @@ Unit @library
 		msg
 
 	printError = (err) ->
+		testsPassed = false
 		log.error messages.join(' ')
 		console.error errorToString(err)
 		return
@@ -208,4 +210,7 @@ Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay =
 			return
 
 		setImmediate ->
+			testsPassed = true
 			runStack scopes[0], ->
+				unless testsPassed
+					process.exit 1
