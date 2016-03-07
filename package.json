@@ -3,7 +3,13 @@
   "version": "0.9.13",
   "preferGlobal": true,
   "description": "JavaScript. Everywhere.",
-  "keywords": ["framework", "native", "android", "ios", "webgl"],
+  "keywords": [
+    "framework",
+    "native",
+    "android",
+    "ios",
+    "webgl"
+  ],
   "bin": {
     "neft": "./bin/neft.js"
   },
@@ -22,8 +28,8 @@
   },
   "scripts": {
     "bundle": "coffee --nodejs --harmony bundle.coffee",
-    "preversion": "preversion.coffee",
-    "checkout-master": "git checkout master; git pull; find ./node_modules/neft-* -type d -maxdepth 0 -execdir sh -c 'echo \\\\n\\\\n$0\\\\n; cd ./node_modules/$0; git checkout master; git pull' {} \\;"
+    "checkout-master": "coffee preversion.coffee; git checkout master; git pull; find ./node_modules/neft-* -type d -maxdepth 0 -execdir sh -c 'echo \\\\n\\\\n$0\\\\n; cd ./node_modules/$0; git checkout master; git pull' {} \\;",
+    "test": "node ./node_modules/neft-unit/bin/unit.js ./node_modules/neft-\\*/"
   },
   "dependencies": {
     "coffee-script": "^1.10.0",
@@ -39,12 +45,12 @@
     "node-static": "^0.7.6",
     "uglify-js": "^2.6.1",
     "semver": "^5.1.0",
-    "neft-android-runtime": "git@github.com:Neft-io/android-runtime.git#8f97f3a",
-    "neft-ios-runtime": "git@github.com:Neft-io/ios-runtime.git#b0ef00d",
-    "neft-sample-project": "git@github.com:Neft-io/sample-project.git#7c18564",
-    "neft-nml-parser": "git@github.com:Neft-io/nml-parser.git#e0d07cf"
+    "neft-android-runtime": "Neft-io/android-runtime#4509df0",
+    "neft-ios-runtime": "Neft-io/ios-runtime#65dd89f",
+    "neft-sample-project": "Neft-io/sample-project#36e6e6d",
+    "neft-nml-parser": "Neft-io/nml-parser#5286aad"
   },
   "devDependencies": {
-    "mustache": "^2.2.1"
+    "glob": "^7.0.3"
   }
 }

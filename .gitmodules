@@ -64,6 +64,6 @@
 [submodule "sample-project"]
 	path = node_modules/neft-sample-project
 	url = https://github.com/Neft-io/sample-project
-[submodule "node_modules/neft-binding"]
+[submodule "neft-binding"]
 	path = node_modules/neft-binding
-	url = git@github.com:Neft-io/neft-binding.git
+	url = https://github.com/Neft-io/neft-binding.git
