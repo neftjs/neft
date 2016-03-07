@@ -1,69 +1,69 @@
 [submodule "document"]
 	path = node_modules/neft-document
-	url = https://github.com/Neft-io/document
+	url = https://github.com/Neft-io/neft-document
 [submodule "renderer"]
 	path = node_modules/neft-renderer
-	url = https://github.com/Neft-io/renderer
+	url = https://github.com/Neft-io/neft-renderer
 [submodule "android-runtime"]
 	path = node_modules/neft-android-runtime
-	url = https://github.com/Neft-io/android-runtime
+	url = https://github.com/Neft-io/neft-android-runtime
 [submodule "ios-runtime"]
 	path = node_modules/neft-ios-runtime
-	url = https://github.com/Neft-io/ios-runtime
+	url = https://github.com/Neft-io/neft-ios-runtime
 [submodule "app"]
 	path = node_modules/neft-app
-	url = https://github.com/Neft-io/app
+	url = https://github.com/Neft-io/neft-app
 [submodule "resources"]
 	path = node_modules/neft-resources
-	url = https://github.com/Neft-io/resources
+	url = https://github.com/Neft-io/neft-resources
 [submodule "networking"]
 	path = node_modules/neft-networking
-	url = https://github.com/Neft-io/networking
+	url = https://github.com/Neft-io/neft-networking
 [submodule "native"]
 	path = node_modules/neft-native
-	url = https://github.com/Neft-io/native
+	url = https://github.com/Neft-io/neft-native
 [submodule "utils"]
 	path = node_modules/neft-utils
-	url = https://github.com/Neft-io/utils
+	url = https://github.com/Neft-io/neft-utils
 [submodule "schema"]
 	path = node_modules/neft-schema
-	url = https://github.com/Neft-io/schema
+	url = https://github.com/Neft-io/neft-schema
 [submodule "signal"]
 	path = node_modules/neft-signal
-	url = https://github.com/Neft-io/signal
+	url = https://github.com/Neft-io/neft-signal
 [submodule "list"]
 	path = node_modules/neft-list
-	url = https://github.com/Neft-io/list
+	url = https://github.com/Neft-io/neft-list
 [submodule "dict"]
 	path = node_modules/neft-dict
-	url = https://github.com/Neft-io/dict
+	url = https://github.com/Neft-io/neft-dict
 [submodule "styles"]
 	path = node_modules/neft-styles
-	url = https://github.com/Neft-io/styles
+	url = https://github.com/Neft-io/neft-styles
 [submodule "nml-parser"]
 	path = node_modules/neft-nml-parser
-	url = https://github.com/Neft-io/nml-parser
+	url = https://github.com/Neft-io/neft-nml-parser
 [submodule "typed-array"]
 	path = node_modules/neft-typed-array
-	url = https://github.com/Neft-io/typed-array
+	url = https://github.com/Neft-io/neft-typed-array
 [submodule "db"]
 	path = node_modules/neft-db
-	url = https://github.com/Neft-io/db
+	url = https://github.com/Neft-io/neft-db
 [submodule "bundle-builder"]
 	path = node_modules/neft-bundle-builder
-	url = https://github.com/Neft-io/bundle-builder
+	url = https://github.com/Neft-io/neft-bundle-builder
 [submodule "log"]
 	path = node_modules/neft-log
-	url = https://github.com/Neft-io/log
+	url = https://github.com/Neft-io/neft-log
 [submodule "unit"]
 	path = node_modules/neft-unit
-	url = https://github.com/Neft-io/unit
+	url = https://github.com/Neft-io/neft-unit
 [submodule "assert"]
 	path = node_modules/neft-assert
-	url = https://github.com/Neft-io/assert
+	url = https://github.com/Neft-io/neft-assert
 [submodule "sample-project"]
 	path = node_modules/neft-sample-project
-	url = https://github.com/Neft-io/sample-project
+	url = https://github.com/Neft-io/neft-sample-project
 [submodule "neft-binding"]
 	path = node_modules/neft-binding
 	url = https://github.com/Neft-io/neft-binding.git

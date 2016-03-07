@@ -45,10 +45,10 @@
     "node-static": "^0.7.6",
     "uglify-js": "^2.6.1",
     "semver": "^5.1.0",
-    "neft-android-runtime": "Neft-io/android-runtime#4509df0",
-    "neft-ios-runtime": "Neft-io/ios-runtime#65dd89f",
-    "neft-sample-project": "Neft-io/sample-project#36e6e6d",
-    "neft-nml-parser": "Neft-io/nml-parser#5286aad"
+    "neft-android-runtime": "Neft-io/neft-android-runtime#4509df0",
+    "neft-ios-runtime": "Neft-io/neft-ios-runtime#65dd89f",
+    "neft-sample-project": "Neft-io/neft-sample-project#36e6e6d",
+    "neft-nml-parser": "Neft-io/neft-nml-parser#5286aad"
   },
   "devDependencies": {
     "glob": "^7.0.3"

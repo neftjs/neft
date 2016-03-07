@@ -140,27 +140,27 @@ for ('button'){
 
 ## Components
 
-- [Document](https://github.com/Neft-io/document),
-- [Renderer](https://github.com/Neft-io/renderer),
-- [Android Runtime](https://github.com/Neft-io/android-runtime),
-- [iOS Runtime](https://github.com/Neft-io/ios-runtime),
-- [App](https://github.com/Neft-io/app),
-- [Resources](https://github.com/Neft-io/resources),
-- [Networking](https://github.com/Neft-io/networking),
-- [Native](https://github.com/Neft-io/native),
-- [Utils](https://github.com/Neft-io/utils),
-- [Schema](https://github.com/Neft-io/schema),
-- [Signal](https://github.com/Neft-io/signal),
-- [List](https://github.com/Neft-io/list),
-- [Dict](https://github.com/Neft-io/dict),
-- [Styles](https://github.com/Neft-io/styles),
-- [NML Parser](https://github.com/Neft-io/nml-parser),
-- [Typed Array](https://github.com/Neft-io/typed-array),
-- [Db](https://github.com/Neft-io/db),
-- [Bundle Builder](https://github.com/Neft-io/bundle-builder),
-- [Log](https://github.com/Neft-io/log),
-- [Unit](https://github.com/Neft-io/unit),
-- [Assert](https://github.com/Neft-io/assert).
+- [Document](https://github.com/Neft-io/neft-document),
+- [Renderer](https://github.com/Neft-io/neft-renderer),
+- [Android Runtime](https://github.com/Neft-io/neft-android-runtime),
+- [iOS Runtime](https://github.com/Neft-io/neft-ios-runtime),
+- [App](https://github.com/Neft-io/neft-app),
+- [Resources](https://github.com/Neft-io/neft-resources),
+- [Networking](https://github.com/Neft-io/neft-networking),
+- [Native](https://github.com/Neft-io/neft-native),
+- [Utils](https://github.com/Neft-io/neft-utils),
+- [Schema](https://github.com/Neft-io/neft-schema),
+- [Signal](https://github.com/Neft-io/neft-signal),
+- [List](https://github.com/Neft-io/neft-list),
+- [Dict](https://github.com/Neft-io/neft-dict),
+- [Styles](https://github.com/Neft-io/neft-styles),
+- [NML Parser](https://github.com/Neft-io/neft-nml-parser),
+- [Typed Array](https://github.com/Neft-io/neft-typed-array),
+- [Db](https://github.com/Neft-io/neft-db),
+- [Bundle Builder](https://github.com/Neft-io/neft-bundle-builder),
+- [Log](https://github.com/Neft-io/neft-log),
+- [Unit](https://github.com/Neft-io/neft-unit),
+- [Assert](https://github.com/Neft-io/neft-assert).
 
 ## GitHub links
 
