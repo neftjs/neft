@@ -9,5 +9,22 @@
     "type": "git",
     "url": "https://github.com/Neft-io/document.git"
   },
-  "bugs": "https://github.com/Neft-io/document/issues"
+  "bugs": "https://github.com/Neft-io/document/issues",
+  "scripts": {
+    "test": "find . -name *.spec.coffee -not -path \"./node_modules/*\" -execdir coffee $1 {} \\;"
+  },
+  "devDependencies": {
+    "coffee-script": "latest",
+    "neft-unit": "Neft-io/neft-unit"
+  },
+  "dependencies": {
+  	"htmlparser2": "^3.9.0",
+    "neft-utils": "Neft-io/neft-utils",
+    "neft-assert": "Neft-io/neft-assert",
+    "neft-signal": "Neft-io/neft-signal",
+    "neft-dict": "Neft-io/neft-dict",
+    "neft-list": "Neft-io/neft-list",
+    "neft-typed-array": "Neft-io/neft-typed-array",
+    "neft-binding": "Neft-io/neft-binding"
+  }
 }
