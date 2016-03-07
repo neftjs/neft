@@ -25,6 +25,7 @@
     "neft-dict": "Neft-io/neft-dict",
     "neft-list": "Neft-io/neft-list",
     "neft-typed-array": "Neft-io/neft-typed-array",
-    "neft-binding": "Neft-io/neft-binding"
+    "neft-binding": "Neft-io/neft-binding",
+    "neft-log": "Neft-io/neft-log"
   }
 }
