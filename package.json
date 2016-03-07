@@ -5,12 +5,16 @@
   "description": "Neft.io unit tests library",
   "license": "Apache 2.0",
   "homepage": "http://neft.io",
+  "bin": {
+    "unit": "./bin/unit.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Neft-io/unit.git"
   },
   "bugs": "https://github.com/Neft-io/unit/issues",
   "dependencies": {
+    "glob": "^7.0.3",
     "neft-log": "Neft-io/neft-log"
   }
 }
