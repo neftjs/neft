@@ -148,12 +148,11 @@ module.exports = (File) -> class Iterator
 		newChild.parent = @node
 		newChild.index = i
 
-		# render fragment with storage
-		storage = Object.create @file.storage or null
-		storage.each = each
-		storage.i = i
-		storage.item = item
-		usedFragment.render storage, @
+		# render fragment
+		newChild.attrs.set 'each', each
+		newChild.attrs.set 'index', i
+		newChild.attrs.set 'item', item
+		usedFragment.render @file.storage, @
 
 		# signal
 		usedFragment.onReplaceByUse.emit @
