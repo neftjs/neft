@@ -411,24 +411,24 @@ describe 'neft:each', ->
 		renderParse view
 		assert.is view.node.stringify(), '<ul>11</ul>'
 
-	it 'provides `this.item` property', ->
-		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.item}</ul>'
+	it 'provides `attrs.item` property', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${attrs.item}</ul>'
 		View.parse source
 		view = source.clone()
 
 		renderParse view
 		assert.is view.node.stringify(), '<ul>12</ul>'
 
-	it 'provides `this.i` property', ->
-		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.i}</ul>'
+	it 'provides `attrs.index` property', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${attrs.index}</ul>'
 		View.parse source
 		view = source.clone()
 
 		renderParse view
 		assert.is view.node.stringify(), '<ul>01</ul>'
 
-	it 'provides `this.each` property', ->
-		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.each}</ul>'
+	it 'provides `attrs.each` property', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${attrs.each}</ul>'
 		View.parse source
 		view = source.clone()
 
@@ -436,7 +436,7 @@ describe 'neft:each', ->
 		assert.is view.node.stringify(), '<ul>1,21,2</ul>'
 
 	it 'supports runtime updates', ->
-		source = View.fromHTML uid(), '<ul neft:each="${this.arr}">${this.each[this.i]}</ul>'
+		source = View.fromHTML uid(), '<ul neft:each="${this.arr}">${attrs.each[attrs.index]}</ul>'
 		View.parse source
 		view = source.clone()
 
