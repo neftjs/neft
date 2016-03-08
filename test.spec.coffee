@@ -11,10 +11,17 @@ describe 'ctor', ->
 		dict = Dict a: 1
 		assert.instanceOf dict, Dict
 
-describe 'values can be accessed by keys', ->
+it 'values can be accessed by keys', ->
 	dict = Dict a: 1
 	assert.is dict.a, 1
 	assert.is dict.abc, undefined
+
+it 'only set properties are enumerable', ->
+	dict = Dict a: 1
+	props = []
+	for prop of dict
+		props.push prop
+	assert.isEqual props, ['a']
 
 describe 'set()', ->
 	it 'set key value', ->
@@ -37,6 +44,14 @@ describe 'pop()', ->
 		dict = Dict a: 1
 		dict.pop 'a'
 		assert.is dict.a, undefined
+
+	it 'removed key is not enumerable', ->
+		dict = Dict b: 1, a: 1
+		dict.pop 'b'
+		props = []
+		for prop of dict
+			props.push prop
+		assert.isEqual props, ['a']
 
 describe 'keys()', ->
 	it 'returns keys as an array', ->
