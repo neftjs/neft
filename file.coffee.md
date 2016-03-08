@@ -363,6 +363,10 @@ File.parse(*File* file)
 				for input, i in @inputs
 					input.render()
 
+				# conditions
+				for condition, i in @conditions
+					condition.render()
+
 				# uses
 				for use in @uses
 					unless use.isRendered
@@ -371,10 +375,6 @@ File.parse(*File* file)
 				# iterators
 				for iterator, i in @iterators
 					iterator.render()
-
-				# conditions
-				for condition, i in @conditions
-					condition.render()
 
 				# source
 				renderTarget @, source
