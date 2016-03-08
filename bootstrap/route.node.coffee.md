@@ -19,15 +19,15 @@ Standard routes @learn
 	<html>
 	<head>
 		<meta charset="utf-8">
-		<title>${title}</title>
-		<script type="text/javascript" src="${neftFilePath}"></script>
-		<script type="text/javascript" src="${appFilePath}"></script>
+		<title>${this.title}</title>
+		<script type="text/javascript" src="${this.neftFilePath}"></script>
+		<script type="text/javascript" src="${this.appFilePath}"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	</head>
 	<body>
 		<noscript>
-			<meta http-equiv="refresh" content="0; url=${appTextModeUrl}"></meta>
+			<meta http-equiv="refresh" content="0; url=${this.appTextModeUrl}"></meta>
 		</noscript>
 	</body>
 	</html>
