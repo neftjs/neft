@@ -83,6 +83,12 @@ class Connection
 			if item instanceof Dict
 				@isConnected = true
 				item.onChange @getSignalChangeListener(), @
+			else if item instanceof List
+				@isConnected = true
+				handler = @getSignalChangeListener()
+				item.onChange handler, @
+				item.onInsert handler, @
+				item.onPop handler, @
 			else if handler = item[@handlerName]
 				@isConnected = true
 				handler @getSignalChangeListener(), @
@@ -91,10 +97,15 @@ class Connection
 	disconnect: ->
 		{item} = @
 		if item and @isConnected
+			handler = @getSignalChangeListener()
 			if item instanceof Dict
-				item.onChange.disconnect @getSignalChangeListener(), @
+				item.onChange.disconnect handler, @
+			else if item instanceof List
+				item.onChange.disconnect handler, @
+				item.onInsert.disconnect handler, @
+				item.onPop.disconnect handler, @
 			else
-				item[@handlerName].disconnect @getSignalChangeListener(), @
+				item[@handlerName].disconnect handler, @
 		@isConnected = false
 		return
 
