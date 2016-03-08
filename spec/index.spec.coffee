@@ -87,6 +87,20 @@ describe 'neft:use', ->
 		renderParse view
 		assert.is view.node.stringify(), '1'
 
+	it 'can be rendered recursively', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a">
+				1
+				<neft:use neft:fragment="a" neft:if="${attrs.loops > 0}" loops="${attrs.loops - 1}" />
+			</neft:fragment>
+			<neft:use neft:fragment="a" loops="3" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '1111'
+
 describe 'neft:target', ->
 	it 'is replaced by the neft:use body', ->
 		source = View.fromHTML uid(), """
