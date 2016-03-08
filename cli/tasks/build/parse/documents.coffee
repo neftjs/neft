@@ -29,7 +29,7 @@ module.exports = (platform, app, callback) ->
 	utils.clear Document._files
 
 	Document.onError onErrorListener = (name) ->
-		parseFile name, "./views/#{name}.html"
+		parseFile name, "./views/#{name}"
 
 	Document.onBeforeParse onBeforeParseListener = (file) ->
 		if platform isnt 'node'
