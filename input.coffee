@@ -95,8 +95,8 @@ module.exports = (File) -> class Input extends signal.Emitter
 			arr = cache[binding.body] ?= [binding.func, binding.connections]
 			docBinding = DocumentBinding.New arr, this
 
-			# if binding.updateOnCreate
-			docBinding.update()
+			if binding.updateOnCreate
+				docBinding.update()
 			return
 
 	render: ->
