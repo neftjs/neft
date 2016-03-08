@@ -213,7 +213,7 @@ data.pop('name');
 			assert.isNot @[key], undefined
 
 			oldVal = @[key]
-			@[key] = undefined
+			delete @[key]
 
 			# dirty
 			@_dirty |= ALL
@@ -232,8 +232,7 @@ Calls [onChange()][dict/Dict::onChange()] signal for each stored key.
 
 		utils.defineProperty @::, 'clear', NOT_ENUMERABLE, ->
 			for key, val of this
-				if @hasOwnProperty(key) and val isnt undefined
-					@pop key
+				@pop key
 
 			return
 
@@ -261,9 +260,8 @@ console.log(data.keys());
 
 				i = 0
 				for key, val of @
-					if @hasOwnProperty(key) and val isnt undefined
-						arr[i] = key
-						i++
+					arr[i] = key
+					i++
 
 				arr.length = i
 
@@ -293,9 +291,8 @@ console.log(data.values());
 
 				i = 0
 				for key, val of @
-					if @hasOwnProperty(key) and val isnt undefined
-						arr[i] = val
-						i++
+					arr[i] = val
+					i++
 
 				arr.length = i
 
@@ -335,11 +332,10 @@ for (var i = 0; i < items.length; i++){
 
 				i = 0
 				for key, val of @
-					if @hasOwnProperty(key) and val isnt undefined
-						arr[i] ?= ['', null]
-						arr[i][0] = key
-						arr[i][1] = val
-						i++
+					arr[i] ?= ['', null]
+					arr[i][0] = key
+					arr[i][1] = val
+					i++
 
 				arr.length = i
 
