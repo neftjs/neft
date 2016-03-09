@@ -191,6 +191,7 @@ Element @virtual_dom
 			# trigger signal
 			emitSignal @, 'onParentChange', old
 
+			Tag.query.checkWatchersDeeply @, old
 			Tag.query.checkWatchersDeeply @
 
 			true
