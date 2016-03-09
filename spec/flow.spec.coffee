@@ -1,5 +1,10 @@
+'use strict'
+
+unit = require 'neft-unit'
+assert = require 'neft-assert'
 Renderer = require '../index'
 
+{describe, it, beforeEach} = unit
 {Flow, Item} = Renderer
 
 setSize = (item, width, height) ->
@@ -8,20 +13,13 @@ setSize = (item, width, height) ->
 	item
 
 expectPosition = (item, x, y) ->
-	expect(item.x).toBe x
-	expect(item.y).toBe y
+	assert.is item.x, x
+	assert.is item.y, y
 	item
 
 expectSize = (item, width, height) ->
-	expect(item.width).toBe width
-	expect(item.height).toBe height
-	item
-
-expectMargins = (item, top, right, bottom, left) ->
-	expect(item.margin.top).toBe top
-	expect(item.margin.right).toBe right
-	expect(item.margin.bottom).toBe bottom
-	expect(item.margin.left).toBe left
+	assert.is item.width, width
+	assert.is item.height, height
 	item
 
 describe 'Flow', ->
@@ -105,7 +103,6 @@ describe 'Flow', ->
 		item3.margin = 20
 		onReady ->
 			expectSize flow, 120, 120
-			expectMargins flow, 10, 0, 20, 20
 			expectPosition item1, 0, 0
 			expectPosition item2, 70, 0
 			expectPosition item3, 0, 70
@@ -122,7 +119,6 @@ describe 'Flow', ->
 		item3.margin = 20
 		onReady ->
 			expectSize flow, 140, 150
-			expectMargins flow, 0, 0, 0, 0
 			expectPosition item1, 20, 10
 			expectPosition item2, 90, 0
 			expectPosition item3, 20, 80
@@ -138,7 +134,6 @@ describe 'Flow', ->
 		item3.margin = 20
 		onReady ->
 			expectSize flow, 230, 90
-			expectMargins flow, 0, 0, 0, 0
 			expectPosition item1, 20, 10
 			expectPosition item2, 90, 0
 			expectPosition item3, 160, 20
@@ -153,7 +148,6 @@ describe 'Flow', ->
 		item3.margin = 20
 		onReady ->
 			expectSize flow, 120, 130
-			expectMargins flow, 10, 0, 20, 20
 			expectPosition item1, 0, 0
 			expectPosition item2, 70, 0
 			expectPosition item3, 0, 80
@@ -169,7 +163,6 @@ describe 'Flow', ->
 		item3.margin = 20
 		onReady ->
 			expectSize flow, 160, 160
-			expectMargins flow, 0, 0, 0, 0
 			expectPosition item1, 20, 10
 			expectPosition item2, 90, 0
 			expectPosition item3, 20, 90
@@ -200,7 +193,6 @@ describe 'Flow', ->
 		setSize item3, 50, 50
 		onReady ->
 			expectSize flow, 100, 170
-			expectMargins flow, 0, 10, 0, 10
 			expectPosition item1, 0, 0
 			expectPosition item2, 0, 60
 			expectSize item2, 100, 50
@@ -218,7 +210,6 @@ describe 'Flow', ->
 		setSize item3, 50, 50
 		onReady ->
 			expectSize flow, 100, 170
-			expectMargins flow, 0, 0, 0, 0
 			expectPosition item1, 0, 0
 			expectPosition item2, 10, 60
 			expectSize item2, 80, 50
@@ -236,29 +227,8 @@ describe 'Flow', ->
 		setSize item3, 50, 50
 		onReady ->
 			expectSize flow, 110, 200
-			expectMargins flow, 10, 10, 0, 0
 			expectPosition item1, 0, 0
 			expectPosition item2, 60, 0
 			expectSize item2, 50, 140
-			expectPosition item3, 0, 150
-			done()
-
-	# BUG
-	it '13', (done) ->
-		flow.width = 110
-		flow.height = 200
-		flow.collapseMargins = true
-		flow.includeBorderMargins = true
-		setSize item1, 50, 50
-		item2.layout.fillWidth = true
-		item2.layout.fillHeight = true
-		item2.margin = 10
-		setSize item3, 50, 50
-		onReady ->
-			expectSize flow, 110, 200
-			expectMargins flow, 0, 0, 0, 0
-			expectPosition item1, 0, 0
-			expectPosition item2, 10, 60
-			expectSize item2, 90, 80
 			expectPosition item3, 0, 150
 			done()
