@@ -121,47 +121,8 @@ module.exports = (File) -> class Use
 		unless usedFragment.isClone
 			usedFragment = usedFragment.clone()
 
-		# attrs
-		{inputAttrs} = usedFragment
-		viewAttrs = usedFragment.node.attrs
-		useAttrs = @node.attrs
-		for prop, val of inputAttrs
-			if viewAttrs[prop] is undefined and useAttrs[prop] is undefined
-				inputAttrs.pop prop
-		for prop, val of viewAttrs
-			if useAttrs[prop] is undefined
-				inputAttrs.set prop, val
-		for prop, val of useAttrs
-			inputAttrs.set prop, val
-
-		# ids
-		{inputIds} = usedFragment
-		viewIds = usedFragment.ids
-		useIds = @file.inputIds
-		for prop, val of inputIds
-			if viewIds[prop] is undefined and useIds[prop] is undefined
-				inputIds.pop prop
-		for prop, val of useIds
-			if viewIds[prop] is undefined
-				inputIds.set prop, val
-		for prop, val of viewIds
-			inputIds.set prop, val
-
-		# funcs
-		{inputFuncs} = usedFragment
-		viewFuncs = usedFragment.ids
-		useFuncs = @file.inputFuncs
-		for prop, val of inputFuncs
-			if viewFuncs[prop] is undefined and useFuncs[prop] is undefined
-				inputFuncs.pop prop
-		for prop, val of useFuncs
-			if viewFuncs[prop] is undefined
-				inputFuncs.set prop, val
-		for prop, val of viewFuncs
-			inputFuncs.set prop, val
-
 		unless usedFragment.isRendered
-			usedFragment = usedFragment.render @
+			usedFragment = usedFragment.render null, @
 
 		usedFragment.node.parent = @node
 		@usedFragment = usedFragment

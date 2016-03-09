@@ -196,7 +196,7 @@ describe 'neft:require', ->
 
 describe 'string interpolation', ->
 	describe '`attrs`', ->
-		it 'support neft:fragment', ->
+		it 'lookup neft:fragment', ->
 			source = View.fromHTML uid(), """
 				<neft:fragment neft:name="a" x="2">${attrs.x}</neft:fragment>
 				<neft:use neft:fragment="a" />
@@ -207,7 +207,7 @@ describe 'string interpolation', ->
 			renderParse view
 			assert.is view.node.stringify(), '2'
 
-		it 'support neft:use', ->
+		it 'lookup neft:use', ->
 			source = View.fromHTML uid(), """
 				<neft:fragment neft:name="a" x="1">${attrs.x}</neft:fragment>
 				<neft:use neft:fragment="a" x="2" />
@@ -218,9 +218,49 @@ describe 'string interpolation', ->
 			renderParse view
 			assert.is view.node.stringify(), '2'
 
+		it 'lookup neft:use deeply', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a" x="1">
+					<neft:fragment neft:name="b" x="1">
+						${attrs.x}
+					</neft:fragment>
+					<neft:use neft:fragment="b" x="2" />
+				</neft:fragment>
+				<neft:use neft:fragment="a" x="2" />
+			"""
+			View.parse source
+			view = source.clone()
+
+			renderParse view
+			assert.is view.node.stringify(), '2'
+
+		it 'updates neft:use deeply lookup', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a" x="1">
+					<neft:fragment neft:name="b" x="1">
+						${attrs.x}
+					</neft:fragment>
+					<neft:use neft:fragment="b" x="${attrs.x}" />
+				</neft:fragment>
+				<neft:use neft:fragment="a" x="2" />
+			"""
+			View.parse source
+			view = source.clone()
+			child = view.node.children[0]
+
+			renderParse view
+			assert.is view.node.stringify(), '2'
+			child.attrs.set 'x', 3
+			assert.is view.node.stringify(), '3'
+
 	it '`this` refers to the global storage', ->
 		source = View.fromHTML uid(), """
-			<neft:fragment neft:name="a">${this.x}, ${this.b.a}</neft:fragment>
+			<neft:fragment neft:name="a">
+				<neft:fragment neft:name="b">
+					${this.x}, ${this.b.a}
+				</neft:fragment>
+				<neft:use neft:fragment="b" />
+			</neft:fragment>
 			<neft:use neft:fragment="a" />
 		"""
 		View.parse source
@@ -453,3 +493,36 @@ describe 'neft:each', ->
 
 		arr.append 3
 		assert.is view.node.stringify(), '<ul>123</ul>'
+
+	it 'access global `this`', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.a}</ul>'
+		View.parse source
+		view = source.clone()
+
+		renderParse view,
+			storage: a: 'a'
+		assert.is view.node.stringify(), '<ul>aa</ul>'
+
+	it 'access `ids`', ->
+		source = View.fromHTML uid(), """
+			<div id="a" prop="a" visible="false" />
+			<ul neft:each="[1,2]">${ids.a.attrs.prop}</ul>
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '<ul>aa</ul>'
+
+	it 'access neft:fragment `attrs`', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a" a="a">
+				<ul neft:each="[1,2]">${attrs.a}${attrs.b}</ul>
+			</neft:fragment>
+			<neft:use neft:fragment="a" b="b" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '<ul>abab</ul>'

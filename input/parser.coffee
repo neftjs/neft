@@ -21,6 +21,7 @@ exports.parse = (text) ->
 	str = ''
 	func = ''
 	isString = isBlock = false
+	blocks = 0
 	innerBlocks = 0
 	i = 0
 	n = text.length
@@ -28,16 +29,17 @@ exports.parse = (text) ->
 		charStr = text[i]
 		if charStr is '$' and text[i+1] is '{'
 			isBlock = true
-			if str isnt ''
+			blocks += 1
+			if str isnt '' or blocks > 1
 				func += '"'+str+'" + '
 			str = ''
 			i++
 		else if charStr is '{'
-			innerBlocks++
+			innerBlocks += 1
 			str += charStr
 		else if charStr is '}'
 			if innerBlocks > 0
-				innerBlocks--
+				innerBlocks -= 1
 				str += charStr
 			else if isBlock
 				func += "(#{str}) + "

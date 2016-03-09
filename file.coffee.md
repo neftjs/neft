@@ -288,9 +288,6 @@ File.parse(*File* file)
 				nodeSignal?.call? file, attr1, attr2
 			return
 
-		onNodeAttrsChange = (name) ->
-			@inputAttrs.set name, @node.attrs[name]
-
 		constructor: (@path, @node) ->
 			assert.isString @path
 			assert.notLengthOf @path, 0
@@ -326,6 +323,7 @@ File.parse(*File* file)
 			@inputArgs = [@inputIds, @inputFuncs, @inputAttrs]
 
 			@node.onAttrsChange onNodeAttrsChange, @
+			@inputAttrs.extend @node.attrs
 
 			`//<development>`
 			if @constructor is File
@@ -341,6 +339,21 @@ File.parse(*File* file)
 			else
 				@_render(storage, source)
 
+		onNodeAttrsChange = (name) ->
+			if @source and @source.node.attrs[name] isnt undefined
+				return
+			@inputAttrs.set name, @node.attrs[name]
+			return
+
+		onSourceFileAttrsChange = (name) ->
+			if @node.attrs[name] is @source.node.attrs[name] is undefined
+				@inputAttrs.set name, @source.file.inputAttrs[name]
+			return
+
+		onSourceNodeAttrsChange = (name) ->
+			@inputAttrs.set name, @source.node.attrs[name]
+			return
+
 		_render: do ->
 			renderTarget = require('./file/render/parse/target') File
 
@@ -348,13 +361,52 @@ File.parse(*File* file)
 				assert.notOk @isRendered
 				assert.ok @readyToUse
 
-				if storage instanceof File.Use
-					source = storage
-					storage = null
-
 				if storage?
 					@storage = storage
 				@source = source
+
+				if source?
+					# attrs
+					{inputAttrs} = @
+					viewAttrs = @node.attrs
+					sourceFileAttrs = source.file.inputAttrs
+					sourceAttrs = source.node.attrs
+					sourceFileAttrs.onChange onSourceFileAttrsChange, @
+					source.node.onAttrsChange onSourceNodeAttrsChange, @
+					for prop, val of inputAttrs
+						if viewAttrs[prop] is sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
+							inputAttrs.pop prop
+					for prop, val of sourceFileAttrs
+						if viewAttrs[prop] is sourceAttrs[prop] is undefined
+							inputAttrs.set prop, val
+					for prop, val of sourceAttrs
+						inputAttrs.set prop, val
+
+					# ids
+					{inputIds} = @
+					viewIds = @ids
+					sourceIds = source.file.inputIds
+					for prop, val of inputIds
+						if viewIds[prop] is undefined and sourceIds[prop] is undefined
+							inputIds.pop prop
+					for prop, val of sourceIds
+						if viewIds[prop] is undefined
+							inputIds.set prop, val
+					for prop, val of viewIds
+						inputIds.set prop, val
+
+					# funcs
+					{inputFuncs} = @
+					viewFuncs = @ids
+					sourceFuncs = source.file.inputFuncs
+					for prop, val of inputFuncs
+						if viewFuncs[prop] is undefined and sourceFuncs[prop] is undefined
+							inputFuncs.pop prop
+					for prop, val of sourceFuncs
+						if viewFuncs[prop] is undefined
+							inputFuncs.set prop, val
+					for prop, val of viewFuncs
+						inputFuncs.set prop, val
 
 				File.onBeforeRender.emit @
 				emitNodeSignal @, 'neft:onBeforeRender'
@@ -402,6 +454,11 @@ File.parse(*File* file)
 				@isRendered = false
 				File.onBeforeRevert.emit @
 				emitNodeSignal @, 'neft:onBeforeRevert'
+
+				# attrs
+				if @source
+					@source.file.inputAttrs.onChange.disconnect onSourceFileAttrsChange, @
+					@source.node.onAttrsChange.disconnect onSourceNodeAttrsChange, @
 
 				# parent use
 				@parentUse?.detachUsedFragment()
