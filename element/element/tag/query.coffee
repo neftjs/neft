@@ -508,7 +508,7 @@ module.exports = (Element, _Tag) ->
 				emitSignal watcher, 'onAdd', node
 			return
 
-		(node) ->
+		(node, parent=node._parent) ->
 			# mark this node
 			node._checkWatchers |= CHECK_WATCHERS_THIS
 			if node instanceof Tag
@@ -516,7 +516,6 @@ module.exports = (Element, _Tag) ->
 
 			# mark parents
 			tmp = node
-			parent = node._parent
 			while parent
 				tmp = parent
 				if tmp._checkWatchers & CHECK_WATCHERS_CHILDREN
