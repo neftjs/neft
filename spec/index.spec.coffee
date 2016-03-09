@@ -224,7 +224,7 @@ describe 'string interpolation', ->
 					<neft:fragment neft:name="b" x="1">
 						${attrs.x}
 					</neft:fragment>
-					<neft:use neft:fragment="b" x="2" />
+					<neft:use neft:fragment="b" />
 				</neft:fragment>
 				<neft:use neft:fragment="a" x="2" />
 			"""
@@ -240,7 +240,7 @@ describe 'string interpolation', ->
 					<neft:fragment neft:name="b" x="1">
 						${attrs.x}
 					</neft:fragment>
-					<neft:use neft:fragment="b" x="${attrs.x}" />
+					<neft:use neft:fragment="b" />
 				</neft:fragment>
 				<neft:use neft:fragment="a" x="2" />
 			"""

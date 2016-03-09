@@ -340,13 +340,13 @@ File.parse(*File* file)
 				@_render(storage, source)
 
 		onNodeAttrsChange = (name) ->
-			if @source and @source.node.attrs[name] isnt undefined
+			if @source and @source.file.inputAttrs isnt @source.node.attrs[name] isnt undefined
 				return
 			@inputAttrs.set name, @node.attrs[name]
 			return
 
 		onSourceFileAttrsChange = (name) ->
-			if @node.attrs[name] is @source.node.attrs[name] is undefined
+			if @source.node.attrs[name] is undefined
 				@inputAttrs.set name, @source.file.inputAttrs[name]
 			return
 
@@ -376,8 +376,11 @@ File.parse(*File* file)
 					for prop, val of inputAttrs
 						if viewAttrs[prop] is sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
 							inputAttrs.pop prop
+					for ptop, val of viewAttrs
+						if sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
+							inputAttrs.set prop, val
 					for prop, val of sourceFileAttrs
-						if viewAttrs[prop] is sourceAttrs[prop] is undefined
+						if sourceAttrs[prop] is undefined
 							inputAttrs.set prop, val
 					for prop, val of sourceAttrs
 						inputAttrs.set prop, val
