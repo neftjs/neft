@@ -23,6 +23,19 @@ Route @class
 
 		lastClientHTMLRoute = null
 
+*Document* Route.getTemplateView(*String* viewName)
+---------------------------------------------------
+
+		@getTemplateView = do ->
+			if utils.isNode
+				(name) ->
+					tmpl = app.views[name].render(app: app, routes: new Dict)
+					usedTemplates.push tmpl
+					tmpl
+			else
+				(name) ->
+					templates[name] ?= app.views[name].render(app: app, routes: new Dict)
+
 *Route* Route(*Object* options)
 -------------------------------
 
@@ -398,7 +411,7 @@ Acceptable syntaxes:
 
 			logtime = log.time 'Render'
 			if viewName isnt tmplName and (tmpl = app.views[tmplName])
-				tmplView = Route::getTemplateView.call @, tmplName
+				tmplView = Route.getTemplateView tmplName
 				tmplView.use useName, null
 			if view = app.views[viewName]
 				r = view.render @
@@ -423,16 +436,3 @@ Acceptable syntaxes:
 			view: ''
 			template: ''
 			use: ''
-
-*Document* Route::getTemplateView(*String* viewName)
-----------------------------------------------------
-
-		getTemplateView: do ->
-			if utils.isNode
-				(name) ->
-					tmpl = app.views[name].render(app: app, routes: new Dict)
-					usedTemplates.push tmpl
-					tmpl
-			else
-				(name) ->
-					templates[name] ?= app.views[name].render(app: app, routes: new Dict)
