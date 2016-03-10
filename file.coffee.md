@@ -378,12 +378,14 @@ File.parse(*File* file)
 							inputAttrs.pop prop
 					for ptop, val of viewAttrs
 						if sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
-							inputAttrs.set prop, val
+							if val isnt undefined
+								inputAttrs.set prop, val
 					for prop, val of sourceFileAttrs
 						if sourceAttrs[prop] is undefined
 							inputAttrs.set prop, val
 					for prop, val of sourceAttrs
-						inputAttrs.set prop, val
+						if val isnt undefined
+							inputAttrs.set prop, val
 
 					# ids
 					{inputIds} = @
