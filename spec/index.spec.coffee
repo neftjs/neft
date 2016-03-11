@@ -330,6 +330,23 @@ describe 'string interpolation', ->
 		renderParse view
 		assert.is view.node.stringify(), '9'
 
+	it 'fragment neft:functions are accessed in this fragment', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a">
+				<neft:function neft:name="pow" arguments="num">
+					return num * num;
+				</neft:function>
+
+				${funcs.pow(3)}
+			</neft:fragment>
+			<neft:use neft:fragment="a" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '9'
+
 	it 'handler is called on signal', ->
 		source = View.fromHTML uid(), """
 			<span x="1" onAttrsChange="${this.onAttrsChange(2)}" />
