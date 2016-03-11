@@ -402,7 +402,7 @@ File.parse(*File* file)
 
 					# funcs
 					{inputFuncs} = @
-					viewFuncs = @ids
+					viewFuncs = @funcs
 					sourceFuncs = source.file.inputFuncs
 					for prop, val of inputFuncs
 						if viewFuncs[prop] is undefined and sourceFuncs[prop] is undefined
