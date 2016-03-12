@@ -4,10 +4,15 @@ utils = require 'neft-utils'
 
 module.exports = (bridge) ->
 	actions = []
+	actionsIndex = 0
 	booleans = []
+	booleansIndex = 0
 	integers = []
+	integersIndex = 0
 	floats = []
+	floatsIndex = 0
 	strings = []
+	stringsIndex = 0
 
 	outDataObject =
 		actions: actions
@@ -16,31 +21,43 @@ module.exports = (bridge) ->
 		floats: floats
 		strings: strings
 
-	_neft.native =
-		onData: bridge.onData
+	ios.dataCallback = bridge.onData
 
 	sendData: ->
-		if actions.length <= 0
+		if actionsIndex <= 0
 			return
-		webkit.messageHandlers.transferData.postMessage outDataObject
-		utils.clear actions
-		utils.clear booleans
-		utils.clear integers
-		utils.clear floats
-		utils.clear strings
+
+		for i in [actionsIndex...actions.length] by 1
+			actions.pop()
+		for i in [booleansIndex...booleans.length] by 1
+			booleans.pop()
+		for i in [integersIndex...integers.length] by 1
+			integers.pop()
+		for i in [floatsIndex...floats.length] by 1
+			floats.pop()
+		for i in [stringsIndex...strings.length] by 1
+			strings.pop()
+
+		actionsIndex = 0
+		booleansIndex = 0
+		integersIndex = 0
+		floatsIndex = 0
+		stringsIndex = 0
+
+		ios.postMessage "transferData", outDataObject
 		return
 	pushAction: (val) ->
-		actions.push val
+		actions[actionsIndex++] = val
 		return
 	pushBoolean: (val) ->
-		booleans.push val
+		booleans[booleansIndex++] = val
 		return
 	pushInteger: (val) ->
-		integers.push val
+		integers[integersIndex++] = val
 		return
 	pushFloat: (val) ->
-		floats.push val
+		floats[floatsIndex++] = val
 		return
 	pushString: (val) ->
-		strings.push val
+		strings[stringsIndex++] = val
 		return
