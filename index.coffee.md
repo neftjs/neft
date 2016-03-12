@@ -66,7 +66,7 @@ ReadOnly *Boolean* utils.isIOS
 		when android?
 			exports.isClient = exports.isAndroid = true
 
-		when _neft?.platform is 'ios'
+		when ios?
 			exports.isClient = exports.isIOS = true
 
 		when window?.document?
