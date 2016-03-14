@@ -45,6 +45,7 @@
     "node-static": "^0.7.6",
     "uglify-js": "^2.6.1",
     "semver": "^5.1.0",
+    "xcode": "^0.8.4",
     "neft-android-runtime": "Neft-io/neft-android-runtime#4509df0",
     "neft-ios-runtime": "Neft-io/neft-ios-runtime#65dd89f",
     "neft-sample-project": "Neft-io/neft-sample-project#36e6e6d",

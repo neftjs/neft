@@ -52,7 +52,7 @@ module.exports = (config, callback) ->
 		fs.copySync './build/static', STATIC_OUT_DIR
 	log.end logtime
 
-	logtime = log.time "Copy extensions files"
+	logtime = log.time "Copy extensions"
 	config.androidExtensions = []
 	for ext in config.extensions
 		nativeDirPath = "#{ext.path}native/android"

@@ -6,13 +6,16 @@ Mustache = require 'mustache'
 coffee = require 'coffee-script'
 cp = require 'child_process'
 pathUtils = require 'path'
+xcode = require 'xcode'
 
 OUT_DIR = './build/ios/'
+EXT_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/Extension/"
 CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/"
 STATIC_OUT_DIR = "#{OUT_DIR}static"
 ANDROID_BUNDLE_DIR = './build/ios/'
+XCODE_PROJECT_PATH = "#{OUT_DIR}Neft.xcodeproj/project.pbxproj"
 
-{log} = Neft
+{utils, log} = Neft
 
 module.exports = (config, callback) ->
 	iosRuntimePath = pathUtils.resolve __dirname, '../../../../node_modules/neft-ios-runtime'
@@ -67,6 +70,19 @@ module.exports = (config, callback) ->
 		fs.copySync './build/static', STATIC_OUT_DIR
 	log.end logtime
 
+	logtime = log.time "Copy extensions"
+	config.iosExtensions = []
+	for ext in config.extensions
+		nativeDirPath = "#{ext.path}native/ios"
+		if fs.existsSync(nativeDirPath)
+			name = utils.capitalize ext.name
+			config.iosExtensions.push
+				name: name
+				path: nativeDirPath
+				bundlePath: bundlePath = "#{EXT_NATIVE_OUT_DIR}#{name}"
+			fs.copySync nativeDirPath, bundlePath
+	log.end logtime
+
 	logtime = log.time "Prepare ios files"
 	for path in mustacheFiles
 		# get file
@@ -103,5 +119,29 @@ module.exports = (config, callback) ->
 		# save file
 		fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
 
-	log.end logtime
-	callback()
+	project = xcode.project XCODE_PROJECT_PATH
+	project.parse (err) ->
+		if err?
+			console.error "Can't parse XCode project; create an issue on GitHub: https://github.com/Neft-io/neft\n\n"+err
+			log.end logtime
+			callback new Error "Can't parse XCode file"
+			return
+
+		mainGroupId = project.findPBXGroupKey path: 'Neft'
+
+		# add extensions
+		for ext in config.iosExtensions
+			baseExtDir = ext.bundlePath.slice OUT_DIR.length
+			files = fs.readdirSync ext.path
+			name = 'Extension'+ext.name
+
+			extGroupId = project.pbxCreateGroup name, "Extension/#{ext.name}"
+			project.addToPbxGroup extGroupId, mainGroupId
+
+			for file in files
+				project.addSourceFile file, null, extGroupId
+
+		fs.writeFile XCODE_PROJECT_PATH, project.writeSync(), ->
+			log.end logtime
+			callback()
+
