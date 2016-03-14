@@ -36,6 +36,7 @@
 		08ADA7CE1C2038D1008FCA00 /* svgToImage.js in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7CD1C2038D1008FCA00 /* svgToImage.js */; };
 		08ADA7D01C205738008FCA00 /* js.js in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7CF1C205738008FCA00 /* js.js */; };
 		08ADA7D41C2182CA008FCA00 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ADA7D31C2182C9008FCA00 /* Config.swift */; };
+		08B098501C93693600EE9593 /* NativeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B0984F1C93693600EE9593 /* NativeItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		08ADA7CD1C2038D1008FCA00 /* svgToImage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = svgToImage.js; sourceTree = "<group>"; };
 		08ADA7CF1C205738008FCA00 /* js.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js.js; sourceTree = "<group>"; };
 		08ADA7D31C2182C9008FCA00 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		08B0984F1C93693600EE9593 /* NativeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 		0886239D1C171C8300FF6C11 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				08B0984F1C93693600EE9593 /* NativeItem.swift */,
 				088623A01C18D51400FF6C11 /* Item.swift */,
 				088623A21C18D51D00FF6C11 /* Text.swift */,
 				0825496B1C3EAFB900D846C0 /* TextInput.swift */,
@@ -244,6 +247,7 @@
 				088B7FD11C4D76010039D52A /* OutAction.swift in Sources */,
 				088623961C16D35100FF6C11 /* Js.swift in Sources */,
 				088623A71C18D53600FF6C11 /* Navigator.swift in Sources */,
+				08B098501C93693600EE9593 /* NativeItem.swift in Sources */,
 				08ADA7D41C2182CA008FCA00 /* Config.swift in Sources */,
 				088623A51C18D52E00FF6C11 /* Image.swift in Sources */,
 				088B7FD61C4D93730039D52A /* CustomApp.swift in Sources */,

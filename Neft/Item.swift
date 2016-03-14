@@ -316,6 +316,10 @@ class Item: Renderer.Object {
 
         let forceChildrenUpdate = forceUpdateBounds || dirtyTransform
         if forceChildrenUpdate || dirtyChildren {
+            // clear
+            dirtyChildren = false
+            dirtyTransform = false
+            
             // measure background
             background?.measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
 
@@ -327,10 +331,6 @@ class Item: Renderer.Object {
                 children[i].measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
                 i += 1
             }
-
-            // clear
-            dirtyChildren = false
-            dirtyTransform = false
         }
     }
 

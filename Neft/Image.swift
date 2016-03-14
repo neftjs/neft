@@ -3,7 +3,7 @@ import UIKit
 class Image: Item {
     static var cache: [String: CGImageRef] = Dictionary()
     static var loadingHandlers: [String: [(result: CGImageRef?) -> Void]] = Dictionary()
-    static let svgToImageJs = Js(name: "svgToImage")
+//    static let svgToImageJs = Js(name: "svgToImage")
     
     override class func register(app: GameViewController) {
         app.client.actions[InAction.CREATE_IMAGE] = {
@@ -41,8 +41,7 @@ class Image: Item {
                 .setOffsetY(reader.getFloat())
         }
         
-        Image.svgToImageJs.runScript("svgToImage")
-        app.view.addSubview(Image.svgToImageJs.webView)
+//        Image.svgToImageJs.runScript("svgToImage")
     }
     
     var modelImage: CGImageRef?
@@ -75,14 +74,14 @@ class Image: Item {
         let plainData = svg.dataUsingEncoding(NSUTF8StringEncoding)
         let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
         
-        dispatch_async(dispatch_get_main_queue()) {
-            Image.svgToImageJs.callFunction("svgToImage", argv: "\"\(base64String)\", \(width), \(height)") {
-                (message: AnyObject) in
-                let dataUri = message as! String
-                if dataUri.isEmpty { return completion(data: nil) }
-                completion(data: self.loadDataUriSource(dataUri))
-            }
-        }
+//        dispatch_async(dispatch_get_main_queue()) {
+//            Image.svgToImageJs.callFunction("svgToImage", argv: "\"\(base64String)\", \(width), \(height)") {
+//                (message: AnyObject) in
+//                let dataUri = message as! String
+//                if dataUri.isEmpty { return completion(data: nil) }
+//                completion(data: self.loadDataUriSource(dataUri))
+//            }
+//        }
     }
     
     private func getTextureFromData(data: NSData, source: String, completion: (texture: CGImageRef?) -> Void) {

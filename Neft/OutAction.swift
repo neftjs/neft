@@ -2,7 +2,7 @@ enum OutAction: Int {
     case
     // basic
     EVENT = 0,
-    
+
     // renderer
     SCREEN_SIZE,
     SCREEN_ORIENTATION,
@@ -24,5 +24,7 @@ enum OutAction: Int {
     FONT_LOAD,
     SCROLLABLE_CONTENT_X,
     SCROLLABLE_CONTENT_Y,
-    TEXT_INPUT_TEXT
+    TEXT_INPUT_TEXT,
+    NATIVE_ITEM_WIDTH,
+    NATIVE_ITEM_HEIGHT
 }

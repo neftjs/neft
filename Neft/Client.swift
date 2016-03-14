@@ -1,7 +1,7 @@
 import UIKit
 
 class Client {
-    let js = Js(name: "neft")
+    let js = JS()
     let reader = Reader()
     
     var actions: Dictionary<InAction, (Reader) -> ()> = [:]
@@ -14,10 +14,15 @@ class Client {
     private static let EventStringType = 3
     
     var outActions: [Int] = []
+    private var outActionsIndex = 0
     var outBooleans: [Bool] = []
+    private var outBooleansIndex = 0
     var outIntegers: [Int] = []
+    private var outIntegersIndex = 0
     var outFloats: [CGFloat] = []
+    private var outFloatsIndex = 0
     var outStrings: [String] = []
+    private var outStringsIndex = 0
     
     init() {
         self.js.addHandler("transferData", handler: {
@@ -70,24 +75,32 @@ class Client {
         onDataProcessed.emit()
     }
     
+    private func pushIntoArray<T>(inout arr: [T], index: Int, val: T) {
+        if arr.count > index {
+            arr[index] = val
+        } else {
+            arr.append(val)
+        }
+    }
+    
     func pushAction(val: OutAction) {
-        outActions.append(val.rawValue)
+        pushIntoArray(&outActions, index: outActionsIndex++, val: val.rawValue)
     }
     
     func pushBoolean(val: Bool) {
-        outBooleans.append(val)
+        pushIntoArray(&outBooleans, index: outBooleansIndex++, val: val)
     }
     
     func pushInteger(val: Int) {
-        outIntegers.append(val)
+        pushIntoArray(&outIntegers, index: outIntegersIndex++, val: val)
     }
     
     func pushFloat(val: CGFloat) {
-        outFloats.append(val)
+        pushIntoArray(&outFloats, index: outFloatsIndex++, val: val)
     }
     
     func pushString(val: String) {
-        outStrings.append(val)
+        pushIntoArray(&outStrings, index: outStringsIndex++, val: val)
     }
     
     func pushEvent(name: String, args: [Any?]?) {
@@ -110,7 +123,7 @@ class Client {
                     pushString(arg as! String)
                 } else {
                     pushInteger(Client.EventNilType)
-                    print("Event can be pushed with a nil, boolean, float or a string, but '\(arg)' given")
+                    print("Event can be pushed with a nil, Bool, CGFloat or a String, but '\(arg)' given")
                 }
             }
         } else {
@@ -122,17 +135,30 @@ class Client {
         customFunctions[name] = function
     }
     
-    func sendData(var codeBefore: String? = "", _ codeAfter: String = "") {
-        if codeBefore == nil {
-            codeBefore = ""
+    /**
+     Removes all elements after the given length.
+     */
+    private func cutDataArray<T>(inout arr: [T], length: Int) {
+        if arr.count > length {
+            arr.removeRange(length..<arr.count)
         }
-        if outActions.count > 0 || codeBefore != "" || codeAfter != "" {
-            self.js.runCode("\(codeBefore!);_neft.native.onData(\(outActions), \(outBooleans), \(outIntegers), \(outFloats), \(outStrings));\(codeAfter)")
-            outActions.removeAll()
-            outIntegers.removeAll()
-            outFloats.removeAll()
-            outBooleans.removeAll()
-            outStrings.removeAll()
-        }
+    }
+    
+    func sendData() {
+        guard outActionsIndex > 0 else { return; }
+        
+        cutDataArray(&outActions, length: outActionsIndex)
+        cutDataArray(&outBooleans, length: outBooleansIndex)
+        cutDataArray(&outIntegers, length: outIntegersIndex)
+        cutDataArray(&outFloats, length: outFloatsIndex)
+        cutDataArray(&outStrings, length: outStringsIndex)
+        
+        outActionsIndex = 0
+        outIntegersIndex = 0
+        outFloatsIndex = 0
+        outBooleansIndex = 0
+        outStringsIndex = 0
+        
+        js.proxy.dataCallback.callWithArguments([outActions, outBooleans, outIntegers, outFloats, outStrings])
     }
 }

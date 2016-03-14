@@ -23,7 +23,9 @@ class Device {
     }
     
     var pixelRatio: CGFloat = 1
+    var lastEvent: UIEvent!
     let app: GameViewController
+    let onTouchEnded = Signal()
     private var view: DeviceView!
     
     class func register(app: GameViewController){
@@ -64,12 +66,15 @@ class Device {
         let touch = touches!.first
         guard touch != nil else { return }
         
+        self.lastEvent = event
+        
         switch touch!.phase {
         case .Began:
             app.client.pushAction(OutAction.POINTER_PRESS)
         case .Moved:
             app.client.pushAction(OutAction.POINTER_MOVE)
         case .Ended, .Cancelled:
+            onTouchEnded.emit()
             app.client.pushAction(OutAction.POINTER_RELEASE)
         default: break
         }
