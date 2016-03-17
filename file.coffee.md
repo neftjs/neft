@@ -24,10 +24,9 @@ File @class
 			if arr?.length
 				i = n = arr.length
 				while file = arr[--i]
-					if file.readyToUse
-						arr[i] = arr[n-1]
-						arr.pop()
-						return file
+					arr[i] = arr[n-1]
+					arr.pop()
+					return file
 
 		@__name__ = 'File'
 		@__path__ = 'File'
@@ -298,7 +297,6 @@ File.parse(*File* file)
 			@isClone = false
 			@uid = utils.uid()
 			@isRendered = false
-			@readyToUse = true
 			@targetNode = null
 			@parent = null
 			@storage = null
@@ -359,7 +357,6 @@ File.parse(*File* file)
 
 			(storage, source) ->
 				assert.notOk @isRendered
-				assert.ok @readyToUse
 
 				if storage?
 					@storage = storage
