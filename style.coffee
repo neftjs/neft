@@ -8,6 +8,9 @@ Renderer = require 'neft-renderer'
 
 log = log.scope 'Styles'
 
+ATTRS_CLASS_PRIORITY = 9999
+PROPS_CLASS_PRIORITY = -2
+
 module.exports = (File, data) -> class Style
 	{windowStyle, styles, queries} = data
 	{Element} = File
@@ -43,7 +46,7 @@ module.exports = (File, data) -> class Style
 		getStyleAttrs = (node) ->
 			attrs = null
 			for attr of node.attrs when node.attrs.hasOwnProperty(attr)
-				if attr is 'class' or attr.slice(0, 6) is 'style:'
+				if attr.slice(0, 6) is 'style:'
 					attrs ?= {}
 					attrs[attr] = true
 			attrs
@@ -96,278 +99,54 @@ module.exports = (File, data) -> class Style
 
 		obj
 
-	emptyComponent = new Renderer.Component
-
-	listenTextRec = (style, node=style.node) ->
-		assert.instanceOf style, Style
-		assert.instanceOf node, File.Element
-
-		style.textWatchingNodes.push node
-		node.onVisibleChange textChangeListener, style
-		if node instanceof Text
-			node.onTextChange textChangeListener, style
-		if node instanceof Tag
-			node.onChildrenChange textChangeListener, style
-
-		if node.children
-			for child in node.children
-				listenTextRec style, child
-
-		return
-
-	textChangeListener = ->
-		if @file.isRendered
-			@updateText()
-
-	attrsChangeListener = (name, oldValue) ->
-		if name is 'href' and @isLink()
-			@item?.linkUri = @getLinkUri()
-
-		if @attrs?[name]
-			@setAttr name, @node.attrs[name], oldValue
-		return
-
 	constructor: ->
 		@file = null
 		@node = null
 		@attrs = null
 		@parent = null
-		@isScope = false
+		@children = []
 		@isAutoParent = true
-		@enabled = true
 		@item = null
 		@scope = null
-		@children = []
-		@textWatchingNodes = []
-		@isTextSet = false
-		@baseText = ''
-		@isLinkUriSet = false
-		@baseLinkUri = ''
-		@parentSet = false
-		@lastItemParent = null
-		@waiting = false
-		@attrsQueue = []
+		@textObject = null
 		@attrsClass = null
-		@isRendered = false
-		@visibilityClass = Renderer.Class.New emptyComponent
-		@visibilityClass.priority = -2
+		@propsClass = null
 
 		Object.seal @
 
-	stylesToRender = []
-	renderStylesPending = false
-	renderStyles = ->
-		renderStylesPending = false
-		for style in stylesToRender
-			style.renderItem()
-		for style in stylesToRender
-			style.findItemIndex()
-		utils.clear stylesToRender
-		return
+	createClassWithPriority: (priority) ->
+		assert.ok @item
 
-	render: ->
-		if @waiting or not @enabled
-			return
-
-		assert.notOk @isRendered
-
-		if @isAutoParent and not @getVisibility()
-			return
-
-		unless @item
-			@reloadItem()
-		unless @item
-			return
-
-		@isRendered = true
-
-		if @isScope
-			@item.document.onShow.emit()
-
-		@item.document.visible = false
-
-		stylesToRender.push @
-		unless renderStylesPending
-			renderStylesPending = true
-			setImmediate renderStyles
-		return
-
-	renderRec: ->
-		@render()
-		for style in @children
-			unless style.isRendered
-				style.renderRec()
-		return
-
-	renderItem: ->
-		if not @item or not @file.isRendered or not @enabled
-			return
-
-		@setItemVisible true
-
-		if @lastItemParent
-			@item.parent = @lastItemParent
-		@findItemParent()
-
-		@item.document.node = @node
-		@baseText = @getTextObject()?.text or ''
-		@updateText()
-		@updateVisibility()
-
-		# set attrs
-		if @attrs
-			if (attrsQueue = @attrsQueue).length
-				for attr, i in attrsQueue by 3
-					@setAttr attr, attrsQueue[i+1], attrsQueue[i+2]
-				utils.clear attrsQueue
-			@attrsClass.enable()
-
-		@item.document.visible = true
-		return
-
-	revert: ->
-		if @waiting or not @isRendered
-			return
-
-		@isRendered = false
-
-		# parent
-		if @isAutoParent and @isScope
-			@item.document.onHide.emit()
-		@item.document.visible = false
-
-		@revertItem()
-		return
-
-	revertItem: ->
-		unless @item
-			return
-
-		@setItemVisible false
-
-		# parent
-		if @isAutoParent
-			@lastItemParent = null
-			if !@parentSet
-				@lastItemParent = @item.parent
-			@item.parent = null
-			@parentSet = false
-
-		itemDocumentNode = @item.document.node
-		@item.document.node = null
-		@item.document.visible = true
-
-		# revert linkUri
-		if @isLinkUriSet
-			@item.linkUri = @baseLinkUri
-			@isLinkUriSet = false
-			@baseLinkUri = ''
-
-		# revert text
-		if @isTextSet
-			@getTextObject().text = @baseText
-			@isTextSet = false
-			@baseText = ''
-		return
+		r = Renderer.Class.New()
+		r.target = @item
+		if priority?
+			r.priority = priority
+		r
 
 	getTextObject: ->
 		{item} = @
-		unless item
-			return
+		assert.isDefined item
+		assert.isNotDefined @textObject
+
 		if @node instanceof Text
 			item
-		else if item._$ and 'text' of item._$
-			item._$
+		else if ($ = item._$) and 'text' of $
+			$
 		else if 'text' of item
 			item
 
 	updateText: ->
-		if @waiting
-			return
+		{textObject, node} = @
+		assert.isDefined textObject
 
-		{node} = @
 		isText = node instanceof Text
 
-		# linkUri
-		anchor = node
-		while anchor = anchor.parent
-			if anchor.style
-				break
-			if anchor.name is 'a'
-				href = anchor.attrs.href
-				if typeof href is 'string'
-					unless @isLinkUriSet
-						@isLinkUriSet = true
-						@baseLinkUri = @item.linkUri
-					@item.linkUri = href
-				break
-
-		# text
-		obj = @getTextObject()
-		if obj
-			# break if already has a parent with text
-			shouldSetText = true
-			parent = node
-			while parent = parent.parent
-				if parent._documentStyle?.isTextSet
-					shouldSetText = false
-					break
-
-			# break if has a styles children
-			if shouldSetText and node instanceof Tag and node.query('[neft:style]')
-				shouldSetText = false
-
-			if shouldSetText
-				if isText
-					text = node.text
-					@setItemVisible text.length > 0
-				else
-					text = node.stringifyChildren()
-
-				if text.length > 0 or @isTextSet
-					@isTextSet = true
-					obj.text = text
-			else
-				if isText
-					@setItemVisible false
-		return
-
-	getVisibility: ->
-		visible = true
-		tmpNode = @node
-		loop
-			visible = tmpNode._visible
-			tmpNode = tmpNode._parent
-			if not visible or not tmpNode or tmpNode._style
-				break
-		visible
-
-	updateVisibility: ->
-		if @waiting
-			return
-
-		if @node instanceof Text and not @isTextSet and @isRendered
-			visible = false
+		if node instanceof Tag
+			text = node.stringifyChildren()
 		else
-			visible = @getVisibility()
+			text = node.text
 
-		if visible and not @isRendered and @file.isRendered
-			@renderRec()
-
-			if @node instanceof Text and not @isTextSet
-				visible = false
-
-		if @item
-			@setItemVisible visible
-		return
-
-	setItemVisible: (val) ->
-		{visibilityClass} = @
-		visible = visibilityClass.changes._attributes.visible
-		if visible isnt val
-			visibilityClass.disable()
-			visibilityClass.changes.setAttribute 'visible', val
-			visibilityClass.enable()
+		textObject.text = text
 		return
 
 	setAttr: do ->
@@ -375,7 +154,6 @@ module.exports = (File, data) -> class Style
 
 		getSplitAttr = do ->
 			cache = Object.create null
-
 			(prop) ->
 				cache[prop] ||= prop.slice(PREFIX_LENGTH).split ':'
 
@@ -391,21 +169,16 @@ module.exports = (File, data) -> class Style
 
 		(attr, val, oldVal) ->
 			assert.instanceOf @, Style
+			assert.isDefined @attrsClass
 
-			if @waiting or not @isRendered or not @item
-				@attrsQueue.push attr, val, oldVal
-				return
-
-			if attr is 'class'
-				@syncClassAttr val, oldVal
-				return true
-
+			{attrsClass} = @
 			props = getSplitAttr attr
 
 			# get object
 			obj = @item
 			for i in [0...props.length-1] by 1
 				unless obj = obj[props[i]]
+					log.warn "Attribute '#{attr}' doesn't exist in item '#{@item}'"
 					return false
 
 			# break if property doesn't exist
@@ -416,21 +189,36 @@ module.exports = (File, data) -> class Style
 
 			# set value
 			internalProp = getInternalProperty prop
+
+			# connect a function to the signal
 			if obj[internalProp] is undefined and typeof obj[prop] is 'function' and obj[prop].connect
 				if typeof oldVal is 'function'
 					obj[prop].disconnect oldVal
 				if typeof val is 'function'
 					obj[prop] val
-			else if @node.attrs[attr] is val and val isnt oldVal
-				@attrsClass.changes.setAttribute getPropertyPath(attr), val
-				obj[prop] = val
+
+			# omit 'null' values for primitive properties;
+			# all attributes from string interpolation may be equal 'null' by default
+			else if val isnt null or typeof internalProp is 'object'
+				isEnabled = attrsClass.running
+				if isEnabled
+					attrsClass.disable()
+				attrsClass.changes.setAttribute getPropertyPath(attr), val
+				if isEnabled
+					attrsClass.enable()
 
 			return true
 
+	###
+	Updates item classes comparing changes between given values.
+	Classes order is preserved.
+	###
 	syncClassAttr: (val, oldVal) ->
 		{item} = @
 		{classes} = item
-		newClasses = val and val.split(' ')
+
+		if typeof val is 'string' and val isnt ''
+			newClasses = val.split(' ')
 
 		# check removed values
 		if typeof oldVal is 'string' and oldVal isnt ''
@@ -440,8 +228,7 @@ module.exports = (File, data) -> class Style
 					classes.remove name
 
 		# add new classes
-		if typeof val is 'string' and val isnt ''
-			newClasses = val.split ' '
+		if newClasses
 			prevIndex = -1
 			for name, i in newClasses when name isnt ''
 				index = classes.index name
@@ -459,98 +246,207 @@ module.exports = (File, data) -> class Style
 
 		return
 
-	isLink: ->
-		@node.name is 'a' and @node.attrs.href? and @node.attrs.href?[0] isnt '#'
+	findAndSetLinkUri: ->
+		assert.isDefined @item
 
-	getLinkUri: ->
-		uri = @node.attrs.href + ''
-		`//<development>`
-		unless ///^([a-z]+:|\/|\$\{)///.test uri
-			log.warn "Relative link found `#{uri}`"
-		`//</development>`
-		uri
+		{node} = @
 
-	reloadItem: ->
-		if @waiting
-			return
+		tmp = node
+		while tmp
+			if tmp._documentStyle and tmp isnt node
+				break
+			if tmp.name is 'a' and tmp.attrs.has('href')
+				@setLinkUri tmp.attrs.href
+				break
+			tmp = tmp.parent
+		return
 
-		unless utils.isClient
-			return
+	setLinkUri: (val) ->
+		if @item
+			@item.linkUri = val+''
+		return
 
-		assert.notOk @item
+	findAndSetVisibility: ->
+		assert.isDefined @item
 
-		if @node instanceof Tag
-			id = @node.attrs['neft:style']
-			assert.isString id
-			@isScope = ///^(styles|renderer)\:///.test id
-		else if @node instanceof Text
-			id = Renderer.Text.New emptyComponent
-			assert.isNotDefined @item
+		{node} = @
 
-		@item = null
-		@scope = null
+		tmp = node
+		while tmp
+			if tmp._documentStyle and tmp isnt node
+				break
+			unless tmp.visible
+				@setVisibility false
+				break
+			tmp = tmp.parent
+		return
 
+	###
+	Sets the item visibility.
+	###
+	setVisibility: (val) ->
+		assert.isBoolean val
+
+		if @item
+			@propsClass ?= @createClassWithPriority PROPS_CLASS_PRIORITY
+			@propsClass.disable()
+			@propsClass.changes._attributes.visible = val
+			@propsClass.enable()
+		return
+
+	###
+	Creates and initializes renderer item based on the node 'neft:style' attribute.
+	The style node 'neft:style' attribute may be:
+		- a 'Renderer.Item' instance - item will be used as is,
+		- a string in format:
+			- 'renderer:Type' where the 'Type' is a Renderer class;
+				a new item will be created,
+			- 'styles:File:Style:SubId' where the 'File' is a property
+				from 'styles' passed to initialize this file,
+				'Style' is a main item id in File,
+				the 'SubId' is a main item children id;
+				an item from the first parent with style 'styles:File:Style' will be used,
+			- 'styles:File:Style' where 'SubId' is unknown and a main item
+				from the Style will be used; matched items will be cloned;
+			- 'styles:File' where 'Style' is a '_main' by default;
+				matched items will be cloned.
+
+	The newly created or found item is initialized.
+	###
+	createItem: ->
+		assert.isNotDefined @item, "Can't create a style item, because it already exists"
+		assert.isNotDefined @node.style, "Can't create a style item, because the node already has a style"
+
+		{node} = @
+
+		if node instanceof Tag
+			id = node.attrs['neft:style']
+			assert.isDefined id, "Tag must specify 'neft:style' attr to create an item for it"
+		else if node instanceof Text
+			id = Renderer.Text.New()
+
+		# use an item from attribute
 		if id instanceof Renderer.Item
 			@item = id
 			@isAutoParent = not id.parent
-		else if @isScope
-			@isAutoParent = true
-			if ///^styles\:///.test(id)
-				match = /^styles:(.+?)(?:\:(.+?))?(?:\:(.+?))?$/.exec id
-				[_, file, style, subid] = match
-				style ?= '_main'
-				if subid
-					parentId = "styles:#{file}:#{style}"
-					parent = @parent
-					loop
-						if parent and parent.node.attrs['neft:style'] is parentId
-							unless parent.scope
-								# parent is not ready yet
-								return
-							scopeParent = parent
-							@item = parent.scope.objects[subid]
-						else if not parent?.scope and file is 'view'
-							@item = windowStyle.objects[subid]
-						if @item or ((not parent or not (parent = parent.parent)) and scope is windowStyle)
-							break
 
-					unless @item
-						log.warn "Can't find `#{id}` style item"
-						return
+		# create an item from styles
+		else if /^styles\:/.test(id)
+			[_, file, style, subid] = id.split(':')
+			style ?= '_main'
+			if subid
+				parentId = "styles:#{file}:#{style}"
+				parent = @parent
 
-					# disable parent's with no possibility to properly synchronize
-					if scopeParent
-						parent = @
-						while (parent = parent.parent) isnt scopeParent
-							if parent.isAutoParent
-								parent.enabled = false
+				loop
+					if parent and parent.node.attrs['neft:style'] is parentId
+						scope = parent.scope
+						@item = scope.objects[subid]
+					else if not parent?.scope and file is 'view'
+						@item = windowStyle.objects[subid]
 
-					@isAutoParent = !@item.parent
+					if @item or not parent
+						break
+
+					parent = parent.parent
+
+				unless @item
+					log.warn "Can't find `#{id}` style item"
+					return
+			else
+				@scope = styles[file]?[style]?.getComponent()
+				if @scope
+					@item = @scope.item
 				else
-					@scope = styles[file]?[style]?.getComponent()
-					if @scope
-						@item = @scope.item
-					else
-						log.warn "Style file `#{id}` can't be find"
-						return
-		else
-			@isAutoParent = false
+					log.warn "Style file `#{id}` can't be find"
 
-		@node.style = @item
+		# create an item from renderer
+		else if /^renderer\:/.test(id)
+			[_, type] = id.split(':')
+			assert.isDefined Renderer[type], "'#{id}' is not defined in Renderer"
+			@item = Renderer[type].New()
+
+		else
+			throw new Error "Unexpected neft:style; '#{id}' given"
 
 		if @item
-			@setItemVisible false
-			if @isLink()
-				@item.linkUri = @getLinkUri()
-			if @attrs
-				@attrsClass.target = @item
-			@visibilityClass.target = @item
+			@isAutoParent = !@item.parent
 
-		# text changes
-		if @getTextObject()
-			listenTextRec @
+			# set visibility
+			@findAndSetVisibility()
 
-		return;
+			# set text
+			if @textObject = @getTextObject()
+				@updateText()
+
+			# set linkUri
+			@findAndSetLinkUri()
+
+			if node instanceof Tag
+				# set attrs
+				if @attrs
+					@attrsClass = @createClassWithPriority ATTRS_CLASS_PRIORITY
+					for key of @attrs
+						@setAttr key, node.attrs[key], null
+					@attrsClass.enable()
+
+				# set class attr
+				if classAttr = node.attrs['class']
+					@syncClassAttr classAttr, ''
+
+			# find parent if necessary or only update index for fixed parents
+			if @isAutoParent
+				@findItemParent()
+			else
+				@findItemIndex()
+
+			# set node style
+			node.style = @item
+
+			# set style node
+			@item.document.node = node
+
+		return
+
+	###
+	Create an item for this style and for children recursively.
+	Item may not be created if it won't be used, that is:
+		- parent is a text style.
+	###
+	createItemDeeply: ->
+		@createItem()
+
+		# optimization - don't create styles inside the text style
+		unless @textObject
+			for child in @children
+				child.createItemDeeply()
+		return
+
+	findItemParent: ->
+		if not @isAutoParent
+			return false
+
+		{node} = @
+		tmpNode = node.parent
+		while tmpNode
+			if style = tmpNode._documentStyle
+				if item = style.item
+					@item.parent = item
+					break
+
+			tmpNode = tmpNode.parent
+
+		unless item
+			@item.parent = null
+			return false
+
+		return true
+
+	setItemParent: (val) ->
+		if @isAutoParent and @item
+			@item.parent = val
+			@findItemIndex()
+		return
 
 	findItemWithParent = (item, parent) ->
 		tmp = item
@@ -560,9 +456,10 @@ module.exports = (File, data) -> class Style
 			tmp = tmpParent
 		return
 
-	findItemIndex = (node, item, parent) ->
-		if not @file.isRendered
-			return
+	findItemIndex: ->
+		{node, item} = @
+		unless parent = item.parent
+			return false
 
 		tmpIndexNode = node
 		parent = parent._children?._target or parent
@@ -575,11 +472,12 @@ module.exports = (File, data) -> class Style
 				if tmpSiblingNode isnt node
 					# get sibling item
 					tmpSiblingDocStyle = tmpSiblingNode._documentStyle
-					if tmpSiblingDocStyle?.parentSet and (tmpSiblingItem = tmpSiblingDocStyle.item)
-						if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
-							if item isnt tmpSiblingTargetItem
-								item.previousSibling = tmpSiblingTargetItem
-							return
+					if tmpSiblingDocStyle and tmpSiblingDocStyle.isAutoParent
+						if tmpSiblingItem = tmpSiblingDocStyle.item
+							if tmpSiblingTargetItem = findItemWithParent(tmpSiblingItem, parent)
+								if item isnt tmpSiblingTargetItem
+									item.previousSibling = tmpSiblingTargetItem
+								return true
 					# check children of special tags
 					else unless tmpSiblingDocStyle
 						tmpIndexNode = tmpSiblingNode
@@ -589,7 +487,7 @@ module.exports = (File, data) -> class Style
 				tmpSiblingNode = tmpSiblingNode._previousSibling
 			# no sibling found, but parent is styled
 			if tmpIndexNode isnt node and tmpIndexNode.style
-				return
+				return true
 			# check parent
 			if tmpSiblingNode = tmpIndexNode._previousSibling
 				tmpIndexNode = tmpSiblingNode
@@ -606,57 +504,24 @@ module.exports = (File, data) -> class Style
 							break
 						child = child.nextSibling
 					item.nextSibling = targetChild
-					return
-		return
-
-	findItemParent: ->
-		if @waiting
-			return
-
-		if @isAutoParent and @item and not @item.parent
-			{node} = @
-			tmpNode = node._parent
-			while tmpNode
-				if style = tmpNode._documentStyle
-					item = style.item
-					if style.node isnt tmpNode
-						item = item._parent
-
-					if item
-						@parentSet = true
-						@item.parent = item
-						break
-
-				tmpNode = tmpNode._parent
-
-			unless item
-				@item.parent = null
-		return
-
-	findItemIndex: ->
-		if @parentSet or not @isAutoParent
-			findItemIndex.call @, @node, @item, @item.parent
-			true
-		else
-			false
+					return true
+		return false
 
 	clone: (originalFile, file) ->
 		clone = new Style
 
 		clone.file = file
-		node = clone.node = originalFile.node.getCopiedElement @node, file.node
-		clone.attrs = @attrs
 
+		node = clone.node = originalFile.node.getCopiedElement @node, file.node
 		node._documentStyle = clone
 
 		if node instanceof Tag
 			styleAttr = node.attrs['neft:style']
 			clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
 
-		# attrs class
+		# set attrs
 		if @attrs
-			clone.attrsClass = Renderer.Class.New emptyComponent
-			clone.attrsClass.priority = 9999
+			clone.attrs = @attrs
 
 		# clone children
 		for child in @children
@@ -664,20 +529,9 @@ module.exports = (File, data) -> class Style
 			child.parent = clone
 			clone.children.push child
 
-		# break for the abstract
-		unless utils.isClient
-			return clone
-
-		# changes
-		if node instanceof Tag
-			clone.node.onAttrsChange attrsChangeListener, clone
-
-		# set attrs
-		if @attrs
-			for attr of @attrs
-				attrVal = clone.node.attrs[attr]
-				if attrVal?
-					clone.setAttr attr, attrVal, null
+		# create item recursively
+		if not @parent and utils.isClient
+			clone.createItemDeeply()
 
 		clone
 
@@ -693,27 +547,5 @@ module.exports = (File, data) -> class Style
 			arr[JSON_ATTRS] = @attrs
 			arr[JSON_CHILDREN] = @children.map callToJSON
 			arr
-
-	# synchronize visibility
-	opts = utils.CONFIGURABLE
-	getter = utils.lookupGetter Element::, 'visible'
-	setter = utils.lookupSetter Element::, 'visible'
-	utils.defineProperty Element::, 'visible', opts, getter, do (_super = setter) ->
-		updateVisibility = (node) ->
-			if style = node._documentStyle
-				hasItem = !!style.item
-				style.updateVisibility()
-				if hasItem and style.isAutoParent
-					return
-			if node instanceof Tag
-				for child in node.children
-					updateVisibility child
-			return
-
-		(val) ->
-			if _super.call @, val
-				updateVisibility @
-				true
-			false
 
 	Style

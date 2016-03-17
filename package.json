@@ -9,5 +9,8 @@
     "type": "git",
     "url": "https://github.com/Neft-io/styles.git"
   },
-  "bugs": "https://github.com/Neft-io/styles/issues"
+  "bugs": "https://github.com/Neft-io/styles/issues",
+  "scripts": {
+    "test": "unit ./"
+  }
 }
