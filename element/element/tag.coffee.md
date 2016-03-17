@@ -224,7 +224,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 *Attrs* Attrs()
 ---------------
 
-		class Attrs
+		@Attrs = class Attrs
 			constructor: (ref) ->
 				utils.defineProperty @, '_ref', 0, ref
 
