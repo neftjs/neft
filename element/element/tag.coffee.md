@@ -258,8 +258,8 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 
 				@hasOwnProperty name
 
-*Any* Attrs::set(*String* name, *Any* value)
---------------------------------------------
+*Boolean* Attrs::set(*String* name, *Any* value)
+------------------------------------------------
 
 			utils.defineProperty @::, 'set', NOT_ENUMERABLE, (name, value) ->
 				assert.isString name
@@ -267,11 +267,13 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 
 				# save change
 				old = @[name]
-				if old isnt value
-					@[name] = value
+				if old is value
+					return false
 
-					# trigger event
-					emitSignal @_ref, 'onAttrsChange', name, old
-					query.checkWatchersDeeply @_ref
+				@[name] = value
 
-				value
+				# trigger event
+				emitSignal @_ref, 'onAttrsChange', name, old
+				query.checkWatchersDeeply @_ref
+
+				true
