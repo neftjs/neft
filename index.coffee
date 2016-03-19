@@ -3,15 +3,14 @@
 utils = require 'neft-utils'
 Document = require 'neft-document'
 
-styles = require('./file/styles')
+require('./file/styles') Document
+require('./file/element') Document
 Style = require('./style')
 
 ATTR_RESOURCES = module.exports.ATTR_RESOURCES =
 	img: ['src']
 
 module.exports = (data) ->
-	styles Document
-
 	Document.Style = Style Document, data
 
 	# support resources when stringifying
@@ -30,4 +29,4 @@ module.exports = (data) ->
 
 				elem
 
-	return
+	Document.Style
