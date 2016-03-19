@@ -31,22 +31,6 @@ Requires standard Neft modules.
 
 			require: require
 
-*Function* globalObject.get(*String* propertyName)
---------------------------------------------------
-
-Gets property value from the local scope.
-
-It's internally used in the string interpolation.
-
-```xml
-<neft:function neft:name="test">
-	return get('user').name;
-</neft:function>
-```
-
-			get: (prop) ->
-				Input.getVal @, prop
-
 		FuncGlobalGetters =
 
 *Arguments* globalObject.arguments
@@ -60,27 +44,10 @@ Array-like object with arguments passed to the function.
 	return [e.x, e.y];
 </neft:function>
 
-<button neft:style:pointer:onMove="${followMouse}" />
+<button style:pointer:onMove="${funcs.followMouse}" />
 ```
 
-			arguments: (_, args) -> args
-
-*Document* globalObject.view
-----------------------------
-
-Reference to the [File][document/File] where the function is placed.
-
-```xml
-<neft:function neft:name="add">
-	return arguments[0] + arguments[1];
-</neft:function>
-
-<neft:function neft:name="print">
-	return "1 + 3 = " + view.funcs.add(1, 3);
-</neft:function>
-```
-
-			view: -> @
+			arguments: (ctx, args) -> args
 
 		funcGlobalProps = Object.keys(FuncGlobalFuncs)
 		Array::push.apply funcGlobalProps, Object.keys(FuncGlobalGetters)
@@ -92,30 +59,32 @@ Reference to the [File][document/File] where the function is placed.
 		bindFuncIntoGlobal: (opts, file) ->
 			assert.instanceOf file, File
 
+			# get bound function from cache
+			if boundFunc = functionsCache[opts.uid]
+				return boundFunc
+
 			# get function
-			unless func = functionsCache[opts.uid]
-				args = funcGlobalProps.concat(opts.arguments)
-				func = functionsCache[opts.uid] = new Function args, opts.body
+			argsNames = funcGlobalProps.concat(opts.arguments)
+			func = new Function argsNames, opts.body
 
 			# get arguments array for further calls
 			args = new Array funcGlobalPropsLength + opts.arguments.length
 			customArgsLength = opts.arguments.length
 
+			# set global props
 			for prop, i in funcGlobalProps
-				if globalFunc = FuncGlobalFuncs[prop]
-					args[i] = globalFunc.bind file
-				else
-					args[i] = null
+				args[i] = FuncGlobalFuncs[prop]
 
-			->
+			# save into cache
+			functionsCache[opts.uid] = (customArgs...) ->
 				# call getters
 				for prop, i in funcGlobalProps
 					if globalGetter = FuncGlobalGetters[prop]
-						args[i] = globalGetter.call file, @, arguments
+						args[i] = globalGetter @, customArgs
 
 				# set function custom arguments
 				for i in [0...customArgsLength] by 1
-					args[funcGlobalPropsLength + i] = arguments[i]
+					args[funcGlobalPropsLength + i] = customArgs[i]
 
 				# call function
-				func.apply this, args
+				func.apply @, args
