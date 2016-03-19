@@ -15,7 +15,8 @@
   },
   "devDependencies": {
     "coffee-script": "latest",
-    "neft-unit": "Neft-io/neft-unit"
+    "neft-unit": "Neft-io/neft-unit",
+    "force-dedupe-git-modules": "^0.3.0"
   },
   "dependencies": {
     "htmlparser2": "^3.9.0",

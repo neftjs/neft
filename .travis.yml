@@ -5,3 +5,4 @@ node_js:
   - "stable"
 before_script:
   - PATH=${PATH//:\.\/node_modules\/\.bin/}
+  - ./node_modules/force-dedupe-git-modules/bin/force-dedupe-git-modules
