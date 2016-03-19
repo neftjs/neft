@@ -98,11 +98,16 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 				i = 0
 				{length} = extensions
 				while extension = extensions[i++]
-					if !extension.name and not extension._bindings?.when
-						extension.enable()
-						if extensions.length < length
-							i--
-							length--
+					if extension._bindings?.when
+						continue
+					if extension instanceof Renderer.Class and extension.name
+						continue
+					if extension instanceof Renderer.Animation
+						continue
+					extension.enable()
+					if extensions.length < length
+						i--
+						length--
 
 		# init objects
 		for id, item of @objects
