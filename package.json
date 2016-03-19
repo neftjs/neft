@@ -9,5 +9,24 @@
     "type": "git",
     "url": "https://github.com/Neft-io/renderer.git"
   },
-  "bugs": "https://github.com/Neft-io/renderer/issues"
+  "bugs": "https://github.com/Neft-io/renderer/issues",
+  "scripts": {
+    "test": "unit ./spec/"
+  },
+  "devDependencies": {
+    "coffee-script": "latest",
+    "neft-unit": "Neft-io/neft-unit"
+  },
+  "dependencies": {
+    "neft-utils": "Neft-io/neft-utils",
+    "neft-assert": "Neft-io/neft-assert",
+    "neft-signal": "Neft-io/neft-signal",
+    "neft-log": "Neft-io/neft-log",
+    "neft-binding": "Neft-io/neft-binding",
+    "neft-typed-array": "Neft-io/neft-typed-array",
+    "neft-document": "Neft-io/neft-document",
+    "neft-list": "Neft-io/neft-list",
+    "neft-native": "Neft-io/neft-native",
+    "neft-resources": "Neft-io/neft-resources"
+  }
 }
