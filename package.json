@@ -11,6 +11,19 @@
   },
   "bugs": "https://github.com/Neft-io/styles/issues",
   "scripts": {
-    "test": "unit ./"
+    "test": "unit ./spec/"
+  },
+  "devDependencies": {
+    "coffee-script": "latest",
+    "neft-unit": "Neft-io/neft-unit",
+    "force-dedupe-git-modules": "^0.3.0"
+  },
+  "dependencies": {
+    "neft-utils": "Neft-io/neft-utils",
+    "neft-assert": "Neft-io/neft-assert",
+    "neft-signal": "Neft-io/neft-signal",
+    "neft-document": "Neft-io/neft-document",
+    "neft-renderer": "Neft-io/neft-renderer",
+    "neft-log": "Neft-io/neft-log"
   }
 }
