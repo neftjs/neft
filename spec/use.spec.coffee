@@ -42,3 +42,14 @@ describe 'neft:use', ->
 
 		renderParse view
 		assert.is view.node.stringify(), '1111'
+
+	it 'can be rendered using short use: syntax', ->
+		view = View.fromHTML uid(), """
+			<neft:fragment neft:name="a-b"><b></b></neft:fragment>
+			<use:a-b />
+		"""
+		View.parse view
+		view = view.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '<b></b>'

@@ -21,14 +21,24 @@ Tag used to place a [neft:fragment][document/neft:fragment@xml].
 <neft:use neft:fragment="h${data.level}" />
 ```
 
+Short version of `neft:use` is a tag prefixed by `use:`.
+
+```xml
+<neft:fragment neft:name="user">
+  This is a user
+</neft:fragment>
+
+<use:user />
+```
+
 `neft:use` attributes are available in the [neft:fragment][document/neft:fragment@xml] scope.
 
 ```xml
 <neft:fragment neft:name="h1">
-  <h1>H1: ${data}</h1>
+  <h1>H1: ${attrs.data}</h1>
 </neft:fragment>
 
-<neft:use neft:fragment="h1" data="Test heading" />
+<use:h1 data="Test heading" />
 ```
 
 ## neft:async
@@ -38,7 +48,7 @@ Renders fragment on the first free animation frame.
 Use this attribute to render less important elements.
 
 ```xml
-<neft:use neft:fragment="body" neft:async />
+<use:body neft:async />
 ```
 
 	'use strict'
@@ -54,8 +64,14 @@ Use this attribute to render less important elements.
 
 			node.children.forEach forNode
 
+			# change short syntax to long formula
+			if /^use\:/.test(node.name)
+				fragment = node.name.slice 'use:'.length
+				node.name = 'neft:use'
+				node.attrs['neft:fragment'] = fragment
+
 			# get uses
-			if node.name is "neft:use"
+			if node.name is 'neft:use'
 				node.name = 'neft:blank'
 				uses.push new File.Use file, node
 
