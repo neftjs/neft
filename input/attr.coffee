@@ -50,6 +50,8 @@ module.exports = (File, Input) -> class InputAttr extends Input
 
 	createHandlerFunc = (input) ->
 		(arg1, arg2) ->
+			unless input.file.isRendered
+				return
 			r = input.binding.func.apply input, input.file.inputArgs
 			if typeof r is 'function'
 				r.call @, arg1, arg2

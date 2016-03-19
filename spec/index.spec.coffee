@@ -402,6 +402,24 @@ describe 'string interpolation', ->
 		view.node.query('span').attrs.set 'x', 2
 		assert.is calls, 1
 
+	it 'attribute handler is not called if the document is not rendered', ->
+		source = View.fromHTML uid(), """
+			<neft:attr name="y" value="3" />
+			<span x="1" id="a1" onAttrsChange="${this.onAttrsChange()}" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		calls = 0
+		renderParse view,
+			storage:
+				onAttrsChange: (x, y) ->
+					calls += 1
+
+		view.revert()
+		view.node.query('span').attrs.set 'x', 2
+		assert.is calls, 0
+
 	describe 'support realtime changes', ->
 		it 'on `attrs`', ->
 			source = View.fromHTML uid(), """
