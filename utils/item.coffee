@@ -136,7 +136,9 @@ module.exports = (Renderer, Impl) ->
 				setOpts.call object, component, opts
 			return
 
+		emptyComponent = null
 		@initialize = (object, component, opts) ->
+			component ?= (emptyComponent ?= new Renderer.Component)
 			assert.instanceOf component, Renderer.Component
 			Object.seal object
 			object._component = component

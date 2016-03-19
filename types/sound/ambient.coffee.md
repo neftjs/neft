@@ -25,7 +25,7 @@ AmbientSound @class
 		@__name__ = 'AmbientSound'
 		@__path__ = 'Renderer.AmbientSound'
 
-*AmbientSound* AmbientSound.New(*Component* component, [*Object* options])
+*AmbientSound* AmbientSound.New([*Component* component, *Object* options])
 --------------------------------------------------------------------------
 
 		@New = (component, opts) ->

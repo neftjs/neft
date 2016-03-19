@@ -30,7 +30,7 @@ Transition @modifier
 	module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
 		@__name__ = 'Transition'
 
-*Transition* Transition.New(*Component* component, [*Object* options])
+*Transition* Transition.New([*Component* component, *Object* options])
 ----------------------------------------------------------------------
 
 		@New = (component, opts) ->

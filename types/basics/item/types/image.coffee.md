@@ -27,7 +27,7 @@ Image @class
 		@__name__ = 'Image'
 		@__path__ = 'Renderer.Image'
 
-*Image* Image.New(*Component* component, [*Object* options])
+*Image* Image.New([*Component* component, *Object* options])
 ------------------------------------------------------------
 
 		@New = (component, opts) ->

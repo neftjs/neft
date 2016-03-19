@@ -13,7 +13,7 @@ Scrollable @class
 		@__name__ = 'Scrollable'
 		@__path__ = 'Renderer.Scrollable'
 
-*Scrollable* Scrollable.New(*Component* component, [*Object* options])
+*Scrollable* Scrollable.New([*Component* component, *Object* options])
 ----------------------------------------------------------------------
 
 		@New = (component, opts) ->

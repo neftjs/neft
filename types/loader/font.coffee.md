@@ -135,7 +135,7 @@ FontLoader @class
 
 			result
 
-*FontLoader* FontLoader.New(*Component* component, [*Object* options])
+*FontLoader* FontLoader.New([*Component* component, *Object* options])
 ----------------------------------------------------------------------
 
 		@New = (component, opts) ->

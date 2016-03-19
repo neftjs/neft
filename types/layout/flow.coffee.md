@@ -23,7 +23,7 @@ Flow @class
 		@__name__ = 'Flow'
 		@__path__ = 'Renderer.Flow'
 
-*Flow* Flow.New(*Component* component, [*Object* options])
+*Flow* Flow.New([*Component* component, *Object* options])
 ----------------------------------------------------------
 
 		@New = (component, opts) ->

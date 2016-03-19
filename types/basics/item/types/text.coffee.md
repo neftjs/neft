@@ -36,7 +36,7 @@ Text @class
 				u: true
 				a: true
 
-*Text* Text.New(*Component* component, [*Object* options])
+*Text* Text.New([*Component* component, *Object* options])
 ----------------------------------------------------------
 
 			@New = (component, opts) ->

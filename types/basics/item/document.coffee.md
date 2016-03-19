@@ -11,12 +11,10 @@ Document @extension
 	log = log.scope 'Renderer', 'Document'
 
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
-		Document = DocElement = DocTag = DocText = null
-		setImmediate ->
-			Document = require 'neft-document'
-			DocElement = Document.Element
-			DocTag = DocElement.Tag
-			DocText = DocElement.Text
+		Document = require 'neft-document'
+		DocElement = Document.Element
+		DocTag = DocElement.Tag
+		DocText = DocElement.Text
 
 		@__name__ = 'Document'
 

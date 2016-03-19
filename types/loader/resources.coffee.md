@@ -36,7 +36,7 @@ ResourcesLoader @class
 					getResources val, target
 			target
 
-*ResourcesLoader* ResourcesLoader.New(*Component* component, [*Object* options])
+*ResourcesLoader* ResourcesLoader.New([*Component* component, *Object* options])
 --------------------------------------------------------------------------------
 
 		@New = (component, opts) ->

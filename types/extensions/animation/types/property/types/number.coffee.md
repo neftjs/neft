@@ -23,7 +23,7 @@ NumberAnimation @modifier
 	module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
 		@__name__ = 'NumberAnimation'
 
-*NumberAnimation* NumberAnimation.New(*Component* component, [*Object* options])
+*NumberAnimation* NumberAnimation.New([*Component* component, *Object* options])
 --------------------------------------------------------------------------------
 
 		@New = (component, opts) ->

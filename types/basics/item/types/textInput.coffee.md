@@ -16,7 +16,7 @@ TextInput @class
 			@__name__ = 'TextInput'
 			@__path__ = 'Renderer.TextInput'
 
-*TextInput* TextInput.New(*Component* component, [*Object* options])
+*TextInput* TextInput.New([*Component* component, *Object* options])
 --------------------------------------------------------------------
 
 			@New = (component, opts) ->

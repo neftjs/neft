@@ -17,7 +17,7 @@ Item @class
 		@__name__ = 'Item'
 		@__path__ = 'Renderer.Item'
 
-*Item* Item.New(*Component* component, [*Object* options])
+*Item* Item.New([*Component* component, *Object* options])
 ----------------------------------------------------------
 
 		@New = (component, opts) ->

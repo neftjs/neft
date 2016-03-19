@@ -23,7 +23,7 @@ Rectangle @class
 			@__name__ = 'Rectangle'
 			@__path__ = 'Renderer.Rectangle'
 
-*Rectangle* Rectangle.New(*Component* component, [*Object* options])
+*Rectangle* Rectangle.New([*Component* component, *Object* options])
 --------------------------------------------------------------------
 
 			@New = (component, opts) ->

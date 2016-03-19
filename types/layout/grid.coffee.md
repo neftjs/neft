@@ -23,7 +23,7 @@ Grid @class
 		@__name__ = 'Grid'
 		@__path__ = 'Renderer.Grid'
 
-*Grid* Grid.New(*Component* component, [*Object* options])
+*Grid* Grid.New([*Component* component, *Object* options])
 ----------------------------------------------------------
 
 		@New = (component, opts) ->

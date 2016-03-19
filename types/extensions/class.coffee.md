@@ -48,7 +48,7 @@ Class @modifier
 		class Class extends Renderer.Extension
 			@__name__ = 'Class'
 
-*Class* Class.New(*Component* component, [*Object* options])
+*Class* Class.New([*Component* component, *Object* options])
 ------------------------------------------------------------
 
 			@New = (component, opts) ->

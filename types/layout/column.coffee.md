@@ -20,7 +20,7 @@ Column @class
 		@__name__ = 'Column'
 		@__path__ = 'Renderer.Column'
 
-*Column* Column.New(*Component* component, [*Object* options])
+*Column* Column.New([*Component* component, *Object* options])
 --------------------------------------------------------------
 
 		@New = (component, opts) ->

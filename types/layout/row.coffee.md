@@ -20,7 +20,7 @@ Row @class
 		@__name__ = 'Row'
 		@__path__ = 'Renderer.Row'
 
-*Row* Row.New(*Component* component, [*Object* options])
+*Row* Row.New([*Component* component, *Object* options])
 --------------------------------------------------------
 
 		@New = (component, opts) ->
