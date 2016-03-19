@@ -650,6 +650,39 @@ console.log(object.length);
 
 			obj
 
+*NotPrimitive* utils.overrideProperty(*NotPrimitive* object, *String* property, [*Any* value, *Function* setter])
+-----------------------------------------------------------------------------------------------------------------
+
+	exports.overrideProperty = (obj, prop, getter, setter) ->
+		unless desc = exports.getPropertyDescriptor(obj, prop)
+			throw new Error "utils.overrideProperty object must has the given property"
+		unless desc.configurable
+			throw new Error "utils.overrideProperty the given property is not configurable"
+
+		# get bitmask descriptors
+		opts = exports.CONFIGURABLE
+		if desc.writable
+			opts |= exports.WRITABLE
+		if desc.enumerable
+			opts |= exports.ENUMERABLE
+
+		# get values
+		if getter isnt undefined and setter isnt undefined
+			if desc.get?
+				if typeof getter is 'function'
+					getter = getter desc.get
+				else
+					getter = desc.get
+			if desc.set?
+				if typeof setter is 'function'
+					setter = setter desc.set
+				else
+					setter = desc.set
+		else if typeof getter is typeof desc.value is 'function'
+			getter = getter desc.value
+
+		exports.defineProperty obj, prop, opts, getter, setter
+
 *Any* utils.clone(*Any* param)
 ------------------------------
 
