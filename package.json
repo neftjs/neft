@@ -9,5 +9,12 @@
     "type": "git",
     "url": "https://github.com/Neft-io/neft-binding.git"
   },
-  "bugs": "https://github.com/Neft-io/neft-binding/issues"
+  "bugs": "https://github.com/Neft-io/neft-binding/issues",
+  "dependencies": {
+    "neft-utils": "Neft-io/neft-utils",
+    "neft-assert": "Neft-io/neft-assert",
+    "neft-log": "Neft-io/neft-log",
+    "neft-dict": "Neft-io/neft-dict",
+    "neft-list": "Neft-io/neft-list"
+  }
 }
