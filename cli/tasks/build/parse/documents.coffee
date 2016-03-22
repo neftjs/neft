@@ -49,7 +49,8 @@ module.exports = (platform, app, callback) ->
 
 	saveView = (name, view, callback) ->
 		json = JSON.stringify view
-		fs.outputFile "#{OUT_DIR}/#{name}.json", json, 'utf-8', callback
+		json = "module.exports = #{json}"
+		fs.outputFile "#{OUT_DIR}/#{name}.js", json, 'utf-8', callback
 
 	onFilesParsed = ->
 		stack = new utils.async.Stack
@@ -66,7 +67,7 @@ module.exports = (platform, app, callback) ->
 		for name, view of Document._files
 			app.views.push
 				name: name
-				path: "#{OUT_DIR}/#{name}.json"
+				path: "#{OUT_DIR}/#{name}.js"
 
 		Document.onError.disconnect onErrorListener
 		Document.onBeforeParse.disconnect onBeforeParseListener
