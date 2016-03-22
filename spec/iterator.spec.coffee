@@ -41,7 +41,7 @@ describe 'neft:each', ->
 		assert.is view.node.stringify(), '<ul>1,21,2</ul>'
 
 	it 'supports runtime updates', ->
-		source = View.fromHTML uid(), '<ul neft:each="${this.arr}">${attrs.each[attrs.index]}</ul>'
+		source = View.fromHTML uid(), '<ul neft:each="${attrs.arr}">${attrs.each[attrs.index]}</ul>'
 		View.parse source
 		view = source.clone()
 
@@ -59,8 +59,8 @@ describe 'neft:each', ->
 		arr.append 3
 		assert.is view.node.stringify(), '<ul>123</ul>'
 
-	it 'access global `this`', ->
-		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${this.a}</ul>'
+	it 'access global `attrs`', ->
+		source = View.fromHTML uid(), '<ul neft:each="[1,2]">${attrs.a}</ul>'
 		View.parse source
 		view = source.clone()
 

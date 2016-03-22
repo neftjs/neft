@@ -34,8 +34,6 @@ module.exports = (File) -> class Use
 			if @isRendered
 				@revert()
 				@render()
-		else if file = @usedFragment
-			file.inputAttrs.set name, @node.attrs[name]
 		return
 
 	queue = []

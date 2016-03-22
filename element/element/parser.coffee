@@ -117,6 +117,10 @@ module.exports = (Element) ->
 		html = html.replace /<neft:function([^>]*)>/g, '$&<![CDATA['
 		html = html.replace /<\/neft:function>/gi, ']]>$&'
 
+		# support neft:script
+		html = html.replace /<neft:script([^>]*)>/g, '$&<![CDATA['
+		html = html.replace /<\/neft:script>/gi, ']]>$&'
+
 		parser.write html
 		parser.end()
 
