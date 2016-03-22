@@ -420,9 +420,9 @@ Acceptable syntaxes:
 					r = tmplView.use(useName, r)
 				else
 					r = tmplView
-				if tmplView.storage.routes.has(useName)
-					tmplView.storage.routes.pop useName
-				tmplView.storage.routes.set useName, @
+				if tmplView.attrs.routes.has(useName)
+					tmplView.attrs.routes.pop useName
+				tmplView.attrs.routes.set useName, @
 				@_destroyViewOnEnd = false
 			else
 				@_destroyViewOnEnd = true
