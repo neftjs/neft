@@ -19,7 +19,7 @@ Tag @virtual_dom
 
 	module.exports = (Element) -> class Tag extends Element
 		@INTERNAL_TAGS = ['neft:attr', 'neft:fragment', 'neft:function', 'neft:rule',
-		'neft:target', 'neft:use', 'neft:require', 'neft:blank', 'neft:log']
+		'neft:target', 'neft:use', 'neft:require', 'neft:blank', 'neft:log', 'neft:script']
 
 		@DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null
 

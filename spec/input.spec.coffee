@@ -66,22 +66,56 @@ describe 'string interpolation', ->
 			child.attrs.set 'x', 3
 			assert.is view.node.stringify(), '3'
 
-	it '`this` refers to the global storage', ->
-		source = View.fromHTML uid(), """
-			<neft:fragment neft:name="a">
-				<neft:fragment neft:name="b">
-					${this.x}, ${this.b.a}
+		it 'always keeps proper sources order', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a" x="1">
+					<neft:fragment neft:name="b" x="1">
+						${attrs.x}
+					</neft:fragment>
+					<neft:use neft:fragment="b" x="4" />
 				</neft:fragment>
-				<neft:use neft:fragment="b" />
-			</neft:fragment>
-			<neft:use neft:fragment="a" />
-		"""
-		View.parse source
-		view = source.clone()
+				<neft:use neft:fragment="a" x="3" />
+			"""
+			View.parse source
+			view = source.clone()
 
-		renderParse view,
-			storage: x: 2, b: {a: 1}
-		assert.is view.node.stringify(), '2, 1'
+			renderParse view,
+				storage: storage = new Dict x: 2
+
+			useA = view.node.children[0]
+			fragmentA = useA.children[0]
+			useB = fragmentA.children[0]
+			fragmentB = useB.children[0]
+			assert.is view.node.stringify(), '4'
+
+			storage.set 'x', -1
+			fragmentA.attrs.set 'x', -1
+			useA.attrs.set 'x', -1
+			fragmentB.attrs.set 'x', -1
+			assert.is view.node.stringify(), '4'
+
+			storage.set 'x', 2
+			fragmentA.attrs.set 'x', 1
+			useA.attrs.set 'x', 3
+			fragmentB.attrs.set 'x', 1
+
+			useB.attrs.set 'x', undefined
+			assert.is view.node.stringify(), '3'
+
+			useA.attrs.set 'x', undefined
+			assert.is view.node.stringify(), '2'
+
+			storage.pop 'x'
+			assert.is view.node.stringify(), '1'
+
+			fragmentB.attrs.set 'x', 2
+			assert.is view.node.stringify(), '1'
+
+			fragmentA.attrs.set 'x', 3
+			assert.is view.node.stringify(), '3'
+
+			fragmentA.attrs.set 'x', undefined
+			assert.is view.node.stringify(), '2'
 
 	it '`ids` refers to nodes', ->
 		source = View.fromHTML uid(), """
@@ -162,7 +196,7 @@ describe 'string interpolation', ->
 
 	it 'handler is called on signal', ->
 		source = View.fromHTML uid(), """
-			<span x="1" onAttrsChange="${this.onAttrsChange(2)}" />
+			<span x="1" onAttrsChange="${attrs.onAttrsChange(2)}" />
 		"""
 		View.parse source
 		view = source.clone()
@@ -179,7 +213,7 @@ describe 'string interpolation', ->
 
 	it 'returned handler is called on signal with context and parameters', ->
 		source = View.fromHTML uid(), """
-			<span x="1" onAttrsChange="${this.onAttrsChange}" />
+			<span x="1" onAttrsChange="${attrs.onAttrsChange}" />
 		"""
 		View.parse source
 		view = source.clone()
@@ -199,7 +233,7 @@ describe 'string interpolation', ->
 	it 'attribute handler is called with proper context and parameters', ->
 		source = View.fromHTML uid(), """
 			<neft:attr name="y" value="3" />
-			<span x="1" id="a1" onAttrsChange="${this.onAttrsChange(ids.a1.attrs.x, attrs.y)}" />
+			<span x="1" id="a1" onAttrsChange="${attrs.onAttrsChange(ids.a1.attrs.x, attrs.y)}" />
 		"""
 		View.parse source
 		view = source.clone()
@@ -247,8 +281,8 @@ describe 'string interpolation', ->
 			elem.attrs.set 'x', 1
 			assert.is view.node.stringify(), '1'
 
-		it 'on `this`', ->
-			source = View.fromHTML uid(), "${this.x}"
+		it 'on file `attrs`', ->
+			source = View.fromHTML uid(), "${attrs.x}"
 			View.parse source
 			view = source.clone()
 
@@ -261,8 +295,8 @@ describe 'string interpolation', ->
 			storage.set 'x', 2
 			assert.is view.node.stringify(), '2'
 
-		it 'on `this` deeply', ->
-			source = View.fromHTML uid(), "${this.dict.x}"
+		it 'on file `attrs` deeply', ->
+			source = View.fromHTML uid(), "${attrs.dict.x}"
 			View.parse source
 			view = source.clone()
 

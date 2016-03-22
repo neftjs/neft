@@ -20,13 +20,7 @@ File @class
 		pool = Object.create null
 
 		getFromPool = (path) ->
-			arr = pool[path]
-			if arr?.length
-				i = n = arr.length
-				while file = arr[--i]
-					arr[i] = arr[n-1]
-					arr.pop()
-					return file
+			pool[path]?.pop()
 
 		@__name__ = 'File'
 		@__path__ = 'File'
@@ -216,6 +210,7 @@ File.parse(*File* file)
 
 			rules = require('./file/parse/rules') File
 			fragments = require('./file/parse/fragments') File
+			scripts = require('./file/parse/scripts') File
 			attrs = require('./file/parse/attrs') File
 			attrChanges = require('./file/parse/attrChanges') File
 			iterators = require('./file/parse/iterators') File
@@ -240,6 +235,7 @@ File.parse(*File* file)
 				# parse
 				rules file
 				fragments file
+				scripts file
 				iterators file
 				attrs file
 				attrChanges file
@@ -300,6 +296,8 @@ File.parse(*File* file)
 			@targetNode = null
 			@parent = null
 			@storage = null
+			@attrs = null
+			@storageConstructor = null
 			@source = null
 			@parentUse = null
 
@@ -320,7 +318,7 @@ File.parse(*File* file)
 			@inputAttrs = new Dict
 			@inputArgs = [@inputIds, @inputFuncs, @inputAttrs]
 
-			@node.onAttrsChange onNodeAttrsChange, @
+			@node.onAttrsChange @_updateInputAttrsKey, @
 			@inputAttrs.extend @node.attrs
 
 			`//<development>`
@@ -328,64 +326,79 @@ File.parse(*File* file)
 				Object.preventExtensions @
 			`//</development>`
 
-*File* File::render([*Any* data, *File* source])
-------------------------------------------------
+*File* File::render([*Any* attrs, *File* source])
+-------------------------------------------------
 
-		render: (storage, source) ->
+		render: (attrs, source) ->
 			unless @isClone
-				@clone().render storage, source
+				@clone().render attrs, source
 			else
-				@_render(storage, source)
+				@_render(attrs, source)
 
-		onNodeAttrsChange = (name) ->
-			if @source and @source.file.inputAttrs isnt @source.node.attrs[name] isnt undefined
-				return
-			@inputAttrs.set name, @node.attrs[name]
-			return
+		_updateInputAttrsKey: (key) ->
+			{inputAttrs, source, attrs} = @
+			viewAttrs = @node.attrs
 
-		onSourceFileAttrsChange = (name) ->
-			if @source.node.attrs[name] is undefined
-				@inputAttrs.set name, @source.file.inputAttrs[name]
-			return
+			if source
+				val = source.node.attrs[key]
+				if val is undefined and attrs
+					val = attrs[key]
+				if val is undefined
+					val = source.file.inputAttrs[key]
+				if val is undefined
+					val = viewAttrs[key]
+			else
+				if attrs
+					val = attrs[key]
+				if val is undefined
+					val = viewAttrs[key]
 
-		onSourceNodeAttrsChange = (name) ->
-			@inputAttrs.set name, @source.node.attrs[name]
+			if val is undefined
+				inputAttrs.pop key
+			else
+				inputAttrs.set key, val
 			return
 
 		_render: do ->
 			renderTarget = require('./file/render/parse/target') File
 
-			(storage, source) ->
+			(attrs=true, source) ->
 				assert.notOk @isRendered
 
-				if storage?
-					@storage = storage
+				@attrs = attrs
 				@source = source
+
+				{inputAttrs, inputIds, inputFuncs} = @
+
+				if attrs instanceof Dict
+					attrs.onChange @_updateInputAttrsKey, @
 
 				if source?
 					# attrs
-					{inputAttrs} = @
 					viewAttrs = @node.attrs
 					sourceFileAttrs = source.file.inputAttrs
 					sourceAttrs = source.node.attrs
-					sourceFileAttrs.onChange onSourceFileAttrsChange, @
-					source.node.onAttrsChange onSourceNodeAttrsChange, @
+					sourceFileAttrs.onChange @_updateInputAttrsKey, @
+					source.node.onAttrsChange @_updateInputAttrsKey, @
 					for prop, val of inputAttrs
-						if viewAttrs[prop] is sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
+						if viewAttrs[prop] is attrs[prop] is sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
 							inputAttrs.pop prop
-					for ptop, val of viewAttrs
-						if sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
+					for prop, val of viewAttrs
+						if attrs[prop] is sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
 							if val isnt undefined
 								inputAttrs.set prop, val
 					for prop, val of sourceFileAttrs
-						if sourceAttrs[prop] is undefined
+						if sourceAttrs[prop] is attrs[prop] is undefined
 							inputAttrs.set prop, val
+					for prop, val of attrs
+						if sourceAttrs[prop] is undefined
+							if val isnt undefined
+								inputAttrs.set prop, val
 					for prop, val of sourceAttrs
 						if val isnt undefined
 							inputAttrs.set prop, val
 
 					# ids
-					{inputIds} = @
 					viewIds = @ids
 					sourceIds = source.file.inputIds
 					for prop, val of inputIds
@@ -398,7 +411,6 @@ File.parse(*File* file)
 						inputIds.set prop, val
 
 					# funcs
-					{inputFuncs} = @
 					viewFuncs = @funcs
 					sourceFuncs = source.file.inputFuncs
 					for prop, val of inputFuncs
@@ -409,9 +421,23 @@ File.parse(*File* file)
 							inputFuncs.set prop, val
 					for prop, val of viewFuncs
 						inputFuncs.set prop, val
+				else
+					# attrs
+					viewAttrs = @node.attrs
+					for prop, val of inputAttrs
+						if viewAttrs[prop] is attrs[prop] is undefined
+							inputAttrs.pop prop
+					for prop, val of viewAttrs
+						if attrs[prop] is undefined
+							if val isnt undefined
+								inputAttrs.set prop, val
+					for prop, val of attrs
+						if val isnt undefined
+							inputAttrs.set prop, val
 
 				File.onBeforeRender.emit @
 				emitNodeSignal @, 'neft:onBeforeRender'
+				@storage?.onBeforeRender?()
 
 				# inputs
 				for input, i in @inputs
@@ -442,6 +468,7 @@ File.parse(*File* file)
 				@isRendered = true
 				File.onRender.emit @
 				emitNodeSignal @, 'neft:onRender'
+				@storage?.onRender?()
 
 				@
 
@@ -456,11 +483,15 @@ File.parse(*File* file)
 				@isRendered = false
 				File.onBeforeRevert.emit @
 				emitNodeSignal @, 'neft:onBeforeRevert'
+				@storage?.onBeforeRevert?()
+
+				if @attrs instanceof Dict
+					@attrs.onChange.disconnect @_updateInputAttrsKey, @
 
 				# attrs
 				if @source
-					@source.file.inputAttrs.onChange.disconnect onSourceFileAttrsChange, @
-					@source.node.onAttrsChange.disconnect onSourceNodeAttrsChange, @
+					@source.file.inputAttrs.onChange.disconnect @_updateInputAttrsKey, @
+					@source.node.onAttrsChange.disconnect @_updateInputAttrsKey, @
 
 				# parent use
 				@parentUse?.detachUsedFragment()
@@ -483,11 +514,12 @@ File.parse(*File* file)
 				# target
 				target @, @source
 
-				@storage = null
+				@attrs = null
 				@source = null
 
 				File.onRevert.emit @
 				emitNodeSignal @, 'neft:onRevert'
+				@storage?.onRevert?()
 
 				@
 
@@ -586,6 +618,16 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
 			# logs
 			for log in @logs
 				clone.logs.push log.clone @, clone
+
+			# storage
+			if @storageConstructor
+				storage = Object.create @storageConstructor::
+				storage.node = clone.node
+				storage.attrs = clone.inputAttrs
+				storage.ids = clone.inputIds
+				storage.funcs = clone.inputFuncs
+				@storageConstructor.call storage
+				clone.storage = storage
 
 			clone
 

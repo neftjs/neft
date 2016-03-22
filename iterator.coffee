@@ -152,7 +152,7 @@ module.exports = (File) -> class Iterator
 		newChild.attrs.set 'each', each
 		newChild.attrs.set 'index', i
 		newChild.attrs.set 'item', item
-		usedFragment.render @file.storage, @
+		usedFragment.render null, @
 
 		# signal
 		usedFragment.onReplaceByUse.emit @
