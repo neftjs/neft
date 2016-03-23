@@ -1,19 +1,15 @@
 'use strict'
 
-fs = require 'fs'
-cp = require 'child_process'
+fs = require 'fs-extra'
 pathUtils = require 'path'
-groundskeeper = require 'groundskeeper'
-uglify = require 'uglify-js'
 Module = require 'module'
+cp = require 'child_process'
 
 {utils, log, assert} = Neft
 
-processFile = require './process'
-buildResult = require './result'
-
-RELEASE_NAMESPACES_TO_REMOVE = ['assert', 'Object.freeze',
-	'Object.seal', 'Object.preventExtensions']
+release = require './release'
+minify = require './minify'
+bundle = require './bundle'
 
 module.exports = (opts, callback) ->
 	assert.isPlainObject opts
@@ -21,72 +17,49 @@ module.exports = (opts, callback) ->
 	assert.isString opts.path
 	assert.isFunction callback
 
-	BUNDLE_FILE_PATH = __dirname + "/bundle.#{utils.uid()}.tmp.js"
-
 	unless opts.verbose
 		log.enabled = log.ERROR
 
 	logtime = log.time 'Resolve bundle modules'
-	fs.writeFileSync BUNDLE_FILE_PATH, "(#{processFile})()"
 
-	index = pathUtils.resolve fs.realpathSync('.'), opts.path
-	child = cp.fork BUNDLE_FILE_PATH, [index, JSON.stringify(opts)]
-	child.on 'exit', ->
-		fs.unlinkSync BUNDLE_FILE_PATH
-	child.on 'message', (msg) ->
-		log.end logtime
-		child.kill()
-
-		# on error
-		if msg.err
-			return callback msg.err
-
-		logtime = log.time 'Build bundle'
-		bundle = buildResult
-			modules: msg.modules
-			paths: msg.paths
-			path: opts.path
-		log.end logtime
-
-		# release mode
-		if opts.release
-			logtime = log.time 'Release mode'
-			namespaces = utils.clone RELEASE_NAMESPACES_TO_REMOVE
-
-			if opts.removeLogs
-				namespaces.push 'log'
-
-			bundle = bundle.replace ///\/\/<(\/)?development>;///g, '//<$1development>'
-			bundle = bundle.replace /, assert,;/g, ', '
-			bundle = bundle.replace /\ assert, |, assert;/g, ' '
-			if opts.removeLogs
-				bundle = bundle.replace /, log,;/g, ', '
-				bundle = bundle.replace /\ log, |, log;/g, ' '
-			cleaner = groundskeeper
-				console: true
-				namespace: namespaces
-				replace: 'true'
-			cleaner.write bundle
-			bundle = cleaner.toString()
-			log.end logtime
+	# stringify opts into JSON
+	processOpts = JSON.stringify opts, (key, val) ->
+		if typeof val is 'function'
+			{_function: val+''}
 		else
-			bundle = bundle.replace ///<production>([^]*?)<\/production>///gm, ''
+			val
 
-		if opts.minify
-			logtime = log.time 'Minimalize'
-			result = uglify.minify bundle,
-				fromString: true
-				mangle: true
-				mangleProperties:
-					reserved: ['Neft', '$', 'require', 'exports', 'module']
-				compress:
-					negate_iife: false
-					keep_fargs: true
-					screw_ie8: true
+	# run process file
+	processPath = pathUtils.join __dirname, './process.coffee'
+	process = cp.execFile 'coffee', [processPath, processOpts], null, (err, _, stderr) ->
+		if not result and (err or stderr)
 			log.end logtime
-			callback null, result.code
-		else
-			callback null, bundle
+			return callback err or stderr
+
+	# load data from the executed file
+	# first log should be a length of the further logged JSON
+	expectedLength = 0
+	result = ''
+	process.stdout.on 'data', (str) ->
+		str += ''
+		if expectedLength is 0
+			expectedLength = parseInt str
+			return
+
+		result += str
+		if result.length < expectedLength
+			return
+
+		process.kill()
+		log.end logtime
+		processData = JSON.parse result
+		stack = new utils.async.Stack
+
+		stack.add bundle, null, [processData, opts]
+		stack.add release, null, [undefined, opts]
+		stack.add minify, null, [undefined, opts]
+
+		stack.runAll callback
 
 # support for custom objects used to lookup for modules
 moduleNamespaces = []
