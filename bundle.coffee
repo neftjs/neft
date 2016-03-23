@@ -5,6 +5,8 @@ crypto = require 'crypto'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
 
+{log} = Neft
+
 CACHE_DIRECTORY = __dirname + '/.tmp'
 fs.ensureDirSync CACHE_DIRECTORY
 
@@ -116,13 +118,15 @@ getModulesInit = (opts) ->
 
 	r
 
-module.exports = (opts) ->
-	declarations = getDeclarations opts.modules
-	init = getModulesInit opts
+module.exports = (processData, opts, callback) ->
+	logtime = log.time 'Build bundle'
+	declarations = getDeclarations processData.modules
+	init = getModulesInit processData
 
 	r = fileScope
 	r = replaceStr r, '{{path}}', opts.path
 	r = replaceStr r, '{{declarations}}', stringify declarations
 	r = replaceStr r, '{{init}}', init
+	log.end logtime
 
-	r
+	callback null, r

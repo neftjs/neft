@@ -1,299 +1,99 @@
 'use strict'
 
-module.exports = ->
-	# gets argv
-	[_, _, index, opts] = process.argv
-	opts = JSON.parse opts
-	{platform, onlyLocal, allowedRemoteModules, modulesDir} = opts
-	allowedRemoteModules ?= []
-	process.argv.splice 2, Infinity
+fs = require 'fs'
+pathUtils = require 'path'
+yaml = require 'js-yaml'
+Module = require 'module'
 
-	extras = opts.extras or {}
-
-	EMULATORS =
-		browser: browserEnv = ->
-			###
-			Provide necessary standard browser globals
-			###
-			global.window = global
-			global.document = {}
-			global.isFake = true
-			global.addEventListener = ->
-			global.Image = ->
-			global.HTMLCanvasElement = if extras.game then (->) else null
-			global.console =
-				log: ->
-			global.navigator = {}
-			global.location = pathname: ''
-			global.navigator = userAgent: ''
-			global.innerWidth = 1024
-			global.innerHeight = 600
-			global.scrollX = 0
-			global.scrollY = 0
-			global.screen = {}
-			global.document =
-				body:
-					appendChild: ->
-				createElement: ->
-					classList:
-						add: ->
-					appendChild: ->
-					insertBefore: ->
-					style: {}
-					children: [
-						{
-							childNodes: []
-							width:
-								baseVal: 0
-							height:
-								baseVal: 0
-						}
-					]
-					removeChild: ->
-					getBoundingClientRect: -> {}
-					addEventListener: ->
-					setAttribute: ->
-					getAttribute: ->
-					innerHTML: ''
-					cloneNode: ->
-						global.document.createElement()
-					getContext: ->
-				createElementNS: ->
-					width: baseVal: value: null
-					height: baseVal: value: null
-					style: {}
-					classList:
-						add: ->
-					transform:
-						baseVal:
-							appendItem: ->
-					setAttribute: ->
-					appendChild: ->
-					setAttributeNS: ->
-					createSVGTransform: ->
-						setTranslate: ->
-						setScale: ->
-					childNodes: [
-						{
-							transform:
-								baseVal:
-									appendItem: ->
-							childNodes: []
-							setAttribute: ->
-						}
-					]
-					children: []
-				getElementById: ->
-				addEventListener: ->
-				querySelector: ->
-				createTextNode: ->
-					{}
-			global.history =
-				pushState: ->
-			global.requestAnimationFrame = ->
-			global.Image = global.document.createElement
-			global.XMLHttpRequest = class XMLHttpRequest
-				open: ->
-				setRequestHeader: ->
-				send: ->
-
-		node: ->
-			global.option = ->
-			global.task = ->
-			global.requestAnimationFrame = ->
-
-		qt: ->
-			###
-			Provide necessary standard qt globals
-			###
-			SIGNAL =
-				connect: ->
-				disconnect: ->
-
-			global.Font = {}
-			global.Qt =
-				include: ->
-				createQmlObject: ->
-					font: {}
-					onClicked: SIGNAL
-					onPressed: SIGNAL
-					onReleased: SIGNAL
-					onEntered: SIGNAL
-					onExited: SIGNAL
-					onPositionChanged: SIGNAL
-					onWheel: SIGNAL
-					contentXChanged: SIGNAL
-					contentYChanged: SIGNAL
-					fontChanged: SIGNAL
-					linkActivated: SIGNAL
-					drag:
-						onActiveChanged: SIGNAL
-					Drag: {}
-					createObject: -> global.Qt.createQmlObject()
-				binding: ->
-				rgba: ->
-				hsla: ->
-				platform: {}
-				locale: ->
-					name: ''
-			global.Screen = {}
-			global.__stylesBody =
-				children: []
-			global.__stylesWindow =
-				items: []
-				width: 900
-				height: 600
-				widthChanged: SIGNAL
-				heightChanged: SIGNAL
-				screen:
-					orientationChanged:
-						connect: ->
-			global.qmlUtils =
-				createBinding: ->
-			global.__stylesHatchery = {}
-			global.__stylesMouseArea =
-				onPressed:
-					connect: ->
-				onPositionChanged:
-					connect: ->
-				onReleased:
-					connect: ->
-			global.requestAnimationFrame = ->
-
-		android: ->
-			global.requestAnimationFrame = ->
-			global.android = {}
-			global.setImmediate = ->
-			global._neft =
-				http:
-					request: -> 0
-					onResponse: ->
-				native:
-					transferData: ->
-					onData: ->
-
-		ios: ->
-			browserEnv()
-			global.MutationObserver = ->
-				observe: ->
-			global._neft =
-				platform: 'ios'
-				native:
-					onData: ->
-					transferData: ->
-
-	NODE_MODULES =
-		fs: true
-		path: true
-		vm: true
-		http: true
-		https: true
-		zlib: true
-		util: true # TODO
-		events: true # TODO
-		rethinkdb: true
-		'coffee-script': true
-		child_process: true
-		stream: true
-		groundskeeper: true
-		'uglify-js': true
-		pegjs: true
-		url: true
-		mmmagic: true
-		'node-static': true
-		mysql: true
-		'js-yaml': true
-		mkdirp: true
-		'form-data': true
-		qs: true
-
-	fs = require 'fs'
-	pathUtils = require 'path'
-	yaml = require 'js-yaml'
-	Module = require 'module'
-	require 'coffee-script/register'
-
-	try
-		CoffeeCache = require 'coffee-cash'
-		CoffeeCache.setCacheDirectory __dirname + '/.tmp'
-		CoffeeCache.register()
-
-	modules = []
-	paths = {}
-
-	# Get index to require and their base path
-	base = pathUtils.dirname index
-
-	EMULATORS[platform]()
-
-	require.extensions['.pegjs'] = require.extensions['.txt'] = (module, filename) ->
-		module.exports = fs.readFileSync filename, 'utf8'
-	require.extensions['.yaml'] = (module, filename) ->
-		module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
-
-	if opts.neftFilePath
-		global.Neft = require opts.neftFilePath
-		Neft.log.enabled = 0
+# parse json opts from
+opts = JSON.parse process.argv[2], (key, val) ->
+	if val and val._function
+		eval "(#{val._function})"
 	else
-		global.Neft = ->
+		val
 
-	###
-	Override standard `Module._load()` to capture all required modules and files
-	###
-	Module = module.constructor
-	Module._load = do (_super = Module._load) -> (req, parent) ->
-		if Neft?[req]
-			return Neft[req]
+index = pathUtils.resolve fs.realpathSync('.'), opts.path
+{platform, test, path} = opts
+test ?= -> true
 
-		moduleReq = req
-		if modulesDir? and req[0] isnt '.'
-			moduleReq = "#{modulesDir}#{req}"
-			try
-				r = _super.call @, moduleReq, parent
-			catch
-				moduleReq = req
-		if moduleReq is req
-			r = _super.call @, moduleReq, parent
+customGlobalProps = Object.create null
+mockGlobal = (obj) ->
+	for key, val of obj
+		customGlobalProps[key] = global[key]
+		global[key] = val
+	return
 
-		if NODE_MODULES[req]
-			return r
+base = pathUtils.dirname index
 
-		for module, _ of NODE_MODULES
-			if parent.id.indexOf("node_modules/#{module}") > 0 or parent.id.indexOf("node_modules\\#{module}") > 0
-				return r
+mockGlobal require("./emulators/#{platform}") opts
 
-		filename = Module._resolveFilename moduleReq, parent
+require.extensions['.pegjs'] = require.extensions['.txt'] = (module, filename) ->
+	module.exports = fs.readFileSync filename, 'utf8'
+require.extensions['.yaml'] = (module, filename) ->
+	module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
 
-		modulePath = pathUtils.relative base, filename
-		parentPath = pathUtils.relative base, parent.id
-		unless parentPath then return r
+if opts.neftFilePath
+	global.Neft = require opts.neftFilePath
+	Neft.log.enabled = 0
+else
+	global.Neft = ->
 
-		if onlyLocal
-			if ///^\.\.(?:\/|\\)|^node_modules(?:\/|\\)///.test(modulePath) or not ///\.[a-zA-Z0-9]+$///.test(modulePath)
-				name = ///^\.\.(?:\/|\\)([a-z_\-A-Z]+)///.exec(modulePath)?[1]
-				if allowedRemoteModules.indexOf(name) is -1 and not /^neft\-document\-/.test(req)
-					return r
+modules = []
+modulesByPaths = {}
+paths = {}
 
-		modules.push modulePath unless ~modules.indexOf modulePath
+# clear cache
+for key of cache = Module._cache
+	delete cache[key]
 
-		mpaths = paths[parentPath] ?= {}
-		mpaths[req] = modulePath
+###
+Override standard `Module._load()` to capture all required modules and files
+###
+disabled = false
+Module = module.constructor
+Module._load = do (_super = Module._load) -> (req, parent) ->
+	if Neft[req]
+		return Neft[req]
 
-		r
+	disabledHere = false
 
-	# run index file
-	try
-		require index
-	catch err
-		if err.stack
-			err = err.stack
-		else
-			err += ''
-		return process.send err: err
+	if not disabled and req isnt index and not test(req)
+		disabled = true
+		disabledHere = true
+	r = _super.call @, req, parent
+	if disabled
+		if disabledHere
+			disabled = false
+		return r
 
-	# add index file into modules list
-	modules.push opts.path
+	filename = Module._resolveFilename req, parent
 
-	process.send
-		modules: modules
-		paths: paths
+	modulePath = pathUtils.relative base, filename
+	parentPath = pathUtils.relative base, parent.id
+
+	unless modulesByPaths[modulePath]
+		modules.push modulePath
+		modulesByPaths[modulePath] = true
+
+	mpaths = paths[parentPath] ?= {}
+	mpaths[req] = modulePath
+
+	r
+
+# run index file
+try
+	require index
+catch err
+	if err.stack
+		err = err.stack
+	else
+		err += ''
+	console.error err
+	process.exit 1
+
+resultJSON = JSON.stringify
+	modules: modules
+	paths: paths
+
+console.log resultJSON.length
+console.log resultJSON
