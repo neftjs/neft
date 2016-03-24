@@ -1159,7 +1159,12 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 		try
 			func.apply context, args
 		catch err
-			if typeof onFail is 'function' then onFail(err) else onFail
+			if typeof onFail is 'function'
+				onFail(err)
+			else if onFail is undefined
+				err
+			else
+				onFail
 
 *Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
 -------------------------------------------------------------------------------
