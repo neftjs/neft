@@ -6,16 +6,21 @@ fs = require 'fs'
 
 PLATFORM_TYPES =
 	node:
+		node: true
 		server: true
 	browser:
+		browser: true
 		client: true
 	qt:
+		qt: true
 		client: true
 		native: true
 	android:
+		android: true
 		client: true
 		native: true
 	ios:
+		ios: true
 		client: true
 		native: true
 
