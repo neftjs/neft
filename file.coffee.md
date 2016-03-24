@@ -182,8 +182,8 @@ Corresponding node handler: *neft:onRevert=""*.
 					attrsToParse.push jsonAttrsToParse[i+1]
 
 				utils.merge obj.fragments, arr[JSON_FRAGMENTS]
-				if arr[JSON_SCRIPTS]?
-					parseArray obj, arr[JSON_SCRIPTS], obj.scripts
+				if (scripts = arr[JSON_SCRIPTS])?
+					obj.scripts = File.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
 				parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
 				parseArray obj, arr[JSON_INPUTS], obj.inputs
 				parseArray obj, arr[JSON_CONDITIONS], obj.conditions
