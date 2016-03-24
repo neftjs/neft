@@ -110,8 +110,6 @@ module.exports = (File) -> class Use
 			return
 
 		usedFragment = file or File.factory(fragment or @name)
-		unless file
-			usedFragment.storage = @file.storage
 
 		if file
 			file.parentUse?.detachUsedFragment()

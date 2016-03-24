@@ -91,3 +91,22 @@ describe 'neft:each', ->
 
 		renderParse view
 		assert.is view.node.stringify(), '<ul>abab</ul>'
+
+	it 'uses parent `this` context', ->
+		source = View.fromHTML uid(), """
+			<neft:fragment neft:name="a">
+				<neft:script>
+					module.exports = function(){
+						this.x = 1;
+					}
+				</neft:script>
+				<ul neft:each="[1,2]">${this.x}</ul>
+			</neft:fragment>
+			${this.x}
+			<neft:use neft:fragment="a" />
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '<ul>11</ul>'
