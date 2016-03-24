@@ -5,57 +5,22 @@ Unit @library
 
 	utils = require 'neft-utils'
 	log = require 'neft-log'
+	stack = require './stack'
+	logger = require './logger'
 
 	{isArray} = Array
+	{push} = Array::
+	{Scope, Test, Listener} = require './structure'
 
-	ERROR_STACK_MAX_LENGTH = 500
-
-	class Describe
-		constructor: ->
-			@message = ''
-			@tests = []
-			@beforeFunctions = []
-			@afterFunctions = []
-
-	class Test
-		constructor: ->
-			@message = ''
-			@testFunction = utils.NOP
-			@onDone = null
-
-	scopes = [new Describe]
-	messages = []
+	scopes = [new Scope]
 	currentScope = scopes[0]
-	currentTest = null
-	testsPassed = true
 
-	errorToString = (err) ->
-		msg = ''
-		if err.stack
-			specFileLine = /^.+\.spec\.[a-z]+:\d+:\d+$/m.exec err.stack
-			if specFileLine?
-				msg += specFileLine[0] + "\n"
-			if err.stack.length > ERROR_STACK_MAX_LENGTH
-				msg += "#{err.stack.slice(0, ERROR_STACK_MAX_LENGTH)}…"
-			else
-				msg += err.stack
-		else
-			msg += err
-		msg
-
-	printError = (err) ->
-		testsPassed = false
-		log.error messages.join(' ')
-		console.error errorToString(err)
-		return
-
-	tryFunction = (func, context, args) ->
+	argOpts = do ->
+		opts = process.argv[2]
 		try
-			func.apply context, args
-			true
-		catch err
-			printError err
-			false
+			JSON.parse opts
+		catch
+			{}
 
 Unit.describe(*String* message, *Function* tests)
 -------------------------------------------------
@@ -63,15 +28,25 @@ Unit.describe(*String* message, *Function* tests)
 	exports.describe = (msg, func) ->
 		beforeEach = utils.NOP
 
-		describe = new Describe
-		describe.message = msg
-		Array::push.apply describe.beforeFunctions, currentScope.beforeFunctions
-		Array::push.apply describe.afterFunctions, currentScope.afterFunctions
+		# new scope
+		scope = new Scope
+		scope.message = msg
+		scopes.push scope
 
-		currentScope.tests.push describe
-		scopes.push describe
-		currentScope = describe
+		# before/after functions
+		push.apply scope.beforeFunctions, currentScope.beforeFunctions
+		push.apply scope.afterFunctions, currentScope.afterFunctions
+
+		# save scope to parent
+		currentScope.children.push scope
+
+		# save as last
+		currentScope = scope
+
+		# filter children tests
 		func()
+
+		# set parent as last
 		scopes.pop()
 		currentScope = utils.last scopes
 		return
@@ -84,37 +59,14 @@ The given test function can contains optional *callback* argument.
 	exports.it = (msg, func) ->
 		testScope = currentScope
 
-		callFunc = (callback) ->
-			currentTest = test
-			callbackCalled = false
-			callCallback = test.onEnd = ->
-				unless callbackCalled
-					callbackCalled = true
-
-					# call after functions
-					for afterFunc in testScope.afterFunctions
-						afterFunc()
-
-					callback()
-				return
-
-			# call before functions
-			for beforeFunc in testScope.beforeFunctions
-				beforeFunc()
-
-			# call test function
-			if func.length is 0
-				tryFunction func
-				callCallback()
-			else
-				unless tryFunction(func, null, [callCallback])
-					callCallback()
-
+		# new test
 		test = new Test
 		test.message = msg
-		test.testFunction = callFunc
+		test.testFunction = func
 
-		utils.last(scopes).tests.push test
+		# add test into scope
+		utils.last(scopes).children.push test
+
 		return
 
 Unit.beforeEach(*Function* code)
@@ -137,27 +89,13 @@ Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay =
 	exports.whenChange = do ->
 		listeners = []
 
-		class Listener
-			constructor: ->
-				@object = null
-				@objectCopy = null
-				@callback = null
-				@maxDelay = 1000
-				@createTimestamp = Date.now()
-
 		checkListeners = ->
 			i = 0
 			while i < listeners.length
 				listener = listeners[i]
 
-				if not utils.isEqual(listener.object, listener.objectCopy, 1)
+				if listener.test()
 					listeners.splice i, 1
-					unless tryFunction(listener.callback)
-						currentTest.onEnd()
-				else if Date.now() - listener.createTimestamp > listener.maxDelay
-					listeners.splice i, 1
-					printError new Error "unit.whenChange waits too long"
-					currentTest.onEnd()
 				else
 					i++
 
@@ -174,43 +112,28 @@ Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay =
 
 			if listeners.length is 0
 				setImmediate checkListeners
+
 			listeners.push listener
 			return
 
-	do ->
-		runStack = (stack, callback) ->
-			if stack.message
-				messages.push stack.message
-			runStackElements stack, ->
-				if stack.message
-					messages.pop()
-				callback()
-			return
+	###
+	Run
+	###
+	setImmediate ->
+		[mainScope] = scopes
 
-		runStackElements = (stack, callback, i=0) ->
-			if i < stack.tests.length
-				element = stack.tests[i]
+		# file message
+		if title = argOpts.title
+			mainScope.message = title
 
-				callNextElement = ->
-					runStackElements stack, callback, i+1
+		# bootstrap duration
+		if startTime = argOpts.startTime
+			duration = Date.now() - startTime
+			ms = duration.toFixed 2
+			mainScope.message += " (#{ms}ms)"
 
-				if element instanceof Describe
-					return runStack element, callNextElement
-				if element instanceof Test
-					return runStackElement element, callNextElement
-			else
-				callback()
-			return
-
-		runStackElement = (test, callback) ->
-			messages.push test.message
-			test.testFunction ->
-				messages.pop()
-				callback()
-			return
-
-		setImmediate ->
-			testsPassed = true
-			runStack scopes[0], ->
-				unless testsPassed
-					process.exit 1
+		# run main scope
+		mainScope.run ->
+			code = if stack.errors.length > 0 then 1 else 0
+			logger.printLogs()
+			process.exit code
