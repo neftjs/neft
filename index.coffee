@@ -193,11 +193,7 @@ class Binding
 	setValue: (val) ->
 		throw "Not implemented"
 
-	FAIL = utils.uid 16
-
-	onFail = (err) ->
-		# log.warn "Binding error '#{err}'"
-		FAIL
+	onError: (err) ->
 
 	update: ->
 		unless @args
@@ -214,8 +210,9 @@ class Binding
 			@updateLoop = 0
 		`//</development>`
 
-		result = utils.tryFunction @func, @ctx, @args, onFail
-		if result is FAIL
+		result = utils.tryFunction @func, @ctx, @args
+		if result instanceof Error
+			@onError result
 			result = @getDefaultValue()
 
 		`//<development>`
