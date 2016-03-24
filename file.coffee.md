@@ -344,8 +344,6 @@ File.parse(*File* file)
 				if val is undefined and attrs
 					val = attrs[key]
 				if val is undefined
-					val = source.file.inputAttrs[key]
-				if val is undefined
 					val = viewAttrs[key]
 			else
 				if attrs
@@ -376,20 +374,15 @@ File.parse(*File* file)
 				if source?
 					# attrs
 					viewAttrs = @node.attrs
-					sourceFileAttrs = source.file.inputAttrs
 					sourceAttrs = source.node.attrs
-					sourceFileAttrs.onChange @_updateInputAttrsKey, @
 					source.node.onAttrsChange @_updateInputAttrsKey, @
 					for prop, val of inputAttrs
-						if viewAttrs[prop] is attrs[prop] is sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
+						if viewAttrs[prop] is attrs[prop] is sourceAttrs[prop] is undefined
 							inputAttrs.pop prop
 					for prop, val of viewAttrs
-						if attrs[prop] is sourceAttrs[prop] is sourceFileAttrs[prop] is undefined
+						if attrs[prop] is sourceAttrs[prop] is undefined
 							if val isnt undefined
 								inputAttrs.set prop, val
-					for prop, val of sourceFileAttrs
-						if sourceAttrs[prop] is attrs[prop] is undefined
-							inputAttrs.set prop, val
 					for prop, val of attrs
 						if sourceAttrs[prop] is undefined
 							if val isnt undefined
@@ -490,7 +483,6 @@ File.parse(*File* file)
 
 				# attrs
 				if @source
-					@source.file.inputAttrs.onChange.disconnect @_updateInputAttrsKey, @
 					@source.node.onAttrsChange.disconnect @_updateInputAttrsKey, @
 
 				# parent use

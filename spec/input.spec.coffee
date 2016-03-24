@@ -31,41 +31,6 @@ describe 'string interpolation', ->
 			renderParse view
 			assert.is view.node.stringify(), '2'
 
-		it 'lookup neft:use deeply', ->
-			source = View.fromHTML uid(), """
-				<neft:fragment neft:name="a" x="1">
-					<neft:fragment neft:name="b" x="1">
-						${attrs.x}
-					</neft:fragment>
-					<neft:use neft:fragment="b" />
-				</neft:fragment>
-				<neft:use neft:fragment="a" x="2" />
-			"""
-			View.parse source
-			view = source.clone()
-
-			renderParse view
-			assert.is view.node.stringify(), '2'
-
-		it 'updates neft:use deeply lookup', ->
-			source = View.fromHTML uid(), """
-				<neft:fragment neft:name="a" x="1">
-					<neft:fragment neft:name="b" x="1">
-						${attrs.x}
-					</neft:fragment>
-					<neft:use neft:fragment="b" />
-				</neft:fragment>
-				<neft:use neft:fragment="a" x="2" />
-			"""
-			View.parse source
-			view = source.clone()
-			child = view.node.children[0]
-
-			renderParse view
-			assert.is view.node.stringify(), '2'
-			child.attrs.set 'x', 3
-			assert.is view.node.stringify(), '3'
-
 		it 'always keeps proper sources order', ->
 			source = View.fromHTML uid(), """
 				<neft:fragment neft:name="a" x="1">
@@ -100,19 +65,19 @@ describe 'string interpolation', ->
 			fragmentB.attrs.set 'x', 1
 
 			useB.attrs.set 'x', undefined
-			assert.is view.node.stringify(), '3'
+			assert.is view.node.stringify(), '1'
 
 			useA.attrs.set 'x', undefined
-			assert.is view.node.stringify(), '2'
+			assert.is view.node.stringify(), '1'
 
 			storage.pop 'x'
 			assert.is view.node.stringify(), '1'
 
 			fragmentB.attrs.set 'x', 2
-			assert.is view.node.stringify(), '1'
+			assert.is view.node.stringify(), '2'
 
 			fragmentA.attrs.set 'x', 3
-			assert.is view.node.stringify(), '3'
+			assert.is view.node.stringify(), '2'
 
 			fragmentA.attrs.set 'x', undefined
 			assert.is view.node.stringify(), '2'
