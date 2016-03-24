@@ -46,10 +46,8 @@ module.exports = (platform, app, callback) ->
 		val = "`require('#{path}')`"
 		obj.path = undefined
 		if linkType
-			if PLATFORM_TYPES[platform][linkType]
-				obj.name = name
-			else
-				return false;
+			unless PLATFORM_TYPES[platform][linkType]
+				return false
 
 		obj.file = val
 		return true
