@@ -30,26 +30,22 @@ module.exports = (opts, callback) ->
 			val
 
 	# run process file
+	running = true
 	processPath = pathUtils.join __dirname, './process.coffee'
-	process = cp.execFile 'coffee', [processPath, processOpts], null, (err, _, stderr) ->
-		if not result and (err or stderr)
+	process = cp.spawn 'coffee', [processPath, processOpts], stdio: ['ipc']
+
+	stderr = ''
+	process.stderr.on 'data', (data) ->
+		stderr += data
+
+	process.on 'exit', ->
+		if running
+			running = false
 			log.end logtime
-			return callback err or stderr
+			return callback stderr
 
-	# load data from the executed file
-	# first log should be a length of the further logged JSON
-	expectedLength = 0
-	result = ''
-	process.stdout.on 'data', (str) ->
-		str += ''
-		if expectedLength is 0
-			expectedLength = parseInt str
-			return
-
-		result += str
-		if result.length < expectedLength
-			return
-
+	process.on 'message', (result) ->
+		running = false
 		process.kill()
 		log.end logtime
 		processData = JSON.parse result

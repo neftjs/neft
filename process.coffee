@@ -95,5 +95,4 @@ resultJSON = JSON.stringify
 	modules: modules
 	paths: paths
 
-console.log resultJSON.length
-console.log resultJSON
+process.send resultJSON
