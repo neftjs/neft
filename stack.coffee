@@ -8,8 +8,11 @@ exports.messages = []
 exports.errors = []
 
 exports.fail = (err) ->
-	exports.errors.push err
-	exports.currentTest.fulfilled = false
+	{errors, currentTest} = exports
+
+	err.test = currentTest
+	errors.push err
+	currentTest.fulfilled = false
 	return
 
 exports.callFunction = (func, context, args) ->

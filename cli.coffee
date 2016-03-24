@@ -7,22 +7,10 @@ fs = require 'fs'
 
 [_, _, path] = process.argv
 
-runTests = 0
-testsCode = 0
+realpath = fs.realpathSync ''
 
 runTestFile = (path) ->
-	runTests += 1
-
-	opts =
-		title: path
-		startTime: Date.now()
-	optsJSON = JSON.stringify opts
-
-	child = cp.fork path, [optsJSON]
-	child.on 'exit', (code) ->
-		testsCode ||= code
-		if --runTests is 0
-			process.exit testsCode
+	require pathUtils.join realpath, path
 
 if fs.statSync(path).isFile()
 	runTestFile path

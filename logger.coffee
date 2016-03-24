@@ -8,13 +8,14 @@ errorUtils = require './error'
 SCOPE_PAD = '    '
 MIN_TIME_WARN = 100
 
-logs = []
 pad = ''
 testStartTime = 0
 
-exports.printLogs = ->
-	for type, i in logs by 2
-		log[type] logs[i+1]
+exports.onTestsEnd = ->
+	for error in stack.errors
+		errorString = errorUtils.toString error
+		errorString = errorString.replace /^/gm, SCOPE_PAD
+		log.error "\n#{error.test.getFullMessage()}\n#{errorString}"
 	return
 
 exports.onScopeStart = (scope) ->
@@ -22,7 +23,7 @@ exports.onScopeStart = (scope) ->
 	if message is ''
 		return
 
-	logs.push 'log', pad + scope.message
+	log pad + scope.message
 	pad += SCOPE_PAD
 	return
 
@@ -47,11 +48,7 @@ exports.onTestEnd = (test) ->
 		msg += " (#{ms} ms)"
 
 	if test.fulfilled
-		logs.push 'ok', msg
+		log.ok msg
 	else
-		error = utils.last stack.errors
-		errorString = errorUtils.toString error
-		errorString = errorString.replace /^/gm, pad + SCOPE_PAD
-		logs.push 'error', msg
-		logs.push 'error', errorString
+		log.error msg
 	return

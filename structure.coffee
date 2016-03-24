@@ -6,6 +6,7 @@ logger = require './logger'
 
 class Scope
 	constructor: ->
+		@parent = null
 		@message = ''
 		@children = []
 		@beforeFunctions = []
@@ -30,6 +31,7 @@ class Test
 	constructor: ->
 		@_callbackCalled = false
 		@_callback = null
+		@parent = null
 		@fulfilled = true
 		@message = ''
 		@testFunction = utils.NOP
@@ -71,6 +73,14 @@ class Test
 				@onEnd()
 
 		return
+
+	getFullMessage: ->
+		str = @message
+		scope = @
+		while scope = scope.parent
+			if message = scope.message
+				str = "#{message} #{str}"
+		str
 
 class Listener
 	constructor: ->

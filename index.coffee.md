@@ -39,6 +39,7 @@ Unit.describe(*String* message, *Function* tests)
 
 		# save scope to parent
 		currentScope.children.push scope
+		scope.parent = currentScope
 
 		# save as last
 		currentScope = scope
@@ -65,7 +66,9 @@ The given test function can contains optional *callback* argument.
 		test.testFunction = func
 
 		# add test into scope
-		utils.last(scopes).children.push test
+		scope = utils.last scopes
+		scope.children.push test
+		test.parent = scope
 
 		return
 
@@ -135,5 +138,5 @@ Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay =
 		# run main scope
 		mainScope.run ->
 			code = if stack.errors.length > 0 then 1 else 0
-			logger.printLogs()
+			logger.onTestsEnd()
 			process.exit code
