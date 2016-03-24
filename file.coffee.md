@@ -34,6 +34,7 @@ File @class
 		JSON_TARGET_NODE = i++
 		JSON_ATTRS_TO_PARSE = i++
 		JSON_FRAGMENTS = i++
+		JSON_SCRIPTS = i++
 		JSON_ATTR_CHANGES = i++
 		JSON_INPUTS = i++
 		JSON_CONDITIONS = i++
@@ -84,6 +85,7 @@ Corresponding node handler: *neft:onRevert=""*.
 		@Element = require('./element/index')
 		@AttrChange = require('./attrChange') @
 		@Use = require('./use') @
+		@Scripts = require('./scripts') @
 		@Input = require('./input') @
 		@Condition = require('./condition') @
 		@Iterator = require('./iterator') @
@@ -180,6 +182,8 @@ Corresponding node handler: *neft:onRevert=""*.
 					attrsToParse.push jsonAttrsToParse[i+1]
 
 				utils.merge obj.fragments, arr[JSON_FRAGMENTS]
+				if arr[JSON_SCRIPTS]?
+					parseArray obj, arr[JSON_SCRIPTS], obj.scripts
 				parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
 				parseArray obj, arr[JSON_INPUTS], obj.inputs
 				parseArray obj, arr[JSON_CONDITIONS], obj.conditions
@@ -296,8 +300,8 @@ File.parse(*File* file)
 			@targetNode = null
 			@parent = null
 			@storage = null
+			@scripts = null
 			@attrs = null
-			@storageConstructor = null
 			@source = null
 			@parentUse = null
 
@@ -612,14 +616,8 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
 				clone.logs.push log.clone @, clone
 
 			# storage
-			if @storageConstructor
-				storage = Object.create @storageConstructor::
-				storage.node = clone.node
-				storage.attrs = clone.inputAttrs
-				storage.ids = clone.inputIds
-				storage.funcs = clone.inputFuncs
-				@storageConstructor.call storage
-				clone.storage = storage
+			if @scripts
+				clone.storage = @scripts.createStorageForFile clone
 
 			clone
 
@@ -664,6 +662,7 @@ File::destroy()
 					attrsToParse[i+1] = @attrsToParse[i+1]
 
 				arr[JSON_FRAGMENTS] = @fragments
+				arr[JSON_SCRIPTS] = @scripts
 				arr[JSON_ATTR_CHANGES] = @attrChanges.map callToJSON
 				arr[JSON_INPUTS] = @inputs.map callToJSON
 				arr[JSON_CONDITIONS] = @conditions.map callToJSON

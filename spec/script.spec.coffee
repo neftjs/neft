@@ -24,9 +24,10 @@ describe 'neft:script', ->
 				module.exports = {};
 			</neft:script>
 		"""
+		View.parse view
 
 		try
-			View.parse view
+			view.render()
 		catch err
 		assert.isDefined err
 
