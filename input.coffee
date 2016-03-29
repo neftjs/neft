@@ -19,6 +19,10 @@ class DocumentBinding extends Binding
 	constructor: (binding, ctx) ->
 		super binding, ctx
 		@args = ctx.file.inputArgs
+		`//<development>`
+		@failed = false
+		@failCheckPending = false
+		`//</development>`
 
 	getItemById: (item) ->
 		if item is 'this'
@@ -29,6 +33,34 @@ class DocumentBinding extends Binding
 			@args[1]
 		else if item is 'attrs'
 			@args[2]
+
+	`//<development>`
+	failCheckQueue = []
+	failCheckQueuePending = false
+
+	checkFails = ->
+		while binding = failCheckQueue.pop()
+			err = failCheckQueue.pop()
+			if binding.failed
+				log.error "Error in '#{binding.ctx.text}', file '#{binding.ctx.file.path}':\n#{err}"
+			binding.failCheckPending = false
+		failCheckQueuePending = false
+		return
+
+	onError: (err) ->
+		@failed = true
+		unless @failCheckPending
+			@failCheckPending = true
+			failCheckQueue.push err, @
+		unless failCheckQueuePending
+			failCheckQueuePending = true
+			setImmediate checkFails
+		return
+
+	update: ->
+		@failed = false
+		super()
+	`//</development>`
 
 	getValue: ->
 		@ctx.getValue()
