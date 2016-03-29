@@ -15,7 +15,7 @@ exports.isBinding = (code) ->
 		return false
 	true
 
-exports.parse = (val, isPublicId, opts=0) ->
+exports.parse = (val, isPublicId, opts=0, objOpts={}) ->
 	binding = ['']
 
 	# split to types
@@ -48,7 +48,7 @@ exports.parse = (val, isPublicId, opts=0) ->
 		if id is 'Renderer'
 			elem.shift()
 			[id] = elem
-		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling' or id is 'target'
+		if id is 'parent' or id is 'nextSibling' or id is 'previousSibling' or id is 'target' or objOpts.globalIdToThis?[id]
 			elem.unshift "this"
 		else if opts & BINDING_THIS_TO_TARGET_OPTS and id is 'this'
 			elem.splice 1, 0, 'target'
