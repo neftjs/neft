@@ -45,9 +45,9 @@ describe 'neft:each', ->
 		View.parse source
 		view = source.clone()
 
-		storage = arr: arr = new List [1, 2]
+		attrs = arr: arr = new List [1, 2]
 
-		renderParse view, storage: storage
+		renderParse view, attrs: attrs
 		assert.is view.node.stringify(), '<ul>12</ul>'
 
 		arr.insert 1, 'a'
@@ -65,7 +65,7 @@ describe 'neft:each', ->
 		view = source.clone()
 
 		renderParse view,
-			storage: a: 'a'
+			attrs: a: 'a'
 		assert.is view.node.stringify(), '<ul>aa</ul>'
 
 	it 'access `ids`', ->

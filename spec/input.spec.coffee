@@ -44,8 +44,7 @@ describe 'string interpolation', ->
 			View.parse source
 			view = source.clone()
 
-			renderParse view,
-				storage: storage = new Dict x: 2
+			renderParse view
 
 			useA = view.node.children[0]
 			fragmentA = useA.children[0]
@@ -53,13 +52,11 @@ describe 'string interpolation', ->
 			fragmentB = useB.children[0]
 			assert.is view.node.stringify(), '4'
 
-			storage.set 'x', -1
 			fragmentA.attrs.set 'x', -1
 			useA.attrs.set 'x', -1
 			fragmentB.attrs.set 'x', -1
 			assert.is view.node.stringify(), '4'
 
-			storage.set 'x', 2
 			fragmentA.attrs.set 'x', 1
 			useA.attrs.set 'x', 3
 			fragmentB.attrs.set 'x', 1
@@ -68,9 +65,6 @@ describe 'string interpolation', ->
 			assert.is view.node.stringify(), '1'
 
 			useA.attrs.set 'x', undefined
-			assert.is view.node.stringify(), '1'
-
-			storage.pop 'x'
 			assert.is view.node.stringify(), '1'
 
 			fragmentB.attrs.set 'x', 2
@@ -159,9 +153,46 @@ describe 'string interpolation', ->
 		renderParse view
 		assert.is view.node.stringify(), '9'
 
+	describe '`scope`', ->
+		it 'is accessed in rendered file', ->
+			source = View.fromHTML uid(), """
+				${scope.a}
+			"""
+			View.parse source
+			view = source.clone()
+
+			renderParse view,
+				storage: a: '1'
+			assert.is view.node.stringify(), '1'
+
+		it 'lookup neft:use', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a">${scope.a}</neft:fragment>
+				<neft:use neft:fragment="a" />
+			"""
+			View.parse source
+			view = source.clone()
+
+			renderParse view,
+				storage: a: '1'
+			assert.is view.node.stringify(), '1'
+
+		it 'lookup neft:each', ->
+			source = View.fromHTML uid(), """
+				<neft:blank neft:each="[1]">
+					${scope.a}
+				</neft:blank>
+			"""
+			View.parse source
+			view = source.clone()
+
+			renderParse view,
+				storage: a: '1'
+			assert.is view.node.stringify(), '1'
+
 	it 'handler is called on signal', ->
 		source = View.fromHTML uid(), """
-			<span x="1" onAttrsChange="${attrs.onAttrsChange(2)}" />
+			<span x="1" onAttrsChange="${scope.onAttrsChange(2)}" />
 		"""
 		View.parse source
 		view = source.clone()
@@ -178,7 +209,7 @@ describe 'string interpolation', ->
 
 	it 'returned handler is called on signal with context and parameters', ->
 		source = View.fromHTML uid(), """
-			<span x="1" onAttrsChange="${attrs.onAttrsChange}" />
+			<span x="1" onAttrsChange="${scope.onAttrsChange}" />
 		"""
 		View.parse source
 		view = source.clone()
@@ -198,7 +229,7 @@ describe 'string interpolation', ->
 	it 'attribute handler is called with proper context and parameters', ->
 		source = View.fromHTML uid(), """
 			<neft:attr name="y" value="3" />
-			<span x="1" id="a1" onAttrsChange="${attrs.onAttrsChange(ids.a1.attrs.x, attrs.y)}" />
+			<span x="1" id="a1" onAttrsChange="${scope.onAttrsChange(ids.a1.attrs.x, attrs.y)}" />
 		"""
 		View.parse source
 		view = source.clone()
@@ -217,7 +248,7 @@ describe 'string interpolation', ->
 	it 'attribute handler is not called if the document is not rendered', ->
 		source = View.fromHTML uid(), """
 			<neft:attr name="y" value="3" />
-			<span x="1" id="a1" onAttrsChange="${attrs.onAttrsChange()}" />
+			<span x="1" id="a1" onAttrsChange="${scope.onAttrsChange()}" />
 		"""
 		View.parse source
 		view = source.clone()
@@ -249,8 +280,8 @@ describe 'string interpolation', ->
 			elem.attrs.set 'x', 1
 			assert.is view.node.stringify(), '1'
 
-		it 'on file `attrs`', ->
-			source = View.fromHTML uid(), "${attrs.x}"
+		it 'on `scope`', ->
+			source = View.fromHTML uid(), "${scope.x}"
 			View.parse source
 			view = source.clone()
 
@@ -263,8 +294,8 @@ describe 'string interpolation', ->
 			storage.set 'x', 2
 			assert.is view.node.stringify(), '2'
 
-		it 'on file `attrs` deeply', ->
-			source = View.fromHTML uid(), "${attrs.dict.x}"
+		it 'on `scope` property', ->
+			source = View.fromHTML uid(), "${scope.dict.x}"
 			View.parse source
 			view = source.clone()
 
@@ -275,4 +306,33 @@ describe 'string interpolation', ->
 			assert.is view.node.stringify(), '1'
 
 			storage.dict.set 'x', 2
+			assert.is view.node.stringify(), '2'
+
+		it 'on `scope` neft:use', ->
+			source = View.fromHTML uid(), """
+				<neft:fragment neft:name="a">${scope.a}</neft:fragment>
+				<neft:use neft:fragment="a" />
+			"""
+			View.parse source
+			view = source.clone()
+
+			renderParse view,
+				storage: storage = new Dict a: '1'
+
+			storage.set 'a', 2
+			assert.is view.node.stringify(), '2'
+
+		it 'on `scope` neft:each', ->
+			source = View.fromHTML uid(), """
+				<neft:blank neft:each="[1]">
+					${scope.a}
+				</neft:blank>
+			"""
+			View.parse source
+			view = source.clone()
+
+			renderParse view,
+				storage: storage = new Dict a: '1'
+
+			storage.set 'a', 2
 			assert.is view.node.stringify(), '2'

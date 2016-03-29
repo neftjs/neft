@@ -5,15 +5,19 @@ bindingParser = require 'neft-binding/parser'
 
 {BINDING_THIS_TO_TARGET_OPTS} = bindingParser
 
+PARSER_OPTS =
+	globalIdToThis:
+		scope: true
+
 isPublicId = (id) ->
-	id in ['this', 'ids', 'funcs', 'attrs']
+	id in ['this', 'ids', 'funcs', 'attrs', 'scope']
 
 shouldBeUpdatedOnCreate = (connection) ->
 	[key] = connection
 	if Array.isArray(key)
 		shouldBeUpdatedOnCreate key
 	else
-		key isnt 'this'
+		not (key in ['this', 'scope'])
 
 exports.parse = (text) ->
 	text = text.replace(/[\t\n]/gm, '')
@@ -57,7 +61,7 @@ exports.parse = (text) ->
 	else
 		func += '"'+str+'"'
 
-	parsed = bindingParser.parse func, isPublicId, BINDING_THIS_TO_TARGET_OPTS
+	parsed = bindingParser.parse func, isPublicId, BINDING_THIS_TO_TARGET_OPTS, PARSER_OPTS
 
 	funcBody = "return #{parsed.hash}"
 

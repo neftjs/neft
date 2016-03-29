@@ -302,6 +302,7 @@ File.parse(*File* file)
 			@storage = null
 			@scripts = null
 			@attrs = null
+			@scope = null
 			@source = null
 			@parentUse = null
 
@@ -330,14 +331,14 @@ File.parse(*File* file)
 				Object.preventExtensions @
 			`//</development>`
 
-*File* File::render([*Any* attrs, *File* source])
--------------------------------------------------
+*File* File::render([*Any* attrs, *Any* scope, *File* source])
+--------------------------------------------------------------
 
-		render: (attrs, source) ->
+		render: (attrs, scope, source) ->
 			unless @isClone
-				@clone().render attrs, source
+				@clone().render attrs, scope, source
 			else
-				@_render(attrs, source)
+				@_render(attrs, scope, source)
 
 		_updateInputAttrsKey: (key) ->
 			{inputAttrs, source, attrs} = @
@@ -364,11 +365,12 @@ File.parse(*File* file)
 		_render: do ->
 			renderTarget = require('./file/render/parse/target') File
 
-			(attrs=true, source) ->
+			(attrs=true, scope, source) ->
 				assert.notOk @isRendered
 
 				@attrs = attrs
 				@source = source
+				@scope = scope
 
 				{inputAttrs, inputIds, inputFuncs} = @
 
@@ -512,6 +514,7 @@ File.parse(*File* file)
 
 				@attrs = null
 				@source = null
+				@scope = null
 
 				File.onRevert.emit @
 				emitNodeSignal @, 'neft:onRevert'

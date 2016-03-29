@@ -118,7 +118,7 @@ module.exports = (File) -> class Use
 			usedFragment = usedFragment.clone()
 
 		unless usedFragment.isRendered
-			usedFragment = usedFragment.render null, @
+			usedFragment = usedFragment.render null, @file.scope, @
 
 		usedFragment.node.parent = @node
 		@usedFragment = usedFragment
