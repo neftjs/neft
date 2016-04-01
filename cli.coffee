@@ -12,7 +12,7 @@ realpath = fs.realpathSync ''
 runTestFile = (path) ->
 	require pathUtils.join realpath, path
 
-if fs.statSync(path).isFile()
+if fs.existsSync(path) and fs.statSync(path).isFile()
 	runTestFile path
 else
 	glob pathUtils.join(path, '/', '**/*.spec.*'), (err, files) ->
