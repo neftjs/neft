@@ -38,7 +38,7 @@ Now you know, why Neft was created - **Don't repeat boring stuff. Focus on a cli
 
 Do you know JavaScript, CoffeeScript, C, Java or Swift? Help us and become a contributor. 🚀😃😎
 
-Did you find a bug, have an idea for a new features or just you're pissed off at the documentation? Create an [issue](https://github.com/Neft-io/neft/issues), write it on our [Gitter](https://gitter.im/Neft-io/neft) or simply [tweet us](https://twitter.com/neft_io). 🤕🗣🚑💉
+Did you find a bug, have an idea for a new features or just you're pissed off at the documentation? Create an [issue](https://github.com/Neft-io/neft/issues), write it on our [Gitter](https://gitter.im/Neft-io/neft) or simply [tweet us](https://twitter.com/neft_io). 🚑💉
 
 ## Links
 
