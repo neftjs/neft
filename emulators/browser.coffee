@@ -4,7 +4,6 @@ module.exports = (opts) ->
 	window: global
 	isFake: true
 	addEventListener: ->
-	Image: ->
 	HTMLCanvasElement: if opts.extras?.game then (->) else null
 	location: pathname: ''
 	navigator: userAgent: ''
