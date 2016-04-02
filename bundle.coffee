@@ -16,10 +16,13 @@ createBundle = (opts, callback) ->
 		release: opts.release
 		removeLogs: opts.release
 		minify: opts.release
+		verbose: true
 		path: "index.coffee"
+		test: (req) ->
+			/^(?:neft\-|\.)/.test(req)
 	}, (err, bundle) ->
 		if err
-			return console.error err
+			return console.error err?.stack or err
 
 		try
 			template = fs.readFileSync "./bundle/#{opts.platform}.coffee.mustache", 'utf-8'

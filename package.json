@@ -11,7 +11,7 @@
     "webgl"
   ],
   "bin": {
-    "neft": "./bin/neft.js"
+    "neft": "./bin/neft"
   },
   "main": "./cli/bundle/neft-node-develop.js",
   "license": "Apache-2.0",
@@ -29,7 +29,7 @@
   "scripts": {
     "bundle": "coffee --nodejs --harmony bundle.coffee",
     "checkout-master": "coffee preversion.coffee; git checkout master; git pull; find ./node_modules/neft-* -type d -maxdepth 0 -execdir sh -c 'echo \\\\n\\\\n$0\\\\n; cd ./node_modules/$0; git checkout master; git pull' {} \\;",
-    "test": "node ./node_modules/neft-unit/bin/unit.js ./node_modules/neft-\\*/"
+    "test": "node ./node_modules/neft-unit/bin/unit.js ./spec"
   },
   "dependencies": {
     "coffee-script": "^1.10.0",
@@ -46,8 +46,8 @@
     "uglify-js": "^2.6.1",
     "semver": "^5.1.0",
     "neft-android-runtime": "Neft-io/neft-android-runtime#4509df0",
-    "neft-ios-runtime": "Neft-io/neft-ios-runtime#65dd89f",
-    "neft-sample-project": "Neft-io/neft-sample-project#36e6e6d",
+    "neft-ios-runtime": "Neft-io/neft-ios-runtime#9ee97c7",
+    "neft-sample-project": "Neft-io/neft-sample-project#5d351a2",
     "neft-nml-parser": "Neft-io/neft-nml-parser#5286aad"
   },
   "devDependencies": {
