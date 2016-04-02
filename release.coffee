@@ -2,7 +2,7 @@
 
 groundskeeper = require 'groundskeeper'
 
-{log} = Neft
+{utils, log} = Neft
 
 RELEASE_NAMESPACES_TO_REMOVE = [
 	'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions'
