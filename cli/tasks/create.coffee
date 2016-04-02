@@ -17,7 +17,7 @@ module.exports = (dest, options) ->
 		return
 
 	log "Copy sample project into '#{dest}'"
-	src = pathUtils.resolve(__dirname, '../../node_modules/sample-project')
+	src = pathUtils.resolve(__dirname, '../../node_modules/neft-sample-project')
 	fs.copySync src, dest
 	fs.removeSync "#{dest}/.git"
 
