@@ -4,7 +4,7 @@ module.exports = (impl) ->
 	{bridge} = impl
 	{outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
 
-	colorUtils = require '../../base/utils/color'
+	colorUtils = require '../../../utils/color'
 
 	bridge.listen bridge.inActions.TEXT_INPUT_TEXT, (reader) ->
 		textInput = bridge.getItemFromReader reader

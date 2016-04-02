@@ -1,10 +1,6 @@
 'use strict'
 
 assert = require 'neft-assert'
-log = require 'neft-log'
-utils = require 'neft-utils'
-
-log = log.scope 'Renderer'
 
 ###
 Parse 3-digit hex, 6-digit hex, rgb, rgba, hsl, hsla, or named color into RGBA hex.

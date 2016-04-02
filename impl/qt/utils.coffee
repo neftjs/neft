@@ -1,4 +1,4 @@
-colorUtils = require '../base/utils/color'
+colorUtils = require '../../utils/color'
 
 exports.DATA_URI_RE = ///^data:([a-z+/]+),(.*)$///
 
