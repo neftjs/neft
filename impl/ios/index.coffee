@@ -3,10 +3,25 @@
 utils = require 'neft-utils'
 
 module.exports = (Networking) ->
-	impl = {}
+	requests = Object.create null
+
+	ios.httpResponseCallback = (id, error, code, resp, headers) ->
+		request = requests[id]
+		delete requests[id]
+
+		if request.type is Networking.Request.JSON_TYPE
+			resp = utils.tryFunction JSON.parse, null, [resp], resp
+		cookies = utils.tryFunction JSON.parse, null, [headers?['X-Cookies']], null
+
+		request.callback
+			status: code
+			data: resp or error
+			headers: headers
+			cookies: cookies
+		return
 
 	Request: require('./request.coffee') Networking
-	Response: require('./response.coffee') Networking, impl
+	Response: require('./response.coffee') Networking
 
 	init: (networking) ->
 		setImmediate ->
@@ -20,47 +35,25 @@ module.exports = (Networking) ->
 	Send a XHR request and call `callback` on response.
 	###
 	sendRequest: (req, res, callback) ->
-		{Request} = Networking
-
-		xhr = new XMLHttpRequest
-
-		# prevent caching
-		uri = req.uri.toString()
-		if utils.has(uri, '?')
-			uri = "#{uri}&now=#{Date.now()}"
-		else
-			uri = "#{uri}?now=#{Date.now()}"
-
-		xhr.open req.method, uri, true
-
+		headers = []
 		for name, val of req.headers
-			xhr.setRequestHeader name, val
-		xhr.setRequestHeader 'X-Expected-Type', req.type
+			headers.push name, val
+		headers.push 'content-type', 'text/plain'
+		headers.push 'charset', 'utf-8'
+		headers.push 'x-expected-type', req.type
 
 		if cookies = utils.tryFunction(JSON.stringify, null, [req.cookies], null)
-			xhr.setRequestHeader 'X-Cookies', cookies
+			headers.push 'x-cookies', cookies
 
-		xhr.onload = ->
-			{response} = xhr
+		if typeof (data = req.data) isnt 'string'
+			data = utils.tryFunction JSON.stringify, null, [data], data+''
 
-			if req.type is Request.JSON_TYPE and typeof response is 'string'
-				response = utils.tryFunction JSON.parse, null, [response], response
+		if typeof data is 'string'
+			headers.push 'content-length', data.length
 
-			if cookies = xhr.getResponseHeader('X-Cookies')
-				cookies = utils.tryFunction JSON.parse, null, [cookies], null
+		id = ios.httpRequest req.uri, req.method, headers, data
 
-			callback
-				status: xhr.status
-				data: response
-				cookies: cookies
-
-		xhr.onerror = ->
-			callback
-				status: xhr.status
-				data: xhr.response
-
-		if utils.isObject(req.data)
-			data = utils.tryFunction JSON.stringify, null, [req.data], req.data
-		else
-			data = req.data
-		xhr.send data
+		requests[id] =
+			type: req.type
+			callback: callback
+		return
