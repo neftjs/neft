@@ -1,4 +1,4 @@
 #!/bin/sh
 
 AB_DIR="`dirname \"$0\"`"
-node --harmony "$AB_DIR/neft.js" "$@"
+NODE_PATH=./ node --harmony "$AB_DIR/neft.js" "$@"
