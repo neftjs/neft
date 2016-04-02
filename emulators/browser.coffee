@@ -7,7 +7,6 @@ module.exports = (opts) ->
 	addEventListener: ->
 	Image: ->
 	HTMLCanvasElement: if opts.extras?.game then (->) else null
-	navigator: {}
 	location: pathname: ''
 	navigator: userAgent: ''
 	innerWidth: 1024
