@@ -17,8 +17,7 @@
     "node-static": "^0.7.6",
     "form-data": "1.0.0-rc3",
     "qs": "^6.0.1",
-    "neft-document-form": "Neft-io/document-form",
-    "neft-styles-material-design": "Neft-io/styles-material-design"
+    "neft-document-form": "Neft-io/document-form#next"
   },
   "android": {
     "package": "io.neft.sample",

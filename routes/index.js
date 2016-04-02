@@ -1,5 +1,5 @@
-var List = require('list');
-var Dict = require('dict');
+var List = require('neft-list');
+var Dict = require('neft-dict');
 
 module.exports = function(app){
 	return {
@@ -21,7 +21,7 @@ module.exports = function(app){
 			/* custom methods below */
 
 			orderProduct: function(product){
-				if (this.orderStatus.get('pending')){
+				if (this.orderStatus.pending){
 					return;
 				}
 
@@ -29,7 +29,7 @@ module.exports = function(app){
 				this.order.append(product);
 			},
 			send: function(){
-				if (this.orderStatus.get('pending')){
+				if (this.orderStatus.pending){
 					return;
 				}
 
@@ -37,7 +37,7 @@ module.exports = function(app){
 				this.orderStatus.set('pending', true);
 
 				// server request
-				app.networking.post('api/order', this.order.items(), function(err, msg){
+				app.networking.post('api/order', this.order.toArray(), function(err, msg){
 					// server URL must be specified in the `package.json`
 					if (this.response.status === 0){
 						err = 'No internet connection';
