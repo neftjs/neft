@@ -31,8 +31,9 @@ module.exports = (platform, app, callback) ->
 
 	packageConfig = JSON.parse fs.readFileSync('./package.json', 'utf-8')
 	for key of packageConfig.dependencies
-		if /^neft\-styles\-/.test(key)
-			inputDirs.push path: "node_modules/#{key}", prefix: "#{key}/"
+		stylesPath = "node_modules/#{key}/styles"
+		if /^neft\-/.test(key) and fs.existsSync(stylesPath)
+			inputDirs.push path: stylesPath, prefix: "#{key}/"
 
 	if utils.isObject(packageConfig.styles)
 		for key, val of packageConfig.styles
