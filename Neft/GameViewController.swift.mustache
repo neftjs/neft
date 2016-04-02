@@ -9,53 +9,102 @@ public extension CGFloat {
     }
 }
 
+extension String {
+    var uppercaseFirst: String {
+        return String(characters.prefix(1)).uppercaseString + String(characters.dropFirst())
+    }
+}
+
+struct Extension {
+    {{#iosExtensions}}
+    struct {{&name}} {}
+    {{/iosExtensions}}
+}
+
 class GameViewController: UIViewController {
     let client = Client()
     let renderer = Renderer()
+    var shadowWindow: ShadowWindow!
     var window: Window!
     var customApp: CustomApp!
-    
+    var frameDelay: Double = 0
+    var frameTime: Double = 0
+
     class Window: UIView {
         var app: GameViewController!
         var windowItem: Item?
         let background = CAShapeLayer()
-        
+
         override func didMoveToSuperview() {
             background.fillColor = UIColor.whiteColor().CGColor
             background.path = CGPathCreateWithRect(CGRect(x: 0, y: 0, width: frame.width, height: frame.height), nil)
         }
-        
+
         override func drawRect(rect: CGRect) {
             let context = UIGraphicsGetCurrentContext()!
             background.renderInContext(context)
             windowItem?.draw(context, inRect: rect)
-            
+
             // DEBUG dirty rectangles
-//            CGContextSetRGBFillColor(context, CGFloat.random(), CGFloat.random(), CGFloat.random(), 0.3);
-//            CGContextFillRect(context, rect);
+            // CGContextSetRGBFillColor(context, CGFloat.random(), CGFloat.random(), CGFloat.random(), 0.3);
+            // CGContextFillRect(context, rect);
+        }
+    }
+
+    class AnimationFrameView: UIView {
+        var app: GameViewController!
+
+        override func drawRect(rect: CGRect) {
+            let time = CACurrentMediaTime()
+            app.frameDelay = (time - app.frameTime) * 1000;
+            app.client.js.callAnimationFrame()
+            dispatch_after(0, dispatch_get_main_queue()) {
+                self.setNeedsDisplay()
+            }
+            app.frameTime = time
+            app.renderer.draw()
+        }
+    }
+
+    class ShadowWindow: UIView {
+        override func drawRect(rect: CGRect) {
         }
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.customApp = CustomApp(app: self)
-        
         renderer.app = self
-        
-        view.addSubview(self.client.js.webView)
+
         (UIApplication.sharedApplication() as! NeftApplication).renderer = renderer
-        
+
         client.actions[InAction.SET_WINDOW] = {
             (reader: Reader) in
             self.window.windowItem = self.renderer.getObjectFromReader(reader) as? Item
             self.window.setNeedsDisplay()
         }
-        
-        self.window = Window(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-        self.window.app = self
-        self.view.addSubview(self.window)
-        
+
+        // animation frame
+        let animationFrameView = AnimationFrameView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        animationFrameView.app = self
+        animationFrameView.userInteractionEnabled = false
+        view.addSubview(animationFrameView)
+
+        // shadow window
+        self.shadowWindow = ShadowWindow(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        view.addSubview(shadowWindow)
+
+        // window
+        self.window = Window(frame: shadowWindow.frame)
+        window.app = self
+        window.userInteractionEnabled = false
+        view.addSubview(self.window)
+
+        super.viewDidLoad()
+
+        self.customApp = CustomApp(app: self)
+        {{#iosExtensions}}
+        Extension.{{&name}}.register(self);
+        {{/iosExtensions}}
+
         self.renderer.load()
         self.client.js.runScript("neft")
     }

@@ -1,6 +1,6 @@
-window._createOnCompletion = (id) ->
+@_createOnCompletion = (id) ->
 	(data) ->
-		webkit.messageHandlers.response.postMessage
+		_neft.postMessage "response",
 			id: id
 			response: data
 		return

@@ -12,6 +12,7 @@
 		082549681C3E631000D846C0 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082549671C3E631000D846C0 /* main.swift */; };
 		0825496A1C3E63B600D846C0 /* NeftApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082549691C3E63B600D846C0 /* NeftApplication.swift */; };
 		0825496C1C3EAFB900D846C0 /* TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0825496B1C3EAFB900D846C0 /* TextInput.swift */; };
+		082566331CB02BBD0054E1F6 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082566321CB02BBD0054E1F6 /* Networking.swift */; };
 		088623801C1635F600FF6C11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0886237F1C1635F600FF6C11 /* AppDelegate.swift */; };
 		088623861C1635F600FF6C11 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088623851C1635F600FF6C11 /* GameViewController.swift */; };
 		088623891C1635F600FF6C11 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 088623871C1635F600FF6C11 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 		08ADA7CE1C2038D1008FCA00 /* svgToImage.js in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7CD1C2038D1008FCA00 /* svgToImage.js */; };
 		08ADA7D01C205738008FCA00 /* js.js in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7CF1C205738008FCA00 /* js.js */; };
 		08ADA7D41C2182CA008FCA00 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ADA7D31C2182C9008FCA00 /* Config.swift */; };
+		08B098501C93693600EE9593 /* NativeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B0984F1C93693600EE9593 /* NativeItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,7 @@
 		082549671C3E631000D846C0 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		082549691C3E63B600D846C0 /* NeftApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeftApplication.swift; sourceTree = "<group>"; };
 		0825496B1C3EAFB900D846C0 /* TextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextInput.swift; sourceTree = "<group>"; };
+		082566321CB02BBD0054E1F6 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		0886237C1C1635F600FF6C11 /* Neft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Neft.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0886237F1C1635F600FF6C11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		088623851C1635F600FF6C11 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 		08ADA7CD1C2038D1008FCA00 /* svgToImage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = svgToImage.js; sourceTree = "<group>"; };
 		08ADA7CF1C205738008FCA00 /* js.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js.js; sourceTree = "<group>"; };
 		08ADA7D31C2182C9008FCA00 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		08B0984F1C93693600EE9593 /* NativeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +126,7 @@
 				0812E09D1C19AE0C00DB1152 /* Utils.swift */,
 				08ADA7D31C2182C9008FCA00 /* Config.swift */,
 				088B7FCB1C4D75900039D52A /* Client.swift */,
+				082566321CB02BBD0054E1F6 /* Networking.swift */,
 			);
 			path = Neft;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 		0886239D1C171C8300FF6C11 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				08B0984F1C93693600EE9593 /* NativeItem.swift */,
 				088623A01C18D51400FF6C11 /* Item.swift */,
 				088623A21C18D51D00FF6C11 /* Text.swift */,
 				0825496B1C3EAFB900D846C0 /* TextInput.swift */,
@@ -186,8 +192,8 @@
 		088623741C1635F600FF6C11 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0710;
+				LastSwiftUpdateCheck = 720;
+				LastUpgradeCheck = 710;
 				ORGANIZATIONNAME = Neft.io;
 				TargetAttributes = {
 					0886237B1C1635F600FF6C11 = {
@@ -239,11 +245,13 @@
 				088B7FD31C4D764C0039D52A /* Reader.swift in Sources */,
 				0825496C1C3EAFB900D846C0 /* TextInput.swift in Sources */,
 				088B7FCF1C4D75B20039D52A /* InAction.swift in Sources */,
+				082566331CB02BBD0054E1F6 /* Networking.swift in Sources */,
 				088623A91C18D53D00FF6C11 /* Device.swift in Sources */,
 				0825496A1C3E63B600D846C0 /* NeftApplication.swift in Sources */,
 				088B7FD11C4D76010039D52A /* OutAction.swift in Sources */,
 				088623961C16D35100FF6C11 /* Js.swift in Sources */,
 				088623A71C18D53600FF6C11 /* Navigator.swift in Sources */,
+				08B098501C93693600EE9593 /* NativeItem.swift in Sources */,
 				08ADA7D41C2182CA008FCA00 /* Config.swift in Sources */,
 				088623A51C18D52E00FF6C11 /* Image.swift in Sources */,
 				088B7FD61C4D93730039D52A /* CustomApp.swift in Sources */,
@@ -319,7 +327,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -359,7 +367,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
@@ -375,11 +383,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Neft/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = neft.io.Neft;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -390,11 +399,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Neft/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = neft.io.Neft;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
