@@ -66,17 +66,21 @@ Module._load = do (_super = Module._load) -> (req, parent) ->
 			disabled = false
 		return r
 
-	filename = Module._resolveFilename req, parent
-
-	modulePath = pathUtils.relative base, filename
-	parentPath = pathUtils.relative base, parent.id
+	if pathUtils.isAbsolute(req) and req isnt index
+		modulePath = req
+		parentPath = ''
+	else
+		filename = Module._resolveFilename req, parent
+		modulePath = pathUtils.relative base, filename
+		parentPath = pathUtils.relative base, parent.id
 
 	unless modulesByPaths[modulePath]
 		modules.push modulePath
 		modulesByPaths[modulePath] = true
 
-	mpaths = paths[parentPath] ?= {}
-	mpaths[req] = modulePath
+	if parentPath
+		mpaths = paths[parentPath] ?= {}
+		mpaths[req] = modulePath
 
 	r
 
@@ -91,8 +95,9 @@ catch err
 	console.error err
 	process.exit 1
 
-resultJSON = JSON.stringify
-	modules: modules
-	paths: paths
+setImmediate ->
+	resultJSON = JSON.stringify
+		modules: modules
+		paths: paths
 
-process.send resultJSON
+	process.send resultJSON
