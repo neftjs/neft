@@ -39,16 +39,20 @@ class Test
 		@onEnd = utils.bindFunctionContext @onEnd, @
 		Object.seal @
 
-	onEnd: ->
+	onEnd: (err) ->
 		if @_callbackCalled
 			return
 
 		@_callbackCalled = true
 		logger.onTestEnd @
 
+		if err
+			stack.fail err
+
 		# call after functions
-		for afterFunc in stack.currentScope.afterFunctions
-			afterFunc()
+		if @fulfilled
+			for afterFunc in stack.currentScope.afterFunctions
+				afterFunc()
 
 		@_callback()
 
