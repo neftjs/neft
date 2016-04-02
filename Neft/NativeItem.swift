@@ -101,6 +101,13 @@ class NativeItem: Item {
         updateSize()
     }
 
+    internal func invalidate(duration duration: Double) {
+        if duration > self.invalidateDuration {
+            self.invalidateDuration = duration
+        }
+        super.invalidate()
+    }
+
     internal func updateSize() {
         guard view != nil else { return; }
 
