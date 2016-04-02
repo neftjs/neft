@@ -29,12 +29,14 @@ Route @class
 		@getTemplateView = do ->
 			if utils.isNode
 				(name) ->
-					tmpl = app.views[name].render(app: app, routes: new Dict)
+					scope = app: app, routes: new Dict
+					tmpl = app.views[name].render null, scope
 					usedTemplates.push tmpl
 					tmpl
 			else
 				(name) ->
-					templates[name] ?= app.views[name].render(app: app, routes: new Dict)
+					scope = app: app, routes: new Dict
+					templates[name] ?= app.views[name].render null, scope
 
 *Route* Route(*Object* options)
 -------------------------------
@@ -404,25 +406,38 @@ Acceptable syntaxes:
 *Document* Route::toHTML()
 --------------------------
 
+		routeToString = ->
+			"#{@method} #{@uri}"
+
+		getDefaultRouteViewName = ->
+			path = "views/#{@name}.html"
+			if app.views[path]
+				return path
+
 		renderViewFromConfig = (opts) ->
-			viewName = opts?.view or @name or 'index'
-			tmplName = opts?.template or 'template'
+			viewName = opts?.view or getDefaultRouteViewName.call(@) or 'views/index.html'
+			tmplName = opts?.template or 'views/template.html'
 			useName = opts?.use or 'body'
 
 			logtime = log.time 'Render'
-			if viewName isnt tmplName and (tmpl = app.views[tmplName])
-				tmplView = Route.getTemplateView tmplName
-				tmplView.use useName, null
+			if viewName isnt tmplName
+				if tmpl = app.views[tmplName]
+					tmplView = Route.getTemplateView tmplName
+					tmplView.use useName, null
+				else
+					log.warn "Template view '#{tmplName}' can't be found for route '#{routeToString.call(@)}'"
 			if view = app.views[viewName]
-				r = view.render @
+				r = view.render null, @
+			else
+				log.warn "View '#{tmplName}' can't be found for route '#{routeToString.call(@)}'"
 			if tmplView
 				if r?
 					r = tmplView.use(useName, r)
 				else
 					r = tmplView
-				if tmplView.attrs.routes.has(useName)
-					tmplView.attrs.routes.pop useName
-				tmplView.attrs.routes.set useName, @
+				if tmplView.scope.routes.has(useName)
+					tmplView.scope.routes.pop useName
+				tmplView.scope.routes.set useName, @
 				@_destroyViewOnEnd = false
 			else
 				@_destroyViewOnEnd = true

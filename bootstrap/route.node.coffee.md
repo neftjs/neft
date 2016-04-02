@@ -19,15 +19,15 @@ Standard routes @learn
 	<html>
 	<head>
 		<meta charset="utf-8">
-		<title>${attrs.title}</title>
-		<script type="text/javascript" src="${attrs.neftFilePath}"></script>
-		<script type="text/javascript" src="${attrs.appFilePath}"></script>
+		<title>${scope.title}</title>
+		<script type="text/javascript" src="${scope.neftFilePath}"></script>
+		<script type="text/javascript" src="${scope.appFilePath}"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	</head>
 	<body>
 		<noscript>
-			<meta http-equiv="refresh" content="0; url=${attrs.appTextModeUrl}"></meta>
+			<meta http-equiv="refresh" content="0; url=${scope.appTextModeUrl}"></meta>
 		</noscript>
 	</body>
 	</html>
@@ -176,7 +176,7 @@ text browsers) or the HTML scaffolding which will run **neft.io** on the client 
 				@response.data.destroy()
 
 			toHTML: ->
-				view.render
+				view.render null,
 					title: app.config.title
 					appTextModeUrl: TEXT_MODE_URI_PREFIX + @request.uri
 					neftFilePath: NEFT_JS_URI

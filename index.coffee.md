@@ -222,6 +222,7 @@ By default, client has *clientId* and *sessionId* hashes.
 		# propagate data
 		Renderer.resources = app.resources
 		Renderer.serverUrl = app.networking.url
+		Document.Scripts.scriptFiles = opts.modules
 
 		# set styles window item
 		if opts.styles?
