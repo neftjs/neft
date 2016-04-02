@@ -6,13 +6,13 @@ class Reader {
     private var integers = NSArray()
     private var floats = NSArray()
     private var strings = NSArray()
-    
+
     private var actionsIndex = 0
     private var booleansIndex = 0
     private var integersIndex = 0
     private var floatsIndex = 0
     private var stringsIndex = 0
-    
+
     func reload(body: AnyObject){
         let dict = body as! NSDictionary
         self.actions = dict.objectForKey("actions") as! NSArray
@@ -20,34 +20,39 @@ class Reader {
         self.integers = dict.objectForKey("integers") as! NSArray
         self.floats = dict.objectForKey("floats") as! NSArray
         self.strings = dict.objectForKey("strings") as! NSArray
-        
+
         actionsIndex = 0
         booleansIndex = 0
         integersIndex = 0
         floatsIndex = 0
         stringsIndex = 0
     }
-    
+
     func getAction() -> InAction? {
         if (actionsIndex >= actions.count){
             return nil
         }
-        return InAction(rawValue: actions[actionsIndex++] as! Int)
+        actionsIndex += 1
+        return InAction(rawValue: actions[actionsIndex - 1] as! Int)
     }
-    
+
     func getBoolean() -> Bool {
-        return booleans[booleansIndex++] as! Bool
+        booleansIndex += 1
+        return booleans[booleansIndex - 1] as! Bool
     }
-    
+
     func getInteger() -> Int {
-        return integers[integersIndex++] as! Int
+        integersIndex += 1
+        return integers[integersIndex - 1] as! Int
     }
-    
+
     func getFloat() -> CGFloat {
-        return floats[floatsIndex++] as! CGFloat
+        floatsIndex += 1
+        return floats[floatsIndex - 1] as! CGFloat
     }
-    
+
     func getString() -> String {
-        return strings[stringsIndex++] as! String
+        stringsIndex += 1
+        return strings[stringsIndex - 1] as! String
     }
 }

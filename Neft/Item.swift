@@ -265,7 +265,7 @@ class Item: Renderer.Object {
 
     }
 
-    func measure(var globalTransform: CGAffineTransform, var _ viewRect: CGRect, inout _ dirtyRects: [CGRect], forceUpdateBounds: Bool = false) {
+    func measure(globalTransform: CGAffineTransform, _ viewRect: CGRect, inout _ dirtyRects: [CGRect], forceUpdateBounds: Bool = false) {
         let isDirty = forceUpdateBounds || dirty || dirtyTransform
 
         // break on no changes
@@ -279,12 +279,12 @@ class Item: Renderer.Object {
         }
 
         // include local transform
-        globalTransform = CGAffineTransformConcat(transform, globalTransform)
+        let innerGlobalTransform = CGAffineTransformConcat(transform, globalTransform)
 
         // update bounds
         if isDirty {
             let oldGlobalBounds = globalBounds
-            globalBounds = CGRectApplyAffineTransform(bounds, globalTransform)
+            globalBounds = CGRectApplyAffineTransform(bounds, innerGlobalTransform)
 
             // add rectangle to redraw
             if dirty || dirtyTransform || !CGRectEqualToRect(globalBounds, oldGlobalBounds) {
@@ -310,25 +310,23 @@ class Item: Renderer.Object {
         }
 
         // clip
-        if clip {
-            viewRect = globalBounds
-        }
+        let childrenViewRect = clip ? globalBounds : viewRect;
 
         let forceChildrenUpdate = forceUpdateBounds || dirtyTransform
         if forceChildrenUpdate || dirtyChildren {
             // clear
             dirtyChildren = false
             dirtyTransform = false
-            
+
             // measure background
-            background?.measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
+            background?.measure(innerGlobalTransform, childrenViewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
 
             // measure children
             var i = 0
             let children = self.children
             let length = children.count
             while i < length {
-                children[i].measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
+                children[i].measure(innerGlobalTransform, childrenViewRect, &dirtyRects, forceUpdateBounds: forceChildrenUpdate)
                 i += 1
             }
         }

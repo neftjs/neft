@@ -3,16 +3,16 @@ import UIKit
 class Client {
     let js = JS()
     let reader = Reader()
-    
+
     var actions: Dictionary<InAction, (Reader) -> ()> = [:]
     var customFunctions: Dictionary<String, (args: [Any?]) -> Void> = [:]
     let onDataProcessed = Signal()
-    
+
     private static let EventNilType = 0
     private static let EventBooleanType = 1
     private static let EventFloatType = 2
     private static let EventStringType = 3
-    
+
     var outActions: [Int] = []
     private var outActionsIndex = 0
     var outBooleans: [Bool] = []
@@ -23,21 +23,21 @@ class Client {
     private var outFloatsIndex = 0
     var outStrings: [String] = []
     private var outStringsIndex = 0
-    
+
     init() {
         self.js.addHandler("transferData", handler: {
             (message: AnyObject) in
             self.reader.reload(message)
             self.onData(self.reader)
         })
-        
+
         actions[InAction.CALL_FUNCTION] = { (reader: Reader) in
             let name = reader.getString()
             let function = self.customFunctions[name]
-            
+
             let argsLength = reader.getInteger()
             var args = [Any?](count: argsLength, repeatedValue: nil)
-            
+
             for i in 0..<argsLength {
                 let argType = reader.getInteger()
                 switch argType {
@@ -53,7 +53,7 @@ class Client {
                     break
                 }
             }
-            
+
             if function != nil {
                 function!(args: args)
             } else {
@@ -61,7 +61,7 @@ class Client {
             }
         }
     }
-    
+
     func onData(reader: Reader) {
         while let action = reader.getAction() {
             let actionFunc = actions[action]
@@ -74,7 +74,7 @@ class Client {
         sendData()
         onDataProcessed.emit()
     }
-    
+
     private func pushIntoArray<T>(inout arr: [T], index: Int, val: T) {
         if arr.count > index {
             arr[index] = val
@@ -82,27 +82,32 @@ class Client {
             arr.append(val)
         }
     }
-    
+
     func pushAction(val: OutAction) {
-        pushIntoArray(&outActions, index: outActionsIndex++, val: val.rawValue)
+        pushIntoArray(&outActions, index: outActionsIndex, val: val.rawValue)
+        outActionsIndex += 1
     }
-    
+
     func pushBoolean(val: Bool) {
-        pushIntoArray(&outBooleans, index: outBooleansIndex++, val: val)
+        pushIntoArray(&outBooleans, index: outBooleansIndex, val: val)
+        outBooleansIndex += 1
     }
-    
+
     func pushInteger(val: Int) {
-        pushIntoArray(&outIntegers, index: outIntegersIndex++, val: val)
+        pushIntoArray(&outIntegers, index: outIntegersIndex, val: val)
+        outIntegersIndex += 1
     }
-    
+
     func pushFloat(val: CGFloat) {
-        pushIntoArray(&outFloats, index: outFloatsIndex++, val: val)
+        pushIntoArray(&outFloats, index: outFloatsIndex, val: val)
+        outFloatsIndex += 1
     }
-    
+
     func pushString(val: String) {
-        pushIntoArray(&outStrings, index: outStringsIndex++, val: val)
+        pushIntoArray(&outStrings, index: outStringsIndex, val: val)
+        outStringsIndex += 1
     }
-    
+
     func pushEvent(name: String, args: [Any?]?) {
         pushAction(OutAction.EVENT)
         pushString(name)
@@ -130,11 +135,11 @@ class Client {
             pushInteger(0)
         }
     }
-    
+
     func addCustomFunction(name: String, function: (args: [Any?]) -> Void) {
         customFunctions[name] = function
     }
-    
+
     /**
      Removes all elements after the given length.
      */
@@ -143,22 +148,22 @@ class Client {
             arr.removeRange(length..<arr.count)
         }
     }
-    
+
     func sendData() {
         guard outActionsIndex > 0 else { return; }
-        
+
         cutDataArray(&outActions, length: outActionsIndex)
         cutDataArray(&outBooleans, length: outBooleansIndex)
         cutDataArray(&outIntegers, length: outIntegersIndex)
         cutDataArray(&outFloats, length: outFloatsIndex)
         cutDataArray(&outStrings, length: outStringsIndex)
-        
+
         outActionsIndex = 0
         outIntegersIndex = 0
         outFloatsIndex = 0
         outBooleansIndex = 0
         outStringsIndex = 0
-        
+
         js.proxy.dataCallback.callWithArguments([outActions, outBooleans, outIntegers, outFloats, outStrings])
     }
 }

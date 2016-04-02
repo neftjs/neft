@@ -43,11 +43,6 @@ class Renderer {
         NativeItem.register(app)
         Rectangle.register(app)
         Scrollable.register(app)
-
-//        app.client.onDataProcessed.connect {
-//            (arg) -> Void in
-//            self.draw()
-//        }
     }
 
     func pxToDp(px: CGFloat) -> CGFloat {
@@ -75,7 +70,7 @@ class Renderer {
                     dirtyRects.removeAtIndex(i)
                     continue intersectRects
                 }
-                i++
+                i += 1
             }
             break
         }

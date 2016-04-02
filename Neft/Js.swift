@@ -10,6 +10,8 @@ import JavaScriptCore
     func postMessage(name: String, _ data: NSDictionary) -> Void
     func timerShot(delay: Int64) -> Int
     func immediate(function: JSValue) -> Void
+    var httpResponseCallback: JSValue { get set }
+    func httpRequest(uri: String, _ method: String, _ headers: NSArray, _ data: JSValue) -> Int
 }
 
 /**
@@ -18,7 +20,7 @@ import JavaScriptCore
 @objc class NeftJS: NSObject, NeftJSExports {
     var js: JS!
     private var lastTimerId = 0
-    
+
     private var timerCallbackValue: JSValue!
     var timerCallback: JSValue {
         get {
@@ -28,7 +30,7 @@ import JavaScriptCore
             timerCallbackValue = val
         }
     }
-    
+
     private var animationFrameCallbackValue: JSValue!
     var animationFrameCallback: JSValue {
         get {
@@ -38,7 +40,7 @@ import JavaScriptCore
             animationFrameCallbackValue = val
         }
     }
-    
+
     private var dataCallbackValue: JSValue!
     var dataCallback: JSValue {
         get {
@@ -48,7 +50,16 @@ import JavaScriptCore
             dataCallbackValue = val
         }
     }
-    
+
+    var httpResponseCallback: JSValue {
+        get {
+            return Networking.responseCallback
+        }
+        set (val) {
+            Networking.responseCallback = val;
+        }
+    }
+
     func postMessage(name: String, _ data: NSDictionary) {
         switch name {
         case "response":
@@ -69,22 +80,33 @@ import JavaScriptCore
             }
         }
     }
-    
+
     func timerShot(delay: Int64) -> Int {
         let id = lastTimerId
         lastTimerId += 1
-        
+
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay), dispatch_get_main_queue()) {
             self.timerCallbackValue.callWithArguments([id])
         }
 
         return id
     }
-    
+
     func immediate(function: JSValue) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue()) {
             function.callWithArguments(nil)
         }
+    }
+
+    func httpRequest(uri: String, _ method: String, _ headersArr: NSArray, _ data: JSValue) -> Int {
+        var headers = [String: String]()
+        for i in (0..<headersArr.count) where i % 2 == 0 {
+            let name = String(headersArr[i])
+            let val = String(headersArr[i+1])
+            headers[name] = val
+        }
+
+        return Networking.request(uri, method: method, headers: headers, data: data)
     }
 }
 
@@ -94,12 +116,12 @@ import JavaScriptCore
 class JS {
     let context: JSContext
     let proxy: NeftJS
-    
+
     private var handlers: Dictionary<String, (message: AnyObject) -> ()> = [:]
-    
+
     var lastRequestId = 0
     var pendingRequests: Dictionary<Int, (message: AnyObject) -> Void> = [:]
-    
+
     init(){
         context = JSContext()
         proxy = NeftJS()
@@ -107,7 +129,7 @@ class JS {
         context.setObject(proxy, forKeyedSubscript: "ios")
         self.runScript("js")
     }
-    
+
     func runScript(filename: String) {
         let path = NSBundle.mainBundle().pathForResource(filename, ofType: "js")
         do {
@@ -117,19 +139,20 @@ class JS {
             print(error);
         }
     }
-    
+
     func runCode(code: String) {
         context.evaluateScript(code)
     }
-    
+
     func addHandler(name: String, handler: (message: AnyObject) -> Void) {
         handlers[name] = handler
     }
-    
+
     func callFunction(name: String, argv: String = "", completion: ((message: AnyObject) -> Void)? = nil) {
         var code = name + "(" + argv
         if completion != nil {
-            let id = self.lastRequestId++
+            let id = self.lastRequestId
+            self.lastRequestId += 1
             pendingRequests[id] = completion
             if !argv.isEmpty {
                 code += ", "
@@ -137,10 +160,10 @@ class JS {
             code += "_createOnCompletion(\(id))"
         }
         code += ")"
-        
+
         context.evaluateScript(code)
     }
-    
+
     func callAnimationFrame() {
         proxy.animationFrameCallback.callWithArguments([])
     }

@@ -39,7 +39,8 @@ class NativeItem: Item {
     static func addClientAction(app: GameViewController, type: String, name: String, handler: ((NativeItem, [Any?]) -> Void)) {
         let funcName = "renderer\(type)\(self.name.uppercaseFirst)\(name.uppercaseFirst)"
         let clientHandler = {
-            (var args: [Any?]) in
+            (inputArgs: [Any?]) in
+            var args = inputArgs
             let index = Int(round(args[0] as! CGFloat))
             let item = app.renderer.objects[index] as! NativeItem
             args.removeFirst()
@@ -65,7 +66,7 @@ class NativeItem: Item {
     internal var onPointerPressInvalidateDuration: Double = 0
     internal var onPointerReleaseInvalidateDuration: Double = 0
     internal var onPointerMoveInvalidateDuration: Double = 0
-    
+
     init(_ app: GameViewController, view: UIView? = nil) {
         super.init(app)
         self.view = view
@@ -131,7 +132,7 @@ class NativeItem: Item {
 
     func onPointerPress(x: CGFloat, _ y: CGFloat) {
         pressed = true
-        
+
         guard view != nil else { return; }
 
         if onPointerPressInvalidateDuration > 0 {
@@ -142,7 +143,7 @@ class NativeItem: Item {
 
     func onPointerRelease(x: CGFloat, _ y: CGFloat) {
         guard view != nil else { return; }
-        
+
         if onPointerReleaseInvalidateDuration > 0 {
             self.invalidateDuration = onPointerReleaseInvalidateDuration
             invalidate()
@@ -151,7 +152,7 @@ class NativeItem: Item {
 
     func onPointerMove(x: CGFloat, _ y: CGFloat) {
         guard view != nil else { return; }
-        
+
         if onPointerMoveInvalidateDuration > 0 {
             self.invalidateDuration = onPointerMoveInvalidateDuration
             invalidate()

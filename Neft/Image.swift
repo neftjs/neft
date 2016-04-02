@@ -4,7 +4,7 @@ class Image: Item {
     static var cache: [String: CGImageRef] = Dictionary()
     static var loadingHandlers: [String: [(result: CGImageRef?) -> Void]] = Dictionary()
 //    static let svgToImageJs = Js(name: "svgToImage")
-    
+
     override class func register(app: GameViewController) {
         app.client.actions[InAction.CREATE_IMAGE] = {
             (reader: Reader) in
@@ -40,25 +40,25 @@ class Image: Item {
             (app.renderer.getObjectFromReader(reader) as! Image)
                 .setOffsetY(reader.getFloat())
         }
-        
+
 //        Image.svgToImageJs.runScript("svgToImage")
     }
-    
+
     var modelImage: CGImageRef?
     var image: CGImageRef?
-    
+
     override internal func updateBounds() {
         super.updateBounds()
         updateImage()
     }
-    
+
     private func updateImage() {
         if modelImage == nil || width < 1 || height < 1 {
             image = nil
         } else {
             let imageWidth = Int(round(app.renderer.dpToPx(width)))
             let imageHeight = Int(round(app.renderer.dpToPx(height)))
-            
+
             UIGraphicsBeginImageContext(CGSize(width: imageWidth, height: imageHeight))
             let context = UIGraphicsGetCurrentContext()
             CGContextDrawImage(context, CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight), modelImage)
@@ -66,14 +66,16 @@ class Image: Item {
             UIGraphicsEndImageContext()
         }
     }
-    
-    private func loadSvgData(svg: NSString, completion: (data: NSData?) -> Void) {
-        let width = 0
-        let height = 0
 
-        let plainData = svg.dataUsingEncoding(NSUTF8StringEncoding)
-        let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-        
+    private func loadSvgData(svg: NSString, completion: (data: NSData?) -> Void) {
+        // TODO
+        completion(data: nil)
+//        let width = 0
+//        let height = 0
+//
+//        let plainData = svg.dataUsingEncoding(NSUTF8StringEncoding)
+//        let base64String = plainData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+
 //        dispatch_async(dispatch_get_main_queue()) {
 //            Image.svgToImageJs.callFunction("svgToImage", argv: "\"\(base64String)\", \(width), \(height)") {
 //                (message: AnyObject) in
@@ -83,7 +85,7 @@ class Image: Item {
 //            }
 //        }
     }
-    
+
     private func getTextureFromData(data: NSData, source: String, completion: (texture: CGImageRef?) -> Void) {
         if source.hasSuffix(".svg") {
             let dataUri = NSString(data: data, encoding: NSUTF8StringEncoding)
@@ -99,14 +101,14 @@ class Image: Item {
             completion(texture: image!.CGImage)
         }
     }
-    
+
     private func loadResourceSource(source: String) -> NSData? {
         let path = NSBundle.mainBundle().pathForResource(source, ofType: nil)
         if path == nil { return nil }
         let data = NSData(contentsOfFile: path!)
         return data
     }
-    
+
     private func loadDataUriSource(source: String) -> NSData? {
         let svgPrefix = "data:image/svg+xml;utf8,"
         if source.hasPrefix(svgPrefix) {
@@ -114,39 +116,39 @@ class Image: Item {
         }
         return self.loadUrlSource(source)
     }
-    
+
     private func loadUrlSource(source: String) -> NSData? {
         let url = NSURL(string: source)
         if url == nil { return nil }
         let data = NSData(contentsOfURL: url!)
         return data
     }
-    
+
     private func setTexture(tex: CGImageRef?) {
         self.modelImage = tex
         invalidate()
         updateImage()
     }
-    
+
     func setSource(val: String) {
         // remove texture if needed
         if val == "" {
             setTexture(nil)
             return
         }
-        
+
         // get texture from cache
         let tex = Image.cache[val]
         if tex != nil {
             setTexture(tex)
             return
         }
-        
+
         // completion handler
         let onCompletion = {
             (tex: CGImageRef?) in
             self.setTexture(tex)
-            
+
             self.app.client.pushAction(OutAction.IMAGE_SIZE)
             self.app.renderer.pushObject(self)
             self.app.client.pushString(val)
@@ -154,14 +156,14 @@ class Image: Item {
             self.app.client.pushFloat(tex != nil ? CGFloat(CGImageGetWidth(tex)) : 0)
             self.app.client.pushFloat(tex != nil ? CGFloat(CGImageGetHeight(tex)) : 0)
         }
-        
+
         // wait for load if loading exist
         var loading = Image.loadingHandlers[val]
         if (loading != nil){
             loading!.append(onCompletion)
             return
         }
-        
+
         // get loading method
         var loadFunc: (source: String) -> NSData?
         if (val.hasPrefix("/static")) {
@@ -171,10 +173,10 @@ class Image: Item {
         } else {
             loadFunc = self.loadUrlSource
         }
-        
+
         // save in loading
         Image.loadingHandlers[val] = [onCompletion]
-        
+
         // load texture
         thread({
             (completion: (result: CGImageRef?) -> Void) in
@@ -189,7 +191,7 @@ class Image: Item {
             if tex != nil && !val.hasPrefix("data:") {
                 Image.cache[val] = tex
             }
-            
+
             let loading = Image.loadingHandlers[val]
             for handler in loading! {
                 handler(result: tex)
@@ -197,27 +199,27 @@ class Image: Item {
             Image.loadingHandlers.removeValueForKey(val)
         }
     }
-    
+
     func setSourceWidth(val: CGFloat) {
         // TODO
     }
-    
+
     func setSourceHeight(val: CGFloat) {
         // TODO
     }
-    
+
     func setFillMode(val: String) {
         // TODO
     }
-    
+
     func setOffsetX(val: CGFloat) {
         // TODO
     }
-    
+
     func setOffsetY(val: CGFloat) {
         // TODO
     }
-    
+
     override func drawShape(context: CGContextRef, inRect rect: CGRect) {
         CGContextDrawImage(context, bounds, image)
     }
