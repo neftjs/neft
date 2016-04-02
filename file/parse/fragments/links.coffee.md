@@ -58,4 +58,4 @@ Optional argument `as` will link all fragments into the specified namespace.
 			dirname = pathUtils.dirname file.path
 			return pathUtils.join(dirname, path)
 
-		"#{File.FILES_PATH}/#{path}"
+		pathUtils.join File.FILES_PATH, path
