@@ -20,6 +20,13 @@ module.exports = (platform, options, app, callback) ->
 	neftFileName = "neft-#{platform}-#{mode}.js"
 	neftFilePath = "../../bundle/neft-#{platform}-#{mode}.js"
 
+	testFunc = do ->
+		switch platform
+			when 'node'
+				(req) -> /^(?:neft\-|\.)/.test(req)
+			else
+				-> true
+
 	bundleBuilder
 		path: 'index.js'
 		verbose: true
@@ -29,6 +36,7 @@ module.exports = (platform, options, app, callback) ->
 		minify: options.release
 		removeLogs: options.release
 		neftFilePath: pathUtils.resolve(__dirname, neftFilePath)
+		test: testFunc
 		, (err, file) ->
 			if err
 				return callback err
