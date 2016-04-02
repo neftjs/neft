@@ -2,7 +2,6 @@
 
 module.exports = (opts) ->
 	window: global
-	document: {}
 	isFake: true
 	addEventListener: ->
 	Image: ->
