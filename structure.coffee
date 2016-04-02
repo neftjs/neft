@@ -44,10 +44,11 @@ class Test
 			return
 
 		@_callbackCalled = true
-		logger.onTestEnd @
 
 		if err
 			stack.fail err
+
+		logger.onTestEnd @
 
 		# call after functions
 		if @fulfilled
