@@ -149,7 +149,23 @@ describe 'neft:script', ->
 			renderParse view
 			assert.is view.storage.a, 1
 
-		it 'is called with node in context', ->
+		it 'is called with scope in context', ->
+			view = View.fromHTML uid(), """
+				<neft:script><![CDATA[
+					var Ctor = module.exports = function(){
+					};
+					Ctor.prototype.onRender = function(){
+						this.a = this.scope.a;
+					};
+				]]></neft:script>
+			"""
+			View.parse view
+			view = view.clone()
+
+			renderParse view, storage: a: 1
+			assert.is view.storage.a, 1
+
+		it 'is called with file node in context', ->
 			view = View.fromHTML uid(), """
 				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){
@@ -162,6 +178,37 @@ describe 'neft:script', ->
 
 			renderParse view
 			assert.is view.storage.aNode, view.node
+
+	describe '[filename]', ->
+		it 'supports .coffee files', ->
+			view = View.fromHTML uid(), """
+				<neft:script filename="a.coffee"><![CDATA[
+					module.exports = class A
+						constructor: ->
+							@a = 1
+				]]></neft:script>
+			"""
+			View.parse view
+			view = view.clone()
+
+			renderParse view
+			assert.is view.storage.a, 1
+
+	it 'predefined context properties are not enumerable', ->
+		view = View.fromHTML uid(), """
+			<neft:script><![CDATA[
+				var Ctor = module.exports = function(){
+				};
+				Ctor.prototype.onRender = function(){
+					this.keys = Object.keys(this);
+				};
+			]]></neft:script>
+		"""
+		View.parse view
+		view = view.clone()
+
+		renderParse view
+		assert.isEqual view.storage.keys, ['keys']
 
 	it 'further tags are merged in a proper order', ->
 		view = View.fromHTML uid(), """

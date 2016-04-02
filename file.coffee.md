@@ -366,7 +366,7 @@ File.parse(*File* file)
 		_render: do ->
 			renderTarget = require('./file/render/parse/target') File
 
-			(attrs=true, scope, source) ->
+			(attrs=true, scope=null, source) ->
 				assert.notOk @isRendered
 
 				@attrs = attrs

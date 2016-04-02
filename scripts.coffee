@@ -1,5 +1,6 @@
 'use strict'
 
+log = require 'neft-log'
 utils = require 'neft-utils'
 assert = require 'neft-assert'
 
@@ -88,10 +89,19 @@ module.exports = (File) -> class Scripts
 			throw new Error "<neft:script> must exports a function"
 
 		obj = Object.create ctor::
-		obj.node = file.node
-		obj.attrs = file.inputAttrs
-		obj.ids = file.inputIds
-		obj.funcs = file.inputFuncs
+		utils.defineProperty obj, 'node', utils.CONFIGURABLE, file.node
+		utils.defineProperty obj, 'attrs', utils.CONFIGURABLE, file.inputAttrs
+		utils.defineProperty obj, 'ids', utils.CONFIGURABLE, file.inputIds
+		utils.defineProperty obj, 'funcs', utils.CONFIGURABLE, file.inputFuncs
+		utils.defineProperty obj, 'scope', utils.CONFIGURABLE, ->
+			`//<development>`
+			unless file.isRendered
+				log.warn "this.scope in neft:script is not accessible if the view is " +
+					"not rendered; make sure you are not modifying your view when it's " +
+					"not rendered; in script '#{paths}'"
+			`//</development>`
+			file.scope
+		, null
 		ctor.call obj
 		obj
 
