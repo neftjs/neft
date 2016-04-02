@@ -1,6 +1,7 @@
 'use strict'
 
 writeStdout = process.stdout.write.bind process.stdout
+writeStderr = process.stderr.write.bind process.stderr
 
 module.exports = (Log) -> class LogNode extends Log
 
@@ -20,3 +21,6 @@ module.exports = (Log) -> class LogNode extends Log
 
 	_write: (msg) ->
 		writeStdout msg+"\n"
+
+	_writeError: (msg) ->
+		writeStderr msg+"\n"
