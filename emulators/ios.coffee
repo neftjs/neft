@@ -1,10 +1,14 @@
 'use strict'
 
 module.exports = ->
-	MutationObserver: ->
-		observe: ->
+	window: global
+	requestAnimationFrame: ->
+	ios:
+		postMessage: ->
 	_neft:
-		platform: 'ios'
+		http:
+			request: -> 0
+			onResponse: ->
 		native:
-			onData: ->
 			transferData: ->
+			onData: ->
