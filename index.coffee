@@ -32,21 +32,21 @@ module.exports = (opts, callback) ->
 	# run process file
 	running = true
 	processPath = pathUtils.join __dirname, './process.coffee'
-	process = cp.spawn 'coffee', [processPath, processOpts], stdio: ['ipc']
+	childProcess = cp.spawn 'coffee', [processPath, processOpts], stdio: ['ipc']
 
 	stderr = ''
-	process.stderr.on 'data', (data) ->
+	childProcess.stderr.on 'data', (data) ->
 		stderr += data
 
-	process.on 'exit', ->
+	childProcess.on 'exit', ->
 		if running
 			running = false
 			log.end logtime
 			return callback stderr
 
-	process.on 'message', (result) ->
+	childProcess.on 'message', (result) ->
 		running = false
-		process.kill()
+		childProcess.kill()
 		log.end logtime
 		processData = JSON.parse result
 		stack = new utils.async.Stack
