@@ -37,19 +37,25 @@ Optional argument `as` will link all fragments into the specified namespace.
 			if node.name isnt "#{File.HTML_NS}:require"
 				continue
 
-			href = node.attrs.href
+			href = node.attrs.href or node.attrs.src
 			unless href then continue
 
 			namespace = node.attrs.as
 
 			# get view
-			path = href
-			if path[0] isnt '/'
-				pathbase = file.path.substring 0, file.path.lastIndexOf('/') + 1
-				path = pathUtils.join '/', pathbase, path
-			path = ///^(?:\/|\\)(.+)$///.exec(path)?[1] or path
+			path = getFilePath File, file, href
 			links.push
 				path: path
 				namespace: namespace
 
 		links
+
+	getFilePath = module.exports.getFilePath = (File, file, path) ->
+		if pathUtils.isAbsolute(path)
+			return path
+
+		if path[0] is '.' and path[1] is '/'
+			dirname = pathUtils.dirname file.path
+			return pathUtils.join(dirname, path)
+
+		"#{File.FILES_PATH}/#{path}"

@@ -48,6 +48,7 @@ File @class
 		JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
 		@HTML_NS = 'neft'
+		@FILES_PATH = ''
 
 		signal.create @, 'onCreate'
 		signal.create @, 'onError'
@@ -266,7 +267,7 @@ File.parse(*File* file)
 				File.onError.emit path
 
 			assert.isString path, "path is not a string"
-			assert.ok files[path]?, "the given file path doesn't exist"
+			assert.ok files[path]?, "the given file path '#{path}' doesn't exist"
 
 			# from pool
 			if r = getFromPool(path)

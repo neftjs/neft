@@ -60,7 +60,7 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
 					i--; n--
 
 					# get fragment
-					path = "#{file.path}:#{name}"
+					path = "#{file.path}##{name}"
 					fragment = new File path, child
 					fragments[name] = path
 					createdFragments.push fragment

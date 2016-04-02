@@ -9,6 +9,11 @@ module.exports = (File) -> class Scripts
 	@__name__ = 'Scripts'
 	@__path__ = 'File.Scripts'
 
+	@scriptFiles = {}
+
+	getScriptFile = @getScriptFile = (path) ->
+		Scripts.scriptFiles[path] or require(path)
+
 	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Scripts) - 1
 
 	i = 1
@@ -24,7 +29,7 @@ module.exports = (File) -> class Scripts
 		assert.instanceOf @file, File
 		assert.isArray @paths
 
-		@_ctor = null
+		@ctor = @getCtor()
 
 		`//<development>`
 		if @constructor is Scripts
@@ -32,16 +37,12 @@ module.exports = (File) -> class Scripts
 		`//</development>`
 
 	getCtor: ->
-		if @_ctor
-			return @_ctor
-
 		{paths} = @
 		if paths.length is 1
-			ctor = require paths[0]
+			ctor = getScriptFile paths[0]
 		else
 			ctor = @createCtorFromScripts()
-
-		@_ctor = ctor
+		ctor
 
 	createCtorFromScripts: (scripts) ->
 		{paths} = @
@@ -49,7 +50,7 @@ module.exports = (File) -> class Scripts
 		# require all scripts
 		ctors = []
 		for path in paths
-			ctors.push require(path)
+			ctors.push getScriptFile(path)
 
 		# call all constructors
 		masterCtor = ->
@@ -81,9 +82,7 @@ module.exports = (File) -> class Scripts
 		masterCtor
 
 	createStorageForFile: (file) ->
-		{paths} = @
-
-		ctor = @getCtor()
+		{ctor, paths} = @
 
 		if typeof ctor isnt 'function'
 			throw new Error "<neft:script> must exports a function"

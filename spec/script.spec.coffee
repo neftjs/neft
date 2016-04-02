@@ -1,5 +1,7 @@
 'use strict'
 
+fs = require 'fs'
+os = require 'os'
 View = require '../index.coffee.md'
 {describe, it} = require 'neft-unit'
 assert = require 'neft-assert'
@@ -8,9 +10,9 @@ assert = require 'neft-assert'
 describe 'neft:script', ->
 	it 'is not rendered', ->
 		view = View.fromHTML uid(), """
-			<neft:script>
+			<neft:script><![CDATA[
 				module.exports = function(){};
-			</neft:script>
+			]]></neft:script>
 		"""
 		View.parse view
 		view = view.clone()
@@ -20,9 +22,9 @@ describe 'neft:script', ->
 
 	it 'must exports a function', ->
 		view = View.fromHTML uid(), """
-			<neft:script>
+			<neft:script><![CDATA[
 				module.exports = {};
-			</neft:script>
+			]]></neft:script>
 		"""
 		View.parse view
 
@@ -34,10 +36,10 @@ describe 'neft:script', ->
 	describe 'returned function', ->
 		it 'prototype is shared between rendered views', ->
 			view = View.fromHTML uid(), """
-				<neft:script>
+				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){};
 					Ctor.prototype = { a: 1 };
-				</neft:script>
+				]]></neft:script>
 			"""
 			View.parse view
 			view = view.clone()
@@ -58,12 +60,12 @@ describe 'neft:script', ->
 		it 'is called on a view clone', ->
 			view = View.fromHTML uid(), """
 				<neft:attr name="x" value="1" />
-				<neft:script>
+				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){
 						this.b = 2;
 					};
 					Ctor.prototype = { a: 1 };
-				</neft:script>
+				]]></neft:script>
 			"""
 			View.parse view
 			view = view.clone()
@@ -85,13 +87,13 @@ describe 'neft:script', ->
 
 		it 'is called with its prototype', ->
 			view = View.fromHTML uid(), """
-				<neft:script>
+				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){
 						this.proto = this;
 						this.protoA = this.a;
 					};
 					Ctor.prototype = { a: 1 };
-				</neft:script>
+				]]></neft:script>
 			"""
 			View.parse view
 			view = view.clone()
@@ -102,11 +104,11 @@ describe 'neft:script', ->
 
 		it 'is called with attrs in context', ->
 			view = View.fromHTML uid(), """
-				<neft:script>
+				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){
 						this.a = this.attrs.a;
 					};
-				</neft:script>
+				]]></neft:script>
 				<neft:attr name="a" value="1" />
 			"""
 			View.parse view
@@ -117,11 +119,11 @@ describe 'neft:script', ->
 
 		it 'is called with ids in context', ->
 			view = View.fromHTML uid(), """
-				<neft:script>
+				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){
 						this.a = this.ids.x.attrs.a;
 					};
-				</neft:script>
+				]]></neft:script>
 				<b id="x" a="1" />
 			"""
 			View.parse view
@@ -132,14 +134,14 @@ describe 'neft:script', ->
 
 		it 'is called with funcs in context', ->
 			view = View.fromHTML uid(), """
-				<neft:function neft:name="abc">
+				<neft:function neft:name="abc"><![CDATA[
 					return 1;
-				</neft:function>
-				<neft:script>
+				]]></neft:function>
+				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){
 						this.a = this.funcs.abc();
 					};
-				</neft:script>
+				]]></neft:script>
 			"""
 			View.parse view
 			view = view.clone()
@@ -149,11 +151,11 @@ describe 'neft:script', ->
 
 		it 'is called with node in context', ->
 			view = View.fromHTML uid(), """
-				<neft:script>
+				<neft:script><![CDATA[
 					var Ctor = module.exports = function(){
 						this.aNode = this.node;
 					};
-				</neft:script>
+				]]></neft:script>
 			"""
 			View.parse view
 			view = view.clone()
@@ -163,7 +165,7 @@ describe 'neft:script', ->
 
 	it 'further tags are merged in a proper order', ->
 		view = View.fromHTML uid(), """
-			<neft:script>
+			<neft:script><![CDATA[
 				var Ctor = module.exports = function(){
 					this.aa = 1;
 				};
@@ -171,8 +173,8 @@ describe 'neft:script', ->
 				Ctor.prototype.doA = function(){
 					this.doACalledOnA = true;
 				};
-			</neft:script>
-			<neft:script>
+			]]></neft:script>
+			<neft:script><![CDATA[
 				var Ctor = module.exports = function(){
 					this.bb = 1;
 					this.bbaa = this.aa;
@@ -181,7 +183,7 @@ describe 'neft:script', ->
 				Ctor.prototype.doA = function(){
 					this.doACalledOnB = true;
 				};
-			</neft:script>
+			]]></neft:script>
 		"""
 		View.parse view
 		view = view.clone()
@@ -198,9 +200,57 @@ describe 'neft:script', ->
 		assert.ok storage.doACalledOnA
 		assert.ok storage.doACalledOnB
 
+	it 'can contains XML text', ->
+		source = View.fromHTML uid(), """
+			<neft:script><![CDATA[
+				var Ctor = module.exports = function(){};
+					Ctor.prototype = { a: '<&&</neft:script>' };
+			]]></neft:script>
+			${this.a}
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '<&&</neft:script>'
+
+	it 'accepts `src` attribute', ->
+		filename = "tmp#{uid()}.js"
+		path = "#{os.tmpdir()}/#{filename}"
+		fs.writeFileSync path, "module.exports = function(){ this.a = 1; };", 'utf-8'
+
+		source = View.fromHTML uid(), """
+			<neft:script href="#{path}" />
+			<neft:blank>${this.a}</neft:blank>
+		"""
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '1'
+
+	it 'accepts relative `src` attribute', ->
+		scriptFilename = "tmp#{uid()}.js"
+		scriptPath = "#{os.tmpdir()}/#{scriptFilename}"
+		fs.writeFileSync scriptPath, "module.exports = function(){ this.a = 1; };", 'utf-8'
+
+		viewFilename = "tmp#{uid()}"
+		viewPath = "#{os.tmpdir()}/#{viewFilename}"
+		fs.writeFileSync viewPath, viewStr = """
+			<neft:script href="./#{scriptFilename}" />
+			<neft:blank>${this.a}</neft:blank>
+		"""
+
+		source = View.fromHTML viewPath, viewStr
+		View.parse source
+		view = source.clone()
+
+		renderParse view
+		assert.is view.node.stringify(), '1'
+
 	it 'properly calls events', ->
 		view = View.fromHTML uid(), """
-			<neft:script>
+			<neft:script><![CDATA[
 				var Ctor = module.exports = function(){
 					this.events = [];
 				};
@@ -216,7 +266,7 @@ describe 'neft:script', ->
 				Ctor.prototype.onRevert = function(){
 					this.events.push('onRevert');
 				};
-			</neft:script>
+			]]></neft:script>
 		"""
 		View.parse view
 		view = view.clone()

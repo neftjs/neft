@@ -44,7 +44,7 @@ Use [List][list/List] to bind changes made in the array.
 						forNode child
 				return
 
-			path = "#{file.path}:each[#{utils.uid()}]"
+			path = "#{file.path}#each[#{utils.uid()}]"
 
 			# get fragment
 			bodyNode = new File.Element.Tag
