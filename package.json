@@ -29,7 +29,7 @@
   "scripts": {
     "bundle": "coffee --nodejs --harmony bundle.coffee",
     "checkout-master": "coffee preversion.coffee; git checkout master; git pull; find ./node_modules/neft-* -type d -maxdepth 0 -execdir sh -c 'echo \\\\n\\\\n$0\\\\n; cd ./node_modules/$0; git checkout master; git pull' {} \\;",
-    "test": "node ./node_modules/neft-unit/bin/unit.js ./node_modules/neft-\\*/"
+    "test": "node ./node_modules/neft-unit/bin/unit.js ./spec"
   },
   "dependencies": {
     "coffee-script": "^1.10.0",
