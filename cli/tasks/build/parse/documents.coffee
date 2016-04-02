@@ -8,13 +8,15 @@ cliUtils = require '../../../utils'
 
 {utils, log, Document, styles} = Neft
 
-IN_DIR = './views'
-OUT_DIR = './build/views'
+IN_DIR = 'views'
+OUT_DIR = 'build'
+
+Document.FILES_PATH = IN_DIR
 
 module.exports = (platform, app, callback) ->
 	logtime = log.time 'Parse documents'
 
-	fs.removeSync OUT_DIR
+	fs.removeSync pathUtils.join(OUT_DIR, IN_DIR)
 
 	# install document extensions
 	packageConfig = JSON.parse fs.readFileSync('./package.json')
@@ -29,7 +31,7 @@ module.exports = (platform, app, callback) ->
 	utils.clear Document._files
 
 	Document.onError onErrorListener = (name) ->
-		parseFile name, "./views/#{name}"
+		parseFile name
 
 	Document.onBeforeParse onBeforeParseListener = (file) ->
 		if platform isnt 'node'
@@ -41,16 +43,19 @@ module.exports = (platform, app, callback) ->
 			Document.Style.createStylesInDocument file
 		return
 
-	parseFile = (name, path) ->
+	parseFile = (path) ->
 		html = fs.readFileSync path, 'utf-8'
-		file = Document.fromHTML name, html
+		file = Document.fromHTML path, html
 		Document.parse file
 		file
 
 	saveView = (name, view, callback) ->
 		json = JSON.stringify view
 		json = "module.exports = #{json}"
-		fs.outputFile "#{OUT_DIR}/#{name}.js", json, 'utf-8', callback
+		path = "#{OUT_DIR}/#{name}.js"
+		app.views.push { name, path }
+		fs.outputFile path, json, 'utf-8', callback
+		return
 
 	onFilesParsed = ->
 		stack = new utils.async.Stack
@@ -64,11 +69,6 @@ module.exports = (platform, app, callback) ->
 		if err
 			return callback err
 
-		for name, view of Document._files
-			app.views.push
-				name: name
-				path: "#{OUT_DIR}/#{name}.js"
-
 		Document.onError.disconnect onErrorListener
 		Document.onBeforeParse.disconnect onBeforeParseListener
 		Document.onParse.disconnect onParseListener
@@ -78,10 +78,8 @@ module.exports = (platform, app, callback) ->
 		return
 
 	cliUtils.forEachFileDeep IN_DIR, (path, stat) ->
-		name = path.slice IN_DIR.length
-		name = ///^\/(.+)\.html$///.exec(name)?[1]
-		if name? and not Document._files[name]
-			parseFile name, path
+		if /\..*ml$/.test(path) and not Document._files[path]
+			parseFile path
 	, (err) ->
 		if err
 			log.end logtime

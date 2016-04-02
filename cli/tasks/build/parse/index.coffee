@@ -24,6 +24,12 @@ PLATFORM_TYPES =
 		client: true
 		native: true
 
+SPECIAL_EXTS = do ->
+	r = {}
+	for _, exts of PLATFORM_TYPES
+		utils.merge r, exts
+	r
+
 CONFIG_LINKS_TO_REQUIRE =
 	views: true
 	styles: true
@@ -45,7 +51,7 @@ module.exports = (platform, app, callback) ->
 
 		val = "`require('#{path}')`"
 		obj.path = undefined
-		if linkType
+		if linkType and SPECIAL_EXTS[linkType]
 			if PLATFORM_TYPES[platform][linkType]
 				obj.name = name
 			else
@@ -83,6 +89,7 @@ module.exports = (platform, app, callback) ->
 	result = ''
 	result += "var opts = #{config};\n"
 	result += "var init = require('./init');\n"
+	result += "opts.modules = typeof modules !== 'undefined' ? modules : {};\n"
 	result += "init(Neft.bind(null, opts));\n"
 
 	result
