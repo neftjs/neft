@@ -32,5 +32,8 @@ module.exports = do ->
 
 			_write: (marker) ->
 				logFunc.apply window['cons'+'ole'], marker
+
+			_writeError: (marker) ->
+				@_write marker
 	else
 		{}

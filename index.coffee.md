@@ -60,6 +60,7 @@ var log = require('log');
 				return utils.merge func, @
 
 		_write: console?['lo'+'g'].bind(console) or (->)
+		_writeError: console?['erro'+'r'].bind(console) or (->)
 
 *Integer* log.LOG
 -----------------
@@ -172,7 +173,7 @@ log.error("Error occurs, ... in file ...");
 
 		error: ->
 			if isEnabled(@, @ERROR)
-				@_write LogImpl.MARKERS.red fromArgs arguments
+				@_writeError LogImpl.MARKERS.red fromArgs arguments
 			return
 
 *Integer* log.time()
@@ -252,7 +253,7 @@ log("hello");
 	impl = switch true
 		when utils.isNode
 			require './impls/node/index.coffee'
-		when utils.isBrowser, utils.isIOS
+		when utils.isBrowser
 			require './impls/browser/index.coffee'
 
 	LogImpl = if typeof impl is 'function' then impl Log else Log
