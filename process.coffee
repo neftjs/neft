@@ -13,8 +13,9 @@ opts = JSON.parse process.argv[2], (key, val) ->
 		val
 
 index = pathUtils.resolve fs.realpathSync('.'), opts.path
-{platform, test, path} = opts
+{platform, test, testResolved, path} = opts
 test ?= -> true
+testResolved ?= -> true
 
 customGlobalProps = Object.create null
 mockGlobal = (obj) ->
@@ -67,6 +68,7 @@ Module._load = do (_super = Module._load) -> (req, parent) ->
 		return r
 
 	if pathUtils.isAbsolute(req) and req isnt index
+		filename = req
 		modulePath = req
 		parentPath = ''
 	else
@@ -74,13 +76,14 @@ Module._load = do (_super = Module._load) -> (req, parent) ->
 		modulePath = pathUtils.relative base, filename
 		parentPath = pathUtils.relative base, parent.id
 
-	unless modulesByPaths[modulePath]
-		modules.push modulePath
-		modulesByPaths[modulePath] = true
+	if req is index or testResolved(req, filename, modulePath, parentPath)
+		unless modulesByPaths[modulePath]
+			modules.push modulePath
+			modulesByPaths[modulePath] = true
 
-	if parentPath
-		mpaths = paths[parentPath] ?= {}
-		mpaths[req] = modulePath
+		if parentPath
+			mpaths = paths[parentPath] ?= {}
+			mpaths[req] = modulePath
 
 	r
 
