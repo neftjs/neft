@@ -22,6 +22,8 @@ App @framework
 
 	pkg = require './package.json'
 
+	BASE_FILE_NAME_RE = /(.+)\.(?:node|server|client|browser|ios|android|native)/
+
 	exports = module.exports = (opts={}, extraOpts={}) ->
 		# Welcome log also for release mode
 		(require('log')).ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
@@ -264,12 +266,15 @@ By default, client has *clientId* and *sessionId* hashes.
 					continue
 
 				fileObj = file.file app
-
-				if target[file.name]?
-					if utils.isPlainObject(target[file.name]) and utils.isPlainObject(fileObj)
-						fileObj = utils.merge Object.create(target[file.name]), fileObj
-
 				target[file.name] = fileObj
+
+				if baseNameMatch = BASE_FILE_NAME_RE.exec(file.name)
+					[_, baseName] = baseNameMatch
+					if target[baseName]?
+						if utils.isPlainObject(target[baseName]) and utils.isPlainObject(fileObj)
+							fileObj = utils.merge Object.create(target[baseName]), fileObj
+					target[baseName] = fileObj
+
 			return
 
 		setImmediate ->
