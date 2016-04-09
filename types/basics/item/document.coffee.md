@@ -39,7 +39,10 @@ Document @extension
 		onPropertyChange = (prop, oldVal) ->
 			if @_updatePending or not (node = @_node)
 				return
-			node.attrs.set prop, @_ref._$[prop]
+			if oldVal is undefined and prop of node.attrs
+				onNodeAttrsChange.call @, prop, oldVal
+			else
+				node.attrs.set prop, @_ref._$[prop]
 			return
 
 		onNodeAttrsChange = (attr, oldVal) ->
