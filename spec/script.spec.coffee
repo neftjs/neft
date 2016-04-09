@@ -326,3 +326,36 @@ describe 'neft:script', ->
 
 		view.revert()
 		assert.isEqual events, ['onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert']
+
+	it 'does not call events for foreign storage', ->
+		view = View.fromHTML uid(), """
+			<neft:script><![CDATA[
+				var Ctor = module.exports = function(){
+					this.events = [];
+				};
+				Ctor.prototype.onBeforeRender = function(){
+					this.events.push('onBeforeRender');
+				};
+				Ctor.prototype.onRender = function(){
+					this.events.push('onRender');
+				};
+				Ctor.prototype.onBeforeRevert = function(){
+					this.events.push('onBeforeRevert');
+				};
+				Ctor.prototype.onRevert = function(){
+					this.events.push('onRevert');
+				};
+			]]></neft:script>
+			<ul neft:each="[1,2]">${attrs.item}</ul>
+		"""
+		View.parse view
+		view = view.clone()
+
+		{events} = view.storage
+		assert.isEqual events, []
+
+		view.render()
+		assert.isEqual events, ['onBeforeRender', 'onRender']
+
+		view.revert()
+		assert.isEqual events, ['onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert']

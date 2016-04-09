@@ -437,7 +437,8 @@ File.parse(*File* file)
 
 				File.onBeforeRender.emit @
 				emitNodeSignal @, 'neft:onBeforeRender'
-				@storage?.onBeforeRender?()
+				if @storage?.node is @node
+					@storage.onBeforeRender?()
 
 				# inputs
 				for input, i in @inputs
@@ -468,7 +469,8 @@ File.parse(*File* file)
 				@isRendered = true
 				File.onRender.emit @
 				emitNodeSignal @, 'neft:onRender'
-				@storage?.onRender?()
+				if @storage?.node is @node
+					@storage.onRender?()
 
 				@
 
@@ -483,7 +485,8 @@ File.parse(*File* file)
 				@isRendered = false
 				File.onBeforeRevert.emit @
 				emitNodeSignal @, 'neft:onBeforeRevert'
-				@storage?.onBeforeRevert?()
+				if @storage?.node is @node
+					@storage.onBeforeRevert?()
 
 				if @attrs instanceof Dict
 					@attrs.onChange.disconnect @_updateInputAttrsKey, @
@@ -519,7 +522,8 @@ File.parse(*File* file)
 
 				File.onRevert.emit @
 				emitNodeSignal @, 'neft:onRevert'
-				@storage?.onRevert?()
+				if @storage?.node is @node
+					@storage.onRevert?()
 
 				@
 
