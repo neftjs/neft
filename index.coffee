@@ -42,7 +42,7 @@ module.exports = (opts, callback) ->
 		if running
 			running = false
 			log.end logtime
-			return callback stderr
+			return callback stderr or 'Internal error; no message has been sent'
 
 	childProcess.on 'message', (result) ->
 		running = false

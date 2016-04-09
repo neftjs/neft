@@ -98,7 +98,7 @@ catch err
 	console.error err
 	process.exit 1
 
-setImmediate ->
+require('timers').setImmediate ->
 	resultJSON = JSON.stringify
 		modules: modules
 		paths: paths
