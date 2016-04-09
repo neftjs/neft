@@ -44,8 +44,10 @@ class Connection
 		Object.seal @
 
 	getSignalChangeListener: do ->
-		withParent = ->
-			@parent.updateItem()
+		withParent = (prop, val) ->
+			# TODO: provide special signal emitted with property changed
+			if val is undefined or typeof prop isnt 'string' or @parent.prop is prop
+				@parent.updateItem()
 			return
 
 		noParent = ->
