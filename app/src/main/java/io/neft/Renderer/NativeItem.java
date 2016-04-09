@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.neft.Client.Action;
+import io.neft.Client.CustomFunction;
 import io.neft.Client.InAction;
 import io.neft.Client.OutAction;
 import io.neft.Client.Reader;
 import io.neft.MainActivity;
+import io.neft.Utils.StringUtils;
 
 public class NativeItem extends Item {
     abstract public static class NativeType {
@@ -61,6 +63,31 @@ public class NativeItem extends Item {
         });
     }
 
+    protected static class ClientHandler {
+        public void work(NativeItem item, Object[] args) {}
+    }
+
+    protected static void addClientAction(final MainActivity app, String type, String name, String subName, final ClientHandler handler) {
+        String eventName = "renderer" + type + StringUtils.capitalize(name) + StringUtils.capitalize(subName);
+        app.client.addCustomFunction(eventName, new CustomFunction() {
+            @Override
+            public void work(Object[] args) {
+                final NativeItem item = (NativeItem) app.renderer.items.get(Math.round((float) args[0]));
+                Object[] handlerArgs = new Object[args.length - 1];
+                System.arraycopy(args, 1, handlerArgs, 0, handlerArgs.length);
+                handler.work(item, handlerArgs);
+            }
+        });
+    }
+
+    protected static void addClientProperty(MainActivity app, String name, String subName, ClientHandler handler) {
+        addClientAction(app, "Set", name, subName, handler);
+    }
+
+    protected static void addClientFunction(MainActivity app, String name, String subName, ClientHandler handler) {
+        addClientAction(app, "Call", name, subName, handler);
+    }
+
     public boolean autoWidth = true;
     public boolean autoHeight = true;
     protected View view;
@@ -71,6 +98,19 @@ public class NativeItem extends Item {
 
     public NativeItem(MainActivity app) {
         super(app);
+    }
+
+    protected void pushEvent(String name, Object[] args) {
+        String eventName = "rendererOn" + StringUtils.capitalize(name);
+        Object[] clientArgs;
+        if (args == null) {
+            clientArgs = new Object[]{this.id};
+        } else {
+            clientArgs = new Object[args.length + 1];
+            clientArgs[0] = this.id;
+            System.arraycopy(args, 0, clientArgs, 1, args.length);
+        }
+        app.client.pushEvent(eventName, clientArgs);
     }
 
     @Override
@@ -85,6 +125,13 @@ public class NativeItem extends Item {
         super.setHeight(val);
         this.autoHeight = val == 0;
         this.updateSize();
+    }
+
+    protected void invalidate(long duration) {
+        if (duration > this.invalidateDuration) {
+            this.invalidateDuration = duration;
+        }
+        super.invalidate();
     }
 
     protected void updateSize() {
