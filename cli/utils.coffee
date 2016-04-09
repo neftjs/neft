@@ -3,7 +3,7 @@
 pathUtils = require 'path'
 fs = require 'fs'
 
-{log, assert} = Neft
+{utils, log, assert} = Neft
 
 exports.verifyNeftProject = (path) ->
 	result = false
@@ -52,3 +52,39 @@ exports.forEachFileDeep = (dir, onFile, onEnd) ->
 
 		return
 	return
+
+exports.isPlatformFilePath = do ->
+	PLATFORM_TYPES =
+		node:
+			node: true
+			server: true
+		browser:
+			browser: true
+			client: true
+		qt:
+			qt: true
+			client: true
+			native: true
+		android:
+			android: true
+			client: true
+			native: true
+		ios:
+			ios: true
+			client: true
+			native: true
+
+	SPECIAL_EXTS = do ->
+		r = {}
+		for _, exts of PLATFORM_TYPES
+			utils.merge r, exts
+		r
+
+	(platform, filePath) ->
+		if linkTypeMatch = /^(.+?)\.([a-zA-Z]+)\.([a-zA-Z]+)$/.exec(filePath)
+			linkType = linkTypeMatch[2]
+
+			if linkType and SPECIAL_EXTS[linkType]
+				return PLATFORM_TYPES[platform][linkType]
+
+		return true

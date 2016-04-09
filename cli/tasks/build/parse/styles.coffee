@@ -46,6 +46,8 @@ module.exports = (platform, app, callback) ->
 		cliUtils.forEachFileDeep dir.path, (path, stat) ->
 			unless pathUtils.extname(path) in ['.js', '.nml']
 				return
+			unless cliUtils.isPlatformFilePath(platform, path)
+				return
 
 			filesToLoad++
 

@@ -1,34 +1,9 @@
 'use strict'
 
 fs = require 'fs'
+cliUtils = require '../../../utils.coffee'
 
 {utils, log} = Neft
-
-PLATFORM_TYPES =
-	node:
-		node: true
-		server: true
-	browser:
-		browser: true
-		client: true
-	qt:
-		qt: true
-		client: true
-		native: true
-	android:
-		android: true
-		client: true
-		native: true
-	ios:
-		ios: true
-		client: true
-		native: true
-
-SPECIAL_EXTS = do ->
-	r = {}
-	for _, exts of PLATFORM_TYPES
-		utils.merge r, exts
-	r
 
 CONFIG_LINKS_TO_REQUIRE =
 	views: true
@@ -44,17 +19,12 @@ module.exports = (platform, app, callback) ->
 		unless utils.isObject(obj)
 			return obj
 
-		{name, path} = obj
+		{path} = obj
+		unless cliUtils.isPlatformFilePath(platform, path)
+			return false
 
-		if linkTypeMatch = /^(.+?)\.([a-zA-Z]+)$/.exec(name)
-			[_, name, linkType] = linkTypeMatch
-
-		val = "`require('#{path}')`"
 		obj.path = undefined
-		if linkType and SPECIAL_EXTS[linkType]
-			unless PLATFORM_TYPES[platform][linkType]
-				return false
-
+		val = "`require('#{path}')`"
 		obj.file = val
 		return true
 
