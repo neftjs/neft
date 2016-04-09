@@ -16,6 +16,8 @@ module.exports = (opts) ->
 		body:
 			appendChild: ->
 		createElement: ->
+			offsetWidth: 0
+			offsetHeight: 0
 			classList:
 				add: ->
 			appendChild: ->
@@ -31,7 +33,7 @@ module.exports = (opts) ->
 				}
 			]
 			removeChild: ->
-			getBoundingClientRect: -> {}
+			getBoundingClientRect: ->
 			addEventListener: ->
 			setAttribute: ->
 			getAttribute: ->
@@ -39,6 +41,7 @@ module.exports = (opts) ->
 			cloneNode: ->
 				global.document.createElement()
 			getContext: ->
+				measureText: -> {}
 		createElementNS: ->
 			width: baseVal: value: null
 			height: baseVal: value: null
