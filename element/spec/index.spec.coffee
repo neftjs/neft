@@ -295,23 +295,26 @@ describe 'View Element', ->
 			assert.is doc2u.queryParents('div > b >'), doc2div1
 
 	describe 'watch()', ->
-		tags = doc2 = doc2div1 = doc2b = doc2u = doc2u2 = doc2div2 = doc2em1 = doc2em2 = null
-
-		beforeEach ->
-			tags = []
-			doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'><u></u></u></b></div><div attr='2'><neft:blank><em>text1</em></neft:blank><em></em></div>"
-			doc2div1 = doc2.children[0]
-			doc2b = doc2div1.children[0]
-			doc2u = doc2b.children[0]
-			doc2u2 = doc2b.children[0].children[0]
-			doc2div2 = doc2.children[1]
-			doc2em1 = doc2div2.children[0].children[0]
-			doc2em2 = doc2div2.children[1]
-
 		it 'is a function', ->
-			assert.instanceOf doc2.watch, Function
+			assert.instanceOf doc.watch, Function
 
 		describe 'works with selector', ->
+			tags = doc2 = doc2div1 = doc2b = doc2u = doc2u2 = doc2div2 = doc2em1 = doc2em2 = null
+
+			beforeEach ->
+				tags = []
+				doc2 = Element.fromHTML """
+					<div><b><u color='blue' attr='1'><u></u></u></b></div>
+					<div attr='2'><neft:blank><em>text1</em></neft:blank><em></em></div>
+					"""
+				doc2div1 = doc2.children[0]
+				doc2b = doc2div1.children[0]
+				doc2u = doc2b.children[0]
+				doc2u2 = doc2b.children[0].children[0]
+				doc2div2 = doc2.children[1]
+				doc2em1 = doc2div2.children[0].children[0]
+				doc2em2 = doc2div2.children[1]
+
 			it 'E', (done) ->
 				doc2b.parent = null
 				watcher = doc2.watch 'b'
@@ -504,6 +507,32 @@ describe 'View Element', ->
 					whenChange tags, ->
 						assert.isEqual tags, [doc2em1.children[0], newText], maxDeep: 1
 						done()
+
+		it 'supports disconnect() in onRemove()', (done) ->
+			tags = []
+			removedTags = []
+			doc2 = Element.fromHTML """
+				<div><b /><b /></div>
+				"""
+			div = doc2.children[0]
+			[b1, b2] = div.children
+			watcher1 = div.watch 'b'
+			watcher2 = div.watch 'b'
+			disconnected = false
+			watcher2.onAdd (tag) ->
+				tags.push tag
+			watcher1.onRemove (tag) ->
+				unless disconnected
+					disconnected = true
+					watcher1.disconnect()
+					watcher2.disconnect()
+			watcher2.onRemove (tag) ->
+				removedTags.push tag
+			whenChange tags, ->
+				b1.parent = null
+				whenChange removedTags, ->
+					assert.isEqual removedTags, [b1, b2], maxDeep: 1
+					done()
 
 	it 'visible property is editable', ->
 		assert.ok p.visible
