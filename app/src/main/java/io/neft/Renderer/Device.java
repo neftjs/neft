@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -347,7 +348,8 @@ public class Device {
     public boolean isPhone;
     public MainActivity app;
     public boolean keyboardVisible = false;
-    public MotionEvent pointerDownEvent;
+    public float pointerDownEventX = 0;
+    public float pointerDownEventY = 0;
 
     public KeyboardText keyboardText;
 
@@ -416,7 +418,8 @@ public class Device {
     public boolean onTouchEvent(MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                pointerDownEvent = event;
+                pointerDownEventX = event.getX();
+                pointerDownEventY = event.getY();
                 app.client.pushAction(OutAction.POINTER_PRESS);
                 break;
             case MotionEvent.ACTION_UP:

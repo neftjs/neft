@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
@@ -133,6 +134,7 @@ public class Scrollable extends Item {
     public float contentX = 0;
     public float contentY = 0;
     public boolean active = false;
+    protected long invalidateDuration = 0;
 
     private final Matrix contentMatrix = new Matrix();
     public ArrayList<RectF> dirtyRects = new ArrayList<>();
@@ -150,9 +152,11 @@ public class Scrollable extends Item {
             public boolean onTouch(View v, MotionEvent event) {
                 if (active) {
                     view.onWindowTouchEvent(event);
+                    invalidate();
 
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         active = false;
+                        invalidateDuration = 500;
                     }
                 }
                 return active;
@@ -200,21 +204,17 @@ public class Scrollable extends Item {
     public void activate() {
         active = true;
 
-        if (dirty) {
-            final long now = SystemClock.uptimeMillis();
-            final MotionEvent lastDownEvent = app.renderer.device.pointerDownEvent;
-            final MotionEvent downEvent = MotionEvent.obtain(
-                    now,
-                    now,
-                    MotionEvent.ACTION_DOWN,
-                    lastDownEvent.getX(),
-                    lastDownEvent.getY(),
-                    lastDownEvent.getMetaState()
-            );
-            view.onWindowTouchEvent(downEvent);
-        } else {
-            view.onWindowTouchEvent(app.renderer.device.pointerDownEvent);
-        }
+        final long now = SystemClock.uptimeMillis();
+        final Device device = app.renderer.device;
+        final MotionEvent downEvent = MotionEvent.obtain(
+                now,
+                now,
+                MotionEvent.ACTION_DOWN,
+                device.pointerDownEventX,
+                device.pointerDownEventY,
+                0
+        );
+        view.onWindowTouchEvent(downEvent);
     }
 
     @Override
@@ -256,6 +256,15 @@ public class Scrollable extends Item {
                     this.dirtyRects.clear();
                 }
             }
+        }
+
+        if (invalidateDuration > 0) {
+            this.invalidateDuration -= app.view.frameDelay;
+            invalidate();
+        }
+
+        if (active) {
+            invalidate();
         }
     }
 
