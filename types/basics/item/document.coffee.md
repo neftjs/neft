@@ -23,55 +23,6 @@ Document @extension
 			name: 'document'
 			valueConstructor: ItemDocument
 
-		setProperty = (props, attr, val, oldVal) ->
-			prop = props[attr]
-			if typeof prop is 'function' and prop.connect
-				if typeof val is 'function' and prop isnt val
-					prop val
-				if typeof oldVal is 'function' and prop isnt oldVal
-					prop.disconnect oldVal
-			else
-				@_updatePending = true
-				props[attr] = val
-				@_updatePending = false
-			return
-
-		onPropertyChange = (prop, oldVal) ->
-			if @_updatePending or not (node = @_node)
-				return
-			if oldVal is undefined and prop of node.attrs
-				onNodeAttrsChange.call @, prop, oldVal
-			else
-				node.attrs.set prop, @_ref._$[prop]
-			return
-
-		onNodeAttrsChange = (attr, oldVal) ->
-			unless props = @_ref._$
-				return
-			if attr of props
-				setProperty.call @, props, attr, @_node.attrs[attr], oldVal
-			return
-
-		enableProperties = ->
-			unless props = @_ref._$
-				return
-			# attrs to properties
-			{attrs} = @_node
-			for attr, val of attrs
-				if attrs.hasOwnProperty(attr) and attr of props
-					@_propertiesCleanQueue.push attr, props[attr], val
-					setProperty.call @, props, attr, val, null
-			return
-
-		disableProperties = ->
-			unless (propertiesCleanQueue = @_propertiesCleanQueue).length
-				return
-			props = @_ref._$
-			for attr, i in propertiesCleanQueue by 3
-				setProperty.call @, props, attr, propertiesCleanQueue[i+1], propertiesCleanQueue[i+2]
-			utils.clear propertiesCleanQueue
-			return
-
 *Document* Document()
 ---------------------
 
@@ -79,12 +30,8 @@ Document @extension
 			super ref
 			@_node = null
 			@_query = ''
-			@_propertiesCleanQueue = []
-			@_updatePending = false
 
 			Object.seal @
-
-			ref.on$Change onPropertyChange, @
 
 ReadOnly *String* Document::query
 ---------------------------------
@@ -124,11 +71,3 @@ ReadOnly *String* Document::query
 			developmentSetter: (val) ->
 				if val?
 					assert.instanceOf val, DocElement
-			setter: (_super) -> (val) ->
-				if @_node instanceof DocTag
-					@_node.onAttrsChange.disconnect onNodeAttrsChange, @
-					disableProperties.call @
-				_super.call @, val
-				if val instanceof DocTag
-					val.onAttrsChange onNodeAttrsChange, @
-					enableProperties.call @
