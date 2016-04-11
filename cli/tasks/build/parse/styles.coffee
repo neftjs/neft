@@ -46,8 +46,6 @@ module.exports = (platform, app, callback) ->
 		cliUtils.forEachFileDeep dir.path, (path, stat) ->
 			unless pathUtils.extname(path) in ['.js', '.nml']
 				return
-			unless cliUtils.isPlatformFilePath(platform, path)
-				return
 
 			filesToLoad++
 
@@ -120,6 +118,9 @@ module.exports = (platform, app, callback) ->
 				utils.merge currentQueries, newQueries
 
 				for filename, fileQueries of currentQueries
+					unless cliUtils.isPlatformFilePath(platform, "#{filename}.js")
+						continue
+
 					dirPriority = do ->
 						for dir, dirPriority of inputDirPriorities
 							if filename.indexOf(dir) is 0
