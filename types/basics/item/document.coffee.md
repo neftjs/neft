@@ -78,7 +78,6 @@ Document @extension
 		constructor: (ref) ->
 			super ref
 			@_node = null
-			@_visible = false
 			@_query = ''
 			@_propertiesCleanQueue = []
 			@_updatePending = false
@@ -133,55 +132,3 @@ ReadOnly *String* Document::query
 				if val instanceof DocTag
 					val.onAttrsChange onNodeAttrsChange, @
 					enableProperties.call @
-
-ReadOnly *Boolean* Document::visible = false
---------------------------------------------
-
-		itemUtils.defineProperty
-			constructor: @
-			name: 'visible'
-			defaultValue: false
-			namespace: 'document'
-			parentConstructor: ctor
-			developmentSetter: (val) ->
-				assert.isBoolean val
-
-*Signal* Document::onShow(*DocumentShowEvent* event)
-----------------------------------------------------
-
-This signal is called when the style item parent has been found.
-
-		signal.Emitter.createSignal @, 'onShow'
-
-*Signal* Document::onHide(*DocumentHideEvent* event)
-----------------------------------------------------
-
-This signal is called when the style item is no longer used.
-
-		signal.Emitter.createSignal @, 'onHide'
-
-*DocumentShowEvent* DocumentShowEvent()
----------------------------------------
-
-		@ShowEvent = class DocumentShowEvent
-			constructor: ->
-				@delay = 0
-				Object.preventExtensions @
-
-Hidden *Integer* DocumentShowEvent::delay = 0
----------------------------------------------
-
-*DocumentHideEvent* DocumentHideEvent()
----------------------------------------
-
-		@HideEvent = class DocumentHideEvent
-			constructor: ->
-				@delay = 0
-				@nextShowDelay = 0
-				Object.preventExtensions @
-
-Hidden *Integer* DocumentHideEvent::delay = 0
----------------------------------------------
-
-Hidden *Integer* DocumentHideEvent::nextShowDelay = 0
------------------------------------------------------
