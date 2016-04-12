@@ -37,14 +37,6 @@ describe 'CLI', ->
 			it 'creates bundle', (done) ->
 				createAndExec 'sh $NEFT_BIN build browser; rm ./build/app-browser-develop.js', (err, stdout, stderr) ->
 					done err or stderr
-		describe 'android', ->
-			it 'creates bundle', (done) ->
-				createAndExec 'sh $NEFT_BIN build android; rm ./build/app-android-develop.js', (err, stdout, stderr) ->
-					done err or stderr
-		describe 'ios', ->
-			it 'creates bundle', (done) ->
-				createAndExec 'sh $NEFT_BIN build ios; rm ./build/app-ios-develop.js', (err, stdout, stderr) ->
-					done err or stderr
 
 	describe 'neft run', ->
 		describe 'node', ->
