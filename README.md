@@ -75,7 +75,7 @@ Apache 2.0
 *routes/index.js*
 
 ```javascript
-var Dict = require('dict');
+var Dict = require('neft-dict');
 module.exports = function(app){
     return {
         'get /': {
@@ -85,7 +85,7 @@ module.exports = function(app){
                 });
             },
             increaseClick: function(){
-                this.data.set('clicks', this.data.get('clicks')+1);
+                this.data.set('clicks', this.data.clicks+1);
             }
         }
     }
@@ -98,8 +98,8 @@ module.exports = function(app){
 
 ```html
 <body>
-    <p class="large" clicks="${data.clicks}">Clicks ${data.clicks}</p>
-    <button style:pointer:onClick="${route.increaseClick()}">+</button>
+    <p class="large" clicks="${scope.data.clicks}">Clicks ${scope.data.clicks}</p>
+    <button style:pointer:onClick="${scope.increaseClick()}">+</button>
 </body>
 ```
 
@@ -120,7 +120,7 @@ Scrollable {
 ```javascript
 Text {
     document.query: 'p'
-    property $.clicks: 0
+    property $.clicks: this.document.node.attrs.clicks
     background.color: 'yellow'
 
     if (this.$.clicks > 5){
