@@ -45,19 +45,25 @@ createBundle = (opts, callback) ->
 		console.log "Ready: #{name}"
 		callback()
 
+TYPES = [
+	{ platform: 'node' },
+	{ platform: 'browser' },
+	{ platform: 'browser', extras: {game: true} },
+	{ platform: 'qt' },
+	{ platform: 'android' },
+	{ platform: 'ios' },
+]
+
 stack = new utils.async.Stack
 
-stack.add createBundle, null, [platform: 'node', release: true]
-stack.add createBundle, null, [platform: 'node', release: false]
-stack.add createBundle, null, [platform: 'browser', release: true]
-stack.add createBundle, null, [platform: 'browser', release: false]
-stack.add createBundle, null, [platform: 'browser', extras: {game: true}, release: true]
-stack.add createBundle, null, [platform: 'browser', extras: {game: true}, release: false]
-# stack.add createBundle, null, [platform: 'qt', release: true]
-# stack.add createBundle, null, [platform: 'qt', release: false]
-stack.add createBundle, null, [platform: 'android', release: true]
-stack.add createBundle, null, [platform: 'android', release: false]
-stack.add createBundle, null, [platform: 'ios', release: true]
-stack.add createBundle, null, [platform: 'ios', release: false]
+for type in TYPES
+	if utils.has(process.argv, "--#{type.platform}")
+		opts = { release: false }
+		utils.merge opts, type
+		stack.add createBundle, null, [opts]
+	if utils.has(process.argv, "--#{type.platform}-release")
+		opts = { release: true }
+		utils.merge opts, type
+		stack.add createBundle, null, [opts]
 
 stack.runAll ->

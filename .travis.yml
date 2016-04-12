@@ -5,4 +5,4 @@ node_js:
   - "stable"
 before_script:
   - PATH=`echo $PATH | sed -e 's/:\.\/node_modules\/\.bin//g'` find ./node_modules/neft-* -maxdepth 0 -type d -exec sh -c 'cd $0; npm install --only=prod' {} \;
-  - npm run bundle
+  - npm run bundle -- --node --browser
