@@ -40,6 +40,10 @@ Do you know JavaScript, CoffeeScript, C, Java or Swift? Help us and become a con
 
 Did you find a bug, have an idea for a new features or just you're pissed off at the documentation? Create an [issue](https://github.com/Neft-io/neft/issues), write it on our [Gitter](https://gitter.im/Neft-io/neft) or simply [tweet us](https://twitter.com/neft_io). 🚑💉
 
+## WARNING
+
+Neft is still in heavy development stage. Some of the published APIs may change. Documentation is partial. Any help is welcome. We're looking for a volunteers to work on a core functionalities, documentation, examples and on a native components implementations. Please remember that any feedback is appreciated.
+
 ## Links
 
 - [Official website](http://www.neft.io/)
