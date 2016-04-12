@@ -1,4 +1,4 @@
-fs = require 'fs'
+fs = require 'fs-extra'
 Mustache = require 'mustache'
 coffee = require 'coffee-script'
 
@@ -8,6 +8,8 @@ global.Neft =
 	assert: require 'neft-assert'
 
 bundle = require 'neft-bundle-builder'
+
+fs.ensureDir './cli/bundle'
 
 createBundle = (opts, callback) ->
 	bundle {
