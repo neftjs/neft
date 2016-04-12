@@ -7,8 +7,7 @@ const unit = require('src/unit');
 
     'use strict'
 
-    utils = require 'src/utils'
-    log = require 'src/log'
+    {utils, log} = Neft
     stack = require './stack'
     logger = require './logger'
     modifiers = require './modifiers'
@@ -127,6 +126,7 @@ The given test function can contains optional *callback* argument.
 
     exports.runTests = ->
         [mainScope] = scopes
+        logger.onTestsStart()
         mainScope.run ->
             logger.onTestsEnd()
             exports.onTestsEnd
@@ -138,7 +138,8 @@ The given test function can contains optional *callback* argument.
 
     exports.onTestsEnd = (result) ->
         code = if result.status is 'success' then 0 else 1
-        process.exit code
+        if utils.isServer
+            process.exit code
 
 # *Boolean* unit.runAutomatically = true
 

@@ -1,8 +1,6 @@
     'use strict'
 
-    utils = require 'src/utils'
-
-    NOP = ->
+    {utils} = Neft
 
     PLATFORMS =
         onNode: 'isNode'
@@ -27,6 +25,6 @@
 # isIOS
 
         for funcName, utilsProp of PLATFORMS
-            getter = if utils[utilsProp] then -> this else NOP
+            getter = if utils[utilsProp] then -> this else utils.NOP
             utils.defineProperty func, funcName, 0, getter, null
         return

@@ -1,3 +1,5 @@
+# coffeelint: disable=no_debugger
+
 'use strict'
 
 fs = require 'fs-extra'
@@ -25,7 +27,7 @@ module.exports = (opts, callback) ->
     # stringify opts into JSON
     processOpts = JSON.stringify opts, (key, val) ->
         if typeof val is 'function'
-            {_function: val+''}
+            {_function: String(val)}
         else
             val
     processOptsBase64 = new Buffer(processOpts).toString('base64')
@@ -40,7 +42,7 @@ module.exports = (opts, callback) ->
 
     if opts.logProcessStdout
         childProcess.stdout.on 'data', (data) ->
-            console.log data+''
+            console.log String(data)
 
     stderr = ''
     childProcess.stderr.on 'data', (data) ->

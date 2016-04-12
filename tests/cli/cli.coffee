@@ -71,5 +71,5 @@ describe 'CLI', ->
 
                     child.stdout.on 'data', (msg) ->
                         if utils.has(String(msg), 'Start as')
-                            child.kill()
+                            child.send 'terminate'
                             setTimeout done

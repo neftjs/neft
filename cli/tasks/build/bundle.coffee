@@ -30,7 +30,8 @@ module.exports = (platform, options, app, callback) ->
                 req isnt path and modulePath.indexOf('node_modules') is -1
         else
             (req, path, modulePath, parentPath) ->
-                modulePath.indexOf('..') isnt 0
+                modulePath.indexOf('..') isnt 0 or
+                modulePath.indexOf('node_modules') is -1
 
     bundleBuilder
         path: 'index.js'

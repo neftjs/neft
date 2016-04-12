@@ -1,9 +1,14 @@
 'use strict'
 
-utils = require 'src/utils'
-log = require 'src/log'
+{utils} = Neft
+
 stack = require './stack'
 errorUtils = require './error'
+log = switch true
+    when utils.isNode
+        require './loggers/node'
+    else
+        require './loggers/client'
 
 SCOPE_PAD = '    '
 MIN_TIME_WARN = 100
@@ -11,15 +16,19 @@ MIN_TIME_WARN = 100
 pad = ''
 testStartTime = 0
 
+exports.onTestsStart = ->
+    log.onTestsStart()
+
 exports.onTestsEnd = ->
     for error in stack.errors
         errorString = errorUtils.toString error
         errorString = errorString.replace /^/gm, SCOPE_PAD
-        msg = "\n"
+        msg = '\n'
         if error.test
             msg += "#{error.test.getFullMessage()}\n"
         msg += errorString
         log.error msg
+    log.onTestsEnd()
     return
 
 exports.onScopeStart = (scope) ->
@@ -27,7 +36,7 @@ exports.onScopeStart = (scope) ->
     if message is ''
         return
 
-    log pad + scope.message
+    log.log pad + scope.message
     pad += SCOPE_PAD
     return
 

@@ -10,5 +10,5 @@ exports.toString = (err) ->
             msg = msg.slice(0, unitStackIndex) + '…'
     else
         msg += err
-    msg += "\n"
+    msg += '\n'
     msg

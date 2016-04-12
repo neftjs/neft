@@ -1,3 +1,9 @@
+global.window = global;
 global.Neft = require('./{{neftFileName}}');
 require('coffee-script/register');
+process.on('message', function(msg) {
+    if (msg === 'terminate') {
+        process.exit();
+    }
+});
 {{&appCode}}
