@@ -1,0 +1,17 @@
+version: '{build}-{branch}'
+environment:
+  matrix:
+    - nodejs_version: "0.11"
+    - nodejs_version: "4.1"
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - git submodule update --init
+  - npm install
+  # TODO: change to more generic script
+  - cd node_modules/neft-bundle-builder && npm install groundskeeper
+test_script:
+  - node --version
+  - npm --version
+  - npm run bundle -- --node --browser
+  - npm test
+build: off
