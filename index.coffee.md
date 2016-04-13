@@ -45,7 +45,10 @@ Unit.describe(*String* message, *Function* tests)
 		currentScope = scope
 
 		# filter children tests
-		func()
+		try
+			func()
+		catch err
+			console.error err
 
 		# set parent as last
 		scopes.pop()
