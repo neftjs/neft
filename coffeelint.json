@@ -1,5 +1,8 @@
 {
 	"no_tabs": {
 		"level": "ignore"
+	},
+	"indentation": {
+		"value": 1
 	}
 }
