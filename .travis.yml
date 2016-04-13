@@ -3,3 +3,9 @@ node_js:
   - "4.1"
   - "0.11"
   - "stable"
+addons:
+  code_climate:
+    repo_token: 9f9358831f5c800a10f8bc15ebee00518e117a0d784d4cb39a76b2a20455618f
+after_script:
+  - istanbul report
+  - codeclimate-test-reporter < coverage/lcov.info

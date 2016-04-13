@@ -14,7 +14,10 @@
     "test": "unit ./tests/**/*.coffee"
   },
   "devDependencies": {
+    "codeclimate-test-reporter": "^0.3.1",
+    "coffee-coverage": "^1.0.1",
     "coffee-script": "latest",
+    "istanbul": "^0.4.3",
     "neft-unit": "Neft-io/neft-unit"
   },
   "dependencies": {
