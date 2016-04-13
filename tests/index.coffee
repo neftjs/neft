@@ -3,7 +3,7 @@
 utils = require 'neft-utils'
 unit = require 'neft-unit'
 assert = require 'neft-assert'
-List = require './index'
+List = require '../index'
 
 {describe, it, beforeEach, afterEach} = unit
 
@@ -17,7 +17,7 @@ describe 'length', ->
 		list = List [1, 2]
 		assert.is list.length, 2
 
-describe 'values are accessed by their keys', ->
+it 'values are accessed by their keys', ->
 	list = List [1, 2]
 	assert.is list[0], 1
 	assert.is list[1], 2
