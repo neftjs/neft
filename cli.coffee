@@ -10,12 +10,20 @@ fs = require 'fs'
 realpath = fs.realpathSync ''
 
 runTestFile = (path) ->
-	require pathUtils.join realpath, path
+	try
+		require pathUtils.join realpath, path
+	catch err
+		console.error err
 
 if fs.existsSync(path) and fs.statSync(path).isFile()
 	runTestFile path
 else
-	glob pathUtils.join(path, '/', '**/*.spec.*'), (err, files) ->
+	if fs.statSync(path).isDirectory()
+		globPath = pathUtils.join path, '/', '**/*'
+	else
+		globPath = path
+
+	glob globPath, (err, files) ->
 		if err
 			throw err
 
