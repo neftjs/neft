@@ -15,10 +15,16 @@ runTestFile = (path) ->
 	catch err
 		console.error err
 
-if fs.existsSync(path) and fs.statSync(path).isFile()
+pathIsFile = pathIsDir = false
+if fs.existsSync(path)
+	pathStat = fs.statSync path
+	pathIsFile = pathStat.isFile()
+	pathIsDir = pathStat.isDirectory()
+
+if pathIsFile
 	runTestFile path
 else
-	if fs.statSync(path).isDirectory()
+	if pathIsDir
 		globPath = pathUtils.join path, '/', '**/*'
 	else
 		globPath = path
