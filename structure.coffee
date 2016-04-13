@@ -51,9 +51,8 @@ class Test
 		logger.onTestEnd @
 
 		# call after functions
-		if @fulfilled
-			for afterFunc in stack.currentScope.afterFunctions
-				afterFunc()
+		for afterFunc in stack.currentScope.afterFunctions
+			afterFunc()
 
 		@_callback()
 
