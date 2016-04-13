@@ -3,7 +3,7 @@
   "name": "neft-list",
   "version": "0.9.12",
   "description": "Neft.io list library used for array data-binding",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "repository": {
     "type": "git",
