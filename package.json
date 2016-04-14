@@ -14,7 +14,7 @@
     "test": "unit ./tests/**/*.coffee"
   },
   "devDependencies": {
-    "codeclimate-test-reporter": "^0.3.1",
+    "coveralls": "^2.11.9",
     "coffee-coverage": "^1.0.1",
     "coffee-script": "latest",
     "istanbul": "^0.4.3",
