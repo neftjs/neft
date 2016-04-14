@@ -10,4 +10,4 @@ JavaScript Everywhere
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
 
 ### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
- - [List](https://github.com/Neft-io/neft-list/wiki/API-Reference)
+- [List](https://github.com/Neft-io/neft-list/wiki/API-Reference)
