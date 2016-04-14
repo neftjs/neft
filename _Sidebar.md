@@ -4,6 +4,7 @@ JavaScript Everywhere
 =====================
 
 - [Home](https://github.com/Neft-io/neft/wiki)
+- [Contribute](https://github.com/Neft-io/neft/wiki/Contribute)
 
 ### Help
 - [Neft on Stack Overflow](http://stackoverflow.com/questions/tagged/neft)
