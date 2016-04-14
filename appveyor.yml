@@ -8,7 +8,7 @@ install:
   - git submodule update --init
   - npm install
   # TODO: change to more generic script
-  - cd node_modules/neft-bundle-builder && npm install groundskeeper
+  - cd node_modules/neft-bundle-builder && npm install coffee-script && npm install groundskeeper
 test_script:
   - node --version
   - npm --version
