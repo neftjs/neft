@@ -29,6 +29,6 @@ Each *Pull Request* is automatically tested by:
 Each *Pull Request* on the [main repository](https://github.com/Neft-io/neft) is additionally tested by:
 - [Travis CI](https://travis-ci.org/Neft-io/neft) - all unit tests,
 - [AppVeyor](https://ci.appveyor.com/project/KrysKruk/neft) - all unit tests running on Windows,
-- [SauceLabs](https://saucelabs.com) - all unit tests running on all supported platforms and various devices.
+- [SauceLabs](https://saucelabs.com) - all unit tests running on all supported platforms and various devices; reported by *Travis CI*.
 
 These tools may help you write better and well-tested code.
