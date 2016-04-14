@@ -7,7 +7,8 @@ Neft is a community project. It has no a huge company administrator or a lot of 
 - Be an active member of the community on [GitHub Issues](https://github.com/Neft-io/neft/issues), [StackOverflow](http://stackoverflow.com/questions/tagged/neft), [Google Group](http://groups.google.com/group/neft_io) or [Gitter](https://gitter.im/Neft-io/neft),
 - work on wikis, tutorials and API References,
 - prepare crazy examples and publish them,
-- fix bugs and add new features in JavaScript, Swift, C, Java code; learn from community code review.
+- fix bugs and add new features in JavaScript, Swift, C, Java code; learn from community code review,
+- don't bite :)
 
 ## Repositories organisation
 
@@ -27,4 +28,4 @@ Each *Pull Request* is automatically tested by:
 Each *Pull Request* on the [main repository](https://github.com/Neft-io/neft) is additionally tested by:
 - [Travis CI](https://travis-ci.org/Neft-io/neft) - all unit tests,
 - [AppVeyor](https://ci.appveyor.com/project/KrysKruk/neft) - all unit tests running on Windows,
-- [SauceLabs](https://saucelabs.com) - all unit tests running on all supported platforms.
+- [SauceLabs](https://saucelabs.com) - all unit tests running on all supported platforms and various devices.
