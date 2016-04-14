@@ -5,9 +5,9 @@ Neft is a community project. It has no a huge company administrator or a lot of 
 ## How to contribute
 
 - Be an active member of the community on [GitHub Issues](https://github.com/Neft-io/neft/issues), [StackOverflow](http://stackoverflow.com/questions/tagged/neft), [Google Group](http://groups.google.com/group/neft_io) or [Gitter](https://gitter.im/Neft-io/neft),
-- Work on wikis, tutorials and API References,
-- Prepare crazy examples and publish them,
-- Fix bugs and add new features in JavaScript, Swift, C, Java code; learn from community code review.
+- work on wikis, tutorials and API References,
+- prepare crazy examples and publish them,
+- fix bugs and add new features in JavaScript, Swift, C, Java code; learn from community code review.
 
 ## Repositories organisation
 
