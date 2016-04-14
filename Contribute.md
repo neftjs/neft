@@ -15,7 +15,7 @@ Because the Neft project complexity, each module is placed in separated reposito
 
 ## Requests
 
-If you want to change one of the Neft modules, fork it. If you need to test your changes in a working app, fork the [main repository](https://github.com/Neft-io/neft) and refer specific submodule to your fork. When everything works fine for you, prepare a *Pull Request* to include your changes into the main branch. Each *Pull Request* must be reviewed by the community. It's a good practice to always create an *Issue* where you describe on what task you are working on.
+If you want to change one of the Neft modules, fork it. If you need to test your changes in a working app, fork the [main repository](https://github.com/Neft-io/neft) and refer specific submodule to your fork. When everything works fine for you, prepare a *Pull Request* to include your changes into the main branch. Each *Pull Request* must be reviewed by the community. It's a good practice to always create an *Issue* with a bug/feature you are working on.
 
 ## Testing
 
