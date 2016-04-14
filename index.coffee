@@ -4,12 +4,15 @@ fs = require 'fs-extra'
 pathUtils = require 'path'
 Module = require 'module'
 cp = require 'child_process'
+os = require 'os'
 
 {utils, log, assert} = Neft
 
 release = require './release'
 minify = require './minify'
 bundle = require './bundle'
+
+isWin32 = os.platform() is 'win32'
 
 module.exports = (opts, callback) ->
 	assert.isPlainObject opts
@@ -32,7 +35,8 @@ module.exports = (opts, callback) ->
 	# run process file
 	running = true
 	processPath = pathUtils.join __dirname, './process.coffee'
-	childProcess = cp.spawn 'coffee', [processPath, processOpts], stdio: ['ipc']
+	cmd = if isWin32 then 'coffee.cmd' else 'coffee'
+	childProcess = cp.spawn cmd, [processPath, processOpts], stdio: ['ipc']
 
 	if opts.logProcessStdout
 		childProcess.stdout.on 'data', (data) ->
