@@ -34,6 +34,10 @@ module.exports = (opts, callback) ->
 	processPath = pathUtils.join __dirname, './process.coffee'
 	childProcess = cp.spawn 'coffee', [processPath, processOpts], stdio: ['ipc']
 
+	if opts.logProcessStdout
+		childProcess.stdout.on 'data', (data) ->
+			console.log data+''
+
 	stderr = ''
 	childProcess.stderr.on 'data', (data) ->
 		stderr += data
