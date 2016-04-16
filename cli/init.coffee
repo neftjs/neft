@@ -41,6 +41,8 @@ args =
 options =
 	release: false
 	out: ''
+	watch: false
+	notify: false
 
 argOutput = ''
 for arg, i in process.argv when i > 1

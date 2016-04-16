@@ -12,6 +12,7 @@ IN_DIR = 'views'
 OUT_DIR = 'build'
 
 Document.FILES_PATH = IN_DIR
+loadedExtensions = {}
 
 module.exports = (platform, app, callback) ->
 	logtime = log.time 'Parse documents'
@@ -23,7 +24,8 @@ module.exports = (platform, app, callback) ->
 	bundleBuilder.addModulesNamespace Neft
 	realpath = fs.realpathSync '.'
 	for key of packageConfig.dependencies
-		if /^neft\-document\-/.test(key)
+		if /^neft\-document\-/.test(key) and not loadedExtensions[key]
+			loadedExtensions[key] = true
 			require(pathUtils.join(realpath, '/node_modules/', key))()
 	bundleBuilder.removeModulesNamespace Neft
 
