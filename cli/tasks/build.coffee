@@ -18,22 +18,34 @@ clear = (platform, callback) ->
 	fs.remove './index.js', callback
 
 watch = (platform, options, callback) ->
-	pending = false
+	batchPending = false
+	buildPending = false
+	runBuildAgain = false
 
 	ignored = '^(?:build|index\.js|local\.json|node_modules)|\.git'
 	if options.out
 		ignored += "|#{options.out}"
 
 	update = ->
-		pending = false
+		batchPending = false
+		if buildPending
+			runBuildAgain = true
+			return
+
+		buildPending = true
 		build platform, options, (err) ->
+			buildPending = false
 			console.log ''
 			callback err
 
+			if runBuildAgain
+				runBuildAgain = false
+				update()
+
 	chokidar.watch('.', ignored: new RegExp(ignored)).on 'all', ->
-		unless pending
+		unless batchPending
 			setTimeout update, 100
-			pending = true
+			batchPending = true
 		return
 	return
 
