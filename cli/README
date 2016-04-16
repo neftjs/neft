@@ -18,3 +18,5 @@ Platforms:
 Options:
   --release          used to build and run release version of your application
   --out=PATH         used to generate complete bundle ready to publish on a server
+  --watch
+  --notify
