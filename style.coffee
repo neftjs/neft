@@ -19,7 +19,9 @@ module.exports = (File, data) -> class Style
 	@__name__ = 'Style'
 	@__path__ = 'File.Style'
 
-	JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Style) - 1
+	@JSON_CTOR_ID = File.Style?.JSON_CTOR_ID
+	@JSON_CTOR_ID ?= File.JSON_CTORS.push(Style) - 1
+	{JSON_CTOR_ID} = @
 
 	i = 1
 	JSON_NODE = i++
