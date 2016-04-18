@@ -1,5 +1,6 @@
 'use strict'
 
+pathUtils = require 'path'
 View = require '../index.coffee.md'
 {describe, it} = require 'neft-unit'
 assert = require 'neft-assert'
@@ -8,7 +9,7 @@ assert = require 'neft-assert'
 describe 'neft:require', ->
 	describe 'shares fragments', ->
 		it 'without namespace', ->
-			first = 'namespace/'+uid()
+			first = 'namespace'+pathUtils.sep+uid()
 			view1 = View.fromHTML first, '<neft:fragment neft:name="a"></neft:fragment>'
 			View.parse view1
 
