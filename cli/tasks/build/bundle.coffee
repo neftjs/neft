@@ -21,21 +21,20 @@ module.exports = (platform, options, app, callback) ->
 	neftFilePath = "../../bundle/neft-#{platform}-#{mode}.js"
 
 	testResolvedFunc = do ->
-		switch platform
-			when 'node'
-				(req, path, modulePath, parentPath) ->
-					if req isnt path and not /^node_modules\//.test(modulePath)
-						true
-					else
-						false
-			else
-				-> true
+		if platform is 'node' and options.out
+			(req, path, modulePath, parentPath) ->
+				not /node_modules\//.test(modulePath) and
+				(req isnt path or pathUtils.isAbsolute(req))
+		else if platform is 'node'
+			(req, path, modulePath, parentPath) ->
+				req isnt path and not /node_modules\//.test(modulePath)
+		else
+			-> true
 
 	bundleBuilder
 		path: 'index.js'
 		verbose: true
 		platform: platform
-		onlyLocal: platform is 'node'
 		release: options.release
 		minify: options.release
 		removeLogs: options.release
