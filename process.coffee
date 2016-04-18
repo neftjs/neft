@@ -6,7 +6,8 @@ yaml = require 'js-yaml'
 Module = require 'module'
 
 # parse json opts from
-opts = JSON.parse process.argv[2], (key, val) ->
+optsString = new Buffer(process.argv[2], 'base64').toString()
+opts = JSON.parse optsString, (key, val) ->
 	if val and val._function
 		eval "(#{val._function})"
 	else
@@ -104,3 +105,7 @@ require('timers').setImmediate ->
 		paths: paths
 
 	process.send resultJSON
+
+process.on 'message', (msg) ->
+	if msg is 'terminate'
+		process.exit()

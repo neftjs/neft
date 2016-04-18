@@ -31,12 +31,15 @@ module.exports = (opts, callback) ->
 			{_function: val+''}
 		else
 			val
+	processOptsBase64 = new Buffer(processOpts).toString('base64')
 
 	# run process file
 	running = true
 	processPath = pathUtils.join __dirname, './process.coffee'
-	cmd = if isWin32 then 'coffee.cmd' else 'coffee'
-	childProcess = cp.spawn cmd, [processPath, processOpts], stdio: ['ipc']
+	cmd = 'coffee'
+	if isWin32
+		cmd += '.cmd'
+	childProcess = cp.spawn cmd, [processPath, processOptsBase64], stdio: ['ipc']
 
 	if opts.logProcessStdout
 		childProcess.stdout.on 'data', (data) ->
@@ -54,7 +57,7 @@ module.exports = (opts, callback) ->
 
 	childProcess.on 'message', (result) ->
 		running = false
-		childProcess.kill()
+		childProcess.send 'terminate'
 		log.end logtime
 		processData = JSON.parse result
 		stack = new utils.async.Stack

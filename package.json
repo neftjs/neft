@@ -12,6 +12,7 @@
   "bugs": "https://github.com/Neft-io/bundle-builder/issues",
   "dependencies": {
     "fs-extra": "^0.26.0",
-    "groundskeeper": "^0.1.11"
+    "groundskeeper": "^0.1.11",
+    "coffee-script": "^1.10.0"
   }
 }
