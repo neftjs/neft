@@ -52,7 +52,7 @@ class Test
 
 		# call after functions
 		for afterFunc in stack.currentScope.afterFunctions
-			afterFunc()
+			stack.callFunction afterFunc
 
 		@_callback()
 
@@ -66,15 +66,14 @@ class Test
 
 		# call before functions
 		for beforeFunc in stack.currentScope.beforeFunctions
-			beforeFunc()
+			stack.callFunction beforeFunc
 
 		# call test function
 		if @testFunction.length is 0
 			stack.callFunction @testFunction
 			@onEnd()
 		else
-			unless stack.callFunction(@testFunction, null, [@onEnd])
-				@onEnd()
+			stack.callFunction @testFunction, null, [@onEnd]
 
 		return
 
