@@ -5,9 +5,25 @@ pathUtils = require 'path'
 cp = require 'child_process'
 fs = require 'fs'
 
-[_, _, path] = process.argv
+[_, _, path, optsArgv...] = process.argv
 
 realpath = fs.realpathSync ''
+opts =
+	require: []
+
+# parse opts
+do ->
+	argv = optsArgv.splice ' '
+	i = 0
+	n = argv.length
+	while i < n
+		arg = argv[i]
+		switch arg
+			when '--require'
+				opts.require.push argv[++i]
+			else
+				throw new Error "Unexpected option '#{arg}'"
+		i++
 
 runTestFile = (path) ->
 	try
@@ -16,10 +32,15 @@ runTestFile = (path) ->
 		console.error err
 
 pathIsFile = pathIsDir = false
+
 if fs.existsSync(path)
 	pathStat = fs.statSync path
 	pathIsFile = pathStat.isFile()
 	pathIsDir = pathStat.isDirectory()
+
+# requires
+for requirePath in opts.require
+	require pathUtils.join realpath, requirePath
 
 if pathIsFile
 	runTestFile path
