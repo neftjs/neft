@@ -3,7 +3,7 @@
 fs = require 'fs'
 cp = require 'child_process'
 log = require 'neft-log'
-packageFile = require './package.json'
+packageFile = require '../package.json'
 
 syncRepoWithDependency = (name) ->
 	commit = ''+cp.execSync "cd node_modules/#{name} && git log --pretty=format:\"%h\" -1"
