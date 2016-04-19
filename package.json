@@ -27,6 +27,7 @@
     "node": ">=0.11.14"
   },
   "scripts": {
+  	"init-submodules": "coffee scripts/init-submodules.coffee",
     "bundle": "coffee --nodejs --harmony bundle.coffee",
     "checkout-master": "coffee scripts/preversion.coffee; git checkout master; git pull; find ./node_modules/neft-* -type d -maxdepth 0 -execdir sh -c 'echo \\\\n\\\\n$0\\\\n; cd ./node_modules/$0; git checkout master; git pull' {} \\;",
     "test": "node ./node_modules/neft-unit/bin/unit.js ./spec"
@@ -48,12 +49,10 @@
     "xcode": "^0.8.4",
     "chokidar": "^1.4.3",
     "node-notifier": "^4.5.0",
+    "glob": "^7.0.3",
     "neft-android-runtime": "Neft-io/neft-android-runtime#4509df0",
     "neft-ios-runtime": "Neft-io/neft-ios-runtime#544be9d",
     "neft-sample-project": "Neft-io/neft-sample-project#b8acc1e",
     "neft-nml-parser": "Neft-io/neft-nml-parser#5286aad"
-  },
-  "devDependencies": {
-    "glob": "^7.0.3"
   }
 }

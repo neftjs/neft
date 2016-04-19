@@ -6,9 +6,9 @@ environment:
 install:
   - ps: Install-Product node $env:nodejs_version
   - git submodule update --init
+  - npm update -g npm
   - npm install
-  # TODO: change to more generic script
-  - cd node_modules/neft-bundle-builder && npm install coffee-script && npm install groundskeeper
+  - npm run init-submodules
 test_script:
   - node --version
   - npm --version
