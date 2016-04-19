@@ -4,6 +4,4 @@ node_js:
   - "0.11"
   - "stable"
 before_script:
-  - PATH=`echo $PATH | sed -e 's/:\.\/node_modules\/\.bin//g'`
-  - npm run init-submodules
   - npm run bundle -- --node --browser

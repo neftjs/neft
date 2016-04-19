@@ -8,7 +8,6 @@ install:
   - git submodule update --init
   - npm update -g npm
   - npm install
-  - npm run init-submodules
 test_script:
   - node --version
   - npm --version
