@@ -1,6 +1,6 @@
 'use strict'
 
-Dict = require './index'
+Dict = require '../index'
 unit = require 'neft-unit'
 assert = require 'neft-assert'
 
