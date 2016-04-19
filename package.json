@@ -11,10 +11,13 @@
   },
   "bugs": "https://github.com/Neft-io/document/issues",
   "scripts": {
-    "test": "unit ./spec/ && unit ./element/spec/"
+    "test": "unit 'tests/**/*.coffee' --require './tests/coverage.coffee'"
   },
   "devDependencies": {
+    "coveralls": "^2.11.9",
+    "coffee-coverage": "^1.0.1",
     "coffee-script": "latest",
+    "istanbul": "^0.4.3",
     "neft-unit": "Neft-io/neft-unit",
     "force-dedupe-git-modules": "^0.3.0"
   },

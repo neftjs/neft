@@ -4,7 +4,7 @@ unit = require 'neft-unit'
 utils = require 'neft-utils'
 assert = require 'neft-assert'
 
-Element = require('../index')
+Element = require '../../element/index'
 
 {describe, it, beforeEach, whenChange} = unit
 
