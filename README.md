@@ -4,7 +4,7 @@
 
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Neft-io/neft)
 [![Build Status](https://travis-ci.org/Neft-io/neft-dict.svg?branch=master)](https://travis-ci.org/Neft-io/neft-dict)
-[![Coverage Status](https://coveralls.io/repos/github/Neft-io/neft-list/badge.svg?branch=master)](https://coveralls.io/github/Neft-io/neft-list?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Neft-io/neft-dict/badge.svg?branch=master)](https://coveralls.io/github/Neft-io/neft-dict?branch=master)
 
 Object-like class used for data-binding in Neft.
 
