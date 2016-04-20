@@ -11,7 +11,7 @@
   },
   "bugs": "https://github.com/Neft-io/document/issues",
   "scripts": {
-    "test": "unit 'tests/**/*.coffee' --require './tests/coverage.coffee'"
+    "test": "unit 'tests/**/*.coffee' --require coffee-coverage/register-istanbul"
   },
   "devDependencies": {
     "coveralls": "^2.11.9",
