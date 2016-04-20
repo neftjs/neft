@@ -11,7 +11,7 @@
   },
   "bugs": "https://github.com/Neft-io/dict/issues",
   "scripts": {
-    "test": "unit tests/**/*.coffee"
+    "test": "unit 'tests/**/*.coffee'"
   },
   "devDependencies": {
   	"coveralls": "^2.11.9",

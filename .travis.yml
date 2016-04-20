@@ -3,6 +3,8 @@ node_js:
   - "4.1"
   - "0.11"
   - "stable"
+script:
+  - npm test -- --require coffee-coverage/register-istanbul
 after_script:
   - istanbul report
   - coveralls < coverage/lcov.info
