@@ -40,7 +40,11 @@ if fs.existsSync(path)
 
 # requires
 for requirePath in opts.require
-	require pathUtils.join realpath, requirePath
+	requireAbsPath = pathUtils.join realpath, requirePath
+	if fs.existsSync(requireAbsPath)
+		require requireAbsPath
+	else
+		require requirePath
 
 if pathIsFile
 	runTestFile path
