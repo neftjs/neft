@@ -15,7 +15,11 @@ exports.onTestsEnd = ->
 	for error in stack.errors
 		errorString = errorUtils.toString error
 		errorString = errorString.replace /^/gm, SCOPE_PAD
-		log.error "\n#{error.test.getFullMessage()}\n#{errorString}"
+		msg = "\n"
+		if error.test
+			msg += "#{error.test.getFullMessage()}\n"
+		msg += errorString
+		log.error msg
 	return
 
 exports.onScopeStart = (scope) ->

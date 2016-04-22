@@ -4,6 +4,7 @@ glob = require 'glob'
 pathUtils = require 'path'
 cp = require 'child_process'
 fs = require 'fs'
+unitsStack = require './stack'
 
 [_, _, path, optsArgv...] = process.argv
 
@@ -29,7 +30,7 @@ runTestFile = (path) ->
 	try
 		require pathUtils.join realpath, path
 	catch err
-		console.error err
+		unitsStack.errors.push err
 
 pathIsFile = pathIsDir = false
 
