@@ -1,6 +1,6 @@
 > [Wiki](Home) ▸ **Contribute**
 
-Neft is a community project. It has no a huge company administrator or a lot of resources. That's why each feedback from the community is so important for the project.
+Neft is a community project. It has no huge company administrator nor a lot of resources. That's why each feedback from the community is so important for the project.
 
 ## How to contribute
 
