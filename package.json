@@ -11,7 +11,7 @@
   },
   "bugs": "https://github.com/Neft-io/schema/issues",
   "scripts": {
-    "test": "unit ./spec/"
+    "test": "unit 'tests/**/*.coffee'"
   },
   "devDependencies": {
     "coffee-script": "latest",
