@@ -8,7 +8,7 @@ Neft is a community project. It has no a huge company administrator or a lot of 
 - create *issues* for found bugs and missed features,
 - work on wikis, tutorials and API References,
 - prepare crazy examples and publish them,
-- fix bugs and add new features in JavaScript, Swift, C, Java code; learn from community code review,
+- fix bugs and add new features in CoffeeScript, JavaScript, Swift, C, Java code; learn from community code review,
 - don't bite :)
 
 ## Repositories organisation
@@ -32,3 +32,34 @@ Each *Pull Request* on the [main repository](https://github.com/Neft-io/neft) is
 - [SauceLabs](https://saucelabs.com) - all unit tests running on all supported platforms and various devices; reported by *Travis CI*.
 
 These tools may help you write better and well-tested code.
+
+## Internal modules
+
+- [Document](https://github.com/Neft-io/neft-document),
+- [Renderer](https://github.com/Neft-io/neft-renderer),
+- [Android Runtime](https://github.com/Neft-io/neft-android-runtime),
+- [iOS Runtime](https://github.com/Neft-io/neft-ios-runtime),
+- [App](https://github.com/Neft-io/neft-app),
+- [Resources](https://github.com/Neft-io/neft-resources),
+- [Networking](https://github.com/Neft-io/neft-networking),
+- [Native](https://github.com/Neft-io/neft-native),
+- [Utils](https://github.com/Neft-io/neft-utils),
+- [Schema](https://github.com/Neft-io/neft-schema),
+- [Signal](https://github.com/Neft-io/neft-signal),
+- [List](https://github.com/Neft-io/neft-list),
+- [Dict](https://github.com/Neft-io/neft-dict),
+- [Styles](https://github.com/Neft-io/neft-styles),
+- [NML Parser](https://github.com/Neft-io/neft-nml-parser),
+- [Typed Array](https://github.com/Neft-io/neft-typed-array),
+- [Db](https://github.com/Neft-io/neft-db),
+- [Bundle Builder](https://github.com/Neft-io/neft-bundle-builder),
+- [Log](https://github.com/Neft-io/neft-log),
+- [Unit](https://github.com/Neft-io/neft-unit),
+- [Assert](https://github.com/Neft-io/neft-assert).
+
+## GitHub links
+
+You must be logged in.
+
+- [All Issues](https://github.com/issues?q=is%3Aissue+user%3ANeft-io+is%3Aopen),
+- [All Pull requests](https://github.com/issues?utf8=%E2%9C%93&q=is%3Apr+user%3ANeft-io+is%3Aopen+).
