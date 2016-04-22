@@ -10,6 +10,7 @@ global.Neft =
 bundle = require 'neft-bundle-builder'
 
 fs.ensureDir './cli/bundle'
+fs.removeSync './node_modules/neft-*/node_modules/neft-*'
 
 createBundle = (opts, callback) ->
 	bundle {

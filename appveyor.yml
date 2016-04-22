@@ -1,0 +1,16 @@
+version: '{build}-{branch}'
+environment:
+  matrix:
+    - nodejs_version: "0.11"
+    - nodejs_version: "4.1"
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - git submodule update --init
+  - npm update -g npm
+  - npm install
+test_script:
+  - node --version
+  - npm --version
+  - npm run bundle -- --node --browser
+  - npm test
+build: off
