@@ -15,13 +15,6 @@ Unit @library
 	scopes = [new Scope]
 	currentScope = scopes[0]
 
-	argOpts = do ->
-		opts = process.argv[2]
-		try
-			JSON.parse opts
-		catch
-			{}
-
 Unit.describe(*String* message, *Function* tests)
 -------------------------------------------------
 
@@ -122,24 +115,28 @@ Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay =
 			listeners.push listener
 			return
 
-	###
-	Run
-	###
-	setImmediate ->
+Unit.runTests()
+---------------
+
+	exports.runTests = ->
 		[mainScope] = scopes
-
-		# file message
-		if title = argOpts.title
-			mainScope.message = title
-
-		# bootstrap duration
-		if startTime = argOpts.startTime
-			duration = Date.now() - startTime
-			ms = duration.toFixed 2
-			mainScope.message += " (#{ms}ms)"
-
-		# run main scope
 		mainScope.run ->
-			code = if stack.errors.length > 0 then 1 else 0
 			logger.onTestsEnd()
-			process.exit code
+			exports.onTestsEnd stack.errors
+
+*Function* Unit.onTestsEnd
+--------------------------
+
+	exports.onTestsEnd = (errors) ->
+		code = if errors.length > 0 then 1 else 0
+		process.exit code
+
+*Boolean* Unit.runAutomatically = true
+--------------------------------------
+
+	exports.runAutomatically = true
+
+	setImmediate ->
+		unless exports.runAutomatically
+			return
+		exports.runTests()
