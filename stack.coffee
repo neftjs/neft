@@ -1,14 +1,16 @@
 'use strict'
 
 log = require 'neft-log'
+utils = require 'neft-utils'
 
 exports.currentScope = null
 exports.currentTest = null
 exports.messages = []
 exports.errors = []
 
-process.on 'uncaughtException', (err) ->
-	exports.fail err
+if utils.isNode
+	process.on 'uncaughtException', (err) ->
+		exports.fail err
 
 exports.fail = (err) ->
 	{errors, currentTest} = exports
