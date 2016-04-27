@@ -5,28 +5,27 @@ assert = require 'neft-assert'
 utils = require 'neft-utils'
 Document = require 'neft-document'
 Renderer = require 'neft-renderer'
-styles = require '../index'
+styles = Neft?.styles or require '../index'
+{createView} = require 'neft-document/tests/utils'
 
 {describe, it} = unit
 {Element} = Document
 
-utils.isClient = true
+testViews = []
 
 render = (opts) ->
-	utils.clear Document._files
+	doc = createView opts.html
+	{path} = doc
 
-	if opts.html?
-		doc = Document.fromHTML utils.uid(), opts.html
-	else
-		doc = Document.fromElement utils.uid(), opts.node
-	Document.parse doc
 	Style = styles
 		styles: opts.styles or {}
 		queries: opts.queries or {}
 		windowStyle: opts.windowStyle or {objects: {}}
 
 	for key, subfile of Document._files
-		Style.extendDocumentByStyles subfile
+		if key.indexOf(path) is 0
+			testViews.push subfile
+			Style.extendDocumentByStyles subfile
 
 	clone = doc.render()
 	clone.destroy()
@@ -35,15 +34,15 @@ render = (opts) ->
 
 describe "neft:style", ->
 	it "can be a Renderer.Item instance", ->
-		item = Renderer.Rectangle.New()
-		node = new Element.Tag
-		node.attrs['neft:style'] = item
-		doc = render
-			node: node
+		# item = Renderer.Rectangle.New()
+		# node = new Element.Tag
+		# node.attrs['neft:style'] = item
+		# doc = render
+		# 	node: node
 
-		assert.is doc.styles.length, 1
-		assert.isDefined style = doc.styles[0]
-		assert.is style.item, item
+		# assert.is doc.styles.length, 1
+		# assert.isDefined style = doc.styles[0]
+		# assert.is style.item, item
 
 	it "accepts 'renderer:' prefix", ->
 		doc = render
@@ -589,3 +588,8 @@ describe "Style item index", ->
 		iNode = doc.node.query 'i'
 
 		assert.is emNode.style.nextSibling, iNode.style
+
+it '', ->
+	for view in testViews
+		utils.clear view.styles
+	return

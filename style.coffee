@@ -532,7 +532,7 @@ module.exports = (File, data) -> class Style
 			clone.children.push child
 
 		# create item recursively
-		if not @parent and utils.isClient
+		if not @parent
 			clone.createItemDeeply()
 
 		clone
