@@ -22,7 +22,7 @@ var log = require('log');
 		str.substring 0, str.length - 3
 
 	class Log
-		@LOGS_METHODS = ['info', 'warn', 'error', 'time', 'ok']
+		@LOGS_METHODS = ['log', 'info', 'warn', 'error', 'time', 'ok']
 
 		@TIMES_LEN = 50
 
