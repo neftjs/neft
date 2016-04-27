@@ -1,34 +1,29 @@
 'use strict'
 
-View = require '../index.coffee.md'
+View = Neft?.Document or require '../index.coffee.md'
 {describe, it} = require 'neft-unit'
 assert = require 'neft-assert'
-{renderParse, uid} = require './utils'
+{createView, renderParse, uid} = require './utils'
 
 describe 'View', ->
 	it 'can be created using HTML', ->
-		view = View.fromHTML uid(), '<b></b>'
-		View.parse view
+		view = createView '<b></b>'
 		assert.instanceOf view, View
 
 	it 'clears got HTML', ->
-		view = View.fromHTML uid(), '<!--comment--><div>   </div>'
-		View.parse view
+		view = createView '<!--comment--><div>   </div>'
 		assert.is view.node.stringify(), '<div></div>'
 
 	it 'finds fragments', ->
-		view = View.fromHTML uid(), '<neft:fragment neft:name="a"></neft:fragment>'
-		View.parse view
+		view = createView '<neft:fragment neft:name="a"></neft:fragment>'
 		assert.is Object.keys(view.fragments).length, 1
 
 	it 'finds uses', ->
-		view = View.fromHTML uid(), '<neft:fragment neft:name="a"><b></b></neft:fragment><neft:use neft:fragment="a" />'
-		View.parse view
+		view = createView '<neft:fragment neft:name="a"><b></b></neft:fragment><neft:use neft:fragment="a" />'
 		assert.is view.uses.length, 1
 
 	it 'can be cloned and destroyed', ->
-		view = View.fromHTML uid(), '<b></b>'
-		View.parse view
+		view = createView '<b></b>'
 		clone = view.clone()
 
 		assert.isNot view, clone
@@ -37,8 +32,7 @@ describe 'View', ->
 
 	it 'is pooled on factory', ->
 		path = uid()
-		viewStart = View.fromHTML path, '<b></b>'
-		View.parse viewStart
+		viewStart = createView '<b></b>', path
 
 		viewFactored = View.factory path
 		viewFactored.destroy()

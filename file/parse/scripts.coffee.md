@@ -3,12 +3,15 @@ neft:script @xml
 
 	'use strict'
 
-	fs = require 'fs'
+	fs = require 'fs-extra'
 	os = require 'os'
+	utils = require 'neft-utils'
 	pathUtils = require 'path'
 	{ getFilePath } = require './fragments/links.coffee.md'
 
 	uid = 0
+	realpath = fs.realpathSync ''
+	tmpdir = os.tmpdir()
 
 	module.exports = (File) -> (file) ->
 		scripts = []
@@ -26,8 +29,11 @@ neft:script @xml
 				# tag body
 				str = tag.stringifyChildren()
 				filename = tag.attrs.filename or "tmp#{uid++}.js"
-				path = "#{os.tmpdir()}/#{filename}"
-				fs.writeFileSync path, str, 'utf-8'
+				if Neft?
+					path = pathUtils.join 'build/scripts/', filename
+				else
+					path = pathUtils.join tmpdir, '/', filename
+				fs.outputFileSync path, str
 				scripts.push path
 
 		if scripts.length > 0
