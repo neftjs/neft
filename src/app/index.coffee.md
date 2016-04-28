@@ -23,6 +23,13 @@ App @framework
 	pkg = require 'package.json'
 
 	BASE_FILE_NAME_RE = /(.+)\.(?:node|server|client|browser|ios|android|native)/
+	DEFAULT_CONFIG =
+		title: "Neft.io Application"
+		protocol: "http"
+		port: 3000
+		host: "localhost"
+		language: "en"
+		type: "app"
 
 	exports = module.exports = (opts={}, extraOpts={}) ->
 		# Welcome log also for release mode
@@ -32,8 +39,7 @@ App @framework
 		log.warn "Use this bundle only in development; type --release when it's ready"
 		`//</development>`
 
-		{config} = pkg
-		config = utils.merge utils.clone(config), opts.config
+		config = utils.merge utils.clone(DEFAULT_CONFIG), opts.config
 
 		if extraOpts?
 			utils.merge config, extraOpts
