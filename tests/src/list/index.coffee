@@ -1,10 +1,6 @@
 'use strict'
 
-utils = require 'neft-utils'
-unit = require 'neft-unit'
-assert = require 'neft-assert'
-List = require '../index'
-
+{utils, unit, assert, List} = Neft
 {describe, it, beforeEach, afterEach} = unit
 
 describe 'ctor', ->

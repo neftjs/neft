@@ -28,7 +28,7 @@
   },
   "scripts": {
     "bundle": "NODE_PATH=./ coffee --nodejs --harmony bundle.coffee",
-    "test": "node ./node_modules/neft-unit/bin/unit.js ./spec"
+    "test": "NODE_PATH=./ coffee ./src/unit/cli.coffee './tests/**/*.coffee' --require tests/init.coffee"
   },
   "dependencies": {
     "coffee-script": "1.10.0",
