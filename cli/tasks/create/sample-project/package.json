@@ -15,7 +15,6 @@
   "dependencies": {
     "neft-ios": "0.0.2",
     "neft-android": "0.0.2",
-    "neft-document-form": "0.0.1",
     "neft-default-styles": "0.0.1"
   },
   "android": {
