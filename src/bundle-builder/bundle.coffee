@@ -4,11 +4,11 @@ fs = require 'fs-extra'
 crypto = require 'crypto'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
+os = require 'os'
 
 {log} = Neft
 
-CACHE_DIRECTORY = __dirname + '/.tmp'
-fs.ensureDirSync CACHE_DIRECTORY
+CACHE_DIRECTORY = os.tmpdir()
 
 {stringify} = JSON
 
