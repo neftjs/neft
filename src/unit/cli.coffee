@@ -5,10 +5,11 @@ pathUtils = require 'path'
 cp = require 'child_process'
 fs = require 'fs'
 unitsStack = require './stack'
+require './index'
 
 [_, _, path, optsArgv...] = process.argv
 
-realpath = fs.realpathSync ''
+realpath = fs.realpathSync './'
 opts =
 	require: []
 
@@ -55,11 +56,8 @@ else
 	else
 		globPath = path
 
-	glob globPath, (err, files) ->
-		if err
-			throw err
+	files = glob.sync globPath
+	for file in files
+		runTestFile file
 
-		for file in files
-			runTestFile file
-
-		return
+	return
