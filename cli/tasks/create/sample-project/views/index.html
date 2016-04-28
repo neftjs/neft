@@ -1,0 +1,26 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>${scope.app.config.title}</title>
+
+<body>
+ 	<h1>Sample app</h1>
+
+	<h2>Order</h2>
+	<p>Products to order: ${scope.order.length}</p>
+	<p neft:if="${scope.orderStatus.loaded}">${scope.orderStatus.error}${scope.orderStatus.response}</p>
+	<button style:pointer:onClick="${scope.route.send()}">
+		<neft:log orderStatusPending="${scope.orderStatus.pending}" />
+		<neft:blank neft:if="${scope.orderStatus.pending}">Wait for a server</neft:blank>
+		<neft:blank neft:else>Send</neft:blank>
+	</button>
+
+	<h2>Products</h2>
+	<neft:log data="${scope.route.data}" route="${scope.route}" />
+	<p neft:if="${scope.data.length === 0}">Oops.. Nothing here</p>
+	<ul neft:each="${scope.data}" class="products">
+		<li>
+			<p>${attrs.item.name}</p>
+			<button style:pointer:onClick="${scope.route.orderProduct(attrs.item)}" class="anchorRight">Order</button>
+		</li>
+	</ul>
+</body>

@@ -1,0 +1,15 @@
+{
+  "resources": {
+    "Icons": {
+      "resources": {
+        "codepoints": {
+          "file": "MaterialIcons.json"
+        },
+        "font": {
+          "file": "MaterialIcons-Regular.ttf",
+          "formats": ["ttf", "woff"]
+        }
+      }
+    }
+  }
+}
