@@ -20,7 +20,9 @@ App @framework
 	if utils.isNode
 		bootstrapRoute = require './bootstrap/route.node'
 
+	`//<development>`
 	pkg = require 'package.json'
+	`//</development>`
 
 	BASE_FILE_NAME_RE = /(.+)\.(?:node|server|client|browser|ios|android|native)/
 	DEFAULT_CONFIG =
@@ -33,7 +35,7 @@ App @framework
 
 	exports = module.exports = (opts={}, extraOpts={}) ->
 		# Welcome log also for release mode
-		(require('log')).ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
+		log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
 
 		`//<development>`
 		log.warn "Use this bundle only in development; type --release when it's ready"
