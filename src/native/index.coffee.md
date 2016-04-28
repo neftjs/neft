@@ -3,8 +3,8 @@ Native @library
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	log = require 'neft-log'
+	assert = require 'src/assert'
+	log = require 'src/log'
 
 	actions = require './actions'
 	bridge = require './bridge'

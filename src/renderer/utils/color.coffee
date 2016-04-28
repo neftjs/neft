@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'neft-assert'
+assert = require 'src/assert'
 
 ###
 Parse 3-digit hex, 6-digit hex, rgb, rgba, hsl, hsla, or named color into RGBA hex.

@@ -3,9 +3,9 @@ Resource @class
 
 	'use strict'
 
-	log = require 'neft-log'
-	utils = require 'neft-utils'
-	assert = require 'neft-assert'
+	log = require 'src/log'
+	utils = require 'src/utils'
+	assert = require 'src/assert'
 
 	log = log.scope 'Resources', 'Resource'
 

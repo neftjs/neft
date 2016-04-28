@@ -1,10 +1,10 @@
 'use strict'
 
-utils = require 'neft-utils'
-log = require 'neft-log'
-assert = require 'neft-assert'
-Dict = require 'neft-dict'
-List = require 'neft-list'
+utils = require 'src/utils'
+log = require 'src/log'
+assert = require 'src/assert'
+Dict = require 'src/dict'
+List = require 'src/list'
 
 log = log.scope 'Binding'
 

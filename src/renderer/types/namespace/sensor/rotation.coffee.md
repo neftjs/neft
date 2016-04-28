@@ -3,8 +3,8 @@ RotationSensor @namespace
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	signal = require 'neft-signal'
+	utils = require 'src/utils'
+	signal = require 'src/signal'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 		class RotationSensor extends signal.Emitter

@@ -3,10 +3,10 @@ Native @class
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	log = require 'neft-log'
-	assert = require 'neft-assert'
-	nativeBridge = require 'neft-native'
+	utils = require 'src/utils'
+	log = require 'src/log'
+	assert = require 'src/assert'
+	nativeBridge = require 'src/native'
 
 	module.exports = (Renderer, Impl, itemUtils) ->
 

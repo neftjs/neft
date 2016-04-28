@@ -42,8 +42,8 @@ console.log(schema.validate({dict: { name: 'John' }}));
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	utils = require 'neft-utils'
+	assert = require 'src/assert'
+	utils = require 'src/utils'
 
 	module.exports = (Schema) -> (row, value, expected) ->
 		unless expected

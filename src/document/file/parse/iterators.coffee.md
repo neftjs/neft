@@ -31,7 +31,7 @@ Use [List][list/List] to bind changes made in the array.
 
 	'use strict'
 
-	utils = require 'neft-utils'
+	utils = require 'src/utils'
 
 	module.exports = (File) -> (file) ->
 		{iterators} = file

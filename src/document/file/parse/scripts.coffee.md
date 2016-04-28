@@ -5,7 +5,7 @@ neft:script @xml
 
 	fs = require 'fs-extra'
 	os = require 'os'
-	utils = require 'neft-utils'
+	utils = require 'src/utils'
 	pathUtils = require 'path'
 	{ getFilePath } = require './fragments/links.coffee.md'
 

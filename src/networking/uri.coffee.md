@@ -3,9 +3,9 @@ Uri
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	assert = require 'neft-assert'
-	Dict = require 'neft-dict'
+	utils = require 'src/utils'
+	assert = require 'src/assert'
+	Dict = require 'src/dict'
 
 	{isArray} = Array
 

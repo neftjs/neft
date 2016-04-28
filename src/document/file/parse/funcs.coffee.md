@@ -17,7 +17,7 @@ Tag used to create functions in the view.
 
 	'use strict'
 
-	utils = require 'neft-utils'
+	utils = require 'src/utils'
 
 	parseLinksFile = require('./fragments/links')
 	parseLinks = null

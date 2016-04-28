@@ -14,8 +14,8 @@ Id must be unique in the scope.
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	log = require 'neft-log'
+	utils = require 'src/utils'
+	log = require 'src/log'
 
 	log = log.scope 'Document'
 

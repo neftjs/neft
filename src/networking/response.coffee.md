@@ -3,10 +3,10 @@ Response
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	assert = require 'neft-assert'
-	log = require 'neft-log'
-	signal = require 'neft-signal'
+	utils = require 'src/utils'
+	assert = require 'src/assert'
+	log = require 'src/log'
+	signal = require 'src/signal'
 
 	assert = assert.scope 'Networking.Response'
 	log = log.scope 'Networking', 'Response'

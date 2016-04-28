@@ -3,9 +3,9 @@ Rendering @engine
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	signal = require 'neft-signal'
-	assert = require 'neft-assert'
+	utils = require 'src/utils'
+	signal = require 'src/signal'
+	assert = require 'src/assert'
 
 	signal.create exports, 'onReady'
 	signal.create exports, 'onWindowChange'

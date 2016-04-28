@@ -3,12 +3,12 @@ File @class
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	assert = require 'neft-assert'
-	log = require 'neft-log'
-	signal = require 'neft-signal'
-	Dict = require 'neft-dict'
-	List = require 'neft-list'
+	utils = require 'src/utils'
+	assert = require 'src/assert'
+	log = require 'src/log'
+	signal = require 'src/signal'
+	Dict = require 'src/dict'
+	List = require 'src/list'
 
 	assert = assert.scope 'View'
 	log = log.scope 'View'

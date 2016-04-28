@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'neft-assert'
+assert = require 'src/assert'
 
 module.exports = (File) -> class Condition
 	@__name__ = 'Condition'

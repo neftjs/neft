@@ -1,9 +1,9 @@
 'use strict'
 
-utils = require 'neft-utils'
+utils = require 'src/utils'
 implUtils = require '../utils'
-log = require 'neft-log'
-signal = require 'neft-signal'
+log = require 'src/log'
+signal = require 'src/signal'
 
 log = log.scope 'Renderer', 'CSS Implementation'
 

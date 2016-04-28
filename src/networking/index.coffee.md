@@ -12,11 +12,11 @@ var Networking = require('networking');
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	signal = require 'neft-signal'
-	assert = require 'neft-assert'
-	log = require 'neft-log'
-	List = require 'neft-list'
+	utils = require 'src/utils'
+	signal = require 'src/signal'
+	assert = require 'src/assert'
+	log = require 'src/log'
+	List = require 'src/list'
 
 	assert = assert.scope 'Networking'
 	log = log.scope 'Networking'

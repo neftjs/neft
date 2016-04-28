@@ -1,9 +1,9 @@
 'use strict'
 
-log = require 'neft-log'
-utils = require 'neft-utils'
-Document = require 'neft-document'
-Renderer = require 'neft-renderer'
+log = require 'src/log'
+utils = require 'src/utils'
+Document = require 'src/document'
+Renderer = require 'src/renderer'
 
 log = log.scope 'Networking'
 

@@ -2,8 +2,8 @@
 
 {assert} = console
 
-utils = require 'neft-utils'
-signal = require 'neft-signal'
+utils = require 'src/utils'
+signal = require 'src/signal'
 
 module.exports = (Renderer) ->
 	impl = abstractImpl = require './impl/base'

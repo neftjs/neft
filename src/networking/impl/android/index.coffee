@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'neft-utils'
+utils = require 'src/utils'
 
 module.exports = (Networking) ->
 

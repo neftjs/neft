@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'neft-utils'
+utils = require 'src/utils'
 
 exports.get = (key, callback) ->
 	val = localStorage.getItem key

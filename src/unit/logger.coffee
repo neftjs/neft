@@ -1,7 +1,7 @@
 'use strict'
 
-utils = require 'neft-utils'
-log = require 'neft-log'
+utils = require 'src/utils'
+log = require 'src/log'
 stack = require './stack'
 errorUtils = require './error'
 

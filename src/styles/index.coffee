@@ -1,7 +1,7 @@
 'use strict'
 
-utils = require 'neft-utils'
-Document = require 'neft-document'
+utils = require 'src/utils'
+Document = require 'src/document'
 
 require('./file/styles') Document
 require('./file/element') Document

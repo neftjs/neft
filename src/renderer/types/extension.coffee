@@ -1,7 +1,7 @@
 'use strict'
 
-utils = require 'neft-utils'
-signal = require 'neft-signal'
+utils = require 'src/utils'
+signal = require 'src/signal'
 
 module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtils.Object
 	@__name__ = 'Extension'

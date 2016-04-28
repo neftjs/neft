@@ -1,7 +1,7 @@
 'use strict'
 
-log = require 'neft-log'
-utils = require 'neft-utils'
+log = require 'src/log'
+utils = require 'src/utils'
 
 exports.currentScope = null
 exports.currentTest = null

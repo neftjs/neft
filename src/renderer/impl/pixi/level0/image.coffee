@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'neft-utils'
+utils = require 'src/utils'
 PIXI = require '../pixi.lib.js'
 
 module.exports = (impl) ->

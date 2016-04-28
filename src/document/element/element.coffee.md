@@ -3,9 +3,9 @@ Element @virtual_dom
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	assert = require 'neft-assert'
-	signal = require 'neft-signal'
+	utils = require 'src/utils'
+	assert = require 'src/assert'
+	signal = require 'src/signal'
 
 	{isArray} = Array
 	{Emitter} = signal

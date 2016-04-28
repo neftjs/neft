@@ -3,24 +3,24 @@ App @framework
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	log = require 'neft-log'
-	signal = require 'neft-signal'
-	db = require 'neft-db'
-	assert = require 'neft-assert'
-	Schema = require 'neft-schema'
-	Networking = require 'neft-networking'
-	Document = require 'neft-document'
-	Renderer = require 'neft-renderer'
-	Resources = require 'neft-resources'
-	Dict = require 'neft-dict'
+	utils = require 'src/utils'
+	log = require 'src/log'
+	signal = require 'src/signal'
+	db = require 'src/db'
+	assert = require 'src/assert'
+	Schema = require 'src/schema'
+	Networking = require 'src/networking'
+	Document = require 'src/document'
+	Renderer = require 'src/renderer'
+	Resources = require 'src/resources'
+	Dict = require 'src/dict'
 
 	AppRoute = require './route'
 
 	if utils.isNode
 		bootstrapRoute = require './bootstrap/route.node'
 
-	pkg = require './package.json'
+	pkg = require 'package.json'
 
 	BASE_FILE_NAME_RE = /(.+)\.(?:node|server|client|browser|ios|android|native)/
 

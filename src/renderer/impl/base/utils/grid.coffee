@@ -2,9 +2,9 @@
 
 MAX_LOOPS = 100
 
-utils = require 'neft-utils'
-log = require 'neft-log'
-TypedArray = require 'neft-typed-array'
+utils = require 'src/utils'
+log = require 'src/log'
+TypedArray = require 'src/typed-array'
 
 log = log.scope 'Renderer'
 

@@ -11,10 +11,10 @@ AmbientSound @class
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	utils = require 'neft-utils'
-	signal = require 'neft-signal'
-	List = require 'neft-list'
+	assert = require 'src/assert'
+	utils = require 'src/utils'
+	signal = require 'src/signal'
+	List = require 'src/list'
 
 	{isArray} = Array
 	SignalsEmitter = signal.Emitter

@@ -1,7 +1,7 @@
 'use strict'
 
-log = require 'neft-log'
-bindingParser = require 'neft-binding/parser'
+log = require 'src/log'
+bindingParser = require 'src/binding/parser'
 
 {BINDING_THIS_TO_TARGET_OPTS} = bindingParser
 

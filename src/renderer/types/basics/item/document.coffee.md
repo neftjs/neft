@@ -3,15 +3,15 @@ Document @extension
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	signal = require 'neft-signal'
-	assert = require 'neft-assert'
-	log = require 'neft-log'
+	utils = require 'src/utils'
+	signal = require 'src/signal'
+	assert = require 'src/assert'
+	log = require 'src/log'
 
 	log = log.scope 'Renderer', 'Document'
 
 	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
-		Document = require 'neft-document'
+		Document = require 'src/document'
 		DocElement = Document.Element
 		DocTag = DocElement.Tag
 		DocText = DocElement.Text

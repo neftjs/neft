@@ -1,6 +1,6 @@
 'use strict'
 
-assert = require 'neft-assert'
+assert = require 'src/assert'
 
 nativeActions = require 'neft-native/actions'
 nativeBridge = require 'neft-native/bridge'

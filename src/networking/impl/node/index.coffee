@@ -1,11 +1,11 @@
 'use strict'
 
-utils = require 'neft-utils'
+utils = require 'src/utils'
 http = require 'http'
 https = require 'https'
 urlUtils = require 'url'
 pathUtils = require 'path'
-assert = require 'neft-assert'
+assert = require 'src/assert'
 nodeStatic = require 'node-static'
 FormData = require 'form-data'
 qs = require 'qs'

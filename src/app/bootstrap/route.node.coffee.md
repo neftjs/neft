@@ -3,14 +3,14 @@ Standard routes @learn
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	log = require 'neft-log'
+	utils = require 'src/utils'
+	log = require 'src/log'
 	fs = require 'fs'
 	pathUtils = require 'path'
 
-	Dict = require 'neft-dict'
-	Document = require 'neft-document'
-	Networking = require 'neft-networking'
+	Dict = require 'src/dict'
+	Document = require 'src/document'
+	Networking = require 'src/networking'
 
 	log = log.scope 'App', 'Bootstrap'
 

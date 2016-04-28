@@ -3,10 +3,10 @@ Anchors @extension
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	log = require 'neft-log'
-	assert = require 'neft-assert'
-	signal = require 'neft-signal'
+	utils = require 'src/utils'
+	log = require 'src/log'
+	assert = require 'src/assert'
+	signal = require 'src/signal'
 
 	log = log.scope 'Renderer'
 

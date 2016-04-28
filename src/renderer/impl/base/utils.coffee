@@ -1,4 +1,4 @@
-utils = require 'neft-utils'
+utils = require 'src/utils'
 
 module.exports = (impl) ->
 	INTEGER_PROPERTIES:

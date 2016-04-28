@@ -13,8 +13,8 @@ Column @class
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	utils = require 'neft-utils'
+	assert = require 'src/assert'
+	utils = require 'src/utils'
 
 	module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
 		@__name__ = 'Column'

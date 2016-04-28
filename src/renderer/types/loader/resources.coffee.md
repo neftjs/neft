@@ -16,11 +16,11 @@ ResourcesLoader @class
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	utils = require 'neft-utils'
-	log = require 'neft-log'
-	signal = require 'neft-signal'
-	Resources = require 'neft-resources'
+	assert = require 'src/assert'
+	utils = require 'src/utils'
+	log = require 'src/log'
+	signal = require 'src/signal'
+	Resources = require 'src/resources'
 
 	log = log.scope 'Renderer', 'ResourcesLoader'
 

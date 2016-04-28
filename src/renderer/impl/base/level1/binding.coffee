@@ -1,6 +1,6 @@
 'use strict'
 
-Binding = require 'neft-binding'
+Binding = require 'src/binding'
 
 module.exports = (impl) ->
 

@@ -27,7 +27,7 @@
     "node": ">=0.11.14"
   },
   "scripts": {
-    "bundle": "coffee --nodejs --harmony bundle.coffee",
+    "bundle": "NODE_PATH=./ coffee --nodejs --harmony bundle.coffee",
     "test": "node ./node_modules/neft-unit/bin/unit.js ./spec"
   },
   "dependencies": {

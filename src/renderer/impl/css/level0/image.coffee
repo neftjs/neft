@@ -1,6 +1,6 @@
 'use strict'
 
-signal = require 'neft-signal'
+signal = require 'src/signal'
 
 module.exports = (impl) ->
 	{Item} = impl.Types

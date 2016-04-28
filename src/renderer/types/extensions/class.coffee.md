@@ -3,12 +3,12 @@ Class @modifier
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	utils = require 'neft-utils'
-	signal = require 'neft-signal'
-	log = require 'neft-log'
-	List = require 'neft-list'
-	TagQuery = require 'neft-document/element/element/tag/query'
+	assert = require 'src/assert'
+	utils = require 'src/utils'
+	signal = require 'src/signal'
+	log = require 'src/log'
+	List = require 'src/list'
+	TagQuery = require 'src/document/element/element/tag/query'
 
 	log = log.scope 'Rendering', 'Class'
 

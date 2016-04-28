@@ -1,10 +1,10 @@
 'use strict'
 
-assert = require 'neft-assert'
-utils = require 'neft-utils'
-signal = require 'neft-signal'
-log = require 'neft-log'
-Renderer = require 'neft-renderer'
+assert = require 'src/assert'
+utils = require 'src/utils'
+signal = require 'src/signal'
+log = require 'src/log'
+Renderer = require 'src/renderer'
 
 log = log.scope 'Styles'
 

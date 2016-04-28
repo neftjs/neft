@@ -16,10 +16,10 @@ Image @class
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	signal = require 'neft-signal'
-	log = require 'neft-log'
-	utils = require 'neft-utils'
+	assert = require 'src/assert'
+	signal = require 'src/signal'
+	log = require 'src/log'
+	utils = require 'src/utils'
 
 	log = log.scope 'Renderer', 'Image'
 

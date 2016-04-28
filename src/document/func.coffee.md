@@ -3,8 +3,8 @@ neft:function @js
 
 	'use strict'
 
-	utils = require 'neft-utils'
-	assert = require 'neft-assert'
+	utils = require 'src/utils'
+	assert = require 'src/assert'
 
 	module.exports = (File) ->
 

@@ -17,10 +17,10 @@ FontLoader @class
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	utils = require 'neft-utils'
-	log = require 'neft-log'
-	signal = require 'neft-signal'
+	assert = require 'src/assert'
+	utils = require 'src/utils'
+	log = require 'src/log'
+	signal = require 'src/signal'
 
 	log = log.scope 'Renderer', 'FontLoader'
 

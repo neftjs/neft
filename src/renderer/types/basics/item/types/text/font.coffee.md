@@ -3,9 +3,9 @@ Font @extension
 
 	'use strict'
 
-	assert = require 'neft-assert'
-	utils = require 'neft-utils'
-	log = require 'neft-log'
+	assert = require 'src/assert'
+	utils = require 'src/utils'
+	log = require 'src/log'
 
 	log = log.scope 'Renderer', 'Font'
 
