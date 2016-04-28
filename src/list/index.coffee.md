@@ -37,7 +37,7 @@ console.log(list instanceof List);
 				assert.isObject arr
 
 			super()
-			@length= 0
+			@length = 0
 
 			if utils.isObject(arr)
 				for val, i in arr
