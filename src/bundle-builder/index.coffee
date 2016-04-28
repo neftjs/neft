@@ -4,15 +4,12 @@ fs = require 'fs-extra'
 pathUtils = require 'path'
 Module = require 'module'
 cp = require 'child_process'
-os = require 'os'
 
 {utils, log, assert} = Neft
 
 release = require './release'
 minify = require './minify'
 bundle = require './bundle'
-
-isWin32 = os.platform() is 'win32'
 
 module.exports = (opts, callback) ->
 	assert.isPlainObject opts
@@ -37,8 +34,6 @@ module.exports = (opts, callback) ->
 	running = true
 	processPath = pathUtils.join __dirname, './process.js'
 	cmd = 'node'
-	if isWin32
-		cmd += '.cmd'
 	childProcess = cp.spawn cmd,
 		['--harmony', processPath, processOptsBase64],
 		stdio: ['ipc']
