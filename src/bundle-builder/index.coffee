@@ -35,11 +35,13 @@ module.exports = (opts, callback) ->
 
 	# run process file
 	running = true
-	processPath = pathUtils.join __dirname, './process.coffee'
-	cmd = 'coffee'
+	processPath = pathUtils.join __dirname, './process.js'
+	cmd = 'node'
 	if isWin32
 		cmd += '.cmd'
-	childProcess = cp.spawn cmd, [processPath, processOptsBase64], stdio: ['ipc']
+	childProcess = cp.spawn cmd,
+		['--harmony', processPath, processOptsBase64],
+		stdio: ['ipc']
 
 	if opts.logProcessStdout
 		childProcess.stdout.on 'data', (data) ->

@@ -28,7 +28,7 @@
   },
   "scripts": {
     "bundle": "NODE_PATH=./ coffee --nodejs --harmony bundle.coffee",
-    "test": "NODE_PATH=./ coffee ./src/unit/cli.coffee './tests/**/*.coffee' --require tests/init.coffee"
+    "test": "NODE_PATH=./ coffee --nodejs --harmony ./src/unit/cli.coffee './tests/**/*.coffee' --require tests/init.coffee"
   },
   "dependencies": {
     "coffee-script": "1.10.0",
