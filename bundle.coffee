@@ -21,7 +21,7 @@ createBundle = (opts, callback) ->
 		verbose: true
 		path: "index.coffee"
 		test: (req) ->
-			/^(?:neft\-|\.)/.test(req)
+			/^(?:src\/|\.)/.test(req)
 	}, (err, bundle) ->
 		if err
 			return console.error err?.stack or err
