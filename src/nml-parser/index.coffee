@@ -1,7 +1,7 @@
 'use strict'
 
 parser = require './parser'
-bindingParser = require 'neft-binding/parser'
+bindingParser = require 'src/binding/parser'
 
 {utils, Renderer, assert} = Neft
 
