@@ -5,6 +5,9 @@ pathUtils = require 'path'
 yaml = require 'js-yaml'
 Module = require 'module'
 
+process.neftBundleBuilder =
+	terminateWhenPossible: true
+
 # parse json opts from
 optsString = new Buffer(process.argv[2], 'base64').toString()
 opts = JSON.parse optsString, (key, val) ->
@@ -68,14 +71,9 @@ Module._load = do (_super = Module._load) -> (req, parent) ->
 			disabled = false
 		return r
 
-	if pathUtils.isAbsolute(req) and req isnt index
-		filename = req
-		modulePath = req
-		parentPath = ''
-	else
-		filename = Module._resolveFilename req, parent
-		modulePath = pathUtils.relative base, filename
-		parentPath = pathUtils.relative base, parent.id
+	filename = Module._resolveFilename req, parent
+	modulePath = pathUtils.relative base, filename
+	parentPath = pathUtils.relative base, parent.id
 
 	if req is index or testResolved(req, filename, modulePath, parentPath)
 		unless modulesByPaths[modulePath]
@@ -99,7 +97,12 @@ catch err
 	console.error err
 	process.exit 1
 
-require('timers').setImmediate ->
+{setImmediate} = require('timers')
+
+setImmediate terminate = ->
+	unless process.neftBundleBuilder.terminateWhenPossible
+		return setTimeout terminate
+
 	resultJSON = JSON.stringify
 		modules: modules
 		paths: paths

@@ -59,6 +59,8 @@ module.exports = (opts, callback) ->
 		running = false
 		childProcess.send 'terminate'
 		log.end logtime
+		if stderr
+			return callback stderr
 		processData = JSON.parse result
 		stack = new utils.async.Stack
 
