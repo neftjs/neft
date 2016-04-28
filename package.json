@@ -49,10 +49,6 @@
     "xcode": "^0.8.4",
     "chokidar": "^1.4.3",
     "node-notifier": "^4.5.0",
-    "glob": "^7.0.3",
-    "neft-android-runtime": "Neft-io/neft-android-runtime#f0efdbf",
-    "neft-ios-runtime": "Neft-io/neft-ios-runtime#544be9d",
-    "neft-sample-project": "Neft-io/neft-sample-project#ee25d2d",
-    "neft-nml-parser": "Neft-io/neft-nml-parser#5286aad"
+    "glob": "^7.0.3"
   }
 }
