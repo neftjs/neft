@@ -7,6 +7,7 @@ Unit @library
 	log = require 'neft-log'
 	stack = require './stack'
 	logger = require './logger'
+	modifiers = require './modifiers'
 
 	{isArray} = Array
 	{push} = Array::
@@ -48,6 +49,8 @@ Unit.describe(*String* message, *Function* tests)
 		currentScope = utils.last scopes
 		return
 
+	modifiers.applyAll exports.describe
+
 Unit.it(*String* message, *Function* test)
 ------------------------------------------
 
@@ -68,6 +71,8 @@ The given test function can contains optional *callback* argument.
 
 		return
 
+	modifiers.applyAll exports.it
+
 Unit.beforeEach(*Function* code)
 --------------------------------
 
@@ -75,12 +80,16 @@ Unit.beforeEach(*Function* code)
 		currentScope.beforeFunctions.push func
 		return
 
+	modifiers.applyAll exports.beforeEach
+
 Unit.afterEach(*Function* code)
 -------------------------------
 
 	exports.afterEach = (func) ->
 		currentScope.afterFunctions.push func
 		return
+
+	modifiers.applyAll exports.afterEach
 
 Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
 -----------------------------------------------------------------------------------------
@@ -122,13 +131,16 @@ Unit.runTests()
 		[mainScope] = scopes
 		mainScope.run ->
 			logger.onTestsEnd()
-			exports.onTestsEnd stack.errors
+			exports.onTestsEnd
+				status: if stack.errors.length is 0 then 'success' else 'error'
+				testsAmount: stack.testsAmount
+				errors: stack.errors
 
 *Function* Unit.onTestsEnd
 --------------------------
 
-	exports.onTestsEnd = (errors) ->
-		code = if errors.length > 0 then 1 else 0
+	exports.onTestsEnd = (result) ->
+		code = if result.status is 'success' then 0 else 1
 		process.exit code
 
 *Boolean* Unit.runAutomatically = true

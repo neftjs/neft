@@ -48,6 +48,7 @@ class Test
 		if err
 			stack.fail err
 
+		stack.testsAmount += 1
 		logger.onTestEnd @
 
 		# call after functions

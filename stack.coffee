@@ -5,12 +5,9 @@ utils = require 'neft-utils'
 
 exports.currentScope = null
 exports.currentTest = null
+exports.testsAmount = 0
 exports.messages = []
 exports.errors = []
-
-if utils.isNode
-	process.on 'uncaughtException', (err) ->
-		exports.fail err
 
 exports.fail = (err) ->
 	{errors, currentTest} = exports
@@ -18,8 +15,10 @@ exports.fail = (err) ->
 	unless err instanceof Error
 		err = new Error err
 
-	err.test = currentTest
-	errors.push err
+	errObj = utils.errorToObject err
+	errObj.stack = err.stack
+	utils.defineProperty errObj, 'test', 0, currentTest
+	errors.push errObj
 	currentTest.fulfilled = false
 	unless currentTest._callbackCalled
 		currentTest.onEnd()
