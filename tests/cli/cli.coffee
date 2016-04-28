@@ -10,7 +10,7 @@ fs = require 'fs-extra'
 
 isWin32 = os.platform() is 'win32'
 
-NEFT_BIN_PATH = pathUtils.join(fs.realpathSync(''), 'bin/neft')
+NEFT_BIN_PATH = pathUtils.join(fs.realpathSync('./'), 'bin/neft')
 EXEC_NEFT = if isWin32 then "#{NEFT_BIN_PATH}.cmd" else "sh #{NEFT_BIN_PATH}"
 
 createApp = (callback) ->

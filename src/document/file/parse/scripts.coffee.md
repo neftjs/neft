@@ -10,7 +10,7 @@ neft:script @xml
 	{ getFilePath } = require './fragments/links.coffee.md'
 
 	uid = 0
-	realpath = fs.realpathSync ''
+	realpath = fs.realpathSync './'
 	tmpdir = os.tmpdir()
 
 	module.exports = (File) -> (file) ->
