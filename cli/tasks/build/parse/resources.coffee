@@ -8,14 +8,14 @@ parser = require './resources/parser'
 IN_DIR = './static'
 
 module.exports = (platform, app, callback) ->
-	logtime = log.time 'Parse resources'
+    logtime = log.time 'Parse resources'
 
-	unless fs.existsSync(IN_DIR)
-		return callback()
+    unless fs.existsSync(IN_DIR)
+        return callback()
 
-	parser.parse IN_DIR, (err, data) ->
-		if err
-			return callback err
-		app.resources = data
-		log.end logtime
-		callback null
+    parser.parse IN_DIR, (err, data) ->
+        if err
+            return callback err
+        app.resources = data
+        log.end logtime
+        callback null

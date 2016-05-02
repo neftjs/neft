@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = (impl) ->
-	initDeviceNamespace: ->
+    initDeviceNamespace: ->
 
-	showDeviceKeyboard: ->
+    showDeviceKeyboard: ->
 
-	hideDeviceKeyboard: ->
+    hideDeviceKeyboard: ->

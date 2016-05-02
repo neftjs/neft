@@ -22,13 +22,13 @@ console.log(schema.validate({desc: []}));
 // you should use array validator instead ...
 ```
 
-	'use strict'
+    'use strict'
 
-	assert = require 'src/assert'
+    assert = require 'src/assert'
 
-	module.exports = (Schema) -> (row, value, expected) ->
-		assert.isString expected
-		, "type validator option for #{row} property must be a string"
+    module.exports = (Schema) -> (row, value, expected) ->
+        assert.isString expected
+        , "type validator option for #{row} property must be a string"
 
-		if typeof value isnt expected
-			throw new Schema.Error row, 'type', "#{row} must be a #{expected}"
+        if typeof value isnt expected
+            throw new Schema.Error row, 'type', "#{row} must be a #{expected}"

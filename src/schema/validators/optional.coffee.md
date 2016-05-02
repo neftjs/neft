@@ -12,7 +12,7 @@ var schema = new Schema({
     type: 'string'
   },
   text: {
-  	type: 'string'
+    type: 'string'
   }
 });
 
@@ -26,4 +26,4 @@ console.log(utils.catchError(schema.validate, schema, [{name: 'Max'}])+'');
 // "SchemaError: Required property text not found"
 ```
 
-	module.exports = (Schema) -> ->
+    module.exports = (Schema) -> ->

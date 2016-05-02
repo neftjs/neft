@@ -5,12 +5,12 @@ neft:log @xml
 <neft:log debugObject="${data.someObject}">${debugText}</neft:log>
 ```
 
-	'use strict'
+    'use strict'
 
-	module.exports = (File) -> (file) ->
-		{logs} = file
+    module.exports = (File) -> (file) ->
+        {logs} = file
 
-		for node in file.node.queryAll('neft:log')
-			logs.push new File.Log file, node
+        for node in file.node.queryAll('neft:log')
+            logs.push new File.Log file, node
 
-		return
+        return

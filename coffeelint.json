@@ -35,7 +35,7 @@
         "level": "error"
     },
     "indentation": {
-        "value": 1,
+        "value": 4,
         "level": "error"
     },
     "line_endings": {
@@ -88,7 +88,7 @@
         "level": "ignore"
     },
     "no_tabs": {
-        "level": "ignore"
+        "level": "error"
     },
     "no_this": {
         "level": "error"

@@ -19,43 +19,43 @@ Optional argument `as` will link all fragments into the specified namespace.
 <neft:use neft:fragment="user:avatar" />
 ```
 
-	'use strict'
+    'use strict'
 
-	pathUtils = require 'path'
+    pathUtils = require 'path'
 
-	module.exports = (File) -> (file) ->
-		# prepare
-		links = []
+    module.exports = (File) -> (file) ->
+        # prepare
+        links = []
 
-		# load found files
-		{children} = file.node
-		i = -1
-		n = children.length
-		while ++i < n
-			node = children[i]
+        # load found files
+        {children} = file.node
+        i = -1
+        n = children.length
+        while ++i < n
+            node = children[i]
 
-			if node.name isnt "#{File.HTML_NS}:require"
-				continue
+            if node.name isnt "#{File.HTML_NS}:require"
+                continue
 
-			href = node.attrs.href or node.attrs.src
-			unless href then continue
+            href = node.attrs.href or node.attrs.src
+            unless href then continue
 
-			namespace = node.attrs.as
+            namespace = node.attrs.as
 
-			# get view
-			path = getFilePath File, file, href
-			links.push
-				path: path
-				namespace: namespace
+            # get view
+            path = getFilePath File, file, href
+            links.push
+                path: path
+                namespace: namespace
 
-		links
+        links
 
-	getFilePath = module.exports.getFilePath = (File, file, path) ->
-		if pathUtils.isAbsolute(path)
-			return path
+    getFilePath = module.exports.getFilePath = (File, file, path) ->
+        if pathUtils.isAbsolute(path)
+            return path
 
-		if path[0] is '.' and path[1] is '/'
-			dirname = pathUtils.dirname file.path
-			return pathUtils.join(dirname, path)
+        if path[0] is '.' and path[1] is '/'
+            dirname = pathUtils.dirname file.path
+            return pathUtils.join(dirname, path)
 
-		pathUtils.join File.FILES_PATH, path
+        pathUtils.join File.FILES_PATH, path

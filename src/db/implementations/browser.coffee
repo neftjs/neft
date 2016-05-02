@@ -3,5 +3,5 @@
 localStorageImpl = require './browser/localStorage'
 
 module.exports = do ->
-	if window.localStorage?
-		localStorageImpl
+    if window.localStorage?
+        localStorageImpl

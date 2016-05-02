@@ -1,21 +1,21 @@
 'use strict'
 
 module.exports = (impl) ->
-	DATA =
-		bindings: null
+    DATA =
+        bindings: null
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner DATA
+    createData: impl.utils.createDataCloner DATA
 
-	create: (data) ->
+    create: (data) ->
 
-	setAnimationLoop: (val) ->
+    setAnimationLoop: (val) ->
 
-	startAnimation: ->
+    startAnimation: ->
 
-	stopAnimation: ->
+    stopAnimation: ->
 
-	resumeAnimation: ->
+    resumeAnimation: ->
 
-	pauseAnimation: ->
+    pauseAnimation: ->

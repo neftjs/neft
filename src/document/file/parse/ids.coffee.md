@@ -12,30 +12,30 @@ Id must be unique in the scope.
 <span>${heading.stringify()}</span>
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	log = require 'src/log'
+    utils = require 'src/utils'
+    log = require 'src/log'
 
-	log = log.scope 'Document'
+    log = log.scope 'Document'
 
-	module.exports = (File) -> (file) ->
-		{ids} = file
+    module.exports = (File) -> (file) ->
+        {ids} = file
 
-		forEachNodeRec = (node) ->
-			for child in node.children
-				unless child.children
-					continue
+        forEachNodeRec = (node) ->
+            for child in node.children
+                unless child.children
+                    continue
 
-				forEachNodeRec child
+                forEachNodeRec child
 
-				unless id = child.attrs['id']
-					continue
+                unless id = child.attrs['id']
+                    continue
 
-				if ids.hasOwnProperty(id)
-					log.warn "Id must be unique; '#{id}' duplicated"
-					continue
-				ids[id] = child
-			return
+                if ids.hasOwnProperty(id)
+                    log.warn "Id must be unique; '#{id}' duplicated"
+                    continue
+                ids[id] = child
+            return
 
-		forEachNodeRec file.node
+        forEachNodeRec file.node

@@ -5,12 +5,12 @@ fs = require 'fs'
 Mustache = require 'mustache'
 
 module.exports = (config, callback) ->
-	appTmplPath = pathUtils.resolve __dirname, './node/app.js.mustache'
-	appTmpl = fs.readFileSync appTmplPath, 'utf-8'
+    appTmplPath = pathUtils.resolve __dirname, './node/app.js.mustache'
+    appTmpl = fs.readFileSync appTmplPath, 'utf-8'
 
-	# write neft file
-	fs.writeFileSync "./build/#{config.neftFileName}", config.neftCode
+    # write neft file
+    fs.writeFileSync "./build/#{config.neftFileName}", config.neftCode
 
-	# write app file
-	appCode = Mustache.render appTmpl, config
-	fs.writeFile "./build/#{config.appFileName}", appCode, 'utf-8', callback
+    # write app file
+    appCode = Mustache.render appTmpl, config
+    fs.writeFile "./build/#{config.appFileName}", appCode, 'utf-8', callback

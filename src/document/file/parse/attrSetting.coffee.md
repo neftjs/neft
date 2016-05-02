@@ -11,35 +11,35 @@ Supports listening on signals as well.
 
 Potentially it's more useful with more specific [Element][document/Element]s from extensions.
 
-	'use strict'
+    'use strict'
 
-	module.exports = (File) ->
-		{AttrsToSet} = File
-		{Tag} = File.Element
+    module.exports = (File) ->
+        {AttrsToSet} = File
+        {Tag} = File.Element
 
-		(file) ->
-			{attrsToSet} = file
+        (file) ->
+            {attrsToSet} = file
 
-			forEachNodeRec = (node) ->
-				for child in node.children
-					unless child instanceof Tag
-						continue
+            forEachNodeRec = (node) ->
+                for child in node.children
+                    unless child instanceof Tag
+                        continue
 
-					forEachNodeRec child
+                    forEachNodeRec child
 
-					nodeProps = null
-					for prop of child.attrs when child.attrs.hasOwnProperty(prop)
-						if prop in ['name', 'children', 'attrs', 'style']
-							continue
-						unless prop of child
-							continue
-						nodeProps ?= {}
-						nodeProps[prop] = true
+                    nodeProps = null
+                    for prop of child.attrs when child.attrs.hasOwnProperty(prop)
+                        if prop in ['name', 'children', 'attrs', 'style']
+                            continue
+                        unless prop of child
+                            continue
+                        nodeProps ?= {}
+                        nodeProps[prop] = true
 
-					if nodeProps
-						attrsToSet.push new AttrsToSet file, child, nodeProps
-				return
+                    if nodeProps
+                        attrsToSet.push new AttrsToSet file, child, nodeProps
+                return
 
-			forEachNodeRec file.node
+            forEachNodeRec file.node
 
-			return
+            return

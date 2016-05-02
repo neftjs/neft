@@ -1,16 +1,16 @@
 Response Error
 ==============
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
 
-	assert = assert.scope 'Networking.Response.Error'
+    assert = assert.scope 'Networking.Response.Error'
 
-	module.exports = (Networking, Response) -> class ResponseError extends Error
+    module.exports = (Networking, Response) -> class ResponseError extends Error
 
-		@RequestResolve = RequestResolve Networking, Response, ResponseError
+        @RequestResolve = RequestResolve Networking, Response, ResponseError
 
 *Error* Error([*Integer* status, *String* message])
 ---------------------------------------------------
@@ -23,26 +23,26 @@ var Networking = require('networking');
 var ResponseError = Networking.Response.Error;
 ```
 
-		constructor: (status, message='') ->
-			unless @ instanceof ResponseError
-				return new ResponseError status, message
+        constructor: (status, message='') ->
+            unless @ instanceof ResponseError
+                return new ResponseError status, message
 
-			if typeof status is 'string'
-				message = status
-				status = @status
-			else if status is undefined
-				status = @status
-				message = @message
+            if typeof status is 'string'
+                message = status
+                status = @status
+            else if status is undefined
+                status = @status
+                message = @message
 
-			assert.ok utils.has(Response.STATUSES, status)
-			assert.isString message
+            assert.ok utils.has(Response.STATUSES, status)
+            assert.isString message
 
-			@status = status
-			@message = message
+            @status = status
+            @message = message
 
-		status: Response.INTERNAL_SERVER_ERROR
-		name: 'ResponseError'
-		message: ''
+        status: Response.INTERNAL_SERVER_ERROR
+        name: 'ResponseError'
+        message: ''
 
 *RequestResolve* Error.RequestResolve(*Networking.Request* request)
 -------------------------------------------------------------------
@@ -56,12 +56,12 @@ var Networking = require('networking');
 var RequestResolveResponseError = Networking.Response.Error.RequestResolve;
 ```
 
-	RequestResolve = (Networking, Response, ResponseError) -> class RequestResolve extends ResponseError
+    RequestResolve = (Networking, Response, ResponseError) -> class RequestResolve extends ResponseError
 
-		constructor: (req) ->
-			assert.instanceOf req, Networking.Request, 'ctor request argument ...'
+        constructor: (req) ->
+            assert.instanceOf req, Networking.Request, 'ctor request argument ...'
 
-			return super "No handler can be found"
+            return super "No handler can be found"
 
-		status: Response.BAD_REQUEST
-		name: 'RequestResolveResponseError'
+        status: Response.BAD_REQUEST
+        name: 'RequestResolveResponseError'

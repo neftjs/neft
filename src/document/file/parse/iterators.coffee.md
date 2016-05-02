@@ -29,42 +29,42 @@ In the tag children you have access to the three special variables:
 
 Use [List][list/List] to bind changes made in the array.
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
+    utils = require 'src/utils'
 
-	module.exports = (File) -> (file) ->
-		{iterators} = file
-		createdFragments = []
+    module.exports = (File) -> (file) ->
+        {iterators} = file
+        createdFragments = []
 
-		forNode = (elem) ->
-			unless attrVal = elem.attrs["neft:each"]
-				for child in elem.children
-					if child instanceof File.Element.Tag
-						forNode child
-				return
+        forNode = (elem) ->
+            unless attrVal = elem.attrs["neft:each"]
+                for child in elem.children
+                    if child instanceof File.Element.Tag
+                        forNode child
+                return
 
-			path = "#{file.path}#each[#{utils.uid()}]"
+            path = "#{file.path}#each[#{utils.uid()}]"
 
-			# get fragment
-			bodyNode = new File.Element.Tag
-			while child = elem.children[0]
-				child.parent = bodyNode
-			fragment = new File path, bodyNode
-			utils.merge fragment.fragments, file.fragments
-			createdFragments.push fragment
+            # get fragment
+            bodyNode = new File.Element.Tag
+            while child = elem.children[0]
+                child.parent = bodyNode
+            fragment = new File path, bodyNode
+            utils.merge fragment.fragments, file.fragments
+            createdFragments.push fragment
 
-			# get iterator
-			iterator = new File.Iterator file, elem, path
-			iterators.push iterator
-			`//<development>`
-			iterator.text = attrVal
-			`//</development>`
+            # get iterator
+            iterator = new File.Iterator file, elem, path
+            iterators.push iterator
+            `//<development>`
+            iterator.text = attrVal
+            `//</development>`
 
-		forNode file.node
+        forNode file.node
 
-		# parse created fragments
-		for fragment in createdFragments
-			File.parse fragment
+        # parse created fragments
+        for fragment in createdFragments
+            File.parse fragment
 
-		return
+        return

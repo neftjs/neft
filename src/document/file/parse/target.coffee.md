@@ -16,8 +16,8 @@ where the [neft:use][document/neft:use@xml] body should be placed.
 </neft:use>
 ```
 
-	'use strict'
+    'use strict'
 
-	module.exports = (File) -> (file) ->
-		file.targetNode = file.node.query("neft:target")
-		file.targetNode?.name = 'neft:blank'
+    module.exports = (File) -> (file) ->
+        file.targetNode = file.node.query("neft:target")
+        file.targetNode?.name = 'neft:blank'

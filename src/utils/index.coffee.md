@@ -6,26 +6,26 @@ Access it with:
 var utils = require('utils');
 ```
 
-	'use strict'
+    'use strict'
 
-	{toString} = Object::
-	funcToString = Function::toString
-	{isArray} = Array
-	{shift, pop} = Array::
-	createObject = Object.create
-	{getPrototypeOf, getOwnPropertyNames} = Object
-	objKeys = Object.keys
-	hasOwnProp = Object.hasOwnProperty
-	getObjOwnPropDesc = Object.getOwnPropertyDescriptor
-	defObjProp = Object.defineProperty
-	{random} = Math
+    {toString} = Object::
+    funcToString = Function::toString
+    {isArray} = Array
+    {shift, pop} = Array::
+    createObject = Object.create
+    {getPrototypeOf, getOwnPropertyNames} = Object
+    objKeys = Object.keys
+    hasOwnProp = Object.hasOwnProperty
+    getObjOwnPropDesc = Object.getOwnPropertyDescriptor
+    defObjProp = Object.defineProperty
+    {random} = Math
 
-	###
-	Link subfiles
-	###
-	require('./namespace') exports
-	require('./stringifying') exports
-	require('./async') exports
+    ###
+    Link subfiles
+    ###
+    require('./namespace') exports
+    require('./stringifying') exports
+    require('./async') exports
 
 ReadOnly *Boolean* utils.isNode
 -------------------------------
@@ -54,33 +54,33 @@ ReadOnly *Boolean* utils.isAndroid
 ReadOnly *Boolean* utils.isIOS
 ------------------------------
 
-	exports.isNode = exports.isServer = exports.isClient =
-	exports.isBrowser = exports.isQt = exports.isAndroid =
-	exports.isIOS = false
+    exports.isNode = exports.isServer = exports.isClient =
+    exports.isBrowser = exports.isQt = exports.isAndroid =
+    exports.isIOS = false
 
-	switch true
+    switch true
 
-		when Qt?.include?
-			exports.isClient = exports.isQt = true
+        when Qt?.include?
+            exports.isClient = exports.isQt = true
 
-		when android?
-			exports.isClient = exports.isAndroid = true
+        when android?
+            exports.isClient = exports.isAndroid = true
 
-		when ios?
-			exports.isClient = exports.isIOS = true
+        when ios?
+            exports.isClient = exports.isIOS = true
 
-		when window?.document?
-			exports.isClient = exports.isBrowser = true
+        when window?.document?
+            exports.isClient = exports.isBrowser = true
 
-		when process? and Object.prototype.toString.call(process) is '[object process]'
-			exports.isNode = exports.isServer = true
+        when process? and Object.prototype.toString.call(process) is '[object process]'
+            exports.isNode = exports.isServer = true
 
 *Function* utils.NOP
 --------------------
 
 No operation (an empty function).
 
-	exports.NOP = ->
+    exports.NOP = ->
 
 *Boolean* utils.is(*Any* value1, *Any* value2)
 ----------------------------------------------
@@ -107,13 +107,13 @@ console.log(-0 === 0);
 // true
 ```
 
-	exports.is = Object.is or (val1, val2) ->
-		if val1 is 0 and val2 is 0
-			return 1 / val1 is 1 / val2
-		else if val1 isnt val1
-			return val2 isnt val2
-		else
-			return val1 is val2
+    exports.is = Object.is or (val1, val2) ->
+        if val1 is 0 and val2 is 0
+            return 1 / val1 is 1 / val2
+        else if val1 isnt val1
+            return val2 isnt val2
+        else
+            return val1 is val2
 
 *Boolean* utils.isFloat(*Any* value)
 ------------------------------------
@@ -137,8 +137,8 @@ console.log(utils.isFloat('10'));
 // false
 ```
 
-	exports.isFloat = (val) ->
-		typeof val is 'number' and isFinite(val)
+    exports.isFloat = (val) ->
+        typeof val is 'number' and isFinite(val)
 
 *Boolean* utils.isInteger(*Any* value)
 --------------------------------------
@@ -159,12 +159,12 @@ console.log(utils.isInteger('2'));
 // false
 ```
 
-	exports.isInteger = (val) ->
-		typeof val is 'number' and
-		isFinite(val) and
-		val > -9007199254740992 and
-		val < 9007199254740992 and
-		Math.floor(val) is val
+    exports.isInteger = (val) ->
+        typeof val is 'number' and
+        isFinite(val) and
+        val > -9007199254740992 and
+        val < 9007199254740992 and
+        Math.floor(val) is val
 
 *Boolean* utils.isPrimitive(*Any* value)
 ----------------------------------------
@@ -182,12 +182,12 @@ console.log(utils.isPrimitive([]));
 // false
 ```
 
-	isPrimitive = exports.isPrimitive = (val) ->
-		val is null or
-		typeof val is 'string' or
-		typeof val is 'number' or
-		typeof val is 'boolean' or
-		typeof val is 'undefined'
+    isPrimitive = exports.isPrimitive = (val) ->
+        val is null or
+        typeof val is 'string' or
+        typeof val is 'number' or
+        typeof val is 'boolean' or
+        typeof val is 'undefined'
 
 *Boolean* utils.isObject(*Any* value)
 -------------------------------------
@@ -211,8 +211,8 @@ console.log(utils.isObject(function(){}));
 // false
 ```
 
-	isObject = exports.isObject = (param) ->
-		param isnt null and typeof param is 'object'
+    isObject = exports.isObject = (param) ->
+        param isnt null and typeof param is 'object'
 
 *Boolean* utils.isPlainObject(*Any* value)
 ------------------------------------------
@@ -241,21 +241,21 @@ console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
 // false
 ```
 
-	exports.isPlainObject = (param) ->
-		unless isObject(param)
-			return false
+    exports.isPlainObject = (param) ->
+        unless isObject(param)
+            return false
 
-		proto = getPrototypeOf param
+        proto = getPrototypeOf param
 
-		# comes from Object.create
-		unless proto
-			return true
+        # comes from Object.create
+        unless proto
+            return true
 
-		# one-proto object
-		if (proto is Object::) and not getPrototypeOf(proto)
-			return true
+        # one-proto object
+        if (proto is Object::) and not getPrototypeOf(proto)
+            return true
 
-		false
+        false
 
 *Boolean* utils.isArguments(*Any* value)
 ----------------------------------------
@@ -272,8 +272,8 @@ console.log(utils.isArguments({}))
 // false
 ```
 
-	exports.isArguments = (param) ->
-		toString.call(param) is '[object Arguments]'
+    exports.isArguments = (param) ->
+        toString.call(param) is '[object Arguments]'
 
 *NotPrimitive* utils.merge(*NotPrimitive* source, *NotPrimitive* object)
 ------------------------------------------------------------------------
@@ -289,23 +289,23 @@ console.log(config);
 // {a: 1, b: 99, d: 100}
 ```
 
-	merge = exports.merge = (source, obj) ->
-		null
-		`//<development>`
-		if isPrimitive(source)
-			throw new Error "utils.merge source cannot be primitive"
-		if isPrimitive(obj)
-			throw new Error "utils.merge object cannot be primitive"
-		if source is obj
-			throw new Error "utils.merge source and object are the same"
-		if arguments.length > 2
-			throw new Error "utils.merge expects only two arguments; use utils.mergeAll instead"
-		`//</development>`
+    merge = exports.merge = (source, obj) ->
+        null
+        `//<development>`
+        if isPrimitive(source)
+            throw new Error "utils.merge source cannot be primitive"
+        if isPrimitive(obj)
+            throw new Error "utils.merge object cannot be primitive"
+        if source is obj
+            throw new Error "utils.merge source and object are the same"
+        if arguments.length > 2
+            throw new Error "utils.merge expects only two arguments; use utils.mergeAll instead"
+        `//</development>`
 
-		for key, value of obj when obj.hasOwnProperty(key)
-			source[key] = value
+        for key, value of obj when obj.hasOwnProperty(key)
+            source[key] = value
 
-		source
+        source
 
 *NotPrimitive* utils.mergeAll(*NotPrimitive* source, *NotPrimitive* objects...)
 -------------------------------------------------------------------------------
@@ -319,25 +319,25 @@ console.log(config);
 // {a: 1, b: 2, c: 3}
 ```
 
-	exports.mergeAll = (source) ->
-		null
-		`//<development>`
-		if isPrimitive(source)
-			throw new Error "utils.merge source cannot be primitive"
-		`//</development>`
+    exports.mergeAll = (source) ->
+        null
+        `//<development>`
+        if isPrimitive(source)
+            throw new Error "utils.merge source cannot be primitive"
+        `//</development>`
 
-		for i in [1...arguments.length] by 1
-			if (obj = arguments[i])?
-				`//<development>`
-				if isPrimitive(obj)
-					throw new Error "utils.mergeAll object cannot be primitive"
-				if source is obj
-					throw new Error "utils.mergeAll source and object are the same"
-				`//</development>`
-				for key, value of obj when obj.hasOwnProperty(key)
-					source[key] = value
+        for i in [1...arguments.length] by 1
+            if (obj = arguments[i])?
+                `//<development>`
+                if isPrimitive(obj)
+                    throw new Error "utils.mergeAll object cannot be primitive"
+                if source is obj
+                    throw new Error "utils.mergeAll source and object are the same"
+                `//</development>`
+                for key, value of obj when obj.hasOwnProperty(key)
+                    source[key] = value
 
-		source
+        source
 
 *NotPrimitive* utils.mergeDeep(*NotPrimitive* source, *NotPrimitive* object)
 ----------------------------------------------------------------------------
@@ -367,27 +367,27 @@ console.log(user);
 // {name: 'Johny', carsByName: {tiny: 'Ferrharhi', monkey: 'BMM', nextCar: 'Fita'}}
 ```
 
-	mergeDeep = exports.mergeDeep = (source, obj) ->
-		null
-		`//<development>`
-		if isPrimitive(source)
-			throw new Error "utils.mergeDeep source cannot be primitive"
-		if isPrimitive(obj)
-			throw new Error "utils.mergeDeep object cannot be primitive"
-		if source is obj
-			throw new Error "utils.mergeDeep source and object are the same"
-		`//</development>`
+    mergeDeep = exports.mergeDeep = (source, obj) ->
+        null
+        `//<development>`
+        if isPrimitive(source)
+            throw new Error "utils.mergeDeep source cannot be primitive"
+        if isPrimitive(obj)
+            throw new Error "utils.mergeDeep object cannot be primitive"
+        if source is obj
+            throw new Error "utils.mergeDeep source and object are the same"
+        `//</development>`
 
-		for key, value of obj when hasOwnProp.call obj, key
-			sourceValue = source[key]
+        for key, value of obj when hasOwnProp.call obj, key
+            sourceValue = source[key]
 
-			if value and typeof value is 'object' and not isArray(value) and sourceValue and typeof sourceValue is 'object' and not isArray(sourceValue)
-				mergeDeep sourceValue, value
-				continue
+            if value and typeof value is 'object' and not isArray(value) and sourceValue and typeof sourceValue is 'object' and not isArray(sourceValue)
+                mergeDeep sourceValue, value
+                continue
 
-			source[key] = value
+            source[key] = value
 
-		source
+        source
 
 *NotPrimitive* utils.fill(*NotPrimitive* source, *NotPrimitive* object)
 -----------------------------------------------------------------------
@@ -409,22 +409,22 @@ console.log(user);
 // {name: 'Johny'}
 ```
 
-	exports.fill = (source, obj) ->
-		null
-		`//<development>`
-		if isPrimitive(source)
-			throw new Error "utils.fill source cannot be primitive"
-		if isPrimitive(obj)
-			throw new Error "utils.fill object cannot be primitive"
-		if source is obj
-			throw new Error "utils.fill source and object are the same"
-		`//</development>`
+    exports.fill = (source, obj) ->
+        null
+        `//<development>`
+        if isPrimitive(source)
+            throw new Error "utils.fill source cannot be primitive"
+        if isPrimitive(obj)
+            throw new Error "utils.fill object cannot be primitive"
+        if source is obj
+            throw new Error "utils.fill source and object are the same"
+        `//</development>`
 
-		for key, value of obj when hasOwnProp.call(obj, key)
-			if key of source and not hasOwnProp.call(source, key)
-				source[key] = value
+        for key, value of obj when hasOwnProp.call(obj, key)
+            if key of source and not hasOwnProp.call(source, key)
+                source[key] = value
 
-		source
+        source
 
 utils.remove(*NotPrimitive* object, *Any* element)
 --------------------------------------------------
@@ -443,26 +443,26 @@ console.log(object);
 // {b: 2}
 ```
 
-	exports.remove = (obj, elem) ->
-		null
-		`//<development>`
-		if isPrimitive(obj)
-			throw new Error "utils.remove object cannot be primitive"
-		`//</development>`
+    exports.remove = (obj, elem) ->
+        null
+        `//<development>`
+        if isPrimitive(obj)
+            throw new Error "utils.remove object cannot be primitive"
+        `//</development>`
 
-		if isArray(obj)
-			index = obj.indexOf elem
-			if index isnt -1
-				if index is 0
-					obj.shift()
-				else if index is obj.length-1
-					obj.pop()
-				else
-					obj.splice index, 1
-		else
-			delete obj[elem]
+        if isArray(obj)
+            index = obj.indexOf elem
+            if index isnt -1
+                if index is 0
+                    obj.shift()
+                else if index is obj.length-1
+                    obj.pop()
+                else
+                    obj.splice index, 1
+        else
+            delete obj[elem]
 
-		return
+        return
 
 utils.removeFromUnorderedArray(*Array* array, *Any* element)
 ------------------------------------------------------------
@@ -471,19 +471,19 @@ Removes the given element from the given array.
 
 Elements order may be changed.
 
-	exports.removeFromUnorderedArray = (arr, elem) ->
-		null
-		`//<development>`
-		unless Array.isArray(arr)
-			throw new Error "utils.removeFromUnorderedArray array must be an Array"
-		`//</development>`
+    exports.removeFromUnorderedArray = (arr, elem) ->
+        null
+        `//<development>`
+        unless Array.isArray(arr)
+            throw new Error "utils.removeFromUnorderedArray array must be an Array"
+        `//</development>`
 
-		index = arr.indexOf elem
-		if index isnt -1
-			arr[index] = arr[arr.length-1]
-			arr.pop()
+        index = arr.indexOf elem
+        if index isnt -1
+            arr[index] = arr[arr.length-1]
+            arr.pop()
 
-		return
+        return
 
 *Object* utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
 ------------------------------------------------------------------------------
@@ -504,21 +504,21 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 // {enumerable: false, configurable: true, get: ..., set: undefined}
 ```
 
-	exports.getPropertyDescriptor = (obj, prop) ->
-		null
-		`//<development>`
-		if isPrimitive(obj)
-			throw new Error "utils.getPropertyDescriptor object cannot be primitive"
-		if typeof prop isnt 'string'
-			throw new Error "utils.getPropertyDescriptor property must be a string"
-		`//</development>`
+    exports.getPropertyDescriptor = (obj, prop) ->
+        null
+        `//<development>`
+        if isPrimitive(obj)
+            throw new Error "utils.getPropertyDescriptor object cannot be primitive"
+        if typeof prop isnt 'string'
+            throw new Error "utils.getPropertyDescriptor property must be a string"
+        `//</development>`
 
-		while obj and not desc
-			desc = getObjOwnPropDesc obj, prop
+        while obj and not desc
+            desc = getObjOwnPropDesc obj, prop
 
-			obj = getPrototypeOf obj
+            obj = getPrototypeOf obj
 
-		desc
+        desc
 
 *Function* utils.lookupGetter(*NotPrimitive* object, *String* property)
 -----------------------------------------------------------------------
@@ -534,33 +534,33 @@ console.log(utils.lookupGetter(object, 'progress'));
 // function(){ return this.loaded / this.length; }
 ```
 
-	exports.lookupGetter = do ->
-		# use native function if possible
-		if Object::__lookupGetter__
-			{lookupGetter} = Object::
-			(obj, prop) ->
-				getter = lookupGetter.call(obj, prop)
-				getter?.trueGetter or getter
+    exports.lookupGetter = do ->
+        # use native function if possible
+        if Object::__lookupGetter__
+            {lookupGetter} = Object::
+            (obj, prop) ->
+                getter = lookupGetter.call(obj, prop)
+                getter?.trueGetter or getter
 
-		# use polyfill
-		(obj, prop) ->
-			if desc = exports.getPropertyDescriptor(obj, prop)
-				desc.get?.trueGetter or desc.get
+        # use polyfill
+        (obj, prop) ->
+            if desc = exports.getPropertyDescriptor(obj, prop)
+                desc.get?.trueGetter or desc.get
 
 *Function* utils.lookupSetter(*NotPrimitive* object, *String* property)
 -----------------------------------------------------------------------
 
 Returns the given property setter function defined in the given object.
 
-	exports.lookupSetter = do ->
-		# use native function if possible
-		if Object::__lookupSetter__
-			return Function.call.bind Object::__lookupSetter__
+    exports.lookupSetter = do ->
+        # use native function if possible
+        if Object::__lookupSetter__
+            return Function.call.bind Object::__lookupSetter__
 
-		# use polyfill
-		(obj, prop) ->
-			desc = exports.getPropertyDescriptor obj, prop
-			desc?.set
+        # use polyfill
+        (obj, prop) ->
+            desc = exports.getPropertyDescriptor obj, prop
+            desc?.set
 
 *NotPrimitive* utils.defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
 --------------------------------------------------------------------------------------------------------------------------------------
@@ -591,97 +591,97 @@ console.log(object.length);
 // 2
 ```
 
-	defObjProp exports, 'WRITABLE', value: 1<<0
-	defObjProp exports, 'ENUMERABLE', value: 1<<1
-	defObjProp exports, 'CONFIGURABLE', value: 1<<2
+    defObjProp exports, 'WRITABLE', value: 1<<0
+    defObjProp exports, 'ENUMERABLE', value: 1<<1
+    defObjProp exports, 'CONFIGURABLE', value: 1<<2
 
-	exports.defineProperty = do ->
-		{WRITABLE, ENUMERABLE, CONFIGURABLE} = exports
+    exports.defineProperty = do ->
+        {WRITABLE, ENUMERABLE, CONFIGURABLE} = exports
 
-		descCfg = enumerable: true, configurable: true
-		valueCfg = exports.merge writable: true, value: null, descCfg
-		accessorsCfg = exports.merge get: undefined, set: undefined, descCfg
+        descCfg = enumerable: true, configurable: true
+        valueCfg = exports.merge writable: true, value: null, descCfg
+        accessorsCfg = exports.merge get: undefined, set: undefined, descCfg
 
-		# thanks to http://stackoverflow.com/a/23522755/2021829
-		isSafari = if navigator?
-			///^((?!chrome).)*safari///i.test(navigator.userAgent)
-		else
-			false
+        # thanks to http://stackoverflow.com/a/23522755/2021829
+        isSafari = if navigator?
+            ///^((?!chrome).)*safari///i.test(navigator.userAgent)
+        else
+            false
 
-		(obj, prop, desc, getter, setter) ->
-			null
-			`//<development>`
-			if isPrimitive(obj)
-				throw new Error "utils.defineProperty object cannot be primitive"
-			if typeof prop isnt 'string'
-				throw new Error "utils.defineProperty property must be a string"
-			if desc? and (not exports.isInteger(desc) or desc < 0)
-				throw new Error "utils.defineProperty descriptors bitmask must be a positive integer"
-			`//</development>`
+        (obj, prop, desc, getter, setter) ->
+            null
+            `//<development>`
+            if isPrimitive(obj)
+                throw new Error "utils.defineProperty object cannot be primitive"
+            if typeof prop isnt 'string'
+                throw new Error "utils.defineProperty property must be a string"
+            if desc? and (not exports.isInteger(desc) or desc < 0)
+                throw new Error "utils.defineProperty descriptors bitmask must be a positive integer"
+            `//</development>`
 
-			# configure value
-			if setter is undefined
-				cfg = valueCfg
-				valueCfg.value = getter
-				valueCfg.writable = desc & WRITABLE
+            # configure value
+            if setter is undefined
+                cfg = valueCfg
+                valueCfg.value = getter
+                valueCfg.writable = desc & WRITABLE
 
-			# configure accessors
-			else
-				# HACK: safari bug
-				# https://bugs.webkit.org/show_bug.cgi?id=132872
-				if isSafari and getter
-					_getter = getter
-					getter = ->
-						if @ isnt obj and @hasOwnProperty(prop)
-							@[prop]
-						else
-							_getter.call @
+            # configure accessors
+            else
+                # HACK: safari bug
+                # https://bugs.webkit.org/show_bug.cgi?id=132872
+                if isSafari and getter
+                    _getter = getter
+                    getter = ->
+                        if @ isnt obj and @hasOwnProperty(prop)
+                            @[prop]
+                        else
+                            _getter.call @
 
-				cfg = accessorsCfg
-				accessorsCfg.get = if typeof getter is 'function' then getter else undefined
-				accessorsCfg.set = if typeof setter is 'function' then setter else undefined
+                cfg = accessorsCfg
+                accessorsCfg.get = if typeof getter is 'function' then getter else undefined
+                accessorsCfg.set = if typeof setter is 'function' then setter else undefined
 
-			# set common config
-			cfg.enumerable = desc & ENUMERABLE
-			cfg.configurable = desc & CONFIGURABLE
+            # set common config
+            cfg.enumerable = desc & ENUMERABLE
+            cfg.configurable = desc & CONFIGURABLE
 
-			# set property
-			defObjProp obj, prop, cfg
+            # set property
+            defObjProp obj, prop, cfg
 
-			obj
+            obj
 
 *NotPrimitive* utils.overrideProperty(*NotPrimitive* object, *String* property, [*Any* value, *Function* setter])
 -----------------------------------------------------------------------------------------------------------------
 
-	exports.overrideProperty = (obj, prop, getter, setter) ->
-		unless desc = exports.getPropertyDescriptor(obj, prop)
-			throw new Error "utils.overrideProperty object must has the given property"
-		unless desc.configurable
-			throw new Error "utils.overrideProperty the given property is not configurable"
+    exports.overrideProperty = (obj, prop, getter, setter) ->
+        unless desc = exports.getPropertyDescriptor(obj, prop)
+            throw new Error "utils.overrideProperty object must has the given property"
+        unless desc.configurable
+            throw new Error "utils.overrideProperty the given property is not configurable"
 
-		# get bitmask descriptors
-		opts = exports.CONFIGURABLE
-		if desc.writable
-			opts |= exports.WRITABLE
-		if desc.enumerable
-			opts |= exports.ENUMERABLE
+        # get bitmask descriptors
+        opts = exports.CONFIGURABLE
+        if desc.writable
+            opts |= exports.WRITABLE
+        if desc.enumerable
+            opts |= exports.ENUMERABLE
 
-		# get values
-		if getter isnt undefined and setter isnt undefined
-			if desc.get?
-				if typeof getter is 'function'
-					getter = getter desc.get
-				else
-					getter = desc.get
-			if desc.set?
-				if typeof setter is 'function'
-					setter = setter desc.set
-				else
-					setter = desc.set
-		else if typeof getter is typeof desc.value is 'function'
-			getter = getter desc.value
+        # get values
+        if getter isnt undefined and setter isnt undefined
+            if desc.get?
+                if typeof getter is 'function'
+                    getter = getter desc.get
+                else
+                    getter = desc.get
+            if desc.set?
+                if typeof setter is 'function'
+                    setter = setter desc.set
+                else
+                    setter = desc.set
+        else if typeof getter is typeof desc.value is 'function'
+            getter = getter desc.value
 
-		exports.defineProperty obj, prop, opts, getter, setter
+        exports.defineProperty obj, prop, opts, getter, setter
 
 *Any* utils.clone(*Any* param)
 ------------------------------
@@ -696,23 +696,23 @@ console.log(utils.clone({a: 1}))
 // {a: 1}
 ```
 
-	clone = exports.clone = (param) ->
-		if isArray(param)
-			return param.slice()
+    clone = exports.clone = (param) ->
+        if isArray(param)
+            return param.slice()
 
-		if isObject(param)
-			proto = getPrototypeOf param
-			if proto is Object::
-				result = {}
-			else
-				result = createObject proto
+        if isObject(param)
+            proto = getPrototypeOf param
+            if proto is Object::
+                result = {}
+            else
+                result = createObject proto
 
-			for key in objKeys param
-				result[key] = param[key]
+            for key in objKeys param
+                result[key] = param[key]
 
-			return result
+            return result
 
-		param
+        param
 
 *Any* utils.cloneDeep(*Any* param)
 ----------------------------------
@@ -731,14 +731,14 @@ console.log(clonedObj.b === obj.b)
 // false
 ```
 
-	cloneDeep = exports.cloneDeep = (param) ->
-		result = clone param
+    cloneDeep = exports.cloneDeep = (param) ->
+        result = clone param
 
-		if isObject result
-			for key in objKeys result
-				result[key] = cloneDeep result[key]
+        if isObject result
+            for key in objKeys result
+                result[key] = cloneDeep result[key]
 
-		result
+        result
 
 *Boolean* utils.isEmpty(*String|NotPrimitive* object)
 -----------------------------------------------------
@@ -762,21 +762,21 @@ console.log(utils.isEmpty(''));
 // true
 ```
 
-	exports.isEmpty = (object) ->
-		if typeof object is 'string'
-			return object is ''
+    exports.isEmpty = (object) ->
+        if typeof object is 'string'
+            return object is ''
 
-		`//<development>`
-		if isPrimitive(object)
-			throw new Error "utils.isEmpty object must be a string or not primitive"
-		`//</development>`
+        `//<development>`
+        if isPrimitive(object)
+            throw new Error "utils.isEmpty object must be a string or not primitive"
+        `//</development>`
 
-		if isArray(object)
-			return not object.length
-		else
-			for key of object
-				return false
-			return true
+        if isArray(object)
+            return not object.length
+        else
+            for key of object
+                return false
+            return true
 
 *Any* utils.last(*NotPrimitive* array)
 --------------------------------------
@@ -791,14 +791,14 @@ console.log(utils.last([]))
 // undefined
 ```
 
-	exports.last = (arg) ->
-		null
-		`//<development>`
-		if isPrimitive(arg)
-			throw new Error "utils.last array cannot be primitive"
-		`//</development>`
+    exports.last = (arg) ->
+        null
+        `//<development>`
+        if isPrimitive(arg)
+            throw new Error "utils.last array cannot be primitive"
+        `//</development>`
 
-		arg[arg.length - 1]
+        arg[arg.length - 1]
 
 *NotPrimitive* utils.clear(*NotPrimitive* object)
 -------------------------------------------------
@@ -817,19 +817,19 @@ console.log(obj);
 // {}
 ```
 
-	exports.clear = (obj) ->
-		null
-		`//<development>`
-		if isPrimitive(obj)
-			throw new Error "utils.clear object cannot be primitive"
-		`//</development>`
+    exports.clear = (obj) ->
+        null
+        `//<development>`
+        if isPrimitive(obj)
+            throw new Error "utils.clear object cannot be primitive"
+        `//</development>`
 
-		if isArray obj
-			obj.pop() for _ in [0...obj.length] by 1
-		else
-			delete obj[key] for key in objKeys obj
+        if isArray obj
+            obj.pop() for _ in [0...obj.length] by 1
+        else
+            delete obj[key] for key in objKeys obj
 
-		obj
+        obj
 
 *Object* utils.setPrototypeOf(*NotPrimitive* object, *NotPrimitive|Null* prototype)
 -----------------------------------------------------------------------------------
@@ -854,43 +854,43 @@ console.log(newObj.b)
 // 100
 ```
 
-	setPrototypeOf = exports.setPrototypeOf = do ->
-		# ES6 `Object.setPrototypeOf()`
-		if typeof Object.setPrototypeOf is 'function'
-			return Object.setPrototypeOf
+    setPrototypeOf = exports.setPrototypeOf = do ->
+        # ES6 `Object.setPrototypeOf()`
+        if typeof Object.setPrototypeOf is 'function'
+            return Object.setPrototypeOf
 
-		# writable __proto__
-		tmp = {}
-		tmp.__proto__ = a: 1
-		if tmp.a is 1
-			return (obj, proto) ->
-				null
-				`//<development>`
-				if isPrimitive(obj)
-					throw new Error "utils.setPrototypeOf object cannot be primitive"
-				if proto? and isPrimitive(proto)
-					throw new Error "utils.setPrototypeOf prototype cannot be primitive"
-				`//</development>`
+        # writable __proto__
+        tmp = {}
+        tmp.__proto__ = a: 1
+        if tmp.a is 1
+            return (obj, proto) ->
+                null
+                `//<development>`
+                if isPrimitive(obj)
+                    throw new Error "utils.setPrototypeOf object cannot be primitive"
+                if proto? and isPrimitive(proto)
+                    throw new Error "utils.setPrototypeOf prototype cannot be primitive"
+                `//</development>`
 
-				obj.__proto__ = proto
-				obj
+                obj.__proto__ = proto
+                obj
 
-		# object merging
-		return (obj, proto) ->
-			null
-			`//<development>`
-			if isPrimitive(obj)
-				throw new Error "utils.setPrototypeOf object cannot be primitive"
-			if proto? and isPrimitive(proto)
-				throw new Error "utils.setPrototypeOf prototype cannot be primitive"
-			`//</development>`
+        # object merging
+        return (obj, proto) ->
+            null
+            `//<development>`
+            if isPrimitive(obj)
+                throw new Error "utils.setPrototypeOf object cannot be primitive"
+            if proto? and isPrimitive(proto)
+                throw new Error "utils.setPrototypeOf prototype cannot be primitive"
+            `//</development>`
 
-			if typeof obj is 'object'
-				newObj = createObject proto
-				merge newObj, obj
-			else
-				merge obj, proto
-			newObj
+            if typeof obj is 'object'
+                newObj = createObject proto
+                merge newObj, obj
+            else
+                merge obj, proto
+            newObj
 
 *Boolean* utils.has(*Any* object, *Any* value)
 ----------------------------------------------
@@ -926,23 +926,23 @@ console.log(utils.has('abc', 'e'))
 // false
 ```
 
-	has = exports.has = (obj, val) ->
-		if typeof obj is 'string'
-			!!~obj.indexOf(val)
-		else
-			`//<development>`
-			if isPrimitive(obj)
-				throw new Error "utils.has object must be a string or not primitive"
-			`//</development>`
+    has = exports.has = (obj, val) ->
+        if typeof obj is 'string'
+            !!~obj.indexOf(val)
+        else
+            `//<development>`
+            if isPrimitive(obj)
+                throw new Error "utils.has object must be a string or not primitive"
+            `//</development>`
 
-			if isArray(obj)
-				!!~Array::indexOf.call obj, val
-			else
-				for key, value of obj when hasOwnProp.call(obj, key)
-					if value is val
-						return true
+            if isArray(obj)
+                !!~Array::indexOf.call obj, val
+            else
+                for key, value of obj when hasOwnProp.call(obj, key)
+                    if value is val
+                        return true
 
-				false
+                false
 
 *Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target = `[]`])
 ------------------------------------------------------------------------------------------
@@ -971,24 +971,24 @@ console.log(utils.objectToArray(object, function(key, val){
 // ['type_dog', 'name_Bandit']
 ```
 
-	exports.objectToArray = (obj, valueGen, target) ->
-		keys = objKeys obj
-		target ?= keys
+    exports.objectToArray = (obj, valueGen, target) ->
+        keys = objKeys obj
+        target ?= keys
 
-		`//<development>`
-		if not isObject(obj)
-			throw new Error "utils.objectToArray object must be an object"
-		if valueGen? and typeof valueGen isnt 'function'
-			throw new Error "utils.objectToArray valueGen must be a function"
-		if not isArray(target)
-			throw new Error "utils.objectToArray target must be an array"
-		`//</development>`
+        `//<development>`
+        if not isObject(obj)
+            throw new Error "utils.objectToArray object must be an object"
+        if valueGen? and typeof valueGen isnt 'function'
+            throw new Error "utils.objectToArray valueGen must be a function"
+        if not isArray(target)
+            throw new Error "utils.objectToArray target must be an array"
+        `//</development>`
 
-		for key, i in keys
-			value = if valueGen then valueGen(key, obj[key], obj) else obj[key]
-			target[i] = value
+        for key, i in keys
+            value = if valueGen then valueGen(key, obj[key], obj) else obj[key]
+            target[i] = value
 
-		target
+        target
 
 *Object* utils.arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, *Object* target = `{}`])
 -------------------------------------------------------------------------------------------------------------
@@ -1022,27 +1022,27 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 // {"a": 0}
 ```
 
-	exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
-		null
-		`//<development>`
-		if not isArray(arr)
-			throw new Error "utils.arrayToObject array must be an array"
-		if keyGen? and typeof keyGen isnt 'function'
-			throw new Error "utils.arrayToObject keyGen must be a function"
-		if valueGen? and typeof valueGen isnt 'function'
-			throw new Error "utils.arrayToObject valueGen must be a function"
-		if not isObject(target)
-			throw new Error "utils.arrayToObject target must be an object"
-		`//</development>`
+    exports.arrayToObject = (arr, keyGen, valueGen, target={}) ->
+        null
+        `//<development>`
+        if not isArray(arr)
+            throw new Error "utils.arrayToObject array must be an array"
+        if keyGen? and typeof keyGen isnt 'function'
+            throw new Error "utils.arrayToObject keyGen must be a function"
+        if valueGen? and typeof valueGen isnt 'function'
+            throw new Error "utils.arrayToObject valueGen must be a function"
+        if not isObject(target)
+            throw new Error "utils.arrayToObject target must be an object"
+        `//</development>`
 
-		for elem, i in arr
-			key = if keyGen then keyGen(i, elem, arr) else i
-			value = if valueGen then valueGen(i, elem, arr) else elem
+        for elem, i in arr
+            key = if keyGen then keyGen(i, elem, arr) else i
+            value = if valueGen then valueGen(i, elem, arr) else elem
 
-			if key?
-				target[key] = value
+            if key?
+                target[key] = value
 
-		target
+        target
 
 *String* utils.capitalize(*String* string)
 ------------------------------------------
@@ -1054,17 +1054,17 @@ console.log(utils.capitalize('name'))
 // Name
 ```
 
-	exports.capitalize = (str) ->
-		null
-		`//<development>`
-		if typeof str isnt 'string'
-			throw new Error "utils.capitalize string must be a string"
-		`//</development>`
+    exports.capitalize = (str) ->
+        null
+        `//<development>`
+        if typeof str isnt 'string'
+            throw new Error "utils.capitalize string must be a string"
+        `//</development>`
 
-		unless str.length
-			return ''
+        unless str.length
+            return ''
 
-		str[0].toUpperCase() + str.slice(1)
+        str[0].toUpperCase() + str.slice(1)
 
 *String* utils.addSlashes(*String* string)
 ------------------------------------------
@@ -1076,21 +1076,21 @@ console.log(utils.addSlashes('a"b'))
 // a\"b
 ```
 
-	exports.addSlashes = do ->
-		SLASHES_RE = ///'|"///g
-		NEW_SUB_STR = '\\$\&'
+    exports.addSlashes = do ->
+        SLASHES_RE = ///'|"///g
+        NEW_SUB_STR = '\\$\&'
 
-		(str) ->
-			null
-			`//<development>`
-			if typeof str isnt 'string'
-				throw new Error "utils.addSlashes string must be a string"
-			`//</development>`
+        (str) ->
+            null
+            `//<development>`
+            if typeof str isnt 'string'
+                throw new Error "utils.addSlashes string must be a string"
+            `//</development>`
 
-			unless str.length
-				return str
+            unless str.length
+                return str
 
-			str.replace SLASHES_RE, NEW_SUB_STR
+            str.replace SLASHES_RE, NEW_SUB_STR
 
 *String* utils.uid([*Integer* length=`8`])
 ------------------------------------------
@@ -1104,22 +1104,22 @@ console.log(utils.uid())
 // "50"
 ```
 
-	exports.uid = (n=8) ->
-		null
-		`//<development>`
-		if typeof n isnt 'number' or n <= 0 or not isFinite(n)
-			throw new Error "utils.uid length must be a positive finite number"
-		`//</development>`
+    exports.uid = (n=8) ->
+        null
+        `//<development>`
+        if typeof n isnt 'number' or n <= 0 or not isFinite(n)
+            throw new Error "utils.uid length must be a positive finite number"
+        `//</development>`
 
-		str = ''
+        str = ''
 
-		loop
-			str += random().toString(16).slice 2
-			if str.length >= n then break
+        loop
+            str += random().toString(16).slice 2
+            if str.length >= n then break
 
-		if str.length isnt n
-			str = str.slice 0, n
-		str
+        if str.length isnt n
+            str = str.slice 0, n
+        str
 
 *Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onFail])
 ----------------------------------------------------------------------------------------------
@@ -1147,24 +1147,24 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 // undefined
 ```
 
-	exports.tryFunction = (func, context, args, onFail) ->
-		null
-		`//<development>`
-		if typeof func isnt 'function'
-			throw new Error "utils.tryFunction function must be a function"
-		if args? and not isObject(args)
-			throw new Error "utils.tryFunction arguments must be an object"
-		`//</development>`
+    exports.tryFunction = (func, context, args, onFail) ->
+        null
+        `//<development>`
+        if typeof func isnt 'function'
+            throw new Error "utils.tryFunction function must be a function"
+        if args? and not isObject(args)
+            throw new Error "utils.tryFunction arguments must be an object"
+        `//</development>`
 
-		try
-			func.apply context, args
-		catch err
-			if typeof onFail is 'function'
-				onFail(err)
-			else if onFail is undefined
-				err
-			else
-				onFail
+        try
+            func.apply context, args
+        catch err
+            if typeof onFail is 'function'
+                onFail(err)
+            else if onFail is undefined
+                err
+            else
+                onFail
 
 *Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
 -------------------------------------------------------------------------------
@@ -1187,20 +1187,20 @@ console.log(utils.catchError(test, null, [100]))
 // null
 ```
 
-	exports.catchError = (func, context, args) ->
-		null
-		`//<development>`
-		if typeof func isnt 'function'
-			throw new Error "utils.catchError function must be a function"
-		if args? and not isObject(args)
-			throw new Error "utils.catchError arguments must be an object"
-		`//</development>`
+    exports.catchError = (func, context, args) ->
+        null
+        `//<development>`
+        if typeof func isnt 'function'
+            throw new Error "utils.catchError function must be a function"
+        if args? and not isObject(args)
+            throw new Error "utils.catchError arguments must be an object"
+        `//</development>`
 
-		try
-			func.apply context, args
-			return
-		catch err
-			err
+        try
+            func.apply context, args
+            return
+        catch err
+            err
 
 *Function* utils.bindFunctionContext(*Function* function, *Any* context)
 ------------------------------------------------------------------------
@@ -1219,32 +1219,32 @@ console.log(bindFunc('a'));
 // {ctx: 1} "a"
 ```
 
-	exports.bindFunctionContext = (func, ctx) ->
-		null
-		`//<development>`
-		if typeof func isnt 'function'
-			throw new Error "utils.bindFunctionContext function must be a function"
-		`//</development>`
+    exports.bindFunctionContext = (func, ctx) ->
+        null
+        `//<development>`
+        if typeof func isnt 'function'
+            throw new Error "utils.bindFunctionContext function must be a function"
+        `//</development>`
 
-		switch func.length
-			when 0
-				-> func.call ctx
-			when 1
-				(a1) -> func.call ctx, a1
-			when 2
-				(a1, a2) -> func.call ctx, a1, a2
-			when 3
-				(a1, a2, a3) -> func.call ctx, a1, a2, a3
-			when 4
-				(a1, a2, a3, a4) -> func.call ctx, a1, a2, a3, a4
-			when 5
-				(a1, a2, a3, a4, a5) -> func.call ctx, a1, a2, a3, a4, a5
-			when 6
-				(a1, a2, a3, a4, a5, a6) -> func.call ctx, a1, a2, a3, a4, a5, a6
-			when 7
-				(a1, a2, a3, a4, a5, a6, a7) -> func.call ctx, a1, a2, a3, a4, a5, a6, a7
-			else
-				-> func.apply ctx, arguments
+        switch func.length
+            when 0
+                -> func.call ctx
+            when 1
+                (a1) -> func.call ctx, a1
+            when 2
+                (a1, a2) -> func.call ctx, a1, a2
+            when 3
+                (a1, a2, a3) -> func.call ctx, a1, a2, a3
+            when 4
+                (a1, a2, a3, a4) -> func.call ctx, a1, a2, a3, a4
+            when 5
+                (a1, a2, a3, a4, a5) -> func.call ctx, a1, a2, a3, a4, a5
+            when 6
+                (a1, a2, a3, a4, a5, a6) -> func.call ctx, a1, a2, a3, a4, a5, a6
+            when 7
+                (a1, a2, a3, a4, a5, a6, a7) -> func.call ctx, a1, a2, a3, a4, a5, a6, a7
+            else
+                -> func.apply ctx, arguments
 
 *Object* utils.errorToObject(*Error* error)
 -------------------------------------------
@@ -1259,37 +1259,37 @@ console.log(utils.errorToObject(error));
 // {name: 'ReferenceError', message: 'error message!'}
 ```
 
-	exports.errorToObject = (error) ->
-		null
-		`//<development>`
-		unless error instanceof Error
-			throw new Error "utils.errorToObject error must be an Error instance"
-		`//</development>`
+    exports.errorToObject = (error) ->
+        null
+        `//<development>`
+        unless error instanceof Error
+            throw new Error "utils.errorToObject error must be an Error instance"
+        `//</development>`
 
-		result =
-			name: error.name
-			message: error.message
+        result =
+            name: error.name
+            message: error.message
 
-		# support custom properties
-		exports.merge result, error
+        # support custom properties
+        exports.merge result, error
 
-		result
+        result
 
 *Object* utils.getOwnProperties(*Object* object)
 ------------------------------------------------
 
 Returns an array or an object with own properties associated in the given object.
 
-	exports.getOwnProperties = (obj) ->
-		null
-		`//<development>`
-		if not isObject(obj)
-			throw new Error "utils.getOwnProperties object must be an object"
-		`//</development>`
+    exports.getOwnProperties = (obj) ->
+        null
+        `//<development>`
+        if not isObject(obj)
+            throw new Error "utils.getOwnProperties object must be an object"
+        `//</development>`
 
-		result = if isArray obj then [] else {}
-		merge result, obj
-		result
+        result = if isArray obj then [] else {}
+        merge result, obj
+        result
 
 *Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep=`Infinity`])
 -----------------------------------------------------------------------------------------------------------------------
@@ -1313,103 +1313,103 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 // false
 ```
 
-	isEqual = exports.isEqual = do ->
-		defaultComparison = (a, b) -> a is b
+    isEqual = exports.isEqual = do ->
+        defaultComparison = (a, b) -> a is b
 
-		forArrays = (a, b, compareFunc, maxDeep) ->
-			# prototypes are the same
-			if getPrototypeOf(a) isnt getPrototypeOf(b)
-				return false
+        forArrays = (a, b, compareFunc, maxDeep) ->
+            # prototypes are the same
+            if getPrototypeOf(a) isnt getPrototypeOf(b)
+                return false
 
-			# length is the same
-			if a.length isnt b.length
-				return false
+            # length is the same
+            if a.length isnt b.length
+                return false
 
-			# values are the same
-			if maxDeep <= 0
-				return true
+            # values are the same
+            if maxDeep <= 0
+                return true
 
-			for aValue in a
-				isTrue = false
+            for aValue in a
+                isTrue = false
 
-				for bValue in b
-					if bValue and typeof bValue is 'object'
-						if isEqual(aValue, bValue, compareFunc, maxDeep - 1)
-							isTrue = true
-						continue
+                for bValue in b
+                    if bValue and typeof bValue is 'object'
+                        if isEqual(aValue, bValue, compareFunc, maxDeep - 1)
+                            isTrue = true
+                        continue
 
-					if compareFunc(aValue, bValue)
-						isTrue = true
-						break
+                    if compareFunc(aValue, bValue)
+                        isTrue = true
+                        break
 
-				unless isTrue
-					return false
+                unless isTrue
+                    return false
 
-			for bValue in b
-				isTrue = false
+            for bValue in b
+                isTrue = false
 
-				for aValue in a
-					if aValue and typeof aValue is 'object'
-						if isEqual(bValue, aValue, compareFunc, maxDeep - 1)
-							isTrue = true
-						continue
+                for aValue in a
+                    if aValue and typeof aValue is 'object'
+                        if isEqual(bValue, aValue, compareFunc, maxDeep - 1)
+                            isTrue = true
+                        continue
 
-					if compareFunc(bValue, aValue)
-						isTrue = true
-						break
+                    if compareFunc(bValue, aValue)
+                        isTrue = true
+                        break
 
-				unless isTrue
-					return false
+                unless isTrue
+                    return false
 
-			true
+            true
 
-		forObjects = (a, b, compareFunc, maxDeep) ->
-			# prototypes are the same
-			if getPrototypeOf(a) isnt getPrototypeOf(b)
-				return false
+        forObjects = (a, b, compareFunc, maxDeep) ->
+            # prototypes are the same
+            if getPrototypeOf(a) isnt getPrototypeOf(b)
+                return false
 
-			# whether keys are the same
-			for key, value of a when a.hasOwnProperty(key)
-				unless b.hasOwnProperty(key)
-					return false
+            # whether keys are the same
+            for key, value of a when a.hasOwnProperty(key)
+                unless b.hasOwnProperty(key)
+                    return false
 
-			for key, value of b when b.hasOwnProperty(key)
-				unless a.hasOwnProperty(key)
-					return false
+            for key, value of b when b.hasOwnProperty(key)
+                unless a.hasOwnProperty(key)
+                    return false
 
-			# whether values are equal
-			if maxDeep <= 0
-				return true
+            # whether values are equal
+            if maxDeep <= 0
+                return true
 
-			for key, value of a when a.hasOwnProperty(key)
-				if value and typeof value is 'object'
-					unless isEqual(value, b[key], compareFunc, maxDeep - 1)
-						return false
-					continue
+            for key, value of a when a.hasOwnProperty(key)
+                if value and typeof value is 'object'
+                    unless isEqual(value, b[key], compareFunc, maxDeep - 1)
+                        return false
+                    continue
 
-				unless compareFunc(value, b[key])
-					return false
+                unless compareFunc(value, b[key])
+                    return false
 
-			true
+            true
 
-		(a, b, compareFunc=defaultComparison, maxDeep=Infinity) ->
-			if typeof compareFunc is 'number'
-				maxDeep = compareFunc
-				compareFunc = defaultComparison
+        (a, b, compareFunc=defaultComparison, maxDeep=Infinity) ->
+            if typeof compareFunc is 'number'
+                maxDeep = compareFunc
+                compareFunc = defaultComparison
 
-			`//<development>`
-			if typeof compareFunc isnt 'function'
-				throw new Error "utils.isEqual compareFunction must be a function"
-			if typeof maxDeep isnt 'number'
-				throw new Error "utils.isEqual maxDeep must be a number"
-			`//</development>`
+            `//<development>`
+            if typeof compareFunc isnt 'function'
+                throw new Error "utils.isEqual compareFunction must be a function"
+            if typeof maxDeep isnt 'number'
+                throw new Error "utils.isEqual maxDeep must be a number"
+            `//</development>`
 
-			if maxDeep < 0
-				return compareFunc a, b
+            if maxDeep < 0
+                return compareFunc a, b
 
-			if isArray(a) and isArray(b)
-				forArrays a, b, compareFunc, maxDeep
-			else if isObject(a) and isObject(b)
-				forObjects a, b, compareFunc, maxDeep
-			else
-				return compareFunc a, b
+            if isArray(a) and isArray(b)
+                forArrays a, b, compareFunc, maxDeep
+            else if isObject(a) and isObject(b)
+                forObjects a, b, compareFunc, maxDeep
+            else
+                return compareFunc a, b

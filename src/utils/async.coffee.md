@@ -7,17 +7,17 @@ var utils = require('utils');
 var async = utils.async;
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = null
+    utils = null
 
-	assert = console.assert.bind console
-	{exports} = module
+    assert = console.assert.bind console
+    {exports} = module
 
-	{shift} = Array::
-	{isArray} = Array
+    {shift} = Array::
+    {isArray} = Array
 
-	NOP = ->
+    NOP = ->
 
 forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
 -------------------------------------------------------------------------------------
@@ -46,55 +46,55 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 // All files are loaded!
 ```
 
-	forEach = do ->
+    forEach = do ->
 
-		forArray = (arr, callback, onEnd, thisArg) ->
-			i = 0
-			n = arr.length
+        forArray = (arr, callback, onEnd, thisArg) ->
+            i = 0
+            n = arr.length
 
-			next = ->
-				# return and call onEnd if there is no elements to check
-				if i is n then return onEnd.call thisArg
+            next = ->
+                # return and call onEnd if there is no elements to check
+                if i is n then return onEnd.call thisArg
 
-				# increase counter
-				i++
+                # increase counter
+                i++
 
-				# call callback func
-				callback.call thisArg, arr[i-1], i-1, arr, next
+                # call callback func
+                callback.call thisArg, arr[i-1], i-1, arr, next
 
-			# start
-			next()
+            # start
+            next()
 
-		forObject = (obj, callback, onEnd, thisArg) ->
-			keys = Object.keys obj
+        forObject = (obj, callback, onEnd, thisArg) ->
+            keys = Object.keys obj
 
-			i = 0
-			n = keys.length
+            i = 0
+            n = keys.length
 
-			next = ->
-				# return and call onEnd if there is no pairs to check
-				if i is n
-					return onEnd.call thisArg
+            next = ->
+                # return and call onEnd if there is no pairs to check
+                if i is n
+                    return onEnd.call thisArg
 
-				# call callback func
-				key = keys[i]
-				callback.call thisArg, key, obj[key], obj, next
+                # call callback func
+                key = keys[i]
+                callback.call thisArg, key, obj[key], obj, next
 
-				# increase counter
-				i++
+                # increase counter
+                i++
 
-			# start
-			next()
+            # start
+            next()
 
-		(list, callback, onEnd, thisArg) ->
-			assert not utils.isPrimitive list
-			assert typeof callback is 'function'
-			assert typeof onEnd is 'function' if onEnd?
+        (list, callback, onEnd, thisArg) ->
+            assert not utils.isPrimitive list
+            assert typeof callback is 'function'
+            assert typeof onEnd is 'function' if onEnd?
 
-			method = if isArray list then forArray else forObject
-			method list, callback, onEnd, thisArg
+            method = if isArray list then forArray else forObject
+            method list, callback, onEnd, thisArg
 
-			null
+            null
 
 *Stack* Stack()
 ---------------
@@ -129,14 +129,14 @@ stack.runAllSimultaneously(function(){
 // All files have been loaded!
 ```
 
-	class Stack
+    class Stack
 
-		constructor: ->
-			# One-deep array of added functions in schema [function, context, args, ...]
-			@_arr = []
-			@length = 0
+        constructor: ->
+            # One-deep array of added functions in schema [function, context, args, ...]
+            @_arr = []
+            @length = 0
 
-			Object.preventExtensions @
+            Object.preventExtensions @
 
 Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
 --------------------------------------------------------------------------
@@ -172,75 +172,75 @@ stack.runAll(function(err, result){
 // "Finite numbers are required!"  undefined
 ```
 
-		add: (func, context, args) ->
-			assert utils.isObject args if args?
+        add: (func, context, args) ->
+            assert utils.isObject args if args?
 
-			@_arr.push func, context, args
-			@length++
-			@
+            @_arr.push func, context, args
+            @length++
+            @
 
 Stack::callNext([*Array* arguments], *Function* callback)
 ---------------------------------------------------------
 
 Calls the first function from the stack and remove it.
 
-		callNext: (args, callback) ->
-			if typeof args is 'function' and not callback?
-				callback = args
-				args = null
+        callNext: (args, callback) ->
+            if typeof args is 'function' and not callback?
+                callback = args
+                args = null
 
-			assert typeof callback is 'function'
+            assert typeof callback is 'function'
 
-			# on empty
-			unless @_arr.length
-				return callback()
+            # on empty
+            unless @_arr.length
+                return callback()
 
-			# get next
-			@length--
-			func = @_arr.shift()
-			context = @_arr.shift()
-			funcArgs = @_arr.shift()
+            # get next
+            @length--
+            func = @_arr.shift()
+            context = @_arr.shift()
+            funcArgs = @_arr.shift()
 
-			if typeof func is 'string'
-				func = utils.get context, func
+            if typeof func is 'string'
+                func = utils.get context, func
 
-			if typeof func isnt 'function'
-				throw new TypeError "ASync Stack::callNext(): function to call is not a function"
+            if typeof func isnt 'function'
+                throw new TypeError "ASync Stack::callNext(): function to call is not a function"
 
-			funcLength = func.length or Math.max(args?.length or 0, funcArgs?.length or 0)+1
-			syncError = null
-			called = false
+            funcLength = func.length or Math.max(args?.length or 0, funcArgs?.length or 0)+1
+            syncError = null
+            called = false
 
-			callbackWrapper = ->
-				assert not called or not syncError
-				, "Callback can't be called if function throws an error;\n" +
-				  "Function: `#{func}`\nSynchronous error: `#{syncError}`"
+            callbackWrapper = ->
+                assert not called or not syncError
+                , "Callback can't be called if function throws an error;\n" +
+                  "Function: `#{func}`\nSynchronous error: `#{syncError}`"
 
-				assert not called
-				, "Callback can't be called twice;\nFunction: `#{func}`"
+                assert not called
+                , "Callback can't be called twice;\nFunction: `#{func}`"
 
-				called = true
-				callback.apply @, arguments
+                called = true
+                callback.apply @, arguments
 
-			# add callback into funcArgs
-			# To avoid got funcArgs array modification and to minimise memory usage,
-			# we create a new object with the `funcArgs` as a prototype.
-			# `Function::apply` expects an object and iterate by it to the `length`.
-			funcArgs = Object.create(funcArgs or null)
-			funcArgs[funcLength - 1] = callbackWrapper
-			if funcArgs.length is undefined or funcArgs.length < funcLength
-				funcArgs.length = funcLength
-			if args
-				for arg, i in args
-					if i isnt funcLength - 1 and funcArgs[i] is undefined
-						funcArgs[i] = arg
+            # add callback into funcArgs
+            # To avoid got funcArgs array modification and to minimise memory usage,
+            # we create a new object with the `funcArgs` as a prototype.
+            # `Function::apply` expects an object and iterate by it to the `length`.
+            funcArgs = Object.create(funcArgs or null)
+            funcArgs[funcLength - 1] = callbackWrapper
+            if funcArgs.length is undefined or funcArgs.length < funcLength
+                funcArgs.length = funcLength
+            if args
+                for arg, i in args
+                    if i isnt funcLength - 1 and funcArgs[i] is undefined
+                        funcArgs[i] = arg
 
-			# call; support sync errors
-			syncError = utils.catchError func, context, funcArgs
-			if syncError
-				callbackWrapper syncError
+            # call; support sync errors
+            syncError = utils.catchError func, context, funcArgs
+            if syncError
+                callbackWrapper syncError
 
-			null
+            null
 
 Stack::runAll([*Function* callback, *Any* callbackContext])
 -----------------------------------------------------------
@@ -249,29 +249,29 @@ Calls all functions from the stack one by one.
 
 When an error occurs, processing stops and the callback function is called with the got error.
 
-		runAll: (callback=NOP, ctx=null) ->
-			if typeof callback isnt 'function'
-				throw new TypeError "ASync runAll(): passed callback is not a function"
+        runAll: (callback=NOP, ctx=null) ->
+            if typeof callback isnt 'function'
+                throw new TypeError "ASync runAll(): passed callback is not a function"
 
-			unless @_arr.length
-				return callback.call ctx, null
+            unless @_arr.length
+                return callback.call ctx, null
 
-			onNextCalled = (err, args...) =>
-				# on err
-				if err?
-					return callback.call ctx, err
+            onNextCalled = (err, args...) =>
+                # on err
+                if err?
+                    return callback.call ctx, err
 
-				# call next
-				if @_arr.length
-					return callNext args
+                # call next
+                if @_arr.length
+                    return callNext args
 
-				callback.apply ctx, arguments
+                callback.apply ctx, arguments
 
-			callNext = (args) => @callNext args, onNextCalled
+            callNext = (args) => @callNext args, onNextCalled
 
-			callNext()
+            callNext()
 
-			null
+            null
 
 Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
 -------------------------------------------------------------------------
@@ -280,39 +280,39 @@ Calls all functions from the stack simultaneously (all at the same time).
 
 When an error occurs, processing stops and the callback function is called with the got error.
 
-		runAllSimultaneously: (callback=NOP, ctx=null) ->
-			assert typeof callback is 'function'
+        runAllSimultaneously: (callback=NOP, ctx=null) ->
+            assert typeof callback is 'function'
 
-			length = n = @_arr.length / 3
-			done = 0
+            length = n = @_arr.length / 3
+            done = 0
 
-			unless length
-				return callback.call(ctx)
+            unless length
+                return callback.call(ctx)
 
-			onDone = (err) ->
-				++done
+            onDone = (err) ->
+                ++done
 
-				if done > length
-					return
+                if done > length
+                    return
 
-				if err
-					done = length
-					return callback.call ctx, err
+                if err
+                    done = length
+                    return callback.call ctx, err
 
-				if done is length
-					callback.call(ctx)
+                if done is length
+                    callback.call(ctx)
 
-			# run all functions
-			while n--
-				@callNext onDone
+            # run all functions
+            while n--
+                @callNext onDone
 
-			null
+            null
 
-	###
-	Exports
-	###
-	module.exports = ->
-		[utils] = arguments
-		utils.async =
-			forEach: forEach
-			Stack: Stack
+    ###
+    Exports
+    ###
+    module.exports = ->
+        [utils] = arguments
+        utils.async =
+            forEach: forEach
+            Stack: Stack

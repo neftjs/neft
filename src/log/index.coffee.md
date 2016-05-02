@@ -6,61 +6,61 @@ Access it with:
 var log = require('log');
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
 
-	{bind} = Function
-	{isArray} = Array
-	{unshift} = Array::
+    {bind} = Function
+    {isArray} = Array
+    {unshift} = Array::
 
-	fromArgs = (args) ->
+    fromArgs = (args) ->
 
-		str = ''
-		str += "#{arg} → " for arg in args
-		str.substring 0, str.length - 3
+        str = ''
+        str += "#{arg} → " for arg in args
+        str.substring 0, str.length - 3
 
-	class Log
-		@LOGS_METHODS = ['log', 'info', 'warn', 'error', 'time', 'ok']
+    class Log
+        @LOGS_METHODS = ['log', 'info', 'warn', 'error', 'time', 'ok']
 
-		@TIMES_LEN = 50
+        @TIMES_LEN = 50
 
-		@MARKERS =
-			white: (str) -> "LOG: #{str}"
-			green: (str) -> "OK: #{str}"
-			gray: (str) -> "#{str}"
-			blue: (str) -> "INFO: #{str}"
-			yellow: (str) -> "WARN: #{str}"
-			red: (str) -> "ERROR: #{str}"
+        @MARKERS =
+            white: (str) -> "LOG: #{str}"
+            green: (str) -> "OK: #{str}"
+            gray: (str) -> "#{str}"
+            blue: (str) -> "INFO: #{str}"
+            yellow: (str) -> "WARN: #{str}"
+            red: (str) -> "ERROR: #{str}"
 
-		@time = Date.now
-		@timeDiff = (since) -> Log.time() - since
-		@times = new Array Log.TIMES_LEN
+        @time = Date.now
+        @timeDiff = (since) -> Log.time() - since
+        @times = new Array Log.TIMES_LEN
 
-		for _, i in @times
-			@times[i] = [0, '']
+        for _, i in @times
+            @times[i] = [0, '']
 
-		constructor: (prefixes, @parentScope) ->
-			@prefixes = prefixes
-			if prefixes
-				assert.isArray prefixes
+        constructor: (prefixes, @parentScope) ->
+            @prefixes = prefixes
+            if prefixes
+                assert.isArray prefixes
 
-				# bind all logs methods by prefixes
-				args = utils.clone(prefixes)
-				args.unshift @
+                # bind all logs methods by prefixes
+                args = utils.clone(prefixes)
+                args.unshift @
 
-				for name in LogImpl.LOGS_METHODS
-					@[name] = bind.apply @[name], args
+                for name in LogImpl.LOGS_METHODS
+                    @[name] = bind.apply @[name], args
 
-			@[key] = value for key, value of @
-			if typeof @['lo'+'g'] is 'function'
-				func = =>
-					@log.apply func, arguments
-				return utils.merge func, @
+            @[key] = value for key, value of @
+            if typeof @['lo'+'g'] is 'function'
+                func = =>
+                    @log.apply func, arguments
+                return utils.merge func, @
 
-		_write: console?['lo'+'g'].bind(console) or (->)
-		_writeError: console?['erro'+'r'].bind(console) or (->)
+        _write: console?['lo'+'g'].bind(console) or (->)
+        _writeError: console?['erro'+'r'].bind(console) or (->)
 
 *Integer* log.LOG
 -----------------
@@ -83,29 +83,29 @@ var log = require('log');
 *Integer* log.ALL
 -----------------
 
-		i = 0
-		LOG: 1<<i++
-		INFO: 1<<i++
-		OK: 1<<i++
-		WARN: 1<<i++
-		ERROR: 1<<i++
-		TIME: 1<<i++
-		ALL: (1<<i++)-1
+        i = 0
+        LOG: 1<<i++
+        INFO: 1<<i++
+        OK: 1<<i++
+        WARN: 1<<i++
+        ERROR: 1<<i++
+        TIME: 1<<i++
+        ALL: (1<<i++)-1
 
 *Integer* enabled = log.ALL
 ---------------------------
 
 Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
-		enabled: @::ALL
+        enabled: @::ALL
 
-		isEnabled = (log, type) ->
-			unless log.enabled & type
-				false
-			else if log.parentScope
-				isEnabled log.parentScope, type
-			else
-				true
+        isEnabled = (log, type) ->
+            unless log.enabled & type
+                false
+            else if log.parentScope
+                isEnabled log.parentScope, type
+            else
+                true
 
 log([*Any* messages...])
 ------------------------
@@ -119,20 +119,20 @@ log("setName()", "db time");
 // will be logged as "setName() → db time"
 ```
 
-		@::['log'] = ->
-			if isEnabled(@, @LOG)
-				@_write LogImpl.MARKERS.white fromArgs arguments
-			return
+        @::['log'] = ->
+            if isEnabled(@, @LOG)
+                @_write LogImpl.MARKERS.white fromArgs arguments
+            return
 
 log.info([*Any* messages...])
 -----------------------------
 
 Prints the given messages into the console with a blue color.
 
-		info: ->
-			if isEnabled(@, @INFO)
-				@_write LogImpl.MARKERS.blue fromArgs arguments
-			return
+        info: ->
+            if isEnabled(@, @INFO)
+                @_write LogImpl.MARKERS.blue fromArgs arguments
+            return
 
 log.ok([*Any* messages...])
 ---------------------------
@@ -143,10 +143,10 @@ Prints the given messages into the console with a green color.
 log.ok("Data has been successfully sent!");
 ```
 
-		ok: ->
-			if isEnabled(@, @OK)
-				@_write LogImpl.MARKERS.green fromArgs arguments
-			return
+        ok: ->
+            if isEnabled(@, @OK)
+                @_write LogImpl.MARKERS.green fromArgs arguments
+            return
 
 log.warn([*Any* messages...])
 -----------------------------
@@ -157,10 +157,10 @@ Prints the given messages into the console with a yellow color.
 log.warn("Example warning with some recommendations");
 ```
 
-		warn: ->
-			if isEnabled(@, @WARN)
-				@_write LogImpl.MARKERS.yellow fromArgs arguments
-			return
+        warn: ->
+            if isEnabled(@, @WARN)
+                @_write LogImpl.MARKERS.yellow fromArgs arguments
+            return
 
 log.error([*Any* messages...])
 ------------------------------
@@ -171,10 +171,10 @@ Prints the given messages into the console with a red color.
 log.error("Error occurs, ... in file ...");
 ```
 
-		error: ->
-			if isEnabled(@, @ERROR)
-				@_writeError LogImpl.MARKERS.red fromArgs arguments
-			return
+        error: ->
+            if isEnabled(@, @ERROR)
+                @_writeError LogImpl.MARKERS.red fromArgs arguments
+            return
 
 *Integer* log.time()
 --------------------
@@ -193,41 +193,41 @@ function findPath(){
 findPath();
 ```
 
-		time: ->
-			unless isEnabled(@, @TIME)
-				return -1
+        time: ->
+            unless isEnabled(@, @TIME)
+                return -1
 
-			{times} = LogImpl
+            {times} = LogImpl
 
-			# get time id and set current time
-			for v, i in times when not v[0]
-				id = i
-				times[i][0] = LogImpl.time()
-				times[i][1] = fromArgs arguments
-				break
+            # get time id and set current time
+            for v, i in times when not v[0]
+                id = i
+                times[i][0] = LogImpl.time()
+                times[i][1] = fromArgs arguments
+                break
 
-			assert id?, "Log times out of range"
+            assert id?, "Log times out of range"
 
-			id
+            id
 
 log.end(*Integer* id)
 ---------------------
 
 Prints an information about the execution time for the given timer id.
 
-		end: (id) ->
-			if id is -1
-				return
+        end: (id) ->
+            if id is -1
+                return
 
-			time = LogImpl.times[id]
-			diff = LogImpl.timeDiff time[0]
-			diff = diff.toFixed 2
+            time = LogImpl.times[id]
+            diff = LogImpl.timeDiff time[0]
+            diff = diff.toFixed 2
 
-			str = "#{time[1]}: #{diff} ms"
-			@_write LogImpl.MARKERS.gray str
+            str = "#{time[1]}: #{diff} ms"
+            @_write LogImpl.MARKERS.gray str
 
-			time[0] = 0
-			return
+            time[0] = 0
+            return
 
 log.scope([*Any* names...])
 ---------------------------
@@ -243,18 +243,18 @@ log("hello");
 // "Example file → hello"
 ```
 
-		scope: (args...) ->
-			if @prefixes
-				unshift.apply args, @prefixes
+        scope: (args...) ->
+            if @prefixes
+                unshift.apply args, @prefixes
 
-			new LogImpl args, this
+            new LogImpl args, this
 
-	# implementation
-	impl = switch true
-		when utils.isNode
-			require './impls/node/index.coffee'
-		when utils.isBrowser
-			require './impls/browser/index.coffee'
+    # implementation
+    impl = switch true
+        when utils.isNode
+            require './impls/node/index.coffee'
+        when utils.isBrowser
+            require './impls/browser/index.coffee'
 
-	LogImpl = if typeof impl is 'function' then impl Log else Log
-	module.exports = new LogImpl
+    LogImpl = if typeof impl is 'function' then impl Log else Log
+    module.exports = new LogImpl

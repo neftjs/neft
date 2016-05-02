@@ -40,24 +40,24 @@ console.log(schema.validate({dict: { name: 'John' }}));
 // true
 ```
 
-	'use strict'
+    'use strict'
 
-	assert = require 'src/assert'
-	utils = require 'src/utils'
+    assert = require 'src/assert'
+    utils = require 'src/utils'
 
-	module.exports = (Schema) -> (row, value, expected) ->
-		unless expected
-			return
+    module.exports = (Schema) -> (row, value, expected) ->
+        unless expected
+            return
 
-		unless utils.isObject(value)
-			throw new Schema.Error row, 'object', "#{row} must be an object"
+        unless utils.isObject(value)
+            throw new Schema.Error row, 'object', "#{row} must be an object"
 
-		# available properties
-		if props = expected?.properties
-			assert.isArray props
+        # available properties
+        if props = expected?.properties
+            assert.isArray props
 
-			for prop of value
-				unless ~props.indexOf prop
-					throw new Schema.Error row, 'object.properties', "#{row} doesn't provide #{prop} property"
+            for prop of value
+                unless ~props.indexOf prop
+                    throw new Schema.Error row, 'object.properties', "#{row} doesn't provide #{prop} property"
 
-		return
+        return

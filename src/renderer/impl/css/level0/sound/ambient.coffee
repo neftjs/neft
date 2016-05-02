@@ -1,41 +1,41 @@
 'use strict'
 
 module.exports = (impl) ->
-	DATA =
-		bindings: null
-		elem: null
+    DATA =
+        bindings: null
+        elem: null
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner DATA
+    createData: impl.utils.createDataCloner DATA
 
-	create: (data) ->
-		self = @
+    create: (data) ->
+        self = @
 
-		elem = data.elem = document.createElement 'audio'
-		elem.setAttribute 'preload', 'auto'
+        elem = data.elem = document.createElement 'audio'
+        elem.setAttribute 'preload', 'auto'
 
-		elem.addEventListener 'ended', ->
-			self.running = false
+        elem.addEventListener 'ended', ->
+            self.running = false
 
-		return
+        return
 
-	setAmbientSoundSource: (val) ->
-		if rsc = impl.Renderer.resources.resolve(val)
-			val = rsc
-		@_impl.elem.setAttribute 'src', val
-		return
+    setAmbientSoundSource: (val) ->
+        if rsc = impl.Renderer.resources.resolve(val)
+            val = rsc
+        @_impl.elem.setAttribute 'src', val
+        return
 
-	setAmbientSoundLoop: (val) ->
-		@_impl.elem.setAttribute 'loop', val
-		return
+    setAmbientSoundLoop: (val) ->
+        @_impl.elem.setAttribute 'loop', val
+        return
 
-	startAmbientSound: (val) ->
-		@_impl.elem.play()
-		if @_impl.elem.readyState is @_impl.elem.HAVE_ENOUGH_DATA
-			@_impl.elem.currentTime = 0
-		return
+    startAmbientSound: (val) ->
+        @_impl.elem.play()
+        if @_impl.elem.readyState is @_impl.elem.HAVE_ENOUGH_DATA
+            @_impl.elem.currentTime = 0
+        return
 
-	stopAmbientSound: (val) ->
-		@_impl.elem.pause()
-		return
+    stopAmbientSound: (val) ->
+        @_impl.elem.pause()
+        return
