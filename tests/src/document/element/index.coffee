@@ -4,10 +4,10 @@
 {Element} = Document
 {describe, it, beforeEach, whenChange} = unit
 
-describe 'View Element', ->
-    return # TODO
-
-    HTML = '<b><em>abc</em></b><u></u><p title="textTitle" class="a bb c2" data-custom="customValue"></p>'
+describe 'src/document Element', ->
+    HTML = '<b><em>abc</em></b>' +
+        '<u></u>' +
+        '<p title="textTitle" class="a bb c2" data-custom="customValue"></p>'
     doc = null
     b = em = div = p = null
 
