@@ -80,7 +80,7 @@ console.log(Networking.Response.BAD_REQUEST);
 
         ]
 
-        @Error = require('./response/error.coffee.md') Networking, Response
+        @Error = require('./response/error') Networking, Response
 
 *Response* Response(*Object* options)
 -------------------------------------

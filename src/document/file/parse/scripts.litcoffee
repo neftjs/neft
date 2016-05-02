@@ -7,7 +7,7 @@ neft:script @xml
     os = require 'os'
     utils = require 'src/utils'
     pathUtils = require 'path'
-    { getFilePath } = require './fragments/links.coffee.md'
+    { getFilePath } = require './fragments/links'
 
     uid = 0
     realpath = fs.realpathSync './'
