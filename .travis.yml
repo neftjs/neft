@@ -4,3 +4,8 @@ node_js:
   - "5.11"
 before_script:
   - npm run bundle -- --node --browser
+script:
+  - npm test -- --require coffee-coverage/register-istanbul
+after_script:
+  - istanbul report
+  - coveralls < coverage/lcov.info

@@ -50,5 +50,10 @@
     "semver": "5.1.0",
     "uglify-js": "2.6.2",
     "xcode": "0.8.4"
+  },
+  "devDependencies": {
+    "coffee-coverage": "1.0.1",
+    "coveralls": "2.11.9",
+    "istanbul": "0.4.3"
   }
 }
