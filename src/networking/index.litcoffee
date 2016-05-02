@@ -25,10 +25,10 @@ var Networking = require('networking');
 
         Impl = require('./impl') Networking
 
-        @Uri = require('./uri.coffee.md') Networking
-        @Handler = require('./handler.coffee.md') Networking
-        @Request = require('./request.coffee.md') Networking, Impl.Request
-        @Response = require('./response.coffee.md') Networking, Impl.Response
+        @Uri = require('./uri') Networking
+        @Handler = require('./handler') Networking
+        @Request = require('./request') Networking, Impl.Request
+        @Response = require('./response') Networking, Impl.Response
 
         @TYPES = [
             (@HTTP = 'http')
