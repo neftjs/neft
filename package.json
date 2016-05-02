@@ -28,7 +28,7 @@
   },
   "scripts": {
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony bundle.coffee",
-    "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./src/unit/cli.coffee './tests/**/*.coffee' --require tests/init.coffee"
+    "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./src/unit/cli.coffee ./tests/**/*.coffee --require tests/init.coffee"
   },
   "dependencies": {
     "chokidar": "1.4.3",
