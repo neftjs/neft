@@ -1,7 +1,7 @@
 'use strict'
 
 fs = require 'fs'
-bundleBuilder = require 'neft-bundle-builder'
+bundleBuilder = require 'src/bundle-builder'
 pathUtils = require 'path'
 
 {utils, log} = Neft

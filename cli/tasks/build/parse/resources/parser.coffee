@@ -5,7 +5,7 @@ pathUtils = require 'path'
 yaml = require 'js-yaml'
 mkdirp = require 'mkdirp'
 try
-	sharpModulePath = pathUtils.join fs.realpathSync(''), '/node_modules/sharp'
+	sharpModulePath = pathUtils.join fs.realpathSync('./'), '/node_modules/sharp'
 	sharp = require sharpModulePath
 
 {utils, log, assert, Resources} = Neft

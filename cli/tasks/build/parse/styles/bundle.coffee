@@ -1,7 +1,7 @@
 'use strict'
 
 pathUtils = require 'path'
-nmlParser = require 'neft-nml-parser'
+nmlParser = require 'src/nml-parser'
 
 {utils, Renderer} = Neft
 

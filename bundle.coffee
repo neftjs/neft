@@ -3,14 +3,13 @@ Mustache = require 'mustache'
 coffee = require 'coffee-script'
 
 global.Neft =
-	utils: utils = require 'neft-utils'
-	log: require 'neft-log'
-	assert: require 'neft-assert'
+	utils: utils = require 'src/utils'
+	log: require 'src/log'
+	assert: require 'src/assert'
 
-bundle = require 'neft-bundle-builder'
+bundle = require 'src/bundle-builder'
 
 fs.ensureDir './cli/bundle'
-fs.removeSync './node_modules/neft-*/node_modules/neft-*'
 
 createBundle = (opts, callback) ->
 	bundle {
@@ -22,7 +21,7 @@ createBundle = (opts, callback) ->
 		verbose: true
 		path: "index.coffee"
 		test: (req) ->
-			/^(?:neft\-|\.)/.test(req)
+			/^(?:src\/|\.|package\.json)/.test(req)
 	}, (err, bundle) ->
 		if err
 			return console.error err?.stack or err

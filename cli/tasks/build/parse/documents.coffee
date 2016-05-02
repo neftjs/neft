@@ -2,9 +2,9 @@
 
 fs = require 'fs-extra'
 pathUtils = require 'path'
-bundleBuilder = require 'neft-bundle-builder'
+bundleBuilder = require 'src/bundle-builder'
 
-cliUtils = require '../../../utils'
+cliUtils = require 'cli/utils'
 
 {utils, log, Document, styles} = Neft
 
