@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse, uid} = require './utils'
 
-describe 'neft:use', ->
+describe 'src/document neft:use', ->
 	it 'is replaced by neft:fragment', ->
 		view = createView """
 			<neft:fragment neft:name="a"><b></b></neft:fragment>

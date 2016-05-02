@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse} = require './utils'
 
-describe 'neft:each', ->
+describe 'src/document neft:each', ->
 	it 'loops expected times', ->
 		source = createView '<ul neft:each="[0,0]">1</ul>'
 		view = source.clone()

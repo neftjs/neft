@@ -47,7 +47,7 @@ VALIDATORS =
 		fail: 2
 		error: "typeRow must be a string"
 
-describe "Schema validators", ->
+describe "src/schema validators", ->
 	# check inserting
 	it "correctly proper data validated", ->
 		schema = {}

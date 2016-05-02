@@ -6,7 +6,7 @@ os = require 'os'
 {describe, it} = unit
 {createView, renderParse, uid} = require './utils'
 
-describe 'neft:script', ->
+describe 'src/document neft:script', ->
 	it 'is not rendered', ->
 		view = createView """
 			<neft:script><![CDATA[

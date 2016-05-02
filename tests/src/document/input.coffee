@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse} = require './utils'
 
-describe 'string interpolation', ->
+describe 'src/document string interpolation', ->
 	describe '`attrs`', ->
 		it 'lookup neft:fragment', ->
 			source = createView """

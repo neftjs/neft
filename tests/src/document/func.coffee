@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse} = require './utils'
 
-describe 'neft:function', ->
+describe 'src/document neft:function', ->
 	it 'can contains XML text', ->
 		source = createView """
 			<neft:function neft:name="abc"><![CDATA[

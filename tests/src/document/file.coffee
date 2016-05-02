@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse, uid} = require './utils'
 
-describe 'View', ->
+describe 'src/document View', ->
 	it 'can be created using HTML', ->
 		view = createView '<b></b>'
 		assert.instanceOf view, Document

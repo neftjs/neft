@@ -19,7 +19,7 @@ expectSize = (item, width, height) ->
 	assert.is item.height, height
 	item
 
-describe 'Flow', ->
+describe 'src/renderer Flow', ->
 	flow = items = item1 = item2 = item3 = onReady = null
 
 	beforeEach ->

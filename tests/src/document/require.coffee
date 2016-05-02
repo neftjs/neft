@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse, uid} = require './utils'
 
-describe 'neft:require', ->
+describe 'src/document neft:require', ->
 	describe 'shares fragments', ->
 		it 'without namespace', ->
 			first = 'namespace'+uid()

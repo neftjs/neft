@@ -4,7 +4,7 @@
 {describe, it} = unit
 SchemaError = Schema.Error
 
-describe 'Schema validating', ->
+describe 'src/schema', ->
 	it 'only provided rows in the schema can be saved', ->
 		SCHEMA =
 			first: {}

@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse} = require './utils'
 
-describe 'neft:if', ->
+describe 'src/document neft:if', ->
 	it 'works with positive expression', ->
 		source = createView '<div><b neft:if="${2 > 1}">1</b></div>'
 		view = source.clone()

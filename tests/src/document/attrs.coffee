@@ -4,7 +4,7 @@
 {describe, it} = unit
 {createView, renderParse} = require './utils'
 
-describe 'attributes', ->
+describe 'src/document attributes', ->
 	it 'are parsed to objects', ->
 		data = a: 1
 		json = JSON.stringify data
