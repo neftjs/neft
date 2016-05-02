@@ -1,41 +1,41 @@
 'use strict'
 
 module.exports = (impl) ->
-	{Item} = impl.Types
+    {Item} = impl.Types
 
-	COLOR_RESOURCE_REQUEST =
-		property: 'color'
+    COLOR_RESOURCE_REQUEST =
+        property: 'color'
 
-	DATA = {}
+    DATA = {}
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner 'Item', DATA
+    createData: impl.utils.createDataCloner 'Item', DATA
 
-	create: (data) ->
-		data.elem ?= impl.utils.createQmlObject 'Rectangle {' +
-			'property alias borderItem: border;' +
-			'color: "transparent";' +
-			'Rectangle {' +
-				'id: border;' +
-				'anchors.fill: parent;' +
-				'color: "transparent";' +
-				'radius: parent.radius;' +
-			'}' +
-		'}'
+    create: (data) ->
+        data.elem ?= impl.utils.createQmlObject 'Rectangle {' +
+            'property alias borderItem: border;' +
+            'color: "transparent";' +
+            'Rectangle {' +
+                'id: border;' +
+                'anchors.fill: parent;' +
+                'color: "transparent";' +
+                'radius: parent.radius;' +
+            '}' +
+        '}'
 
-		Item.create.call @, data
+        Item.create.call @, data
 
-	setRectangleColor: (val) ->
-		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
-		@_impl.elem.color = impl.utils.toQtColor val
+    setRectangleColor: (val) ->
+        val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
+        @_impl.elem.color = impl.utils.toQtColor val
 
-	setRectangleRadius: (val) ->
-		@_impl.elem.radius = val
+    setRectangleRadius: (val) ->
+        @_impl.elem.radius = val
 
-	setRectangleBorderColor: (val) ->
-		val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
-		@_impl.elem.borderItem.border.color = impl.utils.toQtColor val
+    setRectangleBorderColor: (val) ->
+        val = impl.Renderer.resources?.resolve(val, COLOR_RESOURCE_REQUEST) or val
+        @_impl.elem.borderItem.border.color = impl.utils.toQtColor val
 
-	setRectangleBorderWidth: (val) ->
-		@_impl.elem.borderItem.border.width = val
+    setRectangleBorderWidth: (val) ->
+        @_impl.elem.borderItem.border.width = val

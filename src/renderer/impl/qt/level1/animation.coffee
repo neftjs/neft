@@ -1,15 +1,15 @@
 'use strict'
 
 module.exports = (impl) ->
-	DATA =
-		bindings: null
-		elem: null
-		dirty: true
+    DATA =
+        bindings: null
+        elem: null
+        dirty: true
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner DATA
+    createData: impl.utils.createDataCloner DATA
 
-	create: (data) ->
+    create: (data) ->
 
-	setAnimationLoop: (val) ->
+    setAnimationLoop: (val) ->

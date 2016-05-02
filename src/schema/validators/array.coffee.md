@@ -17,10 +17,10 @@ console.log(schema.validate({friends: []}));
 // true
 ```
 
-	'use strict'
+    'use strict'
 
-	{isArray} = Array
+    {isArray} = Array
 
-	module.exports = (Schema) -> (row, value, expected) ->
-		if expected and not isArray(value)
-			throw new Schema.Error row, 'array', "#{row} must be an array"
+    module.exports = (Schema) -> (row, value, expected) ->
+        if expected and not isArray(value)
+            throw new Schema.Error row, 'array', "#{row} must be an array"

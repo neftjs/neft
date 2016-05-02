@@ -1,19 +1,19 @@
 'use strict'
 
 module.exports = (impl) ->
-	DATA =
-		bindings: null
+    DATA =
+        bindings: null
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner DATA
+    createData: impl.utils.createDataCloner DATA
 
-	create: (data) ->
+    create: (data) ->
 
-	setAmbientSoundSource: (val) ->
+    setAmbientSoundSource: (val) ->
 
-	setAmbientSoundLoop: (val) ->
+    setAmbientSoundLoop: (val) ->
 
-	startAmbientSound: (val) ->
+    startAmbientSound: (val) ->
 
-	stopAmbientSound: (val) ->
+    stopAmbientSound: (val) ->

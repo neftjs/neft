@@ -51,31 +51,31 @@ Use this attribute to render less important elements.
 <use:body neft:async />
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
+    utils = require 'src/utils'
 
-	module.exports = (File) -> (file) ->
-		uses = []
+    module.exports = (File) -> (file) ->
+        uses = []
 
-		forNode = (node) ->
-			unless node instanceof File.Element.Tag
-				return
+        forNode = (node) ->
+            unless node instanceof File.Element.Tag
+                return
 
-			node.children.forEach forNode
+            node.children.forEach forNode
 
-			# change short syntax to long formula
-			if /^use\:/.test(node.name)
-				fragment = node.name.slice 'use:'.length
-				node.name = 'neft:use'
-				node.attrs['neft:fragment'] = fragment
+            # change short syntax to long formula
+            if /^use\:/.test(node.name)
+                fragment = node.name.slice 'use:'.length
+                node.name = 'neft:use'
+                node.attrs['neft:fragment'] = fragment
 
-			# get uses
-			if node.name is 'neft:use'
-				node.name = 'neft:blank'
-				uses.push new File.Use file, node
+            # get uses
+            if node.name is 'neft:use'
+                node.name = 'neft:blank'
+                uses.push new File.Use file, node
 
-		forNode file.node
+        forNode file.node
 
-		unless utils.isEmpty uses
-			file.uses = uses
+        unless utils.isEmpty uses
+            file.uses = uses

@@ -1,15 +1,15 @@
 Request
 =======
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
-	signal = require 'src/signal'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
+    signal = require 'src/signal'
 
-	assert = assert.scope 'Networking.Request'
+    assert = assert.scope 'Networking.Request'
 
-	module.exports = (Networking, Impl) -> class Request extends signal.Emitter
+    module.exports = (Networking, Impl) -> class Request extends signal.Emitter
 
 *Array* Request.METHODS
 -----------------------
@@ -23,13 +23,13 @@ Contains:
  - Request.DELETE,
  - Request.OPTIONS.
 
-		@METHODS = [
-			(@GET = 'get'),
-			(@POST = 'post'),
-			(@PUT = 'put'),
-			(@DELETE = 'delete'),
-			(@OPTIONS = 'options')
-		]
+        @METHODS = [
+            (@GET = 'get'),
+            (@POST = 'post'),
+            (@PUT = 'put'),
+            (@DELETE = 'delete'),
+            (@OPTIONS = 'options')
+        ]
 
 *Array* Request.TYPES
 ---------------------
@@ -42,12 +42,12 @@ Contains:
  - Request.HTML_TYPE,
  - Request.BINARY_TYPE.
 
-		@TYPES = [
-			(@TEXT_TYPE = 'text'),
-			(@JSON_TYPE = 'json'),
-			(@HTML_TYPE = 'html'),
-			(@BINARY_TYPE = 'binary')
-		]
+        @TYPES = [
+            (@TEXT_TYPE = 'text'),
+            (@JSON_TYPE = 'json'),
+            (@HTML_TYPE = 'html'),
+            (@BINARY_TYPE = 'binary')
+        ]
 
 *Request* Request(*Object* options)
 -----------------------------------
@@ -63,51 +63,51 @@ var Networking = require('networking');
 var Request = Networking.Request;
 ```
 
-		constructor: (opts) ->
-			assert.isPlainObject opts, 'ctor options argument ...'
-			assert.isString opts.uid if opts.uid?
-			assert.ok utils.has(Request.METHODS, opts.method) if opts.method?
-			unless opts.uri instanceof Networking.Uri
-				assert.isString opts.uri, 'ctor options.uri argument ...'
+        constructor: (opts) ->
+            assert.isPlainObject opts, 'ctor options argument ...'
+            assert.isString opts.uid if opts.uid?
+            assert.ok utils.has(Request.METHODS, opts.method) if opts.method?
+            unless opts.uri instanceof Networking.Uri
+                assert.isString opts.uri, 'ctor options.uri argument ...'
 
-			super()
+            super()
 
-			if opts.type?
-				assert.ok utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...'
-				{@type} = opts
-			utils.defineProperty @, 'type', utils.ENUMERABLE, @type
+            if opts.type?
+                assert.ok utils.has(Request.TYPES, opts.type), 'ctor options.type argument ...'
+                {@type} = opts
+            utils.defineProperty @, 'type', utils.ENUMERABLE, @type
 
-			{@data, @headers, @cookies} = opts
-			{@method} = opts if opts.method?
-			@headers ||= {}
-			@cookies ||= {}
+            {@data, @headers, @cookies} = opts
+            {@method} = opts if opts.method?
+            @headers ||= {}
+            @cookies ||= {}
 
-			if typeof opts.uri is 'string'
-				@uri = new Networking.Uri opts.uri
-			else
-				{@uri} = opts
+            if typeof opts.uri is 'string'
+                @uri = new Networking.Uri opts.uri
+            else
+                {@uri} = opts
 
-			uid = opts.uid or utils.uid()
-			utils.defineProperty @, 'uid', null, uid
+            uid = opts.uid or utils.uid()
+            utils.defineProperty @, 'uid', null, uid
 
-			@pending = true
-			@params = null
+            @pending = true
+            @params = null
 
-			# signal handlers
-			if opts.onLoadEnd
-				@onLoadEnd opts.onLoadEnd
+            # signal handlers
+            if opts.onLoadEnd
+                @onLoadEnd opts.onLoadEnd
 
 *Signal* Request::onLoadEnd(*Any* error, *Any* data)
 ----------------------------------------------------
 
-		signal.Emitter.createSignal @, 'onLoadEnd'
+        signal.Emitter.createSignal @, 'onLoadEnd'
 
 ReadOnly *String* Request::uid
 ------------------------------
 
 Pseudo unique hash. It's created automatically.
 
-		uid: ''
+        uid: ''
 
 ReadOnly *Boolean* Request::pending
 -----------------------------------
@@ -116,7 +116,7 @@ Indicates whether the request is not destroyed.
 
 If it's `false`, the request can't be changed.
 
-		pending: false
+        pending: false
 
 *String* Request::method
 ------------------------
@@ -125,7 +125,7 @@ This property refers to one of the `Request.METHODS` values.
 
 Holds a method with which the request has been called.
 
-		method: Request.GET
+        method: Request.GET
 
 *Networking.Uri* Request::uri
 -----------------------------
@@ -145,7 +145,7 @@ It can holds local and absolute paths.
 "/user/user_id"
 ```
 
-		uri: null
+        uri: null
 
 *String* Request::type
 ----------------------
@@ -159,7 +159,7 @@ That's why, these two requests have the same uri, but different expected types.
 
 It refers to one of the *Request.TYPES* values.
 
-		type: @JSON_TYPE
+        type: @JSON_TYPE
 
 *Object* Request::data = null
 -----------------------------
@@ -167,19 +167,19 @@ It refers to one of the *Request.TYPES* values.
 Holds a data sent with a request.
 It can be, for instance, a form data.
 
-		data: null
+        data: null
 
 ReadOnly *Networking.Handler* Request::handler
 ----------------------------------------------
 
 Refers to the currently considered [Handler][networking/Handler].
 
-		handler: null
+        handler: null
 
 ReadOnly *Networking.Response* Request::response
 ------------------------------------------------
 
-		response: null
+        response: null
 
 ReadOnly *Object* Request::params = {}
 --------------------------------------
@@ -189,7 +189,7 @@ Keeps matched parameters by the handler from the request uri.
 Considering the */users/{name}* URI,
 the 'name' property is available as the *params.name*.
 
-		params: null
+        params: null
 
 ReadOnly *Object* Request::headers
 ----------------------------------
@@ -198,12 +198,12 @@ Contains request headers.
 
 For the client request, this object is empty.
 
-		headers: null
+        headers: null
 
 ReadOnly *Object* Request::cookies
 ----------------------------------
 
-		cookies: null
+        cookies: null
 
 *String* Request::toString()
 ----------------------------
@@ -217,17 +217,17 @@ console.log(req.toString);
 // get /users/id as json
 ```
 
-		toString: ->
-			"#{@method} #{@uri} as #{@type}"
+        toString: ->
+            "#{@method} #{@uri} as #{@type}"
 
-		destroy: ->
-			assert @pending
+        destroy: ->
+            assert @pending
 
-			@pending = false
+            @pending = false
 
-			res = @response
-			if res.isSucceed()
-				@onLoadEnd.emit null, res.data
-			else
-				@onLoadEnd.emit res.data or res.status or "Unknown error"
-			return
+            res = @response
+            if res.isSucceed()
+                @onLoadEnd.emit null, res.data
+            else
+                @onLoadEnd.emit res.data or res.status or "Unknown error"
+            return

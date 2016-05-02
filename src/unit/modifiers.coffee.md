@@ -1,18 +1,18 @@
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
+    utils = require 'src/utils'
 
-	NOP = ->
+    NOP = ->
 
-	PLATFORMS =
-		onNode: 'isNode'
-		onServer: 'isServer'
-		onClient: 'isClient'
-		onBrowser: 'isBrowser'
-		onAndroid: 'isAndroid'
-		onIOS: 'isIOS'
+    PLATFORMS =
+        onNode: 'isNode'
+        onServer: 'isServer'
+        onClient: 'isClient'
+        onBrowser: 'isBrowser'
+        onAndroid: 'isAndroid'
+        onIOS: 'isIOS'
 
-	exports.applyAll = (func) ->
+    exports.applyAll = (func) ->
 
 isNode
 --
@@ -32,6 +32,6 @@ isAndroid
 isIOS
 --
 
-		for funcName, utilsProp of PLATFORMS
-			func[funcName] = if utils[utilsProp] then -> this else NOP
-		return
+        for funcName, utilsProp of PLATFORMS
+            func[funcName] = if utils[utilsProp] then -> this else NOP
+        return

@@ -8,15 +8,15 @@ Access it with:
 var List = require('list');
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
-	signal = require 'src/signal'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
+    signal = require 'src/signal'
 
-	module.exports = class List extends signal.Emitter
-		@__name__ = 'List'
-		@__path__ = 'List'
+    module.exports = class List extends signal.Emitter
+        @__name__ = 'List'
+        @__path__ = 'List'
 
 *List* List([*Array* data])
 ---------------------------
@@ -29,46 +29,46 @@ console.log(list instanceof List);
 // true
 ```
 
-		constructor: (arr) ->
-			unless @ instanceof List
-				return new List arr
+        constructor: (arr) ->
+            unless @ instanceof List
+                return new List arr
 
-			if arr?
-				assert.isObject arr
+            if arr?
+                assert.isObject arr
 
-			super()
-			@length = 0
+            super()
+            @length = 0
 
-			if utils.isObject(arr)
-				for val, i in arr
-					@[i] = val
-					@length++
+            if utils.isObject(arr)
+                for val, i in arr
+                    @[i] = val
+                    @length++
 
-		# merge Array prototype into the List prototype
-		for key in Object.getOwnPropertyNames(Array::)
-			if key isnt 'constructor'
-				@::[key] = Array::[key]
+        # merge Array prototype into the List prototype
+        for key in Object.getOwnPropertyNames(Array::)
+            if key isnt 'constructor'
+                @::[key] = Array::[key]
 
 *Signal* List::onChange(*Any* oldValue, *Integer* index)
 --------------------------------------------------------
 
 Signal called on each value change.
 
-		signal.Emitter.createSignal @, 'onChange'
+        signal.Emitter.createSignal @, 'onChange'
 
 *Signal* List::onInsert(*Any* value, *Integer* index)
 -----------------------------------------------------
 
 Signal called when a value was added.
 
-		signal.Emitter.createSignal @, 'onInsert'
+        signal.Emitter.createSignal @, 'onInsert'
 
 *Signal* List::onPop(*Any* oldValue, *Integer* index)
 -----------------------------------------------------
 
 Signal called when a value was removed.
 
-		signal.Emitter.createSignal @, 'onPop'
+        signal.Emitter.createSignal @, 'onPop'
 
 ReadOnly *Integer* List::length
 -------------------------------
@@ -107,21 +107,21 @@ types.set(0, 'Fantasy');
 // nothing changed ...
 ```
 
-		set: (i, val) ->
-			assert.operator i, '>=', 0
-			assert.operator i, '<', @length
-			assert.isNot val, undefined
+        set: (i, val) ->
+            assert.operator i, '>=', 0
+            assert.operator i, '<', @length
+            assert.isNot val, undefined
 
-			oldVal = @[i]
-			if oldVal is val
-				return val
+            oldVal = @[i]
+            if oldVal is val
+                return val
 
-			@[i] = val
+            @[i] = val
 
-			# signal
-			@onChange.emit oldVal, i
+            # signal
+            @onChange.emit oldVal, i
 
-			val
+            val
 
 *Any* List::append(*Any* value)
 -------------------------------
@@ -146,15 +146,15 @@ console.log(fridge.items());
 // apple, milk, cheese
 ```
 
-		append: (val) ->
-			assert.isNot val, undefined
+        append: (val) ->
+            assert.isNot val, undefined
 
-			@push val
+            @push val
 
-			# signal
-			@onInsert.emit val, @length - 1
+            # signal
+            @onInsert.emit val, @length - 1
 
-			val
+            val
 
 *Any* List::insert(*Integer* index, *Any* value)
 ------------------------------------------------
@@ -181,17 +181,17 @@ console.log(list.items());
 // ['a', 'c', 'b']
 ```
 
-		insert: (i, val) ->
-			assert.operator i, '>=', 0
-			assert.operator i, '<=', @length
-			assert.isNot val, undefined
+        insert: (i, val) ->
+            assert.operator i, '>=', 0
+            assert.operator i, '<=', @length
+            assert.isNot val, undefined
 
-			@splice i, 0, val
+            @splice i, 0, val
 
-			# signal
-			@onInsert.emit val, i
+            # signal
+            @onInsert.emit val, i
 
-			val
+            val
 
 *List* List::extend(*Object* items)
 -----------------------------------
@@ -200,13 +200,13 @@ Appends all values stored in the given items into the list.
 
 Calls [onInsert()][list/List::onInsert()] signal for each value.
 
-		extend: (items) ->
-			assert.isObject items
+        extend: (items) ->
+            assert.isObject items
 
-			for val in items
-				@append val
+            for val in items
+                @append val
 
-			@
+            @
 
 *Any* List::remove(*Any* value)
 -------------------------------
@@ -229,14 +229,14 @@ console.log(list);
 // ['a']
 ```
 
-		remove: (val) ->
-			assert.ok utils.has(@, val)
+        remove: (val) ->
+            assert.ok utils.has(@, val)
 
-			i = @index val
-			if i isnt -1
-				@pop i
+            i = @index val
+            if i isnt -1
+                @pop i
 
-			val
+            val
 
 *Any* List::pop([*Integer* index])
 ----------------------------------
@@ -261,19 +261,19 @@ console.log(list);
 // ['a']
 ```
 
-		pop: (i) ->
-			if i is undefined
-				i = @length - 1
-			assert.operator i, '>=', 0
-			assert.operator i, '<', @length
+        pop: (i) ->
+            if i is undefined
+                i = @length - 1
+            assert.operator i, '>=', 0
+            assert.operator i, '<', @length
 
-			oldVal = @[i]
-			@splice i, 1
+            oldVal = @[i]
+            @splice i, 1
 
-			# signal
-			@onPop.emit oldVal, i
+            # signal
+            @onPop.emit oldVal, i
 
-			oldVal
+            oldVal
 
 List::clear()
 -------------
@@ -300,11 +300,11 @@ console.log(list);
 // []
 ```
 
-		clear: ->
-			while @length > 0
-				@pop()
+        clear: ->
+            while @length > 0
+                @pop()
 
-			return
+            return
 
 *Integer* List::index(*Any* value)
 ----------------------------------
@@ -323,10 +323,10 @@ console.log(list.index('c'));
 // -1
 ```
 
-		index: (val) ->
-			assert.isNot val, undefined
+        index: (val) ->
+            assert.isNot val, undefined
 
-			@indexOf val
+            @indexOf val
 
 *Boolean* List::has(*Any* value)
 --------------------------------
@@ -343,14 +343,14 @@ console.log(list.has('ab123'));
 // false
 ```
 
-		has: (val) ->
-			@index(val) isnt -1
+        has: (val) ->
+            @index(val) isnt -1
 
 *Array* List::toArray()
 -----------------------
 
-		toArray: ->
-			arr = new Array @length
-			for val, i in this
-				arr[i] = val
-			arr
+        toArray: ->
+            arr = new Array @length
+            for val, i in this
+                arr[i] = val
+            arr

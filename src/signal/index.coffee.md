@@ -8,10 +8,10 @@ Access it with:
 var signal = require('signal');
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
 
 *Integer* signal.STOP_PROPAGATION
 ---------------------------------
@@ -38,7 +38,7 @@ obj.onPress.emit();
 // listener 1
 ```
 
-	STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
+    STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
 
 *Signal* signal.create([*NotPrimitive* object, *String* name])
 --------------------------------------------------------------
@@ -60,91 +60,91 @@ obj.onRename.emit('Max', 'George');
 // {0: "Max", 1: "George"}
 ```
 
-	exports.create = (obj, name) ->
-		signal = createSignalFunction obj
-		if name is undefined
-			return signal
+    exports.create = (obj, name) ->
+        signal = createSignalFunction obj
+        if name is undefined
+            return signal
 
-		assert.isNotPrimitive obj, 'signal object cannot be primitive'
-		assert.isString name, 'signal name must be a string'
-		assert.notLengthOf name, 0, 'signal name cannot be an empty string'
+        assert.isNotPrimitive obj, 'signal object cannot be primitive'
+        assert.isString name, 'signal name must be a string'
+        assert.notLengthOf name, 0, 'signal name cannot be an empty string'
 
-		assert not obj.hasOwnProperty(name)
-		, "signal object has already defined the '#{name}' property"
+        assert not obj.hasOwnProperty(name)
+        , "signal object has already defined the '#{name}' property"
 
-		obj[name] = signal
+        obj[name] = signal
 
 *Boolean* signal.isEmpty(*Signal* signal)
 -----------------------------------------
 
 Returns `true` if the given signal has no listeners.
 
-	exports.isEmpty = (signal) ->
-		for func in signal.listeners by 2
-			if func isnt null
-				return false
-		return true
+    exports.isEmpty = (signal) ->
+        for func in signal.listeners by 2
+            if func isnt null
+                return false
+        return true
 
 *Signal* Signal()
 -----------------
 
-	callSignal = (obj, listeners, arg1, arg2) ->
-		i = 0
-		n = listeners.length
-		result = 0
-		containsGaps = false
-		while i < n
-			func = listeners[i]
-			if func is null
-				containsGaps = true
-			else
-				ctx = listeners[i+1]
-				if result <= 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
-					result = STOP_PROPAGATION
-					if containsGaps
-						break
-			i += 2
+    callSignal = (obj, listeners, arg1, arg2) ->
+        i = 0
+        n = listeners.length
+        result = 0
+        containsGaps = false
+        while i < n
+            func = listeners[i]
+            if func is null
+                containsGaps = true
+            else
+                ctx = listeners[i+1]
+                if result <= 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
+                    result = STOP_PROPAGATION
+                    if containsGaps
+                        break
+            i += 2
 
-		if containsGaps
-			shift = 0
-			while i < n
-				func = listeners[i]
-				if func is null
-					shift -= 2
-				else if shift > 0
-					assert.isNotDefined listeners[i+shift]
-					assert.isNotDefined listeners[i+shift+1]
-					listeners[i+shift] = func
-					listeners[i+shift+1] = listeners[i+1]
-					listeners[i] = null
-					listeners[i+1] = null
-				i += 2
+        if containsGaps
+            shift = 0
+            while i < n
+                func = listeners[i]
+                if func is null
+                    shift -= 2
+                else if shift > 0
+                    assert.isNotDefined listeners[i+shift]
+                    assert.isNotDefined listeners[i+shift+1]
+                    listeners[i+shift] = func
+                    listeners[i+shift+1] = listeners[i+1]
+                    listeners[i] = null
+                    listeners[i+1] = null
+                i += 2
 
-		return result
+        return result
 
-	createSignalFunction = (obj) ->
-		handler = (listener, ctx) ->
-			handler.connect listener, ctx
+    createSignalFunction = (obj) ->
+        handler = (listener, ctx) ->
+            handler.connect listener, ctx
 
-		handler.obj = obj
-		handler.listeners = []
-		utils.setPrototypeOf handler, SignalPrototype
+        handler.obj = obj
+        handler.listeners = []
+        utils.setPrototypeOf handler, SignalPrototype
 
-		handler
+        handler
 
-	SignalPrototype =
+    SignalPrototype =
 
 Signal::emit([*Any* argument1, *Any* argument2])
 ------------------------------------------------
 
 Call all of the signal listeners with the given arguments (2 maximally).
 
-		emit: (arg1, arg2) ->
-			assert.isFunction @, "emit must be called on a signal function"
-			assert.isArray @listeners, "emit must be called on a signal function"
-			assert.operator arguments.length, '<', 3, 'signal accepts maximally two parameters; use object instead'
+        emit: (arg1, arg2) ->
+            assert.isFunction @, "emit must be called on a signal function"
+            assert.isArray @listeners, "emit must be called on a signal function"
+            assert.operator arguments.length, '<', 3, 'signal accepts maximally two parameters; use object instead'
 
-			callSignal @obj, @listeners, arg1, arg2
+            callSignal @obj, @listeners, arg1, arg2
 
 Signal::connect(*Function* listener, [*Any* context])
 -----------------------------------------------------
@@ -191,26 +191,26 @@ obj.onPress.emit();
 // {standard: true}
 ```
 
-		connect: (listener, ctx=null) ->
-			assert.isFunction @, "connect must be called on a signal function"
-			assert.isFunction listener, "listener is not a function"
+        connect: (listener, ctx=null) ->
+            assert.isFunction @, "connect must be called on a signal function"
+            assert.isFunction listener, "listener is not a function"
 
-			{listeners} = @
+            {listeners} = @
 
-			i = n = listeners.length
-			while (i-=2) >= 0
-				if listeners[i] isnt null
-					break
+            i = n = listeners.length
+            while (i-=2) >= 0
+                if listeners[i] isnt null
+                    break
 
-			if i+2 is n
-				listeners.push listener, ctx
-			else
-				assert.isNotDefined listeners[i+2]
-				assert.isNotDefined listeners[i+3]
-				listeners[i+2] = listener
-				listeners[i+3] = ctx
+            if i+2 is n
+                listeners.push listener, ctx
+            else
+                assert.isNotDefined listeners[i+2]
+                assert.isNotDefined listeners[i+3]
+                listeners[i+2] = listener
+                listeners[i+3] = ctx
 
-			return
+            return
 
 Signal.disconnect(*Function* listener, [*Any* context])
 -------------------------------------------------------
@@ -233,42 +233,42 @@ obj.onPress.emit()
 // no loggs...
 ```
 
-		disconnect: (listener, ctx=null) ->
-			assert.isFunction @, "disconnect must be called on a signal function"
-			assert.isFunction listener, "listener is not a function"
+        disconnect: (listener, ctx=null) ->
+            assert.isFunction @, "disconnect must be called on a signal function"
+            assert.isFunction listener, "listener is not a function"
 
-			{listeners} = @
-			index = 0
+            {listeners} = @
+            index = 0
 
-			loop
-				index = listeners.indexOf listener, index
-				if index is -1 or listeners[index+1] is ctx
-					break
-				index += 2
-			assert.isNot index, -1, "listener doesn't exist in this signal"
-			assert.is listeners[index], listener
-			assert.is listeners[index + 1], ctx
+            loop
+                index = listeners.indexOf listener, index
+                if index is -1 or listeners[index+1] is ctx
+                    break
+                index += 2
+            assert.isNot index, -1, "listener doesn't exist in this signal"
+            assert.is listeners[index], listener
+            assert.is listeners[index + 1], ctx
 
-			listeners[index] = null
-			listeners[index + 1] = null
+            listeners[index] = null
+            listeners[index + 1] = null
 
-			return
+            return
 
 Signal.disconnectAll()
 ----------------------
 
 Removes all the signal listeners.
 
-		disconnectAll: ->
-			assert.isFunction @, "disconnectAll must be called on a signal function"
+        disconnectAll: ->
+            assert.isFunction @, "disconnectAll must be called on a signal function"
 
-			{listeners} = @
-			for _, i in listeners
-				listeners[i] = null
+            {listeners} = @
+            for _, i in listeners
+                listeners[i] = null
 
-			return
+            return
 
-	exports.Emitter = require('./emitter')
-		create: exports.create
-		createSignalFunction: createSignalFunction
-		callSignal: callSignal
+    exports.Emitter = require('./emitter')
+        create: exports.create
+        createSignalFunction: createSignalFunction
+        callSignal: callSignal

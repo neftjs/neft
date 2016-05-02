@@ -82,111 +82,111 @@ KEY_CODES[Qt.Key_Z] = 'Z'
 pressedKeys = Object.create null
 
 SIGNALS =
-	'keysOnPress': 'onPressed'
-	'keysOnHold': 'onPressed'
-	'keysOnRelease': 'onReleased'
-	'keysOnInput': 'onPressed'
+    'keysOnPress': 'onPressed'
+    'keysOnHold': 'onPressed'
+    'keysOnRelease': 'onReleased'
+    'keysOnInput': 'onPressed'
 
 SIGNALS_ARGS =
-	'keysOnPress': (e) ->
-		if pressedKeys[e.key] and pressedKeys[e.key] isnt e
-			return false
-		pressedKeys[e.key] = e
-		key: KEY_CODES[e.key] || e.text.toUpperCase()
-	'keysOnHold': (e) ->
-		key: KEY_CODES[e.key] || e.text.toUpperCase()
-	'keysOnRelease': (e) ->
-		pressedKeys[e.key] = null
-		key: KEY_CODES[e.key] || e.text.toUpperCase()
-	'keysOnInput': (e) ->
-		text: e.text
+    'keysOnPress': (e) ->
+        if pressedKeys[e.key] and pressedKeys[e.key] isnt e
+            return false
+        pressedKeys[e.key] = e
+        key: KEY_CODES[e.key] || e.text.toUpperCase()
+    'keysOnHold': (e) ->
+        key: KEY_CODES[e.key] || e.text.toUpperCase()
+    'keysOnRelease': (e) ->
+        pressedKeys[e.key] = null
+        key: KEY_CODES[e.key] || e.text.toUpperCase()
+    'keysOnInput': (e) ->
+        text: e.text
 
 module.exports = (impl) ->
-	DATA = utils.merge
-		elem: null
-		linkUri: ''
-		linkUriListens: false
-		bindings: null
-		anchors: null
-	, impl.pointer.DATA
+    DATA = utils.merge
+        elem: null
+        linkUri: ''
+        linkUriListens: false
+        bindings: null
+        anchors: null
+    , impl.pointer.DATA
 
-	exports =
-	DATA: DATA
+    exports =
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner DATA
+    createData: impl.utils.createDataCloner DATA
 
-	create: (data) ->
-		data.elem ?= impl.utils.createQmlObject 'Item {}'
+    create: (data) ->
+        data.elem ?= impl.utils.createQmlObject 'Item {}'
 
-	setItemParent: (val) ->
-		@_impl.elem.parent = val?._impl.elem or __stylesHatchery or null
+    setItemParent: (val) ->
+        @_impl.elem.parent = val?._impl.elem or __stylesHatchery or null
 
-	setItemVisible: (val) ->
-		@_impl.elem.visible = val
+    setItemVisible: (val) ->
+        @_impl.elem.visible = val
 
-	setItemClip: (val) ->
-		@_impl.elem.clip = val
+    setItemClip: (val) ->
+        @_impl.elem.clip = val
 
-	setItemWidth: (val) ->
-		@_impl.elem.width = val
+    setItemWidth: (val) ->
+        @_impl.elem.width = val
 
-	setItemHeight: (val) ->
-		@_impl.elem.height = val
+    setItemHeight: (val) ->
+        @_impl.elem.height = val
 
-	setItemX: (val) ->
-		@_impl.elem.x = val
+    setItemX: (val) ->
+        @_impl.elem.x = val
 
-	setItemY: (val) ->
-		@_impl.elem.y = val
+    setItemY: (val) ->
+        @_impl.elem.y = val
 
-	setItemZ: (val) ->
-		@_impl.elem.z = val
+    setItemZ: (val) ->
+        @_impl.elem.z = val
 
-	setItemScale: (val) ->
-		@_impl.elem.scale = val
+    setItemScale: (val) ->
+        @_impl.elem.scale = val
 
-	setItemRotation: (val) ->
-		@_impl.elem.rotation = impl.utils.radToDeg val
+    setItemRotation: (val) ->
+        @_impl.elem.rotation = impl.utils.radToDeg val
 
-	setItemOpacity: (val) ->
-		@_impl.elem.opacity = val
+    setItemOpacity: (val) ->
+        @_impl.elem.opacity = val
 
-	setItemLinkUri: do ->
-		onLinkUriClicked = ->
-			{linkUri} = @_impl
-			if linkUri
-				if ///^([a-z]+:)///.test linkUri
-					Qt.openUrlExternally linkUri
-				else
-					__location.append linkUri
-				signal.STOP_PROPAGATION
+    setItemLinkUri: do ->
+        onLinkUriClicked = ->
+            {linkUri} = @_impl
+            if linkUri
+                if ///^([a-z]+:)///.test linkUri
+                    Qt.openUrlExternally linkUri
+                else
+                    __location.append linkUri
+                signal.STOP_PROPAGATION
 
-		(val) ->
-			@_impl.linkUri = val
+        (val) ->
+            @_impl.linkUri = val
 
-			unless @_impl.linkUriListens
-				@_impl.linkUriListens = true
-				@pointer.onClick onLinkUriClicked, @
-			return
+            unless @_impl.linkUriListens
+                @_impl.linkUriListens = true
+                @pointer.onClick onLinkUriClicked, @
+            return
 
-	attachItemSignal: do ->
-		attachKeys = (ns, name, uniqueName, qmlName) ->
-			self = @
-			__stylesWindow.Keys[qmlName].connect (e) ->
-				arg = SIGNALS_ARGS[uniqueName] e
-				if self[name].emit(arg) is signal.STOP_PROPAGATION
-					e.accepted = true
-				return
-			return
+    attachItemSignal: do ->
+        attachKeys = (ns, name, uniqueName, qmlName) ->
+            self = @
+            __stylesWindow.Keys[qmlName].connect (e) ->
+                arg = SIGNALS_ARGS[uniqueName] e
+                if self[name].emit(arg) is signal.STOP_PROPAGATION
+                    e.accepted = true
+                return
+            return
 
-		(ns, name) ->
-			if ns is 'pointer'
-				impl.pointer.attachItemSignal.call @, name
-				return
+        (ns, name) ->
+            if ns is 'pointer'
+                impl.pointer.attachItemSignal.call @, name
+                return
 
-			uniqueName = ns + utils.capitalize(name)
-			unless qmlName = SIGNALS[uniqueName]
-				return
+            uniqueName = ns + utils.capitalize(name)
+            unless qmlName = SIGNALS[uniqueName]
+                return
 
-			if ns is 'keys'
-				attachKeys.call @, ns, name, uniqueName, qmlName
+            if ns is 'keys'
+                attachKeys.call @, ns, name, uniqueName, qmlName

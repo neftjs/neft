@@ -25,13 +25,13 @@ console.log(schema.validate({age: -5}));
 // true
 ```
 
-	'use strict'
+    'use strict'
 
-	assert = require 'src/assert'
+    assert = require 'src/assert'
 
-	module.exports = (Schema) -> (row, value, expected) ->
-		assert.isFloat expected
-		, "max validator option for #{row} property must be float"
+    module.exports = (Schema) -> (row, value, expected) ->
+        assert.isFloat expected
+        , "max validator option for #{row} property must be float"
 
-		if not value or value > expected
-			throw new Schema.Error row, 'max', "Maximum range of #{row} is #{expected}"
+        if not value or value > expected
+            throw new Schema.Error row, 'max', "Maximum range of #{row} is #{expected}"

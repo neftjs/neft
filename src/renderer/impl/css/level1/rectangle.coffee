@@ -1,43 +1,43 @@
 'use strict'
 
 module.exports = (impl) ->
-	{Item} = impl.Types
+    {Item} = impl.Types
 
-	{round} = Math
+    {round} = Math
 
-	# TODO: browsers makes borders always visible even
-	#       if the size is less than border width
+    # TODO: browsers makes borders always visible even
+    #       if the size is less than border width
 
-	DATA =
-		innerElem: null
-		innerElemStyle: null
+    DATA =
+        innerElem: null
+        innerElemStyle: null
 
-	div = do ->
-		div = document.createElement 'div'
-		div.setAttribute 'class', 'rect'
-		div
+    div = do ->
+        div = document.createElement 'div'
+        div.setAttribute 'class', 'rect'
+        div
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner 'Item', DATA
+    createData: impl.utils.createDataCloner 'Item', DATA
 
-	create: (data) ->
-		Item.create.call @, data
+    create: (data) ->
+        Item.create.call @, data
 
-		innerElem = data.innerElem = div.cloneNode(false)
-		impl.utils.prependElement data.elem, innerElem
-		data.innerElemStyle = innerElem.style
+        innerElem = data.innerElem = div.cloneNode(false)
+        impl.utils.prependElement data.elem, innerElem
+        data.innerElemStyle = innerElem.style
 
-	setRectangleColor: (val) ->
-		@_impl.innerElemStyle.backgroundColor = val
+    setRectangleColor: (val) ->
+        @_impl.innerElemStyle.backgroundColor = val
 
-	setRectangleRadius: (val) ->
-		val = round val
-		@_impl.innerElemStyle.borderRadius = "#{val}px"
+    setRectangleRadius: (val) ->
+        val = round val
+        @_impl.innerElemStyle.borderRadius = "#{val}px"
 
-	setRectangleBorderColor: (val) ->
-		@_impl.innerElemStyle.borderColor = val
+    setRectangleBorderColor: (val) ->
+        @_impl.innerElemStyle.borderColor = val
 
-	setRectangleBorderWidth: (val) ->
-		val = round val
-		@_impl.innerElemStyle.borderWidth = "#{val}px"
+    setRectangleBorderWidth: (val) ->
+        val = round val
+        @_impl.innerElemStyle.borderWidth = "#{val}px"

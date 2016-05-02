@@ -1,17 +1,17 @@
 Response
 ========
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
-	log = require 'src/log'
-	signal = require 'src/signal'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
+    log = require 'src/log'
+    signal = require 'src/signal'
 
-	assert = assert.scope 'Networking.Response'
-	log = log.scope 'Networking', 'Response'
+    assert = assert.scope 'Networking.Response'
+    log = log.scope 'Networking', 'Response'
 
-	module.exports = (Networking, Impl) -> class Response extends signal.Emitter
+    module.exports = (Networking, Impl) -> class Response extends signal.Emitter
 
 *Array* Response.STATUSES
 -------------------------
@@ -47,40 +47,40 @@ console.log(Networking.Response.OK);
 console.log(Networking.Response.BAD_REQUEST);
 ```
 
-		@STATUSES = [
+        @STATUSES = [
 
-			# Success
-			(@OK = 200),
-			(@CREATED = 201),
-			(@ACCEPTED = 202),
-			(@NO_CONTENT = 204),
+            # Success
+            (@OK = 200),
+            (@CREATED = 201),
+            (@ACCEPTED = 202),
+            (@NO_CONTENT = 204),
 
-			# Redirection
-			(@MOVED = 301),
-			(@FOUND = 302),
-			(@NOT_MODIFIED = 304),
-			(@TEMPORARY_REDIRECT = 307),
+            # Redirection
+            (@MOVED = 301),
+            (@FOUND = 302),
+            (@NOT_MODIFIED = 304),
+            (@TEMPORARY_REDIRECT = 307),
 
-			# Client error
-			(@BAD_REQUEST = 400),
-			(@UNAUTHORIZED = 401),
-			(@PAYMENT_REQUIRED = 402),
-			(@FORBIDDEN = 403),
-			(@NOT_FOUND = 404),
-			(@METHOD_NOT_ALLOWED = 405),
-			(@NOT_ACCEPTABLE = 406),
-			(@CONFLICT = 409),
-			(@PRECONDITION_FAILED = 412),
-			(@UNSUPPORTED_MEDIA_TYPE = 415),
+            # Client error
+            (@BAD_REQUEST = 400),
+            (@UNAUTHORIZED = 401),
+            (@PAYMENT_REQUIRED = 402),
+            (@FORBIDDEN = 403),
+            (@NOT_FOUND = 404),
+            (@METHOD_NOT_ALLOWED = 405),
+            (@NOT_ACCEPTABLE = 406),
+            (@CONFLICT = 409),
+            (@PRECONDITION_FAILED = 412),
+            (@UNSUPPORTED_MEDIA_TYPE = 415),
 
-			# Server error
-			(@INTERNAL_SERVER_ERROR = 500),
-			(@NOT_IMPLEMENTED = 501),
-			(@SERVICE_UNAVAILABLE = 503)
+            # Server error
+            (@INTERNAL_SERVER_ERROR = 500),
+            (@NOT_IMPLEMENTED = 501),
+            (@SERVICE_UNAVAILABLE = 503)
 
-		]
+        ]
 
-		@Error = require('./response/error.coffee.md') Networking, Response
+        @Error = require('./response/error.coffee.md') Networking, Response
 
 *Response* Response(*Object* options)
 -------------------------------------
@@ -91,34 +91,34 @@ var Networking = require('networking');
 var Response = Networking.Response;
 ```
 
-		constructor: (opts) ->
-			assert.isPlainObject opts, 'ctor options argument ...'
-			assert.instanceOf opts.request, Networking.Request, 'ctor options.request argument ...'
+        constructor: (opts) ->
+            assert.isPlainObject opts, 'ctor options argument ...'
+            assert.instanceOf opts.request, Networking.Request, 'ctor options.request argument ...'
 
-			super()
+            super()
 
-			if opts.status?
-				assert.ok utils.has(Response.STATUSES, opts.status), 'ctor options.status argument ...'
-				{@status} = opts
+            if opts.status?
+                assert.ok utils.has(Response.STATUSES, opts.status), 'ctor options.status argument ...'
+                {@status} = opts
 
-			if opts.data?
-				{@data} = opts
-			if opts.encoding?
-				{@encoding} = opts
+            if opts.data?
+                {@data} = opts
+            if opts.encoding?
+                {@encoding} = opts
 
-			@headers = opts.headers or {}
-			@cookies = opts.cookies or {}
+            @headers = opts.headers or {}
+            @cookies = opts.cookies or {}
 
-			utils.defineProperty @, 'request', null, opts.request
+            utils.defineProperty @, 'request', null, opts.request
 
-			@pending = true
+            @pending = true
 
-			# signal handlers
-			if opts.onSend
-				@onSend opts.onSend
+            # signal handlers
+            if opts.onSend
+                @onSend opts.onSend
 
-			if opts.status?
-				@send()
+            if opts.status?
+                @send()
 
 *Signal* Response::onSend()
 ---------------------------
@@ -127,25 +127,25 @@ Called when the response has been sent.
 
 ```javascript
 res.onSend(function(){
-	console.log("Response has been sent!");
+    console.log("Response has been sent!");
 });
 ```
 
-		signal.Emitter.createSignal @, 'onSend'
+        signal.Emitter.createSignal @, 'onSend'
 
 ReadOnly *Boolean* Response::pending
 ------------------------------------
 
 Indicates whether the response is not destroyed.
 
-		pending: false
+        pending: false
 
 ReadOnly *Networking.Request* Response::request
 -----------------------------------------------
 
 Refers to the [Request][networking/Request].
 
-		request: null
+        request: null
 
 *Integer* Response::status = Response.OK
 ----------------------------------------
@@ -159,7 +159,7 @@ res.status = Networking.Response.CREATED;
 res.status = Networking.Response.PAYMENT_REQUIRED;
 ```
 
-		status: @OK
+        status: @OK
 
 *Any* Response::data
 --------------------
@@ -172,22 +172,22 @@ res.data = new Error("Wrong order");
 res.data = Document.fromJSON(...);
 ```
 
-		data: null
+        data: null
 
 *Object* Response::headers
 --------------------------
 
-		headers: null
+        headers: null
 
 *Object* Response::cookies
 --------------------------
 
-		cookies: null
+        cookies: null
 
 *String* Response::encoding = 'utf-8'
 -------------------------------------
 
-		encoding: 'utf-8'
+        encoding: 'utf-8'
 
 *Response* Response::setHeader(*String* name, *String* value)
 -------------------------------------------------------------
@@ -196,16 +196,16 @@ res.data = Document.fromJSON(...);
 res.setHeader('Location', '/redirect/to/url');
 ```
 
-		setHeader: (name, val) ->
-			assert.ok @request.pending
-			assert.isString name, '::setHeader name argument ...'
-			assert.notLengthOf name, 0, '::setHeader name argument ...'
-			assert.isString val, '::setHeader value argument ...'
-			assert.notLengthOf val, 0, '::setHeader value argument ...'
+        setHeader: (name, val) ->
+            assert.ok @request.pending
+            assert.isString name, '::setHeader name argument ...'
+            assert.notLengthOf name, 0, '::setHeader name argument ...'
+            assert.isString val, '::setHeader value argument ...'
+            assert.notLengthOf val, 0, '::setHeader value argument ...'
 
-			Impl.setHeader @, name, val
+            Impl.setHeader @, name, val
 
-			@
+            @
 
 Response::send([*Integer* status, *Any* data])
 ----------------------------------------------
@@ -214,35 +214,35 @@ This method calls the [onSend()][networking/Response::onSend()] signal.
 
 ```javascript
 res.onSend(function(){
-	console.log("Response has been sent");
+    console.log("Response has been sent");
 });
 
 res.send(Networking.Response.OK, {user: 'Max', age: 43});
 ```
 
-		send: (status, data) ->
-			assert.ok @request.pending
+        send: (status, data) ->
+            assert.ok @request.pending
 
-			if not data? and typeof status isnt 'number'
-				data = status
-				status = @status
+            if not data? and typeof status isnt 'number'
+                data = status
+                status = @status
 
-			if status?
-				assert.ok utils.has(Response.STATUSES, status)
-				@status = status
+            if status?
+                assert.ok utils.has(Response.STATUSES, status)
+                @status = status
 
-			if data isnt undefined
-				@data = data
+            if data isnt undefined
+                @data = data
 
-			@request.destroy()
+            @request.destroy()
 
-			{data} = @
+            {data} = @
 
-			Impl.send @, data, =>
-				@pending = false
-				@onSend.emit()
+            Impl.send @, data, =>
+                @pending = false
+                @onSend.emit()
 
-			return
+            return
 
 Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 ---------------------------------------------------------------------
@@ -250,25 +250,25 @@ Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
 
-		redirect: (status, uri) ->
-			if uri is undefined
-				uri = status
-				status = Response.FOUND
+        redirect: (status, uri) ->
+            if uri is undefined
+                uri = status
+                status = Response.FOUND
 
-			assert.ok @request.pending
-			assert.ok utils.has(Response.STATUSES, status)
-			assert.isString uri
+            assert.ok @request.pending
+            assert.ok utils.has(Response.STATUSES, status)
+            assert.isString uri
 
-			log "#{status} redirect to '#{uri}'"
+            log "#{status} redirect to '#{uri}'"
 
-			@status = status
-			@setHeader 'Location', uri
+            @status = status
+            @setHeader 'Location', uri
 
-			@request.destroy()
+            @request.destroy()
 
-			Impl.redirect @, status, uri, =>
-				@pending = false
-				@onSend.emit()
+            Impl.redirect @, status, uri, =>
+                @pending = false
+                @onSend.emit()
 
 Response::raise(*Any* error)
 ----------------------------
@@ -280,16 +280,16 @@ res.raise(new Networking.Response.Error("Login first"));
 res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login first"));
 ```
 
-		raise: (error) ->
-			if error instanceof Response.Error or isFinite(error?.status)
-				@send error.status, error
-			else
-				@send Response.INTERNAL_SERVER_ERROR, error
+        raise: (error) ->
+            if error instanceof Response.Error or isFinite(error?.status)
+                @send error.status, error
+            else
+                @send Response.INTERNAL_SERVER_ERROR, error
 
 *Boolean* Response::isSucceed()
 -------------------------------
 
 Returns `true` if the response status is in range from 200 to 299.
 
-		isSucceed: ->
-			300 > @status >= 200
+        isSucceed: ->
+            300 > @status >= 200

@@ -1,47 +1,47 @@
 Document @extension
 ===================
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	signal = require 'src/signal'
-	assert = require 'src/assert'
-	log = require 'src/log'
+    utils = require 'src/utils'
+    signal = require 'src/signal'
+    assert = require 'src/assert'
+    log = require 'src/log'
 
-	log = log.scope 'Renderer', 'Document'
+    log = log.scope 'Renderer', 'Document'
 
-	module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
-		Document = require 'src/document'
-		DocElement = Document.Element
-		DocTag = DocElement.Tag
-		DocText = DocElement.Text
+    module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
+        Document = require 'src/document'
+        DocElement = Document.Element
+        DocTag = DocElement.Tag
+        DocText = DocElement.Text
 
-		@__name__ = 'Document'
+        @__name__ = 'Document'
 
-		itemUtils.defineProperty
-			constructor: ctor
-			name: 'document'
-			valueConstructor: ItemDocument
+        itemUtils.defineProperty
+            constructor: ctor
+            name: 'document'
+            valueConstructor: ItemDocument
 
 *Document* Document()
 ---------------------
 
-		constructor: (ref) ->
-			super ref
-			@_node = null
-			@_query = ''
+        constructor: (ref) ->
+            super ref
+            @_node = null
+            @_query = ''
 
-			Object.seal @
+            Object.seal @
 
 ReadOnly *String* Document::query
 ---------------------------------
 
-		utils.defineProperty @::, 'query', null, ->
-			@_query
-		, (val) ->
-			if @_query is ''
-				@_query = val
-			return
+        utils.defineProperty @::, 'query', null, ->
+            @_query
+        , (val) ->
+            if @_query is ''
+                @_query = val
+            return
 
 *Document.Element* Document::node
 ---------------------------------
@@ -56,18 +56,18 @@ ReadOnly *String* Document::query
 
 ```nml
 `Text {
-`	document.onNodeChange: function(){
-`		var inputs = this.document.node.queryAll('input[type=string]');
-`	}
+`   document.onNodeChange: function(){
+`       var inputs = this.document.node.queryAll('input[type=string]');
+`   }
 `}
 ```
 
-		itemUtils.defineProperty
-			constructor: @
-			name: 'node'
-			defaultValue: null
-			namespace: 'document'
-			parentConstructor: ctor
-			developmentSetter: (val) ->
-				if val?
-					assert.instanceOf val, DocElement
+        itemUtils.defineProperty
+            constructor: @
+            name: 'node'
+            defaultValue: null
+            namespace: 'document'
+            parentConstructor: ctor
+            developmentSetter: (val) ->
+                if val?
+                    assert.instanceOf val, DocElement

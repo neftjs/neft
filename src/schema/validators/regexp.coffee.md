@@ -20,13 +20,13 @@ console.log(schema.validate({word: 'abc'}));
 // true
 ```
 
-	'use strict'
+    'use strict'
 
-	assert = require 'src/assert'
+    assert = require 'src/assert'
 
-	module.exports = (Schema) -> (row, value, expected) ->
-		assert expected instanceof RegExp
-		, "regexp validator option for the #{row} property must be a regular expression"
+    module.exports = (Schema) -> (row, value, expected) ->
+        assert expected instanceof RegExp
+        , "regexp validator option for the #{row} property must be a regular expression"
 
-		unless expected.test value
-			throw new Schema.Error row, 'regexp', "#{row} doesn't pass the regular expression"
+        unless expected.test value
+            throw new Schema.Error row, 'regexp', "#{row} doesn't pass the regular expression"

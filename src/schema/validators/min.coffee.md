@@ -25,13 +25,13 @@ console.log(schema.validate({age: 0}));
 // true
 ```
 
-	'use strict'
+    'use strict'
 
-	assert = require 'src/assert'
+    assert = require 'src/assert'
 
-	module.exports = (Schema) -> (row, value, expected) ->
-		assert.isFloat expected
-		, "min validator option for #{row} property must be float"
+    module.exports = (Schema) -> (row, value, expected) ->
+        assert.isFloat expected
+        , "min validator option for #{row} property must be float"
 
-		if not value or value < expected
-			throw new Schema.Error row, 'min', "Minimum range of #{row} is #{expected}"
+        if not value or value < expected
+            throw new Schema.Error row, 'min', "Minimum range of #{row} is #{expected}"

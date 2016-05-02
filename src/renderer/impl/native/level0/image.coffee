@@ -3,73 +3,73 @@
 utils = require 'src/utils'
 
 module.exports = (impl) ->
-	{bridge} = impl
-	{outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
+    {bridge} = impl
+    {outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
 
-	DATA =
-		imageLoadCallback: null
+    DATA =
+        imageLoadCallback: null
 
-	bridge.listen bridge.inActions.IMAGE_SIZE, (reader) ->
-		image = bridge.getItemFromReader reader
-		source = reader.getString()
-		success = reader.getBoolean()
-		width = reader.getFloat()
-		height = reader.getFloat()
+    bridge.listen bridge.inActions.IMAGE_SIZE, (reader) ->
+        image = bridge.getItemFromReader reader
+        source = reader.getString()
+        success = reader.getBoolean()
+        width = reader.getFloat()
+        height = reader.getFloat()
 
-		image._impl.imageLoadCallback?.call image, not success,
-			source: source
-			width: width
-			height: height
-		return
+        image._impl.imageLoadCallback?.call image, not success,
+            source: source
+            width: width
+            height: height
+        return
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner 'Item', DATA
+    createData: impl.utils.createDataCloner 'Item', DATA
 
-	create: (data) ->
-		if data.id is 0
-			pushAction outActions.CREATE_IMAGE
-			data.id = bridge.getId this
+    create: (data) ->
+        if data.id is 0
+            pushAction outActions.CREATE_IMAGE
+            data.id = bridge.getId this
 
-		impl.Types.Item.create.call @, data
-		return
+        impl.Types.Item.create.call @, data
+        return
 
-	setStaticImagePixelRatio: (val) ->
+    setStaticImagePixelRatio: (val) ->
 
-	setImageSource: (val, callback) ->
-		@_impl.imageLoadCallback = callback
+    setImageSource: (val, callback) ->
+        @_impl.imageLoadCallback = callback
 
-		pushAction outActions.SET_IMAGE_SOURCE
-		pushItem @
-		pushString val or ""
-		return
+        pushAction outActions.SET_IMAGE_SOURCE
+        pushItem @
+        pushString val or ""
+        return
 
-	setImageSourceWidth: (val) ->
-		pushAction outActions.SET_IMAGE_SOURCE_WIDTH
-		pushItem @
-		pushFloat val
-		return
+    setImageSourceWidth: (val) ->
+        pushAction outActions.SET_IMAGE_SOURCE_WIDTH
+        pushItem @
+        pushFloat val
+        return
 
-	setImageSourceHeight: (val) ->
-		pushAction outActions.SET_IMAGE_SOURCE_HEIGHT
-		pushItem @
-		pushFloat val
-		return
+    setImageSourceHeight: (val) ->
+        pushAction outActions.SET_IMAGE_SOURCE_HEIGHT
+        pushItem @
+        pushFloat val
+        return
 
-	setImageFillMode: (val) ->
-		pushAction outActions.SET_IMAGE_FILL_MODE
-		pushItem @
-		pushString val
-		return
+    setImageFillMode: (val) ->
+        pushAction outActions.SET_IMAGE_FILL_MODE
+        pushItem @
+        pushString val
+        return
 
-	setImageOffsetX: (val) ->
-		pushAction outActions.SET_IMAGE_OFFSET_X
-		pushItem @
-		pushFloat val
-		return
+    setImageOffsetX: (val) ->
+        pushAction outActions.SET_IMAGE_OFFSET_X
+        pushItem @
+        pushFloat val
+        return
 
-	setImageOffsetY: (val) ->
-		pushAction outActions.SET_IMAGE_OFFSET_Y
-		pushItem @
-		pushFloat val
-		return
+    setImageOffsetY: (val) ->
+        pushAction outActions.SET_IMAGE_OFFSET_Y
+        pushItem @
+        pushFloat val
+        return

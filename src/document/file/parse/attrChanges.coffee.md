@@ -5,28 +5,28 @@ Tag used to dynamically change an attribute of the parent element.
 
 ```xml
 <header neft:style="header">
-	<neft:attr name="isActive" value="true" neft:if="${data.isActive}" />
-	<span neft:if="${isActive}">You are active</span>
+    <neft:attr name="isActive" value="true" neft:if="${data.isActive}" />
+    <span neft:if="${isActive}">You are active</span>
 </header>
 ```
 
-	'use strict'
+    'use strict'
 
-	module.exports = (File) ->
-		{AttrChange} = File
+    module.exports = (File) ->
+        {AttrChange} = File
 
-		(file) ->
-			{attrChanges} = file
+        (file) ->
+            {attrChanges} = file
 
-			nodes = file.node.queryAll "neft:attr"
+            nodes = file.node.queryAll "neft:attr"
 
-			for node in nodes
-				target = node.parent
-				name = node.attrs.name
+            for node in nodes
+                target = node.parent
+                name = node.attrs.name
 
-				unless target.attrs.has(name)
-					target.attrs.set name, ''
+                unless target.attrs.has(name)
+                    target.attrs.set name, ''
 
-				attrChanges.push new AttrChange file, node, target, name
+                attrChanges.push new AttrChange file, node, target, name
 
-			return
+            return

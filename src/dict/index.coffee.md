@@ -8,20 +8,20 @@ Access it with:
 var dict = require('dict');
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
-	signal = require 'src/signal'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
+    signal = require 'src/signal'
 
-	module.exports = class Dict extends signal.Emitter
-		@__name__ = 'Dict'
-		@__path__ = 'Dict'
+    module.exports = class Dict extends signal.Emitter
+        @__name__ = 'Dict'
+        @__path__ = 'Dict'
 
-		KEYS = 1<<0
-		VALUES = 1<<1
-		ITEMS = 1<<2
-		ALL = (ITEMS<<1) - 1
+        KEYS = 1<<0
+        VALUES = 1<<1
+        ITEMS = 1<<2
+        ALL = (ITEMS<<1) - 1
 
 *Dict* Dict.fromJSON(*String|Object* json)
 ------------------------------------------
@@ -30,11 +30,11 @@ Creates a new *Dict* from a json string.
 
 This function should be used with [toJSON()][dict/Dict::toJSON()] output.
 
-		@fromJSON = (json) ->
-			json = utils.tryFunction JSON.parse, JSON, [json], json
-			assert.isPlainObject json
+        @fromJSON = (json) ->
+            json = utils.tryFunction JSON.parse, JSON, [json], json
+            assert.isPlainObject json
 
-			new Dict json
+            new Dict json
 
 *Dict* Dict([*Object* data])
 ----------------------------
@@ -52,27 +52,27 @@ console.log(data.name);
 // xyz
 ```
 
-		constructor: (obj) ->
-			# support no `new` syntax
-			unless @ instanceof Dict
-				return new Dict obj
+        constructor: (obj) ->
+            # support no `new` syntax
+            unless @ instanceof Dict
+                return new Dict obj
 
-			if obj?
-				assert.isObject obj
+            if obj?
+                assert.isObject obj
 
-			super()
+            super()
 
-			utils.defineProperty @, '_signals', utils.WRITABLE, @_signals
-			utils.defineProperty @, '_keys', utils.WRITABLE, null
-			utils.defineProperty @, '_values', utils.WRITABLE, null
-			utils.defineProperty @, '_items', utils.WRITABLE, null
-			utils.defineProperty @, '_dirty', utils.WRITABLE, ALL
+            utils.defineProperty @, '_signals', utils.WRITABLE, @_signals
+            utils.defineProperty @, '_keys', utils.WRITABLE, null
+            utils.defineProperty @, '_values', utils.WRITABLE, null
+            utils.defineProperty @, '_items', utils.WRITABLE, null
+            utils.defineProperty @, '_dirty', utils.WRITABLE, ALL
 
-			if utils.isObject(obj)
-				utils.merge this, obj
+            if utils.isObject(obj)
+                utils.merge this, obj
 
-		NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
-		utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Dict
+        NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
+        utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Dict
 
 ReadOnly *Integer* Dict::length
 -------------------------------
@@ -86,10 +86,10 @@ console.log(dict.length);
 // 1
 ```
 
-		desc = NOT_ENUMERABLE
-		utils.defineProperty @::, 'length', desc, ->
-			@keys().length
-		, null
+        desc = NOT_ENUMERABLE
+        utils.defineProperty @::, 'length', desc, ->
+            @keys().length
+        , null
 
 *Signal* Dict::onChange(*String* key, *Any* oldValue)
 -----------------------------------------------------
@@ -109,7 +109,7 @@ user.set('country', 'US');
 // country property changed from Germany to US
 ```
 
-		signal.Emitter.createSignal @, 'onChange'
+        signal.Emitter.createSignal @, 'onChange'
 
 *Any* Dict::set(*String* key, *Any* value)
 ------------------------------------------
@@ -134,38 +134,38 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 // googlePlus changed from undefined to https://...
 ```
 
-		utils.defineProperty @::, 'set', NOT_ENUMERABLE, (key, val) ->
-			assert.isString key
-			assert.notLengthOf key, 0
-			assert.isNot val, undefined
+        utils.defineProperty @::, 'set', NOT_ENUMERABLE, (key, val) ->
+            assert.isString key
+            assert.notLengthOf key, 0
+            assert.isNot val, undefined
 
-			oldVal = @[key]
+            oldVal = @[key]
 
-			# break if value didn't change
-			if oldVal is val
-				return val
+            # break if value didn't change
+            if oldVal is val
+                return val
 
-			# update value
-			@[key] = val
+            # update value
+            @[key] = val
 
-			# dirty
-			@_dirty |= ALL
+            # dirty
+            @_dirty |= ALL
 
-			# signal
-			@onChange.emit key, oldVal
+            # signal
+            @onChange.emit key, oldVal
 
-			val
+            val
 
 *Boolean* Dict::has(*String* key)
 ---------------------------------
 
 Returns `true` if the given key exists in the dict.
 
-		utils.defineProperty @::, 'has', NOT_ENUMERABLE, (key) ->
-			assert.isString key
-			assert.notLengthOf key, 0
+        utils.defineProperty @::, 'has', NOT_ENUMERABLE, (key) ->
+            assert.isString key
+            assert.notLengthOf key, 0
 
-			@[key] isnt undefined
+            @[key] isnt undefined
 
 *Dict* Dict::extend(*Object|Dict* object)
 -----------------------------------------
@@ -174,14 +174,14 @@ Sets all keys with their values from the given object.
 
 Calls [onChange()][dict/Dict::onChange()] signal for each key.
 
-		utils.defineProperty @::, 'extend', NOT_ENUMERABLE, (obj) ->
-			assert.isObject obj
+        utils.defineProperty @::, 'extend', NOT_ENUMERABLE, (obj) ->
+            assert.isObject obj
 
-			for key, val of obj
-				if obj.hasOwnProperty(key)
-					@set key, val
+            for key, val of obj
+                if obj.hasOwnProperty(key)
+                    @set key, val
 
-			@
+            @
 
 *Any* Dict::pop(*String* key)
 -----------------------------
@@ -207,21 +207,21 @@ data.pop('name');
 // name property has been removed
 ```
 
-		utils.defineProperty @::, 'pop', NOT_ENUMERABLE, (key) ->
-			assert.isString key
-			assert.notLengthOf key, 0
-			assert.isNot @[key], undefined
+        utils.defineProperty @::, 'pop', NOT_ENUMERABLE, (key) ->
+            assert.isString key
+            assert.notLengthOf key, 0
+            assert.isNot @[key], undefined
 
-			oldVal = @[key]
-			delete @[key]
+            oldVal = @[key]
+            delete @[key]
 
-			# dirty
-			@_dirty |= ALL
+            # dirty
+            @_dirty |= ALL
 
-			# signal
-			@onChange.emit key, oldVal
+            # signal
+            @onChange.emit key, oldVal
 
-			oldVal
+            oldVal
 
 Dict::clear()
 -------------
@@ -230,11 +230,11 @@ Removes all stored keys from the dict.
 
 Calls [onChange()][dict/Dict::onChange()] signal for each stored key.
 
-		utils.defineProperty @::, 'clear', NOT_ENUMERABLE, ->
-			for key, val of this
-				@pop key
+        utils.defineProperty @::, 'clear', NOT_ENUMERABLE, ->
+            for key, val of this
+                @pop key
 
-			return
+            return
 
 ReadOnly *Array* Dict::keys()
 -----------------------------
@@ -253,19 +253,19 @@ console.log(data.keys());
 // ['x', 'y']
 ```
 
-		utils.defineProperty @::, 'keys', NOT_ENUMERABLE, ->
-			if @_dirty & KEYS
-				@_dirty ^= KEYS
-				arr = @_keys ?= []
+        utils.defineProperty @::, 'keys', NOT_ENUMERABLE, ->
+            if @_dirty & KEYS
+                @_dirty ^= KEYS
+                arr = @_keys ?= []
 
-				i = 0
-				for key, val of @
-					arr[i] = key
-					i++
+                i = 0
+                for key, val of @
+                    arr[i] = key
+                    i++
 
-				arr.length = i
+                arr.length = i
 
-			@_keys
+            @_keys
 
 *Array* Dict::values()
 ----------------------
@@ -284,19 +284,19 @@ console.log(data.values());
 // [10, 30]
 ```
 
-		utils.defineProperty @::, 'values', NOT_ENUMERABLE, ->
-			if @_dirty & VALUES
-				@_dirty ^= VALUES
-				arr = @_values ?= []
+        utils.defineProperty @::, 'values', NOT_ENUMERABLE, ->
+            if @_dirty & VALUES
+                @_dirty ^= VALUES
+                arr = @_values ?= []
 
-				i = 0
-				for key, val of @
-					arr[i] = val
-					i++
+                i = 0
+                for key, val of @
+                    arr[i] = val
+                    i++
 
-				arr.length = i
+                arr.length = i
 
-			@_values
+            @_values
 
 *Array* Dict::items()
 ---------------------
@@ -326,17 +326,17 @@ for (var i = 0; i < items.length; i++){
 // ['prop2', 2]
 ```
 
-		utils.defineProperty @::, 'items', NOT_ENUMERABLE, ->
-			if @_dirty & ITEMS
-				arr = @_values ?= []
+        utils.defineProperty @::, 'items', NOT_ENUMERABLE, ->
+            if @_dirty & ITEMS
+                arr = @_values ?= []
 
-				i = 0
-				for key, val of @
-					arr[i] ?= ['', null]
-					arr[i][0] = key
-					arr[i][1] = val
-					i++
+                i = 0
+                for key, val of @
+                    arr[i] ?= ['', null]
+                    arr[i][0] = key
+                    arr[i][1] = val
+                    i++
 
-				arr.length = i
+                arr.length = i
 
-			@_values
+            @_values

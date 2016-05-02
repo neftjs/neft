@@ -11,28 +11,28 @@ linkResources = require './parse/resources'
 createIndexFile = require './parse/index'
 
 module.exports = (platform, options, callback) ->
-	stack = new utils.async.Stack
+    stack = new utils.async.Stack
 
-	app = Object.preventExtensions
-		extensions: []
-		models: []
-		routes: []
-		views: []
-		styles: []
-		styleQueries: []
-		resources: null
-		config: null
+    app = Object.preventExtensions
+        extensions: []
+        models: []
+        routes: []
+        views: []
+        styles: []
+        styleQueries: []
+        resources: null
+        config: null
 
-	stack.add linkFiles, null, [platform, app]
-	stack.add linkStyles, null, [platform, app]
-	stack.add linkDocuments, null, [platform, app]
-	stack.add linkResources, null, [platform, app]
+    stack.add linkFiles, null, [platform, app]
+    stack.add linkStyles, null, [platform, app]
+    stack.add linkDocuments, null, [platform, app]
+    stack.add linkResources, null, [platform, app]
 
-	stack.runAll (err) ->
-		if err
-			return callback err
+    stack.runAll (err) ->
+        if err
+            return callback err
 
-		file = createIndexFile platform, app
-		fs.writeFileSync './index.js', file, 'utf-8'
+        file = createIndexFile platform, app
+        fs.writeFileSync './index.js', file, 'utf-8'
 
-		callback null, app
+        callback null, app

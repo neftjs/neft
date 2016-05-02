@@ -8,5 +8,5 @@ cp = require 'child_process'
 ANDROID_BUNDLE_DIR = './build/android/'
 
 module.exports = (options, callback) ->
-	fs.copySync "#{ANDROID_BUNDLE_DIR}app/build/outputs/apk", options.out
-	callback()
+    fs.copySync "#{ANDROID_BUNDLE_DIR}app/build/outputs/apk", options.out
+    callback()

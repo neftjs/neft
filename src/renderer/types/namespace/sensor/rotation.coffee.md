@@ -1,13 +1,13 @@
 RotationSensor @namespace
 =========================
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	signal = require 'src/signal'
+    utils = require 'src/utils'
+    signal = require 'src/signal'
 
-	module.exports = (Renderer, Impl, itemUtils) ->
-		class RotationSensor extends signal.Emitter
+    module.exports = (Renderer, Impl, itemUtils) ->
+        class RotationSensor extends signal.Emitter
 
 *Object* RotationSensor
 -----------------------
@@ -16,36 +16,36 @@ RotationSensor @namespace
 `RotationSensor.active = true;
 `
 `Text {
-`	font.pixelSize: 30
-`	onUpdate: function(){
-`		this.text = "x: " + RotationSensor.x + "; " +
-`			"y: " + RotationSensor.y + "; " +
-`			"z: " + RotationSensor.z;
-`	}
+`   font.pixelSize: 30
+`   onUpdate: function(){
+`       this.text = "x: " + RotationSensor.x + "; " +
+`           "y: " + RotationSensor.y + "; " +
+`           "z: " + RotationSensor.z;
+`   }
 `}
 ```
 
-			constructor: ->
-				super()
-				@_active = false
-				@x = 0
-				@y = 0
-				@z = 0
+            constructor: ->
+                super()
+                @_active = false
+                @x = 0
+                @y = 0
+                @z = 0
 
-				Object.preventExtensions @
+                Object.preventExtensions @
 
 *Float* RotationSensor::active = false
 --------------------------------------
 
-			utils.defineProperty @::, 'active', null, ->
-				@_active
-			, (val) ->
-				@_active = val
-				if val
-					Impl.enableRotationSensor.call rotationSensor
-				else
-					Impl.disableRotationSensor.call rotationSensor
-				return
+            utils.defineProperty @::, 'active', null, ->
+                @_active
+            , (val) ->
+                @_active = val
+                if val
+                    Impl.enableRotationSensor.call rotationSensor
+                else
+                    Impl.disableRotationSensor.call rotationSensor
+                return
 
 *Float* RotationSensor::x = 0
 -----------------------------
@@ -56,5 +56,5 @@ RotationSensor @namespace
 *Float* RotationSensor::z = 0
 -----------------------------
 
-		rotationSensor = new RotationSensor
-		rotationSensor
+        rotationSensor = new RotationSensor
+        rotationSensor

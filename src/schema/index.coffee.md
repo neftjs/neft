@@ -8,10 +8,10 @@ Access it with:
 var Schema = require('schema');
 ```
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
 
 *SchemaError* SchemaError()
 ---------------------------
@@ -24,11 +24,11 @@ var Schema = require('schema');
 var SchemaError = Schema.Error;
 ```
 
-	class SchemaError extends Error
-		constructor: (@property, @validator, @message) -> super
+    class SchemaError extends Error
+        constructor: (@property, @validator, @message) -> super
 
-		name: 'SchemaError'
-		message: ''
+        name: 'SchemaError'
+        message: ''
 
 *Schema* Schema(*Object* schema)
 --------------------------------
@@ -49,20 +49,20 @@ new Schema({
 });
 ```
 
-	module.exports = class Schema
-		@Error = SchemaError
+    module.exports = class Schema
+        @Error = SchemaError
 
-		constructor: (@schema) ->
-			assert.isPlainObject @schema
+        constructor: (@schema) ->
+            assert.isPlainObject @schema
 
-			assert.notOk utils.isEmpty(@schema)
-			, "Schema: schema can't be empty"
+            assert.notOk utils.isEmpty(@schema)
+            , "Schema: schema can't be empty"
 
-			for row, elem of @schema
-				assert utils.isPlainObject(elem)
-				, "Schema: schema for #{row} row is not an object"
+            for row, elem of @schema
+                assert utils.isPlainObject(elem)
+                , "Schema: schema for #{row} row is not an object"
 
-			Object.preventExtensions @
+            Object.preventExtensions @
 
 *Object* Schema::schema
 -----------------------
@@ -71,7 +71,7 @@ Saved schema object from the constructor.
 
 It's allowed to change this object in runtime.
 
-		schema: null
+        schema: null
 
 *Boolean* Schema::validate(*Object* data)
 -----------------------------------------
@@ -118,7 +118,7 @@ var schema = new Schema({
     type: 'object'
   },
   'obj.prop1.name': {
-  	type: 'string'
+    type: 'string'
   }
 });
 
@@ -134,10 +134,10 @@ This function uses the [utils.get()][utils/utils.get()] internally.
 ```javascript
 var schema = new Schema({
   names: {
-  	array: true
+    array: true
   },
   'names[]': {
-  	type: 'string'
+    type: 'string'
   }
 });
 
@@ -148,46 +148,46 @@ console.log(schema.validate({names: ['Lily', 'Max']}));
 // true
 ```
 
-		validators =
-			array: require('./validators/array') Schema
-			object: require('./validators/object') Schema
-			optional: require('./validators/optional') Schema
-			max: require('./validators/max') Schema
-			min: require('./validators/min') Schema
-			options: require('./validators/options') Schema
-			regexp: require('./validators/regexp') Schema
-			type: require('./validators/type') Schema
+        validators =
+            array: require('./validators/array') Schema
+            object: require('./validators/object') Schema
+            optional: require('./validators/optional') Schema
+            max: require('./validators/max') Schema
+            min: require('./validators/min') Schema
+            options: require('./validators/options') Schema
+            regexp: require('./validators/regexp') Schema
+            type: require('./validators/type') Schema
 
-		validate: (data) ->
-			assert.isNotPrimitive data
+        validate: (data) ->
+            assert.isNotPrimitive data
 
-			# check if there is no unprovided rows
-			for row of data
-				unless @schema.hasOwnProperty row
-					throw new SchemaError row, null, "Unexpected #{row} property"
+            # check if there is no unprovided rows
+            for row of data
+                unless @schema.hasOwnProperty row
+                    throw new SchemaError row, null, "Unexpected #{row} property"
 
-			# by rows
-			for row, rowValidators of @schema
-				# get current value
-				# add support for string referecing into sub-properties and
-				# multiple values by `utils.get()`
-				values = utils.get data, row
+            # by rows
+            for row, rowValidators of @schema
+                # get current value
+                # add support for string referecing into sub-properties and
+                # multiple values by `utils.get()`
+                values = utils.get data, row
 
-				if not values?
-					if rowValidators.optional
-						continue
-					throw new SchemaError row, 'optional', "Required property #{row} not found"
+                if not values?
+                    if rowValidators.optional
+                        continue
+                    throw new SchemaError row, 'optional', "Required property #{row} not found"
 
-				# by validators
-				for validatorName, validatorOpts of rowValidators
-					validator = validators[validatorName]
+                # by validators
+                for validatorName, validatorOpts of rowValidators
+                    validator = validators[validatorName]
 
-					assert validator, "Schema validator #{validatorName} not found"
+                    assert validator, "Schema validator #{validatorName} not found"
 
-					if values instanceof utils.get.OptionsArray
-						for value, i in values
-							validator row, value, validatorOpts
-					else
-						validator row, values, validatorOpts
+                    if values instanceof utils.get.OptionsArray
+                        for value, i in values
+                            validator row, value, validatorOpts
+                    else
+                        validator row, values, validatorOpts
 
-			true
+            true

@@ -1,23 +1,23 @@
 Animation @modifier
 ===================
 
-	'use strict'
+    'use strict'
 
-	utils = require 'src/utils'
-	assert = require 'src/assert'
-	signal = require 'src/signal'
+    utils = require 'src/utils'
+    assert = require 'src/assert'
+    signal = require 'src/signal'
 
-	module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
-		@__name__ = 'Animation'
+    module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
+        @__name__ = 'Animation'
 
 *Animation* Animation()
 -----------------------
 
-		constructor: ->
-			super()
-			@_loop = false
-			@_updatePending = false
-			@_paused = false
+        constructor: ->
+            super()
+            @_loop = false
+            @_updatePending = false
+            @_paused = false
 
 *Boolean* Animation::when
 -------------------------
@@ -27,116 +27,116 @@ Animation @modifier
 *Signal* Animation::onStart()
 -----------------------------
 
-		signal.Emitter.createSignal @, 'onStart'
+        signal.Emitter.createSignal @, 'onStart'
 
 *Signal* Animation::onStop()
 ----------------------------
 
-		signal.Emitter.createSignal @, 'onStop'
+        signal.Emitter.createSignal @, 'onStop'
 
 *Boolean* Animation::running
 ----------------------------
 
 ## *Signal* Animation::onRunningChange(*Boolean* oldValue)
 
-		itemUtils.defineProperty
-			constructor: @
-			name: 'running'
-			setter: (_super) -> (val) ->
-				@_when = val
-				oldVal = @_running
-				if oldVal is val
-					return
+        itemUtils.defineProperty
+            constructor: @
+            name: 'running'
+            setter: (_super) -> (val) ->
+                @_when = val
+                oldVal = @_running
+                if oldVal is val
+                    return
 
-				assert.isBoolean val
-				_super.call @, val
+                assert.isBoolean val
+                _super.call @, val
 
-				if val
-					Impl.startAnimation.call @
-					@onStart.emit()
-					if @_paused
-						Impl.pauseAnimation.call @
-				else
-					if @_paused
-						@paused = false
-					Impl.stopAnimation.call @
-					@onStop.emit()
-				return
+                if val
+                    Impl.startAnimation.call @
+                    @onStart.emit()
+                    if @_paused
+                        Impl.pauseAnimation.call @
+                else
+                    if @_paused
+                        @paused = false
+                    Impl.stopAnimation.call @
+                    @onStop.emit()
+                return
 
 *Boolean* Animation::paused
 ---------------------------
 
 ## *Signal* Animation::onPausedChange(*Boolean* oldValue)
 
-		itemUtils.defineProperty
-			constructor: @
-			name: 'paused'
-			setter: (_super) -> (val) ->
-				oldVal = @_paused
-				if oldVal is val
-					return
+        itemUtils.defineProperty
+            constructor: @
+            name: 'paused'
+            setter: (_super) -> (val) ->
+                oldVal = @_paused
+                if oldVal is val
+                    return
 
-				assert.isBoolean val
-				_super.call @, val
+                assert.isBoolean val
+                _super.call @, val
 
-				if val
-					Impl.pauseAnimation.call @
-				else
-					Impl.resumeAnimation.call @
-				return
+                if val
+                    Impl.pauseAnimation.call @
+                else
+                    Impl.resumeAnimation.call @
+                return
 
 *Boolean* Animation::loop
 -------------------------
 
 ## *Signal* Animation::onLoopChange(*Boolean* oldValue)
 
-		itemUtils.defineProperty
-			constructor: @
-			name: 'loop'
-			implementation: Impl.setAnimationLoop
-			developmentSetter: (val) ->
-				assert.isBoolean val
+        itemUtils.defineProperty
+            constructor: @
+            name: 'loop'
+            implementation: Impl.setAnimationLoop
+            developmentSetter: (val) ->
+                assert.isBoolean val
 
 ReadOnly *Boolean* Animation::updatePending
 -------------------------------------------
 
-		utils.defineProperty @::, 'updatePending', null, ->
-			@_updatePending
-		, null
+        utils.defineProperty @::, 'updatePending', null, ->
+            @_updatePending
+        , null
 
 Animation::start()
 ------------------
 
-		start: ->
-			@running = true
-			@
+        start: ->
+            @running = true
+            @
 
 Animation::stop()
 -----------------
 
-		stop: ->
-			@running = false
-			@
+        stop: ->
+            @running = false
+            @
 
 Animation::pause()
 ------------------
 
-		pause: ->
-			if @running
-				@paused = true
-			@
+        pause: ->
+            if @running
+                @paused = true
+            @
 
 Animation::resume()
 -------------------
 
-		resume: ->
-			@paused = false
-			@
+        resume: ->
+            @paused = false
+            @
 
-		enable: ->
-			@running = true
-			super()
+        enable: ->
+            @running = true
+            super()
 
-		disable: ->
-			@running = false
-			super()
+        disable: ->
+            @running = false
+            super()

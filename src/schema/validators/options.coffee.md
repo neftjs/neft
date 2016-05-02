@@ -42,19 +42,19 @@ console.log(schema.validate({city: 'Paris'}));
 // true
 ```
 
-	'use strict'
+    'use strict'
 
-	assert = require 'src/assert'
-	utils = require 'src/utils'
+    assert = require 'src/assert'
+    utils = require 'src/utils'
 
-	module.exports = (Schema) -> (row, value, expected) ->
-		assert.isObject expected
-		, "options validator option for #{row} property must be an object or array"
+    module.exports = (Schema) -> (row, value, expected) ->
+        assert.isObject expected
+        , "options validator option for #{row} property must be an object or array"
 
-		if Array.isArray(expected)
-			passed = utils.has expected, value
-		else
-			passed = expected.hasOwnProperty value
+        if Array.isArray(expected)
+            passed = utils.has expected, value
+        else
+            passed = expected.hasOwnProperty value
 
-		unless passed
-			throw new Schema.Error row, 'options', "Passed #{row} value is not acceptable"
+        unless passed
+            throw new Schema.Error row, 'options', "Passed #{row} value is not acceptable"

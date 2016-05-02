@@ -10,112 +10,112 @@ attrsKeyGen = (i, elem) -> elem
 attrsValueGen = (i, elem) -> i
 
 module.exports = (Element) ->
-	extensions = Element.Tag.extensions
+    extensions = Element.Tag.extensions
 
-	internalTagsObject = utils.arrayToObject Element.Tag.INTERNAL_TAGS,
-		((_, key) -> key), (-> true), Object.create(null)
+    internalTagsObject = utils.arrayToObject Element.Tag.INTERNAL_TAGS,
+        ((_, key) -> key), (-> true), Object.create(null)
 
-	class Parser
-		constructor: (callback) ->
-			@_callback = callback
-			@_done = false
-			@_tagStack = []
-			@node = new Element.Tag
+    class Parser
+        constructor: (callback) ->
+            @_callback = callback
+            @_done = false
+            @_tagStack = []
+            @node = new Element.Tag
 
-		onreset: ->
-			Parser.call @, @_callback
+        onreset: ->
+            Parser.call @, @_callback
 
-		onend: ->
-			return if @_done
-			@_done = true
-			@_callback null, @node
+        onend: ->
+            return if @_done
+            @_done = true
+            @_callback null, @node
 
-		onerror: (err) ->
-			@_done = true
-			@_callback err, @node
+        onerror: (err) ->
+            @_done = true
+            @_callback err, @node
 
-		onclosetag: (name) ->
-			elem = @_tagStack.pop()
+        onclosetag: (name) ->
+            elem = @_tagStack.pop()
 
-		_addDomElement: (element) ->
-			lastTag = utils.last(@_tagStack) or @node
+        _addDomElement: (element) ->
+            lastTag = utils.last(@_tagStack) or @node
 
-			length = lastTag.children.push element
-			element._parent = lastTag
-			if element._previousSibling = (lastTag.children[length - 2] or null)
-				element._previousSibling._nextSibling = element
-			return
+            length = lastTag.children.push element
+            element._parent = lastTag
+            if element._previousSibling = (lastTag.children[length - 2] or null)
+                element._previousSibling._nextSibling = element
+            return
 
-		onopentag: (name, attribs) ->
-			null;
-			`//<development>`
-			if /^neft:/.test(name) and not internalTagsObject[name]
-				log.warn "Unknown internal tag name '#{name}'"
-			`//</development>`
+        onopentag: (name, attribs) ->
+            null;
+            `//<development>`
+            if /^neft:/.test(name) and not internalTagsObject[name]
+                log.warn "Unknown internal tag name '#{name}'"
+            `//</development>`
 
-			element = new (extensions[name] or Element.Tag)
-			element.name = name
-			utils.merge element.attrs, attribs
+            element = new (extensions[name] or Element.Tag)
+            element.name = name
+            utils.merge element.attrs, attribs
 
-			@_addDomElement element
-			@_tagStack.push element
+            @_addDomElement element
+            @_tagStack.push element
 
-		ontext: (data) ->
-			# omit tabs and new lines
-			unless data.replace(/[\t\n]/gm, '')
-				return
+        ontext: (data) ->
+            # omit tabs and new lines
+            unless data.replace(/[\t\n]/gm, '')
+                return
 
-			element = new Element.Text
+            element = new Element.Text
 
-			element._text = data
-			@_addDomElement element
+            element._text = data
+            @_addDomElement element
 
-		oncomment: ->
+        oncomment: ->
 
-		oncdatastart: ->
+        oncdatastart: ->
 
-		oncommentend: ->
+        oncommentend: ->
 
-		oncdataend: ->
+        oncdataend: ->
 
-		onprocessinginstruction: (name, data) ->
-			element = new Element.Text
+        onprocessinginstruction: (name, data) ->
+            element = new Element.Text
 
-			element._text = "<#{data}>"
-			@_addDomElement element
+            element._text = "<#{data}>"
+            @_addDomElement element
 
-	parse: (html) ->
-		r = null
+    parse: (html) ->
+        r = null
 
-		handler = new Parser (err, node) =>
-			if err then throw err
+        handler = new Parser (err, node) =>
+            if err then throw err
 
-			r = node
+            r = node
 
-		parser = new htmlparser.Parser handler,
-			xmlMode: true
-			recognizeSelfClosing: true
-			lowerCaseAttributeNames: false
-			lowerCaseTags: false
-			recognizeCDATA: true
-			decodeEntities: true
+        parser = new htmlparser.Parser handler,
+            xmlMode: true
+            recognizeSelfClosing: true
+            lowerCaseAttributeNames: false
+            lowerCaseTags: false
+            recognizeCDATA: true
+            decodeEntities: true
 
-		# TODO: do it while parsing
-		parser.onattribname = do (_super = parser.onattribname) -> (name) ->
-			_super.call @, name
-			@_attribvalue = DEFAULT_ATTR_VALUE
+        # TODO: do it while parsing
+        parser.onattribname = do (_super = parser.onattribname) -> (name) ->
+            _super.call @, name
+            @_attribvalue = DEFAULT_ATTR_VALUE
 
-		parser.onattribdata = do (_super = parser.onattribdata) -> (val) ->
-			if @_attribvalue is DEFAULT_ATTR_VALUE
-				@_attribvalue = ''
-			_super.call @, val
+        parser.onattribdata = do (_super = parser.onattribdata) -> (val) ->
+            if @_attribvalue is DEFAULT_ATTR_VALUE
+                @_attribvalue = ''
+            _super.call @, val
 
-		parser.onattribend = do (_super = parser.onattribend) -> ->
-			if @_attribvalue is DEFAULT_ATTR_VALUE
-				@_attribvalue = 'true'
-			_super.call @
+        parser.onattribend = do (_super = parser.onattribend) -> ->
+            if @_attribvalue is DEFAULT_ATTR_VALUE
+                @_attribvalue = 'true'
+            _super.call @
 
-		parser.write html
-		parser.end()
+        parser.write html
+        parser.end()
 
-		r
+        r

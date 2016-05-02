@@ -1,37 +1,37 @@
 'use strict'
 
 module.exports = (impl) ->
-	{items} = impl
+    {items} = impl
 
-	DATA = {}
+    DATA = {}
 
-	DATA: DATA
+    DATA: DATA
 
-	createData: impl.utils.createDataCloner 'Item', DATA
+    createData: impl.utils.createDataCloner 'Item', DATA
 
-	create: (data) ->
-		impl.Types.Item.create.call @, data
+    create: (data) ->
+        impl.Types.Item.create.call @, data
 
-	setText: (val) ->
+    setText: (val) ->
 
-	setTextWrap: (val) ->
+    setTextWrap: (val) ->
 
-	updateTextContentSize: ->
+    updateTextContentSize: ->
 
-	setTextColor: (val) ->
+    setTextColor: (val) ->
 
-	setTextLinkColor: (val) ->
+    setTextLinkColor: (val) ->
 
-	setTextLineHeight: (val) ->
+    setTextLineHeight: (val) ->
 
-	setTextFontFamily: (val) ->
+    setTextFontFamily: (val) ->
 
-	setTextFontPixelSize: (val) ->
+    setTextFontPixelSize: (val) ->
 
-	setTextFontWordSpacing: (val) ->
+    setTextFontWordSpacing: (val) ->
 
-	setTextFontLetterSpacing: (val) ->
+    setTextFontLetterSpacing: (val) ->
 
-	setTextAlignmentHorizontal: (val) ->
+    setTextAlignmentHorizontal: (val) ->
 
-	setTextAlignmentVertical: (val) ->
+    setTextAlignmentVertical: (val) ->
