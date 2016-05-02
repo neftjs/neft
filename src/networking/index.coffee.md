@@ -247,6 +247,49 @@ The given options object corresponds to the [Request][networking/Request] proper
 				data: data
 				onLoadEnd: onLoadEnd
 
+Networking::resolveRequest(*Networking.Request* request)
+----------------------------------------------------------------------------------------
+
+		resolveRequest: (req) ->
+			assert.instanceOf req, Networking.Request
+			assert.ok req.pending
+			res = req.response
+
+			log "Resolve local `#{req}` request"
+
+			onError = (err) ->
+				unless req.pending
+					return
+
+				if err and (typeof err is 'object' or typeof err is 'string' or typeof err is 'number')
+					res.raise err
+				else
+					res.raise Networking.Response.Error.RequestResolve req
+
+			noHandlersError = ->
+				log.warn "No handler found for request `#{req}`"
+				onError()
+
+			handlers = @_handlers[req.method]
+			if handlers
+				# run handlers
+				err = null
+				utils.async.forEach handlers, (handler, i, handlers, next) ->
+					handler.exec req, res, (_err) ->
+						if _err?
+							err = _err
+						next()
+
+				, ->
+					if err
+						onError err
+					else
+						noHandlersError()
+			else
+				noHandlersError()
+
+			return
+
 *Networking.Request* Networking::createLocalRequest(*Object|Networking.Request* options)
 ----------------------------------------------------------------------------------------
 
@@ -309,38 +352,7 @@ app.networking.createRequest({
 			@pendingRequests.append req
 			@onRequest.emit req, res
 
-			# get handlers
-			log "Resolve local `#{req}` request"
-
-			onError = (err) ->
-				unless req.pending
-					return
-
-				if err and (typeof err is 'object' or typeof err is 'string' or typeof err is 'number')
-					res.raise err
-				else
-					res.raise Networking.Response.Error.RequestResolve req
-
-			noHandlersError = ->
-				log.warn "No handler found for request `#{req}`"
-				onError()
-
-			handlers = @_handlers[req.method]
-			if handlers
-				# run handlers
-				err = null
-				utils.async.forEach handlers, (handler, i, handlers, next) ->
-					handler.exec req, res, (_err) ->
-						if _err?
-							err = _err
-						next()
-
-				, ->
-					if err
-						onError err
-					else
-						noHandlersError()
-			else
-				noHandlersError()
+			# resolve
+			setImmediate => @resolveRequest req
 
 			req
