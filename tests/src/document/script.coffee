@@ -2,7 +2,7 @@
 
 fs = require 'fs'
 os = require 'os'
-{assert, utils, unit} = Neft
+{assert, utils, unit, Document} = Neft
 {describe, it} = unit
 {createView, renderParse, uid} = require './utils'
 
@@ -170,14 +170,14 @@ describe 'src/document neft:script', ->
 
     describe.onServer '[filename]', ->
         it 'supports .coffee files', ->
-            view = View.fromHTML uid(), """
+            view = Document.fromHTML uid(), """
                 <neft:script filename="a.coffee"><![CDATA[
                     module.exports = class A
                         constructor: ->
                             @a = 1
                 ]]></neft:script>
             """
-            View.parse view
+            Document.parse view
             view = view.clone()
 
             renderParse view
@@ -252,11 +252,11 @@ describe 'src/document neft:script', ->
         path = "#{os.tmpdir()}/#{filename}"
         fs.writeFileSync path, "module.exports = function(){ this.a = 1; };", 'utf-8'
 
-        source = View.fromHTML uid(), """
+        source = Document.fromHTML uid(), """
             <neft:script href="#{path}" />
             <neft:blank>${this.a}</neft:blank>
         """
-        View.parse source
+        Document.parse source
         view = source.clone()
 
         renderParse view
@@ -274,8 +274,8 @@ describe 'src/document neft:script', ->
             <neft:blank>${this.a}</neft:blank>
         """
 
-        source = View.fromHTML viewPath, viewStr
-        View.parse source
+        source = Document.fromHTML viewPath, viewStr
+        Document.parse source
         view = source.clone()
 
         renderParse view
