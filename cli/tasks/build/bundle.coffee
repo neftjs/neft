@@ -40,6 +40,7 @@ module.exports = (platform, options, app, callback) ->
         removeLogs: options.release
         neftFilePath: pathUtils.resolve(__dirname, neftFilePath)
         testResolved: testResolvedFunc
+        useBabel: true
         , (err, file) ->
             if err
                 return callback err

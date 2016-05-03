@@ -5,6 +5,7 @@ crypto = require 'crypto'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
 os = require 'os'
+babel = require 'babel-core'
 
 {log} = Neft
 
@@ -28,13 +29,16 @@ replaceStr = (str, oldStr, newStr) ->
 
     r
 
-getFile = (path) ->
+getFile = (path, opts) ->
     try
         file = fs.readFileSync path, 'utf-8'
     catch
         return
 
+    extname = pathUtils.extname path
+
     # compile coffee-script files and cache it
+    # TODO: use this caching method in process.coffee as well for babel
     if IS_COFFEE_RE.test(path)
         digest = crypto.createHash('sha1').update(file, 'utf8').digest('hex')
         cache = pathUtils.join CACHE_DIRECTORY, "#{digest}.js"
@@ -45,7 +49,10 @@ getFile = (path) ->
             file = coffee.compile file, bare: true, literate: isLiterate
             fs.writeFileSync cache, file, 'utf-8'
 
-    if STRING_FILES[pathUtils.extname(path)]
+    if opts.useBabel and extname is '.js'
+        file = babel.transform(file, presets: ['es2015']).code
+
+    if STRING_FILES[extname]
         file = "module.exports = #{JSON.stringify(file)}"
 
     file
@@ -93,14 +100,14 @@ getDeclarations = (modules) ->
 
     r
 
-getModulesInit = (opts) ->
+getModulesInit = (data, opts) ->
     r = ''
 
-    for name in opts.modules
-        modulePaths = opts.paths[name] or {}
+    for name in data.modules
+        modulePaths = data.paths[name] or {}
 
         path = name
-        unless func = getFile path
+        unless func = getFile(path, opts)
             continue
 
         name = name.replace /\\/g, '\\\\'
@@ -121,7 +128,7 @@ getModulesInit = (opts) ->
 module.exports = (processData, opts, callback) ->
     logtime = log.time 'Build bundle'
     declarations = getDeclarations processData.modules
-    init = getModulesInit processData
+    init = getModulesInit processData, opts
 
     r = fileScope
     r = replaceStr r, '{{path}}', opts.path
