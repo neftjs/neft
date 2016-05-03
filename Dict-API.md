@@ -8,12 +8,14 @@ Access it with:
 var dict = require('dict');
 ```
 
-*Dict* Dict.fromJSON(*String|Object* json)
+*[Dict]()* [Dict]().fromJSON(*[String]()|[Object]()* json)
 ------------------------------------------
 
 Creates a new *Dict* from a json string.
 
 This function should be used with [toJSON()][dict/Dict::toJSON()] output.
+
+> [Source]()
 
 *Dict* Dict([*Object* data])
 ----------------------------
