@@ -3,8 +3,13 @@
 JavaScript Everywhere
 =====================
 
-- [Home](https://github.com/Neft-io/neft/wiki)
-- [Contribute](https://github.com/Neft-io/neft/wiki/Contribute)
+- [[Home]]
+- [[How to read wiki]]
+- [[Contribute]]
+- [[Examples]]
+- [[Tutorials]]
+- [[Tour]]
+- [[Plugins]]
 
 ### Help
 - [Neft on Stack Overflow](http://stackoverflow.com/questions/tagged/neft)
