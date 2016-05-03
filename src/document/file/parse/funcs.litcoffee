@@ -18,6 +18,7 @@ Tag used to create functions in the view.
     'use strict'
 
     utils = require 'src/utils'
+    babel = require 'babel-core'
 
     parseLinksFile = require('./fragments/links')
     parseLinks = null
@@ -34,13 +35,20 @@ Tag used to create functions in the view.
                 unless name
                     throw new Error 'Function name is requried'
 
+                # body
                 body = node.stringifyChildren()
+                body = "(function(){#{body}})"
+                body = babel.transform(body, presets: ['es2015']).code
+                body = /{([^]*)}/m.exec(body)?[1]
+
+                # arguments
                 if argsAttr = node.attrs['arguments']
                     args = argsAttr.split(',')
                     for arg, i in args
                         args[i] = arg.trim()
                 else
                     args = []
+
                 funcs[name] =
                     uid: utils.uid()
                     body: body
