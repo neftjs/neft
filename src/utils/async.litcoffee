@@ -1,5 +1,4 @@
-Asynchronous
-============
+# Asynchronous
 
 Access it with:
 ```javascript
@@ -19,8 +18,7 @@ var async = utils.async;
 
     NOP = ->
 
-forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
--------------------------------------------------------------------------------------
+## forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
 
 This is an asynchronous version of the standard `Array.prototype.forEach()` function
 which works with arrays and objects.
@@ -96,8 +94,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 
             null
 
-*Stack* Stack()
----------------
+## **Class** Stack()
 
 Stores functions and runs them synchronously or asynchronously.
 
@@ -138,8 +135,7 @@ stack.runAllSimultaneously(function(){
 
             Object.preventExtensions @
 
-Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
---------------------------------------------------------------------------
+### Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
 
 Adds the given function to the stack.
 
@@ -179,8 +175,7 @@ stack.runAll(function(err, result){
             @length++
             @
 
-Stack::callNext([*Array* arguments], *Function* callback)
----------------------------------------------------------
+### Stack::callNext([*Array* arguments], *Function* callback)
 
 Calls the first function from the stack and remove it.
 
@@ -242,8 +237,7 @@ Calls the first function from the stack and remove it.
 
             null
 
-Stack::runAll([*Function* callback, *Any* callbackContext])
------------------------------------------------------------
+### Stack::runAll([*Function* callback, *Any* callbackContext])
 
 Calls all functions from the stack one by one.
 
@@ -273,8 +267,7 @@ When an error occurs, processing stops and the callback function is called with 
 
             null
 
-Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
--------------------------------------------------------------------------
+### Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
 
 Calls all functions from the stack simultaneously (all at the same time).
 

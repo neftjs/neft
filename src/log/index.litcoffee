@@ -1,9 +1,8 @@
-Log @library
-============
+# Log
 
 Access it with:
 ```javascript
-var log = require('log');
+const { log } = Neft;
 ```
 
     'use strict'
@@ -20,6 +19,8 @@ var log = require('log');
         str = ''
         str += "#{arg} → " for arg in args
         str.substring 0, str.length - 3
+
+## **Class** Log
 
     class Log
         @LOGS_METHODS = ['log', 'info', 'warn', 'error', 'time', 'ok']
@@ -62,26 +63,19 @@ var log = require('log');
         _write: console?['lo'+'g'].bind(console) or (->)
         _writeError: console?['erro'+'r'].bind(console) or (->)
 
-*Integer* log.LOG
------------------
+### *Integer* log.LOG
 
-*Integer* log.INFO
-------------------
+### *Integer* log.INFO
 
-*Integer* log.OK
-----------------
+### *Integer* log.OK
 
-*Integer* log.WARN
-------------------
+### *Integer* log.WARN
 
-*Integer* log.ERROR
--------------------
+### *Integer* log.ERROR
 
-*Integer* log.TIME
-------------------
+### *Integer* log.TIME
 
-*Integer* log.ALL
------------------
+### *Integer* log.ALL
 
         i = 0
         LOG: 1<<i++
@@ -92,8 +86,7 @@ var log = require('log');
         TIME: 1<<i++
         ALL: (1<<i++)-1
 
-*Integer* enabled = log.ALL
----------------------------
+### *Integer* enabled = log.ALL
 
 Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
@@ -107,8 +100,7 @@ Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
             else
                 true
 
-log([*Any* messages...])
-------------------------
+### log([*Any* messages...])
 
 Prints the given messages into the console.
 
@@ -124,8 +116,7 @@ log("setName()", "db time");
                 @_write LogImpl.MARKERS.white fromArgs arguments
             return
 
-log.info([*Any* messages...])
------------------------------
+### log.info([*Any* messages...])
 
 Prints the given messages into the console with a blue color.
 
@@ -134,8 +125,7 @@ Prints the given messages into the console with a blue color.
                 @_write LogImpl.MARKERS.blue fromArgs arguments
             return
 
-log.ok([*Any* messages...])
----------------------------
+### log.ok([*Any* messages...])
 
 Prints the given messages into the console with a green color.
 
@@ -148,8 +138,7 @@ log.ok("Data has been successfully sent!");
                 @_write LogImpl.MARKERS.green fromArgs arguments
             return
 
-log.warn([*Any* messages...])
------------------------------
+### log.warn([*Any* messages...])
 
 Prints the given messages into the console with a yellow color.
 
@@ -162,8 +151,7 @@ log.warn("Example warning with some recommendations");
                 @_write LogImpl.MARKERS.yellow fromArgs arguments
             return
 
-log.error([*Any* messages...])
-------------------------------
+### log.error([*Any* messages...])
 
 Prints the given messages into the console with a red color.
 
@@ -176,8 +164,7 @@ log.error("Error occurs, ... in file ...");
                 @_writeError LogImpl.MARKERS.red fromArgs arguments
             return
 
-*Integer* log.time()
---------------------
+### *Integer* log.time()
 
 Returns an id used to measure execution time by the `log.end()` function.
 
@@ -210,8 +197,7 @@ findPath();
 
             id
 
-log.end(*Integer* id)
----------------------
+### log.end(*Integer* id)
 
 Prints an information about the execution time for the given timer id.
 
@@ -229,8 +215,7 @@ Prints an information about the execution time for the given timer id.
             time[0] = 0
             return
 
-log.scope([*Any* names...])
----------------------------
+### log.scope([*Any* names...])
 
 Returns a new `log` function.
 

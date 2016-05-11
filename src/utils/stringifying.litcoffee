@@ -1,5 +1,4 @@
-Stringifying
-============
+# Stringifying
 
     'use strict'
 
@@ -7,8 +6,7 @@ Stringifying
 
     module.exports = (utils) ->
 
-utils.simplify(*Object* object, [*Object* options])
----------------------------------------------------
+## simplify(*Object* object, [*Object* options])
 
 Convert the given object into the most simplified format with no cyclic references and more.
 
@@ -186,8 +184,7 @@ console.log(clone instanceof Sample)
                 protos: protos
                 constructors: ctors
 
-utils.assemble(*PlainObject* object)
-------------------------------------
+## assemble(*PlainObject* object)
 
 Backward utils.simplify() operation.
 
@@ -260,4 +257,3 @@ Backward utils.simplify() operation.
                         obj[ref] = objects[refsIds[refId++]]
 
                 objects[0]
-

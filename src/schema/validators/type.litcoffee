@@ -1,5 +1,4 @@
-type @validator
-===============
+# Type Validator
 
 Verifies the tested value type using the `typeof`.
 

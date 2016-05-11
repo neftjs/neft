@@ -1,12 +1,10 @@
-Properties extraction
-=====================
+# Properties extraction
 
     'use strict'
 
     module.exports = (utils) ->
 
-*Any* utils.get(*Object* object, *String* path, [*OptionsArray* target])
-------------------------------------------------------------------------
+## *Any* get(*Object* object, *String* path, [*OptionsArray* target])
 
 Extracts property, deep property or an array of possible properties from the given object.
 
@@ -105,8 +103,7 @@ console.log(utils.get(obj, 'prop[].deep.result'));
 
             obj
 
-*OptionsArray* utils.get.OptionsArray()
----------------------------------------
+## **Class** utils.get.OptionsArray()
 
 Special version of an Array, returned if the result of the utils.get()
 function is a list of the possible values.
@@ -115,8 +112,7 @@ function is a list of the possible values.
 
             constructor: -> super
 
-*Boolean* utils.isStringArray(*String* value)
----------------------------------------------
+## *Boolean* isStringArray(*String* value)
 
 Checks whether the given string references into an array according
 to the notation in the utils.get() function.

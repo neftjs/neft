@@ -1,9 +1,8 @@
-Utils @library
-==============
+# Utils
 
 Access it with:
 ```javascript
-var utils = require('utils');
+const { utils } = Neft;
 ```
 
     'use strict'
@@ -27,32 +26,25 @@ var utils = require('utils');
     require('./stringifying') exports
     require('./async') exports
 
-ReadOnly *Boolean* utils.isNode
--------------------------------
+## ReadOnly *Boolean* utils.isNode
 
 `true` if the application is running in the node.js environment.
 
-ReadOnly *Boolean* utils.isServer
----------------------------------
+## ReadOnly *Boolean* utils.isServer
 
 `utils.isNode` link.
 
-ReadOnly *Boolean* utils.isClient
----------------------------------
+## ReadOnly *Boolean* utils.isClient
 
 `utils.isNode` inverse.
 
-ReadOnly *Boolean* utils.isBrowser
-----------------------------------
+## ReadOnly *Boolean* utils.isBrowser
 
-ReadOnly *Boolean* utils.isQt
------------------------------
+## ReadOnly *Boolean* utils.isQt
 
-ReadOnly *Boolean* utils.isAndroid
-----------------------------------
+## ReadOnly *Boolean* utils.isAndroid
 
-ReadOnly *Boolean* utils.isIOS
-------------------------------
+## ReadOnly *Boolean* utils.isIOS
 
     exports.isNode = exports.isServer = exports.isClient =
     exports.isBrowser = exports.isQt = exports.isAndroid =
@@ -75,15 +67,13 @@ ReadOnly *Boolean* utils.isIOS
         when process? and Object.prototype.toString.call(process) is '[object process]'
             exports.isNode = exports.isServer = true
 
-*Function* utils.NOP
---------------------
+## *Function* utils.NOP
 
 No operation (an empty function).
 
     exports.NOP = ->
 
-*Boolean* utils.is(*Any* value1, *Any* value2)
-----------------------------------------------
+## *Boolean* utils.is(*Any* value1, *Any* value2)
 
 Returns `true` if the given values are exactly the same.
 
@@ -115,8 +105,7 @@ console.log(-0 === 0);
         else
             return val1 is val2
 
-*Boolean* utils.isFloat(*Any* value)
-------------------------------------
+## *Boolean* utils.isFloat(*Any* value)
 
 Returns `true` if the given value is a finite number.
 
@@ -140,8 +129,7 @@ console.log(utils.isFloat('10'));
     exports.isFloat = (val) ->
         typeof val is 'number' and isFinite(val)
 
-*Boolean* utils.isInteger(*Any* value)
---------------------------------------
+## *Boolean* utils.isInteger(*Any* value)
 
 Returns `true` if the given value is an integer.
 
@@ -166,8 +154,7 @@ console.log(utils.isInteger('2'));
         val < 9007199254740992 and
         Math.floor(val) is val
 
-*Boolean* utils.isPrimitive(*Any* value)
-----------------------------------------
+## *Boolean* utils.isPrimitive(*Any* value)
 
 Returns `true` if the given value is a `null`, string, number, boolean or an `undefined`.
 
@@ -189,8 +176,7 @@ console.log(utils.isPrimitive([]));
         typeof val is 'boolean' or
         typeof val is 'undefined'
 
-*Boolean* utils.isObject(*Any* value)
--------------------------------------
+## *Boolean* utils.isObject(*Any* value)
 
 Returns `true` if the given value is an object (object, array, but not a `null`).
 
@@ -214,8 +200,7 @@ console.log(utils.isObject(function(){}));
     isObject = exports.isObject = (param) ->
         param isnt null and typeof param is 'object'
 
-*Boolean* utils.isPlainObject(*Any* value)
-------------------------------------------
+## *Boolean* utils.isPlainObject(*Any* value)
 
 Returns `true` if the given value is an object with no prototype,
 or with a prototype equal the `Object.prototype`.
@@ -257,8 +242,7 @@ console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
 
         false
 
-*Boolean* utils.isArguments(*Any* value)
-----------------------------------------
+## *Boolean* utils.isArguments(*Any* value)
 
 Returns `true` if the given value is an arguments object.
 
@@ -275,8 +259,7 @@ console.log(utils.isArguments({}))
     exports.isArguments = (param) ->
         toString.call(param) is '[object Arguments]'
 
-*NotPrimitive* utils.merge(*NotPrimitive* source, *NotPrimitive* object)
-------------------------------------------------------------------------
+## *NotPrimitive* utils.merge(*NotPrimitive* source, *NotPrimitive* object)
 
 Overrides the given source object properties by the given object own properties.
 
@@ -307,8 +290,7 @@ console.log(config);
 
         source
 
-*NotPrimitive* utils.mergeAll(*NotPrimitive* source, *NotPrimitive* objects...)
--------------------------------------------------------------------------------
+## *NotPrimitive* utils.mergeAll(*NotPrimitive* source, *NotPrimitive* objects...)
 
 Like the utils.merge(), but the amount of objects to merge is unknown.
 
@@ -339,8 +321,7 @@ console.log(config);
 
         source
 
-*NotPrimitive* utils.mergeDeep(*NotPrimitive* source, *NotPrimitive* object)
-----------------------------------------------------------------------------
+## *NotPrimitive* utils.mergeDeep(*NotPrimitive* source, *NotPrimitive* object)
 
 Overrides the given source object properties and all its objects
 by the given object own properties.
@@ -389,8 +370,7 @@ console.log(user);
 
         source
 
-*NotPrimitive* utils.fill(*NotPrimitive* source, *NotPrimitive* object)
------------------------------------------------------------------------
+## *NotPrimitive* utils.fill(*NotPrimitive* source, *NotPrimitive* object)
 
 Sets the given object properties into the given source object if the property
 exists in the given source, but it's not defined as an own property.
@@ -426,8 +406,7 @@ console.log(user);
 
         source
 
-utils.remove(*NotPrimitive* object, *Any* element)
---------------------------------------------------
+## utils.remove(*NotPrimitive* object, *Any* element)
 
 Removes an array element or an object property from the given object.
 
@@ -464,8 +443,7 @@ console.log(object);
 
         return
 
-utils.removeFromUnorderedArray(*Array* array, *Any* element)
-------------------------------------------------------------
+## utils.removeFromUnorderedArray(*Array* array, *Any* element)
 
 Removes the given element from the given array.
 
@@ -485,8 +463,7 @@ Elements order may be changed.
 
         return
 
-*Object* utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
-------------------------------------------------------------------------------
+## *Object* utils.getPropertyDescriptor(*NotPrimitive* object, *String* property)
 
 Returns the descriptor of the given property defined in the given object.
 
@@ -520,8 +497,7 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 
         desc
 
-*Function* utils.lookupGetter(*NotPrimitive* object, *String* property)
------------------------------------------------------------------------
+## *Function* utils.lookupGetter(*NotPrimitive* object, *String* property)
 
 Returns the given property getter function defined in the given object.
 
@@ -547,8 +523,7 @@ console.log(utils.lookupGetter(object, 'progress'));
             if desc = exports.getPropertyDescriptor(obj, prop)
                 desc.get?.trueGetter or desc.get
 
-*Function* utils.lookupSetter(*NotPrimitive* object, *String* property)
------------------------------------------------------------------------
+## *Function* utils.lookupSetter(*NotPrimitive* object, *String* property)
 
 Returns the given property setter function defined in the given object.
 
@@ -562,8 +537,7 @@ Returns the given property setter function defined in the given object.
             desc = exports.getPropertyDescriptor obj, prop
             desc?.set
 
-*NotPrimitive* utils.defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
---------------------------------------------------------------------------------------------------------------------------------------
+## *NotPrimitive* defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
 
 Defines the given property in the given object.
 
@@ -650,8 +624,7 @@ console.log(object.length);
 
             obj
 
-*NotPrimitive* utils.overrideProperty(*NotPrimitive* object, *String* property, [*Any* value, *Function* setter])
------------------------------------------------------------------------------------------------------------------
+## *NotPrimitive* utils.overrideProperty(*NotPrimitive* object, *String* property, [*Any* value, *Function* setter])
 
     exports.overrideProperty = (obj, prop, getter, setter) ->
         unless desc = exports.getPropertyDescriptor(obj, prop)
@@ -683,8 +656,7 @@ console.log(object.length);
 
         exports.defineProperty obj, prop, opts, getter, setter
 
-*Any* utils.clone(*Any* param)
-------------------------------
+## *Any* utils.clone(*Any* param)
 
 Returns clone of the given array or object.
 
@@ -714,8 +686,7 @@ console.log(utils.clone({a: 1}))
 
         param
 
-*Any* utils.cloneDeep(*Any* param)
-----------------------------------
+## *Any* utils.cloneDeep(*Any* param)
 
 Returns deep clone of the given array or object.
 
@@ -740,8 +711,7 @@ console.log(clonedObj.b === obj.b)
 
         result
 
-*Boolean* utils.isEmpty(*String|NotPrimitive* object)
------------------------------------------------------
+## *Boolean* utils.isEmpty(*String*|*NotPrimitive* object)
 
 Returns `true` if the given array has no elements, of the given object has no own properties.
 
@@ -778,8 +748,7 @@ console.log(utils.isEmpty(''));
                 return false
             return true
 
-*Any* utils.last(*NotPrimitive* array)
---------------------------------------
+## *Any* utils.last(*NotPrimitive* array)
 
 Returns the last element of the given array, or an array-like object.
 
@@ -800,8 +769,7 @@ console.log(utils.last([]))
 
         arg[arg.length - 1]
 
-*NotPrimitive* utils.clear(*NotPrimitive* object)
--------------------------------------------------
+## *NotPrimitive* utils.clear(*NotPrimitive* object)
 
 Removes all elements from the given array, or all own properties from the given object.
 
@@ -831,8 +799,7 @@ console.log(obj);
 
         obj
 
-*Object* utils.setPrototypeOf(*NotPrimitive* object, *NotPrimitive|Null* prototype)
------------------------------------------------------------------------------------
+## *Object* utils.setPrototypeOf(*NotPrimitive* object, *NotPrimitive*|*Null* prototype)
 
 Changes the given object prototype into the given prototype.
 
@@ -892,8 +859,7 @@ console.log(newObj.b)
                 merge obj, proto
             newObj
 
-*Boolean* utils.has(*Any* object, *Any* value)
-----------------------------------------------
+## *Boolean* utils.has(*Any* object, *Any* value)
 
 Returns `true` if the given array contains the given value.
 
@@ -944,8 +910,7 @@ console.log(utils.has('abc', 'e'))
 
                 false
 
-*Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target = `[]`])
-------------------------------------------------------------------------------------------
+## *Array* utils.objectToArray(*Object* object, [*Function* valueGen, *Array* target = `[]`])
 
 Translates the given object into an array.
 
@@ -990,8 +955,7 @@ console.log(utils.objectToArray(object, function(key, val){
 
         target
 
-*Object* utils.arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, *Object* target = `{}`])
--------------------------------------------------------------------------------------------------------------
+## *Object* utils.arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, *Object* target = `{}`])
 
 Translates the given array into an object.
 
@@ -1044,8 +1008,7 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 
         target
 
-*String* utils.capitalize(*String* string)
-------------------------------------------
+## *String* utils.capitalize(*String* string)
 
 Capitalizes the given string.
 
@@ -1066,8 +1029,7 @@ console.log(utils.capitalize('name'))
 
         str[0].toUpperCase() + str.slice(1)
 
-*String* utils.addSlashes(*String* string)
-------------------------------------------
+## *String* utils.addSlashes(*String* string)
 
 Adds backslashes before each `'` and `"` characters found in the given string.
 
@@ -1092,8 +1054,7 @@ console.log(utils.addSlashes('a"b'))
 
             str.replace SLASHES_RE, NEW_SUB_STR
 
-*String* utils.uid([*Integer* length=`8`])
-------------------------------------------
+## *String* utils.uid([*Integer* length = `8`])
 
 Returns pseudo-unique string with the given length.
 
@@ -1121,8 +1082,7 @@ console.log(utils.uid())
             str = str.slice 0, n
         str
 
-*Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onFail])
-----------------------------------------------------------------------------------------------
+## *Any* utils.tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onFail])
 
 Calls the given function with the given context and arguments.
 
@@ -1166,8 +1126,7 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
             else
                 onFail
 
-*Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
--------------------------------------------------------------------------------
+## *Any* utils.catchError(*Function* function, [*Any* context, *Array* arguments])
 
 Calls the given function with the given context and arguments.
 
@@ -1202,8 +1161,7 @@ console.log(utils.catchError(test, null, [100]))
         catch err
             err
 
-*Function* utils.bindFunctionContext(*Function* function, *Any* context)
-------------------------------------------------------------------------
+## *Function* utils.bindFunctionContext(*Function* function, *Any* context)
 
 Returns a new function calling the given function with the given context and
 arguments in an amount lower or equal the function length.
@@ -1246,8 +1204,7 @@ console.log(bindFunc('a'));
             else
                 -> func.apply ctx, arguments
 
-*Object* utils.errorToObject(*Error* error)
--------------------------------------------
+## *Object* utils.errorToObject(*Error* error)
 
 Returns a plain object with the given error name, message and other custom properties.
 
@@ -1275,8 +1232,7 @@ console.log(utils.errorToObject(error));
 
         result
 
-*Object* utils.getOwnProperties(*Object* object)
-------------------------------------------------
+## *Object* utils.getOwnProperties(*Object* object)
 
 Returns an array or an object with own properties associated in the given object.
 
@@ -1291,8 +1247,7 @@ Returns an array or an object with own properties associated in the given object
         merge result, obj
         result
 
-*Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep=`Infinity`])
------------------------------------------------------------------------------------------------------------------------
+## *Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep = `Infinity`])
 
 Returns `true` if the given objects have equal values.
 
@@ -1413,3 +1368,15 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
                 forObjects a, b, compareFunc, maxDeep
             else
                 return compareFunc a, b
+
+# Glossary
+
+ - [NOP](#nop)
+ - [Float](#isfloat)
+ - [Integer](#isinteger)
+ - [Primitive](#isprimitive)
+ - [NotPrimitive](#isprimitive)
+ - [Object](#isobject)
+ - [PlainObject](#isplainobject)
+ - [Arguments](#isarguments)
+ - [utils.is()](#is)

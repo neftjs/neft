@@ -1,5 +1,4 @@
-max @validator
-==============
+# Max Validator
 
 Determines the maximum range of the number.
 

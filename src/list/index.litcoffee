@@ -1,11 +1,10 @@
-List @library
-=============
+# List
 
-Module used for data-binding on arrays.
+> data-binding on arrays
 
 Access it with:
 ```javascript
-var List = require('list');
+const { List } = Neft;
 ```
 
     'use strict'
@@ -14,12 +13,13 @@ var List = require('list');
     assert = require 'src/assert'
     signal = require 'src/signal'
 
+# **Class** List
+
     module.exports = class List extends signal.Emitter
         @__name__ = 'List'
         @__path__ = 'List'
 
-*List* List([*Array* data])
----------------------------
+## List::constructor([*Array* data])
 
 Creates a new list instance.
 
@@ -49,29 +49,25 @@ console.log(list instanceof List);
             if key isnt 'constructor'
                 @::[key] = Array::[key]
 
-*Signal* List::onChange(*Any* oldValue, *Integer* index)
---------------------------------------------------------
+## *Signal* List::onChange(*Any* oldValue, *Integer* index)
 
 Signal called on each value change.
 
         signal.Emitter.createSignal @, 'onChange'
 
-*Signal* List::onInsert(*Any* value, *Integer* index)
------------------------------------------------------
+## *Signal* List::onInsert(*Any* value, *Integer* index)
 
 Signal called when a value was added.
 
         signal.Emitter.createSignal @, 'onInsert'
 
-*Signal* List::onPop(*Any* oldValue, *Integer* index)
------------------------------------------------------
+## *Signal* List::onPop(*Any* oldValue, *Integer* index)
 
 Signal called when a value was removed.
 
         signal.Emitter.createSignal @, 'onPop'
 
-ReadOnly *Integer* List::length
--------------------------------
+## ReadOnly *Integer* List::length
 
 Amount of values stored in the list.
 
@@ -82,16 +78,15 @@ console.log(list.length);
 // 2
 ```
 
-*Any* List::set(*Integer* index, *Any* value)
----------------------------------------------
+## *Any* List::set(*Integer* index, *Any* value)
 
 Sets the given value under the given index.
 
 The index must exists in the list.
 
-The value can't be an `undefined`. Use [pop()][list/List::pop()] instead.
+The value can't be an `undefined`. Use `pop()` instead.
 
-Calls [onChange()][list/List::onChange()] signal.
+Calls `onChange()` signal.
 
 ```javascript
 var types = new List(['fantasy', 'Thriller']);
@@ -123,14 +118,13 @@ types.set(0, 'Fantasy');
 
             val
 
-*Any* List::append(*Any* value)
--------------------------------
+## *Any* List::append(*Any* value)
 
 Adds the given value on the end on the list.
 
 The value can't be an `undefined`.
 
-Calls [onInsert()][list/List::onInsert()] signal.
+Calls `onInsert()` signal.
 
 ```javascript
 var fridge = new List(['apple', 'milk']);
@@ -156,8 +150,7 @@ console.log(fridge.items());
 
             val
 
-*Any* List::insert(*Integer* index, *Any* value)
-------------------------------------------------
+## *Any* List::insert(*Integer* index, *Any* value)
 
 Add the given value under the given index.
 
@@ -165,7 +158,7 @@ The index can't be greater than the list length.
 
 The value can't be an `undefined`.
 
-Calls [onInsert()][list/List::onInsert()] signal.
+Calls `onInsert()` signal.
 
 ```javascript
 var list = new List(['a', 'b']);
@@ -193,12 +186,11 @@ console.log(list.items());
 
             val
 
-*List* List::extend(*Object* items)
------------------------------------
+## *List* List::extend(*Object* items)
 
 Appends all values stored in the given items into the list.
 
-Calls [onInsert()][list/List::onInsert()] signal for each value.
+Calls `onInsert()` signal for each value.
 
         extend: (items) ->
             assert.isObject items
@@ -208,12 +200,11 @@ Calls [onInsert()][list/List::onInsert()] signal for each value.
 
             @
 
-*Any* List::remove(*Any* value)
--------------------------------
+## *Any* List::remove(*Any* value)
 
 Removes the given value from the list.
 
-Calls [onPop()][list/List::onPop()] signal.
+Calls `onPop()` signal.
 
 ```javascript
 var list = new List(['a', 'b']);
@@ -238,14 +229,13 @@ console.log(list);
 
             val
 
-*Any* List::pop([*Integer* index])
-----------------------------------
+## *Any* List::pop([*Integer* index])
 
 Removes the value stored in the list under the given index.
 
 The index must exists in the list.
 
-Calls [onPop()][list/List::onPop()] signal.
+Calls `onPop()` signal.
 
 ```javascript
 var list = new List(['a', 'b']);
@@ -275,12 +265,11 @@ console.log(list);
 
             oldVal
 
-List::clear()
--------------
+## List::clear()
 
 Removes all values stored in the list.
 
-Calls [onPop()][list/List::onPop()] signal for each value.
+Calls `onPop()` signal for each value.
 
 ```javascript
 var list = new List(['a', 'b']);
@@ -306,8 +295,7 @@ console.log(list);
 
             return
 
-*Integer* List::index(*Any* value)
-----------------------------------
+## *Integer* List::index(*Any* value)
 
 Returns the given value index in the list.
 
@@ -328,12 +316,11 @@ console.log(list.index('c'));
 
             @indexOf val
 
-*Boolean* List::has(*Any* value)
---------------------------------
+## *Boolean* List::has(*Any* value)
 
 Returns `true` if the given value exists in the list.
 
-```
+```javascript
 var list = new List(['a', 'b']);
 
 console.log(list.has('a'));
@@ -346,11 +333,14 @@ console.log(list.has('ab123'));
         has: (val) ->
             @index(val) isnt -1
 
-*Array* List::toArray()
------------------------
+## *Array* List::toArray()
 
         toArray: ->
             arr = new Array @length
             for val, i in this
                 arr[i] = val
             arr
+
+# Glossary
+
+- [List](#class-list)

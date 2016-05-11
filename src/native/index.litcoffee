@@ -1,5 +1,4 @@
-Native @library
-===============
+# Native Communication
 
     'use strict'
 
@@ -39,8 +38,7 @@ Native @library
             log.warn "No listeners added for the native event '#{name}'"
         return
 
-callFunction(*String* name, [*Boolean|Float|String* args...])
--------------------------------------------------------------
+## callFunction(*String* name, [*Boolean*|*Float*|*String* args...])
 
     pushPending = false
 
@@ -83,8 +81,7 @@ callFunction(*String* name, [*Boolean|Float|String* args...])
             setImmediate sendData
         return
 
-on(*String* eventName, *Function* listener)
--------------------------------------------
+## on(*String* eventName, *Function* listener)
 
     exports.on = (name, listener) ->
         assert.isString name

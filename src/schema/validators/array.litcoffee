@@ -1,5 +1,4 @@
-array @validator
-================
+# Array Validator
 
 Determines whether the tested value is an array.
 
