@@ -83,11 +83,11 @@ module.exports = (impl) ->
 
         # manage focus
         innerElem.addEventListener 'focus', (e) ->
+            self.keys.focus = true
             unless self.keys.focus
                 e.preventDefault()
         innerElem.addEventListener 'blur', (e) ->
-            if self.keys.focus
-                data.innerElem.focus()
+            self.keys.focus = false
         @keys.onFocusChange (oldVal) ->
             data.innerElem[if !oldVal then 'focus' else 'blur']()
 
