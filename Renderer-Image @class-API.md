@@ -37,7 +37,7 @@ Image @class
   * [onLoad()](#signal-imageonload)
   * [onError(error)](#signal-imageonerrorerror-error)
 
-*Image* Image.New([*Component* component, *Object* options])
+*Image* Image.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#image-imagenewcomponent-component-object-options)
@@ -47,18 +47,18 @@ Image @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#image-image--rendereritem)
 
-*Float* Image.pixelRatio = 1
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image.pixelRatio = 1
 ----------------------------
-## *Signal* Image.onPixelRatioChange(*Float* oldValue)
+## *Signal* Image.onPixelRatioChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#float-imagepixelratio--1-signal-imageonpixelratiochangefloat-oldvalue)
 
-*Float* Image::width = -1
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::width = -1
 -------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#float-imagewidth--1)
 
-*Float* Image::height = -1
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::height = -1
 --------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#float-imageheight--1)
@@ -72,32 +72,32 @@ The image source URL or data URI.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#signal-imageonsourcechangestring-oldvalue)
 
-ReadOnly *Float* Image::resolution = 1
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::resolution = 1
 --------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#readonly-float-imageresolution--1)
 
-Hidden *Float* Image::sourceWidth = 0
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::sourceWidth = 0
 -------------------------------------
-## Hidden *Signal* Image::onSourceWidthChange(*Float* oldValue)
+## Hidden *Signal* Image::onSourceWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imagesourcewidth--0-hidden-signal-imageonsourcewidthchangefloat-oldvalue)
 
-Hidden *Float* Image::sourceHeight = 0
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::sourceHeight = 0
 --------------------------------------
-## Hidden *Signal* Image::onSourceHeightChange(*Float* oldValue)
+## Hidden *Signal* Image::onSourceHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imagesourceheight--0-hidden-signal-imageonsourceheightchangefloat-oldvalue)
 
-Hidden *Float* Image::offsetX = 0
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::offsetX = 0
 ---------------------------------
-## Hidden *Signal* Image::onOffsetXChange(*Float* oldValue)
+## Hidden *Signal* Image::onOffsetXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imageoffsetx--0-hidden-signal-imageonoffsetxchangefloat-oldvalue)
 
-Hidden *Float* Image::offsetY = 0
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::offsetY = 0
 ---------------------------------
-## Hidden *Signal* Image::onOffsetYChange(*Float* oldValue)
+## Hidden *Signal* Image::onOffsetYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imageoffsety--0-hidden-signal-imageonoffsetychangefloat-oldvalue)
 

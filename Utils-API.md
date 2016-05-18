@@ -295,7 +295,7 @@ Elements order may be changed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#removefromunorderedarrayarray-array-any-element)
 
-## *Object* getPropertyDescriptor(*NotPrimitive* object, *String* property)
+## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) getPropertyDescriptor(*NotPrimitive* object, *String* property)
 
 Returns the descriptor of the given property defined in the given object.
 ```javascript
@@ -433,7 +433,7 @@ console.log(obj);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-clearnotprimitive-object)
 
-## *Object* setPrototypeOf(*NotPrimitive* object, *NotPrimitive*|*Null* prototype)
+## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) setPrototypeOf(*NotPrimitive* object, *NotPrimitive*|*Null* prototype)
 
 Changes the given object prototype into the given prototype.
 **This function on some environments returns a new object.**
@@ -478,7 +478,7 @@ console.log(utils.has('abc', 'e'))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-hasany-object-any-value)
 
-## *Array* objectToArray(*Object* object, [*Function* valueGen, *Array* target = `[]`])
+## *Array* objectToArray([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object, [*Function* valueGen, *Array* target = `[]`])
 
 Translates the given object into an array.
 Array elements are determined by the given valueGen function.
@@ -500,7 +500,7 @@ console.log(utils.objectToArray(object, function(key, val){
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#array-objecttoarrayobject-object-function-valuegen-array-target--)
 
-## *Object* arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, *Object* target = `{}`])
+## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) target = `{}`])
 
 Translates the given array into an object.
 Object keys are determined by the given keyGen function.
@@ -612,7 +612,7 @@ console.log(bindFunc('a'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-bindfunctioncontextfunction-function-any-context)
 
-## *Object* errorToObject(*Error* error)
+## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) errorToObject(*Error* error)
 
 Returns a plain object with the given error name, message and other custom properties.
 Standard error `name` and `message` properties are not enumerable.
@@ -624,13 +624,13 @@ console.log(utils.errorToObject(error));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-errortoobjecterror-error)
 
-## *Object* getOwnProperties(*Object* object)
+## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) getOwnProperties([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object)
 
 Returns an array or an object with own properties associated in the given object.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-getownpropertiesobject-object)
 
-## *Boolean* isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep = `Infinity`])
+## *Boolean* isEqual([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object1, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object2, [*Function* compareFunction, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep = `Infinity`])
 
 Returns `true` if the given objects have equal values.
 The given compareFunction is used to compare two values (which at least one them is primitive).
@@ -650,5 +650,12 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 ## Glossary
 
+ - [NOP](#function-nop)
+ - [Float](#boolean-isfloatany-value)
  - [Integer](#boolean-isintegerany-value)
+ - [Primitive](#boolean-isprimitiveany-value)
+ - [Object](#boolean-isobjectany-value)
+ - [PlainObject](#boolean-isplainobjectany-value)
+ - [Arguments](#boolean-isargumentsany-value)
+ - [utils.is()](#boolean-isany-value1-any-value2)
 

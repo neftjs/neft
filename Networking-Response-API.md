@@ -55,7 +55,7 @@ console.log(Networking.Response.BAD_REQUEST);
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#array-responsestatuses)
 
-*Response* Response(*Object* options)
+*Response* Response([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 -------------------------------------
 
 Access it with:
@@ -116,12 +116,12 @@ res.data = Document.fromJSON(...);
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#any-responsedata)
 
-*Object* Response::headers
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Response::headers
 --------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#object-responseheaders)
 
-*Object* Response::cookies
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Response::cookies
 --------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#object-responsecookies)

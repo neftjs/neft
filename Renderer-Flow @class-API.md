@@ -27,7 +27,7 @@ Flow @class
   * [includeBorderMargins = false](#boolean-flowincludebordermargins--false)
   * [collapseMargins = false](#boolean-flowcollapsemargins--false)
 
-*Flow* Flow.New([*Component* component, *Object* options])
+*Flow* Flow.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ----------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#flow-flownewcomponent-component-object-options)

@@ -26,30 +26,30 @@ Font @extension
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#string-fontfamily--sansserif-signal-fontonfamilychangestring-oldvalue)
 
-*Float* Font.pixelSize = 14
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Font.pixelSize = 14
 ---------------------------
 ## *Signal* Font.onPixelSizeChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#float-fontpixelsize--14-signal-fontonpixelsizechangestring-oldvalue)
 
-*Float* Font.weight = 0.4
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Font.weight = 0.4
 -------------------------
 
 In range from 0 to 1.
 
-## *Signal* Font.onWeightChange(*Float* oldValue)
+## *Signal* Font.onWeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#signal-fontonweightchangefloat-oldvalue)
 
-Hidden *Float* Font.wordSpacing = 0
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Font.wordSpacing = 0
 -----------------------------------
-## Hidden *Signal* Font.onWordSpacingChange(*Float* oldValue)
+## Hidden *Signal* Font.onWordSpacingChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontwordspacing--0-hidden-signal-fontonwordspacingchangefloat-oldvalue)
 
-Hidden *Float* Font.letterSpacing = 0
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Font.letterSpacing = 0
 -------------------------------------
-## Hidden *Signal* Font.onLetterSpacingChange(*Float* oldValue)
+## Hidden *Signal* Font.onLetterSpacingChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontletterspacing--0-hidden-signal-fontonletterspacingchangefloat-oldvalue)
 

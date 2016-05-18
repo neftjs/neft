@@ -18,7 +18,7 @@ Route @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#document-routegettemplateviewstring-viewname)
 
-*Route* Route(*Object* options)
+*Route* Route([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 -------------------------------
 
 Access it with:
@@ -29,11 +29,11 @@ module.exports = function(app){
 ```
 Acceptable syntaxes:
 ```javascript
-*Route* app.Route(*String* method, *String* uri, *Object* options)
+*Route* app.Route(*String* method, *String* uri, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 *Route* app.Route(*String* methodWithUri, *Function* getData)
-*Route* app.Route(*String* methodWithUri, *Object* options)
+*Route* app.Route(*String* methodWithUri, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 *Route* app.Route(*String* uri, *Function* getData)
-*Route* app.Route(*String* uri, *Object* options)
+*Route* app.Route(*String* uri, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 *Route* app.Route(*String* method, *String* uri)
 *Route* app.Route(*String* uri)
 *Route* app.Route(*String* methodWithUri)

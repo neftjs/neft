@@ -110,7 +110,7 @@ Check *utils.isPrimitive()* for more details.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotstringany-value-string-message)
 
-### assert.isFloat(*Float* value, [*String* message])
+### assert.isFloat([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) value, [*String* message])
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisfloatfloat-value-string-message)
 
@@ -142,7 +142,7 @@ Check *utils.isPrimitive()* for more details.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotfunctionany-value-string-message)
 
-### assert.isObject(*Object* value, [*String* message])
+### assert.isObject([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) value, [*String* message])
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisobjectobject-value-string-message)
 
@@ -150,7 +150,7 @@ Check *utils.isPrimitive()* for more details.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotobjectany-value-string-message)
 
-### assert.isPlainObject(*PlainObject* value, [*String* message])
+### assert.isPlainObject([*PlainObject*](/Neft-io/neft/wiki/Utils-API.md#boolean-isplainobjectany-value) value, [*String* message])
 
 Check *utils.isPlainObject()* for more details.
 
@@ -168,18 +168,18 @@ Check *utils.isPlainObject()* for more details.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotarrayany-value-string-message)
 
-### assert.isEqual(*Any* value1, *Any* value2, [*String* message, *Object* options])
+### assert.isEqual(*Any* value1, *Any* value2, [*String* message, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 
 Check *utils.isEqual()* for more details.
 The given options object accepts: [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisequalany-value1-any-value2-string-message-object-options)
 
-### assert.isNotEqual(*Any* value1, *Any* value2, [*String* message, *Object* options])
+### assert.isNotEqual(*Any* value1, *Any* value2, [*String* message, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotequalany-value1-any-value2-string-message-object-options)
 
-### assert.instanceOf(*Object* object, *Function* constructor, [*String* message])
+### assert.instanceOf([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object, *Function* constructor, [*String* message])
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertinstanceofobject-object-function-constructor-string-message)
 

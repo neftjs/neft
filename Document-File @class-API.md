@@ -114,7 +114,7 @@ File::destroy()
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/file.litcoffee#filedestroy)
 
-*Object* File::toJSON()
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) File::toJSON()
 -----------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/file.litcoffee#object-filetojson)

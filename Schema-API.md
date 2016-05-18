@@ -33,7 +33,7 @@ var SchemaError = Schema.Error;
 
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#class-schema)
 
-### Schema::constructor(*Object* schema)
+### Schema::constructor([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) schema)
 
 Creates a new Schema instance used to validate data.
 Specify schema validators for each of the accepted property.
@@ -51,14 +51,14 @@ new Schema({
 
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#schemaconstructorobject-schema)
 
-### *Object* Schema::schema
+### [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Schema::schema
 
 Saved schema object from the constructor.
 It's allowed to change this object in runtime.
 
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#object-schemaschema)
 
-### *Boolean* Schema::validate(*Object* data)
+### *Boolean* Schema::validate([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) data)
 
 Validates the given data object by the schema.
 Returns `true` if the data is valid, otherwise throws an SchemaError instance.

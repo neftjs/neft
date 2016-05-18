@@ -10,7 +10,7 @@ neft:function @js
   * [globalObject.require(moduleName)](#function-globalobjectrequirestring-modulename)
   * [globalObject.arguments](#arguments-globalobjectarguments)
 
-ReadOnly *Object* globalObject
+ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) globalObject
 ------------------------------
 
 Used as a global namespace in the function body.
@@ -30,7 +30,7 @@ Requires standard Neft modules.
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#function-globalobjectrequirestring-modulename)
 
-*Arguments* globalObject.arguments
+[*Arguments*](/Neft-io/neft/wiki/Utils-API.md#boolean-isargumentsany-value) globalObject.arguments
 ----------------------------------
 
 Array-like object with arguments passed to the function.

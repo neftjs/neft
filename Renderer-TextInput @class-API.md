@@ -18,7 +18,7 @@ TextInput @class
   * [Hidden alignment](#hidden-alignment-textinputalignment)
   * [font](#font-textinputfont)
 
-*TextInput* TextInput.New([*Component* component, *Object* options])
+*TextInput* TextInput.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 --------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#textinput-textinputnewcomponent-component-object-options)
@@ -33,9 +33,9 @@ TextInput @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#textinput-textinput--rendereritem)
 
-*Float* TextInput::width = 100
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) TextInput::width = 100
 ------------------------------
-*Float* TextInput::height = 50
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) TextInput::height = 50
 ------------------------------
 *String* TextInput::text
 ------------------------
@@ -49,9 +49,9 @@ TextInput @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#string-textinputcolor--black-signal-textinputoncolorchangestring-oldvalue)
 
-Hidden *Float* TextInput::lineHeight = 1
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) TextInput::lineHeight = 1
 ----------------------------------------
-## Hidden *Signal* TextInput::onLineHeightChange(*Float* oldValue)
+## Hidden *Signal* TextInput::onLineHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#hidden-float-textinputlineheight--1-hidden-signal-textinputonlineheightchangefloat-oldvalue)
 

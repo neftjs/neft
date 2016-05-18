@@ -37,7 +37,7 @@ Unit.afterEach(*Function* code)
 
 > [`Source`](/Neft-io/neft/tree/master/src/unit/index.litcoffee#unitaftereachfunction-code)
 
-Unit.whenChange(*Object* watchObject, *Function* callback, [[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDelay = `1000`])
+Unit.whenChange([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) watchObject, *Function* callback, [[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDelay = `1000`])
 -----------------------------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/unit/index.litcoffee#unitwhenchangeobject-watchobject-function-callback-integer-maxdelay--1000)

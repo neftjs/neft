@@ -29,7 +29,7 @@ Transition @modifier
   * [*Renderer.Animation* animation](#rendereranimation-transitionanimation)
   * [property](#string-transitionproperty)
 
-*Transition* Transition.New([*Component* component, *Object* options])
+*Transition* Transition.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ----------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/transition.litcoffee#transition-transitionnewcomponent-component-object-options)

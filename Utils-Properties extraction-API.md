@@ -9,7 +9,7 @@
   * [**Class** utils.get.OptionsArray()](#class-utilsgetoptionsarray)
   * [isStringArray(value)](#boolean-isstringarraystring-value)
 
-## *Any* get(*Object* object, *String* path, [*OptionsArray* target])
+## *Any* get([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object, *String* path, [*OptionsArray* target])
 
 Extracts property, deep property or an array of possible properties from the given object.
 ```javascript

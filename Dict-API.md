@@ -31,14 +31,14 @@ const { Dict } = Neft
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#class-dict)
 
-### [*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) Dict.fromJSON(*String*|*Object* json)
+### [*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) Dict.fromJSON(*String*|[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) json)
 
 Creates a new [*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) from a json string.
 This function should be used with `toJSON()` output.
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json)
 
-### Dict::constructor([*Object* data])
+### Dict::constructor([[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) data])
 
 Creates a new dict instance.
 The given data parameter determines default keys with their values.
@@ -104,7 +104,7 @@ Returns `true` if the given key exists in the dict.
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#boolean-dicthasstring-key)
 
-### [*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) Dict::extend(*Object*|[*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) object)
+### [*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) Dict::extend([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value)|[*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) object)
 
 Sets all keys with their values from the given object.
 Calls `onChange()` signal for each key.

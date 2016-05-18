@@ -31,7 +31,7 @@ var Networking = require('networking');
     * [Local requests](#local-requests)
     * [Requests to the server](#requests-to-the-server)
 
-*Networking* Networking(*Object* options)
+*Networking* Networking([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 -----------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networking-networkingobject-options)
@@ -74,7 +74,7 @@ Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 
 ReadOnly [*List*](/Neft-io/neft/wiki/List-API.md#class-list) Networking::pendingRequests
 -------------------------------------------
-*Networking.Handler* Networking::createHandler(*Object* options)
+*Networking.Handler* Networking::createHandler([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 ----------------------------------------------------------------
 
 Use this method to create a new [Handler][networking/Handler].

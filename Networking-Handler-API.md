@@ -14,7 +14,7 @@ Handler
   * [exec(*Networking.Request* request, *Networking.Response* response, next)](#handlerexecnetworkingrequest-request-networkingresponse-response-function-next)
   * [toString()](#string-handlertostring)
 
-*Handler* Handler(*Object* options)
+*Handler* Handler([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 -----------------------------------
 
 Represents a callback function called on the request.

@@ -127,7 +127,7 @@ console.log(list.items());
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listinsertinteger-index-any-value)
 
-### [*List*](/Neft-io/neft/wiki/List-API.md#class-list) List::extend(*Object* items)
+### [*List*](/Neft-io/neft/wiki/List-API.md#class-list) List::extend([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) items)
 
 Appends all values stored in the given items into the list.
 Calls `onInsert()` signal for each value.

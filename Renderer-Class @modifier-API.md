@@ -28,7 +28,7 @@ Class @modifier
   * [classes](#list-itemclasses)
   * [onClassesChange(added, removed)](#signal-itemonclasseschangestring-added-string-removed)
 
-*Class* Class.New([*Component* component, *Object* options])
+*Class* Class.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#class-classnewcomponent-component-object-options)
@@ -58,7 +58,7 @@ If state is created inside the [Item][renderer/Item], this property is set autom
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classontargetchangerendereritem-oldvalue)
 
-*Object* Class::changes
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Class::changes
 -----------------------
 
 This objects contains all properties to change on the target item.
@@ -96,7 +96,7 @@ Mostly used with bindings.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classonwhenchangeboolean-oldvalue)
 
-*Object* Class::children
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Class::children
 ------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildren)
@@ -106,12 +106,12 @@ Mostly used with bindings.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#integer-classchildrenlength--0)
 
-*Object* Class::children.append(*Object* value)
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Class::children.append([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) value)
 -----------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildrenappendobject-value)
 
-*Object* Class::children.pop([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Class::children.pop([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 ---------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildrenpopinteger-index)

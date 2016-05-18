@@ -23,7 +23,7 @@ Column @class
   * [alignment](#alignment-columnalignment)
   * [includeBorderMargins = false](#boolean-columnincludebordermargins--false)
 
-*Column* Column.New([*Component* component, *Object* options])
+*Column* Column.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 --------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/column.litcoffee#column-columnnewcomponent-component-object-options)
@@ -39,9 +39,9 @@ Column @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/column.litcoffee#margin-columnpadding-signal-columnonpaddingchangemargin-padding)
 
-*Float* Column::spacing = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Column::spacing = 0
 ---------------------------
-## *Signal* Column::onSpacingChange(*Float* oldValue)
+## *Signal* Column::onSpacingChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/column.litcoffee#float-columnspacing--0-signal-columnonspacingchangefloat-oldvalue)
 

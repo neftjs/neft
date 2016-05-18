@@ -60,7 +60,7 @@ Item @class
   * [keys](#keys-itemkeys)
   * [document](#document-itemdocument)
 
-*Item* Item.New([*Component* component, *Object* options])
+*Item* Item.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ----------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#item-itemnewcomponent-component-object-options)
@@ -132,7 +132,7 @@ properties have been set and it's ready to use.
 
 ReadOnly *String* Item::id
 --------------------------
-*Object* Item::children
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Item::children
 -----------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#readonly-string-itemidobject-itemchildren)
@@ -290,43 +290,43 @@ Determines whether an item is visible or not.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#boolean-itemclip--false-signal-itemonclipchangeboolean-oldvalue)
 
-*Float* Item::width = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::width = 0
 -----------------------
-## *Signal* Item::onWidthChange(*Float* oldValue)
+## *Signal* Item::onWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemwidth--0-signal-itemonwidthchangefloat-oldvalue)
 
-*Float* Item::height = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::height = 0
 ------------------------
-## *Signal* Item::onHeightChange(*Float* oldValue)
+## *Signal* Item::onHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemheight--0-signal-itemonheightchangefloat-oldvalue)
 
-*Float* Item::x = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::x = 0
 -------------------
-## *Signal* Item::onXChange(*Float* oldValue)
+## *Signal* Item::onXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemx--0-signal-itemonxchangefloat-oldvalue)
 
-*Float* Item::y = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::y = 0
 -------------------
-## *Signal* Item::onYChange(*Float* oldValue)
+## *Signal* Item::onYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemy--0-signal-itemonychangefloat-oldvalue)
 
-*Float* Item::z = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::z = 0
 -------------------
-## *Signal* Item::onZChange(*Float* oldValue)
+## *Signal* Item::onZChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemz--0-signal-itemonzchangefloat-oldvalue)
 
-*Float* Item::scale = 1
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::scale = 1
 -----------------------
-## *Signal* Item::onScaleChange(*Float* oldValue)
+## *Signal* Item::onScaleChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemscale--1-signal-itemonscalechangefloat-oldvalue)
 
-*Float* Item::rotation = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::rotation = 0
 --------------------------
 
 ```nml
@@ -338,13 +338,13 @@ Determines whether an item is visible or not.
 `}
 ```
 
-## *Signal* Item::onRotationChange(*Float* oldValue)
+## *Signal* Item::onRotationChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonrotationchangefloat-oldvalue)
 
-*Float* Item::opacity = 1
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::opacity = 1
 -------------------------
-## *Signal* Item::onOpacityChange(*Float* oldValue)
+## *Signal* Item::onOpacityChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemopacity--1-signal-itemonopacitychangefloat-oldvalue)
 

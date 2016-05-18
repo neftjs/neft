@@ -79,12 +79,12 @@ watcher.disconnect();
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/tag.litcoffee#watcher-tagwatchstring-query)
 
-*String* Tag::stringify([*Object* replacements])
+*String* Tag::stringify([[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) replacements])
 ------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/tag.litcoffee#string-tagstringifyobject-replacements)
 
-*String* Tag::stringifyChildren([*Object* replacements])
+*String* Tag::stringifyChildren([[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) replacements])
 --------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/tag.litcoffee#string-tagstringifychildrenobject-replacements)

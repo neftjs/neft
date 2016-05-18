@@ -25,7 +25,7 @@ FontLoader @class
   * [name](#string-fontloadername)
   * [source](#string-fontloadersource)
 
-*FontLoader* FontLoader.New([*Component* component, *Object* options])
+*FontLoader* FontLoader.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ----------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewcomponent-component-object-options)

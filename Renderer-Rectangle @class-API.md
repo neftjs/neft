@@ -25,7 +25,7 @@ Rectangle @class
   * [border.width = 0](#float-rectangleborderwidth--0)
   * [border.color = 'transparent'](#string-rectanglebordercolor--transparent)
 
-*Rectangle* Rectangle.New([*Component* component, *Object* options])
+*Rectangle* Rectangle.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 --------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectanglenewcomponent-component-object-options)
@@ -41,9 +41,9 @@ Rectangle @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#string-rectanglecolor--transparent-signal-rectangleoncolorchangestring-oldvalue)
 
-*Float* Rectangle::radius = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Rectangle::radius = 0
 -----------------------------
-## *Signal* Rectangle::onRadiusChange(*Float* oldValue)
+## *Signal* Rectangle::onRadiusChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#float-rectangleradius--0-signal-rectangleonradiuschangefloat-oldvalue)
 
@@ -53,9 +53,9 @@ Rectangle @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#border-rectangleborder-signal-rectangleonborderchangestring-property-any-oldvalue)
 
-*Float* Rectangle::border.width = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Rectangle::border.width = 0
 -----------------------------------
-## *Signal* Rectangle::border.onWidthChange(*Float* oldValue)
+## *Signal* Rectangle::border.onWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#float-rectangleborderwidth--0-signal-rectangleborderonwidthchangefloat-oldvalue)
 

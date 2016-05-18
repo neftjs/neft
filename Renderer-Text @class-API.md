@@ -28,7 +28,7 @@ Text @class
   * [alignment](#alignment-textalignment)
   * [font](#font-textfont)
 
-*Text* Text.New([*Component* component, *Object* options])
+*Text* Text.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ----------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#text-textnewcomponent-component-object-options)
@@ -38,12 +38,12 @@ Text @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#text-text--rendereritem)
 
-*Float* Text::width = -1
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Text::width = -1
 ------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#float-textwidth--1)
 
-*Float* Text::height = -1
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Text::height = -1
 -------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#float-textheight--1)
@@ -66,21 +66,21 @@ Text @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#string-textlinkcolor--blue-signal-textonlinkcolorchangestring-oldvalue)
 
-Hidden *Float* Text::lineHeight = 1
+Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Text::lineHeight = 1
 -----------------------------------
-## Hidden *Signal* Text::onLineHeightChange(*Float* oldValue)
+## Hidden *Signal* Text::onLineHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#hidden-float-textlineheight--1-hidden-signal-textonlineheightchangefloat-oldvalue)
 
-ReadOnly *Float* Text::contentWidth
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Text::contentWidth
 -----------------------------------
-## *Signal* Text::onContentWidthChange(*Float* oldValue)
+## *Signal* Text::onContentWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#readonly-float-textcontentwidth-signal-textoncontentwidthchangefloat-oldvalue)
 
-ReadOnly *Float* Text::contentHeight
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Text::contentHeight
 ------------------------------------
-## *Signal* Text::onContentHeightChange(*Float* oldValue)
+## *Signal* Text::onContentHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#readonly-float-textcontentheight-signal-textoncontentheightchangefloat-oldvalue)
 

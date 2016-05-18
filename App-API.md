@@ -23,7 +23,7 @@ App @framework
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#dict-app)
 
-*Object* app.config = {}
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.config = {}
 ------------------------
 
 Config object from the *package.json* file.
@@ -70,7 +70,7 @@ HTTP protocol is used by default with the data specified in the *package.json*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#networking-appnetworking)
 
-*Object* app.models = {}
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.models = {}
 ------------------------
 
 Files from the *models* folder with objects returned by their exported functions.
@@ -95,14 +95,14 @@ Files from the *models* folder with objects returned by their exported functions
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appmodels--)
 
-*Object* app.routes = {}
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.routes = {}
 ------------------------
 
 Files from the *routes* folder with objects returned by their exported functions.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-approutes--)
 
-*Object* app.styles = {}
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.styles = {}
 ------------------------
 
 Files from the *styles* folder as *Function*s
@@ -110,7 +110,7 @@ ready to create new [Renderer.Item][renderer/Item]s.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appstyles--)
 
-*Object* app.views = {}
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.views = {}
 -----------------------
 
 Files from the *views* folder as the [Document][document/File] instances.

@@ -24,7 +24,7 @@ ResourcesLoader @class
   * [resources](#resources-resourcesloaderresources)
   * [progress = 0](#float-resourcesloaderprogress--0)
 
-*ResourcesLoader* ResourcesLoader.New([*Component* component, *Object* options])
+*ResourcesLoader* ResourcesLoader.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 --------------------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#resourcesloader-resourcesloadernewcomponent-component-object-options)
@@ -44,9 +44,9 @@ ResourcesLoader {}
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#resources-resourcesloaderresources)
 
-*Float* ResourcesLoader::progress = 0
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) ResourcesLoader::progress = 0
 -------------------------------------
-## *Signal* ResourcesLoaded::onProgressChange(*Float* oldValue)
+## *Signal* ResourcesLoaded::onProgressChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#float-resourcesloaderprogress--0-signal-resourcesloadedonprogresschangefloat-oldvalue)
 

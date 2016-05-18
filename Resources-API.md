@@ -33,12 +33,12 @@ Resources @engine
 
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#resourcesresource-resourcesgetresourcestring-uri)
 
-*String* Resources::resolve(*String* uri, [*Object* request])
+*String* Resources::resolve(*String* uri, [[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) request])
 -------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#string-resourcesresolvestring-uri-object-request)
 
-*Object* Resources::toJSON()
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Resources::toJSON()
 ----------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#object-resourcestojson)

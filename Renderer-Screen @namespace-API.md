@@ -13,7 +13,7 @@ Screen @namespace
   * [Screen.orientation = 'Portrait'](#readonly-string-screenorientation--portrait)
   * [Screen.onOrientationChange(oldValue)](#signal-screenonorientationchangestring-oldvalue)
 
-*Object* Screen
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Screen
 ---------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/screen.litcoffee#object-screen)
@@ -30,12 +30,12 @@ ReadOnly *Boolean* Screen.touch = false
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/screen.litcoffee#readonly-boolean-screentouch--false)
 
-ReadOnly *Float* Screen.width = 1024
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Screen.width = 1024
 ------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/screen.litcoffee#readonly-float-screenwidth--1024)
 
-ReadOnly *Float* Screen.height = 800
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Screen.height = 800
 ------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/screen.litcoffee#readonly-float-screenheight--800)

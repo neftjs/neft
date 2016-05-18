@@ -25,7 +25,7 @@ NumberAnimation @modifier
   * [NumberAnimation() : *Renderer.PropertyAnimation*](#numberanimation-numberanimation--rendererpropertyanimation)
   * [from](#float-numberanimationfrom)
 
-*NumberAnimation* NumberAnimation.New([*Component* component, *Object* options])
+*NumberAnimation* NumberAnimation.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 --------------------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimationnewcomponent-component-object-options)
@@ -35,8 +35,8 @@ NumberAnimation @modifier
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimation--rendererpropertyanimation)
 
-*Float* NumberAnimation::from
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) NumberAnimation::from
 -----------------------------
-*Float* NumberAnimation::to
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) NumberAnimation::to
 ---------------------------
 

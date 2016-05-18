@@ -12,7 +12,7 @@ Navigator @namespace
   * [Navigator.native = false](#boolean-navigatornative--false)
   * [Navigator.online = true](#boolean-navigatoronline--true)
 
-*Object* Navigator
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Navigator
 ------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#object-navigator)

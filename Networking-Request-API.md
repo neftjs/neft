@@ -48,7 +48,7 @@ Contains:
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#array-requesttypes)
 
-*Request* Request(*Object* options)
+*Request* Request([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
 -----------------------------------
 
 Class used to describe coming networking request.
@@ -118,7 +118,7 @@ It refers to one of the *Request.TYPES* values.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#string-requesttype)
 
-*Object* Request::data = null
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::data = null
 -----------------------------
 
 Holds a data sent with a request.
@@ -138,7 +138,7 @@ ReadOnly *Networking.Response* Request::response
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-networkingresponse-requestresponse)
 
-ReadOnly *Object* Request::params = {}
+ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::params = {}
 --------------------------------------
 
 Keeps matched parameters by the handler from the request uri.
@@ -147,7 +147,7 @@ the 'name' property is available as the *params.name*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestparams--)
 
-ReadOnly *Object* Request::headers
+ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::headers
 ----------------------------------
 
 Contains request headers.
@@ -155,7 +155,7 @@ For the client request, this object is empty.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestheaders)
 
-ReadOnly *Object* Request::cookies
+ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::cookies
 ----------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestcookies)

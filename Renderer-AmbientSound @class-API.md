@@ -24,7 +24,7 @@ AmbientSound @class
   * [start()](#ambientsoundstart)
   * [stop()](#ambientsoundstop)
 
-*AmbientSound* AmbientSound.New([*Component* component, *Object* options])
+*AmbientSound* AmbientSound.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 --------------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/sound/ambient.litcoffee#ambientsound-ambientsoundnewcomponent-component-object-options)

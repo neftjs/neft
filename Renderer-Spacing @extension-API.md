@@ -16,19 +16,19 @@ Spacing @extension
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/spacing.litcoffee#spacing-spacing)
 
-*Float* Spacing::column
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Spacing::column
 -----------------------
-## *Signal* Spacing::onColumnChange(*Float* oldValue)
+## *Signal* Spacing::onColumnChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/spacing.litcoffee#float-spacingcolumn-signal-spacingoncolumnchangefloat-oldvalue)
 
-*Float* Spacing::row
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Spacing::row
 --------------------
-## *Signal* Spacing::onRowChange(*Float* oldValue)
+## *Signal* Spacing::onRowChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/spacing.litcoffee#float-spacingrow-signal-spacingonrowchangefloat-oldvalue)
 
-*Float* Spacing::valueOf()
+[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Spacing::valueOf()
 --------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/spacing.litcoffee#float-spacingvalueof)

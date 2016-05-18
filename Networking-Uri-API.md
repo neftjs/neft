@@ -43,12 +43,12 @@ var Uri = Networking.Uri;
 ------------------
 *String* Uri::path
 ------------------
-*Object* Uri::params
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Uri::params
 --------------------
 
 Holds the last *Uri::match()* result.
 
-*Object* Uri::query
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Uri::query
 -------------------
 *String* Uri::hash
 ------------------
@@ -59,7 +59,7 @@ Test whether the uri is valid with the given string.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#object-uriquerystring-urihashboolean-uriteststring-uri)
 
-*Object* Uri::match(*String* uri)
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Uri::match(*String* uri)
 ---------------------------------
 
 Returns found parameters from the given string.

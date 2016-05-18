@@ -8,7 +8,7 @@
   * [simplify(object, [options])](#simplifyobject-object-object-options)
   * [assemble(object)](#assembleplainobject-object)
 
-## simplify(*Object* object, [*Object* options])
+## simplify([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object, [[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 
 Convert the given object into the most simplified format with no cyclic references and more.
 Such object can be easily stringified later using standard *JSON.stringify()*.
@@ -39,7 +39,7 @@ console.log(clone instanceof Sample)
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#simplifyobject-object-object-options)
 
-## assemble(*PlainObject* object)
+## assemble([*PlainObject*](/Neft-io/neft/wiki/Utils-API.md#boolean-isplainobjectany-value) object)
 
 Backward utils.simplify() operation.
 

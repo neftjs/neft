@@ -37,7 +37,7 @@ Device @namespace
   * [show()](#devicekeyboardeventshow)
   * [hide()](#devicekeyboardeventhide)
 
-*Object* Device
+[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Device
 ---------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#object-device)
@@ -160,39 +160,39 @@ ReadOnly *DeviceKeyboardEvent* Device.keyboard
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#devicepointerevent-devicepointerevent)
 
-ReadOnly *Float* DevicePointerEvent::x
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::x
 --------------------------------------
-## *Signal* DevicePointerEvent::onXChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventx-signal-devicepointereventonxchangefloat-oldvalue)
 
-ReadOnly *Float* DevicePointerEvent::y
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::y
 --------------------------------------
-## *Signal* DevicePointerEvent::onYChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventy-signal-devicepointereventonychangefloat-oldvalue)
 
-ReadOnly *Float* DevicePointerEvent::movementX
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::movementX
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onMovementXChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onMovementXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementx-signal-devicepointereventonmovementxchangefloat-oldvalue)
 
-ReadOnly *Float* DevicePointerEvent::movementY
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::movementY
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onMovementYChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onMovementYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementy-signal-devicepointereventonmovementychangefloat-oldvalue)
 
-ReadOnly *Float* DevicePointerEvent::deltaX
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::deltaX
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onDeltaXChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onDeltaXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltax-signal-devicepointereventondeltaxchangefloat-oldvalue)
 
-ReadOnly *Float* DevicePointerEvent::deltaY
+ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::deltaY
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onDeltaYChange(*Float* oldValue)
+## *Signal* DevicePointerEvent::onDeltaYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltay-signal-devicepointereventondeltaychangefloat-oldvalue)
 

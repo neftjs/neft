@@ -28,7 +28,7 @@ Grid @class
   * [alignment](#alignment-gridalignment)
   * [includeBorderMargins = false](#boolean-gridincludebordermargins--false)
 
-*Grid* Grid.New([*Component* component, *Object* options])
+*Grid* Grid.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
 ----------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#grid-gridnewcomponent-component-object-options)
