@@ -8,7 +8,11 @@
   * [callFunction(name, [args...])](#callfunctionstring-name-booleanfloatstring-args)
   * [on(eventName, listener)](#onstring-eventname-function-listener)
 
-## callFunction(*String* name, [*Boolean*|[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value)|*String* args...])
+## callFunction
+
+> callFunction(*String* name, [*Boolean*|[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value)|*String* args...])
+
+sdfsadfsdf
 
 > [`Source`](/Neft-io/neft/tree/master/src/native/index.litcoffee#callfunctionstring-name-booleanfloatstring-args)
 
