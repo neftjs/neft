@@ -63,7 +63,7 @@ console.log(dict.length);
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#readonly-integer-dictlength)
 
-### *Signal* Dict::onChange(*String* key, *Any* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Dict::onChange(*String* key, *Any* oldValue)
 
 Signal called on each key value change.
 ```javascript

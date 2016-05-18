@@ -34,31 +34,31 @@ AmbientSound @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/sound/ambient.litcoffee#ambientsound-ambientsound)
 
-*Signal* AmbientSound::onStart()
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) AmbientSound::onStart()
 --------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/sound/ambient.litcoffee#signal-ambientsoundonstart)
 
-*Signal* AmbientSound::onStop()
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) AmbientSound::onStop()
 -------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/sound/ambient.litcoffee#signal-ambientsoundonstop)
 
 *Boolean* AmbientSound::running
 -------------------------------
-## *Signal* AmbientSound::onRunningChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) AmbientSound::onRunningChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/sound/ambient.litcoffee#boolean-ambientsoundrunning-signal-ambientsoundonrunningchangeboolean-oldvalue)
 
 *String* AmbientSound::source = ''
 ----------------------------------
-## *Signal* AmbientSound::onSourceChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) AmbientSound::onSourceChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/sound/ambient.litcoffee#string-ambientsoundsource---signal-ambientsoundonsourcechangestring-oldvalue)
 
 *Boolean* AmbientSound::loop = false
 ------------------------------------
-## *Signal* AmbientSound::onLoopChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) AmbientSound::onLoopChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/sound/ambient.litcoffee#boolean-ambientsoundloop--false-signal-ambientsoundonloopchangeboolean-oldvalue)
 

@@ -77,13 +77,13 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsleft--null)
 
-## *Signal* Anchors::onLeftChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onLeftChange(*Array* oldValue)
 *Array* Anchors::right = null
 -----------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonleftchangearray-oldvaluearray-anchorsright--null)
 
-## *Signal* Anchors::onRightChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onRightChange(*Array* oldValue)
 *Array* Anchors::horizontalCenter = null
 ----------------------------------------
 
@@ -101,7 +101,7 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonrightchangearray-oldvaluearray-anchorshorizontalcenter--null)
 
-## *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onHorizontalCenterChange(*Array* oldValue)
 *Array* Anchors::top = null
 ---------------------------
 
@@ -119,13 +119,13 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonhorizontalcenterchangearray-oldvaluearray-anchorstop--null)
 
-## *Signal* Anchors::onTopChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onTopChange(*Array* oldValue)
 *Array* Anchors::bottom = null
 ------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsontopchangearray-oldvaluearray-anchorsbottom--null)
 
-## *Signal* Anchors::onBottomChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onBottomChange(*Array* oldValue)
 *Array* Anchors::verticalCenter = null
 --------------------------------------
 
@@ -143,7 +143,7 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonbottomchangearray-oldvaluearray-anchorsverticalcenter--null)
 
-## *Signal* Anchors::onVerticalCenterChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onVerticalCenterChange(*Array* oldValue)
 *Array* Anchors::centerIn = null
 --------------------------------
 
@@ -165,7 +165,7 @@ No target line is required.
 `}
 ```
 
-## *Signal* Anchors::onCenterInChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onCenterInChange(*Array* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsoncenterinchangearray-oldvalue)
 
@@ -187,19 +187,19 @@ No target line is required.
 `}
 ```
 
-## *Signal* Anchors::onFillChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillChange(*Array* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillchangearray-oldvalue)
 
 *Array* Anchors::fillWidth = null
 ---------------------------------
-## *Signal* Anchors::onFillWidthChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillWidthChange(*Array* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsfillwidth--null-signal-anchorsonfillwidthchangearray-oldvalue)
 
 *Array* Anchors::fillHeight = null
 ----------------------------------
-## *Signal* Anchors::onFillHeightChange(*Array* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillHeightChange(*Array* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsfillheight--null-signal-anchorsonfillheightchangearray-oldvalue)
 

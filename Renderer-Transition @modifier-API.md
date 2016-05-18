@@ -41,22 +41,22 @@ Transition @modifier
 
 *Boolean* Transition::when
 --------------------------
-## *Signal* Transition::onWhenChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Transition::onWhenChange(*Boolean* oldValue)
 *Renderer.Item* Transition::target
 ----------------------------------
-## *Signal* Transition::onTargetChange([*Renderer.Item* oldValue])
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Transition::onTargetChange([*Renderer.Item* oldValue])
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/transition.litcoffee#boolean-transitionwhen-signal-transitiononwhenchangeboolean-oldvaluerendereritem-transitiontarget-signal-transitionontargetchangerendereritem-oldvalue)
 
 *Renderer.Animation* Transition::animation
 ------------------------------------------
-## *Signal* Transition::onAnimationChange(*Renderer.Animation* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Transition::onAnimationChange(*Renderer.Animation* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/transition.litcoffee#rendereranimation-transitionanimation-signal-transitiononanimationchangerendereranimation-oldvalue)
 
 *String* Transition::property
 -----------------------------
-## *Signal* Transition::onPropertyChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Transition::onPropertyChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/transition.litcoffee#string-transitionproperty-signal-transitiononpropertychangestring-oldvalue)
 

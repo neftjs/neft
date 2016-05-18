@@ -44,20 +44,20 @@ Keys @extension
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#keys-keys)
 
-*Signal* Keys::onPress(*KeysEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onPress(*KeysEvent* event)
 -----------------------------------------
-*Signal* Keys::onHold(*KeysEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onHold(*KeysEvent* event)
 ----------------------------------------
-*Signal* Keys::onRelease(*KeysEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onRelease(*KeysEvent* event)
 -------------------------------------------
-*Signal* Keys::onInput(*KeysEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onInput(*KeysEvent* event)
 -----------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#signal-keysonpresskeysevent-eventsignal-keysonholdkeysevent-eventsignal-keysonreleasekeysevent-eventsignal-keysoninputkeysevent-event)
 
 *Boolean* Keys::focus = false
 -----------------------------
-## *Signal* Keys::onFocusChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onFocusChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#boolean-keysfocus--false-signal-keysonfocuschangeboolean-oldvalue)
 

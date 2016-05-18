@@ -48,7 +48,7 @@ Navigator @namespace
 
 *Boolean* Navigator.online = true
 ---------------------------------
-## *Signal* Navigator.onOnlineChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Navigator.onOnlineChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatoronline--true-signal-navigatorononlinechangeboolean-oldvalue)
 

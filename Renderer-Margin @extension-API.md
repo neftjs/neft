@@ -48,25 +48,25 @@ Margins are used in anchors and within layout items.
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::left = 0
 ------------------------
-## *Signal* Margin::onLeftChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onLeftChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-marginleft--0-signal-marginonleftchangefloat-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::top = 0
 -----------------------
-## *Signal* Margin::onTopChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onTopChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-margintop--0-signal-marginontopchangefloat-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::right = 0
 -------------------------
-## *Signal* Margin::onRightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onRightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-marginright--0-signal-marginonrightchangefloat-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::bottom = 0
 --------------------------
-## *Signal* Margin::onBottomChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onBottomChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-marginbottom--0-signal-marginonbottomchangefloat-oldvalue)
 
@@ -75,7 +75,7 @@ Margins are used in anchors and within layout items.
 
 Sum of the left and right margin.
 
-## *Signal* Margin::onHorizontalChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onHorizontalChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#signal-marginonhorizontalchangefloat-oldvalue)
 
@@ -84,7 +84,7 @@ Sum of the left and right margin.
 
 Sum of the top and bottom margin.
 
-## *Signal* Margin::onVerticalChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onVerticalChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#signal-marginonverticalchangefloat-oldvalue)
 

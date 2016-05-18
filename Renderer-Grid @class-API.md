@@ -40,37 +40,37 @@ Grid @class
 
 *Margin* Grid::padding
 ----------------------
-## *Signal* Grid::onPaddingChange(*Margin* padding)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Grid::onPaddingChange(*Margin* padding)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#margin-gridpadding-signal-gridonpaddingchangemargin-padding)
 
 [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Grid::columns = 2
 ---------------------------
-## *Signal* Grid::onColumnsChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Grid::onColumnsChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#integer-gridcolumns--2-signal-gridoncolumnschangeinteger-oldvalue)
 
 [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Grid::rows = Infinity
 -------------------------------
-## *Signal* Grid::onRowsChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Grid::onRowsChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#integer-gridrows--infinity-signal-gridonrowschangeinteger-oldvalue)
 
 *Spacing* Grid::spacing
 -----------------------
-## *Signal* Grid::onSpacingChange(*Spacing* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Grid::onSpacingChange(*Spacing* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#spacing-gridspacing-signal-gridonspacingchangespacing-oldvalue)
 
 *Alignment* Grid::alignment
 ---------------------------
-## *Signal* Grid::onAlignmentChange(*Alignment* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Grid::onAlignmentChange(*Alignment* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#alignment-gridalignment-signal-gridonalignmentchangealignment-oldvalue)
 
 *Boolean* Grid::includeBorderMargins = false
 --------------------------------------------
-## *Signal* Grid::onIncludeBorderMarginsChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Grid::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#boolean-gridincludebordermargins--false-signal-gridonincludebordermarginschangeboolean-oldvalue)
 

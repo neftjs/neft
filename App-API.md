@@ -122,7 +122,7 @@ Files from the *views* folder as the [Document][document/File] instances.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#resources-appresources)
 
-*Signal* app.onReady()
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) app.onReady()
 ----------------------
 
 Called when all modules, views, styled etc. have been loaded.

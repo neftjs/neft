@@ -62,7 +62,7 @@ var Request = Networking.Request;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#request-requestobject-options)
 
-*Signal* Request::onLoadEnd(*Any* error, *Any* data)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Request::onLoadEnd(*Any* error, *Any* data)
 ----------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#signal-requestonloadendany-error-any-data)

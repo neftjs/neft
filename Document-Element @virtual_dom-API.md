@@ -59,7 +59,7 @@ Element @virtual_dom
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementparent)
 
-## *Signal* Element::onParentChange(*Element* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Element::onParentChange(*Element* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonparentchangeelement-oldvalue)
 
@@ -68,7 +68,7 @@ Element @virtual_dom
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#rendereritem-elementstyle)
 
-## *Signal* Element::onStyleChange(*Renderer.Item* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Element::onStyleChange(*Renderer.Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonstylechangerendereritem-oldvalue)
 
@@ -77,7 +77,7 @@ Element @virtual_dom
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#boolean-elementvisible)
 
-## *Signal* Element::onVisibleChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Element::onVisibleChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonvisiblechangeboolean-oldvalue)
 

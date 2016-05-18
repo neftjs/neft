@@ -46,7 +46,7 @@ ResourcesLoader {}
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) ResourcesLoader::progress = 0
 -------------------------------------
-## *Signal* ResourcesLoaded::onProgressChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) ResourcesLoaded::onProgressChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#float-resourcesloaderprogress--0-signal-resourcesloadedonprogresschangefloat-oldvalue)
 

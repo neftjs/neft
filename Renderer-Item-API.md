@@ -36,20 +36,20 @@
     * [belowSibling](#readonly-item-itembelowsibling)
     * [aboveSibling](#readonly-item-itemabovesibling)
     * [index](#integer-itemindex)
-    * [visible = true](#boolean-itemvisible--true)
+    * [visible](#boolean-itemvisible--true)
     * [onVisibleChange(oldValue)](#signal-itemonvisiblechangeboolean-oldvalue)
-    * [clip = false](#boolean-itemclip--false)
-    * [width = 0](#float-itemwidth--0)
-    * [height = 0](#float-itemheight--0)
-    * [x = 0](#float-itemx--0)
-    * [y = 0](#float-itemy--0)
-    * [z = 0](#float-itemz--0)
-    * [scale = 1](#float-itemscale--1)
-    * [rotation = 0](#float-itemrotation--0)
+    * [clip](#boolean-itemclip--false)
+    * [width](#float-itemwidth--0)
+    * [height](#float-itemheight--0)
+    * [x](#float-itemx--0)
+    * [y](#float-itemy--0)
+    * [z](#float-itemz--0)
+    * [scale](#float-itemscale--1)
+    * [rotation](#float-itemrotation--0)
     * [onRotationChange(oldValue)](#signal-itemonrotationchangefloat-oldvalue)
-    * [opacity = 1](#float-itemopacity--1)
+    * [opacity](#float-itemopacity--1)
     * [linkUri = ''](#string-itemlinkuri--)
-  * [onLinkUriChange(oldValue)](#signal-itemonlinkurichangestring-oldvalue)
+    * [onLinkUriChange(oldValue)](#signal-itemonlinkurichangestring-oldvalue)
     * [background](#item-itembackground)
     * [onBackgroundChange(oldValue)](#signal-itemonbackgroundchangeitem-oldvalue)
     * [overlap(item)](#itemoverlapitem-item)
@@ -98,11 +98,11 @@ This is a base class for everything which is visible.
 `}
 ```
 
-### *Signal* Item::on$Change(*String* property, *Any* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::on$Change(*String* property, *Any* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonchangestring-property-any-oldvalue)
 
-### *Signal* Item::ready()
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::ready()
 
 Called when the Item is ready, that is, all
 properties have been set and it's ready to use.
@@ -114,7 +114,7 @@ Rectangle {
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemready)
 
-### *Signal* Item::onAnimationFrame([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) miliseconds)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onAnimationFrame([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) miliseconds)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonanimationframeinteger-miliseconds)
 
@@ -123,7 +123,7 @@ Rectangle {
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#readonly-string-itemid-object-itemchildren)
 
-### *Signal* Item::onChildrenChange(*Item* added, *Item* removed)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onChildrenChange(*Item* added, *Item* removed)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonchildrenchangeitem-added-item-removed)
 
@@ -152,7 +152,7 @@ Rectangle {
 Item used to position children items.
 Can be e.g. *Flow*, *Grid* etc.
 
-#### *Signal* Item::children.onLayoutChange(*Item* oldValue)
+#### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::children.onLayoutChange(*Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemchildrenonlayoutchangeitem-oldvalue)
 
@@ -161,7 +161,7 @@ Can be e.g. *Flow*, *Grid* etc.
 A new child trying to be added into the item with the `children.target` defined
 will be added into the `target` item.
 
-#### *Signal* Item::children.onTargetChange(*Item* oldValue)
+#### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::children.onTargetChange(*Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemchildrenontargetchangeitem-oldvalue)
 
@@ -190,7 +190,7 @@ Removes all children from the item.
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#itemchildrenclear)
 
 ### *Item* Item::parent = null
-### *Signal* Item::onParentChange(*Item* oldParent)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onParentChange(*Item* oldParent)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#item-itemparent--null-signal-itemonparentchangeitem-oldparent)
 
@@ -198,7 +198,7 @@ Removes all children from the item.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#item-itemprevioussibling)
 
-### *Signal* Item::onPreviousSiblingChange(*Item* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onPreviousSiblingChange(*Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonprevioussiblingchangeitem-oldvalue)
 
@@ -206,7 +206,7 @@ Removes all children from the item.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#item-itemnextsibling)
 
-### *Signal* Item::onNextSiblingChange(*Item* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onNextSiblingChange(*Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonnextsiblingchangeitem-oldvalue)
 
@@ -222,7 +222,7 @@ Removes all children from the item.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#integer-itemindex)
 
-### *Boolean* Item::visible = true
+### *Boolean* Item::visible = `true`
 
 Determines whether an item is visible or not.
 ```nml
@@ -236,46 +236,46 @@ Item {
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#boolean-itemvisible--true)
 
-### *Signal* Item::onVisibleChange(*Boolean* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onVisibleChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonvisiblechangeboolean-oldvalue)
 
-### *Boolean* Item::clip = false
-### *Signal* Item::onClipChange(*Boolean* oldValue)
+### *Boolean* Item::clip = `false`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onClipChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#boolean-itemclip--false-signal-itemonclipchangeboolean-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::width = 0
-### *Signal* Item::onWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::width = `0`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemwidth--0-signal-itemonwidthchangefloat-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::height = 0
-### *Signal* Item::onHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::height = `0`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemheight--0-signal-itemonheightchangefloat-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::x = 0
-### *Signal* Item::onXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::x = `0`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemx--0-signal-itemonxchangefloat-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::y = 0
-### *Signal* Item::onYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::y = `0`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemy--0-signal-itemonychangefloat-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::z = 0
-### *Signal* Item::onZChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::z = `0`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onZChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemz--0-signal-itemonzchangefloat-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::scale = 1
-### *Signal* Item::onScaleChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::scale = `1`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onScaleChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemscale--1-signal-itemonscalechangefloat-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::rotation = 0
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::rotation = `0`
 
 ```nml
 Rectangle {
@@ -286,12 +286,12 @@ Rectangle {
 }
 ```
 
-### *Signal* Item::onRotationChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onRotationChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonrotationchangefloat-oldvalue)
 
-### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::opacity = 1
-### *Signal* Item::onOpacityChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+### [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Item::opacity = `1`
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onOpacityChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#float-itemopacity--1-signal-itemonopacitychangefloat-oldvalue)
 
@@ -299,7 +299,7 @@ Rectangle {
 
 Points to the URI which will be used when user clicks on this item.
 
-## *Signal* Item::onLinkUriChange(*String* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onLinkUriChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonlinkurichangestring-oldvalue)
 
@@ -308,7 +308,7 @@ Points to the URI which will be used when user clicks on this item.
 An item used as a background for the item.
 By default, background is filled to his parent.
 
-### *Signal* Item::onBackgroundChange(*Item* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onBackgroundChange(*Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonbackgroundchangeitem-oldvalue)
 
@@ -319,12 +319,12 @@ Returns `true` if two items overlaps.
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#itemoverlapitem-item)
 
 ### *Item.Anchors* Item::anchors
-## *Signal* Item::onAnchorsChange(*String* property, *Array* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onAnchorsChange(*String* property, *Array* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#itemanchors-itemanchors-signal-itemonanchorschangestring-property-array-oldvalue)
 
 ### *Item.Layout* Item::layout
-## *Signal* Item::onLayoutChange(*String* property, *Any* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onLayoutChange(*String* property, *Any* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#itemlayout-itemlayout-signal-itemonlayoutchangestring-property-any-oldvalue)
 
@@ -333,7 +333,7 @@ Returns `true` if two items overlaps.
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#itempointer-itempointer)
 
 ### *Item.Margin* Item::margin
-## *Signal* Item::onMarginChange(*String* property, *Any* oldValue)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onMarginChange(*String* property, *Any* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#itemmargin-itemmargin-signal-itemonmarginchangestring-property-any-oldvalue)
 

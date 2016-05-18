@@ -36,7 +36,7 @@ var Networking = require('networking');
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networking-networkingobject-options)
 
-*Signal* Networking::onRequest(*Networking.Request* request, *Networking.Response* response)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Networking::onRequest(*Networking.Request* request, *Networking.Response* response)
 --------------------------------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#signal-networkingonrequestnetworkingrequest-request-networkingresponse-response)

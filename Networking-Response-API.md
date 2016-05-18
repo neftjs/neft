@@ -66,7 +66,7 @@ var Response = Networking.Response;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response-responseobject-options)
 
-*Signal* Response::onSend()
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Response::onSend()
 ---------------------------
 
 Called when the response has been sent.

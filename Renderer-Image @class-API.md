@@ -49,7 +49,7 @@ Image @class
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image.pixelRatio = 1
 ----------------------------
-## *Signal* Image.onPixelRatioChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image.onPixelRatioChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#float-imagepixelratio--1-signal-imageonpixelratiochangefloat-oldvalue)
 
@@ -68,7 +68,7 @@ Image @class
 
 The image source URL or data URI.
 
-## *Signal* Image::onSourceChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onSourceChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#signal-imageonsourcechangestring-oldvalue)
 
@@ -79,31 +79,31 @@ ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Ima
 
 Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::sourceWidth = 0
 -------------------------------------
-## Hidden *Signal* Image::onSourceWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onSourceWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imagesourcewidth--0-hidden-signal-imageonsourcewidthchangefloat-oldvalue)
 
 Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::sourceHeight = 0
 --------------------------------------
-## Hidden *Signal* Image::onSourceHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onSourceHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imagesourceheight--0-hidden-signal-imageonsourceheightchangefloat-oldvalue)
 
 Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::offsetX = 0
 ---------------------------------
-## Hidden *Signal* Image::onOffsetXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onOffsetXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imageoffsetx--0-hidden-signal-imageonoffsetxchangefloat-oldvalue)
 
 Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Image::offsetY = 0
 ---------------------------------
-## Hidden *Signal* Image::onOffsetYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onOffsetYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imageoffsety--0-hidden-signal-imageonoffsetychangefloat-oldvalue)
 
 Hidden [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Image::fillMode = 'Stretch'
 --------------------------------------------
-## Hidden *Signal* Image::onFillModeChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onFillModeChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-integer-imagefillmode--stretch-hidden-signal-imageonfillmodechangeinteger-oldvalue)
 
@@ -112,16 +112,16 @@ ReadOnly *Boolean* Image::loaded
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#readonly-boolean-imageloaded)
 
-## *Signal* Image::onLoadedChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onLoadedChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#signal-imageonloadedchangeboolean-oldvalue)
 
-*Signal* Image::onLoad()
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onLoad()
 ------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#signal-imageonload)
 
-*Signal* Image::onError(*Error* error)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Image::onError(*Error* error)
 --------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#signal-imageonerrorerror-error)

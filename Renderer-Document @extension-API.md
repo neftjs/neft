@@ -22,7 +22,7 @@ ReadOnly *String* Document::query
 
 *Document.Element* Document::node
 ---------------------------------
-## *Signal* Document::onNodeChange(*Document.Element* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Document::onNodeChange(*Document.Element* oldValue)
 
 ```nml
 `Text {

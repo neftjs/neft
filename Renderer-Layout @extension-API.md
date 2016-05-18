@@ -23,13 +23,13 @@ Layout @extension
 
 *Boolean* Layout::fillWidth = false
 -----------------------------------
-## *Signal* Layout::onFillWidthChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Layout::onFillWidthChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/layout.litcoffee#boolean-layoutfillwidth--false-signal-layoutonfillwidthchangeboolean-oldvalue)
 
 *Boolean* Layout::fillHeight = false
 -----------------------------------
-## *Signal* Layout::onFillHeightChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Layout::onFillHeightChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/layout.litcoffee#boolean-layoutfillheight--false-signal-layoutonfillheightchangeboolean-oldvalue)
 

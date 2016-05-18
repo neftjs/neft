@@ -45,7 +45,7 @@ ReadOnly *String* Screen.orientation = 'Portrait'
 
 May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
 
-## *Signal* Screen.onOrientationChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Screen.onOrientationChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/screen.litcoffee#signal-screenonorientationchangestring-oldvalue)
 

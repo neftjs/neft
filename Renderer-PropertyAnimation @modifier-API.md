@@ -30,61 +30,61 @@ PropertyAnimation @modifier
 
 *Renderer.Item* PropertyAnimation::target
 -----------------------------------------
-## *Signal* PropertyAnimation::onTargetChange(*Renderer.Item* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onTargetChange(*Renderer.Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#rendereritem-propertyanimationtarget-signal-propertyanimationontargetchangerendereritem-oldvalue)
 
 *String* PropertyAnimation::property
 ------------------------------------
-## *Signal* PropertyAnimation::onPropertyChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onPropertyChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#string-propertyanimationproperty-signal-propertyanimationonpropertychangestring-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::duration = 250
 -----------------------------------------
-## *Signal* PropertyAnimation::onDurationChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onDurationChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationduration--250-signal-propertyanimationondurationchangefloat-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::startDelay = 0
 -----------------------------------------
-## *Signal* PropertyAnimation::onStartDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onStartDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationstartdelay--0-signal-propertyanimationonstartdelaychangefloat-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::loopDelay = 0
 ----------------------------------------
-## *Signal* PropertyAnimation::onLoopDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onLoopDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationloopdelay--0-signal-propertyanimationonloopdelaychangefloat-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::delay = 0
 ------------------------------------
-## *Signal* PropertyAnimation::onDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationdelay--0-signal-propertyanimationondelaychangefloat-oldvalue)
 
 *Boolean* PropertyAnimation::updateData = false
 -----------------------------------------------
-## *Signal* PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#boolean-propertyanimationupdatedata--false-signal-propertyanimationonupdatedatachangeboolean-oldvalue)
 
 *Boolean* PropertyAnimation::updateProperty = false
 ---------------------------------------------------
-## *Signal* PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#boolean-propertyanimationupdateproperty--false-signal-propertyanimationonupdatepropertychangeboolean-oldvalue)
 
 *Any* PropertyAnimation::from
 -----------------------------
-## *Signal* PropertyAnimation::onFromChange(*Any* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onFromChange(*Any* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#any-propertyanimationfrom-signal-propertyanimationonfromchangeany-oldvalue)
 
 *Any* PropertyAnimation::to
 ---------------------------
-## *Signal* PropertyAnimation::onToChange(*Any* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onToChange(*Any* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#any-propertyanimationto-signal-propertyanimationontochangeany-oldvalue)
 
@@ -95,7 +95,7 @@ ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Pro
 
 *Easing* PropertyAnimation::easing
 ----------------------------------
-## *Signal* PropertyAnimation::onEasingChange(*Easing* value)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onEasingChange(*Easing* value)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#easing-propertyanimationeasing-signal-propertyanimationoneasingchangeeasing-value)
 
@@ -117,7 +117,7 @@ InOutBounce.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#string-easingtype--linear)
 
-## *Signal* Easing::onTypeChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Easing::onTypeChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#signal-easingontypechangestring-oldvalue)
 

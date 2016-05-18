@@ -15,7 +15,7 @@ Text @virtual_dom
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#text-text--element)
 
-*Signal* Text::onTextChange(*String* oldValue)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Text::onTextChange(*String* oldValue)
 ----------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#signal-textontextchangestring-oldvalue)

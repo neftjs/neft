@@ -39,25 +39,25 @@ TextInput @class
 ------------------------------
 *String* TextInput::text
 ------------------------
-## *Signal* TextInput::onTextChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) TextInput::onTextChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#float-textinputwidth--100float-textinputheight--50string-textinputtext-signal-textinputontextchangestring-oldvalue)
 
 *String* TextInput::color = 'black'
 -----------------------------------
-## *Signal* TextInput::onColorChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) TextInput::onColorChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#string-textinputcolor--black-signal-textinputoncolorchangestring-oldvalue)
 
 Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) TextInput::lineHeight = 1
 ----------------------------------------
-## Hidden *Signal* TextInput::onLineHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) TextInput::onLineHeightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#hidden-float-textinputlineheight--1-hidden-signal-textinputonlineheightchangefloat-oldvalue)
 
 *Boolean* TextInput::multiLine = false
 --------------------------------------
-## *Signal* TextInput::onMultiLineChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) TextInput::onMultiLineChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#boolean-textinputmultiline--false-signal-textinputonmultilinechangeboolean-oldvalue)
 
@@ -66,19 +66,19 @@ Hidden [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) TextI
 
 Accepts 'normal' and 'password'.
 
-## *Signal* TextInput::onEchoModeChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) TextInput::onEchoModeChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#signal-textinputonechomodechangestring-oldvalue)
 
 Hidden *Alignment* TextInput::alignment
 ---------------------------------------
-## Hidden *Signal* TextInput::onAlignmentChange(*Alignment* alignment)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) TextInput::onAlignmentChange(*Alignment* alignment)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#hidden-alignment-textinputalignment-hidden-signal-textinputonalignmentchangealignment-alignment)
 
 *Font* TextInput::font
 ----------------------
-## *Signal* TextInput::onFontChange(*String* property, *Any* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) TextInput::onFontChange(*String* property, *Any* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#font-textinputfont-signal-textinputonfontchangestring-property-any-oldvalue)
 

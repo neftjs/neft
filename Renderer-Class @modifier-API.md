@@ -44,7 +44,7 @@ Class @modifier
 This property is used in the [Item::classes][renderer/Item::classes] list
 to identify various classes.
 
-## *Signal* Class::onNameChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Class::onNameChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classonnamechangestring-oldvalue)
 
@@ -54,7 +54,7 @@ to identify various classes.
 Reference to the [Item][renderer/Item] on which this class has effects.
 If state is created inside the [Item][renderer/Item], this property is set automatically.
 
-## *Signal* Class::onTargetChange(*Renderer.Item* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Class::onTargetChange(*Renderer.Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classontargetchangerendereritem-oldvalue)
 
@@ -68,7 +68,7 @@ It accepts bindings and listeners as well.
 
 [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Class::priority = 0
 -----------------------------
-## *Signal* Class::onPriorityChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Class::onPriorityChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#integer-classpriority--0-signal-classonprioritychangeinteger-oldvalue)
 
@@ -92,7 +92,7 @@ Mostly used with bindings.
 `}
 ```
 
-## *Signal* Class::onWhenChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Class::onWhenChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classonwhenchangeboolean-oldvalue)
 
@@ -121,7 +121,7 @@ Mostly used with bindings.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#classdocument-classdocument)
 
-## *Signal* Class::onDocumentChange(*ClassDocument* document)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Class::onDocumentChange(*ClassDocument* document)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classondocumentchangeclassdocument-document)
 
@@ -132,13 +132,13 @@ Mostly used with bindings.
 
 *String* ClassDocument::query
 -----------------------------
-## *Signal* ClassDocument::onQueryChange(*String* oldValue)
-*Signal* ClassDocument::onNodeAdd(*Document.Element* node)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) ClassDocument::onQueryChange(*String* oldValue)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) ClassDocument::onNodeAdd(*Document.Element* node)
 ----------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#string-classdocumentquery-signal-classdocumentonquerychangestring-oldvaluesignal-classdocumentonnodeadddocumentelement-node)
 
-*Signal* ClassDocument::onNodeRemove(*Document.Element* node)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) ClassDocument::onNodeRemove(*Document.Element* node)
 -------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonnoderemovedocumentelement-node)
@@ -149,7 +149,7 @@ Mostly used with bindings.
 Classs at the end of the list have the highest priority.
 This property has a setter, which accepts a string and an array of strings.
 
-## *Signal* Item::onClassesChange(*String* added, *String* removed)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Item::onClassesChange(*String* added, *String* removed)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-itemonclasseschangestring-added-string-removed)
 

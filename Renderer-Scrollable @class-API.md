@@ -28,31 +28,31 @@ Scrollable @class
 ---------------------------------
 *Renderer.Item* Scrollable::contentItem = null
 ----------------------------------------------
-## *Signal* Scrollable::onContentItemChange([*Renderer.Item* oldValue])
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Scrollable::onContentItemChange([*Renderer.Item* oldValue])
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/scrollable.litcoffee#boolean-scrollableclip--truerendereritem-scrollablecontentitem--null-signal-scrollableoncontentitemchangerendereritem-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Scrollable::contentX = 0
 --------------------------------
-## *Signal* Scrollable::onContentXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Scrollable::onContentXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/scrollable.litcoffee#float-scrollablecontentx--0-signal-scrollableoncontentxchangefloat-oldvalue)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Scrollable::contentY = 0
 --------------------------------
-## *Signal* Scrollable::onContentYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Scrollable::onContentYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/scrollable.litcoffee#float-scrollablecontenty--0-signal-scrollableoncontentychangefloat-oldvalue)
 
 Hidden *Boolean* Scrollable::snap = false
 -----------------------------------------
-## Hidden *Signal* Scrollable::onSnapChange(*Boolean* oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Scrollable::onSnapChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/scrollable.litcoffee#hidden-boolean-scrollablesnap--false-hidden-signal-scrollableonsnapchangeboolean-oldvalue)
 
 Hidden *Renderer.Item* Scrollable::snapItem
 -------------------------------------------
-## Hidden *Signal* Scrollable::onSnapItemChange(*Renderer.Item* oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Scrollable::onSnapItemChange(*Renderer.Item* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/scrollable.litcoffee#hidden-rendereritem-scrollablesnapitem-hidden-signal-scrollableonsnapitemchangerendereritem-oldvalue)
 

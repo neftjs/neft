@@ -1,28 +1,28 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Signal @library**
+> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Signal**
 
-Signal @library
-===============
+# Signal
 
 Signal is a function with listeners which can be emitted.
 Access it with:
 ```javascript
-var signal = require('signal');
+const { signal } = Neft;
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal-library)
+> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal)
 
 ## Table of contents
-  * [signal.STOP_PROPAGATION](#integer-signalstoppropagation)
-  * [signal.create([object, name])](#signal-signalcreatenotprimitive-object-string-name)
-  * [signal.isEmpty(signal)](#boolean-signalisemptysignal-signal)
-  * [Signal()](#signal-signal)
-  * [emit([argument1, argument2])](#signalemitany-argument1-any-argument2)
-  * [connect(listener, [context])](#signalconnectfunction-listener-any-context)
-  * [Signal.disconnect(listener, [context])](#signaldisconnectfunction-listener-any-context)
-  * [Signal.disconnectAll()](#signaldisconnectall)
+* [Signal](#signal)
+  * [STOP_PROPAGATION](#integer-stoppropagation)
+  * [create([object, name])](#signal-createnotprimitive-object-string-name)
+  * [isEmpty(signal)](#boolean-isemptysignal-signal)
+  * [**Class** Signal](#class-signal)
+    * [emit([argument1, argument2])](#signalemitany-argument1-any-argument2)
+    * [connect(listener, [context])](#signalconnectfunction-listener-any-context)
+    * [disconnect(listener, [context])](#signaldisconnectfunction-listener-any-context)
+    * [disconnectAll()](#signaldisconnectall)
+* [Glossary](#glossary)
 
-[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) signal.STOP_PROPAGATION
----------------------------------
+## [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) STOP_PROPAGATION
 
 Special constant used to stop calling further listeners.
 Must be returned by the listener function.
@@ -41,10 +41,9 @@ obj.onPress.emit();
 // listener 1
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#integer-signalstoppropagation)
+> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#integer-stoppropagation)
 
-*Signal* signal.create([*NotPrimitive* object, *String* name])
---------------------------------------------------------------
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) create([*NotPrimitive* object, *String* name])
 
 Creates a new signal in the given object under the given name property.
 Returns created signal.
@@ -58,29 +57,25 @@ obj.onRename.emit('Max', 'George');
 // {0: "Max", 1: "George"}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal-signalcreatenotprimitive-object-string-name)
+> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal-createnotprimitive-object-string-name)
 
-*Boolean* signal.isEmpty(*Signal* signal)
------------------------------------------
+## *Boolean* isEmpty([*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) signal)
 
 Returns `true` if the given signal has no listeners.
 
-> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#boolean-signalisemptysignal-signal)
+> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#boolean-isemptysignal-signal)
 
-*Signal* Signal()
------------------
+## **Class** Signal
 
-> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal-signal)
+> [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#class-signal)
 
-Signal::emit([*Any* argument1, *Any* argument2])
-------------------------------------------------
+### Signal::emit([*Any* argument1, *Any* argument2])
 
 Call all of the signal listeners with the given arguments (2 maximally).
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signalemitany-argument1-any-argument2)
 
-Signal::connect(*Function* listener, [*Any* context])
------------------------------------------------------
+### Signal::connect(*Function* listener, [*Any* context])
 
 Adds the given listener function into the signal listeners.
 By default, the signal function works like this method.
@@ -116,8 +111,7 @@ obj.onPress.emit();
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signalconnectfunction-listener-any-context)
 
-Signal.disconnect(*Function* listener, [*Any* context])
--------------------------------------------------------
+### Signal::disconnect(*Function* listener, [*Any* context])
 
 Returns the given listener function from the signal listeners.
 ```javascript
@@ -134,10 +128,13 @@ obj.onPress.emit()
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signaldisconnectfunction-listener-any-context)
 
-Signal.disconnectAll()
-----------------------
+### Signal::disconnectAll()
 
 Removes all the signal listeners.
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signaldisconnectall)
+
+# Glossary
+
+ - [Signal](#class-signal)
 

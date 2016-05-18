@@ -24,28 +24,28 @@ File @class
   * [destroy()](#filedestroy)
   * [toJSON()](#object-filetojson)
 
-*Signal* File.onBeforeRender(*File* file)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) File.onBeforeRender(*File* file)
 -----------------------------------------
 
 Corresponding node handler: *neft:onBeforeRender=""*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/file.litcoffee#signal-fileonbeforerenderfile-file)
 
-*Signal* File.onRender(*File* file)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) File.onRender(*File* file)
 -----------------------------------
 
 Corresponding node handler: *neft:onRender=""*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/file.litcoffee#signal-fileonrenderfile-file)
 
-*Signal* File.onBeforeRevert(*File* file)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) File.onBeforeRevert(*File* file)
 -----------------------------------------
 
 Corresponding node handler: *neft:onBeforeRevert=""*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/file.litcoffee#signal-fileonbeforerevertfile-file)
 
-*Signal* File.onRevert(*File* file)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) File.onRevert(*File* file)
 -----------------------------------
 
 Corresponding node handler: *neft:onRevert=""*.
@@ -97,7 +97,7 @@ File.parse(*File* file)
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/file.litcoffee#file-fileusestring-usename-file-document)
 
-*Signal* File::onReplaceByUse(*File.Use* use)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) File::onReplaceByUse(*File.Use* use)
 ---------------------------------------------
 
 Corresponding node handler: *neft:onReplaceByUse=""*.

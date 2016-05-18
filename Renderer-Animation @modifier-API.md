@@ -25,32 +25,32 @@ Animation @modifier
 
 *Boolean* Animation::when
 -------------------------
-## *Signal* Animation::onWhenChange(*Boolean* oldValue)
-*Signal* Animation::onStart()
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Animation::onWhenChange(*Boolean* oldValue)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Animation::onStart()
 -----------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationwhen-signal-animationonwhenchangeboolean-oldvaluesignal-animationonstart)
 
-*Signal* Animation::onStop()
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Animation::onStop()
 ----------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#signal-animationonstop)
 
 *Boolean* Animation::running
 ----------------------------
-## *Signal* Animation::onRunningChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Animation::onRunningChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationrunning-signal-animationonrunningchangeboolean-oldvalue)
 
 *Boolean* Animation::paused
 ---------------------------
-## *Signal* Animation::onPausedChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Animation::onPausedChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationpaused-signal-animationonpausedchangeboolean-oldvalue)
 
 *Boolean* Animation::loop
 -------------------------
-## *Signal* Animation::onLoopChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Animation::onLoopChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationloop-signal-animationonloopchangeboolean-oldvalue)
 

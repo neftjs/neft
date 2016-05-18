@@ -17,13 +17,13 @@ Alignment @extension
 
 *String* Alignment::horizontal = 'left'
 ---------------------------------------
-## *Signal* Alignment::onHorizontalChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Alignment::onHorizontalChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/alignment.litcoffee#string-alignmenthorizontal--left-signal-alignmentonhorizontalchangestring-oldvalue)
 
 *String* Alignment::vertical = 'top'
 ------------------------------------
-## *Signal* Alignment::onVerticalChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Alignment::onVerticalChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/alignment.litcoffee#string-alignmentvertical--top-signal-alignmentonverticalchangestring-oldvalue)
 

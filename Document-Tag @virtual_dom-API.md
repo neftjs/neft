@@ -32,13 +32,13 @@ Tag @virtual_dom
 ------------------
 *Array* Tag::children
 ---------------------
-## *Signal* Tag::onChildrenChange(*Element* added, *Element* removed)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Tag::onChildrenChange(*Element* added, *Element* removed)
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/tag.litcoffee#string-tagnamearray-tagchildren-signal-tagonchildrenchangeelement-added-element-removed)
 
 *Attrs* Tag::attrs
 ------------------
-## *Signal* Tag::onAttrsChange(*String* attribute, *Any* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Tag::onAttrsChange(*String* attribute, *Any* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/tag.litcoffee#attrs-tagattrs-signal-tagonattrschangestring-attribute-any-oldvalue)
 

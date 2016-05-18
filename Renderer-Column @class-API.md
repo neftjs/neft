@@ -35,25 +35,25 @@ Column @class
 
 *Margin* Column::padding
 ------------------------
-## *Signal* Column::onPaddingChange(*Margin* padding)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Column::onPaddingChange(*Margin* padding)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/column.litcoffee#margin-columnpadding-signal-columnonpaddingchangemargin-padding)
 
 [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Column::spacing = 0
 ---------------------------
-## *Signal* Column::onSpacingChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Column::onSpacingChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/column.litcoffee#float-columnspacing--0-signal-columnonspacingchangefloat-oldvalue)
 
 *Alignment* Column::alignment
 -----------------------------
-## *Signal* Column::onAlignmentChange(*Alignment* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Column::onAlignmentChange(*Alignment* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/column.litcoffee#alignment-columnalignment-signal-columnonalignmentchangealignment-oldvalue)
 
 *Boolean* Column::includeBorderMargins = false
 ----------------------------------------------
-## *Signal* Column::onIncludeBorderMarginsChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Column::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/column.litcoffee#boolean-columnincludebordermargins--false-signal-columnonincludebordermarginschangeboolean-oldvalue)
 

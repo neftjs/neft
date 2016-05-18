@@ -44,19 +44,19 @@ console.log(list instanceof List);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#listconstructorarray-data)
 
-### *Signal* List::onChange(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) List::onChange(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 
 Signal called on each value change.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index)
 
-### *Signal* List::onInsert(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) List::onInsert(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 
 Signal called when a value was added.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listoninsertany-value-integer-index)
 
-### *Signal* List::onPop(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
+### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) List::onPop(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 
 Signal called when a value was removed.
 

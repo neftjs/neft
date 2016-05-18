@@ -46,45 +46,45 @@ Enables mouse and touch handling.
 
 *Boolean* Pointer::enabled = true
 ---------------------------------
-## *Signal* Pointer::onEnabledChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onEnabledChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointerenabled--true-signal-pointeronenabledchangeboolean-oldvalue)
 
 Hidden *Boolean* Pointer::draggable = false
 -------------------------------------------
-## Hidden *Signal* Pointer::onDraggableChange(*Boolean* oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDraggableChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/pointer.litcoffee#hidden-boolean-pointerdraggable--false-hidden-signal-pointerondraggablechangeboolean-oldvalue)
 
 Hidden *Boolean* Pointer::dragActive = false
 --------------------------------------------
-## Hidden *Signal* Pointer::onDragActiveChange(*Boolean* oldValue)
+## Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDragActiveChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/pointer.litcoffee#hidden-boolean-pointerdragactive--false-hidden-signal-pointerondragactivechangeboolean-oldvalue)
 
-*Signal* Pointer::onClick(*PointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onClick(*PointerEvent* event)
 -----------------------------------------------
-*Signal* Pointer::onPress(*PointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onPress(*PointerEvent* event)
 -----------------------------------------------
-*Signal* Pointer::onRelease(*PointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onRelease(*PointerEvent* event)
 -------------------------------------------------
-*Signal* Pointer::onEnter(*PointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onEnter(*PointerEvent* event)
 -----------------------------------------------
-*Signal* Pointer::onExit(*PointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onExit(*PointerEvent* event)
 ----------------------------------------------
-*Signal* Pointer::onWheel(*PointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onWheel(*PointerEvent* event)
 -----------------------------------------------
-*Signal* Pointer::onMove(*PointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onMove(*PointerEvent* event)
 ----------------------------------------------
-Hidden *Signal* Pointer::onDragStart()
+Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDragStart()
 --------------------------------------
-Hidden *Signal* Pointer::onDragEnd()
+Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDragEnd()
 ------------------------------------
-Hidden *Signal* Pointer::onDragEnter()
+Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDragEnter()
 --------------------------------------
-Hidden *Signal* Pointer::onDragExit()
+Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDragExit()
 -------------------------------------
-Hidden *Signal* Pointer::onDrop()
+Hidden [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDrop()
 ---------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronclickpointerevent-eventsignal-pointeronpresspointerevent-eventsignal-pointeronreleasepointerevent-eventsignal-pointeronenterpointerevent-eventsignal-pointeronexitpointerevent-eventsignal-pointeronwheelpointerevent-eventsignal-pointeronmovepointerevent-eventhidden-signal-pointerondragstarthidden-signal-pointerondragendhidden-signal-pointerondragenterhidden-signal-pointerondragexithidden-signal-pointerondrop)
@@ -94,7 +94,7 @@ Hidden *Signal* Pointer::onDrop()
 
 Whether the pointer is currently pressed.
 
-## *Signal* Pointer::onPressedChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onPressedChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronpressedchangeboolean-oldvalue)
 
@@ -103,7 +103,7 @@ Whether the pointer is currently pressed.
 
 Whether the pointer is currently under the item.
 
-## *Signal* Pointer::onHoverChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onHoverChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronhoverchangeboolean-oldvalue)
 

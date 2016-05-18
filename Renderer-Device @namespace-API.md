@@ -110,22 +110,22 @@ ReadOnly *DevicePointerEvent* Device.pointer
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-devicepointerevent-devicepointer)
 
-*Signal* Device.onPointerPress(*DevicePointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onPointerPress(*DevicePointerEvent* event)
 ----------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerpressdevicepointerevent-event)
 
-*Signal* Device.onPointerRelease(*DevicePointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onPointerRelease(*DevicePointerEvent* event)
 ------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerreleasedevicepointerevent-event)
 
-*Signal* Device.onPointerMove(*DevicePointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onPointerMove(*DevicePointerEvent* event)
 ---------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointermovedevicepointerevent-event)
 
-*Signal* Device.onPointerWheel(*DevicePointerEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onPointerWheel(*DevicePointerEvent* event)
 ----------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerwheeldevicepointerevent-event)
@@ -135,22 +135,22 @@ ReadOnly *DeviceKeyboardEvent* Device.keyboard
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-devicekeyboardevent-devicekeyboard)
 
-*Signal* Device.onKeyPress(*DeviceKeyboardEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onKeyPress(*DeviceKeyboardEvent* event)
 -------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeypressdevicekeyboardevent-event)
 
-*Signal* Device.onKeyHold(*DeviceKeyboardEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onKeyHold(*DeviceKeyboardEvent* event)
 ------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyholddevicekeyboardevent-event)
 
-*Signal* Device.onKeyRelease(*DeviceKeyboardEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onKeyRelease(*DeviceKeyboardEvent* event)
 ---------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyreleasedevicekeyboardevent-event)
 
-*Signal* Device.onKeyInput(*DeviceKeyboardEvent* event)
+[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Device.onKeyInput(*DeviceKeyboardEvent* event)
 -------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyinputdevicekeyboardevent-event)
@@ -162,37 +162,37 @@ ReadOnly *DeviceKeyboardEvent* Device.keyboard
 
 ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::x
 --------------------------------------
-## *Signal* DevicePointerEvent::onXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventx-signal-devicepointereventonxchangefloat-oldvalue)
 
 ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::y
 --------------------------------------
-## *Signal* DevicePointerEvent::onYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventy-signal-devicepointereventonychangefloat-oldvalue)
 
 ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::movementX
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onMovementXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onMovementXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementx-signal-devicepointereventonmovementxchangefloat-oldvalue)
 
 ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::movementY
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onMovementYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onMovementYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementy-signal-devicepointereventonmovementychangefloat-oldvalue)
 
 ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::deltaX
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onDeltaXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onDeltaXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltax-signal-devicepointereventondeltaxchangefloat-oldvalue)
 
 ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::deltaY
 ----------------------------------------------
-## *Signal* DevicePointerEvent::onDeltaYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onDeltaYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltay-signal-devicepointereventondeltaychangefloat-oldvalue)
 
@@ -203,19 +203,19 @@ ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Dev
 
 ReadOnly *Boolean* DeviceKeyboardEvent::visible
 ----------------------------------------------
-## *Signal* DeviceKeyboardEvent::onVisibleChange(*Boolean* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DeviceKeyboardEvent::onVisibleChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-boolean-devicekeyboardeventvisible-signal-devicekeyboardeventonvisiblechangeboolean-oldvalue)
 
 ReadOnly *String* DeviceKeyboardEvent::key
 ------------------------------------------
-## *Signal* DeviceKeyboardEvent::onKeyChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DeviceKeyboardEvent::onKeyChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-string-devicekeyboardeventkey-signal-devicekeyboardeventonkeychangestring-oldvalue)
 
 ReadOnly *String* DeviceKeyboardEvent::text
 -------------------------------------------
-## *Signal* DeviceKeyboardEvent::onTextChange(*String* oldValue)
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DeviceKeyboardEvent::onTextChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-string-devicekeyboardeventtext-signal-devicekeyboardeventontextchangestring-oldvalue)
 
