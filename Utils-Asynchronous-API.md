@@ -1,7 +1,6 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Asynchronous**
 
-Asynchronous
-============
+# Asynchronous
 
 Access it with:
 ```javascript
@@ -13,14 +12,13 @@ var async = utils.async;
 
 ## Table of contents
   * [forEach(array, callback, [onEnd, context])](#foreachnotprimitive-array-function-callback-function-onend-any-context)
-  * [Stack()](#stack-stack)
-  * [add(function, [context, arguments])](#stackaddfunction-function-any-context-notprimitive-arguments)
-  * [callNext([arguments], callback)](#stackcallnextarray-arguments-function-callback)
-  * [runAll([callback, callbackContext])](#stackrunallfunction-callback-any-callbackcontext)
-  * [runAllSimultaneously([callback, callbackContext])](#stackrunallsimultaneouslyfunction-callback-any-callbackcontext)
+  * [**Class** Stack()](#class-stack)
+    * [add(function, [context, arguments])](#stackaddfunction-function-any-context-notprimitive-arguments)
+    * [callNext([arguments], callback)](#stackcallnextarray-arguments-function-callback)
+    * [runAll([callback, callbackContext])](#stackrunallfunction-callback-any-callbackcontext)
+    * [runAllSimultaneously([callback, callbackContext])](#stackrunallsimultaneouslyfunction-callback-any-callbackcontext)
 
-forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
--------------------------------------------------------------------------------------
+## forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
 
 This is an asynchronous version of the standard `Array.prototype.forEach()` function
 which works with arrays and objects.
@@ -44,8 +42,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#foreachnotprimitive-array-function-callback-function-onend-any-context)
 
-*Stack* Stack()
----------------
+## **Class** Stack()
 
 Stores functions and runs them synchronously or asynchronously.
 ```javascript
@@ -70,10 +67,9 @@ stack.runAllSimultaneously(function(){
 // All files have been loaded!
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stack-stack)
+> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#class-stack)
 
-Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
---------------------------------------------------------------------------
+### Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])
 
 Adds the given function to the stack.
 The function must provide a callback argument as the last argument.
@@ -101,23 +97,20 @@ stack.runAll(function(err, result){
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments)
 
-Stack::callNext([*Array* arguments], *Function* callback)
----------------------------------------------------------
+### Stack::callNext([*Array* arguments], *Function* callback)
 
 Calls the first function from the stack and remove it.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback)
 
-Stack::runAll([*Function* callback, *Any* callbackContext])
------------------------------------------------------------
+### Stack::runAll([*Function* callback, *Any* callbackContext])
 
 Calls all functions from the stack one by one.
 When an error occurs, processing stops and the callback function is called with the got error.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext)
 
-Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
--------------------------------------------------------------------------
+### Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
 
 Calls all functions from the stack simultaneously (all at the same time).
 When an error occurs, processing stops and the callback function is called with the got error.
