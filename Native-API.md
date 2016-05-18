@@ -10,7 +10,10 @@
 
 ## callFunction
 
-> callFunction(*String* name, [*Boolean*|[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value)|*String* args...])
+<dl>
+<dt>Parameters</dt>
+<dd>*String* name, [*Boolean*|[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value)|*String* args...]</dd>
+</dl>
 
 sdfsadfsdf
 
