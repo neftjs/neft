@@ -1,0 +1,61 @@
+> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Font @extension**
+
+Font @extension
+===============
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#font-extension)
+
+## Table of contents
+  * [Font()](#font-font)
+  * [Font.family = 'sans-serif'](#string-fontfamily--sansserif)
+  * [Font.pixelSize = 14](#float-fontpixelsize--14)
+  * [Font.weight = 0.4](#float-fontweight--04)
+  * [Font.onWeightChange(oldValue)](#signal-fontonweightchangefloat-oldvalue)
+  * [Hidden Font.wordSpacing = 0](#hidden-float-fontwordspacing--0)
+  * [Hidden Font.letterSpacing = 0](#hidden-float-fontletterspacing--0)
+  * [Font.italic = false](#boolean-fontitalic--false)
+
+*Font* Font()
+-------------
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#font-font)
+
+*String* Font.family = 'sans-serif'
+-----------------------------------
+## *Signal* Font.onFamilyChange(*String* oldValue)
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#string-fontfamily--sansserif-signal-fontonfamilychangestring-oldvalue)
+
+*Float* Font.pixelSize = 14
+---------------------------
+## *Signal* Font.onPixelSizeChange(*String* oldValue)
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#float-fontpixelsize--14-signal-fontonpixelsizechangestring-oldvalue)
+
+*Float* Font.weight = 0.4
+-------------------------
+
+In range from 0 to 1.
+
+## *Signal* Font.onWeightChange(*Float* oldValue)
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#signal-fontonweightchangefloat-oldvalue)
+
+Hidden *Float* Font.wordSpacing = 0
+-----------------------------------
+## Hidden *Signal* Font.onWordSpacingChange(*Float* oldValue)
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontwordspacing--0-hidden-signal-fontonwordspacingchangefloat-oldvalue)
+
+Hidden *Float* Font.letterSpacing = 0
+-------------------------------------
+## Hidden *Signal* Font.onLetterSpacingChange(*Float* oldValue)
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontletterspacing--0-hidden-signal-fontonletterspacingchangefloat-oldvalue)
+
+*Boolean* Font.italic = false
+-----------------------------
+## *Signal* Font.onItalicChange(*Boolean* oldValue)
+
+> [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#boolean-fontitalic--false-signal-fontonitalicchangeboolean-oldvalue)
+
