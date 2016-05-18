@@ -44,25 +44,25 @@ console.log(list instanceof List);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#listconstructorarray-data)
 
-### *Signal* List::onChange(*Any* oldValue, *Integer* index)
+### *Signal* List::onChange(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 
 Signal called on each value change.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index)
 
-### *Signal* List::onInsert(*Any* value, *Integer* index)
+### *Signal* List::onInsert(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 
 Signal called when a value was added.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listoninsertany-value-integer-index)
 
-### *Signal* List::onPop(*Any* oldValue, *Integer* index)
+### *Signal* List::onPop(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 
 Signal called when a value was removed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index)
 
-### ReadOnly *Integer* List::length
+### ReadOnly [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) List::length
 
 Amount of values stored in the list.
 ```javascript
@@ -71,7 +71,7 @@ console.log(list.length);
 // 2
 ```
 
-### *Any* List::set(*Integer* index, *Any* value)
+### *Any* List::set([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index, *Any* value)
 
 Sets the given value under the given index.
 The index must exists in the list.
@@ -108,7 +108,7 @@ console.log(fridge.items());
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listappendany-value)
 
-### *Any* List::insert(*Integer* index, *Any* value)
+### *Any* List::insert([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index, *Any* value)
 
 Add the given value under the given index.
 The index can't be greater than the list length.
@@ -151,7 +151,7 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listremoveany-value)
 
-### *Any* List::pop([*Integer* index])
+### *Any* List::pop([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index])
 
 Removes the value stored in the list under the given index.
 The index must exists in the list.
@@ -189,7 +189,7 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#listclear)
 
-### *Integer* List::index(*Any* value)
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) List::index(*Any* value)
 
 Returns the given value index in the list.
 Returns `-1` if the value doesn't exist in the list.

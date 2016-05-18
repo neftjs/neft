@@ -18,7 +18,7 @@ Response
   * [encoding = 'utf-8'](#string-responseencoding--utf8)
   * [setHeader(name, value)](#response-responsesetheaderstring-name-string-value)
   * [send([status, data])](#responsesendinteger-status-any-data)
-  * [redirect(status = `Response.FOUND`, uri)](#responseredirectinteger-status--responsefound-string-uri)
+  * [redirect(status, uri)](#responseredirectinteger-status--responsefound-string-uri)
   * [raise(error)](#responseraiseany-error)
   * [isSucceed()](#boolean-responseissucceed)
 
@@ -92,7 +92,7 @@ Refers to the [Request][networking/Request].
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#readonly-networkingrequest-responserequest)
 
-*Integer* Response::status = Response.OK
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Response::status = Response.OK
 ----------------------------------------
 
 Keeps a normalized code determined the response type.
@@ -140,7 +140,7 @@ res.setHeader('Location', '/redirect/to/url');
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value)
 
-Response::send([*Integer* status, *Any* data])
+Response::send([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) status, *Any* data])
 ----------------------------------------------
 
 This method calls the [onSend()][networking/Response::onSend()] signal.
@@ -153,7 +153,7 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responsesendinteger-status-any-data)
 
-Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
+Response::redirect([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) status = `Response.FOUND`, *String* uri)
 ---------------------------------------------------------------------
 
 The *Response.FOUND* status is typically used for the temporary redirection.

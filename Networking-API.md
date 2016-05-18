@@ -46,7 +46,7 @@ ReadOnly *String* Networking::protocol
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-string-networkingprotocol)
 
-ReadOnly *Integer* Networking::port
+ReadOnly [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Networking::port
 -----------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-integer-networkingport)

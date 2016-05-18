@@ -21,7 +21,7 @@ var signal = require('signal');
   * [Signal.disconnect(listener, [context])](#signaldisconnectfunction-listener-any-context)
   * [Signal.disconnectAll()](#signaldisconnectall)
 
-*Integer* signal.STOP_PROPAGATION
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) signal.STOP_PROPAGATION
 ---------------------------------
 
 Special constant used to stop calling further listeners.

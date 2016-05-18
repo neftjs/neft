@@ -39,7 +39,7 @@ Element @virtual_dom
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-element)
 
-*Integer* Element::index
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Element::index
 ------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#integer-elementindex)

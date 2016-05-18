@@ -118,7 +118,7 @@ Check *utils.isPrimitive()* for more details.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotfloatany-value-string-message)
 
-### assert.isInteger(*Integer* value, [*String* message])
+### assert.isInteger([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) value, [*String* message])
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisintegerinteger-value-string-message)
 
@@ -171,7 +171,7 @@ Check *utils.isPlainObject()* for more details.
 ### assert.isEqual(*Any* value1, *Any* value2, [*String* message, *Object* options])
 
 Check *utils.isEqual()* for more details.
-The given options object accepts: *Integer* maxDeep.
+The given options object accepts: [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisequalany-value1-any-value2-string-message-object-options)
 
@@ -187,11 +187,11 @@ The given options object accepts: *Integer* maxDeep.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertnotinstanceofany-object-function-constructor-string-message)
 
-### assert.lengthOf(*Any* value, *Integer* length, [*String* message])
+### assert.lengthOf(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) length, [*String* message])
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertlengthofany-value-integer-length-string-message)
 
-### assert.notLengthOf(*Any* value, *Integer* length, [*String* message])
+### assert.notLengthOf(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) length, [*String* message])
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertnotlengthofany-value-integer-length-string-message)
 

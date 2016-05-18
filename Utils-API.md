@@ -7,9 +7,9 @@ Access it with:
 const { utils } = Neft;
 ```
 See one of submodules:
- - [[Utils-Asynchronous-API|Asynchronous]]
- - [[Utils-Properties-extraction-API|Properties extraction]]
- - [[Utils-Stringifying-API|Stringifying]]
+ - [[Asynchronous|Utils-Asynchronous-API]]
+ - [[Properties extraction|Utils-Properties-extraction-API]]
+ - [[Stringifying|Utils-Stringifying-API]]
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#utils)
 
@@ -44,8 +44,8 @@ See one of submodules:
   * [clear(object)](#notprimitive-clearnotprimitive-object)
   * [setPrototypeOf(object, prototype)](#object-setprototypeofnotprimitive-object-notprimitivenull-prototype)
   * [has(object, value)](#boolean-hasany-object-any-value)
-  * [objectToArray(object, [valueGen, target = `[]`])](#array-objecttoarrayobject-object-function-valuegen-array-target--)
-  * [arrayToObject(array, [keyGen, valueGen, target = `{}`])](#object-arraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
+  * [objectToArray(object, [valueGen, target])](#array-objecttoarrayobject-object-function-valuegen-array-target--)
+  * [arrayToObject(array, [keyGen, valueGen, target])](#object-arraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
   * [capitalize(string)](#string-capitalizestring-string)
   * [addSlashes(string)](#string-addslashesstring-string)
   * [uid([length])](#string-uidinteger-length--8)
@@ -54,7 +54,8 @@ See one of submodules:
   * [bindFunctionContext(function, context)](#function-bindfunctioncontextfunction-function-any-context)
   * [errorToObject(error)](#object-errortoobjecterror-error)
   * [getOwnProperties(object)](#object-getownpropertiesobject-object)
-  * [isEqual(object1, object2, [compareFunction, maxDeep = `Infinity`])](#boolean-isequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
+  * [isEqual(object1, object2, [compareFunction, maxDeep])](#boolean-isequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
+  * [Glossary](#glossary)
 
 ## ReadOnly *Boolean* isNode
 
@@ -331,7 +332,7 @@ Returns the given property setter function defined in the given object.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-lookupsetternotprimitive-object-string-property)
 
-## *NotPrimitive* defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
+## *NotPrimitive* defineProperty(*NotPrimitive* object, *String* property, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) descriptors, [*Any* value, *Function* setter])
 
 Defines the given property in the given object.
 The descriptors argument is a bitmask accepting
@@ -546,7 +547,7 @@ console.log(utils.addSlashes('a"b'))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#string-addslashesstring-string)
 
-## *String* uid([*Integer* length = `8`])
+## *String* uid([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) length = `8`])
 
 Returns pseudo-unique string with the given length.
 This function doesn't quarantee uniqueness of the returned data.
@@ -629,7 +630,7 @@ Returns an array or an object with own properties associated in the given object
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-getownpropertiesobject-object)
 
-## *Boolean* isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep = `Infinity`])
+## *Boolean* isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep = `Infinity`])
 
 Returns `true` if the given objects have equal values.
 The given compareFunction is used to compare two values (which at least one them is primitive).
@@ -646,4 +647,8 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 ```
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
+
+## Glossary
+
+ - [Integer](#boolean-isintegerany-value)
 

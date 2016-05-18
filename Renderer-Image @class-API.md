@@ -101,9 +101,9 @@ Hidden *Float* Image::offsetY = 0
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-float-imageoffsety--0-hidden-signal-imageonoffsetychangefloat-oldvalue)
 
-Hidden *Integer* Image::fillMode = 'Stretch'
+Hidden [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Image::fillMode = 'Stretch'
 --------------------------------------------
-## Hidden *Signal* Image::onFillModeChange(*Integer* oldValue)
+## Hidden *Signal* Image::onFillModeChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/image.litcoffee#hidden-integer-imagefillmode--stretch-hidden-signal-imageonfillmodechangeinteger-oldvalue)
 

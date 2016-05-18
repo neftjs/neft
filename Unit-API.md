@@ -10,7 +10,7 @@ Unit @library
   * [Unit.it(message, test)](#unititstring-message-function-test)
   * [Unit.beforeEach(code)](#unitbeforeeachfunction-code)
   * [Unit.afterEach(code)](#unitaftereachfunction-code)
-  * [Unit.whenChange(watchObject, callback, [maxDelay = `1000`])](#unitwhenchangeobject-watchobject-function-callback-integer-maxdelay--1000)
+  * [Unit.whenChange(watchObject, callback, [maxDelay])](#unitwhenchangeobject-watchobject-function-callback-integer-maxdelay--1000)
   * [Unit.runTests()](#unitruntests)
   * [Unit.onTestsEnd](#function-unitontestsend)
   * [Unit.runAutomatically = true](#boolean-unitrunautomatically--true)
@@ -37,7 +37,7 @@ Unit.afterEach(*Function* code)
 
 > [`Source`](/Neft-io/neft/tree/master/src/unit/index.litcoffee#unitaftereachfunction-code)
 
-Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
+Unit.whenChange(*Object* watchObject, *Function* callback, [[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDelay = `1000`])
 -----------------------------------------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/unit/index.litcoffee#unitwhenchangeobject-watchobject-function-callback-integer-maxdelay--1000)

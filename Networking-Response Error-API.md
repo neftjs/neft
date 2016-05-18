@@ -9,7 +9,7 @@ Response Error
   * [Error([status, message])](#error-errorinteger-status-string-message)
   * [Error.RequestResolve(*Networking.Request* request)](#requestresolve-errorrequestresolvenetworkingrequest-request)
 
-*Error* Error([*Integer* status, *String* message])
+*Error* Error([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) status, *String* message])
 ---------------------------------------------------
 
 It works as a standard Javascript *Error* class, but provides an extra *status* value.

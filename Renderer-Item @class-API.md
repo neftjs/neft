@@ -125,7 +125,7 @@ properties have been set and it's ready to use.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemready)
 
-*Signal* Item::onAnimationFrame(*Integer* miliseconds)
+*Signal* Item::onAnimationFrame([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) miliseconds)
 ------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemonanimationframeinteger-miliseconds)
@@ -161,7 +161,7 @@ ReadOnly *Item* Item::children.topChild
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrentopchild)
 
-ReadOnly *Integer* Item::children.length
+ReadOnly [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Item::children.length
 ----------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#readonly-integer-itemchildrenlength)
@@ -186,14 +186,14 @@ will be added into the `target` item.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#signal-itemchildrenontargetchangeitem-oldvalue)
 
-*Item* Item::children.get(*Integer* index)
+*Item* Item::children.get([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 ------------------------------------------
 
 Returns an item with the given index.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#item-itemchildrengetinteger-index)
 
-*Integer* Item::children.index(*Item* value)
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Item::children.index(*Item* value)
 --------------------------------------------
 
 Returns an index of the given child in the children array.
@@ -248,7 +248,7 @@ ReadOnly *Item* Item::aboveSibling
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#readonly-item-itemabovesibling)
 
-*Integer* Item::index
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Item::index
 ---------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item.litcoffee#integer-itemindex)

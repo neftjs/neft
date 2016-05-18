@@ -21,12 +21,12 @@ var db = require('db');
   * [DbDict() : *Dict*](#dbdict-dbdict--dict)
   * [disconnect()](#dbdictdisconnect)
 
-*Integer* db.OBSERVABLE
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) db.OBSERVABLE
 -----------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/db/index.litcoffee#integer-dbobservable)
 
-db.get(*String* key, [*Integer* options], *Function* callback)
+db.get(*String* key, [[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) options], *Function* callback)
 --------------------------------------------------------------
 
 ```javascript

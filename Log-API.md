@@ -26,17 +26,17 @@ const { log } = Neft;
 
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#class-log)
 
-### *Integer* log.LOG
-### *Integer* log.INFO
-### *Integer* log.OK
-### *Integer* log.WARN
-### *Integer* log.ERROR
-### *Integer* log.TIME
-### *Integer* log.ALL
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.LOG
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.INFO
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.OK
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.WARN
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.ERROR
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.TIME
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.ALL
 
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#integer-loglog-integer-loginfo-integer-logok-integer-logwarn-integer-logerror-integer-logtime-integer-logall)
 
-### *Integer* enabled = log.ALL
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) enabled = log.ALL
 
 Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
@@ -86,7 +86,7 @@ log.error("Error occurs, ... in file ...");
 
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#logerrorany-messages)
 
-### *Integer* log.time()
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) log.time()
 
 Returns an id used to measure execution time by the `log.end()` function.
 ```javascript
@@ -100,7 +100,7 @@ findPath();
 
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#integer-logtime)
 
-### log.end(*Integer* id)
+### log.end([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) id)
 
 Prints an information about the execution time for the given timer id.
 

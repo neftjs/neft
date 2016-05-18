@@ -44,15 +44,15 @@ Grid @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#margin-gridpadding-signal-gridonpaddingchangemargin-padding)
 
-*Integer* Grid::columns = 2
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Grid::columns = 2
 ---------------------------
-## *Signal* Grid::onColumnsChange(*Integer* oldValue)
+## *Signal* Grid::onColumnsChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#integer-gridcolumns--2-signal-gridoncolumnschangeinteger-oldvalue)
 
-*Integer* Grid::rows = Infinity
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Grid::rows = Infinity
 -------------------------------
-## *Signal* Grid::onRowsChange(*Integer* oldValue)
+## *Signal* Grid::onRowsChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/grid.litcoffee#integer-gridrows--infinity-signal-gridonrowschangeinteger-oldvalue)
 

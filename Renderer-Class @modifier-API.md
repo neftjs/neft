@@ -66,9 +66,9 @@ It accepts bindings and listeners as well.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchanges)
 
-*Integer* Class::priority = 0
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Class::priority = 0
 -----------------------------
-## *Signal* Class::onPriorityChange(*Integer* oldValue)
+## *Signal* Class::onPriorityChange([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) oldValue)
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#integer-classpriority--0-signal-classonprioritychangeinteger-oldvalue)
 
@@ -101,7 +101,7 @@ Mostly used with bindings.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildren)
 
-*Integer* Class::children.length = 0
+[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Class::children.length = 0
 ------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#integer-classchildrenlength--0)
@@ -111,7 +111,7 @@ Mostly used with bindings.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildrenappendobject-value)
 
-*Object* Class::children.pop(*Integer* index)
+*Object* Class::children.pop([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
 ---------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildrenpopinteger-index)

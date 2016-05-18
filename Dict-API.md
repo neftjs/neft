@@ -52,7 +52,7 @@ console.log(data.name);
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#dictconstructorobject-data)
 
-### ReadOnly *Integer* Dict::length
+### ReadOnly [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Dict::length
 
 Amount of keys stored in a dict.
 ```javascript

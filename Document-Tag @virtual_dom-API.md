@@ -99,7 +99,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/tag.litcoffee#attrs-attrs)
 
-*Array* Attrs::item(*Integer* index, [*Array* target])
+*Array* Attrs::item([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index, [*Array* target])
 ------------------------------------------------------
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/tag.litcoffee#array-attrsiteminteger-index-array-target)
