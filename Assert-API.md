@@ -172,6 +172,7 @@ Check *utils.isPlainObject()* for more details.
 ###isEqual
 <dl><dt>Syntax</dt><dd><code>assert.isEqual(&#x2A;Any&#x2A; value1, &#x2A;Any&#x2A; value2, [&#x2A;String&#x2A; message, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>value2 — <i>Any</i></li><li>message — <i>String</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd></dl>
 Check *utils.isEqual()* for more details.
+
 The given options object accepts: [Integer](/Neft-io/neft/wiki/Utils-API#isinteger) maxDeep.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#isequal)
@@ -199,6 +200,7 @@ The given options object accepts: [Integer](/Neft-io/neft/wiki/Utils-API#isinteg
 ###operator
 <dl><dt>Syntax</dt><dd><code>assert.operator(&#x2A;Any&#x2A; value1, &#x2A;String&#x2A; operator, &#x2A;Any&#x2A; value2, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>operator — <i>String</i></li><li>value2 — <i>Any</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 Used to compare the two given values.
+
 ```javascript
 assert.operator(2, '>', 1);
 ```
@@ -208,6 +210,7 @@ assert.operator(2, '>', 1);
 ###match
 <dl><dt>Syntax</dt><dd><code>assert.match(&#x2A;Any&#x2A; value, &#x2A;RegExp&#x2A; regexp, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>regexp — <i>RegExp</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 Used to check whether the given value tests the given regexp.
+
 ```javascript
 assert.match('12', /[0-9]+/);
 ```

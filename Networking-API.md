@@ -1,21 +1,23 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
-> * [[Handler|Networking-Handler-API]]
-> * [[Request|Networking-Request-API]]
-> * [[Response|Networking-Response-API]]
->  * [[Response Error|Networking-Response Error-API]]
-> * [[Uri|Networking-Uri-API]]
-
 Networking
 <dl><dt>Syntax</dt><dd><code>Networking @engine</code></dd></dl>
 This module cares about communication client-server and client internally.
+
 Currently only the HTTP protocol is supported.
+
 Access it with:
 ```javascript
 var Networking = require('networking');
 ```
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#networking)
+
+> * [[Handler|Networking-Handler-API]]
+> * [[Request|Networking-Request-API]]
+> * [[Response|Networking-Response-API]]
+>   * [[Response Error|Networking-Response Error-API]]
+> * [[Uri|Networking-Uri-API]]
 
 Networking
 <dl><dt>Syntax</dt><dd><code>&#x2A;Networking&#x2A; Networking(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Networking</i></dd></dl>
@@ -40,6 +42,7 @@ host
 url
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; Networking::url</code></dd><dt>Prototype property of</dt><dd><i>Networking</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
 URL path contains a protocol, port and a host.
+
 It can be set manually if the external address is different.
 Otherwise it's created automatically.
 
@@ -54,6 +57,7 @@ Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 pendingRequests
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;List&#x2A; Networking::pendingRequests</code></dd><dt>Prototype property of</dt><dd><i>Networking</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Read only</dt></dl>
 Use this method to create a new [Handler][networking/Handler].
+
 ```javscript
 app.networking.createHandler({
     method: 'get',
@@ -101,7 +105,9 @@ resolveRequest
 createLocalRequest
 <dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Request&#x2A; Networking::createLocalRequest(&#x2A;Object|Networking.Request&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Networking</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object or Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
 Use this method to create a new [Request][networking/Request] and handle it.
+
 The given options object corresponds to the [Request][networking/Request] properties.
+
 Local and server requests are supported.
 
 ### Local requests

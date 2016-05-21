@@ -1,7 +1,5 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
-> * [[Font|Renderer-Font @extension-API]]
-
 Text
 <dl><dt>Syntax</dt><dd><code>Text @class</code></dd></dl>
 ```nml
@@ -14,6 +12,8 @@ Text
 ```
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/text.litcoffee#text)
+
+> * [[Font|Renderer-Font @extension-API]]
 
 New
 <dl><dt>Syntax</dt><dd><code>&#x2A;Text&#x2A; Text.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Text</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Text</i></dd></dl>

@@ -21,6 +21,7 @@ Possible values are:
  - Windows,
  - Unix,
  - OSX.
+
 ```nml
 `Text {
 `   text: "You are using: " + Device.platform
@@ -45,6 +46,7 @@ phone
 mobile
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.mobile = false</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 Tablet or a phone.
+
 ```nml
 `Text {
 `   text: Device.mobile ? 'Mobile' : 'Desktop'

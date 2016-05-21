@@ -7,6 +7,7 @@ Margin
 Margin
 <dl><dt>Syntax</dt><dd><code>&#x2A;Margin&#x2A; Margin()</code></dd><dt>Returns</dt><dd><i>Margin</i></dd></dl>
 Margins are used in anchors and within layout items.
+
 ```nml
 `Rectangle {
 `   width: 100
@@ -22,6 +23,7 @@ Margins are used in anchors and within layout items.
 `   }
 `}
 ```
+
 ```nml
 `Column {
 `   Rectangle { color: 'red'; width: 50; height: 50; }

@@ -1,10 +1,10 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
-> * [[NumberAnimation|Renderer-NumberAnimation @modifier-API]]
-
 PropertyAnimation
 <dl><dt>Syntax</dt><dd><code>PropertyAnimation @modifier</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation/types/property.litcoffee#propertyanimation)
+
+> * [[NumberAnimation|Renderer-NumberAnimation @modifier-API]]
 
 PropertyAnimation
 <dl><dt>Syntax</dt><dd><code>&#x2A;PropertyAnimation&#x2A; PropertyAnimation() : &#x2A;Renderer.Animation&#x2A;</code></dd><dt>Extends</dt><dd><i>Renderer.Animation</i></dd><dt>Returns</dt><dd><i>PropertyAnimation</i></dd></dl>

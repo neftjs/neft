@@ -40,8 +40,10 @@ Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 ###log
 <dl><dt>Syntax</dt><dd><code>log([&#x2A;Any&#x2A; messages...])</code></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console.
+
 ```javascript
 log("Log me now!");
+
 log("setName()", "db time");
 // will be logged as "setName() → db time"
 ```
@@ -57,6 +59,7 @@ Prints the given messages into the console with a blue color.
 ###ok
 <dl><dt>Syntax</dt><dd><code>log.ok([&#x2A;Any&#x2A; messages...])</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console with a green color.
+
 ```javascript
 log.ok("Data has been successfully sent!");
 ```
@@ -66,6 +69,7 @@ log.ok("Data has been successfully sent!");
 ###warn
 <dl><dt>Syntax</dt><dd><code>log.warn([&#x2A;Any&#x2A; messages...])</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console with a yellow color.
+
 ```javascript
 log.warn("Example warning with some recommendations");
 ```
@@ -75,6 +79,7 @@ log.warn("Example warning with some recommendations");
 ###error
 <dl><dt>Syntax</dt><dd><code>log.error([&#x2A;Any&#x2A; messages...])</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console with a red color.
+
 ```javascript
 log.error("Error occurs, ... in file ...");
 ```
@@ -84,12 +89,16 @@ log.error("Error occurs, ... in file ...");
 ###time
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; log.time()</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
 Returns an id used to measure execution time by the `log.end()` function.
+
 ```javascript
 function findPath(){
   var logtime = log.time('findPath()');
+
   // ... some complex algorithm ...
+
   log.end(logtime);
 }
+
 findPath();
 ```
 
@@ -104,9 +113,12 @@ Prints an information about the execution time for the given timer id.
 ###scope
 <dl><dt>Syntax</dt><dd><code>log.scope([&#x2A;Any&#x2A; names...])</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>names... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Returns a new `log` function.
+
 All prints will be prefixed by the given names.
+
 ```javascript
 var log = log.scope("Example file");
+
 log("hello");
 // "Example file → hello"
 ```

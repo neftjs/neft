@@ -1,11 +1,11 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
-> * [[Tag|Document-Tag @virtual_dom-API]]
-> * [[Text|Document-Text @virtual_dom-API]]
-
 Element
 <dl><dt>Syntax</dt><dd><code>Element @virtual_dom</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#element)
+
+> * [[Tag|Document-Tag @virtual_dom-API]]
+> * [[Text|Document-Text @virtual_dom-API]]
 
 fromHTML
 <dl><dt>Syntax</dt><dd><code>&#x2A;Element&#x2A; Element.fromHTML(&#x2A;String&#x2A; html)</code></dd><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>html — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>

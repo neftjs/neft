@@ -25,8 +25,11 @@ New
 FontLoader
 <dl><dt>Syntax</dt><dd><code>&#x2A;FontLoader&#x2A; FontLoader()</code></dd><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
 Class used to load custom fonts.
+
 You can override default fonts (*sans-serif*, *sans* and *monospace*).
+
 The font weight and the style (italic or normal) is extracted from the font source path.
+
 Access it with:
 ```nml
 FontLoader {}
@@ -41,6 +44,7 @@ name
 source
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; FontLoader::source</code></dd><dt>Prototype property of</dt><dd><i>FontLoader</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 We recommend usng **WOFF** format and **TTF/OTF** for the oldest Android browser.
+
 Must contains one of:
  - hairline (weight=0),
  - thin,
@@ -57,6 +61,7 @@ Must contains one of:
  - black,
  - extra.*black,
  - ultra.*black|ultra (weight=1).
+
 Italic font filename must contains 'italic'.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#source)

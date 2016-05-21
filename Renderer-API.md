@@ -1,43 +1,11 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Renderer**
 
-> * [[Item|Renderer-Item-API]]
->  * [[Alignment|Renderer-Alignment @extension-API]]
->  * [[Anchors|Renderer-Anchors @extension-API]]
->  * [[Document|Renderer-Document @extension-API]]
->  * [[Keys|Renderer-Keys @extension-API]]
->  * [[Layout|Renderer-Layout @extension-API]]
->  * [[Margin|Renderer-Margin @extension-API]]
->  * [[Spacing|Renderer-Spacing @extension-API]]
->  * [[Pointer|Renderer-Pointer @extension-API]]
->  * [[Image|Renderer-Image @class-API]]
->  * [[Text|Renderer-Text @class-API]]
->   * [[Font|Renderer-Font @extension-API]]
->  * [[Native|Renderer-Native @class-API]]
->  * [[TextInput|Renderer-TextInput @class-API]]
-> * [[Animation|Renderer-Animation @modifier-API]]
->  * [[PropertyAnimation|Renderer-PropertyAnimation @modifier-API]]
->   * [[NumberAnimation|Renderer-NumberAnimation @modifier-API]]
-> * [[Column|Renderer-Column @class-API]]
-> * [[Class|Renderer-Class @modifier-API]]
-> * [[Transition|Renderer-Transition @modifier-API]]
-> * [[Flow|Renderer-Flow @class-API]]
-> * [[Grid|Renderer-Grid @class-API]]
-> * [[Scrollable|Renderer-Scrollable @class-API]]
-> * [[Row|Renderer-Row @class-API]]
-> * [[FontLoader|Renderer-FontLoader @class-API]]
-> * [[Navigator|Renderer-Navigator @namespace-API]]
-> * [[ResourcesLoader|Renderer-ResourcesLoader @class-API]]
-> * [[Device|Renderer-Device @namespace-API]]
-> * [[Screen|Renderer-Screen @namespace-API]]
-> * [[RotationSensor|Renderer-RotationSensor @namespace-API]]
-> * [[Rectangle|Renderer-Rectangle @class-API]]
-> * [[AmbientSound|Renderer-AmbientSound @class-API]]
-
 # Renderer
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/index.litcoffee#renderer)
 
 See one of:
+
  - Namespaces
   - [[Screen|Renderer-Screen-API]]
   - [[Device|Renderer-Device-API]]

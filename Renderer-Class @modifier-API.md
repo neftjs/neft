@@ -24,6 +24,7 @@ to identify various classes.
 target
 <dl><dt>Syntax</dt><dd><code>&#x2A;Renderer.Item&#x2A; Class::target</code></dd><dt>Prototype property of</dt><dd><i>Class</i></dd><dt>Type</dt><dd><i>Renderer.Item</i></dd></dl>
 Reference to the [Item][renderer/Item] on which this class has effects.
+
 If state is created inside the [Item][renderer/Item], this property is set automatically.
 
 ##onTargetChange
@@ -33,6 +34,7 @@ If state is created inside the [Item][renderer/Item], this property is set autom
 changes
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Class::changes</code></dd><dt>Prototype property of</dt><dd><i>Class</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 This objects contains all properties to change on the target item.
+
 It accepts bindings and listeners as well.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/class.litcoffee#changes)
@@ -44,9 +46,12 @@ priority
 when
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Class::when</code></dd><dt>Prototype property of</dt><dd><i>Class</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 Indicates whether the class is active or not.
+
 When it's `true`, this state is appended on the
 end of the [Item::classes][renderer/Item::classes] list.
+
 Mostly used with bindings.
+
 ```nml
 `Grid {
 `   columns: 2
@@ -103,6 +108,7 @@ onNodeRemove
 classes
 <dl><dt>Syntax</dt><dd><code>&#x2A;List&#x2A; Item::classes</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd></dl>
 Classs at the end of the list have the highest priority.
+
 This property has a setter, which accepts a string and an array of strings.
 
 ##onClassesChange

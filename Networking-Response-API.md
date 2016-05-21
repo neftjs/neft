@@ -1,11 +1,11 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Response**
 
-> * [[Response Error|Networking-Response Error-API]]
-
 Response
 ========
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#response)
+
+> * [[Response Error|Networking-Response Error-API]]
 
 ## Table of contents
 * [Response](#response)
@@ -28,8 +28,10 @@ Response
 STATUSES
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Response.STATUSES</code></dd><dt>Static property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
 Contains abstract codes used to describe the response type.
+
 Each status corresponds to the HTTP numeral value.
 Check [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html]() for more.
+
 Contains:
  - Response.OK,
  - Response.CREATED,
@@ -50,6 +52,7 @@ Contains:
  - Response.INTERNAL_SERVER_ERROR,
  - Response.NOT_IMPLEMENTED,
  - Response.SERVICE_UNAVAILABLE.
+
 ```javascript
 console.log(Networking.Response.OK);
 console.log(Networking.Response.BAD_REQUEST);
@@ -70,6 +73,7 @@ var Response = Networking.Response;
 onSend
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Response::onSend()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Called when the response has been sent.
+
 ```javascript
 res.onSend(function(){
     console.log("Response has been sent!");
@@ -93,7 +97,9 @@ Refers to the [Request][networking/Request].
 status
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Response::status = Response.OK</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Default</dt><dd><code>Response.OK</code></dd></dl>
 Keeps a normalized code determined the response type.
+
 It refers to one of the *Response.STATUSES* values.
+
 ```javascript
 res.status = Networking.Response.CREATED;
 res.status = Networking.Response.PAYMENT_REQUIRED;
@@ -104,6 +110,7 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 data
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Response::data</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Any</i></dd></dl>
 Value sent to the client.
+
 ```javascript
 res.data = {items: ['superhero toy', 'book']};
 res.data = new Error("Wrong order");
@@ -135,10 +142,12 @@ res.setHeader('Location', '/redirect/to/url');
 send
 <dl><dt>Syntax</dt><dd><code>Response::send([&#x2A;Integer&#x2A; status, &#x2A;Any&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <i>optional</i></li><li>data — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 This method calls the [onSend()][networking/Response::onSend()] signal.
+
 ```javascript
 res.onSend(function(){
     console.log("Response has been sent");
 });
+
 res.send(Networking.Response.OK, {user: 'Max', age: 43});
 ```
 
@@ -154,6 +163,7 @@ The *Response.MOVED* for is a permanent redirection.
 raise
 <dl><dt>Syntax</dt><dd><code>Response::raise(&#x2A;Any&#x2A; error)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li></ul></dd></dl>
 Finishes the response with an error.
+
 ```javascript
 res.raise(new Networking.Response.Error("Login first"));
 res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login first"));

@@ -1,22 +1,22 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Item**
 
+# Item
+
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#item)
+
 > * [[Alignment|Renderer-Alignment @extension-API]]
 > * [[Anchors|Renderer-Anchors @extension-API]]
 > * [[Document|Renderer-Document @extension-API]]
 > * [[Keys|Renderer-Keys @extension-API]]
 > * [[Layout|Renderer-Layout @extension-API]]
 > * [[Margin|Renderer-Margin @extension-API]]
-> * [[Spacing|Renderer-Spacing @extension-API]]
 > * [[Pointer|Renderer-Pointer @extension-API]]
+> * [[Spacing|Renderer-Spacing @extension-API]]
 > * [[Image|Renderer-Image @class-API]]
-> * [[Text|Renderer-Text @class-API]]
->  * [[Font|Renderer-Font @extension-API]]
 > * [[Native|Renderer-Native @class-API]]
+> * [[Text|Renderer-Text @class-API]]
+>   * [[Font|Renderer-Font @extension-API]]
 > * [[TextInput|Renderer-TextInput @class-API]]
-
-# Item
-
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#item)
 
 ## Table of contents
 * [Item](#item)
@@ -121,6 +121,7 @@ This is a base class for everything which is visible.
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::ready()</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Called when the Item is ready, that is, all
 properties have been set and it's ready to use.
+
 ```nml
 Rectangle {
     width: 200
@@ -238,6 +239,7 @@ Removes all children from the item.
 ### *Boolean* Item::visible = `true`
 
 Determines whether an item is visible or not.
+
 ```nml
 Item {
     width: 100
@@ -254,36 +256,43 @@ Item {
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onvisiblechange)
 
 ### *Boolean* Item::clip = `false`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onClipChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#boolean-itemclip--false-signal-itemonclipchangeboolean-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::width = `0`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onWidthChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemwidth--0-signal-itemonwidthchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::height = `0`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onHeightChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemheight--0-signal-itemonheightchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::x = `0`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onXChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemx--0-signal-itemonxchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::y = `0`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onYChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemy--0-signal-itemonychangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::z = `0`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onZChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemz--0-signal-itemonzchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::scale = `1`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onScaleChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemscale--1-signal-itemonscalechangefloat-oldvalue)
@@ -304,6 +313,7 @@ Rectangle {
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onrotationchange)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::opacity = `1`
+
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onOpacityChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemopacity--1-signal-itemonopacitychangefloat-oldvalue)
@@ -319,6 +329,7 @@ Points to the URI which will be used when user clicks on this item.
 ###background
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::background</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd></dl>
 An item used as a background for the item.
+
 By default, background is filled to his parent.
 
 ###onBackgroundChange

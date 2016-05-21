@@ -27,6 +27,7 @@ Request
 METHODS
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Request.METHODS</code></dd><dt>Static property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
 Contains available *HTTP* methods.
+
 Contains:
  - Request.GET,
  - Request.POST,
@@ -39,6 +40,7 @@ Contains:
 TYPES
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Request.TYPES</code></dd><dt>Static property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
 Contains available expected types.
+
 Contains:
  - Request.TEXT_TYPE,
  - Request.JSON_TYPE,
@@ -50,8 +52,10 @@ Contains:
 Request
 <dl><dt>Syntax</dt><dd><code>&#x2A;Request&#x2A; Request(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Request</i></dd></dl>
 Class used to describe coming networking request.
+
 You should use [Networking::createRequest()][networking/Networking::createRequest()]
 to create a full request.
+
 Access it with:
 ```javascript
 var Networking = require('networking');
@@ -73,6 +77,7 @@ Pseudo unique hash. It's created automatically.
 pending
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Request::pending</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
 Indicates whether the request is not destroyed.
+
 If it's `false`, the request can't be changed.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#pending)
@@ -80,6 +85,7 @@ If it's `false`, the request can't be changed.
 method
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::method</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 This property refers to one of the `Request.METHODS` values.
+
 Holds a method with which the request has been called.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#method)
@@ -87,12 +93,16 @@ Holds a method with which the request has been called.
 uri
 <dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Uri&#x2A; Request::uri</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Uri</i></dd></dl>
 Refers to the request URI path.
+
 It can holds local and absolute paths.
+
 ```javascript
 // for request sent to the server ...
 "http://server.domain/auth/user"
+
 // for got request on the server ...
 "http://server.domain/auth/user"
+
 // for local requests ...
 "/user/user_id"
 ```
@@ -102,10 +112,12 @@ It can holds local and absolute paths.
 type
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::type</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 Describes the expected response type.
+
 It's used in the server-client communication.
 In most cases, a server returns a HTML document for a crawler, but client
 (which renders documents on his own side) expects a clean JSON response.
 That's why, these two requests have the same uri, but different expected types.
+
 It refers to one of the *Request.TYPES* values.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#type)
@@ -130,6 +142,7 @@ response
 params
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::params = {}</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd><dt>Read only</dt></dl>
 Keeps matched parameters by the handler from the request uri.
+
 Considering the */users/{name}* URI,
 the 'name' property is available as the *params.name*.
 
@@ -138,6 +151,7 @@ the 'name' property is available as the *params.name*.
 headers
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::headers</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Read only</dt></dl>
 Contains request headers.
+
 For the client request, this object is empty.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#headers)
@@ -149,7 +163,9 @@ cookies
 toString
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::toString()</code></dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 Returns a string describing the request.
+
 It contains a method, uri and a type.
+
 ```javascript
 console.log(req.toString);
 // get /users/id as json

@@ -68,7 +68,9 @@ Events order:
  6. Release
  7. Click
  8. Release (not captured ensured items)
+
 Stopped 'Enter' event will emit 'Move' event on this item.
+
 Stopped 'Exit' event will emit 'Release' event on this item.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/pointer.litcoffee#pointerevent)
@@ -82,6 +84,7 @@ Enable this property to stop further event propagation.
 checkSiblings
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; PointerEvent::checkSiblings = false</code></dd><dt>Prototype property of</dt><dd><i>PointerEvent</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 By default first deepest captured item will propagate this event only by his parents.
+
 Change this value to test previous siblings as well.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/pointer.litcoffee#checksiblings)
@@ -90,6 +93,7 @@ ensureRelease
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; PointerEvent::ensureRelease = true</code></dd><dt>Prototype property of</dt><dd><i>PointerEvent</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
 Define whether pressed item should get 'onRelease' signal even
 if the pointer has been released outside of this item.
+
 Can be changed only in the 'onPress' signal.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/pointer.litcoffee#ensurerelease)
@@ -98,6 +102,7 @@ ensureMove
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; PointerEvent::ensureMove = true</code></dd><dt>Prototype property of</dt><dd><i>PointerEvent</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
 Define whether the pressed item should get 'onMove' signals even
 if the pointer is outside of this item.
+
 Can be changed only in the 'onPress' signal.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/pointer.litcoffee#ensuremove)

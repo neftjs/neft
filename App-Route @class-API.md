@@ -16,6 +16,7 @@ module.exports = function(app){
   var Route = app.Route;
 };
 ```
+
 Acceptable syntaxes:
 ```javascript
 *Route* app.Route(*String* method, *String* uri, [Object](/Neft-io/neft/wiki/Utils-API#isobject) options)

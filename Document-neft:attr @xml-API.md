@@ -3,6 +3,7 @@
 neft:attr
 <dl><dt>Syntax</dt><dd><code>neft:attr @xml</code></dd></dl>
 Tag used to dynamically change an attribute of the parent element.
+
 ```xml
 <header neft:style="header">
     <neft:attr name="isActive" value="true" neft:if="${data.isActive}" />

@@ -30,8 +30,10 @@ Returns any file from the static/ folder.
 <dl><dt>Syntax</dt><dd><code>neft-type={type}/&#x2A;</code></dd><dt>Default</dt><dd><code>{type}</code></dd></dl>
 URI used by the browser which doesn't support javascript - in such case always
 full HTML document is returned (like for the searching robots).
+
 You can use this route in a browser to check whether your HTML document is proper.
 Clean your cookies when you finish.
+
 ```html
 <a href="/neft-type=app/">Use CSS renderer</a>
 <a href="/neft-type=game/">Use WebGL renderer</a>

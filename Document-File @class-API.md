@@ -1,24 +1,24 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
+File
+<dl><dt>Syntax</dt><dd><code>File @class</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#file)
+
 > * [[neft:attr|Document-neft:attr @xml-API]]
 > * [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
-> * [[neft:fragment|Document-neft:fragment @xml-API]]
->  * [[neft:require|Document-neft:require @xml-API]]
-> * [[neft:if|Document-neft:if @xml-API]]
 > * [[Setting attributes|Document-Setting attributes @learn-API]]
+> * [[neft:if|Document-neft:if @xml-API]]
+> * [[neft:fragment|Document-neft:fragment @xml-API]]
+>   * [[neft:require|Document-neft:require @xml-API]]
 > * [[neft:function|Document-neft:function @xml-API]]
 > * [[id|Document-id @xml-API]]
 > * [[neft:each|Document-neft:each @xml-API]]
 > * [[neft:log|Document-neft:log @xml-API]]
 > * [[neft:rule|Document-neft:rule @xml-API]]
 > * [[neft:script|Document-neft:script @xml-API]]
-> * [[neft:target|Document-neft:target @xml-API]]
 > * [[String Interpolation|Document-String Interpolation @learn-API]]
+> * [[neft:target|Document-neft:target @xml-API]]
 > * [[neft:use|Document-neft:use @xml-API]]
-
-File
-<dl><dt>Syntax</dt><dd><code>File @class</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#file)
 
 onBeforeRender
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRender(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>

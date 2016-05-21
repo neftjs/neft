@@ -7,10 +7,14 @@ Anchors
 Anchors
 <dl><dt>Syntax</dt><dd><code>&#x2A;Anchors&#x2A; Anchors()</code></dd><dt>Returns</dt><dd><i>Anchors</i></dd></dl>
 Anchors describe position relations between two items.
+
 Each item has few lines: top, bottom, verticalCenter, left, right, horizontalCenter.
+
 Anchors give a posibility to say, that a line of the first item must be
 always in the same position as a line of the second item.
+
 Anchors work only between siblings and in relation to the direct parent.
+
 ```nml
 `Item {
 `   height: 100
@@ -118,7 +122,9 @@ left
 ##onVerticalCenterChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onVerticalCenterChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 It's a shortcut for the horizontalCenter and verticalCenter anchors.
+
 No target line is required.
+
 ```nml
 `Rectangle {
 `   id: rect1
@@ -142,7 +148,9 @@ No target line is required.
 fill
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Anchors::fill = null</code></dd><dt>Prototype property of</dt><dd><i>Anchors</i></dd><dt>Type</dt><dd><i>Array</i></dd><dt>Default</dt><dd><code>null</code></dd></dl>
 Changes item position and its size to be always equal the anchored target.
+
 No target line is required.
+
 ```nml
 `Item {
 `   height: 100

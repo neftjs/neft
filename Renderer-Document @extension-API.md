@@ -19,6 +19,7 @@ node
 `  text: this.document.node.attrs.value
 `}
 ```
+
 ```nml
 `Text {
 `   document.onNodeChange: function(){

@@ -13,6 +13,7 @@ Used as a global namespace in the function body.
 require
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; globalObject.require(&#x2A;String&#x2A; moduleName)</code></dd><dt>Static method of</dt><dd><i>globalObject</i></dd><dt>Parameters</dt><dd><ul><li>moduleName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
 Requires standard Neft modules.
+
 ```xml
 <neft:function neft:name="test">
     var utils = require('utils');
@@ -25,11 +26,13 @@ Requires standard Neft modules.
 arguments
 <dl><dt>Syntax</dt><dd><code>&#x2A;Arguments&#x2A; globalObject.arguments</code></dd><dt>Static property of</dt><dd><i>globalObject</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isarguments">Arguments</a></dd></dl>
 Array-like object with arguments passed to the function.
+
 ```xml
 <neft:function neft:name="followMouse">
     var e = arguments[0]; // Renderer.Item::pointer.onMove comes with event argument
     return [e.x, e.y];
 </neft:function>
+
 <button style:pointer:onMove="${funcs.followMouse}" />
 ```
 
