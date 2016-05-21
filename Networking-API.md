@@ -12,11 +12,11 @@ var Networking = require('networking');
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#networking-engine)
 
 Networking
-<dl><dt>Syntax</dt><dd><code>&#x2A;Networking&#x2A; Networking(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Networking</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Networking&#x2A; Networking(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Networking</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#networking-networkingobject-options)
 
 onRequest
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Networking::onRequest(&#x2A;Networking.Request&#x2A; request, &#x2A;Networking.Response&#x2A; response)</code></dd><dt>Prototype method of</dt><dd><i>Networking</i></dd><dt>Parameters</dt><dd><ul><li>request — <i>Networking.Request</i></li><li>response — <i>Networking.Response</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Networking::onRequest(&#x2A;Networking.Request&#x2A; request, &#x2A;Networking.Response&#x2A; response)</code></dd><dt>Prototype method of</dt><dd><i>Networking</i></dd><dt>Parameters</dt><dd><ul><li>request — <i>Networking.Request</i></li><li>response — <i>Networking.Response</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#signal-networkingonrequestnetworkingrequest-request-networkingresponse-response)
 
 protocol
@@ -24,7 +24,7 @@ protocol
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#readonly-string-networkingprotocol)
 
 port
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Networking::port</code></dd><dt>Prototype property of</dt><dd><i>Networking</i></dd><dt>Type</dt><dd><i>Integer</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Networking::port</code></dd><dt>Prototype property of</dt><dd><i>Networking</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#readonly-integer-networkingport)
 
 host
@@ -46,7 +46,7 @@ Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#readonly-string-networkinglanguage)
 
 pendingRequests
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;List&#x2A; Networking::pendingRequests</code></dd><dt>Prototype property of</dt><dd><i>Networking</i></dd><dt>Type</dt><dd><i>List</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;List&#x2A; Networking::pendingRequests</code></dd><dt>Prototype property of</dt><dd><i>Networking</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/List-API.md#class-list">List</a></dd><dt>Read only</dt></dl>
 Use this method to create a new [Handler][networking/Handler].
 ```javscript
 app.networking.createHandler({

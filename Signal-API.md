@@ -23,7 +23,7 @@ const { signal } = Neft;
   * [Glossary](#glossary)
 
 ##STOP_PROPAGATION
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; STOP_PROPAGATION</code></dd><dt>Type</dt><dd><i>Integer</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; STOP_PROPAGATION</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></dd></dl>
 Special constant used to stop calling further listeners.
 Must be returned by the listener function.
 ```javascript
@@ -44,7 +44,7 @@ obj.onPress.emit();
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#integer-stoppropagation)
 
 ##create
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; create([&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; name])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i> — <i>optional</i></li><li>name — <i>String</i> — <i>optional</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; create([&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; name])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i> — <i>optional</i></li><li>name — <i>String</i> — <i>optional</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 Creates a new signal in the given object under the given name property.
 Returns created signal.
 ```javascript
@@ -60,7 +60,7 @@ obj.onRename.emit('Max', 'George');
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#signal-createnotprimitive-object-string-name)
 
 ##isEmpty
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isEmpty(&#x2A;Signal&#x2A; signal)</code></dd><dt>Parameters</dt><dd><ul><li>signal — <i>Signal</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isEmpty(&#x2A;Signal&#x2A; signal)</code></dd><dt>Parameters</dt><dd><ul><li>signal — <a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given signal has no listeners.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#boolean-isemptysignal-signal)
@@ -70,13 +70,13 @@ Returns `true` if the given signal has no listeners.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#class-signal)
 
 ###emit
-<dl><dt>Syntax</dt><dd><code>Signal::emit([&#x2A;Any&#x2A; argument1, &#x2A;Any&#x2A; argument2])</code></dd><dt>Prototype method of</dt><dd><i>Signal</i></dd><dt>Parameters</dt><dd><ul><li>argument1 — <i>Any</i> — <i>optional</i></li><li>argument2 — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Signal::emit([&#x2A;Any&#x2A; argument1, &#x2A;Any&#x2A; argument2])</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd><dt>Parameters</dt><dd><ul><li>argument1 — <i>Any</i> — <i>optional</i></li><li>argument2 — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Call all of the signal listeners with the given arguments (2 maximally).
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#signalemitany-argument1-any-argument2)
 
 ###connect
-<dl><dt>Syntax</dt><dd><code>Signal::connect(&#x2A;Function&#x2A; listener, [&#x2A;Any&#x2A; context])</code></dd><dt>Prototype method of</dt><dd><i>Signal</i></dd><dt>Parameters</dt><dd><ul><li>listener — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Signal::connect(&#x2A;Function&#x2A; listener, [&#x2A;Any&#x2A; context])</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd><dt>Parameters</dt><dd><ul><li>listener — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Adds the given listener function into the signal listeners.
 By default, the signal function works like this method.
 ```javascript
@@ -112,7 +112,7 @@ obj.onPress.emit();
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#signalconnectfunction-listener-any-context)
 
 ###disconnect
-<dl><dt>Syntax</dt><dd><code>Signal::disconnect(&#x2A;Function&#x2A; listener, [&#x2A;Any&#x2A; context])</code></dd><dt>Prototype method of</dt><dd><i>Signal</i></dd><dt>Parameters</dt><dd><ul><li>listener — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Signal::disconnect(&#x2A;Function&#x2A; listener, [&#x2A;Any&#x2A; context])</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd><dt>Parameters</dt><dd><ul><li>listener — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Returns the given listener function from the signal listeners.
 ```javascript
 var obj = {};
@@ -129,7 +129,7 @@ obj.onPress.emit()
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#signaldisconnectfunction-listener-any-context)
 
 ###disconnectAll
-<dl><dt>Syntax</dt><dd><code>Signal::disconnectAll()</code></dd><dt>Prototype method of</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Signal::disconnectAll()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 Removes all the signal listeners.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#signaldisconnectall)

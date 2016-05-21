@@ -11,7 +11,7 @@
   * [isStringArray](#isstringarray)
 
 ##get
-<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; get(&#x2A;Object&#x2A; object, &#x2A;String&#x2A; path, [&#x2A;OptionsArray&#x2A; target])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>Object</i></li><li>path — <i>String</i></li><li>target — <i>OptionsArray</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; get(&#x2A;Object&#x2A; object, &#x2A;String&#x2A; path, [&#x2A;OptionsArray&#x2A; target])</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>path — <i>String</i></li><li>target — <i>OptionsArray</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 Extracts property, deep property or an array of possible properties from the given object.
 ```javascript
 var obj = {prop: 1};

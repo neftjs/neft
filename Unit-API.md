@@ -23,7 +23,7 @@ afterEach
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/unit/index.litcoffee#unitaftereachfunction-code)
 
 whenChange
-<dl><dt>Syntax</dt><dd><code>Unit.whenChange(&#x2A;Object&#x2A; watchObject, &#x2A;Function&#x2A; callback, [&#x2A;Integer&#x2A; maxDelay = `1000`])</code></dd><dt>Static method of</dt><dd><i>Unit</i></dd><dt>Parameters</dt><dd><ul><li>watchObject — <i>Object</i></li><li>callback — <i>Function</i></li><li>maxDelay — <i>Integer</i> — <code>= 1000</code> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Unit.whenChange(&#x2A;Object&#x2A; watchObject, &#x2A;Function&#x2A; callback, [&#x2A;Integer&#x2A; maxDelay = `1000`])</code></dd><dt>Static method of</dt><dd><i>Unit</i></dd><dt>Parameters</dt><dd><ul><li>watchObject — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>callback — <i>Function</i></li><li>maxDelay — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a> — <code>= 1000</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/unit/index.litcoffee#unitwhenchangeobject-watchobject-function-callback-integer-maxdelay--1000)
 
 runTests

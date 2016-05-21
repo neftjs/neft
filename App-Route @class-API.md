@@ -9,7 +9,7 @@ getTemplateView
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/route.litcoffee#document-routegettemplateviewstring-viewname)
 
 Route
-<dl><dt>Syntax</dt><dd><code>&#x2A;Route&#x2A; Route(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Route</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Route&#x2A; Route(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Route</i></dd></dl>
 Access it with:
 ```javascript
 module.exports = function(app){

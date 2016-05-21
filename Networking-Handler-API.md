@@ -16,7 +16,7 @@ Handler
     * [toString](#tostring)
 
 Handler
-<dl><dt>Syntax</dt><dd><code>&#x2A;Handler&#x2A; Handler(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Handler</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Handler&#x2A; Handler(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Handler</i></dd></dl>
 Represents a callback function called on the request.
 Each handler must determine an uri, which is compared with the got request URI.
 You should use [createHandler()][networking/Networking::createHandler()] to create

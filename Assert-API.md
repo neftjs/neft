@@ -112,7 +112,7 @@ Check *utils.isPrimitive()* for more details.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisnotstringany-value-string-message)
 
 ###isFloat
-<dl><dt>Syntax</dt><dd><code>assert.isFloat(&#x2A;Float&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Float</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.isFloat(&#x2A;Float&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value">Float</a></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisfloatfloat-value-string-message)
 
 ###isNotFloat
@@ -120,7 +120,7 @@ Check *utils.isPrimitive()* for more details.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisnotfloatany-value-string-message)
 
 ###isInteger
-<dl><dt>Syntax</dt><dd><code>assert.isInteger(&#x2A;Integer&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Integer</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.isInteger(&#x2A;Integer&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisintegerinteger-value-string-message)
 
 ###isNotInteger
@@ -144,7 +144,7 @@ Check *utils.isPrimitive()* for more details.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisnotfunctionany-value-string-message)
 
 ###isObject
-<dl><dt>Syntax</dt><dd><code>assert.isObject(&#x2A;Object&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Object</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.isObject(&#x2A;Object&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisobjectobject-value-string-message)
 
 ###isNotObject
@@ -152,7 +152,7 @@ Check *utils.isPrimitive()* for more details.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisnotobjectany-value-string-message)
 
 ###isPlainObject
-<dl><dt>Syntax</dt><dd><code>assert.isPlainObject(&#x2A;PlainObject&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>PlainObject</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.isPlainObject(&#x2A;PlainObject&#x2A; value, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isplainobjectany-value">PlainObject</a></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 Check *utils.isPlainObject()* for more details.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisplainobjectplainobject-value-string-message)
@@ -170,18 +170,18 @@ Check *utils.isPlainObject()* for more details.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisnotarrayany-value-string-message)
 
 ###isEqual
-<dl><dt>Syntax</dt><dd><code>assert.isEqual(&#x2A;Any&#x2A; value1, &#x2A;Any&#x2A; value2, [&#x2A;String&#x2A; message, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>value2 — <i>Any</i></li><li>message — <i>String</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.isEqual(&#x2A;Any&#x2A; value1, &#x2A;Any&#x2A; value2, [&#x2A;String&#x2A; message, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>value2 — <i>Any</i></li><li>message — <i>String</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a> — <i>optional</i></li></ul></dd></dl>
 Check *utils.isEqual()* for more details.
 The given options object accepts: [Integer](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisequalany-value1-any-value2-string-message-object-options)
 
 ###isNotEqual
-<dl><dt>Syntax</dt><dd><code>assert.isNotEqual(&#x2A;Any&#x2A; value1, &#x2A;Any&#x2A; value2, [&#x2A;String&#x2A; message, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>value2 — <i>Any</i></li><li>message — <i>String</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.isNotEqual(&#x2A;Any&#x2A; value1, &#x2A;Any&#x2A; value2, [&#x2A;String&#x2A; message, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>value2 — <i>Any</i></li><li>message — <i>String</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisnotequalany-value1-any-value2-string-message-object-options)
 
 ###instanceOf
-<dl><dt>Syntax</dt><dd><code>assert.instanceOf(&#x2A;Object&#x2A; object, &#x2A;Function&#x2A; constructor, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>object — <i>Object</i></li><li>constructor — <i>Function</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.instanceOf(&#x2A;Object&#x2A; object, &#x2A;Function&#x2A; constructor, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>constructor — <i>Function</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertinstanceofobject-object-function-constructor-string-message)
 
 ###notInstanceOf
@@ -189,11 +189,11 @@ The given options object accepts: [Integer](/Neft-io/neft/wiki/Utils-API.md#bool
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertnotinstanceofany-object-function-constructor-string-message)
 
 ###lengthOf
-<dl><dt>Syntax</dt><dd><code>assert.lengthOf(&#x2A;Any&#x2A; value, &#x2A;Integer&#x2A; length, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>length — <i>Integer</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.lengthOf(&#x2A;Any&#x2A; value, &#x2A;Integer&#x2A; length, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>length — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertlengthofany-value-integer-length-string-message)
 
 ###notLengthOf
-<dl><dt>Syntax</dt><dd><code>assert.notLengthOf(&#x2A;Any&#x2A; value, &#x2A;Integer&#x2A; length, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>length — <i>Integer</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assert.notLengthOf(&#x2A;Any&#x2A; value, &#x2A;Integer&#x2A; length, [&#x2A;String&#x2A; message])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>length — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertnotlengthofany-value-integer-length-string-message)
 
 ###operator

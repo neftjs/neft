@@ -33,14 +33,14 @@ const { Dict } = Neft
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#class-dict)
 
 ###fromJSON
-<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; Dict.fromJSON(&#x2A;String&#x2A;|&#x2A;Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>| — <i>String</i></li><li>json — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Dict</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; Dict.fromJSON(&#x2A;String&#x2A;|&#x2A;Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>| — <i>String</i></li><li>json — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd></dl>
 Creates a new [Dict](/Neft-io/neft/wiki/Dict-API.md#class-dict) from a json string.
 This function should be used with `toJSON()` output.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json)
 
 ###constructor
-<dl><dt>Syntax</dt><dd><code>Dict::constructor([&#x2A;Object&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>data — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Dict::constructor([&#x2A;Object&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>data — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a> — <i>optional</i></li></ul></dd></dl>
 Creates a new dict instance.
 The given data parameter determines default keys with their values.
 ```javascript
@@ -54,7 +54,7 @@ console.log(data.name);
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dictconstructorobject-data)
 
 ###length
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Dict::length</code></dd><dt>Prototype property of</dt><dd><i>Dict</i></dd><dt>Type</dt><dd><i>Integer</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Dict::length</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></dd><dt>Read only</dt></dl>
 Amount of keys stored in a dict.
 ```javascript
 var dict = Dict({prop: 1});
@@ -65,7 +65,7 @@ console.log(dict.length);
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#readonly-integer-dictlength)
 
 ###onChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Dict::onChange(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Dict::onChange(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 Signal called on each key value change.
 ```javascript
 var user = new Dict({
@@ -81,7 +81,7 @@ user.set('country', 'US');
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#signal-dictonchangestring-key-any-oldvalue)
 
 ###set
-<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Dict::set(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Dict::set(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 Sets the given value for the given key stored in the dict.
 The value can't be an undefined. Use `pop()` instead.
 Calls `onChange()` signal.
@@ -100,20 +100,20 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#any-dictsetstring-key-any-value)
 
 ###has
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Dict::has(&#x2A;String&#x2A; key)</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Dict::has(&#x2A;String&#x2A; key)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given key exists in the dict.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#boolean-dicthasstring-key)
 
 ###extend
-<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; Dict::extend(&#x2A;Object&#x2A;|&#x2A;Dict&#x2A; object)</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>| — <i>Object</i></li><li>object — <i>Dict</i></li></ul></dd><dt>Returns</dt><dd><i>Dict</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; Dict::extend(&#x2A;Object&#x2A;|&#x2A;Dict&#x2A; object)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>| — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>object — <a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd></dl>
 Sets all keys with their values from the given object.
 Calls `onChange()` signal for each key.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dict-dictextendobjectdict-object)
 
 ###pop
-<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Dict::pop(&#x2A;String&#x2A; key)</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Dict::pop(&#x2A;String&#x2A; key)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 Removes the given key from the dict.
 The key must exists in the dict.
 Calls `onChange()` signal.
@@ -132,14 +132,14 @@ data.pop('name');
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#any-dictpopstring-key)
 
 ###clear
-<dl><dt>Syntax</dt><dd><code>Dict::clear()</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Dict::clear()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd></dl>
 Removes all stored keys from the dict.
 Calls `onChange()` signal for each stored key.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dictclear)
 
 ###keys
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Array&#x2A; Dict::keys()</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>Array</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Array&#x2A; Dict::keys()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd><dt>Read only</dt></dl>
 Returns an array of keys stored in the dict.
 Always returns the same array instance.
 ```javascript
@@ -154,7 +154,7 @@ console.log(data.keys());
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#readonly-array-dictkeys)
 
 ###values
-<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Dict::values()</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Dict::values()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 Returns an array of values stored in the dict.
 Always returns the same array instance.
 ```javascript
@@ -169,7 +169,7 @@ console.log(data.values());
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#array-dictvalues)
 
 ###items
-<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Dict::items()</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Dict::items()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 Returns an array of key-value pairs stored in the dict.
 Always returns the same array instance.
 ```javascript

@@ -21,10 +21,10 @@ getResource
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/index.litcoffee#resourcesresource-resourcesgetresourcestring-uri)
 
 resolve
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Resources::resolve(&#x2A;String&#x2A; uri, [&#x2A;Object&#x2A; request])</code></dd><dt>Prototype method of</dt><dd><i>Resources</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li><li>request — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Resources::resolve(&#x2A;String&#x2A; uri, [&#x2A;Object&#x2A; request])</code></dd><dt>Prototype method of</dt><dd><i>Resources</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li><li>request — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/index.litcoffee#string-resourcesresolvestring-uri-object-request)
 
 toJSON
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resources::toJSON()</code></dd><dt>Prototype method of</dt><dd><i>Resources</i></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resources::toJSON()</code></dd><dt>Prototype method of</dt><dd><i>Resources</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/index.litcoffee#object-resourcestojson)
 

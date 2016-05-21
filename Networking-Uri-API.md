@@ -40,13 +40,13 @@ protocol
 Holds the last *Uri::match()* result.
 
 query
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::query</code></dd><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::query</code></dd><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
 Test whether the uri is valid with the given string.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#object-uriquerystring-urihashboolean-uriteststring-uri)
 
 match
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::match(&#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::match(&#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
 Returns found parameters from the given string.
 If the given uri is not valid with the uri, error will be raised.
 

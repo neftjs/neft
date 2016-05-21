@@ -9,14 +9,14 @@ Spacing
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/spacing.litcoffee#spacing-spacing)
 
 column
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::column</code></dd><dt>Prototype property of</dt><dd><i>Spacing</i></dd><dt>Type</dt><dd><i>Float</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::column</code></dd><dt>Prototype property of</dt><dd><i>Spacing</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value">Float</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/spacing.litcoffee#float-spacingcolumn-signal-spacingoncolumnchangefloat-oldvalue)
 
 row
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::row</code></dd><dt>Prototype property of</dt><dd><i>Spacing</i></dd><dt>Type</dt><dd><i>Float</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::row</code></dd><dt>Prototype property of</dt><dd><i>Spacing</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value">Float</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/spacing.litcoffee#float-spacingrow-signal-spacingonrowchangefloat-oldvalue)
 
 valueOf
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::valueOf()</code></dd><dt>Prototype method of</dt><dd><i>Spacing</i></dd><dt>Returns</dt><dd><i>Float</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::valueOf()</code></dd><dt>Prototype method of</dt><dd><i>Spacing</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value">Float</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/spacing.litcoffee#float-spacingvalueof)
 
