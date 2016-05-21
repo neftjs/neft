@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 Rectangle
 <dl><dt>Syntax</dt><dd><code>Rectangle @class</code></dd></dl>

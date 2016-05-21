@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 Column
 <dl><dt>Syntax</dt><dd><code>Column @class</code></dd></dl>

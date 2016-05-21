@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]] ▸ [[Item|Renderer-Item-API]]
 
 Alignment
 <dl><dt>Syntax</dt><dd><code>Alignment @extension</code></dd></dl>

@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 Grid
 <dl><dt>Syntax</dt><dd><code>Grid @class</code></dd></dl>

@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Resources|Resources-API]]
 
 Resource
 <dl><dt>Syntax</dt><dd><code>Resource @class</code></dd></dl>

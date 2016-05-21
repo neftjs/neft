@@ -1,11 +1,11 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 Animation
 <dl><dt>Syntax</dt><dd><code>Animation @modifier</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation.litcoffee#animation)
 
-> * [[PropertyAnimation|Renderer-PropertyAnimation @modifier-API]]
->   * [[NumberAnimation|Renderer-NumberAnimation @modifier-API]]
+## Nested APIs* [[PropertyAnimation|Renderer-PropertyAnimation @modifier-API]]
+  * [[NumberAnimation|Renderer-NumberAnimation @modifier-API]]
 
 Animation
 <dl><dt>Syntax</dt><dd><code>&#x2A;Animation&#x2A; Animation()</code></dd><dt>Returns</dt><dd><i>Animation</i></dd></dl>

@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ [[Element|Document-Element @virtual_dom-API]]
 
 Text
 <dl><dt>Syntax</dt><dd><code>Text @virtual_dom</code></dd></dl>

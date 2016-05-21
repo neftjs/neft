@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]]
 
 neft:function
 <dl><dt>Syntax</dt><dd><code>neft:function @js</code></dd></dl>

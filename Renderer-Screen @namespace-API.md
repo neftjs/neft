@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 Screen
 <dl><dt>Syntax</dt><dd><code>Screen @namespace</code></dd></dl>

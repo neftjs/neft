@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Response Error**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Networking|Networking-API]] ▸ [[Response|Networking-Response-API]] ▸ **Response Error**
 
 Response Error
 ==============

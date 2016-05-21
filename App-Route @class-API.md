@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[App|App-API]]
 
 Route
 <dl><dt>Syntax</dt><dd><code>Route @class</code></dd></dl>

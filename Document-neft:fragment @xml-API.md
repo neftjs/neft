@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ [[File|Document-File @class-API]]
 
 neft:fragment
 <dl><dt>Syntax</dt><dd><code>neft:fragment @xml</code></dd></dl>
@@ -19,6 +19,8 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
   <neft:use neft:fragment="product" type="painting" name="Lucretia, Paolo Veronese" />
 </section>
 ```
+
+## Nested APIs* [[neft:require|Document-neft:require @xml-API]]
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/fragments.litcoffee#neftfragment)
 

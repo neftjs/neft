@@ -13,11 +13,11 @@ var Networking = require('networking');
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#networking)
 
-> * [[Handler|Networking-Handler-API]]
-> * [[Request|Networking-Request-API]]
-> * [[Response|Networking-Response-API]]
->   * [[Response Error|Networking-Response Error-API]]
-> * [[Uri|Networking-Uri-API]]
+## Nested APIs* [[Handler|Networking-Handler-API]]
+* [[Request|Networking-Request-API]]
+* [[Response|Networking-Response-API]]
+  * [[Response Error|Networking-Response Error-API]]
+* [[Uri|Networking-Uri-API]]
 
 Networking
 <dl><dt>Syntax</dt><dd><code>&#x2A;Networking&#x2A; Networking(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Networking</i></dd></dl>

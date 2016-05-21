@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 ResourcesLoader
 <dl><dt>Syntax</dt><dd><code>ResourcesLoader @class</code></dd></dl>

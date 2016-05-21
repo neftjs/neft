@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]] ▸ [[Animation|Renderer-Animation @modifier-API]] ▸ [[PropertyAnimation|Renderer-PropertyAnimation @modifier-API]]
 
 NumberAnimation
 <dl><dt>Syntax</dt><dd><code>NumberAnimation @modifier</code></dd></dl>

@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 Navigator
 <dl><dt>Syntax</dt><dd><code>Navigator @namespace</code></dd></dl>

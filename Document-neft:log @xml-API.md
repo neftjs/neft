@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ [[File|Document-File @class-API]]
 
 neft:log
 <dl><dt>Syntax</dt><dd><code>neft:log @xml</code></dd></dl>

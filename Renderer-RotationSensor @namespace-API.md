@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 RotationSensor
 <dl><dt>Syntax</dt><dd><code>RotationSensor @namespace</code></dd></dl>

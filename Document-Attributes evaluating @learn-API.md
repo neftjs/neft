@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ [[File|Document-File @class-API]]
 
 Attributes evaluating
 <dl><dt>Syntax</dt><dd><code>Attributes evaluating @learn</code></dd></dl>

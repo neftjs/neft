@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ [[File|Document-File @class-API]] ▸ [[neft:fragment|Document-neft:fragment @xml-API]]
 
 neft:require
 <dl><dt>Syntax</dt><dd><code>neft:require @xml</code></dd></dl>

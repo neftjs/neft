@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]]
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]]
 
 AmbientSound
 <dl><dt>Syntax</dt><dd><code>AmbientSound @class</code></dd></dl>
