@@ -9,7 +9,7 @@
   * [assemble](#assemble)
 
 ##simplify
-<dl><dt>Parameters</dt><dd><ul><li><b>object</b> — <i>Object</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>object — <i>Object</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
 Convert the given object into the most simplified format with no cyclic references and more.
 Such object can be easily stringified later using standard *JSON.stringify()*.
 Use utils.assemble() function to restore the object into the initial structure.
@@ -40,7 +40,7 @@ console.log(clone instanceof Sample)
 > [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#simplifyobject-object-object-options)
 
 ##assemble
-<dl><dt>Parameters</dt><dd><ul><li><b>object</b> — <i>PlainObject</i></li></ul></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>object — <i>PlainObject</i></li></ul></dd></dl>
 Backward utils.simplify() operation.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#assembleplainobject-object)

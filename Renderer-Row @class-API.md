@@ -15,7 +15,7 @@ Row
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#row-class)
 
 New
-<dl><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#row-rownewcomponent-component-object-options)
 
 Row

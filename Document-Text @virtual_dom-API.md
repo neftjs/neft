@@ -9,7 +9,7 @@ Text
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#text-text--element)
 
 onTextChange
-<dl><dt>Prototype method of</dt><dd><i>Text</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Text</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#signal-textontextchangestring-oldvalue)
 
 text

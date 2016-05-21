@@ -5,7 +5,7 @@ Class
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#class-modifier)
 
 New
-<dl><dt>Static method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Class</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Class</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#class-classnewcomponent-component-object-options)
 
 Class
@@ -42,7 +42,7 @@ to identify various classes.
   * [onClassesChange](#onclasseschange)
 
 ##onNameChange
-<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classonnamechangestring-oldvalue)
 
 target
@@ -51,7 +51,7 @@ Reference to the [Item][renderer/Item] on which this class has effects.
 If state is created inside the [Item][renderer/Item], this property is set automatically.
 
 ##onTargetChange
-<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Renderer.Item</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Renderer.Item</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classontargetchangerendereritem-oldvalue)
 
 changes
@@ -85,7 +85,7 @@ Mostly used with bindings.
 ```
 
 ##onWhenChange
-<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Boolean</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classonwhenchangeboolean-oldvalue)
 
 children
@@ -97,11 +97,11 @@ children.length
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#integer-classchildrenlength--0)
 
 children.append
-<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li><b>value</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildrenappendobject-value)
 
 children.pop
-<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li><b>index</b> — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>index — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#object-classchildrenpopinteger-index)
 
 document
@@ -109,7 +109,7 @@ document
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#classdocument-classdocument)
 
 ##onDocumentChange
-<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li><b>document</b> — <i>ClassDocument</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>document — <i>ClassDocument</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classondocumentchangeclassdocument-document)
 
 ClassDocument
@@ -121,7 +121,7 @@ query
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#string-classdocumentquery-signal-classdocumentonquerychangestring-oldvaluesignal-classdocumentonnodeadddocumentelement-node)
 
 onNodeRemove
-<dl><dt>Prototype method of</dt><dd><i>ClassDocument</i></dd><dt>Parameters</dt><dd><ul><li><b>node</b> — <i>Document.Element</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>ClassDocument</i></dd><dt>Parameters</dt><dd><ul><li>node — <i>Document.Element</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonnoderemovedocumentelement-node)
 
 classes
@@ -130,6 +130,6 @@ Classs at the end of the list have the highest priority.
 This property has a setter, which accepts a string and an array of strings.
 
 ##onClassesChange
-<dl><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li><b>added</b> — <i>String</i></li><li><b>removed</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>added — <i>String</i></li><li>removed — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/class.litcoffee#signal-itemonclasseschangestring-added-string-removed)
 

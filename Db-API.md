@@ -14,7 +14,7 @@ OBSERVABLE
 > [`Source`](/Neft-io/neft/tree/master/src/db/index.litcoffee#integer-dbobservable)
 
 get
-<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>options</b> — <i>Integer</i> — <i>optional</i></li><li><b>callback</b> — <i>Function</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>options — <i>Integer</i> — <i>optional</i></li><li>callback — <i>Function</i></li></ul></dd></dl>
 ```javascript
 db.set('items', [], function(){
 \  db.get('items', db.OBSERVABLE, function(err, dict){
@@ -32,15 +32,15 @@ db.set('items', [], function(){
 > [`Source`](/Neft-io/neft/tree/master/src/db/index.litcoffee#dbgetstring-key-integer-options-function-callback)
 
 set
-<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>value</b> — <i>Any</i></li><li><b>callback</b> — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i></li><li>callback — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/db/index.litcoffee#dbsetstring-key-any-value-function-callback)
 
 remove
-<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>value</b> — <i>Any</i> — <i>optional</i></li><li><b>callback</b> — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i> — <i>optional</i></li><li>callback — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/db/index.litcoffee#dbremovestring-key-any-value-function-callback)
 
 append
-<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>value</b> — <i>Any</i></li><li><b>callback</b> — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i></li><li>callback — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/db/index.litcoffee#dbappendstring-key-any-value-function-callback)
 
 DbList

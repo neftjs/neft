@@ -16,7 +16,7 @@ Rectangle
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#rectangle-class)
 
 New
-<dl><dt>Static method of</dt><dd><i>Rectangle</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Rectangle</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Rectangle</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Rectangle</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectanglenewcomponent-component-object-options)
 
 Rectangle

@@ -5,11 +5,11 @@ Route
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#route-class)
 
 getTemplateView
-<dl><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li><b>viewName</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li>viewName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#document-routegettemplateviewstring-viewname)
 
 Route
-<dl><dt>Parameters</dt><dd><ul><li><b>options</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Route</i></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Route</i></dd></dl>
 Access it with:
 ```javascript
 module.exports = function(app){

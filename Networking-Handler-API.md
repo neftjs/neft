@@ -6,7 +6,7 @@ Handler
 > [`Source`](/Neft-io/neft/tree/master/src/networking/handler.litcoffee#handler)
 
 Handler
-<dl><dt>Parameters</dt><dd><ul><li><b>options</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Handler</i></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Handler</i></dd></dl>
 Represents a callback function called on the request.
 Each handler must determine an uri, which is compared with the got request URI.
 You should use [createHandler()][networking/Networking::createHandler()] to create
@@ -47,7 +47,7 @@ If the *next* function is called, the next handler is checked.
 > [`Source`](/Neft-io/neft/tree/master/src/networking/handler.litcoffee#function-handlercallback)
 
 exec
-<dl><dt>Prototype method of</dt><dd><i>Handler</i></dd><dt>Parameters</dt><dd><ul><li><b>request</b> — <i>Networking.Request</i></li><li><b>response</b> — <i>Networking.Response</i></li><li><b>next</b> — <i>Function</i></li></ul></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Handler</i></dd><dt>Parameters</dt><dd><ul><li>request — <i>Networking.Request</i></li><li>response — <i>Networking.Response</i></li><li>next — <i>Function</i></li></ul></dd></dl>
 Executes the handler, that is:
  - compares the uri with the request,
  - validates the request uri with the schema,

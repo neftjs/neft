@@ -6,7 +6,7 @@ Uri
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#uri)
 
 Uri
-<dl><dt>Parameters</dt><dd><ul><li><b>uri</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Uri</i></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Uri</i></dd></dl>
 Represents an uri string with parameters.
 The parameter must be wrapped by the curly brackets **{…}**.
 **Rest parameters** are not greedy and are wrapped by the **{…*}** or just **…***.
@@ -38,14 +38,14 @@ Test whether the uri is valid with the given string.
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#object-uriquerystring-urihashboolean-uriteststring-uri)
 
 match
-<dl><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li><b>uri</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 Returns found parameters from the given string.
 If the given uri is not valid with the uri, error will be raised.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#object-urimatchstring-uri)
 
 toString
-<dl><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li><b>params</b> — <i>Object or Dict</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>params — <i>Object or Dict</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 Parses the uri into a string.
 The given params object is used to replace the uri parameters.
 ```javascript

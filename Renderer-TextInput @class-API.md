@@ -5,7 +5,7 @@ TextInput
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#textinput-class)
 
 New
-<dl><dt>Static method of</dt><dd><i>TextInput</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>TextInput</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>TextInput</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>TextInput</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#textinput-textinputnewcomponent-component-object-options)
 
 keysFocusOnPointerPress
@@ -25,7 +25,7 @@ color
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#string-textinputcolor--black-signal-textinputoncolorchangestring-oldvalue)
 
 lineHeight
-<dl><dt>Prototype property of</dt><dd><i>TextInput</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>1</code></dd><dt>hidden</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>TextInput</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>1</code></dd><dt>Hidden</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#hidden-float-textinputlineheight--1-hidden-signal-textinputonlineheightchangefloat-oldvalue)
 
 multiLine
@@ -51,11 +51,11 @@ Accepts 'normal' and 'password'.
     * [font](#font)
 
 ##onEchoModeChange
-<dl><dt>Prototype method of</dt><dd><i>TextInput</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>TextInput</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#signal-textinputonechomodechangestring-oldvalue)
 
 alignment
-<dl><dt>Prototype property of</dt><dd><i>TextInput</i></dd><dt>Type</dt><dd><i>Alignment</i></dd><dt>hidden</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>TextInput</i></dd><dt>Type</dt><dd><i>Alignment</i></dd><dt>Hidden</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/textInput.litcoffee#hidden-alignment-textinputalignment-hidden-signal-textinputonalignmentchangealignment-alignment)
 
 font

@@ -5,11 +5,11 @@ Resource
 > [`Source`](/Neft-io/neft/tree/master/src/resources/resource.litcoffee#resource-class)
 
 fromJSON
-<dl><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li><b>json</b> — <i>String or Object</i></li></ul></dd><dt>Returns</dt><dd><i>Resource</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>String or Object</i></li></ul></dd><dt>Returns</dt><dd><i>Resource</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/resources/resource.litcoffee#resource-resourcefromjsonstringobject-json)
 
 parseFileName
-<dl><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li><b>name</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/resources/resource.litcoffee#object-resourceparsefilenamestring-name)
 
 Resource

@@ -10,7 +10,7 @@
   * [isStringArray](#isstringarray)
 
 ##get
-<dl><dt>Parameters</dt><dd><ul><li><b>object</b> — <i>Object</i></li><li><b>path</b> — <i>String</i></li><li><b>target</b> — <i>OptionsArray</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>object — <i>Object</i></li><li>path — <i>String</i></li><li>target — <i>OptionsArray</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 Extracts property, deep property or an array of possible properties from the given object.
 ```javascript
 var obj = {prop: 1};
@@ -43,7 +43,7 @@ function is a list of the possible values.
 > [`Source`](/Neft-io/neft/tree/master/src/utils/namespace.litcoffee#class-utilsgetoptionsarray)
 
 ##isStringArray
-<dl><dt>Parameters</dt><dd><ul><li><b>value</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>value — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Checks whether the given string references into an array according
 to the notation in the utils.get() function.
 

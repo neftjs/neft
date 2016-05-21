@@ -37,7 +37,7 @@ Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#integer-enabled--logall)
 
 ###log
-<dl><dt>Parameters</dt><dd><ul><li><b>messages...</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console.
 ```javascript
 log("Log me now!");
@@ -48,13 +48,13 @@ log("setName()", "db time");
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#logany-messages)
 
 ###info
-<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li><b>messages...</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console with a blue color.
 
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#loginfoany-messages)
 
 ###ok
-<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li><b>messages...</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console with a green color.
 ```javascript
 log.ok("Data has been successfully sent!");
@@ -63,7 +63,7 @@ log.ok("Data has been successfully sent!");
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#logokany-messages)
 
 ###warn
-<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li><b>messages...</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console with a yellow color.
 ```javascript
 log.warn("Example warning with some recommendations");
@@ -72,7 +72,7 @@ log.warn("Example warning with some recommendations");
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#logwarnany-messages)
 
 ###error
-<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li><b>messages...</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Prints the given messages into the console with a red color.
 ```javascript
 log.error("Error occurs, ... in file ...");
@@ -95,13 +95,13 @@ findPath();
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#integer-logtime)
 
 ###end
-<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li><b>id</b> — <i>Integer</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>id — <i>Integer</i></li></ul></dd></dl>
 Prints an information about the execution time for the given timer id.
 
 > [`Source`](/Neft-io/neft/tree/master/src/log/index.litcoffee#logendinteger-id)
 
 ###scope
-<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li><b>names...</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>names... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Returns a new `log` function.
 All prints will be prefixed by the given names.
 ```javascript

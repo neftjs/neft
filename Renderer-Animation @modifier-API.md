@@ -29,7 +29,7 @@ loop
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationloop-signal-animationonloopchangeboolean-oldvalue)
 
 updatePending
-<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>read only</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#readonly-boolean-animationupdatepending)
 
 start

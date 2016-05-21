@@ -38,7 +38,7 @@ console.log(Networking.Response.BAD_REQUEST);
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#array-responsestatuses)
 
 Response
-<dl><dt>Parameters</dt><dd><ul><li><b>options</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
+<dl><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
 Access it with:
 ```javascript
 var Networking = require('networking');
@@ -59,13 +59,13 @@ res.onSend(function(){
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#signal-responseonsend)
 
 pending
-<dl><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>read only</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
 Indicates whether the response is not destroyed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#readonly-boolean-responsepending)
 
 request
-<dl><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Networking.Request</i></dd><dt>read only</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Networking.Request</i></dd><dt>Read only</dt></dl>
 Refers to the [Request][networking/Request].
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#readonly-networkingrequest-responserequest)
@@ -105,7 +105,7 @@ encoding
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#string-responseencoding--utf8)
 
 setHeader
-<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li><b>name</b> — <i>String</i></li><li><b>value</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>value — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
 ```javascript
 res.setHeader('Location', '/redirect/to/url');
 ```
@@ -113,7 +113,7 @@ res.setHeader('Location', '/redirect/to/url');
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value)
 
 send
-<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li><b>status</b> — <i>Integer</i> — <i>optional</i></li><li><b>data</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <i>Integer</i> — <i>optional</i></li><li>data — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 This method calls the [onSend()][networking/Response::onSend()] signal.
 ```javascript
 res.onSend(function(){
@@ -125,14 +125,14 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responsesendinteger-status-any-data)
 
 redirect
-<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li><b>status</b> — <i>Integer</i> — <code>= Response.FOUND</code></li><li><b>uri</b> — <i>String</i></li></ul></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <i>Integer</i> — <code>= Response.FOUND</code></li><li>uri — <i>String</i></li></ul></dd></dl>
 The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri)
 
 raise
-<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li><b>error</b> — <i>Any</i></li></ul></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li></ul></dd></dl>
 Finishes the response with an error.
 ```javascript
 res.raise(new Networking.Response.Error("Login first"));

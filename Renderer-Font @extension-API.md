@@ -32,15 +32,15 @@ In range from 0 to 1.
     * [italic](#italic)
 
 ##onWeightChange
-<dl><dt>Static method of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Float</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#signal-fontonweightchangefloat-oldvalue)
 
 wordSpacing
-<dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd><dt>hidden</dt></dl>
+<dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontwordspacing--0-hidden-signal-fontonwordspacingchangefloat-oldvalue)
 
 letterSpacing
-<dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd><dt>hidden</dt></dl>
+<dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontletterspacing--0-hidden-signal-fontonletterspacingchangefloat-oldvalue)
 
 italic

@@ -5,11 +5,11 @@ Element
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-virtualdom)
 
 fromHTML
-<dl><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>html</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>html — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementfromhtmlstring-html)
 
 fromJSON
-<dl><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>json</b> — <i>Array or String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>Array or String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementfromjsonarraystring-json)
 
 Element
@@ -53,7 +53,7 @@ parent
     * [toJSON](#tojson)
 
 ##onParentChange
-<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Element</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Element</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonparentchangeelement-oldvalue)
 
 style
@@ -61,7 +61,7 @@ style
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#rendereritem-elementstyle)
 
 ##onStyleChange
-<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Renderer.Item</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Renderer.Item</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonstylechangerendereritem-oldvalue)
 
 visible
@@ -69,19 +69,19 @@ visible
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#boolean-elementvisible)
 
 ##onVisibleChange
-<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Boolean</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonvisiblechangeboolean-oldvalue)
 
 queryAllParents
-<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>query</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>query — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#array-elementqueryallparentsstring-query)
 
 queryParents
-<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>query</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>query — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementqueryparentsstring-query)
 
 getAccessPath
-<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li><b>toParent</b> — <i>Tag</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>toParent — <i>Tag</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#array-elementgetaccesspathtag-toparent)
 
 clone

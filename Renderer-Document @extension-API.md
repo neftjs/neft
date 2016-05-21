@@ -9,7 +9,7 @@ Document
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/document.litcoffee#document-document)
 
 query
-<dl><dt>Prototype property of</dt><dd><i>Document</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>read only</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>Document</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/document.litcoffee#readonly-string-documentquery)
 
 node

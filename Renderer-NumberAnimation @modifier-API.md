@@ -20,7 +20,7 @@ NumberAnimation
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-modifier)
 
 New
-<dl><dt>Static method of</dt><dd><i>NumberAnimation</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NumberAnimation</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>NumberAnimation</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NumberAnimation</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimationnewcomponent-component-object-options)
 
 NumberAnimation

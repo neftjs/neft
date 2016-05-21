@@ -14,7 +14,7 @@ Text
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#text-class)
 
 New
-<dl><dt>Static method of</dt><dd><i>Text</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Text</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Text</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Text</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#text-textnewcomponent-component-object-options)
 
 Text
@@ -42,15 +42,15 @@ linkColor
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#string-textlinkcolor--blue-signal-textonlinkcolorchangestring-oldvalue)
 
 lineHeight
-<dl><dt>Prototype property of</dt><dd><i>Text</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>1</code></dd><dt>hidden</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>Text</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>1</code></dd><dt>Hidden</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#hidden-float-textlineheight--1-hidden-signal-textonlineheightchangefloat-oldvalue)
 
 contentWidth
-<dl><dt>Prototype property of</dt><dd><i>Text</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>Text</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#readonly-float-textcontentwidth-signal-textoncontentwidthchangefloat-oldvalue)
 
 contentHeight
-<dl><dt>Prototype property of</dt><dd><i>Text</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
+<dl><dt>Prototype property of</dt><dd><i>Text</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/types/text.litcoffee#readonly-float-textcontentheight-signal-textoncontentheightchangefloat-oldvalue)
 
 alignment
