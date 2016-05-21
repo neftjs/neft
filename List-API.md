@@ -46,19 +46,19 @@ console.log(list instanceof List);
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#listconstructorarray-data)
 
 ##onChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onChange(&#x2A;Any&#x2A; oldValue, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li><li>index — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onChange(&#x2A;Any&#x2A; oldValue, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li><li>index — <i>Integer</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Signal called on each value change.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index)
 
 ##onInsert
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onInsert(&#x2A;Any&#x2A; value, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>index — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onInsert(&#x2A;Any&#x2A; value, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>index — <i>Integer</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Signal called when a value was added.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#signal-listoninsertany-value-integer-index)
 
 ##onPop
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onPop(&#x2A;Any&#x2A; oldValue, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li><li>index — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onPop(&#x2A;Any&#x2A; oldValue, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li><li>index — <i>Integer</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Signal called when a value was removed.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index)

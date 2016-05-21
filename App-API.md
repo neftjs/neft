@@ -101,7 +101,7 @@ resources
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#resources-appresources)
 
 onReady
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; app.onReady()</code></dd><dt>Static method of</dt><dd><i>app</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; app.onReady()</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Called when all modules, views, styled etc. have been loaded.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#signal-apponready)

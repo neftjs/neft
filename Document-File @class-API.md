@@ -5,25 +5,25 @@ File
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#file-class)
 
 onBeforeRender
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRender(&#x2A;File&#x2A; file)</code></dd><dt>Static method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRender(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Corresponding node handler: *neft:onBeforeRender=""*.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#signal-fileonbeforerenderfile-file)
 
 onRender
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRender(&#x2A;File&#x2A; file)</code></dd><dt>Static method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRender(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Corresponding node handler: *neft:onRender=""*.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#signal-fileonrenderfile-file)
 
 onBeforeRevert
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Corresponding node handler: *neft:onBeforeRevert=""*.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#signal-fileonbeforerevertfile-file)
 
 onRevert
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Corresponding node handler: *neft:onRevert=""*.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#signal-fileonrevertfile-file)
@@ -65,7 +65,7 @@ use
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#file-fileusestring-usename-file-document)
 
 onReplaceByUse
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File::onReplaceByUse(&#x2A;File.Use&#x2A; use)</code></dd><dt>Prototype method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>use — <i>File.Use</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File::onReplaceByUse(&#x2A;File.Use&#x2A; use)</code></dd><dt>Prototype method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>use — <i>File.Use</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Corresponding node handler: *neft:onReplaceByUse=""*.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#signal-fileonreplacebyusefileuse-use)

@@ -44,7 +44,7 @@ obj.onPress.emit();
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/signal/index.litcoffee#integer-stoppropagation)
 
 ##create
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; create([&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; name])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i> — <i>optional</i></li><li>name — <i>String</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; create([&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; name])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i> — <i>optional</i></li><li>name — <i>String</i> — <i>optional</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Creates a new signal in the given object under the given name property.
 Returns created signal.
 ```javascript

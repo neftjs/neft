@@ -172,7 +172,7 @@ Check *utils.isPlainObject()* for more details.
 ###isEqual
 <dl><dt>Syntax</dt><dd><code>assert.isEqual(&#x2A;Any&#x2A; value1, &#x2A;Any&#x2A; value2, [&#x2A;String&#x2A; message, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>assert</i></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>value2 — <i>Any</i></li><li>message — <i>String</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
 Check *utils.isEqual()* for more details.
-The given options object accepts: [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep.
+The given options object accepts: [Integer](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/assert/index.litcoffee#assertisequalany-value1-any-value2-string-message-object-options)
 

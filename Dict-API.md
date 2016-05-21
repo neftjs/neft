@@ -34,7 +34,7 @@ const { Dict } = Neft
 
 ###fromJSON
 <dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; Dict.fromJSON(&#x2A;String&#x2A;|&#x2A;Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>| — <i>String</i></li><li>json — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Dict</i></dd></dl>
-Creates a new [*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) from a json string.
+Creates a new [Dict](/Neft-io/neft/wiki/Dict-API.md#class-dict) from a json string.
 This function should be used with `toJSON()` output.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json)
@@ -65,7 +65,7 @@ console.log(dict.length);
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#readonly-integer-dictlength)
 
 ###onChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Dict::onChange(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Dict::onChange(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Signal called on each key value change.
 ```javascript
 var user = new Dict({

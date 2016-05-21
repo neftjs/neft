@@ -21,11 +21,11 @@ AmbientSound
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/sound/ambient.litcoffee#ambientsound-ambientsound)
 
 onStart
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; AmbientSound::onStart()</code></dd><dt>Prototype method of</dt><dd><i>AmbientSound</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; AmbientSound::onStart()</code></dd><dt>Prototype method of</dt><dd><i>AmbientSound</i></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/sound/ambient.litcoffee#signal-ambientsoundonstart)
 
 onStop
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; AmbientSound::onStop()</code></dd><dt>Prototype method of</dt><dd><i>AmbientSound</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; AmbientSound::onStop()</code></dd><dt>Prototype method of</dt><dd><i>AmbientSound</i></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/sound/ambient.litcoffee#signal-ambientsoundonstop)
 
 running

@@ -61,7 +61,7 @@ var Request = Networking.Request;
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#request-requestobject-options)
 
 onLoadEnd
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Request::onLoadEnd(&#x2A;Any&#x2A; error, &#x2A;Any&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li><li>data — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Request::onLoadEnd(&#x2A;Any&#x2A; error, &#x2A;Any&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li><li>data — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#signal-requestonloadendany-error-any-data)
 
 uid

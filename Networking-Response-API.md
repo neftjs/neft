@@ -66,7 +66,7 @@ var Response = Networking.Response;
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#response-responseobject-options)
 
 onSend
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Response::onSend()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Response::onSend()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 Called when the response has been sent.
 ```javascript
 res.onSend(function(){

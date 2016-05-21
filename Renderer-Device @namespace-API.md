@@ -70,19 +70,19 @@ pointer
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-devicepointerevent-devicepointer)
 
 onPointerPress
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerPress(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerPress(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerpressdevicepointerevent-event)
 
 onPointerRelease
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerRelease(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerRelease(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerreleasedevicepointerevent-event)
 
 onPointerMove
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerMove(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerMove(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointermovedevicepointerevent-event)
 
 onPointerWheel
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerWheel(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerWheel(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerwheeldevicepointerevent-event)
 
 keyboard
@@ -90,19 +90,19 @@ keyboard
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-devicekeyboardevent-devicekeyboard)
 
 onKeyPress
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyPress(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyPress(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeypressdevicekeyboardevent-event)
 
 onKeyHold
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyHold(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyHold(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyholddevicekeyboardevent-event)
 
 onKeyRelease
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyRelease(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyRelease(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyreleasedevicekeyboardevent-event)
 
 onKeyInput
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyInput(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyInput(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyinputdevicekeyboardevent-event)
 
 DevicePointerEvent
