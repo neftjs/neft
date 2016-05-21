@@ -10,13 +10,14 @@ var async = utils.async;
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#asynchronous)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>array</b> — <i>NotPrimitive</i></li><li><b>callback</b> — <i>Function</i></li><li><b>onEnd</b> — <i>Function</i> — <i>optional</i></li><li><b>context</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 ## Table of contents
   * [forEach](#foreach)
   * [**Class** Stack()](#class-stack)
     * [add](#add)
     * [callNext](#callnext)
     * [runAll](#runall)
-    * [runAllSimultaneously](#runallsimultaneously)
+    * [Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])](#stackrunallsimultaneouslyfunction-callback-any-callbackcontext)
 
 ##forEach
 This is an asynchronous version of the standard `Array.prototype.forEach()` function
@@ -68,6 +69,7 @@ stack.runAllSimultaneously(function(){
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#class-stack)
 
+<dl><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li><b>function</b> — <i>Function</i></li><li><b>context</b> — <i>Any</i> — <i>optional</i></li><li><b>arguments</b> — <i>NotPrimitive</i> — <i>optional</i></li></ul></dd></dl>
 ###add
 Adds the given function to the stack.
 The function must provide a callback argument as the last argument.
@@ -95,18 +97,21 @@ stack.runAll(function(err, result){
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments)
 
+<dl><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li><b>arguments</b> — <i>Array</i> — <i>optional</i></li><li><b>callback</b> — <i>Function</i></li></ul></dd></dl>
 ###callNext
 Calls the first function from the stack and remove it.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback)
 
+<dl><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li><b>callback</b> — <i>Function</i> — <i>optional</i></li><li><b>callbackContext</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 ###runAll
 Calls all functions from the stack one by one.
 When an error occurs, processing stops and the callback function is called with the got error.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext)
 
-###runAllSimultaneously
+### Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])
+
 Calls all functions from the stack simultaneously (all at the same time).
 When an error occurs, processing stops and the callback function is called with the got error.
 

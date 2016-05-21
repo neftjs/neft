@@ -1,5 +1,6 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
+<dl></dl>
 neft:fragment
 Tag used to create separated and repeatable parts of the document.
 Each neft:fragment has to define a `neft:name` unique in the file where it's defined.

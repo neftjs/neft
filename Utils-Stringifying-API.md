@@ -4,6 +4,7 @@
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#stringifying)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>object</b> — <i>Object</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
 ## Table of contents
   * [simplify](#simplify)
   * [assemble](#assemble)
@@ -38,6 +39,7 @@ console.log(clone instanceof Sample)
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#simplifyobject-object-object-options)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>object</b> — <i>PlainObject</i></li></ul></dd></dl>
 ##assemble
 Backward utils.simplify() operation.
 

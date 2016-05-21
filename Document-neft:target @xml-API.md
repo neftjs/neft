@@ -1,5 +1,6 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
+<dl></dl>
 neft:target
 Tag used in the [neft:fragment][document/neft:fragment@xml] to define,
 where the [neft:use][document/neft:use@xml] body should be placed.

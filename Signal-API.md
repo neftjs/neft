@@ -10,6 +10,7 @@ const { signal } = Neft;
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal)
 
+<dl><dt>Type</dt><dd><i>Integer</i></dd></dl>
 ## Table of contents
   * [STOP_PROPAGATION](#stoppropagation)
   * [create](#create)
@@ -18,7 +19,7 @@ const { signal } = Neft;
     * [emit](#emit)
     * [connect](#connect)
     * [disconnect](#disconnect)
-    * [disconnectAll](#disconnectall)
+    * [Signal::disconnectAll()](#signaldisconnectall)
   * [Glossary](#glossary)
 
 ##STOP_PROPAGATION
@@ -41,6 +42,7 @@ obj.onPress.emit();
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#integer-stoppropagation)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>object</b> — <i>NotPrimitive</i> — <i>optional</i></li><li><b>name</b> — <i>String</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ##create
 Creates a new signal in the given object under the given name property.
 Returns created signal.
@@ -56,6 +58,7 @@ obj.onRename.emit('Max', 'George');
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal-createnotprimitive-object-string-name)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>signal</b> — <i>Signal</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 ##isEmpty
 Returns `true` if the given signal has no listeners.
 
@@ -65,11 +68,13 @@ Returns `true` if the given signal has no listeners.
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#class-signal)
 
+<dl><dt>Prototype method of</dt><dd><i>Signal</i></dd><dt>Parameters</dt><dd><ul><li><b>argument1</b> — <i>Any</i> — <i>optional</i></li><li><b>argument2</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 ###emit
 Call all of the signal listeners with the given arguments (2 maximally).
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signalemitany-argument1-any-argument2)
 
+<dl><dt>Prototype method of</dt><dd><i>Signal</i></dd><dt>Parameters</dt><dd><ul><li><b>listener</b> — <i>Function</i></li><li><b>context</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 ###connect
 Adds the given listener function into the signal listeners.
 By default, the signal function works like this method.
@@ -105,6 +110,7 @@ obj.onPress.emit();
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signalconnectfunction-listener-any-context)
 
+<dl><dt>Prototype method of</dt><dd><i>Signal</i></dd><dt>Parameters</dt><dd><ul><li><b>listener</b> — <i>Function</i></li><li><b>context</b> — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 ###disconnect
 Returns the given listener function from the signal listeners.
 ```javascript
@@ -121,7 +127,8 @@ obj.onPress.emit()
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signaldisconnectfunction-listener-any-context)
 
-###disconnectAll
+### Signal::disconnectAll()
+
 Removes all the signal listeners.
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signaldisconnectall)

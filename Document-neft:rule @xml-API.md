@@ -1,5 +1,6 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
+<dl></dl>
 neft:rule
 Tag used in the parsing process.
 Performs some actions on found elements in the parent element.

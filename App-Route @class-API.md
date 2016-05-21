@@ -1,11 +1,14 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
+<dl></dl>
 Route
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#route-class)
 
+<dl><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li><b>viewName</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 getTemplateView
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#document-routegettemplateviewstring-viewname)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>options</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Route</i></dd></dl>
 Route
 Access it with:
 ```javascript
@@ -27,15 +30,30 @@ Acceptable syntaxes:
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#route-routeobject-options)
 
+<dl><dt>Prototype property of</dt><dd><i>Route</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'get'</code></dd></dl>
 method
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#string-routemethod--getnetworkinguri-routeuriapp-routeapproute-routeroutestring-routenameschema-routeschemaany-routedataany-routeerrorfunction-routefactoryfunction-routeinitfunction-routegetdatafunction-callbackfunction-routedestroyfunction-routedestroyjsonfunction-routedestroytextfunction-routedestroyhtmlfunctionnetworkinguri-routeredirectnetworkingrequest-routerequestnetworkingresponse-routeresponsefunction-routenext)
 
+<dl><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 toJSON
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#any-routetojson)
 
-toText
+## Table of contents
+    * [Route](#route)
+    * [getTemplateView](#gettemplateview)
+    * [Route](#route)
+    * [method](#method)
+    * [toJSON](#tojson)
+  * [*String* Route::toText()](#string-routetotext)
+  * [*Document* Route::toHTML()](#document-routetohtml)
+
+*String* Route::toText()
+------------------------
+
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#string-routetotext)
 
-toHTML
+*Document* Route::toHTML()
+--------------------------
+
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#document-routetohtml)
 

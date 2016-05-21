@@ -24,15 +24,16 @@ const { List } = Neft;
     * [remove](#remove)
     * [pop](#pop)
     * [clear](#clear)
-    * [index](#index)
-    * [has](#has)
-    * [toArray](#toarray)
+    * [*Integer* List::index(*Any* value)](#integer-listindexany-value)
+    * [*Boolean* List::has(*Any* value)](#boolean-listhasany-value)
+    * [*Array* List::toArray()](#array-listtoarray)
   * [Glossary](#glossary)
 
 ## **Class** List
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#class-list)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>data</b> — <i>Array</i> — <i>optional</i></li></ul></dd></dl>
 ###constructor
 Creates a new list instance.
 ```javascript
@@ -43,21 +44,25 @@ console.log(list instanceof List);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#listconstructorarray-data)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Any</i></li><li><b>index</b> — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ###onChange
 Signal called on each value change.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>value</b> — <i>Any</i></li><li><b>index</b> — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ###onInsert
 Signal called when a value was added.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listoninsertany-value-integer-index)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Any</i></li><li><b>index</b> — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ###onPop
 Signal called when a value was removed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index)
 
+<dl><dt>Prototype property of</dt><dd><i>List</i></dd><dt>Type</dt><dd><i>Integer</i></dd><dt>read only</dt></dl>
 ###length
 Amount of values stored in the list.
 ```javascript
@@ -66,6 +71,7 @@ console.log(list.length);
 // 2
 ```
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>index</b> — <i>Integer</i></li><li><b>value</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ###set
 Sets the given value under the given index.
 The index must exists in the list.
@@ -84,6 +90,7 @@ types.set(0, 'Fantasy');
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listsetinteger-index-any-value)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>value</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ###append
 Adds the given value on the end on the list.
 The value can't be an `undefined`.
@@ -101,6 +108,7 @@ console.log(fridge.items());
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listappendany-value)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>index</b> — <i>Integer</i></li><li><b>value</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ###insert
 Add the given value under the given index.
 The index can't be greater than the list length.
@@ -119,12 +127,14 @@ console.log(list.items());
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listinsertinteger-index-any-value)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>items</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>List</i></dd></dl>
 ###extend
 Appends all values stored in the given items into the list.
 Calls `onInsert()` signal for each value.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#list-listextendobject-items)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>value</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ###remove
 Removes the given value from the list.
 Calls `onPop()` signal.
@@ -141,6 +151,7 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listremoveany-value)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd><dt>Parameters</dt><dd><ul><li><b>index</b> — <i>Integer</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ###pop
 Removes the value stored in the list under the given index.
 The index must exists in the list.
@@ -158,6 +169,7 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listpopinteger-index)
 
+<dl><dt>Prototype method of</dt><dd><i>List</i></dd></dl>
 ###clear
 Removes all values stored in the list.
 Calls `onPop()` signal for each value.
@@ -177,7 +189,8 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#listclear)
 
-###index
+### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) List::index(*Any* value)
+
 Returns the given value index in the list.
 Returns `-1` if the value doesn't exist in the list.
 ```javascript
@@ -190,7 +203,8 @@ console.log(list.index('c'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#integer-listindexany-value)
 
-###has
+### *Boolean* List::has(*Any* value)
+
 Returns `true` if the given value exists in the list.
 ```javascript
 var list = new List(['a', 'b']);
@@ -202,7 +216,8 @@ console.log(list.has('ab123'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#boolean-listhasany-value)
 
-###toArray
+### *Array* List::toArray()
+
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#array-listtoarray)
 
 ## Glossary

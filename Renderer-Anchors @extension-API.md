@@ -1,8 +1,10 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
+<dl></dl>
 Anchors
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#anchors-extension)
 
+<dl><dt>Returns</dt><dd><i>Anchors</i></dd></dl>
 Anchors
 Anchors describe position relations between two items.
 Each item has few lines: top, bottom, verticalCenter, left, right, horizontalCenter.
@@ -53,9 +55,11 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#anchors-anchors)
 
+<dl><dt>Prototype property of</dt><dd><i>Anchors</i></dd><dt>Type</dt><dd><i>Array</i></dd><dt>Default</dt><dd><code>null</code></dd></dl>
 left
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsleft--null)
 
+<dl><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ## Table of contents
     * [Anchors](#anchors)
     * [Anchors](#anchors)
@@ -67,14 +71,15 @@ left
   * [onBottomChange](#onbottomchange)
   * [onVerticalCenterChange](#onverticalcenterchange)
   * [onCenterInChange](#oncenterinchange)
-    * [fill](#fill)
-  * [onFillChange](#onfillchange)
-    * [fillWidth](#fillwidth)
-    * [fillHeight](#fillheight)
+  * [*Array* Anchors::fill = null](#array-anchorsfill--null)
+  * [*Signal* Anchors::onFillChange(*Array* oldValue)](#signal-anchorsonfillchangearray-oldvalue)
+  * [*Array* Anchors::fillWidth = null](#array-anchorsfillwidth--null)
+  * [*Array* Anchors::fillHeight = null](#array-anchorsfillheight--null)
 
 ##onLeftChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonleftchangearray-oldvaluearray-anchorsright--null)
 
+<dl><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ##onRightChange
 ```nml
 `Item {
@@ -90,6 +95,7 @@ left
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonrightchangearray-oldvaluearray-anchorshorizontalcenter--null)
 
+<dl><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ##onHorizontalCenterChange
 ```nml
 `Item {
@@ -105,9 +111,11 @@ left
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonhorizontalcenterchangearray-oldvaluearray-anchorstop--null)
 
+<dl><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ##onTopChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsontopchangearray-oldvaluearray-anchorsbottom--null)
 
+<dl><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ##onBottomChange
 ```nml
 `Item {
@@ -123,6 +131,7 @@ left
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonbottomchangearray-oldvaluearray-anchorsverticalcenter--null)
 
+<dl><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ##onVerticalCenterChange
 It's a shortcut for the horizontalCenter and verticalCenter anchors.
 No target line is required.
@@ -142,10 +151,13 @@ No target line is required.
 `}
 ```
 
+<dl><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li><b>oldValue</b> — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ##onCenterInChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsoncenterinchangearray-oldvalue)
 
-fill
+*Array* Anchors::fill = null
+----------------------------
+
 Changes item position and its size to be always equal the anchored target.
 No target line is required.
 ```nml
@@ -161,12 +173,19 @@ No target line is required.
 `}
 ```
 
-##onFillChange
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillChange(*Array* oldValue)
+
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillchangearray-oldvalue)
 
-fillWidth
+*Array* Anchors::fillWidth = null
+---------------------------------
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillWidthChange(*Array* oldValue)
+
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsfillwidth--null-signal-anchorsonfillwidthchangearray-oldvalue)
 
-fillHeight
+*Array* Anchors::fillHeight = null
+----------------------------------
+## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillHeightChange(*Array* oldValue)
+
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsfillheight--null-signal-anchorsonfillheightchangearray-oldvalue)
 

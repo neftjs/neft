@@ -1,5 +1,6 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
+<dl></dl>
 neft:require
 Tag used to link [neft:fragment][document/neft:fragment@xml]s from a file and use them.
 ```xml

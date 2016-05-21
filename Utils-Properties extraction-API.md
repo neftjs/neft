@@ -4,6 +4,7 @@
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/namespace.litcoffee#properties-extraction)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>object</b> — <i>Object</i></li><li><b>path</b> — <i>String</i></li><li><b>target</b> — <i>OptionsArray</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ## Table of contents
   * [get](#get)
   * [**Class** utils.get.OptionsArray()](#class-utilsgetoptionsarray)
@@ -41,6 +42,7 @@ function is a list of the possible values.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/namespace.litcoffee#class-utilsgetoptionsarray)
 
+<dl><dt>Parameters</dt><dd><ul><li><b>value</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 ##isStringArray
 Checks whether the given string references into an array according
 to the notation in the utils.get() function.
