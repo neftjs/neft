@@ -25,11 +25,11 @@ In range from 0 to 1.
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/text/font.litcoffee#onweightchange)
 
 wordSpacing
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Font.wordSpacing = 0</code></dd><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Font.wordSpacing = 0</code></dd><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/text/font.litcoffee#wordspacing)
 
 letterSpacing
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Font.letterSpacing = 0</code></dd><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Font.letterSpacing = 0</code></dd><dt>Static property of</dt><dd><i>Font</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/text/font.litcoffee#letterspacing)
 
 italic

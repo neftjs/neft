@@ -59,7 +59,7 @@ console.log(data.name);
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#constructor)
 
 ###length
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Dict::length</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Dict::length</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Read Only</dt></dl>
 Amount of keys stored in a dict.
 
 ```javascript
@@ -162,7 +162,7 @@ Calls `onChange()` signal for each stored key.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#clear)
 
 ###keys
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Array&#x2A; Dict::keys()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Array&#x2A; Dict::keys()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd><dt>Read Only</dt></dl>
 Returns an array of keys stored in the dict.
 
 Always returns the same array instance.

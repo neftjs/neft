@@ -46,31 +46,31 @@ The image source URL or data URI.
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#onsourcechange)
 
 resolution
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; Image::resolution = 1</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>1</code></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; Image::resolution = 1</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>1</code></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#resolution)
 
 sourceWidth
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::sourceWidth = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::sourceWidth = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#sourcewidth)
 
 sourceHeight
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::sourceHeight = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::sourceHeight = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#sourceheight)
 
 offsetX
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::offsetX = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::offsetX = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#offsetx)
 
 offsetY
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::offsetY = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Float&#x2A; Image::offsetY = 0</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#offsety)
 
 fillMode
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Integer&#x2A; Image::fillMode = 'Stretch'</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Default</dt><dd><code>'Stretch'</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Integer&#x2A; Image::fillMode = 'Stretch'</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Default</dt><dd><code>'Stretch'</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#fillmode)
 
 loaded
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Image::loaded</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Image::loaded</code></dd><dt>Prototype property of</dt><dd><i>Image</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/types/image.litcoffee#loaded)
 
 ##onLoadedChange

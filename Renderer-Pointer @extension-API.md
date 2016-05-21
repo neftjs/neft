@@ -30,11 +30,11 @@ enabled
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/pointer.litcoffee#enabled)
 
 draggable
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Boolean&#x2A; Pointer::draggable = false</code></dd><dt>Prototype property of</dt><dd><i>Pointer</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Boolean&#x2A; Pointer::draggable = false</code></dd><dt>Prototype property of</dt><dd><i>Pointer</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/pointer.litcoffee#draggable)
 
 dragActive
-<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Boolean&#x2A; Pointer::dragActive = false</code></dd><dt>Prototype property of</dt><dd><i>Pointer</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd><dt>Hidden</dt></dl>
+<dl><dt>Syntax</dt><dd><code>Hidden &#x2A;Boolean&#x2A; Pointer::dragActive = false</code></dd><dt>Prototype property of</dt><dd><i>Pointer</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd><dt>Not Implemented</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/basics/item/pointer.litcoffee#dragactive)
 
 onClick

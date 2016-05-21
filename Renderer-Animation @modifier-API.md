@@ -34,7 +34,7 @@ loop
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation.litcoffee#loop)
 
 updatePending
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Animation::updatePending</code></dd><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Animation::updatePending</code></dd><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation.litcoffee#updatepending)
 
 start

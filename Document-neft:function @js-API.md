@@ -5,7 +5,7 @@ neft:function
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/func.litcoffee#neftfunction)
 
 globalObject
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; globalObject</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; globalObject</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Read Only</dt></dl>
 Used as a global namespace in the function body.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/func.litcoffee#globalobject)

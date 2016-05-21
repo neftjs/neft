@@ -6,20 +6,20 @@ File
 
 ## Nested APIs
 
-* [[neft:attr|Document-neft:attr @xml-API]]
 * [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
+* [[neft:attr|Document-neft:attr @xml-API]]
 * [[Setting attributes|Document-Setting attributes @learn-API]]
 * [[neft:if|Document-neft:if @xml-API]]
 * [[neft:fragment|Document-neft:fragment @xml-API]]
   * [[neft:require|Document-neft:require @xml-API]]
 * [[neft:function|Document-neft:function @xml-API]]
 * [[id|Document-id @xml-API]]
+* [[neft:rule|Document-neft:rule @xml-API]]
 * [[neft:each|Document-neft:each @xml-API]]
 * [[neft:log|Document-neft:log @xml-API]]
-* [[neft:rule|Document-neft:rule @xml-API]]
 * [[neft:script|Document-neft:script @xml-API]]
-* [[String Interpolation|Document-String Interpolation @learn-API]]
 * [[neft:target|Document-neft:target @xml-API]]
+* [[String Interpolation|Document-String Interpolation @learn-API]]
 * [[neft:use|Document-neft:use @xml-API]]
 
 onBeforeRender
