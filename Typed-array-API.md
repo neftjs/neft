@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Typed Array**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Typed Array**
 
 # Typed Array
 

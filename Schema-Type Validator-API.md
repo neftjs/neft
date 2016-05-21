@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Type Validator**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Type Validator**
 
 # Type Validator
 

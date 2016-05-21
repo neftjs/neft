@@ -1,12 +1,12 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 Device
 <dl><dt>Syntax</dt><dd><code>Device @namespace</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#device-namespace)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#device)
 
 Device
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Device</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#object-device)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#device)
 
 platform
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.platform = 'Unix'</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>'Unix'</code></dd></dl>
@@ -28,19 +28,19 @@ Possible values are:
 `}
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#boolean-deviceplatform--unix)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#platform)
 
 desktop
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.desktop = true</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#boolean-devicedesktop--true)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#desktop)
 
 tablet
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.tablet = false</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#boolean-devicetablet--false)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#tablet)
 
 phone
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.phone = false</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#boolean-devicephone--false)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#phone)
 
 mobile
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.mobile = false</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
@@ -52,7 +52,7 @@ Tablet or a phone.
 `}
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#boolean-devicemobile--false)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#mobile)
 
 pixelRatio
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.pixelRatio = 1</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>1</code></dd></dl>
@@ -63,97 +63,97 @@ pixelRatio
 `}
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#boolean-devicepixelratio--1)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#pixelratio)
 
 pointer
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;DevicePointerEvent&#x2A; Device.pointer</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>DevicePointerEvent</i></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-devicepointerevent-devicepointer)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#pointer)
 
 onPointerPress
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerPress(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerpressdevicepointerevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onpointerpress)
 
 onPointerRelease
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerRelease(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerreleasedevicepointerevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onpointerrelease)
 
 onPointerMove
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerMove(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointermovedevicepointerevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onpointermove)
 
 onPointerWheel
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onPointerWheel(&#x2A;DevicePointerEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DevicePointerEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerwheeldevicepointerevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onpointerwheel)
 
 keyboard
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;DeviceKeyboardEvent&#x2A; Device.keyboard</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-devicekeyboardevent-devicekeyboard)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#keyboard)
 
 onKeyPress
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyPress(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeypressdevicekeyboardevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onkeypress)
 
 onKeyHold
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyHold(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyholddevicekeyboardevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onkeyhold)
 
 onKeyRelease
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyRelease(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyreleasedevicekeyboardevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onkeyrelease)
 
 onKeyInput
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyInput(&#x2A;DeviceKeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li>event — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyinputdevicekeyboardevent-event)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#onkeyinput)
 
 DevicePointerEvent
 <dl><dt>Syntax</dt><dd><code>&#x2A;DevicePointerEvent&#x2A; DevicePointerEvent()</code></dd><dt>Returns</dt><dd><i>DevicePointerEvent</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#devicepointerevent-devicepointerevent)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#devicepointerevent)
 
 x
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; DevicePointerEvent::x</code></dd><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventx-signal-devicepointereventonxchangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#x)
 
 y
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; DevicePointerEvent::y</code></dd><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventy-signal-devicepointereventonychangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#y)
 
 movementX
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; DevicePointerEvent::movementX</code></dd><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementx-signal-devicepointereventonmovementxchangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#movementx)
 
 movementY
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; DevicePointerEvent::movementY</code></dd><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementy-signal-devicepointereventonmovementychangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#movementy)
 
 deltaX
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; DevicePointerEvent::deltaX</code></dd><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltax-signal-devicepointereventondeltaxchangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#deltax)
 
 deltaY
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; DevicePointerEvent::deltaY</code></dd><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltay-signal-devicepointereventondeltaychangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#deltay)
 
 DeviceKeyboardEvent
 <dl><dt>Syntax</dt><dd><code>&#x2A;DeviceKeyboardEvent&#x2A; DeviceKeyboardEvent()</code></dd><dt>Returns</dt><dd><i>DeviceKeyboardEvent</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#devicekeyboardevent-devicekeyboardevent)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#devicekeyboardevent)
 
 visible
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; DeviceKeyboardEvent::visible</code></dd><dt>Prototype property of</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-boolean-devicekeyboardeventvisible-signal-devicekeyboardeventonvisiblechangeboolean-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#visible)
 
 key
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; DeviceKeyboardEvent::key</code></dd><dt>Prototype property of</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-string-devicekeyboardeventkey-signal-devicekeyboardeventonkeychangestring-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#key)
 
 text
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; DeviceKeyboardEvent::text</code></dd><dt>Prototype property of</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#readonly-string-devicekeyboardeventtext-signal-devicekeyboardeventontextchangestring-oldvalue)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#text)
 
 show
 <dl><dt>Syntax</dt><dd><code>DeviceKeyboardEvent::show()</code></dd><dt>Prototype method of</dt><dd><i>DeviceKeyboardEvent</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#devicekeyboardeventshow)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#show)
 
 hide
 <dl><dt>Syntax</dt><dd><code>DeviceKeyboardEvent::hide()</code></dd><dt>Prototype method of</dt><dd><i>DeviceKeyboardEvent</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#devicekeyboardeventhide)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/device.litcoffee#hide)
 

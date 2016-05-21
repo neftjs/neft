@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 id
 <dl><dt>Syntax</dt><dd><code>id @xml</code></dd></dl>
@@ -11,5 +11,5 @@ Id must be unique in the scope.
 <span>${heading.stringify()}</span>
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/ids.litcoffee#id-xml)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/ids.litcoffee#id)
 

@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 neft:each
 <dl><dt>Syntax</dt><dd><code>neft:each @xml</code></dd></dl>

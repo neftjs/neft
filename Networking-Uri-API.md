@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Uri**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Uri**
 
 Uri
 ===
@@ -33,7 +33,7 @@ var Networking = require('networking');
 var Uri = Networking.Uri;
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#uri-uristring-uri)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#uri)
 
 protocol
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Uri::protocol</code></dd><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
@@ -43,14 +43,14 @@ query
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::query</code></dd><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Test whether the uri is valid with the given string.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#object-uriquerystring-urihashboolean-uriteststring-uri)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#query)
 
 match
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::match(&#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns found parameters from the given string.
 If the given uri is not valid with the uri, error will be raised.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#object-urimatchstring-uri)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#match)
 
 toString
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Uri::toString([&#x2A;Object|Dict&#x2A; params])</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>params — <i>Object or Dict</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
@@ -64,5 +64,5 @@ console.log(uri.toString());
 // /user/{name}
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#string-uritostringobjectdict-params)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#tostring)
 

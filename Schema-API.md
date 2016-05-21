@@ -1,4 +1,13 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Schema**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Schema**
+
+> * [[Max Validator|Schema-Max Validator-API]]
+> * [[Array Validator|Schema-Array Validator-API]]
+> * [[Min Validator|Schema-Min Validator-API]]
+> * [[Object Validator|Schema-Object Validator-API]]
+> * [[Optional Validator|Schema-Optional Validator-API]]
+> * [[RegExp Validator|Schema-RegExp Validator-API]]
+> * [[Options Validator|Schema-Options Validator-API]]
+> * [[Type Validator|Schema-Type Validator-API]]
 
 # Schema
 
@@ -50,14 +59,14 @@ new Schema({
 });
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#schemaconstructorobject-schema)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#constructor)
 
 ###schema
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Schema::schema</code></dd><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Saved schema object from the constructor.
 It's allowed to change this object in runtime.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#object-schemaschema)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#schema)
 
 ###validate
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Schema::validate(&#x2A;Object&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>data — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>

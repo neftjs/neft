@@ -1,4 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Response**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Response**
+
+> * [[Response Error|Networking-Response Error-API]]
 
 Response
 ========
@@ -53,7 +55,7 @@ console.log(Networking.Response.OK);
 console.log(Networking.Response.BAD_REQUEST);
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#array-responsestatuses)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#statuses)
 
 Response
 <dl><dt>Syntax</dt><dd><code>&#x2A;Response&#x2A; Response(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
@@ -63,7 +65,7 @@ var Networking = require('networking');
 var Response = Networking.Response;
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#response-responseobject-options)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#response)
 
 onSend
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Response::onSend()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
@@ -74,19 +76,19 @@ res.onSend(function(){
 });
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#signal-responseonsend)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#onsend)
 
 pending
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Response::pending</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
 Indicates whether the response is not destroyed.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#readonly-boolean-responsepending)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#pending)
 
 request
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Request&#x2A; Response::request</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Networking.Request</i></dd><dt>Read only</dt></dl>
 Refers to the [Request][networking/Request].
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#readonly-networkingrequest-responserequest)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#request)
 
 status
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Response::status = Response.OK</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Default</dt><dd><code>Response.OK</code></dd></dl>
@@ -97,7 +99,7 @@ res.status = Networking.Response.CREATED;
 res.status = Networking.Response.PAYMENT_REQUIRED;
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#integer-responsestatus--responseok)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#status)
 
 data
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Response::data</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Any</i></dd></dl>
@@ -108,19 +110,19 @@ res.data = new Error("Wrong order");
 res.data = Document.fromJSON(...);
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#any-responsedata)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#data)
 
 headers
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::headers</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#object-responseheaders)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#headers)
 
 cookies
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::cookies</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#object-responsecookies)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#cookies)
 
 encoding
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Response::encoding = 'utf-8'</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'utf-8'</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#string-responseencoding--utf8)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#encoding)
 
 setHeader
 <dl><dt>Syntax</dt><dd><code>&#x2A;Response&#x2A; Response::setHeader(&#x2A;String&#x2A; name, &#x2A;String&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>value — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
@@ -128,7 +130,7 @@ setHeader
 res.setHeader('Location', '/redirect/to/url');
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#setheader)
 
 send
 <dl><dt>Syntax</dt><dd><code>Response::send([&#x2A;Integer&#x2A; status, &#x2A;Any&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <i>optional</i></li><li>data — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
@@ -140,14 +142,14 @@ res.onSend(function(){
 res.send(Networking.Response.OK, {user: 'Max', age: 43});
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#responsesendinteger-status-any-data)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#send)
 
 redirect
 <dl><dt>Syntax</dt><dd><code>Response::redirect(&#x2A;Integer&#x2A; status = `Response.FOUND`, &#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= Response.FOUND</code></li><li>uri — <i>String</i></li></ul></dd></dl>
 The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#redirect)
 
 raise
 <dl><dt>Syntax</dt><dd><code>Response::raise(&#x2A;Any&#x2A; error)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li></ul></dd></dl>
@@ -157,11 +159,11 @@ res.raise(new Networking.Response.Error("Login first"));
 res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login first"));
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#responseraiseany-error)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#raise)
 
 isSucceed
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Response::isSucceed()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the response status is in range from 200 to 299.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#boolean-responseissucceed)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#issucceed)
 

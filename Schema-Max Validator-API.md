@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Max Validator**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Max Validator**
 
 # Max Validator
 

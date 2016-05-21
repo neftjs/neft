@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Handler**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Handler**
 
 Handler
 =======
@@ -27,25 +27,25 @@ var Networking = require('networking');
 var Handler = Networking.Handler;
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#handler-handlerobject-options)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#handler)
 
 method
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Handler::method</code></dd><dt>Prototype property of</dt><dd><i>Handler</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 Describes which type of the request, this handler can handle.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#string-handlermethod)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#method)
 
 uri
 <dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Uri&#x2A; Handler::uri</code></dd><dt>Prototype property of</dt><dd><i>Handler</i></dd><dt>Type</dt><dd><i>Networking.Uri</i></dd></dl>
 This property is compared with the request uri.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#networkinguri-handleruri)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#uri)
 
 schema
 <dl><dt>Syntax</dt><dd><code>&#x2A;Schema&#x2A; Handler::schema = null</code></dd><dt>Prototype property of</dt><dd><i>Handler</i></dd><dt>Type</dt><dd><i>Schema</i></dd><dt>Default</dt><dd><code>null</code></dd></dl>
 Used to determine whether the request uri is valid and can be handled by the handler callback.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#schema-handlerschema--null)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#schema)
 
 callback
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; Handler::callback</code></dd><dt>Prototype property of</dt><dd><i>Handler</i></dd><dt>Type</dt><dd><i>Function</i></dd></dl>
@@ -54,7 +54,7 @@ It's called with three parameters: **Networking.Request**, **Networking.Response
 a *next* function.
 If the *next* function is called, the next handler is checked.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#function-handlercallback)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#callback)
 
 exec
 <dl><dt>Syntax</dt><dd><code>Handler::exec(&#x2A;Networking.Request&#x2A; request, &#x2A;Networking.Response&#x2A; response, &#x2A;Function&#x2A; next)</code></dd><dt>Prototype method of</dt><dd><i>Handler</i></dd><dt>Parameters</dt><dd><ul><li>request — <i>Networking.Request</i></li><li>response — <i>Networking.Response</i></li><li>next — <i>Function</i></li></ul></dd></dl>
@@ -64,7 +64,7 @@ Executes the handler, that is:
  - calls the handler callback.
 It's internally called by the [createRequest()][networking/Networking::createRequest()].
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#handlerexecnetworkingrequest-request-networkingresponse-response-function-next)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#exec)
 
 toString
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Handler::toString()</code></dd><dt>Prototype method of</dt><dd><i>Handler</i></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
@@ -73,5 +73,5 @@ Returns a string describing the handler.
 "get /users/{name}"
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#string-handlertostring)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/handler.litcoffee#tostring)
 

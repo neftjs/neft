@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Request**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Request**
 
 Request
 =======
@@ -34,7 +34,7 @@ Contains:
  - Request.DELETE,
  - Request.OPTIONS.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#array-requestmethods)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#methods)
 
 TYPES
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Request.TYPES</code></dd><dt>Static property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
@@ -45,7 +45,7 @@ Contains:
  - Request.HTML_TYPE,
  - Request.BINARY_TYPE.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#array-requesttypes)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#types)
 
 Request
 <dl><dt>Syntax</dt><dd><code>&#x2A;Request&#x2A; Request(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Request</i></dd></dl>
@@ -58,31 +58,31 @@ var Networking = require('networking');
 var Request = Networking.Request;
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#request-requestobject-options)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#request)
 
 onLoadEnd
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Request::onLoadEnd(&#x2A;Any&#x2A; error, &#x2A;Any&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li><li>data — <i>Any</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#signal-requestonloadendany-error-any-data)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#onloadend)
 
 uid
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; Request::uid</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
 Pseudo unique hash. It's created automatically.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#readonly-string-requestuid)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#uid)
 
 pending
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Request::pending</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
 Indicates whether the request is not destroyed.
 If it's `false`, the request can't be changed.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#readonly-boolean-requestpending)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#pending)
 
 method
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::method</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 This property refers to one of the `Request.METHODS` values.
 Holds a method with which the request has been called.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#string-requestmethod)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#method)
 
 uri
 <dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Uri&#x2A; Request::uri</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Uri</i></dd></dl>
@@ -97,7 +97,7 @@ It can holds local and absolute paths.
 "/user/user_id"
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#networkinguri-requesturi)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#uri)
 
 type
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::type</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
@@ -108,24 +108,24 @@ In most cases, a server returns a HTML document for a crawler, but client
 That's why, these two requests have the same uri, but different expected types.
 It refers to one of the *Request.TYPES* values.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#string-requesttype)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#type)
 
 data
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Request::data = null</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>null</code></dd></dl>
 Holds a data sent with a request.
 It can be, for instance, a form data.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#object-requestdata--null)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#data)
 
 handler
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Handler&#x2A; Request::handler</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Handler</i></dd><dt>Read only</dt></dl>
 Refers to the currently considered [Handler][networking/Handler].
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#readonly-networkinghandler-requesthandler)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#handler)
 
 response
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Response&#x2A; Request::response</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Response</i></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#readonly-networkingresponse-requestresponse)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#response)
 
 params
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::params = {}</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd><dt>Read only</dt></dl>
@@ -133,18 +133,18 @@ Keeps matched parameters by the handler from the request uri.
 Considering the */users/{name}* URI,
 the 'name' property is available as the *params.name*.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#readonly-object-requestparams--)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#params)
 
 headers
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::headers</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Read only</dt></dl>
 Contains request headers.
 For the client request, this object is empty.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#readonly-object-requestheaders)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#headers)
 
 cookies
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::cookies</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#readonly-object-requestcookies)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#cookies)
 
 toString
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::toString()</code></dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
@@ -155,5 +155,5 @@ console.log(req.toString);
 // get /users/id as json
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#string-requesttostring)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/request.litcoffee#tostring)
 

@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Properties extraction**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Properties extraction**
 
 # Properties extraction
 
@@ -34,7 +34,7 @@ console.log(utils.get(obj, 'prop[].deep.result'));
 // 'utils.get.OptionsArray' instance ...
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#any-getobject-object-string-path-optionsarray-target)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#get)
 
 ## **Class** utils.get.OptionsArray()
 
@@ -48,5 +48,5 @@ function is a list of the possible values.
 Checks whether the given string references into an array according
 to the notation in the utils.get() function.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#boolean-isstringarraystring-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#isstringarray)
 

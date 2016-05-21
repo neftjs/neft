@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 neft:require
 <dl><dt>Syntax</dt><dd><code>neft:require @xml</code></dd></dl>

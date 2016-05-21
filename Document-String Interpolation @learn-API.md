@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 String Interpolation
 <dl><dt>Syntax</dt><dd><code>String Interpolation @learn</code></dd></dl>
@@ -7,5 +7,5 @@ String Interpolation
 <h1>Welcome ${name}!</h1>
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/storage.litcoffee#string-interpolation-learn)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/storage.litcoffee#string-interpolation)
 

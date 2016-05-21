@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Optional Validator**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Optional Validator**
 
 # Optional Validator
 

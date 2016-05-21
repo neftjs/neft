@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 FontLoader
 <dl><dt>Syntax</dt><dd><code>FontLoader @class</code></dd></dl>
@@ -16,11 +16,11 @@ FontLoader
 `}
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#fontloader-class)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#fontloader)
 
 New
 <dl><dt>Syntax</dt><dd><code>&#x2A;FontLoader&#x2A; FontLoader.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>FontLoader</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewcomponent-component-object-options)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#new)
 
 FontLoader
 <dl><dt>Syntax</dt><dd><code>&#x2A;FontLoader&#x2A; FontLoader()</code></dd><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
@@ -32,11 +32,11 @@ Access it with:
 FontLoader {}
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#fontloader-fontloader)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#fontloader)
 
 name
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; FontLoader::name</code></dd><dt>Prototype property of</dt><dd><i>FontLoader</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#string-fontloadername)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#name)
 
 source
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; FontLoader::source</code></dd><dt>Prototype property of</dt><dd><i>FontLoader</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
@@ -59,5 +59,5 @@ Must contains one of:
  - ultra.*black|ultra (weight=1).
 Italic font filename must contains 'italic'.
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#string-fontloadersource)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/loader/font.litcoffee#source)
 

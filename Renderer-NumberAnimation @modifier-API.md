@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 NumberAnimation
 <dl><dt>Syntax</dt><dd><code>NumberAnimation @modifier</code></dd></dl>
@@ -17,15 +17,15 @@ NumberAnimation
 `}
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-modifier)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation)
 
 New
 <dl><dt>Syntax</dt><dd><code>&#x2A;NumberAnimation&#x2A; NumberAnimation.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>NumberAnimation</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NumberAnimation</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimationnewcomponent-component-object-options)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#new)
 
 NumberAnimation
 <dl><dt>Syntax</dt><dd><code>&#x2A;NumberAnimation&#x2A; NumberAnimation() : &#x2A;Renderer.PropertyAnimation&#x2A;</code></dd><dt>Extends</dt><dd><i>Renderer.PropertyAnimation</i></dd><dt>Returns</dt><dd><i>NumberAnimation</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimation--rendererpropertyanimation)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation)
 
 from
 <dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; NumberAnimation::from</code></dd><dt>Prototype property of</dt><dd><i>NumberAnimation</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd></dl>

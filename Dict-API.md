@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Dict**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Dict**
 
 # Dict
 
@@ -37,7 +37,7 @@ const { Dict } = Neft
 Creates a new [Dict](/Neft-io/neft/wiki/Dict-API#class-dict) from a json string.
 This function should be used with `toJSON()` output.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#fromjson)
 
 ###constructor
 <dl><dt>Syntax</dt><dd><code>Dict::constructor([&#x2A;Object&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>data — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd></dl>
@@ -51,7 +51,7 @@ console.log(data.name);
 // xyz
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dictconstructorobject-data)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#constructor)
 
 ###length
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Dict::length</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Read only</dt></dl>
@@ -62,7 +62,7 @@ console.log(dict.length);
 // 1
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#readonly-integer-dictlength)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#length)
 
 ###onChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Dict::onChange(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
@@ -78,7 +78,7 @@ user.set('country', 'US');
 // country property changed from Germany to US
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#signal-dictonchangestring-key-any-oldvalue)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#onchange)
 
 ###set
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Dict::set(&#x2A;String&#x2A; key, &#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -97,20 +97,20 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 // googlePlus changed from undefined to https://...
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#any-dictsetstring-key-any-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#set)
 
 ###has
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Dict::has(&#x2A;String&#x2A; key)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given key exists in the dict.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#boolean-dicthasstring-key)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#has)
 
 ###extend
 <dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; Dict::extend(&#x2A;Object&#x2A;|&#x2A;Dict&#x2A; object)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>| — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li><li>object — <a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd></dl>
 Sets all keys with their values from the given object.
 Calls `onChange()` signal for each key.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dict-dictextendobjectdict-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#extend)
 
 ###pop
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Dict::pop(&#x2A;String&#x2A; key)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -129,14 +129,14 @@ data.pop('name');
 // name property has been removed
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#any-dictpopstring-key)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#pop)
 
 ###clear
 <dl><dt>Syntax</dt><dd><code>Dict::clear()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd></dl>
 Removes all stored keys from the dict.
 Calls `onChange()` signal for each stored key.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#dictclear)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#clear)
 
 ###keys
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Array&#x2A; Dict::keys()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd><dt>Read only</dt></dl>
@@ -151,7 +151,7 @@ console.log(data.keys());
 // ['x', 'y']
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#readonly-array-dictkeys)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#keys)
 
 ###values
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Dict::values()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
@@ -166,7 +166,7 @@ console.log(data.values());
 // [10, 30]
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#array-dictvalues)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/dict/index.litcoffee#values)
 
 ###items
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Dict::items()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>

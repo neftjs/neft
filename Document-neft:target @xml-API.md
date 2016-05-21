@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference)
+> [Wiki](Home) ▸ [[API Reference|API-Reference]]
 
 neft:target
 <dl><dt>Syntax</dt><dd><code>neft:target @xml</code></dd></dl>
@@ -15,5 +15,5 @@ where the [neft:use][document/neft:use@xml] body should be placed.
 </neft:use>
 ```
 
-> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/target.litcoffee#nefttarget-xml)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/target.litcoffee#nefttarget)
 

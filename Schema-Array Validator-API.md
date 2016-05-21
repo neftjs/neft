@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Array Validator**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Array Validator**
 
 # Array Validator
 

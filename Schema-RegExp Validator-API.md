@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **RegExp Validator**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **RegExp Validator**
 
 # RegExp Validator
 
