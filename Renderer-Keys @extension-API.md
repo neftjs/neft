@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Keys @extension**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Keys @extension
-===============
-
+Keys
 ```nml
 `Rectangle {
 `   width: 100
@@ -20,54 +18,24 @@ Keys @extension
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#keys-extension)
 
-## Table of contents
-  * [Keys.focusWindowOnPointerPress = true](#boolean-keysfocuswindowonpointerpress--true)
-  * [Keys.focusedItem](#item-keysfocuseditem)
-  * [Keys()](#keys-keys)
-  * [onPress(event)](#signal-keysonpresskeysevent-event)
-  * [focus = false](#boolean-keysfocus--false)
-  * [KeysEvent() : *DeviceKeyboardEvent*](#keysevent-keysevent--devicekeyboardevent)
-  * [Keys.event](#keysevent-keysevent)
-
-*Boolean* Keys.focusWindowOnPointerPress = true
------------------------------------------------
-
+focusWindowOnPointerPress
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#boolean-keysfocuswindowonpointerpress--true)
 
-*Item* Keys.focusedItem
------------------------
-
+focusedItem
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#item-keysfocuseditem)
 
-*Keys* Keys()
--------------
-
+Keys
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#keys-keys)
 
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onPress(*KeysEvent* event)
------------------------------------------
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onHold(*KeysEvent* event)
-----------------------------------------
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onRelease(*KeysEvent* event)
--------------------------------------------
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onInput(*KeysEvent* event)
------------------------------------------
-
+onPress
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#signal-keysonpresskeysevent-eventsignal-keysonholdkeysevent-eventsignal-keysonreleasekeysevent-eventsignal-keysoninputkeysevent-event)
 
-*Boolean* Keys::focus = false
------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Keys::onFocusChange(*Boolean* oldValue)
-
+focus
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#boolean-keysfocus--false-signal-keysonfocuschangeboolean-oldvalue)
 
-*KeysEvent* KeysEvent() : *DeviceKeyboardEvent*
------------------------------------------------
-
+KeysEvent
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#keysevent-keysevent--devicekeyboardevent)
 
-*KeysEvent* Keys.event
-----------------------
-
+event
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/keys.litcoffee#keysevent-keysevent)
 

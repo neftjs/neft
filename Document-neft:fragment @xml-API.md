@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:fragment @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:fragment @xml
-==================
-
+neft:fragment
 Tag used to create separated and repeatable parts of the document.
 Each neft:fragment has to define a `neft:name` unique in the file where it's defined.
 neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.

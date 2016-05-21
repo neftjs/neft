@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:use @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:use @xml
-=============
-
+neft:use
 Tag used to place a [neft:fragment][document/neft:fragment@xml].
 ```xml
 <neft:fragment neft:name="user">
@@ -33,6 +31,7 @@ Short version of `neft:use` is a tag prefixed by `use:`.
 ```
 
 ## Table of contents
+    * [neft:use](#neftuse)
   * [neft:async](#neftasync)
 
 ## neft:async

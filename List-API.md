@@ -12,29 +12,28 @@ const { List } = Neft;
 
 ## Table of contents
   * [**Class** List](#class-list)
-    * [constructor([data])](#listconstructorarray-data)
-    * [onChange(oldValue, index)](#signal-listonchangeany-oldvalue-integer-index)
-    * [onInsert(value, index)](#signal-listoninsertany-value-integer-index)
-    * [onPop(oldValue, index)](#signal-listonpopany-oldvalue-integer-index)
-    * [length](#readonly-integer-listlength)
-    * [set(index, value)](#any-listsetinteger-index-any-value)
-    * [append(value)](#any-listappendany-value)
-    * [insert(index, value)](#any-listinsertinteger-index-any-value)
-    * [extend(items)](#list-listextendobject-items)
-    * [remove(value)](#any-listremoveany-value)
-    * [pop([index])](#any-listpopinteger-index)
-    * [clear()](#listclear)
-    * [index(value)](#integer-listindexany-value)
-    * [has(value)](#boolean-listhasany-value)
-    * [toArray()](#array-listtoarray)
+    * [constructor](#constructor)
+    * [onChange](#onchange)
+    * [onInsert](#oninsert)
+    * [onPop](#onpop)
+    * [length](#length)
+    * [set](#set)
+    * [append](#append)
+    * [insert](#insert)
+    * [extend](#extend)
+    * [remove](#remove)
+    * [pop](#pop)
+    * [clear](#clear)
+    * [index](#index)
+    * [has](#has)
+    * [toArray](#toarray)
   * [Glossary](#glossary)
 
 ## **Class** List
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#class-list)
 
-### List::constructor([*Array* data])
-
+###constructor
 Creates a new list instance.
 ```javascript
 var list = new List([1, 2]);
@@ -44,26 +43,22 @@ console.log(list instanceof List);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#listconstructorarray-data)
 
-### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) List::onChange(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
-
+###onChange
 Signal called on each value change.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index)
 
-### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) List::onInsert(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
-
+###onInsert
 Signal called when a value was added.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listoninsertany-value-integer-index)
 
-### [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) List::onPop(*Any* oldValue, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index)
-
+###onPop
 Signal called when a value was removed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index)
 
-### ReadOnly [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) List::length
-
+###length
 Amount of values stored in the list.
 ```javascript
 var list = new List(['a', 'b']);
@@ -71,8 +66,7 @@ console.log(list.length);
 // 2
 ```
 
-### *Any* List::set([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index, *Any* value)
-
+###set
 Sets the given value under the given index.
 The index must exists in the list.
 The value can't be an `undefined`. Use `pop()` instead.
@@ -90,8 +84,7 @@ types.set(0, 'Fantasy');
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listsetinteger-index-any-value)
 
-### *Any* List::append(*Any* value)
-
+###append
 Adds the given value on the end on the list.
 The value can't be an `undefined`.
 Calls `onInsert()` signal.
@@ -108,8 +101,7 @@ console.log(fridge.items());
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listappendany-value)
 
-### *Any* List::insert([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index, *Any* value)
-
+###insert
 Add the given value under the given index.
 The index can't be greater than the list length.
 The value can't be an `undefined`.
@@ -127,15 +119,13 @@ console.log(list.items());
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listinsertinteger-index-any-value)
 
-### [*List*](/Neft-io/neft/wiki/List-API.md#class-list) List::extend([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) items)
-
+###extend
 Appends all values stored in the given items into the list.
 Calls `onInsert()` signal for each value.
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#list-listextendobject-items)
 
-### *Any* List::remove(*Any* value)
-
+###remove
 Removes the given value from the list.
 Calls `onPop()` signal.
 ```javascript
@@ -151,8 +141,7 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listremoveany-value)
 
-### *Any* List::pop([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) index])
-
+###pop
 Removes the value stored in the list under the given index.
 The index must exists in the list.
 Calls `onPop()` signal.
@@ -169,8 +158,7 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#any-listpopinteger-index)
 
-### List::clear()
-
+###clear
 Removes all values stored in the list.
 Calls `onPop()` signal for each value.
 ```javascript
@@ -189,8 +177,7 @@ console.log(list);
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#listclear)
 
-### [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) List::index(*Any* value)
-
+###index
 Returns the given value index in the list.
 Returns `-1` if the value doesn't exist in the list.
 ```javascript
@@ -203,8 +190,7 @@ console.log(list.index('c'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#integer-listindexany-value)
 
-### *Boolean* List::has(*Any* value)
-
+###has
 Returns `true` if the given value exists in the list.
 ```javascript
 var list = new List(['a', 'b']);
@@ -216,8 +202,7 @@ console.log(list.has('ab123'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#boolean-listhasany-value)
 
-### *Array* List::toArray()
-
+###toArray
 > [`Source`](/Neft-io/neft/tree/master/src/list/index.litcoffee#array-listtoarray)
 
 ## Glossary

@@ -1,33 +1,28 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **App @framework**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-App @framework
-==============
-
+App
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#app-framework)
 
-## Table of contents
-  * [app](#dict-app)
-  * [app.config = {}](#object-appconfig--)
-    * [type](#type)
-  * [app.networking](#networking-appnetworking)
-  * [app.models = {}](#object-appmodels--)
-  * [app.routes = {}](#object-approutes--)
-  * [app.styles = {}](#object-appstyles--)
-  * [app.views = {}](#object-appviews--)
-  * [app.resources](#resources-appresources)
-  * [app.onReady()](#signal-apponready)
-  * [app.cookies](#dict-appcookies)
-
-[*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) app
-----------
-
+app
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#dict-app)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.config = {}
-------------------------
-
+config
 Config object from the *package.json* file.
 Can be overriden in the *init.js* file.
+
+## Table of contents
+    * [App](#app)
+    * [app](#app)
+    * [config](#config)
+    * [type](#type)
+    * [networking](#networking)
+    * [models](#models)
+    * [routes](#routes)
+    * [styles](#styles)
+    * [views](#views)
+    * [resources](#resources)
+    * [onReady](#onready)
+    * [cookies](#cookies)
 
 ### type
 
@@ -60,9 +55,7 @@ It's used for the crawlers (e.g. GoogleBot) or browsers with no javascript suppo
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#type)
 
-*Networking* app.networking
----------------------------
-
+networking
 Standard Networking instance used to communicate
 with the server and to create local requests.
 All routes created by the *App.Route* uses this networking.
@@ -70,9 +63,7 @@ HTTP protocol is used by default with the data specified in the *package.json*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#networking-appnetworking)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.models = {}
-------------------------
-
+models
 Files from the *models* folder with objects returned by their exported functions.
 ```javascript
 `// models/user/permission.js
@@ -95,43 +86,31 @@ Files from the *models* folder with objects returned by their exported functions
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appmodels--)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.routes = {}
-------------------------
-
+routes
 Files from the *routes* folder with objects returned by their exported functions.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-approutes--)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.styles = {}
-------------------------
-
+styles
 Files from the *styles* folder as *Function*s
 ready to create new [Renderer.Item][renderer/Item]s.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appstyles--)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) app.views = {}
------------------------
-
+views
 Files from the *views* folder as the [Document][document/File] instances.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appviews--)
 
-*Resources* app.resources
--------------------------
-
+resources
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#resources-appresources)
 
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) app.onReady()
-----------------------
-
+onReady
 Called when all modules, views, styled etc. have been loaded.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#signal-apponready)
 
-[*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) app.cookies
-------------------
-
+cookies
 On the client side, this object refers to the last received cookies
 from the networking request.
 On the server side, this cookies object are added into the each networking response.

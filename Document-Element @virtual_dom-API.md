@@ -1,108 +1,76 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Element @virtual_dom**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Element @virtual_dom
-====================
-
+Element
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-virtualdom)
 
-## Table of contents
-  * [Element.fromHTML(html)](#element-elementfromhtmlstring-html)
-  * [Element.fromJSON(*Array|String* json)](#element-elementfromjsonarraystring-json)
-  * [Element()](#element-element)
-  * [index](#integer-elementindex)
-  * [nextSibling](#element-elementnextsibling)
-  * [previousSibling](#element-elementprevioussibling)
-  * [parent](#element-elementparent)
-  * [onParentChange(oldValue)](#signal-elementonparentchangeelement-oldvalue)
-  * [*Renderer.Item* style](#rendereritem-elementstyle)
-  * [onStyleChange(*Renderer.Item* oldValue)](#signal-elementonstylechangerendereritem-oldvalue)
-  * [visible](#boolean-elementvisible)
-  * [onVisibleChange(oldValue)](#signal-elementonvisiblechangeboolean-oldvalue)
-  * [queryAllParents(query)](#array-elementqueryallparentsstring-query)
-  * [queryParents(query)](#element-elementqueryparentsstring-query)
-  * [getAccessPath([toParent])](#array-elementgetaccesspathtag-toparent)
-  * [clone()](#element-elementclone)
-  * [toJSON()](#array-elementtojson)
-
-*Element* Element.fromHTML(*String* html)
------------------------------------------
-
+fromHTML
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementfromhtmlstring-html)
 
-*Element* Element.fromJSON(*Array|String* json)
------------------------------------------------
-
+fromJSON
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementfromjsonarraystring-json)
 
-*Element* Element()
--------------------
-
+Element
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-element)
 
-[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Element::index
-------------------------
-
+index
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#integer-elementindex)
 
-*Element* Element::nextSibling
-------------------------------
-
+nextSibling
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementnextsibling)
 
-*Element* Element::previousSibling
-----------------------------------
-
+previousSibling
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementprevioussibling)
 
-*Element* Element::parent
--------------------------
-
+parent
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementparent)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Element::onParentChange(*Element* oldValue)
+## Table of contents
+    * [Element](#element)
+    * [fromHTML](#fromhtml)
+    * [fromJSON](#fromjson)
+    * [Element](#element)
+    * [index](#index)
+    * [nextSibling](#nextsibling)
+    * [previousSibling](#previoussibling)
+    * [parent](#parent)
+  * [onParentChange](#onparentchange)
+    * [style](#style)
+  * [onStyleChange](#onstylechange)
+    * [visible](#visible)
+  * [onVisibleChange](#onvisiblechange)
+    * [queryAllParents](#queryallparents)
+    * [queryParents](#queryparents)
+    * [getAccessPath](#getaccesspath)
+    * [clone](#clone)
+    * [toJSON](#tojson)
 
+##onParentChange
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonparentchangeelement-oldvalue)
 
-*Renderer.Item* Element::style
-------------------------------
-
+style
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#rendereritem-elementstyle)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Element::onStyleChange(*Renderer.Item* oldValue)
-
+##onStyleChange
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonstylechangerendereritem-oldvalue)
 
-*Boolean* Element::visible
---------------------------
-
+visible
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#boolean-elementvisible)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Element::onVisibleChange(*Boolean* oldValue)
-
+##onVisibleChange
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#signal-elementonvisiblechangeboolean-oldvalue)
 
-*Array* Element::queryAllParents(*String* query)
-------------------------------------------------
-
+queryAllParents
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#array-elementqueryallparentsstring-query)
 
-*Element* Element::queryParents(*String* query)
------------------------------------------------
-
+queryParents
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementqueryparentsstring-query)
 
-*Array* Element::getAccessPath([*Tag* toParent])
-------------------------------------------------
-
+getAccessPath
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#array-elementgetaccesspathtag-toparent)
 
-*Element* Element::clone()
---------------------------
-
+clone
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#element-elementclone)
 
-*Array* Element::toJSON()
--------------------------
-
+toJSON
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element.litcoffee#array-elementtojson)
 

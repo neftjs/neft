@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **FontLoader @class**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-FontLoader @class
-=================
-
+FontLoader
 ```nml
 `Item {
 `   Text {
@@ -19,20 +17,10 @@ FontLoader @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#fontloader-class)
 
-## Table of contents
-  * [FontLoader.New([component, options])](#fontloader-fontloadernewcomponent-component-object-options)
-  * [FontLoader()](#fontloader-fontloader)
-  * [name](#string-fontloadername)
-  * [source](#string-fontloadersource)
-
-*FontLoader* FontLoader.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
-----------------------------------------------------------------------
-
+New
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewcomponent-component-object-options)
 
-*FontLoader* FontLoader()
--------------------------
-
+FontLoader
 Class used to load custom fonts.
 You can override default fonts (*sans-serif*, *sans* and *monospace*).
 The font weight and the style (italic or normal) is extracted from the font source path.
@@ -43,14 +31,10 @@ FontLoader {}
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#fontloader-fontloader)
 
-*String* FontLoader::name
--------------------------
-
+name
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#string-fontloadername)
 
-*String* FontLoader::source
----------------------------
-
+source
 We recommend usng **WOFF** format and **TTF/OTF** for the oldest Android browser.
 Must contains one of:
  - hairline (weight=0),

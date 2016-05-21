@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Flow @class**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Flow @class
-===========
-
+Flow
 ```nml
 `Flow {
 `   width: 90
@@ -18,52 +16,24 @@ Flow @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#flow-class)
 
-## Table of contents
-  * [Flow.New([component, options])](#flow-flownewcomponent-component-object-options)
-  * [Flow() : *Renderer.Item*](#flow-flow--rendereritem)
-  * [padding](#margin-flowpadding)
-  * [spacing](#spacing-flowspacing)
-  * [alignment](#alignment-flowalignment)
-  * [includeBorderMargins = false](#boolean-flowincludebordermargins--false)
-  * [collapseMargins = false](#boolean-flowcollapsemargins--false)
-
-*Flow* Flow.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
-----------------------------------------------------------
-
+New
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#flow-flownewcomponent-component-object-options)
 
-*Flow* Flow() : *Renderer.Item*
--------------------------------
-
+Flow
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#flow-flow--rendereritem)
 
-*Margin* Flow::padding
-----------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Flow::onPaddingChange(*Margin* padding)
-
+padding
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#margin-flowpadding-signal-flowonpaddingchangemargin-padding)
 
-*Spacing* Flow::spacing
------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Flow::onSpacingChange(*Spacing* oldValue)
-
+spacing
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#spacing-flowspacing-signal-flowonspacingchangespacing-oldvalue)
 
-*Alignment* Flow::alignment
----------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Flow::onAlignmentChange(*Alignment* oldValue)
-
+alignment
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#alignment-flowalignment-signal-flowonalignmentchangealignment-oldvalue)
 
-*Boolean* Flow::includeBorderMargins = false
--------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Flow::onIncludeBorderMarginsChange(*Boolean* oldValue)
-
+includeBorderMargins
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#boolean-flowincludebordermargins--false-signal-flowonincludebordermarginschangeboolean-oldvalue)
 
-*Boolean* Flow::collapseMargins = false
----------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Flow::onCollapseMarginsChange(*Boolean* oldValue)
-
+collapseMargins
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/flow.litcoffee#boolean-flowcollapsemargins--false-signal-flowoncollapsemarginschangeboolean-oldvalue)
 

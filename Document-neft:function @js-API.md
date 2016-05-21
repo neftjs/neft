@@ -1,25 +1,14 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:function @js**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:function @js
-=================
-
+neft:function
 > [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#neftfunction-js)
 
-## Table of contents
-  * [globalObject](#readonly-object-globalobject)
-  * [globalObject.require(moduleName)](#function-globalobjectrequirestring-modulename)
-  * [globalObject.arguments](#arguments-globalobjectarguments)
-
-ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) globalObject
-------------------------------
-
+globalObject
 Used as a global namespace in the function body.
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#readonly-object-globalobject)
 
-*Function* globalObject.require(*String* moduleName)
-----------------------------------------------------
-
+require
 Requires standard Neft modules.
 ```xml
 <neft:function neft:name="test">
@@ -30,9 +19,7 @@ Requires standard Neft modules.
 
 > [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#function-globalobjectrequirestring-modulename)
 
-[*Arguments*](/Neft-io/neft/wiki/Utils-API.md#boolean-isargumentsany-value) globalObject.arguments
-----------------------------------
-
+arguments
 Array-like object with arguments passed to the function.
 ```xml
 <neft:function neft:name="followMouse">

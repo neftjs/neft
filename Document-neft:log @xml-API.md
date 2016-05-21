@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:log @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:log @xml
-=============
-
+neft:log
 ```xml
 <neft:log debugObject="${data.someObject}">${debugText}</neft:log>
 ```

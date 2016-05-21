@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Rectangle @class**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Rectangle @class
-================
-
+Rectangle
 ```nml
 `Rectangle {
 `   width: 150
@@ -16,52 +14,24 @@ Rectangle @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#rectangle-class)
 
-## Table of contents
-  * [Rectangle.New([component, options])](#rectangle-rectanglenewcomponent-component-object-options)
-  * [Rectangle() : *Renderer.Item*](#rectangle-rectangle--rendereritem)
-  * [color = 'transparent'](#string-rectanglecolor--transparent)
-  * [radius = 0](#float-rectangleradius--0)
-  * [border](#border-rectangleborder)
-  * [border.width = 0](#float-rectangleborderwidth--0)
-  * [border.color = 'transparent'](#string-rectanglebordercolor--transparent)
-
-*Rectangle* Rectangle.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
---------------------------------------------------------------------
-
+New
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectanglenewcomponent-component-object-options)
 
-*Rectangle* Rectangle() : *Renderer.Item*
------------------------------------------
-
+Rectangle
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectangle--rendereritem)
 
-*String* Rectangle::color = 'transparent'
------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Rectangle::onColorChange(*String* oldValue)
-
+color
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#string-rectanglecolor--transparent-signal-rectangleoncolorchangestring-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Rectangle::radius = 0
------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Rectangle::onRadiusChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+radius
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#float-rectangleradius--0-signal-rectangleonradiuschangefloat-oldvalue)
 
-*Border* Rectangle::border
---------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Rectangle::onBorderChange(*String* property, *Any* oldValue)
-
+border
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#border-rectangleborder-signal-rectangleonborderchangestring-property-any-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Rectangle::border.width = 0
------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Rectangle::border.onWidthChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+border.width
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#float-rectangleborderwidth--0-signal-rectangleborderonwidthchangefloat-oldvalue)
 
-*String* Rectangle::border.color = 'transparent'
-------------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Rectangle::border.onColorChange(*String* oldValue)
-
+border.color
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/shapes/rectangle.litcoffee#string-rectanglebordercolor--transparent-signal-rectangleborderoncolorchangestring-oldvalue)
 

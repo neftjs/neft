@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **String Interpolation @learn**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-String Interpolation @learn
-===========================
-
+String Interpolation
 [Text][document/Text] and [Tag][document/Tag] attribute value can use string interpolation.
 ```xml
 <h1>Welcome ${name}!</h1>

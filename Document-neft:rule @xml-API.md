@@ -1,12 +1,11 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:rule @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:rule @xml
-==============
-
+neft:rule
 Tag used in the parsing process.
 Performs some actions on found elements in the parent element.
 
 ## Table of contents
+    * [neft:rule](#neftrule)
   * [attrs](#attrs)
 
 ## attrs

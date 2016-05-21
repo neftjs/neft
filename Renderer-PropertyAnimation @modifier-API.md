@@ -1,112 +1,51 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **PropertyAnimation @modifier**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-PropertyAnimation @modifier
-===========================
-
+PropertyAnimation
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#propertyanimation-modifier)
 
-## Table of contents
-  * [PropertyAnimation() : *Renderer.Animation*](#propertyanimation-propertyanimation--rendereranimation)
-  * [*Renderer.Item* target](#rendereritem-propertyanimationtarget)
-  * [property](#string-propertyanimationproperty)
-  * [duration = 250](#float-propertyanimationduration--250)
-  * [startDelay = 0](#float-propertyanimationstartdelay--0)
-  * [loopDelay = 0](#float-propertyanimationloopdelay--0)
-  * [delay = 0](#float-propertyanimationdelay--0)
-  * [updateData = false](#boolean-propertyanimationupdatedata--false)
-  * [updateProperty = false](#boolean-propertyanimationupdateproperty--false)
-  * [from](#any-propertyanimationfrom)
-  * [to](#any-propertyanimationto)
-  * [progress = 0](#readonly-float-propertyanimationprogress--0)
-  * [easing](#easing-propertyanimationeasing)
-  * [Easing()](#easing-easing)
-  * [type = 'Linear'](#string-easingtype--linear)
-  * [onTypeChange(oldValue)](#signal-easingontypechangestring-oldvalue)
-
-*PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
---------------------------------------------------------------
-
+PropertyAnimation
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#propertyanimation-propertyanimation--rendereranimation)
 
-*Renderer.Item* PropertyAnimation::target
------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onTargetChange(*Renderer.Item* oldValue)
-
+target
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#rendereritem-propertyanimationtarget-signal-propertyanimationontargetchangerendereritem-oldvalue)
 
-*String* PropertyAnimation::property
-------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onPropertyChange(*String* oldValue)
-
+property
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#string-propertyanimationproperty-signal-propertyanimationonpropertychangestring-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::duration = 250
------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onDurationChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+duration
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationduration--250-signal-propertyanimationondurationchangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::startDelay = 0
------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onStartDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+startDelay
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationstartdelay--0-signal-propertyanimationonstartdelaychangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::loopDelay = 0
-----------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onLoopDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+loopDelay
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationloopdelay--0-signal-propertyanimationonloopdelaychangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::delay = 0
-------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onDelayChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+delay
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationdelay--0-signal-propertyanimationondelaychangefloat-oldvalue)
 
-*Boolean* PropertyAnimation::updateData = false
------------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
-
+updateData
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#boolean-propertyanimationupdatedata--false-signal-propertyanimationonupdatedatachangeboolean-oldvalue)
 
-*Boolean* PropertyAnimation::updateProperty = false
----------------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
-
+updateProperty
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#boolean-propertyanimationupdateproperty--false-signal-propertyanimationonupdatepropertychangeboolean-oldvalue)
 
-*Any* PropertyAnimation::from
------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onFromChange(*Any* oldValue)
-
+from
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#any-propertyanimationfrom-signal-propertyanimationonfromchangeany-oldvalue)
 
-*Any* PropertyAnimation::to
----------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onToChange(*Any* oldValue)
-
+to
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#any-propertyanimationto-signal-propertyanimationontochangeany-oldvalue)
 
-ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) PropertyAnimation::progress = 0
-------------------------------------------------
-
+progress
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#readonly-float-propertyanimationprogress--0)
 
-*Easing* PropertyAnimation::easing
-----------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) PropertyAnimation::onEasingChange(*Easing* value)
-
+easing
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#easing-propertyanimationeasing-signal-propertyanimationoneasingchangeeasing-value)
 
-*Easing* Easing()
------------------
-
+Easing
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#easing-easing)
 
-*String* Easing::type = 'Linear'
---------------------------------
-
+type
 Supported easing functions:
 Linear, InQuad, OutQuad, InOutQuad, InCubic, OutCubic,
 InOutCubic, InQuart, OutQuart, InOutQuart, InQuint, OutQuint,
@@ -117,7 +56,25 @@ InOutBounce.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#string-easingtype--linear)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Easing::onTypeChange(*String* oldValue)
+## Table of contents
+    * [PropertyAnimation](#propertyanimation)
+    * [PropertyAnimation](#propertyanimation)
+    * [target](#target)
+    * [property](#property)
+    * [duration](#duration)
+    * [startDelay](#startdelay)
+    * [loopDelay](#loopdelay)
+    * [delay](#delay)
+    * [updateData](#updatedata)
+    * [updateProperty](#updateproperty)
+    * [from](#from)
+    * [to](#to)
+    * [progress](#progress)
+    * [easing](#easing)
+    * [Easing](#easing)
+    * [type](#type)
+  * [onTypeChange](#ontypechange)
 
+##onTypeChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation/types/property.litcoffee#signal-easingontypechangestring-oldvalue)
 

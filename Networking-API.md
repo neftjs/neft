@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Networking @engine**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Networking @engine
-==================
-
+Networking
 This module cares about communication client-server and client internally.
 Currently only the HTTP protocol is supported.
 Access it with:
@@ -12,71 +10,34 @@ var Networking = require('networking');
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networking-engine)
 
-## Table of contents
-  * [Networking(options)](#networking-networkingobject-options)
-  * [onRequest(*Networking.Request* request, *Networking.Response* response)](#signal-networkingonrequestnetworkingrequest-request-networkingresponse-response)
-  * [protocol](#readonly-string-networkingprotocol)
-  * [port](#readonly-integer-networkingport)
-  * [host](#readonly-string-networkinghost)
-  * [url](#readonly-string-networkingurl)
-  * [language](#readonly-string-networkinglanguage)
-  * [pendingRequests](#readonly-list-networkingpendingrequests)
-  * [*Networking.Request* createRequest(*Object|Networking.Request* options)](#networkingrequest-networkingcreaterequestobjectnetworkingrequest-options)
-  * [*Networking.Request* get(uri, onLoadEnd)](#networkingrequest-networkinggetstring-uri-function-onloadend)
-  * [*Networking.Request* post(uri, [data], onLoadEnd)](#networkingrequest-networkingpoststring-uri-any-data-function-onloadend)
-  * [*Networking.Request* put(uri, [data], onLoadEnd)](#networkingrequest-networkingputstring-uri-any-data-function-onloadend)
-  * [*Networking.Request* delete(uri, [data], onLoadEnd)](#networkingrequest-networkingdeletestring-uri-any-data-function-onloadend)
-  * [resolveRequest(*Networking.Request* request)](#networkingresolverequestnetworkingrequest-request)
-  * [*Networking.Request* createLocalRequest(*Object|Networking.Request* options)](#networkingrequest-networkingcreatelocalrequestobjectnetworkingrequest-options)
-    * [Local requests](#local-requests)
-    * [Requests to the server](#requests-to-the-server)
-
-*Networking* Networking([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
------------------------------------------
-
+Networking
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networking-networkingobject-options)
 
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Networking::onRequest(*Networking.Request* request, *Networking.Response* response)
---------------------------------------------------------------------------------------------
-
+onRequest
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#signal-networkingonrequestnetworkingrequest-request-networkingresponse-response)
 
-ReadOnly *String* Networking::protocol
---------------------------------------
-
+protocol
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-string-networkingprotocol)
 
-ReadOnly [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Networking::port
------------------------------------
-
+port
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-integer-networkingport)
 
-ReadOnly *String* Networking::host
-----------------------------------
-
+host
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-string-networkinghost)
 
-ReadOnly *String* Networking::url
----------------------------------
-
+url
 URL path contains a protocol, port and a host.
 It can be set manually if the external address is different.
 Otherwise it's created automatically.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-string-networkingurl)
 
-ReadOnly *String* Networking::language
---------------------------------------
-
+language
 Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-string-networkinglanguage)
 
-ReadOnly [*List*](/Neft-io/neft/wiki/List-API.md#class-list) Networking::pendingRequests
--------------------------------------------
-*Networking.Handler* Networking::createHandler([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
-----------------------------------------------------------------
-
+pendingRequests
 Use this method to create a new [Handler][networking/Handler].
 ```javscript
 app.networking.createHandler({
@@ -96,44 +57,50 @@ app.networking.createHandler({
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#readonly-list-networkingpendingrequestsnetworkinghandler-networkingcreatehandlerobject-options)
 
-*Networking.Request* Networking::createRequest(*Object|Networking.Request* options)
------------------------------------------------------------------------------------
-
+createRequest
 The given options object corresponds to the [Request][networking/Request] properties.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networkingrequest-networkingcreaterequestobjectnetworkingrequest-options)
 
-*Networking.Request* Networking::get(*String* uri, *Function* onLoadEnd)
-------------------------------------------------------------------------
-
+get
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networkingrequest-networkinggetstring-uri-function-onloadend)
 
-*Networking.Request* Networking::post(*String* uri, [*Any* data], *Function* onLoadEnd)
----------------------------------------------------------------------------------------
-
+post
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networkingrequest-networkingpoststring-uri-any-data-function-onloadend)
 
-*Networking.Request* Networking::put(*String* uri, [*Any* data], *Function* onLoadEnd)
---------------------------------------------------------------------------------------
-
+put
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networkingrequest-networkingputstring-uri-any-data-function-onloadend)
 
-*Networking.Request* Networking::delete(*String* uri, [*Any* data], *Function* onLoadEnd)
------------------------------------------------------------------------------------------
-
+delete
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networkingrequest-networkingdeletestring-uri-any-data-function-onloadend)
 
-Networking::resolveRequest(*Networking.Request* request)
-----------------------------------------------------------------------------------------
-
+resolveRequest
 > [`Source`](/Neft-io/neft/tree/master/src/networking/index.litcoffee#networkingresolverequestnetworkingrequest-request)
 
-*Networking.Request* Networking::createLocalRequest(*Object|Networking.Request* options)
-----------------------------------------------------------------------------------------
-
+createLocalRequest
 Use this method to create a new [Request][networking/Request] and handle it.
 The given options object corresponds to the [Request][networking/Request] properties.
 Local and server requests are supported.
+
+## Table of contents
+    * [Networking](#networking)
+    * [Networking](#networking)
+    * [onRequest](#onrequest)
+    * [protocol](#protocol)
+    * [port](#port)
+    * [host](#host)
+    * [url](#url)
+    * [language](#language)
+    * [pendingRequests](#pendingrequests)
+    * [createRequest](#createrequest)
+    * [get](#get)
+    * [post](#post)
+    * [put](#put)
+    * [delete](#delete)
+    * [resolveRequest](#resolverequest)
+    * [createLocalRequest](#createlocalrequest)
+    * [Local requests](#local-requests)
+    * [Requests to the server](#requests-to-the-server)
 
 ### Local requests
 

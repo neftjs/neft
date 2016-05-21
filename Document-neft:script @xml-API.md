@@ -1,7 +1,5 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:script @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:script @xml
-================
-
+neft:script
 > [`Source`](/Neft-io/neft/tree/master/src/document/file/parse/scripts.litcoffee#neftscript-xml)
 

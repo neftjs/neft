@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:each @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:each @xml
-==============
-
+neft:each
 Attribute used for repeating.
 Tag children will be duplicated for each
 element defined in the `neft:each` attribute.
@@ -23,6 +21,7 @@ In the tag children you have access to the three special variables:
 ```
 
 ## Table of contents
+    * [neft:each](#nefteach)
   * [Runtime changes](#runtime-changes)
 
 ## Runtime changes

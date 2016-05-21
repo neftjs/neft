@@ -5,16 +5,7 @@ Uri
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#uri)
 
-## Table of contents
-  * [Uri(uri)](#uri-uristring-uri)
-  * [protocol](#string-uriprotocol)
-  * [query](#object-uriquery)
-  * [match(uri)](#object-urimatchstring-uri)
-  * [toString([*Object|Dict* params])](#string-uritostringobjectdict-params)
-
-*Uri* Uri(*String* uri)
------------------------
-
+Uri
 Represents an uri string with parameters.
 The parameter must be wrapped by the curly brackets **{…}**.
 **Rest parameters** are not greedy and are wrapped by the **{…*}** or just **…***.
@@ -35,41 +26,21 @@ var Uri = Networking.Uri;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#uri-uristring-uri)
 
-*String* Uri::protocol
-----------------------
-*String* Uri::auth
-------------------
-*String* Uri::host
-------------------
-*String* Uri::path
-------------------
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Uri::params
---------------------
-
+protocol
 Holds the last *Uri::match()* result.
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Uri::query
--------------------
-*String* Uri::hash
-------------------
-*Boolean* Uri::test(*String* uri)
----------------------------------
-
+query
 Test whether the uri is valid with the given string.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#object-uriquerystring-urihashboolean-uriteststring-uri)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Uri::match(*String* uri)
----------------------------------
-
+match
 Returns found parameters from the given string.
 If the given uri is not valid with the uri, error will be raised.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#object-urimatchstring-uri)
 
-*String* Uri::toString([*Object|Dict* params])
-----------------------------------------------
-
+toString
 Parses the uri into a string.
 The given params object is used to replace the uri parameters.
 ```javascript

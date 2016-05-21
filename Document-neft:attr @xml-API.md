@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:attr @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:attr @xml
-==============
-
+neft:attr
 Tag used to dynamically change an attribute of the parent element.
 ```xml
 <header neft:style="header">

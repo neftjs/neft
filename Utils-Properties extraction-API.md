@@ -5,12 +5,11 @@
 > [`Source`](/Neft-io/neft/tree/master/src/utils/namespace.litcoffee#properties-extraction)
 
 ## Table of contents
-  * [get(object, path, [target])](#any-getobject-object-string-path-optionsarray-target)
+  * [get](#get)
   * [**Class** utils.get.OptionsArray()](#class-utilsgetoptionsarray)
-  * [isStringArray(value)](#boolean-isstringarraystring-value)
+  * [isStringArray](#isstringarray)
 
-## *Any* get([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object, *String* path, [*OptionsArray* target])
-
+##get
 Extracts property, deep property or an array of possible properties from the given object.
 ```javascript
 var obj = {prop: 1};
@@ -42,8 +41,7 @@ function is a list of the possible values.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/namespace.litcoffee#class-utilsgetoptionsarray)
 
-## *Boolean* isStringArray(*String* value)
-
+##isStringArray
 Checks whether the given string references into an array according
 to the notation in the utils.get() function.
 

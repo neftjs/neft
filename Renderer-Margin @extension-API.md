@@ -1,25 +1,9 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Margin @extension**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Margin @extension
-=================
-
+Margin
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#margin-extension)
 
-## Table of contents
-  * [Margin()](#margin-margin)
-  * [left = 0](#float-marginleft--0)
-  * [top = 0](#float-margintop--0)
-  * [right = 0](#float-marginright--0)
-  * [bottom = 0](#float-marginbottom--0)
-  * [horizontal = 0](#float-marginhorizontal--0)
-  * [onHorizontalChange(oldValue)](#signal-marginonhorizontalchangefloat-oldvalue)
-  * [vertical = 0](#float-marginvertical--0)
-  * [onVerticalChange(oldValue)](#signal-marginonverticalchangefloat-oldvalue)
-  * [valueOf()](#float-marginvalueof)
-
-*Margin* Margin()
------------------
-
+Margin
 Margins are used in anchors and within layout items.
 ```nml
 `Rectangle {
@@ -46,50 +30,43 @@ Margins are used in anchors and within layout items.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#margin-margin)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::left = 0
-------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onLeftChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+left
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-marginleft--0-signal-marginonleftchangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::top = 0
------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onTopChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+top
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-margintop--0-signal-marginontopchangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::right = 0
--------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onRightChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+right
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-marginright--0-signal-marginonrightchangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::bottom = 0
---------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onBottomChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+bottom
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-marginbottom--0-signal-marginonbottomchangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::horizontal = 0
-------------------------------
-
+horizontal
 Sum of the left and right margin.
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onHorizontalChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
+## Table of contents
+    * [Margin](#margin)
+    * [Margin](#margin)
+    * [left](#left)
+    * [top](#top)
+    * [right](#right)
+    * [bottom](#bottom)
+    * [horizontal](#horizontal)
+  * [onHorizontalChange](#onhorizontalchange)
+    * [vertical](#vertical)
+  * [onVerticalChange](#onverticalchange)
+    * [valueOf](#valueof)
 
+##onHorizontalChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#signal-marginonhorizontalchangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::vertical = 0
-----------------------------
-
+vertical
 Sum of the top and bottom margin.
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Margin::onVerticalChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+##onVerticalChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#signal-marginonverticalchangefloat-oldvalue)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Margin::valueOf()
---------------------------
-
+valueOf
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/margin.litcoffee#float-marginvalueof)
 

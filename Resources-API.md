@@ -1,45 +1,23 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Resources @engine**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Resources @engine
-=================
-
+Resources
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#resources-engine)
 
-## Table of contents
-  * [Resources.fromJSON(*String|Object* json)](#resources-resourcesfromjsonstringobject-json)
-  * [Resources.testUri(uri)](#boolean-resourcestesturistring-uri)
-  * [Resources()](#resources-resources)
-  * [*Resources.Resource* getResource(uri)](#resourcesresource-resourcesgetresourcestring-uri)
-  * [resolve(uri, [request])](#string-resourcesresolvestring-uri-object-request)
-  * [toJSON()](#object-resourcestojson)
-
-*Resources* Resources.fromJSON(*String|Object* json)
-----------------------------------------------------
-
+fromJSON
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#resources-resourcesfromjsonstringobject-json)
 
-*Boolean* Resources.testUri(*String* uri)
------------------------------------------
-
+testUri
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#boolean-resourcestesturistring-uri)
 
-*Resources* Resources()
------------------------
-
+Resources
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#resources-resources)
 
-*Resources.Resource* Resources::getResource(*String* uri)
----------------------------------------------------------
-
+getResource
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#resourcesresource-resourcesgetresourcestring-uri)
 
-*String* Resources::resolve(*String* uri, [[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) request])
--------------------------------------------------------------
-
+resolve
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#string-resourcesresolvestring-uri-object-request)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Resources::toJSON()
-----------------------------
-
+toJSON
 > [`Source`](/Neft-io/neft/tree/master/src/resources/index.litcoffee#object-resourcestojson)
 

@@ -1,27 +1,14 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Text @virtual_dom**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Text @virtual_dom
-=================
-
+Text
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#text-virtualdom)
 
-## Table of contents
-  * [Text() : *Element*](#text-text--element)
-  * [onTextChange(oldValue)](#signal-textontextchangestring-oldvalue)
-  * [text](#string-texttext)
-
-*Text* Text() : *Element*
--------------------------
-
+Text
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#text-text--element)
 
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Text::onTextChange(*String* oldValue)
-----------------------------------------------
-
+onTextChange
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#signal-textontextchangestring-oldvalue)
 
-*String* Text::text
--------------------
-
+text
 > [`Source`](/Neft-io/neft/tree/master/src/document/element/element/text.litcoffee#string-texttext)
 

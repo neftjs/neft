@@ -1,25 +1,12 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Navigator @namespace**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Navigator @namespace
-====================
-
+Navigator
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#navigator-namespace)
 
-## Table of contents
-  * [Navigator](#object-navigator)
-  * [Navigator.language = 'en'](#boolean-navigatorlanguage--en)
-  * [Navigator.browser = true](#boolean-navigatorbrowser--true)
-  * [Navigator.native = false](#boolean-navigatornative--false)
-  * [Navigator.online = true](#boolean-navigatoronline--true)
-
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Navigator
-------------------
-
+Navigator
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#object-navigator)
 
-*Boolean* Navigator.language = 'en'
------------------------------------
-
+language
 ```nml
 `Text {
 `   text: "Your language: " + Navigator.language
@@ -29,14 +16,10 @@ Navigator @namespace
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorlanguage--en)
 
-*Boolean* Navigator.browser = true
-----------------------------------
-
+browser
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorbrowser--true)
 
-*Boolean* Navigator.native = false
-----------------------------------
-
+native
 ```style
 `Text {
 `   text: Navigator.native ? "Native" : "Browser"
@@ -46,9 +29,6 @@ Navigator @namespace
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatornative--false)
 
-*Boolean* Navigator.online = true
----------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Navigator.onOnlineChange(*Boolean* oldValue)
-
+online
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatoronline--true-signal-navigatorononlinechangeboolean-oldvalue)
 

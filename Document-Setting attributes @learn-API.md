@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Setting attributes @learn**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Setting attributes @learn
-=========================
-
+Setting attributes
 [Element][document/Element] properties can be changed using attributes.
 ```xml
 <div visible="false"></div>

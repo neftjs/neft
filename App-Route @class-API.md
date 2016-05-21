@@ -1,26 +1,12 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Route @class**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Route @class
-============
-
+Route
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#route-class)
 
-## Table of contents
-  * [Route.getTemplateView(viewName)](#document-routegettemplateviewstring-viewname)
-  * [Route(options)](#route-routeobject-options)
-  * [method = 'get'](#string-routemethod--get)
-  * [toJSON()](#any-routetojson)
-  * [toText()](#string-routetotext)
-  * [toHTML()](#document-routetohtml)
-
-*Document* Route.getTemplateView(*String* viewName)
----------------------------------------------------
-
+getTemplateView
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#document-routegettemplateviewstring-viewname)
 
-*Route* Route([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
--------------------------------
-
+Route
 Access it with:
 ```javascript
 module.exports = function(app){
@@ -41,59 +27,15 @@ Acceptable syntaxes:
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#route-routeobject-options)
 
-*String* Route::method = 'get'
-------------------------------
-*Networking.Uri* Route::uri
----------------------------
-*App* Route::app
-----------------
-*Route* Route::route
---------------------
-*String* Route::name
---------------------
-*Schema* Route::schema
-----------------------
-*Any* Route::data
------------------
-*Any* Route::error
-------------------
-*Function* Route::factory()
----------------------------
-*Function* Route::init()
-------------------------
-*Function* Route::getData([*Function* callback])
-------------------------------------------------
-*Function* Route::destroy()
----------------------------
-*Function* Route::destroyJSON()
--------------------------------
-*Function* Route::destroyText()
--------------------------------
-*Function* Route::destroyHTML()
--------------------------------
-*Function|Networking.Uri* Route::redirect
------------------------------------------
-*Networking.Request* Route::request
------------------------------------
-*Networking.Response* Route::response
--------------------------------------
-*Function* Route::next()
-------------------------
-
+method
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#string-routemethod--getnetworkinguri-routeuriapp-routeapproute-routeroutestring-routenameschema-routeschemaany-routedataany-routeerrorfunction-routefactoryfunction-routeinitfunction-routegetdatafunction-callbackfunction-routedestroyfunction-routedestroyjsonfunction-routedestroytextfunction-routedestroyhtmlfunctionnetworkinguri-routeredirectnetworkingrequest-routerequestnetworkingresponse-routeresponsefunction-routenext)
 
-*Any* Route::toJSON()
----------------------
-
+toJSON
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#any-routetojson)
 
-*String* Route::toText()
-------------------------
-
+toText
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#string-routetotext)
 
-*Document* Route::toHTML()
---------------------------
-
+toHTML
 > [`Source`](/Neft-io/neft/tree/master/src/app/route.litcoffee#document-routetohtml)
 

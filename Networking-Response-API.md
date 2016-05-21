@@ -5,26 +5,7 @@ Response
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response)
 
-## Table of contents
-  * [Response.STATUSES](#array-responsestatuses)
-  * [Response(options)](#response-responseobject-options)
-  * [onSend()](#signal-responseonsend)
-  * [pending](#readonly-boolean-responsepending)
-  * [*Networking.Request* request](#readonly-networkingrequest-responserequest)
-  * [status = Response.OK](#integer-responsestatus--responseok)
-  * [data](#any-responsedata)
-  * [headers](#object-responseheaders)
-  * [cookies](#object-responsecookies)
-  * [encoding = 'utf-8'](#string-responseencoding--utf8)
-  * [setHeader(name, value)](#response-responsesetheaderstring-name-string-value)
-  * [send([status, data])](#responsesendinteger-status-any-data)
-  * [redirect(status, uri)](#responseredirectinteger-status--responsefound-string-uri)
-  * [raise(error)](#responseraiseany-error)
-  * [isSucceed()](#boolean-responseissucceed)
-
-*Array* Response.STATUSES
--------------------------
-
+STATUSES
 Contains abstract codes used to describe the response type.
 Each status corresponds to the HTTP numeral value.
 Check [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html]() for more.
@@ -55,9 +36,7 @@ console.log(Networking.Response.BAD_REQUEST);
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#array-responsestatuses)
 
-*Response* Response([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
--------------------------------------
-
+Response
 Access it with:
 ```javascript
 var Networking = require('networking');
@@ -66,9 +45,7 @@ var Response = Networking.Response;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response-responseobject-options)
 
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Response::onSend()
----------------------------
-
+onSend
 Called when the response has been sent.
 ```javascript
 res.onSend(function(){
@@ -78,23 +55,17 @@ res.onSend(function(){
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#signal-responseonsend)
 
-ReadOnly *Boolean* Response::pending
-------------------------------------
-
+pending
 Indicates whether the response is not destroyed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#readonly-boolean-responsepending)
 
-ReadOnly *Networking.Request* Response::request
------------------------------------------------
-
+request
 Refers to the [Request][networking/Request].
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#readonly-networkingrequest-responserequest)
 
-[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Response::status = Response.OK
-----------------------------------------
-
+status
 Keeps a normalized code determined the response type.
 It refers to one of the *Response.STATUSES* values.
 ```javascript
@@ -104,9 +75,7 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#integer-responsestatus--responseok)
 
-*Any* Response::data
---------------------
-
+data
 Value sent to the client.
 ```javascript
 res.data = {items: ['superhero toy', 'book']};
@@ -116,33 +85,23 @@ res.data = Document.fromJSON(...);
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#any-responsedata)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Response::headers
---------------------------
-
+headers
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#object-responseheaders)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Response::cookies
---------------------------
-
+cookies
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#object-responsecookies)
 
-*String* Response::encoding = 'utf-8'
--------------------------------------
-
+encoding
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#string-responseencoding--utf8)
 
-*Response* Response::setHeader(*String* name, *String* value)
--------------------------------------------------------------
-
+setHeader
 ```javascript
 res.setHeader('Location', '/redirect/to/url');
 ```
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value)
 
-Response::send([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) status, *Any* data])
-----------------------------------------------
-
+send
 This method calls the [onSend()][networking/Response::onSend()] signal.
 ```javascript
 res.onSend(function(){
@@ -153,17 +112,13 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responsesendinteger-status-any-data)
 
-Response::redirect([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) status = `Response.FOUND`, *String* uri)
----------------------------------------------------------------------
-
+redirect
 The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri)
 
-Response::raise(*Any* error)
-----------------------------
-
+raise
 Finishes the response with an error.
 ```javascript
 res.raise(new Networking.Response.Error("Login first"));
@@ -172,9 +127,7 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responseraiseany-error)
 
-*Boolean* Response::isSucceed()
--------------------------------
-
+isSucceed
 Returns `true` if the response status is in range from 200 to 299.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#boolean-responseissucceed)

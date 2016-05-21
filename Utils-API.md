@@ -14,76 +14,67 @@ See one of submodules:
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#utils)
 
 ## Table of contents
-  * [isNode](#readonly-boolean-isnode)
-  * [isServer](#readonly-boolean-isserver)
-  * [isClient](#readonly-boolean-isclient)
-  * [isBrowser](#readonly-boolean-isbrowser)
-  * [NOP](#function-nop)
-  * [is(value1, value2)](#boolean-isany-value1-any-value2)
-  * [isFloat(value)](#boolean-isfloatany-value)
-  * [isInteger(value)](#boolean-isintegerany-value)
-  * [isPrimitive(value)](#boolean-isprimitiveany-value)
-  * [isObject(value)](#boolean-isobjectany-value)
-  * [isPlainObject(value)](#boolean-isplainobjectany-value)
-  * [isArguments(value)](#boolean-isargumentsany-value)
-  * [merge(source, object)](#notprimitive-mergenotprimitive-source-notprimitive-object)
-  * [mergeAll(source, objects...)](#notprimitive-mergeallnotprimitive-source-notprimitive-objects)
-  * [mergeDeep(source, object)](#notprimitive-mergedeepnotprimitive-source-notprimitive-object)
-  * [fill(source, object)](#notprimitive-fillnotprimitive-source-notprimitive-object)
-  * [remove(object, element)](#removenotprimitive-object-any-element)
-  * [removeFromUnorderedArray(array, element)](#removefromunorderedarrayarray-array-any-element)
-  * [getPropertyDescriptor(object, property)](#object-getpropertydescriptornotprimitive-object-string-property)
-  * [lookupGetter(object, property)](#function-lookupgetternotprimitive-object-string-property)
-  * [lookupSetter(object, property)](#function-lookupsetternotprimitive-object-string-property)
-  * [defineProperty(object, property, descriptors, [value, setter])](#notprimitive-definepropertynotprimitive-object-string-property-integer-descriptors-any-value-function-setter)
-  * [overrideProperty(object, property, [value, setter])](#notprimitive-overridepropertynotprimitive-object-string-property-any-value-function-setter)
-  * [clone(param)](#any-cloneany-param)
-  * [cloneDeep(param)](#any-clonedeepany-param)
-  * [isEmpty(object)](#boolean-isemptystringnotprimitive-object)
-  * [last(array)](#any-lastnotprimitive-array)
-  * [clear(object)](#notprimitive-clearnotprimitive-object)
-  * [setPrototypeOf(object, prototype)](#object-setprototypeofnotprimitive-object-notprimitivenull-prototype)
-  * [has(object, value)](#boolean-hasany-object-any-value)
-  * [objectToArray(object, [valueGen, target])](#array-objecttoarrayobject-object-function-valuegen-array-target--)
-  * [arrayToObject(array, [keyGen, valueGen, target])](#object-arraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
-  * [capitalize(string)](#string-capitalizestring-string)
-  * [addSlashes(string)](#string-addslashesstring-string)
-  * [uid([length])](#string-uidinteger-length--8)
-  * [tryFunction(function, [context, arguments, onFail])](#any-tryfunctionfunction-function-any-context-array-arguments-any-onfail)
-  * [catchError(function, [context, arguments])](#any-catcherrorfunction-function-any-context-array-arguments)
-  * [bindFunctionContext(function, context)](#function-bindfunctioncontextfunction-function-any-context)
-  * [errorToObject(error)](#object-errortoobjecterror-error)
-  * [getOwnProperties(object)](#object-getownpropertiesobject-object)
-  * [isEqual(object1, object2, [compareFunction, maxDeep])](#boolean-isequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
+  * [isNode](#isnode)
+  * [isServer](#isserver)
+  * [isClient](#isclient)
+  * [isBrowser](#isbrowser)
+  * [NOP](#nop)
+  * [is](#is)
+  * [isFloat](#isfloat)
+  * [isInteger](#isinteger)
+  * [isPrimitive](#isprimitive)
+  * [isObject](#isobject)
+  * [isPlainObject](#isplainobject)
+  * [isArguments](#isarguments)
+  * [merge](#merge)
+  * [mergeAll](#mergeall)
+  * [mergeDeep](#mergedeep)
+  * [fill](#fill)
+  * [remove](#remove)
+  * [removeFromUnorderedArray](#removefromunorderedarray)
+  * [getPropertyDescriptor](#getpropertydescriptor)
+  * [lookupGetter](#lookupgetter)
+  * [lookupSetter](#lookupsetter)
+  * [defineProperty](#defineproperty)
+  * [overrideProperty](#overrideproperty)
+  * [clone](#clone)
+  * [cloneDeep](#clonedeep)
+  * [isEmpty](#isempty)
+  * [last](#last)
+  * [clear](#clear)
+  * [setPrototypeOf](#setprototypeof)
+  * [has](#has)
+  * [objectToArray](#objecttoarray)
+  * [arrayToObject](#arraytoobject)
+  * [capitalize](#capitalize)
+  * [addSlashes](#addslashes)
+  * [uid](#uid)
+  * [tryFunction](#tryfunction)
+  * [catchError](#catcherror)
+  * [bindFunctionContext](#bindfunctioncontext)
+  * [errorToObject](#errortoobject)
+  * [getOwnProperties](#getownproperties)
+  * [isEqual](#isequal)
   * [Glossary](#glossary)
 
-## ReadOnly *Boolean* isNode
-
+##isNode
 `true` if the application is running in the node.js environment.
 
-## ReadOnly *Boolean* isServer
-
+##isServer
 `utils.isNode` link.
 
-## ReadOnly *Boolean* isClient
-
+##isClient
 `utils.isNode` inverse.
 
-## ReadOnly *Boolean* isBrowser
-## ReadOnly *Boolean* isQt
-## ReadOnly *Boolean* isAndroid
-## ReadOnly *Boolean* isIOS
-
+##isBrowser
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#readonly-boolean-isbrowser-readonly-boolean-isqt-readonly-boolean-isandroid-readonly-boolean-isios)
 
-## *Function* NOP
-
+##NOP
 No operation (an empty function).
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-nop)
 
-## *Boolean* is(*Any* value1, *Any* value2)
-
+##is
 Returns `true` if the given values are exactly the same.
 It's the *Object.is()* function polyfill (introduced in ECMAScript 6).
 In opposite to the `===` operator, this function treats two *NaN*s as equal, and
@@ -103,8 +94,7 @@ console.log(-0 === 0);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isany-value1-any-value2)
 
-## *Boolean* isFloat(*Any* value)
-
+##isFloat
 Returns `true` if the given value is a finite number.
 ```javascript
 console.log(utils.isFloat(10));
@@ -121,8 +111,7 @@ console.log(utils.isFloat('10'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isfloatany-value)
 
-## *Boolean* isInteger(*Any* value)
-
+##isInteger
 Returns `true` if the given value is an integer.
 ```javascript
 console.log(utils.isInteger(10));
@@ -137,8 +126,7 @@ console.log(utils.isInteger('2'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isintegerany-value)
 
-## *Boolean* isPrimitive(*Any* value)
-
+##isPrimitive
 Returns `true` if the given value is a `null`, string, number, boolean or an `undefined`.
 ```javascript
 console.log(utils.isPrimitive(null));
@@ -151,8 +139,7 @@ console.log(utils.isPrimitive([]));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isprimitiveany-value)
 
-## *Boolean* isObject(*Any* value)
-
+##isObject
 Returns `true` if the given value is an object (object, array, but not a `null`).
 ```javascript
 console.log(utils.isObject({}));
@@ -169,8 +156,7 @@ console.log(utils.isObject(function(){}));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isobjectany-value)
 
-## *Boolean* isPlainObject(*Any* value)
-
+##isPlainObject
 Returns `true` if the given value is an object with no prototype,
 or with a prototype equal the `Object.prototype`.
 ```javascript
@@ -191,8 +177,7 @@ console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isplainobjectany-value)
 
-## *Boolean* isArguments(*Any* value)
-
+##isArguments
 Returns `true` if the given value is an arguments object.
 ```javascript
 (function(){
@@ -205,8 +190,7 @@ console.log(utils.isArguments({}))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isargumentsany-value)
 
-## *NotPrimitive* merge(*NotPrimitive* source, *NotPrimitive* object)
-
+##merge
 Overrides the given source object properties by the given object own properties.
 The source object is returned.
 ```javascript
@@ -218,8 +202,7 @@ console.log(config);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-mergenotprimitive-source-notprimitive-object)
 
-## *NotPrimitive* mergeAll(*NotPrimitive* source, *NotPrimitive* objects...)
-
+##mergeAll
 Like the utils.merge(), but the amount of objects to merge is unknown.
 ```javascript
 var config = {a: 1};
@@ -230,8 +213,7 @@ console.log(config);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-mergeallnotprimitive-source-notprimitive-objects)
 
-## *NotPrimitive* mergeDeep(*NotPrimitive* source, *NotPrimitive* object)
-
+##mergeDeep
 Overrides the given source object properties and all its objects
 by the given object own properties.
 The source object is returned.
@@ -255,8 +237,7 @@ console.log(user);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-mergedeepnotprimitive-source-notprimitive-object)
 
-## *NotPrimitive* fill(*NotPrimitive* source, *NotPrimitive* object)
-
+##fill
 Sets the given object properties into the given source object if the property
 exists in the given source, but it's not defined as an own property.
 The source object is returned.
@@ -272,8 +253,7 @@ console.log(user);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-fillnotprimitive-source-notprimitive-object)
 
-## remove(*NotPrimitive* object, *Any* element)
-
+##remove
 Removes an array element or an object property from the given object.
 ```javascript
 var array = ['a', 'b', 'c'];
@@ -288,15 +268,13 @@ console.log(object);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#removenotprimitive-object-any-element)
 
-## removeFromUnorderedArray(*Array* array, *Any* element)
-
+##removeFromUnorderedArray
 Removes the given element from the given array.
 Elements order may be changed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#removefromunorderedarrayarray-array-any-element)
 
-## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) getPropertyDescriptor(*NotPrimitive* object, *String* property)
-
+##getPropertyDescriptor
 Returns the descriptor of the given property defined in the given object.
 ```javascript
 function User(){
@@ -312,8 +290,7 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-getpropertydescriptornotprimitive-object-string-property)
 
-## *Function* lookupGetter(*NotPrimitive* object, *String* property)
-
+##lookupGetter
 Returns the given property getter function defined in the given object.
 ```javascript
 var object = {loaded: 2, length: 5};
@@ -326,14 +303,12 @@ console.log(utils.lookupGetter(object, 'progress'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-lookupgetternotprimitive-object-string-property)
 
-## *Function* lookupSetter(*NotPrimitive* object, *String* property)
-
+##lookupSetter
 Returns the given property setter function defined in the given object.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-lookupsetternotprimitive-object-string-property)
 
-## *NotPrimitive* defineProperty(*NotPrimitive* object, *String* property, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) descriptors, [*Any* value, *Function* setter])
-
+##defineProperty
 Defines the given property in the given object.
 The descriptors argument is a bitmask accepting
 `utils.WRITABLE`, `utils.ENUMERABLE` and `utils.CONFIGURABLE`.
@@ -356,12 +331,10 @@ console.log(object.length);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-definepropertynotprimitive-object-string-property-integer-descriptors-any-value-function-setter)
 
-## *NotPrimitive* overrideProperty(*NotPrimitive* object, *String* property, [*Any* value, *Function* setter])
-
+##overrideProperty
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-overridepropertynotprimitive-object-string-property-any-value-function-setter)
 
-## *Any* clone(*Any* param)
-
+##clone
 Returns clone of the given array or object.
 ```javascript
 console.log(utils.clone([1, 2]))
@@ -372,8 +345,7 @@ console.log(utils.clone({a: 1}))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-cloneany-param)
 
-## *Any* cloneDeep(*Any* param)
-
+##cloneDeep
 Returns deep clone of the given array or object.
 ```javascript
 var obj2 = {ba: 1};
@@ -387,8 +359,7 @@ console.log(clonedObj.b === obj.b)
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-clonedeepany-param)
 
-## *Boolean* isEmpty(*String*|*NotPrimitive* object)
-
+##isEmpty
 Returns `true` if the given array has no elements, of the given object has no own properties.
 ```javascript
 console.log(utils.isEmpty([]));
@@ -405,8 +376,7 @@ console.log(utils.isEmpty(''));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isemptystringnotprimitive-object)
 
-## *Any* last(*NotPrimitive* array)
-
+##last
 Returns the last element of the given array, or an array-like object.
 ```javascript
 console.log(utils.last(['a', 'b']))
@@ -417,8 +387,7 @@ console.log(utils.last([]))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-lastnotprimitive-array)
 
-## *NotPrimitive* clear(*NotPrimitive* object)
-
+##clear
 Removes all elements from the given array, or all own properties from the given object.
 ```javascript
 var arr = ['a', 'b'];
@@ -433,8 +402,7 @@ console.log(obj);
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-clearnotprimitive-object)
 
-## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) setPrototypeOf(*NotPrimitive* object, *NotPrimitive*|*Null* prototype)
-
+##setPrototypeOf
 Changes the given object prototype into the given prototype.
 **This function on some environments returns a new object.**
 ```javascript
@@ -451,8 +419,7 @@ console.log(newObj.b)
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-setprototypeofnotprimitive-object-notprimitivenull-prototype)
 
-## *Boolean* has(*Any* object, *Any* value)
-
+##has
 Returns `true` if the given array contains the given value.
 ```javascript
 console.log(utils.has(['a'], 'a'))
@@ -478,8 +445,7 @@ console.log(utils.has('abc', 'e'))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-hasany-object-any-value)
 
-## *Array* objectToArray([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object, [*Function* valueGen, *Array* target = `[]`])
-
+##objectToArray
 Translates the given object into an array.
 Array elements are determined by the given valueGen function.
 The valueGen function is called with the property name, property value and the given object.
@@ -500,8 +466,7 @@ console.log(utils.objectToArray(object, function(key, val){
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#array-objecttoarrayobject-object-function-valuegen-array-target--)
 
-## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) arrayToObject(*Array* array, [*Function* keyGen, *Function* valueGen, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) target = `{}`])
-
+##arrayToObject
 Translates the given array into an object.
 Object keys are determined by the given keyGen function.
 Object key values are determined by the given valueGen function.
@@ -527,8 +492,7 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-arraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
 
-## *String* capitalize(*String* string)
-
+##capitalize
 Capitalizes the given string.
 ```javascript
 console.log(utils.capitalize('name'))
@@ -537,8 +501,7 @@ console.log(utils.capitalize('name'))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#string-capitalizestring-string)
 
-## *String* addSlashes(*String* string)
-
+##addSlashes
 Adds backslashes before each `'` and `"` characters found in the given string.
 ```javascript
 console.log(utils.addSlashes('a"b'))
@@ -547,8 +510,7 @@ console.log(utils.addSlashes('a"b'))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#string-addslashesstring-string)
 
-## *String* uid([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) length = `8`])
-
+##uid
 Returns pseudo-unique string with the given length.
 This function doesn't quarantee uniqueness of the returned data.
 ```javascript
@@ -558,8 +520,7 @@ console.log(utils.uid())
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#string-uidinteger-length--8)
 
-## *Any* tryFunction(*Function* function, [*Any* context, *Array* arguments, *Any* onFail])
-
+##tryFunction
 Calls the given function with the given context and arguments.
 If the function throws an error, the given onFail value is returned.
 If the given onFail is a function, it will be called with the caught error.
@@ -579,8 +540,7 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-tryfunctionfunction-function-any-context-array-arguments-any-onfail)
 
-## *Any* catchError(*Function* function, [*Any* context, *Array* arguments])
-
+##catchError
 Calls the given function with the given context and arguments.
 Returns caught error.
 ```javascript
@@ -597,8 +557,7 @@ console.log(utils.catchError(test, null, [100]))
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-catcherrorfunction-function-any-context-array-arguments)
 
-## *Function* bindFunctionContext(*Function* function, *Any* context)
-
+##bindFunctionContext
 Returns a new function calling the given function with the given context and
 arguments in an amount lower or equal the function length.
 ```javascript
@@ -612,8 +571,7 @@ console.log(bindFunc('a'));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-bindfunctioncontextfunction-function-any-context)
 
-## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) errorToObject(*Error* error)
-
+##errorToObject
 Returns a plain object with the given error name, message and other custom properties.
 Standard error `name` and `message` properties are not enumerable.
 ```javascript
@@ -624,14 +582,12 @@ console.log(utils.errorToObject(error));
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-errortoobjecterror-error)
 
-## [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) getOwnProperties([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object)
-
+##getOwnProperties
 Returns an array or an object with own properties associated in the given object.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-getownpropertiesobject-object)
 
-## *Boolean* isEqual([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object1, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object2, [*Function* compareFunction, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep = `Infinity`])
-
+##isEqual
 Returns `true` if the given objects have equal values.
 The given compareFunction is used to compare two values (which at least one them is primitive).
 By default the compareFunction uses triple comparison (`===`).

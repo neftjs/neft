@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **ResourcesLoader @class**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-ResourcesLoader @class
-======================
-
+ResourcesLoader
 ```nml
 `Item {
 `   ResourcesLoader {
@@ -18,20 +16,10 @@ ResourcesLoader @class
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#resourcesloader-class)
 
-## Table of contents
-  * [ResourcesLoader.New([component, options])](#resourcesloader-resourcesloadernewcomponent-component-object-options)
-  * [ResourcesLoader()](#resourcesloader-resourcesloader)
-  * [resources](#resources-resourcesloaderresources)
-  * [progress = 0](#float-resourcesloaderprogress--0)
-
-*ResourcesLoader* ResourcesLoader.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
---------------------------------------------------------------------------------
-
+New
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#resourcesloader-resourcesloadernewcomponent-component-object-options)
 
-*ResourcesLoader* ResourcesLoader()
------------------------------------
-
+ResourcesLoader
 Access it with:
 ```nml
 ResourcesLoader {}
@@ -39,14 +27,9 @@ ResourcesLoader {}
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#resourcesloader-resourcesloader)
 
-*Resources* ResourcesLoader::resources
---------------------------------------
-
+resources
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#resources-resourcesloaderresources)
 
-[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) ResourcesLoader::progress = 0
--------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) ResourcesLoaded::onProgressChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+progress
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/resources.litcoffee#float-resourcesloaderprogress--0-signal-resourcesloadedonprogresschangefloat-oldvalue)
 

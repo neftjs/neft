@@ -1,28 +1,9 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Anchors @extension**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Anchors @extension
-==================
-
+Anchors
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#anchors-extension)
 
-## Table of contents
-  * [Anchors()](#anchors-anchors)
-  * [left = null](#array-anchorsleft--null)
-  * [onLeftChange(oldValue)](#signal-anchorsonleftchangearray-oldvalue)
-  * [onRightChange(oldValue)](#signal-anchorsonrightchangearray-oldvalue)
-  * [onHorizontalCenterChange(oldValue)](#signal-anchorsonhorizontalcenterchangearray-oldvalue)
-  * [onTopChange(oldValue)](#signal-anchorsontopchangearray-oldvalue)
-  * [onBottomChange(oldValue)](#signal-anchorsonbottomchangearray-oldvalue)
-  * [onVerticalCenterChange(oldValue)](#signal-anchorsonverticalcenterchangearray-oldvalue)
-  * [onCenterInChange(oldValue)](#signal-anchorsoncenterinchangearray-oldvalue)
-  * [fill = null](#array-anchorsfill--null)
-  * [onFillChange(oldValue)](#signal-anchorsonfillchangearray-oldvalue)
-  * [fillWidth = null](#array-anchorsfillwidth--null)
-  * [fillHeight = null](#array-anchorsfillheight--null)
-
-*Anchors* Anchors()
--------------------
-
+Anchors
 Anchors describe position relations between two items.
 Each item has few lines: top, bottom, verticalCenter, left, right, horizontalCenter.
 Anchors give a posibility to say, that a line of the first item must be
@@ -72,21 +53,29 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#anchors-anchors)
 
-*Array* Anchors::left = null
-----------------------------
-
+left
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsleft--null)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onLeftChange(*Array* oldValue)
-*Array* Anchors::right = null
------------------------------
+## Table of contents
+    * [Anchors](#anchors)
+    * [Anchors](#anchors)
+    * [left](#left)
+  * [onLeftChange](#onleftchange)
+  * [onRightChange](#onrightchange)
+  * [onHorizontalCenterChange](#onhorizontalcenterchange)
+  * [onTopChange](#ontopchange)
+  * [onBottomChange](#onbottomchange)
+  * [onVerticalCenterChange](#onverticalcenterchange)
+  * [onCenterInChange](#oncenterinchange)
+    * [fill](#fill)
+  * [onFillChange](#onfillchange)
+    * [fillWidth](#fillwidth)
+    * [fillHeight](#fillheight)
 
+##onLeftChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonleftchangearray-oldvaluearray-anchorsright--null)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onRightChange(*Array* oldValue)
-*Array* Anchors::horizontalCenter = null
-----------------------------------------
-
+##onRightChange
 ```nml
 `Item {
 `   height: 100
@@ -101,10 +90,7 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonrightchangearray-oldvaluearray-anchorshorizontalcenter--null)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onHorizontalCenterChange(*Array* oldValue)
-*Array* Anchors::top = null
----------------------------
-
+##onHorizontalCenterChange
 ```nml
 `Item {
 `   height: 100
@@ -119,16 +105,10 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonhorizontalcenterchangearray-oldvaluearray-anchorstop--null)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onTopChange(*Array* oldValue)
-*Array* Anchors::bottom = null
-------------------------------
-
+##onTopChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsontopchangearray-oldvaluearray-anchorsbottom--null)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onBottomChange(*Array* oldValue)
-*Array* Anchors::verticalCenter = null
---------------------------------------
-
+##onBottomChange
 ```nml
 `Item {
 `   height: 100
@@ -143,10 +123,7 @@ so `anchors.top = parent.left` is not allowed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonbottomchangearray-oldvaluearray-anchorsverticalcenter--null)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onVerticalCenterChange(*Array* oldValue)
-*Array* Anchors::centerIn = null
---------------------------------
-
+##onVerticalCenterChange
 It's a shortcut for the horizontalCenter and verticalCenter anchors.
 No target line is required.
 ```nml
@@ -165,13 +142,10 @@ No target line is required.
 `}
 ```
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onCenterInChange(*Array* oldValue)
-
+##onCenterInChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsoncenterinchangearray-oldvalue)
 
-*Array* Anchors::fill = null
-----------------------------
-
+fill
 Changes item position and its size to be always equal the anchored target.
 No target line is required.
 ```nml
@@ -187,19 +161,12 @@ No target line is required.
 `}
 ```
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillChange(*Array* oldValue)
-
+##onFillChange
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillchangearray-oldvalue)
 
-*Array* Anchors::fillWidth = null
----------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillWidthChange(*Array* oldValue)
-
+fillWidth
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsfillwidth--null-signal-anchorsonfillwidthchangearray-oldvalue)
 
-*Array* Anchors::fillHeight = null
-----------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Anchors::onFillHeightChange(*Array* oldValue)
-
+fillHeight
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsfillheight--null-signal-anchorsonfillheightchangearray-oldvalue)
 

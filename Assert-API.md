@@ -10,45 +10,44 @@ const { assert } = Neft;
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertions)
 
 ## Table of contents
-  * [assert(expression, [message])](#assertboolean-expression-string-message)
+  * [assert](#assert)
     * [**Class** assert.AssertionError()](#class-assertassertionerror)
-    * [assert.scope(message)](#assert-assertscopestring-message)
-    * [assert.ok(expression, [message])](#assertokboolean-expression-string-message)
-    * [assert.notOk(expression, [message])](#assertnotokboolean-expression-string-message)
-    * [assert.is(actual, expected, [message])](#assertisany-actual-any-expected-string-message)
-    * [assert.isNot(actual, expected, [message])](#assertisnotany-actual-any-expected-string-message)
-    * [assert.isDefined(value, [message])](#assertisdefinedany-value-string-message)
-    * [assert.isNotDefined(value, [message])](#assertisnotdefinedany-value-string-message)
-    * [assert.isPrimitive(value, [message])](#assertisprimitiveany-value-string-message)
-    * [assert.isNotPrimitive(value, [message])](#assertisnotprimitiveany-value-string-message)
-    * [assert.isString(value, [message])](#assertisstringstring-value-string-message)
-    * [assert.isNotString(value, [message])](#assertisnotstringany-value-string-message)
-    * [assert.isFloat(value, [message])](#assertisfloatfloat-value-string-message)
-    * [assert.isNotFloat(value, [message])](#assertisnotfloatany-value-string-message)
-    * [assert.isInteger(value, [message])](#assertisintegerinteger-value-string-message)
-    * [assert.isNotInteger(value, [message])](#assertisnotintegerany-value-string-message)
-    * [assert.isBoolean(value, [message])](#assertisbooleanboolean-value-string-message)
-    * [assert.isNotBoolean(value, [message])](#assertisnotbooleanany-value-string-message)
-    * [assert.isFunction(value, [message])](#assertisfunctionfunction-value-string-message)
-    * [assert.isNotFunction(value, [message])](#assertisnotfunctionany-value-string-message)
-    * [assert.isObject(value, [message])](#assertisobjectobject-value-string-message)
-    * [assert.isNotObject(value, [message])](#assertisnotobjectany-value-string-message)
-    * [assert.isPlainObject(value, [message])](#assertisplainobjectplainobject-value-string-message)
-    * [assert.isNotPlainObject(value, [message])](#assertisnotplainobjectany-value-string-message)
-    * [assert.isArray(value, [message])](#assertisarrayarray-value-string-message)
-    * [assert.isNotArray(value, [message])](#assertisnotarrayany-value-string-message)
-    * [assert.isEqual(value1, value2, [message, options])](#assertisequalany-value1-any-value2-string-message-object-options)
-    * [assert.isNotEqual(value1, value2, [message, options])](#assertisnotequalany-value1-any-value2-string-message-object-options)
-    * [assert.instanceOf(object, constructor, [message])](#assertinstanceofobject-object-function-constructor-string-message)
-    * [assert.notInstanceOf(object, constructor, [message])](#assertnotinstanceofany-object-function-constructor-string-message)
-    * [assert.lengthOf(value, length, [message])](#assertlengthofany-value-integer-length-string-message)
-    * [assert.notLengthOf(value, length, [message])](#assertnotlengthofany-value-integer-length-string-message)
-    * [assert.operator(value1, operator, value2, [message])](#assertoperatorany-value1-string-operator-any-value2-string-message)
-    * [assert.match(value, regexp, [message])](#assertmatchany-value-regexp-regexp-string-message)
-    * [assert.notMatch(value, regexp, [message])](#assertnotmatchany-value-regexp-regexp-string-message)
+    * [scope](#scope)
+    * [ok](#ok)
+    * [notOk](#notok)
+    * [is](#is)
+    * [isNot](#isnot)
+    * [isDefined](#isdefined)
+    * [isNotDefined](#isnotdefined)
+    * [isPrimitive](#isprimitive)
+    * [isNotPrimitive](#isnotprimitive)
+    * [isString](#isstring)
+    * [isNotString](#isnotstring)
+    * [isFloat](#isfloat)
+    * [isNotFloat](#isnotfloat)
+    * [isInteger](#isinteger)
+    * [isNotInteger](#isnotinteger)
+    * [isBoolean](#isboolean)
+    * [isNotBoolean](#isnotboolean)
+    * [isFunction](#isfunction)
+    * [isNotFunction](#isnotfunction)
+    * [isObject](#isobject)
+    * [isNotObject](#isnotobject)
+    * [isPlainObject](#isplainobject)
+    * [isNotPlainObject](#isnotplainobject)
+    * [isArray](#isarray)
+    * [isNotArray](#isnotarray)
+    * [isEqual](#isequal)
+    * [isNotEqual](#isnotequal)
+    * [instanceOf](#instanceof)
+    * [notInstanceOf](#notinstanceof)
+    * [lengthOf](#lengthof)
+    * [notLengthOf](#notlengthof)
+    * [operator](#operator)
+    * [match](#match)
+    * [notMatch](#notmatch)
 
-## assert(*Boolean* expression, [*String* message])
-
+##assert
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertboolean-expression-string-message)
 
 ### **Class** assert.AssertionError()
@@ -60,143 +59,111 @@ const { AssertionError } = Neft.assert;
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#class-assertassertionerror)
 
-### *assert* assert.scope(*String* message)
-
+###scope
 All fail messages will be prefixed by the given *message*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assert-assertscopestring-message)
 
-### assert.ok(*Boolean* expression, [*String* message])
-
+###ok
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertokboolean-expression-string-message)
 
-### assert.notOk(*Boolean* expression, [*String* message])
-
+###notOk
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertnotokboolean-expression-string-message)
 
-### assert.is(*Any* actual, *Any* expected, [*String* message])
-
+###is
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisany-actual-any-expected-string-message)
 
-### assert.isNot(*Any* actual, *Any* expected, [*String* message])
-
+###isNot
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotany-actual-any-expected-string-message)
 
-### assert.isDefined(*Any* value, [*String* message])
-
+###isDefined
 Checks whether the given value is an undefined or a null.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisdefinedany-value-string-message)
 
-### assert.isNotDefined(*Any* value, [*String* message])
-
+###isNotDefined
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotdefinedany-value-string-message)
 
-### assert.isPrimitive(*Any* value, [*String* message])
-
+###isPrimitive
 Check *utils.isPrimitive()* for more details.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisprimitiveany-value-string-message)
 
-### assert.isNotPrimitive(*Any* value, [*String* message])
-
+###isNotPrimitive
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotprimitiveany-value-string-message)
 
-### assert.isString(*String* value, [*String* message])
-
+###isString
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisstringstring-value-string-message)
 
-### assert.isNotString(*Any* value, [*String* message])
-
+###isNotString
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotstringany-value-string-message)
 
-### assert.isFloat([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) value, [*String* message])
-
+###isFloat
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisfloatfloat-value-string-message)
 
-### assert.isNotFloat(*Any* value, [*String* message])
-
+###isNotFloat
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotfloatany-value-string-message)
 
-### assert.isInteger([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) value, [*String* message])
-
+###isInteger
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisintegerinteger-value-string-message)
 
-### assert.isNotInteger(*Any* value, [*String* message])
-
+###isNotInteger
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotintegerany-value-string-message)
 
-### assert.isBoolean(*Boolean* value, [*String* message])
-
+###isBoolean
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisbooleanboolean-value-string-message)
 
-### assert.isNotBoolean(*Any* value, [*String* message])
-
+###isNotBoolean
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotbooleanany-value-string-message)
 
-### assert.isFunction(*Function* value, [*String* message])
-
+###isFunction
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisfunctionfunction-value-string-message)
 
-### assert.isNotFunction(*Any* value, [*String* message])
-
+###isNotFunction
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotfunctionany-value-string-message)
 
-### assert.isObject([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) value, [*String* message])
-
+###isObject
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisobjectobject-value-string-message)
 
-### assert.isNotObject(*Any* value, [*String* message])
-
+###isNotObject
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotobjectany-value-string-message)
 
-### assert.isPlainObject([*PlainObject*](/Neft-io/neft/wiki/Utils-API.md#boolean-isplainobjectany-value) value, [*String* message])
-
+###isPlainObject
 Check *utils.isPlainObject()* for more details.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisplainobjectplainobject-value-string-message)
 
-### assert.isNotPlainObject(*Any* value, [*String* message])
-
+###isNotPlainObject
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotplainobjectany-value-string-message)
 
-### assert.isArray(*Array* value, [*String* message])
-
+###isArray
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisarrayarray-value-string-message)
 
-### assert.isNotArray(*Any* value, [*String* message])
-
+###isNotArray
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotarrayany-value-string-message)
 
-### assert.isEqual(*Any* value1, *Any* value2, [*String* message, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
-
+###isEqual
 Check *utils.isEqual()* for more details.
 The given options object accepts: [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) maxDeep.
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisequalany-value1-any-value2-string-message-object-options)
 
-### assert.isNotEqual(*Any* value1, *Any* value2, [*String* message, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])
-
+###isNotEqual
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertisnotequalany-value1-any-value2-string-message-object-options)
 
-### assert.instanceOf([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) object, *Function* constructor, [*String* message])
-
+###instanceOf
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertinstanceofobject-object-function-constructor-string-message)
 
-### assert.notInstanceOf(*Any* object, *Function* constructor, [*String* message])
-
+###notInstanceOf
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertnotinstanceofany-object-function-constructor-string-message)
 
-### assert.lengthOf(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) length, [*String* message])
-
+###lengthOf
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertlengthofany-value-integer-length-string-message)
 
-### assert.notLengthOf(*Any* value, [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) length, [*String* message])
-
+###notLengthOf
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertnotlengthofany-value-integer-length-string-message)
 
-### assert.operator(*Any* value1, *String* operator, *Any* value2, [*String* message])
-
+###operator
 Used to compare the two given values.
 ```javascript
 assert.operator(2, '>', 1);
@@ -204,8 +171,7 @@ assert.operator(2, '>', 1);
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertoperatorany-value1-string-operator-any-value2-string-message)
 
-### assert.match(*Any* value, *RegExp* regexp, [*String* message])
-
+###match
 Used to check whether the given value tests the given regexp.
 ```javascript
 assert.match('12', /[0-9]+/);
@@ -213,7 +179,6 @@ assert.match('12', /[0-9]+/);
 
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertmatchany-value-regexp-regexp-string-message)
 
-### assert.notMatch(*Any* value, *RegExp* regexp, [*String* message])
-
+###notMatch
 > [`Source`](/Neft-io/neft/tree/master/src/assert/index.litcoffee#assertnotmatchany-value-regexp-regexp-string-message)
 

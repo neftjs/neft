@@ -5,27 +5,7 @@ Request
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#request)
 
-## Table of contents
-  * [Request.METHODS](#array-requestmethods)
-  * [Request.TYPES](#array-requesttypes)
-  * [Request(options)](#request-requestobject-options)
-  * [onLoadEnd(error, data)](#signal-requestonloadendany-error-any-data)
-  * [uid](#readonly-string-requestuid)
-  * [pending](#readonly-boolean-requestpending)
-  * [method](#string-requestmethod)
-  * [*Networking.Uri* uri](#networkinguri-requesturi)
-  * [type](#string-requesttype)
-  * [data = null](#object-requestdata--null)
-  * [*Networking.Handler* handler](#readonly-networkinghandler-requesthandler)
-  * [*Networking.Response* response](#readonly-networkingresponse-requestresponse)
-  * [params = {}](#readonly-object-requestparams--)
-  * [headers](#readonly-object-requestheaders)
-  * [cookies](#readonly-object-requestcookies)
-  * [toString()](#string-requesttostring)
-
-*Array* Request.METHODS
------------------------
-
+METHODS
 Contains available *HTTP* methods.
 Contains:
  - Request.GET,
@@ -36,9 +16,7 @@ Contains:
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#array-requestmethods)
 
-*Array* Request.TYPES
----------------------
-
+TYPES
 Contains available expected types.
 Contains:
  - Request.TEXT_TYPE,
@@ -48,9 +26,7 @@ Contains:
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#array-requesttypes)
 
-*Request* Request([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)
------------------------------------
-
+Request
 Class used to describe coming networking request.
 You should use [Networking::createRequest()][networking/Networking::createRequest()]
 to create a full request.
@@ -62,37 +38,27 @@ var Request = Networking.Request;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#request-requestobject-options)
 
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Request::onLoadEnd(*Any* error, *Any* data)
-----------------------------------------------------
-
+onLoadEnd
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#signal-requestonloadendany-error-any-data)
 
-ReadOnly *String* Request::uid
-------------------------------
-
+uid
 Pseudo unique hash. It's created automatically.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-string-requestuid)
 
-ReadOnly *Boolean* Request::pending
------------------------------------
-
+pending
 Indicates whether the request is not destroyed.
 If it's `false`, the request can't be changed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-boolean-requestpending)
 
-*String* Request::method
-------------------------
-
+method
 This property refers to one of the `Request.METHODS` values.
 Holds a method with which the request has been called.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#string-requestmethod)
 
-*Networking.Uri* Request::uri
------------------------------
-
+uri
 Refers to the request URI path.
 It can holds local and absolute paths.
 ```javascript
@@ -106,9 +72,7 @@ It can holds local and absolute paths.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#networkinguri-requesturi)
 
-*String* Request::type
-----------------------
-
+type
 Describes the expected response type.
 It's used in the server-client communication.
 In most cases, a server returns a HTML document for a crawler, but client
@@ -118,51 +82,37 @@ It refers to one of the *Request.TYPES* values.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#string-requesttype)
 
-[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::data = null
------------------------------
-
+data
 Holds a data sent with a request.
 It can be, for instance, a form data.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#object-requestdata--null)
 
-ReadOnly *Networking.Handler* Request::handler
-----------------------------------------------
-
+handler
 Refers to the currently considered [Handler][networking/Handler].
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-networkinghandler-requesthandler)
 
-ReadOnly *Networking.Response* Request::response
-------------------------------------------------
-
+response
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-networkingresponse-requestresponse)
 
-ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::params = {}
---------------------------------------
-
+params
 Keeps matched parameters by the handler from the request uri.
 Considering the */users/{name}* URI,
 the 'name' property is available as the *params.name*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestparams--)
 
-ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::headers
-----------------------------------
-
+headers
 Contains request headers.
 For the client request, this object is empty.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestheaders)
 
-ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::cookies
-----------------------------------
-
+cookies
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestcookies)
 
-*String* Request::toString()
-----------------------------
-
+toString
 Returns a string describing the request.
 It contains a method, uri and a type.
 ```javascript

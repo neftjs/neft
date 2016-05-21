@@ -1,8 +1,6 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **neft:require @xml**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-neft:require @xml
-=================
-
+neft:require
 Tag used to link [neft:fragment][document/neft:fragment@xml]s from a file and use them.
 ```xml
 <neft:require href="./user_utils.html" />
@@ -10,6 +8,7 @@ Tag used to link [neft:fragment][document/neft:fragment@xml]s from a file and us
 ```
 
 ## Table of contents
+    * [neft:require](#neftrequire)
   * [Namespace](#namespace)
 
 ## Namespace

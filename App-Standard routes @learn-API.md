@@ -1,32 +1,28 @@
-> [Wiki](Home) ▸ [API Reference](API-Reference) ▸ **Standard routes @learn**
+> [Wiki](Home) ▸ [API Reference](API-Reference)
 
-Standard routes @learn
-======================
-
+Standard routes
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#standard-routes-learn)
 
 ## Table of contents
-  * [app.js](#appjs)
-  * [neft.js](#neftjs)
-  * [favicon.ico](#faviconico)
+    * [Standard routes](#standard-routes)
+  * [js](#js)
+  * [js](#js)
+  * [ico](#ico)
   * [static/{path*}](#staticpath)
-  * [neft-type={type}/*](#nefttypetype)
+  * [neft-type/*](#nefttype)
   * [Default route](#default-route)
 
-## app.js
-
+##js
 Returns the application javascript file.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#appjs)
 
-## neft.js
-
+##js
 Returns the neft javascript file.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#neftjs)
 
-## favicon.ico
-
+##ico
 Returns 'static/favicon.ico' file.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#faviconico)
@@ -35,8 +31,7 @@ Returns 'static/favicon.ico' file.
 
 Returns any file from the static/ folder.
 
-## neft-type={type}/*
-
+##neft-type/*
 URI used by the browser which doesn't support javascript - in such case always
 full HTML document is returned (like for the searching robots).
 You can use this route in a browser to check whether your HTML document is proper.

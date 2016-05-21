@@ -11,22 +11,20 @@ const { signal } = Neft;
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal)
 
 ## Table of contents
-* [Signal](#signal)
-  * [STOP_PROPAGATION](#integer-stoppropagation)
-  * [create([object, name])](#signal-createnotprimitive-object-string-name)
-  * [isEmpty(signal)](#boolean-isemptysignal-signal)
+  * [STOP_PROPAGATION](#stoppropagation)
+  * [create](#create)
+  * [isEmpty](#isempty)
   * [**Class** Signal](#class-signal)
-    * [emit([argument1, argument2])](#signalemitany-argument1-any-argument2)
-    * [connect(listener, [context])](#signalconnectfunction-listener-any-context)
-    * [disconnect(listener, [context])](#signaldisconnectfunction-listener-any-context)
-    * [disconnectAll()](#signaldisconnectall)
-* [Glossary](#glossary)
+    * [emit](#emit)
+    * [connect](#connect)
+    * [disconnect](#disconnect)
+    * [disconnectAll](#disconnectall)
+  * [Glossary](#glossary)
 
-## [*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) STOP_PROPAGATION
-
+##STOP_PROPAGATION
 Special constant used to stop calling further listeners.
 Must be returned by the listener function.
-```javascrpt
+```javascript
 var obj = {};
 signal.create(obj, 'onPress');
 obj.onPress(function(){
@@ -43,8 +41,7 @@ obj.onPress.emit();
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#integer-stoppropagation)
 
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) create([*NotPrimitive* object, *String* name])
-
+##create
 Creates a new signal in the given object under the given name property.
 Returns created signal.
 ```javascript
@@ -59,8 +56,7 @@ obj.onRename.emit('Max', 'George');
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signal-createnotprimitive-object-string-name)
 
-## *Boolean* isEmpty([*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) signal)
-
+##isEmpty
 Returns `true` if the given signal has no listeners.
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#boolean-isemptysignal-signal)
@@ -69,14 +65,12 @@ Returns `true` if the given signal has no listeners.
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#class-signal)
 
-### Signal::emit([*Any* argument1, *Any* argument2])
-
+###emit
 Call all of the signal listeners with the given arguments (2 maximally).
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signalemitany-argument1-any-argument2)
 
-### Signal::connect(*Function* listener, [*Any* context])
-
+###connect
 Adds the given listener function into the signal listeners.
 By default, the signal function works like this method.
 ```javascript
@@ -111,8 +105,7 @@ obj.onPress.emit();
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signalconnectfunction-listener-any-context)
 
-### Signal::disconnect(*Function* listener, [*Any* context])
-
+###disconnect
 Returns the given listener function from the signal listeners.
 ```javascript
 var obj = {};
@@ -128,13 +121,12 @@ obj.onPress.emit()
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signaldisconnectfunction-listener-any-context)
 
-### Signal::disconnectAll()
-
+###disconnectAll
 Removes all the signal listeners.
 
 > [`Source`](/Neft-io/neft/tree/master/src/signal/index.litcoffee#signaldisconnectall)
 
-# Glossary
+## Glossary
 
  - [Signal](#class-signal)
 
