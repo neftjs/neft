@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 FontLoader
+<dl></dl>
 ```nml
 `Item {
 `   Text {
@@ -18,12 +18,12 @@ FontLoader
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#fontloader-class)
 
-<dl><dt>Static method of</dt><dd><i>FontLoader</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
 New
+<dl><dt>Static method of</dt><dd><i>FontLoader</i></dd><dt>Parameters</dt><dd><ul><li><b>component</b> — <i>Component</i> — <i>optional</i></li><li><b>options</b> — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewcomponent-component-object-options)
 
-<dl><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
 FontLoader
+<dl><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
 Class used to load custom fonts.
 You can override default fonts (*sans-serif*, *sans* and *monospace*).
 The font weight and the style (italic or normal) is extracted from the font source path.
@@ -34,20 +34,12 @@ FontLoader {}
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#fontloader-fontloader)
 
-<dl><dt>Prototype property of</dt><dd><i>FontLoader</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 name
+<dl><dt>Prototype property of</dt><dd><i>FontLoader</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/loader/font.litcoffee#string-fontloadername)
 
-## Table of contents
-    * [FontLoader](#fontloader)
-    * [New](#new)
-    * [FontLoader](#fontloader)
-    * [name](#name)
-  * [*String* FontLoader::source](#string-fontloadersource)
-
-*String* FontLoader::source
----------------------------
-
+source
+<dl><dt>Prototype property of</dt><dd><i>FontLoader</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 We recommend usng **WOFF** format and **TTF/OTF** for the oldest Android browser.
 Must contains one of:
  - hairline (weight=0),

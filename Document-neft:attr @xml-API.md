@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 neft:attr
+<dl></dl>
 Tag used to dynamically change an attribute of the parent element.
 ```xml
 <header neft:style="header">

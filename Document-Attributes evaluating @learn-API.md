@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 Attributes evaluating
+<dl></dl>
 Some of the attributes are automatically evaluated to the JavaScript objects.
 String `[...]` evaluates to the array.
 ```xml

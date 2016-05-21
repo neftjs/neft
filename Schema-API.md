@@ -33,8 +33,8 @@ var SchemaError = Schema.Error;
 
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#class-schema)
 
-<dl><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li><b>schema</b> — <i>Object</i></li></ul></dd></dl>
 ###constructor
+<dl><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li><b>schema</b> — <i>Object</i></li></ul></dd></dl>
 Creates a new Schema instance used to validate data.
 Specify schema validators for each of the accepted property.
 ```javascript
@@ -51,15 +51,15 @@ new Schema({
 
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#schemaconstructorobject-schema)
 
-<dl><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 ###schema
+<dl><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 Saved schema object from the constructor.
 It's allowed to change this object in runtime.
 
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#object-schemaschema)
 
-<dl><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li><b>data</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 ###validate
+<dl><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li><b>data</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Validates the given data object by the schema.
 Returns `true` if the data is valid, otherwise throws an SchemaError instance.
 ```javascript

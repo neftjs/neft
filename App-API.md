@@ -1,15 +1,15 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 App
+<dl></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#app-framework)
 
-<dl><dt>Type</dt><dd><i>Dict</i></dd></dl>
 app
+<dl><dt>Type</dt><dd><i>Dict</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#dict-app)
 
-<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 config
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Config object from the *package.json* file.
 Can be overriden in the *init.js* file.
 
@@ -23,9 +23,9 @@ Can be overriden in the *init.js* file.
     * [routes](#routes)
     * [styles](#styles)
     * [views](#views)
-  * [*Resources* app.resources](#resources-appresources)
-  * [*Signal* app.onReady()](#signal-apponready)
-  * [*Dict* app.cookies](#dict-appcookies)
+    * [resources](#resources)
+    * [onReady](#onready)
+    * [cookies](#cookies)
 
 ### type
 
@@ -58,8 +58,8 @@ It's used for the crawlers (e.g. GoogleBot) or browsers with no javascript suppo
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#type)
 
-<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Networking</i></dd></dl>
 networking
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Networking</i></dd></dl>
 Standard Networking instance used to communicate
 with the server and to create local requests.
 All routes created by the *App.Route* uses this networking.
@@ -67,8 +67,8 @@ HTTP protocol is used by default with the data specified in the *package.json*.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#networking-appnetworking)
 
-<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 models
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *models* folder with objects returned by their exported functions.
 ```javascript
 `// models/user/permission.js
@@ -91,40 +91,37 @@ Files from the *models* folder with objects returned by their exported functions
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appmodels--)
 
-<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 routes
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *routes* folder with objects returned by their exported functions.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-approutes--)
 
-<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 styles
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *styles* folder as *Function*s
 ready to create new [Renderer.Item][renderer/Item]s.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appstyles--)
 
-<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 views
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *views* folder as the [Document][document/File] instances.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appviews--)
 
-*Resources* app.resources
--------------------------
-
+resources
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Resources</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#resources-appresources)
 
-[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) app.onReady()
-----------------------
-
+onReady
+<dl><dt>Static method of</dt><dd><i>app</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 Called when all modules, views, styled etc. have been loaded.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#signal-apponready)
 
-[*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) app.cookies
-------------------
-
+cookies
+<dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Dict</i></dd></dl>
 On the client side, this object refers to the last received cookies
 from the networking request.
 On the server side, this cookies object are added into the each networking response.

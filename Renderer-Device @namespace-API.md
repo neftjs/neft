@@ -1,15 +1,15 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 Device
+<dl></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#device-namespace)
 
-<dl><dt>Type</dt><dd><i>Object</i></dd></dl>
 Device
+<dl><dt>Type</dt><dd><i>Object</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#object-device)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>'Unix'</code></dd></dl>
 platform
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>'Unix'</code></dd></dl>
 Possible values are:
  - Android,
  - iOS,
@@ -30,20 +30,20 @@ Possible values are:
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#boolean-deviceplatform--unix)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
 desktop
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#boolean-devicedesktop--true)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 tablet
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#boolean-devicetablet--false)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 phone
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#boolean-devicephone--false)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 mobile
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 Tablet or a phone.
 ```nml
 `Text {
@@ -54,8 +54,8 @@ Tablet or a phone.
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#boolean-devicemobile--false)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>1</code></dd></dl>
 pixelRatio
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>1</code></dd></dl>
 ```nml
 `Text {
 `   text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
@@ -65,145 +65,95 @@ pixelRatio
 
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#boolean-devicepixelratio--1)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>DevicePointerEvent</i></dd><dt>read only</dt></dl>
 pointer
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>DevicePointerEvent</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-devicepointerevent-devicepointer)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onPointerPress
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerpressdevicepointerevent-event)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onPointerRelease
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerreleasedevicepointerevent-event)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onPointerMove
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointermovedevicepointerevent-event)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onPointerWheel
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DevicePointerEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonpointerwheeldevicepointerevent-event)
 
-<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>read only</dt></dl>
 keyboard
+<dl><dt>Static property of</dt><dd><i>Device</i></dd><dt>Type</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-devicekeyboardevent-devicekeyboard)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onKeyPress
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeypressdevicekeyboardevent-event)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onKeyHold
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyholddevicekeyboardevent-event)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onKeyRelease
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyreleasedevicekeyboardevent-event)
 
-<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onKeyInput
+<dl><dt>Static method of</dt><dd><i>Device</i></dd><dt>Parameters</dt><dd><ul><li><b>event</b> — <i>DeviceKeyboardEvent</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#signal-deviceonkeyinputdevicekeyboardevent-event)
 
-<dl><dt>Returns</dt><dd><i>DevicePointerEvent</i></dd></dl>
 DevicePointerEvent
+<dl><dt>Returns</dt><dd><i>DevicePointerEvent</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#devicepointerevent-devicepointerevent)
 
-<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 x
+<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventx-signal-devicepointereventonxchangefloat-oldvalue)
 
-<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 y
+<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventy-signal-devicepointereventonychangefloat-oldvalue)
 
-## Table of contents
-    * [Device](#device)
-    * [Device](#device)
-    * [platform](#platform)
-    * [desktop](#desktop)
-    * [tablet](#tablet)
-    * [phone](#phone)
-    * [mobile](#mobile)
-    * [pixelRatio](#pixelratio)
-    * [pointer](#pointer)
-    * [onPointerPress](#onpointerpress)
-    * [onPointerRelease](#onpointerrelease)
-    * [onPointerMove](#onpointermove)
-    * [onPointerWheel](#onpointerwheel)
-    * [keyboard](#keyboard)
-    * [onKeyPress](#onkeypress)
-    * [onKeyHold](#onkeyhold)
-    * [onKeyRelease](#onkeyrelease)
-    * [onKeyInput](#onkeyinput)
-    * [DevicePointerEvent](#devicepointerevent)
-    * [x](#x)
-    * [y](#y)
-  * [ReadOnly *Float* DevicePointerEvent::movementX](#readonly-float-devicepointereventmovementx)
-  * [ReadOnly *Float* DevicePointerEvent::movementY](#readonly-float-devicepointereventmovementy)
-  * [ReadOnly *Float* DevicePointerEvent::deltaX](#readonly-float-devicepointereventdeltax)
-  * [ReadOnly *Float* DevicePointerEvent::deltaY](#readonly-float-devicepointereventdeltay)
-  * [*DeviceKeyboardEvent* DeviceKeyboardEvent()](#devicekeyboardevent-devicekeyboardevent)
-  * [ReadOnly *Boolean* DeviceKeyboardEvent::visible](#readonly-boolean-devicekeyboardeventvisible)
-  * [ReadOnly *String* DeviceKeyboardEvent::key](#readonly-string-devicekeyboardeventkey)
-  * [ReadOnly *String* DeviceKeyboardEvent::text](#readonly-string-devicekeyboardeventtext)
-  * [DeviceKeyboardEvent::show()](#devicekeyboardeventshow)
-  * [DeviceKeyboardEvent::hide()](#devicekeyboardeventhide)
-
-ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::movementX
-----------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onMovementXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+movementX
+<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementx-signal-devicepointereventonmovementxchangefloat-oldvalue)
 
-ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::movementY
-----------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onMovementYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+movementY
+<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventmovementy-signal-devicepointereventonmovementychangefloat-oldvalue)
 
-ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::deltaX
-----------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onDeltaXChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+deltaX
+<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltax-signal-devicepointereventondeltaxchangefloat-oldvalue)
 
-ReadOnly [*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) DevicePointerEvent::deltaY
-----------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DevicePointerEvent::onDeltaYChange([*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) oldValue)
-
+deltaY
+<dl><dt>Prototype property of</dt><dd><i>DevicePointerEvent</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-float-devicepointereventdeltay-signal-devicepointereventondeltaychangefloat-oldvalue)
 
-*DeviceKeyboardEvent* DeviceKeyboardEvent()
--------------------------------------------
-
+DeviceKeyboardEvent
+<dl><dt>Returns</dt><dd><i>DeviceKeyboardEvent</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#devicekeyboardevent-devicekeyboardevent)
 
-ReadOnly *Boolean* DeviceKeyboardEvent::visible
-----------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DeviceKeyboardEvent::onVisibleChange(*Boolean* oldValue)
-
+visible
+<dl><dt>Prototype property of</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-boolean-devicekeyboardeventvisible-signal-devicekeyboardeventonvisiblechangeboolean-oldvalue)
 
-ReadOnly *String* DeviceKeyboardEvent::key
-------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DeviceKeyboardEvent::onKeyChange(*String* oldValue)
-
+key
+<dl><dt>Prototype property of</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-string-devicekeyboardeventkey-signal-devicekeyboardeventonkeychangestring-oldvalue)
 
-ReadOnly *String* DeviceKeyboardEvent::text
--------------------------------------------
-## [*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) DeviceKeyboardEvent::onTextChange(*String* oldValue)
-
+text
+<dl><dt>Prototype property of</dt><dd><i>DeviceKeyboardEvent</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#readonly-string-devicekeyboardeventtext-signal-devicekeyboardeventontextchangestring-oldvalue)
 
-DeviceKeyboardEvent::show()
----------------------------
-
+show
+<dl><dt>Prototype method of</dt><dd><i>DeviceKeyboardEvent</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#devicekeyboardeventshow)
 
-DeviceKeyboardEvent::hide()
----------------------------
-
+hide
+<dl><dt>Prototype method of</dt><dd><i>DeviceKeyboardEvent</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/namespace/device.litcoffee#devicekeyboardeventhide)
 

@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 neft:use
+<dl></dl>
 Tag used to place a [neft:fragment][document/neft:fragment@xml].
 ```xml
 <neft:fragment neft:name="user">

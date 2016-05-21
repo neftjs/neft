@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 neft:log
+<dl></dl>
 ```xml
 <neft:log debugObject="${data.someObject}">${debugText}</neft:log>
 ```

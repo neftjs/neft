@@ -22,8 +22,8 @@ const { Dict } = Neft
     * [pop](#pop)
     * [clear](#clear)
     * [keys](#keys)
-    * [*Array* Dict::values()](#array-dictvalues)
-    * [*Array* Dict::items()](#array-dictitems)
+    * [values](#values)
+    * [items](#items)
       * [Iterate over a dict](#iterate-over-a-dict)
   * [Glossary](#glossary)
 
@@ -31,15 +31,15 @@ const { Dict } = Neft
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#class-dict)
 
-<dl><dt>Static method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>|</b> — <i>String</i></li><li><b>json</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Dict</i></dd></dl>
 ###fromJSON
+<dl><dt>Static method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>|</b> — <i>String</i></li><li><b>json</b> — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Dict</i></dd></dl>
 Creates a new [*Dict*](/Neft-io/neft/wiki/Dict-API.md#class-dict) from a json string.
 This function should be used with `toJSON()` output.
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>data</b> — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
 ###constructor
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>data</b> — <i>Object</i> — <i>optional</i></li></ul></dd></dl>
 Creates a new dict instance.
 The given data parameter determines default keys with their values.
 ```javascript
@@ -52,8 +52,8 @@ console.log(data.name);
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#dictconstructorobject-data)
 
-<dl><dt>Prototype property of</dt><dd><i>Dict</i></dd><dt>Type</dt><dd><i>Integer</i></dd><dt>read only</dt></dl>
 ###length
+<dl><dt>Prototype property of</dt><dd><i>Dict</i></dd><dt>Type</dt><dd><i>Integer</i></dd><dt>read only</dt></dl>
 Amount of keys stored in a dict.
 ```javascript
 var dict = Dict({prop: 1});
@@ -63,8 +63,8 @@ console.log(dict.length);
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#readonly-integer-dictlength)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>oldValue</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 ###onChange
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>oldValue</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 Signal called on each key value change.
 ```javascript
 var user = new Dict({
@@ -79,8 +79,8 @@ user.set('country', 'US');
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#signal-dictonchangestring-key-any-oldvalue)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>value</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ###set
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li><li><b>value</b> — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 Sets the given value for the given key stored in the dict.
 The value can't be an undefined. Use `pop()` instead.
 Calls `onChange()` signal.
@@ -98,21 +98,21 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#any-dictsetstring-key-any-value)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 ###has
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given key exists in the dict.
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#boolean-dicthasstring-key)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>|</b> — <i>Object</i></li><li><b>object</b> — <i>Dict</i></li></ul></dd><dt>Returns</dt><dd><i>Dict</i></dd></dl>
 ###extend
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>|</b> — <i>Object</i></li><li><b>object</b> — <i>Dict</i></li></ul></dd><dt>Returns</dt><dd><i>Dict</i></dd></dl>
 Sets all keys with their values from the given object.
 Calls `onChange()` signal for each key.
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#dict-dictextendobjectdict-object)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 ###pop
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Parameters</dt><dd><ul><li><b>key</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 Removes the given key from the dict.
 The key must exists in the dict.
 Calls `onChange()` signal.
@@ -130,15 +130,15 @@ data.pop('name');
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#any-dictpopstring-key)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd></dl>
 ###clear
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd></dl>
 Removes all stored keys from the dict.
 Calls `onChange()` signal for each stored key.
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#dictclear)
 
-<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>Array</i></dd><dt>read only</dt></dl>
 ###keys
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>Array</i></dd><dt>read only</dt></dl>
 Returns an array of keys stored in the dict.
 Always returns the same array instance.
 ```javascript
@@ -152,8 +152,8 @@ console.log(data.keys());
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#readonly-array-dictkeys)
 
-### *Array* Dict::values()
-
+###values
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 Returns an array of values stored in the dict.
 Always returns the same array instance.
 ```javascript
@@ -167,8 +167,8 @@ console.log(data.values());
 
 > [`Source`](/Neft-io/neft/tree/master/src/dict/index.litcoffee#array-dictvalues)
 
-### *Array* Dict::items()
-
+###items
+<dl><dt>Prototype method of</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 Returns an array of key-value pairs stored in the dict.
 Always returns the same array instance.
 ```javascript

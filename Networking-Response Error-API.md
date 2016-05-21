@@ -5,8 +5,8 @@ Response Error
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response/error.litcoffee#response-error)
 
-<dl><dt>Parameters</dt><dd><ul><li><b>status</b> — <i>Integer</i> — <i>optional</i></li><li><b>message</b> — <i>String</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Error</i></dd></dl>
 Error
+<dl><dt>Parameters</dt><dd><ul><li><b>status</b> — <i>Integer</i> — <i>optional</i></li><li><b>message</b> — <i>String</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Error</i></dd></dl>
 It works as a standard Javascript *Error* class, but provides an extra *status* value.
 Access it with:
 ```javascript
@@ -16,8 +16,8 @@ var ResponseError = Networking.Response.Error;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response/error.litcoffee#error-errorinteger-status-string-message)
 
-<dl><dt>Static method of</dt><dd><i>Error</i></dd><dt>Parameters</dt><dd><ul><li><b>request</b> — <i>Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>RequestResolve</i></dd></dl>
 RequestResolve
+<dl><dt>Static method of</dt><dd><i>Error</i></dd><dt>Parameters</dt><dd><ul><li><b>request</b> — <i>Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>RequestResolve</i></dd></dl>
 This error is sent if the request can't be resolved,
 because no proper handler which can handle the request can be found.
 Access it with:

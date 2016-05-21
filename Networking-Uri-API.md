@@ -5,8 +5,8 @@ Uri
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#uri)
 
-<dl><dt>Parameters</dt><dd><ul><li><b>uri</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Uri</i></dd></dl>
 Uri
+<dl><dt>Parameters</dt><dd><ul><li><b>uri</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Uri</i></dd></dl>
 Represents an uri string with parameters.
 The parameter must be wrapped by the curly brackets **{…}**.
 **Rest parameters** are not greedy and are wrapped by the **{…*}** or just **…***.
@@ -27,33 +27,25 @@ var Uri = Networking.Uri;
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#uri-uristring-uri)
 
-<dl><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 protocol
+<dl><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 Holds the last *Uri::match()* result.
 
-<dl><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 query
+<dl><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 Test whether the uri is valid with the given string.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#object-uriquerystring-urihashboolean-uriteststring-uri)
 
-<dl><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li><b>uri</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 match
+<dl><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li><b>uri</b> — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 Returns found parameters from the given string.
 If the given uri is not valid with the uri, error will be raised.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/uri.litcoffee#object-urimatchstring-uri)
 
-## Table of contents
-    * [Uri](#uri)
-    * [protocol](#protocol)
-    * [query](#query)
-    * [match](#match)
-  * [*String* Uri::toString([*Object|Dict* params])](#string-uritostringobjectdict-params)
-
-*String* Uri::toString([*Object|Dict* params])
-----------------------------------------------
-
+toString
+<dl><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li><b>params</b> — <i>Object or Dict</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 Parses the uri into a string.
 The given params object is used to replace the uri parameters.
 ```javascript

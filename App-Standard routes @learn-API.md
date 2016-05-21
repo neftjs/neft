@@ -1,10 +1,9 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 Standard routes
+<dl></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#standard-routes-learn)
 
-<dl><dt>Static property of</dt><dd><i>app</i></dd></dl>
 ## Table of contents
     * [Standard routes](#standard-routes)
   * [js](#js)
@@ -15,18 +14,19 @@ Standard routes
   * [Default route](#default-route)
 
 ##js
+<dl><dt>Static property of</dt><dd><i>app</i></dd></dl>
 Returns the application javascript file.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#appjs)
 
-<dl><dt>Static property of</dt><dd><i>neft</i></dd></dl>
 ##js
+<dl><dt>Static property of</dt><dd><i>neft</i></dd></dl>
 Returns the neft javascript file.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#neftjs)
 
-<dl><dt>Static property of</dt><dd><i>favicon</i></dd></dl>
 ##ico
+<dl><dt>Static property of</dt><dd><i>favicon</i></dd></dl>
 Returns 'static/favicon.ico' file.
 
 > [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#faviconico)
@@ -35,8 +35,8 @@ Returns 'static/favicon.ico' file.
 
 Returns any file from the static/ folder.
 
-<dl><dt>Default</dt><dd><code>{type}</code></dd></dl>
 ##neft-type/*
+<dl><dt>Default</dt><dd><code>{type}</code></dd></dl>
 URI used by the browser which doesn't support javascript - in such case always
 full HTML document is returned (like for the searching robots).
 You can use this route in a browser to check whether your HTML document is proper.

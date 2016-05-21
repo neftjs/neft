@@ -1,68 +1,50 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-<dl></dl>
 Animation
+<dl></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#animation-modifier)
 
-<dl><dt>Returns</dt><dd><i>Animation</i></dd></dl>
 Animation
+<dl><dt>Returns</dt><dd><i>Animation</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#animation-animation)
 
-<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 when
+<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationwhen-signal-animationonwhenchangeboolean-oldvaluesignal-animationonstart)
 
-<dl><dt>Prototype method of</dt><dd><i>Animation</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 onStop
+<dl><dt>Prototype method of</dt><dd><i>Animation</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#signal-animationonstop)
 
-<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 running
+<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationrunning-signal-animationonrunningchangeboolean-oldvalue)
 
-<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 paused
+<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationpaused-signal-animationonpausedchangeboolean-oldvalue)
 
-<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 loop
+<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#boolean-animationloop-signal-animationonloopchangeboolean-oldvalue)
 
-<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>read only</dt></dl>
 updatePending
+<dl><dt>Prototype property of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#readonly-boolean-animationupdatepending)
 
-## Table of contents
-    * [Animation](#animation)
-    * [Animation](#animation)
-    * [when](#when)
-    * [onStop](#onstop)
-    * [running](#running)
-    * [paused](#paused)
-    * [loop](#loop)
-    * [updatePending](#updatepending)
-  * [Animation::start()](#animationstart)
-  * [Animation::stop()](#animationstop)
-  * [Animation::pause()](#animationpause)
-  * [Animation::resume()](#animationresume)
-
-Animation::start()
-------------------
-
+start
+<dl><dt>Prototype method of</dt><dd><i>Animation</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#animationstart)
 
-Animation::stop()
------------------
-
+stop
+<dl><dt>Prototype method of</dt><dd><i>Animation</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#animationstop)
 
-Animation::pause()
-------------------
-
+pause
+<dl><dt>Prototype method of</dt><dd><i>Animation</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#animationpause)
 
-Animation::resume()
--------------------
-
+resume
+<dl><dt>Prototype method of</dt><dd><i>Animation</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/extensions/animation.litcoffee#animationresume)
 
