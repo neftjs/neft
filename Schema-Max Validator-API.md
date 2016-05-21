@@ -20,5 +20,5 @@ console.log(schema.validate({age: -5}));
 // true
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/validators/max.litcoffee#max-validator)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/validators/max.litcoffee#max-validator)
 

@@ -8,7 +8,7 @@ Access it with:
 const { Schema } = Neft;
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#schema)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#schema)
 
 ## Table of contents
 * [Schema](#schema)
@@ -28,11 +28,11 @@ var Schema = require('schema');
 var SchemaError = Schema.Error;
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#class-schemaerror)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#class-schemaerror)
 
 ## **Class** Schema
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#class-schema)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#class-schema)
 
 ###constructor
 <dl><dt>Syntax</dt><dd><code>Schema::constructor(&#x2A;Object&#x2A; schema)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>schema — <i>Object</i></li></ul></dd></dl>
@@ -50,14 +50,14 @@ new Schema({
 });
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#schemaconstructorobject-schema)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#schemaconstructorobject-schema)
 
 ###schema
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Schema::schema</code></dd><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 Saved schema object from the constructor.
 It's allowed to change this object in runtime.
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#object-schemaschema)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#object-schemaschema)
 
 ###validate
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Schema::validate(&#x2A;Object&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>data — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -118,5 +118,5 @@ console.log(schema.validate({names: ['Lily', 'Max']}));
 // true
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#nested-properties)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#nested-properties)
 

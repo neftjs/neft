@@ -8,7 +8,7 @@ var utils = require('utils');
 var async = utils.async;
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#asynchronous)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/async.litcoffee#asynchronous)
 
 ## Table of contents
 * [Asynchronous](#asynchronous)
@@ -41,7 +41,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 // All files are loaded!
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#foreachnotprimitive-array-function-callback-function-onend-any-context)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/async.litcoffee#foreachnotprimitive-array-function-callback-function-onend-any-context)
 
 ## **Class** Stack()
 
@@ -68,7 +68,7 @@ stack.runAllSimultaneously(function(){
 // All files have been loaded!
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#class-stack)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/async.litcoffee#class-stack)
 
 ###add
 <dl><dt>Syntax</dt><dd><code>Stack::add(&#x2A;Function&#x2A; function, [&#x2A;Any&#x2A; context, &#x2A;NotPrimitive&#x2A; arguments])</code></dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>arguments — <i>NotPrimitive</i> — <i>optional</i></li></ul></dd></dl>
@@ -96,25 +96,25 @@ stack.runAll(function(err, result){
 // "Finite numbers are required!"  undefined
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments)
 
 ###callNext
 <dl><dt>Syntax</dt><dd><code>Stack::callNext([&#x2A;Array&#x2A; arguments], &#x2A;Function&#x2A; callback)</code></dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>arguments — <i>Array</i> — <i>optional</i></li><li>callback — <i>Function</i></li></ul></dd></dl>
 Calls the first function from the stack and remove it.
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback)
 
 ###runAll
 <dl><dt>Syntax</dt><dd><code>Stack::runAll([&#x2A;Function&#x2A; callback, &#x2A;Any&#x2A; callbackContext])</code></dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>callback — <i>Function</i> — <i>optional</i></li><li>callbackContext — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Calls all functions from the stack one by one.
 When an error occurs, processing stops and the callback function is called with the got error.
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext)
 
 ###runAllSimultaneously
 <dl><dt>Syntax</dt><dd><code>Stack::runAllSimultaneously([&#x2A;Function&#x2A; callback, &#x2A;Any&#x2A; callbackContext])</code></dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>callback — <i>Function</i> — <i>optional</i></li><li>callbackContext — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Calls all functions from the stack simultaneously (all at the same time).
 When an error occurs, processing stops and the callback function is called with the got error.
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackrunallsimultaneouslyfunction-callback-any-callbackcontext)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/async.litcoffee#stackrunallsimultaneouslyfunction-callback-any-callbackcontext)
 

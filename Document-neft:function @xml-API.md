@@ -13,5 +13,5 @@ Tag used to create functions in the view.
 <button neft:style:pointer:onClick="${boost}">1</button>
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/file/parse/funcs.litcoffee#neftfunction-xml)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/funcs.litcoffee#neftfunction-xml)
 

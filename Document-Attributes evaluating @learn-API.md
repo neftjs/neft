@@ -23,5 +23,5 @@ String `List(...` evaluates to the [List][list/List].
 <items neft:each="List([1, 2])"></items>
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/file/parse/attrs.litcoffee#attributes-evaluating-learn)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/attrs.litcoffee#attributes-evaluating-learn)
 

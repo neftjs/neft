@@ -22,5 +22,5 @@ console.log(utils.catchError(schema.validate, schema, [{name: 'Max'}])+'');
 // "SchemaError: Required property text not found"
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/schema/validators/optional.litcoffee#optional-validator)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/validators/optional.litcoffee#optional-validator)
 

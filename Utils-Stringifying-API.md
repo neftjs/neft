@@ -2,7 +2,7 @@
 
 # Stringifying
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#stringifying)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/stringifying.litcoffee#stringifying)
 
 ## Table of contents
 * [Stringifying](#stringifying)
@@ -38,11 +38,11 @@ console.log(clone instanceof Sample)
 // won't work for json, because functions are not stringified ...
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#simplifyobject-object-object-options)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/stringifying.litcoffee#simplifyobject-object-object-options)
 
 ##assemble
 <dl><dt>Syntax</dt><dd><code>assemble(&#x2A;PlainObject&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>PlainObject</i></li></ul></dd></dl>
 Backward utils.simplify() operation.
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/stringifying.litcoffee#assembleplainobject-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/stringifying.litcoffee#assembleplainobject-object)
 

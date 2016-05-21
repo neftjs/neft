@@ -8,5 +8,5 @@ Attribute used to hide or show the tag depends on the condition result.
 <span neft:else>You need to log in</span>
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/file/parse/conditions.litcoffee#neftif-xml)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/conditions.litcoffee#neftif-xml)
 

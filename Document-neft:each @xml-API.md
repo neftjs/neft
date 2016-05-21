@@ -25,5 +25,5 @@ In the tag children you have access to the three special variables:
 
 Use [List][list/List] to bind changes made in the array.
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/file/parse/iterators.litcoffee#runtime-changes)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/iterators.litcoffee#runtime-changes)
 

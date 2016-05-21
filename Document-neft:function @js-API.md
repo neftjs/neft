@@ -2,13 +2,13 @@
 
 neft:function
 <dl><dt>Syntax</dt><dd><code>neft:function @js</code></dd></dl>
-> [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#neftfunction-js)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/func.litcoffee#neftfunction-js)
 
 globalObject
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; globalObject</code></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Read only</dt></dl>
 Used as a global namespace in the function body.
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#readonly-object-globalobject)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/func.litcoffee#readonly-object-globalobject)
 
 require
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; globalObject.require(&#x2A;String&#x2A; moduleName)</code></dd><dt>Static method of</dt><dd><i>globalObject</i></dd><dt>Parameters</dt><dd><ul><li>moduleName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
@@ -20,7 +20,7 @@ Requires standard Neft modules.
 </neft:function>
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#function-globalobjectrequirestring-modulename)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/func.litcoffee#function-globalobjectrequirestring-modulename)
 
 arguments
 <dl><dt>Syntax</dt><dd><code>&#x2A;Arguments&#x2A; globalObject.arguments</code></dd><dt>Static property of</dt><dd><i>globalObject</i></dd><dt>Type</dt><dd><i>Arguments</i></dd></dl>
@@ -33,5 +33,5 @@ Array-like object with arguments passed to the function.
 <button style:pointer:onMove="${funcs.followMouse}" />
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/func.litcoffee#arguments-globalobjectarguments)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/func.litcoffee#arguments-globalobjectarguments)
 

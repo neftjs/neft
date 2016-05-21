@@ -3,7 +3,7 @@
 Response Error
 ==============
 
-> [`Source`](/Neft-io/neft/tree/master/src/networking/response/error.litcoffee#response-error)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee#response-error)
 
 ## Table of contents
 * [Response Error](#response-error)
@@ -19,7 +19,7 @@ var Networking = require('networking');
 var ResponseError = Networking.Response.Error;
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/networking/response/error.litcoffee#error-errorinteger-status-string-message)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee#error-errorinteger-status-string-message)
 
 RequestResolve
 <dl><dt>Syntax</dt><dd><code>&#x2A;RequestResolve&#x2A; Error.RequestResolve(&#x2A;Networking.Request&#x2A; request)</code></dd><dt>Static method of</dt><dd><i>Error</i></dd><dt>Parameters</dt><dd><ul><li>request — <i>Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>RequestResolve</i></dd></dl>
@@ -31,5 +31,5 @@ var Networking = require('networking');
 var RequestResolveResponseError = Networking.Response.Error.RequestResolve;
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/networking/response/error.litcoffee#requestresolve-errorrequestresolvenetworkingrequest-request)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee#requestresolve-errorrequestresolvenetworkingrequest-request)
 

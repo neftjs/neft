@@ -14,5 +14,5 @@ Adds attributes if not exists.
 </neft:rule>
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/file/parse/rules.litcoffee#attrs)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/rules.litcoffee#attrs)
 

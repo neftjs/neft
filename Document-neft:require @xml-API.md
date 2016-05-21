@@ -16,5 +16,5 @@ Optional argument `as` will link all fragments into the specified namespace.
 <neft:use neft:fragment="user:avatar" />
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/document/file/parse/fragments/links.litcoffee#namespace)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file/parse/fragments/links.litcoffee#namespace)
 

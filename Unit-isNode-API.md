@@ -1,6 +1,6 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
-> [`Source`](/Neft-io/neft/tree/master/src/unit/modifiers.litcoffee)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/unit/modifiers.litcoffee)
 
 isNode
 --
@@ -15,5 +15,5 @@ isAndroid
 isIOS
 --
 
-> [`Source`](/Neft-io/neft/tree/master/src/unit/modifiers.litcoffee#isnodeisserverisclientisbrowserisandroidisios)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/unit/modifiers.litcoffee#isnodeisserverisclientisbrowserisandroidisios)
 

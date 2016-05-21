@@ -2,7 +2,7 @@
 
 # Renderer
 
-> [`Source`](/Neft-io/neft/tree/master/src/renderer/index.litcoffee#renderer)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/index.litcoffee#renderer)
 
 See one of:
  - Namespaces
@@ -36,5 +36,5 @@ See one of:
   - [[ResourcesLoader|Renderer-ResourcesLoader-API]]
   - [[FontLoader|Renderer-FontLoader-API]]
 
-> [`Source`](/Neft-io/neft/tree/master/src/renderer/index.litcoffee#renderer)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/index.litcoffee#renderer)
 

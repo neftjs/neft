@@ -11,7 +11,7 @@ See one of submodules:
  - [[Properties extraction|Utils-Properties-extraction-API]]
  - [[Stringifying|Utils-Stringifying-API]]
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#utils)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#utils)
 
 ## Table of contents
 * [Utils](#utils)
@@ -72,13 +72,13 @@ See one of submodules:
 
 ##isBrowser
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; isBrowser</code></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#readonly-boolean-isbrowser-readonly-boolean-isqt-readonly-boolean-isandroid-readonly-boolean-isios)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#readonly-boolean-isbrowser-readonly-boolean-isqt-readonly-boolean-isandroid-readonly-boolean-isios)
 
 ##NOP
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; NOP</code></dd><dt>Type</dt><dd><i>Function</i></dd></dl>
 No operation (an empty function).
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-nop)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#function-nop)
 
 ##is
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; is(&#x2A;Any&#x2A; value1, &#x2A;Any&#x2A; value2)</code></dd><dt>Parameters</dt><dd><ul><li>value1 — <i>Any</i></li><li>value2 — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -99,7 +99,7 @@ console.log(-0 === 0);
 // true
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isany-value1-any-value2)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isany-value1-any-value2)
 
 ##isFloat
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isFloat(&#x2A;Any&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -117,7 +117,7 @@ console.log(utils.isFloat('10'));
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isfloatany-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isfloatany-value)
 
 ##isInteger
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isInteger(&#x2A;Any&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -133,7 +133,7 @@ console.log(utils.isInteger('2'));
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isintegerany-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isintegerany-value)
 
 ##isPrimitive
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isPrimitive(&#x2A;Any&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -147,7 +147,7 @@ console.log(utils.isPrimitive([]));
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isprimitiveany-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isprimitiveany-value)
 
 ##isObject
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isObject(&#x2A;Any&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -165,7 +165,7 @@ console.log(utils.isObject(function(){}));
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isobjectany-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isobjectany-value)
 
 ##isPlainObject
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isPlainObject(&#x2A;Any&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -187,7 +187,7 @@ console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isplainobjectany-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isplainobjectany-value)
 
 ##isArguments
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isArguments(&#x2A;Any&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -201,7 +201,7 @@ console.log(utils.isArguments({}))
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isargumentsany-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isargumentsany-value)
 
 ##merge
 <dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; merge(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>source — <i>NotPrimitive</i></li><li>object — <i>NotPrimitive</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
@@ -214,7 +214,7 @@ console.log(config);
 // {a: 1, b: 99, d: 100}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-mergenotprimitive-source-notprimitive-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-mergenotprimitive-source-notprimitive-object)
 
 ##mergeAll
 <dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; mergeAll(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; objects...)</code></dd><dt>Parameters</dt><dd><ul><li>source — <i>NotPrimitive</i></li><li>objects... — <i>NotPrimitive</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
@@ -226,7 +226,7 @@ console.log(config);
 // {a: 1, b: 2, c: 3}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-mergeallnotprimitive-source-notprimitive-objects)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-mergeallnotprimitive-source-notprimitive-objects)
 
 ##mergeDeep
 <dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; mergeDeep(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>source — <i>NotPrimitive</i></li><li>object — <i>NotPrimitive</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
@@ -251,7 +251,7 @@ console.log(user);
 // {name: 'Johny', carsByName: {tiny: 'Ferrharhi', monkey: 'BMM', nextCar: 'Fita'}}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-mergedeepnotprimitive-source-notprimitive-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-mergedeepnotprimitive-source-notprimitive-object)
 
 ##fill
 <dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; fill(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>source — <i>NotPrimitive</i></li><li>object — <i>NotPrimitive</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
@@ -268,7 +268,7 @@ console.log(user);
 // {name: 'Johny'}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-fillnotprimitive-source-notprimitive-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-fillnotprimitive-source-notprimitive-object)
 
 ##remove
 <dl><dt>Syntax</dt><dd><code>remove(&#x2A;NotPrimitive&#x2A; object, &#x2A;Any&#x2A; element)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>element — <i>Any</i></li></ul></dd></dl>
@@ -284,14 +284,14 @@ console.log(object);
 // {b: 2}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#removenotprimitive-object-any-element)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#removenotprimitive-object-any-element)
 
 ##removeFromUnorderedArray
 <dl><dt>Syntax</dt><dd><code>removeFromUnorderedArray(&#x2A;Array&#x2A; array, &#x2A;Any&#x2A; element)</code></dd><dt>Parameters</dt><dd><ul><li>array — <i>Array</i></li><li>element — <i>Any</i></li></ul></dd></dl>
 Removes the given element from the given array.
 Elements order may be changed.
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#removefromunorderedarrayarray-array-any-element)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#removefromunorderedarrayarray-array-any-element)
 
 ##getPropertyDescriptor
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; getPropertyDescriptor(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
@@ -308,7 +308,7 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 // {enumerable: false, configurable: true, get: ..., set: undefined}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-getpropertydescriptornotprimitive-object-string-property)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#object-getpropertydescriptornotprimitive-object-string-property)
 
 ##lookupGetter
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; lookupGetter(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
@@ -322,13 +322,13 @@ console.log(utils.lookupGetter(object, 'progress'));
 // function(){ return this.loaded / this.length; }
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-lookupgetternotprimitive-object-string-property)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#function-lookupgetternotprimitive-object-string-property)
 
 ##lookupSetter
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; lookupSetter(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
 Returns the given property setter function defined in the given object.
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-lookupsetternotprimitive-object-string-property)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#function-lookupsetternotprimitive-object-string-property)
 
 ##defineProperty
 <dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; defineProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, &#x2A;Integer&#x2A; descriptors, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li><li>descriptors — <i>Integer</i></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
@@ -352,11 +352,11 @@ console.log(object.length);
 // 2
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-definepropertynotprimitive-object-string-property-integer-descriptors-any-value-function-setter)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-definepropertynotprimitive-object-string-property-integer-descriptors-any-value-function-setter)
 
 ##overrideProperty
 <dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; overrideProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-overridepropertynotprimitive-object-string-property-any-value-function-setter)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-overridepropertynotprimitive-object-string-property-any-value-function-setter)
 
 ##clone
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; clone(&#x2A;Any&#x2A; param)</code></dd><dt>Parameters</dt><dd><ul><li>param — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -368,7 +368,7 @@ console.log(utils.clone({a: 1}))
 // {a: 1}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-cloneany-param)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#any-cloneany-param)
 
 ##cloneDeep
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; cloneDeep(&#x2A;Any&#x2A; param)</code></dd><dt>Parameters</dt><dd><ul><li>param — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -383,7 +383,7 @@ console.log(clonedObj.b === obj.b)
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-clonedeepany-param)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#any-clonedeepany-param)
 
 ##isEmpty
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isEmpty(&#x2A;String&#x2A;|&#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>| — <i>String</i></li><li>object — <i>NotPrimitive</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -401,7 +401,7 @@ console.log(utils.isEmpty(''));
 // true
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isemptystringnotprimitive-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isemptystringnotprimitive-object)
 
 ##last
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; last(&#x2A;NotPrimitive&#x2A; array)</code></dd><dt>Parameters</dt><dd><ul><li>array — <i>NotPrimitive</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -413,7 +413,7 @@ console.log(utils.last([]))
 // undefined
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-lastnotprimitive-array)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#any-lastnotprimitive-array)
 
 ##clear
 <dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; clear(&#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
@@ -429,7 +429,7 @@ console.log(obj);
 // {}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#notprimitive-clearnotprimitive-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-clearnotprimitive-object)
 
 ##setPrototypeOf
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; setPrototypeOf(&#x2A;NotPrimitive&#x2A; object, &#x2A;NotPrimitive&#x2A;|&#x2A;Null&#x2A; prototype)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>| — <i>NotPrimitive</i></li><li>prototype — <i>Null</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
@@ -447,7 +447,7 @@ console.log(newObj.b)
 // 100
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-setprototypeofnotprimitive-object-notprimitivenull-prototype)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#object-setprototypeofnotprimitive-object-notprimitivenull-prototype)
 
 ##has
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; has(&#x2A;Any&#x2A; object, &#x2A;Any&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>Any</i></li><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -474,7 +474,7 @@ console.log(utils.has('abc', 'e'))
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-hasany-object-any-value)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-hasany-object-any-value)
 
 ##objectToArray
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; objectToArray(&#x2A;Object&#x2A; object, [&#x2A;Function&#x2A; valueGen, &#x2A;Array&#x2A; target = `[]`])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>Object</i></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <i>Array</i> — <code>= []</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
@@ -496,7 +496,7 @@ console.log(utils.objectToArray(object, function(key, val){
 // ['type_dog', 'name_Bandit']
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#array-objecttoarrayobject-object-function-valuegen-array-target--)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#array-objecttoarrayobject-object-function-valuegen-array-target--)
 
 ##arrayToObject
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; arrayToObject(&#x2A;Array&#x2A; array, [&#x2A;Function&#x2A; keyGen, &#x2A;Function&#x2A; valueGen, &#x2A;Object&#x2A; target = `{}`])</code></dd><dt>Parameters</dt><dd><ul><li>array — <i>Array</i></li><li>keyGen — <i>Function</i> — <i>optional</i></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <i>Object</i> — <code>= {}</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
@@ -523,7 +523,7 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 // {"a": 0}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-arraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#object-arraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
 
 ##capitalize
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; capitalize(&#x2A;String&#x2A; string)</code></dd><dt>Parameters</dt><dd><ul><li>string — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
@@ -533,7 +533,7 @@ console.log(utils.capitalize('name'))
 // Name
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#string-capitalizestring-string)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#string-capitalizestring-string)
 
 ##addSlashes
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; addSlashes(&#x2A;String&#x2A; string)</code></dd><dt>Parameters</dt><dd><ul><li>string — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
@@ -543,7 +543,7 @@ console.log(utils.addSlashes('a"b'))
 // a\"b
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#string-addslashesstring-string)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#string-addslashesstring-string)
 
 ##uid
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; uid([&#x2A;Integer&#x2A; length = `8`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <i>Integer</i> — <code>= 8</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
@@ -554,7 +554,7 @@ console.log(utils.uid())
 // "50"
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#string-uidinteger-length--8)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#string-uidinteger-length--8)
 
 ##tryFunction
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; tryFunction(&#x2A;Function&#x2A; function, [&#x2A;Any&#x2A; context, &#x2A;Array&#x2A; arguments, &#x2A;Any&#x2A; onFail])</code></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>arguments — <i>Array</i> — <i>optional</i></li><li>onFail — <i>Any</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -575,7 +575,7 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 // undefined
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-tryfunctionfunction-function-any-context-array-arguments-any-onfail)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#any-tryfunctionfunction-function-any-context-array-arguments-any-onfail)
 
 ##catchError
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; catchError(&#x2A;Function&#x2A; function, [&#x2A;Any&#x2A; context, &#x2A;Array&#x2A; arguments])</code></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>arguments — <i>Array</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -593,7 +593,7 @@ console.log(utils.catchError(test, null, [100]))
 // null
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#any-catcherrorfunction-function-any-context-array-arguments)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#any-catcherrorfunction-function-any-context-array-arguments)
 
 ##bindFunctionContext
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; bindFunctionContext(&#x2A;Function&#x2A; function, &#x2A;Any&#x2A; context)</code></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
@@ -608,7 +608,7 @@ console.log(bindFunc('a'));
 // {ctx: 1} "a"
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#function-bindfunctioncontextfunction-function-any-context)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#function-bindfunctioncontextfunction-function-any-context)
 
 ##errorToObject
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; errorToObject(&#x2A;Error&#x2A; error)</code></dd><dt>Parameters</dt><dd><ul><li>error — <i>Error</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
@@ -620,13 +620,13 @@ console.log(utils.errorToObject(error));
 // {name: 'ReferenceError', message: 'error message!'}
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-errortoobjecterror-error)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#object-errortoobjecterror-error)
 
 ##getOwnProperties
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; getOwnProperties(&#x2A;Object&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 Returns an array or an object with own properties associated in the given object.
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#object-getownpropertiesobject-object)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#object-getownpropertiesobject-object)
 
 ##isEqual
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isEqual(&#x2A;Object&#x2A; object1, &#x2A;Object&#x2A; object2, [&#x2A;Function&#x2A; compareFunction, &#x2A;Integer&#x2A; maxDeep = `Infinity`])</code></dd><dt>Parameters</dt><dd><ul><li>object1 — <i>Object</i></li><li>object2 — <i>Object</i></li><li>compareFunction — <i>Function</i> — <i>optional</i></li><li>maxDeep — <i>Integer</i> — <code>= Infinity</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -644,7 +644,7 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 // false
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/utils/index.litcoffee#boolean-isequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
+> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-isequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
 
 ## Glossary
 

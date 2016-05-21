@@ -2,11 +2,11 @@
 
 App
 <dl><dt>Syntax</dt><dd><code>App @framework</code></dd></dl>
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#app-framework)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#app-framework)
 
 app
 <dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; app</code></dd><dt>Type</dt><dd><i>Dict</i></dd></dl>
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#dict-app)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#dict-app)
 
 config
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.config = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
@@ -42,7 +42,7 @@ It's used for the crawlers (e.g. GoogleBot) or browsers with no javascript suppo
 `};
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#type)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#type)
 
 networking
 <dl><dt>Syntax</dt><dd><code>&#x2A;Networking&#x2A; app.networking</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Networking</i></dd></dl>
@@ -51,7 +51,7 @@ with the server and to create local requests.
 All routes created by the *App.Route* uses this networking.
 HTTP protocol is used by default with the data specified in the *package.json*.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#networking-appnetworking)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#networking-appnetworking)
 
 models
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.models = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
@@ -75,36 +75,36 @@ Files from the *models* folder with objects returned by their exported functions
 `};
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appmodels--)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#object-appmodels--)
 
 routes
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.routes = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *routes* folder with objects returned by their exported functions.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-approutes--)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#object-approutes--)
 
 styles
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.styles = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *styles* folder as *Function*s
 ready to create new [Renderer.Item][renderer/Item]s.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appstyles--)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#object-appstyles--)
 
 views
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.views = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *views* folder as the [Document][document/File] instances.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#object-appviews--)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#object-appviews--)
 
 resources
 <dl><dt>Syntax</dt><dd><code>&#x2A;Resources&#x2A; app.resources</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Resources</i></dd></dl>
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#resources-appresources)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#resources-appresources)
 
 onReady
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; app.onReady()</code></dd><dt>Static method of</dt><dd><i>app</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 Called when all modules, views, styled etc. have been loaded.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#signal-apponready)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#signal-apponready)
 
 cookies
 <dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; app.cookies</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Dict</i></dd></dl>
@@ -122,5 +122,5 @@ By default, client has *clientId* and *sessionId* hashes.
 <em>${app.cookies.clientId}</em>
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/index.litcoffee#dict-appcookies)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#dict-appcookies)
 

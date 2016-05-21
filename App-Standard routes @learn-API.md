@@ -2,25 +2,25 @@
 
 Standard routes
 <dl><dt>Syntax</dt><dd><code>Standard routes @learn</code></dd></dl>
-> [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#standard-routes-learn)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/bootstrap/route.node.litcoffee#standard-routes-learn)
 
 ##js
 <dl><dt>Syntax</dt><dd><code>app.js</code></dd><dt>Static property of</dt><dd><i>app</i></dd></dl>
 Returns the application javascript file.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#appjs)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/bootstrap/route.node.litcoffee#appjs)
 
 ##js
 <dl><dt>Syntax</dt><dd><code>neft.js</code></dd><dt>Static property of</dt><dd><i>neft</i></dd></dl>
 Returns the neft javascript file.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#neftjs)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/bootstrap/route.node.litcoffee#neftjs)
 
 ##ico
 <dl><dt>Syntax</dt><dd><code>favicon.ico</code></dd><dt>Static property of</dt><dd><i>favicon</i></dd></dl>
 Returns 'static/favicon.ico' file.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#faviconico)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/bootstrap/route.node.litcoffee#faviconico)
 
 ## static/{path*}
 
@@ -38,12 +38,12 @@ Clean your cookies when you finish.
 <a href="/neft-type=text/">Use text type (robots)</a>
 ```
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#nefttypetype)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/bootstrap/route.node.litcoffee#nefttypetype)
 
 ## Default route
 
 It decides whether the full HTML document should be returned (e.g. for the Googlebot or
 text browsers) or the HTML scaffolding which will run **neft.io** on the client side.
 
-> [`Source`](/Neft-io/neft/tree/master/src/app/bootstrap/route.node.litcoffee#default-route)
+> [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/bootstrap/route.node.litcoffee#default-route)
 
