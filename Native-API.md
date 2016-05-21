@@ -10,7 +10,7 @@
   * [on](#on)
 
 ##callFunction
-<dl><dt>Syntax</dt><dd><code>callFunction(&#x2A;String&#x2A; name, [&#x2A;Boolean&#x2A;|&#x2A;Float&#x2A;|&#x2A;String&#x2A; args...])</code></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>| — <i>Boolean</i> — <i>optional</i></li><li>| — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value">Float</a> — <i>optional</i></li><li>args... — <i>String</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>callFunction(&#x2A;String&#x2A; name, [&#x2A;Boolean&#x2A;|&#x2A;Float&#x2A;|&#x2A;String&#x2A; args...])</code></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>| — <i>Boolean</i> — <i>optional</i></li><li>| — <a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a> — <i>optional</i></li><li>args... — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/native/index.litcoffee#callfunctionstring-name-booleanfloatstring-args)
 
 ##on

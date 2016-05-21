@@ -17,7 +17,7 @@ Element
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#element-element)
 
 index
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Element::index</code></dd><dt>Prototype property of</dt><dd><i>Element</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Element::index</code></dd><dt>Prototype property of</dt><dd><i>Element</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#integer-elementindex)
 
 nextSibling
@@ -33,7 +33,7 @@ parent
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#element-elementparent)
 
 ##onParentChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Element::onParentChange(&#x2A;Element&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Element</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Element::onParentChange(&#x2A;Element&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Element</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#signal-elementonparentchangeelement-oldvalue)
 
 style
@@ -41,7 +41,7 @@ style
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#rendereritem-elementstyle)
 
 ##onStyleChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Element::onStyleChange(&#x2A;Renderer.Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Renderer.Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Element::onStyleChange(&#x2A;Renderer.Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Renderer.Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#signal-elementonstylechangerendereritem-oldvalue)
 
 visible
@@ -49,7 +49,7 @@ visible
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#boolean-elementvisible)
 
 ##onVisibleChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Element::onVisibleChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Element::onVisibleChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#signal-elementonvisiblechangeboolean-oldvalue)
 
 queryAllParents

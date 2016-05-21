@@ -294,7 +294,7 @@ Elements order may be changed.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#removefromunorderedarrayarray-array-any-element)
 
 ##getPropertyDescriptor
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; getPropertyDescriptor(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; getPropertyDescriptor(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns the descriptor of the given property defined in the given object.
 ```javascript
 function User(){
@@ -331,7 +331,7 @@ Returns the given property setter function defined in the given object.
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#function-lookupsetternotprimitive-object-string-property)
 
 ##defineProperty
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; defineProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, &#x2A;Integer&#x2A; descriptors, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li><li>descriptors — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; defineProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, &#x2A;Integer&#x2A; descriptors, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li><li>descriptors — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
 Defines the given property in the given object.
 The descriptors argument is a bitmask accepting
 `utils.WRITABLE`, `utils.ENUMERABLE` and `utils.CONFIGURABLE`.
@@ -432,7 +432,7 @@ console.log(obj);
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#notprimitive-clearnotprimitive-object)
 
 ##setPrototypeOf
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; setPrototypeOf(&#x2A;NotPrimitive&#x2A; object, &#x2A;NotPrimitive&#x2A;|&#x2A;Null&#x2A; prototype)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>| — <i>NotPrimitive</i></li><li>prototype — <i>Null</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; setPrototypeOf(&#x2A;NotPrimitive&#x2A; object, &#x2A;NotPrimitive&#x2A;|&#x2A;Null&#x2A; prototype)</code></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>| — <i>NotPrimitive</i></li><li>prototype — <i>Null</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Changes the given object prototype into the given prototype.
 **This function on some environments returns a new object.**
 ```javascript
@@ -477,7 +477,7 @@ console.log(utils.has('abc', 'e'))
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#boolean-hasany-object-any-value)
 
 ##objectToArray
-<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; objectToArray(&#x2A;Object&#x2A; object, [&#x2A;Function&#x2A; valueGen, &#x2A;Array&#x2A; target = `[]`])</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <i>Array</i> — <code>= []</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; objectToArray(&#x2A;Object&#x2A; object, [&#x2A;Function&#x2A; valueGen, &#x2A;Array&#x2A; target = `[]`])</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <i>Array</i> — <code>= []</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 Translates the given object into an array.
 Array elements are determined by the given valueGen function.
 The valueGen function is called with the property name, property value and the given object.
@@ -499,7 +499,7 @@ console.log(utils.objectToArray(object, function(key, val){
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#array-objecttoarrayobject-object-function-valuegen-array-target--)
 
 ##arrayToObject
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; arrayToObject(&#x2A;Array&#x2A; array, [&#x2A;Function&#x2A; keyGen, &#x2A;Function&#x2A; valueGen, &#x2A;Object&#x2A; target = `{}`])</code></dd><dt>Parameters</dt><dd><ul><li>array — <i>Array</i></li><li>keyGen — <i>Function</i> — <i>optional</i></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a> — <code>= {}</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; arrayToObject(&#x2A;Array&#x2A; array, [&#x2A;Function&#x2A; keyGen, &#x2A;Function&#x2A; valueGen, &#x2A;Object&#x2A; target = `{}`])</code></dd><dt>Parameters</dt><dd><ul><li>array — <i>Array</i></li><li>keyGen — <i>Function</i> — <i>optional</i></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <code>= {}</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Translates the given array into an object.
 Object keys are determined by the given keyGen function.
 Object key values are determined by the given valueGen function.
@@ -546,7 +546,7 @@ console.log(utils.addSlashes('a"b'))
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#string-addslashesstring-string)
 
 ##uid
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; uid([&#x2A;Integer&#x2A; length = `8`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a> — <code>= 8</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; uid([&#x2A;Integer&#x2A; length = `8`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 8</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 Returns pseudo-unique string with the given length.
 This function doesn't quarantee uniqueness of the returned data.
 ```javascript
@@ -611,7 +611,7 @@ console.log(bindFunc('a'));
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#function-bindfunctioncontextfunction-function-any-context)
 
 ##errorToObject
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; errorToObject(&#x2A;Error&#x2A; error)</code></dd><dt>Parameters</dt><dd><ul><li>error — <i>Error</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; errorToObject(&#x2A;Error&#x2A; error)</code></dd><dt>Parameters</dt><dd><ul><li>error — <i>Error</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns a plain object with the given error name, message and other custom properties.
 Standard error `name` and `message` properties are not enumerable.
 ```javascript
@@ -623,13 +623,13 @@ console.log(utils.errorToObject(error));
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#object-errortoobjecterror-error)
 
 ##getOwnProperties
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; getOwnProperties(&#x2A;Object&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; getOwnProperties(&#x2A;Object&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns an array or an object with own properties associated in the given object.
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#object-getownpropertiesobject-object)
 
 ##isEqual
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isEqual(&#x2A;Object&#x2A; object1, &#x2A;Object&#x2A; object2, [&#x2A;Function&#x2A; compareFunction, &#x2A;Integer&#x2A; maxDeep = `Infinity`])</code></dd><dt>Parameters</dt><dd><ul><li>object1 — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>object2 — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value">Object</a></li><li>compareFunction — <i>Function</i> — <i>optional</i></li><li>maxDeep — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a> — <code>= Infinity</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isEqual(&#x2A;Object&#x2A; object1, &#x2A;Object&#x2A; object2, [&#x2A;Function&#x2A; compareFunction, &#x2A;Integer&#x2A; maxDeep = `Infinity`])</code></dd><dt>Parameters</dt><dd><ul><li>object1 — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li><li>object2 — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li><li>compareFunction — <i>Function</i> — <i>optional</i></li><li>maxDeep — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= Infinity</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given objects have equal values.
 The given compareFunction is used to compare two values (which at least one them is primitive).
 By default the compareFunction uses triple comparison (`===`).
@@ -648,12 +648,12 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
 
 ## Glossary
 
- - [NOP](#function-nop)
- - [Float](#boolean-isfloatany-value)
- - [Integer](#boolean-isintegerany-value)
- - [Primitive](#boolean-isprimitiveany-value)
- - [Object](#boolean-isobjectany-value)
- - [PlainObject](#boolean-isplainobjectany-value)
- - [Arguments](#boolean-isargumentsany-value)
- - [utils.is()](#boolean-isany-value1-any-value2)
+ - [NOP](#nop)
+ - [Float](#isfloat)
+ - [Integer](#isinteger)
+ - [Primitive](#isprimitive)
+ - [Object](#isobject)
+ - [PlainObject](#isplainobject)
+ - [Arguments](#isarguments)
+ - [utils.is()](#is)
 

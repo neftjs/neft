@@ -13,7 +13,7 @@ when
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation.litcoffee#boolean-animationwhen-signal-animationonwhenchangeboolean-oldvaluesignal-animationonstart)
 
 onStop
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Animation::onStop()</code></dd><dt>Prototype method of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Animation::onStop()</code></dd><dt>Prototype method of</dt><dd><i>Animation</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation.litcoffee#signal-animationonstop)
 
 running

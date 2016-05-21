@@ -11,7 +11,7 @@ Response Error
     * [RequestResolve](#requestresolve)
 
 Error
-<dl><dt>Syntax</dt><dd><code>&#x2A;Error&#x2A; Error([&#x2A;Integer&#x2A; status, &#x2A;String&#x2A; message])</code></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value">Integer</a> — <i>optional</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Error</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Error&#x2A; Error([&#x2A;Integer&#x2A; status, &#x2A;String&#x2A; message])</code></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <i>optional</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Error</i></dd></dl>
 It works as a standard Javascript *Error* class, but provides an extra *status* value.
 Access it with:
 ```javascript
