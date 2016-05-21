@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:each
-<dl><dt>Syntax</dt><dd>neft:each @xml</dd></dl>
+<dl><dt>Syntax</dt><dd><code>neft:each @xml</code></dd></dl>
 Attribute used for repeating.
 Tag children will be duplicated for each
 element defined in the `neft:each` attribute.

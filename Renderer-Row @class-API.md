@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 Row
-<dl><dt>Syntax</dt><dd>Row @class</dd></dl>
+<dl><dt>Syntax</dt><dd><code>Row @class</code></dd></dl>
 ```nml
 `Row {
 `   spacing: 5
@@ -15,26 +15,26 @@ Row
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#row-class)
 
 New
-<dl><dt>Syntax</dt><dd>*Row* Row.New([*Component* component, [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options])</dd><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Row&#x2A; Row.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#row-rownewcomponent-component-object-options)
 
 Row
-<dl><dt>Syntax</dt><dd>*Row* Row() : *Renderer.Item*</dd><dt>Extends</dt><dd><i>Renderer.Item</i></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Row&#x2A; Row() : &#x2A;Renderer.Item&#x2A;</code></dd><dt>Extends</dt><dd><i>Renderer.Item</i></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#row-row--rendereritem)
 
 padding
-<dl><dt>Syntax</dt><dd>*Margin* Row::padding</dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Margin</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Margin&#x2A; Row::padding</code></dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Margin</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#margin-rowpadding-signal-rowonpaddingchangemargin-padding)
 
 spacing
-<dl><dt>Syntax</dt><dd>[*Float*](/Neft-io/neft/wiki/Utils-API.md#boolean-isfloatany-value) Row::spacing = 0</dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Row::spacing = 0</code></dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#float-rowspacing--0-signal-rowonspacingchangefloat-oldvalue)
 
 alignment
-<dl><dt>Syntax</dt><dd>*Alignment* Row::alignment</dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Alignment</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Alignment&#x2A; Row::alignment</code></dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Alignment</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#alignment-rowalignment-signal-rowonalignmentchangealignment-oldvalue)
 
 includeBorderMargins
-<dl><dt>Syntax</dt><dd>*Boolean* Row::includeBorderMargins = false</dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Row::includeBorderMargins = false</code></dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/layout/row.litcoffee#boolean-rowincludebordermargins--false-signal-rowonincludebordermarginschangeboolean-oldvalue)
 

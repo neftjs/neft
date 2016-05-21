@@ -1,19 +1,19 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 Document
-<dl><dt>Syntax</dt><dd>Document @extension</dd></dl>
+<dl><dt>Syntax</dt><dd><code>Document @extension</code></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/document.litcoffee#document-extension)
 
 Document
-<dl><dt>Syntax</dt><dd>*Document* Document()</dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Document()</code></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/document.litcoffee#document-document)
 
 query
-<dl><dt>Syntax</dt><dd>ReadOnly *String* Document::query</dd><dt>Prototype property of</dt><dd><i>Document</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; Document::query</code></dd><dt>Prototype property of</dt><dd><i>Document</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/renderer/types/basics/item/document.litcoffee#readonly-string-documentquery)
 
 node
-<dl><dt>Syntax</dt><dd>*Document.Element* Document::node</dd><dt>Prototype property of</dt><dd><i>Document</i></dd><dt>Type</dt><dd><i>Document.Element</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Document.Element&#x2A; Document::node</code></dd><dt>Prototype property of</dt><dd><i>Document</i></dd><dt>Type</dt><dd><i>Document.Element</i></dd></dl>
 ```nml
 `Text {
 `  text: this.document.node.attrs.value

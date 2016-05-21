@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:use
-<dl><dt>Syntax</dt><dd>neft:use @xml</dd></dl>
+<dl><dt>Syntax</dt><dd><code>neft:use @xml</code></dd></dl>
 Tag used to place a [neft:fragment][document/neft:fragment@xml].
 ```xml
 <neft:fragment neft:name="user">

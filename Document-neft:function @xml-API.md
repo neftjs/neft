@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:function
-<dl><dt>Syntax</dt><dd>neft:function @xml</dd></dl>
+<dl><dt>Syntax</dt><dd><code>neft:function @xml</code></dd></dl>
 Tag used to create functions in the view.
 ```xml
 <neft:function name="multiply" arguments="a, b">

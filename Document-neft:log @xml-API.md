@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:log
-<dl><dt>Syntax</dt><dd>neft:log @xml</dd></dl>
+<dl><dt>Syntax</dt><dd><code>neft:log @xml</code></dd></dl>
 ```xml
 <neft:log debugObject="${data.someObject}">${debugText}</neft:log>
 ```

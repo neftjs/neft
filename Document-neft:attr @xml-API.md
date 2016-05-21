@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:attr
-<dl><dt>Syntax</dt><dd>neft:attr @xml</dd></dl>
+<dl><dt>Syntax</dt><dd><code>neft:attr @xml</code></dd></dl>
 Tag used to dynamically change an attribute of the parent element.
 ```xml
 <header neft:style="header">

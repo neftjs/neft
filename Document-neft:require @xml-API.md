@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:require
-<dl><dt>Syntax</dt><dd>neft:require @xml</dd></dl>
+<dl><dt>Syntax</dt><dd><code>neft:require @xml</code></dd></dl>
 Tag used to link [neft:fragment][document/neft:fragment@xml]s from a file and use them.
 ```xml
 <neft:require href="./user_utils.html" />

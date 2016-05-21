@@ -24,7 +24,7 @@ Response
     * [isSucceed](#issucceed)
 
 STATUSES
-<dl><dt>Syntax</dt><dd>*Array* Response.STATUSES</dd><dt>Static property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Response.STATUSES</code></dd><dt>Static property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
 Contains abstract codes used to describe the response type.
 Each status corresponds to the HTTP numeral value.
 Check [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html]() for more.
@@ -56,7 +56,7 @@ console.log(Networking.Response.BAD_REQUEST);
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#array-responsestatuses)
 
 Response
-<dl><dt>Syntax</dt><dd>*Response* Response([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)</dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Response&#x2A; Response(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
 Access it with:
 ```javascript
 var Networking = require('networking');
@@ -66,7 +66,7 @@ var Response = Networking.Response;
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response-responseobject-options)
 
 onSend
-<dl><dt>Syntax</dt><dd>[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Response::onSend()</dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Response::onSend()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 Called when the response has been sent.
 ```javascript
 res.onSend(function(){
@@ -77,19 +77,19 @@ res.onSend(function(){
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#signal-responseonsend)
 
 pending
-<dl><dt>Syntax</dt><dd>ReadOnly *Boolean* Response::pending</dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Response::pending</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
 Indicates whether the response is not destroyed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#readonly-boolean-responsepending)
 
 request
-<dl><dt>Syntax</dt><dd>ReadOnly *Networking.Request* Response::request</dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Networking.Request</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Request&#x2A; Response::request</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Networking.Request</i></dd><dt>Read only</dt></dl>
 Refers to the [Request][networking/Request].
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#readonly-networkingrequest-responserequest)
 
 status
-<dl><dt>Syntax</dt><dd>[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) Response::status = Response.OK</dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Integer</i></dd><dt>Default</dt><dd><code>Response.OK</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Response::status = Response.OK</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Integer</i></dd><dt>Default</dt><dd><code>Response.OK</code></dd></dl>
 Keeps a normalized code determined the response type.
 It refers to one of the *Response.STATUSES* values.
 ```javascript
@@ -100,7 +100,7 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#integer-responsestatus--responseok)
 
 data
-<dl><dt>Syntax</dt><dd>*Any* Response::data</dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Any</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Response::data</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Any</i></dd></dl>
 Value sent to the client.
 ```javascript
 res.data = {items: ['superhero toy', 'book']};
@@ -111,19 +111,19 @@ res.data = Document.fromJSON(...);
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#any-responsedata)
 
 headers
-<dl><dt>Syntax</dt><dd>[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Response::headers</dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::headers</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#object-responseheaders)
 
 cookies
-<dl><dt>Syntax</dt><dd>[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Response::cookies</dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::cookies</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#object-responsecookies)
 
 encoding
-<dl><dt>Syntax</dt><dd>*String* Response::encoding = 'utf-8'</dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'utf-8'</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Response::encoding = 'utf-8'</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'utf-8'</code></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#string-responseencoding--utf8)
 
 setHeader
-<dl><dt>Syntax</dt><dd>*Response* Response::setHeader(*String* name, *String* value)</dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>value — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Response&#x2A; Response::setHeader(&#x2A;String&#x2A; name, &#x2A;String&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>value — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>
 ```javascript
 res.setHeader('Location', '/redirect/to/url');
 ```
@@ -131,7 +131,7 @@ res.setHeader('Location', '/redirect/to/url');
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value)
 
 send
-<dl><dt>Syntax</dt><dd>Response::send([[*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) status, *Any* data])</dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <i>Integer</i> — <i>optional</i></li><li>data — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Response::send([&#x2A;Integer&#x2A; status, &#x2A;Any&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <i>Integer</i> — <i>optional</i></li><li>data — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 This method calls the [onSend()][networking/Response::onSend()] signal.
 ```javascript
 res.onSend(function(){
@@ -143,14 +143,14 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responsesendinteger-status-any-data)
 
 redirect
-<dl><dt>Syntax</dt><dd>Response::redirect([*Integer*](/Neft-io/neft/wiki/Utils-API.md#boolean-isintegerany-value) status = `Response.FOUND`, *String* uri)</dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <i>Integer</i> — <code>= Response.FOUND</code></li><li>uri — <i>String</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Response::redirect(&#x2A;Integer&#x2A; status = `Response.FOUND`, &#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <i>Integer</i> — <code>= Response.FOUND</code></li><li>uri — <i>String</i></li></ul></dd></dl>
 The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri)
 
 raise
-<dl><dt>Syntax</dt><dd>Response::raise(*Any* error)</dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Response::raise(&#x2A;Any&#x2A; error)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li></ul></dd></dl>
 Finishes the response with an error.
 ```javascript
 res.raise(new Networking.Response.Error("Login first"));
@@ -160,7 +160,7 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#responseraiseany-error)
 
 isSucceed
-<dl><dt>Syntax</dt><dd>*Boolean* Response::isSucceed()</dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Response::isSucceed()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the response status is in range from 200 to 299.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/response.litcoffee#boolean-responseissucceed)

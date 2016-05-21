@@ -35,7 +35,7 @@ var SchemaError = Schema.Error;
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#class-schema)
 
 ###constructor
-<dl><dt>Syntax</dt><dd>Schema::constructor([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) schema)</dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>schema — <i>Object</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Schema::constructor(&#x2A;Object&#x2A; schema)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>schema — <i>Object</i></li></ul></dd></dl>
 Creates a new Schema instance used to validate data.
 Specify schema validators for each of the accepted property.
 ```javascript
@@ -53,14 +53,14 @@ new Schema({
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#schemaconstructorobject-schema)
 
 ###schema
-<dl><dt>Syntax</dt><dd>[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Schema::schema</dd><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Schema::schema</code></dd><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><i>Object</i></dd></dl>
 Saved schema object from the constructor.
 It's allowed to change this object in runtime.
 
 > [`Source`](/Neft-io/neft/tree/master/src/schema/index.litcoffee#object-schemaschema)
 
 ###validate
-<dl><dt>Syntax</dt><dd>*Boolean* Schema::validate([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) data)</dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>data — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Schema::validate(&#x2A;Object&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>data — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Validates the given data object by the schema.
 Returns `true` if the data is valid, otherwise throws an SchemaError instance.
 ```javascript

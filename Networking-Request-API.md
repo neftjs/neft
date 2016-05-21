@@ -25,7 +25,7 @@ Request
     * [toString](#tostring)
 
 METHODS
-<dl><dt>Syntax</dt><dd>*Array* Request.METHODS</dd><dt>Static property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Request.METHODS</code></dd><dt>Static property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
 Contains available *HTTP* methods.
 Contains:
  - Request.GET,
@@ -37,7 +37,7 @@ Contains:
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#array-requestmethods)
 
 TYPES
-<dl><dt>Syntax</dt><dd>*Array* Request.TYPES</dd><dt>Static property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Request.TYPES</code></dd><dt>Static property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Array</i></dd></dl>
 Contains available expected types.
 Contains:
  - Request.TEXT_TYPE,
@@ -48,7 +48,7 @@ Contains:
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#array-requesttypes)
 
 Request
-<dl><dt>Syntax</dt><dd>*Request* Request([*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) options)</dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Request</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Request&#x2A; Request(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Request</i></dd></dl>
 Class used to describe coming networking request.
 You should use [Networking::createRequest()][networking/Networking::createRequest()]
 to create a full request.
@@ -61,31 +61,31 @@ var Request = Networking.Request;
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#request-requestobject-options)
 
 onLoadEnd
-<dl><dt>Syntax</dt><dd>[*Signal*](/Neft-io/neft/wiki/Signal-API.md#class-signal) Request::onLoadEnd(*Any* error, *Any* data)</dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li><li>data — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Request::onLoadEnd(&#x2A;Any&#x2A; error, &#x2A;Any&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li><li>data — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Signal</i></dd></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#signal-requestonloadendany-error-any-data)
 
 uid
-<dl><dt>Syntax</dt><dd>ReadOnly *String* Request::uid</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; Request::uid</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read only</dt></dl>
 Pseudo unique hash. It's created automatically.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-string-requestuid)
 
 pending
-<dl><dt>Syntax</dt><dd>ReadOnly *Boolean* Request::pending</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Boolean&#x2A; Request::pending</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read only</dt></dl>
 Indicates whether the request is not destroyed.
 If it's `false`, the request can't be changed.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-boolean-requestpending)
 
 method
-<dl><dt>Syntax</dt><dd>*String* Request::method</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::method</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 This property refers to one of the `Request.METHODS` values.
 Holds a method with which the request has been called.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#string-requestmethod)
 
 uri
-<dl><dt>Syntax</dt><dd>*Networking.Uri* Request::uri</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Uri</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Uri&#x2A; Request::uri</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Uri</i></dd></dl>
 Refers to the request URI path.
 It can holds local and absolute paths.
 ```javascript
@@ -100,7 +100,7 @@ It can holds local and absolute paths.
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#networkinguri-requesturi)
 
 type
-<dl><dt>Syntax</dt><dd>*String* Request::type</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::type</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 Describes the expected response type.
 It's used in the server-client communication.
 In most cases, a server returns a HTML document for a crawler, but client
@@ -111,24 +111,24 @@ It refers to one of the *Request.TYPES* values.
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#string-requesttype)
 
 data
-<dl><dt>Syntax</dt><dd>[*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::data = null</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>null</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Request::data = null</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>null</code></dd></dl>
 Holds a data sent with a request.
 It can be, for instance, a form data.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#object-requestdata--null)
 
 handler
-<dl><dt>Syntax</dt><dd>ReadOnly *Networking.Handler* Request::handler</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Handler</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Handler&#x2A; Request::handler</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Handler</i></dd><dt>Read only</dt></dl>
 Refers to the currently considered [Handler][networking/Handler].
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-networkinghandler-requesthandler)
 
 response
-<dl><dt>Syntax</dt><dd>ReadOnly *Networking.Response* Request::response</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Response</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Response&#x2A; Request::response</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Networking.Response</i></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-networkingresponse-requestresponse)
 
 params
-<dl><dt>Syntax</dt><dd>ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::params = {}</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::params = {}</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Default</dt><dd><code>{}</code></dd><dt>Read only</dt></dl>
 Keeps matched parameters by the handler from the request uri.
 Considering the */users/{name}* URI,
 the 'name' property is available as the *params.name*.
@@ -136,18 +136,18 @@ the 'name' property is available as the *params.name*.
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestparams--)
 
 headers
-<dl><dt>Syntax</dt><dd>ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::headers</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::headers</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Read only</dt></dl>
 Contains request headers.
 For the client request, this object is empty.
 
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestheaders)
 
 cookies
-<dl><dt>Syntax</dt><dd>ReadOnly [*Object*](/Neft-io/neft/wiki/Utils-API.md#boolean-isobjectany-value) Request::cookies</dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Read only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::cookies</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><i>Object</i></dd><dt>Read only</dt></dl>
 > [`Source`](/Neft-io/neft/tree/master/src/networking/request.litcoffee#readonly-object-requestcookies)
 
 toString
-<dl><dt>Syntax</dt><dd>*String* Request::toString()</dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Request::toString()</code></dd><dt>Prototype method of</dt><dd><i>Request</i></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 Returns a string describing the request.
 It contains a method, uri and a type.
 ```javascript

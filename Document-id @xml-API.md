@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 id
-<dl><dt>Syntax</dt><dd>id @xml</dd></dl>
+<dl><dt>Syntax</dt><dd><code>id @xml</code></dd></dl>
 [Tag][document/Tag] with the id attribute is saved in the local scope
 (file, [neft:fragment][document/neft:fragment@xml], [neft:each][document/neft:each@xml] etc.)
 and it's available in the string interpolation.
