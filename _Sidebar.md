@@ -4,7 +4,6 @@ JavaScript Everywhere
 =====================
 
 - [[Home]]
-- [[How to read wiki]]
 - [[Contribute]]
 - [[Examples]]
 - [[Tutorials]]
