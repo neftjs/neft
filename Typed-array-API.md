@@ -5,6 +5,7 @@
 > [`Source`](/Neft-io/neft/tree/master/src/typed-array/index.litcoffee#typed-array)
 
 ## Table of contents
+* [Typed Array](#typed-array)
   * [**Class** Int8([*Integer* length = `0`])](#class-int8integer-length--0)
   * [**Class** Uint8([*Integer* length = `0`])](#class-uint8integer-length--0)
   * [**Class** Int16([*Integer* length = `0`])](#class-int16integer-length--0)

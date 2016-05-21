@@ -11,6 +11,7 @@ var async = utils.async;
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#asynchronous)
 
 ## Table of contents
+* [Asynchronous](#asynchronous)
   * [forEach](#foreach)
   * [**Class** Stack()](#class-stack)
     * [add](#add)
@@ -19,7 +20,7 @@ var async = utils.async;
     * [runAllSimultaneously](#runallsimultaneously)
 
 ##forEach
-<dl><dt>Parameters</dt><dd><ul><li>array — <i>NotPrimitive</i></li><li>callback — <i>Function</i></li><li>onEnd — <i>Function</i> — <i>optional</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd>forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])</dd><dt>Parameters</dt><dd><ul><li>array — <i>NotPrimitive</i></li><li>callback — <i>Function</i></li><li>onEnd — <i>Function</i> — <i>optional</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 This is an asynchronous version of the standard `Array.prototype.forEach()` function
 which works with arrays and objects.
 The given callback function is called with parameters:
@@ -70,7 +71,7 @@ stack.runAllSimultaneously(function(){
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#class-stack)
 
 ###add
-<dl><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>arguments — <i>NotPrimitive</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd>Stack::add(*Function* function, [*Any* context, *NotPrimitive* arguments])</dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>arguments — <i>NotPrimitive</i> — <i>optional</i></li></ul></dd></dl>
 Adds the given function to the stack.
 The function must provide a callback argument as the last argument.
 The first argument of the callback function is always an error.
@@ -98,20 +99,20 @@ stack.runAll(function(err, result){
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments)
 
 ###callNext
-<dl><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>arguments — <i>Array</i> — <i>optional</i></li><li>callback — <i>Function</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd>Stack::callNext([*Array* arguments], *Function* callback)</dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>arguments — <i>Array</i> — <i>optional</i></li><li>callback — <i>Function</i></li></ul></dd></dl>
 Calls the first function from the stack and remove it.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback)
 
 ###runAll
-<dl><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>callback — <i>Function</i> — <i>optional</i></li><li>callbackContext — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd>Stack::runAll([*Function* callback, *Any* callbackContext])</dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>callback — <i>Function</i> — <i>optional</i></li><li>callbackContext — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Calls all functions from the stack one by one.
 When an error occurs, processing stops and the callback function is called with the got error.
 
 > [`Source`](/Neft-io/neft/tree/master/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext)
 
 ###runAllSimultaneously
-<dl><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>callback — <i>Function</i> — <i>optional</i></li><li>callbackContext — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd>Stack::runAllSimultaneously([*Function* callback, *Any* callbackContext])</dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>callback — <i>Function</i> — <i>optional</i></li><li>callbackContext — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 Calls all functions from the stack simultaneously (all at the same time).
 When an error occurs, processing stops and the callback function is called with the got error.
 

@@ -1,13 +1,9 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:rule
-<dl></dl>
+<dl><dt>Syntax</dt><dd>neft:rule @xml</dd></dl>
 Tag used in the parsing process.
 Performs some actions on found elements in the parent element.
-
-## Table of contents
-    * [neft:rule](#neftrule)
-  * [attrs](#attrs)
 
 ## attrs
 

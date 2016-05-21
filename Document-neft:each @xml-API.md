@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:each
-<dl></dl>
+<dl><dt>Syntax</dt><dd>neft:each @xml</dd></dl>
 Attribute used for repeating.
 Tag children will be duplicated for each
 element defined in the `neft:each` attribute.
@@ -20,10 +20,6 @@ In the tag children you have access to the three special variables:
   <li>Index: ${i}; Current: ${item}; Next: ${each[i+1]}</li>
 </ul>
 ```
-
-## Table of contents
-    * [neft:each](#nefteach)
-  * [Runtime changes](#runtime-changes)
 
 ## Runtime changes
 

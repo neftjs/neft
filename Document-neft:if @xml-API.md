@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 neft:if
-<dl></dl>
+<dl><dt>Syntax</dt><dd>neft:if @xml</dd></dl>
 Attribute used to hide or show the tag depends on the condition result.
 ```xml
 <span neft:if="${user.isLogged}">Hi ${user.name}!</span>

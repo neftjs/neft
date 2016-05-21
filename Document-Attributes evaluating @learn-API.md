@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [API Reference](API-Reference)
 
 Attributes evaluating
-<dl></dl>
+<dl><dt>Syntax</dt><dd>Attributes evaluating @learn</dd></dl>
 Some of the attributes are automatically evaluated to the JavaScript objects.
 String `[...]` evaluates to the array.
 ```xml

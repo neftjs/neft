@@ -2,9 +2,6 @@
 
 > [`Source`](/Neft-io/neft/tree/master/src/unit/modifiers.litcoffee)
 
-## Table of contents
-  * [isNode](#isnode)
-
 isNode
 --
 isServer
