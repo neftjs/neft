@@ -4,7 +4,9 @@ Element
 <dl><dt>Syntax</dt><dd><code>Element @virtual_dom</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#element)
 
-## Nested APIs* [[Tag|Document-Tag @virtual_dom-API]]
+## Nested APIs
+
+* [[Tag|Document-Tag @virtual_dom-API]]
 * [[Text|Document-Text @virtual_dom-API]]
 
 fromHTML

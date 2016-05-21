@@ -5,7 +5,9 @@ Response
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response.litcoffee#response)
 
-## Nested APIs* [[Response Error|Networking-Response Error-API]]
+## Nested APIs
+
+* [[Response Error|Networking-Response Error-API]]
 
 ## Table of contents
 * [Response](#response)

@@ -4,7 +4,9 @@ Animation
 <dl><dt>Syntax</dt><dd><code>Animation @modifier</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/extensions/animation.litcoffee#animation)
 
-## Nested APIs* [[PropertyAnimation|Renderer-PropertyAnimation @modifier-API]]
+## Nested APIs
+
+* [[PropertyAnimation|Renderer-PropertyAnimation @modifier-API]]
   * [[NumberAnimation|Renderer-NumberAnimation @modifier-API]]
 
 Animation

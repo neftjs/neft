@@ -14,7 +14,9 @@ See one of submodules:
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/index.litcoffee#utils)
 
-## Nested APIs* [[Asynchronous|Utils-Asynchronous-API]]
+## Nested APIs
+
+* [[Asynchronous|Utils-Asynchronous-API]]
 * [[Properties extraction|Utils-Properties extraction-API]]
 * [[Stringifying|Utils-Stringifying-API]]
 

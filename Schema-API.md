@@ -11,7 +11,9 @@ const { Schema } = Neft;
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#schema)
 
-## Nested APIs* [[Array Validator|Schema-Array Validator-API]]
+## Nested APIs
+
+* [[Array Validator|Schema-Array Validator-API]]
 * [[Max Validator|Schema-Max Validator-API]]
 * [[Min Validator|Schema-Min Validator-API]]
 * [[Object Validator|Schema-Object Validator-API]]

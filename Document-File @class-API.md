@@ -4,7 +4,9 @@ File
 <dl><dt>Syntax</dt><dd><code>File @class</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#file)
 
-## Nested APIs* [[neft:attr|Document-neft:attr @xml-API]]
+## Nested APIs
+
+* [[neft:attr|Document-neft:attr @xml-API]]
 * [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
 * [[Setting attributes|Document-Setting attributes @learn-API]]
 * [[neft:if|Document-neft:if @xml-API]]

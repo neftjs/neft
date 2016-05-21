@@ -10,6 +10,7 @@
   * [[Element|Document-Element @virtual_dom-API]]
     * [[Tag|Document-Tag @virtual_dom-API]]
     * [[Text|Document-Text @virtual_dom-API]]
+  * [[neft:function|Document-neft:function @js-API]]
   * [[File|Document-File @class-API]]
     * [[neft:attr|Document-neft:attr @xml-API]]
     * [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
@@ -26,7 +27,6 @@
     * [[String Interpolation|Document-String Interpolation @learn-API]]
     * [[neft:target|Document-neft:target @xml-API]]
     * [[neft:use|Document-neft:use @xml-API]]
-  * [[neft:function|Document-neft:function @js-API]]
 * [[List|List-API]] — data-binding on arrays
 * [[Log|Log-API]]
 * [[Native Communication|Native-API]]

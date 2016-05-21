@@ -4,7 +4,9 @@
 
 > [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#item)
 
-## Nested APIs* [[Alignment|Renderer-Alignment @extension-API]]
+## Nested APIs
+
+* [[Alignment|Renderer-Alignment @extension-API]]
 * [[Anchors|Renderer-Anchors @extension-API]]
 * [[Document|Renderer-Document @extension-API]]
 * [[Keys|Renderer-Keys @extension-API]]

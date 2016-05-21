@@ -37,7 +37,9 @@ See one of:
   - [[ResourcesLoader|Renderer-ResourcesLoader-API]]
   - [[FontLoader|Renderer-FontLoader-API]]
 
-## Nested APIs* [[Item|Renderer-Item-API]]
+## Nested APIs
+
+* [[Item|Renderer-Item-API]]
   * [[Alignment|Renderer-Alignment @extension-API]]
   * [[Anchors|Renderer-Anchors @extension-API]]
   * [[Document|Renderer-Document @extension-API]]

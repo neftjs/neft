@@ -4,7 +4,9 @@ App
 <dl><dt>Syntax</dt><dd><code>App @framework</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#app)
 
-## Nested APIs* [[Standard routes|App-Standard routes @learn-API]]
+## Nested APIs
+
+* [[Standard routes|App-Standard routes @learn-API]]
 * [[Route|App-Route @class-API]]
 
 app

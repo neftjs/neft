@@ -4,7 +4,9 @@ Resources
 <dl><dt>Syntax</dt><dd><code>Resources @engine</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/index.litcoffee#resources)
 
-## Nested APIs* [[Resource|Resources-Resource @class-API]]
+## Nested APIs
+
+* [[Resource|Resources-Resource @class-API]]
 
 fromJSON
 <dl><dt>Syntax</dt><dd><code>&#x2A;Resources&#x2A; Resources.fromJSON(&#x2A;String|Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>Resources</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>String or Object</i></li></ul></dd><dt>Returns</dt><dd><i>Resources</i></dd></dl>

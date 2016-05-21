@@ -13,7 +13,9 @@ var Networking = require('networking');
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#networking)
 
-## Nested APIs* [[Handler|Networking-Handler-API]]
+## Nested APIs
+
+* [[Handler|Networking-Handler-API]]
 * [[Request|Networking-Request-API]]
 * [[Response|Networking-Response-API]]
   * [[Response Error|Networking-Response Error-API]]
