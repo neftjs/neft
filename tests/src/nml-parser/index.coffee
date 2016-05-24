@@ -29,5 +29,6 @@ describe.onNode 'src/nml-parser', ->
         assert.is code.objectsConfig[0].onEvent(), 1
 
     it 'recognizes signals listeners as functions written in ES6', ->
-        code = parseAndEval 'Item {\nonEvent: function(){ const ab = 2; return {ab}; }\n}\n'
+        nml = 'Item {\nonEvent: function(){ const ab = 2; return {ab}; }\n}\n'
+        code = parseAndEval nml
         assert.isEqual code.objectsConfig[0].onEvent(), ab: 2

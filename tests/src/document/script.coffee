@@ -8,22 +8,22 @@ os = require 'os'
 
 describe 'src/document neft:script', ->
     it 'is not rendered', ->
-        view = createView """
+        view = createView '''
             <neft:script><![CDATA[
                 module.exports = function(){};
             ]]></neft:script>
-        """
+        '''
         view = view.clone()
 
         renderParse view
         assert.is view.node.stringify(), ''
 
     it 'must exports a function', ->
-        view = createView """
+        view = createView '''
             <neft:script><![CDATA[
                 module.exports = {};
             ]]></neft:script>
-        """
+        '''
 
         try
             view.render()
@@ -32,12 +32,12 @@ describe 'src/document neft:script', ->
 
     describe 'returned function', ->
         it 'prototype is shared between rendered views', ->
-            view = createView """
+            view = createView '''
                 <neft:script><![CDATA[
                     var Ctor = module.exports = function(){};
                     Ctor.prototype = { a: 1 };
                 ]]></neft:script>
-            """
+            '''
             view = view.clone()
 
             renderParse view
@@ -54,7 +54,7 @@ describe 'src/document neft:script', ->
             assert.is view2.storage.__proto__, proto
 
         it 'is called on a view clone', ->
-            view = createView """
+            view = createView '''
                 <neft:attr name="x" value="1" />
                 <neft:script><![CDATA[
                     var Ctor = module.exports = function(){
@@ -62,7 +62,7 @@ describe 'src/document neft:script', ->
                     };
                     Ctor.prototype = { a: 1 };
                 ]]></neft:script>
-            """
+            '''
             view = view.clone()
 
             renderParse view
@@ -81,7 +81,7 @@ describe 'src/document neft:script', ->
             assert.is view2.storage.a, 1
 
         it 'is called with its prototype', ->
-            view = createView """
+            view = createView '''
                 <neft:script><![CDATA[
                     var Ctor = module.exports = function(){
                         this.proto = this;
@@ -89,7 +89,7 @@ describe 'src/document neft:script', ->
                     };
                     Ctor.prototype = { a: 1 };
                 ]]></neft:script>
-            """
+            '''
             view = view.clone()
 
             renderParse view
@@ -97,35 +97,35 @@ describe 'src/document neft:script', ->
             assert.is view.storage.protoA, 1
 
         it 'is called with attrs in context', ->
-            view = createView """
+            view = createView '''
                 <neft:script><![CDATA[
                     var Ctor = module.exports = function(){
                         this.a = this.attrs.a;
                     };
                 ]]></neft:script>
                 <neft:attr name="a" value="1" />
-            """
+            '''
             view = view.clone()
 
             renderParse view
             assert.is view.storage.a, 1
 
         it 'is called with ids in context', ->
-            view = createView """
+            view = createView '''
                 <neft:script><![CDATA[
                     var Ctor = module.exports = function(){
                         this.a = this.ids.x.attrs.a;
                     };
                 ]]></neft:script>
                 <b id="x" a="1" />
-            """
+            '''
             view = view.clone()
 
             renderParse view
             assert.is view.storage.a, 1
 
         it 'is called with funcs in context', ->
-            view = createView """
+            view = createView '''
                 <neft:function neft:name="abc"><![CDATA[
                     return 1;
                 ]]></neft:function>
@@ -134,14 +134,14 @@ describe 'src/document neft:script', ->
                         this.a = this.funcs.abc();
                     };
                 ]]></neft:script>
-            """
+            '''
             view = view.clone()
 
             renderParse view
             assert.is view.storage.a, 1
 
         it 'is called with scope in context', ->
-            view = createView """
+            view = createView '''
                 <neft:script><![CDATA[
                     var Ctor = module.exports = function(){
                     };
@@ -149,20 +149,20 @@ describe 'src/document neft:script', ->
                         this.a = this.scope.a;
                     };
                 ]]></neft:script>
-            """
+            '''
             view = view.clone()
 
             renderParse view, storage: a: 1
             assert.is view.storage.a, 1
 
         it 'is called with file node in context', ->
-            view = createView """
+            view = createView '''
                 <neft:script><![CDATA[
                     var Ctor = module.exports = function(){
                         this.aNode = this.node;
                     };
                 ]]></neft:script>
-            """
+            '''
             view = view.clone()
 
             renderParse view
@@ -170,13 +170,13 @@ describe 'src/document neft:script', ->
 
     describe.onServer '[filename]', ->
         it 'supports .coffee files', ->
-            view = Document.fromHTML uid(), """
+            view = Document.fromHTML uid(), '''
                 <neft:script filename="a.coffee"><![CDATA[
                     module.exports = class A
                         constructor: ->
                             @a = 1
                 ]]></neft:script>
-            """
+            '''
             Document.parse view
             view = view.clone()
 
@@ -184,7 +184,7 @@ describe 'src/document neft:script', ->
             assert.is view.storage.a, 1
 
     it 'predefined context properties are not enumerable', ->
-        view = createView """
+        view = createView '''
             <neft:script><![CDATA[
                 var Ctor = module.exports = function(){
                 };
@@ -192,14 +192,14 @@ describe 'src/document neft:script', ->
                     this.keys = Object.keys(this);
                 };
             ]]></neft:script>
-        """
+        '''
         view = view.clone()
 
         renderParse view
         assert.isEqual view.storage.keys, ['keys']
 
     it 'further tags are merged in a proper order', ->
-        view = createView """
+        view = createView '''
             <neft:script><![CDATA[
                 var Ctor = module.exports = function(){
                     this.aa = 1;
@@ -219,7 +219,7 @@ describe 'src/document neft:script', ->
                     this.doACalledOnB = true;
                 };
             ]]></neft:script>
-        """
+        '''
         view = view.clone()
 
         renderParse view
@@ -230,7 +230,7 @@ describe 'src/document neft:script', ->
         assert.is storage.bb, 1
         assert.is storage.bbaa, 1
 
-        storage.doA();
+        storage.doA()
         assert.ok storage.doACalledOnA
         assert.ok storage.doACalledOnB
 
@@ -250,7 +250,8 @@ describe 'src/document neft:script', ->
     it.onServer 'accepts `src` attribute', ->
         filename = "tmp#{uid()}.js"
         path = "#{os.tmpdir()}/#{filename}"
-        fs.writeFileSync path, "module.exports = function(){ this.a = 1; };", 'utf-8'
+        file = 'module.exports = function(){ this.a = 1; };'
+        fs.writeFileSync path, file, 'utf-8'
 
         source = Document.fromHTML uid(), """
             <neft:script href="#{path}" />
@@ -265,7 +266,8 @@ describe 'src/document neft:script', ->
     it.onServer 'accepts relative `src` attribute', ->
         scriptFilename = "tmp#{uid()}.js"
         scriptPath = "#{os.tmpdir()}/#{scriptFilename}"
-        fs.writeFileSync scriptPath, "module.exports = function(){ this.a = 1; };", 'utf-8'
+        file = 'module.exports = function(){ this.a = 1; };'
+        fs.writeFileSync scriptPath, file, 'utf-8'
 
         viewFilename = "tmp#{uid()}"
         viewPath = "#{os.tmpdir()}/#{viewFilename}"
@@ -310,7 +312,9 @@ describe 'src/document neft:script', ->
         assert.isEqual events, ['onBeforeRender', 'onRender']
 
         view.revert()
-        assert.isEqual events, ['onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert']
+        assert.isEqual events, [
+            'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
+        ]
 
     it 'does not call events for foreign storage', ->
         view = createView """
@@ -342,4 +346,6 @@ describe 'src/document neft:script', ->
         assert.isEqual events, ['onBeforeRender', 'onRender']
 
         view.revert()
-        assert.isEqual events, ['onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert']
+        assert.isEqual events, [
+            'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
+        ]
