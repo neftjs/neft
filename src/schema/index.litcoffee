@@ -1,11 +1,10 @@
-Schema @library
-===============
+# Schema
 
 Module used to validate structures.
 
 Access it with:
 ```javascript
-var Schema = require('schema');
+const { Schema } = Neft;
 ```
 
     'use strict'
@@ -13,10 +12,9 @@ var Schema = require('schema');
     utils = require 'src/utils'
     assert = require 'src/assert'
 
-*SchemaError* SchemaError()
----------------------------
+## **Class** SchemaError()
 
-Raised by the `Schema::validate()` if given data doesn't pass the schema.
+Raised by `Schema::validate()` if given data doesn't pass the schema.
 
 Access it with:
 ```javascript
@@ -30,8 +28,12 @@ var SchemaError = Schema.Error;
         name: 'SchemaError'
         message: ''
 
-*Schema* Schema(*Object* schema)
---------------------------------
+## **Class** Schema
+
+    module.exports = class Schema
+        @Error = SchemaError
+
+### Schema::constructor(*Object* schema)
 
 Creates a new Schema instance used to validate data.
 
@@ -39,18 +41,15 @@ Specify schema validators for each of the accepted property.
 
 ```javascript
 new Schema({
-  address: {
-    type: 'string'
-  },
-  delivery: {
-    optional: true,
-    type: 'boolean'
-  }
+    address: {
+        type: 'string'
+    },
+    delivery: {
+        optional: true,
+        type: 'boolean'
+    }
 });
 ```
-
-    module.exports = class Schema
-        @Error = SchemaError
 
         constructor: (@schema) ->
             assert.isPlainObject @schema
@@ -64,8 +63,7 @@ new Schema({
 
             Object.preventExtensions @
 
-*Object* Schema::schema
------------------------
+### *Object* Schema::schema
 
 Saved schema object from the constructor.
 
@@ -73,8 +71,7 @@ It's allowed to change this object in runtime.
 
         schema: null
 
-*Boolean* Schema::validate(*Object* data)
------------------------------------------
+### *Boolean* Schema::validate(*Object* data)
 
 Validates the given data object by the schema.
 
@@ -108,7 +105,7 @@ console.log(utils.tryFunction(schema.validate, schema, [{age: 5}], false));
 // true
 ```
 
-### Nested properties
+#### Nested properties
 
 Use dot in the property name to valdiate deep objects.
 
@@ -129,7 +126,7 @@ console.log(schema.validate({obj: {prop1: {name: 'Lily'}}}));
 // true
 ```
 
-This function uses the [utils.get()][utils/utils.get()] internally.
+This function uses *utils.get()* internally.
 
 ```javascript
 var schema = new Schema({

@@ -1,5 +1,4 @@
-regexp @validator
-=================
+# RegExp Validator
 
 Checks whether the tested value passed the given regular expression.
 

@@ -1,5 +1,4 @@
-Typed Array @library
-====================
+# Typed Array
 
     'use strict'
 
@@ -9,8 +8,7 @@ Typed Array @library
             arr[i] = 0
         arr
 
-Int8([*Integer* length = `0`])
-------------------------------
+## **Class** Int8([*Integer* length = `0`])
 
     exports.Int8 = do ->
         if typeof Int8Array isnt 'undefined'
@@ -18,8 +16,7 @@ Int8([*Integer* length = `0`])
         else
             polyfill
 
-Uint8([*Integer* length = `0`])
--------------------------------
+## **Class** Uint8([*Integer* length = `0`])
 
     exports.Uint8 = do ->
         if typeof Uint8Array isnt 'undefined'
@@ -27,8 +24,7 @@ Uint8([*Integer* length = `0`])
         else
             polyfill
 
-Int16([*Integer* length = `0`])
--------------------------------
+## **Class** Int16([*Integer* length = `0`])
 
     exports.Int16 = do ->
         if typeof Int16Array isnt 'undefined'
@@ -36,8 +32,7 @@ Int16([*Integer* length = `0`])
         else
             polyfill
 
-Uint16([*Integer* length = `0`])
---------------------------------
+## **Class** Uint16([*Integer* length = `0`])
 
     exports.Uint16 = do ->
         if typeof Uint16Array isnt 'undefined'
@@ -45,8 +40,7 @@ Uint16([*Integer* length = `0`])
         else
             polyfill
 
-Int32([*Integer* length = `0`])
--------------------------------
+## **Class** Int32([*Integer* length = `0`])
 
     exports.Int32 = do ->
         if typeof Int32Array isnt 'undefined'
@@ -54,8 +48,7 @@ Int32([*Integer* length = `0`])
         else
             polyfill
 
-Uint32([*Integer* length = `0`])
---------------------------------
+## **Class** Uint32([*Integer* length = `0`])
 
     exports.Uint32 = do ->
         if typeof Uint32Array isnt 'undefined'
@@ -63,8 +56,7 @@ Uint32([*Integer* length = `0`])
         else
             polyfill
 
-Float32([*Integer* length = `0`])
----------------------------------
+## **Class** Float32([*Integer* length = `0`])
 
     exports.Float32 = do ->
         if typeof Float32Array isnt 'undefined'
@@ -72,8 +64,7 @@ Float32([*Integer* length = `0`])
         else
             polyfill
 
-Float64([*Integer* length = `0`])
----------------------------------
+## **Class** Float64([*Integer* length = `0`])
 
     exports.Float64 = do ->
         if typeof Float64Array isnt 'undefined'

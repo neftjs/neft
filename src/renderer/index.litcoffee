@@ -1,5 +1,4 @@
-Rendering @engine
-=================
+# Renderer
 
     'use strict'
 
@@ -12,6 +11,39 @@ Rendering @engine
 
     Impl = require('./impl') exports
     itemUtils = exports.itemUtils = require('./utils/item') exports, Impl
+
+See one of:
+
+ - Namespaces
+  - [[Screen|Renderer-Screen-API]]
+  - [[Device|Renderer-Device-API]]
+  - [[Navigator|Renderer-Navigator-API]]
+  - [[RotationSensor|Renderer-RotationSensor-API]]
+ - Modifiers
+  - [[Extension|Renderer-Extension-API]]
+  - [[Class|Renderer-Class-API]]
+  - [[Animation|Renderer-Animation-API]]
+  - [[PropertyAnimation|Renderer-PropertyAnimation-API]]
+  - [[NumberAnimation|Renderer-NumberAnimation-API]]
+  - [[Transition|Renderer-Transition-API]]
+ - Base classes
+  - [[Item|Renderer-Item-API]]
+  - [[Image|Renderer-Image-API]]
+  - [[Text|Renderer-Text-API]]
+  - [[TextInput|Renderer-TextInput-API]]
+  - [[Native|Renderer-Native-API]]
+  - [[Rectangle|Renderer-Rectangle-API]]
+ - Layout
+  - [[Grid|Renderer-Grid-API]]
+  - [[Column|Renderer-Column-API]]
+  - [[Row|Renderer-Row-API]]
+  - [[Flow|Renderer-Flow-API]]
+  - [[Scrollable|Renderer-Scrollable-API]]
+ - Sound
+  - [[AmbientSound|Renderer-AmbientSound-API]]
+ - Loaders
+  - [[ResourcesLoader|Renderer-ResourcesLoader-API]]
+  - [[FontLoader|Renderer-FontLoader-API]]
 
     exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
     exports.Device = require('./types/namespace/device') exports, Impl, itemUtils
@@ -32,7 +64,6 @@ Rendering @engine
     exports.Text = require('./types/basics/item/types/text') exports, Impl, itemUtils
     exports.TextInput = require('./types/basics/item/types/textInput') exports, Impl, itemUtils
     exports.Native = require('./types/basics/item/types/native') exports, Impl, itemUtils
-
     exports.Rectangle = require('./types/shapes/rectangle') exports, Impl, itemUtils
 
     exports.Grid = require('./types/layout/grid') exports, Impl, itemUtils

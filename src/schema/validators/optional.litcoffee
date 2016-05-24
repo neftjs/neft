@@ -1,5 +1,4 @@
-optional @validator
-===================
+# Optional Validator
 
 Marks the property as optional.
 

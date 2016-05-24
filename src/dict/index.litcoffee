@@ -1,11 +1,10 @@
-Dict @library
-=============
+# Dict
 
 Module used for data-binding on objects.
 
 Access it with:
 ```javascript
-var dict = require('dict');
+const { Dict } = Neft
 ```
 
     'use strict'
@@ -13,6 +12,8 @@ var dict = require('dict');
     utils = require 'src/utils'
     assert = require 'src/assert'
     signal = require 'src/signal'
+
+## **Class** Dict
 
     module.exports = class Dict extends signal.Emitter
         @__name__ = 'Dict'
@@ -23,12 +24,11 @@ var dict = require('dict');
         ITEMS = 1<<2
         ALL = (ITEMS<<1) - 1
 
-*Dict* Dict.fromJSON(*String|Object* json)
-------------------------------------------
+### *Dict* Dict.fromJSON(*String*|*Object* json)
 
 Creates a new *Dict* from a json string.
 
-This function should be used with [toJSON()][dict/Dict::toJSON()] output.
+This function should be used with `toJSON()` output.
 
         @fromJSON = (json) ->
             json = utils.tryFunction JSON.parse, JSON, [json], json
@@ -36,8 +36,10 @@ This function should be used with [toJSON()][dict/Dict::toJSON()] output.
 
             new Dict json
 
-*Dict* Dict([*Object* data])
-----------------------------
+        NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
+        utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Dict
+
+### Dict::constructor([*Object* data])
 
 Creates a new dict instance.
 
@@ -71,11 +73,7 @@ console.log(data.name);
             if utils.isObject(obj)
                 utils.merge this, obj
 
-        NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
-        utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Dict
-
-ReadOnly *Integer* Dict::length
--------------------------------
+### ReadOnly *Integer* Dict::length
 
 Amount of keys stored in a dict.
 
@@ -91,8 +89,7 @@ console.log(dict.length);
             @keys().length
         , null
 
-*Signal* Dict::onChange(*String* key, *Any* oldValue)
------------------------------------------------------
+### *Signal* Dict::onChange(*String* key, *Any* oldValue)
 
 Signal called on each key value change.
 
@@ -111,14 +108,13 @@ user.set('country', 'US');
 
         signal.Emitter.createSignal @, 'onChange'
 
-*Any* Dict::set(*String* key, *Any* value)
-------------------------------------------
+### *Any* Dict::set(*String* key, *Any* value)
 
 Sets the given value for the given key stored in the dict.
 
-The value can't be an undefined. Use [pop()][dict/Dict::pop()] instead.
+The value can't be an undefined. Use `pop()` instead.
 
-Calls [onChange()][dict/Dict::onChange()] signal.
+Calls `onChange()` signal.
 
 ```javascript
 var links = new Dict({
@@ -156,8 +152,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 
             val
 
-*Boolean* Dict::has(*String* key)
----------------------------------
+### *Boolean* Dict::has(*String* key)
 
 Returns `true` if the given key exists in the dict.
 
@@ -167,12 +162,11 @@ Returns `true` if the given key exists in the dict.
 
             @[key] isnt undefined
 
-*Dict* Dict::extend(*Object|Dict* object)
------------------------------------------
+### *Dict* Dict::extend(*Object*|*Dict* object)
 
 Sets all keys with their values from the given object.
 
-Calls [onChange()][dict/Dict::onChange()] signal for each key.
+Calls `onChange()` signal for each key.
 
         utils.defineProperty @::, 'extend', NOT_ENUMERABLE, (obj) ->
             assert.isObject obj
@@ -183,14 +177,13 @@ Calls [onChange()][dict/Dict::onChange()] signal for each key.
 
             @
 
-*Any* Dict::pop(*String* key)
------------------------------
+### *Any* Dict::pop(*String* key)
 
 Removes the given key from the dict.
 
 The key must exists in the dict.
 
-Calls [onChange()][dict/Dict::onChange()] signal.
+Calls `onChange()` signal.
 
 ```javascript
 var data = new Dict;
@@ -223,12 +216,11 @@ data.pop('name');
 
             oldVal
 
-Dict::clear()
--------------
+### Dict::clear()
 
 Removes all stored keys from the dict.
 
-Calls [onChange()][dict/Dict::onChange()] signal for each stored key.
+Calls `onChange()` signal for each stored key.
 
         utils.defineProperty @::, 'clear', NOT_ENUMERABLE, ->
             for key, val of this
@@ -236,8 +228,7 @@ Calls [onChange()][dict/Dict::onChange()] signal for each stored key.
 
             return
 
-ReadOnly *Array* Dict::keys()
------------------------------
+### ReadOnly *Array* Dict::keys()
 
 Returns an array of keys stored in the dict.
 
@@ -267,8 +258,7 @@ console.log(data.keys());
 
             @_keys
 
-*Array* Dict::values()
-----------------------
+### *Array* Dict::values()
 
 Returns an array of values stored in the dict.
 
@@ -298,8 +288,7 @@ console.log(data.values());
 
             @_values
 
-*Array* Dict::items()
----------------------
+### *Array* Dict::items()
 
 Returns an array of key-value pairs stored in the dict.
 
@@ -315,7 +304,8 @@ console.log(data.items());
 // [['x', 10], ['y', 30]]
 ```
 
-### Iterate over a dict
+#### Iterate over a dict
+
 ```javascript
 var dict = new Dict({prop1: 1, prop2: 2});
 var items = dict.items();
@@ -340,3 +330,7 @@ for (var i = 0; i < items.length; i++){
                 arr.length = i
 
             @_values
+
+## Glossary
+
+- [Dict](#class-dict)

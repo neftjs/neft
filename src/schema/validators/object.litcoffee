@@ -1,5 +1,4 @@
-object @validator
-=================
+# Object Validator
 
 Determines whether the tested value is an object.
 

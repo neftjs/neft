@@ -1,5 +1,4 @@
-min @validator
-==============
+# Min Validator
 
 Determines the minimum range on the number.
 
