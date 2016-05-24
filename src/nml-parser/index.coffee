@@ -1,5 +1,6 @@
 'use strict'
 
+babel = require 'babel-core'
 parser = require './parser'
 bindingParser = require 'src/binding/parser'
 
@@ -93,11 +94,18 @@ bindingAttributeToString = (obj) ->
 
 stringify =
     function: (elem) ->
+        # arguments
         args = idsKeys+''
         if args and elem.params+''
             args += ","
         args += elem.params+''
-        "function(#{args}){#{elem.body}}"
+
+        # body
+        body = "(function(){#{elem.body}})"
+        body = babel.transform(body, presets: ['es2015']).code
+        body = /{([^]*)}/m.exec(body)?[1]
+
+        "function(#{args}){#{body}}"
     object: (elem) ->
         json = {}
         children = []

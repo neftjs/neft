@@ -17,6 +17,19 @@ describe 'src/document neft:function', ->
         renderParse view
         assert.is view.node.stringify(), '</div>'
 
+    it 'supports EcmaScript 6 syntax', ->
+        source = createView """
+            <neft:function neft:name="abc"><![CDATA[
+                const ab = 2;
+                return Object.keys({ab})+'';
+            ]]></neft:function>
+            ${funcs.abc()}
+        """
+        view = source.clone()
+
+        renderParse view
+        assert.is view.node.stringify(), 'ab'
+
     it 'has arguments global variable', ->
         source = createView """
             <neft:function neft:name="abc"><![CDATA[

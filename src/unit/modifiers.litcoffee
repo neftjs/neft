@@ -33,5 +33,6 @@ isIOS
 --
 
         for funcName, utilsProp of PLATFORMS
-            func[funcName] = if utils[utilsProp] then -> this else NOP
+            getter = if utils[utilsProp] then -> this else NOP
+            utils.defineProperty func, funcName, 0, getter, null
         return

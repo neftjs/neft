@@ -3,6 +3,7 @@
 fs = require 'fs'
 pathUtils = require 'path'
 yaml = require 'js-yaml'
+babel = require 'babel-core'
 Module = require 'module'
 
 process.neftBundleBuilder =
@@ -32,16 +33,25 @@ base = pathUtils.dirname index
 
 mockGlobal require("./emulators/#{platform}") opts
 
-require.extensions['.pegjs'] = require.extensions['.txt'] = (module, filename) ->
-    module.exports = fs.readFileSync filename, 'utf8'
-require.extensions['.yaml'] = (module, filename) ->
-    module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
-
 if opts.neftFilePath
     global.Neft = require opts.neftFilePath
     Neft.log.enabled = 0
 else
     global.Neft = ->
+
+require.extensions['.pegjs'] = require.extensions['.txt'] = (module, filename) ->
+    module.exports = fs.readFileSync filename, 'utf8'
+require.extensions['.yaml'] = (module, filename) ->
+    module.exports = yaml.safeLoad fs.readFileSync filename, 'utf8'
+
+# register babel
+if opts.useBabel
+    babelOptions = presets: ['es2015']
+    require.extensions['.js'] = (module, filename) ->
+        if filename.indexOf('node_modules') isnt -1
+            return
+        {code} = babel.transformFileSync filename, babelOptions
+        module._compile code, filename
 
 modules = []
 modulesByPaths = {}
