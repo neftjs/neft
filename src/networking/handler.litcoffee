@@ -1,5 +1,4 @@
-Handler
-=======
+# Handler
 
     'use strict'
 
@@ -13,15 +12,13 @@ Handler
     assert = assert.scope 'Networking.Handler'
     log = log.scope 'Networking', 'Handler'
 
-*Handler* Handler(*Object* options)
------------------------------------
+# **Class** Handler
 
 Represents a callback function called on the request.
 
 Each handler must determine an uri, which is compared with the got request URI.
 
-You should use [createHandler()][networking/Networking::createHandler()] to create
-a functional handler.
+You should use `createHandler()` to create a functional handler.
 
 Access it with:
 ```javascript
@@ -30,6 +27,8 @@ var Handler = Networking.Handler;
 ```
 
     module.exports = (Networking) -> class Handler
+
+## Handler::constructor(*Object* options)
 
         constructor: (opts) ->
             assert.isPlainObject opts, 'ctor options argument ...'
@@ -40,48 +39,43 @@ var Handler = Networking.Handler;
 
             {@method, @uri, @schema, @callback} = opts
 
-*String* Handler::method
-------------------------
+## *String* Handler::method
 
 Describes which type of the request, this handler can handle.
 
         method: ''
 
-*Networking.Uri* Handler::uri
------------------------------
+## *Networking.Uri* Handler::uri
 
 This property is compared with the request uri.
 
         uri: null
 
-*Schema* Handler::schema = null
--------------------------------
+## *Schema* Handler::schema = null
 
 Used to determine whether the request uri is valid and can be handled by the handler callback.
 
         schema: null
 
-*Function* Handler::callback
-----------------------------
+## *Function* Handler::callback
 
 Function used to handle the request.
 
-It's called with three parameters: **Networking.Request**, **Networking.Response** and
+It's called with three parameters: *Networking.Request*, *Networking.Response* and
 a *next* function.
 
 If the *next* function is called, the next handler is checked.
 
         callback: null
 
-Handler::exec(*Networking.Request* request, *Networking.Response* response, *Function* next)
---------------------------------------------------------------------------------------------
+## Handler::exec(*Networking.Request* request, *Networking.Response* response, *Function* next)
 
 Executes the handler, that is:
  - compares the uri with the request,
  - validates the request uri with the schema,
  - calls the handler callback.
 
-It's internally called by the [createRequest()][networking/Networking::createRequest()].
+It's internally called by the `createRequest()`.
 
         exec: (req, res, next) ->
             assert.instanceOf req, Networking.Request, '::exec request argument ...'
@@ -138,8 +132,7 @@ It's internally called by the [createRequest()][networking/Networking::createReq
 
             null
 
-*String* Handler::toString()
-----------------------------
+## *String* Handler::toString()
 
 Returns a string describing the handler.
 
@@ -149,3 +142,7 @@ Returns a string describing the handler.
 
         toString: ->
             "#{@method} #{@uri}"
+
+# Glossary
+
+- [Networking.Handler](#class-handler)

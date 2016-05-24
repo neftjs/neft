@@ -1,5 +1,4 @@
-Response
-========
+# Response
 
     'use strict'
 
@@ -11,10 +10,11 @@ Response
     assert = assert.scope 'Networking.Response'
     log = log.scope 'Networking', 'Response'
 
+# **Class** Response
+
     module.exports = (Networking, Impl) -> class Response extends signal.Emitter
 
-*Array* Response.STATUSES
--------------------------
+## *Array* Response.STATUSES
 
 Contains abstract codes used to describe the response type.
 
@@ -82,8 +82,7 @@ console.log(Networking.Response.BAD_REQUEST);
 
         @Error = require('./response/error') Networking, Response
 
-*Response* Response(*Object* options)
--------------------------------------
+## Response::constructor(*Object* options)
 
 Access it with:
 ```javascript
@@ -120,8 +119,7 @@ var Response = Networking.Response;
             if opts.status?
                 @send()
 
-*Signal* Response::onSend()
----------------------------
+## *Signal* Response::onSend()
 
 Called when the response has been sent.
 
@@ -133,22 +131,19 @@ res.onSend(function(){
 
         signal.Emitter.createSignal @, 'onSend'
 
-ReadOnly *Boolean* Response::pending
-------------------------------------
+## ReadOnly *Boolean* Response::pending
 
 Indicates whether the response is not destroyed.
 
         pending: false
 
-ReadOnly *Networking.Request* Response::request
------------------------------------------------
+## ReadOnly *Networking.Request* Response::request
 
 Refers to the [Request][networking/Request].
 
         request: null
 
-*Integer* Response::status = Response.OK
-----------------------------------------
+## *Integer* Response::status = Response.OK
 
 Keeps a normalized code determined the response type.
 
@@ -161,8 +156,7 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 
         status: @OK
 
-*Any* Response::data
---------------------
+## *Any* Response::data
 
 Value sent to the client.
 
@@ -174,23 +168,19 @@ res.data = Document.fromJSON(...);
 
         data: null
 
-*Object* Response::headers
---------------------------
+## *Object* Response::headers
 
         headers: null
 
-*Object* Response::cookies
---------------------------
+## *Object* Response::cookies
 
         cookies: null
 
-*String* Response::encoding = 'utf-8'
--------------------------------------
+## *String* Response::encoding = 'utf-8'
 
         encoding: 'utf-8'
 
-*Response* Response::setHeader(*String* name, *String* value)
--------------------------------------------------------------
+## *Response* Response::setHeader(*String* name, *String* value)
 
 ```javascript
 res.setHeader('Location', '/redirect/to/url');
@@ -207,8 +197,7 @@ res.setHeader('Location', '/redirect/to/url');
 
             @
 
-Response::send([*Integer* status, *Any* data])
-----------------------------------------------
+## Response::send([*Integer* status, *Any* data])
 
 This method calls the [onSend()][networking/Response::onSend()] signal.
 
@@ -244,8 +233,7 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 
             return
 
-Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
----------------------------------------------------------------------
+## Response::redirect(*Integer* status = `Response.FOUND`, *String* uri)
 
 The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
@@ -270,8 +258,7 @@ The *Response.MOVED* for is a permanent redirection.
                 @pending = false
                 @onSend.emit()
 
-Response::raise(*Any* error)
-----------------------------
+## Response::raise(*Any* error)
 
 Finishes the response with an error.
 
@@ -286,10 +273,13 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
             else
                 @send Response.INTERNAL_SERVER_ERROR, error
 
-*Boolean* Response::isSucceed()
--------------------------------
+## *Boolean* Response::isSucceed()
 
 Returns `true` if the response status is in range from 200 to 299.
 
         isSucceed: ->
             300 > @status >= 200
+
+# Glossary
+
+- [Networking.Response](#class-response)

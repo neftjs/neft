@@ -38,7 +38,7 @@
             log.warn "No listeners added for the native event '#{name}'"
         return
 
-## callFunction(*String* name, [*Boolean*|*Float*|*String* args...])
+# callFunction(*String* name, [*Boolean*|*Float*|*String* args...])
 
     pushPending = false
 
@@ -81,7 +81,7 @@
             setImmediate sendData
         return
 
-## on(*String* eventName, *Function* listener)
+# on(*String* eventName, *Function* listener)
 
     exports.on = (name, listener) ->
         assert.isString name
@@ -91,3 +91,8 @@
         eventListeners = listeners[name] ?= []
         eventListeners.push listener
         return
+
+# Glossary
+
+- [native.callFunction](#callFunction)
+- [native.on](#on)

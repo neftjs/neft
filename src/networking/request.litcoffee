@@ -1,5 +1,4 @@
-Request
-=======
+# Request
 
     'use strict'
 
@@ -9,10 +8,11 @@ Request
 
     assert = assert.scope 'Networking.Request'
 
+# **Class** Request
+
     module.exports = (Networking, Impl) -> class Request extends signal.Emitter
 
-*Array* Request.METHODS
------------------------
+## *Array* Request.METHODS
 
 Contains available *HTTP* methods.
 
@@ -31,8 +31,7 @@ Contains:
             (@OPTIONS = 'options')
         ]
 
-*Array* Request.TYPES
----------------------
+## *Array* Request.TYPES
 
 Contains available expected types.
 
@@ -49,13 +48,11 @@ Contains:
             (@BINARY_TYPE = 'binary')
         ]
 
-*Request* Request(*Object* options)
------------------------------------
+## Request::constructor(*Object* options)
 
 Class used to describe coming networking request.
 
-You should use [Networking::createRequest()][networking/Networking::createRequest()]
-to create a full request.
+You should use `createRequest()` to create a full request.
 
 Access it with:
 ```javascript
@@ -97,20 +94,17 @@ var Request = Networking.Request;
             if opts.onLoadEnd
                 @onLoadEnd opts.onLoadEnd
 
-*Signal* Request::onLoadEnd(*Any* error, *Any* data)
-----------------------------------------------------
+## *Signal* Request::onLoadEnd(*Any* error, *Any* data)
 
         signal.Emitter.createSignal @, 'onLoadEnd'
 
-ReadOnly *String* Request::uid
-------------------------------
+## ReadOnly *String* Request::uid
 
 Pseudo unique hash. It's created automatically.
 
         uid: ''
 
-ReadOnly *Boolean* Request::pending
------------------------------------
+## ReadOnly *Boolean* Request::pending
 
 Indicates whether the request is not destroyed.
 
@@ -118,8 +112,7 @@ If it's `false`, the request can't be changed.
 
         pending: false
 
-*String* Request::method
-------------------------
+## *String* Request::method
 
 This property refers to one of the `Request.METHODS` values.
 
@@ -127,8 +120,7 @@ Holds a method with which the request has been called.
 
         method: Request.GET
 
-*Networking.Uri* Request::uri
------------------------------
+## *Networking.Uri* Request::uri
 
 Refers to the request URI path.
 
@@ -147,8 +139,7 @@ It can holds local and absolute paths.
 
         uri: null
 
-*String* Request::type
-----------------------
+## *String* Request::type
 
 Describes the expected response type.
 
@@ -161,28 +152,24 @@ It refers to one of the *Request.TYPES* values.
 
         type: @JSON_TYPE
 
-*Object* Request::data = null
------------------------------
+## *Object* Request::data = null
 
 Holds a data sent with a request.
 It can be, for instance, a form data.
 
         data: null
 
-ReadOnly *Networking.Handler* Request::handler
-----------------------------------------------
+## ReadOnly *Networking.Handler* Request::handler
 
 Refers to the currently considered [Handler][networking/Handler].
 
         handler: null
 
-ReadOnly *Networking.Response* Request::response
-------------------------------------------------
+## ReadOnly *Networking.Response* Request::response
 
         response: null
 
-ReadOnly *Object* Request::params = {}
---------------------------------------
+## ReadOnly *Object* Request::params = {}
 
 Keeps matched parameters by the handler from the request uri.
 
@@ -191,8 +178,7 @@ the 'name' property is available as the *params.name*.
 
         params: null
 
-ReadOnly *Object* Request::headers
-----------------------------------
+## ReadOnly *Object* Request::headers
 
 Contains request headers.
 
@@ -200,13 +186,11 @@ For the client request, this object is empty.
 
         headers: null
 
-ReadOnly *Object* Request::cookies
-----------------------------------
+## ReadOnly *Object* Request::cookies
 
         cookies: null
 
-*String* Request::toString()
-----------------------------
+## *String* Request::toString()
 
 Returns a string describing the request.
 
@@ -231,3 +215,7 @@ console.log(req.toString);
             else
                 @onLoadEnd.emit res.data or res.status or "Unknown error"
             return
+
+# Glossary
+
+- [Networking.Request](#class-request)

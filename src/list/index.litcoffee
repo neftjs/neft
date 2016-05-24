@@ -25,8 +25,7 @@ Creates a new list instance.
 
 ```javascript
 var list = new List([1, 2]);
-console.log(list instanceof List);
-// true
+list instanceof List; // true
 ```
 
         constructor: (arr) ->
@@ -73,9 +72,7 @@ Amount of values stored in the list.
 
 ```javascript
 var list = new List(['a', 'b']);
-
-console.log(list.length);
-// 2
+list.length; // 2
 ```
 
 ## *Any* List::set(*Integer* index, *Any* value)
@@ -208,16 +205,12 @@ Calls `onPop()` signal.
 
 ```javascript
 var list = new List(['a', 'b']);
-
-console.log(list[1]);
-// b
+list[1]; // b
 
 list.remove('b');
-console.log(list[1]);
-// undefined
+list[1]; // undefined
 
-console.log(list);
-// ['a']
+list; // ['a']
 ```
 
         remove: (val) ->
@@ -239,16 +232,12 @@ Calls `onPop()` signal.
 
 ```javascript
 var list = new List(['a', 'b']);
-
-console.log(list[1]);
-// b
+list[1]; // b
 
 list.pop(1);
-console.log(list[1]);
-// undefined
+list[1]; // undefined
 
-console.log(list);
-// ['a']
+list; // ['a']
 ```
 
         pop: (i) ->
@@ -303,12 +292,8 @@ Returns `-1` if the value doesn't exist in the list.
 
 ```javascript
 var list = new List(['a', 'b']);
-
-console.log(list.index('b'));
-// 1
-
-console.log(list.index('c'));
-// -1
+list.index('b'); // 1
+list.index('c'); // -1
 ```
 
         index: (val) ->
@@ -322,12 +307,8 @@ Returns `true` if the given value exists in the list.
 
 ```javascript
 var list = new List(['a', 'b']);
-
-console.log(list.has('a'));
-// true
-
-console.log(list.has('ab123'));
-// false
+list.has('a'); // true
+list.has('ab123'); // false
 ```
 
         has: (val) ->
