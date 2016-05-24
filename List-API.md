@@ -9,7 +9,7 @@ Access it with:
 const { List } = Neft;
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#list)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#list)
 
 ## Table of contents
 * [List](#list)
@@ -33,7 +33,7 @@ const { List } = Neft;
 
 # **Class** List
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#class-list)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#class-list)
 
 ##constructor
 <dl><dt>Syntax</dt><dd><code>List::constructor([&#x2A;Array&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>data — <i>Array</i> — <i>optional</i></li></ul></dd></dl>
@@ -45,25 +45,25 @@ console.log(list instanceof List);
 // true
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#constructor)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#constructor)
 
 ##onChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onChange(&#x2A;Any&#x2A; oldValue, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li><li>index — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Signal called on each value change.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#onchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#onchange)
 
 ##onInsert
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onInsert(&#x2A;Any&#x2A; value, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li><li>index — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Signal called when a value was added.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#oninsert)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#oninsert)
 
 ##onPop
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; List::onPop(&#x2A;Any&#x2A; oldValue, &#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li><li>index — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Signal called when a value was removed.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#onpop)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#onpop)
 
 ##length
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; List::length</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Read Only</dt></dl>
@@ -100,7 +100,7 @@ types.set(0, 'Fantasy');
 // nothing changed ...
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#set)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#set)
 
 ##append
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; List::append(&#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -124,7 +124,7 @@ console.log(fridge.items());
 // apple, milk, cheese
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#append)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#append)
 
 ##insert
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; List::insert(&#x2A;Integer&#x2A; index, &#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>index — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -150,7 +150,7 @@ console.log(list.items());
 // ['a', 'c', 'b']
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#insert)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#insert)
 
 ##extend
 <dl><dt>Syntax</dt><dd><code>&#x2A;List&#x2A; List::extend(&#x2A;Object&#x2A; items)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>items — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd></dl>
@@ -158,7 +158,7 @@ Appends all values stored in the given items into the list.
 
 Calls `onInsert()` signal for each value.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#extend)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#extend)
 
 ##remove
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; List::remove(&#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -180,7 +180,7 @@ console.log(list);
 // ['a']
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#remove)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#remove)
 
 ##pop
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; List::pop([&#x2A;Integer&#x2A; index])</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>index — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
@@ -204,7 +204,7 @@ console.log(list);
 // ['a']
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#pop)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#pop)
 
 ##clear
 <dl><dt>Syntax</dt><dd><code>List::clear()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd></dl>
@@ -230,7 +230,7 @@ console.log(list);
 // []
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#clear)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#clear)
 
 ##index
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; List::index(&#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
@@ -248,7 +248,7 @@ console.log(list.index('c'));
 // -1
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#index)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#index)
 
 ##has
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; List::has(&#x2A;Any&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Parameters</dt><dd><ul><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -264,11 +264,11 @@ console.log(list.has('ab123'));
 // false
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#has)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#has)
 
 ##toArray
 <dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; List::toArray()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/List-API#class-list">List</a></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/list/index.litcoffee#toarray)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/list/index.litcoffee#toarray)
 
 # Glossary
 

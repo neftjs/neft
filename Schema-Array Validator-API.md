@@ -18,5 +18,5 @@ console.log(schema.validate({friends: []}));
 // true
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/validators/array.litcoffee#array-validator)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/schema/validators/array.litcoffee#array-validator)
 

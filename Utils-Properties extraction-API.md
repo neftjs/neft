@@ -2,7 +2,7 @@
 
 # Properties extraction
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#properties-extraction)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/utils/namespace.litcoffee#properties-extraction)
 
 ## Table of contents
 * [Properties extraction](#properties-extraction)
@@ -39,19 +39,19 @@ console.log(utils.get(obj, 'prop[].deep.result'));
 // 'utils.get.OptionsArray' instance ...
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#get)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/utils/namespace.litcoffee#get)
 
 ## **Class** utils.get.OptionsArray()
 
 Special version of an Array, returned if the result of the utils.get()
 function is a list of the possible values.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#class-utilsgetoptionsarray)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/utils/namespace.litcoffee#class-utilsgetoptionsarray)
 
 ##isStringArray
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; isStringArray(&#x2A;String&#x2A; value)</code></dd><dt>Parameters</dt><dd><ul><li>value — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Checks whether the given string references into an array according
 to the notation in the utils.get() function.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/utils/namespace.litcoffee#isstringarray)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/utils/namespace.litcoffee#isstringarray)
 

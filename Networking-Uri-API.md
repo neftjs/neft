@@ -59,7 +59,7 @@ If the given uri is not valid with the uri, error will be raised.
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/uri.litcoffee#match)
 
 toString
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Uri::toString([&#x2A;Object|Dict&#x2A; params])</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>params — <i>Object or Dict</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Uri::toString([&#x2A;Object|Dict&#x2A; params])</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>params — <i>Object|Dict</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 Parses the uri into a string.
 
 The given params object is used to replace the uri parameters.

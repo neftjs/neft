@@ -6,8 +6,8 @@ App
 
 ## Nested APIs
 
-* [[Standard routes|App-Standard routes @learn-API]]
 * [[Route|App-Route @class-API]]
+* [[Standard routes|App-Standard routes @learn-API]]
 
 app
 <dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; app</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd></dl>

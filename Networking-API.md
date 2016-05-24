@@ -16,9 +16,9 @@ var Networking = require('networking');
 ## Nested APIs
 
 * [[Handler|Networking-Handler-API]]
-* [[Request|Networking-Request-API]]
 * [[Response|Networking-Response-API]]
   * [[Response Error|Networking-Response Error-API]]
+* [[Request|Networking-Request-API]]
 * [[Uri|Networking-Uri-API]]
 
 Networking
@@ -79,7 +79,7 @@ app.networking.createHandler({
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#pendingrequests)
 
 createRequest
-<dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Request&#x2A; Networking::createRequest(&#x2A;Object|Networking.Request&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Networking</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object or Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Request&#x2A; Networking::createRequest(&#x2A;Object|Networking.Request&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Networking</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object|Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
 The given options object corresponds to the [Request][networking/Request] properties.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#createrequest)
@@ -105,7 +105,7 @@ resolveRequest
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/index.litcoffee#resolverequest)
 
 createLocalRequest
-<dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Request&#x2A; Networking::createLocalRequest(&#x2A;Object|Networking.Request&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Networking</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object or Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Networking.Request&#x2A; Networking::createLocalRequest(&#x2A;Object|Networking.Request&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Networking</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object|Networking.Request</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
 Use this method to create a new [Request][networking/Request] and handle it.
 
 The given options object corresponds to the [Request][networking/Request] properties.

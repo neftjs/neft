@@ -2,22 +2,22 @@
 
 # Item
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#item)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#item)
 
 ## Nested APIs
 
 * [[Alignment|Renderer-Alignment @extension-API]]
 * [[Anchors|Renderer-Anchors @extension-API]]
 * [[Document|Renderer-Document @extension-API]]
-* [[Layout|Renderer-Layout @extension-API]]
 * [[Keys|Renderer-Keys @extension-API]]
+* [[Layout|Renderer-Layout @extension-API]]
 * [[Margin|Renderer-Margin @extension-API]]
 * [[Pointer|Renderer-Pointer @extension-API]]
+* [[Spacing|Renderer-Spacing @extension-API]]
 * [[Native|Renderer-Native @class-API]]
+* [[Image|Renderer-Image @class-API]]
 * [[Text|Renderer-Text @class-API]]
   * [[Font|Renderer-Font @extension-API]]
-* [[Spacing|Renderer-Spacing @extension-API]]
-* [[Image|Renderer-Image @class-API]]
 * [[TextInput|Renderer-TextInput @class-API]]
 
 ## Table of contents
@@ -79,17 +79,17 @@
 
 ## **Class** Item
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#class-item)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#class-item)
 
 ###New
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Item</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#new)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#new)
 
 ###constructor
 <dl><dt>Syntax</dt><dd><code>Item::constructor()</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd></dl>
 This is a base class for everything which is visible.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#constructor)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#constructor)
 
 #### Custom properties
 
@@ -117,7 +117,7 @@ This is a base class for everything which is visible.
 
 ###on$Change
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::on$Change(&#x2A;String&#x2A; property, &#x2A;Any&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onchange)
 
 ###ready
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::ready()</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
@@ -141,39 +141,39 @@ Rectangle {
 }
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#ready)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#ready)
 
 ###onAnimationFrame
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onAnimationFrame(&#x2A;Integer&#x2A; miliseconds)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>miliseconds — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onanimationframe)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onanimationframe)
 
 ###id
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; Item::id</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#id)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#id)
 
 ###onChildrenChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onChildrenChange(&#x2A;Item&#x2A; added, &#x2A;Item&#x2A; removed)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>added — <i>Item</i></li><li>removed — <i>Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onchildrenchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onchildrenchange)
 
 ####children.firstChild
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Item&#x2A; Item::children.firstChild</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenfirstchild)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenfirstchild)
 
 ####children.lastChild
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Item&#x2A; Item::children.lastChild</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenlastchild)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenlastchild)
 
 ####children.bottomChild
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Item&#x2A; Item::children.bottomChild</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenbottomchild)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenbottomchild)
 
 ####children.topChild
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Item&#x2A; Item::children.topChild</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrentopchild)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrentopchild)
 
 ####children.length
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Integer&#x2A; Item::children.length</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenlength)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenlength)
 
 ####children.layout
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::children.layout</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd></dl>
@@ -182,7 +182,7 @@ Can be e.g. *Flow*, *Grid* etc.
 
 ####children.onLayoutChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::children.onLayoutChange(&#x2A;Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenonlayoutchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenonlayoutchange)
 
 ####children.target
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::children.target</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd></dl>
@@ -191,63 +191,63 @@ will be added into the `target` item.
 
 ####children.onTargetChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::children.onTargetChange(&#x2A;Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenontargetchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenontargetchange)
 
 ####children.get
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::children.get(&#x2A;Integer&#x2A; index)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>index — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li></ul></dd><dt>Returns</dt><dd><i>Item</i></dd></dl>
 Returns an item with the given index.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenget)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenget)
 
 ####children.index
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Item::children.index(&#x2A;Item&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Item</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
 Returns an index of the given child in the children array.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenindex)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenindex)
 
 ####children.has
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Item::children.has(&#x2A;Item&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>value — <i>Item</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given item is an item child.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenhas)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenhas)
 
 ####children.clear
 <dl><dt>Syntax</dt><dd><code>Item::children.clear()</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd></dl>
 Removes all children from the item.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#childrenclear)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#childrenclear)
 
 ###parent
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::parent = null</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd><dt>Default</dt><dd><code>null</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#parent)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#parent)
 
 ###previousSibling
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::previousSibling</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#previoussibling)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#previoussibling)
 
 ###onPreviousSiblingChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onPreviousSiblingChange(&#x2A;Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onprevioussiblingchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onprevioussiblingchange)
 
 ###nextSibling
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::nextSibling</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#nextsibling)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#nextsibling)
 
 ###onNextSiblingChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onNextSiblingChange(&#x2A;Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onnextsiblingchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onnextsiblingchange)
 
 ###belowSibling
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Item&#x2A; Item::belowSibling</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#belowsibling)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#belowsibling)
 
 ###aboveSibling
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Item&#x2A; Item::aboveSibling</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#abovesibling)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#abovesibling)
 
 ###index
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Item::index</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#index)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#index)
 
 ### *Boolean* Item::visible = `true`
 
@@ -261,54 +261,64 @@ Item {
         rect.visible = !rect.visible;
         text.text = rect.visible ? "Click to hide" : "Click to show";
     }
-
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#boolean-itemvisible--true)
+    Rectangle {
+        id: rect
+        anchors.fill: parent
+        color: 'blue'
+    }
+    Text {
+        id: text
+        text: "Click to hide"
+        anchors.centerIn: parent
+    }
+}
+```
 
 ###onVisibleChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onVisibleChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onvisiblechange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onvisiblechange)
 
 ### *Boolean* Item::clip = `false`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onClipChange(*Boolean* oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#boolean-itemclip--false-signal-itemonclipchangeboolean-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#boolean-itemclip--false-signal-itemonclipchangeboolean-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::width = `0`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onWidthChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemwidth--0-signal-itemonwidthchangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#float-itemwidth--0-signal-itemonwidthchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::height = `0`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onHeightChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemheight--0-signal-itemonheightchangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#float-itemheight--0-signal-itemonheightchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::x = `0`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onXChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemx--0-signal-itemonxchangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#float-itemx--0-signal-itemonxchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::y = `0`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onYChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemy--0-signal-itemonychangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#float-itemy--0-signal-itemonychangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::z = `0`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onZChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemz--0-signal-itemonzchangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#float-itemz--0-signal-itemonzchangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::scale = `1`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onScaleChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemscale--1-signal-itemonscalechangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#float-itemscale--1-signal-itemonscalechangefloat-oldvalue)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::rotation = `0`
 
@@ -323,13 +333,13 @@ Rectangle {
 
 ###onRotationChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onRotationChange(&#x2A;Float&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onrotationchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onrotationchange)
 
 ### [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::opacity = `1`
 
 ### [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onOpacityChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#float-itemopacity--1-signal-itemonopacitychangefloat-oldvalue)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#float-itemopacity--1-signal-itemonopacitychangefloat-oldvalue)
 
 ###linkUri
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Item::linkUri = ''</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>''</code></dd></dl>
@@ -337,7 +347,7 @@ Points to the URI which will be used when user clicks on this item.
 
 ###onLinkUriChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onLinkUriChange(&#x2A;String&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onlinkurichange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onlinkurichange)
 
 ###background
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::background</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item</i></dd></dl>
@@ -347,35 +357,35 @@ By default, background is filled to his parent.
 
 ###onBackgroundChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onBackgroundChange(&#x2A;Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#onbackgroundchange)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#onbackgroundchange)
 
 ###overlap
 <dl><dt>Syntax</dt><dd><code>Item::overlap(&#x2A;Item&#x2A; item)</code></dd><dt>Prototype method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>item — <i>Item</i></li></ul></dd></dl>
 Returns `true` if two items overlaps.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#overlap)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#overlap)
 
 ###anchors
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item.Anchors&#x2A; Item::anchors</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item.Anchors</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#anchors)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#anchors)
 
 ###layout
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item.Layout&#x2A; Item::layout</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item.Layout</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#layout)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#layout)
 
 ###pointer
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item.Pointer&#x2A; Item::pointer</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item.Pointer</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#pointer)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#pointer)
 
 ###margin
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item.Margin&#x2A; Item::margin</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item.Margin</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#margin)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#margin)
 
 ###keys
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item.Keys&#x2A; Item::keys</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item.Keys</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#keys)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#keys)
 
 ###document
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item.Document&#x2A; Item::document</code></dd><dt>Prototype property of</dt><dd><i>Item</i></dd><dt>Type</dt><dd><i>Item.Document</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/renderer/types/basics/item.litcoffee#document)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/renderer/types/basics/item.litcoffee#document)
 

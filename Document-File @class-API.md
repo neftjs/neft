@@ -6,20 +6,20 @@ File
 
 ## Nested APIs
 
-* [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
 * [[neft:attr|Document-neft:attr @xml-API]]
+* [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
 * [[Setting attributes|Document-Setting attributes @learn-API]]
 * [[neft:if|Document-neft:if @xml-API]]
 * [[neft:fragment|Document-neft:fragment @xml-API]]
   * [[neft:require|Document-neft:require @xml-API]]
 * [[neft:function|Document-neft:function @xml-API]]
 * [[id|Document-id @xml-API]]
-* [[neft:rule|Document-neft:rule @xml-API]]
-* [[neft:each|Document-neft:each @xml-API]]
 * [[neft:log|Document-neft:log @xml-API]]
+* [[neft:each|Document-neft:each @xml-API]]
+* [[neft:rule|Document-neft:rule @xml-API]]
 * [[neft:script|Document-neft:script @xml-API]]
-* [[neft:target|Document-neft:target @xml-API]]
 * [[String Interpolation|Document-String Interpolation @learn-API]]
+* [[neft:target|Document-neft:target @xml-API]]
 * [[neft:use|Document-neft:use @xml-API]]
 
 onBeforeRender
@@ -55,7 +55,7 @@ fromElement
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#fromelement)
 
 fromJSON
-<dl><dt>Syntax</dt><dd><code>&#x2A;File&#x2A; File.fromJSON(&#x2A;String|Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>String or Object</i></li></ul></dd><dt>Returns</dt><dd><i>File</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;File&#x2A; File.fromJSON(&#x2A;String|Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>String|Object</i></li></ul></dd><dt>Returns</dt><dd><i>File</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/file.litcoffee#fromjson)
 
 parse

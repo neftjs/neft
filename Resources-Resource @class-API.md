@@ -5,7 +5,7 @@ Resource
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/resource.litcoffee#resource)
 
 fromJSON
-<dl><dt>Syntax</dt><dd><code>&#x2A;Resource&#x2A; Resource.fromJSON(&#x2A;String|Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>String or Object</i></li></ul></dd><dt>Returns</dt><dd><i>Resource</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Resource&#x2A; Resource.fromJSON(&#x2A;String|Object&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>String|Object</i></li></ul></dd><dt>Returns</dt><dd><i>Resource</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/resource.litcoffee#fromjson)
 
 parseFileName

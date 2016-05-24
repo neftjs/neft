@@ -14,7 +14,7 @@ fromHTML
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#fromhtml)
 
 fromJSON
-<dl><dt>Syntax</dt><dd><code>&#x2A;Element&#x2A; Element.fromJSON(&#x2A;Array|String&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>Array or String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Element&#x2A; Element.fromJSON(&#x2A;Array|String&#x2A; json)</code></dd><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>Array|String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/element/element.litcoffee#fromjson)
 
 Element

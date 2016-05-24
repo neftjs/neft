@@ -9,18 +9,18 @@ Access it with:
 const { Schema } = Neft;
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#schema)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/schema/index.litcoffee#schema)
 
 ## Nested APIs
 
 * [[Array Validator|Schema-Array Validator-API]]
 * [[Max Validator|Schema-Max Validator-API]]
-* [[Min Validator|Schema-Min Validator-API]]
 * [[Object Validator|Schema-Object Validator-API]]
-* [[Optional Validator|Schema-Optional Validator-API]]
+* [[Min Validator|Schema-Min Validator-API]]
 * [[Options Validator|Schema-Options Validator-API]]
 * [[RegExp Validator|Schema-RegExp Validator-API]]
 * [[Type Validator|Schema-Type Validator-API]]
+* [[Optional Validator|Schema-Optional Validator-API]]
 
 ## Table of contents
 * [Schema](#schema)
@@ -41,11 +41,11 @@ var Schema = require('schema');
 var SchemaError = Schema.Error;
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#class-schemaerror)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/schema/index.litcoffee#class-schemaerror)
 
 ## **Class** Schema
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#class-schema)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/schema/index.litcoffee#class-schema)
 
 ###constructor
 <dl><dt>Syntax</dt><dd><code>Schema::constructor(&#x2A;Object&#x2A; schema)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>schema — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd></dl>
@@ -65,7 +65,7 @@ new Schema({
 });
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#constructor)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/schema/index.litcoffee#constructor)
 
 ###schema
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Schema::schema</code></dd><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
@@ -73,7 +73,7 @@ Saved schema object from the constructor.
 
 It's allowed to change this object in runtime.
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#schema)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/schema/index.litcoffee#schema)
 
 ###validate
 <dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Schema::validate(&#x2A;Object&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>data — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
@@ -149,5 +149,5 @@ console.log(schema.validate({names: ['Lily', 'Max']}));
 // true
 ```
 
-> [`Source`](/Neft-io/neft/blob/11ce61113abf36cfee4cca0e72112ab5bff468a7/src/schema/index.litcoffee#nested-properties)
+> [`Source`](/Neft-io/neft/blob/2aaed99455b1ed473d23e1aec13cd859d63d5b3b/src/schema/index.litcoffee#nested-properties)
 
