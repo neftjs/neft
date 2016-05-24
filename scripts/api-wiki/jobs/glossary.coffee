@@ -17,7 +17,7 @@ parseList = (list, path, fileLinks) ->
     lines = list.split '\n'
     for line in lines
         if match = line.match(/^\s*[\-*]\s*\[([^\]]+)\]\(([^\)]+)\)\s*$/)
-            phrase = match[1]
+            [_, phrase, hash] = match
             link = URL_PREFIX + wikiPath + match[2]
 
             if glossary[phrase]
@@ -26,7 +26,7 @@ parseList = (list, path, fileLinks) ->
             glossary[phrase] = true
 
             unless fileLinks[match[2]]
-                log.warn "API Glossary term '#{phrase}' url '#{match[2]}' not found"
+                log.warn "API Glossary term '#{phrase}' url '#{hash}' not found"
                 continue
 
             terms.push

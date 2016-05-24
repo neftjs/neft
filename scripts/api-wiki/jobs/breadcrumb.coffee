@@ -40,7 +40,7 @@ treeToMd = (file, prefix = '') ->
     md = "#{prefix}* [[#{file.heading}|#{getFileWikiPageName(file)}]]"
     if file.summary
         md += " — #{file.summary}"
-    md += "\n"
+    md += '\n'
 
     prefix += '  '
     for child in file.children
@@ -112,7 +112,8 @@ exports.prepareFileToSave = (file, path) ->
     parentsMd = ''
     parent = treeFile
     while parent = parent?.parent
-        parentsMd = " ▸ [[#{parent.heading}|#{getFileWikiPageName(parent)}]]" + parentsMd
+        wikiName = getFileWikiPageName parent
+        parentsMd = " ▸ [[#{parent.heading}|#{wikiName}]]" + parentsMd
     md += parentsMd
 
     if heading
