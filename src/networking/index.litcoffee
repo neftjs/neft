@@ -1,5 +1,4 @@
-Networking @engine
-==================
+# Networking
 
 This module cares about communication client-server and client internally.
 
@@ -21,6 +20,8 @@ var Networking = require('networking');
     assert = assert.scope 'Networking'
     log = log.scope 'Networking'
 
+# **Class** Networking
+
     module.exports = class Networking extends signal.Emitter
 
         Impl = require('./impl') Networking
@@ -34,8 +35,7 @@ var Networking = require('networking');
             (@HTTP = 'http')
         ]
 
-*Networking* Networking(*Object* options)
------------------------------------------
+## Networking::constructor(*Object* options)
 
         constructor: (opts) ->
             assert.isPlainObject opts, 'ctor options argument ....'
@@ -71,28 +71,23 @@ var Networking = require('networking');
 
         type: @HTTP
 
-*Signal* Networking::onRequest(*Networking.Request* request, *Networking.Response* response)
---------------------------------------------------------------------------------------------
+## *Signal* Networking::onRequest(*Networking.Request* request, *Networking.Response* response)
 
         signal.Emitter.createSignal @, 'onRequest'
 
-ReadOnly *String* Networking::protocol
---------------------------------------
+## ReadOnly *String* Networking::protocol
 
         protocol: ''
 
-ReadOnly *Integer* Networking::port
------------------------------------
+## ReadOnly *Integer* Networking::port
 
         port: 0
 
-ReadOnly *String* Networking::host
-----------------------------------
+## ReadOnly *String* Networking::host
 
         host: ''
 
-ReadOnly *String* Networking::url
----------------------------------
+## ReadOnly *String* Networking::url
 
 URL path contains a protocol, port and a host.
 
@@ -101,20 +96,17 @@ Otherwise it's created automatically.
 
         url: ''
 
-ReadOnly *String* Networking::language
---------------------------------------
+## ReadOnly *String* Networking::language
 
 Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 
         language: ''
 
-ReadOnly *List* Networking::pendingRequests
--------------------------------------------
+## ReadOnly *List* Networking::pendingRequests
 
-*Networking.Handler* Networking::createHandler(*Object* options)
-----------------------------------------------------------------
+## *Networking.Handler* Networking::createHandler(*Object* options)
 
-Use this method to create a new [Handler][networking/Handler].
+Use this method to create a new *Networking.Handler*.
 
 ```javscript
 app.networking.createHandler({
@@ -152,10 +144,9 @@ app.networking.createHandler({
 
             handler
 
-*Networking.Request* Networking::createRequest(*Object|Networking.Request* options)
------------------------------------------------------------------------------------
+## *Networking.Request* Networking::createRequest(*Object|Networking.Request* options)
 
-The given options object corresponds to the [Request][networking/Request] properties.
+The given options object corresponds to the *Networking.Request* properties.
 
         createRequest: (opts) ->
             assert.instanceOf @, Networking
@@ -196,8 +187,7 @@ The given options object corresponds to the [Request][networking/Request] proper
 
             req
 
-*Networking.Request* Networking::get(*String* uri, *Function* onLoadEnd)
-------------------------------------------------------------------------
+## *Networking.Request* Networking::get(*String* uri, *Function* onLoadEnd)
 
         get: (uri, onLoadEnd) ->
             @createRequest
@@ -205,8 +195,7 @@ The given options object corresponds to the [Request][networking/Request] proper
                 uri: uri
                 onLoadEnd: onLoadEnd
 
-*Networking.Request* Networking::post(*String* uri, [*Any* data], *Function* onLoadEnd)
----------------------------------------------------------------------------------------
+## *Networking.Request* Networking::post(*String* uri, [*Any* data], *Function* onLoadEnd)
 
         post: (uri, data, onLoadEnd) ->
             if typeof data is 'function' and not onLoadEnd
@@ -219,8 +208,7 @@ The given options object corresponds to the [Request][networking/Request] proper
                 data: data
                 onLoadEnd: onLoadEnd
 
-*Networking.Request* Networking::put(*String* uri, [*Any* data], *Function* onLoadEnd)
---------------------------------------------------------------------------------------
+## *Networking.Request* Networking::put(*String* uri, [*Any* data], *Function* onLoadEnd)
 
         put: (uri, data, onLoadEnd) ->
             if typeof data is 'function' and not onLoadEnd
@@ -233,8 +221,7 @@ The given options object corresponds to the [Request][networking/Request] proper
                 data: data
                 onLoadEnd: onLoadEnd
 
-*Networking.Request* Networking::delete(*String* uri, [*Any* data], *Function* onLoadEnd)
------------------------------------------------------------------------------------------
+## *Networking.Request* Networking::delete(*String* uri, [*Any* data], *Function* onLoadEnd)
 
         delete: (uri, onLoadEnd) ->
             if typeof data is 'function' and not onLoadEnd
@@ -247,8 +234,7 @@ The given options object corresponds to the [Request][networking/Request] proper
                 data: data
                 onLoadEnd: onLoadEnd
 
-Networking::resolveRequest(*Networking.Request* request)
-----------------------------------------------------------------------------------------
+## Networking::resolveRequest(*Networking.Request* request)
 
         resolveRequest: (req) ->
             assert.instanceOf req, Networking.Request
@@ -290,8 +276,7 @@ Networking::resolveRequest(*Networking.Request* request)
 
             return
 
-*Networking.Request* Networking::createLocalRequest(*Object|Networking.Request* options)
-----------------------------------------------------------------------------------------
+## *Networking.Request* Networking::createLocalRequest(*Object|Networking.Request* options)
 
 Use this method to create a new [Request][networking/Request] and handle it.
 
@@ -356,3 +341,8 @@ app.networking.createRequest({
             setImmediate => @resolveRequest req
 
             req
+
+# Glossary
+
+- [Networking](#class-networking)
+- [HTTP](#class-networking)

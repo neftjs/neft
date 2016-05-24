@@ -1,5 +1,7 @@
 # Signal
 
+> events-like
+
 Signal is a function with listeners which can be emitted.
 
 Access it with:
@@ -12,7 +14,7 @@ const { signal } = Neft;
     utils = require 'src/utils'
     assert = require 'src/assert'
 
-## *Integer* STOP_PROPAGATION
+# *Integer* STOP_PROPAGATION
 
 Special constant used to stop calling further listeners.
 
@@ -38,7 +40,7 @@ obj.onPress.emit();
 
     STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
 
-## *Signal* create([*NotPrimitive* object, *String* name])
+# *Signal* create([*NotPrimitive* object, *String* name])
 
 Creates a new signal in the given object under the given name property.
 
@@ -71,7 +73,7 @@ obj.onRename.emit('Max', 'George');
 
         obj[name] = signal
 
-## *Boolean* isEmpty(*Signal* signal)
+# *Boolean* isEmpty(*Signal* signal)
 
 Returns `true` if the given signal has no listeners.
 
@@ -81,7 +83,7 @@ Returns `true` if the given signal has no listeners.
                 return false
         return true
 
-## **Class** Signal
+# **Class** Signal
 
     callSignal = (obj, listeners, arg1, arg2) ->
         i = 0
@@ -129,7 +131,7 @@ Returns `true` if the given signal has no listeners.
 
     SignalPrototype =
 
-### Signal::emit([*Any* argument1, *Any* argument2])
+## Signal::emit([*Any* argument1, *Any* argument2])
 
 Call all of the signal listeners with the given arguments (2 maximally).
 
@@ -140,7 +142,7 @@ Call all of the signal listeners with the given arguments (2 maximally).
 
             callSignal @obj, @listeners, arg1, arg2
 
-### Signal::connect(*Function* listener, [*Any* context])
+## Signal::connect(*Function* listener, [*Any* context])
 
 Adds the given listener function into the signal listeners.
 
@@ -205,7 +207,7 @@ obj.onPress.emit();
 
             return
 
-### Signal::disconnect(*Function* listener, [*Any* context])
+## Signal::disconnect(*Function* listener, [*Any* context])
 
 Returns the given listener function from the signal listeners.
 
@@ -246,7 +248,7 @@ obj.onPress.emit()
 
             return
 
-### Signal::disconnectAll()
+## Signal::disconnectAll()
 
 Removes all the signal listeners.
 
@@ -264,6 +266,6 @@ Removes all the signal listeners.
         createSignalFunction: createSignalFunction
         callSignal: callSignal
 
-## Glossary
+# Glossary
 
- - [Signal](#class-signal)
+- [Signal](#class-signal)

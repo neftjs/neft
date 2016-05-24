@@ -1,5 +1,4 @@
-Uri
-===
+# Uri
 
     'use strict'
 
@@ -37,12 +36,13 @@ Uri
 
         result
 
+# **Class** Uri
+
     module.exports = (Networking) -> class Uri
         @URI_TRIM_RE = ///^\/?(.*?)\/?$///
         @NAMES_RE = ///{([a-zA-Z0-9_$]+)\*?}///g
 
-*Uri* Uri(*String* uri)
------------------------
+## Uri::constructor(*String* uri)
 
 Represents an uri string with parameters.
 
@@ -151,39 +151,30 @@ var Uri = Networking.Uri;
 
             Object.seal @
 
-*String* Uri::protocol
-----------------------
+## *String* Uri::protocol
 
-*String* Uri::auth
-------------------
+## *String* Uri::auth
 
-*String* Uri::host
-------------------
+## *String* Uri::host
 
-*String* Uri::path
-------------------
+## *String* Uri::path
 
-*Object* Uri::params
---------------------
+## *Object* Uri::params
 
 Holds the last *Uri::match()* result.
 
-*Object* Uri::query
--------------------
+## *Object* Uri::query
 
-*String* Uri::hash
-------------------
+## *String* Uri::hash
 
-*Boolean* Uri::test(*String* uri)
----------------------------------
+## *Boolean* Uri::test(*String* uri)
 
 Test whether the uri is valid with the given string.
 
         test: (uri) ->
             @_re.test uri
 
-*Object* Uri::match(*String* uri)
----------------------------------
+## *Object* Uri::match(*String* uri)
 
 Returns found parameters from the given string.
 
@@ -204,8 +195,7 @@ If the given uri is not valid with the uri, error will be raised.
 
             @params
 
-*String* Uri::toString([*Object|Dict* params])
-----------------------------------------------
+## *String* Uri::toString([*Object|Dict* params])
 
 Parses the uri into a string.
 
@@ -230,3 +220,7 @@ console.log(uri.toString());
             i = 0
             @_uri.replace Uri.NAMES_RE, =>
                 encodeURI params[@_names[i++]]
+
+# Glossary
+
+- [Networking.Uri](#class-uri)

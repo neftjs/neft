@@ -1,6 +1,6 @@
 # Dict
 
-Module used for data-binding on objects.
+> data-binding for objects
 
 Access it with:
 ```javascript
@@ -13,7 +13,7 @@ const { Dict } = Neft
     assert = require 'src/assert'
     signal = require 'src/signal'
 
-## **Class** Dict
+# **Class** Dict
 
     module.exports = class Dict extends signal.Emitter
         @__name__ = 'Dict'
@@ -24,7 +24,7 @@ const { Dict } = Neft
         ITEMS = 1<<2
         ALL = (ITEMS<<1) - 1
 
-### *Dict* Dict.fromJSON(*String*|*Object* json)
+## *Dict* Dict.fromJSON(*String*|*Object* json)
 
 Creates a new *Dict* from a json string.
 
@@ -39,7 +39,7 @@ This function should be used with `toJSON()` output.
         NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
         utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Dict
 
-### Dict::constructor([*Object* data])
+## Dict::constructor([*Object* data])
 
 Creates a new dict instance.
 
@@ -49,9 +49,7 @@ The given data parameter determines default keys with their values.
 var data = new Dict({
   name: 'xyz'
 });
-
-console.log(data.name);
-// xyz
+data.name; // xyz
 ```
 
         constructor: (obj) ->
@@ -73,15 +71,13 @@ console.log(data.name);
             if utils.isObject(obj)
                 utils.merge this, obj
 
-### ReadOnly *Integer* Dict::length
+## ReadOnly *Integer* Dict::length
 
 Amount of keys stored in a dict.
 
 ```javascript
 var dict = Dict({prop: 1});
-
-console.log(dict.length);
-// 1
+dict.length; // 1
 ```
 
         desc = NOT_ENUMERABLE
@@ -89,7 +85,7 @@ console.log(dict.length);
             @keys().length
         , null
 
-### *Signal* Dict::onChange(*String* key, *Any* oldValue)
+## *Signal* Dict::onChange(*String* key, *Any* oldValue)
 
 Signal called on each key value change.
 
@@ -108,7 +104,7 @@ user.set('country', 'US');
 
         signal.Emitter.createSignal @, 'onChange'
 
-### *Any* Dict::set(*String* key, *Any* value)
+## *Any* Dict::set(*String* key, *Any* value)
 
 Sets the given value for the given key stored in the dict.
 
@@ -152,7 +148,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 
             val
 
-### *Boolean* Dict::has(*String* key)
+## *Boolean* Dict::has(*String* key)
 
 Returns `true` if the given key exists in the dict.
 
@@ -162,7 +158,7 @@ Returns `true` if the given key exists in the dict.
 
             @[key] isnt undefined
 
-### *Dict* Dict::extend(*Object*|*Dict* object)
+## *Dict* Dict::extend(*Object*|*Dict* object)
 
 Sets all keys with their values from the given object.
 
@@ -177,7 +173,7 @@ Calls `onChange()` signal for each key.
 
             @
 
-### *Any* Dict::pop(*String* key)
+## *Any* Dict::pop(*String* key)
 
 Removes the given key from the dict.
 
@@ -216,7 +212,7 @@ data.pop('name');
 
             oldVal
 
-### Dict::clear()
+## Dict::clear()
 
 Removes all stored keys from the dict.
 
@@ -228,7 +224,7 @@ Calls `onChange()` signal for each stored key.
 
             return
 
-### ReadOnly *Array* Dict::keys()
+## ReadOnly *Array* Dict::keys()
 
 Returns an array of keys stored in the dict.
 
@@ -239,9 +235,7 @@ var data = new Dict({
   x: 10,
   y: 30
 });
-
-console.log(data.keys());
-// ['x', 'y']
+data.keys(); // ['x', 'y']
 ```
 
         utils.defineProperty @::, 'keys', NOT_ENUMERABLE, ->
@@ -258,7 +252,7 @@ console.log(data.keys());
 
             @_keys
 
-### *Array* Dict::values()
+## *Array* Dict::values()
 
 Returns an array of values stored in the dict.
 
@@ -269,9 +263,7 @@ var data = new Dict({
   x: 10,
   y: 30
 });
-
-console.log(data.values());
-// [10, 30]
+data.values(); // [10, 30]
 ```
 
         utils.defineProperty @::, 'values', NOT_ENUMERABLE, ->
@@ -288,7 +280,7 @@ console.log(data.values());
 
             @_values
 
-### *Array* Dict::items()
+## *Array* Dict::items()
 
 Returns an array of key-value pairs stored in the dict.
 
@@ -299,12 +291,10 @@ var data = new Dict({
   x: 10,
   y: 30
 });
-
-console.log(data.items());
-// [['x', 10], ['y', 30]]
+data.items(); // [['x', 10], ['y', 30]]
 ```
 
-#### Iterate over a dict
+### Iterate over a dict
 
 ```javascript
 var dict = new Dict({prop1: 1, prop2: 2});
@@ -331,6 +321,6 @@ for (var i = 0; i < items.length; i++){
 
             @_values
 
-## Glossary
+# Glossary
 
 - [Dict](#class-dict)
