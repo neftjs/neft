@@ -152,7 +152,7 @@ module.exports = (File) -> class Iterator
         newChild.attrs.set 'each', each
         newChild.attrs.set 'index', i
         newChild.attrs.set 'item', item
-        usedFragment.storage ?= @file.storage
+        usedFragment.context = @file.context
         usedFragment.render @file.inputAttrs, @file.scope, @
 
         # signal
@@ -171,8 +171,7 @@ module.exports = (File) -> class Iterator
         @node.children[i].parent = undefined
 
         usedFragment = @usedFragments[i]
-        if usedFragment.storage is @file.storage
-            usedFragment.storage = null
+        usedFragment.context = null
         usedFragment.revert().destroy()
         @usedFragments.splice i, 1
 

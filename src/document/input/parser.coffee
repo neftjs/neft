@@ -10,7 +10,7 @@ PARSER_OPTS =
         scope: true
 
 isPublicId = (id) ->
-    id in ['this', 'ids', 'funcs', 'attrs', 'scope']
+    id in ['this', 'ids', 'attrs', 'scope']
 
 shouldBeUpdatedOnCreate = (connection) ->
     [key] = connection

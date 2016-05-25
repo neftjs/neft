@@ -29,10 +29,8 @@ class DocumentBinding extends Binding
             @ctx
         else if item is 'ids'
             @args[0]
-        else if item is 'funcs'
-            @args[1]
         else if item is 'attrs'
-            @args[2]
+            @args[1]
 
     `//<development>`
     failCheckQueue = []
@@ -99,7 +97,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         @parse = require('./input/parser').parse
 
     createFunction = (func) ->
-        new Function 'ids', 'funcs', 'attrs', func
+        new Function 'ids', 'attrs', func
 
     constructor: (@file, @node, @text, @binding) ->
         assert.instanceOf @file, File
@@ -136,7 +134,7 @@ module.exports = (File) -> class Input extends signal.Emitter
     render: ->
         oldTarget = @target
         oldScope = @scope
-        @target = @file.storage
+        @target = @file.context
         @scope = @file.scope
         if oldTarget isnt @target
             @onTargetChange.emit()
