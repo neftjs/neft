@@ -1,13 +1,12 @@
-Text @class
-===========
+# Text
 
-```nml
-`Text {
-`   font.pixelSize: 30
-`   font.family: 'monospace'
-`   text: '<strong>Neft</strong> Renderer'
-`   color: 'blue'
-`}
+```javascript
+Text {
+    font.pixelSize: 30
+    font.family: 'monospace'
+    text: '<strong>Neft</strong> Renderer'
+    color: 'blue'
+}
 ```
 
     'use strict'
@@ -19,8 +18,9 @@ Text @class
 
     log = log.scope 'Renderer', 'Text'
 
-    module.exports = (Renderer, Impl, itemUtils) ->
+# **Class** Text : *Item*
 
+    module.exports = (Renderer, Impl, itemUtils) ->
         class Text extends Renderer.Item
             @__name__ = 'Text'
             @__path__ = 'Renderer.Text'
@@ -36,8 +36,7 @@ Text @class
                 u: true
                 a: true
 
-*Text* Text.New([*Component* component, *Object* options])
-----------------------------------------------------------
+## *Text* Text.New([*Component* component, *Object* options])
 
             @New = (component, opts) ->
                 item = new Text
@@ -48,9 +47,6 @@ Text @class
                     Impl.setTextFontFamily.call item, name
 
                 item
-
-*Text* Text() : *Renderer.Item*
--------------------------------
 
             constructor: ->
                 super()
@@ -67,8 +63,7 @@ Text @class
                 @_width = -1
                 @_height = -1
 
-*Float* Text::width = -1
-------------------------
+## *Float* Text::width = `-1`
 
             _width: -1
             getter = utils.lookupGetter @::, 'width'
@@ -85,8 +80,7 @@ Text @class
                     Impl.setTextWrap.call @, not @_autoWidth
                 return
 
-*Float* Text::height = -1
--------------------------
+## *Float* Text::height = `-1`
 
             _height: -1
             getter = utils.lookupGetter @::, 'height'
@@ -99,8 +93,7 @@ Text @class
                     _super.call @, val
                 return
 
-*String* Text::text
--------------------
+## *String* Text::text
 
 ## *Signal* Text::onTextChange(*String* oldValue)
 
@@ -112,8 +105,7 @@ Text @class
                 setter: (_super) -> (val) ->
                     _super.call @, val+''
 
-*String* Text::color = 'black'
-------------------------------
+## *String* Text::color = `'black'`
 
 ## *Signal* Text::onColorChange(*String* oldValue)
 
@@ -130,8 +122,7 @@ Text @class
                 developmentSetter: (val) ->
                     assert.isString val
 
-*String* Text::linkColor = 'blue'
----------------------------------
+## *String* Text::linkColor = `'blue'`
 
 ## *Signal* Text::onLinkColorChange(*String* oldValue)
 
@@ -148,8 +139,7 @@ Text @class
                 developmentSetter: (val) ->
                     assert.isString val
 
-Hidden *Float* Text::lineHeight = 1
------------------------------------
+## Hidden *Float* Text::lineHeight = `1`
 
 ## Hidden *Signal* Text::onLineHeightChange(*Float* oldValue)
 
@@ -161,8 +151,7 @@ Hidden *Float* Text::lineHeight = 1
                 developmentSetter: (val) ->
                     assert.isFloat val
 
-ReadOnly *Float* Text::contentWidth
------------------------------------
+## ReadOnly *Float* Text::contentWidth
 
 ## *Signal* Text::onContentWidthChange(*Float* oldValue)
 
@@ -178,8 +167,7 @@ ReadOnly *Float* Text::contentWidth
                         itemWidthSetter.call @, val
                     return
 
-ReadOnly *Float* Text::contentHeight
-------------------------------------
+## ReadOnly *Float* Text::contentHeight
 
 ## *Signal* Text::onContentHeightChange(*Float* oldValue)
 
@@ -195,15 +183,13 @@ ReadOnly *Float* Text::contentHeight
                         itemHeightSetter.call @, val
                     return
 
-*Alignment* Text::alignment
----------------------------
+## *Item.Alignment* Text::alignment
 
-## *Signal* Text::onAlignmentChange(*Alignment* alignment)
+## *Signal* Text::onAlignmentChange(*String* property, *Any* oldValue)
 
             Renderer.Item.createAlignment Text
 
-*Font* Text::font
------------------
+## *Item.Text.Font* Text::font
 
 ## *Signal* Text::onFontChange(*String* property, *Any* oldValue)
 
@@ -211,3 +197,7 @@ ReadOnly *Float* Text::contentHeight
             @createFont Text
 
         Text
+
+# Glossary
+
+- [Text](#class-text)

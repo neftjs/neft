@@ -1,5 +1,4 @@
-Anchors @extension
-==================
+# Item.Anchors
 
     'use strict'
 
@@ -20,8 +19,7 @@ Anchors @extension
     FREE_H_LINE_REQ = 1<<4
     FREE_V_LINE_REQ = 1<<5
 
-*Anchors* Anchors()
--------------------
+# **Class** Anchors
 
 Anchors describe position relations between two items.
 
@@ -32,24 +30,22 @@ always in the same position as a line of the second item.
 
 Anchors work only between siblings and in relation to the direct parent.
 
-```nml
-`Item {
-`   height: 100
-`
-`   Rectangle {
-`       id: rect1
-`       width: 100
-`       height: 100
-`       color: 'green'
-`   }
-`
-`   Rectangle {
-`       width: 40
-`       height: 40
-`       color: 'red'
-`       anchors.left: rect1.right
-`   }
-`}
+```javascript
+Item {
+    height: 100
+    Rectangle {
+        id: rect1
+        width: 100
+        height: 100
+        color: 'green'
+    }
+    Rectangle {
+        width: 40
+        height: 40
+        color: 'red'
+        anchors.left: rect1.right
+    }
+}
 ```
 
     H_LINES =
@@ -121,19 +117,18 @@ Anchors work only between siblings and in relation to the direct parent.
 
                     [target, line] = val
 
-```nml
-`Rectangle {
-`   width: 100
-`   height: 100
-`   color: 'green'
-`
-`   Rectangle {
-`       width: 40
-`       height: 40
-`       color: 'red'
-`       anchors.left: parent.right
-`   }
-`}
+```javascript
+Rectangle {
+    width: 100
+    height: 100
+    color: 'green'
+    Rectangle {
+        width: 40
+        height: 40
+        color: 'red'
+        anchors.left: parent.right
+    }
+}
 ```
 
                     if opts & ONLY_TARGET_ALLOW
@@ -182,8 +177,7 @@ so `anchors.top = parent.left` is not allowed.
                 setter: setter
                 getter: -> getter
 
-*Array* Anchors::left = null
-----------------------------
+## *Array* Anchors::left
 
         createAnchorProp 'left', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
             if @_ref
@@ -191,8 +185,7 @@ so `anchors.top = parent.left` is not allowed.
 
 ## *Signal* Anchors::onLeftChange(*Array* oldValue)
 
-*Array* Anchors::right = null
------------------------------
+## *Array* Anchors::right
 
         createAnchorProp 'right', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
             if @_ref
@@ -200,19 +193,17 @@ so `anchors.top = parent.left` is not allowed.
 
 ## *Signal* Anchors::onRightChange(*Array* oldValue)
 
-*Array* Anchors::horizontalCenter = null
-----------------------------------------
+## *Array* Anchors::horizontalCenter
 
-```nml
-`Item {
-`   height: 100
-`
-`   Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-`   Rectangle {
-`       color: 'red'; width: 40; height: 40
-`       anchors.horizontalCenter: rect1.horizontalCenter
-`   }
-`}
+```javascript
+Item {
+    height: 100
+    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+    Rectangle {
+        color: 'red'; width: 40; height: 40
+        anchors.horizontalCenter: rect1.horizontalCenter
+    }
+}
 ```
 
         createAnchorProp 'horizontalCenter', LINE_REQ | V_LINE_REQ | FREE_V_LINE_REQ, ->
@@ -221,19 +212,17 @@ so `anchors.top = parent.left` is not allowed.
 
 ## *Signal* Anchors::onHorizontalCenterChange(*Array* oldValue)
 
-*Array* Anchors::top = null
----------------------------
+## *Array* Anchors::top
 
-```nml
-`Item {
-`   height: 100
-`
-`   Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-`   Rectangle {
-`       color: 'red'; width: 40; height: 40
-`       anchors.top: rect1.verticalCenter
-`   }
-`}
+```javascript
+Item {
+    height: 100
+    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+    Rectangle {
+        color: 'red'; width: 40; height: 40
+        anchors.top: rect1.verticalCenter
+    }
+}
 ```
 
         createAnchorProp 'top', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
@@ -242,8 +231,7 @@ so `anchors.top = parent.left` is not allowed.
 
 ## *Signal* Anchors::onTopChange(*Array* oldValue)
 
-*Array* Anchors::bottom = null
-------------------------------
+## *Array* Anchors::bottom
 
         createAnchorProp 'bottom', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
             if @_ref
@@ -251,19 +239,17 @@ so `anchors.top = parent.left` is not allowed.
 
 ## *Signal* Anchors::onBottomChange(*Array* oldValue)
 
-*Array* Anchors::verticalCenter = null
---------------------------------------
+## *Array* Anchors::verticalCenter
 
-```nml
-`Item {
-`   height: 100
-`
-`   Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-`   Rectangle {
-`       color: 'red'; width: 40; height: 40
-`       anchors.verticalCenter: rect1.verticalCenter
-`   }
-`}
+```javascript
+Item {
+    height: 100
+    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+    Rectangle {
+        color: 'red'; width: 40; height: 40
+        anchors.verticalCenter: rect1.verticalCenter
+    }
+}
 ```
 
         createAnchorProp 'verticalCenter', LINE_REQ | H_LINE_REQ | FREE_H_LINE_REQ, ->
@@ -272,27 +258,25 @@ so `anchors.top = parent.left` is not allowed.
 
 ## *Signal* Anchors::onVerticalCenterChange(*Array* oldValue)
 
-*Array* Anchors::centerIn = null
---------------------------------
+## *Array* Anchors::centerIn
 
 It's a shortcut for the horizontalCenter and verticalCenter anchors.
 
 No target line is required.
 
-```nml
-`Rectangle {
-`   id: rect1
-`   width: 100
-`   height: 100
-`   color: 'green'
-`
-`   Rectangle {
-`       width: 40
-`       height: 40
-`       color: 'red'
-`       anchors.centerIn: parent
-`   }
-`}
+```javascript
+Rectangle {
+    id: rect1
+    width: 100
+    height: 100
+    color: 'green'
+    Rectangle {
+        width: 40
+        height: 40
+        color: 'red'
+        anchors.centerIn: parent
+    }
+}
 ```
 
 ## *Signal* Anchors::onCenterInChange(*Array* oldValue)
@@ -301,24 +285,22 @@ No target line is required.
             if @_ref
                 [@horizontalCenter, @verticalCenter]
 
-*Array* Anchors::fill = null
-----------------------------
+## *Array* Anchors::fill
 
 Changes item position and its size to be always equal the anchored target.
 
 No target line is required.
 
-```nml
-`Item {
-`   height: 100
-`
-`   Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
-`   Rectangle {
-`       color: 'red'
-`       opacity: 0.5
-`       anchors.fill: rect1
-`   }
-`}
+```javascript
+Item {
+    height: 100
+    Rectangle { id: rect1; color: 'green'; width: 100; height: 100; }
+    Rectangle {
+        color: 'red'
+        opacity: 0.5
+        anchors.fill: rect1
+    }
+}
 ```
 
 ## *Signal* Anchors::onFillChange(*Array* oldValue)
@@ -327,8 +309,7 @@ No target line is required.
             if @_ref
                 [@_ref._x, @_ref._y, @_ref._width, @_ref._height]
 
-*Array* Anchors::fillWidth = null
----------------------------------
+## *Array* Anchors::fillWidth
 
 ## *Signal* Anchors::onFillWidthChange(*Array* oldValue)
 
@@ -336,11 +317,14 @@ No target line is required.
             if @_ref
                 [@_ref._x, @_ref._width]
 
-*Array* Anchors::fillHeight = null
-----------------------------------
+## *Array* Anchors::fillHeight
 
 ## *Signal* Anchors::onFillHeightChange(*Array* oldValue)
 
         createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW, ->
             if @_ref
                 [@_ref._y, @_ref._height]
+
+# Glossary
+
+- [Item.Anchors](#class-anchors)

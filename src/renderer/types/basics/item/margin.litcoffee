@@ -1,11 +1,12 @@
-Margin @extension
-=================
+# Item.Margin
 
     'use strict'
 
     utils = require 'src/utils'
     signal = require 'src/signal'
     assert = require 'src/assert'
+
+# **Class** Margin
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Margin extends itemUtils.DeepObject
         @__name__ = 'Margin'
@@ -65,33 +66,29 @@ Margin @extension
 
             Object.preventExtensions @
 
-*Margin* Margin()
------------------
-
 Margins are used in anchors and within layout items.
 
-```nml
-`Rectangle {
-`   width: 100
-`   height: 100
-`   color: 'red'
-`
-`   Rectangle {
-`       width: 100
-`       height: 50
-`       color: 'yellow'
-`       anchors.left: parent.right
-`       margin.left: 20
-`   }
-`}
+```javascript
+Rectangle {
+    width: 100
+    height: 100
+    color: 'red'
+    Rectangle {
+        width: 100
+        height: 50
+        color: 'yellow'
+        anchors.left: parent.right
+        margin.left: 20
+    }
+}
 ```
 
-```nml
-`Column {
-`   Rectangle { color: 'red'; width: 50; height: 50; }
-`   Rectangle { color: 'yellow'; width: 50; height: 50; margin.top: 20; }
-`   Rectangle { color: 'green'; width: 50; height: 50; }
-`}
+```javascript
+Column {
+    Rectangle { color: 'red'; width: 50; height: 50; }
+    Rectangle { color: 'yellow'; width: 50; height: 50; margin.top: 20; }
+    Rectangle { color: 'green'; width: 50; height: 50; }
+}
 ```
 
         createMarginProp = (type, extraProp) ->
@@ -112,36 +109,31 @@ Margins are used in anchors and within layout items.
                 parentConstructor: ctor
                 developmentSetter: developmentSetter
 
-*Float* Margin::left = 0
-------------------------
+## *Float* Margin::left = `0`
 
 ## *Signal* Margin::onLeftChange(*Float* oldValue)
 
         createMarginProp 'left', 'horizontal'
 
-*Float* Margin::top = 0
------------------------
+## *Float* Margin::top = `0`
 
 ## *Signal* Margin::onTopChange(*Float* oldValue)
 
         createMarginProp 'top', 'vertical'
 
-*Float* Margin::right = 0
--------------------------
+## *Float* Margin::right = `0`
 
 ## *Signal* Margin::onRightChange(*Float* oldValue)
 
         createMarginProp 'right', 'horizontal'
 
-*Float* Margin::bottom = 0
---------------------------
+## *Float* Margin::bottom = `0`
 
 ## *Signal* Margin::onBottomChange(*Float* oldValue)
 
         createMarginProp 'bottom', 'vertical'
 
-*Float* Margin::horizontal = 0
-------------------------------
+## *Float* Margin::horizontal = `0`
 
 Sum of the left and right margin.
 
@@ -154,8 +146,7 @@ Sum of the left and right margin.
         , (val) ->
             @left = @right = val / 2
 
-*Float* Margin::vertical = 0
-----------------------------
+## *Float* Margin::vertical = `0`
 
 Sum of the top and bottom margin.
 
@@ -168,8 +159,7 @@ Sum of the top and bottom margin.
         , (val) ->
             @top = @bottom = val / 2
 
-*Float* Margin::valueOf()
---------------------------
+## *Float* Margin::valueOf()
 
         valueOf: ->
             if @left is @top and @top is @right and @right is @bottom
@@ -182,3 +172,7 @@ Sum of the top and bottom margin.
             top: @top
             right: @right
             bottom: @bottom
+
+# Glossary
+
+- [Item.Margin](#class-margin)

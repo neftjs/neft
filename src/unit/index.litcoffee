@@ -1,5 +1,9 @@
-Unit @library
-=============
+# Unit tests
+
+Access it with:
+```javascript
+const unit = require('src/unit');
+```
 
     'use strict'
 
@@ -16,8 +20,7 @@ Unit @library
     scopes = [new Scope]
     currentScope = scopes[0]
 
-Unit.describe(*String* message, *Function* tests)
--------------------------------------------------
+# unit.describe(*String* message, *Function* tests)
 
     exports.describe = (msg, func) ->
         beforeEach = utils.NOP
@@ -51,8 +54,7 @@ Unit.describe(*String* message, *Function* tests)
 
     modifiers.applyAll exports.describe
 
-Unit.it(*String* message, *Function* test)
-------------------------------------------
+# unit.it(*String* message, *Function* test)
 
 The given test function can contains optional *callback* argument.
 
@@ -73,8 +75,7 @@ The given test function can contains optional *callback* argument.
 
     modifiers.applyAll exports.it
 
-Unit.beforeEach(*Function* code)
---------------------------------
+# unit.beforeEach(*Function* code)
 
     exports.beforeEach = (func) ->
         currentScope.beforeFunctions.push func
@@ -82,8 +83,7 @@ Unit.beforeEach(*Function* code)
 
     modifiers.applyAll exports.beforeEach
 
-Unit.afterEach(*Function* code)
--------------------------------
+# unit.afterEach(*Function* code)
 
     exports.afterEach = (func) ->
         currentScope.afterFunctions.push func
@@ -91,8 +91,7 @@ Unit.afterEach(*Function* code)
 
     modifiers.applyAll exports.afterEach
 
-Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
------------------------------------------------------------------------------------------
+# unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
 
     exports.whenChange = do ->
         listeners = []
@@ -124,8 +123,7 @@ Unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay =
             listeners.push listener
             return
 
-Unit.runTests()
----------------
+# unit.runTests()
 
     exports.runTests = ->
         [mainScope] = scopes
@@ -136,15 +134,13 @@ Unit.runTests()
                 testsAmount: stack.testsAmount
                 errors: stack.errors
 
-*Function* Unit.onTestsEnd
---------------------------
+# *Function* unit.onTestsEnd
 
     exports.onTestsEnd = (result) ->
         code = if result.status is 'success' then 0 else 1
         process.exit code
 
-*Boolean* Unit.runAutomatically = true
---------------------------------------
+# *Boolean* unit.runAutomatically = true
 
     exports.runAutomatically = true
 

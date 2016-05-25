@@ -14,23 +14,17 @@
 
     exports.applyAll = (func) ->
 
-isNode
---
+# isNode
 
-isServer
---
+# isServer
 
-isClient
---
+# isClient
 
-isBrowser
---
+# isBrowser
 
-isAndroid
---
+# isAndroid
 
-isIOS
---
+# isIOS
 
         for funcName, utilsProp of PLATFORMS
             getter = if utils[utilsProp] then -> this else NOP

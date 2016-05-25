@@ -1,5 +1,4 @@
-Native @class
-=============
+# Native
 
     'use strict'
 
@@ -7,6 +6,8 @@ Native @class
     log = require 'src/log'
     assert = require 'src/assert'
     nativeBridge = require 'src/native'
+
+# **Class** Native : *Item*
 
     module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -31,14 +32,10 @@ Native @class
                         nativeBridge.callFunction funcName, @_impl.id, val
                 itemUtils.defineProperty opts
 
-*Native* Native() : *Renderer.Item*
------------------------------------
-
             constructor: ->
                 super()
 
-Native::set(*String* propName, *Any* val)
------------------------------------------
+## Native::set(*String* propName, *Any* val)
 
             set: (name, val) ->
                 assert.isString name
@@ -50,8 +47,7 @@ Native::set(*String* propName, *Any* val)
                 nativeBridge.callFunction funcName, id, val
                 return
 
-Native::call(*String* funcName, *Any* args...)
-----------------------------------------------
+## Native::call(*String* funcName, *Any* args...)
 
             call: (name, args...) ->
                 assert.isString name
@@ -65,8 +61,7 @@ Native::call(*String* funcName, *Any* args...)
                 nativeBridge.callFunction.apply nativeBridge, callArgs
                 return
 
-Native::on(*String* eventName, *Function* listener)
----------------------------------------------------
+## Native::on(*String* eventName, *Function* listener)
 
             # nativeEventName -> item id -> [item, listeners...]
             eventListeners = Object.create null
@@ -106,3 +101,7 @@ Native::on(*String* eventName, *Function* listener)
                 return
 
         Native
+
+# Glossary
+
+- [Native](#class-native)
