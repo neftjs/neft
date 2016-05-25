@@ -7,6 +7,8 @@ node_js:
   - "5.11"
 before_script:
   - npm run bundle -- --node --browser
+script:
+  - npm test -- --coverage
 after_script:
   - node_modules/.bin/istanbul report
   - node_modules/.bin/coveralls < coverage/lcov.info

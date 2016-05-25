@@ -23,8 +23,6 @@ do ->
         switch arg
             when '--require'
                 opts.require.push argv[++i]
-            else
-                throw new Error "Unexpected option '#{arg}'"
         i++
 
 runTestFile = (path) ->
