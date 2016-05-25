@@ -1,13 +1,11 @@
-Spacing @extension
-==================
+# Item.Spacing
 
     'use strict'
 
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-*Spacing* Spacing()
--------------------
+# **Class** Spacing
 
     module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Spacing extends itemUtils.DeepObject
         @__name__ = 'Spacing'
@@ -34,8 +32,7 @@ Spacing @extension
 
             Object.preventExtensions @
 
-*Float* Spacing::column
------------------------
+## *Float* Spacing::column = `0`
 
 ## *Signal* Spacing::onColumnChange(*Float* oldValue)
 
@@ -49,8 +46,7 @@ Spacing @extension
             developmentSetter: (val) ->
                 assert.isFloat val
 
-*Float* Spacing::row
---------------------
+## *Float* Spacing::row = `0`
 
 ## *Signal* Spacing::onRowChange(*Float* oldValue)
 
@@ -64,8 +60,7 @@ Spacing @extension
             developmentSetter: (val) ->
                 assert.isFloat val
 
-*Float* Spacing::valueOf()
---------------------------
+## *Float* Spacing::valueOf()
 
         valueOf: ->
             if @column is @row
@@ -76,3 +71,7 @@ Spacing @extension
         toJSON: ->
             column: @column
             row: @row
+
+# Glossary
+
+- [Item.Spacing](#class-spacing)

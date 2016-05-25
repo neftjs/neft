@@ -1,17 +1,16 @@
-Image @class
-============
+# Image
 
-```nml
-`Image {
-`   source: 'http://lorempixel.com/200/140/'
-`   onLoad: function(error){
-`       if (error){
-`           console.error("Can't load this image");
-`       } else {
-`           console.log("Image has been loaded");
-`       }
-`   }
-`}
+```javascript
+Image {
+    source: 'http://lorempixel.com/200/140/'
+    onLoad: function(error){
+        if (error){
+            console.error("Can't load this image");
+        } else {
+            console.log("Image has been loaded");
+        }
+    }
+}
 ```
 
     'use strict'
@@ -23,20 +22,18 @@ Image @class
 
     log = log.scope 'Renderer', 'Image'
 
+# **Class** Image : *Item*
+
     module.exports = (Renderer, Impl, itemUtils) -> class Image extends Renderer.Item
         @__name__ = 'Image'
         @__path__ = 'Renderer.Image'
 
-*Image* Image.New([*Component* component, *Object* options])
-------------------------------------------------------------
+## *Image* Image.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new Image
             itemUtils.Object.initialize item, component, opts
             item
-
-*Image* Image() : *Renderer.Item*
----------------------------------
 
         constructor: ->
             super()
@@ -51,8 +48,7 @@ Image @class
             @_width = -1
             @_height = -1
 
-*Float* Image.pixelRatio = 1
-----------------------------
+## *Float* Image.pixelRatio = `1`
 
 ## *Signal* Image.onPixelRatioChange(*Float* oldValue)
 
@@ -70,8 +66,7 @@ Image @class
             Impl.setStaticImagePixelRatio.call @, val
             @onPixelRatioChange.emit oldVal
 
-*Float* Image::width = -1
--------------------------
+## *Float* Image::width = `-1`
 
         updateSize = ->
             if @_autoHeight is @_autoWidth
@@ -93,8 +88,7 @@ Image @class
             updateSize.call @
             return
 
-*Float* Image::height = -1
---------------------------
+## *Float* Image::height = `-1`
 
         _height: -1
         getter = utils.lookupGetter @::, 'height'
@@ -105,8 +99,7 @@ Image @class
             updateSize.call @
             return
 
-*String* Image::source
-----------------------
+## *String* Image::source
 
 The image source URL or data URI.
 
@@ -178,8 +171,7 @@ The image source URL or data URI.
                         loadCallback.call @, null, defaultResult
                     return
 
-ReadOnly *Float* Image::resolution = 1
---------------------------------------
+## ReadOnly *Float* Image::resolution = `1`
 
         itemUtils.defineProperty
             constructor: @
@@ -191,8 +183,7 @@ ReadOnly *Float* Image::resolution = 1
                 Impl.setImageSourceHeight.call @, @_sourceHeight * val
                 return
 
-Hidden *Float* Image::sourceWidth = 0
--------------------------------------
+## Hidden *Float* Image::sourceWidth = `0`
 
 ## Hidden *Signal* Image::onSourceWidthChange(*Float* oldValue)
 
@@ -206,8 +197,7 @@ Hidden *Float* Image::sourceWidth = 0
             developmentSetter: (val) ->
                 assert.isFloat val
 
-Hidden *Float* Image::sourceHeight = 0
---------------------------------------
+## Hidden *Float* Image::sourceHeight = `0`
 
 ## Hidden *Signal* Image::onSourceHeightChange(*Float* oldValue)
 
@@ -221,8 +211,7 @@ Hidden *Float* Image::sourceHeight = 0
             developmentSetter: (val) ->
                 assert.isFloat val
 
-Hidden *Float* Image::offsetX = 0
----------------------------------
+## Hidden *Float* Image::offsetX = `0`
 
 ## Hidden *Signal* Image::onOffsetXChange(*Float* oldValue)
 
@@ -234,8 +223,7 @@ Hidden *Float* Image::offsetX = 0
             developmentSetter: (val) ->
                 assert.isFloat val
 
-Hidden *Float* Image::offsetY = 0
----------------------------------
+## Hidden *Float* Image::offsetY = `0`
 
 ## Hidden *Signal* Image::onOffsetYChange(*Float* oldValue)
 
@@ -247,8 +235,7 @@ Hidden *Float* Image::offsetY = 0
             developmentSetter: (val) ->
                 assert.isFloat val
 
-Hidden *Integer* Image::fillMode = 'Stretch'
---------------------------------------------
+## Hidden *Integer* Image::fillMode = `'Stretch'`
 
 ## Hidden *Signal* Image::onFillModeChange(*Integer* oldValue)
 
@@ -263,8 +250,7 @@ Hidden *Integer* Image::fillMode = 'Stretch'
                 assert.isString val
                 assert.ok utils.has(FILL_MODE_OPTIONS, val), "Accepted fillMode values: '#{FILL_MODE_OPTIONS}'"
 
-ReadOnly *Boolean* Image::loaded
---------------------------------
+## ReadOnly *Boolean* Image::loaded = `false`
 
         utils.defineProperty @::, 'loaded', null, ->
             @_loaded
@@ -274,12 +260,14 @@ ReadOnly *Boolean* Image::loaded
 
         signal.Emitter.createSignal @, 'onLoadedChange'
 
-*Signal* Image::onLoad()
-------------------------
+## *Signal* Image::onLoad()
 
         signal.Emitter.createSignal @, 'onLoad'
 
-*Signal* Image::onError(*Error* error)
---------------------------------------
+## *Signal* Image::onError(*Error* error)
 
         signal.Emitter.createSignal @, 'onError'
+
+# Glossary
+
+- [Image](#class-image)

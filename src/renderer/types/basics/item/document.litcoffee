@@ -1,5 +1,4 @@
-Document @extension
-===================
+# Item.Document
 
     'use strict'
 
@@ -9,6 +8,8 @@ Document @extension
     log = require 'src/log'
 
     log = log.scope 'Renderer', 'Document'
+
+# **Class** Document
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
         Document = require 'src/document'
@@ -23,9 +24,6 @@ Document @extension
             name: 'document'
             valueConstructor: ItemDocument
 
-*Document* Document()
----------------------
-
         constructor: (ref) ->
             super ref
             @_node = null
@@ -33,8 +31,7 @@ Document @extension
 
             Object.seal @
 
-ReadOnly *String* Document::query
----------------------------------
+## ReadOnly *String* Document::query
 
         utils.defineProperty @::, 'query', null, ->
             @_query
@@ -43,23 +40,22 @@ ReadOnly *String* Document::query
                 @_query = val
             return
 
-*Document.Element* Document::node
----------------------------------
+## *Document.Element* Document::node
 
 ## *Signal* Document::onNodeChange(*Document.Element* oldValue)
 
-```nml
-`Text {
-`  text: this.document.node.attrs.value
-`}
+```javascript
+Text {
+    text: this.document.node.attrs.value
+}
 ```
 
-```nml
-`Text {
-`   document.onNodeChange: function(){
-`       var inputs = this.document.node.queryAll('input[type=string]');
-`   }
-`}
+```javascript
+Text {
+    document.onNodeChange: function(){
+        var inputs = this.document.node.queryAll('input[type=string]');
+    }
+}
 ```
 
         itemUtils.defineProperty
@@ -71,3 +67,7 @@ ReadOnly *String* Document::query
             developmentSetter: (val) ->
                 if val?
                     assert.instanceOf val, DocElement
+
+# Glossary
+
+- [Item.Document](#class-document)

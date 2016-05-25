@@ -1,5 +1,4 @@
-TextInput @class
-================
+# TextInput
 
     'use strict'
 
@@ -10,14 +9,15 @@ TextInput @class
 
     log = log.scope 'Renderer', 'TextInput'
 
+# **Class** TextInput : *Item*
+
     module.exports = (Renderer, Impl, itemUtils) ->
 
         class TextInput extends Renderer.Item
             @__name__ = 'TextInput'
             @__path__ = 'Renderer.TextInput'
 
-*TextInput* TextInput.New([*Component* component, *Object* options])
---------------------------------------------------------------------
+## *TextInput* TextInput.New([*Component* component, *Object* options])
 
             @New = (component, opts) ->
                 item = new TextInput
@@ -35,13 +35,9 @@ TextInput @class
 
                 item
 
-*Boolean* TextInput.keysFocusOnPointerPress = true
---------------------------------------------------
+## *Boolean* TextInput.keysFocusOnPointerPress = true
 
             @keysFocusOnPointerPress = true
-
-*TextInput* TextInput() : *Renderer.Item*
------------------------------------------
 
             constructor: ->
                 super()
@@ -55,14 +51,11 @@ TextInput @class
                 @_width = 100
                 @_height = 50
 
-*Float* TextInput::width = 100
-------------------------------
+## *Float* TextInput::width = `100`
 
-*Float* TextInput::height = 50
-------------------------------
+## *Float* TextInput::height = `50`
 
-*String* TextInput::text
-------------------------
+## *String* TextInput::text
 
 ## *Signal* TextInput::onTextChange(*String* oldValue)
 
@@ -74,8 +67,7 @@ TextInput @class
                 setter: (_super) -> (val) ->
                     _super.call @, val+''
 
-*String* TextInput::color = 'black'
------------------------------------
+## *String* TextInput::color = `'black'`
 
 ## *Signal* TextInput::onColorChange(*String* oldValue)
 
@@ -92,8 +84,7 @@ TextInput @class
                 developmentSetter: (val) ->
                     assert.isString val
 
-Hidden *Float* TextInput::lineHeight = 1
-----------------------------------------
+## Hidden *Float* TextInput::lineHeight = `1`
 
 ## Hidden *Signal* TextInput::onLineHeightChange(*Float* oldValue)
 
@@ -105,8 +96,7 @@ Hidden *Float* TextInput::lineHeight = 1
                 developmentSetter: (val) ->
                     assert.isFloat val
 
-*Boolean* TextInput::multiLine = false
---------------------------------------
+## *Boolean* TextInput::multiLine = `false`
 
 ## *Signal* TextInput::onMultiLineChange(*Boolean* oldValue)
 
@@ -118,8 +108,7 @@ Hidden *Float* TextInput::lineHeight = 1
                 developmentSetter: (val) ->
                     assert.isBoolean val
 
-*String* TextInput::echoMode = 'normal'
----------------------------------------
+## *String* TextInput::echoMode = `'normal'`
 
 Accepts 'normal' and 'password'.
 
@@ -138,18 +127,20 @@ Accepts 'normal' and 'password'.
                     val = val.toLowerCase()
                     _super.call @, val
 
-Hidden *Alignment* TextInput::alignment
----------------------------------------
+## Hidden *Item.Alignment* TextInput::alignment
 
-## Hidden *Signal* TextInput::onAlignmentChange(*Alignment* alignment)
+## Hidden *Signal* TextInput::onAlignmentChange(*String* property, *Any* oldValue)
 
             Renderer.Item.createAlignment TextInput
 
-*Font* TextInput::font
-----------------------
+## *Item.Text.Font* TextInput::font
 
 ## *Signal* TextInput::onFontChange(*String* property, *Any* oldValue)
 
             Renderer.Text.createFont TextInput
 
         TextInput
+
+# Glossary
+
+- [TextInput](#class-textinput)

@@ -1,11 +1,12 @@
-Layout @extension
-=================
+# Item.Layout
 
     'use strict'
 
     utils = require 'src/utils'
     signal = require 'src/signal'
     assert = require 'src/assert'
+
+# **Class** Layout
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Layout extends itemUtils.DeepObject
         @__name__ = 'Layout'
@@ -17,9 +18,6 @@ Layout @extension
             name: propertyName
             valueConstructor: Layout
 
-*Layout* Layout()
------------------
-
         constructor: (ref) ->
             super ref
             @_enabled = true
@@ -28,8 +26,7 @@ Layout @extension
 
             Object.preventExtensions @
 
-*Boolean* Layout::enabled = true
---------------------------------
+## *Boolean* Layout::enabled = `true`
 
         itemUtils.defineProperty
             constructor: Layout
@@ -40,8 +37,7 @@ Layout @extension
             namespace: propertyName
             parentConstructor: ctor
 
-*Boolean* Layout::fillWidth = false
------------------------------------
+## *Boolean* Layout::fillWidth = `false`
 
 ## *Signal* Layout::onFillWidthChange(*Boolean* oldValue)
 
@@ -54,8 +50,7 @@ Layout @extension
             namespace: propertyName
             parentConstructor: ctor
 
-*Boolean* Layout::fillHeight = false
------------------------------------
+## *Boolean* Layout::fillHeight = false
 
 ## *Signal* Layout::onFillHeightChange(*Boolean* oldValue)
 
@@ -67,3 +62,7 @@ Layout @extension
                 assert.isBoolean val
             namespace: propertyName
             parentConstructor: ctor
+
+# Glossary
+
+- [Item.Layout](#class-layout)

@@ -1,5 +1,4 @@
-Font @extension
-===============
+# Item.Text.Font
 
     'use strict'
 
@@ -9,11 +8,10 @@ Font @extension
 
     log = log.scope 'Renderer', 'Font'
 
+# **Class** Font
+
     module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Font extends itemUtils.DeepObject
         @__name__ = 'Font'
-
-*Font* Font()
--------------
 
         itemUtils.defineProperty
             constructor: ctor
@@ -53,8 +51,7 @@ Font @extension
             name ||= 'sans-serif'
             setFontFamilyImpl.call font._ref, name
 
-*String* Font.family = 'sans-serif'
------------------------------------
+## *String* Font.family = `'sans-serif'`
 
 ## *Signal* Font.onFamilyChange(*String* oldValue)
 
@@ -73,8 +70,7 @@ Font @extension
                 _super.call @, val
                 reloadFontFamily @
 
-*Float* Font.pixelSize = 14
----------------------------
+## *Float* Font.pixelSize = `14`
 
 ## *Signal* Font.onPixelSizeChange(*String* oldValue)
 
@@ -88,8 +84,7 @@ Font @extension
             developmentSetter: (val) ->
                 assert.isFloat val
 
-*Float* Font.weight = 0.4
--------------------------
+## *Float* Font.weight = `0.4`
 
 In range from 0 to 1.
 
@@ -109,8 +104,7 @@ In range from 0 to 1.
                 _super.call @, val
                 reloadFontFamily @
 
-Hidden *Float* Font.wordSpacing = 0
------------------------------------
+## Hidden *Float* Font.wordSpacing = `0`
 
 ## Hidden *Signal* Font.onWordSpacingChange(*Float* oldValue)
 
@@ -124,8 +118,7 @@ Hidden *Float* Font.wordSpacing = 0
             developmentSetter: (val) ->
                 assert.isFloat val
 
-Hidden *Float* Font.letterSpacing = 0
--------------------------------------
+## Hidden *Float* Font.letterSpacing = `0`
 
 ## Hidden *Signal* Font.onLetterSpacingChange(*Float* oldValue)
 
@@ -139,8 +132,7 @@ Hidden *Float* Font.letterSpacing = 0
             developmentSetter: (val) ->
                 assert.isFloat val
 
-*Boolean* Font.italic = false
------------------------------
+## *Boolean* Font.italic = `false`
 
 ## *Signal* Font.onItalicChange(*Boolean* oldValue)
 
@@ -163,3 +155,7 @@ Hidden *Float* Font.letterSpacing = 0
             wordSpacing: @wordSpacing
             letterSpacing: @letterSpacing
             italic: @italic
+
+# Glossary
+
+- [Item.Text.Font](#class-font)

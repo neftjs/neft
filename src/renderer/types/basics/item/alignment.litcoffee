@@ -1,13 +1,11 @@
-Alignment @extension
-====================
+# Item.Alignment
 
     'use strict'
 
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-*Alignment* Alignment()
------------------------
+# **Class** Alignment
 
     module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Alignment extends itemUtils.DeepObject
         @__name__ = 'Alignment'
@@ -35,8 +33,7 @@ Alignment @extension
 
             Object.preventExtensions @
 
-*String* Alignment::horizontal = 'left'
----------------------------------------
+## *String* Alignment::horizontal = 'left'
 
 ## *Signal* Alignment::onHorizontalChange(*String* oldValue)
 
@@ -52,8 +49,7 @@ Alignment @extension
             setter: (_super) -> (val='left') ->
                 _super.call @, val
 
-*String* Alignment::vertical = 'top'
-------------------------------------
+## *String* Alignment::vertical = 'top'
 
 ## *Signal* Alignment::onVerticalChange(*String* oldValue)
 
@@ -72,3 +68,7 @@ Alignment @extension
         toJSON: ->
             horizontal: @horizontal
             vertical: @vertical
+
+# Glossary
+
+- [Item.Alignment](#class-alignment)

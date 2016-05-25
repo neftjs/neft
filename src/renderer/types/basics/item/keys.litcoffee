@@ -1,19 +1,18 @@
-Keys @extension
-===============
+# Item.Keys
 
-```nml
-`Rectangle {
-`   width: 100
-`   height: 100
-`   color: 'green'
-`   keys.focus: true
-`   keys.onPressed: function(){
-`       this.color = 'red';
-`   }
-`   keys.onReleased: function(){
-`       this.color = 'green';
-`   }
-`}
+```javascript
+Rectangle {
+    width: 100
+    height: 100
+    color: 'green'
+    keys.focus: true
+    keys.onPressed: function(){
+        this.color = 'red';
+    }
+    keys.onReleased: function(){
+        this.color = 'green';
+    }
+}
 ```
 
     'use strict'
@@ -21,6 +20,8 @@ Keys @extension
     utils = require 'src/utils'
     signal = require 'src/signal'
     assert = require 'src/assert'
+
+# **Class** Keys
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys extends itemUtils.DeepObject
         @__name__ = 'Keys'
@@ -32,43 +33,42 @@ Keys @extension
             name: 'keys'
             valueConstructor: Keys
 
-*Boolean* Keys.focusWindowOnPointerPress = true
------------------------------------------------
+## *Boolean* Keys.focusWindowOnPointerPress = `true`
 
         @focusWindowOnPointerPress = true
 
-*Item* Keys.focusedItem
------------------------
+## *Item* Keys.focusedItem
 
         @focusedItem = null
 
-*Keys* Keys()
--------------
+## **Class** Keys.Event : *Device.KeyboardEvent*
+
+        @Event = class KeysEvent
+            constructor: ->
+                Object.preventExtensions @
+
+            @:: = Object.create Device.keyboard
+            @::constructor = KeysEvent
 
         constructor: (ref) ->
             super ref
             @_focus = false
             Object.preventExtensions @
 
-*Signal* Keys::onPress(*KeysEvent* event)
------------------------------------------
+## *Signal* Keys::onPress(*Item.Keys.Event* event)
 
-*Signal* Keys::onHold(*KeysEvent* event)
-----------------------------------------
+## *Signal* Keys::onHold(*Item.Keys.Event* event)
 
-*Signal* Keys::onRelease(*KeysEvent* event)
--------------------------------------------
+## *Signal* Keys::onRelease(*Item.Keys.Event* event)
 
-*Signal* Keys::onInput(*KeysEvent* event)
------------------------------------------
+## *Signal* Keys::onInput(*Item.Keys.Event* event)
 
         @SIGNALS = ['onPress', 'onHold', 'onRelease', 'onInput']
 
         for signalName in @SIGNALS
             signal.Emitter.createSignal @, signalName
 
-*Boolean* Keys::focus = false
------------------------------
+## *Boolean* Keys::focus = false
 
 ## *Signal* Keys::onFocusChange(*Boolean* oldValue)
 
@@ -128,17 +128,11 @@ Keys @extension
         Device.onKeyInput (event) ->
             focusedKeys?.onInput.emit keysEvent
 
-*KeysEvent* KeysEvent() : *DeviceKeyboardEvent*
------------------------------------------------
-
-        @KeysEvent = class KeysEvent
-            constructor: ->
-                Object.preventExtensions @
-
-            @:: = Object.create Device.keyboard
-            @::constructor = KeysEvent
-
-*KeysEvent* Keys.event
-----------------------
+## *Item.Keys.Event* Keys.event
 
         @event = keysEvent = new KeysEvent
+
+# Glossary
+
+- [Item.Keys](#class-keys)
+- [Item.Keys.Event](#class-keysevent)
