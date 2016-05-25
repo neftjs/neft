@@ -44,6 +44,7 @@ exports.parse = (val, isPublicId, opts=0, objOpts={}) ->
 
     # filter by ids
     for elem, i in binding when typeof elem isnt 'string'
+        elem = objOpts.modifyBindingPart?(elem) or elem
         [id] = elem
         if id is 'Renderer'
             elem.shift()

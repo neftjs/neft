@@ -134,6 +134,11 @@ describe 'src/document string interpolation', ->
                 storage: a: '1'
             assert.is view.node.stringify(), '1'
 
+            view.revert()
+            renderParse view,
+                storage: a: '2'
+            assert.is view.node.stringify(), '2'
+
         it 'is accesible by context', ->
             source = createView """
                 ${this.scope.a}
@@ -143,6 +148,11 @@ describe 'src/document string interpolation', ->
             renderParse view,
                 storage: a: '1'
             assert.is view.node.stringify(), '1'
+
+            view.revert()
+            renderParse view,
+                storage: a: '2'
+            assert.is view.node.stringify(), '2'
 
         it 'lookup neft:use', ->
             source = createView """
@@ -155,6 +165,11 @@ describe 'src/document string interpolation', ->
                 storage: a: '1'
             assert.is view.node.stringify(), '1'
 
+            view.revert()
+            renderParse view,
+                storage: a: '2'
+            assert.is view.node.stringify(), '2'
+
         it 'lookup neft:each', ->
             source = createView """
                 <neft:blank neft:each="[1]">
@@ -166,6 +181,11 @@ describe 'src/document string interpolation', ->
             renderParse view,
                 storage: a: '1'
             assert.is view.node.stringify(), '1'
+
+            view.revert()
+            renderParse view,
+                storage: a: '2'
+            assert.is view.node.stringify(), '2'
 
     it 'handler is called on signal', ->
         source = createView """

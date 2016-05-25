@@ -8,6 +8,12 @@ bindingParser = require 'src/binding/parser'
 PARSER_OPTS =
     globalIdToThis:
         scope: true
+    modifyBindingPart: (elem) ->
+        # File context doesn't have signal on 'scope' change, so
+        # we need to use short '${scope}' syntax which uses Input::scope.
+        if elem[0] is 'this' and elem[1] is 'scope'
+            elem.shift()
+        return
 
 isPublicId = (id) ->
     id in ['this', 'ids', 'attrs', 'scope']
