@@ -190,7 +190,7 @@ describe 'src/document neft:script', ->
                 }
 
                 this.onCreate(function(){
-                    var keys = [...protoKeys];
+                    var keys = [].concat(protoKeys);
                     this.keys = keys;
                     for (var key in this) {
                         keys.push(key);
