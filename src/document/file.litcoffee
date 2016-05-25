@@ -14,6 +14,7 @@ File @class
     log = log.scope 'View'
 
     {Emitter} = signal
+    {emitSignal} = Emitter
 
     module.exports = class File extends Emitter
         files = @_files = {}
@@ -41,7 +42,6 @@ File @class
         JSON_ITERATORS = i++
         JSON_USES = i++
         JSON_IDS = i++
-        JSON_FUNCS = i++
         JSON_ATTRS_TO_SET = i++
         JSON_LOGS = i++
         JSON_STYLES = i++
@@ -91,7 +91,6 @@ Corresponding node handler: *neft:onRevert=""*.
         @Condition = require('./condition') @
         @Iterator = require('./iterator') @
         @Log = require('./log') @
-        @Func = require('./func') @
         @AttrsToSet = require('./attrsToSet') @
 
 *File* File.fromHTML(*String* path, *String* html)
@@ -194,7 +193,6 @@ Corresponding node handler: *neft:onRevert=""*.
                 for id, path of arr[JSON_IDS]
                     obj.ids[id] = obj.node.getChildByAccessPath path
 
-                utils.merge obj.funcs, arr[JSON_FUNCS]
                 parseArray obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet
 
                 `//<development>`
@@ -225,7 +223,6 @@ File.parse(*File* file)
             conditions = require('./file/parse/conditions') File
             ids = require('./file/parse/ids') File
             logs = require('./file/parse/logs') File
-            funcs = require('./file/parse/funcs') File
             attrSetting = require('./file/parse/attrSetting') File
 
             (file) ->
@@ -249,7 +246,6 @@ File.parse(*File* file)
                 storage file
                 conditions file
                 ids file
-                funcs file
                 attrSetting file
                 `//<development>`
                 logs file
@@ -257,6 +253,8 @@ File.parse(*File* file)
 
                 # trigger signal
                 File.onParse.emit file
+
+                file
 
 *File* File.factory(*String* path)
 ----------------------------------
@@ -300,7 +298,7 @@ File.parse(*File* file)
             @isRendered = false
             @targetNode = null
             @parent = null
-            @storage = null
+            @context = null
             @scripts = null
             @attrs = null
             @scope = null
@@ -315,14 +313,12 @@ File.parse(*File* file)
             @iterators = []
             @uses = []
             @ids = {}
-            @funcs = {}
             @attrsToSet = []
             @logs = []
             @styles = []
             @inputIds = new Dict
-            @inputFuncs = new Dict
             @inputAttrs = new Dict
-            @inputArgs = [@inputIds, @inputFuncs, @inputAttrs]
+            @inputArgs = [@inputIds, @inputAttrs]
 
             @node.onAttrsChange @_updateInputAttrsKey, @
             @inputAttrs.extend @node.attrs
@@ -373,7 +369,7 @@ File.parse(*File* file)
                 @source = source
                 @scope = scope
 
-                {inputAttrs, inputIds, inputFuncs} = @
+                {inputAttrs, inputIds} = @
 
                 if attrs instanceof Dict
                     attrs.onChange @_updateInputAttrsKey, @
@@ -409,18 +405,6 @@ File.parse(*File* file)
                             inputIds.set prop, val
                     for prop, val of viewIds
                         inputIds.set prop, val
-
-                    # funcs
-                    viewFuncs = @funcs
-                    sourceFuncs = source.file.inputFuncs
-                    for prop, val of inputFuncs
-                        if viewFuncs[prop] is undefined and sourceFuncs[prop] is undefined
-                            inputFuncs.pop prop
-                    for prop, val of sourceFuncs
-                        if viewFuncs[prop] is undefined
-                            inputFuncs.set prop, val
-                    for prop, val of viewFuncs
-                        inputFuncs.set prop, val
                 else
                     # attrs
                     viewAttrs = @node.attrs
@@ -437,8 +421,8 @@ File.parse(*File* file)
 
                 File.onBeforeRender.emit @
                 emitNodeSignal @, 'neft:onBeforeRender'
-                if @storage?.node is @node
-                    @storage.onBeforeRender?()
+                if @context?.node is @node
+                    emitSignal @context, 'onBeforeRender'
 
                 # inputs
                 for input, i in @inputs
@@ -469,8 +453,8 @@ File.parse(*File* file)
                 @isRendered = true
                 File.onRender.emit @
                 emitNodeSignal @, 'neft:onRender'
-                if @storage?.node is @node
-                    @storage.onRender?()
+                if @context?.node is @node
+                    emitSignal @context, 'onRender'
 
                 @
 
@@ -485,8 +469,8 @@ File.parse(*File* file)
                 @isRendered = false
                 File.onBeforeRevert.emit @
                 emitNodeSignal @, 'neft:onBeforeRevert'
-                if @storage?.node is @node
-                    @storage.onBeforeRevert?()
+                if @context?.node is @node
+                    emitSignal @context, 'onBeforeRevert'
 
                 if @attrs instanceof Dict
                     @attrs.onChange.disconnect @_updateInputAttrsKey, @
@@ -522,8 +506,8 @@ File.parse(*File* file)
 
                 File.onRevert.emit @
                 emitNodeSignal @, 'neft:onRevert'
-                if @storage?.node is @node
-                    @storage.onRevert?()
+                if @context?.node is @node
+                    emitSignal @context, 'onRevert'
 
                 @
 
@@ -594,11 +578,6 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
                 clone.ids[id] = @node.getCopiedElement node, clone.node
             clone.inputIds.extend clone.ids
 
-            # funcs
-            for name, func of @funcs
-                clone.funcs[name] = File.Func.bindFuncIntoGlobal func, clone
-            clone.inputFuncs.extend clone.funcs
-
             # inputs
             for input in @inputs
                 clone.inputs.push input.clone @, clone
@@ -623,9 +602,9 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
             for log in @logs
                 clone.logs.push log.clone @, clone
 
-            # storage
+            # context
             if @scripts
-                clone.storage = @scripts.createStorageForFile clone
+                clone.context = @scripts.createCloneContext clone
 
             clone
 
@@ -681,7 +660,6 @@ File::destroy()
                 for id, node of @ids
                     ids[id] = node.getAccessPath @node
 
-                arr[JSON_FUNCS] = @funcs
                 arr[JSON_ATTRS_TO_SET] = @attrsToSet
 
                 `//<development>`

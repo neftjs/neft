@@ -3,8 +3,30 @@
 log = require 'src/log'
 utils = require 'src/utils'
 assert = require 'src/assert'
+signal = require 'src/signal'
 
+{Emitter} = signal
+{emitSignal} = Emitter
 assert = assert.scope 'View.Scripts'
+
+class FileContext extends Emitter
+    propOpts = utils.CONFIGURABLE | utils.WRITABLE
+
+    constructor: ->
+        super()
+        utils.defineProperty @, '_signals', propOpts, @_signals
+        utils.defineProperty @, 'node', propOpts, null
+        utils.defineProperty @, 'attrs', propOpts, null
+        utils.defineProperty @, 'ids', propOpts, null
+        utils.defineProperty @, 'scope', propOpts, null
+
+    utils.defineProperty @::, 'constructor', propOpts, @
+
+    Emitter.createSignal @, 'onCreate'
+    Emitter.createSignal @, 'onBeforeRender'
+    Emitter.createSignal @, 'onRender'
+    Emitter.createSignal @, 'onBeforeRevert'
+    Emitter.createSignal @, 'onRevert'
 
 module.exports = (File) -> class Scripts
     @__name__ = 'Scripts'
@@ -30,80 +52,41 @@ module.exports = (File) -> class Scripts
         assert.instanceOf @file, File
         assert.isArray @paths
 
-        @ctor = @getCtor()
-
         `//<development>`
         if @constructor is Scripts
             Object.seal @
         `//</development>`
 
-    getCtor: ->
+        @file.context = @createContext()
+
+    createContext: ->
+        ctx = new FileContext
+        for path in @paths
+            func = getScriptFile path
+            func.call ctx
+        ctx
+
+    createCloneContext: (file) ->
         {paths} = @
-        if paths.length is 1
-            ctor = getScriptFile paths[0]
-        else
-            ctor = @createCtorFromScripts()
-        ctor
+        ctx = Object.create @file.context
+        propOpts = utils.CONFIGURABLE | utils.WRITABLE
 
-    createCtorFromScripts: (scripts) ->
-        {paths} = @
-
-        # require all scripts
-        ctors = []
-        for path in paths
-            ctors.push getScriptFile(path)
-
-        # call all constructors
-        masterCtor = ->
-            for ctor in ctors
-                ctor.call @
-            return
-
-        # merge multiple constructors prototypes into one
-        for ctor in ctors
-            proto = ctor::
-            while proto and proto isnt Object::
-                keys = Object.getOwnPropertyNames proto
-                for key in keys
-                    if key is 'constructor'
-                        continue
-                    desc = Object.getOwnPropertyDescriptor proto, key
-
-                    # methods call from all prototypes
-                    if typeof desc.value is typeof masterCtor::[key] is 'function'
-                        desc.value = do (func1 = masterCtor::[key], func2 = desc.value) -> ->
-                            r1 = func1.apply @, arguments
-                            r2 = func2.apply @, arguments
-                            r1 or r2
-
-                    Object.defineProperty masterCtor::, key, desc
-
-                proto = proto.__proto__
-
-        masterCtor
-
-    createStorageForFile: (file) ->
-        {ctor, paths} = @
-
-        if typeof ctor isnt 'function'
-            throw new Error "<neft:script> must exports a function"
-
-        obj = Object.create ctor::
-        utils.defineProperty obj, 'node', utils.CONFIGURABLE, file.node
-        utils.defineProperty obj, 'attrs', utils.CONFIGURABLE, file.inputAttrs
-        utils.defineProperty obj, 'ids', utils.CONFIGURABLE, file.inputIds
-        utils.defineProperty obj, 'funcs', utils.CONFIGURABLE, file.inputFuncs
-        utils.defineProperty obj, 'scope', utils.CONFIGURABLE, ->
+        utils.defineProperty ctx, 'node', propOpts, file.node
+        utils.defineProperty ctx, 'attrs', propOpts, file.inputAttrs
+        utils.defineProperty ctx, 'ids', propOpts, file.inputIds
+        utils.defineProperty ctx, 'scope', utils.CONFIGURABLE, ->
             `//<development>`
             unless file.isRendered
                 log.warn "this.scope in neft:script is not accessible if the view is " +
-                    "not rendered; make sure you are not modifying your view when it's " +
-                    "not rendered; in script '#{paths}'"
+                "not rendered; make sure you are not modifying your view when it's " +
+                "not rendered; in script '#{paths}'"
             `//</development>`
             file.scope
         , null
-        ctor.call obj
-        obj
+
+        emitSignal ctx, 'onCreate'
+
+        ctx
 
     toJSON: (key, arr) ->
         unless arr
