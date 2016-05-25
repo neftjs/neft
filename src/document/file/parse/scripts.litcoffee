@@ -16,6 +16,9 @@ neft:script @xml
     isCoffee = (path) -> /\.(?:coffee|litcoffee|coffee\.md)$/.test(path)
 
     module.exports = (File) -> (file) ->
+        if file instanceof File.Iterator
+            return
+
         scripts = []
 
         for tag in file.node.queryAll('script')
@@ -46,7 +49,6 @@ neft:script @xml
                 fs.outputFileSync path, str
                 scripts.push path
 
-        if scripts.length > 0
-            file.scripts = new File.Scripts file, scripts
+        file.scripts = new File.Scripts file, scripts
 
         return

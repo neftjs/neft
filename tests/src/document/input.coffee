@@ -16,6 +16,16 @@ describe 'src/document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), '2'
 
+        it 'is accessible by context', ->
+            source = createView """
+                <neft:fragment neft:name="a" x="2">${this.attrs.x}</neft:fragment>
+                <neft:use neft:fragment="a" />
+            """
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), '2'
+
         it 'lookup neft:use', ->
             source = createView """
                 <neft:fragment neft:name="a" x="1">${attrs.x}</neft:fragment>
@@ -70,18 +80,32 @@ describe 'src/document string interpolation', ->
             fragmentA.attrs.set 'x', undefined
             assert.is view.node.stringify(), '2'
 
-    it '`ids` refers to nodes', ->
-        source = createView """
-            <a id="first" label="12" visible="false" />
-            ${ids.first.attrs.label}
-        """
-        view = source.clone()
+    describe '`ids`', ->
+        it 'refers to nodes', ->
+            source = createView """
+                <a id="first" label="12" visible="false" />
+                ${ids.first.attrs.label}
+            """
+            view = source.clone()
 
-        renderParse view
-        assert.is view.node.stringify(), '12'
+            renderParse view
+            assert.is view.node.stringify(), '12'
 
-        view.node.children[0].attrs.set 'label', 23
-        assert.is view.node.stringify(), '23'
+            view.node.children[0].attrs.set 'label', 23
+            assert.is view.node.stringify(), '23'
+
+        it 'is accessible by context', ->
+            source = createView """
+                <a id="first" label="12" visible="false" />
+                ${this.ids.first.attrs.label}
+            """
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), '12'
+
+            view.node.children[0].attrs.set 'label', 23
+            assert.is view.node.stringify(), '23'
 
     it 'file `ids` are accessed in fragments', ->
         source = createView """
@@ -103,6 +127,16 @@ describe 'src/document string interpolation', ->
         it 'is accessed in rendered file', ->
             source = createView """
                 ${scope.a}
+            """
+            view = source.clone()
+
+            renderParse view,
+                storage: a: '1'
+            assert.is view.node.stringify(), '1'
+
+        it 'is accesible by context', ->
+            source = createView """
+                ${this.scope.a}
             """
             view = source.clone()
 

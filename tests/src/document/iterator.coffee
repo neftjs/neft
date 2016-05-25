@@ -59,6 +59,14 @@ describe 'src/document neft:each', ->
             attrs: a: 'a'
         assert.is view.node.stringify(), '<ul>aa</ul>'
 
+    it 'access global `attrs` by context', ->
+        source = createView '<ul neft:each="[1,2]">${this.attrs.a}</ul>'
+        view = source.clone()
+
+        renderParse view,
+            attrs: a: 'a'
+        assert.is view.node.stringify(), '<ul>aa</ul>'
+
     it 'access `ids`', ->
         source = createView """
             <div id="a" prop="a" visible="false" />
@@ -85,11 +93,15 @@ describe 'src/document neft:each', ->
         source = createView """
             <neft:fragment neft:name="a">
                 <neft:script>
-                    this.x = 1;
+                    this.onCreate(function(){
+                        this.self = this;
+                    });
+                    this.getX = function(){
+                        return this === this.self ? 1 : 0;
+                    };
                 </neft:script>
-                <ul neft:each="[1,2]">${this.x}</ul>
+                <ul neft:each="[1,2]">${this.getX()}</ul>
             </neft:fragment>
-            ${this.x}
             <neft:use neft:fragment="a" />
         """
         view = source.clone()
