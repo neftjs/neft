@@ -18,8 +18,10 @@ Tag @virtual_dom
     CSS_ID_RE = ///\#([^\s]+)///
 
     module.exports = (Element) -> class Tag extends Element
-        @INTERNAL_TAGS = ['neft:attr', 'neft:fragment', 'neft:function', 'neft:rule',
-        'neft:target', 'neft:use', 'neft:require', 'neft:blank', 'neft:log', 'neft:script']
+        @INTERNAL_TAGS = [
+            'neft:attr', 'neft:fragment', 'neft:rule', 'neft:target',
+            'neft:use', 'neft:require', 'neft:blank', 'neft:log', 'neft:script'
+        ]
 
         @DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null
 

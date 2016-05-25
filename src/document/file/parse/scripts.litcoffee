@@ -13,8 +13,14 @@ neft:script @xml
     realpath = fs.realpathSync './'
     tmpdir = os.tmpdir()
 
+    isCoffee = (path) -> /\.(?:coffee|litcoffee|coffee\.md)$/.test(path)
+
     module.exports = (File) -> (file) ->
         scripts = []
+
+        for tag in file.node.queryAll('script')
+            if Object.keys(tag.attrs).length is 0
+                tag.name = 'neft:script'
 
         for tag in file.node.queryAll('neft:script')
             tag.parent = null
@@ -29,6 +35,10 @@ neft:script @xml
                 # tag body
                 str = tag.stringifyChildren()
                 filename = tag.attrs.filename or "tmp#{uid++}.js"
+                if isCoffee(filename)
+                    str = "`module.exports = function(){`\n\n#{str}\n\n`};`"
+                else
+                    str = "module.exports = function(){\n\n#{str}\n\n};"
                 if Neft?
                     path = pathUtils.join 'build/scripts/', filename
                 else

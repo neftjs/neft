@@ -99,49 +99,6 @@ describe 'src/document string interpolation', ->
         view.node.children[0].attrs.set 'label', 23
         assert.is view.node.stringify(), '23'
 
-    it '`funcs` refers to neft:functions', ->
-        source = createView """
-            <neft:function neft:name="pow" arguments="num">
-                return num * num;
-            </neft:function>
-            ${funcs.pow(3)}
-        """
-        view = source.clone()
-
-        renderParse view
-        assert.is view.node.stringify(), '9'
-
-    it 'file `funcs` are accessed in neft:functions', ->
-        source = createView """
-            <neft:function neft:name="pow" arguments="num">
-                return num * num;
-            </neft:function>
-            <neft:fragment neft:name="a">
-                ${funcs.pow(3)}
-            </neft:fragment>
-            <neft:use neft:fragment="a" />
-        """
-        view = source.clone()
-
-        renderParse view
-        assert.is view.node.stringify(), '9'
-
-    it 'fragment neft:functions are accessed in this fragment', ->
-        source = createView """
-            <neft:fragment neft:name="a">
-                <neft:function neft:name="pow" arguments="num">
-                    return num * num;
-                </neft:function>
-
-                ${funcs.pow(3)}
-            </neft:fragment>
-            <neft:use neft:fragment="a" />
-        """
-        view = source.clone()
-
-        renderParse view
-        assert.is view.node.stringify(), '9'
-
     describe '`scope`', ->
         it 'is accessed in rendered file', ->
             source = createView """
