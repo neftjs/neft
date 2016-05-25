@@ -5,7 +5,7 @@ exports.toString = (err) ->
     if err.stack
         msg += err.stack
 
-        unitStackIndex = msg.indexOf '/neft-cli/src/unit/'
+        unitStackIndex = msg.indexOf '/src/unit/stack.coffee'
         if unitStackIndex >= 0
             msg = msg.slice(0, unitStackIndex) + '…'
     else
