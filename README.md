@@ -1,6 +1,6 @@
 # Neft: JavaScript Everywhere
 
-<a href="http://www.neft.io"><img src="http://www.neft.io/static/images/neft-white.svg" alt="Neft" width="200" align="left" hspace="10" vspace="6"></a>
+<a href="http://www.neft.io"><img src="http://www.neft.io/static/images/neft-white.svg" alt="Neft" width="100" align="left" hspace="10" vspace="6"></a>
 
 **Neft** is a JavaScript framework for multiplatform applications. Neft runs fully natively on iOS and Android. Supports rendering in modern browsers in HTML or WebGL. Neft provides Virtual DOM and uniform Rendering Engine easily extended by native views. Renders HTML on server.
 
