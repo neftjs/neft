@@ -43,7 +43,7 @@ The given test function can contains optional *callback* argument.
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/unit/index.litcoffee#aftereach)
 
 #whenChange
-<dl><dt>Syntax</dt><dd><code>unit.whenChange(&#x2A;Object&#x2A; watchObject, &#x2A;Function&#x2A; callback, [&#x2A;Integer&#x2A; maxDelay = `1000`])</code></dd><dt>Static method of</dt><dd><i>unit</i></dd><dt>Parameters</dt><dd><ul><li>watchObject — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></li><li>callback — <i>Function</i></li><li>maxDelay — <a href="/Neft-io/neft/Utils-API.md#isinteger">Integer</a> — <code>= 1000</code> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>unit.whenChange(&#x2A;Object&#x2A; watchObject, &#x2A;Function&#x2A; callback, [&#x2A;Integer&#x2A; maxDelay = `1000`])</code></dd><dt>Static method of</dt><dd><i>unit</i></dd><dt>Parameters</dt><dd><ul><li>watchObject — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></li><li>callback — <i>Function</i></li><li>maxDelay — <a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a> — <code>= 1000</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/unit/index.litcoffee#whenchange)
 
 #runTests

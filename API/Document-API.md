@@ -19,8 +19,8 @@ Document
   * [[neft:log|Document-neft:log @xml-API]]
   * [[neft:rule|Document-neft:rule @xml-API]]
   * [[neft:script|Document-neft:script @xml-API]]
-  * [[String Interpolation|Document-String Interpolation @learn-API]]
   * [[neft:target|Document-neft:target @xml-API]]
+  * [[String Interpolation|Document-String Interpolation @learn-API]]
   * [[neft:use|Document-neft:use @xml-API]]
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/index.litcoffee#document)
