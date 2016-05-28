@@ -15,7 +15,7 @@ Row
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/row.litcoffee#row)
 
 New
-<dl><dt>Syntax</dt><dd><code>&#x2A;Row&#x2A; Row.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Row&#x2A; Row.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/row.litcoffee#new)
 
 Row
@@ -27,7 +27,7 @@ padding
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/row.litcoffee#padding)
 
 spacing
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Row::spacing = 0</code></dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Row::spacing = 0</code></dd><dt>Prototype property of</dt><dd><i>Row</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/row.litcoffee#spacing)
 
 alignment

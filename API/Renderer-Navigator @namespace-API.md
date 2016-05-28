@@ -5,7 +5,7 @@ Navigator
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/navigator.litcoffee#navigator)
 
 Navigator
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Navigator</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Navigator</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/namespace/navigator.litcoffee#navigator)
 
 language

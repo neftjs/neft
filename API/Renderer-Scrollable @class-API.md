@@ -5,7 +5,7 @@ Scrollable
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/scrollable.litcoffee#scrollable)
 
 New
-<dl><dt>Syntax</dt><dd><code>&#x2A;Scrollable&#x2A; Scrollable.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Scrollable</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Scrollable</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Scrollable&#x2A; Scrollable.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Scrollable</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Scrollable</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/scrollable.litcoffee#new)
 
 Scrollable
@@ -17,11 +17,11 @@ clip
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/scrollable.litcoffee#clip)
 
 contentX
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Scrollable::contentX = 0</code></dd><dt>Prototype property of</dt><dd><i>Scrollable</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Scrollable::contentX = 0</code></dd><dt>Prototype property of</dt><dd><i>Scrollable</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/scrollable.litcoffee#contentx)
 
 contentY
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Scrollable::contentY = 0</code></dd><dt>Prototype property of</dt><dd><i>Scrollable</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Scrollable::contentY = 0</code></dd><dt>Prototype property of</dt><dd><i>Scrollable</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/layout/scrollable.litcoffee#contenty)
 
 snap

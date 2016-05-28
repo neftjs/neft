@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]] ▸ [[Item|Renderer-Item-API]] ▸ **Anchors**
 
 #Anchors
-<dl><dt>Syntax</dt><dd><code>Item.Anchors</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API.md#class-item">Item</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Item.Anchors</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#anchors)
 
 ## Table of contents
@@ -78,11 +78,11 @@ so `anchors.top = parent.left` is not allowed.
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#left)
 
 ##onLeftChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onLeftChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onLeftChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#onleftchange)
 
 ##onRightChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onRightChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onRightChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 ```javascript
 Item {
     height: 100
@@ -97,7 +97,7 @@ Item {
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#onrightchange)
 
 ##onHorizontalCenterChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onHorizontalCenterChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onHorizontalCenterChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 ```javascript
 Item {
     height: 100
@@ -112,11 +112,11 @@ Item {
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#onhorizontalcenterchange)
 
 ##onTopChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onTopChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onTopChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#ontopchange)
 
 ##onBottomChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onBottomChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onBottomChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 ```javascript
 Item {
     height: 100
@@ -131,7 +131,7 @@ Item {
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#onbottomchange)
 
 ##onVerticalCenterChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onVerticalCenterChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onVerticalCenterChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 It's a shortcut for the horizontalCenter and verticalCenter anchors.
 
 No target line is required.
@@ -152,7 +152,7 @@ Rectangle {
 ```
 
 ##onCenterInChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onCenterInChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onCenterInChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#oncenterinchange)
 
 ##fill
@@ -174,7 +174,7 @@ Item {
 ```
 
 ##onFillChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onFillChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Anchors::onFillChange(&#x2A;Array&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Anchors</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/anchors.litcoffee#onfillchange)
 
 ##fillWidth
