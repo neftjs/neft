@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]] ▸ [[Item|Renderer-Item-API]] ▸ **Pointer**
 
 #Pointer
-<dl><dt>Syntax</dt><dd><code>Item.Pointer</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/Renderer-Item-API.md#class-item">Item</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Item.Pointer</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API.md#class-item">Item</a></dd></dl>
 ```javascript
 Rectangle {
     width: 100
@@ -44,24 +44,24 @@ Enables mouse and touch handling.
 
 ## *Boolean* Pointer::enabled = `true`
 
-## [Signal](/Neft-io/neft/Signal-API.md#class-signal) Pointer::onEnabledChange(*Boolean* oldValue)
+## [Signal](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onEnabledChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointerenabled--true-signal-pointeronenabledchangeboolean-oldvalue)
 
 ## Hidden *Boolean* Pointer::draggable = `false`
 
-## Hidden [Signal](/Neft-io/neft/Signal-API.md#class-signal) Pointer::onDraggableChange(*Boolean* oldValue)
+## Hidden [Signal](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDraggableChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#hidden-boolean-pointerdraggable--false-hidden-signal-pointerondraggablechangeboolean-oldvalue)
 
 ## Hidden *Boolean* Pointer::dragActive = `false`
 
-## Hidden [Signal](/Neft-io/neft/Signal-API.md#class-signal) Pointer::onDragActiveChange(*Boolean* oldValue)
+## Hidden [Signal](/Neft-io/neft/wiki/Signal-API.md#class-signal) Pointer::onDragActiveChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#hidden-boolean-pointerdragactive--false-hidden-signal-pointerondragactivechangeboolean-oldvalue)
 
 ##onClick
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Pointer::onClick(&#x2A;Item.Pointer.Event&#x2A; event)</code></dd><dt>Prototype method of</dt><dd><i>Pointer</i></dd><dt>Parameters</dt><dd><ul><li>event — <a href="/Neft-io/neft/Renderer-Item.Pointer-API.md#class-pointerevent">Item.Pointer.Event</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Pointer::onClick(&#x2A;Item.Pointer.Event&#x2A; event)</code></dd><dt>Prototype method of</dt><dd><i>Pointer</i></dd><dt>Parameters</dt><dd><ul><li>event — <a href="/Neft-io/neft/wiki/Renderer-Item.Pointer-API.md#class-pointerevent">Item.Pointer.Event</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#onclick)
 
 ## *Boolean* Pointer::pressed = `false`
@@ -69,7 +69,7 @@ Enables mouse and touch handling.
 Whether the pointer is currently pressed.
 
 ##onPressedChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Pointer::onPressedChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Pointer</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Pointer::onPressedChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Pointer</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#onpressedchange)
 
 ## *Boolean* Pointer::hover = `false`
@@ -77,7 +77,7 @@ Whether the pointer is currently pressed.
 Whether the pointer is currently under the item.
 
 ##onHoverChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Pointer::onHoverChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Pointer</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Pointer::onHoverChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Pointer</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#onhoverchange)
 
 ##**Class** Pointer.Event
@@ -131,7 +131,7 @@ Can be changed only in the 'onPress' signal.
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventensuremove--true)
 
 ##event
-<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Pointer.Event&#x2A; Pointer.event</code></dd><dt>Static property of</dt><dd><i>Pointer</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Renderer-Item.Pointer-API.md#class-pointerevent">Item.Pointer.Event</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Pointer.Event&#x2A; Pointer.event</code></dd><dt>Static property of</dt><dd><i>Pointer</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item.Pointer-API.md#class-pointerevent">Item.Pointer.Event</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#event)
 
 # Glossary

@@ -9,7 +9,7 @@ getTemplateView
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/route.litcoffee#gettemplateview)
 
 Route
-<dl><dt>Syntax</dt><dd><code>&#x2A;Route&#x2A; Route(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Route</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Route&#x2A; Route(&#x2A;Object&#x2A; options)</code></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Route</i></dd></dl>
 Access it with:
 ```javascript
 module.exports = function(app){
@@ -19,11 +19,11 @@ module.exports = function(app){
 
 Acceptable syntaxes:
 ```javascript
-*Route* app.Route(*String* method, *String* uri, [Object](/Neft-io/neft/Utils-API.md#isobject) options)
+*Route* app.Route(*String* method, *String* uri, [Object](/Neft-io/neft/wiki/Utils-API.md#isobject) options)
 *Route* app.Route(*String* methodWithUri, *Function* getData)
-*Route* app.Route(*String* methodWithUri, [Object](/Neft-io/neft/Utils-API.md#isobject) options)
+*Route* app.Route(*String* methodWithUri, [Object](/Neft-io/neft/wiki/Utils-API.md#isobject) options)
 *Route* app.Route(*String* uri, *Function* getData)
-*Route* app.Route(*String* uri, [Object](/Neft-io/neft/Utils-API.md#isobject) options)
+*Route* app.Route(*String* uri, [Object](/Neft-io/neft/wiki/Utils-API.md#isobject) options)
 *Route* app.Route(*String* method, *String* uri)
 *Route* app.Route(*String* uri)
 *Route* app.Route(*String* methodWithUri)

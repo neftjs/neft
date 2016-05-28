@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]] ▸ [[Item|Renderer-Item-API]] ▸ **Keys**
 
 #Keys
-<dl><dt>Syntax</dt><dd><code>Item.Keys</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/Renderer-Item-API.md#class-item">Item</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Item.Keys</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API.md#class-item">Item</a></dd></dl>
 ```javascript
 Rectangle {
     width: 100
@@ -39,7 +39,7 @@ Rectangle {
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#boolean-keysfocuswindowonpointerpress--true)
 
 ##focusedItem
-<dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Keys.focusedItem</code></dd><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Renderer-Item-API.md#class-item">Item</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Keys.focusedItem</code></dd><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API.md#class-item">Item</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#focuseditem)
 
 ##**Class** Keys.Event
@@ -47,7 +47,7 @@ Rectangle {
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#class-keysevent)
 
 ##onPress
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Keys::onPress(&#x2A;Item.Keys.Event&#x2A; event)</code></dd><dt>Prototype method of</dt><dd><i>Keys</i></dd><dt>Parameters</dt><dd><ul><li>event — <a href="/Neft-io/neft/Renderer-Item.Keys-API.md#class-keysevent">Item.Keys.Event</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Keys::onPress(&#x2A;Item.Keys.Event&#x2A; event)</code></dd><dt>Prototype method of</dt><dd><i>Keys</i></dd><dt>Parameters</dt><dd><ul><li>event — <a href="/Neft-io/neft/wiki/Renderer-Item.Keys-API.md#class-keysevent">Item.Keys.Event</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#onpress)
 
 ##focus
@@ -55,7 +55,7 @@ Rectangle {
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#focus)
 
 ##event
-<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Keys.Event&#x2A; Keys.event</code></dd><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Renderer-Item.Keys-API.md#class-keysevent">Item.Keys.Event</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Keys.Event&#x2A; Keys.event</code></dd><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item.Keys-API.md#class-keysevent">Item.Keys.Event</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#event)
 
 # Glossary

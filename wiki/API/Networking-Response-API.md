@@ -68,7 +68,7 @@ console.log(Networking.Response.BAD_REQUEST);
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#statuses)
 
 ##constructor
-<dl><dt>Syntax</dt><dd><code>Response::constructor(&#x2A;Object&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Response::constructor(&#x2A;Object&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></li></ul></dd></dl>
 Access it with:
 ```javascript
 var Networking = require('networking');
@@ -78,7 +78,7 @@ var Response = Networking.Response;
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#constructor)
 
 ##onSend
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Response::onSend()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Response::onSend()</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
 Called when the response has been sent.
 
 ```javascript
@@ -96,13 +96,13 @@ Indicates whether the response is not destroyed.
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#pending)
 
 ##request
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Request&#x2A; Response::request</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Networking-Request-API.md#class-request">Networking.Request</a></dd><dt>Read Only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Request&#x2A; Response::request</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Networking-Request-API.md#class-request">Networking.Request</a></dd><dt>Read Only</dt></dl>
 Refers to the [Request][networking/Request].
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#request)
 
 ##status
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Response::status = Response.OK</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isinteger">Integer</a></dd><dt>Default</dt><dd><code>Response.OK</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Response::status = Response.OK</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a></dd><dt>Default</dt><dd><code>Response.OK</code></dd></dl>
 Keeps a normalized code determined the response type.
 
 It refers to one of the *Response.STATUSES* values.
@@ -127,11 +127,11 @@ res.data = Document.fromJSON(...);
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#data)
 
 ##headers
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::headers</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::headers</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#headers)
 
 ##cookies
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::cookies</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::cookies</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#cookies)
 
 ##encoding
@@ -147,7 +147,7 @@ res.setHeader('Location', '/redirect/to/url');
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#setheader)
 
 ##send
-<dl><dt>Syntax</dt><dd><code>Response::send([&#x2A;Integer&#x2A; status, &#x2A;Any&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/Utils-API.md#isinteger">Integer</a> — <i>optional</i></li><li>data — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Response::send([&#x2A;Integer&#x2A; status, &#x2A;Any&#x2A; data])</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a> — <i>optional</i></li><li>data — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 This method calls the [onSend()][networking/Response::onSend()] signal.
 
 ```javascript
@@ -161,7 +161,7 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#send)
 
 ##redirect
-<dl><dt>Syntax</dt><dd><code>Response::redirect(&#x2A;Integer&#x2A; status = `Response.FOUND`, &#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/Utils-API.md#isinteger">Integer</a> — <code>= Response.FOUND</code></li><li>uri — <i>String</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Response::redirect(&#x2A;Integer&#x2A; status = `Response.FOUND`, &#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>status — <a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a> — <code>= Response.FOUND</code></li><li>uri — <i>String</i></li></ul></dd></dl>
 The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
 

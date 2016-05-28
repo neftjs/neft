@@ -9,7 +9,7 @@ fromJSON
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/resource.litcoffee#fromjson)
 
 parseFileName
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resource.parseFileName(&#x2A;String&#x2A; name)</code></dd><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resource.parseFileName(&#x2A;String&#x2A; name)</code></dd><dt>Static method of</dt><dd><i>Resource</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/resource.litcoffee#parsefilename)
 
 Resource
@@ -21,6 +21,6 @@ file
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/resource.litcoffee#file)
 
 toJSON
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resource::toJSON()</code></dd><dt>Prototype method of</dt><dd><i>Resource</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resource::toJSON()</code></dd><dt>Prototype method of</dt><dd><i>Resource</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/resources/resource.litcoffee#tojson)
 
