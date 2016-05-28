@@ -125,10 +125,10 @@ describe 'src/document string interpolation', ->
         view.node.children[0].attrs.set 'label', 23
         assert.is view.node.stringify(), '23'
 
-    describe '`scope`', ->
+    describe '`root`', ->
         it 'is accessed in rendered file', ->
             source = createView '''
-                ${scope.a}
+                ${root.a}
             '''
             view = source.clone()
 
@@ -143,7 +143,7 @@ describe 'src/document string interpolation', ->
 
         it 'is accesible by context', ->
             source = createView '''
-                ${this.scope.a}
+                ${this.root.a}
             '''
             view = source.clone()
 
@@ -158,7 +158,7 @@ describe 'src/document string interpolation', ->
 
         it 'lookup neft:use', ->
             source = createView '''
-                <neft:fragment neft:name="a">${scope.a}</neft:fragment>
+                <neft:fragment neft:name="a">${root.a}</neft:fragment>
                 <neft:use neft:fragment="a" />
             '''
             view = source.clone()
@@ -175,7 +175,7 @@ describe 'src/document string interpolation', ->
         it 'lookup neft:each', ->
             source = createView '''
                 <neft:blank neft:each="[1]">
-                    ${scope.a}
+                    ${root.a}
                 </neft:blank>
             '''
             view = source.clone()
@@ -252,7 +252,7 @@ describe 'src/document string interpolation', ->
 
     it 'handler is called on signal', ->
         source = createView '''
-            <span x="1" onAttrsChange="${scope.onAttrsChange(2)}" />
+            <span x="1" onAttrsChange="${root.onAttrsChange(2)}" />
         '''
         view = source.clone()
 
@@ -268,7 +268,7 @@ describe 'src/document string interpolation', ->
 
     it 'returned handler is called on signal with context and parameters', ->
         source = createView '''
-            <span x="1" onAttrsChange="${scope.onAttrsChange}" />
+            <span x="1" onAttrsChange="${root.onAttrsChange}" />
         '''
         view = source.clone()
 
@@ -287,7 +287,7 @@ describe 'src/document string interpolation', ->
     it 'attribute handler is called with proper context and parameters', ->
         source = createView '''
             <neft:attr name="y" value="3" />
-            <span x="1" id="a1" onAttrsChange="${scope.onAttrsChange(ids.a1.attrs.x, attrs.y)}" />
+            <span x="1" id="a1" onAttrsChange="${root.onAttrsChange(ids.a1.attrs.x, attrs.y)}" />
         '''
         view = source.clone()
 
@@ -305,7 +305,7 @@ describe 'src/document string interpolation', ->
     it 'attribute handler is not called if the document is not rendered', ->
         source = createView '''
             <neft:attr name="y" value="3" />
-            <span x="1" id="a1" onAttrsChange="${scope.onAttrsChange()}" />
+            <span x="1" id="a1" onAttrsChange="${root.onAttrsChange()}" />
         '''
         view = source.clone()
 
@@ -335,8 +335,8 @@ describe 'src/document string interpolation', ->
             elem.attrs.set 'x', 1
             assert.is view.node.stringify(), '1'
 
-        it 'on `scope`', ->
-            source = createView "${scope.x}"
+        it 'on `root`', ->
+            source = createView "${root.x}"
             view = source.clone()
 
             storage = new Dict x: 1
@@ -348,8 +348,8 @@ describe 'src/document string interpolation', ->
             storage.set 'x', 2
             assert.is view.node.stringify(), '2'
 
-        it 'on `scope` property', ->
-            source = createView "${scope.dict.x}"
+        it 'on `root` property', ->
+            source = createView "${root.dict.x}"
             view = source.clone()
 
             storage = dict: new Dict x: 1
@@ -361,9 +361,9 @@ describe 'src/document string interpolation', ->
             storage.dict.set 'x', 2
             assert.is view.node.stringify(), '2'
 
-        it 'on `scope` neft:use', ->
+        it 'on `root` neft:use', ->
             source = createView '''
-                <neft:fragment neft:name="a">${scope.a}</neft:fragment>
+                <neft:fragment neft:name="a">${root.a}</neft:fragment>
                 <neft:use neft:fragment="a" />
             '''
             view = source.clone()
@@ -374,10 +374,10 @@ describe 'src/document string interpolation', ->
             storage.set 'a', 2
             assert.is view.node.stringify(), '2'
 
-        it 'on `scope` neft:each', ->
+        it 'on `root` neft:each', ->
             source = createView '''
                 <neft:blank neft:each="[1]">
-                    ${scope.a}
+                    ${root.a}
                 </neft:blank>
             '''
             view = source.clone()

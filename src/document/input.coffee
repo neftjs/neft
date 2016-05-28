@@ -110,7 +110,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         super()
 
         @target = null
-        @scope = null
+        @root = null
         @binding.func ?= createFunction @binding.body
 
         `//<development>`
@@ -119,7 +119,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         `//</development>`
 
     signal.Emitter.createSignal @, 'onTargetChange'
-    signal.Emitter.createSignal @, 'onScopeChange'
+    signal.Emitter.createSignal @, 'onRootChange'
 
     registerBinding: do ->
         cache = Object.create null
@@ -135,13 +135,13 @@ module.exports = (File) -> class Input extends signal.Emitter
 
     render: ->
         oldTarget = @target
-        oldScope = @scope
+        oldRoot = @root
         @target = @file.context
-        @scope = @file.scope
+        @root = @file.root
         if oldTarget isnt @target
             @onTargetChange.emit()
-        if oldScope isnt @scope
-            @onScopeChange.emit()
+        if oldRoot isnt @root
+            @onRootChange.emit()
         return
 
     revert: ->
