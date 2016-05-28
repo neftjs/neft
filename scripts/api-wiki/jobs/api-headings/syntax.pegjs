@@ -23,7 +23,7 @@ text =
 	arr:$(d:$[a-zA-Z0-9-|_$:/{}*]+ " "? { return d })+ { return arr }
 
 name =
-	namespace:$(word ".")? parent:(d:word "::" { return d })? name:$(word "."?)+ {
+	namespace:$(word ".")? parent:(d:word "::" { return d })? name:$("**Class**"? __? $(word "."?)+) {
 		namespace = namespace.slice(0, -1);
 		return {namespace: namespace, parent: parent, name: name};
 	}
