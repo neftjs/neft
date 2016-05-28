@@ -50,13 +50,13 @@ var Uri = Networking.Uri;
 Holds the last *Uri::match()* result.
 
 ##query
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::query</code></dd><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::query</code></dd><dt>Prototype property of</dt><dd><i>Uri</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Test whether the uri is valid with the given string.
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/uri.litcoffee#query)
 
 ##match
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::match(&#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Uri::match(&#x2A;String&#x2A; uri)</code></dd><dt>Prototype method of</dt><dd><i>Uri</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns found parameters from the given string.
 
 If the given uri is not valid with the uri, error will be raised.

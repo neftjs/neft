@@ -10,11 +10,11 @@ App
 * [[Route|App-Route @class-API]]
 
 app
-<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; app</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; app</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#app)
 
 config
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.config = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.config = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Config object from the *package.json* file.
 
 Can be overriden in the *init.js* file.
@@ -54,7 +54,7 @@ It's used for the crawlers (e.g. GoogleBot) or browsers with no javascript suppo
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#type)
 
 networking
-<dl><dt>Syntax</dt><dd><code>&#x2A;Networking&#x2A; app.networking</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Networking-API.md#class-networking">Networking</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Networking&#x2A; app.networking</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Networking-API#class-networking">Networking</a></dd></dl>
 Standard Networking instance used to communicate
 with the server and to create local requests.
 
@@ -65,7 +65,7 @@ HTTP protocol is used by default with the data specified in the *package.json*.
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#networking)
 
 models
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.models = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.models = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *models* folder with objects returned by their exported functions.
 
 ```javascript
@@ -90,20 +90,20 @@ Files from the *models* folder with objects returned by their exported functions
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#models)
 
 routes
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.routes = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.routes = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *routes* folder with objects returned by their exported functions.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#routes)
 
 styles
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.styles = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.styles = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *styles* folder as *Function*s
 ready to create new [Renderer.Item][renderer/Item]s.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#styles)
 
 views
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.views = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.views = {}</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
 Files from the *views* folder as the [Document][document/File] instances.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#views)
@@ -113,13 +113,13 @@ resources
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#resources)
 
 onReady
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; app.onReady()</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; app.onReady()</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Called when all modules, views, styled etc. have been loaded.
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#onready)
 
 cookies
-<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; app.cookies</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Dict-API.md#class-dict">Dict</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Dict&#x2A; app.cookies</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Dict-API#class-dict">Dict</a></dd></dl>
 On the client side, this object refers to the last received cookies
 from the networking request.
 

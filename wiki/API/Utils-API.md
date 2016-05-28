@@ -236,7 +236,7 @@ console.log(utils.isArguments({}))
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#isarguments)
 
 ##merge
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.merge(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.merge(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></dd></dl>
 Overrides the given source object properties by the given object own properties.
 
 The source object is returned.
@@ -251,7 +251,7 @@ console.log(config);
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#merge)
 
 ##mergeAll
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.mergeAll(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; objects...)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>objects... — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.mergeAll(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; objects...)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>objects... — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></dd></dl>
 Like the utils.merge(), but the amount of objects to merge is unknown.
 
 ```javascript
@@ -264,7 +264,7 @@ console.log(config);
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#mergeall)
 
 ##mergeDeep
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.mergeDeep(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.mergeDeep(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></dd></dl>
 Overrides the given source object properties and all its objects
 by the given object own properties.
 
@@ -293,7 +293,7 @@ console.log(user);
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#mergedeep)
 
 ##fill
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.fill(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.fill(&#x2A;NotPrimitive&#x2A; source, &#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>source — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></dd></dl>
 Sets the given object properties into the given source object if the property
 exists in the given source, but it's not defined as an own property.
 
@@ -314,7 +314,7 @@ console.log(user);
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#fill)
 
 ##remove
-<dl><dt>Syntax</dt><dd><code>utils.remove(&#x2A;NotPrimitive&#x2A; object, &#x2A;Any&#x2A; element)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>element — <i>Any</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>utils.remove(&#x2A;NotPrimitive&#x2A; object, &#x2A;Any&#x2A; element)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>element — <i>Any</i></li></ul></dd></dl>
 Removes an array element or an object property from the given object.
 
 ```javascript
@@ -340,7 +340,7 @@ Elements order may be changed.
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#removefromunorderedarray)
 
 ##getPropertyDescriptor
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.getPropertyDescriptor(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.getPropertyDescriptor(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns the descriptor of the given property defined in the given object.
 
 ```javascript
@@ -360,7 +360,7 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#getpropertydescriptor)
 
 ##lookupGetter
-<dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; utils.lookupGetter(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; utils.lookupGetter(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
 Returns the given property getter function defined in the given object.
 
 ```javascript
@@ -375,13 +375,13 @@ console.log(utils.lookupGetter(object, 'progress'));
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#lookupgetter)
 
 ##lookupSetter
-<dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; utils.lookupSetter(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; utils.lookupSetter(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Function</i></dd></dl>
 Returns the given property setter function defined in the given object.
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#lookupsetter)
 
 ##defineProperty
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; defineProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, &#x2A;Integer&#x2A; descriptors, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li><li>descriptors — <a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; defineProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, &#x2A;Integer&#x2A; descriptors, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li><li>descriptors — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></dd></dl>
 Defines the given property in the given object.
 
 The descriptors argument is a bitmask accepting
@@ -411,7 +411,7 @@ console.log(object.length);
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#defineproperty)
 
 ##overrideProperty
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.overrideProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.overrideProperty(&#x2A;NotPrimitive&#x2A; object, &#x2A;String&#x2A; property, [&#x2A;Any&#x2A; value, &#x2A;Function&#x2A; setter])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>property — <i>String</i></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#overrideproperty)
 
 ##clone
@@ -447,7 +447,7 @@ console.log(clonedObj.b === obj.b)
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#clonedeep)
 
 ##isEmpty
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; utils.isEmpty(&#x2A;String&#x2A;|&#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a> or <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; utils.isEmpty(&#x2A;String&#x2A;|&#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a> or <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given array has no elements, of the given object has no own properties.
 
 ```javascript
@@ -470,7 +470,7 @@ console.log(utils.isEmpty(''));
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#isempty)
 
 ##last
-<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; utils.last(&#x2A;NotPrimitive&#x2A; array)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>array — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; utils.last(&#x2A;NotPrimitive&#x2A; array)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>array — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
 Returns the last element of the given array, or an array-like object.
 
 ```javascript
@@ -484,7 +484,7 @@ console.log(utils.last([]))
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#last)
 
 ##clear
-<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.clear(&#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;NotPrimitive&#x2A; utils.clear(&#x2A;NotPrimitive&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></dd></dl>
 Removes all elements from the given array, or all own properties from the given object.
 
 ```javascript
@@ -502,7 +502,7 @@ console.log(obj);
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#clear)
 
 ##setPrototypeOf
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.setPrototypeOf(&#x2A;NotPrimitive&#x2A; object, &#x2A;NotPrimitive&#x2A;|&#x2A;Null&#x2A; prototype)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li><li>prototype — <i>Null</i> or <a href="/Neft-io/neft/wiki/Utils-API.md#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.setPrototypeOf(&#x2A;NotPrimitive&#x2A; object, &#x2A;NotPrimitive&#x2A;|&#x2A;Null&#x2A; prototype)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li><li>prototype — <i>Null</i> or <a href="/Neft-io/neft/wiki/Utils-API#isprimitive">NotPrimitive</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Changes the given object prototype into the given prototype.
 
 **This function on some environments returns a new object.**
@@ -561,7 +561,7 @@ console.log(utils.has('abc', 'e'))
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#has)
 
 ##objectToArray
-<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; utils.objectToArray(&#x2A;Object&#x2A; object, [&#x2A;Function&#x2A; valueGen, &#x2A;Array&#x2A; target = `[]`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <i>Array</i> — <code>= []</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; utils.objectToArray(&#x2A;Object&#x2A; object, [&#x2A;Function&#x2A; valueGen, &#x2A;Array&#x2A; target = `[]`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <i>Array</i> — <code>= []</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 Translates the given object into an array.
 
 Array elements are determined by the given valueGen function.
@@ -589,7 +589,7 @@ console.log(utils.objectToArray(object, function(key, val){
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#objecttoarray)
 
 ##arrayToObject
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.arrayToObject(&#x2A;Array&#x2A; array, [&#x2A;Function&#x2A; keyGen, &#x2A;Function&#x2A; valueGen, &#x2A;Object&#x2A; target = `{}`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>array — <i>Array</i></li><li>keyGen — <i>Function</i> — <i>optional</i></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a> — <code>= {}</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.arrayToObject(&#x2A;Array&#x2A; array, [&#x2A;Function&#x2A; keyGen, &#x2A;Function&#x2A; valueGen, &#x2A;Object&#x2A; target = `{}`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>array — <i>Array</i></li><li>keyGen — <i>Function</i> — <i>optional</i></li><li>valueGen — <i>Function</i> — <i>optional</i></li><li>target — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a> — <code>= {}</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Translates the given array into an object.
 
 Object keys are determined by the given keyGen function.
@@ -644,7 +644,7 @@ console.log(utils.addSlashes('a"b'))
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#addslashes)
 
 ##uid
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; utils.uid([&#x2A;Integer&#x2A; length = `8`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a> — <code>= 8</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; utils.uid([&#x2A;Integer&#x2A; length = `8`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 8</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 Returns pseudo-unique string with the given length.
 
 This function doesn't quarantee uniqueness of the returned data.
@@ -724,7 +724,7 @@ console.log(bindFunc('a'));
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#bindfunctioncontext)
 
 ##errorToObject
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.errorToObject(&#x2A;Error&#x2A; error)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Error</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.errorToObject(&#x2A;Error&#x2A; error)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>error — <i>Error</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns a plain object with the given error name, message and other custom properties.
 
 Standard error `name` and `message` properties are not enumerable.
@@ -738,13 +738,13 @@ console.log(utils.errorToObject(error));
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#errortoobject)
 
 ##getOwnProperties
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.getOwnProperties(&#x2A;Object&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; utils.getOwnProperties(&#x2A;Object&#x2A; object)</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 Returns an array or an object with own properties associated in the given object.
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/index.litcoffee#getownproperties)
 
 ##isEqual
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; utils.isEqual(&#x2A;Object&#x2A; object1, &#x2A;Object&#x2A; object2, [&#x2A;Function&#x2A; compareFunction, &#x2A;Integer&#x2A; maxDeep = `Infinity`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object1 — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></li><li>object2 — <a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></li><li>compareFunction — <i>Function</i> — <i>optional</i></li><li>maxDeep — <a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a> — <code>= Infinity</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; utils.isEqual(&#x2A;Object&#x2A; object1, &#x2A;Object&#x2A; object2, [&#x2A;Function&#x2A; compareFunction, &#x2A;Integer&#x2A; maxDeep = `Infinity`])</code></dd><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object1 — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li><li>object2 — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li><li>compareFunction — <i>Function</i> — <i>optional</i></li><li>maxDeep — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= Infinity</code> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Returns `true` if the given objects have equal values.
 
 The given compareFunction is used to compare two values (which at least one them is primitive).

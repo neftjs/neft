@@ -5,11 +5,11 @@ Document
 ## Nested APIs
 
 * [[Element|Document-Element @virtual_dom-API]]
-  * [[Tag|Document-Tag @virtual_dom-API]]
   * [[Text|Document-Text @virtual_dom-API]]
+  * [[Tag|Document-Tag @virtual_dom-API]]
 * [[File|Document-File @class-API]]
-  * [[neft:attr|Document-neft:attr @xml-API]]
   * [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
+  * [[neft:attr|Document-neft:attr @xml-API]]
   * [[Setting attributes|Document-Setting attributes @learn-API]]
   * [[neft:if|Document-neft:if @xml-API]]
   * [[neft:fragment|Document-neft:fragment @xml-API]]
@@ -19,8 +19,8 @@ Document
   * [[neft:log|Document-neft:log @xml-API]]
   * [[neft:rule|Document-neft:rule @xml-API]]
   * [[neft:script|Document-neft:script @xml-API]]
-  * [[neft:target|Document-neft:target @xml-API]]
   * [[String Interpolation|Document-String Interpolation @learn-API]]
+  * [[neft:target|Document-neft:target @xml-API]]
   * [[neft:use|Document-neft:use @xml-API]]
 
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/document/index.litcoffee#document)

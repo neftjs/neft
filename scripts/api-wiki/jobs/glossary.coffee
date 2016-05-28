@@ -14,7 +14,7 @@ escapeRegExp = (str) ->
 
 parseList = (list, path, fileLinks) ->
     wikiPath = path.replace /\.md$/, ''
-    wikiPath = path.replace /.*\//, ''
+    wikiPath = wikiPath.replace /.*\//, ''
     lines = list.split '\n'
     for line in lines
         if match = line.match(/^\s*[\-*]\s*\[([^\]]+)\]\(([^\)]+)\)\s*$/)

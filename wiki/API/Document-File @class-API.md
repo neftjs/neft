@@ -6,8 +6,8 @@ File
 
 ## Nested APIs
 
-* [[neft:attr|Document-neft:attr @xml-API]]
 * [[Attributes evaluating|Document-Attributes evaluating @learn-API]]
+* [[neft:attr|Document-neft:attr @xml-API]]
 * [[Setting attributes|Document-Setting attributes @learn-API]]
 * [[neft:if|Document-neft:if @xml-API]]
 * [[neft:fragment|Document-neft:fragment @xml-API]]
@@ -17,30 +17,30 @@ File
 * [[neft:log|Document-neft:log @xml-API]]
 * [[neft:rule|Document-neft:rule @xml-API]]
 * [[neft:script|Document-neft:script @xml-API]]
-* [[neft:target|Document-neft:target @xml-API]]
 * [[String Interpolation|Document-String Interpolation @learn-API]]
+* [[neft:target|Document-neft:target @xml-API]]
 * [[neft:use|Document-neft:use @xml-API]]
 
 onBeforeRender
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRender(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRender(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Corresponding node handler: *neft:onBeforeRender=""*.
 
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#onbeforerender)
 
 onRender
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRender(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRender(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Corresponding node handler: *neft:onRender=""*.
 
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#onrender)
 
 onBeforeRevert
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onBeforeRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Corresponding node handler: *neft:onBeforeRevert=""*.
 
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#onbeforerevert)
 
 onRevert
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File.onRevert(&#x2A;File&#x2A; file)</code></dd><dt>Static property of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>File</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Corresponding node handler: *neft:onRevert=""*.
 
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#onrevert)
@@ -82,7 +82,7 @@ use
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#use)
 
 onReplaceByUse
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File::onReplaceByUse(&#x2A;File.Use&#x2A; use)</code></dd><dt>Prototype method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>use — <i>File.Use</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API.md#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; File::onReplaceByUse(&#x2A;File.Use&#x2A; use)</code></dd><dt>Prototype method of</dt><dd><i>File</i></dd><dt>Parameters</dt><dd><ul><li>use — <i>File.Use</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 Corresponding node handler: *neft:onReplaceByUse=""*.
 
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#onreplacebyuse)
@@ -96,6 +96,6 @@ destroy
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#destroy)
 
 toJSON
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; File::toJSON()</code></dd><dt>Prototype method of</dt><dd><i>File</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; File::toJSON()</code></dd><dt>Prototype method of</dt><dd><i>File</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/166a8d6faa3ffad1f28cca284e4169ff5ecdee2c/src/document/file.litcoffee#tojson)
 

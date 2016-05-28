@@ -28,11 +28,11 @@ const { log } = Neft;
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#class-log)
 
 ###LOG
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; log.LOG</code></dd><dt>Static property of</dt><dd><i>log</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; log.LOG</code></dd><dt>Static property of</dt><dd><i>log</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#log)
 
 ###enabled
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; enabled = log.ALL</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a></dd><dt>Default</dt><dd><code>log.ALL</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; enabled = log.ALL</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Default</dt><dd><code>log.ALL</code></dd></dl>
 Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#enabled)
@@ -87,7 +87,7 @@ log.error("Error occurs, ... in file ...");
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#error)
 
 ###time
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; log.time()</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; log.time()</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
 Returns an id used to measure execution time by the `log.end()` function.
 
 ```javascript
@@ -105,7 +105,7 @@ findPath();
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#time)
 
 ###end
-<dl><dt>Syntax</dt><dd><code>log.end(&#x2A;Integer&#x2A; id)</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>id — <a href="/Neft-io/neft/wiki/Utils-API.md#isinteger">Integer</a></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>log.end(&#x2A;Integer&#x2A; id)</code></dd><dt>Static method of</dt><dd><i>log</i></dd><dt>Parameters</dt><dd><ul><li>id — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></li></ul></dd></dl>
 Prints an information about the execution time for the given timer id.
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#end)
