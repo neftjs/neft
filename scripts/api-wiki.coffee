@@ -6,18 +6,14 @@ files = require './api-wiki/files'
 git =  require './api-wiki/git'
 
 INPUT = './src/**/*.litcoffee'
-WIKI_URL = process.env.npm_package_config_wiki_url
+REPO = 'wiki'
 
 stack = new utils.async.Stack
-repo = ''
 parsedFiles = null
-
-# clone wiki git repo
-stack.add ((callback) -> repo = git.clone WIKI_URL, callback), null
 
 # parse literate files
 stack.add ((callback) ->
-    files.parseAll INPUT, repo, (err, _files) ->
+    files.parseAll INPUT, REPO, (err, _files) ->
         parsedFiles = _files
         callback err
 ), null
@@ -32,4 +28,4 @@ stack.runAll (err) ->
             throw err
 
         # push changes into wiki git repo
-        git.push repo, ->
+        git.push ->

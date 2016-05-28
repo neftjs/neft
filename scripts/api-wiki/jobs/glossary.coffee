@@ -4,7 +4,7 @@ log = require 'src/log'
 {Heading, Paragraph, headingToUrl} = require '../markdown'
 
 GLOSSARY_HEADING = 'Glossary'
-URL_PREFIX = '/Neft-io/neft/'
+URL_PREFIX = '/Neft-io/neft/wiki/'
 
 glossary = Object.create null
 terms = []
@@ -14,6 +14,7 @@ escapeRegExp = (str) ->
 
 parseList = (list, path, fileLinks) ->
     wikiPath = path.replace /\.md$/, ''
+    wikiPath = wikiPath.replace /.*\//, ''
     lines = list.split '\n'
     for line in lines
         if match = line.match(/^\s*[\-*]\s*\[([^\]]+)\]\(([^\)]+)\)\s*$/)
