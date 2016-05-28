@@ -189,6 +189,67 @@ describe 'src/document string interpolation', ->
                 storage: a: '2'
             assert.is view.node.stringify(), '2'
 
+    describe '`state`', ->
+        it 'is accessed in rendered file', ->
+            source = createView '''
+                <script>
+                    this.onRender(function(){
+                        this.state.set('a', 1);
+                    });
+                </script>
+                ${state.a}
+            '''
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), '1'
+
+        it 'is accesible by context', ->
+            source = createView '''
+                <script>
+                    this.onRender(function(){
+                        this.state.set('a', 1);
+                    });
+                </script>
+                ${this.state.a}
+            '''
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), '1'
+
+        it 'is cleared on revert', ->
+            source = createView '''
+                <script>
+                    this.onRender(function(){
+                        this.state.set('a', (this.state.a || 0) + 1);
+                    });
+                </script>
+                ${state.a}
+            '''
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), '1'
+
+            view.revert()
+            renderParse view
+            assert.is view.node.stringify(), '1'
+
+        it 'is not accessible in not rendered document', ->
+            source = createView '''
+                <script>
+                    this.onCreate(function(){
+                        this.a = !!this.state;
+                    });
+                </script>
+                ${this.a}
+            '''
+            view = source.clone()
+
+            renderParse view
+            assert.is view.node.stringify(), 'false'
+
     it 'handler is called on signal', ->
         source = createView '''
             <span x="1" onAttrsChange="${scope.onAttrsChange(2)}" />

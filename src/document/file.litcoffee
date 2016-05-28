@@ -318,7 +318,8 @@ File.parse(*File* file)
             @styles = []
             @inputIds = new Dict
             @inputAttrs = new Dict
-            @inputArgs = [@inputIds, @inputAttrs]
+            @inputState = new Dict
+            @inputArgs = [@inputIds, @inputAttrs, @inputState]
 
             @node.onAttrsChange @_updateInputAttrsKey, @
             @inputAttrs.extend @node.attrs
@@ -422,6 +423,7 @@ File.parse(*File* file)
                 File.onBeforeRender.emit @
                 emitNodeSignal @, 'neft:onBeforeRender'
                 if @context?.node is @node
+                    @context.state = @inputState
                     emitSignal @context, 'onBeforeRender'
 
                 # inputs
@@ -503,10 +505,12 @@ File.parse(*File* file)
                 @attrs = null
                 @source = null
                 @scope = null
+                @inputState.clear()
 
                 File.onRevert.emit @
                 emitNodeSignal @, 'neft:onRevert'
                 if @context?.node is @node
+                    @context.state = null
                     emitSignal @context, 'onRevert'
 
                 @
