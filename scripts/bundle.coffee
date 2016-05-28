@@ -19,7 +19,7 @@ createBundle = (opts, callback) ->
         removeLogs: opts.release
         minify: opts.release
         verbose: true
-        path: "index.coffee"
+        path: 'index.coffee'
         test: (req) ->
             /^(?:src\/|\.|package\.json)/.test(req)
     }, (err, bundle) ->
@@ -27,17 +27,22 @@ createBundle = (opts, callback) ->
             return console.error err?.stack or err
 
         try
-            template = fs.readFileSync "./bundle/#{opts.platform}.coffee.mustache", 'utf-8'
+            tmplSrc = "./scripts/bundle/#{opts.platform}.coffee.mustache"
+            template = fs.readFileSync tmplSrc, 'utf-8'
             template = coffee.compile template, bare: true
         try
-            template ||= fs.readFileSync "./bundle/#{opts.platform}.js.mustache", 'utf-8'
-        template ||= fs.readFileSync "./bundle/standard.js.mustache", 'utf-8'
+            tmplSrc = "./scripts/bundle/#{opts.platform}.js.mustache"
+            template ||= fs.readFileSync tmplSrc, 'utf-8'
+        tmplSrc = "./scripts/bundle/standard.js.mustache"
+        template ||= fs.readFileSync tmplSrc, 'utf-8'
 
         mode = if opts.release then 'release' else 'develop'
 
         template = Mustache.render template, neftCode: bundle
 
-        extrasText = if opts.extras then "#{Object.keys(opts.extras).sort().join('-')}-" else ""
+        extrasText = ''
+        if opts.extras
+            extrasText = "#{Object.keys(opts.extras).sort().join('-')}-"
         name = "#{opts.platform}-#{extrasText}#{mode}"
 
         fs.writeFileSync "./cli/bundle/neft-#{name}.js", template
@@ -46,23 +51,23 @@ createBundle = (opts, callback) ->
         callback()
 
 TYPES = [
-    { platform: 'node' },
-    { platform: 'browser' },
-    { platform: 'browser', extras: {game: true} },
-    { platform: 'qt' },
-    { platform: 'android' },
-    { platform: 'ios' },
+    {platform: 'node'},
+    {platform: 'browser'},
+    {platform: 'browser', extras: {game: true}},
+    {platform: 'qt'},
+    {platform: 'android'},
+    {platform: 'ios'},
 ]
 
 stack = new utils.async.Stack
 
 for type in TYPES
     if utils.has(process.argv, "--#{type.platform}")
-        opts = { release: false }
+        opts = {release: false}
         utils.merge opts, type
         stack.add createBundle, null, [opts]
     if utils.has(process.argv, "--#{type.platform}-release")
-        opts = { release: true }
+        opts = {release: true}
         utils.merge opts, type
         stack.add createBundle, null, [opts]
 
