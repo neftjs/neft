@@ -75,12 +75,6 @@ module.exports = (File) -> class Scripts
         utils.defineProperty ctx, 'attrs', propOpts, file.inputAttrs
         utils.defineProperty ctx, 'ids', propOpts, file.inputIds
         utils.defineProperty ctx, 'scope', utils.CONFIGURABLE, ->
-            `//<development>`
-            unless file.isRendered
-                log.warn "this.scope in neft:script is not accessible if the view is " +
-                "not rendered; make sure you are not modifying your view when it's " +
-                "not rendered; in script '#{paths}'"
-            `//</development>`
             file.scope
         , null
 
