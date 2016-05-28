@@ -13,7 +13,7 @@
   "bin": {
     "neft": "./bin/neft"
   },
-  "main": "./cli/bundle/neft-node-develop.js",
+  "main": "index.coffee",
   "license": "Apache-2.0",
   "homepage": "http://neft.io",
   "author": "Krystian Kruk <krystian@neft.io>",
@@ -30,10 +30,10 @@
     "wiki_url": "git@github.com:Neft-io/neft.wiki.git"
   },
   "scripts": {
-    "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony bundle.coffee",
+    "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
     "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./src/unit/cli.coffee ./tests/\\*\\*/\\*.coffee --require tests/init.coffee",
     "sync-wiki": "git subtree pull --prefix wiki wiki master --squash",
-    "update-api-wiki": "cross-env NODE_PATH=./ coffee ./scripts/api-wiki.coffee"
+    "update-api-wiki": "cross-env NODE_PATH=./ coffee scripts/api-wiki.coffee"
   },
   "dependencies": {
     "babel-core": "6.9.0",

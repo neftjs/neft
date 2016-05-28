@@ -19,7 +19,7 @@ createBundle = (opts, callback) ->
         removeLogs: opts.release
         minify: opts.release
         verbose: true
-        path: "index.coffee"
+        path: 'index.coffee'
         test: (req) ->
             /^(?:src\/|\.|package\.json)/.test(req)
     }, (err, bundle) ->
@@ -27,11 +27,11 @@ createBundle = (opts, callback) ->
             return console.error err?.stack or err
 
         try
-            template = fs.readFileSync "./bundle/#{opts.platform}.coffee.mustache", 'utf-8'
+            template = fs.readFileSync "./scripts/bundle/#{opts.platform}.coffee.mustache", 'utf-8'
             template = coffee.compile template, bare: true
         try
-            template ||= fs.readFileSync "./bundle/#{opts.platform}.js.mustache", 'utf-8'
-        template ||= fs.readFileSync "./bundle/standard.js.mustache", 'utf-8'
+            template ||= fs.readFileSync "./scripts/bundle/#{opts.platform}.js.mustache", 'utf-8'
+        template ||= fs.readFileSync "./scripts/bundle/standard.js.mustache", 'utf-8'
 
         mode = if opts.release then 'release' else 'develop'
 
