@@ -22,8 +22,8 @@ describe 'src/document neft:if', ->
     it 'supports runtime updates', ->
         source = createView """
             <neft:fragment neft:name="a">
-                <b neft:if="${attrs.x > 1}">OK</b>
-                <b neft:if="${attrs.x === 1}">FAIL</b>
+                <b neft:if="${props.x > 1}">OK</b>
+                <b neft:if="${props.x === 1}">FAIL</b>
             </neft:fragment>
             <neft:use neft:fragment="a" x="1" />
         """

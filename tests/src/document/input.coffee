@@ -5,10 +5,10 @@
 {createView, renderParse} = require './utils'
 
 describe 'src/document string interpolation', ->
-    describe '`attrs`', ->
+    describe '`props`', ->
         it 'lookup neft:fragment', ->
             source = createView '''
-                <neft:fragment neft:name="a" x="2">${attrs.x}</neft:fragment>
+                <neft:fragment neft:name="a" x="2">${props.x}</neft:fragment>
                 <neft:use neft:fragment="a" />
             '''
             view = source.clone()
@@ -19,7 +19,7 @@ describe 'src/document string interpolation', ->
         it 'is accessible by context', ->
             source = createView '''
                 <neft:fragment neft:name="a" x="2">
-                    ${this.attrs.x}
+                    ${this.props.x}
                 </neft:fragment>
                 <neft:use neft:fragment="a" />
             '''
@@ -30,7 +30,7 @@ describe 'src/document string interpolation', ->
 
         it 'lookup neft:use', ->
             source = createView '''
-                <neft:fragment neft:name="a" x="1">${attrs.x}</neft:fragment>
+                <neft:fragment neft:name="a" x="1">${props.x}</neft:fragment>
                 <neft:use neft:fragment="a" x="2" />
             '''
             view = source.clone()
@@ -42,7 +42,7 @@ describe 'src/document string interpolation', ->
             source = createView '''
                 <neft:fragment neft:name="a" x="1">
                     <neft:fragment neft:name="b" x="1">
-                        ${attrs.x}
+                        ${props.x}
                     </neft:fragment>
                     <neft:use neft:fragment="b" x="4" />
                 </neft:fragment>
@@ -290,7 +290,7 @@ describe 'src/document string interpolation', ->
             <span
               x="1"
               id="a1"
-              onAttrsChange="${root.test(ids.a1.attrs.x, attrs.y)}"
+              onAttrsChange="${root.test(ids.a1.attrs.x, props.y)}"
             />
         '''
         view = source.clone()
@@ -327,9 +327,9 @@ describe 'src/document string interpolation', ->
         assert.is calls, 1
 
     describe 'support realtime changes', ->
-        it 'on `attrs`', ->
+        it 'on `props`', ->
             source = createView '''
-                <neft:fragment neft:name="a">${attrs.x}</neft:fragment>
+                <neft:fragment neft:name="a">${props.x}</neft:fragment>
                 <neft:use neft:fragment="a" x="2" y="1" />
             '''
             view = source.clone()

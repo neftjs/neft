@@ -300,7 +300,7 @@ File.parse(*File* file)
             @parent = null
             @context = null
             @scripts = null
-            @attrs = null
+            @props = null
             @root = null
             @source = null
             @parentUse = null
@@ -317,83 +317,83 @@ File.parse(*File* file)
             @logs = []
             @styles = []
             @inputIds = new Dict
-            @inputAttrs = new Dict
+            @inputProps = new Dict
             @inputState = new Dict
-            @inputArgs = [@inputIds, @inputAttrs, @inputState]
+            @inputArgs = [@inputIds, @inputProps, @inputState]
 
             @node.onAttrsChange @_updateInputAttrsKey, @
-            @inputAttrs.extend @node.attrs
+            @inputProps.extend @node.attrs
 
             `//<development>`
             if @constructor is File
                 Object.preventExtensions @
             `//</development>`
 
-*File* File::render([*Any* attrs, *Any* root, *File* source])
+*File* File::render([*Any* props, *Any* root, *File* source])
 -------------------------------------------------------------
 
-        render: (attrs, root, source) ->
+        render: (props, root, source) ->
             unless @isClone
-                @clone().render attrs, root, source
+                @clone().render props, root, source
             else
-                @_render(attrs, root, source)
+                @_render(props, root, source)
 
         _updateInputAttrsKey: (key) ->
-            {inputAttrs, source, attrs} = @
+            {inputProps, source, props} = @
             viewAttrs = @node.attrs
 
             if source
                 val = source.node.attrs[key]
-                if val is undefined and attrs
-                    val = attrs[key]
+                if val is undefined and props
+                    val = props[key]
                 if val is undefined
                     val = viewAttrs[key]
             else
-                if attrs
-                    val = attrs[key]
+                if props
+                    val = props[key]
                 if val is undefined
                     val = viewAttrs[key]
 
             if val is undefined
-                inputAttrs.pop key
+                inputProps.pop key
             else
-                inputAttrs.set key, val
+                inputProps.set key, val
             return
 
         _render: do ->
             renderTarget = require('./file/render/parse/target') File
 
-            (attrs=true, root=null, source) ->
+            (props=true, root=null, source) ->
                 assert.notOk @isRendered
 
-                @attrs = attrs
+                @props = props
                 @source = source
                 @root = root
 
-                {inputAttrs, inputIds} = @
+                {inputProps, inputIds} = @
 
-                if attrs instanceof Dict
-                    attrs.onChange @_updateInputAttrsKey, @
+                if props instanceof Dict
+                    props.onChange @_updateInputAttrsKey, @
 
                 if source?
-                    # attrs
+                    # props
                     viewAttrs = @node.attrs
                     sourceAttrs = source.node.attrs
                     source.node.onAttrsChange @_updateInputAttrsKey, @
-                    for prop, val of inputAttrs
-                        if viewAttrs[prop] is attrs[prop] is sourceAttrs[prop] is undefined
-                            inputAttrs.pop prop
+                    for prop, val of inputProps
+                        if viewAttrs[prop] is props[prop] is sourceAttrs[prop] is undefined
+                            inputProps.pop prop
                     for prop, val of viewAttrs
-                        if attrs[prop] is sourceAttrs[prop] is undefined
+                        if props[prop] is sourceAttrs[prop] is undefined
                             if val isnt undefined
-                                inputAttrs.set prop, val
-                    for prop, val of attrs
+                                inputProps.set prop, val
+                    for prop, val of props
                         if sourceAttrs[prop] is undefined
                             if val isnt undefined
-                                inputAttrs.set prop, val
+                                inputProps.set prop, val
                     for prop, val of sourceAttrs
                         if val isnt undefined
-                            inputAttrs.set prop, val
+                            inputProps.set prop, val
 
                     # ids
                     viewIds = @ids
@@ -407,18 +407,18 @@ File.parse(*File* file)
                     for prop, val of viewIds
                         inputIds.set prop, val
                 else
-                    # attrs
+                    # props
                     viewAttrs = @node.attrs
-                    for prop, val of inputAttrs
-                        if viewAttrs[prop] is attrs[prop] is undefined
-                            inputAttrs.pop prop
+                    for prop, val of inputProps
+                        if viewAttrs[prop] is props[prop] is undefined
+                            inputProps.pop prop
                     for prop, val of viewAttrs
-                        if attrs[prop] is undefined
+                        if props[prop] is undefined
                             if val isnt undefined
-                                inputAttrs.set prop, val
-                    for prop, val of attrs
+                                inputProps.set prop, val
+                    for prop, val of props
                         if val isnt undefined
-                            inputAttrs.set prop, val
+                            inputProps.set prop, val
 
                 File.onBeforeRender.emit @
                 emitNodeSignal @, 'neft:onBeforeRender'
@@ -474,10 +474,10 @@ File.parse(*File* file)
                 if @context?.node is @node
                     emitSignal @context, 'onBeforeRevert'
 
-                if @attrs instanceof Dict
-                    @attrs.onChange.disconnect @_updateInputAttrsKey, @
+                if @props instanceof Dict
+                    @props.onChange.disconnect @_updateInputAttrsKey, @
 
-                # attrs
+                # props
                 if @source
                     @source.node.onAttrsChange.disconnect @_updateInputAttrsKey, @
 
@@ -502,7 +502,7 @@ File.parse(*File* file)
                 # target
                 target @, @source
 
-                @attrs = null
+                @props = null
                 @source = null
                 @root = null
                 @inputState.clear()

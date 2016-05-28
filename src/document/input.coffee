@@ -29,7 +29,7 @@ class DocumentBinding extends Binding
             @ctx
         else if item is 'ids'
             @args[0]
-        else if item is 'attrs'
+        else if item is 'props'
             @args[1]
         else if item is 'state'
             @args[2]
@@ -99,7 +99,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         @parse = require('./input/parser').parse
 
     createFunction = (func) ->
-        new Function 'ids', 'attrs', 'state', func
+        new Function 'ids', 'props', 'state', func
 
     constructor: (@file, @node, @text, @binding) ->
         assert.instanceOf @file, File

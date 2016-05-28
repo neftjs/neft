@@ -12,34 +12,34 @@ describe 'src/document neft:each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>11</ul>'
 
-    it 'provides `attrs.item` property', ->
-        source = createView '<ul neft:each="[1,2]">${attrs.item}</ul>'
+    it 'provides `props.item` property', ->
+        source = createView '<ul neft:each="[1,2]">${props.item}</ul>'
         view = source.clone()
 
         renderParse view
         assert.is view.node.stringify(), '<ul>12</ul>'
 
-    it 'provides `attrs.index` property', ->
-        source = createView '<ul neft:each="[1,2]">${attrs.index}</ul>'
+    it 'provides `props.index` property', ->
+        source = createView '<ul neft:each="[1,2]">${props.index}</ul>'
         view = source.clone()
 
         renderParse view
         assert.is view.node.stringify(), '<ul>01</ul>'
 
-    it 'provides `attrs.each` property', ->
-        source = createView '<ul neft:each="[1,2]">${attrs.each}</ul>'
+    it 'provides `props.each` property', ->
+        source = createView '<ul neft:each="[1,2]">${props.each}</ul>'
         view = source.clone()
 
         renderParse view
         assert.is view.node.stringify(), '<ul>1,21,2</ul>'
 
     it 'supports runtime updates', ->
-        source = createView '<ul neft:each="${attrs.arr}">${attrs.each[attrs.index]}</ul>'
+        source = createView '<ul neft:each="${props.arr}">${props.each[props.index]}</ul>'
         view = source.clone()
 
-        attrs = arr: arr = new List [1, 2]
+        props = arr: arr = new List [1, 2]
 
-        renderParse view, attrs: attrs
+        renderParse view, props: props
         assert.is view.node.stringify(), '<ul>12</ul>'
 
         arr.insert 1, 'a'
@@ -51,20 +51,20 @@ describe 'src/document neft:each', ->
         arr.append 3
         assert.is view.node.stringify(), '<ul>123</ul>'
 
-    it 'access global `attrs`', ->
-        source = createView '<ul neft:each="[1,2]">${attrs.a}</ul>'
+    it 'access global `props`', ->
+        source = createView '<ul neft:each="[1,2]">${props.a}</ul>'
         view = source.clone()
 
         renderParse view,
-            attrs: a: 'a'
+            props: a: 'a'
         assert.is view.node.stringify(), '<ul>aa</ul>'
 
-    it 'access global `attrs` by context', ->
-        source = createView '<ul neft:each="[1,2]">${this.attrs.a}</ul>'
+    it 'access global `props` by context', ->
+        source = createView '<ul neft:each="[1,2]">${this.props.a}</ul>'
         view = source.clone()
 
         renderParse view,
-            attrs: a: 'a'
+            props: a: 'a'
         assert.is view.node.stringify(), '<ul>aa</ul>'
 
     it 'access `ids`', ->
@@ -77,10 +77,10 @@ describe 'src/document neft:each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>aa</ul>'
 
-    it 'access neft:fragment `attrs`', ->
+    it 'access neft:fragment `props`', ->
         source = createView """
             <neft:fragment neft:name="a" a="a">
-                <ul neft:each="[1,2]">${attrs.a}${attrs.b}</ul>
+                <ul neft:each="[1,2]">${props.a}${props.b}</ul>
             </neft:fragment>
             <neft:use neft:fragment="a" b="b" />
         """
@@ -109,10 +109,10 @@ describe 'src/document neft:each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>11</ul>'
 
-    it 'internal attrs are not accessible by context', ->
+    it 'internal props are not accessible by context', ->
         source = createView '''
             <ul neft:each="[0]">
-                ${this.attrs.item}${this.attrs.index}${this.attrs.each}
+                ${this.props.item}${this.props.index}${this.props.each}
             </ul>
         '''
         view = source.clone()
