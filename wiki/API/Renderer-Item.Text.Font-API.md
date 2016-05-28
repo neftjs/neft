@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Renderer|Renderer-API]] ▸ [[Item|Renderer-Item-API]] ▸ [[Text|Renderer-Text-API]] ▸ **Text.Font**
 
 #Text.Font
-<dl><dt>Syntax</dt><dd><code>Item.Text.Font</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Item-API#class-item">Item</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Item.Text.Font</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/Renderer-Item-API.md#class-item">Item</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#textfont)
 
 ## Table of contents
@@ -22,39 +22,39 @@
 
 ## *String* Font.family = `'sans-serif'`
 
-## [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Font.onFamilyChange(*String* oldValue)
+## [Signal](/Neft-io/neft/Signal-API.md#class-signal) Font.onFamilyChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#string-fontfamily--sansserif-signal-fontonfamilychangestring-oldvalue)
 
-## [Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) Font.pixelSize = `14`
+## [Float](/Neft-io/neft/Utils-API.md#isfloat) Font.pixelSize = `14`
 
-## [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Font.onPixelSizeChange(*String* oldValue)
+## [Signal](/Neft-io/neft/Signal-API.md#class-signal) Font.onPixelSizeChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#float-fontpixelsize--14-signal-fontonpixelsizechangestring-oldvalue)
 
-## [Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) Font.weight = `0.4`
+## [Float](/Neft-io/neft/Utils-API.md#isfloat) Font.weight = `0.4`
 
 In range from 0 to 1.
 
 ##onWeightChange
-<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Font.onWeightChange(&#x2A;Float&#x2A; oldValue)</code></dd><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <a href="/Neft-io/neft/wiki/API/Utils-API#isfloat">Float</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Signal-API#class-signal">Signal</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Font.onWeightChange(&#x2A;Float&#x2A; oldValue)</code></dd><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <a href="/Neft-io/neft/Utils-API.md#isfloat">Float</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Signal-API.md#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#onweightchange)
 
-## Hidden [Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) Font.wordSpacing = `0`
+## Hidden [Float](/Neft-io/neft/Utils-API.md#isfloat) Font.wordSpacing = `0`
 
-## Hidden [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Font.onWordSpacingChange([Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) oldValue)
+## Hidden [Signal](/Neft-io/neft/Signal-API.md#class-signal) Font.onWordSpacingChange([Float](/Neft-io/neft/Utils-API.md#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontwordspacing--0-hidden-signal-fontonwordspacingchangefloat-oldvalue)
 
-## Hidden [Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) Font.letterSpacing = `0`
+## Hidden [Float](/Neft-io/neft/Utils-API.md#isfloat) Font.letterSpacing = `0`
 
-## Hidden [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Font.onLetterSpacingChange([Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) oldValue)
+## Hidden [Signal](/Neft-io/neft/Signal-API.md#class-signal) Font.onLetterSpacingChange([Float](/Neft-io/neft/Utils-API.md#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#hidden-float-fontletterspacing--0-hidden-signal-fontonletterspacingchangefloat-oldvalue)
 
 ## *Boolean* Font.italic = `false`
 
-## [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Font.onItalicChange(*Boolean* oldValue)
+## [Signal](/Neft-io/neft/Signal-API.md#class-signal) Font.onItalicChange(*Boolean* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#boolean-fontitalic--false-signal-fontonitalicchangeboolean-oldvalue)
 

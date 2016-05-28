@@ -10,7 +10,7 @@
   * [assemble](#assemble)
 
 ##simplify
-<dl><dt>Syntax</dt><dd><code>simplify(&#x2A;Object&#x2A; object, [&#x2A;Object&#x2A; options])</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a></li><li>options — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>simplify(&#x2A;Object&#x2A; object, [&#x2A;Object&#x2A; options])</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></li><li>options — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a> — <i>optional</i></li></ul></dd></dl>
 Convert the given object into the most simplified format with no cyclic references and more.
 
 Such object can be easily stringified later using standard *JSON.stringify()*.
@@ -49,7 +49,7 @@ console.log(clone instanceof Sample)
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/stringifying.litcoffee#simplify)
 
 ##assemble
-<dl><dt>Syntax</dt><dd><code>assemble(&#x2A;PlainObject&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/wiki/API/Utils-API#isplainobject">PlainObject</a></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>assemble(&#x2A;PlainObject&#x2A; object)</code></dd><dt>Parameters</dt><dd><ul><li>object — <a href="/Neft-io/neft/Utils-API.md#isplainobject">PlainObject</a></li></ul></dd></dl>
 Backward utils.simplify() operation.
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/stringifying.litcoffee#assemble)

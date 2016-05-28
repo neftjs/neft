@@ -16,8 +16,8 @@ const { Schema } = Neft;
 * [[Array Validator|Schema-Array Validator-API]]
 * [[Max Validator|Schema-Max Validator-API]]
 * [[Min Validator|Schema-Min Validator-API]]
-* [[Object Validator|Schema-Object Validator-API]]
 * [[Optional Validator|Schema-Optional Validator-API]]
+* [[Object Validator|Schema-Object Validator-API]]
 * [[Options Validator|Schema-Options Validator-API]]
 * [[RegExp Validator|Schema-RegExp Validator-API]]
 * [[Type Validator|Schema-Type Validator-API]]
@@ -48,7 +48,7 @@ var SchemaError = Schema.Error;
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/index.litcoffee#class-schema)
 
 ###constructor
-<dl><dt>Syntax</dt><dd><code>Schema::constructor(&#x2A;Object&#x2A; schema)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>schema — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Schema::constructor(&#x2A;Object&#x2A; schema)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>schema — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></li></ul></dd></dl>
 Creates a new Schema instance used to validate data.
 
 Specify schema validators for each of the accepted property.
@@ -68,7 +68,7 @@ new Schema({
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/index.litcoffee#constructor)
 
 ###schema
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Schema::schema</code></dd><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Schema::schema</code></dd><dt>Prototype property of</dt><dd><i>Schema</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></dd></dl>
 Saved schema object from the constructor.
 
 It's allowed to change this object in runtime.
@@ -76,7 +76,7 @@ It's allowed to change this object in runtime.
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/index.litcoffee#schema)
 
 ###validate
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Schema::validate(&#x2A;Object&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>data — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Schema::validate(&#x2A;Object&#x2A; data)</code></dd><dt>Prototype method of</dt><dd><i>Schema</i></dd><dt>Parameters</dt><dd><ul><li>data — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 Validates the given data object by the schema.
 
 Returns `true` if the data is valid, otherwise throws an SchemaError instance.

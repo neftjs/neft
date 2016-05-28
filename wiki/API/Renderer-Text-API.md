@@ -34,57 +34,57 @@ Text {
 * [Glossary](#glossary)
 
 #**Class** Text
-<dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Text : &#x2A;Item&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Item-API#class-item">Item</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Text : &#x2A;Item&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/Renderer-Item-API.md#class-item">Item</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#class-text)
 
 ##New
-<dl><dt>Syntax</dt><dd><code>&#x2A;Text&#x2A; Text.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Text-API#class-text">Text</a></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Text-API#class-text">Text</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Text&#x2A; Text.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><a href="/Neft-io/neft/Renderer-Text-API.md#class-text">Text</a></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/Renderer-Text-API.md#class-text">Text</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#new)
 
-## [Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) Text::width = `-1`
+## [Float](/Neft-io/neft/Utils-API.md#isfloat) Text::width = `-1`
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#float-textwidth--1)
 
-## [Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) Text::height = `-1`
+## [Float](/Neft-io/neft/Utils-API.md#isfloat) Text::height = `-1`
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#float-textheight--1)
 
 ##text
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Text::text</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Text-API#class-text">Text</a></dd><dt>Type</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Text::text</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/Renderer-Text-API.md#class-text">Text</a></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#text)
 
 ## *String* Text::color = `'black'`
 
-## [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Text::onColorChange(*String* oldValue)
+## [Signal](/Neft-io/neft/Signal-API.md#class-signal) Text::onColorChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#string-textcolor--black-signal-textoncolorchangestring-oldvalue)
 
 ## *String* Text::linkColor = `'blue'`
 
-## [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Text::onLinkColorChange(*String* oldValue)
+## [Signal](/Neft-io/neft/Signal-API.md#class-signal) Text::onLinkColorChange(*String* oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#string-textlinkcolor--blue-signal-textonlinkcolorchangestring-oldvalue)
 
-## Hidden [Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) Text::lineHeight = `1`
+## Hidden [Float](/Neft-io/neft/Utils-API.md#isfloat) Text::lineHeight = `1`
 
-## Hidden [Signal](/Neft-io/neft/wiki/API/Signal-API#class-signal) Text::onLineHeightChange([Float](/Neft-io/neft/wiki/API/Utils-API#isfloat) oldValue)
+## Hidden [Signal](/Neft-io/neft/Signal-API.md#class-signal) Text::onLineHeightChange([Float](/Neft-io/neft/Utils-API.md#isfloat) oldValue)
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#hidden-float-textlineheight--1-hidden-signal-textonlineheightchangefloat-oldvalue)
 
 ##contentWidth
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; Text::contentWidth</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Text-API#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Utils-API#isfloat">Float</a></dd><dt>Read Only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; Text::contentWidth</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/Renderer-Text-API.md#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isfloat">Float</a></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#contentwidth)
 
 ##contentHeight
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; Text::contentHeight</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Text-API#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Utils-API#isfloat">Float</a></dd><dt>Read Only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; Text::contentHeight</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/Renderer-Text-API.md#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isfloat">Float</a></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#contentheight)
 
 ##alignment
-<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Alignment&#x2A; Text::alignment</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Text-API#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Item.Alignment-API#class-alignment">Item.Alignment</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Alignment&#x2A; Text::alignment</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/Renderer-Text-API.md#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Renderer-Item.Alignment-API.md#class-alignment">Item.Alignment</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#alignment)
 
 ##font
-<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Text.Font&#x2A; Text::font</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Text-API#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Renderer-Item.Text.Font-API#class-font">Item.Text.Font</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Item.Text.Font&#x2A; Text::font</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/Renderer-Text-API.md#class-text">Text</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Renderer-Item.Text.Font-API.md#class-font">Item.Text.Font</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text.litcoffee#font)
 
 # Glossary

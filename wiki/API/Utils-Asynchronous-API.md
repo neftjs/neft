@@ -20,7 +20,7 @@ var async = utils.async;
     * [runAllSimultaneously](#runallsimultaneously)
 
 ##forEach
-<dl><dt>Syntax</dt><dd><code>forEach(&#x2A;NotPrimitive&#x2A; array, &#x2A;Function&#x2A; callback, [&#x2A;Function&#x2A; onEnd, &#x2A;Any&#x2A; context])</code></dd><dt>Parameters</dt><dd><ul><li>array — <a href="/Neft-io/neft/wiki/API/Utils-API#isprimitive">NotPrimitive</a></li><li>callback — <i>Function</i></li><li>onEnd — <i>Function</i> — <i>optional</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>forEach(&#x2A;NotPrimitive&#x2A; array, &#x2A;Function&#x2A; callback, [&#x2A;Function&#x2A; onEnd, &#x2A;Any&#x2A; context])</code></dd><dt>Parameters</dt><dd><ul><li>array — <a href="/Neft-io/neft/Utils-API.md#isprimitive">NotPrimitive</a></li><li>callback — <i>Function</i></li><li>onEnd — <i>Function</i> — <i>optional</i></li><li>context — <i>Any</i> — <i>optional</i></li></ul></dd></dl>
 This is an asynchronous version of the standard `Array.prototype.forEach()` function
 which works with arrays and objects.
 
@@ -82,7 +82,7 @@ stack.runAllSimultaneously(function(){
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/async.litcoffee#class-stack)
 
 ###add
-<dl><dt>Syntax</dt><dd><code>Stack::add(&#x2A;Function&#x2A; function, [&#x2A;Any&#x2A; context, &#x2A;NotPrimitive&#x2A; arguments])</code></dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>arguments — <a href="/Neft-io/neft/wiki/API/Utils-API#isprimitive">NotPrimitive</a> — <i>optional</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>Stack::add(&#x2A;Function&#x2A; function, [&#x2A;Any&#x2A; context, &#x2A;NotPrimitive&#x2A; arguments])</code></dd><dt>Prototype method of</dt><dd><i>Stack</i></dd><dt>Parameters</dt><dd><ul><li>function — <i>Function</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>arguments — <a href="/Neft-io/neft/Utils-API.md#isprimitive">NotPrimitive</a> — <i>optional</i></li></ul></dd></dl>
 Adds the given function to the stack.
 
 The function must provide a callback argument as the last argument.

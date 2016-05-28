@@ -48,11 +48,11 @@ watcher.disconnect();
 > [`Source`](/Neft-io/neft/blob/d388ebfb756a89ede607900f85ca7571fa993196/src/document/element/element/tag.litcoffee#watch)
 
 stringify
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Tag::stringify([&#x2A;Object&#x2A; replacements])</code></dd><dt>Prototype method of</dt><dd><i>Tag</i></dd><dt>Parameters</dt><dd><ul><li>replacements — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Tag::stringify([&#x2A;Object&#x2A; replacements])</code></dd><dt>Prototype method of</dt><dd><i>Tag</i></dd><dt>Parameters</dt><dd><ul><li>replacements — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/d388ebfb756a89ede607900f85ca7571fa993196/src/document/element/element/tag.litcoffee#stringify)
 
 stringifyChildren
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Tag::stringifyChildren([&#x2A;Object&#x2A; replacements])</code></dd><dt>Prototype method of</dt><dd><i>Tag</i></dd><dt>Parameters</dt><dd><ul><li>replacements — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Tag::stringifyChildren([&#x2A;Object&#x2A; replacements])</code></dd><dt>Prototype method of</dt><dd><i>Tag</i></dd><dt>Parameters</dt><dd><ul><li>replacements — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/d388ebfb756a89ede607900f85ca7571fa993196/src/document/element/element/tag.litcoffee#stringifychildren)
 
 replace
@@ -64,7 +64,7 @@ Attrs
 > [`Source`](/Neft-io/neft/blob/d388ebfb756a89ede607900f85ca7571fa993196/src/document/element/element/tag.litcoffee#attrs)
 
 item
-<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Attrs::item(&#x2A;Integer&#x2A; index, [&#x2A;Array&#x2A; target])</code></dd><dt>Prototype method of</dt><dd><i>Attrs</i></dd><dt>Parameters</dt><dd><ul><li>index — <a href="/Neft-io/neft/wiki/API/Utils-API#isinteger">Integer</a></li><li>target — <i>Array</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Array&#x2A; Attrs::item(&#x2A;Integer&#x2A; index, [&#x2A;Array&#x2A; target])</code></dd><dt>Prototype method of</dt><dd><i>Attrs</i></dd><dt>Parameters</dt><dd><ul><li>index — <a href="/Neft-io/neft/Utils-API.md#isinteger">Integer</a></li><li>target — <i>Array</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/d388ebfb756a89ede607900f85ca7571fa993196/src/document/element/element/tag.litcoffee#item)
 
 has
