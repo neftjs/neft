@@ -31,6 +31,8 @@ class DocumentBinding extends Binding
             @args[0]
         else if item is 'attrs'
             @args[1]
+        else if item is 'state'
+            @args[2]
 
     `//<development>`
     failCheckQueue = []
@@ -97,7 +99,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         @parse = require('./input/parser').parse
 
     createFunction = (func) ->
-        new Function 'ids', 'attrs', func
+        new Function 'ids', 'attrs', 'state', func
 
     constructor: (@file, @node, @text, @binding) ->
         assert.instanceOf @file, File
