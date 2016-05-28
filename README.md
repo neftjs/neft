@@ -6,6 +6,8 @@
 
 [See the wiki](https://github.com/Neft-io/neft/wiki) for more.
 
+Official plugins: [neft-android](https://github.com/Neft-io/neft-android), [neft-ios](https://github.com/Neft-io/neft-ios).
+
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/Neft-io/neft)
 <a href="https://twitter.com/neft_io"><img src="https://g.twimg.com/about/feature-corporate/image/followbutton.png" alt="Twitter" height="20" /></a>
 
