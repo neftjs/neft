@@ -142,11 +142,11 @@ describe 'src/document neft:script', ->
             renderParse view
             assert.is view.context.a, 1
 
-        it 'is called with scope in context', ->
+        it 'is called with root in context', ->
             view = createView '''
                 <neft:script><![CDATA[
                     this.onRender(function(){
-                        this.a = this.scope.a;
+                        this.a = this.root.a;
                     });
                 ]]></neft:script>
             '''

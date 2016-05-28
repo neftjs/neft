@@ -108,3 +108,14 @@ describe 'src/document neft:each', ->
 
         renderParse view
         assert.is view.node.stringify(), '<ul>11</ul>'
+
+    it 'internal attrs are not accessible by context', ->
+        source = createView '''
+            <ul neft:each="[0]">
+                ${this.attrs.item}${this.attrs.index}${this.attrs.each}
+            </ul>
+        '''
+        view = source.clone()
+
+        renderParse view
+        assert.is view.node.stringify(), '<ul>undefinedundefinedundefined</ul>'
