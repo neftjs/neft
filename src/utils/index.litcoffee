@@ -537,7 +537,7 @@ Returns the given property setter function defined in the given object.
             desc = exports.getPropertyDescriptor obj, prop
             desc?.set
 
-## *NotPrimitive* defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
+## *NotPrimitive* utils.defineProperty(*NotPrimitive* object, *String* property, *Integer* descriptors, [*Any* value, *Function* setter])
 
 Defines the given property in the given object.
 
