@@ -10,11 +10,11 @@ var db = require('db');
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/db/index.litcoffee#database)
 
 OBSERVABLE
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; db.OBSERVABLE</code></dd><dt>Static property of</dt><dd><i>db</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Utils-API#isinteger">Integer</a></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; db.OBSERVABLE</code></dd><dt>Static property of</dt><dd><i>db</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isinteger">Integer</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/db/index.litcoffee#observable)
 
 get
-<dl><dt>Syntax</dt><dd><code>db.get(&#x2A;String&#x2A; key, [&#x2A;Integer&#x2A; options], &#x2A;Function&#x2A; callback)</code></dd><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>options — <a href="/Neft-io/neft/wiki/API/Utils-API#isinteger">Integer</a> — <i>optional</i></li><li>callback — <i>Function</i></li></ul></dd></dl>
+<dl><dt>Syntax</dt><dd><code>db.get(&#x2A;String&#x2A; key, [&#x2A;Integer&#x2A; options], &#x2A;Function&#x2A; callback)</code></dd><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>options — <a href="/Neft-io/neft/Utils-API.md#isinteger">Integer</a> — <i>optional</i></li><li>callback — <i>Function</i></li></ul></dd></dl>
 ```javascript
 db.set('items', [], function(){
 \  db.get('items', db.OBSERVABLE, function(err, dict){
@@ -44,7 +44,7 @@ append
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/db/index.litcoffee#append)
 
 DbList
-<dl><dt>Syntax</dt><dd><code>&#x2A;DbList&#x2A; DbList() : &#x2A;List&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/API/List-API#class-list">List</a></dd><dt>Returns</dt><dd><i>DbList</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;DbList&#x2A; DbList() : &#x2A;List&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/List-API.md#class-list">List</a></dd><dt>Returns</dt><dd><i>DbList</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/db/index.litcoffee#dblist)
 
 disconnect
@@ -52,7 +52,7 @@ disconnect
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/db/index.litcoffee#disconnect)
 
 DbDict
-<dl><dt>Syntax</dt><dd><code>&#x2A;DbDict&#x2A; DbDict() : &#x2A;Dict&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/API/Dict-API#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>DbDict</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;DbDict&#x2A; DbDict() : &#x2A;Dict&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/Dict-API.md#class-dict">Dict</a></dd><dt>Returns</dt><dd><i>DbDict</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/db/index.litcoffee#dbdict)
 
 disconnect

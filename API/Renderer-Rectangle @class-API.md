@@ -16,7 +16,7 @@ Rectangle
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/shapes/rectangle.litcoffee#rectangle)
 
 New
-<dl><dt>Syntax</dt><dd><code>&#x2A;Rectangle&#x2A; Rectangle.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Rectangle</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/wiki/API/Utils-API#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Rectangle</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Rectangle&#x2A; Rectangle.New([&#x2A;Component&#x2A; component, &#x2A;Object&#x2A; options])</code></dd><dt>Static method of</dt><dd><i>Rectangle</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <a href="/Neft-io/neft/Utils-API.md#isobject">Object</a> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Rectangle</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/shapes/rectangle.litcoffee#new)
 
 Rectangle
@@ -28,7 +28,7 @@ color
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/shapes/rectangle.litcoffee#color)
 
 radius
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Rectangle::radius = 0</code></dd><dt>Prototype property of</dt><dd><i>Rectangle</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Rectangle::radius = 0</code></dd><dt>Prototype property of</dt><dd><i>Rectangle</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/shapes/rectangle.litcoffee#radius)
 
 border
@@ -36,7 +36,7 @@ border
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/shapes/rectangle.litcoffee#border)
 
 border.width
-<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Rectangle::border.width = 0</code></dd><dt>Prototype property of</dt><dd><i>Rectangle</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/API/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Rectangle::border.width = 0</code></dd><dt>Prototype property of</dt><dd><i>Rectangle</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/Utils-API.md#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/renderer/types/shapes/rectangle.litcoffee#borderwidth)
 
 border.color
