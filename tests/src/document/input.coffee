@@ -287,14 +287,18 @@ describe 'src/document string interpolation', ->
     it 'attribute handler is called with proper context and parameters', ->
         source = createView '''
             <neft:attr name="y" value="3" />
-            <span x="1" id="a1" onAttrsChange="${root.onAttrsChange(ids.a1.attrs.x, attrs.y)}" />
+            <span
+              x="1"
+              id="a1"
+              onAttrsChange="${root.test(ids.a1.attrs.x, attrs.y)}"
+            />
         '''
         view = source.clone()
 
         calls = 0
         renderParse view,
             storage:
-                onAttrsChange: (x, y) ->
+                test: (x, y) ->
                     calls += 1
                     assert.is x, 2
                     assert.is y, 3
@@ -336,7 +340,7 @@ describe 'src/document string interpolation', ->
             assert.is view.node.stringify(), '1'
 
         it 'on `root`', ->
-            source = createView "${root.x}"
+            source = createView '${root.x}'
             view = source.clone()
 
             storage = new Dict x: 1
@@ -349,7 +353,7 @@ describe 'src/document string interpolation', ->
             assert.is view.node.stringify(), '2'
 
         it 'on `root` property', ->
-            source = createView "${root.dict.x}"
+            source = createView '${root.dict.x}'
             view = source.clone()
 
             storage = dict: new Dict x: 1
