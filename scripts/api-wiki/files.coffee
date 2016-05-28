@@ -35,7 +35,7 @@ toWikiPath = (path, repo, md) ->
     unless utils.has(pathUtils.basename(path), 'index')
         filename += '-' + fileHeading
     filename += '-API.md'
-    wikiPath = pathUtils.join repo, filename
+    wikiPath = pathUtils.join repo, 'API/', filename
 
 exports.parseAll = (path, repo, callback) ->
     parsedFiles = []
