@@ -31,9 +31,9 @@ exports.createView = do ->
             view
 
 exports.renderParse = (view, opts) ->
-    view.render opts?.attrs, opts?.storage, opts?.source
+    view.render opts?.props, opts?.storage, opts?.source
     view.revert()
-    view.render opts?.attrs, opts?.storage, opts?.source
+    view.render opts?.props, opts?.storage, opts?.source
 
 if utils.isNode
     process.on 'exit', ->

@@ -310,7 +310,7 @@ describe 'src/styles', ->
 
             doc = render
                 html: """<ul neft:each="[1,2]">
-                    <a href="/${attrs.item}">${attrs.item}</a>
+                    <a href="/${props.item}">${props.item}</a>
                 </ul>"""
 
             ulNode = doc.node.query 'ul'
@@ -550,7 +550,7 @@ describe 'src/styles', ->
 
             doc = render
                 html: """<div neft:style="renderer:Item" neft:each="[1,2,3]">
-                    <b>${attrs.item}</b>
+                    <b>${props.item}</b>
                 </div>"""
 
             divNode = doc.node.query 'div'

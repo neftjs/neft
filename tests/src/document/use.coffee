@@ -30,7 +30,7 @@ describe 'src/document neft:use', ->
         source = createView """
             <neft:fragment neft:name="a">
                 1
-                <neft:use neft:fragment="a" neft:if="${attrs.loops > 0}" loops="${attrs.loops - 1}" />
+                <neft:use neft:fragment="a" neft:if="${props.loops > 0}" loops="${props.loops - 1}" />
             </neft:fragment>
             <neft:use neft:fragment="a" loops="3" />
         """

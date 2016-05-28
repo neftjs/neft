@@ -114,11 +114,11 @@ describe 'src/document neft:script', ->
             assert.is view.context.proto, view.context
             assert.is view.context.protoA, 1
 
-        it 'is called with attrs in context', ->
+        it 'is called with props in context', ->
             view = createView '''
                 <neft:script><![CDATA[
                     this.onCreate(function(){
-                        this.a = this.attrs.a;
+                        this.a = this.props.a;
                     });
                 ]]></neft:script>
                 <neft:attr name="a" value="1" />
@@ -341,7 +341,7 @@ describe 'src/document neft:script', ->
                     this.events.push('onRevert');
                 });
             ]]></neft:script>
-            <ul neft:each="[1,2]">${attrs.item}</ul>
+            <ul neft:each="[1,2]">${props.item}</ul>
         """
         view = view.clone()
 

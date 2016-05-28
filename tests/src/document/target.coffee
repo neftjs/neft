@@ -20,7 +20,7 @@ describe 'src/document neft:target', ->
     it 'can be hidden', ->
         source = createView """
             <neft:fragment neft:name="a">
-                <neft:target neft:if="${attrs.x === 1}" />
+                <neft:target neft:if="${props.x === 1}" />
             </neft:fragment>
             <neft:use neft:fragment="a" x="0"><b></b></neft:use>
         """
