@@ -1,8 +1,7 @@
-neft:log @xml
-=============
+# neft:log
 
 ```xml
-<neft:log debugObject="${data.someObject}">${debugText}</neft:log>
+<neft:log debugObject="${props.someObject}">${props.debugText}</neft:log>
 ```
 
     'use strict'
@@ -14,3 +13,7 @@ neft:log @xml
             logs.push new File.Log file, node
 
         return
+
+# Glossary
+
+- [neft:log](#neft:log)

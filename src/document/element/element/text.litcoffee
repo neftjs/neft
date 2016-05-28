@@ -1,5 +1,4 @@
-Text @virtual_dom
-=================
+# Element.Text
 
     'use strict'
 
@@ -10,6 +9,8 @@ Text @virtual_dom
     {emitSignal} = signal.Emitter
 
     assert = assert.scope 'View.Element.Text'
+
+# **Class** Text : *Element*
 
     module.exports = (Element) -> class Text extends Element
         @__name__ = 'Text'
@@ -26,9 +27,6 @@ Text @virtual_dom
             obj._text = arr[JSON_TEXT]
             obj
 
-*Text* Text() : *Element*
--------------------------
-
         constructor: ->
             Element.call this
 
@@ -44,13 +42,11 @@ Text @virtual_dom
             clone._text = @_text
             clone
 
-*Signal* Text::onTextChange(*String* oldValue)
-----------------------------------------------
+## *Signal* Text::onTextChange(*String* oldValue)
 
         signal.Emitter.createSignal @, 'onTextChange'
 
-*String* Text::text
--------------------
+## *String* Text::text
 
         opts = utils.CONFIGURABLE
         utils.defineProperty @::, 'text', opts, ->
@@ -78,3 +74,7 @@ Text @virtual_dom
             super arr
             arr[JSON_TEXT] = @text
             arr
+
+# Glossary
+
+- [Element.Text](#class-text)

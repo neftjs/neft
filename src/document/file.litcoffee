@@ -1,5 +1,4 @@
-File @class
-===========
+# Document
 
     'use strict'
 
@@ -16,18 +15,20 @@ File @class
     {Emitter} = signal
     {emitSignal} = Emitter
 
-    module.exports = class File extends Emitter
+# **Class** Document
+
+    module.exports = class Document extends Emitter
         files = @_files = {}
         pool = Object.create null
 
         getFromPool = (path) ->
             pool[path]?.pop()
 
-        @__name__ = 'File'
-        @__path__ = 'File'
+        @__name__ = 'Document'
+        @__path__ = 'Document'
 
         @JSON_CTORS = []
-        JSON_CTOR_ID = @JSON_CTOR_ID = @JSON_CTORS.push(File) - 1
+        JSON_CTOR_ID = @JSON_CTOR_ID = @JSON_CTORS.push(Document) - 1
 
         i = 1
         JSON_PATH = i++
@@ -55,29 +56,25 @@ File @class
         signal.create @, 'onBeforeParse'
         signal.create @, 'onParse'
 
-*Signal* File.onBeforeRender(*File* file)
------------------------------------------
+## *Signal* Document.onBeforeRender(*Document* file)
 
 Corresponding node handler: *neft:onBeforeRender=""*.
 
         signal.create @, 'onBeforeRender'
 
-*Signal* File.onRender(*File* file)
------------------------------------
+## *Signal* Document.onRender(*Document* file)
 
 Corresponding node handler: *neft:onRender=""*.
 
         signal.create @, 'onRender'
 
-*Signal* File.onBeforeRevert(*File* file)
------------------------------------------
+## *Signal* Document.onBeforeRevert(*Document* file)
 
 Corresponding node handler: *neft:onBeforeRevert=""*.
 
         signal.create @, 'onBeforeRevert'
 
-*Signal* File.onRevert(*File* file)
------------------------------------
+## *Signal* Document.onRevert(*Document* file)
 
 Corresponding node handler: *neft:onRevert=""*.
 
@@ -93,15 +90,14 @@ Corresponding node handler: *neft:onRevert=""*.
         @Log = require('./log') @
         @AttrsToSet = require('./attrsToSet') @
 
-*File* File.fromHTML(*String* path, *String* html)
---------------------------------------------------
+## *Document* Document.fromHTML(*String* path, *String* html)
 
         @fromHTML = do ->
             unless utils.isNode
                 return (path, html) ->
                     throw new Error "Document.fromHTML is available only on the server"
 
-            clear = require('./file/clear') File
+            clear = require('./file/clear') Document
 
             (path, html) ->
                 assert.isString path
@@ -113,28 +109,26 @@ Corresponding node handler: *neft:onRevert=""*.
                     html = '<html></html>'
 
                 # get node
-                node = File.Element.fromHTML html
+                node = Document.Element.fromHTML html
 
                 # clear
                 clear node
 
                 # create file
-                File.fromElement path, node
+                Document.fromElement path, node
 
-*File* File.fromElement(*String* path, *Element* element)
----------------------------------------------------------
+## *Document* Document.fromElement(*String* path, *Element* element)
 
         @fromElement = (path, node) ->
             assert.isString path
             assert.notLengthOf path, 0
-            assert.instanceOf node, File.Element
+            assert.instanceOf node, Document.Element
             assert.notOk files[path]?
 
             # create
-            file = new File path, node
+            file = new Document path, node
 
-*File* File.fromJSON(*String|Object* json)
-------------------------------------------
+## *Document* Document.fromJSON(*String*|*Object* json)
 
         @fromJSON = (json) ->
             # parse json
@@ -146,7 +140,7 @@ Corresponding node handler: *neft:onRevert=""*.
             if file = files[json[JSON_PATH]]
                 return file
 
-            file = File.JSON_CTORS[json[0]]._fromJSON json
+            file = Document.JSON_CTORS[json[0]]._fromJSON json
             assert.notOk files[file.path]?
 
             # save to storage
@@ -157,18 +151,18 @@ Corresponding node handler: *neft:onRevert=""*.
         @_fromJSON = do ->
             parseObject = (file, obj, target) ->
                 for key, val of obj
-                    target[key] = File.JSON_CTORS[val[0]]._fromJSON file, val
+                    target[key] = Document.JSON_CTORS[val[0]]._fromJSON file, val
                 return
 
             parseArray = (file, arr, target) ->
                 for val in arr
-                    target.push File.JSON_CTORS[val[0]]._fromJSON file, val
+                    target.push Document.JSON_CTORS[val[0]]._fromJSON file, val
                 return
 
             (arr, obj) ->
                 unless obj
-                    node = File.Element.fromJSON arr[JSON_NODE]
-                    obj = new File arr[JSON_PATH], node
+                    node = Document.Element.fromJSON arr[JSON_NODE]
+                    obj = new Document arr[JSON_PATH], node
 
                 # targetNode
                 if arr[JSON_TARGET_NODE]
@@ -183,7 +177,7 @@ Corresponding node handler: *neft:onRevert=""*.
 
                 utils.merge obj.fragments, arr[JSON_FRAGMENTS]
                 if (scripts = arr[JSON_SCRIPTS])?
-                    obj.scripts = File.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
+                    obj.scripts = Document.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
                 parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
                 parseArray obj, arr[JSON_INPUTS], obj.inputs
                 parseArray obj, arr[JSON_CONDITIONS], obj.conditions
@@ -203,36 +197,35 @@ Corresponding node handler: *neft:onRevert=""*.
 
                 obj
 
-File.parse(*File* file)
------------------------
+## Document.parse(*Document* file)
 
         @parse = do ->
             unless utils.isNode
                 return (file) ->
                     throw new Error "Document.parse() is available only on the server"
 
-            rules = require('./file/parse/rules') File
-            fragments = require('./file/parse/fragments') File
-            scripts = require('./file/parse/scripts') File
-            attrs = require('./file/parse/attrs') File
-            attrChanges = require('./file/parse/attrChanges') File
-            iterators = require('./file/parse/iterators') File
-            target = require('./file/parse/target') File
-            uses = require('./file/parse/uses') File
-            storage = require('./file/parse/storage') File
-            conditions = require('./file/parse/conditions') File
-            ids = require('./file/parse/ids') File
-            logs = require('./file/parse/logs') File
-            attrSetting = require('./file/parse/attrSetting') File
+            rules = require('./file/parse/rules') Document
+            fragments = require('./file/parse/fragments') Document
+            scripts = require('./file/parse/scripts') Document
+            attrs = require('./file/parse/attrs') Document
+            attrChanges = require('./file/parse/attrChanges') Document
+            iterators = require('./file/parse/iterators') Document
+            target = require('./file/parse/target') Document
+            uses = require('./file/parse/uses') Document
+            storage = require('./file/parse/storage') Document
+            conditions = require('./file/parse/conditions') Document
+            ids = require('./file/parse/ids') Document
+            logs = require('./file/parse/logs') Document
+            attrSetting = require('./file/parse/attrSetting') Document
 
             (file) ->
-                assert.instanceOf file, File
+                assert.instanceOf file, Document
                 assert.notOk files[file.path]?
 
                 files[file.path] = file
 
                 # trigger signal
-                File.onBeforeParse.emit file
+                Document.onBeforeParse.emit file
 
                 # parse
                 rules file
@@ -252,17 +245,16 @@ File.parse(*File* file)
                 `//</development>`
 
                 # trigger signal
-                File.onParse.emit file
+                Document.onParse.emit file
 
                 file
 
-*File* File.factory(*String* path)
-----------------------------------
+## *Document* Document.factory(*String* path)
 
         @factory = (path) ->
             unless files.hasOwnProperty path
                 # TODO: trigger here instance of `LoadError` class
-                File.onError.emit path
+                Document.onError.emit path
 
             assert.isString path, "path is not a string"
             assert.ok files[path]?, "the given file path '#{path}' doesn't exist"
@@ -274,12 +266,11 @@ File.parse(*File* file)
             # clone original
             file = files[path].clone()
 
-            File.onCreate.emit file
+            Document.onCreate.emit file
 
             file
 
-*File* File(*String* path, *Element* element)
----------------------------------------------
+## Document::constructor(*String* path, *Element* element)
 
         @emitNodeSignal = emitNodeSignal = (file, attrName, attr1, attr2) ->
             if nodeSignal = file.node.attrs[attrName]
@@ -289,7 +280,7 @@ File.parse(*File* file)
         constructor: (@path, @node) ->
             assert.isString @path
             assert.notLengthOf @path, 0
-            assert.instanceOf @node, File.Element
+            assert.instanceOf @node, Document.Element
 
             super()
 
@@ -325,12 +316,11 @@ File.parse(*File* file)
             @inputProps.extend @node.attrs
 
             `//<development>`
-            if @constructor is File
+            if @constructor is Document
                 Object.preventExtensions @
             `//</development>`
 
-*File* File::render([*Any* props, *Any* root, *File* source])
--------------------------------------------------------------
+# *Document* Document::render([*Any* props, *Any* root, *Document* source])
 
         render: (props, root, source) ->
             unless @isClone
@@ -361,7 +351,7 @@ File.parse(*File* file)
             return
 
         _render: do ->
-            renderTarget = require('./file/render/parse/target') File
+            renderTarget = require('./file/render/parse/target') Document
 
             (props=true, root=null, source) ->
                 assert.notOk @isRendered
@@ -420,7 +410,7 @@ File.parse(*File* file)
                         if val isnt undefined
                             inputProps.set prop, val
 
-                File.onBeforeRender.emit @
+                Document.onBeforeRender.emit @
                 emitNodeSignal @, 'neft:onBeforeRender'
                 if @context?.node is @node
                     @context.state = @inputState
@@ -453,23 +443,22 @@ File.parse(*File* file)
                 `//</development>`
 
                 @isRendered = true
-                File.onRender.emit @
+                Document.onRender.emit @
                 emitNodeSignal @, 'neft:onRender'
                 if @context?.node is @node
                     emitSignal @context, 'onRender'
 
                 @
 
-*File* File::revert()
----------------------
+## *Document* Document::revert()
 
         revert: do ->
-            target = require('./file/render/revert/target') File
+            target = require('./file/render/revert/target') Document
             ->
                 assert.ok @isRendered
 
                 @isRendered = false
-                File.onBeforeRevert.emit @
+                Document.onBeforeRevert.emit @
                 emitNodeSignal @, 'neft:onBeforeRevert'
                 if @context?.node is @node
                     emitSignal @context, 'onBeforeRevert'
@@ -507,7 +496,7 @@ File.parse(*File* file)
                 @root = null
                 @inputState.clear()
 
-                File.onRevert.emit @
+                Document.onRevert.emit @
                 emitNodeSignal @, 'neft:onRevert'
                 if @context?.node is @node
                     @context.state = null
@@ -515,8 +504,7 @@ File.parse(*File* file)
 
                 @
 
-*File* File::use(*String* useName, [*File* document])
------------------------------------------------------
+## *Document* Document::use(*String* useName, [*Document* document])
 
         use: (useName, view) ->
             if @uses
@@ -532,15 +520,13 @@ File.parse(*File* file)
 
             @
 
-*Signal* File::onReplaceByUse(*File.Use* use)
----------------------------------------------
+## *Signal* Document::onReplaceByUse(*Document.Use* use)
 
 Corresponding node handler: *neft:onReplaceByUse=""*.
 
         Emitter.createSignal @, 'onReplaceByUse'
 
-*File* File::clone()
---------------------
+## *Document* Document::clone()
 
         clone: ->
             # from pool
@@ -559,7 +545,7 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
                 func Dict, List
 
         _clone: ->
-            clone = new File @path, @node.cloneDeep()
+            clone = new Document @path, @node.cloneDeep()
             clone.isClone = true
             clone.fragments = @fragments
 
@@ -612,8 +598,7 @@ Corresponding node handler: *neft:onReplaceByUse=""*.
 
             clone
 
-File::destroy()
----------------
+## Document::destroy()
 
         destroy: ->
             if @isRendered
@@ -625,15 +610,14 @@ File::destroy()
             pathPool.push @
             return
 
-*Object* File::toJSON()
------------------------
+## *Object* Document::toJSON()
 
         toJSON: do ->
             callToJSON = (elem) ->
                 elem.toJSON()
 
             (key, arr) ->
-                if @isClone and original = File._files[@path]
+                if @isClone and original = Document._files[@path]
                     return original.toJSON key, arr
 
                 unless arr
@@ -676,3 +660,7 @@ File::destroy()
                 arr[JSON_STYLES] = @styles.map callToJSON
 
                 arr
+
+# Glossary
+
+- [Document](#class-document)

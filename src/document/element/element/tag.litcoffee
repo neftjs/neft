@@ -1,5 +1,4 @@
-Tag @virtual_dom
-================
+# Element.Tag
 
     'use strict'
 
@@ -16,6 +15,8 @@ Tag @virtual_dom
     isDefined = (elem) -> elem?
 
     CSS_ID_RE = ///\#([^\s]+)///
+
+# **Class** Tag : *Element*
 
     module.exports = (Element) -> class Tag extends Element
         @INTERNAL_TAGS = [
@@ -54,9 +55,6 @@ Tag @virtual_dom
 
             obj
 
-*Tag* Tag() : *Element*
------------------------
-
         constructor: ->
             Element.call this
 
@@ -69,18 +67,15 @@ Tag @virtual_dom
                 Object.seal @
             `//</development>`
 
-*String* Tag::name
-------------------
+## *String* Tag::name
 
-*Array* Tag::children
----------------------
+## *Array* Tag::children
 
 ## *Signal* Tag::onChildrenChange(*Element* added, *Element* removed)
 
         signal.Emitter.createSignal @, 'onChildrenChange'
 
-*Attrs* Tag::attrs
-------------------
+## *Element.Tag.Attrs* Tag::attrs
 
 ## *Signal* Tag::onAttrsChange(*String* attribute, *Any* oldValue)
 
@@ -92,8 +87,7 @@ Tag @virtual_dom
             utils.merge clone.attrs, @attrs
             clone
 
-*Tag* Tag::cloneDeep()
-----------------------
+## *Element.Tag* Tag::cloneDeep()
 
         cloneDeep: ->
             clone = @clone()
@@ -112,8 +106,7 @@ Tag @virtual_dom
 
             clone
 
-*Element* Tag::getCopiedElement(*Element* lookForElement, *Element* copiedParent)
----------------------------------------------------------------------------------
+## *Element* Tag::getCopiedElement(*Element* lookForElement, *Element* copiedParent)
 
         getCopiedElement: do ->
             arr = new TypedArray.Uint16 256
@@ -143,8 +136,7 @@ Tag @virtual_dom
 
                 elem
 
-*Tag* Tag::getChildByAccessPath(*Array* accessPath)
----------------------------------------------------
+## *Element.Tag* Tag::getChildByAccessPath(*Array* accessPath)
 
         getChildByAccessPath: (arr) ->
             assert.isArray arr
@@ -156,20 +148,17 @@ Tag @virtual_dom
 
             elem
 
-*Array* Tag::queryAll(*String* query, [*Function* onElement, *Any* onElementContext])
--------------------------------------------------------------------------------------
+## *Array* Tag::queryAll(*String* query, [*Function* onElement, *Any* onElementContext])
 
         @query = query = require('./tag/query') Element, @
 
         queryAll: query.queryAll
 
-*Element* Tag::query(*String* query)
-------------------------------------
+## *Element* Tag::query(*String* query)
 
         query: query.query
 
-*Watcher* Tag::watch(*String* query)
-------------------------------------
+## *Watcher* Tag::watch(*String* query)
 
 ```javascript
 var watcher = doc.watch('div > * > b[attr]');
@@ -180,20 +169,17 @@ watcher.disconnect();
 
         watch: query.watch
 
-*String* Tag::stringify([*Object* replacements])
-------------------------------------------------
+## *String* Tag::stringify([*Object* replacements])
 
         stringify: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
             stringify.getOuterHTML @, replacements
 
-*String* Tag::stringifyChildren([*Object* replacements])
---------------------------------------------------------
+## *String* Tag::stringifyChildren([*Object* replacements])
 
         stringifyChildren: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
             stringify.getInnerHTML @, replacements
 
-Tag::replace(*Element* oldElement, *Element* newElement)
---------------------------------------------------------
+## Tag::replace(*Element* oldElement, *Element* newElement)
 
         replace: (oldElement, newElement) ->
             assert.instanceOf oldElement, Element
@@ -223,8 +209,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 
             arr
 
-*Attrs* Attrs()
----------------
+# **Class** Attrs
 
         @Attrs = class Attrs
             constructor: (ref) ->
@@ -233,8 +218,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
             NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
             utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Attrs
 
-*Array* Attrs::item(*Integer* index, [*Array* target])
-------------------------------------------------------
+## *Array* Attrs::item(*Integer* index, [*Array* target])
 
             utils.defineProperty @::, 'item', NOT_ENUMERABLE, (index, target=[]) ->
                 assert.isArray target
@@ -251,8 +235,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 
                 target
 
-*Boolean* Attrs::has(*String* name)
------------------------------------
+## *Boolean* Attrs::has(*String* name)
 
             utils.defineProperty @::, 'has', NOT_ENUMERABLE, (name) ->
                 assert.isString name
@@ -260,8 +243,7 @@ Tag::replace(*Element* oldElement, *Element* newElement)
 
                 @hasOwnProperty name
 
-*Boolean* Attrs::set(*String* name, *Any* value)
-------------------------------------------------
+## *Boolean* Attrs::set(*String* name, *Any* value)
 
             utils.defineProperty @::, 'set', NOT_ENUMERABLE, (name, value) ->
                 assert.isString name
@@ -279,3 +261,8 @@ Tag::replace(*Element* oldElement, *Element* newElement)
                 query.checkWatchersDeeply @_ref
 
                 true
+
+# Glossary
+
+- [Element.Tag](#class-tag)
+- [Element.Tag.Attrs](#class-attrs)
