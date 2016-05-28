@@ -1,29 +1,28 @@
-Attributes evaluating @learn
-============================
+# Attributes evaluating
 
 Some of the attributes are automatically evaluated to the JavaScript objects.
 
-String `[...]` evaluates to the array.
+String `[...]` evaluates to an array.
 ```xml
-<items neft:each="[1, 2]"></items>
+<use:list neft:each="[1, 2]" />
 ```
 ```xml
-<neft:use neft:fragment="list" items="[{name: 't-shirt'}]" />
-```
-
-String `{...}` evaluates to the object.
-```xml
-<neft:use neft:fragment="user" data="{name: 'Johny'}" />
+<use:list items="[{name: 't-shirt'}]" />
 ```
 
-String `Dict(...` evaluates to the [Dict][dict/Dict].
+String `{...}` evaluates to an object.
 ```xml
-<neft:use neft:fragment="user" data="Dict({name: 'Johny'})" />
+<use:user data="{name: 'Johny'}" />
 ```
 
-String `List(...` evaluates to the [List][list/List].
+String `Dict(...` evaluates to *Dict*.
 ```xml
-<items neft:each="List([1, 2])"></items>
+<use:user data="Dict({name: 'Johny'})" />
+```
+
+String `List(...` evaluates to *List*.
+```xml
+<use:list neft:each="List([1, 2])" />
 ```
 
     'use strict'

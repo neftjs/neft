@@ -1,10 +1,9 @@
-neft:if @xml
-=======
+# neft:if
 
 Attribute used to hide or show the tag depends on the condition result.
 
 ```xml
-<span neft:if="${user.isLogged}">Hi ${user.name}!</span>
+<span neft:if="${props.user.isLogged}">Hi ${props.user.name}!</span>
 <span neft:else>You need to log in</span>
 ```
 
@@ -32,3 +31,7 @@ Attribute used to hide or show the tag depends on the condition result.
                 return
 
             forEachNodeRec file.node
+
+# Glossary
+
+- [neft:if](#neft:if)

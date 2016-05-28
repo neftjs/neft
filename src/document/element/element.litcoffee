@@ -1,5 +1,4 @@
-Element @virtual_dom
-====================
+# Element
 
     'use strict'
 
@@ -13,6 +12,8 @@ Element @virtual_dom
 
     assert = assert.scope 'View.Element'
 
+# **Class** Element
+
     class Element extends Emitter
         @__name__ = 'Element'
         @__path__ = 'File.Element'
@@ -24,8 +25,7 @@ Element @virtual_dom
         JSON_VISIBLE = i++
         JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-*Element* Element.fromHTML(*String* html)
------------------------------------------
+## *Element* Element.fromHTML(*String* html)
 
         @fromHTML = (html) ->
             assert.isString html
@@ -35,8 +35,7 @@ Element @virtual_dom
 
             Element.parser.parse html
 
-*Element* Element.fromJSON(*Array|String* json)
------------------------------------------------
+## *Element* Element.fromJSON(*Array*|*String* json)
 
         @fromJSON = (json) ->
             if typeof json is 'string'
@@ -51,9 +50,6 @@ Element @virtual_dom
 
         @Text = require('./element/text') Element
         @Tag = Tag = require('./element/tag') Element
-
-*Element* Element()
--------------------
 
         constructor: ->
             Emitter.call this
@@ -74,8 +70,7 @@ Element @virtual_dom
                 Object.seal @
             `//</development>`
 
-*Integer* Element::index
-------------------------
+## *Integer* Element::index
 
         opts = utils.CONFIGURABLE
         utils.defineProperty @::, 'index', opts, ->
@@ -117,24 +112,21 @@ Element @virtual_dom
             assert.is @_nextSibling, children[val+1] or null
             true
 
-*Element* Element::nextSibling
-------------------------------
+## *Element* Element::nextSibling
 
         opts = utils.CONFIGURABLE
         utils.defineProperty @::, 'nextSibling', opts, ->
             @_nextSibling
         , null
 
-*Element* Element::previousSibling
-----------------------------------
+## *Element* Element::previousSibling
 
         opts = utils.CONFIGURABLE
         utils.defineProperty @::, 'previousSibling', opts, ->
             @_previousSibling
         , null
 
-*Element* Element::parent
--------------------------
+## *Element* Element::parent
 
         opts = utils.CONFIGURABLE
         utils.defineProperty @::, 'parent', opts, ->
@@ -200,8 +192,7 @@ Element @virtual_dom
 
         signal.Emitter.createSignal @, 'onParentChange'
 
-*Renderer.Item* Element::style
-------------------------------
+## *Renderer.Item* Element::style
 
         opts = utils.CONFIGURABLE
         utils.defineProperty @::, 'style', opts, ->
@@ -221,8 +212,7 @@ Element @virtual_dom
 
         signal.Emitter.createSignal @, 'onStyleChange'
 
-*Boolean* Element::visible
---------------------------
+## *Boolean* Element::visible
 
         opts = utils.CONFIGURABLE
         utils.defineProperty @::, 'visible', opts, ->
@@ -244,18 +234,15 @@ Element @virtual_dom
 
         signal.Emitter.createSignal @, 'onVisibleChange'
 
-*Array* Element::queryAllParents(*String* query)
-------------------------------------------------
+## *Array* Element::queryAllParents(*String* query)
 
         queryAllParents: Tag.query.queryAllParents
 
-*Element* Element::queryParents(*String* query)
------------------------------------------------
+## *Element* Element::queryParents(*String* query)
 
         queryParents: Tag.query.queryParents
 
-*Array* Element::getAccessPath([*Tag* toParent])
-------------------------------------------------
+## *Array* Element::getAccessPath([*Tag* toParent])
 
         getAccessPath: (toParent) ->
             if toParent?
@@ -274,15 +261,13 @@ Element @virtual_dom
 
             arr
 
-*Element* Element::clone()
---------------------------
+## *Element* Element::clone()
 
         clone: (clone = new Element) ->
             clone._visible = @_visible
             clone
 
-*Array* Element::toJSON()
--------------------------
+## *Array* Element::toJSON()
 
         toJSON: (arr) ->
             unless arr
@@ -295,3 +280,7 @@ Element @virtual_dom
             @parser = require('./element/parser') Element
 
     module.exports = Element
+
+# Glossary
+
+- [Element](#class-element)

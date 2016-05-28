@@ -1,21 +1,20 @@
-neft:fragment @xml
-==================
+# neft:fragment
 
 Tag used to create separated and repeatable parts of the document.
 
 Each neft:fragment has to define a `neft:name` unique in the file where it's defined.
 
-neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
+neft:fragment can be rendered by the *neft:use* tag.
 
 ```xml
 <neft:fragment neft:name="product">
-  <h2>${name}</h2>
-  <span>Type: ${type}</span>
+  <h2>${props.name}</h2>
+  <span>Type: ${props.type}</span>
 </neft:fragment>
 
 <section>
-  <neft:use neft:fragment="product" type="electronics" name="dryer" />
-  <neft:use neft:fragment="product" type="painting" name="Lucretia, Paolo Veronese" />
+  <use:product type="electronics" name="dryer" />
+  <use:product type="painting" name="Lucretia, Paolo Veronese" />
 </section>
 ```
 
@@ -77,3 +76,7 @@ neft:fragment can be rendered by the [neft:use][document/neft:use@xml] tag.
                 File.parse createdFragment
 
             return
+
+# Glossary
+
+- [neft:fragment](#neft:fragment)

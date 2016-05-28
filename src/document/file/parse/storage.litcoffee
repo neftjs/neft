@@ -1,10 +1,9 @@
-String Interpolation @learn
-===========================
+# String Interpolation
 
-[Text][document/Text] and [Tag][document/Tag] attribute value can use string interpolation.
+*Element.Text* and *Element.Tag* attribute value can use string interpolation.
 
 ```xml
-<h1>Welcome ${name}!</h1>
+<h1>Welcome ${props.name}!</h1>
 ```
 
     'use strict'

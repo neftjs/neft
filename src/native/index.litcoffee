@@ -94,5 +94,5 @@
 
 # Glossary
 
-- [native.callFunction](#callFunction)
+- [native.callFunction](#callfunction)
 - [native.on](#on)

@@ -1,7 +1,6 @@
-neft:use @xml
-=============
+# neft:use
 
-Tag used to place a [neft:fragment][document/neft:fragment@xml].
+Tag used to place *neft:fragment*.
 
 ```xml
 <neft:fragment neft:name="user">
@@ -11,7 +10,7 @@ Tag used to place a [neft:fragment][document/neft:fragment@xml].
 <neft:use neft:fragment="user" />
 ```
 
-`neft:fragment` attribute can be changed in runtime.
+*neft:fragment* attribute can be changed in runtime.
 
 ```xml
 <neft:fragment neft:name="h1">
@@ -21,7 +20,7 @@ Tag used to place a [neft:fragment][document/neft:fragment@xml].
 <neft:use neft:fragment="h${data.level}" />
 ```
 
-Short version of `neft:use` is a tag prefixed by `use:`.
+Short version of *neft:use* is a tag prefixed by `use:`.
 
 ```xml
 <neft:fragment neft:name="user">
@@ -31,11 +30,11 @@ Short version of `neft:use` is a tag prefixed by `use:`.
 <use:user />
 ```
 
-`neft:use` attributes are available in the [neft:fragment][document/neft:fragment@xml] scope.
+*neft:use* attributes are available in *neft:fragment* scope.
 
 ```xml
 <neft:fragment neft:name="h1">
-  <h1>H1: ${attrs.data}</h1>
+  <h1>H1: ${props.data}</h1>
 </neft:fragment>
 
 <use:h1 data="Test heading" />
@@ -79,3 +78,7 @@ Use this attribute to render less important elements.
 
         unless utils.isEmpty uses
             file.uses = uses
+
+# Glossary
+
+- [neft:use](#neft:use)

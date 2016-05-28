@@ -1,12 +1,11 @@
-neft:attr @xml
-==============
+# neft:attr
 
 Tag used to dynamically change an attribute of the parent element.
 
 ```xml
-<header neft:style="header">
-    <neft:attr name="isActive" value="true" neft:if="${data.isActive}" />
-    <span neft:if="${isActive}">You are active</span>
+<header id="header">
+    <neft:attr name="isActive" value="true" neft:if="${root.isActive}" />
+    <span>Active: ${ids.header.attrs.isActive}</span>
 </header>
 ```
 
@@ -30,3 +29,7 @@ Tag used to dynamically change an attribute of the parent element.
                 attrChanges.push new AttrChange file, node, target, name
 
             return
+
+# Glossary
+
+- [neft:attr](#neft:attr)

@@ -1,17 +1,16 @@
-neft:target @xml
-================
+# neft:target
 
-Tag used in the [neft:fragment][document/neft:fragment@xml] to define,
-where the [neft:use][document/neft:use@xml] body should be placed.
+Tag used in *neft:fragment* to define,
+where *neft:use* body should be placed.
 
 ```xml
 <neft:fragment neft:name="user">
-  <name>${name}</name>
-  <age>${age}</age>
+  <name>${props.name}</name>
+  <age>${props.age}</age>
   <neft:target />
 </neft:fragment>
 
-<neft:use neft:fragment="user" name="Max" age="19">
+<use:user name="Max" age="19">
   <superPower>flying</superPower>
 </neft:use>
 ```
@@ -21,3 +20,7 @@ where the [neft:use][document/neft:use@xml] body should be placed.
     module.exports = (File) -> (file) ->
         file.targetNode = file.node.query("neft:target")
         file.targetNode?.name = 'neft:blank'
+
+# Glossary
+
+- [neft:target](#neft:target)

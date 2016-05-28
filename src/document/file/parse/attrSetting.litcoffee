@@ -1,15 +1,14 @@
-Setting attributes @learn
-=========================
+# Setting attributes
 
-[Element][document/Element] properties can be changed using attributes.
+*Element* properties can be changed using attributes.
 
 ```xml
-<div visible="false"></div>
+<div visible="false" />
 ```
 
 Supports listening on signals as well.
 
-Potentially it's more useful with more specific [Element][document/Element]s from extensions.
+Potentially it's more useful with more specific *Element*s from extensions.
 
     'use strict'
 

@@ -1,5 +1,4 @@
-neft:script @xml
-================
+# neft:script
 
     'use strict'
 
@@ -52,3 +51,7 @@ neft:script @xml
         file.scripts = new File.Scripts file, scripts
 
         return
+
+# Glossary
+
+- [neft:script](#neft:script)

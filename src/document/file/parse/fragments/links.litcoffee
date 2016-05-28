@@ -1,12 +1,11 @@
-neft:require @xml
-=================
+# neft:require
 
-Tag used to link [neft:fragment][document/neft:fragment@xml]s from a file and use them.
+Tag used to link *neft:fragment*s from a file and use them.
 
 ```xml
 <neft:require href="./user_utils.html" />
 
-<neft:use neft:fragment="avatar" />
+<use:avatar />
 ```
 
 ## Namespace
@@ -16,7 +15,7 @@ Optional argument `as` will link all fragments into the specified namespace.
 ```xml
 <neft:require href="./user_utils.html" as="user" />
 
-<neft:use neft:fragment="user:avatar" />
+<use:user:avatar />
 ```
 
     'use strict'
@@ -59,3 +58,7 @@ Optional argument `as` will link all fragments into the specified namespace.
             return pathUtils.join(dirname, path)
 
         pathUtils.join File.FILES_PATH, path
+
+# Glossary
+
+- [neft:require](#neft:require)

@@ -1,5 +1,4 @@
-neft:rule @xml
-==============
+# neft:rule
 
 Tag used in the parsing process.
 Performs some actions on found elements in the parent element.
@@ -112,3 +111,7 @@ Adds attributes if not exists.
                         enterCommand command, node
 
             return
+
+# Glossary
+
+- [neft:rule](#neft:rule)
