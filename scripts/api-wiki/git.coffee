@@ -5,21 +5,12 @@ os = require 'os'
 fs = require 'fs-extra'
 pathUtils = require 'path'
 
-exports.clone = (url, callback) ->
-    dest = pathUtils.join os.tmpDir(), '/', String(Math.random()).slice(2)
-    fs.removeSync dest
-
-    cp.exec "git clone #{url} #{dest}", (err) ->
-        callback err
-
-    dest
-
-exports.push = (repo, callback) ->
+exports.push = (callback) ->
     message = 'Automatic API Wiki update'
-    cmd = "cd #{repo} && "
+    cmd = ''
     cmd += 'git add --all && '
     cmd += "git commit -m '#{message}' && "
-    cmd += 'git push'
+    cmd += 'git subtree push --prefix wiki wiki master'
     cp.exec cmd, (err, stderr, stdout) ->
         callback stderr or err
 

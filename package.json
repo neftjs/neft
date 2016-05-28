@@ -32,6 +32,7 @@
   "scripts": {
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony bundle.coffee",
     "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./src/unit/cli.coffee ./tests/\\*\\*/\\*.coffee --require tests/init.coffee",
+    "sync-wiki": "git subtree pull --prefix wiki wiki master --squash",
     "update-api-wiki": "cross-env NODE_PATH=./ coffee ./scripts/api-wiki.coffee"
   },
   "dependencies": {
