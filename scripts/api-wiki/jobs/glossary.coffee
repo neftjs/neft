@@ -4,7 +4,7 @@ log = require 'src/log'
 {Heading, Paragraph, headingToUrl} = require '../markdown'
 
 GLOSSARY_HEADING = 'Glossary'
-URL_PREFIX = '/Neft-io/neft/'
+URL_PREFIX = '/Neft-io/neft/wiki/'
 
 glossary = Object.create null
 terms = []
