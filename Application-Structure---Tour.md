@@ -1,6 +1,6 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **App Structure**
+> [Wiki](Home) ▸ [[Tour]] ▸ **Application Structure**
 
-App Structure
+Application Structure
 ===
 
 CoffeeScript support
