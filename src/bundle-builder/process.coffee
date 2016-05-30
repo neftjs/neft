@@ -30,6 +30,7 @@ mockGlobal = (obj) ->
     return
 
 base = pathUtils.dirname index
+disabledFilenames = Object.create null
 
 mockGlobal require("./emulators/#{platform}") opts
 
@@ -47,6 +48,8 @@ require.extensions['.yaml'] = (module, filename) ->
 # register babel
 if opts.useBabel
     babelOptions = presets: ['es2015']
+    es2015Filename = Module._resolveFilename 'babel-preset-es2015', module
+    disabledFilenames[es2015Filename] = true
     require.extensions['.js'] = (module, filename) ->
         if filename.indexOf('node_modules') isnt -1
             return
@@ -82,6 +85,9 @@ Module._load = do (_super = Module._load) -> (req, parent) ->
         return r
 
     filename = Module._resolveFilename req, parent
+    if disabledFilenames[filename]
+        return r
+
     modulePath = pathUtils.relative base, filename
     parentPath = pathUtils.relative base, parent.id
 
