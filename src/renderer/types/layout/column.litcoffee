@@ -1,14 +1,12 @@
-Column @class
-=============
+# Column
 
-```nml
-`Column {
-`   spacing: 5
-`
-`   Rectangle { color: 'blue'; width: 50; height: 50; }
-`   Rectangle { color: 'green'; width: 20; height: 50; }
-`   Rectangle { color: 'red'; width: 50; height: 20; }
-`}
+```javascript
+Column {
+    spacing: 5
+    Rectangle { color: 'blue'; width: 50; height: 50; }
+    Rectangle { color: 'green'; width: 20; height: 50; }
+    Rectangle { color: 'red'; width: 50; height: 20; }
+}
 ```
 
     'use strict'
@@ -16,21 +14,19 @@ Column @class
     assert = require 'src/assert'
     utils = require 'src/utils'
 
+# **Class** Column : *Item*
+
     module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
         @__name__ = 'Column'
         @__path__ = 'Renderer.Column'
 
-*Column* Column.New([*Component* component, *Object* options])
---------------------------------------------------------------
+## *Column* Column.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new Column
             itemUtils.Object.initialize item, component, opts
             item.effectItem = item
             item
-
-*Column* Column() : *Renderer.Item*
------------------------------------
 
         constructor: ->
             super()
@@ -49,16 +45,14 @@ Column @class
             @_effectItem = val
             Impl.setColumnEffectItem.call @, val, oldVal
 
-*Margin* Column::padding
-------------------------
+## *Item.Margin* Column::padding
 
-## *Signal* Column::onPaddingChange(*Margin* padding)
+## *Signal* Column::onPaddingChange(*Item.Margin* padding)
 
         Renderer.Item.createMargin @,
             propertyName: 'padding'
 
-*Float* Column::spacing = 0
----------------------------
+## *Float* Column::spacing = `0`
 
 ## *Signal* Column::onSpacingChange(*Float* oldValue)
 
@@ -74,15 +68,13 @@ Column @class
                 assert.isFloat val
                 _super.call @, val
 
-*Alignment* Column::alignment
------------------------------
+## *Item.Alignment* Column::alignment
 
-## *Signal* Column::onAlignmentChange(*Alignment* oldValue)
+## *Signal* Column::onAlignmentChange(*Item.Alignment* oldValue)
 
         Renderer.Item.createAlignment @
 
-*Boolean* Column::includeBorderMargins = false
-----------------------------------------------
+## *Boolean* Column::includeBorderMargins = `false`
 
 ## *Signal* Column::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
@@ -93,3 +85,7 @@ Column @class
             implementation: Impl.setColumnIncludeBorderMargins
             developmentSetter: (val) ->
                 assert.isBoolean val
+
+# Glossary
+
+- [Column](#class-column)

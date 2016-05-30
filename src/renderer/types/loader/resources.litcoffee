@@ -1,17 +1,15 @@
-ResourcesLoader @class
-======================
+# ResourcesLoader
 
-```nml
-`Item {
-`   ResourcesLoader {
-`       id: loader
-`       resources: app.resources
-`   }
-`
-`   Text {
-`       text: 'Progress: ' + loader.progress * 100 + '%'
-`   }
-`}
+```javascript
+Item {
+    ResourcesLoader {
+        id: loader
+        resources: app.resources
+    }
+    Text {
+        text: 'Progress: ' + loader.progress * 100 + '%'
+    }
+}
 ```
 
     'use strict'
@@ -23,6 +21,13 @@ ResourcesLoader @class
     Resources = require 'src/resources'
 
     log = log.scope 'Renderer', 'ResourcesLoader'
+
+# **Class** ResourcesLoader
+
+Access it with:
+```javascript
+ResourcesLoader {}
+```
 
     module.exports = (Renderer, Impl, itemUtils) -> class ResourcesLoader extends itemUtils.FixedObject
         @__name__ = 'ResourcesLoader'
@@ -36,21 +41,12 @@ ResourcesLoader @class
                     getResources val, target
             target
 
-*ResourcesLoader* ResourcesLoader.New([*Component* component, *Object* options])
---------------------------------------------------------------------------------
+## *ResourcesLoader* ResourcesLoader.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new ResourcesLoader
             itemUtils.Object.initialize item, component, opts
             item
-
-*ResourcesLoader* ResourcesLoader()
------------------------------------
-
-Access it with:
-```nml
-ResourcesLoader {}
-```
 
         constructor: ->
             super()
@@ -61,8 +57,7 @@ ResourcesLoader {}
                     @progress = 0
                     Impl.loadResources.call @, getResources(@_resources)
 
-*Resources* ResourcesLoader::resources
---------------------------------------
+## *Resources* ResourcesLoader::resources
 
         utils.defineProperty @::, 'resources', null, ->
             @_resources
@@ -72,8 +67,7 @@ ResourcesLoader {}
             assert.instanceOf val, Resources
             @_resources = val
 
-*Float* ResourcesLoader::progress = 0
--------------------------------------
+## *Float* ResourcesLoader::progress = `0`
 
 ## *Signal* ResourcesLoaded::onProgressChange(*Float* oldValue)
 
@@ -82,3 +76,7 @@ ResourcesLoader {}
             name: 'progress'
             developmentSetter: (val) ->
                 assert.isFloat val
+
+# Glossary
+
+- [ResourcesLoader](#class-resourcesloader)

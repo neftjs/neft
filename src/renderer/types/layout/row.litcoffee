@@ -1,14 +1,12 @@
-Row @class
-==========
+# Row
 
-```nml
-`Row {
-`   spacing: 5
-`
-`   Rectangle { color: 'blue'; width: 50; height: 50; }
-`   Rectangle { color: 'green'; width: 20; height: 50; }
-`   Rectangle { color: 'red'; width: 50; height: 20; }
-`}
+```javascript
+Row {
+    spacing: 5
+    Rectangle { color: 'blue'; width: 50; height: 50; }
+    Rectangle { color: 'green'; width: 20; height: 50; }
+    Rectangle { color: 'red'; width: 50; height: 20; }
+}
 ```
 
     'use strict'
@@ -16,21 +14,19 @@ Row @class
     assert = require 'src/assert'
     utils = require 'src/utils'
 
+# **Class** Row : *Item*
+
     module.exports = (Renderer, Impl, itemUtils) -> class Row extends Renderer.Item
         @__name__ = 'Row'
         @__path__ = 'Renderer.Row'
 
-*Row* Row.New([*Component* component, *Object* options])
---------------------------------------------------------
+## *Row* Row.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new Row
             itemUtils.Object.initialize item, component, opts
             item.effectItem = item
             item
-
-*Row* Row() : *Renderer.Item*
------------------------------
 
         constructor: ->
             super()
@@ -49,16 +45,14 @@ Row @class
             @_effectItem = val
             Impl.setRowEffectItem.call @, val, oldVal
 
-*Margin* Row::padding
----------------------
+## *Item.Margin* Row::padding
 
-## *Signal* Row::onPaddingChange(*Margin* padding)
+## *Signal* Row::onPaddingChange(*Item.Margin* padding)
 
         Renderer.Item.createMargin @,
             propertyName: 'padding'
 
-*Float* Row::spacing = 0
-------------------------
+## *Float* Row::spacing = `0`
 
 ## *Signal* Row::onSpacingChange(*Float* oldValue)
 
@@ -74,15 +68,13 @@ Row @class
                 assert.isFloat val
                 _super.call @, val
 
-*Alignment* Row::alignment
---------------------------
+## *Item.Alignment* Row::alignment
 
-## *Signal* Row::onAlignmentChange(*Alignment* oldValue)
+## *Signal* Row::onAlignmentChange(*Item.Alignment* oldValue)
 
         Renderer.Item.createAlignment @
 
-*Boolean* Row::includeBorderMargins = false
--------------------------------------------
+## *Boolean* Row::includeBorderMargins = `false`
 
 ## *Signal* Row::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
@@ -93,3 +85,7 @@ Row @class
             implementation: Impl.setRowIncludeBorderMargins
             developmentSetter: (val) ->
                 assert.isBoolean val
+
+# Glossary
+
+- [Row](#class-row)

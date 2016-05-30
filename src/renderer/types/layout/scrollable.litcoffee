@@ -1,5 +1,4 @@
-Scrollable @class
-==========
+# Scrollable
 
     'use strict'
 
@@ -9,21 +8,19 @@ Scrollable @class
 
     {emitSignal} = signal.Emitter
 
+# **Class** Scrollable : *Item*
+
     module.exports = (Renderer, Impl, itemUtils) -> class Scrollable extends Renderer.Item
         @__name__ = 'Scrollable'
         @__path__ = 'Renderer.Scrollable'
 
-*Scrollable* Scrollable.New([*Component* component, *Object* options])
-----------------------------------------------------------------------
+## *Scrollable* Scrollable.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new Scrollable
             itemUtils.Object.initialize item, component, opts
             item.clip = true
             item
-
-*Scrollable* Scrollable() : *Renderer.Item*
--------------------------------------------
 
         constructor: ->
             super()
@@ -33,13 +30,9 @@ Scrollable @class
             @_snap = false
             @_snapItem = null
 
-*Boolean* Scrollable::clip = true
----------------------------------
+## *Item* Scrollable::contentItem = `null`
 
-*Renderer.Item* Scrollable::contentItem = null
-----------------------------------------------
-
-## *Signal* Scrollable::onContentItemChange([*Renderer.Item* oldValue])
+## *Signal* Scrollable::onContentItemChange(*Item* oldValue)
 
         itemUtils.defineProperty
             constructor: @
@@ -54,8 +47,7 @@ Scrollable @class
                     emitSignal val, 'onParentChange', null
                 _super.call @, val
 
-*Float* Scrollable::contentX = 0
---------------------------------
+## *Float* Scrollable::contentX = `0`
 
 ## *Signal* Scrollable::onContentXChange(*Float* oldValue)
 
@@ -67,8 +59,7 @@ Scrollable @class
             developmentSetter: (val) ->
                 assert.isFloat val
 
-*Float* Scrollable::contentY = 0
---------------------------------
+## *Float* Scrollable::contentY = `0`
 
 ## *Signal* Scrollable::onContentYChange(*Float* oldValue)
 
@@ -80,8 +71,7 @@ Scrollable @class
             developmentSetter: (val) ->
                 assert.isFloat val
 
-Hidden *Boolean* Scrollable::snap = false
------------------------------------------
+## Hidden *Boolean* Scrollable::snap = `false`
 
 ## Hidden *Signal* Scrollable::onSnapChange(*Boolean* oldValue)
 
@@ -93,10 +83,9 @@ Hidden *Boolean* Scrollable::snap = false
             developmentSetter: (val) ->
                 assert.isBoolean val
 
-Hidden *Renderer.Item* Scrollable::snapItem
--------------------------------------------
+## Hidden *Item* Scrollable::snapItem
 
-## Hidden *Signal* Scrollable::onSnapItemChange(*Renderer.Item* oldValue)
+## Hidden *Signal* Scrollable::onSnapItemChange(*Item* oldValue)
 
         itemUtils.defineProperty
             constructor: @
@@ -106,3 +95,7 @@ Hidden *Renderer.Item* Scrollable::snapItem
             developmentSetter: (val=null) ->
                 if val?
                     assert.instanceOf val, Renderer.Item
+
+# Glossary
+
+- [Scrollable](#class-scrollable)

@@ -1,21 +1,19 @@
-Transition @modifier
-====================
+# Transition
 
-```nml
-`Rectangle {
-`   width: 100; height: 100;
-`   color: 'red'
-`   pointer.onClick: function(){
-`       this.x = Math.random()*300;
-`   }
-`
-`   Transition {
-`       property: 'x'
-`       animation: NumberAnimation {
-`           duration: 1500
-`       }
-`   }
-`}
+```javascript
+Rectangle {
+    width: 100; height: 100;
+    color: 'red'
+    pointer.onClick: function () {
+        this.x = Math.random() * 300;
+    }
+    Transition {
+        property: 'x'
+        animation: NumberAnimation {
+            duration: 1500
+        }
+    }
+}
 ```
 
     'use strict'
@@ -27,19 +25,17 @@ Transition @modifier
 
     log = log.scope 'Renderer', 'Transition'
 
+# **Class** Transition : *Renderer.Extension*
+
     module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
         @__name__ = 'Transition'
 
-*Transition* Transition.New([*Component* component, *Object* options])
-----------------------------------------------------------------------
+## *Transition* Transition.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new Transition
             itemUtils.Object.initialize item, component, opts
             item
-
-*Transition* Transition()
--------------------------
 
         constructor: ->
             super()
@@ -64,16 +60,6 @@ Transition @modifier
             animation.target ?= @target
             animation.start()
             return
-
-*Boolean* Transition::when
---------------------------
-
-## *Signal* Transition::onWhenChange(*Boolean* oldValue)
-
-*Renderer.Item* Transition::target
-----------------------------------
-
-## *Signal* Transition::onTargetChange([*Renderer.Item* oldValue])
 
         onTargetReady = ->
             @_running = true
@@ -124,10 +110,9 @@ Transition @modifier
                             log.error "'#{property}' property signal not found"
                 return
 
-*Renderer.Animation* Transition::animation
-------------------------------------------
+## *Animation* Transition::animation
 
-## *Signal* Transition::onAnimationChange(*Renderer.Animation* oldValue)
+## *Signal* Transition::onAnimationChange(*Animation* oldValue)
 
         itemUtils.defineProperty
             constructor: @
@@ -152,8 +137,7 @@ Transition @modifier
                     val.property = @property
                 return
 
-*String* Transition::property
------------------------------
+## *String* Transition::property
 
 ## *Signal* Transition::onPropertyChange(*String* oldValue)
 
@@ -194,3 +178,7 @@ Transition @modifier
                         handlerName = "on#{utils.capitalize(val)}Change"
                         target[handlerName] listener, @
                 return
+
+# Glossary
+
+- [Transition](#class-transition)

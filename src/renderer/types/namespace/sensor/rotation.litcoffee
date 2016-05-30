@@ -1,5 +1,18 @@
-RotationSensor @namespace
-=========================
+# RotationSensor
+
+```javascript
+`
+RotationSensor.active = true;
+`
+Text {
+    font.pixelSize: 30
+    onUpdate: function(){
+    this.text = 'x: ' + RotationSensor.x + '; ' +
+        'y: ' + RotationSensor.y + '; ' +
+        'z: ' + RotationSensor.z;
+    }
+}
+```
 
     'use strict'
 
@@ -8,23 +21,6 @@ RotationSensor @namespace
 
     module.exports = (Renderer, Impl, itemUtils) ->
         class RotationSensor extends signal.Emitter
-
-*Object* RotationSensor
------------------------
-
-```nml
-`RotationSensor.active = true;
-`
-`Text {
-`   font.pixelSize: 30
-`   onUpdate: function(){
-`       this.text = "x: " + RotationSensor.x + "; " +
-`           "y: " + RotationSensor.y + "; " +
-`           "z: " + RotationSensor.z;
-`   }
-`}
-```
-
             constructor: ->
                 super()
                 @_active = false
@@ -34,8 +30,7 @@ RotationSensor @namespace
 
                 Object.preventExtensions @
 
-*Float* RotationSensor::active = false
---------------------------------------
+## *Float* RotationSensor.active = `false`
 
             utils.defineProperty @::, 'active', null, ->
                 @_active
@@ -47,14 +42,15 @@ RotationSensor @namespace
                     Impl.disableRotationSensor.call rotationSensor
                 return
 
-*Float* RotationSensor::x = 0
------------------------------
+## *Float* RotationSensor.x = `0`
 
-*Float* RotationSensor::y = 0
------------------------------
+## *Float* RotationSensor.y = `0`
 
-*Float* RotationSensor::z = 0
------------------------------
+## *Float* RotationSensor.z = `0`
 
         rotationSensor = new RotationSensor
         rotationSensor
+
+# Glossary
+
+- [RotationSensor](#rotationsensor)

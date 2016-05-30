@@ -1,18 +1,16 @@
-FontLoader @class
-=================
+# FontLoader
 
-```nml
-`Item {
-`   Text {
-`       font.family: 'myFont'
-`       text: 'Cool font!'
-`   }
-`}
-`
-`FontLoader {
-`   name: 'myFont'
-`   source: 'rsc:/static/fonts/myFont'
-`}
+```javascript
+Item {
+    Text {
+        font.family: 'myFont'
+        text: 'Cool font!'
+    }
+}
+FontLoader {
+    name: 'myFont'
+    source: 'rsc:/static/fonts/myFont'
+}
 ```
 
     'use strict'
@@ -23,6 +21,19 @@ FontLoader @class
     signal = require 'src/signal'
 
     log = log.scope 'Renderer', 'FontLoader'
+
+# **Class** FontLoader
+
+Class used to load custom fonts.
+
+You can override default fonts (*sans-serif*, *sans* and *monospace*).
+
+The font weight and the style (italic or normal) is extracted from the font source path.
+
+Access it with:
+```javascript
+FontLoader {}
+```
 
     module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends itemUtils.FixedObject
         @__name__ = 'FontLoader'
@@ -135,35 +146,19 @@ FontLoader @class
 
             result
 
-*FontLoader* FontLoader.New([*Component* component, *Object* options])
-----------------------------------------------------------------------
+## *FontLoader* FontLoader.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new FontLoader
             itemUtils.Object.initialize item, component, opts
             item
 
-*FontLoader* FontLoader()
--------------------------
-
-Class used to load custom fonts.
-
-You can override default fonts (*sans-serif*, *sans* and *monospace*).
-
-The font weight and the style (italic or normal) is extracted from the font source path.
-
-Access it with:
-```nml
-FontLoader {}
-```
-
         constructor: ->
             super()
             @_name = ''
             @_source = ''
 
-*String* FontLoader::name
--------------------------
+## *String* FontLoader::name
 
         utils.defineProperty @::, 'name', null, ->
             @_name
@@ -176,13 +171,12 @@ FontLoader {}
 
             loadFontIfReady @
 
-*String* FontLoader::source
----------------------------
+## *String* FontLoader::source
 
-We recommend usng **WOFF** format and **TTF/OTF** for the oldest Android browser.
+We recommend using **WOFF** format and **TTF/OTF** for the oldest Android browser.
 
 Must contains one of:
- - hairline (weight=0),
+ - hairline *(weight=0)*,
  - thin,
  - ultra.*light,
  - extra.*light,
@@ -196,7 +190,7 @@ Must contains one of:
  - heavy,
  - black,
  - extra.*black,
- - ultra.*black|ultra (weight=1).
+ - ultra.*black|ultra *(weight=1)*.
 
 Italic font filename must contains 'italic'.
 
@@ -211,3 +205,7 @@ Italic font filename must contains 'italic'.
 
             loadFontIfReady @
             return
+
+# Glossary
+
+- [FontLoader](#class-fontloader)

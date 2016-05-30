@@ -1,5 +1,4 @@
-Screen @namespace
-=================
+# Screen
 
     'use strict'
 
@@ -9,10 +8,6 @@ Screen @namespace
 
     module.exports = (Renderer, Impl, itemUtils) ->
         class Screen extends signal.Emitter
-
-*Object* Screen
----------------
-
             constructor: ->
                 super()
                 @_impl = bindings: null
@@ -23,38 +18,34 @@ Screen @namespace
 
                 Object.preventExtensions @
 
-ReadOnly *Boolean* Screen.touch = false
----------------------------------------
+## ReadOnly *Boolean* Screen.touch = `false`
 
-```nml
-`Text {
-`   text: Screen.touch ? "Touch" : "Mouse"
-`   font.pixelSize: 30
-`}
+```javascript
+Text {
+    text: Screen.touch ? 'Touch' : 'Mouse'
+    font.pixelSize: 30
+}
 ```
 
             utils.defineProperty @::, 'touch', null, ->
                 @_touch
             , null
 
-ReadOnly *Float* Screen.width = 1024
-------------------------------------
+## ReadOnly *Float* Screen.width = `1024`
 
             utils.defineProperty @::, 'width', null, ->
                 @_width
             , null
 
-ReadOnly *Float* Screen.height = 800
-------------------------------------
+## ReadOnly *Float* Screen.height = `800`
 
             utils.defineProperty @::, 'height', null, ->
                 @_height
             , null
 
-ReadOnly *String* Screen.orientation = 'Portrait'
--------------------------------------------------
+## ReadOnly *String* Screen.orientation = `'Portrait'`
 
-May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
+May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
 
 ## *Signal* Screen.onOrientationChange(*String* oldValue)
 
@@ -72,3 +63,7 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape
             return
 
         screen
+
+# Glossary
+
+- [Screen](#screen)
