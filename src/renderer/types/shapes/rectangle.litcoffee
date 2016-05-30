@@ -1,15 +1,14 @@
-Rectangle @class
-================
+# Rectangle
 
-```nml
-`Rectangle {
-`   width: 150
-`   height: 100
-`   color: 'blue'
-`   border.color: 'black'
-`   border.width: 5
-`   radius: 10
-`}
+```javascript
+Rectangle {
+    width: 150
+    height: 100
+    color: 'blue'
+    border.color: 'black'
+    border.width: 5
+    radius: 10
+}
 ```
 
     'use strict'
@@ -17,22 +16,20 @@ Rectangle @class
     assert = require 'src/assert'
     utils = require 'src/utils'
 
+# **Class** Rectangle : *Item*
+
     module.exports = (Renderer, Impl, itemUtils) ->
 
         class Rectangle extends Renderer.Item
             @__name__ = 'Rectangle'
             @__path__ = 'Renderer.Rectangle'
 
-*Rectangle* Rectangle.New([*Component* component, *Object* options])
---------------------------------------------------------------------
+## *Rectangle* Rectangle.New([*Component* component, *Object* options])
 
             @New = (component, opts) ->
                 item = new Rectangle
                 itemUtils.Object.initialize item, component, opts
                 item
-
-*Rectangle* Rectangle() : *Renderer.Item*
------------------------------------------
 
             constructor: ->
                 super()
@@ -40,8 +37,7 @@ Rectangle @class
                 @_radius = 0
                 @_border = null
 
-*String* Rectangle::color = 'transparent'
------------------------------------------
+## *String* Rectangle::color = `'transparent'`
 
 ## *Signal* Rectangle::onColorChange(*String* oldValue)
 
@@ -58,8 +54,7 @@ Rectangle @class
                 developmentSetter: (val) ->
                     assert.isString val
 
-*Float* Rectangle::radius = 0
------------------------------
+## *Float* Rectangle::radius = `0`
 
 ## *Signal* Rectangle::onRadiusChange(*Float* oldValue)
 
@@ -71,8 +66,7 @@ Rectangle @class
                 developmentSetter: (val) ->
                     assert.isFloat val
 
-*Border* Rectangle::border
---------------------------
+## *Object* Rectangle::border
 
 ## *Signal* Rectangle::onBorderChange(*String* property, *Any* oldValue)
 
@@ -97,8 +91,7 @@ Rectangle @class
                 @_color = 'transparent'
                 super ref
 
-*Float* Rectangle::border.width = 0
------------------------------------
+## *Float* Rectangle::border.width = `0`
 
 ## *Signal* Rectangle::border.onWidthChange(*Float* oldValue)
 
@@ -112,8 +105,7 @@ Rectangle @class
                 developmentSetter: (val) ->
                     assert.isFloat val
 
-*String* Rectangle::border.color = 'transparent'
-------------------------------------------------
+## *String* Rectangle::border.color = `'transparent'`
 
 ## *Signal* Rectangle::border.onColorChange(*String* oldValue)
 
@@ -137,3 +129,7 @@ Rectangle @class
                 color: @color
 
         Rectangle
+
+# Glossary
+
+- [Rectangle](#class-rectangle)

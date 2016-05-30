@@ -1,5 +1,4 @@
-Device @namespace
-=================
+# Device
 
     'use strict'
 
@@ -8,10 +7,6 @@ Device @namespace
 
     module.exports = (Renderer, Impl, itemUtils) ->
         class Device extends signal.Emitter
-
-*Object* Device
----------------
-
             constructor: ->
                 super()
                 @_platform = 'Unix'
@@ -23,8 +18,7 @@ Device @namespace
 
                 Object.preventExtensions @
 
-*Boolean* Device.platform = 'Unix'
-----------------------------------
+## *Boolean* Device.platform = `'Unix'`
 
 Possible values are:
  - Android,
@@ -38,124 +32,108 @@ Possible values are:
  - Unix,
  - OSX.
 
-```nml
-`Text {
-`   text: "You are using: " + Device.platform
-`   font.pixelSize: 30
-`}
+```javascript
+Text {
+    text: 'You are using: ' + Device.platform
+    font.pixelSize: 30
+}
 ```
 
             utils.defineProperty @::, 'platform', null, ->
                 @_platform
             , null
 
-*Boolean* Device.desktop = true
--------------------------------
+## *Boolean* Device.desktop = `true`
 
             utils.defineProperty @::, 'desktop', null, ->
                 @_desktop
             , null
 
-*Boolean* Device.tablet = false
--------------------------------
+## *Boolean* Device.tablet = `false`
 
             utils.defineProperty @::, 'tablet', null, ->
                 not @desktop and not @phone
             , null
 
-*Boolean* Device.phone = false
-------------------------------
+## *Boolean* Device.phone = `false`
 
             utils.defineProperty @::, 'phone', null, ->
                 @_phone
             , null
 
-*Boolean* Device.mobile = false
--------------------------------
+## *Boolean* Device.mobile = `false`
 
 Tablet or a phone.
 
-```nml
-`Text {
-`   text: Device.mobile ? 'Mobile' : 'Desktop'
-`   font.pixelSize: 30
-`}
+```javascript
+Text {
+    text: Device.mobile ? 'Mobile' : 'Desktop'
+    font.pixelSize: 30
+}
 ```
 
             utils.defineProperty @::, 'mobile', null, ->
                 @tablet or @phone
             , null
 
-*Boolean* Device.pixelRatio = 1
--------------------------------
+## *Boolean* Device.pixelRatio = `1`
 
-```nml
-`Text {
-`   text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
-`   font.pixelSize: 30
-`}
+```javascript
+Text {
+    text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
+    font.pixelSize: 30
+}
 ```
 
             utils.defineProperty @::, 'pixelRatio', null, ->
                 @_pixelRatio
             , null
 
-ReadOnly *DevicePointerEvent* Device.pointer
---------------------------------------------
+## ReadOnly *Device.PointerEvent* Device.pointer
 
             utils.defineProperty Device::, 'pointer', null, ->
                 @_pointer
             , null
 
-*Signal* Device.onPointerPress(*DevicePointerEvent* event)
-----------------------------------------------------------
+## *Signal* Device.onPointerPress(*Device.PointerEvent* event)
 
             signal.Emitter.createSignal @, 'onPointerPress'
 
-*Signal* Device.onPointerRelease(*DevicePointerEvent* event)
-------------------------------------------------------------
+## *Signal* Device.onPointerRelease(*Device.PointerEvent* event)
 
             signal.Emitter.createSignal @, 'onPointerRelease'
 
-*Signal* Device.onPointerMove(*DevicePointerEvent* event)
----------------------------------------------------------
+## *Signal* Device.onPointerMove(*Device.PointerEvent* event)
 
             signal.Emitter.createSignal @, 'onPointerMove'
 
-*Signal* Device.onPointerWheel(*DevicePointerEvent* event)
-----------------------------------------------------------
+## *Signal* Device.onPointerWheel(*Device.PointerEvent* event)
 
             signal.Emitter.createSignal @, 'onPointerWheel'
 
-ReadOnly *DeviceKeyboardEvent* Device.keyboard
-----------------------------------------------
+## ReadOnly *Device.KeyboardEvent* Device.keyboard
 
             utils.defineProperty Device::, 'keyboard', null, ->
                 @_keyboard
             , null
 
-*Signal* Device.onKeyPress(*DeviceKeyboardEvent* event)
--------------------------------------------------------
+## *Signal* Device.onKeyPress(*Device.KeyboardEvent* event)
 
             signal.Emitter.createSignal @, 'onKeyPress'
 
-*Signal* Device.onKeyHold(*DeviceKeyboardEvent* event)
-------------------------------------------------------
+## *Signal* Device.onKeyHold(*Device.KeyboardEvent* event)
 
             signal.Emitter.createSignal @, 'onKeyHold'
 
-*Signal* Device.onKeyRelease(*DeviceKeyboardEvent* event)
----------------------------------------------------------
+## *Signal* Device.onKeyRelease(*Device.KeyboardEvent* event)
 
             signal.Emitter.createSignal @, 'onKeyRelease'
 
-*Signal* Device.onKeyInput(*DeviceKeyboardEvent* event)
--------------------------------------------------------
+## *Signal* Device.onKeyInput(*Device.KeyboardEvent* event)
 
             signal.Emitter.createSignal @, 'onKeyInput'
 
-*DevicePointerEvent* DevicePointerEvent()
------------------------------------------
+# **Class** Device.PointerEvent
 
         class DevicePointerEvent extends signal.Emitter
             constructor: ->
@@ -170,68 +148,61 @@ ReadOnly *DeviceKeyboardEvent* Device.keyboard
 
                 Object.preventExtensions @
 
-ReadOnly *Float* DevicePointerEvent::x
---------------------------------------
+## ReadOnly *Float* Device.PointerEvent::x
 
-## *Signal* DevicePointerEvent::onXChange(*Float* oldValue)
+## *Signal* Device.PointerEvent::onXChange(*Float* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'x'
                 defaultValue: 0
 
-ReadOnly *Float* DevicePointerEvent::y
---------------------------------------
+## ReadOnly *Float* Device.PointerEvent::y
 
-## *Signal* DevicePointerEvent::onYChange(*Float* oldValue)
+## *Signal* Device.PointerEvent::onYChange(*Float* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'y'
                 defaultValue: 0
 
-ReadOnly *Float* DevicePointerEvent::movementX
-----------------------------------------------
+## ReadOnly *Float* Device.PointerEvent::movementX
 
-## *Signal* DevicePointerEvent::onMovementXChange(*Float* oldValue)
+## *Signal* Device.PointerEvent::onMovementXChange(*Float* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'movementX'
                 defaultValue: 0
 
-ReadOnly *Float* DevicePointerEvent::movementY
-----------------------------------------------
+## ReadOnly *Float* Device.PointerEvent::movementY
 
-## *Signal* DevicePointerEvent::onMovementYChange(*Float* oldValue)
+## *Signal* Device.PointerEvent::onMovementYChange(*Float* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'movementY'
                 defaultValue: 0
 
-ReadOnly *Float* DevicePointerEvent::deltaX
-----------------------------------------------
+## ReadOnly *Float* Device.PointerEvent::deltaX
 
-## *Signal* DevicePointerEvent::onDeltaXChange(*Float* oldValue)
+## *Signal* Device.PointerEvent::onDeltaXChange(*Float* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'deltaX'
                 defaultValue: 0
 
-ReadOnly *Float* DevicePointerEvent::deltaY
-----------------------------------------------
+## ReadOnly *Float* Device.PointerEvent::deltaY
 
-## *Signal* DevicePointerEvent::onDeltaYChange(*Float* oldValue)
+## *Signal* Device.PointerEvent::onDeltaYChange(*Float* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'deltaY'
                 defaultValue: 0
 
-*DeviceKeyboardEvent* DeviceKeyboardEvent()
--------------------------------------------
+# **Class** Device.KeyboardEvent()
 
         class DeviceKeyboardEvent extends signal.Emitter
             constructor: ->
@@ -243,44 +214,39 @@ ReadOnly *Float* DevicePointerEvent::deltaY
 
                 Object.preventExtensions @
 
-ReadOnly *Boolean* DeviceKeyboardEvent::visible
-----------------------------------------------
+## ReadOnly *Boolean* Device.KeyboardEvent::visible
 
-## *Signal* DeviceKeyboardEvent::onVisibleChange(*Boolean* oldValue)
+## *Signal* Device.KeyboardEvent::onVisibleChange(*Boolean* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'visible'
                 defaultValue: false
 
-ReadOnly *String* DeviceKeyboardEvent::key
-------------------------------------------
+## ReadOnly *String* Device.KeyboardEvent::key
 
-## *Signal* DeviceKeyboardEvent::onKeyChange(*String* oldValue)
+## *Signal* Device.KeyboardEvent::onKeyChange(*String* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'key'
                 defaultValue: ''
 
-ReadOnly *String* DeviceKeyboardEvent::text
--------------------------------------------
+## ReadOnly *String* Device.KeyboardEvent::text
 
-## *Signal* DeviceKeyboardEvent::onTextChange(*String* oldValue)
+## *Signal* Device.KeyboardEvent::onTextChange(*String* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
                 name: 'text'
                 defaultValue: ''
 
-DeviceKeyboardEvent::show()
----------------------------
+## Device.KeyboardEvent::show()
 
             show: ->
                 Impl.showDeviceKeyboard.call device
 
-DeviceKeyboardEvent::hide()
----------------------------
+## Device.KeyboardEvent::hide()
 
             hide: ->
                 Impl.hideDeviceKeyboard.call device
@@ -305,3 +271,9 @@ DeviceKeyboardEvent::hide()
         # initialize by the implementation
         Impl.initDeviceNamespace.call device
         device
+
+# Glossary
+
+- [Device](#device)
+- [Device.PointerEvent](#class-devicepointerevent)
+- [Device.KeyboardEvent](#class-devicekeyboardevent)

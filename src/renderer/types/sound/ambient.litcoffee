@@ -1,12 +1,11 @@
-AmbientSound @class
-===================
+# AmbientSound
 
-```nml
-`AmbientSound {
-`   running: true
-`   source: '/static/sounds/bg.mp3'
-`   loop: true
-`}
+```javascript
+AmbientSound {
+    running: true
+    source: '/static/sounds/bg.mp3'
+    loop: true
+}
 ```
 
     'use strict'
@@ -21,20 +20,18 @@ AmbientSound @class
 
     assert = assert.scope 'Renderer.AmbientSound'
 
+# **Class** AmbientSound
+
     module.exports = (Renderer, Impl, itemUtils) -> class AmbientSound extends itemUtils.Object
         @__name__ = 'AmbientSound'
         @__path__ = 'Renderer.AmbientSound'
 
-*AmbientSound* AmbientSound.New([*Component* component, *Object* options])
---------------------------------------------------------------------------
+## *AmbientSound* AmbientSound.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new AmbientSound
             itemUtils.Object.initialize item, component, opts
             item
-
-*AmbientSound* AmbientSound()
------------------------------
 
         constructor: ->
             super()
@@ -43,18 +40,15 @@ AmbientSound @class
             @_source = ''
             @_loop = false
 
-*Signal* AmbientSound::onStart()
---------------------------------
+## *Signal* AmbientSound::onStart()
 
         signal.Emitter.createSignal @, 'onStart'
 
-*Signal* AmbientSound::onStop()
--------------------------------
+## *Signal* AmbientSound::onStop()
 
         signal.Emitter.createSignal @, 'onStop'
 
-*Boolean* AmbientSound::running
--------------------------------
+## *Boolean* AmbientSound::running
 
 ## *Signal* AmbientSound::onRunningChange(*Boolean* oldValue)
 
@@ -85,8 +79,7 @@ AmbientSound @class
                     @onStop.emit()
                 return
 
-*String* AmbientSound::source = ''
-----------------------------------
+## *String* AmbientSound::source
 
 ## *Signal* AmbientSound::onSourceChange(*String* oldValue)
 
@@ -97,8 +90,7 @@ AmbientSound @class
             developmentSetter: (val) ->
                 assert.isString val, '::source setter ...'
 
-*Boolean* AmbientSound::loop = false
-------------------------------------
+## *Boolean* AmbientSound::loop = false
 
 ## *Signal* AmbientSound::onLoopChange(*Boolean* oldValue)
 
@@ -109,16 +101,18 @@ AmbientSound @class
             developmentSetter: (val) ->
                 assert.isBoolean val, '::loop setter ...'
 
-AmbientSound::start()
----------------------
+## AmbientSound::start()
 
         start: ->
             @running = true
             @
 
-AmbientSound::stop()
---------------------
+## AmbientSound::stop()
 
         stop: ->
             @running = false
             @
+
+# Glossary
+
+- [AmbientSound](#class-ambientsound)

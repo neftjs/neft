@@ -1,5 +1,4 @@
-Resources @engine
-=================
+# Resources
 
     'use strict'
 
@@ -9,6 +8,8 @@ Resources @engine
 
     log = log.scope 'Resources'
 
+# **Class** Resources
+
     module.exports = class Resources
         @__name__ = 'Resources'
 
@@ -17,8 +18,7 @@ Resources @engine
 
         @URI = ///^(?:rsc|resource|resources)?:\/?\/?(.*?)(?:@([0-9p]+)x)?(?:\.[a-zA-Z]+)?(?:\#[a-zA-Z0-9]+)?$///
 
-*Resources* Resources.fromJSON(*String|Object* json)
-----------------------------------------------------
+## *Resources* Resources.fromJSON(*String*|*Object* json)
 
         @fromJSON = (json) ->
             if typeof json is 'string'
@@ -35,20 +35,15 @@ Resources @engine
 
             resources
 
-*Boolean* Resources.testUri(*String* uri)
------------------------------------------
+## *Boolean* Resources.testUri(*String* uri)
 
         @testUri = (uri) ->
             assert.isString uri
             Resources.URI.test uri
 
-*Resources* Resources()
------------------------
-
         constructor: ->
 
-*Resources.Resource* Resources::getResource(*String* uri)
----------------------------------------------------------
+## *Resource* Resources::getResource(*String* uri)
 
         getResource: (uri) ->
             if typeof uri is 'string'
@@ -65,8 +60,7 @@ Resources @engine
                 chunk = chunk.slice 0, chunk.lastIndexOf('/')
             return
 
-*String* Resources::resolve(*String* uri, [*Object* request])
--------------------------------------------------------------
+## *String* Resources::resolve(*String* uri, [*Object* request])
 
         resolve: (uri, req) ->
             rsc = @getResource uri
@@ -80,10 +74,13 @@ Resources @engine
                 path = rsc.resolve '', name
             path and @resolve(path) or path
 
-*Object* Resources::toJSON()
-----------------------------
+## *Object* Resources::toJSON()
 
         toJSON: ->
             utils.merge
                 __name__: @constructor.__name__
             , @
+
+# Glossary
+
+- [Resources](#class-resources)

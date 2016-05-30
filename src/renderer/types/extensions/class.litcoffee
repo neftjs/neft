@@ -1,5 +1,4 @@
-Class @modifier
-===============
+# Class
 
     'use strict'
 
@@ -45,19 +44,17 @@ Class @modifier
                 @_bindings[prop] = true
                 return
 
+# **Class** Class : *Renderer.Extension*
+
         class Class extends Renderer.Extension
             @__name__ = 'Class'
 
-*Class* Class.New([*Component* component, *Object* options])
-------------------------------------------------------------
+## *Class* Class.New([*Component* component, *Object* options])
 
             @New = (component, opts) ->
                 item = new Class
                 itemUtils.Object.initialize item, component, opts
                 item
-
-*Class* Class()
----------------
 
             lastUid = 0
             constructor: ->
@@ -71,10 +68,9 @@ Class @modifier
                 @_document = null
                 @_children = null
 
-*String* Class::name
---------------------
+## *String* Class::name
 
-This property is used in the [Item::classes][renderer/Item::classes] list
+This property is used in the *Item*::classes list
 to identify various classes.
 
 ## *Signal* Class::onNameChange(*String* oldValue)
@@ -107,14 +103,13 @@ to identify various classes.
                             @enable()
                     return
 
-*Renderer.Item* Class::target
------------------------------
+## *Item* Class::target
 
-Reference to the [Item][renderer/Item] on which this class has effects.
+Reference to the *Item* on which this class has effects.
 
-If state is created inside the [Item][renderer/Item], this property is set automatically.
+If state is created inside the *Item*, this property is set automatically.
 
-## *Signal* Class::onTargetChange(*Renderer.Item* oldValue)
+## *Signal* Class::onTargetChange(*Item* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
@@ -150,8 +145,7 @@ If state is created inside the [Item][renderer/Item], this property is set autom
                             @enable()
                     return
 
-*Object* Class::changes
------------------------
+## *Object* Class::changes
 
 This objects contains all properties to change on the target item.
 
@@ -172,8 +166,7 @@ It accepts bindings and listeners as well.
                         changes.setAttribute prop, val
                 return
 
-*Integer* Class::priority = 0
------------------------------
+## *Integer* Class::priority = `0`
 
 ## *Signal* Class::onPriorityChange(*Integer* oldValue)
 
@@ -188,27 +181,26 @@ It accepts bindings and listeners as well.
                     updatePriorities @
                     return
 
-*Boolean* Class::when
----------------------
+## *Boolean* Class::when
 
 Indicates whether the class is active or not.
 
 When it's `true`, this state is appended on the
-end of the [Item::classes][renderer/Item::classes] list.
+end of the *Item*::classes list.
 
 Mostly used with bindings.
 
-```nml
-`Grid {
-`   columns: 2
-`   // reduce to one column if the view width is lower than 500 pixels
-`   Class {
-`       when: view.width < 500
-`       changes: {
-`           columns: 1
-`       }
-`   }
-`}
+```javascript
+Grid {
+    columns: 2
+    // reduce to one column if the view width is lower than 500 pixels
+    Class {
+        when: view.width < 500
+        changes: {
+            columns: 1
+        }
+    }
+}
 ```
 
 ## *Signal* Class::onWhenChange(*Boolean* oldValue)
@@ -244,8 +236,7 @@ Mostly used with bindings.
                 updateTargetClass saveAndDisableClass, @_target, @
                 return
 
-*Object* Class::children
-------------------------
+## *Object* Class::children
 
             utils.defineProperty @::, 'children', null, ->
                 @_children ||= new ChildrenObject(@)
@@ -267,15 +258,13 @@ Mostly used with bindings.
 
             class ChildrenObject
 
-*Integer* Class::children.length = 0
-------------------------------------
+### *Integer* Class::children.length = `0`
 
                 constructor: (ref) ->
                     @_ref = ref
                     @length = 0
 
-*Object* Class::children.append(*Object* value)
------------------------------------------------
+### *Object* Class::children.append(*Object* value)
 
                 append: (val) ->
                     assert.instanceOf val, itemUtils.Object
@@ -291,8 +280,7 @@ Mostly used with bindings.
 
                     val
 
-*Object* Class::children.pop(*Integer* index)
----------------------------------------------
+### *Object* Class::children.pop(*Integer* index)
 
                 pop: (i=@length-1) ->
                     assert.operator i, '>=', 0
@@ -670,8 +658,7 @@ Mostly used with bindings.
                 runQueue target
             return
 
-*ClassDocument* Class::document
--------------------------------
+## *Object* Class::document
 
         class ClassChildDocument
             constructor: (parent) ->
@@ -683,7 +670,7 @@ Mostly used with bindings.
         class ClassDocument extends itemUtils.DeepObject
             @__name__ = 'ClassDocument'
 
-## *Signal* Class::onDocumentChange(*ClassDocument* document)
+## *Signal* Class::onDocumentChange(*Object* document)
 
             itemUtils.defineProperty
                 constructor: Class
@@ -699,9 +686,6 @@ Mostly used with bindings.
                     @reloadQuery()
                 return
 
-*ClassDocument* ClassDocument()
--------------------------------
-
             constructor: (ref) ->
                 @_query = ''
                 @_classesInUse = []
@@ -713,18 +697,15 @@ Mostly used with bindings.
                 ref.onTargetChange onTargetChange, @
                 onTargetChange.call @, ref._target
 
-*String* ClassDocument::query
------------------------------
+## *String* Class::document.query
 
-## *Signal* ClassDocument::onQueryChange(*String* oldValue)
+## *Signal* Class::document.onQueryChange(*String* oldValue)
 
-*Signal* ClassDocument::onNodeAdd(*Document.Element* node)
-----------------------------------------------------------
+## *Signal* Class::document.onNodeAdd(*Element* node)
 
             signal.Emitter.createSignal @, 'onNodeAdd'
 
-*Signal* ClassDocument::onNodeRemove(*Document.Element* node)
--------------------------------------------------------------
+## *Signal* Class::document.onNodeRemove(*Element* node)
 
             signal.Emitter.createSignal @, 'onNodeRemove'
 
@@ -843,10 +824,9 @@ Mostly used with bindings.
                     watcher.onRemove onNodeRemove, @
                 return
 
-*List* Item::classes
---------------------
+## *List* Item::classes
 
-Classs at the end of the list have the highest priority.
+Classes at the end of the list have the highest priority.
 
 This property has a setter, which accepts a string and an array of strings.
 
@@ -931,3 +911,7 @@ This property has a setter, which accepts a string and an array of strings.
                     return
 
         Class
+
+# Glossary
+
+- [Class](#class-class)

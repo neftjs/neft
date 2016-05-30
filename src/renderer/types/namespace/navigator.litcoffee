@@ -1,5 +1,4 @@
-Navigator @namespace
-====================
+# Navigator
 
     'use strict'
 
@@ -9,10 +8,6 @@ Navigator @namespace
 
     module.exports = (Renderer, Impl, itemUtils) ->
         class Navigator extends signal.Emitter
-
-*Object* Navigator
-------------------
-
             constructor: ->
                 super()
                 @_impl = bindings: null
@@ -22,43 +17,39 @@ Navigator @namespace
 
                 Object.preventExtensions @
 
-*Boolean* Navigator.language = 'en'
------------------------------------
+## *Boolean* Navigator.language = `'en'`
 
-```nml
-`Text {
-`   text: "Your language: " + Navigator.language
-`   font.pixelSize: 30
-`}
+```javascript
+Text {
+    text: 'Your language: ' + Navigator.language
+    font.pixelSize: 30
+}
 ```
 
             utils.defineProperty @::, 'language', null, ->
                 @_language
             , null
 
-*Boolean* Navigator.browser = true
-----------------------------------
+## *Boolean* Navigator.browser = `true`
 
             utils.defineProperty @::, 'browser', null, ->
                 @_browser
             , null
 
-*Boolean* Navigator.native = false
-----------------------------------
+## *Boolean* Navigator.native = `false`
 
-```style
-`Text {
-`   text: Navigator.native ? "Native" : "Browser"
-`   font.pixelSize: 30
-`}
+```javascript
+Text {
+    text: Navigator.native ? 'Native' : 'Browser'
+    font.pixelSize: 30
+}
 ```
 
             utils.defineProperty @::, 'native', null, ->
                 not @_browser
             , null
 
-*Boolean* Navigator.online = true
----------------------------------
+## *Boolean* Navigator.online = `true`
 
 ## *Signal* Navigator.onOnlineChange(*Boolean* oldValue)
 
@@ -71,3 +62,7 @@ Navigator @namespace
         navigator = new Navigator
         Impl.initNavigatorNamespace?.call navigator
         navigator
+
+# Glossary
+
+- [Navigator](#navigator)

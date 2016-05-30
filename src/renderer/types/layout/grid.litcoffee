@@ -1,17 +1,15 @@
-Grid @class
-===========
+# Grid
 
-```nml
-`Grid {
-`   spacing.column: 15
-`   spacing.row: 5
-`   columns: 2
-`
-`   Rectangle { color: 'blue'; width: 60; height: 50; }
-`   Rectangle { color: 'green'; width: 20; height: 70; }
-`   Rectangle { color: 'red'; width: 50; height: 30; }
-`   Rectangle { color: 'yellow'; width: 20; height: 20; }
-`}
+```javascript
+Grid {
+    spacing.column: 15
+    spacing.row: 5
+    columns: 2
+    Rectangle { color: 'blue'; width: 60; height: 50; }
+    Rectangle { color: 'green'; width: 20; height: 70; }
+    Rectangle { color: 'red'; width: 50; height: 30; }
+    Rectangle { color: 'yellow'; width: 20; height: 20; }
+}
 ```
 
     'use strict'
@@ -19,21 +17,19 @@ Grid @class
     assert = require 'src/assert'
     utils = require 'src/utils'
 
+# **Class** Grid : *Item*
+
     module.exports = (Renderer, Impl, itemUtils) -> class Grid extends Renderer.Item
         @__name__ = 'Grid'
         @__path__ = 'Renderer.Grid'
 
-*Grid* Grid.New([*Component* component, *Object* options])
-----------------------------------------------------------
+## *Grid* Grid.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
             item = new Grid
             itemUtils.Object.initialize item, component, opts
             item.effectItem = item
             item
-
-*Grid* Grid() : *Renderer.Item*
--------------------------------
 
         constructor: ->
             super()
@@ -54,16 +50,14 @@ Grid @class
             @_effectItem = val
             Impl.setGridEffectItem.call @, val, oldVal
 
-*Margin* Grid::padding
-----------------------
+## *Item.Margin* Grid::padding
 
-## *Signal* Grid::onPaddingChange(*Margin* padding)
+## *Signal* Grid::onPaddingChange(*Item.Margin* padding)
 
         Renderer.Item.createMargin @,
             propertyName: 'padding'
 
-*Integer* Grid::columns = 2
----------------------------
+## *Integer* Grid::columns = `2`
 
 ## *Signal* Grid::onColumnsChange(*Integer* oldValue)
 
@@ -79,10 +73,9 @@ Grid @class
                     val = 1
                 _super.call @, val
 
-*Integer* Grid::rows = Infinity
--------------------------------
+## *Number* Grid::rows = `Infinity`
 
-## *Signal* Grid::onRowsChange(*Integer* oldValue)
+## *Signal* Grid::onRowsChange(*Number* oldValue)
 
         itemUtils.defineProperty
             constructor: @
@@ -96,22 +89,19 @@ Grid @class
                     val = 1
                 _super.call @, val
 
-*Spacing* Grid::spacing
------------------------
+## *Item.Spacing* Grid::spacing
 
-## *Signal* Grid::onSpacingChange(*Spacing* oldValue)
+## *Signal* Grid::onSpacingChange(*Item.Spacing* oldValue)
 
         Renderer.Item.createSpacing @
 
-*Alignment* Grid::alignment
----------------------------
+## *Item.Alignment* Grid::alignment
 
-## *Signal* Grid::onAlignmentChange(*Alignment* oldValue)
+## *Signal* Grid::onAlignmentChange(*Item.Alignment* oldValue)
 
         Renderer.Item.createAlignment @
 
-*Boolean* Grid::includeBorderMargins = false
---------------------------------------------
+## *Boolean* Grid::includeBorderMargins = `false`
 
 ## *Signal* Grid::onIncludeBorderMarginsChange(*Boolean* oldValue)
 
@@ -122,3 +112,7 @@ Grid @class
             implementation: Impl.setGridIncludeBorderMargins
             developmentSetter: (val) ->
                 assert.isBoolean val
+
+# Glossary
+
+- [Grid](#class-grid)

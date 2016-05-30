@@ -1,5 +1,4 @@
-PropertyAnimation @modifier
-===========================
+# PropertyAnimation
 
     'use strict'
 
@@ -9,15 +8,13 @@ PropertyAnimation @modifier
 
     log = log.scope 'Renderer', 'PropertyAnimation'
 
+# **Class** PropertyAnimation : *Animation*
+
     module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
         @__name__ = 'PropertyAnimation'
 
-*PropertyAnimation* PropertyAnimation() : *Renderer.Animation*
---------------------------------------------------------------
-
         constructor: ->
             super()
-            @_target = null
             @_property = ''
             @_autoFrom = true
             @_duration = 250
@@ -36,11 +33,6 @@ PropertyAnimation @modifier
             _super.call @, val
             return
 
-*Renderer.Item* PropertyAnimation::target
------------------------------------------
-
-## *Signal* PropertyAnimation::onTargetChange(*Renderer.Item* oldValue)
-
         itemUtils.defineProperty
             constructor: @
             name: 'target'
@@ -58,8 +50,7 @@ PropertyAnimation @modifier
                 _super.call @, val
                 return
 
-*String* PropertyAnimation::property
-------------------------------------
+## *String* PropertyAnimation::property
 
 ## *Signal* PropertyAnimation::onPropertyChange(*String* oldValue)
 
@@ -71,8 +62,7 @@ PropertyAnimation @modifier
             developmentSetter: (val) ->
                 assert.isString val
 
-*Float* PropertyAnimation::duration = 250
------------------------------------------
+## *Float* PropertyAnimation::duration = `250`
 
 ## *Signal* PropertyAnimation::onDurationChange(*Float* oldValue)
 
@@ -90,8 +80,7 @@ PropertyAnimation @modifier
                     _super.call @, val
                 return
 
-*Float* PropertyAnimation::startDelay = 0
------------------------------------------
+## *Float* PropertyAnimation::startDelay = `0`
 
 ## *Signal* PropertyAnimation::onStartDelayChange(*Float* oldValue)
 
@@ -103,8 +92,7 @@ PropertyAnimation @modifier
             developmentSetter: (val) ->
                 assert.isFloat val
 
-*Float* PropertyAnimation::loopDelay = 0
-----------------------------------------
+## *Float* PropertyAnimation::loopDelay = `0`
 
 ## *Signal* PropertyAnimation::onLoopDelayChange(*Float* oldValue)
 
@@ -116,8 +104,7 @@ PropertyAnimation @modifier
             developmentSetter: (val) ->
                 assert.isFloat val
 
-*Float* PropertyAnimation::delay = 0
-------------------------------------
+## *Float* PropertyAnimation::delay = `0`
 
 ## *Signal* PropertyAnimation::onDelayChange(*Float* oldValue)
 
@@ -138,8 +125,7 @@ PropertyAnimation @modifier
                 _super.call @, val
                 return
 
-*Boolean* PropertyAnimation::updateData = false
------------------------------------------------
+## *Boolean* PropertyAnimation::updateData = `false`
 
 ## *Signal* PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
 
@@ -156,8 +142,7 @@ PropertyAnimation @modifier
                 _super.call @, val
                 return
 
-*Boolean* PropertyAnimation::updateProperty = false
----------------------------------------------------
+## *Boolean* PropertyAnimation::updateProperty = `false`
 
 ## *Signal* PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
 
@@ -173,8 +158,7 @@ PropertyAnimation @modifier
                 _super.call @, val
                 return
 
-*Any* PropertyAnimation::from
------------------------------
+## *Any* PropertyAnimation::from
 
 ## *Signal* PropertyAnimation::onFromChange(*Any* oldValue)
 
@@ -187,8 +171,7 @@ PropertyAnimation @modifier
                 _super.call @, val
                 return
 
-*Any* PropertyAnimation::to
----------------------------
+## *Any* PropertyAnimation::to
 
 ## *Signal* PropertyAnimation::onToChange(*Any* oldValue)
 
@@ -197,15 +180,13 @@ PropertyAnimation @modifier
             name: 'to'
             implementation: Impl.setPropertyAnimationTo
 
-ReadOnly *Float* PropertyAnimation::progress = 0
-------------------------------------------------
+## ReadOnly *Float* PropertyAnimation::progress = `0`
 
         utils.defineProperty @::, 'progress', null, ->
             Impl.getPropertyAnimationProgress.call @
         , null
 
-*Easing* PropertyAnimation::easing
-----------------------------------
+## *Easing* PropertyAnimation::easing
 
 ## *Signal* PropertyAnimation::onEasingChange(*Easing* value)
 
@@ -219,16 +200,14 @@ ReadOnly *Float* PropertyAnimation::progress = 0
             else if not val
                 @easing.type = 'Linear'
 
-*Easing* Easing()
------------------
+# **Class** Easing
 
         class Easing extends itemUtils.DeepObject
             constructor: (ref) ->
                 @_type = 'Linear'
                 super ref
 
-*String* Easing::type = 'Linear'
---------------------------------
+## *String* Easing::type = `'Linear'`
 
 Supported easing functions:
 Linear, InQuad, OutQuad, InOutQuad, InCubic, OutCubic,
@@ -273,3 +252,8 @@ InOutBounce.
                         type = 'Linear'
                     _super.call @, type
                     return
+
+# Glossary
+
+- [PropertyAnimation](#class-propertyanimation)
+- [Easing](#class-easing)

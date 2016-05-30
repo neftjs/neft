@@ -1,5 +1,4 @@
-Animation @modifier
-===================
+# Animation
 
     'use strict'
 
@@ -7,11 +6,10 @@ Animation @modifier
     assert = require 'src/assert'
     signal = require 'src/signal'
 
+# **Class** Animation : *Renderer.Extension*
+
     module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
         @__name__ = 'Animation'
-
-*Animation* Animation()
------------------------
 
         constructor: ->
             super()
@@ -19,25 +17,13 @@ Animation @modifier
             @_updatePending = false
             @_paused = false
 
-*Boolean* Animation::when
--------------------------
-
-## *Signal* Animation::onWhenChange(*Boolean* oldValue)
-
-*Signal* Animation::onStart()
------------------------------
+## *Signal* Animation::onStart()
 
         signal.Emitter.createSignal @, 'onStart'
 
-*Signal* Animation::onStop()
-----------------------------
+## *Signal* Animation::onStop()
 
         signal.Emitter.createSignal @, 'onStop'
-
-*Boolean* Animation::running
-----------------------------
-
-## *Signal* Animation::onRunningChange(*Boolean* oldValue)
 
         itemUtils.defineProperty
             constructor: @
@@ -63,8 +49,7 @@ Animation @modifier
                     @onStop.emit()
                 return
 
-*Boolean* Animation::paused
----------------------------
+## *Boolean* Animation::paused
 
 ## *Signal* Animation::onPausedChange(*Boolean* oldValue)
 
@@ -85,8 +70,7 @@ Animation @modifier
                     Impl.resumeAnimation.call @
                 return
 
-*Boolean* Animation::loop
--------------------------
+## *Boolean* Animation::loop
 
 ## *Signal* Animation::onLoopChange(*Boolean* oldValue)
 
@@ -97,37 +81,32 @@ Animation @modifier
             developmentSetter: (val) ->
                 assert.isBoolean val
 
-ReadOnly *Boolean* Animation::updatePending
--------------------------------------------
+## ReadOnly *Boolean* Animation::updatePending
 
         utils.defineProperty @::, 'updatePending', null, ->
             @_updatePending
         , null
 
-Animation::start()
-------------------
+## Animation::start()
 
         start: ->
             @running = true
             @
 
-Animation::stop()
------------------
+## Animation::stop()
 
         stop: ->
             @running = false
             @
 
-Animation::pause()
-------------------
+## Animation::pause()
 
         pause: ->
             if @running
                 @paused = true
             @
 
-Animation::resume()
--------------------
+## Animation::resume()
 
         resume: ->
             @paused = false
@@ -140,3 +119,7 @@ Animation::resume()
         disable: ->
             @running = false
             super()
+
+# Glossary
+
+- [Animation](#class-animation)
