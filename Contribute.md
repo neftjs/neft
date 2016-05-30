@@ -22,12 +22,9 @@ If you want to change one of the Neft modules, fork it. If you need to test your
 ## Testing
 
 Each *Pull Request* is automatically tested by:
-- [Travis CI](https://travis-ci.org/Neft-io/neft) - unit tests,
-- [CodeClimate](https://codeclimate.com/github/Neft-io/neft) - lint statistics,
-- [Coveralls](https://coveralls.io/github/Neft-io/neft) - code coverage.
-
-Each *Pull Request* on the [main repository](https://github.com/Neft-io/neft) is additionally tested by:
 - [Travis CI](https://travis-ci.org/Neft-io/neft) - all unit tests,
+- [CodeClimate](https://codeclimate.com/github/Neft-io/neft) - lint statistics,
+- [Coveralls](https://coveralls.io/github/Neft-io/neft) - code coverage,
 - [AppVeyor](https://ci.appveyor.com/project/KrysKruk/neft) - all unit tests running on Windows,
 - [SauceLabs](https://saucelabs.com) - all unit tests running on all supported platforms and various devices; reported by *Travis CI*.
 
