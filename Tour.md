@@ -1,7 +1,7 @@
 > [Wiki](Home) ▸ **Tour**
 
 - [[First Application|First Application - Tour]],
-- [[App Structure|App Structure - Tour]],
+- [[Application Structure|Application Structure - Tour]],
 - [[Data Binding|Data Binding - Tour]],
 - [[Routing|Routing - Tour]],
 - [[Views|Views - Tour]],
