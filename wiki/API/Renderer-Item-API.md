@@ -7,15 +7,15 @@
 ## Nested APIs
 
 * [[Alignment|Renderer-Item.Alignment-API]]
-* [[Keys|Renderer-Item.Keys-API]]
-* [[Document|Renderer-Item.Document-API]]
 * [[Anchors|Renderer-Item.Anchors-API]]
+* [[Document|Renderer-Item.Document-API]]
+* [[Keys|Renderer-Item.Keys-API]]
 * [[Layout|Renderer-Item.Layout-API]]
-* [[Pointer|Renderer-Item.Pointer-API]]
 * [[Margin|Renderer-Item.Margin-API]]
+* [[Pointer|Renderer-Item.Pointer-API]]
 * [[Spacing|Renderer-Item.Spacing-API]]
-* [[Native|Renderer-Native-API]]
 * [[Image|Renderer-Image-API]]
+* [[Native|Renderer-Native-API]]
 * [[Text|Renderer-Text-API]]
   * [[Text.Font|Renderer-Item.Text.Font-API]]
 * [[TextInput|Renderer-TextInput-API]]
@@ -78,7 +78,7 @@
   * [document](#document)
 * [Glossary](#glossary)
 
-# **Class** Item
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Item
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#class-item)
 
@@ -179,7 +179,7 @@ Rectangle {
 ###children.layout
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::children.layout</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd></dl>
 Item used to position children items.
-Can be e.g. *Flow*, *Grid* etc.
+Can be e.g. *Flow*, [Grid](/Neft-io/neft/wiki/Renderer-Grid-API#class-grid) etc.
 
 ###children.onLayoutChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::children.onLayoutChange(&#x2A;Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Parameters</dt><dd><ul><li>oldValue — <a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>

@@ -109,7 +109,7 @@ Files from the *views* folder as the [Document][document/File] instances.
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#views)
 
 resources
-<dl><dt>Syntax</dt><dd><code>&#x2A;Resources&#x2A; app.resources</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Resources</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Resources&#x2A; app.resources</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Resources-API#class-resources">Resources</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/index.litcoffee#resources)
 
 onReady

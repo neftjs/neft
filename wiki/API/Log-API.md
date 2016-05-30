@@ -23,7 +23,7 @@ const { log } = Neft;
     * [end](#end)
     * [scope](#scope)
 
-## **Class** Log
+## *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Log
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#class-log)
 

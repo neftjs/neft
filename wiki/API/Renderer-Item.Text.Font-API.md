@@ -16,7 +16,7 @@
   * [*Boolean* Font.italic = `false`](#boolean-fontitalic--false)
 * [Glossary](#glossary)
 
-# **Class** Font
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Font
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/text/font.litcoffee#class-font)
 

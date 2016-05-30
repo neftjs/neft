@@ -25,7 +25,7 @@
   * [toString](#tostring)
 * [Glossary](#glossary)
 
-# **Class** Request
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Request
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#class-request)
 

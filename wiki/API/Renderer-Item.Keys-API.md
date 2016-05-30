@@ -30,7 +30,7 @@ Rectangle {
   * [event](#event)
 * [Glossary](#glossary)
 
-# **Class** Keys
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Keys
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#class-keys)
 
@@ -42,8 +42,8 @@ Rectangle {
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Keys.focusedItem</code></dd><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#focuseditem)
 
-##**Class** Keys.Event
-<dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Keys.Event : &#x2A;Device.KeyboardEvent&#x2A;</code></dd><dt>Extends</dt><dd><i>Device.KeyboardEvent</i></dd></dl>
+##*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Keys.Event
+<dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Keys.Event : &#x2A;Device.KeyboardEvent&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#class-devicekeyboardevent">Device.KeyboardEvent</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/keys.litcoffee#class-keysevent)
 
 ##onPress

@@ -53,7 +53,7 @@ const { assert } = Neft;
 <dl><dt>Syntax</dt><dd><code>assert(&#x2A;Boolean&#x2A; expression, [&#x2A;String&#x2A; message])</code></dd><dt>Parameters</dt><dd><ul><li>expression — <i>Boolean</i></li><li>message — <i>String</i> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/assert/index.litcoffee#assert)
 
-##**Class** assert.AssertionError
+##*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* assert.AssertionError
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; assert.AssertionError()</code></dd></dl>
 Access it with:
 ```javascript

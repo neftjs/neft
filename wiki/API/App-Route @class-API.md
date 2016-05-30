@@ -5,7 +5,7 @@ Route
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/route.litcoffee#route)
 
 getTemplateView
-<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route.getTemplateView(&#x2A;String&#x2A; viewName)</code></dd><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li>viewName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route.getTemplateView(&#x2A;String&#x2A; viewName)</code></dd><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li>viewName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Document-Document-API#class-document">Document</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/route.litcoffee#gettemplateview)
 
 Route
@@ -44,6 +44,6 @@ toText
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/route.litcoffee#totext)
 
 toHTML
-<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route::toHTML()</code></dd><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route::toHTML()</code></dd><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Document-Document-API#class-document">Document</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/app/route.litcoffee#tohtml)
 

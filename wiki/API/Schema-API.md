@@ -13,14 +13,14 @@ const { Schema } = Neft;
 
 ## Nested APIs
 
+* [[Max Validator|Schema-Max Validator-API]]
 * [[Array Validator|Schema-Array Validator-API]]
 * [[Min Validator|Schema-Min Validator-API]]
-* [[Optional Validator|Schema-Optional Validator-API]]
 * [[Object Validator|Schema-Object Validator-API]]
-* [[Max Validator|Schema-Max Validator-API]]
-* [[Type Validator|Schema-Type Validator-API]]
+* [[Optional Validator|Schema-Optional Validator-API]]
 * [[Options Validator|Schema-Options Validator-API]]
 * [[RegExp Validator|Schema-RegExp Validator-API]]
+* [[Type Validator|Schema-Type Validator-API]]
 
 ## Table of contents
 * [Schema](#schema)
@@ -31,7 +31,7 @@ const { Schema } = Neft;
     * [validate](#validate)
       * [Nested properties](#nested-properties)
 
-##**Class** SchemaError
+##*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* SchemaError
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; SchemaError()</code></dd></dl>
 Raised by `Schema::validate()` if given data doesn't pass the schema.
 
@@ -43,7 +43,7 @@ var SchemaError = Schema.Error;
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/index.litcoffee#class-schemaerror)
 
-## **Class** Schema
+## *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Schema
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/index.litcoffee#class-schema)
 

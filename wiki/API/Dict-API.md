@@ -29,7 +29,7 @@ const { Dict } = Neft
     * [Iterate over a dict](#iterate-over-a-dict)
 * [Glossary](#glossary)
 
-# **Class** Dict
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Dict
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/dict/index.litcoffee#class-dict)
 
