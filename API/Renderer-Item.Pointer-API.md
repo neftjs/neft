@@ -34,7 +34,7 @@ Rectangle {
   * [event](#event)
 * [Glossary](#glossary)
 
-# **Class** Pointer
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Pointer
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#class-pointer)
 
@@ -80,8 +80,8 @@ Whether the pointer is currently under the item.
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Pointer::onHoverChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Pointer</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/pointer.litcoffee#onhoverchange)
 
-##**Class** Pointer.Event
-<dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Pointer.Event : &#x2A;Device.PointerEvent&#x2A;</code></dd><dt>Extends</dt><dd><i>Device.PointerEvent</i></dd></dl>
+##*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Pointer.Event
+<dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Pointer.Event : &#x2A;Device.PointerEvent&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#class-devicepointerevent">Device.PointerEvent</a></dd></dl>
 Events order:
  1. Press
  2. Enter

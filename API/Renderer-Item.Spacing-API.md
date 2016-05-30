@@ -12,7 +12,7 @@
   * [valueOf](#valueof)
 * [Glossary](#glossary)
 
-# **Class** Spacing
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Spacing
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/spacing.litcoffee#class-spacing)
 

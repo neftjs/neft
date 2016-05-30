@@ -16,7 +16,7 @@
   * [toString](#tostring)
 * [Glossary](#glossary)
 
-# **Class** Handler
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Handler
 
 Represents a callback function called on the request.
 

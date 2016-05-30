@@ -28,7 +28,7 @@
   * [isSucceed](#issucceed)
 * [Glossary](#glossary)
 
-# **Class** Response
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Response
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#class-response)
 

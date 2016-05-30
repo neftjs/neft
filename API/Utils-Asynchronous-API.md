@@ -47,7 +47,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/async.litcoffee#foreach)
 
-##**Class** Stack
+##*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Stack
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Stack()</code></dd></dl>
 Stores functions and runs them synchronously or asynchronously.
 

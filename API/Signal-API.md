@@ -78,7 +78,7 @@ Returns `true` if the given signal has no listeners.
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/signal/index.litcoffee#isempty)
 
-# **Class** Signal
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Signal
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/signal/index.litcoffee#class-signal)
 

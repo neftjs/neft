@@ -15,10 +15,10 @@ var Networking = require('networking');
 
 ## Nested APIs
 
+* [[Request|Networking-Request-API]]
 * [[Handler|Networking-Handler-API]]
 * [[Response|Networking-Response-API]]
   * [[Response Error|Networking-Response Error-API]]
-* [[Request|Networking-Request-API]]
 * [[Uri|Networking-Uri-API]]
 
 ## Table of contents
@@ -43,7 +43,7 @@ var Networking = require('networking');
     * [Requests to the server](#requests-to-the-server)
 * [Glossary](#glossary)
 
-# **Class** Networking
+# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Networking
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/index.litcoffee#class-networking)
 
