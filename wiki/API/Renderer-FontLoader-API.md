@@ -25,7 +25,7 @@ FontLoader {
   * [source](#source)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* FontLoader
+# **Class** FontLoader
 
 Class used to load custom fonts.
 

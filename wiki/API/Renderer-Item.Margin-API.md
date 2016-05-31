@@ -7,18 +7,18 @@
 ## Table of contents
 * [Margin](#margin)
 * [**Class** Margin](#class-margin)
-  * [*Float* Margin::left = `0`](#float-marginleft--0)
-  * [*Float* Margin::top = `0`](#float-margintop--0)
-  * [*Float* Margin::right = `0`](#float-marginright--0)
-  * [*Float* Margin::bottom = `0`](#float-marginbottom--0)
-  * [*Float* Margin::horizontal = `0`](#float-marginhorizontal--0)
+  * [left](#left)
+  * [top](#top)
+  * [right](#right)
+  * [bottom](#bottom)
+  * [horizontal](#horizontal)
   * [onHorizontalChange](#onhorizontalchange)
-  * [*Float* Margin::vertical = `0`](#float-marginvertical--0)
+  * [vertical](#vertical)
   * [onVerticalChange](#onverticalchange)
   * [valueOf](#valueof)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Margin
+# **Class** Margin
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#class-margin)
 
@@ -49,40 +49,32 @@ Column {
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#class-margin)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Margin::left = `0`
+##left
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Margin::left = `0`</code></dd><dt>Prototype property of</dt><dd><i>Margin</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#left)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Margin::onLeftChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
+##top
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Margin::top = `0`</code></dd><dt>Prototype property of</dt><dd><i>Margin</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#top)
 
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#float-marginleft--0-signal-marginonleftchangefloat-oldvalue)
+##right
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Margin::right = `0`</code></dd><dt>Prototype property of</dt><dd><i>Margin</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#right)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Margin::top = `0`
+##bottom
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Margin::bottom = `0`</code></dd><dt>Prototype property of</dt><dd><i>Margin</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#bottom)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Margin::onTopChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#float-margintop--0-signal-marginontopchangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Margin::right = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Margin::onRightChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#float-marginright--0-signal-marginonrightchangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Margin::bottom = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Margin::onBottomChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#float-marginbottom--0-signal-marginonbottomchangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Margin::horizontal = `0`
-
+##horizontal
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Margin::horizontal = `0`</code></dd><dt>Prototype property of</dt><dd><i>Margin</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 Sum of the left and right margin.
 
 ##onHorizontalChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Margin::onHorizontalChange(&#x2A;Float&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><i>Margin</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/margin.litcoffee#onhorizontalchange)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Margin::vertical = `0`
-
+##vertical
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Margin::vertical = `0`</code></dd><dt>Prototype property of</dt><dd><i>Margin</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 Sum of the top and bottom margin.
 
 ##onVerticalChange

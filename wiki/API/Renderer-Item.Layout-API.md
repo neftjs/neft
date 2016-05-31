@@ -7,28 +7,28 @@
 ## Table of contents
 * [Layout](#layout)
 * [**Class** Layout](#class-layout)
-  * [*Boolean* Layout::enabled = `true`](#boolean-layoutenabled--true)
-  * [*Boolean* Layout::fillWidth = `false`](#boolean-layoutfillwidth--false)
-  * [fillHeight](#fillheight)
+  * [enabled](#enabled)
+  * [fillWidth](#fillwidth)
+  * [*Boolean* Layout::fillHeight = false](#boolean-layoutfillheight--false)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Layout
+# **Class** Layout
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/layout.litcoffee#class-layout)
 
-## *Boolean* Layout::enabled = `true`
+##enabled
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Layout::enabled = `true`</code></dd><dt>Prototype property of</dt><dd><i>Layout</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/layout.litcoffee#enabled)
 
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/layout.litcoffee#boolean-layoutenabled--true)
+##fillWidth
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Layout::fillWidth = `false`</code></dd><dt>Prototype property of</dt><dd><i>Layout</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/layout.litcoffee#fillwidth)
 
-## *Boolean* Layout::fillWidth = `false`
+## *Boolean* Layout::fillHeight = false
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Layout::onFillWidthChange(*Boolean* oldValue)
+## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Layout::onFillHeightChange(*Boolean* oldValue)
 
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/layout.litcoffee#boolean-layoutfillwidth--false-signal-layoutonfillwidthchangeboolean-oldvalue)
-
-##fillHeight
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Layout::fillHeight = false</code></dd><dt>Prototype property of</dt><dd><i>Layout</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/layout.litcoffee#fillheight)
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/layout.litcoffee#boolean-layoutfillheight--false-signal-layoutonfillheightchangeboolean-oldvalue)
 
 # Glossary
 

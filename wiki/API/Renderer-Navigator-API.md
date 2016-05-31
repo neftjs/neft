@@ -6,14 +6,14 @@
 
 ## Table of contents
 * [Navigator](#navigator)
-  * [*Boolean* Navigator.language = `'en'`](#boolean-navigatorlanguage--en)
-  * [*Boolean* Navigator.browser = `true`](#boolean-navigatorbrowser--true)
-  * [*Boolean* Navigator.native = `false`](#boolean-navigatornative--false)
-  * [*Boolean* Navigator.online = `true`](#boolean-navigatoronline--true)
+  * [language](#language)
+  * [browser](#browser)
+  * [native](#native)
+  * [online](#online)
 * [Glossary](#glossary)
 
-## *Boolean* Navigator.language = `'en'`
-
+##language
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Navigator.language = `'en'`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Navigator-API#navigator">Navigator</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>'en'</code></dd></dl>
 ```javascript
 Text {
     text: 'Your language: ' + Navigator.language
@@ -21,14 +21,14 @@ Text {
 }
 ```
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorlanguage--en)
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#language)
 
-## *Boolean* Navigator.browser = `true`
+##browser
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Navigator.browser = `true`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Navigator-API#navigator">Navigator</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#browser)
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorbrowser--true)
-
-## *Boolean* Navigator.native = `false`
-
+##native
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Navigator.native = `false`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Navigator-API#navigator">Navigator</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 ```javascript
 Text {
     text: Navigator.native ? 'Native' : 'Browser'
@@ -36,13 +36,11 @@ Text {
 }
 ```
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatornative--false)
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#native)
 
-## *Boolean* Navigator.online = `true`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Navigator.onOnlineChange(*Boolean* oldValue)
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatoronline--true-signal-navigatorononlinechangeboolean-oldvalue)
+##online
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Navigator.online = `true`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Navigator-API#navigator">Navigator</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/navigator.litcoffee#online)
 
 # Glossary
 

@@ -31,7 +31,7 @@ const { List } = Neft;
   * [toArray](#toarray)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* List
+# **Class** List
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/list/index.litcoffee#class-list)
 

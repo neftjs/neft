@@ -6,12 +6,12 @@
 
 ## Table of contents
 * [Device](#device)
-  * [*Boolean* Device.platform = `'Unix'`](#boolean-deviceplatform--unix)
-  * [*Boolean* Device.desktop = `true`](#boolean-devicedesktop--true)
-  * [*Boolean* Device.tablet = `false`](#boolean-devicetablet--false)
-  * [*Boolean* Device.phone = `false`](#boolean-devicephone--false)
-  * [*Boolean* Device.mobile = `false`](#boolean-devicemobile--false)
-  * [*Boolean* Device.pixelRatio = `1`](#boolean-devicepixelratio--1)
+  * [platform](#platform)
+  * [desktop](#desktop)
+  * [tablet](#tablet)
+  * [phone](#phone)
+  * [mobile](#mobile)
+  * [pixelRatio](#pixelratio)
   * [pointer](#pointer)
   * [onPointerPress](#onpointerpress)
   * [onPointerRelease](#onpointerrelease)
@@ -37,8 +37,8 @@
   * [hide](#hide)
 * [Glossary](#glossary)
 
-## *Boolean* Device.platform = `'Unix'`
-
+##platform
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.platform = `'Unix'`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>'Unix'</code></dd></dl>
 Possible values are:
  - Android,
  - iOS,
@@ -58,22 +58,22 @@ Text {
 }
 ```
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#boolean-deviceplatform--unix)
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#platform)
 
-## *Boolean* Device.desktop = `true`
+##desktop
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.desktop = `true`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#desktop)
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#boolean-devicedesktop--true)
+##tablet
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.tablet = `false`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#tablet)
 
-## *Boolean* Device.tablet = `false`
+##phone
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.phone = `false`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#phone)
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#boolean-devicetablet--false)
-
-## *Boolean* Device.phone = `false`
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#boolean-devicephone--false)
-
-## *Boolean* Device.mobile = `false`
-
+##mobile
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.mobile = `false`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
 Tablet or a phone.
 
 ```javascript
@@ -83,10 +83,10 @@ Text {
 }
 ```
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#boolean-devicemobile--false)
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#mobile)
 
-## *Boolean* Device.pixelRatio = `1`
-
+##pixelRatio
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Device.pixelRatio = `1`</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>1</code></dd></dl>
 ```javascript
 Text {
     text: Device.pixelRatio >= 2 ? 'Retina' : 'Non-retina'
@@ -94,7 +94,7 @@ Text {
 }
 ```
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#boolean-devicepixelratio--1)
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#pixelratio)
 
 ##pointer
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Device.PointerEvent&#x2A; Device.pointer</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#class-devicepointerevent">Device.PointerEvent</a></dd><dt>Read Only</dt></dl>
@@ -136,7 +136,7 @@ Text {
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Device.onKeyInput(&#x2A;Device.KeyboardEvent&#x2A; event)</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Parameters</dt><dd><ul><li>event — <a href="/Neft-io/neft/wiki/Renderer-Device-API#class-devicekeyboardevent">Device.KeyboardEvent</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#onkeyinput)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Device.PointerEvent
+# **Class** Device.PointerEvent
 
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#class-devicepointerevent)
 
@@ -164,7 +164,7 @@ Text {
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; Device.PointerEvent::deltaY</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Device-API#device">Device</a></dd><dt>Prototype property of</dt><dd><i>PointerEvent</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#deltay)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Device.KeyboardEvent
+#**Class** Device.KeyboardEvent
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Device.KeyboardEvent()</code></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/namespace/device.litcoffee#class-devicekeyboardevent)
 

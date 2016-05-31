@@ -11,7 +11,7 @@
   * [text](#text)
 * [Glossary](#glossary)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Text
+#**Class** Text
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Text : &#x2A;Element&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/Document-Element-API#class-element">Element</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/element/element/text.litcoffee#class-text)
 

@@ -22,7 +22,7 @@ const unit = require('src/unit');
 * [whenChange](#whenchange)
 * [runTests](#runtests)
 * [onTestsEnd](#ontestsend)
-* [runAutomatically](#runautomatically)
+* [*Boolean* unit.runAutomatically = true](#boolean-unitrunautomatically--true)
 
 #describe
 <dl><dt>Syntax</dt><dd><code>unit.describe(&#x2A;String&#x2A; message, &#x2A;Function&#x2A; tests)</code></dd><dt>Static method of</dt><dd><i>unit</i></dd><dt>Parameters</dt><dd><ul><li>message — <i>String</i></li><li>tests — <i>Function</i></li></ul></dd></dl>
@@ -54,7 +54,7 @@ The given test function can contains optional *callback* argument.
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; unit.onTestsEnd</code></dd><dt>Static property of</dt><dd><i>unit</i></dd><dt>Type</dt><dd><i>Function</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/unit/index.litcoffee#ontestsend)
 
-#runAutomatically
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; unit.runAutomatically = true</code></dd><dt>Static property of</dt><dd><i>unit</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/unit/index.litcoffee#runautomatically)
+# *Boolean* unit.runAutomatically = true
+
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/unit/index.litcoffee#boolean-unitrunautomatically--true)
 

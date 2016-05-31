@@ -23,7 +23,7 @@
   * [resume](#resume)
 * [Glossary](#glossary)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Animation
+#**Class** Animation
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Animation : &#x2A;Renderer.Extension&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Extension-API#class-extension">Renderer.Extension</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation.litcoffee#class-animation)
 

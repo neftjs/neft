@@ -15,35 +15,35 @@
 * [**Class** Float32](#class-float32)
 * [**Class** Float64](#class-float64)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Int8
+#**Class** Int8
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Int8([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-int8)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Uint8
+#**Class** Uint8
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Uint8([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-uint8)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Int16
+#**Class** Int16
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Int16([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-int16)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Uint16
+#**Class** Uint16
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Uint16([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-uint16)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Int32
+#**Class** Int32
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Int32([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-int32)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Uint32
+#**Class** Uint32
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Uint32([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-uint32)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Float32
+#**Class** Float32
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Float32([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-float32)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Float64
+#**Class** Float64
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Float64([&#x2A;Integer&#x2A; length = `0`])</code></dd><dt>Parameters</dt><dd><ul><li>length — <a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a> — <code>= 0</code> — <i>optional</i></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/typed-array/index.litcoffee#class-float64)
 

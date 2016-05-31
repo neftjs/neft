@@ -8,8 +8,8 @@
 
 * [[neft:attr|Document-neft:attr-API]]
 * [[Attributes evaluating|Document-Attributes evaluating-API]]
-* [[neft:if|Document-neft:if-API]]
 * [[Setting attributes|Document-Setting attributes-API]]
+* [[neft:if|Document-neft:if-API]]
 * [[neft:fragment|Document-neft:fragment-API]]
   * [[neft:require|Document-neft:require-API]]
 * [[id|Document-id-API]]
@@ -43,7 +43,7 @@
   * [toJSON](#tojson)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Document
+# **Class** Document
 
 > [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file.litcoffee#class-document)
 
