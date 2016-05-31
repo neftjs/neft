@@ -50,11 +50,12 @@ if opts.useBabel
     babelOptions = presets: ['es2015']
     es2015Filename = Module._resolveFilename 'babel-preset-es2015', module
     disabledFilenames[es2015Filename] = true
-    require.extensions['.js'] = (module, filename) ->
-        if filename.indexOf('node_modules') isnt -1
-            return
-        {code} = babel.transformFileSync filename, babelOptions
-        module._compile code, filename
+    require.extensions['.js'] = do (_super = require.extensions['.js']) ->
+        (module, filename) ->
+            if filename.indexOf('node_modules') >= 0
+                return _super(module, filename)
+            {code} = babel.transformFileSync filename, babelOptions
+            module._compile code, filename
 
 modules = []
 modulesByPaths = {}
