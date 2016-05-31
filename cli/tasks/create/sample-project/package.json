@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "neft-sample-project",
-  "version": "0.9.12",
+  "version": "0.0.1",
   "description": "Sample Neft.io project",
   "config": {
     "title": "Neft.io Project",
@@ -13,9 +13,9 @@
     "type": "app"
   },
   "dependencies": {
-    "neft-ios": "0.0.2",
-    "neft-android": "0.0.2",
-    "neft-default-styles": "0.0.1"
+    "neft-ios": "^0.0.2",
+    "neft-android": "^0.0.2",
+    "neft-default-styles": "^0.0.1"
   },
   "android": {
     "package": "io.neft.sample",
