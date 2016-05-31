@@ -9,11 +9,11 @@
 * [**Class** Resource](#class-resource)
   * [fromJSON](#fromjson)
   * [parseFileName](#parsefilename)
-  * [*String* Resource::file = `''`](#string-resourcefile--)
+  * [file](#file)
   * [toJSON](#tojson)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Resource
+# **Class** Resource
 
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/resources/resource.litcoffee#class-resource)
 
@@ -25,23 +25,9 @@
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resource.parseFileName(&#x2A;String&#x2A; name)</code></dd><dt>Static method of</dt><dd><a href="/Neft-io/neft/wiki/Resources-Resource-API#class-resource">Resource</a></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/resources/resource.litcoffee#parsefilename)
 
-## *String* Resource::file = `''`
-
-## *String* Resource::color = `''`
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Resource::width = `0`
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Resource::height = `0`
-
-## *Array* Resource::formats
-
-## *Array* Resource::resolutions
-
-## [Object](/Neft-io/neft/wiki/Utils-API#isobject) Resource::paths
-
-## *String* Resource::resolve([*String* uri, [Object](/Neft-io/neft/wiki/Utils-API#isobject) request])
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/resources/resource.litcoffee#string-resourcefile---string-resourcecolor---float-resourcewidth--0-float-resourceheight--0-array-resourceformats-array-resourceresolutions-object-resourcepaths-string-resourceresolvestring-uri-object-request)
+##file
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Resource::file = `''`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Resources-Resource-API#class-resource">Resource</a></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>''</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/resources/resource.litcoffee#file)
 
 ##toJSON
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Resource::toJSON()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Resources-Resource-API#class-resource">Resource</a></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>

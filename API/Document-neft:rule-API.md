@@ -20,9 +20,9 @@ Adds attributes if not exists.
 </neft:rule>
 ```
 
-> [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file/parse/rules.litcoffee#attrs)
+> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/document/file/parse/rules.litcoffee#attrs)
 
 # Glossary
 
-- [neft:rule](#neft:rule)
+- [neft:rule](#neftrule)
 

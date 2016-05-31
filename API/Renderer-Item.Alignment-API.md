@@ -7,21 +7,25 @@
 ## Table of contents
 * [Alignment](#alignment)
 * [**Class** Alignment](#class-alignment)
-  * [horizontal](#horizontal)
-  * [vertical](#vertical)
+  * [*String* Alignment::horizontal = 'left'](#string-alignmenthorizontal--left)
+  * [*String* Alignment::vertical = 'top'](#string-alignmentvertical--top)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Alignment
+# **Class** Alignment
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/alignment.litcoffee#class-alignment)
 
-##horizontal
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Alignment::horizontal = 'left'</code></dd><dt>Prototype property of</dt><dd><i>Alignment</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'left'</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/alignment.litcoffee#horizontal)
+## *String* Alignment::horizontal = 'left'
 
-##vertical
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Alignment::vertical = 'top'</code></dd><dt>Prototype property of</dt><dd><i>Alignment</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'top'</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/alignment.litcoffee#vertical)
+## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Alignment::onHorizontalChange(*String* oldValue)
+
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/alignment.litcoffee#string-alignmenthorizontal--left-signal-alignmentonhorizontalchangestring-oldvalue)
+
+## *String* Alignment::vertical = 'top'
+
+## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Alignment::onVerticalChange(*String* oldValue)
+
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/alignment.litcoffee#string-alignmentvertical--top-signal-alignmentonverticalchangestring-oldvalue)
 
 # Glossary
 

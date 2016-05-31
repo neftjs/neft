@@ -9,7 +9,7 @@ Attribute used to hide or show the tag depends on the condition result.
 <span neft:else>You need to log in</span>
 ```
 
-> [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file/parse/conditions.litcoffee#neftif)
+> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/document/file/parse/conditions.litcoffee#neftif)
 
 ## Table of contents
 * [neft:if](#neftif)
@@ -17,5 +17,5 @@ Attribute used to hide or show the tag depends on the condition result.
 
 # Glossary
 
-- [neft:if](#neft:if)
+- [neft:if](#neftif)
 

@@ -16,16 +16,16 @@
   * [method](#method)
   * [uri](#uri)
   * [type](#type)
-  * [data](#data)
+  * [*Object* Request::data = null](#object-requestdata--null)
   * [handler](#handler)
   * [response](#response)
-  * [params](#params)
+  * [ReadOnly *Object* Request::params = {}](#readonly-object-requestparams--)
   * [headers](#headers)
   * [cookies](#cookies)
   * [toString](#tostring)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Request
+# **Class** Request
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#class-request)
 
@@ -126,12 +126,12 @@ It refers to one of the *Request.TYPES* values.
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#type)
 
-##data
-<dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Request::data = null</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>null</code></dd></dl>
+## [Object](/Neft-io/neft/wiki/Utils-API#isobject) Request::data = null
+
 Holds a data sent with a request.
 It can be, for instance, a form data.
 
-> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#data)
+> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#object-requestdata--null)
 
 ##handler
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Handler&#x2A; Request::handler</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Networking-Handler-API#class-handler">Networking.Handler</a></dd><dt>Read Only</dt></dl>
@@ -143,14 +143,14 @@ Refers to the currently considered [Handler][networking/Handler].
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Networking.Response&#x2A; Request::response</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Networking-Response-API#class-response">Networking.Response</a></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#response)
 
-##params
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::params = {}</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd><dt>Read Only</dt></dl>
+## ReadOnly [Object](/Neft-io/neft/wiki/Utils-API#isobject) Request::params = {}
+
 Keeps matched parameters by the handler from the request uri.
 
 Considering the */users/{name}* URI,
 the 'name' property is available as the *params.name*.
 
-> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#params)
+> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/request.litcoffee#readonly-object-requestparams--)
 
 ##headers
 <dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Object&#x2A; Request::headers</code></dd><dt>Prototype property of</dt><dd><i>Request</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Read Only</dt></dl>

@@ -21,7 +21,7 @@
   * [fillHeight](#fillheight)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Anchors
+# **Class** Anchors
 
 Anchors describe position relations between two items.
 

@@ -10,13 +10,13 @@
   * [constructor](#constructor)
   * [method](#method)
   * [uri](#uri)
-  * [schema](#schema)
+  * [*Schema* Handler::schema = null](#schema-handlerschema--null)
   * [callback](#callback)
   * [exec](#exec)
   * [toString](#tostring)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Handler
+# **Class** Handler
 
 Represents a callback function called on the request.
 
@@ -48,11 +48,11 @@ This property is compared with the request uri.
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/handler.litcoffee#uri)
 
-##schema
-<dl><dt>Syntax</dt><dd><code>&#x2A;Schema&#x2A; Handler::schema = null</code></dd><dt>Prototype property of</dt><dd><i>Handler</i></dd><dt>Type</dt><dd><i>Schema</i></dd><dt>Default</dt><dd><code>null</code></dd></dl>
+## *Schema* Handler::schema = null
+
 Used to determine whether the request uri is valid and can be handled by the handler callback.
 
-> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/handler.litcoffee#schema)
+> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/handler.litcoffee#schema-handlerschema--null)
 
 ##callback
 <dl><dt>Syntax</dt><dd><code>&#x2A;Function&#x2A; Handler::callback</code></dd><dt>Prototype property of</dt><dd><i>Handler</i></dd><dt>Type</dt><dd><i>Function</i></dd></dl>

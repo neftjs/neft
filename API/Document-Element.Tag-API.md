@@ -24,7 +24,7 @@
   * [set](#set)
 * [Glossary](#glossary)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Tag
+#**Class** Tag
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Tag : &#x2A;Element&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/Document-Element-API#class-element">Element</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/element/element/tag.litcoffee#class-tag)
 
@@ -79,7 +79,7 @@ watcher.disconnect();
 <dl><dt>Syntax</dt><dd><code>Tag::replace(&#x2A;Element&#x2A; oldElement, &#x2A;Element&#x2A; newElement)</code></dd><dt>Prototype method of</dt><dd><i>Tag</i></dd><dt>Parameters</dt><dd><ul><li>oldElement — <a href="/Neft-io/neft/wiki/Document-Element-API#class-element">Element</a></li><li>newElement — <a href="/Neft-io/neft/wiki/Document-Element-API#class-element">Element</a></li></ul></dd></dl>
 > [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/element/element/tag.litcoffee#replace)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Attrs
+# **Class** Attrs
 
 > [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/element/element/tag.litcoffee#class-attrs)
 

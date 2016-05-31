@@ -13,7 +13,7 @@ const { log } = Neft;
 * [Log](#log)
   * [**Class** Log](#class-log)
     * [LOG](#log)
-    * [enabled](#enabled)
+    * [*Integer* enabled = log.ALL](#integer-enabled--logall)
     * [log](#log)
     * [info](#info)
     * [ok](#ok)
@@ -23,7 +23,7 @@ const { log } = Neft;
     * [end](#end)
     * [scope](#scope)
 
-## *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Log
+## **Class** Log
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#class-log)
 
@@ -31,11 +31,11 @@ const { log } = Neft;
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; log.LOG</code></dd><dt>Static property of</dt><dd><i>log</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#log)
 
-###enabled
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; enabled = log.ALL</code></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Default</dt><dd><code>log.ALL</code></dd></dl>
+### [Integer](/Neft-io/neft/wiki/Utils-API#isinteger) enabled = log.ALL
+
 Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
-> [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#enabled)
+> [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/log/index.litcoffee#integer-enabled--logall)
 
 ###log
 <dl><dt>Syntax</dt><dd><code>log([&#x2A;Any&#x2A; messages...])</code></dd><dt>Parameters</dt><dd><ul><li>messages... — <i>Any</i> — <i>optional</i></li></ul></dd></dl>

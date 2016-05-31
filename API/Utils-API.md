@@ -12,8 +12,8 @@ const { utils } = Neft;
 ## Nested APIs
 
 * [[Asynchronous|Utils-Asynchronous-API]]
-* [[Stringifying|Utils-Stringifying-API]]
 * [[Properties extraction|Utils-Properties extraction-API]]
+* [[Stringifying|Utils-Stringifying-API]]
 
 ## Table of contents
 * [Utils](#utils)

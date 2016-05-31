@@ -2,8 +2,8 @@
 
 # neft:target
 
-Tag used in *neft:fragment* to define,
-where *neft:use* body should be placed.
+Tag used in [neft:fragment](/Neft-io/neft/wiki/Document-neft:fragment-API#neftfragment) to define,
+where [neft:use](/Neft-io/neft/wiki/Document-neft:use-API#neftuse) body should be placed.
 
 ```xml
 <neft:fragment neft:name="user">
@@ -17,7 +17,7 @@ where *neft:use* body should be placed.
 </neft:use>
 ```
 
-> [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file/parse/target.litcoffee#nefttarget)
+> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/document/file/parse/target.litcoffee#nefttarget)
 
 ## Table of contents
 * [neft:target](#nefttarget)
@@ -25,5 +25,5 @@ where *neft:use* body should be placed.
 
 # Glossary
 
-- [neft:target](#neft:target)
+- [neft:target](#nefttarget)
 

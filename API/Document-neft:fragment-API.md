@@ -6,7 +6,7 @@ Tag used to create separated and repeatable parts of the document.
 
 Each neft:fragment has to define a `neft:name` unique in the file where it's defined.
 
-neft:fragment can be rendered by the *neft:use* tag.
+neft:fragment can be rendered by the [neft:use](/Neft-io/neft/wiki/Document-neft:use-API#neftuse) tag.
 
 ```xml
 <neft:fragment neft:name="product">
@@ -20,7 +20,7 @@ neft:fragment can be rendered by the *neft:use* tag.
 </section>
 ```
 
-> [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file/parse/fragments.litcoffee#neftfragment)
+> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/document/file/parse/fragments.litcoffee#neftfragment)
 
 ## Nested APIs
 
@@ -32,5 +32,5 @@ neft:fragment can be rendered by the *neft:use* tag.
 
 # Glossary
 
-- [neft:fragment](#neft:fragment)
+- [neft:fragment](#neftfragment)
 
