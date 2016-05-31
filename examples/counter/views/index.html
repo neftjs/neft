@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>${root.app.config.title}</title>
+
+<script>
+    this.onRender(function () {
+        this.state.set('counter', 0);
+    });
+    this.increment = function () {
+        this.state.set('counter', this.state.counter + 1);
+    };
+    this.decrement = function () {
+        this.state.set('counter', this.state.counter - 1);
+    };
+</script>
+
+<body>
+    <h1>${state.counter}</h1>
+    <button style:pointer:onClick="${this.decrement()}">-</button>
+    <button style:pointer:onClick="${this.increment()}">+</button>
+</body>
