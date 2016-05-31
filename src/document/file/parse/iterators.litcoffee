@@ -70,4 +70,4 @@ Use *List* to bind changes made in the array.
 
 # Glossary
 
-- [neft:each](#neft:each)
+- [neft:each](#nefteach)

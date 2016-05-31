@@ -49,7 +49,7 @@
         class Class extends Renderer.Extension
             @__name__ = 'Class'
 
-## *Class* Class.New([*Component* component, *Object* options])
+## *Renderer.Class* Class.New([*Component* component, *Object* options])
 
             @New = (component, opts) ->
                 item = new Class
@@ -914,4 +914,4 @@ This property has a setter, which accepts a string and an array of strings.
 
 # Glossary
 
-- [Class](#class-class)
+- [Renderer.Class](#class-class)

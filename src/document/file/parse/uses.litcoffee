@@ -81,4 +81,4 @@ Use this attribute to render less important elements.
 
 # Glossary
 
-- [neft:use](#neft:use)
+- [neft:use](#neftuse)

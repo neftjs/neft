@@ -1,5 +1,4 @@
-Route @class
-============
+# App.Route
 
     'use strict'
 
@@ -14,6 +13,8 @@ Route @class
 
     log = log.scope 'App', 'Route'
 
+# **Class** Route
+
     module.exports = (app) -> class Route
 
         if utils.isNode
@@ -23,8 +24,7 @@ Route @class
 
         lastClientHTMLRoute = null
 
-*Document* Route.getTemplateView(*String* viewName)
----------------------------------------------------
+## *Document* Route.getTemplateView(*String* viewName)
 
         @getTemplateView = do ->
             if utils.isNode
@@ -38,13 +38,12 @@ Route @class
                     scope = app: app, routes: new Dict
                     templates[name] ?= app.views[name].render null, scope
 
-*Route* Route(*Object* options)
--------------------------------
+## Route::constructor(*Object* options)
 
 Access it with:
 ```javascript
-module.exports = function(app){
-  var Route = app.Route;
+module.exports = function(app) {
+    var Route = app.Route;
 };
 ```
 
@@ -324,69 +323,49 @@ Acceptable syntaxes:
             if not fakeAsync and callNextIfNeeded(route, next)
                 return
 
-*String* Route::method = 'get'
-------------------------------
+## *String* Route::method = `'get'`
 
-*Networking.Uri* Route::uri
----------------------------
+## *Networking.Uri* Route::uri
 
-*App* Route::app
-----------------
+## *App* Route::app
 
-*Route* Route::route
---------------------
+## *App.Route* Route::route
 
-*String* Route::name
---------------------
+## *String* Route::name
 
-*Schema* Route::schema
-----------------------
+## *Schema* Route::schema
 
-*Any* Route::data
------------------
+## *Any* Route::data
 
-*Any* Route::error
-------------------
+## *Any* Route::error
 
-*Function* Route::factory()
----------------------------
+## *Function* Route::factory()
 
-*Function* Route::init()
-------------------------
+## *Function* Route::init()
 
-*Function* Route::getData([*Function* callback])
-------------------------------------------------
+## *Function* Route::getData([*Function* callback])
 
-*Function* Route::destroy()
----------------------------
+## *Function* Route::destroy()
 
-*Function* Route::destroyJSON()
--------------------------------
+## *Function* Route::destroyJSON()
 
-*Function* Route::destroyText()
--------------------------------
+## *Function* Route::destroyText()
 
-*Function* Route::destroyHTML()
--------------------------------
+## *Function* Route::destroyHTML()
 
-*Function|Networking.Uri* Route::redirect
------------------------------------------
+## *Function*|*Networking.Uri* Route::redirect
 
-*Networking.Request* Route::request
------------------------------------
+## *Networking.Request* Route::request
 
-*Networking.Response* Route::response
--------------------------------------
+## *Networking.Response* Route::response
 
-*Function* Route::next()
-------------------------
+## *Function* Route::next()
 
         next: ->
             assert.ok pendingRoutes[@__hash__]
             destroyRoute @
 
-*Any* Route::toJSON()
----------------------
+## *Any* Route::toJSON()
 
         toJSON: ->
             if @response.status < 400
@@ -394,8 +373,7 @@ Acceptable syntaxes:
             else
                 @error.toJSON?() or @error
 
-*String* Route::toText()
-------------------------
+## *String* Route::toText()
 
         toText: ->
             if @response.status < 400
@@ -403,8 +381,7 @@ Acceptable syntaxes:
             else
                 @error+''
 
-*Document* Route::toHTML()
---------------------------
+## *Document* Route::toHTML()
 
         routeToString = ->
             "#{@method} #{@uri}"

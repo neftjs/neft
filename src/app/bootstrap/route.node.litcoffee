@@ -1,5 +1,4 @@
-Standard routes @learn
-======================
+# Standard routes
 
     'use strict'
 

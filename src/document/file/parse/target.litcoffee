@@ -23,4 +23,4 @@ where *neft:use* body should be placed.
 
 # Glossary
 
-- [neft:target](#neft:target)
+- [neft:target](#nefttarget)

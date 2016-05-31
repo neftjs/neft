@@ -79,4 +79,4 @@ neft:fragment can be rendered by the *neft:use* tag.
 
 # Glossary
 
-- [neft:fragment](#neft:fragment)
+- [neft:fragment](#neftfragment)
