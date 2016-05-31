@@ -2,7 +2,7 @@
 
 <a href="http://www.neft.io"><img src="http://www.neft.io/static/images/neft-white.svg" alt="Neft" width="100" align="left" hspace="10" vspace="6"></a>
 
-**Neft** is a JavaScript framework for multiplatform applications. Neft runs fully natively on iOS and Android. Supports rendering in modern browsers in HTML or WebGL. Neft provides Virtual DOM and uniform Rendering Engine easily extended by native views. Renders HTML on server.
+**Neft** is an end-to-end solution for multiplatform applications written in JavaScript. Neft runs fully natively on iOS and Android. Supports rendering in modern browsers in HTML and WebGL. Neft provides Virtual DOM, Rendering Engine easily extended by native views, standardized styles and more.
 
 [See the wiki](https://github.com/Neft-io/neft/wiki) for more.
 
