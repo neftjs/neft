@@ -435,9 +435,9 @@ Acceptable syntaxes:
                     r = tmplView.use(useName, r)
                 else
                     r = tmplView
-                if tmplView.scope.routes.has(useName)
-                    tmplView.scope.routes.pop useName
-                tmplView.scope.routes.set useName, @
+                if tmplView.root.routes.has(useName)
+                    tmplView.root.routes.pop useName
+                tmplView.root.routes.set useName, @
                 @_destroyViewOnEnd = false
             else
                 @_destroyViewOnEnd = true
