@@ -41,7 +41,7 @@ console.log(utils.get(obj, 'prop[].deep.result'));
 
 > [`Source`](/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/utils/namespace.litcoffee#get)
 
-##*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* utils.get.OptionsArray
+##**Class** utils.get.OptionsArray
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; utils.get.OptionsArray()</code></dd></dl>
 Special version of an Array, returned if the result of the utils.get()
 function is a list of the possible values.

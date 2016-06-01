@@ -16,11 +16,11 @@
   * [onSend](#onsend)
   * [pending](#pending)
   * [request](#request)
-  * [status](#status)
+  * [*Integer* Response::status = Response.OK](#integer-responsestatus--responseok)
   * [data](#data)
   * [headers](#headers)
   * [cookies](#cookies)
-  * [encoding](#encoding)
+  * [*String* Response::encoding = 'utf-8'](#string-responseencoding--utf8)
   * [setHeader](#setheader)
   * [send](#send)
   * [redirect](#redirect)
@@ -28,7 +28,7 @@
   * [isSucceed](#issucceed)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Response
+# **Class** Response
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#class-response)
 
@@ -101,8 +101,8 @@ Refers to the [Request][networking/Request].
 
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#request)
 
-##status
-<dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Response::status = Response.OK</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd><dt>Default</dt><dd><code>Response.OK</code></dd></dl>
+## [Integer](/Neft-io/neft/wiki/Utils-API#isinteger) Response::status = Response.OK
+
 Keeps a normalized code determined the response type.
 
 It refers to one of the *Response.STATUSES* values.
@@ -112,7 +112,7 @@ res.status = Networking.Response.CREATED;
 res.status = Networking.Response.PAYMENT_REQUIRED;
 ```
 
-> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#status)
+> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#integer-responsestatus--responseok)
 
 ##data
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Response::data</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>Any</i></dd></dl>
@@ -134,9 +134,9 @@ res.data = Document.fromJSON(...);
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; Response::cookies</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#cookies)
 
-##encoding
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Response::encoding = 'utf-8'</code></dd><dt>Prototype property of</dt><dd><i>Response</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'utf-8'</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#encoding)
+## *String* Response::encoding = 'utf-8'
+
+> [`Source`](/Neft-io/neft/blob/e79ebc2b61607e795a53c22d1577605addf00689/src/networking/response.litcoffee#string-responseencoding--utf8)
 
 ##setHeader
 <dl><dt>Syntax</dt><dd><code>&#x2A;Response&#x2A; Response::setHeader(&#x2A;String&#x2A; name, &#x2A;String&#x2A; value)</code></dd><dt>Prototype method of</dt><dd><i>Response</i></dd><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>value — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Response</i></dd></dl>

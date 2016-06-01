@@ -30,7 +30,7 @@
   * [toJSON](#tojson)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Element
+# **Class** Element
 
 > [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/element/element.litcoffee#class-element)
 

@@ -1,7 +1,8 @@
 'use strict'
 
 utils = require 'src/utils'
-fs = require 'fs'
+fs = require 'fs-extra'
+pathUtils = require 'path'
 files = require './api-wiki/files'
 git =  require './api-wiki/git'
 
@@ -13,6 +14,7 @@ parsedFiles = null
 
 # parse literate files
 stack.add ((callback) ->
+    fs.emptyDirSync pathUtils.join REPO, 'API'
     files.parseAll INPUT, REPO, (err, _files) ->
         parsedFiles = _files
         callback err

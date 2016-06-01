@@ -2,7 +2,7 @@
 
 # neft:use
 
-Tag used to place *neft:fragment*.
+Tag used to place [neft:fragment](/Neft-io/neft/wiki/Document-neft:fragment-API#neftfragment).
 
 ```xml
 <neft:fragment neft:name="user">
@@ -12,7 +12,7 @@ Tag used to place *neft:fragment*.
 <neft:use neft:fragment="user" />
 ```
 
-*neft:fragment* attribute can be changed in runtime.
+[neft:fragment](/Neft-io/neft/wiki/Document-neft:fragment-API#neftfragment) attribute can be changed in runtime.
 
 ```xml
 <neft:fragment neft:name="h1">
@@ -22,7 +22,7 @@ Tag used to place *neft:fragment*.
 <neft:use neft:fragment="h${data.level}" />
 ```
 
-Short version of *neft:use* is a tag prefixed by `use:`.
+Short version of [neft:use](/Neft-io/neft/wiki/Document-neft:use-API#neftuse) is a tag prefixed by `use:`.
 
 ```xml
 <neft:fragment neft:name="user">
@@ -32,7 +32,7 @@ Short version of *neft:use* is a tag prefixed by `use:`.
 <use:user />
 ```
 
-*neft:use* attributes are available in *neft:fragment* scope.
+[neft:use](/Neft-io/neft/wiki/Document-neft:use-API#neftuse) attributes are available in [neft:fragment](/Neft-io/neft/wiki/Document-neft:fragment-API#neftfragment) scope.
 
 ```xml
 <neft:fragment neft:name="h1">
@@ -57,9 +57,9 @@ Use this attribute to render less important elements.
 <use:body neft:async />
 ```
 
-> [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file/parse/uses.litcoffee#neftasync)
+> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/document/file/parse/uses.litcoffee#neftasync)
 
 # Glossary
 
-- [neft:use](#neft:use)
+- [neft:use](#neftuse)
 

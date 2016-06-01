@@ -54,4 +54,4 @@
 
 # Glossary
 
-- [neft:script](#neft:script)
+- [neft:script](#neftscript)

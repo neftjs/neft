@@ -61,4 +61,4 @@ Optional argument `as` will link all fragments into the specified namespace.
 
 # Glossary
 
-- [neft:require](#neft:require)
+- [neft:require](#neftrequire)

@@ -12,22 +12,22 @@
 * [PropertyAnimation](#propertyanimation)
 * [**Class** PropertyAnimation](#class-propertyanimation)
   * [property](#property)
-  * [*Float* PropertyAnimation::duration = `250`](#float-propertyanimationduration--250)
-  * [*Float* PropertyAnimation::startDelay = `0`](#float-propertyanimationstartdelay--0)
-  * [*Float* PropertyAnimation::loopDelay = `0`](#float-propertyanimationloopdelay--0)
-  * [*Float* PropertyAnimation::delay = `0`](#float-propertyanimationdelay--0)
-  * [*Boolean* PropertyAnimation::updateData = `false`](#boolean-propertyanimationupdatedata--false)
-  * [*Boolean* PropertyAnimation::updateProperty = `false`](#boolean-propertyanimationupdateproperty--false)
+  * [duration](#duration)
+  * [startDelay](#startdelay)
+  * [loopDelay](#loopdelay)
+  * [delay](#delay)
+  * [updateData](#updatedata)
+  * [updateProperty](#updateproperty)
   * [from](#from)
   * [to](#to)
-  * [ReadOnly *Float* PropertyAnimation::progress = `0`](#readonly-float-propertyanimationprogress--0)
+  * [progress](#progress)
   * [easing](#easing)
 * [**Class** Easing](#class-easing)
-  * [*String* Easing::type = `'Linear'`](#string-easingtype--linear)
+  * [type](#type)
   * [onTypeChange](#ontypechange)
 * [Glossary](#glossary)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* PropertyAnimation
+#**Class** PropertyAnimation
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; PropertyAnimation : &#x2A;Animation&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Animation-API#class-animation">Animation</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#class-propertyanimation)
 
@@ -35,41 +35,29 @@
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; PropertyAnimation::property</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#property)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) PropertyAnimation::duration = `250`
+##duration
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; PropertyAnimation::duration = `250`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>250</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#duration)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) PropertyAnimation::onDurationChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
+##startDelay
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; PropertyAnimation::startDelay = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#startdelay)
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationduration--250-signal-propertyanimationondurationchangefloat-oldvalue)
+##loopDelay
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; PropertyAnimation::loopDelay = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#loopdelay)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) PropertyAnimation::startDelay = `0`
+##delay
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; PropertyAnimation::delay = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#delay)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) PropertyAnimation::onStartDelayChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
+##updateData
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; PropertyAnimation::updateData = `false`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#updatedata)
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationstartdelay--0-signal-propertyanimationonstartdelaychangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) PropertyAnimation::loopDelay = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) PropertyAnimation::onLoopDelayChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationloopdelay--0-signal-propertyanimationonloopdelaychangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) PropertyAnimation::delay = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) PropertyAnimation::onDelayChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#float-propertyanimationdelay--0-signal-propertyanimationondelaychangefloat-oldvalue)
-
-## *Boolean* PropertyAnimation::updateData = `false`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) PropertyAnimation::onUpdateDataChange(*Boolean* oldValue)
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#boolean-propertyanimationupdatedata--false-signal-propertyanimationonupdatedatachangeboolean-oldvalue)
-
-## *Boolean* PropertyAnimation::updateProperty = `false`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) PropertyAnimation::onUpdatePropertyChange(*Boolean* oldValue)
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#boolean-propertyanimationupdateproperty--false-signal-propertyanimationonupdatepropertychangeboolean-oldvalue)
+##updateProperty
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; PropertyAnimation::updateProperty = `false`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#updateproperty)
 
 ##from
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; PropertyAnimation::from</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><i>Any</i></dd></dl>
@@ -79,20 +67,20 @@
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; PropertyAnimation::to</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><i>Any</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#to)
 
-## ReadOnly [Float](/Neft-io/neft/wiki/Utils-API#isfloat) PropertyAnimation::progress = `0`
-
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#readonly-float-propertyanimationprogress--0)
+##progress
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;Float&#x2A; PropertyAnimation::progress = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd><dt>Read Only</dt></dl>
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#progress)
 
 ##easing
 <dl><dt>Syntax</dt><dd><code>&#x2A;Easing&#x2A; PropertyAnimation::easing</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-propertyanimation">PropertyAnimation</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-easing">Easing</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#easing)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Easing
+# **Class** Easing
 
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#class-easing)
 
-## *String* Easing::type = `'Linear'`
-
+##type
+<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Easing::type = `'Linear'`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-easing">Easing</a></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'Linear'</code></dd></dl>
 Supported easing functions:
 Linear, InQuad, OutQuad, InOutQuad, InCubic, OutCubic,
 InOutCubic, InQuart, OutQuart, InOutQuart, InQuint, OutQuint,
@@ -101,7 +89,7 @@ InOutExpo, InCirc, OutCirc, InOutCirc, InElastic, OutElastic,
 InOutElastic, InBack, OutBack, InOutBack, InBounce, OutBounce,
 InOutBounce.
 
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#string-easingtype--linear)
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extensions/animation/types/property.litcoffee#type)
 
 ##onTypeChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Easing::onTypeChange(&#x2A;String&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-PropertyAnimation-API#class-easing">Easing</a></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>

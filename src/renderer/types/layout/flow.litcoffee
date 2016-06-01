@@ -17,7 +17,7 @@ Flow {
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-# **Class** Float : *Item*
+# **Class** Flow : *Item*
 
     module.exports = (Renderer, Impl, itemUtils) -> class Flow extends Renderer.Item
         @__name__ = 'Flow'

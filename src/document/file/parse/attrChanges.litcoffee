@@ -32,4 +32,4 @@ Tag used to dynamically change an attribute of the parent element.
 
 # Glossary
 
-- [neft:attr](#neft:attr)
+- [neft:attr](#neftattr)

@@ -45,7 +45,7 @@
     * [children.index](#childrenindex)
     * [children.has](#childrenhas)
     * [children.clear](#childrenclear)
-  * [parent](#parent)
+  * [*Item* Item::parent = null](#item-itemparent--null)
   * [previousSibling](#previoussibling)
   * [onPreviousSiblingChange](#onprevioussiblingchange)
   * [nextSibling](#nextsibling)
@@ -53,19 +53,19 @@
   * [belowSibling](#belowsibling)
   * [aboveSibling](#abovesibling)
   * [index](#index)
-  * [*Boolean* Item::visible = `true`](#boolean-itemvisible--true)
+  * [visible](#visible)
   * [onVisibleChange](#onvisiblechange)
-  * [*Boolean* Item::clip = `false`](#boolean-itemclip--false)
-  * [*Float* Item::width = `0`](#float-itemwidth--0)
-  * [*Float* Item::height = `0`](#float-itemheight--0)
-  * [*Float* Item::x = `0`](#float-itemx--0)
-  * [*Float* Item::y = `0`](#float-itemy--0)
-  * [*Float* Item::z = `0`](#float-itemz--0)
-  * [*Float* Item::scale = `1`](#float-itemscale--1)
-  * [*Float* Item::rotation = `0`](#float-itemrotation--0)
+  * [clip](#clip)
+  * [width](#width)
+  * [height](#height)
+  * [x](#x)
+  * [y](#y)
+  * [z](#z)
+  * [scale](#scale)
+  * [rotation](#rotation)
   * [onRotationChange](#onrotationchange)
-  * [*Float* Item::opacity = `1`](#float-itemopacity--1)
-  * [linkUri](#linkuri)
+  * [opacity](#opacity)
+  * [*String* Item::linkUri = ''](#string-itemlinkuri--)
   * [onLinkUriChange](#onlinkurichange)
   * [background](#background)
   * [onBackgroundChange](#onbackgroundchange)
@@ -78,7 +78,7 @@
   * [document](#document)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Item
+# **Class** Item
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#class-item)
 
@@ -179,7 +179,7 @@ Rectangle {
 ###children.layout
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::children.layout</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd></dl>
 Item used to position children items.
-Can be e.g. *Flow*, [Grid](/Neft-io/neft/wiki/Renderer-Grid-API#class-grid) etc.
+Can be e.g. [Flow](/Neft-io/neft/wiki/Renderer-Flow-API#class-flow), [Grid](/Neft-io/neft/wiki/Renderer-Grid-API#class-grid) etc.
 
 ###children.onLayoutChange
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::children.onLayoutChange(&#x2A;Item&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Parameters</dt><dd><ul><li>oldValue — <a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
@@ -218,9 +218,11 @@ Removes all children from the item.
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#childrenclear)
 
-##parent
-<dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::parent = null</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Default</dt><dd><code>null</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#parent)
+## [Item](/Neft-io/neft/wiki/Renderer-Item-API#class-item) Item::parent = null
+
+## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onParentChange([Item](/Neft-io/neft/wiki/Renderer-Item-API#class-item) oldParent)
+
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#item-itemparent--null-signal-itemonparentchangeitem-oldparent)
 
 ##previousSibling
 <dl><dt>Syntax</dt><dd><code>&#x2A;Item&#x2A; Item::previousSibling</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd></dl>
@@ -250,8 +252,8 @@ Removes all children from the item.
 <dl><dt>Syntax</dt><dd><code>&#x2A;Integer&#x2A; Item::index</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isinteger">Integer</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#index)
 
-## *Boolean* Item::visible = `true`
-
+##visible
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Item::visible = `true`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
 Determines whether an item is visible or not.
 
 ```nml
@@ -279,50 +281,36 @@ Item {
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onVisibleChange(&#x2A;Boolean&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#onvisiblechange)
 
-## *Boolean* Item::clip = `false`
+##clip
+<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; Item::clip = `false`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#clip)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onClipChange(*Boolean* oldValue)
+##width
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::width = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#width)
 
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#boolean-itemclip--false-signal-itemonclipchangeboolean-oldvalue)
+##height
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::height = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#height)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::width = `0`
+##x
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::x = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#x)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onWidthChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
+##y
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::y = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#y)
 
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#float-itemwidth--0-signal-itemonwidthchangefloat-oldvalue)
+##z
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::z = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#z)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::height = `0`
+##scale
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::scale = `1`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>1</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#scale)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onHeightChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#float-itemheight--0-signal-itemonheightchangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::x = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onXChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#float-itemx--0-signal-itemonxchangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::y = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onYChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#float-itemy--0-signal-itemonychangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::z = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onZChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#float-itemz--0-signal-itemonzchangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::scale = `1`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onScaleChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#float-itemscale--1-signal-itemonscalechangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::rotation = `0`
-
+##rotation
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::rotation = `0`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 ```nml
 Rectangle {
     width: 100
@@ -336,14 +324,12 @@ Rectangle {
 <dl><dt>Syntax</dt><dd><code>&#x2A;Signal&#x2A; Item::onRotationChange(&#x2A;Float&#x2A; oldValue)</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Parameters</dt><dd><ul><li>oldValue — <a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></li></ul></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Signal-API#class-signal">Signal</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#onrotationchange)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Item::opacity = `1`
+##opacity
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Item::opacity = `1`</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>1</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#opacity)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Item::onOpacityChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
+## *String* Item::linkUri = ''
 
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item.litcoffee#float-itemopacity--1-signal-itemonopacitychangefloat-oldvalue)
-
-##linkUri
-<dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Item::linkUri = ''</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>''</code></dd></dl>
 Points to the URI which will be used when user clicks on this item.
 
 ##onLinkUriChange

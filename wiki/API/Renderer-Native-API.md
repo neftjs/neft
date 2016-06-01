@@ -12,7 +12,7 @@
   * [on](#on)
 * [Glossary](#glossary)
 
-#*[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Native
+#**Class** Native
 <dl><dt>Syntax</dt><dd><code>&#x2A;&#x2A;Class&#x2A;&#x2A; Native : &#x2A;Item&#x2A;</code></dd><dt>Extends</dt><dd><a href="/Neft-io/neft/wiki/Renderer-Item-API#class-item">Item</a></dd></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/types/native.litcoffee#class-native)
 

@@ -2,7 +2,7 @@
 
 # neft:require
 
-Tag used to link *neft:fragment*s from a file and use them.
+Tag used to link [neft:fragment](/Neft-io/neft/wiki/Document-neft:fragment-API#neftfragment)s from a file and use them.
 
 ```xml
 <neft:require href="./user_utils.html" />
@@ -25,9 +25,9 @@ Optional argument `as` will link all fragments into the specified namespace.
 <use:user:avatar />
 ```
 
-> [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file/parse/fragments/links.litcoffee#namespace)
+> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/document/file/parse/fragments/links.litcoffee#namespace)
 
 # Glossary
 
-- [neft:require](#neft:require)
+- [neft:require](#neftrequire)
 

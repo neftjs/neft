@@ -14,7 +14,7 @@
   * [disable](#disable)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Extension
+# **Class** Extension
 
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/extension.litcoffee#class-extension)
 

@@ -7,26 +7,22 @@
 ## Table of contents
 * [Spacing](#spacing)
 * [**Class** Spacing](#class-spacing)
-  * [*Float* Spacing::column = `0`](#float-spacingcolumn--0)
-  * [*Float* Spacing::row = `0`](#float-spacingrow--0)
+  * [column](#column)
+  * [row](#row)
   * [valueOf](#valueof)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* Spacing
+# **Class** Spacing
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/spacing.litcoffee#class-spacing)
 
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Spacing::column = `0`
+##column
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::column = `0`</code></dd><dt>Prototype property of</dt><dd><i>Spacing</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/spacing.litcoffee#column)
 
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Spacing::onColumnChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/spacing.litcoffee#float-spacingcolumn--0-signal-spacingoncolumnchangefloat-oldvalue)
-
-## [Float](/Neft-io/neft/wiki/Utils-API#isfloat) Spacing::row = `0`
-
-## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) Spacing::onRowChange([Float](/Neft-io/neft/wiki/Utils-API#isfloat) oldValue)
-
-> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/spacing.litcoffee#float-spacingrow--0-signal-spacingonrowchangefloat-oldvalue)
+##row
+<dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::row = `0`</code></dd><dt>Prototype property of</dt><dd><i>Spacing</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+> [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/spacing.litcoffee#row)
 
 ##valueOf
 <dl><dt>Syntax</dt><dd><code>&#x2A;Float&#x2A; Spacing::valueOf()</code></dd><dt>Prototype method of</dt><dd><i>Spacing</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isfloat">Float</a></dd></dl>

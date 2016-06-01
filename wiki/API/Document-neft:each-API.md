@@ -5,7 +5,7 @@
 Attribute used for repeating.
 
 Tag children will be duplicated for each
-element defined in the *neft:each* attribute.
+element defined in the [neft:each](/Neft-io/neft/wiki/Document-neft:each-API#nefteach) attribute.
 
 Supports arrays and [List](/Neft-io/neft/wiki/List-API#class-list) instances.
 
@@ -35,9 +35,9 @@ In the tag children you have access to the three special variables:
 
 Use [List](/Neft-io/neft/wiki/List-API#class-list) to bind changes made in the array.
 
-> [`Source`](/Neft-io/neft/blob/b07f8471f0eea285e6ecaed7d5dc667674e2a4ae/src/document/file/parse/iterators.litcoffee#runtime-changes)
+> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/document/file/parse/iterators.litcoffee#runtime-changes)
 
 # Glossary
 
-- [neft:each](#neft:each)
+- [neft:each](#nefteach)
 

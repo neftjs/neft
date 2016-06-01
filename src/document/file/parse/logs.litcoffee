@@ -16,4 +16,4 @@
 
 # Glossary
 
-- [neft:log](#neft:log)
+- [neft:log](#neftlog)

@@ -34,4 +34,4 @@ Attribute used to hide or show the tag depends on the condition result.
 
 # Glossary
 
-- [neft:if](#neft:if)
+- [neft:if](#neftif)

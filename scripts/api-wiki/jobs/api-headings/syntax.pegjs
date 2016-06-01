@@ -79,7 +79,7 @@ extend =
 	":" __ d:type { return d }
 
 defaults =
-	"=" __ d:$([a-zA-Z0-9'"._\-{}\[\]]+ / type) { return d }
+	"=" __ "`" d:$([a-zA-Z0-9'"._\-{}\[\]]+ / type) "`" { return d }
 
 tags =
 	arr:(__? d:("@" d:word { return d })+ { return d }) { return arr }

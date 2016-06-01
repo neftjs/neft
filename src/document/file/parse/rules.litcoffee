@@ -114,4 +114,4 @@ Adds attributes if not exists.
 
 # Glossary
 
-- [neft:rule](#neft:rule)
+- [neft:rule](#neftrule)

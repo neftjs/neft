@@ -18,16 +18,16 @@
   * [[Text|Renderer-Text-API]]
     * [[Text.Font|Renderer-Item.Text.Font-API]]
   * [[TextInput|Renderer-TextInput-API]]
+* [[Extension|Renderer-Extension-API]]
 * [[Animation|Renderer-Animation-API]]
   * [[PropertyAnimation|Renderer-PropertyAnimation-API]]
     * [[NumberAnimation|Renderer-NumberAnimation-API]]
-* [[Extension|Renderer-Extension-API]]
 * [[Class|Renderer-Class-API]]
 * [[Transition|Renderer-Transition-API]]
 * [[Column|Renderer-Column-API]]
 * [[Flow|Renderer-Flow-API]]
-* [[Row|Renderer-Row-API]]
 * [[Grid|Renderer-Grid-API]]
+* [[Row|Renderer-Row-API]]
 * [[Scrollable|Renderer-Scrollable-API]]
 * [[FontLoader|Renderer-FontLoader-API]]
 * [[ResourcesLoader|Renderer-ResourcesLoader-API]]
@@ -35,8 +35,8 @@
 * [[Navigator|Renderer-Navigator-API]]
 * [[Screen|Renderer-Screen-API]]
 * [[RotationSensor|Renderer-RotationSensor-API]]
-* [[Rectangle|Renderer-Rectangle-API]]
 * [[AmbientSound|Renderer-AmbientSound-API]]
+* [[Rectangle|Renderer-Rectangle-API]]
 
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/index.litcoffee#renderer)
 

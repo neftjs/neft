@@ -20,12 +20,12 @@ AmbientSound {
   * [onStop](#onstop)
   * [running](#running)
   * [source](#source)
-  * [loop](#loop)
+  * [*Boolean* AmbientSound::loop = false](#boolean-ambientsoundloop--false)
   * [start](#start)
   * [stop](#stop)
 * [Glossary](#glossary)
 
-# *[Class](/Neft-io/neft/wiki/Renderer-Class-API#class-class)* AmbientSound
+# **Class** AmbientSound
 
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/sound/ambient.litcoffee#class-ambientsound)
 
@@ -49,9 +49,11 @@ AmbientSound {
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; AmbientSound::source</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-AmbientSound-API#class-ambientsound">AmbientSound</a></dd><dt>Type</dt><dd><i>String</i></dd></dl>
 > [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/sound/ambient.litcoffee#source)
 
-##loop
-<dl><dt>Syntax</dt><dd><code>&#x2A;Boolean&#x2A; AmbientSound::loop = false</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-AmbientSound-API#class-ambientsound">AmbientSound</a></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/sound/ambient.litcoffee#loop)
+## *Boolean* AmbientSound::loop = false
+
+## [Signal](/Neft-io/neft/wiki/Signal-API#class-signal) AmbientSound::onLoopChange(*Boolean* oldValue)
+
+> [`Source`](/Neft-io/neft/blob/8b1b771764f7b63d37551418b52ff56a86d16c1f/src/renderer/types/sound/ambient.litcoffee#boolean-ambientsoundloop--false-signal-ambientsoundonloopchangeboolean-oldvalue)
 
 ##start
 <dl><dt>Syntax</dt><dd><code>AmbientSound::start()</code></dd><dt>Prototype method of</dt><dd><a href="/Neft-io/neft/wiki/Renderer-AmbientSound-API#class-ambientsound">AmbientSound</a></dd></dl>

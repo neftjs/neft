@@ -3,7 +3,7 @@
 # id
 
 [Element.Tag](/Neft-io/neft/wiki/Document-Element.Tag-API#class-tag) with the id attribute is saved in the local scope
-(file, *neft:fragment*, *neft:each* etc.)
+(file, [neft:fragment](/Neft-io/neft/wiki/Document-neft:fragment-API#neftfragment), [neft:each](/Neft-io/neft/wiki/Document-neft:each-API#nefteach) etc.)
 and it's available in the string interpolation.
 
 Id must be unique in the scope.
