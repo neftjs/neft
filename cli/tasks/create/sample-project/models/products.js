@@ -1,5 +1,5 @@
-module.exports = function(app){
-	var products = [
+module.exports = (app) => {
+	const products = [
 		{id: 1, name: 'Product 1'},
 		{id: 2, name: 'Product 2'},
 		{id: 3, name: 'Product 3'},
@@ -8,7 +8,7 @@ module.exports = function(app){
 	];
 
 	return {
-		getAll: function(){
+		getAll() {
 			return products;
 		}
 	};

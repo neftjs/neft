@@ -1,4 +1,4 @@
-Rectangle { // first style in `view.js` is a window
+Rectangle {
 	Scrollable {
 		anchors.fill: parent
 		contentItem: Column {

@@ -1,8 +1,5 @@
 {
   "resources": {
-    "fonts": {
-      "file": "fonts"
-    },
     "primary": {
       "color": "#444"
     }

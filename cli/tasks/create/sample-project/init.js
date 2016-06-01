@@ -1,4 +1,4 @@
-module.exports = function(NeftApp){
-	var config = {};
-	var app = NeftApp(config);
+module.exports = (NeftApp) => {
+	const config = {};
+	const app = NeftApp(config);
 };
