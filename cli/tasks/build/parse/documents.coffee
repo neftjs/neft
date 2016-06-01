@@ -36,13 +36,11 @@ module.exports = (platform, app, callback) ->
         parseFile name
 
     Document.onBeforeParse onBeforeParseListener = (file) ->
-        if platform isnt 'node'
-            Document.Style.applyStyleQueriesInDocument file
+        Document.Style.applyStyleQueriesInDocument file
         return
 
     Document.onParse onParseListener = (file) ->
-        if platform isnt 'node'
-            Document.Style.createStylesInDocument file
+        Document.Style.createStylesInDocument file
         return
 
     parseFile = (path) ->
