@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "neft-example-counter",
+  "version": "0.0.1",
+  "config": {
+    "title": "Neft.io Project",
+    "protocol": "http",
+    "port": 3001,
+    "host": "localhost",
+    "url": "http://localhost:3000/",
+    "language": "en",
+    "type": "app"
+  },
+  "dependencies": {
+    "neft-default-styles": "0.0.1"
+  },
+  "android": {
+    "package": "io.neft.example.counter",
+    "versionCode": 1,
+    "versionName": "1.0",
+    "application": {
+      "label": "Neft.io Example Counter"
+    }
+  }
+}
