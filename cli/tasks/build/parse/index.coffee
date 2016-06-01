@@ -56,8 +56,8 @@ module.exports = (platform, app, callback) ->
     # create file
     result = ''
     result += "var opts = #{config};\n"
-    result += "var init = require('./init');\n"
-    result += "opts.modules = typeof modules !== 'undefined' ? modules : {};\n"
-    result += "init(Neft.bind(null, opts));\n"
+    result += 'var init = require(\'./init\');\n'
+    result += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
+    result += 'module.exports = init(Neft.bind(null, opts));\n'
 
     result

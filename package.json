@@ -11,7 +11,8 @@
     "webgl"
   ],
   "bin": {
-    "neft": "./bin/neft"
+    "neft": "bin/neft",
+    "neft-unit": "bin/neft-unit"
   },
   "main": "index.coffee",
   "license": "Apache-2.0",

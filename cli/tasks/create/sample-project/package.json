@@ -12,6 +12,9 @@
     "language": "en",
     "type": "app"
   },
+  "scripts": {
+    "test": "neft-unit ./tests/\\*\\*/\\*.js"
+  },
   "dependencies": {
     "neft-ios": "^0.0.2",
     "neft-android": "^0.0.2",
