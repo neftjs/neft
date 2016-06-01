@@ -1255,16 +1255,19 @@ The given compareFunction is used to compare two values (which at least one them
 By default the compareFunction uses triple comparison (`===`).
 
 ```javascript
-console.log(utils.isEqual([0, 1], [1, 0]))
+utils.isEqual([1, 0], [1, 0])
 // true
 
-console.log(utils.isEqual({a: 1}, {a: 1}))
+utils.isEqual({a: 1}, {a: 1})
 // true
 
-console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1}}))
+utils.isEqual({a: {aa: 1}}, {a: {aa: 1}})
 // true
 
-console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
+utils.isEqual([0, 1], [1, 0])
+// false
+
+utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
 // false
 ```
 
@@ -1284,36 +1287,15 @@ console.log(utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}}))
             if maxDeep <= 0
                 return true
 
-            for aValue in a
-                isTrue = false
+            for aValue, index in a
+                bValue = b[index]
 
-                for bValue in b
-                    if bValue and typeof bValue is 'object'
-                        if isEqual(aValue, bValue, compareFunc, maxDeep - 1)
-                            isTrue = true
-                        continue
+                if bValue and typeof bValue is 'object'
+                    unless isEqual(aValue, bValue, compareFunc, maxDeep - 1)
+                        return false
+                    continue
 
-                    if compareFunc(aValue, bValue)
-                        isTrue = true
-                        break
-
-                unless isTrue
-                    return false
-
-            for bValue in b
-                isTrue = false
-
-                for aValue in a
-                    if aValue and typeof aValue is 'object'
-                        if isEqual(bValue, aValue, compareFunc, maxDeep - 1)
-                            isTrue = true
-                        continue
-
-                    if compareFunc(bValue, aValue)
-                        isTrue = true
-                        break
-
-                unless isTrue
+                unless compareFunc(aValue, bValue)
                     return false
 
             true

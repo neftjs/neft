@@ -214,4 +214,27 @@ describe 'src/utils', ->
         # TODO
 
     describe 'isEqual()', ->
-        # TODO
+        it 'returns proper value of two objects given', ->
+            assert.ok utils.isEqual {a: 1}, {a: 1}
+            assert.notOk utils.isEqual {a: 1}, {b: 1}
+            assert.notOk utils.isEqual {a: 1}, {a: 2}
+
+        it 'returns proper value of two arrays given', ->
+            assert.ok utils.isEqual [1, 2], [1, 2]
+            assert.notOk utils.isEqual [1, 2], [1]
+            assert.notOk utils.isEqual [2, 1], [1, 2]
+
+        it 'test objects deeply', ->
+            assert.ok utils.isEqual {a: [{b: 1}]}, {a: [{b: 1}]}
+            assert.notOk utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}
+
+        it 'compareFunction is used to test primitive values', ->
+            funcArgs = []
+            compareFunction = (args...) -> funcArgs.push args
+            utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}, compareFunction
+            expected = [[1, 2]]
+            assert.is JSON.stringify(funcArgs), JSON.stringify(expected)
+
+        it 'maxDeep specifies how deep objects should be tested', ->
+            assert.ok utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}, 2
+            assert.notOk utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}, 3
