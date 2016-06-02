@@ -23,13 +23,14 @@ module.exports = (platform, options, app, callback) ->
     testResolvedFunc = do ->
         if platform is 'node' and options.out
             (req, path, modulePath, parentPath) ->
-                not /node_modules\//.test(modulePath) and
+                modulePath.indexOf('node_modules') is -1 and
                 (req isnt path or pathUtils.isAbsolute(req))
         else if platform is 'node'
             (req, path, modulePath, parentPath) ->
-                req isnt path and not /node_modules\//.test(modulePath)
+                req isnt path and modulePath.indexOf('node_modules') is -1
         else
-            -> true
+            (req, path, modulePath, parentPath) ->
+                modulePath.indexOf('..') isnt 0
 
     bundleBuilder
         path: 'index.js'
