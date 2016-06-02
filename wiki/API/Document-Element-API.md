@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ **Element**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ **Element**
 
 # Element
 
@@ -6,8 +6,8 @@
 
 ## Nested APIs
 
-* [[Tag|Document-Element.Tag-API]]
 * [[Text|Document-Element.Text-API]]
+* [[Tag|Document-Element.Tag-API]]
 
 ## Table of contents
 * [Element](#element)

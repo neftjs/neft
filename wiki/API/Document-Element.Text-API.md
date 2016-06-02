@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Element|Document-Element-API]] ▸ **Text**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ [[Element|Document-Element-API]] ▸ **Text**
 
 #Text
 <dl><dt>Syntax</dt><dd><code>Element.Text</code></dd><dt>Static property of</dt><dd><a href="/Neft-io/neft/wiki/Document-Element-API#class-element">Element</a></dd></dl>

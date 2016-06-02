@@ -13,13 +13,13 @@ const { Schema } = Neft;
 
 ## Nested APIs
 
-* [[Array Validator|Schema-Array Validator-API]]
 * [[Max Validator|Schema-Max Validator-API]]
+* [[Array Validator|Schema-Array Validator-API]]
 * [[Min Validator|Schema-Min Validator-API]]
 * [[Object Validator|Schema-Object Validator-API]]
 * [[Optional Validator|Schema-Optional Validator-API]]
-* [[Options Validator|Schema-Options Validator-API]]
 * [[RegExp Validator|Schema-RegExp Validator-API]]
+* [[Options Validator|Schema-Options Validator-API]]
 * [[Type Validator|Schema-Type Validator-API]]
 
 ## Table of contents

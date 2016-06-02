@@ -16,11 +16,11 @@
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/document.litcoffee#class-document)
 
 ##query
-<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; Document::query</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Document-Document-API#class-document">Document</a></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read Only</dt></dl>
+<dl><dt>Syntax</dt><dd><code>ReadOnly &#x2A;String&#x2A; Document::query</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Document-API#class-document">Document</a></dd><dt>Type</dt><dd><i>String</i></dd><dt>Read Only</dt></dl>
 > [`Source`](/Neft-io/neft/blob/65f8de73ffc0dbb38be0f58144f629599500b1a9/src/renderer/types/basics/item/document.litcoffee#query)
 
 ##node
-<dl><dt>Syntax</dt><dd><code>&#x2A;Document.Element&#x2A; Document::node</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Document-Document-API#class-document">Document</a></dd><dt>Type</dt><dd><i>Document.Element</i></dd></dl>
+<dl><dt>Syntax</dt><dd><code>&#x2A;Document.Element&#x2A; Document::node</code></dd><dt>Prototype property of</dt><dd><a href="/Neft-io/neft/wiki/Document-API#class-document">Document</a></dd><dt>Type</dt><dd><i>Document.Element</i></dd></dl>
 ```javascript
 Text {
     text: this.document.node.attrs.value

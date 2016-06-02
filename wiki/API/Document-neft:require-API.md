@@ -1,4 +1,4 @@
-> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-Document-API]] ▸ [[neft:fragment|Document-neft:fragment-API]] ▸ **neft:require**
+> [Wiki](Home) ▸ [[API Reference|API-Reference]] ▸ [[Document|Document-API]] ▸ [[neft:fragment|Document-neft:fragment-API]] ▸ **neft:require**
 
 # neft:require
 
