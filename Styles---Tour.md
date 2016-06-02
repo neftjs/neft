@@ -372,13 +372,4 @@ Inline styles also supports signals. You can attach route method, or a `neft:fun
 <span style:onTextChange="${route.spanTextChange}">ABC</span>
 ```
 
-### Custom properties
-
-Item custom properties are synchronized with the HTML element attributes.
-
-```html
-<!-- property $.health: 200 -->
-<player health="100" />
-```
-
 Next article: [[Networking - Tour]]
