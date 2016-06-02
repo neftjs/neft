@@ -1,6 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony
 
-"use strict";
+process.env.NODE_PATH = './:'+__dirname+'/..:'+__dirname+'/../node_modules';
+require('module').Module._initPaths();
 require('coffee-script/register');
 const fs = require('fs');
 global.Neft = require('../cli/bundle/neft-node-develop.js');

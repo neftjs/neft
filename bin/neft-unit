@@ -1,4 +1,0 @@
-#!/bin/sh
-
-AB_DIR="`dirname \"$0\"`"
-NODE_PATH=./:$AB_DIR/../:./:$AB_DIR/../node_modules node --harmony "$AB_DIR/neft-unit.js" "$@"

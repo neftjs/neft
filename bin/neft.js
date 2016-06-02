@@ -1,4 +1,5 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony
 
-"use strict";
-require("../cli/neft-cli.js");
+process.env.NODE_PATH = './:'+__dirname+'/..:'+__dirname+'/../node_modules';
+require('module').Module._initPaths();
+require('../cli/neft-cli.js');
