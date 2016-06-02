@@ -24,19 +24,21 @@ By default, views are rendered with the route object as globals.
 
 ```javascript
 // routes/user.js
-module.exports = function(app){
-    'get /user': {
-        showAge: true,
-        getData: function(callback){
-            callback(null, { login: 'Johny', age: 25 });
+module.exports = (app) => {
+    return {
+        'get /user': {
+            showAge: true,
+            getData(callback) {
+                callback(null, { login: 'Johny', age: 25 });
+            }
         }
-    }
+    };
 };
 ```
 ```html
 <!-- views/user.html -->
-<h1>Hi ${data.login}</h1>
-<h2 neft:if="${showAge}">Your age: ${data.age}</h2>
+<h1>Hi ${root.data.login}</h1>
+<h2 neft:if="${root.showAge}">Your age: ${root.data.age}</h2>
 ```
 
 ## Condition
@@ -46,7 +48,7 @@ module.exports = function(app){
 `neft:else` is optional and must be a next sibling of a tag with condition.
 
 ```html
-<div neft:if="${a > b}">a is greater than b</div>
+<div neft:if="${props.a > props.b}">a is greater than b</div>
 <div neft:else>a isn't greater than b</div>
 ```
 
@@ -60,7 +62,7 @@ Creates three global properties available in the `neft:each` body: `i`, `item` a
 
 ```html
 <ul neft:each="[1, 2, 3]">
-    <li>Index=${i}; element=${item}; array=${each}</li>
+    <li>Index=${props.index}; element=${props.item}; array=${props.each}</li>
 </ul>
 ```
 
@@ -75,7 +77,7 @@ Fragment can be rendered by the `neft:use` tag.
     <!-- user avatar view -->
 </neft:fragment>
 
-<neft:use neft:fragment="avatar" />
+<use:avatar />
 ```
 
 ### String interpolation
@@ -84,10 +86,10 @@ Fragment can be rendered by the `neft:use` tag.
 
 ```html
 <neft:fragment neft:name="avatar" showLogin="true">
-    <h5 neft:if="${showLogin}">${user.login}</h5>
+    <h5 neft:if="${props.showLogin}">${props.user.login}</h5>
 </neft:fragment>
 
-<neft:use neft:fragment="avatar" user="${data.user}" />
+<use:avatar user="${root.data.user}" />
 ```
 
 ## Identifiers
@@ -96,7 +98,7 @@ Tags with the `id` attribute are available in the string interpolation as global
 
 ```html
 <input type="text" id="userNameInput" value="Max" />
-<h1>Your name: ${userNameInput.attrs.get('value')}</h1>
+<h1>Your name: ${ids.userNameInput.attrs.value}</h1>
 ```
 
 ## Logging
@@ -104,7 +106,7 @@ Tags with the `id` attribute are available in the string interpolation as global
 For the debug purposes you can use the `neft:log` tag.
 
 ```html
-<neft:log userData="${data}">${text}</neft:log>
+<neft:log userData="${props.data}">${props.text}</neft:log>
 ```
 
 ## More tags
@@ -122,12 +124,12 @@ If you want to use different view file, specify the route `toHTML` method.
 
 ```javascript
 // routes/user.js
-module.exports = function(app){
+module.exports = (app) => {
     return {
         'get /user': {
             toHTML: {
-                view: 'pages/user', // views/pages/user.html
-                template: 'templates/user',
+                view: 'views/pages/user.html',
+                template: 'views/templates/user.html',
                 use: 'body'
             }
         }
