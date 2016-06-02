@@ -1,6 +1,6 @@
 {
   "name": "neft",
-  "version": "0.9.13",
+  "version": "0.10.0",
   "preferGlobal": true,
   "description": "JavaScript. Everywhere.",
   "keywords": [
