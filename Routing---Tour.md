@@ -11,10 +11,10 @@ Each file must exports a function.
 
 ```javascript
 // routes/user.js
-module.exports = function(app){
+module.exports = (app) => {
     return {
         'get /users': {
-            getData: function(callback){
+            getData(callback) {
                 app.models.users.getUsers(callback);
             }
         }
@@ -36,10 +36,10 @@ The route URI can specify parameters which supports various URIs matching the pa
 
 ```javascript
 // routes/user.js
-module.exports = function(app){
+module.exports = (app) => {
     return {
         'get /user/{id}': {
-            getData: function(callback){
+            getData(callback) {
                 app.models.users.getById(this.request.params.id, callback);
 
                 // e.g. for the URI '/user/12'
@@ -56,7 +56,7 @@ For more strict parameters validation, you can use the Schema module.
 
 ```javascript
 // routes/user.js
-module.exports = function(app){
+module.exports = (app) => {
     return {
         'get /user/{id}': {
             schema: {
@@ -65,7 +65,7 @@ module.exports = function(app){
                     min: 0
                 }
             },
-            getData: function(callback){
+            getData(callback){
             }
         }
     };
@@ -93,11 +93,11 @@ This functionality is more useful for the HTML rendering, where the route object
 
 ```javascript
 // routes/user.js
-module.exports = function(app){
+module.exports = (app) => {
     return {
         'get /users/nav': {
             navOrSomething: [],
-            getData: function(callback){
+            getData(callback) {
                 callback(null, this.navOrSomething);
             }
         }
