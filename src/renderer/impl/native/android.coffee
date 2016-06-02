@@ -2,8 +2,8 @@
 
 assert = require 'src/assert'
 
-nativeActions = require 'neft-native/actions'
-nativeBridge = require 'neft-native/bridge'
+nativeActions = require 'src/native/actions'
+nativeBridge = require 'src/native/bridge'
 
 module.exports = (impl) ->
     Types:

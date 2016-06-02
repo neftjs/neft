@@ -3,8 +3,8 @@
 utils = require 'src/utils'
 assert = require 'src/assert'
 
-nativeActions = require 'neft-native/actions'
-nativeBridge = require 'neft-native/bridge'
+nativeActions = require 'src/native/actions'
+nativeBridge = require 'src/native/bridge'
 
 _neft.renderer = {}
 
