@@ -2,7 +2,7 @@
 
 #Route
 <dl><dt>Syntax</dt><dd><code>App.Route</code></dd><dt>Static property of</dt><dd><i>App</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#route)
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#route)
 
 ## Table of contents
 * [Route](#route)
@@ -16,11 +16,11 @@
 
 # **Class** Route
 
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#class-route)
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#class-route)
 
 ##getTemplateView
-<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route.getTemplateView(&#x2A;String&#x2A; viewName)</code></dd><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li>viewName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Document-Document-API#class-document">Document</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#gettemplateview)
+<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route.getTemplateView(&#x2A;String&#x2A; viewName)</code></dd><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li>viewName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Document-API#class-document">Document</a></dd></dl>
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#gettemplateview)
 
 ##constructor
 <dl><dt>Syntax</dt><dd><code>Route::constructor(&#x2A;Object&#x2A; options)</code></dd><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li>options — <a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></li></ul></dd></dl>
@@ -43,21 +43,21 @@ Acceptable syntaxes:
 *Route* app.Route(*String* methodWithUri)
 ```
 
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#constructor)
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#constructor)
 
 ##method
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Route::method = `'get'`</code></dd><dt>Prototype property of</dt><dd><i>Route</i></dd><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>'get'</code></dd></dl>
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#method)
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#method)
 
 ##toJSON
 <dl><dt>Syntax</dt><dd><code>&#x2A;Any&#x2A; Route::toJSON()</code></dd><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Returns</dt><dd><i>Any</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#tojson)
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#tojson)
 
 ##toText
 <dl><dt>Syntax</dt><dd><code>&#x2A;String&#x2A; Route::toText()</code></dd><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#totext)
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#totext)
 
 ##toHTML
-<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route::toHTML()</code></dd><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Document-Document-API#class-document">Document</a></dd></dl>
-> [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/route.litcoffee#tohtml)
+<dl><dt>Syntax</dt><dd><code>&#x2A;Document&#x2A; Route::toHTML()</code></dd><dt>Prototype method of</dt><dd><i>Route</i></dd><dt>Returns</dt><dd><a href="/Neft-io/neft/wiki/Document-API#class-document">Document</a></dd></dl>
+> [`Source`](/Neft-io/neft/blob/ff48820399c4a74536b2bb1aeedad9a10e28ae9e/src/app/route.litcoffee#tohtml)
 

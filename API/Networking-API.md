@@ -16,9 +16,9 @@ var Networking = require('networking');
 ## Nested APIs
 
 * [[Handler|Networking-Handler-API]]
-* [[Request|Networking-Request-API]]
 * [[Response|Networking-Response-API]]
   * [[Response Error|Networking-Response Error-API]]
+* [[Request|Networking-Request-API]]
 * [[Uri|Networking-Uri-API]]
 
 ## Table of contents

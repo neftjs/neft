@@ -116,7 +116,7 @@ ready to create new [Item](/Neft-io/neft/wiki/Renderer-Item-API#class-item)s.
 
 ##views
 <dl><dt>Syntax</dt><dd><code>&#x2A;Object&#x2A; app.views = `{}`</code></dd><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><a href="/Neft-io/neft/wiki/Utils-API#isobject">Object</a></dd><dt>Default</dt><dd><code>{}</code></dd></dl>
-Files from the *views* folder as the [Document](/Neft-io/neft/wiki/Document-Document-API#class-document) instances.
+Files from the *views* folder as the [Document](/Neft-io/neft/wiki/Document-API#class-document) instances.
 
 > [`Source`](/Neft-io/neft/blob/564f8d734f4e3d2b9c5aa3d8f0b6cad0c8b3f9f0/src/app/index.litcoffee#views)
 

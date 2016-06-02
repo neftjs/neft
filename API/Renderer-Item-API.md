@@ -7,14 +7,14 @@
 ## Nested APIs
 
 * [[Alignment|Renderer-Item.Alignment-API]]
-* [[Anchors|Renderer-Item.Anchors-API]]
 * [[Document|Renderer-Item.Document-API]]
+* [[Anchors|Renderer-Item.Anchors-API]]
 * [[Keys|Renderer-Item.Keys-API]]
 * [[Layout|Renderer-Item.Layout-API]]
 * [[Margin|Renderer-Item.Margin-API]]
-* [[Pointer|Renderer-Item.Pointer-API]]
 * [[Spacing|Renderer-Item.Spacing-API]]
 * [[Image|Renderer-Image-API]]
+* [[Pointer|Renderer-Item.Pointer-API]]
 * [[Native|Renderer-Native-API]]
 * [[Text|Renderer-Text-API]]
   * [[Text.Font|Renderer-Item.Text.Font-API]]
