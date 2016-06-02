@@ -3,24 +3,5 @@
 <title>${root.app.config.title}</title>
 
 <body>
- 	<h1>Sample app</h1>
-
-	<h2>Order</h2>
-	<p>Products to order: ${root.order.length}</p>
-	<p neft:if="${root.orderStatus.loaded}">${root.orderStatus.error}${root.orderStatus.response}</p>
-	<button style:pointer:onClick="${root.route.send()}">
-		<neft:log orderStatusPending="${root.orderStatus.pending}" />
-		<neft:blank neft:if="${root.orderStatus.pending}">Wait for a server</neft:blank>
-		<neft:blank neft:else>Send</neft:blank>
-	</button>
-
-	<h2>Products</h2>
-	<neft:log data="${root.route.data}" route="${root.route}" />
-	<p neft:if="${root.data.length === 0}">Oops.. Nothing here</p>
-	<ul neft:each="${root.data}" class="products">
-		<li>
-			<p>${attrs.item.name}</p>
-			<button style:pointer:onClick="${root.route.orderProduct(attrs.item)}" class="anchorRight">Order</button>
-		</li>
-	</ul>
+    <h1>${root.app.config.title}</h1>
 </body>

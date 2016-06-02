@@ -7,7 +7,7 @@ Rectangle {
 
 			Flow {
 				document.query: 'body'
-				width: 400
+				width: 800
 			}
 		}
 	}
