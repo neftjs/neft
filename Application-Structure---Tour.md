@@ -3,6 +3,15 @@
 Application Structure
 ===
 
+EcmaScript 6
+---
+
+```text
+models/user.js
+```
+
+Neft parse all JavaScript files by **Babel** to support EcmaScript 6 code.
+
 CoffeeScript support
 ---
 
@@ -10,7 +19,7 @@ CoffeeScript support
 models/user.coffee
 ```
 
-CoffeeScript files are automatically parsed.
+CoffeeScript files are automatically parsed into JavaScript.
 
 Platform specified files
 ---
@@ -23,9 +32,7 @@ To use models, routes, styles or views only on the needed platform, before the f
 - `android`, `native` or `client` for Android,
 - `ios`, `native` or `client` for iOS.
 
-```text
-models/database.server.js
-```
+For instance, `models/database.server.js` will be included only in the Node bundle.
 
 Initialization file
 ---
@@ -35,28 +42,30 @@ Initialization file
 It can be used to e.g. dynamically change the server port for the cloud service.
 
 ```javascript
-module.exports = function(NeftApp){
+module.exports = (NeftApp) => {
     var config = {};
 
     if (typeof process !== 'undefined'){
         config.port = process.env.OPENSHIFT_NODEJS_PORT;
     }
 
-    var app = NeftApp(config);
+    return NeftApp(config);
 };
 ```
 
 Models
 ---
 
-Models are a JavaScript files operating on data.
-In Neft, they are placed in the `models/` folder.
+Neft application must provides some standard folders.
+One of them is `models/`.
 
-Each file must exports a function.
+Models are commonly used to get and update the data from the database.
+
+Each file must exports a function returning an object.
 
 ```javascript
 // models/users.js
-module.exports = function(app){
+module.exports = (app) => {
     return {
         getUsers: function(callback){
             callback(new Error("No admin permissions"));
@@ -68,9 +77,24 @@ module.exports = function(app){
 Models are available in the `app.models` object.
 
 ```javascript
-module.exports = function(app){
-    app.models.users.getUsers(function(){});
+module.exports = (app) => {
+    app.models.users.getUsers(() => {});
 };
 ```
+
+Native
+---
+
+Routes
+---
+
+Static
+---
+
+Views
+---
+
+Tests
+---
 
 Next article: [[Data Binding - Tour]]
