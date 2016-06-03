@@ -43,7 +43,7 @@ It can be used to e.g. dynamically change the server port for the cloud service.
 
 ```javascript
 module.exports = (NeftApp) => {
-    var config = {};
+    const config = {};
 
     if (typeof process !== 'undefined'){
         config.port = process.env.OPENSHIFT_NODEJS_PORT;
