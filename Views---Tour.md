@@ -159,7 +159,7 @@ You can also use external file by the `<neft:script src="" />` attribute.
 
 ## Fragment lifecycle
 
-Created `<neft:fragment>`s are reusing and keeping in the memory to ensure best performance.
+Created `<neft:fragment>`s are reusing and keeping in the memory to ensure the best performance.
 
 `<script>` `this` object contains some signals used to detect the fragment status.
 
