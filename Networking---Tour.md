@@ -21,9 +21,9 @@ By default, routes return:
 
 ```javascript
 // models/user.client.js
-module.exports = function(app){
+module.exports = (app) => {
     return {
-        getUsers: function(callback){
+        getUsers(callback) {
             app.networking.get("/users", callback);
         }
     }
