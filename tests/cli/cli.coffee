@@ -37,26 +37,37 @@ describe 'CLI', ->
                 done err or stderr
 
     describe 'neft build', ->
+        buildApp = (target, callback) ->
+            path = createApp (err, _, stderr) ->
+                forkSilent NEFT_BIN_PATH, ['build', target], cwd: path, callback
+
         describe 'node', ->
+            BUNDLE_FILE = 'build/app-node-develop.js'
             it 'creates bundle', (done) ->
-                path = createApp (err, _, stderr) ->
-                    forkSilent NEFT_BIN_PATH, ['build', 'node'], cwd: path, (err, _, stderr) ->
-                        assert.ok fs.existsSync pathUtils.join(path, 'build/app-node-develop.js')
-                        done err or stderr
+                path = buildApp 'node', (err, _, stderr) ->
+                    appPath = pathUtils.join path, BUNDLE_FILE
+                    assert.ok fs.existsSync appPath
+                    done err or stderr
 
         describe 'browser', ->
+            BUNDLE_FILE = 'build/app-browser-develop.js'
             it 'creates bundle', (done) ->
-                path = createApp (err, _, stderr) ->
-                    forkSilent NEFT_BIN_PATH, ['build', 'browser'], cwd: path, (err, _, stderr) ->
-                        assert.ok fs.existsSync pathUtils.join(path, 'build/app-browser-develop.js')
-                        done err or stderr
+                path = buildApp 'browser', (err, _, stderr) ->
+                    appPath = pathUtils.join path, BUNDLE_FILE
+                    assert.ok fs.existsSync appPath
+                    done err or stderr
 
     describe 'neft run', ->
         describe 'node', ->
             it 'starts node server', (done) ->
                 path = createApp (err, _, stderr) ->
-                    child = forkSilent NEFT_BIN_PATH, ['run', 'node'], cwd: path, (err, _, stderr) ->
-                        done err or stderr
+                    child = forkSilent(
+                        NEFT_BIN_PATH,
+                        ['run', 'node'],
+                        cwd: path,
+                        (err, _, stderr) ->
+                            done err or stderr
+                    )
 
                     child.stdout.on 'data', (msg) ->
                         if utils.has(String(msg), 'Start as')
