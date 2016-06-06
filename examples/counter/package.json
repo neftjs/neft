@@ -12,7 +12,7 @@
     "type": "app"
   },
   "scripts": {
-    "test": "../../bin/neft-unit ./tests/\\*\\*/\\*.js"
+    "test": "neft-unit ./tests/\\*\\*/\\*.js"
   },
   "dependencies": {
     "neft-default-styles": "0.0.1"
