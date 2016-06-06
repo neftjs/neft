@@ -4,8 +4,6 @@ glob = require 'glob'
 pathUtils = require 'path'
 cp = require 'child_process'
 fs = require 'fs'
-unitsStack = require './stack'
-require './index'
 
 [_, _, path, optsArgv...] = process.argv
 
@@ -50,6 +48,9 @@ for requirePath in opts.require
         require requireAbsPath
     else
         require requirePath
+
+unitsStack = require './stack'
+require './index'
 
 if pathIsFile
     runTestFile path
