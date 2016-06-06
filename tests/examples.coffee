@@ -18,6 +18,7 @@ fork = (path, args, options, callback) ->
     child.on 'exit', callback
 
 buildApp = (absPath, callback) ->
+    cp.execSync "cd #{absPath} && npm install"
     fork NEFT_BIN_PATH, ['build', 'node'], cwd: absPath, (code) ->
         callback if code is 1 then new Error else null
 
