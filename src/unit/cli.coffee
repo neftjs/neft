@@ -12,6 +12,7 @@ require './index'
 realpath = fs.realpathSync './'
 opts =
     require: []
+    ignore: []
 
 # parse opts
 do ->
@@ -23,6 +24,8 @@ do ->
         switch arg
             when '--require'
                 opts.require.push argv[++i]
+            when '--ignore'
+                opts.ignore.push argv[++i]
         i++
 
 runTestFile = (path) ->
@@ -54,7 +57,8 @@ else
     else
         globPath = path
 
-    files = glob.sync globPath
+    files = glob.sync globPath,
+        ignore: opts.ignore
     for file in files
         runTestFile file
 
