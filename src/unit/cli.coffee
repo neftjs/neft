@@ -29,9 +29,11 @@ do ->
         i++
 
 runTestFile = (path) ->
+    absPath = pathUtils.join realpath, path
     try
-        require pathUtils.join realpath, path
+        require absPath
     catch err
+        unitsStack.errors.push new Error "Can't load file '#{absPath}'"
         unitsStack.errors.push err
 
 pathIsFile = pathIsDir = false
