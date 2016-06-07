@@ -4,7 +4,7 @@
 
 **Neft** is an end-to-end solution for multiplatform applications written in JavaScript. Neft runs fully native on iOS and Android. Supports rendering in modern browsers in HTML and WebGL. Neft provides Virtual DOM, Rendering Engine easily extended by native views, standardized styles and more.
 
-[See the wiki](https://github.com/Neft-io/neft/wiki) for more.
+[See the wiki](https://github.com/Neft-io/neft/wiki).
 
 Official plugins: [neft-android](https://github.com/Neft-io/neft-android), [neft-ios](https://github.com/Neft-io/neft-ios).
 
