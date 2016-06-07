@@ -32,7 +32,7 @@
   },
   "scripts": {
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
-    "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./src/unit/cli.coffee ./tests/\\*\\*/\\*.coffee --require tests/init.coffee",
+    "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./src/unit/cli.coffee './tests/**/*.coffee' --require tests/init.coffee",
     "sync-wiki": "git subtree pull --prefix wiki wiki master",
     "update-api-wiki": "cross-env NODE_PATH=./ coffee scripts/api-wiki.coffee"
   },
@@ -60,9 +60,9 @@
     "xcode": "0.8.7"
   },
   "devDependencies": {
+    "babel-register": "6.9.0",
     "coffee-coverage": "1.0.1",
     "coveralls": "2.11.9",
-    "istanbul": "0.4.3",
-    "pegjs": "0.9.0"
+    "istanbul": "0.4.3"
   }
 }

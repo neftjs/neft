@@ -6,125 +6,125 @@
 describe 'src/utils', ->
     describe 'is()', ->
         it 'returns true if the given values are the same', ->
-            assert.ok utils.is 'a', 'a'
-            assert.ok utils.is 1, 1
-            assert.ok utils.is undefined, undefined
-            assert.ok utils.is null, null
-            assert.ok utils.is true, true
-            assert.ok utils.is obj = {}, obj
-            assert.ok utils.is (func = ->), func
+            assert.is utils.is('a', 'a'), true
+            assert.is utils.is(1, 1), true
+            assert.is utils.is(undefined, undefined), true
+            assert.is utils.is(null, null), true
+            assert.is utils.is(true, true), true
+            assert.is utils.is(obj = {}, obj), true
+            assert.is utils.is((func = ->), func), true
 
         it 'returns false if the given values are different', ->
-            assert.notOk utils.is 'a', 'b'
-            assert.notOk utils.is 1, 2
-            assert.notOk utils.is null, undefined
-            assert.notOk utils.is false, true
-            assert.notOk utils.is {}, {}
-            assert.notOk utils.is (->), ->
+            assert.is utils.is('a', 'b'), false
+            assert.is utils.is(1, 2), false
+            assert.is utils.is(null, undefined), false
+            assert.is utils.is(false, true), false
+            assert.is utils.is({}, {}), false
+            assert.is utils.is((->), ->), false
 
         it 'returns true if two NaNs have been given', ->
-            assert.ok utils.is NaN, NaN
+            assert.is utils.is(NaN, NaN), true
 
         it 'returns false for negative zero and positive zero comparison', ->
-            assert.notOk utils.is -0, 0
+            assert.is utils.is(-0, 0), false
 
     describe 'isFloat()', ->
         it 'returns true for finite numbers', ->
-            assert.ok utils.isFloat 10
-            assert.ok utils.isFloat 10.5
-            assert.ok utils.isFloat -23.12
-            assert.ok utils.isFloat 0
+            assert.is utils.isFloat(10), true
+            assert.is utils.isFloat(10.5), true
+            assert.is utils.isFloat(-23.12), true
+            assert.is utils.isFloat(0), true
 
         it 'returns false for not infinite numbers', ->
-            assert.notOk utils.isFloat NaN
-            assert.notOk utils.isFloat Infinity
-            assert.notOk utils.isFloat -Infinity
+            assert.is utils.isFloat(NaN), false
+            assert.is utils.isFloat(Infinity), false
+            assert.is utils.isFloat(-Infinity), false
 
         it 'returns false for not numbers type', ->
-            assert.notOk utils.isFloat null
-            assert.notOk utils.isFloat true
-            assert.notOk utils.isFloat undefined
-            assert.notOk utils.isFloat ->
-            assert.notOk utils.isFloat {}
-            assert.notOk utils.isFloat Object(4)
-            assert.notOk utils.isFloat '4'
+            assert.is utils.isFloat(null), false
+            assert.is utils.isFloat(true), false
+            assert.is utils.isFloat(undefined), false
+            assert.is utils.isFloat(->), false
+            assert.is utils.isFloat({}), false
+            assert.is utils.isFloat(Object(4)), false
+            assert.is utils.isFloat('4'), false
 
     describe 'isInteger()', ->
         it 'returns true for finite numbers with no exponent', ->
-            assert.ok utils.isInteger 3
-            assert.ok utils.isInteger -5
-            assert.ok utils.isInteger 0
+            assert.is utils.isInteger(3), true
+            assert.is utils.isInteger(-5), true
+            assert.is utils.isInteger(0), true
 
         it 'returns false for not finite numbers', ->
-            assert.notOk utils.isInteger NaN
-            assert.notOk utils.isInteger Infinity
-            assert.notOk utils.isInteger -Infinity
+            assert.is utils.isInteger(NaN), false
+            assert.is utils.isInteger(Infinity), false
+            assert.is utils.isInteger(-Infinity), false
 
         it 'returns false for numbers with exponent', ->
-            assert.notOk utils.isInteger 3.2
-            assert.notOk utils.isInteger -5.1
-            assert.notOk utils.isInteger 0.3
+            assert.is utils.isInteger(3.2), false
+            assert.is utils.isInteger(-5.1), false
+            assert.is utils.isInteger(0.3), false
 
         it 'returns false for not numbers type', ->
-            assert.notOk utils.isInteger null
-            assert.notOk utils.isInteger true
-            assert.notOk utils.isInteger undefined
-            assert.notOk utils.isInteger ->
-            assert.notOk utils.isInteger {}
-            assert.notOk utils.isInteger Object(4)
-            assert.notOk utils.isInteger '4'
+            assert.is utils.isInteger(null), false
+            assert.is utils.isInteger(true), false
+            assert.is utils.isInteger(undefined), false
+            assert.is utils.isInteger(->), false
+            assert.is utils.isInteger({}), false
+            assert.is utils.isInteger(Object(4)), false
+            assert.is utils.isInteger('4'), false
 
     describe 'isPrimitive()', ->
         it 'returns true for a null, string, number boolean or an undefined', ->
-            assert.ok utils.isPrimitive null
-            assert.ok utils.isPrimitive 'a'
-            assert.ok utils.isPrimitive 12.2
-            assert.ok utils.isPrimitive true
-            assert.ok utils.isPrimitive undefined
+            assert.is utils.isPrimitive(null), true
+            assert.is utils.isPrimitive('a'), true
+            assert.is utils.isPrimitive(12.2), true
+            assert.is utils.isPrimitive(true), true
+            assert.is utils.isPrimitive(undefined), true
 
         it 'returns false for other types', ->
-            assert.notOk utils.isPrimitive {}
-            assert.notOk utils.isPrimitive []
-            assert.notOk utils.isPrimitive ->
-            assert.notOk utils.isPrimitive Object(4)
+            assert.is utils.isPrimitive({}), false
+            assert.is utils.isPrimitive([]), false
+            assert.is utils.isPrimitive(->), false
+            assert.is utils.isPrimitive(Object(4)), false
 
     describe 'isObject()', ->
         it 'returns true if the given value is an array of an object', ->
-            assert.ok utils.isObject []
-            assert.ok utils.isObject {}
-            assert.ok utils.isObject Object.create(null)
-            assert.ok utils.isObject Object.create({a: 1})
+            assert.is utils.isObject([]), true
+            assert.is utils.isObject({}), true
+            assert.is utils.isObject(Object.create(null)), true
+            assert.is utils.isObject(Object.create({a: 1})), true
 
         it 'returns false for the given null', ->
-            assert.notOk utils.isObject null
+            assert.is utils.isObject(null), false
 
         it 'returns false for types different than object', ->
-            assert.notOk utils.isObject ->
-            assert.notOk utils.isObject false
-            assert.notOk utils.isObject undefined
-            assert.notOk utils.isObject 'a'
+            assert.is utils.isObject(->), false
+            assert.is utils.isObject(false), false
+            assert.is utils.isObject(undefined), false
+            assert.is utils.isObject('a'), false
 
     describe 'isPlainObject()', ->
         it 'returns true for the given object with no prototype', ->
-            assert.ok utils.isPlainObject Object.create(null)
+            assert.is utils.isPlainObject(Object.create(null)), true
 
         it 'returns true for the given object with standard prototype', ->
-            assert.ok utils.isPlainObject {}
-            assert.ok utils.isPlainObject Object.create(Object.prototype)
+            assert.is utils.isPlainObject({}), true
+            assert.is utils.isPlainObject(Object.create(Object.prototype)), true
 
         it 'returns false for object with custom prototype', ->
             class A
-            assert.notOk utils.isPlainObject Object.create({a: 1})
-            assert.notOk utils.isPlainObject new A
+            assert.is utils.isPlainObject(Object.create({a: 1})), false
+            assert.is utils.isPlainObject(new A), false
 
         it 'returns false for the given null', ->
-            assert.notOk utils.isPlainObject null
+            assert.is utils.isPlainObject(null), false
 
         it 'returns false for types different than object', ->
-            assert.notOk utils.isPlainObject ->
-            assert.notOk utils.isPlainObject false
-            assert.notOk utils.isPlainObject undefined
-            assert.notOk utils.isPlainObject 'a'
+            assert.is utils.isPlainObject(->), false
+            assert.is utils.isPlainObject(false), false
+            assert.is utils.isPlainObject(undefined), false
+            assert.is utils.isPlainObject('a'), false
 
     describe 'isArguments()', ->
         # TODO
@@ -215,26 +215,26 @@ describe 'src/utils', ->
 
     describe 'isEqual()', ->
         it 'returns proper value of two objects given', ->
-            assert.ok utils.isEqual {a: 1}, {a: 1}
-            assert.notOk utils.isEqual {a: 1}, {b: 1}
-            assert.notOk utils.isEqual {a: 1}, {a: 2}
+            assert.is utils.isEqual({a: 1}, {a: 1}), true
+            assert.is utils.isEqual({a: 1}, {b: 1}), false
+            assert.is utils.isEqual({a: 1}, {a: 2}), false
 
         it 'returns proper value of two arrays given', ->
-            assert.ok utils.isEqual [1, 2], [1, 2]
-            assert.notOk utils.isEqual [1, 2], [1]
-            assert.notOk utils.isEqual [2, 1], [1, 2]
+            assert.is utils.isEqual([1, 2], [1, 2]), true
+            assert.is utils.isEqual([1, 2], [1]), false
+            assert.is utils.isEqual([2, 1], [1, 2]), false
 
         it 'test objects deeply', ->
-            assert.ok utils.isEqual {a: [{b: 1}]}, {a: [{b: 1}]}
-            assert.notOk utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}
+            assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 1}]}), true
+            assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}), false
 
         it 'compareFunction is used to test primitive values', ->
             funcArgs = []
             compareFunction = (args...) -> funcArgs.push args
-            utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}, compareFunction
+            utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, compareFunction)
             expected = [[1, 2]]
             assert.is JSON.stringify(funcArgs), JSON.stringify(expected)
 
         it 'maxDeep specifies how deep objects should be tested', ->
-            assert.ok utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}, 2
-            assert.notOk utils.isEqual {a: [{b: 1}]}, {a: [{b: 2}]}, 3
+            assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 2), true
+            assert.is utils.isEqual({a: [{b: 1}]}, {a: [{b: 2}]}, 3), false

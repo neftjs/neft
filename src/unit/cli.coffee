@@ -4,14 +4,13 @@ glob = require 'glob'
 pathUtils = require 'path'
 cp = require 'child_process'
 fs = require 'fs'
-unitsStack = require './stack'
-require './index'
 
 [_, _, path, optsArgv...] = process.argv
 
 realpath = fs.realpathSync './'
 opts =
     require: []
+    ignore: []
 
 # parse opts
 do ->
@@ -23,12 +22,16 @@ do ->
         switch arg
             when '--require'
                 opts.require.push argv[++i]
+            when '--ignore'
+                opts.ignore.push argv[++i]
         i++
 
 runTestFile = (path) ->
+    absPath = pathUtils.join realpath, path
     try
-        require pathUtils.join realpath, path
+        require absPath
     catch err
+        unitsStack.errors.push new Error "Can't load file '#{absPath}'"
         unitsStack.errors.push err
 
 pathIsFile = pathIsDir = false
@@ -46,6 +49,9 @@ for requirePath in opts.require
     else
         require requirePath
 
+unitsStack = require './stack'
+require './index'
+
 if pathIsFile
     runTestFile path
 else
@@ -54,7 +60,8 @@ else
     else
         globPath = path
 
-    files = glob.sync globPath
+    files = glob.sync globPath,
+        ignore: opts.ignore
     for file in files
         runTestFile file
 
