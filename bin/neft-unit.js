@@ -1,7 +1,9 @@
 #!/usr/bin/env node --harmony
 
-process.env.NODE_PATH = './:'+__dirname+'/..:'+__dirname+'/../node_modules';
-require('module').Module._initPaths();
+const PATHS = ['./', __dirname+'/..', __dirname+'/../node_modules'];
+const isWin = process.platform === 'win32';
+process.env.NODE_PATH = PATHS.join(isWin ? ';' : ':');
+require('module')._initPaths();
 require('coffee-script/register');
 require('babel-register')({
     presets: ['es2015'],
