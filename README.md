@@ -14,37 +14,3 @@ Official plugins: [neft-android](https://github.com/Neft-io/neft-android), [neft
 [![npm version](https://badge.fury.io/js/neft.svg)](https://badge.fury.io/js/neft)
 [![Build Status](https://travis-ci.org/Neft-io/neft.svg?branch=master)](https://travis-ci.org/Neft-io/neft)
 [![Build status](https://ci.appveyor.com/api/projects/status/k3mj31b8406cwflv/branch/master?svg=true)](https://ci.appveyor.com/project/KrysKruk/neft/branch/master)
-
-### Supported platforms
-
-- Node >= 0.11.14,
-- Browsers (HTML5 or WebGL) IE >= 9,
-- Android >= 2.2.0 (API 8),
-- iOS >= 8.0.
-
-### What next?
-
-Do you know JavaScript, CoffeeScript, C, Java or Swift? Help us and become a contributor. 🚀😃😎
-
-Did you find a bug, have an idea for a new features or just you're pissed off at the documentation? Create an [issue](https://github.com/Neft-io/neft/issues), write it on our [Gitter](https://gitter.im/Neft-io/neft) or simply [tweet us](https://twitter.com/neft_io). 🚑💉
-
-## WARNING
-
-Neft is still in heavy development stage. Some of the published APIs may change. Documentation is partial. Any help is welcome. We're looking for a volunteers to work on a core functionalities, documentation, examples and on a native components implementations. Please remember that any feedback is appreciated.
-
-## Installation
-
-```
-npm install -g neft
-```
-
-## Running
-
-```
-neft create MyApp
-cd MyApp
-neft run node
-neft run browser
-neft run android
-neft run ios
-```
