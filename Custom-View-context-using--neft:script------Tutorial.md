@@ -8,7 +8,7 @@ To modify the `this` object, create a `<neft:script>` or `<script>` tag.
 
 The given JavaScript code has access to the `this` object and can easily modify it, adding new methods or listening on signals.
 
-In the example below we add simple `sum` function into the context. Created function can be easily used in string interpolated texts.
+In the example below we add simple `sum` function into the context. Created function can be used in string interpolated texts.
 
 ```html
 <script>
