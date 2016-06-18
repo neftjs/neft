@@ -71,11 +71,11 @@ module.exports = (opts, callback) ->
 
 # support for custom objects used to lookup for modules
 moduleNamespaces = []
-Module._load = do (_super = Module._load) -> (req, parent) ->
+Module._load = do (_super = Module._load) -> (req, parent, isMain) ->
     for obj in moduleNamespaces
         if obj[req]
             return obj[req]
-    _super.apply @, arguments
+    _super.call @, req, parent, isMain
 
 module.exports.addModulesNamespace = (obj) ->
     moduleNamespaces.push obj

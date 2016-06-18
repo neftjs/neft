@@ -3,7 +3,6 @@
 fs = require 'fs'
 pathUtils = require 'path'
 yaml = require 'js-yaml'
-babel = require 'babel-core'
 Module = require 'module'
 
 process.neftBundleBuilder =
@@ -46,13 +45,7 @@ require.extensions['.yaml'] = (module, filename) ->
 
 # register babel
 if opts.useBabel
-    babelOptions = presets: ['es2015']
-    require.extensions['.js'] = do (_super = require.extensions['.js']) ->
-        (module, filename) ->
-            if filename.indexOf('node_modules') >= 0
-                return _super(module, filename)
-            {code} = babel.transformFileSync filename, babelOptions
-            module._compile code, filename
+    require('lib/moduleCache').registerBabel()
 
 modules = []
 modulesByPaths = {}
