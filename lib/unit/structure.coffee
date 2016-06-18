@@ -1,6 +1,6 @@
 'use strict'
 
-utils = require 'src/utils'
+{utils} = Neft
 stack = require './stack'
 logger = require './logger'
 
@@ -102,7 +102,7 @@ class Listener
             return true
 
         if @maxDelay > 0 and Date.now() - @createTimestamp > @maxDelay
-            stack.fail new Error "unit.whenChange waits too long"
+            stack.fail new Error 'unit.whenChange waits too long'
             stack.currentTest.onEnd()
             return true
 

@@ -36,6 +36,7 @@ runTestFile = (path) ->
 
 pathIsFile = pathIsDir = false
 
+path = path.replace /^['"]|['"]$/g, ''
 if fs.existsSync(path)
     pathStat = fs.statSync path
     pathIsFile = pathStat.isFile()

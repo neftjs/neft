@@ -1,2 +1,3 @@
 cli/bundle
 coverage
+*.log

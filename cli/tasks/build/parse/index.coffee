@@ -2,6 +2,7 @@
 
 fs = require 'fs'
 cliUtils = require '../../../utils.coffee'
+glob = require 'glob'
 
 {utils, log} = Neft
 
@@ -14,7 +15,7 @@ CONFIG_LINKS_TO_REQUIRE =
 ###
 Prepares index file
 ###
-module.exports = (platform, app, callback) ->
+module.exports = (platform, app, options) ->
     stringifyLink = (obj) ->
         unless utils.isObject(obj)
             return obj
@@ -54,10 +55,23 @@ module.exports = (platform, app, callback) ->
     config = config.replace ///`"///g, ''
 
     # create file
-    result = ''
-    result += "var opts = #{config};\n"
-    result += 'var init = require(\'./init\');\n'
-    result += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
-    result += 'module.exports = init(Neft.bind(null, opts));\n'
+    file = ''
+    file += "var opts = #{config};\n"
+    file += 'var init = require(\'./init\');\n'
+    file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
+    file += 'module.exports = init(Neft.bind(null, opts));\n'
 
-    result
+    # run tests
+    if options.withTests
+        testFiles = glob.sync './tests/**/*.js'
+
+        file += 'window.app = module.exports;\n'
+        file += 'Neft.unit = require(\'lib/unit\');\n'
+        file += 'Neft.unit.runAutomatically = false;\n'
+        file += 'app.onReady(function() {\n'
+        for testFile in testFiles
+            file += "    require('#{testFile}');\n"
+            file += '    Neft.unit.runTests();\n'
+        file += '});\n'
+
+    file

@@ -43,6 +43,7 @@ options =
     out: ''
     watch: false
     notify: false
+    'with-tests': false
 
 argOutput = ''
 for arg, i in process.argv when i > 1
@@ -55,7 +56,7 @@ for arg, i in process.argv when i > 1
             value = DEFAULT_OPTIONS_VALUES[name] or true
 
         if options[name] is undefined
-            log.error "Unexpected option '"+arg+"'"
+            log.error "Unexpected option '#{arg}'"
             args.help = true
 
         options[name] = value
@@ -65,7 +66,7 @@ for arg, i in process.argv when i > 1
             argOutput = ''
         else
             if args[arg] is undefined
-                log.error "Unexpected command '"+arg+"'"
+                log.error "Unexpected command '#{arg}'"
                 args.help = true
 
             args[arg] = true
@@ -73,15 +74,17 @@ for arg, i in process.argv when i > 1
         if ARGS_WITH_COMMANDS[arg]
             argOutput = arg
 
+options.withTests = options['with-tests']
+
 if process.argv.length <= 2
     args.help = true
 
 # verify
 if args.build is true or args.run is true
-    log.error "No platform specified"
+    log.error 'No platform specified'
     args.help = true
 else if (args.build and not PLATFORMS[args.build]) or args.run and not PLATFORMS[args.run]
-    log.error "Unsupported platform"
+    log.error 'Unsupported platform'
     args.help = true
 
 # commands

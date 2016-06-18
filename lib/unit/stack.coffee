@@ -1,7 +1,6 @@
 'use strict'
 
-log = require 'src/log'
-utils = require 'src/utils'
+{utils, log} = Neft
 
 exports.currentScope = null
 exports.currentTest = null

@@ -20,3 +20,4 @@ Options:
   --out=PATH         used to generate complete bundle ready to publish on a server
   --watch
   --notify
+  --with-tests
