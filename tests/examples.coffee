@@ -52,14 +52,13 @@ runApp = (absPath, callback) ->
             callback code, stdout, stderr
     child
 
-testSauceApp = (driver, callback) ->
-    desired =
+testSauceApp = (platform, callback) ->
+    driver = sauce.getDriver()
+    desired = utils.merge
         name: 'Neft'
         tags: ['examples']
-        browserName: 'chrome'
-        platform: 'Windows 7'
-        version: '48.0'
         'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER
+    , platform
 
     callbackCalled = false
 
@@ -107,9 +106,41 @@ testSauceApp = (driver, callback) ->
 
     stack.runAll (err) ->
         driver.sauceJobStatus not err, ->
+            driver.quit()
             callback err
 
     return
+
+runSauceTest = (type, callback) ->
+    stack = new utils.async.Stack
+    appChild = null
+    sauceProcess = null
+
+    sauceConnectAndSave = (callback) ->
+        sauce.connect (err, process) ->
+            sauceProcess = process
+            callback err
+
+    runAndSaveApp = (absPath, callback) ->
+        appChild = runApp absPath, callback
+
+    stack.add buildApp, null, [absPath, ['browser', '--with-tests']]
+    stack.add sauceConnectAndSave
+    stack.add runAndSaveApp, null, [absPath]
+    stack.add (callback) ->
+        platformsStack = new utils.async.Stack
+        platforms = sauce.getPlatforms type
+        for platform in platforms
+            platformsStack.add testSauceApp, null, [platform]
+        platformsStack.runAllSimultaneously callback
+
+    stack.runAll (err1) ->
+        appChild?.send 'terminate'
+        closeStack = new utils.async.Stack
+        if sauceProcess?
+            closeStack.add sauceProcess.close, sauceProcess
+        closeStack.runAll (err2) ->
+            callback err1 or err2
 
 for example in examples
     absPath = fs.realpathSync example
@@ -122,32 +153,4 @@ for example in examples
 
         if process.env.NEFT_TEST_BROWSER
             it 'should pass tests on browser', (callback) ->
-                stack = new utils.async.Stack
-                appChild = null
-                sauceProcess = null
-                sauceDriver = null
-
-                sauceConnectAndSave = (callback) ->
-                    sauce.connect (err, process, driver) ->
-                        sauceProcess = process
-                        sauceDriver = driver
-                        callback err, driver
-
-                runAndSaveApp = (absPath, callback) ->
-                    appChild = runApp absPath, callback
-
-                stack.add buildApp, null, [absPath, ['browser', '--with-tests']]
-                stack.add sauceConnectAndSave
-                stack.add runAndSaveApp, null, [absPath]
-                stack.add (callback) ->
-                    testSauceApp sauceDriver, callback
-
-                stack.runAll (err1) ->
-                    appChild?.send 'terminate'
-                    closeStack = new utils.async.Stack
-                    if sauceDriver?
-                        closeStack.add sauceDriver.quit, sauceDriver
-                    if sauceProcess?
-                        closeStack.add sauceProcess.close, sauceDriver
-                    closeStack.runAllSimultaneously (err2) ->
-                        callback err1 or err2
+                runSauceTest 'browser', callback
