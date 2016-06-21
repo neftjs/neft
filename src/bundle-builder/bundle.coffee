@@ -3,18 +3,12 @@
 fs = require 'fs-extra'
 crypto = require 'crypto'
 pathUtils = require 'path'
-coffee = require 'coffee-script'
 os = require 'os'
-babel = require 'babel-core'
+moduleCache = require 'lib/moduleCache'
 
 {log} = Neft
-
-CACHE_DIRECTORY = os.tmpdir()
-
 {stringify} = JSON
 
-IS_COFFEE_RE = ///\.(coffee|litcoffee|coffee.md)$///
-IS_LITERATE_COFFEE_RE = ///\.(litcoffee|coffee.md)$///
 STRING_FILES =
     '.pegjs': true
     '.txt': true
@@ -30,27 +24,10 @@ replaceStr = (str, oldStr, newStr) ->
     r
 
 getFile = (path, opts) ->
-    try
-        file = fs.readFileSync path, 'utf-8'
-    catch
+    unless extname = pathUtils.extname path
         return
 
-    extname = pathUtils.extname path
-
-    # compile coffee-script files and cache it
-    # TODO: use this caching method in process.coffee as well for babel
-    if IS_COFFEE_RE.test(path)
-        digest = crypto.createHash('sha1').update(file, 'utf8').digest('hex')
-        cache = pathUtils.join CACHE_DIRECTORY, "#{digest}.js"
-        if fs.existsSync(cache)
-            file = fs.readFileSync cache, 'utf-8'
-        else
-            isLiterate = IS_LITERATE_COFFEE_RE.test path
-            file = coffee.compile file, bare: true, literate: isLiterate
-            fs.writeFileSync cache, file, 'utf-8'
-
-    if opts.useBabel and extname is '.js'
-        file = babel.transform(file, presets: ['es2015']).code
+    file = moduleCache.getFile path
 
     if STRING_FILES[extname]
         file = "module.exports = #{JSON.stringify(file)}"
