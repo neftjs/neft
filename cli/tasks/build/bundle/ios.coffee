@@ -18,7 +18,7 @@ XCODE_PROJECT_PATH = "#{OUT_DIR}Neft.xcodeproj/project.pbxproj"
 {utils, log} = Neft
 
 module.exports = (config, callback) ->
-    iosRuntimePath = pathUtils.resolve __dirname, '../../../../node_modules/neft-ios-runtime'
+    iosRuntimePath = pathUtils.resolve __dirname, '../../../../runtimes/ios'
 
     mustacheFiles = []
     coffeeFiles = []
