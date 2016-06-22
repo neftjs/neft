@@ -7,8 +7,10 @@ errorUtils = require './error'
 log = switch true
     when utils.isNode
         require './loggers/node'
+    when utils.isBrowser
+        require './loggers/browser'
     else
-        require './loggers/client'
+        require './loggers/native'
 
 SCOPE_PAD = '    '
 MIN_TIME_WARN = 100
