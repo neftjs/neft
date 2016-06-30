@@ -1,0 +1,1 @@
+# Basic click counter
