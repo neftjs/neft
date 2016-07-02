@@ -70,18 +70,20 @@ module.exports = (platform, options, app, callback) ->
                 extensions: []
 
             # get module extensions
-            modules = fs.readdirSync './node_modules'
-            for path in modules
-                if /^neft\-/.test(path)
-                    config.extensions.push
-                        name: path.slice('neft-'.length)
-                        path: "./node_modules/#{path}/"
+            try
+                modules = fs.readdirSync './node_modules'
+                for path in modules
+                    if /^neft\-/.test(path)
+                        config.extensions.push
+                            name: path.slice('neft-'.length)
+                            path: "./node_modules/#{path}/"
 
             # get local extensions
-            extensions = fs.readdirSync './extensions'
-            for path in extensions
-                config.extensions.push
-                    name: path
-                    path: "./extensions/#{path}/"
+            try
+                extensions = fs.readdirSync './extensions'
+                for path in extensions
+                    config.extensions.push
+                        name: path
+                        path: "./extensions/#{path}/"
 
             require("./bundle/#{platform}") config, callback

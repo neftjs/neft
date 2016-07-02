@@ -38,11 +38,12 @@ module.exports = (platform, app, callback) ->
             inputDirs.push path: stylesPath, prefix: "#{key}/"
 
     # add local extensions
-    extensions = fs.readdirSync './extensions'
-    for path in extensions
-        stylesPath = "extensions/#{path}/styles"
-        if fs.existsSync(stylesPath)
-            inputDirs.push path: stylesPath, prefix: "#{path}/"
+    try
+        extensions = fs.readdirSync './extensions'
+        for path in extensions
+            stylesPath = "extensions/#{path}/styles"
+            if fs.existsSync(stylesPath)
+                inputDirs.push path: stylesPath, prefix: "#{path}/"
 
     # add custom style paths
     if utils.isObject(packageConfig.styles)
