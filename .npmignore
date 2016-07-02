@@ -1,2 +1,4 @@
 coverage
 *.log
+build
+tmp

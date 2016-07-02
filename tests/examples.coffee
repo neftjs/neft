@@ -6,6 +6,7 @@ glob = require 'glob'
 fs = require 'fs'
 cp = require 'child_process'
 pathUtils = require 'path'
+os = require 'os'
 sauce = require './sauce'
 
 {unit, assert, utils} = Neft
@@ -14,6 +15,13 @@ sauce = require './sauce'
 APP_URL = 'localhost:3000'
 NEFT_BIN_PATH = pathUtils.join(fs.realpathSync('./'), 'bin/neft.js')
 NEFT_UNIT_BIN_PATH = pathUtils.join(fs.realpathSync('./'), 'bin/neft-unit.js')
+ANDROID_APK = 'build/android/app/build/outputs/apk/app-debug.apk'
+IOS_APP = 'build/ios/build/Release-iphonesimulator/Neft.app'
+APPIUM_VERSION = '1.5.3'
+
+BUILD_NUMBER = process.env.TRAVIS_BUILD_NUMBER
+BUILD_NUMBER ||= process.env.APPVEYOR_BUILD_NUMBER
+BUILD_NUMBER ||= "custom-#{utils.uid()}"
 
 examples = glob.sync './examples/*'
 
@@ -52,64 +60,169 @@ runApp = (absPath, callback) ->
             callback code, stdout, stderr
     child
 
-testSauceApp = (driver, callback) ->
-    desired =
-        name: 'Neft'
-        tags: ['examples']
-        browserName: 'chrome'
-        platform: 'Windows 7'
-        version: '48.0'
-        'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER
-
-    callbackCalled = false
-
+testSauceAppOnDriver = (desired, callback) ->
+    driver = sauce.getDriver()
     stack = new utils.async.Stack
 
     run = (func, args, onResult = utils.NOP) ->
-        if typeof args is 'function'
-            callback = args
-            args = null
-
         stack.add func, driver, args
-        if callback
-            stack.add (result, callback) ->
-                try
-                    onResult result
-                catch err
-                    return callback err
-                callback()
+        stack.add (result, callback) ->
+            try
+                onResult result
+            catch err
+                return callback err
+            callback()
 
         return
 
     run driver.init, [desired]
-    run driver.get, [APP_URL]
 
-    checkTestsFinished = ->
-        run driver.execute, ['''
-            if (neftUnitLogItem.$.running) {
-                return { running: true };
-            } else {
-                return {
-                    running: false,
-                    success: neftUnitLogItem.$.success,
-                    logs: neftUnitLogItem.text
-                };
-            }
-        '''],
-        ({running, success, logs}) ->
-            if running
-                return checkTestsFinished()
-            console.log logs
-            unless success
-                throw new Error 'Client tests failed'
+    if desired.browserName
+        run driver.get, [APP_URL]
+        logType = 'browser'
+    else
+        logType = 'syslog'
+
+    if desired.browserName
+        checkTestsFinished = ->
+            run driver.execute, ['''
+                if (neftUnitLogItem.$.running) {
+                    return { running: true };
+                } else {
+                    return {
+                        running: false,
+                        success: neftUnitLogItem.$.success,
+                        logs: neftUnitLogItem.text
+                    };
+                }
+            '''],
+            ({running, success, logs}) ->
+                if running
+                    return checkTestsFinished()
+                console.log logs
+                unless success
+                    throw new Error 'Client tests failed'
+    else
+        checkTestsFinished = ->
+            run driver.log, [logType],
+            (logs) ->
+                running = true
+                success = true
+
+                for log in logs
+                    if log.message.indexOf('Neft tests ended') >= 0
+                        running = false
+                        break
+
+                if running
+                    stack.add (callback) ->
+                        setTimeout ->
+                            checkTestsFinished()
+                            callback()
+                        , 500
+                    return
+
+                for log in logs
+                    if /Unit\ (LOG|OK|ERROR)/.test(log.message)
+                        console.log log.message
+                    else if log.message.indexOf('Neft tests failed') >= 0
+                        success = false
+
+                unless success
+                    throw new Error 'Client tests failed'
 
     checkTestsFinished()
 
     stack.runAll (err) ->
+        console.log 'SAUCE TEST ENDED'
+        console.log desired
         driver.sauceJobStatus not err, ->
+            driver.quit()
             callback err
 
     return
+
+testSauceApp = (absPath, type, callback) ->
+    platforms = utils.cloneDeep sauce.getPlatforms type
+
+    runTests = (config) ->
+        platformsStack = new utils.async.Stack
+        for platform in platforms
+            desired = utils.mergeAll
+                name: 'Neft'
+                tags: ['examples']
+                build: BUILD_NUMBER
+                'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER
+            , config, platform
+            platformsStack.add testSauceAppOnDriver, null, [desired]
+        platformsStack.runAllSimultaneously callback
+
+    switch type
+        when 'android'
+            apkLocal = pathUtils.join absPath, ANDROID_APK
+            apkFilename = "#{utils.uid()}.apk"
+            sauce.sendFile apkLocal, apkFilename, (err) ->
+                if err
+                    return callback err
+                runTests
+                    appiumVersion: APPIUM_VERSION
+                    app: "sauce-storage:#{apkFilename}"
+        when 'ios'
+            zipLocal = pathUtils.join os.tmpdir(), 'Neft.zip'
+            projectLocal = pathUtils.join absPath, 'build/ios'
+            appLocal = pathUtils.join absPath, IOS_APP
+
+            prepareDesired = (desired, callback) ->
+                xcode = 'xcodebuild -sdk iphonesimulator'
+                xcode += desired.platformVersion
+                cp.execSync xcode, cwd: projectLocal
+                cp.execSync "zip -r #{zipLocal} #{appLocal}"
+
+                zipFilename = "#{utils.uid()}.zip"
+                sauce.sendFile zipLocal, zipFilename, (err) ->
+                    if err
+                        return callback err
+                    desired.app = "sauce-storage:#{zipFilename}"
+                    callback null
+
+            iosStack = new utils.async.Stack
+            for platform in platforms
+                iosStack.add prepareDesired, null, [platform]
+            iosStack.runAll (err) ->
+                if err
+                    return callback err
+                runTests
+                    appiumVersion: APPIUM_VERSION
+        else
+            runTests()
+
+    return
+
+runSauceTest = (type, callback) ->
+    stack = new utils.async.Stack
+    appChild = null
+    sauceProcess = null
+
+    sauceConnectAndSave = (callback) ->
+        sauce.connect (err, process) ->
+            sauceProcess = process
+            callback err
+
+    runAndSaveApp = (absPath, callback) ->
+        appChild = runApp absPath, callback
+
+    stack.add buildApp, null, [absPath, [type, '--with-tests']]
+    stack.add sauceConnectAndSave
+    stack.add runAndSaveApp, null, [absPath]
+    stack.add testSauceApp, null, [absPath, type]
+
+    stack.runAll (err1) ->
+        appChild?.send 'terminate'
+        closeStack = new utils.async.Stack
+        if sauceProcess?
+            closeStack.add sauceProcess.close, sauceProcess
+        closeStack.runAll (err2) ->
+            callback err1 or err2
 
 for example in examples
     absPath = fs.realpathSync example
@@ -122,32 +235,12 @@ for example in examples
 
         if process.env.NEFT_TEST_BROWSER
             it 'should pass tests on browser', (callback) ->
-                stack = new utils.async.Stack
-                appChild = null
-                sauceProcess = null
-                sauceDriver = null
+                runSauceTest 'browser', callback
 
-                sauceConnectAndSave = (callback) ->
-                    sauce.connect (err, process, driver) ->
-                        sauceProcess = process
-                        sauceDriver = driver
-                        callback err, driver
+        if process.env.NEFT_TEST_ANDROID
+            it 'should pass tests on android', (callback) ->
+                runSauceTest 'android', callback
 
-                runAndSaveApp = (absPath, callback) ->
-                    appChild = runApp absPath, callback
-
-                stack.add buildApp, null, [absPath, ['browser', '--with-tests']]
-                stack.add sauceConnectAndSave
-                stack.add runAndSaveApp, null, [absPath]
-                stack.add (callback) ->
-                    testSauceApp sauceDriver, callback
-
-                stack.runAll (err1) ->
-                    appChild?.send 'terminate'
-                    closeStack = new utils.async.Stack
-                    if sauceDriver?
-                        closeStack.add sauceDriver.quit, sauceDriver
-                    if sauceProcess?
-                        closeStack.add sauceProcess.close, sauceDriver
-                    closeStack.runAllSimultaneously (err2) ->
-                        callback err1 or err2
+        if process.env.NEFT_TEST_IOS
+            it 'should pass tests on ios', (callback) ->
+                runSauceTest 'ios', callback

@@ -1,0 +1,6 @@
+-
+    deviceName: 'Android Emulator'
+    deviceType: 'phone'
+    deviceOrientation: 'portrait'
+    platformName: 'Android'
+    platformVersion: '5.1'
