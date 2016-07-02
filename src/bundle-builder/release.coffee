@@ -25,7 +25,7 @@ module.exports = (bundle, opts, callback) ->
         cleaner = groundskeeper
             console: true
             namespace: namespaces
-            replace: 'true'
+            replace: 'true\n'
         cleaner.write bundle
         bundle = cleaner.toString()
         log.end logtime
