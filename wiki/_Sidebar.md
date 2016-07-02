@@ -4,10 +4,10 @@ JavaScript Everywhere
 =====================
 
 - [[Home]]
-- [[Contribute]]
-- [[Examples]]
-- [[Tutorials]]
 - [[Tour]]
+- [[Contribute]]
+- [[Tutorials]]
+- [[Examples]]
 - [[Plugins]]
 
 ### Help

@@ -5,8 +5,6 @@ First application
 
 Neft is a JavaScript framework made for easy writing server-browser-native applications.
 
-Neft is an Open Source project under the Apache 2.0 license. The source code is available in the GitHub service.
-
 Installation
 ---
 
@@ -14,7 +12,7 @@ Installation
 npm install -g neft
 ```
 
-`npm` is the package manager for JavaScript installed in Node.
+`npm` is the package manager for JavaScript installed by default in Node.
 
 `-g` flag will install Neft globally.
 
@@ -28,8 +26,6 @@ neft create MyApp
 ```
 
 `MyApp` is the name of folder, where the app will be created.
-
-This command creates a sample application with the server-client communication and simple list rendering.
 
 ### Run server
 
@@ -54,7 +50,7 @@ To open your application in a browser, you need to run the server.
 In further development, you can rebuild your app with no browser opening.
 
 ```bash
-neft build browser
+neft build browser --watch --notify
 ```
 
 #### WebGL renderer
@@ -67,7 +63,7 @@ If you want to use the WebGL renderer you can:
 
 #### Text mode
 
-If you want to disable the renderer in a browser, you can:
+If you want to disable the renderer in a browser and see how Google see your page, you can:
 - change the `config.type` to `text` in the `pakcage.json`,
 - use `/neft-type=text/` URI (e.g. `http://localhost:3000/neft-type=text/`).
 
@@ -81,7 +77,7 @@ Your application will run on a device.
 
 All Android files are in the `./build/android` folder.
 
-If the Android SDK folder can't be found, specify its path in the `local.json` file.
+If the Android SDK folder can't be find, specify its path in the `local.json` file.
 
 ### Run on iOS
 
@@ -89,7 +85,7 @@ If the Android SDK folder can't be found, specify its path in the `local.json` f
 neft run ios
 ```
 
-This command runs the XCode on your Mac computer.
+This command runs XCode on your Mac computer.
 
 All iOS files are in the `./build/ios` folder.
 

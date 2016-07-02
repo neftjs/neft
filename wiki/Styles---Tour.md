@@ -3,13 +3,13 @@
 Styles
 ===
 
-Neft uses his own simply language to describe how the elements looks like, therefore styles in Neft can be well organized and more dynamic (JavaScript support, views data-binding etc.).
+Neft uses his own language to describe how the elements looks like, therefore styles in Neft can be well organized and more dynamic, because the JavaScript support, views data-binding and more.
 
 All style files must be placed in the `/styles` folder.
 
-The main style is named `view.js`.
-
 ## NML syntax
+
+NML *(Neft Marked Language)* is a simple but powerful language inspired by QML.
 
 ```javascript
 TypeName {
@@ -28,13 +28,18 @@ TypeName {
 
 `TypeName` is a class name provided by Neft: an Item, Column, Rectangle, FontLoader and more. `TypeName` can be also a reference to your custom style.
 
-`id` is optional and it's used for data-binding and to describe the top object.
+`id` is optional and it's used for data-binding.
+
+## Main style
+
+The main style must be returned as a first element from the `view.js` file.
+It's a starting point of your application.
 
 ## Base item
 
 All visible types in Neft extends the `Item` type.
 
-It contains various properties (e.g. `x`, `y`, `scale`, `width`, `nextSibling`), `keys` and `pointer` support, `children` array and more. Check later the API Reference for the `Renderer` module.
+It contains various properties (e.g. `x`, `y`, `scale`, `width`, `nextSibling`), `keys` and `pointer` support, `children` list and more. Check later the API Reference for the `Renderer` module.
 
 ```javascript
 Item {
@@ -50,9 +55,9 @@ Style file can contains custom JavaScript code and top level items (items with n
 
 ```javascript
 // styles/button.js
-``
-var utils = require('utils');
-``
+`
+var utils = Neft.utils;
+`
 
 Item {
     id: button
@@ -65,7 +70,7 @@ Rectangle {
 
 ## Data binding
 
-Style item properties can reference to the item object itself (`this`), other items (by their ids), defined JavaScript variables, call functions and more.
+Item properties can reference to the item object itself (`this`), other items (by their ids), defined JavaScript variables and call functions.
 
 ```javascript
 Item {
@@ -84,12 +89,12 @@ Item {
 
 ## Global access
 
-In style files you have access to the `app` object and to the `view` - first top level item from the `view.js` file (in other words - window item).
+In style files you have access to the `app` object and to the `view` main style globally.
 
 ```javascript
 Rectangle {
     width: view.width
-    color: app.cookies.clientColor // chm..
+    color: app.cookies.clientColor
 }
 ```
 
@@ -187,14 +192,15 @@ button.sampleButton {
 
 ## Layout
 
-To position children in an item, you can use few methods.
-The first one you already know - it's absolute positioning (`x` and `y`).
+To position children in an item, you can use few methods:
+ - absolute positioning (`x` and `y` properties),
+ - from left to right - `Flow` type,
+ - on a grid - `Grid`, `Column`, `Row` types,
+ - anchors.
 
 ### Flow
 
 Flow element position items from left to right.
-
-`Item::layout` gives you a possibility to change how this item behaves in his layout parent.
 
 ```javascript
 Flow {
@@ -214,9 +220,9 @@ Flow {
 
 ### Grid
 
-Grid positions its children in grid formation.
+Grid positions its children in a grid formation.
 
-Other elements similar to Grid are Column and Row.
+Other elements similar to `Grid` are `Column` and `Row`.
 
 ```javascript
 Grid {
@@ -240,7 +246,7 @@ Grid {
 `Item::anchor` describes relation between two items.
 Each item has few lines: top, verticalCenter, bottom, left, horizontalCenter and bottom.
 
-You can stick item line into another item. For the performance reasons, you can anchor only to siblings or to the item parent.
+You can stick an item line into another item line. For the performance reasons, you can anchor only to siblings or to the item parent.
 
 ```javascript
 Item {
@@ -259,11 +265,15 @@ Item {
 
 `Item::background` gives a possibility to use any item as a background.
 
-By default, background fills his parent.
+By default, *background` is a `Rectangle` filling his parent.
 
 ```javascript
 Item {
-    background: Rectangle {}
+    background: Rectangle {
+        color: 'red'
+    }
+    // .. or just
+    background.color: 'red'
 }
 ```
 
@@ -285,7 +295,8 @@ Item {
 }
 ```
 
-By default animators don't update the property during animation (it's much faster). To change this behavior, switch the `PropertyAnimation::updateData` property.
+By default animators don't update the property during animation (it's much faster).
+To change this behaviour, switch the `PropertyAnimation::updateProperty` boolean.
 
 ## Transitions
 
@@ -312,14 +323,14 @@ Item {
 
 ## Views integration
 
-You can draw styles just putting them into the `view.js` top level item, but, for the better organization, we need to integrate our HTML documents with our styles.
+You can draw styles just putting them into the `view.js` top level item, but, for the better organization, we need to integrate our HTML documents with created styles.
 
 `Item::document::query` will use an item on all elements found by the given query. `document::query` can't be changed in runtime.
 
 ```javascript
 Text {
     document.query: 'span'
-    // this item will be used for all 'span' elements
+    // this item will be used for all 'span' elements from views
 }
 ```
 
@@ -337,12 +348,12 @@ Item {
 
 ### Runtime changes
 
-For more dynamic behaviors you can use the `for (query){}` syntax.
-It works like *if (){}* but uses a query and modifies all HTML elements found by the given query.
+For more dynamic behaviors you can use the `for (query) {}` syntax.
+It works like `if () {}` but uses a query and modifies all found HTML elements in runtime.
 
 ```javascript
-for ('span.large'){
-    font.pixelSize: 30
+for ('header.large'){
+    width: parent.width * 0.8
 }
 ```
 
@@ -358,18 +369,28 @@ for ('body[page=docs]'){
 }
 ```
 
+### Text styling
+
+All HTML texts are rendered by default as Renderer `Text` items. You can modify how the texts looks like using the `#text` query. In Neft, text styles are not inherited like in CSS.
+
+```javascript
+for ('span.large #text') {
+    font.pixelSize: 30
+}
+```
+
 ### Inline styles
 
-Attached style Item on the document element is available under the `style` property. You can use it to define styles in the HTML document.
+Attached style Item on the document element is available under the `style` property. You can use it to define inline styles in the HTML document.
 
 ```html
 <span style:font:pixelSize="30">ABC</span>
 ```
 
-Inline styles also supports signals. You can attach route method, or a `neft:function`.
+Inline styles also supports signals.
 
 ```html
-<span style:onTextChange="${route.spanTextChange}">ABC</span>
+<span style:pointer:onClick="${this.onSpanClick}">ABC</span>
 ```
 
 Next article: [[Networking - Tour]]
