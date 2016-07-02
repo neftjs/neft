@@ -33,7 +33,7 @@ console.log(utils.get(obj, 'prop[].deep.result'));
 // 'utils.get.OptionsArray' instance ...
 ```
 
-        get = utils.get = (obj, path='', target) ->
+        get = utils.get = (obj, path = '', target) ->
             switch typeof path
                 when 'object'
                     path = exports.clone path
@@ -47,7 +47,8 @@ console.log(utils.get(obj, 'prop[].deep.result'));
             for key, i in path
                 # empty props are not supported
                 if not key.length and i
-                    throw new ReferenceError "utils.get(): empty properties are not supported"
+                    throw new ReferenceError 'utils.get(): empty properties ' +
+                        'are not supported'
 
                 # support array elements by `[]` chars
                 if isStringArray key
@@ -121,7 +122,7 @@ to the notation in the utils.get() function.
             null
             `//<development>`
             if typeof arg isnt 'string'
-                throw new Error "utils.isStringArray value must be a string"
+                throw new Error 'utils.isStringArray value must be a string'
             `//</development>`
 
             ///\[\]$///.test arg

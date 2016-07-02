@@ -47,13 +47,13 @@ console.log(clone instanceof Sample)
             nativeProtos = [Array::, Object::]
             nativeCtors = [Array, Object]
 
-            (obj, opts={}) ->
+            (obj, opts = {}) ->
                 null
                 `//<development>`
                 unless utils.isObject(obj)
-                    throw new Error "utils.simplify object must be an object"
+                    throw new Error 'utils.simplify object must be an object'
                 unless utils.isPlainObject(opts)
-                    throw new Error "utils.simplify options must be a plain object"
+                    throw new Error 'utils.simplify options must be a plain object'
                 `//</development>`
 
                 optsProps = opts.properties ?= false
@@ -195,7 +195,7 @@ Backward utils.simplify() operation.
                 null
                 `//<development>`
                 unless utils.isPlainObject(obj)
-                    throw new Error "utils.assemble object must be a plain object"
+                    throw new Error 'utils.assemble object must be a plain object'
                 `//</development>`
 
                 {opts, objects, references, protos, constructors} = obj

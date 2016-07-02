@@ -109,7 +109,7 @@ The given test function can contains optional *callback* argument.
                 setImmediate checkListeners
             return
 
-        (obj, callback, maxDelay=1000) ->
+        (obj, callback, maxDelay = 1000) ->
             listener = new Listener
             listener.object = obj
             listener.objectCopy = utils.clone(obj)

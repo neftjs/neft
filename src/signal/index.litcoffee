@@ -95,7 +95,7 @@ Returns `true` if the given signal has no listeners.
             if func is null
                 containsGaps = true
             else
-                ctx = listeners[i+1]
+                ctx = listeners[i + 1]
                 if result <= 0 and func.call(ctx or obj, arg1, arg2) is STOP_PROPAGATION
                     result = STOP_PROPAGATION
                     if containsGaps
@@ -109,12 +109,12 @@ Returns `true` if the given signal has no listeners.
                 if func is null
                     shift -= 2
                 else if shift > 0
-                    assert.isNotDefined listeners[i+shift]
-                    assert.isNotDefined listeners[i+shift+1]
-                    listeners[i+shift] = func
-                    listeners[i+shift+1] = listeners[i+1]
+                    assert.isNotDefined listeners[i + shift]
+                    assert.isNotDefined listeners[i + shift + 1]
+                    listeners[i + shift] = func
+                    listeners[i + shift + 1] = listeners[i + 1]
                     listeners[i] = null
-                    listeners[i+1] = null
+                    listeners[i + 1] = null
                 i += 2
 
         return result
@@ -136,8 +136,8 @@ Returns `true` if the given signal has no listeners.
 Call all of the signal listeners with the given arguments (2 maximally).
 
         emit: (arg1, arg2) ->
-            assert.isFunction @, "emit must be called on a signal function"
-            assert.isArray @listeners, "emit must be called on a signal function"
+            assert.isFunction @, 'emit must be called on a signal function'
+            assert.isArray @listeners, 'emit must be called on a signal function'
             assert.operator arguments.length, '<', 3, 'signal accepts maximally two parameters; use object instead'
 
             callSignal @obj, @listeners, arg1, arg2
@@ -186,24 +186,24 @@ obj.onPress.emit();
 // {standard: true}
 ```
 
-        connect: (listener, ctx=null) ->
-            assert.isFunction @, "connect must be called on a signal function"
-            assert.isFunction listener, "listener is not a function"
+        connect: (listener, ctx = null) ->
+            assert.isFunction @, 'connect must be called on a signal function'
+            assert.isFunction listener, 'listener is not a function'
 
             {listeners} = @
 
             i = n = listeners.length
-            while (i-=2) >= 0
+            while (i -= 2) >= 0
                 if listeners[i] isnt null
                     break
 
-            if i+2 is n
+            if i + 2 is n
                 listeners.push listener, ctx
             else
-                assert.isNotDefined listeners[i+2]
-                assert.isNotDefined listeners[i+3]
-                listeners[i+2] = listener
-                listeners[i+3] = ctx
+                assert.isNotDefined listeners[i + 2]
+                assert.isNotDefined listeners[i + 3]
+                listeners[i + 2] = listener
+                listeners[i + 3] = ctx
 
             return
 
@@ -227,16 +227,16 @@ obj.onPress.emit()
 // no loggs...
 ```
 
-        disconnect: (listener, ctx=null) ->
-            assert.isFunction @, "disconnect must be called on a signal function"
-            assert.isFunction listener, "listener is not a function"
+        disconnect: (listener, ctx = null) ->
+            assert.isFunction @, 'disconnect must be called on a signal function'
+            assert.isFunction listener, 'listener is not a function'
 
             {listeners} = @
             index = 0
 
             loop
                 index = listeners.indexOf listener, index
-                if index is -1 or listeners[index+1] is ctx
+                if index is -1 or listeners[index + 1] is ctx
                     break
                 index += 2
             assert.isNot index, -1, "listener doesn't exist in this signal"
@@ -253,7 +253,7 @@ obj.onPress.emit()
 Removes all the signal listeners.
 
         disconnectAll: ->
-            assert.isFunction @, "disconnectAll must be called on a signal function"
+            assert.isFunction @, 'disconnectAll must be called on a signal function'
 
             {listeners} = @
             for _, i in listeners

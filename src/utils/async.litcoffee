@@ -58,7 +58,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
                 i++
 
                 # call callback func
-                callback.call thisArg, arr[i-1], i-1, arr, next
+                callback.call thisArg, arr[i - 1], i - 1, arr, next
 
             # start
             next()
@@ -129,7 +129,8 @@ stack.runAllSimultaneously(function(){
     class Stack
 
         constructor: ->
-            # One-deep array of added functions in schema [function, context, args, ...]
+            # One-deep array of added functions
+            # in schema [function, context, args, ...]
             @_arr = []
             @length = 0
 
@@ -200,9 +201,13 @@ Calls the first function from the stack and remove it.
                 func = utils.get context, func
 
             if typeof func isnt 'function'
-                throw new TypeError "ASync Stack::callNext(): function to call is not a function"
+                throw new TypeError 'ASync Stack::callNext(): ' +
+                    'function to call is not a function'
 
-            funcLength = func.length or Math.max(args?.length or 0, funcArgs?.length or 0)+1
+            funcLength = func.length or Math.max(
+                args?.length or 0,
+                funcArgs?.length or 0
+            ) + 1
             syncError = null
             called = false
 
@@ -243,9 +248,10 @@ Calls all functions from the stack one by one.
 
 When an error occurs, processing stops and the callback function is called with the got error.
 
-        runAll: (callback=NOP, ctx=null) ->
+        runAll: (callback = NOP, ctx = null) ->
             if typeof callback isnt 'function'
-                throw new TypeError "ASync runAll(): passed callback is not a function"
+                throw new TypeError 'ASync runAll(): ' +
+                    'passed callback is not a function'
 
             unless @_arr.length
                 return callback.call ctx, null
@@ -273,7 +279,7 @@ Calls all functions from the stack simultaneously (all at the same time).
 
 When an error occurs, processing stops and the callback function is called with the got error.
 
-        runAllSimultaneously: (callback=NOP, ctx=null) ->
+        runAllSimultaneously: (callback = NOP, ctx = null) ->
             assert typeof callback is 'function'
 
             length = n = @_arr.length / 3
