@@ -4,6 +4,7 @@ enum InAction: Int {
     CALL_FUNCTION = 0,
 
     // renderer
+    DEVICE_LOG,
     DEVICE_SHOW_KEYBOARD,
     DEVICE_HIDE_KEYBOARD,
 

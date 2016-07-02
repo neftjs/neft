@@ -9,7 +9,7 @@
     signal.create exports, 'onReady'
     signal.create exports, 'onWindowChange'
 
-    Impl = require('./impl') exports
+    exports._Impl = Impl = require('./impl') exports
     itemUtils = exports.itemUtils = require('./utils/item') exports, Impl
 
     exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils

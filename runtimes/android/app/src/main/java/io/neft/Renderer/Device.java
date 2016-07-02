@@ -381,6 +381,13 @@ public class Device {
     static void register(MainActivity app){
         final Device device = app.renderer.device;
 
+        app.client.actions.put(InAction.DEVICE_LOG, new Action() {
+            @Override
+            public void work(Reader reader) {
+                device.log(reader.getString());
+            }
+        });
+
         app.client.actions.put(InAction.DEVICE_SHOW_KEYBOARD, new Action() {
             @Override
             public void work(Reader reader) {
@@ -394,6 +401,10 @@ public class Device {
                 device.hideKeyboard();
             }
         });
+    }
+
+    void log(String val){
+        Log.i("Neft", val);
     }
 
     void showKeyboard(){
