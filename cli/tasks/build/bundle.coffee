@@ -67,14 +67,21 @@ module.exports = (platform, options, app, callback) ->
                 appCode: file
                 package: JSON.parse fs.readFileSync('./package.json')
                 local: JSON.parse fs.readFileSync('./local.json')
-                extensions: extensions = []
+                extensions: []
 
-            # get extensions
+            # get module extensions
             modules = fs.readdirSync './node_modules'
             for path in modules
                 if /^neft\-/.test(path)
-                    extensions.push
+                    config.extensions.push
                         name: path.slice('neft-'.length)
                         path: "./node_modules/#{path}/"
+
+            # get local extensions
+            extensions = fs.readdirSync './extensions'
+            for path in extensions
+                config.extensions.push
+                    name: path
+                    path: "./extensions/#{path}/"
 
             require("./bundle/#{platform}") config, callback

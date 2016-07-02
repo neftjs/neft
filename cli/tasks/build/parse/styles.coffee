@@ -30,11 +30,21 @@ module.exports = (platform, app, callback) ->
     inputDirs = [path: IN_DIR, prefix: '']
 
     packageConfig = JSON.parse fs.readFileSync('./package.json', 'utf-8')
+
+    # add package module extensions
     for key of packageConfig.dependencies
         stylesPath = "node_modules/#{key}/styles"
         if /^neft\-/.test(key) and fs.existsSync(stylesPath)
             inputDirs.push path: stylesPath, prefix: "#{key}/"
 
+    # add local extensions
+    extensions = fs.readdirSync './extensions'
+    for path in extensions
+        stylesPath = "extensions/#{path}/styles"
+        if fs.existsSync(stylesPath)
+            inputDirs.push path: stylesPath, prefix: "#{path}/"
+
+    # add custom style paths
     if utils.isObject(packageConfig.styles)
         for key, val of packageConfig.styles
             inputDirs.push path: val, prefix: "#{key}/"
