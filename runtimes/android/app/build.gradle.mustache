@@ -23,6 +23,14 @@ android {
     }
     productFlavors {
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi', 'armeabi-v7a', 'x86'
+            universalApk true
+        }
+    }
 }
 
 dependencies {
