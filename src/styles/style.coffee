@@ -36,7 +36,7 @@ module.exports = (File, data) -> class Style
             nodes = file.node.queryAll elem.query
             for node in nodes
                 unless node instanceof Tag
-                    log.warn "document.query can be attached only to tags; " +
+                    log.warn 'document.query can be attached only to tags; ' +
                         "query '#{elem.query}' has been omitted for this node"
                     continue
                 unless node.attrs.has('neft:style')
@@ -178,7 +178,7 @@ module.exports = (File, data) -> class Style
 
             # get object
             obj = @item
-            for i in [0...props.length-1] by 1
+            for i in [0...props.length - 1] by 1
                 unless obj = obj[props[i]]
                     log.warn "Attribute '#{attr}' doesn't exist in item '#{@item}'"
                     return false
@@ -242,7 +242,7 @@ module.exports = (File, data) -> class Style
                         classes.pop index
                         if prevIndex > index
                             prevIndex--
-                    index = prevIndex+1
+                    index = prevIndex + 1
                     classes.insert index, name
                 prevIndex = index
 
@@ -265,7 +265,7 @@ module.exports = (File, data) -> class Style
 
     setLinkUri: (val) ->
         if @item
-            @item.linkUri = val+''
+            @item.linkUri = val + ''
         return
 
     findAndSetVisibility: ->
@@ -372,7 +372,7 @@ module.exports = (File, data) -> class Style
             throw new Error "Unexpected neft:style; '#{id}' given"
 
         if @item
-            @isAutoParent = !@item.parent
+            @isAutoParent = not @item.parent
 
             # set visibility
             @findAndSetVisibility()

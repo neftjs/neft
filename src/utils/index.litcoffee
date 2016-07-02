@@ -276,13 +276,14 @@ console.log(config);
         null
         `//<development>`
         if isPrimitive(source)
-            throw new Error "utils.merge source cannot be primitive"
+            throw new Error 'utils.merge source cannot be primitive'
         if isPrimitive(obj)
-            throw new Error "utils.merge object cannot be primitive"
+            throw new Error 'utils.merge object cannot be primitive'
         if source is obj
-            throw new Error "utils.merge source and object are the same"
+            throw new Error 'utils.merge source and object are the same'
         if arguments.length > 2
-            throw new Error "utils.merge expects only two arguments; use utils.mergeAll instead"
+            throw new Error 'utils.merge expects only two arguments; ' +
+                'use utils.mergeAll instead'
         `//</development>`
 
         for key, value of obj when obj.hasOwnProperty(key)
@@ -305,16 +306,16 @@ console.log(config);
         null
         `//<development>`
         if isPrimitive(source)
-            throw new Error "utils.merge source cannot be primitive"
+            throw new Error 'utils.merge source cannot be primitive'
         `//</development>`
 
         for i in [1...arguments.length] by 1
             if (obj = arguments[i])?
                 `//<development>`
                 if isPrimitive(obj)
-                    throw new Error "utils.mergeAll object cannot be primitive"
+                    throw new Error 'utils.mergeAll object cannot be primitive'
                 if source is obj
-                    throw new Error "utils.mergeAll source and object are the same"
+                    throw new Error 'utils.mergeAll source and object are the same'
                 `//</development>`
                 for key, value of obj when obj.hasOwnProperty(key)
                     source[key] = value
@@ -352,11 +353,11 @@ console.log(user);
         null
         `//<development>`
         if isPrimitive(source)
-            throw new Error "utils.mergeDeep source cannot be primitive"
+            throw new Error 'utils.mergeDeep source cannot be primitive'
         if isPrimitive(obj)
-            throw new Error "utils.mergeDeep object cannot be primitive"
+            throw new Error 'utils.mergeDeep object cannot be primitive'
         if source is obj
-            throw new Error "utils.mergeDeep source and object are the same"
+            throw new Error 'utils.mergeDeep source and object are the same'
         `//</development>`
 
         for key, value of obj when hasOwnProp.call obj, key
@@ -393,11 +394,11 @@ console.log(user);
         null
         `//<development>`
         if isPrimitive(source)
-            throw new Error "utils.fill source cannot be primitive"
+            throw new Error 'utils.fill source cannot be primitive'
         if isPrimitive(obj)
-            throw new Error "utils.fill object cannot be primitive"
+            throw new Error 'utils.fill object cannot be primitive'
         if source is obj
-            throw new Error "utils.fill source and object are the same"
+            throw new Error 'utils.fill source and object are the same'
         `//</development>`
 
         for key, value of obj when hasOwnProp.call(obj, key)
@@ -426,7 +427,7 @@ console.log(object);
         null
         `//<development>`
         if isPrimitive(obj)
-            throw new Error "utils.remove object cannot be primitive"
+            throw new Error 'utils.remove object cannot be primitive'
         `//</development>`
 
         if isArray(obj)
@@ -434,7 +435,7 @@ console.log(object);
             if index isnt -1
                 if index is 0
                     obj.shift()
-                else if index is obj.length-1
+                else if index is obj.length - 1
                     obj.pop()
                 else
                     obj.splice index, 1
@@ -453,12 +454,12 @@ Elements order may be changed.
         null
         `//<development>`
         unless Array.isArray(arr)
-            throw new Error "utils.removeFromUnorderedArray array must be an Array"
+            throw new Error 'utils.removeFromUnorderedArray array must be an Array'
         `//</development>`
 
         index = arr.indexOf elem
         if index isnt -1
-            arr[index] = arr[arr.length-1]
+            arr[index] = arr[arr.length - 1]
             arr.pop()
 
         return
@@ -485,9 +486,9 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
         null
         `//<development>`
         if isPrimitive(obj)
-            throw new Error "utils.getPropertyDescriptor object cannot be primitive"
+            throw new Error 'utils.getPropertyDescriptor object cannot be primitive'
         if typeof prop isnt 'string'
-            throw new Error "utils.getPropertyDescriptor property must be a string"
+            throw new Error 'utils.getPropertyDescriptor property must be a string'
         `//</development>`
 
         while obj and not desc
@@ -586,11 +587,12 @@ console.log(object.length);
             null
             `//<development>`
             if isPrimitive(obj)
-                throw new Error "utils.defineProperty object cannot be primitive"
+                throw new Error 'utils.defineProperty object cannot be primitive'
             if typeof prop isnt 'string'
-                throw new Error "utils.defineProperty property must be a string"
+                throw new Error 'utils.defineProperty property must be a string'
             if desc? and (not exports.isInteger(desc) or desc < 0)
-                throw new Error "utils.defineProperty descriptors bitmask must be a positive integer"
+                throw new Error 'utils.defineProperty descriptors bitmask ' +
+                    'must be a positive integer'
             `//</development>`
 
             # configure value
@@ -628,9 +630,11 @@ console.log(object.length);
 
     exports.overrideProperty = (obj, prop, getter, setter) ->
         unless desc = exports.getPropertyDescriptor(obj, prop)
-            throw new Error "utils.overrideProperty object must has the given property"
+            throw new Error 'utils.overrideProperty object ' +
+                'must has the given property'
         unless desc.configurable
-            throw new Error "utils.overrideProperty the given property is not configurable"
+            throw new Error 'utils.overrideProperty the given property ' +
+                'is not configurable'
 
         # get bitmask descriptors
         opts = exports.CONFIGURABLE
@@ -738,7 +742,8 @@ console.log(utils.isEmpty(''));
 
         `//<development>`
         if isPrimitive(object)
-            throw new Error "utils.isEmpty object must be a string or not primitive"
+            throw new Error 'utils.isEmpty object must be a string or ' +
+                'not primitive'
         `//</development>`
 
         if isArray(object)
@@ -764,7 +769,7 @@ console.log(utils.last([]))
         null
         `//<development>`
         if isPrimitive(arg)
-            throw new Error "utils.last array cannot be primitive"
+            throw new Error 'utils.last array cannot be primitive'
         `//</development>`
 
         arg[arg.length - 1]
@@ -789,7 +794,7 @@ console.log(obj);
         null
         `//<development>`
         if isPrimitive(obj)
-            throw new Error "utils.clear object cannot be primitive"
+            throw new Error 'utils.clear object cannot be primitive'
         `//</development>`
 
         if isArray obj
@@ -834,9 +839,11 @@ console.log(newObj.b)
                 null
                 `//<development>`
                 if isPrimitive(obj)
-                    throw new Error "utils.setPrototypeOf object cannot be primitive"
+                    throw new Error 'utils.setPrototypeOf object ' +
+                        'cannot be primitive'
                 if proto? and isPrimitive(proto)
-                    throw new Error "utils.setPrototypeOf prototype cannot be primitive"
+                    throw new Error 'utils.setPrototypeOf prototype ' +
+                        'cannot be primitive'
                 `//</development>`
 
                 obj.__proto__ = proto
@@ -847,9 +854,11 @@ console.log(newObj.b)
             null
             `//<development>`
             if isPrimitive(obj)
-                throw new Error "utils.setPrototypeOf object cannot be primitive"
+                throw new Error 'utils.setPrototypeOf object ' +
+                    'cannot be primitive'
             if proto? and isPrimitive(proto)
-                throw new Error "utils.setPrototypeOf prototype cannot be primitive"
+                throw new Error 'utils.setPrototypeOf prototype ' +
+                    'cannot be primitive'
             `//</development>`
 
             if typeof obj is 'object'
@@ -898,7 +907,7 @@ console.log(utils.has('abc', 'e'))
         else
             `//<development>`
             if isPrimitive(obj)
-                throw new Error "utils.has object must be a string or not primitive"
+                throw new Error 'utils.has object must be a string or not primitive'
             `//</development>`
 
             if isArray(obj)
@@ -942,11 +951,11 @@ console.log(utils.objectToArray(object, function(key, val){
 
         `//<development>`
         if not isObject(obj)
-            throw new Error "utils.objectToArray object must be an object"
+            throw new Error 'utils.objectToArray object must be an object'
         if valueGen? and typeof valueGen isnt 'function'
-            throw new Error "utils.objectToArray valueGen must be a function"
+            throw new Error 'utils.objectToArray valueGen must be a function'
         if not isArray(target)
-            throw new Error "utils.objectToArray target must be an array"
+            throw new Error 'utils.objectToArray target must be an array'
         `//</development>`
 
         for key, i in keys
@@ -990,13 +999,13 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
         null
         `//<development>`
         if not isArray(arr)
-            throw new Error "utils.arrayToObject array must be an array"
+            throw new Error 'utils.arrayToObject array must be an array'
         if keyGen? and typeof keyGen isnt 'function'
-            throw new Error "utils.arrayToObject keyGen must be a function"
+            throw new Error 'utils.arrayToObject keyGen must be a function'
         if valueGen? and typeof valueGen isnt 'function'
-            throw new Error "utils.arrayToObject valueGen must be a function"
+            throw new Error 'utils.arrayToObject valueGen must be a function'
         if not isObject(target)
-            throw new Error "utils.arrayToObject target must be an object"
+            throw new Error 'utils.arrayToObject target must be an object'
         `//</development>`
 
         for elem, i in arr
@@ -1021,7 +1030,7 @@ console.log(utils.capitalize('name'))
         null
         `//<development>`
         if typeof str isnt 'string'
-            throw new Error "utils.capitalize string must be a string"
+            throw new Error 'utils.capitalize string must be a string'
         `//</development>`
 
         unless str.length
@@ -1046,7 +1055,7 @@ console.log(utils.addSlashes('a"b'))
             null
             `//<development>`
             if typeof str isnt 'string'
-                throw new Error "utils.addSlashes string must be a string"
+                throw new Error 'utils.addSlashes string must be a string'
             `//</development>`
 
             unless str.length
@@ -1065,11 +1074,11 @@ console.log(utils.uid())
 // "50"
 ```
 
-    exports.uid = (n=8) ->
+    exports.uid = (n = 8) ->
         null
         `//<development>`
         if typeof n isnt 'number' or n <= 0 or not isFinite(n)
-            throw new Error "utils.uid length must be a positive finite number"
+            throw new Error 'utils.uid length must be a positive finite number'
         `//</development>`
 
         str = ''
@@ -1111,9 +1120,9 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
         null
         `//<development>`
         if typeof func isnt 'function'
-            throw new Error "utils.tryFunction function must be a function"
+            throw new Error 'utils.tryFunction function must be a function'
         if args? and not isObject(args)
-            throw new Error "utils.tryFunction arguments must be an object"
+            throw new Error 'utils.tryFunction arguments must be an object'
         `//</development>`
 
         try
@@ -1150,9 +1159,9 @@ console.log(utils.catchError(test, null, [100]))
         null
         `//<development>`
         if typeof func isnt 'function'
-            throw new Error "utils.catchError function must be a function"
+            throw new Error 'utils.catchError function must be a function'
         if args? and not isObject(args)
-            throw new Error "utils.catchError arguments must be an object"
+            throw new Error 'utils.catchError arguments must be an object'
         `//</development>`
 
         try
@@ -1181,7 +1190,7 @@ console.log(bindFunc('a'));
         null
         `//<development>`
         if typeof func isnt 'function'
-            throw new Error "utils.bindFunctionContext function must be a function"
+            throw new Error 'utils.bindFunctionContext function must be a function'
         `//</development>`
 
         switch func.length
@@ -1220,7 +1229,7 @@ console.log(utils.errorToObject(error));
         null
         `//<development>`
         unless error instanceof Error
-            throw new Error "utils.errorToObject error must be an Error instance"
+            throw new Error 'utils.errorToObject error must be an Error instance'
         `//</development>`
 
         result =
@@ -1240,7 +1249,7 @@ Returns an array or an object with own properties associated in the given object
         null
         `//<development>`
         if not isObject(obj)
-            throw new Error "utils.getOwnProperties object must be an object"
+            throw new Error 'utils.getOwnProperties object must be an object'
         `//</development>`
 
         result = if isArray obj then [] else {}
@@ -1329,16 +1338,16 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
 
             true
 
-        (a, b, compareFunc=defaultComparison, maxDeep=Infinity) ->
+        (a, b, compareFunc = defaultComparison, maxDeep = Infinity) ->
             if typeof compareFunc is 'number'
                 maxDeep = compareFunc
                 compareFunc = defaultComparison
 
             `//<development>`
             if typeof compareFunc isnt 'function'
-                throw new Error "utils.isEqual compareFunction must be a function"
+                throw new Error 'utils.isEqual compareFunction must be a function'
             if typeof maxDeep isnt 'number'
-                throw new Error "utils.isEqual maxDeep must be a number"
+                throw new Error 'utils.isEqual maxDeep must be a number'
             `//</development>`
 
             if maxDeep < 0

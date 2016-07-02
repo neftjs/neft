@@ -12,19 +12,19 @@
 
     exports.applyAll = (func) ->
 
-# isNode
+# onNode
 
-# isServer
+# onServer
 
-# isClient
+# onClient
 
-# isBrowser
+# onBrowser
 
-# isAndroid
+# onAndroid
 
-# isIOS
+# onIOS
 
         for funcName, utilsProp of PLATFORMS
-            getter = if utils[utilsProp] then -> this else utils.NOP
+            getter = if utils[utilsProp] then -> @ else utils.NOP
             utils.defineProperty func, funcName, 0, getter, null
         return
