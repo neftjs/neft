@@ -89,6 +89,11 @@ Text {
                 @_pixelRatio
             , null
 
+## Device.log(*String* message, ...)
+
+            log: (msgs...) ->
+                Impl.logDevice msgs.join(' ')
+
 ## ReadOnly *Device.PointerEvent* Device.pointer
 
             utils.defineProperty Device::, 'pointer', null, ->
