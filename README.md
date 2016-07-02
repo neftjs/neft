@@ -14,3 +14,5 @@ Official plugins: [neft-android](https://github.com/Neft-io/neft-android), [neft
 [![npm version](https://badge.fury.io/js/neft.svg)](https://badge.fury.io/js/neft)
 [![Build Status](https://travis-ci.org/Neft-io/neft.svg?branch=master)](https://travis-ci.org/Neft-io/neft)
 [![Build status](https://ci.appveyor.com/api/projects/status/k3mj31b8406cwflv/branch/master?svg=true)](https://ci.appveyor.com/project/KrysKruk/neft/branch/master)
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/kildyt.svg)](https://saucelabs.com/u/kildyt)
