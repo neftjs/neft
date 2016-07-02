@@ -34,6 +34,7 @@ exports.out = do (i=0) ->
     CALL_FUNCTION: i++
 
     # renderer
+    DEVICE_LOG: i++
     DEVICE_SHOW_KEYBOARD: i++
     DEVICE_HIDE_KEYBOARD: i++
 

@@ -81,6 +81,10 @@ module.exports = (impl) ->
                 'iOS'
         return
 
+    logDevice: (msg) ->
+        pushAction outActions.DEVICE_LOG
+        pushString msg
+
     showDeviceKeyboard: ->
         pushAction outActions.DEVICE_SHOW_KEYBOARD
         return
