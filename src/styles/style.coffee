@@ -319,6 +319,9 @@ module.exports = (File, data) -> class Style
         assert.isNotDefined @item, "Can't create a style item, because it already exists"
         assert.isNotDefined @node.style, "Can't create a style item, because the node already has a style"
 
+        unless windowStyle
+            return
+
         {node} = @
 
         if node instanceof Tag
