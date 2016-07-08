@@ -1,8 +1,7 @@
 'use strict';
 
 const moduleCache = require('lib/moduleCache');
-moduleCache.registerFilenameResolver();
-moduleCache.registerCoffeeScript();
+moduleCache.register();
 require('./init.coffee');
 
 module.exports = Neft
