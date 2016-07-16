@@ -35,6 +35,11 @@ neft:fragment can be rendered by the *neft:use* tag.
                 namespace = if link.namespace then "#{link.namespace}:" else ''
                 linkView = File.factory link.path
 
+                # link required file
+                if link.namespace
+                    fragments[link.namespace] = linkView
+
+                # link required file fragments
                 for name, fragment of linkView.fragments
                     fragments[namespace + name] = fragment
 
