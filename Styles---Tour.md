@@ -32,7 +32,7 @@ TypeName {
 
 ## Main style
 
-The main style must be returned as a first element from the `view.js` file.
+The main style must be returned as a first element from the `__view__.js` file.
 It's a starting point of your application.
 
 ## Base item
@@ -323,7 +323,7 @@ Item {
 
 ## Views integration
 
-You can draw styles just putting them into the `view.js` top level item, but, for the better organization, we need to integrate our HTML documents with created styles.
+You can draw styles just putting them into the `__view__.js` top level item, but, for the better organization, we need to integrate our HTML documents with created styles.
 
 `Item::document::query` will use an item on all elements found by the given query. `document::query` can't be changed in runtime.
 
