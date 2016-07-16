@@ -3,10 +3,10 @@
 fs = require 'fs-extra'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
-createBundle = require './styles/bundle'
 
-{utils, log, Document} = Neft
+{utils, log, Document, nmlParser} = Neft
 
+createBundle = nmlParser.bundle
 cliUtils = require '../../../utils'
 
 IN_DIR = './styles'

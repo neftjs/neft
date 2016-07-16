@@ -21,7 +21,8 @@
     module.exports = (Element) -> class Tag extends Element
         @INTERNAL_TAGS = [
             'neft:attr', 'neft:fragment', 'neft:rule', 'neft:target',
-            'neft:use', 'neft:require', 'neft:blank', 'neft:log', 'neft:script'
+            'neft:use', 'neft:require', 'neft:blank', 'neft:log', 'neft:script',
+            'neft:style'
         ]
 
         @DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null

@@ -5,7 +5,7 @@ exports.toString = (err) ->
     if err.stack
         msg += err.stack
 
-        unitStackIndex = msg.indexOf '/src/unit/stack.coffee'
+        unitStackIndex = msg.indexOf '/lib/unit/stack.coffee'
         if unitStackIndex >= 0
             msg = msg.slice(0, unitStackIndex) + '…'
     else

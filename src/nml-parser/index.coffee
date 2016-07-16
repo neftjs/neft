@@ -1,10 +1,12 @@
 'use strict'
 
 babel = require 'babel-core'
+bundle = require './bundle'
 parser = require './parser'
 bindingParser = require 'src/binding/parser'
-
-{utils, Renderer, assert} = Neft
+utils = require 'src/utils'
+Renderer = require 'src/renderer'
+assert = require 'src/assert'
 
 ATTRIBUTE = 'attribute'
 
@@ -344,3 +346,5 @@ module.exports = (file, filename) ->
     codes: codes
     autoInitCodes: autoInitCodes
     queries: allQueries
+
+module.exports.bundle = bundle module.exports
