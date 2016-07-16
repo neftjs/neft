@@ -224,7 +224,7 @@ app.cookies.onChange(function(key){
         # set styles window item
         if opts.styles?
             for style in opts.styles
-                if style.name is 'view'
+                if style.name in ['view', '__view__']
                     style.file._init app: app, view: null
                     windowStyle = style.file._main.getComponent()
                     break

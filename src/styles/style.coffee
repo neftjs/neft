@@ -347,7 +347,7 @@ module.exports = (File, data) -> class Style
                     if parent and parent.node.attrs['neft:style'] is parentId
                         scope = parent.scope
                         @item = scope.objects[subid]
-                    else if not parent?.scope and file is 'view'
+                    else if not parent?.scope and file in ['view', '__view__']
                         @item = windowStyle.objects[subid]
 
                     if @item or not parent
