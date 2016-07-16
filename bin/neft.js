@@ -1,6 +1,6 @@
 #!/usr/bin/env node --harmony
 
-const PATHS = ['./', __dirname+'/..', __dirname+'/../node_modules'];
+const PATHS = ['./build', './', __dirname+'/..', __dirname+'/../node_modules'];
 const isWin = process.platform === 'win32';
 process.env.NODE_PATH = PATHS.join(isWin ? ';' : ':');
 require('module')._initPaths();

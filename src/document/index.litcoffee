@@ -55,6 +55,7 @@
         signal.create @, 'onError'
         signal.create @, 'onBeforeParse'
         signal.create @, 'onParse'
+        signal.create @, 'onStyle'
 
 ## *Signal* Document.onBeforeRender(*Document* file)
 
@@ -207,6 +208,7 @@ Corresponding node handler: *neft:onRevert=""*.
             rules = require('./file/parse/rules') Document
             fragments = require('./file/parse/fragments') Document
             scripts = require('./file/parse/scripts') Document
+            styles = require('./file/parse/styles') Document
             attrs = require('./file/parse/attrs') Document
             attrChanges = require('./file/parse/attrChanges') Document
             iterators = require('./file/parse/iterators') Document
@@ -228,6 +230,7 @@ Corresponding node handler: *neft:onRevert=""*.
                 Document.onBeforeParse.emit file
 
                 # parse
+                styles file
                 rules file
                 fragments file
                 scripts file

@@ -17,3 +17,6 @@ exports.styles = exports['neft-styles'] = require 'src/styles'
 exports.assert = exports['neft-assert'] = require 'src/assert'
 exports.db = exports['neft-db'] = require 'src/db'
 exports.Binding = exports['neft-binding'] = require 'src/binding'
+
+if exports.utils.isNode
+    exports.nmlParser = require 'src/nml-parser'

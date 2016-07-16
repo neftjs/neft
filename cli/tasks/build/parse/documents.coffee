@@ -3,10 +3,11 @@
 fs = require 'fs-extra'
 pathUtils = require 'path'
 bundleBuilder = require 'src/bundle-builder'
+coffee = require 'coffee-script'
 
 cliUtils = require 'cli/utils'
 
-{utils, log, Document, styles} = Neft
+{utils, log, Document, styles, signal} = Neft
 
 IN_DIR = 'views'
 OUT_DIR = 'build'
@@ -43,6 +44,16 @@ module.exports = (platform, app, callback) ->
         Document.Style.createStylesInDocument file
         return
 
+    Document.onStyle onStyleListener = (style) ->
+        destPath = pathUtils.join 'build/styles/_views/', style.path
+        data = coffee.compile style.data
+        fs.outputFileSync destPath, data
+        style.destPath = destPath
+        app.styles.push
+            name: style.filename
+            path: destPath
+        return
+
     parseFile = (path) ->
         html = fs.readFileSync path, 'utf-8'
         file = Document.fromHTML path, html
@@ -72,6 +83,7 @@ module.exports = (platform, app, callback) ->
         Document.onError.disconnect onErrorListener
         Document.onBeforeParse.disconnect onBeforeParseListener
         Document.onParse.disconnect onParseListener
+        Document.onStyle.disconnect onStyleListener
 
         log.end logtime
         callback null

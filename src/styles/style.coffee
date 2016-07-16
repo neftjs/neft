@@ -29,10 +29,10 @@ module.exports = (File, data) -> class Style
     JSON_CHILDREN = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-    @applyStyleQueriesInDocument = (file) ->
+    @applyStyleQueriesInDocument = (file, localQueries = queries) ->
         assert.instanceOf file, File
 
-        for elem in queries
+        for elem in localQueries
             nodes = file.node.queryAll elem.query
             for node in nodes
                 unless node instanceof Tag
@@ -55,7 +55,7 @@ module.exports = (File, data) -> class Style
 
         forNode = (file, node, parentStyle) ->
             isText = node instanceof Text
-            if isText or (attr = node.attrs['neft:style'])
+            if isText or node.attrs['neft:style']
                 style = new Style
                 style.file = file
                 style.node = node
