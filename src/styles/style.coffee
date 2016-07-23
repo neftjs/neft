@@ -39,8 +39,8 @@ module.exports = (File, data) -> class Style
                     log.warn 'document.query can be attached only to tags; ' +
                         "query '#{elem.query}' has been omitted for this node"
                     continue
-                unless node.attrs.has('neft:style')
-                    node.attrs.set 'neft:style', elem.style
+                unless node.attrs.has('n-style')
+                    node.attrs.set 'n-style', elem.style
 
         file
 
@@ -48,14 +48,14 @@ module.exports = (File, data) -> class Style
         getStyleAttrs = (node) ->
             attrs = null
             for attr of node.attrs when node.attrs.hasOwnProperty(attr)
-                if attr.slice(0, 6) is 'style:'
+                if attr.slice(0, 8) is 'n-style:'
                     attrs ?= {}
                     attrs[attr] = true
             attrs
 
         forNode = (file, node, parentStyle) ->
             isText = node instanceof Text
-            if isText or node.attrs['neft:style']
+            if isText or node.attrs['n-style']
                 style = new Style
                 style.file = file
                 style.node = node
@@ -152,7 +152,7 @@ module.exports = (File, data) -> class Style
         return
 
     setAttr: do ->
-        PREFIX_LENGTH = 'style:'.length
+        PREFIX_LENGTH = 'n-style:'.length
 
         getSplitAttr = do ->
             cache = Object.create null
@@ -297,8 +297,8 @@ module.exports = (File, data) -> class Style
         return
 
     ###
-    Creates and initializes renderer item based on the node 'neft:style' attribute.
-    The style node 'neft:style' attribute may be:
+    Creates and initializes renderer item based on the node 'n-style' attribute.
+    The style node 'n-style' attribute may be:
         - a 'Renderer.Item' instance - item will be used as is,
         - a string in format:
             - 'renderer:Type' where the 'Type' is a Renderer class;
@@ -325,8 +325,8 @@ module.exports = (File, data) -> class Style
         {node} = @
 
         if node instanceof Tag
-            id = node.attrs['neft:style']
-            assert.isDefined id, "Tag must specify 'neft:style' attr to create an item for it"
+            id = node.attrs['n-style']
+            assert.isDefined id, "Tag must specify 'n-style' attr to create an item for it"
         else if node instanceof Text
             id = Renderer.Text.New()
 
@@ -344,7 +344,7 @@ module.exports = (File, data) -> class Style
                 parent = @parent
 
                 loop
-                    if parent and parent.node.attrs['neft:style'] is parentId
+                    if parent and parent.node.attrs['n-style'] is parentId
                         scope = parent.scope
                         @item = scope.objects[subid]
                     else if not parent?.scope and file in ['view', '__view__']
@@ -372,7 +372,7 @@ module.exports = (File, data) -> class Style
             @item = Renderer[type].New()
 
         else
-            throw new Error "Unexpected neft:style; '#{id}' given"
+            throw new Error "Unexpected n-style; '#{id}' given"
 
         if @item
             @isAutoParent = not @item.parent
@@ -521,7 +521,7 @@ module.exports = (File, data) -> class Style
         node._documentStyle = clone
 
         if node instanceof Tag
-            styleAttr = node.attrs['neft:style']
+            styleAttr = node.attrs['n-style']
             clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
 
         # set attrs

@@ -4,7 +4,7 @@ Some of the attributes are automatically evaluated to the JavaScript objects.
 
 String `[...]` evaluates to an array.
 ```xml
-<use:list neft:each="[1, 2]" />
+<use:list n-each="[1, 2]" />
 ```
 ```xml
 <use:list items="[{name: 't-shirt'}]" />
@@ -22,7 +22,7 @@ String `Dict(...` evaluates to *Dict*.
 
 String `List(...` evaluates to *List*.
 ```xml
-<use:list neft:each="List([1, 2])" />
+<use:list n-each="List([1, 2])" />
 ```
 
     'use strict'

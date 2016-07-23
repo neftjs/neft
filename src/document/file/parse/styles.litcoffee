@@ -1,4 +1,4 @@
-# neft:style
+# style
 
     'use strict'
 
@@ -21,14 +21,10 @@
         if file instanceof File.Iterator
             return
 
-        for tag in file.node.children
-            if tag.name is 'style' and Object.keys(tag.attrs).length is 0
-                tag.name = 'neft:style'
-
         styleTags = []
         stylePath = "styles:#{file.path}"
         for tag in file.node.children
-            if tag.name isnt 'neft:style'
+            if tag.name isnt 'style'
                 continue
 
             styleTags.push tag
@@ -54,7 +50,7 @@
                     style: itemPath
 
             # detect main item with no document.query
-            unless file.node.attrs['neft:style']
+            unless file.node.attrs['n-style']
                 mainHasDoc = false
                 mainId = styleFile.codes._main.link
                 for _, id of styleFile.queries
@@ -62,7 +58,7 @@
                         mainHasDoc = true
                         break
                 unless mainHasDoc
-                    file.node.attrs.set 'neft:style', stylePath
+                    file.node.attrs.set 'n-style', stylePath
 
         while styleTags.length > 0
             styleTags.pop().parent = null
@@ -74,4 +70,4 @@
 
 # Glossary
 
-- [neft:style](#neftstyle)
+- [style](#style)

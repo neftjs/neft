@@ -28,8 +28,8 @@ module.exports = (File) -> class Use
             @render()
 
     attrsChangeListener = (name) ->
-        if name is 'neft:fragment'
-            @name = @node.attrs['neft:fragment']
+        if name is 'fragment'
+            @name = @node.attrs['fragment']
 
             if @isRendered
                 @revert()
@@ -56,7 +56,7 @@ module.exports = (File) -> class Use
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
 
-        @name = @node.attrs['neft:fragment']
+        @name = @node.attrs['fragment']
         @usedFragment = null
         @isRendered = false
 
@@ -73,7 +73,7 @@ module.exports = (File) -> class Use
     logUsesWithNoFragments = ->
         while useElem = usesWithNotFoundFragments.pop()
             unless useElem.usedFragment
-                log.warn "neft:fragment '#{useElem.name}' can't be find in file '#{useElem.file.path}'"
+                log.warn "fragment '#{useElem.name}' can't be find in file '#{useElem.file.path}'"
         return
     `//</development>`
 
@@ -88,10 +88,10 @@ module.exports = (File) -> class Use
         @isRendered = true
 
         useAsync = utils.isClient
-        useAsync &&= @node.attrs.has 'neft:async'
-        useAsync &&= @node.attrs['neft:async'] isnt false
+        useAsync &&= @node.attrs.has 'n-async'
+        useAsync &&= @node.attrs['n-async'] isnt false
         if useAsync
-            queue.push this, file
+            queue.push @, file
             unless queuePending
                 requestAnimationFrame runQueue
                 queuePending = true
@@ -126,7 +126,7 @@ module.exports = (File) -> class Use
         # signal
         usedFragment.parentUse = @
         usedFragment.onReplaceByUse.emit @
-        File.emitNodeSignal usedFragment, 'neft:onReplaceByUse', @
+        File.emitNodeSignal usedFragment, 'n-onReplaceByUse', @
 
         return
 

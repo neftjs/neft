@@ -14,8 +14,6 @@ module.exports = (File) -> class Iterator
     @__name__ = 'Iterator'
     @__path__ = 'File.Iterator'
 
-    @HTML_ATTR = "#{File.HTML_NS}:each"
-
     JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Iterator) - 1
 
     i = 1
@@ -32,7 +30,7 @@ module.exports = (File) -> class Iterator
         obj
 
     attrsChangeListener = (name) ->
-        if @file.isRendered and name is 'neft:each'
+        if @file.isRendered and name is 'n-each'
             @update()
 
     visibilityChangeListener = (oldVal) ->
@@ -62,7 +60,7 @@ module.exports = (File) -> class Iterator
         unless @node.visible
             return
 
-        each = @node.attrs[Iterator.HTML_ATTR]
+        each = @node.attrs['n-each']
 
         # stop if nothing changed
         if each is @data
@@ -157,7 +155,7 @@ module.exports = (File) -> class Iterator
 
         # signal
         usedFragment.onReplaceByUse.emit @
-        File.emitNodeSignal usedFragment, 'neft:onReplaceByUse', @
+        File.emitNodeSignal usedFragment, 'n-onReplaceByUse', @
 
         @
 

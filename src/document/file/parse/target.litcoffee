@@ -1,26 +1,26 @@
-# neft:target
+# target
 
-Tag used in *neft:fragment* to define,
-where *neft:use* body should be placed.
+Tag used in *fragment* to define,
+where *use* body should be placed.
 
 ```xml
-<neft:fragment neft:name="user">
+<fragment name="user">
   <name>${props.name}</name>
   <age>${props.age}</age>
-  <neft:target />
-</neft:fragment>
+  <target />
+</fragment>
 
 <use:user name="Max" age="19">
   <superPower>flying</superPower>
-</neft:use>
+</use>
 ```
 
     'use strict'
 
     module.exports = (File) -> (file) ->
-        file.targetNode = file.node.query("neft:target")
-        file.targetNode?.name = 'neft:blank'
+        if file.targetNode = file.node.query('target')
+            file.targetNode.name = 'blank'
 
 # Glossary
 
-- [neft:target](#nefttarget)
+- [target](#target)

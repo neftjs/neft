@@ -4,29 +4,29 @@
 {describe, it} = unit
 {createView, renderParse} = require './utils'
 
-describe 'src/document neft:if', ->
+describe 'src/document n-if', ->
     it 'works with positive expression', ->
-        source = createView '<div><b neft:if="${2 > 1}">1</b></div>'
+        source = createView '<div><b n-if="${2 > 1}">1</b></div>'
         view = source.clone()
 
         renderParse view
         assert.is view.node.stringify(), '<div><b>1</b></div>'
 
     it 'works with negative expression', ->
-        source = createView '<div><b neft:if="${1 > 2}">1</b></div>'
+        source = createView '<div><b n-if="${1 > 2}">1</b></div>'
         view = source.clone()
 
         renderParse view
         assert.is view.node.stringify(), '<div></div>'
 
     it 'supports runtime updates', ->
-        source = createView """
-            <neft:fragment neft:name="a">
-                <b neft:if="${props.x > 1}">OK</b>
-                <b neft:if="${props.x === 1}">FAIL</b>
-            </neft:fragment>
-            <neft:use neft:fragment="a" x="1" />
-        """
+        source = createView '''
+            <fragment name="a">
+                <b n-if="${props.x > 1}">OK</b>
+                <b n-if="${props.x === 1}">FAIL</b>
+            </fragment>
+            <use fragment="a" x="1" />
+        '''
         view = source.clone()
         elem = view.node.children[0]
 

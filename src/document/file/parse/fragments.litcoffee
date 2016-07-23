@@ -1,20 +1,20 @@
-# neft:fragment
+# fragment
 
 Tag used to create separated and repeatable parts of the document.
 
-Each neft:fragment has to define a `neft:name` unique in the file where it's defined.
+Each fragment has to define a `name` unique in the file where it's defined.
 
-neft:fragment can be rendered by the *neft:use* tag.
+fragment can be rendered by the *use* tag.
 
 ```xml
-<neft:fragment neft:name="product">
+<fragment name="product">
   <h2>${props.name}</h2>
   <span>Type: ${props.type}</span>
-</neft:fragment>
+</fragment>
 
 <section>
-  <use:product type="electronics" name="dryer" />
-  <use:product type="painting" name="Lucretia, Paolo Veronese" />
+  <product type="electronics" name="dryer" />
+  <product type="painting" name="Lucretia, Paolo Veronese" />
 </section>
 ```
 
@@ -51,15 +51,15 @@ neft:fragment can be rendered by the *neft:use* tag.
                 while ++i < n
                     child = children[i]
 
-                    if child.name isnt 'neft:fragment'
+                    if child.name isnt 'fragment'
                         forEachNodeRec child
                         continue
 
-                    unless name = child.attrs['neft:name']
+                    unless name = child.attrs['name']
                         continue
 
                     # remove node from file
-                    child.name = 'neft:blank'
+                    child.name = 'blank'
                     child.parent = null
                     i--; n--
 
@@ -84,4 +84,4 @@ neft:fragment can be rendered by the *neft:use* tag.
 
 # Glossary
 
-- [neft:fragment](#neftfragment)
+- [fragment](#fragment)

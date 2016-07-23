@@ -22,7 +22,7 @@ module.exports = (File) -> class Condition
         obj
 
     onAttrsChange = (name) ->
-        if name is 'neft:if'
+        if name is 'n-if'
             @update()
         return
 
@@ -40,7 +40,7 @@ module.exports = (File) -> class Condition
         `//</development>`
 
     update: ->
-        visible = @node.visible = !!@node.attrs['neft:if']
+        visible = @node.visible = !!@node.attrs['n-if']
         @elseNode?.visible = not visible
         return
 

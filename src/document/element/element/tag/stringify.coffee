@@ -23,20 +23,20 @@ SINGLE_TAG =
     wbr: true
 
 isPublic = (name) ->
-    not /^(?:neft:|style:)/.test name
+    name isnt 'blank' and not /^(?:n-|style:)/.test(name)
 
 getInnerHTML = (elem, replacements) ->
     if elem.children
-        r = ""
+        r = ''
         for child in elem.children
             r += getOuterHTML child, replacements
         r
     else
-        ""
+        ''
 
 getOuterHTML = (elem, replacements) ->
     if elem._visible is false
-        return ""
+        return ''
 
     if elem._text isnt undefined
         return elem._text
@@ -44,12 +44,11 @@ getOuterHTML = (elem, replacements) ->
     if replacements and replacer = replacements[elem.name]
         elem = replacer(elem) or elem
 
-    name = elem.name
-
+    {name} = elem
     if not name or not isPublic(name)
         return getInnerHTML elem, replacements
 
-    ret = "<" + name
+    ret = '<' + name
     {attrs} = elem
     for attrName, attrValue of attrs
         if not attrs.hasOwnProperty(attrName)
@@ -57,13 +56,13 @@ getOuterHTML = (elem, replacements) ->
         if not attrValue? or typeof attrValue is 'function' or not isPublic(attrName)
             continue
 
-        ret += " " + attrName + "=\"" + attrValue + "\""
+        ret += ' ' + attrName + '="' + attrValue + '"'
 
     innerHTML = getInnerHTML elem, replacements
     if not innerHTML and SINGLE_TAG[name]
-        ret + " />"
+        ret + ' />'
     else
-        ret + ">" + innerHTML + "</" + name + ">"
+        ret + '>' + innerHTML + '</' + name + '>'
 
 module.exports =
     getInnerHTML: getInnerHTML

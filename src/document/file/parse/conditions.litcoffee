@@ -1,10 +1,10 @@
-# neft:if
+# n-if
 
 Attribute used to hide or show the tag depends on the condition result.
 
 ```xml
-<span neft:if="${props.user.isLogged}">Hi ${props.user.name}!</span>
-<span neft:else>You need to log in</span>
+<span n-if="${props.user.isLogged}">Hi ${props.user.name}!</span>
+<span n-else>You need to log in</span>
 ```
 
     'use strict'
@@ -22,9 +22,9 @@ Attribute used to hide or show the tag depends on the condition result.
 
                     forEachNodeRec child
 
-                    if child.attrs.has('neft:if')
+                    if child.attrs.has('n-if')
                         elseNode = null
-                        if child.nextSibling?.attrs.has?('neft:else')
+                        if child.nextSibling?.attrs?.has?('n-else')
                             elseNode = child.nextSibling
 
                         conditions.push new File.Condition file, child, elseNode
@@ -34,4 +34,4 @@ Attribute used to hide or show the tag depends on the condition result.
 
 # Glossary
 
-- [neft:if](#neftif)
+- [n-if](#nif)

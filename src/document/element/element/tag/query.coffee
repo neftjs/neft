@@ -30,7 +30,7 @@ test = (node, funcs, index, targetFunc, targetCtx, single) ->
 
 anyDescendant = (node, funcs, index, targetFunc, targetCtx, single) ->
     for child in node.children
-        if not (child instanceof Tag) or child.name isnt 'neft:blank'
+        if not (child instanceof Tag) or child.name isnt 'blank'
             if test(child, funcs, index, targetFunc, targetCtx, single)
                 if single
                     return true
@@ -48,7 +48,7 @@ directParent = (node, funcs, index, targetFunc, targetCtx, single) ->
     if parent = node._parent
         if test(parent, funcs, index, targetFunc, targetCtx, single)
             return true
-        if parent.name is 'neft:blank'
+        if parent.name is 'blank'
             return directParent parent, funcs, index, targetFunc, targetCtx, single
     false
 directParent.isIterator = true
@@ -57,7 +57,7 @@ directParent.toString = -> 'directParent'
 
 anyChild = (node, funcs, index, targetFunc, targetCtx, single) ->
     for child in node.children
-        if child instanceof Tag and child.name is 'neft:blank'
+        if child instanceof Tag and child.name is 'blank'
             if anyChild(child, funcs, index, targetFunc, targetCtx, single)
                 if single
                     return true

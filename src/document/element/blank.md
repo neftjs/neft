@@ -1,6 +1,6 @@
-neft:blank @xml
-===============
+blank @xml
+==========
 
 ```xml
-<neft:blank neft:if="..."></neft:blank>
+<blank n-if="..."></blank>
 ```
