@@ -1,4 +1,4 @@
-# neft:rule
+# rule
 
 Tag used in the parsing process.
 Performs some actions on found elements in the parent element.
@@ -8,9 +8,9 @@ Performs some actions on found elements in the parent element.
 Adds attributes if not exists.
 
 ```xml
-<neft:rule query="input[type=string]">
+<rule query="input[type=string]">
   <attrs class="specialInput" />
-</neft:rule>
+</rule>
 ```
 
     'use strict'
@@ -18,7 +18,7 @@ Adds attributes if not exists.
     utils = require 'src/utils'
     log = require 'src/log'
 
-    log = log.scope 'Document', 'neft:rule'
+    log = log.scope 'Document', 'rule'
 
     commands =
         'attrs': (command, node) ->
@@ -43,7 +43,7 @@ Adds attributes if not exists.
 
     isMainFileRule = (node) ->
         while node = node.parent
-            if node.name isnt 'neft:blank' and node.name isnt 'neft:rule'
+            if node.name isnt 'blank' and node.name isnt 'rule'
                 return false
         true
 
@@ -57,14 +57,14 @@ Adds attributes if not exists.
             fileRules[file.path] = rules
 
             # get rules from this file
-            localRules = file.node.queryAll 'neft:rule'
+            localRules = file.node.queryAll 'rule'
             localRules.sort (a, b) ->
                 getNodeLength(b) - getNodeLength(a)
 
             for rule in localRules
                 query = rule.attrs.query
                 unless query
-                    log.error "neft:rule no 'query' attribute found"
+                    log.error "rule no 'query' attribute found"
                     continue
 
                 children = rule.children
@@ -72,7 +72,7 @@ Adds attributes if not exists.
                 n = children.length
                 while i < n
                     child = children[i]
-                    if child.name is 'neft:rule'
+                    if child.name is 'rule'
                         subquery = child.attrs['query']
                         if /^[A-Za-z]/.test(subquery)
                             subquery = query + ' ' + subquery
@@ -114,4 +114,4 @@ Adds attributes if not exists.
 
 # Glossary
 
-- [neft:rule](#neftrule)
+- [rule](#rule)

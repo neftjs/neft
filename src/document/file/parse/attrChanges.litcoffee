@@ -1,10 +1,10 @@
-# neft:attr
+# attr
 
 Tag used to dynamically change an attribute of the parent element.
 
 ```xml
 <header id="header">
-    <neft:attr name="isActive" value="true" neft:if="${root.isActive}" />
+    <attr name="isActive" value="true" n-if="${root.isActive}" />
     <span>Active: ${ids.header.attrs.isActive}</span>
 </header>
 ```
@@ -17,7 +17,7 @@ Tag used to dynamically change an attribute of the parent element.
         (file) ->
             {attrChanges} = file
 
-            nodes = file.node.queryAll "neft:attr"
+            nodes = file.node.queryAll 'attr'
 
             for node in nodes
                 target = node.parent
@@ -32,4 +32,4 @@ Tag used to dynamically change an attribute of the parent element.
 
 # Glossary
 
-- [neft:attr](#neftattr)
+- [attr](#attr)

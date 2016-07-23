@@ -2,7 +2,7 @@
 
 {Document, utils} = Neft
 
-VIEWS_CACHE_FILE = "tmp/views.json"
+VIEWS_CACHE_FILE = 'tmp/views.json'
 
 loaded = false
 

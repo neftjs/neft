@@ -1,4 +1,4 @@
-# neft:script
+# script
 
     'use strict'
 
@@ -21,10 +21,14 @@
         scripts = []
 
         for tag in file.node.queryAll('script')
-            if Object.keys(tag.attrs).length is 0
-                tag.name = 'neft:script'
+            omit = false
+            for attr of tag.attrs
+                if attr not in ['src', 'href', 'filename']
+                    omit = true
+                    break
+            if omit
+                continue
 
-        for tag in file.node.queryAll('neft:script')
             tag.parent = null
 
             {src} = tag.attrs
@@ -54,4 +58,4 @@
 
 # Glossary
 
-- [neft:script](#neftscript)
+- [script](#neftscript)

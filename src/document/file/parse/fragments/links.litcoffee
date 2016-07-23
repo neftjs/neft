@@ -1,11 +1,10 @@
-# neft:require
+# import
 
-Tag used to link *neft:fragment*s from a file and use them.
+Tag used to link *fragment*s from a file and use them.
 
 ```xml
-<neft:require href="./user_utils.html" />
-
-<use:avatar />
+<import href="./user_utils.html" />
+<avatar />
 ```
 
 ## Namespace
@@ -13,9 +12,8 @@ Tag used to link *neft:fragment*s from a file and use them.
 Optional argument `as` will link all fragments into the specified namespace.
 
 ```xml
-<neft:require href="./user_utils.html" as="user" />
-
-<use:user:avatar />
+<import href="./user_utils.html" as="user" />
+<user:avatar />
 ```
 
     'use strict'
@@ -33,7 +31,7 @@ Optional argument `as` will link all fragments into the specified namespace.
         while ++i < n
             node = children[i]
 
-            if node.name isnt "#{File.HTML_NS}:require"
+            if node.name isnt 'import'
                 continue
 
             href = node.attrs.href or node.attrs.src
@@ -61,4 +59,4 @@ Optional argument `as` will link all fragments into the specified namespace.
 
 # Glossary
 
-- [neft:require](#neftrequire)
+- [import](#import)

@@ -12,9 +12,6 @@ attrsValueGen = (i, elem) -> i
 module.exports = (Element) ->
     extensions = Element.Tag.extensions
 
-    internalTagsObject = utils.arrayToObject Element.Tag.INTERNAL_TAGS,
-        ((_, key) -> key), (-> true), Object.create(null)
-
     class Parser
         constructor: (callback) ->
             @_callback = callback
@@ -47,12 +44,6 @@ module.exports = (Element) ->
             return
 
         onopentag: (name, attribs) ->
-            null;
-            `//<development>`
-            if /^neft:/.test(name) and not internalTagsObject[name]
-                log.warn "Unknown internal tag name '#{name}'"
-            `//</development>`
-
             element = new (extensions[name] or Element.Tag)
             element.name = name
             utils.merge element.attrs, attribs
@@ -93,12 +84,14 @@ module.exports = (Element) ->
             r = node
 
         parser = new htmlparser.Parser handler,
-            xmlMode: false
+            xmlMode: true
             recognizeSelfClosing: true
             lowerCaseAttributeNames: false
             lowerCaseTags: false
             recognizeCDATA: true
             decodeEntities: true
+
+        parser._tokenizer._xmlMode = false # enable script and style
 
         # TODO: do it while parsing
         parser.onattribname = do (_super = parser.onattribname) -> (name) ->

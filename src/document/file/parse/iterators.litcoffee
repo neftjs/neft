@@ -1,25 +1,25 @@
-# neft:each
+# n-each
 
 Attribute used for repeating.
 
 Tag children will be duplicated for each
-element defined in the *neft:each* attribute.
+element defined in the *n-each* attribute.
 
 Supports arrays and *List* instances.
 
 ```xml
-<ul neft:each="[1, 2]">
+<ul n-each="[1, 2]">
   <li>ping</li>
 </ul>
 ```
 
 In the tag children you have access to the three special variables:
-- **each** - `neft:each` attribute,
+- **each** - `n-each` attribute,
 - **item** - current element,
 - **index** - current element index.
 
 ```xml
-<ul neft:each="List(['New York', 'Paris', 'Warsaw'])">
+<ul n-each="List(['New York', 'Paris', 'Warsaw'])">
   <li>Index: ${props.index}; Current: ${props.item}; Next: ${props.each[i+1]}</li>
 </ul>
 ```
@@ -37,7 +37,7 @@ Use *List* to bind changes made in the array.
         createdFragments = []
 
         forNode = (elem) ->
-            unless attrVal = elem.attrs["neft:each"]
+            unless attrVal = elem.attrs['n-each']
                 for child in elem.children
                     if child instanceof File.Element.Tag
                         forNode child
@@ -70,4 +70,4 @@ Use *List* to bind changes made in the array.
 
 # Glossary
 
-- [neft:each](#nefteach)
+- [n-each](#neach)

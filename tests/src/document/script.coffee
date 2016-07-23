@@ -6,10 +6,10 @@ os = require 'os'
 {describe, it} = unit
 {createView, renderParse, uid} = require './utils'
 
-describe 'src/document neft:script', ->
+describe 'src/document script', ->
     it 'is not rendered', ->
         view = createView '''
-            <neft:script></neft:script>
+            <script></script>
         '''
         view = view.clone()
 
@@ -18,9 +18,9 @@ describe 'src/document neft:script', ->
 
     it 'context is shared between rendered views', ->
         view = createView '''
-            <neft:script><![CDATA[
+            <script>
                 this.a = Math.random();
-            ]]></neft:script>
+            </script>
         '''
         view = view.clone()
 
@@ -37,49 +37,28 @@ describe 'src/document neft:script', ->
         renderParse view2
         assert.is view2.context.__proto__, proto
 
-    describe '<script>', ->
-        it 'works like <neft:script>', ->
-            view = createView '''
-                <script>
-                    this.a = Math.random();
-                </script>
-            '''
-            view = view.clone()
+    it 'is disabled if contains unknown attributes', ->
+        view = createView '''
+            <script type="text">
+                this.a = Math.random();
+            </script>
+        '''
+        view = view.clone()
 
-            renderParse view
-            assert.isFloat view.context.a
-
-        it 'is not rendered', ->
-            view = createView '''
-                <script></script>
-            '''
-            view = view.clone()
-
-            renderParse view
-            assert.is view.node.stringify(), ''
-
-        it 'does not work if has attributes', ->
-            view = createView '''
-                <script src=""><![CDATA[
-                    this.a = 1;
-                ]]></script>
-            '''
-            view = view.clone()
-
-            renderParse view
-            assert.isNot view.node.stringify(), ''
-            assert.is view.context?.a, undefined
+        renderParse view
+        proto = view.context.__proto__
+        assert.is view.context.a, undefined
 
     describe 'this.onCreate()', ->
         it 'is called on a view clone', ->
             view = createView '''
-                <neft:attr name="x" value="1" />
-                <neft:script><![CDATA[
+                <attr name="x" value="1" />
+                <script>
                     this.onCreate(function(){
                         this.b = 2;
                     });
                     this.a = 1;
-                ]]></neft:script>
+                </script>
             '''
             view = view.clone()
 
@@ -100,13 +79,13 @@ describe 'src/document neft:script', ->
 
         it 'is called with its prototype', ->
             view = createView '''
-                <neft:script><![CDATA[
+                <script>
                     this.onCreate(function(){
                         this.proto = this;
                         this.protoA = this.a;
                     });
                     this.a = 1;
-                ]]></neft:script>
+                </script>
             '''
             view = view.clone()
 
@@ -116,12 +95,12 @@ describe 'src/document neft:script', ->
 
         it 'is called with props in context', ->
             view = createView '''
-                <neft:script><![CDATA[
+                <script>
                     this.onCreate(function(){
                         this.a = this.props.a;
                     });
-                ]]></neft:script>
-                <neft:attr name="a" value="1" />
+                </script>
+                <attr name="a" value="1" />
             '''
             view = view.clone()
 
@@ -130,11 +109,11 @@ describe 'src/document neft:script', ->
 
         it 'is called with ids in context', ->
             view = createView '''
-                <neft:script><![CDATA[
+                <script>
                     this.onCreate(function(){
                         this.a = this.ids.x.attrs.a;
                     });
-                ]]></neft:script>
+                </script>
                 <b id="x" a="1" />
             '''
             view = view.clone()
@@ -144,11 +123,11 @@ describe 'src/document neft:script', ->
 
         it 'is called with root in context', ->
             view = createView '''
-                <neft:script><![CDATA[
+                <script>
                     this.onRender(function(){
                         this.a = this.root.a;
                     });
-                ]]></neft:script>
+                </script>
             '''
             view = view.clone()
 
@@ -157,11 +136,11 @@ describe 'src/document neft:script', ->
 
         it 'is called with file node in context', ->
             view = createView '''
-                <neft:script><![CDATA[
+                <script>
                     this.onCreate(function(){
                         this.aNode = this.node;
                     });
-                ]]></neft:script>
+                </script>
             '''
             view = view.clone()
 
@@ -171,9 +150,9 @@ describe 'src/document neft:script', ->
     describe.onServer '[filename]', ->
         it 'supports .coffee files', ->
             view = Document.fromHTML uid(), '''
-                <neft:script filename="a.coffee"><![CDATA[
+                <script filename="a.coffee">
                     @a = 1
-                ]]></neft:script>
+                </script>
             '''
             Document.parse view
             view = view.clone()
@@ -183,7 +162,7 @@ describe 'src/document neft:script', ->
 
     it 'predefined context properties are not enumerable', ->
         view = createView '''
-            <neft:script><![CDATA[
+            <script>
                 var protoKeys = [];
                 for (var key in this) {
                     protoKeys.push(key);
@@ -196,7 +175,7 @@ describe 'src/document neft:script', ->
                         keys.push(key);
                     }
                 });
-            ]]></neft:script>
+            </script>
         '''
         view = view.clone()
 
@@ -205,19 +184,19 @@ describe 'src/document neft:script', ->
 
     it 'further tags are properly called', ->
         view = createView '''
-            <neft:script><![CDATA[
+            <script>
                 this.onCreate(function(){
                     this.aa = 1;
                 });
                 this.a = 1;
-            ]]></neft:script>
-            <neft:script><![CDATA[
+            </script>
+            <script>
                 this.onCreate(function(){
                     this.bb = 1;
                     this.bbaa = this.aa;
                 });
                 this.b = 1;
-            ]]></neft:script>
+            </script>
         '''
         view = view.clone()
 
@@ -231,27 +210,15 @@ describe 'src/document neft:script', ->
 
     it 'can contains XML text', ->
         source = createView """
-            <neft:script><![CDATA[
-                this.a = '<&&</neft:script>';
-            ]]></neft:script>
-            ${this.a}
-        """
-        view = source.clone()
-
-        renderParse view
-        assert.is view.node.stringify(), '<&&</neft:script>'
-
-    it '<script> can contains XML text with no CDATA', ->
-        source = createView """
             <script>
-                this.a = '<&&</neft:script>';
+                this.a = '<&&</b>';
             </script>
             ${this.a}
         """
         view = source.clone()
 
         renderParse view
-        assert.is view.node.stringify(), '<&&</neft:script>'
+        assert.is view.node.stringify(), '<&&</b>'
 
     it.onServer 'accepts `src` attribute', ->
         filename = "tmp#{uid()}.js"
@@ -260,8 +227,8 @@ describe 'src/document neft:script', ->
         fs.writeFileSync path, file, 'utf-8'
 
         source = Document.fromHTML uid(), """
-            <neft:script src="#{path}" />
-            <neft:blank>${this.a}</neft:blank>
+            <script src="#{path}"></script>
+            <blank>${this.a}</blank>
         """
         Document.parse source
         view = source.clone()
@@ -278,8 +245,8 @@ describe 'src/document neft:script', ->
         viewFilename = "tmp#{uid()}"
         viewPath = "#{os.tmpdir()}/#{viewFilename}"
         fs.writeFileSync viewPath, viewStr = """
-            <neft:script src="./#{scriptFilename}" />
-            <neft:blank>${this.a}</neft:blank>
+            <script src="./#{scriptFilename}"></script>
+            <blank>${this.a}</blank>
         """
 
         source = Document.fromHTML viewPath, viewStr
@@ -291,7 +258,7 @@ describe 'src/document neft:script', ->
 
     it 'properly calls events', ->
         view = createView """
-            <neft:script><![CDATA[
+            <script>
                 this.onCreate(function(){
                     this.events = [];
                 });
@@ -307,7 +274,7 @@ describe 'src/document neft:script', ->
                 this.onRevert(function(){
                     this.events.push('onRevert');
                 });
-            ]]></neft:script>
+            </script>
         """
         view = view.clone()
 
@@ -324,7 +291,7 @@ describe 'src/document neft:script', ->
 
     it 'does not call events for foreign context', ->
         view = createView """
-            <neft:script><![CDATA[
+            <script>
                 this.onCreate(function(){
                     this.events = [];
                 });
@@ -340,8 +307,8 @@ describe 'src/document neft:script', ->
                 this.onRevert(function(){
                     this.events.push('onRevert');
                 });
-            ]]></neft:script>
-            <ul neft:each="[1,2]">${props.item}</ul>
+            </script>
+            <ul n-each="[1,2]">${props.item}</ul>
         """
         view = view.clone()
 

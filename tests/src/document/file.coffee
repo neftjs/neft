@@ -14,11 +14,14 @@ describe 'src/document View', ->
         assert.is view.node.stringify(), '<div></div>'
 
     it 'finds fragments', ->
-        view = createView '<neft:fragment neft:name="a"></neft:fragment>'
+        view = createView '<fragment name="a"></fragment>'
         assert.is Object.keys(view.fragments).length, 1
 
     it 'finds uses', ->
-        view = createView '<neft:fragment neft:name="a"><b></b></neft:fragment><neft:use neft:fragment="a" />'
+        view = createView '''
+            <fragment name="a"><b></b></fragment>
+            <use fragment="a" />
+        '''
         assert.is view.uses.length, 1
 
     it 'can be cloned and destroyed', ->

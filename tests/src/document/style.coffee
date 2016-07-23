@@ -8,10 +8,10 @@ os = require 'os'
 
 styles {queries: []}
 
-describe 'src/document neft:style', ->
+describe 'src/document style', ->
     it 'is not rendered', ->
         view = createView '''
-            <neft:style></neft:style>
+            <style></style>
         '''
         view = view.clone()
 
@@ -20,89 +20,54 @@ describe 'src/document neft:style', ->
 
     it 'extends nodes by style items', ->
         view = createView '''
-            <neft:style>
+            <style>
                 Item {
                     id: firstItem
                     document.query: 'test'
                 }
-            </neft:style>
+            </style>
             <test />
         '''
         view = view.clone()
 
         renderParse view
         testNode = view.node.query 'test'
-        assert.isNot testNode.attrs['neft:style'].indexOf('firstItem'), -1
+        assert.isNot testNode.attrs['n-style'].indexOf('firstItem'), -1
 
     it 'extends file node by main item if needed', ->
         view = createView '''
-            <neft:style>
+            <style>
                 Item {
                     id: firstItem
                 }
                 Item {
                     document.query: 'abc'
                 }
-            </neft:style>
+            </style>
         '''
         view = view.clone()
 
         renderParse view
-        assert.ok view.node.attrs['neft:style']
+        assert.ok view.node.attrs['n-style']
 
     it 'further declarations are merged', ->
         view = createView '''
-            <neft:style>
+            <style>
                 Item {
                     id: firstItem
                     document.query: 'test'
                 }
-            </neft:style>
-            <neft:style>
+            </style>
+            <style>
                 Item {
                     id: mainItem
                 }
-            </neft:style>
+            </style>
             <test />
         '''
         view = view.clone()
 
         renderParse view
         testNode = view.node.query 'test'
-        assert.isNot testNode.attrs['neft:style'].indexOf('firstItem'), -1
-        assert.ok view.node.attrs['neft:style']
-
-    describe '<style>', ->
-        it 'is not rendered', ->
-            view = createView '''
-                <style></style>
-            '''
-            view = view.clone()
-
-            renderParse view
-            assert.is view.node.stringify(), ''
-
-        it 'does not work if has attributes', ->
-            view = createView '''
-                <style src=""></style>
-            '''
-            view = view.clone()
-
-            renderParse view
-            assert.isNot view.node.stringify(), ''
-
-        it 'works as neft:style', ->
-            view = createView '''
-                <style>
-                    Item {
-                        id: firstItem
-                        document.query: 'test'
-                    }
-                </style>
-                <test />
-            '''
-            view = view.clone()
-
-            renderParse view
-            testNode = view.node.query 'test'
-            assert.isNot testNode.attrs['neft:style'].indexOf('firstItem'), -1
+        assert.isNot testNode.attrs['n-style'].indexOf('firstItem'), -1
+        assert.ok view.node.attrs['n-style']

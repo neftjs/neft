@@ -1,7 +1,7 @@
-# neft:log
+# log
 
 ```xml
-<neft:log debugObject="${props.someObject}">${props.debugText}</neft:log>
+<log debugObject="${props.someObject}">${props.debugText}</log>
 ```
 
     'use strict'
@@ -9,11 +9,11 @@
     module.exports = (File) -> (file) ->
         {logs} = file
 
-        for node in file.node.queryAll('neft:log')
+        for node in file.node.queryAll('log')
             logs.push new File.Log file, node
 
         return
 
 # Glossary
 
-- [neft:log](#neftlog)
+- [log](#log)

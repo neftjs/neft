@@ -30,7 +30,7 @@ describe 'src/document Element', ->
             assert.is p.children.length, 0
 
         it 'has proper elements names', ->
-            assert.is doc.name, 'neft:blank'
+            assert.is doc.name, 'blank'
             assert.is b.name, 'b'
             assert.is em.name, 'em'
             assert.is div.name, 'u'
@@ -41,7 +41,7 @@ describe 'src/document Element', ->
         assert.is html, HTML
 
     it 'hidden attrs are omitted in the stringified process', ->
-        elem = Element.fromHTML '<span neft:if="a" neft:each="a"></span>'
+        elem = Element.fromHTML '<span n-if="a" n-each="a"></span>'
         html = elem.stringify()
 
         assert.is html, '<span></span>'
@@ -159,7 +159,7 @@ describe 'src/document Element', ->
         assert.is elem.stringify(), '<b><em></em></b><u></u><p></p>'
 
     describe 'queryAll() works with selector', ->
-        doc2 = Element.fromHTML "<div><b class='first second'><u color='blue' attr='1'>text1<u></u></u></b></div><div attr='2'><neft:blank><em>text2</em></neft:blank><em></em></div>"
+        doc2 = Element.fromHTML "<div><b class='first second'><u color='blue' attr='1'>text1<u></u></u></b></div><div attr='2'><blank><em>text2</em></blank><em></em></div>"
         doc2div1 = doc2.children[0]
         doc2b = doc2div1.children[0]
         doc2u = doc2b.children[0]
@@ -241,11 +241,11 @@ describe 'src/document Element', ->
         it 'E #text', ->
             assert.isEqual doc2.queryAll('em #text'), [doc2em1.children[0]], maxDeep: 1
 
-        it 'omits neft:blank', ->
+        it 'omits blank', ->
             assert.isEqual doc2.queryAll('div > em'), [doc2em1, doc2em2], maxDeep: 1
 
     describe 'query() works with selector', ->
-        doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><neft:blank><em></em></neft:blank></div>"
+        doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><blank><em></em></blank></div>"
         doc2div1 = doc2.children[0]
         doc2b = doc2div1.children[0]
         doc2u = doc2b.children[0]
@@ -261,11 +261,11 @@ describe 'src/document Element', ->
             assert.is doc2.query('[color]'), doc2u
             assert.is doc2.query('[width]'), null
 
-        it 'omits neft:blank', ->
+        it 'omits blank', ->
             assert.is doc2.query('div > em'), doc2em
 
     describe 'queryParents() works with selector', ->
-        doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><neft:blank><em></em></neft:blank></div>"
+        doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><blank><em></em></blank></div>"
         doc2div1 = doc2.children[0]
         doc2b = doc2div1.children[0]
         doc2u = doc2b.children[0]
@@ -291,7 +291,7 @@ describe 'src/document Element', ->
                 tags = []
                 doc2 = Element.fromHTML """
                     <div><b><u color='blue' attr='1'><u></u></u></b></div>
-                    <div attr='2'><neft:blank><em>text1</em></neft:blank><em></em></div>
+                    <div attr='2'><blank><em>text1</em></blank><em></em></div>
                     """
                 doc2div1 = doc2.children[0]
                 doc2b = doc2div1.children[0]

@@ -48,7 +48,6 @@
         JSON_STYLES = i++
         JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-        @HTML_NS = 'neft'
         @FILES_PATH = ''
 
         signal.create @, 'onCreate'
@@ -59,25 +58,25 @@
 
 ## *Signal* Document.onBeforeRender(*Document* file)
 
-Corresponding node handler: *neft:onBeforeRender=""*.
+Corresponding node handler: *n-onBeforeRender=""*.
 
         signal.create @, 'onBeforeRender'
 
 ## *Signal* Document.onRender(*Document* file)
 
-Corresponding node handler: *neft:onRender=""*.
+Corresponding node handler: *n-onRender=""*.
 
         signal.create @, 'onRender'
 
 ## *Signal* Document.onBeforeRevert(*Document* file)
 
-Corresponding node handler: *neft:onBeforeRevert=""*.
+Corresponding node handler: *n-onBeforeRevert=""*.
 
         signal.create @, 'onBeforeRevert'
 
 ## *Signal* Document.onRevert(*Document* file)
 
-Corresponding node handler: *neft:onRevert=""*.
+Corresponding node handler: *n-onRevert=""*.
 
         signal.create @, 'onRevert'
 
@@ -414,7 +413,7 @@ Corresponding node handler: *neft:onRevert=""*.
                             inputProps.set prop, val
 
                 Document.onBeforeRender.emit @
-                emitNodeSignal @, 'neft:onBeforeRender'
+                emitNodeSignal @, 'n-onBeforeRender'
                 if @context?.node is @node
                     @context.state = @inputState
                     emitSignal @context, 'onBeforeRender'
@@ -447,7 +446,7 @@ Corresponding node handler: *neft:onRevert=""*.
 
                 @isRendered = true
                 Document.onRender.emit @
-                emitNodeSignal @, 'neft:onRender'
+                emitNodeSignal @, 'n-onRender'
                 if @context?.node is @node
                     emitSignal @context, 'onRender'
 
@@ -462,7 +461,7 @@ Corresponding node handler: *neft:onRevert=""*.
 
                 @isRendered = false
                 Document.onBeforeRevert.emit @
-                emitNodeSignal @, 'neft:onBeforeRevert'
+                emitNodeSignal @, 'n-onBeforeRevert'
                 if @context?.node is @node
                     emitSignal @context, 'onBeforeRevert'
 
@@ -500,7 +499,7 @@ Corresponding node handler: *neft:onRevert=""*.
                 @inputState.clear()
 
                 Document.onRevert.emit @
-                emitNodeSignal @, 'neft:onRevert'
+                emitNodeSignal @, 'n-onRevert'
                 if @context?.node is @node
                     @context.state = null
                     emitSignal @context, 'onRevert'
@@ -519,13 +518,13 @@ Corresponding node handler: *neft:onRevert=""*.
             if elem
                 elem.render view
             else
-                log.warn "'#{@path}' view doesn't have '#{useName}' neft:use"
+                log.warn "'#{@path}' view doesn't have '#{useName}' use"
 
             @
 
 ## *Signal* Document::onReplaceByUse(*Document.Use* use)
 
-Corresponding node handler: *neft:onReplaceByUse=""*.
+Corresponding node handler: *n-onReplaceByUse=""*.
 
         Emitter.createSignal @, 'onReplaceByUse'
 
