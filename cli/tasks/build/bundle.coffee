@@ -38,6 +38,7 @@ module.exports = (platform, options, app, callback) ->
     # disable app
     globalNeft = Neft
     mockNeft = ->
+        onReady: ->
     utils.merge mockNeft, Neft
     global.Neft = mockNeft
 
