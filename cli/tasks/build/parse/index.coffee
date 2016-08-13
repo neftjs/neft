@@ -63,7 +63,7 @@ module.exports = (platform, app, options) ->
     file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
 
     if fs.existsSync('./init.js')
-        file += 'var init = require(\'./init\');\n'
+        file += 'var init = require(\'../init\');\n'
         file += 'module.exports = init(Neft.bind(null, opts));\n'
     else
         file += 'module.exports = Neft(opts);\n'
