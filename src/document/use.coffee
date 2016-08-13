@@ -68,15 +68,6 @@ module.exports = (File) -> class Use
             Object.preventExtensions @
         `//</development>`
 
-    `//<development>`
-    usesWithNotFoundComponents = []
-    logUsesWithNoComponents = ->
-        while useElem = usesWithNotFoundComponents.pop()
-            unless useElem.usedComponent
-                log.warn "component '#{useElem.name}' can't be find in file '#{useElem.file.path}'"
-        return
-    `//</development>`
-
     render: (file) ->
         assert.instanceOf file, File if file?
 
@@ -103,10 +94,6 @@ module.exports = (File) -> class Use
     renderComponent: (file) ->
         component = @file.components[@name]
         if not file and not component and not File._files[@name]
-            `//<development>`
-            # if usesWithNotFoundComponents.push(@) is 1
-            #   setTimeout logUsesWithNoComponents
-            `//</development>`
             return
 
         usedComponent = file or File.factory(component or @name)
