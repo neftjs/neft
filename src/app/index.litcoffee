@@ -307,6 +307,10 @@ app.cookies.onChange(function(key){
                         r[method] = opts
             app.routes[path] = r
 
+        # provide default index route
+        unless app.routes.index
+            app.routes.index = new app.Route 'get /', {}
+
         # emit ready signal
         app.onReady.emit()
 
