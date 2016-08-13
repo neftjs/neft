@@ -43,7 +43,7 @@ module.exports = (File) -> class Iterator
         assert.isString @name
         assert.notLengthOf @name, 0
 
-        @usedFragments = []
+        @usedComponents = []
         @text = ''
         @data = null
         @isRendered = false
@@ -109,7 +109,7 @@ module.exports = (File) -> class Iterator
     clearData: ->
         assert.isObject @data
 
-        while length = @usedFragments.length
+        while length = @usedComponents.length
             @popItem length - 1
 
         @
@@ -135,27 +135,27 @@ module.exports = (File) -> class Iterator
 
         {data} = @
 
-        usedFragment = File.factory @name
-        @usedFragments.splice i, 0, usedFragment
+        usedComponent = File.factory @name
+        @usedComponents.splice i, 0, usedComponent
 
         each = data
         item = data[i]
 
         # replace
-        newChild = usedFragment.node
+        newChild = usedComponent.node
         newChild.parent = @node
         newChild.index = i
 
-        # render fragment
+        # render component
         newChild.attrs.set 'each', each
         newChild.attrs.set 'index', i
         newChild.attrs.set 'item', item
-        usedFragment.context = @file.context
-        usedFragment.render @file.inputProps, @file.root, @
+        usedComponent.context = @file.context
+        usedComponent.render @file.inputProps, @file.root, @
 
         # signal
-        usedFragment.onReplaceByUse.emit @
-        File.emitNodeSignal usedFragment, 'n-onReplaceByUse', @
+        usedComponent.onReplaceByUse.emit @
+        File.emitNodeSignal usedComponent, 'n-onReplaceByUse', @
 
         @
 
@@ -168,10 +168,10 @@ module.exports = (File) -> class Iterator
 
         @node.children[i].parent = undefined
 
-        usedFragment = @usedFragments[i]
-        usedFragment.context = null
-        usedFragment.revert().destroy()
-        @usedFragments.splice i, 1
+        usedComponent = @usedComponents[i]
+        usedComponent.context = null
+        usedComponent.revert().destroy()
+        @usedComponents.splice i, 1
 
         @
 

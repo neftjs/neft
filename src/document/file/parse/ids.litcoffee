@@ -1,7 +1,7 @@
 # id
 
 *Element.Tag* with the id attribute is saved in the local scope
-(file, *fragment*, *n-each* etc.)
+(file, *component*, *n-each* etc.)
 and it's available in the string interpolation.
 
 Id must be unique in the scope.

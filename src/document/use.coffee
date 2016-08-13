@@ -28,8 +28,8 @@ module.exports = (File) -> class Use
             @render()
 
     attrsChangeListener = (name) ->
-        if name is 'fragment'
-            @name = @node.attrs['fragment']
+        if name is 'component'
+            @name = @node.attrs['component']
 
             if @isRendered
                 @revert()
@@ -44,7 +44,7 @@ module.exports = (File) -> class Use
         file = queue.shift()
 
         if style.isRendered
-            style.renderFragment file
+            style.renderComponent file
 
         if queue.length
             requestAnimationFrame runQueue
@@ -56,8 +56,8 @@ module.exports = (File) -> class Use
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
 
-        @name = @node.attrs['fragment']
-        @usedFragment = null
+        @name = @node.attrs['component']
+        @usedComponent = null
         @isRendered = false
 
         @node.onVisibleChange visibilityChangeListener, @
@@ -67,15 +67,6 @@ module.exports = (File) -> class Use
         if @constructor is Use
             Object.preventExtensions @
         `//</development>`
-
-    `//<development>`
-    usesWithNotFoundFragments = []
-    logUsesWithNoFragments = ->
-        while useElem = usesWithNotFoundFragments.pop()
-            unless useElem.usedFragment
-                log.warn "fragment '#{useElem.name}' can't be find in file '#{useElem.file.path}'"
-        return
-    `//</development>`
 
     render: (file) ->
         assert.instanceOf file, File if file?
@@ -96,56 +87,52 @@ module.exports = (File) -> class Use
                 requestAnimationFrame runQueue
                 queuePending = true
         else
-            @renderFragment file
+            @renderComponent file
 
         return
 
-    renderFragment: (file) ->
-        fragment = @file.fragments[@name]
-        if not file and not fragment and not File._files[@name]
-            `//<development>`
-            # if usesWithNotFoundFragments.push(@) is 1
-            #   setTimeout logUsesWithNoFragments
-            `//</development>`
+    renderComponent: (file) ->
+        component = @file.components[@name]
+        if not file and not component and not File._files[@name]
             return
 
-        usedFragment = file or File.factory(fragment or @name)
+        usedComponent = file or File.factory(component or @name)
 
         if file
-            file.parentUse?.detachUsedFragment()
+            file.parentUse?.detachUsedComponent()
 
-        unless usedFragment.isClone
-            usedFragment = usedFragment.clone()
+        unless usedComponent.isClone
+            usedComponent = usedComponent.clone()
 
-        unless usedFragment.isRendered
-            usedFragment = usedFragment.render null, @file.root, @
+        unless usedComponent.isRendered
+            usedComponent = usedComponent.render null, @file.root, @
 
-        usedFragment.node.parent = @node
-        @usedFragment = usedFragment
+        usedComponent.node.parent = @node
+        @usedComponent = usedComponent
 
         # signal
-        usedFragment.parentUse = @
-        usedFragment.onReplaceByUse.emit @
-        File.emitNodeSignal usedFragment, 'n-onReplaceByUse', @
+        usedComponent.parentUse = @
+        usedComponent.onReplaceByUse.emit @
+        File.emitNodeSignal usedComponent, 'n-onReplaceByUse', @
 
         return
 
     revert: ->
         return unless @isRendered
 
-        # destroy used fragment
-        if @usedFragment
-            @usedFragment.revert().destroy()
+        # destroy used component
+        if @usedComponent
+            @usedComponent.revert().destroy()
 
         @isRendered = false
         return
 
-    detachUsedFragment: ->
-        assert.isDefined @usedFragment
+    detachUsedComponent: ->
+        assert.isDefined @usedComponent
 
-        @usedFragment.node.parent = null
-        @usedFragment.parentUse = null
-        @usedFragment = null
+        @usedComponent.node.parent = null
+        @usedComponent.parentUse = null
+        @usedComponent = null
         return
 
     clone: (original, file) ->

@@ -5,21 +5,21 @@
 {createView, renderParse, uid} = require './utils'
 
 describe 'src/document use', ->
-    it 'is replaced by fragment', ->
+    it 'is replaced by component', ->
         view = createView '''
-            <fragment name="a"><b></b></fragment>
-            <use fragment="a" />
+            <component name="a"><b></b></component>
+            <use component="a" />
         '''
         view = view.clone()
 
         renderParse view
         assert.is view.node.stringify(), '<b></b>'
 
-    it 'is replaced in fragment', ->
+    it 'is replaced in component', ->
         source = createView '''
-            <fragment name="b">1</fragment>
-            <fragment name="a"><use fragment="b" /></fragment>
-            <use fragment="a" />
+            <component name="b">1</component>
+            <component name="a"><use component="b" /></component>
+            <use component="a" />
         '''
         view = source.clone()
 
@@ -28,15 +28,15 @@ describe 'src/document use', ->
 
     it 'can be rendered recursively', ->
         source = createView '''
-            <fragment name="a">
+            <component name="a">
                 1
                 <use
-                  fragment="a"
+                  component="a"
                   n-if="${props.loops > 0}"
                   loops="${props.loops - 1}"
                 />
-            </fragment>
-            <use fragment="a" loops="3" />
+            </component>
+            <use component="a" loops="3" />
         '''
         view = source.clone()
 
@@ -45,7 +45,7 @@ describe 'src/document use', ->
 
     it 'can be rendered using short syntax', ->
         view = createView '''
-            <fragment name="a-b"><b></b></fragment>
+            <component name="a-b"><b></b></component>
             <a-b />
         '''
         view = view.clone()

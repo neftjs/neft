@@ -34,7 +34,7 @@ Use *List* to bind changes made in the array.
 
     module.exports = (File) -> (file) ->
         {iterators} = file
-        createdFragments = []
+        createdComponents = []
 
         forNode = (elem) ->
             unless attrVal = elem.attrs['n-each']
@@ -45,13 +45,13 @@ Use *List* to bind changes made in the array.
 
             path = "#{file.path}#each[#{utils.uid()}]"
 
-            # get fragment
+            # get component
             bodyNode = new File.Element.Tag
             while child = elem.children[0]
                 child.parent = bodyNode
-            fragment = new File path, bodyNode
-            utils.merge fragment.fragments, file.fragments
-            createdFragments.push fragment
+            component = new File path, bodyNode
+            utils.merge component.components, file.components
+            createdComponents.push component
 
             # get iterator
             iterator = new File.Iterator file, elem, path
@@ -62,9 +62,9 @@ Use *List* to bind changes made in the array.
 
         forNode file.node
 
-        # parse created fragments
-        for fragment in createdFragments
-            File.parse fragment
+        # parse created components
+        for component in createdComponents
+            File.parse component
 
         return
 

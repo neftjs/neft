@@ -35,7 +35,7 @@
         JSON_NODE = i++
         JSON_TARGET_NODE = i++
         JSON_ATTRS_TO_PARSE = i++
-        JSON_FRAGMENTS = i++
+        JSON_COMPONENTS = i++
         JSON_SCRIPTS = i++
         JSON_ATTR_CHANGES = i++
         JSON_INPUTS = i++
@@ -175,7 +175,7 @@ Corresponding node handler: *n-onRevert=""*.
                     attrsToParse.push node.getChildByAccessPath(attrNode)
                     attrsToParse.push jsonAttrsToParse[i+1]
 
-                utils.merge obj.fragments, arr[JSON_FRAGMENTS]
+                utils.merge obj.components, arr[JSON_COMPONENTS]
                 if (scripts = arr[JSON_SCRIPTS])?
                     obj.scripts = Document.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
                 parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
@@ -205,7 +205,7 @@ Corresponding node handler: *n-onRevert=""*.
                     throw new Error "Document.parse() is available only on the server"
 
             rules = require('./file/parse/rules') Document
-            fragments = require('./file/parse/fragments') Document
+            components = require('./file/parse/components') Document
             scripts = require('./file/parse/scripts') Document
             styles = require('./file/parse/styles') Document
             attrs = require('./file/parse/attrs') Document
@@ -231,7 +231,7 @@ Corresponding node handler: *n-onRevert=""*.
                 # parse
                 styles file
                 rules file
-                fragments file
+                components file
                 scripts file
                 iterators file
                 attrs file
@@ -299,7 +299,7 @@ Corresponding node handler: *n-onRevert=""*.
             @parentUse = null
 
             @attrsToParse = []
-            @fragments = {}
+            @components = {}
             @attrChanges = []
             @inputs = []
             @conditions = []
@@ -473,7 +473,7 @@ Corresponding node handler: *n-onRevert=""*.
                     @source.node.onAttrsChange.disconnect @_updateInputAttrsKey, @
 
                 # parent use
-                @parentUse?.detachUsedFragment()
+                @parentUse?.detachUsedComponent()
 
                 # inputs
                 if @inputs
@@ -549,7 +549,7 @@ Corresponding node handler: *n-onReplaceByUse=""*.
         _clone: ->
             clone = new Document @path, @node.cloneDeep()
             clone.isClone = true
-            clone.fragments = @fragments
+            clone.components = @components
 
             if @targetNode
                 clone.targetNode = @node.getCopiedElement @targetNode, clone.node
@@ -638,7 +638,7 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                     attrsToParse[i] = attrNode.getAccessPath @node
                     attrsToParse[i+1] = @attrsToParse[i+1]
 
-                arr[JSON_FRAGMENTS] = @fragments
+                arr[JSON_COMPONENTS] = @components
                 arr[JSON_SCRIPTS] = @scripts
                 arr[JSON_ATTR_CHANGES] = @attrChanges.map callToJSON
                 arr[JSON_INPUTS] = @inputs.map callToJSON

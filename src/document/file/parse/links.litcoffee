@@ -1,6 +1,6 @@
 # import
 
-Tag used to link *fragment*s from a file and use them.
+Tag used to link *component*s from a file and use them.
 
 ```xml
 <import href="./user_utils.html" />
@@ -9,7 +9,7 @@ Tag used to link *fragment*s from a file and use them.
 
 ## Namespace
 
-Optional argument `as` will link all fragments into the specified namespace.
+Optional argument `as` will link all components into the specified namespace.
 
 ```xml
 <import href="./user_utils.html" as="user" />

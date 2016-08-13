@@ -6,10 +6,10 @@
 
 describe 'src/document string interpolation', ->
     describe '`props`', ->
-        it 'lookup fragment', ->
+        it 'lookup component', ->
             source = createView '''
-                <fragment name="a" x="2">${props.x}</fragment>
-                <use fragment="a" />
+                <component name="a" x="2">${props.x}</component>
+                <use component="a" />
             '''
             view = source.clone()
 
@@ -18,10 +18,10 @@ describe 'src/document string interpolation', ->
 
         it 'is accessible by context', ->
             source = createView '''
-                <fragment name="a" x="2">
+                <component name="a" x="2">
                     ${this.props.x}
-                </fragment>
-                <use fragment="a" />
+                </component>
+                <use component="a" />
             '''
             view = source.clone()
 
@@ -30,8 +30,8 @@ describe 'src/document string interpolation', ->
 
         it 'lookup use', ->
             source = createView '''
-                <fragment name="a" x="1">${props.x}</fragment>
-                <use fragment="a" x="2" />
+                <component name="a" x="1">${props.x}</component>
+                <use component="a" x="2" />
             '''
             view = source.clone()
 
@@ -40,32 +40,32 @@ describe 'src/document string interpolation', ->
 
         it 'always keeps proper sources order', ->
             source = createView '''
-                <fragment name="a" x="1">
-                    <fragment name="b" x="1">
+                <component name="a" x="1">
+                    <component name="b" x="1">
                         ${props.x}
-                    </fragment>
-                    <use fragment="b" x="4" />
-                </fragment>
-                <use fragment="a" x="3" />
+                    </component>
+                    <use component="b" x="4" />
+                </component>
+                <use component="a" x="3" />
             '''
             view = source.clone()
 
             renderParse view
 
             useA = view.node.children[0]
-            fragmentA = useA.children[0]
-            useB = fragmentA.children[0]
-            fragmentB = useB.children[0]
+            componentA = useA.children[0]
+            useB = componentA.children[0]
+            componentB = useB.children[0]
             assert.is view.node.stringify(), '4'
 
-            fragmentA.attrs.set 'x', -1
+            componentA.attrs.set 'x', -1
             useA.attrs.set 'x', -1
-            fragmentB.attrs.set 'x', -1
+            componentB.attrs.set 'x', -1
             assert.is view.node.stringify(), '4'
 
-            fragmentA.attrs.set 'x', 1
+            componentA.attrs.set 'x', 1
             useA.attrs.set 'x', 3
-            fragmentB.attrs.set 'x', 1
+            componentB.attrs.set 'x', 1
 
             useB.attrs.set 'x', undefined
             assert.is view.node.stringify(), '1'
@@ -73,13 +73,13 @@ describe 'src/document string interpolation', ->
             useA.attrs.set 'x', undefined
             assert.is view.node.stringify(), '1'
 
-            fragmentB.attrs.set 'x', 2
+            componentB.attrs.set 'x', 2
             assert.is view.node.stringify(), '2'
 
-            fragmentA.attrs.set 'x', 3
+            componentA.attrs.set 'x', 3
             assert.is view.node.stringify(), '2'
 
-            fragmentA.attrs.set 'x', undefined
+            componentA.attrs.set 'x', undefined
             assert.is view.node.stringify(), '2'
 
     describe '`ids`', ->
@@ -109,13 +109,13 @@ describe 'src/document string interpolation', ->
             view.node.children[0].attrs.set 'label', 23
             assert.is view.node.stringify(), '23'
 
-    it 'file `ids` are accessed in fragments', ->
+    it 'file `ids` are accessed in components', ->
         source = createView '''
             <a id="first" label="12" visible="false" />
-            <fragment name="a">
+            <component name="a">
                 ${ids.first.attrs.label}
-            </fragment>
-            <use fragment="a" />
+            </component>
+            <use component="a" />
         '''
         view = source.clone()
 
@@ -158,8 +158,8 @@ describe 'src/document string interpolation', ->
 
         it 'lookup use', ->
             source = createView '''
-                <fragment name="a">${root.a}</fragment>
-                <use fragment="a" />
+                <component name="a">${root.a}</component>
+                <use component="a" />
             '''
             view = source.clone()
 
@@ -329,8 +329,8 @@ describe 'src/document string interpolation', ->
     describe 'support realtime changes', ->
         it 'on `props`', ->
             source = createView '''
-                <fragment name="a">${props.x}</fragment>
-                <use fragment="a" x="2" y="1" />
+                <component name="a">${props.x}</component>
+                <use component="a" x="2" y="1" />
             '''
             view = source.clone()
             elem = view.node.children[0]
@@ -367,8 +367,8 @@ describe 'src/document string interpolation', ->
 
         it 'on `root` use', ->
             source = createView '''
-                <fragment name="a">${root.a}</fragment>
-                <use fragment="a" />
+                <component name="a">${root.a}</component>
+                <use component="a" />
             '''
             view = source.clone()
 

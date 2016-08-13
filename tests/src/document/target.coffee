@@ -7,12 +7,12 @@
 describe 'src/document target', ->
     it 'is replaced by the use body', ->
         source = createView '''
-            <fragment name="a">
+            <component name="a">
                 <a1 />
                 <target />
                 <a2 />
-            </fragment>
-            <use fragment="a"><b></b></use>
+            </component>
+            <use component="a"><b></b></use>
         '''
         view = source.clone()
 
@@ -21,10 +21,10 @@ describe 'src/document target', ->
 
     it 'can be hidden', ->
         source = createView '''
-            <fragment name="a">
+            <component name="a">
                 <target n-if="${props.x === 1}" />
-            </fragment>
-            <use fragment="a" x="0"><b></b></use>
+            </component>
+            <use component="a" x="0"><b></b></use>
         '''
         view = source.clone()
         elem = view.node.children[0]

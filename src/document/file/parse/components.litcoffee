@@ -1,16 +1,16 @@
-# fragment
+# component
 
 Tag used to create separated and repeatable parts of the document.
 
-Each fragment has to define a `name` unique in the file where it's defined.
+Each component has to define a `name` unique in the file where it's defined.
 
-fragment can be rendered by the *use* tag.
+component can be rendered by the *use* tag.
 
 ```xml
-<fragment name="product">
+<component name="product">
   <h2>${props.name}</h2>
   <span>Type: ${props.type}</span>
-</fragment>
+</component>
 
 <section>
   <product type="electronics" name="dryer" />
@@ -23,13 +23,13 @@ fragment can be rendered by the *use* tag.
     utils = require 'src/utils'
 
     module.exports = (File) ->
-        parseLinks = require('./fragments/links') File
+        parseLinks = require('./links') File
 
         (file) ->
-            {fragments} = file
-            createdFragments = []
+            {components} = file
+            createdComponents = []
 
-            # merge fragments from files
+            # merge components from files
             links = parseLinks file
             for link in links
                 namespace = if link.namespace then "#{link.namespace}:" else ''
@@ -37,13 +37,13 @@ fragment can be rendered by the *use* tag.
 
                 # link required file
                 if link.namespace
-                    fragments[link.namespace] = linkView
+                    components[link.namespace] = linkView
 
-                # link required file fragments
-                for name, fragment of linkView.fragments
-                    fragments[namespace + name] = fragment
+                # link required file components
+                for name, component of linkView.components
+                    components[namespace + name] = component
 
-            # find fragments in file
+            # find components in file
             forEachNodeRec = (node) ->
                 unless children = node.children
                     return
@@ -51,7 +51,7 @@ fragment can be rendered by the *use* tag.
                 while ++i < n
                     child = children[i]
 
-                    if child.name isnt 'fragment'
+                    if child.name isnt 'component'
                         forEachNodeRec child
                         continue
 
@@ -63,25 +63,25 @@ fragment can be rendered by the *use* tag.
                     child.parent = null
                     i--; n--
 
-                    # get fragment
+                    # get component
                     path = "#{file.path}##{name}"
-                    fragment = new File path, child
-                    fragments[name] = path
-                    createdFragments.push fragment
+                    component = new File path, child
+                    components[name] = path
+                    createdComponents.push component
 
             forEachNodeRec file.node
 
-            # link fragments
-            for createdFragment in createdFragments
-                for fragmentName, fragmentId of fragments
-                    createdFragment.fragments[fragmentName] ?= fragmentId
+            # link components
+            for createdComponent in createdComponents
+                for componentName, componentId of components
+                    createdComponent.components[componentName] ?= componentId
 
-            # parse fragments
-            for createdFragment in createdFragments
-                File.parse createdFragment
+            # parse components
+            for createdComponent in createdComponents
+                File.parse createdComponent
 
             return
 
 # Glossary
 
-- [fragment](#fragment)
+- [component](#component)

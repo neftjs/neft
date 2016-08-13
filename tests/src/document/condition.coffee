@@ -21,11 +21,11 @@ describe 'src/document n-if', ->
 
     it 'supports runtime updates', ->
         source = createView '''
-            <fragment name="a">
+            <component name="a">
                 <b n-if="${props.x > 1}">OK</b>
                 <b n-if="${props.x === 1}">FAIL</b>
-            </fragment>
-            <use fragment="a" x="1" />
+            </component>
+            <use component="a" x="1" />
         '''
         view = source.clone()
         elem = view.node.children[0]
