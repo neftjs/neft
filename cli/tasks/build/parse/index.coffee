@@ -69,10 +69,8 @@ module.exports = (platform, app, options) ->
         file += 'window.app = module.exports;\n'
         file += 'Neft.unit = require(\'lib/unit\');\n'
         file += 'Neft.unit.runAutomatically = false;\n'
-        file += 'app.onReady(function() {\n'
         for testFile in testFiles
-            file += "    require('#{testFile}');\n"
-            file += '    Neft.unit.runTests();\n'
-        file += '});\n'
+            file += "require('#{testFile}');\n"
+            file += 'Neft.unit.runTests();\n'
 
     file
