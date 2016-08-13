@@ -1,48 +1,48 @@
 # use
 
-Tag used to place *fragment*.
+Tag used to place *component*.
 
 ```xml
-<fragment name="user">
+<component name="user">
   This is a user
-</fragment>
+</component>
 
-<use fragment="user" />
+<use component="user" />
 ```
 
-*fragment* attribute can be changed in runtime.
+*component* attribute can be changed in runtime.
 
 ```xml
-<fragment name="h1">
+<component name="h1">
   <h1>H1 heading</h1>
-</fragment>
+</component>
 
-<use fragment="h${data.level}" />
+<use component="h${data.level}" />
 ```
 
 Short version of *use* is a tag prefixed by `use:`.
 
 ```xml
-<fragment name="user">
+<component name="user">
   This is a user
-</fragment>
+</component>
 
 <user />
 ```
 
-*use* attributes are available in *fragment* scope.
+*use* attributes are available in *component* scope.
 
 ```xml
-<fragment name="heading">
+<component name="heading">
   <h1>H1: ${props.data}</h1>
-</fragment>
+</component>
 
 <heading data="Test heading" />
 ```
 
 ## n-async
 
-Renders fragment on the first free animation frame.
+Renders component on the first free animation frame.
 
 Use this attribute to render less important elements.
 
@@ -64,10 +64,10 @@ Use this attribute to render less important elements.
             node.children.forEach forNode
 
             # change short syntax to long formula
-            if file.fragments[node.name]
-                fragment = node.name
+            if file.components[node.name]
+                component = node.name
                 node.name = 'use'
-                node.attrs['fragment'] = fragment
+                node.attrs['component'] = component
 
             # get uses
             if node.name is 'use'

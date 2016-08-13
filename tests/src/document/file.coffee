@@ -13,14 +13,14 @@ describe 'src/document View', ->
         view = createView '<!--comment--><div>   </div>'
         assert.is view.node.stringify(), '<div></div>'
 
-    it 'finds fragments', ->
-        view = createView '<fragment name="a"></fragment>'
-        assert.is Object.keys(view.fragments).length, 1
+    it 'finds components', ->
+        view = createView '<component name="a"></component>'
+        assert.is Object.keys(view.components).length, 1
 
     it 'finds uses', ->
         view = createView '''
-            <fragment name="a"><b></b></fragment>
-            <use fragment="a" />
+            <component name="a"><b></b></component>
+            <use component="a" />
         '''
         assert.is view.uses.length, 1
 

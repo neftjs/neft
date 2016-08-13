@@ -77,12 +77,12 @@ describe 'src/document n-each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>aa</ul>'
 
-    it 'access fragment `props`', ->
+    it 'access component `props`', ->
         source = createView """
-            <fragment name="a" a="a">
+            <component name="a" a="a">
                 <ul n-each="[1,2]">${props.a}${props.b}</ul>
-            </fragment>
-            <use fragment="a" b="b" />
+            </component>
+            <use component="a" b="b" />
         """
         view = source.clone()
 
@@ -91,7 +91,7 @@ describe 'src/document n-each', ->
 
     it 'uses parent `this` context', ->
         source = createView """
-            <fragment name="a">
+            <component name="a">
                 <script>
                     this.onCreate(function(){
                         this.self = this;
@@ -101,8 +101,8 @@ describe 'src/document n-each', ->
                     };
                 </script>
                 <ul n-each="[1,2]">${this.getX()}</ul>
-            </fragment>
-            <use fragment="a" />
+            </component>
+            <use component="a" />
         """
         view = source.clone()
 

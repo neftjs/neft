@@ -1,18 +1,18 @@
 # target
 
-Tag used in *fragment* to define,
+Tag used in *component* to define,
 where *use* body should be placed.
 
 ```xml
-<fragment name="user">
+<component name="user">
   <name>${props.name}</name>
   <age>${props.age}</age>
   <target />
-</fragment>
+</component>
 
-<use:user name="Max" age="19">
+<user name="Max" age="19">
   <superPower>flying</superPower>
-</use>
+</user>
 ```
 
     'use strict'

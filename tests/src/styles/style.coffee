@@ -471,13 +471,13 @@ describe 'src/styles', ->
 
         it "is properly synchronized on 'use'", ->
             doc = render
-                html: """<fragment name="a">
+                html: '''<component name="a">
                     <b n-style="renderer:Item" />
                     <i n-style="renderer:Item" />
-                </fragment>
+                </component>
                 <div n-style="renderer:Item">
-                    <use fragment="a" />
-                </div>"""
+                    <use component="a" />
+                </div>'''
 
             divNode = doc.node.query 'div'
             bNode = doc.node.query 'b'

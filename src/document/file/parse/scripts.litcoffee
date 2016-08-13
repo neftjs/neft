@@ -6,7 +6,7 @@
     os = require 'os'
     utils = require 'src/utils'
     pathUtils = require 'path'
-    { getFilePath } = require './fragments/links'
+    { getFilePath } = require './links'
 
     uid = 0
     realpath = fs.realpathSync './'

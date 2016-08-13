@@ -48,7 +48,7 @@ Adds attributes if not exists.
         true
 
     module.exports = (File) ->
-        parseLinks = require('./fragments/links') File
+        parseLinks = require('./links') File
 
         fileRules = Object.create null
 
