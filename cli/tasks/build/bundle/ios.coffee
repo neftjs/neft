@@ -10,7 +10,9 @@ xcode = require 'xcode'
 
 OUT_DIR = './build/ios/'
 EXT_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/Extension/"
+CUSTOM_NATIVE_DIR = './native/ios'
 CUSTOM_NATIVE_OUT_DIR = "#{OUT_DIR}Neft/"
+STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}static"
 ANDROID_BUNDLE_DIR = './build/ios/'
 XCODE_PROJECT_PATH = "#{OUT_DIR}Neft.xcodeproj/project.pbxproj"
@@ -42,9 +44,10 @@ module.exports = (config, callback) ->
             true
     log.end logtime
 
-    logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
-    fs.copySync "./native/ios", CUSTOM_NATIVE_OUT_DIR
-    log.end logtime
+    if fs.existsSync(CUSTOM_NATIVE_DIR)
+        logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
+        fs.copySync CUSTOM_NATIVE_DIR, CUSTOM_NATIVE_OUT_DIR
+        log.end logtime
 
     # check whether otfinfo is installed
     checkFonts = false
@@ -54,21 +57,22 @@ module.exports = (config, callback) ->
     catch
         log.error "Custom fonts are not supported. Install 'lcdf-typetools'; e.g. brew install lcdf-typetools"
 
-    logtime = log.time "Copy static files into '#{STATIC_OUT_DIR}'"
     config.fonts = []
-    fs.copySync './static', STATIC_OUT_DIR,
-        filter: (path) ->
-            # get font PostScript name
-            if checkFonts and pathUtils.extname(path) in ['.otf', '.ttf']
-                realpath = fs.realpathSync(path)
-                name = (cp.execSync("otfinfo -p #{realpath}")+"").trim()
-                config.fonts.push
-                    source: "/#{path}"
-                    name: name
-            true
-    if fs.existsSync('./build/static')
-        fs.copySync './build/static', STATIC_OUT_DIR
-    log.end logtime
+    if fs.existsSync(STATIC_DIR)
+        logtime = log.time "Copy static files into '#{STATIC_OUT_DIR}'"
+        fs.copySync STATIC_DIR, STATIC_OUT_DIR,
+            filter: (path) ->
+                # get font PostScript name
+                if checkFonts and pathUtils.extname(path) in ['.otf', '.ttf']
+                    realpath = fs.realpathSync(path)
+                    name = (cp.execSync("otfinfo -p #{realpath}")+"").trim()
+                    config.fonts.push
+                        source: "/#{path}"
+                        name: name
+                true
+        if fs.existsSync('./build/static')
+            fs.copySync './build/static', STATIC_OUT_DIR
+        log.end logtime
 
     logtime = log.time "Copy extensions"
     config.iosExtensions = []
