@@ -5,6 +5,8 @@ groundskeeper = require 'groundskeeper'
 RELEASE_NAMESPACES_TO_REMOVE = [
     'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions'
 ]
+DEV_TAG_RE = ///\/\/<(\/)?development>;///g
+PROD_TAG_RE = ///<production>([^]*?)<\/production>///gm
 
 module.exports = (bundle, opts, callback) ->
     if opts.release
@@ -13,7 +15,7 @@ module.exports = (bundle, opts, callback) ->
         if opts.removeLogs
             namespaces.push 'log'
 
-        bundle = bundle.replace ///\/\/<(\/)?development>;///g, '//<$1development>'
+        bundle = bundle.replace DEV_TAG_RE, '//<$1development>'
         bundle = bundle.replace /, assert,;/g, ', '
         bundle = bundle.replace /\ assert, |, assert;/g, ' '
         if opts.removeLogs
@@ -26,6 +28,6 @@ module.exports = (bundle, opts, callback) ->
         cleaner.write bundle
         bundle = cleaner.toString()
     else
-        bundle = bundle.replace ///<production>([^]*?)<\/production>///gm, ''
+        bundle = bundle.replace PROD_TAG_RE, ''
 
     callback null, bundle

@@ -43,7 +43,9 @@ fileScope = """(function(){
         return (path in modules ? modules[path] :
                (typeof Neft !== "undefined" && Neft[name]) ||
                (typeof require === 'function' && require(name)) ||
-               (function(){throw new Error("Cannot find module '"+name+"'");}()));
+               (function(){
+                    throw new Error("Cannot find module '"+name+"'");
+                }()));
     };
 
     // fill modules by their bodies
@@ -58,7 +60,7 @@ fileScope = """(function(){
     }
 })();"""
 
-moduleScope = """(function(){
+moduleScope = '''(function(){
     var module = {exports: modules["{{name}}"]};
     var require = getModule.bind(null, {{paths}});
     var exports = module.exports;
@@ -66,7 +68,7 @@ moduleScope = """(function(){
     {{file}}
 
     return module.exports;
-})();"""
+})();'''
 
 getDeclarations = (modules) ->
     r = {}
