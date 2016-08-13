@@ -34,6 +34,6 @@ module.exports = (platform, options, callback) ->
             return callback err
 
         file = createIndexFile platform, app, options
-        fs.writeFileSync './index.js', file, 'utf-8'
+        fs.writeFileSync './build/index.js', file, 'utf-8'
 
         callback null, app
