@@ -26,7 +26,7 @@ getFile = (path, opts) ->
     unless extname = pathUtils.extname(path)
         return
 
-    file = moduleCache.getFile path
+    file = moduleCache.getFile path, compile: false
 
     if STRING_FILES[extname]
         file = "module.exports = #{JSON.stringify(file)}"
