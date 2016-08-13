@@ -27,7 +27,10 @@ module.exports = (platform, app, callback) ->
     filesByFilename = {}
 
     inputDirPriorities = {}
-    inputDirs = [path: IN_DIR, prefix: '']
+    inputDirs = [
+        {path: pathUtils.join(__dirname, '/styles/default'), prefix: ''},
+        {path: IN_DIR, prefix: ''}
+    ]
 
     packageConfig = JSON.parse fs.readFileSync('./package.json', 'utf-8')
 
