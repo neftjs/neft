@@ -150,7 +150,11 @@ Files from the *views* folder as the *Document* instances.
 
 ## *Resources* app.resources
 
-        app.resources = if opts.resources then Resources.fromJSON(opts.resources) else new Resources
+        app.resources = do ->
+            if opts.resources
+                Resources.fromJSON(opts.resources)
+            else
+                new Resources
 
 ## *Signal* app.onReady()
 
@@ -272,27 +276,6 @@ app.cookies.onChange(function(key){
 
             return
 
-        setImmediate ->
-            # load views
-            for view in opts.views when view.name?
-                app.views[view.name] = Document.fromJSON view.file
-
-            init opts.models, app.models
-            init opts.routes, app.routes
-
-            for path, obj of app.routes
-                r = {}
-                if utils.isObject(obj) and not (obj instanceof app.Route)
-                    for method, opts of obj
-                        if utils.isObject(opts)
-                            route = new app.Route method, opts
-                            r[route.name] = route
-                        else
-                            r[method] = opts
-                app.routes[path] = r
-
-            app.onReady.emit()
-
         # load document extensions
         if utils.isObject(opts.extensions)
             for ext in opts.extensions
@@ -301,5 +284,27 @@ app.cookies.onChange(function(key){
         # exports app classes
         exports.app =
             Route: app.Route
+
+        # load views
+        for view in opts.views when view.name?
+            app.views[view.name] = Document.fromJSON view.file
+
+        # load files
+        init opts.models, app.models
+        init opts.routes, app.routes
+
+        for path, obj of app.routes
+            r = {}
+            if utils.isObject(obj) and not (obj instanceof app.Route)
+                for method, opts of obj
+                    if utils.isObject(opts)
+                        route = new app.Route method, opts
+                        r[route.name] = route
+                    else
+                        r[method] = opts
+            app.routes[path] = r
+
+        # emit ready signal
+        app.onReady.emit()
 
         app

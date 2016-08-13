@@ -1,7 +1,7 @@
 'use strict'
 
 fs = require 'fs'
-bundleBuilder = require 'src/bundle-builder'
+bundleBuilder = require 'lib/bundle-builder'
 pathUtils = require 'path'
 
 {utils, log} = Neft
@@ -10,9 +10,9 @@ DEFAULT_LOCAL_FILE =
     android:
         sdkDir: '$ANDROID_HOME'
         compileSdkVersion: 23
-        buildToolsVersion: "23"
+        buildToolsVersion: '23'
         dependencies: [
-            "com.android.support:appcompat-v7:23.0.0"
+            'com.android.support:appcompat-v7:23.0.0'
         ]
 
 module.exports = (platform, options, app, callback) ->
@@ -33,6 +33,34 @@ module.exports = (platform, options, app, callback) ->
                 modulePath.indexOf('..') isnt 0 or
                 modulePath.indexOf('node_modules') is -1
 
+    logtime = log.time 'Resolve bundle modules'
+
+    # disable app
+    globalNeft = Neft
+    mockNeft = ->
+    utils.merge mockNeft, Neft
+    global.Neft = mockNeft
+
+    # mock utils
+    mockUtils = utils.clone mockNeft.utils
+    mockNeft.utils = mockUtils
+    mockUtils.isNode = mockUtils.isServer = mockUtils.isClient =
+    mockUtils.isBrowser = mockUtils.isAndroid = mockUtils.isIOS = false
+    switch platform
+        when 'node'
+            mockUtils.isNode = true
+            mockUtils.isServer = true
+        when 'browser'
+            mockUtils.isBrowser = true
+            mockUtils.isClient = true
+        when 'android'
+            mockUtils.isAndroid = true
+            mockUtils.isClient = true
+        when 'ios'
+            mockUtils.isIOS = true
+            mockUtils.isClient = true
+
+    # build bundle
     bundleBuilder
         path: 'index.js'
         verbose: true
@@ -42,8 +70,10 @@ module.exports = (platform, options, app, callback) ->
         removeLogs: options.release
         neftFilePath: pathUtils.resolve(__dirname, neftFilePath)
         testResolved: testResolvedFunc
-        useBabel: true
         , (err, file) ->
+            global.Neft = globalNeft
+            log.end logtime
+
             if err
                 return callback err
 

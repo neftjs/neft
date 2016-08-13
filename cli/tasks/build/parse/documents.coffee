@@ -2,7 +2,6 @@
 
 fs = require 'fs-extra'
 pathUtils = require 'path'
-bundleBuilder = require 'src/bundle-builder'
 coffee = require 'coffee-script'
 
 cliUtils = require 'cli/utils'
@@ -22,13 +21,11 @@ module.exports = (platform, app, callback) ->
 
     # install document extensions
     packageConfig = JSON.parse fs.readFileSync('./package.json')
-    bundleBuilder.addModulesNamespace Neft
     realpath = fs.realpathSync '.'
     for key of packageConfig.dependencies
         if /^neft\-document\-/.test(key) and not loadedExtensions[key]
             loadedExtensions[key] = true
             require(pathUtils.join(realpath, '/node_modules/', key))()
-    bundleBuilder.removeModulesNamespace Neft
 
     styles {windowStyle: null, styles: {}, queries: app.styleQueries}
     utils.clear Document._files

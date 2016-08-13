@@ -11,6 +11,7 @@ CONFIG_LINKS_TO_REQUIRE =
     styles: true
     models: true
     routes: true
+    scripts: true
 
 ###
 Prepares index file

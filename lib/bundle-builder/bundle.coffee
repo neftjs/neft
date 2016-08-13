@@ -4,9 +4,8 @@ fs = require 'fs-extra'
 crypto = require 'crypto'
 pathUtils = require 'path'
 os = require 'os'
-moduleCache = require 'lib/moduleCache'
+moduleCache = require 'lib/module-cache'
 
-{log} = Neft
 {stringify} = JSON
 
 STRING_FILES =
@@ -24,7 +23,7 @@ replaceStr = (str, oldStr, newStr) ->
     r
 
 getFile = (path, opts) ->
-    unless extname = pathUtils.extname path
+    unless extname = pathUtils.extname(path)
         return
 
     file = moduleCache.getFile path
@@ -103,7 +102,6 @@ getModulesInit = (data, opts) ->
     r
 
 module.exports = (processData, opts, callback) ->
-    logtime = log.time 'Build bundle'
     declarations = getDeclarations processData.modules
     init = getModulesInit processData, opts
 
@@ -111,6 +109,5 @@ module.exports = (processData, opts, callback) ->
     r = replaceStr r, '{{path}}', opts.path
     r = replaceStr r, '{{declarations}}', stringify declarations
     r = replaceStr r, '{{init}}', init
-    log.end logtime
 
     callback null, r

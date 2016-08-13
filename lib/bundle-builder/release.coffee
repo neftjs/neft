@@ -2,16 +2,13 @@
 
 groundskeeper = require 'groundskeeper'
 
-{utils, log} = Neft
-
 RELEASE_NAMESPACES_TO_REMOVE = [
     'assert', 'Object.freeze', 'Object.seal', 'Object.preventExtensions'
 ]
 
 module.exports = (bundle, opts, callback) ->
     if opts.release
-        logtime = log.time 'Release mode'
-        namespaces = utils.clone RELEASE_NAMESPACES_TO_REMOVE
+        namespaces = RELEASE_NAMESPACES_TO_REMOVE.slice()
 
         if opts.removeLogs
             namespaces.push 'log'
@@ -28,7 +25,6 @@ module.exports = (bundle, opts, callback) ->
             replace: 'true\n'
         cleaner.write bundle
         bundle = cleaner.toString()
-        log.end logtime
     else
         bundle = bundle.replace ///<production>([^]*?)<\/production>///gm, ''
 
