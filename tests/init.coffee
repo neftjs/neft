@@ -1,6 +1,6 @@
-useCoverage = process.argv.indexOf('--coverage')
+useCoverage = process.argv.indexOf('--coverage') >= 0
 
-if useCoverage >= 0
+if useCoverage
     require 'coffee-coverage/register-istanbul'
 
 moduleCache = require 'lib/module-cache'
