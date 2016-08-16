@@ -20,12 +20,13 @@ module.exports = (platform, options, callback) ->
         views: []
         styles: []
         styleQueries: []
+        scripts: []
         resources: null
         config: null
 
-    stack.add linkFiles, null, [platform, app]
     stack.add linkStyles, null, [platform, app]
     stack.add linkDocuments, null, [platform, app]
+    stack.add linkFiles, null, [platform, app]
     stack.add linkResources, null, [platform, app]
 
     stack.runAll (err) ->

@@ -3,13 +3,7 @@
 fs = require 'fs'
 pathUtils = require 'path'
 PEG = require 'pegjs'
-
-try
-    grammar = require './grammar.pegjs'
-catch
-    grammarPath = pathUtils.resolve(__dirname, './grammar.pegjs')
-    grammar = fs.readFileSync grammarPath, 'utf-8'
-
+grammar = require './grammar.pegjs'
 parser = PEG.buildParser grammar,
     optimize: 'speed'
 

@@ -12,7 +12,5 @@ require('babel-register')({
 const fs = require('fs');
 global.Neft = require('../cli/bundle/neft-node-develop.js');
 global.app = require(fs.realpathSync('./build/app-node-develop.js'));
-app.onReady(function() {
-    Neft.unit = require('../lib/unit');
-    require('../lib/unit/cli');
-});
+Neft.unit = require('../lib/unit');
+require('../lib/unit/cli');

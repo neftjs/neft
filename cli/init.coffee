@@ -4,7 +4,7 @@ semver = require 'semver'
 fs = require 'fs'
 pathUtils = require 'path'
 global.Neft = require './bundle/neft-node-develop'
-require('lib/moduleCache').registerBabel()
+require('lib/module-cache').registerBabel()
 
 {log} = Neft
 

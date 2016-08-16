@@ -1,13 +1,12 @@
 fs = require 'fs-extra'
 Mustache = require 'mustache'
 coffee = require 'coffee-script'
+bundle = require 'lib/bundle-builder'
+moduleCache = require 'lib/module-cache'
 
-global.Neft =
-    utils: utils = require 'src/utils'
-    log: require 'src/log'
-    assert: require 'src/assert'
-
-bundle = require 'src/bundle-builder'
+moduleCache.registerCoffeeScript()
+moduleCache.registerYaml()
+moduleCache.registerTxt(['.txt', '.pegjs'])
 
 fs.ensureDir './cli/bundle'
 
@@ -24,7 +23,7 @@ createBundle = (opts, callback) ->
             /^(?:src\/|\.|package\.json)/.test(req)
     }, (err, bundle) ->
         if err
-            return console.error err?.stack or err
+            return callback err
 
         try
             tmplSrc = "./scripts/bundle/#{opts.platform}.coffee.mustache"
@@ -33,7 +32,7 @@ createBundle = (opts, callback) ->
         try
             tmplSrc = "./scripts/bundle/#{opts.platform}.js.mustache"
             template ||= fs.readFileSync tmplSrc, 'utf-8'
-        tmplSrc = "./scripts/bundle/standard.js.mustache"
+        tmplSrc = './scripts/bundle/standard.js.mustache'
         template ||= fs.readFileSync tmplSrc, 'utf-8'
 
         mode = if opts.release then 'release' else 'develop'
@@ -47,28 +46,39 @@ createBundle = (opts, callback) ->
 
         fs.writeFileSync "./cli/bundle/neft-#{name}.js", template
 
-        console.log "Ready: #{name}"
         callback()
 
 TYPES = [
     {platform: 'node'},
     {platform: 'browser'},
     {platform: 'browser', extras: {game: true}},
-    {platform: 'qt'},
     {platform: 'android'},
     {platform: 'ios'},
 ]
 
-stack = new utils.async.Stack
+do ->
+    stack = []
 
-for type in TYPES
-    if utils.has(process.argv, "--#{type.platform}")
-        opts = {release: false}
-        utils.merge opts, type
-        stack.add createBundle, null, [opts]
-    if utils.has(process.argv, "--#{type.platform}-release")
-        opts = {release: true}
-        utils.merge opts, type
-        stack.add createBundle, null, [opts]
+    registerBundle = (type, opts) ->
+        bundleOpts = {}
+        bundleOpts[key] = val for key, val of type
+        bundleOpts[key] = val for key, val of opts
+        stack.push (callback) -> createBundle(bundleOpts, callback)
 
-stack.runAll ->
+    for type in TYPES
+        if process.argv.indexOf("--#{type.platform}") >= 0
+            registerBundle type, {release: false}
+        if process.argv.indexOf("--#{type.platform}-release") >= 0
+            registerBundle type, {release: true}
+
+    index = -1
+    callback = (err) ->
+        if err?
+            throw err
+        index += 1
+        if index < stack.length
+            stack[index] callback
+
+    callback()
+
+    return

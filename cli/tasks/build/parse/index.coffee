@@ -11,6 +11,7 @@ CONFIG_LINKS_TO_REQUIRE =
     styles: true
     models: true
     routes: true
+    scripts: true
 
 ###
 Prepares index file
@@ -68,10 +69,8 @@ module.exports = (platform, app, options) ->
         file += 'window.app = module.exports;\n'
         file += 'Neft.unit = require(\'lib/unit\');\n'
         file += 'Neft.unit.runAutomatically = false;\n'
-        file += 'app.onReady(function() {\n'
         for testFile in testFiles
-            file += "    require('#{testFile}');\n"
-            file += '    Neft.unit.runTests();\n'
-        file += '});\n'
+            file += "require('#{testFile}');\n"
+            file += 'Neft.unit.runTests();\n'
 
     file

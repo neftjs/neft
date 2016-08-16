@@ -18,8 +18,8 @@ module.exports = (nmlParser) -> (file) ->
     code = ''
 
     # scope types
-    code += "Renderer = require('neft-renderer')\n"
-    code += "onReady = require('neft-signal').create()\n"
+    code += '{Renderer} = Neft\n'
+    code += 'onReady = Neft.signal.create()\n'
     code += '{Image, Device, Navigator, Screen, RotationSensor} = Renderer\n'
     code += 'view = app = null\n'
 

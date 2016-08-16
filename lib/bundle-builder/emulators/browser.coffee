@@ -74,6 +74,8 @@ module.exports = (opts) ->
             {}
     history:
         pushState: ->
+    setTimeout: ->
+    setInterval: ->
     requestAnimationFrame: ->
     Image: document.createElement
     XMLHttpRequest: class XMLHttpRequest
