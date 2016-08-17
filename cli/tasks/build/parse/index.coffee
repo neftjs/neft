@@ -2,6 +2,7 @@
 
 fs = require 'fs'
 cliUtils = require '../../../utils.coffee'
+pathUtils = require 'path'
 glob = require 'glob'
 
 {utils, log} = Neft
@@ -74,6 +75,7 @@ module.exports = (platform, app, options) ->
 
         file += 'window.app = module.exports;\n'
         for testFile in testFiles
+            testFile = pathUtils.join '../', testFile
             file += "require('#{testFile}');\n"
         file += 'Neft.unit.runTests();\n'
 
