@@ -15,7 +15,7 @@
     isCoffee = (path) -> /\.(?:coffee|litcoffee|coffee\.md)$/.test(path)
     getScriptPath = (filename) ->
         extname = (filename and pathUtils.extname(filename)) or '.js'
-        "build/scripts/#{uid++}.js"
+        "build/scripts/#{uid++}#{extname}"
 
     module.exports = (File) -> (file) ->
         if file instanceof File.Iterator
