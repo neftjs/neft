@@ -1,6 +1,5 @@
 global.window = global;
 global.Neft = require('./{{neftFileName}}');
-require('lib/module-cache').register();
 process.on('message', function(msg) {
     if (msg === 'terminate') {
         process.exit();
