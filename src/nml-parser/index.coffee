@@ -1,9 +1,11 @@
 'use strict'
 
-babel = require 'babel-core'
+try
+    babel = require 'babel-core'
 bundle = require './bundle'
 parser = require './parser'
 bindingParser = require 'src/binding/parser'
+log = require 'src/log'
 utils = require 'src/utils'
 Renderer = require 'src/renderer'
 assert = require 'src/assert'
@@ -103,9 +105,14 @@ stringify =
         args += elem.params+''
 
         # body
-        body = "(function(){#{elem.body}})"
-        body = babel.transform(body, presets: ['es2015']).code
-        body = /{([^]*)}/m.exec(body)?[1]
+        {body} = elem
+        if babel
+            body = "(function(){#{body}})"
+            body = babel.transform(body, presets: ['es2015']).code
+            body = /{([^]*)}/m.exec(body)?[1]
+        else
+            log.warn.once 'NML functions do not support EcmaScript 6, ' +
+                'because babel is not installed'
 
         "function(#{args}){#{body}}"
     object: (elem) ->
