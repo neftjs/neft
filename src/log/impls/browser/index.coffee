@@ -6,14 +6,14 @@ performance = do ->
     else
         Date
 
-logFunc = window['cons'+'ole']['lo'+'g']
+logFunc = window['cons' + 'ole']['lo' + 'g']
 
 module.exports = do ->
     if ///chrome|safari///i.test(navigator.userAgent) or webkit?
         (Log) -> class LogBrowser extends Log
             @MARKERS = do ->
                 tmp = ['', '']
-                marker = (color, style='normal', msg) ->
+                marker = (color, style = 'normal', msg) ->
                     tmp[0] = "%c#{msg}"
                     tmp[1] = "color: #{color}; font-weight: #{style}"
                     tmp
@@ -31,7 +31,7 @@ module.exports = do ->
                 LogBrowser.time() - since
 
             _write: (marker) ->
-                logFunc.apply window['cons'+'ole'], marker
+                logFunc.apply window['cons' + 'ole'], marker
 
             _writeError: (marker) ->
                 @_write marker

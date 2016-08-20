@@ -20,7 +20,7 @@ module.exports = (Log) -> class LogNode extends Log
         (diff[0] * 1e9 + diff[1]) / 1e6
 
     _write: (msg) ->
-        writeStdout msg+"\n"
+        writeStdout msg + '\n'
 
     _writeError: (msg) ->
-        writeStderr msg+"\n"
+        writeStderr msg + '\n'

@@ -55,13 +55,13 @@ const { log } = Neft;
                     @[name] = bind.apply @[name], args
 
             @[key] = value for key, value of @
-            if typeof @['lo'+'g'] is 'function'
+            if typeof @['lo' + 'g'] is 'function'
                 func = =>
                     @log.apply func, arguments
                 return utils.merge func, @
 
-        _write: console?['lo'+'g'].bind(console) or (->)
-        _writeError: console?['erro'+'r'].bind(console) or (->)
+        _write: console?['lo' + 'g'].bind(console) or (->)
+        _writeError: console?['erro' + 'r'].bind(console) or (->)
 
 ### *Integer* log.LOG
 
@@ -84,7 +84,7 @@ const { log } = Neft;
         WARN: 1<<i++
         ERROR: 1<<i++
         TIME: 1<<i++
-        ALL: (1<<i++)-1
+        ALL: (1<<i++) - 1
 
 ### *Integer* enabled = log.ALL
 
@@ -193,7 +193,7 @@ findPath();
                 times[i][1] = fromArgs arguments
                 break
 
-            assert id?, "Log times out of range"
+            assert id?, 'Log times out of range'
 
             id
 
@@ -232,7 +232,7 @@ log("hello");
             if @prefixes
                 unshift.apply args, @prefixes
 
-            new LogImpl args, this
+            new LogImpl args, @
 
     # implementation
     impl = switch true
