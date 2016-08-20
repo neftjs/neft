@@ -57,8 +57,8 @@ module.exports = (platform, app, options) ->
 
     # create file
     file = ''
-    file += "var opts = #{config};\n"
     file += 'var init = require(\'./init\');\n'
+    file += "var opts = #{config};\n"
     file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
     file += 'module.exports = init(Neft.bind(null, opts));\n'
 
