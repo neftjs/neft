@@ -15,10 +15,18 @@ const { log } = Neft;
     {unshift} = Array::
 
     fromArgs = (args) ->
-
         str = ''
         str += "#{arg} → " for arg in args
         str.substring 0, str.length - 3
+
+    callOnce = do ->
+        usedMessages = Object.create null
+        ->
+            msg = fromArgs arguments
+            if usedMessages[msg]
+                return -1
+            usedMessages[msg] = true
+            @ arguments...
 
 ## **Class** Log
 
@@ -42,22 +50,24 @@ const { log } = Neft;
         for _, i in @times
             @times[i] = [0, '']
 
-        constructor: (prefixes, @parentScope) ->
+        constructor: (prefixes = [], @parentScope) ->
             @prefixes = prefixes
-            if prefixes
-                assert.isArray prefixes
+            assert.isArray prefixes
 
-                # bind all logs methods by prefixes
-                args = utils.clone(prefixes)
-                args.unshift @
+            # bind all logs methods
+            args = utils.clone(prefixes)
+            args.unshift @
 
-                for name in LogImpl.LOGS_METHODS
-                    @[name] = bind.apply @[name], args
+            for name in @constructor.LOGS_METHODS
+                @[name] = bind.apply @[name], args
+                @[name].once = callOnce
 
             @[key] = value for key, value of @
             if typeof @['lo' + 'g'] is 'function'
                 func = =>
                     @log.apply func, arguments
+                func.once = callOnce
+                func.constructor = @constructor
                 return utils.merge func, @
 
         _write: console?['lo' + 'g'].bind(console) or (->)
@@ -113,7 +123,7 @@ log("setName()", "db time");
 
         @::['log'] = ->
             if isEnabled(@, @LOG)
-                @_write LogImpl.MARKERS.white fromArgs arguments
+                @_write @constructor.MARKERS.white fromArgs arguments
             return
 
 ### log.info([*Any* messages...])
@@ -122,7 +132,7 @@ Prints the given messages into the console with a blue color.
 
         info: ->
             if isEnabled(@, @INFO)
-                @_write LogImpl.MARKERS.blue fromArgs arguments
+                @_write @constructor.MARKERS.blue fromArgs arguments
             return
 
 ### log.ok([*Any* messages...])
@@ -135,7 +145,7 @@ log.ok("Data has been successfully sent!");
 
         ok: ->
             if isEnabled(@, @OK)
-                @_write LogImpl.MARKERS.green fromArgs arguments
+                @_write @constructor.MARKERS.green fromArgs arguments
             return
 
 ### log.warn([*Any* messages...])
@@ -148,7 +158,7 @@ log.warn("Example warning with some recommendations");
 
         warn: ->
             if isEnabled(@, @WARN)
-                @_write LogImpl.MARKERS.yellow fromArgs arguments
+                @_write @constructor.MARKERS.yellow fromArgs arguments
             return
 
 ### log.error([*Any* messages...])
@@ -161,7 +171,7 @@ log.error("Error occurs, ... in file ...");
 
         error: ->
             if isEnabled(@, @ERROR)
-                @_writeError LogImpl.MARKERS.red fromArgs arguments
+                @_writeError @constructor.MARKERS.red fromArgs arguments
             return
 
 ### *Integer* log.time()
@@ -184,12 +194,12 @@ findPath();
             unless isEnabled(@, @TIME)
                 return -1
 
-            {times} = LogImpl
+            {times} = @constructor
 
             # get time id and set current time
             for v, i in times when not v[0]
                 id = i
-                times[i][0] = LogImpl.time()
+                times[i][0] = @constructor.time()
                 times[i][1] = fromArgs arguments
                 break
 
@@ -205,12 +215,12 @@ Prints an information about the execution time for the given timer id.
             if id is -1
                 return
 
-            time = LogImpl.times[id]
-            diff = LogImpl.timeDiff time[0]
+            time = @constructor.times[id]
+            diff = @constructor.timeDiff time[0]
             diff = diff.toFixed 2
 
             str = "#{time[1]}: #{diff} ms"
-            @_write LogImpl.MARKERS.gray str
+            @_write @constructor.MARKERS.gray str
 
             time[0] = 0
             return
@@ -232,7 +242,7 @@ log("hello");
             if @prefixes
                 unshift.apply args, @prefixes
 
-            new LogImpl args, @
+            new @constructor args, @
 
     # implementation
     impl = switch true
@@ -242,4 +252,5 @@ log("hello");
             require './impls/browser/index.coffee'
 
     LogImpl = if typeof impl is 'function' then impl Log else Log
-    module.exports = new LogImpl
+    exports = module.exports = new LogImpl
+    exports.Log = Log

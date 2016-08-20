@@ -32,7 +32,7 @@
   },
   "scripts": {
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
-    "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./lib/unit/cli.coffee './tests/**/*.coffee' --require tests/init.coffee",
+    "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony ./lib/unit/cli.coffee './tests/src/log/*.coffee' --require tests/init.coffee",
     "sync-wiki": "git subtree pull --prefix wiki wiki master",
     "update-api-wiki": "cross-env NODE_PATH=./ coffee scripts/api-wiki.coffee"
   },
@@ -65,6 +65,7 @@
     "coveralls": "2.11.9",
     "istanbul": "0.4.3",
     "sauce-connect-launcher": "^0.14.0",
+    "sinon": "^1.17.5",
     "wd": "0.4.0"
   }
 }

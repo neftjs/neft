@@ -4,7 +4,6 @@ writeStdout = process.stdout.write.bind process.stdout
 writeStderr = process.stderr.write.bind process.stderr
 
 module.exports = (Log) -> class LogNode extends Log
-
     @MARKERS =
         white: (str) -> "\u001b[37m#{str}\u001b[39m"
         green: (str) -> "\u001b[32m#{str}\u001b[39m"
