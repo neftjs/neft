@@ -8,7 +8,7 @@ language: node_js
 before_script:
     - npm run bundle -- --node --browser --ios
 script:
-    - npm test -- --coverage
+    - npm test
 after_script:
     - node_modules/.bin/istanbul report
     - node_modules/.bin/coveralls < coverage/lcov.info
@@ -29,6 +29,8 @@ matrix:
         -
             os: linux
             node_js: "6.2"
+            env:
+                - NEFT_RUN_COVERAGE=1
         -
             os: osx
             node_js: "5.11"

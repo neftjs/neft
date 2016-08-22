@@ -5,7 +5,7 @@ TYPES = ['unit', 'cli', 'examples']
 {argv, env} = process
 
 # coverage arg
-useCoverage = argv.indexOf('--coverage') >= 0
+useCoverage = !!env.NEFT_RUN_COVERAGE
 
 # test arg
 shouldTest = exports.shouldTest = {}
