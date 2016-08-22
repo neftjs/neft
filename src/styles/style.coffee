@@ -39,8 +39,7 @@ module.exports = (File, data) -> class Style
                     log.warn 'document.query can be attached only to tags; ' +
                         "query '#{elem.query}' has been omitted for this node"
                     continue
-                unless node.attrs.has('n-style')
-                    node.attrs.set 'n-style', elem.style
+                node.attrs.set 'n-style', elem.style
 
         file
 
