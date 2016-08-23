@@ -1,5 +1,9 @@
 'use strict'
 
+tests = require 'tests/init'
+unless tests.shouldTest.cli
+    return
+
 os = require 'os'
 cp = require 'child_process'
 pathUtils = require 'path'

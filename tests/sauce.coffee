@@ -2,6 +2,10 @@
 
 'use strict'
 
+tests = require './init'
+unless tests.useSauce
+    return
+
 utils = require 'src/utils'
 sauceConnectLauncher = require 'sauce-connect-launcher'
 wd = require 'wd'
@@ -14,14 +18,37 @@ https = require 'https'
 
 SAUCE_HOST = 'ondemand.saucelabs.com'
 SAUCE_PORT = 80
+RECONNECTS = 10
+RECONNECT_TIMEOUT = 5000
 
-exports.connect = (callback) ->
+sauceProcess = null
+onSauceConnected = []
+do connectSauce = ->
+    tries = 0
     sauceConnectLauncher
         username: SAUCE_USERNAME
         accessKey: SAUCE_ACCESS_KEY
-        verbose: true
         tunnelIdentifier: TRAVIS_JOB_NUMBER
-    , callback
+    , (err, process) ->
+        if err or not process
+            if tries++ is RECONNECTS
+                throw new Error "Can't connect to SauceLabs"
+            setTimeout connectSauce, RECONNECT_TIMEOUT
+        else
+            sauceProcess = process
+            for listener in onSauceConnected
+                listener null, process
+        return
+
+process.on 'exit', ->
+    sauceProcess?.close()
+
+exports.connect = (callback) ->
+    if sauceProcess?
+        callback null, sauceProcess
+    else
+        onSauceConnected.push callback
+    return
 
 exports.getDriver = ->
     wd.remote(

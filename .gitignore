@@ -1,5 +1,5 @@
-cli/bundle
+/cli/bundle
 coverage
 *.log
-build
+/build
 tmp
