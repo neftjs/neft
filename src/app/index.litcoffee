@@ -11,6 +11,7 @@
     Networking = require 'src/networking'
     Document = require 'src/document'
     Renderer = require 'src/renderer'
+    Styles = require 'src/styles'
     Resources = require 'src/resources'
     Dict = require 'src/dict'
 
@@ -25,14 +26,14 @@
 
     BASE_FILE_NAME_RE = /(.+)\.(?:node|server|client|browser|ios|android|native)/
     DEFAULT_CONFIG =
-        title: "Neft.io Application"
-        protocol: "http"
+        title: 'Neft.io Application'
+        protocol: 'http'
         port: 3000
-        host: "localhost"
-        language: "en"
-        type: "app"
+        host: 'localhost'
+        language: 'en'
+        type: 'app'
 
-    exports = module.exports = (opts={}, extraOpts={}) ->
+    exports = module.exports = (opts = {}, extraOpts = {}) ->
         # Welcome log also for release mode
         log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
 
@@ -223,7 +224,9 @@ app.cookies.onChange(function(key){
         # propagate data
         Renderer.resources = app.resources
         Renderer.serverUrl = app.networking.url
-        Document.Scripts.scriptFiles = opts.modules
+        Document.Scripts.scripts = utils.arrayToObject opts.scripts,
+            (index, elem) -> elem.name,
+            (index, elem) -> elem.file
 
         # set styles window item
         if opts.styles?
@@ -248,7 +251,7 @@ app.cookies.onChange(function(key){
                 app.styles[style.name] = style.file
 
         # load styles
-        require('styles')
+        Styles
             windowStyle: windowStyle
             styles: app.styles
             queries: opts.styleQueries

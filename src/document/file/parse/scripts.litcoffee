@@ -8,14 +8,10 @@
     pathUtils = require 'path'
     {getFilePath} = require './links'
 
-    uid = 0
-    realpath = fs.realpathSync './'
-    tmpdir = os.tmpdir()
+    OUT_DIR = 'build/scripts/'
+    DEFAULT_FILE_EXT = '.js'
 
     isCoffee = (path) -> /\.(?:coffee|litcoffee|coffee\.md)$/.test(path)
-    getScriptPath = (filename) ->
-        extname = (filename and pathUtils.extname(filename)) or '.js'
-        "build/scripts/#{uid++}#{extname}"
 
     module.exports = (File) -> (file) ->
         if file instanceof File.Iterator
@@ -23,7 +19,7 @@
 
         scripts = []
 
-        for tag in file.node.queryAll('script')
+        for tag, i in file.node.queryAll('script')
             omit = false
             for attr of tag.attrs
                 if attr not in ['src', 'href', 'filename']
@@ -38,20 +34,24 @@
             src ||= tag.attrs.href
 
             if src
-                src = getFilePath File, file, src
-                path = getScriptPath src
-                fs.copySync src, path
-                scripts.push path
+                # file
+                filename = getFilePath File, file, src
+                script = fs.readFileSync filename, 'utf-8'
             else
-                # tag body
-                str = tag.stringifyChildren()
-                path = getScriptPath tag.attrs.filename
-                if isCoffee(path)
-                    str = "`module.exports = function(){`\n\n#{str}\n\n`};`"
+                # tag
+                script = tag.stringifyChildren()
+                {filename} = tag.attrs
+                if isCoffee(filename)
+                    script = "`module.exports = function(){`\n\n#{script}\n\n`};`"
                 else
-                    str = "module.exports = function(){\n\n#{str}\n\n};"
-                fs.outputFileSync path, str
-                scripts.push path
+                    script = "module.exports = function(){\n\n#{script}\n\n};"
+
+            name = "#{file.path}##{i}"
+            extname = (filename and pathUtils.extname(filename)) or DEFAULT_FILE_EXT
+            path = pathUtils.join OUT_DIR, name + extname
+            fs.outputFileSync path, script
+            File.Scripts.scripts[name] = require path
+            scripts.push name
 
         file.scripts = new File.Scripts file, scripts
 

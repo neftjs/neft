@@ -7,7 +7,20 @@ Module = require 'module'
 
 TEXT_EXTNAMES = ['.txt', '.pegjs']
 
+paths = {}
+
 module.exports = (opts, callback) ->
+    # prepare environment
+    unless opts.watch
+        paths = {}
+
+    # remove changed files from cache
+    if opts.watch and opts.changedFiles
+        cache = Module._cache
+        for file in opts.changedFiles
+            delete cache[file]
+            delete paths[file]
+
     # extend global namespace by platform properties
     MOCK_KEYS = Object.create null
     for key, val of require("./emulators/#{opts.platform}") opts
@@ -15,15 +28,12 @@ module.exports = (opts, callback) ->
         global[key] = val
 
     # get config
-    INDEX_PATH = pathUtils.resolve fs.realpathSync('.'), opts.path
+    INDEX_PATH = opts.path
     BASE_DIR = pathUtils.dirname INDEX_PATH
     TEST = opts.test or -> true
     TEST_RESOLVED = opts.testResolved or -> true
 
     # capture requires
-    modules = []
-    modulesByPaths = {}
-    paths = {}
     filenames = []
     disabled = false
     moduleLoad = Module._load
@@ -46,14 +56,12 @@ module.exports = (opts, callback) ->
         shouldInclude = req is INDEX_PATH
         shouldInclude ||= TEST_RESOLVED(req, filename, modulePath, parentPath)
         if shouldInclude
-            filenames.push filename
-            unless modulesByPaths[modulePath]
-                modules.push modulePath
-                modulesByPaths[modulePath] = true
+            unless opts.watch
+                filenames.push filename
 
             if parentPath
-                mpaths = paths[parentPath] ?= {}
-                mpaths[req] = modulePath
+                mpaths = paths[parent.id] ?= {}
+                mpaths[req] = filename
 
         r
 
@@ -64,9 +72,10 @@ module.exports = (opts, callback) ->
         callback err
 
     # remove require files from cache
-    cache = Module._cache
-    for filename in filenames
-        delete cache[filename]
+    unless opts.watch
+        cache = Module._cache
+        for filename in filenames
+            delete cache[filename]
 
     # clear global namespace from mock data
     for key, val of MOCK_KEYS
@@ -80,7 +89,6 @@ module.exports = (opts, callback) ->
 
     unless err
         callback null,
-            modules: modules
             paths: paths
 
     return

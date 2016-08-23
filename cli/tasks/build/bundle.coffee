@@ -15,6 +15,9 @@ DEFAULT_LOCAL_FILE =
             'com.android.support:appcompat-v7:23.0.0'
         ]
 
+INDEX_PATH = 'index.js'
+INDEX_ABS_PATH = pathUtils.resolve fs.realpathSync('.'), INDEX_PATH
+
 module.exports = (platform, options, app, callback) ->
     mode = if options.release then 'release' else 'develop'
     neftFileName = "neft-#{platform}-#{mode}.js"
@@ -72,14 +75,22 @@ module.exports = (platform, options, app, callback) ->
             mockUtils.isIOS = true
             mockUtils.isClient = true
 
+    # prepare config
+    if options.watch
+        changedFiles = []
+        changedFiles.push options.changedFiles...
+        changedFiles.push INDEX_ABS_PATH
+
     # build bundle
     bundleBuilder
-        path: 'index.js'
+        path: INDEX_PATH
         verbose: true
         platform: platform
         release: options.release
         minify: options.release
         removeLogs: options.release
+        watch: options.watch
+        changedFiles: changedFiles
         neftFilePath: pathUtils.resolve(__dirname, neftFilePath)
         testResolved: testResolvedFunc
         , (err, file) ->
