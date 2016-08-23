@@ -2,6 +2,10 @@
 
 'use strict'
 
+tests = require './init'
+unless tests.shouldTest.examples
+    return
+
 glob = require 'glob'
 fs = require 'fs'
 cp = require 'child_process'
@@ -219,8 +223,6 @@ runSauceTest = (type, callback) ->
     stack.runAll (err1) ->
         appChild?.send 'terminate'
         closeStack = new utils.async.Stack
-        if sauceProcess?
-            closeStack.add sauceProcess.close, sauceProcess
         closeStack.runAll (err2) ->
             callback err1 or err2
 

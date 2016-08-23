@@ -35,12 +35,23 @@ module.exports = (platform, options, app, callback) ->
 
     logtime = log.time 'Resolve bundle modules'
 
-    # disable app
+    # mock Neft and disable app
     globalNeft = Neft
     mockNeft = ->
         onReady: ->
     utils.merge mockNeft, Neft
     global.Neft = mockNeft
+
+    # disable unit tests
+    unit = null
+    utils.defineProperty mockNeft, 'unit',
+        utils.ENUMERABLE | utils.CONFIGURABLE,
+        ->
+            unit
+        , (val) ->
+            val.runAutomatically = false
+            unit = Object.create val
+            unit.runTests = ->
 
     # mock utils
     mockUtils = utils.clone mockNeft.utils
