@@ -35,7 +35,7 @@ module.exports = (platform, app, callback) ->
     for key of packageConfig.dependencies
         stylesPath = "node_modules/#{key}/styles"
         if /^neft\-/.test(key) and fs.existsSync(stylesPath)
-            inputDirs.push path: stylesPath, prefix: "#{key}/"
+            inputDirs.unshift path: stylesPath, prefix: "#{key}/"
 
     # add local extensions
     try
@@ -43,12 +43,12 @@ module.exports = (platform, app, callback) ->
         for path in extensions
             stylesPath = "extensions/#{path}/styles"
             if fs.existsSync(stylesPath)
-                inputDirs.push path: stylesPath, prefix: "#{path}/"
+                inputDirs.unshift path: stylesPath, prefix: "#{path}/"
 
     # add custom style paths
     if utils.isObject(packageConfig.styles)
         for key, val of packageConfig.styles
-            inputDirs.push path: val, prefix: "#{key}/"
+            inputDirs.unshift path: val, prefix: "#{key}/"
 
     for dir, i in inputDirs then do (dir) ->
         if dir.prefix
