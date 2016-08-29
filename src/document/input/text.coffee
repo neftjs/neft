@@ -14,8 +14,8 @@ module.exports = (File, Input) -> class InputText extends Input
             obj = new InputText file, node, arr[JSON_TEXT], arr[JSON_BINDING]
         obj
 
-    constructor: (file, node, text, binding) ->
-        Input.call this, file, node, text, binding
+    constructor: (file, node, text, bindingConfig) ->
+        Input.call @, file, node, text, bindingConfig
 
         if file.isClone
             @registerBinding()
@@ -38,7 +38,7 @@ module.exports = (File, Input) -> class InputText extends Input
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node
 
-        new InputText file, node, @text, @binding
+        new InputText file, node, @text, @bindingConfig
 
     toJSON: (key, arr) ->
         unless arr

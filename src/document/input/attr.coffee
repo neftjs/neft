@@ -23,11 +23,11 @@ module.exports = (File, Input) -> class InputAttr extends Input
     isHandler = (name) ->
         /^on[A-Z]|\:on[A-Z][A-Za-z0-9_$]*$/.test name
 
-    constructor: (file, node, text, binding, @attrName) ->
+    constructor: (file, node, text, bindingConfig, @attrName) ->
         assert.isString @attrName
         assert.notLengthOf @attrName, 0
 
-        Input.call this, file, node, text, binding
+        Input.call @, file, node, text, bindingConfig
 
         if isHandler(@attrName)
             @handlerFunc = createHandlerFunc @
@@ -52,7 +52,7 @@ module.exports = (File, Input) -> class InputAttr extends Input
         (arg1, arg2) ->
             unless input.file.isRendered
                 return
-            r = input.binding.func.apply input, input.file.inputArgs
+            r = input.bindingConfig.func.apply input, input.file.inputArgs
             if typeof r is 'function'
                 r.call @, arg1, arg2
             return
@@ -60,7 +60,7 @@ module.exports = (File, Input) -> class InputAttr extends Input
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node
 
-        new InputAttr file, node, @text, @binding, @attrName
+        new InputAttr file, node, @text, @bindingConfig, @attrName
 
     toJSON: (key, arr) ->
         unless arr

@@ -419,11 +419,11 @@ Corresponding node handler: *n-onRevert=""*.
                     emitSignal @context, 'onBeforeRender'
 
                 # inputs
-                for input, i in @inputs
+                for input in @inputs
                     input.render()
 
                 # conditions
-                for condition, i in @conditions
+                for condition in @conditions
                     condition.render()
 
                 # uses
@@ -432,7 +432,7 @@ Corresponding node handler: *n-onRevert=""*.
                         use.render()
 
                 # iterators
-                for iterator, i in @iterators
+                for iterator in @iterators
                     iterator.render()
 
                 # source
@@ -449,6 +449,9 @@ Corresponding node handler: *n-onRevert=""*.
                 emitNodeSignal @, 'n-onRender'
                 if @context?.node is @node
                     emitSignal @context, 'onRender'
+
+                for input in @inputs
+                    input.onRender()
 
                 @
 

@@ -204,7 +204,7 @@ describe 'src/document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), '1'
 
-        it 'is accesible by context', ->
+        it 'is accessible by context', ->
             source = createView '''
                 <script>
                     this.onRender(function(){
@@ -250,6 +250,24 @@ describe 'src/document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), 'false'
 
+        it 'binding is not updated on reverted component', ->
+            source = createView '''
+                <script>
+                    this.onRender(function(){
+                        this.state.set('obj', { a: 1 });
+                    });
+                </script>
+                ${state.obj.a || '0'}
+            '''
+            view = source.clone()
+
+            renderParse view
+
+            view.revert()
+            assert.is view.node.stringify(), '1'
+            view.render()
+            assert.is view.node.stringify(), '1'
+
     it 'handler is called on signal', ->
         source = createView '''
             <span x="1" onAttrsChange="${root.onAttrsChange(2)}" />
@@ -277,56 +295,57 @@ describe 'src/document string interpolation', ->
             storage:
                 onAttrsChange: (prop, oldVal) ->
                     calls += 1
-                    assert.is this, view.node.children[0]
+                    assert.is @, view.node.children[0]
                     assert.is prop, 'x'
                     assert.is oldVal, 1
 
         view.node.children[0].attrs.set 'x', 2
         assert.is calls, 1
 
-    it 'attribute handler is called with proper context and parameters', ->
-        source = createView '''
-            <attr name="y" value="3" />
-            <span
-              x="1"
-              id="a1"
-              onAttrsChange="${root.test(ids.a1.attrs.x, props.y)}"
-            />
-        '''
-        view = source.clone()
+    describe 'attribute handler', ->
+        it 'is called with proper context and parameters', ->
+            source = createView '''
+                <attr name="y" value="3" />
+                <span
+                  x="1"
+                  id="a1"
+                  onAttrsChange="${root.test(ids.a1.attrs.x, props.y)}"
+                />
+            '''
+            view = source.clone()
 
-        calls = 0
-        renderParse view,
-            storage:
-                test: (x, y) ->
-                    calls += 1
-                    assert.is x, 2
-                    assert.is y, 3
+            calls = 0
+            renderParse view,
+                storage:
+                    test: (x, y) ->
+                        calls += 1
+                        assert.is x, 2
+                        assert.is y, 3
 
-        view.node.query('span').attrs.set 'x', 2
-        assert.is calls, 1
+            view.node.query('span').attrs.set 'x', 2
+            assert.is calls, 1
 
-    it 'attribute handler is not called if the document is not rendered', ->
-        source = createView '''
-            <attr name="y" value="3" />
-            <span x="1" id="a1" onAttrsChange="${root.onAttrsChange()}" />
-        '''
-        view = source.clone()
+        it 'is not called if the document is not rendered', ->
+            source = createView '''
+                <attr name="y" value="3" />
+                <span x="1" id="a1" onAttrsChange="${root.onAttrsChange()}" />
+            '''
+            view = source.clone()
 
-        calls = 0
-        renderParse view,
-            storage:
-                onAttrsChange: (x, y) ->
-                    calls += 1
+            calls = 0
+            renderParse view,
+                storage:
+                    onAttrsChange: (x, y) ->
+                        calls += 1
 
-        view.node.query('span').attrs.set 'x', 4
-        assert.is calls, 1
+            view.node.query('span').attrs.set 'x', 4
+            assert.is calls, 1
 
-        view.revert()
-        view.node.query('span').attrs.set 'x', 2
-        assert.is calls, 1
+            view.revert()
+            view.node.query('span').attrs.set 'x', 2
+            assert.is calls, 1
 
-    describe 'support realtime changes', ->
+    describe 'support real-time changes', ->
         it 'on `props`', ->
             source = createView '''
                 <component name="a">${props.x}</component>
