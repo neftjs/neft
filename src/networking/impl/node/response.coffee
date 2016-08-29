@@ -16,10 +16,17 @@ HEADERS =
     'Cache-Control': 'no-cache'
     'Content-Language': (obj) -> obj.networking.language
     'X-Frame-Options': 'deny'
+    'Access-Control-Allow-Headers': 'x-cookies, x-expected-type'
+    'Access-Control-Expose-Headers': 'x-cookies, x-expected-type'
 
 METHOD_HEADERS =
     OPTIONS:
-        'Access-Control-Allow-Origin': (obj) -> obj.networking.url
+        'Access-Control-Allow-Origin': (obj) ->
+            {networking} = obj
+            if networking.allowAllOrigins
+                '*'
+            else
+                obj.networking.url
         'Allow': 'GET, POST, PUT, DELETE'
 
 GZIP_ENCODING_HEADERS =

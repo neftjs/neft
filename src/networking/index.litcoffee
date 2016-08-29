@@ -24,18 +24,22 @@ var Networking = require('networking');
 
     module.exports = class Networking extends signal.Emitter
 
-        Impl = require('./impl') Networking
+        @Impl = require('./impl') Networking
 
         @Uri = require('./uri') Networking
         @Handler = require('./handler') Networking
-        @Request = require('./request') Networking, Impl.Request
-        @Response = require('./response') Networking, Impl.Response
+        @Request = require('./request') Networking, @Impl.Request
+        @Response = require('./response') Networking, @Impl.Response
 
         @TYPES = [
             (@HTTP = 'http')
         ]
 
 ## Networking::constructor(*Object* options)
+
+Options:
+- `allowAllOrigins` determines whether *Access-Control-Allow-Origin* should return wildcard,
+  false by default
 
         constructor: (opts) ->
             assert.isPlainObject opts, 'ctor options argument ....'
@@ -47,9 +51,13 @@ var Networking = require('networking');
             assert.isString opts.host, 'ctor options.host argument ...'
             assert.isString opts.language, 'ctor options.language argument ...'
             assert.notLengthOf opts.language, 0, 'ctor options.language argument ...'
+            assert.isBoolean opts.allowAllOrigins, """
+                allowAllOrigins option must be a boolean, but `#{opts.allowAllOrigins}` given
+            """ if opts.allowAllOrigins?
 
             utils.defineProperty @, '_handlers', utils.CONFIGURABLE, {}
             {@type, @protocol, @port, @host, @language} = opts
+            @allowAllOrigins = opts.allowAllOrigins ? false
             @pendingRequests = new List
 
             if opts.url?
@@ -62,7 +70,7 @@ var Networking = require('networking');
                 url = "#{@protocol}://#{@host}:#{@port}"
             utils.defineProperty @, 'url', utils.ENUMERABLE, url
 
-            setImmediate => Impl.init @
+            setImmediate => Networking.Impl.init @
             log.info "Start as `#{@host}:#{@port}`"
 
             super()
@@ -180,7 +188,7 @@ The given options object corresponds to the *Networking.Request* properties.
             @onRequest.emit req, res
 
             # get handlers
-            Impl.sendRequest req, res, (opts) ->
+            Networking.Impl.sendRequest req, res, (opts) ->
                 utils.merge res, opts
                 res.pending = false
                 req.destroy()
