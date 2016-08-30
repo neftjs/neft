@@ -170,7 +170,10 @@ module.exports = (File) -> class Input extends signal.Emitter
             arr[0] = JSON_CTOR_ID
         arr[JSON_NODE] = @node.getAccessPath @file.node
         arr[JSON_TEXT] = @text
-        arr[JSON_BINDING] = @bindingConfig
+        arr[JSON_BINDING] =
+            body: @bindingConfig.body
+            connections: @bindingConfig.connections
+            updateOnCreate: @bindingConfig.updateOnCreate
         arr
 
     @Text = require('./input/text.coffee') File, @
