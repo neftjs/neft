@@ -12,33 +12,28 @@ cliUtils = require '../../../utils'
 IN_DIR = './styles'
 OUT_DIR = 'build/styles'
 QUERIES = './build/styles/queries.json'
+DEFAULT_STYLES = pathUtils.join __dirname, '/styles/default'
 
 getQueryPriority = (val) ->
     Document.Element.Tag.query.getSelectorCommandsLength val
 
 queriesSortFunc = (a, b) ->
-    b.dirPriority - a.dirPriority or getQueryPriority(a.query) - getQueryPriority(b.query)
+    b.dirPriority - a.dirPriority or
+    getQueryPriority(a.query) - getQueryPriority(b.query)
 
-module.exports = (platform, app, callback) ->
-    fs.ensureDir OUT_DIR
+writeFile = (path, data, callback) ->
+    data = coffee.compile data, bare: true
+    fs.outputFile path, data, callback
 
-    filesToLoad = 0
-    files = []
-    filesByFilename = {}
-
-    inputDirPriorities = {}
-    inputDirs = [
-        {path: pathUtils.join(__dirname, '/styles/default'), prefix: ''},
-        {path: IN_DIR, prefix: ''}
-    ]
-
-    packageConfig = JSON.parse fs.readFileSync('./package.json', 'utf-8')
+getInputDirs = ->
+    inputDirs = []
+    packageConfig = require 'package.json'
 
     # add package module extensions
     for key of packageConfig.dependencies
         stylesPath = "node_modules/#{key}/styles"
         if /^neft\-/.test(key) and fs.existsSync(stylesPath)
-            inputDirs.unshift path: stylesPath, prefix: "#{key}/"
+            inputDirs.push path: stylesPath, prefix: "#{key}/"
 
     # add local extensions
     try
@@ -46,12 +41,32 @@ module.exports = (platform, app, callback) ->
         for path in extensions
             stylesPath = "extensions/#{path}/styles"
             if fs.existsSync(stylesPath)
-                inputDirs.unshift path: stylesPath, prefix: "#{path}/"
+                inputDirs.push path: stylesPath, prefix: "#{path}/"
 
     # add custom style paths
     if utils.isObject(packageConfig.styles)
         for key, val of packageConfig.styles
-            inputDirs.unshift path: val, prefix: "#{key}/"
+            inputDirs.push path: val, prefix: "#{key}/"
+
+    # main styles folder
+    inputDirs.push {path: IN_DIR, prefix: ''}
+
+    # default __view__ if needed
+    unless fs.existsSync(pathUtils.join(IN_DIR, '/__view__.js'))
+        inputDirs.push {path: DEFAULT_STYLES, prefix: ''}
+
+    inputDirs
+
+module.exports = (platform, app, callback) ->
+    fs.ensureDir OUT_DIR
+
+    inputDirs = getInputDirs()
+    filesToLoad = 0
+    files = []
+    filesByFilename = {}
+    filesByDestPaths = {}
+
+    inputDirPriorities = {}
 
     for dir, i in inputDirs then do (dir) ->
         if dir.prefix
@@ -97,10 +112,6 @@ module.exports = (platform, app, callback) ->
             if files.length is filesToLoad
                 onFilesReady()
 
-    writeFile = (path, data, callback) ->
-        data = coffee.compile data
-        fs.outputFile path, data, callback
-
     onFilesReady = ->
         newQueries = {}
         stack = new utils.async.Stack
@@ -124,8 +135,11 @@ module.exports = (platform, app, callback) ->
 
         # queries
         writeLogtime = log.time 'Save styles'
-        stack.runAllSimultaneously ->
+        stack.runAllSimultaneously (err) ->
             log.end writeLogtime
+
+            if err
+                return callback err
 
             currentQueries = null
             mergeQueries = ->
