@@ -15,10 +15,17 @@ exports.createView = do ->
     if utils.isNode
         (html, viewUid = exports.uid()) ->
             loaded = true
+            # omit fromJSON cache by detecting differences
+            files = utils.clone Document._files
             view = Document.fromHTML viewUid, html
             Document.parse view
-            json = JSON.stringify view
-            Document.fromJSON json
+            for path, file of Document._files
+                if files[path]
+                    continue
+                delete Document._files[path]
+                json = JSON.stringify file
+                Document.fromJSON json
+            Document._files[view.path]
     else
         cache = require VIEWS_CACHE_FILE
         if utils.isClient and modules?
