@@ -56,11 +56,17 @@ class DocumentBinding extends Binding
             failCheckQueuePending = true
             setImmediate checkFails
         return
+    `//</development>`
 
     update: ->
+        # disable updates for reverted files
+        unless @ctx.file.isRendered
+            @ctx.isDirty = true
+            return
+        `//<development>`
         @failed = false
+        `//</development>`
         super()
-    `//</development>`
 
     getValue: ->
         @ctx.getValue()
@@ -98,20 +104,25 @@ module.exports = (File) -> class Input extends signal.Emitter
     if utils.isServer
         @parse = require('./input/parser').parse
 
-    createFunction = (func) ->
-        new Function 'ids', 'props', 'state', func
+    initBindingConfig = (cfg) ->
+        cfg.func ?= new Function 'ids', 'props', 'state', cfg.body
+        cfg.tree ?= [cfg.func, cfg.connections]
+        return
 
-    constructor: (@file, @node, @text, @binding) ->
+    constructor: (@file, @node, @text, @bindingConfig) ->
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
         assert.isString @text
-        assert.isObject @binding
+        assert.isObject @bindingConfig
 
         super()
 
         @target = null
         @root = null
-        @binding.func ?= createFunction @binding.body
+        @isDirty = false
+        @binding = null
+
+        initBindingConfig @bindingConfig
 
         `//<development>`
         if @constructor is Input
@@ -121,17 +132,12 @@ module.exports = (File) -> class Input extends signal.Emitter
     signal.Emitter.createSignal @, 'onTargetChange'
     signal.Emitter.createSignal @, 'onRootChange'
 
-    registerBinding: do ->
-        cache = Object.create null
-
-        ->
-            {binding} = @
-            arr = cache[binding.body] ?= [binding.func, binding.connections]
-            docBinding = DocumentBinding.New arr, this
-
-            if binding.updateOnCreate
-                docBinding.update()
-            return
+    registerBinding: ->
+        assert.isNotDefined @binding
+        @binding = DocumentBinding.New @bindingConfig.tree, @
+        if @bindingConfig.updateOnCreate
+            @isDirty = true
+        return
 
     render: ->
         oldTarget = @target
@@ -144,13 +150,19 @@ module.exports = (File) -> class Input extends signal.Emitter
             @onRootChange.emit()
         return
 
+    onRender: ->
+        if @isDirty
+            @isDirty = false
+            @binding.update()
+        return
+
     revert: ->
         return
 
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node
 
-        new Input file, node, @text, @binding
+        new Input file, node, @text, @bindingConfig
 
     toJSON: (key, arr) ->
         unless arr
@@ -158,7 +170,10 @@ module.exports = (File) -> class Input extends signal.Emitter
             arr[0] = JSON_CTOR_ID
         arr[JSON_NODE] = @node.getAccessPath @file.node
         arr[JSON_TEXT] = @text
-        arr[JSON_BINDING] = @binding
+        arr[JSON_BINDING] =
+            body: @bindingConfig.body
+            connections: @bindingConfig.connections
+            updateOnCreate: @bindingConfig.updateOnCreate
         arr
 
     @Text = require('./input/text.coffee') File, @

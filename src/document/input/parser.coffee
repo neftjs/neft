@@ -84,6 +84,7 @@ exports.parse = (text) ->
             break
 
     func: null
+    tree: null
     body: funcBody
     connections: connections
     updateOnCreate: updateOnCreate

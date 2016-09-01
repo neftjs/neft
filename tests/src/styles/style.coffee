@@ -28,8 +28,8 @@ render = (opts) ->
     doc.render()
 
 describe 'src/styles', ->
-    describe "n-style", ->
-        it "can be a Renderer.Item instance", ->
+    describe 'n-style', ->
+        it 'can be a Renderer.Item instance', ->
             # item = Renderer.Rectangle.New()
             # node = new Element.Tag
             # node.attrs['n-style'] = item
@@ -42,14 +42,14 @@ describe 'src/styles', ->
 
         it "accepts 'renderer:' prefix", ->
             doc = render
-                html: """<b n-style="renderer:Rectangle" />"""
+                html: '<b n-style="renderer:Rectangle" />'
 
             assert.is doc.styles.length, 1
             assert.instanceOf (style = doc.styles[0]).item, Renderer.Rectangle
 
         it "accepts 'styles:file' syntax", ->
             doc = render
-                html: """<b n-style="styles:file" />"""
+                html: '<b n-style="styles:file" />'
                 styles:
                     file:
                         _main:
@@ -61,7 +61,7 @@ describe 'src/styles', ->
 
         it "accepts 'styles:file:style' syntax", ->
             doc = render
-                html: """<b n-style="styles:file:style" />"""
+                html: '<b n-style="styles:file:style" />'
                 styles:
                     file:
                         style:
@@ -73,11 +73,11 @@ describe 'src/styles', ->
 
         it "accepts 'styles:file:style:subid' syntax", ->
             doc = render
-                html: """<b n-style="styles:file:style">
+                html: '''<b n-style="styles:file:style">
                     <div n-style="renderer:Item">
                         <i n-style="styles:file:style:subid" />
                     </div>
-                </b>"""
+                </b>'''
                 styles:
                     file:
                         style:
@@ -95,41 +95,41 @@ describe 'src/styles', ->
 
         it "accepts 'styles:view:style:subid' syntax", ->
             doc = render
-                html: """<b n-style="styles:view:style:subid" />"""
+                html: '<b n-style="styles:view:style:subid" />'
                 windowStyle:
                     objects:
                         subid: Renderer.Text.New()
 
             assert.is doc.styles.length, 1
-            assert.instanceOf (item = (style = doc.styles[0]).item), Renderer.Text
+            assert.instanceOf doc.styles[0].item, Renderer.Text
 
-        it "created style is accessible in node", ->
+        it 'created style is accessible in node', ->
             doc = render
-                html: """<b n-style="renderer:Item" />"""
+                html: '<b n-style="renderer:Item" />'
 
             assert.is (node = doc.styles[0].node).name, 'b'
             assert.instanceOf node.style, Renderer.Item
 
-        it "node is accessible in created style document", ->
+        it 'node is accessible in created style document', ->
             doc = render
-                html: """<b n-style="renderer:Item" />"""
+                html: '<b n-style="renderer:Item" />'
 
             bNode = doc.node.query 'b'
             assert.is bNode.style.document.node, bNode
 
-        it "must be specify to create a style", ->
+        it 'must be specify to create a style', ->
             doc = render
-                html: """<b />"""
+                html: '<b />'
 
             node = doc.node.query 'b'
 
             assert.is doc.styles.length, 0
             assert.isNotDefined node.style
 
-    describe "Renderer.Text::text", ->
-        it "is always equal of stringified node children", ->
+    describe 'Renderer.Text::text', ->
+        it 'is always equal of stringified node children', ->
             doc = render
-                html: """<b n-style="renderer:Text">ab<i>c</i></b>"""
+                html: '<b n-style="renderer:Text">ab<i>c</i></b>'
 
             node = doc.node.query 'b'
             item = doc.styles[0].item
@@ -139,9 +139,11 @@ describe 'src/styles', ->
             node.children[0].text = '123'
             assert.is item.text, node.stringifyChildren()
 
-        it "is always equal of stringified visible node children", ->
+        it 'is always equal of stringified visible node children', ->
             doc = render
-                html: """<b n-style="renderer:Text">ab<i visible="false">c</i></b>"""
+                html: '''
+                    <b n-style="renderer:Text">ab<i visible="false">c</i></b>
+                '''
 
             bNode = doc.node.query 'b'
             iNode = doc.node.query 'i'
@@ -152,10 +154,10 @@ describe 'src/styles', ->
             iNode.attrs.set 'visible', true
             assert.is item.text, bNode.stringifyChildren()
 
-    describe "Renderer.Item::$.text", ->
-        it "is always equal stringified node children", ->
+    describe 'Renderer.Item::$.text', ->
+        it 'is always equal stringified node children', ->
             doc = render
-                html: """<b n-style="styles:file">ab<i>c</i></b>"""
+                html: '<b n-style="styles:file">ab<i>c</i></b>'
                 styles:
                     file:
                         _main:
@@ -172,9 +174,9 @@ describe 'src/styles', ->
             node.children[0].text = '123'
             assert.is item.$.text, node.stringifyChildren()
 
-        it "is more important than ::text property", ->
+        it 'is more important than ::text property', ->
             doc = render
-                html: """<b n-style="styles:file">ab<i>c</i></b>"""
+                html: '<b n-style="styles:file">ab<i>c</i></b>'
                 styles:
                     file:
                         _main:
@@ -194,19 +196,19 @@ describe 'src/styles', ->
             assert.is item.text, ''
             assert.is item.$.text, node.stringifyChildren()
 
-    describe "Element.Text", ->
-        it "is rendered as Renderer.Text", ->
+    describe 'Element.Text', ->
+        it 'is rendered as Renderer.Text', ->
             doc = render
-                html: """<b>abc</b>"""
+                html: '<b>abc</b>'
 
             assert.is doc.styles.length, 1
             assert.instanceOf node = (style = doc.styles[0]).node, Element.Text
             assert.is node.text, 'abc'
             assert.instanceOf item = style.item, Renderer.Text
 
-        it "text is properly synchronized", ->
+        it 'text is properly synchronized', ->
             doc = render
-                html: """<b>abc</b>"""
+                html: '<b>abc</b>'
 
             node = doc.node.query '#text'
             item = doc.styles[0].item
@@ -217,9 +219,9 @@ describe 'src/styles', ->
 
             assert.is item.text, node.text
 
-        it "is not created if has a text parent", ->
+        it 'is not created if has a text parent', ->
             doc = render
-                html: """<b n-style="styles:file">ab</b>"""
+                html: '<b n-style="styles:file">ab</b>'
                 styles:
                     file:
                         _main:
@@ -234,7 +236,7 @@ describe 'src/styles', ->
             assert.instanceOf item, Renderer.Text
             assert.isNotDefined textNode.style
 
-    describe "a[href]", ->
+    describe 'a[href]', ->
         it 'sets style linkUri', ->
             doc = render
                 html: '<a href="/abc" n-style="renderer:Item"></a>'
