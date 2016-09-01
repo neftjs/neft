@@ -17,7 +17,8 @@ exports.createView = do ->
             loaded = true
             view = Document.fromHTML viewUid, html
             Document.parse view
-            view
+            json = JSON.stringify view
+            Document.fromJSON json
     else
         cache = require VIEWS_CACHE_FILE
         if utils.isClient and modules?
