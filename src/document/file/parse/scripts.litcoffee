@@ -46,7 +46,13 @@
                 else
                     script = "module.exports = function(){\n\n#{script}\n\n};"
 
-            name = "#{file.path}##{i}"
+            filePath = file.path
+
+            # support win absolute paths
+            if pathUtils.isAbsolute(filePath)
+                filePath = encodeURIComponent filePath
+
+            name = "#{filePath}##{i}"
             extname = (filename and pathUtils.extname(filename)) or DEFAULT_FILE_EXT
             path = pathUtils.join OUT_DIR, name + extname
             fs.outputFileSync path, script
