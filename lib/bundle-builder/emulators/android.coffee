@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = ->
-    windiow: global
+    window: global
     requestAnimationFrame: ->
     android: {}
     setImmediate: ->
