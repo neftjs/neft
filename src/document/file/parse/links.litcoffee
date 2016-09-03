@@ -37,6 +37,9 @@ Optional argument `as` will link all components into the specified namespace.
             href = node.attrs.href or node.attrs.src
             unless href then continue
 
+            # hide element
+            node.name = 'blank'
+
             namespace = node.attrs.as
 
             # get view
