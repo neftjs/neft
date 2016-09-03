@@ -48,8 +48,6 @@ Adds attributes if not exists.
         true
 
     module.exports = (File) ->
-        parseLinks = require('./links') File
-
         fileRules = Object.create null
 
         (file) ->
@@ -89,17 +87,6 @@ Adds attributes if not exists.
                     node: localRule
                     parent: localRule.parent
                 localRule.parent = null
-
-            # merge rules from files
-            links = parseLinks file
-            for link in links
-                linkView = File.factory link.path
-                for externalRule in fileRules[linkView.path]
-                    # load rules only from the mail file scope
-                    if isMainFileRule(externalRule)
-                        rules.push
-                            node: externalRule.node
-                            parent: file.node
 
             for rule in rules
                 unless query = rule.node.attrs['query']

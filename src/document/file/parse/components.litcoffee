@@ -37,11 +37,13 @@ component can be rendered by the *use* tag.
 
                 # link required file
                 if link.namespace
-                    components[link.namespace] = linkView
+                    components[link.namespace] = linkView.path
 
                 # link required file components
                 for name, component of linkView.components
                     components[namespace + name] = component
+
+                linkView.destroy()
 
             # find components in file
             forEachNodeRec = (node) ->
