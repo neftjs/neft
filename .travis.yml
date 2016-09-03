@@ -26,6 +26,7 @@ matrix:
             node_js: "5.11"
             env:
                 - NEFT_TEST_BROWSER=1
+                - NEFT_TEST_ANDROID=1
         -
             os: linux
             node_js: "6.2"
