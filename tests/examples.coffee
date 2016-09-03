@@ -19,7 +19,7 @@ sauce = require './sauce'
 APP_URL = 'localhost:3000'
 NEFT_BIN_PATH = pathUtils.join(fs.realpathSync('./'), 'bin/neft.js')
 NEFT_UNIT_BIN_PATH = pathUtils.join(fs.realpathSync('./'), 'bin/neft-unit.js')
-ANDROID_APK = 'build/android/app/build/outputs/apk/app-debug.apk'
+ANDROID_APK = 'build/android/app/build/outputs/apk/app-universal-debug.apk'
 IOS_APP = 'build/ios/build/Release-iphonesimulator/Neft.app'
 APPIUM_VERSION = '1.5.3'
 
@@ -84,6 +84,8 @@ testSauceAppOnDriver = (desired, callback) ->
     if desired.browserName
         run driver.get, [APP_URL]
         logType = 'browser'
+    else if desired.deviceName is 'Android Emulator'
+        logType = 'logcat'
     else
         logType = 'syslog'
 

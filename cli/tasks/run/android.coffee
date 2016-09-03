@@ -18,7 +18,7 @@ module.exports = (options) ->
         sdkDir = (cp.execSync('echo $ANDROID_HOME')+'').trim()
 
     adbPath = "#{sdkDir}/platform-tools/adb"
-    apkFileName = 'app-debug.apk'
+    apkFileName = 'app-universal-debug.apk'
     adb = cp.exec "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}", (err) ->
         log.end logtime
         if err
