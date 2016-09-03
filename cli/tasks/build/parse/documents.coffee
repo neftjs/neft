@@ -18,6 +18,7 @@ module.exports = (platform, app, callback) ->
     logtime = log.time 'Parse documents'
 
     fs.removeSync pathUtils.join(OUT_DIR, IN_DIR)
+    fs.removeSync pathUtils.join(OUT_DIR, 'scripts')
 
     # install document extensions
     packageConfig = JSON.parse fs.readFileSync('./package.json')

@@ -34,24 +34,30 @@ getFile = (path, opts) ->
     file
 
 fileScope = """(function(){
-    // list of modules with empty objects
-    var modules = {{declarations}};
+    var __modules = {{init}};
 
-    // used as `require`
-    function getModule(paths, name){
-        var path = paths[name];
-        return (path in modules ? modules[path] :
-               (typeof Neft !== "undefined" && Neft[name]) ||
-               (typeof require === 'function' && require(name)) ||
-               (function(){
-                    throw new Error("Cannot find module '"+name+"'");
-                }()));
-    };
+    var __require = (function(){
+        var exports = {{declarations}};
+        var initialized = new Array(__modules.length);
 
-    // fill modules by their bodies
-    {{init}}
+        return function (paths, name){
+            var path = paths[name];
+            if (path < exports.length) {
+                if (!initialized[path]) {
+                    initialized[path] = true;
+                    exports[path] = {};
+                    exports[path] = __modules[path](exports[path]);
+                }
+                return exports[path];
+            }
+            if (typeof require === 'function') {
+                return require(name);
+            }
+            throw new Error("Cannot find module '"+name+"'");
+        };
+    })();
 
-    var result = modules["{{path}}"];
+    var result = __require({index: {{index}}}, 'index');
 
     if(typeof module !== 'undefined'){
         return module.exports = result;
@@ -60,32 +66,36 @@ fileScope = """(function(){
     }
 })();"""
 
-moduleScope = '''(function(){
-    var module = {exports: modules["{{name}}"]};
-    var require = getModule.bind(null, {{paths}});
+moduleScope = '''function(exports){
+    var module = {exports: exports};
+    var require = __require.bind(null, {{paths}});
     var exports = module.exports;
 
     {{file}}
 
     return module.exports;
-})();'''
+}'''
 
 getDeclarations = (modules) ->
-    r = {}
+    r = []
 
     for name in modules
-        r[name] = {}
+        r.push {}
 
     r
 
-getModulesInit = (data, opts) ->
-    r = ''
+getModulesInit = (modules, paths, indexes, opts) ->
+    inits = []
 
-    for name in data.modules
-        modulePaths = data.paths[name] or {}
+    for name in modules
+        index = indexes[name]
+        modulePaths = paths[name]
 
-        path = name
-        unless func = getFile(path, opts)
+        pathRefs = {}
+        for req of modulePaths
+            pathRefs[req] = indexes[modulePaths[req]]
+
+        unless func = getFile(name, opts)
             continue
 
         name = name.replace /\\/g, '\\\\'
@@ -96,19 +106,41 @@ getModulesInit = (data, opts) ->
 
         module = moduleScope
         module = replaceStr module, '{{name}}', name
-        module = replaceStr module, '{{paths}}', stringify modulePaths
+        module = replaceStr module, '{{paths}}', stringify pathRefs
         module = replaceStr module, '{{file}}', func
 
-        r += "modules['#{name}'] = #{module}"
+        inits[index] = module
 
-    r
+    "[#{inits}]"
+
+getModulesByPaths = (paths) ->
+    modules = []
+    modulesByPaths = Object.create null
+    for parentPath of paths
+        parentPaths = paths[parentPath]
+        for req of parentPaths
+            path = parentPaths[req]
+            if modulesByPaths[path]
+                continue
+            modulesByPaths[path] = true
+            modules.push path
+    modules
+
+getIndexes = (modules) ->
+    indexes = Object.create null
+    for module, i in modules
+        indexes[module] = i
+    indexes
 
 module.exports = (processData, opts, callback) ->
-    declarations = getDeclarations processData.modules
-    init = getModulesInit processData, opts
+    {paths} = processData
+    modules = getModulesByPaths paths
+    indexes = getIndexes modules
+    declarations = getDeclarations modules
+    init = getModulesInit modules, paths, indexes, opts
 
     r = fileScope
-    r = replaceStr r, '{{path}}', opts.path
+    r = replaceStr r, '{{index}}', indexes[opts.path]
     r = replaceStr r, '{{declarations}}', stringify declarations
     r = replaceStr r, '{{init}}', init
 
