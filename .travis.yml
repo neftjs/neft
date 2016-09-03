@@ -6,7 +6,7 @@ cache:
         - node_modules
 language: node_js
 before_script:
-    - npm run bundle -- --node --browser --ios
+    - npm run bundle -- --node --browser --ios --android
 script:
     - npm test
 after_script:
@@ -17,6 +17,7 @@ env:
         - secure: "Tdilk9NhH6U13CzfBlNVDMmQB9GF3klh6KM+IvSwGLYWL71YjMBTa1K+Wrl/HkX67zBA3/iH7zER0N02/Gqy25JIcFvTr/lNjCVhdLSMfeDZze7XaDUDOX/Yju4nl5ZwvDG/j0W8HIIXI2ceujubVzM8AvAT0GOGZ1bKo3GDfQicATdVPL8MA1gc5wI6lcTjtKHu9EVvwa0xW67814xvlxETFOAT1upAgKYQ3oBZBMCjQ14DVVCRv6EtbxSPxh9HsqELDVXjPODsHuPoT/XLsdo5aVLB+gX5pu76Ksq30V2+K0sMMRTVuwqhkOYnXY+RxHh91WUn36o9/Ozp5uVidLbqEtzpYgSG4rm4I5bGpCy4hOixaDImLlkTFS/XBiX5fsqaBILHxIbl4YrWRyosI5+AZdGFfKfGe2k/a2lQBAE08Lq7FwXtHkKAt24fhKngw6g080HZM/PCIQWcAyH0xZ0f8IPBVR+Zvgy+AU4kcjtOg6pGo+nkyCjuqZDpjWqEZdDemL6tbtHC4S2E8LCGhb0+FJn+TQ4hYagG5tJrYADKr3PiaODpb6J/OXb7V9Sn/70tr5/0CXCJ5YTjSX3+sKp5qXj1NnQML27a/Y5FZuoYhXKZxwM68wRGr9p4vFxkRxTwu5wn6K6IJnZec5HfZiJ7N6NJJKgMOxdbv6MfdQ4="
         - secure: "HTKDJVyMgTF6yc0T0IE7OU5ZDsv/YEEQk2Ab08HcY9QfGIdXYH9g7ZN3SdPrl1ITAelvKAOTx4v+dyZAtscV8KVkieNJC95mPOnx+/f9tF41XpVQLH7lpRTN0ckvhydRKlX58IeQodQO50VjMd+0xZIUPDZdGIxsuTL7+oZYi3+Ec/DRVW3wwIdGYsZyoZ0viAXbplBmIl4g1tiXr2GAsoGiJqme6WmN/fObJspNGHzhcQzgb5kW3CKOLV22+Sh7SnWRvrUKOL93DrCiXWgjXs60Au6jpFqLEffb9+wSiPdl9X14TC7bh6zWWVjeykrwUbXFaaf6E7K0WhiI0lnUM8G4UhMVzUlPNhGz0PmPN6vbwuXcFleSAqW4wYle+Pd1ZUj3/Q2HabnF2lmo7uTr9jvEeyO733iJwrOTv7yanDuKYTjVVan3EUCiidHBXmRKdTiH42tWPk3bvus25XhxOespTrcWSDn5JH3RKkKkfjKUe2ryW2SPsSOjKsp+99JplIQl1ePeVOZ/85G/HGv8uAnXdxWdnLx8LEiFLZ9BE9VUNW7eCbIWefbewYp6X/OxdAxffrFyQbTnuEf4PBNcYHz71O8EPCFW6G87sMGU4uGuE04LjiqeBuQ6tkqiMkyuc4ft7VUuALf+hr1fPQg9+OvJmNs+t/vTekZx+EXglcI="
 matrix:
+    fast_finish: true
     include:
         -
             os: linux
@@ -27,10 +28,19 @@ matrix:
             env:
                 - NEFT_TEST_BROWSER=1
         -
+            language: android
             os: linux
-            node_js: "6.2"
             env:
-                - NEFT_RUN_COVERAGE=1
+                - TRAVIS_NODE_VERSION=5.11
+                - NEFT_TEST_ANDROID=1
+            before_install:
+                - nvm install $TRAVIS_NODE_VERSION
+                - npm install
+            android:
+                components:
+                    - build-tools-23.0.0
+                    - android-23
+                    - extra
         -
             os: osx
             node_js: "5.11"
@@ -38,3 +48,8 @@ matrix:
             xcode_sdk: iphonesimulator9.3
             env:
                 - NEFT_TEST_IOS=1
+        -
+            os: linux
+            node_js: "6.2"
+            env:
+                - NEFT_RUN_COVERAGE=1

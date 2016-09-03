@@ -16,21 +16,22 @@ static Persistent<Object, CopyablePersistentTraits<Object>> global_;
 static Persistent<Object, CopyablePersistentTraits<Object>> globalAndroid_;
 static Persistent<Object, CopyablePersistentTraits<Object>> globalNeft_;
 
-namespace JS {
-    class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
-    public:
-        virtual void* Allocate(size_t length) {
-            void* data = AllocateUninitialized(length);
-            return data == NULL ? data : memset(data, 0, length);
-        }
-        virtual void* AllocateUninitialized(size_t length) {
-            return malloc(length);
-        }
-        virtual void Free(void* data, size_t) {
-            free(data);
-        }
-    };
+class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
+public:
+    virtual void* Allocate(size_t length) {
+        return calloc(length, 1);
+    }
+    virtual void* AllocateUninitialized(size_t length) {
+        return malloc(length);
+    }
+    virtual void Free(void* data, size_t) {
+        free(data);
+    }
+};
 
+ArrayBufferAllocator allocator;
+
+namespace JS {
     Isolate* GetIsolate(){
         return isolate_;
     }
@@ -112,7 +113,6 @@ namespace JS {
         V8::Initialize();
 
         // Create a new Isolate and make it the current one.
-        JS::ArrayBufferAllocator allocator;
         Isolate::CreateParams create_params;
         create_params.array_buffer_allocator = &allocator;
         Isolate* isolate = isolate_ = Isolate::New(create_params);
