@@ -18,34 +18,40 @@ clear = (platform, callback) ->
     fs.remove './index.js', callback
 
 watch = (platform, options, callback) ->
-    batchPending = false
-    buildPending = false
-    runBuildAgain = false
+    changedFiles = []
+    isWaiting = false
+    isPending = false
+    shouldBuildAgain = false
 
     ignored = '^(?:build|index\.js|local\.json|node_modules)|\.git'
     if options.out
         ignored += "|#{options.out}"
 
     update = ->
-        batchPending = false
-        if buildPending
-            runBuildAgain = true
+        isWaiting = false
+        if isPending
+            shouldBuildAgain = true
             return
 
-        buildPending = true
-        build platform, options, (err) ->
-            buildPending = false
+        isPending = true
+        buildOptions = utils.mergeAll {}, options,
+            changedFiles: changedFiles
+        changedFiles = []
+        build platform, buildOptions, (err) ->
+            isPending = false
             console.log ''
             callback err
 
-            if runBuildAgain
-                runBuildAgain = false
+            if shouldBuildAgain
+                shouldBuildAgain = false
                 update()
 
-    chokidar.watch('.', ignored: new RegExp(ignored)).on 'all', ->
-        unless batchPending
-            setTimeout update, 100
-            batchPending = true
+    chokidar.watch('.', ignored: new RegExp(ignored)).on 'all', (event, path) ->
+        if event is 'change'
+            changedFiles.push fs.realpathSync path
+        unless isWaiting
+            setTimeout update, 200
+            isWaiting = true
         return
     return
 

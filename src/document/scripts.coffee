@@ -33,25 +33,22 @@ module.exports = (File) -> class Scripts
     @__name__ = 'Scripts'
     @__path__ = 'File.Scripts'
 
-    @scriptFiles = {}
-
-    getScriptFile = @getScriptFile = (path) ->
-        Scripts.scriptFiles[path] or require(path)
+    @scripts = {}
 
     JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(Scripts) - 1
 
     i = 1
-    JSON_PATHS = i++
+    JSON_NAMES = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
     @_fromJSON = (file, arr, obj) ->
         unless obj
-            obj = new Scripts file, arr[JSON_PATHS]
+            obj = new Scripts file, arr[JSON_NAMES]
         obj
 
-    constructor: (@file, @paths) ->
+    constructor: (@file, @names) ->
         assert.instanceOf @file, File
-        assert.isArray @paths
+        assert.isArray @names
 
         `//<development>`
         if @constructor is Scripts
@@ -62,13 +59,13 @@ module.exports = (File) -> class Scripts
 
     createContext: ->
         ctx = new FileContext
-        for path in @paths
-            func = getScriptFile path
+        for name in @names
+            func = Scripts.scripts[name]
             func.call ctx
         ctx
 
     createCloneContext: (file) ->
-        {paths} = @
+        {names} = @
         ctx = Object.create @file.context
         propOpts = utils.CONFIGURABLE | utils.WRITABLE
 
@@ -88,5 +85,5 @@ module.exports = (File) -> class Scripts
         unless arr
             arr = new Array JSON_ARGS_LENGTH
             arr[0] = JSON_CTOR_ID
-        arr[JSON_PATHS] = @paths
+        arr[JSON_NAMES] = @names
         arr

@@ -12,6 +12,7 @@ release = require './release'
 minify = require './minify'
 
 module.exports = (opts, callback) ->
+    opts.path = pathUtils.resolve fs.realpathSync('.'), opts.path
     process opts, (err, data) ->
         return callback err if err?
         bundle data, opts, (err, file) ->
