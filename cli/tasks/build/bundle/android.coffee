@@ -9,7 +9,9 @@ cp = require 'child_process'
 OUT_DIR = './build/android/'
 NATIVE_OUT_DIR = "#{OUT_DIR}app/src/main/java/io/neft/"
 EXT_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}Extensions/"
+CUSTOM_NATIVE_DIR = './native/android'
 CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}CustomApp/"
+STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
 ANDROID_BUNDLE_DIR = './build/android/'
 
@@ -42,15 +44,17 @@ module.exports = (config, callback) ->
             true
     log.end logtime
 
-    logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
-    fs.copySync "./native/android", CUSTOM_NATIVE_OUT_DIR
-    log.end logtime
+    if fs.existsSync(CUSTOM_NATIVE_DIR)
+        logtime = log.time "Copy custom native files into `#{CUSTOM_NATIVE_OUT_DIR}`"
+        fs.copySync CUSTOM_NATIVE_DIR, CUSTOM_NATIVE_OUT_DIR
+        log.end logtime
 
-    logtime = log.time "Copy static files into '#{STATIC_OUT_DIR}'"
-    fs.copySync './static', STATIC_OUT_DIR
-    if fs.existsSync('./build/static')
-        fs.copySync './build/static', STATIC_OUT_DIR
-    log.end logtime
+    if fs.existsSync(STATIC_DIR)
+        logtime = log.time "Copy static files into '#{STATIC_OUT_DIR}'"
+        fs.copySync STATIC_DIR, STATIC_OUT_DIR
+        if fs.existsSync('./build/static')
+            fs.copySync './build/static', STATIC_OUT_DIR
+        log.end logtime
 
     logtime = log.time "Copy extensions"
     config.androidExtensions = []
