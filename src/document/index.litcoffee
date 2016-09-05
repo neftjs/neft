@@ -324,11 +324,11 @@ Corresponding node handler: *n-onRevert=""*.
 
 # *Document* Document::render([*Any* props, *Any* root, *Document* source])
 
-        render: (props, root, source) ->
+        render: (props, root, source, ids) ->
             unless @isClone
-                @clone().render props, root, source
+                @clone().render props, root, source, ids
             else
-                @_render(props, root, source)
+                @_render(props, root, source, ids)
 
         _updateInputAttrsKey: (key) ->
             {inputProps, source, props} = @
@@ -355,7 +355,7 @@ Corresponding node handler: *n-onRevert=""*.
         _render: do ->
             renderTarget = require('./file/render/parse/target') Document
 
-            (props=true, root=null, source) ->
+            (props=true, root=null, source, ids) ->
                 assert.notOk @isRendered
 
                 @props = props
@@ -386,18 +386,6 @@ Corresponding node handler: *n-onRevert=""*.
                     for prop, val of sourceAttrs
                         if val isnt undefined
                             inputProps.set prop, val
-
-                    # ids
-                    viewIds = @ids
-                    sourceIds = source.file.inputIds
-                    for prop, val of inputIds
-                        if viewIds[prop] is undefined and sourceIds[prop] is undefined
-                            inputIds.pop prop
-                    for prop, val of sourceIds
-                        if viewIds[prop] is undefined
-                            inputIds.set prop, val
-                    for prop, val of viewIds
-                        inputIds.set prop, val
                 else
                     # props
                     viewAttrs = @node.attrs
@@ -411,6 +399,18 @@ Corresponding node handler: *n-onRevert=""*.
                     for prop, val of props
                         if val isnt undefined
                             inputProps.set prop, val
+
+                # ids
+                if ids
+                    viewIds = @ids
+                    for prop, val of inputIds
+                        if viewIds[prop] is undefined and ids[prop] is undefined
+                            inputIds.pop prop
+                    for prop, val of ids
+                        if viewIds[prop] is undefined
+                            inputIds.set prop, val
+                    for prop, val of viewIds
+                        inputIds.set prop, val
 
                 Document.onBeforeRender.emit @
                 emitNodeSignal @, 'n-onBeforeRender'

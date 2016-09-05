@@ -132,21 +132,18 @@ describe 'src/document string interpolation', ->
             view.inputIds.first.update()
             assert.is view.node.stringify(), 'b'
 
-    it 'file `ids` are accessed in components', ->
+    it 'file `ids` are not accessed in components', ->
         source = createView '''
             <a id="first" label="12" visible="false" />
             <component name="a">
-                ${ids.first.attrs.label}
+                ${typeof ids.first}
             </component>
             <use component="a" />
         '''
         view = source.clone()
 
         renderParse view
-        assert.is view.node.stringify(), '12'
-
-        view.node.children[0].attrs.set 'label', 23
-        assert.is view.node.stringify(), '23'
+        assert.is view.node.stringify(), 'undefined'
 
     describe '`root`', ->
         it 'is accessed in rendered file', ->
