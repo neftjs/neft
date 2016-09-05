@@ -17,7 +17,7 @@ getQueryPriority = (val) ->
     Document.Element.Tag.query.getSelectorCommandsLength val
 
 queriesSortFunc = (a, b) ->
-    a.dirPriority - b.dirPriority or getQueryPriority(b.query) - getQueryPriority(a.query)
+    b.dirPriority - a.dirPriority or getQueryPriority(a.query) - getQueryPriority(b.query)
 
 module.exports = (platform, app, callback) ->
     fs.ensureDir OUT_DIR
