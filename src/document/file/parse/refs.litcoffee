@@ -1,14 +1,14 @@
-# id
+# ref
 
-*Element.Tag* with the id attribute is saved in the local scope
+*Element.Tag* with the ref attribute is saved in the local scope
 (file, *component*, *n-each* etc.)
 and it's available in the string interpolation.
 
 Id must be unique in the scope.
 
 ```xml
-<h1 id="heading">Heading</h1>
-<span>${ids.heading.stringify()}</span>
+<h1 ref="heading">Heading</h1>
+<span>${refs.heading.stringify()}</span>
 ```
 
     'use strict'
@@ -19,7 +19,7 @@ Id must be unique in the scope.
     log = log.scope 'Document'
 
     module.exports = (File) -> (file) ->
-        {ids} = file
+        {refs} = file
 
         forEachNodeRec = (node) ->
             for child in node.children
@@ -28,17 +28,17 @@ Id must be unique in the scope.
 
                 forEachNodeRec child
 
-                unless id = child.attrs['id']
+                unless ref = child.attrs['ref']
                     continue
 
-                if ids.hasOwnProperty(id)
-                    log.warn "Id must be unique; '#{id}' duplicated"
+                if refs.hasOwnProperty(ref)
+                    log.warn "Ref must be unique; '#{ref}' duplicated"
                     continue
-                ids[id] = child
+                refs[ref] = child
             return
 
         forEachNodeRec file.node
 
 # Glossary
 
-- [id](#id)
+- [ref](#ref)

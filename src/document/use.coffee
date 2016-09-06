@@ -57,7 +57,7 @@ module.exports = (File) -> class Use
         assert.instanceOf @node, File.Element
 
         @name = @node.attrs.component
-        @idName = @node.attrs.id
+        @refName = @node.attrs.ref
         @usedComponent = null
         @isRendered = false
 
@@ -116,18 +116,18 @@ module.exports = (File) -> class Use
         usedComponent.onReplaceByUse.emit @
         File.emitNodeSignal usedComponent, 'n-onReplaceByUse', @
 
-        # id
-        if @idName
-            @file.inputIds.set @idName, usedComponent.context
+        # ref
+        if @refName
+            @file.inputRefs.set @refName, usedComponent.context
 
         return
 
     revert: ->
         return unless @isRendered
 
-        # id
-        if @idName
-            @file.inputIds.set @idName, @file.ids[@idName]
+        # ref
+        if @refName
+            @file.inputRefs.set @refName, @file.refs[@refName]
 
         # destroy used component
         if @usedComponent

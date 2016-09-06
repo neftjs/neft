@@ -3,9 +3,9 @@
 Tag used to dynamically change an attribute of the parent element.
 
 ```xml
-<header id="header">
+<header ref="header">
     <attr name="isActive" value="true" n-if="${root.isActive}" />
-    <span>Active: ${ids.header.attrs.isActive}</span>
+    <span>Active: ${refs.header.attrs.isActive}</span>
 </header>
 ```
 

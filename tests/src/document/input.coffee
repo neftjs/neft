@@ -82,11 +82,11 @@ describe 'src/document string interpolation', ->
             componentA.attrs.set 'x', undefined
             assert.is view.node.stringify(), '2'
 
-    describe '`ids`', ->
+    describe '`refs`', ->
         it 'refers to nodes', ->
             source = createView '''
-                <a id="first" label="12" visible="false" />
-                ${ids.first.attrs.label}
+                <a ref="first" label="12" visible="false" />
+                ${refs.first.attrs.label}
             '''
             view = source.clone()
 
@@ -98,8 +98,8 @@ describe 'src/document string interpolation', ->
 
         it 'are accessible by context', ->
             source = createView '''
-                <a id="first" label="12" visible="false" />
-                ${this.ids.first.attrs.label}
+                <a ref="first" label="12" visible="false" />
+                ${this.refs.first.attrs.label}
             '''
             view = source.clone()
 
@@ -121,22 +121,22 @@ describe 'src/document string interpolation', ->
                         };
                     </script>
                 </component>
-                <a id="first" />
-                ${ids.first.state.name}
+                <a ref="first" />
+                ${refs.first.state.name}
             '''
             view = source.clone()
 
             renderParse view
             assert.is view.node.stringify(), 'a'
 
-            view.inputIds.first.update()
+            view.inputRefs.first.update()
             assert.is view.node.stringify(), 'b'
 
-    it 'file `ids` are not accessed in components', ->
+    it 'file `refs` are not accessed in components', ->
         source = createView '''
-            <a id="first" label="12" visible="false" />
+            <a ref="first" label="12" visible="false" />
             <component name="a">
-                ${typeof ids.first}
+                ${typeof refs.first}
             </component>
             <use component="a" />
         '''
@@ -328,8 +328,8 @@ describe 'src/document string interpolation', ->
                 <attr name="y" value="3" />
                 <span
                   x="1"
-                  id="a1"
-                  onAttrsChange="${root.test(ids.a1.attrs.x, props.y)}"
+                  ref="a1"
+                  onAttrsChange="${root.test(refs.a1.attrs.x, props.y)}"
                 />
             '''
             view = source.clone()
@@ -348,7 +348,7 @@ describe 'src/document string interpolation', ->
         it 'is not called if the document is not rendered', ->
             source = createView '''
                 <attr name="y" value="3" />
-                <span x="1" id="a1" onAttrsChange="${root.onAttrsChange()}" />
+                <span x="1" ref="a1" onAttrsChange="${root.onAttrsChange()}" />
             '''
             view = source.clone()
 
