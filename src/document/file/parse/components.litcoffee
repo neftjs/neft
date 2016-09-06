@@ -57,7 +57,7 @@ component can be rendered by the *use* tag.
                         forEachNodeRec child
                         continue
 
-                    unless name = child.attrs['name']
+                    unless name = child.props['name']
                         continue
 
                     # remove node from file

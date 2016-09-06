@@ -37,7 +37,7 @@ Use *List* to bind changes made in the array.
         createdComponents = []
 
         forNode = (elem) ->
-            unless attrVal = elem.attrs['n-each']
+            unless propVal = elem.props['n-each']
                 for child in elem.children
                     if child instanceof File.Element.Tag
                         forNode child
@@ -57,7 +57,7 @@ Use *List* to bind changes made in the array.
             iterator = new File.Iterator file, elem, path
             iterators.push iterator
             `//<development>`
-            iterator.text = attrVal
+            iterator.text = propVal
             `//</development>`
 
         forNode file.node

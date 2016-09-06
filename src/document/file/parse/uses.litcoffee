@@ -67,7 +67,7 @@ Use this attribute to render less important elements.
             if file.components[node.name]
                 component = node.name
                 node.name = 'use'
-                node.attrs['component'] = component
+                node.props['component'] = component
 
             # get uses
             if node.name is 'use'

@@ -32,7 +32,7 @@ describe 'src/styles', ->
         it 'can be a Renderer.Item instance', ->
             # item = Renderer.Rectangle.New()
             # node = new Element.Tag
-            # node.attrs['n-style'] = item
+            # node.props['n-style'] = item
             # doc = render
             #   node: node
 
@@ -151,7 +151,7 @@ describe 'src/styles', ->
 
             assert.is item.text, bNode.stringifyChildren()
 
-            iNode.attrs.set 'visible', true
+            iNode.props.set 'visible', true
             assert.is item.text, bNode.stringifyChildren()
 
     describe 'Renderer.Item::$.text', ->
@@ -245,7 +245,7 @@ describe 'src/styles', ->
 
             assert.is doc.styles.length, 1
             assert.instanceOf style = node.style, Renderer.Item
-            assert.is style.linkUri, node.attrs.href
+            assert.is style.linkUri, node.props.href
 
         it 'sets child node style linkUri', ->
             doc = render
@@ -256,7 +256,7 @@ describe 'src/styles', ->
 
             assert.is doc.styles.length, 1
             assert.instanceOf style = bNode.style, Renderer.Item
-            assert.is style.linkUri, aNode.attrs.href
+            assert.is style.linkUri, aNode.props.href
 
         it "doesn't set child node style linkUri if the parent node is styled", ->
             doc = render
@@ -274,9 +274,9 @@ describe 'src/styles', ->
                 html: '<a href="/abc" n-style="renderer:Item"></a>'
 
             node = doc.node.query 'a'
-            node.attrs.set 'href', '/123'
+            node.props.set 'href', '/123'
 
-            assert.is node.style.linkUri, node.attrs.href
+            assert.is node.style.linkUri, node.props.href
 
         it 'updates style linkUri on parent change', ->
             doc = render
@@ -289,7 +289,7 @@ describe 'src/styles', ->
             assert.is bNode.style.linkUri, ''
 
             bNode.parent = divNode
-            assert.is bNode.style.linkUri, aNode.attrs.href
+            assert.is bNode.style.linkUri, aNode.props.href
 
             bNode.parent = null
             assert.is bNode.style.linkUri, ''
@@ -303,13 +303,13 @@ describe 'src/styles', ->
             aNode = doc.node.query 'a'
             bNode = doc.node.query 'b'
 
-            aNode.attrs.set 'href', '/123'
-            assert.is bNode.style.linkUri, aNode.attrs.href
+            aNode.props.set 'href', '/123'
+            assert.is bNode.style.linkUri, aNode.props.href
 
         it 'updates n-each styles', ->
             test = ->
                 for child in ulNode.children
-                    assert.is child.query('#text').style?.linkUri, child.query('a').attrs.href
+                    assert.is child.query('#text').style?.linkUri, child.query('a').props.href
                 return
 
             doc = render
@@ -321,7 +321,7 @@ describe 'src/styles', ->
 
             test()
 
-            ulNode.attrs.set 'n-each', [5, 6, 7]
+            ulNode.props.set 'n-each', [5, 6, 7]
             test()
 
     describe "'n-style:' attributes", ->
@@ -332,7 +332,7 @@ describe 'src/styles', ->
             {node, item} = doc.styles[0]
 
             assert.instanceOf item, Renderer.Item
-            assert.is item.x, node.attrs['n-style:x']
+            assert.is item.x, node.props['n-style:x']
 
         it 'on change are set on a style item', ->
             doc = render
@@ -340,8 +340,8 @@ describe 'src/styles', ->
 
             {node, item} = doc.styles[0]
 
-            node.attrs.set 'style:x', 70
-            assert.is item.x, node.attrs['n-style:x']
+            node.props.set 'style:x', 70
+            assert.is item.x, node.props['n-style:x']
 
         it "'null' value is not set for non-object properties", ->
             doc = render
@@ -351,8 +351,8 @@ describe 'src/styles', ->
 
             assert.is item.x, 0
 
-            node.attrs.set 'n-style:x', 4
-            node.attrs.set 'n-style:x', null
+            node.props.set 'n-style:x', 4
+            node.props.set 'n-style:x', null
             assert.is item.x, 4
 
     describe "'class' attribute", ->
@@ -362,7 +362,7 @@ describe 'src/styles', ->
 
             {node, item} = doc.styles[0]
 
-            assert.isEqual item.classes.toArray(), node.attrs.class.split(' ')
+            assert.isEqual item.classes.toArray(), node.props.class.split(' ')
 
         it 'synchronizes item classes on add and remove', ->
             doc = render
@@ -370,8 +370,8 @@ describe 'src/styles', ->
 
             {node, item} = doc.styles[0]
 
-            node.attrs.set 'class', 'g a c'
-            assert.isEqual item.classes.toArray(), node.attrs.class.split(' ')
+            node.props.set 'class', 'g a c'
+            assert.isEqual item.classes.toArray(), node.props.class.split(' ')
 
     describe 'Style item visible', ->
         it "is 'true' by default", ->
@@ -547,7 +547,7 @@ describe 'src/styles', ->
         it "is valid in n-each", ->
             test = ->
                 childItem = divNode.style.children.firstChild
-                for item in divNode.attrs['n-each']
+                for item in divNode.props['n-each']
                     assert.is childItem.text, item+''
                     childItem = childItem.nextSibling
                 return
@@ -561,7 +561,7 @@ describe 'src/styles', ->
 
             test()
 
-            divNode.attrs.set 'n-each', [5,6,7,8]
+            divNode.props.set 'n-each', [5,6,7,8]
             test()
             return
 

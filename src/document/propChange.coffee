@@ -4,14 +4,14 @@ assert = require 'src/assert'
 utils = require 'src/utils'
 log = require 'src/log'
 
-assert = assert.scope 'View.AttrChange'
-log = log.scope 'View', 'AttrChange'
+assert = assert.scope 'View.PropChange'
+log = log.scope 'View', 'PropChange'
 
-module.exports = (File) -> class AttrChange
-    @__name__ = 'AttrChange'
-    @__path__ = 'File.AttrChange'
+module.exports = (File) -> class PropChange
+    @__name__ = 'PropChange'
+    @__path__ = 'File.PropChange'
 
-    JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(AttrChange) - 1
+    JSON_CTOR_ID = @JSON_CTOR_ID = File.JSON_CTORS.push(PropChange) - 1
 
     i = 1
     JSON_NODE = i++
@@ -23,7 +23,7 @@ module.exports = (File) -> class AttrChange
         unless obj
             node = file.node.getChildByAccessPath arr[JSON_NODE]
             target = file.node.getChildByAccessPath arr[JSON_TARGET]
-            obj = new AttrChange file, node, target, arr[JSON_NAME]
+            obj = new PropChange file, node, target, arr[JSON_NAME]
         obj
 
     constructor: (@file, @node, @target, @name) ->
@@ -33,28 +33,28 @@ module.exports = (File) -> class AttrChange
         assert.isString @name
         assert.notLengthOf @name, 0
 
-        @_defaultValue = @target.attrs[@name]
+        @_defaultValue = @target.props[@name]
 
         @update()
         @node.onVisibleChange onVisibleChange, @
-        @node.onAttrsChange onAttrsChange, @
+        @node.onPropsChange onPropsChange, @
 
         `//<development>`
-        if @constructor is AttrChange
+        if @constructor is PropChange
             Object.preventExtensions @
         `//</development>`
 
     update: ->
-        val = if @node.visible then @node.attrs.value else @_defaultValue
-        @target.attrs.set @name, val
+        val = if @node.visible then @node.props.value else @_defaultValue
+        @target.props.set @name, val
         return
 
     onVisibleChange = ->
         @update()
 
-    onAttrsChange = (name, oldValue) ->
+    onPropsChange = (name, oldValue) ->
         if name is 'name'
-            throw new Error 'Dynamic attr name is not implemented'
+            throw new Error 'Dynamic prop name is not implemented'
         else if name is 'value'
             @update()
         return
@@ -63,7 +63,7 @@ module.exports = (File) -> class AttrChange
         node = original.node.getCopiedElement @node, file.node
         target = original.node.getCopiedElement @target, file.node
 
-        new AttrChange file, node, target, @name
+        new PropChange file, node, target, @name
 
     toJSON: (key, arr) ->
         unless arr

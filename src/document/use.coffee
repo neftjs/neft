@@ -27,9 +27,9 @@ module.exports = (File) -> class Use
         if @file.isRendered and not @isRendered
             @render()
 
-    attrsChangeListener = (name) ->
+    propsChangeListener = (name) ->
         if name is 'component'
-            @name = @node.attrs['component']
+            @name = @node.props['component']
 
             if @isRendered
                 @revert()
@@ -56,13 +56,13 @@ module.exports = (File) -> class Use
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
 
-        @name = @node.attrs.component
-        @refName = @node.attrs.ref
+        @name = @node.props.component
+        @refName = @node.props.ref
         @usedComponent = null
         @isRendered = false
 
         @node.onVisibleChange visibilityChangeListener, @
-        @node.onAttrsChange attrsChangeListener, @
+        @node.onPropsChange propsChangeListener, @
 
         `//<development>`
         if @constructor is Use
@@ -80,8 +80,8 @@ module.exports = (File) -> class Use
         @isRendered = true
 
         useAsync = utils.isClient
-        useAsync &&= @node.attrs.has 'n-async'
-        useAsync &&= @node.attrs['n-async'] isnt false
+        useAsync &&= @node.props.has 'n-async'
+        useAsync &&= @node.props['n-async'] isnt false
         if useAsync
             queue.push @, file
             unless queuePending

@@ -22,9 +22,9 @@ Attribute used to hide or show the tag depends on the condition result.
 
                     forEachNodeRec child
 
-                    if child.attrs.has('n-if')
+                    if child.props.has('n-if')
                         elseNode = null
-                        if child.nextSibling?.attrs?.has?('n-else')
+                        if child.nextSibling?.props?.has?('n-else')
                             elseNode = child.nextSibling
 
                         conditions.push new File.Condition file, child, elseNode

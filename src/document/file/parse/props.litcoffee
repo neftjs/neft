@@ -35,15 +35,15 @@ String `List(...` evaluates to *List*.
 
     module.exports = (File) -> (file) ->
         {Tag} = File.Element
-        {attrsToParse} = file
+        {propsToParse} = file
 
         forNode = (elem) ->
-            for name, val of elem.attrs when elem.attrs.hasOwnProperty(name)
+            for name, val of elem.props when elem.props.hasOwnProperty(name)
                 jsVal = evalFunc val, Dict, List
                 if utils.isObject(jsVal)
-                    attrsToParse.push elem, name
+                    propsToParse.push elem, name
                 else if jsVal isnt undefined
-                    elem.attrs.set name, jsVal
+                    elem.props.set name, jsVal
 
             for child in elem.children
                 if child instanceof Tag

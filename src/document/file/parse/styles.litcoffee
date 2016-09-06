@@ -50,7 +50,7 @@
                     style: itemPath
 
             # detect main item with no document.query
-            unless file.node.attrs['n-style']
+            unless file.node.props['n-style']
                 mainHasDoc = false
                 mainId = styleFile.codes._main.link
                 for _, id of styleFile.queries
@@ -58,7 +58,7 @@
                         mainHasDoc = true
                         break
                 unless mainHasDoc
-                    file.node.attrs.set 'n-style', stylePath
+                    file.node.props.set 'n-style', stylePath
 
         while styleTags.length > 0
             styleTags.pop().parent = null

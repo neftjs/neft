@@ -28,7 +28,7 @@ Id must be unique in the scope.
 
                 forEachNodeRec child
 
-                unless ref = child.attrs['ref']
+                unless ref = child.props['ref']
                     continue
 
                 if refs.hasOwnProperty(ref)

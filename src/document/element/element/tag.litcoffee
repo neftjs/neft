@@ -37,7 +37,7 @@
         @_fromJSON = (arr, obj=new Tag) ->
             Element._fromJSON arr, obj
             obj.name = arr[JSON_NAME]
-            utils.merge obj.attrs, arr[JSON_ATTRS]
+            utils.merge obj.props, arr[JSON_ATTRS]
 
             prevChild = null
             for child in arr[JSON_CHILDREN]
@@ -55,7 +55,7 @@
 
             @name = 'blank'
             @children = []
-            @attrs = new Attrs @
+            @props = new Props @
 
             `//<development>`
             if @constructor is Tag
@@ -70,16 +70,16 @@
 
         signal.Emitter.createSignal @, 'onChildrenChange'
 
-## *Element.Tag.Attrs* Tag::attrs
+## *Element.Tag.Props* Tag::props
 
-## *Signal* Tag::onAttrsChange(*String* attribute, *Any* oldValue)
+## *Signal* Tag::onPropsChange(*String* attribute, *Any* oldValue)
 
-        signal.Emitter.createSignal @, 'onAttrsChange'
+        signal.Emitter.createSignal @, 'onPropsChange'
 
         clone: (clone = new Tag) ->
             super clone
             clone.name = @name
-            utils.merge clone.attrs, @attrs
+            utils.merge clone.props, @props
             clone
 
 ## *Element.Tag* Tag::cloneDeep()
@@ -197,23 +197,23 @@ watcher.disconnect();
             super arr
             arr[JSON_NAME] = @name
             children = arr[JSON_CHILDREN] = []
-            arr[JSON_ATTRS] = @attrs
+            arr[JSON_ATTRS] = @props
 
             for child in @children
                 children.push child.toJSON()
 
             arr
 
-# **Class** Attrs
+# **Class** Props
 
-        @Attrs = class Attrs
+        @Props = class Props
             constructor: (ref) ->
                 utils.defineProperty @, '_ref', 0, ref
 
             NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
-            utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Attrs
+            utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Props
 
-## *Array* Attrs::item(*Integer* index, [*Array* target])
+## *Array* Props::item(*Integer* index, [*Array* target])
 
             utils.defineProperty @::, 'item', NOT_ENUMERABLE, (index, target=[]) ->
                 assert.isArray target
@@ -230,7 +230,7 @@ watcher.disconnect();
 
                 target
 
-## *Boolean* Attrs::has(*String* name)
+## *Boolean* Props::has(*String* name)
 
             utils.defineProperty @::, 'has', NOT_ENUMERABLE, (name) ->
                 assert.isString name
@@ -238,7 +238,7 @@ watcher.disconnect();
 
                 @hasOwnProperty name
 
-## *Boolean* Attrs::set(*String* name, *Any* value)
+## *Boolean* Props::set(*String* name, *Any* value)
 
             utils.defineProperty @::, 'set', NOT_ENUMERABLE, (name, value) ->
                 assert.isString name
@@ -252,7 +252,7 @@ watcher.disconnect();
                 @[name] = value
 
                 # trigger event
-                emitSignal @_ref, 'onAttrsChange', name, old
+                emitSignal @_ref, 'onPropsChange', name, old
                 query.checkWatchersDeeply @_ref
 
                 true
@@ -260,4 +260,4 @@ watcher.disconnect();
 # Glossary
 
 - [Element.Tag](#class-tag)
-- [Element.Tag.Attrs](#class-attrs)
+- [Element.Tag.Props](#class-props)

@@ -31,7 +31,7 @@ module.exports = (File) -> class Log
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
 
-        @node.onAttrsChange @log, @
+        @node.onPropsChange @log, @
         listenOnTextChange @node, @
 
         `//<development>`
@@ -40,12 +40,12 @@ module.exports = (File) -> class Log
         `//</development>`
 
     render: ->
-        if utils.isEmpty(@node.attrs)
+        if utils.isEmpty(@node.props)
             console.log @node.stringifyChildren()
         else
-            {attrs} = @node
+            {props} = @node
             log = [@node.stringifyChildren()]
-            for key, val of attrs when attrs.hasOwnProperty(key)
+            for key, val of props when props.hasOwnProperty(key)
                 log.push key, '=', val
             console.log.apply console, log
         return

@@ -177,4 +177,4 @@ module.exports = (File) -> class Input extends signal.Emitter
         arr
 
     @Text = require('./input/text.coffee') File, @
-    @Attr = require('./input/attr.coffee') File, @
+    @Prop = require('./input/prop.coffee') File, @

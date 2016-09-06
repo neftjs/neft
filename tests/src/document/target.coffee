@@ -32,5 +32,5 @@ describe 'src/document target', ->
         renderParse view
         assert.is view.node.stringify(), ''
 
-        elem.attrs.set 'x', 1
+        elem.props.set 'x', 1
         assert.is view.node.stringify(), '<b></b>'

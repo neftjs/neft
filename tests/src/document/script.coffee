@@ -100,7 +100,7 @@ describe 'src/document script', ->
                         this.a = this.props.a;
                     });
                 </script>
-                <attr name="a" value="1" />
+                <prop name="a" value="1" />
             '''
             view = view.clone()
 
@@ -111,7 +111,7 @@ describe 'src/document script', ->
             view = createView '''
                 <script>
                     this.onCreate(function(){
-                        this.a = this.refs.x.attrs.a;
+                        this.a = this.refs.x.props.a;
                     });
                 </script>
                 <b ref="x" a="1" />

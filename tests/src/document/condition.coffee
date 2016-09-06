@@ -32,5 +32,5 @@ describe 'src/document n-if', ->
 
         renderParse view
         assert.is view.node.stringify(), '<b>FAIL</b>'
-        elem.attrs.set 'x', 2
+        elem.props.set 'x', 2
         assert.is view.node.stringify(), '<b>OK</b>'

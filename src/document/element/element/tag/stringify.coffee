@@ -49,14 +49,14 @@ getOuterHTML = (elem, replacements) ->
         return getInnerHTML elem, replacements
 
     ret = '<' + name
-    {attrs} = elem
-    for attrName, attrValue of attrs
-        if not attrs.hasOwnProperty(attrName)
+    {props} = elem
+    for propName, propValue of props
+        if not props.hasOwnProperty(propName)
             continue
-        if not attrValue? or typeof attrValue is 'function' or not isPublic(attrName)
+        if not propValue? or typeof propValue is 'function' or not isPublic(propName)
             continue
 
-        ret += ' ' + attrName + '="' + attrValue + '"'
+        ret += ' ' + propName + '="' + propValue + '"'
 
     innerHTML = getInnerHTML elem, replacements
     if not innerHTML and SINGLE_TAG[name]

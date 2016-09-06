@@ -34,16 +34,16 @@
         JSON_PATH = i++
         JSON_NODE = i++
         JSON_TARGET_NODE = i++
-        JSON_ATTRS_TO_PARSE = i++
+        JSON_PROPS_TO_PARSE = i++
         JSON_COMPONENTS = i++
         JSON_SCRIPTS = i++
-        JSON_ATTR_CHANGES = i++
+        JSON_PROP_CHANGES = i++
         JSON_INPUTS = i++
         JSON_CONDITIONS = i++
         JSON_ITERATORS = i++
         JSON_USES = i++
         JSON_REFS = i++
-        JSON_ATTRS_TO_SET = i++
+        JSON_PROPS_TO_SET = i++
         JSON_LOGS = i++
         JSON_STYLES = i++
         JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
@@ -81,14 +81,14 @@ Corresponding node handler: *n-onRevert=""*.
         signal.create @, 'onRevert'
 
         @Element = require('./element/index')
-        @AttrChange = require('./attrChange') @
+        @PropChange = require('./propChange') @
         @Use = require('./use') @
         @Scripts = require('./scripts') @
         @Input = require('./input') @
         @Condition = require('./condition') @
         @Iterator = require('./iterator') @
         @Log = require('./log') @
-        @AttrsToSet = require('./attrsToSet') @
+        @PropsToSet = require('./propsToSet') @
 
 ## *Document* Document.fromHTML(*String* path, *String* html)
 
@@ -168,17 +168,17 @@ Corresponding node handler: *n-onRevert=""*.
                 if arr[JSON_TARGET_NODE]
                     obj.targetNode = node.getChildByAccessPath arr[JSON_TARGET_NODE]
 
-                # attrsToParse
-                {attrsToParse} = obj
-                jsonAttrsToParse = arr[JSON_ATTRS_TO_PARSE]
-                for attrNode, i in jsonAttrsToParse by 2
-                    attrsToParse.push node.getChildByAccessPath(attrNode)
-                    attrsToParse.push jsonAttrsToParse[i+1]
+                # propsToParse
+                {propsToParse} = obj
+                jsonPropsToParse = arr[JSON_PROPS_TO_PARSE]
+                for propNode, i in jsonPropsToParse by 2
+                    propsToParse.push node.getChildByAccessPath(propNode)
+                    propsToParse.push jsonPropsToParse[i+1]
 
                 utils.merge obj.components, arr[JSON_COMPONENTS]
                 if (scripts = arr[JSON_SCRIPTS])?
                     obj.scripts = Document.JSON_CTORS[scripts[0]]._fromJSON(obj, scripts)
-                parseArray obj, arr[JSON_ATTR_CHANGES], obj.attrChanges
+                parseArray obj, arr[JSON_PROP_CHANGES], obj.propChanges
                 parseArray obj, arr[JSON_INPUTS], obj.inputs
                 parseArray obj, arr[JSON_CONDITIONS], obj.conditions
                 parseArray obj, arr[JSON_ITERATORS], obj.iterators
@@ -187,7 +187,7 @@ Corresponding node handler: *n-onRevert=""*.
                 for ref, path of arr[JSON_REFS]
                     obj.refs[ref] = obj.node.getChildByAccessPath path
 
-                parseArray obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet
+                parseArray obj, arr[JSON_PROPS_TO_SET], obj.propsToSet
 
                 `//<development>`
                 parseArray obj, arr[JSON_LOGS], obj.logs
@@ -208,8 +208,8 @@ Corresponding node handler: *n-onRevert=""*.
             components = require('./file/parse/components') Document
             scripts = require('./file/parse/scripts') Document
             styles = require('./file/parse/styles') Document
-            attrs = require('./file/parse/attrs') Document
-            attrChanges = require('./file/parse/attrChanges') Document
+            props = require('./file/parse/props') Document
+            propChanges = require('./file/parse/propChanges') Document
             iterators = require('./file/parse/iterators') Document
             target = require('./file/parse/target') Document
             uses = require('./file/parse/uses') Document
@@ -217,7 +217,7 @@ Corresponding node handler: *n-onRevert=""*.
             conditions = require('./file/parse/conditions') Document
             refs = require('./file/parse/refs') Document
             logs = require('./file/parse/logs') Document
-            attrSetting = require('./file/parse/attrSetting') Document
+            propSetting = require('./file/parse/propSetting') Document
 
             (file) ->
                 assert.instanceOf file, Document
@@ -234,14 +234,14 @@ Corresponding node handler: *n-onRevert=""*.
                 components file
                 scripts file
                 iterators file
-                attrs file
-                attrChanges file
+                props file
+                propChanges file
                 target file
                 uses file
                 storage file
                 conditions file
                 refs file
-                attrSetting file
+                propSetting file
                 `//<development>`
                 logs file
                 `//</development>`
@@ -274,9 +274,9 @@ Corresponding node handler: *n-onRevert=""*.
 
 ## Document::constructor(*String* path, *Element* element)
 
-        @emitNodeSignal = emitNodeSignal = (file, attrName, attr1, attr2) ->
-            if nodeSignal = file.node.attrs[attrName]
-                nodeSignal?.call? file, attr1, attr2
+        @emitNodeSignal = emitNodeSignal = (file, propName, prop1, prop2) ->
+            if nodeSignal = file.node.props[propName]
+                nodeSignal?.call? file, prop1, prop2
             return
 
         constructor: (@path, @node) ->
@@ -298,15 +298,15 @@ Corresponding node handler: *n-onRevert=""*.
             @source = null
             @parentUse = null
 
-            @attrsToParse = []
+            @propsToParse = []
             @components = {}
-            @attrChanges = []
+            @propChanges = []
             @inputs = []
             @conditions = []
             @iterators = []
             @uses = []
             @refs = {}
-            @attrsToSet = []
+            @propsToSet = []
             @logs = []
             @styles = []
             @inputRefs = new Dict
@@ -314,8 +314,8 @@ Corresponding node handler: *n-onRevert=""*.
             @inputState = new Dict
             @inputArgs = [@inputRefs, @inputProps, @inputState]
 
-            @node.onAttrsChange @_updateInputAttrsKey, @
-            @inputProps.extend @node.attrs
+            @node.onPropsChange @_updateInputPropsKey, @
+            @inputProps.extend @node.props
 
             `//<development>`
             if @constructor is Document
@@ -330,21 +330,21 @@ Corresponding node handler: *n-onRevert=""*.
             else
                 @_render(props, root, source, refs)
 
-        _updateInputAttrsKey: (key) ->
+        _updateInputPropsKey: (key) ->
             {inputProps, source, props} = @
-            viewAttrs = @node.attrs
+            viewProps = @node.props
 
             if source
-                val = source.node.attrs[key]
+                val = source.node.props[key]
                 if val is undefined and props
                     val = props[key]
                 if val is undefined
-                    val = viewAttrs[key]
+                    val = viewProps[key]
             else
                 if props
                     val = props[key]
                 if val is undefined
-                    val = viewAttrs[key]
+                    val = viewProps[key]
 
             if val is undefined
                 inputProps.pop key
@@ -365,34 +365,34 @@ Corresponding node handler: *n-onRevert=""*.
                 {inputProps, inputRefs} = @
 
                 if props instanceof Dict
-                    props.onChange @_updateInputAttrsKey, @
+                    props.onChange @_updateInputPropsKey, @
 
                 if source?
                     # props
-                    viewAttrs = @node.attrs
-                    sourceAttrs = source.node.attrs
-                    source.node.onAttrsChange @_updateInputAttrsKey, @
+                    viewProps = @node.props
+                    sourceProps = source.node.props
+                    source.node.onPropsChange @_updateInputPropsKey, @
                     for prop, val of inputProps
-                        if viewAttrs[prop] is props[prop] is sourceAttrs[prop] is undefined
+                        if viewProps[prop] is props[prop] is sourceProps[prop] is undefined
                             inputProps.pop prop
-                    for prop, val of viewAttrs
-                        if props[prop] is sourceAttrs[prop] is undefined
+                    for prop, val of viewProps
+                        if props[prop] is sourceProps[prop] is undefined
                             if val isnt undefined
                                 inputProps.set prop, val
                     for prop, val of props
-                        if sourceAttrs[prop] is undefined
+                        if sourceProps[prop] is undefined
                             if val isnt undefined
                                 inputProps.set prop, val
-                    for prop, val of sourceAttrs
+                    for prop, val of sourceProps
                         if val isnt undefined
                             inputProps.set prop, val
                 else
                     # props
-                    viewAttrs = @node.attrs
+                    viewProps = @node.props
                     for prop, val of inputProps
-                        if viewAttrs[prop] is props[prop] is undefined
+                        if viewProps[prop] is props[prop] is undefined
                             inputProps.pop prop
-                    for prop, val of viewAttrs
+                    for prop, val of viewProps
                         if props[prop] is undefined
                             if val isnt undefined
                                 inputProps.set prop, val
@@ -469,11 +469,11 @@ Corresponding node handler: *n-onRevert=""*.
                     emitSignal @context, 'onBeforeRevert'
 
                 if @props instanceof Dict
-                    @props.onChange.disconnect @_updateInputAttrsKey, @
+                    @props.onChange.disconnect @_updateInputPropsKey, @
 
                 # props
                 if @source
-                    @source.node.onAttrsChange.disconnect @_updateInputAttrsKey, @
+                    @source.node.onPropsChange.disconnect @_updateInputPropsKey, @
 
                 # parent use
                 @parentUse?.detachUsedComponent()
@@ -543,7 +543,7 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 else
                     @_clone()
 
-        parseAttr = do ->
+        parseProp = do ->
             cache = Object.create null
             (val) ->
                 func = cache[val] ?= new Function 'Dict', 'List', "return #{val}"
@@ -557,16 +557,16 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             if @targetNode
                 clone.targetNode = @node.getCopiedElement @targetNode, clone.node
 
-            # attrsToParse
-            {attrsToParse} = @
-            for attrNode, i in attrsToParse by 2
-                attrNode = @node.getCopiedElement attrNode, clone.node
-                attrName = attrsToParse[i+1]
-                attrNode.attrs.set attrName, parseAttr(attrNode.attrs[attrName])
+            # propsToParse
+            {propsToParse} = @
+            for propNode, i in propsToParse by 2
+                propNode = @node.getCopiedElement propNode, clone.node
+                propName = propsToParse[i+1]
+                propNode.props.set propName, parseProp(propNode.props[propName])
 
-            # attrChanges
-            for attrChange in @attrChanges
-                clone.attrChanges.push attrChange.clone @, clone
+            # propChanges
+            for propChange in @propChanges
+                clone.propChanges.push propChange.clone @, clone
 
             # refs
             for ref, node of @refs
@@ -589,9 +589,9 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             for use in @uses
                 clone.uses.push use.clone @, clone
 
-            # attrs to set
-            for attrsToSet in @attrsToSet
-                clone.attrsToSet.push attrsToSet.clone @, clone
+            # props to set
+            for propsToSet in @propsToSet
+                clone.propsToSet.push propsToSet.clone @, clone
 
             # logs
             for log in @logs
@@ -635,15 +635,15 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 if @targetNode
                     arr[JSON_TARGET_NODE] = @targetNode.getAccessPath @node
 
-                # attrsToParse
-                attrsToParse = arr[JSON_ATTRS_TO_PARSE] = new Array @attrsToParse.length
-                for attrNode, i in @attrsToParse by 2
-                    attrsToParse[i] = attrNode.getAccessPath @node
-                    attrsToParse[i+1] = @attrsToParse[i+1]
+                # propsToParse
+                propsToParse = arr[JSON_PROPS_TO_PARSE] = new Array @propsToParse.length
+                for propNode, i in @propsToParse by 2
+                    propsToParse[i] = propNode.getAccessPath @node
+                    propsToParse[i+1] = @propsToParse[i+1]
 
                 arr[JSON_COMPONENTS] = @components
                 arr[JSON_SCRIPTS] = @scripts
-                arr[JSON_ATTR_CHANGES] = @attrChanges.map callToJSON
+                arr[JSON_PROP_CHANGES] = @propChanges.map callToJSON
                 arr[JSON_INPUTS] = @inputs.map callToJSON
                 arr[JSON_CONDITIONS] = @conditions.map callToJSON
                 arr[JSON_ITERATORS] = @iterators.map callToJSON
@@ -653,7 +653,7 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 for ref, node of @refs
                     refs[ref] = node.getAccessPath @node
 
-                arr[JSON_ATTRS_TO_SET] = @attrsToSet
+                arr[JSON_PROPS_TO_SET] = @propsToSet
 
                 `//<development>`
                 arr[JSON_LOGS] = @logs.map callToJSON

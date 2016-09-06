@@ -34,13 +34,13 @@ Optional argument `as` will link all components into the specified namespace.
             if node.name isnt 'import'
                 continue
 
-            href = node.attrs.href or node.attrs.src
+            href = node.props.href or node.props.src
             unless href then continue
 
             # hide element
             node.name = 'blank'
 
-            namespace = node.attrs.as
+            namespace = node.props.as
 
             # get view
             path = getFilePath File, file, href

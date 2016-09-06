@@ -25,7 +25,7 @@ module.exports = (File, data) -> class Style
 
     i = 1
     JSON_NODE = i++
-    JSON_ATTRS = i++
+    JSON_PROPS = i++
     JSON_CHILDREN = i++
     JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
@@ -39,27 +39,27 @@ module.exports = (File, data) -> class Style
                     log.warn 'document.query can be attached only to tags; ' +
                         "query '#{elem.query}' has been omitted for this node"
                     continue
-                node.attrs.set 'n-style', elem.style
+                node.props.set 'n-style', elem.style
 
         file
 
     @createStylesInDocument = do ->
         getStyleAttrs = (node) ->
-            attrs = null
-            for attr of node.attrs when node.attrs.hasOwnProperty(attr)
-                if attr.slice(0, 8) is 'n-style:'
-                    attrs ?= {}
-                    attrs[attr] = true
-            attrs
+            props = null
+            for prop of node.props when node.props.hasOwnProperty(prop)
+                if prop.slice(0, 8) is 'n-style:'
+                    props ?= {}
+                    props[prop] = true
+            props
 
         forNode = (file, node, parentStyle) ->
             isText = node instanceof Text
-            if isText or node.attrs['n-style']
+            if isText or node.props['n-style']
                 style = new Style
                 style.file = file
                 style.node = node
                 style.parent = parentStyle
-                style.attrs = not isText and getStyleAttrs node
+                style.props = not isText and getStyleAttrs node
 
                 if parentStyle
                     parentStyle.children.push style
@@ -91,7 +91,7 @@ module.exports = (File, data) -> class Style
             obj = new Style
         obj.file = file
         obj.node = file.node.getChildByAccessPath arr[JSON_NODE]
-        obj.attrs = arr[JSON_ATTRS]
+        obj.props = arr[JSON_PROPS]
 
         for child in arr[JSON_CHILDREN]
             cloneChild = Style._fromJSON file, child
@@ -103,14 +103,14 @@ module.exports = (File, data) -> class Style
     constructor: ->
         @file = null
         @node = null
-        @attrs = null
+        @props = null
         @parent = null
         @children = []
         @isAutoParent = true
         @item = null
         @scope = null
         @textObject = null
-        @attrsClass = null
+        @propsClass = null
         @propsClass = null
 
         Object.seal @
@@ -150,10 +150,10 @@ module.exports = (File, data) -> class Style
         textObject.text = text
         return
 
-    setAttr: do ->
+    setProp: do ->
         PREFIX_LENGTH = 'n-style:'.length
 
-        getSplitAttr = do ->
+        getSplitProp = do ->
             cache = Object.create null
             (prop) ->
                 cache[prop] ||= prop.slice(PREFIX_LENGTH).split ':'
@@ -168,45 +168,45 @@ module.exports = (File, data) -> class Style
             (prop) ->
                 cache[prop] ||= "_#{prop}"
 
-        (attr, val, oldVal) ->
+        (prop, val, oldVal) ->
             assert.instanceOf @, Style
-            assert.isDefined @attrsClass
+            assert.isDefined @propsClass
 
-            {attrsClass} = @
-            props = getSplitAttr attr
+            {propsClass} = @
+            parts = getSplitProp prop
 
             # get object
             obj = @item
-            for i in [0...props.length - 1] by 1
-                unless obj = obj[props[i]]
-                    log.warn "Attribute '#{attr}' doesn't exist in item '#{@item}'"
+            for i in [0...parts.length - 1] by 1
+                unless obj = obj[parts[i]]
+                    log.warn "Attribute '#{prop}' doesn't exist in item '#{@item}'"
                     return false
 
             # break if property doesn't exist
-            prop = utils.last props
-            unless prop of obj
-                log.warn "Attribute '#{attr}' doesn't exist in item '#{@item}'"
+            lastPart = utils.last parts
+            unless lastPart of obj
+                log.warn "Attribute '#{prop}' doesn't exist in item '#{@item}'"
                 return false
 
             # set value
-            internalProp = getInternalProperty prop
+            internalProp = getInternalProperty lastPart
 
             # connect a function to the signal
-            if obj[internalProp] is undefined and typeof obj[prop] is 'function' and obj[prop].connect
+            if obj[internalProp] is undefined and typeof obj[lastPart] is 'function' and obj[lastPart].connect
                 if typeof oldVal is 'function'
-                    obj[prop].disconnect oldVal
+                    obj[lastPart].disconnect oldVal
                 if typeof val is 'function'
-                    obj[prop] val
+                    obj[lastPart] val
 
             # omit 'null' values for primitive properties;
-            # all attributes from string interpolation may be equal 'null' by default
+            # all props from string interpolation may be equal 'null' by default
             else if val isnt null or typeof internalProp is 'object'
-                isEnabled = attrsClass.running
+                isEnabled = propsClass.running
                 if isEnabled
-                    attrsClass.disable()
-                attrsClass.changes.setAttribute getPropertyPath(attr), val
+                    propsClass.disable()
+                propsClass.changes.setAttribute getPropertyPath(prop), val
                 if isEnabled
-                    attrsClass.enable()
+                    propsClass.enable()
 
             return true
 
@@ -214,7 +214,7 @@ module.exports = (File, data) -> class Style
     Updates item classes comparing changes between given values.
     Classes order is preserved.
     ###
-    syncClassAttr: (val, oldVal) ->
+    syncClassProp: (val, oldVal) ->
         {item} = @
         {classes} = item
 
@@ -256,8 +256,8 @@ module.exports = (File, data) -> class Style
         while tmp
             if tmp._documentStyle and tmp isnt node
                 break
-            if tmp.name is 'a' and tmp.attrs.has('href')
-                @setLinkUri tmp.attrs.href
+            if tmp.name is 'a' and tmp.props.has('href')
+                @setLinkUri tmp.props.href
                 break
             tmp = tmp.parent
         return
@@ -324,8 +324,8 @@ module.exports = (File, data) -> class Style
         {node} = @
 
         if node instanceof Tag
-            id = node.attrs['n-style']
-            assert.isDefined id, "Tag must specify 'n-style' attr to create an item for it"
+            id = node.props['n-style']
+            assert.isDefined id, "Tag must specify 'n-style' prop to create an item for it"
         else if node instanceof Text
             id = Renderer.Text.New()
 
@@ -343,7 +343,7 @@ module.exports = (File, data) -> class Style
                 parent = @parent
 
                 loop
-                    if parent and parent.node.attrs['n-style'] is parentId
+                    if parent and parent.node.props['n-style'] is parentId
                         scope = parent.scope
                         @item = scope.objects[subid]
                     else if not parent?.scope and file in ['view', '__view__']
@@ -387,16 +387,16 @@ module.exports = (File, data) -> class Style
             @findAndSetLinkUri()
 
             if node instanceof Tag
-                # set attrs
-                if @attrs
-                    @attrsClass = @createClassWithPriority ATTRS_CLASS_PRIORITY
-                    for key of @attrs
-                        @setAttr key, node.attrs[key], null
-                    @attrsClass.enable()
+                # set props
+                if @props
+                    @propsClass = @createClassWithPriority ATTRS_CLASS_PRIORITY
+                    for key of @props
+                        @setProp key, node.props[key], null
+                    @propsClass.enable()
 
-                # set class attr
-                if classAttr = node.attrs['class']
-                    @syncClassAttr classAttr, ''
+                # set class prop
+                if classAttr = node.props['class']
+                    @syncClassProp classAttr, ''
 
             # find parent if necessary or only update index for fixed parents
             if @isAutoParent
@@ -520,12 +520,12 @@ module.exports = (File, data) -> class Style
         node._documentStyle = clone
 
         if node instanceof Tag
-            styleAttr = node.attrs['n-style']
+            styleAttr = node.props['n-style']
             clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
 
-        # set attrs
-        if @attrs
-            clone.attrs = @attrs
+        # set props
+        if @props
+            clone.props = @props
 
         # clone children
         for child in @children
@@ -548,7 +548,7 @@ module.exports = (File, data) -> class Style
                 arr = new Array JSON_ARGS_LENGTH
                 arr[0] = JSON_CTOR_ID
             arr[JSON_NODE] = @node.getAccessPath @file.node
-            arr[JSON_ATTRS] = @attrs
+            arr[JSON_PROPS] = @props
             arr[JSON_CHILDREN] = @children.map callToJSON
             arr
 
