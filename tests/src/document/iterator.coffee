@@ -67,10 +67,10 @@ describe 'src/document n-each', ->
             props: a: 'a'
         assert.is view.node.stringify(), '<ul>aa</ul>'
 
-    it 'access `ids`', ->
+    it 'access `refs`', ->
         source = createView """
-            <div id="a" prop="a" visible="false" />
-            <ul n-each="[1,2]">${ids.a.attrs.prop}</ul>
+            <div ref="a" prop="a" visible="false" />
+            <ul n-each="[1,2]">${refs.a.attrs.prop}</ul>
         """
         view = source.clone()
 

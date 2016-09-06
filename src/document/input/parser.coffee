@@ -16,7 +16,7 @@ PARSER_OPTS =
         return
 
 isPublicId = (id) ->
-    id in ['this', 'ids', 'props', 'root', 'state']
+    id in ['this', 'refs', 'props', 'root', 'state']
 
 shouldBeUpdatedOnCreate = (connection) ->
     [key] = connection

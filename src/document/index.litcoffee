@@ -42,7 +42,7 @@
         JSON_CONDITIONS = i++
         JSON_ITERATORS = i++
         JSON_USES = i++
-        JSON_IDS = i++
+        JSON_REFS = i++
         JSON_ATTRS_TO_SET = i++
         JSON_LOGS = i++
         JSON_STYLES = i++
@@ -184,8 +184,8 @@ Corresponding node handler: *n-onRevert=""*.
                 parseArray obj, arr[JSON_ITERATORS], obj.iterators
                 parseArray obj, arr[JSON_USES], obj.uses
 
-                for id, path of arr[JSON_IDS]
-                    obj.ids[id] = obj.node.getChildByAccessPath path
+                for ref, path of arr[JSON_REFS]
+                    obj.refs[ref] = obj.node.getChildByAccessPath path
 
                 parseArray obj, arr[JSON_ATTRS_TO_SET], obj.attrsToSet
 
@@ -215,7 +215,7 @@ Corresponding node handler: *n-onRevert=""*.
             uses = require('./file/parse/uses') Document
             storage = require('./file/parse/storage') Document
             conditions = require('./file/parse/conditions') Document
-            ids = require('./file/parse/ids') Document
+            refs = require('./file/parse/refs') Document
             logs = require('./file/parse/logs') Document
             attrSetting = require('./file/parse/attrSetting') Document
 
@@ -240,7 +240,7 @@ Corresponding node handler: *n-onRevert=""*.
                 uses file
                 storage file
                 conditions file
-                ids file
+                refs file
                 attrSetting file
                 `//<development>`
                 logs file
@@ -305,14 +305,14 @@ Corresponding node handler: *n-onRevert=""*.
             @conditions = []
             @iterators = []
             @uses = []
-            @ids = {}
+            @refs = {}
             @attrsToSet = []
             @logs = []
             @styles = []
-            @inputIds = new Dict
+            @inputRefs = new Dict
             @inputProps = new Dict
             @inputState = new Dict
-            @inputArgs = [@inputIds, @inputProps, @inputState]
+            @inputArgs = [@inputRefs, @inputProps, @inputState]
 
             @node.onAttrsChange @_updateInputAttrsKey, @
             @inputProps.extend @node.attrs
@@ -324,11 +324,11 @@ Corresponding node handler: *n-onRevert=""*.
 
 # *Document* Document::render([*Any* props, *Any* root, *Document* source])
 
-        render: (props, root, source, ids) ->
+        render: (props, root, source, refs) ->
             unless @isClone
-                @clone().render props, root, source, ids
+                @clone().render props, root, source, refs
             else
-                @_render(props, root, source, ids)
+                @_render(props, root, source, refs)
 
         _updateInputAttrsKey: (key) ->
             {inputProps, source, props} = @
@@ -355,14 +355,14 @@ Corresponding node handler: *n-onRevert=""*.
         _render: do ->
             renderTarget = require('./file/render/parse/target') Document
 
-            (props=true, root=null, source, ids) ->
+            (props=true, root=null, source, refs) ->
                 assert.notOk @isRendered
 
                 @props = props
                 @source = source
                 @root = root
 
-                {inputProps, inputIds} = @
+                {inputProps, inputRefs} = @
 
                 if props instanceof Dict
                     props.onChange @_updateInputAttrsKey, @
@@ -400,17 +400,17 @@ Corresponding node handler: *n-onRevert=""*.
                         if val isnt undefined
                             inputProps.set prop, val
 
-                # ids
-                if ids
-                    viewIds = @ids
-                    for prop, val of inputIds
-                        if viewIds[prop] is undefined and ids[prop] is undefined
-                            inputIds.pop prop
-                    for prop, val of ids
-                        if viewIds[prop] is undefined
-                            inputIds.set prop, val
-                    for prop, val of viewIds
-                        inputIds.set prop, val
+                # refs
+                if refs
+                    viewRefs = @refs
+                    for prop, val of inputRefs
+                        if viewRefs[prop] is undefined and refs[prop] is undefined
+                            inputRefs.pop prop
+                    for prop, val of refs
+                        if viewRefs[prop] is undefined
+                            inputRefs.set prop, val
+                    for prop, val of viewRefs
+                        inputRefs.set prop, val
 
                 Document.onBeforeRender.emit @
                 emitNodeSignal @, 'n-onBeforeRender'
@@ -568,10 +568,10 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             for attrChange in @attrChanges
                 clone.attrChanges.push attrChange.clone @, clone
 
-            # ids
-            for id, node of @ids
-                clone.ids[id] = @node.getCopiedElement node, clone.node
-            clone.inputIds.extend clone.ids
+            # refs
+            for ref, node of @refs
+                clone.refs[ref] = @node.getCopiedElement node, clone.node
+            clone.inputRefs.extend clone.refs
 
             # inputs
             for input in @inputs
@@ -649,9 +649,9 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 arr[JSON_ITERATORS] = @iterators.map callToJSON
                 arr[JSON_USES] = @uses.map callToJSON
 
-                ids = arr[JSON_IDS] = {}
-                for id, node of @ids
-                    ids[id] = node.getAccessPath @node
+                refs = arr[JSON_REFS] = {}
+                for ref, node of @refs
+                    refs[ref] = node.getAccessPath @node
 
                 arr[JSON_ATTRS_TO_SET] = @attrsToSet
 

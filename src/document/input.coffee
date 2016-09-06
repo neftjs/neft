@@ -27,7 +27,7 @@ class DocumentBinding extends Binding
     getItemById: (item) ->
         if item is 'this'
             @ctx
-        else if item is 'ids'
+        else if item is 'refs'
             @args[0]
         else if item is 'props'
             @args[1]
@@ -105,7 +105,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         @parse = require('./input/parser').parse
 
     initBindingConfig = (cfg) ->
-        cfg.func ?= new Function 'ids', 'props', 'state', cfg.body
+        cfg.func ?= new Function 'refs', 'props', 'state', cfg.body
         cfg.tree ?= [cfg.func, cfg.connections]
         return
 

@@ -107,14 +107,14 @@ describe 'src/document script', ->
             renderParse view
             assert.is view.context.a, 1
 
-        it 'is called with ids in context', ->
+        it 'is called with refs in context', ->
             view = createView '''
                 <script>
                     this.onCreate(function(){
-                        this.a = this.ids.x.attrs.a;
+                        this.a = this.refs.x.attrs.a;
                     });
                 </script>
-                <b id="x" a="1" />
+                <b ref="x" a="1" />
             '''
             view = view.clone()
 

@@ -151,7 +151,7 @@ module.exports = (File) -> class Iterator
         newChild.attrs.set 'index', i
         newChild.attrs.set 'item', item
         usedComponent.context = @file.context
-        usedComponent.render @file.inputProps, @file.root, null, @file.inputIds
+        usedComponent.render @file.inputProps, @file.root, null, @file.inputRefs
 
         # signal
         usedComponent.onReplaceByUse.emit @
