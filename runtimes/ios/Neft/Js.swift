@@ -5,7 +5,7 @@ import JavaScriptCore
 */
 @objc protocol NeftJSExports: JSExport {
     var timerCallback: JSValue { get set }
-    var animationFrameCallback: JSValue { get set }
+    var animationFrameCallback: JSValue? { get set }
     var dataCallback: JSValue { get set }
     func postMessage(name: String, _ data: NSDictionary) -> Void
     func timerShot(delay: Int64) -> Int
@@ -31,8 +31,8 @@ import JavaScriptCore
         }
     }
 
-    private var animationFrameCallbackValue: JSValue!
-    var animationFrameCallback: JSValue {
+    private var animationFrameCallbackValue: JSValue?
+    var animationFrameCallback: JSValue? {
         get {
             return animationFrameCallbackValue
         }
@@ -60,7 +60,7 @@ import JavaScriptCore
         }
     }
 
-    func postMessage(name: String, _ data: NSDictionary) {
+    private func handleMessage(name: String, _ data: NSDictionary) {
         switch name {
         case "response":
             let id = data.objectForKey("id") as! Int
@@ -81,21 +81,27 @@ import JavaScriptCore
         }
     }
 
+    func postMessage(name: String, _ data: NSDictionary) {
+        dispatch_async(dispatch_get_main_queue(), {
+            self.handleMessage(name, data)
+        })
+    }
+
     func timerShot(delay: Int64) -> Int {
         let id = lastTimerId
         lastTimerId += 1
 
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay), dispatch_get_main_queue()) {
-            self.timerCallbackValue.callWithArguments([id])
+        let delay_ns = delay * 1000000
+        let codeVersion = js.codeVersion
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delay_ns), dispatch_get_main_queue()) {
+            self.js.callFunctionWithArguments(self.timerCallbackValue, arguments: [id], codeVersion: codeVersion)
         }
 
         return id
     }
 
     func immediate(function: JSValue) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue()) {
-            function.callWithArguments(nil)
-        }
+        self.js.callFunctionWithArguments(function, arguments: nil)
     }
 
     func httpRequest(uri: String, _ method: String, _ headersArr: NSArray, _ data: JSValue) -> Int {
@@ -116,10 +122,10 @@ import JavaScriptCore
 class JS {
     let context: JSContext
     let proxy: NeftJS
-
+    private var queue = dispatch_queue_create("io.neft", DISPATCH_QUEUE_SERIAL)
     private var handlers: Dictionary<String, (message: AnyObject) -> ()> = [:]
-
     var lastRequestId = 0
+    var codeVersion: UInt = 0
     var pendingRequests: Dictionary<Int, (message: AnyObject) -> Void> = [:]
 
     init(){
@@ -134,14 +140,24 @@ class JS {
         let path = NSBundle.mainBundle().pathForResource(filename, ofType: "js")
         do {
             let file = try NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-            context.evaluateScript(file as String)
+            self.runCode(file as String)
         } catch let error as NSError {
             print(error);
         }
     }
 
     func runCode(code: String) {
-        context.evaluateScript(code)
+        self.codeVersion += 1
+        self.context.evaluateScript(code)
+    }
+
+    func callFunctionWithArguments(value: JSValue?, arguments: [AnyObject]!, codeVersion: UInt? = nil) {
+        guard value != nil else { return }
+        let currentCodeVersion = codeVersion ?? self.codeVersion
+        dispatch_async(queue, {
+            guard self.codeVersion == currentCodeVersion else { return }
+            value!.callWithArguments(arguments)
+        })
     }
 
     func addHandler(name: String, handler: (message: AnyObject) -> Void) {
@@ -165,6 +181,6 @@ class JS {
     }
 
     func callAnimationFrame() {
-        proxy.animationFrameCallback.callWithArguments([])
+        callFunctionWithArguments(proxy.animationFrameCallback, arguments: nil)
     }
 }

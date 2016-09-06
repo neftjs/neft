@@ -107,6 +107,17 @@ class GameViewController: UIViewController {
 
         self.renderer.load()
         self.client.js.runScript("neft")
+
+        // reloading bundle support
+        self.client.actions[InAction.RELOAD_BUNDLE] = { (reader: Reader) in
+            let bundle = reader.getString()
+            dispatch_async(dispatch_get_main_queue(), {
+                self.window.windowItem = nil
+                self.shadowWindow.subviews.forEach({ $0.removeFromSuperview() })
+                self.renderer.reset()
+                self.client.reload(bundle)
+            })
+        }
     }
 
     override func shouldAutorotate() -> Bool {

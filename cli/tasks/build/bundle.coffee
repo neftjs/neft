@@ -3,17 +3,10 @@
 fs = require 'fs'
 bundleBuilder = require 'lib/bundle-builder'
 pathUtils = require 'path'
+coffee = require 'coffee-script'
+Mustache = require 'mustache'
 
 {utils, log} = Neft
-
-DEFAULT_LOCAL_FILE =
-    android:
-        sdkDir: '$ANDROID_HOME'
-        compileSdkVersion: 23
-        buildToolsVersion: '23'
-        dependencies: [
-            'com.android.support:appcompat-v7:23.0.0'
-        ]
 
 INDEX_PATH = 'build/index.js'
 INDEX_ABS_PATH = pathUtils.resolve fs.realpathSync('.'), INDEX_PATH
@@ -99,15 +92,6 @@ module.exports = (platform, options, app, callback) ->
             if err
                 return callback err
 
-            if fs.existsSync('./local.json')
-                localFile = JSON.parse fs.readFileSync './local.json', 'utf-8'
-                local = {}
-                utils.mergeDeep local, DEFAULT_LOCAL_FILE
-                utils.mergeDeep local, localFile
-            else
-                local = DEFAULT_LOCAL_FILE
-            fs.writeFileSync './local.json', JSON.stringify(local, null, 4)
-
             config =
                 platform: platform
                 release: options.release
@@ -120,6 +104,7 @@ module.exports = (platform, options, app, callback) ->
                 package: JSON.parse fs.readFileSync('./package.json')
                 local: JSON.parse fs.readFileSync('./local.json')
                 extensions: []
+                buildBundleOnly: !!options.buildBundleOnly
 
             # get module extensions
             try

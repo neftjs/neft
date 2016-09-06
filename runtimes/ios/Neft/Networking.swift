@@ -11,6 +11,7 @@ class Networking {
 
         let req = NSMutableURLRequest()
         let session = NSURLSession.sharedSession()
+        req.timeoutInterval = 0
 
         // url
         req.URL = NSURL(string: uri)
@@ -24,7 +25,9 @@ class Networking {
         }
 
         // body
-        req.HTTPBody = data.toString().dataUsingEncoding(NSUTF8StringEncoding)
+        if method != "get" {
+            req.HTTPBody = data.toString().dataUsingEncoding(NSUTF8StringEncoding)
+        }
 
         let task = session.dataTaskWithRequest(req) {
             (data, response, error) in

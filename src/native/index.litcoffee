@@ -46,6 +46,9 @@
             log.warn "No listeners added for the native event '#{name}'"
         return
 
+    exports.bridge = bridge
+    exports.actions = actions
+
 # callFunction(*String* name, [*Boolean*|*Float*|*String* args...])
 
     pushPending = false
