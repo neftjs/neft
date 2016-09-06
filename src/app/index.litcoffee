@@ -236,7 +236,8 @@ app.cookies.onChange(function(key){
                     windowStyle = style.file._main.getComponent()
                     break
 
-        windowStyleItem = windowStyle?.item or new Renderer.Item
+        windowStyleItem = windowStyle?.item
+        assert.ok windowStyleItem, '__view__ style must be defined'
         Renderer.window = windowStyleItem
 
         if opts.styles?
