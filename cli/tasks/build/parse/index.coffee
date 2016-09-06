@@ -2,6 +2,7 @@
 
 fs = require 'fs'
 cliUtils = require '../../../utils.coffee'
+pathUtils = require 'path'
 glob = require 'glob'
 
 {utils, log} = Neft
@@ -57,12 +58,16 @@ module.exports = (platform, app, options) ->
 
     # create file
     file = ''
-    file += 'var init = require(\'./init\');\n'
     if options.withTests
         file += "require('cli/tasks/build/parse/index/initUnit');\n"
     file += "var opts = #{config};\n"
     file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
-    file += 'module.exports = init(Neft.bind(null, opts));\n'
+
+    if fs.existsSync('./init.js')
+        file += 'var init = require(\'../init\');\n'
+        file += 'module.exports = init(Neft.bind(null, opts));\n'
+    else
+        file += 'module.exports = Neft(opts);\n'
 
     # run tests
     if options.withTests
@@ -70,6 +75,7 @@ module.exports = (platform, app, options) ->
 
         file += 'window.app = module.exports;\n'
         for testFile in testFiles
+            testFile = pathUtils.join '../', testFile
             file += "require('#{testFile}');\n"
         file += 'Neft.unit.runTests();\n'
 

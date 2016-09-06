@@ -32,7 +32,7 @@ getFolderLinks = (dir, callback) ->
 
             links.push
                 name: name
-                path: "./#{path}"
+                path: path
         , (err) ->
             callback err, links
 

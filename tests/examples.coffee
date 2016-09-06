@@ -7,7 +7,7 @@ unless tests.shouldTest.examples
     return
 
 glob = require 'glob'
-fs = require 'fs'
+fs = require 'fs-extra'
 cp = require 'child_process'
 pathUtils = require 'path'
 os = require 'os'
@@ -34,6 +34,7 @@ fork = (path, args, options, callback) ->
     child.on 'exit', callback
 
 buildApp = (absPath, args, callback) ->
+    fs.removeSync pathUtils.join(absPath, '/build')
     cp.execSync "cd #{absPath} && npm install"
     fork NEFT_BIN_PATH, ['build', args...], cwd: absPath, (code) ->
         callback if code is 1 then new Error else null

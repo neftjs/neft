@@ -10,7 +10,7 @@ createBundle = nmlParser.bundle
 cliUtils = require '../../../utils'
 
 IN_DIR = './styles'
-OUT_DIR = './build/styles'
+OUT_DIR = 'build/styles'
 QUERIES = './build/styles/queries.json'
 DEFAULT_STYLES = pathUtils.join __dirname, '/styles/default'
 
@@ -130,7 +130,7 @@ module.exports = (platform, app, callback) ->
                 stack.add writeFile, null, [file.destPath, file.data]
 
             app.styles.push
-                name: ///^\./build/styles/(.+)\.[a-z]+$///.exec(file.destPath)[1]
+                name: ///^build/styles/(.+)\.[a-z]+$///.exec(file.destPath)[1]
                 path: file.destPath
 
         # queries

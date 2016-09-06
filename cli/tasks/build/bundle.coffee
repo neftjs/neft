@@ -15,7 +15,7 @@ DEFAULT_LOCAL_FILE =
             'com.android.support:appcompat-v7:23.0.0'
         ]
 
-INDEX_PATH = 'index.js'
+INDEX_PATH = 'build/index.js'
 INDEX_ABS_PATH = pathUtils.resolve fs.realpathSync('.'), INDEX_PATH
 
 module.exports = (platform, options, app, callback) ->
