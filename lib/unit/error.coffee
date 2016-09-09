@@ -1,8 +1,9 @@
 'use strict'
 
-pathUtils = require 'path'
+STACK_FILE_PATH = 'lib/unit/stack.coffee'
 
-STACK_FILE_PATH = ['lib', 'unit', 'stack.coffee'].join(pathUtils.sep)
+if process?.platform is 'win32'
+    STACK_FILE_PATH = STACK_FILE_PATH.replace /\//g, '\\'
 
 exports.toString = (err) ->
     msg = ''
