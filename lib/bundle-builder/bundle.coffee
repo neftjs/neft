@@ -34,6 +34,7 @@ getFile = (path, opts) ->
     file
 
 fileScope = """(function(){
+    {{before}}
     var __modules = {{init}};
 
     var __require = (function(){
@@ -139,7 +140,15 @@ module.exports = (processData, opts, callback) ->
     declarations = getDeclarations modules
     init = getModulesInit modules, paths, indexes, opts
 
+    # before
+    before = ''
+    if opts.globals
+        for key, val of opts.globals
+            val = JSON.stringify val
+            before += "var #{key} = #{val};\n"
+
     r = fileScope
+    r = replaceStr r, '{{before}}', before
     r = replaceStr r, '{{index}}', indexes[opts.path]
     r = replaceStr r, '{{declarations}}', stringify declarations
     r = replaceStr r, '{{init}}', init
