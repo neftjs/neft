@@ -14,7 +14,7 @@ module.exports = (Document) ->
             docStyle.setLinkUri href
         else if node instanceof Tag
             for child in node.children
-                if child instanceof Tag and child.name is 'a' and child.attrs.has('href')
+                if child instanceof Tag and child.name is 'a' and child.props.has('href')
                     continue
                 setLinkUriForNode child, href
         return
@@ -27,8 +27,8 @@ module.exports = (Document) ->
             # find nearest 'a' tag
             tmp = newParent
             while tmp
-                if tmp.name is 'a' and tmp.attrs.has('href')
-                    setLinkUriForNode node, tmp.attrs.href
+                if tmp.name is 'a' and tmp.props.has('href')
+                    setLinkUriForNode node, tmp.props.href
                     return true
                 if tmp._documentStyle?
                     break
@@ -140,9 +140,9 @@ module.exports = (Document) ->
             true
 
     ###
-    Override Tag.Attrs::set method.
+    Override Tag.Props::set method.
     ###
-    utils.overrideProperty Tag.Attrs::, 'set', (_super) ->
+    utils.overrideProperty Tag.Props::, 'set', (_super) ->
         (name, val) ->
             if docStyle = @_ref._documentStyle
                 oldVal = @[name]
@@ -155,13 +155,13 @@ module.exports = (Document) ->
                 setLinkUriForNode @_ref, val, oldVal
 
             if docStyle
-                # update style attrs
-                if docStyle.attrs?[name]
-                    docStyle.setAttr name, val, oldVal
+                # update style props
+                if docStyle.props?[name]
+                    docStyle.setProp name, val, oldVal
 
                 # update classes
                 if name is 'class'
-                    docStyle.syncClassAttr val, oldVal
+                    docStyle.syncClassProp val, oldVal
 
             true
 

@@ -3,13 +3,13 @@
 Tag used in the parsing process.
 Performs some actions on found elements in the parent element.
 
-## attrs
+## props
 
 Adds attributes if not exists.
 
 ```xml
 <rule query="input[type=string]">
-  <attrs class="specialInput" />
+  <props class="specialInput" />
 </rule>
 ```
 
@@ -21,10 +21,10 @@ Adds attributes if not exists.
     log = log.scope 'Document', 'rule'
 
     commands =
-        'attrs': (command, node) ->
-            for name, val of command.attrs when command.attrs.hasOwnProperty(name)
-                unless node.attrs.has(name)
-                    node.attrs.set name, val
+        'props': (command, node) ->
+            for name, val of command.props when command.props.hasOwnProperty(name)
+                unless node.props.has(name)
+                    node.props.set name, val
             return
 
     enterCommand = (command, node) ->
@@ -60,7 +60,7 @@ Adds attributes if not exists.
                 getNodeLength(b) - getNodeLength(a)
 
             for rule in localRules
-                query = rule.attrs.query
+                query = rule.props.query
                 unless query
                     log.error "rule no 'query' attribute found"
                     continue
@@ -71,12 +71,12 @@ Adds attributes if not exists.
                 while i < n
                     child = children[i]
                     if child.name is 'rule'
-                        subquery = child.attrs['query']
+                        subquery = child.props['query']
                         if /^[A-Za-z]/.test(subquery)
                             subquery = query + ' ' + subquery
                         else
                             subquery = query + subquery
-                        child.attrs.set 'query', subquery
+                        child.props.set 'query', subquery
                         child.parent = rule.parent
                         n--
                     else
@@ -89,7 +89,7 @@ Adds attributes if not exists.
                 localRule.parent = null
 
             for rule in rules
-                unless query = rule.node.attrs['query']
+                unless query = rule.node.props['query']
                     continue
 
                 nodes = rule.parent.queryAll query

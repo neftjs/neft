@@ -102,53 +102,53 @@ byTag.isIterator = false
 byTag.priority = DEFAULT_PRIORITY
 byTag.toString = -> 'byTag'
 
-byAttr = (node, data1) ->
+byProp = (node, data1) ->
     if node instanceof Tag
-        node.attrs[data1] isnt undefined
+        node.props[data1] isnt undefined
     else
         false
-byAttr.isIterator = false
-byAttr.priority = ATTRS_PRIORITY
-byAttr.toString = -> 'byAttr'
+byProp.isIterator = false
+byProp.priority = ATTRS_PRIORITY
+byProp.toString = -> 'byProp'
 
-byAttrValue = (node, data1, data2) ->
+byPropValue = (node, data1, data2) ->
     if node instanceof Tag
-        `node.attrs[data1] == data2`
+        `node.props[data1] == data2`
     else
         false
-byAttrValue.isIterator = false
-byAttrValue.priority = ATTRS_PRIORITY
-byAttrValue.toString = -> 'byAttrValue'
+byPropValue.isIterator = false
+byPropValue.priority = ATTRS_PRIORITY
+byPropValue.toString = -> 'byPropValue'
 
-byAttrStartsWithValue = (node, data1, data2) ->
+byPropStartsWithValue = (node, data1, data2) ->
     if node instanceof Tag
-        attr = node.attrs[data1]
-        if typeof attr is 'string'
-            return attr.indexOf(data2) is 0
+        prop = node.props[data1]
+        if typeof prop is 'string'
+            return prop.indexOf(data2) is 0
     false
-byAttrStartsWithValue.isIterator = false
-byAttrStartsWithValue.priority = ATTRS_PRIORITY
-byAttrStartsWithValue.toString = -> 'byAttrStartsWithValue'
+byPropStartsWithValue.isIterator = false
+byPropStartsWithValue.priority = ATTRS_PRIORITY
+byPropStartsWithValue.toString = -> 'byPropStartsWithValue'
 
-byAttrEndsWithValue = (node, data1, data2) ->
+byPropEndsWithValue = (node, data1, data2) ->
     if node instanceof Tag
-        attr = node.attrs[data1]
-        if typeof attr is 'string'
-            return attr.indexOf(data2, attr.length - data2.length) > -1
+        prop = node.props[data1]
+        if typeof prop is 'string'
+            return prop.indexOf(data2, prop.length - data2.length) > -1
     false
-byAttrEndsWithValue.isIterator = false
-byAttrEndsWithValue.priority = ATTRS_PRIORITY
-byAttrEndsWithValue.toString = -> 'byAttrEndsWithValue'
+byPropEndsWithValue.isIterator = false
+byPropEndsWithValue.priority = ATTRS_PRIORITY
+byPropEndsWithValue.toString = -> 'byPropEndsWithValue'
 
-byAttrContainsValue = (node, data1, data2) ->
+byPropContainsValue = (node, data1, data2) ->
     if node instanceof Tag
-        attr = node.attrs[data1]
-        if typeof attr is 'string'
-            return attr.indexOf(data2) > -1
+        prop = node.props[data1]
+        if typeof prop is 'string'
+            return prop.indexOf(data2) > -1
     false
-byAttrContainsValue.isIterator = false
-byAttrContainsValue.priority = ATTRS_PRIORITY
-byAttrContainsValue.toString = -> 'byAttrContainsValue'
+byPropContainsValue.isIterator = false
+byPropContainsValue.priority = ATTRS_PRIORITY
+byPropContainsValue.toString = -> 'byPropContainsValue'
 
 TYPE = /^#?[a-zA-Z0-9|\-:_]+/
 DEEP = /^([ ]*)>([ ]*)|^([ ]+)/
@@ -213,24 +213,24 @@ getQueries = (selector, opts=0) ->
                 val = TRIM_ATTR_VALUE.exec(val)[1]
 
             if STARTS_WITH.test(name)
-                func = byAttrStartsWithValue
+                func = byPropStartsWithValue
             else if ENDS_WITH.test(name)
-                func = byAttrEndsWithValue
+                func = byPropEndsWithValue
             else if CONTAINS.test(name)
-                func = byAttrContainsValue
+                func = byPropContainsValue
             else
-                func = byAttrValue
+                func = byPropValue
 
-            if func isnt byAttrValue
+            if func isnt byPropValue
                 name = name.slice 0, -1
 
             funcs[arrFunc] func, name, val
         else if exec = ATTR_SEARCH.exec(sel)
             sel = sel.slice exec[0].length
-            funcs[arrFunc] byAttr, exec[1], null
+            funcs[arrFunc] byProp, exec[1], null
         else if exec = ATTR_CLASS_SEARCH.exec(sel)
             sel = sel.slice exec[0].length
-            funcs[arrFunc] byAttrContainsValue, 'class', exec[1]
+            funcs[arrFunc] byPropContainsValue, 'class', exec[1]
         else if exec = DEEP.exec(sel)
             sel = sel.slice exec[0].length
             deep = exec[0].trim()

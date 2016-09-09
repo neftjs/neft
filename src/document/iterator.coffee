@@ -29,7 +29,7 @@ module.exports = (File) -> class Iterator
         obj.text = arr[JSON_TEXT]
         obj
 
-    attrsChangeListener = (name) ->
+    propsChangeListener = (name) ->
         if @file.isRendered and name is 'n-each'
             @update()
 
@@ -48,7 +48,7 @@ module.exports = (File) -> class Iterator
         @data = null
         @isRendered = false
 
-        @node.onAttrsChange attrsChangeListener, @
+        @node.onPropsChange propsChangeListener, @
         @node.onVisibleChange visibilityChangeListener, @
 
         `//<development>`
@@ -60,7 +60,7 @@ module.exports = (File) -> class Iterator
         unless @node.visible
             return
 
-        each = @node.attrs['n-each']
+        each = @node.props['n-each']
 
         # stop if nothing changed
         if each is @data
@@ -147,9 +147,9 @@ module.exports = (File) -> class Iterator
         newChild.index = i
 
         # render component
-        newChild.attrs.set 'each', each
-        newChild.attrs.set 'index', i
-        newChild.attrs.set 'item', item
+        newChild.props.set 'each', each
+        newChild.props.set 'index', i
+        newChild.props.set 'item', item
         usedComponent.context = @file.context
         usedComponent.render @file.inputProps, @file.root, null, @file.inputRefs
 

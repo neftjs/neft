@@ -21,8 +21,8 @@
 
         for tag, i in file.node.queryAll('script')
             omit = false
-            for attr of tag.attrs
-                if attr not in ['src', 'href', 'filename']
+            for prop of tag.props
+                if prop not in ['src', 'href', 'filename']
                     omit = true
                     break
             if omit
@@ -30,8 +30,8 @@
 
             tag.parent = null
 
-            {src} = tag.attrs
-            src ||= tag.attrs.href
+            {src} = tag.props
+            src ||= tag.props.href
 
             if src
                 # file
@@ -40,7 +40,7 @@
             else
                 # tag
                 script = tag.stringifyChildren()
-                {filename} = tag.attrs
+                {filename} = tag.props
                 if isCoffee(filename)
                     script = "`module.exports = function(){`\n\n#{script}\n\n`};`"
                 else

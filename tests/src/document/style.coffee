@@ -32,7 +32,7 @@ describe 'src/document style', ->
 
         renderParse view
         testNode = view.node.query 'test'
-        assert.isNot testNode.attrs['n-style'].indexOf('firstItem'), -1
+        assert.isNot testNode.props['n-style'].indexOf('firstItem'), -1
 
     it 'extends file node by main item if needed', ->
         view = createView '''
@@ -48,7 +48,7 @@ describe 'src/document style', ->
         view = view.clone()
 
         renderParse view
-        assert.ok view.node.attrs['n-style']
+        assert.ok view.node.props['n-style']
 
     it 'further declarations are merged', ->
         view = createView '''
@@ -69,5 +69,5 @@ describe 'src/document style', ->
 
         renderParse view
         testNode = view.node.query 'test'
-        assert.isNot testNode.attrs['n-style'].indexOf('firstItem'), -1
-        assert.ok view.node.attrs['n-style']
+        assert.isNot testNode.props['n-style'].indexOf('firstItem'), -1
+        assert.ok view.node.props['n-style']

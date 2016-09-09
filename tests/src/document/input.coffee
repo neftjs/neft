@@ -58,55 +58,55 @@ describe 'src/document string interpolation', ->
             componentB = useB.children[0]
             assert.is view.node.stringify(), '4'
 
-            componentA.attrs.set 'x', -1
-            useA.attrs.set 'x', -1
-            componentB.attrs.set 'x', -1
+            componentA.props.set 'x', -1
+            useA.props.set 'x', -1
+            componentB.props.set 'x', -1
             assert.is view.node.stringify(), '4'
 
-            componentA.attrs.set 'x', 1
-            useA.attrs.set 'x', 3
-            componentB.attrs.set 'x', 1
+            componentA.props.set 'x', 1
+            useA.props.set 'x', 3
+            componentB.props.set 'x', 1
 
-            useB.attrs.set 'x', undefined
+            useB.props.set 'x', undefined
             assert.is view.node.stringify(), '1'
 
-            useA.attrs.set 'x', undefined
+            useA.props.set 'x', undefined
             assert.is view.node.stringify(), '1'
 
-            componentB.attrs.set 'x', 2
+            componentB.props.set 'x', 2
             assert.is view.node.stringify(), '2'
 
-            componentA.attrs.set 'x', 3
+            componentA.props.set 'x', 3
             assert.is view.node.stringify(), '2'
 
-            componentA.attrs.set 'x', undefined
+            componentA.props.set 'x', undefined
             assert.is view.node.stringify(), '2'
 
     describe '`refs`', ->
         it 'refers to nodes', ->
             source = createView '''
                 <a ref="first" label="12" visible="false" />
-                ${refs.first.attrs.label}
+                ${refs.first.props.label}
             '''
             view = source.clone()
 
             renderParse view
             assert.is view.node.stringify(), '12'
 
-            view.node.children[0].attrs.set 'label', 23
+            view.node.children[0].props.set 'label', 23
             assert.is view.node.stringify(), '23'
 
         it 'are accessible by context', ->
             source = createView '''
                 <a ref="first" label="12" visible="false" />
-                ${this.refs.first.attrs.label}
+                ${this.refs.first.props.label}
             '''
             view = source.clone()
 
             renderParse view
             assert.is view.node.stringify(), '12'
 
-            view.node.children[0].attrs.set 'label', 23
+            view.node.children[0].props.set 'label', 23
             assert.is view.node.stringify(), '23'
 
         it 'refers to used components', ->
@@ -290,46 +290,46 @@ describe 'src/document string interpolation', ->
 
     it 'handler is called on signal', ->
         source = createView '''
-            <span x="1" onAttrsChange="${root.onAttrsChange(2)}" />
+            <span x="1" onPropsChange="${root.onPropsChange(2)}" />
         '''
         view = source.clone()
 
         calls = 0
         renderParse view,
             storage:
-                onAttrsChange: (val) ->
+                onPropsChange: (val) ->
                     calls += 1
                     assert.is val, 2
 
-        view.node.children[0].attrs.set 'x', 2
+        view.node.children[0].props.set 'x', 2
         assert.is calls, 1
 
     it 'returned handler is called on signal with context and parameters', ->
         source = createView '''
-            <span x="1" onAttrsChange="${root.onAttrsChange}" />
+            <span x="1" onPropsChange="${root.onPropsChange}" />
         '''
         view = source.clone()
 
         calls = 0
         renderParse view,
             storage:
-                onAttrsChange: (prop, oldVal) ->
+                onPropsChange: (prop, oldVal) ->
                     calls += 1
                     assert.is @, view.node.children[0]
                     assert.is prop, 'x'
                     assert.is oldVal, 1
 
-        view.node.children[0].attrs.set 'x', 2
+        view.node.children[0].props.set 'x', 2
         assert.is calls, 1
 
-    describe 'attribute handler', ->
+    describe 'prop handler', ->
         it 'is called with proper context and parameters', ->
             source = createView '''
-                <attr name="y" value="3" />
+                <prop name="y" value="3" />
                 <span
                   x="1"
                   ref="a1"
-                  onAttrsChange="${root.test(refs.a1.attrs.x, props.y)}"
+                  onPropsChange="${root.test(refs.a1.props.x, props.y)}"
                 />
             '''
             view = source.clone()
@@ -342,27 +342,27 @@ describe 'src/document string interpolation', ->
                         assert.is x, 2
                         assert.is y, 3
 
-            view.node.query('span').attrs.set 'x', 2
+            view.node.query('span').props.set 'x', 2
             assert.is calls, 1
 
         it 'is not called if the document is not rendered', ->
             source = createView '''
-                <attr name="y" value="3" />
-                <span x="1" ref="a1" onAttrsChange="${root.onAttrsChange()}" />
+                <prop name="y" value="3" />
+                <span x="1" ref="a1" onPropsChange="${root.onPropsChange()}" />
             '''
             view = source.clone()
 
             calls = 0
             renderParse view,
                 storage:
-                    onAttrsChange: (x, y) ->
+                    onPropsChange: (x, y) ->
                         calls += 1
 
-            view.node.query('span').attrs.set 'x', 4
+            view.node.query('span').props.set 'x', 4
             assert.is calls, 1
 
             view.revert()
-            view.node.query('span').attrs.set 'x', 2
+            view.node.query('span').props.set 'x', 2
             assert.is calls, 1
 
     describe 'support real-time changes', ->
@@ -375,7 +375,7 @@ describe 'src/document string interpolation', ->
             elem = view.node.children[0]
 
             renderParse view
-            elem.attrs.set 'x', 1
+            elem.props.set 'x', 1
             assert.is view.node.stringify(), '1'
 
         it 'on `root`', ->

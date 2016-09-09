@@ -40,7 +40,7 @@ describe 'src/document Element', ->
 
         assert.is html, HTML
 
-    it 'hidden attrs are omitted in the stringified process', ->
+    it 'hidden props are omitted in the stringified process', ->
         elem = Element.fromHTML '<span n-if="a" n-each="a"></span>'
         html = elem.stringify()
 
@@ -94,36 +94,36 @@ describe 'src/document Element', ->
         assert.isNot clone.children[0], em
         assert.is clone.children[0].name, 'em'
 
-    describe 'attrs', ->
+    describe 'props', ->
         it 'are filled properly', ->
-            assert.isEqual doc.attrs.item(0), [undefined, undefined]
-            assert.isEqual div.attrs.item(0), [undefined, undefined]
-            assert.isEqual p.attrs.item(0), ['title', 'textTitle']
-            assert.isEqual p.attrs.item(1), ['class', 'a bb c2']
-            assert.isEqual p.attrs.item(2), ['data-custom', 'customValue']
+            assert.isEqual doc.props.item(0), [undefined, undefined]
+            assert.isEqual div.props.item(0), [undefined, undefined]
+            assert.isEqual p.props.item(0), ['title', 'textTitle']
+            assert.isEqual p.props.item(1), ['class', 'a bb c2']
+            assert.isEqual p.props.item(2), ['data-custom', 'customValue']
 
-            assert.is p.attrs['title'], 'textTitle'
+            assert.is p.props['title'], 'textTitle'
 
         it 'can be changed', ->
             elem = p.clone()
 
-            assert.is elem.attrs['title'], 'textTitle'
+            assert.is elem.props['title'], 'textTitle'
 
             # change
-            elem.attrs.set 'title', 'changed value'
-            assert.is elem.attrs['title'], 'changed value'
+            elem.props.set 'title', 'changed value'
+            assert.is elem.props['title'], 'changed value'
 
         it 'can store references to the objects', ->
             elem = p.clone()
-            title = elem.attrs['title']
+            title = elem.props['title']
             obj = a: 1
 
             # change
-            elem.attrs.set 'title', obj
-            assert.is elem.attrs['title'], obj
+            elem.props.set 'title', obj
+            assert.is elem.props['title'], obj
             assert.is elem.stringify(), '<p title="[object Object]" class="a bb c2" data-custom="customValue"></p>'
 
-            elem.attrs.set 'title', title
+            elem.props.set 'title', title
 
     describe 'index property', ->
         it 'returns child index in the parent', ->
@@ -337,10 +337,10 @@ describe 'src/document Element', ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                doc2u.attrs.set 'attr2', '2'
+                doc2u.props.set 'attr2', '2'
                 whenChange tags, ->
                     assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.attrs.set 'attr2', undefined
+                    doc2u.props.set 'attr2', undefined
                     whenChange tags, ->
                         assert.isEqual tags, []
                         done()
@@ -351,10 +351,10 @@ describe 'src/document Element', ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                doc2u.attrs.set 'attr', '2'
+                doc2u.props.set 'attr', '2'
                 whenChange tags, ->
                     assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.attrs.set 'attr', '1'
+                    doc2u.props.set 'attr', '1'
                     whenChange tags, ->
                         assert.isEqual tags, []
                         done()
@@ -365,10 +365,10 @@ describe 'src/document Element', ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                doc2u.attrs.set 'color', 'red'
+                doc2u.props.set 'color', 'red'
                 whenChange tags, ->
                     assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.attrs.set 'color', 'blue'
+                    doc2u.props.set 'color', 'blue'
                     whenChange tags, ->
                         assert.isEqual tags, []
                         done()
@@ -379,10 +379,10 @@ describe 'src/document Element', ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                doc2u.attrs.set 'color', 'red'
+                doc2u.props.set 'color', 'red'
                 whenChange tags, ->
                     assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.attrs.set 'color', 'blue'
+                    doc2u.props.set 'color', 'blue'
                     whenChange tags, ->
                         assert.isEqual tags, []
                         done()
@@ -393,10 +393,10 @@ describe 'src/document Element', ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                doc2u.attrs.set 'color', 'orange'
+                doc2u.props.set 'color', 'orange'
                 whenChange tags, ->
                     assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.attrs.set 'color', 'blue'
+                    doc2u.props.set 'color', 'blue'
                     whenChange tags, ->
                         assert.isEqual tags, []
                         done()
@@ -424,10 +424,10 @@ describe 'src/document Element', ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                doc2u.attrs.set 'attr2', '2'
+                doc2u.props.set 'attr2', '2'
                 whenChange tags, ->
                     assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.attrs.set 'attr2', undefined
+                    doc2u.props.set 'attr2', undefined
                     whenChange tags, ->
                         assert.isEqual tags, []
                         done()
@@ -475,7 +475,7 @@ describe 'src/document Element', ->
                 doc2u.parent = doc2b
                 whenChange tags, ->
                     assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.attrs.set 'color', undefined
+                    doc2u.props.set 'color', undefined
                     whenChange tags, ->
                         assert.isEqual tags, []
                         done()
@@ -532,11 +532,11 @@ describe 'src/document Element', ->
             elem = Element.fromHTML('<b a="1"></b>').cloneDeep()
             tag = elem.children[0]
 
-            tag.onAttrsChange (name, oldVal) ->
-                value = @attrs[name]
+            tag.onPropsChange (name, oldVal) ->
+                value = @props[name]
                 args = [@, arguments...]
 
-            tag.attrs.set 'a', 2
+            tag.props.set 'a', 2
 
             assert.isEqual args, [tag, 'a', '1'], maxDeep: 1
             assert.is value, 2

@@ -33,17 +33,17 @@
                             elem.text = ''
                             inputs.push input
 
-                # attrs
+                # props
                 else if elem instanceof Tag
-                    for name, val of elem.attrs
-                        if elem.attrs.hasOwnProperty(name) and Input.test(val)
+                    for name, val of elem.props
+                        if elem.props.hasOwnProperty(name) and Input.test(val)
                             if funcBody = Input.parse(val)
                                 text = ''
                                 `//<development>`
                                 text = val
                                 `//</development>`
-                                input = new Input.Attr file, elem, text, funcBody, name
-                                elem.attrs.set name, null
+                                input = new Input.Prop file, elem, text, funcBody, name
+                                elem.props.set name, null
                                 inputs.push input
 
                     for child in elem.children

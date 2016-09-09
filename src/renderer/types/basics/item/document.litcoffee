@@ -46,7 +46,7 @@
 
 ```javascript
 Text {
-    text: this.document.node.attrs.value
+    text: this.document.node.props.value
 }
 ```
 

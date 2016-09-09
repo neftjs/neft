@@ -7,7 +7,7 @@ require('./file/styles') Document
 require('./file/element') Document
 Style = require('./style')
 
-ATTR_RESOURCES = module.exports.ATTR_RESOURCES =
+PROP_RESOURCES = module.exports.PROP_RESOURCES =
     img: ['src']
 
 module.exports = (data) ->
@@ -17,15 +17,15 @@ module.exports = (data) ->
     {resources} = data
     replacements = Document.Element.Tag.DEFAULT_STRINGIFY_REPLACEMENTS
 
-    for tagName, attrs of ATTR_RESOURCES
-        for attr in attrs
+    for tagName, props of PROP_RESOURCES
+        for prop in props
             _super = replacements[tagName] or utils.NOP
-            replacements[tagName] = do (_super, attr) -> (elem) ->
+            replacements[tagName] = do (_super, prop) -> (elem) ->
                 elem = _super(elem) or elem
 
-                attrVal = elem.attrs[attr]
-                if attrVal and rsc = resources.resolve(attrVal)
-                    elem.attrs.set attr, rsc
+                propVal = elem.props[prop]
+                if propVal and rsc = resources.resolve(propVal)
+                    elem.props.set prop, rsc
 
                 elem
 

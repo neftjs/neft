@@ -21,7 +21,7 @@ module.exports = (File) -> class Condition
             obj = new Condition file, node, elseNode
         obj
 
-    onAttrsChange = (name) ->
+    onPropsChange = (name) ->
         if name is 'n-if'
             @update()
         return
@@ -32,7 +32,7 @@ module.exports = (File) -> class Condition
         if elseNode?
             assert.instanceOf @elseNode, File.Element
 
-        @node.onAttrsChange onAttrsChange, @
+        @node.onPropsChange onPropsChange, @
 
         `//<development>`
         if @constructor is Condition
@@ -40,7 +40,7 @@ module.exports = (File) -> class Condition
         `//</development>`
 
     update: ->
-        visible = @node.visible = !!@node.attrs['n-if']
+        visible = @node.visible = !!@node.props['n-if']
         @elseNode?.visible = not visible
         return
 

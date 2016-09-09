@@ -70,7 +70,7 @@ describe 'src/document n-each', ->
     it 'access `refs`', ->
         source = createView """
             <div ref="a" prop="a" visible="false" />
-            <ul n-each="[1,2]">${refs.a.attrs.prop}</ul>
+            <ul n-each="[1,2]">${refs.a.props.prop}</ul>
         """
         view = source.clone()
 

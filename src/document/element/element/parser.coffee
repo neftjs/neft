@@ -6,8 +6,8 @@ log = log.scope 'Document'
 
 DEFAULT_ATTR_VALUE = utils.uid 100
 
-attrsKeyGen = (i, elem) -> elem
-attrsValueGen = (i, elem) -> i
+propsKeyGen = (i, elem) -> elem
+propsValueGen = (i, elem) -> i
 
 module.exports = (Element) ->
     extensions = Element.Tag.extensions
@@ -46,7 +46,7 @@ module.exports = (Element) ->
         onopentag: (name, attribs) ->
             element = new (extensions[name] or Element.Tag)
             element.name = name
-            utils.merge element.attrs, attribs
+            utils.merge element.props, attribs
 
             @_addDomElement element
             @_tagStack.push element
