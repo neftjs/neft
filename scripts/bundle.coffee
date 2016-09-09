@@ -19,6 +19,7 @@ createBundle = (opts, callback) ->
         minify: opts.release
         verbose: true
         path: 'index.coffee'
+        env: opts.env
         test: (req) ->
             /^(?:src\/|\.|package\.json)/.test(req)
     }, (err, bundle) ->
@@ -50,8 +51,8 @@ createBundle = (opts, callback) ->
 
 TYPES = [
     {platform: 'node'},
-    {platform: 'browser'},
-    {platform: 'browser', extras: {game: true}},
+    {platform: 'browser', globals: {NEFT_TYPE: 'app'}},
+    {platform: 'browser', globals: {NEFT_TYPE: 'game'}, extras: {game: true}},
     {platform: 'android'},
     {platform: 'ios'},
 ]
