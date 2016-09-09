@@ -26,6 +26,7 @@ module.exports = (impl) ->
             item.contentWidth = textElem.canvas.width / textElem.resolution
             item.contentHeight = textElem.canvas.height / textElem.resolution
             updateAlignment item
+            impl._dirty = true
             return
 
         updateAll = (item) ->
