@@ -15,7 +15,7 @@ module.exports = (options) ->
 
     {sdkDir} = local.android
     if sdkDir is '$ANDROID_HOME'
-        sdkDir = (cp.execSync('echo $ANDROID_HOME')+'').trim()
+        sdkDir = (cp.execSync('echo $ANDROID_HOME') + '').trim()
 
     adbPath = "#{sdkDir}/platform-tools/adb"
     apkFileName = 'app-universal-debug.apk'
@@ -28,7 +28,7 @@ module.exports = (options) ->
         # get current device time
         deviceTime = 0
         cp.exec "#{adbPath} shell date +%m-%d_%H:%M:%S", (err, data) ->
-            deviceTime = new Date((data+'').replace('_', ' ')).valueOf()
+            deviceTime = new Date((data + '').replace('_', ' ')).valueOf()
 
         # run logcat
         LOG_RE = /^(\d+-\d+\s[0-9:.]+)\s([A-Z])\/Neft\s+\(\s*[0-9]+\):\s(.+)$/gm
@@ -36,7 +36,7 @@ module.exports = (options) ->
         logcat = cp.spawn "#{adbPath}", ['logcat', '-v', 'time', 'Neft:v', '*:s']
         log.enabled = log.ALL
         logcat.stdout.on 'data', (data) ->
-            while match = LOG_RE.exec(data+'')
+            while match = LOG_RE.exec(data + '')
                 [_, date, level, msg] = match
                 if new Date(date).valueOf() > deviceTime
                     if LOG_LEVEL.test(msg)

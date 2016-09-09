@@ -85,7 +85,7 @@ build = (platform, options, callback) ->
             notifier.notify
                 title: 'Neft'
                 icon: NOTIFY_ICON_PATH
-                subtitle: if err then "Error" else ''
+                subtitle: if err then 'Error' else ''
                 message: if err then err.name or err else 'Build ready'
             callback err
 

@@ -84,13 +84,15 @@ if process.argv.length <= 2
 if args.build is true or args.run is true
     log.error 'No platform specified'
     args.help = true
-else if (args.build and not PLATFORMS[args.build]) or args.run and not PLATFORMS[args.run]
+else if (args.build or args.run) and not PLATFORMS[args.build or args.run]
     log.error 'Unsupported platform'
     args.help = true
 
 # commands
 if args.help
-    log '\n'+fs.readFileSync(pathUtils.resolve(__dirname, './README'), 'utf-8')
+    helpFilePath = pathUtils.resolve(__dirname, './README')
+    helpFile = fs.readFileSync(helpFilePath, 'utf-8')
+    log "\n#{helpFile}"
 
 else if args.version
     log require('../package.json').version

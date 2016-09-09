@@ -19,7 +19,7 @@ module.exports = (dest, options) ->
     fs.copySync src, dest
     fs.removeSync "#{dest}/.git"
 
-    log "Install modules (may take a while)"
+    log 'Install modules (may take a while)'
 
     onNpmInstall = ->
         log.ok "Project created in '#{dest}'"

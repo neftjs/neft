@@ -15,7 +15,7 @@ exports.verifyNeftProject = (path) ->
             result = true
 
     unless result
-        log.error "No Neft project found"
+        log.error 'No Neft project found'
 
     result
 
