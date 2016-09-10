@@ -16,7 +16,7 @@
 	<tr>
 		<td>iOS</td>
 		<td rowspan="5">JavaScript</td>
-		<td rowspan="5">HTML</td>
+		<td rowspan="5">XML</td>
 		<td rowspan="5">NML</td>
 		<td>Swift / ObjC</td>
 		<td>UIKit</td>
