@@ -27,8 +27,8 @@ module.exports = (Renderer) ->
 
     platformImpl = do ->
         r = null
-        if utils.isBrowser and window.HTMLCanvasElement?
-            try r ?= require('./impl/pixi') impl
+        if utils.isBrowser and NEFT_TYPE? and NEFT_TYPE is 'game'
+            r ?= require('./impl/pixi') impl
         if utils.isBrowser
             r ?= require('./impl/css') impl
         if utils.isQt
