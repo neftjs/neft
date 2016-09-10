@@ -35,6 +35,7 @@ Use *List* to bind changes made in the array.
     module.exports = (File) -> (file) ->
         {iterators} = file
         createdComponents = []
+        uid = 0
 
         forNode = (elem) ->
             unless propVal = elem.props['n-each']
@@ -43,7 +44,7 @@ Use *List* to bind changes made in the array.
                         forNode child
                 return
 
-            path = "#{file.path}#each[#{utils.uid()}]"
+            path = "#{file.path}#each[#{uid++}]"
 
             # get component
             bodyNode = new File.Element.Tag
