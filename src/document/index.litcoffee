@@ -204,7 +204,6 @@ Corresponding node handler: *n-onRevert=""*.
                 return (file) ->
                     throw new Error "Document.parse() is available only on the server"
 
-            rules = require('./file/parse/rules') Document
             components = require('./file/parse/components') Document
             scripts = require('./file/parse/scripts') Document
             styles = require('./file/parse/styles') Document
@@ -230,7 +229,6 @@ Corresponding node handler: *n-onRevert=""*.
 
                 # parse
                 styles file
-                rules file
                 components file
                 scripts file
                 iterators file
