@@ -7,7 +7,6 @@ exports.Dict = require 'src/dict'
 exports.List = require 'src/list'
 exports.log = require 'src/log'
 exports.Resources = require 'src/resources'
-exports.native = require 'src/native'
 exports.Renderer = require 'src/renderer'
 exports.Networking = require 'src/networking'
 exports.Schema = require 'src/schema'
@@ -16,6 +15,9 @@ exports.styles = require 'src/styles'
 exports.assert = require 'src/assert'
 exports.db = require 'src/db'
 exports.Binding = require 'src/binding'
+
+if exports.utils.isClient and not exports.utils.isBrowser
+    exports.native = require 'src/native'
 
 if exports.utils.isNode
     exports.nmlParser = require 'src/nml-parser'

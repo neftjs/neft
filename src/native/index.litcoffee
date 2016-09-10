@@ -2,8 +2,16 @@
 
     'use strict'
 
+    utils = require 'src/utils'
     assert = require 'src/assert'
     log = require 'src/log'
+
+    assert.notOk utils.isServer, '''
+        native module is not supported on a server
+    '''
+    assert.notOk utils.isBrowser, '''
+        native module is not supported in a browser
+    '''
 
     actions = require './actions'
     bridge = require './bridge'
