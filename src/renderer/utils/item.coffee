@@ -366,3 +366,15 @@ module.exports = (Renderer, Impl) ->
         utils.defineProperty prototype, name, null, getter, setter
 
         prototype
+
+    setPropertyValue: (item, prop, val) ->
+        assert.instanceOf item, Renderer.Item
+        assert.isString prop
+
+        internalName = getPropInternalName prop
+        signalName = getPropHandlerName prop
+
+        oldVal = item[internalName]
+        item[internalName] = val
+        emitSignal item, signalName, oldVal
+        return
