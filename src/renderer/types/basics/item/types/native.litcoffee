@@ -5,8 +5,12 @@
     utils = require 'src/utils'
     log = require 'src/log'
     assert = require 'src/assert'
-    nativeBridge = require 'src/native'
     colorUtils = require 'src/renderer/utils/color'
+
+    IS_NATIVE = not utils.isServer and not utils.isBrowser
+
+    if IS_NATIVE
+        nativeBridge = require 'src/native'
 
 # **Class** Native : *Item*
 
@@ -17,8 +21,10 @@
             @__path__ = 'Renderer.Native'
 
             @New = (component, opts) ->
-                item = new this
+                item = new @
                 itemUtils.Object.initialize item, component, opts
+                unless IS_NATIVE
+                    item.onParentChange Impl.updateNativeSize
                 @Initialize? item
                 item
 
@@ -71,7 +77,10 @@ where `XXX` is the given name.
                 developmentSetter: (val) ->
                     assert.isString val
                 implementationValue: (val) ->
-                    colorUtils.toRGBAHex val, config.defaultValue
+                    if IS_NATIVE
+                        colorUtils.toRGBAHex val, config.defaultValue
+                    else
+                        val
 
             @defineProperty = (config) ->
                 itemName = @__name__
@@ -114,9 +123,14 @@ where `XXX` is the given name.
 
                     ctorName = utils.capitalize itemName
                     name = utils.capitalize config.name
-                    funcName = "rendererSet#{ctorName}#{name}"
-                    (val) ->
-                        nativeBridge.callFunction funcName, @_impl.id, val
+                    if IS_NATIVE
+                        funcName = "rendererSet#{ctorName}#{name}"
+                        (val) ->
+                            nativeBridge.callFunction funcName, @_impl.id, val
+                    else
+                        funcName = "set#{ctorName}#{name}"
+                        (val) ->
+                            Impl[funcName].call @, val
 
                 # save
                 properties.push config
@@ -127,10 +141,41 @@ where `XXX` is the given name.
             constructor: ->
                 super()
 
+                unless IS_NATIVE
+                    @_autoWidth = true
+                    @_autoHeight = true
+                    @_width = -1
+                    @_height = -1
+
                 # save properties with default values
                 if properties = @constructor._properties
                     for property in properties
                         @[property.internalName] = property.defaultValue
+
+            unless IS_NATIVE
+                _width: -1
+                getter = utils.lookupGetter @::, 'width'
+                itemWidthSetter = utils.lookupSetter @::, 'width'
+                utils.defineProperty @::, 'width', null, getter,
+                    do (_super = itemWidthSetter) -> (val) ->
+                        if @_autoWidth = val is -1
+                            _super.call @, @_contentWidth
+                            Impl.updateNativeSize.call @
+                        else
+                            _super.call @, val
+                        return
+
+                _height: -1
+                getter = utils.lookupGetter @::, 'height'
+                itemHeightSetter = utils.lookupSetter @::, 'height'
+                utils.defineProperty @::, 'height', null, getter,
+                    do (_super = itemHeightSetter) -> (val) ->
+                        if @_autoHeight = val is -1
+                            _super.call @, @_contentHeight
+                            Impl.updateNativeSize.call @
+                        else
+                            _super.call @, val
+                        return
 
 ## Native::set(*String* propName, *Any* val)
 
@@ -140,8 +185,13 @@ where `XXX` is the given name.
                 ctorName = utils.capitalize @constructor.__name__
                 id = @_impl.id
                 name = utils.capitalize name
-                funcName = "rendererSet#{ctorName}#{name}"
-                nativeBridge.callFunction funcName, id, val
+
+                if IS_NATIVE
+                    funcName = "rendererSet#{ctorName}#{name}"
+                    nativeBridge.callFunction funcName, id, val
+                else
+                    funcName = "set#{ctorName}#{name}"
+                    Impl[funcName].call @, val
                 return
 
 ## Native::call(*String* funcName, *Any* args...)
@@ -152,10 +202,14 @@ where `XXX` is the given name.
                 ctorName = utils.capitalize @constructor.__name__
                 id = @_impl.id
                 name = utils.capitalize name
-                funcName = "rendererCall#{ctorName}#{name}"
 
-                callArgs = [funcName, id, args...]
-                nativeBridge.callFunction.apply nativeBridge, callArgs
+                if IS_NATIVE
+                    funcName = "rendererCall#{ctorName}#{name}"
+                    callArgs = [funcName, id, args...]
+                    nativeBridge.callFunction.apply nativeBridge, callArgs
+                else
+                    funcName = "call#{ctorName}#{name}"
+                    Impl[funcName].apply @, args
                 return
 
 ## Native::on(*String* eventName, *Function* listener)
@@ -185,16 +239,21 @@ where `XXX` is the given name.
                 assert.isString name
                 assert.isFunction func
 
-                ctorName = utils.capitalize @constructor.__name__
                 name = utils.capitalize name
-                eventName = "rendererOn#{ctorName}#{name}"
 
-                unless listeners = eventListeners[eventName]
-                    listeners = eventListeners[eventName] = Object.create(null)
-                    nativeBridge.on eventName, createNativeEventListener(listeners, eventName)
+                if IS_NATIVE
+                    ctorName = utils.capitalize @constructor.__name__
+                    eventName = "rendererOn#{ctorName}#{name}"
 
-                itemListeners = listeners[@_impl.id] ?= [@]
-                itemListeners.push func
+                    unless listeners = eventListeners[eventName]
+                        listeners = eventListeners[eventName] = Object.create(null)
+                        nativeBridge.on eventName, createNativeEventListener(listeners, eventName)
+
+                    itemListeners = listeners[@_impl.id] ?= [@]
+                    itemListeners.push func
+                else
+                    eventName = "on#{name}"
+                    @_impl[eventName].connect func
                 return
 
         Native

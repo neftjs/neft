@@ -34,12 +34,7 @@ html, body {
     position: absolute;
     z-index: 0;
 }
-#styles div,
-#styles span,
-#styles canvas,
-#styles img,
-#styles textarea,
-#styles input {
+#styles * {
     position: absolute;
 }
 #styles span span {
