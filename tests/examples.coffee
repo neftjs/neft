@@ -17,6 +17,7 @@ sauce = require './sauce'
 {describe, it} = unit
 
 APP_URL = 'localhost:3000'
+GAME_APP_URL = 'localhost:3000/neft-type=game/'
 NEFT_BIN_PATH = pathUtils.join(fs.realpathSync('./'), 'bin/neft.js')
 NEFT_UNIT_BIN_PATH = pathUtils.join(fs.realpathSync('./'), 'bin/neft-unit.js')
 ANDROID_APK = 'build/android/app/build/outputs/apk/app-universal-debug.apk'
@@ -65,7 +66,7 @@ runApp = (absPath, callback) ->
             callback code, stdout, stderr
     child
 
-testSauceAppOnDriver = (desired, callback) ->
+testSauceAppOnDriver = (desired, opts, callback) ->
     driver = sauce.getDriver()
     stack = new utils.async.Stack
 
@@ -82,13 +83,15 @@ testSauceAppOnDriver = (desired, callback) ->
 
     run driver.init, [desired]
 
-    if desired.browserName
-        run driver.get, [APP_URL]
-        logType = 'browser'
-    else if desired.deviceName is 'Android Emulator'
-        logType = 'logcat'
-    else
-        logType = 'syslog'
+    switch opts.platform
+        when 'browser'
+            url = if opts.type is 'game' then GAME_APP_URL else APP_URL
+            run driver.get, [url]
+            logType = 'browser'
+        when 'android'
+            logType = 'logcat'
+        else
+            logType = 'syslog'
 
     if desired.browserName
         checkTestsFinished = ->
@@ -149,8 +152,8 @@ testSauceAppOnDriver = (desired, callback) ->
 
     return
 
-testSauceApp = (absPath, type, callback) ->
-    platforms = utils.cloneDeep sauce.getPlatforms type
+testSauceApp = (absPath, opts, callback) ->
+    platforms = utils.cloneDeep sauce.getPlatforms opts.platform
 
     runTests = (config) ->
         platformsStack = new utils.async.Stack
@@ -161,10 +164,10 @@ testSauceApp = (absPath, type, callback) ->
                 build: BUILD_NUMBER
                 'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER
             , config, platform
-            platformsStack.add testSauceAppOnDriver, null, [desired]
+            platformsStack.add testSauceAppOnDriver, null, [desired, opts]
         platformsStack.runAllSimultaneously callback
 
-    switch type
+    switch opts.platform
         when 'android'
             apkLocal = pathUtils.join absPath, ANDROID_APK
             apkFilename = "#{utils.uid()}.apk"
@@ -205,7 +208,7 @@ testSauceApp = (absPath, type, callback) ->
 
     return
 
-runSauceTest = (type, callback) ->
+runSauceTest = (opts, callback) ->
     stack = new utils.async.Stack
     appChild = null
     sauceProcess = null
@@ -218,10 +221,10 @@ runSauceTest = (type, callback) ->
     runAndSaveApp = (absPath, callback) ->
         appChild = runApp absPath, callback
 
-    stack.add buildApp, null, [absPath, [type, '--with-tests']]
+    stack.add buildApp, null, [absPath, [opts.platform, '--with-tests']]
     stack.add sauceConnectAndSave
     stack.add runAndSaveApp, null, [absPath]
-    stack.add testSauceApp, null, [absPath, type]
+    stack.add testSauceApp, null, [absPath, opts]
 
     stack.runAll (err1) ->
         appChild?.send 'terminate'
@@ -240,12 +243,15 @@ for example in examples
 
         if process.env.NEFT_TEST_BROWSER
             it 'should pass tests on browser', (callback) ->
-                runSauceTest 'browser', callback
+                runSauceTest {platform: 'browser'}, callback
+
+            it 'should pass tests on browser as a game', (callback) ->
+                runSauceTest {platform: 'browser', type: 'game'}, callback
 
         if process.env.NEFT_TEST_ANDROID
             it 'should pass tests on android', (callback) ->
-                runSauceTest 'android', callback
+                runSauceTest {platform: 'android'}, callback
 
         if process.env.NEFT_TEST_IOS
             it 'should pass tests on ios', (callback) ->
-                runSauceTest 'ios', callback
+                runSauceTest {platform: 'ios'}, callback
