@@ -1,0 +1,11 @@
+resources:
+    primary:
+        color: "#0DFF7E"
+    secondary:
+        color: "#098EFF"
+    text:
+        color: "#1A1A1A"
+    nav:
+        color: "#1A1A1A"
+    nav-text:
+        color: "white"

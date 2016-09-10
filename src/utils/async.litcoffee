@@ -215,7 +215,7 @@ Calls the first function from the stack and remove it.
             callbackWrapper = ->
                 assert not called or not syncError
                 , "Callback can't be called if function throws an error;\n" +
-                  "Function: `#{func}`\nSynchronous error: `#{syncError}`"
+                  "Function: `#{func}`\nSynchronous error: `#{syncError?.stack or syncError}`"
 
                 assert not called
                 , "Callback can't be called twice;\nFunction: `#{func}`"

@@ -1,0 +1,20 @@
+<import src="input/NativeItem.html" as="NativeItem" />
+<import src="input/RandomColor.html" as="RandomColor" />
+
+<script>
+    const { utils } = Neft;
+
+    this.onRender(function () {
+        this.state.set('enabled', utils.isBrowser || utils.isIOS);
+    });
+</script>
+
+<NativeItem enabled="${state.enabled}">
+    <button
+      n-style:textColor="${refs.colorInput.state.color}"
+    >ABC</button>
+</NativeItem>
+
+<blank n-if="${state.enabled}">
+    <RandomColor ref="colorInput" />
+</blank>

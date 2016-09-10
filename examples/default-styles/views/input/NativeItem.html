@@ -1,0 +1,27 @@
+<style>
+    Flow {
+        document.query: 'main';
+        layout.fillWidth: true;
+        alignment: 'center';
+        height: 120;
+        background.border.width: 2;
+        background.border.color: 'rgba(0, 0, 0, .1)';
+
+        Class {
+            name: 'disabled';
+            changes: {
+                background.color: 'rgba(255, 0, 0, .1)';
+            };
+
+            Text {
+                text: 'Not supported on your platform';
+                anchors.centerIn: parent;
+                opacity: 0.7;
+            }
+        }
+    }
+</style>
+
+<main class="${!props.enabled && 'disabled'}">
+    <target />
+</main>

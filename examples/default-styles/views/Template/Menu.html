@@ -1,0 +1,88 @@
+<import src="./Menu/Item.html" as="Item" />
+
+<script>
+    this.onRender(function () {
+        this.state.extend({
+            elements: ['Button', 'Slider', 'Stepper', 'Switch']
+        });
+    });
+</script>
+
+<style>
+    Rectangle {
+        id: nav;
+        document.query: 'nav';
+        signal $.onClose
+        color: 'rgba(0, 0, 0, .35)';
+        anchors.fill: parent;
+        layout.enabled: false;
+
+        Item {
+            anchors.fill: parent;
+            pointer.onRelease: function () {
+                nav.$.onClose.emit();
+            };
+        }
+
+        Scrollable {
+            id: scroll;
+            background.color: 'nav';
+            anchors.fillHeight: parent;
+            width: Math.min(250, Screen.width * 0.8);
+            contentItem: Column {
+                document.query: 'ul';
+                anchors.fillWidth: parent;
+                padding.top: 60;
+            }
+
+            if (isClose.running) {
+                x: -this.width;
+            }
+
+            Transition {
+                property: 'x';
+                animation: NumberAnimation {
+                    duration: 750;
+                }
+            }
+        }
+
+        Class {
+            id: isClose;
+            name: 'close';
+            changes: {
+                opacity: 0;
+            }
+        }
+
+        Transition {
+            property: 'opacity';
+            animation: NumberAnimation {
+                id: opacityAnimation;
+                duration: 750;
+                onStart: function () {
+                    nav.visible = true
+                };
+                onStop: function () {
+                    nav.visible = !isClose.running;
+                }
+            }
+        }
+
+        for ('#text') {
+            color: 'nav-text';
+        }
+    }
+</style>
+
+<nav
+  class="${!props.open && 'close'}"
+  n-style:$:onClose="${this.props.onClose()}"
+>
+    <ul n-each="${state.elements}">
+        <Item
+          item="${props.item}"
+          onClick="${this.props.onClose()}"
+        />
+    </ul>
+</nav>
