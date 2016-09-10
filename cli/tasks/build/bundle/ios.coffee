@@ -124,6 +124,7 @@ module.exports = (config, callback) ->
         nativeDirPath = "#{ext.path}native/ios"
         if fs.existsSync(nativeDirPath)
             name = utils.capitalize ext.name
+            name = name.replace /(\-\w)/g, (m) -> m[1].toUpperCase()
             config.iosExtensions.push
                 name: name
                 path: nativeDirPath
