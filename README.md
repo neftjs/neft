@@ -1,8 +1,8 @@
+<a href="http://www.neft.io"><img src="http://www.neft.io/static/images/neft-white.svg" alt="Neft" width="100" align="right" hspace="10" vspace="6"></a>
+
 # Neft
 
 ## Universal Platform
-
-<a href="http://www.neft.io"><img src="http://www.neft.io/static/images/neft-white.svg" alt="Neft" width="100" align="right" hspace="10" vspace="6"></a>
 
 <table>
 	<tr>
