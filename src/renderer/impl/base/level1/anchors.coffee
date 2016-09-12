@@ -2,6 +2,7 @@
 
 assert = require 'src/assert'
 log = require 'src/log'
+utils = require 'src/utils'
 
 log = log.scope 'Renderer', 'Anchors'
 
@@ -288,10 +289,13 @@ module.exports = (impl) ->
             @prop = getItemProp[source]
             @getSourceValue = getSourceValue[source]
             @getTargetValue = getTargetValue[line][@type]
+            @targetItem = null
+
+            Object.seal @
 
             if typeof @getTargetValue isnt 'function'
                 @getTargetValue = GET_ZERO
-                log.error "Anchor '#{@source}: #{def.join('.')}' is not supported"
+                log.error "Unknown anchor `#{@}` given"
 
             switch target
                 when 'parent'
@@ -314,12 +318,13 @@ module.exports = (impl) ->
                     item.onPreviousSiblingChange onPreviousSiblingChange, @
                     onPreviousSiblingChange.call @, null
                 else
+                    if not utils.isObject(target) or handler not of target
+                        log.error "Unknown anchor `#{@}` given"
+                        return
                     if @targetItem = target
                         for handler in getTargetWatchProps[line][@type]
                             @targetItem[handler] update, @
                     update.call @
-
-            Object.preventExtensions @
 
         update: ->
             # sometimes it can be already destroyed
