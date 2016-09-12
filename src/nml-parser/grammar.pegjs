@@ -193,7 +193,7 @@ AttributeEnds
 	/ Comment
 
 AttributeBody
-	= Type
+	= d:Type AttributeEnds? { return d }
 	/ "{" d:(__ d:Declaration __ { return d })* __ "}" AttributeEnds { return d }
 	/ "[" d:Type* "]" AttributeEnds { return d }
 	/ d:$StringLiteral AttributeEnds { return d }
