@@ -30,12 +30,15 @@ module.exports = (platform, app, callback) ->
 
     styles {windowStyle: null, styles: {}, queries: app.styleQueries}
     utils.clear Document._files
+    mainPaths = Object.create null
 
-    Document.onError onErrorListener = (name) ->
-        parseFile name
+    Document.onError onErrorListener = (path) ->
+        mainPaths[path] = true
+        parseFile path
 
     Document.onBeforeParse onBeforeParseListener = (file) ->
-        Document.Style.applyStyleQueriesInDocument file
+        if mainPaths[file.path]
+            Document.Style.applyStyleQueriesInDocument file
         return
 
     Document.onParse onParseListener = (file) ->
@@ -53,9 +56,17 @@ module.exports = (platform, app, callback) ->
         return
 
     parseFile = (path) ->
-        html = fs.readFileSync path, 'utf-8'
+        try
+            html = fs.readFileSync path, 'utf-8'
+        catch
+            log.error "File `#{path}` doesn't exist"
+            return
         file = Document.fromHTML path, html
-        Document.parse file
+        try
+            Document.parse file
+        catch error
+            log.error "File `#{path}` can't be parsed: #{error}"
+            return
         file
 
     saveView = (name, view, callback) ->
@@ -89,6 +100,7 @@ module.exports = (platform, app, callback) ->
 
     cliUtils.forEachFileDeep IN_DIR, (path, stat) ->
         if /\..*ml$/.test(path) and not Document._files[path]
+            mainPaths[path] = true
             parseFile path
     , (err) ->
         if err
