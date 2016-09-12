@@ -15,6 +15,18 @@ JavaScript Everywhere
 - [Neft Google Group](https://groups.google.com/forum/#!forum/neft_io)
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
 
+### Guide
+- Installation
+- Getting Started
+- Overview
+- Views
+- Styles
+- Routing
+- Networking
+- Resources
+- Unit testing
+- Native
+
 ### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
 * Library
   - [[List|List-API]]
