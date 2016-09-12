@@ -58,7 +58,7 @@
                         mainHasDoc = true
                         break
                 unless mainHasDoc
-                    file.node.props.set 'n-style', stylePath
+                    file.node.props.set 'n-style', "#{stylePath}:#{mainId}"
 
         while styleTags.length > 0
             styleTags.pop().parent = null
