@@ -9,9 +9,6 @@ before_script:
     - npm run bundle -- --node --browser --ios --android
 script:
     - npm test
-after_script:
-    - node_modules/.bin/istanbul report
-    - node_modules/.bin/coveralls < coverage/lcov.info
 env:
     global:
         - secure: "Tdilk9NhH6U13CzfBlNVDMmQB9GF3klh6KM+IvSwGLYWL71YjMBTa1K+Wrl/HkX67zBA3/iH7zER0N02/Gqy25JIcFvTr/lNjCVhdLSMfeDZze7XaDUDOX/Yju4nl5ZwvDG/j0W8HIIXI2ceujubVzM8AvAT0GOGZ1bKo3GDfQicATdVPL8MA1gc5wI6lcTjtKHu9EVvwa0xW67814xvlxETFOAT1upAgKYQ3oBZBMCjQ14DVVCRv6EtbxSPxh9HsqELDVXjPODsHuPoT/XLsdo5aVLB+gX5pu76Ksq30V2+K0sMMRTVuwqhkOYnXY+RxHh91WUn36o9/Ozp5uVidLbqEtzpYgSG4rm4I5bGpCy4hOixaDImLlkTFS/XBiX5fsqaBILHxIbl4YrWRyosI5+AZdGFfKfGe2k/a2lQBAE08Lq7FwXtHkKAt24fhKngw6g080HZM/PCIQWcAyH0xZ0f8IPBVR+Zvgy+AU4kcjtOg6pGo+nkyCjuqZDpjWqEZdDemL6tbtHC4S2E8LCGhb0+FJn+TQ4hYagG5tJrYADKr3PiaODpb6J/OXb7V9Sn/70tr5/0CXCJ5YTjSX3+sKp5qXj1NnQML27a/Y5FZuoYhXKZxwM68wRGr9p4vFxkRxTwu5wn6K6IJnZec5HfZiJ7N6NJJKgMOxdbv6MfdQ4="
@@ -53,3 +50,6 @@ matrix:
             node_js: "6.2"
             env:
                 - NEFT_RUN_COVERAGE=1
+            after_script:
+                - node_modules/.bin/istanbul report
+                - node_modules/.bin/coveralls < coverage/lcov.info
