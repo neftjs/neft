@@ -113,6 +113,9 @@ module.exports = (impl) ->
     create: (data) ->
         data.elem ?= document.createElement 'div'
         data.elemStyle = data.elem.style
+        `//<development>`
+        data.elem.setAttribute 'neft-debug', @toString()
+        `//</development>`
 
     setItemParent: (val) ->
         self = @

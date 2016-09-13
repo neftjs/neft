@@ -68,7 +68,8 @@ module.exports = (Renderer) ->
                 obj = Object.getPrototypeOf(obj)
                 type = obj.constructor.__name__
 
-        object._impl = impl.Types[type]?.createData?() or {bindings: null}
+        object._impl = impl.Types[type]?.createData?() or {}
+        object._impl.bindings ?= {}
         Object.seal object._impl
 
     impl.initializeObject = (object, type) ->
@@ -85,5 +86,9 @@ module.exports = (Renderer) ->
         _super.call impl, item
         impl.onWindowReady.emit()
         item.keys.focus = true
+
+    impl.addTypeImplementation = (type, methods) ->
+        impl.Types[type] = methods
+        utils.merge impl, methods
 
     impl

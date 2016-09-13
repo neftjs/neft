@@ -88,7 +88,7 @@ parseResourcesFile = (path, config) ->
 
     file = fs.readFileSync path, 'utf-8'
     try
-        if pathUtils.extname(path) is '.yaml'
+        if pathUtils.extname(path) in ['.yaml', '.yml']
             json = yaml.safeLoad file
         else
             json = JSON.parse file
@@ -218,20 +218,20 @@ getFile = (path, config) ->
         return
 
     stat = fs.statSync path
-    jsonPathResourcesFile = pathUtils.join path, './resources.json'
-    yamlPathResourcesFile = pathUtils.join path, './resources.yaml'
+    possiblePaths = [
+        pathUtils.join(path, './resources.json'),
+        pathUtils.join(path, './resources.yaml'),
+        pathUtils.join(path, './resources.yml'),
+    ]
 
     if isResourcesPath(path)
-        parseResourcesFile path, config
-    else if stat.isDirectory()
-        if fs.existsSync(jsonPathResourcesFile)
-            parseResourcesFile jsonPathResourcesFile, config
-        else if fs.existsSync(yamlPathResourcesFile)
-            parseResourcesFile yamlPathResourcesFile, config
-        else
-            parseResourcesFolder path, config
-    else
-        parseResourceFile path, config
+        return parseResourcesFile path, config
+    if stat.isDirectory()
+        for possiblePath in possiblePaths
+            if fs.existsSync(possiblePath)
+                return parseResourcesFile possiblePath, config
+        return parseResourcesFolder path, config
+    return parseResourceFile path, config
 
 exports.parse = (path, callback) ->
     stack = new utils.async.Stack

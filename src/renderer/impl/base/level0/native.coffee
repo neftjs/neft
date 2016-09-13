@@ -11,3 +11,5 @@ module.exports = (impl) ->
 
     create: (data) ->
         impl.Types.Item.create.call @, data
+
+    updateNativeSize: ->

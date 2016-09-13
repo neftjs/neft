@@ -2,8 +2,7 @@
 
 {unit, assert, Renderer} = Neft
 {describe, it, beforeEach} = unit
-{Device} = Renderer
-Impl = Renderer._Impl
+{Impl, Device} = Renderer
 
 describe 'src/renderer Device', ->
     describe 'log()', ->

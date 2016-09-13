@@ -8,6 +8,7 @@ module.exports = (impl) ->
     NOP = ->
 
     DATA =
+        elem: null
         bindings: null
         anchors: null
         capturePointer: 0

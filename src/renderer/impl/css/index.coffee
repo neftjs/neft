@@ -34,12 +34,7 @@ html, body {
     position: absolute;
     z-index: 0;
 }
-#styles div,
-#styles span,
-#styles canvas,
-#styles img,
-#styles textarea,
-#styles input {
+#styles * {
     position: absolute;
 }
 #styles span span {
@@ -151,6 +146,7 @@ module.exports = (impl) ->
         Image: require './level0/image'
         Text: require './level0/text'
         TextInput: require './level0/textInput'
+        Native: require './level0/native'
         FontLoader: require './level0/loader/font'
         ResourcesLoader: require './level0/loader/resources'
         Device: require './level0/device'
