@@ -32,8 +32,8 @@
 
 Defines new property with the given name.
 
-For each property, signal `onXXXChange` is created,
-where `XXX` is the given name.
+For each property, signal `onXYZChange` is created,
+where `XYZ` is the given name.
 
 `config` parameter must be an object with specified keys:
 - `enabled` - whether it's supported on current platform,
