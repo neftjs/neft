@@ -3,6 +3,7 @@
 utils = require 'src/utils'
 
 module.exports = (Networking) ->
+    impl = Object.create null
     requests = Object.create null
 
     ios.httpResponseCallback = (id, error, code, resp, headers) ->
@@ -20,10 +21,11 @@ module.exports = (Networking) ->
             cookies: cookies
         return
 
-    Request: require('./request.coffee') Networking
-    Response: require('./response.coffee') Networking
+    Request: require('./request.coffee') Networking, impl
+    Response: require('./response.coffee') Networking, impl
 
     init: (networking) ->
+        impl.networking = networking
         setImmediate ->
             networking.createLocalRequest
                 method: Networking.Request.GET
