@@ -179,14 +179,7 @@ Acceptable syntaxes:
         resolveSyncGetDataFunc = (route) ->
             assert.instanceOf route, Route
 
-            try
-                data = route.getData()
-                if data?
-                    route.data = data
-            catch err
-                if route.response.status is 200
-                    route.response.status = 500
-                route.error = err
+            route.data = route.getData()
 
         resolveAsyncGetDataFuncCallback = (route, err, data) ->
             assert.instanceOf route, Route

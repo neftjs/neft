@@ -128,7 +128,7 @@ It's internally called by the `createRequest()`.
                     next()
 
             req.handler = @
-            utils.tryFunction @callback, @, [req, res, callbackNext], callbackNext
+            @callback req, res, callbackNext
 
             null
 
