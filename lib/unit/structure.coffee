@@ -31,6 +31,7 @@ class Test
     constructor: ->
         @_callbackCalled = false
         @_callback = null
+        @context = {}
         @parent = null
         @fulfilled = true
         @message = ''
@@ -53,7 +54,7 @@ class Test
 
         # call after functions
         for afterFunc in stack.currentScope.afterFunctions
-            stack.callFunction afterFunc
+            stack.callFunction afterFunc, @context
 
         @_callback()
 
@@ -67,14 +68,14 @@ class Test
 
         # call before functions
         for beforeFunc in stack.currentScope.beforeFunctions
-            stack.callFunction beforeFunc
+            stack.callFunction beforeFunc, @context
 
         # call test function
         if @testFunction.length is 0
-            stack.callFunction @testFunction
+            stack.callFunction @testFunction, @context
             @onEnd()
         else
-            stack.callFunction @testFunction, null, [@onEnd]
+            stack.callFunction @testFunction, @context, [@onEnd]
 
         return
 
