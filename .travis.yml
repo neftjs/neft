@@ -1,9 +1,6 @@
 notifications:
     email: false
 sudo: false
-cache:
-    directories:
-        - node_modules
 language: node_js
 before_script:
     - npm run bundle -- --node --browser --ios --android
