@@ -1,6 +1,4 @@
 version: '{build}-{branch}'
-cache:
-    - node_modules
 environment:
     matrix:
         - nodejs_version: "0.11"

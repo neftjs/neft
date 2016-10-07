@@ -4,20 +4,17 @@
 {describe, it, beforeEach} = unit
 {Impl} = Networking
 
+Networking.Impl =
+    init: ->
+
 describe 'src/networking', ->
     beforeEach ->
-        Networking.Impl =
-            init: ->
-
         @config =
             type: Networking.HTTP
             protocol: 'http'
             port: 3000
             host: 'localhost'
             language: 'en'
-
-    afterEach ->
-        Networking.Impl = Impl
 
     describe 'option.allowAllOrigins', ->
         it 'is false by default', ->
@@ -27,4 +24,5 @@ describe 'src/networking', ->
             assert.is new Networking(@config).allowAllOrigins, false
 
         it 'can be set to true', ->
+            utils.merge @config, {allowAllOrigins: true}
             assert.is new Networking(@config).allowAllOrigins, true
