@@ -78,9 +78,6 @@ module.exports = (Networking) ->
         if cookies = utils.tryFunction(JSON.stringify, null, [req.cookies], null)
             xhr.setRequestHeader 'X-Cookies', cookies
 
-        # if req.type is Request.JSON_TYPE
-        #   xhr.responseType = 'json'
-
         xhr.onload = ->
             {response} = xhr
 

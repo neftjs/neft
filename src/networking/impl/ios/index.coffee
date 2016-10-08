@@ -7,7 +7,8 @@ module.exports = (Networking) ->
     requests = Object.create null
 
     ios.httpResponseCallback = (id, error, code, resp, headers) ->
-        request = requests[id]
+        unless request = requests[id]
+            return
         delete requests[id]
 
         if request.type is Networking.Request.JSON_TYPE
@@ -47,10 +48,17 @@ module.exports = (Networking) ->
         if cookies = utils.tryFunction(JSON.stringify, null, [req.cookies], null)
             headers.push 'x-cookies', cookies
 
-        if typeof (data = req.data) isnt 'string'
-            data = utils.tryFunction JSON.stringify, null, [data], data+''
+        # parse data
+        {data} = req
+        switch typeof data
+            when 'undefined'
+                data = null
+            when 'string'
+                # NOP
+            else
+                data = utils.tryFunction JSON.stringify, null, [data], String(data)
 
-        if typeof data is 'string'
+        if data and typeof data is 'string'
             headers.push 'content-length', data.length
 
         id = ios.httpRequest req.uri, req.method, headers, data
