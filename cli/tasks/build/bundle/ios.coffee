@@ -16,19 +16,63 @@ STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}static"
 ANDROID_BUNDLE_DIR = './build/ios/'
 XCODE_PROJECT_PATH = "#{OUT_DIR}Neft.xcodeproj/project.pbxproj"
+RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/ios'
 
 {utils, log} = Neft
 
-module.exports = (config, callback) ->
-    iosRuntimePath = pathUtils.resolve __dirname, '../../../../runtimes/ios'
+mustacheFiles = ['../../runtimes/ios/neft.coffee.mustache']
+coffeeFiles = []
 
-    mustacheFiles = []
-    coffeeFiles = []
+prepareFiles = (config) ->
+    logtime = log.time 'Prepare ios files'
+
+    for path in mustacheFiles
+        # get file
+        file = fs.readFileSync path, 'utf-8'
+
+        # get proper relative path
+        relativePath = pathUtils.relative RUNTIME_PATH, path
+        relativePath = relativePath.slice 0, -'.mustache'.length
+
+        # compile coffee files
+        if /\.coffee$/.test(relativePath)
+            file = coffee.compile file
+            relativePath = relativePath.slice 0, -'.coffee'.length
+            relativePath += '.js'
+        else if config.buildBundleOnly
+            continue
+
+        # render file
+        file = Mustache.render file, config
+
+        # save file
+        fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
+
+    for path in coffeeFiles
+        # get file
+        file = fs.readFileSync path, 'utf-8'
+
+        # get proper relative path
+        relativePath = pathUtils.relative RUNTIME_PATH, path
+
+        # compile coffee files
+        file = coffee.compile file
+        relativePath = relativePath.slice 0, -'.coffee'.length
+        relativePath += '.js'
+
+        # save file
+        fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
+    log.end logtime
+
+module.exports = (config, callback) ->
+    # if config.buildBundleOnly
+    prepareFiles config
+    return callback()
 
     logtime = log.time "Copy ios files into '#{OUT_DIR}'"
     if fs.existsSync(OUT_DIR)
         fs.removeSync OUT_DIR
-    fs.copySync iosRuntimePath, OUT_DIR,
+    fs.copySync RUNTIME_PATH, OUT_DIR,
         filter: (path) ->
             # omit hidden files
             if /\/\./i.test(path)
@@ -87,42 +131,9 @@ module.exports = (config, callback) ->
             fs.copySync nativeDirPath, bundlePath
     log.end logtime
 
-    logtime = log.time "Prepare ios files"
-    for path in mustacheFiles
-        # get file
-        file = fs.readFileSync path, 'utf-8'
+    prepareFiles config
 
-        # get proper relative path
-        relativePath = pathUtils.relative iosRuntimePath, path
-        relativePath = relativePath.slice 0, -'.mustache'.length
-
-        # compile coffee files
-        if /\.coffee$/.test(relativePath)
-            file = coffee.compile file
-            relativePath = relativePath.slice 0, -'.coffee'.length
-            relativePath += '.js'
-
-        # render file
-        file = Mustache.render file, config
-
-        # save file
-        fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
-
-    for path in coffeeFiles
-        # get file
-        file = fs.readFileSync path, 'utf-8'
-
-        # get proper relative path
-        relativePath = pathUtils.relative iosRuntimePath, path
-
-        # compile coffee files
-        file = coffee.compile file
-        relativePath = relativePath.slice 0, -'.coffee'.length
-        relativePath += '.js'
-
-        # save file
-        fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
-
+    logtime = log.time 'Prepare XCode project'
     project = xcode.project XCODE_PROJECT_PATH
     project.parse (err) ->
         if err?

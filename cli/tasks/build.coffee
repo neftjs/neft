@@ -11,14 +11,35 @@ pathUtils = require 'path'
 parseApp = require './build/parse'
 createBundle = require './build/bundle'
 saveBundle = require './build/saveBundle'
+watchServer = require './build/watchServer'
 
 NOTIFY_ICON_PATH = pathUtils.join __dirname, '../../media/logo-white.png'
+
+DEFAULT_LOCAL_FILE =
+    watchServer:
+        general:
+            protocol: 'http'
+            host: 'localhost'
+        ios:
+            port: 3010
+        android:
+            port: 3011
+        browser:
+            port: 3012
+    android:
+        sdkDir: '$ANDROID_HOME'
+        compileSdkVersion: 23
+        buildToolsVersion: '23'
+        dependencies: [
+            'com.android.support:appcompat-v7:23.0.0'
+        ]
 
 clear = (platform, callback) ->
     fs.remove './index.js', callback
 
 watch = (platform, options, callback) ->
     changedFiles = []
+    buildBundleOnly = false
     isWaiting = false
     isPending = false
     shouldBuildAgain = false
@@ -33,13 +54,15 @@ watch = (platform, options, callback) ->
             shouldBuildAgain = true
             return
 
+        console.log ''
         isPending = true
         buildOptions = utils.mergeAll {}, options,
             changedFiles: changedFiles
+            buildBundleOnly: buildBundleOnly
         changedFiles = []
+        buildBundleOnly = true
         build platform, buildOptions, (err) ->
             isPending = false
-            console.log ''
             callback err
 
             if shouldBuildAgain
@@ -96,9 +119,29 @@ module.exports = (platform, options, callback) ->
     unless cliUtils.verifyNeftProject('./')
         return
 
+    # normalize local.json file
+    if fs.existsSync('./local.json')
+        localFile = JSON.parse fs.readFileSync './local.json', 'utf-8'
+        local = {}
+        utils.mergeDeep local, DEFAULT_LOCAL_FILE
+        utils.mergeDeep local, localFile
+    else
+        local = DEFAULT_LOCAL_FILE
+    fs.writeFileSync './local.json', JSON.stringify(local, null, 4)
+
     # watch for changes
     if options.watch
-        watch platform, options, callback
+        try
+            runServer = watchServer.start platform
+        catch err
+            return callback err
+        callbackCalled = false
+        watch platform, options, (err) ->
+            unless err
+                runServer.send()
+            unless callbackCalled
+                callbackCalled = true
+                callback err
         return
 
     build platform, options, callback

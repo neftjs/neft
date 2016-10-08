@@ -2,6 +2,7 @@ enum InAction: Int {
     case
     // basic
     CALL_FUNCTION = 0,
+    RELOAD_BUNDLE,
 
     // renderer
     DEVICE_LOG,

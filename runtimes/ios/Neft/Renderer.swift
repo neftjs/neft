@@ -29,9 +29,7 @@ class Renderer {
     }
 
     func load() {
-        self.navigator = Navigator(app)
-        self.device = Device(app)
-        self.screen = Screen(app)
+        self.reset()
 
         Device.register(app)
         Screen.register(app)
@@ -43,6 +41,13 @@ class Renderer {
         NativeItem.register(app)
         Rectangle.register(app)
         Scrollable.register(app)
+    }
+
+    func reset() {
+        self.objects.removeAll()
+        self.navigator = Navigator(app)
+        self.device = Device(app)
+        self.screen = Screen(app)
     }
 
     func pxToDp(px: CGFloat) -> CGFloat {

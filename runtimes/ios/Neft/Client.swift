@@ -83,6 +83,22 @@ class Client {
         }
     }
 
+    func reload(bundle: String) {
+        self.reader.reload([
+            "actions": [],
+            "booleans": [],
+            "integers": [],
+            "floats": [],
+            "strings": []
+        ])
+        outActionsIndex = 0
+        outIntegersIndex = 0
+        outFloatsIndex = 0
+        outBooleansIndex = 0
+        outStringsIndex = 0
+        self.js.runCode(bundle)
+    }
+
     func pushAction(val: OutAction) {
         pushIntoArray(&outActions, index: outActionsIndex, val: val.rawValue)
         outActionsIndex += 1
