@@ -11,6 +11,7 @@ class Networking {
 
         var req = URLRequest(url: URL(string: uri)!)
         let session = URLSession.shared
+        req.timeoutInterval = 0
 
         // method
         req.httpMethod = method
