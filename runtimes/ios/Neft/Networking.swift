@@ -22,7 +22,9 @@ class Networking {
         }
 
         // body
-        req.httpBody = data.toString().data(using: String.Encoding.utf8)
+        if method != "get" {
+            req.httpBody = data.toString().data(using: String.Encoding.utf8)
+        }
 
         let task = session.dataTask(with: req, completionHandler: {
             (data, response, error) in
@@ -33,7 +35,7 @@ class Networking {
             let httpData = data != nil ? NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! : ""
             let httpHeaders: [String: String] = headers != nil ? headers! : [:]
             responseCallback.call(withArguments: [id, errMsg, status, httpData, httpHeaders])
-        }) 
+        })
 
         task.resume()
 
