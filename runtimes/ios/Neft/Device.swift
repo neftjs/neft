@@ -49,7 +49,7 @@ class Device {
         self.view = DeviceView(frame: app.view.frame)
         view.app = app
         view.isHidden = true
-        app.view.addSubview(view)
+        app.shadowWindow.addSubview(view)
 
         // DEVICE_PIXEL_RATIO
         let pixelRatio = UIScreen.main.scale

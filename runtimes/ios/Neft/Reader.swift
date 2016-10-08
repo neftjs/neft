@@ -1,17 +1,17 @@
 import UIKit
 
 class Reader {
-    fileprivate var actions = NSArray()
-    fileprivate var booleans = NSArray()
-    fileprivate var integers = NSArray()
-    fileprivate var floats = NSArray()
-    fileprivate var strings = NSArray()
+    private var actions = NSArray()
+    private var booleans = NSArray()
+    private var integers = NSArray()
+    private var floats = NSArray()
+    private var strings = NSArray()
 
-    fileprivate var actionsIndex = 0
-    fileprivate var booleansIndex = 0
-    fileprivate var integersIndex = 0
-    fileprivate var floatsIndex = 0
-    fileprivate var stringsIndex = 0
+    private var actionsIndex = 0
+    private var booleansIndex = 0
+    private var integersIndex = 0
+    private var floatsIndex = 0
+    private var stringsIndex = 0
 
     func reload(_ body: AnyObject){
         let dict = body as! NSDictionary

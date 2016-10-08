@@ -11,17 +11,7 @@ PLATFORM_BUNDLE_PATH =
 getFileBundle = (platform) ->
     fs.readFileSync PLATFORM_BUNDLE_PATH[platform], 'utf-8'
 
-exports.start = (platform) ->
-    # get local file
-    try
-        local = require 'local.json'
-        serverConfig = {}
-        utils.merge serverConfig, local.watchServer.general
-        utils.merge serverConfig, local.watchServer[platform]
-    catch err
-        throw new Error 'File local.json must specify watchServer config'
-        return
-
+exports.start = (serverConfig, platform) ->
     # create server
     networking = new Networking utils.merge
         type: Networking.HTTP

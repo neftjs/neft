@@ -131,11 +131,22 @@ module.exports = (platform, options, callback) ->
 
     # watch for changes
     if options.watch
+        # get local file
         try
-            runServer = watchServer.start platform
+            local = require 'local.json'
+            watchServerConfig = {}
+            utils.merge watchServerConfig, local.watchServer.general
+            utils.merge watchServerConfig, local.watchServer[platform]
+        catch err
+            throw new Error 'File local.json must specify watchServer config'
+            return
+
+        try
+            runServer = watchServer.start watchServerConfig, platform
         catch err
             return callback err
         callbackCalled = false
+        options.watchServerConfig = watchServerConfig
         watch platform, options, (err) ->
             unless err
                 runServer.send()
