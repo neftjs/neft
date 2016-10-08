@@ -24,7 +24,7 @@ useSauce = exports.useSauce = env.NEFT_TEST_BROWSER or
     env.NEFT_TEST_IOS or
     false
 if useSauce
-    execSync 'npm install sauce-connect-launcher'
+    execSync 'npm install sauce-connect-launcher@0.15.1'
     execSync 'npm install wd@0.4.0'
 
 # code coverage
