@@ -25,6 +25,7 @@ class GameViewController: UIViewController {
     let client = Client()
     let renderer = Renderer()
     var shadowWindow: ShadowWindow!
+    var renderView: RenderView!
     var window: Window!
     var customApp: CustomApp!
     var frameDelay: Double = 0
@@ -51,16 +52,12 @@ class GameViewController: UIViewController {
         }
     }
 
-    class AnimationFrameView: UIView {
+    class RenderView: UIView {
         var app: GameViewController!
 
         override func draw(_ rect: CGRect) {
             let time = CACurrentMediaTime()
             app.frameDelay = (time - app.frameTime) * 1000;
-            app.client.js.callAnimationFrame()
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 0)) {
-                self.setNeedsDisplay()
-            }
             app.frameTime = time
             app.renderer.draw()
         }
@@ -69,6 +66,11 @@ class GameViewController: UIViewController {
     class ShadowWindow: UIView {
         override func draw(_ rect: CGRect) {
         }
+    }
+
+    @objc private func animationFrame() {
+        client.js.callAnimationFrame()
+        renderView.setNeedsDisplay()
     }
 
     override func viewDidLoad() {
@@ -83,10 +85,15 @@ class GameViewController: UIViewController {
         }
 
         // animation frame
-        let animationFrameView = AnimationFrameView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-        animationFrameView.app = self
-        animationFrameView.isUserInteractionEnabled = false
-        view.addSubview(animationFrameView)
+        renderView = RenderView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        renderView.app = self
+        renderView.isUserInteractionEnabled = false
+        view.addSubview(renderView)
+
+        // animation frame
+        let updater = CADisplayLink(target: self, selector: #selector(GameViewController.animationFrame))
+        updater.frameInterval = 1
+        updater.add(to: RunLoop.current, forMode: RunLoopMode.commonModes)
 
         // shadow window
         self.shadowWindow = ShadowWindow(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
