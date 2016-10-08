@@ -85,7 +85,7 @@ import JavaScriptCore
         let id = lastTimerId
         lastTimerId += 1
 
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(delay) / Double(NSEC_PER_SEC)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(delay))) {
             self.timerCallbackValue.call(withArguments: [id])
         }
 
