@@ -7,7 +7,7 @@ class Navigator {
     
     init(_ app: GameViewController) {
         // NAVIGATOR_LANGUAGE
-        app.client.pushAction(OutAction.navigator_LANGUAGE)
+        app.client.pushAction(OutAction.navigatorLanguage)
         app.client.pushString(Locale.preferredLanguages[0])
         
         // NAVIGATOR_ONLINE

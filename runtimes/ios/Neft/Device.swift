@@ -9,7 +9,7 @@ class Device {
         }
 
         @objc func insertText(_ text: String) {
-            app.client.pushAction(OutAction.key_INPUT)
+            app.client.pushAction(OutAction.keyInput)
             app.client.pushString(text)
         }
 
@@ -54,12 +54,12 @@ class Device {
         // DEVICE_PIXEL_RATIO
         let pixelRatio = UIScreen.main.scale
         self.pixelRatio = pixelRatio
-        app.client.pushAction(OutAction.device_PIXEL_RATIO)
+        app.client.pushAction(OutAction.devicePixelRatio)
         app.client.pushFloat(pixelRatio)
 
         // DEVICE_IS_PHONE
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
-        app.client.pushAction(OutAction.device_IS_PHONE)
+        app.client.pushAction(OutAction.deviceIsPhone)
         app.client.pushBoolean(isPhone)
     }
 
@@ -74,12 +74,12 @@ class Device {
 
         switch touch!.phase {
         case .began:
-            app.client.pushAction(OutAction.pointer_PRESS)
+            app.client.pushAction(OutAction.pointerPress)
         case .moved:
-            app.client.pushAction(OutAction.pointer_MOVE)
+            app.client.pushAction(OutAction.pointerMove)
         case .ended, .cancelled:
             onTouchEnded.emit()
-            app.client.pushAction(OutAction.pointer_RELEASE)
+            app.client.pushAction(OutAction.pointerRelease)
         default: break
         }
 
@@ -95,11 +95,11 @@ class Device {
 
     func showKeyboard() {
         view.becomeFirstResponder()
-        app.client.pushAction(OutAction.device_KEYBOARD_SHOW)
+        app.client.pushAction(OutAction.deviceKeyboardShow)
     }
 
     func hideKeyboard() {
         app.view.endEditing(true)
-        app.client.pushAction(OutAction.device_KEYBOARD_HIDE)
+        app.client.pushAction(OutAction.deviceKeyboardHide)
     }
 }

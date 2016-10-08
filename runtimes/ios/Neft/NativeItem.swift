@@ -122,7 +122,7 @@ class NativeItem: Item {
     internal func pushWidth(_ val: CGFloat) {
         if autoWidth && width != val {
             super.setWidth(val)
-            app.client.pushAction(OutAction.native_ITEM_WIDTH)
+            app.client.pushAction(OutAction.nativeItemWidth)
             app.client.pushInteger(id)
             app.client.pushFloat(val)
         }
@@ -131,7 +131,7 @@ class NativeItem: Item {
     internal func pushHeight(_ val: CGFloat) {
         if autoHeight && height != val {
             super.setHeight(val)
-            app.client.pushAction(OutAction.native_ITEM_HEIGHT)
+            app.client.pushAction(OutAction.nativeItemHeight)
             app.client.pushInteger(id)
             app.client.pushFloat(val)
         }

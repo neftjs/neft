@@ -119,7 +119,7 @@ class Scrollable: Item {
         invalidate()
 
         if sendEvent {
-            app.client.pushAction(OutAction.scrollable_CONTENT_X)
+            app.client.pushAction(OutAction.scrollableContextX)
             app.renderer.pushObject(self)
             app.client.pushFloat(val)
         }
@@ -131,7 +131,7 @@ class Scrollable: Item {
         invalidate()
 
         if sendEvent {
-            app.client.pushAction(OutAction.scrollable_CONTENT_Y)
+            app.client.pushAction(OutAction.scrollableContentY)
             app.renderer.pushObject(self)
             app.client.pushFloat(val)
         }

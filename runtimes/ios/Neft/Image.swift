@@ -149,7 +149,7 @@ class Image: Item {
             (tex: CGImage?) in
             self.setTexture(tex)
 
-            self.app.client.pushAction(OutAction.image_SIZE)
+            self.app.client.pushAction(OutAction.imageSize)
             self.app.renderer.pushObject(self)
             self.app.client.pushString(val)
             self.app.client.pushBoolean(tex != nil)

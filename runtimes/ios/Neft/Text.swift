@@ -280,13 +280,13 @@ class Text: Item {
             Text.fonts[name] = postScriptName
         }
 
-        app.client.pushAction(OutAction.font_LOAD)
+        app.client.pushAction(OutAction.fontLoad)
         app.client.pushString(name)
         app.client.pushBoolean(postScriptName != nil)
     }
     
     fileprivate func pushContentSize() {
-        app.client.pushAction(OutAction.text_SIZE)
+        app.client.pushAction(OutAction.textSize)
         app.client.pushInteger(self.id)
         app.client.pushFloat(self.contentWidth)
         app.client.pushFloat(self.contentHeight)

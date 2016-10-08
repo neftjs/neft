@@ -108,7 +108,7 @@ class TextInput: Item {
         }
         if (self.text != text){
             self.text = text
-            app.client.pushAction(OutAction.text_INPUT_TEXT)
+            app.client.pushAction(OutAction.textInputText)
             app.renderer.pushObject(self)
             app.client.pushString(text)
         }
