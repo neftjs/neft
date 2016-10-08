@@ -1,7 +1,7 @@
 import UIKit
 
 extension Array where Element: Renderer.Object {
-    func indexOfObject(object: Element) -> Int? {
+    func indexOfObject(_ object: Element) -> Int? {
         let length = self.count
         var index = 0
         while index < length {
@@ -13,9 +13,9 @@ extension Array where Element: Renderer.Object {
         return nil
     }
 
-    mutating func removeObject(object: Element) -> Bool {
+    mutating func removeObject(_ object: Element) -> Bool {
         if let index = self.indexOfObject(object) {
-            self.removeAtIndex(index)
+            self.remove(at: index)
             return true;
         }
         return false;
@@ -23,72 +23,72 @@ extension Array where Element: Renderer.Object {
 }
 
 class Item: Renderer.Object {
-    class func register(app: GameViewController) {
-        app.client.actions[InAction.CREATE_ITEM] = {
+    class func register(_ app: GameViewController) {
+        app.client.actions[InAction.createItem] = {
             (reader: Reader) in
             Item(app)
         }
-        app.client.actions[InAction.SET_ITEM_PARENT] = {
+        app.client.actions[InAction.setItemParent] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setParent(app.renderer.getObjectFromReader(reader) as? Item)
         }
-        app.client.actions[InAction.INSERT_ITEM_BEFORE] = {
+        app.client.actions[InAction.insertItemBefore] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .insertBefore(app.renderer.getObjectFromReader(reader) as! Item)
         }
-        app.client.actions[InAction.SET_ITEM_VISIBLE] = {
+        app.client.actions[InAction.setItemVisible] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setVisible(reader.getBoolean())
         }
-        app.client.actions[InAction.SET_ITEM_CLIP] = {
+        app.client.actions[InAction.setItemClip] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setClip(reader.getBoolean())
         }
-        app.client.actions[InAction.SET_ITEM_WIDTH] = {
+        app.client.actions[InAction.setItemWidth] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setWidth(reader.getFloat())
         }
-        app.client.actions[InAction.SET_ITEM_HEIGHT] = {
+        app.client.actions[InAction.setItemHeight] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setHeight(reader.getFloat())
         }
-        app.client.actions[InAction.SET_ITEM_X] = {
+        app.client.actions[InAction.setItemX] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setX(reader.getFloat())
         }
-        app.client.actions[InAction.SET_ITEM_Y] = {
+        app.client.actions[InAction.setItemY] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setY(reader.getFloat())
         }
-        app.client.actions[InAction.SET_ITEM_SCALE] = {
+        app.client.actions[InAction.setItemScale] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setScale(reader.getFloat())
         }
-        app.client.actions[InAction.SET_ITEM_ROTATION] = {
+        app.client.actions[InAction.setItemRotation] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setRotation(reader.getFloat())
         }
-        app.client.actions[InAction.SET_ITEM_OPACITY] = {
+        app.client.actions[InAction.setItemOpacity] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setOpacity(reader.getInteger())
         }
-        app.client.actions[InAction.SET_ITEM_BACKGROUND] = {
+        app.client.actions[InAction.setItemBackground] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setBackground(app.renderer.getObjectFromReader(reader) as? Item)
         }
-        app.client.actions[InAction.SET_ITEM_KEYS_FOCUS] = {
+        app.client.actions[InAction.setItemKeysFocus] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Item)
                 .setKeysFocus(reader.getBoolean())
@@ -110,7 +110,7 @@ class Item: Renderer.Object {
 
     var transform = CGAffineTransform(a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0)
 
-    internal private(set) var dirty = false
+    internal fileprivate(set) var dirty = false
     internal var dirtyChildren = false
     internal var dirtyTransform = false
     var bounds = CGRect()
@@ -128,7 +128,7 @@ class Item: Renderer.Object {
         }
     }
 
-    private func updateTransform() {
+    fileprivate func updateTransform() {
         var a: CGFloat = 1
         var b: CGFloat = 0
         var c: CGFloat = 0
@@ -166,7 +166,7 @@ class Item: Renderer.Object {
         ty += b * -originX + d * -originY
 
         // save
-        self.transform = CGAffineTransformMake(a, b, c, d, tx, ty)
+        self.transform = CGAffineTransform(a: a, b: b, c: c, d: d, tx: tx, ty: ty)
     }
 
     internal func updateBounds() {
@@ -174,7 +174,7 @@ class Item: Renderer.Object {
         bounds.size.height = height
     }
 
-    func setParent(val: Item?) {
+    func setParent(_ val: Item?) {
         if parent != nil {
             parent!.children.removeObject(self)
             parent!.invalidate()
@@ -189,7 +189,7 @@ class Item: Renderer.Object {
         invalidate()
     }
 
-    func insertBefore(val: Item) {
+    func insertBefore(_ val: Item) {
         if parent != nil {
             parent!.children.removeObject(self)
             parent!.invalidate()
@@ -197,75 +197,75 @@ class Item: Renderer.Object {
 
         let newParent = val.parent!
         let index = newParent.children.indexOfObject(val)!
-        newParent.children.insert(self, atIndex: index)
+        newParent.children.insert(self, at: index)
         self.parent = newParent
         newParent.invalidate()
         invalidate()
     }
 
-    func setVisible(val: Bool) {
+    func setVisible(_ val: Bool) {
         self.visible = val
         invalidate()
     }
 
-    func setClip(val: Bool) {
+    func setClip(_ val: Bool) {
         self.clip = val
         invalidate()
     }
 
-    func setWidth(val: CGFloat) {
+    func setWidth(_ val: CGFloat) {
         self.width = val
         invalidate()
         dirtyTransform = true
         updateBounds()
     }
 
-    func setHeight(val: CGFloat) {
+    func setHeight(_ val: CGFloat) {
         self.height = val
         invalidate()
         dirtyTransform = true
         updateBounds()
     }
 
-    func setX(val: CGFloat) {
+    func setX(_ val: CGFloat) {
         self.x = val
         invalidate()
         dirtyTransform = true
     }
 
-    func setY(val: CGFloat) {
+    func setY(_ val: CGFloat) {
         self.y = val
         invalidate()
         dirtyTransform = true
     }
 
-    func setScale(val: CGFloat) {
+    func setScale(_ val: CGFloat) {
         self.scale = val
         invalidate()
         dirtyTransform = true
     }
 
-    func setRotation(val: CGFloat) {
+    func setRotation(_ val: CGFloat) {
         self.rotation = val
         invalidate()
         dirtyTransform = true
     }
 
-    func setOpacity(val: Int) {
+    func setOpacity(_ val: Int) {
         self.opacity = CGFloat(val) / 255
         invalidate()
     }
 
-    func setBackground(val: Item?) {
+    func setBackground(_ val: Item?) {
         self.background = val
         invalidate()
     }
 
-    func setKeysFocus(val: Bool) {
+    func setKeysFocus(_ val: Bool) {
 
     }
 
-    func measure(globalTransform: CGAffineTransform, _ viewRect: CGRect, inout _ dirtyRects: [CGRect], forceUpdateBounds: Bool = false) {
+    func measure(_ globalTransform: CGAffineTransform, _ viewRect: CGRect, _ dirtyRects: inout [CGRect], forceUpdateBounds: Bool = false) {
         let isDirty = forceUpdateBounds || dirty || dirtyTransform
 
         // break on no changes
@@ -279,23 +279,23 @@ class Item: Renderer.Object {
         }
 
         // include local transform
-        let innerGlobalTransform = CGAffineTransformConcat(transform, globalTransform)
+        let innerGlobalTransform = transform.concatenating(globalTransform)
 
         // update bounds
         if isDirty {
             let oldGlobalBounds = globalBounds
-            globalBounds = CGRectApplyAffineTransform(bounds, innerGlobalTransform)
+            globalBounds = bounds.applying(innerGlobalTransform)
 
             // add rectangle to redraw
-            if dirty || dirtyTransform || !CGRectEqualToRect(globalBounds, oldGlobalBounds) {
-                var redrawRect = CGRectUnion(oldGlobalBounds, globalBounds)
-                redrawRect = CGRectIntersection(redrawRect, viewRect)
-                if !CGRectIsEmpty(redrawRect) {
+            if dirty || dirtyTransform || !globalBounds.equalTo(oldGlobalBounds) {
+                var redrawRect = oldGlobalBounds.union(globalBounds)
+                redrawRect = redrawRect.intersection(viewRect)
+                if !redrawRect.isEmpty {
                     var i = 0
                     let length = dirtyRects.count
                     while i < length {
-                        if CGRectIntersectsRect(dirtyRects[i], redrawRect) {
-                            dirtyRects[i] = CGRectUnion(dirtyRects[i], redrawRect)
+                        if dirtyRects[i].intersects(redrawRect) {
+                            dirtyRects[i] = dirtyRects[i].union(redrawRect)
                             break
                         }
                         i += 1
@@ -332,29 +332,29 @@ class Item: Renderer.Object {
         }
     }
 
-    func drawShape(context: CGContextRef, inRect rect: CGRect) {
+    func drawShape(_ context: CGContext, inRect rect: CGRect) {
 
     }
 
-    func draw(context: CGContextRef, inRect rect: CGRect) {
-        CGContextSaveGState(context)
+    func draw(_ context: CGContext, inRect rect: CGRect) {
+        context.saveGState()
 
         // set opacity
-        CGContextSetAlpha(context, opacity)
+        context.setAlpha(opacity)
 
         // transform
-        CGContextConcatCTM(context, transform)
+        context.concatenate(transform)
 
         // clip
         if clip {
-            CGContextClipToRect(context, bounds)
+            context.clip(to: bounds)
         }
 
         // background
         background?.draw(context, inRect: rect)
 
         // shape
-        if CGRectIntersectsRect(rect, globalBounds) {
+        if rect.intersects(globalBounds) {
             drawShape(context, inRect: rect)
         }
 
@@ -365,6 +365,6 @@ class Item: Renderer.Object {
             }
         }
 
-        CGContextRestoreGState(context)
+        context.restoreGState()
     }
 }

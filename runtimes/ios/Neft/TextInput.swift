@@ -2,71 +2,71 @@ import UIKit
 
 class TextInput: Item {
 
-    override class func register(app: GameViewController) {
-        app.client.actions[InAction.CREATE_TEXT_INPUT] = {
+    override class func register(_ app: GameViewController) {
+        app.client.actions[InAction.createTextInput] = {
             (reader: Reader) in
             TextInput(app)
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_TEXT] = {
+        app.client.actions[InAction.setTextInputText] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setText(reader.getString())
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_COLOR] = {
+        app.client.actions[InAction.setTextInputColor] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setColor(reader.getInteger())
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_LINE_HEIGHT] = {
+        app.client.actions[InAction.setTextInputLineHeight] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setLineHeight(reader.getFloat())
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_MULTI_LINE] = {
+        app.client.actions[InAction.setTextInputMultiLine] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setMultiLine(reader.getBoolean())
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_ECHO_MODE] = {
+        app.client.actions[InAction.setTextInputEchoMode] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setEchoMode(reader.getString())
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_FONT_FAMILY] = {
+        app.client.actions[InAction.setTextInputFontFamily] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setFontFamily(reader.getString())
         }
-        app.client.actions[InAction.SET_TEXT_FONT_INPUT_PIXEL_SIZE] = {
+        app.client.actions[InAction.setTextFontInputPixelSize] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setFontPixelSize(reader.getFloat())
         }
-        app.client.actions[InAction.SET_TEXT_FONT_INPUT_WORD_SPACING] = {
+        app.client.actions[InAction.setTextFontInputWordSpacing] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setFontWordSpacing(reader.getFloat())
         }
-        app.client.actions[InAction.SET_TEXT_FONT_INPUT_LETTER_SPACING] = {
+        app.client.actions[InAction.setTextFontInputLetterSpacing] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setFontLetterSpacing(reader.getFloat())
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_ALIGNMENT_HORIZONTAL] = {
+        app.client.actions[InAction.setTextInputAlignmentHorizontal] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setAlignmentHorizontal(reader.getString())
         }
-        app.client.actions[InAction.SET_TEXT_INPUT_ALIGNMENT_VERTICAL] = {
+        app.client.actions[InAction.setTextInputAlignmentVertical] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! TextInput)
                 .setAlignmentVertical(reader.getString())
         }
     }
 
-    private let fieldView = UITextField()
-    private let areaView = UITextView()
-    private var view: UIView
+    fileprivate let fieldView = UITextField()
+    fileprivate let areaView = UITextView()
+    fileprivate var view: UIView
 
     var fontFamily = "Helvetica"
     var fontPixelSize: CGFloat = 14
@@ -94,12 +94,12 @@ class TextInput: Item {
         container.addSubview(areaView)
         container.alpha = 0
         app.window.addSubview(container)
-        areaView.hidden = true
-        fieldView.userInteractionEnabled = false
-        areaView.userInteractionEnabled = false
+        areaView.isHidden = true
+        fieldView.isUserInteractionEnabled = false
+        areaView.isUserInteractionEnabled = false
     }
 
-    private func detectTextChange() {
+    fileprivate func detectTextChange() {
         var text = ""
         if multiLine {
             text = areaView.text
@@ -108,13 +108,13 @@ class TextInput: Item {
         }
         if (self.text != text){
             self.text = text
-            app.client.pushAction(OutAction.TEXT_INPUT_TEXT)
+            app.client.pushAction(OutAction.text_INPUT_TEXT)
             app.renderer.pushObject(self)
             app.client.pushString(text)
         }
     }
 
-    private func reloadView() {
+    fileprivate func reloadView() {
         let oldView = view
         if multiLine {
             view = areaView
@@ -124,8 +124,8 @@ class TextInput: Item {
         guard oldView != view else { return }
 
         // visibility
-        view.hidden = false
-        oldView.hidden = true
+        view.isHidden = false
+        oldView.isHidden = true
 
         // font
         if multiLine {
@@ -163,14 +163,14 @@ class TextInput: Item {
 
         // focus
         if focus {
-            oldView.userInteractionEnabled = false
+            oldView.isUserInteractionEnabled = false
             oldView.resignFirstResponder()
-            view.userInteractionEnabled = true
+            view.isUserInteractionEnabled = true
             view.becomeFirstResponder()
         }
     }
 
-    private func updateFont() {
+    fileprivate func updateFont() {
         let font = UIFont(name: fontFamily, size: fontPixelSize)
         if multiLine {
             areaView.font = font
@@ -184,7 +184,7 @@ class TextInput: Item {
         view.frame.size = bounds.size
     }
 
-    func setText(val: String) {
+    func setText(_ val: String) {
         self.text = val
         if multiLine {
             areaView.text = val
@@ -194,7 +194,7 @@ class TextInput: Item {
         invalidate()
     }
 
-    func setColor(val: Int) {
+    func setColor(_ val: Int) {
         let color = Color.hexColorToUIColor(val)
         if multiLine {
             areaView.textColor = color
@@ -204,27 +204,27 @@ class TextInput: Item {
         invalidate()
     }
 
-    func setLineHeight(val: CGFloat) {
+    func setLineHeight(_ val: CGFloat) {
         // TODO
     }
 
-    func setMultiLine(val: Bool) {
+    func setMultiLine(_ val: Bool) {
         multiLine = val
         reloadView()
         invalidate()
     }
 
     // TODO: 'password' echo mode is not supported in multiline textinput
-    func setEchoMode(val: String) {
+    func setEchoMode(_ val: String) {
         switch val {
         case "password":
-            fieldView.secureTextEntry = true
+            fieldView.isSecureTextEntry = true
         default:
-            fieldView.secureTextEntry = false
+            fieldView.isSecureTextEntry = false
         }
     }
 
-    func setFontFamily(val: String) {
+    func setFontFamily(_ val: String) {
         let fontName = Text.fonts[val]
         if fontName != nil {
             self.fontFamily = fontName!
@@ -233,29 +233,29 @@ class TextInput: Item {
         }
     }
 
-    func setFontPixelSize(val: CGFloat) {
+    func setFontPixelSize(_ val: CGFloat) {
         self.fontPixelSize = val
         updateFont()
         invalidate()
     }
 
-    func setFontWordSpacing(val: CGFloat) {
+    func setFontWordSpacing(_ val: CGFloat) {
         // TODO
     }
 
-    func setFontLetterSpacing(val: CGFloat) {
+    func setFontLetterSpacing(_ val: CGFloat) {
         // TODO
     }
 
-    func setAlignmentHorizontal(val: String) {
+    func setAlignmentHorizontal(_ val: String) {
         var alignment: NSTextAlignment?
         switch val {
         case "center":
-            alignment = .Center
+            alignment = .center
         case "right":
-            alignment = .Right
+            alignment = .right
         default:
-            alignment = .Left
+            alignment = .left
         }
 
         if multiLine {
@@ -265,7 +265,7 @@ class TextInput: Item {
         }
     }
 
-    func setAlignmentVertical(val: String) {
+    func setAlignmentVertical(_ val: String) {
         // TODO
         switch val {
         case "center": break
@@ -274,11 +274,11 @@ class TextInput: Item {
         }
     }
 
-    override func setKeysFocus(val: Bool) {
+    override func setKeysFocus(_ val: Bool) {
         super.setKeysFocus(val)
         focus = val
 
-        view.userInteractionEnabled = val
+        view.isUserInteractionEnabled = val
         if val {
             view.becomeFirstResponder()
         } else {
@@ -290,7 +290,7 @@ class TextInput: Item {
         invalidateFrames = 10
     }
 
-    override func measure(globalTransform: CGAffineTransform, _ viewRect: CGRect, inout _ dirtyRects: [CGRect], forceUpdateBounds: Bool) {
+    override func measure(_ globalTransform: CGAffineTransform, _ viewRect: CGRect, _ dirtyRects: inout [CGRect], forceUpdateBounds: Bool) {
         let dirtyPosition = forceUpdateBounds || dirtyTransform
 
         super.measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceUpdateBounds)
@@ -307,8 +307,8 @@ class TextInput: Item {
         }
     }
 
-    override func drawShape(context: CGContextRef, inRect rect: CGRect) {
-        view.drawViewHierarchyInRect(bounds, afterScreenUpdates: false)
+    override func drawShape(_ context: CGContext, inRect rect: CGRect) {
+        view.drawHierarchy(in: bounds, afterScreenUpdates: false)
     }
 
 }

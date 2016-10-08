@@ -1,14 +1,14 @@
 import UIKit
 
 class NativeItem: Item {
-    static var types: Dictionary<String, (app: GameViewController) -> NativeItem> = [:]
+    static var types: Dictionary<String, (_ app: GameViewController) -> NativeItem> = [:]
 
     class var name: String {
         return "Unknown"
     }
 
-    override class func register(app: GameViewController){
-        app.client.actions[InAction.CREATE_NATIVE_ITEM] = {
+    override class func register(_ app: GameViewController){
+        app.client.actions[InAction.createNativeItem] = {
             (reader: Reader) in
             let ctorName = reader.getString()
             let ctor = types[ctorName]
@@ -16,27 +16,27 @@ class NativeItem: Item {
                 print("Native item '\(ctorName)' type not found")
                 NativeItem(app)
             } else {
-                ctor!(app: app)
+                ctor!(app)
             }
         }
-        app.client.actions[InAction.ON_NATIVE_ITEM_POINTER_PRESS] = {
+        app.client.actions[InAction.onNativeItemPointerPress] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! NativeItem)
                 .onPointerPress(reader.getFloat(), reader.getFloat())
         }
-        app.client.actions[InAction.ON_NATIVE_ITEM_POINTER_RELEASE] = {
+        app.client.actions[InAction.onNativeItemPointerRelease] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! NativeItem)
                 .onPointerRelease(reader.getFloat(), reader.getFloat())
         }
-        app.client.actions[InAction.ON_NATIVE_ITEM_POINTER_MOVE] = {
+        app.client.actions[InAction.onNativeItemPointerMove] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! NativeItem)
                 .onPointerMove(reader.getFloat(), reader.getFloat())
         }
     }
 
-    static func addClientAction(app: GameViewController, type: String, name: String, handler: ((NativeItem, [Any?]) -> Void)) {
+    static func addClientAction(_ app: GameViewController, type: String, name: String, handler: @escaping ((NativeItem, [Any?]) -> Void)) {
         let funcName = "renderer\(type)\(self.name.uppercaseFirst)\(name.uppercaseFirst)"
         let clientHandler = {
             (inputArgs: [Any?]) in
@@ -49,11 +49,11 @@ class NativeItem: Item {
         app.client.addCustomFunction(funcName, function: clientHandler)
     }
 
-    class func addClientProperty(app: GameViewController, name: String, handler: ((NativeItem, [Any?]) -> Void)) {
+    class func addClientProperty(_ app: GameViewController, name: String, handler: @escaping ((NativeItem, [Any?]) -> Void)) {
         addClientAction(app, type: "Set", name: name, handler: handler)
     }
 
-    class func addClientFunction(app: GameViewController, name: String, handler: ((NativeItem, [Any?]) -> Void)) {
+    class func addClientFunction(_ app: GameViewController, name: String, handler: @escaping ((NativeItem, [Any?]) -> Void)) {
         addClientAction(app, type: "Call", name: name, handler: handler)
 
     }
@@ -80,28 +80,28 @@ class NativeItem: Item {
         }
     }
 
-    internal func pushEvent(name: String, args: [Any?]?) {
-        let eventName = "rendererOn\(self.dynamicType.name.uppercaseFirst)\(name.uppercaseFirst)"
+    internal func pushEvent(_ name: String, args: [Any?]?) {
+        let eventName = "rendererOn\(type(of: self).name.uppercaseFirst)\(name.uppercaseFirst)"
         var clientArgs: [Any?] = [CGFloat(self.id)]
         if args != nil {
-            clientArgs.appendContentsOf(args!)
+            clientArgs.append(contentsOf: args!)
         }
         app.client.pushEvent(eventName, args: clientArgs)
     }
 
-    override func setWidth(val: CGFloat) {
+    override func setWidth(_ val: CGFloat) {
         super.setWidth(val)
         autoWidth = val == 0
         updateSize()
     }
 
-    override func setHeight(val: CGFloat) {
+    override func setHeight(_ val: CGFloat) {
         super.setHeight(val)
         autoHeight = val == 0
         updateSize()
     }
 
-    internal func invalidate(duration duration: Double) {
+    internal func invalidate(duration: Double) {
         if duration > self.invalidateDuration {
             self.invalidateDuration = duration
         }
@@ -119,25 +119,25 @@ class NativeItem: Item {
         pushHeight(height)
     }
 
-    internal func pushWidth(val: CGFloat) {
+    internal func pushWidth(_ val: CGFloat) {
         if autoWidth && width != val {
             super.setWidth(val)
-            app.client.pushAction(OutAction.NATIVE_ITEM_WIDTH)
+            app.client.pushAction(OutAction.native_ITEM_WIDTH)
             app.client.pushInteger(id)
             app.client.pushFloat(val)
         }
     }
 
-    internal func pushHeight(val: CGFloat) {
+    internal func pushHeight(_ val: CGFloat) {
         if autoHeight && height != val {
             super.setHeight(val)
-            app.client.pushAction(OutAction.NATIVE_ITEM_HEIGHT)
+            app.client.pushAction(OutAction.native_ITEM_HEIGHT)
             app.client.pushInteger(id)
             app.client.pushFloat(val)
         }
     }
 
-    func onPointerPress(x: CGFloat, _ y: CGFloat) {
+    func onPointerPress(_ x: CGFloat, _ y: CGFloat) {
         pressed = true
 
         guard view != nil else { return; }
@@ -148,7 +148,7 @@ class NativeItem: Item {
         }
     }
 
-    func onPointerRelease(x: CGFloat, _ y: CGFloat) {
+    func onPointerRelease(_ x: CGFloat, _ y: CGFloat) {
         guard view != nil else { return; }
 
         if onPointerReleaseInvalidateDuration > 0 {
@@ -157,7 +157,7 @@ class NativeItem: Item {
         }
     }
 
-    func onPointerMove(x: CGFloat, _ y: CGFloat) {
+    func onPointerMove(_ x: CGFloat, _ y: CGFloat) {
         guard view != nil else { return; }
 
         if onPointerMoveInvalidateDuration > 0 {
@@ -166,7 +166,7 @@ class NativeItem: Item {
         }
     }
 
-    override func measure(globalTransform: CGAffineTransform, _ viewRect: CGRect, inout _ dirtyRects: [CGRect], forceUpdateBounds: Bool) {
+    override func measure(_ globalTransform: CGAffineTransform, _ viewRect: CGRect, _ dirtyRects: inout [CGRect], forceUpdateBounds: Bool) {
         super.measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceUpdateBounds)
         if invalidateDuration > 0 {
             invalidateDuration -= app.frameDelay
@@ -177,9 +177,9 @@ class NativeItem: Item {
         }
     }
 
-    override func drawShape(context: CGContextRef, inRect rect: CGRect) {
+    override func drawShape(_ context: CGContext, inRect rect: CGRect) {
         if view != nil {
-            view!.drawViewHierarchyInRect(bounds, afterScreenUpdates: false)
+            view!.drawHierarchy(in: bounds, afterScreenUpdates: false)
         }
     }
 }

@@ -11,7 +11,7 @@ public extension CGFloat {
 
 extension String {
     var uppercaseFirst: String {
-        return String(characters.prefix(1)).uppercaseString + String(characters.dropFirst())
+        return String(characters.prefix(1)).uppercased() + String(characters.dropFirst())
     }
 }
 
@@ -36,13 +36,13 @@ class GameViewController: UIViewController {
         let background = CAShapeLayer()
 
         override func didMoveToSuperview() {
-            background.fillColor = UIColor.whiteColor().CGColor
-            background.path = CGPathCreateWithRect(CGRect(x: 0, y: 0, width: frame.width, height: frame.height), nil)
+            background.fillColor = UIColor.white.cgColor
+            background.path = CGPath(rect: CGRect(x: 0, y: 0, width: frame.width, height: frame.height), transform: nil)
         }
 
-        override func drawRect(rect: CGRect) {
+        override func draw(_ rect: CGRect) {
             let context = UIGraphicsGetCurrentContext()!
-            background.renderInContext(context)
+            background.render(in: context)
             windowItem?.draw(context, inRect: rect)
 
             // DEBUG dirty rectangles
@@ -54,11 +54,11 @@ class GameViewController: UIViewController {
     class AnimationFrameView: UIView {
         var app: GameViewController!
 
-        override func drawRect(rect: CGRect) {
+        override func draw(_ rect: CGRect) {
             let time = CACurrentMediaTime()
             app.frameDelay = (time - app.frameTime) * 1000;
             app.client.js.callAnimationFrame()
-            dispatch_after(0, dispatch_get_main_queue()) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 0)) {
                 self.setNeedsDisplay()
             }
             app.frameTime = time
@@ -67,16 +67,16 @@ class GameViewController: UIViewController {
     }
 
     class ShadowWindow: UIView {
-        override func drawRect(rect: CGRect) {
+        override func draw(_ rect: CGRect) {
         }
     }
 
     override func viewDidLoad() {
         renderer.app = self
 
-        (UIApplication.sharedApplication() as! NeftApplication).renderer = renderer
+        (UIApplication.shared as! NeftApplication).renderer = renderer
 
-        client.actions[InAction.SET_WINDOW] = {
+        client.actions[InAction.setWindow] = {
             (reader: Reader) in
             self.window.windowItem = self.renderer.getObjectFromReader(reader) as? Item
             self.window.setNeedsDisplay()
@@ -85,7 +85,7 @@ class GameViewController: UIViewController {
         // animation frame
         let animationFrameView = AnimationFrameView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
         animationFrameView.app = self
-        animationFrameView.userInteractionEnabled = false
+        animationFrameView.isUserInteractionEnabled = false
         view.addSubview(animationFrameView)
 
         // shadow window
@@ -95,29 +95,29 @@ class GameViewController: UIViewController {
         // window
         self.window = Window(frame: shadowWindow.frame)
         window.app = self
-        window.userInteractionEnabled = false
+        window.isUserInteractionEnabled = false
         view.addSubview(self.window)
 
         super.viewDidLoad()
 
         self.customApp = CustomApp(app: self)
         {{#iosExtensions}}
-        Extension.{{&name}}.register(self);
+        Extension.{{&name}}.register(self)
         {{/iosExtensions}}
 
         self.renderer.load()
         self.client.js.runScript("neft")
     }
 
-    override func shouldAutorotate() -> Bool {
+    override var shouldAutorotate : Bool {
         return false
     }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            return .AllButUpsideDown
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .allButUpsideDown
         } else {
-            return .All
+            return .all
         }
     }
 
@@ -125,7 +125,7 @@ class GameViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return false
     }
 }
