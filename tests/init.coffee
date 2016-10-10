@@ -19,19 +19,13 @@ unless shouldTestArgvExists
         shouldTest[type] = true
 
 # sauce connect
-useSauce = exports.useSauce = env.NEFT_TEST_BROWSER or
+exports.useSauce = env.NEFT_TEST_BROWSER or
     env.NEFT_TEST_ANDROID or
     env.NEFT_TEST_IOS or
     false
-if useSauce
-    execSync 'npm install sauce-connect-launcher@0.15.1'
-    execSync 'npm install wd@0.4.0'
 
 # code coverage
 if useCoverage
-    execSync 'npm install coffee-coverage'
-    execSync 'npm install coveralls'
-    execSync 'npm install istanbul'
     require 'coffee-coverage/register-istanbul'
 
 # register extensions

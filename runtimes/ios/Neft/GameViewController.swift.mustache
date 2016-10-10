@@ -109,7 +109,7 @@ class GameViewController: UIViewController {
 
         self.customApp = CustomApp(app: self)
         {{#iosExtensions}}
-        Extension.{{&name}}.register(self)
+        Extension.{{&name}}.register(app: self)
         {{/iosExtensions}}
 
         self.renderer.load()

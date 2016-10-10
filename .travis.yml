@@ -39,16 +39,9 @@ matrix:
             os: osx
             node_js: "5.11"
             osx_image: xcode8
-            xcode_sdk: iphonesimulator10.0
             env:
                 - NEFT_TEST_IOS=1
-        -
-            os: osx
-            node_js: "5.11"
-            osx_image: xcode8
-            xcode_sdk: iphonesimulator8.1
-            env:
-                - NEFT_TEST_IOS=1
+                - NEFT_IOS_VERSION=10.0
         -
             os: linux
             node_js: "6.2"
