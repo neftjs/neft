@@ -59,7 +59,7 @@ describe 'src/document n-each', ->
             props: a: 'a'
         assert.is view.node.stringify(), '<ul>aa</ul>'
 
-    it 'access global `props` by context', ->
+    it 'access global `props` by scope', ->
         source = createView '<ul n-each="[1,2]">${this.props.a}</ul>'
         view = source.clone()
 
@@ -89,7 +89,7 @@ describe 'src/document n-each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>abab</ul>'
 
-    it 'uses parent `this` context', ->
+    it 'uses parent `this` scope', ->
         source = createView """
             <component name="a">
                 <script>
@@ -109,7 +109,7 @@ describe 'src/document n-each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>11</ul>'
 
-    it 'internal props are not accessible by context', ->
+    it 'internal props are not accessible by scope', ->
         source = createView '''
             <ul n-each="[0]">
                 ${this.props.item}${this.props.index}${this.props.each}

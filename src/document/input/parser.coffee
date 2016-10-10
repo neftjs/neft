@@ -9,7 +9,7 @@ PARSER_OPTS =
     globalIdToThis:
         root: true
     modifyBindingPart: (elem) ->
-        # File context doesn't have signal on 'root' change, so
+        # File scope doesn't have signal on 'root' change, so
         # we need to use short '${root}' syntax which uses Input::root.
         if elem[0] is 'this' and elem[1] is 'root'
             elem.shift()
