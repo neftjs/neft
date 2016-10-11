@@ -16,7 +16,7 @@ describe 'src/document script', ->
         renderParse view
         assert.is view.node.stringify(), ''
 
-    it 'context is shared between rendered views', ->
+    it 'scope is shared between rendered views', ->
         view = createView '''
             <script>
                 this.a = Math.random();
@@ -25,17 +25,17 @@ describe 'src/document script', ->
         view = view.clone()
 
         renderParse view
-        proto = view.context.__proto__
-        assert.isFloat view.context.a
+        proto = view.scope.__proto__
+        assert.isFloat view.scope.a
 
         view.revert()
         renderParse view
-        assert.is view.context.__proto__, proto
+        assert.is view.scope.__proto__, proto
         view.revert()
 
         view2 = view.clone()
         renderParse view2
-        assert.is view2.context.__proto__, proto
+        assert.is view2.scope.__proto__, proto
 
     it 'is disabled if contains unknown attributes', ->
         view = createView '''
@@ -46,8 +46,8 @@ describe 'src/document script', ->
         view = view.clone()
 
         renderParse view
-        proto = view.context.__proto__
-        assert.is view.context.a, undefined
+        proto = view.scope.__proto__
+        assert.is view.scope.a, undefined
 
     describe 'this.onCreate()', ->
         it 'is called on a view clone', ->
@@ -63,19 +63,19 @@ describe 'src/document script', ->
             view = view.clone()
 
             renderParse view
-            {context} = view
-            assert.is context.b, 2
-            assert.is context.a, 1
+            {scope} = view
+            assert.is scope.b, 2
+            assert.is scope.a, 1
 
             view.revert()
             renderParse view
-            assert.is view.context, context
+            assert.is view.scope, scope
 
             view2 = view.clone()
             renderParse view2
-            assert.isNot view2.context, context
-            assert.is view2.context.b, 2
-            assert.is view2.context.a, 1
+            assert.isNot view2.scope, scope
+            assert.is view2.scope.b, 2
+            assert.is view2.scope.a, 1
 
         it 'is called with its prototype', ->
             view = createView '''
@@ -90,10 +90,10 @@ describe 'src/document script', ->
             view = view.clone()
 
             renderParse view
-            assert.is view.context.proto, view.context
-            assert.is view.context.protoA, 1
+            assert.is view.scope.proto, view.scope
+            assert.is view.scope.protoA, 1
 
-        it 'is called with props in context', ->
+        it 'is called with props in scope', ->
             view = createView '''
                 <script>
                     this.onCreate(function(){
@@ -105,9 +105,9 @@ describe 'src/document script', ->
             view = view.clone()
 
             renderParse view
-            assert.is view.context.a, 1
+            assert.is view.scope.a, 1
 
-        it 'is called with refs in context', ->
+        it 'is called with refs in scope', ->
             view = createView '''
                 <script>
                     this.onCreate(function(){
@@ -119,9 +119,9 @@ describe 'src/document script', ->
             view = view.clone()
 
             renderParse view
-            assert.is view.context.a, 1
+            assert.is view.scope.a, 1
 
-        it 'is called with root in context', ->
+        it 'is called with root in scope', ->
             view = createView '''
                 <script>
                     this.onRender(function(){
@@ -132,9 +132,9 @@ describe 'src/document script', ->
             view = view.clone()
 
             renderParse view, storage: a: 1
-            assert.is view.context.a, 1
+            assert.is view.scope.a, 1
 
-        it 'is called with file node in context', ->
+        it 'is called with file node in scope', ->
             view = createView '''
                 <script>
                     this.onCreate(function(){
@@ -145,7 +145,7 @@ describe 'src/document script', ->
             view = view.clone()
 
             renderParse view
-            assert.is view.context.aNode, view.node
+            assert.is view.scope.aNode, view.node
 
     describe.onServer '[filename]', ->
         it 'supports .coffee files', ->
@@ -158,9 +158,9 @@ describe 'src/document script', ->
             view = view.clone()
 
             renderParse view
-            assert.is view.context.a, 1
+            assert.is view.scope.a, 1
 
-    it 'predefined context properties are not enumerable', ->
+    it 'predefined scope properties are not enumerable', ->
         view = createView '''
             <script>
                 var protoKeys = [];
@@ -180,7 +180,7 @@ describe 'src/document script', ->
         view = view.clone()
 
         renderParse view
-        assert.isEqual view.context.keys, ['keys']
+        assert.isEqual view.scope.keys, ['keys']
 
     it 'further tags are properly called', ->
         view = createView '''
@@ -201,12 +201,12 @@ describe 'src/document script', ->
         view = view.clone()
 
         renderParse view
-        {context} = view
-        assert.is context.a, 1
-        assert.is context.aa, 1
-        assert.is context.b, 1
-        assert.is context.bb, 1
-        assert.is context.bbaa, 1
+        {scope} = view
+        assert.is scope.a, 1
+        assert.is scope.aa, 1
+        assert.is scope.b, 1
+        assert.is scope.bb, 1
+        assert.is scope.bbaa, 1
 
     it 'can contains XML text', ->
         source = createView """
@@ -278,7 +278,7 @@ describe 'src/document script', ->
         """
         view = view.clone()
 
-        {events} = view.context
+        {events} = view.scope
         assert.isEqual events, []
 
         view.render()
@@ -289,7 +289,7 @@ describe 'src/document script', ->
             'onBeforeRender', 'onRender', 'onBeforeRevert', 'onRevert'
         ]
 
-    it 'does not call events for foreign context', ->
+    it 'does not call events for foreign scope', ->
         view = createView """
             <script>
                 this.onCreate(function(){
@@ -312,7 +312,7 @@ describe 'src/document script', ->
         """
         view = view.clone()
 
-        {events} = view.context
+        {events} = view.scope
         assert.isEqual events, []
 
         view.render()

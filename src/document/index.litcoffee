@@ -289,7 +289,7 @@ Corresponding node handler: *n-onRevert=""*.
             @isRendered = false
             @targetNode = null
             @parent = null
-            @context = null
+            @scope = null
             @scripts = null
             @props = null
             @root = null
@@ -412,9 +412,9 @@ Corresponding node handler: *n-onRevert=""*.
 
                 Document.onBeforeRender.emit @
                 emitNodeSignal @, 'n-onBeforeRender'
-                if @context?.node is @node
-                    @context.state = @inputState
-                    emitSignal @context, 'onBeforeRender'
+                if @scope?.node is @node
+                    @scope.state = @inputState
+                    emitSignal @scope, 'onBeforeRender'
 
                 # inputs
                 for input in @inputs
@@ -445,8 +445,8 @@ Corresponding node handler: *n-onRevert=""*.
                 @isRendered = true
                 Document.onRender.emit @
                 emitNodeSignal @, 'n-onRender'
-                if @context?.node is @node
-                    emitSignal @context, 'onRender'
+                if @scope?.node is @node
+                    emitSignal @scope, 'onRender'
 
                 for input in @inputs
                     input.onRender()
@@ -463,8 +463,8 @@ Corresponding node handler: *n-onRevert=""*.
                 @isRendered = false
                 Document.onBeforeRevert.emit @
                 emitNodeSignal @, 'n-onBeforeRevert'
-                if @context?.node is @node
-                    emitSignal @context, 'onBeforeRevert'
+                if @scope?.node is @node
+                    emitSignal @scope, 'onBeforeRevert'
 
                 if @props instanceof Dict
                     @props.onChange.disconnect @_updateInputPropsKey, @
@@ -501,9 +501,9 @@ Corresponding node handler: *n-onRevert=""*.
 
                 Document.onRevert.emit @
                 emitNodeSignal @, 'n-onRevert'
-                if @context?.node is @node
-                    @context.state = null
-                    emitSignal @context, 'onRevert'
+                if @scope?.node is @node
+                    @scope.state = null
+                    emitSignal @scope, 'onRevert'
 
                 @
 
@@ -595,9 +595,9 @@ Corresponding node handler: *n-onReplaceByUse=""*.
             for log in @logs
                 clone.logs.push log.clone @, clone
 
-            # context
+            # scope
             if @scripts
-                clone.context = @scripts.createCloneContext clone
+                clone.scope = @scripts.createCloneScope clone
 
             clone
 

@@ -150,7 +150,7 @@ module.exports = (File) -> class Iterator
         newChild.props.set 'each', each
         newChild.props.set 'index', i
         newChild.props.set 'item', item
-        usedComponent.context = @file.context
+        usedComponent.scope = @file.scope
         usedComponent.render @file.inputProps, @file.root, null, @file.inputRefs
 
         # signal
@@ -169,7 +169,7 @@ module.exports = (File) -> class Iterator
         @node.children[i].parent = undefined
 
         usedComponent = @usedComponents[i]
-        usedComponent.context = null
+        usedComponent.scope = null
         usedComponent.revert().destroy()
         @usedComponents.splice i, 1
 

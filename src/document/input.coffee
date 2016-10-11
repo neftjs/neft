@@ -142,7 +142,7 @@ module.exports = (File) -> class Input extends signal.Emitter
     render: ->
         oldTarget = @target
         oldRoot = @root
-        @target = @file.context
+        @target = @file.scope
         @root = @file.root
         if oldTarget isnt @target
             @onTargetChange.emit()

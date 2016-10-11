@@ -55,31 +55,31 @@ module.exports = (File) -> class Scripts
             Object.seal @
         `//</development>`
 
-        @file.context = @createContext()
+        @file.scope = @createScope()
 
-    createContext: ->
+    createScope: ->
         ctx = new FileContext
         for name in @names
             func = Scripts.scripts[name]
             func.call ctx
         ctx
 
-    createCloneContext: (file) ->
+    createCloneScope: (file) ->
         {names} = @
-        ctx = Object.create @file.context
+        scope = Object.create @file.scope
         propOpts = utils.CONFIGURABLE | utils.WRITABLE
 
-        utils.defineProperty ctx, 'node', propOpts, file.node
-        utils.defineProperty ctx, 'props', propOpts, file.inputProps
-        utils.defineProperty ctx, 'refs', propOpts, file.inputRefs
-        utils.defineProperty ctx, 'root', utils.CONFIGURABLE, ->
+        utils.defineProperty scope, 'node', propOpts, file.node
+        utils.defineProperty scope, 'props', propOpts, file.inputProps
+        utils.defineProperty scope, 'refs', propOpts, file.inputRefs
+        utils.defineProperty scope, 'root', utils.CONFIGURABLE, ->
             file.root
         , null
-        utils.defineProperty ctx, 'state', propOpts, null
+        utils.defineProperty scope, 'state', propOpts, null
 
-        emitSignal ctx, 'onCreate'
+        emitSignal scope, 'onCreate'
 
-        ctx
+        scope
 
     toJSON: (key, arr) ->
         unless arr

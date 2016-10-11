@@ -16,7 +16,7 @@ describe 'src/document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), '2'
 
-        it 'is accessible by context', ->
+        it 'is accessible by scope', ->
             source = createView '''
                 <component name="a" x="2">
                     ${this.props.x}
@@ -96,7 +96,7 @@ describe 'src/document string interpolation', ->
             view.node.children[0].props.set 'label', 23
             assert.is view.node.stringify(), '23'
 
-        it 'are accessible by context', ->
+        it 'are accessible by scope', ->
             source = createView '''
                 <a ref="first" label="12" visible="false" />
                 ${this.refs.first.props.label}
@@ -161,7 +161,7 @@ describe 'src/document string interpolation', ->
                 storage: a: '2'
             assert.is view.node.stringify(), '2'
 
-        it 'is accesible by context', ->
+        it 'is accesible by scope', ->
             source = createView '''
                 ${this.root.a}
             '''
@@ -224,7 +224,7 @@ describe 'src/document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), '1'
 
-        it 'is accessible by context', ->
+        it 'is accessible by scope', ->
             source = createView '''
                 <script>
                     this.onRender(function(){
@@ -304,7 +304,7 @@ describe 'src/document string interpolation', ->
         view.node.children[0].props.set 'x', 2
         assert.is calls, 1
 
-    it 'returned handler is called on signal with context and parameters', ->
+    it 'returned handler is called on signal with scope and parameters', ->
         source = createView '''
             <span x="1" onPropsChange="${root.onPropsChange}" />
         '''
@@ -323,7 +323,7 @@ describe 'src/document string interpolation', ->
         assert.is calls, 1
 
     describe 'prop handler', ->
-        it 'is called with proper context and parameters', ->
+        it 'is called with proper scope and parameters', ->
             source = createView '''
                 <prop name="y" value="3" />
                 <span

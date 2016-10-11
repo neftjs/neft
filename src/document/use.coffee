@@ -118,7 +118,7 @@ module.exports = (File) -> class Use
 
         # ref
         if @refName
-            @file.inputRefs.set @refName, usedComponent.context
+            @file.inputRefs.set @refName, usedComponent.scope
 
         return
 

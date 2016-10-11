@@ -13,7 +13,7 @@
 
     log = log.scope 'App', 'Bootstrap'
 
-    VIEW_HTML = """
+    VIEW_HTML = '''
     <!doctype html>
     <html>
     <head>
@@ -30,7 +30,7 @@
         </noscript>
     </body>
     </html>
-    """
+    '''
 
     module.exports = (app) ->
         APP_JS_URI = '/app.js'
