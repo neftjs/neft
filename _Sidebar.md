@@ -15,17 +15,35 @@ JavaScript Everywhere
 - [Neft Google Group](https://groups.google.com/forum/#!forum/neft_io)
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
 
-### Guide
+### Get Started
 - Installation
-- Getting Started
-- Overview
-- Views
-- Styles
-- Routing
-- Networking
-- Resources
-- Unit testing
-- Native
+- First app
+- Running
+- Base concepts
+
+### Guide
+
+#### Views
+- Components
+- Lifecycle
+- Multiple Components
+- Virtual DOM
+
+#### Styles
+- Views Integration
+- Custom Elements
+- Text Styling
+- Abstract Styles
+
+#### Static Resources
+
+#### Routes
+
+#### Networking
+
+#### Unit Testing
+
+#### Native Communication
 
 ### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
 * Library
