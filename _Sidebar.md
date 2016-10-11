@@ -4,10 +4,10 @@ JavaScript Everywhere
 =====================
 
 - [[Home]]
-- [[Tour]]
-- [[Tutorials]]
-- [[Examples]]
-- [[Plugins]]
+- [[Tour]] [DEPRECATED]
+- [[Tutorials]] [DEPRECATED]
+- [[Examples]] [DEPRECATED]
+- [[Plugins]] [DEPRECATED]
 
 ### Help
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
@@ -28,6 +28,7 @@ JavaScript Everywhere
 - Views Integration
 - Custom Elements
 - Text Styling
+- Animations
 - Abstract Styles
 
 ### Static Resources
