@@ -4,8 +4,7 @@ class Networking {
     internal static var lastId: Int = 0
 
     // args: id, error, code, resp, headers
-    static var responseCallback: JSValue!
-    static func request(_ uri: String, method: String, headers: [String: String], data: JSValue) -> Int {
+    static func request(_ uri: String, method: String, headers: [String: String], data: JSValue, completion: @escaping ([Any]) -> Void) -> Int {
         let id = self.lastId
         self.lastId += 1
 
@@ -34,7 +33,7 @@ class Networking {
             let headers = httpResponse?.allHeaderFields as? [String: String]
             let httpData = data != nil ? NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! : ""
             let httpHeaders: [String: String] = headers != nil ? headers! : [:]
-            responseCallback.call(withArguments: [id, errMsg, status, httpData, httpHeaders])
+            completion([id, errMsg, status, httpData, httpHeaders])
         })
 
         task.resume()

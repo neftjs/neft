@@ -22,10 +22,9 @@ struct Extension {
 }
 
 class GameViewController: UIViewController {
-    let client = Client()
-    let renderer = Renderer()
+    var client: Client! = Client()
+    var renderer: Renderer! = Renderer()
     var shadowWindow: ShadowWindow!
-    var renderView: RenderView!
     var window: Window!
     var customApp: CustomApp!
     var frameDelay: Double = 0
@@ -47,19 +46,8 @@ class GameViewController: UIViewController {
             windowItem?.draw(context, inRect: rect)
 
             // DEBUG dirty rectangles
-            // CGContextSetRGBFillColor(context, CGFloat.random(), CGFloat.random(), CGFloat.random(), 0.3);
-            // CGContextFillRect(context, rect);
-        }
-    }
-
-    class RenderView: UIView {
-        var app: GameViewController!
-
-        override func draw(_ rect: CGRect) {
-            let time = CACurrentMediaTime()
-            app.frameDelay = (time - app.frameTime) * 1000;
-            app.frameTime = time
-            app.renderer.draw()
+            // context.setFillColor(red: CGFloat.random(), green: CGFloat.random(), blue: CGFloat.random(), alpha: 0.3);
+            // context.fill(rect);
         }
     }
 
@@ -69,26 +57,29 @@ class GameViewController: UIViewController {
     }
 
     @objc private func animationFrame() {
+        let time = CACurrentMediaTime()
+        frameDelay = (time - frameTime) * 1000;
+        frameTime = time
         client.js.callAnimationFrame()
-        renderView.setNeedsDisplay()
+        renderer.draw()
     }
 
-    override func viewDidLoad() {
-        renderer.app = self
-
-        (UIApplication.shared as! NeftApplication).renderer = renderer
-
+    private func initClient() {
         client.actions[InAction.setWindow] = {
             (reader: Reader) in
             self.window.windowItem = self.renderer.getObjectFromReader(reader) as? Item
             self.window.setNeedsDisplay()
         }
+    }
 
-        // animation frame
-        renderView = RenderView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-        renderView.app = self
-        renderView.isUserInteractionEnabled = false
-        view.addSubview(renderView)
+    private func initRenderer() {
+        renderer.app = self
+        (UIApplication.shared as! NeftApplication).renderer = renderer
+    }
+
+    override func viewDidLoad() {
+        initClient();
+        initRenderer()
 
         // animation frame
         let updater = CADisplayLink(target: self, selector: #selector(GameViewController.animationFrame))
@@ -107,13 +98,54 @@ class GameViewController: UIViewController {
 
         super.viewDidLoad()
 
+        // init custom
         self.customApp = CustomApp(app: self)
         {{#iosExtensions}}
         Extension.{{&name}}.register(app: self)
         {{/iosExtensions}}
 
+        // run
         self.renderer.load()
         self.client.js.runScript("neft")
+
+        // watch on js bundle file change
+        if (!{{&release}}) {
+            watchOnBundleChange(url: "{{&watchServerConfig.protocol}}://{{&watchServerConfig.host}}:{{&watchServerConfig.port}}/newBundle");
+        }
+    }
+
+    private func watchOnBundleChange(url: String) {
+        var req = URLRequest(url: URL(string: url)!)
+        let session = URLSession.shared
+        req.timeoutInterval = 0
+
+        let task = session.dataTask(with: req, completionHandler: {
+            (data, response, error) in
+            let js = data != nil ? NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! : ""
+            DispatchQueue.main.async {
+                self.runJsBundle(code: js as String)
+                self.watchOnBundleChange(url: url)
+            }
+        })
+
+        task.resume()
+    }
+
+    private func runJsBundle(code: String) {
+        // clear
+        client.destroy()
+        window.windowItem = nil
+        shadowWindow.subviews.forEach({ $0.removeFromSuperview() })
+
+        // init classes
+        client = Client()
+        initClient()
+        renderer = Renderer()
+        initRenderer()
+
+        // run
+        renderer.load()
+        client.js.runCode(code)
     }
 
     override var shouldAutorotate : Bool {

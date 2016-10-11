@@ -164,6 +164,13 @@ class Client {
         outBooleansIndex = 0
         outStringsIndex = 0
 
-        js.proxy.dataCallback.call(withArguments: [outActions, outBooleans, outIntegers, outFloats, outStrings])
+        js.queue.async {
+            self.js.proxy.dataCallback?.call(withArguments: [self.outActions, self.outBooleans, self.outIntegers, self.outFloats, self.outStrings])
+        }
+    }
+    
+    func destroy() {
+        actions.removeAll()
+        js.destroy()
     }
 }
