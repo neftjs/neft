@@ -11,8 +11,6 @@ JavaScript Everywhere
 - [[Plugins]]
 
 ### Help
-- [Neft on Stack Overflow](http://stackoverflow.com/questions/tagged/neft)
-- [Neft Google Group](https://groups.google.com/forum/#!forum/neft_io)
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
 
 ### Get Started
