@@ -4,6 +4,8 @@ engines:
     config: coffeelint.json
   fixme:
     enabled: true
+  tailor:
+    enabled: true
 ratings:
   paths:
     - "**"
