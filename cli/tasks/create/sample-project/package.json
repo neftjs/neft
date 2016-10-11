@@ -16,8 +16,6 @@
     "test": "neft-unit ./tests/\\*\\*/\\*.js"
   },
   "dependencies": {
-    "neft-ios": "^0.0.2",
-    "neft-android": "^0.0.2",
     "neft-default-styles": "^0.0.1"
   },
   "android": {

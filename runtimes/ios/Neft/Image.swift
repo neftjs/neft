@@ -1,41 +1,41 @@
 import UIKit
 
 class Image: Item {
-    static var cache: [String: CGImageRef] = Dictionary()
-    static var loadingHandlers: [String: [(result: CGImageRef?) -> Void]] = Dictionary()
+    static var cache: [String: CGImage] = Dictionary()
+    static var loadingHandlers: [String: [(_ result: CGImage?) -> Void]] = Dictionary()
 //    static let svgToImageJs = Js(name: "svgToImage")
 
-    override class func register(app: GameViewController) {
-        app.client.actions[InAction.CREATE_IMAGE] = {
+    override class func register(_ app: GameViewController) {
+        app.client.actions[InAction.createImage] = {
             (reader: Reader) in
             Image(app)
         }
-        app.client.actions[InAction.SET_IMAGE_SOURCE] = {
+        app.client.actions[InAction.setImageSource] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Image)
                 .setSource(reader.getString())
         }
-        app.client.actions[InAction.SET_IMAGE_SOURCE_WIDTH] = {
+        app.client.actions[InAction.setImageSourceWidth] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Image)
                 .setSourceWidth(reader.getFloat())
         }
-        app.client.actions[InAction.SET_IMAGE_SOURCE_HEIGHT] = {
+        app.client.actions[InAction.setImageSourceHeight] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Image)
                 .setSourceHeight(reader.getFloat())
         }
-        app.client.actions[InAction.SET_IMAGE_FILL_MODE] = {
+        app.client.actions[InAction.setImageFillMode] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Image)
                 .setFillMode(reader.getString())
         }
-        app.client.actions[InAction.SET_IMAGE_OFFSET_X] = {
+        app.client.actions[InAction.setImageOffsetX] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Image)
                 .setOffsetX(reader.getFloat())
         }
-        app.client.actions[InAction.SET_IMAGE_OFFSET_Y] = {
+        app.client.actions[InAction.setImageOffsetY] = {
             (reader: Reader) in
             (app.renderer.getObjectFromReader(reader) as! Image)
                 .setOffsetY(reader.getFloat())
@@ -44,15 +44,15 @@ class Image: Item {
 //        Image.svgToImageJs.runScript("svgToImage")
     }
 
-    var modelImage: CGImageRef?
-    var image: CGImageRef?
+    var modelImage: CGImage?
+    var image: CGImage?
 
     override internal func updateBounds() {
         super.updateBounds()
         updateImage()
     }
 
-    private func updateImage() {
+    fileprivate func updateImage() {
         if modelImage == nil || width < 1 || height < 1 {
             image = nil
         } else {
@@ -61,15 +61,15 @@ class Image: Item {
 
             UIGraphicsBeginImageContext(CGSize(width: imageWidth, height: imageHeight))
             let context = UIGraphicsGetCurrentContext()
-            CGContextDrawImage(context, CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight), modelImage)
-            image = CGBitmapContextCreateImage(context)
+            context?.draw(modelImage!, in: CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight))
+            image = context?.makeImage()
             UIGraphicsEndImageContext()
         }
     }
 
-    private func loadSvgData(svg: NSString, completion: (data: NSData?) -> Void) {
+    fileprivate func loadSvgData(_ svg: NSString, completion: (_ data: Data?) -> Void) {
         // TODO
-        completion(data: nil)
+        completion(nil)
 //        let width = 0
 //        let height = 0
 //
@@ -86,51 +86,51 @@ class Image: Item {
 //        }
     }
 
-    private func getTextureFromData(data: NSData, source: String, completion: (texture: CGImageRef?) -> Void) {
+    fileprivate func getTextureFromData(_ data: Data, source: String, completion: (_ texture: CGImage?) -> Void) {
         if source.hasSuffix(".svg") {
-            let dataUri = NSString(data: data, encoding: NSUTF8StringEncoding)
-            if dataUri == nil { return completion(texture: nil) }
+            let dataUri = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+            if dataUri == nil { return completion(nil) }
             self.loadSvgData(dataUri!) {
-                (data: NSData?) in
-                if data == nil { return completion(texture: nil) }
+                (data: Data?) in
+                if data == nil { return completion(nil) }
                 self.getTextureFromData(data!, source: "", completion: completion)
             }
         } else {
             let image = UIImage(data: data)
-            if image == nil { return completion(texture: nil) }
-            completion(texture: image!.CGImage)
+            if image == nil { return completion(nil) }
+            completion(image!.cgImage)
         }
     }
 
-    private func loadResourceSource(source: String) -> NSData? {
-        let path = NSBundle.mainBundle().pathForResource(source, ofType: nil)
+    fileprivate func loadResourceSource(_ source: String) -> Data? {
+        let path = Bundle.main.path(forResource: source, ofType: nil)
         if path == nil { return nil }
-        let data = NSData(contentsOfFile: path!)
+        let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
         return data
     }
 
-    private func loadDataUriSource(source: String) -> NSData? {
+    fileprivate func loadDataUriSource(_ source: String) -> Data? {
         let svgPrefix = "data:image/svg+xml;utf8,"
         if source.hasPrefix(svgPrefix) {
-            return NSData(contentsOfFile: source.substringFromIndex(source.startIndex.advancedBy(svgPrefix.characters.count)))
+            return (try? Data(contentsOf: URL(fileURLWithPath: source.substring(from: source.characters.index(source.startIndex, offsetBy: svgPrefix.characters.count)))))
         }
         return self.loadUrlSource(source)
     }
 
-    private func loadUrlSource(source: String) -> NSData? {
-        let url = NSURL(string: source)
+    fileprivate func loadUrlSource(_ source: String) -> Data? {
+        let url = URL(string: source)
         if url == nil { return nil }
-        let data = NSData(contentsOfURL: url!)
+        let data = try? Data(contentsOf: url!)
         return data
     }
 
-    private func setTexture(tex: CGImageRef?) {
+    fileprivate func setTexture(_ tex: CGImage?) {
         self.modelImage = tex
         invalidate()
         updateImage()
     }
 
-    func setSource(val: String) {
+    func setSource(_ val: String) {
         // remove texture if needed
         if val == "" {
             setTexture(nil)
@@ -146,15 +146,16 @@ class Image: Item {
 
         // completion handler
         let onCompletion = {
-            (tex: CGImageRef?) in
+            (tex: CGImage?) in
             self.setTexture(tex)
 
-            self.app.client.pushAction(OutAction.IMAGE_SIZE)
+            self.app.client.pushAction(OutAction.imageSize)
             self.app.renderer.pushObject(self)
             self.app.client.pushString(val)
             self.app.client.pushBoolean(tex != nil)
-            self.app.client.pushFloat(tex != nil ? CGFloat(CGImageGetWidth(tex)) : 0)
-            self.app.client.pushFloat(tex != nil ? CGFloat(CGImageGetHeight(tex)) : 0)
+            
+            self.app.client.pushFloat(tex != nil ? CGFloat(tex!.width) : 0)
+            self.app.client.pushFloat(tex != nil ? CGFloat(tex!.height) : 0)
         }
 
         // wait for load if loading exist
@@ -165,7 +166,7 @@ class Image: Item {
         }
 
         // get loading method
-        var loadFunc: (source: String) -> NSData?
+        var loadFunc: (_ source: String) -> Data?
         if (val.hasPrefix("/static")) {
             loadFunc = self.loadResourceSource
         } else if (val.hasPrefix("data:")) {
@@ -179,49 +180,49 @@ class Image: Item {
 
         // load texture
         thread({
-            (completion: (result: CGImageRef?) -> Void) in
-            let data = loadFunc(source: val)
-            if data == nil { return completion(result: nil) }
+            (completion: (_ result: CGImage?) -> Void) -> Void in
+            let data = loadFunc(val)
+            if data == nil { return completion(nil) }
             self.getTextureFromData(data!, source: val) {
-                (texture: CGImageRef?) in
-                completion(result: texture)
+                (texture: CGImage?) in
+                completion(texture)
             }
         }) {
-            (tex: CGImageRef?) in
+            (tex: CGImage?) in
             if tex != nil && !val.hasPrefix("data:") {
                 Image.cache[val] = tex
             }
 
             let loading = Image.loadingHandlers[val]
             for handler in loading! {
-                handler(result: tex)
+                handler(tex)
             }
-            Image.loadingHandlers.removeValueForKey(val)
+            Image.loadingHandlers.removeValue(forKey: val)
         }
     }
 
-    func setSourceWidth(val: CGFloat) {
+    func setSourceWidth(_ val: CGFloat) {
         // TODO
     }
 
-    func setSourceHeight(val: CGFloat) {
+    func setSourceHeight(_ val: CGFloat) {
         // TODO
     }
 
-    func setFillMode(val: String) {
+    func setFillMode(_ val: String) {
         // TODO
     }
 
-    func setOffsetX(val: CGFloat) {
+    func setOffsetX(_ val: CGFloat) {
         // TODO
     }
 
-    func setOffsetY(val: CGFloat) {
+    func setOffsetY(_ val: CGFloat) {
         // TODO
     }
 
-    override func drawShape(context: CGContextRef, inRect rect: CGRect) {
-        CGContextDrawImage(context, bounds, image)
+    override func drawShape(_ context: CGContext, inRect rect: CGRect) {
+        context.draw(image!, in: bounds)
     }
 }
 

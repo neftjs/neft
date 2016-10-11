@@ -5,7 +5,7 @@ class Client {
     let reader = Reader()
 
     var actions: Dictionary<InAction, (Reader) -> ()> = [:]
-    var customFunctions: Dictionary<String, (args: [Any?]) -> Void> = [:]
+    var customFunctions: Dictionary<String, (_ args: [Any?]) -> Void> = [:]
     let onDataProcessed = Signal()
 
     private static let EventNilType = 0
@@ -31,12 +31,12 @@ class Client {
             self.onData(self.reader)
         })
 
-        actions[InAction.CALL_FUNCTION] = { (reader: Reader) in
+        actions[InAction.callFunction] = { (reader: Reader) in
             let name = reader.getString()
             let function = self.customFunctions[name]
 
             let argsLength = reader.getInteger()
-            var args = [Any?](count: argsLength, repeatedValue: nil)
+            var args = [Any?](repeating: nil, count: argsLength)
 
             for i in 0..<argsLength {
                 let argType = reader.getInteger()
@@ -55,14 +55,14 @@ class Client {
             }
 
             if function != nil {
-                function!(args: args)
+                function!(args)
             } else {
                 print("Native function '\(name)' not found")
             }
         }
     }
 
-    func onData(reader: Reader) {
+    func onData(_ reader: Reader) {
         while let action = reader.getAction() {
             let actionFunc = actions[action]
             if actionFunc != nil {
@@ -75,7 +75,7 @@ class Client {
         onDataProcessed.emit()
     }
 
-    private func pushIntoArray<T>(inout arr: [T], index: Int, val: T) {
+    private func pushIntoArray<T>(_ arr: inout [T], index: Int, val: T) {
         if arr.count > index {
             arr[index] = val
         } else {
@@ -83,33 +83,33 @@ class Client {
         }
     }
 
-    func pushAction(val: OutAction) {
+    func pushAction(_ val: OutAction) {
         pushIntoArray(&outActions, index: outActionsIndex, val: val.rawValue)
         outActionsIndex += 1
     }
 
-    func pushBoolean(val: Bool) {
+    func pushBoolean(_ val: Bool) {
         pushIntoArray(&outBooleans, index: outBooleansIndex, val: val)
         outBooleansIndex += 1
     }
 
-    func pushInteger(val: Int) {
+    func pushInteger(_ val: Int) {
         pushIntoArray(&outIntegers, index: outIntegersIndex, val: val)
         outIntegersIndex += 1
     }
 
-    func pushFloat(val: CGFloat) {
+    func pushFloat(_ val: CGFloat) {
         pushIntoArray(&outFloats, index: outFloatsIndex, val: val)
         outFloatsIndex += 1
     }
 
-    func pushString(val: String) {
+    func pushString(_ val: String) {
         pushIntoArray(&outStrings, index: outStringsIndex, val: val)
         outStringsIndex += 1
     }
 
-    func pushEvent(name: String, args: [Any?]?) {
-        pushAction(OutAction.EVENT)
+    func pushEvent(_ name: String, args: [Any?]?) {
+        pushAction(OutAction.event)
         pushString(name)
         if args != nil {
             let length = args!.count
@@ -136,16 +136,16 @@ class Client {
         }
     }
 
-    func addCustomFunction(name: String, function: (args: [Any?]) -> Void) {
+    func addCustomFunction(_ name: String, function: @escaping (_ args: [Any?]) -> Void) {
         customFunctions[name] = function
     }
 
     /**
      Removes all elements after the given length.
      */
-    private func cutDataArray<T>(inout arr: [T], length: Int) {
+    private func cutDataArray<T>(_ arr: inout [T], length: Int) {
         if arr.count > length {
-            arr.removeRange(length..<arr.count)
+            arr.removeSubrange(length..<arr.count)
         }
     }
 
@@ -164,6 +164,6 @@ class Client {
         outBooleansIndex = 0
         outStringsIndex = 0
 
-        js.proxy.dataCallback.callWithArguments([outActions, outBooleans, outIntegers, outFloats, outStrings])
+        js.proxy.dataCallback.call(withArguments: [outActions, outBooleans, outIntegers, outFloats, outStrings])
     }
 }

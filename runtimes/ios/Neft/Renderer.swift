@@ -16,14 +16,14 @@ class Renderer {
 
     var objects: [Object] = []
 
-    private let measureTransform = CGAffineTransformMake(1, 0, 0, 1, 0, 0)
+    private let measureTransform = CGAffineTransform(a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0)
     private var dirtyRects = [CGRect]()
 
     var navigator: Navigator!
     var device: Device!
     var screen: Screen!
 
-    func getObjectFromReader(reader: Reader) -> Object? {
+    func getObjectFromReader(_ reader: Reader) -> Object? {
         let id = reader.getInteger()
         return id == -1 ? nil : self.objects[id]
     }
@@ -45,15 +45,15 @@ class Renderer {
         Scrollable.register(app)
     }
 
-    func pxToDp(px: CGFloat) -> CGFloat {
+    func pxToDp(_ px: CGFloat) -> CGFloat {
         return px / device.pixelRatio
     }
 
-    func dpToPx(dp: CGFloat) -> CGFloat {
+    func dpToPx(_ dp: CGFloat) -> CGFloat {
         return dp * device.pixelRatio
     }
 
-    func pushObject(val: Object) {
+    func pushObject(_ val: Object) {
         app.client.pushInteger(val.id)
     }
 
@@ -65,9 +65,9 @@ class Renderer {
             var i = 1
             let length = dirtyRects.count
             while i < length {
-                if CGRectIntersectsRect(dirtyRects[i-1], dirtyRects[i]) {
-                    dirtyRects[i-1] = CGRectUnion(dirtyRects[i-1], dirtyRects[i])
-                    dirtyRects.removeAtIndex(i)
+                if dirtyRects[i-1].intersects(dirtyRects[i]) {
+                    dirtyRects[i-1] = dirtyRects[i-1].union(dirtyRects[i])
+                    dirtyRects.remove(at: i)
                     continue intersectRects
                 }
                 i += 1
@@ -76,7 +76,7 @@ class Renderer {
         }
 
         for rect in dirtyRects {
-            app.window.setNeedsDisplayInRect(rect)
+            app.window.setNeedsDisplay(rect)
         }
 
         dirtyRects.removeAll()

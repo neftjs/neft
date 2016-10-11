@@ -1,3 +1,11 @@
 import UIKit
 
-UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(NeftApplication), NSStringFromClass(AppDelegate))
+UIApplicationMain(
+    CommandLine.argc,
+    UnsafeMutableRawPointer(CommandLine.unsafeArgv)
+        .bindMemory(
+            to: UnsafeMutablePointer<Int8>.self,
+            capacity: Int(CommandLine.argc)),
+    NSStringFromClass(NeftApplication.self),
+    NSStringFromClass(AppDelegate.self)
+)

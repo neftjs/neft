@@ -27,7 +27,7 @@ do ->
 
         if typeof delay isnt 'number'
             delay = parseInt delay
-        if isNaN(delay)
+        if isNaN(delay) or delay < 4
             delay = 4
 
         argc = arguments.length

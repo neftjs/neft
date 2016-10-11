@@ -1,15 +1,15 @@
 import UIKit
 
 class Device {
-    private class DeviceView: UIView, UIKeyInput {
+    fileprivate class DeviceView: UIView, UIKeyInput {
         var app: GameViewController!
 
-        @objc func hasText() -> Bool {
+        @objc var hasText : Bool {
             return true
         }
 
-        @objc func insertText(text: String) {
-            app.client.pushAction(OutAction.KEY_INPUT)
+        @objc func insertText(_ text: String) {
+            app.client.pushAction(OutAction.keyInput)
             app.client.pushString(text)
         }
 
@@ -17,7 +17,7 @@ class Device {
 
         }
 
-        override func canBecomeFirstResponder() -> Bool {
+        override var canBecomeFirstResponder : Bool {
             return true
         }
     }
@@ -26,18 +26,18 @@ class Device {
     var lastEvent: UIEvent!
     let app: GameViewController
     let onTouchEnded = Signal()
-    private var view: DeviceView!
+    fileprivate var view: DeviceView!
 
-    class func register(app: GameViewController){
-        app.client.actions[InAction.DEVICE_LOG] = {
+    class func register(_ app: GameViewController){
+        app.client.actions[InAction.deviceLog] = {
             (reader: Reader) in
             app.renderer.device!.log(reader.getString())
         }
-        app.client.actions[InAction.DEVICE_SHOW_KEYBOARD] = {
+        app.client.actions[InAction.deviceShowKeyboard] = {
             (reader: Reader) in
             app.renderer.device!.showKeyboard()
         }
-        app.client.actions[InAction.DEVICE_HIDE_KEYBOARD] = {
+        app.client.actions[InAction.deviceHideKeyboard] = {
             (reader: Reader) in
             app.renderer.device!.hideKeyboard()
         }
@@ -48,23 +48,23 @@ class Device {
 
         self.view = DeviceView(frame: app.view.frame)
         view.app = app
-        view.hidden = true
+        view.isHidden = true
         app.view.addSubview(view)
 
         // DEVICE_PIXEL_RATIO
-        let pixelRatio = UIScreen.mainScreen().scale
+        let pixelRatio = UIScreen.main.scale
         self.pixelRatio = pixelRatio
-        app.client.pushAction(OutAction.DEVICE_PIXEL_RATIO)
+        app.client.pushAction(OutAction.devicePixelRatio)
         app.client.pushFloat(pixelRatio)
 
         // DEVICE_IS_PHONE
-        let isPhone = UIDevice.currentDevice().userInterfaceIdiom == .Phone
-        app.client.pushAction(OutAction.DEVICE_IS_PHONE)
+        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+        app.client.pushAction(OutAction.deviceIsPhone)
         app.client.pushBoolean(isPhone)
     }
 
-    func onEvent(event: UIEvent) {
-        let touches = event.allTouches()
+    func onEvent(_ event: UIEvent) {
+        let touches = event.allTouches
         guard touches != nil else { return }
 
         let touch = touches!.first
@@ -73,33 +73,33 @@ class Device {
         self.lastEvent = event
 
         switch touch!.phase {
-        case .Began:
-            app.client.pushAction(OutAction.POINTER_PRESS)
-        case .Moved:
-            app.client.pushAction(OutAction.POINTER_MOVE)
-        case .Ended, .Cancelled:
+        case .began:
+            app.client.pushAction(OutAction.pointerPress)
+        case .moved:
+            app.client.pushAction(OutAction.pointerMove)
+        case .ended, .cancelled:
             onTouchEnded.emit()
-            app.client.pushAction(OutAction.POINTER_RELEASE)
+            app.client.pushAction(OutAction.pointerRelease)
         default: break
         }
 
-        let location = touch!.locationInView(self.view)
+        let location = touch!.location(in: self.view)
         app.client.pushFloat(location.x)
         app.client.pushFloat(location.y)
         app.client.sendData()
     }
 
-    func log(val: String) {
+    func log(_ val: String) {
         NSLog(val)
     }
 
     func showKeyboard() {
         view.becomeFirstResponder()
-        app.client.pushAction(OutAction.DEVICE_KEYBOARD_SHOW)
+        app.client.pushAction(OutAction.deviceKeyboardShow)
     }
 
     func hideKeyboard() {
         app.view.endEditing(true)
-        app.client.pushAction(OutAction.DEVICE_KEYBOARD_HIDE)
+        app.client.pushAction(OutAction.deviceKeyboardHide)
     }
 }

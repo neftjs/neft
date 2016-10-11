@@ -13,7 +13,7 @@ pathUtils = require 'path'
 os = require 'os'
 sauce = require './sauce'
 
-{unit, assert, utils} = Neft
+{unit, assert, utils, log} = Neft
 {describe, it} = unit
 
 APP_URL = 'localhost:3000'
@@ -65,6 +65,10 @@ runApp = (absPath, callback) ->
             callbackCalled = true
             callback code, stdout, stderr
     child
+
+logCommand = (cmd) ->
+    log.info "$ #{cmd}"
+    log.info cp.execSync(cmd) + '\n'
 
 testSauceAppOnDriver = (desired, opts, callback) ->
     driver = sauce.getDriver()
@@ -183,8 +187,12 @@ testSauceApp = (absPath, opts, callback) ->
             appLocal = pathUtils.join absPath, IOS_APP
 
             prepareDesired = (desired, callback) ->
+                logCommand 'xcodebuild -version'
+                logCommand 'xcodebuild -showsdks'
+
+                {NEFT_IOS_VERSION} = process.env
                 xcode = 'xcodebuild -sdk iphonesimulator'
-                xcode += desired.platformVersion
+                xcode += NEFT_IOS_VERSION
                 cp.execSync xcode, cwd: projectLocal
                 cp.execSync "zip -r #{zipLocal} #{appLocal}"
 

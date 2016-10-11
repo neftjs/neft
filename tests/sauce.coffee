@@ -14,34 +14,45 @@ pathUtils = require 'path'
 yaml = require 'js-yaml'
 https = require 'https'
 
+{unit} = Neft
 {TRAVIS_JOB_NUMBER, SAUCE_USERNAME, SAUCE_ACCESS_KEY} = process.env
 
 SAUCE_HOST = 'ondemand.saucelabs.com'
 SAUCE_PORT = 80
-RECONNECTS = 10
-RECONNECT_TIMEOUT = 5000
+RECONNECTS = 15
+RECONNECT_TIMEOUT = 1000 * 60 # 1 min
 
 sauceProcess = null
 onSauceConnected = []
-do connectSauce = ->
+do ->
     tries = 0
-    sauceConnectLauncher
-        username: SAUCE_USERNAME
-        accessKey: SAUCE_ACCESS_KEY
-        tunnelIdentifier: TRAVIS_JOB_NUMBER
-    , (err, process) ->
-        if err or not process
-            if tries++ is RECONNECTS
-                throw new Error "Can't connect to SauceLabs"
-            setTimeout connectSauce, RECONNECT_TIMEOUT
-        else
-            sauceProcess = process
-            for listener in onSauceConnected
-                listener null, process
-        return
+    connectSauce = ->
+        sauceConnectLauncher
+            username: SAUCE_USERNAME
+            accessKey: SAUCE_ACCESS_KEY
+            tunnelIdentifier: TRAVIS_JOB_NUMBER
+        , (err, process) ->
+            if err or not process
+                if tries++ is RECONNECTS
+                    throw new Error "Can't connect to SauceLabs"
+                console.error err
+                console.warn "Can't connect to SauceLabs."
+                console.warn "Next (#{tries}) try in #{RECONNECT_TIMEOUT}ms"
+                setTimeout connectSauce, RECONNECT_TIMEOUT
+            else
+                sauceProcess = process
+                for listener in onSauceConnected
+                    listener null, process
+            return
+    connectSauce()
 
-process.on 'exit', ->
-    sauceProcess?.close()
+    unit.onTestsEnd = do (_super = unit.onTestsEnd) -> (args...) ->
+        unless sauceProcess
+            return _super args...
+        sauceProcess.close ->
+            _super args...
+    process.on 'exit', ->
+        sauceProcess?.close()
 
 exports.connect = (callback) ->
     if sauceProcess?

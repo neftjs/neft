@@ -4,11 +4,11 @@ class NeftApplication: UIApplication {
     
     var renderer: Renderer?
     
-    func sendFakeEvent(event: UIEvent) {
+    func sendFakeEvent(_ event: UIEvent) {
         super.sendEvent(event)
     }
     
-    override func sendEvent(event: UIEvent) {
+    override func sendEvent(_ event: UIEvent) {
         super.sendEvent(event)
         renderer?.device.onEvent(event)
     }
