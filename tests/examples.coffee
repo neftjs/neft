@@ -27,6 +27,7 @@ APPIUM_VERSION = '1.5.3'
 BUILD_NUMBER = process.env.TRAVIS_BUILD_NUMBER
 BUILD_NUMBER ||= process.env.APPVEYOR_BUILD_NUMBER
 BUILD_NUMBER ||= "custom-#{utils.uid()}"
+CHECK_STATUS_MAX_TRIES = 50
 
 examples = glob.sync './examples/*'
 
@@ -97,8 +98,9 @@ testSauceAppOnDriver = (desired, opts, callback) ->
         else
             logType = 'syslog'
 
+    lastLogs = ''
     if desired.browserName
-        checkTestsFinished = ->
+        checkStatus = ->
             run driver.execute, ['''
                 if (neftUnitLogItem.$.running) {
                     return { running: true };
@@ -111,20 +113,23 @@ testSauceAppOnDriver = (desired, opts, callback) ->
                 }
             '''],
             ({running, success, logs}) ->
+                lastLogs = logs
                 if running
                     return checkTestsFinished()
-                console.log logs
+                log logs
                 unless success
                     throw new Error 'Client tests failed'
     else
-        checkTestsFinished = ->
+        checkStatus = ->
             run driver.log, [logType],
             (logs) ->
+                lastLogs = JSON.stringify logs
+
                 running = true
                 success = true
 
-                for log in logs
-                    if log.message.indexOf('Neft tests ended') >= 0
+                for appLog in logs
+                    if appLog.message.indexOf('Neft tests ended') >= 0
                         running = false
                         break
 
@@ -136,20 +141,32 @@ testSauceAppOnDriver = (desired, opts, callback) ->
                         , 500
                     return
 
-                for log in logs
-                    if /Unit\ (LOG|OK|ERROR)/.test(log.message)
-                        console.log log.message
-                    else if log.message.indexOf('Neft tests failed') >= 0
+                for appLog in logs
+                    if /Unit\ (LOG|OK|ERROR)/.test(appLog.message)
+                        log appLog.message
+                    else if appLog.message.indexOf('Neft tests failed') >= 0
                         success = false
 
                 unless success
                     throw new Error 'Client tests failed'
 
+    tries = 0
+    checkTestsFinished = ->
+        if tries++ >= CHECK_STATUS_MAX_TRIES
+            throw new Error "SauceLabs tests status check timeout; last logs: #{lastLogs}"
+        if tries > 1
+            log 'Waiting for SauceLabs tests status'
+        checkStatus()
+
     checkTestsFinished()
 
+    log 'Run SauceLabs test'
     stack.runAll (err) ->
-        console.log 'SAUCE TEST ENDED'
-        console.log desired
+        if err
+            log.error 'SauceLabs test failed'
+        else
+            log.ok 'SauceLabs test finished'
+        log JSON.stringify desired
         driver.sauceJobStatus not err, ->
             driver.quit()
             callback err

@@ -3,3 +3,8 @@
     deviceOrientation: 'portrait'
     platformName: 'iOS'
     platformVersion: '9.3'
+-
+    deviceName: 'iPhone 4s Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '8.1'
