@@ -186,7 +186,7 @@ app.cookies.onChange(function(key){
 
 ```xml
 <h1>Your clientId</h1>
-<em>${root.app.cookies.clientId}</em>
+<em>${context.app.cookies.clientId}</em>
 ```
 
         # cookies

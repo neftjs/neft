@@ -118,7 +118,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         super()
 
         @target = null
-        @root = null
+        @context = null
         @isDirty = false
         @binding = null
 
@@ -130,7 +130,7 @@ module.exports = (File) -> class Input extends signal.Emitter
         `//</development>`
 
     signal.Emitter.createSignal @, 'onTargetChange'
-    signal.Emitter.createSignal @, 'onRootChange'
+    signal.Emitter.createSignal @, 'onContextChange'
 
     registerBinding: ->
         assert.isNotDefined @binding
@@ -141,13 +141,13 @@ module.exports = (File) -> class Input extends signal.Emitter
 
     render: ->
         oldTarget = @target
-        oldRoot = @root
+        oldContext = @context
         @target = @file.scope
-        @root = @file.root
+        @context = @file.context
         if oldTarget isnt @target
             @onTargetChange.emit()
-        if oldRoot isnt @root
-            @onRootChange.emit()
+        if oldContext isnt @context
+            @onContextChange.emit()
         return
 
     onRender: ->

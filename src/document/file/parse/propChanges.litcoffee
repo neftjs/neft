@@ -4,7 +4,7 @@ Tag used to dynamically change a prop of the parent element.
 
 ```xml
 <header ref="header">
-    <prop name="isActive" value="true" n-if="${root.isActive}" />
+    <prop name="isActive" value="true" n-if="${context.isActive}" />
     <span>Active: ${refs.header.props.isActive}</span>
 </header>
 ```

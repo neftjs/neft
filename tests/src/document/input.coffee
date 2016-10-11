@@ -145,10 +145,10 @@ describe 'src/document string interpolation', ->
         renderParse view
         assert.is view.node.stringify(), 'undefined'
 
-    describe '`root`', ->
+    describe '`context`', ->
         it 'is accessed in rendered file', ->
             source = createView '''
-                ${root.a}
+                ${context.a}
             '''
             view = source.clone()
 
@@ -163,7 +163,7 @@ describe 'src/document string interpolation', ->
 
         it 'is accesible by scope', ->
             source = createView '''
-                ${this.root.a}
+                ${this.context.a}
             '''
             view = source.clone()
 
@@ -178,7 +178,7 @@ describe 'src/document string interpolation', ->
 
         it 'lookup use', ->
             source = createView '''
-                <component name="a">${root.a}</component>
+                <component name="a">${context.a}</component>
                 <use component="a" />
             '''
             view = source.clone()
@@ -195,7 +195,7 @@ describe 'src/document string interpolation', ->
         it 'lookup n-each', ->
             source = createView '''
                 <blank n-each="[1]">
-                    ${root.a}
+                    ${context.a}
                 </blank>
             '''
             view = source.clone()
@@ -290,7 +290,7 @@ describe 'src/document string interpolation', ->
 
     it 'handler is called on signal', ->
         source = createView '''
-            <span x="1" onPropsChange="${root.onPropsChange(2)}" />
+            <span x="1" onPropsChange="${context.onPropsChange(2)}" />
         '''
         view = source.clone()
 
@@ -306,7 +306,7 @@ describe 'src/document string interpolation', ->
 
     it 'returned handler is called on signal with scope and parameters', ->
         source = createView '''
-            <span x="1" onPropsChange="${root.onPropsChange}" />
+            <span x="1" onPropsChange="${context.onPropsChange}" />
         '''
         view = source.clone()
 
@@ -329,7 +329,7 @@ describe 'src/document string interpolation', ->
                 <span
                   x="1"
                   ref="a1"
-                  onPropsChange="${root.test(refs.a1.props.x, props.y)}"
+                  onPropsChange="${context.test(refs.a1.props.x, props.y)}"
                 />
             '''
             view = source.clone()
@@ -348,7 +348,7 @@ describe 'src/document string interpolation', ->
         it 'is not called if the document is not rendered', ->
             source = createView '''
                 <prop name="y" value="3" />
-                <span x="1" ref="a1" onPropsChange="${root.onPropsChange()}" />
+                <span x="1" ref="a1" onPropsChange="${context.onPropsChange()}" />
             '''
             view = source.clone()
 
@@ -378,8 +378,8 @@ describe 'src/document string interpolation', ->
             elem.props.set 'x', 1
             assert.is view.node.stringify(), '1'
 
-        it 'on `root`', ->
-            source = createView '${root.x}'
+        it 'on `context`', ->
+            source = createView '${context.x}'
             view = source.clone()
 
             storage = new Dict x: 1
@@ -391,8 +391,8 @@ describe 'src/document string interpolation', ->
             storage.set 'x', 2
             assert.is view.node.stringify(), '2'
 
-        it 'on `root` property', ->
-            source = createView '${root.dict.x}'
+        it 'on `context` property', ->
+            source = createView '${context.dict.x}'
             view = source.clone()
 
             storage = dict: new Dict x: 1
@@ -404,9 +404,9 @@ describe 'src/document string interpolation', ->
             storage.dict.set 'x', 2
             assert.is view.node.stringify(), '2'
 
-        it 'on `root` use', ->
+        it 'on `context` use', ->
             source = createView '''
-                <component name="a">${root.a}</component>
+                <component name="a">${context.a}</component>
                 <use component="a" />
             '''
             view = source.clone()
@@ -417,10 +417,10 @@ describe 'src/document string interpolation', ->
             storage.set 'a', 2
             assert.is view.node.stringify(), '2'
 
-        it 'on `root` n-each', ->
+        it 'on `context` n-each', ->
             source = createView '''
                 <blank n-each="[1]">
-                    ${root.a}
+                    ${context.a}
                 </blank>
             '''
             view = source.clone()

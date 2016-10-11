@@ -18,15 +18,15 @@
     <html>
     <head>
         <meta charset="utf-8">
-        <title>${root.title}</title>
-        <script type="text/javascript" src="${root.neftFilePath}"></script>
-        <script type="text/javascript" src="${root.appFilePath}"></script>
+        <title>${context.title}</title>
+        <script type="text/javascript" src="${context.neftFilePath}"></script>
+        <script type="text/javascript" src="${context.appFilePath}"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     </head>
     <body>
         <noscript>
-            <meta http-equiv="refresh" content="0; url=${root.appTextModeUrl}"></meta>
+            <meta http-equiv="refresh" content="0; url=${context.appTextModeUrl}"></meta>
         </noscript>
     </body>
     </html>

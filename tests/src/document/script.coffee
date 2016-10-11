@@ -121,11 +121,11 @@ describe 'src/document script', ->
             renderParse view
             assert.is view.scope.a, 1
 
-        it 'is called with root in scope', ->
+        it 'is called with context in scope', ->
             view = createView '''
                 <script>
                     this.onRender(function(){
-                        this.a = this.root.a;
+                        this.a = this.context.a;
                     });
                 </script>
             '''
