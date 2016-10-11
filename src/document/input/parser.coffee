@@ -7,23 +7,23 @@ bindingParser = require 'src/binding/parser'
 
 PARSER_OPTS =
     globalIdToThis:
-        root: true
+        context: true
     modifyBindingPart: (elem) ->
-        # File scope doesn't have signal on 'root' change, so
-        # we need to use short '${root}' syntax which uses Input::root.
-        if elem[0] is 'this' and elem[1] is 'root'
+        # File scope doesn't have signal on 'context' change, so
+        # we need to use short '${context}' syntax which uses Input::context.
+        if elem[0] is 'this' and elem[1] is 'context'
             elem.shift()
         return
 
 isPublicId = (id) ->
-    id in ['this', 'refs', 'props', 'root', 'state']
+    id in ['this', 'refs', 'props', 'context', 'state']
 
 shouldBeUpdatedOnCreate = (connection) ->
     [key] = connection
     if Array.isArray(key)
         shouldBeUpdatedOnCreate key
     else
-        not (key in ['this', 'root'])
+        not (key in ['this', 'context'])
 
 exports.parse = (text) ->
     text = text.replace(/[\t\n]/gm, '')

@@ -292,7 +292,7 @@ Corresponding node handler: *n-onRevert=""*.
             @scope = null
             @scripts = null
             @props = null
-            @root = null
+            @context = null
             @source = null
             @parentUse = null
 
@@ -320,13 +320,13 @@ Corresponding node handler: *n-onRevert=""*.
                 Object.preventExtensions @
             `//</development>`
 
-# *Document* Document::render([*Any* props, *Any* root, *Document* source])
+# *Document* Document::render([*Any* props, *Any* context, *Document* source])
 
-        render: (props, root, source, refs) ->
+        render: (props, context, source, refs) ->
             unless @isClone
-                @clone().render props, root, source, refs
+                @clone().render props, context, source, refs
             else
-                @_render(props, root, source, refs)
+                @_render(props, context, source, refs)
 
         _updateInputPropsKey: (key) ->
             {inputProps, source, props} = @
@@ -353,12 +353,12 @@ Corresponding node handler: *n-onRevert=""*.
         _render: do ->
             renderTarget = require('./file/render/parse/target') Document
 
-            (props=true, root=null, source, refs) ->
+            (props = true, context = null, source, refs) ->
                 assert.notOk @isRendered
 
                 @props = props
                 @source = source
-                @root = root
+                @context = context
 
                 {inputProps, inputRefs} = @
 
@@ -496,7 +496,7 @@ Corresponding node handler: *n-onRevert=""*.
 
                 @props = null
                 @source = null
-                @root = null
+                @context = null
                 @inputState.clear()
 
                 Document.onRevert.emit @

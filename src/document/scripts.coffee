@@ -18,7 +18,7 @@ class FileContext extends Emitter
         utils.defineProperty @, 'node', propOpts, null
         utils.defineProperty @, 'props', propOpts, null
         utils.defineProperty @, 'refs', propOpts, null
-        utils.defineProperty @, 'root', propOpts, null
+        utils.defineProperty @, 'context', propOpts, null
         utils.defineProperty @, 'state', propOpts, null
 
     utils.defineProperty @::, 'constructor', propOpts, @
@@ -72,8 +72,8 @@ module.exports = (File) -> class Scripts
         utils.defineProperty scope, 'node', propOpts, file.node
         utils.defineProperty scope, 'props', propOpts, file.inputProps
         utils.defineProperty scope, 'refs', propOpts, file.inputRefs
-        utils.defineProperty scope, 'root', utils.CONFIGURABLE, ->
-            file.root
+        utils.defineProperty scope, 'context', utils.CONFIGURABLE, ->
+            file.context
         , null
         utils.defineProperty scope, 'state', propOpts, null
 

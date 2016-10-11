@@ -106,7 +106,7 @@ module.exports = (File) -> class Use
             usedComponent = usedComponent.clone()
 
         unless usedComponent.isRendered
-            usedComponent = usedComponent.render null, @file.root, @
+            usedComponent = usedComponent.render null, @file.context, @
 
         usedComponent.node.parent = @node
         @usedComponent = usedComponent
