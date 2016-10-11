@@ -5,7 +5,6 @@ JavaScript Everywhere
 
 - [[Home]]
 - [[Tour]]
-- [[Contribute]]
 - [[Tutorials]]
 - [[Examples]]
 - [[Plugins]]
@@ -19,29 +18,27 @@ JavaScript Everywhere
 - Running
 - Base concepts
 
-### Guide
-
-##### Views
+### Views
 - Components
 - Lifecycle
 - Multiple Components
 - Virtual DOM
 
-#### Styles
+### Styles
 - Views Integration
 - Custom Elements
 - Text Styling
 - Abstract Styles
 
-#### Static Resources
+### Static Resources
 
-#### Routes
+### Routes
 
-#### Networking
+### Networking
 
-#### Unit Testing
+### Unit Testing
 
-#### Native Communication
+### Native Communication
 
 ### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
 * Library
@@ -63,3 +60,5 @@ JavaScript Everywhere
   - [[Resources|Resources-API]]
 * Framework
   - [[App|App-API]]
+
+### [[Contribute]]
