@@ -39,25 +39,6 @@ JavaScript Everywhere
 
 ### Native Communication
 
-### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
-* Library
-  - [[List|List-API]]
-  - [[Dict|Dict-API]]
-  - [[Signal|Signal-API]]
-  - [[Assert|Assert-API]]
-  - [[Db|Db-API]]
-  - [[Log|Log-API]]
-  - [[Schema|Schema-API]]
-  - [[Unit tests|Unit-API]]
-  - [[Typed Array|Typed-Array-API]]
-  - [[Native Communication|Native-API]]
-  - [[Utils|Utils-API]]
-* Engine
-  - [[Document|Document-API]]
-  - [[Networking|Networking-API]]
-  - [[Renderer|Renderer-API]]
-  - [[Resources|Resources-API]]
-* Framework
-  - [[App|App-API]]
+### [[API Reference]]
 
 ### [[Contribute]]
