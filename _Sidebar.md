@@ -21,7 +21,7 @@ JavaScript Everywhere
 
 ### Guide
 
-#### Views
+##### Views
 - Components
 - Lifecycle
 - Multiple Components
