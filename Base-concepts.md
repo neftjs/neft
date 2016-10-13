@@ -1,5 +1,3 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Data Binding**
-
 Data Binding
 ===
 
