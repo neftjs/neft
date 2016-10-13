@@ -1,6 +1,3 @@
-Static Resources
-===
-
 ### File structure
 
 ### Main file
