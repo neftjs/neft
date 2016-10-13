@@ -4,8 +4,6 @@ JavaScript Everywhere
 =====================
 
 - [[Home]]
-- [[Tour]] [DEPRECATED]
-- [[Tutorials]] [DEPRECATED]
 
 ### Help
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
