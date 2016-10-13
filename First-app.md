@@ -1,8 +1,3 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **First Application**
-
-First application
-===
-
 Neft is a JavaScript framework made for easy writing server-browser-native applications.
 
 Installation
