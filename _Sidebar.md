@@ -31,7 +31,7 @@ JavaScript Everywhere
 
 ### [[Static Resources]]
 
-### [[Routes]]
+### [[Routing]]
 
 ### [[Networking]]
 
