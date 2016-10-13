@@ -1,8 +1,3 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Routing**
-
-Routing
-===
-
 Routes are used to handle the user request based on the given URI.
 
 Routes are placed in the `routes/` folder.
