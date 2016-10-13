@@ -1,8 +1,3 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Native Communication**
-
-Native Communication
-===
-
 Custom communication with the native code is available by the `native` module. Such communication is always asynchronous.
 
 ```javascript
