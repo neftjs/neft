@@ -1,6 +1,4 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Resources**
-
-Resources
+Static Resources
 ===
 
 ### File structure
