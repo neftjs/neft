@@ -84,7 +84,7 @@ import JavaScriptCore
 
     func timerShot(_ delay: Int64) -> Int {
         guard timerCallbackValue != nil else { return -1 }
-        
+
         let id = lastTimerId
         lastTimerId += 1
 
@@ -122,7 +122,7 @@ import JavaScriptCore
             }
         }
     }
-    
+
     func destroy() {
         timerCallbackValue = nil
         animationFrameCallbackValue = nil
@@ -156,14 +156,16 @@ class JS {
         let path = Bundle.main.path(forResource: filename, ofType: "js")
         do {
             let file = try NSString(contentsOfFile: path!, encoding: String.Encoding.utf8.rawValue)
-            context.evaluateScript(file as String)
+            runCode(file as String)
         } catch let error as NSError {
             print(error);
         }
     }
 
     func runCode(_ code: String) {
-        context.evaluateScript(code)
+        queue.async {
+            self.context.evaluateScript(code)
+        }
     }
 
     func addHandler(_ name: String, handler: @escaping (_ message: AnyObject) -> Void) {
@@ -190,13 +192,12 @@ class JS {
 
     func callAnimationFrame() {
         let callback = proxy.animationFrameCallback
-        if callback != nil {
-            queue.async {
-                callback!.call(withArguments: [])
-            }
+        guard callback != nil else { return }
+        queue.async {
+            callback!.call(withArguments: [])
         }
     }
-    
+
     func destroy() {
         self.handlers.removeAll()
         proxy.destroy()
