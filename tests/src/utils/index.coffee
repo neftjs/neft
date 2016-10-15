@@ -190,7 +190,12 @@ describe 'src/utils', ->
         # TODO
 
     describe 'capitalize()', ->
-        # TODO
+        it 'uppercases first character', ->
+            assert.is utils.capitalize('abc'), 'Abc'
+            assert.is utils.capitalize('abc_def'), 'Abc_def'
+            assert.is utils.capitalize('Abc_def'), 'Abc_def'
+            assert.is utils.capitalize('1abc'), '1abc'
+            assert.is utils.capitalize(''), ''
 
     describe 'addSlashes()', ->
         # TODO
@@ -205,10 +210,58 @@ describe 'src/utils', ->
         # TODO
 
     describe 'bindFunctionContext()', ->
-        # TODO
+        it 'returns bound function', ->
+            ctx = null
+            args = null
+            handleFunc = (localCtx, localArgs...) ->
+                ctx = localCtx
+                args = localArgs
+
+            boundCtx = a: 2
+            wrongCtx = wrong: 1
+
+            test = (func) ->
+                funcArgs = []
+                for i in [0...func.length] by 1
+                    funcArgs.push i
+
+                utils.bindFunctionContext(func, boundCtx).apply wrongCtx, funcArgs
+                assert.is ctx, boundCtx
+                assert.isEqual args, funcArgs
+
+            test ((a) -> handleFunc(@, arguments...))
+            test ((a, b) -> handleFunc(@, arguments...))
+            test ((a, b, c) -> handleFunc(@, arguments...))
+            test ((a, b, c, d) -> handleFunc(@, arguments...))
+            test ((a, b, c, d, e) -> handleFunc(@, arguments...))
+            test ((a, b, c, d, e, f) -> handleFunc(@, arguments...))
+            test ((a, b, c, d, e, f, g) -> handleFunc(@, arguments...))
+            test ((a, b, c, d, e, f, g, h) -> handleFunc(@, arguments...))
+            test ((a, b, c, d, e, f, g, h, i) -> handleFunc(@, arguments...))
 
     describe 'errorToObject()', ->
-        # TODO
+        it 'returns error name and message', ->
+            message = 'random message'
+            error = new TypeError message
+            object = utils.errorToObject error
+            assert.is object.name, 'TypeError'
+            assert.is object.message, message
+
+        it 'merges custom error properties', ->
+            error = new Error
+            error.prop = 'a'
+            object = utils.errorToObject error
+            assert.is object.prop, 'a'
+
+        it 'returned object can be stringified', ->
+            error = new TypeError 'error message'
+            error.custom = 2
+            object = utils.errorToObject error
+            json = JSON.parse JSON.stringify object
+            assert.isEqual json,
+                name: 'TypeError'
+                message: 'error message'
+                custom: 2
 
     describe 'getOwnProperties()', ->
         # TODO
