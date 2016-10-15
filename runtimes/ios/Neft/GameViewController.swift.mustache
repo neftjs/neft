@@ -78,7 +78,7 @@ class GameViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        initClient();
+        initClient()
         initRenderer()
 
         // animation frame
@@ -109,9 +109,9 @@ class GameViewController: UIViewController {
         self.client.js.runScript("neft")
 
         // watch on js bundle file change
-        if (!{{&release}}) {
-            watchOnBundleChange(url: "{{&watchServerConfig.protocol}}://{{&watchServerConfig.host}}:{{&watchServerConfig.port}}/newBundle");
-        }
+        {{^release}}
+        watchOnBundleChange(url: "{{&watchServerConfig.protocol}}://{{&watchServerConfig.host}}:{{&watchServerConfig.port}}/newBundle")
+        {{/release}}
     }
 
     private func watchOnBundleChange(url: String) {

@@ -1,15 +1,14 @@
 package io.neft;
 
-import android.content.res.AssetManager;
-import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import io.neft.Client.Client;
 import io.neft.CustomApp.CustomApp;
@@ -17,47 +16,91 @@ import io.neft.Renderer.Renderer;
 import io.neft.Renderer.WindowView;
 
 public class MainActivity extends FragmentActivity {
+    public abstract class UrlResponse implements Runnable {
+        public abstract void run(String response);
+        public void run() {}
+    }
 
     private static final String TAG = "Neft";
 
     public WindowView view;
     public CustomApp customApp;
-    final public Http http = new Http();
-    final public Timers timers = new Timers();
-    final public Client client = new Client();
-    final public Renderer renderer = new Renderer();
+    public Http http;
+    public Timers timers;
+    public Client client;
+    public Renderer renderer;
 
-    protected void init(){
-        // get javascript file
-        String neft = getAssetFile("javascript/neft.js");
-
-        // initialize
-        this.customApp = new CustomApp(this);
+    protected void init(final String code) {
+        customApp = new CustomApp(this);
+        http = new Http();
+        timers = new Timers();
+        client = new Client();
+        renderer = new Renderer();
         renderer.app = this;
         view.renderer = renderer;
         renderer.init(this);
 
-        Native.init(neft);
+        Native.init(code);
         renderer.onAnimationFrame();
     }
 
-    private String getAssetFile(String path) {
+    protected void restart() {
+        throw new UnsupportedOperationException();
+    }
+
+    @NonNull
+    protected String getAssetFile(String path) {
         try {
-            AssetManager assets = this.getAssets();
-            InputStream inputStream = assets.open(path);
-            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append(line);
-                total.append("\n");
-            }
-            return total.toString();
+            return Http.getStringFromInputStream(this.getAssets().open(path));
         } catch (IOException error) {
             Log.d(TAG, "IO ERROR!");
             Log.d(TAG, error.toString());
         }
         return "";
+    }
+
+    protected void getUrlData(final String path, final UrlResponse onResponse) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String resp = null;
+                try {
+                    URL url = new URL(path);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setUseCaches(false);
+                    resp = Http.getStringFromInputStream(conn.getInputStream());
+                } catch (IOException err) {
+                    err.printStackTrace();
+                }
+                final String finalResp = resp;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        onResponse.run(finalResp);
+                    }
+                });
+            }
+        });
+
+        thread.start();
+    }
+
+    protected void watchOnBundleChange(final String path) {
+        getUrlData(path, new UrlResponse() {
+            @Override
+            public void run(String response) {
+                if (response != null) {
+                    restart();
+                    return;
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        watchOnBundleChange(path);
+                    }
+                }, 5000);
+            }
+        });
     }
 
     @Override

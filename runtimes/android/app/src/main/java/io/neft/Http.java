@@ -1,16 +1,10 @@
 package io.neft;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 public class Http {
@@ -18,6 +12,18 @@ public class Http {
 
     public Http() {
         Native.http_init(this);
+    }
+
+    public static String getStringFromInputStream(InputStream stream) throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream(stream.available());
+
+        int count;
+        byte[] buffer = new byte[1024];
+        while ((count = stream.read(buffer)) > 0) {
+            byteStream.write(buffer, 0, count);
+        }
+
+        return byteStream.toString();
     }
 
     public int request(final String path, final String method, final String[] headers, final String data) {
@@ -56,14 +62,7 @@ public class Http {
                         }
 
                         // read response
-                        InputStream in = new BufferedInputStream(conn.getInputStream());
-                        InputStreamReader is = new InputStreamReader(in);
-                        BufferedReader br = new BufferedReader(is);
-                        StringBuilder resp = new StringBuilder();
-                        String s = null;
-                        while ((s = br.readLine()) != null) {
-                            resp.append(s);
-                        }
+                        String resp = getStringFromInputStream(conn.getInputStream());
 
                         // get cookies
                         String cookies = conn.getHeaderField("x-cookies");
@@ -71,14 +70,10 @@ public class Http {
                             cookies = "";
                         }
 
-                        Native.http_onResponse(id, "", respCode, resp + "", cookies);
+                        Native.http_onResponse(id, "", respCode, resp, cookies);
                     } finally {
                         conn.disconnect();
                     }
-                } catch (MalformedURLException e) {
-                    Native.http_onResponse(id, e.toString(), 0, "", "");
-                } catch (ProtocolException e) {
-                    Native.http_onResponse(id, e.toString(), 0, "", "");
                 } catch (IOException e) {
                     Native.http_onResponse(id, e.toString(), 0, "", "");
                 }
