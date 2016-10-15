@@ -122,9 +122,15 @@ class GameViewController: UIViewController {
         let task = session.dataTask(with: req, completionHandler: {
             (data, response, error) in
             let js = data != nil ? NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! : ""
-            DispatchQueue.main.async {
-                self.runJsBundle(code: js as String)
-                self.watchOnBundleChange(url: url)
+            if (js != "") {
+                DispatchQueue.main.async {
+                    self.runJsBundle(code: js as String)
+                    self.watchOnBundleChange(url: url)
+                }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(1000))) {
+                    self.watchOnBundleChange(url: url)
+                }
             }
         })
 
