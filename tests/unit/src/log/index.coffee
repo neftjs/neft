@@ -4,6 +4,8 @@
 {describe, it, beforeEach, afterEach} = unit
 {spy} = require 'sinon'
 
+Log = log.constructor
+
 describe 'src/log', ->
     testLog = null
 
@@ -26,6 +28,8 @@ describe 'src/log', ->
             _writeError: spy (msg) ->
 
         testLog = new TestImpl
+
+        Log.setGlobalLinesPrefix ''
 
     describe 'log()', ->
         it 'writes message', ->

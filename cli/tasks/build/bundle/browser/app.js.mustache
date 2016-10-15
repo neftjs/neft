@@ -3,7 +3,7 @@
 		throw "Neft framework is not included";
 	}
 
-    {{^release}}
+    {{#watchServerConfig}}
     (function(){
         function watchOnBundle() {
             var xhr = new XMLHttpRequest;
@@ -22,7 +22,7 @@
 
         watchOnBundle();
     }());
-    {{/release}}
+    {{/watchServerConfig}}
 
 	{{&appCode}}
 }());

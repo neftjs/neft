@@ -133,6 +133,7 @@ stack.runAllSimultaneously(function(){
             # in schema [function, context, args, ...]
             @_arr = []
             @length = 0
+            @pending = false
 
             Object.preventExtensions @
 
@@ -249,6 +250,7 @@ Calls all functions from the stack one by one.
 When an error occurs, processing stops and the callback function is called with the got error.
 
         runAll: (callback = NOP, ctx = null) ->
+            assert @pending is false
             if typeof callback isnt 'function'
                 throw new TypeError 'ASync runAll(): ' +
                     'passed callback is not a function'
@@ -265,10 +267,12 @@ When an error occurs, processing stops and the callback function is called with 
                 if @_arr.length
                     return callNext args
 
+                @pending = false
                 callback.apply ctx, arguments
 
             callNext = (args) => @callNext args, onNextCalled
 
+            @pending = true
             callNext()
 
             null
@@ -280,6 +284,7 @@ Calls all functions from the stack simultaneously (all at the same time).
 When an error occurs, processing stops and the callback function is called with the got error.
 
         runAllSimultaneously: (callback = NOP, ctx = null) ->
+            assert @pending is false
             assert typeof callback is 'function'
 
             length = n = @_arr.length / 3
@@ -288,7 +293,7 @@ When an error occurs, processing stops and the callback function is called with 
             unless length
                 return callback.call(ctx)
 
-            onDone = (err) ->
+            onDone = (err) =>
                 ++done
 
                 if done > length
@@ -299,9 +304,11 @@ When an error occurs, processing stops and the callback function is called with 
                     return callback.call ctx, err
 
                 if done is length
+                    @pending = false
                     callback.call(ctx)
 
             # run all functions
+            @pending = true
             while n--
                 @callNext onDone
 

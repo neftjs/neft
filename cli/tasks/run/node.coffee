@@ -9,3 +9,6 @@ module.exports = (options) ->
     process.on 'message', (msg) ->
         if msg is 'terminate'
             child.send 'terminate'
+
+    child.on 'exit', ->
+        process.exit()

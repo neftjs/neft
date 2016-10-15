@@ -17,11 +17,11 @@ public class MainActivity extends io.neft.MainActivity {
         setContentView(R.layout.activity_main);
         this.view = (WindowView) findViewById(R.id.layout);
 
-        {{#release}}
+        {{^watchServerConfig}}
         init(getAssetFile(ASSET_FILE_PATH));
-        {{/release}}
+        {{/watchServerConfig}}
 
-        {{^release}}
+        {{#watchServerConfig}}
         String watchServerUrl = "{{&watchServerConfig.protocol}}://{{&watchServerConfig.host}}:{{&watchServerConfig.port}}";
         getUrlData(watchServerUrl + "/bundle", new UrlResponse() {
             @Override
@@ -33,7 +33,7 @@ public class MainActivity extends io.neft.MainActivity {
             }
         });
         watchOnBundleChange(watchServerUrl + "/onNewBundle");
-        {{/release}}
+        {{/watchServerConfig}}
     }
 
     protected void init(String code) {
