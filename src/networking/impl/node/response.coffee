@@ -20,7 +20,7 @@ HEADERS =
     'Access-Control-Expose-Headers': 'x-cookies, x-expected-type'
 
 METHOD_HEADERS =
-    OPTIONS:
+    GET:
         'Access-Control-Allow-Origin': (obj) ->
             {networking} = obj
             if networking.allowAllOrigins
