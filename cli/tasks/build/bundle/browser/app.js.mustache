@@ -3,5 +3,26 @@
 		throw "Neft framework is not included";
 	}
 
+    {{^release}}
+    (function(){
+        function watchOnBundle() {
+            var xhr = new XMLHttpRequest;
+            var url = "{{watchServerConfig.protocol}}://";
+            url += "{{watchServerConfig.host}}";
+            url += ":{{watchServerConfig.port}}";
+            xhr.open("get", url + "/onNewBundle", true);
+            xhr.onload = function () {
+                location.href = location.href;
+            };
+            xhr.onerror = function () {
+                setTimeout(watchOnBundle, 1000);
+            };
+            xhr.send();
+        }
+
+        watchOnBundle();
+    }());
+    {{/release}}
+
 	{{&appCode}}
 }());

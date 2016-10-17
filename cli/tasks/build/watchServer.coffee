@@ -18,15 +18,8 @@ exports.start = (serverConfig, platform) ->
     networking = new Networking utils.merge
         type: Networking.HTTP
         language: 'en'
-        accessAllOrigins: true
+        allowAllOrigins: true
     , serverConfig
-
-    # allow browsers to request
-    networking.createHandler
-        method: 'options'
-        uri: 'newBundle'
-        callback: (req, res, next) ->
-            res.send 200, 'OK'
 
     # manage listeners
     onBundleSignal = signal.create()

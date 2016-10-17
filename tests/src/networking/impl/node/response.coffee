@@ -11,7 +11,7 @@ describe 'src/networking/impl/node/response', ->
         @pending =
             "#{@uid}":
                 serverReq:
-                    method: 'OPTIONS'
+                    method: 'GET'
                     headers: {}
                 serverRes:
                     getHeader: -> null
