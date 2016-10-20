@@ -10,15 +10,14 @@ cliUtils = require 'cli/utils'
 
 IN_DIR = 'views'
 OUT_DIR = 'build'
+SCRIPTS_DIR = './build/scripts'
 
 Document.FILES_PATH = IN_DIR
+Document.SCRIPTS_PATH = "#{SCRIPTS_DIR}/#{utils.uid()}/"
 loadedExtensions = {}
 
 module.exports = (platform, app, callback) ->
     logtime = log.time 'Parse documents'
-
-    fs.removeSync pathUtils.join(OUT_DIR, IN_DIR)
-    fs.removeSync pathUtils.join(OUT_DIR, 'scripts')
 
     # install document extensions
     packageConfig = JSON.parse fs.readFileSync('./package.json')
@@ -73,7 +72,7 @@ module.exports = (platform, app, callback) ->
         json = JSON.stringify view
         json = "module.exports = #{json}"
         path = "#{OUT_DIR}/#{name}.js"
-        app.views.push { name, path }
+        app.views.push {name, path}
         fs.outputFile path, json, 'utf-8', callback
         return
 
@@ -89,13 +88,18 @@ module.exports = (platform, app, callback) ->
         if err
             return callback err
 
+        # clear listeners
         Document.onError.disconnect onErrorListener
         Document.onBeforeParse.disconnect onBeforeParseListener
         Document.onParse.disconnect onParseListener
         Document.onStyle.disconnect onStyleListener
 
+        # move scripts as build scripts
+        fs.ensureDirSync Document.SCRIPTS_PATH
+        fs.copySync Document.SCRIPTS_PATH, SCRIPTS_DIR
+        fs.removeSync Document.SCRIPTS_PATH
         log.end logtime
-        callback null
+        callback err
         return
 
     cliUtils.forEachFileDeep IN_DIR, (path, stat) ->

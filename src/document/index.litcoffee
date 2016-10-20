@@ -49,6 +49,7 @@
         JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
         @FILES_PATH = ''
+        @SCRIPTS_PATH = ''
 
         signal.create @, 'onCreate'
         signal.create @, 'onError'
