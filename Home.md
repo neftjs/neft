@@ -3,7 +3,7 @@
 ## Everywhere
 
 - Node >= 0.11.14,
-- Browsers (HTML5 or WebGL) IE >= 9,
+- Browsers (HTML5 or WebGL) IE >= 10,
 - Android >= 2.2.0 (API 8),
 - iOS >= 8.0.
 
