@@ -27,8 +27,10 @@ class Client {
     init() {
         self.js.addHandler("transferData", handler: {
             (message: AnyObject) in
-            self.reader.reload(message)
-            self.onData(self.reader)
+            DispatchQueue.main.async {
+                self.reader.reload(message)
+                self.onData(self.reader)
+            }
         })
 
         actions[InAction.callFunction] = { (reader: Reader) in
@@ -168,7 +170,7 @@ class Client {
             self.js.proxy.dataCallback?.call(withArguments: [self.outActions, self.outBooleans, self.outIntegers, self.outFloats, self.outStrings])
         }
     }
-    
+
     func destroy() {
         actions.removeAll()
         js.destroy()
