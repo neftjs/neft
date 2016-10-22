@@ -6,6 +6,8 @@ os = require 'os'
 {describe, it} = unit
 {createView, renderParse, uid} = require './utils'
 
+Document.SCRIPTS_PATH = 'build/scripts'
+
 describe 'src/document script', ->
     it 'is not rendered', ->
         view = createView '''

@@ -261,6 +261,7 @@ When an error occurs, processing stops and the callback function is called with 
             onNextCalled = (err, args...) =>
                 # on err
                 if err?
+                    @pending = false
                     return callback.call ctx, err
 
                 # call next
@@ -301,6 +302,7 @@ When an error occurs, processing stops and the callback function is called with 
 
                 if err
                     done = length
+                    @pending = false
                     return callback.call ctx, err
 
                 if done is length
