@@ -71,11 +71,10 @@ module.exports = (platform, app, options) ->
 
     # run tests
     if options.withTests
-        testFiles = glob.sync './tests/**/*.js'
+        testFiles = glob.sync 'tests/**/*.js'
 
         file += 'window.app = module.exports;\n'
         for testFile in testFiles
-            testFile = pathUtils.join '../', testFile
             file += "require('#{testFile}');\n"
         file += 'Neft.unit.runTests();\n'
 

@@ -1,0 +1,75 @@
+# -
+#     deviceName: 'iPhone 6s Plus Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'iOS'
+#     platformVersion: '9.3'
+# -
+#     deviceName: 'iPhone 6s Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'iOS'
+#     platformVersion: '9.3'
+# -
+#     deviceName: 'iPhone 6 Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'iOS'
+#     platformVersion: '8.4'
+# -
+#     deviceName: 'iPad Pro Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'iOS'
+#     platformVersion: '9.3'
+# -
+#     deviceName: 'iPad Mini 4 Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'iOS'
+#     platformVersion: '9.3'
+-
+    deviceName: 'iPhone 4s Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '8.1'
+-
+    deviceName: 'iPhone 5s Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '8.1'
+-
+    deviceName: 'iPhone Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '8.2'
+-
+    deviceName: 'iPhone Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '8.3'
+-
+    deviceName: 'iPhone Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '8.4'
+-
+    deviceName: 'iPhone Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '9.0'
+-
+    deviceName: 'iPhone Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '9.1'
+-
+    deviceName: 'iPhone Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '9.2'
+-
+    deviceName: 'iPhone 5s Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '9.3'
+-
+    deviceName: 'iPhone 4s Simulator'
+    deviceOrientation: 'portrait'
+    platformName: 'iOS'
+    platformVersion: '9.3'

@@ -1,36 +1,21 @@
-{execSync} = require 'child_process'
-
-TYPES = ['unit', 'cli', 'examples']
+glob = require 'glob'
 
 {argv, env} = process
 
-# coverage arg
-useCoverage = !!env.NEFT_RUN_COVERAGE
-
-# test arg
-shouldTest = exports.shouldTest = {}
-shouldTestArgvExists = false
-for type in TYPES
-    shouldTest[type] = argv.indexOf("--#{type}") >= 0
-    unless shouldTestArgvExists
-        shouldTestArgvExists = shouldTest[type]
-unless shouldTestArgvExists
-    for type in TYPES
-        shouldTest[type] = true
-
-# sauce connect
+# config
+exports.useCoverage = !!env.NEFT_RUN_COVERAGE
 exports.useSauce = env.NEFT_TEST_BROWSER or
     env.NEFT_TEST_ANDROID or
     env.NEFT_TEST_IOS or
     false
 
-# code coverage
-if useCoverage
+# run code coverage
+if exports.useCoverage
     require 'coffee-coverage/register-istanbul'
 
 # register extensions
 moduleCache = require 'lib/module-cache'
-unless useCoverage
+unless exports.useCoverage
     moduleCache.registerFilenameResolver()
     moduleCache.registerCoffeeScript()
 moduleCache.registerYaml()
@@ -39,3 +24,15 @@ moduleCache.registerTxt(['.txt', '.pegjs'])
 # load Neft
 global.Neft = require '../index'
 global.Neft.unit = require 'lib/unit'
+
+# load tests
+do ->
+    CWD = 'tests/'
+    ignoreArgv = do ->
+        ignoreIndex = argv.indexOf('--ignore')
+        if ignoreIndex >= 0 then (argv[ignoreIndex + 1] + '').split ',' else []
+    files = glob.sync '**/*.coffee',
+        cwd: CWD
+        ignore: [ignoreArgv..., 'init.coffee', 'utils/**/*']
+    for file in files
+        require CWD + file

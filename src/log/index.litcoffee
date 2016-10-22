@@ -14,10 +14,20 @@ const { log } = Neft;
     {isArray} = Array
     {unshift} = Array::
 
+    linesPrefix = ''
+
     fromArgs = (args) ->
         str = ''
         str += "#{arg} → " for arg in args
-        str.substring 0, str.length - 3
+        str = str.substring 0, str.length - 3
+
+        lines = str.split '\n'
+        str = ''
+        for line in lines
+            str += "#{linesPrefix}#{line}\n"
+        str = str.slice 0, -1
+
+        str
 
     callOnce = do ->
         usedMessages = Object.create null
@@ -42,6 +52,9 @@ const { log } = Neft;
             blue: (str) -> "INFO: #{str}"
             yellow: (str) -> "WARN: #{str}"
             red: (str) -> "ERROR: #{str}"
+
+        @setGlobalLinesPrefix = (prefix) ->
+            linesPrefix = prefix
 
         @time = Date.now
         @timeDiff = (since) -> Log.time() - since

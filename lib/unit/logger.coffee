@@ -1,10 +1,11 @@
 'use strict'
 
-{utils} = Neft
+{utils, log} = Neft
+Log = log.constructor
 
 stack = require './stack'
 errorUtils = require './error'
-log = switch true
+logger = switch true
     when utils.isNode
         require './loggers/node'
     when utils.isBrowser
@@ -17,9 +18,27 @@ MIN_TIME_WARN = 100
 
 pad = ''
 testStartTime = 0
+currentTest = null
+currentTestLogged = false
+
+log.constructor::_write = do (_super = log.constructor::_write) -> ->
+    if currentTest and not currentTestLogged
+        currentTestLogged = true
+        decreaseLogPad()
+        log.info currentTest.message
+        increaseLogPad()
+    _super.apply @, arguments
+
+increaseLogPad = ->
+    pad += SCOPE_PAD
+    Log.setGlobalLinesPrefix pad
+
+decreaseLogPad = ->
+    pad = pad.slice SCOPE_PAD.length
+    Log.setGlobalLinesPrefix pad
 
 exports.onTestsStart = ->
-    log.onTestsStart()
+    logger.onTestsStart()
 
 exports.onTestsEnd = ->
     for error in stack.errors
@@ -30,7 +49,7 @@ exports.onTestsEnd = ->
             msg += "#{error.test.getFullMessage()}\n"
         msg += errorString
         log.error msg
-    log.onTestsEnd()
+    logger.onTestsEnd()
     return
 
 exports.onScopeStart = (scope) ->
@@ -38,8 +57,8 @@ exports.onScopeStart = (scope) ->
     if message is ''
         return
 
-    log.log pad + scope.message
-    pad += SCOPE_PAD
+    log scope.message
+    increaseLogPad()
     return
 
 exports.onScopeEnd = (scope) ->
@@ -47,15 +66,21 @@ exports.onScopeEnd = (scope) ->
     if message is ''
         return
 
-    pad = pad.slice SCOPE_PAD.length
+    decreaseLogPad()
     return
 
 exports.onTestStart = (test) ->
     testStartTime = Date.now()
+    currentTest = test
+    currentTestLogged = false
+    increaseLogPad()
     return
 
 exports.onTestEnd = (test) ->
-    msg = pad + test.message
+    decreaseLogPad()
+
+    currentTestLogged = true
+    msg = test.message
 
     duration = Date.now() - testStartTime
     if duration > MIN_TIME_WARN

@@ -1,0 +1,66 @@
+# Emulator
+-
+    deviceName: 'Android Emulator'
+    deviceOrientation: 'portrait'
+    platformName: 'Android'
+    platformVersion: '5.1'
+-
+    deviceName: 'Android Emulator'
+    deviceOrientation: 'portrait'
+    platformName: 'Android'
+    platformVersion: '4.3'
+-
+    deviceName: 'Android Emulator'
+    deviceOrientation: 'portrait'
+    platformName: 'Android'
+    platformVersion: '4.0'
+    automationName: 'Selendroid'
+
+# LG Nexus
+-
+    deviceName: 'LG Nexus 4 Emulator'
+    deviceOrientation: 'portrait'
+    platformName: 'Android'
+    platformVersion: '4.2'
+
+# HTC Evo
+-
+    deviceName: 'HTC Evo 3D Emulator'
+    deviceOrientation: 'portrait'
+    platformName: 'Android'
+    platformVersion: '4.0'
+    automationName: 'Selendroid'
+
+# Google Nexus
+-
+    deviceName: 'Google Nexus 7 HD Emulator'
+    deviceOrientation: 'portrait'
+    platformName: 'Android'
+    platformVersion: '4.4'
+
+# Samsung Galaxy
+# -
+#     deviceName: 'Samsung Galaxy S7 Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'Android'
+#     platformVersion: '6.0'
+# -
+#     deviceName: 'Samsung Galaxy S6 Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'Android'
+#     platformVersion: '6.0'
+# -
+#     deviceName: 'Samsung Galaxy Note 5 Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'Android'
+#     platformVersion: '6.0'
+# -
+#     deviceName: 'Samsung Galaxy S5 Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'Android'
+#     platformVersion: '5.0'
+# -
+#     deviceName: 'Samsung Galaxy S4 Device'
+#     deviceOrientation: 'portrait'
+#     platformName: 'Android'
+#     platformVersion: '4.4'
