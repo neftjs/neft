@@ -8,7 +8,6 @@
     pathUtils = require 'path'
     {getFilePath} = require './links'
 
-    OUT_DIR = 'build/scripts/'
     DEFAULT_FILE_EXT = '.js'
 
     isCoffee = (path) -> /\.(?:coffee|litcoffee|coffee\.md)$/.test(path)
@@ -54,7 +53,7 @@
 
             name = "#{filePath}##{i}"
             extname = (filename and pathUtils.extname(filename)) or DEFAULT_FILE_EXT
-            path = pathUtils.join OUT_DIR, name + extname
+            path = pathUtils.join File.SCRIPTS_PATH, name + extname
             fs.outputFileSync path, script
             File.Scripts.scripts[name] = require path
             scripts.push name
