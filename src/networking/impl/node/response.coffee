@@ -101,7 +101,7 @@ sendData = do ->
                 if isFinite(len)
                     res.setHeader 'Content-Length', len
 
-                res.end data+''
+                res.end data + ''
 
             (req, res, data, callback) ->
                 acceptEncodingHeader = req?.headers['Accept-Encoding']
@@ -167,6 +167,7 @@ module.exports = (Networking, pending) ->
 
         # send data
         {type} = res.request
+        data ?= ''
         data = prepareData type, serverRes, data
         sendData type, serverReq, serverRes, data, (err) ->
             callback err

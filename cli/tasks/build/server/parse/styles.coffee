@@ -7,7 +7,7 @@ coffee = require 'coffee-script'
 {utils, log, Document, nmlParser} = Neft
 
 createBundle = nmlParser.bundle
-cliUtils = require '../../../utils'
+cliUtils = require 'cli/utils'
 
 IN_DIR = './styles'
 OUT_DIR = 'build/styles'

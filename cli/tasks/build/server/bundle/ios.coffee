@@ -16,7 +16,7 @@ STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}static"
 ANDROID_BUNDLE_DIR = './build/ios/'
 XCODE_PROJECT_PATH = "#{OUT_DIR}Neft.xcodeproj/project.pbxproj"
-RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/ios'
+RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../../runtimes/ios'
 
 {utils, log} = Neft
 

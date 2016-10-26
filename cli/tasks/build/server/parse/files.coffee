@@ -3,7 +3,7 @@
 fs = require 'fs'
 pathUtils = require 'path'
 
-cliUtils = require '../../../utils'
+cliUtils = require 'cli/utils'
 
 {utils, log} = Neft
 

@@ -13,19 +13,17 @@ PLATFORM_BUNDLE_PATH =
 getFileBundle = (platform) ->
     fs.readFileSync PLATFORM_BUNDLE_PATH[platform], 'utf-8'
 
-exports.start = (serverConfig, platform) ->
-    # create server
-    networking = new Networking utils.merge
-        type: Networking.HTTP
-        language: 'en'
-        allowAllOrigins: true
-    , serverConfig
-
+exports.start = (networking) ->
     # manage listeners
-    onBundleSignal = signal.create()
-    onSend = ->
-        onBundleSignal.emit()
-        onBundleSignal.disconnectAll()
+    onBundleSignals =
+        browser: signal.create()
+        ios: signal.create()
+        android: signal.create()
+    onSend = (platform) ->
+        unless onBundleSignals[platform]
+            return
+        onBundleSignals[platform].emit()
+        onBundleSignals[platform].disconnectAll()
 
     ###
     Request: newBundle
@@ -33,11 +31,12 @@ exports.start = (serverConfig, platform) ->
     ###
     networking.createHandler
         method: 'get'
-        uri: 'newBundle'
+        uri: 'newBundle/{platform}'
         callback: (req, res, next) ->
-            onBundleSignal.connect ->
+            {platform} = req.params
+            onBundleSignals[platform].connect ->
                 if res.pending
-                    res.send 200, getFileBundle(platform)
+                    res.send 200, getFileBundle(req.params.platform)
 
 
     ###
@@ -46,9 +45,10 @@ exports.start = (serverConfig, platform) ->
     ###
     networking.createHandler
         method: 'get'
-        uri: 'onNewBundle'
+        uri: 'onNewBundle/{platform}'
         callback: (req, res, next) ->
-            onBundleSignal.connect ->
+            {platform} = req.params
+            onBundleSignals[platform].connect ->
                 if res.pending
                     res.send 200, ''
 
@@ -58,10 +58,10 @@ exports.start = (serverConfig, platform) ->
     ###
     networking.createHandler
         method: 'get'
-        uri: 'bundle'
+        uri: 'bundle/{platform}'
         callback: (req, res, next) ->
-            res.send 200, getFileBundle(platform)
+            res.send 200, getFileBundle(req.params.platform)
 
     # exported API
-    send: ->
-        onSend()
+    send: (platform) ->
+        onSend platform

@@ -1,7 +1,7 @@
 'use strict'
 
 fs = require 'fs'
-cliUtils = require '../../../utils.coffee'
+cliUtils = require 'cli/utils'
 pathUtils = require 'path'
 glob = require 'glob'
 
@@ -59,7 +59,7 @@ module.exports = (platform, app, options) ->
     # create file
     file = ''
     if options.withTests
-        file += "require('cli/tasks/build/parse/index/initUnit');\n"
+        file += "require('cli/tasks/build/server/parse/index/initUnit');\n"
     file += "var opts = #{config};\n"
     file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
 

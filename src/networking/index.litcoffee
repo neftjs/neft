@@ -35,6 +35,31 @@ var Networking = require('networking');
             (@HTTP = 'http')
         ]
 
+        @createRequest = (opts) ->
+            assert.isObject opts, '.createRequest options argument ...'
+
+            opts.uri = if opts.uri then opts.uri + '' else ''
+
+            # create a request
+            if opts instanceof Networking.Request
+                req = opts
+            else
+                req = new Networking.Request opts
+
+            # create a response
+            resOpts = if utils.isObject(opts.response) then opts.response else {}
+            resOpts.request = req
+            res = new Networking.Response resOpts
+            req.response = res
+
+            # get handlers
+            Networking.Impl.sendRequest req, res, (opts) ->
+                utils.merge res, opts
+                res.pending = false
+                req.destroy()
+
+            req
+
 ## Networking::constructor(*Object* options)
 
 Options:

@@ -16,7 +16,7 @@ CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}CustomApp/"
 STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
 BUNDLE_DIR = './build/android/'
-RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../runtimes/android'
+RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../../runtimes/android'
 
 mustacheFiles = []
 

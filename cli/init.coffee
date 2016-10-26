@@ -6,7 +6,7 @@ pathUtils = require 'path'
 global.Neft = require './bundle/neft-node-develop'
 require('lib/module-cache').registerBabel()
 
-{log} = Neft
+{log, utils} = Neft
 
 # warning for legacy node version
 do ->
@@ -26,7 +26,6 @@ PLATFORMS =
     node: true
     browser: true
     android: true
-    qt: true
     ios: true
 
 DEFAULT_OPTIONS_VALUES =
@@ -36,8 +35,8 @@ args =
     help: false
     version: false
     create: ''
-    build: ''
-    run: ''
+    build: []
+    run: []
 
 options =
     release: false
@@ -62,9 +61,14 @@ for arg, i in process.argv when i > 1
 
         options[name] = value
     else
-        if argOutput
-            args[argOutput] = arg
-            argOutput = ''
+        if ARGS_WITH_COMMANDS[arg]
+            argOutput = arg
+        else if argOutput
+            argValue = args[argOutput]
+            if Array.isArray(argValue)
+                argValue.push arg
+            else
+                args[argOutput] += arg
         else
             if args[arg] is undefined
                 log.error "Unexpected command '#{arg}'"
@@ -72,21 +76,26 @@ for arg, i in process.argv when i > 1
 
             args[arg] = true
 
-        if ARGS_WITH_COMMANDS[arg]
-            argOutput = arg
-
 options.withTests = options['with-tests']
+delete options['with-tests']
 
 if process.argv.length <= 2
     args.help = true
 
 # verify
-if args.build is true or args.run is true
-    log.error 'No platform specified'
-    args.help = true
-else if (args.build or args.run) and not PLATFORMS[args.build or args.run]
-    log.error 'Unsupported platform'
-    args.help = true
+platforms = args.build
+if platforms.length is 0
+    platforms = args.run
+if utils.has(process.argv, 'build') or utils.has(process.argv, 'run')
+    if not platforms or not platforms.length
+        log.error 'No platform specified'
+        args.help = true
+    else
+        unsupportedPlatform = platforms.find (platform) -> not PLATFORMS[platform]
+        if unsupportedPlatform
+            log.error "Unsupported platform #{unsupportedPlatform}"
+            args.help = true
+    options.platforms = platforms
 
 # commands
 if args.help
@@ -100,10 +109,13 @@ else if args.version
 else if args.create
     require('./tasks/create') args.create, options
 
-else if (platform = args.build or args.run)
-    require('./tasks/build') platform, options, (err) ->
+else if platforms.length > 0
+    require('./tasks/build') options, (err) ->
         if err
             return log.error err?.stack or err
 
-        if args.run
-            require('./tasks/run') platform, options
+        if args.run.length > 0
+            for platform in platforms
+                require('./tasks/run') platform, options
+        else if not options.watch
+            process.exit()
