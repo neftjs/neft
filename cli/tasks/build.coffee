@@ -29,9 +29,12 @@ module.exports = (options, callback) ->
         Networking.createRequest
             method: 'post'
             uri: "#{LOCAL.buildServer.url}onTerminate"
-            onLoadEnd: ->
+            onLoadEnd: (err) ->
                 log.warn 'Master CLI process stops running'
-                process.exit()
+                if err
+                    log.error err
+                unless options.isRunning
+                    process.exit()
 
         process.on 'SIGINT', ->
             Networking.createRequest

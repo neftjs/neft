@@ -45,6 +45,7 @@ module.exports = (platform, options, callback) ->
     stack.runAll (err) ->
         Log.setGlobalLinesPrefix ''
         if err
+            log.error err?.stack or err
             log.error platform
         else
             log.ok platform

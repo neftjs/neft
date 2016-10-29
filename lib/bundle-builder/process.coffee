@@ -7,25 +7,33 @@ Module = require 'module'
 
 TEXT_EXTNAMES = ['.txt', '.pegjs']
 
-paths = {}
+paths = Object.create null
+caches = Object.create null
 
 module.exports = (opts, callback) ->
+    {platform} = opts
+
     # prepare environment
-    unless opts.watch
-        paths = {}
+    paths[platform] ?= {}
+    caches[platform] ?= {}
+    Module._cache = caches[platform]
+    platformPaths = paths[platform]
 
     # remove changed files from cache
     if opts.watch and opts.changedFiles
         cache = Module._cache
         for file in opts.changedFiles
             delete cache[file]
-            delete paths[file]
+            delete platformPaths[file]
 
     # extend global namespace by platform properties
     MOCK_KEYS = Object.create null
-    for key, val of require("./emulators/#{opts.platform}") opts
+    for key, val of require("./emulators/#{platform}") opts
         MOCK_KEYS[key] = global[key]
         global[key] = val
+
+    # onEnvPrepare
+    opts.onEnvPrepare?.emit()
 
     # get config
     INDEX_PATH = opts.path
@@ -60,7 +68,7 @@ module.exports = (opts, callback) ->
                 filenames.push filename
 
             if parentPath
-                mpaths = paths[parent.id] ?= {}
+                mpaths = platformPaths[parent.id] ?= {}
                 mpaths[req] = filename
 
         r
@@ -89,6 +97,6 @@ module.exports = (opts, callback) ->
 
     unless err
         callback null,
-            paths: paths
+            paths: platformPaths
 
     return

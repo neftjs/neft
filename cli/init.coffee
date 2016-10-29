@@ -110,6 +110,7 @@ else if args.create
     require('./tasks/create') args.create, options
 
 else if platforms.length > 0
+    options.isRunning = args.run.length > 0
     require('./tasks/build') options, (err) ->
         if err
             return log.error err?.stack or err

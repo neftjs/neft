@@ -253,7 +253,7 @@ where `XYZ` is the given name.
                     itemListeners.push func
                 else
                     eventName = "on#{name}"
-                    @_impl[eventName].connect func
+                    @_impl[eventName]?.connect func
                 return
 
         Native
