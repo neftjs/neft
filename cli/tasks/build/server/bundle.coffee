@@ -21,7 +21,8 @@ mockNeft = (platform, neftFilePath) ->
 
     # mock Neft and disable app
     module = new Module neftFilePath
-    module.load neftFilePath
+    moduleFile = fs.readFileSync neftFilePath, 'utf8'
+    module._compile moduleFile, neftFilePath
     global.Neft = ->
     utils.merge Neft, module.exports
     MOCK_NEFT[platform] = Neft
