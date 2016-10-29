@@ -109,9 +109,9 @@ class GameViewController: UIViewController {
         self.client.js.runScript("neft")
 
         // watch on js bundle file change
-        {{#watchServerConfig}}
-        watchOnBundleChange(url: "{{&watchServerConfig.protocol}}://{{&watchServerConfig.host}}:{{&watchServerConfig.port}}/newBundle")
-        {{/watchServerConfig}}
+        {{#buildServerUrl}}
+        watchOnBundleChange(url: "{{&buildServerUrl}}/newBundle/ios")
+        {{/buildServerUrl}}
     }
 
     private func watchOnBundleChange(url: String) {

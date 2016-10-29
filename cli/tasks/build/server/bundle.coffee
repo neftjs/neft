@@ -116,7 +116,7 @@ module.exports = (platform, options, app, callback) ->
                 local: JSON.parse fs.readFileSync('./local.json')
                 extensions: []
                 buildBundleOnly: !!options.buildBundleOnly
-                watchServerConfig: options.watchServerConfig
+                buildServerUrl: options.buildServerUrl
 
             # get module extensions
             try
