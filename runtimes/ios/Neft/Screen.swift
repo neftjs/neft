@@ -3,18 +3,16 @@ import UIKit
 class Screen {
     var rect: CGRect
     
-    class func register(_ app: GameViewController){
+    class func register(){
         
     }
     
-    init(_ app: GameViewController) {
+    init() {
         // SCREEN_SIZE
         let mainScreen = UIScreen.main
         let size = mainScreen.bounds
         self.rect = size
-        app.client.pushAction(OutAction.screenSize)
-        app.client.pushFloat(size.width)
-        app.client.pushFloat(size.height)
+        App.getApp().client.pushAction(.screenSize, size.width + 1, size.height + 1)
     }
 }
 

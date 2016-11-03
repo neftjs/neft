@@ -1,186 +1,192 @@
 import UIKit
 
 class NativeItem: Item {
-    static var types: Dictionary<String, (_ app: GameViewController) -> NativeItem> = [:]
+    class NativeUIView: UIView {}
+    
+    static var types: Dictionary<String, () -> NativeItem> = [:]
+    class var name: String { return "Unknown" }
 
-    class var name: String {
-        return "Unknown"
-    }
-
-    override class func register(_ app: GameViewController){
-        app.client.actions[InAction.createNativeItem] = {
+    override class func register(){
+        onAction(.createNativeItem) {
             (reader: Reader) in
             let ctorName = reader.getString()
             let ctor = types[ctorName]
             if ctor == nil {
                 print("Native item '\(ctorName)' type not found")
-                NativeItem(app)
+                save(item: NativeItem())
             } else {
-                ctor!(app)
+                save(item: ctor!())
             }
         }
-        app.client.actions[InAction.onNativeItemPointerPress] = {
-            (reader: Reader) in
-            (app.renderer.getObjectFromReader(reader) as! NativeItem)
-                .onPointerPress(reader.getFloat(), reader.getFloat())
+        
+        onAction(.onNativeItemPointerPress) {
+            (item: NativeItem, reader: Reader) in
+            item.onPointerPress(reader.getFloat(), reader.getFloat())
         }
-        app.client.actions[InAction.onNativeItemPointerRelease] = {
-            (reader: Reader) in
-            (app.renderer.getObjectFromReader(reader) as! NativeItem)
-                .onPointerRelease(reader.getFloat(), reader.getFloat())
+        
+        onAction(.onNativeItemPointerMove) {
+            (item: NativeItem, reader: Reader) in
+            item.onPointerMove(reader.getFloat(), reader.getFloat())
         }
-        app.client.actions[InAction.onNativeItemPointerMove] = {
-            (reader: Reader) in
-            (app.renderer.getObjectFromReader(reader) as! NativeItem)
-                .onPointerMove(reader.getFloat(), reader.getFloat())
+        
+        onAction(.onNativeItemPointerRelease) {
+            (item: NativeItem, reader: Reader) in
+            item.onPointerRelease(reader.getFloat(), reader.getFloat())
         }
     }
-
-    static func addClientAction(_ app: GameViewController, type: String, name: String, handler: @escaping ((NativeItem, [Any?]) -> Void)) {
+    
+    private static func on<T: NativeItem>(
+        _ type: String,
+        _ name: String,
+        _ handler: @escaping (T, [Any?]) -> Void
+        ) {
         let funcName = "renderer\(type)\(self.name.uppercaseFirst)\(name.uppercaseFirst)"
-        let clientHandler = {
+        App.getApp().client.addCustomFunction(funcName) {
             (inputArgs: [Any?]) in
             var args = inputArgs
             let index = Int(round(args[0] as! CGFloat))
-            let item = app.renderer.objects[index] as! NativeItem
+            let item = App.getApp().renderer.items[index] as! T
             args.removeFirst()
             handler(item, args)
         }
-        app.client.addCustomFunction(funcName, function: clientHandler)
     }
-
-    class func addClientProperty(_ app: GameViewController, name: String, handler: @escaping ((NativeItem, [Any?]) -> Void)) {
-        addClientAction(app, type: "Set", name: name, handler: handler)
+    
+    internal static func onSet<T: NativeItem>(
+        _ propertyName: String,
+        _ handler: @escaping (T, [Any?]) -> Void
+        ) {
+        on("Set", propertyName, handler)
     }
-
-    class func addClientFunction(_ app: GameViewController, name: String, handler: @escaping ((NativeItem, [Any?]) -> Void)) {
-        addClientAction(app, type: "Call", name: name, handler: handler)
-
+    
+    internal static func onSet<T: NativeItem>(
+        _ propertyName: String,
+        _ handler: @escaping (T, Bool) -> Void
+        ) {
+        onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, args[0] as! Bool)
+        }
+    }
+    
+    internal static func onSet<T: NativeItem>(
+        _ propertyName: String,
+        _ handler: @escaping (T, CGFloat) -> Void
+        ) {
+        onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, args[0] as! CGFloat)
+        }
+    }
+    
+    internal static func onSet<T: NativeItem>(
+        _ propertyName: String,
+        _ handler: @escaping (T, Int) -> Void
+        ) {
+        onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, Int(args[0] as! CGFloat))
+        }
+    }
+    
+    internal static func onSet<T: NativeItem>(
+        _ propertyName: String,
+        _ handler: @escaping (T, UIColor?) -> Void
+        ) {
+        onSet(propertyName) {
+            (item: T, val: Int?) in
+            handler(item, val != nil ? Color.hexColorToUIColor(val!) : nil)
+        }
+    }
+    
+    internal static func onSet<T: NativeItem>(
+        _ propertyName: String,
+        _ handler: @escaping (T, String) -> Void
+        ) {
+        onSet(propertyName) {
+            (item: T, args: [Any?]) in
+            handler(item, args[0] as! String)
+        }
+    }
+    
+    internal static func onCall<T: NativeItem>(
+        _ funcName: String,
+        _ handler: @escaping (T, [Any?]) -> Void
+        ) {
+        on("Call", funcName, handler)
+    }
+    
+    internal static func onCreate<T: NativeItem>(
+        handler: @escaping () -> T
+        ) {
+        let typeName = self.name
+        assert(NativeItem.types[typeName] == nil, "NativeItem \(typeName) onCreate already called")
+        NativeItem.types[typeName] = handler
     }
 
     var autoWidth = true
     var autoHeight = true
-    var pressed = false
-    internal var view: UIView?
-    internal var invalidateDuration: Double = 0
-    internal var onPointerPressInvalidateDuration: Double = 0
-    internal var onPointerReleaseInvalidateDuration: Double = 0
-    internal var onPointerMoveInvalidateDuration: Double = 0
-
-    init(_ app: GameViewController, view: UIView? = nil) {
-        super.init(app)
-        self.view = view
-        if view != nil {
-            app.shadowWindow.addSubview(view!)
+    
+    override var width: CGFloat {
+        didSet {
+            autoWidth = width == 0
             updateSize()
         }
-        app.renderer.device.onTouchEnded.connect {
-            (arg: Any?) in
-            self.pressed = false
+    }
+    
+    override var height: CGFloat {
+        didSet {
+            autoHeight = height == 0
+            updateSize()
         }
     }
 
-    internal func pushEvent(_ name: String, args: [Any?]?) {
-        let eventName = "rendererOn\(type(of: self).name.uppercaseFirst)\(name.uppercaseFirst)"
-        var clientArgs: [Any?] = [CGFloat(self.id)]
-        if args != nil {
-            clientArgs.append(contentsOf: args!)
-        }
-        app.client.pushEvent(eventName, args: clientArgs)
+    override init(view: UIView = UIView()) {
+        super.init(view: view)
     }
-
-    override func setWidth(_ val: CGFloat) {
-        super.setWidth(val)
-        autoWidth = val == 0
+    
+    override func didSave() {
+        super.didSave()
         updateSize()
-    }
-
-    override func setHeight(_ val: CGFloat) {
-        super.setHeight(val)
-        autoHeight = val == 0
-        updateSize()
-    }
-
-    internal func invalidate(duration: Double) {
-        if duration > self.invalidateDuration {
-            self.invalidateDuration = duration
-        }
-        super.invalidate()
     }
 
     internal func updateSize() {
-        guard view != nil else { return; }
-
-        let width = autoWidth ? view!.bounds.width : self.width
-        let height = autoHeight ? view!.bounds.height : self.height
-        view!.bounds.size.width = width
-        view!.bounds.size.height = height
+        let width = autoWidth ? view.bounds.width : self.width
+        let height = autoHeight ? view.bounds.height : self.height
+        view.bounds.size.width = width
+        view.bounds.size.height = height
         pushWidth(width)
         pushHeight(height)
     }
 
-    internal func pushWidth(_ val: CGFloat) {
+    private func pushWidth(_ val: CGFloat) {
         if autoWidth && width != val {
-            super.setWidth(val)
-            app.client.pushAction(OutAction.nativeItemWidth)
-            app.client.pushInteger(id)
-            app.client.pushFloat(val)
+            self.width = val
+            pushAction(.nativeItemWidth, val)
         }
     }
 
-    internal func pushHeight(_ val: CGFloat) {
+    private func pushHeight(_ val: CGFloat) {
         if autoHeight && height != val {
-            super.setHeight(val)
-            app.client.pushAction(OutAction.nativeItemHeight)
-            app.client.pushInteger(id)
-            app.client.pushFloat(val)
+            self.height = val
+            pushAction(.nativeItemHeight, val)
         }
     }
 
-    func onPointerPress(_ x: CGFloat, _ y: CGFloat) {
-        pressed = true
-
-        guard view != nil else { return; }
-
-        if onPointerPressInvalidateDuration > 0 {
-            self.invalidateDuration = onPointerPressInvalidateDuration
-            invalidate()
-        }
+    internal func onPointerPress(_ x: CGFloat, _ y: CGFloat) {
     }
 
-    func onPointerRelease(_ x: CGFloat, _ y: CGFloat) {
-        guard view != nil else { return; }
-
-        if onPointerReleaseInvalidateDuration > 0 {
-            self.invalidateDuration = onPointerReleaseInvalidateDuration
-            invalidate()
-        }
+    internal func onPointerRelease(_ x: CGFloat, _ y: CGFloat) {
     }
 
-    func onPointerMove(_ x: CGFloat, _ y: CGFloat) {
-        guard view != nil else { return; }
-
-        if onPointerMoveInvalidateDuration > 0 {
-            self.invalidateDuration = onPointerMoveInvalidateDuration
-            invalidate()
-        }
+    internal func onPointerMove(_ x: CGFloat, _ y: CGFloat) {
     }
-
-    override func measure(_ globalTransform: CGAffineTransform, _ viewRect: CGRect, _ dirtyRects: inout [CGRect], forceUpdateBounds: Bool) {
-        super.measure(globalTransform, viewRect, &dirtyRects, forceUpdateBounds: forceUpdateBounds)
-        if invalidateDuration > 0 {
-            invalidateDuration -= app.frameDelay
-            invalidate()
+    
+    internal func pushEvent(event: String, args: [Any?]?) {
+        let eventName = "rendererOn\(type(of: self).name.uppercaseFirst)\(event.uppercaseFirst)"
+        var clientArgs: [Any?] = [CGFloat(id)]
+        if args != nil {
+            clientArgs.append(contentsOf: args!)
         }
-        if view != nil {
-            view!.frame = globalBounds
-        }
-    }
-
-    override func drawShape(_ context: CGContext, inRect rect: CGRect) {
-        if view != nil {
-            view!.drawHierarchy(in: bounds, afterScreenUpdates: false)
-        }
+        App.getApp().client.pushEvent(eventName, args: clientArgs)
     }
 }
-

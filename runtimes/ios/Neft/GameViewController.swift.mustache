@@ -24,51 +24,22 @@ struct Extension {
 class GameViewController: UIViewController {
     var client: Client! = Client()
     var renderer: Renderer! = Renderer()
-    var shadowWindow: ShadowWindow!
-    var window: Window!
     var customApp: CustomApp!
     var frameDelay: Double = 0
     var frameTime: Double = 0
-
-    class Window: UIView {
-        var app: GameViewController!
-        var windowItem: Item?
-        let background = CAShapeLayer()
-
-        override func didMoveToSuperview() {
-            background.fillColor = UIColor.white.cgColor
-            background.path = CGPath(rect: CGRect(x: 0, y: 0, width: frame.width, height: frame.height), transform: nil)
-        }
-
-        override func draw(_ rect: CGRect) {
-            let context = UIGraphicsGetCurrentContext()!
-            background.render(in: context)
-            windowItem?.draw(context, inRect: rect)
-
-            // DEBUG dirty rectangles
-            // context.setFillColor(red: CGFloat.random(), green: CGFloat.random(), blue: CGFloat.random(), alpha: 0.3);
-            // context.fill(rect);
-        }
-    }
-
-    class ShadowWindow: UIView {
-        override func draw(_ rect: CGRect) {
-        }
-    }
 
     @objc private func animationFrame() {
         let time = CACurrentMediaTime()
         frameDelay = (time - frameTime) * 1000;
         frameTime = time
+        client.sendData()
         client.js.callAnimationFrame()
-        renderer.draw()
     }
 
     private func initClient() {
         client.actions[InAction.setWindow] = {
             (reader: Reader) in
-            self.window.windowItem = self.renderer.getObjectFromReader(reader) as? Item
-            self.window.setNeedsDisplay()
+            self.view.addSubview(self.renderer.getItemFromReader(reader)!.view)
         }
     }
 
@@ -78,6 +49,8 @@ class GameViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        App.app = self
+
         initClient()
         initRenderer()
 
@@ -86,20 +59,10 @@ class GameViewController: UIViewController {
         updater.frameInterval = 1
         updater.add(to: RunLoop.current, forMode: RunLoopMode.commonModes)
 
-        // shadow window
-        self.shadowWindow = ShadowWindow(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        view.addSubview(shadowWindow)
-
-        // window
-        self.window = Window(frame: shadowWindow.frame)
-        window.app = self
-        window.isUserInteractionEnabled = false
-        view.addSubview(self.window)
-
         super.viewDidLoad()
 
         // init custom
-        self.customApp = CustomApp(app: self)
+        self.customApp = CustomApp()
         initExtensions()
 
         // run
@@ -137,15 +100,14 @@ class GameViewController: UIViewController {
 
     private func initExtensions() {
         {{#iosExtensions}}
-        Extension.{{&name}}.register(app: self)
+        Extension.{{&name}}.register()
         {{/iosExtensions}}
     }
 
     private func runJsBundle(code: String) {
         // clear
         client.destroy()
-        window.windowItem = nil
-        shadowWindow.subviews.forEach({ $0.removeFromSuperview() })
+        view.subviews.forEach({ $0.removeFromSuperview() })
 
         // init classes
         client = Client()

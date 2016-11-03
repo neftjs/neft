@@ -90,17 +90,14 @@ import JavaScriptCore
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(delay))) {
             guard self.js != nil else { return }
-            self.js.queue.async {
-                guard self.timerCallbackValue != nil else { return }
-                self.timerCallbackValue!.call(withArguments: [id])
-            }
+            self.timerCallbackValue?.call(withArguments: [id])
         }
 
         return id
     }
 
     func immediate(_ function: JSValue) {
-        js.queue.async {
+        DispatchQueue.main.async {
             function.call(withArguments: nil)
         }
     }
@@ -116,10 +113,7 @@ import JavaScriptCore
         return Networking.request(uri, method: method, headers: headers, data: data) {
             (args: [Any]) -> Void in
             guard self.js != nil else { return }
-            self.js.queue.async {
-                guard self.httpResponseCallback != nil else { return }
-                self.httpResponseCallback!.call(withArguments: args)
-            }
+            self.httpResponseCallback?.call(withArguments: args)
         }
     }
 
@@ -140,7 +134,6 @@ class JS {
 
     fileprivate var handlers: Dictionary<String, (_ message: AnyObject) -> ()> = [:]
 
-    var queue = DispatchQueue(label: "io.neft", target: DispatchQueue.main)
     var lastRequestId = 0
     var pendingRequests: Dictionary<Int, (_ message: AnyObject) -> Void> = [:]
 
@@ -163,9 +156,7 @@ class JS {
     }
 
     func runCode(_ code: String) {
-        queue.async {
-            self.context.evaluateScript(code)
-        }
+        self.context.evaluateScript(code)
     }
 
     func addHandler(_ name: String, handler: @escaping (_ message: AnyObject) -> Void) {
@@ -185,17 +176,12 @@ class JS {
         }
         code += ")"
 
-        queue.async {
-            self.context.evaluateScript(code)
-        }
+        self.context.evaluateScript(code)
     }
 
     func callAnimationFrame() {
         let callback = proxy.animationFrameCallback
-        guard callback != nil else { return }
-        queue.async {
-            callback!.call(withArguments: [])
-        }
+        callback?.call(withArguments: [])
     }
 
     func destroy() {
