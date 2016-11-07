@@ -20,7 +20,7 @@ JavaScript Everywhere
 - [[Multiple Components|Views Multiple Components]]
 - [[Virtual DOM|Views Virtual DOM]]
 
-### Styles
+### [[Styles]]
 - [[Views Integration|Styles Views Integration]]
 - [[Custom Elements|Styles Custom Elements]]
 - [[Text Styling|Styles Text Styling]]
