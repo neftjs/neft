@@ -43,6 +43,21 @@
 
 - `NML` - *Neft Marked Language* - Simple language used to describe styles, bindings and animations.<br>See [Built in native controls](https://github.com/Neft-io/neft-default-styles), [API Doc](https://github.com/Neft-io/neft/wiki/Renderer-API).
 
+* * *
+
+### What Neft does?
+
+1. Runs your JavaScript code on different platfoms.
+2. Renders basic elements and native views through [extensions](https://github.com/Neft-io/neft/wiki/Extensions).
+3. Supports asynchronous communication with native code.
+4. Allows to write component-based views in XML and JavaScript
+5. Provides styling engine.
+
+### What Neft *does not*?
+
+1. Supports browser APIs. Neft is not a browser.
+2. Understands CSS. Neft has his own [styling engine](https://github.com/Neft-io/neft/wiki/Styles).
+
 ### [Examples](https://github.com/Neft-io/neft/wiki/Examples)
 
 ### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
