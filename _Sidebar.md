@@ -40,4 +40,6 @@ JavaScript Everywhere
 
 ### [[API Reference]]
 
+### [[Extensions]]
+
 ### [[Contribute]]
