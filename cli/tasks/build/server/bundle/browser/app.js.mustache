@@ -3,14 +3,11 @@
 		throw "Neft framework is not included";
 	}
 
-    {{#watchServerConfig}}
+    {{#buildServerUrl}}
     (function(){
         function watchOnBundle() {
             var xhr = new XMLHttpRequest;
-            var url = "{{watchServerConfig.protocol}}://";
-            url += "{{watchServerConfig.host}}";
-            url += ":{{watchServerConfig.port}}";
-            xhr.open("get", url + "/onNewBundle", true);
+            xhr.open("get", "{{&buildServerUrl}}/onNewBundle/browser", true);
             xhr.onload = function () {
                 location.href = location.href;
             };
@@ -22,7 +19,7 @@
 
         watchOnBundle();
     }());
-    {{/watchServerConfig}}
+    {{/buildServerUrl}}
 
 	{{&appCode}}
 }());

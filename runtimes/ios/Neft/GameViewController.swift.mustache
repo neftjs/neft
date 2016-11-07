@@ -100,18 +100,16 @@ class GameViewController: UIViewController {
 
         // init custom
         self.customApp = CustomApp(app: self)
-        {{#iosExtensions}}
-        Extension.{{&name}}.register(app: self)
-        {{/iosExtensions}}
+        initExtensions()
 
         // run
         self.renderer.load()
         self.client.js.runScript("neft")
 
         // watch on js bundle file change
-        {{#watchServerConfig}}
-        watchOnBundleChange(url: "{{&watchServerConfig.protocol}}://{{&watchServerConfig.host}}:{{&watchServerConfig.port}}/newBundle")
-        {{/watchServerConfig}}
+        {{#buildServerUrl}}
+        watchOnBundleChange(url: "{{&buildServerUrl}}/newBundle/ios")
+        {{/buildServerUrl}}
     }
 
     private func watchOnBundleChange(url: String) {
@@ -137,6 +135,12 @@ class GameViewController: UIViewController {
         task.resume()
     }
 
+    private func initExtensions() {
+        {{#iosExtensions}}
+        Extension.{{&name}}.register(app: self)
+        {{/iosExtensions}}
+    }
+
     private func runJsBundle(code: String) {
         // clear
         client.destroy()
@@ -148,6 +152,7 @@ class GameViewController: UIViewController {
         initClient()
         renderer = Renderer()
         initRenderer()
+        initExtensions()
 
         // run
         renderer.load()

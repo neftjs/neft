@@ -140,7 +140,7 @@ class JS {
 
     fileprivate var handlers: Dictionary<String, (_ message: AnyObject) -> ()> = [:]
 
-    var queue = DispatchQueue(label: "io.neft")
+    var queue = DispatchQueue(label: "io.neft", target: DispatchQueue.main)
     var lastRequestId = 0
     var pendingRequests: Dictionary<Int, (_ message: AnyObject) -> Void> = [:]
 

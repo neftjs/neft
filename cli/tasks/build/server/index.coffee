@@ -17,6 +17,17 @@ runServer = ->
         allowAllOrigins: true
     , LOCAL.buildServer
 
+    BUILD_SERVER_URL = do (config = LOCAL.buildServer) ->
+        config.protocol + '://' +
+        config.host + ':' +
+        config.port
+
+    prepareBuildOptions = (options) ->
+        options = Object.create options
+        if options.watch
+            options.buildServerUrl = BUILD_SERVER_URL
+        options
+
     watchHandler = watchServer.start networking
 
     buildsStack = new utils.async.Stack
@@ -30,6 +41,7 @@ runServer = ->
             return
         watchers[platform] = watch platform, options, (buildOptions, onBuilt) ->
             buildsStack.add (callback) ->
+                buildOptions = prepareBuildOptions buildOptions
                 build platform, buildOptions, (err) ->
                     watchHandler.send platform
                     onBuilt null
@@ -67,6 +79,7 @@ runServer = ->
         callback: (req, res) ->
             {data} = req
             stack = new utils.async.Stack
+            data = prepareBuildOptions data
             for platform in data.platforms
                 stack.add build, null, [platform, data]
             buildsStack.add (callback) ->

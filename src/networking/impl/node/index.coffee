@@ -42,6 +42,8 @@ module.exports = (Networking) ->
 
         # on request
         server.on 'request', (serverReq, serverRes) ->
+            serverRes.setTimeout 0
+
             data = ''
 
             serverReq.on 'data', (chunk) ->
@@ -128,6 +130,7 @@ module.exports = (Networking) ->
 
         nodeReq = reqModule.request opts, (nodeRes) ->
             nodeRes.setEncoding res.encoding
+            nodeRes.setTimeout 0
 
             data = ''
 
