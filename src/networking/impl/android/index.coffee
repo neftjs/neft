@@ -3,7 +3,7 @@
 utils = require 'src/utils'
 
 module.exports = (Networking) ->
-
+    impl = Object.create null
     requests = Object.create null
 
     _neft.http.onResponse (id, error, code, resp, cookies) ->
@@ -20,11 +20,11 @@ module.exports = (Networking) ->
             cookies: cookies
         return
 
-    Request: require('./request') Networking
-    Response: require('./response') Networking
+    Request: require('./request') Networking, impl
+    Response: require('./response') Networking, impl
 
     init: (networking) ->
-        # send internal request
+        impl.networking = networking
         setImmediate ->
             networking.createLocalRequest
                 method: Networking.Request.GET

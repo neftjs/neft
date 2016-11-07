@@ -5,7 +5,7 @@
     const { utils } = Neft;
 
     this.onRender(function () {
-        this.state.set('enabled', utils.isBrowser || utils.isIOS);
+        this.state.set('enabled', utils.isBrowser || utils.isIOS || utils.isAndroid);
     });
 </script>
 

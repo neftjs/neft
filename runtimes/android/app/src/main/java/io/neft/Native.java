@@ -1,6 +1,6 @@
 package io.neft;
 
-import io.neft.Client.Client;
+import io.neft.client.Client;
 
 public class Native extends Thread {
     static {
