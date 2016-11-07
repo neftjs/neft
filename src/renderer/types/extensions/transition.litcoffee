@@ -41,7 +41,6 @@ Rectangle {
             super()
             @_animation = null
             @_property = ''
-            @_duration = 0
             @_to = 0
 
         listener = (oldVal) ->
@@ -53,7 +52,6 @@ Rectangle {
             @_to = to
 
             animation.stop()
-            animation.duration = @_duration
             animation.from = oldVal
             animation.to = @_to
 
@@ -132,7 +130,6 @@ Rectangle {
                     oldVal.stop()
 
                 if val
-                    @_duration = val.duration
                     val.target = null
                     val.property = @property
                 return

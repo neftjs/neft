@@ -1,0 +1,28 @@
+<import src="Template/Header.html" as="Header" />
+<import src="Template/Menu.html" as="Menu" />
+
+<script>
+    this.onRender(function () {
+        this.state.set('menuOpen', true);
+    });
+
+    this.onMenuOpen = function () {
+        this.state.set('menuOpen', true);
+    };
+
+    this.onMenuClose = function () {
+        this.state.set('menuOpen', false);
+    };
+</script>
+
+<body>
+    <Header
+      onMenuOpen="${this.onMenuOpen()}"
+      title="${context.routes.body.request.params.element}"
+    />
+    <use component="body" />
+    <Menu
+      open="${state.menuOpen}"
+      onClose="${this.onMenuClose()}"
+    />
+</body>

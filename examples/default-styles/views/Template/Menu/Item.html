@@ -1,0 +1,25 @@
+<style>
+    Flow {
+        document.query: 'li';
+        layout.fillWidth: true;
+        padding: '15 30';
+
+        if (this.pointer.hover) {
+            background.color: 'rgba(255, 255, 255, 0.05)';
+        }
+
+        if (this.nextSibling) {
+            Rectangle {
+                layout.enabled: false;
+                color: 'rgba(255, 255, 255, 0.05)';
+                anchors.fillWidth: parent;
+                height: 1;
+                anchors.bottom: parent.bottom;
+            }
+        }
+    }
+</style>
+
+<a href="/${props.item}">
+    <li n-style:pointer:onClick="${this.props.onClick()}">${props.item}</li>
+</a>

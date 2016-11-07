@@ -23,10 +23,10 @@ testApp = (absPath, callback) ->
             callback if code is 1 then new Error else null
             innerCallback null
 
-for example in glob.sync('./examples/*')
-    if example.indexOf('default-styles') >= 0
-        continue # DEBUG
+glob.sync('./examples/*').forEach (example) ->
     absPath = fs.realpathSync example
+    unless fs.existsSync(pathUtils.join(absPath, 'tests'))
+        return
     describe example, ->
         describe 'should pass tests on', ->
             appManager.buildApp absPath, 'node'

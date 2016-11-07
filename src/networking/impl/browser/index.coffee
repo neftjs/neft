@@ -12,7 +12,7 @@ module.exports = (Networking) ->
         isReady = false
 
         # Send internal request to change the page based on the URI
-        impl.changePage = window.location.neftChangePage = (uri) ->
+        impl.changePage = (uri) ->
             # send internal request
             res = networking.createLocalRequest
                 method: Networking.Request.GET

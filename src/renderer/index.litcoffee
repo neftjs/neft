@@ -8,6 +8,7 @@
 
     signal.create exports, 'onReady'
     signal.create exports, 'onWindowChange'
+    signal.create exports, 'onLinkUri'
 
     exports.Impl = Impl = require('./impl') exports
     itemUtils = exports.itemUtils = require('./utils/item') exports, Impl

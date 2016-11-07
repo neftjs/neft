@@ -13,6 +13,8 @@ module.exports = (impl) ->
         id: 0
         bindings: null
         anchors: null
+        linkUri: ''
+        linkUriListens: false
     , impl.pointer.DATA
 
     DATA: DATA
@@ -96,6 +98,23 @@ module.exports = (impl) ->
         pushItem @
         pushInteger val * 255 | 0
         return
+
+    setItemLinkUri: do ->
+        onClick = (event) ->
+            {linkUri} = @_impl
+            if linkUri
+                impl.Renderer.onLinkUri.emit linkUri
+            else
+                event.stopPropagation = false
+            return
+
+        (val) ->
+            @_impl.linkUri = val
+
+            unless @_impl.linkUriListens
+                @_impl.linkUriListens = true
+                @pointer.onClick onClick, @
+            return
 
     setItemKeysFocus: (val) ->
         pushAction outActions.SET_ITEM_KEYS_FOCUS

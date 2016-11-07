@@ -1,0 +1,13 @@
+<import src="input/NativeItem.html" as="NativeItem" />
+<import src="input/RandomColor.html" as="RandomColor" />
+
+<NativeItem>
+    <input
+      ref="input"
+      type="stepper"
+      n-style:color="${refs.colorInput.state.color}"
+    />
+</NativeItem>
+
+Value: ${refs.input.style.value}
+<RandomColor ref="colorInput" />

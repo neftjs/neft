@@ -139,7 +139,7 @@ module.exports = (impl) ->
                 if ///^([a-z]+:)///.test linkUri
                     window.location.href = linkUri
                 else
-                    window.location.neftChangePage? linkUri
+                    impl.Renderer.onLinkUri.emit linkUri
             else
                 event.stopPropagation = false
             return

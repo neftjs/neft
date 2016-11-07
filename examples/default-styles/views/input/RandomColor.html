@@ -1,0 +1,15 @@
+<script>
+    this.randomizeColor = function () {
+        const color = [];
+        for (let i = 0; i < 3; i++) {
+            color.push(Math.round(Math.random() * 255));
+        }
+        this.state.set('color', `rgb(${color})`);
+    };
+
+    this.onRender(function () {
+        this.state.set('color', '');
+    });
+</script>
+
+<button n-style:pointer:onClick="${this.randomizeColor()}">Change color</button>

@@ -1,0 +1,27 @@
+<import src="input/NativeItem.html" as="NativeItem" />
+<import src="input/RandomColor.html" as="RandomColor" />
+
+<script>
+    const { utils } = Neft;
+
+    this.onRender(function () {
+        this.state.set('enabled', utils.isIOS);
+    });
+</script>
+
+<NativeItem enabled="${state.enabled}">
+    <input
+      ref="input"
+      type="slider"
+      n-style:thumbColor="${refs.colorInput.state.color}"
+      n-style:minTrackColor="${refs.colorInput2.state.color}"
+      n-style:maxTrackColor="${refs.colorInput3.state.color}"
+    />
+</NativeItem>
+
+<blank ref="blank" n-if="${state.enabled}">
+    Value: ${refs.input.style.value}
+    <RandomColor ref="colorInput" />
+    <RandomColor ref="colorInput2" />
+    <RandomColor ref="colorInput3" />
+</blank>

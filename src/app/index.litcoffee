@@ -224,6 +224,11 @@ app.cookies.onChange(function(key){
         # propagate data
         Renderer.resources = app.resources
         Renderer.serverUrl = app.networking.url
+        Renderer.onLinkUri (uri) ->
+            app.networking.createLocalRequest
+                method: Networking.Request.GET
+                type: Networking.Request.HTML_TYPE
+                uri: uri
         Document.Scripts.scripts = utils.arrayToObject opts.scripts,
             (index, elem) -> elem.name,
             (index, elem) -> elem.file

@@ -1,0 +1,30 @@
+<import src="input/NativeItem.html" as="NativeItem" />
+<import src="input/RandomColor.html" as="RandomColor" />
+
+<script>
+    this.toggleInput = function () {
+        const { style } = this.refs.input;
+        style.selected = !style.selected;
+    };
+    this.toggleAnimatedInput = function () {
+        const { style } = this.refs.input;
+        style.setSelectedAnimated(!style.selected);
+    };
+</script>
+
+<NativeItem>
+    <input
+      ref="input"
+      type="switch"
+      n-style:borderColor="${refs.colorInput.state.color}"
+      n-style:selectedColor="${refs.colorInput2.state.color}"
+      n-style:thumbColor="${refs.colorInput3.state.color}"
+    />
+</NativeItem>
+
+State: ${refs.input.style.selected}
+<RandomColor ref="colorInput" />
+<RandomColor ref="colorInput2" />
+<RandomColor ref="colorInput3" />
+<button n-style:pointer:onClick="${this.toggleInput()}">Toggle</button>
+<button n-style:pointer:onClick="${this.toggleAnimatedInput()}">Toggle animated</button>
