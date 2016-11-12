@@ -7,11 +7,9 @@
 ### Help
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
 
-### Get Started
-- [[Installation]]
-- [[First app]]
-- [[Running]]
-- [[Base concepts]]
+### [[Get Started]]
+
+### [[Data binding]]
 
 ### Views
 - [[Components|Views Components]]
