@@ -58,9 +58,9 @@
 1. Supports browser APIs. Neft is not a browser.
 2. Understands CSS. Neft has his own [styling engine](https://github.com/Neft-io/neft/wiki/Styles).
 
-### [Examples](https://github.com/Neft-io/neft/wiki/Examples)
+* * *
 
-### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
+### [Documentation](https://github.com/Neft-io/neft/wiki)
 
 * * *
 
