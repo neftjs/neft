@@ -26,6 +26,7 @@
 ### [[Static Resources]]
 
 ### [[Routing]]
+- [[Views Integration|Routing Views Integration]]
 
 ### [[Networking]]
 
