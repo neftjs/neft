@@ -51,7 +51,7 @@ exports.parse = (str) ->
 
         # join the same types
         if pushedType and lastType
-            if pushedType.__proto__ is lastType.__proto__
+            if pushedType.__proto__ is lastType.__proto__ and not (lastType instanceof Heading)
                 file.pop()
                 pushedType.text += "#{lastType.text}\n"
                 lastType = pushedType
