@@ -6,9 +6,9 @@ fs = require 'fs-extra'
 pathUtils = require 'path'
 
 exports.push = (callback) ->
-    message = 'Automatic API Wiki update'
+    message = 'API Wiki update'
     cmd = ''
-    cmd += 'git add --all && '
+    cmd += 'git add -f wiki && '
     cmd += "git commit -m '#{message}' && "
     cmd += 'git subtree push --prefix wiki wiki master'
     cp.exec cmd, (err, stderr, stdout) ->
