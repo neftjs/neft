@@ -4,7 +4,7 @@
 
 - Node >= 0.11.14,
 - Browsers (HTML5 or WebGL) IE >= 10,
-- Android >= 2.2.0 (API 8),
+- Android >= 4.0.0,
 - iOS >= 8.0.
 
 ## Why Neft?
@@ -15,11 +15,11 @@ Share code between a truly native application, website and a server. Neft uses h
 
 ### Virtual DOM
 
-DOM model powers native apps and websites in a better logic abstraction. Neft also render on the server.
+DOM model powers native apps and websites in a better logic abstraction. Neft also renders on a server.
 
 ### Abstract styles
 
-CSS alternative for more dynamic and cross-platform apps. Automatically synchronized with DOM. With native elements.
+CSS alternative for more dynamic and cross-platform apps. Automatically synchronized with DOM. With [native elements](https://github.com/Neft-io/neft/wiki/Default-Styles).
 
 ## Installation
 
@@ -42,7 +42,7 @@ neft run node
 Specify your Android SDK path in `local.json` and run:
 
 ```
-neft run android
+neft run android --watch
 ```
 
 ## iOS native app
@@ -50,17 +50,17 @@ neft run android
 Download XCode on your Mac computer and run:
 
 ```
-neft run ios
+neft run ios --watch
 ```
-
-## Android/iOS native views
-
-Check out existing [[plugins|Plugins]] or write a new one (tutorial needed).
-
-## Android/iOS native code
-
-Check our [[native communication model|Native-Communication---Tour]] and implement your `native/android/CustomApp.java` or `native/ios/CustomApp.swift` boostrap app.
 
 ## No examples, tutorials, bad docs quality
 
 Neft API is mostly stabilized. Now we are working on docs and tests improvements. You can help with making Neft brilliant. [[Contribute]]. Always create an issue if something doesn't work. Thank you!
+
+## Contribute
+
+Our main goals are:
+- improve documentation,
+- add visual tests,
+- OS X Cocoa renderer,
+- Windows 10 through [UWP](https://en.wikipedia.org/wiki/Universal_Windows_Platform).
