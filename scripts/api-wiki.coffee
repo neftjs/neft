@@ -30,4 +30,4 @@ stack.runAll (err) ->
             throw err
 
         # push changes into wiki git repo
-        git.push ->
+        git.push()
