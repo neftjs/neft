@@ -27,3 +27,5 @@ Prepare a [Pull Request](https://github.com/Neft-io/neft/pulls) with a code you 
 You can fix a bug, add new [native element](https://github.com/Neft-io/neft/wiki/Default-Styles), write an [extension](https://github.com/Neft-io/neft/wiki/Extensions) or even add support for a new platform!
 
 It's a good practice to always create an [issue](https://github.com/Neft-io/neft/issues) with a bug/feature you are working on.
+
+If you're changing Neft JavaScript code, remember to rebuild a bundle by typing `npm run bundle -- --ios` or whatever platform you want to test.
