@@ -74,13 +74,13 @@ Creates three global properties available in the `neft:each` body: `props.index`
 </ul>
 ```
 
-## Identifiers
+## References
 
-Tags with the `id` attribute is available in the `ids`/`this.ids` object.
+Tags with the `ref` attribute is available in the `refs`/`this.refs` object.
 
 ```html
-<input type="text" id="userNameInput" value="Max" />
-<h1>Your name: ${ids.userNameInput.attrs.value}</h1>
+<input type="text" ref="userNameInput" value="Max" />
+<h1>Your name: ${refs.userNameInput.props.value}</h1>
 ```
 
 ## Logging
