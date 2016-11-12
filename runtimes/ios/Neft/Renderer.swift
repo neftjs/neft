@@ -1,20 +1,9 @@
 import UIKit
 
 class Renderer {
-    class Object {
-        let app: GameViewController
-        let id: Int
-
-        init(_ app: GameViewController) {
-            self.app = app
-            self.id = app.renderer.objects.count
-            app.renderer.objects.append(self)
-        }
-    }
-
     var app: GameViewController!
 
-    var objects: [Object] = []
+    var items: [Item] = []
 
     private let measureTransform = CGAffineTransform(a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0)
     private var dirtyRects = [CGRect]()
@@ -23,26 +12,26 @@ class Renderer {
     var device: Device!
     var screen: Screen!
 
-    func getObjectFromReader(_ reader: Reader) -> Object? {
+    func getItemFromReader(_ reader: Reader) -> Item? {
         let id = reader.getInteger()
-        return id == -1 ? nil : self.objects[id]
+        return id == -1 ? nil : self.items[id]
     }
 
     func load() {
-        self.navigator = Navigator(app)
-        self.device = Device(app)
-        self.screen = Screen(app)
+        self.navigator = Navigator()
+        self.device = Device()
+        self.screen = Screen()
 
-        Device.register(app)
-        Screen.register(app)
-        Navigator.register(app)
-        Item.register(app)
-        Image.register(app)
-        Text.register(app)
-        TextInput.register(app)
-        NativeItem.register(app)
-        Rectangle.register(app)
-        Scrollable.register(app)
+        Device.register()
+        Screen.register()
+        Navigator.register()
+        Item.register()
+        Image.register()
+        Text.register()
+        TextInput.register()
+        NativeItem.register()
+        Rectangle.register()
+        Scrollable.register()
     }
 
     func pxToDp(_ px: CGFloat) -> CGFloat {
@@ -53,32 +42,7 @@ class Renderer {
         return dp * device.pixelRatio
     }
 
-    func pushObject(_ val: Object) {
+    func pushItem(_ val: Item) {
         app.client.pushInteger(val.id)
-    }
-
-    func draw() {
-        // measure window item
-        app.window.windowItem?.measure(measureTransform, screen.rect, &dirtyRects)
-
-        intersectRects: while true {
-            var i = 1
-            let length = dirtyRects.count
-            while i < length {
-                if dirtyRects[i-1].intersects(dirtyRects[i]) {
-                    dirtyRects[i-1] = dirtyRects[i-1].union(dirtyRects[i])
-                    dirtyRects.remove(at: i)
-                    continue intersectRects
-                }
-                i += 1
-            }
-            break
-        }
-
-        for rect in dirtyRects {
-            app.window.setNeedsDisplay(rect)
-        }
-
-        dirtyRects.removeAll()
     }
 }

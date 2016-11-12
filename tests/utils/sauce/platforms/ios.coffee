@@ -77,7 +77,7 @@ exports.prepareBuild = (appPath, callback) ->
 
     xcode = 'xcodebuild -sdk iphonesimulator'
     xcode += NEFT_IOS_VERSION
-    cp.execSync xcode, cwd: projectLocal
+    cp.execSync xcode, cwd: projectLocal, stdio: [0, 1, 2]
     cp.execSync "zip -r #{zipLocal} #{appLocal}"
 
     zipFilename = "#{utils.uid()}.zip"

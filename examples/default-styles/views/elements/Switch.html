@@ -2,6 +2,11 @@
 <import src="input/RandomColor.html" as="RandomColor" />
 
 <script>
+    const { utils } = Neft;
+
+    this.onRender(function () {
+        this.state.set('enabled', utils.isIOS);
+    });
     this.toggleInput = function () {
         const { style } = this.refs.input;
         style.selected = !style.selected;
@@ -12,7 +17,7 @@
     };
 </script>
 
-<NativeItem>
+<NativeItem enabled="${state.enabled}">
     <input
       ref="input"
       type="switch"

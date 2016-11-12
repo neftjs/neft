@@ -27,10 +27,8 @@ class Client {
     init() {
         self.js.addHandler("transferData", handler: {
             (message: AnyObject) in
-            DispatchQueue.main.async {
-                self.reader.reload(message)
-                self.onData(self.reader)
-            }
+            self.reader.reload(message)
+            self.onData(self.reader)
         })
 
         actions[InAction.callFunction] = { (reader: Reader) in
@@ -166,9 +164,44 @@ class Client {
         outBooleansIndex = 0
         outStringsIndex = 0
 
-        js.queue.async {
-            self.js.proxy.dataCallback?.call(withArguments: [self.outActions, self.outBooleans, self.outIntegers, self.outFloats, self.outStrings])
+        self.js.proxy.dataCallback?.call(
+            withArguments: [self.outActions, self.outBooleans, self.outIntegers, self.outFloats, self.outStrings]
+        )
+    }
+    
+    func onAction(_ action: InAction, _ handler: @escaping (Reader) -> Void) {
+        App.getApp().client.actions[action] = {
+            (reader: Reader) in
+            handler(reader)
         }
+    }
+    
+    func onAction(_ action: InAction, _ handler: @escaping () -> Void) {
+        onAction(action) {
+            (reader: Reader) in
+            handler()
+        }
+    }
+    
+    func pushAction(_ action: OutAction, _ args: [Any]) {
+        pushAction(action)
+        for arg in args {
+            if arg is Bool {
+                pushBoolean(arg as! Bool)
+            } else if arg is CGFloat {
+                pushFloat(arg as! CGFloat)
+            } else if arg is Int {
+                pushInteger(arg as! Int)
+            } else if arg is String {
+                pushString(arg as! String)
+            } else {
+                fatalError("Action can be pushed with Bool, CGFloat or String, but '\(arg)' given")
+            }
+        }
+    }
+    
+    func pushAction(_ action: OutAction, _ args: Any...) {
+        pushAction(action, args)
     }
 
     func destroy() {

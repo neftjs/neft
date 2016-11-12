@@ -46,8 +46,7 @@ class Color {
     static fileprivate let colorSpace = CGColorSpaceCreateDeviceRGB()
     static fileprivate var colorComponents: [CGFloat] = Array(repeating: 0, count: 4)
     
-    static func hexColorToCGColor(_ hexInt: Int) -> CGColor {
-        let hex = UInt(bitPattern: hexInt)
+    static func hexColorToCGColor(_ hex: Int) -> CGColor {
         colorComponents[0] = CGFloat(hex >> 24)        / colorDivisor
         colorComponents[1] = CGFloat(hex >> 16 & 0xFF) / colorDivisor
         colorComponents[2] = CGFloat(hex >> 8  & 0xFF) / colorDivisor
@@ -55,7 +54,7 @@ class Color {
         return CGColor(colorSpace: colorSpace, components: colorComponents)!
     }
     
-    static func hexColorToUIColor(_ hexInt: Int) -> UIColor {
-        return UIColor(cgColor: hexColorToCGColor(hexInt))
+    static func hexColorToUIColor(_ hex: Int) -> UIColor {
+        return UIColor(cgColor: hexColorToCGColor(hex))
     }
 }

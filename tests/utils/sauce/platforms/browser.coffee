@@ -49,7 +49,11 @@ runTest = (appPath, desired, callback) ->
 
     checkTestsFinished()
 
-    driver.fulfil callback
+    # wait for node server to run
+    # TODO: detect instead of setting timeout
+    setTimeout ->
+        driver.fulfil callback
+    , 5000
 
 exports.testApp = (appPath, desired, callback) ->
     appManager.runAppServer appPath, (err, appServer) ->

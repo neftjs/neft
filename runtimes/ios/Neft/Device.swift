@@ -24,32 +24,30 @@ class Device {
 
     var pixelRatio: CGFloat = 1
     var lastEvent: UIEvent!
-    let app: GameViewController
     let onTouchEnded = Signal()
     fileprivate var view: DeviceView!
 
-    class func register(_ app: GameViewController){
-        app.client.actions[InAction.deviceLog] = {
+    class func register(){
+        App.getApp().client.onAction(.deviceLog) {
             (reader: Reader) in
-            app.renderer.device!.log(reader.getString())
+            App.getApp().renderer.device!.log(reader.getString())
         }
-        app.client.actions[InAction.deviceShowKeyboard] = {
-            (reader: Reader) in
-            app.renderer.device!.showKeyboard()
+
+        App.getApp().client.onAction(.deviceShowKeyboard) {
+            App.getApp().renderer.device!.showKeyboard()
         }
-        app.client.actions[InAction.deviceHideKeyboard] = {
-            (reader: Reader) in
-            app.renderer.device!.hideKeyboard()
+        
+        App.getApp().client.onAction(.deviceHideKeyboard) {
+            App.getApp().renderer.device!.hideKeyboard()
         }
     }
 
-    init(_ app: GameViewController) {
-        self.app = app
-
+    init() {
+        let app: GameViewController = App.getApp()
         self.view = DeviceView(frame: app.view.frame)
         view.app = app
         view.isHidden = true
-        app.shadowWindow.addSubview(view)
+        app.view.addSubview(view)
 
         // DEVICE_PIXEL_RATIO
         let pixelRatio = UIScreen.main.scale
@@ -64,6 +62,8 @@ class Device {
     }
 
     func onEvent(_ event: UIEvent) {
+        let app: GameViewController = App.getApp()
+        
         let touches = event.allTouches
         guard touches != nil else { return }
 
@@ -94,11 +94,13 @@ class Device {
     }
 
     func showKeyboard() {
+        let app: GameViewController = App.getApp()
         view.becomeFirstResponder()
         app.client.pushAction(OutAction.deviceKeyboardShow)
     }
 
     func hideKeyboard() {
+        let app: GameViewController = App.getApp()
         app.view.endEditing(true)
         app.client.pushAction(OutAction.deviceKeyboardHide)
     }

@@ -1,14 +1,13 @@
 import Foundation
 
 class Navigator {
-    class func register(_ app: GameViewController){
+    class func register(){
         
     }
     
-    init(_ app: GameViewController) {
+    init() {
         // NAVIGATOR_LANGUAGE
-        app.client.pushAction(OutAction.navigatorLanguage)
-        app.client.pushString(Locale.preferredLanguages[0])
+        App.getApp().client.pushAction(.navigatorLanguage, Locale.preferredLanguages[0])
         
         // NAVIGATOR_ONLINE
         // TODO

@@ -1,7 +1,15 @@
 <import src="input/NativeItem.html" as="NativeItem" />
 <import src="input/RandomColor.html" as="RandomColor" />
 
-<NativeItem>
+<script>
+    const { utils } = Neft;
+
+    this.onRender(function () {
+        this.state.set('enabled', utils.isIOS);
+    });
+</script>
+
+<NativeItem enabled="${state.enabled}">
     <input
       ref="input"
       type="stepper"

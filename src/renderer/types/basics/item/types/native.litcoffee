@@ -78,7 +78,10 @@ where `XYZ` is the given name.
                     assert.isString val
                 implementationValue: (val) ->
                     if IS_NATIVE
-                        colorUtils.toRGBAHex val, config.defaultValue
+                        if val?
+                            colorUtils.toRGBAHex val, config.defaultValue
+                        else
+                            null
                     else
                         val
 

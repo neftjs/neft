@@ -38,6 +38,7 @@
         08ADA7D01C205738008FCA00 /* js.js in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7CF1C205738008FCA00 /* js.js */; };
         08ADA7D41C2182CA008FCA00 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08ADA7D31C2182C9008FCA00 /* Config.swift */; };
         08B098501C93693600EE9593 /* NativeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B0984F1C93693600EE9593 /* NativeItem.swift */; };
+        08EF8BEB1DC4DAD5005191F3 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EF8BEA1DC4DAD5005191F3 /* App.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
         08ADA7CF1C205738008FCA00 /* js.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js.js; sourceTree = "<group>"; };
         08ADA7D31C2182C9008FCA00 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
         08B0984F1C93693600EE9593 /* NativeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeItem.swift; sourceTree = "<group>"; };
+        08EF8BEA1DC4DAD5005191F3 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
                 088623971C16F48900FF6C11 /* neft.js */,
                 08ADA7CD1C2038D1008FCA00 /* svgToImage.js */,
                 088623851C1635F600FF6C11 /* GameViewController.swift */,
+                08EF8BEA1DC4DAD5005191F3 /* App.swift */,
                 088623871C1635F600FF6C11 /* Main.storyboard */,
                 0886238A1C1635F600FF6C11 /* Assets.xcassets */,
                 0886238C1C1635F600FF6C11 /* LaunchScreen.storyboard */,
@@ -246,6 +249,7 @@
                 088B7FD31C4D764C0039D52A /* Reader.swift in Sources */,
                 0825496C1C3EAFB900D846C0 /* TextInput.swift in Sources */,
                 088B7FCF1C4D75B20039D52A /* InAction.swift in Sources */,
+                08EF8BEB1DC4DAD5005191F3 /* App.swift in Sources */,
                 082566331CB02BBD0054E1F6 /* Networking.swift in Sources */,
                 088623A91C18D53D00FF6C11 /* Device.swift in Sources */,
                 0825496A1C3E63B600D846C0 /* NeftApplication.swift in Sources */,

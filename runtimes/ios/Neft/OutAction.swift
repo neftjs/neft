@@ -22,7 +22,7 @@ enum OutAction: Int {
     imageSize,
     textSize,
     fontLoad,
-    scrollableContextX,
+    scrollableContentX,
     scrollableContentY,
     textInputText,
     nativeItemWidth,

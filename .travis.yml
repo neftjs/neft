@@ -49,11 +49,14 @@ matrix:
         -
             os: osx
             node_js: "5.11"
-            osx_image: xcode8
+            osx_image: xcode8.1sneakpeek # https://github.com/travis-ci/travis-ci/issues/6791#issuecomment-260052295
             env:
                 - JOB_TYPE="ios"
                 - NEFT_TEST_IOS=1
-                - NEFT_IOS_VERSION=10.0
+                - NEFT_IOS_VERSION=10.1
+            install:
+                - xcodebuild -showsdks
+                - npm install
         -
             os: linux
             node_js: "6.2"

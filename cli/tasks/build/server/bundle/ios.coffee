@@ -117,6 +117,8 @@ module.exports = (config, callback) ->
         if fs.existsSync('./build/static')
             fs.copySync './build/static', STATIC_OUT_DIR
         log.end logtime
+    else
+        fs.ensureDirSync STATIC_OUT_DIR
 
     logtime = log.time "Copy extensions"
     config.iosExtensions = []
