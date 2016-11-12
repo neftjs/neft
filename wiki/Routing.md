@@ -1,13 +1,8 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Routing**
-
-Routing
-===
-
-Routes are used to handle the user request based on the given URI.
+Routes are used to handle user request based on the given URI.
 
 Routes are placed in the `routes/` folder.
 
-Each file must exports a function returning an object.
+Each file must exports a function returning an object of routes.
 
 ```javascript
 // routes/user.js
@@ -15,16 +10,14 @@ module.exports = (app) => {
     return {
         'get /users': {
             getData(callback) {
-                app.models.users.getUsers(callback);
+                callback(null, [{name: 'User1'}]);
             }
         }
     };
 };
 ```
 
-Returned object are changed to routes.
-
-`get /users` will be used, on a request with the `GET` method and the `/users` URI.
+`get /users` is used on a request with the `GET` method and the `/users` URI.
 
 To resolve the request with a data, declare the `Route::getData()` function.
 `callback` function as the first argument expects an Error instance (if thrown) and the data as the second parameter.
@@ -32,7 +25,7 @@ This is a common pattern used in Neft modules.
 
 ## URI parameters
 
-In the URI you can specify parameters by putting the parameter name in curly brackets.
+In URI you can specify parameters by putting the parameter name in curly brackets.
 
 Matched parameters are available in the `this.request.params` object.
 
@@ -54,7 +47,7 @@ module.exports = (app) => {
 
 ## Parameters schema
 
-For more strict parameters validation, you can use the Schema module.
+For more strict parameters validation, you can use [[Schema|Schema API]] module.
 
 ```javascript
 // routes/user.js
@@ -93,14 +86,14 @@ URI queries from the got request URI are available by `this.request.uri.query`.
 
 All non-standard route properties are saved in the route object.
 
-This functionality is more useful for the HTML rendering, where the route object is available in the HTML document using the `${root}` object.
+This functionality is more useful for the HTML rendering, where the route object is available in the HTML document using the `${context}` object.
 
 ```javascript
 // routes/user.js
 module.exports = (app) => {
     return {
         'get /users/nav': {
-            defaultData: [],
+            defaultData: [], // accessible in views by ${context.defaultData}
             getData(callback) {
                 callback(null, this.defaultData);
             }
@@ -109,4 +102,7 @@ module.exports = (app) => {
 };
 ```
 
-Next article: [[Views - Tour]]
+## See more
+- [[Route API|App App.Route API]],
+- [[Request API|Networking Request API]],
+- [[Uri API|Networking Uri API]].

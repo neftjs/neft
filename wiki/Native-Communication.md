@@ -1,8 +1,3 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Native Communication**
-
-Native Communication
-===
-
 Custom communication with the native code is available by the `native` module. Such communication is always asynchronous.
 
 ```javascript
@@ -18,5 +13,3 @@ Native communication right now supports only: nulls, booleans, floats and string
 
 Native code must be placed in folder `/native` created in you application. 
 You will find there a sample code with function registering and event sending.
-
-Next article: [[Resources - Tour]]

@@ -1,8 +1,3 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Views**
-
-Views
-===
-
 Views are used to serve HTML documents for crawlers (e.g. GoogleBot), browsers with no JavaScript support and, on the client side, to position and handle rendered elements.
 
 In Neft, all views must be placed in the `/views` folder and are available in the `app.views` object.

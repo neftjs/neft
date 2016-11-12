@@ -1,8 +1,3 @@
-> [Wiki](Home) ▸ [[Tour]] ▸ **Resources**
-
-Resources
-===
-
 ### File structure
 
 ### Main file
