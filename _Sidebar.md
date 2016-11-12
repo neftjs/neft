@@ -9,11 +9,10 @@
 
 ### [[Get Started]]
 
-### [[Data binding]]
-
 ### Views
 - [[Components|Views Components]]
 - [[Scripting|Views Scripting]]
+- [[Data binding]]
 - [[Multiple Components|Views Multiple Components]]
 - [[Virtual DOM|Views Virtual DOM]]
 
