@@ -70,3 +70,5 @@ To speed up coding, you can automatically rebuild the bundle each time you chang
 Application run in native environment will automatically restart.
 
 To make it works, you will need to specify `buildServer.host` in your `local.json` file. We recommend to use your machine IP address.
+
+Changing static files or custom native code requires you to rerun your application on a device manually.
