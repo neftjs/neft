@@ -1,7 +1,7 @@
 'use strict'
 
 exports.Heading = class Heading
-    constructor: (@line = 0, @text = '') ->
+    constructor: (@line = 0, @text = '', @syntax = '') ->
     getLevel: ->
         prefix = /^([#]+)/.exec @text
         if prefix?

@@ -14,8 +14,8 @@ exports.prepareFileToSave = (file, path) ->
             heading = type
         else if type instanceof ProgramCode
             url = pathUtils.join URL_PREFIX, fileCommit, '/', path
-            if heading?
-                url += headingToUrl heading.text
+            if heading?.syntax
+                url += headingToUrl heading.syntax
             text = "> [`Source`](#{url})\n"
             file[i] = new Paragraph type.line, text
 
