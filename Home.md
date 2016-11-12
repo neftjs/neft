@@ -47,7 +47,7 @@ neft run android --watch
 
 ## iOS native app
 
-Download XCode on your Mac computer and run:
+Download XCode (8.1 or newer) on your Mac computer and run:
 
 ```
 neft run ios --watch
