@@ -41,5 +41,6 @@ JavaScript Everywhere
 ### [[API Reference]]
 
 ### [[Extensions]]
+- [[Default Styles]]
 
 ### [[Contribute]]
