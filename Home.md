@@ -1,5 +1,3 @@
-# JavaScript Everywhere
-
 ## Everywhere
 
 - Node >= 0.11.14,
