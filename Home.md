@@ -55,7 +55,7 @@ neft run ios --watch
 
 Neft API is mostly stabilized. Now we are working on docs and tests improvements. You can help with making Neft brilliant. [[Contribute]]. Always create an issue if something doesn't work. Thank you!
 
-## Contribute
+## [[Contribute]]
 
 Our main goals are:
 - improve documentation,
