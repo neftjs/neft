@@ -77,6 +77,16 @@ exports.onFilesParse = (parsedFiles, repo) ->
         childFile.parent = parentFile
         parentFile.children.push childFile
 
+    # sort children
+    for path, file of filesTree
+        file.children.sort (file1, file2) ->
+            if file1.heading < file2.heading
+                -1
+            else if file1.heading > file2.heading
+                1
+            else
+                0
+
     # wiki index file
     md = '> [Wiki](Home)'
     md += ' ▸ **API Reference**\n\n'
