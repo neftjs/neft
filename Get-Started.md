@@ -1,3 +1,16 @@
+## tl;dr
+
+```
+npm install neft -g
+npm create MyApp
+cd MyApp
+npm run node browser --watch
+```
+
+... and play with `MyApp/views/index.html`.
+
+* * *
+
 ## Installation
 
 To install Neft make sure you have installed [Node.js](https://nodejs.org/) in version 0.11.14 or newer.
