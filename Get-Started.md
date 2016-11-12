@@ -7,7 +7,11 @@ cd MyApp
 npm run node browser --watch
 ```
 
-... and play with `MyApp/views/index.html`.
+... and play with `MyApp/views/index.html`;
+
+or alternatively:
+- `neft run ios --watch`,
+- `neft run android --watch`.
 
 * * *
 
