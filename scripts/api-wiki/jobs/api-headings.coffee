@@ -32,6 +32,7 @@ exports.modifyFile = (file, path) ->
         if def.name is text
             continue
 
+        type.syntax = text
         type.setHeadingText def.name
 
         html = '<dl>'

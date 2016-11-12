@@ -1,37 +1,42 @@
 [[[http://www.neft.io/static/images/neft-white.svg|alt="Neft.io Logo"|width=210px]]](http://neft.io)
 
-JavaScript Everywhere
-=====================
+# Neft Universal Platform
 
 - [[Home]]
-- [[Tour]]
-- [[Contribute]]
-- [[Tutorials]]
-- [[Examples]]
-- [[Plugins]]
 
 ### Help
-- [Neft on Stack Overflow](http://stackoverflow.com/questions/tagged/neft)
-- [Neft Google Group](https://groups.google.com/forum/#!forum/neft_io)
 - [Neft on Gitter](https://gitter.im/Neft-io/neft)
 
-### [API Reference](https://github.com/Neft-io/neft/wiki/API-Reference)
-* Library
-  - [[List|List-API]]
-  - [[Dict|Dict-API]]
-  - [[Signal|Signal-API]]
-  - [[Assert|Assert-API]]
-  - [[Db|Db-API]]
-  - [[Log|Log-API]]
-  - [[Schema|Schema-API]]
-  - [[Unit tests|Unit-API]]
-  - [[Typed Array|Typed-Array-API]]
-  - [[Native Communication|Native-API]]
-  - [[Utils|Utils-API]]
-* Engine
-  - [[Document|Document-API]]
-  - [[Networking|Networking-API]]
-  - [[Renderer|Renderer-API]]
-  - [[Resources|Resources-API]]
-* Framework
-  - [[App|App-API]]
+### [[Get Started]]
+
+### Views
+- [[Components|Views Components]]
+- [[Scripting|Views Scripting]]
+- [[Data binding]]
+- [[Multiple Components|Views Multiple Components]]
+- [[Virtual DOM|Views Virtual DOM]]
+
+### [[Styles]]
+- [[Views Integration|Styles Views Integration]]
+- [[Custom Elements|Styles Custom Elements]]
+- [[Text Styling|Styles Text Styling]]
+- [[Animations|Styles Animation]]
+- [[Abstract Styles|Styles Abstract Styles]]
+
+### [[Static Resources]]
+
+### [[Routing]]
+
+### [[Networking]]
+
+### Testing
+- [[Unit|Unit Testing]]
+
+### [[Native Communication]]
+
+### [[API Reference]]
+
+### [[Extensions]]
+- [[Default Styles]]
+
+### [[Contribute]]
