@@ -2,9 +2,9 @@
 
 ```
 npm install neft -g
-npm create MyApp
+neft create MyApp
 cd MyApp
-npm run node browser --watch
+neft run node browser --watch
 ```
 
 ... and play with `MyApp/views/index.html`;
