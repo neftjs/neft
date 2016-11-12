@@ -9,7 +9,7 @@
 
 ### [[Get Started]]
 
-### Views
+### [[Views]]
 - [[Components|Views Components]]
 - [[Scripting|Views Scripting]]
 - [[Data binding]]
