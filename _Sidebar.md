@@ -9,7 +9,7 @@
 
 ### [[Get Started]]
 
-### Views
+### [[Views]]
 - [[Components|Views Components]]
 - [[Scripting|Views Scripting]]
 - [[Data binding]]
@@ -26,6 +26,7 @@
 ### [[Static Resources]]
 
 ### [[Routing]]
+- [[Views Integration|Routing Views Integration]]
 
 ### [[Networking]]
 

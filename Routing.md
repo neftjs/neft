@@ -103,6 +103,6 @@ module.exports = (app) => {
 ```
 
 ## See more
-- [[Route API|App App.Route API]],
-- [[Request API|Networking Request API]],
-- [[Uri API|Networking Uri API]].
+- [[Route API|App App.Route API]]
+- [[Request API|Networking Request API]]
+- [[Uri API|Networking Uri API]]

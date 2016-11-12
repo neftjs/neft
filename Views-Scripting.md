@@ -1,6 +1,46 @@
-> [Wiki](Home) ▸ [[Tutorials]] ▸ **Custom View context using neft:script**
-
 `${this}` is available in each view file and `<neft:fragment />`. These objects are not shared between different views or fragments so can be easily used to extend HTML by custom JavaScript methods.
+
+## Script
+
+`<neft:script>` or just `<script>` is called with the `this` object used in string interpolation.
+
+```html
+<script>
+    this.sum = (x, y) => x + y;
+</script>
+<h1>${this.sum(1, 2)}</h1>
+```
+
+You can also use external file by the `<neft:script src="" />` attribute.
+
+## Fragment lifecycle
+
+Created `<neft:fragment>`s are reusing and keeping in the memory to ensure the best performance.
+
+`<script>` `this` object contains some signals used to detect the fragment status.
+
+```html
+<script>
+    this.onCreate(function() {});
+    this.onBeforeRender(function() {});
+    this.onRender(function() {});
+    this.onBeforeRevert(function() {});
+    this.onRevert(function() {});
+</script>
+```
+
+After `onCreate` you will only get looped render and revert signals.
+
+Because the `this` object is shared between rendered fragments, you should always use the `this.state` Dict to store the local data. You can be sure, that this object is empty when the fragment is rendered.
+
+```html
+<script>
+    this.onRender(function() {
+        this.state.extend({ x: 1 });
+    });
+</script>
+<h1>${state.x}</h1>
+```
 
 ## Extending object
 
