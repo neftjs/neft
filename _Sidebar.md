@@ -1,7 +1,6 @@
 [[[http://www.neft.io/static/images/neft-white.svg|alt="Neft.io Logo"|width=210px]]](http://neft.io)
 
-JavaScript Everywhere
-=====================
+# Neft Universal Platform
 
 - [[Home]]
 
