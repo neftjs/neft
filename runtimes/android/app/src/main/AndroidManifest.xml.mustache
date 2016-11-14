@@ -8,11 +8,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="{{&package.android.application.label}}"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:theme="@android:style/Theme.Light.NoTitleBar"
         android:hardwareAccelerated="true" >
         <activity
             android:name=".MainActivity"
-            android:label="{{&package.android.application.label}}" >
+            android:label="{{&package.android.application.label}}"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

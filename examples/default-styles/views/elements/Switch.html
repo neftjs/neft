@@ -5,7 +5,7 @@
     const { utils } = Neft;
 
     this.onRender(function () {
-        this.state.set('enabled', utils.isIOS);
+        this.state.set('enabled', utils.isIOS || utils.isAndroid);
     });
     this.toggleInput = function () {
         const { style } = this.refs.input;

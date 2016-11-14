@@ -5,14 +5,14 @@ android {
     buildToolsVersion "{{&local.android.buildToolsVersion}}"
     defaultConfig {
         applicationId "{{&package.android.package}}"
-        minSdkVersion 8
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode {{&package.android.versionCode}}
         versionName "{{&package.android.versionName}}"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
         }
     }
     sourceSets {

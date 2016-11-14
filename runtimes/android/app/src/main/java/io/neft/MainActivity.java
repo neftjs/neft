@@ -10,10 +10,17 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import io.neft.Client.Client;
+import io.neft.client.Client;
 import io.neft.CustomApp.CustomApp;
-import io.neft.Renderer.Renderer;
-import io.neft.Renderer.WindowView;
+import io.neft.client.annotation.Parser;
+import io.neft.renderer.Image;
+import io.neft.renderer.Item;
+import io.neft.renderer.NativeItem;
+import io.neft.renderer.Rectangle;
+import io.neft.renderer.Renderer;
+import io.neft.renderer.Scrollable;
+import io.neft.renderer.Text;
+import io.neft.renderer.WindowView;
 
 public class MainActivity extends FragmentActivity {
     public abstract class UrlResponse implements Runnable {
@@ -30,15 +37,28 @@ public class MainActivity extends FragmentActivity {
     public Client client;
     public Renderer renderer;
 
+    protected void initExtensions() {}
+
     protected void init(final String code) {
-        customApp = new CustomApp(this);
+        App.app = this;
+        customApp = new CustomApp();
         http = new Http();
         timers = new Timers();
         client = new Client();
         renderer = new Renderer();
         renderer.app = this;
         view.renderer = renderer;
+
+        Parser.registerHandlers(WindowView.class);
+        Parser.registerHandlers(Item.class);
+        Parser.registerHandlers(Rectangle.class);
+        Parser.registerHandlers(Image.class);
+        Parser.registerHandlers(Scrollable.class);
+        Parser.registerHandlers(Text.class);
+        Parser.registerHandlers(NativeItem.class);
         renderer.init(this);
+
+        initExtensions();
 
         Native.init(code);
         renderer.onAnimationFrame();
@@ -104,8 +124,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return renderer.device.onTouchEvent(event);
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        renderer.device.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
     }
 
 }

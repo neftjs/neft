@@ -10,7 +10,7 @@ cp = require 'child_process'
 
 OUT_DIR = './build/android/'
 NATIVE_OUT_DIR = "#{OUT_DIR}app/src/main/java/io/neft/"
-EXT_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}Extensions/"
+EXT_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}extensions/"
 CUSTOM_NATIVE_DIR = './native/android'
 CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}CustomApp/"
 STATIC_DIR = './static'
@@ -89,9 +89,12 @@ module.exports = (config, callback) ->
         nativeDirPath = "#{ext.path}native/android"
         if fs.existsSync(nativeDirPath)
             name = utils.capitalize ext.name
+            name = name.replace /(\-\w)/g, (m) -> m[1].toUpperCase()
+            packageName = name.toLowerCase()
             config.androidExtensions.push
                 name: name
-            fs.copySync nativeDirPath, "#{EXT_NATIVE_OUT_DIR}#{name}"
+                packageName: packageName
+            fs.copySync nativeDirPath, "#{EXT_NATIVE_OUT_DIR}#{packageName}"
     log.end logtime
 
     prepareFiles config
