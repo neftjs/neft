@@ -41,15 +41,14 @@ module.exports = (platform, app, options) ->
                     val.splice i, 1
         val
 
-    # include document extensions
-    packageFile = JSON.parse fs.readFileSync('./package.json', 'utf-8')
-    try
-        for key of packageFile.dependencies
-            if /^neft\-document\-/.test(key)
-                app.extensions.push "`require('#{key}')`"
+    # include app extensions
+    for ext in app.allExtensions
+        path = pathUtils.join ext.path, '/app.js'
+        if fs.existsSync(path)
+            app.extensions.push "`require('#{path}')`"
 
     # get 'package.json' config
-    app.config = packageFile.config
+    app.config = app.package.config
 
     # parse app into object
     config = JSON.stringify app, jsonReplacer

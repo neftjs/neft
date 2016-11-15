@@ -1,6 +1,7 @@
 'use strict'
 
 fs = require 'fs-extra'
+pathUtils = require 'path'
 
 {utils, log} = Neft
 
@@ -14,6 +15,8 @@ module.exports = (platform, options, callback) ->
     stack = new utils.async.Stack
 
     app = Object.preventExtensions
+        package: JSON.parse fs.readFileSync('./package.json')
+        allExtensions: []
         extensions: []
         models: []
         routes: []
@@ -23,6 +26,34 @@ module.exports = (platform, options, callback) ->
         scripts: []
         resources: null
         config: null
+
+    # get neft defined extensions
+    packageExtensions = app.package.extensions
+    if Array.isArray(packageExtensions)
+        for ext in packageExtensions
+            path = pathUtils.resolve __dirname, "../../../../extensions/#{ext}"
+            unless fs.existsSync(path)
+                log.error "Neft extension #{ext} defined in package.json not found"
+            app.allExtensions.push
+                name: ext
+                path: path
+
+    # get module extensions
+    try
+        modules = fs.readdirSync './node_modules'
+        for path in modules
+            if /^neft\-/.test(path)
+                app.allExtensions.push
+                    name: path.slice('neft-'.length)
+                    path: "./node_modules/#{path}/"
+
+    # get local extensions
+    try
+        extensions = fs.readdirSync './extensions'
+        for path in extensions
+            app.allExtensions.push
+                name: path
+                path: "./extensions/#{path}/"
 
     stack.add linkStyles, null, [platform, app]
     stack.add linkDocuments, null, [platform, app]

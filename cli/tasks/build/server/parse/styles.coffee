@@ -25,28 +25,13 @@ writeFile = (path, data, callback) ->
     data = coffee.compile data, bare: true
     fs.outputFile path, data, callback
 
-getInputDirs = ->
+getInputDirs = (app) ->
     inputDirs = []
-    packageConfig = require 'package.json'
 
-    # add package module extensions
-    for key of packageConfig.dependencies
-        stylesPath = "node_modules/#{key}/styles"
-        if /^neft\-/.test(key) and fs.existsSync(stylesPath)
-            inputDirs.push path: stylesPath, prefix: "#{key}/"
-
-    # add local extensions
-    try
-        extensions = fs.readdirSync './extensions'
-        for path in extensions
-            stylesPath = "extensions/#{path}/styles"
-            if fs.existsSync(stylesPath)
-                inputDirs.push path: stylesPath, prefix: "#{path}/"
-
-    # add custom style paths
-    if utils.isObject(packageConfig.styles)
-        for key, val of packageConfig.styles
-            inputDirs.push path: val, prefix: "#{key}/"
+    for ext in app.allExtensions
+        path = pathUtils.join ext.path, '/styles'
+        if fs.existsSync(path)
+            inputDirs.push path: path, prefix: "#{ext.name}/"
 
     # main styles folder
     inputDirs.push {path: IN_DIR, prefix: ''}
@@ -60,7 +45,7 @@ getInputDirs = ->
 module.exports = (platform, app, callback) ->
     fs.ensureDir OUT_DIR
 
-    inputDirs = getInputDirs()
+    inputDirs = getInputDirs app
     filesToLoad = 0
     files = []
     filesByFilename = {}

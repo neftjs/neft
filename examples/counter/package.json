@@ -14,9 +14,9 @@
   "scripts": {
     "test": "neft-unit ./tests/\\*\\*/\\*.js"
   },
-  "dependencies": {
-    "neft-default-styles": "0.0.1"
-  },
+  "extensions": [
+    "default-styles"
+  ],
   "android": {
     "package": "io.neft.example.counter",
     "versionCode": 1,

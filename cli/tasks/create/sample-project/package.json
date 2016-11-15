@@ -15,6 +15,9 @@
   "scripts": {
     "test": "neft-unit ./tests/\\*\\*/\\*.js"
   },
+  "extensions": [
+    "default-styles"
+  ],
   "android": {
     "package": "io.neft.sample",
     "versionCode": 1,
