@@ -20,12 +20,11 @@ module.exports = (platform, app, callback) ->
     logtime = log.time 'Parse documents'
 
     # install document extensions
-    packageConfig = JSON.parse fs.readFileSync('./package.json')
-    realpath = fs.realpathSync '.'
-    for key of packageConfig.dependencies
-        if /^neft\-document\-/.test(key) and not loadedExtensions[key]
-            loadedExtensions[key] = true
-            require(pathUtils.join(realpath, '/node_modules/', key))()
+    for ext in app.allExtensions
+        path = pathUtils.join ext.path, '/app.js'
+        if not loadedExtensions[ext.name] and fs.existsSync(path)
+            loadedExtensions[ext.name] = true
+            require(path)()
 
     styles {windowStyle: null, styles: {}, queries: app.styleQueries}
     utils.clear Document._files

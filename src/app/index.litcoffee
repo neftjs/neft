@@ -285,10 +285,10 @@ app.cookies.onChange(function(key){
 
             return
 
-        # load document extensions
+        # load app extensions
         if utils.isObject(opts.extensions)
             for ext in opts.extensions
-                ext app: app
+                ext app
 
         # exports app classes
         exports.app =

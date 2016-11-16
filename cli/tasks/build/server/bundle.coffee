@@ -113,27 +113,10 @@ module.exports = (platform, options, app, callback) ->
                 neftCode: fs.readFileSync neftFilePath, 'utf-8'
                 appFileName: "app-#{platform}-#{mode}.js"
                 appCode: file
-                package: JSON.parse fs.readFileSync('./package.json')
+                package: app.package
                 local: JSON.parse fs.readFileSync('./local.json')
-                extensions: []
+                extensions: app.extensions
                 buildBundleOnly: !!options.buildBundleOnly
                 buildServerUrl: options.buildServerUrl
-
-            # get module extensions
-            try
-                modules = fs.readdirSync './node_modules'
-                for path in modules
-                    if /^neft\-/.test(path)
-                        config.extensions.push
-                            name: path.slice('neft-'.length)
-                            path: "./node_modules/#{path}/"
-
-            # get local extensions
-            try
-                extensions = fs.readdirSync './extensions'
-                for path in extensions
-                    config.extensions.push
-                        name: path
-                        path: "./extensions/#{path}/"
 
             require("./bundle/#{platform}") config, callback

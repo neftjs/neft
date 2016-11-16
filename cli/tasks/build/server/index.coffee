@@ -88,7 +88,8 @@ runServer = ->
                     if err
                         res.send 500, utils.errorToObject(err)
                     else
-                        startWatchers data
+                        if data.watch
+                            startWatchers data
                         res.send 200
             unless buildsStack.pending
                 buildsStack.runAll utils.NOP
