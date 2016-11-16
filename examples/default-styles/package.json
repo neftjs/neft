@@ -14,9 +14,10 @@
   "scripts": {
     "test": "neft-unit ./tests/\\*\\*/\\*.js"
   },
-  "dependencies": {
-    "neft-default-styles": "^0.0.1"
-  },
+  "extensions": [
+    "default-styles",
+    "native-items"
+  ],
   "android": {
     "package": "io.neft.example.styles",
     "versionCode": 1,
