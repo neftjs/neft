@@ -23,9 +23,10 @@ runServer = ->
         config.port
 
     prepareBuildOptions = (options) ->
-        options = Object.create options
         if options.watch
-            options.buildServerUrl = BUILD_SERVER_URL
+            utils.merge buildServerUrl: BUILD_SERVER_URL, options
+        else
+            options
         options
 
     watchHandler = watchServer.start networking
