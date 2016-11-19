@@ -22,6 +22,7 @@
 - [[Text Styling|Styles Text Styling]]
 - [[Animations|Styles Animation]]
 - [[Abstract Styles|Styles Abstract Styles]]
+- [[Layout|Styles Layout]]
 
 ### [[Static Resources]]
 
