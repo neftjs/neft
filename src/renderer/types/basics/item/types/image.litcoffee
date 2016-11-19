@@ -42,7 +42,6 @@ Image {
             @_resolution = 1
             @_sourceWidth = 0
             @_sourceHeight = 0
-            @_fillMode = 'Stretch'
             @_autoWidth = true
             @_autoHeight = true
             @_width = -1
@@ -63,7 +62,6 @@ Image {
                 return
             oldVal = pixelRatio
             pixelRatio = val
-            Impl.setStaticImagePixelRatio.call @, val
             @onPixelRatioChange.emit oldVal
 
 ## *Float* Image::width = `-1`
@@ -124,8 +122,8 @@ The image source URL or data URI.
                     assert.isFloat size.width
                     assert.isFloat size.height
 
-                    @sourceWidth = size.width
-                    @sourceHeight = size.height
+                    itemUtils.setPropertyValue @, 'sourceWidth', size.width
+                    itemUtils.setPropertyValue @, 'sourceHeight', size.height
                     if @_autoWidth
                         itemWidthSetter.call @, size.width
                     if @_autoHeight
@@ -141,7 +139,7 @@ The image source URL or data URI.
                         if @sourceWidth is 0 or @sourceHeight is 0
                             setSize.call @, opts
                         else
-                            @resolution = opts.width / @sourceWidth
+                            itemUtils.setPropertyValue @, 'resolution', opts.width / @sourceWidth
 
                     @_loaded = true
                     @onLoadedChange.emit false
@@ -156,9 +154,9 @@ The image source URL or data URI.
                     if @_loaded
                         @_loaded = false
                         @onLoadedChange.emit true
-                    @sourceWidth = 0
-                    @sourceHeight = 0
-                    @resolution = 1
+                    itemUtils.setPropertyValue @, 'sourceWidth', 0
+                    itemUtils.setPropertyValue @, 'sourceHeight', 0
+                    itemUtils.setPropertyValue @, 'resolution', 1
                     if val
                         if res = Renderer.resources?.getResource(val)
                             RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio
@@ -177,78 +175,27 @@ The image source URL or data URI.
             constructor: @
             name: 'resolution'
             defaultValue: 1
-            setter: (_super) -> (val) ->
-                _super.call @, val
-                Impl.setImageSourceWidth.call @, @_sourceWidth * val
-                Impl.setImageSourceHeight.call @, @_sourceHeight * val
-                return
+            setter: (_super) -> ->
 
-## Hidden *Float* Image::sourceWidth = `0`
+## ReadOnly *Float* Image::sourceWidth = `0`
 
-## Hidden *Signal* Image::onSourceWidthChange(*Float* oldValue)
+## *Signal* Image::onSourceWidthChange(*Float* oldValue)
 
         itemUtils.defineProperty
             constructor: @
             name: 'sourceWidth'
             defaultValue: 0
-            implementation: Impl.setImageSourceWidth
-            implementationValue: (val) ->
-                val * @_resolution
-            developmentSetter: (val) ->
-                assert.isFloat val
+            setter: (_super) -> ->
 
-## Hidden *Float* Image::sourceHeight = `0`
+## ReadOnly *Float* Image::sourceHeight = `0`
 
-## Hidden *Signal* Image::onSourceHeightChange(*Float* oldValue)
+## *Signal* Image::onSourceHeightChange(*Float* oldValue)
 
         itemUtils.defineProperty
             constructor: @
             name: 'sourceHeight'
             defaultValue: 0
-            implementation: Impl.setImageSourceHeight
-            implementationValue: (val) ->
-                val * @_resolution
-            developmentSetter: (val) ->
-                assert.isFloat val
-
-## Hidden *Float* Image::offsetX = `0`
-
-## Hidden *Signal* Image::onOffsetXChange(*Float* oldValue)
-
-        itemUtils.defineProperty
-            constructor: @
-            name: 'offsetX'
-            defaultValue: 0
-            implementation: Impl.setImageOffsetX
-            developmentSetter: (val) ->
-                assert.isFloat val
-
-## Hidden *Float* Image::offsetY = `0`
-
-## Hidden *Signal* Image::onOffsetYChange(*Float* oldValue)
-
-        itemUtils.defineProperty
-            constructor: @
-            name: 'offsetY'
-            defaultValue: 0
-            implementation: Impl.setImageOffsetY
-            developmentSetter: (val) ->
-                assert.isFloat val
-
-## Hidden *Integer* Image::fillMode = `'Stretch'`
-
-## Hidden *Signal* Image::onFillModeChange(*Integer* oldValue)
-
-        FILL_MODE_OPTIONS = ['Stretch', 'Tile']
-
-        itemUtils.defineProperty
-            constructor: @
-            name: 'fillMode'
-            defaultValue: 'Stretch'
-            implementation: Impl.setImageFillMode
-            developmentSetter: (val='Stretch') ->
-                assert.isString val
-                assert.ok utils.has(FILL_MODE_OPTIONS, val), "Accepted fillMode values: '#{FILL_MODE_OPTIONS}'"
+            setter: (_super) -> ->
 
 ## ReadOnly *Boolean* Image::loaded = `false`
 

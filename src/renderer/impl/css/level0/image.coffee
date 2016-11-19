@@ -76,8 +76,7 @@ module.exports = (impl) ->
         img = data.image
         {callback} = data
 
-        unless data.useCssBackground
-            data.innerElem?.style.display = if img.status is 'ready' then 'block' else 'none'
+        data.innerElem?.style.display = if img.status is 'ready' then 'block' else 'none'
 
         if img.status is 'ready'
             callback?.call @, null, img
@@ -87,32 +86,11 @@ module.exports = (impl) ->
             img.onLoaded onImageLoaded, @
         return
 
-    useCssBackground = (item) ->
-        data = item._impl
-        data.useCssBackground = true
-        data.elemStyle.backgroundImage = "url('#{data.source}')"
-        data.elemStyle.backgroundPosition = '50% 50%'
-        data.innerElem.style.display = 'none'
-        return
-
-    setBackgroundSize = (item, width, height) ->
-        data = item._impl
-
-        unless data.useCssBackground
-            useCssBackground item
-
-        data.elemStyle.backgroundSize = "#{width}px #{height}px"
-
-        return
-
     DATA =
         innerElem: null
         callback: null
         source: ''
         image: null
-        useCssBackground: false
-        offsetX: 0
-        offsetY: 0
 
     DATA: DATA
 
@@ -130,8 +108,6 @@ module.exports = (impl) ->
         data.elem.appendChild innerElem
         return
 
-    setStaticImagePixelRatio: (val) ->
-
     setImageSource: (val, callback) ->
         val = impl.utils.encodeImageSrc val
 
@@ -141,56 +117,5 @@ module.exports = (impl) ->
         data.callback = callback
         data.image = getImage val
 
-        if data.useCssBackground
-            data.elemStyle.backgroundImage = "url('#{val}')"
-
         callCallback.call @
-        return
-
-    setImageSourceWidth: (val) ->
-        data = @_impl
-
-        if data.image and val > 0 and val isnt data.image.width
-            setBackgroundSize @, val, @_sourceHeight
-        return
-
-    setImageSourceHeight: (val) ->
-        data = @_impl
-
-        if data.image and val > 0 and val isnt data.image.height
-            setBackgroundSize @, @_sourceWidth, val
-        return
-
-    setImageFillMode: (val) ->
-        data = @_impl
-
-        if val is 'Stretch'
-            data.useCssBackground = false
-            data.elemStyle.backgroundImage = ''
-            data.innerElem.style.display = 'block'
-        else
-            useCssBackground @
-
-            switch val
-                when 'PreserveAspectFit'
-                    data.elemStyle.backgroundRepeat = 'no-repeat'
-                when 'Tile'
-                    data.elemStyle.backgroundRepeat = 'repeat'
-
-        return
-
-    setImageOffsetX: (val) ->
-        data = @_impl
-        unless data.useCssBackground
-            useCssBackground @
-        data.offsetX = val
-        data.elemStyle.backgroundPosition = "#{val}px #{data.offsetY}px"
-        return
-
-    setImageOffsetY: (val) ->
-        data = @_impl
-        unless data.useCssBackground
-            useCssBackground @
-        data.offsetY = val
-        data.elemStyle.backgroundPosition = "#{data.offsetY}px #{val}px"
         return

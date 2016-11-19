@@ -27,11 +27,6 @@ enum InAction: Int {
 
     createImage,
     setImageSource,
-    setImageSourceWidth,
-    setImageSourceHeight,
-    setImageFillMode,
-    setImageOffsetX,
-    setImageOffsetY,
 
     createText,
     setText,

@@ -54,11 +54,6 @@ exports.out = do (i=0) ->
 
     CREATE_IMAGE: i++
     SET_IMAGE_SOURCE: i++
-    SET_IMAGE_SOURCE_WIDTH: i++
-    SET_IMAGE_SOURCE_HEIGHT: i++
-    SET_IMAGE_FILL_MODE: i++
-    SET_IMAGE_OFFSET_X: i++
-    SET_IMAGE_OFFSET_Y: i++
 
     CREATE_TEXT: i++
     SET_TEXT: i++
