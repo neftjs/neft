@@ -173,7 +173,6 @@ module.exports = (impl) ->
         Navigator: require '../css/level0/navigator'
         FontLoader: require '../css/level0/loader/font'
         ResourcesLoader: require '../css/level0/loader/resources'
-        RotationSensor: require '../css/level0/sensor/rotation'
 
     setWindow: (item) ->
         unless window.isFake

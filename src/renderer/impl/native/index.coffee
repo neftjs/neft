@@ -23,7 +23,6 @@ module.exports = (impl) ->
         Device: require './level0/device'
         Screen: require './level0/screen'
         Navigator: require './level0/navigator'
-        RotationSensor: require './level0/sensor/rotation'
 
         Rectangle: require './level1/rectangle'
     , platform.Types

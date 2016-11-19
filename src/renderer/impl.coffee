@@ -12,7 +12,7 @@ module.exports = (Renderer) ->
     signal.create impl, 'onWindowReady'
 
     TYPES = ['Item', 'Image', 'Text', 'Native', 'FontLoader', 'ResourcesLoader',
-             'Device', 'Screen', 'Navigator', 'RotationSensor',
+             'Device', 'Screen', 'Navigator',
 
              'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
              'Animation', 'PropertyAnimation', 'NumberAnimation']
