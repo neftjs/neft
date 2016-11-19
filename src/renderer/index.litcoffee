@@ -38,8 +38,6 @@
     exports.Row = require('./types/layout/row') exports, Impl, itemUtils
     exports.Flow = require('./types/layout/flow') exports, Impl, itemUtils
 
-    exports.AmbientSound = require('./types/sound/ambient') exports, Impl, itemUtils
-
     exports.ResourcesLoader = require('./types/loader/resources') exports, Impl, itemUtils
     exports.FontLoader = require('./types/loader/font') exports, Impl, itemUtils
 

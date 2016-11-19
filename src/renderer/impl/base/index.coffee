@@ -13,7 +13,6 @@ exports.Types =
     Screen: require './level0/screen'
     Navigator: require './level0/navigator'
     RotationSensor: require './level0/sensor/rotation'
-    AmbientSound: require './level0/sound/ambient'
 
     Rectangle: require './level1/rectangle'
     Grid: require './level1/grid'

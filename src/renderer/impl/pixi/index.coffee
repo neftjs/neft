@@ -175,8 +175,6 @@ module.exports = (impl) ->
         ResourcesLoader: require '../css/level0/loader/resources'
         RotationSensor: require '../css/level0/sensor/rotation'
 
-        AmbientSound: require '../css/level0/sound/ambient'
-
     setWindow: (item) ->
         unless window.isFake
             if stage.children.length

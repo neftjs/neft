@@ -15,9 +15,7 @@ module.exports = (Renderer) ->
              'Device', 'Screen', 'Navigator', 'RotationSensor',
 
              'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
-             'Animation', 'PropertyAnimation', 'NumberAnimation',
-
-             'AmbientSound']
+             'Animation', 'PropertyAnimation', 'NumberAnimation']
 
     ABSTRACT_TYPES =
         'Class': true

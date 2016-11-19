@@ -156,8 +156,6 @@ module.exports = (impl) ->
 
         Rectangle: require './level1/rectangle'
 
-        AmbientSound: require './level0/sound/ambient'
-
     setWindow: (item) ->
         onLoaded = ->
             if document.readyState is 'complete'
