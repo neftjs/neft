@@ -1,9 +1,11 @@
 # String Interpolation
 
-*Element.Text* and *Element.Tag* attribute value can use string interpolation.
+Each text element and attribute value can use string interpolation.
+
+Example:
 
 ```xml
-<h1>Welcome ${props.name}!</h1>
+<h1 title="${props.title}">Welcome ${props.name}!</h1>
 ```
 
     'use strict'

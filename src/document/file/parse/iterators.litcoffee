@@ -1,32 +1,41 @@
 # n-each
 
-Attribute used for repeating.
+This attribute is used for repetitions.
 
-Tag children will be duplicated for each
-element defined in the *n-each* attribute.
+Tag body will be cloned for each element defined by this attribute.
 
-Supports arrays and *List* instances.
+Example:
 
 ```xml
 <ul n-each="[1, 2]">
-  <li>ping</li>
+  <li>ping</li> <!-- rendered twice -->
 </ul>
 ```
 
-In the tag children you have access to the three special variables:
-- **each** - `n-each` attribute,
-- **item** - current element,
-- **index** - current element index.
+You can *string interpolation* inside this attribute.
+
+*List*s changes are automatically synchronized.
+
+Example:
+
+```xml
+<ul n-each="${props.listOfItems}">
+  <li>item</li>
+</ul>
+```
+
+Cloned tag body has access to three special props:
+- **each** - `n-each` attribute (e.g. an array or a *List*),
+- **item** - current element from a list,
+- **index** - current element index from a list.
+
+Example:
 
 ```xml
 <ul n-each="List(['New York', 'Paris', 'Warsaw'])">
-  <li>Index: ${props.index}; Current: ${props.item}; Next: ${props.each[i+1]}</li>
+  <li>Index: ${props.index}; Current: ${props.item}; Next: ${props.each[props.index+1]}</li>
 </ul>
 ```
-
-## Runtime changes
-
-Use *List* to bind changes made in the array.
 
     'use strict'
 

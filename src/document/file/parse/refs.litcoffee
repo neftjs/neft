@@ -1,14 +1,14 @@
 # ref
 
-*Element.Tag* with the ref attribute is saved in the local scope
-(file, *component*, *n-each* etc.)
-and it's available in the string interpolation.
+This attribute is used to save a attached tag into the local `refs` object.
 
-Id must be unique in the scope.
+Id must be unique in *component*.
+
+Example:
 
 ```xml
 <h1 ref="heading">Heading</h1>
-<span>${refs.heading.stringify()}</span>
+<span>${refs.heading.stringify()}</span> <!-- <span>Heading</span> -->
 ```
 
     'use strict'

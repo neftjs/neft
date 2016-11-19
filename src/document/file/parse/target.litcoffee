@@ -1,18 +1,19 @@
-# target
+# <target />
 
-Tag used in *component* to define,
-where *use* body should be placed.
+This tag is used in *component* to define where the given children should be placed.
+
+Example:
 
 ```xml
-<component name="user">
+<component name="User">
   <name>${props.name}</name>
   <age>${props.age}</age>
-  <target />
+  <target /> <!-- <superPower>flying</superPower> -->
 </component>
 
-<user name="Max" age="19">
+<User name="Max" age="19">
   <superPower>flying</superPower>
-</user>
+</User>
 ```
 
     'use strict'
@@ -23,4 +24,4 @@ where *use* body should be placed.
 
 # Glossary
 
-- [target](#target)
+- [<target />](#target)

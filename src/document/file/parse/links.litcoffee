@@ -1,19 +1,27 @@
-# import
+# <import />
 
-Tag used to link *component*s from a file and use them.
+This tag is used to import *component*s from other file.
+
+The *href* attribute can be an absolute path (e.g. `/file.xml`),
+relative to the current file position (e.g. `./file.xml`), or
+relative for the *views* folder (e.g. `file.xml`).
+
+All imported files are accessible.
+
+Example:
 
 ```xml
 <import href="./user_utils.html" />
-<avatar />
+<Avatar />
 ```
 
-## Namespace
+Optional **as** attribute specifies a namespace for imported components.
 
-Optional argument `as` will link all components into the specified namespace.
+Example:
 
 ```xml
-<import href="./user_utils.html" as="user" />
-<user:avatar />
+<import href="./user_utils.html" as="User" />
+<User:Avatar />
 ```
 
     'use strict'
@@ -63,3 +71,4 @@ Optional argument `as` will link all components into the specified namespace.
 # Glossary
 
 - [import](#import)
+- [<import />](#import)

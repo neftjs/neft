@@ -1,53 +1,43 @@
-# use
+# <use />
 
-Tag used to place *component*.
+This tag is used to place a *component*.
+
+Example:
 
 ```xml
-<component name="user">
+<component name="User">
   This is a user
 </component>
 
-<use component="user" />
+<use component="User" /> <!-- This is a user -->
 ```
 
 *component* attribute can be changed in runtime.
 
 ```xml
-<component name="h1">
+<component name="H1">
   <h1>H1 heading</h1>
 </component>
 
-<use component="h${data.level}" />
+<use component="H${data.level}" />
 ```
 
-Short version of *use* is a tag prefixed by `use:`.
+*use* attributes are available by `props` in a *component* scope.
 
 ```xml
-<component name="user">
-  This is a user
-</component>
-
-<user />
-```
-
-*use* attributes are available in *component* scope.
-
-```xml
-<component name="heading">
+<component name="Heading">
   <h1>H1: ${props.data}</h1>
 </component>
 
-<heading data="Test heading" />
+<Heading data="Test heading" />
 ```
 
 ## n-async
 
-Renders component on the first free animation frame.
-
-Use this attribute to render less important elements.
+Use this attribute to render the given component on a first free animation frame.
 
 ```xml
-<body n-async />
+<Menu n-async />
 ```
 
     'use strict'
@@ -81,4 +71,4 @@ Use this attribute to render less important elements.
 
 # Glossary
 
-- [use](#use)
+- [<use />](#use)

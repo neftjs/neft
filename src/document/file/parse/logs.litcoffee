@@ -1,4 +1,10 @@
-# log
+# <log />
+
+This tag logs the given attributes and the whole body into console.
+
+Each *string interpolation* change is detected and the whole tag is logged.
+
+Example:
 
 ```xml
 <log debugObject="${props.someObject}">${props.debugText}</log>
@@ -16,4 +22,4 @@
 
 # Glossary
 
-- [log](#log)
+- [<log />](#log)
