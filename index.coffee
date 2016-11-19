@@ -13,7 +13,6 @@ exports.Schema = require 'src/schema'
 exports.Document = require 'src/document'
 exports.styles = require 'src/styles'
 exports.assert = require 'src/assert'
-exports.db = require 'src/db'
 exports.Binding = require 'src/binding'
 
 if exports.utils.isClient and not exports.utils.isBrowser
