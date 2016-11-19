@@ -1,20 +1,27 @@
-# component
+# <component />
 
-Tag used to create separated and repeatable parts of the document.
+This tag is used to create separated and repeatable parts of a document.
 
-Each component has to define a `name` unique in the file where it's defined.
+Each component has to define a unique `name`.
 
-component can be rendered by the *use* tag.
+*Component* can be created using the *<use />* tag,
+or by creating a tag with the needed name.
+
+It's recommended to start component names with a big letter.
+
+Each component creates different script scope (`this`).
+
+Example:
 
 ```xml
-<component name="product">
+<component name="Product">
   <h2>${props.name}</h2>
   <span>Type: ${props.type}</span>
 </component>
 
 <section>
-  <product type="electronics" name="dryer" />
-  <product type="painting" name="Lucretia, Paolo Veronese" />
+  <Product type="electronics" name="dryer" />
+  <Product type="painting" name="Lucretia, Paolo Veronese" />
 </section>
 ```
 
@@ -87,3 +94,4 @@ component can be rendered by the *use* tag.
 # Glossary
 
 - [component](#component)
+- [<component />](#component)

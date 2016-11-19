@@ -1,6 +1,13 @@
 # n-if
 
-Attribute used to hide or show the tag depends on the condition result.
+This attribute is used to hide or show the tag depends on the given condition.
+
+If the given *string interpolation* evalues to *falsy* result,
+the whole tag is being hidden.
+
+`n-else` attribute may be specified in the next sibling.
+
+Example:
 
 ```xml
 <span n-if="${props.user.isLogged}">Hi ${props.user.name}!</span>

@@ -26,9 +26,14 @@ const { Dict } = Neft
 
 ## *Dict* Dict.fromJSON(*String*|*Object* json)
 
-Creates a new *Dict* from a json string.
+Returns a new *Dict* based on the given *json*.
 
-This function should be used with `toJSON()` output.
+Example:
+
+```javascript
+const dict = Dict.fromJSON('{"param": "value"}');
+dict.param; // value
+```
 
         @fromJSON = (json) ->
             json = utils.tryFunction JSON.parse, JSON, [json], json
@@ -43,7 +48,9 @@ This function should be used with `toJSON()` output.
 
 Creates a new dict instance.
 
-The given data parameter determines default keys with their values.
+The given *data* parameter determines default keys with their values.
+
+Example:
 
 ```javascript
 var data = new Dict({
@@ -69,14 +76,18 @@ data.name; // xyz
             utils.defineProperty @, '_dirty', utils.WRITABLE, ALL
 
             if utils.isObject(obj)
-                utils.merge this, obj
+                utils.merge @, obj
 
 ## ReadOnly *Integer* Dict::length
 
-Amount of keys stored in a dict.
+Returns an amount of keys stored in this *Dict*.
+
+This property cannot be changed manually.
+
+Example:
 
 ```javascript
-var dict = Dict({prop: 1});
+var dict = Dict({ prop: 1 });
 dict.length; // 1
 ```
 
@@ -88,6 +99,8 @@ dict.length; // 1
 ## *Signal* Dict::onChange(*String* key, *Any* oldValue)
 
 Signal called on each key value change.
+
+Example:
 
 ```javascript
 var user = new Dict({
@@ -106,11 +119,13 @@ user.set('country', 'US');
 
 ## *Any* Dict::set(*String* key, *Any* value)
 
-Sets the given value for the given key stored in the dict.
+Sets the given value under the given key in this *Dict*.
 
-The value can't be an undefined. Use `pop()` instead.
+The given value can't be an undefined. Use `pop()` instead.
 
 Calls `onChange()` signal.
+
+Example:
 
 ```javascript
 var links = new Dict({
@@ -150,7 +165,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 
 ## *Boolean* Dict::has(*String* key)
 
-Returns `true` if the given key exists in the dict.
+Returns `true` if the given key exists in this *Dict*.
 
         utils.defineProperty @::, 'has', NOT_ENUMERABLE, (key) ->
             assert.isString key
@@ -160,9 +175,9 @@ Returns `true` if the given key exists in the dict.
 
 ## *Dict* Dict::extend(*Object*|*Dict* object)
 
-Sets all keys with their values from the given object.
+Sets all keys with their values from the given object into this *Dict*.
 
-Calls `onChange()` signal for each key.
+Calls `onChange()` signal for each given key.
 
         utils.defineProperty @::, 'extend', NOT_ENUMERABLE, (obj) ->
             assert.isObject obj
@@ -175,11 +190,13 @@ Calls `onChange()` signal for each key.
 
 ## *Any* Dict::pop(*String* key)
 
-Removes the given key from the dict.
+Removes the given key from this *Dict*.
 
-The key must exists in the dict.
+The given key must exists.
 
 Calls `onChange()` signal.
+
+Example:
 
 ```javascript
 var data = new Dict;
@@ -214,7 +231,7 @@ data.pop('name');
 
 ## Dict::clear()
 
-Removes all stored keys from the dict.
+Removes all stored keys from this *Dict*.
 
 Calls `onChange()` signal for each stored key.
 
@@ -226,9 +243,13 @@ Calls `onChange()` signal for each stored key.
 
 ## ReadOnly *Array* Dict::keys()
 
-Returns an array of keys stored in the dict.
+Returns an array of keys stored in this *Dict*.
+
+Returned array is *read only* and cannot be modified.
 
 Always returns the same array instance.
+
+Example:
 
 ```javascript
 var data = new Dict({
@@ -254,9 +275,13 @@ data.keys(); // ['x', 'y']
 
 ## *Array* Dict::values()
 
-Returns an array of values stored in the dict.
+Returns an array of values stored in this *Dict*.
+
+Returned array is *read only* and cannot be modified.
 
 Always returns the same array instance.
+
+Example:
 
 ```javascript
 var data = new Dict({
@@ -282,9 +307,13 @@ data.values(); // [10, 30]
 
 ## *Array* Dict::items()
 
-Returns an array of key-value pairs stored in the dict.
+Returns an array of key-value pairs stored in this *Dict*.
+
+Returned array is *read only* and cannot be modified.
 
 Always returns the same array instance.
+
+Example:
 
 ```javascript
 var data = new Dict({
@@ -292,18 +321,6 @@ var data = new Dict({
   y: 30
 });
 data.items(); // [['x', 10], ['y', 30]]
-```
-
-### Iterate over a dict
-
-```javascript
-var dict = new Dict({prop1: 1, prop2: 2});
-var items = dict.items();
-for (var i = 0; i < items.length; i++){
-  console.log(items[i][0], items[i][1]);
-}
-// ['prop1', 1]
-// ['prop2', 2]
 ```
 
         utils.defineProperty @::, 'items', NOT_ENUMERABLE, ->

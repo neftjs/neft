@@ -1,28 +1,28 @@
 # Attributes evaluating
 
-Some of the attributes are automatically evaluated to the JavaScript objects.
+Some of the attributes are automatically evaluated to JavaScript objects.
 
 String `[...]` evaluates to an array.
 ```xml
-<use:list n-each="[1, 2]" />
+<List n-each="[1, 2]" />
 ```
 ```xml
-<use:list items="[{name: 't-shirt'}]" />
+<List items="[{name: 't-shirt'}]" />
 ```
 
 String `{...}` evaluates to an object.
 ```xml
-<use:user data="{name: 'Johny'}" />
+<User data="{name: 'Johny'}" />
 ```
 
 String `Dict(...` evaluates to *Dict*.
 ```xml
-<use:user data="Dict({name: 'Johny'})" />
+<User data="Dict({name: 'Johny'})" />
 ```
 
 String `List(...` evaluates to *List*.
 ```xml
-<use:list n-each="List([1, 2])" />
+<List n-each="List([1, 2])" />
 ```
 
     'use strict'

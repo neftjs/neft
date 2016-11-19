@@ -1,6 +1,8 @@
-# prop
+# <prop />
 
-Tag used to dynamically change a prop of the parent element.
+This tag is used to dynamically change the given property on the parent element.
+
+Example:
 
 ```xml
 <header ref="header">
@@ -32,4 +34,4 @@ Tag used to dynamically change a prop of the parent element.
 
 # Glossary
 
-- [prop](#prop)
+- [<prop />](#prop)
