@@ -2,7 +2,7 @@ import UIKit
 
 extension Extension.DefaultStyles {
     class StepperItem: NativeItem {
-        override class var name: String { return "DSStepperItem" }
+        override class var name: String { return "DSStepper" }
 
         override class func register() {
             onCreate() {

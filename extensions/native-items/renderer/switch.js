@@ -9,7 +9,7 @@ class Switch extends Renderer.Native {
     }
 }
 
-Switch.__name__ = 'DSSwitchItem';
+Switch.__name__ = 'DSSwitch';
 
 Switch.Initialize = (item) => {
     item.on('selectedChange', function (val) {

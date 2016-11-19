@@ -14,7 +14,7 @@ public class DSSlider extends NativeItem {
     private float minValue = 0;
     private float maxValue = 1;
 
-    @OnCreate("DSSliderItem")
+    @OnCreate("DSSlider")
     public DSSlider() {
         super(new SeekBar(App.getApp().getApplicationContext()));
         pushWidth(Math.round(dpToPx(DEFAULT_WIDTH)));

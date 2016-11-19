@@ -10,7 +10,7 @@ import io.neft.renderer.annotation.OnSet;
 import io.neft.utils.ColorValue;
 
 public class DSButton extends NativeItem {
-    @OnCreate("DSButtonItem")
+    @OnCreate("DSButton")
     public DSButton() {
         super(new Button(App.getApp().getApplicationContext()));
         getItemView().setTextColor(Color.BLACK);

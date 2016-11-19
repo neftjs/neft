@@ -2,7 +2,7 @@ import UIKit
 
 extension Extension.DefaultStyles {
     class SwitchItem: NativeItem {
-        override class var name: String { return "DSSwitchItem" }
+        override class var name: String { return "DSSwitch" }
 
         override class func register() {
             onCreate() {

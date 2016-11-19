@@ -2,7 +2,7 @@ import UIKit
 
 extension Extension.DefaultStyles {
     class ButtonItem: NativeItem {
-        override class var name: String { return "DSButtonItem" }
+        override class var name: String { return "DSButton" }
 
         override class func register() {
             onCreate() {

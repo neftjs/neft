@@ -9,7 +9,7 @@ class Slider extends Renderer.Native {
     }
 }
 
-Slider.__name__ = 'DSSliderItem';
+Slider.__name__ = 'DSSlider';
 
 Slider.Initialize = (item) => {
     item.on('valueChange', function (val) {

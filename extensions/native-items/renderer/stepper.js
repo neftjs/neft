@@ -3,7 +3,7 @@ const { setPropertyValue } = Renderer.itemUtils;
 
 class Stepper extends Renderer.Native {}
 
-Stepper.__name__ = 'DSStepperItem';
+Stepper.__name__ = 'DSStepper';
 
 Stepper.Initialize = (item) => {
     item.on('valueChange', function (val) {

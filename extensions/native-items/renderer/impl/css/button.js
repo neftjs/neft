@@ -9,11 +9,11 @@ exports.createData = function () {
     return Item.createData();
 };
 
-exports.setDSButtonItemText = function(val) {
+exports.setDSButtonText = function(val) {
     this._impl.elem.textContent = val;
     Native.updateNativeSize.call(this);
 };
 
-exports.setDSButtonItemTextColor = function(val) {
+exports.setDSButtonTextColor = function(val) {
     this._impl.elemStyle.color = val;
 };

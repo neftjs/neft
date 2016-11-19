@@ -2,7 +2,7 @@ const { Renderer, assert, utils } = Neft;
 
 class Button extends Renderer.Native {}
 
-Button.__name__ = 'DSButtonItem';
+Button.__name__ = 'DSButton';
 
 Button.defineProperty({
     enabled: utils.isIOS || utils.isBrowser || utils.isAndroid,

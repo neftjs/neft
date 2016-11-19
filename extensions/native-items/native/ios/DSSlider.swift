@@ -2,7 +2,7 @@ import UIKit
 
 extension Extension.DefaultStyles {
     class SliderItem: NativeItem {
-        override class var name: String { return "DSSliderItem" }
+        override class var name: String { return "DSSlider" }
 
         override class func register() {
             onCreate() {
