@@ -76,10 +76,30 @@ where `XYZ` is the given name.
                 defaultValue: ''
                 developmentSetter: (val) ->
                     assert.isString val
+                implementationValue: do ->
+                    RESOURCE_REQUEST =
+                        property: 'color'
+                    (val) ->
+                        val = Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
+                        if IS_NATIVE
+                            if val?
+                                colorUtils.toRGBAHex val, config.defaultValue
+                            else
+                                null
+                        else
+                            val
+
+#### item
+
+            PROPERTY_TYPES.item = (config) ->
+                defaultValue: null
+                developmentSetter: (val) ->
+                    if val?
+                        assert.instanceOf val, Renderer.Item
                 implementationValue: (val) ->
                     if IS_NATIVE
                         if val?
-                            colorUtils.toRGBAHex val, config.defaultValue
+                            val._impl.id
                         else
                             null
                     else
@@ -133,7 +153,7 @@ where `XYZ` is the given name.
                     else
                         funcName = "set#{ctorName}#{name}"
                         (val) ->
-                            Impl[funcName].call @, val
+                            Impl[funcName]?.call @, val
 
                 # save
                 properties.push config
@@ -194,7 +214,7 @@ where `XYZ` is the given name.
                     nativeBridge.callFunction funcName, id, val
                 else
                     funcName = "set#{ctorName}#{name}"
-                    Impl[funcName].call @, val
+                    Impl[funcName]?.call @, val
                 return
 
 ## Native::call(*String* funcName, *Any* args...)
@@ -212,7 +232,7 @@ where `XYZ` is the given name.
                     nativeBridge.callFunction.apply nativeBridge, callArgs
                 else
                     funcName = "call#{ctorName}#{name}"
-                    Impl[funcName].apply @, args
+                    Impl[funcName]?.apply @, args
                 return
 
 ## Native::on(*String* eventName, *Function* listener)

@@ -24,6 +24,7 @@ forkSilent = (path, args, options, callback, onChild) ->
         stderr = ''
         child.stderr.on 'data', (data) ->
             stderr += data
+            log.error data
         child.on 'exit', (code) ->
             setImmediate ->
                 innerCallback null

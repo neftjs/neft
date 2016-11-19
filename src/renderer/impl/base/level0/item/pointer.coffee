@@ -14,10 +14,6 @@ module.exports = (impl) ->
     STOP_ASIDE_PROPAGATION = 1<<1
     STOP_PROPAGATION = 1<<2
 
-    Scrollable = null
-    impl.Renderer.onReady ->
-        {Scrollable} = this
-
     captureItems = do ->
         checkItem = (item, ex, ey, onItem, parentX, parentY, parentScale) ->
             result = 0
@@ -79,7 +75,7 @@ module.exports = (impl) ->
                         child = child.belowSibling
 
                 # test content item
-                if item instanceof Scrollable and item._contentItem and not (result & STOP_ASIDE_PROPAGATION)
+                if item._contentItem and not (result & STOP_ASIDE_PROPAGATION)
                     result |= checkItem(
                         item._contentItem,
                         ex, ey,

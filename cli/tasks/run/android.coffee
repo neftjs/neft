@@ -62,6 +62,5 @@ module.exports = (options) ->
             if err
                 logcat.kill()
                 console.error err
-
-    adb.stderr.on 'data', (data) ->
-        console.log data+''
+    adb.stdout.pipe process.stdout
+    adb.stderr.pipe process.stderr

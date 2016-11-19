@@ -14,9 +14,6 @@ module.exports = (impl) ->
 
     {round} = Math
 
-    unless isTouch
-        impl._scrollableUsePointer = false
-
     updateMask = (item) ->
         data = item._impl
         {elem} = data

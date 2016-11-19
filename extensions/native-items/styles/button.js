@@ -1,7 +1,7 @@
 `
-const Styles = require('extensions/native-items');
+const NativeItems = require('extensions/native-items');
 `
 
-Styles.Button {
+NativeItems.Button {
     document.query: 'button'
 }

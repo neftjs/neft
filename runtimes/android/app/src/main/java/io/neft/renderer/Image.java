@@ -257,29 +257,4 @@ public class Image extends Item {
         });
         thread.start();
     }
-
-    @OnAction(InAction.SET_IMAGE_SOURCE_WIDTH)
-    public void setSourceWidth(float val) {
-        // TODO
-    }
-
-    @OnAction(InAction.SET_IMAGE_SOURCE_HEIGHT)
-    public void setSourceHeight(float val) {
-        // TODO
-    }
-
-    @OnAction(InAction.SET_IMAGE_FILL_MODE)
-    public void setFillMode(String val) {
-        // TODO
-    }
-
-    @OnAction(InAction.SET_IMAGE_OFFSET_X)
-    public void setOffsetX(float val) {
-        // TODO
-    }
-
-    @OnAction(InAction.SET_IMAGE_OFFSET_Y)
-    public void setOffsetY(float val) {
-        // TODO
-    }
 }

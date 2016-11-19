@@ -12,7 +12,7 @@ OUT_DIR = './build/android/'
 NATIVE_OUT_DIR = "#{OUT_DIR}app/src/main/java/io/neft/"
 EXT_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}extensions/"
 CUSTOM_NATIVE_DIR = './native/android'
-CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}CustomApp/"
+CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}customapp/"
 STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
 BUNDLE_DIR = './build/android/'
@@ -85,8 +85,8 @@ module.exports = (config, callback) ->
 
     logtime = log.time 'Copy extensions'
     config.androidExtensions = []
-    for ext in config.extensions
-        nativeDirPath = "#{ext.path}native/android"
+    for ext in config.allExtensions
+        nativeDirPath = "#{ext.path}/native/android"
         if fs.existsSync(nativeDirPath)
             name = utils.capitalize ext.name
             name = name.replace /(\-\w)/g, (m) -> m[1].toUpperCase()
@@ -114,6 +114,7 @@ module.exports = (config, callback) ->
             exec = "cd #{BUNDLE_DIR} && ./gradlew.bat #{gradlewMode}"
         else
             exec = "cd #{BUNDLE_DIR} && chmod +x gradlew && ./gradlew #{gradlewMode}"
-        cp.exec exec, (err) ->
+        gradleProcess = cp.exec exec, (err) ->
             log.end logtime
             callback err
+        gradleProcess.stdout.pipe process.stdout

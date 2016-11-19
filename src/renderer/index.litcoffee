@@ -16,7 +16,6 @@
     exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
     exports.Device = require('./types/namespace/device') exports, Impl, itemUtils
     exports.Navigator = require('./types/namespace/navigator') exports, Impl, itemUtils
-    exports.RotationSensor = require('./types/namespace/sensor/rotation') exports, Impl, itemUtils
 
     exports.Extension = require('./types/extension') exports, Impl, itemUtils
     exports.Class = require('./types/extensions/class') exports, Impl, itemUtils
@@ -30,7 +29,6 @@
     exports.Item = require('./types/basics/item') exports, Impl, itemUtils
     exports.Image = require('./types/basics/item/types/image') exports, Impl, itemUtils
     exports.Text = require('./types/basics/item/types/text') exports, Impl, itemUtils
-    exports.TextInput = require('./types/basics/item/types/textInput') exports, Impl, itemUtils
     exports.Native = require('./types/basics/item/types/native') exports, Impl, itemUtils
     exports.Rectangle = require('./types/shapes/rectangle') exports, Impl, itemUtils
 
@@ -38,9 +36,6 @@
     exports.Column = require('./types/layout/column') exports, Impl, itemUtils
     exports.Row = require('./types/layout/row') exports, Impl, itemUtils
     exports.Flow = require('./types/layout/flow') exports, Impl, itemUtils
-    exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
-
-    exports.AmbientSound = require('./types/sound/ambient') exports, Impl, itemUtils
 
     exports.ResourcesLoader = require('./types/loader/resources') exports, Impl, itemUtils
     exports.FontLoader = require('./types/loader/font') exports, Impl, itemUtils

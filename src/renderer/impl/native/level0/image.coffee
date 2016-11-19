@@ -29,47 +29,15 @@ module.exports = (impl) ->
     create: (data) ->
         if data.id is 0
             pushAction outActions.CREATE_IMAGE
-            data.id = bridge.getId this
+            data.id = bridge.getId @
 
         impl.Types.Item.create.call @, data
         return
-
-    setStaticImagePixelRatio: (val) ->
 
     setImageSource: (val, callback) ->
         @_impl.imageLoadCallback = callback
 
         pushAction outActions.SET_IMAGE_SOURCE
         pushItem @
-        pushString val or ""
-        return
-
-    setImageSourceWidth: (val) ->
-        pushAction outActions.SET_IMAGE_SOURCE_WIDTH
-        pushItem @
-        pushFloat val
-        return
-
-    setImageSourceHeight: (val) ->
-        pushAction outActions.SET_IMAGE_SOURCE_HEIGHT
-        pushItem @
-        pushFloat val
-        return
-
-    setImageFillMode: (val) ->
-        pushAction outActions.SET_IMAGE_FILL_MODE
-        pushItem @
-        pushString val
-        return
-
-    setImageOffsetX: (val) ->
-        pushAction outActions.SET_IMAGE_OFFSET_X
-        pushItem @
-        pushFloat val
-        return
-
-    setImageOffsetY: (val) ->
-        pushAction outActions.SET_IMAGE_OFFSET_Y
-        pushItem @
-        pushFloat val
+        pushString val or ''
         return

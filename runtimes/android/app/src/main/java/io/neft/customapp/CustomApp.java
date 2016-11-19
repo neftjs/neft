@@ -1,4 +1,4 @@
-package io.neft.CustomApp;
+package io.neft.customapp;
 
 public class CustomApp {
     public CustomApp() {

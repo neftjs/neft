@@ -1,3 +1,5 @@
 const { Impl } = Neft.Renderer;
 
-Impl.addTypeImplementation('DSButtonItem', require('./button'));
+Impl.addTypeImplementation('DSScrollable', require('./scrollable'));
+Impl.addTypeImplementation('DSTextInput', require('./textInput'));
+Impl.addTypeImplementation('DSButton', require('./button'));

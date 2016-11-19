@@ -1,6 +1,3 @@
-Scrollable {
-    contentItem: Flow {
-        document.query: 'body'
-        anchors.fillWidth: parent
-    }
+Flow {
+    document.query: 'body'
 }

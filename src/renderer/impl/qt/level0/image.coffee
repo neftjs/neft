@@ -136,8 +136,6 @@ module.exports = (impl) ->
 
         Item.create.call @, data
 
-    setStaticImagePixelRatio: (val) ->
-
     setImageSource: do ->
         onStatusChanged = ->
             data = @_impl

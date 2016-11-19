@@ -1,4 +1,4 @@
-package io.neft.extensions.defaultstyles;
+package io.neft.extensions.nativeitems;
 
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -10,7 +10,7 @@ import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
 
 public class DSSwitch extends NativeItem {
-    @OnCreate("DSSwitchItem")
+    @OnCreate("DSSwitch")
     public DSSwitch() {
         super(new Switch(App.getApp().getApplicationContext()));
 

@@ -82,8 +82,6 @@ module.exports = (impl) ->
         @onHeightChange updateSize
         return
 
-    setStaticImagePixelRatio: (val) ->
-
     setImageSource: (val, callback) ->
         self = @
         data = @_impl
@@ -128,36 +126,4 @@ module.exports = (impl) ->
         unless /^data:/.test(val)
             data.image.elem.crossOrigin = ''
 
-        return
-
-    setImageSourceWidth: (val) ->
-        @_impl.sourceWidth = val
-        if @_impl.width isnt val
-            updateSize.call @
-        return
-
-    setImageSourceHeight: (val) ->
-        @_impl.sourceHeight = val
-        if @_impl.height isnt val
-            updateSize.call @
-        return
-
-    setImageFillMode: (val) ->
-        data = @_impl
-        if val is 'Tile'
-            replaceContentElem.call @, 'TilingSprite'
-        else if data.isTiling
-            replaceContentElem.call @, 'Sprite'
-        return
-
-    setImageOffsetX: (val) ->
-        unless @_impl.isTiling
-            replaceContentElem.call @, 'TilingSprite'
-        @_impl.contentElem.tilePosition.x = val
-        return
-
-    setImageOffsetY: (val) ->
-        unless @_impl.isTiling
-            replaceContentElem.call @, 'TilingSprite'
-        @_impl.contentElem.tilePosition.y = val
         return

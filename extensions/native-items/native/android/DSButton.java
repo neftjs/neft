@@ -1,4 +1,4 @@
-package io.neft.extensions.defaultstyles;
+package io.neft.extensions.nativeitems;
 
 import android.graphics.Color;
 import android.widget.Button;
@@ -10,7 +10,7 @@ import io.neft.renderer.annotation.OnSet;
 import io.neft.utils.ColorValue;
 
 public class DSButton extends NativeItem {
-    @OnCreate("DSButtonItem")
+    @OnCreate("DSButton")
     public DSButton() {
         super(new Button(App.getApp().getApplicationContext()));
         getItemView().setTextColor(Color.BLACK);

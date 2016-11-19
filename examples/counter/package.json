@@ -15,7 +15,8 @@
     "test": "neft-unit ./tests/\\*\\*/\\*.js"
   },
   "extensions": [
-    "default-styles"
+    "default-styles",
+    "native-items"
   ],
   "android": {
     "package": "io.neft.example.counter",

@@ -4,45 +4,20 @@ class Image: Item {
     static var cache: [String: UIImage] = Dictionary()
     static var loadingHandlers: [String: [(_ result: UIImage?) -> Void]] = Dictionary()
     // static let svgToImageJs = Js(name: "svgToImage")
-    
+
     override class func register() {
         onAction(.createImage) {
             save(item: Image())
         }
-        
+
         onAction(.setImageSource) {
             (item: Image, val: String) in
             item.setSource(val)
         }
-        
-        // TODO
-        onAction(.setImageSourceWidth) {
-            (item: Image, val: CGFloat) in ()
-        }
-        
-        // TODO
-        onAction(.setImageSourceHeight) {
-            (item: Image, val: CGFloat) in ()
-        }
-        
-        // TODO
-        onAction(.setImageFillMode) {
-            (item: Image, val: String) in ()
-        }
-        
-        // TODO
-        onAction(.setImageOffsetX) {
-            (item: Image, val: CGFloat) in ()
-        }
-        
-        // TODO
-        onAction(.setImageOffsetY) {
-            (item: Image, val: CGFloat) in ()
-        }
-        
+
         // Image.svgToImageJs.runScript("svgToImage")
     }
-    
+
     // var modelImage: CGImage?
     // var image: CGImage?
     private var image: UIImage? {
@@ -50,20 +25,20 @@ class Image: Item {
             imageView.image = image
         }
     }
-    
+
     var imageView: UIImageView {
         return view as! UIImageView
     }
-    
+
     override init(view: UIView = UIImageView()) {
         super.init(view: view)
     }
-    
+
     private func loadSvgData(_ svg: NSString, completion: (_ data: Data?) -> Void) {
         // TODO
         completion(nil)
     }
-    
+
     private func getImageFromData(_ data: Data, source: String, completion: (_ img: UIImage?) -> Void) {
         if source.hasSuffix(".svg") {
             let dataUri = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
@@ -78,14 +53,14 @@ class Image: Item {
             completion(image)
         }
     }
-    
+
     private func loadResourceSource(_ source: String) -> Data? {
         let path = Bundle.main.path(forResource: source, ofType: nil)
         if path == nil { return nil }
         let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
         return data
     }
-    
+
     private func loadDataUriSource(_ source: String) -> Data? {
         let svgPrefix = "data:image/svg+xml;utf8,"
         if source.hasPrefix(svgPrefix) {
@@ -93,45 +68,45 @@ class Image: Item {
         }
         return self.loadUrlSource(source)
     }
-    
+
     private func loadUrlSource(_ source: String) -> Data? {
         let url = URL(string: source)
         if url == nil { return nil }
         let data = try? Data(contentsOf: url!)
         return data
     }
-    
+
     private func setSource(_ val: String) {
         // remove image
         if val == "" {
             image = nil
             return
         }
-        
+
         // get image from cache
         let img = Image.cache[val]
         if img != nil {
             image = img
             return
         }
-        
+
         // completion handler
         let onCompletion = {
             (img: UIImage?) in
             self.image = img
-            
+
             let width = img == nil ? 0 : CGFloat(img!.size.width)
             let height = img == nil ? 0 : CGFloat(img!.size.height)
             self.pushAction(.imageSize, val, img != nil, width, height)
         }
-        
+
         // wait for load if loading exist
         var loading = Image.loadingHandlers[val]
         if (loading != nil){
             loading!.append(onCompletion)
             return
         }
-        
+
         // get loading method
         var loadFunc: (_ source: String) -> Data?
         if (val.hasPrefix("/static")) {
@@ -141,10 +116,10 @@ class Image: Item {
         } else {
             loadFunc = self.loadUrlSource
         }
-        
+
         // save in loading
         Image.loadingHandlers[val] = [onCompletion]
-        
+
         // load image
         thread({
             (completion: (_ result: UIImage?) -> Void) -> Void in
@@ -158,7 +133,7 @@ class Image: Item {
             if img != nil && !val.hasPrefix("data:") {
                 Image.cache[val] = img
             }
-            
+
             let loading = Image.loadingHandlers[val]
             for handler in loading! {
                 handler(img)

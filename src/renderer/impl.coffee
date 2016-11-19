@@ -11,15 +11,11 @@ module.exports = (Renderer) ->
     impl.window = null
     signal.create impl, 'onWindowReady'
 
-    TYPES = ['Item', 'Image', 'Text', 'TextInput', 'Native', 'FontLoader', 'ResourcesLoader',
-             'Device', 'Screen', 'Navigator', 'RotationSensor',
+    TYPES = ['Item', 'Image', 'Text', 'Native', 'FontLoader', 'ResourcesLoader',
+             'Device', 'Screen', 'Navigator',
 
              'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
-             'Animation', 'PropertyAnimation', 'NumberAnimation',
-
-             'Scrollable',
-
-             'AmbientSound']
+             'Animation', 'PropertyAnimation', 'NumberAnimation']
 
     ABSTRACT_TYPES =
         'Class': true

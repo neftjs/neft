@@ -9,9 +9,7 @@ nativeBridge = require 'src/native/bridge'
 _neft.renderer = {}
 
 module.exports = (impl) ->
-    Types:
-        Scrollable: require './level2/scrollable'
-
+    Types: {}
     bridge: do ->
         itemsById = new Array 20000 # 20k
 

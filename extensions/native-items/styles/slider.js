@@ -1,7 +1,7 @@
 `
-const Styles = require('extensions/native-items');
+const NativeItems = require('extensions/native-items');
 `
 
-Styles.Slider {
+NativeItems.Slider {
     document.query: 'input[type=slider]'
 }

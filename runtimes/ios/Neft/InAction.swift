@@ -27,11 +27,6 @@ enum InAction: Int {
 
     createImage,
     setImageSource,
-    setImageSourceWidth,
-    setImageSourceHeight,
-    setImageFillMode,
-    setImageOffsetX,
-    setImageOffsetY,
 
     createText,
     setText,
@@ -46,19 +41,6 @@ enum InAction: Int {
     setTextAlignmentHorizontal,
     setTextAlignmentVertical,
 
-    createTextInput,
-    setTextInputText,
-    setTextInputColor,
-    setTextInputLineHeight,
-    setTextInputMultiLine,
-    setTextInputEchoMode,
-    setTextInputFontFamily,
-    setTextFontInputPixelSize,
-    setTextFontInputWordSpacing,
-    setTextFontInputLetterSpacing,
-    setTextInputAlignmentHorizontal,
-    setTextInputAlignmentVertical,
-
     createNativeItem,
     onNativeItemPointerPress,
     onNativeItemPointerRelease,
@@ -70,11 +52,5 @@ enum InAction: Int {
     setRectangleColor,
     setRectangleRadius,
     setRectangleBorderColor,
-    setRectangleBorderWidth,
-
-    createScrollable,
-    setScrollableContentItem,
-    setScrollableContentX,
-    setScrollableContentY,
-    activateScrollable
+    setRectangleBorderWidth
 }
