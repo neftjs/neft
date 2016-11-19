@@ -31,7 +31,6 @@ class Renderer {
         TextInput.register()
         NativeItem.register()
         Rectangle.register()
-        Scrollable.register()
     }
 
     func pxToDp(_ px: CGFloat) -> CGFloat {

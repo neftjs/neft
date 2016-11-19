@@ -17,8 +17,6 @@ module.exports = (Renderer) ->
              'Rectangle', 'Grid', 'Column', 'Row', 'Flow',
              'Animation', 'PropertyAnimation', 'NumberAnimation',
 
-             'Scrollable',
-
              'AmbientSound']
 
     ABSTRACT_TYPES =

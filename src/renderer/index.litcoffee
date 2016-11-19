@@ -38,7 +38,6 @@
     exports.Column = require('./types/layout/column') exports, Impl, itemUtils
     exports.Row = require('./types/layout/row') exports, Impl, itemUtils
     exports.Flow = require('./types/layout/flow') exports, Impl, itemUtils
-    exports.Scrollable = require('./types/layout/scrollable') exports, Impl, itemUtils
 
     exports.AmbientSound = require('./types/sound/ambient') exports, Impl, itemUtils
 

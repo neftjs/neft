@@ -31,7 +31,7 @@ getInputDirs = (app) ->
     for ext in app.allExtensions
         path = pathUtils.join ext.path, '/styles'
         if fs.existsSync(path)
-            inputDirs.push path: path, prefix: "#{ext.name}/"
+            inputDirs.unshift path: path, prefix: "#{ext.name}/"
 
     # main styles folder
     inputDirs.push {path: IN_DIR, prefix: ''}

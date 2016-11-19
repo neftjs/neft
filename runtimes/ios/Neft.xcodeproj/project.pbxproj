@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
         0812E09E1C19AE0C00DB1152 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0812E09D1C19AE0C00DB1152 /* Utils.swift */; };
-        082549651C3AF9B200D846C0 /* Scrollable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082549641C3AF9B200D846C0 /* Scrollable.swift */; };
         082549681C3E631000D846C0 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082549671C3E631000D846C0 /* main.swift */; };
         0825496A1C3E63B600D846C0 /* NeftApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082549691C3E63B600D846C0 /* NeftApplication.swift */; };
         0825496C1C3EAFB900D846C0 /* TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0825496B1C3EAFB900D846C0 /* TextInput.swift */; };
@@ -43,7 +42,6 @@
 
 /* Begin PBXFileReference section */
         0812E09D1C19AE0C00DB1152 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-        082549641C3AF9B200D846C0 /* Scrollable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrollable.swift; sourceTree = "<group>"; };
         082549671C3E631000D846C0 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
         082549691C3E63B600D846C0 /* NeftApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeftApplication.swift; sourceTree = "<group>"; };
         0825496B1C3EAFB900D846C0 /* TextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextInput.swift; sourceTree = "<group>"; };
@@ -146,7 +144,6 @@
                 088623A81C18D53D00FF6C11 /* Device.swift */,
                 088623AA1C18D55200FF6C11 /* Screen.swift */,
                 0886239E1C171C9600FF6C11 /* Rectangle.swift */,
-                082549641C3AF9B200D846C0 /* Scrollable.swift */,
             );
             name = Renderer;
             sourceTree = "<group>";
@@ -269,7 +266,6 @@
                 0886239C1C171C7200FF6C11 /* Renderer.swift in Sources */,
                 082549681C3E631000D846C0 /* main.swift in Sources */,
                 088623801C1635F600FF6C11 /* AppDelegate.swift in Sources */,
-                082549651C3AF9B200D846C0 /* Scrollable.swift in Sources */,
                 088623AB1C18D55200FF6C11 /* Screen.swift in Sources */,
             );
             runOnlyForDeploymentPostprocessing = 0;

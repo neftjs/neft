@@ -9,6 +9,9 @@
 </script>
 
 <style>
+    `
+    const NativeItems = require('extensions/native-items');
+    `
     Rectangle {
         id: nav;
         document.query: 'nav';
@@ -24,7 +27,7 @@
             };
         }
 
-        Scrollable {
+        NativeItems.Scrollable {
             id: scroll;
             background.color: 'nav';
             anchors.fillHeight: parent;
@@ -80,6 +83,18 @@
   n-style:$:onClose="${this.props.onClose()}"
 >
     <ul n-each="${state.elements}">
+        <Item
+          item="${props.item}"
+          onClick="${this.props.onClose()}"
+        />
+        <Item
+          item="${props.item}"
+          onClick="${this.props.onClose()}"
+        />
+        <Item
+          item="${props.item}"
+          onClick="${this.props.onClose()}"
+        />
         <Item
           item="${props.item}"
           onClick="${this.props.onClose()}"

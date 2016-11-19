@@ -26,8 +26,6 @@ exports.Types =
     PropertyAnimation: require './level1/animation/property'
     NumberAnimation: require './level1/animation/number'
 
-    Scrollable: require './level2/scrollable'
-
 exports.Extras =
     Binding: require './level1/binding'
     Anchors: require './level1/anchors'

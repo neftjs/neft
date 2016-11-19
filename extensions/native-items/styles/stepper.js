@@ -1,7 +1,7 @@
 `
-const Styles = require('extensions/native-items');
+const NativeItems = require('extensions/native-items');
 `
 
-Styles.Stepper {
+NativeItems.Stepper {
     document.query: 'input[type=stepper]'
 }

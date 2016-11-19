@@ -120,10 +120,10 @@ module.exports = (config, callback) ->
     else
         fs.ensureDirSync STATIC_OUT_DIR
 
-    logtime = log.time "Copy extensions"
+    logtime = log.time 'Copy extensions'
     config.iosExtensions = []
-    for ext in config.extensions
-        nativeDirPath = "#{ext.path}native/ios"
+    for ext in config.allExtensions
+        nativeDirPath = "#{ext.path}/native/ios"
         if fs.existsSync(nativeDirPath)
             name = utils.capitalize ext.name
             name = name.replace /(\-\w)/g, (m) -> m[1].toUpperCase()

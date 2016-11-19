@@ -11,14 +11,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import io.neft.client.Client;
-import io.neft.CustomApp.CustomApp;
+import io.neft.customapp.CustomApp;
 import io.neft.client.annotation.Parser;
 import io.neft.renderer.Image;
 import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
 import io.neft.renderer.Rectangle;
 import io.neft.renderer.Renderer;
-import io.neft.renderer.Scrollable;
 import io.neft.renderer.Text;
 import io.neft.renderer.WindowView;
 
@@ -53,7 +52,6 @@ public class MainActivity extends FragmentActivity {
         Parser.registerHandlers(Item.class);
         Parser.registerHandlers(Rectangle.class);
         Parser.registerHandlers(Image.class);
-        Parser.registerHandlers(Scrollable.class);
         Parser.registerHandlers(Text.class);
         Parser.registerHandlers(NativeItem.class);
         renderer.init(this);
@@ -90,7 +88,7 @@ public class MainActivity extends FragmentActivity {
                     conn.setUseCaches(false);
                     resp = Http.getStringFromInputStream(conn.getInputStream());
                 } catch (IOException err) {
-                    err.printStackTrace();
+                    Log.w(TAG, "Watch mode does not work; cannot connect to " + path);
                 }
                 final String finalResp = resp;
                 runOnUiThread(new Runnable() {
@@ -118,7 +116,7 @@ public class MainActivity extends FragmentActivity {
                     public void run() {
                         watchOnBundleChange(path);
                     }
-                }, 5000);
+                }, 30000);
             }
         });
     }

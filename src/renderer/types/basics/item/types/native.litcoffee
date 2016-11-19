@@ -85,6 +85,22 @@ where `XYZ` is the given name.
                     else
                         val
 
+#### item
+
+            PROPERTY_TYPES.item = (config) ->
+                defaultValue: null
+                developmentSetter: (val) ->
+                    if val?
+                        assert.instanceOf val, Renderer.Item
+                implementationValue: (val) ->
+                    if IS_NATIVE
+                        if val?
+                            val._impl.id
+                        else
+                            null
+                    else
+                        val
+
             @defineProperty = (config) ->
                 itemName = @__name__
                 properties = @_properties ||= []

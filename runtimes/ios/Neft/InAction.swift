@@ -70,11 +70,5 @@ enum InAction: Int {
     setRectangleColor,
     setRectangleRadius,
     setRectangleBorderColor,
-    setRectangleBorderWidth,
-
-    createScrollable,
-    setScrollableContentItem,
-    setScrollableContentX,
-    setScrollableContentY,
-    activateScrollable
+    setRectangleBorderWidth
 }

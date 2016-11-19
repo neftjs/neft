@@ -1,6 +1,6 @@
 import UIKit
 
-extension Extension.DefaultStyles {
+extension Extension.NativeItems {
     class ButtonItem: NativeItem {
         override class var name: String { return "DSButton" }
 

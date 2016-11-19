@@ -1,4 +1,4 @@
-package io.neft.extensions.defaultstyles;
+package io.neft.extensions.nativeitems;
 
 import android.widget.CompoundButton;
 import android.widget.Switch;

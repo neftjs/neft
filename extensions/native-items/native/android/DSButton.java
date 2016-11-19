@@ -1,4 +1,4 @@
-package io.neft.extensions.defaultstyles;
+package io.neft.extensions.nativeitems;
 
 import android.graphics.Color;
 import android.widget.Button;

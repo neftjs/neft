@@ -6,41 +6,48 @@ import java.lang.reflect.Method;
 
 import io.neft.App;
 import io.neft.client.CustomFunction;
+import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
 import io.neft.utils.ColorValue;
 import io.neft.utils.StringUtils;
 
 public final class Parser {
-    private static void invokeMethod(Method method, NativeItem item, Object[] args) throws InvocationTargetException, IllegalAccessException {
-        Class[] parameterTypes = method.getParameterTypes();
+    private static Object[] getMethodCallArgs(Class[] parameterTypes, Object[] args) {
         Class arg = parameterTypes.length > 0 ? parameterTypes[0] : null;
 
         if (parameterTypes.length > 1) {
-            throw new RuntimeException("Method " + method.getName() + " has more than 1 parameter");
+            throw new IllegalArgumentException("Method has more than 1 parameter");
         }
 
         if (arg == null) {
-            method.invoke(item);
+            return new Object[] {};
         } else if (arg == Object[].class) {
-            method.invoke(item, args);
+            return new Object[] {args};
         } else if (arg == boolean.class) {
-            method.invoke(item, (boolean) args[0]);
+            return new Object[] {args[0]};
         } else if (arg == float.class) {
-            method.invoke(item, (float) args[0]);
+            return new Object[] {args[0]};
         } else if (arg == int.class) {
-            method.invoke(item, Math.round((float) args[0]));
+            return new Object[] {Math.round((float) args[0])};
         } else if (arg == ColorValue.class) {
             if (args[0] == null) {
-                method.invoke(item, (Object) null);
+                return new Object[1];
             } else {
                 int val = Float.floatToIntBits((float) args[0]);
                 int argb = ColorValue.RGBAtoARGB(val);
-                method.invoke(item, new ColorValue(argb));
+                return new Object[] {new ColorValue(argb)};
             }
         } else if (arg == String.class) {
-            method.invoke(item, (String) args[0]);
+            return new Object[]{args[0]};
+        } else if (arg == Item.class) {
+            Integer id = args[0] == null ? 0 : Math.round((float) args[0]);
+            if (id <= 0) {
+                return new Object[1];
+            } else {
+                return new Object[] {App.getApp().renderer.items.get(id)};
+            }
         } else {
-            throw new RuntimeException("Not supported method " + method.getName() + " parameters");
+            throw new IllegalArgumentException("Method parameters not supported");
         }
     }
 
@@ -49,6 +56,14 @@ public final class Parser {
                 + type
                 + StringUtils.capitalize(clazzType)
                 + StringUtils.capitalize(value);
+        final Class[] parameterTypes = method.getParameterTypes();
+        try {
+            getMethodCallArgs(parameterTypes, new Object[]{0});
+        } catch (IllegalArgumentException err) {
+            throw new RuntimeException("Cannot apply " + type + " annotation on " + method.getName(), err);
+        } catch (RuntimeException err) {
+            // NOP
+        }
         App.getApp().client.addCustomFunction(eventName, new CustomFunction() {
             @Override
             public void work(Object[] args) {
@@ -57,7 +72,7 @@ public final class Parser {
                 Object[] handlerArgs = new Object[args.length - 1];
                 System.arraycopy(args, 1, handlerArgs, 0, handlerArgs.length);
                 try {
-                    invokeMethod(method, item, handlerArgs);
+                    method.invoke(item, getMethodCallArgs(parameterTypes, handlerArgs));
                 } catch (InvocationTargetException err) {
                     throw new RuntimeException("Cannot call args `"+args+"` on "+method.getName()+" method", err);
                 } catch (IllegalAccessException err) {

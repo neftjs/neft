@@ -27,7 +27,6 @@ runServer = ->
             utils.merge buildServerUrl: BUILD_SERVER_URL, options
         else
             options
-        options
 
     watchHandler = watchServer.start networking
 

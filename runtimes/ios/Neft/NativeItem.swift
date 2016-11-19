@@ -2,7 +2,7 @@ import UIKit
 
 class NativeItem: Item {
     class NativeUIView: UIView {}
-    
+
     static var types: Dictionary<String, () -> NativeItem> = [:]
     class var name: String { return "Unknown" }
 
@@ -18,23 +18,23 @@ class NativeItem: Item {
                 save(item: ctor!())
             }
         }
-        
+
         onAction(.onNativeItemPointerPress) {
             (item: NativeItem, reader: Reader) in
             item.onPointerPress(reader.getFloat(), reader.getFloat())
         }
-        
+
         onAction(.onNativeItemPointerMove) {
             (item: NativeItem, reader: Reader) in
             item.onPointerMove(reader.getFloat(), reader.getFloat())
         }
-        
+
         onAction(.onNativeItemPointerRelease) {
             (item: NativeItem, reader: Reader) in
             item.onPointerRelease(reader.getFloat(), reader.getFloat())
         }
     }
-    
+
     private static func on<T: NativeItem>(
         _ type: String,
         _ name: String,
@@ -50,14 +50,14 @@ class NativeItem: Item {
             handler(item, args)
         }
     }
-    
+
     internal static func onSet<T: NativeItem>(
         _ propertyName: String,
         _ handler: @escaping (T, [Any?]) -> Void
         ) {
         on("Set", propertyName, handler)
     }
-    
+
     internal static func onSet<T: NativeItem>(
         _ propertyName: String,
         _ handler: @escaping (T, Bool) -> Void
@@ -67,7 +67,7 @@ class NativeItem: Item {
             handler(item, args[0] as! Bool)
         }
     }
-    
+
     internal static func onSet<T: NativeItem>(
         _ propertyName: String,
         _ handler: @escaping (T, CGFloat) -> Void
@@ -77,7 +77,7 @@ class NativeItem: Item {
             handler(item, args[0] as! CGFloat)
         }
     }
-    
+
     internal static func onSet<T: NativeItem>(
         _ propertyName: String,
         _ handler: @escaping (T, Int) -> Void
@@ -87,7 +87,7 @@ class NativeItem: Item {
             handler(item, Int(args[0] as! CGFloat))
         }
     }
-    
+
     internal static func onSet<T: NativeItem>(
         _ propertyName: String,
         _ handler: @escaping (T, UIColor?) -> Void
@@ -97,7 +97,17 @@ class NativeItem: Item {
             handler(item, val != nil ? Color.hexColorToUIColor(val!) : nil)
         }
     }
-    
+
+    internal static func onSet<T: NativeItem>(
+        _ propertyName: String,
+        _ handler: @escaping (T, Item?) -> Void
+        ) {
+        onSet(propertyName) {
+            (item: T, val: Int?) in
+            handler(item, val != nil && val! >= 0 ? renderer.items[val!] : nil)
+        }
+    }
+
     internal static func onSet<T: NativeItem>(
         _ propertyName: String,
         _ handler: @escaping (T, String) -> Void
@@ -107,14 +117,14 @@ class NativeItem: Item {
             handler(item, args[0] as! String)
         }
     }
-    
+
     internal static func onCall<T: NativeItem>(
         _ funcName: String,
         _ handler: @escaping (T, [Any?]) -> Void
         ) {
         on("Call", funcName, handler)
     }
-    
+
     internal static func onCreate<T: NativeItem>(
         handler: @escaping () -> T
         ) {
@@ -125,14 +135,14 @@ class NativeItem: Item {
 
     var autoWidth = true
     var autoHeight = true
-    
+
     override var width: CGFloat {
         didSet {
             autoWidth = width == 0
             updateSize()
         }
     }
-    
+
     override var height: CGFloat {
         didSet {
             autoHeight = height == 0
@@ -143,7 +153,7 @@ class NativeItem: Item {
     override init(view: UIView = UIView()) {
         super.init(view: view)
     }
-    
+
     override func didSave() {
         super.didSave()
         updateSize()
@@ -180,7 +190,7 @@ class NativeItem: Item {
 
     internal func onPointerMove(_ x: CGFloat, _ y: CGFloat) {
     }
-    
+
     internal func pushEvent(event: String, args: [Any?]?) {
         let eventName = "rendererOn\(type(of: self).name.uppercaseFirst)\(event.uppercaseFirst)"
         var clientArgs: [Any?] = [CGFloat(id)]

@@ -1,5 +1,6 @@
-extension Extension.DefaultStyles {
+extension Extension.NativeItems {
     static func register() {
+        ScrollableItem.register()
         ButtonItem.register()
         SliderItem.register()
         StepperItem.register()

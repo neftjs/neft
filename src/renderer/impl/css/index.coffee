@@ -156,8 +156,6 @@ module.exports = (impl) ->
 
         Rectangle: require './level1/rectangle'
 
-        Scrollable: require './level2/scrollable'
-
         AmbientSound: require './level0/sound/ambient'
 
     setWindow: (item) ->

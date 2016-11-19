@@ -105,7 +105,7 @@ public class Item {
         App.getApp().client.pushAction(action, localArgs);
     }
 
-    protected void removeFromParent() {
+    public void removeFromParent() {
         ViewGroup parent = (ViewGroup) view.getParent();
         if (parent != null) {
             parent.removeView(view);

@@ -115,6 +115,7 @@ module.exports = (platform, options, app, callback) ->
                 appCode: file
                 package: app.package
                 local: JSON.parse fs.readFileSync('./local.json')
+                allExtensions: app.allExtensions
                 extensions: app.extensions
                 buildBundleOnly: !!options.buildBundleOnly
                 buildServerUrl: options.buildServerUrl
