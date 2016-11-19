@@ -30,7 +30,6 @@
     exports.Item = require('./types/basics/item') exports, Impl, itemUtils
     exports.Image = require('./types/basics/item/types/image') exports, Impl, itemUtils
     exports.Text = require('./types/basics/item/types/text') exports, Impl, itemUtils
-    exports.TextInput = require('./types/basics/item/types/textInput') exports, Impl, itemUtils
     exports.Native = require('./types/basics/item/types/native') exports, Impl, itemUtils
     exports.Rectangle = require('./types/shapes/rectangle') exports, Impl, itemUtils
 

@@ -17,7 +17,6 @@ module.exports = (impl) ->
         Item: require './level0/item'
         Image: require './level0/image'
         Text: require './level0/text'
-        TextInput: require './level0/textInput'
         Native: require './level0/native'
         FontLoader: require './level0/loader/font'
         ResourcesLoader: require './level0/loader/resources'

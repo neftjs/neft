@@ -22,7 +22,6 @@ enum OutAction: Int {
     imageSize,
     textSize,
     fontLoad,
-    textInputText,
     nativeItemWidth,
     nativeItemHeight
 }

@@ -72,6 +72,8 @@ module.exports = (opts) ->
         querySelector: ->
         createTextNode: ->
             {}
+        documentElement:
+            appendChild: ->
     history:
         pushState: ->
     setTimeout: ->

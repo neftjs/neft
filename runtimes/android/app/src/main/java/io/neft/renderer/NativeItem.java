@@ -164,4 +164,14 @@ public class NativeItem extends Item {
     protected void onPointerRelease(float x, float y) {}
 
     protected void onPointerMove(float x, float y) {}
+
+    @Override
+    public void setKeysFocus(boolean val) {
+        super.setKeysFocus(val);
+        if (val) {
+            itemView.requestFocus();
+        } else {
+            itemView.clearFocus();
+        }
+    }
 }

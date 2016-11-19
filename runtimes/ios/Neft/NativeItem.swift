@@ -135,6 +135,15 @@ class NativeItem: Item {
 
     var autoWidth = true
     var autoHeight = true
+    override var keysFocus: Bool {
+        didSet {
+            if keysFocus {
+                view.becomeFirstResponder()
+            } else {
+                view.resignFirstResponder()
+            }
+        }
+    }
 
     override var width: CGFloat {
         didSet {
@@ -160,10 +169,8 @@ class NativeItem: Item {
     }
 
     internal func updateSize() {
-        let width = autoWidth ? view.bounds.width : self.width
-        let height = autoHeight ? view.bounds.height : self.height
-        view.bounds.size.width = width
-        view.bounds.size.height = height
+        let width = autoWidth ? view.frame.width : self.width
+        let height = autoHeight ? view.frame.height : self.height
         pushWidth(width)
         pushHeight(height)
     }

@@ -66,6 +66,5 @@ public class Renderer {
         Navigator.register(app);
         Device.register(app);
         Screen.register(app);
-        TextInput.register(app);
     }
 }

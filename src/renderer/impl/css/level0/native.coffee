@@ -14,7 +14,7 @@ module.exports = (impl) ->
 
     updateNativeSize: ->
         {setPropertyValue} = impl.Renderer.itemUtils
-        {elem} = @_impl
+        elem = @_impl.innerElem or @_impl.elem
 
         if (@_autoWidth or @_autoHeight) and not elem.offsetParent
             elemNextSibling = elem.nextSibling

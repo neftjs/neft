@@ -23,7 +23,6 @@ public enum OutAction {
     IMAGE_SIZE,
     TEXT_SIZE,
     FONT_LOAD,
-    TEXT_INPUT_TEXT,
     NATIVE_ITEM_WIDTH,
     NATIVE_ITEM_HEIGHT
 }

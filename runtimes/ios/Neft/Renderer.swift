@@ -28,7 +28,6 @@ class Renderer {
         Item.register()
         Image.register()
         Text.register()
-        TextInput.register()
         NativeItem.register()
         Rectangle.register()
     }
