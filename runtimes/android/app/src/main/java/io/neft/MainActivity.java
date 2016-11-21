@@ -59,7 +59,6 @@ public class MainActivity extends FragmentActivity {
         initExtensions();
 
         Native.init(code);
-        renderer.onAnimationFrame();
     }
 
     protected void restart() {

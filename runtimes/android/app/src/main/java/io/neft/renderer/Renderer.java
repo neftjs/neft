@@ -1,39 +1,38 @@
 package io.neft.renderer;
 
-import android.graphics.Matrix;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
 import java.util.ArrayList;
 
+import io.neft.App;
 import io.neft.client.Reader;
 import io.neft.MainActivity;
 import io.neft.Native;
 
 public class Renderer {
-    private static final long MIN_FRAME_DELAY = 16;
 
     public MainActivity app;
     final public ArrayList<Item> items;
-    final private Runnable runnable;
 
     final public Device device = new Device();
     final public Screen screen = new Screen();
     final public Navigator navigator = new Navigator();
 
-    public ArrayList<RectF> dirtyRects = new ArrayList<>();
-    private Matrix measureMatrix = new Matrix();
-    private Rect dirtyRect = new Rect();
-
     public Renderer() {
         this.items = new ArrayList<>();
-        this.runnable = new Runnable() {
-            public void run() {
-                onAnimationFrame();
-            }
-        };
 
         items.add(null);
+
+        View view = new View(App.getApp().getApplicationContext());
+        App.getApp().view.addView(view);
+        view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                onAnimationFrame();
+                return true;
+            }
+        });
     }
 
     public float pxToDp(float px) {
@@ -49,7 +48,6 @@ public class Renderer {
     }
 
     public void onAnimationFrame() {
-        app.view.postDelayed(runnable, MIN_FRAME_DELAY);
         app.client.sendData();
         Native.renderer_callAnimationFrame();
     }
