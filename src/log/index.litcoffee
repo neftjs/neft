@@ -43,8 +43,6 @@ const { log } = Neft;
     class Log
         @LOGS_METHODS = ['log', 'info', 'warn', 'error', 'time', 'ok']
 
-        @TIMES_LEN = 50
-
         @MARKERS =
             white: (str) -> "LOG: #{str}"
             green: (str) -> "OK: #{str}"
@@ -58,10 +56,6 @@ const { log } = Neft;
 
         @time = Date.now
         @timeDiff = (since) -> Log.time() - since
-        @times = new Array Log.TIMES_LEN
-
-        for _, i in @times
-            @times[i] = [0, '']
 
         constructor: (prefixes = [], @parentScope) ->
             @prefixes = prefixes
@@ -187,7 +181,7 @@ log.error("Error occurs, ... in file ...");
                 @_writeError @constructor.MARKERS.red fromArgs arguments
             return
 
-### *Integer* log.time()
+### *Array* log.time()
 
 Returns an id used to measure execution time by the `log.end()` function.
 
@@ -207,35 +201,20 @@ findPath();
             unless isEnabled(@, @TIME)
                 return -1
 
-            {times} = @constructor
+            [@constructor.time(), fromArgs(arguments)]
 
-            # get time id and set current time
-            for v, i in times when not v[0]
-                id = i
-                times[i][0] = @constructor.time()
-                times[i][1] = fromArgs arguments
-                break
-
-            assert id?, 'Log times out of range'
-
-            id
-
-### log.end(*Integer* id)
+### log.end(*Array* logTime)
 
 Prints an information about the execution time for the given timer id.
 
-        end: (id) ->
-            if id is -1
-                return
-
-            time = @constructor.times[id]
-            diff = @constructor.timeDiff time[0]
+        end: (logTime) ->
+            diff = @constructor.timeDiff logTime[0]
             diff = diff.toFixed 2
 
-            str = "#{time[1]}: #{diff} ms"
+            str = "#{logTime[1]}: #{diff} ms"
             @_write @constructor.MARKERS.gray str
 
-            time[0] = 0
+            logTime[0] = 0
             return
 
 ### log.scope([*Any* names...])
