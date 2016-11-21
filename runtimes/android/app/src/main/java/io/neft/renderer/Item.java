@@ -167,7 +167,7 @@ public class Item {
 
     @OnAction(InAction.SET_ITEM_ROTATION)
     public void setRotation(float val) {
-        view.setRotation(val);
+        view.setRotation((float) Math.toDegrees(val));
     }
 
     @OnAction(InAction.SET_ITEM_OPACITY)
