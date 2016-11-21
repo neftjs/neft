@@ -78,7 +78,6 @@ public class NativeItem extends Item {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
             ));
-            view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
         updateSize();
     }

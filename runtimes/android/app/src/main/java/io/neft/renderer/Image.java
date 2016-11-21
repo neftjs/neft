@@ -86,7 +86,6 @@ public class Image extends Item {
 
     public Image() {
         super();
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackground(shape);
         } else {
