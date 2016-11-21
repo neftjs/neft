@@ -1,6 +1,7 @@
 package io.neft.renderer;
 
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -48,11 +49,24 @@ public class Text extends Item {
     }
 
     protected TextView textView = new TextView(App.getApp().view.getContext());
+    public boolean wrap = false;
 
     public Text() {
         super();
         view.addView(textView);
         textView.setTextSize(DEFAULT_TEXT_SIZE);
+    }
+
+    private void updateMaxWidth() {
+        textView.setMaxWidth(view.getLayoutParams().width);
+    }
+
+    @Override
+    public void setWidth(float val) {
+        super.setWidth(val);
+        if (wrap) {
+            updateMaxWidth();
+        }
     }
 
     @OnAction(InAction.SET_TEXT)
@@ -62,6 +76,12 @@ public class Text extends Item {
 
     @OnAction(InAction.SET_TEXT_WRAP)
     public void setWrap(boolean val) {
+        wrap = val;
+        if (wrap) {
+            updateMaxWidth();
+        } else {
+            textView.setMaxWidth(-1);
+        }
     }
 
     @OnAction(InAction.SET_TEXT_COLOR)
@@ -71,6 +91,7 @@ public class Text extends Item {
 
     @OnAction(InAction.SET_TEXT_LINE_HEIGHT)
     public void setLineHeight(float val) {
+        textView.setLineSpacing(0, val);
     }
 
     @OnAction(InAction.SET_TEXT_FONT_FAMILY)
@@ -105,7 +126,6 @@ public class Text extends Item {
             default:
                 gravity = Gravity.START;
         }
-        System.out.println("SET GRAVITY " + gravity);
         textView.setGravity(gravity);
     }
 
