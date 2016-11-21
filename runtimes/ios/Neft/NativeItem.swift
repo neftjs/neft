@@ -128,9 +128,7 @@ class NativeItem: Item {
     internal static func onCreate<T: NativeItem>(
         handler: @escaping () -> T
         ) {
-        let typeName = self.name
-        assert(NativeItem.types[typeName] == nil, "NativeItem \(typeName) onCreate already called")
-        NativeItem.types[typeName] = handler
+        NativeItem.types[self.name] = handler
     }
 
     var autoWidth = true
