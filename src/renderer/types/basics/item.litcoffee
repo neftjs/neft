@@ -400,10 +400,9 @@ Removes all children from the item.
                     oldAboveSibling._belowSibling = oldBelowSibling
 
                 # new z-index siblings
+                @_belowSibling = @_aboveSibling = null
                 if valChildren
                     updateZSiblingsForAppendedItem @, @_z, valChildren
-                else
-                    @_belowSibling = @_aboveSibling = null
 
                 # z-index children
                 if oldChildren
@@ -425,6 +424,15 @@ Removes all children from the item.
                 assert.is @nextSibling, null
                 if val
                     assert.is val.children.lastChild, @
+                    assert.isDefined val.children.firstChild
+                    assert.isDefined val.children.lastChild
+                    assert.isDefined val.children.topChild
+                    assert.isDefined val.children.bottomChild
+                if old and old.children.length is 0
+                    assert.isNotDefined old.children.firstChild
+                    assert.isNotDefined old.children.lastChild
+                    assert.isNotDefined old.children.topChild
+                    assert.isNotDefined old.children.bottomChild
                 `//</development>`
 
                 # signals
@@ -591,6 +599,7 @@ Removes all children from the item.
                 oldAboveSibling._belowSibling = oldBelowSibling
 
             # new z-index siblings
+            @_belowSibling = @_aboveSibling = null
             if nextSibling
                 updateZSiblingsForInsertedItem @, nextSibling, @_z, newChildren
             else
