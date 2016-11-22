@@ -180,29 +180,25 @@ class Item {
 
     var x: CGFloat = 0 {
         didSet {
-            updateTransform()
+            updateFrame()
         }
     }
 
     var y: CGFloat = 0 {
         didSet {
-            updateTransform()
+            updateFrame()
         }
     }
 
     var width: CGFloat = 0 {
         didSet {
-            view.frame.size.width = width
-            view.frame = view.frame
-            updateTransform()
+            updateFrame()
         }
     }
 
     var height: CGFloat = 0 {
         didSet {
-            view.frame.size.height = height
-            view.frame = view.frame
-            updateTransform()
+            updateFrame()
         }
     }
 
@@ -242,17 +238,15 @@ class Item {
 
     func didSave() {}
 
+    private func updateFrame() {
+        view.frame = CGRect(x: x, y: y, width: width, height: height)
+    }
+
     private func updateTransform() {
         var a: CGFloat = 1
         var b: CGFloat = 0
         var c: CGFloat = 0
         var d: CGFloat = 1
-        var tx: CGFloat = 0
-        var ty: CGFloat = 0
-
-        // translate to position
-        tx = x
-        ty = y
 
         // scale
         a = scale
@@ -273,7 +267,7 @@ class Item {
         }
 
         // save
-        view.transform = CGAffineTransform(a: a, b: b, c: c, d: d, tx: tx, ty: ty)
+        view.transform = CGAffineTransform(a: a, b: b, c: c, d: d, tx: 0, ty: 0)
     }
 
     func pushAction(_ action: OutAction, _ args: Any...) {
