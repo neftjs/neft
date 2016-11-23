@@ -1,4 +1,4 @@
 # Summary
 
-* Contribute
+* [Contribute](wiki/Contribute.md)
 
