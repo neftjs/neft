@@ -25,38 +25,38 @@ matrix:
             node_js: "0.11"
             env:
                 - JOB_TYPE="node on linux"
-        -
-            os: linux
-            node_js: "5.11"
-            env:
-                - JOB_TYPE="browser"
-                - NEFT_TEST_BROWSER=1
-        -
-            language: android
-            os: linux
-            env:
-                - JOB_TYPE="android"
-                - TRAVIS_NODE_VERSION=5.11
-                - NEFT_TEST_ANDROID=1
-            install:
-                - nvm install $TRAVIS_NODE_VERSION
-                - npm install
-            android:
-                components:
-                    - build-tools-23.0.0
-                    - android-23
-                    - extra
-        -
-            os: osx
-            node_js: "5.11"
-            osx_image: xcode8.1sneakpeek # https://github.com/travis-ci/travis-ci/issues/6791#issuecomment-260052295
-            env:
-                - JOB_TYPE="ios"
-                - NEFT_TEST_IOS=1
-                - NEFT_IOS_VERSION=10.1
-            install:
-                - xcodebuild -showsdks
-                - npm install
+        # -
+        #     os: linux
+        #     node_js: "5.11"
+        #     env:
+        #         - JOB_TYPE="browser"
+        #         - NEFT_TEST_BROWSER=1
+        # -
+        #     language: android
+        #     os: linux
+        #     env:
+        #         - JOB_TYPE="android"
+        #         - TRAVIS_NODE_VERSION=5.11
+        #         - NEFT_TEST_ANDROID=1
+        #     install:
+        #         - nvm install $TRAVIS_NODE_VERSION
+        #         - npm install
+        #     android:
+        #         components:
+        #             - build-tools-23.0.0
+        #             - android-23
+        #             - extra
+        # -
+        #     os: osx
+        #     node_js: "5.11"
+        #     osx_image: xcode8.1sneakpeek # https://github.com/travis-ci/travis-ci/issues/6791#issuecomment-260052295
+        #     env:
+        #         - JOB_TYPE="ios"
+        #         - NEFT_TEST_IOS=1
+        #         - NEFT_IOS_VERSION=10.1
+        #     install:
+        #         - xcodebuild -showsdks
+        #         - npm install
         -
             os: linux
             node_js: "6.2"
