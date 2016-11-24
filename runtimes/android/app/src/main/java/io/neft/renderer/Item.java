@@ -1,17 +1,12 @@
 package io.neft.renderer;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import java.util.Arrays;
-
 import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
-import io.neft.MainActivity;
 import io.neft.client.annotation.OnAction;
 
 public class Item {
@@ -23,69 +18,11 @@ public class Item {
     public final int id;
     protected Item background;
 
-    public static class ItemViewGroup extends ViewGroup {
-        private int itemWidth = 0;
-        private int itemHeight = 0;
-
-        public ItemViewGroup(Context context) {
-            super(context);
-            setClipChildren(false);
-            setWillNotDraw(true);
-        }
-
-        @Override
-        protected void onLayout(boolean changed, int l, int t, int r, int b) {
-            int count = getChildCount();
-            for (int i = 0; i < count; i++) {
-                View child = getChildAt(i);
-                if (child instanceof ItemViewGroup) {
-                    ItemViewGroup group = (ItemViewGroup) child;
-                    child.layout(
-                            0,
-                            0,
-                            group.itemWidth,
-                            group.itemHeight
-                    );
-                } else {
-                    child.measure(itemWidth, itemHeight);
-                    child.layout(0, 0, itemWidth, itemHeight);
-                }
-            }
-        }
-
-        @Override
-        protected void onMeasure(int width, int height) {
-            int count = getChildCount();
-            for (int i = 0; i < count; i++) {
-                View child = getChildAt(i);
-                measureChild(child, itemWidth, itemHeight);
-            }
-            setMeasuredDimension(itemWidth, itemHeight);
-        }
-
-        public int getItemWidth() {
-            return itemWidth;
-        }
-
-        public void setItemWidth(int itemWidth) {
-            this.itemWidth = itemWidth;
-            requestLayout();
-        }
-
-        public int getItemHeight() {
-            return itemHeight;
-        }
-
-        public void setItemHeight(int itemHeight) {
-            this.itemHeight = itemHeight;
-            requestLayout();
-        }
-    }
-
     public ViewGroup view = new RelativeLayout(App.getApp().view.getContext());
 
     public Item() {
         view.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         this.id = App.getApp().renderer.items.size();
         App.getApp().renderer.items.add(this);
     }
@@ -167,7 +104,7 @@ public class Item {
 
     @OnAction(InAction.SET_ITEM_ROTATION)
     public void setRotation(float val) {
-        view.setRotation(val);
+        view.setRotation((float) Math.toDegrees(val));
     }
 
     @OnAction(InAction.SET_ITEM_OPACITY)
