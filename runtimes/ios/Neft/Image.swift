@@ -83,13 +83,6 @@ class Image: Item {
             return
         }
 
-        // get image from cache
-        let img = Image.cache[val]
-        if img != nil {
-            image = img
-            return
-        }
-
         // completion handler
         let onCompletion = {
             (img: UIImage?) in
@@ -100,18 +93,25 @@ class Image: Item {
             self.pushAction(.imageSize, val, img != nil, width, height)
         }
 
+        // get image from cache
+        let img = Image.cache[val]
+        if img != nil {
+            onCompletion(img)
+            return
+        }
+
         // wait for load if loading exist
         var loading = Image.loadingHandlers[val]
-        if (loading != nil){
+        if loading != nil {
             loading!.append(onCompletion)
             return
         }
 
         // get loading method
         var loadFunc: (_ source: String) -> Data?
-        if (val.hasPrefix("/static")) {
+        if val.hasPrefix("/static") {
             loadFunc = self.loadResourceSource
-        } else if (val.hasPrefix("data:")) {
+        } else if val.hasPrefix("data:") {
             loadFunc = self.loadDataUriSource
         } else {
             loadFunc = self.loadUrlSource
@@ -142,4 +142,3 @@ class Image: Item {
         }
     }
 }
-
