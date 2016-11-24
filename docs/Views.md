@@ -1,3 +1,5 @@
+# Views
+
 Views on the client side are used to position, organize and handle rendered elements.
 
 Views can be also used to serve HTML documents for crawlers (e.g. GoogleBot).

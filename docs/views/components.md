@@ -1,3 +1,5 @@
+# Components
+
 `neft:fragment` is a template for repeated pieces of code.
 
 Fragment can be rendered by the `neft:use` tag.

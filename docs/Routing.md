@@ -1,3 +1,5 @@
+# Routing
+
 Routes are used to handle user request based on the given URI.
 
 Routes are placed in the `routes/` folder.

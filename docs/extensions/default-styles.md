@@ -1,3 +1,5 @@
+# Default Styles
+
 This extension adds styles for common HTML tags.
 
 Inspired by [W3 Default style sheet for HTML 4](https://www.w3.org/TR/CSS2/sample.html).

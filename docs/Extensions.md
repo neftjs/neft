@@ -1,3 +1,5 @@
+# Extensions
+
 Neft modules provides basic functions required to run simple application on various environments like:
  - rendering shapes, texts and images,
  - handling cursor, touch and keyboard events,

@@ -1,4 +1,6 @@
-Documents are automatically rendered by routes. 
+# Views Integration
+
+Documents are automatically rendered by routes.
 
 By default, route uses a view equal its name, which is automatically generated from the route URI (parameters are removing).
 

@@ -1,3 +1,5 @@
+# Native Communication
+
 Native communication needs to be asynchronous and supports sending nulls, booleans, floats or strings.
 
 ## JavaScript

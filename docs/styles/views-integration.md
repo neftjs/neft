@@ -1,3 +1,5 @@
+# Views Integration
+
 Neft uses his own language to describe how the elements looks like, therefore styles in Neft can be well organized and more dynamic, because the JavaScript support, views data-binding and more.
 
 All style files must be placed in the `/styles` folder.

@@ -1,3 +1,5 @@
+# Scripting
+
 `${this}` is available in each view file and `<neft:fragment />`. These objects are not shared between different views or fragments so can be easily used to extend HTML by custom JavaScript methods.
 
 ## Script

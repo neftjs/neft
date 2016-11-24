@@ -1,3 +1,5 @@
+# Networking
+
 HTTP networking connection is available under the `app.networking` Networking instance. Commonly used classes in routes are `Networking.Request` and `Networking.Response`.
 
 Neft uses special HTTP header `X-Expected-Type`. Routes are polymorphic. They return the same data in various formats (currently supported are `text`, `json` and `html`) for the same URI.
