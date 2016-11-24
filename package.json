@@ -27,14 +27,10 @@
   "engines": {
     "node": ">=0.11.14"
   },
-  "config": {
-    "wiki_url": "git@github.com:Neft-io/neft.wiki.git"
-  },
   "scripts": {
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
     "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony tests/init.coffee",
-    "sync-wiki": "git subtree pull --prefix wiki wiki master",
-    "update-api-wiki": "cross-env NODE_PATH=./ coffee scripts/api-wiki.coffee"
+    "update-api-docs": "cross-env NODE_PATH=./ coffee scripts/api-wiki.coffee"
   },
   "dependencies": {
     "babel-core": "6.18.0",
