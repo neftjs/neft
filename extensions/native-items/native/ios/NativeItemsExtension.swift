@@ -6,5 +6,6 @@ extension Extension.NativeItems {
         SliderItem.register()
         StepperItem.register()
         SwitchItem.register()
+        VideoItem.register()
     }
 }
