@@ -5,9 +5,11 @@
     fs = require 'fs-extra'
     os = require 'os'
     utils = require 'src/utils'
+    log = require 'src/log'
     pathUtils = require 'path'
     bundleStyle = null
 
+    log = log.scope 'Document'
     uid = 0
     realpath = fs.realpathSync './'
     tmpdir = os.tmpdir()
@@ -62,6 +64,11 @@
 
         while styleTags.length > 0
             styleTags.pop().parent = null
+
+        # detect not supported <style> tags inside another nodes
+        if tag = file.node.query('style')
+            log.warn "<style> inside '#{tag.parent.name}' element detected;" +
+                ' <style> needs to be defined as top-level element in your file or component'
 
         unless utils.isEmpty(queries)
             File.Style.applyStyleQueriesInDocument file, queries
