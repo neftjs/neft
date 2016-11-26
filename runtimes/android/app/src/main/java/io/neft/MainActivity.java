@@ -1,8 +1,7 @@
 package io.neft;
 
+import android.app.Activity;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -21,7 +20,7 @@ import io.neft.renderer.Renderer;
 import io.neft.renderer.Text;
 import io.neft.renderer.WindowView;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends Activity {
     public abstract class UrlResponse implements Runnable {
         public abstract void run(String response);
         public void run() {}
@@ -65,7 +64,6 @@ public class MainActivity extends FragmentActivity {
         throw new UnsupportedOperationException();
     }
 
-    @NonNull
     protected String getAssetFile(String path) {
         try {
             return Http.getStringFromInputStream(this.getAssets().open(path));
