@@ -2,6 +2,7 @@ package io.neft.renderer;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import io.neft.App;
@@ -18,10 +19,11 @@ public class Item {
     public final int id;
     protected Item background;
 
-    public ViewGroup view = new RelativeLayout(App.getApp().view.getContext());
+    public ViewGroup view = new FrameLayout(App.getApp().view.getContext());
 
     public Item() {
-        view.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+        view.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
+        view.setClipChildren(false);
         this.id = App.getApp().renderer.items.size();
         App.getApp().renderer.items.add(this);
     }
@@ -71,6 +73,7 @@ public class Item {
 
     @OnAction(InAction.SET_ITEM_CLIP)
     public void setClip(boolean val) {
+        view.setClipChildren(val);
     }
 
     @OnAction(InAction.SET_ITEM_WIDTH)

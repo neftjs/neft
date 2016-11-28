@@ -1,15 +1,13 @@
 package io.neft.renderer;
 
-import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 import java.util.HashMap;
 
 import io.neft.App;
-import io.neft.client.Action;
 import io.neft.client.CustomFunction;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
@@ -74,7 +72,7 @@ public class NativeItem extends Item {
         this.itemView = itemView;
         if (itemView != null) {
             view.addView(itemView);
-            itemView.setLayoutParams(new RelativeLayout.LayoutParams(
+            itemView.setLayoutParams(new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
             ));
