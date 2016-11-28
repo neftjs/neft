@@ -1,6 +1,4 @@
-<a href="http://www.neft.io"><img src="http://www.neft.io/static/images/neft-white.svg" alt="Neft" width="100" align="right" hspace="10" vspace="6"></a>
-
-# Neft
+<img src="https://cdn.rawgit.com/Neft-io/neft/master/media/neft-white-full.svg" alt="Neft.io logo" width="256" />
 
 ## Universal Platform
 

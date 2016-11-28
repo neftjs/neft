@@ -1,3 +1,63 @@
+<img src="https://cdn.rawgit.com/Neft-io/neft/master/media/neft-white-full.svg" alt="Neft.io logo" width="256" />
+
+## Universal Platform
+
+<table>
+    <tr>
+        <th>Platform</th>
+        <th>Code</th>
+        <th>Views</th>
+        <th>Styling</th>
+        <th>Custom bindings</th>
+        <th>Custom styling</th>
+    </tr>
+    <tr>
+        <td>iOS</td>
+        <td rowspan="5">JavaScript</td>
+        <td rowspan="5">XML</td>
+        <td rowspan="5">NML</td>
+        <td>Swift / ObjC</td>
+        <td>UIKit</td>
+    </tr>
+    <tr>
+        <td>Android</td>
+        <td>Java / C</td>
+        <td>android.view</td>
+    </tr>
+    <tr>
+        <td>Browser</td>
+        <td rowspan="3">JavaScript</td>
+        <td>HTML & CSS</td>
+    </tr>
+    <tr>
+        <td>Browser WebGL</td>
+        <td>Pixi.js</td>
+    </tr>
+    <tr>
+        <td>Node</td>
+        <td></td>
+    </tr>
+</table>
+
+- `NML` - *Neft Marked Language* - Simple language used to describe styles, bindings and animations.<br>See [Built in native controls](https://github.com/Neft-io/neft-default-styles), [API Doc](https://github.com/Neft-io/neft/wiki/Renderer-API).
+
+* * *
+
+### What Neft does?
+
+1. Runs your JavaScript code on different platfoms.
+2. Renders basic elements and native views through [extensions](https://github.com/Neft-io/neft/wiki/Extensions).
+3. Supports asynchronous communication with native code.
+4. Allows to write component-based views in XML and JavaScript
+5. Provides styling engine.
+
+### What Neft *does not*?
+
+1. Supports browser APIs. Neft is not a browser.
+2. Understands CSS. Neft has his own [styling engine](https://github.com/Neft-io/neft/wiki/Styles).
+
+* * *
+
 ## Everywhere
 
 - Node >= 0.11.14,
