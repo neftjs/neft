@@ -3,4 +3,4 @@ coverage
 *.log
 /build
 tmp
-/wiki/api
+_book
