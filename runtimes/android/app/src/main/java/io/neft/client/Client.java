@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import io.neft.App;
 import io.neft.Native;
 
 public class Client {
@@ -75,7 +76,7 @@ public class Client {
         Native.client_init(this);
     }
 
-    public void onData(final byte[] actions, final boolean[] booleans, final int[] integers, final float[] floats, final String[] strings) {
+    public void onData(final byte[] actions, boolean[] booleans, int[] integers, float[] floats, String[] strings) {
         reader.booleans = booleans;
         reader.booleansIndex = 0;
         reader.integers = integers;
@@ -85,9 +86,19 @@ public class Client {
         reader.strings = strings;
         reader.stringsIndex = 0;
 
-        final int length = actions.length;
-        for (int i = 0; i < length; i++){
-            final InAction actionType = InActionValues[actions[i]];
+        App.getApp().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                processActions(actions);
+                sendData();
+            }
+        });
+    }
+
+    private void processActions(byte[] actionsArr) {
+        final int length = actionsArr.length;
+        for (int i = 0; i < length; i++) {
+            final InAction actionType = InActionValues[actionsArr[i]];
             final Action action = this.actions.get(actionType);
             if (action != null) {
                 action.work(reader);
@@ -95,8 +106,6 @@ public class Client {
                 Log.e("Neft", "Native action '" + actionType + "' is not implemented");
             }
         }
-
-        sendData();
     }
 
     public void pushAction(OutAction val) {

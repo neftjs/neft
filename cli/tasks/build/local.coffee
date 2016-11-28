@@ -13,9 +13,7 @@ DEFAULT_LOCAL_FILE =
         sdkDir: '$ANDROID_HOME'
         compileSdkVersion: 23
         buildToolsVersion: '23'
-        dependencies: [
-            'com.android.support:appcompat-v7:23.0.0'
-        ]
+        dependencies: []
 
 exports.normalizeLocalFile = ->
     if fs.existsSync('./local.json')
