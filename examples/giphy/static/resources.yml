@@ -1,0 +1,5 @@
+resources:
+    neftGreen:
+        color: "#0DFF7E"
+    text:
+        color: "#1A1A1A"
