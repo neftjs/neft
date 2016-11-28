@@ -22,7 +22,6 @@ public class Item {
 
     public Item() {
         view.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         this.id = App.getApp().renderer.items.size();
         App.getApp().renderer.items.add(this);
     }
