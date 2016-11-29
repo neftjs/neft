@@ -1,4 +1,4 @@
-# Native Communication
+# Native
 
     'use strict'
 
@@ -46,7 +46,7 @@
             log.warn "No listeners added for the native event '#{name}'"
         return
 
-# callFunction(*String* name, [*Boolean*|*Float*|*String* args...])
+## native.callFunction(*String* name, [*Boolean*|*Float*|*String* args...])
 
     pushPending = false
 
@@ -66,7 +66,7 @@
         bridge.pushInteger argsLen
 
         for i in [0...argsLen]
-            arg = arguments[i+1]
+            arg = arguments[i + 1]
             switch typeof arg
                 when 'boolean'
                     bridge.pushInteger EVENT_BOOLEAN_TYPE
@@ -80,7 +80,7 @@
                     bridge.pushString arg
                 else
                     if arg?
-                        log.warn "Native function can be called with a boolean, " +
+                        log.warn 'Native function can be called with a boolean, ' +
                             "float or a string, but '#{arg}' given"
                     bridge.pushInteger EVENT_NULL_TYPE
 
@@ -89,7 +89,7 @@
             setImmediate sendData
         return
 
-# on(*String* eventName, *Function* listener)
+## native.on(*String* eventName, *Function* listener)
 
     exports.on = (name, listener) ->
         assert.isString name
@@ -99,8 +99,3 @@
         eventListeners = listeners[name] ?= []
         eventListeners.push listener
         return
-
-# Glossary
-
-- [native.callFunction](#callfunction)
-- [native.on](#on)

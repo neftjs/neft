@@ -1,4 +1,4 @@
-# Item.Keys
+# Keys
 
 ```javascript
 Rectangle {
@@ -20,8 +20,6 @@ Rectangle {
     utils = require 'src/utils'
     signal = require 'src/signal'
     assert = require 'src/assert'
-
-# **Class** Keys
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Keys extends itemUtils.DeepObject
         @__name__ = 'Keys'
@@ -68,7 +66,7 @@ Rectangle {
         for signalName in @SIGNALS
             signal.Emitter.createSignal @, signalName
 
-## *Boolean* Keys::focus = false
+## *Boolean* Keys::focus = `false`
 
 ## *Signal* Keys::onFocusChange(*Boolean* oldValue)
 
@@ -131,8 +129,3 @@ Rectangle {
 ## *Item.Keys.Event* Keys.event
 
         @event = keysEvent = new KeysEvent
-
-# Glossary
-
-- [Item.Keys](#class-keys)
-- [Item.Keys.Event](#class-keysevent)

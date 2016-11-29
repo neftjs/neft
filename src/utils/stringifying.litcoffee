@@ -6,7 +6,7 @@
 
     module.exports = (utils) ->
 
-## simplify(*Object* object, [*Object* options])
+## utils.simplify(*Object* object, [*Object* options])
 
 Convert the given object into the most simplified format with no cyclic references and more.
 
@@ -184,7 +184,7 @@ console.log(clone instanceof Sample)
                 protos: protos
                 constructors: ctors
 
-## assemble(*PlainObject* object)
+## utils.assemble(*PlainObject* object)
 
 Backward utils.simplify() operation.
 

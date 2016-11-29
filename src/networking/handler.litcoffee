@@ -1,19 +1,5 @@
 # Handler
 
-    'use strict'
-
-    utils = require 'src/utils'
-    assert = require 'src/assert'
-    log = require 'src/log'
-    Schema = require 'src/schema'
-
-    {parse, stringify} = JSON
-
-    assert = assert.scope 'Networking.Handler'
-    log = log.scope 'Networking', 'Handler'
-
-# **Class** Handler
-
 Represents a callback function called on the request.
 
 Each handler must determine an uri, which is compared with the got request URI.
@@ -25,6 +11,18 @@ Access it with:
 var Networking = require('networking');
 var Handler = Networking.Handler;
 ```
+
+    'use strict'
+
+    utils = require 'src/utils'
+    assert = require 'src/assert'
+    log = require 'src/log'
+    Schema = require 'src/schema'
+
+    {parse, stringify} = JSON
+
+    assert = assert.scope 'Networking.Handler'
+    log = log.scope 'Networking', 'Handler'
 
     module.exports = (Networking) -> class Handler
 
@@ -51,7 +49,7 @@ This property is compared with the request uri.
 
         uri: null
 
-## *Schema* Handler::schema = null
+## *Schema* Handler::schema = `null`
 
 Used to determine whether the request uri is valid and can be handled by the handler callback.
 
@@ -142,7 +140,3 @@ Returns a string describing the handler.
 
         toString: ->
             "#{@method} #{@uri}"
-
-# Glossary
-
-- [Networking.Handler](#class-handler)

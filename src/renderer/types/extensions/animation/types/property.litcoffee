@@ -8,10 +8,10 @@
 
     log = log.scope 'Renderer', 'PropertyAnimation'
 
-# **Class** PropertyAnimation : *Animation*
-
     module.exports = (Renderer, Impl, itemUtils) -> class PropertyAnimation extends Renderer.Animation
         @__name__ = 'PropertyAnimation'
+
+## *PropertyAnimation* PropertyAnimation::constructor() : *Animation*
 
         constructor: ->
             super()
@@ -200,8 +200,7 @@
             else if not val
                 @easing.type = 'Linear'
 
-# **Class** Easing
-
+        # TODO: move into separated file
         class Easing extends itemUtils.DeepObject
             constructor: (ref) ->
                 @_type = 'Linear'
@@ -252,8 +251,3 @@ InOutBounce.
                         type = 'Linear'
                     _super.call @, type
                     return
-
-# Glossary
-
-- [PropertyAnimation](#class-propertyanimation)
-- [Easing](#class-easing)

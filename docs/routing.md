@@ -1,13 +1,14 @@
 # Routing
 
-Routes are used to handle user request based on the given URI.
+Neft on all platforms is using URIs to support different pages, just like a browser do for web pages.
 
-Routes are placed in the `routes/` folder.
+All routes are placed in the `routes/` folder. Create it if needed.
 
-Each file must exports a function returning an object of routes.
+Each file in this folder must exports a function and return an object of routes.
+
+Let's consider how example */routes/user.js* may looks like:
 
 ```javascript
-// routes/user.js
 module.exports = (app) => {
     return {
         'get /users': {
@@ -19,20 +20,35 @@ module.exports = (app) => {
 };
 ```
 
-`get /users` is used on a request with the `GET` method and the `/users` URI.
+As you can see, you have access to the main [app](/api/app.html) object.
 
-To resolve the request with a data, declare the `Route::getData()` function.
-`callback` function as the first argument expects an Error instance (if thrown) and the data as the second parameter.
-This is a common pattern used in Neft modules.
+`get /users` creates a [route](/api/app-route.html).
+
+It can be called in various ways:
+- by a browser, when user open `/users` page,
+- when user clicks on a link pointed to `/users` (using `<a href />` tag or [Item::linkUri](/api/renderer-item.html#linkuri)),
+- by a crawler (e.g. GoogleBot),
+- by you, when you sends a request to your server using `app.networking.get('/users', (err, data) => {})`,
+- by you, when you sends a *local request*, using [app.networking.createLocalRequest](/api/networking.html#createlocalrequest).
+
+Each route needs to return some data. To do this, declare the [getData](/api/app-route.html#getdata) function.
+
+`callback` argument is a function.
+It expects an *Error* instance (if thrown) and data as the second parameter.
+This is a common pattern used in Neft callbacks.
+
+`getData` is only one of the many methods you can declare in a route.
+See API Reference of [Route](/api/app-route.html) for more.
 
 ## URI parameters
 
-In URI you can specify parameters by putting the parameter name in curly brackets.
+In URI you can specify parameters by putting them in curly brackets.
 
-Matched parameters are available in the `this.request.params` object.
+Matched parameters are available under the `this.request.params` object.
+
+For instance, if you want to return user data based on the given *id*:
 
 ```javascript
-// routes/user.js
 module.exports = (app) => {
     return {
         'get /user/{id}': {
@@ -49,10 +65,11 @@ module.exports = (app) => {
 
 ## Parameters schema
 
-For more strict parameters validation, you can use [[Schema|Schema API]] module.
+For more strict parameters validation, you can use [Schema](/api/schema.html) module. Just declare it as `schema` in your route object.
+
+If the received request does not correspond to the *schema*, route is omitted.
 
 ```javascript
-// routes/user.js
 module.exports = (app) => {
     return {
         'get /user/{id}': {
@@ -77,34 +94,28 @@ If the request was called with some data (e.g. json) you can access it by `this.
 
 ## Request query
 
-URI queries from the got request URI are available by `this.request.uri.query`.
+If the request URI specifies some query, it's available under the `this.request.uri.query` object.
 
 ```javascript
 // /users?limit=100&offset=200
 // this.request.uri.query.limit == 100
+// this.request.uri.query.offset == 200
 ```
 
 ## Custom attributes
 
 All non-standard route properties are saved in the route object.
 
-This functionality is more useful for the HTML rendering, where the route object is available in the HTML document using the `${context}` object.
+This functionality is more useful for the HTML rendering, where the route object is available in the HTML document by the `${context}` string.
 
 ```javascript
-// routes/user.js
 module.exports = (app) => {
     return {
         'get /users/nav': {
-            defaultData: [], // accessible in views by ${context.defaultData}
-            getData(callback) {
-                callback(null, this.defaultData);
-            }
+            defaultData: new Neft.List() // accessible in views by ${context.defaultData}
         }
     };
 };
 ```
 
-## See more
-- [[Route API|App App.Route API]]
-- [[Request API|Networking Request API]]
-- [[Uri API|Networking Uri API]]
+## Views integration

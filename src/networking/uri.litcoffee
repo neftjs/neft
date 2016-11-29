@@ -36,8 +36,6 @@
 
         result
 
-# **Class** Uri
-
     module.exports = (Networking) -> class Uri
         @URI_TRIM_RE = ///^\/?(.*?)\/?$///
         @NAMES_RE = ///{([a-zA-Z0-9_$]+)\*?}///g
@@ -220,7 +218,3 @@ console.log(uri.toString());
             i = 0
             @_uri.replace Uri.NAMES_RE, =>
                 encodeURI params[@_names[i++]]
-
-# Glossary
-
-- [Networking.Uri](#class-uri)

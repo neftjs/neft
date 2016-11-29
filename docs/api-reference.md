@@ -1,86 +1,80 @@
-> [Wiki](Home) ▸ **API Reference**
-
-* [[App|App-API]]
-  * [[Route|App-App.Route-API]]
-  * [[Standard routes|App-Standard routes-API]]
-* [[Assertions|Assert-API]]
-* [[Database|Db-API]]
-* [[Dict|Dict-API]] — data-binding for objects
-* [[Document|Document-API]]
-  * [[Attributes evaluating|Document-Attributes evaluating-API]]
-  * [[Element|Document-Element-API]]
-    * [[Tag|Document-Element.Tag-API]]
-    * [[Text|Document-Element.Text-API]]
-  * [[Setting attributes|Document-Setting attributes-API]]
-  * [[String Interpolation|Document-String Interpolation-API]]
-  * [[component|Document-component-API]]
-  * [[import|Document-import-API]]
-  * [[log|Document-log-API]]
-  * [[n-each|Document-n-each-API]]
-  * [[n-if|Document-n-if-API]]
-  * [[prop|Document-prop-API]]
-  * [[ref|Document-ref-API]]
-  * [[script|Document-script-API]]
-  * [[style|Document-style-API]]
-  * [[target|Document-target-API]]
-  * [[use|Document-use-API]]
-* [[List|List-API]] — data-binding on arrays
-* [[Log|Log-API]]
-* [[Native Communication|Native-API]]
-* [[Networking|Networking-API]]
-  * [[Handler|Networking-Handler-API]]
-  * [[Request|Networking-Request-API]]
-  * [[Response|Networking-Response-API]]
-    * [[Response Error|Networking-Response Error-API]]
-  * [[Uri|Networking-Uri-API]]
-* [[Renderer|Renderer-API]]
-  * [[AmbientSound|Renderer-AmbientSound-API]]
-  * [[Animation|Renderer-Animation-API]]
-    * [[PropertyAnimation|Renderer-PropertyAnimation-API]]
-      * [[NumberAnimation|Renderer-NumberAnimation-API]]
-  * [[Class|Renderer-Class-API]]
-  * [[Column|Renderer-Column-API]]
-  * [[Device|Renderer-Device-API]]
-  * [[Extension|Renderer-Extension-API]]
-  * [[Flow|Renderer-Flow-API]]
-  * [[FontLoader|Renderer-FontLoader-API]]
-  * [[Grid|Renderer-Grid-API]]
-  * [[Item|Renderer-Item-API]]
-    * [[Alignment|Renderer-Item.Alignment-API]]
-    * [[Anchors|Renderer-Item.Anchors-API]]
-    * [[Document|Renderer-Item.Document-API]]
-    * [[Image|Renderer-Image-API]]
-    * [[Keys|Renderer-Item.Keys-API]]
-    * [[Layout|Renderer-Item.Layout-API]]
-    * [[Margin|Renderer-Item.Margin-API]]
-    * [[Native|Renderer-Native-API]]
-    * [[Pointer|Renderer-Item.Pointer-API]]
-    * [[Spacing|Renderer-Item.Spacing-API]]
-    * [[Text|Renderer-Text-API]]
-      * [[Text.Font|Renderer-Item.Text.Font-API]]
-    * [[TextInput|Renderer-TextInput-API]]
-  * [[Navigator|Renderer-Navigator-API]]
-  * [[Rectangle|Renderer-Rectangle-API]]
-  * [[ResourcesLoader|Renderer-ResourcesLoader-API]]
-  * [[RotationSensor|Renderer-RotationSensor-API]]
-  * [[Row|Renderer-Row-API]]
-  * [[Screen|Renderer-Screen-API]]
-  * [[Scrollable|Renderer-Scrollable-API]]
-  * [[Transition|Renderer-Transition-API]]
-* [[Resources|Resources-API]]
-  * [[Resource|Resources-Resource-API]]
-* [[Schema|Schema-API]]
-  * [[Array Validator|Schema-Array Validator-API]]
-  * [[Max Validator|Schema-Max Validator-API]]
-  * [[Min Validator|Schema-Min Validator-API]]
-  * [[Object Validator|Schema-Object Validator-API]]
-  * [[Optional Validator|Schema-Optional Validator-API]]
-  * [[Options Validator|Schema-Options Validator-API]]
-  * [[RegExp Validator|Schema-RegExp Validator-API]]
-  * [[Type Validator|Schema-Type Validator-API]]
-* [[Signal|Signal-API]] — events-like
-* [[Typed Array|Typed-array-API]]
-* [[Utils|Utils-API]]
-  * [[Asynchronous|Utils-Asynchronous-API]]
-  * [[Properties extraction|Utils-Properties extraction-API]]
-  * [[Stringifying|Utils-Stringifying-API]]
+* [App](api/app.md)
+  * [Route](api/app-app.route.md)
+  * [Standard routes](api/app-standard-routes.md)
+* [Assertions](api/assert.md)
+* [Database](api/db.md)
+* [Dict](api/dict.md) — data-binding for objects
+* [Document](api/document.md)
+  * [&lt;component /&gt;](api/document-&lt;component-&gt;.md)
+  * [&lt;import /&gt;](api/document-&lt;import-&gt;.md)
+  * [&lt;log /&gt;](api/document-&lt;log-&gt;.md)
+  * [&lt;prop /&gt;](api/document-&lt;prop-&gt;.md)
+  * [&lt;target /&gt;](api/document-&lt;target-&gt;.md)
+  * [&lt;use /&gt;](api/document-&lt;use-&gt;.md)
+  * [Attributes evaluating](api/document-attributes-evaluating.md)
+  * [Element](api/document-element.md)
+    * [Tag](api/document-element.tag.md)
+    * [Text](api/document-element.text.md)
+  * [Setting attributes](api/document-setting-attributes.md)
+  * [String Interpolation](api/document-string-interpolation.md)
+  * [n-each](api/document-n-each.md)
+  * [n-if](api/document-n-if.md)
+  * [ref](api/document-ref.md)
+  * [script](api/document-script.md)
+  * [style](api/document-style.md)
+* [List](api/list.md) — data-binding on arrays
+* [Log](api/log.md)
+* [Native Communication](api/native.md)
+* [Networking](api/networking.md)
+  * [Handler](api/networking-handler.md)
+  * [Request](api/networking-request.md)
+  * [Response](api/networking-response.md)
+    * [Response Error](api/networking-response-error.md)
+  * [Uri](api/networking-uri.md)
+* [Renderer](api/renderer.md)
+  * [Animation](api/renderer-animation.md)
+    * [PropertyAnimation](api/renderer-propertyanimation.md)
+      * [NumberAnimation](api/renderer-numberanimation.md)
+  * [Class](api/renderer-class.md)
+  * [Column](api/renderer-column.md)
+  * [Device](api/renderer-device.md)
+  * [Extension](api/renderer-extension.md)
+  * [Flow](api/renderer-flow.md)
+  * [FontLoader](api/renderer-fontloader.md)
+  * [Grid](api/renderer-grid.md)
+  * [Item](api/renderer-item.md)
+    * [Alignment](api/renderer-item.alignment.md)
+    * [Anchors](api/renderer-item.anchors.md)
+    * [Document](api/renderer-item.document.md)
+    * [Image](api/renderer-image.md)
+    * [Keys](api/renderer-item.keys.md)
+    * [Layout](api/renderer-item.layout.md)
+    * [Margin](api/renderer-item.margin.md)
+    * [Native](api/renderer-native.md)
+    * [Pointer](api/renderer-item.pointer.md)
+    * [Spacing](api/renderer-item.spacing.md)
+    * [Text](api/renderer-text.md)
+      * [Text.Font](api/renderer-item.text.font.md)
+  * [Navigator](api/renderer-navigator.md)
+  * [Rectangle](api/renderer-rectangle.md)
+  * [ResourcesLoader](api/renderer-resourcesloader.md)
+  * [Row](api/renderer-row.md)
+  * [Screen](api/renderer-screen.md)
+  * [Transition](api/renderer-transition.md)
+* [Resources](api/resources.md)
+  * [Resource](api/resources-resource.md)
+* [Schema](api/schema.md)
+  * [Array Validator](api/schema-array-validator.md)
+  * [Max Validator](api/schema-max-validator.md)
+  * [Min Validator](api/schema-min-validator.md)
+  * [Object Validator](api/schema-object-validator.md)
+  * [Optional Validator](api/schema-optional-validator.md)
+  * [Options Validator](api/schema-options-validator.md)
+  * [RegExp Validator](api/schema-regexp-validator.md)
+  * [Type Validator](api/schema-type-validator.md)
+* [Signal](api/signal.md) — events-like
+* [Typed Array](api/typed-array.md)
+* [Utils](api/utils.md)
+  * [Asynchronous](api/utils-asynchronous.md)
+  * [Properties extraction](api/utils-properties-extraction.md)
+  * [Stringifying](api/utils-stringifying.md)

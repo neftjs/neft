@@ -20,8 +20,6 @@ var Networking = require('networking');
     assert = assert.scope 'Networking'
     log = log.scope 'Networking'
 
-# **Class** Networking
-
     module.exports = class Networking extends signal.Emitter
 
         @Impl = require('./impl') Networking
@@ -374,8 +372,3 @@ app.networking.createRequest({
             setImmediate => @resolveRequest req
 
             req
-
-# Glossary
-
-- [Networking](#class-networking)
-- [HTTP](#class-networking)

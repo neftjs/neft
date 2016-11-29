@@ -63,7 +63,3 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
             return
 
         screen
-
-# Glossary
-
-- [Screen](#screen)

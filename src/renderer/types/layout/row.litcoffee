@@ -14,8 +14,6 @@ Row {
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-# **Class** Row : *Item*
-
     module.exports = (Renderer, Impl, itemUtils) -> class Row extends Renderer.Item
         @__name__ = 'Row'
         @__path__ = 'Renderer.Row'
@@ -27,6 +25,8 @@ Row {
             itemUtils.Object.initialize item, component, opts
             item.effectItem = item
             item
+
+## *Row* Row::constructor() : *Item*
 
         constructor: ->
             super()
@@ -85,7 +85,3 @@ Row {
             implementation: Impl.setRowIncludeBorderMargins
             developmentSetter: (val) ->
                 assert.isBoolean val
-
-# Glossary
-
-- [Row](#class-row)

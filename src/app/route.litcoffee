@@ -1,4 +1,4 @@
-# App.Route
+# Route
 
     'use strict'
 
@@ -12,8 +12,6 @@
     Dict = require 'src/dict'
 
     log = log.scope 'App', 'Route'
-
-# **Class** Route
 
     module.exports = (app) -> class Route
 
@@ -346,7 +344,9 @@ Acceptable syntaxes:
 
 ## *Function* Route::destroyHTML()
 
-## *Function*|*Networking.Uri* Route::redirect
+## *Networking.Uri* Route::redirect
+
+Can be also a function. May returns a *Networking.Uri*, any String or `undefined`.
 
 ## *Networking.Request* Route::request
 
@@ -380,13 +380,13 @@ Acceptable syntaxes:
             "#{@method} #{@uri}"
 
         getDefaultRouteViewName = ->
-            path = "views/#{@name}.html"
+            path = "views/#{@name}.xhtml"
             if app.views[path]
                 return path
 
         renderViewFromConfig = (opts) ->
-            viewName = opts?.view or getDefaultRouteViewName.call(@) or 'views/index.html'
-            tmplName = opts?.template or 'views/template.html'
+            viewName = opts?.view or getDefaultRouteViewName.call(@) or 'views/index.xhtml'
+            tmplName = opts?.template or 'views/template.xhtml'
             useName = opts?.use or 'body'
 
             logtime = log.time 'Render'

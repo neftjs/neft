@@ -39,24 +39,20 @@
     </tr>
 </table>
 
-- `NML` - *Neft Marked Language* - Simple language used to describe styles, bindings and animations.<br>See [Built in native controls](https://github.com/Neft-io/neft-default-styles), [API Doc](https://github.com/Neft-io/neft/wiki/Renderer-API).
-
-* * *
+> `NML` - *Neft Marked Language* - Simple language used to describe styles, bindings and animations with [native controls](/extensions/native-items.html).
 
 ### What Neft does?
 
-1. Runs your JavaScript code on different platfoms.
-2. Renders basic elements and native views through [extensions](https://github.com/Neft-io/neft/wiki/Extensions).
-3. Supports asynchronous communication with native code.
-4. Allows to write component-based views in XML and JavaScript
+1. Runs your JavaScript code on [different platfoms](#everywhere).
+2. Renders basic elements and native views through [extensions](/extensions.html).
+3. Supports communication with native code.
+4. Allows to write component-based views in XML and JavaScript.
 5. Provides styling engine.
 
-### What Neft *does not*?
+### What Neft does NOT?
 
 1. Supports browser APIs. Neft is not a browser.
-2. Understands CSS. Neft has his own [styling engine](https://github.com/Neft-io/neft/wiki/Styles).
-
-* * *
+2. Understands CSS. Neft has his own [styling engine](/styles.html). CSS is too complex to implement on all native platforms. Instead you have more dynamic language but with less functionalities.
 
 ## Everywhere
 
@@ -77,7 +73,7 @@ DOM model powers native apps and websites in a better logic abstraction. Neft al
 
 ### Abstract styles
 
-CSS alternative for more dynamic and cross-platform apps. Automatically synchronized with DOM. With [native elements](https://github.com/Neft-io/neft/wiki/Default-Styles).
+CSS alternative for more dynamic and cross-platform apps. Automatically synchronized with DOM. With [native elements](/extensions/native-items.html).
 
 ## Installation
 
@@ -90,10 +86,10 @@ npm install -g neft
 ```
 neft create MyApp
 cd MyApp
-neft build browser
-neft run node
-.. open http://localhost:3000/ in a browser
+neft run node browser --watch
 ```
+
+... and play with `MyApp/views/index.html`.
 
 ## Android native app
 
@@ -113,12 +109,8 @@ neft run ios --watch
 
 ## No examples, tutorials, bad docs quality
 
-Neft API is mostly stabilized. Now we are working on docs and tests improvements. You can help with making Neft brilliant. [[Contribute]]. Always create an issue if something doesn't work. Thank you!
+You can help with making Neft brilliant. [Contribute](/contribute.html).
 
-## [[Contribute]]
+Always create an issue if something doesn't work or can be improved.
 
-Our main goals are:
-- improve documentation,
-- add visual tests,
-- OS X Cocoa renderer,
-- Windows 10 through [UWP](https://en.wikipedia.org/wiki/Universal_Windows_Platform).
+*Neft is ours ;)*

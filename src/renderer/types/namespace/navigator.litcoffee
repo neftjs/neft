@@ -62,7 +62,3 @@ Text {
         navigator = new Navigator
         Impl.initNavigatorNamespace?.call navigator
         navigator
-
-# Glossary
-
-- [Navigator](#navigator)

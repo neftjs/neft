@@ -19,8 +19,6 @@ Rectangle {
 
     utils = require 'src/utils'
 
-# **Class** NumberAnimation : *PropertyAnimation*
-
     module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
         @__name__ = 'NumberAnimation'
 
@@ -31,6 +29,8 @@ Rectangle {
             itemUtils.Object.initialize item, component, opts
             item
 
+## *NumberAnimation* NumberAnimation::constructor() : *PropertyAnimation*
+
         constructor: ->
             super()
             @_from = 0
@@ -39,7 +39,3 @@ Rectangle {
 ## *Float* NumberAnimation::from
 
 ## *Float* NumberAnimation::to
-
-# Glossary
-
-- [NumberAnimation](#class-numberanimation)

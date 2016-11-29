@@ -1,12 +1,10 @@
-# Item.Layout
+# Layout
 
     'use strict'
 
     utils = require 'src/utils'
     signal = require 'src/signal'
     assert = require 'src/assert'
-
-# **Class** Layout
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Layout extends itemUtils.DeepObject
         @__name__ = 'Layout'
@@ -50,7 +48,7 @@
             namespace: propertyName
             parentConstructor: ctor
 
-## *Boolean* Layout::fillHeight = false
+## *Boolean* Layout::fillHeight = `false`
 
 ## *Signal* Layout::onFillHeightChange(*Boolean* oldValue)
 
@@ -62,7 +60,3 @@
                 assert.isBoolean val
             namespace: propertyName
             parentConstructor: ctor
-
-# Glossary
-
-- [Item.Layout](#class-layout)

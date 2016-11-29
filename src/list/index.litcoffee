@@ -1,7 +1,5 @@
 # List
 
-> data-binding on arrays
-
 Access it with:
 ```javascript
 const { List } = Neft;
@@ -12,8 +10,6 @@ const { List } = Neft;
     utils = require 'src/utils'
     assert = require 'src/assert'
     signal = require 'src/signal'
-
-# **Class** List
 
     module.exports = class List extends signal.Emitter
         @__name__ = 'List'
@@ -318,10 +314,6 @@ list.has('ab123'); // false
 
         toArray: ->
             arr = new Array @length
-            for val, i in this
+            for val, i in @
                 arr[i] = val
             arr
-
-# Glossary
-
-- [List](#class-list)

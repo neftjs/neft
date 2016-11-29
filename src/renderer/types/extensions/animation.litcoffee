@@ -6,10 +6,10 @@
     assert = require 'src/assert'
     signal = require 'src/signal'
 
-# **Class** Animation : *Renderer.Extension*
-
     module.exports = (Renderer, Impl, itemUtils) -> class Animation extends Renderer.Extension
         @__name__ = 'Animation'
+
+## *Animation* Animation::constructor() : *Renderer.Extension*
 
         constructor: ->
             super()
@@ -119,7 +119,3 @@
         disable: ->
             @running = false
             super()
-
-# Glossary
-
-- [Animation](#class-animation)

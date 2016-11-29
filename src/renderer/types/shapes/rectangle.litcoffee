@@ -16,8 +16,6 @@ Rectangle {
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-# **Class** Rectangle : *Item*
-
     module.exports = (Renderer, Impl, itemUtils) ->
 
         class Rectangle extends Renderer.Item
@@ -30,6 +28,8 @@ Rectangle {
                 item = new Rectangle
                 itemUtils.Object.initialize item, component, opts
                 item
+
+## *Rectangle* Rectangle::constructor() : *Item*
 
             constructor: ->
                 super()
@@ -129,7 +129,3 @@ Rectangle {
                 color: @color
 
         Rectangle
-
-# Glossary
-
-- [Rectangle](#class-rectangle)

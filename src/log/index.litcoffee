@@ -38,8 +38,6 @@ const { log } = Neft;
             usedMessages[msg] = true
             @ arguments...
 
-## **Class** Log
-
     class Log
         @LOGS_METHODS = ['log', 'info', 'warn', 'error', 'time', 'ok']
 
@@ -80,19 +78,19 @@ const { log } = Neft;
         _write: console?['lo' + 'g'].bind(console) or (->)
         _writeError: console?['erro' + 'r'].bind(console) or (->)
 
-### *Integer* log.LOG
+## *Integer* log.LOG
 
-### *Integer* log.INFO
+## *Integer* log.INFO
 
-### *Integer* log.OK
+## *Integer* log.OK
 
-### *Integer* log.WARN
+## *Integer* log.WARN
 
-### *Integer* log.ERROR
+## *Integer* log.ERROR
 
-### *Integer* log.TIME
+## *Integer* log.TIME
 
-### *Integer* log.ALL
+## *Integer* log.ALL
 
         i = 0
         LOG: 1<<i++
@@ -103,7 +101,7 @@ const { log } = Neft;
         TIME: 1<<i++
         ALL: (1<<i++) - 1
 
-### *Integer* enabled = log.ALL
+## *Integer* enabled = `log.ALL`
 
 Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
@@ -117,7 +115,7 @@ Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
             else
                 true
 
-### log([*Any* messages...])
+## log([*Any* messages...])
 
 Prints the given messages into the console.
 
@@ -133,7 +131,7 @@ log("setName()", "db time");
                 @_write @constructor.MARKERS.white fromArgs arguments
             return
 
-### log.info([*Any* messages...])
+## log.info([*Any* messages...])
 
 Prints the given messages into the console with a blue color.
 
@@ -142,7 +140,7 @@ Prints the given messages into the console with a blue color.
                 @_write @constructor.MARKERS.blue fromArgs arguments
             return
 
-### log.ok([*Any* messages...])
+## log.ok([*Any* messages...])
 
 Prints the given messages into the console with a green color.
 
@@ -155,7 +153,7 @@ log.ok("Data has been successfully sent!");
                 @_write @constructor.MARKERS.green fromArgs arguments
             return
 
-### log.warn([*Any* messages...])
+## log.warn([*Any* messages...])
 
 Prints the given messages into the console with a yellow color.
 
@@ -168,7 +166,7 @@ log.warn("Example warning with some recommendations");
                 @_write @constructor.MARKERS.yellow fromArgs arguments
             return
 
-### log.error([*Any* messages...])
+## log.error([*Any* messages...])
 
 Prints the given messages into the console with a red color.
 
@@ -181,7 +179,7 @@ log.error("Error occurs, ... in file ...");
                 @_writeError @constructor.MARKERS.red fromArgs arguments
             return
 
-### *Array* log.time()
+## *Array* log.time()
 
 Returns an id used to measure execution time by the `log.end()` function.
 
@@ -203,7 +201,7 @@ findPath();
 
             [@constructor.time(), fromArgs(arguments)]
 
-### log.end(*Array* logTime)
+## log.end(*Array* logTime)
 
 Prints an information about the execution time for the given timer id.
 
@@ -217,7 +215,7 @@ Prints an information about the execution time for the given timer id.
             logTime[0] = 0
             return
 
-### log.scope([*Any* names...])
+## log.scope([*Any* names...])
 
 Returns a new `log` function.
 

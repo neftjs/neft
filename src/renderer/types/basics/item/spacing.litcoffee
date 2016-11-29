@@ -1,11 +1,9 @@
-# Item.Spacing
+# Spacing
 
     'use strict'
 
     assert = require 'src/assert'
     utils = require 'src/utils'
-
-# **Class** Spacing
 
     module.exports = (Renderer, Impl, itemUtils) -> (ctor) -> class Spacing extends itemUtils.DeepObject
         @__name__ = 'Spacing'
@@ -71,7 +69,3 @@
         toJSON: ->
             column: @column
             row: @row
-
-# Glossary
-
-- [Item.Spacing](#class-spacing)

@@ -74,7 +74,7 @@ In the release mode, code is minified and all assertions are removed.
 
 ## Local configuration file
 
-After first build, in your application folder, you'll find `local.json` file.
+In your application folder, you can find `local.json` file.
 
 This file is used to configure your local environment. It's ignored by Git (see `.gitignore` file in your application folder).
 

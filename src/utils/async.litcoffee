@@ -18,7 +18,7 @@ var async = utils.async;
 
     NOP = ->
 
-## forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
+## utils.async.forEach(*NotPrimitive* array, *Function* callback, [*Function* onEnd, *Any* context])
 
 This is an asynchronous version of the standard `Array.prototype.forEach()` function
 which works with arrays and objects.

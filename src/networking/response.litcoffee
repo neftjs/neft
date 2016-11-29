@@ -10,8 +10,6 @@
     assert = assert.scope 'Networking.Response'
     log = log.scope 'Networking', 'Response'
 
-# **Class** Response
-
     module.exports = (Networking, Impl) -> class Response extends signal.Emitter
 
 ## *Array* Response.STATUSES
@@ -143,7 +141,7 @@ Refers to the [Request][networking/Request].
 
         request: null
 
-## *Integer* Response::status = Response.OK
+## *Integer* Response::status = `Response.OK`
 
 Keeps a normalized code determined the response type.
 
@@ -176,7 +174,7 @@ res.data = Document.fromJSON(...);
 
         cookies: null
 
-## *String* Response::encoding = 'utf-8'
+## *String* Response::encoding = `'utf-8'`
 
         encoding: 'utf-8'
 
@@ -279,7 +277,3 @@ Returns `true` if the response status is in range from 200 to 299.
 
         isSucceed: ->
             300 > @status >= 200
-
-# Glossary
-
-- [Networking.Response](#class-response)

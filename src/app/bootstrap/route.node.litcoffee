@@ -39,7 +39,6 @@
         JS_NEFT_GAME_FILE_PATH = './build/neft-browser-game-release.js'
         JS_BUNDLE_FILE_PATH = './build/app-browser-release.js'
         VIEW_NAME = '_app_bootstrap'
-        VIEW_FILE = 'view.html'
         TEXT_MODE_URI_PREFIX = '/neft-type=text'
         TYPE_COOKIE_NAME = 'neft-type'
 

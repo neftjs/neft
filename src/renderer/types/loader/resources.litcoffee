@@ -1,5 +1,12 @@
 # ResourcesLoader
 
+Access it with:
+```javascript
+ResourcesLoader {}
+```
+
+Example:
+
 ```javascript
 Item {
     ResourcesLoader {
@@ -21,13 +28,6 @@ Item {
     Resources = require 'src/resources'
 
     log = log.scope 'Renderer', 'ResourcesLoader'
-
-# **Class** ResourcesLoader
-
-Access it with:
-```javascript
-ResourcesLoader {}
-```
 
     module.exports = (Renderer, Impl, itemUtils) -> class ResourcesLoader extends itemUtils.FixedObject
         @__name__ = 'ResourcesLoader'
@@ -76,7 +76,3 @@ ResourcesLoader {}
             name: 'progress'
             developmentSetter: (val) ->
                 assert.isFloat val
-
-# Glossary
-
-- [ResourcesLoader](#class-resourcesloader)

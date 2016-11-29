@@ -27,9 +27,9 @@
     exports.Component = require('./types/basics/component') exports, Impl, itemUtils
 
     exports.Item = require('./types/basics/item') exports, Impl, itemUtils
-    exports.Image = require('./types/basics/item/types/image') exports, Impl, itemUtils
-    exports.Text = require('./types/basics/item/types/text') exports, Impl, itemUtils
-    exports.Native = require('./types/basics/item/types/native') exports, Impl, itemUtils
+    exports.Image = require('./types/basics/image') exports, Impl, itemUtils
+    exports.Text = require('./types/basics/text') exports, Impl, itemUtils
+    exports.Native = require('./types/basics/native') exports, Impl, itemUtils
     exports.Rectangle = require('./types/shapes/rectangle') exports, Impl, itemUtils
 
     exports.Grid = require('./types/layout/grid') exports, Impl, itemUtils
