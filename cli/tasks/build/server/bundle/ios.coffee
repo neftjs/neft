@@ -74,9 +74,6 @@ module.exports = (config, callback) ->
         fs.removeSync OUT_DIR
     fs.copySync RUNTIME_PATH, OUT_DIR,
         filter: (path) ->
-            # omit hidden files
-            if /\/\./i.test(path)
-                return false
             # compile coffee files
             if /\.coffee$/.test(path)
                 coffeeFiles.push path
@@ -140,7 +137,8 @@ module.exports = (config, callback) ->
     project = xcode.project XCODE_PROJECT_PATH
     project.parse (err) ->
         if err?
-            console.error "Can't parse XCode project; create an issue on GitHub: https://github.com/Neft-io/neft\n\n"+err
+            log.error "Can't parse XCode project"
+            log.error err?.stack or err
             log.end logtime
             callback new Error "Can't parse XCode file"
             return
