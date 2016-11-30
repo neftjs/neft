@@ -84,7 +84,8 @@ module.exports = (platform, options, app, callback) ->
         changedFiles.push INDEX_ABS_PATH
 
         # build files
-        Array::push.apply changedFiles, glob.sync('./build/*(styles|views)/**/*.js')
+        for buildFilePath in glob.sync('./build/*(styles|views)/**/*.js')
+            changedFiles.push fs.realpathSync buildFilePath
 
     onEnvPrepare = signal.create()
     onEnvPrepare.connect -> mockNeft platform, neftFilePath
