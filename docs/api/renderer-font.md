@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/text/font.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/text/font.litcoffee)
 
 
 * * * 
@@ -21,7 +21,7 @@
 <dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/text/font.litcoffee#signal-fontonfamilychangestring-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/text/font.litcoffee#signal-fontonfamilychangestring-oldvalue)
 
 
 * * * 
@@ -38,7 +38,7 @@
 <dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/text/font.litcoffee#signal-fontonpixelsizechangestring-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/text/font.litcoffee#signal-fontonpixelsizechangestring-oldvalue)
 
 
 * * * 
@@ -57,7 +57,7 @@ In range from 0 to 1.
 <dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/text/font.litcoffee#signal-fontonweightchangefloat-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/text/font.litcoffee#signal-fontonweightchangefloat-oldvalue)
 
 
 * * * 
@@ -74,7 +74,7 @@ In range from 0 to 1.
 <dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd><dt>Not Implemented</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/text/font.litcoffee#hidden-signal-fontonwordspacingchangefloat-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/text/font.litcoffee#hidden-signal-fontonwordspacingchangefloat-oldvalue)
 
 
 * * * 
@@ -91,7 +91,7 @@ In range from 0 to 1.
 <dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd><dt>Not Implemented</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/text/font.litcoffee#hidden-signal-fontonletterspacingchangefloat-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/text/font.litcoffee#hidden-signal-fontonletterspacingchangefloat-oldvalue)
 
 
 * * * 
@@ -108,5 +108,5 @@ In range from 0 to 1.
 <dl><dt>Static property of</dt><dd><i>Font</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/text/font.litcoffee#signal-fontonitalicchangeboolean-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/text/font.litcoffee#signal-fontonitalicchangeboolean-oldvalue)
 

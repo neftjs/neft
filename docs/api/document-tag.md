@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Extends</dt><dd><i>Element</i></dd><dt>Returns</dt><dd><i>Tag</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#tag-tagconstructor--element)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#tag-tagconstructor--element)
 
 
 * * * 
@@ -38,7 +38,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>added — <i>Element</i></li><li>removed — <i>Element</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#signal-tagonchildrenchangeelement-added-element-removed)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#signal-tagonchildrenchangeelement-added-element-removed)
 
 
 * * * 
@@ -55,7 +55,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>attribute — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#signal-tagonpropschangestring-attribute-any-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#signal-tagonpropschangestring-attribute-any-oldvalue)
 
 
 * * * 
@@ -65,7 +65,7 @@
 <dl><dt>Returns</dt><dd><i>Element.Tag</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#elementtag-tagclonedeep)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#elementtag-tagclonedeep)
 
 
 * * * 
@@ -75,7 +75,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>lookForElement — <i>Element</i></li><li>copiedParent — <i>Element</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#element-taggetcopiedelementelement-lookforelement-element-copiedparent)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#element-taggetcopiedelementelement-lookforelement-element-copiedparent)
 
 
 * * * 
@@ -85,7 +85,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>accessPath — <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Element.Tag</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#elementtag-taggetchildbyaccesspatharray-accesspath)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#elementtag-taggetchildbyaccesspatharray-accesspath)
 
 
 * * * 
@@ -95,7 +95,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>query — <i>String</i></li><li>onElement — <i>Function</i> — <i>optional</i></li><li>onElementContext — <i>Any</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#array-tagqueryallstring-query-function-onelement-any-onelementcontext)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#array-tagqueryallstring-query-function-onelement-any-onelementcontext)
 
 
 * * * 
@@ -105,7 +105,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>query — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#element-tagquerystring-query)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#element-tagquerystring-query)
 
 
 * * * 
@@ -122,7 +122,7 @@ watcher.disconnect();
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#watcher-tagwatchstring-query)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#watcher-tagwatchstring-query)
 
 
 * * * 
@@ -132,7 +132,7 @@ watcher.disconnect();
 <dl><dt>Parameters</dt><dd><ul><li>replacements — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#string-tagstringifyobject-replacements)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#string-tagstringifyobject-replacements)
 
 
 * * * 
@@ -142,7 +142,7 @@ watcher.disconnect();
 <dl><dt>Parameters</dt><dd><ul><li>replacements — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#string-tagstringifychildrenobject-replacements)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#string-tagstringifychildrenobject-replacements)
 
 
 * * * 
@@ -152,5 +152,5 @@ watcher.disconnect();
 <dl><dt>Parameters</dt><dd><ul><li>oldElement — <i>Element</i></li><li>newElement — <i>Element</i></li></ul></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag.litcoffee#tagreplaceelement-oldelement-element-newelement)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag.litcoffee#tagreplaceelement-oldelement-element-newelement)
 

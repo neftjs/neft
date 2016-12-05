@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/namespace/navigator.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/navigator.litcoffee)
 
 
 * * * 
@@ -21,7 +21,7 @@ Text {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorlanguage--39en39)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorlanguage--39en39)
 
 
 * * * 
@@ -31,7 +31,7 @@ Text {
 <dl><dt>Static property of</dt><dd><i>Navigator</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorbrowser--true)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatorbrowser--true)
 
 
 * * * 
@@ -48,7 +48,7 @@ Text {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatornative--false)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/navigator.litcoffee#boolean-navigatornative--false)
 
 
 * * * 
@@ -65,5 +65,5 @@ Text {
 <dl><dt>Static property of</dt><dd><i>Navigator</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/namespace/navigator.litcoffee#signal-navigatorononlinechangeboolean-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/navigator.litcoffee#signal-navigatorononlinechangeboolean-oldvalue)
 

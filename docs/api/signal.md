@@ -11,7 +11,7 @@ const { signal } = Neft;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee)
 
 
 * * * 
@@ -43,7 +43,7 @@ obj.onPress.emit();
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee#integer-signalstoppropagation)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee#integer-signalstoppropagation)
 
 
 * * * 
@@ -70,7 +70,7 @@ obj.onRename.emit('Max', 'George');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee#signal-signalcreatenotprimitive-object-string-name)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee#signal-signalcreatenotprimitive-object-string-name)
 
 
 * * * 
@@ -82,7 +82,7 @@ obj.onRename.emit('Max', 'George');
 Returns `true` if the given signal has no listeners.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee#boolean-signalisemptysignal-signal)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee#boolean-signalisemptysignal-signal)
 
 
 * * * 
@@ -94,7 +94,7 @@ Returns `true` if the given signal has no listeners.
 Call all of the signal listeners with the given arguments (2 maximally).
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee#signalemitany-argument1-any-argument2)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee#signalemitany-argument1-any-argument2)
 
 
 * * * 
@@ -146,7 +146,7 @@ obj.onPress.emit();
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee#signalconnectfunction-listener-any-context)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee#signalconnectfunction-listener-any-context)
 
 
 * * * 
@@ -174,7 +174,7 @@ obj.onPress.emit()
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee#signaldisconnectfunction-listener-any-context)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee#signaldisconnectfunction-listener-any-context)
 
 
 * * * 
@@ -183,5 +183,5 @@ obj.onPress.emit()
 Removes all the signal listeners.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/signal/index.litcoffee#signaldisconnectall)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/signal/index.litcoffee#signaldisconnectall)
 

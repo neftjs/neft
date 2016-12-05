@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee)
 
 Anchors describe position relations between two items.
 
@@ -34,7 +34,7 @@ Item {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee)
 
 ```javascript
 Rectangle {
@@ -51,13 +51,13 @@ Rectangle {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee)
 
 Horizontal anchors can't point to the vertical lines (and vice versa),
 so `anchors.top = parent.left` is not allowed.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee)
 
 
 * * * 
@@ -67,7 +67,7 @@ so `anchors.top = parent.left` is not allowed.
 <dl><dt>Type</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsleft)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsleft)
 
 
 * * * 
@@ -84,7 +84,7 @@ so `anchors.top = parent.left` is not allowed.
 <dl><dt>Type</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsright)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsright)
 
 
 * * * 
@@ -112,7 +112,7 @@ Item {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#array-anchorshorizontalcenter)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#array-anchorshorizontalcenter)
 
 
 * * * 
@@ -140,7 +140,7 @@ Item {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#array-anchorstop)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#array-anchorstop)
 
 
 * * * 
@@ -157,7 +157,7 @@ Item {
 <dl><dt>Type</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsbottom)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsbottom)
 
 
 * * * 
@@ -185,7 +185,7 @@ Item {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsverticalcenter)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#array-anchorsverticalcenter)
 
 
 * * * 
@@ -228,7 +228,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsoncenterinchangearray-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsoncenterinchangearray-oldvalue)
 
 
 * * * 
@@ -261,7 +261,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillchangearray-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillchangearray-oldvalue)
 
 
 * * * 
@@ -278,7 +278,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillwidthchangearray-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillwidthchangearray-oldvalue)
 
 
 * * * 
@@ -295,5 +295,5 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillheightchangearray-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/anchors.litcoffee#signal-anchorsonfillheightchangearray-oldvalue)
 

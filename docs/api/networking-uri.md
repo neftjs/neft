@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/uri.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/uri.litcoffee)
 
 
 * * * 
@@ -37,7 +37,7 @@ var Uri = Networking.Uri;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/uri.litcoffee#uriconstructorstring-uri)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/uri.litcoffee#uriconstructorstring-uri)
 
 
 * * * 
@@ -100,7 +100,7 @@ Holds the last *Uri::match()* result.
 Test whether the uri is valid with the given string.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/uri.litcoffee#boolean-uriteststring-uri)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/uri.litcoffee#boolean-uriteststring-uri)
 
 
 * * * 
@@ -114,7 +114,7 @@ Returns found parameters from the given string.
 If the given uri is not valid with the uri, error will be raised.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/uri.litcoffee#object-urimatchstring-uri)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/uri.litcoffee#object-urimatchstring-uri)
 
 
 * * * 
@@ -138,5 +138,5 @@ console.log(uri.toString());
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/uri.litcoffee#string-uritostringobjectdict-params)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/uri.litcoffee#string-uritostringobjectdict-params)
 

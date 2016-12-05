@@ -9,7 +9,7 @@ const { utils } = Neft;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee)
 
 
 * * * 
@@ -67,7 +67,7 @@ const { utils } = Neft;
 <dl><dt>Static property of</dt><dd><i>utils</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#readonly-boolean-utilsisios)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#readonly-boolean-utilsisios)
 
 
 * * * 
@@ -79,7 +79,7 @@ const { utils } = Neft;
 No operation (an empty function).
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#function-utilsnop)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#function-utilsnop)
 
 
 * * * 
@@ -111,7 +111,7 @@ console.log(-0 === 0);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisany-value1-any-value2)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisany-value1-any-value2)
 
 
 * * * 
@@ -140,7 +140,7 @@ console.log(utils.isFloat('10'));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisfloatany-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisfloatany-value)
 
 
 * * * 
@@ -166,7 +166,7 @@ console.log(utils.isInteger('2'));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisintegerany-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisintegerany-value)
 
 
 * * * 
@@ -189,7 +189,7 @@ console.log(utils.isPrimitive([]));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisprimitiveany-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisprimitiveany-value)
 
 
 * * * 
@@ -218,7 +218,7 @@ console.log(utils.isObject(function(){}));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisobjectany-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisobjectany-value)
 
 
 * * * 
@@ -252,7 +252,7 @@ console.log(utils.isPlainObject(Object.create({propertyInProto: 1})))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisplainobjectany-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisplainobjectany-value)
 
 
 * * * 
@@ -274,7 +274,7 @@ console.log(utils.isArguments({}))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisargumentsany-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisargumentsany-value)
 
 
 * * * 
@@ -295,7 +295,7 @@ console.log(config);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#notprimitive-utilsmergenotprimitive-source-notprimitive-object)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#notprimitive-utilsmergenotprimitive-source-notprimitive-object)
 
 
 * * * 
@@ -314,7 +314,7 @@ console.log(config);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#notprimitive-utilsmergeallnotprimitive-source-notprimitive-objects)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#notprimitive-utilsmergeallnotprimitive-source-notprimitive-objects)
 
 
 * * * 
@@ -349,7 +349,7 @@ console.log(user);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#notprimitive-utilsmergedeepnotprimitive-source-notprimitive-object)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#notprimitive-utilsmergedeepnotprimitive-source-notprimitive-object)
 
 
 * * * 
@@ -376,7 +376,7 @@ console.log(user);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#notprimitive-utilsfillnotprimitive-source-notprimitive-object)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#notprimitive-utilsfillnotprimitive-source-notprimitive-object)
 
 
 * * * 
@@ -400,7 +400,7 @@ console.log(object);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#utilsremovenotprimitive-object-any-element)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#utilsremovenotprimitive-object-any-element)
 
 
 * * * 
@@ -414,7 +414,7 @@ Removes the given element from the given array.
 Elements order may be changed.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#utilsremovefromunorderedarrayarray-array-any-element)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#utilsremovefromunorderedarrayarray-array-any-element)
 
 
 * * * 
@@ -440,7 +440,7 @@ console.log(utils.getPropertyDescriptor(user, 'isAdult'));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#object-utilsgetpropertydescriptornotprimitive-object-string-property)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#object-utilsgetpropertydescriptornotprimitive-object-string-property)
 
 
 * * * 
@@ -461,7 +461,7 @@ console.log(utils.lookupGetter(object, 'progress'));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#function-utilslookupgetternotprimitive-object-string-property)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#function-utilslookupgetternotprimitive-object-string-property)
 
 
 * * * 
@@ -473,7 +473,7 @@ console.log(utils.lookupGetter(object, 'progress'));
 Returns the given property setter function defined in the given object.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#function-utilslookupsetternotprimitive-object-string-property)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#function-utilslookupsetternotprimitive-object-string-property)
 
 
 * * * 
@@ -509,7 +509,7 @@ console.log(object.length);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#notprimitive-utilsdefinepropertynotprimitive-object-string-property-integer-descriptors-any-value-function-setter)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#notprimitive-utilsdefinepropertynotprimitive-object-string-property-integer-descriptors-any-value-function-setter)
 
 
 * * * 
@@ -519,7 +519,7 @@ console.log(object.length);
 <dl><dt>Static method of</dt><dd><i>utils</i></dd><dt>Parameters</dt><dd><ul><li>object — <i>NotPrimitive</i></li><li>property — <i>String</i></li><li>value — <i>Any</i> — <i>optional</i></li><li>setter — <i>Function</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NotPrimitive</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#notprimitive-utilsoverridepropertynotprimitive-object-string-property-any-value-function-setter)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#notprimitive-utilsoverridepropertynotprimitive-object-string-property-any-value-function-setter)
 
 
 * * * 
@@ -539,7 +539,7 @@ console.log(utils.clone({a: 1}))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#any-utilscloneany-param)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#any-utilscloneany-param)
 
 
 * * * 
@@ -563,7 +563,7 @@ console.log(clonedObj.b === obj.b)
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#any-utilsclonedeepany-param)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#any-utilsclonedeepany-param)
 
 
 * * * 
@@ -592,7 +592,7 @@ console.log(utils.isEmpty(''));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisemptystringnotprimitive-object)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisemptystringnotprimitive-object)
 
 
 * * * 
@@ -612,7 +612,7 @@ console.log(utils.last([]))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#any-utilslastnotprimitive-array)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#any-utilslastnotprimitive-array)
 
 
 * * * 
@@ -636,7 +636,7 @@ console.log(obj);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#notprimitive-utilsclearnotprimitive-object)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#notprimitive-utilsclearnotprimitive-object)
 
 
 * * * 
@@ -666,7 +666,7 @@ console.log(newObj.b)
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#object-utilssetprototypeofnotprimitive-object-notprimitivenull-prototype)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#object-utilssetprototypeofnotprimitive-object-notprimitivenull-prototype)
 
 
 * * * 
@@ -707,7 +707,7 @@ console.log(utils.has('abc', 'e'))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilshasany-object-any-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilshasany-object-any-value)
 
 
 * * * 
@@ -741,7 +741,7 @@ console.log(utils.objectToArray(object, function(key, val){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#array-utilsobjecttoarrayobject-object-function-valuegen-array-target--)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#array-utilsobjecttoarrayobject-object-function-valuegen-array-target--)
 
 
 * * * 
@@ -780,7 +780,7 @@ console.log(utils.arrayToObject(['a'], function(i, elem){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#object-utilsarraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#object-utilsarraytoobjectarray-array-function-keygen-function-valuegen-object-target--)
 
 
 * * * 
@@ -797,7 +797,7 @@ console.log(utils.capitalize('name'))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#string-utilscapitalizestring-string)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#string-utilscapitalizestring-string)
 
 
 * * * 
@@ -814,7 +814,7 @@ console.log(utils.addSlashes('a"b'))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#string-utilsaddslashesstring-string)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#string-utilsaddslashesstring-string)
 
 
 * * * 
@@ -833,7 +833,7 @@ console.log(utils.uid())
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#string-utilsuidinteger-length--8)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#string-utilsuidinteger-length--8)
 
 
 * * * 
@@ -866,7 +866,7 @@ console.log(utils.tryFunction(test, null, [100], 'ERROR!'))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#any-utilstryfunctionfunction-function-any-context-array-arguments-any-onfail)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#any-utilstryfunctionfunction-function-any-context-array-arguments-any-onfail)
 
 
 * * * 
@@ -894,7 +894,7 @@ console.log(utils.catchError(test, null, [100]))
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#any-utilscatcherrorfunction-function-any-context-array-arguments)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#any-utilscatcherrorfunction-function-any-context-array-arguments)
 
 
 * * * 
@@ -918,7 +918,7 @@ console.log(bindFunc('a'));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#function-utilsbindfunctioncontextfunction-function-any-context)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#function-utilsbindfunctioncontextfunction-function-any-context)
 
 
 * * * 
@@ -938,7 +938,7 @@ console.log(utils.errorToObject(error));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#object-utilserrortoobjecterror-error)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#object-utilserrortoobjecterror-error)
 
 
 * * * 
@@ -950,7 +950,7 @@ console.log(utils.errorToObject(error));
 Returns an array or an object with own properties associated in the given object.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#object-utilsgetownpropertiesobject-object)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#object-utilsgetownpropertiesobject-object)
 
 
 * * * 
@@ -982,5 +982,5 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/index.litcoffee#boolean-utilsisequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/index.litcoffee#boolean-utilsisequalobject-object1-object-object2-function-comparefunction-integer-maxdeep--infinity)
 

@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/stringifying.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/stringifying.litcoffee)
 
 
 * * * 
@@ -49,7 +49,7 @@ console.log(clone instanceof Sample)
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/stringifying.litcoffee#utilssimplifyobject-object-object-options)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/stringifying.litcoffee#utilssimplifyobject-object-object-options)
 
 
 * * * 
@@ -61,5 +61,5 @@ console.log(clone instanceof Sample)
 Backward utils.simplify() operation.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/stringifying.litcoffee#utilsassembleplainobject-object)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/stringifying.litcoffee#utilsassembleplainobject-object)
 

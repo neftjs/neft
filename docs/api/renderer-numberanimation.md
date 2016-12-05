@@ -19,7 +19,7 @@ Rectangle {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/extensions/animation/types/property/types/number.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property/types/number.litcoffee)
 
 
 * * * 
@@ -29,7 +29,7 @@ Rectangle {
 <dl><dt>Static method of</dt><dd><i>NumberAnimation</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>NumberAnimation</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimationnewcomponent-component-object-options)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimationnewcomponent-component-object-options)
 
 
 * * * 
@@ -39,7 +39,7 @@ Rectangle {
 <dl><dt>Extends</dt><dd><i>PropertyAnimation</i></dd><dt>Returns</dt><dd><i>NumberAnimation</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimationconstructor--propertyanimation)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property/types/number.litcoffee#numberanimation-numberanimationconstructor--propertyanimation)
 
 
 * * * 

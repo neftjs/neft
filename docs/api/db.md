@@ -9,7 +9,7 @@ var db = require('db');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee)
 
 
 * * * 
@@ -19,7 +19,7 @@ var db = require('db');
 <dl><dt>Static property of</dt><dd><i>db</i></dd><dt>Type</dt><dd><i>Integer</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#integer-dbobservable)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#integer-dbobservable)
 
 
 * * * 
@@ -43,7 +43,7 @@ db.set('items', [], function(){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dbgetstring-key-integer-options-function-callback)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dbgetstring-key-integer-options-function-callback)
 
 
 * * * 
@@ -53,7 +53,7 @@ db.set('items', [], function(){
 <dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i></li><li>callback — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dbsetstring-key-any-value-function-callback)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dbsetstring-key-any-value-function-callback)
 
 
 * * * 
@@ -63,7 +63,7 @@ db.set('items', [], function(){
 <dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i> — <i>optional</i></li><li>callback — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dbremovestring-key-any-value-function-callback)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dbremovestring-key-any-value-function-callback)
 
 
 * * * 
@@ -73,7 +73,7 @@ db.set('items', [], function(){
 <dl><dt>Static method of</dt><dd><i>db</i></dd><dt>Parameters</dt><dd><ul><li>key — <i>String</i></li><li>value — <i>Any</i></li><li>callback — <i>Function</i> — <i>optional</i></li></ul></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dbappendstring-key-any-value-function-callback)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dbappendstring-key-any-value-function-callback)
 
 
 * * * 
@@ -83,14 +83,14 @@ db.set('items', [], function(){
 <dl><dt>Extends</dt><dd><i>List</i></dd><dt>Returns</dt><dd><i>DbList</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dblist-dblist--list)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dblist-dblist--list)
 
 
 * * * 
 
 ### `disconnect()`
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dblistdisconnect)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dblistdisconnect)
 
 
 * * * 
@@ -100,12 +100,12 @@ db.set('items', [], function(){
 <dl><dt>Extends</dt><dd><i>Dict</i></dd><dt>Returns</dt><dd><i>DbDict</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dbdict-dbdict--dict)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dbdict-dbdict--dict)
 
 
 * * * 
 
 ### `disconnect()`
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/db/index.litcoffee#dbdictdisconnect)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/db/index.litcoffee#dbdictdisconnect)
 

@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee)
 
 
 * * * 
@@ -23,7 +23,7 @@ Contains:
  - Request.OPTIONS.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#array-requestmethods)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#array-requestmethods)
 
 
 * * * 
@@ -41,7 +41,7 @@ Contains:
  - Request.BINARY_TYPE.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#array-requesttypes)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#array-requesttypes)
 
 
 * * * 
@@ -61,7 +61,7 @@ var Request = Networking.Request;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#requestconstructorobject-options)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#requestconstructorobject-options)
 
 
 * * * 
@@ -71,7 +71,7 @@ var Request = Networking.Request;
 <dl><dt>Parameters</dt><dd><ul><li>error — <i>Any</i></li><li>data — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#signal-requestonloadendany-error-any-data)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#signal-requestonloadendany-error-any-data)
 
 
 * * * 
@@ -83,7 +83,7 @@ var Request = Networking.Request;
 Pseudo unique hash. It's created automatically.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#readonly-string-requestuid)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#readonly-string-requestuid)
 
 
 * * * 
@@ -97,7 +97,7 @@ Indicates whether the request is not destroyed.
 If it's `false`, the request can't be changed.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#readonly-boolean-requestpending)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#readonly-boolean-requestpending)
 
 
 * * * 
@@ -111,7 +111,7 @@ This property refers to one of the `Request.METHODS` values.
 Holds a method with which the request has been called.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#string-requestmethod)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#string-requestmethod)
 
 
 * * * 
@@ -136,7 +136,7 @@ It can holds local and absolute paths.
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#networkinguri-requesturi)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#networkinguri-requesturi)
 
 
 * * * 
@@ -155,7 +155,7 @@ That's why, these two requests have the same uri, but different expected types.
 It refers to one of the *Request.TYPES* values.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#string-requesttype)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#string-requesttype)
 
 
 * * * 
@@ -168,7 +168,7 @@ Holds a data sent with a request.
 It can be, for instance, a form data.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#object-requestdata--null)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#object-requestdata--null)
 
 
 * * * 
@@ -180,7 +180,7 @@ It can be, for instance, a form data.
 Refers to the currently considered [Handler][networking/Handler].
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#readonly-networkinghandler-requesthandler)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#readonly-networkinghandler-requesthandler)
 
 
 * * * 
@@ -190,7 +190,7 @@ Refers to the currently considered [Handler][networking/Handler].
 <dl><dt>Type</dt><dd><i>Networking.Response</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#readonly-networkingresponse-requestresponse)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#readonly-networkingresponse-requestresponse)
 
 
 * * * 
@@ -205,7 +205,7 @@ Considering the */users/{name}* URI,
 the 'name' property is available as the *params.name*.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#readonly-object-requestparams--)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#readonly-object-requestparams--)
 
 
 * * * 
@@ -219,7 +219,7 @@ Contains request headers.
 For the client request, this object is empty.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#readonly-object-requestheaders)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#readonly-object-requestheaders)
 
 
 * * * 
@@ -229,7 +229,7 @@ For the client request, this object is empty.
 <dl><dt>Type</dt><dd><i>Object</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#readonly-object-requestcookies)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#readonly-object-requestcookies)
 
 
 * * * 
@@ -248,5 +248,5 @@ console.log(req.toString);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/networking/request.litcoffee#string-requesttostring)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/request.litcoffee#string-requesttostring)
 

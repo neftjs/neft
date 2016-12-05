@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag/props.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag/props.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>index — <i>Integer</i></li><li>target — <i>Array</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag/props.litcoffee#array-propsiteminteger-index-array-target)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag/props.litcoffee#array-propsiteminteger-index-array-target)
 
 
 * * * 
@@ -24,7 +24,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag/props.litcoffee#boolean-propshasstring-name)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag/props.litcoffee#boolean-propshasstring-name)
 
 
 * * * 
@@ -34,5 +34,5 @@
 <dl><dt>Parameters</dt><dd><ul><li>name — <i>String</i></li><li>value — <i>Any</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/document/element/element/tag/props.litcoffee#boolean-propssetstring-name-any-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/tag/props.litcoffee#boolean-propssetstring-name-any-value)
 

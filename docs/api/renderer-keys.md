@@ -19,7 +19,7 @@ Rectangle {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/keys.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/keys.litcoffee)
 
 
 * * * 
@@ -29,7 +29,7 @@ Rectangle {
 <dl><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>true</code></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/keys.litcoffee#boolean-keysfocuswindowonpointerpress--true)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/keys.litcoffee#boolean-keysfocuswindowonpointerpress--true)
 
 
 * * * 
@@ -39,7 +39,7 @@ Rectangle {
 <dl><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><i>Item</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/keys.litcoffee#item-keysfocuseditem)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/keys.litcoffee#item-keysfocuseditem)
 
 
 * * * 
@@ -49,7 +49,7 @@ Rectangle {
 <dl><dt>Extends</dt><dd><i>Device.KeyboardEvent</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/keys.litcoffee#class-keysevent--devicekeyboardevent)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/keys.litcoffee#class-keysevent--devicekeyboardevent)
 
 
 * * * 
@@ -80,7 +80,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>event — <i>Item.Keys.Event</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/keys.litcoffee#signal-keysoninputitemkeysevent-event)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/keys.litcoffee#signal-keysoninputitemkeysevent-event)
 
 
 * * * 
@@ -97,7 +97,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/keys.litcoffee#signal-keysonfocuschangeboolean-oldvalue)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/keys.litcoffee#signal-keysonfocuschangeboolean-oldvalue)
 
 
 * * * 
@@ -107,5 +107,5 @@ Rectangle {
 <dl><dt>Static property of</dt><dd><i>Keys</i></dd><dt>Type</dt><dd><i>Item.Keys.Event</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/renderer/types/basics/item/keys.litcoffee#itemkeysevent-keysevent)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/keys.litcoffee#itemkeysevent-keysevent)
 

@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/namespace.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/namespace.litcoffee)
 
 
 * * * 
@@ -41,7 +41,7 @@ console.log(utils.get(obj, 'prop[].deep.result'));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/namespace.litcoffee#any-utilsgetobject-object-string-path-optionsarray-target)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/namespace.litcoffee#any-utilsgetobject-object-string-path-optionsarray-target)
 
 ## **Class** utils.get.OptionsArray()
 
@@ -49,7 +49,7 @@ Special version of an Array, returned if the result of the utils.get()
 function is a list of the possible values.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/namespace.litcoffee)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/namespace.litcoffee)
 
 
 * * * 
@@ -62,5 +62,5 @@ Checks whether the given string references into an array according
 to the notation in the utils.get() function.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/3dc9f5366bf00b190122a2aec6eec7c6b4593c4f/src/utils/namespace.litcoffee#boolean-utilsisstringarraystring-value)
+> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/namespace.litcoffee#boolean-utilsisstringarraystring-value)
 
