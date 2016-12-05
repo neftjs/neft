@@ -1,4 +1,4 @@
-# Element.Text
+# Text
 
     'use strict'
 
@@ -9,8 +9,6 @@
     {emitSignal} = signal.Emitter
 
     assert = assert.scope 'View.Element.Text'
-
-# **Class** Text : *Element*
 
     module.exports = (Element) -> class Text extends Element
         @__name__ = 'Text'
@@ -27,6 +25,8 @@
             obj._text = arr[JSON_TEXT]
             obj
 
+## *Text* Text::constructor() : *Element*
+
         constructor: ->
             Element.call this
 
@@ -41,10 +41,6 @@
             super clone
             clone._text = @_text
             clone
-
-## *Signal* Text::onTextChange(*String* oldValue)
-
-        signal.Emitter.createSignal @, 'onTextChange'
 
 ## *String* Text::text
 
@@ -67,6 +63,10 @@
 
             true
 
+## *Signal* Text::onTextChange(*String* oldValue)
+
+        signal.Emitter.createSignal @, 'onTextChange'
+
         toJSON: (arr) ->
             unless arr
                 arr = new Array JSON_ARGS_LENGTH
@@ -74,7 +74,3 @@
             super arr
             arr[JSON_TEXT] = @text
             arr
-
-# Glossary
-
-- [Element.Text](#class-text)

@@ -89,7 +89,7 @@ Text {
                 @_pixelRatio
             , null
 
-## Device.log(*String* message, ...)
+## Device.log(*String* message...)
 
             log: (msgs...) ->
                 Impl.logDevice msgs.join(' ')
@@ -276,9 +276,3 @@ Text {
         # initialize by the implementation
         Impl.initDeviceNamespace.call device
         device
-
-# Glossary
-
-- [Device](#device)
-- [Device.PointerEvent](#class-devicepointerevent)
-- [Device.KeyboardEvent](#class-devicekeyboardevent)

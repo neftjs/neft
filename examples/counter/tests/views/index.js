@@ -5,7 +5,7 @@ describe('views/index', () => {
     let view;
 
     beforeEach(() => {
-        view = app.views['views/index.html'].render();
+        view = app.views['views/index.xhtml'].render();
     });
 
     describe('state.counter', () => {

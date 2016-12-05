@@ -12,8 +12,6 @@
 
     assert = assert.scope 'Renderer.Item'
 
-# **Class** Item
-
     module.exports = (Renderer, Impl, itemUtils) -> class Item extends itemUtils.Object
         @__name__ = 'Item'
         @__path__ = 'Renderer.Item'
@@ -25,7 +23,7 @@
             itemUtils.Object.initialize item, component, opts
             item
 
-## Item::constructor()
+## *Item* Item::constructor()
 
 This is a base class for everything which is visible.
 
@@ -64,25 +62,24 @@ This is a base class for everything which is visible.
 ### Custom properties
 
 ```nml
-`Item {
-`   id: main
-`   property $.currentLife: 0.8
-`
-`   Text {
-`     text: "Life: " + main.$.currentLife
-`   }
-`}
+Item {
+    id: main
+    property $.currentLife: 0.8
+    Text {
+        text: "Life: " + main.$.currentLife
+    }
+}
 ```
 
 ### Custom signals
 
 ```nml
-`Item {
-`   signal $.onPlayerCollision
-`   $.onPlayerCollision: function(){
-`       // boom!
-`   }
-`}
+Item {
+    signal $.onPlayerCollision
+    $.onPlayerCollision: function(){
+        // boom!
+    }
+}
 ```
 
 ## *Signal* Item::on$Change(*String* property, *Any* oldValue)
@@ -288,7 +285,7 @@ Removes all children from the item.
                     last.parent = null
                 return
 
-## *Item* Item::parent = null
+## *Item* Item::parent = `null`
 
 ## *Signal* Item::onParentChange(*Item* oldParent)
 
@@ -930,7 +927,7 @@ Rectangle {
             developmentSetter: (val) ->
                 assert.isFloat val, '::opacity setter ...'
 
-## *String* Item::linkUri = ''
+## *String* Item::linkUri = `''`
 
 Points to the URI which will be used when user clicks on this item.
 
@@ -1043,7 +1040,3 @@ Returns `true` if two items overlaps.
         @Document = @createDocument @
 
         Item
-
-# Glossary
-
-- [Item](#class-item)

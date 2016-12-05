@@ -1,17 +1,34 @@
 # Native Communication
 
-Native communication needs to be asynchronous and supports sending nulls, booleans, floats or strings.
+It's not possible to support all different APIs on all supported platforms. Sometimes you need to code in native.
 
-## JavaScript
+Each platform can use different programming language. For instance on Android you can use *Java* or *C*.
 
-To send and receive native messages, use [Neft.native](https://github.com/Neft-io/neft/wiki/Native-API) module.
+You cannot call native methods directly from JavaScript, but you can achieve such communication creating a **bridge**.
+
+Neft provides a module called [native](/api/native.html).
+Use it in your JavaScript code to send data and to receive it.
+
+Native communication needs to be asynchronous and cannot block your execution.
+
+In passing and receiving data you're limited to basic types:
+ - `null`,
+ - float number,
+ - boolean,
+ - string.
+
+Passing complex structures like arrays or objects is not supported, but you can parse it to JSON and send as a string.
+
+Let's check, how we can communicate on different platforms:
+
+## JavaScript client
+
+To send and receive native messages, use [native](/api/native.html) module.
 
 ```javascript
-Neft.native.callFunction("functionName", "arg1", "arg2", "argMore");
+Neft.native.callFunction("functionName", "arg1", "arg2", "argMore...");
 Neft.native.on("eventName", (arg1, arg2, arg3) -> {});
 ```
-
-Sending complex JavaScript structures are not supported. You can try to serialize them into *JSON*.
 
 ## iOS
 

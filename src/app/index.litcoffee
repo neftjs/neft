@@ -46,8 +46,6 @@
         if extraOpts?
             utils.merge config, extraOpts
 
-# *Dict* app
-
         app = new Dict
 
 ## *Object* app.config = `{}`

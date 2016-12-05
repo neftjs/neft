@@ -8,8 +8,6 @@
 
     assert = assert.scope 'Networking.Request'
 
-# **Class** Request
-
     module.exports = (Networking, Impl) -> class Request extends signal.Emitter
 
 ## *Array* Request.METHODS
@@ -152,7 +150,7 @@ It refers to one of the *Request.TYPES* values.
 
         type: @JSON_TYPE
 
-## *Object* Request::data = null
+## *Object* Request::data = `null`
 
 Holds a data sent with a request.
 It can be, for instance, a form data.
@@ -169,7 +167,7 @@ Refers to the currently considered [Handler][networking/Handler].
 
         response: null
 
-## ReadOnly *Object* Request::params = {}
+## ReadOnly *Object* Request::params = `{}`
 
 Keeps matched parameters by the handler from the request uri.
 
@@ -215,7 +213,3 @@ console.log(req.toString);
             else
                 @onLoadEnd.emit res.data or res.status or "Unknown error"
             return
-
-# Glossary
-
-- [Networking.Request](#class-request)

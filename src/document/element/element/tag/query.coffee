@@ -16,7 +16,7 @@ test = (node, funcs, index, targetFunc, targetCtx, single) ->
         func = funcs[index]
 
         if func.isIterator
-            return func node, funcs, index+3, targetFunc, targetCtx, single
+            return func node, funcs, index + 3, targetFunc, targetCtx, single
         else
             data1 = funcs[index + 1]
             data2 = funcs[index + 2]

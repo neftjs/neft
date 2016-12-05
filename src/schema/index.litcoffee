@@ -28,12 +28,10 @@ var SchemaError = Schema.Error;
         name: 'SchemaError'
         message: ''
 
-## **Class** Schema
-
     module.exports = class Schema
         @Error = SchemaError
 
-### Schema::constructor(*Object* schema)
+## Schema::constructor(*Object* schema)
 
 Creates a new Schema instance used to validate data.
 
@@ -63,7 +61,7 @@ new Schema({
 
             Object.preventExtensions @
 
-### *Object* Schema::schema
+## *Object* Schema::schema
 
 Saved schema object from the constructor.
 
@@ -71,7 +69,7 @@ It's allowed to change this object in runtime.
 
         schema: null
 
-### *Boolean* Schema::validate(*Object* data)
+## *Boolean* Schema::validate(*Object* data)
 
 Validates the given data object by the schema.
 
@@ -105,7 +103,7 @@ console.log(utils.tryFunction(schema.validate, schema, [{age: 5}], false));
 // true
 ```
 
-#### Nested properties
+### Nested properties
 
 Use dot in the property name to valdiate deep objects.
 

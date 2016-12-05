@@ -5,8 +5,6 @@
     utils = require 'src/utils'
     signal = require 'src/signal'
 
-# **Class** Extension
-
     module.exports = (Renderer, Impl, itemUtils) -> class Extension extends itemUtils.Object
         @__name__ = 'Extension'
 
@@ -80,7 +78,3 @@
         disable: ->
             @_running = false
             @onRunningChange.emit true
-
-# Glossary
-
-- [Renderer.Extension](#class-extension)

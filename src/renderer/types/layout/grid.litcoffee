@@ -17,8 +17,6 @@ Grid {
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-# **Class** Grid : *Item*
-
     module.exports = (Renderer, Impl, itemUtils) -> class Grid extends Renderer.Item
         @__name__ = 'Grid'
         @__path__ = 'Renderer.Grid'
@@ -30,6 +28,8 @@ Grid {
             itemUtils.Object.initialize item, component, opts
             item.effectItem = item
             item
+
+## *Grid* Grid::constructor() : *Item*
 
         constructor: ->
             super()
@@ -112,7 +112,3 @@ Grid {
             implementation: Impl.setGridIncludeBorderMargins
             developmentSetter: (val) ->
                 assert.isBoolean val
-
-# Glossary
-
-- [Grid](#class-grid)

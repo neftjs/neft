@@ -1,4 +1,4 @@
-# Item.Pointer
+# Pointer
 
 ```javascript
 Rectangle {
@@ -18,8 +18,6 @@ Rectangle {
     assert = require 'src/assert'
 
     NOP = ->
-
-# **Class** Pointer
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class Pointer extends itemUtils.DeepObject
         @__name__ = 'Pointer'
@@ -260,8 +258,3 @@ Can be changed only in the 'onPress' signal.
 ## *Item.Pointer.Event* Pointer.event
 
         @event = new PointerEvent
-
-# Glossary
-
-- [Item.Pointer](#class-pointer)
-- [Item.Pointer.Event](#class-pointerevent)

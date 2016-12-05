@@ -1,133 +1,205 @@
 # Scripting
 
-`${this}` is available in each view file and `<neft:fragment />`. These objects are not shared between different views or fragments so can be easily used to extend HTML by custom JavaScript methods.
+Each view file and [component](/views.html#component) can be scripted.
 
-## Script
+The whole *JavaScript* code put inside the `<script />` tag.
 
-`<neft:script>` or just `<script>` is called with the `this` object used in string interpolation.
+In the view file:
 
-```html
-<script>
-    this.sum = (x, y) => x + y;
-</script>
-<h1>${this.sum(1, 2)}</h1>
+```xhtml
+<script></script>
 ```
 
-You can also use external file by the `<neft:script src="" />` attribute.
+or in a [component](/views.html#component):
 
-## Fragment lifecycle
-
-Created `<neft:fragment>`s are reusing and keeping in the memory to ensure the best performance.
-
-`<script>` `this` object contains some signals used to detect the fragment status.
-
-```html
-<script>
-    this.onCreate(function() {});
-    this.onBeforeRender(function() {});
-    this.onRender(function() {});
-    this.onBeforeRevert(function() {});
-    this.onRevert(function() {});
-</script>
-```
-
-After `onCreate` you will only get looped render and revert signals.
-
-Because the `this` object is shared between rendered fragments, you should always use the `this.state` Dict to store the local data. You can be sure, that this object is empty when the fragment is rendered.
-
-```html
-<script>
-    this.onRender(function() {
-        this.state.extend({ x: 1 });
-    });
-</script>
-<h1>${state.x}</h1>
-```
-
-## Extending object
-
-To modify the `this` object, create a `<neft:script>` or `<script>` tag.
-
-The given JavaScript code has access to the `this` object and can easily modify it, adding new methods or listening on signals.
-
-In the example below we add simple `sum` function into the context. Created function can be used in string interpolated texts.
-
-```html
-<script>
-    this.sum = function (a, b) { return a + b };
-</script>
-<h1>1 + 2 = ${this.sum(1, 2)}</h1>
+```xhtml
+<component name="Avatar">
+    <script></script>
+</component>
 ```
 
 ## View lifecycle
 
-Created views are not removing from the memory. They are clearing and reusing again.
-
-To have control of the current view status, you can listen on various `this` signals:
-
+Inside the `<sript />` tag you can connect to five [signals](/data-binding.html#signal):
  - `this.onCreate()`,
  - `this.onBeforeRender()`,
  - `this.onRender()`,
  - `this.onBeforeRevert()`,
  - `this.onRevert()`.
 
-You can't use EcmaScript 6 arrow functions to listen on these signals, because they are calling with modified `this` context.
+View once created is reusing. Because of that, `onCreate` signal is called only when there is no free views to use and a new one has to be created.
 
-### onCreate
+When a view needs to be put into a document, it's **rendered** (`onBeforeRender`, `onRender`).
 
-`this.onCreate()` is called when the view is cloned. Inside this handler, data set into the `this` object is not shared between different instances of the same view but it's not cleared after the view reverting.
+When a view is no longer needed, it's **reverted** (`onBeforeRevert`, `onRevert`).
 
-It can be used to e.g. register listeners.
+Reverted views can be rendered later.
 
-```html
+## Custom methods
+
+Custom methods should be created inside the `onCreate` [signal](/data-binding.html#signal) as lambda functions.
+
+It ensures, that you have always the proper context (`this`) inside all methods.
+
+View context can be used in [String Interpolation](/views.html#string-interpolation).
+
+```xhtml
 <script>
+this.onCreate(function () {
+    this.plusOne = (number) => {
+        return number + 1;
+    };
+});
+</script>
+<p>${this.plusOne(2)}</p> <!-- <p>3</p> -->
+```
+
+## `this.state`
+
+`this.state` is a [Dict](/data-binding.html#dict).
+Use it to store custom data for a rendered view.
+
+It's save to use. Automatically cleared when view is *reverted*.
+
+Data can be read in [String Interpolation](/views.html#string-interpolation) under the `${state}` object.
+
+Default `state` must be defined in `onRender` signal.
+
+```xhtml
+<script>
+this.onCreate(function () {
+    this.increment = () => {
+        this.state.set('counterValue', this.state.counterValue + 1);
+    };
+});
+this.onRender(function () {
+    this.state.set('counterValue', 1);
+    this.increment();
+});
+</script>
+<p>Counter: ${state.counterValue}</p> <!-- <p>Counter: 2</p> -->
+```
+
+## `this.refs`
+
+All nodes with [`ref`](/views.html#ref) tags are available under the `this.refs` object.
+
+```xhtml
+<script>
+this.onRender(function () {
+    this.refs.image.props.set('src', "rsc:background");
+});
+</script>
+<img ref="image" /> <!-- <img src="rsc:background" /> -->
+```
+
+If node with `ref` tag renders a [component](/views.html#component), it refers to the `this` context and not no the [Virtual DOM](/views/virtual-dom.html) element.
+
+```xhtml
+<component name="Issue">
+    <script>
     this.onCreate(function () {
-        this.ids.input.onAttrsChange((attr, value) => console.log(attr, value));
+        this.getTitle = () => 'More gifs!';
     });
-</script>
-<input type="text" id="input" />
-```
+    </script>
+</component>
 
-### onRender
-
-`this.onRender()` signal is called when the view instance is ready to be used. From this point you have access to the `this.state` object.
-
-```html
-<script>
+<component name="IssueList">
+    <script>
     this.onRender(function () {
-        this.state.extend({ counter: 0 });
+        console.log(this.refs.firstIssue.getTitle());
+        // More gifs!
     });
-</script>
-<h1>Counter: ${this.state.counter}</h1>
+    </script>
+    <Issue ref="firstIssue" />
+</component>
+
+<IssueList />
 ```
 
-### onRevert
+This object is available in [String Interpolation](/views.html#string-interpolation) as `${refs}`.
 
-Use `this.onRevert()` signal to clear your view and prepare it for the further rendering.
+## `this.node`
 
-## Predefined properties
+It refers to the main view or component [element](/views/virtual-dom.html).
 
-`this` context object contains some predefined properties:
+More about it you'll learn in the [next chapter](/views/virtual-dom.html) but you can use it to e.g. find an element by a selector.
 
- - `this.props` - attributes from `<neft:use />`,
- - `this.ids` - all view elements with defined `id` attribute,
- - `this.root` - route object,
- - `this.node` - main view Virtual DOM element.
+```xhtml
+<script>
+this.onRender(function () {
+    const spans = this.node.queryAll('p > span');
+    console.log(spans);
+    // [<span>first</span>, <span>third</span>]
+});
+</script>
+<p><span>first</span> second <span>third</span></p>
+```
 
-## Script files
+## `this.props`
 
-If our JavaScript code inside the `<script>` tag is really long, you can move it to separated file - just include the relative `src` attribute.
+`this.props` object contains properties used to create a [component](/views.html#component).
 
-```html
-<script src="./customFile.js" />
+You should not change it.
+
+Use it to configure creating components.
+
+This object is available in [String Interpolation](/views.html#string-interpolation) as `${props}`.
+
+```xhtml
+<component name="User">
+    <script>
+    this.onCreate(function () {
+        console.log(this.props.nick);
+        // testslover32
+    });
+    </script>
+
+    <h1>${props.nick}</h1>
+</component>
+
+<User nick="testslover32" />
+```
+
+`this.props` is an instance of [Dict](/data-binding.html#dict) and can be changed in runtime. Connect to [`this.props.onChange()`](/api/dict.html#onchange) signal if you want to detect it manually.
+
+## `this.context`
+
+This property refers to a [route](/routing.html) used to render this view.
+
+You can use to make, for instance, a *HTTP* request.
+
+```xhtml
+<script>
+this.onRender(function () {
+    this.context.app.networking.get('/users', (err, resp) => {});
+});
+</script>
+```
+
+... or to get a [route.data](/api/app-route.html#data).
+
+More about it you'll learn in [Routing](/routing.html) chapter.
+
+This object is available in [String Interpolation](/views.html#string-interpolation) as `${context}`.
+
+## Script file
+
+You can move your *JavaScript* code to separated file.
+
+`<script />` accepts `src` attribute. Use is with relative path.
+
+```xhtml
+<script src="./scriptFile.js" />
 ```
 
 ## CoffeeScript support
 
-If you like to use CoffeeScript in views as well, you can do it by specifying the `filename` attribute with *.coffee* extension.
+If you like to use *CoffeeScript*, you can do it by specifying the `filename` attribute with the *.coffee* extension.
 
 ```html
 <script filename="view.coffee">
-    @sum = (a, b) -> a + b
+@onCreate ->
+    @sum = (a, b) => a + b
 </script>
 ```

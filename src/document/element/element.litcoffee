@@ -12,8 +12,6 @@
 
     assert = assert.scope 'View.Element'
 
-# **Class** Element
-
     class Element extends Emitter
         @__name__ = 'Element'
         @__path__ = 'File.Element'
@@ -31,7 +29,7 @@
             assert.isString html
 
             unless utils.isNode
-                throw "Creating Views from HTML files is allowed only on a server"
+                throw 'Creating Views from HTML files is allowed only on a server'
 
             Element.parser.parse html
 
@@ -44,15 +42,17 @@
             assert.isArray json
             Element.JSON_CTORS[json[0]]._fromJSON json
 
-        @_fromJSON = (arr, obj=new Element) ->
+        @_fromJSON = (arr, obj = new Element) ->
             obj._visible = arr[JSON_VISIBLE] is 1
             obj
 
         @Text = require('./element/text') Element
         @Tag = Tag = require('./element/tag') Element
 
+## *Element* Element::constructor()
+
         constructor: ->
-            Emitter.call this
+            Emitter.call @
 
             @_parent = null
             @_nextSibling = null
@@ -87,7 +87,7 @@
             children = parent.children
             if val > children.length
                 val = children.length
-            if index is val or index is val-1
+            if index is val or index is val - 1
                 return false
 
             # current siblings
@@ -101,15 +101,15 @@
             children.splice val, 0, @
 
             # new siblings
-            @_previousSibling = children[val-1] or null
-            @_nextSibling = children[val+1] or null
+            @_previousSibling = children[val - 1] or null
+            @_nextSibling = children[val + 1] or null
             @_previousSibling?._nextSibling = @
             @_nextSibling?._previousSibling = @
 
             assert.is @index, val
             assert.is children[val], @
-            assert.is @_previousSibling, children[val-1] or null
-            assert.is @_nextSibling, children[val+1] or null
+            assert.is @_previousSibling, children[val - 1] or null
+            assert.is @_nextSibling, children[val + 1] or null
             true
 
 ## *Element* Element::nextSibling
@@ -280,7 +280,3 @@
             @parser = require('./element/parser') Element
 
     module.exports = Element
-
-# Glossary
-
-- [Element](#class-element)

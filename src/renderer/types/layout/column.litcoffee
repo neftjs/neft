@@ -14,8 +14,6 @@ Column {
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-# **Class** Column : *Item*
-
     module.exports = (Renderer, Impl, itemUtils) -> class Column extends Renderer.Item
         @__name__ = 'Column'
         @__path__ = 'Renderer.Column'
@@ -27,6 +25,8 @@ Column {
             itemUtils.Object.initialize item, component, opts
             item.effectItem = item
             item
+
+## *Column* Column::constructor() : *Item*
 
         constructor: ->
             super()
@@ -85,7 +85,3 @@ Column {
             implementation: Impl.setColumnIncludeBorderMargins
             developmentSetter: (val) ->
                 assert.isBoolean val
-
-# Glossary
-
-- [Column](#class-column)

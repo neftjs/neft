@@ -1,7 +1,5 @@
 # Signal
 
-> events-like
-
 Signal is a function with listeners which can be emitted.
 
 Access it with:
@@ -14,7 +12,7 @@ const { signal } = Neft;
     utils = require 'src/utils'
     assert = require 'src/assert'
 
-# *Integer* STOP_PROPAGATION
+## *Integer* signal.STOP_PROPAGATION
 
 Special constant used to stop calling further listeners.
 
@@ -40,7 +38,7 @@ obj.onPress.emit();
 
     STOP_PROPAGATION = exports.STOP_PROPAGATION = 1 << 30
 
-# *Signal* create([*NotPrimitive* object, *String* name])
+## *Signal* signal.create([*NotPrimitive* object, *String* name])
 
 Creates a new signal in the given object under the given name property.
 
@@ -73,7 +71,7 @@ obj.onRename.emit('Max', 'George');
 
         obj[name] = signal
 
-# *Boolean* isEmpty(*Signal* signal)
+## *Boolean* signal.isEmpty(*Signal* signal)
 
 Returns `true` if the given signal has no listeners.
 
@@ -82,8 +80,6 @@ Returns `true` if the given signal has no listeners.
             if func isnt null
                 return false
         return true
-
-# **Class** Signal
 
     callSignal = (obj, listeners, arg1, arg2) ->
         i = 0
@@ -265,7 +261,3 @@ Removes all the signal listeners.
         create: exports.create
         createSignalFunction: createSignalFunction
         callSignal: callSignal
-
-# Glossary
-
-- [Signal](#class-signal)

@@ -1,4 +1,4 @@
-# Item.Anchors
+# Anchors
 
     'use strict'
 
@@ -18,8 +18,6 @@
     V_LINE_REQ = 1<<3
     FREE_H_LINE_REQ = 1<<4
     FREE_V_LINE_REQ = 1<<5
-
-# **Class** Anchors
 
 Anchors describe position relations between two items.
 
@@ -324,7 +322,3 @@ Item {
         createAnchorProp 'fillHeight', ONLY_TARGET_ALLOW, ->
             if @_ref
                 [@_ref._y, @_ref._height]
-
-# Glossary
-
-- [Item.Anchors](#class-anchors)

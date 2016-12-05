@@ -8,8 +8,6 @@
 
     log = log.scope 'Resources'
 
-# **Class** Resources
-
     module.exports = class Resources
         @__name__ = 'Resources'
 
@@ -80,7 +78,3 @@
             utils.merge
                 __name__: @constructor.__name__
             , @
-
-# Glossary
-
-- [Resources](#class-resources)

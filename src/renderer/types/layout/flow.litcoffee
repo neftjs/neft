@@ -17,8 +17,6 @@ Flow {
     assert = require 'src/assert'
     utils = require 'src/utils'
 
-# **Class** Flow : *Item*
-
     module.exports = (Renderer, Impl, itemUtils) -> class Flow extends Renderer.Item
         @__name__ = 'Flow'
         @__path__ = 'Renderer.Flow'
@@ -30,6 +28,8 @@ Flow {
             itemUtils.Object.initialize item, component, opts
             item.effectItem = item
             item
+
+## *Flow* Flow::constructor() : *Item*
 
         constructor: ->
             super()
@@ -92,7 +92,3 @@ Flow {
             implementation: Impl.setFlowCollapseMargins
             developmentSetter: (val) ->
                 assert.isBoolean val
-
-# Glossary
-
-- [Flow](#class-flow)

@@ -44,8 +44,6 @@
                 @_bindings[prop] = true
                 return
 
-# **Class** Class : *Renderer.Extension*
-
         class Class extends Renderer.Extension
             @__name__ = 'Class'
 
@@ -55,6 +53,8 @@
                 item = new Class
                 itemUtils.Object.initialize item, component, opts
                 item
+
+## *Class* Class::constructor() : *Renderer.Extension*
 
             lastUid = 0
             constructor: ->
@@ -258,13 +258,13 @@ Grid {
 
             class ChildrenObject
 
-### *Integer* Class::children.length = `0`
+## *Integer* Class::children.length = `0`
 
                 constructor: (ref) ->
                     @_ref = ref
                     @length = 0
 
-### *Object* Class::children.append(*Object* value)
+## *Object* Class::children.append(*Object* value)
 
                 append: (val) ->
                     assert.instanceOf val, itemUtils.Object
@@ -280,7 +280,7 @@ Grid {
 
                     val
 
-### *Object* Class::children.pop(*Integer* index)
+## *Object* Class::children.pop(*Integer* index)
 
                 pop: (i=@length-1) ->
                     assert.operator i, '>=', 0
@@ -697,10 +697,6 @@ Grid {
                 ref.onTargetChange onTargetChange, @
                 onTargetChange.call @, ref._target
 
-## *String* Class::document.query
-
-## *Signal* Class::document.onQueryChange(*String* oldValue)
-
 ## *Signal* Class::document.onNodeAdd(*Element* node)
 
             signal.Emitter.createSignal @, 'onNodeAdd'
@@ -708,6 +704,10 @@ Grid {
 ## *Signal* Class::document.onNodeRemove(*Element* node)
 
             signal.Emitter.createSignal @, 'onNodeRemove'
+
+## *String* Class::document.query
+
+## *Signal* Class::document.onQueryChange(*String* oldValue)
 
             itemUtils.defineProperty
                 constructor: @
@@ -911,7 +911,3 @@ This property has a setter, which accepts a string and an array of strings.
                     return
 
         Class
-
-# Glossary
-
-- [Renderer.Class](#class-class)

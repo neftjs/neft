@@ -15,8 +15,6 @@
     {Emitter} = signal
     {emitSignal} = Emitter
 
-# **Class** Document
-
     module.exports = class Document extends Emitter
         files = @_files = {}
         pool = Object.create null
@@ -96,7 +94,7 @@ Corresponding node handler: *n-onRevert=""*.
         @fromHTML = do ->
             unless utils.isNode
                 return (path, html) ->
-                    throw new Error "Document.fromHTML is available only on the server"
+                    throw new Error 'Document.fromHTML is available only on the server'
 
             clear = require('./file/clear') Document
 
@@ -271,7 +269,7 @@ Corresponding node handler: *n-onRevert=""*.
 
             file
 
-## Document::constructor(*String* path, *Element* element)
+## *Document* Document::constructor(*String* path, *Element* element)
 
         @emitNodeSignal = emitNodeSignal = (file, propName, prop1, prop2) ->
             if nodeSignal = file.node.props[propName]
@@ -664,7 +662,3 @@ Corresponding node handler: *n-onReplaceByUse=""*.
                 arr[JSON_STYLES] = @styles.map callToJSON
 
                 arr
-
-# Glossary
-
-- [Document](#class-document)

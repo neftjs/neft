@@ -1,12 +1,10 @@
-# Item.Margin
+# Margin
 
     'use strict'
 
     utils = require 'src/utils'
     signal = require 'src/signal'
     assert = require 'src/assert'
-
-# **Class** Margin
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor, opts) -> class Margin extends itemUtils.DeepObject
         @__name__ = 'Margin'
@@ -172,7 +170,3 @@ Sum of the top and bottom margin.
             top: @top
             right: @right
             bottom: @bottom
-
-# Glossary
-
-- [Item.Margin](#class-margin)

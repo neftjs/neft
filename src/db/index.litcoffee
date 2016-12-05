@@ -1,5 +1,4 @@
-Database @library
-=================
+# Database
 
 Access it with:
 ```javascript
@@ -21,15 +20,13 @@ var db = require('db');
     watchersCount = Object.create null
     watchers = Object.create null
 
-*Integer* db.OBSERVABLE
------------------------
+## *Integer* db.OBSERVABLE
 
     exports.OBSERVABLE = 1<<29
 
     BITMASK = exports.OBSERVABLE
 
-db.get(*String* key, [*Integer* options], *Function* callback)
---------------------------------------------------------------
+## db.get(*String* key, [*Integer* options], *Function* callback)
 
 ```javascript
 db.set('items', [], function(){
@@ -73,8 +70,7 @@ db.set('items', [], function(){
 
         return
 
-db.set(*String* key, *Any* value, [*Function* callback])
---------------------------------------------------------
+## db.set(*String* key, *Any* value, [*Function* callback])
 
     exports.set = (key, val, callback=NOP) ->
         assert.isString key
@@ -85,8 +81,7 @@ db.set(*String* key, *Any* value, [*Function* callback])
         impl.set key, val, callback
         return
 
-db.remove(*String* key, [*Any* value, *Function* callback])
------------------------------------------------------------
+## db.remove(*String* key, [*Any* value, *Function* callback])
 
     exports.remove = (key, val, callback=NOP) ->
         if typeof val is 'function'
@@ -128,8 +123,7 @@ db.remove(*String* key, [*Any* value, *Function* callback])
             impl.remove key, callback
         return
 
-db.append(*String* key, *Any* value, [*Function* callback])
------------------------------------------------------------
+## db.append(*String* key, *Any* value, [*Function* callback])
 
     exports.append = (key, val, callback=NOP) ->
         assert.isString key
@@ -152,12 +146,11 @@ db.append(*String* key, *Any* value, [*Function* callback])
 
     createPassProperty = (object, name) ->
         utils.defineProperty object, name, null, ->
-            Object.getPrototypeOf(this)[name]
+            Object.getPrototypeOf(@)[name]
         , (val) ->
-            Object.getPrototypeOf(this)[name] = val
+            Object.getPrototypeOf(@)[name] = val
 
-*DbList* DbList() : *List*
---------------------------
+## *DbList* DbList() : *List*
 
     class DbList extends List
         onChange = (key) ->
@@ -180,16 +173,14 @@ db.append(*String* key, *Any* value, [*Function* callback])
             @_watchersCount += 1
             @
 
-DbList::disconnect()
---------------------
+## DbList::disconnect()
 
         disconnect: ->
             unless --watchersCount[@_key]
                 watchers[@_key] = null
             return
 
-*DbDict* DbDict() : *Dict*
---------------------------
+## *DbDict* DbDict() : *Dict*
 
     class DbDict extends Dict
         onChange = (key) ->
@@ -210,8 +201,7 @@ DbList::disconnect()
             @_watchersCount += 1
             @
 
-DbDict::disconnect()
---------------------
+## DbDict::disconnect()
 
         disconnect: ->
             unless --watchersCount[@_key]

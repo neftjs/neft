@@ -25,8 +25,6 @@ Rectangle {
 
     log = log.scope 'Renderer', 'Transition'
 
-# **Class** Transition : *Renderer.Extension*
-
     module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
         @__name__ = 'Transition'
 
@@ -36,6 +34,8 @@ Rectangle {
             item = new Transition
             itemUtils.Object.initialize item, component, opts
             item
+
+## *Transition* Transition::constructor() : *Renderer.Extension*
 
         constructor: ->
             super()
@@ -152,12 +152,12 @@ Rectangle {
                 if target and val.indexOf('.') isnt -1
                     chains = val.split '.'
                     n = chains.length
-                    for chain, i in chains when i < n-1
+                    for chain, i in chains when i < n - 1
                         target = target[chain]
                         unless target
                             log.error "No object found for the '#{val}' property"
                             break
-                    val = chains[n-1]
+                    val = chains[n - 1]
                     @target = target
 
                 if animation
@@ -175,7 +175,3 @@ Rectangle {
                         handlerName = "on#{utils.capitalize(val)}Change"
                         target[handlerName] listener, @
                 return
-
-# Glossary
-
-- [Transition](#class-transition)

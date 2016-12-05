@@ -30,7 +30,7 @@
   "scripts": {
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
     "test": "cross-env NODE_PATH=./ coffee --nodejs --harmony tests/init.coffee",
-    "update-api-docs": "cross-env NODE_PATH=./ coffee scripts/api-wiki.coffee"
+    "update-api-docs": "cross-env NODE_PATH=./ coffee scripts/api-docs.coffee"
   },
   "dependencies": {
     "babel-core": "6.18.0",
@@ -59,6 +59,7 @@
     "babel-register": "6.9.0",
     "coffee-coverage": "1.0.1",
     "coveralls": "2.11.14",
+    "escape-html": "1.0.3",
     "istanbul": "^0.4.5",
     "sauce-connect-launcher": "0.17.0",
     "sinon": "1.17.5",

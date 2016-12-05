@@ -1,5 +1,18 @@
 # FontLoader
 
+Class used to load custom fonts.
+
+You can override default fonts (*sans-serif*, *sans* and *monospace*).
+
+The font weight and the style (italic or normal) is extracted from the font source path.
+
+Access it with:
+```javascript
+FontLoader {}
+```
+
+Example:
+
 ```javascript
 Item {
     Text {
@@ -21,19 +34,6 @@ FontLoader {
     signal = require 'src/signal'
 
     log = log.scope 'Renderer', 'FontLoader'
-
-# **Class** FontLoader
-
-Class used to load custom fonts.
-
-You can override default fonts (*sans-serif*, *sans* and *monospace*).
-
-The font weight and the style (italic or normal) is extracted from the font source path.
-
-Access it with:
-```javascript
-FontLoader {}
-```
 
     module.exports = (Renderer, Impl, itemUtils) -> class FontLoader extends itemUtils.FixedObject
         @__name__ = 'FontLoader'
@@ -205,7 +205,3 @@ Italic font filename must contains 'italic'.
 
             loadFontIfReady @
             return
-
-# Glossary
-
-- [FontLoader](#class-fontloader)

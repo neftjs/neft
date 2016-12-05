@@ -9,7 +9,7 @@ const { assert } = Neft;
 
     utils = require 'src/utils'
 
-# assert(*Boolean* expression, [*String* message])
+## assert(*Boolean* expression, [*String* message])
 
 Throws *AssertionError* if the given *expression* is falsy.
 
@@ -426,8 +426,3 @@ Throws an error if the given *regexp* tests on the given *value*.
     assert.notMatch = (val, regexp, msg) ->
         if regexp.test val
             @fail val, regexp, msg, 'not match', assert.match
-
-# Glossary
-
-- [assert](#assert)
-- [AssertionError](#assert.AssertionError)

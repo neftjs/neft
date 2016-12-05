@@ -1,20 +1,20 @@
 # Networking
 
-HTTP networking connection is available under the `app.networking` Networking instance. Commonly used classes in routes are `Networking.Request` and `Networking.Response`.
+The whole networking communication is handled by the *Networking* module.
 
-Neft uses special HTTP header `X-Expected-Type`. Routes are polymorphic. They return the same data in various formats (currently supported are `text`, `json` and `html`) for the same URI.
+To use it, you have to refer by the `app.networking` instance. The `app` object is available in [routing](/routing.html), [views](/views.html) and other parts of your application.
 
-By default, routes return:
-- `html` for crawlers and local requests,
-- `json` for manual client-server and local requests.
+The `app.networking` object by default uses HTTP connection.
 
-### AJAX request
+## AJAX request
 
-`app.networking` provides methods for the basic REST resources:
+`app.networking` provides methods for basic REST requests:
 - `get(uri, onLoadEnd)`,
 - `post(uri, data, onLoadEnd)`,
 - `put(uri, data, onLoadEnd)`,
 - `delete(uri, data, onLoadEnd)`.
+
+Example for routing:
 
 ```javascript
 // models/user.client.js
@@ -27,8 +27,26 @@ module.exports = (app) => {
 };
 ```
 
-If you need to specify more options (e.g. expected type, headers, cookies) use the `createRequest()` method.
+Example for views:
 
-For local requests use the `createLocalRequest()` method.
+```xml
+<script>
+    this.onRender(function () {
+        this.context.app.networking.get("/users", (err, resp) => {});
+    });
+</script>
+```
 
-Next article: [[Native Communication - Tour]]
+If you need to specify more options (e.g. expected type, headers, cookies) use `createRequest()` method.
+
+For local requests use `createLocalRequest()` method.
+
+## Custom headers
+
+### X-Expected-Type
+
+This HTTP header may be a `text`, `json` or `html`.
+
+It's defined by the [Networking.Request::type](/api/networking-request.html#type) attribute.
+
+[App.Route](/api/app-route.html) is using this property to return data in the needed format.

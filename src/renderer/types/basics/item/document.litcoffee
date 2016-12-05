@@ -1,4 +1,4 @@
-# Item.Document
+# Document
 
     'use strict'
 
@@ -8,8 +8,6 @@
     log = require 'src/log'
 
     log = log.scope 'Renderer', 'Document'
-
-# **Class** Document
 
     module.exports = (Renderer, Impl, itemUtils, Item) -> (ctor) -> class ItemDocument extends itemUtils.DeepObject
         Document = require 'src/document'
@@ -67,7 +65,3 @@ Text {
             developmentSetter: (val) ->
                 if val?
                     assert.instanceOf val, DocElement
-
-# Glossary
-
-- [Item.Document](#class-document)

@@ -1,4 +1,4 @@
-# Element.Tag
+# Tag
 
     'use strict'
 
@@ -16,9 +16,8 @@
 
     CSS_ID_RE = ///\#([^\s]+)///
 
-# **Class** Tag : *Element*
-
     module.exports = (Element) -> class Tag extends Element
+        @Props = Props = require('./tag/props') @
         @DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null
 
         @extensions = Object.create null
@@ -34,7 +33,7 @@
         JSON_ATTRS = i++
         JSON_ARGS_LENGTH = @JSON_ARGS_LENGTH = i
 
-        @_fromJSON = (arr, obj=new Tag) ->
+        @_fromJSON = (arr, obj = new Tag) ->
             Element._fromJSON arr, obj
             obj.name = arr[JSON_NAME]
             utils.merge obj.props, arr[JSON_ATTRS]
@@ -50,8 +49,10 @@
 
             obj
 
+## *Tag* Tag::constructor() : *Element*
+
         constructor: ->
-            Element.call this
+            Element.call @
 
             @name = 'blank'
             @children = []
@@ -166,12 +167,12 @@ watcher.disconnect();
 
 ## *String* Tag::stringify([*Object* replacements])
 
-        stringify: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
+        stringify: (replacements = Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
             stringify.getOuterHTML @, replacements
 
 ## *String* Tag::stringifyChildren([*Object* replacements])
 
-        stringifyChildren: (replacements=Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
+        stringifyChildren: (replacements = Tag.DEFAULT_STRINGIFY_REPLACEMENTS) ->
             stringify.getInnerHTML @, replacements
 
 ## Tag::replace(*Element* oldElement, *Element* newElement)
@@ -203,61 +204,3 @@ watcher.disconnect();
                 children.push child.toJSON()
 
             arr
-
-# **Class** Props
-
-        @Props = class Props
-            constructor: (ref) ->
-                utils.defineProperty @, '_ref', 0, ref
-
-            NOT_ENUMERABLE = utils.CONFIGURABLE | utils.WRITABLE
-            utils.defineProperty @::, 'constructor', NOT_ENUMERABLE, Props
-
-## *Array* Props::item(*Integer* index, [*Array* target])
-
-            utils.defineProperty @::, 'item', NOT_ENUMERABLE, (index, target=[]) ->
-                assert.isArray target
-
-                target[0] = target[1] = undefined
-
-                i = 0
-                for key, val of @
-                    if @hasOwnProperty(key) and i is index
-                        target[0] = key
-                        target[1] = val
-                        break
-                    i++
-
-                target
-
-## *Boolean* Props::has(*String* name)
-
-            utils.defineProperty @::, 'has', NOT_ENUMERABLE, (name) ->
-                assert.isString name
-                assert.notLengthOf name, 0
-
-                @hasOwnProperty name
-
-## *Boolean* Props::set(*String* name, *Any* value)
-
-            utils.defineProperty @::, 'set', NOT_ENUMERABLE, (name, value) ->
-                assert.isString name
-                assert.notLengthOf name, 0
-
-                # save change
-                old = @[name]
-                if old is value
-                    return false
-
-                @[name] = value
-
-                # trigger event
-                emitSignal @_ref, 'onPropsChange', name, old
-                query.checkWatchersDeeply @_ref
-
-                true
-
-# Glossary
-
-- [Element.Tag](#class-tag)
-- [Element.Tag.Props](#class-props)

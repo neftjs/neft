@@ -1359,15 +1359,3 @@ utils.isEqual({a: {aa: 1}}, {a: {aa: 1, ab: 2}})
                 forObjects a, b, compareFunc, maxDeep
             else
                 return compareFunc a, b
-
-# Glossary
-
- - [NOP](#nop)
- - [Float](#isfloat)
- - [Integer](#isinteger)
- - [Primitive](#isprimitive)
- - [NotPrimitive](#isprimitive)
- - [Object](#isobject)
- - [PlainObject](#isplainobject)
- - [Arguments](#isarguments)
- - [utils.is()](#is)

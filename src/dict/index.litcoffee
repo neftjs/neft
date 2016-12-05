@@ -1,7 +1,5 @@
 # Dict
 
-> data-binding for objects
-
 Access it with:
 ```javascript
 const { Dict } = Neft
@@ -12,8 +10,6 @@ const { Dict } = Neft
     utils = require 'src/utils'
     assert = require 'src/assert'
     signal = require 'src/signal'
-
-# **Class** Dict
 
     module.exports = class Dict extends signal.Emitter
         @__name__ = 'Dict'
@@ -337,7 +333,3 @@ data.items(); // [['x', 10], ['y', 30]]
                 arr.length = i
 
             @_values
-
-# Glossary
-
-- [Dict](#class-dict)

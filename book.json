@@ -1,3 +1,28 @@
 {
-    "root": "./docs"
+    "plugins": [
+        "github",
+        "edit-link",
+        "styles-less",
+        "simple-page-toc",
+        "expandable-chapters",
+        "anchors"
+    ],
+    "pluginsConfig": {
+        "edit-link": {
+            "base": "https://github.com/Neft-io/neft/tree/master/docs",
+            "label": "Edit This Page"
+        },
+        "github": {
+            "url": "https://github.com/Neft-io/neft"
+        },
+        "simple-page-toc": {
+            "maxDepth": 3,
+            "skipFirstH1": true
+        }
+    },
+    "styles": {
+        "website": "./gitbook/styles/website.less"
+    },
+    "root": "./docs",
+    "title": "Neft.io Universal Platform"
 }
