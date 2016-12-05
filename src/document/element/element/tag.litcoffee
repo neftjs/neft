@@ -17,7 +17,7 @@
     CSS_ID_RE = ///\#([^\s]+)///
 
     module.exports = (Element) -> class Tag extends Element
-        @Props = require './tag/props'
+        @Props = Props = require('./tag/props') @
         @DEFAULT_STRINGIFY_REPLACEMENTS = Object.create null
 
         @extensions = Object.create null

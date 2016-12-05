@@ -8,7 +8,7 @@
 
     {emitSignal} = signal.Emitter
 
-    module.exports = class Props
+    module.exports = (Tag) -> class Props
         constructor: (ref) ->
             utils.defineProperty @, '_ref', 0, ref
 
@@ -55,6 +55,6 @@
 
             # trigger event
             emitSignal @_ref, 'onPropsChange', name, old
-            query.checkWatchersDeeply @_ref
+            Tag.query.checkWatchersDeeply @_ref
 
             true
