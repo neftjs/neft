@@ -1,8 +1,8 @@
 {
   "name": "neft",
-  "version": "0.10.4",
+  "version": "0.11.4",
   "preferGlobal": true,
-  "description": "JavaScript. Everywhere.",
+  "description": "Universal Platform",
   "keywords": [
     "framework",
     "native",

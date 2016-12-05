@@ -1,5 +1,5 @@
 coverage
 *.log
-build
+/build
 tmp
 _book
