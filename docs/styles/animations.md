@@ -1,23 +1,34 @@
 # Animations
 
+Neft allows to dynamically change properties like position or size.
 
+It can be easily used to animate such properties but can be not efficient enough.
 
-## Number animation
+To speed up such operations, Neft provides *Animators*.
 
-Neft supports animating number properties.
-Use `NumberAnimation` to achieve this goal.
+## Animators
 
-By default animator animates item, in which it was created.
+## NumberAnimation
 
-```javascript
+This animator animates any property which stores numbers.
+
+Use it to animate position, size, rotation, scale and more.
+
+```xhtml
+<style>
 Item {
+    pointer.onClick: function () {
+        xAnimator.start();
+    }
+
     NumberAnimation {
+        id: xAnimator
         property: 'x'
         from: 0
         to: 1000
-        loop: true
     }
 }
+</style>
 ```
 
 By default animators don't update the property during animation (it's much faster).
