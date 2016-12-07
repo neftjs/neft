@@ -7,6 +7,8 @@
   - [Virtual DOM](/views/virtual-dom.md)
 - [Styles](/styles.md)
   - [Views Integration](/styles/views-integration.md)
+  - [Runtime styling](/styles/runtime-styling.md)
+  - [Animations](/styles/animations.md)
 - [Static Resources](/static-resources.md)
 - [Routing](/routing.md)
   - [Models](/routing/models.md)
