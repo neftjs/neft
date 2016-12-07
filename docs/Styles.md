@@ -135,3 +135,23 @@ Rectangle {
 </style>
 <button />
 ```
+
+## Native Items
+
+Neft has some built-in native elements.
+
+You can access them using the [native-items](/extensions/native-items.html) extension.
+
+*NML* allows to write *JavaScript* code before types. You need to wrap it in back-ticks like in *Markdown*.
+
+```xhtml
+<style>
+`
+const NativeItems = require('extensions/native-items');
+`
+NativeItems.Button {
+    document.query: 'button'
+}
+</style>
+<button>Click here</button>
+```
