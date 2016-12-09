@@ -9,7 +9,7 @@ const { log } = Neft;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee)
 
 
 * * * 
@@ -61,7 +61,7 @@ const { log } = Neft;
 <dl><dt>Static property of</dt><dd><i>log</i></dd><dt>Type</dt><dd><i>Integer</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#integer-logall)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#integer-logall)
 
 
 * * * 
@@ -73,7 +73,7 @@ const { log } = Neft;
 Bitmask of the `log.LOG`, `INFO`, `OK`, `WARN`, `ERROR` and `TIME`.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#integer-enabled--logall)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#integer-enabled--logall)
 
 
 * * * 
@@ -92,7 +92,7 @@ log("setName()", "db time");
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logany-messages)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logany-messages)
 
 
 * * * 
@@ -104,7 +104,7 @@ log("setName()", "db time");
 Prints the given messages into the console with a blue color.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#loginfoany-messages)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#loginfoany-messages)
 
 
 * * * 
@@ -120,7 +120,7 @@ log.ok("Data has been successfully sent!");
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logokany-messages)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logokany-messages)
 
 
 * * * 
@@ -136,7 +136,7 @@ log.warn("Example warning with some recommendations");
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logwarnany-messages)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logwarnany-messages)
 
 
 * * * 
@@ -152,7 +152,7 @@ log.error("Error occurs, ... in file ...");
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logerrorany-messages)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logerrorany-messages)
 
 
 * * * 
@@ -176,7 +176,7 @@ findPath();
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#array-logtime)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#array-logtime)
 
 
 * * * 
@@ -188,7 +188,7 @@ findPath();
 Prints an information about the execution time for the given timer id.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logendarray-logtime)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logendarray-logtime)
 
 
 * * * 
@@ -209,5 +209,5 @@ log("hello");
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logscopeany-names)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/log/index.litcoffee#logscopeany-names)
 

@@ -23,5 +23,5 @@ console.log(schema.validate({word: 'abc'}));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/validators/regexp.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/validators/regexp.litcoffee)
 

@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>html — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementfromhtmlstring-html)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementfromhtmlstring-html)
 
 
 * * * 
@@ -24,7 +24,7 @@
 <dl><dt>Static method of</dt><dd><i>Element</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>String</i> or <i>Array</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementfromjsonarraystring-json)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementfromjsonarraystring-json)
 
 
 * * * 
@@ -34,7 +34,7 @@
 <dl><dt>Returns</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementconstructor)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementconstructor)
 
 
 * * * 
@@ -44,7 +44,7 @@
 <dl><dt>Type</dt><dd><i>Integer</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#integer-elementindex)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#integer-elementindex)
 
 
 * * * 
@@ -54,7 +54,7 @@
 <dl><dt>Type</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementnextsibling)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementnextsibling)
 
 
 * * * 
@@ -64,7 +64,7 @@
 <dl><dt>Type</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementprevioussibling)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementprevioussibling)
 
 
 * * * 
@@ -74,7 +74,7 @@
 <dl><dt>Type</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementparent)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementparent)
 
 
 * * * 
@@ -84,7 +84,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Element</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#signal-elementonparentchangeelement-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#signal-elementonparentchangeelement-oldvalue)
 
 
 * * * 
@@ -94,7 +94,7 @@
 <dl><dt>Type</dt><dd><i>Renderer.Item</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#rendereritem-elementstyle)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#rendereritem-elementstyle)
 
 
 * * * 
@@ -104,7 +104,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Renderer.Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#signal-elementonstylechangerendereritem-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#signal-elementonstylechangerendereritem-oldvalue)
 
 
 * * * 
@@ -114,7 +114,7 @@
 <dl><dt>Type</dt><dd><i>Boolean</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#boolean-elementvisible)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#boolean-elementvisible)
 
 
 * * * 
@@ -124,7 +124,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#signal-elementonvisiblechangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#signal-elementonvisiblechangeboolean-oldvalue)
 
 
 * * * 
@@ -134,7 +134,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>query — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#array-elementqueryallparentsstring-query)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#array-elementqueryallparentsstring-query)
 
 
 * * * 
@@ -144,7 +144,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>query — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementqueryparentsstring-query)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementqueryparentsstring-query)
 
 
 * * * 
@@ -154,7 +154,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>toParent — <i>Tag</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#array-elementgetaccesspathtag-toparent)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#array-elementgetaccesspathtag-toparent)
 
 
 * * * 
@@ -164,7 +164,7 @@
 <dl><dt>Returns</dt><dd><i>Element</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementclone)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#element-elementclone)
 
 
 * * * 
@@ -174,5 +174,5 @@
 <dl><dt>Returns</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#array-elementtojson)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element.litcoffee#array-elementtojson)
 

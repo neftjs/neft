@@ -10,7 +10,7 @@ var async = utils.async;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee)
 
 
 * * * 
@@ -44,7 +44,7 @@ utils.async.forEach(toLoadInOrder, function(elem, i, array, next){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#utilsasyncforeachnotprimitive-array-function-callback-function-onend-any-context)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#utilsasyncforeachnotprimitive-array-function-callback-function-onend-any-context)
 
 ## **Class** Stack()
 
@@ -79,7 +79,7 @@ stack.runAllSimultaneously(function(){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee)
 
 
 * * * 
@@ -120,7 +120,7 @@ stack.runAll(function(err, result){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackaddfunction-function-any-context-notprimitive-arguments)
 
 
 * * * 
@@ -132,7 +132,7 @@ stack.runAll(function(err, result){
 Calls the first function from the stack and remove it.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackcallnextarray-arguments-function-callback)
 
 
 * * * 
@@ -146,7 +146,7 @@ Calls all functions from the stack one by one.
 When an error occurs, processing stops and the callback function is called with the got error.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackrunallfunction-callback-any-callbackcontext)
 
 
 * * * 
@@ -160,5 +160,5 @@ Calls all functions from the stack simultaneously (all at the same time).
 When an error occurs, processing stops and the callback function is called with the got error.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackrunallsimultaneouslyfunction-callback-any-callbackcontext)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/utils/async.litcoffee#stackrunallsimultaneouslyfunction-callback-any-callbackcontext)
 

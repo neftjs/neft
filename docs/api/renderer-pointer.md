@@ -15,12 +15,12 @@ Rectangle {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee)
 
 Enables mouse and touch handling.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee)
 
 
 * * * 
@@ -37,7 +37,7 @@ Enables mouse and touch handling.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronenabledchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronenabledchangeboolean-oldvalue)
 
 
 * * * 
@@ -54,7 +54,7 @@ Enables mouse and touch handling.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd><dt>Not Implemented</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#hidden-signal-pointerondraggablechangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#hidden-signal-pointerondraggablechangeboolean-oldvalue)
 
 
 * * * 
@@ -71,7 +71,7 @@ Enables mouse and touch handling.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd><dt>Not Implemented</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#hidden-signal-pointerondragactivechangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#hidden-signal-pointerondragactivechangeboolean-oldvalue)
 
 
 * * * 
@@ -158,7 +158,7 @@ Enables mouse and touch handling.
 <dl><dt>Type</dt><dd><i>Signal</i></dd><dt>Not Implemented</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#hidden-signal-pointerondrop)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#hidden-signal-pointerondrop)
 
 
 * * * 
@@ -177,7 +177,7 @@ Whether the pointer is currently pressed.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronpressedchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronpressedchangeboolean-oldvalue)
 
 
 * * * 
@@ -196,7 +196,7 @@ Whether the pointer is currently under the item.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronhoverchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#signal-pointeronhoverchangeboolean-oldvalue)
 
 
 * * * 
@@ -220,7 +220,7 @@ Stopped 'Enter' event will emit 'Move' event on this item.
 Stopped 'Exit' event will emit 'Release' event on this item.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#class-pointerevent--devicepointerevent)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#class-pointerevent--devicepointerevent)
 
 
 * * * 
@@ -232,7 +232,7 @@ Stopped 'Exit' event will emit 'Release' event on this item.
 Enable this property to stop further event propagation.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventstoppropagation--false)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventstoppropagation--false)
 
 
 * * * 
@@ -246,7 +246,7 @@ By default first deepest captured item will propagate this event only by his par
 Change this value to test previous siblings as well.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventchecksiblings--false)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventchecksiblings--false)
 
 
 * * * 
@@ -261,7 +261,7 @@ if the pointer has been released outside of this item.
 Can be changed only in the 'onPress' signal.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventensurerelease--true)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventensurerelease--true)
 
 
 * * * 
@@ -276,7 +276,7 @@ if the pointer is outside of this item.
 Can be changed only in the 'onPress' signal.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventensuremove--true)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#boolean-pointereventensuremove--true)
 
 
 * * * 
@@ -286,5 +286,5 @@ Can be changed only in the 'onPress' signal.
 <dl><dt>Static property of</dt><dd><i>Pointer</i></dd><dt>Type</dt><dd><i>Item.Pointer.Event</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#itempointerevent-pointerevent)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/basics/item/pointer.litcoffee#itempointerevent-pointerevent)
 

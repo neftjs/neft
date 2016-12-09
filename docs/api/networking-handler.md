@@ -16,7 +16,7 @@ var Handler = Networking.Handler;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee)
 
 
 * * * 
@@ -26,7 +26,7 @@ var Handler = Networking.Handler;
 <dl><dt>Parameters</dt><dd><ul><li>options — <i>Object</i></li></ul></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#handlerconstructorobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#handlerconstructorobject-options)
 
 
 * * * 
@@ -38,7 +38,7 @@ var Handler = Networking.Handler;
 Describes which type of the request, this handler can handle.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#string-handlermethod)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#string-handlermethod)
 
 
 * * * 
@@ -50,7 +50,7 @@ Describes which type of the request, this handler can handle.
 This property is compared with the request uri.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#networkinguri-handleruri)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#networkinguri-handleruri)
 
 
 * * * 
@@ -62,7 +62,7 @@ This property is compared with the request uri.
 Used to determine whether the request uri is valid and can be handled by the handler callback.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#schema-handlerschema--null)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#schema-handlerschema--null)
 
 
 * * * 
@@ -79,7 +79,7 @@ a *next* function.
 If the *next* function is called, the next handler is checked.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#function-handlercallback)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#function-handlercallback)
 
 
 * * * 
@@ -96,7 +96,7 @@ Executes the handler, that is:
 It's internally called by the `createRequest()`.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#handlerexecnetworkingrequest-request-networkingresponse-response-function-next)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#handlerexecnetworkingrequest-request-networkingresponse-response-function-next)
 
 
 * * * 
@@ -112,5 +112,5 @@ Returns a string describing the handler.
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#string-handlertostring)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/handler.litcoffee#string-handlertostring)
 

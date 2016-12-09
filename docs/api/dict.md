@@ -9,7 +9,7 @@ const { Dict } = Neft
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee)
 
 
 * * * 
@@ -28,7 +28,7 @@ dict.param; // value
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dict-dictfromjsonstringobject-json)
 
 
 * * * 
@@ -51,7 +51,7 @@ data.name; // xyz
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dictconstructorobject-data)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dictconstructorobject-data)
 
 
 * * * 
@@ -72,7 +72,7 @@ dict.length; // 1
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#readonly-integer-dictlength)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#readonly-integer-dictlength)
 
 
 * * * 
@@ -99,7 +99,7 @@ user.set('country', 'US');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#signal-dictonchangestring-key-any-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#signal-dictonchangestring-key-any-oldvalue)
 
 
 * * * 
@@ -131,7 +131,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#any-dictsetstring-key-any-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#any-dictsetstring-key-any-value)
 
 
 * * * 
@@ -143,7 +143,7 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 Returns `true` if the given key exists in this *Dict*.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#boolean-dicthasstring-key)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#boolean-dicthasstring-key)
 
 
 * * * 
@@ -157,7 +157,7 @@ Sets all keys with their values from the given object into this *Dict*.
 Calls `onChange()` signal for each given key.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dict-dictextendobjectdict-object)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dict-dictextendobjectdict-object)
 
 
 * * * 
@@ -190,7 +190,7 @@ data.pop('name');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#any-dictpopstring-key)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#any-dictpopstring-key)
 
 
 * * * 
@@ -201,7 +201,7 @@ Removes all stored keys from this *Dict*.
 Calls `onChange()` signal for each stored key.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dictclear)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#dictclear)
 
 
 * * * 
@@ -227,7 +227,7 @@ data.keys(); // ['x', 'y']
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#readonly-array-dictkeys)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#readonly-array-dictkeys)
 
 
 * * * 
@@ -253,7 +253,7 @@ data.values(); // [10, 30]
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#array-dictvalues)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#array-dictvalues)
 
 
 * * * 
@@ -279,5 +279,5 @@ data.items(); // [['x', 10], ['y', 30]]
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#array-dictitems)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/dict/index.litcoffee#array-dictitems)
 

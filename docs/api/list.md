@@ -9,7 +9,7 @@ const { List } = Neft;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee)
 
 
 * * * 
@@ -26,7 +26,7 @@ list instanceof List; // true
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#listconstructorarray-data)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#listconstructorarray-data)
 
 
 * * * 
@@ -38,7 +38,7 @@ list instanceof List; // true
 Signal called on each value change.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#signal-listonchangeany-oldvalue-integer-index)
 
 
 * * * 
@@ -50,7 +50,7 @@ Signal called on each value change.
 Signal called when a value was added.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#signal-listoninsertany-value-integer-index)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#signal-listoninsertany-value-integer-index)
 
 
 * * * 
@@ -62,7 +62,7 @@ Signal called when a value was added.
 Signal called when a value was removed.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#signal-listonpopany-oldvalue-integer-index)
 
 
 * * * 
@@ -108,7 +108,7 @@ types.set(0, 'Fantasy');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listsetinteger-index-any-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listsetinteger-index-any-value)
 
 
 * * * 
@@ -138,7 +138,7 @@ console.log(fridge.items());
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listappendany-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listappendany-value)
 
 
 * * * 
@@ -170,7 +170,7 @@ console.log(list.items());
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listinsertinteger-index-any-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listinsertinteger-index-any-value)
 
 
 * * * 
@@ -184,7 +184,7 @@ Appends all values stored in the given items into the list.
 Calls `onInsert()` signal for each value.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#list-listextendobject-items)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#list-listextendobject-items)
 
 
 * * * 
@@ -208,7 +208,7 @@ list; // ['a']
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listremoveany-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listremoveany-value)
 
 
 * * * 
@@ -234,7 +234,7 @@ list; // ['a']
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listpopinteger-index)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#any-listpopinteger-index)
 
 
 * * * 
@@ -263,7 +263,7 @@ console.log(list);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#listclear)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#listclear)
 
 
 * * * 
@@ -283,7 +283,7 @@ list.index('c'); // -1
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#integer-listindexany-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#integer-listindexany-value)
 
 
 * * * 
@@ -301,7 +301,7 @@ list.has('ab123'); // false
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#boolean-listhasany-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#boolean-listhasany-value)
 
 
 * * * 
@@ -311,5 +311,5 @@ list.has('ab123'); // false
 <dl><dt>Returns</dt><dd><i>Array</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#array-listtoarray)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/list/index.litcoffee#array-listtoarray)
 

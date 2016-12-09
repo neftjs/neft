@@ -5,7 +5,7 @@ Response Error
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee)
 
 
 * * * 
@@ -23,7 +23,7 @@ var ResponseError = Networking.Response.Error;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee#error-errorinteger-status-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee#error-errorinteger-status-string-message)
 
 
 * * * 
@@ -42,5 +42,5 @@ var RequestResolveResponseError = Networking.Response.Error.RequestResolve;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee#requestresolve-errorrequestresolvenetworkingrequest-request)
+> [`Source`](https://github.com/Neft-io/neft/blob/feb74662c4f7ee7aedc58bcb4488ea1b56f65be9/src/networking/response/error.litcoffee#requestresolve-errorrequestresolvenetworkingrequest-request)
 

@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Extends</dt><dd><i>Element</i></dd><dt>Returns</dt><dd><i>Text</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee#text-textconstructor--element)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee#text-textconstructor--element)
 
 
 * * * 
@@ -24,7 +24,7 @@
 <dl><dt>Type</dt><dd><i>String</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee#string-texttext)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee#string-texttext)
 
 
 * * * 
@@ -34,5 +34,5 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee#signal-textontextchangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/document/element/element/text.litcoffee#signal-textontextchangestring-oldvalue)
 

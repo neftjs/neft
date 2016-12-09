@@ -29,5 +29,5 @@ console.log(utils.catchError(schema.validate, schema, [{name: 'Max'}])+'');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/validators/optional.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/8a7d1218650a3ad43d88cdbda24dae5a72a732ea/src/schema/validators/optional.litcoffee)
 

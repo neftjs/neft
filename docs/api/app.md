@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee)
 
 
 * * * 
@@ -49,7 +49,7 @@ module.exports = function(NeftApp) {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee)
 
 
 * * * 
@@ -66,7 +66,7 @@ All routes created by the *App.Route* uses this networking.
 HTTP protocol is used by default with the data specified in the *package.json*.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#networking-appnetworking)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#networking-appnetworking)
 
 
 * * * 
@@ -96,7 +96,7 @@ module.exports = function(app) {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-appmodels--)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-appmodels--)
 
 
 * * * 
@@ -108,7 +108,7 @@ module.exports = function(app) {
 Files from the *routes* folder with objects returned by their exported functions.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-approutes--)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-approutes--)
 
 
 * * * 
@@ -121,7 +121,7 @@ Files from the *styles* folder as *Function*s
 ready to create new *Item*s.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-appstyles--)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-appstyles--)
 
 
 * * * 
@@ -133,7 +133,7 @@ ready to create new *Item*s.
 Files from the *views* folder as the *Document* instances.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-appviews--)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#object-appviews--)
 
 
 * * * 
@@ -143,7 +143,7 @@ Files from the *views* folder as the *Document* instances.
 <dl><dt>Static property of</dt><dd><i>app</i></dd><dt>Type</dt><dd><i>Resources</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#resources-appresources)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#resources-appresources)
 
 
 * * * 
@@ -155,7 +155,7 @@ Files from the *views* folder as the *Document* instances.
 Called when all modules, views, styled etc. have been loaded.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#signal-apponready)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#signal-apponready)
 
 
 * * * 
@@ -183,5 +183,5 @@ app.cookies.onChange(function(key){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#dict-appcookies)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/index.litcoffee#dict-appcookies)
 

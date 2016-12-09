@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Extends</dt><dd><i>Renderer.Extension</i></dd><dt>Returns</dt><dd><i>Animation</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animation-animationconstructor--rendererextension)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animation-animationconstructor--rendererextension)
 
 
 * * * 
@@ -24,7 +24,7 @@
 <dl><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonstart)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonstart)
 
 
 * * * 
@@ -34,7 +34,7 @@
 <dl><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonstop)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonstop)
 
 
 * * * 
@@ -51,7 +51,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonpausedchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonpausedchangeboolean-oldvalue)
 
 
 * * * 
@@ -68,7 +68,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonloopchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#signal-animationonloopchangeboolean-oldvalue)
 
 
 * * * 
@@ -78,33 +78,33 @@
 <dl><dt>Type</dt><dd><i>Boolean</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#readonly-boolean-animationupdatepending)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#readonly-boolean-animationupdatepending)
 
 
 * * * 
 
 ### `start()`
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationstart)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationstart)
 
 
 * * * 
 
 ### `stop()`
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationstop)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationstop)
 
 
 * * * 
 
 ### `pause()`
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationpause)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationpause)
 
 
 * * * 
 
 ### `resume()`
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationresume)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation.litcoffee#animationresume)
 
