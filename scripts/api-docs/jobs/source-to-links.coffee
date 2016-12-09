@@ -13,7 +13,7 @@ exports.prepareFileToSave = (file, path) ->
         if type instanceof Heading and type.getLevel() <= 4
             heading = type
         else if type instanceof ProgramCode
-            url = pathUtils.join URL_PREFIX, fileCommit, '/', path
+            url = URL_PREFIX + fileCommit + '/' + pathUtils.normalize(path)
             if heading?.syntax
                 url += headingToUrl heading.syntax
             text = "\n> [`Source`](#{url})\n"
