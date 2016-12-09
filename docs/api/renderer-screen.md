@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee)
 
 
 * * * 
@@ -21,7 +21,7 @@ Text {
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#readonly-boolean-screentouch--false)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#readonly-boolean-screentouch--false)
 
 
 * * * 
@@ -31,7 +31,7 @@ Text {
 <dl><dt>Static property of</dt><dd><i>Screen</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>1024</code></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#readonly-float-screenwidth--1024)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#readonly-float-screenwidth--1024)
 
 
 * * * 
@@ -41,7 +41,7 @@ Text {
 <dl><dt>Static property of</dt><dd><i>Screen</i></dd><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>800</code></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#readonly-float-screenheight--800)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#readonly-float-screenheight--800)
 
 
 * * * 
@@ -60,5 +60,5 @@ May contains: Portrait, Landscape, InvertedPortrait, InvertedLandscape.
 <dl><dt>Static property of</dt><dd><i>Screen</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#signal-screenonorientationchangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/namespace/screen.litcoffee#signal-screenonorientationchangestring-oldvalue)
 

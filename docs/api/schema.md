@@ -11,7 +11,7 @@ const { Schema } = Neft;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee)
 
 ## **Class** SchemaError()
 
@@ -24,7 +24,7 @@ var SchemaError = Schema.Error;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee)
 
 
 * * * 
@@ -50,7 +50,7 @@ new Schema({
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee#schemaconstructorobject-schema)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee#schemaconstructorobject-schema)
 
 
 * * * 
@@ -64,7 +64,7 @@ Saved schema object from the constructor.
 It's allowed to change this object in runtime.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee#object-schemaschema)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee#object-schemaschema)
 
 
 * * * 
@@ -146,5 +146,5 @@ console.log(schema.validate({names: ['Lily', 'Max']}));
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/schema/index.litcoffee)
 

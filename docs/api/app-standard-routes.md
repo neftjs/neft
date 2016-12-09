@@ -4,28 +4,28 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
 
 ## app.js
 
 Returns the application javascript file.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
 
 ## neft.js
 
 Returns the neft javascript file.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
 
 ## favicon.ico
 
 Returns 'static/favicon.ico' file.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
 
 ## static/{path*}
 
@@ -46,7 +46,7 @@ Clean your cookies when you finish.
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
 
 ## Default route
 
@@ -54,5 +54,5 @@ It decides whether the full HTML document should be returned (e.g. for the Googl
 text browsers) or the HTML scaffolding which will run **neft.io** on the client side.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/bootstrap/route.node.litcoffee)
 

@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee)
 
 
 * * * 
@@ -45,7 +45,7 @@ console.log(Networking.Response.BAD_REQUEST);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#array-responsestatuses)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#array-responsestatuses)
 
 
 * * * 
@@ -61,7 +61,7 @@ var Response = Networking.Response;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responseconstructorobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responseconstructorobject-options)
 
 
 * * * 
@@ -79,7 +79,7 @@ res.onSend(function(){
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#signal-responseonsend)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#signal-responseonsend)
 
 
 * * * 
@@ -91,7 +91,7 @@ res.onSend(function(){
 Indicates whether the response is not destroyed.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#readonly-boolean-responsepending)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#readonly-boolean-responsepending)
 
 
 * * * 
@@ -103,7 +103,7 @@ Indicates whether the response is not destroyed.
 Refers to the [Request][networking/Request].
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#readonly-networkingrequest-responserequest)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#readonly-networkingrequest-responserequest)
 
 
 * * * 
@@ -122,7 +122,7 @@ res.status = Networking.Response.PAYMENT_REQUIRED;
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#integer-responsestatus--responseok)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#integer-responsestatus--responseok)
 
 
 * * * 
@@ -140,7 +140,7 @@ res.data = Document.fromJSON(...);
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#any-responsedata)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#any-responsedata)
 
 
 * * * 
@@ -150,7 +150,7 @@ res.data = Document.fromJSON(...);
 <dl><dt>Type</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#object-responseheaders)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#object-responseheaders)
 
 
 * * * 
@@ -160,7 +160,7 @@ res.data = Document.fromJSON(...);
 <dl><dt>Type</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#object-responsecookies)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#object-responsecookies)
 
 
 * * * 
@@ -170,7 +170,7 @@ res.data = Document.fromJSON(...);
 <dl><dt>Type</dt><dd><i>String</i></dd><dt>Default</dt><dd><code>&#39;utf-8&#39;</code></dd></dl>
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#string-responseencoding--39utf839)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#string-responseencoding--39utf839)
 
 
 * * * 
@@ -184,7 +184,7 @@ res.setHeader('Location', '/redirect/to/url');
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#response-responsesetheaderstring-name-string-value)
 
 
 * * * 
@@ -204,7 +204,7 @@ res.send(Networking.Response.OK, {user: 'Max', age: 43});
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responsesendinteger-status-any-data)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responsesendinteger-status-any-data)
 
 
 * * * 
@@ -217,7 +217,7 @@ The *Response.FOUND* status is typically used for the temporary redirection.
 The *Response.MOVED* for is a permanent redirection.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responseredirectinteger-status--responsefound-string-uri)
 
 
 * * * 
@@ -234,7 +234,7 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 ```
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responseraiseany-error)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#responseraiseany-error)
 
 
 * * * 
@@ -246,5 +246,5 @@ res.raise(new Networking.Response.Error(Networking.Response.UNAUTHORIZED, "Login
 Returns `true` if the response status is in range from 200 to 299.
 
 
-> [`Source`](https:/github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#boolean-responseissucceed)
+> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/networking/response.litcoffee#boolean-responseissucceed)
 
