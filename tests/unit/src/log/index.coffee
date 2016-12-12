@@ -1,12 +1,11 @@
 'use strict'
 
-{log, unit, assert} = Neft
-{describe, it, beforeEach, afterEach} = unit
+{log} = Neft
 {spy} = require 'sinon'
 
 Log = log.constructor
 
-describe 'src/log', ->
+describe 'Log', ->
     testLog = null
 
     beforeEach ->

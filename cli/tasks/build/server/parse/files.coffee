@@ -4,8 +4,8 @@ fs = require 'fs'
 pathUtils = require 'path'
 
 cliUtils = require 'cli/utils'
-
-{utils, log} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
 
 FOLDERS = [
     {name: 'routes', dir: 'routes'},

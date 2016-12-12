@@ -1,7 +1,6 @@
 'use strict'
 
-{Schema, unit, utils, assert} = Neft
-{describe, it} = unit
+{Schema, utils} = Neft
 SchemaError = Schema.Error
 
 VALIDATORS =
@@ -47,7 +46,7 @@ VALIDATORS =
         fail: 2
         error: "typeRow must be a string"
 
-describe "src/schema validators", ->
+describe "schema validators", ->
     # check inserting
     it "correctly proper data validated", ->
         schema = {}

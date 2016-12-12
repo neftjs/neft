@@ -1,7 +1,6 @@
 'use strict'
 
 module.exports = ->
-    window: global
     requestAnimationFrame: ->
     ios:
         postMessage: ->

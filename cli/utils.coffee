@@ -2,22 +2,17 @@
 
 pathUtils = require 'path'
 fs = require 'fs'
-
-{utils, log, assert} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
+assert = require 'src/assert'
 
 exports.verifyNeftProject = (path) ->
-    result = false
-
     src = pathUtils.resolve path, './package.json'
-    if fs.existsSync(src)
-        json = JSON.parse fs.readFileSync src, 'utf-8'
-        if json.config?.type
-            result = true
-
-    unless result
+    unless fs.existsSync(src)
         log.error 'No Neft project found'
-
-    result
+        false
+    else
+        true
 
 exports.forEachFileDeep = (dir, onFile, onEnd) ->
     assert.isString dir
@@ -55,6 +50,9 @@ exports.forEachFileDeep = (dir, onFile, onEnd) ->
 
 exports.isPlatformFilePath = do ->
     PLATFORM_TYPES =
+        local:
+            local: true
+            server: true
         node:
             node: true
             server: true

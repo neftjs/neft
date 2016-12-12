@@ -1,9 +1,8 @@
 'use strict'
 
-{unit, assert, utils} = Neft
-{describe, it} = unit
+{utils} = Neft
 
-describe 'src/utils', ->
+describe 'utils', ->
     describe 'is()', ->
         it 'returns true if the given values are the same', ->
             assert.is utils.is('a', 'a'), true

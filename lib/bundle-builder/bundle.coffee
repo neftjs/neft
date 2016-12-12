@@ -43,11 +43,12 @@ fileScope = """(function(){
 
         return function (paths, name){
             var path = paths[name];
-            if (path < exports.length) {
+            var module = __modules[path];
+            if (module) {
                 if (!initialized[path]) {
                     initialized[path] = true;
                     exports[path] = {};
-                    exports[path] = __modules[path](exports[path]);
+                    exports[path] = module(exports[path]);
                 }
                 return exports[path];
             }

@@ -1,9 +1,8 @@
 'use strict'
 
-{utils, unit, assert, List} = Neft
-{describe, it, beforeEach, afterEach} = unit
+{utils, List} = Neft
 
-describe 'src/list', ->
+describe 'List', ->
     describe 'ctor', ->
         it 'creates new List', ->
             list = List()

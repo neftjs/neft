@@ -1,7 +1,6 @@
 'use strict'
 
-{unit, assert, Renderer} = Neft
-{describe, it, beforeEach} = unit
+{Renderer} = Neft
 {Flow, Item} = Renderer
 
 setSize = (item, width, height) ->
@@ -19,7 +18,7 @@ expectSize = (item, width, height) ->
     assert.is item.height, height
     item
 
-describe 'src/renderer Flow', ->
+describe 'renderer Flow', ->
     flow = items = item1 = item2 = item3 = onReady = null
 
     beforeEach ->
