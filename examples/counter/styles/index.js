@@ -1,3 +1,3 @@
-for ('h1') {
+select ('h1') {
 	alignment.horizontal: 'center'
 }

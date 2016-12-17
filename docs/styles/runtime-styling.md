@@ -30,7 +30,7 @@ Rectangle {
 Item {
     document.query: 'main'
 
-    for ('div button.big'){
+    select ('div button.big'){
         width: 200
     }
 }
@@ -42,13 +42,13 @@ Item {
 </main>
 ```
 
-`for`s can be nested.
+`select`s can be nested.
 
 ```xhtml
 <style>
 Item {
-    for ('body.pageDocs'){
-        for ('header'){
+    select ('body.pageDocs'){
+        select ('header'){
             background.color: 'green'
         }
     }
@@ -73,7 +73,7 @@ Available text properties are available in [API Reference](/api/renderer-text.ht
 Item {
     document.query: 'header'
 
-    for ('p #text') {
+    select ('p #text') {
         font.pixelSize: 30
     }
 }

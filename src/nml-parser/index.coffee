@@ -253,7 +253,7 @@ stringify =
         }, body...]
 
         stringify.object elem
-    for: (elem) ->
+    select: (elem) ->
         changes = []
         body = []
 
@@ -285,7 +285,7 @@ getIds = (elem, ids={}) ->
     ids
 
 module.exports = (file, filename) ->
-    elems = parser file
+    elems = parser file, filename
     codes = {}
     autoInitCodes = []
     bootstrap = ''
