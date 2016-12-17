@@ -63,9 +63,10 @@ supportImageResource = (path, rsc) ->
 
             name = pathUtils.basename path
             name = Resources.Resource.parseFileName name
+            nameResolution = name.resolution ? 1
 
-            width = Math.round meta.width / name.resolution
-            height = Math.round meta.height / name.resolution
+            width = Math.round meta.width / nameResolution
+            height = Math.round meta.height / nameResolution
 
             rsc.width = width
             rsc.height = height
