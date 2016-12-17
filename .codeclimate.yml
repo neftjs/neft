@@ -1,11 +1,13 @@
 engines:
-  coffeelint:
-    enabled: true
-    config: coffeelint.json
-  fixme:
-    enabled: true
-  tailor:
-    enabled: true
+    coffeelint:
+        enabled: true
+        config: coffeelint.json
+    fixme:
+        enabled: true
+    tailor:
+        enabled: true
+    shellcheck:
+        enabled: true
 ratings:
-  paths:
-    - "**"
+    paths:
+        - "**"
