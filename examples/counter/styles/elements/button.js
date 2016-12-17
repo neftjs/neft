@@ -4,7 +4,7 @@ Flow {
     padding: '10 20'
     margin: 5
 
-    for ('#text') {
+    select ('#text') {
         color: 'white'
         font.pixelSize: 20
     }
