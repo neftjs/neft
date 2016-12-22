@@ -4,3 +4,5 @@ coverage
 /build
 tmp
 _book
+node_modules
+npm-debug.log*
