@@ -10,7 +10,7 @@ Flow {
 	padding.vertical: 18.76
 	layout.fillWidth: true
 
-	for ('#text'){
+	select ('#text'){
 		font.pixelSize: 28
 	}
 }
@@ -20,7 +20,7 @@ Flow {
 	padding.vertical: 21
 	layout.fillWidth: true
 
-	for ('#text'){
+	select ('#text'){
 		font.pixelSize: 21
 	}
 }
@@ -30,7 +30,7 @@ Flow {
 	padding.vertical: 23.24
 	layout.fillWidth: true
 
-	for ('#text'){
+	select ('#text'){
 		font.pixelSize: 16.38
 	}
 }
@@ -46,7 +46,7 @@ Flow {
 	padding.vertical: 42
 	layout.fillWidth: true
 
-	for ('#text'){
+	select ('#text'){
 		font.pixelSize: 11.62
 	}
 }
@@ -56,13 +56,13 @@ Flow {
 	padding.vertical: 46.76
 	layout.fillWidth: true
 
-	for ('#text'){
+	select ('#text'){
 		font.pixelSize: 10.5
 	}
 }
 
-for ('h1, h2, h3, h4, h5, h6, b, strong'){
-	for ('#text'){
+select ('h1, h2, h3, h4, h5, h6, b, strong'){
+	select ('#text'){
 		font.weight: 0.7
 	}
 }
@@ -73,14 +73,14 @@ Flow {
 	layout.fillWidth: true
 }
 
-for ('i, cite, em, var, address'){
-	for ('#text'){
+select ('i, cite, em, var, address'){
+	select ('#text'){
 		font.italic: true
 	}
 }
 
-for ('pre, tt, code, kbd, samp'){
-	for ('#text'){
+select ('pre, tt, code, kbd, samp'){
+	select ('#text'){
 		font.family: 'monospace'
 	}
 }
@@ -102,7 +102,7 @@ Flow {
 	padding.left: 40
 	layout.fillWidth: true
 
-	for ('ul, ol'){
+	select ('ul, ol'){
 		margin.vertical: 0
 	}
 }
