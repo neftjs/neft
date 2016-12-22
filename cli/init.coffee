@@ -37,13 +37,14 @@ args =
     create: ''
     build: []
     run: []
+    test: false
 
 options =
     release: false
     out: ''
     watch: false
     notify: false
-    'with-tests': false
+    'init-file': './init.js'
 
 argOutput = ''
 for arg, i in process.argv when i > 1
@@ -76,8 +77,14 @@ for arg, i in process.argv when i > 1
 
             args[arg] = true
 
-options.withTests = options['with-tests']
-delete options['with-tests']
+# options to camelCase
+do ->
+    ALIASES =
+        'init-file': 'initFile'
+    for oldName, newName of ALIASES
+        options[newName] = options[oldName]
+        delete options[oldName]
+    return
 
 if process.argv.length <= 2
     args.help = true
@@ -120,3 +127,6 @@ else if platforms.length > 0
                 require('./tasks/run') platform, options
         else if not options.watch
             process.exit()
+
+else if args.test
+    require 'lib/testing/cli'

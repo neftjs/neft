@@ -1,10 +1,9 @@
 'use strict'
 
-{Schema, unit, assert} = Neft
-{describe, it} = unit
+{Schema} = Neft
 SchemaError = Schema.Error
 
-describe 'src/schema', ->
+describe 'schema', ->
     it 'only provided rows in the schema can be saved', ->
         SCHEMA =
             first: {}

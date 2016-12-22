@@ -1,0 +1,13 @@
+{
+    "buildServer": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": 3001
+    },
+    "android": {
+        "sdkDir": "$ANDROID_HOME",
+        "compileSdkVersion": 23,
+        "buildToolsVersion": "23",
+        "dependencies": []
+    }
+}

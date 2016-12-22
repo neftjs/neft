@@ -29,7 +29,7 @@
             assert.isString html
 
             unless utils.isNode
-                throw 'Creating Views from HTML files is allowed only on a server'
+                throw new Error 'Creating Views from HTML files is allowed only on a server'
 
             Element.parser.parse html
 

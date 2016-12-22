@@ -5,7 +5,8 @@ cliUtils = require 'cli/utils'
 pathUtils = require 'path'
 glob = require 'glob'
 
-{utils, log} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
 
 CONFIG_LINKS_TO_REQUIRE =
     views: true
@@ -57,24 +58,16 @@ module.exports = (platform, app, options) ->
 
     # create file
     file = ''
-    if options.withTests
-        file += "require('cli/tasks/build/server/parse/index/initUnit');\n"
     file += "var opts = #{config};\n"
     file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
 
-    if fs.existsSync('./init.js')
-        file += 'var init = require(\'../init\');\n'
+    if fs.existsSync(options.initFile)
+        initFilePath = options.initFile
+        unless pathUtils.isAbsolute(initFilePath)
+            initFilePath = pathUtils.join '../', initFilePath
+        file += "var init = require('#{initFilePath}');\n"
         file += 'module.exports = init(Neft.bind(null, opts));\n'
     else
         file += 'module.exports = Neft(opts);\n'
-
-    # run tests
-    if options.withTests
-        testFiles = glob.sync 'tests/**/*.js'
-
-        file += 'window.app = module.exports;\n'
-        for testFile in testFiles
-            file += "require('#{testFile}');\n"
-        file += 'Neft.unit.runTests();\n'
 
     file

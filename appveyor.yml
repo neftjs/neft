@@ -1,14 +1,6 @@
 version: '{build}-{branch}'
 environment:
-    matrix:
-        -
-            nodejs_version: "0.11"
-        -
-            nodejs_version: "5.11"
-        -
-            nodejs_version: "6.2"
-    GITHUB_TOKEN:
-        secure: J+YXvx4BxCaV9hbGGzYiwYOjsxSVOGnNxKxUcisvOWLGExCecUNn1cWdA1LD1R8k
+    nodejs_version: "6.2"
 install:
     - ps: Install-Product node $env:nodejs_version
     - npm install

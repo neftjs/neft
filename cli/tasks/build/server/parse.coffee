@@ -2,8 +2,8 @@
 
 fs = require 'fs-extra'
 pathUtils = require 'path'
-
-{utils, log} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
 
 linkFiles = require './parse/files'
 linkStyles = require './parse/styles'

@@ -7,8 +7,9 @@ coffee = require 'coffee-script'
 Mustache = require 'mustache'
 Module = require 'module'
 glob = require 'glob'
-
-{utils, log, signal} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
+signal = require 'src/signal'
 
 INDEX_PATH = 'build/index.js'
 INDEX_ABS_PATH = pathUtils.resolve fs.realpathSync('.'), INDEX_PATH

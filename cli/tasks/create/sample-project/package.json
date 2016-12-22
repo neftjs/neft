@@ -13,7 +13,7 @@
     "type": "app"
   },
   "scripts": {
-    "test": "neft-unit ./tests/\\*\\*/\\*.js"
+    "test": "neft test"
   },
   "extensions": [
     "default-styles",

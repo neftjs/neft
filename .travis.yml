@@ -2,35 +2,36 @@ notifications:
     email: false
 sudo: false
 language: node_js
+# addons:
+#     apt:
+#         sources:
+#             - google-chrome
+#         packages:
+#             - google-chrome-stable
+cache:
+    apt: true
+    directories:
+        - node_modules
 before_script:
+    - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
+    - export NVM_DIR="$HOME/.nvm"
+    - "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\""
+    - nvm install 0.11.0
+    - nvm install 4.1.2
+    - nvm install 5.0.0
+    - nvm install 6.2.2
+    - nvm install 7.0.0
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
     - npm run bundle -- --node --browser --ios --android
 script:
     - npm test
 env:
     global:
-        - secure: "Tdilk9NhH6U13CzfBlNVDMmQB9GF3klh6KM+IvSwGLYWL71YjMBTa1K+Wrl/HkX67zBA3/iH7zER0N02/Gqy25JIcFvTr/lNjCVhdLSMfeDZze7XaDUDOX/Yju4nl5ZwvDG/j0W8HIIXI2ceujubVzM8AvAT0GOGZ1bKo3GDfQicATdVPL8MA1gc5wI6lcTjtKHu9EVvwa0xW67814xvlxETFOAT1upAgKYQ3oBZBMCjQ14DVVCRv6EtbxSPxh9HsqELDVXjPODsHuPoT/XLsdo5aVLB+gX5pu76Ksq30V2+K0sMMRTVuwqhkOYnXY+RxHh91WUn36o9/Ozp5uVidLbqEtzpYgSG4rm4I5bGpCy4hOixaDImLlkTFS/XBiX5fsqaBILHxIbl4YrWRyosI5+AZdGFfKfGe2k/a2lQBAE08Lq7FwXtHkKAt24fhKngw6g080HZM/PCIQWcAyH0xZ0f8IPBVR+Zvgy+AU4kcjtOg6pGo+nkyCjuqZDpjWqEZdDemL6tbtHC4S2E8LCGhb0+FJn+TQ4hYagG5tJrYADKr3PiaODpb6J/OXb7V9Sn/70tr5/0CXCJ5YTjSX3+sKp5qXj1NnQML27a/Y5FZuoYhXKZxwM68wRGr9p4vFxkRxTwu5wn6K6IJnZec5HfZiJ7N6NJJKgMOxdbv6MfdQ4="
-        - secure: "HTKDJVyMgTF6yc0T0IE7OU5ZDsv/YEEQk2Ab08HcY9QfGIdXYH9g7ZN3SdPrl1ITAelvKAOTx4v+dyZAtscV8KVkieNJC95mPOnx+/f9tF41XpVQLH7lpRTN0ckvhydRKlX58IeQodQO50VjMd+0xZIUPDZdGIxsuTL7+oZYi3+Ec/DRVW3wwIdGYsZyoZ0viAXbplBmIl4g1tiXr2GAsoGiJqme6WmN/fObJspNGHzhcQzgb5kW3CKOLV22+Sh7SnWRvrUKOL93DrCiXWgjXs60Au6jpFqLEffb9+wSiPdl9X14TC7bh6zWWVjeykrwUbXFaaf6E7K0WhiI0lnUM8G4UhMVzUlPNhGz0PmPN6vbwuXcFleSAqW4wYle+Pd1ZUj3/Q2HabnF2lmo7uTr9jvEeyO733iJwrOTv7yanDuKYTjVVan3EUCiidHBXmRKdTiH42tWPk3bvus25XhxOespTrcWSDn5JH3RKkKkfjKUe2ryW2SPsSOjKsp+99JplIQl1ePeVOZ/85G/HGv8uAnXdxWdnLx8LEiFLZ9BE9VUNW7eCbIWefbewYp6X/OxdAxffrFyQbTnuEf4PBNcYHz71O8EPCFW6G87sMGU4uGuE04LjiqeBuQ6tkqiMkyuc4ft7VUuALf+hr1fPQg9+OvJmNs+t/vTekZx+EXglcI="
-        - secure: "Rf0SbI11X0caNaiTD3xJlpZt5qFjQnaTxlqYp4MLZGrtAbL8Zt3c0CC8W4Z+5P+ZTOrlUzcgFRX3wGhK/B7EC1uL90PFHloE4Ch4Rx6FRjt6ZKUyDKpk9+WQiwYCMy8ywnWofia6LNEXrOh/pKhB9Fygyv282u+R2I7sNCAoR3TmoThVgabvg13pywI8H0L62y76K1cevSrISzrKO7O3w0Vw+H05Q4BHbm/elrJGuV1NhYEuIV5gX/dlYpm+8FBmq+CkAPJKAk7sVUdErUCAgckWvGCQTdd15zwVE4GS3mCUxeFRGjaXaOLCNrK/sm0OTRvwmakuno4kIEEUvUn19oYpKKF1ITyOLEBiXVPJDjidXNQKH8Rg0kmJIPuN0DBcqAZkTAUQaTvXNdzLCdqjpNOjYvxjScIElj+/knqJ5Bb1DlKIiedFWCGg3jNgo2pjQzKVInq95c00+/2o5zFVZebxYsJ2I3jsnehab9k3hxoZxaA8fbpPr5X6/Lh+HWwVKAhNenWibv2CJ79MB/lIJIfnm7fWkdGP003t5es+JvWWd6DUq9S1Q9j2ZpUPLzngsTnbYhJm5QbTRHIjFS4uVEIJBu664kzpw8Hp4hl9xkNrpgWlKV8WpF8FRRSUl/1s8iru/YrKWt5flM4a2srCHs47zi8ZERkL6yf8r2CELRU="
-before_install:
-    - echo $JOB_TYPE && sh .integration/push_github_status.sh "${TRAVIS_PULL_REQUEST_SHA}" "${JOB_TYPE}" pending "https://travis-ci.org/Neft-io/neft/jobs/${TRAVIS_JOB_ID}"
-after_success:
-    - echo $JOB_TYPE && sh .integration/push_github_status.sh "${TRAVIS_PULL_REQUEST_SHA}" "${JOB_TYPE}" success "https://travis-ci.org/Neft-io/neft/jobs/${TRAVIS_JOB_ID}"
-after_failure:
-    - echo $JOB_TYPE && sh .integration/push_github_status.sh "${TRAVIS_PULL_REQUEST_SHA}" "${JOB_TYPE}" failure "https://travis-ci.org/Neft-io/neft/jobs/${TRAVIS_JOB_ID}"
+        - TEST_NVM=1
+        - TEST_CHROME=1
 matrix:
-    fast_finish: true
     include:
-        -
-            os: linux
-            node_js: "0.11"
-            env:
-                - JOB_TYPE="node on linux"
-        # -
-        #     os: linux
-        #     node_js: "5.11"
-        #     env:
-        #         - JOB_TYPE="browser"
-        #         - NEFT_TEST_BROWSER=1
         # -
         #     language: android
         #     os: linux
@@ -60,8 +61,3 @@ matrix:
         -
             os: linux
             node_js: "6.2"
-            env:
-                - NEFT_RUN_COVERAGE=1
-            after_script:
-                - node_modules/.bin/istanbul report
-                - node_modules/.bin/coveralls < coverage/lcov.info

@@ -14,8 +14,9 @@ module.exports = (options, callback) ->
     stack = new utils.async.Stack
     fs.ensureDirSync out
     stack.add fs.remove, fs, ["#{out}/(neft-*|app-*|build|static)"]
-    copy 'static'
 
+    if fs.existsSync('static')
+        copy 'static'
     if fs.existsSync('build/static')
         copy 'build/static'
 

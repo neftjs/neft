@@ -1,6 +1,8 @@
 'use strict'
 
 fs = require 'fs-extra'
+pathUtils = require 'path'
+mustache = require 'mustache'
 
 {utils, log} = Neft
 
@@ -14,14 +16,28 @@ module.exports = (options, callback) ->
     stack = new utils.async.Stack
     fs.ensureDirSync out
     stack.add fs.remove, fs, ["#{out}/(neft-*|app-*|build|static)"]
-    copy 'static'
 
+    mode = if options.release then 'release' else 'develop'
+    neftFilePath = "build/neft-browser-#{mode}.js"
+    appFilePath = "build/app-browser-#{mode}.js"
+
+    # index file
+    indexFilePath = pathUtils.join __dirname, './browser/index.mustache'
+    indexFile = fs.readFileSync indexFilePath, 'utf-8'
+    indexFile = mustache.render indexFile,
+        neftFilePath: neftFilePath
+        appFilePath: appFilePath
+    stack.add fs.writeFile, fs, ["#{out}/index.html", indexFile]
+
+    # static files
+    if fs.existsSync('static')
+        copy 'static'
     if fs.existsSync('build/static')
         copy 'build/static'
 
-    mode = if options.release then 'release' else 'develop'
-    copy "build/neft-browser-#{mode}.js"
-    copy "build/app-browser-#{mode}.js"
+    # js files
+    copy neftFilePath
+    copy appFilePath
 
     stack.runAll (err) ->
         log.end logtime

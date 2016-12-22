@@ -1,13 +1,12 @@
 'use strict'
 
-{unit, Networking, assert, utils} = Neft
-{describe, it, beforeEach} = unit
+{Networking, utils} = Neft
 {Impl} = Networking
 
 Networking.Impl =
     init: ->
 
-describe 'src/networking', ->
+describe 'Networking', ->
     beforeEach ->
         @config =
             type: Networking.HTTP

@@ -3,7 +3,8 @@
 fs = require 'fs'
 parser = require './resources/parser'
 
-{utils, log} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
 
 IN_DIR = './static'
 

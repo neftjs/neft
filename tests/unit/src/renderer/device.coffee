@@ -1,10 +1,9 @@
 'use strict'
 
-{unit, assert, Renderer} = Neft
-{describe, it, beforeEach} = unit
+{Renderer} = Neft
 {Impl, Device} = Renderer
 
-describe 'src/renderer Device', ->
+describe 'renderer Device', ->
     describe 'log()', ->
         it 'calls logDevice impl method properly', ->
             {logDevice} = Impl

@@ -8,7 +8,10 @@ try
     sharpModulePath = pathUtils.join fs.realpathSync('./'), '/node_modules/sharp'
     sharp = require sharpModulePath
 
-{utils, log, assert, Resources} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
+assert = require 'src/assert'
+Resources = require 'src/resources'
 
 log = log.scope 'Resources', 'Parser'
 

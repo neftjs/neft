@@ -8,6 +8,7 @@ Commands:
   create             creates new project at specified path
   build <Platform>   copies platform files and create application bundle
   run <Platform>     builds and runs your application
+  test
 
 Platforms:
   node
@@ -20,4 +21,4 @@ Options:
   --out=PATH         used to generate complete bundle ready to publish on a server
   --watch
   --notify
-  --with-tests
+  --init-file=PATH

@@ -5,8 +5,11 @@ pathUtils = require 'path'
 coffee = require 'coffee-script'
 
 cliUtils = require 'cli/utils'
-
-{utils, log, Document, styles, signal} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
+Document = require 'src/document'
+styles = require 'src/styles'
+signal = require 'src/signal'
 
 IN_DIR = 'views'
 OUT_DIR = 'build'
@@ -17,6 +20,9 @@ Document.SCRIPTS_PATH = SCRIPTS_DIR
 loadedExtensions = {}
 
 module.exports = (platform, app, callback) ->
+    unless fs.existsSync(IN_DIR)
+        return callback null
+
     logtime = log.time 'Parse documents'
 
     # clear

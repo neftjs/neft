@@ -41,10 +41,8 @@
         log.warn "Use this bundle only in development; type --release when it's ready"
         `//</development>`
 
-        config = utils.merge utils.clone(DEFAULT_CONFIG), opts.config
-
-        if extraOpts?
-            utils.merge config, extraOpts
+        config = utils.clone DEFAULT_CONFIG
+        config = utils.mergeAll config, opts.config, extraOpts
 
         app = new Dict
 

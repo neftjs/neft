@@ -1,10 +1,15 @@
 'use strict'
 
+moduleCache = require 'lib/module-cache'
+moduleCache.registerTxt(['.pegjs'])
+
 fs = require 'fs-extra'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
-
-{utils, log, Document, nmlParser} = Neft
+utils = require 'src/utils'
+log = require 'src/log'
+Document = require 'src/document'
+nmlParser = require 'src/nml-parser'
 
 createBundle = nmlParser.bundle
 cliUtils = require 'cli/utils'

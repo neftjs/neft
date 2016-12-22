@@ -1,9 +1,8 @@
 'use strict'
 
-{Dict, unit, assert} = Neft
-{describe, it, beforeEach, afterEach} = unit
+{Dict} = Neft
 
-describe 'src/dict', ->
+describe 'Dict', ->
     describe 'ctor', ->
         it 'creates new dict', ->
             dict = Dict a: 1
