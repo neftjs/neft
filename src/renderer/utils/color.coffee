@@ -187,7 +187,7 @@ exports.toRGBAHex = do ->
             if t * 2 < 1
                 return q
             if t * 3 < 2
-                return p + (q - p) * (2/3 - t) * 6
+                return p + (q - p) * (2 / 3 - t) * 6
             return p
 
         (hStr, sStr, lStr) ->
@@ -206,15 +206,15 @@ exports.toRGBAHex = do ->
                     q = l + s - l * s
                 p = l * 2 - q
 
-                red = hueToRgb p, q, h + 1/3
+                red = hueToRgb p, q, h + 1 / 3
                 green = hueToRgb p, q, h
-                blue = hueToRgb p, q, h - 1/3
+                blue = hueToRgb p, q, h - 1 / 3
 
             return Math.round(red * 255) << 16 |
                 Math.round(green * 255) << 8 |
                 Math.round(blue * 255)
 
-    (color, defaultColor='transparent') ->
+    (color, defaultColor = 'transparent') ->
         assert.isString color
         r = g = b = a = 0
 
@@ -224,11 +224,11 @@ exports.toRGBAHex = do ->
         # 3-digit hexadecimal
         if DIGIT_3_RE.test(color)
             r = parseInt color[1], 16
-            g = parseInt color[1], 16
-            b = parseInt color[1], 16
-            r = r<<1 | r
-            g = g<<1 | g
-            b = b<<1 | b
+            g = parseInt color[2], 16
+            b = parseInt color[3], 16
+            r = r<<4 | r
+            g = g<<4 | g
+            b = b<<4 | b
             a = 0xFF
 
         # 6-digit hexadecimal
