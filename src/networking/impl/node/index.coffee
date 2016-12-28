@@ -20,6 +20,12 @@ pending = Object.create null
 
 staticServer = new nodeStatic.Server gzip: true
 
+serveStatic = (req, res) ->
+    staticServer.serve req, res, (err) ->
+        if err
+            req.url = "/build#{req.url}"
+            staticServer.serve req, res
+
 module.exports = (Networking) ->
 
     Request: require('./request') Networking, pending
@@ -50,8 +56,8 @@ module.exports = (Networking) ->
                 data += chunk
 
             serverReq.on 'end', ->
-                if ///^(?:\/static\/|\/build\/static\/)///.test(serverReq.url)
-                    staticServer.serve serverReq, serverRes
+                if serverReq.url.indexOf('/static/') is 0
+                    serveStatic serverReq, serverRes
                     return
 
                 {url} = serverReq

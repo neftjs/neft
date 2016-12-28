@@ -77,9 +77,11 @@ supportImageResource = (path, rsc) ->
             for format in rsc.formats
                 for resolution in rsc.resolutions
                     resPath = rsc.paths[format][resolution].slice(1)
+                    if nameResolution isnt resolution
+                        resPath = "build/#{resPath}"
                     if not (exists = fs.existsSync(resPath)) or new Date(fs.statSync(resPath).mtime) < mtime
                         unless exists
-                            bgStack.add mkdirp, null, [pathUtils.dirname(resPath)]
+                            mkdirp.sync pathUtils.dirname(resPath)
                         bgStack.add resizeImage, null, [path, width * resolution, height * resolution, resPath]
             callback()
             return
@@ -179,10 +181,7 @@ parseResourceFile = (path, config) ->
     for format in rsc.formats
         formatPaths = paths[format] = {}
         for resolution in rsc.resolutions
-            resPath = ''
-            if name.resolution isnt resolution
-                resPath += '/build'
-            resPath += "/#{dirPath}/#{name.file}#{resolutionToString(resolution)}.#{format}"
+            resPath = "/#{dirPath}/#{name.file}#{resolutionToString(resolution)}.#{format}"
             formatPaths[resolution] = resPath
 
     if IMAGE_FORMATS[name.format]
