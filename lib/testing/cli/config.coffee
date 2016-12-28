@@ -18,7 +18,12 @@ DEFAULT_CONFIG =
     browserHttpServer:
         port: '8000'
         host: '0.0.0.0'
-    environments: []
+    environments: [
+        {
+            platform: 'node'
+            version: 'current'
+        }
+    ]
 
 INIT_FILE_PATH = slash pathUtils.join __dirname, './initFile.coffee'
 
