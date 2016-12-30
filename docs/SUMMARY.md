@@ -14,6 +14,7 @@
   - [Models](/routing/models.md)
 - [Networking](/networking.md)
 - [Native Communication](/native-communication.md)
+- [Testing](/testing.md)
 
 ## Extensions
   - [Introduction](/extensions.md)

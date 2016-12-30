@@ -1,12 +1,13 @@
 'use strict'
 
 fs = require 'fs-extra'
+pathUtils = require 'path'
 childProcess = require 'child_process'
 config = require './config'
 
 {utils, log} = Neft
 
-NEFT_BIN_PATH = fs.realpathSync './bin/neft.js'
+NEFT_BIN_PATH = pathUtils.join __dirname, '../../../bin/neft.js'
 
 BUILD_ARGS = [
     'build',

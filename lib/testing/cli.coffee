@@ -5,7 +5,6 @@ global.Neft = require 'cli/bundle/neft-node-develop'
 builder = require './cli/builder'
 httpServer = require './cli/httpServer'
 testsFile = require './cli/testsFile'
-localTests = require './cli/localTests'
 chromeEnv = require './env/chrome'
 
 config = require './cli/config'
@@ -13,10 +12,13 @@ config = require './cli/config'
 {log} = Neft
 
 getEnvTarget = (env) ->
-    env.target ? env.platform
+    unless env.platform in ['local']
+        env.platform
 
 getEnvHandler = (env) ->
     switch env.platform
+        when 'local'
+            require './env/local'
         when 'node'
             if env.version is 'current'
                 require './env/node'
@@ -27,16 +29,17 @@ getEnvHandler = (env) ->
                 when 'chrome'
                     require './env/chrome'
                 else
-                    throw new Exception "Unsupported browser '#{env.browser}'"
+                    throw new Error "Unsupported browser '#{env.browser}'"
         else
-            throw new Exception "Unsupported environment '#{env.platform}'"
+            throw new Error "Unsupported environment '#{env.platform}'"
 
 targetsToBuild = {}
 envQueue = []
 server = null
 
 for env in config.getEnabledConfigEnvironments()
-    targetsToBuild[getEnvTarget(env)] = true
+    if buildTarget = getEnvTarget env
+        targetsToBuild[buildTarget] = true
     envQueue.push env: env, handler: getEnvHandler(env)
 
 buildProjects = (callback) ->
@@ -73,12 +76,9 @@ reportAndExit = (err) ->
         log.ok 'All tests ended: SUCCESS'
         process.exit 0
 
-localTests.runTestsLocally (err) ->
+buildProjects (err) ->
     if err
         return reportAndExit err
-    buildProjects (err) ->
-        if err
-            return reportAndExit err
-        runEnvs (err) ->
-            server?.close()
-            reportAndExit err
+    runEnvs (err) ->
+        server?.close()
+        reportAndExit err

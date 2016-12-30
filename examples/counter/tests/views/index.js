@@ -1,6 +1,3 @@
-const { assert, unit } = Neft;
-const { describe, it, beforeEach } = unit;
-
 describe('views/index', () => {
     let view;
 

@@ -1,9 +1,4 @@
-# Unit tests
-
-Access it with:
-```javascript
-const unit = require('src/unit');
-```
+# Testing
 
     'use strict'
 
@@ -19,7 +14,7 @@ const unit = require('src/unit');
     scopes = [new Scope]
     currentScope = scopes[0]
 
-# unit.describe(*String* message, *Function* tests)
+# describe(*String* message, *Function* tests)
 
     exports.describe = (msg, func) ->
         beforeEach = utils.NOP
@@ -53,7 +48,7 @@ const unit = require('src/unit');
 
     modifiers.applyAll exports.describe
 
-# unit.it(*String* message, *Function* test)
+# it(*String* message, *Function* test)
 
 The given test function can contains optional *callback* argument.
 
@@ -74,7 +69,7 @@ The given test function can contains optional *callback* argument.
 
     modifiers.applyAll exports.it
 
-# unit.beforeEach(*Function* code)
+# beforeEach(*Function* code)
 
     exports.beforeEach = (func) ->
         currentScope.beforeFunctions.push func
@@ -82,7 +77,7 @@ The given test function can contains optional *callback* argument.
 
     modifiers.applyAll exports.beforeEach
 
-# unit.afterEach(*Function* code)
+# afterEach(*Function* code)
 
     exports.afterEach = (func) ->
         currentScope.afterFunctions.push func
@@ -90,7 +85,7 @@ The given test function can contains optional *callback* argument.
 
     modifiers.applyAll exports.afterEach
 
-# unit.whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
+# whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
 
     exports.whenChange = do ->
         listeners = []
@@ -122,28 +117,22 @@ The given test function can contains optional *callback* argument.
             listeners.push listener
             return
 
-# unit.runTests()
-
-    exports.runTests = ->
+    runTests = ->
         [mainScope] = scopes
         logger.onTestsStart()
         mainScope.run ->
             logger.onTestsEnd()
-            exports.onTestsEnd
+            onTestsEnd
                 status: if stack.errors.length is 0 then 'success' else 'error'
                 testsAmount: stack.testsAmount
                 errors: stack.errors
 
-# *Function* unit.onTestsEnd
-
-    exports.onTestsEnd = (result) ->
+    onTestsEnd = (result) ->
         code = if result.status is 'success' then 0 else 1
         if utils.isServer
             process.exit code
 
-# *Boolean* unit.runAutomatically = true
-
-    exports.runAutomatically = do ->
+    runAutomatically = do ->
         val = process?.env.RUN_TESTS
         if typeof val is 'string'
             val = try JSON.parse val
@@ -151,5 +140,5 @@ The given test function can contains optional *callback* argument.
         val
 
     setImmediate ->
-        if exports.runAutomatically
-            exports.runTests()
+        if runAutomatically
+            runTests()

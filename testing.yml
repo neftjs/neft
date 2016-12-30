@@ -1,5 +1,7 @@
 environments:
     -
+        platform: local
+    -
         platform: node
         version: current
     -
