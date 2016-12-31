@@ -61,9 +61,6 @@ module.exports = (config, callback) ->
         fs.removeSync OUT_DIR
     fs.copySync RUNTIME_PATH, OUT_DIR,
         filter: (path) ->
-            # omit hidden files
-            if /\/\./i.test(path)
-                return false
             # process mustache files later
             if /\.mustache$/.test(path)
                 mustacheFiles.push path
