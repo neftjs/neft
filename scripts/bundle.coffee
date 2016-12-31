@@ -59,6 +59,7 @@ TYPES = [
 
 do ->
     stack = []
+    buildAll = process.argv.length is 2
 
     registerBundle = (type, opts) ->
         bundleOpts = {}
@@ -67,9 +68,9 @@ do ->
         stack.push (callback) -> createBundle(bundleOpts, callback)
 
     for type in TYPES
-        if process.argv.indexOf("--#{type.platform}") >= 0
+        if buildAll or process.argv.indexOf("--#{type.platform}") >= 0
             registerBundle type, {release: false}
-        if process.argv.indexOf("--#{type.platform}-release") >= 0
+        if buildAll or process.argv.indexOf("--#{type.platform}-release") >= 0
             registerBundle type, {release: true}
 
     index = -1
