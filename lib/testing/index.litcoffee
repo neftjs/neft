@@ -6,6 +6,7 @@
     stack = require './stack'
     logger = require './logger'
     modifiers = require './modifiers'
+    screenshot = require './screenshot/client'
 
     {isArray} = Array
     {push} = Array::
@@ -116,6 +117,36 @@ The given test function can contains optional *callback* argument.
 
             listeners.push listener
             return
+
+# takeScreenshot(*String|Object* options, [*Function* callback])
+
+    screenshotInitialized = false
+    exports.takeScreenshot = (opts, callback) ->
+        if typeof opts is 'string'
+            opts = expected: opts
+
+        unless opts?.expected
+            throw new Error "'expected' path not set in takeScreenshot"
+
+        {currentTest} = Test
+        currentTest.preventEnding = true
+
+        endCurrentTest = (err) ->
+            callback? err
+            currentTest.preventEnding = false
+            currentTest.onEnd err
+
+        unless screenshotInitialized
+            screenshotInitialized = true
+            screenshot.initialize (err) ->
+                if err
+                    endCurrentTest err
+                else
+                    exports.takeScreenshot opts, callback
+            return
+
+        screenshot.take opts, endCurrentTest
+        return
 
     runTests = ->
         [mainScope] = scopes

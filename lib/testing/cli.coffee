@@ -6,6 +6,9 @@ builder = require './cli/builder'
 httpServer = require './cli/httpServer'
 testsFile = require './cli/testsFile'
 chromeEnv = require './env/chrome'
+processLogs = require './cli/processLogs'
+screenshot = require './screenshot/server'
+server = require './server'
 
 config = require './cli/config'
 
@@ -35,11 +38,11 @@ getEnvHandler = (env) ->
 
 targetsToBuild = {}
 envQueue = []
-server = null
+httpServerProcess = null
 
 for env in config.getEnabledConfigEnvironments()
-    if buildTarget = getEnvTarget env
-        targetsToBuild[buildTarget] = true
+    if buildTarget = getEnvTarget(env)
+        targetsToBuild[buildTarget] = env
     envQueue.push env: env, handler: getEnvHandler(env)
 
 buildProjects = (callback) ->
@@ -49,14 +52,15 @@ buildProjects = (callback) ->
             return callback err
         unless target = targets[0]
             return callback()
-        if target is 'browser' and not server
-            server = httpServer.runHttpServer buildNext
+        if target is 'browser' and not httpServerProcess
+            httpServerProcess = httpServer.runHttpServer buildNext
             return
         targets.shift()
         testsFile.saveBuildTestsFile target, (err) ->
             if err
                 return callback err
-            builder.buildProject target, buildNext
+            env = targetsToBuild[target]
+            builder.buildProject target, env, buildNext
     buildNext()
 
 runEnvs = (callback) ->
@@ -65,7 +69,8 @@ runEnvs = (callback) ->
             return callback err
         unless envCfg = envQueue.shift()
             return callback null
-        envCfg.handler.run envCfg.env, runNext
+        logsReader = new processLogs.LogsReader
+        envCfg.handler.run envCfg.env, logsReader, runNext
     runNext()
 
 reportAndExit = (err) ->
@@ -76,9 +81,10 @@ reportAndExit = (err) ->
         log.ok 'All tests ended: SUCCESS'
         process.exit 0
 
+server.startServer()
 buildProjects (err) ->
     if err
         return reportAndExit err
     runEnvs (err) ->
-        server?.close()
+        httpServerProcess?.close()
         reportAndExit err

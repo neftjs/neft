@@ -3,3 +3,4 @@ coverage
 /build
 tmp
 _book
+/tests_results

@@ -1,7 +1,6 @@
 'use strict'
 
 testsFile = require '../cli/testsFile'
-processLogs = require '../cli/processLogs'
 config = require '../cli/config'
 childProcess = require 'child_process'
 pathUtils = require 'path'
@@ -16,9 +15,8 @@ PROCESS_OPTIONS =
 getInitPath = ->
     pathUtils.join __dirname, './local/initFile.js'
 
-runTestsInProcess = (callback) ->
+runTestsInProcess = (logsReader, callback) ->
     log.info 'running local tests'
-    logsReader = new processLogs.LogsReader
     mainErr = null
     path = getInitPath()
     nodeProcess = childProcess.fork path, PROCESS_OPTIONS
@@ -33,8 +31,8 @@ runTestsInProcess = (callback) ->
         log.info 'local tests terminated'
         callback mainErr or logsReader.error
 
-exports.run = (env, callback) ->
+exports.run = (env, logsReader, callback) ->
     testsFile.saveBuildTestsFile TARGET, (err) ->
         if err
             return callback err
-        runTestsInProcess callback
+        runTestsInProcess logsReader, callback

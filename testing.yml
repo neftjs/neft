@@ -1,3 +1,7 @@
+server:
+    protocol: http
+    host: localhost
+    port: 3002
 environments:
     -
         platform: local
@@ -28,3 +32,5 @@ environments:
         platform: browser
         browser: chrome
         enabled: $TEST_CHROME
+        width: 200
+        height: 200
