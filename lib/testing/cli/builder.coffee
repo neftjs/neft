@@ -13,7 +13,8 @@ BUILD_ARGS = [
     'build',
     '',
     "--init-file=#{config.getInitFilePath()}",
-    '--out='
+    '--out=',
+    '--config='
 ]
 
 BUILD_OPTIONS =
@@ -28,12 +29,15 @@ Builds Neft app for the given target.
 See `neft help` for available targets.
 Callback function is called when build is ready.
 ###
-exports.buildProject = (target, callback) ->
+exports.buildProject = (target, env, callback) ->
     log.info "#{target} project building"
     fs.removeSync './build/browser'
     args = utils.clone BUILD_ARGS
     args[1] = target # target
     args[3] += config.getPlatformOutFolder(target) # out
+    args[4] += JSON.stringify # config
+        testingServerUrl: config.getServerUrl()
+        environment: env
     error = null
     buildProcess = childProcess.fork NEFT_BIN_PATH, args, BUILD_OPTIONS
     buildProcess.stdout.on 'data', (data) ->

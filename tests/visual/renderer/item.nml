@@ -1,0 +1,162 @@
+/* DEFINITIONS */
+
+Rectangle {
+    id: baseRect
+    x: 40
+    y: 50
+    width: 55
+    height: 60
+    color: 'green'
+}
+
+Rectangle {
+    id: baseChild
+    x: 5
+    y: 10
+    width: 20
+    height: 33
+    color: 'blue'
+}
+
+Rectangle {
+    id: baseContainer
+    x: 40
+    y: 50
+    width: 55
+    height: 60
+    color: 'green'
+    exports.baseChild {}
+    exports.baseChild {
+        x: 15
+        y: 4
+        color: 'orange'
+    }
+}
+
+/* TESTS */
+
+Rectangle {
+    id: testPosition
+    x: 50
+    y: 25
+    width: 100
+    height: 70
+    color: 'green'
+}
+
+Rectangle {
+    id: testSize
+    width: 82
+    height: 50
+    color: 'green'
+}
+
+exports.baseRect {
+    id: testScale
+    scale: 1.8
+}
+
+exports.baseRect {
+    id: testRotation
+    rotation: Math.PI / 4
+}
+
+exports.baseRect {
+    id: testRotationAndScale
+    scale: 0.7
+    rotation: Math.PI / 8
+}
+
+exports.baseRect {
+    id: testRotationAndScale
+    scale: 0.7
+    rotation: Math.PI / 8
+}
+
+exports.baseRect {
+    id: testChildren
+    exports.baseChild {}
+}
+
+exports.baseRect {
+    id: testTwoChildren
+    exports.baseChild {}
+    exports.baseChild {
+        x: 15
+        y: 4
+        color: 'orange'
+    }
+}
+
+exports.baseRect {
+    id: testZIndex
+    exports.baseChild {
+        z: 1
+    }
+    exports.baseChild {
+        x: 15
+        y: 4
+        color: 'orange'
+    }
+}
+
+exports.baseContainer {
+    id: testScaleChildren
+    scale: 1.3
+}
+
+exports.baseContainer {
+    id: testMinusScaleChildren
+    scale: -1.3
+}
+
+exports.baseContainer {
+    id: testRotateChildren
+    rotation: - Math.PI / 9
+}
+
+exports.baseContainer {
+    id: testScaleAndRotateChildren
+    scale: 1.2
+    rotation: - Math.PI / 9
+}
+
+exports.baseRect {
+    id: testClip
+    scale: 1.8
+    rotation: Math.PI / 7
+    clip: true
+    exports.baseChild {
+        x: parent.width - this.width / 2
+    }
+}
+
+exports.baseRect {
+    id: testOpacity
+    opacity: 0.8
+}
+
+exports.baseRect {
+    id: testChildrenOpacity
+    opacity: 0.8
+    Rectangle {
+        width: 50
+        height: 50
+        color: 'blue'
+        opacity: 0.5
+    }
+}
+
+exports.baseRect {
+    id: testBackground
+    opacity: 0.9
+    scale: 1.2
+    rotation: Math.PI / 12
+    color: 'transparent'
+    background: Rectangle {
+        width: 50
+        height: 50
+        color: 'blue'
+        opacity: 0.5
+    }
+}

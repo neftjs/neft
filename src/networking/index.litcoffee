@@ -58,6 +58,10 @@ var Networking = require('networking');
 
             req
 
+        @_initServer = (networking) ->
+            setImmediate -> Networking.Impl.init networking
+            log.info "Start as `#{networking.host}:#{networking.port}`"
+
 ## Networking::constructor(*Object* options)
 
 Options:
@@ -93,8 +97,7 @@ Options:
                 url = "#{@protocol}://#{@host}:#{@port}"
             utils.defineProperty @, 'url', utils.ENUMERABLE, url
 
-            setImmediate => Networking.Impl.init @
-            log.info "Start as `#{@host}:#{@port}`"
+            Networking._initServer @
 
             super()
 

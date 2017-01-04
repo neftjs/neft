@@ -5,13 +5,13 @@
 stack = require './stack'
 errorUtils = require './error'
 
-exports.PREFIX = '[TEST] '
+exports.TEST_PREFIX = '[TEST] '
 exports.ERROR = '[ERROR] '
 exports.SUCCESS = 'Tests success'
 exports.FAILURE = 'Tests failure'
 
 log = (msg) ->
-    console.log exports.PREFIX + msg
+    console.log exports.TEST_PREFIX + msg
 
 logError = (error) ->
     msg = ''

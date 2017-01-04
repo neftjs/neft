@@ -7,7 +7,6 @@ utils = require 'src/utils'
 signal = require 'src/signal'
 logger = require '../logger'
 config = require '../cli/config'
-processLogs = require '../cli/processLogs'
 
 {log} = Neft
 
@@ -26,7 +25,8 @@ CHROME_ARGS = [
     '--v=1',
     '--no-first-run',
     "--user-data-dir=#{USER_DATA_DIR}",
-    '--no-sandbox' # TODO: run chrome on travis in sandbox mode
+    '--no-sandbox', # TODO: run chrome on travis in sandbox mode
+    '--window-position=0,0'
 ]
 
 CHROME_LOG_RE = ///
@@ -77,12 +77,14 @@ getConsoleLogs = (stdout) ->
 ###
 Runs the given URI in Chrome
 ###
-runOnPathWithUri = (path, uri, callback) ->
+runOnPathWithUri = (env, uri, callback) ->
     args = utils.clone CHROME_ARGS
     args.push "--app=#{uri}"
 
-    command = "#{path} #{args.join(' ')}"
-    chrome = childProcess.exec command, env: config.getProcessEnv()
+    if env.width? and env.height?
+        args.push "--window-size=#{env.width},#{env.height}"
+
+    chrome = childProcess.spawn env.path, args, env: config.getProcessEnv()
 
     chrome.on 'exit', ->
         fs.removeSync USER_DATA_DIR
@@ -100,22 +102,22 @@ runOnPathWithUri = (path, uri, callback) ->
     kill: ->
         chrome?.kill()
 
-runAndLog = (path, callback) ->
-    log.info "running #{path}"
-    logsReader = new processLogs.LogsReader
+runAndLog = (env, logsReader, callback) ->
+    log.info "running #{env.path}"
     url = config.getBrowserHttpServerUrl()
-    chromeProcess = runOnPathWithUri path, url, ->
-        log.info "#{path} terminated"
+    chromeProcess = runOnPathWithUri env, url, ->
+        log.info "#{env.path} terminated"
         callback logsReader.error
     chromeProcess.onLog (msg) ->
         logsReader.log msg
         if logsReader.terminated
             chromeProcess.kill()
 
-exports.run = (env, callback) ->
+exports.run = (env, logsReader, callback) ->
     if env.path
-        return runAndLog env.path, callback
+        return runAndLog env, logsReader, callback
     getChromePath (err, path) ->
         if err
             return callback err
-        runAndLog path, callback
+        env.path = path
+        exports.run env, logsReader, callback

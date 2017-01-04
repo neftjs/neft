@@ -8,11 +8,10 @@ module.exports = (nmlParser) -> (file) ->
 
     # prepare scope name
     parts = name.split '/'
-    for part, i in parts
+    for part, i in parts when part
         parts[i] = part[0].toUpperCase() + part.slice(1)
 
     scopeItemName = parts.join ''
-    scopeName = scopeItemName[0].toLowerCase() + scopeItemName.slice(1)
 
     # bootstrap code
     code = ''

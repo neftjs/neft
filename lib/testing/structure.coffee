@@ -28,6 +28,8 @@ class Scope
             return
 
 class Test
+    @currentTest = null
+
     constructor: ->
         @_callbackCalled = false
         @_callback = null
@@ -38,10 +40,14 @@ class Test
         @testFunction = utils.NOP
         @onDone = null
         @onEnd = utils.bindFunctionContext @onEnd, @
+        @preventEnding = false
         Object.seal @
 
     onEnd: (err) ->
         if @_callbackCalled
+            return
+
+        if @preventEnding
             return
 
         @_callbackCalled = true
@@ -66,6 +72,7 @@ class Test
         @_callback = callback
 
         logger.onTestStart @
+        Test.currentTest = @
 
         # call before functions
         for beforeFunc in stack.currentScope.beforeFunctions

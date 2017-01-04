@@ -18,6 +18,10 @@ DEFAULT_CONFIG =
     browserHttpServer:
         port: '8000'
         host: '0.0.0.0'
+    server:
+        protocol: 'http'
+        host: 'localhost'
+        port: 3002
     environments: [
         {
             platform: 'node'
@@ -80,6 +84,10 @@ Returns URL used to serve static files through HTTP.
 ###
 exports.getBrowserHttpServerUrl = ->
     {port, host} = exports.getConfig().browserHttpServer
+    "http://#{host}:#{port}"
+
+exports.getServerUrl = ->
+    {port, host} = exports.getConfig().server
     "http://#{host}:#{port}"
 
 ###

@@ -2,7 +2,6 @@
 
 childProcess = require 'child_process'
 config = require '../cli/config'
-processLogs = require '../cli/processLogs'
 pathUtils = require 'path'
 which = require 'which'
 
@@ -15,10 +14,9 @@ getInitPath = (env) ->
     path = config.getPlatformOutFolder 'node'
     pathUtils.join path, 'build/app-node-develop.js'
 
-exports.run = (env, callback) ->
+exports.run = (env, logsReader, callback) ->
     {version} = env
     log.info "running nvm with node version #{version}"
-    logsReader = new processLogs.LogsReader
     mainErr = null
     path = getInitPath env
     command = ". $NVM_DIR/nvm.sh && nvm exec #{version} node #{path}"

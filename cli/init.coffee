@@ -4,7 +4,10 @@ semver = require 'semver'
 fs = require 'fs'
 pathUtils = require 'path'
 global.Neft = require './bundle/neft-node-develop'
-require('lib/module-cache').registerBabel()
+moduleCache = require 'lib/module-cache'
+
+moduleCache.registerBabel()
+moduleCache.registerNml()
 
 {log, utils} = Neft
 
@@ -45,6 +48,7 @@ options =
     watch: false
     notify: false
     'init-file': './init.js'
+    config: ''
 
 argOutput = ''
 for arg, i in process.argv when i > 1

@@ -49,7 +49,11 @@ module.exports = (platform, app, options) ->
             app.extensions.push "`require('#{path}')`"
 
     # get 'package.json' config
-    app.config = app.package.config
+    app.config = app.package.config or {}
+
+    # include custom config
+    if options.config
+        utils.merge app.config, JSON.parse(options.config)
 
     # parse app into object
     config = JSON.stringify app, jsonReplacer

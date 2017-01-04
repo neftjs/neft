@@ -2,7 +2,6 @@
 
 childProcess = require 'child_process'
 config = require '../cli/config'
-processLogs = require '../cli/processLogs'
 pathUtils = require 'path'
 
 {log} = Neft
@@ -14,9 +13,8 @@ getInitPath = (env) ->
     path = config.getPlatformOutFolder 'node'
     pathUtils.join path, 'build/app-node-develop.js'
 
-exports.run = (env, callback) ->
+exports.run = (env, logsReader, callback) ->
     log.info 'running node'
-    logsReader = new processLogs.LogsReader
     mainErr = null
     path = getInitPath env
     nodeProcess = childProcess.fork path, PROCESS_OPTIONS

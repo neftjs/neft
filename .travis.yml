@@ -1,18 +1,22 @@
-notifications:
-    email: false
+dist: trusty
 sudo: false
 language: node_js
-# addons:
-#     apt:
-#         sources:
-#             - google-chrome
-#         packages:
-#             - google-chrome-stable
+notifications:
+    email: false
+addons:
+    apt:
+        packages:
+            - imagemagick
+            - chromium-browser
 cache:
     apt: true
     directories:
         - node_modules
 before_script:
+    # log versions
+    - compare --version
+
+    # install nvm
     - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
     - export NVM_DIR="$HOME/.nvm"
     - "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\""
@@ -21,8 +25,12 @@ before_script:
     - nvm install 5.0.0
     - nvm install 6.2.2
     - nvm install 7.0.0
+
+    # run xvfb
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
+
+    # build neft bundles
     - npm run bundle -- --node --browser --ios --android
 script:
     - npm test
@@ -30,6 +38,7 @@ env:
     global:
         - TEST_NVM=1
         - TEST_CHROME=1
+        - LOG_SCREENSHOT_DATA_URI=1
 matrix:
     include:
         # -
