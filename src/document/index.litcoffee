@@ -652,12 +652,12 @@ Corresponding node handler: *n-onReplaceByUse=""*.
 
                 arr[JSON_PROPS_TO_SET] = @propsToSet
 
-                `//<development>`
-                arr[JSON_LOGS] = @logs.map callToJSON
-                `//</development>`
                 `//<production>`
                 arr[JSON_LOGS] = []
                 `//</production>`
+                `//<development>`
+                arr[JSON_LOGS] = @logs.map callToJSON
+                `//</development>`
 
                 arr[JSON_STYLES] = @styles.map callToJSON
 
