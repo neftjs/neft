@@ -47,6 +47,7 @@ module.exports = (File) -> class Iterator
         @text = ''
         @data = null
         @isRendered = false
+        @inputProps = Object.create @file.inputProps
 
         @node.onPropsChange propsChangeListener, @
         @node.onVisibleChange visibilityChangeListener, @
@@ -147,11 +148,11 @@ module.exports = (File) -> class Iterator
         newChild.index = i
 
         # render component
-        newChild.props.set 'each', each
-        newChild.props.set 'index', i
-        newChild.props.set 'item', item
+        @inputProps.each = each
+        @inputProps.index = i
+        @inputProps.item = item
         usedComponent.scope = @file.scope
-        usedComponent.render @file.inputProps, @file.context, null, @file.inputRefs
+        usedComponent.render @inputProps, @file.context, null, @file.inputRefs
 
         # signal
         usedComponent.onReplaceByUse.emit @

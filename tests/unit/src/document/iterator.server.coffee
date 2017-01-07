@@ -118,3 +118,16 @@ describe 'Document n-each', ->
 
         renderParse view
         assert.is view.node.stringify(), '<ul>undefinedundefinedundefined</ul>'
+
+    it 'can be nested', ->
+        source = createView '''
+            <ul n-each="[1]">
+                <ul n-each="[2]">
+                    ${props.item}|${props.index}|${props.each}
+                </ul>
+            </ul>
+        '''
+        view = source.clone()
+
+        renderParse view
+        assert.is view.node.stringify(), '<ul><ul>2|0|2</ul></ul>'
