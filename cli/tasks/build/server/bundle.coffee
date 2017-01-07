@@ -68,10 +68,16 @@ module.exports = (platform, options, app, callback) ->
         if platform is 'node' and options.out
             (req, path, modulePath, parentPath) ->
                 modulePath.indexOf('node_modules') is -1 and
-                (req isnt path or pathUtils.isAbsolute(req))
+                (req isnt path or pathUtils.isAbsolute(req)) or (
+                    modulePath.indexOf('node_modules/neft') isnt -1 and
+                    modulePath.indexOf('node_modules/neft/node_modules') is -1
+                )
         else if platform is 'node'
             (req, path, modulePath, parentPath) ->
-                req isnt path and modulePath.indexOf('node_modules') is -1
+                req isnt path and modulePath.indexOf('node_modules') is -1 or (
+                    modulePath.indexOf('node_modules/neft') isnt -1 and
+                    modulePath.indexOf('node_modules/neft/node_modules') is -1
+                )
         else
             (req, path, modulePath, parentPath) ->
                 true

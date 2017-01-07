@@ -1,4 +1,4 @@
-#!/usr/bin/env node --harmony
+#!/usr/bin/env node
 
 const PATHS = ['./build', './', __dirname+'/..', __dirname+'/../node_modules'];
 const isWin = process.platform === 'win32';

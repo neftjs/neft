@@ -19,8 +19,9 @@ or alternatively:
 
 ## Installation
 
-To install Neft make sure you have installed [Node.js](https://nodejs.org/) in version 0.11.14 or newer.
+To install Neft make sure you have installed [Node.js](https://nodejs.org/) in version **4.0.0 or newer**.
 *Node* is an open-source JavaScript runtime environment.
+See [installation instruction for Linux distributions](https://nodejs.org/en/download/package-manager/), type `brew install node` under OSX or `choco install nodejs.install` under Windows. For more informations see [https://nodejs.org/en/download/](Node.js's Downloads page).
 
 Then you can easily install Neft on your machine by typing `npm install neft -g` in your terminal.
 

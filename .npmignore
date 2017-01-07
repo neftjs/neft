@@ -4,3 +4,6 @@ coverage
 tmp
 _book
 /tests_results
+/examples
+/tests
+/docs

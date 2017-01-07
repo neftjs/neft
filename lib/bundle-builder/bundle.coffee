@@ -59,18 +59,28 @@ fileScope = """(function(){
         };
     })();
 
-    var result = __require({index: {{index}}}, 'index');
+    var __createRequire = function (paths){
+        var requireFunc = __require.bind(null, paths);
+        if (typeof require === 'function') {
+            for (var key in require) {
+                requireFunc[key] = require[key];
+            }
+        }
+        return requireFunc;
+    };
+
+    var __result = __require({index: {{index}}}, 'index');
 
     if(typeof module !== 'undefined'){
-        return module.exports = result;
+        return module.exports = __result;
     } else {
-        return result;
+        return __result;
     }
 })();"""
 
 moduleScope = '''function(exports){
     var module = {exports: exports};
-    var require = __require.bind(null, {{paths}});
+    var require = __createRequire({{paths}});
     var exports = module.exports;
 
     {{file}}
