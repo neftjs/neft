@@ -1,3 +1,5 @@
+# coffeelint: disable=no_debugger
+
 'use strict'
 
 utils = require 'src/utils'
@@ -44,7 +46,9 @@ module.exports = (File) -> class Log
             console.log @node.stringifyChildren()
         else
             {props} = @node
-            log = [@node.stringifyChildren()]
+            log = []
+            if content = @node.stringifyChildren()
+                log.push content
             for key, val of props when props.hasOwnProperty(key)
                 log.push key, '=', val
             console.log.apply console, log
