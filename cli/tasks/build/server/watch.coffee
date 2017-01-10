@@ -12,9 +12,9 @@ module.exports = (platform, options, onBuild) ->
     shouldBuildAgain = false
     files = Object.create null
 
-    ignored = '^(?:build|index\.js|local\.json|node_modules|\.)'
+    ignored = '^(?:build|index\\.js|local\\.json|node_modules)'
     if options.out
-        ignored += "|#{options.out}"
+        ignored += "|^#{options.out}"
 
     update = ->
         isWaiting = false
@@ -38,6 +38,10 @@ module.exports = (platform, options, onBuild) ->
         ignored: new RegExp ignored
         ignoreInitial: true
     chokidar.watch('.', chokidarOptions).on 'all', (event, path) ->
+        # omit hidden files
+        if path[0] is '.'
+            return
+
         # do nothing when file has not been modified
         file = moduleCache.getFile path
         if files[path] is file
