@@ -1,3 +1,5 @@
+# coffeelint: disable=no_debugger
+
 fs = require 'fs-extra'
 Mustache = require 'mustache'
 coffee = require 'coffee-script'
@@ -11,6 +13,7 @@ moduleCache.registerTxt(['.txt', '.pegjs'])
 fs.ensureDir './cli/bundle'
 
 createBundle = (opts, callback) ->
+    console.log "Create Neft bundle file for #{opts.platform} platform"
     bundle {
         platform: opts.platform
         extras: opts.extras
