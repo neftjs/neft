@@ -15,13 +15,15 @@ config = require './cli/config'
 {log} = Neft
 
 getEnvTarget = (env) ->
-    unless env.platform in ['local']
+    unless env.platform in ['local', 'npm']
         env.platform
 
 getEnvHandler = (env) ->
     switch env.platform
         when 'local'
             require './env/local'
+        when 'npm'
+            require './env/npm'
         when 'node'
             if env.version is 'current'
                 require './env/node'
@@ -74,6 +76,7 @@ runEnvs = (callback) ->
     runNext()
 
 reportAndExit = (err) ->
+    log.error err
     if err
         log.error 'All tests ended: FAILURE'
         process.exit 1

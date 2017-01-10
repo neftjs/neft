@@ -1,7 +1,11 @@
+browserHttpServer:
+    protocol: http
+    host: localhost
+    port: 3003
 server:
     protocol: http
     host: localhost
-    port: 3002
+    port: 3004
 environments:
     -
         platform: local
@@ -10,11 +14,7 @@ environments:
         version: current
     -
         platform: node
-        version: 0.11.0
-        enabled: $TEST_NVM
-    -
-        platform: node
-        version: 4.1.2
+        version: 4.0.0
         enabled: $TEST_NVM
     -
         platform: node
@@ -28,6 +28,20 @@ environments:
         platform: node
         version: 7.0.0
         enabled: $TEST_NVM
+    -
+        platform: npm
+        nodeVersion: current
+        global: true
+    # -
+    #     platform: npm
+    #     nodeVersion: 4.0.0
+    #     global: true
+    #     enabled: $TEST_NVM
+    # -
+    #     platform: npm
+    #     nodeVersion: 7.0.0
+    #     global: true
+    #     enabled: $TEST_NVM
     -
         platform: browser
         browser: chrome
