@@ -29,7 +29,7 @@ DEFAULT_CONFIG =
         }
     ]
 
-INIT_FILE_PATH = slash pathUtils.join __dirname, './initFile.coffee'
+INIT_FILE_PATH = slash pathUtils.join __dirname, './initFile.js'
 
 getConfigRawFile = ->
     for path in CONFIG_FILE_PATHS

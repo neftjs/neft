@@ -25,7 +25,7 @@ exports.LogsReader = class LogsReader
             log PROCESS_LOG_PREFIX + msg
         else if content.indexOf(logger.ERROR) is 0
             errMsg = content.slice logger.ERROR.length
-            errMsg = decodeURIComponent errMsg
+            errMsg = try decodeURIComponent errMsg catch then errMsg
             @error = new Error errMsg
             log.error logger.TEST_PREFIX + errMsg
         else if content is logger.SUCCESS

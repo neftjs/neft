@@ -52,7 +52,8 @@ exports.isPlatformFilePath = do ->
     PLATFORM_TYPES =
         local:
             local: true
-            server: true
+        npm:
+            npm: true
         node:
             node: true
             server: true
