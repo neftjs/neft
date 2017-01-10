@@ -12,7 +12,7 @@ module.exports = (platform, options, onBuild) ->
     shouldBuildAgain = false
     files = Object.create null
 
-    ignored = '^(?:build|index\.js|local\.json|node_modules)|\.git'
+    ignored = '^(?:build|index\.js|local\.json|node_modules)|\.'
     if options.out
         ignored += "|#{options.out}"
 
