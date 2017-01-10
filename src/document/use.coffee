@@ -3,6 +3,7 @@
 utils = require 'src/utils'
 assert = require 'src/assert'
 log = require 'src/log'
+signal = require 'src/signal'
 
 assert = assert.scope 'View.Use'
 log = log.scope 'View', 'Use'
@@ -33,7 +34,7 @@ module.exports = (File) -> class Use
 
             if @isRendered
                 @revert()
-                @render()
+                signal.setImmediate @render
         return
 
     queue = []
@@ -60,6 +61,7 @@ module.exports = (File) -> class Use
         @refName = @node.props.ref
         @usedComponent = null
         @isRendered = false
+        @render = utils.bindFunctionContext @render, @
 
         @node.onVisibleChange visibilityChangeListener, @
         @node.onPropsChange propsChangeListener, @
