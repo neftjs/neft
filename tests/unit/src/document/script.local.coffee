@@ -146,7 +146,7 @@ describe 'Document script', ->
             renderParse view
             assert.is view.scope.aNode, view.node
 
-    describe.onServer '[filename]', ->
+    describe '[filename]', ->
         it 'supports .coffee files', ->
             view = Document.fromHTML uid(), '''
                 <script filename="a.coffee">
@@ -219,7 +219,7 @@ describe 'Document script', ->
         renderParse view
         assert.is view.node.stringify(), '<&&</b>'
 
-    it.onServer 'accepts `src` attribute', ->
+    it 'accepts `src` attribute', ->
         filename = "tmp#{uid()}.js"
         path = "#{os.tmpdir()}/#{filename}"
         file = 'module.exports = function(){ this.a = 1; }'
@@ -235,7 +235,7 @@ describe 'Document script', ->
         renderParse view
         assert.is view.node.stringify(), '1'
 
-    it.onServer 'accepts relative `src` attribute', ->
+    it 'accepts relative `src` attribute', ->
         scriptFilename = "tmp#{uid()}.js"
         scriptPath = "#{os.tmpdir()}/#{scriptFilename}"
         file = 'module.exports = function(){ this.a = 1; }'

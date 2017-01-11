@@ -76,8 +76,8 @@ runEnvs = (callback) ->
     runNext()
 
 reportAndExit = (err) ->
-    log.error err
     if err
+        log.error err
         log.error 'All tests ended: FAILURE'
         process.exit 1
     else

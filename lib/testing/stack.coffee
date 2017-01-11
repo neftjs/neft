@@ -2,6 +2,8 @@
 
 {utils, log} = Neft
 
+exports.onlyScopes = 0
+exports.onlyTests = 0
 exports.currentScope = null
 exports.currentTest = null
 exports.testsAmount = 0

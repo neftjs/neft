@@ -5,7 +5,6 @@
     {utils, log} = Neft
     stack = require './stack'
     logger = require './logger'
-    modifiers = require './modifiers'
     screenshot = require './screenshot/client'
 
     {isArray} = Array
@@ -15,14 +14,18 @@
     scopes = [new Scope]
     currentScope = scopes[0]
 
+    ONLY_OPT = 1 << 1
+
 # describe(*String* message, *Function* tests)
 
-    exports.describe = (msg, func) ->
+    exports.describe = (msg, func, opts = 0) ->
         beforeEach = utils.NOP
 
         # new scope
         scope = new Scope
         scope.message = msg
+        if scope.isOnly = (opts & ONLY_OPT) > 0
+            stack.onlyScopes += 1
         scopes.push scope
 
         # before/after functions
@@ -36,30 +39,32 @@
         # save as last
         currentScope = scope
 
-        # filter children tests
-        try
-            func()
-        catch err
-            console.error err
+        # children tests
+        func()
 
         # set parent as last
         scopes.pop()
         currentScope = utils.last scopes
         return
 
-    modifiers.applyAll exports.describe
+# describe.only(*String* message, *Function* tests)
+
+    exports.describe.only = (msg, func) ->
+        exports.describe msg, func, ONLY_OPT
 
 # it(*String* message, *Function* test)
 
 The given test function can contains optional *callback* argument.
 
-    exports.it = (msg, func) ->
+    exports.it = (msg, func, opts = 0) ->
         testScope = currentScope
 
         # new test
         test = new Test
         test.message = msg
         test.testFunction = func
+        if test.isOnly = (opts & ONLY_OPT) > 0
+            stack.onlyTests += 1
 
         # add test into scope
         scope = utils.last scopes
@@ -68,7 +73,10 @@ The given test function can contains optional *callback* argument.
 
         return
 
-    modifiers.applyAll exports.it
+# it.only(*String* message, *Function* test)
+
+    exports.it.only = (msg, func) ->
+        exports.it msg, func, ONLY_OPT
 
 # beforeEach(*Function* code)
 
@@ -76,15 +84,11 @@ The given test function can contains optional *callback* argument.
         currentScope.beforeFunctions.push func
         return
 
-    modifiers.applyAll exports.beforeEach
-
 # afterEach(*Function* code)
 
     exports.afterEach = (func) ->
         currentScope.afterFunctions.push func
         return
-
-    modifiers.applyAll exports.afterEach
 
 # whenChange(*Object* watchObject, *Function* callback, [*Integer* maxDelay = `1000`])
 
