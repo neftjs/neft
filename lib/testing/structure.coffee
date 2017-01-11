@@ -11,6 +11,7 @@ class Scope
         @children = []
         @beforeFunctions = []
         @afterFunctions = []
+        @isOnly = false
         Object.seal @
 
     run: do ->
@@ -41,6 +42,7 @@ class Test
         @onDone = null
         @onEnd = utils.bindFunctionContext @onEnd, @
         @preventEnding = false
+        @isOnly = false
         Object.seal @
 
     onEnd: (err) ->
@@ -68,6 +70,18 @@ class Test
         return
 
     run: (callback) ->
+        if not @isOnly and stack.onlyTests + stack.onlyScopes > 0
+            shouldRun = false
+            if stack.onlyScopes > 0
+                scope = @parent
+                while scope
+                    if scope.isOnly
+                        shouldRun = true
+                        break
+                    scope = scope.parent
+            unless shouldRun
+                return callback null
+
         stack.currentTest = @
         @_callback = callback
 
