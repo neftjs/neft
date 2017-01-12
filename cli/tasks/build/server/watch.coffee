@@ -38,15 +38,25 @@ module.exports = (platform, options, onBuild) ->
         ignored: new RegExp ignored
         ignoreInitial: true
     chokidar.watch('.', chokidarOptions).on 'all', (event, path) ->
+        # do nothing on internal watcher error
+        if event is 'error'
+            return
+
         # omit hidden files
         if path[0] is '.'
             return
 
-        # do nothing when file has not been modified
-        file = moduleCache.getFile path
-        if files[path] is file
-            return
-        files[path] = file
+        # always rebuild on directory changes
+        unless event in ['addDir', 'unlinkDir']
+            # always rebuild on file removed
+            if event is 'unlink'
+                delete files[path]
+            else
+                # do nothing when file has not been modified
+                file = moduleCache.getFile path
+                if files[path] is file
+                    return
+                files[path] = file
 
         # add to changed files
         if event is 'change'
