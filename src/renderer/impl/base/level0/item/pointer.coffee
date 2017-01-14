@@ -162,6 +162,14 @@ module.exports = (impl) ->
 
                 captureItems impl.window, e._x, e._y, onItem
 
+                # exit all entered items on touch screen
+                if impl.Renderer.Screen.touch
+                    while item = hoverItems.pop()
+                        data = item._impl
+                        data.pointerHover = false
+                        data.pointerMoveFlag = 0
+                        emitSignal item.pointer, 'onExit', event
+
                 unless event._stopPropagation
                     for item in itemsToRelease by -1
                         if item
