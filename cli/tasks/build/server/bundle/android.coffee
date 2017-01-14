@@ -15,38 +15,37 @@ CUSTOM_NATIVE_DIR = './native/android'
 CUSTOM_NATIVE_OUT_DIR = "#{NATIVE_OUT_DIR}customapp/"
 STATIC_DIR = './static'
 STATIC_OUT_DIR = "#{OUT_DIR}app/src/main/assets/static"
+JS_FILE_PATH = "app/src/main/assets/javascript/neft.coffee.mustache"
 BUNDLE_DIR = './build/android/'
 RUNTIME_PATH = pathUtils.resolve __dirname, '../../../../../runtimes/android'
 
 mustacheFiles = []
 
-prepareFiles = (config) ->
-    logtime = log.time 'Prepare android files'
-    for path in mustacheFiles
-        # get file
-        file = fs.readFileSync path, 'utf-8'
+processMustacheFile = (path, config) ->
+    # get file
+    file = fs.readFileSync path, 'utf-8'
 
-        # get proper relative path
-        relativePath = pathUtils.relative RUNTIME_PATH, path
-        relativePath = relativePath.slice 0, -'.mustache'.length
+    # get proper relative path
+    relativePath = pathUtils.relative RUNTIME_PATH, path
+    relativePath = relativePath.slice 0, -'.mustache'.length
 
-        # compile coffee files
-        if /\.coffee$/.test(relativePath)
-            file = coffee.compile file
-            relativePath = relativePath.slice 0, -'.coffee'.length
-            relativePath += '.js'
+    # compile coffee files
+    if /\.coffee$/.test(relativePath)
+        file = coffee.compile file
+        relativePath = relativePath.slice 0, -'.coffee'.length
+        relativePath += '.js'
 
-        # render file
-        file = Mustache.render file, config
+    # render file
+    file = Mustache.render file, config
 
-        # save file
-        fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
-
-    log.end logtime
+    # save file
+    fs.writeFileSync pathUtils.join(OUT_DIR, relativePath), file, 'utf-8'
+    return
 
 module.exports = (config, callback) ->
     if config.buildBundleOnly
-        prepareFiles config
+        jsFilePath = fs.realpathSync pathUtils.join RUNTIME_PATH, JS_FILE_PATH
+        processMustacheFile jsFilePath, config
         return callback()
 
     # check whether android sdk dir is specified
@@ -94,7 +93,10 @@ module.exports = (config, callback) ->
             fs.copySync nativeDirPath, "#{EXT_NATIVE_OUT_DIR}#{packageName}"
     log.end logtime
 
-    prepareFiles config
+    logtime = log.time 'Prepare android files'
+    for path in mustacheFiles
+        processMustacheFile path, config
+    log.end logtime
 
     # main activity
     androidPackagePath = config.package.android.package.replace /\./g, '/'
