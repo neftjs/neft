@@ -27,7 +27,7 @@ module.exports = (Networking) ->
 
     init: (networking) ->
         impl.networking = networking
-        setImmediate ->
+        requestAnimationFrame ->
             networking.createLocalRequest
                 method: Networking.Request.GET
                 type: Networking.Request.HTML_TYPE
