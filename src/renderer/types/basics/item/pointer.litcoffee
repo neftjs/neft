@@ -197,7 +197,8 @@ Events order:
  5. Exit
  6. Release
  7. Click
- 8. Release (not captured ensured items)
+ 8. Exit (entered items on touch devices)
+ 9. Release (not captured ensured items)
 
 Stopped 'Enter' event will emit 'Move' event on this item.
 
