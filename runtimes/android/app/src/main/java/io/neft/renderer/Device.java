@@ -447,6 +447,7 @@ public class Device {
 
         app.client.pushFloat(x / pixelRatio);
         app.client.pushFloat(y / pixelRatio);
+        app.client.sendData();
 
         return true;
     }

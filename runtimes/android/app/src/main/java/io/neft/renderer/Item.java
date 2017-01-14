@@ -1,9 +1,9 @@
 package io.neft.renderer;
 
+import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import io.neft.App;
 import io.neft.client.InAction;
@@ -18,6 +18,7 @@ public class Item {
 
     public final int id;
     protected Item background;
+    private Rect clipRect;
 
     public ViewGroup view = new FrameLayout(App.getApp().view.getContext());
 
@@ -73,19 +74,33 @@ public class Item {
 
     @OnAction(InAction.SET_ITEM_CLIP)
     public void setClip(boolean val) {
-        view.setClipChildren(val);
+        clipRect = val ? new Rect() : null;
+        reloadClipBounds();
+    }
+
+    private void reloadClipBounds() {
+        if (clipRect != null) {
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+            clipRect.right = params.width;
+            clipRect.bottom = params.height;
+        }
+        view.setClipBounds(clipRect);
     }
 
     @OnAction(InAction.SET_ITEM_WIDTH)
     public void setWidth(float val) {
-        view.getLayoutParams().width = Math.round(dpToPx(val));
-        view.requestLayout();
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.width = Math.round(dpToPx(val));
+        view.setLayoutParams(params);
+        reloadClipBounds();
     }
 
     @OnAction(InAction.SET_ITEM_HEIGHT)
     public void setHeight(float val) {
-        view.getLayoutParams().height = Math.round(dpToPx(val));
-        view.requestLayout();
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.height = Math.round(dpToPx(val));
+        view.setLayoutParams(params);
+        reloadClipBounds();
     }
 
     @OnAction(InAction.SET_ITEM_X)

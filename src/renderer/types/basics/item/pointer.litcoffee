@@ -97,24 +97,31 @@ Enables mouse and touch handling.
 
 ## *Signal* Pointer::onMove(*Item.Pointer.Event* event)
 
-## Hidden *Signal* Pointer::onDragStart()
+        PRESS_SIGNALS =
+            onClick: true
+            onPress: true
+            onRelease: true
 
-## Hidden *Signal* Pointer::onDragEnd()
-
-## Hidden *Signal* Pointer::onDragEnter()
-
-## Hidden *Signal* Pointer::onDragExit()
-
-## Hidden *Signal* Pointer::onDrop()
+        MOVE_SIGNALS =
+            onEnter: true
+            onExit: true
+            onMove: true
 
         onLazySignalInitialized = (pointer, name) ->
+            # automatically initialize pressed and hover properties
+            # if required events will be listened
+            if PRESS_SIGNALS[name] or MOVE_SIGNALS[name]
+                initializePressed pointer
+                if MOVE_SIGNALS[name]
+                    initializeHover pointer
             Impl.attachItemSignal.call pointer, 'pointer', name # TODO: send here an item
             return
 
-        @SIGNALS = ['onClick', 'onPress', 'onRelease',
-                    'onEnter', 'onExit', 'onWheel', 'onMove',
-                    'onDragStart', 'onDragEnd',
-                    'onDragEnter', 'onDragExit', 'onDrop']
+        @SIGNALS = Object.keys(PRESS_SIGNALS).concat(Object.keys(MOVE_SIGNALS)).concat [
+            'onWheel'
+            # 'onDragStart', 'onDragEnd',
+            # 'onDragEnter', 'onDragExit', 'onDrop'
+        ]
 
         for signalName in @SIGNALS
             signal.Emitter.createSignal @, signalName, onLazySignalInitialized
@@ -125,7 +132,7 @@ Whether the pointer is currently pressed.
 
 ## *Signal* Pointer::onPressedChange(*Boolean* oldValue)
 
-        intitializePressed = do ->
+        initializePressed = do ->
             onPress = (event) ->
                 event.stopPropagation = false
                 @pressed = true
@@ -145,9 +152,9 @@ Whether the pointer is currently pressed.
             defaultValue: false
             namespace: 'pointer'
             parentConstructor: ctor
-            signalInitializer: intitializePressed
+            signalInitializer: initializePressed
             getter: (_super) -> ->
-                intitializePressed @
+                initializePressed @
                 _super.call @
 
 ## *Boolean* Pointer::hover = `false`

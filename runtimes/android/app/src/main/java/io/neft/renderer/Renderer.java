@@ -24,12 +24,13 @@ public class Renderer {
 
         items.add(null);
 
-        View view = new View(App.getApp().getApplicationContext());
+        final View view = new View(App.getApp().getApplicationContext());
         App.getApp().view.addView(view);
         view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
                 onAnimationFrame();
+                view.invalidate();
                 return true;
             }
         });
