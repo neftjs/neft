@@ -26,7 +26,7 @@ module.exports = (File) -> class Use
 
     visibilityChangeListener = ->
         if @file.isRendered and not @isRendered
-            @render()
+            @renderImmediate()
 
     propsChangeListener = (name) ->
         if name is 'component'
@@ -34,7 +34,7 @@ module.exports = (File) -> class Use
 
             if @isRendered
                 @revert()
-                signal.setImmediate @render
+                @renderImmediate()
         return
 
     queue = []
@@ -61,7 +61,8 @@ module.exports = (File) -> class Use
         @refName = @node.props.ref
         @usedComponent = null
         @isRendered = false
-        @render = utils.bindFunctionContext @render, @
+        @isRenderPending = false
+        @_renderImmediateCallback = utils.bindFunctionContext @_renderImmediateCallback, @
 
         @node.onVisibleChange visibilityChangeListener, @
         @node.onPropsChange propsChangeListener, @
@@ -70,6 +71,18 @@ module.exports = (File) -> class Use
         if @constructor is Use
             Object.preventExtensions @
         `//</development>`
+
+    renderImmediate: ->
+        unless @isRenderPending
+            @isRenderPending = true
+            signal.setImmediate @_renderImmediateCallback
+        return
+
+    _renderImmediateCallback: ->
+        @isRenderPending = false
+        unless @isRendered
+            @render()
+        return
 
     render: (file) ->
         assert.instanceOf file, File if file?

@@ -4,6 +4,7 @@
 
 utils = require 'src/utils'
 assert = require 'src/assert'
+signal = require 'src/signal'
 
 module.exports = (File) -> class Log
     @__name__ = 'Log'
@@ -23,7 +24,7 @@ module.exports = (File) -> class Log
 
     listenOnTextChange = (node, log) ->
         if node instanceof File.Element.Text
-            node.onTextChange log.log, log
+            node.onTextChange log.render, log
         else
             for child in node.children
                 listenOnTextChange child, log
@@ -33,7 +34,10 @@ module.exports = (File) -> class Log
         assert.instanceOf @file, File
         assert.instanceOf @node, File.Element
 
-        @node.onPropsChange @log, @
+        @isRenderPending = false
+        @log = utils.bindFunctionContext @log, @
+
+        @node.onPropsChange @render, @
         listenOnTextChange @node, @
 
         `//<development>`
@@ -42,6 +46,17 @@ module.exports = (File) -> class Log
         `//</development>`
 
     render: ->
+        unless @isRenderPending
+            @isRenderPending = true
+            signal.setImmediate @log
+        return
+
+    log: ->
+        @isRenderPending = false
+
+        unless @file.isRendered
+            return
+
         if utils.isEmpty(@node.props)
             console.log @node.stringifyChildren()
         else
@@ -53,10 +68,6 @@ module.exports = (File) -> class Log
                 log.push key, '=', val
             console.log.apply console, log
         return
-
-    log: ->
-        if @file.isRendered
-            @render()
 
     clone: (original, file) ->
         node = original.node.getCopiedElement @node, file.node
