@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
@@ -19,6 +18,17 @@ public class DSScrollable extends NativeItem {
         private DSScrollable scrollable;
         private HorizontalScrollView hScroll;
 
+        class HorizontalScrollableView extends HorizontalScrollView {
+            public HorizontalScrollableView(Context context) {
+                super(context);
+            }
+
+            @Override
+            protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+                scrollable.sendContentX();
+            }
+        }
+
         public ScrollableView(Context context) {
             super(context);
 
@@ -27,28 +37,17 @@ public class DSScrollable extends NativeItem {
                     ViewGroup.LayoutParams.MATCH_PARENT
             ));
 
-            hScroll = new HorizontalScrollView(context);
+            hScroll = new HorizontalScrollableView(context);
             hScroll.setLayoutParams(new LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
             addView(hScroll);
+        }
 
-            getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                @Override
-                public void onScrollChanged() {
-                    float scrollY = scrollable.pxToDp(getScrollY());
-                    scrollable.pushEvent("contentYChange", scrollY);
-                }
-            });
-
-            hScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                @Override
-                public void onScrollChanged() {
-                    float scrollX = scrollable.pxToDp(getScrollX());
-                    scrollable.pushEvent("contentXChange", scrollX);
-                }
-            });
+        @Override
+        protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+            scrollable.sendContentY();
         }
 
         @Override
@@ -82,6 +81,16 @@ public class DSScrollable extends NativeItem {
         return (ScrollableView) itemView;
     }
 
+    private void sendContentX() {
+        float scrollX = pxToDp(getItemView().hScroll.getScrollX());
+        pushEvent("contentXChange", scrollX);
+    }
+
+    private void sendContentY() {
+        float scrollY = pxToDp(getItemView().getScrollY());
+        pushEvent("contentYChange", scrollY);
+    }
+
     @OnSet("contentItem")
     public void setContentItem(Item val) {
         if (contentItem != null) {
@@ -95,11 +104,15 @@ public class DSScrollable extends NativeItem {
 
     @OnSet("contentX")
     public void setContentX(int val) {
-        getItemView().hScroll.scrollTo(val, 0);
+        int px = Math.round(dpToPx(val));
+        getItemView().hScroll.scrollTo(px, 0);
+        sendContentX();
     }
 
     @OnSet("contentY")
     public void setContentY(int val) {
-        getItemView().scrollTo(0, val);
+        int px = Math.round(dpToPx(val));
+        getItemView().scrollTo(0, px);
+        sendContentY();
     }
 }
