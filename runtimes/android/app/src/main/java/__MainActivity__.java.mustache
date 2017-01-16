@@ -3,6 +3,7 @@ package {{&package.android.package}};
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
@@ -20,6 +21,16 @@ public class MainActivity extends io.neft.MainActivity {
         setContentView(R.layout.activity_main);
         this.view = (WindowView) findViewById(R.id.layout);
 
+        this.view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                init();
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+    }
+
+    private void init() {
         {{^buildServerUrl}}
         init(getAssetFile(ASSET_FILE_PATH));
         {{/buildServerUrl}}
