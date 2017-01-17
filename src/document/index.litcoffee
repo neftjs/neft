@@ -447,9 +447,6 @@ Corresponding node handler: *n-onRevert=""*.
                 if @scope?.node is @node
                     emitSignal @scope, 'onRender'
 
-                for input in @inputs
-                    input.onRender()
-
                 @
 
 ## *Document* Document::revert()

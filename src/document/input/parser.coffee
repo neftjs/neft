@@ -78,13 +78,7 @@ exports.parse = (text) ->
 
     connections = eval "[#{parsed.connections}]"
 
-    updateOnCreate = true
-    for connection in connections
-        unless updateOnCreate = shouldBeUpdatedOnCreate(connection)
-            break
-
     func: null
     tree: null
     body: funcBody
     connections: connections
-    updateOnCreate: updateOnCreate

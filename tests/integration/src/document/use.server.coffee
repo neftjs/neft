@@ -50,3 +50,47 @@ describe 'Document use', ->
 
         renderParse view
         assert.is view.node.stringify(), '<b></b>'
+
+    it 'does not render hidden component', ->
+        view = createView '''
+            <script>
+            this.onBeforeRender(function () {
+                this.logs = [];
+            });
+            </script>
+            <component name="a-b">
+                <script>
+                this.onRender(function () {
+                    this.props.logs.push(this.props.name);
+                });
+                </script>
+            </component>
+            <a-b logs="${this.logs}" name="fail" n-if="${false}" />
+            <a-b logs="${this.logs}" name="ok" />
+        '''
+        view = view.clone()
+        renderParse view
+        assert.isEqual view.scope.logs, ['ok']
+
+    it 'does not render component inside hidden element', ->
+        view = createView '''
+            <script>
+            this.onBeforeRender(function () {
+                this.logs = [];
+            });
+            </script>
+            <component name="a-b">
+                <script>
+                this.onRender(function () {
+                    this.props.logs.push(this.props.name);
+                });
+                </script>
+            </component>
+            <div n-if="${false}">
+                <a-b logs="${this.logs}" name="fail" />
+            </div>
+            <a-b logs="${this.logs}" name="ok" />
+        '''
+        view = view.clone()
+        renderParse view
+        assert.isEqual view.scope.logs, ['ok']

@@ -24,7 +24,10 @@ module.exports = (File) -> class Use
             obj = new Use file, node
         obj
 
-    visibilityChangeListener = ->
+    visibilityChangeListener = (oldValue) ->
+        value = not oldValue
+        isHidden = if value then -1 else 1
+        @hiddenDepth += isHidden
         if @file.isRendered and not @isRendered
             @renderImmediate()
 
@@ -62,9 +65,16 @@ module.exports = (File) -> class Use
         @usedComponent = null
         @isRendered = false
         @isRenderPending = false
+        @hiddenDepth = 0
         @_renderImmediateCallback = utils.bindFunctionContext @_renderImmediateCallback, @
 
-        @node.onVisibleChange visibilityChangeListener, @
+        do =>
+            elem = @node
+            while elem
+                if 'n-if' of elem.props
+                    elem.onVisibleChange visibilityChangeListener, @
+                elem = elem.parent
+
         @node.onPropsChange propsChangeListener, @
 
         `//<development>`
@@ -87,7 +97,7 @@ module.exports = (File) -> class Use
     render: (file) ->
         assert.instanceOf file, File if file?
 
-        return unless @node.visible
+        return if @hiddenDepth > 0
 
         if @isRendered
             @revert()
