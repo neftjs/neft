@@ -63,7 +63,7 @@ It's save to use. Automatically cleared when view is *reverted*.
 
 Data can be read in [String Interpolation](/views.html#string-interpolation) under the `${state}` object.
 
-Default `state` must be defined in `onRender` signal.
+Default `state` must be defined in `onBeforeRender` signal.
 
 ```xhtml
 <script>
@@ -72,7 +72,7 @@ this.onCreate(function () {
         this.state.set('counterValue', this.state.counterValue + 1);
     };
 });
-this.onRender(function () {
+this.onBeforeRender(function () {
     this.state.set('counterValue', 1);
     this.increment();
 });
@@ -127,7 +127,7 @@ More about it you'll learn in the [next chapter](/views/virtual-dom.html) but yo
 
 ```xhtml
 <script>
-this.onRender(function () {
+this.onBeforeRender(function () {
     const spans = this.node.queryAll('p > span');
     console.log(spans);
     // [<span>first</span>, <span>third</span>]
@@ -171,7 +171,7 @@ You can use to make, for instance, a *HTTP* request.
 
 ```xhtml
 <script>
-this.onRender(function () {
+this.onBeforeRender(function () {
     this.context.app.networking.get('/users', (err, resp) => {});
 });
 </script>

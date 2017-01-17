@@ -60,8 +60,7 @@ class DocumentBinding extends Binding
 
     update: ->
         # disable updates for reverted files
-        unless @ctx.file.isRendered
-            @ctx.isDirty = true
+        if not @ctx.isRendered
             return
         `//<development>`
         @failed = false
@@ -117,9 +116,9 @@ module.exports = (File) -> class Input extends signal.Emitter
 
         super()
 
+        @isRendered = false
         @target = null
         @context = null
-        @isDirty = false
         @binding = null
 
         initBindingConfig @bindingConfig
@@ -135,8 +134,6 @@ module.exports = (File) -> class Input extends signal.Emitter
     registerBinding: ->
         assert.isNotDefined @binding
         @binding = DocumentBinding.New @bindingConfig.tree, @
-        if @bindingConfig.updateOnCreate
-            @isDirty = true
         return
 
     render: ->
@@ -148,15 +145,12 @@ module.exports = (File) -> class Input extends signal.Emitter
             @onTargetChange.emit()
         if oldContext isnt @context
             @onContextChange.emit()
-        return
-
-    onRender: ->
-        if @isDirty
-            @isDirty = false
-            @binding.update()
+        @isRendered = true
+        @binding?.update()
         return
 
     revert: ->
+        @isRendered = false
         return
 
     clone: (original, file) ->
@@ -173,7 +167,6 @@ module.exports = (File) -> class Input extends signal.Emitter
         arr[JSON_BINDING] =
             body: @bindingConfig.body
             connections: @bindingConfig.connections
-            updateOnCreate: @bindingConfig.updateOnCreate
         arr
 
     @Text = require('./input/text.coffee') File, @

@@ -120,7 +120,13 @@ describe 'Document Element', ->
             # change
             elem.props.set 'title', obj
             assert.is elem.props['title'], obj
-            assert.is elem.stringify(), '<p title="[object Object]" class="a bb c2" data-custom="customValue"></p>'
+            assert.is elem.stringify(), '''
+                <p \
+                  title="[object Object]" \
+                  class="a bb c2" \
+                  data-custom="customValue"\
+                ></p>
+            '''
 
             elem.props.set 'title', title
 
@@ -158,7 +164,17 @@ describe 'Document Element', ->
         assert.is elem.stringify(), '<b><em></em></b><u></u><p></p>'
 
     describe 'queryAll() works with selector', ->
-        doc2 = Element.fromHTML "<div><b class='first second'><u color='blue' attr='1'>text1<u></u></u></b></div><div attr='2'><blank><em>text2</em></blank><em></em></div>"
+        doc2 = Element.fromHTML """
+            <div>\
+                <b class='first second'>\
+                    <u color='blue' attr='1'>\
+                        text1\
+                        <u></u>\
+                    </u>\
+                </b>\
+            </div>\
+            <div attr='2'><blank><em>text2</em></blank><em></em></div>
+        """
         doc2div1 = doc2.children[0]
         doc2b = doc2div1.children[0]
         doc2u = doc2b.children[0]
@@ -222,7 +238,9 @@ describe 'Document Element', ->
             assert.isEqual doc2.queryAll('b.first.second.third'), []
 
         it '*', ->
-            assert.isEqual doc2.queryAll('*'), [doc2div1, doc2b, doc2u, doc2u2, doc2div2, doc2em1, doc2em2], maxDeep: 1
+            assert.isEqual doc2.queryAll('*'), [
+                doc2div1, doc2b, doc2u, doc2u2, doc2div2, doc2em1, doc2em2
+            ], maxDeep: 1
 
         it '*[foo]', ->
             assert.isEqual doc2.queryAll('*[color]'), [doc2u], maxDeep: 1
@@ -231,11 +249,17 @@ describe 'Document Element', ->
             assert.isEqual doc2.queryAll('div > * > u[color]'), [doc2u], maxDeep: 1
 
         it 'E > * > F[foo], F[foo]', ->
-            assert.isEqual doc2.queryAll('div > * > u[color], div[attr]'), [doc2u, doc2div2], maxDeep: 1
-            assert.isEqual doc2.queryAll('div > * > u[color],div[attr]'), [doc2u, doc2div2], maxDeep: 1
+            assert.isEqual doc2.queryAll('div > * > u[color], div[attr]'), [
+                doc2u, doc2div2
+            ], maxDeep: 1
+            assert.isEqual doc2.queryAll('div > * > u[color],div[attr]'), [
+                doc2u, doc2div2
+            ], maxDeep: 1
 
         it '#text', ->
-            assert.isEqual doc2.queryAll('#text'), [doc2u.children[0], doc2em1.children[0]], maxDeep: 1
+            assert.isEqual doc2.queryAll('#text'), [
+                doc2u.children[0], doc2em1.children[0]
+            ], maxDeep: 1
 
         it 'E #text', ->
             assert.isEqual doc2.queryAll('em #text'), [doc2em1.children[0]], maxDeep: 1
@@ -244,7 +268,10 @@ describe 'Document Element', ->
             assert.isEqual doc2.queryAll('div > em'), [doc2em1, doc2em2], maxDeep: 1
 
     describe 'query() works with selector', ->
-        doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><blank><em></em></blank></div>"
+        doc2 = Element.fromHTML """
+            <div><b><u color='blue' attr='1'></u></b></div>\
+            <div attr='2'><blank><em></em></blank></div>
+        """
         doc2div1 = doc2.children[0]
         doc2b = doc2div1.children[0]
         doc2u = doc2b.children[0]
@@ -264,7 +291,10 @@ describe 'Document Element', ->
             assert.is doc2.query('div > em'), doc2em
 
     describe 'queryParents() works with selector', ->
-        doc2 = Element.fromHTML "<div><b><u color='blue' attr='1'></u></b></div><div attr='2'><blank><em></em></blank></div>"
+        doc2 = Element.fromHTML """
+            <div><b><u color='blue' attr='1'></u></b></div>\
+            <div attr='2'><blank><em></em></blank></div>
+        """
         doc2div1 = doc2.children[0]
         doc2b = doc2div1.children[0]
         doc2u = doc2b.children[0]

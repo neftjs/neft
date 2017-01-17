@@ -547,7 +547,7 @@ describe 'styles', ->
             test = ->
                 childItem = divNode.style.children.firstChild
                 for item in divNode.props['n-each']
-                    assert.is childItem.text, item+''
+                    assert.is childItem.text, item + ''
                     childItem = childItem.nextSibling
                 return
 
@@ -560,7 +560,7 @@ describe 'styles', ->
 
             test()
 
-            divNode.props.set 'n-each', [5,6,7,8]
+            divNode.props.set 'n-each', [5, 6, 7, 8]
             test()
             return
 
