@@ -27,6 +27,8 @@ describe 'Log', ->
             _writeError: spy (msg) ->
 
         testLog = new TestImpl
+        testLog._write = TestImpl::_write
+        testLog._writeError = TestImpl::_writeError
 
         Log.setGlobalLinesPrefix ''
 

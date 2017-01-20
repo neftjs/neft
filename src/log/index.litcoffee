@@ -67,7 +67,8 @@ const { log } = Neft;
                 @[name] = bind.apply @[name], args
                 @[name].once = callOnce
 
-            @[key] = value for key, value of @
+            @scope = @scope.bind @
+            @end = @end.bind @
             if typeof @['lo' + 'g'] is 'function'
                 func = =>
                     @log.apply func, arguments

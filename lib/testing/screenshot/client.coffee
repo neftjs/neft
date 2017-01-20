@@ -24,7 +24,11 @@ exports.initialize = (callback) ->
     app.networking.post url, clientUid: UID, (err) ->
         getControlRect().parent = null
         if err
-            callback new Error "Cannot initialize screenshots"
+            callback new Error """
+                Cannot initialize screenshots;
+                Make sure application is visible on the screen and \
+                can be captured by screenshot
+            """
         else
             requestAnimationFrame -> callback()
     return

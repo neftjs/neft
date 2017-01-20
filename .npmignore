@@ -3,7 +3,7 @@ coverage
 /build
 tmp
 _book
-/tests_results
+tests_results
 /examples
 /tests
 /docs

@@ -15,6 +15,9 @@ getInitPath = (env) ->
     path = config.getPlatformOutFolder 'node'
     pathUtils.join path, 'build/app-node-develop.js'
 
+exports.getName = (env) ->
+    "Node v#{env.version} tests"
+
 exports.execCommand = (nodeVersion, command, logsReader, callback) ->
     mainErr = null
     prefix = ". $NVM_DIR/nvm.sh && nvm exec #{nodeVersion} "

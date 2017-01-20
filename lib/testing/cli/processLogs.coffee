@@ -1,8 +1,9 @@
 'use strict'
 
 logger = require '../logger'
+cliLogger = require './logger'
 
-{log} = Neft
+{log, signal} = Neft
 
 PROCESS_LOG_PREFIX = '[PROCESS] '
 SCREENSHOT_TEST_PREFIX = '[SCREENSHOT TEST] '
@@ -12,15 +13,21 @@ getLoggerLog = (log) ->
         log.slice logger.TEST_PREFIX.length
 
 exports.LogsReader = class LogsReader
-    constructor: ->
+    constructor: (@tag) ->
         @error = null
         @terminated = false
+        @onTest = signal.create()
     log: (data) ->
         msg = String(data).trim()
         unless msg
             return
+
         if msg.indexOf('\n') >= 0
             return msg.split('\n').forEach @log, @
+
+        if @tag
+            cliLogger.log @tag, msg
+
         unless content = getLoggerLog(msg)
             log PROCESS_LOG_PREFIX + msg
         else if content.indexOf(logger.ERROR) is 0
@@ -36,4 +43,5 @@ exports.LogsReader = class LogsReader
             @terminated = true
             @error = new Error logger.FAILURE
         else
+            @onTest.emit msg
             log msg
