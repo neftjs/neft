@@ -113,6 +113,13 @@ runAndLog = (env, logsReader, callback) ->
         if logsReader.terminated
             chromeProcess.kill()
 
+exports.getName = (env) ->
+    {path} = env
+    if path
+        "Chrome #{env.path} tests"
+    else
+        "Chrome tests"
+
 exports.run = (env, logsReader, callback) ->
     if env.path
         return runAndLog env, logsReader, callback

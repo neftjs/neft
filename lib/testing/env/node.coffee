@@ -15,6 +15,9 @@ getInitPath = (env) ->
     path = config.getPlatformOutFolder 'node'
     pathUtils.join path, 'build/app-node-develop.js'
 
+exports.getName = ->
+    "Current Node tests"
+
 exports.execFile = (path, logsReader, callback) ->
     mainErr = null
     nodeProcess = childProcess.fork path, PROCESS_OPTIONS

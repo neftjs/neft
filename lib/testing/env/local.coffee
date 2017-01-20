@@ -31,6 +31,9 @@ runTestsInProcess = (logsReader, callback) ->
         log.info 'local tests terminated'
         callback mainErr or logsReader.error
 
+exports.getName = ->
+    "Local tests"
+
 exports.run = (env, logsReader, callback) ->
     testsFile.saveBuildTestsFile TARGET, (err) ->
         if err

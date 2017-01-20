@@ -5,7 +5,15 @@ config = require './config'
 
 {log} = Neft
 
+server = null
+
+exports.isRun = ->
+    server?
+
 exports.runHttpServer = (callback) ->
+    if server
+        return callback()
+
     {port, host} = config.getConfig().browserHttpServer
 
     log.info 'HTTP server running'
@@ -15,3 +23,6 @@ exports.runHttpServer = (callback) ->
         log.info 'HTTP server run'
         callback()
     server
+
+exports.closeServer = ->
+    server?.close()

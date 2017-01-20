@@ -23,10 +23,6 @@ logError = (error) ->
 exports.onTestsStart = ->
 
 exports.onTestsEnd = ->
-    # log all errors
-    for error in stack.errors
-        logError error
-
     # log result
     if stack.errors.length
         log exports.FAILURE

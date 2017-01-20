@@ -22,16 +22,16 @@ PACKAGE_FILENAME = do ->
 getInitPath = ->
     pathUtils.join __dirname, './local/initFile.js'
 
-buildProject = (callback) ->
-    log.info "creating npm package"
+buildProject = (logsReader, callback) ->
+    logsReader.log "creating npm package"
     childProcess.exec 'npm pack', (err) ->
         if err
             return callback err
-        log.info "npm package created"
+        logsReader.log "npm package created"
         callback null
 
-installProjectOnNode = (env, callback) ->
-    log.info "installing npm package"
+installProjectOnNode = (env, logsReader, callback) ->
+    logsReader.log "installing npm package"
     cmd = "npm install #{PACKAGE_FILENAME}"
     if env.global
         cmd += " -g"
@@ -39,23 +39,23 @@ installProjectOnNode = (env, callback) ->
         log.error stderr
         log stdout
         fs.unlinkSync PACKAGE_FILENAME
-        log.info "npm package installed"
+        logsReader.log "npm package installed"
         callback null
 
-installProjectOnNvm = (env, callback) ->
-    log.info "installing npm package on nvm"
+installProjectOnNvm = (env, logsReader, callback) ->
+    logsReader.log "installing npm package on nvm"
     cmd = "npm install #{PACKAGE_FILENAME}"
     if env.global
         cmd += " -g"
     nvmEnv.execCommand env.nodeVersion, cmd, null, (err) ->
         fs.unlinkSync PACKAGE_FILENAME
-        log.info "npm package on nvm installed"
+        logsReader.log "npm package on nvm installed"
         callback null
 
 runTestsInNodeProcess = (env, logsReader, callback) ->
-    log.info 'running npm tests'
+    logsReader.log 'running npm tests'
     nodeEnv.execFile getInitPath(), logsReader, (err) ->
-        log.info 'npm tests terminated'
+        logsReader.log 'npm tests terminated'
         callback err
 
 runTestsInNvmProcess = (env, logsReader, callback) ->
@@ -65,6 +65,9 @@ runTestsInNvmProcess = (env, logsReader, callback) ->
         log.info "npm tests on nvm using node #{nodeVersion} terminated"
         callback err
 
+exports.getName = (env) ->
+    "NVM tests on #{env.nodeVersion} Node"
+
 exports.run = (env, logsReader, callback) ->
     useNvm = env.nodeVersion isnt 'current'
     installProject = if useNvm then installProjectOnNvm else installProjectOnNode
@@ -72,10 +75,10 @@ exports.run = (env, logsReader, callback) ->
     testsFile.saveBuildTestsFile TARGET, (err) ->
         if err
             return callback err
-        buildProject (err) ->
+        buildProject logsReader, (err) ->
             if err
                 return callback err
-            installProject env, (err) ->
+            installProject env, logsReader, (err) ->
                 if err
                     return callback err
                 runTestsInProcess env, logsReader, callback

@@ -29,6 +29,8 @@ compare = (opts) ->
     result is '0'
 
 module.exports = (opts) ->
+    unless opts.rect
+        return false
     crop opts
     resize opts
     compare opts
