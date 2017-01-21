@@ -30,6 +30,9 @@ module.exports = (File) -> class Use
         @hiddenDepth += isHidden
         if @file.isRendered and not @isRendered
             @renderImmediate()
+        if @file.isRendered and @isRendered and @hiddenDepth > 0
+            @revert()
+        return
 
     propsChangeListener = (name) ->
         if name is 'component'
