@@ -75,10 +75,10 @@ Start
 SourceCharacter
     = .
 
-Letter
+Letter "letter"
     = [a-zA-Z_$]
 
-Word
+Word "word"
     = $[a-zA-Z0-9_$]+
 
 Variable
@@ -87,7 +87,7 @@ Variable
 Reference
     = $(Variable ("." Variable)+)
 
-LineTerminator
+LineTerminator "line terminator"
     = [\n\r\u2028\u2029]
 
 LineTerminatorSequence "end of line"
@@ -113,7 +113,7 @@ HexDigit
 DecimalDigit
     = [0-9]
 
-SingleEscapeCharacter
+SingleEscapeCharacter "escape character"
     = "'"
     / '"'
     / "\\"
@@ -143,7 +143,7 @@ MultiLineComment
 SingleLineComment
     = WhiteSpace* "//" (!LineTerminator SourceCharacter)*
 
-StringLiteral "string"
+StringLiteral "string literal"
     = '"' chars:$DoubleStringCharacter* '"' {
         return chars;
     }
@@ -262,28 +262,22 @@ Id "id declaration"
 
 /* FUNCTION */
 
-FunctionBody
-    = FunctionBodyCode (FunctionBodyCode FunctionBodyFunc)* FunctionBodyCode
+FunctionBody "function brackets"
+    = "{" (!"}" FunctionBodyText)* "}"
 
-FunctionBodyCode
-    = FunctionBodyAny (StringLiteral FunctionBodyAny)* FunctionBodyAny
+FunctionBodyText "function code"
+    = StringLiteral / Comment / FunctionBody / SourceCharacter
 
-FunctionBodyAny
-    = [a-zA-Z0-9_\-+=!@#$%^&*()~\[\]\\|<>,.?/ \t\r\n;:]*
-
-FunctionBodyFunc
-    = "{" FunctionBody "}"
-
-FunctionParams
+FunctionParams "function parameters"
     = "(" first:Variable? rest:(WhiteSpace* "," WhiteSpace* d:Variable { return d })* ")" {
         return flattenArray([first, rest])
     }
 
-FunctionName
+FunctionName "function name"
     = (Variable ".")* "on" Variable
 
 Function "function"
-    = name:$FunctionName ":" WhiteSpace* "function" WhiteSpace* params:FunctionParams WhiteSpace* "{" body:$FunctionBody "}" AttributeEnds {
+    = name:$FunctionName (":" WhiteSpace* "function")? WhiteSpace* params:FunctionParams WhiteSpace* body:$FunctionBody AttributeEnds {
         return { type: 'function', name: name, params: params, body: body };
     }
 
@@ -304,7 +298,7 @@ TypeNameRest
     / "['" (("." / "/")? Variable)+ "']"
     / "[\"" (("." / "/")? Variable)+ "\"]"
 
-TypeName "type name"
+TypeName "renderer type name"
     = d:$(Variable TypeNameRest?) {
         if (d.indexOf('/') !== -1 && d.indexOf('[') === -1){
             return d.replace(/\.([a-zA-Z0-9_/]+)$/, "['$1") + "']";
@@ -312,10 +306,10 @@ TypeName "type name"
         return d;
     }
 
-TypeBody
+TypeBody "renderer type body"
     = __ d:Declarations __ { return d }
 
-Type
+Type "renderer type"
     = __ name:TypeName WhiteSpace* "{" body:TypeBody "}" __ {
         var obj = { type: 'object', name: name, id: '', body: body };
 
@@ -339,7 +333,7 @@ MainType
 
 /* IF STATEMENT */
 
-IfStatement
+IfStatement "if statement"
     = __ "if" WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral/$InlineBrackets/SourceCharacter) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
         var obj = { type: 'if', condition: cond, body: body };
         setParentRec(body, obj);
@@ -348,7 +342,7 @@ IfStatement
 
 /* FOR STATEMENT */
 
-SelectStatement
+SelectStatement "select statement"
     = __ type:("select" / "for") WhiteSpace* "(" WhiteSpace* cond:$(!")" d:($StringLiteral) {return d})+ WhiteSpace* ")" WhiteSpace* "{" body:TypeBody "}" __ {
         if (type === "for") {
             warning("'for' statement has been renamed to 'select'");
@@ -375,7 +369,7 @@ CodeBodyAnyChar
 CodeBodyFunc
     = "{" CodeBody "}"
 
-Code
+Code "code"
     = "`" d:$(d:$CodeBody &{return d.trim() ? d : undefined;}) "`" {
         return { type: 'code', body: d }
     }
