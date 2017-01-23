@@ -1,5 +1,6 @@
 'use strict'
 
+{Document} = Neft
 {createView, renderParse, uid} = require './utils.server'
 
 describe 'Document use', ->
@@ -94,3 +95,31 @@ describe 'Document use', ->
         view = view.clone()
         renderParse view
         assert.isEqual view.scope.logs, ['ok']
+
+    it.only 'is reverted when comes invisible', ->
+        view = createView '''
+            <component name="abc">
+                <script>
+                this.onRevert(function () {
+                    this.reverted = (this.reverted + 1) || 1;
+                });
+                </script>
+            </component>
+            <script>
+            this.onBeforeRender(function () {
+                this.state.set('visible', true);
+            });
+            </script>
+            <div ref="container" n-if="${state.visible}">
+                <abc ref="abc" />
+            </div>
+        '''
+        view = view.clone()
+        view.render()
+        {scope} = view
+        {abc} = scope.refs
+
+        assert.is abc.reverted, undefined
+        scope.state.set 'visible', false
+        assert.is abc.reverted, 1
+        assert.instanceOf scope.refs.abc, Document.Element
