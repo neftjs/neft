@@ -468,7 +468,6 @@ Corresponding node handler: *n-onRevert=""*.
 
                 isScopeRender = @scope?.node is @node
 
-                @isRendered = false
                 Document.onBeforeRevert.emit @
                 emitNodeSignal @, 'n-onBeforeRevert'
                 if isScopeRender
@@ -506,6 +505,8 @@ Corresponding node handler: *n-onRevert=""*.
                 @source = null
                 @context = null
                 @inputState.clear()
+
+                @isRendered = false
 
                 Document.onRevert.emit @
                 emitNodeSignal @, 'n-onRevert'

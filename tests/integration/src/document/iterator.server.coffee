@@ -151,3 +151,36 @@ describe 'Document n-each', ->
 
         renderParse view
         assert.is view.node.stringify(), '<ul><ul>2|0|2</ul></ul>'
+
+    it 'reverts components when comes invisible', ->
+        view = createView '''
+            <component name="abc">
+                <script>
+                this.onBeforeRevert(function () {
+                    this.props.onRevertCalled();
+                });
+                </script>
+            </component>
+            <script>
+            this.onCreate(function () {
+                this.onChildRevert = () => {
+                    this.reverted = (this.reverted + 1) || 1;
+                };
+            });
+            this.onBeforeRender(function () {
+                this.state.set('visible', true);
+            });
+            </script>
+            <div ref="container" n-if="${state.visible}">
+                <ul n-each="[2]">
+                    <abc onRevertCalled="${this.onChildRevert}" />
+                </ul>
+            </div>
+        '''
+        view = view.clone()
+        view.render()
+        {scope} = view
+
+        assert.is scope.reverted, undefined
+        scope.state.set 'visible', false
+        assert.is scope.reverted, 1
