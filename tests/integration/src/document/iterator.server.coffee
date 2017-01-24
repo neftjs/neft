@@ -108,6 +108,26 @@ describe 'Document n-each', ->
         renderParse view
         assert.is view.node.stringify(), '<ul>11</ul>'
 
+    it 'access parent component `state` object', ->
+        source = createView '''
+            <script>
+            this.onBeforeRender(function () {
+                this.state.set('a', 1);
+            });
+            this.onRevert(function () {
+                if (this.state) {
+                    throw new Error('State is available but not should be');
+                }
+            });
+            </script>
+            <ul n-each="[1,2]">${state.a}</ul>
+            <ul n-each="[1,2]">${this.state.a}</ul>
+        '''
+        view = source.clone()
+
+        renderParse view
+        assert.is view.node.stringify(), '<ul>11</ul><ul>11</ul>'
+
     it 'internal props are not accessible by scope', ->
         source = createView '''
             <ul n-each="[0]">

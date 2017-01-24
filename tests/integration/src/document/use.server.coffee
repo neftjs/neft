@@ -96,7 +96,7 @@ describe 'Document use', ->
         renderParse view
         assert.isEqual view.scope.logs, ['ok']
 
-    it.only 'is reverted when comes invisible', ->
+    it 'is reverted when comes invisible', ->
         view = createView '''
             <component name="abc">
                 <script>

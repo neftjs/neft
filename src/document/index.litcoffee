@@ -359,6 +359,11 @@ Corresponding node handler: *n-onRevert=""*.
                 @source = source
                 @context = context
 
+                # @scope can be changed before render;
+                # given scope will be used as already rendered;
+                # some of fields from external scope will be available
+                isScopeRender = @scope?.node is @node
+
                 {inputProps, inputRefs} = @
 
                 if props instanceof Dict
@@ -411,9 +416,14 @@ Corresponding node handler: *n-onRevert=""*.
 
                 Document.onBeforeRender.emit @
                 emitNodeSignal @, 'n-onBeforeRender'
-                if @scope?.node is @node
+
+                # if set scope is original, prepare it
+                if isScopeRender
                     @scope.state = @inputState
                     emitSignal @scope, 'onBeforeRender'
+                else
+                    # treat given scope as pointer
+                    @inputArgs[2] = @scope.state
 
                 # inputs
                 for input in @inputs
@@ -444,7 +454,7 @@ Corresponding node handler: *n-onRevert=""*.
                 @isRendered = true
                 Document.onRender.emit @
                 emitNodeSignal @, 'n-onRender'
-                if @scope?.node is @node
+                if isScopeRender
                     emitSignal @scope, 'onRender'
 
                 @
@@ -456,10 +466,12 @@ Corresponding node handler: *n-onRevert=""*.
             ->
                 assert.ok @isRendered
 
+                isScopeRender = @scope?.node is @node
+
                 @isRendered = false
                 Document.onBeforeRevert.emit @
                 emitNodeSignal @, 'n-onBeforeRevert'
-                if @scope?.node is @node
+                if isScopeRender
                     emitSignal @scope, 'onBeforeRevert'
 
                 if @props instanceof Dict
@@ -497,9 +509,11 @@ Corresponding node handler: *n-onRevert=""*.
 
                 Document.onRevert.emit @
                 emitNodeSignal @, 'n-onRevert'
-                if @scope?.node is @node
+                if isScopeRender
                     @scope.state = null
                     emitSignal @scope, 'onRevert'
+                else
+                    @inputArgs[2] = @inputState
 
                 @
 
