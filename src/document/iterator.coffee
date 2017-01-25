@@ -4,6 +4,7 @@ utils = require 'src/utils'
 assert = require 'src/assert'
 List = require 'src/list'
 log = require 'src/log'
+signal = require 'src/signal'
 
 {isArray} = Array
 
@@ -31,11 +32,18 @@ module.exports = (File) -> class Iterator
 
     propsChangeListener = (name) ->
         if @file.isRendered and name is 'n-each'
-            @update()
+            @revert()
+            @renderImmediate()
 
-    visibilityChangeListener = (oldVal) ->
-        if @file.isRendered and oldVal is false and not @node.data
-            @update()
+    visibilityChangeListener = (oldValue) ->
+        value = not oldValue
+        isHidden = if value then -1 else 1
+        @hiddenDepth += isHidden
+        if @file.isRendered and not @isRendered
+            @renderImmediate()
+        if @file.isRendered and @isRendered and @hiddenDepth > 0
+            @revert()
+        return
 
     constructor: (@file, @node, @name) ->
         assert.instanceOf @file, File
@@ -47,19 +55,39 @@ module.exports = (File) -> class Iterator
         @text = ''
         @data = null
         @isRendered = false
+        @isRenderPending = false
+        @hiddenDepth = 0
         @inputProps = Object.create @file.inputProps
+        @_renderImmediateCallback = utils.bindFunctionContext @_renderImmediateCallback, @
 
         @node.onPropsChange propsChangeListener, @
-        @node.onVisibleChange visibilityChangeListener, @
+
+        do =>
+            elem = @node
+            while elem
+                if 'n-if' of elem.props
+                    elem.onVisibleChange visibilityChangeListener, @
+                elem = elem.parent
 
         `//<development>`
         if @constructor is Iterator
             Object.preventExtensions @
         `//</development>`
 
+    renderImmediate: ->
+        unless @isRenderPending
+            @isRenderPending = true
+            signal.setImmediate @_renderImmediateCallback
+        return
+
+    _renderImmediateCallback: ->
+        @isRenderPending = false
+        unless @isRendered
+            @render()
+        return
+
     render: ->
-        unless @node.visible
-            return
+        return if @hiddenDepth > 0
 
         each = @node.props['n-each']
 
@@ -71,6 +99,8 @@ module.exports = (File) -> class Iterator
         if not isArray(each) and not (each instanceof List)
             # log.warn "Data is not an array nor List in '#{@text}':\n#{each}"
             return
+
+        @isRendered = true
 
         # set as data
         @data = array = each
@@ -84,8 +114,6 @@ module.exports = (File) -> class Iterator
         # add items
         for _, i in array
             @insertItem i
-
-        @isRendered = true
 
         null
 
@@ -102,6 +130,7 @@ module.exports = (File) -> class Iterator
 
         @data = null
         @isRendered = false
+        return
 
     update: ->
         @revert()
