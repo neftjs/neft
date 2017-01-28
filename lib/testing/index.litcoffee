@@ -16,6 +16,12 @@
 
     ONLY_OPT = 1 << 1
 
+    raportOnlyUsed = ->
+        if process.env.CI
+            throw new Error "Cannot use describe.only and it.only on CI"
+        else
+            log.warn "describe.only or it.only is used"
+
 # describe(*String* message, *Function* tests)
 
     exports.describe = (msg, func, opts = 0) ->
@@ -50,6 +56,7 @@
 # describe.only(*String* message, *Function* tests)
 
     exports.describe.only = (msg, func) ->
+        raportOnlyUsed()
         exports.describe msg, func, ONLY_OPT
 
 # it(*String* message, *Function* test)
@@ -76,6 +83,7 @@ The given test function can contains optional *callback* argument.
 # it.only(*String* message, *Function* test)
 
     exports.it.only = (msg, func) ->
+        raportOnlyUsed()
         exports.it msg, func, ONLY_OPT
 
 # beforeEach(*Function* code)
