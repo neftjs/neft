@@ -18,9 +18,15 @@ import io.neft.client.InAction;
 import io.neft.client.annotation.OnAction;
 import io.neft.utils.ColorValue;
 
+import static android.graphics.Paint.Cap.SQUARE;
+
 public class Rectangle extends Item {
     private static class RectDrawable extends Drawable {
         static final Paint PAINT = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        static {
+            PAINT.setStrokeCap(SQUARE);
+        }
 
         private int alpha = 255;
         private final Path path = new Path();
