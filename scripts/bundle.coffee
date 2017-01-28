@@ -14,6 +14,12 @@ fs.ensureDir './cli/bundle'
 
 createBundle = (opts, callback) ->
     console.log "Create Neft bundle file for #{opts.platform} platform"
+    processEnv = opts.env ? {}
+    globals =
+        process:
+            env: processEnv
+    if process.env.CI
+        processEnv.CI = true
     bundle {
         platform: opts.platform
         extras: opts.extras
@@ -22,7 +28,7 @@ createBundle = (opts, callback) ->
         minify: opts.release
         verbose: true
         path: 'index.coffee'
-        env: opts.env
+        globals: opts.globals
         test: (req) ->
             /^(?:src\/|\.|package\.json)/.test(req)
     }, (err, bundle) ->
@@ -54,8 +60,8 @@ createBundle = (opts, callback) ->
 
 TYPES = [
     {platform: 'node'},
-    {platform: 'browser', globals: {NEFT_TYPE: 'app'}},
-    {platform: 'browser', globals: {NEFT_TYPE: 'game'}, extras: {game: true}},
+    {platform: 'browser', env: {NEFT_TYPE: 'app'}},
+    {platform: 'browser', env: {NEFT_TYPE: 'game'}, extras: {game: true}},
     {platform: 'android'},
     {platform: 'ios'},
 ]
