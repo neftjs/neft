@@ -11,6 +11,8 @@ import android.graphics.drawable.PictureDrawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
@@ -75,6 +77,7 @@ public class Image extends Item {
     static final HashMap<String, Bitmap> cache = new HashMap<>();
     static final HashMap<String, ArrayList<LoadHandler>> loading = new HashMap<>();
 
+    protected View imageView;
     public String source;
 
     @OnAction(InAction.CREATE_IMAGE)
@@ -86,10 +89,16 @@ public class Image extends Item {
 
     public Image() {
         super();
+        imageView = new View(App.getApp().view.getContext());
+        imageView.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        view.addView(imageView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackground(shape);
+            imageView.setBackground(shape);
         } else {
-            view.setBackgroundDrawable(shape);
+            imageView.setBackgroundDrawable(shape);
         }
     }
 

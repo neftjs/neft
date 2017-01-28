@@ -10,7 +10,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.annotation.OnAction;
 import io.neft.utils.ColorValue;
@@ -101,6 +104,7 @@ public class Rectangle extends Item {
         }
     }
 
+    protected View rectangleView;
     protected RectDrawable shape = new RectDrawable();
 
     @OnAction(InAction.CREATE_RECTANGLE)
@@ -110,10 +114,16 @@ public class Rectangle extends Item {
 
     public Rectangle() {
         super();
+        rectangleView = new View(App.getApp().view.getContext());
+        rectangleView.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        ));
+        view.addView(rectangleView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackground(shape);
+            rectangleView.setBackground(shape);
         } else {
-            view.setBackgroundDrawable(shape);
+            rectangleView.setBackgroundDrawable(shape);
         }
     }
 
