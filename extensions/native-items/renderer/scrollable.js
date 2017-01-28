@@ -1,6 +1,8 @@
 const { Renderer, assert, utils, signal } = Neft;
 const { setPropertyValue } = Renderer.itemUtils;
-const { emitSignal } = signal.Emitter
+const { emitSignal } = signal.Emitter;
+
+const PREVENT_CLICK_MIN_PX = 10;
 
 class Scrollable extends Renderer.Native {}
 
@@ -13,6 +15,26 @@ Scrollable.Initialize = (item) => {
 
     item.on('contentYChange', function (val) {
         setPropertyValue(this, 'contentY', val);
+    });
+
+    let pressX = 0, pressY = 0, prevented = false;
+
+    item.pointer.onPress((event) => {
+        pressX = event.x;
+        pressY = event.y;
+        prevented = false;
+    });
+
+    item.pointer.onMove((event) => {
+        if (prevented) {
+            return;
+        }
+        const dx = Math.abs(pressX - event.x);
+        const dy = Math.abs(pressY - event.y);
+        if (Math.sqrt(dx * dx + dy * dy) > PREVENT_CLICK_MIN_PX) {
+            event.preventClick = true;
+            prevented = true;
+        }
     });
 };
 

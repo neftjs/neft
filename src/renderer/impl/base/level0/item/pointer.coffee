@@ -52,10 +52,10 @@ module.exports = (impl) ->
             if rotation isnt 0
                 rsin = sin -rotation
                 rcos = cos -rotation
-                t1 = x + w/2
-                t2 = y + h/2
-                rey = rcos * (ex-t1) - rsin * (ey-t2) + t1
-                ey = rsin * (ex-t1) + rcos * (ey-t2) + t2
+                t1 = x + w / 2
+                t2 = y + h / 2
+                rey = rcos * (ex - t1) - rsin * (ey - t2) + t1
+                ey = rsin * (ex - t1) + rcos * (ey - t2) + t2
                 ex = rey
 
             # omit outer point for clipped items
@@ -133,6 +133,7 @@ module.exports = (impl) ->
             (e) ->
                 event._stopPropagation = false
                 event._checkSiblings = false
+                event._preventClick = false
                 captureItems impl.window, e._x, e._y, onItem
                 return
 
@@ -147,7 +148,7 @@ module.exports = (impl) ->
                     index = itemsToRelease.indexOf item
                     if index >= 0
                         itemsToRelease[index] = null
-                if capturePointer & CLICK
+                if capturePointer & CLICK and not event._preventClick
                     if utils.has(pressedItems, item)
                         emitSignal item.pointer, 'onClick', event
                 if capturePointer & (RELEASE | CLICK)
