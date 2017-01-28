@@ -210,6 +210,7 @@ Stopped 'Exit' event will emit 'Release' event on this item.
                 @_checkSiblings = false
                 @_ensureRelease = true
                 @_ensureMove = true
+                @_preventClick = false
                 Object.preventExtensions @
 
             @:: = Object.create Renderer.Device.pointer
@@ -218,6 +219,8 @@ Stopped 'Exit' event will emit 'Release' event on this item.
 ### *Boolean* PointerEvent::stopPropagation = `false`
 
 Enable this property to stop further event propagation.
+
+This property is reset on each pointer press.
 
             utils.defineProperty @::, 'stopPropagation', null, ->
                 @_stopPropagation
@@ -230,6 +233,8 @@ Enable this property to stop further event propagation.
 By default first deepest captured item will propagate this event only by his parents.
 
 Change this value to test previous siblings as well.
+
+This property is reset on each pointer press.
 
             utils.defineProperty @::, 'checkSiblings', null, ->
                 @_checkSiblings
@@ -262,6 +267,20 @@ Can be changed only in the 'onPress' signal.
             , (val) ->
                 assert.isBoolean val
                 @_ensureMove = val
+
+### *Boolean* PointerEvent::preventClick = `false`
+
+Set it to `true` to block emitting `click` signals.
+
+This property is reset on each pointer press.
+
+It's internally used by Scrollable element to block `clicks` after view has been scrolled.
+
+            utils.defineProperty @::, 'preventClick', null, ->
+                @_preventClick
+            , (val) ->
+                assert.isBoolean val
+                @_preventClick = val
 
 ## *Item.Pointer.Event* Pointer.event
 
