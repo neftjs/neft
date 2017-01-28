@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PictureDrawable;
@@ -63,7 +64,7 @@ public class Image extends Item {
 
         @Override
         public int getOpacity() {
-            return 0;
+            return PixelFormat.TRANSPARENT;
         }
     }
 
@@ -186,7 +187,7 @@ public class Image extends Item {
         source = val;
 
         // remove source
-        if (val.equals("")) {
+        if (val.isEmpty()) {
             shape.setBitmap(null);
             return;
         }
@@ -204,7 +205,7 @@ public class Image extends Item {
         final LoadHandler onLoad = new LoadHandler() {
             @Override
             void work(String source, Bitmap bitmap) {
-                if (self.source != source) {
+                if (!source.equals(self.source)) {
                     return;
                 }
                 shape.setBitmap(bitmap);
