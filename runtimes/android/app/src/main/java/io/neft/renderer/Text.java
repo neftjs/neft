@@ -38,7 +38,7 @@ public class Text extends Item {
                     fonts.put(name, Typeface.createFromAsset(App.getApp().getAssets(), source.substring(1)));
                     success = true;
                 } else {
-                    Log.e("JAVA", "Loading font's by URL is not currently supported");
+                    Log.e("NEFT", "Loading font's by URL is not currently supported; '" + source + "' given");
                     success = false;
                 }
                 App.getApp().client.pushAction(OutAction.FONT_LOAD, name, success);
@@ -96,6 +96,7 @@ public class Text extends Item {
 
     @OnAction(InAction.SET_TEXT_FONT_FAMILY)
     public void setFontFamily(String val) {
+        textView.setTypeface(fonts.get(val));
     }
 
     @OnAction(InAction.SET_TEXT_FONT_PIXEL_SIZE)
