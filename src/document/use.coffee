@@ -93,7 +93,7 @@ module.exports = (File) -> class Use
 
     _renderImmediateCallback: ->
         @isRenderPending = false
-        unless @isRendered
+        if not @isRendered and @file.isRendered
             @render()
         return
 
