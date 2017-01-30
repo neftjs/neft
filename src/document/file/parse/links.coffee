@@ -36,7 +36,7 @@ getFilePath = module.exports.getFilePath = (File, file, path) ->
     if pathUtils.isAbsolute(path)
         return path
 
-    if path[0] is '.' and path[1] is '/'
+    if /\.{1,2}[\/\\]/.test(path)
         dirname = pathUtils.dirname file.path
         return pathUtils.join(dirname, path)
 
