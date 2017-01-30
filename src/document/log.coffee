@@ -24,7 +24,7 @@ module.exports = (File) -> class Log
 
     listenOnTextChange = (node, log) ->
         if node instanceof File.Element.Text
-            node.onTextChange log.render, log
+            node.onTextChange log.renderOnChange, log
         else
             for child in node.children
                 listenOnTextChange child, log
@@ -37,13 +37,17 @@ module.exports = (File) -> class Log
         @isRenderPending = false
         @log = utils.bindFunctionContext @log, @
 
-        @node.onPropsChange @render, @
+        @node.onPropsChange @renderOnChange, @
         listenOnTextChange @node, @
 
         `//<development>`
         if @constructor is Log
             Object.preventExtensions @
         `//</development>`
+
+    renderOnChange: ->
+        if @file.isRendered
+            @render()
 
     render: ->
         unless @isRenderPending
@@ -53,9 +57,6 @@ module.exports = (File) -> class Log
 
     log: ->
         @isRenderPending = false
-
-        unless @file.isRendered
-            return
 
         if utils.isEmpty(@node.props)
             console.log @node.stringifyChildren()
