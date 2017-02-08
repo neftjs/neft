@@ -34,7 +34,6 @@ See `neft help` for available targets.
 Callback function is called when build is ready.
 ###
 exports.buildProject = (target, env, callback) ->
-    fs.removeSync './build/browser'
     args = utils.clone BUILD_ARGS
     args[1] = target # target
     args[3] += config.getPlatformOutFolder(target) # out
