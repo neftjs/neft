@@ -2,19 +2,33 @@ package io.neft.client;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.neft.App;
 import io.neft.Native;
+import lombok.Synchronized;
 
 public class Client {
+    private static class FullData {
+        final byte[] actions;
+        final Reader reader;
+
+        FullData(byte[] actions, Reader reader) {
+            this.actions = actions;
+            this.reader = reader;
+        }
+    }
+
+    private static final App APP = App.getInstance();
     private static final int OUT_ARRAYS_VALUE = 64;
     private static final int OUT_ARRAYS_INCREASE_VALUE = 24;
 
-    static int EVENT_NULL_TYPE = 0;
-    static int EVENT_BOOLEAN_TYPE = 1;
-    static int EVENT_FLOAT_TYPE = 2;
-    static int EVENT_STRING_TYPE = 3;
+    private static final int EVENT_NULL_TYPE = 0;
+    private static final int EVENT_BOOLEAN_TYPE = 1;
+    private static final int EVENT_FLOAT_TYPE = 2;
+    private static final int EVENT_STRING_TYPE = 3;
 
     final private InAction[] InActionValues = InAction.values();
 
@@ -30,18 +44,30 @@ public class Client {
     private int outFloatsIndex = 0;
     private int outStringsIndex = 0;
 
-    final public Reader reader;
-    final public HashMap<InAction, Action> actions = new HashMap<>();
-    final private HashMap<String, CustomFunction> customFunctions = new HashMap<>();
+    public final HashMap<InAction, Action> actions = new HashMap<>();
+    private final HashMap<String, CustomFunction> customFunctions = new HashMap<>();
+    private final List<FullData> dataToProcess = new ArrayList<>();
+    private final Runnable processDataRunnable;
+    private boolean dataProcessPending;
+    private final Object stackLock = new Object();
 
     public Client() {
-        this.reader = new Reader();
-
         this.outActions = new byte[OUT_ARRAYS_VALUE];
         this.outBooleans = new boolean[OUT_ARRAYS_VALUE];
         this.outIntegers = new int[OUT_ARRAYS_VALUE];
         this.outFloats = new float[OUT_ARRAYS_VALUE];
         this.outStrings = new String[OUT_ARRAYS_VALUE];
+
+        processDataRunnable = new Runnable() {
+            @Override
+            public void run() {
+                while (!dataToProcess.isEmpty()) {
+                    FullData fullData = dataToProcess.remove(0);
+                    processActions(fullData.actions, fullData.reader);
+                }
+                dataProcessPending = false;
+            }
+        };
 
         actions.put(InAction.CALL_FUNCTION, new Action() {
             @Override
@@ -76,30 +102,25 @@ public class Client {
         Native.client_init(this);
     }
 
-    public void onData(final byte[] actions, boolean[] booleans, int[] integers, float[] floats, String[] strings) {
-        reader.booleans = booleans;
-        reader.booleansIndex = 0;
-        reader.integers = integers;
-        reader.integersIndex = 0;
-        reader.floats = floats;
-        reader.floatsIndex = 0;
-        reader.strings = strings;
-        reader.stringsIndex = 0;
-
-        App.getApp().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                processActions(actions);
-                sendData();
-            }
-        });
+    public void onData(
+            byte[] actions,
+            boolean[] booleans,
+            int[] integers,
+            float[] floats,
+            String[] strings
+    ) {
+        Reader reader = new Reader(booleans, integers, floats, strings);
+        dataToProcess.add(new FullData(actions, reader));
+        if (!dataProcessPending) {
+            dataProcessPending = true;
+            APP.getActivity().runOnUiThread(processDataRunnable);
+        }
     }
 
-    private void processActions(byte[] actionsArr) {
-        final int length = actionsArr.length;
-        for (int i = 0; i < length; i++) {
-            final InAction actionType = InActionValues[actionsArr[i]];
-            final Action action = this.actions.get(actionType);
+    private void processActions(byte[] actionsArr, Reader reader) {
+        for (byte actionIndex : actionsArr) {
+            InAction actionType = InActionValues[actionIndex];
+            Action action = this.actions.get(actionType);
             if (action != null) {
                 action.work(reader);
             } else {
@@ -108,6 +129,7 @@ public class Client {
         }
     }
 
+    @Synchronized("stackLock")
     public void pushAction(OutAction val) {
         if (outActionsIndex == outActions.length){
             final byte[] newArray = new byte[outActionsIndex + OUT_ARRAYS_INCREASE_VALUE];
@@ -117,7 +139,8 @@ public class Client {
         outActions[outActionsIndex++] = (byte) val.ordinal();
     }
 
-    public void pushBoolean(boolean val) {
+    @Synchronized("stackLock")
+    private void pushBoolean(boolean val) {
         if (outBooleansIndex == outBooleans.length){
             final boolean[] newArray = new boolean[outBooleansIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outBooleans, 0, newArray, 0, outBooleansIndex);
@@ -126,7 +149,8 @@ public class Client {
         outBooleans[outBooleansIndex++] = val;
     }
 
-    public void pushInteger(int val) {
+    @Synchronized("stackLock")
+    private void pushInteger(int val) {
         if (outIntegersIndex == outIntegers.length){
             final int[] newArray = new int[outIntegersIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outIntegers, 0, newArray, 0, outIntegersIndex);
@@ -135,7 +159,8 @@ public class Client {
         outIntegers[outIntegersIndex++] = val;
     }
 
-    public void pushFloat(float val) {
+    @Synchronized("stackLock")
+    private void pushFloat(float val) {
         if (outFloatsIndex == outFloats.length){
             final float[] newArray = new float[outFloatsIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outFloats, 0, newArray, 0, outFloatsIndex);
@@ -144,7 +169,8 @@ public class Client {
         outFloats[outFloatsIndex++] = val;
     }
 
-    public void pushString(String val) {
+    @Synchronized("stackLock")
+    private void pushString(String val) {
         if (outStringsIndex == outStrings.length){
             final String[] newArray = new String[outStringsIndex + OUT_ARRAYS_INCREASE_VALUE];
             System.arraycopy(outStrings, 0, newArray, 0, outStringsIndex);
@@ -153,6 +179,7 @@ public class Client {
         outStrings[outStringsIndex++] = val;
     }
 
+    @Synchronized("stackLock")
     public void pushEvent(String name, Object... args) {
         pushAction(OutAction.EVENT);
         pushString(name);
@@ -182,6 +209,7 @@ public class Client {
         }
     }
 
+    @Synchronized("stackLock")
     public void pushAction(OutAction action, Object... args) {
         pushAction(action);
         for (Object arg : args) {
@@ -194,31 +222,45 @@ public class Client {
             } else if (arg instanceof String) {
                 pushString((String) arg);
             } else {
-                throw new RuntimeException("Action can be pushed with Bool, CGFloat or String, but '"+arg+"' given");
+                throw new RuntimeException("Action can be pushed with Boolean, Float or String, but '"+arg+"' given");
             }
         }
     }
 
     public void addCustomFunction(String name, CustomFunction func) {
-        assert name.length() > 0;
-        assert !customFunctions.containsKey(name);
-        assert func != null;
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+        if (customFunctions.containsKey(name)) {
+            throw new IllegalArgumentException("Given name is already in use");
+        }
+        if (func == null) {
+            throw new IllegalArgumentException("Function cannot be null");
+        }
 
         customFunctions.put(name, func);
     }
 
     public void sendData() {
-        if (outActionsIndex > 0){
-            final int outActionsIndex = this.outActionsIndex;
-            final int outBooleansIndex = this.outBooleansIndex;
-            final int outIntegersIndex = this.outIntegersIndex;
-            final int outFloatsIndex = this.outFloatsIndex;
-            final int outStringsIndex = this.outStringsIndex;
-            this.outActionsIndex = this.outBooleansIndex = 0;
-            this.outIntegersIndex = this.outFloatsIndex = this.outStringsIndex = 0;
-            Native.client_sendData(outActions, outActionsIndex,
-                    outBooleans, outBooleansIndex, outIntegers, outIntegersIndex,
-                    outFloats, outFloatsIndex, outStrings, outStringsIndex);
+        if (outActionsIndex <= 0) {
+            return;
         }
+        int outActionsIndex = this.outActionsIndex;
+        int outBooleansIndex = this.outBooleansIndex;
+        int outIntegersIndex = this.outIntegersIndex;
+        int outFloatsIndex = this.outFloatsIndex;
+        int outStringsIndex = this.outStringsIndex;
+        this.outActionsIndex = 0;
+        this.outBooleansIndex = 0;
+        this.outIntegersIndex = 0;
+        this.outFloatsIndex = 0;
+        this.outStringsIndex = 0;
+        Native.client_sendData(
+                outActions, outActionsIndex,
+                outBooleans, outBooleansIndex,
+                outIntegers, outIntegersIndex,
+                outFloats, outFloatsIndex,
+                outStrings, outStringsIndex
+        );
     }
 }

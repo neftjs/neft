@@ -10,10 +10,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
-import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.annotation.OnAction;
 import io.neft.utils.ColorValue;
@@ -75,22 +72,22 @@ public class Rectangle extends Item {
             invalidateSelf();
         }
 
-        public void setColor(int color) {
+        void setColor(int color) {
             this.color = color;
             invalidateSelf();
         }
 
-        public void setRadius(float radius) {
+        void setRadius(float radius) {
             this.radius = radius;
             invalidateSelf();
         }
 
-        public void setBorderColor(int color) {
+        void setBorderColor(int color) {
             this.borderColor = color;
             invalidateSelf();
         }
 
-        public void setBorderWidth(float borderWidth) {
+        void setBorderWidth(float borderWidth) {
             this.borderWidth = borderWidth;
             invalidateSelf();
         }
@@ -110,21 +107,16 @@ public class Rectangle extends Item {
         }
     }
 
-    protected View rectangleView;
-    protected RectDrawable shape = new RectDrawable();
+    private final RectDrawable shape = new RectDrawable();
 
     @OnAction(InAction.CREATE_RECTANGLE)
     public static void create() {
         new Rectangle();
     }
 
-    public Rectangle() {
+    private Rectangle() {
         super();
-        rectangleView = new View(App.getApp().view.getContext());
-        rectangleView.setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        ));
+        View rectangleView = new View(APP.getActivity().getApplicationContext());
         view.addView(rectangleView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rectangleView.setBackground(shape);

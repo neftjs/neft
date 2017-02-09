@@ -7,7 +7,6 @@ import android.widget.FrameLayout;
 
 import java.util.HashMap;
 
-import io.neft.App;
 import io.neft.client.CustomFunction;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
@@ -18,7 +17,7 @@ import io.neft.renderer.annotation.Parser;
 import io.neft.utils.StringUtils;
 
 public class NativeItem extends Item {
-    public static HashMap<String, Class<? extends NativeItem>> types = new HashMap<>();
+    public static final HashMap<String, Class<? extends NativeItem>> types = new HashMap<>();
     public static HashMap<Class<? extends NativeItem>, String> classTypes = new HashMap<>();
 
     public static void registerItem(Class<? extends NativeItem> clazz) {
@@ -38,16 +37,16 @@ public class NativeItem extends Item {
         }
     }
 
-    protected static class ClientHandler {
+    private static class ClientHandler {
         public void work(NativeItem item, Object[] args) {}
     }
 
     protected static void addClientAction(final MainActivity app, String type, String name, String subName, final ClientHandler handler) {
         String eventName = "renderer" + type + StringUtils.capitalize(name) + StringUtils.capitalize(subName);
-        app.client.addCustomFunction(eventName, new CustomFunction() {
+        APP.getClient().addCustomFunction(eventName, new CustomFunction() {
             @Override
             public void work(Object[] args) {
-                final NativeItem item = (NativeItem) app.renderer.items.get(Math.round((float) args[0]));
+                final NativeItem item = (NativeItem) APP.getRenderer().getItemById(Math.round((float) args[0]));
                 Object[] handlerArgs = new Object[args.length - 1];
                 System.arraycopy(args, 1, handlerArgs, 0, handlerArgs.length);
                 handler.work(item, handlerArgs);
@@ -89,10 +88,10 @@ public class NativeItem extends Item {
             clientArgs = new Object[]{this.id};
         } else {
             clientArgs = new Object[args.length + 1];
-            clientArgs[0] = Float.valueOf(this.id);
+            clientArgs[0] = (float) this.id;
             System.arraycopy(args, 0, clientArgs, 1, args.length);
         }
-        App.getApp().client.pushEvent(eventName, clientArgs);
+        APP.getClient().pushEvent(eventName, clientArgs);
     }
 
     @Override

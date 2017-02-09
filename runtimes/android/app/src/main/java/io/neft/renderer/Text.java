@@ -1,16 +1,13 @@
 package io.neft.renderer;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
 
-import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.Reader;
@@ -18,8 +15,9 @@ import io.neft.client.annotation.OnAction;
 import io.neft.utils.ColorValue;
 
 public class Text extends Item {
-    private static final int DEFAULT_TEXT_SIZE = 14;
-    static final HashMap<String, Typeface> fonts = new HashMap<>();
+    private static final int DEFAULT_FONT_PIXEL_SIZE = 14;
+    private static final int DEFAULT_COLOR = Color.BLACK;
+    private static final HashMap<String, Typeface> FONTS = new HashMap<>();
 
     @OnAction(InAction.CREATE_TEXT)
     public static void create() {
@@ -35,26 +33,27 @@ public class Text extends Item {
             public void run() {
                 boolean success;
                 if (source.startsWith("/static")) {
-                    fonts.put(name, Typeface.createFromAsset(App.getApp().getAssets(), source.substring(1)));
+                    FONTS.put(name, Typeface.createFromAsset(APP.getActivity().getAssets(), source.substring(1)));
                     success = true;
                 } else {
                     Log.e("NEFT", "Loading font's by URL is not currently supported; '" + source + "' given");
                     success = false;
                 }
-                App.getApp().client.pushAction(OutAction.FONT_LOAD, name, success);
+                APP.getClient().pushAction(OutAction.FONT_LOAD, name, success);
             }
         });
 
         thread.start();
     }
 
-    protected TextView textView = new TextView(App.getApp().view.getContext());
-    public boolean wrap = false;
+    private final TextView textView = new TextView(APP.getActivity().getApplicationContext());
+    private boolean wrap = false;
 
-    public Text() {
+    private Text() {
         super();
         view.addView(textView);
-        textView.setTextSize(DEFAULT_TEXT_SIZE);
+        textView.setTextSize(DEFAULT_FONT_PIXEL_SIZE);
+        textView.setTextColor(DEFAULT_COLOR);
     }
 
     private void updateMaxWidth() {
@@ -96,7 +95,7 @@ public class Text extends Item {
 
     @OnAction(InAction.SET_TEXT_FONT_FAMILY)
     public void setFontFamily(String val) {
-        textView.setTypeface(fonts.get(val));
+        textView.setTypeface(FONTS.get(val));
     }
 
     @OnAction(InAction.SET_TEXT_FONT_PIXEL_SIZE)
@@ -106,12 +105,12 @@ public class Text extends Item {
 
     @OnAction(InAction.SET_TEXT_FONT_WORD_SPACING)
     public void setFontWordSpacing(float val) {
-
+        // TODO
     }
 
     @OnAction(InAction.SET_TEXT_FONT_LETTER_SPACING)
     public void setFontLetterSpacing(float val) {
-
+        // TODO
     }
 
     @OnAction(InAction.SET_TEXT_ALIGNMENT_HORIZONTAL)
@@ -132,6 +131,7 @@ public class Text extends Item {
 
     @OnAction(InAction.SET_TEXT_ALIGNMENT_VERTICAL)
     public void setAlignmentVertical(String val) {
+        // TODO
     }
 
     @OnAction(InAction.UPDATE_TEXT_CONTENT_SIZE)

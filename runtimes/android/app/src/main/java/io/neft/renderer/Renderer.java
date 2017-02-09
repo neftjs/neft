@@ -1,69 +1,45 @@
 package io.neft.renderer;
 
-import android.view.View;
-import android.view.ViewTreeObserver;
-
 import java.util.ArrayList;
+import java.util.List;
 
-import io.neft.App;
 import io.neft.client.Reader;
-import io.neft.MainActivity;
-import io.neft.Native;
+import lombok.Getter;
 
 public class Renderer {
-
-    public MainActivity app;
-    final public ArrayList<Item> items;
-
-    final public Device device = new Device();
-    final public Screen screen = new Screen();
-    final public Navigator navigator = new Navigator();
+    final private List<Item> items = new ArrayList<>();
+    @Getter final private Device device = new Device();
+    final private Screen screen = new Screen();
+    final private Navigator navigator = new Navigator();
 
     public Renderer() {
-        this.items = new ArrayList<>();
-
         items.add(null);
-
-        final View view = new View(App.getApp().getApplicationContext());
-        App.getApp().view.addView(view);
-        view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                onAnimationFrame();
-                view.invalidate();
-                return true;
-            }
-        });
     }
 
     public float pxToDp(float px) {
-        return px / device.pixelRatio;
+        return px / device.getPixelRatio();
     }
 
     public float dpToPx(float dp) {
-        return dp * device.pixelRatio;
+        return dp * device.getPixelRatio();
     }
 
-    public void pushItem(Item val) {
-        app.client.pushInteger(val.id);
-    }
-
-    public void onAnimationFrame() {
-        app.client.sendData();
-        Native.renderer_callAnimationFrame();
+    synchronized int registerItem(Item item) {
+        items.add(item);
+        return items.size() - 1;
     }
 
     public Item getItemFromReader(Reader reader) {
-        return items.get(reader.getInteger());
+        return getItemById(reader.getInteger());
     }
 
-    public void init(MainActivity app) {
-        Device.init(device, app);
-        Screen.init(screen, app);
-        Navigator.init(navigator, app);
+    public Item getItemById(int id) {
+        return items.get(id);
+    }
 
-        Navigator.register(app);
-        Device.register(app);
-        Screen.register(app);
+    public void init() {
+        Device.init(device);
+        Screen.init(screen);
+        Navigator.init(navigator);
     }
 }

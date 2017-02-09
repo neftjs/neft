@@ -1,19 +1,11 @@
 package {{&package.android.package}};
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import io.neft.App;
-import io.neft.renderer.WindowView;
+import io.neft.WindowView;
 
 public class MainActivity extends io.neft.MainActivity {
-    private static final String ASSET_FILE_PATH = "javascript/neft.js";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,48 +13,20 @@ public class MainActivity extends io.neft.MainActivity {
         setContentView(R.layout.activity_main);
         this.view = (WindowView) findViewById(R.id.layout);
 
-        this.view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        Runnable initExtensions = new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                init();
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            public void run() {
+                {{#androidExtensions}}
+                io.neft.extensions.{{&packageName}}.{{&name}}Extension.register();
+                {{/androidExtensions}}
             }
-        });
-    }
-
-    private void init() {
+        };
         {{^buildServerUrl}}
-        init(getAssetFile(ASSET_FILE_PATH));
+        String codeWatchChangesUrl = null;
         {{/buildServerUrl}}
-
         {{#buildServerUrl}}
-        String watchServerUrl = "{{&buildServerUrl}}";
-        getUrlData(watchServerUrl + "/bundle/android", new UrlResponse() {
-            @Override
-            public void run(String response) {
-                if (response == null) {
-                    response = getAssetFile(ASSET_FILE_PATH);
-                }
-                init(response);
-            }
-        });
-        watchOnBundleChange(watchServerUrl + "/onNewBundle/android");
+        String codeWatchChangesUrl = "{{&buildServerUrl}}";
         {{/buildServerUrl}}
-    }
-
-    protected void init(String code) {
-        super.init(code);
-    }
-
-    protected void initExtensions() {
-        {{#androidExtensions}}
-        io.neft.extensions.{{&packageName}}.{{&name}}Extension.register();
-        {{/androidExtensions}}
-    }
-
-    @Override
-    protected void restart() {
-        Context context = getBaseContext();
-        ProcessPhoenix.triggerRebirth(context, new Intent(context, MainActivity.class));
+        App.getInstance().attach(this, codeWatchChangesUrl, initExtensions);
     }
 }

@@ -1,32 +1,25 @@
 package io.neft.renderer;
 
 import android.graphics.RectF;
-import android.util.DisplayMetrics;
 import android.view.View;
 
+import io.neft.App;
 import io.neft.client.OutAction;
-import io.neft.MainActivity;
 
-public class Screen {
+final class Screen {
+    private static final App APP = App.getInstance();
+    private float width;
+    private float height;
+    private RectF rect;
 
-    public float width;
-    public float height;
-    public RectF rect;
-
-    static void init(Screen screen, MainActivity app) {
-        View windowView = app.view;
-
+    static void init(Screen screen) {
         // SCREEN_SIZE
-        final float pixelRatio = app.renderer.device.pixelRatio;
+        View windowView = APP.getWindowView();
+        final float pixelRatio = APP.getRenderer().getDevice().getPixelRatio();
         screen.width = windowView.getWidth() / pixelRatio;
         screen.height = windowView.getHeight() / pixelRatio;
         screen.rect = new RectF(0, 0, windowView.getWidth(), windowView.getHeight());
 
-        app.client.pushAction(OutAction.SCREEN_SIZE);
-        app.client.pushFloat(screen.width);
-        app.client.pushFloat(screen.height);
+        APP.getClient().pushAction(OutAction.SCREEN_SIZE, screen.width, screen.height);
     }
-
-    static void register(MainActivity app) {}
-
 }
