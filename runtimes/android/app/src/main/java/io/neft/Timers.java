@@ -3,10 +3,10 @@ package io.neft;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Timers extends Timer {
+class Timers extends Timer {
     private int lastId = 0;
 
-    public Timers() {
+    Timers() {
         Native.timers_init(this);
     }
 

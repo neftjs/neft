@@ -2,23 +2,19 @@ package io.neft.renderer;
 
 import java.util.Locale;
 
+import io.neft.App;
 import io.neft.client.OutAction;
-import io.neft.MainActivity;
 
-public class Navigator {
+final class Navigator {
+    private static final App APP = App.getInstance();
+    private String language;
 
-    public String language;
-
-    static void init(Navigator navigator, MainActivity app) {
+    static void init(Navigator navigator) {
         // NAVIGATOR_LANGUAGE
         navigator.language = Locale.getDefault().getLanguage();
-        app.client.pushAction(OutAction.NAVIGATOR_LANGUAGE);
-        app.client.pushString(navigator.language);
+        APP.getClient().pushAction(OutAction.NAVIGATOR_LANGUAGE, navigator.language);
 
         // NAVIGATOR_ONLINE
         // TODO
     }
-
-    static void register(MainActivity app) {}
-
 }

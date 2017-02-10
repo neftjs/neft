@@ -2,14 +2,9 @@ package io.neft.extensions.nativeitems;
 
 import android.graphics.Color;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
-import android.widget.Button;
 import android.widget.EditText;
 
-import io.neft.App;
 import io.neft.renderer.NativeItem;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
@@ -18,7 +13,7 @@ import io.neft.utils.ColorValue;
 public class DSTextInput extends NativeItem {
     @OnCreate("DSTextInput")
     public DSTextInput() {
-        super(new EditText(App.getApp().getApplicationContext()));
+        super(new EditText(APP.getActivity().getApplicationContext()));
 
         setTextColor(new ColorValue(Color.BLACK));
 

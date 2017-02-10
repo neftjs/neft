@@ -13,6 +13,8 @@ import io.neft.renderer.Item;
 import io.neft.utils.ColorValue;
 
 public final class Parser {
+    private static final App APP = App.getInstance();
+
     private static void invoke(Method method, Object receiver, Object... args) {
         try {
             method.invoke(receiver, args);
@@ -45,7 +47,7 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
                 invoke(method, item, reader);
             }
         };
@@ -55,7 +57,7 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
                 invoke(method, item);
             }
         };
@@ -65,8 +67,8 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
-                Item val = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
+                Item val = APP.getRenderer().getItemFromReader(reader);
                 invoke(method, item, val);
             }
         };
@@ -76,7 +78,7 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
                 invoke(method, item, reader.getBoolean());
             }
         };
@@ -86,7 +88,7 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
                 invoke(method, item, reader.getFloat());
             }
         };
@@ -96,7 +98,7 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
                 invoke(method, item, reader.getInteger());
             }
         };
@@ -106,7 +108,7 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
                 int rgba = reader.getInteger();
                 int argb = ColorValue.RGBAtoARGB(rgba);
                 ColorValue color = new ColorValue(argb);
@@ -119,7 +121,7 @@ public final class Parser {
         return new Action() {
             @Override
             public void work(Reader reader) {
-                Item item = App.getApp().renderer.getItemFromReader(reader);
+                Item item = APP.getRenderer().getItemFromReader(reader);
                 invoke(method, item, reader.getString());
             }
         };
@@ -154,7 +156,7 @@ public final class Parser {
             throw new RuntimeException("OnAction method parameters not supported; on " + method.getName());
         }
 
-        App.getApp().client.actions.put(actionType, action);
+        APP.getClient().actions.put(actionType, action);
     }
 
     public static void registerHandlers(Class clazz) {

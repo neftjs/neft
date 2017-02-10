@@ -1,16 +1,22 @@
 package io.neft.client;
 
 public class Reader {
-    public boolean[] booleans;
-    public int[] integers;
-    public float[] floats;
-    public String[] strings;
+    private final boolean[] booleans;
+    private final int[] integers;
+    private final float[] floats;
+    private final String[] strings;
 
-    public int booleansIndex = 0;
-    public int integersIndex = 0;
-    public int floatsIndex = 0;
-    public int stringsIndex = 0;
+    private int booleansIndex = 0;
+    private int integersIndex = 0;
+    private int floatsIndex = 0;
+    private int stringsIndex = 0;
 
+    Reader(boolean[] booleans, int[] integers, float[] floats, String[] strings) {
+        this.booleans = booleans;
+        this.integers = integers;
+        this.floats = floats;
+        this.strings = strings;
+    }
 
     public boolean getBoolean() {
         return booleans[booleansIndex++];

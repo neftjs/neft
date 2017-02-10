@@ -3,7 +3,6 @@ package io.neft.extensions.nativeitems;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import io.neft.App;
 import io.neft.renderer.NativeItem;
 import io.neft.renderer.annotation.OnCall;
 import io.neft.renderer.annotation.OnCreate;
@@ -12,7 +11,7 @@ import io.neft.renderer.annotation.OnSet;
 public class DSSwitch extends NativeItem {
     @OnCreate("DSSwitch")
     public DSSwitch() {
-        super(new Switch(App.getApp().getApplicationContext()));
+        super(new Switch(APP.getActivity().getApplicationContext()));
 
         getItemView().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

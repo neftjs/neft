@@ -7,14 +7,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Http {
+class Http {
     private int lastId = 0;
 
-    public Http() {
+    Http() {
         Native.http_init(this);
     }
 
-    public static String getStringFromInputStream(InputStream stream) throws IOException {
+    static String getStringFromInputStream(InputStream stream) throws IOException {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream(stream.available());
 
         int count;
@@ -26,61 +26,63 @@ public class Http {
         return byteStream.toString();
     }
 
+    private void doRequestSync(int id, String path, String method, String[] headers, String data) {
+        try {
+            URL url = new URL(path);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setUseCaches(false);
+
+            // set method
+            conn.setRequestMethod(method.toUpperCase());
+
+            // set headers
+            for (int i = 0; i < headers.length; i+=2){
+                conn.setRequestProperty(headers[i], headers[i+1]);
+            }
+
+            try {
+                // set data
+                if (!method.equals("get")) {
+                    conn.setDoOutput(true);
+                    DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+                    out.write(data.getBytes());
+                }
+
+                // get response code
+                int respCode = conn.getResponseCode();
+
+                // end of wrong response code
+                if (respCode >= 400 && respCode < 500){
+                    Native.http_onResponse(id, "", respCode, "", "");
+                    return;
+                }
+
+                // read response
+                String resp = getStringFromInputStream(conn.getInputStream());
+
+                // get cookies
+                String cookies = conn.getHeaderField("x-cookies");
+                if (cookies == null){
+                    cookies = "";
+                }
+
+                Native.http_onResponse(id, "", respCode, resp, cookies);
+            } finally {
+                conn.disconnect();
+            }
+        } catch (IOException e) {
+            Native.http_onResponse(id, e.toString(), 0, "", "");
+        }
+    }
+
     public int request(final String path, final String method, final String[] headers, final String data) {
         final int id = lastId++;
 
-        final Thread t1 = new Thread(new Runnable() {
+        (new Thread(new Runnable() {
             public void run() {
-                try {
-                    URL url = new URL(path);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setUseCaches(false);
-
-                    // set method
-                    conn.setRequestMethod(method.toUpperCase());
-
-                    // set headers
-                    for (int i = 0; i < headers.length; i+=2){
-                        conn.setRequestProperty(headers[i], headers[i+1]);
-                    }
-
-                    try {
-                        // set data
-                        if (!method.equals("get")) {
-                            conn.setDoOutput(true);
-                            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-                            out.write(data.getBytes());
-                        }
-
-                        // get response code
-                        int respCode = conn.getResponseCode();
-
-                        // end of wrong response code
-                        if (respCode >= 400 && respCode < 500){
-                            Native.http_onResponse(id, "", respCode, "", "");
-                            return;
-                        }
-
-                        // read response
-                        String resp = getStringFromInputStream(conn.getInputStream());
-
-                        // get cookies
-                        String cookies = conn.getHeaderField("x-cookies");
-                        if (cookies == null){
-                            cookies = "";
-                        }
-
-                        Native.http_onResponse(id, "", respCode, resp, cookies);
-                    } finally {
-                        conn.disconnect();
-                    }
-                } catch (IOException e) {
-                    Native.http_onResponse(id, e.toString(), 0, "", "");
-                }
+                doRequestSync(id, path, method, headers, data);
             }
-        });
-
-        t1.start();
+        })).start();
 
         return id;
     }

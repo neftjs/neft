@@ -2,21 +2,20 @@ package io.neft.extensions.nativeitems;
 
 import android.widget.SeekBar;
 
-import io.neft.App;
 import io.neft.renderer.NativeItem;
 import io.neft.renderer.annotation.OnCall;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
 
 public class DSSlider extends NativeItem {
-    public static final int DEFAULT_WIDTH = 150;
-    public static final float PRECISION = 10000;
+    private static final int DEFAULT_WIDTH = 150;
+    private static final float PRECISION = 10000;
     private float minValue = 0;
     private float maxValue = 1;
 
     @OnCreate("DSSlider")
     public DSSlider() {
-        super(new SeekBar(App.getApp().getApplicationContext()));
+        super(new SeekBar(APP.getActivity().getApplicationContext()));
         pushWidth(Math.round(dpToPx(DEFAULT_WIDTH)));
         autoWidth = false;
         setMaxValue(maxValue);

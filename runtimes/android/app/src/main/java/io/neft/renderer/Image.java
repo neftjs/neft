@@ -24,7 +24,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import io.neft.App;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.annotation.OnAction;
@@ -36,7 +35,7 @@ public class Image extends Item {
         private Bitmap bitmap;
         private final Rect srcRect = new Rect();
 
-        public void setBitmap(Bitmap bitmap) {
+        void setBitmap(Bitmap bitmap) {
             this.bitmap = bitmap;
             if (bitmap != null) {
                 srcRect.right = bitmap.getWidth();
@@ -64,7 +63,7 @@ public class Image extends Item {
 
         @Override
         public int getOpacity() {
-            return PixelFormat.TRANSPARENT;
+            return PixelFormat.TRANSLUCENT;
         }
     }
 
@@ -72,25 +71,24 @@ public class Image extends Item {
         void work(String source, Bitmap bitmap) { throw new UnsupportedOperationException(); }
     }
 
-    static int MAX_WIDTH = 1280;
-    static int MAX_HEIGHT = 960;
+    private static final int MAX_WIDTH = 1280;
+    private static final int MAX_HEIGHT = 960;
 
-    static final HashMap<String, Bitmap> cache = new HashMap<>();
-    static final HashMap<String, ArrayList<LoadHandler>> loading = new HashMap<>();
+    private static final HashMap<String, Bitmap> CACHE = new HashMap<>();
+    private static final HashMap<String, ArrayList<LoadHandler>> LOADING = new HashMap<>();
 
-    protected View imageView;
-    public String source;
+    private String source;
 
     @OnAction(InAction.CREATE_IMAGE)
     public static void create() {
         new Image();
     }
 
-    protected ImageDrawable shape = new ImageDrawable();
+    private final ImageDrawable shape = new ImageDrawable();
 
-    public Image() {
+    private Image() {
         super();
-        imageView = new View(App.getApp().view.getContext());
+        View imageView = new View(APP.getActivity().getApplicationContext());
         imageView.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -135,7 +133,7 @@ public class Image extends Item {
     static private Bitmap loadResourceSource(String val) {
         try {
             // get file
-            InputStream in = App.getApp().getAssets().open(val.substring(1));
+            InputStream in = APP.getActivity().getAssets().open(val.substring(1));
             if (in == null) {
                 return null;
             }
@@ -192,8 +190,8 @@ public class Image extends Item {
             return;
         }
 
-        // get bitmap from cache if exists
-        Bitmap fromCache = cache.get(val);
+        // get bitmap from CACHE if exists
+        Bitmap fromCache = CACHE.get(val);
         if (fromCache != null) {
             shape.setBitmap(fromCache);
             onLoad();
@@ -217,16 +215,16 @@ public class Image extends Item {
             }
         };
 
-        // wait for load if already loading exists
-        ArrayList<LoadHandler> loadingArray = loading.get(val);
+        // wait for load if already LOADING exists
+        ArrayList<LoadHandler> loadingArray = LOADING.get(val);
         if (loadingArray != null) {
             loadingArray.add(onLoad);
             return;
         }
 
-        // save in loading
+        // save in LOADING
         loadingArray = new ArrayList<>();
-        loading.put(val, loadingArray);
+        LOADING.put(val, loadingArray);
         loadingArray.add(onLoad);
 
         // load source
@@ -245,21 +243,21 @@ public class Image extends Item {
                     bitmap = validateBitmap(bitmap);
                 }
 
-                // save to cache
+                // save to CACHE
                 if (bitmap != null && !val.startsWith("data:")) {
-                    cache.put(val, bitmap);
+                    CACHE.put(val, bitmap);
                 }
 
                 // call handlers
                 final Bitmap finalBitmap = bitmap;
-                App.getApp().runOnUiThread(new Runnable() {
+                APP.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final ArrayList<LoadHandler> loadingArray = loading.get(val);
+                        final ArrayList<LoadHandler> loadingArray = LOADING.get(val);
                         for (final LoadHandler handler : loadingArray) {
                             handler.work(val, finalBitmap);
                         }
-                        loading.remove(val);
+                        LOADING.remove(val);
                     }
                 });
             }

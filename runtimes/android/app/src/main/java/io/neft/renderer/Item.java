@@ -11,37 +11,39 @@ import io.neft.client.OutAction;
 import io.neft.client.annotation.OnAction;
 
 public class Item {
+    protected static final App APP = App.getInstance();
+
     @OnAction(InAction.CREATE_ITEM)
     public static void create() {
         new Item();
     }
 
-    public final int id;
-    protected Item background;
+    final int id;
+    private Item background;
     private Rect clipRect;
 
-    public ViewGroup view = new FrameLayout(App.getApp().view.getContext());
+    public final ViewGroup view;
 
     public Item() {
+        this.view = new FrameLayout(APP.getWindowView().getContext());
         view.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
         view.setClipChildren(false);
-        this.id = App.getApp().renderer.items.size();
-        App.getApp().renderer.items.add(this);
+        this.id = APP.getRenderer().registerItem(this);
     }
 
     protected float dpToPx(float dp) {
-        return App.getApp().renderer.dpToPx(dp);
+        return APP.getRenderer().dpToPx(dp);
     }
 
     protected float pxToDp(float px) {
-        return App.getApp().renderer.pxToDp(px);
+        return APP.getRenderer().pxToDp(px);
     }
 
-    protected void pushAction(OutAction action, Object... args) {
+    void pushAction(OutAction action, Object... args) {
         Object[] localArgs = new Object[args.length + 1];
         System.arraycopy(args, 0, localArgs, 1, args.length);
         localArgs[0] = id;
-        App.getApp().client.pushAction(action, localArgs);
+        APP.getClient().pushAction(action, localArgs);
     }
 
     public void removeFromParent() {
@@ -62,6 +64,7 @@ public class Item {
     @OnAction(InAction.INSERT_ITEM_BEFORE)
     public void insertBefore(Item val) {
         removeFromParent();
+
         ViewGroup parent = (ViewGroup) val.view.getParent();
         int index = parent.indexOfChild(val.view);
         parent.addView(view, index);
@@ -69,20 +72,20 @@ public class Item {
 
     @OnAction(InAction.SET_ITEM_VISIBLE)
     public void setVisible(boolean val) {
-        view.setVisibility(val ? View.VISIBLE : View.INVISIBLE);
+        view.setVisibility(val ? View.VISIBLE : View.GONE);
     }
 
     @OnAction(InAction.SET_ITEM_CLIP)
     public void setClip(boolean val) {
+        view.setLayerType(val ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, null);
         clipRect = val ? new Rect() : null;
         reloadClipBounds();
     }
 
     private void reloadClipBounds() {
         if (clipRect != null) {
-            ViewGroup.LayoutParams params = view.getLayoutParams();
-            clipRect.right = params.width;
-            clipRect.bottom = params.height;
+            clipRect.right = view.getLayoutParams().width;
+            clipRect.bottom = view.getLayoutParams().height;
         }
         view.setClipBounds(clipRect);
     }

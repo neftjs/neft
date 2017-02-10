@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 
-import io.neft.App;
 import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
 import io.neft.renderer.annotation.OnCreate;
@@ -32,16 +31,14 @@ public class DSScrollable extends NativeItem {
         public ScrollableView(Context context) {
             super(context);
 
-            setLayoutParams(new LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-            ));
+            setLayerType(LAYER_TYPE_HARDWARE, null);
 
             hScroll = new HorizontalScrollableView(context);
             hScroll.setLayoutParams(new LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             ));
+            hScroll.setClipChildren(false);
             addView(hScroll);
         }
 
@@ -52,16 +49,12 @@ public class DSScrollable extends NativeItem {
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            super.onTouchEvent(event);
-            hScroll.dispatchTouchEvent(event);
-            return true;
+            return super.onTouchEvent(event) || hScroll.onTouchEvent(event);
         }
 
         @Override
         public boolean onInterceptTouchEvent(MotionEvent event) {
-            super.onInterceptTouchEvent(event);
-            hScroll.onInterceptTouchEvent(event);
-            return true;
+            return super.onInterceptTouchEvent(event) || hScroll.onInterceptTouchEvent(event);
         }
 
         void addContentView(View view) {
@@ -73,7 +66,7 @@ public class DSScrollable extends NativeItem {
 
     @OnCreate("DSScrollable")
     public DSScrollable() {
-        super(new ScrollableView(App.getApp().getApplicationContext()));
+        super(new ScrollableView(APP.getActivity().getApplicationContext()));
         getItemView().scrollable = this;
     }
 
@@ -95,8 +88,8 @@ public class DSScrollable extends NativeItem {
     public void setContentItem(Item val) {
         if (contentItem != null) {
             contentItem.removeFromParent();
-            contentItem = null;
         }
+        contentItem = val;
         if (val != null) {
             getItemView().addContentView(val.view);
         }

@@ -12,6 +12,8 @@ import io.neft.utils.ColorValue;
 import io.neft.utils.StringUtils;
 
 public final class Parser {
+    private static final App APP = App.getInstance();
+
     private static Object[] getMethodCallArgs(Class[] parameterTypes, Object[] args) {
         Class arg = parameterTypes.length > 0 ? parameterTypes[0] : null;
 
@@ -44,7 +46,7 @@ public final class Parser {
             if (id <= 0) {
                 return new Object[1];
             } else {
-                return new Object[] {App.getApp().renderer.items.get(id)};
+                return new Object[] {APP.getRenderer().getItemById(id)};
             }
         } else {
             throw new IllegalArgumentException("Method parameters not supported");
@@ -64,11 +66,11 @@ public final class Parser {
         } catch (RuntimeException err) {
             // NOP
         }
-        App.getApp().client.addCustomFunction(eventName, new CustomFunction() {
+        APP.getClient().addCustomFunction(eventName, new CustomFunction() {
             @Override
             public void work(Object[] args) {
                 int itemId = Math.round((float) args[0]);
-                NativeItem item = (NativeItem) App.getApp().renderer.items.get(itemId);
+                NativeItem item = (NativeItem) APP.getRenderer().getItemById(itemId);
                 Object[] handlerArgs = new Object[args.length - 1];
                 System.arraycopy(args, 1, handlerArgs, 0, handlerArgs.length);
                 try {
@@ -84,7 +86,7 @@ public final class Parser {
 
     public static void registerHandlers(Class<? extends NativeItem> clazz) {
         // onCreate
-        Constructor ctor = null;
+        Constructor ctor;
         try {
             ctor = clazz.getDeclaredConstructor();
         } catch (NoSuchMethodException e) {

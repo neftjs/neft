@@ -2,11 +2,7 @@ package io.neft;
 
 import io.neft.client.Client;
 
-public class Native extends Thread {
-    static {
-        System.loadLibrary("neft");
-    }
-
+public class Native {
     public static native void init(String js);
 
     public static native void timers_init(Timers timers);
