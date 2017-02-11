@@ -26,24 +26,7 @@ const { AssertionError } = Neft.assert;
 
     assert.AssertionError = class AssertionError extends Error
         @generateMessage = (error, msg) ->
-            standardMsg = "#{error.actual} #{error.operator} #{error.expected}"
-
-            if ///\.\.\.$///.test msg
-                msgDef = msg.slice(0, -3).split(' ')
-
-                msgDef[2] ?= ''
-                msgDef[2] += ''
-
-                where = "#{error.scope}#{msgDef[0]}"
-
-                "#{standardMsg}\n" +
-                "  #{where} #{msgDef[1]}#{msgDef[2]} (got `#{error.actual}`, type #{typeof error.actual})" +
-                ", but `#{error.operator} #{error.expected}` asserted;\n" +
-                "  Documentation: http://neft.io/docs/#{where}\n"
-            else if msg
-                msg
-            else
-                standardMsg
+            msg or "#{error.actual} #{error.operator} #{error.expected}"
 
         constructor: (opts) ->
             @name = 'AssertionError'

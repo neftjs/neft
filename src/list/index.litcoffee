@@ -29,7 +29,12 @@ list instanceof List; // true
                 return new List arr
 
             if arr?
-                assert.isObject arr
+                assert.isObject arr, """
+                    List can be called with no argument or an object, but #{arr} given
+                """
+            assert.operator arguments.length, '<=', 1, """
+                List must be called with zero or one argument
+            """
 
             super()
             @length = 0
@@ -96,9 +101,17 @@ types.set(0, 'Fantasy');
 ```
 
         set: (i, val) ->
-            assert.operator i, '>=', 0
-            assert.operator i, '<', @length
-            assert.isNot val, undefined
+            assert.operator i, '>=', 0, """
+                List.set index cannot be lower than zero, but #{i} given
+            """
+            assert.operator i, '<', @length, """
+                List.set index must be lower than list length, #{i} given
+            """
+            assert.isNot val, undefined, """
+                List.set cannot be called with undefined value; \
+                undefined is reserved value for not existing keys; \
+                use null instead
+            """
 
             oldVal = @[i]
             if oldVal is val
@@ -134,7 +147,11 @@ console.log(fridge.items());
 ```
 
         append: (val) ->
-            assert.isNot val, undefined
+            assert.isNot val, undefined, """
+                List.append cannot be called with undefined value; \
+                undefined is reserved value for not existing keys; \
+                use null instead
+            """
 
             @push val
 
@@ -168,9 +185,17 @@ console.log(list.items());
 ```
 
         insert: (i, val) ->
-            assert.operator i, '>=', 0
-            assert.operator i, '<=', @length
-            assert.isNot val, undefined
+            assert.operator i, '>=', 0, """
+                List.insert index cannot be lower than zero, but #{i} given
+            """
+            assert.operator i, '<=', @length, """
+                List.insert index must be lower or equal list length, #{i} given
+            """
+            assert.isNot val, undefined, """
+                List.insert cannot be called with undefined value; \
+                undefined is reserved value for not existing keys; \
+                use null instead
+            """
 
             @splice i, 0, val
 
@@ -186,7 +211,9 @@ Appends all values stored in the given items into the list.
 Calls `onInsert()` signal for each value.
 
         extend: (items) ->
-            assert.isObject items
+            assert.isObject items, """
+                List.extend needs to be called with an object, but #{items} given
+            """
 
             for val in items
                 @append val
@@ -210,7 +237,9 @@ list; // ['a']
 ```
 
         remove: (val) ->
-            assert.ok utils.has(@, val)
+            assert.ok utils.has(@, val), """
+                List.remove cannot be called on not existing key, #{val} given
+            """
 
             i = @index val
             if i isnt -1
@@ -239,8 +268,10 @@ list; // ['a']
         pop: (i) ->
             if i is undefined
                 i = @length - 1
-            assert.operator i, '>=', 0
-            assert.operator i, '<', @length
+            assert.operator i, '>=', 0, "List.pop index cannot be lower than zero, but #{i} given"
+            assert.operator i, '<', @length, """
+                List.pop index must be lower than list length, #{i} given
+            """
 
             oldVal = @[i]
             @splice i, 1
@@ -293,7 +324,11 @@ list.index('c'); // -1
 ```
 
         index: (val) ->
-            assert.isNot val, undefined
+            assert.isNot val, undefined, """
+                List.index cannot be called with undefined value; \
+                undefined is reserved value for not existing keys; \
+                use null instead
+            """
 
             @indexOf val
 

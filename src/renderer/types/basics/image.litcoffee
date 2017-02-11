@@ -57,7 +57,7 @@ Image {
         utils.defineProperty @, 'pixelRatio', utils.CONFIGURABLE, ->
             pixelRatio
         , (val) ->
-            assert.isFloat val
+            assert.isFloat val, "Image.pixelRatio needs to be a float, but #{val} given"
             if val is pixelRatio
                 return
             oldVal = pixelRatio
@@ -108,7 +108,7 @@ The image source URL or data URI.
             name: 'source'
             defaultValue: ''
             developmentSetter: (val) ->
-                assert.isString val
+                assert.isString val, "Image.source needs to be a string, but #{val} given"
             setter: do ->
                 RESOURCE_REQUEST =
                     resolution: 1

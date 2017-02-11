@@ -56,8 +56,8 @@
         return
 
     exports.callFunction = (name, arg1, arg2, arg3) ->
-        assert.isString name
-        assert.notLengthOf name, 0
+        assert.isString name, "native.callFunction name needs to be a string, but #{name} given"
+        assert.notLengthOf name, 0, "native.callFunction name cannot be an empty string"
 
         bridge.pushAction CALL_FUNCTION
         bridge.pushString name
@@ -92,9 +92,11 @@
 ## native.on(*String* eventName, *Function* listener)
 
     exports.on = (name, listener) ->
-        assert.isString name
-        assert.notLengthOf name, 0
-        assert.isFunction listener
+        assert.isString name, "native.on name needs to be a string, but #{name} given"
+        assert.notLengthOf name, 0, "native.on name cannot be an empty string"
+        assert.isFunction listener, """
+            native.on listener needs to be a function, but #{listener} given
+        """
 
         eventListeners = listeners[name] ?= []
         eventListeners.push listener
