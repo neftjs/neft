@@ -173,7 +173,10 @@ The given test function can contains optional *callback* argument.
     onTestsEnd = (result) ->
         code = if result.status is 'success' then 0 else 1
         if utils.isServer
-            process.exit code
+            # give logs some time to be printed int stdout
+            setTimeout ->
+                process.exit code
+            , 100
 
     runAutomatically = do ->
         val = process?.env.RUN_TESTS

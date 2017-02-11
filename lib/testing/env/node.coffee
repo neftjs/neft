@@ -29,6 +29,8 @@ exports.execFile = (path, logsReader, callback) ->
         mainErr ?= String(data)
         log.error data
     nodeProcess.on 'exit', ->
+        unless logsReader.terminated
+            mainErr ||= "Node tests terminated before ending"
         callback mainErr or logsReader.error
 
 exports.run = (env, logsReader, callback) ->
