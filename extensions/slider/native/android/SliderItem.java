@@ -1,4 +1,4 @@
-package io.neft.extensions.nativeitems;
+package io.neft.extensions.slider;
 
 import android.widget.SeekBar;
 
@@ -7,14 +7,14 @@ import io.neft.renderer.annotation.OnCall;
 import io.neft.renderer.annotation.OnCreate;
 import io.neft.renderer.annotation.OnSet;
 
-public class DSSlider extends NativeItem {
+public class SliderItem extends NativeItem {
     private static final int DEFAULT_WIDTH = 150;
     private static final float PRECISION = 10000;
     private float minValue = 0;
     private float maxValue = 1;
 
-    @OnCreate("DSSlider")
-    public DSSlider() {
+    @OnCreate("Slider")
+    public SliderItem() {
         super(new SeekBar(APP.getActivity().getApplicationContext()));
         pushWidth(Math.round(dpToPx(DEFAULT_WIDTH)));
         autoWidth = false;
