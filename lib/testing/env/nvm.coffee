@@ -32,6 +32,8 @@ exports.execCommand = (nodeVersion, command, logsReader, callback) ->
         mainErr ?= String data
         log.error data
     nvmProcess.on 'exit', ->
+        unless logsReader?.terminated
+            mainErr ||= "NVM tests terminated before ending"
         callback mainErr or logsReader?.error
 
 exports.run = (env, logsReader, callback) ->

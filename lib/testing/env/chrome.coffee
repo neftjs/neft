@@ -107,7 +107,9 @@ runAndLog = (env, logsReader, callback) ->
     url = config.getBrowserHttpServerUrl()
     chromeProcess = runOnPathWithUri env, url, ->
         log.info "#{env.path} terminated"
-        callback logsReader.error
+        unless logsReader.terminated
+            error = "Chrome tests terminated before ending"
+        callback error or logsReader.error
     chromeProcess.onLog (msg) ->
         logsReader.log msg
         if logsReader.terminated
