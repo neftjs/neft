@@ -1,6 +1,10 @@
 package {{&package.android.package}};
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import io.neft.App;
 import io.neft.WindowView;
@@ -21,12 +25,19 @@ public class MainActivity extends io.neft.MainActivity {
                 {{/androidExtensions}}
             }
         };
+        Runnable restart = new Runnable() {
+            @Override
+            public void run() {
+                Context context = App.getInstance().getActivity().getBaseContext();
+                ProcessPhoenix.triggerRebirth(context, new Intent(context, {{&package.android.package}}.MainActivity.class));
+            }
+        };
         {{^buildServerUrl}}
         String codeWatchChangesUrl = null;
         {{/buildServerUrl}}
         {{#buildServerUrl}}
         String codeWatchChangesUrl = "{{&buildServerUrl}}";
         {{/buildServerUrl}}
-        App.getInstance().attach(this, codeWatchChangesUrl, initExtensions);
+        App.getInstance().attach(this, codeWatchChangesUrl, initExtensions, restart);
     }
 }
