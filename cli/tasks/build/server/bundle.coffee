@@ -59,28 +59,18 @@ mockNeft = (platform, neftFilePath) ->
                 utils.isClient = true
     return
 
+isInternalDependency = do ->
+    PREFIX = fs.realpathSync pathUtils.join __dirname, '../../../../node_modules/'
+    (filename) ->
+        filename.indexOf(PREFIX) is 0
+
 module.exports = (platform, options, app, callback) ->
     mode = if options.release then 'release' else 'develop'
     neftFileName = "neft-#{platform}-#{mode}.js"
     neftFilePath = pathUtils.resolve __dirname, "../../../bundle/neft-#{platform}-#{mode}.js"
 
-    testResolvedFunc = do ->
-        if platform is 'node' and options.out
-            (req, path, modulePath, parentPath) ->
-                modulePath.indexOf('node_modules') is -1 and
-                (req isnt path or pathUtils.isAbsolute(req)) or (
-                    modulePath.indexOf('node_modules/neft') isnt -1 and
-                    modulePath.indexOf('node_modules/neft/node_modules') is -1
-                )
-        else if platform is 'node'
-            (req, path, modulePath, parentPath) ->
-                req isnt path and modulePath.indexOf('node_modules') is -1 or (
-                    modulePath.indexOf('node_modules/neft') isnt -1 and
-                    modulePath.indexOf('node_modules/neft/node_modules') is -1
-                )
-        else
-            (req, path, modulePath, parentPath) ->
-                true
+    testFunc = (req, filename) ->
+        not isInternalDependency filename or req
 
     logtime = log.time 'Resolve bundle modules'
 
@@ -107,7 +97,8 @@ module.exports = (platform, options, app, callback) ->
         removeLogs: options.release
         watch: options.watch
         changedFiles: changedFiles
-        testResolved: testResolvedFunc
+        test: testFunc
+        testResolved: testFunc
         onEnvPrepare: onEnvPrepare
         , (err, file) ->
             global.Neft = NEFT
