@@ -205,7 +205,7 @@ where `XYZ` is the given name.
 ## Native::set(*String* propName, *Any* val)
 
             set: (name, val) ->
-                assert.isString name
+                assert.isString name, "NativeItem.set name must be a string, but #{name} given"
 
                 ctorName = utils.capitalize @constructor.__name__
                 id = @_impl.id
@@ -222,7 +222,7 @@ where `XYZ` is the given name.
 ## Native::call(*String* funcName, *Any* args...)
 
             call: (name, args...) ->
-                assert.isString name
+                assert.isString name, "NativeItem.call name must be a string, but #{name} given"
 
                 ctorName = utils.capitalize @constructor.__name__
                 id = @_impl.id
@@ -251,7 +251,7 @@ where `XYZ` is the given name.
 
                 length = arguments.length
                 args = new Array length - 1
-                for i in [0...length-1] by 1
+                for i in [0...length - 1] by 1
                     args[i] = arguments[i + 1]
 
                 item = itemListeners[0]
@@ -261,8 +261,10 @@ where `XYZ` is the given name.
                 return
 
             on: (name, func) ->
-                assert.isString name
-                assert.isFunction func
+                assert.isString name, "NativeItem.on name must be a string, but #{name} given"
+                assert.isFunction func, """
+                    NativeItem.on listener must be a function, but #{func} given
+                """
 
                 name = utils.capitalize name
 

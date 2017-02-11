@@ -52,7 +52,7 @@ Rectangle {
                     (val) ->
                         Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
                 developmentSetter: (val) ->
-                    assert.isString val
+                    assert.isString val, "Rectangle.color needs to be a string, but #{val} given"
 
 ## *Float* Rectangle::radius = `0`
 
@@ -64,7 +64,7 @@ Rectangle {
                 defaultValue: 0
                 implementation: Impl.setRectangleRadius
                 developmentSetter: (val) ->
-                    assert.isFloat val
+                    assert.isFloat val, "Rectangle.radius needs to be a float, but #{val} given"
 
 ## *Object* Rectangle::border
 
@@ -103,7 +103,9 @@ Rectangle {
                 parentConstructor: Rectangle
                 implementation: Impl.setRectangleBorderWidth
                 developmentSetter: (val) ->
-                    assert.isFloat val
+                    assert.isFloat val, """
+                        Rectangle.border.width needs to be a float, but #{val} given
+                    """
 
 ## *String* Rectangle::border.color = `'transparent'`
 
@@ -122,7 +124,9 @@ Rectangle {
                     (val) ->
                         Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
                 developmentSetter: (val) ->
-                    assert.isString val
+                    assert.isString val, """
+                        Rectangle.border.color needs to be a string, but #{val} given
+                    """
 
             toJSON: ->
                 width: @width

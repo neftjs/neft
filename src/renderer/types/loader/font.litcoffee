@@ -163,8 +163,8 @@ FontLoader {
         utils.defineProperty @::, 'name', null, ->
             @_name
         , (val) ->
-            assert.isString val
-            assert.notLengthOf val, 0
+            assert.isString val, "FontLoader.name needs to be a string, but #{val} given"
+            assert.notLengthOf val, 0, "FontLoader.name cannot be an empty string"
             assert.lengthOf @_source, 0
 
             @_name = val
@@ -197,8 +197,8 @@ Italic font filename must contains 'italic'.
         utils.defineProperty @::, 'source', null, ->
             @_source
         , (val) ->
-            assert.isString val
-            assert.notLengthOf val, 0
+            assert.isString val, "FontLoader.source needs to be a string, but #{val} given"
+            assert.notLengthOf val, 0, "FontLoader.source cannot be an empty string"
             assert.lengthOf @_source, 0
 
             @_source = val

@@ -63,14 +63,14 @@
             namespace: 'font'
             parentConstructor: ctor
             developmentSetter: (val) ->
-                assert.isString val
+                assert.isString val, "Font.family needs to be a string, but #{val} given"
             setter: (_super) -> (val) ->
                 _super.call @, val
                 reloadFontFamily @
 
 ## *Float* Font.pixelSize = `14`
 
-## *Signal* Font.onPixelSizeChange(*String* oldValue)
+## *Signal* Font.onPixelSizeChange(*Float* oldValue)
 
         itemUtils.defineProperty
             constructor: @
@@ -80,7 +80,7 @@
             parentConstructor: ctor
             implementation: Impl["set#{ctor.__name__}FontPixelSize"]
             developmentSetter: (val) ->
-                assert.isFloat val
+                assert.isFloat val, "Font.pixelSize needs to be a float, but #{val} given"
 
 ## *Float* Font.weight = `0.4`
 
@@ -95,9 +95,9 @@ In range from 0 to 1.
             namespace: 'font'
             parentConstructor: ctor
             developmentSetter: (val) ->
-                assert.isFloat val
-                assert.operator val, '>=', 0
-                assert.operator val, '<=', 1
+                assert.isFloat val, "Font.weight needs to be a float, but #{val} given"
+                assert.operator val, '>=', 0, "Font.weight needs to be in range 0-1, #{val} given"
+                assert.operator val, '<=', 1, "Font.weight needs to be in range 0-1, #{val} given"
             setter: (_super) -> (val) ->
                 _super.call @, val
                 reloadFontFamily @
@@ -114,7 +114,7 @@ In range from 0 to 1.
             parentConstructor: ctor
             implementation: Impl["set#{ctor.__name__}FontWordSpacing"]
             developmentSetter: (val) ->
-                assert.isFloat val
+                assert.isFloat val, "Font.wordSpacing needs to be a float, but #{val} given"
 
 ## Hidden *Float* Font.letterSpacing = `0`
 
@@ -128,7 +128,7 @@ In range from 0 to 1.
             parentConstructor: ctor
             implementation: Impl["set#{ctor.__name__}FontLetterSpacing"]
             developmentSetter: (val) ->
-                assert.isFloat val
+                assert.isFloat val, "Font.letterSpacing needs to be a float, but #{val} given"
 
 ## *Boolean* Font.italic = `false`
 
@@ -141,7 +141,7 @@ In range from 0 to 1.
             namespace: 'font'
             parentConstructor: ctor
             developmentSetter: (val) ->
-                assert.isBoolean val
+                assert.isBoolean val, "Font.italic needs to be a boolean, but #{val} given"
             setter: (_super) -> (val) ->
                 _super.call @, val
                 reloadFontFamily @

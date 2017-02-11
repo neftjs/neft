@@ -20,7 +20,7 @@ getPropHandlerName = do ->
 class Connection
     pool = []
 
-    @factory = (binding, item, prop, parent=null) ->
+    @factory = (binding, item, prop, parent = null) ->
         if pool.length > 0 and (elem = pool.pop())
             Connection.call elem, binding, item, prop, parent
             elem
@@ -176,10 +176,10 @@ class Binding
         `//</development>`
 
     getItemById: (item) ->
-        throw "Not implemented"
+        throw new Error "Not implemented"
 
     getValue: ->
-        throw "Not implemented"
+        throw new Error "Not implemented"
 
     getDefaultValue: ->
         switch typeof @getValue()
@@ -193,7 +193,7 @@ class Binding
                 null
 
     setValue: (val) ->
-        throw "Not implemented"
+        throw new Error "Not implemented"
 
     onError: (err) ->
 

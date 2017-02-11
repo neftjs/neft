@@ -33,7 +33,7 @@ dict.param; // value
 
         @fromJSON = (json) ->
             json = utils.tryFunction JSON.parse, JSON, [json], json
-            assert.isPlainObject json
+            assert.isPlainObject json, "Dict.fromJSON cannot parse json, #{json} given"
 
             new Dict json
 
@@ -61,7 +61,12 @@ data.name; // xyz
                 return new Dict obj
 
             if obj?
-                assert.isObject obj
+                assert.isObject obj, """
+                    Dict can be called with no argument or an object, but #{obj} given
+                """
+            assert.operator arguments.length, "<=", 1, """
+                Dict must be called with zero or one argument
+            """
 
             super()
 
@@ -138,9 +143,13 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 ```
 
         utils.defineProperty @::, 'set', NOT_ENUMERABLE, (key, val) ->
-            assert.isString key
-            assert.notLengthOf key, 0
-            assert.isNot val, undefined
+            assert.isString key, "Dict.set key needs to be a string, but #{key} given"
+            assert.notLengthOf key, 0, "Dict.set key cannot be an empty string"
+            assert.isNot val, undefined, """
+                Dict.set value cannot be an undefined; \
+                undefined is reserved value for not existing keys; \
+                use null instead
+            """
 
             oldVal = @[key]
 
@@ -164,8 +173,8 @@ links.set('googlePlus', 'https://plus.google.com/+NeftIo-for-apps/');
 Returns `true` if the given key exists in this *Dict*.
 
         utils.defineProperty @::, 'has', NOT_ENUMERABLE, (key) ->
-            assert.isString key
-            assert.notLengthOf key, 0
+            assert.isString key, "Dict.has key needs to be a string, but #{key} given"
+            assert.notLengthOf key, 0, "Dict.has key cannot be an empty string"
 
             @[key] isnt undefined
 
@@ -176,7 +185,7 @@ Sets all keys with their values from the given object into this *Dict*.
 Calls `onChange()` signal for each given key.
 
         utils.defineProperty @::, 'extend', NOT_ENUMERABLE, (obj) ->
-            assert.isObject obj
+            assert.isObject obj, "Dict.extend argument needs to be an object, but #{obj} given"
 
             for key, val of obj
                 if obj.hasOwnProperty(key)
@@ -210,9 +219,11 @@ data.pop('name');
 ```
 
         utils.defineProperty @::, 'pop', NOT_ENUMERABLE, (key) ->
-            assert.isString key
-            assert.notLengthOf key, 0
-            assert.isNot @[key], undefined
+            assert.isString key, "Dict.pop key must be a string, but #{key} given"
+            assert.notLengthOf key, 0, "Dict.pop key cannot be an empty string"
+            assert.isNot @[key], undefined, """
+                Dict.pop cannot be called on not existing key, #{key} given
+            """
 
             oldVal = @[key]
             delete @[key]
