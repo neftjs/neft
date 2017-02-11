@@ -7,7 +7,6 @@ public final class NativeItemsExtension {
         NativeItem.registerItem(DSScrollable.class);
         NativeItem.registerItem(DSTextInput.class);
         NativeItem.registerItem(DSButton.class);
-        NativeItem.registerItem(DSSlider.class);
         NativeItem.registerItem(DSSwitch.class);
         NativeItem.registerItem(DSVideo.class);
     }

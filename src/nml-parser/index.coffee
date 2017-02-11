@@ -222,6 +222,8 @@ stringify =
         rendererCtor = Renderer[elem.name.split('.')[0]]
         if rendererCtor?
             r = "Renderer.#{elem.name}.New(_c, #{json})\n"
+        else if laxyItem = exports.lazyItems[elem.name]
+            r = "require('#{laxyItem}').New(_c, #{json})\n"
         else
             r = "Renderer.Component.getCloneFunction(#{elem.name}, '#{elem.name}')(_c, #{json})\n"
         if visibleId
@@ -284,7 +286,7 @@ getIds = (elem, ids={}) ->
         ids[attr.value] = attr.parent
     ids
 
-module.exports = (file, filename) ->
+exports = module.exports = (file, filename, opts) ->
     elems = parser file, filename
     codes = {}
     autoInitCodes = []
@@ -354,4 +356,5 @@ module.exports = (file, filename) ->
     autoInitCodes: autoInitCodes
     queries: allQueries
 
-module.exports.bundle = bundle module.exports
+exports.bundle = bundle exports
+exports.lazyItems = {}

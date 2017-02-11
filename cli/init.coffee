@@ -123,10 +123,7 @@ else if args.create
 else if platforms.length > 0
     options.isRunning = args.run.length > 0
     require('./tasks/build') options, (err) ->
-        if err
-            return log.error err?.stack or err
-
-        if args.run.length > 0
+        if args.run.length > 0 and not err
             for platform in platforms
                 require('./tasks/run') platform, options
         else if not options.watch

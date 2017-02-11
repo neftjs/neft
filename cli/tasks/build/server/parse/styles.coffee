@@ -6,6 +6,7 @@ moduleCache.registerTxt(['.pegjs'])
 fs = require 'fs-extra'
 pathUtils = require 'path'
 coffee = require 'coffee-script'
+glob = require 'glob'
 utils = require 'src/utils'
 log = require 'src/log'
 Document = require 'src/document'
@@ -47,6 +48,16 @@ getInputDirs = (app) ->
 
     inputDirs
 
+nmlParser.lazyItems = do ->
+    mainPath = pathUtils.join __dirname, '../../../../../'
+    paths = glob.sync pathUtils.join mainPath, 'extensions/*/renderer/*.js'
+    result = {}
+    for path in paths
+        name = path.slice(0, -3).slice(path.lastIndexOf('/') + 1)
+        name = utils.capitalize name
+        result[name] = path.slice mainPath.length
+    result
+
 module.exports = (platform, app, callback) ->
     fs.ensureDir OUT_DIR
 
@@ -68,7 +79,7 @@ module.exports = (platform, app, callback) ->
 
             filesToLoad++
 
-            filename = dir.prefix + path.slice(dir.path.length+1)
+            filename = dir.prefix + path.slice(dir.path.length + 1)
             filename = filename.slice 0, filename.lastIndexOf('.')
             destPath = "#{OUT_DIR}/#{filename}.js"
 
@@ -112,9 +123,9 @@ module.exports = (platform, app, callback) ->
                 try
                     createBundle file
                 catch err
-                    console.error "\u001b[1mError in `#{file.path}`\u001b[22m\n\n#{err.message or err}"
+                    log.error "\u001b[1mError in `#{file.path}`\u001b[22m\n\n#{err.message or err}"
                     log.end compileLogtime
-                    continue
+                    return callback new Error "Cannot parse #{file.path} style file"
                 log.end compileLogtime
                 newQueries[file.filename] = file.queries
                 stack.add writeFile, null, [file.destPath, file.data]

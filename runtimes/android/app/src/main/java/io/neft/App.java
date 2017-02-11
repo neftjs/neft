@@ -1,15 +1,11 @@
 package io.neft;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Choreographer;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
-
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -67,6 +63,7 @@ public class App extends Thread {
             }
     );
     private Runnable initExtensions;
+    private Runnable restart;
     private boolean framePending;
     private final Runnable animationFrameRunnable;
     private final List<MotionEvent> touchEvents = new ArrayList<>();
@@ -153,7 +150,12 @@ public class App extends Thread {
         });
     }
 
-    public void attach(@NonNull MainActivity activity, String codeWatchChangesUrl, Runnable initExtensions) {
+    public void attach(
+            @NonNull MainActivity activity,
+            String codeWatchChangesUrl,
+            Runnable initExtensions,
+            Runnable restart
+    ) {
         if (isAlive()) {
             throw new IllegalStateException("Attach needs to be called before starting APP thread");
         }
@@ -164,6 +166,7 @@ public class App extends Thread {
         this.windowView = activity.view;
         this.codeWatchChangesUrl = codeWatchChangesUrl;
         this.initExtensions = initExtensions;
+        this.restart = restart;
 
         startWhenReady();
     }
@@ -210,11 +213,6 @@ public class App extends Thread {
             Native.init(code);
             watchOnBundleChange(codeWatchChangesUrl + "/onNewBundle/android");
         }
-    }
-
-    private void restart() {
-        Context context = activity.getBaseContext();
-        ProcessPhoenix.triggerRebirth(context, new Intent(context, io.neft.sample.MainActivity.class));
     }
 
     private String getAssetFile(String path) {
@@ -271,7 +269,7 @@ public class App extends Thread {
             @Override
             public void run(String response) {
                 if (response != null) {
-                    restart();
+                    restart.run();
                     return;
                 }
                 new Handler().postDelayed(new Runnable() {
