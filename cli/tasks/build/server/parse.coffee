@@ -2,6 +2,7 @@
 
 fs = require 'fs-extra'
 pathUtils = require 'path'
+glob = require 'glob'
 utils = require 'src/utils'
 log = require 'src/log'
 
@@ -10,6 +11,13 @@ linkStyles = require './parse/styles'
 linkDocuments = require './parse/documents'
 linkResources = require './parse/resources'
 createIndexFile = require './parse/index'
+
+NEFT_EXTENSIONS = do ->
+    extensionsPath = pathUtils.join __dirname, '../../../../extensions/'
+    paths = glob.sync "#{extensionsPath}*"
+    for path, i in paths
+        paths[i] = path.slice extensionsPath.length
+    paths
 
 module.exports = (platform, options, callback) ->
     stack = new utils.async.Stack
@@ -29,6 +37,8 @@ module.exports = (platform, options, callback) ->
 
     # get neft defined extensions
     packageExtensions = app.package.extensions
+    if packageExtensions is undefined
+        packageExtensions = NEFT_EXTENSIONS
     if Array.isArray(packageExtensions)
         for ext in packageExtensions
             path = pathUtils.resolve __dirname, "../../../../extensions/#{ext}"

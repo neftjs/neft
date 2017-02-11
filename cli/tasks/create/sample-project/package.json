@@ -15,10 +15,6 @@
   "scripts": {
     "test": "neft test"
   },
-  "extensions": [
-    "default-styles",
-    "native-items"
-  ],
   "android": {
     "package": "io.neft.sample",
     "versionCode": 1,
