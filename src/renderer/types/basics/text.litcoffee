@@ -120,7 +120,7 @@ Text {
                     (val) ->
                         Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
                 developmentSetter: (val) ->
-                    assert.isString val
+                    assert.isString val, "Text.color needs to be a string, but #{val} given"
 
 ## *String* Text::linkColor = `'blue'`
 
@@ -149,7 +149,7 @@ Text {
                 defaultValue: 1
                 implementation: Impl.setTextLineHeight
                 developmentSetter: (val) ->
-                    assert.isFloat val
+                    assert.isFloat val, "Text.lineHeight needs to be a float, but #{val} given"
 
 ## ReadOnly *Float* Text::contentWidth
 

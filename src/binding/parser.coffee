@@ -4,7 +4,7 @@ exports.BINDING_THIS_TO_TARGET_OPTS = BINDING_THIS_TO_TARGET_OPTS = 1
 
 repeatString = (str, amount) ->
     r = str
-    for i in [0...amount-1] by 1
+    for i in [0...amount - 1] by 1
         r += str
     r
 
@@ -15,7 +15,7 @@ exports.isBinding = (code) ->
         return false
     true
 
-exports.parse = (val, isPublicId, opts=0, objOpts={}) ->
+exports.parse = (val, isPublicId, opts = 0, objOpts = {}) ->
     binding = ['']
 
     # split to types
@@ -39,7 +39,7 @@ exports.parse = (val, isPublicId, opts=0, objOpts={}) ->
                 lastBinding = null
                 binding.push char
 
-        if /'|"/.test(char) and val[i-1] isnt '\\'
+        if /'|"/.test(char) and val[i - 1] isnt '\\'
             isString = not isString
 
     # filter by ids
@@ -63,8 +63,8 @@ exports.parse = (val, isPublicId, opts=0, objOpts={}) ->
     n = binding.length
     while ++i < n
         if typeof binding[i] is 'string'
-            if typeof binding[i-1] is 'string'
-                binding[i-1] += binding[i]
+            if typeof binding[i - 1] is 'string'
+                binding[i - 1] += binding[i]
 
             else if binding[i].trim() isnt ''
                 continue
@@ -79,10 +79,10 @@ exports.parse = (val, isPublicId, opts=0, objOpts={}) ->
         if typeof elem is 'string'
             hash += elem
         else if elem.length > 1
-            if binding[i-1]? and text
+            if binding[i - 1]? and text
                 text += ", "
 
-            text += repeatString('[', elem.length-1)
+            text += repeatString('[', elem.length - 1)
             text += "'#{elem[0]}'"
             if elem[0] is "this"
                 hash += "this"

@@ -28,7 +28,7 @@
 This is a base class for everything which is visible.
 
         constructor: ->
-            assert.instanceOf @, Item, 'ctor ...'
+            assert.instanceOf @, Item
 
             super()
             @_$ = null
@@ -140,7 +140,7 @@ Rectangle {
         utils.defineProperty @::, 'children', null, ->
             @_children ||= new ChildrenObject(@)
         , (val) ->
-            assert.isArray val, '::children setter ...'
+            assert.isArray val, "Item.children needs to be an array, but #{val} given"
             @clear()
             for item in val
                 val.parent = @
@@ -204,7 +204,9 @@ Can be e.g. *Flow*, *Grid* etc.
                 defaultValue: null
                 developmentSetter: (val) ->
                     if val?
-                        assert.instanceOf val, Item
+                        assert.instanceOf val, Item, """
+                            Item.children.layout needs to be an Item, but #{val} given
+                        """
                 setter: (_super) -> (val) ->
                     if @_layout?.effectItem
                         @_layout.parent = null
@@ -236,17 +238,24 @@ will be added into the `target` item.
                 defaultValue: null
                 developmentSetter: (val) ->
                     if val?
-                        assert.instanceOf val, Item
+                        assert.instanceOf val, Item, """
+                            Item.children.target needs to be an Item, but #{val} given
+                        """
 
 ### *Item* Item::children.get(*Integer* index)
 
 Returns an item with the given index.
 
             get: (val) ->
-                assert.operator val, '>=', 0
-                assert.operator val, '<', @length
+                assert.operator val, '>=', 0, """
+                    Item.children.get index cannot be lower than zero, #{val} given
+                """
+                assert.operator val, '<', @length, """
+                    Item.children.get index must be lower than children.length, \
+                    #{val} given
+                """
 
-                if val < @length/2
+                if val < @length / 2
                     sibling = @firstChild
                     while val > 0
                         sibling = sibling.nextSibling
@@ -329,7 +338,7 @@ Removes all children from the item.
             constructor: @
             name: 'parent'
             defaultValue: null
-            setter: (_super) -> (val=null) ->
+            setter: (_super) -> (val = null) ->
                 old = @_parent
                 oldChildren = old?.children
                 valChildren = val?.children
@@ -351,13 +360,15 @@ Removes all children from the item.
                 if old is val
                     return
 
-                assert.isNot @, val
+                assert.isNot @, val, "Item.parent cannot be set with context item, #{val} given"
 
                 if pointer = @_pointer
                     pointer.hover = pointer.pressed = false
 
                 if val isnt null
-                    assert.instanceOf val, Item, '::parent setter ...'
+                    assert.instanceOf val, Item, """
+                        Item.parent needs to be an Item or null, but #{val} given
+                    """
 
                 # old siblings
                 oldPreviousSibling = @_previousSibling
@@ -458,21 +469,27 @@ Removes all children from the item.
 
         utils.defineProperty @::, 'previousSibling', null, ->
             @_previousSibling
-        , (val=null) ->
-            assert.isNot @, val
+        , (val = null) ->
+            assert.isNot @, val, """
+                Item.previousSibling cannot be set with context Item, #{val} given
+            """
 
             if val is @_previousSibling
                 return
 
             if val
-                assert.instanceOf val, Item
+                assert.instanceOf val, Item, """
+                    Item.previousSibling must be an Item or null, but #{val} given
+                """
                 nextSibling = val._nextSibling
                 if not nextSibling and val._parent isnt @_parent
                     @parent = val._parent
                 else
                     @nextSibling = nextSibling
             else
-                assert.isDefined @_parent
+                assert.isDefined @_parent, """
+                    Cannot null Item.previousSibling when Item has no parent
+                """
                 @nextSibling = @_parent.children.firstChild
 
             assert.is @_previousSibling, val
@@ -526,13 +543,21 @@ Removes all children from the item.
 
         utils.defineProperty @::, 'nextSibling', null, ->
             @_nextSibling
-        , (val=null) ->
-            assert.isNot @, val
+        , (val = null) ->
+            assert.isNot @, val, """
+                Item.nextSibling cannot be set with context Item, #{val} given
+            """
             if val
-                assert.instanceOf val, Item
-                assert.isDefined val._parent
+                assert.instanceOf val, Item, """
+                    Item.nextSibling needs to be an Item or null, but #{val} given
+                """
+                assert.isDefined val._parent, """
+                    Item.nextSibling value needs to have a parent, given #{val} has no parent
+                """
             else
-                assert.isDefined @_parent
+                assert.isDefined @_parent, """
+                    Cannot null Item.nextSibling when Item has no parent
+                """
 
             if val is @_nextSibling
                 return
@@ -681,10 +706,14 @@ Removes all children from the item.
                 index++
             index
         , (val) ->
-            assert.isInteger val
-            assert.isDefined @_parent
-            assert.operator val, '>=', 0
-            assert.operator val, '<=', @_parent._children.length
+            assert.isInteger val, "Item.index needs to be a integer, but #{val} given"
+            assert.isDefined @_parent, """
+                When setting Item.index, item needs to have a parent, #{@} has no parent
+            """
+            assert.operator val, '>=', 0, "Item.index needs to greater than zero, #{val} given"
+            assert.operator val, '<=', @_parent._children.length, """
+                Item.index needs to be lower than parent.children.length, #{val} given
+            """
 
             {children} = @parent
             if val >= children.length
@@ -727,7 +756,7 @@ Item {
             defaultValue: true
             implementation: Impl.setItemVisible
             developmentSetter: (val) ->
-                assert.isBoolean val, '::visible setter ...'
+                assert.isBoolean val, "Item.visible needs to be a boolean, but #{val} given"
 
 ## *Boolean* Item::clip = `false`
 
@@ -739,7 +768,7 @@ Item {
             defaultValue: false
             implementation: Impl.setItemClip
             developmentSetter: (val) ->
-                assert.isBoolean val, '::clip setter ...'
+                assert.isBoolean val, "Item.clip needs to be a boolean, but #{val} given"
 
 ## *Float* Item::width = `0`
 
@@ -751,7 +780,7 @@ Item {
             defaultValue: 0
             implementation: Impl.setItemWidth
             developmentSetter: (val) ->
-                assert.isFloat val, '::width setter ...'
+                assert.isFloat val, "Item.width needs to be a float, but #{val} given"
 
 ## *Float* Item::height = `0`
 
@@ -763,7 +792,7 @@ Item {
             defaultValue: 0
             implementation: Impl.setItemHeight
             developmentSetter: (val) ->
-                assert.isFloat val, '::height setter ...'
+                assert.isFloat val, "Item.height needs to be a float, but #{val} given"
 
 ## *Float* Item::x = `0`
 
@@ -775,7 +804,7 @@ Item {
             defaultValue: 0
             implementation: Impl.setItemX
             developmentSetter: (val) ->
-                assert.isFloat val, '::x setter ...'
+                assert.isFloat val, "Item.x needs to be a float, but #{val} given"
 
 ## *Float* Item::y = `0`
 
@@ -787,7 +816,7 @@ Item {
             defaultValue: 0
             implementation: Impl.setItemY
             developmentSetter: (val) ->
-                assert.isFloat val, '::y setter ...'
+                assert.isFloat val, "Item.y needs to be a float, but #{val} given"
 
 ## *Float* Item::z = `0`
 
@@ -798,7 +827,7 @@ Item {
             name: 'z'
             defaultValue: 0
             developmentSetter: (val) ->
-                assert.isFloat val, '::z setter ...'
+                assert.isFloat val, "Item.z needs to be a float, but #{val} given"
             setter: (_super) -> (val) ->
                 oldVal = @_z
                 if oldVal is val
@@ -892,7 +921,7 @@ Item {
             defaultValue: 1
             implementation: Impl.setItemScale
             developmentSetter: (val) ->
-                assert.isFloat val, '::scale setter ...'
+                assert.isFloat val, "Item.scale needs to be a float, but #{val} given"
 
 ## *Float* Item::rotation = `0`
 
@@ -913,7 +942,7 @@ Rectangle {
             defaultValue: 0
             implementation: Impl.setItemRotation
             developmentSetter: (val) ->
-                assert.isFloat val, '::rotation setter ...'
+                assert.isFloat val, "Item.rotation needs to be a float, but #{val} given"
 
 ## *Float* Item::opacity = `1`
 
@@ -925,7 +954,7 @@ Rectangle {
             defaultValue: 1
             implementation: Impl.setItemOpacity
             developmentSetter: (val) ->
-                assert.isFloat val, '::opacity setter ...'
+                assert.isFloat val, "Item.opacity needs to be a float, but #{val} given"
 
 ## *String* Item::linkUri = `''`
 
@@ -939,7 +968,7 @@ Points to the URI which will be used when user clicks on this item.
             defaultValue: ''
             implementation: Impl.setItemLinkUri
             developmentSetter: (val) ->
-                assert.isString val, '::linkUri setter ...'
+                assert.isString val, "Item.linkUri needs to be a string, but #{val} given"
 
 ## *Item* Item::background
 
@@ -968,7 +997,9 @@ By default, background is filled to his parent.
             defaultValue: null
             developmentSetter: (val) ->
                 if val?
-                    assert.instanceOf val, Item
+                    assert.instanceOf val, Item, """
+                        "Item.background needs to be an Item or null, but #{val} given"
+                    """
             getter: (_super) -> ->
                 unless @_background
                     @_defaultBackground ||= createDefaultBackground @
@@ -996,7 +1027,7 @@ By default, background is filled to his parent.
 Returns `true` if two items overlaps.
 
         overlap: (item) ->
-            assert.instanceOf item, Item
+            assert.instanceOf item, Item, "Item.overlap called on wrong context"
 
             Impl.doItemOverlap.call @, item
 

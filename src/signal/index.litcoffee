@@ -91,7 +91,9 @@ If there is no pending emits, the given function is calling immediately.
 
     immediate = []
     exports.setImmediate = (callback) ->
-        assert.isFunction callback
+        assert.isFunction callback, """
+            signal.setImmediate callback must be a function, but #{callback} given
+        """
         if pendingSignals is 0
             callback()
         else
@@ -158,7 +160,9 @@ Call all of the signal listeners with the given arguments (2 maximally).
         emit: (arg1, arg2) ->
             assert.isFunction @, 'emit must be called on a signal function'
             assert.isArray @listeners, 'emit must be called on a signal function'
-            assert.operator arguments.length, '<', 3, 'signal accepts maximally two parameters; use object instead'
+            assert.operator arguments.length, '<', 3, """
+                signal accepts maximally two parameters; use object instead
+            """
 
             callSignal @obj, @listeners, arg1, arg2
 
