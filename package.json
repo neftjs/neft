@@ -64,7 +64,6 @@
     "coveralls": "2.11.14",
     "escape-html": "1.0.3",
     "istanbul": "^0.4.5",
-    "sinon": "1.17.5",
     "wd": "0.4.0"
   }
 }
