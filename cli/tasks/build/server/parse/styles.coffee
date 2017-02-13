@@ -48,7 +48,7 @@ getInputDirs = (app) ->
 
     inputDirs
 
-nmlParser.lazyItems = do ->
+nmlParser.lazyItems = Neft.nmlParser.lazyItems = do ->
     mainPath = pathUtils.join __dirname, '../../../../../'
     paths = glob.sync pathUtils.join mainPath, 'extensions/*/renderer/*.js'
     result = {}

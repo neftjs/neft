@@ -1,0 +1,3 @@
+Button {
+    document.query: 'button'
+}

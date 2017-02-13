@@ -9,9 +9,6 @@
 </script>
 
 <style>
-    `
-    const NativeItems = require('extensions/native-items');
-    `
     Rectangle {
         id: nav;
         document.query: 'nav';
@@ -27,7 +24,7 @@
             };
         }
 
-        NativeItems.Scrollable {
+        Scrollable {
             id: scroll;
             background.color: 'nav';
             anchors.fillHeight: parent;
