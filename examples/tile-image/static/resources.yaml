@@ -1,0 +1,4 @@
+resolutions: [1, 2, 3, 4]
+resources:
+    logo:
+        file: logo@4x.png

@@ -6,8 +6,8 @@
     },
     "android": {
         "sdkDir": "$ANDROID_HOME",
-        "compileSdkVersion": 23,
-        "buildToolsVersion": "23",
+        "compileSdkVersion": 25,
+        "buildToolsVersion": "25",
         "dependencies": []
     }
 }
