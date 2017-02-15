@@ -26,6 +26,7 @@ class Image: Item {
         }
     }
 
+    var source: String?
     var imageView: UIImageView {
         return view as! UIImageView
     }
@@ -34,12 +35,12 @@ class Image: Item {
         super.init(view: view)
     }
 
-    private func loadSvgData(_ svg: NSString, completion: (_ data: Data?) -> Void) {
+    static private func loadSvgData(_ svg: NSString, completion: (_ data: Data?) -> Void) {
         // TODO
         completion(nil)
     }
 
-    private func getImageFromData(_ data: Data, source: String, completion: (_ img: UIImage?) -> Void) {
+    static private func getImageFromData(_ data: Data, source: String, completion: (_ img: UIImage?) -> Void) {
         if source.hasSuffix(".svg") {
             let dataUri = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
             guard dataUri != nil else { return completion(nil) }
@@ -54,14 +55,14 @@ class Image: Item {
         }
     }
 
-    private func loadResourceSource(_ source: String) -> Data? {
+    static private func loadResourceSource(_ source: String) -> Data? {
         let path = Bundle.main.path(forResource: source, ofType: nil)
         if path == nil { return nil }
         let data = try? Data(contentsOf: URL(fileURLWithPath: path!))
         return data
     }
 
-    private func loadDataUriSource(_ source: String) -> Data? {
+    static private func loadDataUriSource(_ source: String) -> Data? {
         let svgPrefix = "data:image/svg+xml;utf8,"
         if source.hasPrefix(svgPrefix) {
             return (try? Data(contentsOf: URL(fileURLWithPath: source.substring(from: source.characters.index(source.startIndex, offsetBy: svgPrefix.characters.count)))))
@@ -69,28 +70,18 @@ class Image: Item {
         return self.loadUrlSource(source)
     }
 
-    private func loadUrlSource(_ source: String) -> Data? {
+    static private func loadUrlSource(_ source: String) -> Data? {
         let url = URL(string: source)
         if url == nil { return nil }
         let data = try? Data(contentsOf: url!)
         return data
     }
 
-    private func setSource(_ val: String) {
+    static func getImageFromSource(_ val: String, _ onCompletion: @escaping (UIImage?) -> Void) {
         // remove image
         if val == "" {
-            image = nil
+            onCompletion(nil)
             return
-        }
-
-        // completion handler
-        let onCompletion = {
-            (img: UIImage?) in
-            self.image = img
-
-            let width = img == nil ? 0 : CGFloat(img!.size.width)
-            let height = img == nil ? 0 : CGFloat(img!.size.height)
-            self.pushAction(.imageSize, val, img != nil, width, height)
         }
 
         // get image from cache
@@ -139,6 +130,22 @@ class Image: Item {
                 handler(img)
             }
             Image.loadingHandlers.removeValue(forKey: val)
+        }
+    }
+
+    private func setSource(_ val: String) {
+        self.source = val
+        Image.getImageFromSource(val) {
+            (img: UIImage?) in
+            if (self.source != val) {
+                return
+            }
+
+            self.image = img
+
+            let width = img == nil ? 0 : CGFloat(img!.size.width)
+            let height = img == nil ? 0 : CGFloat(img!.size.height)
+            self.pushAction(.imageSize, val, img != nil, width, height)
         }
     }
 }

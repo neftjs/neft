@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "neft-example-tile-image",
+  "version": "0.0.1",
+  "description": "Neft.io TileImage Example",
+  "config": {
+    "title": "Neft.io Project",
+    "protocol": "http",
+    "port": 3000,
+    "host": "localhost",
+    "url": "http://localhost:3000/",
+    "language": "en",
+    "type": "app"
+  },
+  "scripts": {
+    "test": "neft-unit ./tests/\\*\\*/\\*.js"
+  },
+  "android": {
+    "package": "io.neft.examples.tileimage",
+    "versionCode": 1,
+    "versionName": "1.0",
+    "application": {
+      "label": "Neft.io TimeImage Example"
+    }
+  }
+}

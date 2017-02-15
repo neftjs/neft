@@ -3,10 +3,6 @@
 <title>${context.app.config.title}</title>
 
 <style>
-    `
-    const NativeItems = require('extensions/native-items');
-    `
-
     Flow {
         document.query: 'header';
         alignment: 'center';
@@ -38,12 +34,12 @@
         spacing: 10;
         background.color: 'neftGreen';
 
-        NativeItems.TextInput {
+        TextInput {
             id: input;
             layout.fillWidth: true;
         }
 
-        NativeItems.Button {
+        Button {
             text: 'Random';
             pointer.onClick: function () {
                 Device.keyboard.hide();
@@ -84,7 +80,7 @@
             opacity: 0.5;
         }
 
-        NativeItems.Video {
+        Video {
             source: image.$.source;
             loop: true;
             anchors.centerIn: parent;

@@ -4,9 +4,7 @@ fs = require 'fs'
 pathUtils = require 'path'
 yaml = require 'js-yaml'
 mkdirp = require 'mkdirp'
-try
-    sharpModulePath = pathUtils.join fs.realpathSync('./'), '/node_modules/sharp'
-    sharp = require sharpModulePath
+try sharp = require 'sharp'
 
 utils = require 'src/utils'
 log = require 'src/log'
@@ -27,7 +25,6 @@ DEFAULT_CONFIG =
 
 stack = null
 bgStack = null
-logShowed = false
 
 isResourcesPath = (path) ->
     /\/resources\.(?:json|yaml)$/.test path
@@ -43,14 +40,11 @@ resolutionToString = (resolution) ->
     if resolution is 1
         ''
     else
-        '@' + (resolution+'').replace('.', 'p') + 'x'
+        '@' + (resolution + '').replace('.', 'p') + 'x'
 
 supportImageResource = (path, rsc) ->
     unless sharp
-        unless logShowed
-            log.warn "Install 'sharp' module for full image resources support; 'npm install sharp'"
-            logShowed = true
-        return
+        throw new Error "sharp module is not installed (npm install sharp)"
 
     # get size
     stats = fs.statSync path

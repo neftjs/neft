@@ -65,5 +65,8 @@
     "escape-html": "1.0.3",
     "istanbul": "^0.4.5",
     "wd": "0.4.0"
+  },
+  "optionalDependencies": {
+    "sharp": "^0.17.2"
   }
 }

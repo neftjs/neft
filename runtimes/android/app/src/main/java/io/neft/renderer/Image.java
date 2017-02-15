@@ -27,6 +27,8 @@ import java.util.HashMap;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.annotation.OnAction;
+import io.neft.utils.Consumer;
+import io.neft.utils.StringUtils;
 
 public class Image extends Item {
     private static class ImageDrawable extends Drawable {
@@ -67,15 +69,11 @@ public class Image extends Item {
         }
     }
 
-    abstract class LoadHandler {
-        void work(String source, Bitmap bitmap) { throw new UnsupportedOperationException(); }
-    }
-
     private static final int MAX_WIDTH = 1280;
     private static final int MAX_HEIGHT = 960;
 
     private static final HashMap<String, Bitmap> CACHE = new HashMap<>();
-    private static final HashMap<String, ArrayList<LoadHandler>> LOADING = new HashMap<>();
+    private static final HashMap<String, ArrayList<Consumer<Bitmap>>> LOADING = new HashMap<>();
 
     private String source;
 
@@ -180,52 +178,31 @@ public class Image extends Item {
         return bitmap;
     }
 
-    @OnAction(InAction.SET_IMAGE_SOURCE)
-    public void setSource(final String val) {
-        source = val;
-
+    public static void getImageFromSource(final String val, final Consumer<Bitmap> callback) {
         // remove source
         if (val.isEmpty()) {
-            shape.setBitmap(null);
+            callback.accept(null);
             return;
         }
 
         // get bitmap from CACHE if exists
         Bitmap fromCache = CACHE.get(val);
         if (fromCache != null) {
-            shape.setBitmap(fromCache);
-            onLoad();
+            callback.accept(fromCache);
             return;
         }
 
-        // get load end handler
-        final Image self = this;
-        final LoadHandler onLoad = new LoadHandler() {
-            @Override
-            void work(String source, Bitmap bitmap) {
-                if (!source.equals(self.source)) {
-                    return;
-                }
-                shape.setBitmap(bitmap);
-                if (bitmap != null) {
-                    self.onLoad();
-                } else {
-                    self.onError();
-                }
-            }
-        };
-
         // wait for load if already LOADING exists
-        ArrayList<LoadHandler> loadingArray = LOADING.get(val);
+        ArrayList<Consumer<Bitmap>> loadingArray = LOADING.get(val);
         if (loadingArray != null) {
-            loadingArray.add(onLoad);
+            loadingArray.add(callback);
             return;
         }
 
         // save in LOADING
         loadingArray = new ArrayList<>();
         LOADING.put(val, loadingArray);
-        loadingArray.add(onLoad);
+        loadingArray.add(callback);
 
         // load source
         final Thread thread = new Thread(new Runnable() {
@@ -253,9 +230,9 @@ public class Image extends Item {
                 APP.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final ArrayList<LoadHandler> loadingArray = LOADING.get(val);
-                        for (final LoadHandler handler : loadingArray) {
-                            handler.work(val, finalBitmap);
+                        final ArrayList<Consumer<Bitmap>> loadingArray = LOADING.get(val);
+                        for (final Consumer<Bitmap> handler : loadingArray) {
+                            handler.accept(finalBitmap);
                         }
                         LOADING.remove(val);
                     }
@@ -263,5 +240,25 @@ public class Image extends Item {
             }
         });
         thread.start();
+    }
+
+    @OnAction(InAction.SET_IMAGE_SOURCE)
+    public void setSource(final String val) {
+        final Image self = this;
+        this.source = val;
+        getImageFromSource(val, new Consumer<Bitmap>() {
+            @Override
+            public void accept(Bitmap bitmap) {
+                if (!StringUtils.equals(self.source, val)) {
+                    return;
+                }
+                shape.setBitmap(bitmap);
+                if (bitmap != null) {
+                    self.onLoad();
+                } else {
+                    self.onError();
+                }
+            }
+        });
     }
 }
