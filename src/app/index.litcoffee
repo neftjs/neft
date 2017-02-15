@@ -187,7 +187,7 @@ app.cookies.onChange(function(key){
 
         # cookies
         COOKIES_KEY = '__neft_cookies'
-        app.cookies = null
+        app.cookies = {}
         onCookiesReady = (dict) ->
             app.cookies = dict
             if utils.isClient
@@ -202,7 +202,8 @@ app.cookies.onChange(function(key){
                     cookies = {}
                 db.set COOKIES_KEY, cookies, (err) ->
                     db.get COOKIES_KEY, db.OBSERVABLE, (err, dict) ->
-                        onCookiesReady dict
+                        if dict
+                            onCookiesReady dict
         app.networking.onRequest (req, res) ->
             if utils.isClient
                 utils.merge req.cookies, app.cookies

@@ -5,10 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import io.neft.App;
-import io.neft.client.CustomFunction;
 import io.neft.renderer.Item;
 import io.neft.renderer.NativeItem;
 import io.neft.utils.ColorValue;
+import io.neft.utils.Consumer;
 import io.neft.utils.StringUtils;
 
 public final class Parser {
@@ -66,9 +66,9 @@ public final class Parser {
         } catch (RuntimeException err) {
             // NOP
         }
-        APP.getClient().addCustomFunction(eventName, new CustomFunction() {
+        APP.getClient().addCustomFunction(eventName, new Consumer<Object[]>() {
             @Override
-            public void work(Object[] args) {
+            public void accept(Object[] args) {
                 int itemId = Math.round((float) args[0]);
                 NativeItem item = (NativeItem) APP.getRenderer().getItemById(itemId);
                 Object[] handlerArgs = new Object[args.length - 1];

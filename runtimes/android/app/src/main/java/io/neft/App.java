@@ -127,6 +127,7 @@ public class App extends Thread {
         new Timers();
         client = new Client();
         renderer = new Renderer();
+        Db.register();
 
         Parser.registerHandlers(WindowView.class);
         Parser.registerHandlers(Item.class);
