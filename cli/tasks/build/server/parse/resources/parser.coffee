@@ -4,7 +4,7 @@ fs = require 'fs'
 pathUtils = require 'path'
 yaml = require 'js-yaml'
 mkdirp = require 'mkdirp'
-sharp = require 'sharp'
+try sharp = require 'sharp'
 
 utils = require 'src/utils'
 log = require 'src/log'
@@ -40,9 +40,12 @@ resolutionToString = (resolution) ->
     if resolution is 1
         ''
     else
-        '@' + (resolution+'').replace('.', 'p') + 'x'
+        '@' + (resolution + '').replace('.', 'p') + 'x'
 
 supportImageResource = (path, rsc) ->
+    unless sharp
+        throw new Error "sharp module is not installed (npm install sharp)"
+
     # get size
     stats = fs.statSync path
     mtime = new Date stats.mtime

@@ -54,7 +54,6 @@
     "pngjs": "3.0.0",
     "qs": "6.2.0",
     "semver": "5.1.0",
-    "sharp": "^0.17.2",
     "slash": "1.0.0",
     "uglify-js": "2.6.2",
     "which": "1.2.12",
@@ -66,5 +65,8 @@
     "escape-html": "1.0.3",
     "istanbul": "^0.4.5",
     "wd": "0.4.0"
+  },
+  "optionalDependencies": {
+    "sharp": "^0.17.2"
   }
 }
