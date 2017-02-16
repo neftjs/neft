@@ -11,8 +11,6 @@ moduleCache = require 'lib/module-cache'
 STRING_FILES =
     '.pegjs': true
     '.txt': true
-MODULE_CACHE_OPTIONS =
-    forceCache: true
 
 replaceStr = (str, oldStr, newStr) ->
     i = str.indexOf oldStr
@@ -28,7 +26,7 @@ getFile = (path, opts) ->
     unless extname = pathUtils.extname(path)
         return
 
-    file = moduleCache.getFile path, MODULE_CACHE_OPTIONS
+    file = moduleCache.getFile path
 
     if STRING_FILES[extname]
         file = "module.exports = #{JSON.stringify(file)}"
