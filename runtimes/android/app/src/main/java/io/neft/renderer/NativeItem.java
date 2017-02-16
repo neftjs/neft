@@ -7,13 +7,13 @@ import android.widget.FrameLayout;
 
 import java.util.HashMap;
 
-import io.neft.client.CustomFunction;
 import io.neft.client.InAction;
 import io.neft.client.OutAction;
 import io.neft.client.Reader;
 import io.neft.MainActivity;
 import io.neft.client.annotation.OnAction;
 import io.neft.renderer.annotation.Parser;
+import io.neft.utils.Consumer;
 import io.neft.utils.StringUtils;
 
 public class NativeItem extends Item {
@@ -43,9 +43,9 @@ public class NativeItem extends Item {
 
     protected static void addClientAction(final MainActivity app, String type, String name, String subName, final ClientHandler handler) {
         String eventName = "renderer" + type + StringUtils.capitalize(name) + StringUtils.capitalize(subName);
-        APP.getClient().addCustomFunction(eventName, new CustomFunction() {
+        APP.getClient().addCustomFunction(eventName, new Consumer<Object[]>() {
             @Override
-            public void work(Object[] args) {
+            public void accept(Object[] args) {
                 final NativeItem item = (NativeItem) APP.getRenderer().getItemById(Math.round((float) args[0]));
                 Object[] handlerArgs = new Object[args.length - 1];
                 System.arraycopy(args, 1, handlerArgs, 0, handlerArgs.length);

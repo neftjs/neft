@@ -31,6 +31,7 @@
         088B7FD11C4D76010039D52A /* OutAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088B7FD01C4D76010039D52A /* OutAction.swift */; };
         088B7FD31C4D764C0039D52A /* Reader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088B7FD21C4D764C0039D52A /* Reader.swift */; };
         088B7FD61C4D93730039D52A /* CustomApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088B7FD51C4D93730039D52A /* CustomApp.swift */; };
+        088D29E01E5514A6002541E7 /* Db.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088D29DF1E5514A6002541E7 /* Db.swift */; };
         08ADA7CA1C20242F008FCA00 /* static in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7C91C20242F008FCA00 /* static */; };
         08ADA7CE1C2038D1008FCA00 /* svgToImage.js in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7CD1C2038D1008FCA00 /* svgToImage.js */; };
         08ADA7D01C205738008FCA00 /* js.js in Resources */ = {isa = PBXBuildFile; fileRef = 08ADA7CF1C205738008FCA00 /* js.js */; };
@@ -66,6 +67,7 @@
         088B7FD01C4D76010039D52A /* OutAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutAction.swift; sourceTree = "<group>"; };
         088B7FD21C4D764C0039D52A /* Reader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reader.swift; sourceTree = "<group>"; };
         088B7FD51C4D93730039D52A /* CustomApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomApp.swift; sourceTree = "<group>"; };
+        088D29DF1E5514A6002541E7 /* Db.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Db.swift; sourceTree = "<group>"; };
         08ADA7C91C20242F008FCA00 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; path = static; sourceTree = SOURCE_ROOT; };
         08ADA7CD1C2038D1008FCA00 /* svgToImage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = svgToImage.js; sourceTree = "<group>"; };
         08ADA7CF1C205738008FCA00 /* js.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = js.js; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
                 08ADA7D31C2182C9008FCA00 /* Config.swift */,
                 088B7FCB1C4D75900039D52A /* Client.swift */,
                 082566321CB02BBD0054E1F6 /* Networking.swift */,
+                088D29DF1E5514A6002541E7 /* Db.swift */,
             );
             path = Neft;
             sourceTree = "<group>";
@@ -263,6 +266,7 @@
                 082549681C3E631000D846C0 /* main.swift in Sources */,
                 088623801C1635F600FF6C11 /* AppDelegate.swift in Sources */,
                 088623AB1C18D55200FF6C11 /* Screen.swift in Sources */,
+                088D29E01E5514A6002541E7 /* Db.swift in Sources */,
             );
             runOnlyForDeploymentPostprocessing = 0;
         };

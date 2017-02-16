@@ -33,6 +33,6 @@ module.exports = (file, filename) ->
 
     # log warnings
     for warning in result.warnings
-        log.warn getErrorMessage warning
+        log.warn warning.message
 
     result

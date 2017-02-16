@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.neft.App;
 import io.neft.Native;
+import io.neft.utils.Consumer;
 import lombok.Synchronized;
 
 public class Client {
@@ -45,7 +46,7 @@ public class Client {
     private int outStringsIndex = 0;
 
     public final HashMap<InAction, Action> actions = new HashMap<>();
-    private final HashMap<String, CustomFunction> customFunctions = new HashMap<>();
+    private final HashMap<String, Consumer<Object[]>> customFunctions = new HashMap<>();
     private final List<FullData> dataToProcess = new ArrayList<>();
     private final Runnable processDataRunnable;
     private boolean dataProcessPending;
@@ -73,7 +74,7 @@ public class Client {
             @Override
             public void work(Reader reader) {
                 final String name = reader.getString();
-                final CustomFunction func = customFunctions.get(name);
+                final Consumer<Object[]> func = customFunctions.get(name);
 
                 final int argsLength = reader.getInteger();
                 Object[] args = new Object[argsLength];
@@ -92,7 +93,7 @@ public class Client {
                 }
 
                 if (func != null) {
-                    func.work(args);
+                    func.accept(args);
                 } else {
                     Log.w("Neft", "Native function '" + name + "' not found");
                 }
@@ -227,7 +228,7 @@ public class Client {
         }
     }
 
-    public void addCustomFunction(String name, CustomFunction func) {
+    public void addCustomFunction(String name, Consumer<Object[]> func) {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Name cannot be empty");
         }

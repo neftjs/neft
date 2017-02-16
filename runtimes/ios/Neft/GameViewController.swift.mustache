@@ -41,6 +41,7 @@ class GameViewController: UIViewController {
             (reader: Reader) in
             self.view.addSubview(self.renderer.getItemFromReader(reader)!.view)
         }
+        Db.register()
     }
 
     private func initRenderer() {
