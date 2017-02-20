@@ -5,7 +5,7 @@
 ```
 
 ```css
-DefaultStyles.Stepper {}
+Stepper {}
 ```
 
 |Browser|iOS|Android|

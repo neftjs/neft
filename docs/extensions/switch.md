@@ -5,7 +5,7 @@
 ```
 
 ```css
-DefaultStyles.Switch {}
+Switch {}
 ```
 
 |Browser|iOS|Android|

@@ -30,7 +30,7 @@ FontLoader {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/loader/font.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/renderer/types/loader/font.litcoffee)
 
 
 * * * 
@@ -40,7 +40,7 @@ FontLoader {
 <dl><dt>Static method of</dt><dd><i>FontLoader</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewcomponent-component-object-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewcomponent-component-object-options)
 
 
 * * * 
@@ -50,7 +50,7 @@ FontLoader {
 <dl><dt>Type</dt><dd><i>String</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/loader/font.litcoffee#string-fontloadername)
+> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/renderer/types/loader/font.litcoffee#string-fontloadername)
 
 
 * * * 
@@ -81,5 +81,5 @@ Must contains one of:
 Italic font filename must contains 'italic'.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/loader/font.litcoffee#string-fontloadersource)
+> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/renderer/types/loader/font.litcoffee#string-fontloadersource)
 

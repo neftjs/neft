@@ -19,13 +19,14 @@
 ## Extensions
   - [Introduction](/extensions.md)
   - [Default Styles](/extensions/default-styles.md)
-  - [Native Items](/extensions/native-items.md)
-    - [Scrollable](/extensions/native-items/scrollable.md)
-    - [TextInput](/extensions/native-items/textinput.md)
-    - [Button](/extensions/native-items/button.md)
-    - [Stepper](/extensions/native-items/stepper.md)
-    - [Switch](/extensions/native-items/switch.md)
-    - [Slider](/extensions/native-items/slider.md)
+  - [Button](/extensions/button.md)
+  - [Scrollable](/extensions/scrollable.md)
+  - [Slider](/extensions/slider.md)
+  - [Stepper](/extensions/stepper.md)
+  - [Switch](/extensions/switch.md)
+  - [TextInput](/extensions/textinput.md)
+  - [TileImage](/extensions/tileimage.md)
+  - [Video](/extensions/video.md)
 
 ## Help
   - [Contribute](/contribute.md)
