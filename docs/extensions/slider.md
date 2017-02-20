@@ -5,7 +5,7 @@
 ```
 
 ```css
-DefaultStyles.Slider {}
+Slider {}
 ```
 
 |Browser|iOS|Android|

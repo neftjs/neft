@@ -5,7 +5,7 @@
 ```
 
 ```css
-DefaultStyles.Button {}
+Button {}
 ```
 
 |Browser|iOS|Android|
