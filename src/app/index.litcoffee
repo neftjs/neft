@@ -187,7 +187,7 @@ app.cookies.onChange(function(key){
 
         # cookies
         COOKIES_KEY = '__neft_cookies'
-        app.cookies = {}
+        app.cookies = Dict()
         onCookiesReady = (dict) ->
             app.cookies = dict
             if utils.isClient

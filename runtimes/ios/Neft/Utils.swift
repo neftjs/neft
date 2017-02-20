@@ -1,12 +1,5 @@
 import UIKit
 
-func thread(_ background: @escaping () -> Void) {
-    let priority = DispatchQueue.GlobalQueuePriority.default
-    DispatchQueue.global(priority: priority).async {
-        background()
-    }
-}
-
 func thread(_ background: @escaping () -> Void, _ completion: (() -> Void)? = nil) {
     let priority = DispatchQueue.GlobalQueuePriority.default
     DispatchQueue.global(priority: priority).async {
