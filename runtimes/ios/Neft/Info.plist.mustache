@@ -39,8 +39,9 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>/static/fonts/Robo22to-B22lack.ttf</string>
-		<string>/static/fonts/SourceCodePro-Regular.ttf</string>
+        {{#fonts}}
+		<string>{{&source}}</string>
+        {{/fonts}}
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

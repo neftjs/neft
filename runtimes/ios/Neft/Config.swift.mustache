@@ -1,0 +1,7 @@
+struct Config {
+    static let fonts: [String: String] = [
+    {{#fonts}}
+        "{{&source}}": "{{&name}}",
+    {{/fonts}}
+    ]
+}
