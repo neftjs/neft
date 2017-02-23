@@ -96,7 +96,11 @@ module.exports = (config, callback) ->
         cp.execSync 'otfinfo --version', silent: true
         checkFonts = true
     catch
-        log.error "Custom fonts are not supported. Install 'lcdf-typetools'; e.g. brew install lcdf-typetools"
+        log.error """
+            Custom fonts are not supported. \
+            Install 'lcdf-typetools'; \
+            e.g. brew install lcdf-typetools
+        """
 
     config.fonts = []
     if fs.existsSync(STATIC_DIR)
@@ -106,7 +110,7 @@ module.exports = (config, callback) ->
                 # get font PostScript name
                 if checkFonts and pathUtils.extname(path) in ['.otf', '.ttf']
                     realpath = fs.realpathSync(path)
-                    name = (cp.execSync("otfinfo -p #{realpath}")+"").trim()
+                    name = (cp.execSync("otfinfo -p #{realpath}") + "").trim()
                     config.fonts.push
                         source: "/#{path}"
                         name: name
@@ -149,7 +153,7 @@ module.exports = (config, callback) ->
         for ext in config.iosExtensions
             baseExtDir = ext.bundlePath.slice OUT_DIR.length
             files = fs.readdirSync ext.path
-            name = 'Extension'+ext.name
+            name = 'Extension' + ext.name
 
             extGroupId = project.pbxCreateGroup name, "Extension/#{ext.name}"
             project.addToPbxGroup extGroupId, mainGroupId
