@@ -37,11 +37,11 @@ extension Extension.SwitchToggle {
         }
 
         var switchView: UISwitch {
-            return view as! UISwitch
+            return itemView as! UISwitch
         }
 
-        override init(view: UIView = UISwitch()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UISwitch())
 
             switchView.addTarget(
                 self,

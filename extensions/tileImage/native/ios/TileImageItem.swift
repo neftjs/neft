@@ -25,8 +25,8 @@ extension Extension.TileImage {
         var source: String?
         var resolution: CGFloat = 1
 
-        override init(view: UIView = UIView()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UIView())
         }
 
         func setSource(val: String) {
@@ -41,7 +41,7 @@ extension Extension.TileImage {
                     scale: self.resolution,
                     orientation: UIImageOrientation.up
                 )
-                self.view.backgroundColor = UIColor(patternImage: scaledImg)
+                self.itemView.backgroundColor = UIColor(patternImage: scaledImg)
             }
         }
     }

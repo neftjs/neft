@@ -36,11 +36,11 @@ extension Extension.Stepper {
         }
 
         var stepperView: UIStepper {
-            return view as! UIStepper
+            return itemView as! UIStepper
         }
 
-        override init(view: UIView = UIStepper()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UIStepper())
 
             stepperView.addTarget(
                 self,

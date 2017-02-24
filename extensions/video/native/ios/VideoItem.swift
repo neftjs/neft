@@ -54,8 +54,8 @@ extension Extension.Video {
             }
         }
 
-        override init(view: UIView = UIView()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UIView())
         }
 
         private func updatePlayerSize() {
@@ -80,7 +80,7 @@ extension Extension.Video {
             player = AVPlayer(url: url!)
             layer = AVPlayerLayer(player: player)
             updatePlayerSize()
-            view.layer.addSublayer(layer!)
+            itemView.layer.addSublayer(layer!)
 
             NotificationCenter.default.addObserver(
                 self,
