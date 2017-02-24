@@ -95,6 +95,7 @@ class Image: Item {
         var loading = Image.loadingHandlers[val]
         if loading != nil {
             loading!.append(onCompletion)
+            Image.loadingHandlers[val] = loading!
             return
         }
 
@@ -126,10 +127,10 @@ class Image: Item {
             }
 
             let loading = Image.loadingHandlers[val]
+            Image.loadingHandlers.removeValue(forKey: val)
             for handler in loading! {
                 handler(img)
             }
-            Image.loadingHandlers.removeValue(forKey: val)
         }
     }
 
