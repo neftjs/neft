@@ -66,8 +66,8 @@ extension Extension.Scrollable {
             }
         }
 
-        override init(view: UIView = UIView()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UIView())
             view.addSubview(scrollView)
             delegate.scrollable = self
         }

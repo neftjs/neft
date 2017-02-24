@@ -26,13 +26,29 @@ class Image: Item {
         }
     }
 
-    var source: String?
-    var imageView: UIImageView {
-        return view as! UIImageView
+    override var width: CGFloat {
+        didSet {
+            updateFrame()
+        }
     }
 
-    override init(view: UIView = UIImageView()) {
-        super.init(view: view)
+    override var height: CGFloat {
+        didSet {
+            updateFrame()
+        }
+    }
+
+    var source: String?
+    let imageView: UIImageView
+
+    override init() {
+        imageView = UIImageView()
+        super.init()
+        view.addSubview(imageView)
+    }
+
+    private func updateFrame() {
+        imageView.frame = CGRect(x: 0, y: 0, width: width, height: height)
     }
 
     static private func loadSvgData(_ svg: NSString, completion: (_ data: Data?) -> Void) {

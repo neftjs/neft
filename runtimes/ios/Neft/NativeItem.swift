@@ -136,9 +136,9 @@ class NativeItem: Item {
     override var keysFocus: Bool {
         didSet {
             if keysFocus {
-                view.becomeFirstResponder()
+                itemView.becomeFirstResponder()
             } else {
-                view.resignFirstResponder()
+                itemView.resignFirstResponder()
             }
         }
     }
@@ -157,8 +157,12 @@ class NativeItem: Item {
         }
     }
 
-    override init(view: UIView = UIView()) {
-        super.init(view: view)
+    let itemView: UIView
+
+    init(itemView: UIView = UIView()) {
+        self.itemView = itemView
+        super.init()
+        view.addSubview(itemView)
     }
 
     override func didSave() {
@@ -167,8 +171,9 @@ class NativeItem: Item {
     }
 
     internal func updateSize() {
-        let width = autoWidth ? view.frame.width : self.width
-        let height = autoHeight ? view.frame.height : self.height
+        let width = autoWidth ? itemView.frame.width : self.width
+        let height = autoHeight ? itemView.frame.height : self.height
+        itemView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         pushWidth(width)
         pushHeight(height)
     }

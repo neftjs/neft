@@ -94,15 +94,31 @@ class Text: Item {
         }
     }
 
-    var labelView: UILabel {
-        return view as! UILabel
+    override var width: CGFloat {
+        didSet {
+            updateFrame()
+        }
     }
 
-    override init(view: UIView = UILabel()) {
-        super.init(view: view)
+    override var height: CGFloat {
+        didSet {
+            updateFrame()
+        }
+    }
+
+    let labelView: UILabel
+
+    override init() {
+        labelView = UILabel()
+        super.init()
+        view.addSubview(labelView)
         labelView.lineBreakMode = .byWordWrapping
         labelView.numberOfLines = 0
         updateFont()
+    }
+
+    private func updateFrame() {
+        labelView.frame = CGRect(x: 0, y: 0, width: width, height: height)
     }
 
     private func updateFont() {

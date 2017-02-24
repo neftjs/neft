@@ -21,11 +21,11 @@ extension Extension.TextInput {
         }
 
         var fieldView: UITextField {
-            return view as! UITextField
+            return itemView as! UITextField
         }
 
-        override init(view: UIView = UITextField()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UITextField())
             fieldView.addTarget(self, action: #selector(onTextChange(textField:)), for: UIControlEvents.editingChanged)
             fieldView.borderStyle = .roundedRect
             fieldView.frame.size.width = 250

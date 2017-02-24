@@ -232,8 +232,8 @@ class Item {
         item.didSave()
     }
 
-    init(view: UIView = UIView()) {
-        self.view = view
+    init() {
+        self.view = UIView()
     }
 
     func didSave() {}

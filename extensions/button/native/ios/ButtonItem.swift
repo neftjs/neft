@@ -23,11 +23,11 @@ extension Extension.Button {
         }
 
         var buttonView: UIButton {
-            return view as! UIButton
+            return itemView as! UIButton
         }
 
-        override init(view: UIView = UIButton()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UIButton())
             buttonView.setTitleColor(UIColor.black, for: .normal)
         }
     }

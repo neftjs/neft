@@ -47,11 +47,11 @@ extension Extension.Slider {
         }
 
         var sliderView: UISlider {
-            return view as! UISlider
+            return itemView as! UISlider
         }
 
-        override init(view: UIView = UISlider()) {
-            super.init(view: view)
+        init() {
+            super.init(itemView: UISlider())
 
             sliderView.addTarget(
                 self,
