@@ -26,8 +26,9 @@ Let's check, how we can communicate on different platforms:
 To send and receive native messages, use [native](/api/native.html) module.
 
 ```javascript
-Neft.native.callFunction("functionName", "arg1", "arg2", "argMore...");
-Neft.native.on("eventName", (arg1, arg2, arg3) -> {});
+const { callNativeFunction, onNativeEvent } = Neft.native;
+callNativeFunction("functionName", "arg1", "arg2", "argMore...");
+onNativeEvent("eventName", (arg1, arg2, arg3) -> {});
 ```
 
 ## iOS

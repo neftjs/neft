@@ -5,6 +5,7 @@ Access it with:
 const { utils } = Neft;
 ```
 
+    # coffeelint: disable=no_debugger
     'use strict'
 
     {toString} = Object::
@@ -1255,6 +1256,21 @@ Returns an array or an object with own properties associated in the given object
         result = if isArray obj then [] else {}
         merge result, obj
         result
+
+## *Function* utils.deprecate(*Function* function, *String* message)
+
+Prints a warning that the given function should not be used.
+
+Returns a new function which warns once by default.
+
+    exports.deprecate = (func, msg) ->
+        warned = false
+        deprecated = ->
+            unless warned
+                console.warn msg
+                warned = true
+            func.apply @, arguments
+        deprecated
 
 ## *Boolean* utils.isEqual(*Object* object1, *Object* object2, [*Function* compareFunction, *Integer* maxDeep = `Infinity`])
 
