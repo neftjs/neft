@@ -131,7 +131,7 @@ The image source URL or data URI.
                     updateSize.call @
                     return
 
-                loadCallback = (err=null, opts) ->
+                loadCallback = (err = null, opts) ->
                     if err
                         log.warn "Can't load '#{@source}' image at #{@toString()}"
                     else
