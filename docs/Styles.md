@@ -127,7 +127,7 @@ You can create *JavaScript* function directly in *NML*.
 ```xhtml
 <style>
 Rectangle {
-    document.query: 'button'
+    query: 'button'
     pointer.onClick: function (event) {
         console.log(event.x);
     }
@@ -150,7 +150,7 @@ You can access them using the [native-items](/extensions/native-items.html) exte
 const NativeItems = require('extensions/native-items');
 `
 NativeItems.Button {
-    document.query: 'button'
+    query: 'button'
 }
 </style>
 <button>Click here</button>

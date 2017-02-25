@@ -114,7 +114,7 @@ describe 'styles', ->
                 html: '<b n-style="renderer:Item" />'
 
             bNode = doc.node.query 'b'
-            assert.is bNode.style.document.node, bNode
+            assert.is bNode.style.node, bNode
 
         it 'must be specify to create a style', ->
             doc = render

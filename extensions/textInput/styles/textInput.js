@@ -1,3 +1,3 @@
 TextInput {
-    document.query: 'input[type=text]'
+    query: 'input[type=text]'
 }

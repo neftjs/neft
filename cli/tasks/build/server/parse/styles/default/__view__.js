@@ -6,6 +6,6 @@ Column {
     Flow {
         layout.fillWidth: true
         layout.fillHeight: true
-        document.query: 'body'
+        query: 'body'
     }
 }

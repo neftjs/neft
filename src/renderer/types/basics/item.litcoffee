@@ -16,6 +16,9 @@
         @__name__ = 'Item'
         @__path__ = 'Renderer.Item'
 
+        Document = require 'src/document'
+        DocElement = Document.Element
+
 ## *Item* Item.New([*Component* component, *Object* options])
 
         @New = (component, opts) ->
@@ -51,13 +54,14 @@ This is a base class for everything which is visible.
             @_linkUri = ''
             @_anchors = null
             @_layout = null
-            @_document = null
             @_keys = null
             @_pointer = null
             @_margin = null
             @_classes = null
             @_background = null
             @_defaultBackground = null
+            @_query = ''
+            @_node = null
 
 ### Custom properties
 
@@ -88,6 +92,41 @@ Item {
             constructor: @
             name: '$'
             valueConstructor: itemUtils.CustomObject
+
+## ReadOnly *String* Item::query
+
+        utils.defineProperty @::, 'query', null, ->
+            @_query
+        , (val) ->
+            if @_query is ''
+                @_query = val
+            return
+
+## *Document.Element* Item::node
+
+## *Signal* Item::onNodeChange(*Document.Element* oldValue)
+
+```javascript
+Text {
+    text: this.node.props.value
+}
+```
+
+```javascript
+Text {
+    onNodeChange: function(){
+        var inputs = this.node.queryAll('input[type=string]');
+    }
+}
+```
+
+        itemUtils.defineProperty
+            constructor: @
+            name: 'node'
+            defaultValue: null
+            developmentSetter: (val) ->
+                if val?
+                    assert.instanceOf val, DocElement
 
 ## *Signal* Item::ready()
 
@@ -1038,7 +1077,6 @@ Returns `true` if two items overlaps.
         @createMargin = require('./item/margin') Renderer, Impl, itemUtils, Item
         @createPointer = require('./item/pointer') Renderer, Impl, itemUtils, Item
         @createKeys = require('./item/keys') Renderer, Impl, itemUtils, Item
-        @createDocument = require('./item/document') Renderer, Impl, itemUtils, Item
 
 ## *Item.Anchors* Item::anchors
 
@@ -1065,9 +1103,5 @@ Returns `true` if two items overlaps.
 ## *Item.Keys* Item::keys
 
         @Keys = @createKeys @
-
-## *Item.Document* Item::document
-
-        @Document = @createDocument @
 
         Item

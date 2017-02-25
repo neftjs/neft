@@ -1,5 +1,5 @@
 Flow {
-    document.query: 'button'
+    query: 'button'
     background.color: 'gray'
     padding: '10 20'
     margin: 5

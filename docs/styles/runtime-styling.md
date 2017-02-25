@@ -28,7 +28,7 @@ Rectangle {
 ```xhtml
 <style>
 Item {
-    document.query: 'main'
+    query: 'main'
 
     select ('div button.big'){
         width: 200
@@ -71,7 +71,7 @@ Available text properties are available in [API Reference](/api/renderer-text.ht
 ```xhtml
 <style>
 Item {
-    document.query: 'header'
+    query: 'header'
 
     select ('p #text') {
         font.pixelSize: 30
@@ -83,12 +83,12 @@ Item {
 
 ### Using elements
 
-Another option to stylize texts is match them by `document.query`.
+Another option to stylize texts is match them by `query`.
 
 ```xhtml
 <style>
 Text {
-    document.query: 'p'
+    query: 'p'
     // this.text is equal 'abc'
 }
 </style>
@@ -100,7 +100,7 @@ If you want to use another type rather than [`Text`](/api/renderer-text.html), p
 ```xhtml
 <style>
 Rectangle {
-    document.query: 'p'
+    query: 'p'
     property $.text: ''
     // this.$.text is equal 'abc'
 }

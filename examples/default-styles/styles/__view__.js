@@ -1,6 +1,6 @@
 Item {
     Column {
-        document.query: 'body'
+        query: 'body'
         anchors.fill: parent
     }
 }

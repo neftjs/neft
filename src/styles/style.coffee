@@ -36,7 +36,7 @@ module.exports = (File, data) -> class Style
             nodes = file.node.queryAll elem.query
             for node in nodes
                 unless node instanceof Tag
-                    log.warn 'document.query can be attached only to tags; ' +
+                    log.warn 'query can be attached only to tags; ' +
                         "query '#{elem.query}' has been omitted for this node"
                     continue
                 node.props.set 'n-style', elem.style
@@ -408,7 +408,7 @@ module.exports = (File, data) -> class Style
             node.style = @item
 
             # set style node
-            @item.document.node = node
+            @item.node = node
 
         return
 
@@ -503,7 +503,7 @@ module.exports = (File, data) -> class Style
                     targetChild = null
                     child = parent.children.firstChild
                     while child
-                        if child isnt item and child.document.node
+                        if child isnt item and child.node
                             targetChild = child
                             break
                         child = child.nextSibling

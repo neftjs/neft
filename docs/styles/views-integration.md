@@ -2,12 +2,12 @@
 
 Items can be attached to *XHTML* elements.
 
-To connect [`Item`](/api/renderer-item.html) with [View](/views.html) elements, specify `document.query` as *CSS Selector*. All matched tags will be styled.
+To connect [`Item`](/api/renderer-item.html) with [View](/views.html) elements, specify `query` as *CSS Selector*. All matched tags will be styled.
 
 ```xhtml
 <style>
 Rectangle {
-    document.query: 'button.bigButton'
+    query: 'button.bigButton'
     width: 50
     height: 50
     color: 'red'
@@ -17,20 +17,20 @@ Rectangle {
 <button class="bigButton" />
 ```
 
-Matched [Virtual DOM](/views/virtual-dom.html) [Tag](/api/document-tag.html) is accessible in styles as `document.node`. You can use it in properties.
+Matched [Virtual DOM](/views/virtual-dom.html) [Tag](/api/document-tag.html) is accessible in styles as `node`. You can use it in properties.
 
 ```xhtml
 <style>
 Item {
-    document.query: 'enemy'
-    width: this.document.node.props.health * 100
+    query: 'enemy'
+    width: this.node.props.health * 100
     // width is equal 80
 }
 </style>
 <enemy health="0.8" />
 ```
 
-`document.query` can be also attached to children.
+`query` can be also attached to children.
 
 Only the first matched child [Tag](/views/virtual-dom.html) can be styled.
 
@@ -39,10 +39,10 @@ Now you can create complex custom elements based on more than one HTML element.
 ```xhtml
 <style>
 Item {
-    document.query: 'avatar'
+    query: 'avatar'
 
     Text {
-        document.query: '> nick'
+        query: '> nick'
     }
 }
 </style>
@@ -62,7 +62,7 @@ You can use it to define inline styles in *XHTML*.
 ```xhtml
 <style>
 Item {
-    document.query: 'button'
+    query: 'button'
 }
 </style>
 <button style:width="200" />
@@ -73,7 +73,7 @@ Using *Inline Styles* you can attach also to signals.
 ```xhtml
 <style>
 Item {
-    document.query: 'button'
+    query: 'button'
 }
 </style>
 <script>

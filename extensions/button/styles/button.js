@@ -1,3 +1,3 @@
 Button {
-    document.query: 'button'
+    query: 'button'
 }
