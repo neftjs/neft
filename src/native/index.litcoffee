@@ -46,7 +46,7 @@
             log.warn "No listeners added for the native event '#{name}'"
         return
 
-## native.callFunction(*String* name, [*Boolean*|*Float*|*String* args...])
+## native.callNativeFunction(*String* name, [*Boolean*|*Float*|*String* args...])
 
     pushPending = false
 
@@ -55,9 +55,13 @@
         bridge.sendData()
         return
 
-    exports.callFunction = (name, arg1, arg2, arg3) ->
-        assert.isString name, "native.callFunction name needs to be a string, but #{name} given"
-        assert.notLengthOf name, 0, "native.callFunction name cannot be an empty string"
+    exports.callNativeFunction = (name, arg1, arg2, arg3) ->
+        assert.isString name, """
+            native.callNativeFunction name needs to be a string, but #{name} given
+        """
+        assert.notLengthOf name, 0, """
+            native.callNativeFunction name cannot be an empty string
+        """
 
         bridge.pushAction CALL_FUNCTION
         bridge.pushString name
@@ -89,15 +93,23 @@
             setImmediate sendData
         return
 
-## native.on(*String* eventName, *Function* listener)
+    exports.callFunction = utils.deprecate exports.callNativeFunction, '''
+        Neft.native.callFunction is deprecated; use callNativeFunction instead
+    '''
 
-    exports.on = (name, listener) ->
-        assert.isString name, "native.on name needs to be a string, but #{name} given"
-        assert.notLengthOf name, 0, "native.on name cannot be an empty string"
+## native.onNativeEvent(*String* eventName, *Function* listener)
+
+    exports.onNativeEvent = (name, listener) ->
+        assert.isString name, "native.onNativeEvent name needs to be a string, but #{name} given"
+        assert.notLengthOf name, 0, "native.onNativeEvent name cannot be an empty string"
         assert.isFunction listener, """
-            native.on listener needs to be a function, but #{listener} given
+            native.onNativeEvent listener needs to be a function, but #{listener} given
         """
 
         eventListeners = listeners[name] ?= []
         eventListeners.push listener
         return
+
+    exports.on = utils.deprecate exports.onNativeEvent, '''
+        Neft.native.on is deprecated; use onNativeEvent instead
+    '''

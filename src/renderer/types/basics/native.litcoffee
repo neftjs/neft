@@ -10,7 +10,7 @@
     IS_NATIVE = not utils.isServer and not utils.isBrowser
 
     if IS_NATIVE
-        nativeBridge = require 'src/native'
+        {callNativeFunction, onNativeEvent} = require 'src/native'
 
     module.exports = (Renderer, Impl, itemUtils) ->
 
@@ -149,7 +149,7 @@ where `XYZ` is the given name.
                     if IS_NATIVE
                         funcName = "rendererSet#{ctorName}#{name}"
                         (val) ->
-                            nativeBridge.callFunction funcName, @_impl.id, val
+                            callNativeFunction funcName, @_impl.id, val
                     else
                         funcName = "set#{ctorName}#{name}"
                         (val) ->
@@ -211,7 +211,7 @@ where `XYZ` is the given name.
 
                 if IS_NATIVE
                     funcName = "rendererSet#{ctorName}#{name}"
-                    nativeBridge.callFunction funcName, id, val
+                    callNativeFunction funcName, id, val
                 else
                     funcName = "set#{ctorName}#{name}"
                     Impl[funcName]?.call @, val
@@ -229,7 +229,7 @@ where `XYZ` is the given name.
                 if IS_NATIVE
                     funcName = "rendererCall#{ctorName}#{name}"
                     callArgs = [funcName, id, args...]
-                    nativeBridge.callFunction.apply nativeBridge, callArgs
+                    callNativeFunction callArgs...
                 else
                     funcName = "call#{ctorName}#{name}"
                     Impl[funcName]?.apply @, args
@@ -272,7 +272,7 @@ where `XYZ` is the given name.
 
                     unless listeners = eventListeners[eventName]
                         listeners = eventListeners[eventName] = Object.create(null)
-                        nativeBridge.on eventName, createNativeEventListener(listeners, eventName)
+                        onNativeEvent eventName, createNativeEventListener(listeners, eventName)
 
                     itemListeners = listeners[@_impl.id] ?= [@]
                     itemListeners.push func
