@@ -34,10 +34,8 @@
         type: 'app'
 
     exports = module.exports = (opts = {}, extraOpts = {}) ->
-        # Welcome log also for release mode
-        log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
-
         `//<development>`
+        log.ok "Welcome! Neft.io v#{pkg.version}; Feedback appreciated"
         log.warn "Use this bundle only in development; type --release when it's ready"
         `//</development>`
 
