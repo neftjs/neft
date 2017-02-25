@@ -1,4 +1,4 @@
 Video {
-    document.query: 'video'
-    source: this.document.node.props.source
+    query: 'video'
+    source: this.node.props.source
 }

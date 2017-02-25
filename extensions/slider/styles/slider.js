@@ -1,3 +1,3 @@
 Slider {
-    document.query: 'input[type=slider]'
+    query: 'input[type=slider]'
 }

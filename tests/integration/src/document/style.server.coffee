@@ -22,7 +22,7 @@ describe 'Document style', ->
             <style>
                 Item {
                     id: firstItem
-                    document.query: 'test'
+                    query: 'test'
                 }
             </style>
             <test />
@@ -40,7 +40,7 @@ describe 'Document style', ->
                     id: firstItem
                 }
                 Item {
-                    document.query: 'abc'
+                    query: 'abc'
                 }
             </style>
         '''
@@ -54,7 +54,7 @@ describe 'Document style', ->
             <style>
                 Item {
                     id: firstItem
-                    document.query: 'test'
+                    query: 'test'
                 }
             </style>
             <style>

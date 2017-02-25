@@ -1,3 +1,3 @@
 Stepper {
-    document.query: 'input[type=stepper]'
+    query: 'input[type=stepper]'
 }

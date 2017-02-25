@@ -679,9 +679,9 @@ Grid {
 
             onTargetChange = (oldVal) ->
                 if oldVal
-                    oldVal.document.onNodeChange.disconnect @reloadQuery, @
+                    oldVal.onNodeChange.disconnect @reloadQuery, @
                 if val = @_ref._target
-                    val.document.onNodeChange @reloadQuery, @
+                    val.onNodeChange @reloadQuery, @
                 if oldVal isnt val
                     @reloadQuery()
                 return
@@ -818,7 +818,7 @@ Grid {
                     @_classesPool.push classElem
 
                 # add new ones
-                if (query = @_query) and (target = @_ref.target) and (node = target.document.node) and node.watch
+                if (query = @_query) and (target = @_ref.target) and (node = target.node) and node.watch
                     watcher = @_nodeWatcher = node.watch query
                     watcher.onAdd onNodeAdd, @
                     watcher.onRemove onNodeRemove, @

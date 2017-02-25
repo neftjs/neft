@@ -123,9 +123,9 @@ stringify =
         attrToValue = (body) ->
             {value} = body
 
-            if body.name is 'document.query' and not MODIFIERS_NAMES[body.parent.name]
+            if body.name is 'query' and not MODIFIERS_NAMES[body.parent.name]
                 if isBinding(body)
-                    throw new Error 'document.query must be a string'
+                    throw new Error 'query must be a string'
                 if value
                     query = ''
                     tmp = body
@@ -133,7 +133,7 @@ stringify =
                     # get value
                     while tmp = tmp.parent
                         for child in tmp.body
-                            if child.name is 'document.query'
+                            if child.name is 'query'
                                 query = child.value.replace(/'/g, '') + ' ' + query
                                 break
                     query = query.trim()
@@ -345,7 +345,7 @@ exports = module.exports = (file, filename, opts) ->
             val = id + val
 
             if allQueries[query]?
-                throw new Error "document.query '#{query}' is duplicated"
+                throw new Error "query '#{query}' is duplicated"
             allQueries[query] = val
 
     if not codes._main and firstId

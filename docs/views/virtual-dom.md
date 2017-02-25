@@ -12,7 +12,7 @@ The main tag for a view file or [component](/views.html#component) can be access
 
 Each tag with `ref` attribute is accessible by the `this.refs` object or using the `${refs}` [string interpolation](/views.html#string-interpolation) unless it puts a [component](/views.html#component).
 
-In styles, connected node can be reached using the [`this.document.node`](/api/renderer-document.html#node) reference.
+In styles, connected node can be reached using the [`this.node`](/api/renderer-item.html#node) reference.
 
 ## Querying elements
 

@@ -11,7 +11,7 @@
 <style>
     Rectangle {
         id: nav;
-        document.query: 'nav';
+        query: 'nav';
         signal $.onClose
         color: 'rgba(0, 0, 0, .35)';
         anchors.fill: parent;
@@ -30,7 +30,7 @@
             anchors.fillHeight: parent;
             width: Math.min(250, Screen.width * 0.8);
             contentItem: Column {
-                document.query: 'ul';
+                query: 'ul';
                 anchors.fillWidth: parent;
                 padding.top: 60;
             }

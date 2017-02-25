@@ -1,3 +1,3 @@
 Switch {
-    document.query: 'input[type=switch]'
+    query: 'input[type=switch]'
 }

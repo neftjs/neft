@@ -4,7 +4,7 @@
 
 <style>
     Flow {
-        document.query: 'header';
+        query: 'header';
         alignment: 'center';
         layout.fillWidth: true;
         padding: 8;
@@ -26,7 +26,7 @@
     Row {
         id: form;
         signal $.onSend
-        document.query: 'form';
+        query: 'form';
         layout.fillWidth: true;
         height: 50;
         alignment: 'center';
@@ -61,7 +61,7 @@
     Rectangle {
         id: image;
         property $.source: '';
-        document.query: 'image';
+        query: 'image';
         layout.fillWidth: true;
         layout.fillHeight: true;
         color: 'rgba(0, 0, 0, .05)';

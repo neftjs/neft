@@ -49,7 +49,7 @@ module.exports = (File) -> (file) ->
                 query: query
                 style: itemPath
 
-        # detect main item with no document.query
+        # detect main item with no query
         unless file.node.props['n-style']
             mainHasDoc = false
             mainId = styleFile.codes._main.link
