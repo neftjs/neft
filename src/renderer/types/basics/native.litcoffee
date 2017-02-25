@@ -184,7 +184,6 @@ where `XYZ` is the given name.
                 utils.defineProperty @::, 'width', null, getter,
                     do (_super = itemWidthSetter) -> (val) ->
                         if @_autoWidth = val is -1
-                            _super.call @, @_contentWidth
                             Impl.updateNativeSize.call @
                         else
                             _super.call @, val
@@ -196,7 +195,6 @@ where `XYZ` is the given name.
                 utils.defineProperty @::, 'height', null, getter,
                     do (_super = itemHeightSetter) -> (val) ->
                         if @_autoHeight = val is -1
-                            _super.call @, @_contentHeight
                             Impl.updateNativeSize.call @
                         else
                             _super.call @, val
