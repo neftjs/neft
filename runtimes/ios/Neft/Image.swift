@@ -152,9 +152,16 @@ class Image: Item {
 
     private func setSource(_ val: String) {
         self.source = val
+
+        if val.isEmpty {
+            self.image = nil
+            self.pushAction(.imageSize, val, true, CGFloat(0), CGFloat(0))
+            return
+        }
+
         Image.getImageFromSource(val) {
             (img: UIImage?) in
-            if (self.source != val) {
+            if self.source != val {
                 return
             }
 

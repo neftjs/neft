@@ -100,8 +100,8 @@ public class Image extends Item {
     }
 
     private void onLoad() {
-        float width = pxToDp(shape.bitmap.getWidth());
-        float height = pxToDp(shape.bitmap.getHeight());
+        float width = shape.bitmap == null ? 0 : pxToDp(shape.bitmap.getWidth());
+        float height = shape.bitmap == null ? 0 : pxToDp(shape.bitmap.getHeight());
         pushAction(OutAction.IMAGE_SIZE, source, true, width, height);
     }
 
@@ -246,6 +246,13 @@ public class Image extends Item {
     public void setSource(final String val) {
         final Image self = this;
         this.source = val;
+
+        if (val.isEmpty()) {
+            shape.setBitmap(null);
+            onLoad();
+            return;
+        }
+
         getImageFromSource(val, new Consumer<Bitmap>() {
             @Override
             public void accept(Bitmap bitmap) {
