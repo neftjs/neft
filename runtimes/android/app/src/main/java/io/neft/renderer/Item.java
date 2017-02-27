@@ -77,7 +77,10 @@ public class Item {
 
     @OnAction(InAction.SET_ITEM_CLIP)
     public void setClip(boolean val) {
-        view.setLayerType(val ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, null);
+        // using hardware layer when low memory is available causes runtime exceptions
+        if (!val || Runtime.getRuntime().freeMemory() > 8000000) {
+            view.setLayerType(val ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, null);
+        }
         clipRect = val ? new Rect() : null;
         reloadClipBounds();
     }
