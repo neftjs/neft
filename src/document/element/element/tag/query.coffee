@@ -2,6 +2,7 @@
 
 utils = require 'src/utils'
 signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 assert = require 'src/assert'
 
 {emitSignal} = signal.Emitter
@@ -526,7 +527,7 @@ module.exports = (Element, _Tag) ->
                 watcher.nodesWillChange = false
             return
 
-        (node, parent=node._parent) ->
+        (node, parent = node._parent) ->
             # mark this node
             node._checkWatchers |= CHECK_WATCHERS_THIS
             if node instanceof Tag
@@ -550,8 +551,8 @@ module.exports = (Element, _Tag) ->
 
             # run update
             unless pending
-                setImmediate updateWatchers
                 pending = true
+                eventLoop.setImmediate updateWatchers
             return
 
 module.exports.getSelectorCommandsLength = (selector, beginQuery=0, endQuery=Infinity) ->

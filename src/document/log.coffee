@@ -4,7 +4,7 @@
 
 utils = require 'src/utils'
 assert = require 'src/assert'
-signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 
 module.exports = (File) -> class Log
     @__name__ = 'Log'
@@ -52,7 +52,7 @@ module.exports = (File) -> class Log
     render: ->
         unless @isRenderPending
             @isRenderPending = true
-            signal.setImmediate @log
+            eventLoop.setImmediate @log
         return
 
     log: ->

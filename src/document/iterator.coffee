@@ -4,7 +4,7 @@ utils = require 'src/utils'
 assert = require 'src/assert'
 List = require 'src/list'
 log = require 'src/log'
-signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 
 {isArray} = Array
 
@@ -77,7 +77,7 @@ module.exports = (File) -> class Iterator
     renderImmediate: ->
         unless @isRenderPending
             @isRenderPending = true
-            signal.setImmediate @_renderImmediateCallback
+            eventLoop.setImmediate @_renderImmediateCallback
         return
 
     _renderImmediateCallback: ->

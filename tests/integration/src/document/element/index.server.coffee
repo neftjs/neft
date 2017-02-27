@@ -330,200 +330,171 @@ describe 'Document Element', ->
                 doc2em1 = doc2div2.children[0].children[0]
                 doc2em2 = doc2div2.children[1]
 
-            it 'E', (done) ->
+            it 'E', ->
                 doc2b.parent = null
                 watcher = doc2.watch 'b'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 doc2b.parent = doc2div1
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2b], maxDeep: 1
-                    done()
+                assert.isEqual tags, [doc2b], maxDeep: 1
 
-            it 'E F', (done) ->
+            it 'E F', ->
                 doc2u.parent = null
                 watcher = doc2.watch 'b u'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 doc2u.parent = doc2b
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u, doc2u2], maxDeep: 1
-                    done()
+                assert.isEqual tags, [doc2u, doc2u2], maxDeep: 1
 
-            it 'E > F', (done) ->
+            it 'E > F', ->
                 doc2u.parent = null
                 watcher = doc2div1.watch '> u'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 doc2u.parent = doc2div1
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
 
-            it '[foo]', (done) ->
+            it '[foo]', ->
                 watcher = doc2div1.watch '[attr2]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.props.set 'attr2', '2'
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.props.set 'attr2', undefined
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'attr2', undefined
+                assert.isEqual tags, []
 
-            it '[foo=bar]', (done) ->
+            it '[foo=bar]', ->
                 watcher = doc2div1.watch '[attr=2]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.props.set 'attr', '2'
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.props.set 'attr', '1'
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'attr', '1'
+                assert.isEqual tags, []
 
-            it '[foo^=bar]', (done) ->
+            it '[foo^=bar]', ->
                 watcher = doc2div1.watch '[color^=re]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.props.set 'color', 'red'
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.props.set 'color', 'blue'
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'color', 'blue'
+                assert.isEqual tags, []
 
-            it '[foo$=bar]', (done) ->
+            it '[foo$=bar]', ->
                 watcher = doc2div1.watch '[color$=ed]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.props.set 'color', 'red'
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.props.set 'color', 'blue'
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'color', 'blue'
+                assert.isEqual tags, []
 
-            it '[foo*=bar]', (done) ->
+            it '[foo*=bar]', ->
                 watcher = doc2div1.watch '[color*=rang]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.props.set 'color', 'orange'
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.props.set 'color', 'blue'
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'color', 'blue'
+                assert.isEqual tags, []
 
-            it '*', (done) ->
+            it '*', ->
                 doc2u.parent = null
                 watcher = doc2div1.watch '*'
-                for node in watcher.nodes
-                    tags.push node
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.parent = doc2div1
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2b, doc2u, doc2u2], maxDeep: 1
-                    doc2u.parent = null
-                    whenChange tags, ->
-                        assert.isEqual tags, [doc2b], maxDeep: 1
-                        done()
+                assert.isEqual tags, [doc2b, doc2u, doc2u2], maxDeep: 1
+                doc2u.parent = null
+                assert.isEqual tags, [doc2b], maxDeep: 1
 
-            it '*[foo]', (done) ->
+            it '*[foo]', ->
                 watcher = doc2div1.watch '*[attr2]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.props.set 'attr2', '2'
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.props.set 'attr2', undefined
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'attr2', undefined
+                assert.isEqual tags, []
 
-            it 'E > * > F[foo]', (done) ->
+            it 'E > * > F[foo]', ->
                 doc2u.parent = null
                 watcher = doc2.watch 'div > * > u[color]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2u.parent = doc2b
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.parent = null
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.parent = null
+                assert.isEqual tags, []
 
-            it 'E > * > F[foo], F[foo]', (done) ->
+            it 'E > * > F[foo], F[foo]', ->
                 doc2div1.parent = null
                 doc2div2.parent = null
                 watcher = doc2.watch 'div > * > u[color], div[attr]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
                 doc2div1.parent = doc2
                 doc2div2.parent = doc2
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u, doc2div2], maxDeep: 1
-                    doc2div1.parent = null
-                    doc2div2.parent = null
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u, doc2div2], maxDeep: 1
+                doc2div1.parent = null
+                doc2div2.parent = null
+                assert.isEqual tags, []
 
-            it '&[foo]', (done) ->
-                doc2u.parent = null
+            it '&[foo]', ->
                 watcher = doc2u.watch '&[color]'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                doc2u.parent = doc2b
-                whenChange tags, ->
-                    assert.isEqual tags, [doc2u], maxDeep: 1
-                    doc2u.props.set 'color', undefined
-                    whenChange tags, ->
-                        assert.isEqual tags, []
-                        done()
+                assert.isEqual tags, [doc2u], maxDeep: 1
+                doc2u.props.set 'color', undefined
+                assert.isEqual tags, []
 
-            it '#text', (done) ->
+            it '#text', ->
                 watcher = doc2.watch '#text'
+                tags.push watcher.nodes...
                 watcher.onAdd (tag) ->
                     tags.push tag
                 watcher.onRemove (tag) ->
                     utils.remove tags, tag
-                whenChange tags, ->
                     assert.isEqual tags, [doc2em1.children[0]], maxDeep: 1
                     newText = new Element.Text
                     newText.parent = doc2em2
-                    whenChange tags, ->
-                        assert.isEqual tags, [doc2em1.children[0], newText], maxDeep: 1
-                        done()
+                    assert.isEqual tags, [doc2em1.children[0], newText], maxDeep: 1
 
-        it 'supports disconnect() in onRemove()', (done) ->
+        it 'supports disconnect() in onRemove()', ->
             tags = []
             removedTags = []
             doc2 = Element.fromHTML """
@@ -543,11 +514,8 @@ describe 'Document Element', ->
                     watcher2.disconnect()
             watcher2.onRemove (tag) ->
                 removedTags.push tag
-            whenChange tags, ->
-                b1.parent = null
-                whenChange removedTags, ->
-                    assert.isEqual removedTags, [b1, b2], maxDeep: 1
-                    done()
+            b1.parent = null
+            assert.isEqual removedTags, [b1, b2], maxDeep: 1
 
     it 'visible property is editable', ->
         assert.ok p.visible

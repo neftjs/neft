@@ -1,5 +1,6 @@
 'use strict'
 
+eventLoop = require 'src/eventLoop'
 Binding = require 'src/binding'
 
 module.exports = (impl) ->
@@ -41,6 +42,12 @@ module.exports = (impl) ->
                 impl.Renderer.window
             else
                 @component.objects[item] or impl.Renderer[item] or null
+
+        update: ->
+            eventLoop.lock()
+            super()
+            eventLoop.release()
+            return
 
         getValue: ->
             @obj[@prop]

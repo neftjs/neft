@@ -1,7 +1,7 @@
 'use strict'
 
 utils = require 'src/utils'
-signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 
 module.exports = (impl) ->
     {Item, Image} = impl.Types
@@ -177,8 +177,8 @@ module.exports = (impl) ->
             data.contentUpdatePending = true
 
             unless pending
-                setImmediate updateAll
                 pending = true
+                eventLoop.setImmediate updateAll
             return
 
     updateTextStyle = (item) ->

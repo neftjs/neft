@@ -62,6 +62,7 @@ module.exports = (platform, app, options) ->
 
     # create file
     file = ''
+    file += "Neft.eventLoop.lock()\n"
     file += "var opts = #{config};\n"
     file += 'opts.modules = typeof modules !== \'undefined\' ? modules : {};\n'
 
@@ -73,5 +74,6 @@ module.exports = (platform, app, options) ->
         file += 'module.exports = init(Neft.bind(null, opts));\n'
     else
         file += 'module.exports = Neft(opts);\n'
+    file += "Neft.eventLoop.release();\n"
 
     file

@@ -2,6 +2,7 @@
 
 utils = require 'src/utils'
 assert = require 'src/assert'
+eventLoop = require 'src/eventLoop'
 
 module.exports = (impl) ->
     {Types} = impl
@@ -12,6 +13,8 @@ module.exports = (impl) ->
     nowTime = now()
 
     vsync = ->
+        eventLoop.lock()
+        requestAnimationFrame vsync
         nowTime = now()
 
         i = 0; n = pending.length
@@ -24,13 +27,12 @@ module.exports = (impl) ->
             else
                 # remove element in not ordered list
                 # this array may change due loop
-                pending[i] = pending[n-1]
-                pending[n-1] = pending[pending.length-1]
+                pending[i] = pending[n - 1]
+                pending[n - 1] = pending[pending.length - 1]
                 pending.pop()
                 anim._impl.pending = false
                 n--
-
-        requestAnimationFrame vsync
+        eventLoop.release()
         return
     requestAnimationFrame? vsync
 

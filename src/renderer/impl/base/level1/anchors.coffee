@@ -3,6 +3,7 @@
 assert = require 'src/assert'
 log = require 'src/log'
 utils = require 'src/utils'
+eventLoop = require 'src/eventLoop'
 
 log = log.scope 'Renderer', 'Anchors'
 
@@ -36,8 +37,8 @@ module.exports = (impl) ->
         @pending = true
         queue.push @
         unless pending
-            setImmediate updateItems
             pending = true
+            eventLoop.setImmediate updateItems
         return
 
     getItemProp =
