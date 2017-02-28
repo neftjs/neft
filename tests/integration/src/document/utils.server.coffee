@@ -3,6 +3,7 @@
 {Document, utils} = Neft
 
 Document.SCRIPTS_PATH = 'build/scripts'
+Document.STYLES_PATH = 'build/styles'
 
 exports.uid = do (i = 0) -> -> "index_#{i++}.html"
 

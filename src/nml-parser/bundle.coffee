@@ -43,6 +43,11 @@ module.exports = (nmlParser) -> (file) ->
     for autoInitCode in data.autoInitCodes
         code += "   `(function(){#{autoInitCode}}())`\n"
 
+    code += "exports._queries = #{JSON.stringify(data.queries)}\n"
+
+    if mainLink = data.codes._main?.link
+        code += "exports._mainLink = '#{mainLink}'\n"
+
     file.name = scopeItemName
     file.data = code
     file.queries = data.queries

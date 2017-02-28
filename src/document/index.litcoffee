@@ -49,6 +49,7 @@
 
         @FILES_PATH = ''
         @SCRIPTS_PATH = ''
+        @STYLES_PATH = ''
 
         signal.create @, 'onCreate'
         signal.create @, 'onError'
