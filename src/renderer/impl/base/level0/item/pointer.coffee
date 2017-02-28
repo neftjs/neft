@@ -2,6 +2,7 @@
 
 utils = require 'src/utils'
 signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 
 {sin, cos} = Math
 {emitSignal} = signal.Emitter
@@ -158,6 +159,7 @@ module.exports = (impl) ->
                 PROPAGATE_UP | STOP_ASIDE_PROPAGATION
 
             (e) ->
+                eventLoop.lock()
                 event._stopPropagation = false
                 event._checkSiblings = false
 
@@ -181,6 +183,7 @@ module.exports = (impl) ->
                 utils.clear itemsToRelease
                 utils.clear itemsToMove
                 utils.clear pressedItems
+                eventLoop.release()
                 return
 
         # support move, enter and exit events
@@ -205,6 +208,7 @@ module.exports = (impl) ->
                 PROPAGATE_UP | STOP_ASIDE_PROPAGATION
 
             (e) ->
+                eventLoop.lock()
                 event._stopPropagation = false
                 event._checkSiblings = false
                 flag = (flag % 2) + 1
@@ -231,6 +235,7 @@ module.exports = (impl) ->
                     if data.pointerMoveFlag isnt flag
                         data.pointerMoveFlag = flag
 
+                eventLoop.release()
                 return
 
         # support wheel event
@@ -246,8 +251,10 @@ module.exports = (impl) ->
                 PROPAGATE_UP | STOP_ASIDE_PROPAGATION
 
             (e) ->
+                eventLoop.lock()
                 event._checkSiblings = false
                 captureItems impl.window, e._x, e._y, onItem
+                eventLoop.release()
                 return
 
     i = 0

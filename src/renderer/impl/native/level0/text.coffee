@@ -1,5 +1,7 @@
 'use strict'
 
+eventLoop = require 'src/eventLoop'
+
 module.exports = (impl) ->
     {bridge} = impl
     {outActions, pushAction, pushItem, pushBoolean, pushInteger, pushFloat, pushString} = bridge
@@ -39,8 +41,8 @@ module.exports = (impl) ->
             queue.push item
 
             unless pending
-                setImmediate updateAll
                 pending = true
+                eventLoop.setImmediate updateAll
             return
 
     DATA =

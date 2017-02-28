@@ -16,6 +16,7 @@ module.exports = (impl) ->
         vsync = ->
             requestAnimationFrame vsync
             nativeBridge.sendData()
+            return
 
         requestAnimationFrame vsync
 

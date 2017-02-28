@@ -3,7 +3,7 @@
 utils = require 'src/utils'
 assert = require 'src/assert'
 log = require 'src/log'
-signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 
 assert = assert.scope 'View.Use'
 log = log.scope 'View', 'Use'
@@ -88,7 +88,7 @@ module.exports = (File) -> class Use
     renderImmediate: ->
         unless @isRenderPending
             @isRenderPending = true
-            signal.setImmediate @_renderImmediateCallback
+            eventLoop.setImmediate @_renderImmediateCallback
         return
 
     _renderImmediateCallback: ->

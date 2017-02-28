@@ -1,6 +1,7 @@
 'use strict'
 
 utils = require 'src/utils'
+eventLoop = require 'src/eventLoop'
 PIXI = require '../pixi.lib.js'
 
 module.exports = (impl) ->
@@ -44,8 +45,8 @@ module.exports = (impl) ->
             queue.push item
 
             unless pending
-                setImmediate updateAll
                 pending = true
+                eventLoop.setImmediate updateAll
             return
 
     updateAlignment = (item) ->

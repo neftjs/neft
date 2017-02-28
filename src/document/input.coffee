@@ -4,6 +4,7 @@ utils = require 'src/utils'
 assert = require 'src/assert'
 log = require 'src/log'
 signal = require 'src/signal'
+eventLoop = require 'src/eventLoop'
 Dict = require 'src/dict'
 List = require 'src/list'
 Binding = require 'src/binding'
@@ -65,7 +66,10 @@ class DocumentBinding extends Binding
         `//<development>`
         @failed = false
         `//</development>`
+        eventLoop.lock()
         super()
+        eventLoop.release()
+        return
 
     getValue: ->
         @ctx.getValue()

@@ -14,6 +14,7 @@ exports.Document = require 'src/document'
 exports.styles = require 'src/styles'
 exports.assert = require 'src/assert'
 exports.db = require 'src/db'
+exports.eventLoop = require 'src/eventLoop'
 exports.Binding = require 'src/binding'
 
 if exports.utils.isClient and not exports.utils.isBrowser

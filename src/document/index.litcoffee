@@ -6,6 +6,7 @@
     assert = require 'src/assert'
     log = require 'src/log'
     signal = require 'src/signal'
+    eventLoop = require 'src/eventLoop'
     Dict = require 'src/dict'
     List = require 'src/list'
 
@@ -325,7 +326,10 @@ Corresponding node handler: *n-onRevert=""*.
             unless @isClone
                 @clone().render props, context, source, refs
             else
-                @_render(props, context, source, refs)
+                eventLoop.lock()
+                result = @_render(props, context, source, refs)
+                eventLoop.release()
+                result
 
         _updateInputPropsKey: (key) ->
             {inputProps, source, props} = @

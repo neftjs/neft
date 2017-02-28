@@ -12,8 +12,6 @@ const { signal } = Neft;
     utils = require 'src/utils'
     assert = require 'src/assert'
 
-    pendingSignals = 0
-
 ## *Integer* signal.STOP_PROPAGATION
 
 Special constant used to stop calling further listeners.
@@ -83,25 +81,7 @@ Returns `true` if the given signal has no listeners.
                 return false
         return true
 
-## signal.setImmediate(*Function* callback)
-
-Register a function which will be called when all pending signal emits will be finished.
-
-If there is no pending emits, the given function is calling immediately.
-
-    immediate = []
-    exports.setImmediate = (callback) ->
-        assert.isFunction callback, """
-            signal.setImmediate callback must be a function, but #{callback} given
-        """
-        if pendingSignals is 0
-            callback()
-        else
-            immediate.push callback
-
     callSignal = (obj, listeners, arg1, arg2) ->
-        pendingSignals += 1
-
         i = 0
         n = listeners.length
         result = 0
@@ -132,12 +112,6 @@ If there is no pending emits, the given function is calling immediately.
                     listeners[i] = null
                     listeners[i + 1] = null
                 i += 2
-
-        pendingSignals -= 1
-
-        if pendingSignals is 0
-            while callback = immediate.shift()
-                callback()
 
         result
 

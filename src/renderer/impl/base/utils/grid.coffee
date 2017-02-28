@@ -4,6 +4,7 @@ MAX_LOOPS = 100
 
 utils = require 'src/utils'
 log = require 'src/log'
+eventLoop = require 'src/eventLoop'
 TypedArray = require 'src/typed-array'
 
 log = log.scope 'Renderer'
@@ -343,8 +344,8 @@ update = ->
     queue.push @
 
     unless pending
-        setImmediate updateItems
         pending = true
+        eventLoop.setImmediate updateItems
     return
 
 updateSize = ->
