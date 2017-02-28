@@ -21,9 +21,9 @@
     <input
       ref="input"
       type="switch"
-      n-style:borderColor="${refs.colorInput.state.color}"
-      n-style:selectedColor="${refs.colorInput2.state.color}"
-      n-style:thumbColor="${refs.colorInput3.state.color}"
+      style:borderColor="${refs.colorInput.state.color}"
+      style:selectedColor="${refs.colorInput2.state.color}"
+      style:thumbColor="${refs.colorInput3.state.color}"
     />
 </NativeItem>
 
@@ -31,5 +31,5 @@ State: ${refs.input.style.selected}
 <RandomColor ref="colorInput" />
 <RandomColor ref="colorInput2" />
 <RandomColor ref="colorInput3" />
-<button n-style:pointer:onClick="${this.toggleInput()}">Toggle</button>
-<button n-style:pointer:onClick="${this.toggleAnimatedInput()}">Toggle animated</button>
+<button style:pointer:onClick="${this.toggleInput()}">Toggle</button>
+<button style:pointer:onClick="${this.toggleAnimatedInput()}">Toggle animated</button>

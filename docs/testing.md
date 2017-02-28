@@ -71,7 +71,7 @@ this.onRender(function () {
 });
 </script>
 
-<button n-style:pointer:onClick="${this.increment()}">Increment</button>
+<button style:pointer:onClick="${this.increment()}">Increment</button>
 ```
 
 ... and we want to test whether `increment` method works like a charm.
