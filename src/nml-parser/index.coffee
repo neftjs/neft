@@ -16,6 +16,7 @@ ATTRIBUTE = 'attribute'
 {BINDING_THIS_TO_TARGET_OPTS} = bindingParser
 
 ids = idsKeys = itemsKeys = extensions = queries = null
+fileUid = 0
 
 isAnchor = (obj) ->
     assert obj.type is ATTRIBUTE, "isAnchor: type must be an attribute"
@@ -164,7 +165,7 @@ stringify =
             value
 
         unless elem.id
-            json.id = elem.id = "i#{utils.uid()}"
+            json.id = elem.id = "i#{fileUid++}"
 
         for body in elem.body
             switch body.type
@@ -287,6 +288,7 @@ getIds = (elem, ids={}) ->
     ids
 
 exports = module.exports = (file, filename, opts) ->
+    fileUid = 0
     elems = parser file, filename
     codes = {}
     autoInitCodes = []
@@ -333,7 +335,7 @@ exports = module.exports = (file, filename, opts) ->
             autoInitCodes.push code
         else
             code += 'return _c.createItem\n'
-            uid = 'n' + utils.uid()
+            uid = 'n' + fileUid++
             id ||= uid
             if codes[id]?
                 id = uid
