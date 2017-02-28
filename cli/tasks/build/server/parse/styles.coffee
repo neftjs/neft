@@ -19,6 +19,7 @@ IN_DIR = './styles'
 OUT_DIR = 'build/styles'
 QUERIES = './build/styles/queries.json'
 DEFAULT_STYLES = pathUtils.join __dirname, '/styles/default'
+STYLE_EXT_NAMES = ['.js', '.nml']
 
 getQueryPriority = (val) ->
     Document.Element.Tag.query.getSelectorCommandsLength val
@@ -42,8 +43,12 @@ getInputDirs = (app) ->
     # main styles folder
     inputDirs.push {path: IN_DIR, prefix: ''}
 
-    # default __view__ if needed
-    unless fs.existsSync(pathUtils.join(IN_DIR, '/__view__.js'))
+    # use default __view__ if needed
+    isMainViewExists = false
+    for ext in STYLE_EXT_NAMES
+        if isMainViewExists = fs.existsSync(pathUtils.join(IN_DIR, '/__view__' + ext))
+            break
+    unless isMainViewExists
         inputDirs.push {path: DEFAULT_STYLES, prefix: ''}
 
     inputDirs
@@ -74,7 +79,7 @@ module.exports = (platform, app, callback) ->
             inputDirPriorities[dir.prefix] = i
         filesToLoad++
         cliUtils.forEachFileDeep dir.path, (path, stat) ->
-            unless pathUtils.extname(path) in ['.js', '.nml']
+            unless pathUtils.extname(path) in STYLE_EXT_NAMES
                 return
 
             filesToLoad++
