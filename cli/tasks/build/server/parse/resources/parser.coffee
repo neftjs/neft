@@ -42,6 +42,22 @@ resolutionToString = (resolution) ->
     else
         '@' + (resolution + '').replace('.', 'p') + 'x'
 
+getImageSize = do ->
+    cache = Object.create null
+    (path, mtime, callback) ->
+        if cache[path] and mtime < Date.now() - 1000
+            callback null, cache[path]
+            return
+        sharp(path).metadata (err, meta) ->
+            if err
+                return callback err
+            cache[path] =
+                width: meta.width
+                height: meta.height
+            callback null, cache[path]
+            return
+        return
+
 supportImageResource = (path, rsc) ->
     unless sharp
         throw new Error "sharp module is not installed (npm install sharp)"
@@ -54,7 +70,7 @@ supportImageResource = (path, rsc) ->
         sharp(path).resize(width, height).toFile(output, callback)
 
     stack.add (callback) ->
-        sharp(path).metadata (err, meta) ->
+        getImageSize path, mtime, (err, meta) ->
             if err
                 return callback err
 
@@ -81,22 +97,18 @@ supportImageResource = (path, rsc) ->
             return
 
 parseResourcesFolder = (path) ->
-    throw "Resources folder not implemented"
+    throw new Error "Resources folder not implemented"
 
 parseResourcesFile = (path, config) ->
     assert.isString path
 
-    file = fs.readFileSync path, 'utf-8'
     try
-        if pathUtils.extname(path) in ['.yaml', '.yml']
-            json = yaml.safeLoad file
-        else
-            json = JSON.parse file
+        file = require path
     catch err
         log.error "Error in file '#{path}'"
         throw err
 
-    getValue json, path, config
+    getValue file, path, config
 
 parseResourcesObject = (obj, dirPath, config) ->
     assert.isPlainObject obj
@@ -210,11 +222,11 @@ getValue = (val, dirPath, config) ->
             parseResourceFile dirPath, config
 
 getFile = (path, config) ->
-    unless fs.existsSync(path)
+    try
+        stat = fs.statSync path
+    catch
         log.error "File '#{path}' doesn't exist"
         return
-
-    stat = fs.statSync path
     possiblePaths = [
         pathUtils.join(path, './resources.json'),
         pathUtils.join(path, './resources.yaml'),
