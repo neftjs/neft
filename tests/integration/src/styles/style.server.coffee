@@ -323,35 +323,35 @@ describe 'styles', ->
             ulNode.props.set 'n-each', [5, 6, 7]
             test()
 
-    describe "'n-style:' attributes", ->
+    describe "'style:' attributes", ->
         it 'are set on a style item', ->
             doc = render
-                html: '<b n-style="renderer:Item" n-style:x="50" />'
+                html: '<b n-style="renderer:Item" style:x="50" />'
 
             {node, item} = doc.styles[0]
 
             assert.instanceOf item, Renderer.Item
-            assert.is item.x, node.props['n-style:x']
+            assert.is item.x, node.props['style:x']
 
         it 'on change are set on a style item', ->
             doc = render
-                html: '<b n-style="renderer:Item" n-style:x="50" />'
+                html: '<b n-style="renderer:Item" style:x="50" />'
 
             {node, item} = doc.styles[0]
 
             node.props.set 'style:x', 70
-            assert.is item.x, node.props['n-style:x']
+            assert.is item.x, node.props['style:x']
 
         it "'null' value is not set for non-object properties", ->
             doc = render
-                html: '<b n-style="renderer:Item" n-style:x="null" />'
+                html: '<b n-style="renderer:Item" style:x="null" />'
 
             {node, item} = doc.styles[0]
 
             assert.is item.x, 0
 
-            node.props.set 'n-style:x', 4
-            node.props.set 'n-style:x', null
+            node.props.set 'style:x', 4
+            node.props.set 'style:x', null
             assert.is item.x, 4
 
     describe "'class' attribute", ->
