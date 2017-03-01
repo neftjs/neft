@@ -9,6 +9,5 @@ install:
 test_script:
     - node --version
     - npm --version
-    - npm run bundle -- --node --browser
     - npm test
 build: off
