@@ -5,7 +5,6 @@ os = require 'os'
 utils = require 'src/utils'
 log = require 'src/log'
 pathUtils = require 'path'
-bundleStyle = null
 
 log = log.scope 'Document'
 uid = 0
@@ -14,8 +13,6 @@ tmpdir = os.tmpdir()
 
 module.exports = (File) -> (file) ->
     {STYLE_ID_PROP} = File.Style
-    bundleStyle = Neft.nmlParser.bundle
-
     queries = []
     addedStyles = {}
 
@@ -23,27 +20,34 @@ module.exports = (File) -> (file) ->
         return
 
     styleTags = []
-    stylePath = "styles:#{file.path}"
     for tag in file.node.children
         if tag.name isnt 'style'
             continue
 
         styleTags.push tag
 
-        # tag body
-        str = tag.stringifyChildren()
-        styleFile =
-            data: str
-            path: "#{file.path}.js"
-            filename: file.path
-        bundleStyle styleFile
+        filePath = file.path
 
-        if utils.isEmpty(styleFile.codes)
+        # support win absolute paths
+        if pathUtils.isAbsolute(filePath)
+            filePath = encodeURIComponent filePath
+
+        # tag body
+        body = tag.stringifyChildren()
+        name = "#{filePath}##{styleTags.length - 1}"
+        stylePath = "styles:#{name}"
+        path = pathUtils.join File.STYLES_PATH, name + '.nml'
+        fs.outputFileSync path, body
+        styleFile = require path
+
+        unless styleFile._main
             continue
 
-        File.onStyle.emit styleFile
+        File.onStyle.emit
+            path: path
+            filename: name
 
-        for query, style of styleFile.queries
+        for query, style of styleFile._queries
             itemPath = "#{stylePath}:#{style}"
             addedStyles[itemPath] = true
             queries.push
@@ -53,8 +57,8 @@ module.exports = (File) -> (file) ->
         # detect main item with no query
         unless file.node.props[STYLE_ID_PROP]
             mainHasDoc = false
-            mainId = styleFile.codes._main.link
-            for _, id of styleFile.queries
+            mainId = styleFile._mainLink
+            for _, id of styleFile._queries
                 if id is mainId
                     mainHasDoc = true
                     break

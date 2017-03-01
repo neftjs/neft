@@ -14,9 +14,11 @@ signal = require 'src/signal'
 IN_DIR = 'views'
 OUT_DIR = 'build'
 SCRIPTS_DIR = './build/scripts'
+STYLES_DIR = './build/styles/_views'
 
 Document.FILES_PATH = IN_DIR
 Document.SCRIPTS_PATH = SCRIPTS_DIR
+Document.STYLES_PATH = STYLES_DIR
 loadedExtensions = {}
 
 module.exports = (platform, app, callback) ->
@@ -54,13 +56,9 @@ module.exports = (platform, app, callback) ->
         return
 
     Document.onStyle onStyleListener = (style) ->
-        destPath = pathUtils.join 'build/styles/_views/', style.path
-        data = coffee.compile style.data
-        fs.outputFileSync destPath, data
-        style.destPath = destPath
         app.styles.push
             name: style.filename
-            path: destPath
+            path: style.path
         return
 
     parseFile = (path) ->

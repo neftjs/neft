@@ -5,6 +5,7 @@ utils = require 'src/utils'
 module.exports = (File) -> (file) ->
     {iterators} = file
     createdComponents = []
+    uid = 0
 
     forNode = (elem) ->
         unless propVal = elem.props['n-each']
@@ -13,7 +14,7 @@ module.exports = (File) -> (file) ->
                     forNode child
             return
 
-        path = "#{file.path}#each[#{utils.uid()}]"
+        path = "#{file.path}#each[#{uid++}]"
 
         # get component
         bodyNode = new File.Element.Tag
