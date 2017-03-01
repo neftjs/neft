@@ -29,14 +29,10 @@ before_install:
     # install project dependencies
     - npm install
     - (cd tests && npm install)
-
-    # build neft bundles
-    - npm run bundle -- --node --browser
 script:
     - npm test
 env:
     global:
-        - TEST_NVM=1
         - TEST_CHROME=1
         - LOG_SCREENSHOT_DATA_URI=1
 matrix:

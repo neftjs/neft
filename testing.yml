@@ -13,36 +13,6 @@ environments:
         platform: node
         version: current
     -
-        platform: node
-        version: 4.0.0
-        enabled: $TEST_NVM
-    -
-        platform: node
-        version: 5.0.0
-        enabled: $TEST_NVM
-    -
-        platform: node
-        version: 6.2.2
-        enabled: $TEST_NVM
-    -
-        platform: node
-        version: 7.0.0
-        enabled: $TEST_NVM
-    -
-        platform: npm
-        nodeVersion: current
-        global: true
-    # -
-    #     platform: npm
-    #     nodeVersion: 4.0.0
-    #     global: true
-    #     enabled: $TEST_NVM
-    # -
-    #     platform: npm
-    #     nodeVersion: 7.0.0
-    #     global: true
-    #     enabled: $TEST_NVM
-    -
         platform: browser
         browser: chrome
         enabled: $TEST_CHROME
