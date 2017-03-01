@@ -37,6 +37,6 @@ this.onBeforeRender(function () {
 <body>
     <p n-if="${state.error}">ERROR: ${state.error}</p>
     <p>Change text and restart application to see saved value</p>
-    <input type="text" ref="input" n-style:onTextChange="${this.saveText()}" />
-    <button n-style:pointer:onClick="${this.removeText}">Remove</button>
+    <input type="text" ref="input" style:onTextChange="${this.saveText()}" />
+    <button style:pointer:onClick="${this.removeText}">Remove</button>
 </body>

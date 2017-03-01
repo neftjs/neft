@@ -77,7 +77,7 @@
 
 <nav
   class="${!props.open && 'close'}"
-  n-style:$:onClose="${this.props.onClose()}"
+  style:$:onClose="${this.props.onClose()}"
 >
     <ul n-each="${state.elements}">
         <Item

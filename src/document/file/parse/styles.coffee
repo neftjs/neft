@@ -13,6 +13,7 @@ realpath = fs.realpathSync './'
 tmpdir = os.tmpdir()
 
 module.exports = (File) -> (file) ->
+    {STYLE_ID_PROP} = File.Style
     bundleStyle = Neft.nmlParser.bundle
 
     queries = []
@@ -50,7 +51,7 @@ module.exports = (File) -> (file) ->
                 style: itemPath
 
         # detect main item with no query
-        unless file.node.props['n-style']
+        unless file.node.props[STYLE_ID_PROP]
             mainHasDoc = false
             mainId = styleFile.codes._main.link
             for _, id of styleFile.queries
@@ -58,7 +59,7 @@ module.exports = (File) -> (file) ->
                     mainHasDoc = true
                     break
             unless mainHasDoc
-                file.node.props.set 'n-style', "#{stylePath}:#{mainId}"
+                file.node.props.set STYLE_ID_PROP, "#{stylePath}:#{mainId}"
 
     while styleTags.length > 0
         styleTags.pop().parent = null

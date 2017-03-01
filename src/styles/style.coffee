@@ -19,6 +19,7 @@ module.exports = (File, data) -> class Style
     @__name__ = 'Style'
     @__path__ = 'File.Style'
 
+    @STYLE_ID_PROP = STYLE_ID_PROP = 'n-style'
     @JSON_CTOR_ID = File.Style?.JSON_CTOR_ID
     @JSON_CTOR_ID ?= File.JSON_CTORS.push(Style) - 1
     {JSON_CTOR_ID} = @
@@ -39,22 +40,28 @@ module.exports = (File, data) -> class Style
                     log.warn 'query can be attached only to tags; ' +
                         "query '#{elem.query}' has been omitted for this node"
                     continue
-                node.props.set 'n-style', elem.style
+                node.props.set STYLE_ID_PROP, elem.style
 
         file
 
     @createStylesInDocument = do ->
+        nStyleWarned = false
         getStyleAttrs = (node) ->
             props = null
             for prop of node.props when node.props.hasOwnProperty(prop)
-                if prop.slice(0, 8) is 'n-style:'
+                isStyleProp = prop.slice(0, 8) is 'n-style:'
+                if isStyleProp and not nStyleWarned
+                    nStyleWarned = true
+                    log.warn 'n-style is deprecated, use style instead'
+                isStyleProp ||= prop.slice(0, 6) is 'style:'
+                if isStyleProp
                     props ?= {}
                     props[prop] = true
             props
 
         forNode = (file, node, parentStyle) ->
             isText = node instanceof Text
-            if isText or node.props['n-style']
+            if isText or node.props[STYLE_ID_PROP]
                 style = new Style
                 style.file = file
                 style.node = node
@@ -151,17 +158,24 @@ module.exports = (File, data) -> class Style
         return
 
     setProp: do ->
-        PREFIX_LENGTH = 'n-style:'.length
+        DEPRECATED_PREFIX = 'n-style:'
+        PREFIX = 'style:'
+
+        getPropWithoutPrefix = (prop) ->
+            if prop.slice(0, DEPRECATED_PREFIX.length) is DEPRECATED_PREFIX
+                prop.slice DEPRECATED_PREFIX.length
+            else
+                prop.slice PREFIX.length
 
         getSplitProp = do ->
             cache = Object.create null
             (prop) ->
-                cache[prop] ||= prop.slice(PREFIX_LENGTH).split ':'
+                cache[prop] ||= getPropWithoutPrefix(prop).split ':'
 
         getPropertyPath = do ->
             cache = Object.create null
             (prop) ->
-                cache[prop] ||= prop.slice(PREFIX_LENGTH).replace /:/g, '.'
+                cache[prop] ||= getPropWithoutPrefix(prop).replace /:/g, '.'
 
         getInternalProperty = do ->
             cache = Object.create null
@@ -192,7 +206,10 @@ module.exports = (File, data) -> class Style
             internalProp = getInternalProperty lastPart
 
             # connect a function to the signal
-            if obj[internalProp] is undefined and typeof obj[lastPart] is 'function' and obj[lastPart].connect
+            isSignal = obj[internalProp] is undefined
+            isSignal &&= typeof obj[lastPart] is 'function'
+            isSignal &&= obj[lastPart].connect
+            if isSignal
                 if typeof oldVal is 'function'
                     obj[lastPart].disconnect oldVal
                 if typeof val is 'function'
@@ -324,8 +341,8 @@ module.exports = (File, data) -> class Style
         {node} = @
 
         if node instanceof Tag
-            id = node.props['n-style']
-            assert.isDefined id, "Tag must specify 'n-style' prop to create an item for it"
+            id = node.props[STYLE_ID_PROP]
+            assert.isDefined id, "Tag must specify #{STYLE_ID_PROP} prop to create an item for it"
         else if node instanceof Text
             id = Renderer.Text.New()
 
@@ -343,7 +360,7 @@ module.exports = (File, data) -> class Style
                 parent = @parent
 
                 loop
-                    if parent and parent.node.props['n-style'] is parentId
+                    if parent and parent.node.props[STYLE_ID_PROP] is parentId
                         scope = parent.scope
                         @item = scope.objects[subid]
                     else if not parent?.scope and file in ['view', '__view__']
@@ -520,7 +537,7 @@ module.exports = (File, data) -> class Style
         node._documentStyle = clone
 
         if node instanceof Tag
-            styleAttr = node.props['n-style']
+            styleAttr = node.props[STYLE_ID_PROP]
             clone.isAutoParent = not /^styles:(.+?)\:(.+?)\:(.+?)$/.test(styleAttr)
 
         # set props
