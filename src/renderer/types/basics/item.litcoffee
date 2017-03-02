@@ -102,7 +102,7 @@ Item {
                 @_query = val
             return
 
-## *Document.Element* Item::node
+## ReadOnly *Document.Element* Item::node
 
 ## *Signal* Item::onNodeChange(*Document.Element* oldValue)
 
@@ -127,6 +127,33 @@ Text {
             developmentSetter: (val) ->
                 if val?
                     assert.instanceOf val, DocElement
+
+## ReadOnly *Object* Item::document
+
+`<script />` object of document where this item has been created.
+
+```xhtml
+<style>
+Button {
+    query: 'button'
+    pointer.onClick() {
+        console.log(this.document.getFoo()); // foo
+    }
+}
+</style>
+<script>
+this.onBeforeCreate(function () {
+    this.getFoo = () => {
+        return 'foo';
+    };
+});
+</script>
+<button />
+```
+
+        utils.defineProperty @::, 'document', null,
+            -> @_component?.document
+        , null
 
 ## *Signal* Item::ready()
 
