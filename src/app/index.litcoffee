@@ -232,7 +232,7 @@ app.cookies.onChange(function(key){
         if opts.styles?
             for style in opts.styles
                 if style.name in ['view', '__view__']
-                    style.file._init app: app, view: null
+                    style.file._init view: null
                     windowStyle = style.file._main.getComponent()
                     break
 
@@ -242,7 +242,6 @@ app.cookies.onChange(function(key){
 
         if opts.styles?
             stylesInitObject =
-                app: app
                 view: windowStyleItem
 
             # initialize styles
