@@ -20,7 +20,7 @@ module.exports = (nmlParser) -> (file) ->
     code += '{Renderer} = Neft\n'
     code += 'onReady = Neft.signal.create()\n'
     code += '{Image, Device, Navigator, Screen, RotationSensor} = Renderer\n'
-    code += 'view = app = null\n'
+    code += 'view = null\n'
 
     # parse NML
     if pathUtils.extname(file.path) not in ['.js', '.nml']
@@ -38,8 +38,8 @@ module.exports = (nmlParser) -> (file) ->
             code += "exports.#{fileId} = `(function(){ #{val} }())`\n"
 
     code += 'exports._init = (opts) -> \n'
-    code += '   {view, app} = opts\n'
-    code += '   onReady.emit app\n'
+    code += '   {view} = opts\n'
+    code += '   onReady.emit()\n'
     for autoInitCode in data.autoInitCodes
         code += "   `(function(){#{autoInitCode}}())`\n"
 
