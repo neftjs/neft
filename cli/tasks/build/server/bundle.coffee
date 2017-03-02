@@ -107,6 +107,9 @@ module.exports = (platform, options, app, callback) ->
             if err
                 return callback err
 
+            # make app object global in the file scope
+            file = "var app = #{file};\n"
+
             config =
                 platform: platform
                 release: options.release
