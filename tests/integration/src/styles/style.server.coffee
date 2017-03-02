@@ -588,6 +588,23 @@ describe 'styles', ->
 
             assert.is emNode.style.nextSibling, iNode.style
 
+    describe 'item.document', ->
+        it 'refers to component scope', ->
+            doc = render
+                html: '''
+                    <div n-style="styles:file:style" />
+                '''
+                styles:
+                    file:
+                        style:
+                            getComponent: ({document}) ->
+                                item = Renderer.Rectangle.New()
+                                item._component.document = document
+                                item: item
+
+            node = doc.node.query 'div'
+            assert.is node.style.document, doc.scope
+
     it '', ->
         for view in testViews
             utils.clear view.styles

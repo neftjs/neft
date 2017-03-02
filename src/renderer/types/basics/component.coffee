@@ -44,6 +44,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
         @objectsInitQueue = []
         @parent = original
         @disabledObjects = original?.disabledObjects or Object.create(null)
+        @document = null
 
         # if original
             # @createItem = original.createItem
@@ -52,7 +53,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
         # else
         @clone = utils.bindFunctionContext @clone, @
         @createItem = utils.bindFunctionContext @createItem, @
-        @createItem.getComponent = @clone
+        @createItem.getComponent = (opts) => @clone null, null, opts
             # @cloneItem = utils.bindFunctionContext @cloneItem, @
             # @cacheItem = utils.bindFunctionContext @cacheItem, @
 
@@ -198,7 +199,7 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
 
         clone
 
-    clone: (parentComponent, itemOpts) ->
+    clone: (parentComponent, itemOpts, componentOpts) ->
         unless parentComponent instanceof Component
             itemOpts = parentComponent
             parentComponent = null
@@ -206,6 +207,9 @@ module.exports = (Renderer, Impl, itemUtils) -> class Component
         component = new Component @
         component.mirror = not parentComponent
         component.belongsToComponent = parentComponent
+
+        if componentOpts?.document
+            component.document = componentOpts.document
 
         components = {}
         components[component.id] = component

@@ -333,7 +333,9 @@ module.exports = (File, data) -> class Style
     ###
     createItem: ->
         assert.isNotDefined @item, "Can't create a style item, because it already exists"
-        assert.isNotDefined @node.style, "Can't create a style item, because the node already has a style"
+        assert.isNotDefined @node.style, '''
+            Can't create a style item, because the node already has a style
+        '''
 
         unless windowStyle
             return
@@ -375,7 +377,7 @@ module.exports = (File, data) -> class Style
                     log.warn "Can't find `#{id}` style item"
                     return
             else
-                @scope = styles[file]?[style]?.getComponent()
+                @scope = styles[file]?[style]?.getComponent document: @file.scope
                 if @scope
                     @item = @scope.item
                 else
