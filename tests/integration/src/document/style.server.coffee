@@ -70,3 +70,22 @@ describe 'Document style', ->
         testNode = view.node.query 'test'
         assert.isNot testNode.props['n-style'].indexOf('firstItem'), -1
         assert.ok view.node.props['n-style']
+
+    it 'can be placed in <component />', ->
+        view = createView '''
+            <component name="TestComp">
+                <style>
+                    Item {
+                        id: firstItem
+                        query: 'test'
+                    }
+                </style>
+                <test />
+            </component>
+            <TestComp />
+        '''
+        view = view.clone()
+
+        renderParse view
+        testNode = view.node.query 'test'
+        assert.isNot testNode.props['n-style'].indexOf('firstItem'), -1
