@@ -2,6 +2,8 @@
 
 chokidar = require 'chokidar'
 fs = require 'fs'
+glob = require 'glob'
+Module = require 'module'
 utils = require 'src/utils'
 moduleCache = require 'lib/module-cache'
 
@@ -22,6 +24,16 @@ module.exports = (platform, options, onBuild) ->
             shouldBuildAgain = true
             return
 
+        # add build files into changed files
+        for buildFilePath in glob.sync('./build/*(styles|views)/**/*')
+            changedFiles.push fs.realpathSync buildFilePath
+
+        # clear cache
+        cache = Module._cache
+        for file in changedFiles
+            delete cache[file]
+
+        # run build
         isPending = true
         buildOptions = utils.mergeAll {}, options,
             changedFiles: changedFiles

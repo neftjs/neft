@@ -86,7 +86,7 @@ module.exports = (config, callback) ->
         if fs.existsSync(nativeDirPath)
             name = utils.capitalize ext.name
             name = name.replace /(\-\w)/g, (m) -> m[1].toUpperCase()
-            packageName = name.toLowerCase()
+            packageName = "#{name.toLowerCase()}_extension"
             config.androidExtensions.push
                 name: name
                 packageName: packageName

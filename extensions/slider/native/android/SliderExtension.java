@@ -1,4 +1,4 @@
-package io.neft.extensions.slider;
+package io.neft.extensions.slider_extension;
 
 import io.neft.renderer.NativeItem;
 

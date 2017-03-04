@@ -1,6 +1,6 @@
 import UIKit
 
-extension Extension.SwitchToggle {
+extension Extension.Switch {
     class SwitchItem: NativeItem {
         override class var name: String { return "Switch" }
 

@@ -1,4 +1,4 @@
-package io.neft.extensions.textinput;
+package io.neft.extensions.textinput_extension;
 
 import io.neft.renderer.NativeItem;
 

@@ -223,8 +223,9 @@ stringify =
         rendererCtor = Renderer[elem.name.split('.')[0]]
         if rendererCtor?
             declaration = "Renderer.#{elem.name}.New();\n"
-        else if lazyItem = exports.lazyItems[elem.name]
-            requires[elem.name] ?= lazyItem
+        else
+            extName = elem.name[0].toLowerCase() + elem.name.slice(1)
+            requires[elem.name] ?= "extensions/#{extName}/renderer/#{extName}"
             declaration = "#{elem.name}.New();\n"
         itemsDeclarations += "var #{visibleId} = #{declaration};\n"
         unless MODIFIERS_NAMES[elem.name]
@@ -362,4 +363,3 @@ exports = module.exports = (file, filename, opts) ->
     beforeFileCode: beforeFileCode
 
 exports.bundle = bundle exports
-exports.lazyItems = {}

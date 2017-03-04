@@ -1,4 +1,4 @@
-package io.neft.extensions.video;
+package io.neft.extensions.video_extension;
 
 import io.neft.renderer.NativeItem;
 

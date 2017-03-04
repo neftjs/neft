@@ -1,4 +1,4 @@
-package io.neft.extensions.scrollable;
+package io.neft.extensions.scrollable_extension;
 
 import android.content.Context;
 import android.view.MotionEvent;
