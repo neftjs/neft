@@ -21,16 +21,17 @@ getControlRect = do ->
 exports.initialize = (callback) ->
     getControlRect().parent = Neft.Renderer.window
     url = "#{app.config.testingServerUrl}/initializeScreenshots"
-    app.networking.post url, clientUid: UID, (err) ->
-        getControlRect().parent = null
-        if err
-            callback new Error """
-                Cannot initialize screenshots;
-                Make sure application is visible on the screen and \
-                can be captured by screenshot
-            """
-        else
-            requestAnimationFrame -> callback()
+    requestAnimationFrame ->
+        app.networking.post url, clientUid: UID, (err) ->
+            getControlRect().parent = null
+            if err
+                callback new Error """
+                    Cannot initialize screenshots;
+                    Make sure application is visible on the screen and \
+                    can be captured by screenshot
+                """
+            else
+                callback()
     return
 
 exports.take = (opts, callback) ->

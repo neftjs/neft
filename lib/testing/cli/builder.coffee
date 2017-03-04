@@ -4,7 +4,6 @@ fs = require 'fs-extra'
 pathUtils = require 'path'
 childProcess = require 'child_process'
 config = require './config'
-logger = require './logger'
 testsFile = require './testsFile'
 httpServer = require './httpServer'
 
@@ -25,8 +24,7 @@ BUILD_OPTIONS =
     env:
         RUN_TESTS: false
 
-BUILD_LOG_PREFIX = '[BUILD] '
-TAG = 'building'
+BUILD_LOG_PREFIX = '   '
 
 ###
 Builds Neft app for the given target.
@@ -43,22 +41,17 @@ exports.buildProject = (target, env, callback) ->
     error = null
     buildProcess = childProcess.fork NEFT_BIN_PATH, args, BUILD_OPTIONS
     buildProcess.stdout.on 'data', (data) ->
-        logger.log TAG, BUILD_LOG_PREFIX + String(data).trim()
+        log BUILD_LOG_PREFIX + String(data).trim()
     buildProcess.stderr.on 'data', (data) ->
         error = String(data).trim()
-        log.error TAG, BUILD_LOG_PREFIX + error
+        log.error TAG, error
         buildProcess.kill()
     buildProcess.on 'exit', ->
-        logger.log TAG, "#{target} project built"
         callback error
     return
 
 exports.buildProjects = (targetsToBuild, callback) ->
     targets = Object.keys targetsToBuild
-
-    callback = do (_super = callback) -> (err) ->
-        logger.changeGroup 'building', '📝  Building', if err then 'red' else 'green'
-        _super err
 
     builtAmount = 0
     buildNext = (err) ->
@@ -74,7 +67,7 @@ exports.buildProjects = (targetsToBuild, callback) ->
             return
 
         builtAmount += 1
-        logger.changeGroup 'building', "📝  Building #{target} [#{builtAmount}/#{targets.length}]"
+        log.info "\n✏️  Building #{target} [#{builtAmount}/#{targets.length}]"
 
         targets.shift()
         testsFile.saveBuildTestsFile target, (err) ->

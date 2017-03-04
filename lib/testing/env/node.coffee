@@ -16,7 +16,7 @@ getInitPath = (env) ->
     pathUtils.join path, 'build/app-node-develop.js'
 
 exports.getName = ->
-    "Current Node tests"
+    "Node tests"
 
 exports.execFile = (path, logsReader, callback) ->
     mainErr = null
@@ -30,11 +30,8 @@ exports.execFile = (path, logsReader, callback) ->
         log.error data
     nodeProcess.on 'exit', ->
         unless logsReader.terminated
-            mainErr ||= "Node tests terminated before ending"
+            mainErr ?= "Node tests terminated before all tests ended"
         callback mainErr or logsReader.error
 
 exports.run = (env, logsReader, callback) ->
-    log.info 'running node'
-    exports.execFile getInitPath(env), logsReader, (err) ->
-        log.info 'node terminated'
-        callback err
+    exports.execFile getInitPath(env), logsReader, callback

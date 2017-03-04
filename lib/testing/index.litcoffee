@@ -2,7 +2,7 @@
 
     'use strict'
 
-    {utils, log} = Neft
+    {utils, log, assert} = Neft
     stack = require './stack'
     logger = require './logger'
     screenshot = require './screenshot/client'
@@ -141,6 +141,11 @@ The given test function can contains optional *callback* argument.
             throw new Error "'expected' path not set in takeScreenshot"
 
         {currentTest} = Test
+        assert.notOk currentTest.callbackCalled, """
+            takeScreenshot called but current test '#{currentTest.getFullMessage()}' \
+            is not pending
+        """
+
         currentTest.preventEnding = true
 
         endCurrentTest = (err) ->

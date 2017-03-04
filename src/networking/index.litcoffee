@@ -275,7 +275,7 @@ The given options object corresponds to the *Networking.Request* properties.
             assert.ok req.pending
             res = req.response
 
-            log "Resolve local `#{req}` request"
+            log "Resolve `#{req}` request"
 
             onError = (err) ->
                 unless req.pending

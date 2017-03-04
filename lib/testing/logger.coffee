@@ -5,42 +5,53 @@
 stack = require './stack'
 errorUtils = require './error'
 
-exports.TEST_PREFIX = '[TEST] '
+exports.TEST = '[TEST] '
+exports.SCOPE = '[SCOPE] '
+exports.ERROR_TEST = '[ERROR_TEST] '
 exports.ERROR = '[ERROR] '
 exports.SUCCESS = 'Tests success'
 exports.FAILURE = 'Tests failure'
 
-log = (msg) ->
-    console.log exports.TEST_PREFIX + msg
+scopeDeepness = 0
 
-logError = (error) ->
-    msg = ''
-    if error.currentTest
-        msg += "#{error.currentTest.getFullMessage()}\n"
-    msg += errorUtils.toString error
-    log exports.ERROR + encodeURIComponent(msg)
+getDeepnessPrefix = ->
+    r = ''
+    for i in [0...scopeDeepness] by 1
+        r += '   '
+    r
 
 exports.onTestsStart = ->
 
 exports.onTestsEnd = ->
     # log result
     if stack.errors.length
-        log exports.FAILURE
+        console.log exports.FAILURE
     else
-        log exports.SUCCESS
+        console.log exports.SUCCESS
     return
 
 exports.onScopeStart = (scope) ->
+    if scope.message
+        console.log exports.SCOPE + getDeepnessPrefix() + scope.message
+        scopeDeepness += 1
     return
 
 exports.onScopeEnd = (scope) ->
+    if scope.message
+        scopeDeepness -= 1
     return
 
 exports.onTestStart = (test) ->
-    log test.getFullMessage()
-    return
 
 exports.onTestError = (test, error) ->
-    logError error
+    if test.message
+        console.log exports.ERROR_TEST + getDeepnessPrefix() + test.message
+    msg = "Error in test: #{test.getFullMessage()}\n"
+    msg += errorUtils.toString(error)
+    console.log exports.ERROR + encodeURIComponent(msg)
+    return
 
 exports.onTestEnd = (test) ->
+    if test.message
+        console.log exports.TEST + getDeepnessPrefix() + test.message
+    return
