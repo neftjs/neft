@@ -18,11 +18,11 @@
             @__name__ = 'Native'
             @__path__ = 'Renderer.Native'
 
-## *Native* Native.New([*Component* component, *Object* options])
+## *Native* Native.New([*Object* options])
 
-            @New = (component, opts) ->
+            @New = (opts) ->
                 item = new @
-                itemUtils.Object.initialize item, component, opts
+                itemUtils.Object.initialize item, opts
                 unless IS_NATIVE
                     item.onParentChange Impl.updateNativeSize
                 @Initialize? item

@@ -18,7 +18,6 @@ module.exports = (nmlParser) -> (file) ->
 
     # scope types
     code += '{Renderer} = Neft\n'
-    code += 'onReady = Neft.signal.create()\n'
     code += '{Image, Device, Navigator, Screen, RotationSensor} = Renderer\n'
     code += 'view = null\n'
 
@@ -27,6 +26,7 @@ module.exports = (nmlParser) -> (file) ->
         return new Error 'No js files are not supported'
 
     data = nmlParser file.data, file.filename
+    code += data.beforeFileCode
 
     if data.bootstrap
         code += "`#{data.bootstrap}`\n"
@@ -35,11 +35,10 @@ module.exports = (nmlParser) -> (file) ->
         if typeof val?.link is 'string'
             code += "exports.#{fileId} = exports.#{val.link}\n"
         else
-            code += "exports.#{fileId} = `(function(){ #{val} }())`\n"
+            code += "exports.#{fileId} = `function(__opts){ var document = __opts && __opts.document; #{val} }`\n"
 
     code += 'exports._init = (opts) -> \n'
     code += '   {view} = opts\n'
-    code += '   onReady.emit()\n'
     for autoInitCode in data.autoInitCodes
         code += "   `(function(){#{autoInitCode}}())`\n"
 

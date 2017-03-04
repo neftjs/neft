@@ -22,11 +22,11 @@ Rectangle {
             @__name__ = 'Rectangle'
             @__path__ = 'Renderer.Rectangle'
 
-## *Rectangle* Rectangle.New([*Component* component, *Object* options])
+## *Rectangle* Rectangle.New([*Object* options])
 
-            @New = (component, opts) ->
+            @New = (opts) ->
                 item = new Rectangle
-                itemUtils.Object.initialize item, component, opts
+                itemUtils.Object.initialize item, opts
                 item
 
 ## *Rectangle* Rectangle::constructor() : *Item*

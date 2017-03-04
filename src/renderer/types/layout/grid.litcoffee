@@ -21,11 +21,11 @@ Grid {
         @__name__ = 'Grid'
         @__path__ = 'Renderer.Grid'
 
-## *Grid* Grid.New([*Component* component, *Object* options])
+## *Grid* Grid.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new Grid
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item.effectItem = item
             item
 

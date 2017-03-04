@@ -18,11 +18,11 @@ Column {
         @__name__ = 'Column'
         @__path__ = 'Renderer.Column'
 
-## *Column* Column.New([*Component* component, *Object* options])
+## *Column* Column.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new Column
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item.effectItem = item
             item
 

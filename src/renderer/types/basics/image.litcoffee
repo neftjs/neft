@@ -26,11 +26,11 @@ Image {
         @__name__ = 'Image'
         @__path__ = 'Renderer.Image'
 
-## *Image* Image.New([*Component* component, *Object* options])
+## *Image* Image.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new Image
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item
 
 ## *Image* Image::constructor() : *Item*

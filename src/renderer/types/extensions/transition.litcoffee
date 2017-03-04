@@ -28,11 +28,11 @@ Rectangle {
     module.exports = (Renderer, Impl, itemUtils) -> class Transition extends Renderer.Extension
         @__name__ = 'Transition'
 
-## *Transition* Transition.New([*Component* component, *Object* options])
+## *Transition* Transition.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new Transition
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item
 
 ## *Transition* Transition::constructor() : *Renderer.Extension*

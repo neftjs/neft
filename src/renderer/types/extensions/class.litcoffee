@@ -16,26 +16,17 @@
     module.exports = (Renderer, Impl, itemUtils) ->
         class ChangesObject
             constructor: ->
-                @_links = []
                 @_attributes = {}
                 @_functions = []
                 @_bindings = {}
 
             setAttribute: (prop, val) ->
                 @_attributes[prop] = val
-                if val instanceof Renderer.Component.Link
-                    @_links.push val
                 return
 
             setFunction: (prop, val) ->
                 boundFunc = (arg1, arg2) ->
-                    if @_component
-                        arr = @_component.objectsOrderSignalArr
-                        arr[arr.length - 2] = arg1
-                        arr[arr.length - 1] = arg2
-                        val.apply @_target, arr
-                    else
-                        val.call @_target, arg1, arg2
+                    val.call @_target, arg1, arg2
                 @_functions.push prop, boundFunc
                 return
 
@@ -47,11 +38,11 @@
         class Class extends Renderer.Extension
             @__name__ = 'Class'
 
-## *Renderer.Class* Class.New([*Component* component, *Object* options])
+## *Renderer.Class* Class.New([*Object* options])
 
-            @New = (component, opts) ->
+            @New = (opts) ->
                 item = new Class
-                itemUtils.Object.initialize item, component, opts
+                itemUtils.Object.initialize item, opts
                 item
 
 ## *Class* Class::constructor() : *Renderer.Extension*
@@ -129,7 +120,7 @@ If state is created inside the *Item*, this property is set automatically.
                     if oldVal
                         utils.remove oldVal._extensions, @
                         if @_running and not @_document?._query
-                            unloadObjects @, @_component, oldVal
+                            unloadObjects @, oldVal
                     if name
                         if oldVal
                             oldVal._classExtensions[name] = null
@@ -141,7 +132,7 @@ If state is created inside the *Item*, this property is set automatically.
 
                     if val
                         val._extensions.push @
-                        if val._classes?.has(name) or @_when or (@_priority isnt -1 and @_component.ready and !@_name and !@_bindings?.when and !@_document?._query)
+                        if val._classes?.has(name) or @_when or (@_priority isnt -1 and !@_name and !@_bindings?.when and !@_document?._query)
                             @enable()
                     return
 
@@ -217,7 +208,7 @@ Grid {
                 updateTargetClass saveAndEnableClass, @_target, @
 
                 unless @_document?._query
-                    loadObjects @, @_component, @_target
+                    loadObjects @, @_target
 
                 return
 
@@ -270,9 +261,6 @@ Grid {
                     assert.instanceOf val, itemUtils.Object
                     assert.isNot val, @_ref
 
-                    unless @_ref._component.isClone
-                        @_ref._component.disabledObjects[val.id] = true
-
                     if val instanceof Class
                         updateChildPriorities @_ref, val
 
@@ -292,8 +280,8 @@ Grid {
 
                     oldVal
 
-            clone: (component) ->
-                clone = cloneClassWithNoDocument.call @, component
+            clone: ->
+                clone = cloneClassWithNoDocument.call @
 
                 if doc = @_document
                     cloneDoc = clone.document
@@ -303,7 +291,7 @@ Grid {
 
                 clone
 
-        loadObjects = (classElem, component, item) ->
+        loadObjects = (classElem, item) ->
             if children = classElem._children
                 for child in children
                     if child instanceof Renderer.Item
@@ -362,9 +350,9 @@ Grid {
             classList = target._classList
             index = classList.indexOf classElem
 
-            if index > 0 and classListSortFunc(classElem, classList[index-1]) < 0
+            if index > 0 and classListSortFunc(classElem, classList[index - 1]) < 0
                 return true
-            if index < classList.length-1 and classListSortFunc(classElem, classList[index+1]) > 0
+            if index < classList.length - 1 and classListSortFunc(classElem, classList[index + 1]) > 0
                 return true
             false
 
@@ -375,19 +363,11 @@ Grid {
         updateClassList = (item) ->
             item._classList.sort classListSortFunc
 
-        cloneClassChild = (classElem, component, child) ->
-            clone = component.cloneRawObject child
-            cloneComp = clone._component.belongsToComponent or clone._component
-            cloneComp.onObjectChange ?= signal.create()
-            if clone.id
-                cloneComp.setObjectById clone, clone.id
-            cloneComp.initObjects()
-            if component.objects[clone.id]
-                component.setObjectById clone, clone.id
-            return clone
+        cloneClassChild = (classElem, child) ->
+            child.clone()
 
-        cloneClassWithNoDocument = (component) ->
-            clone = Class.New component
+        cloneClassWithNoDocument = ->
+            clone = Class.New()
             clone.id = @id
             clone._classUid = @_classUid
             clone._name = @_name
@@ -398,19 +378,13 @@ Grid {
 
             if @_bindings
                 for prop, val of @_bindings
-                    clone.createBinding prop, val, component
+                    clone.createBinding prop, val
 
             # clone children
             if children = @_children
                 for child, i in children
-                    childClone = cloneClassChild clone, component, child
+                    childClone = cloneClassChild clone, child
                     clone.children.append childClone
-
-            if component.isDeepClone
-                # clone links
-                if (changes = @_changes)
-                    for link in changes._links
-                        linkClone = cloneClassChild clone, component, link.getItem(@_component)
 
             clone
 
@@ -529,7 +503,7 @@ Grid {
                             defaultValue = getPropertyDefaultValue object, lastPath
                             defaultIsBinding = !!classList[i].changes._bindings[alias]
                             if defaultIsBinding
-                                object.createBinding lastPath, null, classElem._component, item
+                                object.createBinding lastPath, null, item
                             object[lastPath] = defaultValue
                             break
 
@@ -552,14 +526,11 @@ Grid {
                             continue
 
                     if bindings[attr]
-                        object.createBinding lastPath, val, classElem._component, item
+                        object.createBinding lastPath, val, item
                     else
                         if object._bindings?[lastPath]
-                            object.createBinding lastPath, null, classElem._component, item
-                        if val instanceof Renderer.Component.Link
-                            object[lastPath] = val.getItem classElem._component
-                        else
-                            object[lastPath] = val
+                            object.createBinding lastPath, null, item
+                        object[lastPath] = val
 
             return
 
@@ -618,7 +589,7 @@ Grid {
                         lastPath = path[path.length - 1]
                         unless object
                             continue
-                        object.createBinding lastPath, null, classElem._component, item
+                        object.createBinding lastPath, null, item
 
                     # set default value
                     if attr isnt alias or not path
@@ -632,7 +603,7 @@ Grid {
                         continue
                     `//</development>`
                     if defaultIsBinding
-                        object.createBinding lastPath, defaultValue, classElem._component, item
+                        object.createBinding lastPath, defaultValue, item
                     else
                         if defaultValue is undefined
                             defaultValue = getPropertyDefaultValue object, lastPath
@@ -743,7 +714,7 @@ Grid {
                         updatePriorities @_ref
 
                     unless val
-                        loadObjects @, @_component, @_target
+                        loadObjects @, @_target
                     return
 
             getChildClass = (style, parentClass) ->
@@ -764,8 +735,7 @@ Grid {
 
                 # get class
                 unless classElem = @_classesPool.pop()
-                    newComp = @_ref._component.cloneComponentObject()
-                    classElem = cloneClassWithNoDocument.call @_ref, newComp
+                    classElem = cloneClassWithNoDocument.call @_ref
                     classElem._document = new ClassChildDocument @
 
                 # save

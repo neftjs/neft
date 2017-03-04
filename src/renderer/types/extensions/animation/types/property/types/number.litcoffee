@@ -22,11 +22,11 @@ Rectangle {
     module.exports = (Renderer, Impl, itemUtils) -> class NumberAnimation extends Renderer.PropertyAnimation
         @__name__ = 'NumberAnimation'
 
-## *NumberAnimation* NumberAnimation.New([*Component* component, *Object* options])
+## *NumberAnimation* NumberAnimation.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new NumberAnimation
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item
 
 ## *NumberAnimation* NumberAnimation::constructor() : *PropertyAnimation*

@@ -15,7 +15,8 @@ ATTRIBUTE = 'attribute'
 # options
 {BINDING_THIS_TO_TARGET_OPTS} = bindingParser
 
-ids = idsKeys = itemsKeys = extensions = queries = null
+ids = idsKeys = itemsKeys = extensions = queries = requires = null
+itemsDeclarations = afterItemCode = null
 fileUid = 0
 
 isAnchor = (obj) ->
@@ -83,24 +84,26 @@ anchorAttributeToString = (obj) ->
     r = "[#{anchor}]"
 
     if useBinding
-        "[function(#{idsKeys}){return #{r}}, []]"
+        "[function(){return #{r}}, []]"
     else
         r
 
+isVariableBindingId = (id) ->
+    ids.hasOwnProperty(id) or id in ['document', 'app']
+
 isPublicBindingId = (id) ->
-    id is 'this' or id is 'app' or id is 'view' or ids.hasOwnProperty(id) or id of Renderer
+    id is 'this' or isVariableBindingId(id) or Renderer[id]?
 
 bindingAttributeToString = (obj) ->
-    binding = bindingParser.parse obj.value, isPublicBindingId, obj._parserOptions
-    args = idsKeys+''
-    func = "function(#{args}){return #{binding.hash}}"
+    binding = bindingParser.parse obj.value, isPublicBindingId, obj._parserOptions, null, isVariableBindingId
+    func = "function(){return #{binding.hash}}"
 
     "[#{func}, [#{binding.connections}]]"
 
 stringify =
     function: (elem) ->
         # arguments
-        args = idsKeys+''
+        args = ''
         if args and elem.params+''
             args += ","
         args += elem.params+''
@@ -155,7 +158,7 @@ stringify =
                 return false
             else if value?.type is 'object'
                 valueCode = stringify.object value
-                value = "((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
+                value = "(#{valueCode})"
             else if body.type is 'function'
                 value = stringify.function body
             else if isAnchor(body)
@@ -197,9 +200,6 @@ stringify =
         itemsKeys.push json.id
         visibleId = json.id
 
-        if utils.has(idsKeys, json.id)
-            visibleId = json.id
-
         json = JSON.stringify json, null, 4
 
         if children.length
@@ -222,14 +222,14 @@ stringify =
 
         rendererCtor = Renderer[elem.name.split('.')[0]]
         if rendererCtor?
-            r = "Renderer.#{elem.name}.New(_c, #{json})\n"
-        else if laxyItem = exports.lazyItems[elem.name]
-            r = "require('#{laxyItem}').New(_c, #{json})\n"
-        else
-            r = "Renderer.Component.getCloneFunction(#{elem.name}, '#{elem.name}')(_c, #{json})\n"
-        if visibleId
-            r = "#{visibleId} = #{r}"
-        r
+            declaration = "Renderer.#{elem.name}.New();\n"
+        else if lazyItem = exports.lazyItems[elem.name]
+            requires[elem.name] ?= lazyItem
+            declaration = "#{elem.name}.New();\n"
+        itemsDeclarations += "var #{visibleId} = #{declaration};\n"
+        unless MODIFIERS_NAMES[elem.name]
+            afterItemCode += "#{visibleId}.onReady.emit();\n"
+        "(Renderer.itemUtils.Object.setOpts(#{visibleId}, #{json}), #{visibleId})\n"
     if: (elem) ->
         changes = []
         body = []
@@ -292,17 +292,21 @@ exports = module.exports = (file, filename, opts) ->
     elems = parser file, filename
     codes = {}
     autoInitCodes = []
+    requires = {}
     bootstrap = ''
     firstId = null
     allQueries = {}
+    beforeFileCode = ''
 
     for elem, i in elems
+        itemsDeclarations = ''
+        afterItemCode = ''
         queries = {}
         id = elem.id
         ids = getIds elem
         idsKeys = Object.keys(ids).filter (id) -> !!id
         itemsKeys = []
-        code = "var _c = new Renderer.Component({fileName: '#{filename}'})\n"
+        code = 'var _c = {};'
         if elem.type is 'code'
             bootstrap += elem.body
             continue
@@ -315,8 +319,7 @@ exports = module.exports = (file, filename, opts) ->
         for id in itemsKeys
             unless utils.has(objectsIds, id)
                 objectsIds.push id
-        if objectsIds.length
-            code += "var #{objectsIds}\n"
+        code += itemsDeclarations
 
         objects = utils.arrayToObject objectsIds,
             (i, elem) -> elem,
@@ -324,17 +327,13 @@ exports = module.exports = (file, filename, opts) ->
 
         code += '_c.item = '
         code += elemCode
-        code += "_c.itemId = '#{elem.id}'\n"
-        code += "_c.idsOrder = #{JSON.stringify(idsKeys)}\n"
-        code += "_c.objectsOrder = #{JSON.stringify(idsKeys).replace(/\"/g, '')}\n"
         code += "_c.objects = #{JSON.stringify(objects).replace(/\"`|`\"/g, '')}\n"
+        code += afterItemCode
 
         if elem.name is 'Class'
-            code += "_c.initAsEmptyDefinition()\n"
-            code += "_c.item.enable()\n"
             autoInitCodes.push code
         else
-            code += 'return _c.createItem\n'
+            code += 'return _c\n'
             uid = 'n' + fileUid++
             id ||= uid
             if codes[id]?
@@ -353,10 +352,14 @@ exports = module.exports = (file, filename, opts) ->
     if not codes._main and firstId
         codes._main = link: firstId
 
+    for name, path of requires
+        beforeFileCode += "#{name} = require '#{path}'\n"
+
     bootstrap: bootstrap
     codes: codes
     autoInitCodes: autoInitCodes
     queries: allQueries
+    beforeFileCode: beforeFileCode
 
 exports.bundle = bundle exports
 exports.lazyItems = {}

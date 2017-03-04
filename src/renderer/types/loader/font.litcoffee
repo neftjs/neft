@@ -146,11 +146,11 @@ FontLoader {
 
             result
 
-## *FontLoader* FontLoader.New([*Component* component, *Object* options])
+## *FontLoader* FontLoader.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new FontLoader
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item
 
         constructor: ->

@@ -12,12 +12,14 @@ parseAndEval = (text) ->
     comp =
         objectsConfig: []
     Renderer =
-        Component: (config) ->
-            comp.config = config
-            comp
         Item:
-            New: (comp, config) ->
-                comp.objectsConfig.push config
+            New: ->
+                onReady:
+                    emit: ->
+        itemUtils:
+            Object:
+                setOpts: (item, opts) ->
+                    comp.objectsConfig.push opts
     func = new Function 'Renderer', code
     func Renderer
     comp
@@ -27,7 +29,7 @@ describe 'nml-parser', ->
         it 'properly', ->
             code = parseAndEval '''
                 Item {
-                    onEvent: function(a, b){
+                    onEvent: function(){
                         "}";
                         return 1;
                         // {
@@ -40,7 +42,7 @@ describe 'nml-parser', ->
         it 'with no function token', ->
             code = parseAndEval '''
                 Item {
-                    onEvent(a, b){
+                    onEvent(){
                         "}";
                         return 1;
                         // {

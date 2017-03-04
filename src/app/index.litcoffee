@@ -233,7 +233,7 @@ app.cookies.onChange(function(key){
             for style in opts.styles
                 if style.name in ['view', '__view__']
                     style.file._init view: null
-                    windowStyle = style.file._main.getComponent()
+                    windowStyle = style.file._main document: null
                     break
 
         windowStyleItem = windowStyle?.item
