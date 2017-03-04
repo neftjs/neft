@@ -6,7 +6,6 @@ pathUtils = require 'path'
 coffee = require 'coffee-script'
 Mustache = require 'mustache'
 Module = require 'module'
-glob = require 'glob'
 utils = require 'src/utils'
 log = require 'src/log'
 signal = require 'src/signal'
@@ -79,10 +78,6 @@ module.exports = (platform, options, app, callback) ->
         changedFiles = []
         changedFiles.push options.changedFiles...
         changedFiles.push INDEX_ABS_PATH
-
-        # build files
-        for buildFilePath in glob.sync('./build/*(styles|views)/**/*.js')
-            changedFiles.push fs.realpathSync buildFilePath
 
     onEnvPrepare = signal.create()
     onEnvPrepare.connect -> mockNeft platform, neftFilePath

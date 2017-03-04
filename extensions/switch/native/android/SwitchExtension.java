@@ -1,4 +1,4 @@
-package io.neft.extensions.switchtoggle;
+package io.neft.extensions.switchextension;
 
 import io.neft.renderer.NativeItem;
 

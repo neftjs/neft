@@ -1,4 +1,4 @@
-package io.neft.extensions.slider;
+package io.neft.extensions.sliderextension;
 
 import android.widget.SeekBar;
 

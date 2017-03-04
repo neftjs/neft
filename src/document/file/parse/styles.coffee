@@ -38,7 +38,13 @@ module.exports = (File) -> (file) ->
         stylePath = "styles:#{name}"
         path = pathUtils.join File.STYLES_PATH, name + '.nml'
         fs.outputFileSync path, body
+        if name is 'views/Actions/Index.xhtml#0'
+            console.log 'REQUIRE', path
         styleFile = require path
+        if name is 'views/Actions/Index.xhtml#0'
+            console.log require.extensions['.nml'] + ''
+            console.log require + ''
+            console.log 'QUERIES', styleFile._queries
 
         unless styleFile._main
             continue

@@ -1,4 +1,4 @@
-package io.neft.extensions.scrollable;
+package io.neft.extensions.scrollableextension;
 
 import io.neft.renderer.NativeItem;
 

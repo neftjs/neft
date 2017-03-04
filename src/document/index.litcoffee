@@ -229,8 +229,8 @@ Corresponding node handler: *n-onRevert=""*.
                 Document.onBeforeParse.emit file
 
                 # parse
-                components file
                 styles file
+                components file
                 scripts file
                 iterators file
                 props file

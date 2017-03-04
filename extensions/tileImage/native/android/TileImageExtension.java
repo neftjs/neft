@@ -1,4 +1,4 @@
-package io.neft.extensions.tileimage;
+package io.neft.extensions.tileimageextension;
 
 import io.neft.renderer.NativeItem;
 

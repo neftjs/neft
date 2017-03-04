@@ -71,7 +71,7 @@ module.exports = (platform, app, callback) ->
         try
             Document.parse file
         catch error
-            log.error "File `#{path}` can't be parsed: #{error}"
+            log.error "File `#{path}` can't be parsed: #{error.stack}"
             return
         file
 

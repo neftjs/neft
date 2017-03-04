@@ -155,7 +155,7 @@ stringify =
                 return false
             else if value?.type is 'object'
                 valueCode = stringify.object value
-                value = "((#{valueCode}), new Renderer.Component.Link('#{value.id}'))"
+                value = "((#{valueCode}), new Neft.Renderer.Component.Link('#{value.id}'))"
             else if body.type is 'function'
                 value = stringify.function body
             else if isAnchor(body)
@@ -222,11 +222,16 @@ stringify =
 
         rendererCtor = Renderer[elem.name.split('.')[0]]
         if rendererCtor?
-            r = "Renderer.#{elem.name}.New(_c, #{json})\n"
-        else if laxyItem = exports.lazyItems[elem.name]
-            r = "require('#{laxyItem}').New(_c, #{json})\n"
+            r = "Neft.Renderer.#{elem.name}.New(_c, #{json})\n"
         else
-            r = "Renderer.Component.getCloneFunction(#{elem.name}, '#{elem.name}')(_c, #{json})\n"
+            extName = elem.name[0].toLowerCase() + elem.name.slice(1)
+            r = "(function(){\n"
+            r += "var opts = #{json};\n"
+            r += "return typeof #{elem.name} !== 'undefined' ? "
+            r += "Neft.Renderer.Component.getCloneFunction(#{elem.name}, '#{elem.name}')(_c, opts)"
+            r += " : "
+            r += "require('extensions/#{extName}/renderer/#{extName}').New(_c, opts);\n"
+            r += "}())\n"
         if visibleId
             r = "#{visibleId} = #{r}"
         r
@@ -302,7 +307,7 @@ exports = module.exports = (file, filename, opts) ->
         ids = getIds elem
         idsKeys = Object.keys(ids).filter (id) -> !!id
         itemsKeys = []
-        code = "var _c = new Renderer.Component({fileName: '#{filename}'})\n"
+        code = "var _c = new Neft.Renderer.Component({fileName: '#{filename}'})\n"
         if elem.type is 'code'
             bootstrap += elem.body
             continue
@@ -359,4 +364,3 @@ exports = module.exports = (file, filename, opts) ->
     queries: allQueries
 
 exports.bundle = bundle exports
-exports.lazyItems = {}

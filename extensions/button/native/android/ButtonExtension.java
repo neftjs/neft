@@ -1,4 +1,4 @@
-package io.neft.extensions.button;
+package io.neft.extensions.buttonextension;
 
 import io.neft.renderer.NativeItem;
 

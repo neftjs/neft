@@ -1,4 +1,4 @@
-package io.neft.extensions.video;
+package io.neft.extensions.videoextension;
 
 import android.media.MediaPlayer;
 import android.view.Gravity;

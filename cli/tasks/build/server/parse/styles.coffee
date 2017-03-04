@@ -53,16 +53,6 @@ getInputDirs = (app) ->
 
     inputDirs
 
-nmlParser.lazyItems = Neft.nmlParser.lazyItems = do ->
-    mainPath = pathUtils.join __dirname, '../../../../../'
-    paths = glob.sync pathUtils.join mainPath, 'extensions/*/renderer/*.js'
-    result = {}
-    for path in paths
-        name = path.slice(0, -3).slice(path.lastIndexOf('/') + 1)
-        name = utils.capitalize name
-        result[name] = path.slice mainPath.length
-    result
-
 module.exports = (platform, app, callback) ->
     fs.ensureDir OUT_DIR
 

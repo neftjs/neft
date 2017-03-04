@@ -1,4 +1,4 @@
-package io.neft.extensions.tileimage;
+package io.neft.extensions.tileimageextension;
 
 import android.graphics.Bitmap;
 import android.graphics.Shader;
