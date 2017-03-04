@@ -18,11 +18,11 @@ Row {
         @__name__ = 'Row'
         @__path__ = 'Renderer.Row'
 
-## *Row* Row.New([*Component* component, *Object* options])
+## *Row* Row.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new Row
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item.effectItem = item
             item
 

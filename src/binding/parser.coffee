@@ -15,7 +15,8 @@ exports.isBinding = (code) ->
         return false
     true
 
-exports.parse = (val, isPublicId, opts = 0, objOpts = {}) ->
+exports.parse = (val, isPublicId, opts = 0, objOpts = {}, isVariableId) ->
+    isVariableId ?= -> false
     binding = ['']
 
     # split to types
@@ -83,7 +84,10 @@ exports.parse = (val, isPublicId, opts = 0, objOpts = {}) ->
                 text += ", "
 
             text += repeatString('[', elem.length - 1)
-            text += "'#{elem[0]}'"
+            if isVariableId(elem[0])
+                text += "#{elem[0]}"
+            else
+                text += "'#{elem[0]}'"
             if elem[0] is "this"
                 hash += "this"
             else

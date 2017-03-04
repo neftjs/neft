@@ -34,11 +34,11 @@ Text {
                 u: true
                 a: true
 
-## *Text* Text.New([*Component* component, *Object* options])
+## *Text* Text.New([*Object* options])
 
-            @New = (component, opts) ->
+            @New = (opts) ->
                 item = new Text
-                itemUtils.Object.initialize item, component, opts
+                itemUtils.Object.initialize item, opts
 
                 # set default font family
                 if name = Renderer.FontLoader.getInternalFontName('sans-serif', 0.4, false)

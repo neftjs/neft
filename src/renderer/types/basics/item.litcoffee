@@ -19,11 +19,11 @@
         Document = require 'src/document'
         DocElement = Document.Element
 
-## *Item* Item.New([*Component* component, *Object* options])
+## *Item* Item.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new Item
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item
 
 ## *Item* Item::constructor()
@@ -127,33 +127,6 @@ Text {
             developmentSetter: (val) ->
                 if val?
                     assert.instanceOf val, DocElement
-
-## ReadOnly *Object* Item::document
-
-`<script />` object of document where this item has been created.
-
-```xhtml
-<style>
-Button {
-    query: 'button'
-    pointer.onClick() {
-        console.log(this.document.getFoo()); // foo
-    }
-}
-</style>
-<script>
-this.onBeforeCreate(function () {
-    this.getFoo = () => {
-        return 'foo';
-    };
-});
-</script>
-<button />
-```
-
-        utils.defineProperty @::, 'document', null,
-            -> @_component?.document
-        , null
 
 ## *Signal* Item::ready()
 
@@ -1045,14 +1018,14 @@ By default, background is filled to his parent.
 ## *Signal* Item::onBackgroundChange(*Item* oldValue)
 
         defaultBackgroundClass = do ->
-            ext = Renderer.Class.New new Renderer.Component
+            ext = Renderer.Class.New()
             ext.priority = -1
             ext.changes.setAttribute 'anchors.fill', ['parent']
             ext
 
         createDefaultBackground = (parent) ->
-            rect = Renderer.Rectangle.New parent._component
-            ext = defaultBackgroundClass.clone parent._component
+            rect = Renderer.Rectangle.New()
+            ext = defaultBackgroundClass.clone()
             ext.target = rect
             ext.enable()
             rect

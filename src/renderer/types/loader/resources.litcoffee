@@ -41,11 +41,11 @@ Item {
                     getResources val, target
             target
 
-## *ResourcesLoader* ResourcesLoader.New([*Component* component, *Object* options])
+## *ResourcesLoader* ResourcesLoader.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new ResourcesLoader
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item
 
         constructor: ->

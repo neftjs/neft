@@ -22,12 +22,11 @@ describe 'renderer Flow', ->
     flow = items = item1 = item2 = item3 = null
 
     beforeEach ->
-        comp = new Renderer.Component
-        flow = Flow.New comp
+        flow = Flow.New()
 
         items = []
         for i in [0...3]
-            item = items[i] = Item.New comp
+            item = items[i] = Item.New()
             item.parent = flow
         [item1, item2, item3] = items
 

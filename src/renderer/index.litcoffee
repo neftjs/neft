@@ -24,8 +24,6 @@
     exports.NumberAnimation = require('./types/extensions/animation/types/property/types/number') exports, Impl, itemUtils
     exports.Transition = require('./types/extensions/transition') exports, Impl, itemUtils
 
-    exports.Component = require('./types/basics/component') exports, Impl, itemUtils
-
     exports.Item = require('./types/basics/item') exports, Impl, itemUtils
     exports.Image = require('./types/basics/image') exports, Impl, itemUtils
     exports.Text = require('./types/basics/text') exports, Impl, itemUtils

@@ -198,9 +198,6 @@ class Binding
     onError: (err) ->
 
     update: ->
-        unless @args
-            return
-
         `//<development>`
         if @updatePending
             if @updateLoop > MAX_LOOPS

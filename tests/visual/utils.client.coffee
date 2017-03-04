@@ -6,7 +6,7 @@ exports.Checker = class Checker
     constructor: ({prefix, @styles}) ->
         @prefix = "tests/visual/#{prefix}"
     test: (name) ->
-        item = @styles[name]()
+        item = @styles[name](document: null).item
         item.layout.enabled = false
         item.parent = Neft.Renderer.window
         expected = "#{@prefix}/#{name}.png"

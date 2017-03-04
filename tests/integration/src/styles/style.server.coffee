@@ -51,9 +51,8 @@ describe 'styles', ->
                 html: '<b n-style="styles:file" />'
                 styles:
                     file:
-                        _main:
-                            getComponent: ->
-                                item: Renderer.Rectangle.New()
+                        _main: ->
+                            item: Renderer.Rectangle.New()
 
             assert.is doc.styles.length, 1
             assert.instanceOf (item = doc.styles[0].item), Renderer.Rectangle
@@ -63,9 +62,8 @@ describe 'styles', ->
                 html: '<b n-style="styles:file:style" />'
                 styles:
                     file:
-                        style:
-                            getComponent: ->
-                                item: Renderer.Rectangle.New()
+                        style: ->
+                            item: Renderer.Rectangle.New()
 
             assert.is doc.styles.length, 1
             assert.instanceOf (item = doc.styles[0].item), Renderer.Rectangle
@@ -79,11 +77,10 @@ describe 'styles', ->
                 </b>'''
                 styles:
                     file:
-                        style:
-                            getComponent: ->
-                                item: Renderer.Rectangle.New()
-                                objects:
-                                    subid: Renderer.Text.New()
+                        style: ->
+                            item: Renderer.Rectangle.New()
+                            objects:
+                                subid: Renderer.Text.New()
 
             bNode = doc.node.query 'b'
             iNode = doc.node.query 'i'
@@ -159,11 +156,10 @@ describe 'styles', ->
                 html: '<b n-style="styles:file">ab<i>c</i></b>'
                 styles:
                     file:
-                        _main:
-                            getComponent: ->
-                                item = Renderer.Item.New()
-                                item.$.text = 'debug'
-                                item: item
+                        _main: ->
+                            item = Renderer.Item.New()
+                            item.$.text = 'debug'
+                            item: item
 
             node = doc.node.query 'b'
             item = doc.styles[0].item
@@ -178,11 +174,10 @@ describe 'styles', ->
                 html: '<b n-style="styles:file">ab<i>c</i></b>'
                 styles:
                     file:
-                        _main:
-                            getComponent: ->
-                                item = Renderer.Text.New()
-                                item.$.text = 'debug'
-                                item: item
+                        _main: ->
+                            item = Renderer.Text.New()
+                            item.$.text = 'debug'
+                            item: item
 
             node = doc.node.query 'b'
             item = doc.styles[0].item
@@ -223,10 +218,9 @@ describe 'styles', ->
                 html: '<b n-style="styles:file">ab</b>'
                 styles:
                     file:
-                        _main:
-                            getComponent: ->
-                                item = Renderer.Text.New()
-                                item: item
+                        _main: ->
+                            item = Renderer.Text.New()
+                            item: item
 
             node = doc.node.query 'b'
             textNode = node.query '#text'
@@ -493,13 +487,12 @@ describe 'styles', ->
                 <b n-style="styles:file:style" />"""
                 styles:
                     file:
-                        style:
-                            getComponent: ->
-                                parent = Renderer.Item.New()
-                                item = Renderer.Item.New()
-                                item.parent = parent
+                        style: ->
+                            parent = Renderer.Item.New()
+                            item = Renderer.Item.New()
+                            item.parent = parent
 
-                                item: item
+                            item: item
 
             divNode = doc.node.query 'div'
             bNode = doc.node.query 'b'
@@ -572,38 +565,20 @@ describe 'styles', ->
                 </b>"""
                 styles:
                     file:
-                        style:
-                            getComponent: ->
-                                item = Renderer.Rectangle.New()
-                                subid = Renderer.Text.New()
-                                subid.parent = item
+                        style: ->
+                            item = Renderer.Rectangle.New()
+                            subid = Renderer.Text.New()
+                            subid.parent = item
 
-                                item: item
-                                objects:
-                                    subid: subid
+                            item: item
+                            objects:
+                                subid: subid
 
             bNode = doc.node.query 'b'
             emNode = doc.node.query 'em'
             iNode = doc.node.query 'i'
 
             assert.is emNode.style.nextSibling, iNode.style
-
-    describe 'item.document', ->
-        it 'refers to component scope', ->
-            doc = render
-                html: '''
-                    <div n-style="styles:file:style" />
-                '''
-                styles:
-                    file:
-                        style:
-                            getComponent: ({document}) ->
-                                item = Renderer.Rectangle.New()
-                                item._component.document = document
-                                item: item
-
-            node = doc.node.query 'div'
-            assert.is node.style.document, doc.scope
 
     it '', ->
         for view in testViews

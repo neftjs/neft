@@ -16,7 +16,7 @@ module.exports = (Renderer, Impl) ->
     NOP = ->
 
     getObjAsString = (item) ->
-        "(#{item.constructor.__name__})#{item._component?.fileName}:#{item.id}"
+        "(#{item.constructor.__name__}):#{item.id}"
 
     getObjFile = (item) ->
         path = ''
@@ -30,7 +30,7 @@ module.exports = (Renderer, Impl) ->
         path or ''
 
     class UtilsObject extends Emitter
-        initObject = (component, opts) ->
+        initObject = (opts) ->
             for prop, val of opts
                 path = exports.splitAttribute prop
                 prop = path[path.length - 1]
@@ -57,12 +57,10 @@ module.exports = (Renderer, Impl) ->
                 prop = path[path.length - 1]
                 obj = exports.getObjectByPath @, path
                 if Array.isArray(val) and val.length is 2 and typeof val[0] is 'function' and Array.isArray(val[1])
-                    obj.createBinding prop, val, component
+                    obj.createBinding prop, val
             return
 
-        setOpts = (component, opts) ->
-            assert.instanceOf component, Renderer.Component
-
+        setOpts = (opts) ->
             if typeof opts.id is 'string'
                 @id = opts.id
             if Array.isArray(opts.properties)
@@ -78,8 +76,9 @@ module.exports = (Renderer, Impl) ->
                     else if child instanceof Renderer.Extension and not child._bindings?.target
                         child.target = @
 
-            classElem = createClass component, opts
+            classElem = createClass opts
             classElem.target = @
+            classElem.enable()
             return
 
         CHANGES_OMIT_ATTRIBUTES =
@@ -89,8 +88,8 @@ module.exports = (Renderer, Impl) ->
             signals: true
             children: true
 
-        createClass = (component, opts) ->
-            classElem = Renderer.Class.New component
+        createClass = (opts) ->
+            classElem = Renderer.Class.New()
             classElem._priority = -1
 
             {changes} = classElem
@@ -126,25 +125,22 @@ module.exports = (Renderer, Impl) ->
 
             return
 
-        @setOpts = (object, component, opts) ->
+        @setOpts = (object, opts) ->
             if opts.id?
                 object.id = opts.id
 
             if object instanceof Renderer.Class or object instanceof FixedObject
-                initObject.call object, component, opts
+                initObject.call object, opts
             else
-                setOpts.call object, component, opts
+                setOpts.call object, opts
             return
 
-        emptyComponent = null
-        @initialize = (object, component, opts) ->
-            component ?= (emptyComponent ?= new Renderer.Component)
-            assert.instanceOf component, Renderer.Component
+        @initialize = (object, opts) ->
             Object.seal object
-            object._component = component
             Impl.initializeObject object, object.constructor.__name__
             if opts
-                UtilsObject.setOpts object, component, opts
+                UtilsObject.setOpts object, opts
+            return
 
         constructor: ->
             Emitter.call @
@@ -152,8 +148,7 @@ module.exports = (Renderer, Impl) ->
             @id = ''
             @_impl = null
             @_bindings = null
-            @_component = null
-            unless this instanceof Renderer.Class
+            unless @ instanceof Renderer.Class
                 @_classExtensions = null
                 @_classList = []
                 @_classQueue = []
@@ -161,10 +156,9 @@ module.exports = (Renderer, Impl) ->
 
             Impl.createObject @, @constructor.__name__
 
-        createBinding: (prop, val, component, ctx=@) ->
+        createBinding: (prop, val, ctx = @) ->
             assert.isString prop
             assert.isArray val if val?
-            assert.instanceOf component, Renderer.Component
 
             `//<development>`
             unless prop of @
@@ -178,11 +172,11 @@ module.exports = (Renderer, Impl) ->
             bindings = @_bindings ?= {}
             if bindings[prop] isnt val
                 bindings[prop] = val
-                Impl.setItemBinding.call @, prop, val, component, ctx
+                Impl.setItemBinding.call @, prop, val, ctx
             return
 
-        clone: (component, opts) ->
-            clone = @constructor.New component
+        clone: (opts) ->
+            clone = @constructor.New()
             if @id
                 clone.id = @id
 
@@ -191,7 +185,7 @@ module.exports = (Renderer, Impl) ->
                 MutableDeepObject.call clone._$, clone
 
             if opts
-                setOpts.call clone, component, opts
+                setOpts.call clone, opts
 
             clone
 
@@ -199,8 +193,8 @@ module.exports = (Renderer, Impl) ->
             getObjAsString @
 
     class FixedObject extends UtilsObject
-        constructor: (component, opts) ->
-            super component, opts
+        constructor: (opts) ->
+            super opts
 
     class MutableDeepObject extends signal.Emitter
         constructor: (ref) ->
@@ -208,7 +202,6 @@ module.exports = (Renderer, Impl) ->
             super()
             @_ref = ref
             @_impl = bindings: null
-            @_component = ref._component
             @_bindings = null
             @_extensions = []
 
@@ -266,13 +259,7 @@ module.exports = (Renderer, Impl) ->
 
     bindSignalListener: (object, func) ->
         (arg1, arg2) ->
-            if comp = object._component
-                arr = comp.objectsOrderSignalArr
-                arr[arr.length - 2] = arg1
-                arr[arr.length - 1] = arg2
-                func.apply object, arr
-            else
-                func.call object, arg1, arg2
+            func.call object, arg1, arg2
 
     defineProperty: (opts) ->
         assert.isPlainObject opts

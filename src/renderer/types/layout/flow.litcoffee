@@ -21,11 +21,11 @@ Flow {
         @__name__ = 'Flow'
         @__path__ = 'Renderer.Flow'
 
-## *Flow* Flow.New([*Component* component, *Object* options])
+## *Flow* Flow.New([*Object* options])
 
-        @New = (component, opts) ->
+        @New = (opts) ->
             item = new Flow
-            itemUtils.Object.initialize item, component, opts
+            itemUtils.Object.initialize item, opts
             item.effectItem = item
             item
 
