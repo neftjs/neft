@@ -7,7 +7,7 @@ findWindow = require './server/findWindow'
 testScreenshot = require './server/testScreenshot'
 server = require '../server'
 
-{utils} = Neft
+{utils, log} = Neft
 
 DEST = 'tests_results'
 INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
@@ -47,6 +47,8 @@ getScreenshotError = (opts) ->
     """
 
 server.onInitializeScreenshots ({clientUid}) ->
+    log "🎞  Initialize screenshots"
+
     unless driver
         throw new Error "Screenshots on this platform are not supported"
 
@@ -59,6 +61,7 @@ server.onInitializeScreenshots ({clientUid}) ->
     return
 
 server.onScreenshot (opts) ->
+    log "🎞  Take screenshot"
     path = pathUtils.parse opts.expected
     opts.name ?= path.name
     opts.path = getPathWithBasename pathUtils.join(DEST, path.base), path.name

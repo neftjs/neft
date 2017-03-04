@@ -32,8 +32,8 @@ class Test
     @currentTest = null
 
     constructor: ->
-        @_callbackCalled = false
         @_callback = null
+        @callbackCalled = false
         @context = {}
         @parent = null
         @fulfilled = true
@@ -46,13 +46,13 @@ class Test
         Object.seal @
 
     onEnd: (err) ->
-        if @_callbackCalled
+        if @callbackCalled
             return
 
         if @preventEnding
             return
 
-        @_callbackCalled = true
+        @callbackCalled = true
 
         if err
             logger.onTestError @, err

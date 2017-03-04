@@ -1,22 +1,20 @@
 'use strict'
 
 logger = require '../logger'
-cliLogger = require './logger'
 
 {log, signal} = Neft
 
-PROCESS_LOG_PREFIX = '[PROCESS] '
-SCREENSHOT_TEST_PREFIX = '[SCREENSHOT TEST] '
+LOG_PREFIX = '   '
 
-getLoggerLog = (log) ->
-    if log.indexOf(logger.TEST_PREFIX) is 0
-        log.slice logger.TEST_PREFIX.length
+exports.errors = Object.create null
+
+exports.passingTests = Object.create null
 
 exports.LogsReader = class LogsReader
-    constructor: (@tag) ->
+    constructor: (@name) ->
         @error = null
         @terminated = false
-        @onTest = signal.create()
+        exports.passingTests[@name] = 0
     log: (data) ->
         msg = String(data).trim()
         unless msg
@@ -25,23 +23,26 @@ exports.LogsReader = class LogsReader
         if msg.indexOf('\n') >= 0
             return msg.split('\n').forEach @log, @
 
-        if @tag
-            cliLogger.log @tag, msg
-
-        unless content = getLoggerLog(msg)
-            log PROCESS_LOG_PREFIX + msg
-        else if content.indexOf(logger.ERROR) is 0
-            errMsg = content.slice logger.ERROR.length
+        if msg.indexOf(logger.SCOPE) >= 0
+            log LOG_PREFIX + msg.slice(logger.SCOPE.length)
+        else if msg.indexOf(logger.TEST) >= 0
+            log.ok LOG_PREFIX + msg.slice(logger.TEST.length)
+            exports.passingTests[@name] += 1
+        else if msg.indexOf(logger.ERROR_TEST) >= 0
+            msg = msg.slice(logger.ERROR_TEST.length)
+            log.error LOG_PREFIX + msg
+        else if msg.indexOf(logger.ERROR) >= 0
+            errMsg = msg.slice logger.ERROR.length
             errMsg = try decodeURIComponent errMsg catch then errMsg
             @error = new Error errMsg
-            log.error logger.TEST_PREFIX + errMsg
-        else if content is logger.SUCCESS
-            log.ok content
+            errMsg = "\n#{errMsg}\n"
+            log.error errMsg
+            exports.errors[@name] ?= ''
+            exports.errors[@name] += errMsg
+        else if msg is logger.SUCCESS
             @terminated = true
-        else if content is logger.FAILURE
-            log.error content
+        else if msg is logger.FAILURE
             @terminated = true
             @error = new Error logger.FAILURE
         else
-            @onTest.emit msg
-            log msg
+            log.debug LOG_PREFIX + msg

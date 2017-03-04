@@ -39,7 +39,7 @@ const { log } = Neft;
             @ arguments...
 
     class Log
-        @LOGS_METHODS = ['log', 'info', 'warn', 'error', 'time', 'ok']
+        @LOGS_METHODS = ['log', 'debug', 'info', 'warn', 'error', 'time', 'ok']
 
         @MARKERS =
             white: (str) -> "LOG: #{str}"
@@ -130,6 +130,13 @@ log("setName()", "db time");
         @::['log'] = ->
             if isEnabled(@, @LOG)
                 @_write @constructor.MARKERS.white fromArgs arguments
+            return
+
+## log.debug([*Any* messages...])
+
+        debug: ->
+            if isEnabled(@, @INFO)
+                @_write @constructor.MARKERS.gray fromArgs arguments
             return
 
 ## log.info([*Any* messages...])

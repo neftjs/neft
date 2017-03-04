@@ -33,10 +33,13 @@ exports.fail = (err) ->
             currentTest.onEnd errObj
     return
 
-exports.callFunction = (func, context, args) ->
-    try
-        func.apply context, args
-        true
-    catch err
-        exports.fail err
-        false
+# this method name will be used to truncate error stack
+exports.callFunction = `function __callNeftTestingFunction__(func, context, args) {
+    try {
+        func.apply(context, args);
+        return true;
+    } catch (err) {
+        exports.fail(err);
+        return false;
+    }
+}`

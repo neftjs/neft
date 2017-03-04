@@ -2,9 +2,8 @@
 
 config = require './config'
 processLogs = require './processLogs'
-logger = require './logger'
 
-LOGGER_TEST_ICONS = ['🌕', '🌖', '🌗', '🌘', '🌑', '🌒', '🌓', '🌔']
+{log} = Neft
 
 getEnvTarget = (env) ->
     unless env.platform in ['local', 'npm']
@@ -42,22 +41,15 @@ exports.getTargetsToBuild = ->
     targetsToBuild
 
 exports.runEnvs = (callback) ->
-    # 🎞
     runNext = ->
         unless envCfg = envQueue.shift()
             return callback null
         name = envCfg.handler.getName envCfg.env
+        log.info "\n▶️  #{name}"
         iconIndex = -1
-        logger.changeGroup name, "⌛️  #{name}"
         logsReader = new processLogs.LogsReader name
-        logsReader.onTest ->
-            iconIndex = (iconIndex + 1) % LOGGER_TEST_ICONS.length
-            icon = LOGGER_TEST_ICONS[iconIndex]
-            logger.changeGroup name, "#{icon}  #{name}",
         envCfg.handler.run envCfg.env, logsReader, (err) ->
             if err
-                logger.changeGroup name, "❌  #{name}", 'red'
                 return callback err
-            logger.changeGroup name, "🎉  #{name}", 'green'
             runNext()
     runNext()

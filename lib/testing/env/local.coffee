@@ -16,7 +16,6 @@ getInitPath = ->
     pathUtils.join __dirname, './local/initFile.js'
 
 runTestsInProcess = (logsReader, callback) ->
-    log.info 'running local tests'
     mainErr = null
     path = getInitPath()
     nodeProcess = childProcess.fork path, PROCESS_OPTIONS
@@ -28,7 +27,8 @@ runTestsInProcess = (logsReader, callback) ->
         mainErr ?= String(data)
         log.error data
     nodeProcess.on 'exit', ->
-        log.info 'local tests terminated'
+        unless logsReader.terminated
+            mainErr ?= "Local tests terminated before all tests ended"
         callback mainErr or logsReader.error
 
 exports.getName = ->

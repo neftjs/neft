@@ -5,7 +5,6 @@ childProcess = require 'child_process'
 which = require 'which'
 utils = require 'src/utils'
 signal = require 'src/signal'
-logger = require '../logger'
 config = require '../cli/config'
 
 {log} = Neft
@@ -103,12 +102,10 @@ runOnPathWithUri = (env, uri, callback) ->
         chrome?.kill()
 
 runAndLog = (env, logsReader, callback) ->
-    log.info "running #{env.path}"
     url = config.getBrowserHttpServerUrl()
     chromeProcess = runOnPathWithUri env, url, ->
-        log.info "#{env.path} terminated"
         unless logsReader.terminated
-            error = "Chrome tests terminated before ending"
+            error = "Chrome tests terminated before all tests ended"
         callback error or logsReader.error
     chromeProcess.onLog (msg) ->
         logsReader.log msg
