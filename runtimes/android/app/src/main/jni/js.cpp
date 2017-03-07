@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "include/libplatform/libplatform.h"
 #include "android/log.h"
 #include "include/v8.h"
@@ -30,6 +29,17 @@ public:
 };
 
 ArrayBufferAllocator allocator;
+
+void OnMessage(Local<Message> message, Local<Value> error) {
+    HandleScope scope(isolate_);
+    String::Utf8Value str(message->Get());
+
+    __android_log_write(ANDROID_LOG_ERROR, "Neft", *str);
+}
+
+void OnFatalError(const char* location, const char* message) {
+    __android_log_print(ANDROID_LOG_ERROR, "Neft", "FATAL ERROR: %s %s", location, message);
+}
 
 namespace JS {
     Isolate* GetIsolate(){
@@ -118,6 +128,11 @@ namespace JS {
         Isolate* isolate = isolate_ = Isolate::New(create_params);
         {
             Isolate::Scope isolate_scope(isolate);
+
+            // configure
+            isolate->SetAutorunMicrotasks(true);
+            isolate->AddMessageListener(OnMessage);
+            isolate->SetFatalErrorHandler(OnFatalError);
 
             // Create a stack-allocated handle scope.
             HandleScope handle_scope(isolate);
