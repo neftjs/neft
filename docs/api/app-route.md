@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/route.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/f2fd46a079d77e7d1e7ad1596b16369c7e28c146/src/app/route.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Static method of</dt><dd><i>Route</i></dd><dt>Parameters</dt><dd><ul><li>viewName — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/route.litcoffee#document-routegettemplateviewstring-viewname)
+> [`Source`](https://github.com/Neft-io/neft/blob/f2fd46a079d77e7d1e7ad1596b16369c7e28c146/src/app/route.litcoffee#document-routegettemplateviewstring-viewname)
 
 
 * * * 
@@ -43,7 +43,7 @@ Acceptable syntaxes:
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/route.litcoffee#routeconstructorobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/f2fd46a079d77e7d1e7ad1596b16369c7e28c146/src/app/route.litcoffee#routeconstructorobject-options)
 
 
 * * * 
@@ -181,7 +181,7 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
 <dl><dt>Returns</dt><dd><i>Function</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/route.litcoffee#function-routenext)
+> [`Source`](https://github.com/Neft-io/neft/blob/f2fd46a079d77e7d1e7ad1596b16369c7e28c146/src/app/route.litcoffee#function-routenext)
 
 
 * * * 
@@ -191,7 +191,7 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
 <dl><dt>Returns</dt><dd><i>Any</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/route.litcoffee#any-routetojson)
+> [`Source`](https://github.com/Neft-io/neft/blob/f2fd46a079d77e7d1e7ad1596b16369c7e28c146/src/app/route.litcoffee#any-routetojson)
 
 
 * * * 
@@ -201,7 +201,7 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
 <dl><dt>Returns</dt><dd><i>String</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/route.litcoffee#string-routetotext)
+> [`Source`](https://github.com/Neft-io/neft/blob/f2fd46a079d77e7d1e7ad1596b16369c7e28c146/src/app/route.litcoffee#string-routetotext)
 
 
 * * * 
@@ -211,5 +211,5 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
 <dl><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/app/route.litcoffee#document-routetohtml)
+> [`Source`](https://github.com/Neft-io/neft/blob/f2fd46a079d77e7d1e7ad1596b16369c7e28c146/src/app/route.litcoffee#document-routetohtml)
 

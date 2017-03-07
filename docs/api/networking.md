@@ -13,7 +13,7 @@ var Networking = require('networking');
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee)
 
 
 * * * 
@@ -27,7 +27,7 @@ Options:
   false by default
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkingconstructorobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkingconstructorobject-options)
 
 
 * * * 
@@ -37,7 +37,7 @@ Options:
 <dl><dt>Parameters</dt><dd><ul><li>request — <i>Networking.Request</i></li><li>response — <i>Networking.Response</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#signal-networkingonrequestnetworkingrequest-request-networkingresponse-response)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#signal-networkingonrequestnetworkingrequest-request-networkingresponse-response)
 
 
 * * * 
@@ -47,7 +47,7 @@ Options:
 <dl><dt>Type</dt><dd><i>String</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#readonly-string-networkingprotocol)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#readonly-string-networkingprotocol)
 
 
 * * * 
@@ -57,7 +57,7 @@ Options:
 <dl><dt>Type</dt><dd><i>Integer</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#readonly-integer-networkingport)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#readonly-integer-networkingport)
 
 
 * * * 
@@ -67,7 +67,7 @@ Options:
 <dl><dt>Type</dt><dd><i>String</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#readonly-string-networkinghost)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#readonly-string-networkinghost)
 
 
 * * * 
@@ -82,7 +82,7 @@ It can be set manually if the external address is different.
 Otherwise it's created automatically.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#readonly-string-networkingurl)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#readonly-string-networkingurl)
 
 
 * * * 
@@ -94,7 +94,7 @@ Otherwise it's created automatically.
 Indicates the application language regarding to BCP47 (e.g. 'en', 'en-US').
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#readonly-string-networkinglanguage)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#readonly-string-networkinglanguage)
 
 
 * * * 
@@ -129,7 +129,7 @@ app.networking.createHandler({
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkinghandler-networkingcreatehandlerobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkinghandler-networkingcreatehandlerobject-options)
 
 
 * * * 
@@ -141,7 +141,7 @@ app.networking.createHandler({
 The given options object corresponds to the *Networking.Request* properties.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkingrequest-networkingcreaterequestobjectnetworkingrequest-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkingrequest-networkingcreaterequestobjectnetworkingrequest-options)
 
 
 * * * 
@@ -151,7 +151,7 @@ The given options object corresponds to the *Networking.Request* properties.
 <dl><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li><li>onLoadEnd — <i>Function</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkingrequest-networkinggetstring-uri-function-onloadend)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkingrequest-networkinggetstring-uri-function-onloadend)
 
 
 * * * 
@@ -161,7 +161,7 @@ The given options object corresponds to the *Networking.Request* properties.
 <dl><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li><li>data — <i>Any</i> — <i>optional</i></li><li>onLoadEnd — <i>Function</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkingrequest-networkingpoststring-uri-any-data-function-onloadend)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkingrequest-networkingpoststring-uri-any-data-function-onloadend)
 
 
 * * * 
@@ -171,7 +171,7 @@ The given options object corresponds to the *Networking.Request* properties.
 <dl><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li><li>data — <i>Any</i> — <i>optional</i></li><li>onLoadEnd — <i>Function</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkingrequest-networkingputstring-uri-any-data-function-onloadend)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkingrequest-networkingputstring-uri-any-data-function-onloadend)
 
 
 * * * 
@@ -181,7 +181,7 @@ The given options object corresponds to the *Networking.Request* properties.
 <dl><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li><li>data — <i>Any</i> — <i>optional</i></li><li>onLoadEnd — <i>Function</i></li></ul></dd><dt>Returns</dt><dd><i>Networking.Request</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkingrequest-networkingdeletestring-uri-any-data-function-onloadend)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkingrequest-networkingdeletestring-uri-any-data-function-onloadend)
 
 
 * * * 
@@ -191,7 +191,7 @@ The given options object corresponds to the *Networking.Request* properties.
 <dl><dt>Parameters</dt><dd><ul><li>request — <i>Networking.Request</i></li></ul></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee#networkingresolverequestnetworkingrequest-request)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee#networkingresolverequestnetworkingrequest-request)
 
 
 * * * 
@@ -237,5 +237,5 @@ app.networking.createRequest({
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/c3c6f8f8caea44afbf317808559fc53e08c2f316/src/networking/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/1cb12350372f2cf03225e434a330bab72accf2d8/src/networking/index.litcoffee)
 

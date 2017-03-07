@@ -69,7 +69,6 @@
   * [Item](&#x2F;api&#x2F;renderer-item.md)
     * [Alignment](&#x2F;api&#x2F;renderer-alignment.md)
     * [Anchors](&#x2F;api&#x2F;renderer-anchors.md)
-    * [Document](&#x2F;api&#x2F;renderer-document.md)
     * [Keys](&#x2F;api&#x2F;renderer-keys.md)
     * [Layout](&#x2F;api&#x2F;renderer-layout.md)
     * [Margin](&#x2F;api&#x2F;renderer-margin.md)

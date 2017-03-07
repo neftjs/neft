@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee)
 
 
 * * * 
@@ -16,7 +16,7 @@
 Corresponding node handler: *n-onBeforeRender=""*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#signal-documentonbeforerenderdocument-file)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#signal-documentonbeforerenderdocument-file)
 
 
 * * * 
@@ -28,7 +28,7 @@ Corresponding node handler: *n-onBeforeRender=""*.
 Corresponding node handler: *n-onRender=""*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#signal-documentonrenderdocument-file)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#signal-documentonrenderdocument-file)
 
 
 * * * 
@@ -40,7 +40,7 @@ Corresponding node handler: *n-onRender=""*.
 Corresponding node handler: *n-onBeforeRevert=""*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#signal-documentonbeforerevertdocument-file)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#signal-documentonbeforerevertdocument-file)
 
 
 * * * 
@@ -52,7 +52,7 @@ Corresponding node handler: *n-onBeforeRevert=""*.
 Corresponding node handler: *n-onRevert=""*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#signal-documentonrevertdocument-file)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#signal-documentonrevertdocument-file)
 
 
 * * * 
@@ -62,7 +62,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Static method of</dt><dd><i>Document</i></dd><dt>Parameters</dt><dd><ul><li>path — <i>String</i></li><li>html — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentfromhtmlstring-path-string-html)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentfromhtmlstring-path-string-html)
 
 
 * * * 
@@ -72,7 +72,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Static method of</dt><dd><i>Document</i></dd><dt>Parameters</dt><dd><ul><li>path — <i>String</i></li><li>element — <i>Element</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentfromelementstring-path-element-element)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentfromelementstring-path-element-element)
 
 
 * * * 
@@ -82,7 +82,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Static method of</dt><dd><i>Document</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>Object</i> or <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentfromjsonstringobject-json)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentfromjsonstringobject-json)
 
 
 * * * 
@@ -92,7 +92,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Static method of</dt><dd><i>Document</i></dd><dt>Parameters</dt><dd><ul><li>file — <i>Document</i></li></ul></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#documentparsedocument-file)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#documentparsedocument-file)
 
 
 * * * 
@@ -102,7 +102,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Static method of</dt><dd><i>Document</i></dd><dt>Parameters</dt><dd><ul><li>path — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentfactorystring-path)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentfactorystring-path)
 
 
 * * * 
@@ -112,7 +112,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Parameters</dt><dd><ul><li>path — <i>String</i></li><li>element — <i>Element</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentconstructorstring-path-element-element)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentconstructorstring-path-element-element)
 
 
 * * * 
@@ -122,7 +122,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Parameters</dt><dd><ul><li>props — <i>Any</i> — <i>optional</i></li><li>context — <i>Any</i> — <i>optional</i></li><li>source — <i>Document</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentrenderany-props-any-context-document-source)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentrenderany-props-any-context-document-source)
 
 
 * * * 
@@ -132,7 +132,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentrevert)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentrevert)
 
 
 * * * 
@@ -142,7 +142,7 @@ Corresponding node handler: *n-onRevert=""*.
 <dl><dt>Parameters</dt><dd><ul><li>useName — <i>String</i></li><li>document — <i>Document</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentusestring-usename-document-document)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentusestring-usename-document-document)
 
 
 * * * 
@@ -154,7 +154,7 @@ Corresponding node handler: *n-onRevert=""*.
 Corresponding node handler: *n-onReplaceByUse=""*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#signal-documentonreplacebyusedocumentuse-use)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#signal-documentonreplacebyusedocumentuse-use)
 
 
 * * * 
@@ -164,14 +164,14 @@ Corresponding node handler: *n-onReplaceByUse=""*.
 <dl><dt>Returns</dt><dd><i>Document</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#document-documentclone)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#document-documentclone)
 
 
 * * * 
 
 ### `destroy()`
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#documentdestroy)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#documentdestroy)
 
 
 * * * 
@@ -181,5 +181,5 @@ Corresponding node handler: *n-onReplaceByUse=""*.
 <dl><dt>Returns</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/4204f7eaa7b56ed6b598787353bf1c073b3e4bfe/src/document/index.litcoffee#object-documenttojson)
+> [`Source`](https://github.com/Neft-io/neft/blob/52c552300bc69e335e7f1a7ef53f27ca19a6b600/src/document/index.litcoffee#object-documenttojson)
 

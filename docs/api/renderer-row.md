@@ -13,17 +13,17 @@ Row {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/layout/row.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/layout/row.litcoffee)
 
 
 * * * 
 
 ### `Row.New()`
 
-<dl><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li>component — <i>Component</i> — <i>optional</i></li><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
+<dl><dt>Static method of</dt><dd><i>Row</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/layout/row.litcoffee#row-rownewcomponent-component-object-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/layout/row.litcoffee#row-rownewobject-options)
 
 
 * * * 
@@ -33,7 +33,7 @@ Row {
 <dl><dt>Extends</dt><dd><i>Item</i></dd><dt>Returns</dt><dd><i>Row</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/layout/row.litcoffee#row-rowconstructor--item)
+> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/layout/row.litcoffee#row-rowconstructor--item)
 
 
 * * * 
@@ -50,7 +50,7 @@ Row {
 <dl><dt>Parameters</dt><dd><ul><li>padding — <i>Item.Margin</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/layout/row.litcoffee#signal-rowonpaddingchangeitemmargin-padding)
+> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/layout/row.litcoffee#signal-rowonpaddingchangeitemmargin-padding)
 
 
 * * * 
@@ -67,7 +67,7 @@ Row {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/layout/row.litcoffee#signal-rowonspacingchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/layout/row.litcoffee#signal-rowonspacingchangefloat-oldvalue)
 
 
 * * * 
@@ -84,7 +84,7 @@ Row {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item.Alignment</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/layout/row.litcoffee#signal-rowonalignmentchangeitemalignment-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/layout/row.litcoffee#signal-rowonalignmentchangeitemalignment-oldvalue)
 
 
 * * * 
@@ -101,5 +101,5 @@ Row {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/layout/row.litcoffee#signal-rowonincludebordermarginschangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/layout/row.litcoffee#signal-rowonincludebordermarginschangeboolean-oldvalue)
 
