@@ -2,7 +2,7 @@
 
 config = require './cli/config'
 
-{utils, Networking, signal} = Neft
+{utils, Networking, signal, log} = Neft
 
 exports.onInitializeScreenshots = signal.create()
 exports.onScreenshot = signal.create()
@@ -27,6 +27,7 @@ exports.startServer = ->
             try
                 exports.onInitializeScreenshots.emit req.data
             catch err
+                log.error err?.stack or err
                 res.raise err?.message or err
                 return
             res.send 200
@@ -38,6 +39,7 @@ exports.startServer = ->
             try
                 exports.onScreenshot.emit req.data
             catch err
+                log.error err?.stack or err
                 res.raise err?.message or err
                 return
             res.send 200

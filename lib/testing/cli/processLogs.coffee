@@ -4,8 +4,6 @@ logger = require '../logger'
 
 {log, signal} = Neft
 
-LOG_PREFIX = '   '
-
 exports.errors = Object.create null
 
 exports.passingTests = Object.create null
@@ -17,6 +15,7 @@ exports.LogsReader = class LogsReader
         exports.passingTests[@name] = 0
     log: (data) ->
         msg = String(data).trim()
+        msg = msg.replace /^\n+|\n+$/g, ''
         unless msg
             return
 
@@ -24,13 +23,13 @@ exports.LogsReader = class LogsReader
             return msg.split('\n').forEach @log, @
 
         if msg.indexOf(logger.SCOPE) >= 0
-            log LOG_PREFIX + msg.slice(logger.SCOPE.length)
+            log msg.slice(logger.SCOPE.length)
         else if msg.indexOf(logger.TEST) >= 0
-            log.ok LOG_PREFIX + msg.slice(logger.TEST.length)
+            log.ok msg.slice(logger.TEST.length)
             exports.passingTests[@name] += 1
         else if msg.indexOf(logger.ERROR_TEST) >= 0
             msg = msg.slice(logger.ERROR_TEST.length)
-            log.error LOG_PREFIX + msg
+            log.error msg
         else if msg.indexOf(logger.ERROR) >= 0
             errMsg = msg.slice logger.ERROR.length
             errMsg = try decodeURIComponent errMsg catch then errMsg
@@ -45,4 +44,4 @@ exports.LogsReader = class LogsReader
             @terminated = true
             @error = new Error logger.FAILURE
         else
-            log.debug LOG_PREFIX + msg
+            log.debug msg

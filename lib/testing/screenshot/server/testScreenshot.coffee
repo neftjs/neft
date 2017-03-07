@@ -11,12 +11,13 @@ crop = (opts) ->
     childProcess.execSync cmd, stdio: 'pipe'
 
 resize = (opts) ->
-    {width, height} = opts.env
+    width = opts.env.view?.width or opts.env.width
+    height = opts.env.view?.height or opts.env.height
     if not width or not height
         return
     cmd = 'convert '
     cmd += "#{opts.path} "
-    cmd += "-scale #{width}x#{height} "
+    cmd += "-scale #{width}x#{height}\\! "
     cmd += opts.path
     childProcess.execSync cmd, stdio: 'pipe'
 

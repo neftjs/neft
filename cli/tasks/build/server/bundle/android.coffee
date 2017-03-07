@@ -110,10 +110,10 @@ module.exports = (config, callback) ->
         apkMode = if config.release then 'release' else 'debug'
         gradlewMode = 'assembleDebug'
         if /^win/.test(process.platform)
-            exec = "cd #{BUNDLE_DIR} && ./gradlew.bat #{gradlewMode}"
+            cmd = "./gradlew.bat #{gradlewMode}"
         else
-            exec = "cd #{BUNDLE_DIR} && chmod +x gradlew && ./gradlew #{gradlewMode}"
-        gradleProcess = cp.exec exec, (err) ->
+            cmd = "chmod +x gradlew && ./gradlew #{gradlewMode}"
+        gradleProcess = cp.exec cmd, cwd: BUNDLE_DIR, (err) ->
             log.end logtime
             callback err
         gradleProcess.stdout.pipe process.stdout

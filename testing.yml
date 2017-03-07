@@ -12,6 +12,7 @@ environments:
     -
         platform: node
         version: current
+        enabled: $TEST_NODE
     -
         platform: browser
         browser: chrome
@@ -24,3 +25,25 @@ environments:
         enabled: $TEST_CHROME
         width: 200
         height: 200
+    -
+        platform: android
+        target: android-24
+        abi: default/armeabi-v7a
+        enabled: $TEST_ANDROID
+        width: 200
+        height: 250
+        view:
+            y: 10
+            width: 200
+            height: 200
+    -
+        platform: android
+        target: android-24
+        abi: default/x86
+        enabled: $TEST_ANDROID
+        width: 200
+        height: 250
+        view:
+            y: 10
+            width: 200
+            height: 200

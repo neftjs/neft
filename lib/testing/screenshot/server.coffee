@@ -6,6 +6,7 @@ driver = require './driver'
 findWindow = require './server/findWindow'
 testScreenshot = require './server/testScreenshot'
 server = require '../server'
+targets = require '../cli/targets'
 
 {utils, log} = Neft
 
@@ -46,18 +47,30 @@ getScreenshotError = (opts) ->
         Expected: #{expectedUri}
     """
 
-server.onInitializeScreenshots ({clientUid}) ->
+takeScreenshot = (opts) ->
+    # use target-specified screenshot function
+    if opts.env
+        handler = targets.getEnvHandler(opts.env)
+        if handler.takeScreenshot
+            handler.takeScreenshot opts
+            return
+
+    # take the whole screen screenshot
+    driver.takeScreenshot opts
+    return
+
+server.onInitializeScreenshots (opts) ->
     log "🎞  Initialize screenshots"
 
     unless driver
         throw new Error "Screenshots on this platform are not supported"
 
-    opts = path: INITIALIZATION_FILE_PATH
-    driver.takeScreenshot opts
+    opts.path = INITIALIZATION_FILE_PATH
+    takeScreenshot opts
     rect = findWindow opts
     unless rect
         throw new Error "Cannot find application on screenshot; check '#{opts.path}' file"
-    rects[clientUid] = rect
+    rects[opts.clientUid] = rect
     return
 
 server.onScreenshot (opts) ->
@@ -68,7 +81,7 @@ server.onScreenshot (opts) ->
     opts.diff = getPathWithBasename opts.path, "#{path.name}_diff"
     opts.rect = rects[opts.clientUid]
 
-    driver.takeScreenshot opts
+    takeScreenshot opts
     if testScreenshot(opts)
         fs.unlinkSync opts.diff
         fs.unlinkSync opts.path

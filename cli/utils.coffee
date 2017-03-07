@@ -2,6 +2,7 @@
 
 pathUtils = require 'path'
 fs = require 'fs'
+childProcess = require 'child_process'
 utils = require 'src/utils'
 log = require 'src/log'
 assert = require 'src/assert'
@@ -90,3 +91,27 @@ exports.isPlatformFilePath = do ->
                 return PLATFORM_TYPES[platform][linkType]
 
         return true
+
+LOCAL_IP = do ->
+    cmd = """
+        ifconfig | \
+        grep -Eo 'inet (addr:)?([0-9]*\\.){3}[0-9]*' | \
+        grep -Eo '([0-9]*\\.){3}[0-9]*' | \
+        grep -v '127.0.0.1'
+    """
+    out = try childProcess.execSync cmd, stdio: 'pipe'
+    out ?= try childProcess.execSync 'ipconfig getifaddr en0', stdio: 'pipe'
+    if out
+        String(out).trim()
+    else
+        log.warn "Cannot resolve local IP address; is ifconfig or ipconfig commands available?"
+        ''
+
+exports.isLocalHost = (host) ->
+    String(host).toLowerCase() is 'localhost'
+
+exports.getValidHost = (host) ->
+    if exports.isLocalHost(host) and LOCAL_IP
+        LOCAL_IP
+    else
+        host

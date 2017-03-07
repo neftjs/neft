@@ -5,6 +5,7 @@ yaml = require 'js-yaml'
 pathUtils = require 'path'
 childProcess = require 'child_process'
 slash = require 'slash'
+cliUtils = require 'cli/utils'
 
 {utils} = Neft
 
@@ -17,7 +18,7 @@ CONFIG_FILE_PATHS = [
 DEFAULT_CONFIG =
     browserHttpServer:
         port: '8000'
-        host: '0.0.0.0'
+        host: 'localhost'
     server:
         protocol: 'http'
         host: 'localhost'
@@ -53,6 +54,8 @@ Supported files:
 exports.getConfig = ->
     config = utils.mergeAll {}, DEFAULT_CONFIG, getConfigFile()
     config.environments ?= []
+    config.server.host = cliUtils.getValidHost config.server.host
+    config.browserHttpServer.host = cliUtils.getValidHost config.browserHttpServer.host
     config
 
 ###

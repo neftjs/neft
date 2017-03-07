@@ -13,7 +13,6 @@ Log = Neft.log.constructor
 
 module.exports = (platform, options, callback) ->
     log.info platform
-    Log.setGlobalLinesPrefix '  '
 
     # create build folder
     fs.ensureDirSync './build'
@@ -43,7 +42,6 @@ module.exports = (platform, options, callback) ->
 
     # run
     stack.runAll (err) ->
-        Log.setGlobalLinesPrefix ''
         if err
             log.error err?.stack or err
             log.error platform

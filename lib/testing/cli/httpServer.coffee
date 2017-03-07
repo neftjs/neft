@@ -16,7 +16,7 @@ exports.runHttpServer = (callback) ->
 
     {port, host} = config.getConfig().browserHttpServer
 
-    log.info 'Running HTTP server for client tests'
+    log.info "Running HTTP server for client tests on `#{host}:#{port}`"
     server = httpServer.createServer
         root: './build/'
     server.listen port, host, ->
