@@ -342,6 +342,9 @@ module.exports = (File, data) -> class Style
 
         {node} = @
 
+        # whether found item is global and has no parent in NML
+        isMainItem = true
+
         if node instanceof Tag
             id = node.props[STYLE_ID_PROP]
             assert.isDefined id, "Tag must specify #{STYLE_ID_PROP} prop to create an item for it"
@@ -358,6 +361,7 @@ module.exports = (File, data) -> class Style
             [_, file, style, subid] = id.split(':')
             style ?= '_main'
             if subid
+                isMainItem = false
                 parentId = "styles:#{file}:#{style}"
                 parent = @parent
 
@@ -420,7 +424,7 @@ module.exports = (File, data) -> class Style
             # find parent if necessary or only update index for fixed parents
             if @isAutoParent
                 @findItemParent()
-            else
+            else if isMainItem
                 @findItemIndex()
 
             # set node style
