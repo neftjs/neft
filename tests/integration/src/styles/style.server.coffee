@@ -557,7 +557,7 @@ describe 'styles', ->
             test()
             return
 
-        it "is valid for fixed item parent", ->
+        it "is preserved for item with parent", ->
             doc = render
                 html: """<b n-style="styles:file:style">
                     <em n-style="renderer:Item" />
@@ -578,7 +578,7 @@ describe 'styles', ->
             emNode = doc.node.query 'em'
             iNode = doc.node.query 'i'
 
-            assert.is emNode.style.nextSibling, iNode.style
+            assert.is emNode.style.previousSibling, iNode.style
 
     it '', ->
         for view in testViews
