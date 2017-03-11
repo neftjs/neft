@@ -153,6 +153,10 @@ module.exports = (processData, opts, callback) ->
 
     # before
     before = ''
+    if opts.env
+        before += "var process = typeof global !== 'undefined' && global.process || {env: {}};\n"
+        for key, val of opts.env
+            before += "process.env['#{key}'] = #{JSON.stringify(val)};\n"
     if opts.globals
         for key, val of opts.globals
             val = JSON.stringify val

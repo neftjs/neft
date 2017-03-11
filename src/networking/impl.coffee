@@ -7,7 +7,7 @@ assert = require 'src/assert'
 PlatformImpl = switch true
     when utils.isNode
         require './impl/node/index'
-    when utils.isBrowser
+    when utils.isBrowser or utils.isWebGL
         require './impl/browser/index'
     when utils.isIOS
         require './impl/ios/index'

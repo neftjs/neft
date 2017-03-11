@@ -60,6 +60,9 @@ exports.isPlatformFilePath = do ->
         browser:
             browser: true
             client: true
+        webgl:
+            webgl: true
+            client: true
         qt:
             qt: true
             client: true

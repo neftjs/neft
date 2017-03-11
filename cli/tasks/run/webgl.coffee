@@ -8,5 +8,5 @@ module.exports = (options) ->
     {config} = packageFile
     url = config.url
     url ?= "#{config.protocol}://#{config.host}:#{config.port}/"
-    url += "neft-type=app/"
+    url += "neft-type=game/"
     open url

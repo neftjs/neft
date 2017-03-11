@@ -14,33 +14,30 @@ fs.ensureDir './cli/bundle'
 
 createBundle = (opts, callback) ->
     console.log "Create Neft bundle file for #{opts.platform} platform"
-    processEnv = opts.env ? {}
-    globals =
-        process:
-            env: processEnv
-    if process.env.CI
-        processEnv.CI = true
+    process.env.NEFT_PLATFORM = opts.platform
+    env =
+        NEFT_PLATFORM: opts.platform
     bundle {
         platform: opts.platform
-        extras: opts.extras
         release: opts.release
         removeLogs: opts.release
         minify: opts.release
         verbose: true
         path: 'index.coffee'
-        globals: opts.globals
+        env: env
         test: (req) ->
             /^(?:src\/|\.|package\.json)/.test(req)
     }, (err, bundle) ->
         if err
             return callback err
 
+        tmplName = opts.template or opts.platform
         try
-            tmplSrc = "./scripts/bundle/#{opts.platform}.coffee.mustache"
+            tmplSrc = "./scripts/bundle/#{tmplName}.coffee.mustache"
             template = fs.readFileSync tmplSrc, 'utf-8'
             template = coffee.compile template, bare: true
         try
-            tmplSrc = "./scripts/bundle/#{opts.platform}.js.mustache"
+            tmplSrc = "./scripts/bundle/#{tmplName}.js.mustache"
             template ||= fs.readFileSync tmplSrc, 'utf-8'
         tmplSrc = './scripts/bundle/standard.js.mustache'
         template ||= fs.readFileSync tmplSrc, 'utf-8'
@@ -49,10 +46,7 @@ createBundle = (opts, callback) ->
 
         template = Mustache.render template, neftCode: bundle
 
-        extrasText = ''
-        if opts.extras
-            extrasText = "#{Object.keys(opts.extras).sort().join('-')}-"
-        name = "#{opts.platform}-#{extrasText}#{mode}"
+        name = "#{opts.platform}-#{mode}"
 
         fs.writeFileSync "./cli/bundle/neft-#{name}.js", template
 
@@ -60,8 +54,8 @@ createBundle = (opts, callback) ->
 
 TYPES = [
     {platform: 'node'},
-    {platform: 'browser', env: {NEFT_TYPE: 'app'}},
-    {platform: 'browser', env: {NEFT_TYPE: 'game'}, extras: {game: true}},
+    {platform: 'browser'},
+    {platform: 'webgl', template: 'browser'},
     {platform: 'android'},
     {platform: 'ios'},
 ]

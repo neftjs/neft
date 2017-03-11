@@ -7,7 +7,7 @@
     assert = require 'src/assert'
     colorUtils = require 'src/renderer/utils/color'
 
-    IS_NATIVE = not utils.isServer and not utils.isBrowser
+    IS_NATIVE = utils.isNative
 
     if IS_NATIVE
         {callNativeFunction, onNativeEvent} = require 'src/native'
