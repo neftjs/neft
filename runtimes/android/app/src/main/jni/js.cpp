@@ -131,6 +131,7 @@ namespace JS {
 
             // configure
             isolate->SetAutorunMicrotasks(true);
+            isolate->SetCaptureStackTraceForUncaughtExceptions(true);
             isolate->AddMessageListener(OnMessage);
             isolate->SetFatalErrorHandler(OnFatalError);
 
