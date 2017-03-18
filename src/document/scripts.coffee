@@ -75,7 +75,7 @@ module.exports = (File) -> class Scripts
         utils.defineProperty scope, 'context', utils.CONFIGURABLE, ->
             file.context
         , null
-        utils.defineProperty scope, 'state', propOpts, null
+        utils.defineProperty scope, 'state', propOpts, file.inputState
 
         emitSignal scope, 'onCreate'
 
