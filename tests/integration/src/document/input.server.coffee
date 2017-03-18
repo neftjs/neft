@@ -255,7 +255,7 @@ describe 'Document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), '1'
 
-        it 'is not accessible in not rendered document', ->
+        it 'is accessible in not rendered document', ->
             source = createView '''
                 <script>
                     this.onCreate(function(){
@@ -267,7 +267,7 @@ describe 'Document string interpolation', ->
             view = source.clone()
 
             renderParse view
-            assert.is view.node.stringify(), 'false'
+            assert.is view.node.stringify(), 'true'
 
         it 'binding is not updated on reverted component', ->
             source = createView '''
