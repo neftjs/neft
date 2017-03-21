@@ -1,6 +1,6 @@
 const { utils } = Neft;
 const { Impl } = Neft.Renderer;
-const { Item, Native } = Impl.Types;
+const { Item } = Impl.Types;
 
 exports.create = function (data) {
     Item.create.call(this, data);

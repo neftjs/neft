@@ -74,4 +74,8 @@ if (utils.isBrowser) {
     Impl.addTypeImplementation('Scrollable', require('./impl/css/scrollable'));
 }
 
+if (!utils.isBrowser && !utils.isAndroid && !utils.isIOS) {
+    Impl.addTypeImplementation('Scrollable', require('./impl/base/scrollable'));
+}
+
 module.exports = Scrollable;
