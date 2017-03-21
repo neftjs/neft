@@ -39,7 +39,11 @@ const { utils } = Neft;
 
 `utils.isNode` inverse.
 
+## ReadOnly *Boolean* utils.isNative
+
 ## ReadOnly *Boolean* utils.isBrowser
+
+## ReadOnly *Boolean* utils.isWebGL
 
 ## ReadOnly *Boolean* utils.isQt
 
@@ -48,8 +52,8 @@ const { utils } = Neft;
 ## ReadOnly *Boolean* utils.isIOS
 
     exports.isNode = exports.isServer = exports.isClient =
-    exports.isBrowser = exports.isQt = exports.isAndroid =
-    exports.isIOS = false
+    exports.isNative = exports.isBrowser = exports.isWebGL = exports.isQt =
+    exports.isAndroid = exports.isIOS = false
 
     switch true
 
@@ -57,15 +61,18 @@ const { utils } = Neft;
             exports.isClient = exports.isQt = true
 
         when android?
-            exports.isClient = exports.isAndroid = true
+            exports.isClient = exports.isNative = exports.isAndroid = true
 
         when ios?
-            exports.isClient = exports.isIOS = true
+            exports.isClient = exports.isNative = exports.isIOS = true
+
+        when process.env.NEFT_PLATFORM is 'webgl'
+            exports.isClient = exports.isWebGL = true
 
         when window?.document?
             exports.isClient = exports.isBrowser = true
 
-        when process? and Object.prototype.toString.call(process) is '[object process]'
+        when process.env.NEFT_PLATFORM is 'node'
             exports.isNode = exports.isServer = true
 
 ## *Function* utils.NOP

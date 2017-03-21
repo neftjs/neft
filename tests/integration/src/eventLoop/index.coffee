@@ -1,4 +1,4 @@
-eventLoop = require 'src/eventLoop'
+{eventLoop} = Neft
 
 describe 'src/eventLoop', ->
     it 'calls setImmediate callback when all locks will be released', ->

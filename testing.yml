@@ -18,3 +18,9 @@ environments:
         enabled: $TEST_CHROME
         width: 200
         height: 200
+    -
+        platform: webgl
+        browser: chrome
+        enabled: $TEST_CHROME
+        width: 200
+        height: 200

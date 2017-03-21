@@ -12,6 +12,7 @@
 
     exports.Impl = Impl = require('./impl') exports
     itemUtils = exports.itemUtils = require('./utils/item') exports, Impl
+    exports.colorUtils = require './utils/color'
 
     exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
     exports.Device = require('./types/namespace/device') exports, Impl, itemUtils

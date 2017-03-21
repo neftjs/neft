@@ -44,7 +44,7 @@ exports.buildProject = (target, env, callback) ->
         log BUILD_LOG_PREFIX + String(data).trim()
     buildProcess.stderr.on 'data', (data) ->
         error = String(data).trim()
-        log.error TAG, error
+        log.error error
         buildProcess.kill()
     buildProcess.on 'exit', ->
         callback error
@@ -61,7 +61,7 @@ exports.buildProjects = (targetsToBuild, callback) ->
         unless target = targets[0]
             return callback()
 
-        if target is 'browser' and not httpServer.isRun()
+        if target in ['browser', 'webgl'] and not httpServer.isRun()
             builtAmount -= 1
             httpServer.runHttpServer buildNext
             return

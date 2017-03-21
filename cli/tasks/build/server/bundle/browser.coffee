@@ -10,9 +10,6 @@ module.exports = (config, callback) ->
 
     # write neft file
     fs.writeFileSync "./build/#{config.neftFileName}", config.neftCode
-    neftGamePath = "../../../../bundle/neft-browser-game-#{config.mode}.js"
-    neftGame = fs.readFileSync pathUtils.resolve(__dirname, neftGamePath), 'utf-8'
-    fs.writeFileSync "./build/neft-browser-game-#{config.mode}.js", neftGame
 
     # write app file
     appCode = Mustache.render appTmpl, config

@@ -35,24 +35,26 @@
     module.exports = (app) ->
         APP_JS_URI = '/app.js'
         NEFT_JS_URI = '/neft.js'
-        JS_NEFT_FILE_PATH = './build/neft-browser-release.js'
-        JS_NEFT_GAME_FILE_PATH = './build/neft-browser-game-release.js'
-        JS_BUNDLE_FILE_PATH = './build/app-browser-release.js'
+        JS_NEFT_HTML_FILE_PATH = './build/neft-browser-release.js'
+        JS_NEFT_WEBGL_FILE_PATH = './build/neft-webgl-release.js'
+        JS_HTML_BUNDLE_FILE_PATH = './build/app-browser-release.js'
+        JS_WEBGL_BUNDLE_FILE_PATH = './build/app-webgl-release.js'
         VIEW_NAME = '_app_bootstrap'
         TEXT_MODE_URI_PREFIX = '/neft-type=text'
         TYPE_COOKIE_NAME = 'neft-type'
 
         `//<development>`
-        JS_NEFT_FILE_PATH = './build/neft-browser-develop.js'
-        JS_NEFT_GAME_FILE_PATH = './build/neft-browser-game-develop.js'
-        JS_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
+        JS_NEFT_HTML_FILE_PATH = './build/neft-browser-develop.js'
+        JS_NEFT_WEBGL_FILE_PATH = './build/neft-webgl-develop.js'
+        JS_HTML_BUNDLE_FILE_PATH = './build/app-browser-develop.js'
+        JS_WEBGL_BUNDLE_FILE_PATH = './build/app-webgl-develop.js'
         `//</development>`
 
         view = Document.fromHTML VIEW_NAME, VIEW_HTML
         Document.parse view
 
         reservedUris = ['app.js', 'favicon.ico', 'static']
-        reservedUrisRe = do =>
+        reservedUrisRe = do ->
             re = ''
             re += "#{utils.addSlashes(uri)}|" for uri in reservedUris
             re = re.slice 0, -1
@@ -70,17 +72,25 @@
 Returns the application javascript file.
 
         `//<production>`
-        try
-            appFile = fs.readFileSync JS_BUNDLE_FILE_PATH, 'utf-8'
+        try appFile = fs.readFileSync JS_HTML_BUNDLE_FILE_PATH, 'utf-8'
+        try appWebglFile = fs.readFileSync JS_WEBGL_BUNDLE_FILE_PATH, 'utf-8'
         `//</production>`
         new app.Route
             uri: APP_JS_URI
             getData: (callback) ->
+                isGameType = getType(@request) is 'game'
+
                 `//<development>`
-                fs.readFile JS_BUNDLE_FILE_PATH, 'utf-8', callback
+                if isGameType
+                    fs.readFile JS_WEBGL_BUNDLE_FILE_PATH, 'utf-8', callback
+                else
+                    fs.readFile JS_HTML_BUNDLE_FILE_PATH, 'utf-8', callback
                 `//</development>`
                 `//<production>`
-                callback null, appFile
+                if isGameType
+                    callback null, appFile
+                else
+                    callback null, appWebglFile
                 `//</production>`
 
 ## neft.js
@@ -88,9 +98,8 @@ Returns the application javascript file.
 Returns the neft javascript file.
 
         `//<production>`
-        try
-            neftFile = fs.readFileSync JS_NEFT_FILE_PATH, 'utf-8'
-            neftGameFile = fs.readFileSync JS_NEFT_GAME_FILE_PATH, 'utf-8'
+        try neftFile = fs.readFileSync JS_NEFT_HTML_FILE_PATH, 'utf-8'
+        try neftGameFile = fs.readFileSync JS_NEFT_WEBGL_FILE_PATH, 'utf-8'
         `//</production>`
         new app.Route
             uri: NEFT_JS_URI
@@ -99,9 +108,9 @@ Returns the neft javascript file.
 
                 `//<development>`
                 if isGameType
-                    fs.readFile JS_NEFT_GAME_FILE_PATH, 'utf-8', callback
+                    fs.readFile JS_NEFT_WEBGL_FILE_PATH, 'utf-8', callback
                 else
-                    fs.readFile JS_NEFT_FILE_PATH, 'utf-8', callback
+                    fs.readFile JS_NEFT_HTML_FILE_PATH, 'utf-8', callback
                 `//</development>`
                 `//<production>`
                 if isGameType

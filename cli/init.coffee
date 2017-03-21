@@ -28,6 +28,7 @@ ARGS_WITH_COMMANDS =
 PLATFORMS =
     node: true
     browser: true
+    webgl: true
     android: true
     ios: true
 

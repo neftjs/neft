@@ -41,21 +41,19 @@ mockNeft = (platform, neftFilePath) ->
 
     # mock utils
     do (utils = Neft.utils) ->
-        utils.isNode = utils.isServer = utils.isClient =
+        utils.isNode = utils.isServer = utils.isClient = utils.isNative =
         utils.isBrowser = utils.isAndroid = utils.isIOS = false
         switch platform
             when 'node'
-                utils.isNode = true
-                utils.isServer = true
+                utils.isServer = utils.isNode = true
             when 'browser'
-                utils.isBrowser = true
-                utils.isClient = true
+                utils.isClient = utils.isBrowser = true
+            when 'webgl'
+                utils.isClient = utils.isWebGL = true
             when 'android'
-                utils.isAndroid = true
-                utils.isClient = true
+                utils.isNative = utils.isClient = utils.isAndroid = true
             when 'ios'
-                utils.isIOS = true
-                utils.isClient = true
+                utils.isNative = utils.isClient = utils.isIOS = true
     return
 
 isInternalDependency = do ->
