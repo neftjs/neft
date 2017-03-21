@@ -1,6 +1,6 @@
 'use strict'
 
-{toRGBAHex} = require 'src/renderer/utils/color'
+{toRGBAHex} = Neft.Renderer.colorUtils
 
 assertHex = (value, expected) ->
     assert.is toRGBAHex(value).toString(16), expected
