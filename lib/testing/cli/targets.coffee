@@ -20,7 +20,7 @@ getEnvHandler = (env) ->
                 require '../env/node'
             else
                 require '../env/nvm'
-        when 'browser'
+        when 'browser', 'webgl'
             switch env.browser
                 when 'chrome'
                     require '../env/chrome'

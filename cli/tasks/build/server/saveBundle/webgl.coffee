@@ -22,7 +22,7 @@ module.exports = (options, callback) ->
     appFilePath = "build/app-webgl-#{mode}.js"
 
     # index file
-    indexFilePath = pathUtils.join __dirname, './webgl/index.mustache'
+    indexFilePath = pathUtils.join __dirname, './browser/index.mustache'
     indexFile = fs.readFileSync indexFilePath, 'utf-8'
     indexFile = mustache.render indexFile,
         neftFilePath: neftFilePath

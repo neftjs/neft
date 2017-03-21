@@ -2,6 +2,7 @@
 
 {utils} = Neft
 
+REQUEST_DELAY = 50
 UID = utils.uid()
 exports.CONTROL_COLOR = [240, 20, 130]
 
@@ -38,6 +39,7 @@ exports.take = (opts, callback) ->
     opts.clientUid = UID
     opts.env = environment
     url = "#{app.config.testingServerUrl}/takeScreenshot"
-    requestAnimationFrame ->
+    setTimeout ->
         app.networking.post url, opts, callback
+    , REQUEST_DELAY
     return

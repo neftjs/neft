@@ -21,7 +21,7 @@ resize = (opts) ->
     childProcess.execSync cmd, stdio: 'pipe'
 
 compare = (opts) ->
-    args = ['-metric', 'AE', '-fuzz', '30%', opts.path, opts.expected, opts.diff]
+    args = ['-metric', 'AE', '-fuzz', '60%', opts.path, opts.expected, opts.diff]
     compareProcess = childProcess.spawnSync 'compare', args, stdio: 'pipe'
 
     # support older 'compare' versions with no custom exit codes
