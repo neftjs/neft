@@ -14,6 +14,7 @@ ANDROID = 'tools/android'
 DEVICE_RUN_TRY_DELAY = 1000
 DEFAULT_PORT = 5554
 SDK_DIR = ''
+PORT_SERIAL_NUMBER_PREFIX = "emulator-"
 
 loadConfig = ->
     SDK_DIR = do ->
@@ -85,11 +86,14 @@ getDeviceSerialNumberByName = do ->
             callback null
         return
 
+getDeviceSerialNumberForPort = (port) ->
+    PORT_SERIAL_NUMBER_PREFIX + port
+
 getFreeDevicePort = ->
-    numbers = getRunDeviceSerialNumbers()
-    numbers = utils.arrayToObject numbers, ((i, elem) -> elem), -> true
+    serialNumbers = getRunDeviceSerialNumbers()
+    serialNumbers = utils.arrayToObject serialNumbers, ((i, elem) -> elem), -> true
     port = DEFAULT_PORT
-    while numbers[port]
+    while serialNumbers[getDeviceSerialNumberForPort port]
         port += 2 # emulator uses even numbers for console and odd as adb ports
     port
 
@@ -135,7 +139,7 @@ runEmulator = (env, logsReader, callback) ->
 
         logsReader.log "Starting android emulator"
         port = getFreeDevicePort()
-        env.deviceSerialNumber = "emulator-#{port}"
+        env.deviceSerialNumber = getDeviceSerialNumberForPort port
         cmd = EMULATOR
         cmd += " -port #{port}"
         cmd += " -avd #{env.emulatorName}"
@@ -162,16 +166,16 @@ runTests = (env, logsReader, callback, delay = 0) ->
 
     logsReader.log "Running android tests on #{env.deviceSerialNumber}"
     createdSerialNumbersByName[env.emulatorName] = env.deviceSerialNumber
-    androidRun
+    androidProcess = androidRun
         release: false
         deviceSerialNumber: env.deviceSerialNumber
         pipeOutput: false
         onLog: (msg) ->
             logsReader.log msg
             if logsReader.terminated
-                callback logsReader.error
+                androidProcess.kill()
     , (err) ->
-        callback err
+        callback err or logsReader.error
     return
 
 exports.takeScreenshot = ({env, path}) ->

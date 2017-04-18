@@ -26,6 +26,8 @@ module.exports = (options, callback = ->) ->
     if options.deviceSerialNumber
         adbPath += " -s #{options.deviceSerialNumber}"
 
+    adb = logcat = null
+
     cmd = "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}"
     adb = cp.exec cmd, (err) ->
         log.end logtime
@@ -48,9 +50,6 @@ module.exports = (options, callback = ->) ->
             cp.spawn cmd, args
         logcat.stdout.on 'data', (data) ->
             LOG_RE.lastIndex = 0
-            # console.log '----------'
-            # console.log String data
-            # console.log '----------'
             while match = LOG_RE.exec(data + '')
                 [_, date, level, msg] = match
                 if new Date(date).valueOf() > deviceTime
@@ -93,4 +92,10 @@ module.exports = (options, callback = ->) ->
         adb.stdout.pipe process.stdout
         adb.stderr.pipe process.stderr
 
-    return
+    kill: ->
+        if callbackCalled
+            return
+        callbackCalled = true
+        adb.kill()
+        logcat?.kill()
+        callback()
