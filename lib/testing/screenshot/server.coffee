@@ -2,6 +2,7 @@
 
 fs = require 'fs-extra'
 pathUtils = require 'path'
+childProcess = require 'child_process'
 driver = require './driver'
 findWindow = require './server/findWindow'
 testScreenshot = require './server/testScreenshot'
@@ -12,6 +13,8 @@ targets = require '../cli/targets'
 
 DEST = 'tests_results'
 INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
+INITIALIZATION_TRIES = 20
+INITIALIZATION_TRY_DELAY_SEC = 1
 
 fs.emptyDirSync DEST
 
@@ -66,8 +69,13 @@ server.onInitializeScreenshots (opts) ->
         throw new Error "Screenshots on this platform are not supported"
 
     opts.path = INITIALIZATION_FILE_PATH
-    takeScreenshot opts
-    rect = findWindow opts
+    tryNo = 0
+    while not rect and tryNo++ < INITIALIZATION_TRIES
+        takeScreenshot opts
+        rect = findWindow opts
+        unless rect
+            log "Cannot initialize screenshots; try #{tryNo} / #{INITIALIZATION_TRIES}"
+        childProcess.execSync "sleep #{INITIALIZATION_TRY_DELAY_SEC}"
     unless rect
         throw new Error "Cannot find application on screenshot; check '#{opts.path}' file"
     rects[opts.clientUid] = rect
