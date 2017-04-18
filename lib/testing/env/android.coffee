@@ -191,9 +191,11 @@ exports.takeScreenshot = ({env, path}) ->
     name = getEmulatorName env
     serialNumber = createdSerialNumbersByName[name]
     adbPath = "#{pathUtils.join(SDK_DIR, ADB)} -s #{serialNumber}"
-    try childProcess.execSync "#{adbPath} shell mount -o rw,remount rootfs /", stdio: 'pipe'
-    childProcess.execSync "#{adbPath} shell screencap -p /sdcard/screen.png", stdio: 'pipe'
-    childProcess.execSync "#{adbPath} pull /sdcard/screen.png", stdio: 'pipe'
+    childProcess.execSync "
+        #{adbPath} shell screencap -p | \
+        perl -pe 's/\\x0D\\x0A/\\x0A/g' \
+        > screen.png
+    ", stdio: 'pipe'
     fs.renameSync './screen.png', path
     return
 

@@ -43,6 +43,7 @@ matrix:
 
         # Android
         -
+            sudo: required
             language: android
             jdk: oraclejdk8
             addons:
@@ -63,6 +64,10 @@ matrix:
                     - android-24
                     - sys-img-armeabi-v7a-android-24
                     - sys-img-x86-android-24
+            before_install:
+                # run xvfb
+                - export DISPLAY=:99.0
+                - sh -e /etc/init.d/xvfb start
         # -
         #     os: osx
         #     node_js: "5.11"

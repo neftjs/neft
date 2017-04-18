@@ -56,7 +56,14 @@ takeScreenshot = (opts) ->
         handler = targets.getEnvHandler(opts.env)
         if handler.takeScreenshot
             handler.takeScreenshot opts
-            return
+            try stats = fs.statSync opts.path
+            if stats?.size
+                return
+            else
+                log.warn """
+                    #{opts.env.platform} custom screenshot handler failed; \
+                    the whole screen is capturing
+                """
 
     # take the whole screen screenshot
     driver.takeScreenshot opts
