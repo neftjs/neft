@@ -131,10 +131,29 @@ createEmulator = (env, logsReader, callback) ->
 
 runEmulator = (env, logsReader, callback) ->
     logsReader.log "Checking run android devices"
+    pending = true
+
+    finishWhenReady = (delay = 0) ->
+        unless pending
+            return
+
+        if isDeviceAvailable(env.deviceSerialNumber)
+            pending = false
+            callback null
+            return
+
+        if delay is 0
+            logsReader.log "Waiting for device"
+        else if delay % (DEVICE_RUN_TRY_DELAY * 10) is 0
+            logsReader.log "Waiting for device (#{delay / 1000}s)"
+        setTimeout ->
+            finishWhenReady delay + DEVICE_RUN_TRY_DELAY
+        , DEVICE_RUN_TRY_DELAY
+
     getDeviceSerialNumberByName env.emulatorName, (serialNumber) ->
         if serialNumber
             env.deviceSerialNumber = serialNumber
-            callback null
+            finishWhenReady()
             return
 
         logsReader.log "Starting android emulator"
@@ -143,27 +162,17 @@ runEmulator = (env, logsReader, callback) ->
         cmd = EMULATOR
         cmd += " -port #{port}"
         cmd += " -avd #{env.emulatorName}"
-        emulatorProcess = childProcess.exec cmd, cwd: SDK_DIR
+        cmd += " -no-audio"
+        emulatorProcess = childProcess.exec cmd, cwd: SDK_DIR, (err, stdout, stderr) ->
+            if (err or stderr) and pending
+                pending = false
+                log.error err or stderr
+                callback new Error 'Cannot run android emulator'
         emulatorProcess.stdout.pipe process.stdout
-
-        callbackCalled = false
-        emulatorProcess.stdout.on 'data', ->
-            unless callbackCalled
-                callbackCalled = true
-                callback null
+        finishWhenReady()
     return
 
-runTests = (env, logsReader, callback, delay = 0) ->
-    unless isDeviceAvailable(env.deviceSerialNumber)
-        if delay is 0
-            logsReader.log "Waiting for device"
-        else if delay % (DEVICE_RUN_TRY_DELAY * 10) is 0
-            logsReader.log "Waiting for device (#{delay / 1000}s)"
-        setTimeout ->
-            runTests env, logsReader, callback, delay + DEVICE_RUN_TRY_DELAY
-        , DEVICE_RUN_TRY_DELAY
-        return
-
+runTests = (env, logsReader, callback) ->
     logsReader.log "Running android tests on #{env.deviceSerialNumber}"
     createdSerialNumbersByName[env.emulatorName] = env.deviceSerialNumber
     androidProcess = androidRun
