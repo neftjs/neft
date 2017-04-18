@@ -115,9 +115,9 @@ runAndLog = (env, logsReader, callback) ->
 exports.getName = (env) ->
     {path} = env
     if path
-        "Chrome #{env.path} tests"
+        "Chrome #{env.path} #{env.platform} tests"
     else
-        "Chrome tests"
+        "Chrome #{env.platform} tests"
 
 exports.run = (env, logsReader, callback) ->
     if env.path
