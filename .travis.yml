@@ -52,7 +52,7 @@ matrix:
                         - imagemagick
                         - net-tools
             env:
-                - TEST_ANDROID=1
+                - TEST_ANDROID_ARM=1
             android:
                 components:
                     - tools
