@@ -2,15 +2,19 @@
 
 fs = require 'fs-extra'
 pathUtils = require 'path'
+childProcess = require 'child_process'
 driver = require './driver'
 findWindow = require './server/findWindow'
 testScreenshot = require './server/testScreenshot'
 server = require '../server'
+targets = require '../cli/targets'
 
 {utils, log} = Neft
 
 DEST = 'tests_results'
 INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
+INITIALIZATION_TRIES = 20
+INITIALIZATION_TRY_DELAY_SEC = 1
 
 fs.emptyDirSync DEST
 
@@ -46,18 +50,42 @@ getScreenshotError = (opts) ->
         Expected: #{expectedUri}
     """
 
-server.onInitializeScreenshots ({clientUid}) ->
+takeScreenshot = (opts) ->
+    # use target-specified screenshot function
+    if opts.env
+        handler = targets.getEnvHandler(opts.env)
+        if handler.takeScreenshot
+            handler.takeScreenshot opts
+            try stats = fs.statSync opts.path
+            if stats?.size
+                return
+            else
+                log.warn """
+                    #{opts.env.platform} custom screenshot handler failed; \
+                    the whole screen is capturing
+                """
+
+    # take the whole screen screenshot
+    driver.takeScreenshot opts
+    return
+
+server.onInitializeScreenshots (opts) ->
     log "🎞  Initialize screenshots"
 
     unless driver
         throw new Error "Screenshots on this platform are not supported"
 
-    opts = path: INITIALIZATION_FILE_PATH
-    driver.takeScreenshot opts
-    rect = findWindow opts
+    opts.path = INITIALIZATION_FILE_PATH
+    tryNo = 0
+    while not rect and tryNo++ < INITIALIZATION_TRIES
+        takeScreenshot opts
+        rect = findWindow opts
+        unless rect
+            log "Cannot initialize screenshots; try #{tryNo} / #{INITIALIZATION_TRIES}"
+        childProcess.execSync "sleep #{INITIALIZATION_TRY_DELAY_SEC}"
     unless rect
         throw new Error "Cannot find application on screenshot; check '#{opts.path}' file"
-    rects[clientUid] = rect
+    rects[opts.clientUid] = rect
     return
 
 server.onScreenshot (opts) ->
@@ -68,7 +96,7 @@ server.onScreenshot (opts) ->
     opts.diff = getPathWithBasename opts.path, "#{path.name}_diff"
     opts.rect = rects[opts.clientUid]
 
-    driver.takeScreenshot opts
+    takeScreenshot opts
     if testScreenshot(opts)
         fs.unlinkSync opts.diff
         fs.unlinkSync opts.path

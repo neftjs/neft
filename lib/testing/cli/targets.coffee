@@ -2,6 +2,8 @@
 
 config = require './config'
 processLogs = require './processLogs'
+builder = require './builder'
+testsFile = require './testsFile'
 
 {log} = Neft
 
@@ -9,7 +11,7 @@ getEnvTarget = (env) ->
     unless env.platform in ['local', 'npm']
         env.platform
 
-getEnvHandler = (env) ->
+exports.getEnvHandler = (env) ->
     switch env.platform
         when 'local'
             require '../env/local'
@@ -26,6 +28,8 @@ getEnvHandler = (env) ->
                     require '../env/chrome'
                 else
                     throw new Error "Unsupported browser '#{env.browser}'"
+        when 'android'
+            require '../env/android'
         else
             throw new Error "Unsupported environment '#{env.platform}'"
 
@@ -35,21 +39,31 @@ envQueue = []
 for env in config.getEnabledConfigEnvironments()
     if buildTarget = getEnvTarget(env)
         targetsToBuild[buildTarget] = env
-    envQueue.push env: env, handler: getEnvHandler(env)
+    envQueue.push env: env, handler: exports.getEnvHandler(env)
 
-exports.getTargetsToBuild = ->
-    targetsToBuild
+buildProject = (env, callback) ->
+    target = getEnvTarget env
+    if target
+        builder.buildProject target, env, callback
+    else
+        callback null
 
 exports.runEnvs = (callback) ->
     runNext = ->
         unless envCfg = envQueue.shift()
             return callback null
         name = envCfg.handler.getName envCfg.env
-        log.info "\n▶️  #{name}"
         iconIndex = -1
         logsReader = new processLogs.LogsReader name
-        envCfg.handler.run envCfg.env, logsReader, (err) ->
+        testsFile.saveBuildTestsFile envCfg.env.platform, (err) ->
             if err
                 return callback err
-            runNext()
+            buildProject envCfg.env, (err) ->
+                if err
+                    return callback err
+                log.info "\n▶️  #{name}"
+                envCfg.handler.run envCfg.env, logsReader, (err) ->
+                    if err
+                        return callback err
+                    runNext()
     runNext()

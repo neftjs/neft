@@ -35,7 +35,4 @@ exports.getName = ->
     "Local tests"
 
 exports.run = (env, logsReader, callback) ->
-    testsFile.saveBuildTestsFile TARGET, (err) ->
-        if err
-            return callback err
-        runTestsInProcess logsReader, callback
+    runTestsInProcess logsReader, callback

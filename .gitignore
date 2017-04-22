@@ -7,3 +7,4 @@ _book
 node_modules
 npm-debug.log*
 tests_results
+/local.json

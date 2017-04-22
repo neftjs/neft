@@ -33,9 +33,7 @@ reportAndExit = (err) ->
         process.exit 0
 
 server.startServer()
-builder.buildProjects targets.getTargetsToBuild(), (err) ->
-    if err
-        return reportAndExit err
+httpServer.runHttpServer ->
     targets.runEnvs (err) ->
         httpServer.closeServer()
         reportAndExit err

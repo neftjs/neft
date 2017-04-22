@@ -72,13 +72,10 @@ exports.run = (env, logsReader, callback) ->
     useNvm = env.nodeVersion isnt 'current'
     installProject = if useNvm then installProjectOnNvm else installProjectOnNode
     runTestsInProcess = if useNvm then runTestsInNvmProcess else runTestsInNodeProcess
-    testsFile.saveBuildTestsFile TARGET, (err) ->
+    buildProject logsReader, (err) ->
         if err
             return callback err
-        buildProject logsReader, (err) ->
+        installProject env, logsReader, (err) ->
             if err
                 return callback err
-            installProject env, logsReader, (err) ->
-                if err
-                    return callback err
-                runTestsInProcess env, logsReader, callback
+            runTestsInProcess env, logsReader, callback

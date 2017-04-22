@@ -35,6 +35,8 @@ module.exports = (platform, options, callback) ->
         resources: null
         config: null
 
+    extensionsByName = Object.create null
+
     # get neft defined extensions
     packageExtensions = app.package.extensions
     if packageExtensions is undefined
@@ -44,26 +46,26 @@ module.exports = (platform, options, callback) ->
             path = pathUtils.resolve __dirname, "../../../../extensions/#{ext}"
             unless fs.existsSync(path)
                 log.error "Neft extension #{ext} defined in package.json not found"
-            app.allExtensions.push
-                name: ext
-                path: path
+            extensionsByName[ext] = path
 
     # get module extensions
     try
         modules = fs.readdirSync './node_modules'
         for path in modules
             if /^neft\-/.test(path)
-                app.allExtensions.push
-                    name: path.slice('neft-'.length)
-                    path: "./node_modules/#{path}/"
+                extensionsByName[path.slice('neft-'.length)] = "./node_modules/#{path}/"
 
     # get local extensions
     try
         extensions = fs.readdirSync './extensions'
         for path in extensions
-            app.allExtensions.push
-                name: path
-                path: "./extensions/#{path}/"
+            extensionsByName[path] = "./extensions/#{path}/"
+
+    # prepare extensions list
+    for name, path of extensionsByName
+        app.allExtensions.push
+            name: name
+            path: path
 
     stack.add linkStyles, null, [platform, app]
     stack.add linkDocuments, null, [platform, app]

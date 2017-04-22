@@ -4,9 +4,12 @@ fs = require 'fs'
 open = require 'open'
 cp = require 'child_process'
 
-{log} = Neft
+{log, utils} = Neft
 
-module.exports = (options) ->
+FATAL_ERROR_DELAY = 2000
+
+module.exports = (options, callback = ->) ->
+    callbackCalled = false
     mode = if options.release then 'release' else 'develop'
 
     logtime = log.time 'Install APK'
@@ -15,11 +18,18 @@ module.exports = (options) ->
 
     {sdkDir} = local.android
     if sdkDir is '$ANDROID_HOME'
-        sdkDir = (cp.execSync('echo $ANDROID_HOME') + '').trim()
+        sdkDir = process.env.ANDROID_HOME
 
     adbPath = "#{sdkDir}/platform-tools/adb"
     apkFileName = 'app-universal-debug.apk'
-    adb = cp.exec "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}", (err) ->
+
+    if options.deviceSerialNumber
+        adbPath += " -s #{options.deviceSerialNumber}"
+
+    adb = logcat = null
+
+    cmd = "#{adbPath} install -r build/android/app/build/outputs/apk/#{apkFileName}"
+    adb = cp.exec cmd, (err) ->
         log.end logtime
         if err
             console.error err
@@ -27,21 +37,35 @@ module.exports = (options) ->
 
         # get current device time
         deviceTime = 0
-        cp.exec "#{adbPath} shell date +%m-%d_%H:%M:%S", (err, data) ->
-            deviceTime = new Date((data + '').replace('_', ' ')).valueOf()
+        shellDate = cp.execSync "#{adbPath} shell date +%m-%d_%H:%M:%S"
+        deviceTime = new Date(String(shellDate).replace('_', ' ')).valueOf()
 
         # run logcat
-        LOG_RE = /^(\d+-\d+\s[0-9:.]+)\s([A-Z])\/Neft\s+\(\s*[0-9]+\):\s(.+)$/gm
+        LOG_RE = /^(\d+-\d+\s[0-9:.]+)\s([A-Z])\/(?:Neft|AndroidRuntime)\s*\(\s*[0-9]+\):\s(.+)$/gm
         LOG_LEVEL = /^(LOG|OK|INFO|WARN|ERROR):\s/
-        logcat = cp.spawn "#{adbPath}", ['logcat', '-v', 'time', 'Neft:v', '*:s']
-        log.enabled = log.ALL
+        logcat = do ->
+            args = adbPath.split ' '
+            args.push 'logcat', '-v', 'time', 'Neft:v', '*:E'
+            cmd = args.shift()
+            cp.spawn cmd, args
         logcat.stdout.on 'data', (data) ->
+            LOG_RE.lastIndex = 0
             while match = LOG_RE.exec(data + '')
                 [_, date, level, msg] = match
                 if new Date(date).valueOf() > deviceTime
                     if LOG_LEVEL.test(msg)
                         [levelStr, level] = LOG_LEVEL.exec msg
                         msg = msg.slice levelStr.length
+                    if utils.has(msg, 'FATAL EXCEPTION:')
+                        setTimeout (msg) ->
+                            logcat.kill()
+                            unless callbackCalled
+                                callbackCalled = true
+                                callback msg
+                        , FATAL_ERROR_DELAY, msg
+                    if options.onLog
+                        options.onLog msg
+                        continue
                     switch level
                         when 'D', 'LOG'
                             log msg
@@ -55,12 +79,23 @@ module.exports = (options) ->
                             log.error msg
                         else
                             console.error "Unknown log level", level, msg
+                return
             return
 
         # run app
         shell = cp.exec "#{adbPath} shell am start -a android.intent.action.MAIN -n #{packageFile.android.package}/.MainActivity", (err) ->
             if err
                 logcat.kill()
-                console.error err
-    adb.stdout.pipe process.stdout
-    adb.stderr.pipe process.stderr
+                log.error err
+
+    unless options.pipeOutput is false
+        adb.stdout.pipe process.stdout
+        adb.stderr.pipe process.stderr
+
+    kill: ->
+        if callbackCalled
+            return
+        callbackCalled = true
+        adb.kill()
+        logcat?.kill()
+        callback()

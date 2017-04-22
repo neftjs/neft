@@ -52,6 +52,6 @@ exports.onTestError = (test, error) ->
     return
 
 exports.onTestEnd = (test) ->
-    if test.message
+    if test.message and test.fulfilled
         console.log exports.TEST + getDeepnessPrefix() + test.message
     return

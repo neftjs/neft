@@ -1,30 +1,17 @@
-dist: trusty
+dist: precise
 sudo: false
 language: ruby
 notifications:
     email: false
-addons:
-    apt:
-        packages:
-            - imagemagick
-            - chromium-browser
 cache:
-    apt: true
     directories:
         - node_modules
-before_install:
+install:
     # install nvm
     - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash
     - export NVM_DIR="$HOME/.nvm"
     - "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\""
-    - nvm install 4.0.0
-    - nvm install 5.0.0
-    - nvm install 6.2.2
     - nvm install 7.0.0
-
-    # run xvfb
-    - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
 
     # install project dependencies
     - npm install
@@ -33,25 +20,54 @@ script:
     - npm test
 env:
     global:
-        - TEST_CHROME=1
         - LOG_SCREENSHOT_DATA_URI=1
 matrix:
     include:
-        # -
-        #     language: android
-        #     os: linux
-        #     env:
-        #         - JOB_TYPE="android"
-        #         - TRAVIS_NODE_VERSION=5.11
-        #         - NEFT_TEST_ANDROID=1
-        #     install:
-        #         - nvm install $TRAVIS_NODE_VERSION
-        #         - npm install
-        #     android:
-        #         components:
-        #             - build-tools-23.0.0
-        #             - android-23
-        #             - extra
+        # Node
+        -
+            env:
+                - TEST_NODE=1
+        # HTML & WebGL
+        -
+            env:
+                - TEST_CHROME=1
+            addons:
+                apt:
+                    packages:
+                        - imagemagick
+                        - chromium-browser
+            before_install:
+                # run xvfb
+                - export DISPLAY=:99.0
+                - sh -e /etc/init.d/xvfb start
+
+        # Android
+        -
+            sudo: required
+            language: android
+            jdk: oraclejdk8
+            addons:
+                apt:
+                    packages:
+                        - imagemagick
+                        - net-tools
+            env:
+                - TEST_ANDROID_ARM=1
+            android:
+                components:
+                    - tools
+                    - platform-tools
+                    # build
+                    - build-tools-25.0.0
+                    - android-25
+                    # emulators
+                    - android-24
+                    - sys-img-armeabi-v7a-android-24
+                    - sys-img-x86-android-24
+            before_install:
+                # run xvfb
+                - export DISPLAY=:99.0
+                - sh -e /etc/init.d/xvfb start
         # -
         #     os: osx
         #     node_js: "5.11"
@@ -63,5 +79,3 @@ matrix:
         #     install:
         #         - xcodebuild -showsdks
         #         - npm install
-        -
-            os: linux

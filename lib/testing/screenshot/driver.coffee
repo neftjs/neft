@@ -4,6 +4,6 @@ os = require 'os'
 
 module.exports = switch os.platform()
     when 'darwin'
-        require './driver/ios'
+        require './driver/osx'
     when 'linux'
         require './driver/linux'

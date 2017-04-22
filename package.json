@@ -66,5 +66,13 @@
     "escape-html": "1.0.3",
     "istanbul": "^0.4.5",
     "wd": "0.4.0"
+  },
+  "android": {
+    "package": "io.neft.tests",
+    "versionCode": 1,
+    "versionName": "1.0",
+    "application": {
+        "label": "Neft.io Tests"
+    }
   }
 }
