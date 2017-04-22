@@ -44,6 +44,7 @@
     "groundskeeper": "0.1.12",
     "htmlparser2": "3.9.0",
     "http-server": "0.9.0",
+    "jimp": "0.2.27",
     "js-yaml": "3.6.1",
     "mkdirp": "0.5.1",
     "mustache": "2.2.1",
@@ -65,8 +66,5 @@
     "escape-html": "1.0.3",
     "istanbul": "^0.4.5",
     "wd": "0.4.0"
-  },
-  "optionalDependencies": {
-    "sharp": "^0.17.2"
   }
 }
