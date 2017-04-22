@@ -4,7 +4,7 @@ fs = require 'fs'
 pathUtils = require 'path'
 yaml = require 'js-yaml'
 mkdirp = require 'mkdirp'
-try sharp = require 'sharp'
+Jimp = require 'jimp'
 
 utils = require 'src/utils'
 log = require 'src/log'
@@ -24,7 +24,7 @@ DEFAULT_CONFIG =
     resolutions: [1]
 
 stack = null
-bgStack = null
+resizeStack = null
 
 isResourcesPath = (path) ->
     /\/resources\.(?:json|yaml)$/.test path
@@ -48,29 +48,29 @@ getImageSize = do ->
         if cache[path] and mtime < Date.now() - 1000
             callback null, cache[path]
             return
-        sharp(path).metadata (err, meta) ->
+        Jimp.read path, (err, image) ->
             if err
                 return callback err
             cache[path] =
-                width: meta.width
-                height: meta.height
+                width: image.bitmap.width
+                height: image.bitmap.height
             callback null, cache[path]
             return
         return
 
 supportImageResource = (path, rsc) ->
-    unless sharp
-        throw new Error "sharp module is not installed (npm install sharp)"
-
     # get size
     stats = fs.statSync path
     mtime = new Date stats.mtime
 
     resizeImage = (path, width, height, output, callback) ->
-        sharp(path).resize(width, height).toFile(output, callback)
+        Jimp.read path, (err, image) ->
+            if err
+                return callback err
+            image.resize(width, height).write output, callback
 
     stack.add (callback) ->
-        getImageSize path, mtime, (err, meta) ->
+        getImageSize path, mtime.valueOf(), (err, meta) ->
             if err
                 return callback err
 
@@ -89,10 +89,14 @@ supportImageResource = (path, rsc) ->
                     resPath = rsc.paths[format][resolution].slice(1)
                     if nameResolution isnt resolution
                         resPath = "build/#{resPath}"
-                    if not (exists = fs.existsSync(resPath)) or new Date(fs.statSync(resPath).mtime) < mtime
+                    shouldResize = not (exists = fs.existsSync(resPath))
+                    shouldResize ||= new Date(fs.statSync(resPath).mtime) < mtime
+                    if shouldResize
                         unless exists
                             mkdirp.sync pathUtils.dirname(resPath)
-                        bgStack.add resizeImage, null, [path, width * resolution, height * resolution, resPath]
+                        resizeStack.add resizeImage, null, [
+                            path, width * resolution, height * resolution, resPath
+                        ]
             callback()
             return
 
@@ -244,14 +248,14 @@ getFile = (path, config) ->
 
 exports.parse = (path, callback) ->
     stack = new utils.async.Stack
-    bgStack = new utils.async.Stack
+    resizeStack = new utils.async.Stack
     rscs = getFile path, DEFAULT_CONFIG
     stack.runAllSimultaneously (err) ->
-        if not err and bgStack.length
-            logtime = log.time 'Resize images'
-            bgStack.runAllSimultaneously ->
-                log.end logtime
-
         unless rscs instanceof Resources
             rscs = {}
-        callback err, rscs
+
+        if not err and resizeStack.length
+            resizeStack.runAllSimultaneously ->
+                callback err, rscs
+        else
+            callback err, rscs
