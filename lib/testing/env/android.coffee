@@ -175,6 +175,7 @@ runEmulator = (env, logsReader, callback) ->
 runTests = (env, logsReader, callback) ->
     logsReader.log "Running android tests on #{env.deviceSerialNumber}"
     createdSerialNumbersByName[env.emulatorName] = env.deviceSerialNumber
+    firstLog = true
     androidProcess = androidRun
         release: false
         deviceSerialNumber: env.deviceSerialNumber
@@ -183,6 +184,16 @@ runTests = (env, logsReader, callback) ->
             logsReader.log msg
             if logsReader.terminated
                 androidProcess.kill()
+                return
+
+            if firstLog
+                # close any popup
+                # in most cases on slow machines you will see prompt wait/ok
+                # this command emulates ENTER key two times to focus WAIT and click it
+                childProcess.execSync """
+                    #{ADB} -s #{env.deviceSerialNumber} shell input keyevent 66 66 &
+                """, cwd: SDK_DIR
+            firstLog = false
     , (err) ->
         callback err or logsReader.error
     return
