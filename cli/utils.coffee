@@ -102,7 +102,7 @@ LOCAL_IP = do ->
     out = try childProcess.execSync cmd, stdio: 'pipe'
     out ?= try childProcess.execSync 'ipconfig getifaddr en0', stdio: 'pipe'
     if out
-        String(out).trim()
+        String(out).split('\n')[0].trim()
     else
         log.warn "Cannot resolve local IP address; is ifconfig or ipconfig commands available?"
         ''
