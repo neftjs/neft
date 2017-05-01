@@ -1,0 +1,52 @@
+const { utils } = Neft;
+const { Image, NumberAnimation, Class, Impl } = Neft.Renderer;
+const { Item, Native } = Impl.Types;
+
+exports.create = function (data) {
+    Item.create.call(this, data);
+    Impl.setItemClip.call(this, true);
+
+    // auto size
+    data.autoSizeClass = Class.New();
+    data.autoSizeClass.target = this;
+    data.autoSizeClass.priority = -2;
+
+    // inner image
+    data.image = Image.New();
+    Impl.setItemParent.call(data.image, this);
+    data.image.onLoad(() => {
+        exports.setSpriteImageFrameCount.call(this, this._impl.frameCount);
+        data.autoSizeClass.disable();
+        data.autoSizeClass.changes.setAttribute('height', data.image.height);
+        data.autoSizeClass.enable();
+    });
+
+    // animation
+    this.animation.target = data.image;
+    this.animation.property = 'x';
+    this.animation.easing = 'Steps';
+};
+
+exports.createData = function () {
+    return utils.merge({
+        autoSizeClass: null,
+        frameCount: 1,
+        image: null,
+    }, Item.DATA);
+};
+
+exports.setSpriteImageSource = function (val) {
+    this._impl.image.source = val;
+};
+
+exports.setSpriteImageFrameCount = function (val) {
+    const { width } = this._impl.image;
+    this._impl.frameCount = val;
+
+    this.animation.easing.steps = val;
+    this.animation.to = -width + width / val;
+
+    this._impl.autoSizeClass.disable();
+    this._impl.autoSizeClass.changes.setAttribute('width', width / val);
+    this._impl.autoSizeClass.enable();
+};
