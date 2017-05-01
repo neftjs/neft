@@ -204,6 +204,7 @@
         class Easing extends itemUtils.DeepObject
             constructor: (ref) ->
                 @_type = 'Linear'
+                @_steps = 1
                 super ref
 
 ## *String* Easing::type = `'Linear'`
@@ -214,14 +215,14 @@ InOutCubic, InQuart, OutQuart, InOutQuart, InQuint, OutQuint,
 InOutQuint, InSine, OutSine, InOutSine, InExpo, OutExpo,
 InOutExpo, InCirc, OutCirc, InOutCirc, InElastic, OutElastic,
 InOutElastic, InBack, OutBack, InOutBack, InBounce, OutBounce,
-InOutBounce.
+InOutBounce, Steps.
 
             EASINGS = ['Linear', 'InQuad', 'OutQuad', 'InOutQuad', 'InCubic', 'OutCubic',
                 'InOutCubic', 'InQuart', 'OutQuart', 'InOutQuart', 'InQuint', 'OutQuint',
                 'InOutQuint', 'InSine', 'OutSine', 'InOutSine', 'InExpo', 'OutExpo',
                 'InOutExpo', 'InCirc', 'OutCirc', 'InOutCirc', 'InElastic', 'OutElastic',
                 'InOutElastic', 'InBack', 'OutBack', 'InOutBack', 'InBounce', 'OutBounce',
-                'InOutBounce']
+                'InOutBounce', 'Steps']
 
             EASING_ALIASES = Object.create(null)
             for easing in EASINGS
@@ -247,7 +248,21 @@ InOutBounce.
                     type = EASING_ALIASES[val]
                     type ||= EASING_ALIASES[val.toLowerCase()]
                     unless type
-                        log.warn "Easing type not recognized; '#{val}' given"
+                        log.warn "Easing type '#{val}' not recognized"
                         type = 'Linear'
                     _super.call @, type
                     return
+
+## *Integer* Easing::steps = `1`
+
+            itemUtils.defineProperty
+                constructor: @
+                name: 'steps'
+                defaultValue: 1
+                namespace: 'easing'
+                parentConstructor: PropertyAnimation
+                implementation: Impl.setPropertyAnimationEasingSteps
+                developmentSetter: (val) ->
+                    if val
+                        assert.isInteger val
+                        assert.operator val, '>', 0
