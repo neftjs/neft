@@ -1,8 +1,11 @@
-dist: precise
+dist: trusty
 sudo: false
-language: ruby
+language: generic
 notifications:
     email: false
+branches:
+    only:
+        - master
 cache:
     directories:
         - $HOME/.nvm
@@ -34,6 +37,7 @@ matrix:
 
         # Linux HTML & WebGL
         -
+            dist: precise
             env:
                 - TEST_CHROME=1
             addons:
@@ -51,6 +55,7 @@ matrix:
         # Linux Android
         -
             sudo: required
+            dist: precise
             language: android
             jdk: oraclejdk8
             addons:
@@ -89,6 +94,17 @@ matrix:
             before_script:
                 - npm run bundle -- --node
 
+        # OSX HTML & WebGL
+        -
+            os: osx
+            env:
+                - TEST_CHROME=1
+            before_script:
+                - npm run bundle -- --node --browser --webgl
+            before_install:
+                - brew install imagemagick
+                - brew cask install chromium
+
         # OSX iOS
         -
             os: osx
@@ -98,7 +114,6 @@ matrix:
             before_script:
                 - npm run bundle -- --node --ios
             before_install:
-                - brew update
                 - brew install imagemagick
                 - brew install lcdf-typetools
 
@@ -111,6 +126,5 @@ matrix:
             before_script:
                 - npm run bundle -- --node --macos
             before_install:
-                - brew update
                 - brew install imagemagick
                 - brew install lcdf-typetools

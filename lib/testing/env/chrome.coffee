@@ -12,11 +12,11 @@ config = require '../cli/config'
 USER_DATA_DIR = "tmp/chrome-#{utils.uid()}"
 
 CHROME_PATHS = [
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     'chromium',
     'google-chrome',
     'chromium-browser',
-    '/Applications/Chromium.app/Contents/MacOS/Chromium',
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 ]
 
 CHROME_ARGS = [
@@ -25,14 +25,14 @@ CHROME_ARGS = [
     '--no-first-run',
     "--user-data-dir=#{USER_DATA_DIR}",
     '--no-sandbox', # TODO: run chrome on travis in sandbox mode
-    '--window-position=0,0'
+    '--window-position=0,0',
 ]
 
 CHROME_LOG_RE = ///
     # declaration
     ^\[
         # pid, date, severity
-        (?:[0-9A-Z/]*:){4}
+        (?:[0-9A-Z/.]*:){4}
         # type
         (.*?)
         \([0-9]*\)
@@ -79,10 +79,16 @@ Runs the given URI in Chrome
 ###
 runOnPathWithUri = (env, uri, callback) ->
     args = utils.clone CHROME_ARGS
-    args.push "--app=#{uri}"
 
     if env.width? and env.height?
         args.push "--window-size=#{env.width},#{env.height}"
+
+    args.push "--app=#{uri}"
+
+    onProcessData = (data) ->
+        for logMsg in getConsoleLogs(data)
+            onLog.emit logMsg
+        return
 
     chrome = childProcess.spawn env.path, args, env: config.getProcessEnv()
 
@@ -91,10 +97,8 @@ runOnPathWithUri = (env, uri, callback) ->
         fs.removeSync USER_DATA_DIR
         callback()
 
-    chrome.stderr.on 'data', (data) ->
-        for logMsg in getConsoleLogs(data)
-            onLog.emit logMsg
-        return
+    chrome.stdout.on 'data', onProcessData
+    chrome.stderr.on 'data', onProcessData
 
     process.once 'SIGINT', ->
         chrome.kill()
