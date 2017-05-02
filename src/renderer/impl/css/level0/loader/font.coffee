@@ -41,7 +41,7 @@ module.exports = (impl) ->
             implUtils.onFontLoaded.emit name
         return
 
-    loadFont: (name, source, sources) ->
+    loadFont: (name, source, sources, callback) ->
         urlStr = ''
         for source in sources
             urlStr += "url('#{source}'), "
@@ -66,7 +66,10 @@ module.exports = (impl) ->
 
             xhr = new XMLHttpRequest
             xhr.open 'get', sources[0], true
+            xhr.onerror = ->
+                callback new Error "Cannot load font #{sources[0]}"
             xhr.onload = ->
+                callback()
                 if implUtils.loadingFonts[name] is 1
                     emitFontLoadedSignal = ->
                         emitLoadedSignal name

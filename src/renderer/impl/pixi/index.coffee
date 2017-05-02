@@ -172,7 +172,6 @@ module.exports = (impl) ->
         Screen: require '../css/level0/screen'
         Navigator: require '../css/level0/navigator'
         FontLoader: require '../css/level0/loader/font'
-        ResourcesLoader: require '../css/level0/loader/resources'
 
     setWindow: (item) ->
         unless window.isFake

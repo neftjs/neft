@@ -8,7 +8,6 @@ exports.Types =
     Text: require './level0/text'
     Native: require './level0/native'
     FontLoader: require './level0/loader/font'
-    ResourcesLoader: require './level0/loader/resources'
     Device: require './level0/device'
     Screen: require './level0/screen'
     Navigator: require './level0/navigator'

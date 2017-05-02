@@ -1,4 +1,4 @@
 'use strict'
 
 module.exports = (impl) ->
-    loadFont: (name, source, sources) ->
+    loadFont: (name, source, sources, callback) ->
