@@ -11,7 +11,7 @@ module.exports = (Renderer) ->
     impl.window = null
     signal.create impl, 'onWindowReady'
 
-    TYPES = ['Item', 'Image', 'Text', 'Native', 'FontLoader', 'ResourcesLoader',
+    TYPES = ['Item', 'Image', 'Text', 'Native', 'FontLoader',
              'Device', 'Screen', 'Navigator',
 
              'Rectangle', 'Grid', 'Column', 'Row', 'Flow',

@@ -362,6 +362,7 @@ module.exports = (Renderer, Impl) ->
         signalName = getPropHandlerName prop
 
         oldVal = item[internalName]
-        item[internalName] = val
-        emitSignal item, signalName, oldVal
+        if val isnt oldVal
+            item[internalName] = val
+            emitSignal item, signalName, oldVal
         return

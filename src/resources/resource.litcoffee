@@ -39,6 +39,7 @@
         constructor: ->
             assert.instanceOf @, Resource
 
+            @name = ''
             @file = ''
             @color = ''
             @width = 0
@@ -46,6 +47,10 @@
             @formats = null
             @resolutions = null
             @paths = null
+
+            Object.seal @
+
+## *String* Resource::name = `''`
 
 ## *String* Resource::file = `''`
 
@@ -63,7 +68,7 @@
 
 ## *String* Resource::resolve([*String* uri, *Object* request])
 
-        resolve: (uri='', req) ->
+        resolve: (uri = '', req) ->
             if req is undefined and utils.isPlainObject(uri)
                 req = uri
                 uri = ''

@@ -23,10 +23,8 @@ module.exports = (impl) ->
 
         if @_autoWidth
             setPropertyValue @, 'width', elem.offsetWidth
-            @_autoWidth = true
         if @_autoHeight
             setPropertyValue @, 'height', elem.offsetHeight
-            @_autoHeight = true
 
         if elemNextSibling
             elemParent.insertBefore elem, elemNextSibling

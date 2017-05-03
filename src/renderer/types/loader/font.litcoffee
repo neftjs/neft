@@ -64,7 +64,7 @@ FontLoader {
             getFontWeight = (source) ->
                 for re, i in WEIGHTS
                     if re.test(source)
-                        return i / (WEIGHTS.length-1)
+                        return i / (WEIGHTS.length - 1)
 
                 log.warn "Can't find font weight in the got source; `#{source}` got."
                 0.4
@@ -103,7 +103,13 @@ FontLoader {
                 obj[weightInt] = name
 
                 # load font
-                Impl.loadFont name, source, sources
+                Impl.loadFont name, source, sources, (err) ->
+                    loader._loaded = true
+                    loader.onLoadedChange.emit false
+                    if err
+                        loader.onError.emit err
+                    else
+                        loader.onLoad.emit()
                 return
 
         loadFontIfReady = (loader) ->
@@ -121,13 +127,13 @@ FontLoader {
                     unless result = obj[weightInt]
                         # get closest available weight
                         closestLeft = -1
-                        for i in [weightInt-1..0] by -1
+                        for i in [weightInt - 1..0] by -1
                             if obj[i]
                                 closestLeft = i
                                 break
 
                         closestRight = -1
-                        for i in [weightInt+1...WEIGHTS.length] by 1
+                        for i in [weightInt + 1...WEIGHTS.length] by 1
                             if obj[i]
                                 closestRight = i
                                 break
@@ -157,6 +163,7 @@ FontLoader {
             super()
             @_name = ''
             @_source = ''
+            @_loaded = false
 
 ## *String* FontLoader::name
 
@@ -205,3 +212,21 @@ Italic font filename must contains 'italic'.
 
             loadFontIfReady @
             return
+
+## ReadOnly *Boolean* FontLoader::loaded = `false`
+
+        utils.defineProperty @::, 'loaded', null, ->
+            @_loaded
+        , null
+
+## *Signal* FontLoader::onLoadedChange(*Boolean* oldValue)
+
+        signal.Emitter.createSignal @, 'onLoadedChange'
+
+## *Signal* FontLoader::onLoad()
+
+        signal.Emitter.createSignal @, 'onLoad'
+
+## *Signal* FontLoader::onError(*Error* error)
+
+        signal.Emitter.createSignal @, 'onError'
