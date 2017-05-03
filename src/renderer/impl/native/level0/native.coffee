@@ -21,19 +21,19 @@ module.exports = (impl) ->
 
     bridge.listen bridge.inActions.NATIVE_ITEM_WIDTH, (reader) ->
         item = bridge.getItemFromReader reader
-        oldVal = item.width
-        item._width = reader.getFloat()
-        item.onWidthChange.emit oldVal
+        item._impl.nativeWidth = reader.getFloat()
+        updateNativeSize.call item
         return
 
     bridge.listen bridge.inActions.NATIVE_ITEM_HEIGHT, (reader) ->
         item = bridge.getItemFromReader reader
-        oldVal = item.height
-        item._height = reader.getFloat()
-        item.onHeightChange.emit oldVal
+        item._impl.nativeHeight = reader.getFloat()
+        updateNativeSize.call item
         return
 
-    DATA = {}
+    DATA =
+        nativeWidth: 0
+        nativeHeight: 0
 
     DATA: DATA
 
@@ -43,9 +43,18 @@ module.exports = (impl) ->
         if data.id is 0
             pushAction outActions.CREATE_NATIVE_ITEM
             pushString @constructor.__name__
-            data.id = bridge.getId this
+            data.id = bridge.getId @
 
         @pointer.onPress onPointerPress, @
         @pointer.onRelease onPointerRelease, @
         @pointer.onMove onPointerMove, @
+        return
+
+    updateNativeSize: updateNativeSize = ->
+        {setPropertyValue} = impl.Renderer.itemUtils
+
+        if @_autoWidth
+            setPropertyValue @, 'width', @_impl.nativeWidth
+        if @_autoHeight
+            setPropertyValue @, 'height', @_impl.nativeHeight
         return

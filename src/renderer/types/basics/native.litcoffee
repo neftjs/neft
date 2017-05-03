@@ -166,39 +166,37 @@ where `XYZ` is the given name.
             constructor: ->
                 super()
 
-                unless IS_NATIVE
-                    @_autoWidth = true
-                    @_autoHeight = true
-                    @_width = -1
-                    @_height = -1
+                @_autoWidth = true
+                @_autoHeight = true
+                @_width = -1
+                @_height = -1
 
                 # save properties with default values
                 if properties = @constructor._properties
                     for property in properties
                         @[property.internalName] = property.defaultValue
 
-            unless IS_NATIVE
-                _width: -1
-                getter = utils.lookupGetter @::, 'width'
-                itemWidthSetter = utils.lookupSetter @::, 'width'
-                utils.defineProperty @::, 'width', null, getter,
-                    do (_super = itemWidthSetter) -> (val) ->
-                        if @_autoWidth = val is -1
-                            Impl.updateNativeSize.call @
-                        else
-                            _super.call @, val
-                        return
+            _width: -1
+            getter = utils.lookupGetter @::, 'width'
+            itemWidthSetter = utils.lookupSetter @::, 'width'
+            utils.defineProperty @::, 'width', null, getter,
+                do (_super = itemWidthSetter) -> (val) ->
+                    if @_autoWidth = val is -1
+                        Impl.updateNativeSize.call @
+                    else
+                        _super.call @, val
+                    return
 
-                _height: -1
-                getter = utils.lookupGetter @::, 'height'
-                itemHeightSetter = utils.lookupSetter @::, 'height'
-                utils.defineProperty @::, 'height', null, getter,
-                    do (_super = itemHeightSetter) -> (val) ->
-                        if @_autoHeight = val is -1
-                            Impl.updateNativeSize.call @
-                        else
-                            _super.call @, val
-                        return
+            _height: -1
+            getter = utils.lookupGetter @::, 'height'
+            itemHeightSetter = utils.lookupSetter @::, 'height'
+            utils.defineProperty @::, 'height', null, getter,
+                do (_super = itemHeightSetter) -> (val) ->
+                    if @_autoHeight = val is -1
+                        Impl.updateNativeSize.call @
+                    else
+                        _super.call @, val
+                    return
 
 ## Native::set(*String* propName, *Any* val)
 
