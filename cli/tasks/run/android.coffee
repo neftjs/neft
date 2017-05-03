@@ -32,7 +32,7 @@ module.exports = (options, callback = ->) ->
     adb = cp.exec cmd, (err) ->
         log.end logtime
         if err
-            console.error err
+            log.error err
             return
 
         # get current device time
@@ -41,7 +41,14 @@ module.exports = (options, callback = ->) ->
         deviceTime = new Date(String(shellDate).replace('_', ' ')).valueOf()
 
         # run logcat
-        LOG_RE = /^(\d+-\d+\s[0-9:.]+)\s([A-Z])\/(?:Neft|AndroidRuntime)\s*\(\s*[0-9]+\):\s(.+)$/gm
+        LOG_RE = ///
+            ^
+            (\d+-\d+\s[0-9:.]+)\s
+            ([A-Z])\/(?:Neft|AndroidRuntime)\s*
+            \(\s*[0-9]+\):\s
+            (.+)
+            $
+        ///gm
         LOG_LEVEL = /^(LOG|OK|INFO|WARN|ERROR):\s/
         logcat = do ->
             args = adbPath.split ' '
@@ -50,40 +57,46 @@ module.exports = (options, callback = ->) ->
             cp.spawn cmd, args
         logcat.stdout.on 'data', (data) ->
             LOG_RE.lastIndex = 0
-            while match = LOG_RE.exec(data + '')
+            dataStr = String data
+            while match = LOG_RE.exec(dataStr)
                 [_, date, level, msg] = match
-                if new Date(date).valueOf() > deviceTime
-                    if LOG_LEVEL.test(msg)
-                        [levelStr, level] = LOG_LEVEL.exec msg
-                        msg = msg.slice levelStr.length
-                    if utils.has(msg, 'FATAL EXCEPTION:')
-                        setTimeout (msg) ->
-                            logcat.kill()
-                            unless callbackCalled
-                                callbackCalled = true
-                                callback msg
-                        , FATAL_ERROR_DELAY, msg
-                    if options.onLog
-                        options.onLog msg
-                        continue
-                    switch level
-                        when 'D', 'LOG'
-                            log msg
-                        when 'OK'
-                            log.ok msg
-                        when 'I', 'INFO'
-                            log.info msg
-                        when 'W', 'WARN'
-                            log.warn msg
-                        when 'E', 'F', 'ERROR'
-                            log.error msg
-                        else
-                            console.error "Unknown log level", level, msg
-                return
+                if new Date(date).valueOf() <= deviceTime
+                    continue
+                if LOG_LEVEL.test(msg)
+                    [levelStr, level] = LOG_LEVEL.exec msg
+                    msg = msg.slice levelStr.length
+                if utils.has(msg, 'FATAL EXCEPTION:')
+                    setTimeout (msg) ->
+                        logcat.kill()
+                        unless callbackCalled
+                            callbackCalled = true
+                            callback msg
+                    , FATAL_ERROR_DELAY, msg
+                if options.onLog
+                    options.onLog msg
+                    continue
+                switch level
+                    when 'D', 'LOG'
+                        log msg
+                    when 'OK'
+                        log.ok msg
+                    when 'I', 'INFO'
+                        log.info msg
+                    when 'W', 'WARN'
+                        log.warn msg
+                    when 'E', 'F', 'ERROR'
+                        log.error msg
+                    else
+                        log.error "Unknown log level", level, msg
             return
 
         # run app
-        shell = cp.exec "#{adbPath} shell am start -a android.intent.action.MAIN -n #{packageFile.android.package}/.MainActivity", (err) ->
+        runCmd = """
+            #{adbPath} shell am start \
+            -a android.intent.action.MAIN \
+            -n #{packageFile.android.package}/.MainActivity
+        """
+        shell = cp.exec runCmd, (err) ->
             if err
                 logcat.kill()
                 log.error err
