@@ -102,7 +102,7 @@ runOnPathWithUri = (env, uri, callback) ->
         chrome?.kill()
 
 runAndLog = (env, logsReader, callback) ->
-    url = config.getBrowserHttpServerUrl() + '/' + env.platform
+    url = config.getBrowserHttpServerUrl()
     chromeProcess = runOnPathWithUri env, url, ->
         unless logsReader.terminated
             error = "Chrome tests terminated before all tests ended"

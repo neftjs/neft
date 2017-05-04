@@ -4,8 +4,13 @@ config = require './config'
 processLogs = require './processLogs'
 builder = require './builder'
 testsFile = require './testsFile'
+httpServer = require './httpServer'
 
 {log} = Neft
+
+HTTP_BASED_PLATFORMS =
+    browser: true
+    webgl: true
 
 getEnvTarget = (env) ->
     unless env.platform in ['local', 'npm']
@@ -49,12 +54,7 @@ buildProject = (env, callback) ->
         callback null
 
 exports.runEnvs = (callback) ->
-    runNext = ->
-        unless envCfg = envQueue.shift()
-            return callback null
-        name = envCfg.handler.getName envCfg.env
-        iconIndex = -1
-        logsReader = new processLogs.LogsReader name
+    buildAndRun = (name, logsReader, envCfg) ->
         testsFile.saveBuildTestsFile envCfg.env.platform, (err) ->
             if err
                 return callback err
@@ -66,4 +66,22 @@ exports.runEnvs = (callback) ->
                     if err
                         return callback err
                     runNext()
+
+    runNext = ->
+        unless envCfg = envQueue.shift()
+            return callback null
+        name = envCfg.handler.getName envCfg.env
+        iconIndex = -1
+        logsReader = new processLogs.LogsReader name
+
+        httpServer.closeServer()
+
+        if HTTP_BASED_PLATFORMS[envCfg.env.platform]
+            httpServer.runHttpServer envCfg.env.platform, ->
+                buildAndRun name, logsReader, envCfg
+        else
+            buildAndRun name, logsReader, envCfg
+
+        return
+
     runNext()

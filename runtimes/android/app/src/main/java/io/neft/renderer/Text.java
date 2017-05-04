@@ -4,6 +4,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -51,6 +54,10 @@ public class Text extends Item {
 
     private Text() {
         super();
+        textView.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
         view.addView(textView);
         textView.setTextSize(DEFAULT_FONT_PIXEL_SIZE);
         textView.setTextColor(DEFAULT_COLOR);
@@ -136,7 +143,7 @@ public class Text extends Item {
 
     @OnAction(InAction.UPDATE_TEXT_CONTENT_SIZE)
     public void updateContentSize() {
-        textView.measure(0, 0);
+        textView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         float width = pxToDp(textView.getMeasuredWidth());
         float height = pxToDp(textView.getMeasuredHeight());
         pushAction(OutAction.TEXT_SIZE, width, height);

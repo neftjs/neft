@@ -1,5 +1,5 @@
 Rectangle {
-    id: testPosition
+    id: position
     x: 50
     y: 25
     width: 100
@@ -8,14 +8,14 @@ Rectangle {
 }
 
 Rectangle {
-    id: testSize
+    id: size
     width: 82
     height: 50
     color: 'green'
 }
 
 Rectangle {
-    id: testScale
+    id: scale
     x: 40
     y: 50
     width: 55
@@ -25,7 +25,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testRotation
+    id: rotation
     x: 40
     y: 50
     width: 55
@@ -35,7 +35,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testRotationAndScale
+    id: rotationAndScale
     x: 40
     y: 50
     width: 55
@@ -46,7 +46,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testChildren
+    id: children
     x: 40
     y: 50
     width: 55
@@ -63,7 +63,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testTwoChildren
+    id: twoChildren
     x: 40
     y: 50
     width: 55
@@ -88,7 +88,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testZIndex
+    id: zIndex
     x: 40
     y: 50
     width: 55
@@ -114,7 +114,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testScaleChildren
+    id: scaleChildren
     x: 40
     y: 50
     width: 55
@@ -140,7 +140,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testMinusScaleChildren
+    id: minusScaleChildren
     x: 40
     y: 50
     width: 55
@@ -166,7 +166,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testRotateChildren
+    id: rotateChildren
     x: 40
     y: 50
     width: 55
@@ -192,7 +192,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testScaleAndRotateChildren
+    id: scaleAndRotateChildren
     x: 40
     y: 50
     width: 55
@@ -219,7 +219,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testClip
+    id: clip
     x: 40
     y: 50
     width: 55
@@ -239,7 +239,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testOpacity
+    id: opacity
     x: 40
     y: 50
     width: 55
@@ -249,7 +249,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testChildrenOpacity
+    id: childrenOpacity
     x: 40
     y: 50
     width: 55
@@ -265,7 +265,7 @@ Rectangle {
 }
 
 Rectangle {
-    id: testBackground
+    id: background
     x: 40
     y: 50
     width: 55

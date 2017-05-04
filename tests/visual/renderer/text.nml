@@ -1,0 +1,34 @@
+Text {
+    id: customFont
+    text: 'ABCabc123y'
+    font.pixelSize: 30
+    x: 10
+    y: 10
+}
+
+Text {
+    id: textWithAutoSize
+    text: 'ABCabc123'
+    background.color: 'red'
+    font.pixelSize: 30
+}
+
+Text {
+    id: changedTextWithAutoSize
+    text: 'ABCabc123y'
+    background.color: 'red'
+    font.pixelSize: 50
+    x: 10
+    y: 10
+    onReady() {
+        this.text = 'ghjy';
+    }
+}
+
+Text {
+    id: wrapText
+    text: 'ABCabc123abc123abc123'
+    width: parent.width
+    background.color: 'red'
+    font.pixelSize: 50
+}

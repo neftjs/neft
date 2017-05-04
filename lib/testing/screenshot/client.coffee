@@ -32,6 +32,12 @@ getControlRect = do ->
         rect.layout.enabled = false
         rect.color = "rgb(#{exports.CONTROL_COLOR})"
         rect.z = 9999
+        log.info """
+            Create screenshot initialize rect \
+            width=#{rect.width} \
+            height=#{rect.height} \
+            color=#{rect.color}
+        """
         rect
 
 exports.initialize = (callback) ->

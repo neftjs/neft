@@ -15,6 +15,6 @@ exports.Checker = class Checker
     registerAll: ->
         for item of @styles
             do (item) =>
-                if /^test/.test(item)
+                if item[0] isnt '_'
                     it item, => @test item
         return
