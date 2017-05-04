@@ -391,7 +391,6 @@
                 INFOPLIST_FILE = Neft/Info.plist;
                 IPHONEOS_DEPLOYMENT_TARGET = 7.0;
                 LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-                PRODUCT_BUNDLE_IDENTIFIER = neft.io.Neft;
                 PRODUCT_NAME = "$(TARGET_NAME)";
                 PROVISIONING_PROFILE = "";
                 SDKROOT = iphoneos;
@@ -408,7 +407,6 @@
                 INFOPLIST_FILE = Neft/Info.plist;
                 IPHONEOS_DEPLOYMENT_TARGET = 7.0;
                 LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-                PRODUCT_BUNDLE_IDENTIFIER = neft.io.Neft;
                 PRODUCT_NAME = "$(TARGET_NAME)";
                 PROVISIONING_PROFILE = "";
                 SDKROOT = iphoneos;

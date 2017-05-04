@@ -15,6 +15,7 @@ DEST = 'tests_results'
 INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
 INITIALIZATION_TRIES = 20
 INITIALIZATION_TRY_DELAY_SEC = 1
+CUSTOM_SCREENSHOT_MAX_DELAY_MS = 3000
 
 fs.emptyDirSync DEST
 
@@ -55,8 +56,14 @@ takeScreenshot = (opts) ->
     if opts.env
         handler = targets.getEnvHandler(opts.env)
         if handler.takeScreenshot
-            handler.takeScreenshot opts
-            try stats = fs.statSync opts.path
+            startTime = Date.now()
+            while Date.now() < startTime + CUSTOM_SCREENSHOT_MAX_DELAY_MS
+                handler.takeScreenshot opts
+                try
+                    stats = fs.statSync opts.path
+                    if stats?.size
+                        break
+                childProcess.execSync "sleep 0.1"
             if stats?.size
                 return
             else
@@ -71,6 +78,8 @@ takeScreenshot = (opts) ->
 
 server.onInitializeScreenshots (opts) ->
     log "🎞  Initialize screenshots"
+
+    fs.emptyDirSync DEST
 
     unless driver
         throw new Error "Screenshots on this platform are not supported"

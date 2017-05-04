@@ -25,8 +25,17 @@ const { AssertionError } = Neft.assert;
 ```
 
     assert.AssertionError = class AssertionError extends Error
+        valueToString = (value) ->
+            if utils.isObject(value)
+                result = try JSON.stringify value
+            result or String(value)
+
         @generateMessage = (error, msg) ->
-            msg or "#{error.actual} #{error.operator} #{error.expected}"
+            msg or """
+                #{valueToString error.actual} \
+                #{error.operator} \
+                #{valueToString error.expected}
+            """
 
         constructor: (opts) ->
             @name = 'AssertionError'

@@ -22,5 +22,11 @@
     "application": {
       "label": "Neft.io Sample Project"
     }
+  },
+  "ios": {
+    "package": "io.neft.sample",
+    "application": {
+        "label": "Neft.io Tests"
+    }
   }
 }

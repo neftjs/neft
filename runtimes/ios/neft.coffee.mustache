@@ -9,6 +9,26 @@ Global object
 @global = @
 
 ###
+Console
+###
+do =>
+    getMessage = (type, args) ->
+        "[#{type}] " + Array::join.call args, ' '
+
+    console.log = do (_super = console.log) -> ->
+        ios.log getMessage('LOG', arguments)
+        _super arguments...
+    console.info = do (_super = console.info) -> ->
+        ios.info getMessage('INFO', arguments)
+        _super arguments...
+    console.warn = do (_super = console.warn) -> ->
+        ios.warn getMessage('WARN', arguments)
+        _super arguments...
+    console.error = do (_super = console.error) -> ->
+        ios.error getMessage('ERROR', arguments)
+        _super arguments...
+
+###
 Timers
 ###
 setTimeout = clearTimeout = setImmediate = null

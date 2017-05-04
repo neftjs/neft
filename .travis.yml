@@ -79,3 +79,12 @@ matrix:
         #     install:
         #         - xcodebuild -showsdks
         #         - npm install
+        -
+            os: osx
+            osx_image: xcode8.3
+            env:
+                - TEST_IOS=1
+            before_install:
+                - brew update
+                - brew install imagemagick
+                - brew install lcdf-typetools

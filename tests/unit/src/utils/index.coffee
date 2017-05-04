@@ -257,6 +257,11 @@ describe 'utils', ->
             error.custom = 2
             object = utils.errorToObject error
             json = JSON.parse JSON.stringify object
+
+            # line and column are optional
+            delete json.line
+            delete json.column
+
             assert.isEqual json,
                 name: 'TypeError'
                 message: 'error message'

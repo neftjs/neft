@@ -74,5 +74,11 @@
     "application": {
         "label": "Neft.io Tests"
     }
+  },
+  "ios": {
+    "package": "io.neft.tests",
+    "application": {
+        "label": "Neft.io Tests"
+    }
   }
 }

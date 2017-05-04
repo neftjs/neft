@@ -47,3 +47,12 @@ environments:
             y: 10
             width: 200
             height: 200
+    -
+        platform: ios
+        ios: 10.3
+        device: iPhone 7
+        enabled: $TEST_IOS
+        view:
+            y: 50
+            width: 200
+            height: 200
