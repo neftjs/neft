@@ -10,18 +10,19 @@ server = null
 exports.isRun = ->
     server?
 
-exports.runHttpServer = (callback) ->
+exports.runHttpServer = (target, callback) ->
     if server
         return callback()
 
     {port, host} = config.getConfig().browserHttpServer
 
-    log.info "Running HTTP server for client tests on `#{host}:#{port}`"
+    log.info "\n📡  Running HTTP server for #{target} tests on `#{host}:#{port}`"
     server = httpServer.createServer
-        root: './build/'
+        root: "./build/#{target}"
     server.listen port, host, ->
         callback()
     server
 
 exports.closeServer = ->
     server?.close()
+    server = null

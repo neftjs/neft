@@ -3,7 +3,6 @@
 global.Neft = require 'cli/bundle/neft-node-develop'
 
 builder = require './cli/builder'
-httpServer = require './cli/httpServer'
 chromeEnv = require './env/chrome'
 screenshot = require './screenshot/server'
 server = require './server'
@@ -33,7 +32,5 @@ reportAndExit = (err) ->
         process.exit 0
 
 server.startServer()
-httpServer.runHttpServer ->
-    targets.runEnvs (err) ->
-        httpServer.closeServer()
-        reportAndExit err
+targets.runEnvs (err) ->
+    reportAndExit err
