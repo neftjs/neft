@@ -5,7 +5,7 @@ PNG = require('pngjs').PNG
 client = require '../client'
 
 [RED, GREEN, BLUE] = client.CONTROL_COLOR
-CONTROL_COLOR_TRESHOLD = 15
+CONTROL_COLOR_TRESHOLD = 25
 
 {abs} = Math
 

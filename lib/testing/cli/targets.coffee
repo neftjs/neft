@@ -35,6 +35,8 @@ exports.getEnvHandler = (env) ->
                     throw new Error "Unsupported browser '#{env.browser}'"
         when 'android'
             require '../env/android'
+        when 'ios'
+            require '../env/ios'
         else
             throw new Error "Unsupported environment '#{env.platform}'"
 

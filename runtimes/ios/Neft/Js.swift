@@ -12,6 +12,7 @@ import JavaScriptCore
     func immediate(_ function: JSValue) -> Void
     var httpResponseCallback: JSValue? { get set }
     func httpRequest(_ uri: String, _ method: String, _ headers: NSArray, _ data: JSValue) -> Int
+    func log(_ message: String) -> Void
 }
 
 /**
@@ -117,6 +118,10 @@ import JavaScriptCore
         }
     }
 
+    func log(_ message: String) -> Void {
+        NSLog("%@", message)
+    }
+
     func destroy() {
         timerCallbackValue = nil
         animationFrameCallbackValue = nil
@@ -143,6 +148,10 @@ class JS {
         proxy.js = self
         context.setObject(proxy, forKeyedSubscript: "ios" as (NSCopying & NSObjectProtocol)!)
         self.runScript("js")
+        context.exceptionHandler = {
+            (context: JSContext!, value: JSValue!) in
+            NSLog("JS ERROR: \(value.objectForKeyedSubscript("stack").toString())")
+        }
     }
 
     func runScript(_ filename: String) {

@@ -10,6 +10,8 @@ exports.toString = (err) ->
                 break
             stack.push line
         msg += stack.join '\n'
+    else if err.name? and err.message?
+        msg += "#{err.name}: #{err.message}"
     else
-        msg += err
+        msg += JSON.stringify err
     msg
