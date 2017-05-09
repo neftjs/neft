@@ -23,11 +23,11 @@ env:
         - LOG_SCREENSHOT_DATA_URI=1
 matrix:
     include:
-        # Node
+        # Linux Node
         -
             env:
                 - TEST_NODE=1
-        # HTML & WebGL
+        # Linux HTML & WebGL
         -
             env:
                 - TEST_CHROME=1
@@ -41,7 +41,7 @@ matrix:
                 - export DISPLAY=:99.0
                 - sh -e /etc/init.d/xvfb start
 
-        # Android
+        # Linux Android
         -
             sudo: required
             language: android
@@ -68,17 +68,14 @@ matrix:
                 # run xvfb
                 - export DISPLAY=:99.0
                 - sh -e /etc/init.d/xvfb start
-        # -
-        #     os: osx
-        #     node_js: "5.11"
-        #     osx_image: xcode8.1sneakpeek # https://github.com/travis-ci/travis-ci/issues/6791#issuecomment-260052295
-        #     env:
-        #         - JOB_TYPE="ios"
-        #         - NEFT_TEST_IOS=1
-        #         - NEFT_IOS_VERSION=10.1
-        #     install:
-        #         - xcodebuild -showsdks
-        #         - npm install
+
+        # OSX Node
+        -
+            os: osx
+            env:
+                - TEST_NODE=1
+
+        # OSX iOS
         -
             os: osx
             osx_image: xcode8.3
