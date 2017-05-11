@@ -19,7 +19,6 @@ public class Item {
     }
 
     final int id;
-    private Item background;
     private Rect clipRect;
 
     public final ViewGroup view;
@@ -133,18 +132,6 @@ public class Item {
     @OnAction(InAction.SET_ITEM_OPACITY)
     public void setOpacity(int val) {
         view.setAlpha(val / 255f);
-    }
-
-    @OnAction(InAction.SET_ITEM_BACKGROUND)
-    public void setBackground(Item val) {
-        if (background != null) {
-            background.removeFromParent();
-            background = null;
-        }
-        if (val != null) {
-            background = val;
-            view.addView(val.view, 0);
-        }
     }
 
     @OnAction(InAction.SET_ITEM_KEYS_FOCUS)

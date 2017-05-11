@@ -97,13 +97,13 @@ module.exports = (impl) ->
         top: (item) ->
             0
         right: (item) ->
-            - item._width
+            -item._width
         bottom: (item) ->
-            - item._height
+            -item._height
         horizontalCenter: (item) ->
-            - item._width / 2
+            -item._width / 2
         verticalCenter: (item) ->
-            - item._height / 2
+            -item._height / 2
         fillWidthSize: (item) ->
             0
         fillHeightSize: (item) ->
@@ -183,17 +183,17 @@ module.exports = (impl) ->
         top: (margin) ->
             margin._top
         right: (margin) ->
-            - margin._right
+            -margin._right
         bottom: (margin) ->
-            - margin._bottom
+            -margin._bottom
         horizontalCenter: (margin) ->
             margin._left - margin._right
         verticalCenter: (margin) ->
             margin._top - margin._bottom
         fillWidthSize: (margin) ->
-            - margin._left - margin._right
+            -margin._left - margin._right
         fillHeightSize: (margin) ->
-            - margin._top - margin._bottom
+            -margin._top - margin._bottom
 
     onParentChange = (oldVal) ->
         if oldVal

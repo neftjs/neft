@@ -58,8 +58,6 @@ This is a base class for everything which is visible.
             @_pointer = null
             @_margin = null
             @_classes = null
-            @_background = null
-            @_defaultBackground = null
             @_query = ''
             @_node = null
 
@@ -1008,58 +1006,6 @@ Points to the URI which will be used when user clicks on this item.
             implementation: Impl.setItemLinkUri
             developmentSetter: (val) ->
                 assert.isString val, "Item.linkUri needs to be a string, but #{val} given"
-
-## *Item* Item::background
-
-An item used as a background for the item.
-
-By default, background is filled to his parent.
-
-## *Signal* Item::onBackgroundChange(*Item* oldValue)
-
-        defaultBackgroundClass = do ->
-            ext = Renderer.Class.New()
-            ext.priority = -1
-            ext.changes.setAttribute 'anchors.fill', ['parent']
-            ext
-
-        createDefaultBackground = (parent) ->
-            rect = Renderer.Rectangle.New()
-            ext = defaultBackgroundClass.clone()
-            ext.target = rect
-            ext.enable()
-            rect
-
-        itemUtils.defineProperty
-            constructor: @
-            name: 'background'
-            defaultValue: null
-            developmentSetter: (val) ->
-                if val?
-                    assert.instanceOf val, Item, """
-                        "Item.background needs to be an Item or null, but #{val} given"
-                    """
-            getter: (_super) -> ->
-                unless @_background
-                    @_defaultBackground ||= createDefaultBackground @
-                    @background = @_defaultBackground
-                _super.call @
-            setter: (_super) -> (val) ->
-                val ||= @_defaultBackground
-                oldVal = @_background
-                if val is oldVal
-                    return
-                if oldVal and oldVal._parent is @
-                    oldVal._parent = null
-                    emitSignal oldVal, 'onParentChange', @
-                if val
-                    oldParent = val._parent
-                    if val._previousSibling or val._nextSibling
-                        val.parent = null
-                    val._parent = @
-                    emitSignal val, 'onParentChange', oldParent
-                Impl.setItemBackground.call @, val
-                _super.call @, val
 
 ## Item::overlap(*Item* item)
 

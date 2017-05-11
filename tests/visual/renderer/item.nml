@@ -263,22 +263,3 @@ Rectangle {
         opacity: 0.5
     }
 }
-
-Rectangle {
-    id: background
-    x: 40
-    y: 50
-    width: 55
-    height: 60
-    opacity: 0.9
-    scale: 1.2
-    rotation: Math.PI / 12
-    color: 'transparent'
-
-    background: Rectangle {
-        width: 50
-        height: 50
-        color: 'blue'
-        opacity: 0.5
-    }
-}
