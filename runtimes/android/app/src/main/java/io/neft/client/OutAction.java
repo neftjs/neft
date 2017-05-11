@@ -24,5 +24,6 @@ public enum OutAction {
     TEXT_SIZE,
     FONT_LOAD,
     NATIVE_ITEM_WIDTH,
-    NATIVE_ITEM_HEIGHT
+    NATIVE_ITEM_HEIGHT,
+    WINDOW_RESIZE
 }

@@ -6,8 +6,6 @@ assert = require 'src/assert'
 nativeActions = require 'src/native/actions'
 nativeBridge = require 'src/native/bridge'
 
-_neft.renderer = {}
-
 module.exports = (impl) ->
     Types: {}
     bridge: do ->

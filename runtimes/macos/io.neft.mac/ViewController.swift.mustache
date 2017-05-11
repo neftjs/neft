@@ -1,0 +1,135 @@
+import Cocoa
+import WebKit
+
+struct Extension {
+    {{#macosExtensions}}
+    struct {{&name}} {}
+    {{/macosExtensions}}
+}
+
+class ViewController: NSViewController, NSWindowDelegate {
+    var script: Script! = Script()
+    var client: Client!
+    var networking: Networking!
+    var renderer: Renderer! = Renderer()
+    var customApp: CustomApp!
+
+    override func loadView() {
+        super.loadView()
+
+        // set ItemView as a main view
+        self.view = ItemView()
+    }
+
+    func windowDidResize(_ notification: Notification) {
+        let size = view.window!.contentView!.frame.size
+        client.pushAction(.windowResize, size.width, size.height)
+    }
+
+    private func initClient() {
+        client = Client(script: script)
+        client.actions[InAction.setWindow] = {
+            (reader: Reader) in
+            self.view.addSubview(self.renderer.getItemFromReader(reader)!.view)
+        }
+        Db.register()
+    }
+
+    private func initRenderer() {
+        renderer.app = self
+        (NSApplication.shared() as! NeftApplication).renderer = renderer
+        renderer.load()
+    }
+
+    fileprivate var displayLink: CVDisplayLink?
+
+    override func viewDidLoad() {
+        App.app = self
+
+        initClient()
+        initRenderer()
+        networking = Networking(script: script)
+
+        super.viewDidLoad()
+
+        view.wantsLayer = true
+        view.layer!.backgroundColor = CGColor(red: 1, green: 1, blue: 1, alpha: 1)
+
+        // init custom
+        self.customApp = CustomApp()
+        initExtensions()
+
+        // run
+        runScript()
+
+        // watch on js bundle file change
+        {{#buildServerUrl}}
+        watchOnBundleChange(url: "{{&buildServerUrl}}/newBundle/ios")
+        {{/buildServerUrl}}
+    }
+
+    private func runScript() {
+        script.attach(view, debug: {{debug}})
+        script.runScript("neft") {
+            self.client.sendData() {
+                self.script.runCode("__macos__.onLoad()")
+                self.client.ready = true
+            }
+        }
+    }
+
+    private func watchOnBundleChange(url: String) {
+        var req = URLRequest(url: URL(string: url)!)
+        let session = URLSession.shared
+        req.timeoutInterval = 0
+
+        let task = session.dataTask(with: req, completionHandler: {
+            (data, response, error) in
+            let js = data != nil ? NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! : ""
+            if (js != "") {
+                DispatchQueue.main.async {
+                    self.runJsBundle(code: js as String)
+                    self.watchOnBundleChange(url: url)
+                }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(1000))) {
+                    self.watchOnBundleChange(url: url)
+                }
+            }
+        })
+
+        task.resume()
+    }
+
+    private func runJsBundle(code: String) {
+        // clear
+        client.destroy()
+        view.subviews.forEach { $0.removeFromSuperview() }
+
+        // init classes
+        script = Script()
+        initClient()
+        renderer = Renderer()
+        initRenderer()
+        initExtensions()
+
+        // run
+        runScript()
+    }
+
+    private func initExtensions() {
+        {{#macosExtensions}}
+        Extension.{{&name}}.register()
+        {{/macosExtensions}}
+    }
+
+    override func viewDidAppear() {
+        self.view.window!.delegate = self
+    }
+
+    override var representedObject: Any? {
+        didSet {
+        // Update the view, if already loaded.
+        }
+    }
+}

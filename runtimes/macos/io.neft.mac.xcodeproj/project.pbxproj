@@ -1,0 +1,453 @@
+// !$*UTF8*$!
+{
+    archiveVersion = 1;
+    classes = {
+    };
+    objectVersion = 46;
+    objects = {
+
+/* Begin PBXBuildFile section */
+        082DBC8D1EC25F98008DF242 /* Db.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC8C1EC25F98008DF242 /* Db.swift */; };
+        082DBC8F1EC25FAD008DF242 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC8E1EC25FAD008DF242 /* Networking.swift */; };
+        082DBC921EC25FCE008DF242 /* CustomApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC911EC25FCE008DF242 /* CustomApp.swift */; };
+        082DBC941EC25FE1008DF242 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC931EC25FE1008DF242 /* Renderer.swift */; };
+        082DBC981EC2601C008DF242 /* NativeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC971EC2601C008DF242 /* NativeItem.swift */; };
+        082DBC9A1EC26039008DF242 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC991EC26039008DF242 /* Item.swift */; };
+        082DBC9C1EC26045008DF242 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC9B1EC26045008DF242 /* Text.swift */; };
+        082DBC9E1EC26053008DF242 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC9D1EC26053008DF242 /* Image.swift */; };
+        082DBCA01EC26065008DF242 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBC9F1EC26065008DF242 /* Navigator.swift */; };
+        082DBCA21EC2606F008DF242 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBCA11EC2606F008DF242 /* Device.swift */; };
+        082DBCA41EC26079008DF242 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBCA31EC26079008DF242 /* Screen.swift */; };
+        082DBCA61EC26086008DF242 /* Rectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBCA51EC26086008DF242 /* Rectangle.swift */; };
+        082DBCA81EC2620C008DF242 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 082DBCA71EC2620C008DF242 /* Config.swift */; };
+        082DBCAA1EC2699E008DF242 /* static in Resources */ = {isa = PBXBuildFile; fileRef = 082DBCA91EC2699E008DF242 /* static */; };
+        0879EC111ED4D08000FBFAD6 /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0879EC101ED4D08000FBFAD6 /* Script.swift */; };
+        08AD43321EF07EAF001E39BF /* ClientUpdateMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AD43311EF07EAF001E39BF /* ClientUpdateMessage.swift */; };
+        08BC7D241F32519D00F90386 /* NetworkingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC7D231F32519D00F90386 /* NetworkingMessage.swift */; };
+        08C2A7831EC254C500F18E5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A7821EC254C500F18E5F /* AppDelegate.swift */; };
+        08C2A7851EC254C500F18E5F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A7841EC254C500F18E5F /* ViewController.swift */; };
+        08C2A7871EC254C500F18E5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08C2A7861EC254C500F18E5F /* Assets.xcassets */; };
+        08C2A78A1EC254C500F18E5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C2A7881EC254C500F18E5F /* Main.storyboard */; };
+        08C2A7931EC2578C00F18E5F /* InAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A7921EC2578C00F18E5F /* InAction.swift */; };
+        08C2A7951EC2579C00F18E5F /* OutAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A7941EC2579C00F18E5F /* OutAction.swift */; };
+        08C2A7971EC257AA00F18E5F /* Reader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A7961EC257AA00F18E5F /* Reader.swift */; };
+        08C2A7991EC257E200F18E5F /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A7981EC257E200F18E5F /* Client.swift */; };
+        08C2A79B1EC2580900F18E5F /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A79A1EC2580900F18E5F /* App.swift */; };
+        08C2A79D1EC2588300F18E5F /* neft.js in Resources */ = {isa = PBXBuildFile; fileRef = 08C2A79C1EC2588300F18E5F /* neft.js */; };
+        08C2A7A11EC2590E00F18E5F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C2A7A01EC2590E00F18E5F /* Utils.swift */; };
+        08FF3E4A1EF566FE002F3692 /* NeftApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FF3E491EF566FE002F3692 /* NeftApplication.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+        0879EBD61ECB8EF900FBFAD6 /* Embed Frameworks */ = {
+            isa = PBXCopyFilesBuildPhase;
+            buildActionMask = 2147483647;
+            dstPath = "";
+            dstSubfolderSpec = 10;
+            files = (
+            );
+            name = "Embed Frameworks";
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+        082DBC8C1EC25F98008DF242 /* Db.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Db.swift; sourceTree = "<group>"; };
+        082DBC8E1EC25FAD008DF242 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+        082DBC911EC25FCE008DF242 /* CustomApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomApp.swift; sourceTree = "<group>"; };
+        082DBC931EC25FE1008DF242 /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+        082DBC971EC2601C008DF242 /* NativeItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeItem.swift; sourceTree = "<group>"; };
+        082DBC991EC26039008DF242 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+        082DBC9B1EC26045008DF242 /* Text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+        082DBC9D1EC26053008DF242 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+        082DBC9F1EC26065008DF242 /* Navigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
+        082DBCA11EC2606F008DF242 /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+        082DBCA31EC26079008DF242 /* Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+        082DBCA51EC26086008DF242 /* Rectangle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rectangle.swift; sourceTree = "<group>"; };
+        082DBCA71EC2620C008DF242 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+        082DBCA91EC2699E008DF242 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; path = static; sourceTree = "<group>"; };
+        0879EC101ED4D08000FBFAD6 /* Script.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
+        08AD43311EF07EAF001E39BF /* ClientUpdateMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientUpdateMessage.swift; sourceTree = "<group>"; };
+        08BC7D231F32519D00F90386 /* NetworkingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkingMessage.swift; sourceTree = "<group>"; };
+        08C2A77F1EC254C500F18E5F /* io.neft.mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = io.neft.mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+        08C2A7821EC254C500F18E5F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+        08C2A7841EC254C500F18E5F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+        08C2A7861EC254C500F18E5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+        08C2A7891EC254C500F18E5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+        08C2A78B1EC254C500F18E5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+        08C2A7921EC2578C00F18E5F /* InAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAction.swift; sourceTree = "<group>"; };
+        08C2A7941EC2579C00F18E5F /* OutAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutAction.swift; sourceTree = "<group>"; };
+        08C2A7961EC257AA00F18E5F /* Reader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reader.swift; sourceTree = "<group>"; };
+        08C2A7981EC257E200F18E5F /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
+        08C2A79A1EC2580900F18E5F /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+        08C2A79C1EC2588300F18E5F /* neft.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = neft.js; sourceTree = "<group>"; };
+        08C2A7A01EC2590E00F18E5F /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+        08FF3E491EF566FE002F3692 /* NeftApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeftApplication.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+        08C2A77C1EC254C500F18E5F /* Frameworks */ = {
+            isa = PBXFrameworksBuildPhase;
+            buildActionMask = 2147483647;
+            files = (
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+        082DBC901EC25FC5008DF242 /* CustomApp */ = {
+            isa = PBXGroup;
+            children = (
+                082DBC911EC25FCE008DF242 /* CustomApp.swift */,
+            );
+            name = CustomApp;
+            sourceTree = "<group>";
+        };
+        082DBC961EC26008008DF242 /* Renderer */ = {
+            isa = PBXGroup;
+            children = (
+                082DBC931EC25FE1008DF242 /* Renderer.swift */,
+                082DBC971EC2601C008DF242 /* NativeItem.swift */,
+                082DBC991EC26039008DF242 /* Item.swift */,
+                082DBC9B1EC26045008DF242 /* Text.swift */,
+                082DBC9D1EC26053008DF242 /* Image.swift */,
+                082DBC9F1EC26065008DF242 /* Navigator.swift */,
+                082DBCA11EC2606F008DF242 /* Device.swift */,
+                082DBCA31EC26079008DF242 /* Screen.swift */,
+                082DBCA51EC26086008DF242 /* Rectangle.swift */,
+            );
+            name = Renderer;
+            sourceTree = "<group>";
+        };
+        0879EBE41ECB928E00FBFAD6 /* javascript */ = {
+            isa = PBXGroup;
+            children = (
+                08C2A79C1EC2588300F18E5F /* neft.js */,
+            );
+            name = javascript;
+            sourceTree = "<group>";
+        };
+        0879EC0F1ECCE9D200FBFAD6 /* Client */ = {
+            isa = PBXGroup;
+            children = (
+                08C2A7921EC2578C00F18E5F /* InAction.swift */,
+                08C2A7941EC2579C00F18E5F /* OutAction.swift */,
+                08C2A7961EC257AA00F18E5F /* Reader.swift */,
+                08C2A7981EC257E200F18E5F /* Client.swift */,
+            );
+            name = Client;
+            sourceTree = "<group>";
+        };
+        08AD43301EF07E9A001E39BF /* Script */ = {
+            isa = PBXGroup;
+            children = (
+                0879EC101ED4D08000FBFAD6 /* Script.swift */,
+                08AD43311EF07EAF001E39BF /* ClientUpdateMessage.swift */,
+                08BC7D231F32519D00F90386 /* NetworkingMessage.swift */,
+            );
+            name = Script;
+            sourceTree = "<group>";
+        };
+        08C2A7761EC254C500F18E5F = {
+            isa = PBXGroup;
+            children = (
+                0879EBE41ECB928E00FBFAD6 /* javascript */,
+                082DBCA91EC2699E008DF242 /* static */,
+                08C2A7811EC254C500F18E5F /* io.neft.mac */,
+                08C2A7801EC254C500F18E5F /* Products */,
+            );
+            sourceTree = "<group>";
+        };
+        08C2A7801EC254C500F18E5F /* Products */ = {
+            isa = PBXGroup;
+            children = (
+                08C2A77F1EC254C500F18E5F /* io.neft.mac.app */,
+            );
+            name = Products;
+            sourceTree = "<group>";
+        };
+        08C2A7811EC254C500F18E5F /* io.neft.mac */ = {
+            isa = PBXGroup;
+            children = (
+                08AD43301EF07E9A001E39BF /* Script */,
+                0879EC0F1ECCE9D200FBFAD6 /* Client */,
+                082DBC961EC26008008DF242 /* Renderer */,
+                082DBC901EC25FC5008DF242 /* CustomApp */,
+                08C2A7821EC254C500F18E5F /* AppDelegate.swift */,
+                08C2A7841EC254C500F18E5F /* ViewController.swift */,
+                08C2A7861EC254C500F18E5F /* Assets.xcassets */,
+                08C2A7881EC254C500F18E5F /* Main.storyboard */,
+                08C2A78B1EC254C500F18E5F /* Info.plist */,
+                08C2A79A1EC2580900F18E5F /* App.swift */,
+                082DBCA71EC2620C008DF242 /* Config.swift */,
+                08C2A7A01EC2590E00F18E5F /* Utils.swift */,
+                082DBC8E1EC25FAD008DF242 /* Networking.swift */,
+                082DBC8C1EC25F98008DF242 /* Db.swift */,
+                08FF3E491EF566FE002F3692 /* NeftApplication.swift */,
+            );
+            path = io.neft.mac;
+            sourceTree = "<group>";
+        };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+        08C2A77E1EC254C500F18E5F /* io.neft.mac */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = 08C2A78E1EC254C500F18E5F /* Build configuration list for PBXNativeTarget "io.neft.mac" */;
+            buildPhases = (
+                08C2A77B1EC254C500F18E5F /* Sources */,
+                08C2A77C1EC254C500F18E5F /* Frameworks */,
+                08C2A77D1EC254C500F18E5F /* Resources */,
+                0879EBD61ECB8EF900FBFAD6 /* Embed Frameworks */,
+            );
+            buildRules = (
+            );
+            dependencies = (
+            );
+            name = io.neft.mac;
+            productName = io.neft.mac;
+            productReference = 08C2A77F1EC254C500F18E5F /* io.neft.mac.app */;
+            productType = "com.apple.product-type.application";
+        };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+        08C2A7771EC254C500F18E5F /* Project object */ = {
+            isa = PBXProject;
+            attributes = {
+                LastSwiftUpdateCheck = 830;
+                LastUpgradeCheck = 830;
+                ORGANIZATIONNAME = Neft.io;
+                TargetAttributes = {
+                    08C2A77E1EC254C500F18E5F = {
+                        CreatedOnToolsVersion = 8.3.1;
+                        DevelopmentTeam = GH4UWD2GU6;
+                        ProvisioningStyle = Automatic;
+                    };
+                };
+            };
+            buildConfigurationList = 08C2A77A1EC254C500F18E5F /* Build configuration list for PBXProject "io.neft.mac" */;
+            compatibilityVersion = "Xcode 3.2";
+            developmentRegion = English;
+            hasScannedForEncodings = 0;
+            knownRegions = (
+                en,
+                Base,
+            );
+            mainGroup = 08C2A7761EC254C500F18E5F;
+            productRefGroup = 08C2A7801EC254C500F18E5F /* Products */;
+            projectDirPath = "";
+            projectRoot = "";
+            targets = (
+                08C2A77E1EC254C500F18E5F /* io.neft.mac */,
+            );
+        };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+        08C2A77D1EC254C500F18E5F /* Resources */ = {
+            isa = PBXResourcesBuildPhase;
+            buildActionMask = 2147483647;
+            files = (
+                082DBCAA1EC2699E008DF242 /* static in Resources */,
+                08C2A79D1EC2588300F18E5F /* neft.js in Resources */,
+                08C2A7871EC254C500F18E5F /* Assets.xcassets in Resources */,
+                08C2A78A1EC254C500F18E5F /* Main.storyboard in Resources */,
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+        08C2A77B1EC254C500F18E5F /* Sources */ = {
+            isa = PBXSourcesBuildPhase;
+            buildActionMask = 2147483647;
+            files = (
+                082DBC8F1EC25FAD008DF242 /* Networking.swift in Sources */,
+                08C2A7951EC2579C00F18E5F /* OutAction.swift in Sources */,
+                08AD43321EF07EAF001E39BF /* ClientUpdateMessage.swift in Sources */,
+                08C2A7A11EC2590E00F18E5F /* Utils.swift in Sources */,
+                082DBC8D1EC25F98008DF242 /* Db.swift in Sources */,
+                082DBC941EC25FE1008DF242 /* Renderer.swift in Sources */,
+                082DBCA61EC26086008DF242 /* Rectangle.swift in Sources */,
+                08C2A7851EC254C500F18E5F /* ViewController.swift in Sources */,
+                08C2A7991EC257E200F18E5F /* Client.swift in Sources */,
+                08C2A7971EC257AA00F18E5F /* Reader.swift in Sources */,
+                08C2A7931EC2578C00F18E5F /* InAction.swift in Sources */,
+                082DBC9C1EC26045008DF242 /* Text.swift in Sources */,
+                082DBCA01EC26065008DF242 /* Navigator.swift in Sources */,
+                082DBC9E1EC26053008DF242 /* Image.swift in Sources */,
+                082DBCA21EC2606F008DF242 /* Device.swift in Sources */,
+                082DBCA81EC2620C008DF242 /* Config.swift in Sources */,
+                08FF3E4A1EF566FE002F3692 /* NeftApplication.swift in Sources */,
+                0879EC111ED4D08000FBFAD6 /* Script.swift in Sources */,
+                08BC7D241F32519D00F90386 /* NetworkingMessage.swift in Sources */,
+                082DBC9A1EC26039008DF242 /* Item.swift in Sources */,
+                082DBCA41EC26079008DF242 /* Screen.swift in Sources */,
+                08C2A79B1EC2580900F18E5F /* App.swift in Sources */,
+                082DBC921EC25FCE008DF242 /* CustomApp.swift in Sources */,
+                08C2A7831EC254C500F18E5F /* AppDelegate.swift in Sources */,
+                082DBC981EC2601C008DF242 /* NativeItem.swift in Sources */,
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+        08C2A7881EC254C500F18E5F /* Main.storyboard */ = {
+            isa = PBXVariantGroup;
+            children = (
+                08C2A7891EC254C500F18E5F /* Base */,
+            );
+            name = Main.storyboard;
+            sourceTree = "<group>";
+        };
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+        08C2A78C1EC254C500F18E5F /* Debug */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                ALWAYS_SEARCH_USER_PATHS = NO;
+                CLANG_ANALYZER_NONNULL = YES;
+                CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+                CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+                CLANG_CXX_LIBRARY = "libc++";
+                CLANG_ENABLE_MODULES = YES;
+                CLANG_ENABLE_OBJC_ARC = YES;
+                CLANG_WARN_BOOL_CONVERSION = YES;
+                CLANG_WARN_CONSTANT_CONVERSION = YES;
+                CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+                CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+                CLANG_WARN_EMPTY_BODY = YES;
+                CLANG_WARN_ENUM_CONVERSION = YES;
+                CLANG_WARN_INFINITE_RECURSION = YES;
+                CLANG_WARN_INT_CONVERSION = YES;
+                CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+                CLANG_WARN_SUSPICIOUS_MOVE = YES;
+                CLANG_WARN_UNREACHABLE_CODE = YES;
+                CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+                CODE_SIGN_IDENTITY = "-";
+                COPY_PHASE_STRIP = NO;
+                DEBUG_INFORMATION_FORMAT = dwarf;
+                ENABLE_STRICT_OBJC_MSGSEND = YES;
+                ENABLE_TESTABILITY = YES;
+                GCC_C_LANGUAGE_STANDARD = gnu99;
+                GCC_DYNAMIC_NO_PIC = NO;
+                GCC_NO_COMMON_BLOCKS = YES;
+                GCC_OPTIMIZATION_LEVEL = 0;
+                GCC_PREPROCESSOR_DEFINITIONS = (
+                    "DEBUG=1",
+                    "$(inherited)",
+                );
+                GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+                GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+                GCC_WARN_UNDECLARED_SELECTOR = YES;
+                GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+                GCC_WARN_UNUSED_FUNCTION = YES;
+                GCC_WARN_UNUSED_VARIABLE = YES;
+                MACOSX_DEPLOYMENT_TARGET = 10.12;
+                MTL_ENABLE_DEBUG_INFO = YES;
+                ONLY_ACTIVE_ARCH = YES;
+                SDKROOT = macosx;
+                SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+                SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+            };
+            name = Debug;
+        };
+        08C2A78D1EC254C500F18E5F /* Release */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                ALWAYS_SEARCH_USER_PATHS = NO;
+                CLANG_ANALYZER_NONNULL = YES;
+                CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+                CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+                CLANG_CXX_LIBRARY = "libc++";
+                CLANG_ENABLE_MODULES = YES;
+                CLANG_ENABLE_OBJC_ARC = YES;
+                CLANG_WARN_BOOL_CONVERSION = YES;
+                CLANG_WARN_CONSTANT_CONVERSION = YES;
+                CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+                CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+                CLANG_WARN_EMPTY_BODY = YES;
+                CLANG_WARN_ENUM_CONVERSION = YES;
+                CLANG_WARN_INFINITE_RECURSION = YES;
+                CLANG_WARN_INT_CONVERSION = YES;
+                CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+                CLANG_WARN_SUSPICIOUS_MOVE = YES;
+                CLANG_WARN_UNREACHABLE_CODE = YES;
+                CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+                CODE_SIGN_IDENTITY = "-";
+                COPY_PHASE_STRIP = NO;
+                DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+                ENABLE_NS_ASSERTIONS = NO;
+                ENABLE_STRICT_OBJC_MSGSEND = YES;
+                GCC_C_LANGUAGE_STANDARD = gnu99;
+                GCC_NO_COMMON_BLOCKS = YES;
+                GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+                GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+                GCC_WARN_UNDECLARED_SELECTOR = YES;
+                GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+                GCC_WARN_UNUSED_FUNCTION = YES;
+                GCC_WARN_UNUSED_VARIABLE = YES;
+                MACOSX_DEPLOYMENT_TARGET = 10.12;
+                MTL_ENABLE_DEBUG_INFO = NO;
+                SDKROOT = macosx;
+                SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+            };
+            name = Release;
+        };
+        08C2A78F1EC254C500F18E5F /* Debug */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                COMBINE_HIDPI_IMAGES = YES;
+                DEVELOPMENT_TEAM = GH4UWD2GU6;
+                INFOPLIST_FILE = io.neft.mac/Info.plist;
+                LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+                PRODUCT_BUNDLE_IDENTIFIER = neft.io.mac;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SWIFT_VERSION = 3.0;
+            };
+            name = Debug;
+        };
+        08C2A7901EC254C500F18E5F /* Release */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+                COMBINE_HIDPI_IMAGES = YES;
+                DEVELOPMENT_TEAM = GH4UWD2GU6;
+                INFOPLIST_FILE = io.neft.mac/Info.plist;
+                LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+                PRODUCT_BUNDLE_IDENTIFIER = neft.io.mac;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SWIFT_VERSION = 3.0;
+            };
+            name = Release;
+        };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+        08C2A77A1EC254C500F18E5F /* Build configuration list for PBXProject "io.neft.mac" */ = {
+            isa = XCConfigurationList;
+            buildConfigurations = (
+                08C2A78C1EC254C500F18E5F /* Debug */,
+                08C2A78D1EC254C500F18E5F /* Release */,
+            );
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Release;
+        };
+        08C2A78E1EC254C500F18E5F /* Build configuration list for PBXNativeTarget "io.neft.mac" */ = {
+            isa = XCConfigurationList;
+            buildConfigurations = (
+                08C2A78F1EC254C500F18E5F /* Debug */,
+                08C2A7901EC254C500F18E5F /* Release */,
+            );
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Release;
+        };
+/* End XCConfigurationList section */
+    };
+    rootObject = 08C2A7771EC254C500F18E5F /* Project object */;
+}

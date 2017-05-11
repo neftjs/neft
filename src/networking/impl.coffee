@@ -15,6 +15,8 @@ PlatformImpl = switch true
         require './impl/qt/index'
     when utils.isAndroid
         require './impl/android/index'
+    when utils.isMacOS
+        require './impl/macos/index'
 
 assert PlatformImpl
 , "No networking implementation found"

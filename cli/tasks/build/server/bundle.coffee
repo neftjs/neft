@@ -54,6 +54,8 @@ mockNeft = (platform, neftFilePath) ->
                 utils.isNative = utils.isClient = utils.isAndroid = true
             when 'ios'
                 utils.isNative = utils.isClient = utils.isIOS = true
+            when 'macos'
+                utils.isNative = utils.isClient = utils.isMacOS = true
     return
 
 isInternalDependency = do ->
@@ -106,6 +108,7 @@ module.exports = (platform, options, app, callback) ->
             config =
                 platform: platform
                 release: options.release
+                debug: !options.release
                 app: app
                 mode: mode
                 neftFileName: neftFileName

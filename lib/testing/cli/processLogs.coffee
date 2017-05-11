@@ -4,6 +4,13 @@ logger = require '../logger'
 
 {log, signal} = Neft
 
+logByMsgPrefix = (prefix, methodName, msg) ->
+    if msg.indexOf(prefix) is 0
+        log[methodName] msg.slice(prefix.length)
+        true
+    else
+        false
+
 exports.errors = Object.create null
 
 exports.passingTests = Object.create null
@@ -43,5 +50,15 @@ exports.LogsReader = class LogsReader
         else if msg is logger.FAILURE
             @terminated = true
             @error = new Error logger.FAILURE
+        else if logByMsgPrefix 'LOG: ', 'debug', msg
+            return
+        else if logByMsgPrefix 'OK: ', 'ok', msg
+            return
+        else if logByMsgPrefix 'INFO: ', 'info', msg
+            return
+        else if logByMsgPrefix 'WARN: ', 'warn', msg
+            return
+        else if logByMsgPrefix 'ERROR: ', 'error', msg
+            return
         else
             log.debug msg

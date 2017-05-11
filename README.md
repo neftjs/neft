@@ -13,9 +13,9 @@
     </tr>
     <tr>
         <td>iOS</td>
-        <td rowspan="5">JavaScript</td>
-        <td rowspan="5">XML</td>
-        <td rowspan="5">NML</td>
+        <td rowspan="6">JavaScript</td>
+        <td rowspan="6">XML</td>
+        <td rowspan="6">NML</td>
         <td>Swift / ObjC</td>
         <td>UIKit</td>
     </tr>
@@ -23,6 +23,11 @@
         <td>Android</td>
         <td>Java / C</td>
         <td>android.view</td>
+    </tr>
+    <tr>
+        <td>OSX</td>
+        <td>Swift / ObjC</td>
+        <td>Cocoa</td>
     </tr>
     <tr>
         <td>Browser</td>

@@ -9,8 +9,17 @@ module.exports = (impl) ->
         switch true
             when utils.isAndroid
                 require('./android') impl
-            when utils.isIOS
-                require('./ios') impl
+            when utils.isIOS or utils.isMacOS
+                require('./apple') impl
+    {bridge} = platform
+
+    bridge.listen bridge.inActions.WINDOW_RESIZE, (reader) ->
+        width = reader.getFloat()
+        height = reader.getFloat()
+        if item = impl.windowItem
+            item.width = width
+            item.height = height
+        return
 
     exports =
     Types: utils.merge
@@ -26,7 +35,7 @@ module.exports = (impl) ->
         Rectangle: require './level1/rectangle'
     , platform.Types
 
-    bridge: bridge = platform.bridge
+    bridge: bridge
 
     setWindow: (item) ->
         bridge.pushAction bridge.outActions.SET_WINDOW

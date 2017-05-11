@@ -101,3 +101,16 @@ matrix:
                 - brew update
                 - brew install imagemagick
                 - brew install lcdf-typetools
+
+        # OSX MacOS
+        -
+            os: osx
+            osx_image: xcode8.3
+            env:
+                - TEST_MACOS=1
+            before_script:
+                - npm run bundle -- --node --macos
+            before_install:
+                - brew update
+                - brew install imagemagick
+                - brew install lcdf-typetools

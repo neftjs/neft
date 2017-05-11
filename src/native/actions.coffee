@@ -25,6 +25,7 @@ exports.in = do (i=0) ->
     FONT_LOAD: i++
     NATIVE_ITEM_WIDTH: i++
     NATIVE_ITEM_HEIGHT: i++
+    WINDOW_RESIZE: i++
 
 exports.out = do (i=0) ->
     # basic
