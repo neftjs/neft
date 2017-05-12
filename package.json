@@ -1,6 +1,6 @@
 {
   "name": "neft",
-  "version": "0.11.18",
+  "version": "0.11.19",
   "preferGlobal": true,
   "description": "Universal Platform",
   "keywords": [
@@ -72,13 +72,13 @@
     "versionCode": 1,
     "versionName": "1.0",
     "application": {
-        "label": "Neft.io Tests"
+      "label": "Neft.io Tests"
     }
   },
   "ios": {
     "package": "io.neft.tests",
     "application": {
-        "label": "Neft.io Tests"
+      "label": "Neft.io Tests"
     }
   }
 }
