@@ -22,7 +22,6 @@ enum InAction: Int {
     setItemScale,
     setItemRotation,
     setItemOpacity,
-    setItemBackground,
     setItemKeysFocus,
 
     createImage,

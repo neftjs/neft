@@ -134,13 +134,6 @@ module.exports = (impl) ->
         newParent.insertBefore @_impl.elem, valElem
         return
 
-    setItemBackground: (val) ->
-        if (oldElem = @_background?._impl.elem)?.parentNode is @_impl.elem
-            @_impl.elem.removeChild oldElem
-        if val
-            implUtils.prependElement @_impl.elem, val._impl.elem
-        return
-
     setItemVisible: (val) ->
         @_impl.elemStyle.display = if val then 'inline' else 'none'
         return

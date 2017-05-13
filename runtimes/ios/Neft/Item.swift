@@ -164,11 +164,6 @@ class Item {
             item.view.alpha = CGFloat(val) / 255
         }
 
-        onAction(.setItemBackground) {
-            (item: Item, val: Item?) in
-            item.background = val
-        }
-
         onAction(.setItemKeysFocus) {
             (item: Item, val: Bool) in
             item.keysFocus = val
@@ -211,15 +206,6 @@ class Item {
     var rotation: CGFloat = 0 {
         didSet {
             updateTransform()
-        }
-    }
-
-    var background: Item? {
-        didSet {
-            oldValue?.view.removeFromSuperview()
-            if background != nil {
-                view.insertSubview(background!.view, at: 0)
-            }
         }
     }
 

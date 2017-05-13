@@ -59,14 +59,6 @@ module.exports = (impl) ->
         impl._dirty = true
         return
 
-    setItemBackground: (val) ->
-        if @_background?._impl.elem.parent is @_impl.elem
-            @_impl.elem.removeChild @_background._impl.elem
-        if val
-            @_impl.elem.addChildAt val._impl.elem, 0
-        impl._dirty = true
-        return
-
     setItemVisible: (val) ->
         @_impl.elem.visible = val
         impl._dirty = true

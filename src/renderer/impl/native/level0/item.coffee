@@ -39,12 +39,6 @@ module.exports = (impl) ->
         pushItem val
         return
 
-    setItemBackground: (val) ->
-        pushAction outActions.SET_ITEM_BACKGROUND
-        pushItem @
-        pushItem val
-        return
-
     setItemVisible: (val) ->
         pushAction outActions.SET_ITEM_VISIBLE
         pushItem @

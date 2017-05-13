@@ -9,14 +9,12 @@ Text {
 Text {
     id: textWithAutoSize
     text: 'ABCabc123'
-    background.color: 'red'
     font.pixelSize: 30
 }
 
 Text {
     id: changedTextWithAutoSize
     text: 'ABCabc123y'
-    background.color: 'red'
     font.pixelSize: 50
     x: 10
     y: 10
@@ -29,6 +27,5 @@ Text {
     id: wrapText
     text: 'ABCabc123abc123abc123'
     width: parent.width
-    background.color: 'red'
     font.pixelSize: 50
 }
