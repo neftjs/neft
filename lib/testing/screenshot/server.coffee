@@ -8,6 +8,7 @@ findWindow = require './server/findWindow'
 testScreenshot = require './server/testScreenshot'
 server = require '../server'
 targets = require '../cli/targets'
+imgur = require 'imgur'
 
 {utils, log} = Neft
 
@@ -16,6 +17,9 @@ INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
 INITIALIZATION_TRIES = 20
 INITIALIZATION_TRY_DELAY_SEC = 1
 CUSTOM_SCREENSHOT_MAX_DELAY_MS = 3000
+{LOG_SCREENSHOT_DATA_URI} = process.env
+
+imgur.setClientId '2ea624e59d38a21'
 
 fs.emptyDirSync DEST
 
@@ -27,7 +31,7 @@ getPathWithBasename = (path, basename) ->
         base: undefined
 
 getErrorFileUri = (path) ->
-    if process.env.LOG_SCREENSHOT_DATA_URI
+    if LOG_SCREENSHOT_DATA_URI
         file = fs.readFileSync path
         base64 = new Buffer(file).toString 'base64'
         return "data:image/png;base64,#{base64}"
@@ -92,6 +96,11 @@ server.onInitializeScreenshots (opts) ->
         unless rect
             log "Cannot initialize screenshots; try #{tryNo} / #{INITIALIZATION_TRIES}"
         childProcess.execSync "sleep #{INITIALIZATION_TRY_DELAY_SEC}"
+
+    if LOG_SCREENSHOT_DATA_URI
+        imgur.uploadFile(INITIALIZATION_FILE_PATH)
+            .then (json) -> log.info "Initialization screenshot: #{json.data.link}"
+
     unless rect
         throw new Error "Cannot find application on screenshot; check '#{opts.path}' file"
     rects[opts.clientUid] = rect
