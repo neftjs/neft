@@ -1,5 +1,5 @@
-build/
-local.json
-node_modules
-npm-debug.log*
+/build
+/local.json
+/node_modules
+/npm-debug.log*
 /tests_results
