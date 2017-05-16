@@ -128,8 +128,7 @@ module.exports = (impl) ->
                         itemsToMove.push item
                     if event._stopPropagation
                         return STOP_PROPAGATION
-                    return getEventStatus()
-                PROPAGATE_UP | STOP_ASIDE_PROPAGATION
+                getEventStatus()
 
             (e) ->
                 event._stopPropagation = false
@@ -155,8 +154,7 @@ module.exports = (impl) ->
                 if capturePointer & (RELEASE | CLICK)
                     if event._stopPropagation
                         return STOP_PROPAGATION
-                    return getEventStatus()
-                PROPAGATE_UP | STOP_ASIDE_PROPAGATION
+                getEventStatus()
 
             (e) ->
                 eventLoop.lock()
@@ -204,8 +202,7 @@ module.exports = (impl) ->
                 if capturePointer & (ENTER | EXIT | MOVE)
                     if event._stopPropagation
                         return STOP_PROPAGATION
-                    return getEventStatus()
-                PROPAGATE_UP | STOP_ASIDE_PROPAGATION
+                getEventStatus()
 
             (e) ->
                 eventLoop.lock()
@@ -247,8 +244,7 @@ module.exports = (impl) ->
                         emitSignal pointer, 'onWheel', event
                         if event._stopPropagation
                             return STOP_PROPAGATION
-                        return getEventStatus()
-                PROPAGATE_UP | STOP_ASIDE_PROPAGATION
+                getEventStatus()
 
             (e) ->
                 eventLoop.lock()
