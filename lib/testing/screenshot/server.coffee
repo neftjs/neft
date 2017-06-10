@@ -15,8 +15,9 @@ imgur = require 'imgur'
 DEST = 'tests_results'
 INITIALIZATION_FILE_PATH = pathUtils.join DEST, 'initialization.png'
 INITIALIZATION_TRIES = 20
+
 INITIALIZATION_TRY_DELAY_SEC = 1
-CUSTOM_SCREENSHOT_MAX_DELAY_MS = 3000
+CUSTOM_SCREENSHOT_MAX_DELAY_MS = 1000
 {LOG_SCREENSHOT_DATA_URI} = process.env
 
 imgur.setClientId '2ea624e59d38a21'
@@ -61,8 +62,11 @@ takeScreenshot = (opts) ->
         handler = targets.getEnvHandler(opts.env)
         if handler.takeScreenshot
             startTime = Date.now()
-            while Date.now() < startTime + CUSTOM_SCREENSHOT_MAX_DELAY_MS
-                handler.takeScreenshot opts
+            maxDelay = handler.TAKE_SCREENSHOT_DELAY_MS ? CUSTOM_SCREENSHOT_MAX_DELAY_MS
+            itertion = 0
+            while Date.now() < startTime + maxDelay
+                if itertion++ % 10 is 0
+                    handler.takeScreenshot opts
                 try
                     stats = fs.statSync opts.path
                     if stats?.size
@@ -73,7 +77,8 @@ takeScreenshot = (opts) ->
             else
                 log.warn """
                     #{opts.env.platform} custom screenshot handler failed; \
-                    the whole screen is capturing
+                    waited #{maxDelay} ms for a file; \
+                    the whole screen is captured
                 """
 
     # take the whole screen screenshot

@@ -96,6 +96,8 @@ scanProgress = (env, logsReader, callback) ->
 exports.getName = (env) ->
     "#{env.device} on iOS #{env.ios} tests"
 
+exports.TAKE_SCREENSHOT_DELAY_MS = 20000
+
 exports.takeScreenshot = ({env, path}) ->
     deviceId = getDeviceId(env).id
     path = pathUtils.join REALPATH, path
