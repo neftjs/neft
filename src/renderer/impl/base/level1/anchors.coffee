@@ -304,7 +304,7 @@ module.exports = (impl) ->
                     item.onParentChange onParentChange, @
                     onParentChange.call @, null
                 when 'children'
-                    @targetItem = item._children
+                    @targetItem = item.children
                     item.onChildrenChange onChildrenChange, @
                     child = @targetItem.firstChild
                     while child
@@ -338,7 +338,7 @@ module.exports = (impl) ->
                 when 'parent'
                     targetItem = @item._parent
                 when 'children'
-                    targetItem = @item._children
+                    targetItem = @item.children
                 when 'nextSibling'
                     targetItem = @item._nextSibling
                 when 'previousSibling'
@@ -350,8 +350,16 @@ module.exports = (impl) ->
 
             if targetItem
                 `//<development>`
-                if @item._parent and targetItem isnt @item._children and @item._parent isnt targetItem and @item._parent isnt targetItem._parent
-                    log.error "You can anchor only to a parent or sibling. Item '#{@item.toString()}.anchors.#{@source}: #{@target}'"
+                fails = @item._parent
+                fails &&= targetItem isnt @item._children
+                fails &&= @item._parent isnt targetItem
+                fails &&= @item._parent isnt targetItem._parent
+                if fails
+                    log.error """
+                        Invalid anchor point; \
+                        you can anchor only to a parent or a sibling; \
+                        item '#{@item.toString()}.anchors.#{@source}: #{@target}'
+                    """
                 `//</development>`
 
                 r = @getSourceValue(@item) + @getTargetValue(targetItem)
@@ -363,7 +371,10 @@ module.exports = (impl) ->
             @updateLoops++
             @item[@prop] = r
             if @updateLoops is MAX_LOOPS
-                log.error "Potential anchors loop detected. Recalculating on this anchor (#{@}) has been disabled."
+                log.error """
+                    Potential anchors loop detected; \
+                    recalculating on this anchor (#{@}) has been disabled
+                """
                 @updateLoops++
             else if @updateLoops < MAX_LOOPS
                 @updateLoops--
