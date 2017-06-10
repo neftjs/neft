@@ -2,6 +2,7 @@
 
 {utils, log} = Neft
 
+INITIALIZATION_DELAY = 100
 REQUEST_DELAY = 50
 UID = utils.uid()
 exports.CONTROL_COLOR = [240, 20, 130]
@@ -41,23 +42,25 @@ getControlRect = do ->
         rect
 
 exports.initialize = (callback) ->
-    getControlRect().parent = Neft.Renderer.window
-    url = "#{app.config.testingServerUrl}/initializeScreenshots"
     setTimeout ->
-        opts =
-            clientUid: UID
-            env: environment
-        app.networking.post url, opts, (err) ->
-            getControlRect().parent = null
-            if err
-                callback new Error """
-                    Cannot initialize screenshots;
-                    Make sure application is visible on the screen and \
-                    can be captured by screenshot
-                """
-            else
-                callback()
-    , REQUEST_DELAY
+        getControlRect().parent = Neft.Renderer.window
+        url = "#{app.config.testingServerUrl}/initializeScreenshots"
+        setTimeout ->
+            opts =
+                clientUid: UID
+                env: environment
+            app.networking.post url, opts, (err) ->
+                getControlRect().parent = null
+                if err
+                    callback new Error """
+                        Cannot initialize screenshots;
+                        Make sure application is visible on the screen and \
+                        can be captured by screenshot
+                    """
+                else
+                    callback()
+        , REQUEST_DELAY
+    , INITIALIZATION_DELAY
     return
 
 exports.take = (opts, callback) ->
