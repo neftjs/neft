@@ -49,7 +49,7 @@ environments:
             height: 200
     -
         platform: ios
-        ios: 10.3
+        ios: 10.3.1
         device: iPhone 7
         enabled: $TEST_IOS
         view:
