@@ -23,8 +23,6 @@
             @New = (opts) ->
                 item = new @
                 itemUtils.Object.initialize item, opts
-                unless IS_NATIVE
-                    item.onParentChange Impl.updateNativeSize
                 @Initialize? item
                 item
 
