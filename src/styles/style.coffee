@@ -8,8 +8,8 @@ Renderer = require 'src/renderer'
 
 log = log.scope 'Styles'
 
-ATTRS_CLASS_PRIORITY = 9999
-PROPS_CLASS_PRIORITY = -2
+PROPS_CLASS_PRIORITY = 9999
+PROP_PREFIX = 'style:'
 
 module.exports = (File, data) -> class Style
     {windowStyle, styles, queries} = data
@@ -116,8 +116,7 @@ module.exports = (File, data) -> class Style
         @isAutoParent = true
         @item = null
         @scope = null
-        @textObject = null
-        @propsClass = null
+        @textProp = ''
         @propsClass = null
 
         Object.seal @
@@ -131,21 +130,21 @@ module.exports = (File, data) -> class Style
             r.priority = priority
         r
 
-    getTextObject: ->
+    getTextProp: ->
         {item} = @
         assert.isDefined item
-        assert.isNotDefined @textObject
+        assert.notOk @textProp
 
-        if @node instanceof Text
-            item
-        else if ($ = item._$) and 'text' of $
-            $
-        else if 'text' of item
-            item
+        if ($ = item._$) and 'text' of $
+            "#{PROP_PREFIX}$:text"
+        else if @node instanceof Text or 'text' of item
+            "#{PROP_PREFIX}text"
+        else
+            ''
 
     updateText: ->
-        {textObject, node} = @
-        assert.isDefined textObject
+        {textProp, node} = @
+        assert.ok textProp
 
         isText = node instanceof Text
 
@@ -154,18 +153,31 @@ module.exports = (File, data) -> class Style
         else
             text = node.text
 
-        textObject.text = text
+        @setProp textProp, text
+        return
+
+    setPropsClassAttribute: (attr, val) ->
+        assert.instanceOf @, Style
+
+        unless @propsClass
+            @propsClass = @createClassWithPriority PROPS_CLASS_PRIORITY
+
+        {propsClass} = @
+
+        propsClass.disable()
+        propsClass.changes.setAttribute attr, val
+        propsClass.enable()
+
         return
 
     setProp: do ->
         DEPRECATED_PREFIX = 'n-style:'
-        PREFIX = 'style:'
 
         getPropWithoutPrefix = (prop) ->
             if prop.slice(0, DEPRECATED_PREFIX.length) is DEPRECATED_PREFIX
                 prop.slice DEPRECATED_PREFIX.length
             else
-                prop.slice PREFIX.length
+                prop.slice PROP_PREFIX.length
 
         getSplitProp = do ->
             cache = Object.create null
@@ -184,9 +196,7 @@ module.exports = (File, data) -> class Style
 
         (prop, val, oldVal) ->
             assert.instanceOf @, Style
-            assert.isDefined @propsClass
 
-            {propsClass} = @
             parts = getSplitProp prop
 
             # get object
@@ -217,13 +227,8 @@ module.exports = (File, data) -> class Style
 
             # omit 'null' values for primitive properties;
             # all props from string interpolation may be equal 'null' by default
-            else if val isnt null or typeof internalProp is 'object'
-                isEnabled = propsClass.running
-                if isEnabled
-                    propsClass.disable()
-                propsClass.changes.setAttribute getPropertyPath(prop), val
-                if isEnabled
-                    propsClass.enable()
+            else if val isnt null or typeof obj[internalProp] is 'object'
+                @setPropsClassAttribute getPropertyPath(prop), val
 
             return true
 
@@ -306,10 +311,7 @@ module.exports = (File, data) -> class Style
         assert.isBoolean val
 
         if @item
-            @propsClass ?= @createClassWithPriority PROPS_CLASS_PRIORITY
-            @propsClass.disable()
-            @propsClass.changes._attributes.visible = val
-            @propsClass.enable()
+            @setPropsClassAttribute 'visible', val
         return
 
     ###
@@ -403,7 +405,7 @@ module.exports = (File, data) -> class Style
             @findAndSetVisibility()
 
             # set text
-            if @textObject = @getTextObject()
+            if @textProp = @getTextProp()
                 @updateText()
 
             # set linkUri
@@ -412,10 +414,8 @@ module.exports = (File, data) -> class Style
             if node instanceof Tag
                 # set props
                 if @props
-                    @propsClass = @createClassWithPriority ATTRS_CLASS_PRIORITY
                     for key of @props
                         @setProp key, node.props[key], null
-                    @propsClass.enable()
 
                 # set class prop
                 if classAttr = node.props['class']
@@ -444,7 +444,7 @@ module.exports = (File, data) -> class Style
         @createItem()
 
         # optimization - don't create styles inside the text style
-        unless @textObject
+        unless @textProp
             for child in @children
                 child.createItemDeeply()
         return

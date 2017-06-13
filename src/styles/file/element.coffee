@@ -108,7 +108,7 @@ module.exports = (Document) ->
         updateTextNode = (node) ->
             while node
                 if (docStyle = node._documentStyle)
-                    if docStyle.textObject
+                    if docStyle.textProp
                         docStyle.updateText()
                     break
                 node = node.parent
@@ -127,7 +127,7 @@ module.exports = (Document) ->
     utils.overrideProperty Text::, 'text', null, (_super) ->
         updateTextNode = (node) ->
             while node
-                if (docStyle = node._documentStyle) and docStyle.textObject
+                if (docStyle = node._documentStyle) and docStyle.textProp
                     docStyle.updateText()
                     break
                 node = node.parent
