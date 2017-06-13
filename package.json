@@ -30,7 +30,7 @@
     "bundle": "cross-env NODE_PATH=./ coffee --nodejs --harmony scripts/bundle.coffee",
     "test": "node ./bin/neft.js test",
     "update-api-docs": "cross-env NODE_PATH=./ coffee scripts/api-docs.coffee",
-    "prepublish": "npm run bundle"
+    "prepublishOnly": "npm run bundle"
   },
   "dependencies": {
     "babel-core": "6.22.1",

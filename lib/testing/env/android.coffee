@@ -15,6 +15,7 @@ DEVICE_RUN_TRY_DELAY = 1000
 DEFAULT_PORT = 5554
 SDK_DIR = ''
 PORT_SERIAL_NUMBER_PREFIX = "emulator-"
+CI = !!process.env.CI
 
 loadConfig = ->
     SDK_DIR = do ->
@@ -120,6 +121,7 @@ createEmulator = (env, logsReader, callback) ->
     logsReader.log "Creating android emulator"
     cmd = "echo no | #{ANDROID} create avd --force -n #{name} "
     cmd += "-t #{env.target} --abi #{env.abi} --skin #{env.width}x#{env.height}"
+    log.debug "> #{cmd}" if CI
     androidProcess = childProcess.exec cmd, cwd: SDK_DIR, (err, stdout, stderr) ->
         if err
             log.error err
@@ -163,6 +165,7 @@ runEmulator = (env, logsReader, callback) ->
         cmd += " -port #{port}"
         cmd += " -avd #{env.emulatorName}"
         cmd += " -no-audio"
+        log.debug "> #{cmd}" if CI
         emulatorProcess = childProcess.exec cmd, cwd: SDK_DIR, (err, stdout, stderr) ->
             if (err or stderr) and pending
                 pending = false
