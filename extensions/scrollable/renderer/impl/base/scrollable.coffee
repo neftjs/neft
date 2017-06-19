@@ -126,8 +126,8 @@ createContinuous = (item, prop) ->
 DELTA_VALIDATION_PENDING = 1
 
 pointerWindowMoveListeners = []
-onImplReady = ->
-    Impl.window.pointer.onMove (e) ->
+onImplReady = (windowItem) ->
+    windowItem.pointer.onMove (e) ->
         stop = false
         for listener in pointerWindowMoveListeners
             r = listener(e)
@@ -139,10 +139,7 @@ onImplReady = ->
         if stop
             signal.STOP_PROPAGATION
 
-if Impl.window?
-    onImplReady()
-else
-    Impl.onWindowReady onImplReady
+Impl.onWindowItemReady onImplReady
 
 pointerUsed = false
 usePointer = (item) ->
@@ -157,7 +154,7 @@ usePointer = (item) ->
         unless scroll(item, e.movementX + dx, e.movementY + dy)
             e.stopPropagation = false
 
-    onImplReady = ->
+    onImplReady = (windowItem) ->
         pointerWindowMoveListeners.push (e) ->
             if not listen
                 return
@@ -187,7 +184,7 @@ usePointer = (item) ->
                 verticalContinuous.update dy + e.movementY
             signal.STOP_PROPAGATION
 
-        Impl.window.pointer.onRelease (e) ->
+        windowItem.pointer.onRelease (e) ->
             listen = false
             dx = dy = 0
 
@@ -202,10 +199,7 @@ usePointer = (item) ->
 
             return
 
-    if Impl.window?
-        onImplReady()
-    else
-        Impl.onWindowReady onImplReady
+    Impl.onWindowItemReady onImplReady
 
     item.pointer.onPress (e) ->
         listen = true
@@ -278,15 +272,15 @@ exports.createData = ->
 
 exports.setScrollableContentItem = (val) ->
     if oldVal = @_impl.contentItem
-        Impl.setItemParent.call oldVal, null
+        Item.setItemParent.call oldVal, null
         oldVal.onWidthChange.disconnect onWidthChange, @
         oldVal.onHeightChange.disconnect onHeightChange, @
 
     if val
         if @children.length > 0
-            Impl.insertItemBefore.call val, @children.first
+            Item.insertItemBefore.call val, @children.first
         else
-            Impl.setItemParent.call val, @
+            Item.setItemParent.call val, @
 
         @_impl.contentItem = val
         val.onWidthChange onWidthChange, @
@@ -295,10 +289,10 @@ exports.setScrollableContentItem = (val) ->
 
 exports.setScrollableContentX = (val) ->
     if item = @_impl.contentItem
-        Impl.setItemX.call item, -val
+        Item.setItemX.call item, -val
     return
 
 exports.setScrollableContentY = (val) ->
     if item = @_impl.contentItem
-        Impl.setItemY.call item, -val
+        Item.setItemY.call item, -val
     return

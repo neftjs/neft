@@ -118,7 +118,7 @@ Text {
                     RESOURCE_REQUEST =
                         property: 'color'
                     (val) ->
-                        Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
+                        Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
                 developmentSetter: (val) ->
                     assert.isString val, "Text.color needs to be a string, but #{val} given"
 
@@ -135,7 +135,7 @@ Text {
                     RESOURCE_REQUEST =
                         property: 'color'
                     (val) ->
-                        Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
+                        Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
                 developmentSetter: (val) ->
                     assert.isString val
 

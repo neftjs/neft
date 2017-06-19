@@ -7,11 +7,17 @@
     assert = require 'src/assert'
 
     signal.create exports, 'onReady'
-    signal.create exports, 'onWindowChange'
+    signal.create exports, 'onWindowItemChange'
     signal.create exports, 'onLinkUri'
 
-    exports.Impl = Impl = require('./impl') exports
-    itemUtils = exports.itemUtils = require('./utils/item') exports, Impl
+    Impl = require('./impl') exports
+    exports.Impl =
+        addTypeImplementation: Impl.addTypeImplementation,
+        Types: Impl.Types,
+        onWindowItemReady: Impl.onWindowItemReady,
+        utils: Impl.utils,
+
+    exports.itemUtils = itemUtils = require('./utils/item') exports, Impl
     exports.colorUtils = require './utils/color'
 
     exports.Screen = require('./types/namespace/screen') exports, Impl, itemUtils
@@ -39,15 +45,23 @@
     exports.ResourcesLoader = require('./types/loader/resources') exports, Impl, itemUtils
     exports.FontLoader = require('./types/loader/font') exports, Impl, itemUtils
 
-    utils.defineProperty exports, 'window', utils.CONFIGURABLE, null, (val) ->
+    exports.setWindowItem = (val) ->
         assert.instanceOf val, exports.Item
-        utils.defineProperty exports, 'window', utils.ENUMERABLE, val
-        exports.onWindowChange.emit null
         Impl.setWindow val
+        exports.onWindowItemChange.emit null
+        return
 
-    utils.defineProperty exports, 'serverUrl', utils.WRITABLE, ''
-    utils.defineProperty exports, 'resources', utils.WRITABLE, null
+    exports.setServerUrl = (val) ->
+        Impl.serverUrl = val
+        return
+
+    exports.setResources = (val) ->
+        Impl.resources = val
+        return
+
+    exports.getResource = (path) ->
+        Impl.resources?.getResource path
+
+    Object.freeze exports
 
     exports.onReady.emit()
-
-    Object.preventExtensions exports

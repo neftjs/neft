@@ -33,8 +33,7 @@ TileImage.defineProperty({
             });
         }
         return function (val) {
-            const { resources } = Renderer;
-            const res = resources && resources.getResource(val);
+            const res = Renderer.getResource(val);
             if (res) {
                 const path = res.resolve(RESOURCE_REQUEST);
                 this.set('resolution', getResourceResolutionByPath(res, path));

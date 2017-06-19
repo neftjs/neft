@@ -8,8 +8,10 @@ signal = require 'src/signal'
 module.exports = (Renderer) ->
     impl = abstractImpl = require './impl/base'
     impl.Renderer = Renderer
-    impl.window = null
-    signal.create impl, 'onWindowReady'
+    impl.windowItem = null
+    impl.serverUrl = ''
+    impl.resources = null
+    signal.create impl, 'onWindowItemReady'
 
     TYPES = ['Item', 'Image', 'Text', 'Native', 'FontLoader',
              'Device', 'Screen', 'Navigator',
@@ -78,10 +80,11 @@ module.exports = (Renderer) ->
             impl.Types[type]?.create?.call object, object._impl
 
     impl.setWindow = do (_super = impl.setWindow) -> (item) ->
-        utils.defineProperty impl, 'window', utils.ENUMERABLE, item
+        utils.defineProperty impl, 'windowItem', utils.ENUMERABLE, item
         _super.call impl, item
-        impl.onWindowReady.emit()
+        impl.onWindowItemReady.emit item
         item.keys.focus = true
+        return
 
     impl.addTypeImplementation = (type, methods) ->
         impl.Types[type] = methods

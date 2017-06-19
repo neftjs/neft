@@ -71,7 +71,11 @@ module.exports = (platform, app, callback) ->
         try
             Document.parse file
         catch error
-            log.error "File `#{path}` can't be parsed: #{error}"
+            log.error """
+                View file `#{path}` can't be parsed
+                If it's not related to your view scripts, please report this error on GitHub
+                #{error.stack}
+            """
             return
         file
 

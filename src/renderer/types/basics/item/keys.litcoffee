@@ -77,11 +77,11 @@ Rectangle {
             Renderer.Device.onPointerPress ->
                 focusChangeOnPointerPress = false
 
-        Renderer.onWindowChange ->
-            @window.pointer.onPress ->
+        Renderer.onWindowItemChange ->
+            Impl.windowItem.pointer.onPress ->
                 if Keys.focusWindowOnPointerPress and not focusChangeOnPointerPress
                     @keys.focus = true
-            , @window
+            , Impl.windowItem
 
         itemUtils.defineProperty
             constructor: Keys
@@ -110,8 +110,8 @@ Rectangle {
                     if not val and focusedKeys is @
                         focusedKeys = null
                         Keys.focusedItem = null
-                        if focusedKeys isnt Renderer.window.keys
-                            Renderer.window.keys.focus = true
+                        if focusedKeys isnt Impl.windowItem.keys
+                            Impl.windowItem.keys.focus = true
                 return
 
         Device.onKeyPress (event) ->

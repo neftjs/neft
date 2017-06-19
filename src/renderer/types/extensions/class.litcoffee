@@ -186,7 +186,7 @@ Grid {
     columns: 2
     // reduce to one column if the view width is lower than 500 pixels
     Class {
-        when: view.width < 500
+        when: windowItem.width < 500
         changes: {
             columns: 1
         }

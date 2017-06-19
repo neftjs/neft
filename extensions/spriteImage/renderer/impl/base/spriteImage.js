@@ -4,7 +4,7 @@ const { Item, Native } = Impl.Types;
 
 exports.create = function (data) {
     Item.create.call(this, data);
-    Impl.setItemClip.call(this, true);
+    Item.setItemClip.call(this, true);
 
     // auto size
     data.autoSizeClass = Class.New();
@@ -13,7 +13,7 @@ exports.create = function (data) {
 
     // inner image
     data.image = Image.New();
-    Impl.setItemParent.call(data.image, this);
+    Item.setItemParent.call(data.image, this);
     data.image.onLoad(() => {
         exports.setSpriteImageFrameCount.call(this, this._impl.frameCount);
         data.autoSizeClass.disable();

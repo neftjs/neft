@@ -92,7 +92,7 @@ isVariableBindingId = (id) ->
     ids.hasOwnProperty(id) or id in ['document', 'app']
 
 isPublicBindingId = (id) ->
-    id is 'this' or isVariableBindingId(id) or Renderer[id]?
+    id is 'this' or isVariableBindingId(id) or id is 'windowItem' or Renderer[id]?
 
 bindingAttributeToString = (obj) ->
     binding = bindingParser.parse obj.value, isPublicBindingId, obj._parserOptions, null, isVariableBindingId
@@ -195,7 +195,7 @@ stringify =
                         throw "Unexpected object body type '#{body.type}'"
 
         if not elem.parent and elem.name is 'Class' and not json.target
-            json.target = "`view`"
+            json.target = "`windowItem`"
 
         itemsKeys.push json.id
         visibleId = json.id

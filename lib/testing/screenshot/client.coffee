@@ -13,7 +13,7 @@ updateViewConfig = ->
         return
     if not view = environment.view
         return
-    utils.merge Neft.Renderer.window, view
+    utils.merge app.windowItem, view
     str = do ->
         str = ''
         for key, val of view
@@ -28,8 +28,8 @@ getControlRect = do ->
             return rect
         updateViewConfig()
         rect = Neft.Renderer.Rectangle.New()
-        rect.width = Neft.Renderer.window.width
-        rect.height = Neft.Renderer.window.height
+        rect.width = app.windowItem.width
+        rect.height = app.windowItem.height
         rect.layout.enabled = false
         rect.color = "rgb(#{exports.CONTROL_COLOR})"
         rect.z = 9999
@@ -43,7 +43,7 @@ getControlRect = do ->
 
 exports.initialize = (callback) ->
     setTimeout ->
-        getControlRect().parent = Neft.Renderer.window
+        getControlRect().parent = app.windowItem
         url = "#{app.config.testingServerUrl}/initializeScreenshots"
         setTimeout ->
             opts =

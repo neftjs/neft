@@ -108,7 +108,7 @@ exports.run = (env, logsReader, callback) ->
     logsReader.log "Finding requested device id"
     device = getDeviceId env
     env.deviceId = device.id
-    logsReader.log "Resolved device id is equal #{env.deviceId}"
+    logsReader.log "Use device id #{env.deviceId}"
 
     if device.status is 'Booted'
         logsReader.log "Requested simulator is already booted"

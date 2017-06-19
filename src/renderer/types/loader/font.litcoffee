@@ -74,10 +74,10 @@ FontLoader {
 
             (loader) ->
                 # get best source
-                source = Renderer.resources?.resolve(loader.source) or loader.source
+                source = Impl.resources?.resolve(loader.source) or loader.source
 
                 # get all sources
-                if rsc = Renderer.resources?.getResource(source)
+                if rsc = Impl.resources?.getResource(source)
                     sources = []
                     for _, path of rsc.paths
                         sources.push path[1]

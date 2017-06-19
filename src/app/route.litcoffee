@@ -232,7 +232,7 @@ Acceptable syntaxes:
         finishRequest = (route) ->
             assert.instanceOf route, Route
             if route.response.data instanceof Document
-                Renderer.window.node = route.response.data.node
+                app.windowItem.node = route.response.data.node
             if route.response.pending
                 route.response.send()
             return

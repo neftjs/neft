@@ -158,7 +158,7 @@ The image source URL or data URI.
                     itemUtils.setPropertyValue @, 'sourceHeight', 0
                     itemUtils.setPropertyValue @, 'resolution', 1
                     if val
-                        if res = Renderer.resources?.getResource(val)
+                        if res = Impl.resources?.getResource(val)
                             RESOURCE_REQUEST.resolution = Renderer.Device.pixelRatio * Image.pixelRatio
                             val = res.resolve RESOURCE_REQUEST
                             setSize.call @, res

@@ -27,8 +27,8 @@ module.exports = (impl) ->
                 item
             else if item is 'this'
                 @ctx
-            else if item is 'view'
-                impl.Renderer.window
+            else if item is 'windowItem'
+                impl.windowItem
             else
                 impl.Renderer[item] or null
 

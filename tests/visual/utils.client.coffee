@@ -8,7 +8,7 @@ exports.Checker = class Checker
     test: (name) ->
         item = @styles[name](document: null).item
         item.layout.enabled = false
-        item.parent = Neft.Renderer.window
+        item.parent = app.windowItem
         expected = "#{@prefix}/#{name}.png"
         takeScreenshot expected, ->
             item.parent = null

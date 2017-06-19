@@ -43,10 +43,10 @@ getInputDirs = (app) ->
     # main styles folder
     inputDirs.push {path: IN_DIR, prefix: ''}
 
-    # use default __view__ if needed
+    # use default __windowItem__ if needed
     isMainViewExists = false
     for ext in STYLE_EXT_NAMES
-        if isMainViewExists = fs.existsSync(pathUtils.join(IN_DIR, '/__view__' + ext))
+        if isMainViewExists = fs.existsSync(pathUtils.join(IN_DIR, '/__windowItem__' + ext))
             break
     unless isMainViewExists
         inputDirs.push {path: DEFAULT_STYLES, prefix: ''}

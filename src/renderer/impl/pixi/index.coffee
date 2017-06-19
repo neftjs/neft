@@ -158,7 +158,7 @@ module.exports = (impl) ->
         requestAnimationFrame vsync
 
     window.addEventListener 'resize', resize = ->
-        item = impl.window
+        item = impl.windowItem
         return unless item
 
         item.width = innerWidth
