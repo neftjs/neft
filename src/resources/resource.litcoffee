@@ -11,7 +11,14 @@
     module.exports = (Resources) -> class Resource
         @__name__ = 'Resource'
         @__path__ = 'Resources.Resource'
-        @FILE_NAME = ///^(.*?)(?:@([0-9p]+)x)?(?:\.([a-zA-Z0-9]+))?(?:\#([a-zA-Z0-9]+))?$///
+        @FILE_NAME = ///
+            ^
+            (.*?) # file
+            (?:@([0-9p]+)x)? # resolution
+            (?:\.([a-zA-Z0-9]+))? # format
+            (?:\#([a-zA-Z0-9]+))? # property
+            $
+        ///
 
 ## *Resource* Resource.fromJSON(*String*|*Object* json)
 
@@ -27,11 +34,13 @@
                 res[prop] = val
             res
 
-## *Object* Resource.parseFileName(*String* name)
+## *Object* Resource.parseFileName(*String* path)
 
-        @parseFileName = (name) ->
-            if name and (match = Resource.FILE_NAME.exec(name))
-                file: match[1]
+        @parseFileName = (path) ->
+            assert.isString path
+
+            if path and (match = Resource.FILE_NAME.exec(path))
+                file: match[1] or undefined
                 resolution: if match[2]? then parseFloat(match[2].replace('p', '.'))
                 format: match[3]
                 property: match[4]
@@ -39,8 +48,8 @@
         constructor: ->
             assert.instanceOf @, Resource
 
-            @name = ''
             @file = ''
+            @name = ''
             @color = ''
             @width = 0
             @height = 0
@@ -50,9 +59,9 @@
 
             Object.seal @
 
-## *String* Resource::name = `''`
-
 ## *String* Resource::file = `''`
+
+## *String* Resource::name = `''`
 
 ## *String* Resource::color = `''`
 
@@ -73,48 +82,45 @@
                 req = uri
                 uri = ''
 
-            if uri is ''
-                file = @file
-            else
+            if uri isnt ''
                 name = Resource.parseFileName uri
-                {file} = name
-                resolution = name.resolution
+                {file, resolution, property} = name
                 if name.format
                     formats = [name.format]
-                property = name.property
 
             assert.isString uri
             assert.isPlainObject req if req?
 
+            file ?= req?.file or @file
             resolution ?= req?.resolution or 1
             formats ?= req?.formats or @formats
-            property ||= req?.property or 'file'
+            property ?= req?.property or 'file'
 
-            # if file isnt @file
-            #   return
+            if file isnt @file
+                return
 
             if property isnt 'file'
                 return @[property]
 
             # get resolution from size
-            if utils.isPlainObject(req)
-                if req.width > req.height
-                    req.resolution *= req.width / @width
-                else if req.width < req.height
-                    req.resolution *= req.height / @height
+            if req?.width? or req?.height?
+                if req.width? and req.width > req.height
+                    resolution *= req.width / @width
+                else if req.height? and req.width < req.height
+                    resolution *= req.height / @height
 
             # get best resolution
             diff = Infinity
-            rResolution = 0
+            bestResolution = 0
             for val in @resolutions
                 thisDiff = Math.abs(resolution - val)
-                if thisDiff < diff or (thisDiff is diff and val > rResolution)
+                if thisDiff < diff or (thisDiff is diff and val > bestResolution)
                     diff = thisDiff
-                    rResolution = val
+                    bestResolution = val
 
             # get path
             for format in formats
-                if r = @paths[format]?[rResolution]
+                if r = @paths[format]?[bestResolution]
                     return r
 
             return

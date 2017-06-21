@@ -165,7 +165,7 @@ parseResourceFile = (path, config) ->
 
     utils.merge rsc, newConfig
 
-    if newConfig.file
+    if name.file
         rsc.file = name.file
 
     if rsc.resolutions

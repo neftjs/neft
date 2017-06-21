@@ -14,7 +14,19 @@
         @Resources = @
         @Resource = require('./resource') @
 
-        @URI = ///^(?:rsc|resource|resources)?:\/?\/?(.*?)(?:@([0-9p]+)x)?(?:\.[a-zA-Z]+)?(?:\#[a-zA-Z0-9]+)?$///
+        URI_SEPARATOR = '/'
+
+        @URI = ///
+            ^
+            (?:rsc|resource|resources)?:\/?\/? # schema
+            (.*?) # file
+            (
+                (?:@(?:[0-9p]+)x)? # resolution
+                (?:\.(?:[a-zA-Z0-9]+))? # format
+                (?:\#(?:[a-zA-Z0-9]+))? # property
+            )
+            $
+        ///
 
 ## *Resources* Resources.fromJSON(*String*|*Object* json)
 
@@ -28,7 +40,10 @@
                 if prop is '__name__'
                     continue
                 val = Resources[val.__name__].fromJSON val
-                assert.notOk prop of resources, "Can't set '#{prop}' property in this resources object, because it's already defined"
+                assert.notOk prop of resources, """
+                    Can't set '#{prop}' property in this resources object, \
+                    because it's already defined
+                """
                 resources[prop] = val
 
             resources
@@ -53,24 +68,20 @@
                 if r = @[chunk]
                     rest = uri.slice chunk.length + 1
                     if rest isnt '' and r instanceof Resources
-                        r = r.getResource rest
-                    return r
-                chunk = chunk.slice 0, chunk.lastIndexOf('/')
+                        return r.getResource rest
+                    else if uri is chunk
+                        return r
+                    return
+                chunk = chunk.substring 0, chunk.lastIndexOf(URI_SEPARATOR)
             return
 
 ## *String* Resources::resolve(*String* uri, [*Object* request])
 
         resolve: (uri, req) ->
+            return unless Resources.testUri uri
             rsc = @getResource uri
-            if rsc instanceof Resources.Resource
-                name = Resources.Resource.parseFileName uri
-                name.file = ''
-                if req?
-                    for key, val of req
-                        unless name[key]
-                            name[key] = val
-                path = rsc.resolve '', name
-            path and @resolve(path) or path
+            rscUri = Resources.URI.exec(uri)?[2]
+            rsc?.resolve rscUri, req
 
 ## *Object* Resources::toJSON()
 
