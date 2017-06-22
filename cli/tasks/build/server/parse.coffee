@@ -28,7 +28,7 @@ module.exports = (platform, options, callback) ->
         extensions: []
         models: []
         routes: []
-        views: []
+        components: []
         styles: []
         styleQueries: []
         scripts: []

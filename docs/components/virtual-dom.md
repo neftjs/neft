@@ -1,6 +1,6 @@
 # Virtual DOM
 
-Each *XHTML* tag in a view file is represented by an instance of [`Tag`](/api/document-tag.html).
+Each *XHTML* tag in a component file is represented by an instance of [`Tag`](/api/document-tag.html).
 
 Each text is represented by an instance of [`Text`](/api/document-text.html).
 
@@ -8,9 +8,9 @@ The base class for both types is [`Element`](/api/document-element.html).
 
 ## Getting elements
 
-The main tag for a view file or [component](/views.html#component) can be accessed inside `<script />` as `this.node`.
+The main tag for a component file or [component](/components.html#component) can be accessed inside `<script />` as `this.node`.
 
-Each tag with `ref` attribute is accessible by the `this.refs` object or using the `${refs}` [string interpolation](/views.html#string-interpolation) unless it puts a [component](/views.html#component).
+Each tag with `ref` attribute is accessible by the `this.refs` object or using the `${refs}` [string interpolation](/components.html#string-interpolation) unless it puts a [component](/components.html#component).
 
 In styles, connected node can be reached using the [`this.node`](/api/renderer-item.html#node) reference.
 

@@ -11,10 +11,10 @@ Document = require 'src/document'
 styles = require 'src/styles'
 signal = require 'src/signal'
 
-IN_DIR = 'views'
+IN_DIR = 'components'
 OUT_DIR = 'build'
 SCRIPTS_DIR = './build/scripts'
-STYLES_DIR = './build/styles/_views'
+STYLES_DIR = './build/styles/_components'
 
 Document.FILES_PATH = IN_DIR
 Document.SCRIPTS_PATH = SCRIPTS_DIR
@@ -72,26 +72,26 @@ module.exports = (platform, app, callback) ->
             Document.parse file
         catch error
             log.error """
-                View file `#{path}` can't be parsed
-                If it's not related to your view scripts, please report this error on GitHub
+                View file `#{path}` can't be parsed; \
+                if it's not related to your component scripts, please report this error on GitHub
                 #{error.stack}
             """
             return
         file
 
-    saveView = (name, view, callback) ->
-        json = JSON.stringify view
+    saveComponent = (name, component, callback) ->
+        json = JSON.stringify component
         json = "module.exports = #{json}"
         path = "#{OUT_DIR}/#{name}.js"
-        app.views.push {name, path}
+        app.components.push {name, path}
         fs.outputFile path, json, 'utf-8', callback
         return
 
     onFilesParsed = ->
         stack = new utils.async.Stack
 
-        for name, view of Document._files
-            stack.add saveView, null, [name, view]
+        for name, component of Document._files
+            stack.add saveComponent, null, [name, component]
 
         stack.runAllSimultaneously onViewsSaved
 

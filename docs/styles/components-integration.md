@@ -1,8 +1,8 @@
-# Views Integration
+# Components Integration
 
 Items can be attached to *XHTML* elements.
 
-To connect [`Item`](/api/renderer-item.html) with [View](/views.html) elements, specify `query` as *CSS Selector*. All matched tags will be styled.
+To connect [`Item`](/api/renderer-item.html) with [components](/components.html), specify `query` as *CSS Selector*. All matched tags will be styled.
 
 ```xhtml
 <style>
@@ -17,7 +17,7 @@ Rectangle {
 <button class="bigButton" />
 ```
 
-Matched [Virtual DOM](/views/virtual-dom.html) [Tag](/api/document-tag.html) is accessible in styles as `node`. You can use it in properties.
+Matched [Virtual DOM](/components/virtual-dom.html) [Tag](/api/document-tag.html) is accessible in styles as `node`. You can use it in properties.
 
 ```xhtml
 <style>
@@ -32,7 +32,7 @@ Item {
 
 `query` can be also attached to children.
 
-Only the first matched child [Tag](/views/virtual-dom.html) can be styled.
+Only the first matched child [Tag](/components/virtual-dom.html) can be styled.
 
 Now you can create complex custom elements based on more than one HTML element.
 
@@ -53,7 +53,7 @@ Item {
 
 ## Inline Styles
 
-You can refer to [`Item`](/api/renderer-api.html) (styles) directly from [Virtual DOM](/views/virtual-dom.html) tag.
+You can refer to [`Item`](/api/renderer-api.html) (styles) directly from [Virtual DOM](/components/virtual-dom.html) tag.
 
 Each styled [Tag](/api/document-tag.html) has `style` prop pointing at created Item.
 

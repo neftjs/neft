@@ -137,11 +137,11 @@ ready to create new *Item*s.
 
         app.styles = {}
 
-## *Object* app.views = `{}`
+## *Object* app.components = `{}`
 
-Files from the *views* folder as the *Document* instances.
+Files from the *components* folder as the *Document* instances.
 
-        app.views = {}
+        app.components = {}
 
 ## *Resources* app.resources
 
@@ -153,7 +153,7 @@ Files from the *views* folder as the *Document* instances.
 
 ## *Signal* app.onReady()
 
-Called when all modules, views, styled etc. have been loaded.
+Called when all modules, components, styled etc. have been loaded.
 
         signal.create app, 'onReady'
 
@@ -288,9 +288,9 @@ app.cookies.onChange(function(key){
         exports.app =
             Route: app.Route
 
-        # load views
-        for view in opts.views when view.name?
-            app.views[view.name] = Document.fromJSON view.file
+        # load components
+        for component in opts.components when component.name?
+            app.components[component.name] = Document.fromJSON component.file
 
         # load files
         init opts.models, app.models
