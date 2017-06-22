@@ -9,21 +9,19 @@ TextInput {
 const { db } = Neft;
 const KEY = 'input-text';
 
-this.onCreate(function () {
-    this.onError = (error) => {
-        if (error) {
-            this.state.set('error', error.message);
-        }
-    };
+this.onError = (error) => {
+    if (error) {
+        this.state.set('error', error.message);
+    }
+};
 
-    this.saveText = () => {
-        db.set(KEY, this.refs.input.style.text, this.onError);
-    };
+this.saveText = () => {
+    db.set(KEY, this.refs.input.style.text, this.onError);
+};
 
-    this.removeText = () => {
-        db.remove(KEY, this.onError);
-    };
-});
+this.removeText = () => {
+    db.remove(KEY, this.onError);
+};
 
 this.onBeforeRender(function () {
     this.state.set('error', '');

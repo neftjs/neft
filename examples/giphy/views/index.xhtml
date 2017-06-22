@@ -93,20 +93,18 @@
 </style>
 
 <script>
-    this.onCreate(function () {
-        this.randomGiphyForTag = (tag) => {
-            const url = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag="
-                + encodeURIComponent(tag);
-            this.context.app.networking.get(url, (err, resp) => {
-                if (err) return;
-                this.refs.image.style.$.source = resp.data.image_mp4_url;
-            });
-        };
+this.randomGiphyForTag = (tag) => {
+    const url = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag="
+        + encodeURIComponent(tag);
+    this.context.app.networking.get(url, (err, resp) => {
+        if (err) return;
+        this.refs.image.style.$.source = resp.data.image_mp4_url;
     });
+};
 
-    this.onRender(function () {
-        this.randomGiphyForTag('minions');
-    });
+this.onRender(function () {
+    this.randomGiphyForTag('minions');
+});
 </script>
 
 <body>

@@ -10,20 +10,21 @@ signal = require 'src/signal'
 assert = assert.scope 'View.Scripts'
 
 class FileContext extends Emitter
-    propOpts = utils.CONFIGURABLE | utils.WRITABLE
+    PROP_OPTS = 0
 
-    constructor: ->
+    constructor: (file) ->
         super()
-        utils.defineProperty @, '_signals', propOpts, @_signals
-        utils.defineProperty @, 'node', propOpts, null
-        utils.defineProperty @, 'props', propOpts, null
-        utils.defineProperty @, 'refs', propOpts, null
-        utils.defineProperty @, 'context', propOpts, null
-        utils.defineProperty @, 'state', propOpts, null
+        utils.defineProperty @, '_signals', PROP_OPTS, @_signals
+        utils.defineProperty @, 'node', PROP_OPTS, file.node
+        utils.defineProperty @, 'props', PROP_OPTS, file.inputProps
+        utils.defineProperty @, 'refs', PROP_OPTS, file.inputRefs
+        utils.defineProperty @, 'context', PROP_OPTS, ->
+            file.context
+        , null
+        utils.defineProperty @, 'state', PROP_OPTS, file.inputState
 
-    utils.defineProperty @::, 'constructor', propOpts, @
+    utils.defineProperty @::, 'constructor', PROP_OPTS, @
 
-    Emitter.createSignal @, 'onCreate'
     Emitter.createSignal @, 'onBeforeRender'
     Emitter.createSignal @, 'onRender'
     Emitter.createSignal @, 'onBeforeRevert'
@@ -55,31 +56,14 @@ module.exports = (File) -> class Scripts
             Object.seal @
         `//</development>`
 
-        @file.scope = @createScope()
-
-    createScope: ->
-        ctx = new FileContext
+    createScope: (file) ->
+        ctx = new FileContext file
         for name in @names
-            func = Scripts.scripts[name]
-            func.call ctx
+            Scripts.scripts[name].call ctx
         ctx
 
     createCloneScope: (file) ->
-        {names} = @
-        scope = Object.create @file.scope
-        propOpts = utils.CONFIGURABLE | utils.WRITABLE
-
-        utils.defineProperty scope, 'node', propOpts, file.node
-        utils.defineProperty scope, 'props', propOpts, file.inputProps
-        utils.defineProperty scope, 'refs', propOpts, file.inputRefs
-        utils.defineProperty scope, 'context', utils.CONFIGURABLE, ->
-            file.context
-        , null
-        utils.defineProperty scope, 'state', propOpts, file.inputState
-
-        emitSignal scope, 'onCreate'
-
-        scope
+        @createScope file
 
     toJSON: (key, arr) ->
         unless arr

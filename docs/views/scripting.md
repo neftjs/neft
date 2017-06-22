@@ -20,14 +20,13 @@ or in a [component](/views.html#component):
 
 ## View lifecycle
 
-Inside the `<sript />` tag you can connect to five [signals](/data-binding.html#signal):
- - `this.onCreate()`,
+Inside the `<sript />` tag you can connect to four [signals](/data-binding.html#signal):
  - `this.onBeforeRender()`,
  - `this.onRender()`,
  - `this.onBeforeRevert()`,
  - `this.onRevert()`.
 
-View once created is reusing. Because of that, `onCreate` signal is called only when there is no free views to use and a new one has to be created.
+View once created is reusing. Because of that, `<script>` is called only when there is no free views to use and a new one has to be created.
 
 When a view needs to be put into a document, it's **rendered** (`onBeforeRender`, `onRender`).
 
@@ -37,21 +36,20 @@ Reverted views can be rendered later.
 
 ## Custom methods
 
-Custom methods should be created inside the `onCreate` [signal](/data-binding.html#signal) as lambda functions.
+Custom methods should be created inside the `<script>` tag as lambda functions.
 
 It ensures, that you have always the proper context (`this`) inside all methods.
 
 View context can be used in [String Interpolation](/views.html#string-interpolation).
 
 ```xhtml
-<script>
-this.onCreate(function () {
-    this.plusOne = (number) => {
-        return number + 1;
-    };
-});
-</script>
 <p>${this.plusOne(2)}</p> <!-- <p>3</p> -->
+
+<script>
+this.plusOne = (number) => {
+    return number + 1;
+};
+</script>
 ```
 
 ## `this.state`
@@ -66,18 +64,18 @@ Data can be read in [String Interpolation](/views.html#string-interpolation) und
 Default `state` must be defined in `onBeforeRender` signal.
 
 ```xhtml
+<p>Counter: ${state.counterValue}</p> <!-- <p>Counter: 2</p> -->
+
 <script>
-this.onCreate(function () {
-    this.increment = () => {
-        this.state.set('counterValue', this.state.counterValue + 1);
-    };
-});
+this.increment = () => {
+    this.state.set('counterValue', this.state.counterValue + 1);
+};
+
 this.onBeforeRender(function () {
     this.state.set('counterValue', 1);
     this.increment();
 });
 </script>
-<p>Counter: ${state.counterValue}</p> <!-- <p>Counter: 2</p> -->
 ```
 
 ## `this.refs`
@@ -98,9 +96,7 @@ If node with `ref` tag renders a [component](/views.html#component), it refers t
 ```xhtml
 <component name="Issue">
     <script>
-    this.onCreate(function () {
-        this.getTitle = () => 'More gifs!';
-    });
+    this.getTitle = () => 'More gifs!';
     </script>
 </component>
 
@@ -149,7 +145,7 @@ This object is available in [String Interpolation](/views.html#string-interpolat
 ```xhtml
 <component name="User">
     <script>
-    this.onCreate(function () {
+    this.onRender(function () {
         console.log(this.props.nick);
         // testslover32
     });
@@ -199,7 +195,6 @@ If you like to use *CoffeeScript*, you can do it by specifying the `filename` at
 
 ```html
 <script filename="view.coffee">
-@onCreate ->
-    @sum = (a, b) => a + b
+@sum = (a, b) => a + b
 </script>
 ```

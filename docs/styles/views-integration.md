@@ -77,9 +77,7 @@ Item {
 }
 </style>
 <script>
-this.onCreate(function () {
-    this.onButtonClick = (event) => {};
-});
+this.onButtonClick = (event) => {};
 </script>
 <button style:pointer:onClick="${this.onButtonClick}" />
 ```
