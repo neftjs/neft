@@ -371,7 +371,7 @@ module.exports = (File, data) -> class Style
                     if parent and parent.node.props[STYLE_ID_PROP] is parentId
                         scope = parent.scope
                         @item = scope.objects[subid]
-                    else if not parent?.scope and file in ['view', '__view__']
+                    else if not parent?.scope and file in ['windowItem', '__windowItem__']
                         @item = windowStyle.objects[subid]
 
                     if @item or not parent

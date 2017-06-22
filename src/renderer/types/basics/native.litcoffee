@@ -78,7 +78,7 @@ where `XYZ` is the given name.
                     RESOURCE_REQUEST =
                         property: 'color'
                     (val) ->
-                        val = Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
+                        val = Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
                         if IS_NATIVE
                             if val?
                                 colorUtils.toRGBAHex val, config.defaultValue

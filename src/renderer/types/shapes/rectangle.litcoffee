@@ -50,7 +50,7 @@ Rectangle {
                     RESOURCE_REQUEST =
                         property: 'color'
                     (val) ->
-                        Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
+                        Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
                 developmentSetter: (val) ->
                     assert.isString val, "Rectangle.color needs to be a string, but #{val} given"
 
@@ -122,7 +122,7 @@ Rectangle {
                     RESOURCE_REQUEST =
                         property: 'color'
                     (val) ->
-                        Renderer.resources?.resolve(val, RESOURCE_REQUEST) or val
+                        Impl.resources?.resolve(val, RESOURCE_REQUEST) or val
                 developmentSetter: (val) ->
                     assert.isString val, """
                         Rectangle.border.color needs to be a string, but #{val} given

@@ -217,8 +217,8 @@ app.cookies.onChange(function(key){
             return
 
         # propagate data
-        Renderer.resources = app.resources
-        Renderer.serverUrl = app.networking.url
+        Renderer.setResources app.resources
+        Renderer.setServerUrl app.networking.url
         Renderer.onLinkUri (uri) ->
             app.networking.createLocalRequest
                 method: Networking.Request.GET
@@ -231,22 +231,22 @@ app.cookies.onChange(function(key){
         # set styles window item
         if opts.styles?
             for style in opts.styles
-                if style.name in ['view', '__view__']
-                    style.file._init view: null
+                if style.name in ['windowItem', '__windowItem__']
+                    style.file._init windowItem: null
                     windowStyle = style.file._main document: null
                     break
 
-        windowStyleItem = windowStyle?.item
-        assert.ok windowStyleItem, '__view__ style must be defined'
-        Renderer.window = windowStyleItem
+        app.windowItem = windowStyleItem = windowStyle?.item
+        assert.ok windowStyleItem, '__windowItem__ style must be defined'
+        Renderer.setWindowItem windowStyleItem
 
         if opts.styles?
             stylesInitObject =
-                view: windowStyleItem
+                windowItem: windowStyleItem
 
             # initialize styles
             for style in opts.styles when style.name?
-                if style.name isnt 'view'
+                if style.name isnt 'windowItem'
                     style.file._init stylesInitObject
                 app.styles[style.name] = style.file
 

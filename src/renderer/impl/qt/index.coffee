@@ -6,7 +6,7 @@ module.exports = (impl) ->
     utils.merge impl.utils, require('./utils')
 
     resize = ->
-        item = impl.window
+        item = impl.windowItem
         return unless item
 
         item.width = __stylesWindow.width

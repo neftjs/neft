@@ -123,7 +123,7 @@ module.exports = (impl) ->
     utils.merge impl.utils, require('./utils')
 
     window.addEventListener 'resize', resize = ->
-        item = impl.window
+        item = impl.windowItem
         return unless item
 
         pixelRatio = window.devicePixelRatio or 1

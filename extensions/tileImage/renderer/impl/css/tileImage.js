@@ -1,5 +1,5 @@
 const { utils } = Neft;
-const { Item, Native } = Neft.Renderer.Impl.Types;
+const { Item } = Neft.Renderer.Impl.Types;
 
 exports.create = function (data) {
     data.elem = document.createElement('div');

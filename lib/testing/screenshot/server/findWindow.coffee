@@ -6,6 +6,7 @@ client = require '../client'
 
 [RED, GREEN, BLUE] = client.CONTROL_COLOR
 CONTROL_COLOR_TRESHOLD = 25
+MIN_SIZE = 5 # width * height
 
 {abs} = Math
 
@@ -54,4 +55,6 @@ getMaxRect = (rects) ->
     maxRect
 
 module.exports = (opts) ->
-    getMaxRect getRects opts.path
+    rect = getMaxRect getRects opts.path
+    if rect and rect.width * rect.height >= MIN_SIZE
+        rect

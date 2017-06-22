@@ -134,7 +134,7 @@ module.exports = (impl) ->
                 event._stopPropagation = false
                 event._checkSiblings = false
                 event._preventClick = false
-                captureItems impl.window, e._x, e._y, onItem
+                captureItems impl.windowItem, e._x, e._y, onItem
                 return
 
         # support release and click events
@@ -161,7 +161,7 @@ module.exports = (impl) ->
                 event._stopPropagation = false
                 event._checkSiblings = false
 
-                captureItems impl.window, e._x, e._y, onItem
+                captureItems impl.windowItem, e._x, e._y, onItem
 
                 # exit all entered items on touch screen
                 if impl.Renderer.Screen.touch
@@ -210,7 +210,7 @@ module.exports = (impl) ->
                 event._checkSiblings = false
                 flag = (flag % 2) + 1
 
-                captureItems impl.window, e._x, e._y, onItem
+                captureItems impl.windowItem, e._x, e._y, onItem
 
                 for item in itemsToMove
                     if event._stopPropagation
@@ -249,7 +249,7 @@ module.exports = (impl) ->
             (e) ->
                 eventLoop.lock()
                 event._checkSiblings = false
-                captureItems impl.window, e._x, e._y, onItem
+                captureItems impl.windowItem, e._x, e._y, onItem
                 eventLoop.release()
                 return
 

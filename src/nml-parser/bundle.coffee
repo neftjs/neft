@@ -19,7 +19,7 @@ module.exports = (nmlParser) -> (file) ->
     # scope types
     code += '{Renderer} = Neft\n'
     code += '{Image, Device, Navigator, Screen, RotationSensor} = Renderer\n'
-    code += 'view = null\n'
+    code += 'windowItem = null\n'
 
     # parse NML
     if pathUtils.extname(file.path) not in ['.js', '.nml']
@@ -38,7 +38,7 @@ module.exports = (nmlParser) -> (file) ->
             code += "exports.#{fileId} = `function(__opts){ var document = __opts && __opts.document; #{val} }`\n"
 
     code += 'exports._init = (opts) -> \n'
-    code += '   {view} = opts\n'
+    code += '   {windowItem} = opts\n'
     for autoInitCode in data.autoInitCodes
         code += "   `(function(){#{autoInitCode}}())`\n"
 

@@ -16,7 +16,7 @@ CHROME_PATHS = [
     'google-chrome',
     'chromium-browser',
     '/Applications/Chromium.app/Contents/MacOS/Chromium',
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 ]
 
 CHROME_ARGS = [
@@ -54,6 +54,7 @@ getChromePath = (callback) ->
             if err
                 next()
             else
+                log "Chrome path resolved to #{resolvedPath}"
                 callback null, resolvedPath
     , ->
         callback new Error 'Cannot resolve Chrome path'
@@ -86,6 +87,7 @@ runOnPathWithUri = (env, uri, callback) ->
     chrome = childProcess.spawn env.path, args, env: config.getProcessEnv()
 
     chrome.on 'exit', ->
+        log "Chrome terminated"
         fs.removeSync USER_DATA_DIR
         callback()
 

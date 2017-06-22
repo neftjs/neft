@@ -122,7 +122,7 @@ Item {
                 ResourcesLoader.resources is already set and cannot be changed
             """
             if typeof val is 'string'
-                val = Renderer.resources.getResource val
+                val = Impl.resources.getResource val
             assert.instanceOf val, Resources
             @progress = 0
             @_length = 0
