@@ -92,9 +92,7 @@ describe 'Document n-each', ->
         source = createView """
             <component name="a">
                 <script>
-                    this.onCreate(function(){
-                        this.self = this;
-                    });
+                    this.self = this;
                     this.getX = function(){
                         return this === this.self ? 1 : 0;
                     };
@@ -113,11 +111,6 @@ describe 'Document n-each', ->
             <script>
             this.onBeforeRender(function () {
                 this.state.set('a', 1);
-            });
-            this.onRevert(function () {
-                if (this.state) {
-                    throw new Error('State is available but not should be');
-                }
             });
             </script>
             <ul n-each="[1,2]">${state.a}</ul>
@@ -162,11 +155,9 @@ describe 'Document n-each', ->
                 </script>
             </component>
             <script>
-            this.onCreate(function () {
-                this.onChildRevert = () => {
-                    this.reverted = (this.reverted + 1) || 1;
-                };
-            });
+            this.onChildRevert = () => {
+                this.reverted = (this.reverted + 1) || 1;
+            };
             this.onBeforeRender(function () {
                 this.state.set('visible', true);
             });

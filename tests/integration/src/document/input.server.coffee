@@ -255,12 +255,10 @@ describe 'Document string interpolation', ->
             renderParse view
             assert.is view.node.stringify(), '1'
 
-        it 'is accessible in not rendered document', ->
+        it 'is accessible in created document', ->
             source = createView '''
                 <script>
-                    this.onCreate(function(){
-                        this.a = !!this.state;
-                    });
+                    this.a = !!this.state;
                 </script>
                 ${this.a}
             '''

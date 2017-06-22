@@ -59,19 +59,17 @@ Use it to access e.g. models (`app.models`) or views (`app.views`).
 Let's assume, we have a view `PlusButton.xhtml` like below:
 
 ```xhtml
+<button style:pointer:onClick="${this.increment()}">Increment</button>
+
 <script>
-this.onCreate(function () {
-    this.increment = () => {
-        this.state.set('value', this.state.value + 1);
-    };
-});
+this.increment = () => {
+    this.state.set('value', this.state.value + 1);
+};
 
 this.onRender(function () {
     this.state.set('value', 0);
 });
 </script>
-
-<button style:pointer:onClick="${this.increment()}">Increment</button>
 ```
 
 ... and we want to test whether `increment` method works like a charm.

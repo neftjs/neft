@@ -424,7 +424,6 @@ Corresponding node handler: *n-onRevert=""*.
 
                 # if set scope is original, prepare it
                 if isScopeRender
-                    @scope.state = @inputState
                     emitSignal @scope, 'onBeforeRender'
                 else
                     # treat given scope as pointer
@@ -516,7 +515,6 @@ Corresponding node handler: *n-onRevert=""*.
                 Document.onRevert.emit @
                 emitNodeSignal @, 'n-onRevert'
                 if isScopeRender
-                    @scope.state = null
                     emitSignal @scope, 'onRevert'
                 else
                     @inputArgs[2] = @inputState

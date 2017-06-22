@@ -27,15 +27,13 @@ Use [`queryAll()`](/api/document-tag.html#queryall) to get all matched elements.
 To find a text, specify `#text` in *CSS Selector*.
 
 ```xhtml
-<script>
-this.onCreate(function () {
-    console.log(this.node.queryAll('p > span > #text'));
-    // [big, dragon]
-
-    console.log(this.node.queryAll('p #text'));
-    // [big, yellow, dragon]
-});
-</script>
-
 <p><span>big</span> yellow <span>dragon</span></p>
+
+<script>
+console.log(this.node.queryAll('p > span > #text'));
+// [big, dragon]
+
+console.log(this.node.queryAll('p #text'));
+// [big, yellow, dragon]
+</script>
 ```
