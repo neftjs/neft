@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Static method of</dt><dd><i>Class</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Renderer.Class</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#rendererclass-classnewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#rendererclass-classnewobject-options)
 
 
 * * * 
@@ -24,7 +24,7 @@
 <dl><dt>Extends</dt><dd><i>Renderer.Extension</i></dd><dt>Returns</dt><dd><i>Class</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#class-classconstructor--rendererextension)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#class-classconstructor--rendererextension)
 
 
 * * * 
@@ -44,7 +44,7 @@ to identify various classes.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classonnamechangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classonnamechangestring-oldvalue)
 
 
 * * * 
@@ -65,7 +65,7 @@ If state is created inside the *Item*, this property is set automatically.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classontargetchangeitem-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classontargetchangeitem-oldvalue)
 
 
 * * * 
@@ -79,7 +79,7 @@ This objects contains all properties to change on the target item.
 It accepts bindings and listeners as well.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#object-classchanges)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#object-classchanges)
 
 
 * * * 
@@ -96,7 +96,7 @@ It accepts bindings and listeners as well.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Integer</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classonprioritychangeinteger-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classonprioritychangeinteger-oldvalue)
 
 
 * * * 
@@ -117,7 +117,7 @@ Grid {
     columns: 2
     // reduce to one column if the view width is lower than 500 pixels
     Class {
-        when: view.width < 500
+        when: windowItem.width < 500
         changes: {
             columns: 1
         }
@@ -133,7 +133,7 @@ Grid {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classonwhenchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classonwhenchangeboolean-oldvalue)
 
 
 * * * 
@@ -143,7 +143,7 @@ Grid {
 <dl><dt>Type</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#object-classchildren)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#object-classchildren)
 
 
 * * * 
@@ -153,7 +153,7 @@ Grid {
 <dl><dt>Type</dt><dd><i>Integer</i></dd><dt>Default</dt><dd><code>0</code></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#integer-classchildrenlength--0)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#integer-classchildrenlength--0)
 
 
 * * * 
@@ -163,7 +163,7 @@ Grid {
 <dl><dt>Parameters</dt><dd><ul><li>value — <i>Object</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#object-classchildrenappendobject-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#object-classchildrenappendobject-value)
 
 
 * * * 
@@ -173,7 +173,7 @@ Grid {
 <dl><dt>Parameters</dt><dd><ul><li>index — <i>Integer</i></li></ul></dd><dt>Returns</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#object-classchildrenpopinteger-index)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#object-classchildrenpopinteger-index)
 
 
 * * * 
@@ -183,7 +183,7 @@ Grid {
 <dl><dt>Type</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#object-classdocument)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#object-classdocument)
 
 
 * * * 
@@ -193,7 +193,7 @@ Grid {
 <dl><dt>Parameters</dt><dd><ul><li>document — <i>Object</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classondocumentchangeobject-document)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classondocumentchangeobject-document)
 
 
 * * * 
@@ -203,7 +203,7 @@ Grid {
 <dl><dt>Parameters</dt><dd><ul><li>node — <i>Element</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonnodeaddelement-node)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonnodeaddelement-node)
 
 
 * * * 
@@ -213,7 +213,7 @@ Grid {
 <dl><dt>Parameters</dt><dd><ul><li>node — <i>Element</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonnoderemoveelement-node)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonnoderemoveelement-node)
 
 
 * * * 
@@ -230,7 +230,7 @@ Grid {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonquerychangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-classdocumentonquerychangestring-oldvalue)
 
 
 * * * 
@@ -251,5 +251,5 @@ This property has a setter, which accepts a string and an array of strings.
 <dl><dt>Parameters</dt><dd><ul><li>added — <i>String</i></li><li>removed — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/extensions/class.litcoffee#signal-itemonclasseschangestring-added-string-removed)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/extensions/class.litcoffee#signal-itemonclasseschangestring-added-string-removed)
 

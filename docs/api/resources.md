@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/resources/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/00846cfc577d67d7dae0902be43d7546f566bda4/src/resources/index.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Static method of</dt><dd><i>Resources</i></dd><dt>Parameters</dt><dd><ul><li>json — <i>Object</i> or <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Resources</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/resources/index.litcoffee#resources-resourcesfromjsonstringobject-json)
+> [`Source`](https://github.com/Neft-io/neft/blob/00846cfc577d67d7dae0902be43d7546f566bda4/src/resources/index.litcoffee#resources-resourcesfromjsonstringobject-json)
 
 
 * * * 
@@ -24,7 +24,7 @@
 <dl><dt>Static method of</dt><dd><i>Resources</i></dd><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Boolean</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/resources/index.litcoffee#boolean-resourcestesturistring-uri)
+> [`Source`](https://github.com/Neft-io/neft/blob/00846cfc577d67d7dae0902be43d7546f566bda4/src/resources/index.litcoffee#boolean-resourcestesturistring-uri)
 
 
 * * * 
@@ -34,7 +34,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li></ul></dd><dt>Returns</dt><dd><i>Resource</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/resources/index.litcoffee#resource-resourcesgetresourcestring-uri)
+> [`Source`](https://github.com/Neft-io/neft/blob/00846cfc577d67d7dae0902be43d7546f566bda4/src/resources/index.litcoffee#resource-resourcesgetresourcestring-uri)
 
 
 * * * 
@@ -44,7 +44,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>uri — <i>String</i></li><li>request — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>String</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/resources/index.litcoffee#string-resourcesresolvestring-uri-object-request)
+> [`Source`](https://github.com/Neft-io/neft/blob/00846cfc577d67d7dae0902be43d7546f566bda4/src/resources/index.litcoffee#string-resourcesresolvestring-uri-object-request)
 
 
 * * * 
@@ -54,5 +54,5 @@
 <dl><dt>Returns</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/resources/index.litcoffee#object-resourcestojson)
+> [`Source`](https://github.com/Neft-io/neft/blob/00846cfc577d67d7dae0902be43d7546f566bda4/src/resources/index.litcoffee#object-resourcestojson)
 

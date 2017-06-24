@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Static method of</dt><dd><i>Item</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Item</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#item-itemnewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#item-itemnewobject-options)
 
 
 * * * 
@@ -26,7 +26,7 @@
 This is a base class for everything which is visible.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#item-itemconstructor)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#item-itemconstructor)
 
 ### Custom properties
 
@@ -59,7 +59,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonchangestring-property-any-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonchangestring-property-any-oldvalue)
 
 
 * * * 
@@ -69,7 +69,7 @@ Item {
 <dl><dt>Type</dt><dd><i>String</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-string-itemquery)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-string-itemquery)
 
 
 * * * 
@@ -100,7 +100,7 @@ Text {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonnodechangedocumentelement-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonnodechangedocumentelement-oldvalue)
 
 
 * * * 
@@ -130,7 +130,7 @@ Rectangle {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemready)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemready)
 
 
 * * * 
@@ -140,7 +140,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>miliseconds — <i>Integer</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonanimationframeinteger-miliseconds)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonanimationframeinteger-miliseconds)
 
 
 * * * 
@@ -157,7 +157,7 @@ Rectangle {
 <dl><dt>Type</dt><dd><i>Object</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#object-itemchildren)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#object-itemchildren)
 
 
 * * * 
@@ -167,7 +167,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>added — <i>Item</i></li><li>removed — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonchildrenchangeitem-added-item-removed)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonchildrenchangeitem-added-item-removed)
 
 
 * * * 
@@ -177,7 +177,7 @@ Rectangle {
 <dl><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenfirstchild)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenfirstchild)
 
 
 * * * 
@@ -187,7 +187,7 @@ Rectangle {
 <dl><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenlastchild)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenlastchild)
 
 
 * * * 
@@ -197,7 +197,7 @@ Rectangle {
 <dl><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenbottomchild)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrenbottomchild)
 
 
 * * * 
@@ -207,7 +207,7 @@ Rectangle {
 <dl><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrentopchild)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-item-itemchildrentopchild)
 
 
 * * * 
@@ -217,7 +217,7 @@ Rectangle {
 <dl><dt>Type</dt><dd><i>Integer</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-integer-itemchildrenlength)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-integer-itemchildrenlength)
 
 
 * * * 
@@ -237,7 +237,7 @@ Can be e.g. *Flow*, *Grid* etc.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemchildrenonlayoutchangeitem-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemchildrenonlayoutchangeitem-oldvalue)
 
 
 * * * 
@@ -257,7 +257,7 @@ will be added into the `target` item.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemchildrenontargetchangeitem-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemchildrenontargetchangeitem-oldvalue)
 
 
 * * * 
@@ -269,7 +269,7 @@ will be added into the `target` item.
 Returns an item with the given index.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#item-itemchildrengetinteger-index)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#item-itemchildrengetinteger-index)
 
 
 * * * 
@@ -281,7 +281,7 @@ Returns an item with the given index.
 Returns an index of the given child in the children array.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#integer-itemchildrenindexitem-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#integer-itemchildrenindexitem-value)
 
 
 * * * 
@@ -293,7 +293,7 @@ Returns an index of the given child in the children array.
 Returns `true` if the given item is an item child.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#boolean-itemchildrenhasitem-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#boolean-itemchildrenhasitem-value)
 
 
 * * * 
@@ -302,7 +302,7 @@ Returns `true` if the given item is an item child.
 Removes all children from the item.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#itemchildrenclear)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#itemchildrenclear)
 
 
 * * * 
@@ -319,7 +319,7 @@ Removes all children from the item.
 <dl><dt>Parameters</dt><dd><ul><li>oldParent — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonparentchangeitem-oldparent)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonparentchangeitem-oldparent)
 
 
 * * * 
@@ -329,7 +329,7 @@ Removes all children from the item.
 <dl><dt>Type</dt><dd><i>Item</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#item-itemprevioussibling)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#item-itemprevioussibling)
 
 
 * * * 
@@ -339,7 +339,7 @@ Removes all children from the item.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonprevioussiblingchangeitem-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonprevioussiblingchangeitem-oldvalue)
 
 
 * * * 
@@ -349,7 +349,7 @@ Removes all children from the item.
 <dl><dt>Type</dt><dd><i>Item</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#item-itemnextsibling)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#item-itemnextsibling)
 
 
 * * * 
@@ -359,7 +359,7 @@ Removes all children from the item.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonnextsiblingchangeitem-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonnextsiblingchangeitem-oldvalue)
 
 
 * * * 
@@ -369,7 +369,7 @@ Removes all children from the item.
 <dl><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-item-itembelowsibling)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-item-itembelowsibling)
 
 
 * * * 
@@ -379,7 +379,7 @@ Removes all children from the item.
 <dl><dt>Type</dt><dd><i>Item</i></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#readonly-item-itemabovesibling)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#readonly-item-itemabovesibling)
 
 
 * * * 
@@ -389,7 +389,7 @@ Removes all children from the item.
 <dl><dt>Type</dt><dd><i>Integer</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#integer-itemindex)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#integer-itemindex)
 
 
 * * * 
@@ -429,7 +429,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonvisiblechangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonvisiblechangeboolean-oldvalue)
 
 
 * * * 
@@ -446,7 +446,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonclipchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonclipchangeboolean-oldvalue)
 
 
 * * * 
@@ -463,7 +463,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonwidthchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonwidthchangefloat-oldvalue)
 
 
 * * * 
@@ -480,7 +480,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonheightchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonheightchangefloat-oldvalue)
 
 
 * * * 
@@ -497,7 +497,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonxchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonxchangefloat-oldvalue)
 
 
 * * * 
@@ -514,7 +514,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonychangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonychangefloat-oldvalue)
 
 
 * * * 
@@ -531,7 +531,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonzchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonzchangefloat-oldvalue)
 
 
 * * * 
@@ -548,7 +548,7 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonscalechangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonscalechangefloat-oldvalue)
 
 
 * * * 
@@ -574,7 +574,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonrotationchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonrotationchangefloat-oldvalue)
 
 
 * * * 
@@ -591,7 +591,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonopacitychangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonopacitychangefloat-oldvalue)
 
 
 * * * 
@@ -610,28 +610,7 @@ Points to the URI which will be used when user clicks on this item.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonlinkurichangestring-oldvalue)
-
-
-* * * 
-
-### `background`
-
-<dl><dt>Type</dt><dd><i>Item</i></dd></dl>
-
-An item used as a background for the item.
-
-By default, background is filled to his parent.
-
-
-* * * 
-
-### `onBackgroundChange()`
-
-<dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Item</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
-
-
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonbackgroundchangeitem-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonlinkurichangestring-oldvalue)
 
 
 * * * 
@@ -643,7 +622,7 @@ By default, background is filled to his parent.
 Returns `true` if two items overlaps.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#itemoverlapitem-item)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#itemoverlapitem-item)
 
 
 * * * 
@@ -660,7 +639,7 @@ Returns `true` if two items overlaps.
 <dl><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Array</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonanchorschangestring-property-array-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonanchorschangestring-property-array-oldvalue)
 
 
 * * * 
@@ -677,7 +656,7 @@ Returns `true` if two items overlaps.
 <dl><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonlayoutchangestring-property-any-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonlayoutchangestring-property-any-oldvalue)
 
 
 * * * 
@@ -687,7 +666,7 @@ Returns `true` if two items overlaps.
 <dl><dt>Type</dt><dd><i>Item.Pointer</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#itempointer-itempointer)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#itempointer-itempointer)
 
 
 * * * 
@@ -704,7 +683,7 @@ Returns `true` if two items overlaps.
 <dl><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#signal-itemonmarginchangestring-property-any-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#signal-itemonmarginchangestring-property-any-oldvalue)
 
 
 * * * 
@@ -714,5 +693,5 @@ Returns `true` if two items overlaps.
 <dl><dt>Type</dt><dd><i>Item.Keys</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/item.litcoffee#itemkeys-itemkeys)
+> [`Source`](https://github.com/Neft-io/neft/blob/1c22b02628f64778edad3ddf18e34212b96ce456/src/renderer/types/basics/item.litcoffee#itemkeys-itemkeys)
 

@@ -23,7 +23,7 @@ Item {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/resources.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/resources.litcoffee)
 
 
 * * * 
@@ -33,7 +33,7 @@ Item {
 <dl><dt>Static method of</dt><dd><i>ResourcesLoader</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>ResourcesLoader</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/resources.litcoffee#resourcesloader-resourcesloadernewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/resources.litcoffee#resourcesloader-resourcesloadernewobject-options)
 
 
 * * * 
@@ -43,14 +43,14 @@ Item {
 <dl><dt>Type</dt><dd><i>Resources</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/resources.litcoffee#resources-resourcesloaderresources)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/resources.litcoffee#resources-resourcesloaderresources)
 
 
 * * * 
 
 ### `progress`
 
-<dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd></dl>
+<dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd><dt>Read Only</dt></dl>
 
 
 * * * 
@@ -60,5 +60,5 @@ Item {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/resources.litcoffee#signal-resourcesloadedonprogresschangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/resources.litcoffee#signal-resourcesloadedonprogresschangefloat-oldvalue)
 

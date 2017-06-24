@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Extends</dt><dd><i>Animation</i></dd><dt>Returns</dt><dd><i>PropertyAnimation</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#propertyanimation-propertyanimationconstructor--animation)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#propertyanimation-propertyanimationconstructor--animation)
 
 
 * * * 
@@ -31,7 +31,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonpropertychangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonpropertychangestring-oldvalue)
 
 
 * * * 
@@ -48,7 +48,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationondurationchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationondurationchangefloat-oldvalue)
 
 
 * * * 
@@ -65,7 +65,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonstartdelaychangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonstartdelaychangefloat-oldvalue)
 
 
 * * * 
@@ -82,7 +82,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonloopdelaychangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonloopdelaychangefloat-oldvalue)
 
 
 * * * 
@@ -99,7 +99,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationondelaychangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationondelaychangefloat-oldvalue)
 
 
 * * * 
@@ -116,7 +116,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonupdatedatachangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonupdatedatachangeboolean-oldvalue)
 
 
 * * * 
@@ -133,7 +133,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonupdatepropertychangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonupdatepropertychangeboolean-oldvalue)
 
 
 * * * 
@@ -150,7 +150,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonfromchangeany-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationonfromchangeany-oldvalue)
 
 
 * * * 
@@ -167,7 +167,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationontochangeany-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationontochangeany-oldvalue)
 
 
 * * * 
@@ -177,7 +177,7 @@
 <dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>0</code></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#readonly-float-propertyanimationprogress--0)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#readonly-float-propertyanimationprogress--0)
 
 
 * * * 
@@ -194,7 +194,7 @@
 <dl><dt>Parameters</dt><dd><ul><li>value — <i>Easing</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationoneasingchangeeasing-value)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-propertyanimationoneasingchangeeasing-value)
 
 
 * * * 
@@ -209,10 +209,10 @@ InOutCubic, InQuart, OutQuart, InOutQuart, InQuint, OutQuint,
 InOutQuint, InSine, OutSine, InOutSine, InExpo, OutExpo,
 InOutExpo, InCirc, OutCirc, InOutCirc, InElastic, OutElastic,
 InOutElastic, InBack, OutBack, InOutBack, InBounce, OutBounce,
-InOutBounce.
+InOutBounce, Steps.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#string-easingtype--39linear39)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#string-easingtype--39linear39)
 
 
 * * * 
@@ -222,5 +222,15 @@ InOutBounce.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/f9c128ccb37aa79380c961e878cd76ec9e79c99e/src/renderer/types/extensions/animation/types/property.litcoffee#signal-easingontypechangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#signal-easingontypechangestring-oldvalue)
+
+
+* * * 
+
+### `steps`
+
+<dl><dt>Type</dt><dd><i>Integer</i></dd><dt>Default</dt><dd><code>1</code></dd></dl>
+
+
+> [`Source`](https://github.com/Neft-io/neft/blob/704c61fcc7ff8864dd95e4a4d2dffd96ce02aece/src/renderer/types/extensions/animation/types/property.litcoffee#integer-easingsteps--1)
 

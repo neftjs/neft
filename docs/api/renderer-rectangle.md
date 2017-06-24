@@ -15,7 +15,7 @@ Rectangle {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee)
 
 
 * * * 
@@ -25,7 +25,7 @@ Rectangle {
 <dl><dt>Static method of</dt><dd><i>Rectangle</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Rectangle</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectanglenewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectanglenewobject-options)
 
 
 * * * 
@@ -35,7 +35,7 @@ Rectangle {
 <dl><dt>Extends</dt><dd><i>Item</i></dd><dt>Returns</dt><dd><i>Rectangle</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectangleconstructor--item)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee#rectangle-rectangleconstructor--item)
 
 
 * * * 
@@ -52,7 +52,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleoncolorchangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleoncolorchangestring-oldvalue)
 
 
 * * * 
@@ -69,7 +69,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleonradiuschangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleonradiuschangefloat-oldvalue)
 
 
 * * * 
@@ -86,7 +86,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleonborderchangestring-property-any-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleonborderchangestring-property-any-oldvalue)
 
 
 * * * 
@@ -103,7 +103,7 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleborderonwidthchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleborderonwidthchangefloat-oldvalue)
 
 
 * * * 
@@ -120,5 +120,5 @@ Rectangle {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleborderoncolorchangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/shapes/rectangle.litcoffee#signal-rectangleborderoncolorchangestring-oldvalue)
 

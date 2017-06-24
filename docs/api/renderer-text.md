@@ -13,7 +13,7 @@ Text {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee)
 
 
 * * * 
@@ -23,7 +23,7 @@ Text {
 <dl><dt>Static method of</dt><dd><i>Text</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Text</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#text-textnewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#text-textnewobject-options)
 
 
 * * * 
@@ -33,7 +33,7 @@ Text {
 <dl><dt>Extends</dt><dd><i>Item</i></dd><dt>Returns</dt><dd><i>Text</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#text-textconstructor--item)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#text-textconstructor--item)
 
 
 * * * 
@@ -43,7 +43,7 @@ Text {
 <dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>-1</code></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#float-textwidth--1)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#float-textwidth--1)
 
 
 * * * 
@@ -53,7 +53,7 @@ Text {
 <dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>-1</code></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#float-textheight--1)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#float-textheight--1)
 
 
 * * * 
@@ -70,7 +70,7 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#signal-textontextchangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#signal-textontextchangestring-oldvalue)
 
 
 * * * 
@@ -87,7 +87,7 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#signal-textoncolorchangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#signal-textoncolorchangestring-oldvalue)
 
 
 * * * 
@@ -104,7 +104,7 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#signal-textonlinkcolorchangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#signal-textonlinkcolorchangestring-oldvalue)
 
 
 * * * 
@@ -121,7 +121,7 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd><dt>Not Implemented</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#hidden-signal-textonlineheightchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#hidden-signal-textonlineheightchangefloat-oldvalue)
 
 
 * * * 
@@ -138,7 +138,7 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#signal-textoncontentwidthchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#signal-textoncontentwidthchangefloat-oldvalue)
 
 
 * * * 
@@ -155,7 +155,7 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#signal-textoncontentheightchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#signal-textoncontentheightchangefloat-oldvalue)
 
 
 * * * 
@@ -172,7 +172,7 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#signal-textonalignmentchangestring-property-any-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#signal-textonalignmentchangestring-property-any-oldvalue)
 
 
 * * * 
@@ -189,5 +189,5 @@ Text {
 <dl><dt>Parameters</dt><dd><ul><li>property — <i>String</i></li><li>oldValue — <i>Any</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/text.litcoffee#signal-textonfontchangestring-property-any-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/text.litcoffee#signal-textonfontchangestring-property-any-oldvalue)
 

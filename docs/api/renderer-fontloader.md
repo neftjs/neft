@@ -30,7 +30,7 @@ FontLoader {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/font.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee)
 
 
 * * * 
@@ -40,7 +40,7 @@ FontLoader {
 <dl><dt>Static method of</dt><dd><i>FontLoader</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>FontLoader</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee#fontloader-fontloadernewobject-options)
 
 
 * * * 
@@ -50,7 +50,7 @@ FontLoader {
 <dl><dt>Type</dt><dd><i>String</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/font.litcoffee#string-fontloadername)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee#string-fontloadername)
 
 
 * * * 
@@ -81,5 +81,45 @@ Must contains one of:
 Italic font filename must contains 'italic'.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/loader/font.litcoffee#string-fontloadersource)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee#string-fontloadersource)
+
+
+* * * 
+
+### `loaded`
+
+<dl><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd><dt>Read Only</dt></dl>
+
+
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee#readonly-boolean-fontloaderloaded--false)
+
+
+* * * 
+
+### `onLoadedChange()`
+
+<dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
+
+
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee#signal-fontloaderonloadedchangeboolean-oldvalue)
+
+
+* * * 
+
+### `onLoad()`
+
+<dl><dt>Type</dt><dd><i>Signal</i></dd></dl>
+
+
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee#signal-fontloaderonload)
+
+
+* * * 
+
+### `onError()`
+
+<dl><dt>Parameters</dt><dd><ul><li>error — <i>Error</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
+
+
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/loader/font.litcoffee#signal-fontloaderonerrorerror-error)
 

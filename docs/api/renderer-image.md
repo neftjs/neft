@@ -17,7 +17,7 @@ Image {
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee)
 
 
 * * * 
@@ -27,7 +27,7 @@ Image {
 <dl><dt>Static method of</dt><dd><i>Image</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Image</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#image-imagenewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#image-imagenewobject-options)
 
 
 * * * 
@@ -37,7 +37,7 @@ Image {
 <dl><dt>Extends</dt><dd><i>Item</i></dd><dt>Returns</dt><dd><i>Image</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#image-imageconstructor--item)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#image-imageconstructor--item)
 
 
 * * * 
@@ -54,7 +54,7 @@ Image {
 <dl><dt>Static property of</dt><dd><i>Image</i></dd><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#signal-imageonpixelratiochangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#signal-imageonpixelratiochangefloat-oldvalue)
 
 
 * * * 
@@ -64,7 +64,7 @@ Image {
 <dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>-1</code></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#float-imagewidth--1)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#float-imagewidth--1)
 
 
 * * * 
@@ -74,7 +74,7 @@ Image {
 <dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>-1</code></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#float-imageheight--1)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#float-imageheight--1)
 
 
 * * * 
@@ -93,7 +93,7 @@ The image source URL or data URI.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>String</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#signal-imageonsourcechangestring-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#signal-imageonsourcechangestring-oldvalue)
 
 
 * * * 
@@ -103,7 +103,7 @@ The image source URL or data URI.
 <dl><dt>Type</dt><dd><i>Float</i></dd><dt>Default</dt><dd><code>1</code></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#readonly-float-imageresolution--1)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#readonly-float-imageresolution--1)
 
 
 * * * 
@@ -120,7 +120,7 @@ The image source URL or data URI.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#signal-imageonsourcewidthchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#signal-imageonsourcewidthchangefloat-oldvalue)
 
 
 * * * 
@@ -137,7 +137,7 @@ The image source URL or data URI.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Float</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#signal-imageonsourceheightchangefloat-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#signal-imageonsourceheightchangefloat-oldvalue)
 
 
 * * * 
@@ -147,7 +147,7 @@ The image source URL or data URI.
 <dl><dt>Type</dt><dd><i>Boolean</i></dd><dt>Default</dt><dd><code>false</code></dd><dt>Read Only</dt></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#readonly-boolean-imageloaded--false)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#readonly-boolean-imageloaded--false)
 
 
 * * * 
@@ -157,7 +157,7 @@ The image source URL or data URI.
 <dl><dt>Parameters</dt><dd><ul><li>oldValue — <i>Boolean</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#signal-imageonloadedchangeboolean-oldvalue)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#signal-imageonloadedchangeboolean-oldvalue)
 
 
 * * * 
@@ -167,7 +167,7 @@ The image source URL or data URI.
 <dl><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#signal-imageonload)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#signal-imageonload)
 
 
 * * * 
@@ -177,5 +177,5 @@ The image source URL or data URI.
 <dl><dt>Parameters</dt><dd><ul><li>error — <i>Error</i></li></ul></dd><dt>Type</dt><dd><i>Signal</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/image.litcoffee#signal-imageonerrorerror-error)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/image.litcoffee#signal-imageonerrorerror-error)
 

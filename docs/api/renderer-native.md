@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee)
 
 
 * * * 
@@ -14,7 +14,7 @@
 <dl><dt>Static method of</dt><dd><i>Native</i></dd><dt>Parameters</dt><dd><ul><li>options — <i>Object</i> — <i>optional</i></li></ul></dd><dt>Returns</dt><dd><i>Native</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee#native-nativenewobject-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee#native-nativenewobject-options)
 
 
 * * * 
@@ -41,32 +41,32 @@ where `XYZ` is the given name.
 ### Predefined types
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee)
 
 #### text
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee)
 
 #### number
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee)
 
 #### boolean
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee)
 
 #### color
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee)
 
 #### item
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee)
 
 
 * * * 
@@ -76,7 +76,7 @@ where `XYZ` is the given name.
 <dl><dt>Extends</dt><dd><i>Item</i></dd><dt>Returns</dt><dd><i>Native</i></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee#native-nativeconstructor--item)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee#native-nativeconstructor--item)
 
 
 * * * 
@@ -86,7 +86,7 @@ where `XYZ` is the given name.
 <dl><dt>Parameters</dt><dd><ul><li>propName — <i>String</i></li><li>val — <i>Any</i></li></ul></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee#nativesetstring-propname-any-val)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee#nativesetstring-propname-any-val)
 
 
 * * * 
@@ -96,7 +96,7 @@ where `XYZ` is the given name.
 <dl><dt>Parameters</dt><dd><ul><li>funcName — <i>String</i></li><li>args... — <i>Any</i></li></ul></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee#nativecallstring-funcname-any-args)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee#nativecallstring-funcname-any-args)
 
 
 * * * 
@@ -106,5 +106,5 @@ where `XYZ` is the given name.
 <dl><dt>Parameters</dt><dd><ul><li>eventName — <i>String</i></li><li>listener — <i>Function</i></li></ul></dd></dl>
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/88c1d4e83c5a6037666ad9719faf105f21aa5cbe/src/renderer/types/basics/native.litcoffee#nativeonstring-eventname-function-listener)
+> [`Source`](https://github.com/Neft-io/neft/blob/87bb31fdac5741b735a2e67422e1d7db01196e62/src/renderer/types/basics/native.litcoffee#nativeonstring-eventname-function-listener)
 

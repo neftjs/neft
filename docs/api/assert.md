@@ -9,7 +9,7 @@ const { assert } = Neft;
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee)
 
 
 * * * 
@@ -21,7 +21,7 @@ const { assert } = Neft;
 Throws *AssertionError* if the given *expression* is falsy.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertboolean-expression-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertboolean-expression-string-message)
 
 ## **Class** assert.AssertionError()
 
@@ -31,7 +31,7 @@ const { AssertionError } = Neft.assert;
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee)
 
 
 * * * 
@@ -43,7 +43,7 @@ const { AssertionError } = Neft.assert;
 Returns new assert namespace where all failues are prefixed by the given *message*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assert-assertscopestring-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assert-assertscopestring-message)
 
 
 * * * 
@@ -57,7 +57,7 @@ Link to the main assert function.
 Throws an error if the given *expression* is falsy.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertokboolean-expression-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertokboolean-expression-string-message)
 
 
 * * * 
@@ -69,7 +69,7 @@ Throws an error if the given *expression* is falsy.
 Throws an error if the given *expression* is truthy.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertnotokboolean-expression-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertnotokboolean-expression-string-message)
 
 
 * * * 
@@ -86,7 +86,7 @@ Read more about [comparison operators in JavaScript](https://developer.mozilla.o
 /Web/JavaScript/Reference/Operators/Comparison_Operators).
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisany-actual-any-expected-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisany-actual-any-expected-string-message)
 
 
 * * * 
@@ -100,7 +100,7 @@ Throws an error if the given *actual* is the same as *expected*.
 Strict comparison operator is used in this operation (`===`).
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotany-actual-any-expected-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotany-actual-any-expected-string-message)
 
 
 * * * 
@@ -112,7 +112,7 @@ Strict comparison operator is used in this operation (`===`).
 Throws an error if the given *value* is `null` or `undefined`.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisdefinedany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisdefinedany-value-string-message)
 
 
 * * * 
@@ -124,7 +124,7 @@ Throws an error if the given *value* is `null` or `undefined`.
 Throws an error if the given *value* is not `null` or `undefined`.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotdefinedany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotdefinedany-value-string-message)
 
 
 * * * 
@@ -138,7 +138,7 @@ Throws an error if the given *value* is not a primitive value.
 Primitive value must be `null`, string, number, boolean or `undefined`.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisprimitiveany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisprimitiveany-value-string-message)
 
 
 * * * 
@@ -152,7 +152,7 @@ Throws an error if the given *value* if a primitive value.
 Primitive value must be `null`, string, number, boolean or `undefined`.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotprimitiveany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotprimitiveany-value-string-message)
 
 
 * * * 
@@ -164,7 +164,7 @@ Primitive value must be `null`, string, number, boolean or `undefined`.
 Throws an error if the given *value* is not a string.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisstringstring-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisstringstring-value-string-message)
 
 
 * * * 
@@ -176,7 +176,7 @@ Throws an error if the given *value* is not a string.
 Throws an error if the given *value* is a string.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotstringany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotstringany-value-string-message)
 
 
 * * * 
@@ -190,7 +190,7 @@ Throws an error if the given *value* is not a float number.
 Float number needs to be finite and may be an integer.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisfloatfloat-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisfloatfloat-value-string-message)
 
 
 * * * 
@@ -204,7 +204,7 @@ Throws an error if the given *value* is a float number.
 Float number needs to be finite and may be an integer.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotfloatany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotfloatany-value-string-message)
 
 
 * * * 
@@ -216,7 +216,7 @@ Float number needs to be finite and may be an integer.
 Throws an error if the given *value* is not an integer.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisintegerinteger-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisintegerinteger-value-string-message)
 
 
 * * * 
@@ -228,7 +228,7 @@ Throws an error if the given *value* is not an integer.
 Throws an error if the given *value* is an integer.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotintegerany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotintegerany-value-string-message)
 
 
 * * * 
@@ -240,7 +240,7 @@ Throws an error if the given *value* is an integer.
 Throws an error if the given *value* is not a boolean.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisbooleanboolean-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisbooleanboolean-value-string-message)
 
 
 * * * 
@@ -252,7 +252,7 @@ Throws an error if the given *value* is not a boolean.
 Throws an error if the given *value* is a boolean.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotbooleanany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotbooleanany-value-string-message)
 
 
 * * * 
@@ -264,7 +264,7 @@ Throws an error if the given *value* is a boolean.
 Throws an error if the given *value* is not a function.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisfunctionfunction-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisfunctionfunction-value-string-message)
 
 
 * * * 
@@ -276,7 +276,7 @@ Throws an error if the given *value* is not a function.
 Throws an error if the given *value* is a function.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotfunctionany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotfunctionany-value-string-message)
 
 
 * * * 
@@ -292,7 +292,7 @@ Arrays are objects.
 `null` is not an object.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisobjectobject-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisobjectobject-value-string-message)
 
 
 * * * 
@@ -308,7 +308,7 @@ Arrays are objects.
 `null` is not an object.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotobjectany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotobjectany-value-string-message)
 
 
 * * * 
@@ -324,7 +324,7 @@ Plain object in an object with no prototype or direct standard `Object` prototyp
 Arrays and instances of classes are not plain objects.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisplainobjectplainobject-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisplainobjectplainobject-value-string-message)
 
 
 * * * 
@@ -340,7 +340,7 @@ Plain object in an object with no prototype or direct standard `Object` prototyp
 Arrays and instances of classes are not plain objects.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotplainobjectany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotplainobjectany-value-string-message)
 
 
 * * * 
@@ -354,7 +354,7 @@ Throws an error if the given *value* is not an array.
 Typed arrays are not arrays.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisarrayarray-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisarrayarray-value-string-message)
 
 
 * * * 
@@ -366,7 +366,7 @@ Typed arrays are not arrays.
 Throws an error if the given *value* is an array.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotarrayany-value-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotarrayany-value-string-message)
 
 
 * * * 
@@ -383,7 +383,7 @@ Maximum deepness may be specified by *options.maxDeep*.
 Default value is `Infinity`.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisequalany-value1-any-value2-string-message-object-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisequalany-value1-any-value2-string-message-object-options)
 
 
 * * * 
@@ -395,7 +395,7 @@ Default value is `Infinity`.
 Throws an error if the given values are equal.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertisnotequalany-value1-any-value2-string-message-object-options)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertisnotequalany-value1-any-value2-string-message-object-options)
 
 
 * * * 
@@ -407,7 +407,7 @@ Throws an error if the given values are equal.
 Throws an error if the given *object* is not an instance of the given *constructor*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertinstanceofobject-object-function-constructor-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertinstanceofobject-object-function-constructor-string-message)
 
 
 * * * 
@@ -419,7 +419,7 @@ Throws an error if the given *object* is not an instance of the given *construct
 Throws an error if the given *object* is an instance of the given *constructor*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertnotinstanceofany-object-function-constructor-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertnotinstanceofany-object-function-constructor-string-message)
 
 
 * * * 
@@ -431,7 +431,7 @@ Throws an error if the given *object* is an instance of the given *constructor*.
 Throws an error if the given *value* object `length` is not equal the given *length*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertlengthofany-value-integer-length-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertlengthofany-value-integer-length-string-message)
 
 
 * * * 
@@ -443,7 +443,7 @@ Throws an error if the given *value* object `length` is not equal the given *len
 Throws an error if the given *value* object `length` is equal the given *length*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertnotlengthofany-value-integer-length-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertnotlengthofany-value-integer-length-string-message)
 
 
 * * * 
@@ -465,7 +465,7 @@ assert.operator(2, '<=', 1); // AssertionError
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertoperatorany-value1-string-operator-any-value2-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertoperatorany-value1-string-operator-any-value2-string-message)
 
 
 * * * 
@@ -483,7 +483,7 @@ assert.match('12', /[0-9]+/); // true
 ```
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertmatchany-value-regexp-regexp-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertmatchany-value-regexp-regexp-string-message)
 
 
 * * * 
@@ -495,5 +495,5 @@ assert.match('12', /[0-9]+/); // true
 Throws an error if the given *regexp* tests on the given *value*.
 
 
-> [`Source`](https://github.com/Neft-io/neft/blob/b4692e53a8efbb3dd52dcf1601c35c05cabfc4e0/src/assert/index.litcoffee#assertnotmatchany-value-regexp-regexp-string-message)
+> [`Source`](https://github.com/Neft-io/neft/blob/e6767c3daab3a1119507e57d0bc6612ebe7315bd/src/assert/index.litcoffee#assertnotmatchany-value-regexp-regexp-string-message)
 
