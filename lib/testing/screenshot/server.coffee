@@ -8,7 +8,6 @@ findWindow = require './server/findWindow'
 testScreenshot = require './server/testScreenshot'
 server = require '../server'
 targets = require '../cli/targets'
-imgur = require 'imgur'
 
 {utils, log} = Neft
 
@@ -20,7 +19,9 @@ INITIALIZATION_TRY_DELAY_SEC = 1
 CUSTOM_SCREENSHOT_MAX_DELAY_MS = 1000
 {LOG_SCREENSHOT_DATA_URI} = process.env
 
-imgur.setClientId '2ea624e59d38a21'
+if LOG_SCREENSHOT_DATA_URI
+    imgur = require 'imgur'
+    imgur.setClientId '2ea624e59d38a21'
 
 fs.emptyDirSync DEST
 
