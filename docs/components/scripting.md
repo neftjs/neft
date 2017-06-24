@@ -1,16 +1,16 @@
 # Scripting
 
-Each view file and [component](/views.html#component) can be scripted.
+Each component file and [component](/components.html#component) can be scripted.
 
 The whole *JavaScript* code put inside the `<script />` tag.
 
-In the view file:
+In the component file:
 
 ```xhtml
 <script></script>
 ```
 
-or in a [component](/views.html#component):
+or in a [component](/components.html#component):
 
 ```xhtml
 <component name="Avatar">
@@ -18,7 +18,7 @@ or in a [component](/views.html#component):
 </component>
 ```
 
-## View lifecycle
+## Component lifecycle
 
 Inside the `<sript />` tag you can connect to four [signals](/data-binding.html#signal):
  - `this.onBeforeRender()`,
@@ -26,13 +26,13 @@ Inside the `<sript />` tag you can connect to four [signals](/data-binding.html#
  - `this.onBeforeRevert()`,
  - `this.onRevert()`.
 
-View once created is reusing. Because of that, `<script>` is called only when there is no free views to use and a new one has to be created.
+Component once created is reusing. Because of that, `<script>` is called only when there is no free components to use and a new one has to be created.
 
-When a view needs to be put into a document, it's **rendered** (`onBeforeRender`, `onRender`).
+When a component needs to be put into a document, it's **rendered** (`onBeforeRender`, `onRender`).
 
-When a view is no longer needed, it's **reverted** (`onBeforeRevert`, `onRevert`).
+When a component is no longer needed, it's **reverted** (`onBeforeRevert`, `onRevert`).
 
-Reverted views can be rendered later.
+Reverted components can be rendered later.
 
 ## Custom methods
 
@@ -40,7 +40,7 @@ Custom methods should be created inside the `<script>` tag as lambda functions.
 
 It ensures, that you have always the proper context (`this`) inside all methods.
 
-View context can be used in [String Interpolation](/views.html#string-interpolation).
+Component context can be used in [String Interpolation](/components.html#string-interpolation).
 
 ```xhtml
 <p>${this.plusOne(2)}</p> <!-- <p>3</p> -->
@@ -55,11 +55,11 @@ this.plusOne = (number) => {
 ## `this.state`
 
 `this.state` is a [Dict](/data-binding.html#dict).
-Use it to store custom data for a rendered view.
+Use it to store custom data for a rendered component.
 
-It's save to use. Automatically cleared when view is *reverted*.
+It's save to use. Automatically cleared when component is *reverted*.
 
-Data can be read in [String Interpolation](/views.html#string-interpolation) under the `${state}` object.
+Data can be read in [String Interpolation](/components.html#string-interpolation) under the `${state}` object.
 
 Default `state` must be defined in `onBeforeRender` signal.
 
@@ -80,7 +80,7 @@ this.onBeforeRender(function () {
 
 ## `this.refs`
 
-All nodes with [`ref`](/views.html#ref) tags are available under the `this.refs` object.
+All nodes with [`ref`](/components.html#ref) tags are available under the `this.refs` object.
 
 ```xhtml
 <script>
@@ -91,7 +91,7 @@ this.onRender(function () {
 <img ref="image" /> <!-- <img src="rsc:background" /> -->
 ```
 
-If node with `ref` tag renders a [component](/views.html#component), it refers to the `this` context and not no the [Virtual DOM](/views/virtual-dom.html) element.
+If node with `ref` tag renders a [component](/components.html#component), it refers to the `this` context and not no the [Virtual DOM](/components/virtual-dom.html) element.
 
 ```xhtml
 <component name="Issue">
@@ -113,13 +113,13 @@ If node with `ref` tag renders a [component](/views.html#component), it refers t
 <IssueList />
 ```
 
-This object is available in [String Interpolation](/views.html#string-interpolation) as `${refs}`.
+This object is available in [String Interpolation](/components.html#string-interpolation) as `${refs}`.
 
 ## `this.node`
 
-It refers to the main view or component [element](/views/virtual-dom.html).
+It refers to the main component or component [element](/components/virtual-dom.html).
 
-More about it you'll learn in the [next chapter](/views/virtual-dom.html) but you can use it to e.g. find an element by a selector.
+More about it you'll learn in the [next chapter](/components/virtual-dom.html) but you can use it to e.g. find an element by a selector.
 
 ```xhtml
 <script>
@@ -134,13 +134,13 @@ this.onBeforeRender(function () {
 
 ## `this.props`
 
-`this.props` object contains properties used to create a [component](/views.html#component).
+`this.props` object contains properties used to create a [component](/components.html#component).
 
 You should not change it.
 
 Use it to configure creating components.
 
-This object is available in [String Interpolation](/views.html#string-interpolation) as `${props}`.
+This object is available in [String Interpolation](/components.html#string-interpolation) as `${props}`.
 
 ```xhtml
 <component name="User">
@@ -161,7 +161,7 @@ This object is available in [String Interpolation](/views.html#string-interpolat
 
 ## `this.context`
 
-This property refers to a [route](/routing.html) used to render this view.
+This property refers to a [route](/routing.html) used to render this component.
 
 You can use to make, for instance, a *HTTP* request.
 
@@ -177,7 +177,7 @@ this.onBeforeRender(function () {
 
 More about it you'll learn in [Routing](/routing.html) chapter.
 
-This object is available in [String Interpolation](/views.html#string-interpolation) as `${context}`.
+This object is available in [String Interpolation](/components.html#string-interpolation) as `${context}`.
 
 ## Script file
 
@@ -194,7 +194,7 @@ You can move your *JavaScript* code to separated file.
 If you like to use *CoffeeScript*, you can do it by specifying the `filename` attribute with the *.coffee* extension.
 
 ```html
-<script filename="view.coffee">
+<script filename="component.coffee">
 @sum = (a, b) => a + b
 </script>
 ```

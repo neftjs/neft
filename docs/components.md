@@ -1,13 +1,13 @@
-# Views
+# Components
 
-Views on the client side are used to organize and handle rendered elements.
+Components on the client side are used to organize and handle rendered elements.
 They can be also used to serve HTML documents for crawlers (e.g. GoogleBot).
 
-All views must be placed in the `/views` folder and use *XHTML* format.
+All components must be placed in the `/components` folder and use *XHTML* format.
 
 View file does not have to be fully compatible with the *XML* standard. You cannot use self-enclosing tags from *HTML* (write `<meta />` instead of `<meta>`).
 
-`views/index.xhtml` file is rendered as the first page.
+`components/index.xhtml` file is rendered as the first page.
 
 All elements inside the `<body>` tag are rendered.
 
@@ -168,7 +168,7 @@ This tag is used to import *component*s from other files.
 
 The *href* attribute can be an absolute path (e.g. `/file.xhtml`),
 relative to the current file position (e.g. `./file.xhtml`), or
-relative to the *views* folder (e.g. `file.xhtml`).
+relative to the *components* folder (e.g. `file.xhtml`).
 
 All imported files are accessible inside the document.
 

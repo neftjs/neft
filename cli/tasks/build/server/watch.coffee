@@ -25,7 +25,7 @@ module.exports = (platform, options, onBuild) ->
             return
 
         # add build files into changed files
-        for buildFilePath in glob.sync('./build/*(styles|views)/**/*')
+        for buildFilePath in glob.sync('./build/*(styles|components)/**/*')
             changedFiles.push fs.realpathSync buildFilePath
 
         # clear cache

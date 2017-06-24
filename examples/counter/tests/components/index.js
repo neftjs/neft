@@ -1,8 +1,8 @@
-describe('views/index', () => {
+describe('components/index', () => {
     let view;
 
     beforeEach(() => {
-        view = app.views['views/index.xhtml'].render();
+        view = app.components['components/index.xhtml'].render();
     });
 
     describe('state.counter', () => {

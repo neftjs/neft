@@ -9,7 +9,7 @@ utils = require 'src/utils'
 log = require 'src/log'
 
 CONFIG_LINKS_TO_REQUIRE =
-    views: true
+    components: true
     styles: true
     models: true
     routes: true

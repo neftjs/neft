@@ -22,19 +22,19 @@
 
         lastClientHTMLRoute = null
 
-## *Document* Route.getTemplateView(*String* viewName)
+## *Document* Route.getTemplateComponent(*String* componentName)
 
-        @getTemplateView = do ->
+        @getTemplateComponent = do ->
             if utils.isNode
                 (name) ->
                     scope = app: app, routes: new Dict
-                    tmpl = app.views[name].render null, scope
+                    tmpl = app.components[name].render null, scope
                     usedTemplates.push tmpl
                     tmpl
             else
                 (name) ->
                     scope = app: app, routes: new Dict
-                    templates[name] ?= app.views[name].render null, scope
+                    templates[name] ?= app.components[name].render null, scope
 
 ## Route::constructor(*Object* options)
 
@@ -82,7 +82,7 @@ Acceptable syntaxes:
                 spaceIndex = opts.uri.indexOf ' '
                 if spaceIndex isnt -1
                     opts.method ?= opts.uri.slice 0, spaceIndex
-                    opts.uri = opts.uri.slice spaceIndex+1
+                    opts.uri = opts.uri.slice spaceIndex + 1
                 opts.uri = new Networking.Uri opts.uri
             assert.instanceOf opts.uri, Networking.Uri
 
@@ -150,7 +150,7 @@ Acceptable syntaxes:
                 r.request = r.response = null
                 r.route = r
                 r._dataPrepared = false
-                r._destroyViewOnEnd = false
+                r._destroyComponentOnEnd = false
                 r
 
         destroyRoute = (route) ->
@@ -170,7 +170,7 @@ Acceptable syntaxes:
                         route.destroyJSON?()
                     when 'html'
                         route.destroyHTML?()
-            if route._destroyViewOnEnd
+            if route._destroyComponentOnEnd
                 route.response.data.destroy()
             routesCache[route.__id__].push Object.getPrototypeOf(route)
 
@@ -209,11 +209,11 @@ Acceptable syntaxes:
                     data = route.toJSON()
                 when 'html'
                     data = route.toHTML()
-                    if respData instanceof Document and route._destroyViewOnEnd
+                    if respData instanceof Document and route._destroyComponentOnEnd
                         respData.destroy()
                         response.data = null
                     if not (data instanceof Document) and response.data is respData
-                        data = renderViewFromConfig.call route, data
+                        data = renderComponentFromConfig.call route, data
             route._dataPrepared = true
             if data?
                 response.data = data
@@ -370,54 +370,59 @@ Can be also a function. May returns a *Networking.Uri*, any String or `undefined
 
         toText: ->
             if @response.status < 400
-                @data+''
+                @data + ''
             else
-                @error+''
+                @error + ''
 
 ## *Document* Route::toHTML()
 
         routeToString = ->
             "#{@method} #{@uri}"
 
-        getDefaultRouteViewName = ->
-            path = "views/#{@name}.xhtml"
-            if app.views[path]
+        getDefaultRouteComponentName = ->
+            path = "components/#{@name}.xhtml"
+            if app.components[path]
                 return path
 
-        renderViewFromConfig = (opts) ->
-            viewName = opts?.view or getDefaultRouteViewName.call(@) or 'views/index.xhtml'
-            tmplName = opts?.template or 'views/template.xhtml'
+        renderComponentFromConfig = (opts) ->
+            componentName = opts?.component or
+                getDefaultRouteComponentName.call(@) or
+                'components/index.xhtml'
+            tmplName = opts?.template or componentName
             useName = opts?.use or 'body'
 
             logtime = log.time 'Render'
-            if viewName isnt tmplName
-                if tmpl = app.views[tmplName]
-                    tmplView = Route.getTemplateView tmplName
-                    tmplView.use useName, null
+            if componentName isnt tmplName
+                if tmpl = app.components[tmplName]
+                    tmplComponent = Route.getTemplateComponent tmplName
+                    tmplComponent.use useName, null
                 else
-                    log.warn "Template view '#{tmplName}' can't be found for route '#{routeToString.call(@)}'"
-            if view = app.views[viewName]
-                r = view.render null, @
+                    log.warn """
+                        Template component '#{tmplName}' can't be found \
+                        for route '#{routeToString.call(@)}'
+                    """
+            if component = app.components[componentName]
+                r = component.render null, @
             else
-                log.warn "View '#{tmplName}' can't be found for route '#{routeToString.call(@)}'"
-            if tmplView
+                log.warn "Component '#{tmplName}' can't be found for route '#{routeToString.call(@)}'"
+            if tmplComponent
                 if r?
-                    r = tmplView.use(useName, r)
+                    r = tmplComponent.use(useName, r)
                 else
-                    r = tmplView
-                if tmplView.context.routes.has(useName)
-                    tmplView.context.routes.pop useName
-                tmplView.context.routes.set useName, @
-                @_destroyViewOnEnd = false
+                    r = tmplComponent
+                if tmplComponent.context.routes.has(useName)
+                    tmplComponent.context.routes.pop useName
+                tmplComponent.context.routes.set useName, @
+                @_destroyComponentOnEnd = false
             else
-                @_destroyViewOnEnd = true
+                @_destroyComponentOnEnd = true
             log.end logtime
             r
 
         createToHTMLFromObject = (opts) ->
-            -> renderViewFromConfig.call @, opts
+            -> renderComponentFromConfig.call @, opts
 
         toHTML: createToHTMLFromObject
-            view: ''
+            component: ''
             template: ''
             use: ''
