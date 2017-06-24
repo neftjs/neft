@@ -2,6 +2,7 @@
 
 fs = require 'fs'
 open = require 'open'
+cliUtils = require 'cli/utils'
 
 module.exports = (options) ->
     packageFile = JSON.parse fs.readFileSync './package.json'
@@ -9,4 +10,8 @@ module.exports = (options) ->
     url = config.url
     url ?= "#{config.protocol}://#{config.host}:#{config.port}/"
     url += "neft-type=game/"
-    open url
+
+    cliUtils.onUrlAccessible config.protocol, url, ->
+        open url
+
+    return
