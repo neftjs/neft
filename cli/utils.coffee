@@ -3,6 +3,8 @@
 pathUtils = require 'path'
 fs = require 'fs'
 childProcess = require 'child_process'
+http = require 'http'
+https = require 'https'
 utils = require 'src/utils'
 log = require 'src/log'
 assert = require 'src/assert'
@@ -115,3 +117,23 @@ exports.getValidHost = (host) ->
         LOCAL_IP
     else
         host
+
+READY_TRIES = 10
+READY_TRY_DELAY = 500
+
+exports.onUrlAccessible = (protocol, url, callback, tryNo = 0) ->
+    switch protocol.toLowerCase()
+        when 'http'
+            reqModule = http
+        when 'https'
+            reqModule = https
+        else
+            callback()
+            return
+    reqModule.get url, (res) ->
+        callback()
+    .on 'error', ->
+        setTimeout ->
+            exports.onUrlAccessible protocol, url, callback, tryNo + 1
+        , READY_TRY_DELAY
+    return
