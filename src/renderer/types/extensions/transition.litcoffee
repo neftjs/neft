@@ -108,16 +108,16 @@ Rectangle {
                             log.error "'#{property}' property signal not found"
                 return
 
-## *Animation* Transition::animation
+## *PropertyAnimation* Transition::animation
 
-## *Signal* Transition::onAnimationChange(*Animation* oldValue)
+## *Signal* Transition::onAnimationChange(*PropertyAnimation* oldValue)
 
         itemUtils.defineProperty
             constructor: @
             name: 'animation'
             defaultValue: null
             developmentSetter: (val) ->
-                assert.instanceOf val, Renderer.Animation if val?
+                assert.instanceOf val, Renderer.PropertyAnimation if val?
             setter: (_super) -> (val) ->
                 oldVal = @animation
                 if oldVal is val
