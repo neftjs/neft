@@ -23,6 +23,7 @@
             @_updateData = false
             @_updateProperty = false
             @_easing = null
+            @_updatePending = false
 
         getter = utils.lookupGetter @::, 'running'
         setter = utils.lookupSetter @::, 'running'
@@ -184,6 +185,12 @@
 
         utils.defineProperty @::, 'progress', null, ->
             Impl.getPropertyAnimationProgress.call @
+        , null
+
+## ReadOnly *Boolean* PropertyAnimation::updatePending
+
+        utils.defineProperty @::, 'updatePending', null, ->
+            @_updatePending
         , null
 
 ## *Easing* PropertyAnimation::easing

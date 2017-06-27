@@ -14,7 +14,6 @@
         constructor: ->
             super()
             @_loop = false
-            @_updatePending = false
             @_paused = false
             @_reversed = false
 
@@ -92,12 +91,6 @@
             implementation: Impl.setAnimationLoop
             developmentSetter: (val) ->
                 assert.isBoolean val
-
-## ReadOnly *Boolean* Animation::updatePending
-
-        utils.defineProperty @::, 'updatePending', null, ->
-            @_updatePending
-        , null
 
 ## Animation::start()
 
