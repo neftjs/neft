@@ -162,7 +162,10 @@ module.exports = (Renderer, Impl) ->
 
             `//<development>`
             unless prop of @
-                log.warn "Binding on the '#{prop}' property can't be created, because this object (#{@toString()}) doesn't have such property"
+                log.warn """
+                    Binding on the '#{prop}' property can't be created, \
+                    because this object (#{@toString()}) doesn't have such property
+                """
                 return
             `//</development>`
 
