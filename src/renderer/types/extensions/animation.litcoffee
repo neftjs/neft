@@ -16,6 +16,7 @@
             @_loop = false
             @_updatePending = false
             @_paused = false
+            @_reversed = false
 
 ## *Signal* Animation::onStart()
 
@@ -69,6 +70,17 @@
                 else
                     Impl.resumeAnimation.call @
                 return
+
+## *Boolean* Animation::reversed
+
+## *Signal* Animation::onReversedChange(*Boolean* oldValue)
+
+        itemUtils.defineProperty
+            constructor: @
+            name: 'reversed'
+            implementation: Impl.setAnimationReversed
+            developmentSetter: (val) ->
+                assert.isBoolean val
 
 ## *Boolean* Animation::loop
 
